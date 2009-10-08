@@ -716,22 +716,22 @@ BOOL ScDrawView::SelectObject( const String& rName )
     return ( pFound != NULL );
 }
 
-String ScDrawView::GetSelectedChartName() const
-{
-    //  used for modifying a chart's data area - PersistName must always be used
-    //  (as in ScDocument::FindChartData and UpdateChartArea)
-
-    const SdrMarkList& rMarkList = GetMarkedObjectList();
-    if (rMarkList.GetMarkCount() == 1)
-    {
-        SdrObject* pObj = rMarkList.GetMark(0)->GetMarkedSdrObj();
-        if (pObj->GetObjIdentifier() == OBJ_OLE2)
-            if ( pDoc->IsChart(pObj) )
-                return static_cast<SdrOle2Obj*>(pObj)->GetPersistName();
-    }
-
-    return EMPTY_STRING;        // nichts gefunden
-}
+//UNUSED2008-05  String ScDrawView::GetSelectedChartName() const
+//UNUSED2008-05  {
+//UNUSED2008-05      //  used for modifying a chart's data area - PersistName must always be used
+//UNUSED2008-05      //  (as in ScDocument::FindChartData and UpdateChartArea)
+//UNUSED2008-05
+//UNUSED2008-05      const SdrMarkList& rMarkList = GetMarkedObjectList();
+//UNUSED2008-05      if (rMarkList.GetMarkCount() == 1)
+//UNUSED2008-05      {
+//UNUSED2008-05          SdrObject* pObj = rMarkList.GetMark(0)->GetMarkedSdrObj();
+//UNUSED2008-05          if (pObj->GetObjIdentifier() == OBJ_OLE2)
+//UNUSED2008-05              if ( pDoc->IsChart(pObj) )
+//UNUSED2008-05                  return static_cast<SdrOle2Obj*>(pObj)->GetPersistName();
+//UNUSED2008-05      }
+//UNUSED2008-05
+//UNUSED2008-05      return EMPTY_STRING;        // nichts gefunden
+//UNUSED2008-05  }
 
 FASTBOOL ScDrawView::InsertObjectSafe(SdrObject* pObj, SdrPageView& rPV, ULONG nOptions)
 {

@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: miscuno.cxx,v $
- * $Revision: 1.14 $
+ * $Revision: 1.14.32.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -42,10 +42,10 @@ using namespace com::sun::star;
 
 //------------------------------------------------------------------------
 
-SC_SIMPLE_SERVICE_INFO( ScEmptyEnumeration, "ScEmptyEnumeration", "stardiv.unknown" )
-SC_SIMPLE_SERVICE_INFO( ScEmptyEnumerationAccess, "ScEmptyEnumerationAccess", "stardiv.unknown" )
-//SC_SIMPLE_SERVICE_INFO( ScIndexEnumeration, "ScIndexEnumeration", "stardiv.unknown" )
-SC_SIMPLE_SERVICE_INFO( ScPrintSettingsObj, "ScPrintSettingsObj", "stardiv.unknown" )
+//UNUSED2008-05  SC_SIMPLE_SERVICE_INFO( ScEmptyEnumeration, "ScEmptyEnumeration", "stardiv.unknown" )
+//UNUSED2008-05  SC_SIMPLE_SERVICE_INFO( ScEmptyEnumerationAccess, "ScEmptyEnumerationAccess", "stardiv.unknown" )
+//UNUSED2008-05  SC_SIMPLE_SERVICE_INFO( ScIndexEnumeration, "ScIndexEnumeration", "stardiv.unknown" )
+//UNUSED2008-05  SC_SIMPLE_SERVICE_INFO( ScPrintSettingsObj, "ScPrintSettingsObj", "stardiv.unknown" )
 
 SC_SIMPLE_SERVICE_INFO( ScNameToIndexAccess, "ScNameToIndexAccess", "stardiv.unknown" )
 
@@ -242,58 +242,58 @@ sal_Bool SAL_CALL ScIndexEnumeration::supportsService( const ::rtl::OUString& Se
 
 //------------------------------------------------------------------------
 
-ScEmptyEnumerationAccess::ScEmptyEnumerationAccess()
-{
-}
-
-ScEmptyEnumerationAccess::~ScEmptyEnumerationAccess()
-{
-}
-
-// XEnumerationAccess
-
-uno::Reference<container::XEnumeration> SAL_CALL ScEmptyEnumerationAccess::createEnumeration()
-                                                    throw(uno::RuntimeException)
-{
-    ScUnoGuard aGuard;
-    return new ScEmptyEnumeration;
-}
-
-uno::Type SAL_CALL ScEmptyEnumerationAccess::getElementType() throw(uno::RuntimeException)
-{
-    ScUnoGuard aGuard;
-    return getCppuType((uno::Reference<uno::XInterface>*)0);    // or what?
-}
-
-sal_Bool SAL_CALL ScEmptyEnumerationAccess::hasElements() throw(uno::RuntimeException)
-{
-    return FALSE;
-}
+//UNUSED2008-05  ScEmptyEnumerationAccess::ScEmptyEnumerationAccess()
+//UNUSED2008-05  {
+//UNUSED2008-05  }
+//UNUSED2008-05
+//UNUSED2008-05  ScEmptyEnumerationAccess::~ScEmptyEnumerationAccess()
+//UNUSED2008-05  {
+//UNUSED2008-05  }
+//UNUSED2008-05
+//UNUSED2008-05  // XEnumerationAccess
+//UNUSED2008-05
+//UNUSED2008-05  uno::Reference<container::XEnumeration> SAL_CALL ScEmptyEnumerationAccess::createEnumeration()
+//UNUSED2008-05                                                      throw(uno::RuntimeException)
+//UNUSED2008-05  {
+//UNUSED2008-05      ScUnoGuard aGuard;
+//UNUSED2008-05      return new ScEmptyEnumeration;
+//UNUSED2008-05  }
+//UNUSED2008-05
+//UNUSED2008-05  uno::Type SAL_CALL ScEmptyEnumerationAccess::getElementType() throw(uno::RuntimeException)
+//UNUSED2008-05  {
+//UNUSED2008-05      ScUnoGuard aGuard;
+//UNUSED2008-05      return getCppuType((uno::Reference<uno::XInterface>*)0);    // or what?
+//UNUSED2008-05  }
+//UNUSED2008-05
+//UNUSED2008-05  sal_Bool SAL_CALL ScEmptyEnumerationAccess::hasElements() throw(uno::RuntimeException)
+//UNUSED2008-05  {
+//UNUSED2008-05      return FALSE;
+//UNUSED2008-05  }
 
 //------------------------------------------------------------------------
 
-ScEmptyEnumeration::ScEmptyEnumeration()
-{
-}
-
-ScEmptyEnumeration::~ScEmptyEnumeration()
-{
-}
-
-// XEnumeration
-
-sal_Bool SAL_CALL ScEmptyEnumeration::hasMoreElements() throw(uno::RuntimeException)
-{
-    ScUnoGuard aGuard;
-    return FALSE;
-}
-
-uno::Any SAL_CALL ScEmptyEnumeration::nextElement() throw(container::NoSuchElementException,
-                                        lang::WrappedTargetException, uno::RuntimeException)
-{
-    ScUnoGuard aGuard;
-    return uno::Any();
-}
+//UNUSED2008-05  ScEmptyEnumeration::ScEmptyEnumeration()
+//UNUSED2008-05  {
+//UNUSED2008-05  }
+//UNUSED2008-05
+//UNUSED2008-05  ScEmptyEnumeration::~ScEmptyEnumeration()
+//UNUSED2008-05  {
+//UNUSED2008-05  }
+//UNUSED2008-05
+//UNUSED2008-05  // XEnumeration
+//UNUSED2008-05
+//UNUSED2008-05  sal_Bool SAL_CALL ScEmptyEnumeration::hasMoreElements() throw(uno::RuntimeException)
+//UNUSED2008-05  {
+//UNUSED2008-05      ScUnoGuard aGuard;
+//UNUSED2008-05      return FALSE;
+//UNUSED2008-05  }
+//UNUSED2008-05
+//UNUSED2008-05  uno::Any SAL_CALL ScEmptyEnumeration::nextElement() throw(container::NoSuchElementException,
+//UNUSED2008-05                                          lang::WrappedTargetException, uno::RuntimeException)
+//UNUSED2008-05  {
+//UNUSED2008-05      ScUnoGuard aGuard;
+//UNUSED2008-05      return uno::Any();
+//UNUSED2008-05  }
 
 //------------------------------------------------------------------------
 
@@ -348,40 +348,40 @@ sal_Bool SAL_CALL ScNameToIndexAccess::hasElements(  ) throw(::com::sun::star::u
 
 //------------------------------------------------------------------------
 
-ScPrintSettingsObj::ScPrintSettingsObj()
-{
-}
-
-ScPrintSettingsObj::~ScPrintSettingsObj()
-{
-}
-
-// XPropertySet
-
-uno::Reference<beans::XPropertySetInfo> SAL_CALL ScPrintSettingsObj::getPropertySetInfo()
-                                                        throw(uno::RuntimeException)
-{
-    return NULL;
-}
-
-void SAL_CALL ScPrintSettingsObj::setPropertyValue(
-                        const rtl::OUString& /* aPropertyName */, const uno::Any& /* aValue */ )
-                throw(beans::UnknownPropertyException, beans::PropertyVetoException,
-                        lang::IllegalArgumentException, lang::WrappedTargetException,
-                        uno::RuntimeException)
-{
-    //! later...
-}
-
-uno::Any SAL_CALL ScPrintSettingsObj::getPropertyValue( const rtl::OUString& /* aPropertyName */ )
-                throw(beans::UnknownPropertyException, lang::WrappedTargetException,
-                        uno::RuntimeException)
-{
-    //! later...
-    return uno::Any();
-}
-
-SC_IMPL_DUMMY_PROPERTY_LISTENER( ScPrintSettingsObj )
+//UNUSED2008-05  ScPrintSettingsObj::ScPrintSettingsObj()
+//UNUSED2008-05  {
+//UNUSED2008-05  }
+//UNUSED2008-05
+//UNUSED2008-05  ScPrintSettingsObj::~ScPrintSettingsObj()
+//UNUSED2008-05  {
+//UNUSED2008-05  }
+//UNUSED2008-05
+//UNUSED2008-05  // XPropertySet
+//UNUSED2008-05
+//UNUSED2008-05  uno::Reference<beans::XPropertySetInfo> SAL_CALL ScPrintSettingsObj::getPropertySetInfo()
+//UNUSED2008-05                                                          throw(uno::RuntimeException)
+//UNUSED2008-05  {
+//UNUSED2008-05      return NULL;
+//UNUSED2008-05  }
+//UNUSED2008-05
+//UNUSED2008-05  void SAL_CALL ScPrintSettingsObj::setPropertyValue(
+//UNUSED2008-05                          const rtl::OUString& /* aPropertyName */, const uno::Any& /* aValue */ )
+//UNUSED2008-05                  throw(beans::UnknownPropertyException, beans::PropertyVetoException,
+//UNUSED2008-05                          lang::IllegalArgumentException, lang::WrappedTargetException,
+//UNUSED2008-05                          uno::RuntimeException)
+//UNUSED2008-05  {
+//UNUSED2008-05      //! later...
+//UNUSED2008-05  }
+//UNUSED2008-05
+//UNUSED2008-05  uno::Any SAL_CALL ScPrintSettingsObj::getPropertyValue( const rtl::OUString& /* aPropertyName */ )
+//UNUSED2008-05                  throw(beans::UnknownPropertyException, lang::WrappedTargetException,
+//UNUSED2008-05                          uno::RuntimeException)
+//UNUSED2008-05  {
+//UNUSED2008-05      //! later...
+//UNUSED2008-05      return uno::Any();
+//UNUSED2008-05  }
+//UNUSED2008-05
+//UNUSED2008-05  SC_IMPL_DUMMY_PROPERTY_LISTENER( ScPrintSettingsObj )
 
 
 //------------------------------------------------------------------------

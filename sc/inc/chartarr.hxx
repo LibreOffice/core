@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: chartarr.hxx,v $
- * $Revision: 1.7 $
+ * $Revision: 1.7.32.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -90,7 +90,6 @@ public:
     ScChartArray( ScDocument* pDoc, const ScRangeListRef& rRangeList,
                     const String& rChartName );
     ScChartArray( const ScChartArray& rArr );
-    ScChartArray( ScDocument* pDoc, SvStream& rStream, ScMultipleReadHeader& rHdr );
 
     virtual ~ScChartArray();
     virtual DataObject* Clone() const;
@@ -98,8 +97,6 @@ public:
     const ScRangeListRef&   GetRangeList() const { return aPositioner.GetRangeList(); }
     void    SetRangeList( const ScRangeListRef& rNew ) { aPositioner.SetRangeList(rNew); }
     void    SetRangeList( const ScRange& rNew ) { aPositioner.SetRangeList(rNew); }
-    void    AddToRangeList( const ScRange& rRange ) { aPositioner.AddToRangeList(rRange); }
-    void    AddToRangeList( const ScRangeListRef& rAdd ) { aPositioner.AddToRangeList(rAdd); }
     const   ScChartPositionMap* GetPositionMap() { return aPositioner.GetPositionMap(); }
 
     void    SetHeaders(BOOL bCol, BOOL bRow) { aPositioner.SetHeaders(bCol, bRow); }
@@ -108,8 +105,6 @@ public:
     BOOL    IsValid() const                  { return bValid; }
     void    SetName(const String& rNew)      { aName = rNew; }
     const String& GetName() const            { return aName; }
-
-    BOOL    IsAtCursor(const ScAddress& rPos) const { return aPositioner.IsAtCursor(rPos); }
 
     BOOL    operator==(const ScChartArray& rCmp) const;
 
@@ -128,8 +123,6 @@ public:
                         { return (ScChartArray*)At(nIndex); }
 
     BOOL    operator==(const ScChartCollection& rCmp) const;
-
-    BOOL    Load( ScDocument* pDoc, SvStream& rStream );
 };
 
 

@@ -155,7 +155,6 @@ private:
     void            GetVisibleCell( SCCOL nCol, SCROW nRow, SCTAB nTab, ScBaseCell*& rpCell );
 
     BOOL            IsAvailable( SCCOL nX, SCROW nY );
-    long            GetAvailableWidth( SCCOL nX, SCROW nY, long nNeeded );
     void            GetOutputArea( SCCOL nX, SCSIZE nArrY, long nPosX, long nPosY,
                                     SCCOL nCellX, SCROW nCellY, long nNeeded,
                                     const ScPatternAttr& rPattern,
@@ -172,8 +171,6 @@ private:
 
     void            SetSyntaxColor( Font* pFont, ScBaseCell* pCell );
     void            SetEditSyntaxColor( EditEngine& rEngine, ScBaseCell* pCell );
-
-    void            ConnectObject( const com::sun::star::uno::Reference < com::sun::star::embed::XEmbeddedObject >& rRef, SdrOle2Obj* pOleObj );
 
     double          GetStretch();
 
@@ -232,7 +229,6 @@ public:
     void    DrawRotated(BOOL bPixelToLogic);        // logisch
 
     void    DrawClear();
-    void    DrawPageBorder( SCCOL nStartX, SCROW nStartY, SCCOL nEndX, SCROW nEndY );
 
     // #i72502# printer only command set
     Point PrePrintDrawingLayer(long nLogStX, long nLogStY );
@@ -260,7 +256,6 @@ public:
 
     void    DrawNoteMarks();
     void    AddPDFNotes();
-    void    PrintNoteMarks( const List& rPosList );     // List of ScAddress
 };
 
 

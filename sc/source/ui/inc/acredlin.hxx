@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: acredlin.hxx,v $
- * $Revision: 1.8 $
+ * $Revision: 1.8.32.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -176,7 +176,7 @@ private:
 
     void            Init();
     void            InitFilter();
-    void            SetMyStaticData();
+//UNUSED2008-05  void           SetMyStaticData();
 
     DECL_LINK( FilterHandle, SvxTPFilter* );
     DECL_LINK( RefHandle, SvxTPFilter* );

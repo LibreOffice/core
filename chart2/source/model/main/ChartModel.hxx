@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: ChartModel.hxx,v $
- * $Revision: 1.12 $
+ * $Revision: 1.12.8.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -37,11 +37,7 @@
 #include <com/sun/star/frame/XStorable2.hpp>
 #include <com/sun/star/util/XModifiable.hpp>
 #include <com/sun/star/util/XCloseable.hpp>
-#include <com/sun/star/view/XPrintable.hpp>
-#include <com/sun/star/document/XEventBroadcaster.hpp>
-#include <com/sun/star/document/XEventsSupplier.hpp>
 #include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
-#include <com/sun/star/document/XViewDataSupplier.hpp>
 #include <com/sun/star/document/XFilter.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
@@ -97,18 +93,12 @@ typedef ::comphelper::WeakImplHelper20<
         ,::com::sun::star::frame::XStorable2    //(extension of XStorable)
 //      ,::com::sun::star::frame::XStorable     //(required interface) base of XStorable2
         ,::com::sun::star::util::XModifiable    //comprehends XModifyBroadcaster (required interface)
-//      ,::com::sun::star::view::XPrintable     //(optional interface)
-//      ,::com::sun::star::document::XEventBroadcaster      //(optional interface)
-//      ,::com::sun::star::document::XEventsSupplier        //(optional interface)
-//      ,::com::sun::star::document::XViewDataSupplier      //(optional interface)
     //  ,::com::sun::star::uno::XWeak           // implemented by WeakImplHelper(optional interface)
     //  ,::com::sun::star::uno::XInterface      // implemented by WeakImplHelper(optional interface)
     //  ,::com::sun::star::lang::XTypeProvider  // implemented by WeakImplHelper
         ,::com::sun::star::lang::XServiceInfo
-//         ,::com::sun::star::chart2::XModelDataProvider
         ,::com::sun::star::chart2::XChartDocument  // derived from XModel
         ,::com::sun::star::chart2::data::XDataReceiver   // public API
-//         ,::com::sun::star::style::XStyleFamiliesSupplier
         ,::com::sun::star::chart2::XTitled
         ,::com::sun::star::frame::XLoadable
         ,::com::sun::star::util::XCloneable
@@ -401,74 +391,6 @@ public:
     // ____ document::XDocumentPropertiesSupplier ____
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::document::XDocumentProperties > SAL_CALL
         getDocumentProperties(  ) throw (::com::sun::star::uno::RuntimeException);
-
-/*
-    //-----------------------------------------------------------------
-    // ::com::sun::star::view::XPrintable (optional interface)
-    //-----------------------------------------------------------------
-    virtual ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > SAL_CALL
-        getPrinter()        throw (::com::sun::star::uno::RuntimeException);
-
-    virtual void SAL_CALL
-        setPrinter( const ::com::sun::star::uno::Sequence<
-                            ::com::sun::star::beans::PropertyValue >& rPrinter )
-                            throw (::com::sun::star::lang::IllegalArgumentException
-                            , ::com::sun::star::uno::RuntimeException);
-
-    virtual void SAL_CALL
-        print( const ::com::sun::star::uno::Sequence<
-                            ::com::sun::star::beans::PropertyValue >& rOptions )
-                            throw (::com::sun::star::lang::IllegalArgumentException
-                            , ::com::sun::star::uno::RuntimeException);
-
-    //-----------------------------------------------------------------
-    // ::com::sun::star::document::XEventBroadcaster (optional interface)
-    //-----------------------------------------------------------------
-
-    virtual void SAL_CALL
-        addEventListener( const ::com::sun::star::uno::Reference<
-                            ::com::sun::star::document::XEventListener >& xListener )
-                            throw (::com::sun::star::uno::RuntimeException);
-
-    virtual void SAL_CALL
-        removeEventListener( const ::com::sun::star::uno::Reference<
-                            ::com::sun::star::document::XEventListener >& xListener )
-                            throw (::com::sun::star::uno::RuntimeException);
-
-    //-----------------------------------------------------------------
-    // ::com::sun::star::document::XEventsSupplier (optional interface)
-    //-----------------------------------------------------------------
-
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameReplace > SAL_CALL
-        getEvents()         throw (::com::sun::star::uno::RuntimeException);
-
-    //-----------------------------------------------------------------
-    // ::com::sun::star::document::XViewDataSupplier (optional interface)
-    //-----------------------------------------------------------------
-
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess > SAL_CALL
-        getViewData()       throw (::com::sun::star::uno::RuntimeException);
-
-    virtual void SAL_CALL
-        setViewData( const ::com::sun::star::uno::Reference<
-                            ::com::sun::star::container::XIndexAccess >& xData )
-                            throw (::com::sun::star::uno::RuntimeException);
-    */
-
-    //-----------------------------------------------------------------
-    // ::com::sun::star::style::XStyleFamiliesSupplier
-    //-----------------------------------------------------------------
-//     virtual ::com::sun::star::uno::Reference<
-//             ::com::sun::star::container::XNameAccess > SAL_CALL
-//         getStyleFamilies() throw (::com::sun::star::uno::RuntimeException);
-
-    //-----------------------------------------------------------------
-    // ::com::sun::star::chart2::XModelDataProvider
-    //-----------------------------------------------------------------
-//     virtual ::com::sun::star::uno::Sequence<
-//                 ::com::sun::star::uno::Reference<
-//                     ::com::sun::star::chart2::XDataSeries > > SAL_CALL
-//         getDataSeries()    throw (::com::sun::star::uno::RuntimeException);
 
     //-----------------------------------------------------------------
     // ::com::sun::star::chart2::XChartDocument

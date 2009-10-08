@@ -101,561 +101,92 @@ inline BOOL IsAmbiguousScript( BYTE nScript )
 
 // -----------------------------------------------------------------------------------------
 
-// special handling for non-convertable characters is no longer needed
-#if 0
-
-//  read string from a string cell in original CharSet
-
-String lcl_ReadOriginalStringCell( SvStream& rStream, USHORT nVer, CharSet eSystemCharSet )
-{
-    if( nVer >= SC_DATABYTES2 )
-    {
-        BYTE cData;
-        rStream >> cData;
-        if( cData & 0x0F )
-            rStream.SeekRel( cData & 0x0F );
-    }
-
-    CharSet eOld = rStream.GetStreamCharSet();
-    rStream.SetStreamCharSet( eSystemCharSet );     // no conversion
-
-    String aString;
-    rStream >> aString;
-
-    rStream.SetStreamCharSet( eOld );
-
-    return aString;
-}
-
-#endif
+//UNUSED2008-05  SCROW ScColumn::NoteCount( SCROW nMaxRow ) const
+//UNUSED2008-05  {
+//UNUSED2008-05      SCROW nNoteCount = 0;
+//UNUSED2008-05      SCSIZE i;
+//UNUSED2008-05
+//UNUSED2008-05      for (i=0; i<nCount; i++)
+//UNUSED2008-05          if ( pItems[i].pCell->GetNotePtr() && pItems[i].nRow<=nMaxRow )
+//UNUSED2008-05              ++nNoteCount;
+//UNUSED2008-05
+//UNUSED2008-05      return nNoteCount;
+//UNUSED2008-05  }
 
 // -----------------------------------------------------------------------------------------
 
-void ScColumn::LoadData( SvStream& rStream )
-{
-    SCSIZE      nNewCount = 0;
-    SCROW       nNewRow = 0;
-    BYTE        nByte;
-    USHORT      nVer = (USHORT) pDocument->GetSrcVersion();
-
-    ScMultipleReadHeader aHdr( rStream );
-
-#if SC_ROWLIMIT_STREAM_ACCESS
-#error address types changed!
-    rStream >> nNewCount;
-#endif
-    if ( nNewCount > static_cast<SCSIZE>(MAXROW+1) )                        // wuerde das Array zu gross?
-    {
-        pDocument->SetLostData();
-        rStream.SetError( SVSTREAM_FILEFORMAT_ERROR );
-        return;
-    }
-
-    Resize( nNewCount );                            // veraendert nCount nicht
-    for (SCSIZE i=0; i<nNewCount; i++)
-    {
-#if SC_ROWLIMIT_STREAM_ACCESS
-#error address types changed!
-        rStream >> nNewRow;
-#endif
-        rStream >> nByte;
-
-        if ( nNewRow > MAXROW )                 // Zeilennummer zu gross?
-        {
-            pDocument->SetLostData();
-            rStream.SetError( SVSTREAM_FILEFORMAT_ERROR );
-            return;
-        }
-
-        switch ((CellType) nByte)
-        {
-            case CELLTYPE_VALUE:
-                {
-                    ScValueCell* pCell = new ScValueCell( rStream, nVer );
-                    Append( nNewRow, pCell );
-                }
-                break;
-            case CELLTYPE_STRING:
-                {
-                    ScStringCell* pCell = new ScStringCell( rStream, nVer );
-                    Append( nNewRow, pCell );
-                }
-                break;
-            case CELLTYPE_SYMBOLS:
-                {
-                    CharSet eOld = rStream.GetStreamCharSet();
-                    //  convert into true symbol characters
-                    rStream.SetStreamCharSet( RTL_TEXTENCODING_SYMBOL );
-                    ScStringCell* pCell = new ScStringCell( rStream, nVer );
-                    Append( nNewRow, pCell );
-                    rStream.SetStreamCharSet( eOld );
-                    ScSymbolStringCellEntry * pEntry = new ScSymbolStringCellEntry;
-                    pEntry->pCell = pCell;
-                    pEntry->nRow = nNewRow;
-                    pDocument->GetLoadedSymbolStringCellsList().Insert(
-                        pEntry, LIST_APPEND );
-                }
-                break;
-            case CELLTYPE_EDIT:
-                {
-                    ScEditCell* pCell = new ScEditCell( rStream, nVer, pDocument );
-                    Append( nNewRow, pCell );
-                }
-                break;
-            case CELLTYPE_FORMULA:
-                {
-                    DBG_ERRORFILE( "REMOVED_BINFILTER");
-                }
-                break;
-            case CELLTYPE_NOTE:
-                {
-                    ScNoteCell *pCell = new ScNoteCell( rStream, nVer );
-                    Append( nNewRow, pCell);
-                }
-                break;
-            default:
-                DBG_ERROR( "Falscher Zellentyp" );
-                rStream.SetError( SVSTREAM_FILEFORMAT_ERROR );
-                return;
-        }
-    }
-}
-
-BOOL lcl_RemoveAny( ScDocument* pDocument, SCCOL nCol, SCTAB nTab )
-{
-    ScDBCollection* pDBColl = pDocument->GetDBCollection();
-    if ( pDBColl )
-    {
-        USHORT nCount = pDBColl->GetCount();
-        for (USHORT i=0; i<nCount; i++)
-        {
-            ScDBData* pData = (*pDBColl)[i];
-            if ( pData->IsStripData() &&
-                    pData->HasImportParam() && !pData->HasImportSelection() )
-            {
-                ScRange aDBRange;
-                pData->GetArea(aDBRange);
-                if ( nTab == aDBRange.aStart.Tab() &&
-                     nCol >= aDBRange.aStart.Col() && nCol <= aDBRange.aEnd.Col() )
-                    return TRUE;
-            }
-        }
-    }
-
-    return FALSE;
-}
-
-BOOL lcl_RemoveThis( ScDocument* pDocument, SCCOL nCol, SCROW nRow, SCTAB nTab )
-{
-    ScDBCollection* pDBColl = pDocument->GetDBCollection();
-    if ( pDBColl )
-    {
-        USHORT nCount = pDBColl->GetCount();
-        for (USHORT i=0; i<nCount; i++)
-        {
-            ScDBData* pData = (*pDBColl)[i];
-            if ( pData->IsStripData() &&
-                    pData->HasImportParam() && !pData->HasImportSelection() )
-            {
-                ScRange aDBRange;
-                pData->GetArea(aDBRange);
-                if ( nTab == aDBRange.aStart.Tab() &&
-                     nCol >= aDBRange.aStart.Col() && nCol <= aDBRange.aEnd.Col() &&
-                     nRow >= aDBRange.aStart.Row() && nRow <= aDBRange.aEnd.Row() )
-                    return TRUE;
-            }
-        }
-    }
-
-    return FALSE;
-}
-
-void ScColumn::SaveData( SvStream& rStream ) const
-{
-    CellType eCellType;
-    ScBaseCell* pCell;
-    SCSIZE i;
-    ScFontToSubsFontConverter_AutoPtr xFontConverter;
-    const ULONG nFontConverterFlags = FONTTOSUBSFONT_EXPORT | FONTTOSUBSFONT_ONLYOLDSOSYMBOLFONTS;
-
-    ScMultipleWriteHeader aHdr( rStream );
-
-    SCSIZE nSaveCount = nCount;
-
-    //  Zeilen hinter MAXROW abziehen
-    SCROW nSaveMaxRow = pDocument->GetSrcMaxRow();
-    if ( nSaveMaxRow != MAXROW )
-    {
-        if ( nSaveCount && pItems[nSaveCount-1].nRow > nSaveMaxRow )
-        {
-            pDocument->SetLostData();           // Warnung ausgeben
-            do
-                --nSaveCount;
-            while ( nSaveCount && pItems[nSaveCount-1].nRow > nSaveMaxRow );
-        }
-    }
-
-    //  Zellen abziehen, die wegen Import nicht gespeichert werden
-    BOOL bRemoveAny = lcl_RemoveAny( pDocument, nCol, nTab );
-    SCSIZE nEffCount = nSaveCount;
-    if ( bRemoveAny )
-    {
-        for (i=0; i<nSaveCount; i++)
-            if ( lcl_RemoveThis( pDocument, nCol, pItems[i].nRow, nTab ) )
-                --nEffCount;
-
-//      String aDbg("Tab ");aDbg+=nTab;aDbg+=" Col ";aDbg+=nCol;
-//      aDbg+=" Remove ";aDbg+=nSaveCount-nEffCount; DBG_ERROR(aDbg);
-    }
-
-#if SC_ROWLIMIT_STREAM_ACCESS
-#error address types changed!
-    rStream << nEffCount;           // nEffCount: Zellen, die wirklich gespeichert werden
-#endif
-
-    ScAttrIterator aIter( pAttrArray, 0, MAXROW );
-    SCROW nStt = 0, nEnd = 0;
-    const ScPatternAttr* pAttr;
-    do
-    {
-        pAttr = aIter.Next( nStt, nEnd );
-    }
-    while( pAttr && !(
-        (xFontConverter = pAttr->GetSubsFontConverter( nFontConverterFlags ))
-        || pAttr->IsSymbolFont()) );
-
-    for (i=0; i<nSaveCount; i++)        // nSaveCount: Ende auf MAXROW angepasst
-    {
-        SCROW nRow = pItems[i].nRow;
-
-        if ( !bRemoveAny || !lcl_RemoveThis( pDocument, nCol, nRow, nTab ) )
-        {
-#if SC_ROWLIMIT_STREAM_ACCESS
-#error address types changed!
-            rStream << nRow;
-#endif
-
-            pCell = pItems[i].pCell;
-            eCellType = pCell->GetCellType();
-
-            switch( eCellType )
-            {
-                case CELLTYPE_VALUE:
-                    rStream << (BYTE) eCellType;
-                    ((ScValueCell*)pCell)->Save( rStream );
-                    break;
-                case CELLTYPE_STRING:
-                    if( pAttr )
-                    {
-                        if( nRow > nEnd )
-                        {
-                            do
-                            {
-                                do
-                                {
-                                    pAttr = aIter.Next( nStt, nEnd );
-                                }
-                                while ( pAttr && nRow > nEnd );     // #99139# skip all formats before this cell
-                            }
-                            while( pAttr && !(
-                                (xFontConverter = pAttr->GetSubsFontConverter( nFontConverterFlags ))
-                                || pAttr->IsSymbolFont()) );
-                        }
-                        if( pAttr && nRow >= nStt && nRow <= nEnd )
-                            eCellType = CELLTYPE_SYMBOLS;
-                    }
-                    rStream << (BYTE) eCellType;
-                    if ( eCellType == CELLTYPE_SYMBOLS )
-                    {
-                        //  cell string contains true symbol characters
-                        CharSet eOld = rStream.GetStreamCharSet();
-                        rStream.SetStreamCharSet( RTL_TEXTENCODING_SYMBOL );
-                        ((ScStringCell*)pCell)->Save( rStream, xFontConverter );
-                        rStream.SetStreamCharSet( eOld );
-                    }
-                    else
-                        ((ScStringCell*)pCell)->Save( rStream );
-                    break;
-                case CELLTYPE_EDIT:
-                    rStream << (BYTE) eCellType;
-                    ((ScEditCell*)pCell)->Save( rStream );
-                    break;
-                case CELLTYPE_FORMULA:
-                    DBG_ERRORFILE( "REMOVED_BINFILTER");
-                    break;
-                case CELLTYPE_NOTE:
-                    rStream << (BYTE) eCellType;
-                    ((ScNoteCell*)pCell)->Save( rStream );
-                    break;
-                default:
-                    {
-                        //  #53846# soll zwar nicht vorkommen, aber falls doch,
-                        //  eine leere NoteCell speichern, damit das Dokument
-                        //  ueberhaupt wieder geladen werden kann.
-                        rStream << (BYTE) CELLTYPE_NOTE;
-                        ScNoteCell aDummyCell;
-                        aDummyCell.Save( rStream );
-                        DBG_ERROR( "Falscher Zellentyp" );
-                    }
-                    break;
-            }
-        }
-    }
-}
-
-// -----------------------------------------------------------------------------------------
-
-void ScColumn::LoadNotes( SvStream& rStream )
-{
-    ScReadHeader aHdr(rStream);
-
-    SCSIZE nNoteCount = 0;
-#if SC_ROWLIMIT_STREAM_ACCESS
-#error address types changed!
-    rStream >> nNoteCount;
-#endif
-    for (SCSIZE i=0; i<nNoteCount && rStream.GetError() == SVSTREAM_OK; i++)
-    {
-        SCSIZE nPos = 0;
-#if SC_ROWLIMIT_STREAM_ACCESS
-#error address types changed!
-        rStream >> nPos;
-#endif
-        if (nPos < nCount)
-            pItems[nPos].pCell->LoadNote(rStream, pDocument);
-        else
-        {
-            DBG_ERROR("falsche Pos in ScColumn::LoadNotes");
-            rStream.SetError( SVSTREAM_FILEFORMAT_ERROR );
-        }
-    }
-}
-
-SCROW ScColumn::NoteCount( SCROW nMaxRow ) const
-{
-    SCROW nNoteCount = 0;
-    SCSIZE i;
-
-    for (i=0; i<nCount; i++)
-        if ( pItems[i].pCell->GetNotePtr() && pItems[i].nRow<=nMaxRow )
-            ++nNoteCount;
-
-    return nNoteCount;
-}
-
-void ScColumn::SaveNotes( SvStream& rStream ) const
-{
-    SCROW nSaveMaxRow = pDocument->GetSrcMaxRow();
-    SCSIZE i;
-
-    BOOL bRemoveAny = lcl_RemoveAny( pDocument, nCol, nTab );
-    SCROW nNoteCount;
-    if ( bRemoveAny )
-    {
-        //  vorher zaehlen, wieviele Notizen es werden
-
-        nNoteCount = 0;
-        for (i=0; i<nCount; i++)
-            if ( pItems[i].pCell->GetNotePtr() && pItems[i].nRow<=nSaveMaxRow &&
-                    !lcl_RemoveThis( pDocument, nCol, pItems[i].nRow, nTab ) )
-                ++nNoteCount;
-    }
-    else
-        nNoteCount = NoteCount(nSaveMaxRow);
-
-    //  Speichern
-    //  Als Positionen muessen die Indizes gespeichert werden, die beim Laden entstehen,
-    //  also ohne die weggelassenen Zellen mitzuzaehlen.
-
-    ScWriteHeader aHdr(rStream);
-#if SC_ROWLIMIT_STREAM_ACCESS
-#error address types changed!
-    rStream << nNoteCount;
-#endif
-
-    USHORT nDestPos = 0;
-    for (i=0; i<nCount && rStream.GetError() == SVSTREAM_OK; i++)
-    {
-        SCROW nRow = pItems[i].nRow;
-        if ( !bRemoveAny || !lcl_RemoveThis( pDocument, nCol, nRow, nTab ) )
-        {
-            const ScPostIt* pNote = pItems[i].pCell->GetNotePtr();
-            if ( pNote && nRow <= nSaveMaxRow )
-            {
-                rStream << nDestPos;
-                rStream << *pNote;
-            }
-            ++nDestPos;         // nDestPos zaehlt die in SaveData gespeicherten Zellen
-        }
-    }
-
-    //  SetLostData ist schon in SaveData passiert, wenn noetig
-}
-
-// -----------------------------------------------------------------------------------------
-
-void ScColumn::CorrectSymbolCells( CharSet eStreamCharSet )
-{
-    //  #99139# find and correct string cells that are formatted with a symbol font,
-    //  but are not in the LoadedSymbolStringCellsList
-    //  (because CELLTYPE_SYMBOLS wasn't written in the file)
-
-    ScFontToSubsFontConverter_AutoPtr xFontConverter;
-    const ULONG nFontConverterFlags = FONTTOSUBSFONT_EXPORT | FONTTOSUBSFONT_ONLYOLDSOSYMBOLFONTS;
-
-    BOOL bListInitialized = FALSE;
-    ScSymbolStringCellEntry* pCurrentEntry = NULL;
-
-    ScAttrIterator aAttrIter( pAttrArray, 0, MAXROW );
-    SCROW nStt, nEnd;
-    const ScPatternAttr* pAttr = aAttrIter.Next( nStt, nEnd );
-    while ( pAttr )
-    {
-        if ( (xFontConverter = pAttr->GetSubsFontConverter( nFontConverterFlags )) ||
-                pAttr->IsSymbolFont() )
-        {
-            ScColumnIterator aCellIter( this, nStt, nEnd );
-            SCROW nRow;
-            ScBaseCell* pCell;
-            while ( aCellIter.Next( nRow, pCell ) )
-            {
-                if ( pCell->GetCellType() == CELLTYPE_STRING )
-                {
-                    List& rList = pDocument->GetLoadedSymbolStringCellsList();
-                    if (!bListInitialized)
-                    {
-                        pCurrentEntry = (ScSymbolStringCellEntry*)rList.First();
-                        bListInitialized = TRUE;
-                    }
-
-                    while ( pCurrentEntry && pCurrentEntry->nRow < nRow )
-                        pCurrentEntry = (ScSymbolStringCellEntry*)rList.Next();
-
-                    if ( pCurrentEntry && pCurrentEntry->nRow == nRow )
-                    {
-                        //  found
-                    }
-                    else
-                    {
-                        //  not in list -> convert and put into list
-
-                        ScStringCell* pStrCell = (ScStringCell*)pCell;
-                        String aOldStr;
-                        pStrCell->GetString( aOldStr );
-
-                        //  convert back to stream character set (get original data)
-                        ByteString aByteStr( aOldStr, eStreamCharSet );
-
-                        //  convert using symbol encoding, as for CELLTYPE_SYMBOLS cells
-                        String aNewStr( aByteStr, RTL_TEXTENCODING_SYMBOL );
-                        pStrCell->SetString( aNewStr );
-
-                        ScSymbolStringCellEntry * pEntry = new ScSymbolStringCellEntry;
-                        pEntry->pCell = pStrCell;
-                        pEntry->nRow = nRow;
-
-                        if ( pCurrentEntry )
-                            rList.Insert( pEntry );     // before current entry - pCurrentEntry stays valid
-                        else
-                            rList.Insert( pEntry, LIST_APPEND );    // append if already behind last entry
-                    }
-                }
-            }
-        }
-
-        pAttr = aAttrIter.Next( nStt, nEnd );
-    }
-}
-
-BOOL ScColumn::Load( SvStream& rStream, ScMultipleReadHeader& rHdr )
-{
-    rHdr.StartEntry();
-    while (rHdr.BytesLeft() && rStream.GetError() == SVSTREAM_OK)
-    {
-        USHORT nID;
-        rStream >> nID;
-        switch (nID)
-        {
-            case SCID_COLDATA:
-                LoadData( rStream );
-                break;
-            case SCID_COLNOTES:
-                LoadNotes( rStream );
-                break;
-            case SCID_COLATTRIB:
-                pAttrArray->Load( rStream );
-                break;
-            default:
-                {
-                    DBG_ERROR("unbekannter Sub-Record in ScColumn::Load");
-                    ScReadHeader aDummyHeader( rStream );
-                }
-        }
-    }
-    rHdr.EndEntry();
-
-    //  #99139# old versions didn't always write CELLTYPE_SYMBOLS for symbol string cells,
-    //  so we have to look for remaining string cells in areas that are formatted with
-    //  symbol font:
-    CorrectSymbolCells( rStream.GetStreamCharSet() );
-
-    if ( pDocument->SymbolStringCellsPending() )
-    {
-        ScFontToSubsFontConverter_AutoPtr xFontConverter;
-        const ULONG nFontConverterFlags = FONTTOSUBSFONT_IMPORT | FONTTOSUBSFONT_ONLYOLDSOSYMBOLFONTS;
-        ScSymbolStringCellEntry* pE;
-        SCROW nStt, nEnd = 0;
-
-        ScAttrIterator aIter( pAttrArray, 0, MAXROW );
-        const ScPatternAttr* pAttr = aIter.Next( nStt, nEnd );
-        xFontConverter = pAttr->GetSubsFontConverter( nFontConverterFlags );
-
-        List& rList = pDocument->GetLoadedSymbolStringCellsList();
-        for ( pE = (ScSymbolStringCellEntry*) rList.First(); pE;
-                pE = (ScSymbolStringCellEntry*) rList.Next() )
-        {
-            const ScPatternAttr* pLastAttr = pAttr;
-            while ( nEnd < pE->nRow )
-            {
-                pAttr = aIter.Next( nStt, nEnd );
-            }
-            if ( pAttr != pLastAttr )
-                xFontConverter = pAttr->GetSubsFontConverter( nFontConverterFlags );
-            pE->pCell->ConvertFont( xFontConverter );
-            delete pE;
-        }
-        rList.Clear();
-    }
-    pAttrArray->ConvertFontsAfterLoad();
-
-    return TRUE;
-}
-
-BOOL ScColumn::Save( SvStream& rStream, ScMultipleWriteHeader& rHdr ) const
-{
-    rHdr.StartEntry();
-
-    if (!IsEmptyData())             //! Test, ob alles weggelassen wird?
-    {
-        rStream << (USHORT) SCID_COLDATA;
-        SaveData( rStream );
-    }
-    SCROW nNotes = NoteCount(); //! Test, ob alles weggelassen wird?
-    if (nNotes > 0)
-    {
-        rStream << (USHORT) SCID_COLNOTES;
-        SaveNotes( rStream );
-    }
-    if (!IsEmptyAttr())
-    {
-        rStream << (USHORT) SCID_COLATTRIB;
-        pAttrArray->Save( rStream );
-    }
-
-    rHdr.EndEntry();
-
-    return TRUE;
-}
+//UNUSED2008-05  void ScColumn::CorrectSymbolCells( CharSet eStreamCharSet )
+//UNUSED2008-05  {
+//UNUSED2008-05      //  #99139# find and correct string cells that are formatted with a symbol font,
+//UNUSED2008-05      //  but are not in the LoadedSymbolStringCellsList
+//UNUSED2008-05      //  (because CELLTYPE_SYMBOLS wasn't written in the file)
+//UNUSED2008-05
+//UNUSED2008-05      ScFontToSubsFontConverter_AutoPtr xFontConverter;
+//UNUSED2008-05      const ULONG nFontConverterFlags = FONTTOSUBSFONT_EXPORT | FONTTOSUBSFONT_ONLYOLDSOSYMBOLFONTS;
+//UNUSED2008-05
+//UNUSED2008-05      BOOL bListInitialized = FALSE;
+//UNUSED2008-05      ScSymbolStringCellEntry* pCurrentEntry = NULL;
+//UNUSED2008-05
+//UNUSED2008-05      ScAttrIterator aAttrIter( pAttrArray, 0, MAXROW );
+//UNUSED2008-05      SCROW nStt, nEnd;
+//UNUSED2008-05      const ScPatternAttr* pAttr = aAttrIter.Next( nStt, nEnd );
+//UNUSED2008-05      while ( pAttr )
+//UNUSED2008-05      {
+//UNUSED2008-05          if ( (xFontConverter = pAttr->GetSubsFontConverter( nFontConverterFlags )) ||
+//UNUSED2008-05                  pAttr->IsSymbolFont() )
+//UNUSED2008-05          {
+//UNUSED2008-05              ScColumnIterator aCellIter( this, nStt, nEnd );
+//UNUSED2008-05              SCROW nRow;
+//UNUSED2008-05              ScBaseCell* pCell;
+//UNUSED2008-05              while ( aCellIter.Next( nRow, pCell ) )
+//UNUSED2008-05              {
+//UNUSED2008-05                  if ( pCell->GetCellType() == CELLTYPE_STRING )
+//UNUSED2008-05                  {
+//UNUSED2008-05                      List& rList = pDocument->GetLoadedSymbolStringCellsList();
+//UNUSED2008-05                      if (!bListInitialized)
+//UNUSED2008-05                      {
+//UNUSED2008-05                          pCurrentEntry = (ScSymbolStringCellEntry*)rList.First();
+//UNUSED2008-05                          bListInitialized = TRUE;
+//UNUSED2008-05                      }
+//UNUSED2008-05
+//UNUSED2008-05                      while ( pCurrentEntry && pCurrentEntry->nRow < nRow )
+//UNUSED2008-05                          pCurrentEntry = (ScSymbolStringCellEntry*)rList.Next();
+//UNUSED2008-05
+//UNUSED2008-05                      if ( pCurrentEntry && pCurrentEntry->nRow == nRow )
+//UNUSED2008-05                      {
+//UNUSED2008-05                          //  found
+//UNUSED2008-05                      }
+//UNUSED2008-05                      else
+//UNUSED2008-05                      {
+//UNUSED2008-05                          //  not in list -> convert and put into list
+//UNUSED2008-05
+//UNUSED2008-05                          ScStringCell* pStrCell = (ScStringCell*)pCell;
+//UNUSED2008-05                          String aOldStr;
+//UNUSED2008-05                          pStrCell->GetString( aOldStr );
+//UNUSED2008-05
+//UNUSED2008-05                          //  convert back to stream character set (get original data)
+//UNUSED2008-05                          ByteString aByteStr( aOldStr, eStreamCharSet );
+//UNUSED2008-05
+//UNUSED2008-05                          //  convert using symbol encoding, as for CELLTYPE_SYMBOLS cells
+//UNUSED2008-05                          String aNewStr( aByteStr, RTL_TEXTENCODING_SYMBOL );
+//UNUSED2008-05                          pStrCell->SetString( aNewStr );
+//UNUSED2008-05
+//UNUSED2008-05                          ScSymbolStringCellEntry * pEntry = new ScSymbolStringCellEntry;
+//UNUSED2008-05                          pEntry->pCell = pStrCell;
+//UNUSED2008-05                          pEntry->nRow = nRow;
+//UNUSED2008-05
+//UNUSED2008-05                          if ( pCurrentEntry )
+//UNUSED2008-05                              rList.Insert( pEntry );     // before current entry - pCurrentEntry stays valid
+//UNUSED2008-05                          else
+//UNUSED2008-05                              rList.Insert( pEntry, LIST_APPEND );    // append if already behind last entry
+//UNUSED2008-05                      }
+//UNUSED2008-05                  }
+//UNUSED2008-05              }
+//UNUSED2008-05          }
+//UNUSED2008-05
+//UNUSED2008-05          pAttr = aAttrIter.Next( nStt, nEnd );
+//UNUSED2008-05      }
+//UNUSED2008-05  }
 
 // -----------------------------------------------------------------------------------------
 
@@ -1989,30 +1520,6 @@ BOOL ScColumn::HasDataAt(SCROW nRow) const
 
     return FALSE;
 
-}
-
-SCROW ScColumn::GetFirstEntryPos() const
-{
-    if (pAttrArray)
-        return Min( GetFirstDataPos(), pAttrArray->GetFirstEntryPos() );
-    else
-        return GetFirstDataPos();
-}
-
-SCROW ScColumn::GetLastEntryPos() const
-{
-    if (pAttrArray)
-        return Max( GetLastDataPos(), pAttrArray->GetLastEntryPos(TRUE) );
-    else
-        return GetLastDataPos();
-}
-
-SCROW ScColumn::GetLastAttrPos() const
-{
-    if (pAttrArray)
-        return pAttrArray->GetLastEntryPos(FALSE);
-    else
-        return 0;
 }
 
 BOOL ScColumn::IsAllAttrEqual( const ScColumn& rCol, SCROW nStartRow, SCROW nEndRow ) const

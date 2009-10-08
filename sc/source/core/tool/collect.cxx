@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: collect.cxx,v $
- * $Revision: 1.14 $
+ * $Revision: 1.14.32.3 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -369,23 +369,23 @@ void StrCollection::Store( SvStream& rStream ) const
 // TypedStrCollection
 //------------------------------------------------------------------------
 
-TypedStrData::TypedStrData( ScDocument* pDoc, SCCOL nCol, SCROW nRow, SCTAB nTab,
-                                BOOL bAllStrings )
-{
-    if ( pDoc->HasValueData( nCol, nRow, nTab ) )
-    {
-        pDoc->GetValue( nCol, nRow, nTab, nValue );
-        if (bAllStrings)
-            pDoc->GetString( nCol, nRow, nTab, aStrValue );
-        nStrType = 0;
-    }
-    else
-    {
-        pDoc->GetString( nCol, nRow, nTab, aStrValue );
-        nValue = 0.0;
-        nStrType = 1;       //! Typ uebergeben ?
-    }
-}
+//UNUSED2008-05  TypedStrData::TypedStrData( ScDocument* pDoc, SCCOL nCol, SCROW nRow, SCTAB nTab,
+//UNUSED2008-05                                  BOOL bAllStrings )
+//UNUSED2008-05  {
+//UNUSED2008-05      if ( pDoc->HasValueData( nCol, nRow, nTab ) )
+//UNUSED2008-05      {
+//UNUSED2008-05          pDoc->GetValue( nCol, nRow, nTab, nValue );
+//UNUSED2008-05          if (bAllStrings)
+//UNUSED2008-05              pDoc->GetString( nCol, nRow, nTab, aStrValue );
+//UNUSED2008-05          nStrType = 0;
+//UNUSED2008-05      }
+//UNUSED2008-05      else
+//UNUSED2008-05      {
+//UNUSED2008-05          pDoc->GetString( nCol, nRow, nTab, aStrValue );
+//UNUSED2008-05          nValue = 0.0;
+//UNUSED2008-05          nStrType = 1;       //! Typ uebergeben ?
+//UNUSED2008-05      }
+//UNUSED2008-05  }
 
 DataObject* TypedStrData::Clone() const
 {

@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: scmod.cxx,v $
- * $Revision: 1.58 $
+ * $Revision: 1.58.32.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -1576,13 +1576,6 @@ void ScModule::InputChanged( EditView* pView )
         pHdl->InputChanged( pView );
 }
 
-void ScModule::SetInputWindow( ScInputWindow* pWin )
-{
-    ScInputHandler* pHdl = GetInputHdl();
-    if ( pHdl )
-        pHdl->SetInputWindow( pWin );
-}
-
 void ScModule::ViewShellGone( ScTabViewShell* pViewSh )
 {
     ScInputHandler* pHdl = GetInputHdl();
@@ -1677,12 +1670,6 @@ void ScModule::ActivateInputWindow( const String* pStrFormula, BOOL bMatrix )
 //                  Referenz - Dialoge
 //
 //------------------------------------------------------------------
-
-void ScModule::CloseDialogs()
-{
-    if( nCurRefDlgId )
-        SetRefDialog( nCurRefDlgId, FALSE );
-}
 
 void ScModule::SetRefDialog( USHORT nId, BOOL bVis, SfxViewFrame* pViewFrm )
 {

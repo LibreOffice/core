@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: xistyle.hxx,v $
- * $Revision: 1.23 $
+ * $Revision: 1.23.90.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -55,6 +55,9 @@ class XclImpPalette : public XclDefaultPalette
 public:
     explicit            XclImpPalette( const XclImpRoot& rRoot );
 
+    /** Clears all buffered data, used to set up for a new sheet. */
+    void                Initialize();
+
     /** Returns the RGB color data for a (non-zero-based) Excel palette entry.
         @descr  First looks for a color read from file, then looks for a default color.
         @return  The color from current or default palette or COL_AUTO, if nothing else found. */
@@ -88,9 +91,13 @@ public:
 
     /** Sets all font attributes to used or unused. */
     void                SetAllUsedFlags( bool bUsed );
+    /** Sets the passed font data and all used flags to 'used'. */
+    void                SetFontData( const XclFontData& rFontData, bool bHasCharSet );
 
     /** Returns read-only access to font data. */
     inline const XclFontData& GetFontData() const { return maData; }
+    /** Returns true, if the font character set is valid. */
+    inline bool         HasCharSet() const { return mbHasCharSet; }
     /** Returns true, if the font contains superscript or subscript. */
     inline bool         HasEscapement() const { return maData.mnEscapem != EXC_FONTESC_NONE; }
     /** Returns the text encoding for strings used with this font. */
@@ -165,9 +172,11 @@ class XclImpFontBuffer : protected XclImpRoot, ScfNoCopy
 public:
     explicit            XclImpFontBuffer( const XclImpRoot& rRoot );
 
+    /** Clears all buffered data, used to set up for a new sheet. */
+    void                Initialize();
+
     /** Returns the object that stores all contents of a FONT record. */
-    inline const XclImpFont* GetFont( sal_uInt16 nFontIndex ) const
-                            { return maFontList.GetObject( nFontIndex ); }
+    const XclImpFont*   GetFont( sal_uInt16 nFontIndex ) const;
     /** Returns the application font data of this file, needed i.e. for column width. */
     inline const XclFontData& GetAppFontData() const { return maAppFont; }
 
@@ -188,10 +197,18 @@ public:
     void                WriteFontProperties(
                             ScfPropertySet& rPropSet, XclFontPropSetType eType,
                             sal_uInt16 nFontIdx, const Color* pFontColor = 0 ) const;
+    /** Writes default font properties for form controls to the passed property set. */
+    void                WriteDefaultCtrlFontProperties( ScfPropertySet& rPropSet ) const;
+
+private:
+    /** Updates the application default font. */
+    void                UpdateAppFont( const XclFontData& rFontData, bool bHasCharSet );
 
 private:
     ScfDelList< XclImpFont > maFontList;    /// List of all FONT records in the Excel file.
     XclFontData         maAppFont;          /// Application font (for column width).
+    XclImpFont          maFont4;            /// Built-in font with index 4.
+    XclImpFont          maCtrlFont;         /// BIFF5 default form controls font (Helv,8pt,bold).
 };
 
 // FORMAT record - number formats =============================================
@@ -201,6 +218,9 @@ class XclImpNumFmtBuffer : public XclNumFmtBuffer, protected XclImpRoot
 {
 public:
     explicit            XclImpNumFmtBuffer( const XclImpRoot& rRoot );
+
+    /** Clears all buffered data, used to set up for a new sheet. */
+    void                Initialize();
 
     /** Reads a FORMAT record. */
     void                ReadFormat( XclImpStream& rStrm );
@@ -451,6 +471,9 @@ class XclImpXFBuffer : protected XclImpRoot, ScfNoCopy
 {
 public:
     explicit            XclImpXFBuffer( const XclImpRoot& rRoot );
+
+    /** Clears all buffered data, used to set up for a new sheet. */
+    void                Initialize();
 
     /** Reads an XF record. */
     void                ReadXF( XclImpStream& rStrm );

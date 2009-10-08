@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: xmlsubti.cxx,v $
- * $Revision: 1.50 $
+ * $Revision: 1.50.30.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -107,14 +107,6 @@ void ScMyTableData::AddColumn()
         nRealCols.resize(nColsPerCol.size() + nDefaultColCount + 1, 0);
     }
     nRealCols[aTableCellPos.Column + 1] = nRealCols[aTableCellPos.Column] + nColsPerCol[aTableCellPos.Column];
-}
-
-sal_Int32 ScMyTableData::FindNextCol(const sal_Int32 nIndex) const
-{
-    sal_Int32 i = nIndex;
-    while(nRealCols[i] < 0)
-        ++i;
-    return nRealCols[i];
 }
 
 sal_Int32 ScMyTableData::GetRealCols(const sal_Int32 nIndex, const sal_Bool /* bIsNormal */) const
@@ -424,22 +416,6 @@ void ScMyTables::SetRowStyle(const rtl::OUString& rCellStyleName)
 {
     rImport.GetStylesImportHelper()->SetRowStyle(rCellStyleName);
 }
-
-void ScMyTables::CloseRow()
-{
-    sal_Int32 nToMerge;
-    sal_Int32 nSpannedCols(aTableVec[nTableCount - 1]->GetSpannedCols());
-    sal_Int32 nColCount(aTableVec[nTableCount - 1]->GetColCount());
-    sal_Int32 nCol(aTableVec[nTableCount - 1]->GetColumn());
-    sal_Int32 nColsPerCol(aTableVec[nTableCount - 1]->GetColsPerCol(nCol));
-    if (nSpannedCols > nColCount)
-        nToMerge = aTableVec[nTableCount - 1]->GetChangedCols(nCol, nCol + nColsPerCol + nSpannedCols - nColCount);
-    else
-        nToMerge = aTableVec[nTableCount - 1]->GetChangedCols(nCol, nCol + nColsPerCol);
-    if ((nToMerge > nCol) && (aTableVec[nTableCount - 1]->GetSubTableSpanned() == 1))
-        DoMerge(nColsPerCol + aTableVec[nTableCount - 1]->GetColsPerCol(nToMerge) - 1);
-}
-
 
 void ScMyTables::InsertColumn()
 {

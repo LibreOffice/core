@@ -1144,7 +1144,7 @@ void ScPrintFunc::SetDateTime( const Date& rDate, const Time& rTime )
 }
 
 void lcl_DrawGraphic( const Graphic &rGraphic, OutputDevice *pOut,
-                        const Rectangle &rGrf, const Rectangle &rOut )
+                      const Rectangle &rGrf, const Rectangle &rOut )
 {
     const FASTBOOL bNotInside = !rOut.IsInside( rGrf );
     if ( bNotInside )
@@ -1154,22 +1154,6 @@ void lcl_DrawGraphic( const Graphic &rGraphic, OutputDevice *pOut,
     }
 
     ((Graphic&)rGraphic).Draw( pOut, rGrf.TopLeft(), rGrf.GetSize() );
-
-    if ( bNotInside )
-        pOut->Pop();
-}
-
-void lcl_DrawGraphic( const Bitmap& rBitmap, OutputDevice *pOut,
-                        const Rectangle &rGrf, const Rectangle &rOut )
-{
-    const FASTBOOL bNotInside = !rOut.IsInside( rGrf );
-    if ( bNotInside )
-    {
-        pOut->Push();
-        pOut->IntersectClipRegion( rOut );
-    }
-
-    pOut->DrawBitmap( rGrf.TopLeft(), rGrf.GetSize(), rBitmap );
 
     if ( bNotInside )
         pOut->Pop();
@@ -1768,15 +1752,6 @@ BOOL ScPrintFunc::IsLeft( long nPageNo )            // linke Fussnoten ?
 void ScPrintFunc::MakeTableString()
 {
     pDoc->GetName( nPrintTab, aFieldData.aTabName );
-}
-
-String lcl_CmdStr( USHORT nId )
-{
-    String aDel( ScGlobal::GetRscString( STR_HFCMD_DELIMITER ) );
-    String aCmd = aDel;
-    aCmd += ScGlobal::GetRscString( nId );
-    aCmd += aDel;
-    return aCmd;
 }
 
 void ScPrintFunc::MakeEditEngine()

@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: drawvie3.cxx,v $
- * $Revision: 1.16 $
+ * $Revision: 1.16.32.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -75,26 +75,6 @@ ScDrawView::ScDrawView( OutputDevice* pOut, ScViewData* pData ) :
     Construct();
 }
 
-ScDrawView::ScDrawView( OutputDevice* pOut, ScDocument* pDocument, SCTAB nTable ) :
-    FmFormView( pDocument->GetDrawLayer(), pOut ),
-    pViewData( NULL ),
-    pDev( pOut ),
-    pDoc( pDocument ),
-    nTab( nTable ),
-    pDropMarker( NULL ),
-    pDropMarkObj( NULL ),
-    bInConstruct( TRUE )
-    //HMHbDisableHdl( FALSE )
-{
-    // #i73602# Use default from the configuration
-    SetBufferedOverlayAllowed(getOptionsDrawinglayer().IsOverlayBuffer_Calc());
-
-    // #i74769#, #i75172# Use default from the configuration
-    SetBufferedOutputAllowed(getOptionsDrawinglayer().IsPaintBuffer_Calc());
-
-    Construct();
-}
-
 // Verankerung setzen
 
 void ScDrawView::SetAnchor( ScAnchorType eType )
@@ -141,8 +121,7 @@ ScAnchorType ScDrawView::GetAnchor() const
     return SCA_DONTKNOW;
 }
 
-void __EXPORT ScDrawView::SFX_NOTIFY( SfxBroadcaster& rBC, const TypeId& rBCType,
-                                     const SfxHint& rHint, const TypeId& rHintType )
+void __EXPORT ScDrawView::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
 {
     if (rHint.ISA(ScTabDeletedHint))                        // Tabelle geloescht
     {
@@ -160,7 +139,7 @@ void __EXPORT ScDrawView::SFX_NOTIFY( SfxBroadcaster& rBC, const TypeId& rBCType
             UpdateWorkArea();
     }
     else
-        FmFormView::SFX_NOTIFY( rBC,rBCType,rHint,rHintType );
+        FmFormView::Notify( rBC,rHint );
 }
 
 void ScDrawView::UpdateIMap( SdrObject* pObj )

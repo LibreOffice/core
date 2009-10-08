@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: global2.cxx,v $
- * $Revision: 1.23 $
+ * $Revision: 1.23.32.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -228,37 +228,6 @@ BOOL ScQueryEntry::operator==( const ScQueryEntry& r ) const
         && nVal             == r.nVal
         && *pStr            == *r.pStr;
     //! pSearchParam und pSearchText nicht vergleichen
-}
-
-void ScQueryEntry::Load( SvStream& /* rStream */ )
-{
-#if SC_ROWLIMIT_STREAM_ACCESS
-#error address types changed!
-    BYTE cOp, cConnect;
-    rStream >> bDoQuery
-            >> bQueryByString
-            >> cOp
-            >> cConnect
-            >> nField
-            >> nVal;
-    rStream.ReadByteString( *pStr, rStream.GetStreamCharSet() );
-    eOp = (ScQueryOp) cOp;
-    eConnect = (ScQueryConnect) cConnect;
-#endif
-}
-
-void ScQueryEntry::Store( SvStream& /* rStream */ ) const
-{
-#if SC_ROWLIMIT_STREAM_ACCESS
-#error address types changed!
-    rStream << bDoQuery
-            << bQueryByString
-            << (BYTE) eOp
-            << (BYTE) eConnect
-            << nField
-            << nVal;
-    rStream.WriteByteString( *pStr, rStream.GetStreamCharSet() );
-#endif
 }
 
 utl::TextSearch* ScQueryEntry::GetSearchTextPtr( BOOL bCaseSens )
@@ -502,76 +471,6 @@ void ScQueryParam::FillInExcelSyntax(String& aCellStr, SCSIZE nIndex)
             rEntry.eOp = SC_EQUAL;
         }
     }
-}
-
-//------------------------------------------------------------------------
-
-void ScQueryParam::Load( SvStream& rStream )        // z.B. fuer Pivot-Tabelle
-{
-    // bDestPers wird nicht geladen/gespeichert
-
-    ScReadHeader aHdr( rStream );
-
-#if SC_ROWLIMIT_STREAM_ACCESS
-#error address types changed!
-    rStream >> nCol1
-            >> nRow1
-            >> nCol2
-            >> nRow2
-            >> nDestTab
-            >> nDestCol
-            >> nDestRow
-            >> bHasHeader
-            >> bInplace
-            >> bCaseSens
-            >> bRegExp
-            >> bDuplicate
-            >> bByRow;
-#endif
-
-    Resize( MAXQUERY );
-
-    for (USHORT i=0; i<MAXQUERY; i++)
-        pEntries[i].Load(rStream);
-}
-
-//------------------------------------------------------------------------
-
-void ScQueryParam::Store( SvStream& rStream ) const     // z.B. fuer Pivot-Tabelle
-{
-    // bDestPers wird nicht geladen/gespeichert
-
-    ScWriteHeader aHdr( rStream );
-
-    DBG_ASSERT( nEntryCount <= MAXQUERY || !pEntries[MAXQUERY].bDoQuery,
-                    "zuviele Eintraege bei ScQueryParam::Store" );
-
-
-    if ( nEntryCount < MAXQUERY )
-    {
-        DBG_ERROR("ScQueryParam::Store - zuwenig Eintraege");
-        ((ScQueryParam*)this)->Resize( MAXQUERY );
-    }
-
-#if SC_ROWLIMIT_STREAM_ACCESS
-#error address types changed!
-    rStream << nCol1
-            << nRow1
-            << nCol2
-            << nRow2
-            << nDestTab
-            << nDestCol
-            << nDestRow
-            << bHasHeader
-            << bInplace
-            << bCaseSens
-            << bRegExp
-            << bDuplicate
-            << bByRow;
-#endif
-
-    for (USHORT i=0; i<MAXQUERY; i++)
-        pEntries[i].Store(rStream);
 }
 
 //------------------------------------------------------------------------
@@ -891,47 +790,6 @@ void __EXPORT ScConsolidateParam::SetAreas( ScArea* const* ppAreas, USHORT nCoun
             ppDataAreas[i] = new ScArea( *(ppAreas[i]) );
         nDataAreaCount = nCount;
     }
-}
-
-void ScConsolidateParam::Load( SvStream& rStream )
-{
-    ClearDataAreas();
-
-    ScReadHeader aHdr( rStream );
-
-#if SC_ROWLIMIT_STREAM_ACCESS
-#error address types changed!
-    BYTE nByte;
-    rStream >> nCol >> nRow >> nTab
-            >> bByCol >> bByRow >> bReferenceData >> nByte;
-    eFunction = (ScSubTotalFunc) nByte;
-
-    rStream >> nDataAreaCount;
-    if ( nDataAreaCount )
-    {
-        ppDataAreas = new ScArea*[nDataAreaCount];
-        for ( USHORT i=0; i<nDataAreaCount; i++ )
-        {
-            ppDataAreas[i] = new ScArea();
-            rStream >> *ppDataAreas[i];
-        }
-    }
-#endif
-}
-
-void ScConsolidateParam::Store( SvStream& rStream ) const
-{
-    ScWriteHeader aHdr( rStream, 12+10*nDataAreaCount );
-#if SC_ROWLIMIT_STREAM_ACCESS
-#error address types changed!
-
-    rStream << nCol << nRow << nTab
-            << bByCol << bByRow << bReferenceData << (BYTE) eFunction;
-
-    rStream << nDataAreaCount;
-    for (USHORT i=0; i<nDataAreaCount; i++)
-        rStream << *ppDataAreas[i];
-#endif
 }
 
 // -----------------------------------------------------------------------

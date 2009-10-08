@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: DragMethod_PieSegment.cxx,v $
- * $Revision: 1.4 $
+ * $Revision: 1.4.68.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -104,7 +104,7 @@ FASTBOOL DragMethod_PieSegment::Beg()
     SdrPageView* pPV = m_rDrawViewWrapper.GetPageView();
     if( pObj && pPV )
     {
-        pPV->setDragPoly0(pObj->TakeXorPoly(true));
+        pPV->setDragPoly0(pObj->TakeXorPoly());
         pPV->setDragPoly(pPV->getDragPoly0());
     }
     Show();

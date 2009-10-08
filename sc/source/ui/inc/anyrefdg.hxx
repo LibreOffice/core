@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: anyrefdg.hxx,v $
- * $Revision: 1.11 $
+ * $Revision: 1.11.32.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -81,7 +81,7 @@ public:
 
     void                StartUpdateData();
 
-    void                SilentGrabFocus();  // does not update any references
+//UNUSED2008-05  void                SilentGrabFocus();  // does not update any references
 
     void                SetRefDialog( ScAnyRefDlg* pDlg );
     inline ScAnyRefDlg* GetRefDialog() { return pAnyRefDlg; }

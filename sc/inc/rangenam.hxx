@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: rangenam.hxx,v $
- * $Revision: 1.16 $
+ * $Revision: 1.16.32.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -113,7 +113,7 @@ public:
     ScAddress       GetPos() const                  { return aPos; }
     // Der Index muss eindeutig sein. Ist er 0, wird ein neuer Index vergeben
     void            SetIndex( USHORT nInd )         { nIndex = nInd; }
-    const USHORT    GetIndex() const                { return nIndex; }
+    USHORT    GetIndex() const                { return nIndex; }
     ScTokenArray*   GetCode()                       { return pCode; }
     USHORT          GetErrCode();
     BOOL            HasReferences() const;
@@ -151,8 +151,6 @@ public:
     void            ValidateTabRefs();
 
     void            ReplaceRangeNamesInUse( const ScIndexMap& rMap );
-
-    BOOL            IsBeyond( SCROW nMaxRow ) const;
 
     static void     MakeValidName( String& rName );
     SC_DLLPUBLIC static BOOL        IsNameValid( const String& rName, ScDocument* pDoc );

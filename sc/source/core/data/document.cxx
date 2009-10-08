@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: document.cxx,v $
- * $Revision: 1.90 $
+ * $Revision: 1.88.22.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -298,9 +298,11 @@ BOOL ScDocument::InsertTab( SCTAB nPos, const String& rName,
                 pRangeName->UpdateTabRef( nPos, 1 );
                 pDBCollection->UpdateReference(
                                     URM_INSDEL, 0,0,nPos, MAXCOL,MAXROW,MAXTAB, 0,0,1 );
+#if OLD_PIVOT_IMPLEMENTATION
                 if (pPivotCollection)
                     pPivotCollection->UpdateReference(
                                     URM_INSDEL, 0,0,nPos, MAXCOL,MAXROW,MAXTAB, 0,0,1 );
+#endif
                 if (pDPCollection)
                     pDPCollection->UpdateReference( URM_INSDEL, aRange, 0,0,1 );
                 if (pDetOpList)
@@ -380,9 +382,11 @@ BOOL ScDocument::DeleteTab( SCTAB nTab, ScDocument* pRefUndoDoc )
                 pRangeName->UpdateTabRef( nTab, 2 );
                 pDBCollection->UpdateReference(
                                     URM_INSDEL, 0,0,nTab, MAXCOL,MAXROW,MAXTAB, 0,0,-1 );
+#if OLD_PIVOT_IMPLEMENTATION
                 if (pPivotCollection)
                     pPivotCollection->UpdateReference(
                                     URM_INSDEL, 0,0,nTab, MAXCOL,MAXROW,MAXTAB, 0,0,-1 );
+#endif
                 if (pDPCollection)
                     pDPCollection->UpdateReference( URM_INSDEL, aRange, 0,0,-1 );
                 if (pDetOpList)
@@ -2393,13 +2397,6 @@ BOOL ScDocument::HasSelectionData( SCCOL nCol, SCROW nRow, SCTAB nTab ) const
 }
 
 
-void ScDocument::SetDirtyVar()
-{
-    for (SCTAB i=0; i<=MAXTAB; i++)
-        if (pTab[i]) pTab[i]->SetDirtyVar();
-}
-
-
 void ScDocument::SetDirty()
 {
     BOOL bOldAutoCalc = GetAutoCalc();
@@ -2530,15 +2527,6 @@ void ScDocument::CalcAfterLoad()
     bCalcingAfterLoad = FALSE;
 
     SetDetectiveDirty(FALSE);   // noch keine wirklichen Aenderungen
-}
-
-
-void ScDocument::GetErrCode( SCCOL nCol, SCROW nRow, SCTAB nTab, USHORT& rErrCode )
-{
-    if ( VALIDTAB(nTab) && pTab[nTab] )
-        rErrCode = pTab[nTab]->GetErrCode( nCol, nRow );
-    else
-        rErrCode = 0;
 }
 
 
@@ -2873,13 +2861,6 @@ const ScBitMaskCompressedArray< SCROW, BYTE> & ScDocument::GetRowFlagsArray(
     return *pFlags;
 }
 
-
-SCCOL ScDocument::GetLastFlaggedCol( SCTAB nTab ) const
-{
-    if ( ValidTab(nTab) && pTab[nTab] )
-        return pTab[nTab]->GetLastFlaggedCol();
-    return 0;
-}
 
 SCROW ScDocument::GetLastFlaggedRow( SCTAB nTab ) const
 {
@@ -3274,21 +3255,6 @@ BOOL ScDocument::IsStyleSheetUsed( const ScStyleSheet& rStyle, BOOL bGatherAllSt
 }
 
 
-
-BOOL ScDocument::ApplyFlags( SCCOL nStartCol, SCROW nStartRow,
-                        SCCOL nEndCol, SCROW nEndRow,
-                        const ScMarkData& rMark,
-                        INT16 nFlags )
-{
-    BOOL bChanged = FALSE;
-    for (SCTAB i=0; i <= MAXTAB; i++)
-        if (pTab[i])
-            if (rMark.GetTableSelect(i))
-                bChanged |= pTab[i]->ApplyFlags( nStartCol, nStartRow, nEndCol, nEndRow, nFlags );
-    return bChanged;
-}
-
-
 BOOL ScDocument::ApplyFlagsTab( SCCOL nStartCol, SCROW nStartRow,
                         SCCOL nEndCol, SCROW nEndRow, SCTAB nTab, INT16 nFlags )
 {
@@ -3298,20 +3264,6 @@ BOOL ScDocument::ApplyFlagsTab( SCCOL nStartCol, SCROW nStartRow,
 
     DBG_ERROR("ApplyFlags: falsche Tabelle");
     return FALSE;
-}
-
-
-BOOL ScDocument::RemoveFlags( SCCOL nStartCol, SCROW nStartRow,
-                        SCCOL nEndCol, SCROW nEndRow,
-                        const ScMarkData& rMark,
-                        INT16 nFlags )
-{
-    BOOL bChanged = FALSE;
-    for (SCTAB i=0; i <= MAXTAB; i++)
-        if (pTab[i])
-            if (rMark.GetTableSelect(i))
-                bChanged |= pTab[i]->RemoveFlags( nStartCol, nStartRow, nEndCol, nEndRow, nFlags );
-    return bChanged;
 }
 
 
@@ -3524,22 +3476,6 @@ void ScDocument::FindMaxRotCol( SCTAB nTab, RowInfo* pRowInfo, SCSIZE nArrCount,
     }
 }
 
-BOOL ScDocument::HasLines( const ScRange& rRange, Rectangle& rSizes ) const
-{
-    SCTAB nTab1 = rRange.aStart.Tab();
-    SCTAB nTab2 = rRange.aEnd.Tab();
-    PutInOrder( nTab1, nTab2 );
-    BOOL bFound = FALSE;
-    rSizes = Rectangle(0,0,0,0);
-
-    for (SCTAB i=nTab1; i<=nTab2; i++)
-        if (pTab[i])
-            if (pTab[i]->HasLines( rRange, rSizes ))
-                bFound = TRUE;
-
-    return bFound;
-}
-
 void ScDocument::GetBorderLines( SCCOL nCol, SCROW nRow, SCTAB nTab,
                         const SvxBorderLine** ppLeft, const SvxBorderLine** ppTop,
                         const SvxBorderLine** ppRight, const SvxBorderLine** ppBottom ) const
@@ -3651,25 +3587,6 @@ BOOL ScDocument::IsBlockEditable( SCTAB nTab, SCCOL nStartCol, SCROW nStartRow,
 }
 
 
-BOOL ScDocument::IsSelectedBlockEditable( SCCOL nStartCol, SCROW nStartRow,
-                                            SCCOL nEndCol, SCROW nEndRow,
-                                            const ScMarkData& rMark ) const
-{
-    // import into read-only document is possible
-    if ( !bImportingXML && !mbChangeReadOnlyEnabled && pShell && pShell->IsReadOnly() )
-        return FALSE;
-
-    BOOL bOk = TRUE;
-    for (SCTAB i=0; i<=MAXTAB && bOk; i++)
-        if (pTab[i])
-            if (rMark.GetTableSelect(i))
-                if (!pTab[i]->IsBlockEditable( nStartCol, nStartRow, nEndCol, nEndRow ))
-                    bOk = FALSE;
-
-    return bOk;
-}
-
-
 BOOL ScDocument::IsSelectionEditable( const ScMarkData& rMark,
             BOOL* pOnlyNotBecauseOfMatrix /* = NULL */ ) const
 {
@@ -3715,67 +3632,6 @@ BOOL ScDocument::IsSelectionEditable( const ScMarkData& rMark,
 
     if ( pOnlyNotBecauseOfMatrix )
         *pOnlyNotBecauseOfMatrix = ( !bOk && bMatrix );
-
-    return bOk;
-}
-
-
-BOOL ScDocument::IsSelectionOrBlockEditable( SCTAB nTab, SCCOL nStartCol, SCROW nStartRow,
-                                        SCCOL nEndCol, SCROW nEndRow,
-                                        const ScMarkData& rMark ) const
-{
-    // import into read-only document is possible
-    if ( !bImportingXML && !mbChangeReadOnlyEnabled && pShell && pShell->IsReadOnly() )
-        return FALSE;
-
-    BOOL bOk = TRUE;
-    if (VALIDTAB(nTab))
-    {
-        if (pTab[nTab])
-        {
-            if (rMark.IsMarked())
-            {
-                ScRange aRange;
-                rMark.GetMarkArea(aRange);
-                bOk = pTab[nTab]->IsBlockEditable( aRange.aStart.Col(), aRange.aStart.Row(),
-                                                   aRange.aEnd.Col(),   aRange.aEnd.Row() );
-            }
-
-            if (bOk && rMark.IsMultiMarked())
-                bOk = pTab[nTab]->IsSelectionEditable( rMark );
-            if ( bOk && !rMark.IsMarked() && !rMark.IsMultiMarked() )
-                bOk = pTab[nTab]->IsBlockEditable( nStartCol, nStartRow, nEndCol, nEndRow );
-            return bOk;
-        }
-    }
-    DBG_ERROR("Falsche Tabellennummer");
-    return FALSE;
-}
-
-
-BOOL ScDocument::IsSelectedOrBlockEditable( SCCOL nStartCol, SCROW nStartRow,
-                                            SCCOL nEndCol, SCROW nEndRow,
-                                            const ScMarkData& rMark ) const
-{
-    // import into read-only document is possible
-    if ( !bImportingXML && !mbChangeReadOnlyEnabled && pShell && pShell->IsReadOnly() )
-        return FALSE;
-
-    BOOL bOk = TRUE;
-    for (SCTAB i=0; i<=MAXTAB && bOk; i++)
-        if (pTab[i])
-            if (rMark.GetTableSelect(i))
-            {
-                if (rMark.IsMarked())
-                {
-                    ScRange aRange;
-                    rMark.GetMarkArea(aRange);
-                    bOk = pTab[i]->IsBlockEditable( aRange.aStart.Col(), aRange.aStart.Row(),
-                                                    aRange.aEnd.Col(),   aRange.aEnd.Row() );
-                }
-                if ( bOk && !rMark.IsMarked() )
-                    bOk = pTab[i]->IsBlockEditable( nStartCol, nStartRow, nEndCol, nEndRow );
-            }
 
     return bOk;
 }
@@ -4074,36 +3930,22 @@ BOOL ScDocument::RefreshAutoFilter( SCCOL nStartCol, SCROW nStartRow,
 }
 
 
-void ScDocument::SetAutoFilterFlags()
-{
-    USHORT nCount = pDBCollection->GetCount();
-    for (USHORT i=0; i<nCount; i++)
-    {
-        ScDBData* pData = (*pDBCollection)[i];
-        SCTAB nDBTab;
-        SCCOL nDBStartCol;
-        SCROW nDBStartRow;
-        SCCOL nDBEndCol;
-        SCROW nDBEndRow;
-        pData->GetArea( nDBTab, nDBStartCol,nDBStartRow, nDBEndCol,nDBEndRow );
-        pData->SetAutoFilter( HasAttrib( nDBStartCol,nDBStartRow,nDBTab,
-                                nDBEndCol,nDBStartRow,nDBTab, HASATTR_AUTOFILTER ) );
-    }
-}
-
-
-BOOL ScDocument::IsOverlapped( SCCOL nCol, SCROW nRow, SCTAB nTab ) const
-{
-    const ScMergeFlagAttr* pAttr = (const ScMergeFlagAttr*)
-                                        GetAttr( nCol, nRow, nTab, ATTR_MERGE_FLAG );
-    if (pAttr)
-        return pAttr->IsOverlapped();
-    else
-    {
-        DBG_ERROR("Overlapped: Attr==0");
-        return FALSE;
-    }
-}
+//UNUSED2008-05  void ScDocument::SetAutoFilterFlags()
+//UNUSED2008-05  {
+//UNUSED2008-05      USHORT nCount = pDBCollection->GetCount();
+//UNUSED2008-05      for (USHORT i=0; i<nCount; i++)
+//UNUSED2008-05      {
+//UNUSED2008-05          ScDBData* pData = (*pDBCollection)[i];
+//UNUSED2008-05          SCTAB nDBTab;
+//UNUSED2008-05          SCCOL nDBStartCol;
+//UNUSED2008-05          SCROW nDBStartRow;
+//UNUSED2008-05          SCCOL nDBEndCol;
+//UNUSED2008-05          SCROW nDBEndRow;
+//UNUSED2008-05          pData->GetArea( nDBTab, nDBStartCol,nDBStartRow, nDBEndCol,nDBEndRow );
+//UNUSED2008-05          pData->SetAutoFilter( HasAttrib( nDBStartCol,nDBStartRow,nDBTab,
+//UNUSED2008-05                                  nDBEndCol,nDBStartRow,nDBTab, HASATTR_AUTOFILTER ) );
+//UNUSED2008-05      }
+//UNUSED2008-05  }
 
 
 BOOL ScDocument::IsHorOverlapped( SCCOL nCol, SCROW nRow, SCTAB nTab ) const
@@ -4330,234 +4172,6 @@ void ScDocument::StylesToNames()
 }
 
 
-void lcl_RemoveMergeFromStyles( ScStyleSheetPool* pStylePool )
-{
-    pStylePool->SetSearchMask( SFX_STYLE_FAMILY_ALL );
-
-    USHORT nCount = pStylePool->Count();
-    for (USHORT i=0; i<nCount; i++)
-    {
-        //  in alten Versionen wurden statt SFXSTYLEBIT_USERDEF alle Bits gesetzt
-        SfxStyleSheetBase* pStyle = (*pStylePool)[i];
-        if ( pStyle->GetMask() & SFXSTYLEBIT_READONLY )
-            pStyle->SetMask( pStyle->GetMask() & ~SFXSTYLEBIT_READONLY );
-
-        SfxItemSet& rSet = pStyle->GetItemSet();
-        rSet.ClearItem( ATTR_MERGE );
-        rSet.ClearItem( ATTR_MERGE_FLAG );
-
-        //  Das SvxBoxInfoItem wurde bis zur 358 falsch geladen, so dass
-        //  Seitenvorlagen falsche Items mit bDist = FALSE enthalten koennen
-        if ( pStyle->GetFamily() == SFX_STYLE_FAMILY_PAGE )
-        {
-            const SvxBoxInfoItem& rPageInfo = (const SvxBoxInfoItem&)rSet.Get(ATTR_BORDER_INNER);
-            if ( !rPageInfo.IsDist() )
-            {
-                DBG_WARNING("altes SvxBoxInfoItem muss korrigiert werden");
-                SvxBoxInfoItem aNew( rPageInfo );
-                aNew.SetDist( TRUE );
-                rSet.Put( aNew );
-            }
-            //  Das gilt fuer alle Hdr/Ftr-SetItems, darum kann das SetItem auch
-            //  direkt im Pool geaendert werden (const weggecastet):
-            SfxItemSet& rHdrSet = ((SvxSetItem&)rSet.Get(ATTR_PAGE_HEADERSET)).GetItemSet();
-            const SvxBoxInfoItem& rHdrInfo = (const SvxBoxInfoItem&)rHdrSet.Get(ATTR_BORDER_INNER);
-            if ( !rHdrInfo.IsDist() )
-            {
-                DBG_WARNING("altes SvxBoxInfoItem muss korrigiert werden");
-                SvxBoxInfoItem aNew( rHdrInfo );
-                aNew.SetDist( TRUE );
-                rHdrSet.Put( aNew );
-            }
-            SfxItemSet& rFtrSet = ((SvxSetItem&)rSet.Get(ATTR_PAGE_FOOTERSET)).GetItemSet();
-            const SvxBoxInfoItem& rFtrInfo = (const SvxBoxInfoItem&)rFtrSet.Get(ATTR_BORDER_INNER);
-            if ( !rFtrInfo.IsDist() )
-            {
-                DBG_WARNING("altes SvxBoxInfoItem muss korrigiert werden");
-                SvxBoxInfoItem aNew( rFtrInfo );
-                aNew.SetDist( TRUE );
-                rFtrSet.Put( aNew );
-            }
-            const SfxUInt16Item& rScaleItem = (const SfxUInt16Item&)rSet.Get(ATTR_PAGE_SCALE);
-            USHORT nScale = rScaleItem.GetValue();
-            //! Extra-Konstanten fuer Seitenformat?
-            //  0 ist erlaubt (wird gesetzt bei Scale To Pages)
-            if ( nScale != 0 && ( nScale < MINZOOM || nScale > MAXZOOM ) )
-            {
-                //  konnte anscheinend mal irgendwie kaputtgehen (#34508#)
-                DBG_WARNING("kaputter Zoom im Seitenformat muss korrigiert werden");
-                rSet.Put( SfxUInt16Item( ATTR_PAGE_SCALE, 100 ) );
-            }
-        }
-    }
-}
-
-
-BOOL ScDocument::LoadPool( SvStream& rStream, BOOL /* bLoadRefCounts */ )
-{
-    //  bLoadingDone wird beim Laden des StylePools (ScStyleSheet::GetItemSet) gebraucht
-    bLoadingDone = FALSE;
-
-    USHORT nOldBufSize = rStream.GetBufferSize();
-    rStream.SetBufferSize( 32768 );
-    CharSet eOldSet = rStream.GetStreamCharSet();
-
-    SetPrinter( NULL );
-
-    ScPatternAttr::pDoc = this;
-
-    if ( xPoolHelper.isValid() && !bIsClip )
-        xPoolHelper->SourceDocumentGone();
-
-    xPoolHelper = new ScPoolHelper( this );
-
-    xPoolHelper->GetDocPool()->SetFileFormatVersion( (USHORT)rStream.GetVersion() );
-    BOOL bStylesFound = FALSE;
-
-    BOOL bRet = FALSE;
-    USHORT nID;
-    rStream >> nID;
-    if (nID == SCID_POOLS || nID == SCID_NEWPOOLS)
-    {
-        ScReadHeader aHdr( rStream );
-        while (aHdr.BytesLeft())
-        {
-            USHORT nSubID;
-            rStream >> nSubID;
-            ScReadHeader aSubHdr( rStream );
-            switch (nSubID)
-            {
-                case SCID_CHARSET:
-                    {
-                        BYTE cSet, cGUI;    // cGUI is dummy, old GUIType
-                        rStream >> cGUI >> cSet;
-                        eSrcSet = (CharSet) cSet;
-                        rStream.SetStreamCharSet( ::GetSOLoadTextEncoding(
-                            eSrcSet, (USHORT)rStream.GetVersion() ) );
-                    }
-                    break;
-                case SCID_DOCPOOL:
-                    xPoolHelper->GetDocPool()->Load( rStream );
-                    break;
-                case SCID_STYLEPOOL:
-                    {
-                        //  StylePool konvertiert beim Laden selber
-                        CharSet eOld = rStream.GetStreamCharSet();
-                        rStream.SetStreamCharSet( gsl_getSystemTextEncoding() );    //! ???
-                        xPoolHelper->GetStylePool()->Load( rStream );
-                        rStream.SetStreamCharSet( eOld );
-                        lcl_RemoveMergeFromStyles( xPoolHelper->GetStylePool() );   // setzt auch ReadOnly zurueck
-                        bStylesFound = TRUE;
-                    }
-                    break;
-                case SCID_EDITPOOL :
-                    xPoolHelper->GetEditPool()->Load( rStream );
-                    break;
-                default:
-                    DBG_ERROR("unbekannter Sub-Record in ScDocument::LoadPool");
-            }
-        }
-
-        UpdStlShtPtrsFrmNms();
-        bRet = TRUE;
-    }
-    else
-    {
-        DBG_ERROR("LoadPool: SCID_POOLS nicht gefunden");
-    }
-
-    if (!bStylesFound)
-        xPoolHelper->GetStylePool()->CreateStandardStyles();
-
-    rStream.SetStreamCharSet( eOldSet );
-    rStream.SetBufferSize( nOldBufSize );
-
-    bLoadingDone = TRUE;
-
-    //  Das Uno-Objekt merkt sich einen Pointer auf den NumberFormatter
-    //  -> mitteilen, dass der alte Pointer ungueltig geworden ist
-    BroadcastUno( ScPointerChangedHint(SC_POINTERCHANGED_NUMFMT) );
-
-    return bRet;
-}
-
-
-BOOL ScDocument::SavePool( SvStream& rStream ) const
-{
-    xPoolHelper->GetDocPool()->SetFileFormatVersion( (USHORT)rStream.GetVersion() );
-
-    USHORT nOldBufSize = rStream.GetBufferSize();
-    rStream.SetBufferSize( 32768 );
-    CharSet eOldSet = rStream.GetStreamCharSet();
-    CharSet eStoreCharSet = ::GetSOStoreTextEncoding(
-        gsl_getSystemTextEncoding(), (USHORT)rStream.GetVersion() );
-    rStream.SetStreamCharSet( eStoreCharSet );
-
-    //  Compress-Mode fuer Grafiken in Brush-Items (Hintergrund im Seitenformat)
-
-    USHORT nComprMode = rStream.GetCompressMode() & ~(COMPRESSMODE_ZBITMAP | COMPRESSMODE_NATIVE);
-    BOOL bNative = FALSE;
-    BOOL bCompr = FALSE;
-
-    if ( rStream.GetVersion() >= SOFFICE_FILEFORMAT_40 && bCompr )
-        nComprMode |= COMPRESSMODE_ZBITMAP;             //  komprimiert ab 4.0
-    if ( rStream.GetVersion() > SOFFICE_FILEFORMAT_40 && bNative )
-        nComprMode |= COMPRESSMODE_NATIVE;              //  Originalformat ab 5.0
-    rStream.SetCompressMode( nComprMode );
-
-    {
-        rStream << (USHORT) SCID_NEWPOOLS;
-        ScWriteHeader aHdr( rStream );
-
-        {
-            rStream << (USHORT) SCID_CHARSET;
-            ScWriteHeader aSetHdr( rStream, 2 );
-            rStream << (BYTE) 0     // dummy, old System::GetGUIType()
-                    << (BYTE) eStoreCharSet;
-        }
-
-        //  Force the default style's name to be "Standard" for all languages in the file.
-        //  This is needed for versions up to 5.1, to find the default pattern's style in
-        //  the UpdateStyleSheet call.
-        //  #89078# this has to be set for the DocPool save, too, so the default style name
-        //  is adjusted for the patterns, or a wrong style would be used if other styles
-        //  match the default style's name after CharacterSet conversion.
-
-        String aFileStdName = String::CreateFromAscii(RTL_CONSTASCII_STRINGPARAM(STRING_STANDARD));
-        if ( aFileStdName != ScGlobal::GetRscString(STR_STYLENAME_STANDARD) )
-            xPoolHelper->GetStylePool()->SetForceStdName( &aFileStdName );
-
-        {
-            rStream << (USHORT) SCID_DOCPOOL;
-            ScWriteHeader aDocPoolHdr( rStream );
-            xPoolHelper->GetDocPool()->Store( rStream );
-        }
-
-        {
-            rStream << (USHORT) SCID_STYLEPOOL;
-            ScWriteHeader aStylePoolHdr( rStream );
-            xPoolHelper->GetStylePool()->SetSearchMask( SFX_STYLE_FAMILY_ALL );
-
-            xPoolHelper->GetStylePool()->Store( rStream, FALSE );
-        }
-
-        xPoolHelper->GetStylePool()->SetForceStdName( NULL );
-
-        if ( rStream.GetVersion() >= SOFFICE_FILEFORMAT_50 )
-        {
-            rStream << (USHORT) SCID_EDITPOOL;
-            ScWriteHeader aEditPoolHdr( rStream );
-            xPoolHelper->GetEditPool()->SetFileFormatVersion( (USHORT)rStream.GetVersion() );
-            xPoolHelper->GetEditPool()->Store( rStream );
-        }
-    }
-
-    rStream.SetStreamCharSet( eOldSet );
-    rStream.SetBufferSize( nOldBufSize );
-    return TRUE;
-}
-
-
 ULONG ScDocument::GetCellCount() const
 {
     ULONG nCellCount = 0L;
@@ -4637,14 +4251,6 @@ void ScDocument::SetRepeatArea( SCTAB nTab, SCCOL nStartCol, SCCOL nEndCol, SCRO
 {
     if ( ValidTab(nTab)  && pTab[nTab] )
         pTab[nTab]->SetRepeatArea( nStartCol, nEndCol, nStartRow, nEndRow );
-}
-
-
-void ScDocument::UpdatePageBreaks()
-{
-    for (SCTAB i=0; i<=MAXTAB; i++)
-        if (pTab[i])
-            pTab[i]->UpdatePageBreaks( NULL );
 }
 
 

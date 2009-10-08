@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: documen3.cxx,v $
- * $Revision: 1.42 $
+ * $Revision: 1.41.28.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -95,14 +95,14 @@ void ScDocument::SetRangeName( ScRangeName* pNewRangeName )
     pRangeName = pNewRangeName;
 }
 
-ScRangeData* ScDocument::GetRangeAtCursor(SCCOL nCol, SCROW nRow, SCTAB nTab,
-                                            BOOL bStartOnly) const
-{
-    if ( pRangeName )
-        return pRangeName->GetRangeAtCursor( ScAddress( nCol, nRow, nTab ), bStartOnly );
-    else
-        return NULL;
-}
+//UNUSED2008-05  ScRangeData* ScDocument::GetRangeAtCursor(SCCOL nCol, SCROW nRow, SCTAB nTab,
+//UNUSED2008-05                                              BOOL bStartOnly) const
+//UNUSED2008-05  {
+//UNUSED2008-05      if ( pRangeName )
+//UNUSED2008-05          return pRangeName->GetRangeAtCursor( ScAddress( nCol, nRow, nTab ), bStartOnly );
+//UNUSED2008-05      else
+//UNUSED2008-05          return NULL;
+//UNUSED2008-05  }
 
 ScRangeData* ScDocument::GetRangeAtBlock( const ScRange& rBlock, String* pName ) const
 {
@@ -225,6 +225,7 @@ ScDPObject* ScDocument::GetDPAtBlock( const ScRange & rBlock ) const
     return NULL;
 }
 
+#if OLD_PIVOT_IMPLEMENTATION
 ScPivotCollection* ScDocument::GetPivotCollection() const
 {
     return pPivotCollection;
@@ -262,17 +263,11 @@ ScPivot* ScDocument::GetPivotAtCursor(SCCOL nCol, SCROW nRow, SCTAB nTab) const
     else
         return NULL;
 }
+#endif
 
 ScChartCollection* ScDocument::GetChartCollection() const
 {
     return pChartCollection;
-}
-
-void ScDocument::SetChartCollection(ScChartCollection* pNewChartCollection)
-{
-    if (pChartCollection)
-        delete pChartCollection;
-    pChartCollection = pNewChartCollection;
 }
 
 void ScDocument::StopTemporaryChartLock()
@@ -831,8 +826,10 @@ void ScDocument::UpdateReference( UpdateRefMode eUpdateRefMode,
             xRowNameRanges->UpdateReference( eUpdateRefMode, this, aRange, nDx, nDy, nDz );
             pDBCollection->UpdateReference( eUpdateRefMode, nCol1, nRow1, nTab1, nCol2, nRow2, nTab2, nDx, nDy, nDz );
             pRangeName->UpdateReference( eUpdateRefMode, aRange, nDx, nDy, nDz );
+#if OLD_PIVOT_IMPLEMENTATION
             if (pPivotCollection)
                 pPivotCollection->UpdateReference( eUpdateRefMode, nCol1, nRow1, nTab1, nCol2, nRow2, nTab2, nDx, nDy, nDz );
+#endif
             if ( pDPCollection )
                 pDPCollection->UpdateReference( eUpdateRefMode, aRange, nDx, nDy, nDz );
             UpdateChartRef( eUpdateRefMode, nCol1, nRow1, nTab1, nCol2, nRow2, nTab2, nDx, nDy, nDz );
@@ -922,7 +919,9 @@ void ScDocument::UpdateGrow( const ScRange& rArea, SCCOL nGrowX, SCROW nGrowY )
     //! UpdateChartRef
 
     pRangeName->UpdateGrow( rArea, nGrowX, nGrowY );
+#if OLD_PIVOT_IMPLEMENTATION
     pPivotCollection->UpdateGrow( rArea, nGrowX, nGrowY );
+#endif
 
     for (SCTAB i=0; i<=MAXTAB && pTab[i]; i++)
         pTab[i]->UpdateGrow( rArea, nGrowX, nGrowY );

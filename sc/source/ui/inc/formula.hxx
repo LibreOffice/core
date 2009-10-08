@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: formula.hxx,v $
- * $Revision: 1.5 $
+ * $Revision: 1.5.32.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -181,8 +181,6 @@ private:
     void            FillDialog(BOOL nFlag=TRUE);
     void            EditNextFunc( BOOL bForward, xub_StrLen nFStart=NOT_FOUND );
     void            EditThisFunc(xub_StrLen nFStart);
-    void            EditFuncParas(xub_StrLen nEditPos);
-
 
     void            UpdateArgInput( USHORT nOffset, USHORT nInput );
     BOOL            CalcValue( const String& rStrExp, String& rStrResult );
@@ -192,8 +190,7 @@ private:
     void            SaveArg( USHORT nEd );
     void            UpdateSelection();
     void            DoEnter( BOOL bOk );
-    void            UpdateFunctionDesc();
-    void            ResizeArgArr( const ScFuncDesc* pNewFunc );
+//UNUSED2008-05  void           ResizeArgArr( const ScFuncDesc* pNewFunc );
     void            FillListboxes();
     void            FillControls();
 
@@ -202,7 +199,7 @@ private:
 
     ScRefEdit*      GetCurrRefEdit();
 
-    DECL_LINK( ScrollHdl, ScParaWin* );
+//UNUSED2008-05  DECL_LINK( ScrollHdl, ScParaWin* );
     DECL_LINK( ModifyHdl, ScParaWin* );
     DECL_LINK( FxHdl, ScParaWin* );
 

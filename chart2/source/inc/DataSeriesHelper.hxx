@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: DataSeriesHelper.hxx,v $
- * $Revision: 1.7 $
+ * $Revision: 1.7.24.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -51,11 +51,6 @@ namespace DataSeriesHelper
 ::rtl::OUString GetRole(
         const ::com::sun::star::uno::Reference<
             ::com::sun::star::chart2::data::XLabeledDataSequence >& xLabeledDataSequence );
-
-void SetRole(
-        const ::com::sun::star::uno::Reference<
-            ::com::sun::star::chart2::data::XLabeledDataSequence >& xLabeledDataSequence,
-        const ::rtl::OUString& rRole );
 
 /** Retrieves the data sequence in the given data source that matches the
     given role.  If more than one sequences match the role, the first match

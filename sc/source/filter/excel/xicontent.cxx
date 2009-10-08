@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: xicontent.cxx,v $
- * $Revision: 1.32 $
+ * $Revision: 1.31.88.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -169,40 +169,63 @@ void lclInsertUrl( const XclImpRoot& rRoot, const String& rUrl, SCCOL nScCol, SC
     ScDocument& rDoc = rRoot.GetDoc();
     ScAddress aScPos( nScCol, nScRow, nScTab );
     CellType eCellType = rDoc.GetCellType( aScPos );
-
-    // #i54261# hyperlinks only in string cells
-    if( (eCellType == CELLTYPE_STRING) || (eCellType == CELLTYPE_EDIT) )
+    switch( eCellType )
     {
-        String aDisplText;
-        rDoc.GetString( nScCol, nScRow, nScTab, aDisplText );
-        if( !aDisplText.Len() )
-            aDisplText = rUrl;
-
-        ScEditEngineDefaulter& rEE = rRoot.GetEditEngine();
-        SvxURLField aUrlField( rUrl, aDisplText, SVXURLFORMAT_APPDEFAULT );
-
-        const ScEditCell* pEditCell = (eCellType == CELLTYPE_EDIT) ? static_cast< const ScEditCell* >( rDoc.GetCell( aScPos ) ) : 0;
-        const EditTextObject* pEditObj = pEditCell ? pEditCell->GetData() : 0;
-        if( pEditObj )
+        // #i54261# hyperlinks in string cells
+        case CELLTYPE_STRING:
+        case CELLTYPE_EDIT:
         {
-            rEE.SetText( *pEditObj );
-            rEE.QuickInsertField( SvxFieldItem( aUrlField, EE_FEATURE_FIELD ), ESelection( 0, 0, 0xFFFF, 0 ) );
-        }
-        else
-        {
-            rEE.SetText( EMPTY_STRING );
-            rEE.QuickInsertField( SvxFieldItem( aUrlField, EE_FEATURE_FIELD ), ESelection() );
-            if( const ScPatternAttr* pPattern = rDoc.GetPattern( aScPos.Col(), aScPos.Row(), nScTab ) )
+            String aDisplText;
+            rDoc.GetString( nScCol, nScRow, nScTab, aDisplText );
+            if( !aDisplText.Len() )
+                aDisplText = rUrl;
+
+            ScEditEngineDefaulter& rEE = rRoot.GetEditEngine();
+            SvxURLField aUrlField( rUrl, aDisplText, SVXURLFORMAT_APPDEFAULT );
+
+            const ScEditCell* pEditCell = (eCellType == CELLTYPE_EDIT) ? static_cast< const ScEditCell* >( rDoc.GetCell( aScPos ) ) : 0;
+            const EditTextObject* pEditObj = pEditCell ? pEditCell->GetData() : 0;
+            if( pEditObj )
             {
-                SfxItemSet aItemSet( rEE.GetEmptyItemSet() );
-                pPattern->FillEditItemSet( &aItemSet );
-                rEE.QuickSetAttribs( aItemSet, ESelection( 0, 0, 0xFFFF, 0 ) );
+                rEE.SetText( *pEditObj );
+                rEE.QuickInsertField( SvxFieldItem( aUrlField, EE_FEATURE_FIELD ), ESelection( 0, 0, 0xFFFF, 0 ) );
             }
-        }
-        ::std::auto_ptr< EditTextObject > xTextObj( rEE.CreateTextObject() );
+            else
+            {
+                rEE.SetText( EMPTY_STRING );
+                rEE.QuickInsertField( SvxFieldItem( aUrlField, EE_FEATURE_FIELD ), ESelection() );
+                if( const ScPatternAttr* pPattern = rDoc.GetPattern( aScPos.Col(), aScPos.Row(), nScTab ) )
+                {
+                    SfxItemSet aItemSet( rEE.GetEmptyItemSet() );
+                    pPattern->FillEditItemSet( &aItemSet );
+                    rEE.QuickSetAttribs( aItemSet, ESelection( 0, 0, 0xFFFF, 0 ) );
+                }
+            }
+            ::std::auto_ptr< EditTextObject > xTextObj( rEE.CreateTextObject() );
 
-        ScEditCell* pCell = new ScEditCell( xTextObj.get(), &rDoc, rEE.GetEditTextObjectPool() );
-        rDoc.PutCell( aScPos, pCell );
+            ScEditCell* pCell = new ScEditCell( xTextObj.get(), &rDoc, rEE.GetEditTextObjectPool() );
+            rDoc.PutCell( aScPos, pCell );
+        }
+        break;
+
+        // fix for #i31050# disabled, HYPERLINK is not able to return numeric value (#i91351#)
+#if 0
+        case CELLTYPE_VALUE:
+        {
+            // #i31050# replace number with HYPERLINK function
+            ScTokenArray aTokenArray;
+            aTokenArray.AddOpCode( ocHyperLink );
+            aTokenArray.AddOpCode( ocOpen );
+            aTokenArray.AddString( rUrl );
+            aTokenArray.AddOpCode( ocSep );
+            aTokenArray.AddDouble( rDoc.GetValue( aScPos ) );
+            aTokenArray.AddOpCode( ocClose );
+            rDoc.PutCell( aScPos, new ScFormulaCell( &rDoc, aScPos, &aTokenArray ) );
+        }
+        break;
+#endif
+
+        default:;
     }
 }
 
@@ -664,7 +687,7 @@ void XclImpValidation::ReadDval( XclImpStream& rStrm )
     if( nObjId != EXC_DVAL_NOOBJ )
     {
         DBG_ASSERT( nObjId <= 0xFFFF, "XclImpValidation::ReadDval - invalid object ID" );
-        rRoot.GetObjectManager().SetInvalidObj( rRoot.GetCurrScTab(), static_cast< sal_uInt16 >( nObjId ) );
+        rRoot.GetObjectManager().SetSkipObj( rRoot.GetCurrScTab(), static_cast< sal_uInt16 >( nObjId ) );
     }
 }
 
@@ -830,8 +853,7 @@ XclImpWebQuery::XclImpWebQuery( const ScRange& rDestRange ) :
 void XclImpWebQuery::ReadParamqry( XclImpStream& rStrm )
 {
     sal_uInt16 nFlags = rStrm.ReaduInt16();
-    sal_uInt16 nType = 0;
-    ::extract_value( nType, nFlags, 0, 3 );
+    sal_uInt16 nType = ::extract_value< sal_uInt16 >( nFlags, 0, 3 );
     if( (nType == EXC_PQRYTYPE_WEBQUERY) && ::get_flag( nFlags, EXC_PQRY_WEBQUERY ) )
     {
         if( ::get_flag( nFlags, EXC_PQRY_TABLES ) )

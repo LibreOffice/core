@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: excform.cxx,v $
- * $Revision: 1.52 $
+ * $Revision: 1.52.4.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -695,8 +695,7 @@ ConvErr ExcelToSc::Convert( const ScTokenArray*& pErgebnis, XclImpStream& aIn, s
                 aIn >> nUINT16;
                 if( nINT16 >= 0 )
                 {
-                    const ExtName*  pExtName;
-                    pExtName = rR.pExtNameBuff->GetName( nUINT16 );
+                    const ExtName* pExtName = rR.pExtNameBuff->GetNameByIndex( nINT16, nUINT16 );
                     if( pExtName && pExtName->IsDDE() &&
                         rR.pExtSheetBuff->IsLink( ( UINT16 ) nINT16 ) )
                     {

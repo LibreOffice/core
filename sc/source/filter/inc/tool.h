@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: tool.h,v $
- * $Revision: 1.6 $
+ * $Revision: 1.5.32.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -41,8 +41,6 @@ const BYTE  nDezFloat = 2;  //        "         "  Float-Zellen
 void        PutFormString( SCCOL nCol, SCROW nRow, SCTAB nTab, sal_Char *pString );
 
 void        SetFormat( SCCOL nCol, SCROW nRow, SCTAB nTab, BYTE nFormat, BYTE nSt );
-
-sal_Char*   ReplaceWith( sal_Char* pString, sal_Char cVon, sal_Char cNach );
 
 void        InitPage( void );
 

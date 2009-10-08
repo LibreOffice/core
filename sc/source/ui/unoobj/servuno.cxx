@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: servuno.cxx,v $
- * $Revision: 1.17 $
+ * $Revision: 1.17.32.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -174,13 +174,13 @@ static const sal_Char* __FAR_DATA aOldNames[SC_SERVICE_COUNT] =
 
 //  alles static
 
-String ScServiceProvider::GetProviderName(sal_uInt16 nObjectType)
-{
-    String sRet;
-    if (nObjectType < SC_SERVICE_COUNT)
-        sRet = String::CreateFromAscii( aProvNames[nObjectType] );
-    return sRet;
-}
+//UNUSED2008-05  String ScServiceProvider::GetProviderName(sal_uInt16 nObjectType)
+//UNUSED2008-05  {
+//UNUSED2008-05      String sRet;
+//UNUSED2008-05      if (nObjectType < SC_SERVICE_COUNT)
+//UNUSED2008-05          sRet = String::CreateFromAscii( aProvNames[nObjectType] );
+//UNUSED2008-05      return sRet;
+//UNUSED2008-05  }
 
 sal_uInt16 ScServiceProvider::GetProviderType(const String& rServiceName)
 {

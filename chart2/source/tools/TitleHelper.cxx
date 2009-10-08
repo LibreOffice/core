@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: TitleHelper.cxx,v $
- * $Revision: 1.10 $
+ * $Revision: 1.10.44.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -45,56 +45,6 @@ namespace chart
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::chart2;
 using ::com::sun::star::uno::Reference;
-
-namespace
-{
-
-rtl::OUString lcl_getIdentifierForTitle( TitleHelper::eTitleType nTitleIndex )
-{
-    switch( nTitleIndex )
-    {
-        case TitleHelper::MAIN_TITLE:
-        {
-            static rtl::OUString m_aIdentifier( C2U( "@main-title" ) );
-            return m_aIdentifier;
-        }
-        case TitleHelper::SUB_TITLE:
-        {
-            static rtl::OUString m_aIdentifier( C2U( "@sub-title" ) );
-            return m_aIdentifier;
-        }
-        case TitleHelper::X_AXIS_TITLE:
-        {
-            static rtl::OUString m_aIdentifier( C2U( "@xaxis-title" ) );
-            return m_aIdentifier;
-        }
-        case TitleHelper::Y_AXIS_TITLE:
-        {
-            static rtl::OUString m_aIdentifier( C2U( "@yaxis-title" ) );
-            return m_aIdentifier;
-        }
-        case TitleHelper::Z_AXIS_TITLE:
-        {
-            static rtl::OUString m_aIdentifier( C2U( "@zaxis-title" ) );
-            return m_aIdentifier;
-        }
-        case TitleHelper::SECONDARY_X_AXIS_TITLE:
-        {
-            static rtl::OUString m_aIdentifier( C2U( "@secondaryxaxis-title" ) );
-            return m_aIdentifier;
-        }
-        case TitleHelper::SECONDARY_Y_AXIS_TITLE:
-        {
-            static rtl::OUString m_aIdentifier( C2U( "@secondaryyaxis-title" ) );
-            return m_aIdentifier;
-        }
-        default:
-            OSL_ENSURE( false, "Unsupported Title-Type requested" );
-            return ::rtl::OUString();
-    }
-}
-
-} //anonymous namespace
 
 uno::Reference< XTitled > lcl_getTitleParentFromDiagram(
       TitleHelper::eTitleType nTitleIndex

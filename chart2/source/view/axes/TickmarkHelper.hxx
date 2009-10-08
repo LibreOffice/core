@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: TickmarkHelper.hxx,v $
- * $Revision: 1.7 $
+ * $Revision: 1.7.24.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -156,13 +156,10 @@ public:
 
     void          getAllTicks( ::std::vector< ::std::vector< TickInfo > >& rAllTickInfos ) const;
     void          getAllTicksShifted( ::std::vector< ::std::vector< TickInfo > >& rAllTickInfos ) const;
-    bool          isPostEquidistant( sal_Int32 nDepth ) const;
 
     //
     static double getMinimumAtIncrement( double fMin, const ::com::sun::star::chart2::ExplicitIncrementData& rIncrement );
     static double getMaximumAtIncrement( double fMax, const ::com::sun::star::chart2::ExplicitIncrementData& rIncrement );
-
-    double        getScaledWidth() const;
 
 protected: //methods
     void        addSubTicks( sal_Int32 nDepth,

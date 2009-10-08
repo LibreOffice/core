@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: XMLFilter.cxx,v $
- * $Revision: 1.5 $
+ * $Revision: 1.5.44.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -33,7 +33,6 @@
 
 #include "XMLFilter.hxx"
 #include "macros.hxx"
-#include "ContextHelper.hxx"
 #include "MediaDescriptorHelper.hxx"
 #include "ContainerHelper.hxx"
 #include <comphelper/mediadescriptor.hxx>

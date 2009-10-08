@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: DataPoint.hxx,v $
- * $Revision: 1.6 $
+ * $Revision: 1.6.44.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -65,7 +65,6 @@ class DataPoint :
         public ::property::OPropertySet
 {
 public:
-    DataPoint();
     DataPoint( const ::com::sun::star::uno::Reference<
                    ::com::sun::star::beans::XPropertySet > & rParentProperties );
     virtual ~DataPoint();

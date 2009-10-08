@@ -644,26 +644,6 @@ void ScInterpreter::MFastMult(ScMatrix* pA, ScMatrix* pB, ScMatrix* pR,
     }
 }
 
-void ScInterpreter::MFastSub(ScMatrix* pA, ScMatrix* pB, ScMatrix* pR,
-                              SCSIZE n, SCSIZE m)
-        // Subtrahiert n x m Mat a - m x l Mat b nach Mat r
-{
-    for (SCSIZE i = 0; i < n; i++)
-    {
-        for (SCSIZE j = 0; j < m; j++)
-            pR->PutDouble(pA->GetDouble(i,j) - pB->GetDouble(i,j), i, j);
-    }
-}
-
-void ScInterpreter::MFastTrans(ScMatrix* pA, ScMatrix* pR,
-                              SCSIZE n, SCSIZE m)
-        // Transponiert n x m Mat a nach Mat r
-{
-    for (SCSIZE i = 0; i < n; i++)
-        for (SCSIZE j = 0; j < m; j++)
-            pR->PutDouble(pA->GetDouble(i, j), j, i);
-}
-
 
 /* Matrix LUP decomposition according to the pseudocode of "Introduction to
  * Algorithms" by Cormen, Leiserson, Rivest, Stein.

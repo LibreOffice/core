@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: MediaDescriptorHelper.cxx,v $
- * $Revision: 1.5 $
+ * $Revision: 1.5.44.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -216,27 +216,6 @@ MediaDescriptorHelper::~MediaDescriptorHelper()
 
 }
 
-    uno::Sequence< beans::PropertyValue > MediaDescriptorHelper
-::getAll()
-{
-    uno::Sequence< beans::PropertyValue > aAll( m_aRegularProperties );
-    //write properties to aAll
-    if( m_aDeprecatedProperties.getLength() )
-    {
-        sal_Int32 nCount = aAll.getLength();
-        aAll.realloc( nCount + m_aDeprecatedProperties.getLength());
-        for(sal_Int32 i=0;i<m_aDeprecatedProperties.getLength();i++)
-            aAll[nCount+i]=m_aDeprecatedProperties[i];
-    }
-    if( m_aAdditionalProperties.getLength() )
-    {
-        sal_Int32 nCount = aAll.getLength();
-        aAll.realloc(nCount + m_aAdditionalProperties.getLength());
-        for(sal_Int32 i=0;i<m_aAdditionalProperties.getLength();i++)
-            aAll[nCount+i]=m_aAdditionalProperties[i];
-    }
-    return aAll;
-}
     uno::Sequence< beans::PropertyValue > MediaDescriptorHelper
 ::getReducedForModel()
 {

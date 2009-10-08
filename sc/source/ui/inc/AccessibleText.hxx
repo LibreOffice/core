@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: AccessibleText.hxx,v $
- * $Revision: 1.19 $
+ * $Revision: 1.19.32.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -204,7 +204,7 @@ public:
     virtual SvxViewForwarder* GetViewForwarder();
     virtual SvxEditViewForwarder* GetEditViewForwarder( sal_Bool /* bCreate */ ) { return NULL; }
 
-    DECL_LINK( NotifyHdl, EENotify* );
+//UNUSED2008-05  DECL_LINK( NotifyHdl, EENotify* );
 private:
     ScPreviewViewForwarder* mpViewForwarder;
     ScPreviewShell* mpViewShell;
@@ -234,7 +234,7 @@ public:
     virtual SvxViewForwarder* GetViewForwarder();
     virtual SvxEditViewForwarder* GetEditViewForwarder( sal_Bool /* bCreate */ ) { return NULL; }
 
-    DECL_LINK( NotifyHdl, EENotify* );
+//UNUSED2008-05  DECL_LINK( NotifyHdl, EENotify* );
 private:
     ScPreviewViewForwarder* mpViewForwarder;
     ScPreviewShell* mpViewShell;

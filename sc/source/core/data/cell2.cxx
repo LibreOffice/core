@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: cell2.cxx,v $
- * $Revision: 1.34 $
+ * $Revision: 1.33.30.3 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -60,14 +60,6 @@ IMPL_FIXEDMEMPOOL_NEWDEL( ScEditCell, nMemPoolEditCell, nMemPoolEditCell )
 
 // -----------------------------------------------------------------------
 
-ScEditCell::ScEditCell( ScDocument* pDocP ) :
-        ScBaseCell( CELLTYPE_EDIT ),
-        pData( NULL ),
-        pString( NULL ),
-        pDoc( pDocP )
-{
-}
-
 ScEditCell::ScEditCell( const EditTextObject* pObject, ScDocument* pDocP,
             const SfxItemPool* pFromPool )  :
         ScBaseCell( CELLTYPE_EDIT ),
@@ -83,28 +75,6 @@ ScEditCell::ScEditCell( const ScEditCell& rEditCell, ScDocument* pDocP )  :
         pDoc( pDocP )
 {
     SetTextObject( rEditCell.pData, rEditCell.pDoc->GetEditPool() );
-}
-
-ScEditCell::ScEditCell( SvStream& rStream, USHORT nVer, ScDocument* pDocP ) :
-        ScBaseCell( CELLTYPE_EDIT ),
-        pString( NULL ),
-        pDoc( pDocP )
-{
-    if( nVer >= SC_DATABYTES2 )
-    {
-        BYTE cData;
-        rStream >> cData;
-        if( cData & 0x0F )
-            rStream.SeekRel( cData & 0x0F );
-    }
-    if ( nVer < SC_VERSION_EDITPOOL )
-    {   // jedes hat seinen eigenen Pool, dem neuen zuordnen
-        EditTextObject* pTmp = EditTextObject::Create( rStream );
-        SetTextObject( pTmp, NULL );
-        delete pTmp;
-    }
-    else
-        pData = EditTextObject::Create( rStream, pDoc->GetEditPool() );
 }
 
 ScEditCell::ScEditCell( const String& rString, ScDocument* pDocP )  :
@@ -169,24 +139,6 @@ void ScEditCell::GetString( String& rString ) const
     }
     else
         rString.Erase();
-}
-
-void ScEditCell::Save( SvStream& rStream ) const
-{
-    DBG_ASSERT(pData,"StoreTextObject(NULL)");
-    rStream << (BYTE) 0x00;
-    if ( rStream.GetVersion() < SOFFICE_FILEFORMAT_50 )
-    {   // jedem seinen eigenen Pool
-        ScEditEngineDefaulter aEngine( EditEngine::CreatePool(), TRUE );
-        // #52396# richtige Metric schreiben
-        aEngine.SetRefMapMode( MAP_100TH_MM );
-        aEngine.SetText( *pData );
-        EditTextObject* pTmp = aEngine.CreateTextObject();
-        pTmp->Store( rStream );
-        delete pTmp;
-    }
-    else
-        pData->Store( rStream );
 }
 
 void ScEditCell::SetTextObject( const EditTextObject* pObject,
@@ -512,12 +464,6 @@ BOOL ScFormulaCell::HasRelNameReference() const
             return TRUE;
     }
     return FALSE;
-}
-
-BOOL ScFormulaCell::HasDBArea() const
-{
-    pCode->Reset();
-    return (pCode->GetNextDBArea() != NULL);
 }
 
 BOOL ScFormulaCell::HasColRowName() const
@@ -1390,83 +1336,3 @@ void ScFormulaCell::CompileColRowNameFormula()
     }
 }
 
-ScValueCell::ScValueCell( SvStream& rStream, USHORT nVer ) :
-    ScBaseCell( CELLTYPE_VALUE )
-{
-    if( nVer >= SC_DATABYTES2 )
-    {
-        BYTE cData;
-        rStream >> cData;
-        if( cData & 0x0F )
-            rStream.SeekRel( cData & 0x0F );
-    }
-    rStream >> aValue;
-}
-
-void ScValueCell::Save( SvStream& rStream ) const
-{
-    rStream << (BYTE) 0x00 << aValue;
-}
-
-ScStringCell::ScStringCell( SvStream& rStream, USHORT nVer ) :
-    ScBaseCell( CELLTYPE_STRING )
-{
-    if( nVer >= SC_DATABYTES2 )
-    {
-        BYTE cData;
-        rStream >> cData;
-        if( cData & 0x0F )
-            rStream.SeekRel( cData & 0x0F );
-    }
-    rStream.ReadByteString( aString, rStream.GetStreamCharSet() );
-}
-
-void ScStringCell::Save( SvStream& rStream, FontToSubsFontConverter hConv ) const
-{
-    rStream << (BYTE) 0x00;
-    if ( !hConv )
-        rStream.WriteByteString( aString, rStream.GetStreamCharSet() );
-    else
-    {
-        String aTmp( aString );
-        sal_Unicode* p = aTmp.GetBufferAccess();
-        sal_Unicode const * const pStop = p + aTmp.Len();
-        for ( ; p < pStop; ++p )
-        {
-            *p = ConvertFontToSubsFontChar( hConv, *p );
-        }
-        aTmp.ReleaseBufferAccess();
-        rStream.WriteByteString( aTmp, rStream.GetStreamCharSet() );
-    }
-}
-
-void ScStringCell::ConvertFont( FontToSubsFontConverter hConv )
-{
-    if ( hConv )
-    {
-        sal_Unicode* p = aString.GetBufferAccess();
-        sal_Unicode const * const pStop = p + aString.Len();
-        for ( ; p < pStop; ++p )
-        {
-            *p = ConvertFontToSubsFontChar( hConv, *p );
-        }
-        aString.ReleaseBufferAccess();
-    }
-}
-
-ScNoteCell::ScNoteCell( SvStream& rStream, USHORT nVer ) :
-    ScBaseCell( CELLTYPE_NOTE )
-{
-    if( nVer >= SC_DATABYTES2 )
-    {
-        BYTE cData;
-        rStream >> cData;
-        if( cData & 0x0F )
-            rStream.SeekRel( cData & 0x0F );
-    }
-}
-
-void ScNoteCell::Save( SvStream& rStream ) const
-{
-    rStream << (BYTE) 0x00;
-}

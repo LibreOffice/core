@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: navipi.hxx,v $
- * $Revision: 1.13 $
+ * $Revision: 1.13.32.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -31,15 +31,10 @@
 #ifndef SC_NAVIPI_HXX
 #define SC_NAVIPI_HXX
 
-#ifndef _TOOLBOX_HXX //autogen
+#include <vector>
 #include <vcl/toolbox.hxx>
-#endif
-#ifndef _FIELD_HXX //autogen
 #include <vcl/field.hxx>
-#endif
-#ifndef _LSTBOX_HXX //autogen
 #include <vcl/lstbox.hxx>
-#endif
 #include <svtools/stdctrl.hxx>
 #include <svtools/poolitem.hxx>
 #include <svtools/lstner.hxx>
@@ -73,29 +68,42 @@ enum NavListMode { NAV_LMODE_NONE       = 0x4000,
 //========================================================================
 // class ScScenarioListBox -----------------------------------------------
 //========================================================================
+
 class ScScenarioListBox : public ListBox
 {
 public:
-            ScScenarioListBox( Window* pParent );
-            ~ScScenarioListBox();
+    explicit            ScScenarioListBox( ScScenarioWindow& rParent );
+    virtual             ~ScScenarioListBox();
 
-    void UpdateEntries( List* pNewEntryList );
+    void                UpdateEntries( List* pNewEntryList );
 
 protected:
-    virtual void    Select();
-    virtual void    DoubleClick();
-    virtual void    GetFocus();
-    virtual void    LoseFocus();
-    virtual long    Notify( NotifyEvent& rNEvt );
+    virtual void        Select();
+    virtual void        DoubleClick();
+    virtual long        Notify( NotifyEvent& rNEvt );
 
 private:
-    ScScenarioWindow&   rParent;
-    List                aEntryList;
-    String              aCurText;
-    Accelerator*        pAccel;
-    void                ClearEntryList();
-    void                CopyEntryList( List& rNewList );
-    DECL_LINK( AccelSelectHdl, Accelerator * );
+    struct ScenarioEntry
+    {
+        String              maName;
+        String              maComment;
+        bool                mbProtected;
+
+        inline explicit     ScenarioEntry() : mbProtected( false ) {}
+    };
+    typedef ::std::vector< ScenarioEntry > ScenarioList;
+
+private:
+    const ScenarioEntry* GetSelectedEntry() const;
+
+    void                ExecuteScenarioSlot( USHORT nSlotId );
+    void                SelectScenario();
+    void                EditScenario();
+    void                DeleteScenario( bool bQueryBox );
+
+private:
+    ScScenarioWindow&   mrParent;
+    ScenarioList        maEntries;
 };
 
 //========================================================================
@@ -245,8 +253,8 @@ private:
     RowEdit             aEdRow;
     CommandToolBox      aTbxCmd;
     ScContentTree       aLbEntries;
-    ScDocListBox        aLbDocuments;
     ScScenarioWindow    aWndScenarios;
+    ScDocListBox        aLbDocuments;
 
     Timer           aContentTimer;
 
@@ -281,8 +289,6 @@ private:
 
     SfxBindings&    GetBindings()
                     { return rBindings; }
-    BOOL    GetDBAtCursor( String& rStrName );
-    BOOL    GetAreaAtCursor( String& rStrName );
 
     void    SetCurrentCell( SCCOL nCol, SCROW Row );
     void    SetCurrentCellStr( const String rName );
@@ -330,8 +336,7 @@ public:
                 ~ScNavigatorDlg();
 
     using Window::Notify;
-    virtual void    SFX_NOTIFY( SfxBroadcaster& rBC, const TypeId& rBCType,
-                            const SfxHint& rHint, const TypeId& rHintType );
+    virtual void    Notify( SfxBroadcaster& rBC, const SfxHint& rHint );
 
     void            CursorPosChanged();
 

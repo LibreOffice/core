@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: conditio.cxx,v $
- * $Revision: 1.26 $
+ * $Revision: 1.25.30.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -290,128 +290,6 @@ ScConditionEntry::~ScConditionEntry()
 
     delete pFormula1;
     delete pFormula2;
-}
-
-ScConditionEntry::ScConditionEntry( SvStream& /* rStream */, ScMultipleReadHeader& /* rHdr */,
-                                    ScDocument* pDocument ) :
-    nVal1(0.0),
-    nVal2(0.0),
-    bIsStr1(FALSE),
-    bIsStr2(FALSE),
-    pFormula1(NULL),
-    pFormula2(NULL),
-    pFCell1(NULL),
-    pFCell2(NULL),
-    pDoc(pDocument),
-    bRelRef1(FALSE),
-    bRelRef2(FALSE),
-    bFirstRun(TRUE)
-{
-#if SC_ROWLIMIT_STREAM_ACCESS
-#error address types changed!
-    USHORT nVer = (USHORT) pDoc->GetSrcVersion();
-
-    rHdr.StartEntry();
-
-    BYTE nOpByte;
-    rStream >> nOpByte;
-    eOp = (ScConditionMode) nOpByte;
-
-    rStream >> nOptions;
-
-    ScAddress aPos;
-    BYTE nTypeByte;
-    rStream >> nTypeByte;
-    ScConditionValType eType = (ScConditionValType) nTypeByte;
-    if ( eType == SC_VAL_FORMULA )
-    {
-        rStream >> aPos;
-        pFormula1 = new ScTokenArray;
-        pFormula1->Load( rStream, nVer, aPos );
-        bRelRef1 = lcl_HasRelRef( pDoc, pFormula1 );
-    }
-    else if ( eType == SC_VAL_VALUE )
-        rStream >> nVal1;
-    else
-    {
-        bIsStr1 = TRUE;
-        rStream.ReadByteString( aStrVal1, rStream.GetStreamCharSet() );
-    }
-
-    if ( eOp == SC_COND_BETWEEN || eOp == SC_COND_NOTBETWEEN )
-    {
-        rStream >> nTypeByte;
-        eType = (ScConditionValType) nTypeByte;
-        if ( eType == SC_VAL_FORMULA )
-        {
-            rStream >> aPos;
-            pFormula2 = new ScTokenArray;
-            pFormula2->Load( rStream, nVer, aPos );
-            bRelRef2 = lcl_HasRelRef( pDoc, pFormula2 );
-        }
-        else if ( eType == SC_VAL_VALUE )
-            rStream >> nVal2;
-        else
-        {
-            bIsStr2 = TRUE;
-            rStream.ReadByteString( aStrVal2, rStream.GetStreamCharSet() );
-        }
-    }
-
-    rHdr.EndEntry();
-
-    aSrcPos = aPos;
-
-    //  Formelzellen werden erst bei IsValid angelegt
-#endif // SC_ROWLIMIT_STREAM_ACCESS
-}
-
-void ScConditionEntry::StoreCondition(SvStream& /* rStream */, ScMultipleWriteHeader& /* rHdr */) const
-{
-#if SC_ROWLIMIT_STREAM_ACCESS
-#error address types changed!
-    rHdr.StartEntry();
-
-    //  1) Byte fuer die Operation
-    //  2) USHORT fuer Optionen
-    //  3) Byte, ob Wert, String oder Formel folgt
-    //  4) double, String oder TokenArray
-    //  5) je nach Operation 3 und 4 nochmal
-    //  vor jedem TokenArray noch die Position als ScAddress
-
-    rStream << (BYTE) eOp;
-    rStream << nOptions;
-
-    ScConditionValType eType =
-            pFormula1 ? SC_VAL_FORMULA : ( bIsStr1 ? SC_VAL_STRING : SC_VAL_VALUE );
-    rStream << (BYTE) eType;
-    if ( eType == SC_VAL_FORMULA )
-    {
-        rStream << aSrcPos;
-        pFormula1->Store( rStream, aSrcPos );
-    }
-    else if ( eType == SC_VAL_VALUE )
-        rStream << nVal1;
-    else
-        rStream.WriteByteString( aStrVal1, rStream.GetStreamCharSet() );
-
-    if ( eOp == SC_COND_BETWEEN || eOp == SC_COND_NOTBETWEEN )
-    {
-        eType = pFormula2 ? SC_VAL_FORMULA : ( bIsStr2 ? SC_VAL_STRING : SC_VAL_VALUE );
-        rStream << (BYTE) eType;
-        if ( eType == SC_VAL_FORMULA )
-        {
-            rStream << aSrcPos;
-            pFormula2->Store( rStream, aSrcPos );
-        }
-        else if ( eType == SC_VAL_VALUE )
-            rStream << nVal2;
-        else
-            rStream.WriteByteString( aStrVal2, rStream.GetStreamCharSet() );
-    }
-
-    rHdr.EndEntry();
-#endif // SC_ROWLIMIT_STREAM_ACCESS
 }
 
 void ScConditionEntry::Compile( const String& rExpr1, const String& rExpr2,
@@ -1262,30 +1140,6 @@ ScCondFormatEntry::ScCondFormatEntry( ScDocument* pDocument, const ScCondFormatE
 {
 }
 
-ScCondFormatEntry::ScCondFormatEntry( SvStream& rStream, ScMultipleReadHeader& rHdr,
-                                        ScDocument* pDocument ) :
-    ScConditionEntry( rStream, rHdr, pDocument ),
-    pParent( NULL )
-{
-    //  im Datei-Header sind getrennte Eintraege fuer ScConditionEntry und ScCondFormatEntry
-
-    rHdr.StartEntry();
-    rStream.ReadByteString( aStyleName, rStream.GetStreamCharSet() );
-    rHdr.EndEntry();
-}
-
-void ScCondFormatEntry::Store(SvStream& rStream, ScMultipleWriteHeader& rHdr) const
-{
-    //  im Datei-Header sind getrennte Eintraege fuer ScConditionEntry und ScCondFormatEntry
-
-    StoreCondition( rStream, rHdr );
-
-    rHdr.StartEntry();
-    rStream.WriteByteString( aStyleName, rStream.GetStreamCharSet() );
-    rHdr.EndEntry();
-}
-
-
 int ScCondFormatEntry::operator== ( const ScCondFormatEntry& r ) const
 {
     return ScConditionEntry::operator==( r ) &&
@@ -1355,54 +1209,6 @@ ScConditionalFormat* ScConditionalFormat::Clone(ScDocument* pNewDoc) const
     }
 
     return pNew;
-}
-
-ScConditionalFormat::ScConditionalFormat(SvStream& rStream, ScMultipleReadHeader& rHdr,
-                                            ScDocument* pDocument) :
-    pDoc( pDocument ),
-    pAreas( NULL ),
-    ppEntries( NULL ),
-    nEntryCount( 0 )
-{
-    //  ein Eintrag im Header fuer die ScConditionalFormat-Daten,
-    //  je zwei Eintraege fuer jede Bedingung (ScConditionEntry und ScCondFormatEntry)
-
-    rHdr.StartEntry();
-
-    rStream >> nKey;
-    rStream >> nEntryCount;
-
-    rHdr.EndEntry();
-
-        //  Eintraege laden
-
-    if (nEntryCount)
-    {
-        ppEntries = new ScCondFormatEntry*[nEntryCount];
-        for (USHORT i=0; i<nEntryCount; i++)
-        {
-            ppEntries[i] = new ScCondFormatEntry(rStream, rHdr, pDocument);
-            ppEntries[i]->SetParent(this);
-        }
-    }
-}
-
-void ScConditionalFormat::Store(SvStream& rStream, ScMultipleWriteHeader& rHdr) const
-{
-    //  ein Eintrag im Header fuer die ScConditionalFormat-Daten,
-    //  je zwei Eintraege fuer jede Bedingung (ScConditionEntry und ScCondFormatEntry)
-
-    rHdr.StartEntry();
-
-    rStream << nKey;
-    rStream << nEntryCount;
-
-    rHdr.EndEntry();
-
-        //  Eintraege speichern
-
-    for (USHORT i=0; i<nEntryCount; i++)
-        ppEntries[i]->Store(rStream, rHdr);
 }
 
 BOOL ScConditionalFormat::EqualEntries( const ScConditionalFormat& r ) const
@@ -1685,41 +1491,6 @@ BOOL ScConditionalFormatList::operator==( const ScConditionalFormatList& r ) con
     return bEqual;
 }
 
-void ScConditionalFormatList::Load( SvStream& rStream, ScDocument* pDocument )
-{
-    ScMultipleReadHeader aHdr( rStream );
-
-    USHORT nNewCount;
-    rStream >> nNewCount;
-
-    for (USHORT i=0; i<nNewCount; i++)
-    {
-        ScConditionalFormat* pNew = new ScConditionalFormat( rStream, aHdr, pDocument );
-        InsertNew( pNew );
-    }
-}
-
-void ScConditionalFormatList::Store( SvStream& rStream ) const
-{
-    USHORT i;
-    ScMultipleWriteHeader aHdr( rStream );
-
-    USHORT nCount = Count();
-    USHORT nUsed = 0;
-    for (i=0; i<nCount; i++)
-        if ((*this)[i]->IsUsed())
-            ++nUsed;
-
-    rStream << nUsed;       // Anzahl der gespeicherten
-
-    for (i=0; i<nCount; i++)
-    {
-        const ScConditionalFormat* pForm = (*this)[i];
-        if (pForm->IsUsed())
-            pForm->Store( rStream, aHdr );
-    }
-}
-
 ScConditionalFormat* ScConditionalFormatList::GetFormat( sal_uInt32 nKey )
 {
     //! binaer suchen
@@ -1733,12 +1504,12 @@ ScConditionalFormat* ScConditionalFormatList::GetFormat( sal_uInt32 nKey )
     return NULL;
 }
 
-void ScConditionalFormatList::ResetUsed()
-{
-    USHORT nCount = Count();
-    for (USHORT i=0; i<nCount; i++)
-        (*this)[i]->SetUsed(FALSE);
-}
+//UNUSED2008-05  void ScConditionalFormatList::ResetUsed()
+//UNUSED2008-05  {
+//UNUSED2008-05      USHORT nCount = Count();
+//UNUSED2008-05      for (USHORT i=0; i<nCount; i++)
+//UNUSED2008-05          (*this)[i]->SetUsed(FALSE);
+//UNUSED2008-05  }
 
 void ScConditionalFormatList::CompileAll()
 {

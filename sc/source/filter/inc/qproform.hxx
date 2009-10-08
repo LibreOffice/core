@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: qproform.hxx,v $
- * $Revision: 1.3 $
+ * $Revision: 1.3.32.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -81,8 +81,6 @@ class QProToSc : public ConverterBase
     void DoFunc( DefTokenId eOc, sal_uInt16 nArgs, const sal_Char* pExtString );
     void ReadSRD( SingleRefData& rR, sal_Int8 nPage, sal_Int8 nCol, sal_uInt16 rRel );
     void IncToken( TokenId &aParam );
-    void DecToken( TokenId& aParam );
-    void NegToken( TokenId& aParam );
     DefTokenId IndexToToken( sal_uInt16 nToken );
     FUNC_TYPE IndexToType( sal_uInt8 nToken );
     DefTokenId IndexToDLLId( sal_uInt16 nIndex );

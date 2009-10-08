@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: ChartController.hxx,v $
- * $Revision: 1.13 $
+ * $Revision: 1.12.44.3 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -584,7 +584,6 @@ private:
     //private methods
 
     sal_Bool            impl_isDisposedOrSuspended() const;
-    ::com::sun::star::awt::Size impl_getDiagramSize( sal_Int32 nDiaIndex = 0 ) const;
     ::std::auto_ptr< ReferenceSizeProvider > impl_createReferenceSizeProvider() const;
     void                impl_adaptDataSeriesAutoResize();
 
@@ -597,7 +596,6 @@ private:
     void SAL_CALL       executeDlg_ObjectProperties( const ::rtl::OUString& rObjectCID );
 
     void SAL_CALL       executeDispatch_ChartType();
-    void SAL_CALL       executeDispatch_ObjectToDefault();
 
     void SAL_CALL       executeDispatch_InsertTitle();
     void SAL_CALL       executeDispatch_InsertLegend();

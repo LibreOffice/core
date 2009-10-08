@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: FormattedString.hxx,v $
- * $Revision: 1.6 $
+ * $Revision: 1.6.44.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -61,7 +61,6 @@ class FormattedString :
     public ::property::OPropertySet
 {
 public:
-    FormattedString( const ::rtl::OUString & rString );
     FormattedString( ::com::sun::star::uno::Reference<
            ::com::sun::star::uno::XComponentContext > const & xContext );
     virtual ~FormattedString();

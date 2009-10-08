@@ -8,7 +8,7 @@
 #
 # $RCSfile: launchTest.pl,v $
 #
-# $Revision: 1.3 $
+# $Revision: 1.3.138.1 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -43,7 +43,7 @@ die "can't access output dir" unless -d $OUTPUTDIR;
 
 
 my $officeclasspath = "$ENV{OFFICEPATH}/program/classes/";
-my $classpath = "$officeclasspath/jurt.jar:$officeclasspath/unoil.jar:$officeclasspath/jut.jar:$officeclasspath/juh.jar:$officeclasspath/java_uno.jar:$officeclasspath/ridl.jar:$test_class:$ENV{CLASSPATH}";
+my $classpath = "$officeclasspath/jurt.jar:$officeclasspath/unoil.jar:$officeclasspath/juh.jar:$officeclasspath/java_uno.jar:$officeclasspath/ridl.jar:$test_class:$ENV{CLASSPATH}";
 $ENV{CLASSPATH}=$classpath;
 print "classpath $ENV{CLASSPATH}\n";
 my $status = system("java -classpath $ENV{CLASSPATH} TestVBA $TESTDOCUMENT $OUTPUTDIR" );

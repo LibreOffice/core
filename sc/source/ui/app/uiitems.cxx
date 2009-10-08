@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: uiitems.cxx,v $
- * $Revision: 1.9 $
+ * $Revision: 1.9.32.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -60,21 +60,21 @@ TYPEINIT1(ScIndexHint,          SfxHint);
 //      ScInputStatusItem - Status-Update fuer Eingabezeile
 // -----------------------------------------------------------------------
 
-ScInputStatusItem::ScInputStatusItem( USHORT nWhichP,
-                                      SCTAB nTab,
-                                      SCCOL nCol, SCROW nRow,
-                                      SCCOL nStartCol, SCROW nStartRow,
-                                      SCCOL nEndCol,   SCROW nEndRow,
-                                      const String& rString, const EditTextObject* pData )
-
-    :   SfxPoolItem ( nWhichP ),
-        aCursorPos  ( nCol, nRow, nTab ),
-        aStartPos   ( nStartCol, nStartRow, nTab ),
-        aEndPos     ( nEndCol,   nEndRow,   nTab ),
-        aString     ( rString ),
-        pEditData   ( pData ? pData->Clone() : NULL )
-{
-}
+//UNUSED2008-05  ScInputStatusItem::ScInputStatusItem( USHORT nWhichP,
+//UNUSED2008-05                                        SCTAB nTab,
+//UNUSED2008-05                                        SCCOL nCol, SCROW nRow,
+//UNUSED2008-05                                        SCCOL nStartCol, SCROW nStartRow,
+//UNUSED2008-05                                        SCCOL nEndCol,   SCROW nEndRow,
+//UNUSED2008-05                                        const String& rString, const EditTextObject* pData )
+//UNUSED2008-05
+//UNUSED2008-05      :   SfxPoolItem ( nWhichP ),
+//UNUSED2008-05          aCursorPos  ( nCol, nRow, nTab ),
+//UNUSED2008-05          aStartPos   ( nStartCol, nStartRow, nTab ),
+//UNUSED2008-05          aEndPos     ( nEndCol,   nEndRow,   nTab ),
+//UNUSED2008-05          aString     ( rString ),
+//UNUSED2008-05          pEditData   ( pData ? pData->Clone() : NULL )
+//UNUSED2008-05  {
+//UNUSED2008-05  }
 
 ScInputStatusItem::ScInputStatusItem( USHORT nWhichP,
                                       const ScAddress& rCurPos,
@@ -165,12 +165,6 @@ ScIndexHint::~ScIndexHint()
 // -----------------------------------------------------------------------
 //      ScEditViewHint - neue EditView fuer Cursorposition anlegen
 // -----------------------------------------------------------------------
-
-ScEditViewHint::ScEditViewHint() :
-    pEditEngine( NULL ),
-    aCursorPos( 0,0,0 )
-{
-}
 
 ScEditViewHint::ScEditViewHint( ScEditEngineDefaulter* pEngine, const ScAddress& rCurPos ) :
     pEditEngine( pEngine ),

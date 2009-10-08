@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: DiagramHelper.hxx,v $
- * $Revision: 1.10 $
+ * $Revision: 1.9.22.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -191,14 +191,6 @@ public:
             const ::com::sun::star::uno::Reference<
                 ::com::sun::star::chart2::XDataSeries >& xSeries );
 
-    static ::com::sun::star::uno::Reference<
-    ::com::sun::star::chart2::XCoordinateSystem >
-        getCoordinateSystemOfChartType(
-            const ::com::sun::star::uno::Reference<
-                ::com::sun::star::chart2::XDiagram >& xDiagram,
-            const ::com::sun::star::uno::Reference<
-                ::com::sun::star::chart2::XChartType >& xChartType );
-
     static ::std::vector<
             ::com::sun::star::uno::Reference<
             ::com::sun::star::chart2::XDataSeries > >
@@ -307,12 +299,6 @@ public:
                 const ::com::sun::star::uno::Reference<
           ::com::sun::star::chart2::XDataSeries >& xGivenDataSeries,
                 bool bForward );
-
-    static sal_Int32 getIndexOfSeriesWithinChartType(
-                const ::com::sun::star::uno::Reference<
-                    ::com::sun::star::chart2::XDataSeries >& xDataSeries,
-               const ::com::sun::star::uno::Reference<
-                    ::com::sun::star::chart2::XChartType >& xChartType );
 
     static bool isSupportingFloorAndWall( const ::com::sun::star::uno::Reference<
                 ::com::sun::star::chart2::XDiagram > & xDiagram );

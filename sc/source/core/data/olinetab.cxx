@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: olinetab.cxx,v $
- * $Revision: 1.10 $
+ * $Revision: 1.10.32.3 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -62,36 +62,6 @@ ScOutlineEntry::ScOutlineEntry( const ScOutlineEntry& rEntry ) :
     bHidden ( rEntry.bHidden ),
     bVisible( rEntry.bVisible )
 {
-}
-
-ScOutlineEntry::ScOutlineEntry( SvStream& /* rStream */, ScMultipleReadHeader& rHdr )
-{
-    rHdr.StartEntry();
-#if SC_ROWLIMIT_STREAM_ACCESS
-#error address types changed!
-
-    rStream >> nStart;
-    rStream >> nSize;
-    rStream >> bHidden;
-    rStream >> bVisible;
-
-#endif
-    rHdr.EndEntry();
-}
-
-void ScOutlineEntry::Store( SvStream& /* rStream */, ScMultipleWriteHeader& rHdr )
-{
-    rHdr.StartEntry();
-
-#if SC_ROWLIMIT_STREAM_ACCESS
-#error address types changed!
-    rStream << nStart;
-    rStream << nSize;
-    rStream << bHidden;
-    rStream << bVisible;
-
-#endif
-    rHdr.EndEntry();
 }
 
 DataObject* ScOutlineEntry::Clone() const
@@ -714,37 +684,6 @@ void ScOutlineArray::RemoveAll()
     nDepth = 0;
 }
 
-void ScOutlineArray::Load( SvStream& rStream )
-{
-    ScMultipleReadHeader aHdr( rStream );
-
-    rStream >> nDepth;
-    for (USHORT nLevel=0; nLevel<nDepth; nLevel++)
-    {
-        USHORT nCount;
-        rStream >> nCount;
-        for (USHORT nIndex=0; nIndex<nCount; nIndex++)
-        {
-            ScOutlineEntry* pEntry = new ScOutlineEntry( rStream, aHdr );
-            aCollections[nLevel].Insert( pEntry );
-        }
-    }
-}
-
-void ScOutlineArray::Store( SvStream& rStream )
-{
-    ScMultipleWriteHeader aHdr( rStream );
-
-    rStream << nDepth;
-    for (USHORT nLevel=0; nLevel<nDepth; nLevel++)
-    {
-        USHORT nCount = aCollections[nLevel].GetCount();
-        rStream << nCount;
-        for (USHORT nIndex=0; nIndex<nCount; nIndex++)
-            ((ScOutlineEntry*) aCollections[nLevel].At(nIndex))->Store( rStream, aHdr );
-    }
-}
-
 //------------------------------------------------------------------------
 
 ScOutlineTable::ScOutlineTable()
@@ -785,20 +724,6 @@ void ScOutlineTable::InsertRow( SCROW nStartRow, SCSIZE nSize )
 BOOL ScOutlineTable::DeleteRow( SCROW nStartRow, SCSIZE nSize )
 {
     return aRowOutline.DeleteSpace( nStartRow, nSize );
-}
-
-void ScOutlineTable::Load( SvStream& rStream )
-{
-    DBG_ASSERT( aColOutline.GetDepth()==0 && aRowOutline.GetDepth()==0,
-                    "Load auf nicht leere ScOutlineTable" );
-    aColOutline.Load( rStream );
-    aRowOutline.Load( rStream );
-}
-
-void ScOutlineTable::Store( SvStream& rStream )
-{
-    aColOutline.Store( rStream );
-    aRowOutline.Store( rStream );
 }
 
 //------------------------------------------------------------------------

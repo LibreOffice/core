@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: dwfunctr.hxx,v $
- * $Revision: 1.7 $
+ * $Revision: 1.7.46.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -146,8 +146,7 @@ public:
                     ~ScFunctionDockWin();
 
     using SfxDockingWindow::Notify;
-    virtual void    SFX_NOTIFY( SfxBroadcaster& rBC, const TypeId& rBCType,
-                            const SfxHint& rHint, const TypeId& rHintType );
+    virtual void    Notify( SfxBroadcaster& rBC, const SfxHint& rHint );
 
     void            SetSlotIDs( USHORT nLeft, USHORT nRight )
                         { nLeftSlot = nLeft; nRightSlot = nRight; }

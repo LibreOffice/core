@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: markarr.cxx,v $
- * $Revision: 1.11 $
+ * $Revision: 1.11.32.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -125,11 +125,6 @@ BOOL ScMarkArray::GetMark( SCROW nRow ) const
 }
 
 //------------------------------------------------------------------------
-
-void ScMarkArray::SetMark( SCROW nRow, BOOL bMarked )
-{
-    SetMarkArea( nRow, nRow, bMarked );
-}
 
 void ScMarkArray::SetMarkArea( SCROW nStartRow, SCROW nEndRow, BOOL bMarked )
 {
@@ -314,35 +309,6 @@ BOOL ScMarkArray::HasOneMark( SCROW& rStartRow, SCROW& rEndRow ) const
         }
     }
     return bRet;
-}
-
-void ScMarkArray::SwapCol(ScMarkArray& rMarkArray)
-{
-    SCSIZE nTemp = rMarkArray.nCount;
-    rMarkArray.nCount = nCount;
-    nCount = nTemp;
-
-    nTemp = rMarkArray.nLimit;
-    rMarkArray.nLimit = nLimit;
-    nLimit = nTemp;
-
-    ScMarkEntry* pTemp = rMarkArray.pData;
-    rMarkArray.pData = pData;
-    pData = pTemp;
-}
-
-void ScMarkArray::MoveTo(SCROW nStartRow, SCROW nEndRow, ScMarkArray& rMarkArray)
-{
-    SCROW nStart = nStartRow;
-    for (SCSIZE i = 0; i < nCount; i++)
-    {
-        if ((pData[i].nRow >= nStartRow) && ((i==0) ? TRUE : pData[i-1].nRow < nEndRow))
-        {
-            rMarkArray.SetMarkArea(nStart, Min(pData[i].nRow,nEndRow), pData[i].bMarked);
-        }
-        nStart = Max((SCROW)nStart, (SCROW)(pData[i].nRow + 1) );
-    }
-    DeleteArea(nStartRow, nEndRow);
 }
 
 void ScMarkArray::CopyMarksTo( ScMarkArray& rDestMarkArray ) const

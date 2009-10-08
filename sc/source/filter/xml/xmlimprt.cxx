@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: xmlimprt.cxx,v $
- * $Revision: 1.133 $
+ * $Revision: 1.132.30.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -215,6 +215,7 @@ static __FAR_DATA SvXMLTokenMapEntry aDocTokenMap[] =
     XML_TOKEN_MAP_END
 };
 
+#if 0 // apparently not used - 2008-08-15 (Friday)
 static __FAR_DATA SvXMLTokenMapEntry aStylesTokenMap[] =
 {
     { XML_NAMESPACE_STYLE,  XML_STYLE,              XML_TOK_STYLES_STYLE            },
@@ -234,6 +235,7 @@ static __FAR_DATA SvXMLTokenMapEntry aStyleTokenMap[] =
     { XML_NAMESPACE_STYLE,  XML_PROPERTIES,         XML_TOK_STYLE_PROPERTIES    },
     XML_TOKEN_MAP_END
 };
+#endif
 
 static __FAR_DATA SvXMLTokenMapEntry aBodyTokenMap[] =
 {
@@ -415,6 +417,7 @@ static __FAR_DATA SvXMLTokenMapEntry aTableRowCellTokenMap[] =
     XML_TOKEN_MAP_END
 };
 
+#if 0 // apparently not used - 2008-08-15 (Friday)
 static __FAR_DATA SvXMLTokenMapEntry aTableRowCellAttrTokenMap[] =
 {
     { XML_NAMESPACE_TABLE, XML_STYLE_NAME,                      XML_TOK_TABLE_ROW_CELL_ATTR_STYLE_NAME              },
@@ -434,6 +437,7 @@ static __FAR_DATA SvXMLTokenMapEntry aTableRowCellAttrTokenMap[] =
     { XML_NAMESPACE_TABLE, XML_CURRENCY,                        XML_TOK_TABLE_ROW_CELL_ATTR_CURRENCY                },
     XML_TOKEN_MAP_END
 };
+#endif
 
 static __FAR_DATA SvXMLTokenMapEntry aTableAnnotationAttrTokenMap[] =
 {
@@ -959,29 +963,29 @@ const SvXMLTokenMap& ScXMLImport::GetDocElemTokenMap()
     return *pDocElemTokenMap;
 }
 
-const SvXMLTokenMap& ScXMLImport::GetStylesElemTokenMap()
-{
-    if( !pStylesElemTokenMap )
-        pStylesElemTokenMap = new SvXMLTokenMap( aStylesTokenMap );
-
-    return *pStylesElemTokenMap;
-}
-
-const SvXMLTokenMap& ScXMLImport::GetStylesAttrTokenMap()
-{
-    if( !pStylesAttrTokenMap )
-        pStylesAttrTokenMap = new SvXMLTokenMap( aStylesAttrTokenMap );
-
-    return *pStylesAttrTokenMap;
-}
-
-const SvXMLTokenMap& ScXMLImport::GetStyleElemTokenMap()
-{
-    if( !pStyleElemTokenMap )
-        pStyleElemTokenMap = new SvXMLTokenMap( aStyleTokenMap );
-
-    return *pStyleElemTokenMap;
-}
+//UNUSED2008-05  const SvXMLTokenMap& ScXMLImport::GetStylesElemTokenMap()
+//UNUSED2008-05  {
+//UNUSED2008-05      if( !pStylesElemTokenMap )
+//UNUSED2008-05          pStylesElemTokenMap = new SvXMLTokenMap( aStylesTokenMap );
+//UNUSED2008-05
+//UNUSED2008-05      return *pStylesElemTokenMap;
+//UNUSED2008-05  }
+//UNUSED2008-05
+//UNUSED2008-05  const SvXMLTokenMap& ScXMLImport::GetStylesAttrTokenMap()
+//UNUSED2008-05  {
+//UNUSED2008-05      if( !pStylesAttrTokenMap )
+//UNUSED2008-05          pStylesAttrTokenMap = new SvXMLTokenMap( aStylesAttrTokenMap );
+//UNUSED2008-05
+//UNUSED2008-05      return *pStylesAttrTokenMap;
+//UNUSED2008-05  }
+//UNUSED2008-05
+//UNUSED2008-05  const SvXMLTokenMap& ScXMLImport::GetStyleElemTokenMap()
+//UNUSED2008-05  {
+//UNUSED2008-05      if ( !pStyleElemTokenMap )
+//UNUSED2008-05          pStyleElemTokenMap = new SvXMLTokenMap( aStyleTokenMap );
+//UNUSED2008-05
+//UNUSED2008-05      return *pStyleElemTokenMap;
+//UNUSED2008-05  }
 
 const SvXMLTokenMap& ScXMLImport::GetBodyElemTokenMap()
 {
@@ -1116,12 +1120,12 @@ const SvXMLTokenMap& ScXMLImport::GetTableRowCellElemTokenMap()
     return *pTableRowCellElemTokenMap;
 }
 
-const SvXMLTokenMap& ScXMLImport::GetTableRowCellAttrTokenMap()
-{
-    if( !pTableRowCellAttrTokenMap )
-        pTableRowCellAttrTokenMap = new SvXMLTokenMap( aTableRowCellAttrTokenMap );
-    return *pTableRowCellAttrTokenMap;
-}
+//UNUSED2008-05  const SvXMLTokenMap& ScXMLImport::GetTableRowCellAttrTokenMap()
+//UNUSED2008-05  {
+//UNUSED2008-05      if ( !pTableRowCellAttrTokenMap )
+//UNUSED2008-05          pTableRowCellAttrTokenMap = new SvXMLTokenMap( aTableRowCellAttrTokenMap );
+//UNUSED2008-05      return *pTableRowCellAttrTokenMap;
+//UNUSED2008-05  }
 
 const SvXMLTokenMap& ScXMLImport::GetTableAnnotationAttrTokenMap()
 {

@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: validat.hxx,v $
- * $Revision: 1.15 $
+ * $Revision: 1.15.32.3 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -98,11 +98,7 @@ public:
                                 ScDocument* pDocument, const ScAddress& rPos );
             ScValidationData( const ScValidationData& r );
             ScValidationData( ScDocument* pDocument, const ScValidationData& r );
-            ScValidationData( SvStream& rStream, ScMultipleReadHeader& rHdr,
-                                ScDocument* pDocument );
     virtual ~ScValidationData();
-
-    void            Store(SvStream& rStream, ScMultipleWriteHeader& rHdr) const;
 
     ScValidationData* Clone() const     // echte Kopie
                     { return new ScValidationData( GetDocument(), *this ); }
@@ -201,8 +197,6 @@ public:
 
     ScValidationData* GetData( sal_uInt32 nKey );
 
-    void    Load( SvStream& rStream, ScDocument* pDocument );
-    void    Store( SvStream& rStream ) const;
     void    ResetUsed();
 
     void    CompileXML();

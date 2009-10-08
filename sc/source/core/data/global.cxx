@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: global.cxx,v $
- * $Revision: 1.56 $
+ * $Revision: 1.55.30.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -1066,11 +1066,6 @@ void ScGlobal::AddLanguage( SfxItemSet& rSet, SvNumberFormatter& rFormatter )
 #define FUNC_NOTFOUND 0xffff
 
 ScFuncDesc aDefaultFuncDesc;
-
-const ScFuncDesc* ScFormulaUtil::GetDefaultFuncDesc()
-{
-    return &aDefaultFuncDesc;
-}
 
 BOOL ScFormulaUtil::GetNextFunc( const String&  rFormula,
                                  BOOL           bBack,

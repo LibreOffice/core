@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: LabelPositionHelper.hxx,v $
- * $Revision: 1.4 $
+ * $Revision: 1.4.44.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -59,8 +59,6 @@ public:
     virtual ~LabelPositionHelper();
 
     ::com::sun::star::awt::Point transformSceneToScreenPosition(
-            const ::com::sun::star::drawing::Position3D& rScenePosition3D ) const;
-    ::com::sun::star::awt::Point transformScaledLogicToScreenPosition(
             const ::com::sun::star::drawing::Position3D& rScenePosition3D ) const;
 
     static void changeTextAdjustment( tAnySequence& rPropValues, const tNameSequence& rPropNames, LabelAlignment eAlignment);

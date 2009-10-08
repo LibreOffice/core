@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: tabvwsh.hxx,v $
- * $Revision: 1.31 $
+ * $Revision: 1.30.32.3 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -168,7 +168,7 @@ private:
 
     SbxObject*              pScSbxObject;
 
-    BOOL                    bChartDlgIsEdit;            // Datenbereich aendern
+//UNUSED2008-05  BOOL                    bChartDlgIsEdit;            // Datenbereich aendern
     BOOL                    bChartAreaValid;            // wenn Chart aufgezogen wird
     String                  aEditChartName;
     ScRangeListRef          aChartSource;
@@ -184,7 +184,7 @@ private:
 private:
     SC_DLLPRIVATE void  Construct( BYTE nForceDesignMode = SC_FORCEMODE_NONE );
 
-    SC_DLLPRIVATE void          SetMySubShell( SfxShell* pShell );
+//UNUSED2008-05  SC_DLLPRIVATE void          SetMySubShell( SfxShell* pShell );
     SC_DLLPRIVATE SfxShell*     GetMySubShell() const;
 
     SC_DLLPRIVATE void          DoReadUserData( const String& rData );
@@ -239,8 +239,8 @@ public:
 
                     // -> Clone-Methode fuer Factory
 
-                    ScTabViewShell( SfxViewFrame*           pViewFrame,
-                                    const ScTabViewShell&   rWin );
+//UNUSED2008-05  ScTabViewShell( SfxViewFrame*           pViewFrame,
+//UNUSED2008-05                  const ScTabViewShell&   rWin );
 
                     // aus einer allgemeinen Shell konstruieren und
                     // soviel wie moeglich uebernehmen (SliderPos etc.):
@@ -265,8 +265,8 @@ public:
     SvxBorderLine*  GetDefaultFrameLine() const { return pCurFrameLine; }
     void            SetDefaultFrameLine(const SvxBorderLine* pLine );
 
-    void            ExecuteShowNIY( SfxRequest& rReq );
-    void            StateDisabled( SfxItemSet& rSet );
+//UNUSED2008-05  void            ExecuteShowNIY( SfxRequest& rReq );
+//UNUSED2008-05  void           StateDisabled( SfxItemSet& rSet );
 
     void            Execute( SfxRequest& rReq );
     void            GetState( SfxItemSet& rSet );
@@ -348,18 +348,17 @@ public:
 
     void            FillFieldData( ScHeaderFieldData& rData );
 
-    void            ResetChartArea();
+//UNUSED2008-05  void            ResetChartArea();
     void            SetChartArea( const ScRangeListRef& rSource, const Rectangle& rDest );
     BOOL            GetChartArea( ScRangeListRef& rSource, Rectangle& rDest, SCTAB& rTab ) const;
 
-    BOOL            IsChartDlgEdit() const;
-    void            SetChartDlgEdit(BOOL bFlag){bChartDlgIsEdit=bFlag;}
+//UNUSED2008-05  BOOL            IsChartDlgEdit() const;
+//UNUSED2008-05  void            SetChartDlgEdit(BOOL bFlag){bChartDlgIsEdit=bFlag;}
 
     void            SetEditChartName(const String& aStr){aEditChartName=aStr;}
-    const String&   GetEditChartName() const;
+//UNUSED2008-05  const String&   GetEditChartName() const;
 
-    virtual void SFX_NOTIFY( SfxBroadcaster& rBC, const TypeId& rBCType,
-                         const SfxHint& rHint, const TypeId& rHintType );
+    virtual void Notify( SfxBroadcaster& rBC, const SfxHint& rHint );
 
     ScNavigatorSettings*    GetNavigatorSettings();
 
@@ -375,8 +374,6 @@ public:
                                          PrintDialog *pPrintDialog,
                                          BOOL bSilent, BOOL bIsAPI );
     virtual USHORT          Print( SfxProgress& rProgress, BOOL bIsAPI, PrintDialog* pPrintDialog = NULL );
-
-    void            TestFunction( USHORT nPar );
 
     void            ConnectObject( SdrOle2Obj* pObj );
     BOOL            ActivateObject( SdrOle2Obj* pObj, long nVerb );

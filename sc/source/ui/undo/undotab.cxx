@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: undotab.cxx,v $
- * $Revision: 1.21 $
+ * $Revision: 1.19.28.2 $
  *
  * This file is part of OpenOffice.org.
  *

@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: autoform.cxx,v $
- * $Revision: 1.22 $
+ * $Revision: 1.22.32.3 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -604,11 +604,6 @@ void ScAutoFormatData::CopyItem( USHORT nToIndex, USHORT nFromIndex, USHORT nWhi
 const ScNumFormatAbbrev& ScAutoFormatData::GetNumFormat( USHORT nIndex ) const
 {
     return GetField( nIndex ).GetNumFormat();
-}
-
-void ScAutoFormatData::SetNumFormat( USHORT nIndex, const ScNumFormatAbbrev& rNumFormat )
-{
-    GetField( nIndex ).SetNumFormat( rNumFormat );
 }
 
 BOOL ScAutoFormatData::IsEqualData( USHORT nIndex1, USHORT nIndex2 ) const

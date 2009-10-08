@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: token.cxx,v $
- * $Revision: 1.34 $
+ * $Revision: 1.33.32.3 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -177,27 +177,11 @@ void ScRawToken::SetDoubleReference( const ComplRefData& rRef )
     nRefCnt = 0;
 }
 
-void ScRawToken::SetReference( ComplRefData& rRef )
-{
-    DBG_ASSERT( lcl_IsReference( eOp, GetType() ), "SetReference: no Ref" );
-    aRef = rRef;
-    if( GetType() == svSingleRef )
-        aRef.Ref2 = aRef.Ref1;
-}
-
 void ScRawToken::SetDouble(double rVal)
 {
     eOp   = ocPush;
     eType = svDouble;
     nValue = rVal;
-    nRefCnt = 0;
-}
-
-void ScRawToken::SetInt(int rVal)
-{
-    eOp   = ocPush;
-    eType = svDouble;
-    nValue = (double)rVal;
     nRefCnt = 0;
 }
 
@@ -209,11 +193,35 @@ void ScRawToken::SetName( USHORT n )
     nRefCnt = 0;
 }
 
-ComplRefData& ScRawToken::GetReference()
-{
-    DBG_ASSERT( lcl_IsReference( eOp, GetType() ), "GetReference: no Ref" );
-    return aRef;
-}
+//UNUSED2008-05  void ScRawToken::SetInt(int rVal)
+//UNUSED2008-05  {
+//UNUSED2008-05      eOp   = ocPush;
+//UNUSED2008-05      eType = svDouble;
+//UNUSED2008-05      nValue = (double)rVal;
+//UNUSED2008-05      nRefCnt = 0;
+//UNUSED2008-05
+//UNUSED2008-05  }
+//UNUSED2008-05  void ScRawToken::SetMatrix( ScMatrix* p )
+//UNUSED2008-05  {
+//UNUSED2008-05      eOp   = ocPush;
+//UNUSED2008-05      eType = svMatrix;
+//UNUSED2008-05      pMat  = p;
+//UNUSED2008-05      nRefCnt = 0;
+//UNUSED2008-05  }
+//UNUSED2008-05
+//UNUSED2008-05  ComplRefData& ScRawToken::GetReference()
+//UNUSED2008-05  {
+//UNUSED2008-05      DBG_ASSERT( lcl_IsReference( eOp, GetType() ), "GetReference: no Ref" );
+//UNUSED2008-05      return aRef;
+//UNUSED2008-05  }
+//UNUSED2008-05
+//UNUSED2008-05  void ScRawToken::SetReference( ComplRefData& rRef )
+//UNUSED2008-05  {
+//UNUSED2008-05      DBG_ASSERT( lcl_IsReference( eOp, GetType() ), "SetReference: no Ref" );
+//UNUSED2008-05      aRef = rRef;
+//UNUSED2008-05      if( GetType() == svSingleRef )
+//UNUSED2008-05          aRef.Ref2 = aRef.Ref1;
+//UNUSED2008-05  }
 
 void ScRawToken::SetExternal( const sal_Unicode* pStr )
 {
@@ -225,14 +233,6 @@ void ScRawToken::SetExternal( const sal_Unicode* pStr )
     // Platz fuer Byte-Parameter lassen!
     memcpy( cStr+1, pStr, GetStrLenBytes( nLen ) );
     cStr[ nLen+1 ] = 0;
-    nRefCnt = 0;
-}
-
-void ScRawToken::SetMatrix( ScMatrix* p )
-{
-    eOp   = ocPush;
-    eType = svMatrix;
-    pMat  = p;
     nRefCnt = 0;
 }
 
@@ -622,28 +622,28 @@ BOOL ScToken::Is3DRef() const
 }
 
 
-BOOL ScToken::IsRPNReferenceAbsName() const
-{
-    if ( GetRef() == 1 && GetOpCode() == ocPush )
-    {   // only in RPN and not ocColRowNameAuto or similar
-        switch ( GetType() )
-        {
-            case svDoubleRef :
-                if ( !GetSingleRef2().IsRelName() )
-                    return TRUE;
-            //! fallthru
-            case svSingleRef :
-                if ( !GetSingleRef().IsRelName() )
-                    return TRUE;
-                break;
-            default:
-            {
-                // added to avoid warnings
-            }
-        }
-    }
-    return FALSE;
-}
+//UNUSED2008-05  BOOL ScToken::IsRPNReferenceAbsName() const
+//UNUSED2008-05  {
+//UNUSED2008-05      if ( GetRef() == 1 && GetOpCode() == ocPush )
+//UNUSED2008-05      {   // only in RPN and not ocColRowNameAuto or similar
+//UNUSED2008-05          switch ( GetType() )
+//UNUSED2008-05          {
+//UNUSED2008-05              case svDoubleRef :
+//UNUSED2008-05                  if ( !GetSingleRef2().IsRelName() )
+//UNUSED2008-05                      return TRUE;
+//UNUSED2008-05                  //! fallthru
+//UNUSED2008-05              case svSingleRef :
+//UNUSED2008-05                  if ( !GetSingleRef().IsRelName() )
+//UNUSED2008-05                      return TRUE;
+//UNUSED2008-05                  break;
+//UNUSED2008-05              default:
+//UNUSED2008-05                  {
+//UNUSED2008-05                      // added to avoid warnings
+//UNUSED2008-05                  }
+//UNUSED2008-05          }
+//UNUSED2008-05      }
+//UNUSED2008-05      return FALSE;
+//UNUSED2008-05  }
 
 
 // static
@@ -1401,15 +1401,15 @@ BOOL ScTokenArray::HasOpCodeRPN( OpCode eOp ) const
     return FALSE;
 }
 
-BOOL ScTokenArray::HasName() const
-{
-    for ( USHORT j=0; j < nLen; j++ )
-    {
-        if( pCode[j]->GetType() == svIndex )
-            return TRUE;
-    }
-    return FALSE;
-}
+//UNUSED2008-05  BOOL ScTokenArray::HasName() const
+//UNUSED2008-05  {
+//UNUSED2008-05      for ( USHORT j=0; j < nLen; j++ )
+//UNUSED2008-05      {
+//UNUSED2008-05          if ( pCode[j]->GetType() == svIndex )
+//UNUSED2008-05              return TRUE;
+//UNUSED2008-05      }
+//UNUSED2008-05      return FALSE;
+//UNUSED2008-05  }
 
 BOOL ScTokenArray::HasNameOrColRowName() const
 {

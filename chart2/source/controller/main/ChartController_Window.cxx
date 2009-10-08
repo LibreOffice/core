@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: ChartController_Window.cxx,v $
- * $Revision: 1.32 $
+ * $Revision: 1.31.24.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -1131,12 +1131,6 @@ bool ChartController::execute_KeyInput( const KeyEvent& rKEvt )
             && aKeyCode.GetCode() == KEY_R)
         {
                 // 3D-Kontext wieder zerstoeren
-            Base3D* pBase3D = (Base3D*) GetWindow()->Get3DContext();
-
-            if (pBase3D)
-            {
-                pBase3D->Destroy(GetWindow());
-            }
             GetWindow()->Invalidate();
             bReturn = TRUE;
         }
@@ -1328,16 +1322,14 @@ bool ChartController::impl_moveOrResizeObject(
             if( bNeedResize )
                 eActionType = ActionDescriptionProvider::RESIZE;
 
-            UndoGuard aUndoGuard(
-                ActionDescriptionProvider::createDescription(
-                    eActionType,
-                    ObjectNameProvider::getName( ObjectIdentifier::getObjectType( rCID ))),
-                m_xUndoManager, xChartModel );
+            ObjectType eObjectType = ObjectIdentifier::getObjectType( rCID );
+            UndoGuard aUndoGuard( ActionDescriptionProvider::createDescription(
+                    eActionType, ObjectNameProvider::getName( eObjectType )), m_xUndoManager, xChartModel );
             {
                 ControllerLockGuard aCLGuard( xChartModel );
                 if( bNeedShift )
                     xObjProp->setPropertyValue( C2U("RelativePosition"), uno::makeAny( aRelPos ));
-                if( bNeedResize )
+                if( bNeedResize || (eObjectType == OBJECTTYPE_DIAGRAM) )//Also set an explicat size at the diagram when an explicit position is set
                     xObjProp->setPropertyValue( C2U("RelativeSize"), uno::makeAny( aRelSize ));
             }
             aUndoGuard.commitAction();

@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: column.cxx,v $
- * $Revision: 1.31 $
+ * $Revision: 1.31.32.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -822,41 +822,6 @@ void ScColumn::Resize( SCSIZE nSize )
         delete[] pItems;
     }
     pItems = pNewItems;
-}
-
-//  SetNewRow gehoert zu SwapRow
-
-void ScColumn::SetNewRow( SCROW nOldRow, SCROW nNewRow )    // nNewRow muss leer sein
-{
-    SCSIZE  nIndex;
-    if (Search(nOldRow, nIndex))
-    {
-        ScBaseCell* pCell = pItems[nIndex].pCell;
-        --nCount;
-        memmove( &pItems[nIndex], &pItems[nIndex + 1], (nCount - nIndex) * sizeof(ColEntry) );
-
-        SvtBroadcaster* pBC = pCell->GetBroadcaster();
-        if (pBC)
-        {
-            MoveListeners( *pBC, nOldRow );     // Broadcaster bleibt an alter Stelle
-            pCell->SetBroadcaster(NULL);
-        }
-
-        if (pCell->GetCellType() != CELLTYPE_NOTE)      // sonst geloescht
-        {
-            Insert(nNewRow, pCell);
-
-            long dy = (long)nNewRow - (long)nOldRow;
-            if (pCell->GetCellType() == CELLTYPE_FORMULA)
-            {
-                ScFormulaCell* pFormula = (ScFormulaCell*)pCell;
-                ScRange aRange( ScAddress( 0, nNewRow, nTab ),
-                                ScAddress( MAXCOL, nNewRow, nTab ) );
-                pFormula->aPos.SetRow( nNewRow );
-                pFormula->UpdateReference(URM_MOVE, aRange, 0, -dy, 0);
-            }
-        }
-    }
 }
 
 //  SwapRow zum Sortieren

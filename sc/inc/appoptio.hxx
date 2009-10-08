@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: appoptio.hxx,v $
- * $Revision: 1.10 $
+ * $Revision: 1.10.32.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -88,8 +88,6 @@ public:
 
 
     const ScAppOptions& operator=   ( const ScAppOptions& rOpt );
-    friend SvStream&    operator>>  ( SvStream& rStream, ScAppOptions& rOpt );
-    friend SvStream&    operator<<  ( SvStream& rStream, const ScAppOptions& rOpt );
 
 private:
     FieldUnit   eMetric;

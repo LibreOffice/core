@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: tp_3D_SceneIllumination.cxx,v $
- * $Revision: 1.4 $
+ * $Revision: 1.4.68.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -52,6 +52,9 @@
 
 // header for define RET_OK
 #include <vcl/msgbox.hxx>
+
+#include <svx/svx3ditems.hxx>
+#include <svx/svddef.hxx>
 
 //.............................................................................
 namespace chart
@@ -386,7 +389,7 @@ IMPL_LINK( ThreeD_SceneIllumination_TabPage, fillControlsFromModel, void *, EMPT
     return 0;
 }
 
-void ThreeD_SceneIllumination_TabPage::applyLightSourceToModel( Base3DLightNumber nLightNumber )
+void ThreeD_SceneIllumination_TabPage::applyLightSourceToModel( sal_uInt32 nLightNumber )
 {
     ControllerLockGuard aGuard( m_xChartModel );
     m_bInCommitToModel = true;
@@ -400,7 +403,7 @@ void ThreeD_SceneIllumination_TabPage::applyLightSourcesToModel()
     m_aTimerTriggeredControllerLock.startTimer();
     ControllerLockGuard aGuard( m_xChartModel );
     for( sal_Int32 nL=0; nL<8; nL++)
-        applyLightSourceToModel( static_cast< Base3DLightNumber >( nL ));
+        applyLightSourceToModel( nL );
     m_aTimerTriggeredControllerLock.startTimer();
 }
 
@@ -409,16 +412,47 @@ IMPL_LINK( ThreeD_SceneIllumination_TabPage, PreviewChangeHdl, void*, EMPTYARG )
     m_aTimerTriggeredControllerLock.startTimer();
 
     //update m_pLightSourceInfoList from preview
-    B3dLightGroup* pLightGroup = m_aCtl_Preview.GetPreviewControl().GetLightGroup();
-    for( sal_Int32 nL=0; nL<8; nL++)
-    {
-        LightSourceInfo* pInfo = &m_pLightSourceInfoList[nL];
-        Base3DLightNumber nLightNumber = Base3DLightNumber(nL);
+    const SfxItemSet a3DLightAttributes(m_aCtl_Preview.GetSvx3DLightControl().Get3DAttributes());
+    LightSourceInfo* pInfo = &m_pLightSourceInfoList[0];
 
-        pInfo->aLightSource.nDiffuseColor = pLightGroup->GetIntensity( Base3DMaterialDiffuse, nLightNumber ).GetColor();
-        pInfo->aLightSource.bIsEnabled = pLightGroup->IsEnabled( nLightNumber );
-        pInfo->aLightSource.aDirection = B3DVectorToDirection3D( pLightGroup->GetDirection( nLightNumber ) );
-    }
+    pInfo->aLightSource.nDiffuseColor = ((const Svx3DLightcolor1Item&)a3DLightAttributes.Get(SDRATTR_3DSCENE_LIGHTCOLOR_1)).GetValue().GetColor();
+    pInfo->aLightSource.bIsEnabled = ((const Svx3DLightOnOff1Item&)a3DLightAttributes.Get(SDRATTR_3DSCENE_LIGHTON_1)).GetValue();
+    pInfo->aLightSource.aDirection = B3DVectorToDirection3D(((const Svx3DLightDirection1Item&)a3DLightAttributes.Get(SDRATTR_3DSCENE_LIGHTDIRECTION_1)).GetValue());
+
+    pInfo = &m_pLightSourceInfoList[1];
+    pInfo->aLightSource.nDiffuseColor = ((const Svx3DLightcolor2Item&)a3DLightAttributes.Get(SDRATTR_3DSCENE_LIGHTCOLOR_2)).GetValue().GetColor();
+    pInfo->aLightSource.bIsEnabled = ((const Svx3DLightOnOff2Item&)a3DLightAttributes.Get(SDRATTR_3DSCENE_LIGHTON_2)).GetValue();
+    pInfo->aLightSource.aDirection = B3DVectorToDirection3D(((const Svx3DLightDirection2Item&)a3DLightAttributes.Get(SDRATTR_3DSCENE_LIGHTDIRECTION_2)).GetValue());
+
+    pInfo = &m_pLightSourceInfoList[2];
+    pInfo->aLightSource.nDiffuseColor = ((const Svx3DLightcolor3Item&)a3DLightAttributes.Get(SDRATTR_3DSCENE_LIGHTCOLOR_3)).GetValue().GetColor();
+    pInfo->aLightSource.bIsEnabled = ((const Svx3DLightOnOff3Item&)a3DLightAttributes.Get(SDRATTR_3DSCENE_LIGHTON_3)).GetValue();
+    pInfo->aLightSource.aDirection = B3DVectorToDirection3D(((const Svx3DLightDirection3Item&)a3DLightAttributes.Get(SDRATTR_3DSCENE_LIGHTDIRECTION_3)).GetValue());
+
+    pInfo = &m_pLightSourceInfoList[3];
+    pInfo->aLightSource.nDiffuseColor = ((const Svx3DLightcolor4Item&)a3DLightAttributes.Get(SDRATTR_3DSCENE_LIGHTCOLOR_4)).GetValue().GetColor();
+    pInfo->aLightSource.bIsEnabled = ((const Svx3DLightOnOff4Item&)a3DLightAttributes.Get(SDRATTR_3DSCENE_LIGHTON_4)).GetValue();
+    pInfo->aLightSource.aDirection = B3DVectorToDirection3D(((const Svx3DLightDirection4Item&)a3DLightAttributes.Get(SDRATTR_3DSCENE_LIGHTDIRECTION_4)).GetValue());
+
+    pInfo = &m_pLightSourceInfoList[4];
+    pInfo->aLightSource.nDiffuseColor = ((const Svx3DLightcolor5Item&)a3DLightAttributes.Get(SDRATTR_3DSCENE_LIGHTCOLOR_5)).GetValue().GetColor();
+    pInfo->aLightSource.bIsEnabled = ((const Svx3DLightOnOff5Item&)a3DLightAttributes.Get(SDRATTR_3DSCENE_LIGHTON_5)).GetValue();
+    pInfo->aLightSource.aDirection = B3DVectorToDirection3D(((const Svx3DLightDirection5Item&)a3DLightAttributes.Get(SDRATTR_3DSCENE_LIGHTDIRECTION_5)).GetValue());
+
+    pInfo = &m_pLightSourceInfoList[5];
+    pInfo->aLightSource.nDiffuseColor = ((const Svx3DLightcolor6Item&)a3DLightAttributes.Get(SDRATTR_3DSCENE_LIGHTCOLOR_6)).GetValue().GetColor();
+    pInfo->aLightSource.bIsEnabled = ((const Svx3DLightOnOff6Item&)a3DLightAttributes.Get(SDRATTR_3DSCENE_LIGHTON_6)).GetValue();
+    pInfo->aLightSource.aDirection = B3DVectorToDirection3D(((const Svx3DLightDirection6Item&)a3DLightAttributes.Get(SDRATTR_3DSCENE_LIGHTDIRECTION_6)).GetValue());
+
+    pInfo = &m_pLightSourceInfoList[6];
+    pInfo->aLightSource.nDiffuseColor = ((const Svx3DLightcolor7Item&)a3DLightAttributes.Get(SDRATTR_3DSCENE_LIGHTCOLOR_7)).GetValue().GetColor();
+    pInfo->aLightSource.bIsEnabled = ((const Svx3DLightOnOff7Item&)a3DLightAttributes.Get(SDRATTR_3DSCENE_LIGHTON_7)).GetValue();
+    pInfo->aLightSource.aDirection = B3DVectorToDirection3D(((const Svx3DLightDirection7Item&)a3DLightAttributes.Get(SDRATTR_3DSCENE_LIGHTDIRECTION_7)).GetValue());
+
+    pInfo = &m_pLightSourceInfoList[7];
+    pInfo->aLightSource.nDiffuseColor = ((const Svx3DLightcolor8Item&)a3DLightAttributes.Get(SDRATTR_3DSCENE_LIGHTCOLOR_8)).GetValue().GetColor();
+    pInfo->aLightSource.bIsEnabled = ((const Svx3DLightOnOff8Item&)a3DLightAttributes.Get(SDRATTR_3DSCENE_LIGHTON_8)).GetValue();
+    pInfo->aLightSource.aDirection = B3DVectorToDirection3D(((const Svx3DLightDirection8Item&)a3DLightAttributes.Get(SDRATTR_3DSCENE_LIGHTDIRECTION_8)).GetValue());
 
     applyLightSourcesToModel();
 
@@ -427,8 +461,8 @@ IMPL_LINK( ThreeD_SceneIllumination_TabPage, PreviewChangeHdl, void*, EMPTYARG )
 
 IMPL_LINK( ThreeD_SceneIllumination_TabPage, PreviewSelectHdl, void*, EMPTYARG )
 {
-    Base3DLightNumber nLightNumber = m_aCtl_Preview.GetPreviewControl().GetSelectedLight();
-    if(nLightNumber>=0&&nLightNumber<8)
+    sal_uInt32 nLightNumber = m_aCtl_Preview.GetSvx3DLightControl().GetSelectedLight();
+    if(nLightNumber<8)
     {
         LightButton* pButton = m_pLightSourceInfoList[nLightNumber].pButton;
         if(!pButton->IsChecked())
@@ -469,7 +503,7 @@ IMPL_LINK( ThreeD_SceneIllumination_TabPage, ColorDialogHdl, Button*, pButton )
                 pInfo = 0;
             }
             if(pInfo)
-                applyLightSourceToModel( Base3DLightNumber( nL ));
+                applyLightSourceToModel( nL );
         }
         SelectColorHdl( pListBox );
     }
@@ -499,7 +533,7 @@ IMPL_LINK( ThreeD_SceneIllumination_TabPage, SelectColorHdl, ColorLB*, pListBox 
         if(pInfo)
         {
             pInfo->aLightSource.nDiffuseColor = pListBox->GetSelectEntryColor().GetColor();
-            applyLightSourceToModel( Base3DLightNumber( nL ));
+            applyLightSourceToModel( nL );
         }
     }
     this->updatePreview();
@@ -530,7 +564,7 @@ IMPL_LINK( ThreeD_SceneIllumination_TabPage, ClickLightSourceButtonHdl, LightBut
         if(pInfo)
         {
             pInfo->aLightSource.bIsEnabled=pButton->isLightOn();
-            applyLightSourceToModel( Base3DLightNumber( nL ));
+            applyLightSourceToModel( nL );
         }
     }
     else
@@ -554,24 +588,64 @@ IMPL_LINK( ThreeD_SceneIllumination_TabPage, ClickLightSourceButtonHdl, LightBut
 
 void ThreeD_SceneIllumination_TabPage::updatePreview()
 {
-    B3dLightGroup* pLightGroup = m_aCtl_Preview.GetPreviewControl().GetLightGroup();
-    pLightGroup->SetGlobalAmbientLight( m_aLB_AmbientLight.GetSelectEntryColor() );
-    Base3DLightNumber nSelectLightSource = Base3DLightNone;
+    SfxItemSet aItemSet(m_aCtl_Preview.GetSvx3DLightControl().Get3DAttributes());
+    LightSourceInfo* pInfo = &m_pLightSourceInfoList[0];
 
-    for( sal_Int32 nL=8; nL--;)
+    // AmbientColor
+    aItemSet.Put(Svx3DAmbientcolorItem(m_aLB_AmbientLight.GetSelectEntryColor()));
+
+    aItemSet.Put(Svx3DLightcolor1Item(pInfo->aLightSource.nDiffuseColor));
+    aItemSet.Put(Svx3DLightOnOff1Item(pInfo->aLightSource.bIsEnabled));
+    aItemSet.Put(Svx3DLightDirection1Item(Direction3DToB3DVector(pInfo->aLightSource.aDirection)));
+
+    pInfo = &m_pLightSourceInfoList[1];
+    aItemSet.Put(Svx3DLightcolor2Item(pInfo->aLightSource.nDiffuseColor));
+    aItemSet.Put(Svx3DLightOnOff2Item(pInfo->aLightSource.bIsEnabled));
+    aItemSet.Put(Svx3DLightDirection2Item(Direction3DToB3DVector(pInfo->aLightSource.aDirection)));
+
+    pInfo = &m_pLightSourceInfoList[2];
+    aItemSet.Put(Svx3DLightcolor3Item(pInfo->aLightSource.nDiffuseColor));
+    aItemSet.Put(Svx3DLightOnOff3Item(pInfo->aLightSource.bIsEnabled));
+    aItemSet.Put(Svx3DLightDirection3Item(Direction3DToB3DVector(pInfo->aLightSource.aDirection)));
+
+    pInfo = &m_pLightSourceInfoList[3];
+    aItemSet.Put(Svx3DLightcolor4Item(pInfo->aLightSource.nDiffuseColor));
+    aItemSet.Put(Svx3DLightOnOff4Item(pInfo->aLightSource.bIsEnabled));
+    aItemSet.Put(Svx3DLightDirection4Item(Direction3DToB3DVector(pInfo->aLightSource.aDirection)));
+
+    pInfo = &m_pLightSourceInfoList[4];
+    aItemSet.Put(Svx3DLightcolor5Item(pInfo->aLightSource.nDiffuseColor));
+    aItemSet.Put(Svx3DLightOnOff5Item(pInfo->aLightSource.bIsEnabled));
+    aItemSet.Put(Svx3DLightDirection5Item(Direction3DToB3DVector(pInfo->aLightSource.aDirection)));
+
+    pInfo = &m_pLightSourceInfoList[5];
+    aItemSet.Put(Svx3DLightcolor6Item(pInfo->aLightSource.nDiffuseColor));
+    aItemSet.Put(Svx3DLightOnOff6Item(pInfo->aLightSource.bIsEnabled));
+    aItemSet.Put(Svx3DLightDirection6Item(Direction3DToB3DVector(pInfo->aLightSource.aDirection)));
+
+    pInfo = &m_pLightSourceInfoList[6];
+    aItemSet.Put(Svx3DLightcolor7Item(pInfo->aLightSource.nDiffuseColor));
+    aItemSet.Put(Svx3DLightOnOff7Item(pInfo->aLightSource.bIsEnabled));
+    aItemSet.Put(Svx3DLightDirection7Item(Direction3DToB3DVector(pInfo->aLightSource.aDirection)));
+
+    pInfo = &m_pLightSourceInfoList[7];
+    aItemSet.Put(Svx3DLightcolor8Item(pInfo->aLightSource.nDiffuseColor));
+    aItemSet.Put(Svx3DLightOnOff8Item(pInfo->aLightSource.bIsEnabled));
+    aItemSet.Put(Svx3DLightDirection8Item(Direction3DToB3DVector(pInfo->aLightSource.aDirection)));
+
+    // set lights and ambient light
+    m_aCtl_Preview.GetSvx3DLightControl().Set3DAttributes(aItemSet);
+
+    // select light
+    for(sal_uInt32 a(0); a < 8; a++)
     {
-        LightSourceInfo* pInfo = &m_pLightSourceInfoList[nL];
-        Base3DLightNumber nLightNumber = Base3DLightNumber(nL);
-        pLightGroup->SetIntensity( Color( pInfo->aLightSource.nDiffuseColor ), Base3DMaterialDiffuse, nLightNumber );
-        pLightGroup->Enable( pInfo->aLightSource.bIsEnabled, nLightNumber );
-        pLightGroup->SetDirection( Direction3DToB3DPoint( pInfo->aLightSource.aDirection ), nLightNumber );
-        if(pInfo->pButton->IsChecked())
-            nSelectLightSource = Base3DLightNumber(nL);
+        if(m_pLightSourceInfoList[a].pButton->IsChecked())
+        {
+            m_aCtl_Preview.GetSvx3DLightControl().SelectLight(a);
+            m_aCtl_Preview.CheckSelection();
+            break;
+        }
     }
-
-    m_aCtl_Preview.GetPreviewControl().SelectLight( nSelectLightSource );
-    m_aCtl_Preview.CheckSelection();
-    m_aCtl_Preview.Invalidate();
 }
 
 //.............................................................................

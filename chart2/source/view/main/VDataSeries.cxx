@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: VDataSeries.cxx,v $
- * $Revision: 1.33 $
+ * $Revision: 1.32.8.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -455,9 +455,9 @@ rtl::OUString VDataSeries::getDataCurveEquationCID( sal_Int32 nCurveIndex ) cons
     aRet = ObjectIdentifier::createDataCurveEquationCID( m_aSeriesParticle, nCurveIndex );
     return aRet;
 }
-void VDataSeries::setDiagramReferenceSize( const awt::Size & rDiagramRefSize )
+void VDataSeries::setPageReferenceSize( const awt::Size & rPageRefSize )
 {
-    m_aReferenceSize = rDiagramRefSize;
+    m_aReferenceSize = rPageRefSize;
 }
 
 StackingDirection VDataSeries::getStackingDirection() const

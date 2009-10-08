@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: xlstyle.hxx,v $
- * $Revision: 1.23 $
+ * $Revision: 1.23.32.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -463,10 +463,14 @@ public:
 protected:
     typedef ::std::map< sal_uInt16, XclNumFmt > XclNumFmtMap;
 
+    /** Clears all buffered data, used to set up for a new sheet. */
+    void                InitializeImport();
+
     /** Returns the current number format map. */
     inline const XclNumFmtMap& GetFormatMap() const { return maFmtMap; }
-    /** Returns the number format with the specified Excel format index. */
-    const XclNumFmt*    GetFormat( sal_uInt16 nXclNumFmt ) const;
+
+//UNUSED2008-05  /** Returns the number format with the specified Excel format index. */
+//UNUSED2008-05  const XclNumFmt*    GetFormat( sal_uInt16 nXclNumFmt ) const;
 
     /** Inserts a new number format for the specified Excel format index. */
     void                InsertFormat( sal_uInt16 nXclNumFmt, const String& rFormat );

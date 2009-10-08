@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: fdumper.hxx,v $
- * $Revision: 1.10 $
+ * $Revision: 1.8.28.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -31,7 +31,7 @@
 #ifndef SC_FDUMPER_HXX
 #define SC_FDUMPER_HXX
 
-#define SCF_INCL_DUMPER (OSL_DEBUG_LEVEL > 0)
+#define SCF_INCL_DUMPER (OSL_DEBUG_LEVEL > 0) && 0
 
 #include <map>
 #include <math.h>

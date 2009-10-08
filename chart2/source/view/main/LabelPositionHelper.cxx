@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: LabelPositionHelper.cxx,v $
- * $Revision: 1.7 $
+ * $Revision: 1.7.44.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -70,22 +70,6 @@ awt::Point LabelPositionHelper::transformSceneToScreenPosition( const drawing::P
                   rScenePosition3D, m_xLogicTarget, m_pShapeFactory, m_nDimensionCount );
 }
 
-awt::Point LabelPositionHelper::transformScaledLogicToScreenPosition( const drawing::Position3D& rLogicPosition3D ) const
-{
-    drawing::Position3D aScenePosition3D( SequenceToPosition3D(
-        m_pPosHelper->getTransformationScaledLogicToScene()->transform(
-            Position3DToSequence(rLogicPosition3D) ) ) );
-    /*
-    if(3==m_nDimensionCount)
-    {
-        drawing::Position3D aScenePosition3D_rotated( aScenePosition3D.PositionX, -aScenePosition3D.PositionZ, aScenePosition3D.PositionY );
-        aScenePosition3D = aScenePosition3D_rotated;
-    }
-    */
-    awt::Point aScreenPosition2D( this->transformSceneToScreenPosition( aScenePosition3D ) );
-    return aScreenPosition2D;
-}
-
 //static
 void LabelPositionHelper::changeTextAdjustment( tAnySequence& rPropValues, const tNameSequence& rPropNames, LabelAlignment eAlignment)
 {
@@ -136,7 +120,7 @@ void LabelPositionHelper::doDynamicFontResize( tAnySequence& rPropValues
     //-------------------------
     //handle dynamic font resize:
     awt::Size aOldReferenceSize;
-    if( xAxisModelProps->getPropertyValue( C2U("ReferenceDiagramSize")) >>= aOldReferenceSize )
+    if( xAxisModelProps->getPropertyValue( C2U("ReferencePageSize")) >>= aOldReferenceSize )
     {
         uno::Any* pAOldAndNewFontHeightAny = PropertyMapper::getValuePointer( rPropValues, rPropNames, C2U("CharHeight") );
         lcl_doDynamicFontResize( pAOldAndNewFontHeightAny, aOldReferenceSize, rNewReferenceSize );

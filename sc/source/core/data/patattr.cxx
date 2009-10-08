@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: patattr.cxx,v $
- * $Revision: 1.34 $
+ * $Revision: 1.34.32.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -1212,15 +1212,15 @@ BOOL ScPatternAttr::IsSymbolFont() const
         return FALSE;
 }
 
-FontToSubsFontConverter ScPatternAttr::GetSubsFontConverter( ULONG nFlags ) const
-{
-    const SfxPoolItem* pItem;
-    if( GetItemSet().GetItemState( ATTR_FONT, TRUE, &pItem ) == SFX_ITEM_SET )
-        return CreateFontToSubsFontConverter(
-            ((const SvxFontItem*) pItem)->GetFamilyName(), nFlags );
-    else
-        return 0;
-}
+//UNUSED2008-05  FontToSubsFontConverter ScPatternAttr::GetSubsFontConverter( ULONG nFlags ) const
+//UNUSED2008-05  {
+//UNUSED2008-05      const SfxPoolItem* pItem;
+//UNUSED2008-05      if( GetItemSet().GetItemState( ATTR_FONT, TRUE, &pItem ) == SFX_ITEM_SET )
+//UNUSED2008-05          return CreateFontToSubsFontConverter(
+//UNUSED2008-05              ((const SvxFontItem*) pItem)->GetFamilyName(), nFlags );
+//UNUSED2008-05      else
+//UNUSED2008-05          return 0;
+//UNUSED2008-05  }
 
 
 ULONG ScPatternAttr::GetNumberFormat( SvNumberFormatter* pFormatter ) const

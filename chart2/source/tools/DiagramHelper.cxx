@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: DiagramHelper.cxx,v $
- * $Revision: 1.19 $
+ * $Revision: 1.18.22.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -61,26 +61,6 @@ using namespace ::std;
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::Sequence;
 using ::rtl::OUString;
-
-namespace
-{
-bool lcl_ChartTypeIsMemberOfCooSys(
-    const Reference< chart2::XCoordinateSystem > & xCooSys,
-    const Reference< chart2::XChartType > & xChartType )
-{
-    Reference< chart2::XChartTypeContainer > xCTCnt( xCooSys, uno::UNO_QUERY );
-    if( xCTCnt.is())
-    {
-        Sequence< Reference< chart2::XChartType > > aChartTypes( xCTCnt->getChartTypes());
-        for( sal_Int32 i=0; i<aChartTypes.getLength(); ++i )
-            if( aChartTypes[i] == xChartType )
-                return true;
-    }
-
-    return false;
-}
-
-} // anonymous namespace
 
 namespace chart
 {
@@ -412,11 +392,6 @@ StackMode DiagramHelper::getStackModeFromChartType(
     bool& rbFound, bool& rbAmbiguous,
     const Reference< XCoordinateSystem > & xCorrespondingCoordinateSystem )
 {
-    OSL_ASSERT( !xCorrespondingCoordinateSystem.is() ||
-                lcl_ChartTypeIsMemberOfCooSys(
-                    xCorrespondingCoordinateSystem,
-                    xChartType ));
-
     StackMode eStackMode = StackMode_NONE;
     rbFound = false;
     rbAmbiguous = false;
@@ -708,44 +683,6 @@ uno::Reference< XChartType > DiagramHelper::getChartTypeOfSeries(
                 if( xGivenDataSeries==aSeriesList[nS] )
                     return xChartType;
             }
-        }
-    }
-    return 0;
-}
-
-//static
-uno::Reference< XCoordinateSystem > DiagramHelper::getCoordinateSystemOfChartType(
-              const uno::Reference< chart2::XDiagram >& xDiagram
-            , const uno::Reference< XChartType >& xGivenChartType )
-{
-    if( !xGivenChartType.is() )
-        return 0;
-
-    //iterate through the model to find the given xChartType
-    //the found parent indicates the coordinate system
-
-    //iterate through all coordinate systems
-    uno::Reference< XCoordinateSystemContainer > xCooSysContainer( xDiagram, uno::UNO_QUERY );
-    if( !xCooSysContainer.is())
-        return 0;
-
-    uno::Sequence< uno::Reference< XCoordinateSystem > > aCooSysList( xCooSysContainer->getCoordinateSystems() );
-    for( sal_Int32 nCS = 0; nCS < aCooSysList.getLength(); ++nCS )
-    {
-        uno::Reference< XCoordinateSystem > xCooSys( aCooSysList[nCS] );
-
-        //iterate through all chart types in the current coordinate system
-        uno::Reference< XChartTypeContainer > xChartTypeContainer( xCooSys, uno::UNO_QUERY );
-        OSL_ASSERT( xChartTypeContainer.is());
-        if( !xChartTypeContainer.is() )
-            continue;
-        uno::Sequence< uno::Reference< XChartType > > aChartTypeList( xChartTypeContainer->getChartTypes() );
-        for( sal_Int32 nT = 0; nT < aChartTypeList.getLength(); ++nT )
-        {
-            uno::Reference< XChartType > xChartType( aChartTypeList[nT] );
-
-            if( xGivenChartType==xChartType )
-                return xCooSys;
         }
     }
     return 0;
@@ -1360,29 +1297,6 @@ bool DiagramHelper::moveSeries( const Reference< XDiagram >& xDiagram, const Ref
         xDiagram, xGivenDataSeries, bForward, bDoMove );
 
     return bMoved;
-}
-
-sal_Int32 DiagramHelper::getIndexOfSeriesWithinChartType(
-                const Reference< XDataSeries >& xDataSeries,
-               const Reference< XChartType >& xChartType )
-{
-    sal_Int32 nRet = -1;
-
-    uno::Reference< XDataSeriesContainer > xDataSeriesContainer( xChartType, uno::UNO_QUERY );
-    if( xDataSeriesContainer.is() )
-    {
-        uno::Sequence< uno::Reference< XDataSeries > > aSeriesList( xDataSeriesContainer->getDataSeries() );
-        for( sal_Int32 nS = 0; nS < aSeriesList.getLength(); ++nS )
-        {
-            if( xDataSeries==aSeriesList[nS] )
-            {
-                nRet = nS;
-                break;
-            }
-        }
-    }
-
-    return nRet;
 }
 
 bool DiagramHelper::isSupportingFloorAndWall( const Reference<

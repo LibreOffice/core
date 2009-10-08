@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: xlchart.hxx,v $
- * $Revision: 1.15 $
+ * $Revision: 1.14.62.3 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -51,6 +51,7 @@ namespace com { namespace sun { namespace star {
 #define SERVICE_DRAWING_BITMAPTABLE         CREATE_OUSTRING( "com.sun.star.drawing.BitmapTable" )
 #define SERVICE_DRAWING_DASHTABLE           CREATE_OUSTRING( "com.sun.star.drawing.DashTable" )
 #define SERVICE_DRAWING_GRADIENTTABLE       CREATE_OUSTRING( "com.sun.star.drawing.GradientTable" )
+#define SERVICE_DRAWING_HATCHTABLE          CREATE_OUSTRING( "com.sun.star.drawing.HatchTable" )
 
 #define SERVICE_CHART2_AXIS                 CREATE_OUSTRING( "com.sun.star.chart2.Axis" )
 #define SERVICE_CHART2_CARTESIANCOORDSYS2D  CREATE_OUSTRING( "com.sun.star.chart2.CartesianCoordinateSystem2d" )
@@ -187,7 +188,7 @@ const sal_uInt16 EXC_CHSERIES_INVALID           = 0xFFFF;   /// Invalid series i
 
 const sal_uInt16 EXC_ID_CHDATAFORMAT            = 0x1006;
 
-const sal_uInt16 EXC_CHDATAFORMAT_MAXPOINT      = 31999;    /// Maximum valid point index.
+const sal_uInt16 EXC_CHDATAFORMAT_MAXPOINTCOUNT = 32000;    /// Maximum number of data points.
 const sal_uInt16 EXC_CHDATAFORMAT_DEFAULT       = 0xFFFD;   /// As format index: global default for an axes set.
 const sal_uInt16 EXC_CHDATAFORMAT_UNKNOWN       = 0xFFFE;   /// As point index: unknown format, don't use.
 const sal_uInt16 EXC_CHDATAFORMAT_ALLPOINTS     = 0xFFFF;   /// As point index: default for a series.
@@ -1269,6 +1270,7 @@ public:
                             XclChEscherFormat& rEscherFmt,
                             XclChPicFormat& rPicFmt,
                             XclChObjectTable& rGradientTable,
+                            XclChObjectTable& rHatchTable,
                             XclChObjectTable& rBitmapTable,
                             const ScfPropertySet& rPropSet,
                             XclChPropertyMode ePropMode );
@@ -1300,6 +1302,7 @@ public:
     void                WriteEscherProperties(
                             ScfPropertySet& rPropSet,
                             XclChObjectTable& rGradientTable,
+                            XclChObjectTable& rHatchTable,
                             XclChObjectTable& rBitmapTable,
                             const XclChEscherFormat& rEscherFmt,
                             const XclChPicFormat& rPicFmt,
@@ -1324,6 +1327,8 @@ private:
     ScfPropSetHelper&   GetAreaHelper( XclChPropertyMode ePropMode );
     /** Returns a gradient property set helper according to the passed property mode. */
     ScfPropSetHelper&   GetGradientHelper( XclChPropertyMode ePropMode );
+    /** Returns a hatch property set helper according to the passed property mode. */
+    ScfPropSetHelper&   GetHatchHelper( XclChPropertyMode ePropMode );
 
 private:
     ScfPropSetHelper    maLineHlpCommon;    /// Properties for lines in common objects.
@@ -1333,6 +1338,8 @@ private:
     ScfPropSetHelper    maAreaHlpFilled;    /// Properties for areas in filled series.
     ScfPropSetHelper    maGradHlpCommon;    /// Properties for gradients in common objects.
     ScfPropSetHelper    maGradHlpFilled;    /// Properties for gradients in filled series.
+    ScfPropSetHelper    maHatchHlpCommon;   /// Properties for hatches in common objects.
+    ScfPropSetHelper    maHatchHlpFilled;   /// Properties for hatches in filled series.
     ScfPropSetHelper    maBitmapHlp;        /// Properties for bitmaps.
     ScfPropSetHelper    maRotationHlp;      /// Properties for text rotation.
     ScfPropSetHelper    maLegendHlp;        /// Properties for legend.
@@ -1360,6 +1367,7 @@ public:
 
     inline XclChObjectTable& GetLineDashTable() const { return *mxLineDashTable; }
     inline XclChObjectTable& GetGradientTable() const { return *mxGradientTable; }
+    inline XclChObjectTable& GetHatchTable() const { return *mxHatchTable; }
     inline XclChObjectTable& GetBitmapTable() const { return *mxBitmapTable; }
 
     /** Starts the API chart document conversion. Must be called once before any API access. */
@@ -1377,6 +1385,7 @@ private:
     XclChFmtInfoProvRef mxFmtInfoProv;          /// Provides info about auto formatting.
     XclChObjectTableRef mxLineDashTable;        /// Container for line dash styles.
     XclChObjectTableRef mxGradientTable;        /// Container for gradient fill styles.
+    XclChObjectTableRef mxHatchTable;           /// Container for hatch fill styles.
     XclChObjectTableRef mxBitmapTable;          /// Container for bitmap fill styles.
 };
 

@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: VLegendSymbolFactory.hxx,v $
- * $Revision: 1.3 $
+ * $Revision: 1.3.44.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -63,35 +63,12 @@ public:
             tPropertyType ePropertyType,
             const ::com::sun::star::uno::Any& rExplicitSymbol /*should contain a ::com::sun::star::chart2::Symbol without automatic symbol if the charttype does support symbols else empty*/);
 
-    /// @param bWhiteDay: if <FALSE/> this symbol is for BlackDays
-    static ::com::sun::star::uno::Reference<
-                ::com::sun::star::drawing::XShape >
-        createJapaneseCandleStickSymbol(
-            const ::com::sun::star::uno::Reference<
-                ::com::sun::star::drawing::XShapes > xSymbolContainer,
-            const ::com::sun::star::uno::Reference<
-                ::com::sun::star::lang::XMultiServiceFactory > & xShapeFactory,
-            const ::com::sun::star::uno::Reference<
-                ::com::sun::star::beans::XPropertySet > & xLegendEntryProperties,
-            bool bWhiteDay );
-
     enum tStockLineType
     {
         STOCK_LINE_TYPE_VERT,
         STOCK_LINE_TYPE_OPEN,
         STOCK_LINE_TYPE_CLOSE
     };
-
-    static ::com::sun::star::uno::Reference<
-                ::com::sun::star::drawing::XShape >
-        createStockLineSymbol(
-            const ::com::sun::star::uno::Reference<
-                ::com::sun::star::drawing::XShapes > xSymbolContainer,
-            const ::com::sun::star::uno::Reference<
-                ::com::sun::star::lang::XMultiServiceFactory > & xShapeFactory,
-            const ::com::sun::star::uno::Reference<
-                ::com::sun::star::beans::XPropertySet > & xLegendEntryProperties,
-            tStockLineType eType );
 
 private:
      VLegendSymbolFactory();

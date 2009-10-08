@@ -8,7 +8,7 @@
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.4 $
+# $Revision: 1.4.44.3 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -58,7 +58,7 @@ SLOFILES=	\
     $(SLO)$/MinMaxLineWrapper.obj \
     $(SLO)$/UpDownBarWrapper.obj \
     $(SLO)$/WallFloorWrapper.obj \
-    $(SLO)$/WrappedNamedProperty.obj \
+    $(SLO)$/WrappedAutomaticPositionProperties.obj \
     $(SLO)$/WrappedCharacterHeightProperty.obj \
     $(SLO)$/WrappedDataCaptionProperties.obj \
     $(SLO)$/WrappedTextRotationProperty.obj \
@@ -72,7 +72,8 @@ SLOFILES=	\
     $(SLO)$/WrappedStatisticProperties.obj \
     $(SLO)$/WrappedSceneProperty.obj \
     $(SLO)$/WrappedSeriesAreaOrLineProperty.obj \
-    $(SLO)$/WrappedAddInProperty.obj
+    $(SLO)$/WrappedAddInProperty.obj \
+    $(SLO)$/WrappedScaleTextProperties.obj
 
 # --- Targets -----------------------------------------------------------------
 

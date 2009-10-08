@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: ModifyListenerHelper.hxx,v $
- * $Revision: 1.4 $
+ * $Revision: 1.4.44.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -122,36 +122,6 @@ private:
         tListenerMap;
 
     tListenerMap m_aListenerMap;
-};
-
-// ================================================================================
-
-class ModifyListenerOnDemmandRefresh :
-        public ::cppu::WeakImplHelper1<
-        ::com::sun::star::util::XModifyListener >
-{
-public:
-    explicit ModifyListenerOnDemmandRefresh( ::osl::Mutex & rMutex );
-
-    void listenAtDocument( const ::com::sun::star::uno::Reference<
-                               ::com::sun::star::chart2::XChartDocument > & xChartDoc );
-
-    void update();
-    bool needsUpdate() const;
-
-    // ____ XModifyListener ____
-    virtual void SAL_CALL modified(
-        const ::com::sun::star::lang::EventObject& aEvent )
-        throw (::com::sun::star::uno::RuntimeException);
-
-    // ____ XEventListener (base of XModifyListener) ____
-    virtual void SAL_CALL disposing(
-        const ::com::sun::star::lang::EventObject& Source )
-        throw (::com::sun::star::uno::RuntimeException);
-
-private:
-    ::osl::Mutex & m_rMutex;
-    bool m_bNeedsUpdate;
 };
 
 // ================================================================================

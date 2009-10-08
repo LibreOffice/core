@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: scimpexpmsg.cxx,v $
- * $Revision: 1.5 $
+ * $Revision: 1.5.32.3 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -40,91 +40,77 @@
 
 #include <tools/string.hxx>
 
-
-void ScDocument::AddToImpExpLog( const ScImpExpLogMsg& /* r */ )
-{
-}
-
-
-void ScDocument::AddToImpExpLog( ScImpExpLogMsg* p )
-{
-    delete p;
-}
-
-
-
-
-ScImpExpLogMsg::ScImpExpLogMsg( ScImpExpMsg e ) : eId( e ), pPos( NULL ), pHint( NULL )
-{
-}
-
-
-ScImpExpLogMsg::ScImpExpLogMsg( ScImpExpMsg e, const String& r ) : eId( e ), pHint( NULL )
-{
-    pPos = new String( r );
-}
-
-
-ScImpExpLogMsg::ScImpExpLogMsg( ScImpExpMsg e, const String& rP, const String& rH ) : eId( e )
-{
-    pPos = new String( rP );
-    pHint = new String( rH );
-}
-
-ScImpExpLogMsg::ScImpExpLogMsg( const ScImpExpLogMsg& r ) : eId( r.eId )
-{
-    if( r.pPos )
-        pPos = new String( *r.pPos );
-    else
-        pPos = NULL;
-
-    if( r.pHint )
-        pHint = new String( *r.pHint );
-    else
-        pHint = NULL;
-}
-
-
-ScImpExpLogMsg::~ScImpExpLogMsg()
-{
-    if( pPos )
-        delete pPos;
-
-    if( pHint )
-        delete pHint;
-}
-
-
-void ScImpExpLogMsg::Set( ScImpExpMsg e, const String* pP, const String* pH )
-{
-    eId = e;
-    if( pPos )
-        delete pPos;
-
-    if( pHint )
-        delete pHint;
-
-    if( pP )
-        pPos = new String( *pP );
-    else
-        pPos = NULL;
-
-    if( pH )
-        pHint = new String( *pH );
-}
-
-
-String ScImpExpLogMsg::GetMsg( ScImpExpMsg e )
-{
-    const sal_Char*     p;
-    switch( e )
-    {
-        case SC_IMPEXPMSG_UNKNOWN:  p = "unknown log message";                  break;
-        default:                    p = "Not specified type of log message";
-    }
-
-    String  aRet;
-    aRet.AssignAscii( p );
-    return aRet;
-}
+//UNUSED2008-05  ScImpExpLogMsg::ScImpExpLogMsg( ScImpExpMsg e ) : eId( e ), pPos( NULL ), pHint( NULL )
+//UNUSED2008-05  {
+//UNUSED2008-05  }
+//UNUSED2008-05
+//UNUSED2008-05
+//UNUSED2008-05  ScImpExpLogMsg::ScImpExpLogMsg( ScImpExpMsg e, const String& r ) : eId( e ), pHint( NULL )
+//UNUSED2008-05  {
+//UNUSED2008-05      pPos = new String( r );
+//UNUSED2008-05  }
+//UNUSED2008-05
+//UNUSED2008-05
+//UNUSED2008-05  ScImpExpLogMsg::ScImpExpLogMsg( ScImpExpMsg e, const String& rP, const String& rH ) : eId( e )
+//UNUSED2008-05  {
+//UNUSED2008-05      pPos = new String( rP );
+//UNUSED2008-05      pHint = new String( rH );
+//UNUSED2008-05  }
+//UNUSED2008-05
+//UNUSED2008-05  ScImpExpLogMsg::ScImpExpLogMsg( const ScImpExpLogMsg& r ) : eId( r.eId )
+//UNUSED2008-05  {
+//UNUSED2008-05      if( r.pPos )
+//UNUSED2008-05          pPos = new String( *r.pPos );
+//UNUSED2008-05      else
+//UNUSED2008-05          pPos = NULL;
+//UNUSED2008-05
+//UNUSED2008-05      if( r.pHint )
+//UNUSED2008-05          pHint = new String( *r.pHint );
+//UNUSED2008-05      else
+//UNUSED2008-05          pHint = NULL;
+//UNUSED2008-05  }
+//UNUSED2008-05
+//UNUSED2008-05
+//UNUSED2008-05  ScImpExpLogMsg::~ScImpExpLogMsg()
+//UNUSED2008-05  {
+//UNUSED2008-05      if( pPos )
+//UNUSED2008-05          delete pPos;
+//UNUSED2008-05
+//UNUSED2008-05      if( pHint )
+//UNUSED2008-05          delete pHint;
+//UNUSED2008-05  }
+//UNUSED2008-05
+//UNUSED2008-05
+//UNUSED2008-05  void ScImpExpLogMsg::Set( ScImpExpMsg e, const String* pP, const String* pH )
+//UNUSED2008-05  {
+//UNUSED2008-05      eId = e;
+//UNUSED2008-05      if( pPos )
+//UNUSED2008-05          delete pPos;
+//UNUSED2008-05
+//UNUSED2008-05      if( pHint )
+//UNUSED2008-05          delete pHint;
+//UNUSED2008-05
+//UNUSED2008-05      if( pP )
+//UNUSED2008-05          pPos = new String( *pP );
+//UNUSED2008-05      else
+//UNUSED2008-05          pPos = NULL;
+//UNUSED2008-05
+//UNUSED2008-05      if( pH )
+//UNUSED2008-05          pHint = new String( *pH );
+//UNUSED2008-05  }
+//UNUSED2008-05
+//UNUSED2008-05
+//UNUSED2008-05  String ScImpExpLogMsg::GetMsg( ScImpExpMsg e )
+//UNUSED2008-05  {
+//UNUSED2008-05      const sal_Char*     p;
+//UNUSED2008-05      switch( e )
+//UNUSED2008-05      {
+//UNUSED2008-05          case SC_IMPEXPMSG_UNKNOWN:  p = "unknown log message";                  break;
+//UNUSED2008-05          default:                    p = "Not specified type of log message";
+//UNUSED2008-05      }
+//UNUSED2008-05
+//UNUSED2008-05      String  aRet;
+//UNUSED2008-05      aRet.AssignAscii( p );
+//UNUSED2008-05      return aRet;
+//UNUSED2008-05  }
 

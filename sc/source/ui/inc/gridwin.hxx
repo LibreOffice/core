@@ -44,7 +44,9 @@
 
 struct ScTableInfo;
 class ScViewSelectionEngine;
+#if OLD_PIVOT_IMPLEMENTATION
 class ScPivot;
+#endif
 class ScDPObject;
 class ScOutputData;
 class ScFilterListBox;
@@ -168,11 +170,13 @@ private:
     BYTE                    nMouseStatus;
     BYTE                    nNestedButtonState;     // track nested button up/down calls
 
+#if OLD_PIVOT_IMPLEMENTATION
     BOOL                    bPivotMouse;            // Pivot-D&D (alte Pivottabellen)
     ScPivot*                pDragPivot;
     BOOL                    bPivotColField;
     SCCOL                   nPivotCol;
     SCCOL                   nPivotField;
+#endif
 
     BOOL                    bDPMouse;               // DataPilot-D&D (neue Pivottabellen)
     long                    nDPField;
@@ -231,10 +235,12 @@ private:
 
     BOOL            DoPageFieldSelection( SCCOL nCol, SCROW nRow );
     void            DoPushButton( SCCOL nCol, SCROW nRow, const MouseEvent& rMEvt );
+#if OLD_PIVOT_IMPLEMENTATION
     void            PivotMouseMove( const MouseEvent& rMEvt );
     void            PivotMouseButtonUp( const MouseEvent& rMEvt );
     BOOL            PivotTestMouse( const MouseEvent& rMEvt, BOOL bMove );
     void            DoPivotDrop( BOOL bDelete, BOOL bToCols, SCSIZE nDestPos );
+#endif
 
     void            DPMouseMove( const MouseEvent& rMEvt );
     void            DPMouseButtonUp( const MouseEvent& rMEvt );
@@ -282,7 +288,6 @@ private:
     void            DrawSdrGrid( const Rectangle& rDrawingRect, OutputDevice* pContentDev );
     //BOOL          DrawBeforeScroll();
     void            DrawAfterScroll(/*BOOL bVal*/);
-    void            OutlinerViewPaint( const Rectangle& rRect );
     //void          DrawMarks();
     //BOOL          NeedDrawMarks();
     void            DrawComboButton( const Point&   rCellPos,
@@ -377,11 +382,7 @@ public:
     void            InvertSimple( SCCOL nX1, SCROW nY1, SCCOL nX2, SCROW nY2,
                                     BOOL bTestMerge = FALSE, BOOL bRepeat = FALSE );
 
-    void            DrawDragRect( SCCOL nX1, SCROW nY1, SCCOL nX2, SCROW nY2 );
-
-    void            DrawRefMark( SCCOL nRefStartX, SCROW nRefStartY,
-                                    SCCOL nRefEndX, SCROW nRefEndY,
-                                    const Color& rColor, BOOL bHandle );
+//UNUSED2008-05  void           DrawDragRect( SCCOL nX1, SCROW nY1, SCCOL nX2, SCROW nY2 );
 
     void            CreateAnchorHandle(SdrHdlList& rHdl, const ScAddress& rAddress);
 

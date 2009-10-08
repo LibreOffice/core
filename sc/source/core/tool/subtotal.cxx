@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: subtotal.cxx,v $
- * $Revision: 1.7 $
+ * $Revision: 1.7.32.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -39,6 +39,7 @@
 
 // -----------------------------------------------------------------------
 
+#if OLD_PIVOT_IMPLEMENTATION
 SubTotal::SubTotal()
 {
     nIndex = 0;             //! test fuer Pivot
@@ -218,7 +219,7 @@ double SubTotal::Result( USHORT nFunction ) const
     }
     return nRet;
 }
-
+#endif
 
 BOOL SubTotal::SafePlus(double& fVal1, double fVal2)
 {

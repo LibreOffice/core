@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: xlpage.hxx,v $
- * $Revision: 1.8 $
+ * $Revision: 1.8.90.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -92,13 +92,6 @@ const sal_uInt16 EXC_SETUP_STARTPAGE        = 0x0080;
 const sal_uInt16 EXC_SETUP_NOTES_END        = 0x0200;
 
 const sal_uInt16 EXC_PAPERSIZE_DEFAULT      = 0;
-
-// (0x00E9) BITMAP ------------------------------------------------------------
-
-const sal_uInt16 EXC_ID_BITMAP              = 0x00E9;
-const sal_uInt32 EXC_BITMAP_UNKNOWNID       = 0x00010009;
-const sal_uInt32 EXC_BITMAP_MAXREC          = 0x201C;
-const sal_uInt32 EXC_BITMAP_MAXCONT         = 0x2014;
 
 // ============================================================================
 

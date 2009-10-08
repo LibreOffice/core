@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: root.hxx,v $
- * $Revision: 1.44 $
+ * $Revision: 1.44.14.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -47,6 +47,7 @@ class ExtNameBuff;
 class ExtSheetBuffer;
 class ExcelToSc;
 
+class XclImpColRowSettings;
 class XclImpAutoFilterBuffer;
 class XclImpPivotCacheList;
 class _ScRangeListTabs;
@@ -70,6 +71,7 @@ struct RootData     // -> Inkarnation jeweils im ImportExcel-Objekt!
     ShrfmlaBuffer*      pShrfmlaBuff;
     ExtNameBuff*        pExtNameBuff;
     ExcelToSc*          pFmlaConverter;
+    XclImpColRowSettings* pColRowBuff;        // Col/Row-Einstellungen 1 Tabelle
 
     // Biff8
     XclImpAutoFilterBuffer* pAutoFilterBuffer;      // ranges for autofilter and advanced filter

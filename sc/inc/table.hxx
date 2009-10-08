@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: table.hxx,v $
- * $Revision: 1.35 $
+ * $Revision: 1.35.30.6 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -350,13 +350,13 @@ public:
     BOOL        HasData( SCCOL nCol, SCROW nRow );
     BOOL        HasStringData( SCCOL nCol, SCROW nRow );
     BOOL        HasValueData( SCCOL nCol, SCROW nRow );
-    USHORT      GetErrorData(SCCOL nCol, SCROW nRow) const;
+//UNUSED2008-05  USHORT     GetErrorData(SCCOL nCol, SCROW nRow) const;
     BOOL        HasStringCells( SCCOL nStartCol, SCROW nStartRow,
                                 SCCOL nEndCol, SCROW nEndRow ) const;
 
     USHORT      GetErrCode( const ScAddress& rPos ) const
                     { return aCol[rPos.Col()].GetErrCode( rPos.Row() ); }
-    USHORT      GetErrCode( SCCOL nCol, SCROW nRow ) const;
+//UNUSED2008-05  USHORT     GetErrCode( SCCOL nCol, SCROW nRow ) const;
 
     void        ResetChanged( const ScRange& rRange );
 
@@ -385,7 +385,7 @@ public:
     void        UpdateGrow( const ScRange& rArea, SCCOL nGrowX, SCROW nGrowY );
 
     void        UpdateInsertTab(SCTAB nTable);
-    void        UpdateInsertTabOnlyCells(SCTAB nTable);
+//UNUSED2008-05  void        UpdateInsertTabOnlyCells(SCTAB nTable);
     void        UpdateDeleteTab( SCTAB nTable, BOOL bIsMove, ScTable* pRefUndo = NULL );
     void        UpdateMoveTab(SCTAB nOldPos, SCTAB nNewPos, SCTAB nTabNo, ScProgress& );
     void        UpdateCompile( BOOL bForceIfNameInUse = FALSE );
@@ -551,8 +551,6 @@ public:
     void        SetRowFlags( SCROW nRow, BYTE nNewFlags );
     void        SetRowFlags( SCROW nStartRow, SCROW nEndRow, BYTE nNewFlags );
 
-                /// @return  the index of the last column with any set flags (auto-pagebreak is ignored).
-    SCCOL      GetLastFlaggedCol() const;
                 /// @return  the index of the last row with any set flags (auto-pagebreak is ignored).
     SCROW      GetLastFlaggedRow() const;
 
@@ -580,10 +578,6 @@ public:
 
     void        StripHidden( SCCOL& rX1, SCROW& rY1, SCCOL& rX2, SCROW& rY2 );
     void        ExtendHidden( SCCOL& rX1, SCROW& rY1, SCCOL& rX2, SCROW& rY2 );
-
-    BOOL        Load( SvStream& rStream, USHORT nVersion, ScProgress* pProgress );
-    BOOL        Save( SvStream& rStream, long& rSavedDocCells, ScProgress* pProgress ) const;
-
     void        Sort(const ScSortParam& rSortParam, BOOL bKeepQuery);
     BOOL        ValidQuery(SCROW nRow, const ScQueryParam& rQueryParam,
                     BOOL* pSpecial = NULL, ScBaseCell* pCell = NULL,

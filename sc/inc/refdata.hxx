@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: refdata.hxx,v $
- * $Revision: 1.7 $
+ * $Revision: 1.7.32.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -112,9 +112,9 @@ struct SingleRefData        // Single reference (one address) into the sheet
             void SmartRelAbs( const ScAddress& rPos );
             void CalcRelFromAbs( const ScAddress& rPos );
             void CalcAbsIfRel( const ScAddress& rPos );
-            void OldBoolsToNewFlags( const OldSingleRefBools& );
-            BYTE CreateStoreByteFromFlags() const;
-            void CreateFlagsFromLoadByte( BYTE );
+//UNUSED2008-05  void OldBoolsToNewFlags( const OldSingleRefBools& );
+//UNUSED2008-05  BYTE CreateStoreByteFromFlags() const;
+//UNUSED2008-05  void CreateFlagsFromLoadByte( BYTE );
             BOOL operator==( const SingleRefData& ) const;
 };
 

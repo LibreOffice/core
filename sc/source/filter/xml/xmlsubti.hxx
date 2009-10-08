@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: xmlsubti.hxx,v $
- * $Revision: 1.32 $
+ * $Revision: 1.32.32.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -74,7 +74,6 @@ public:
     void                                AddRow();
     void                                AddColumn();
     void                                SetFirstColumn() { aTableCellPos.Column = -1; }
-    sal_Int32                           FindNextCol(const sal_Int32 nIndex) const;
     sal_Int32                           GetColsPerCol(const sal_Int32 nIndex) const { return nColsPerCol[nIndex]; }
     void                                SetColsPerCol(const sal_Int32 nIndex, sal_Int32 nValue = 1) { nColsPerCol[nIndex] = nValue; }
     sal_Int32                           GetRealCols(const sal_Int32 nIndex, const sal_Bool bIsNormal = sal_True) const;
@@ -149,7 +148,6 @@ public:
                                                 const sal_Bool bProtection, const rtl::OUString& sPassword);
     void                                AddRow();
     void                                SetRowStyle(const rtl::OUString& rCellStyleName);
-    void                                CloseRow();
     void                                AddColumn(sal_Bool bIsCovered);
     void                                NewTable(sal_Int32 nTempSpannedCols);
     void                                UpdateRowHeights();

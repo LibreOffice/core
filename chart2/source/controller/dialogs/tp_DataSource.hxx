@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: tp_DataSource.hxx,v $
- * $Revision: 1.5 $
+ * $Revision: 1.4.44.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -118,9 +118,6 @@ protected:
             data was valid
      */
     bool updateModelFromControl( Edit * pField = 0 );
-
-    /// disable all controls (while Calc range chooser is active)
-    void disableAll();
 
     ::com::sun::star::uno::Reference< ::com::sun::star::sheet::XRangeSelectionListener >
         getSelectionRangeListener();

@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: DataBrowserModel.cxx,v $
- * $Revision: 1.6 $
+ * $Revision: 1.6.16.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -297,14 +297,6 @@ DataBrowserModel::DataBrowserModel(
 
 DataBrowserModel::~DataBrowserModel()
 {}
-
-
-void DataBrowserModel::setModel(
-    const Reference< chart2::XChartDocument > & xChartDoc )
-{
-    m_xChartDocument.set( xChartDoc );
-    m_apDialogModel.reset( new DialogModel( xChartDoc, m_xContext ));
-}
 
 namespace
 {
@@ -641,15 +633,6 @@ bool DataBrowserModel::setCellText( sal_Int32 nAtColumn, sal_Int32 nAtRow, const
         setCellAny( nAtColumn, nAtRow, uno::makeAny( rText ));
 }
 
-Reference< chart2::data::XLabeledDataSequence >
-    DataBrowserModel::getDataOfColumn( sal_Int32 nColumnIndex ) const
-{
-    if( 0 <= nColumnIndex &&
-        static_cast< tDataColumnVector::size_type >( nColumnIndex ) < m_aColumns.size())
-        return m_aColumns[ nColumnIndex ].m_xLabeledDataSequence;
-    return Reference< chart2::data::XLabeledDataSequence >();
-}
-
 sal_Int32 DataBrowserModel::getColumnCount() const
 {
     return static_cast< sal_Int32 >( m_aColumns.size());
@@ -773,13 +756,19 @@ void DataBrowserModel::updateFromModel()
                         nHeaderEnd = nHeaderStart;
 
                         // @todo: dimension index 1 for y-values used here. This is just a guess
-                        sal_Int32 nNumberFormatKey =
+                        sal_Int32 nYAxisNumberFormatKey =
                             DataSeriesHelper::getNumberFormatKeyFromAxis(
                                 aSeries[nSeriesIdx], aCooSysSeq[nCooSysIdx], 1 );
 
                         sal_Int32 nSeqIdx=0;
                         for( ; nSeqIdx<aLSeqs.getLength(); ++nSeqIdx )
                         {
+                            sal_Int32 nSequenceNumberFormatKey = nYAxisNumberFormatKey;
+                            OUString aRole = lcl_getRole( aLSeqs[nSeqIdx] );
+                            if( aRole.equals( C2U( "values-x" ) ) )
+                                nSequenceNumberFormatKey = DataSeriesHelper::getNumberFormatKeyFromAxis(
+                                    aSeries[nSeriesIdx], aCooSysSeq[nCooSysIdx], 0, 0 );
+
                             if( ::std::find_if( aSharedSequences.begin(), aSharedSequences.end(),
                                              lcl_RepresentationsOfLSeqMatch( aLSeqs[nSeqIdx] )) == aSharedSequences.end())
                             {
@@ -791,7 +780,7 @@ void DataBrowserModel::updateFromModel()
                                         lcl_getUIRoleName( aLSeqs[nSeqIdx] ),
                                         aLSeqs[nSeqIdx],
                                         NUMBER,
-                                        nNumberFormatKey ));
+                                        nSequenceNumberFormatKey ));
                                 ++nHeaderEnd;
                             }
                             // else skip
@@ -809,7 +798,7 @@ void DataBrowserModel::updateFromModel()
 
                         // add ranges for error bars if present for a series
                         if( StatisticsHelper::usesErrorBarRanges( aSeries[nSeriesIdx], /* bYError = */ true ))
-                            addErrorBarRanges( aSeries[nSeriesIdx], nNumberFormatKey, nSeqIdx, nHeaderEnd );
+                            addErrorBarRanges( aSeries[nSeriesIdx], nYAxisNumberFormatKey, nSeqIdx, nHeaderEnd );
 
                         m_aHeaders.push_back(
                             tDataHeader(
@@ -827,10 +816,6 @@ void DataBrowserModel::updateFromModel()
             }
         }
     }
-}
-
-void DataBrowserModel::applyToModel()
-{
 }
 
 void DataBrowserModel::addErrorBarRanges(
@@ -910,14 +895,5 @@ void DataBrowserModel::addErrorBarRanges(
         ASSERT_EXCEPTION( ex );
     }
 }
-
-// static
-void DataBrowserModel::restoreModel(
-    const Reference< chart2::XChartDocument > & xSource,
-    const Reference< chart2::XChartDocument > & xDestination )
-{
-    DialogModel::restoreModel( xSource, xDestination );
-}
-
 
 } //  namespace chart

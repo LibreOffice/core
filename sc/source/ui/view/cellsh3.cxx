@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: cellsh3.cxx,v $
- * $Revision: 1.24 $
+ * $Revision: 1.24.90.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -895,6 +895,8 @@ void ScCellShell::Execute( SfxRequest& rReq )
                     pTabViewShell->ResetBrushDocument();            // abort format paint brush
                 else if (pTabViewShell->HasHintWindow())
                     pTabViewShell->RemoveHintWindow();              // Eingabemeldung abschalten
+                else if( IsFullScreen() )
+                    SetFullScreen( false );
                 else
                 {
                     // TODO/LATER: when is this code executed?
@@ -961,5 +963,27 @@ void ScCellShell::Execute( SfxRequest& rReq )
     }
 }
 
+bool ScCellShell::IsFullScreen() const
+{
+    USHORT          nSlot           = SID_WIN_FULLSCREEN;
+    ScTabViewShell* pTabViewShell   = GetViewData()->GetViewShell();
+    SfxBindings&    rBindings       = pTabViewShell->GetViewFrame()->GetBindings();
+    SfxPoolItem*    pItem           = 0;
+    bool            bIsFullScreen   = false;
+
+    if (rBindings.QueryState( nSlot, pItem ) >= SFX_ITEM_DEFAULT)
+        bIsFullScreen = static_cast< SfxBoolItem* >( pItem )->GetValue();
+    return bIsFullScreen;
+}
+
+void ScCellShell::SetFullScreen( bool bSet )
+{
+    if( IsFullScreen() != bSet )
+    {
+        ScTabViewShell* pTabViewShell = GetViewData()->GetViewShell();
+        SfxBoolItem aItem( SID_WIN_FULLSCREEN, bSet );
+        pTabViewShell->GetDispatcher()->Execute( SID_WIN_FULLSCREEN, SFX_CALLMODE_RECORD, &aItem, 0L );
+    }
+}
 
 

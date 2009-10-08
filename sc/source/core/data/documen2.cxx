@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: documen2.cxx,v $
- * $Revision: 1.75 $
+ * $Revision: 1.72.28.6 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -154,7 +154,6 @@ ScDocument::ScDocument( ScDocumentMode  eMode,
         pDocOptions( NULL ),
         pExtDocOptions( NULL ),
         pConsolidateDlgData( NULL ),
-        pLoadedSymbolStringCellList( NULL ),
         pRecursionHelper( NULL ),
         pAutoNameCache( NULL ),
         pLookupCacheMapImpl( NULL ),
@@ -195,7 +194,6 @@ ScDocument::ScDocument( ScDocumentMode  eMode,
         bInLinkUpdate( FALSE ),
         bChartListenerCollectionNeedsUpdate( FALSE ),
         bHasForcedFormulas( FALSE ),
-        bLostData(FALSE),
         bInDtorClear( FALSE ),
         bExpandRefs( FALSE ),
         bDetectiveDirty( FALSE ),
@@ -246,7 +244,9 @@ ScDocument::ScDocument( ScDocumentMode  eMode,
 
     pRangeName = new ScRangeName( 4, 4, FALSE, this );
     pDBCollection = new ScDBCollection( 4, 4, FALSE, this );
+#if OLD_PIVOT_IMPLEMENTATION
     pPivotCollection = new ScPivotCollection(4, 4, this );
+#endif
     pSelectionAttr = NULL;
     pChartCollection = new ScChartCollection;
     apTemporaryChartLock = std::auto_ptr< ScTemporaryChartLock >( new ScTemporaryChartLock(this) );
@@ -413,7 +413,9 @@ ScDocument::~ScDocument()
     }
     delete pRangeName;
     delete pDBCollection;
+#if OLD_PIVOT_IMPLEMENTATION
     delete pPivotCollection;
+#endif
     delete pSelectionAttr;
     apTemporaryChartLock.reset();
     delete pChartCollection;
@@ -586,632 +588,6 @@ void ScDocument::ResetClip( ScDocument* pSourceDoc, SCTAB nTab )
     }
 }
 
-void lcl_RefreshPivotData( ScPivotCollection* pColl )
-{
-    USHORT nCount = pColl->GetCount();
-    for (USHORT i=0; i<nCount; i++)
-    {
-        ScPivot* pPivot = (*pColl)[i];
-        if (pPivot->CreateData(TRUE))
-            pPivot->ReleaseData();
-    }
-}
-
-
-BOOL ScDocument::SymbolStringCellsPending() const
-{
-    return pLoadedSymbolStringCellList && pLoadedSymbolStringCellList->Count();
-}
-
-
-List& ScDocument::GetLoadedSymbolStringCellsList()
-{
-    if ( !pLoadedSymbolStringCellList )
-        pLoadedSymbolStringCellList = new List;
-    return *pLoadedSymbolStringCellList;
-}
-
-
-BOOL ScDocument::Load( SvStream& rStream, ScProgress* pProgress )
-{
-    bLoadingDone = FALSE;
-
-    //----------------------------------------------------
-
-    Clear();
-    USHORT nOldBufSize = rStream.GetBufferSize();
-    rStream.SetBufferSize( 32768 );
-
-        //  Progress-Bar
-
-//  ULONG nCurPos = rStream.Tell();
-//  ULONG nEndPos = rStream.Seek( STREAM_SEEK_TO_END );
-//  rStream.Seek( nCurPos );
-//  ScProgress aProgress( NULL, ScGlobal::GetRscString(STR_LOAD_DOC), nEndPos - nCurPos );
-
-    BOOL bError = FALSE;
-    USHORT nVersion = 0;
-    SCROW nVerMaxRow = MAXROW_30;       // 8191, wenn in der Datei nichts steht
-    SCTAB nTab = 0;
-    USHORT nEnumDummy;
-    String aEmptyName;
-    String aPageStyle;
-    CharSet eOldSet = rStream.GetStreamCharSet();
-
-    USHORT nID;
-    rStream >> nID;
-    if (nID == SCID_DOCUMENT || nID == SCID_NEWDOCUMENT )
-    {
-        ScReadHeader aHdr( rStream );
-        while (aHdr.BytesLeft() && !bError )
-        {
-            USHORT nSubID;
-            rStream >> nSubID;
-            switch (nSubID)
-            {
-                case SCID_DOCFLAGS:
-                    {
-                        ScReadHeader aFlagsHdr( rStream );
-
-                        rStream >> nVersion;                // 312 abwaerts
-                        rStream.ReadByteString( aPageStyle, rStream.GetStreamCharSet() );
-                        rStream >> bProtected;              // Dokument geschuetzt
-                        String aPass;
-                        rStream.ReadByteString( aPass, rStream.GetStreamCharSet() );
-                        if (aPass.Len())
-                            SvPasswordHelper::GetHashPassword(aProtectPass, aPass);
-                        if ( aFlagsHdr.BytesLeft() )
-                        {
-                            rStream >> nEnumDummy;
-                            eLanguage = LanguageType( nEnumDummy );
-                        }
-                        if ( aFlagsHdr.BytesLeft() )
-                            rStream >> bAutoCalc;
-#if SC_ROWLIMIT_STREAM_ACCESS
-#error address types changed!
-                        if ( aFlagsHdr.BytesLeft() )
-                            rStream >> nVisibleTab;
-#endif
-                        if ( aFlagsHdr.BytesLeft() )
-                            rStream >> nVersion;            // echte Version
-#if SC_ROWLIMIT_STREAM_ACCESS
-#error address types changed!
-                        if ( aFlagsHdr.BytesLeft() )
-                            rStream >> nVerMaxRow;          // sonst auf 8191 lassen
-#endif
-
-                        nSrcVer     = nVersion;             // Member
-                        nSrcMaxRow  = nVerMaxRow;           // Member
-
-                        // Fuer Debugging bis hin zur SC 3.0a:
-                        if( nVersion > 0x0002 && nVersion < SC_NUMFMT )
-                        {
-                            bError = TRUE;
-                            rStream.SetError( SVSTREAM_WRONGVERSION );
-                        }
-
-                        // Das obere Byte muss kleiner oder gleich sein
-                        //  (3.1 Dateien mit 8192 Zeilen koennen noch gelesen werden)
-
-                        if( ( nSrcVer & 0xFF00 ) > ( SC_CURRENT_VERSION & 0xFF00 ) )
-                        {
-                            bError = TRUE;
-                            rStream.SetError( SVSTREAM_WRONGVERSION );
-                        }
-                    }
-                    break;
-                case SCID_CHARSET:
-                    {
-                        ScReadHeader aSetHdr( rStream );
-                        BYTE cSet, cGUI;    // cGUI is dummy, old GUIType
-                        rStream >> cGUI >> cSet;
-                        eSrcSet = (CharSet) cSet;
-                        rStream.SetStreamCharSet( ::GetSOLoadTextEncoding(
-                            eSrcSet, (USHORT)rStream.GetVersion() ) );
-                    }
-                    break;
-                case SCID_LINKUPMODE: //    Link Update Mode
-                    {
-                        ScReadHeader aSetHdr( rStream );
-                        BYTE cSet;
-                        rStream >> cSet;
-                        eLinkMode=(ScLkUpdMode) cSet;
-                    }
-                    break;
-                case SCID_TABLE:
-                    pTab[nTab] = new ScTable(this, nTab, aEmptyName);
-                    pTab[nTab]->SetPageStyle( aPageStyle );
-                    pTab[nTab]->Load(rStream,nVersion,pProgress);
-                    ++nTab;
-                    break;
-                case SCID_DRAWING:
-                    DBG_ERROR("ScDocument::LoadDrawLayer() no longer supported, binary loading removed (!)");
-                    break;
-                case SCID_DDELINKS:
-                    LoadDdeLinks(rStream);
-                    break;
-                case SCID_AREALINKS:
-                    LoadAreaLinks(rStream);
-                    break;
-                case SCID_RANGENAME:
-                    DBG_ERRORFILE( "REMOVED_BINFILTER SCID_RANGENAME");
-                    break;
-                case SCID_DBAREAS:
-                    pDBCollection->Load( rStream );
-                    break;
-                case SCID_DATAPILOT:
-                    GetDPCollection()->LoadNew( rStream );
-                    break;
-                case SCID_PIVOT:
-                    pPivotCollection->Load( rStream );
-                    break;
-                case SCID_CHARTS:
-                    pChartCollection->Load( this, rStream );
-                    break;
-                case SCID_COLNAMERANGES:
-                    xColNameRanges->Load( rStream, nVersion );
-                    break;
-                case SCID_ROWNAMERANGES:
-                    xRowNameRanges->Load( rStream, nVersion );
-                    break;
-                case SCID_CONDFORMATS:
-                    if (!pCondFormList)
-                        pCondFormList = new ScConditionalFormatList;
-                    pCondFormList->Load( rStream, this );
-                    break;
-                case SCID_VALIDATION:
-                    if (!pValidationList)
-                        pValidationList = new ScValidationDataList;
-                    pValidationList->Load( rStream, this );
-                    break;
-                case SCID_DETOPLIST:
-                    if (!pDetOpList)
-                        pDetOpList = new ScDetOpList;
-                    pDetOpList->Load( rStream );
-                    break;
-                case SCID_NUMFORMAT:
-                    {
-                        ScReadHeader aNumHeader(rStream);
-                        xPoolHelper->GetFormTable()->Load(rStream);
-                    }
-                    break;
-                case SCID_DOCOPTIONS:
-                    ImplLoadDocOptions(rStream);
-                    break;
-                case SCID_VIEWOPTIONS:
-                    ImplLoadViewOptions(rStream);
-                    break;
-                case SCID_PRINTSETUP:
-                    {
-                        ScReadHeader aJobHeader(rStream);
-                        SfxItemSet* pSet = new SfxItemSet( *xPoolHelper->GetDocPool(),
-                                SID_PRINTER_NOTFOUND_WARN, SID_PRINTER_NOTFOUND_WARN,
-                                SID_PRINTER_CHANGESTODOC,  SID_PRINTER_CHANGESTODOC,
-                                SID_SCPRINTOPTIONS,        SID_SCPRINTOPTIONS,
-                                NULL );
-                        SetPrinter( SfxPrinter::Create( rStream, pSet ) );
-                    }
-                    break;
-                case SCID_CONSOLIDATA:
-                    if (!pConsolidateDlgData)
-                        pConsolidateDlgData = new ScConsolidateParam;
-                    pConsolidateDlgData->Load( rStream );
-                    break;
-                case SCID_CHANGETRACK:
-                    if ( pChangeTrack )
-                        pChangeTrack->Clear();  // es kann nur einen geben
-                    else
-                        StartChangeTracking();
-                    pChangeTrack->Load( rStream, nVersion );
-                    break;
-                case SCID_CHGVIEWSET:
-                    if (!pChangeViewSettings)
-                        pChangeViewSettings = new ScChangeViewSettings;
-                    pChangeViewSettings->Load( rStream, nVersion );
-                    break;
-                default:
-                    {
-                        DBG_ERROR("unbekannter Sub-Record in ScDocument::Load");
-                        ScReadHeader aDummyHdr( rStream );
-                    }
-            }
-
-            if (rStream.GetError() != SVSTREAM_OK)
-                bError = TRUE;
-        }
-    }
-    else
-    {
-        //  Assertion nur, wenn kein Passwort gesetzt ist
-        DBG_ASSERT( rStream.GetKey().Len(), "Load: SCID_DOCUMENT nicht gefunden" );
-        bError = TRUE;
-    }
-
-    rStream.SetStreamCharSet( eOldSet );
-    rStream.SetBufferSize( nOldBufSize );
-
-    if (!bError)                                    // Neuberechnungen
-    {
-        xPoolHelper->GetStylePool()->UpdateStdNames();  // falls mit Version in anderer Sprache gespeichert
-
-        //  Zahlformat-Sprache
-        //  (kann nicht in LoadPool passieren, weil der Numberformatter geladen sein muss)
-
-        ScDocumentPool* pPool = xPoolHelper->GetDocPool();
-        if ( pPool->GetLoadingVersion() == 0 )              // 0 = Pool-Version bis 3.1
-        {
-            //  in 3.1-Dokumenten gibt es ATTR_LANGUAGE_FORMAT noch nicht
-            //  darum bei Bedarf zu ATTR_VALUE_FORMAT noch die Sprache dazutun
-            //  (Bug #37441#)
-
-            //  harte Attribute:
-
-            SvNumberFormatter* pFormatter = xPoolHelper->GetFormTable();
-            USHORT nCount = pPool->GetItemCount(ATTR_PATTERN);
-            ScPatternAttr* pPattern;
-            for (USHORT i=0; i<nCount; i++)
-            {
-                pPattern = (ScPatternAttr*)pPool->GetItem(ATTR_PATTERN, i);
-                if (pPattern)
-                    ScGlobal::AddLanguage( pPattern->GetItemSet(), *pFormatter );
-            }
-
-            //  Vorlagen:
-
-            SfxStyleSheetIterator aIter( xPoolHelper->GetStylePool(), SFX_STYLE_FAMILY_PARA );
-            for ( SfxStyleSheetBase* pStyle = aIter.First(); pStyle; pStyle = aIter.Next() )
-                ScGlobal::AddLanguage( pStyle->GetItemSet(), *pFormatter );
-        }
-
-        // change FontItems in styles
-        xPoolHelper->GetStylePool()->ConvertFontsAfterLoad();
-
-        //  Druckbereiche etc.
-
-        SfxStyleSheetIterator   aIter( xPoolHelper->GetStylePool(), SFX_STYLE_FAMILY_PAGE );
-        ScStyleSheet*           pStyleSheet = NULL;
-
-        nMaxTableNumber = 0;
-        for (SCTAB i=0; i<=MAXTAB; i++)
-            if (pTab[i])
-            {
-                // MaxTableNumber ermitteln
-
-                nMaxTableNumber = i+1;
-
-                // Druckbereiche aus <= 3.00.2 Dokumenten
-                // aus den PageStyles holen und jetzt an
-                // der Tabelle speichern.
-
-                pStyleSheet = (ScStyleSheet*)aIter.Find( pTab[i]->GetPageStyle() );
-
-                if ( pStyleSheet )
-                {
-                    SfxItemSet&         rSet            = pStyleSheet->GetItemSet();
-                    const ScRangeItem*  pPrintAreaItem  = NULL;
-                    const ScRangeItem*  pRepeatColItem  = NULL;
-                    const ScRangeItem*  pRepeatRowItem  = NULL;
-
-                    rSet.GetItemState( ATTR_PAGE_PRINTAREA, TRUE,
-                                       (const SfxPoolItem**)&pPrintAreaItem );
-                    rSet.GetItemState( ATTR_PAGE_REPEATCOL, TRUE,
-                                       (const SfxPoolItem**)&pRepeatColItem );
-                    rSet.GetItemState( ATTR_PAGE_REPEATROW, TRUE,
-                                       (const SfxPoolItem**)&pRepeatRowItem );
-
-                    if ( pPrintAreaItem ) // Druckbereiche
-                    {
-                        if ( !pPrintAreaItem->GetFlags() )
-                            SetPrintRange( i, pPrintAreaItem->GetRange() );
-                        rSet.ClearItem( ATTR_PAGE_PRINTAREA );
-                    }
-
-                    if ( pRepeatColItem ) // Wiederholungsspalte
-                    {
-                        SetRepeatColRange( i, !pRepeatColItem->GetFlags()
-                                            ? &pRepeatColItem->GetRange()
-                                            : (const ScRange *)NULL );
-                        rSet.ClearItem( ATTR_PAGE_REPEATCOL );
-                    }
-
-                    if ( pRepeatRowItem ) // Wiederholungszeile
-                    {
-                        SetRepeatRowRange( i, !pRepeatRowItem->GetFlags()
-                                            ? &pRepeatRowItem->GetRange()
-                                            : (const ScRange *)NULL );
-                        rSet.ClearItem( ATTR_PAGE_REPEATROW );
-                    }
-                }
-            }
-
-
-        if ( pDPCollection && pDPCollection->GetCount() )
-            pPivotCollection->FreeAll();
-        else
-        {
-            lcl_RefreshPivotData( pPivotCollection );
-            GetDPCollection()->ConvertOldTables( *pPivotCollection );
-        }
-        if ( pDPCollection )
-            pDPCollection->EnsureNames();   // make sure every table has a name
-
-        SetAutoFilterFlags();
-        if (pDrawLayer)
-            UpdateAllCharts();
-#ifndef PRODUCT
-//2do: wg. #62107
-// ChartListenerCollection speichern/laden, damit nach dem Laden das Update
-// hier einmal eingespart werden kann und somit nicht mehr alle Charts
-// angefasst werden muessen. Die ChartListenerCollection muss dann zum Master
-// der Referenzen werden.
-//      static BOOL bShown = 0;
-//      if ( !bShown && SOFFICE_FILEFORMAT_NOW > SOFFICE_FILEFORMAT_50 )
-//      {
-//          bShown = 1;
-//          DBG_ERRORFILE( "bei inkompatiblem FileFormat ChartListenerCollection speichern!" );
-//      }
-#endif
-        UpdateChartListenerCollection();
-        if (pDrawLayer)
-            RefreshNoteFlags();
-        CalcAfterLoad();
-    }
-
-    if ( pLoadedSymbolStringCellList )
-    {   // we had symbol string cells, list was cleared by columns, delete it
-        delete pLoadedSymbolStringCellList;
-        pLoadedSymbolStringCellList = NULL;
-    }
-
-    //----------------------------------------------------
-
-    bLoadingDone = TRUE;
-
-    return !bError;
-}
-
-BOOL ScDocument::Save( SvStream& rStream, ScProgress* pProgress ) const
-{
-    ((ScDocument*)this)->bLoadingDone = FALSE;      // nicht zwischendrin reinpfuschen lassen
-
-    ((ScDocument*)this)->bLostData = FALSE;         // wird beim Speichern gesetzt
-
-    ((ScDocument*)this)->nSrcVer = SC_CURRENT_VERSION;
-    ((ScDocument*)this)->nSrcMaxRow = MAXROW;
-    if ( rStream.GetVersion() <= SOFFICE_FILEFORMAT_31 )
-    {
-        //  3.1 Export -> nur 8192 Zeilen schreiben, und kompatible Versionsnummer
-
-        ((ScDocument*)this)->nSrcVer = SC_31_EXPORT_VER;
-        ((ScDocument*)this)->nSrcMaxRow = MAXROW_30;
-    }
-    else if ( rStream.GetVersion() <= SOFFICE_FILEFORMAT_40 )
-    {   //  4.0 Export -> kompatible Versionsnummer
-        ((ScDocument*)this)->nSrcVer = SC_40_EXPORT_VER;
-    }
-
-    USHORT nOldBufSize = rStream.GetBufferSize();
-    rStream.SetBufferSize( 32768 );
-
-    CharSet eOldSet = rStream.GetStreamCharSet();
-    CharSet eStoreCharSet = ::GetSOStoreTextEncoding(
-        gsl_getSystemTextEncoding(), (USHORT)rStream.GetVersion() );
-    rStream.SetStreamCharSet( eStoreCharSet );
-
-
-        //  Progress-Bar
-
-    long nSavedDocCells = 0;
-//  ScProgress aProgress( NULL, ScGlobal::GetRscString( STR_SAVE_DOC ), GetWeightedCount() + 1 );
-
-    {
-        rStream << (USHORT) SCID_NEWDOCUMENT;
-        ScWriteHeader aHdr( rStream );
-
-        //  Flags
-
-        {
-            rStream << (USHORT) SCID_DOCFLAGS;
-            ScWriteHeader aFlagsHdr( rStream, 18 );         //! ausprobieren
-
-            // wg. Bug in 312 ScToken::RelToRelAbs mit DoubleRefs bekommt
-            // die 312er immer vorgegaukelt, dass es keine RelRefs gaebe,
-            // was auch ok ist, da immer absolut gespeichert wird und
-            // SR_RELATIVE nie zur Verwendung kam und nicht kommen darf.
-            if ( nSrcVer & 0xFF00 )
-                rStream << (USHORT) nSrcVer;
-                // hoehere Major-Version darf von 312 nicht geladen werden
-            else
-                rStream << (USHORT) (SC_RELATIVE_REFS - 1);
-
-            // dummy page style (for compatibility)
-            rStream.WriteByteString(
-                        String::CreateFromAscii(RTL_CONSTASCII_STRINGPARAM(STRING_STANDARD)),
-                        rStream.GetStreamCharSet() );
-            rStream << bProtected;                  // Dokument geschuetzt
-            String aPass;
-            //rStream.WriteByteString( aProtectPass, rStream.GetStreamCharSet() );
-            rStream.WriteByteString( aPass, rStream.GetStreamCharSet() );
-            rStream << (USHORT) eLanguage;
-            rStream << bAutoCalc;
-
-#if SC_ROWLIMIT_STREAM_ACCESS
-#error address types changed!
-            rStream << nVisibleTab;
-#endif
-
-            // und hier jetzt die echte Versionsnummer
-            rStream << (USHORT) nSrcVer;
-
-#if SC_ROWLIMIT_STREAM_ACCESS
-#error address types changed!
-            rStream << nSrcMaxRow;                  // Zeilenanzahl
-#endif
-        }
-
-        //  Zeichensatz
-
-        {
-            rStream << (USHORT) SCID_CHARSET;
-            ScWriteHeader aSetHdr( rStream, 2 );
-            rStream << (BYTE) 0     // dummy, old System::GetGUIType()
-                    << (BYTE) eStoreCharSet;
-        }
-
-        //  Link Update Mode
-
-        if(eLinkMode!=LM_UNKNOWN)
-        {
-            rStream << (USHORT) SCID_LINKUPMODE;
-            ScWriteHeader aSetHdr( rStream, 1 );
-            rStream << (BYTE) eLinkMode;
-        }
-
-        DBG_ERRORFILE( "REMOVED_BINFILTER SCID_RANGENAME");
-
-        rStream << (USHORT) SCID_DBAREAS;
-        pDBCollection->Store( rStream );
-
-        rStream << (USHORT) SCID_DDELINKS;
-        SaveDdeLinks( rStream );
-
-        rStream << (USHORT) SCID_AREALINKS;
-        SaveAreaLinks( rStream );
-
-        {
-            rStream << (USHORT) SCID_NUMFORMAT;
-            ScWriteHeader aNumHeader(rStream);
-            xPoolHelper->GetFormTable()->Save(rStream);
-        }
-
-        if ( xColNameRanges->Count() )
-        {
-            rStream << (USHORT) SCID_COLNAMERANGES;
-            xColNameRanges->Store( rStream );
-        }
-        if ( xRowNameRanges->Count() )
-        {
-            rStream << (USHORT) SCID_ROWNAMERANGES;
-            xRowNameRanges->Store( rStream );
-        }
-
-        if (pCondFormList)
-            pCondFormList->ResetUsed();     // wird beim Speichern der Tabellen gesetzt
-        if (pValidationList)
-            pValidationList->ResetUsed();   // wird beim Speichern der Tabellen gesetzt
-
-        //  Tabellen (Daten)
-
-        for (SCTAB i=0; i<=MAXTAB; i++)
-        {
-            if (pTab[i])
-            {
-                rStream << (USHORT) SCID_TABLE;
-                pTab[i]->Save(rStream, nSavedDocCells, pProgress);
-            }
-        }
-
-        //  bedingte Formate / Gueltigkeit
-        //  beim Speichern der Tabellen ist eingetragen worden,
-        //  welche Eintraege benutzt werden
-
-        if (pCondFormList)
-        {
-            rStream << (USHORT) SCID_CONDFORMATS;
-            pCondFormList->Store(rStream);
-        }
-        if (pValidationList)
-        {
-            rStream << (USHORT) SCID_VALIDATION;
-            pValidationList->Store(rStream);
-        }
-
-        //  Liste der Detektiv-Operationen (zum Aktualisieren)
-        if (pDetOpList)
-        {
-            rStream << (USHORT) SCID_DETOPLIST;
-            pDetOpList->Store(rStream);
-        }
-
-        //  Drawing
-        if (pDrawLayer)
-        {
-            DBG_ERROR("ScDocument::StoreDrawLayer() no longer supported, binary saving removed (!)");
-        }
-
-        //  Collections
-
-        //  (new) DataPilot collection must be saved before old Pivot collection
-        //  so old data can be skipped by new office
-        //  not in 3.0 or 4.0 export to avoid warning messages
-
-        if ( nSrcVer > SC_40_EXPORT_VER && pDPCollection && pDPCollection->GetCount() )
-        {
-            rStream << (USHORT) SCID_DATAPILOT;             // new data
-            pDPCollection->StoreNew( rStream );
-        }
-
-        rStream << (USHORT) SCID_PIVOT;                     // old data
-        if ( pDPCollection && pDPCollection->GetCount() )
-            pDPCollection->StoreOld( rStream );
-        else
-            pPivotCollection->Store( rStream );             // not converted or all empty
-
-                //  Charts werden hier nicht mehr gespeichert, weil
-                //  jedes Chart seine Daten selber speichert
-
-        DBG_ASSERT(!pChartCollection || !pChartCollection->GetCount(),
-                        "wer hat da ein Chart eingetragen?");
-
-        rStream << (USHORT) SCID_DOCOPTIONS;
-        ImplSaveDocOptions(rStream);
-
-        rStream << (USHORT) SCID_VIEWOPTIONS;
-        ImplSaveViewOptions(rStream);
-
-        //  Job-Setup vom Printer
-
-        if (pPrinter)
-        {
-            rStream << (USHORT) SCID_PRINTSETUP;
-            ScWriteHeader aJobHeader(rStream);
-
-            ((ScDocument*)this)->GetPrinter()->Store( rStream );
-        }
-
-        if ( nSrcVer > SC_40_EXPORT_VER )   //  Das folgende nicht bei 3.0 oder 4.0 Export...
-        {
-            if (pConsolidateDlgData)        //  Einstellungen fuer den Konsolidieren-Dialog
-            {
-                rStream << (USHORT) SCID_CONSOLIDATA;
-                pConsolidateDlgData->Store( rStream );
-            }
-            if ( pChangeTrack )
-            {
-                rStream << (USHORT) SCID_CHANGETRACK;
-                pChangeTrack->Store( rStream );
-            }
-            if ( pChangeViewSettings )
-            {
-                rStream << (USHORT) SCID_CHGVIEWSET;
-                pChangeViewSettings->Store( rStream );
-            }
-        }
-    }
-
-    rStream.SetStreamCharSet( eOldSet );
-    rStream.SetBufferSize( nOldBufSize );
-
-    ((ScDocument*)this)->bLoadingDone = TRUE;
-
-    return ( rStream.GetError() == SVSTREAM_OK );
-}
-
-void ScDocument::SetLostData()
-{
-    bLostData = TRUE;
-}
-
 void ScDocument::DeleteNumberFormat( const sal_uInt32* /* pDelKeys */, sal_uInt32 /* nCount */ )
 {
 /*
@@ -1375,9 +751,11 @@ BOOL ScDocument::MoveTab( SCTAB nOldPos, SCTAB nNewPos )
                 pDBCollection->UpdateMoveTab( nOldPos, nNewPos );
                 xColNameRanges->UpdateReference( URM_REORDER, this, aSourceRange, 0,0,nDz );
                 xRowNameRanges->UpdateReference( URM_REORDER, this, aSourceRange, 0,0,nDz );
+#if OLD_PIVOT_IMPLEMENTATION
                 if (pPivotCollection)
                     pPivotCollection->UpdateReference( URM_REORDER,
                                     0,0,nOldPos, MAXCOL,MAXROW,nOldPos, 0,0,nDz );
+#endif
                 if (pDPCollection)
                     pDPCollection->UpdateReference( URM_REORDER, aSourceRange, 0,0,nDz );
                 if (pDetOpList)
@@ -1468,9 +846,11 @@ BOOL ScDocument::CopyTab( SCTAB nOldPos, SCTAB nNewPos, const ScMarkData* pOnlyM
                 pRangeName->UpdateTabRef(nNewPos, 1);
                 pDBCollection->UpdateReference(
                                     URM_INSDEL, 0,0,nNewPos, MAXCOL,MAXROW,MAXTAB, 0,0,1 );
+#if OLD_PIVOT_IMPLEMENTATION
                 if (pPivotCollection)
                     pPivotCollection->UpdateReference(
                                     URM_INSDEL, 0,0,nNewPos, MAXCOL,MAXROW,MAXTAB, 0,0,1 );
+#endif
                 if (pDPCollection)
                     pDPCollection->UpdateReference( URM_INSDEL, aRange, 0,0,1 );
                 if (pDetOpList)
@@ -1565,7 +945,6 @@ ULONG ScDocument::TransferTab( ScDocument* pSrcDoc, SCTAB nSrcPos,
         if (VALIDTAB(nDestPos) && pTab[nDestPos])
         {
             pTab[nDestPos]->DeleteArea( 0,0, MAXCOL,MAXROW, IDF_ALL );
-//          ClearDrawPage(nDestPos);
         }
         else
             bValid = FALSE;

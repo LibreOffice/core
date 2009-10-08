@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: fapihelper.cxx,v $
- * $Revision: 1.10 $
+ * $Revision: 1.10.32.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -37,6 +37,7 @@
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/task/XInteractionHandler.hpp>
 #include <com/sun/star/task/XInteractionRequest.hpp>
+#include <com/sun/star/beans/XPropertyState.hpp>
 #include <comphelper/processfactory.hxx>
 #include <tools/urlobj.hxx>
 #include <sfx2/objsh.hxx>
@@ -53,10 +54,11 @@ using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::Sequence;
 using ::com::sun::star::uno::Exception;
 using ::com::sun::star::uno::UNO_QUERY;
+using ::com::sun::star::uno::UNO_QUERY_THROW;
 using ::com::sun::star::uno::TypeClass_BOOLEAN;
 using ::com::sun::star::uno::XInterface;
 using ::com::sun::star::beans::XPropertySet;
-using ::com::sun::star::beans::XPropertySetInfo;
+using ::com::sun::star::beans::XPropertyState;
 using ::com::sun::star::lang::XServiceName;
 using ::com::sun::star::lang::XMultiServiceFactory;
 using ::com::sun::star::task::XInteractionHandler;
@@ -127,11 +129,11 @@ Reference< XInterface > ScfApiHelper::CreateInstanceWithArgs(
     return xInt;
 }
 
-Reference< XInterface > ScfApiHelper::CreateInstanceWithArgs(
-        SfxObjectShell* pShell, const OUString& rServiceName, const Sequence< Any >& rArgs )
-{
-    return CreateInstanceWithArgs( GetServiceFactory( pShell ), rServiceName, rArgs );
-}
+//UNUSED2008-05  Reference< XInterface > ScfApiHelper::CreateInstanceWithArgs(
+//UNUSED2008-05          SfxObjectShell* pShell, const OUString& rServiceName, const Sequence< Any >& rArgs )
+//UNUSED2008-05  {
+//UNUSED2008-05      return CreateInstanceWithArgs( GetServiceFactory( pShell ), rServiceName, rArgs );
+//UNUSED2008-05  }
 
 Reference< XInterface > ScfApiHelper::CreateInstanceWithArgs(
         const OUString& rServiceName, const Sequence< Any >& rArgs )
@@ -189,6 +191,20 @@ OUString ScfPropertySet::GetServiceName() const
 }
 
 // Get properties -------------------------------------------------------------
+
+bool ScfPropertySet::HasProperty( const OUString& rPropName ) const
+{
+    bool bHasProp = false;
+    try
+    {
+        Reference< XPropertyState > xPropState( mxPropSet, UNO_QUERY_THROW );
+        bHasProp = xPropState->getPropertyState( rPropName ) == ::com::sun::star::beans::PropertyState_DIRECT_VALUE;
+    }
+    catch( Exception& )
+    {
+    }
+    return bHasProp;
+}
 
 bool ScfPropertySet::GetAnyProperty( Any& rValue, const OUString& rPropName ) const
 {
@@ -360,7 +376,7 @@ bool ScfPropSetHelper::ReadValue( String& rString )
 
 bool ScfPropSetHelper::ReadValue( Color& rColor )
 {
-    sal_Int32 nApiColor;
+    sal_Int32 nApiColor(0);
     bool bRet = ReadValue( nApiColor );
     rColor = ScfApiHelper::ConvertFromApiColor( nApiColor );
     return bRet;

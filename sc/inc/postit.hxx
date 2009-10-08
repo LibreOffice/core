@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: postit.hxx,v $
- * $Revision: 1.7 $
+ * $Revision: 1.7.32.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -122,32 +122,6 @@ inline int ScPostIt::operator==( const ScPostIt& rPostIt ) const
         &&  mbShown == rPostIt.mbShown
         &&  maRectangle == rPostIt.maRectangle
         &&  maItemSet   == rPostIt.maItemSet );
-}
-
-inline SvStream& operator>>( SvStream& rStream, ScPostIt& rPostIt )
-{
-    //  without bShown !!!
-
-    CharSet eSet = rStream.GetStreamCharSet();
-    String aText = rPostIt.GetText();
-    rStream.ReadByteString( aText, eSet );
-    rStream.ReadByteString( rPostIt.maStrDate, eSet );
-    rStream.ReadByteString( rPostIt.maStrAuthor, eSet );
-
-    return rStream;
-}
-
-inline SvStream& operator<<( SvStream& rStream, const ScPostIt& rPostIt )
-{
-    //  without bShown !!!
-
-    CharSet eSet = rStream.GetStreamCharSet();
-    String aText = rPostIt.GetText();
-    rStream.WriteByteString( aText, eSet );
-    rStream.WriteByteString( rPostIt.maStrDate, eSet );
-    rStream.WriteByteString( rPostIt.maStrAuthor, eSet );
-
-    return rStream;
 }
 
 // ============================================================================

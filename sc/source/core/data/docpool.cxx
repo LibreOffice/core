@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: docpool.cxx,v $
- * $Revision: 1.25 $
+ * $Revision: 1.25.32.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -610,19 +610,6 @@ void ScDocumentPool::CheckRef( const SfxPoolItem& rItem )   // static
         DBG_ASSERT( nRef<=(ULONG)SC_MAX_POOLREF+1 || (nRef>=(ULONG)SC_SAFE_POOLREF-1 && nRef<=(ULONG)SC_SAFE_POOLREF+2),
                 "ScDocumentPool::CheckRef" );
         SetRefCount( (SfxPoolItem&)rItem, (ULONG) SC_SAFE_POOLREF );
-    }
-}
-
-void ScDocumentPool::MyLoadCompleted()
-{
-    LoadCompleted();
-
-    USHORT nCount = GetItemCount(ATTR_PATTERN);
-    for (USHORT i=0; i<nCount; i++)
-    {
-        const SfxPoolItem* pItem = GetItem(ATTR_PATTERN, i);
-        if (pItem)
-            CheckRef(*pItem);
     }
 }
 

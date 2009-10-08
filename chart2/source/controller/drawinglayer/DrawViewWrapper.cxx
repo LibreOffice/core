@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: DrawViewWrapper.cxx,v $
- * $Revision: 1.20 $
+ * $Revision: 1.20.6.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -59,6 +59,7 @@
 #include <com/sun/star/lang/XUnoTunnel.hpp>
 
 #include <sfx2/objsh.hxx>
+#include <svx/helperhittest3d.hxx>
 
 using namespace ::com::sun::star;
 
@@ -230,10 +231,16 @@ SdrObject* DrawViewWrapper::getHitObject( const Point& rPnt ) const
             E3dScene* pScene = pE3d->GetScene();
             if( pScene )
             {
-                ::std::vector< SdrObject* > aHitList;
-                sal_uInt32 nHitCount = pScene->HitTest( rPnt, aHitList );
-                if( nHitCount )
-                    pRet = aHitList[0];
+                // prepare result vector and call helper
+                ::std::vector< const E3dCompoundObject* > aHitList;
+                const basegfx::B2DPoint aHitPoint(rPnt.X(), rPnt.Y());
+                getAllHit3DObjectsSortedFrontToBack(aHitPoint, *pScene, aHitList);
+
+                if(aHitList.size())
+                {
+                    // choose the frontmost hit 3D object of the scene
+                    pRet = const_cast< E3dCompoundObject* >(aHitList[0]);
+                }
             }
         }
     }
@@ -340,7 +347,7 @@ bool DrawViewWrapper::IsObjectHit( SdrObject* pObj, const Point& rPnt ) const
     return false;
 }
 
-void DrawViewWrapper::SFX_NOTIFY(SfxBroadcaster& rBC, const TypeId& rBCType, const SfxHint& rHint, const TypeId& rHintType)
+void DrawViewWrapper::Notify(SfxBroadcaster& rBC, const SfxHint& rHint)
 {
     //prevent wrong reselection of objects
     SdrModel* pSdrModel( this->GetModel() );
@@ -357,7 +364,7 @@ void DrawViewWrapper::SFX_NOTIFY(SfxBroadcaster& rBC, const TypeId& rBCType, con
             return;
     }
 
-    E3dView::SFX_NOTIFY(rBC, rBCType, rHint, rHintType);
+    E3dView::Notify(rBC, rHint);
 
     if( pSdrHint != 0 )
     {

@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: AxisHelper.cxx,v $
- * $Revision: 1.4 $
+ * $Revision: 1.4.44.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -134,7 +134,7 @@ Reference< XAxis > AxisHelper::createAxis(
 
             // set correct initial AutoScale
             if( pRefSizeProvider )
-                pRefSizeProvider->setValuesAtPropertySet( xProp, ReferenceSizeProvider::REF_DIAGRAM );
+                pRefSizeProvider->setValuesAtPropertySet( xProp );
         }
         catch( uno::Exception& e )
         {

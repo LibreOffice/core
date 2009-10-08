@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: AccessibleCsvControl.cxx,v $
- * $Revision: 1.24 $
+ * $Revision: 1.22.32.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -298,11 +298,6 @@ void ScAccessibleCsvControl::implDispose()
         osl_incrementInterlockedCount( &m_refCount );
         dispose();
     }
-}
-
-Point ScAccessibleCsvControl::implGetRelPos( const Point& rPos ) const
-{
-    return rPos - implGetControl().GetWindowExtentsRelative( NULL ).TopLeft();
 }
 
 Point ScAccessibleCsvControl::implGetAbsPos( const Point& rPos ) const

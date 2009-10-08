@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: tabvwsh2.cxx,v $
- * $Revision: 1.27 $
+ * $Revision: 1.27.32.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -323,7 +323,7 @@ void ScTabViewShell::ExecDraw(SfxRequest& rReq)
             break;
 
         case SID_DRAW_CHART:
-            bChartDlgIsEdit = FALSE;
+//UNUSED2008-05  bChartDlgIsEdit = FALSE;
             pTabView->SetDrawFuncPtr(new FuMarkRect(this, pWin, pView, pDoc, aNewReq));
             break;
 

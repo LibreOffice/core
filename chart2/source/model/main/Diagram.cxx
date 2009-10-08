@@ -8,7 +8,7 @@
  *
  * $RCSfile: Diagram.cxx,v $
  *
- * $Revision: 1.25 $
+ * $Revision: 1.24.32.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -35,7 +35,6 @@
 #include "macros.hxx"
 #include "PropertyHelper.hxx"
 #include "Wall.hxx"
-#include "ContextHelper.hxx"
 #include "UserDefinedProperties.hxx"
 #include "ConfigColorScheme.hxx"
 #include "ContainerHelper.hxx"

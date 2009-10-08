@@ -6,8 +6,8 @@
  *
  * OpenOffice.org - a multi-platform office productivity suite
  *
- * $RCSfile: OEnumeration.hxx,v $
- * $Revision: 1.3 $
+ * $RCSfile: WrappedScaleTextProperties.hxx,v $
+ * $Revision: 1.1.2.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -27,40 +27,31 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#ifndef CHART_OENUMERATION_HXX
-#define CHART_OENUMERATION_HXX
 
-#include <cppuhelper/implbase1.hxx>
-#include <com/sun/star/container/XEnumeration.hpp>
+#ifndef CHART_WRAPPED_SCALETEXT_PROPERTIES_HXX
+#define CHART_WRAPPED_SCALETEXT_PROPERTIES_HXX
 
+#include "WrappedProperty.hxx"
+#include "Chart2ModelContact.hxx"
+
+#include <boost/shared_ptr.hpp>
 #include <vector>
 
-namespace comphelper
+//.............................................................................
+namespace chart
+{
+namespace wrapper
 {
 
-class OEnumeration :
-        public ::cppu::WeakImplHelper1<
-    ::com::sun::star::container::XEnumeration >
+class WrappedScaleTextProperties
 {
 public:
-    OEnumeration( const ::std::vector< ::com::sun::star::uno::Any > & rContainer );
-    virtual ~OEnumeration();
-
-protected:
-    // ____ XEnumeration ____
-    virtual sal_Bool SAL_CALL hasMoreElements()
-        throw (::com::sun::star::uno::RuntimeException);
-    virtual ::com::sun::star::uno::Any SAL_CALL nextElement()
-        throw (::com::sun::star::container::NoSuchElementException,
-               ::com::sun::star::lang::WrappedTargetException,
-               ::com::sun::star::uno::RuntimeException);
-
-private:
-    ::std::vector< ::com::sun::star::uno::Any > m_aContainer;
-    ::std::vector< ::com::sun::star::uno::Any >::const_iterator m_aIter;
+    static void addProperties( ::std::vector< ::com::sun::star::beans::Property >& rOutProperties );
+    static void addWrappedProperties( std::vector< WrappedProperty* >& rList
+                    , ::boost::shared_ptr< Chart2ModelContact > spChart2ModelContact );
 };
 
-} //  namespace comphelper
-
-// CHART_OENUMERATION_HXX
+} //namespace wrapper
+} //namespace chart
+//.............................................................................
 #endif

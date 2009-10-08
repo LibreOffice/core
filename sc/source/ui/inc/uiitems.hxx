@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: uiitems.hxx,v $
- * $Revision: 1.7 $
+ * $Revision: 1.7.32.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -56,13 +56,14 @@ class ScInputStatusItem : public SfxPoolItem
 
 public:
                             TYPEINFO();
-                            ScInputStatusItem( USHORT nWhich,
-                                               SCTAB nTab,
-                                               SCCOL nCol, SCROW nRow,
-                                               SCCOL nStartCol, SCROW nStartRow,
-                                               SCCOL nEndCol,   SCROW nSEndRow,
-                                               const String& rString,
-                                               const EditTextObject* pData );
+//UNUSED2008-05             ScInputStatusItem( USHORT nWhich,
+//UNUSED2008-05                                SCTAB nTab,
+//UNUSED2008-05                                SCCOL nCol, SCROW nRow,
+//UNUSED2008-05                                SCCOL nStartCol, SCROW nStartRow,
+//UNUSED2008-05                                SCCOL nEndCol,   SCROW nSEndRow,
+//UNUSED2008-05                                const String& rString,
+//UNUSED2008-05                                const EditTextObject* pData );
+
                             ScInputStatusItem( USHORT nWhich,
                                                const ScAddress& rCurPos,
                                                const ScAddress& rStartPos,
@@ -122,7 +123,6 @@ class ScEditViewHint : public SfxHint
 
 public:
                     TYPEINFO();
-                    ScEditViewHint();
                     ScEditViewHint( ScEditEngineDefaulter* pEngine, const ScAddress& rCurPos );
                     ~ScEditViewHint();
 
@@ -130,6 +130,9 @@ public:
     SCROW           GetRow() const      { return aCursorPos.Row(); }
     SCTAB           GetTab() const      { return aCursorPos.Tab(); }
     ScEditEngineDefaulter*  GetEngine() const   { return pEditEngine; }
+
+private:
+    ScEditViewHint(); // disabled
 };
 
 class ScIndexHint : public SfxHint

@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: xlroot.cxx,v $
- * $Revision: 1.32 $
+ * $Revision: 1.32.88.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -272,7 +272,7 @@ ScDBCollection& XclRoot::GetDatabaseRanges() const
 
 SdrPage* XclRoot::GetSdrPage( SCTAB nScTab ) const
 {
-    return GetDoc().GetDrawLayer() ?
+    return ((nScTab >= 0) && GetDoc().GetDrawLayer()) ?
         GetDoc().GetDrawLayer()->GetPage( static_cast< sal_uInt16 >( nScTab ) ) : 0;
 }
 

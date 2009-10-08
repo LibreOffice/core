@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: DataSource.cxx,v $
- * $Revision: 1.4 $
+ * $Revision: 1.4.44.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -60,32 +60,6 @@ DataSource::DataSource(
     const Sequence< Reference< chart2::data::XLabeledDataSequence > > & rSequences ) :
         m_aDataSeq( rSequences )
 {}
-
-DataSource::DataSource(
-    const Sequence< Reference< chart2::data::XDataSequence > > & rSequences )
-{
-    m_aDataSeq.realloc( rSequences.getLength());
-    sal_Int32 i;
-    for(i=rSequences.getLength(); --i;)
-    {
-        m_aDataSeq[i].set( new LabeledDataSequence( rSequences[i] ));
-    }
-}
-
-DataSource::DataSource(
-    const Sequence< Reference< chart2::data::XDataSequence > > & rSequences,
-    const Sequence< Reference< chart2::data::XDataSequence > > & rLabel )
-{
-    m_aDataSeq.realloc( rSequences.getLength());
-    for( sal_Int32 i=0; i<rSequences.getLength(); ++i )
-    {
-        if( i < rLabel.getLength())
-            m_aDataSeq[i].set( new LabeledDataSequence( rSequences[i], rLabel[i] ));
-        else
-            m_aDataSeq[i].set( new LabeledDataSequence( rSequences[i],
-                                                        Reference< chart2::data::XDataSequence >() ));
-    }
-}
 
 DataSource::~DataSource()
 {}

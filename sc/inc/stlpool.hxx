@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: stlpool.hxx,v $
- * $Revision: 1.6 $
+ * $Revision: 1.6.32.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -56,7 +56,7 @@ public:
 
     void                CreateStandardStyles();
     void                CopyStdStylesFrom( ScStyleSheetPool* pSrcPool );
-    void                UpdateStdNames();
+//UNUSED2008-05  void               UpdateStdNames();
 
     void                CopyStyleFrom( ScStyleSheetPool* pSrcPool,
                                         const String& rName, SfxStyleFamily eFamily );
@@ -68,8 +68,6 @@ public:
 
     virtual SfxStyleSheetBase& Make( const String&, SfxStyleFamily eFam,
                                      USHORT nMask = 0xffff, USHORT nPos = 0xffff );
-
-    void                ConvertFontsAfterLoad();     // old binary file format
 
 protected:
     virtual             ~ScStyleSheetPool();

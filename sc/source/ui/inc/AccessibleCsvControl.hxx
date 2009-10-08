@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: AccessibleCsvControl.hxx,v $
- * $Revision: 1.17 $
+ * $Revision: 1.15.32.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -136,8 +136,6 @@ protected:
     /** Disposes the object. This is a helper called from destructors only. */
     void implDispose();
 
-    /** Converts the screen position rPos to a position relative to this control. */
-    Point implGetRelPos( const Point& rPos ) const;
     /** Converts the control-relative position to an absolute screen position. */
     Point implGetAbsPos( const Point& rPos ) const;
 };

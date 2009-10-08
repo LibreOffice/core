@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: tabvwshc.cxx,v $
- * $Revision: 1.13 $
+ * $Revision: 1.13.32.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -71,19 +71,6 @@
 #include "highred.hxx"
 #include "simpref.hxx"
 #include "dpobject.hxx"
-
-// -----------------------------------------------------------------------
-
-//!     nach document verschieben !!!
-
-BOOL lcl_IsValueCol( ScDocument* pDoc, SCCOL nCol, SCROW nRow1, SCROW nRow2, SCTAB nTab )
-{
-    BOOL bVal = TRUE;
-    for (SCROW nRow=nRow1; nRow<=nRow2 && bVal; nRow++)
-        if (pDoc->HasStringData( nCol, nRow, nTab ))
-            bVal = FALSE;
-    return bVal;
-}
 
 //------------------------------------------------------------------
 
@@ -267,109 +254,6 @@ SfxModelessDialog* ScTabViewShell::CreateRefDialog(
             {
                 GetViewData()->SetRefTabNo( GetViewData()->GetTabNo() );
                 pResult = new ScDPLayoutDlg( pB, pCW, pParent, *pDialogDPObject );
-
-#if 0
-            ScDocument*     pDoc = GetViewData()->GetDocument();
-            SCTAB           nTab  = 0;
-            SCCOL           nCol1 = 0;
-            SCCOL           nCol2 = 0;
-            SCROW           nRow1 = 0;
-            SCROW           nRow2 = 0;
-
-            ScPivot*        pPivot = pDoc->GetPivotAtCursor(
-                                        GetViewData()->GetCurX(),
-                                        GetViewData()->GetCurY(),
-                                        GetViewData()->GetTabNo() );
-            ScDPObject*     pDPObj = pDoc->GetDPAtCursor(
-                                        GetViewData()->GetCurX(),
-                                        GetViewData()->GetCurY(),
-                                        GetViewData()->GetTabNo() );
-            ScPivotParam    aPivotParam;
-
-            if ( pPivot ) // befinden wir uns auf einer Pivot-Tabelle?
-            {
-                ScArea aArea;
-                ScQueryParam aQuery;
-                pPivot->GetParam( aPivotParam, aQuery, aArea );
-                pPivot->GetSrcArea( nCol1, nRow1, nCol2, nRow2, nTab);
-
-                // Quelldatenbereich markieren
-                if ( nTab == GetViewData()->GetTabNo() )
-                    MarkRange( ScRange( nCol1,nRow1,nTab, nCol2,nRow2,nTab ) );
-            }
-            else if ( pDPObj && pDPObj->IsSheetData() )
-            {
-                //  get (old) ScPivotParam
-
-                pDPObj->FillOldParam( aPivotParam );
-                ScRange aSource = pDPObj->GetSourceRange();
-                nCol1 = aSource.aStart.Col();
-                nRow1 = aSource.aStart.Row();
-                nCol2 = aSource.aEnd.Col();
-                nRow2 = aSource.aEnd.Row();
-                nTab  = aSource.aStart.Tab();
-
-                if ( nTab == GetViewData()->GetTabNo() )
-                    MarkRange( ScRange( nCol1,nRow1,nTab, nCol2,nRow2,nTab ) );
-            }
-            else // neue Pivot-Tabelle erzeugen
-            {
-                ScDBData*   pDBData = GetDBData();
-                String      aErrMsg;
-
-                pDBData->GetArea( nTab, nCol1, nRow1, nCol2, nRow2 );
-
-
-                if (nRow2+2 <= MAXROW - 4)              // Default-Ausgabebereich
-                {                                       // min. Tabelle hat 5 Zeilen
-                    aPivotParam.nCol = nCol1;
-                    aPivotParam.nRow = nRow2+2;
-                    aPivotParam.nTab = nTab;
-                }
-                else
-                {
-                    aPivotParam.nCol = 0;
-                    aPivotParam.nRow = 0;
-                    aPivotParam.nTab = MAXTAB+1;
-                }
-
-            }
-
-            SfxItemSet aArgSet( GetPool(),
-                                SCITEM_PIVOTDATA,
-                                SCITEM_PIVOTDATA );
-
-            // Ermitteln der Ueberschriften:
-            String      aFieldName;
-            USHORT      nLabelCount = nCol2-nCol1+1;
-            SCsCOL      nCol        = nCol1;
-            BOOL        bIsValue    = FALSE;
-            LabelData** aLabelArr   = new LabelData*[nLabelCount];
-
-            for ( USHORT i=0; i<nLabelCount; i++ )
-            {
-                pDoc->GetString( nCol, nRow1, nTab, aFieldName );
-                if ( !aFieldName )
-                    aFieldName = ColToAlpha( nCol );
-                bIsValue = lcl_IsValueCol( pDoc, nCol, nRow1+1, nRow2, nTab );
-                aLabelArr[i] = new LabelData( aFieldName, nCol, bIsValue );
-                nCol++;
-            }
-
-            aPivotParam.SetLabelData( aLabelArr, nLabelCount );
-            aArgSet.Put( ScPivotItem( SCITEM_PIVOTDATA, &aPivotParam ) );
-
-            // aktuelle Tabelle merken (wg. RefInput im Dialog)
-            GetViewData()->SetRefTabNo( GetViewData()->GetTabNo() );
-
-            *pPivotSource = ScArea( nTab, nCol1,nRow1, nCol2,nRow2 );
-            pResult = new ScPivotLayoutDlg( pB, pCW, pParent, aArgSet );
-
-
-            for ( USHORT p=0; p<nLabelCount; p++ )
-                delete aLabelArr[p];
-            delete [] aLabelArr;
-#endif
             }
         }
         break;

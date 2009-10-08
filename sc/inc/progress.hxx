@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: progress.hxx,v $
- * $Revision: 1.3 $
+ * $Revision: 1.3.32.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -68,8 +68,6 @@ public:
                                                     BOOL bWait = TRUE );
     static  ScProgress*     GetInterpretProgress() { return pInterpretProgress; }
     static  void            DeleteInterpretProgress();
-    static  void            SetAllowInterpret( BOOL bVal );
-    static  BOOL            GetAllowInterpret() { return bAllowInterpretProgress; }
     static  ULONG           GetInterpretCount() { return nInterpretProgress; }
     static  ULONG           GetGlobalRange()    { return nGlobalRange; }
     static  ULONG           GetGlobalPercent()  { return nGlobalPercent; }

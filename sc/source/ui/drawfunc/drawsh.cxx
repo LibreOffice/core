@@ -331,7 +331,7 @@ void ScDrawShell::ExecuteMacroAssign( SdrObject* pObj, Window* pWin )
     SfxItemSet* pItemSet = new SfxItemSet(SFX_APP()->GetPool(), SID_ATTR_MACROITEM, SID_ATTR_MACROITEM );
     pItemSet->Put ( aItem, SID_ATTR_MACROITEM );
 
-    SfxMacroAssignDlg aDlg( pWin, *pItemSet );
+    SfxMacroAssignDlg aDlg( pWin, GetObjectShell(), *pItemSet );
     SfxMacroTabPage *pMacroPage = (SfxMacroTabPage*) aDlg.GetTabPage();
     pMacroPage->AddEvent( ScResId(RID_SCSTR_ONCLICK),
         SFX_EVENT_MOUSECLICK_OBJECT);

@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: editable.cxx,v $
- * $Revision: 1.5 $
+ * $Revision: 1.5.32.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -44,11 +44,6 @@ ScEditableTester::ScEditableTester() :
     bIsEditable( TRUE ),
     bOnlyMatrix( TRUE )
 {
-}
-
-void ScEditableTester::Reset()
-{
-    bIsEditable = bOnlyMatrix = TRUE;
 }
 
 ScEditableTester::ScEditableTester( ScDocument* pDoc, SCTAB nTab,

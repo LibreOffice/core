@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: cellsh2.cxx,v $
- * $Revision: 1.35 $
+ * $Revision: 1.34.24.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -1058,6 +1058,7 @@ void ScCellShell::ExecuteDB( SfxRequest& rReq )
 
                         pDocSh->GetUndoManager()->LeaveListAction();
                     }
+                    delete pDlg;
                 }
             }
             break;
@@ -1098,6 +1099,7 @@ void __EXPORT ScCellShell::GetDBState( SfxItemSet& rSet )
                             bOk = pDBData->HasQueryParam() ||
                                   pDBData->HasSortParam() ||
                                   pDBData->HasSubTotalParam();
+#if OLD_PIVOT_IMPLEMENTATION
                             if (!bOk)
                             {
                                 //  Pivottabelle mit den Daten als Quellbereich ?
@@ -1112,6 +1114,7 @@ void __EXPORT ScCellShell::GetDBState( SfxItemSet& rSet )
                                         bOk = TRUE;
                                 }
                             }
+#endif
                         }
                     }
                     if (!bOk)

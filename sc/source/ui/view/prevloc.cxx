@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: prevloc.cxx,v $
- * $Revision: 1.16 $
+ * $Revision: 1.16.32.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -285,18 +285,6 @@ void ScPreviewLocationData::GetDrawRange( USHORT nPos, Rectangle& rPixelRect, Ma
     }
 }
 
-ScPreviewLocationEntry* lcl_GetEntryByPosition( const List& rEntries, const Point& rPos, ScPreviewLocationType eType )
-{
-    ULONG nCount = rEntries.Count();
-    for (ULONG nListPos=0; nListPos<nCount; nListPos++)
-    {
-        ScPreviewLocationEntry* pEntry = (ScPreviewLocationEntry*)rEntries.GetObject(nListPos);
-        if ( pEntry->eType == eType && pEntry->aPixelRect.IsInside( rPos ) )
-            return pEntry;
-    }
-    return NULL;
-}
-
 ScPreviewLocationEntry* lcl_GetEntryByAddress( const List& rEntries, const ScAddress& rPos, ScPreviewLocationType eType )
 {
     ULONG nCount = rEntries.Count();
@@ -309,44 +297,44 @@ ScPreviewLocationEntry* lcl_GetEntryByAddress( const List& rEntries, const ScAdd
     return NULL;
 }
 
-ScAddress ScPreviewLocationData::GetCellFromRange( const Size& rOffsetPixel, const ScRange& rRange ) const
-{
-    const double nScaleX = HMM_PER_TWIPS;
-    const double nScaleY = HMM_PER_TWIPS;
-
-    Size aOffsetLogic = pWindow->PixelToLogic( rOffsetPixel, aCellMapMode );
-    SCTAB nTab = rRange.aStart.Tab();
-
-    long nPosX = 0;
-    SCCOL nCol = rRange.aStart.Col();
-    SCCOL nEndCol = rRange.aEnd.Col();
-    while ( nCol <= nEndCol && nPosX < aOffsetLogic.Width() )
-    {
-        USHORT nDocW = pDoc->GetColWidth( nCol, nTab );
-        if (nDocW)
-            nPosX += (long) (nDocW * nScaleX);
-        ++nCol;
-    }
-    if ( nCol > rRange.aStart.Col() )
-        --nCol;
-
-    long nPosY = 0;
-    ScCoupledCompressedArrayIterator< SCROW, BYTE, USHORT> aIter(
-            pDoc->GetRowFlagsArray( nTab), rRange.aStart.Row(),
-            rRange.aEnd.Row(), CR_HIDDEN, 0, pDoc->GetRowHeightArray( nTab));
-    while ( aIter && nPosY < aOffsetLogic.Height() )
-    {
-        USHORT nDocH = *aIter;
-        if (nDocH)
-            nPosY += (long) (nDocH * nScaleY);
-        ++aIter;
-    }
-    SCROW nRow = aIter.GetPos();
-    if ( nRow > rRange.aStart.Row() )
-        --nRow;
-
-    return ScAddress( nCol, nRow, nTab );
-}
+//UNUSED2008-05  ScAddress ScPreviewLocationData::GetCellFromRange( const Size& rOffsetPixel, const ScRange& rRange ) const
+//UNUSED2008-05  {
+//UNUSED2008-05      const double nScaleX = HMM_PER_TWIPS;
+//UNUSED2008-05      const double nScaleY = HMM_PER_TWIPS;
+//UNUSED2008-05
+//UNUSED2008-05      Size aOffsetLogic = pWindow->PixelToLogic( rOffsetPixel, aCellMapMode );
+//UNUSED2008-05      SCTAB nTab = rRange.aStart.Tab();
+//UNUSED2008-05
+//UNUSED2008-05      long nPosX = 0;
+//UNUSED2008-05      SCCOL nCol = rRange.aStart.Col();
+//UNUSED2008-05      SCCOL nEndCol = rRange.aEnd.Col();
+//UNUSED2008-05      while ( nCol <= nEndCol && nPosX < aOffsetLogic.Width() )
+//UNUSED2008-05      {
+//UNUSED2008-05          USHORT nDocW = pDoc->GetColWidth( nCol, nTab );
+//UNUSED2008-05          if (nDocW)
+//UNUSED2008-05              nPosX += (long) (nDocW * nScaleX);
+//UNUSED2008-05          ++nCol;
+//UNUSED2008-05      }
+//UNUSED2008-05      if ( nCol > rRange.aStart.Col() )
+//UNUSED2008-05          --nCol;
+//UNUSED2008-05
+//UNUSED2008-05      long nPosY = 0;
+//UNUSED2008-05      ScCoupledCompressedArrayIterator< SCROW, BYTE, USHORT> aIter(
+//UNUSED2008-05              pDoc->GetRowFlagsArray( nTab), rRange.aStart.Row(),
+//UNUSED2008-05              rRange.aEnd.Row(), CR_HIDDEN, 0, pDoc->GetRowHeightArray( nTab));
+//UNUSED2008-05      while ( aIter && nPosY < aOffsetLogic.Height() )
+//UNUSED2008-05      {
+//UNUSED2008-05          USHORT nDocH = *aIter;
+//UNUSED2008-05          if (nDocH)
+//UNUSED2008-05              nPosY += (long) (nDocH * nScaleY);
+//UNUSED2008-05          ++aIter;
+//UNUSED2008-05      }
+//UNUSED2008-05      SCROW nRow = aIter.GetPos();
+//UNUSED2008-05      if ( nRow > rRange.aStart.Row() )
+//UNUSED2008-05          --nRow;
+//UNUSED2008-05
+//UNUSED2008-05      return ScAddress( nCol, nRow, nTab );
+//UNUSED2008-05  }
 
 Rectangle ScPreviewLocationData::GetOffsetPixel( const ScAddress& rCellPos, const ScRange& rRange ) const
 {
@@ -375,24 +363,6 @@ Rectangle ScPreviewLocationData::GetOffsetPixel( const ScAddress& rCellPos, cons
     Size aSizePixel = pWindow->LogicToPixel( aSizeLogic, aCellMapMode );
 
     return Rectangle( Point( aOffsetPixel.Width(), aOffsetPixel.Height() ), aSizePixel );
-}
-
-BOOL ScPreviewLocationData::GetCell( const Point& rPos, ScAddress& rCellPos, Rectangle& rCellRect ) const
-{
-    ScPreviewLocationEntry* pEntry = lcl_GetEntryByPosition( aEntries, rPos, SC_PLOC_CELLRANGE );
-    if ( pEntry )
-    {
-        Size aOffsetPixel( rPos.X() - pEntry->aPixelRect.Left(), rPos.Y() - pEntry->aPixelRect.Top() );
-        rCellPos = GetCellFromRange( aOffsetPixel, pEntry->aCellRange );
-
-        Rectangle aOffsetRect = GetOffsetPixel( rCellPos, pEntry->aCellRange );
-        rCellRect = Rectangle( aOffsetRect.Left() + pEntry->aPixelRect.Left(),
-                               aOffsetRect.Top() + pEntry->aPixelRect.Top(),
-                               aOffsetRect.Right() + pEntry->aPixelRect.Left(),
-                               aOffsetRect.Bottom() + pEntry->aPixelRect.Top() );
-        return TRUE;
-    }
-    return FALSE;
 }
 
 BOOL ScPreviewLocationData::GetCellPosition( const ScAddress& rCellPos, Rectangle& rCellRect ) const

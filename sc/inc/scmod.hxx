@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: scmod.hxx,v $
- * $Revision: 1.24 $
+ * $Revision: 1.24.32.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -152,7 +152,6 @@ public:
     virtual void        FillStatusBar(StatusBar &rBar);
     virtual void        Notify( SfxBroadcaster& rBC, const SfxHint& rHint );
     void                DeleteCfg();
-    void                CloseDialogs();
 
                         // von der Applikation verschoben:
 
@@ -238,7 +237,6 @@ SC_DLLPUBLIC    void                    SetAppOptions   ( const ScAppOptions& rO
     void                SetRefInputHdl( ScInputHandler* pNew );
     ScInputHandler*     GetRefInputHdl();
 
-    void                SetInputWindow( ScInputWindow* pWin );
     void                ViewShellGone(ScTabViewShell* pViewSh);
     void                ViewShellChanged();
     // Kommunikation mit Funktionsautopilot

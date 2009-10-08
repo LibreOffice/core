@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: xistream.cxx,v $
- * $Revision: 1.22 $
+ * $Revision: 1.22.30.3 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -468,12 +468,12 @@ void XclImpStream::PopPosition()
     }
 }
 
-void XclImpStream::RejectPosition()
-{
-    DBG_ASSERT( !maPosStack.empty(), "XclImpStream::RejectPosition - stack empty" );
-    if( !maPosStack.empty() )
-        maPosStack.pop_back();
-}
+//UNUSED2008-05  void XclImpStream::RejectPosition()
+//UNUSED2008-05  {
+//UNUSED2008-05      DBG_ASSERT( !maPosStack.empty(), "XclImpStream::RejectPosition - stack empty" );
+//UNUSED2008-05      if( !maPosStack.empty() )
+//UNUSED2008-05          maPosStack.pop_back();
+//UNUSED2008-05  }
 
 void XclImpStream::StoreGlobalPosition()
 {
@@ -506,7 +506,7 @@ sal_Size XclImpStream::GetRecSize()
     if( !mbHasComplRec )
     {
         PushPosition();
-        while( JumpToNextContinue() );  // JumpToNextContinue() adds up mnCurrRecSize
+        while( JumpToNextContinue() ) ;  // JumpToNextContinue() adds up mnCurrRecSize
         mnComplRecSize = mnCurrRecSize;
         mbHasComplRec = true;
         PopPosition();
@@ -525,7 +525,7 @@ sal_uInt16 XclImpStream::GetNextRecId()
     if( mbValidRec )
     {
         PushPosition();
-        while( JumpToNextContinue() );  // skip following CONTINUE records
+        while( JumpToNextContinue() ) ;  // skip following CONTINUE records
         if( mnNextRecPos < mnStreamSize )
         {
             mrStrm.Seek( mnNextRecPos );
@@ -972,11 +972,6 @@ String XclImpStream::ReadRawByteString( sal_uInt16 nChars )
 String XclImpStream::ReadByteString( bool b16BitLen )
 {
     return ReadRawByteString( ReadByteStrLen( b16BitLen ) );
-}
-
-void XclImpStream::IgnoreByteString( bool b16BitLen )
-{
-    Ignore( ReadByteStrLen( b16BitLen ) );
 }
 
 // private --------------------------------------------------------------------

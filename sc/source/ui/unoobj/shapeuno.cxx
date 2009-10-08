@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: shapeuno.cxx,v $
- * $Revision: 1.21 $
+ * $Revision: 1.21.32.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -239,17 +239,6 @@ uno::Reference<beans::XPropertySetInfo> SAL_CALL ScShapeObj::getPropertySetInfo(
         }
     }
     return mxPropSetInfo;
-}
-
-ScDocument* lcl_GetDocument( SdrObject* pObj )
-{
-    if( pObj )
-    {
-        ScDrawLayer* pModel = (ScDrawLayer*)pObj->GetModel();
-        if ( pModel )
-            return pModel->GetDocument();
-    }
-    return NULL;
 }
 
 BOOL lcl_GetPageNum( SdrPage* pPage, SdrModel& rModel, SCTAB& rNum )

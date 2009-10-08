@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: tokstack.cxx,v $
- * $Revision: 1.15 $
+ * $Revision: 1.14.32.3 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -531,26 +531,26 @@ const TokenId TokenPool::Store( const double& rDouble )
 }
 
 
-const TokenId TokenPool::StoreError( USHORT nError )
-{
-    if( nElementAkt >= nElement )
-        GrowElement();
-
-    if( nP_ErrAkt >= nP_Err )
-        GrowError();
-
-    pElement[ nElementAkt ] = nP_ErrAkt;    // Index in Error-Array
-    pType[ nElementAkt ] = T_Err;           // Typinfo Error eintragen
-
-    pP_Err[ nP_ErrAkt ] = nError;
-
-    pSize[ nElementAkt ] = 1;           // eigentlich Banane
-
-    nElementAkt++;
-    nP_ErrAkt++;
-
-    return ( const TokenId ) nElementAkt; // Ausgabe von altem Wert + 1!
-}
+//UNUSED2008-05  const TokenId TokenPool::StoreError( USHORT nError )
+//UNUSED2008-05  {
+//UNUSED2008-05      if( nElementAkt >= nElement )
+//UNUSED2008-05          GrowElement();
+//UNUSED2008-05
+//UNUSED2008-05      if( nP_ErrAkt >= nP_Err )
+//UNUSED2008-05          GrowError();
+//UNUSED2008-05
+//UNUSED2008-05      pElement[ nElementAkt ] = nP_ErrAkt;    // Index in Error-Array
+//UNUSED2008-05      pType[ nElementAkt ] = T_Err;           // Typinfo Error eintragen
+//UNUSED2008-05
+//UNUSED2008-05      pP_Err[ nP_ErrAkt ] = nError;
+//UNUSED2008-05
+//UNUSED2008-05      pSize[ nElementAkt ] = 1;           // eigentlich Banane
+//UNUSED2008-05
+//UNUSED2008-05      nElementAkt++;
+//UNUSED2008-05      nP_ErrAkt++;
+//UNUSED2008-05
+//UNUSED2008-05      return ( const TokenId ) nElementAkt; // Ausgabe von altem Wert + 1!
+//UNUSED2008-05  }
 
 
 const TokenId TokenPool::Store( const UINT16 nIndex )
@@ -768,19 +768,19 @@ const String* TokenPool::GetExternal( const TokenId& rId ) const
 }
 
 
-const String* TokenPool::GetString( const TokenId& r ) const
-{
-    const String*   p = NULL;
-    UINT16 n = (UINT16) r;
-    if( n && n <= nElementAkt )
-    {
-        n--;
-        if( pType[ n ] == T_Str )
-            p = ppP_Str[ pElement[ n ] ];
-    }
-
-    return p;
-}
+//UNUSED2008-05  const String* TokenPool::GetString( const TokenId& r ) const
+//UNUSED2008-05  {
+//UNUSED2008-05      const String*   p = NULL;
+//UNUSED2008-05      UINT16 n = (UINT16) r;
+//UNUSED2008-05      if( n && n <= nElementAkt )
+//UNUSED2008-05      {
+//UNUSED2008-05          n--;
+//UNUSED2008-05          if( pType[ n ] == T_Str )
+//UNUSED2008-05              p = ppP_Str[ pElement[ n ] ];
+//UNUSED2008-05      }
+//UNUSED2008-05
+//UNUSED2008-05      return p;
+//UNUSED2008-05  }
 
 ScMatrix* TokenPool::GetMatrix( unsigned int n ) const
 {

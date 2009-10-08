@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: viewopti.cxx,v $
- * $Revision: 1.9 $
+ * $Revision: 1.9.32.3 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -125,43 +125,6 @@ int ScGridOptions::operator==( const ScGridOptions& rCpy ) const
 }
 
 
-//------------------------------------------------------------------------
-
-SvStream& operator>>( SvStream& rStream, ScGridOptions& rOpt )
-{
-    BYTE nDummy;
-    rStream >> rOpt.nFldDrawX;
-    rStream >> rOpt.nFldDrawY;
-    rStream >> rOpt.nFldDivisionX;
-    rStream >> rOpt.nFldDivisionY;
-    rStream >> rOpt.nFldSnapX;
-    rStream >> rOpt.nFldSnapY;
-    rStream >> nDummy; rOpt.bUseGridsnap = (BOOL)nDummy;
-    rStream >> nDummy; rOpt.bSynchronize = (BOOL)nDummy;
-    rStream >> nDummy; rOpt.bGridVisible = (BOOL)nDummy;
-    rStream >> nDummy; rOpt.bEqualGrid   = (BOOL)nDummy;
-
-    return rStream;
-}
-
-//------------------------------------------------------------------------
-
-SvStream& operator<<( SvStream& rStream, const ScGridOptions& rOpt )
-{
-    rStream << rOpt.nFldDrawX;
-    rStream << rOpt.nFldDrawY;
-    rStream << rOpt.nFldDivisionX;
-    rStream << rOpt.nFldDivisionY;
-    rStream << rOpt.nFldSnapX;
-    rStream << rOpt.nFldSnapY;
-    rStream << (BOOL)rOpt.bUseGridsnap;
-    rStream << (BOOL)rOpt.bSynchronize;
-    rStream << (BOOL)rOpt.bGridVisible;
-    rStream << (BOOL)rOpt.bEqualGrid;
-
-    return rStream;
-}
-
 //========================================================================
 // class ScViewOptions
 //========================================================================
@@ -264,93 +227,6 @@ int ScViewOptions::operator==( const ScViewOptions& rOpt ) const
 
 //------------------------------------------------------------------------
 
-SvStream& operator>>( SvStream& rStream, ScViewOptions& rOpt )
-{
-    USHORT  i;
-    BYTE    n;
-
-    ScReadHeader aHdr( rStream );
-
-    for ( i=0; i<=VOPT_GRID; i++ )          // kompatibel bleiben -> nur bis VOPT_GRID
-        rStream >> rOpt.aOptArr[i];
-
-    for ( i=0; i<MAX_TYPE; i++ )
-    {
-        rStream >> n;
-
-        //#i80528# adapt to new range eventually
-        if((BYTE)VOBJ_MODE_HIDE < n) n = (BYTE)VOBJ_MODE_SHOW;
-
-        rOpt.aModeArr[i] = (ScVObjMode)n;
-    }
-
-    rStream >> rOpt.aGridCol;
-    rStream.ReadByteString( rOpt.aGridColName, rStream.GetStreamCharSet() );
-
-    if( aHdr.BytesLeft() )
-        rStream >> rOpt.aOptArr[VOPT_HELPLINES];
-
-    if( aHdr.BytesLeft() )
-        rStream >> rOpt.aGridOpt;
-
-    if( aHdr.BytesLeft() )
-        rStream >> rOpt.bHideAutoSpell;
-
-    if( aHdr.BytesLeft() )
-        rStream >> rOpt.aOptArr[VOPT_ANCHOR];
-
-    if( aHdr.BytesLeft() )
-        rStream >> rOpt.aOptArr[VOPT_PAGEBREAKS];
-
-    if( aHdr.BytesLeft() )
-        rStream >> rOpt.aOptArr[VOPT_SOLIDHANDLES];
-
-    if( aHdr.BytesLeft() )
-        rStream >> rOpt.aOptArr[VOPT_CLIPMARKS];
-
-    if( aHdr.BytesLeft() )
-        rStream >> rOpt.aOptArr[VOPT_BIGHANDLES];
-
-    return rStream;
-}
-
-//------------------------------------------------------------------------
-
-void ScViewOptions::Save(SvStream& rStream, BOOL bConfig) const
-{
-    USHORT i;
-
-    ScWriteHeader aHdr( rStream, 68 );
-
-    for ( i=0; i<=VOPT_GRID; i++ )          // kompatibel bleiben -> nur bis VOPT_GRID
-        rStream << aOptArr[i];
-
-    for ( i=0; i<MAX_TYPE; i++ )
-        rStream << (BYTE)aModeArr[i];
-
-    rStream << aGridCol;
-    rStream.WriteByteString( aGridColName, rStream.GetStreamCharSet() );
-    rStream << aOptArr[VOPT_HELPLINES];
-    rStream << aGridOpt;
-    rStream << bHideAutoSpell;
-    rStream << aOptArr[VOPT_ANCHOR];
-    rStream << aOptArr[VOPT_PAGEBREAKS];
-    rStream << aOptArr[VOPT_SOLIDHANDLES];
-
-    if ( bConfig || rStream.GetVersion() > SOFFICE_FILEFORMAT_40 )      // nicht bei 4.0 Export
-    {
-        rStream << aOptArr[VOPT_CLIPMARKS];
-
-        //  big handles are not saved in 5.0-documents to avoid warning messages
-        //! save to files after 5.0 !!!
-
-        if ( bConfig )
-            rStream << aOptArr[VOPT_BIGHANDLES];
-    }
-}
-
-//------------------------------------------------------------------------
-
 SvxGridItem* ScViewOptions::CreateGridItem( USHORT nId /* = SID_ATTR_GRID_OPTIONS */ ) const
 {
     SvxGridItem* pItem = new SvxGridItem( nId );
@@ -373,9 +249,9 @@ SvxGridItem* ScViewOptions::CreateGridItem( USHORT nId /* = SID_ATTR_GRID_OPTION
 //      ScTpViewItem - Daten fuer die ViewOptions-TabPage
 //========================================================================
 
-ScTpViewItem::ScTpViewItem( USHORT nWhichP ) : SfxPoolItem( nWhichP )
-{
-}
+//UNUSED2008-05  ScTpViewItem::ScTpViewItem( USHORT nWhichP ) : SfxPoolItem( nWhichP )
+//UNUSED2008-05  {
+//UNUSED2008-05  }
 
 //------------------------------------------------------------------------
 

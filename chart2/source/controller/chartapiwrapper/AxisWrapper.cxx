@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: AxisWrapper.cxx,v $
- * $Revision: 1.11 $
+ * $Revision: 1.11.8.3 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -43,15 +43,14 @@
 
 #include "CharacterProperties.hxx"
 #include "LineProperties.hxx"
-// #include "NamedLineProperties.hxx"
 #include "UserDefinedProperties.hxx"
 #include "WrappedCharacterHeightProperty.hxx"
 #include "WrappedTextRotationProperty.hxx"
-// #include "WrappedNamedProperty.hxx"
 #include "WrappedGapwidthProperty.hxx"
 #include "WrappedScaleProperty.hxx"
 #include "WrappedDefaultProperty.hxx"
 #include "WrappedNumberFormatProperty.hxx"
+#include "WrappedScaleTextProperties.hxx"
 
 #include <algorithm>
 #include <rtl/ustrbuf.hxx>
@@ -306,6 +305,7 @@ const Sequence< Property > & lcl_GetPropertySequence()
         ::chart::LineProperties::AddPropertiesToVector( aProperties );
 //         ::chart::NamedLineProperties::AddPropertiesToVector( aProperties );
         ::chart::UserDefinedProperties::AddPropertiesToVector( aProperties );
+        ::chart::wrapper::WrappedScaleTextProperties::addProperties( aProperties );
 
         // and sort them for access via bsearch
         ::std::sort( aProperties.begin(), aProperties.end(),
@@ -440,26 +440,27 @@ void SAL_CALL AxisWrapper::removeEventListener(
 // ================================================================================
 
 //ReferenceSizePropertyProvider
-void AxisWrapper::setCurrentSizeAsReference()
+void AxisWrapper::updateReferenceSize()
 {
-    /*
     Reference< beans::XPropertySet > xProp( this->getAxis(), uno::UNO_QUERY );
     if( xProp.is() )
-        xProp->setPropertyValue( C2U("ReferenceDiagramSize"), uno::makeAny(
-                            m_spChart2ModelContact->GetDiagramSize() ));
-    */
+    {
+        if( xProp->getPropertyValue( C2U("ReferencePageSize") ).hasValue() )
+            xProp->setPropertyValue( C2U("ReferencePageSize"), uno::makeAny(
+            m_spChart2ModelContact->GetPageSize() ));
+    }
 }
 Any AxisWrapper::getReferenceSize()
 {
     Any aRet;
     Reference< beans::XPropertySet > xProp( this->getAxis(), uno::UNO_QUERY );
     if( xProp.is() )
-        aRet = xProp->getPropertyValue( C2U("ReferenceDiagramSize") );
+        aRet = xProp->getPropertyValue( C2U("ReferencePageSize") );
     return aRet;
 }
 awt::Size AxisWrapper::getCurrentSizeForReference()
 {
-    return m_spChart2ModelContact->GetDiagramSize();
+    return m_spChart2ModelContact->GetPageSize();
 }
 
 // ================================================================================
@@ -534,9 +535,8 @@ const std::vector< WrappedProperty* > AxisWrapper::createWrappedProperties()
 
     WrappedScaleProperty::addWrappedProperties( aWrappedProperties, m_spChart2ModelContact );
 
-    //aWrappedProperties.push_back( new WrappedStackedTextProperty() );
-//     WrappedNamedProperty::addWrappedLineProperties( aWrappedProperties, m_spChart2ModelContact );
     WrappedCharacterHeightProperty::addWrappedProperties( aWrappedProperties, this );
+    WrappedScaleTextProperties::addWrappedProperties( aWrappedProperties, m_spChart2ModelContact );
 
     return aWrappedProperties;
 }

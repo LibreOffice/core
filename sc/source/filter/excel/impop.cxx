@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: impop.cxx,v $
- * $Revision: 1.96 $
+ * $Revision: 1.95.4.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -125,6 +125,7 @@ ImportExcel::ImportExcel( XclImpRootData& rImpData, SvStream& rStrm ):
     maStrm( rStrm, GetRoot() ),
     aIn( maStrm )
 {
+    mnLastRefIdx = 0;
     nBdshtTab = 0;
     nIxfeIndex = 0;     // zur Sicherheit auf 0
 
@@ -135,7 +136,7 @@ ImportExcel::ImportExcel( XclImpRootData& rImpData, SvStream& rStrm ):
     pExcRoot->pExtSheetBuff = new ExtSheetBuffer( pExcRoot );   //&aExtSheetBuff;
     pExcRoot->pTabNameBuff = new NameBuffer( pExcRoot );        //&aTabNameBuff;
     pExcRoot->pShrfmlaBuff = new ShrfmlaBuffer( pExcRoot );     //&aShrfrmlaBuff;
-    pExcRoot->pExtNameBuff = new ExtNameBuff ( pExcRoot );
+    pExcRoot->pExtNameBuff = new ExtNameBuff ( *this );
 
     pExtNameBuff = new NameBuffer( pExcRoot );          //#94039# prevent empty rootdata
     pExtNameBuff->SetBase( 1 );
@@ -383,8 +384,7 @@ void ImportExcel::Row25( void )
             aIn.Ignore( 2 );   // reserved
             aIn >> nGrbit;
 
-            BYTE nLevel = 0;
-            ::extract_value( nLevel, nGrbit, 0, 3 );
+            sal_uInt8 nLevel = ::extract_value< sal_uInt8 >( nGrbit, 0, 3 );
             pRowOutlineBuff->SetLevel( nRow, nLevel,
                 ::get_flag( nGrbit, EXC_ROW_COLLAPSED ), ::get_flag( nGrbit, EXC_ROW_HIDDEN ) );
 
@@ -435,21 +435,7 @@ void ImportExcel::Externsheet( void )
     bool bSameWorkBook;
     String aEncodedUrl( aIn.ReadByteString( false ) );
     XclImpUrlHelper::DecodeUrl( aUrl, aTabName, bSameWorkBook, *pExcRoot->pIR, aEncodedUrl );
-    pExcRoot->pExtSheetBuff->Add( aUrl, aTabName, bSameWorkBook );
-}
-
-
-void ImportExcel::Note( void )
-{
-    XclAddress aXclPos;
-    aIn >> aXclPos;
-
-    ScAddress aScPos( ScAddress::UNINITIALIZED );
-    if( GetAddressConverter().ConvertAddress( aScPos, aXclPos, GetCurrScTab(), true ) )
-    {
-        ScPostIt aScNote( aIn.ReadByteString( TRUE ), GetDocPtr() );
-        GetDoc().SetNote( aScPos.Col(), aScPos.Row(), aScPos.Tab(), aScNote );
-    }
+    mnLastRefIdx = pExcRoot->pExtSheetBuff->Add( aUrl, aTabName, bSameWorkBook );
 }
 
 
@@ -546,15 +532,15 @@ void ImportExcel::Externname25( void )
     if( ( nOpt & 0x0001 ) || ( ( nOpt & 0xFFFE ) == 0x0000 ) )
     {// external name
         ScfTools::ConvertToScDefinedName( aName );
-        pExcRoot->pExtNameBuff->AddName( aName );
+        pExcRoot->pExtNameBuff->AddName( aName, mnLastRefIdx );
     }
     else if( nOpt & 0x0010 )
     {// ole link
-        pExcRoot->pExtNameBuff->AddOLE( aName, nRes );      // nRes is storage ID
+        pExcRoot->pExtNameBuff->AddOLE( aName, mnLastRefIdx, nRes );        // nRes is storage ID
     }
     else
     {// dde link
-        pExcRoot->pExtNameBuff->AddDDE( aName );
+        pExcRoot->pExtNameBuff->AddDDE( aName, mnLastRefIdx );
     }
 }
 
@@ -649,8 +635,7 @@ void ImportExcel::Colinfo( void )
 
     bool bHidden = ::get_flag( nOpt, EXC_COLINFO_HIDDEN );
     bool bCollapsed = ::get_flag( nOpt, EXC_COLINFO_COLLAPSED );
-    sal_uInt8 nLevel;
-    ::extract_value( nLevel, nOpt, 8, 3 );
+    sal_uInt8 nLevel = ::extract_value< sal_uInt8 >( nOpt, 8, 3 );
     pColOutlineBuff->SetLevelRange( nColFirst, nColLast, nLevel, bCollapsed, bHidden );
 
     if( bHidden )
@@ -926,8 +911,7 @@ void ImportExcel::Row34( void )
 
         aIn >> nGrbit >> nXF;
 
-        BYTE nLevel = 0;
-        ::extract_value( nLevel, nGrbit, 0, 3 );
+        sal_uInt8 nLevel = ::extract_value< sal_uInt8 >( nGrbit, 0, 3 );
         pRowOutlineBuff->SetLevel( nScRow, nLevel,
             ::get_flag( nGrbit, EXC_ROW_COLLAPSED ), ::get_flag( nGrbit, EXC_ROW_HIDDEN ) );
 
@@ -1126,12 +1110,13 @@ void ImportExcel::Bof5( void )
 
 void ImportExcel::EndSheet( void )
 {
-    pColRowBuff->Convert( GetCurrScTab() );
-
     pExcRoot->pExtSheetBuff->Reset();
 
     if( GetBiff() <= EXC_BIFF5 )
+    {
         pExcRoot->pExtNameBuff->Reset();
+        mnLastRefIdx = 0;
+    }
 
     FinalizeTable();
 }
@@ -1149,7 +1134,7 @@ void ImportExcel::NeueTabelle( void )
 
     pOutlineListBuffer->Append( new XclImpOutlineDataBuffer( GetRoot(), nTab ) );
 
-    pColRowBuff = pOutlineListBuffer->Last()->GetColRowBuff();
+    pExcRoot->pColRowBuff = pColRowBuff = pOutlineListBuffer->Last()->GetColRowBuff();
     pColOutlineBuff = pOutlineListBuffer->Last()->GetColOutline();
     pRowOutlineBuff = pOutlineListBuffer->Last()->GetRowOutline();
 }

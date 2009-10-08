@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: export.cxx,v $
- * $Revision: 1.5 $
+ * $Revision: 1.5.32.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -37,7 +37,7 @@
 #include "scerrors.hxx"
 #include "exp_op.hxx"
 
-
+#if ENABLE_LOTUS123_EXPORT
 FltError ScExportLotus123( SvStream& aStream, ScDocument* pDoc, ExportFormatLotus eFormat, CharSet eDest )
 {
     switch( eFormat )
@@ -56,6 +56,6 @@ FltError ScExportLotus123( SvStream& aStream, ScDocument* pDoc, ExportFormatLotu
 
     return eERR_OK;
 }
-
+#endif
 
 

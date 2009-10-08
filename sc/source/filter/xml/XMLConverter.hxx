@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: XMLConverter.hxx,v $
- * $Revision: 1.16 $
+ * $Revision: 1.15.32.3 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -109,8 +109,8 @@ public:
                             const sal_Bool bIsFormula = sal_True);
 // EXPORT: Core Date Time
     static void         ConvertDateTimeToString(const DateTime& aDateTime, rtl::OUStringBuffer& sDate);
-// IMPORT: Core Date Time
-    static void         ConvertStringToDateTime(const rtl::OUString& sDate, DateTime& aDateTime, SvXMLUnitConverter* pUnitConverter);
+//UNUSED2008-05  // IMPORT: Core Date Time
+//UNUSED2008-05      static void         ConvertStringToDateTime(const rtl::OUString& sDate, DateTime& aDateTime, SvXMLUnitConverter* pUnitConverter);
 
     static void         ConvertCoreToAPIDateTime(const DateTime& aDateTime, com::sun::star::util::DateTime& rDateTime);
 

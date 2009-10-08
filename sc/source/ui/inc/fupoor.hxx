@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: fupoor.hxx,v $
- * $Revision: 1.7 $
+ * $Revision: 1.7.146.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -90,7 +90,7 @@ private:
 
     // #95491# see member
     void SetMouseButtonCode(sal_uInt16 nNew) { if(nNew != mnCode) mnCode = nNew; }
-    const sal_uInt16 GetMouseButtonCode() const { return mnCode; }
+    sal_uInt16 GetMouseButtonCode() const { return mnCode; }
 
     virtual void Paint(const Rectangle&, Window*) {}
 

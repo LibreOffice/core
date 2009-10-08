@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: VDiagram.cxx,v $
- * $Revision: 1.18 $
+ * $Revision: 1.18.60.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -55,6 +55,7 @@
 // header for class E3dScene
 #include <svx/scene3d.hxx>
 #include <rtl/math.hxx>
+#include <svx/e3dsceneupdater.hxx>
 
 //.............................................................................
 namespace chart
@@ -478,6 +479,11 @@ void VDiagram::adjustAspectRatio3d( const awt::Size& rAvailableSize )
                             FIXED_SIZE_FOR_3D_CHART_VOLUME/2.0,
                             FIXED_SIZE_FOR_3D_CHART_VOLUME/2.0 );
 
+            // To get the 3D aspect ratio's effect on the 2D scene size, the scene's 2D size needs to be adapted to
+            // 3D content changes here. The tooling class remembers the current 3D transformation stack
+            // and in it's destructor, calculates a new 2D SnapRect for the scene and it's modified 3D geometry.
+            E3DModifySceneSnapRectUpdater aUpdater(lcl_getE3dScene( m_xOuterGroupShape ));
+
             m_xAspectRatio3D->setPropertyValue( C2U( UNO_NAME_3D_TRANSFORM_MATRIX )
                 , uno::makeAny(BaseGFXHelper::B3DHomMatrixToHomogenMatrix( aResult )) );
         }
@@ -491,10 +497,6 @@ void VDiagram::adjustAspectRatio3d( const awt::Size& rAvailableSize )
 ::basegfx::B2IRectangle VDiagram::adjustPosAndSize_3d( const awt::Point& rPos, const awt::Size& rAvailableSize )
 {
     adjustAspectRatio3d( rAvailableSize );
-
-    //calculate correct 2d dimensions for getting a correct initial 2D aspect ratio
-    E3dScene* pScene = lcl_getE3dScene( m_xOuterGroupShape );
-    pScene->CorrectSceneDimensions();
 
     //do not change aspect ratio of 3D scene with 2D bound rect
     m_aCurrentSizeWithoutAxes = ShapeFactory::calculateNewSizeRespectingAspectRatio(

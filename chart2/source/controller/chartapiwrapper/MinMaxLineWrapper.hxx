@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: MinMaxLineWrapper.hxx,v $
- * $Revision: 1.3 $
+ * $Revision: 1.3.44.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -33,7 +33,6 @@
 #include "ServiceMacros.hxx"
 #include "MutexContainer.hxx"
 #include "WrappedIgnoreProperty.hxx"
-//#include "WrappedNamedProperty.hxx"
 #include <cppuhelper/interfacecontainer.hxx>
 
 
@@ -133,7 +132,6 @@ private: //member
 
     ::boost::shared_ptr< ::cppu::OPropertyArrayHelper > m_pPropertyArrayHelper;
 
-//    WrappedLineDashNameProperty         m_aWrappedLineDashNameProperty;
     WrappedIgnoreProperty               m_aWrappedLineJointProperty;
 };
 

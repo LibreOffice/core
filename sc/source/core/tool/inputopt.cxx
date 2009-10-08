@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: inputopt.cxx,v $
- * $Revision: 1.10 $
+ * $Revision: 1.10.32.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -114,55 +114,6 @@ const ScInputOptions& ScInputOptions::operator=( const ScInputOptions& rCpy )
     return *this;
 }
 
-//------------------------------------------------------------------------
-
-SvStream& operator>>( SvStream& rStream, ScInputOptions& rOpt )
-{
-    rOpt.SetDefaults();
-
-    ScReadHeader aHdr( rStream );
-
-    rStream >> rOpt.nMoveDir;
-    rStream >> rOpt.bMoveSelection;
-    rStream >> rOpt.bEnterEdit;
-    rStream >> rOpt.bExtendFormat;
-
-    if (aHdr.BytesLeft())
-        rStream >> rOpt.bRangeFinder;           // ab 363
-
-    if (aHdr.BytesLeft())
-        rStream >> rOpt.bExpandRefs;            // ab 364v
-
-    if (aHdr.BytesLeft())
-        rStream >> rOpt.bMarkHeader;            // ab 364irgendwas
-
-    if (aHdr.BytesLeft())
-        rStream >> rOpt.bUseTabCol;             // ab 373d
-
-    // newer additions are not in old file format
-
-    return rStream;
-}
-
-//------------------------------------------------------------------------
-
-SvStream& operator<<( SvStream& rStream, const ScInputOptions& rOpt )
-{
-    ScWriteHeader aHdr( rStream, 6 );
-
-    rStream << rOpt.nMoveDir;
-    rStream << rOpt.bMoveSelection;
-    rStream << rOpt.bEnterEdit;
-    rStream << rOpt.bExtendFormat;
-    rStream << rOpt.bRangeFinder;
-    rStream << rOpt.bExpandRefs;
-    rStream << rOpt.bMarkHeader;
-    rStream << rOpt.bUseTabCol;
-
-    // newer additions are not in old file format
-
-    return rStream;
-}
 
 //==================================================================
 //  Config Item containing input options

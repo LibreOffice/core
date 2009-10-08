@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: detdata.hxx,v $
- * $Revision: 1.7 $
+ * $Revision: 1.7.32.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -100,9 +100,6 @@ public:
     BOOL    operator==( const ScDetOpList& r ) const;       // fuer Ref-Undo
 
     void    Append( ScDetOpData* pData );
-
-    void    Load( SvStream& rStream );
-    void    Store( SvStream& rStream ) const;
 
     BOOL    HasAddError() const     { return bHasAddError; }
 };

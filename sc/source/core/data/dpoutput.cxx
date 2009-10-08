@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: dpoutput.cxx,v $
- * $Revision: 1.19 $
+ * $Revision: 1.17.30.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -183,15 +183,6 @@ void lcl_SetFrame( ScDocument* pDoc, SCTAB nTab,
     aBoxInfo.SetValid(VALID_DISTANCE,FALSE);
 
     pDoc->ApplyFrameAreaTab( ScRange( nCol1, nRow1, nTab, nCol2, nRow2, nTab ), &aBox, &aBoxInfo );
-}
-
-void lcl_AttrArea( ScDocument* pDoc, SCTAB nTab,
-                    SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
-                    const SfxPoolItem& rItem )
-{
-    ScPatternAttr aPattern( pDoc->GetPool() );
-    aPattern.GetItemSet().Put( rItem );
-    pDoc->ApplyPatternAreaTab( nCol1,nRow1, nCol2,nRow2, nTab, aPattern );
 }
 
 // -----------------------------------------------------------------------
@@ -630,7 +621,6 @@ void ScDPOutput::HeaderCell( SCCOL nCol, SCROW nRow, SCTAB nTab,
         //! limit frames to horizontal or vertical?
         if (bColHeader)
         {
-//          lcl_AttrArea( pDoc,nTab, nCol,nMemberStartRow+(SCROW)nLevel, nCol,nTabEndRow, aItem );
             lcl_SetFrame( pDoc,nTab, nCol,nMemberStartRow+(SCROW)nLevel, nCol,nTabEndRow, 20 );
             lcl_SetStyleById( pDoc,nTab, nCol,nMemberStartRow+(SCROW)nLevel, nCol,nDataStartRow-1,
                                     STR_PIVOT_STYLE_TITLE );
@@ -639,7 +629,6 @@ void ScDPOutput::HeaderCell( SCCOL nCol, SCROW nRow, SCTAB nTab,
         }
         else
         {
-//          lcl_AttrArea( pDoc,nTab, nMemberStartCol+(SCCOL)nLevel,nRow, nTabEndCol,nRow, aItem );
             lcl_SetFrame( pDoc,nTab, nMemberStartCol+(SCCOL)nLevel,nRow, nTabEndCol,nRow, 20 );
             lcl_SetStyleById( pDoc,nTab, nMemberStartCol+(SCCOL)nLevel,nRow, nDataStartCol-1,nRow,
                                     STR_PIVOT_STYLE_TITLE );

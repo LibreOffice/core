@@ -1,14 +1,14 @@
 #*************************************************************************
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-# 
+#
 # Copyright 2008 by Sun Microsystems, Inc.
 #
 # OpenOffice.org - a multi-platform office productivity suite
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.8 $
+# $Revision: 1.8.90.1 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -51,16 +51,11 @@ PROJECTPCHSOURCE=..\pch\filt_pch
 
 SLOFILES =	\
         $(SLO)$/fapihelper.obj				\
-        $(SLO)$/fdumper.obj					\
-        $(SLO)$/fdumperdff.obj				\
-        $(SLO)$/fdumperole.obj				\
         $(SLO)$/fprogressbar.obj			\
         $(SLO)$/ftools.obj
 
 EXCEPTIONSFILES = \
-        $(SLO)$/fapihelper.obj				\
-        $(SLO)$/fdumper.obj					\
-        $(SLO)$/fdumperole.obj
+        $(SLO)$/fapihelper.obj
 
 # --- Targets -------------------------------------------------------
 

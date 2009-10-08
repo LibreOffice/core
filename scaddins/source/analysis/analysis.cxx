@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: analysis.cxx,v $
- * $Revision: 1.46 $
+ * $Revision: 1.46.20.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -687,7 +687,7 @@ sal_Int32 SAL_CALL AnalysisAddIn::getEomonth( constREFXPS& xOpt, sal_Int32 nDate
     else if( nNewMonth < 1 )
     {
         nNewMonth = -nNewMonth;
-        nYear = sal::static_int_cast<sal_uInt16>( nYear + ( nNewMonth / 12 ) );
+        nYear = sal::static_int_cast<sal_uInt16>( nYear - ( nNewMonth / 12 ) );
         nYear--;
         nNewMonth %= 12;
         nNewMonth = 12 - nNewMonth;

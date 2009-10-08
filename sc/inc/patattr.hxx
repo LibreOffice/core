@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: patattr.hxx,v $
- * $Revision: 1.14 $
+ * $Revision: 1.14.32.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -136,18 +136,18 @@ public:
                                 with text encoding RTL_TEXTENC_SYMBOL */
     BOOL                    IsSymbolFont() const;
 
-                            /** Create a FontToSubsFontConverter if needed for
-                                this pattern, else return 0.
-
-                                @param nFlags is the bit mask which shall be
-                                used for CreateFontToSubsFontConverter().
-
-                                The converter must be destroyed by the caller
-                                using DestroyFontToSubsFontConverter() which
-                                should be accomplished using the
-                                ScFontToSubsFontConverter_AutoPtr
-                             */
-    FontToSubsFontConverter GetSubsFontConverter( ULONG nFlags ) const;
+//UNUSED2008-05                          /** Create a FontToSubsFontConverter if needed for
+//UNUSED2008-05                              this pattern, else return 0.
+//UNUSED2008-05
+//UNUSED2008-05                              @param nFlags is the bit mask which shall be
+//UNUSED2008-05                              used for CreateFontToSubsFontConverter().
+//UNUSED2008-05
+//UNUSED2008-05                              The converter must be destroyed by the caller
+//UNUSED2008-05                              using DestroyFontToSubsFontConverter() which
+//UNUSED2008-05                              should be accomplished using the
+//UNUSED2008-05                              ScFontToSubsFontConverter_AutoPtr
+//UNUSED2008-05                           */
+//UNUSED2008-05  FontToSubsFontConverter GetSubsFontConverter( ULONG nFlags ) const;
 
     ULONG                   GetNumberFormat( SvNumberFormatter* ) const;
     ULONG                   GetNumberFormat( SvNumberFormatter* pFormatter,

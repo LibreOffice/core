@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: viewopti.hxx,v $
- * $Revision: 1.8 $
+ * $Revision: 1.8.32.3 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -90,9 +90,6 @@ public:
     const ScGridOptions&    operator=  ( const ScGridOptions& rCpy );
     int                     operator== ( const ScGridOptions& rOpt ) const;
     int                     operator!= ( const ScGridOptions& rOpt ) const { return !(operator==(rOpt)); }
-
-    friend SvStream&        operator>> ( SvStream& rStream, ScGridOptions& rOpt );
-    friend SvStream&        operator<< ( SvStream& rStream, const ScGridOptions& rOpt );
 };
 
 //==================================================================
@@ -128,10 +125,6 @@ public:
     int                     operator== ( const ScViewOptions& rOpt ) const;
     int                     operator!= ( const ScViewOptions& rOpt ) const { return !(operator==(rOpt)); }
 
-    friend SvStream&        operator>> ( SvStream& rStream, ScViewOptions& rOpt );
-
-    void                    Save(SvStream& rStream, BOOL bConfig = FALSE) const;
-
 private:
     BOOL            aOptArr     [MAX_OPT];
     ScVObjMode      aModeArr    [MAX_TYPE];
@@ -141,12 +134,6 @@ private:
     BOOL            bHideAutoSpell;
 };
 
-inline SvStream& operator<<( SvStream& rStream, const ScViewOptions& rOpt )
-{
-    rOpt.Save( rStream, FALSE );
-    return rStream;
-}
-
 //==================================================================
 // Item fuer Einstellungsdialog - Ansicht
 //==================================================================
@@ -155,7 +142,7 @@ class SC_DLLPUBLIC ScTpViewItem : public SfxPoolItem
 {
 public:
                 TYPEINFO();
-                ScTpViewItem( USHORT nWhich );
+//UNUSED2008-05  ScTpViewItem( USHORT nWhich );
                 ScTpViewItem( USHORT nWhich, const ScViewOptions& rOpt );
                 ScTpViewItem( const ScTpViewItem&  rItem );
                 ~ScTpViewItem();

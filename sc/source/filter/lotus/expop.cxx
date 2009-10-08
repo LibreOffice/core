@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: expop.cxx,v $
- * $Revision: 1.7 $
+ * $Revision: 1.7.32.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -43,7 +43,7 @@
 
 #include "exp_op.hxx"
 
-
+#if ENABLE_LOTUS123_EXPORT
 const USHORT ExportWK1::WK1MAXCOL = 255;
 const USHORT ExportWK1::WK1MAXROW = 8191;
 
@@ -411,6 +411,6 @@ FltError ExportWK1::Write()
 
     return eERR_OK;
 }
-
+#endif
 
 

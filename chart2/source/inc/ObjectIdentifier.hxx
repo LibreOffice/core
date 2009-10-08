@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: ObjectIdentifier.hxx,v $
- * $Revision: 1.6 $
+ * $Revision: 1.6.44.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -101,8 +101,6 @@ class ObjectIdentifier
     //where Type: getStringForType( ObjectType eType ) or other string
 
 public:
-    ObjectIdentifier();
-
     static rtl::OUString createClassifiedIdentifierForObject(
           const ::com::sun::star::uno::Reference<
                     ::com::sun::star::uno::XInterface >& xObject
@@ -141,12 +139,6 @@ public:
     static rtl::OUString createParticleForCoordinateSystem(
           const ::com::sun::star::uno::Reference<
                     ::com::sun::star::chart2::XCoordinateSystem >& xCooSys
-        , const ::com::sun::star::uno::Reference<
-                    ::com::sun::star::frame::XModel >& xChartModel );
-
-    static rtl::OUString createParticleForChartType(
-          const ::com::sun::star::uno::Reference<
-                    ::com::sun::star::chart2::XChartType >& xChartType
         , const ::com::sun::star::uno::Reference<
                     ::com::sun::star::frame::XModel >& xChartModel );
 

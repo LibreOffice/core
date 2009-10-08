@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: ftools.cxx,v $
- * $Revision: 1.20 $
+ * $Revision: 1.20.4.1 $
  *
  * This file is part of OpenOffice.org.
  *

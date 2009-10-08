@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: xichart.hxx,v $
- * $Revision: 1.14 $
+ * $Revision: 1.13.62.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -70,6 +70,9 @@ namespace com { namespace sun { namespace star {
         }
     }
 } } }
+
+struct XclObjLineData;
+struct XclObjFillData;
 
 // Common =====================================================================
 
@@ -291,10 +294,6 @@ public:
     inline explicit     XclImpChFrameBase() {}
     /** Creates a new frame object with specific default formatting. */
     explicit            XclImpChFrameBase( const XclChFormatInfo& rFmtInfo );
-    /** Creates a new frame object with the passed formatting. */
-    explicit            XclImpChFrameBase(
-                            const XclChLineFormat& rLineFmt,
-                            const XclChAreaFormat& rAreaFmt );
 
     /** Reads a frame formatting record (called by base class). */
     virtual void        ReadSubRecord( XclImpStream& rStrm );
@@ -312,6 +311,14 @@ public:
     inline bool         HasArea() const { return mxEscherFmt.is() || IsAutoArea() || mxAreaFmt->HasArea(); }
 
 protected:
+    /** Converts and writes the contained line formatting to the passed property set. */
+    void                ConvertLineBase( const XclImpChRoot& rRoot,
+                            ScfPropertySet& rPropSet, XclChObjectType eObjType,
+                            sal_uInt16 nFormatIdx = EXC_CHDATAFORMAT_UNKNOWN ) const;
+    /** Converts and writes the contained area formatting to the passed property set. */
+    void                ConvertAreaBase( const XclImpChRoot& rRoot,
+                            ScfPropertySet& rPropSet, XclChObjectType eObjType,
+                            sal_uInt16 nFormatIdx = EXC_CHDATAFORMAT_UNKNOWN ) const;
     /** Converts and writes the contained data to the passed property set. */
     void                ConvertFrameBase( const XclImpChRoot& rRoot,
                             ScfPropertySet& rPropSet, XclChObjectType eObjType,
@@ -337,15 +344,12 @@ public:
     explicit            XclImpChFrame(
                             const XclImpChRoot& rRoot,
                             XclChObjectType eObjType );
-    /** Creates a new frame object with the passed formatting. */
-    explicit            XclImpChFrame(
-                            const XclImpChRoot& rRoot,
-                            const XclChLineFormat& rLineFmt,
-                            const XclChAreaFormat& rAreaFmt,
-                            XclChObjectType eObjType );
 
     /** Reads the CHFRAME record (called by base class). */
     virtual void        ReadHeaderRecord( XclImpStream& rStrm );
+
+    /** Sets formatting from BIFF3-BIFF5 OBJ record, if own formatting is invisible. */
+    void                UpdateObjFrame( const XclObjLineData& rLineData, const XclObjFillData& rFillData );
 
     /** Converts and writes the contained data to the passed property set. */
     void                Convert( ScfPropertySet& rPropSet ) const;
@@ -654,10 +658,10 @@ public:
 
     /** Converts and writes the contained data to the passed property set. */
     void                Convert( ScfPropertySet& rPropSet, const XclChExtTypeInfo& rTypeInfo ) const;
-    /** Writes the area format for a data point in a series with automatic point colors. */
-    void                ConvertVarPoint( ScfPropertySet& rPropSet, sal_uInt16 nFormatIdx ) const;
     /** Writes the line format only, e.g. for trend lines or error bars. */
     void                ConvertLine( ScfPropertySet& rPropSet, XclChObjectType eObjType ) const;
+    /** Writes the area format only for the series or a data point. */
+    void                ConvertArea( ScfPropertySet& rPropSet, sal_uInt16 nFormatIdx ) const;
 
 private:
     /** Removes unused formatting (e.g. pie distance in a bar chart). */
@@ -1321,8 +1325,8 @@ public:
     /** Reads a CHDATAFORMAT group describing a series format or a data point format. */
     void                ReadChDataFormat( XclImpStream& rStrm );
 
-    /** Sets new chart background formatting. */
-    void                SetChartFrameFormat( const XclChLineFormat& rLineFmt, const XclChAreaFormat& rAreaFmt );
+    /** Sets formatting from BIFF3-BIFF5 OBJ record, if own formatting is invisible. */
+    void                UpdateObjFrame( const XclObjLineData& rLineData, const XclObjFillData& rFillData );
 
     /** Returns the specified chart type group. */
     XclImpChTypeGroupRef GetTypeGroup( sal_uInt16 nGroupIdx ) const;
@@ -1386,10 +1390,8 @@ public:
     /** Reads the complete chart substream (BOF/EOF block).
         @descr  The passed stream must be located in the BOF record of the chart substream. */
     void                ReadChartSubStream( XclImpStream& rStrm );
-    /** Sets new chart background formatting.
-        @descr  Used for BIFF5, where background formatting information is
-            contained in the chart OBJ record. */
-    void                SetChartFrameFormat( const XclChLineFormat& rLineFmt, const XclChAreaFormat& rAreaFmt );
+    /** Sets formatting from BIFF3-BIFF5 OBJ record, if own formatting is invisible. */
+    void                UpdateObjFrame( const XclObjLineData& rLineData, const XclObjFillData& rFillData );
 
     /** Returns the number of units on the progress bar needed for the chart. */
     sal_Size            GetProgressSize() const;

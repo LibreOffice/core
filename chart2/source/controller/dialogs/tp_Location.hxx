@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: tp_Location.hxx,v $
- * $Revision: 1.4 $
+ * $Revision: 1.4.44.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -48,7 +48,7 @@ namespace chart
 //-----------------------------------------------------------------------------
 /**
 */
-
+#ifdef LOCATION_PAGE
 class LocationTabPage : public svt::OWizardPage
 {
 public:
@@ -71,6 +71,7 @@ protected:
     ::com::sun::star::uno::Reference<
                        ::com::sun::star::uno::XComponentContext>    m_xCC;
 };
+#endif
 
 //.............................................................................
 } //namespace chart

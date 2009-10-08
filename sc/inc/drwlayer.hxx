@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: drwlayer.hxx,v $
- * $Revision: 1.21 $
+ * $Revision: 1.21.32.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -154,7 +154,6 @@ public:
                                     const ScAddress& rDestPos, const Rectangle& rDestRange );
 
     void            SetPageSize( USHORT nPageNo, const Size& rSize );
-    ULONG           GetDefTextHeight() const;
 
                     //  mirror or move between positive and negative positions for RTL
     void            MirrorRTL( SdrObject* pObj );

@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: chgviset.cxx,v $
- * $Revision: 1.8 $
+ * $Revision: 1.8.32.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -124,77 +124,6 @@ void ScChangeViewSettings::SetTheComment(const String& rString)
         pCommentSearcher = new utl::TextSearch( aSearchParam, *ScGlobal::pCharClass );
     }
 }
-
-void ScChangeViewSettings::Load( SvStream& rStream, USHORT nVer )
-{
-    ScReadHeader aHdr( rStream );
-
-    BYTE nByte;
-    UINT32 nDT;
-    rStream >> bShowIt;
-    rStream >> bIsDate;
-    rStream >> nByte; eDateMode = (ScChgsDateMode)nByte;
-    rStream >> nDT; aFirstDateTime.SetDate( nDT );
-    rStream >> nDT; aFirstDateTime.SetTime( nDT );
-    rStream >> nDT; aLastDateTime.SetDate( nDT );
-    rStream >> nDT; aLastDateTime.SetTime( nDT );
-    rStream >> bIsAuthor;
-    rStream >> bEveryoneButMe;
-    rStream.ReadByteString( aAuthorToShow, rStream.GetStreamCharSet() );
-    rStream >> bIsRange;
-    aRangeList.Load( rStream, nVer );
-    if ( aHdr.BytesLeft() )
-    {
-        rStream >> bShowAccepted;
-        rStream >> bShowRejected;
-    }
-    else
-    {
-        bShowAccepted = FALSE;
-        bShowRejected = FALSE;
-    }
-
-    // Zusaetzlich Kommentar-Informationen lesen (src509)
-    if ( aHdr.BytesLeft() )  //#59103#
-    {
-        rStream >> bIsComment;
-        rStream.ReadByteString( aComment, rStream.GetStreamCharSet() );
-    }
-    else
-    {
-        bIsComment = FALSE;
-        aComment.Erase();
-    }
-    SetTheComment(aComment);
-}
-
-void ScChangeViewSettings::Store( SvStream& rStream ) const
-{
-    ScWriteHeader aHdr( rStream, 42 );      // Groesse, wenn String und RangeList leer sind
-
-    rStream << bShowIt;
-    rStream << bIsDate;
-    rStream << (BYTE) eDateMode;
-    rStream << (UINT32) aFirstDateTime.GetDate();
-    rStream << (UINT32) aFirstDateTime.GetTime();
-    rStream << (UINT32) aLastDateTime.GetDate();
-    rStream << (UINT32) aLastDateTime.GetTime();
-    rStream << bIsAuthor;
-    rStream << bEveryoneButMe;
-    rStream.WriteByteString( aAuthorToShow, rStream.GetStreamCharSet() );
-    rStream << bIsRange;
-    aRangeList.Store( rStream );
-    rStream << bShowAccepted;
-    rStream << bShowRejected;
-
-    // Zusaetzlich Kommentar-Informationen schreiben (src509)
-    if(bIsComment || aComment.Len()>0) //#59103#
-    {
-        rStream << bIsComment;
-        rStream.WriteByteString( aComment, rStream.GetStreamCharSet() );
-    }
-}
-
 
 void ScChangeViewSettings::AdjustDateMode( const ScDocument& rDoc )
 {

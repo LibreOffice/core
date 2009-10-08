@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: tokenarray.hxx,v $
- * $Revision: 1.12 $
+ * $Revision: 1.12.32.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -112,8 +112,9 @@ public:
 
     BOOL    HasOpCode( OpCode ) const;
     BOOL    HasOpCodeRPN( OpCode ) const;
-    /// Token of type svIndex
-    BOOL    HasName() const;
+//UNUSED2008-05  /// Token of type svIndex
+//UNUSED2008-05  BOOL    HasName() const;
+
     /// Token of type svIndex or opcode ocColRowName
     BOOL    HasNameOrColRowName() const;
     /// Exactly and only one range (valid or deleted)

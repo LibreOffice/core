@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: Stripe.hxx,v $
- * $Revision: 1.5 $
+ * $Revision: 1.5.44.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -71,8 +71,6 @@ public:
     ::com::sun::star::drawing::Position3D GetPosition2() const { return m_aPoint2; }
     ::com::sun::star::drawing::Position3D GetPosition3() const { return m_aPoint3; }
     ::com::sun::star::drawing::Position3D GetPosition4() const { return m_aPoint4; }
-
-    ::com::sun::star::drawing::Direction3D GetDirectionTo4() const;
 
 private:
     ::com::sun::star::drawing::Position3D m_aPoint1;

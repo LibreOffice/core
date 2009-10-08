@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: expop2.cxx,v $
- * $Revision: 1.35 $
+ * $Revision: 1.35.14.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -144,7 +144,7 @@ ExportBiff8::ExportBiff8( XclExpRootData& rExpData, SvStream& rStrm ) :
     ExportBiff5( rExpData, rStrm )
 {
     pExcRoot->eDateiTyp = Biff8;
-    pExcRoot->pEscher = new XclEscher( GetDoc().GetTableCount(), *pExcRoot );
+    pExcRoot->pEscher = new XclEscher( GetRoot(), GetDoc().GetTableCount() );
 }
 
 

@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: dbnamdlg.cxx,v $
- * $Revision: 1.10 $
+ * $Revision: 1.9.30.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -81,7 +81,6 @@ public:
           rBtnHeader(rHdr), rBtnSize(rSize), rBtnFormat(rFmt), rBtnStrip(rStrip),
           rCurArea(rArea),
           bHeader(FALSE), bSize(FALSE), bFormat(FALSE), bDirty(FALSE) {}
-    void Clear();
     void Save();
     void Restore();
 
@@ -101,16 +100,6 @@ private:
     BOOL        bDirty:1;
 };
 
-
-
-//----------------------------------------------------------------------------
-
-void DBSaveData::Clear()
-{
-    aStr.Erase();
-    aArea = ScRange();
-    bHeader = bSize = bFormat = bStrip = bDirty = FALSE;
-}
 
 
 //----------------------------------------------------------------------------

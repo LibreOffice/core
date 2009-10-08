@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: xltools.cxx,v $
- * $Revision: 1.32 $
+ * $Revision: 1.31.32.3 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -426,16 +426,16 @@ rtl_TextEncoding XclTools::GetTextEncoding( sal_uInt16 nCodePage )
     return pEntry->meTextEnc;
 }
 
-sal_uInt16 XclTools::GetXclCodePage( rtl_TextEncoding eTextEnc )
-{
-    const XclCodePageEntry* pEntry = ::std::find_if( pCodePageTable, pCodePageTableEnd, XclCodePageEntry_TEPred( eTextEnc ) );
-    if( pEntry == pCodePageTableEnd )
-    {
-        DBG_ERROR1( "XclTools::GetXclCodePage - unsupported text encoding: %d", eTextEnc );
-        return 1252;
-    }
-    return pEntry->mnCodePage;
-}
+//UNUSED2008-05  sal_uInt16 XclTools::GetXclCodePage( rtl_TextEncoding eTextEnc )
+//UNUSED2008-05  {
+//UNUSED2008-05      const XclCodePageEntry* pEntry = ::std::find_if( pCodePageTable, pCodePageTableEnd, XclCodePageEntry_TEPred( eTextEnc ) );
+//UNUSED2008-05      if( pEntry == pCodePageTableEnd )
+//UNUSED2008-05      {
+//UNUSED2008-05          DBG_ERROR1( "XclTools::GetXclCodePage - unsupported text encoding: %d", eTextEnc );
+//UNUSED2008-05          return 1252;
+//UNUSED2008-05      }
+//UNUSED2008-05      return pEntry->mnCodePage;
+//UNUSED2008-05  }
 
 // font names -----------------------------------------------------------------
 

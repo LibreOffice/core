@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: xeformula.cxx,v $
- * $Revision: 1.27 $
+ * $Revision: 1.25.30.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -341,7 +341,7 @@ private:
     void                AdjustLastTokenClassForEastereggOp();
 
     void                AppendOpTokenId( sal_uInt8 nTokenId, sal_uInt8 nExpClass, sal_uInt8 nSpaces = 0 );
-    void                AppendFuncTokenId( sal_uInt16 nXclFuncIdx, sal_uInt8 nRetClass, sal_uInt8 nExpRetClass, sal_uInt8 nSpaces = 0 );
+//UNUSED2008-05  void                AppendFuncTokenId( sal_uInt16 nXclFuncIdx, sal_uInt8 nRetClass, sal_uInt8 nExpRetClass, sal_uInt8 nSpaces = 0 );
     void                AppendVarFuncTokenId( sal_uInt16 nXclFuncIdx, sal_uInt8 nRetClass, sal_uInt8 nExpRetClass, sal_uInt8 nParamCount, sal_uInt8 nSpaces = 0 );
 
     // token vector -----------------------------------------------------------
@@ -628,7 +628,7 @@ void XclExpFmlaCompImpl::AppendInlineArrays( ScfUInt8Vec& rExtensionTokens )
 
         if( meBiff == EXC_BIFF8 )
         {
-            rExtensionTokens.push_back( sal::static_int_cast<const sal_uInt8>( nMaxC - 1 ) );
+            rExtensionTokens.push_back( sal::static_int_cast<sal_uInt8>( nMaxC - 1 ) );
             rExtensionTokens.resize( rExtensionTokens.size() + 2 );
             ShortToSVBT16( static_cast< USHORT >( nMaxR - 1 ), &*(rExtensionTokens.end() - 2) );
         }
@@ -2015,12 +2015,12 @@ void XclExpFmlaCompImpl::AppendOpTokenId( sal_uInt8 nTokenId, sal_uInt8 nExpClas
     AdjustLastTokenClass( nExpClass );
 }
 
-void XclExpFmlaCompImpl::AppendFuncTokenId(
-        sal_uInt16 nXclFuncIdx, sal_uInt8 nRetClass, sal_uInt8 nExpRetClass, sal_uInt8 nSpaces )
-{
-    AppendOpTokenId( GetTokenId( EXC_TOKID_FUNC, nRetClass ), nExpRetClass, nSpaces );
-    Append( nXclFuncIdx );
-}
+//UNUSED2008-05  void XclExpFmlaCompImpl::AppendFuncTokenId(
+//UNUSED2008-05          sal_uInt16 nXclFuncIdx, sal_uInt8 nRetClass, sal_uInt8 nExpRetClass, sal_uInt8 nSpaces )
+//UNUSED2008-05  {
+//UNUSED2008-05      AppendOpTokenId( GetTokenId( EXC_TOKID_FUNC, nRetClass ), nExpRetClass, nSpaces );
+//UNUSED2008-05      Append( nXclFuncIdx );
+//UNUSED2008-05  }
 
 void XclExpFmlaCompImpl::AppendVarFuncTokenId(
         sal_uInt16 nXclFuncIdx, sal_uInt8 nRetClass, sal_uInt8 nExpRetClass,

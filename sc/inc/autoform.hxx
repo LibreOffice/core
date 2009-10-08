@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: autoform.hxx,v $
- * $Revision: 1.8 $
+ * $Revision: 1.8.32.3 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -245,7 +245,6 @@ public:
     void                        CopyItem( USHORT nToIndex, USHORT nFromIndex, USHORT nWhich );
 
     const ScNumFormatAbbrev&    GetNumFormat( USHORT nIndex ) const;
-    void                        SetNumFormat( USHORT nIndex, const ScNumFormatAbbrev& rNumFormat );
 
     BOOL                        IsEqualData( USHORT nIndex1, USHORT nIndex2 ) const;
 

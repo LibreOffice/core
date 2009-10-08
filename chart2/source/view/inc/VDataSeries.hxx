@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: VDataSeries.hxx,v $
- * $Revision: 1.22 $
+ * $Revision: 1.21.8.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -86,7 +86,7 @@ public:
     void setCategoryXAxis();
     void setParticle( const rtl::OUString& rSeriesParticle );
     void setGlobalSeriesIndex( sal_Int32 nGlobalSeriesIndex );
-    void setDiagramReferenceSize( const ::com::sun::star::awt::Size & rDiagramRefSize );
+    void setPageReferenceSize( const ::com::sun::star::awt::Size & rPageRefSize );
 
     sal_Int32   getTotalPointCount() const;
     double      getX( sal_Int32 index ) const;

@@ -6,8 +6,8 @@
  *
  * OpenOffice.org - a multi-platform office productivity suite
  *
- * $RCSfile: OEnumeration.cxx,v $
- * $Revision: 1.4 $
+ * $RCSfile: WrappedAutomaticPositionProperties.hxx,v $
+ * $Revision: 1.1.2.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -28,40 +28,25 @@
  *
  ************************************************************************/
 
-// MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_chart2.hxx"
-#include "OEnumeration.hxx"
+#ifndef CHART_WRAPPED_AUTOMATICPOSITION_PROPERTIES_HXX
+#define CHART_WRAPPED_AUTOMATICPOSITION_PROPERTIES_HXX
 
-using namespace ::com::sun::star;
+#include "WrappedProperty.hxx"
+#include <vector>
 
-namespace comphelper
+//.............................................................................
+namespace chart
+{
+namespace wrapper
 {
 
-OEnumeration::OEnumeration(
-    const ::std::vector< uno::Any > & rContainer ) :
-        m_aContainer( rContainer ),
-        m_aIter( m_aContainer.begin() )
-{}
-
-OEnumeration::~OEnumeration()
-{}
-
-sal_Bool SAL_CALL OEnumeration::hasMoreElements()
-    throw (uno::RuntimeException)
+class WrappedAutomaticPositionProperties
 {
-    return ! m_aContainer.empty();
-}
+public:
+    static void addProperties( ::std::vector< ::com::sun::star::beans::Property >& rOutProperties );
+    static void addWrappedProperties( std::vector< WrappedProperty* >& rList );
+};
 
-uno::Any SAL_CALL OEnumeration::nextElement()
-    throw (container::NoSuchElementException,
-           lang::WrappedTargetException,
-           uno::RuntimeException)
-{
-    if( m_aIter == m_aContainer.end())
-        throw container::NoSuchElementException();
-
-    return *m_aIter++;
-}
-
-
-} //  namespace comphelper
+} //namespace wrapper
+} //namespace chart
+#endif

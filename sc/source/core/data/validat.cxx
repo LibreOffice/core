@@ -129,74 +129,8 @@ ScValidationData::ScValidationData( ScDocument* pDocument, const ScValidationDat
     //  Formeln wirklich kopiert
 }
 
-ScValidationData::ScValidationData( SvStream& rStream, ScMultipleReadHeader& rHdr,
-                                    ScDocument* pDocument ) :
-    ScConditionEntry( rStream, rHdr, pDocument ),
-    mnListType( ValidListType::UNSORTED )   // not imported/exported
-{
-    //  im Datei-Header sind getrennte Eintraege fuer ScConditionEntry und ScValidationData
-
-    rHdr.StartEntry();
-
-    //  1) Key
-    //  2) eDataMode
-    //  3) bShowInput
-    //  4) aInputTitle
-    //  5) aInputMessage
-    //  6) bShowError
-    //  7) aErrorTitle
-    //  8) aErrorMessage
-    //  9) eErrorStyle
-
-    USHORT nDummy;
-    rStream >> nKey;
-    rStream >> nDummy;
-    eDataMode = (ScValidationMode) nDummy;
-    rStream >> bShowInput;
-    rStream.ReadByteString( aInputTitle, rStream.GetStreamCharSet() );
-    rStream.ReadByteString( aInputMessage, rStream.GetStreamCharSet() );
-    rStream >> bShowError;
-    rStream.ReadByteString( aErrorTitle, rStream.GetStreamCharSet() );
-    rStream.ReadByteString( aErrorMessage, rStream.GetStreamCharSet() );
-    rStream >> nDummy;
-    eErrorStyle = (ScValidErrorStyle) nDummy;
-
-    rHdr.EndEntry();
-}
-
 ScValidationData::~ScValidationData()
 {
-}
-
-void ScValidationData::Store(SvStream& rStream, ScMultipleWriteHeader& rHdr) const
-{
-    //  im Datei-Header sind getrennte Eintraege fuer ScConditionEntry und ScValidationData
-
-    StoreCondition( rStream, rHdr );
-
-    rHdr.StartEntry();
-
-    //  1) Key
-    //  2) eDataMode
-    //  3) bShowInput
-    //  4) aInputTitle
-    //  5) aInputMessage
-    //  6) bShowError
-    //  7) aErrorTitle
-    //  8) aErrorMessage
-    //  9) eErrorStyle
-
-    rStream << nKey;
-    rStream << (USHORT) eDataMode;
-    rStream << bShowInput;
-    rStream.WriteByteString( aInputTitle, rStream.GetStreamCharSet() );
-    rStream.WriteByteString( aInputMessage, rStream.GetStreamCharSet() );
-    rStream << bShowError;
-    rStream.WriteByteString( aErrorTitle, rStream.GetStreamCharSet() );
-    rStream.WriteByteString( aErrorMessage, rStream.GetStreamCharSet() );
-    rStream << (USHORT) eErrorStyle;
-
-    rHdr.EndEntry();
 }
 
 BOOL ScValidationData::IsEmpty() const
@@ -973,41 +907,6 @@ ScValidationData* ScValidationDataList::GetData( sal_uInt32 nKey )
 
     DBG_ERROR("ScValidationDataList: Eintrag nicht gefunden");
     return NULL;
-}
-
-void ScValidationDataList::Load( SvStream& rStream, ScDocument* pDocument )
-{
-    ScMultipleReadHeader aHdr( rStream );
-
-    USHORT nNewCount;
-    rStream >> nNewCount;
-
-    for (USHORT i=0; i<nNewCount; i++)
-    {
-        ScValidationData* pNew = new ScValidationData( rStream, aHdr, pDocument );
-        InsertNew( pNew );
-    }
-}
-
-void ScValidationDataList::Store( SvStream& rStream ) const
-{
-    USHORT i;
-    ScMultipleWriteHeader aHdr( rStream );
-
-    USHORT nCount = Count();
-    USHORT nUsed = 0;
-    for (i=0; i<nCount; i++)
-        if ((*this)[i]->IsUsed())
-            ++nUsed;
-
-    rStream << nUsed;       // Anzahl der gespeicherten
-
-    for (i=0; i<nCount; i++)
-    {
-        const ScValidationData* pForm = (*this)[i];
-        if (pForm->IsUsed())
-            pForm->Store( rStream, aHdr );
-    }
 }
 
 void ScValidationDataList::ResetUsed()

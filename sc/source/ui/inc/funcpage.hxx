@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: funcpage.hxx,v $
- * $Revision: 1.4 $
+ * $Revision: 1.4.32.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -72,10 +72,7 @@ protected:
     virtual long    PreNotify( NotifyEvent& rNEvt );
 
 public:
-                    ScListBox( Window* pParent, WinBits nWinStyle = WB_BORDER );
-
                     ScListBox( Window* pParent, const ResId& rResId );
-
 };
 
 

@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: xlchart.cxx,v $
- * $Revision: 1.12 $
+ * $Revision: 1.11.62.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -36,6 +36,7 @@
 #include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/awt/Size.hpp>
 #include <com/sun/star/awt/Gradient.hpp>
+#include <com/sun/star/drawing/Hatch.hpp>
 #include <com/sun/star/drawing/LineDash.hpp>
 #include <com/sun/star/drawing/LineStyle.hpp>
 #include <com/sun/star/drawing/FillStyle.hpp>
@@ -451,8 +452,8 @@ static const XclChFormatInfo spFmtInfos[] =
     { EXC_CHOBJTYPE_FLOOR3D,        EXC_CHPROPMODE_COMMON,       EXC_COLOR_CHWINDOWTEXT, EXC_CHLINEFORMAT_HAIR,   23,                     EXC_CHFRAMETYPE_AUTO,      true,  false, true  },
     { EXC_CHOBJTYPE_TEXT,           EXC_CHPROPMODE_COMMON,       EXC_COLOR_CHWINDOWTEXT, EXC_CHLINEFORMAT_HAIR,   EXC_COLOR_CHWINDOWBACK, EXC_CHFRAMETYPE_INVISIBLE, false, true,  true  },
     { EXC_CHOBJTYPE_LEGEND,         EXC_CHPROPMODE_COMMON,       EXC_COLOR_CHWINDOWTEXT, EXC_CHLINEFORMAT_HAIR,   EXC_COLOR_CHWINDOWBACK, EXC_CHFRAMETYPE_AUTO,      true,  true,  true  },
-    { EXC_CHOBJTYPE_LINEARSERIES,   EXC_CHPROPMODE_LINEARSERIES, EXC_COLOR_CHWINDOWTEXT, EXC_CHLINEFORMAT_SINGLE, EXC_COLOR_CHWINDOWBACK, EXC_CHFRAMETYPE_AUTO,      false, false, false },
-    { EXC_CHOBJTYPE_FILLEDSERIES,   EXC_CHPROPMODE_FILLEDSERIES, EXC_COLOR_CHBORDERAUTO, EXC_CHLINEFORMAT_SINGLE, EXC_COLOR_CHWINDOWBACK, EXC_CHFRAMETYPE_AUTO,      false, false, true  },
+    { EXC_CHOBJTYPE_LINEARSERIES,   EXC_CHPROPMODE_LINEARSERIES, 0xFFFF,                 EXC_CHLINEFORMAT_SINGLE, EXC_COLOR_CHWINDOWBACK, EXC_CHFRAMETYPE_AUTO,      false, false, false },
+    { EXC_CHOBJTYPE_FILLEDSERIES,   EXC_CHPROPMODE_FILLEDSERIES, EXC_COLOR_CHBORDERAUTO, EXC_CHLINEFORMAT_SINGLE, 0xFFFF,                 EXC_CHFRAMETYPE_AUTO,      false, false, true  },
     { EXC_CHOBJTYPE_AXISLINE,       EXC_CHPROPMODE_COMMON,       EXC_COLOR_CHWINDOWTEXT, EXC_CHLINEFORMAT_HAIR,   EXC_COLOR_CHWINDOWBACK, EXC_CHFRAMETYPE_AUTO,      false, false, false },
     { EXC_CHOBJTYPE_GRIDLINE,       EXC_CHPROPMODE_COMMON,       EXC_COLOR_CHWINDOWTEXT, EXC_CHLINEFORMAT_HAIR,   EXC_COLOR_CHWINDOWBACK, EXC_CHFRAMETYPE_INVISIBLE, false, true,  false  },
     { EXC_CHOBJTYPE_TRENDLINE,      EXC_CHPROPMODE_COMMON,       EXC_COLOR_CHWINDOWTEXT, EXC_CHLINEFORMAT_DOUBLE, EXC_COLOR_CHWINDOWBACK, EXC_CHFRAMETYPE_INVISIBLE, false, false, false },
@@ -656,6 +657,10 @@ const sal_Char* const sppcAreaNamesFilled[] = { "FillStyle", "Color", "Transpare
 const sal_Char* const sppcGradNamesCommon[] = {  "FillStyle", "FillGradientName", 0 };
 /** Property names for gradient area style in filled series objects. */
 const sal_Char* const sppcGradNamesFilled[] = {  "FillStyle", "GradientName", 0 };
+/** Property names for hatch area style in common objects. */
+const sal_Char* const sppcHatchNamesCommon[] = { "FillStyle", "FillHatchName", "FillColor", "FillBackground", 0 };
+/** Property names for hatch area style in filled series objects. */
+const sal_Char* const sppcHatchNamesFilled[] = { "FillStyle", "HatchName", "Color", "FillBackground", 0 };
 /** Property names for bitmap area style. */
 const sal_Char* const sppcBitmapNames[] = { "FillStyle", "FillBitmapName", "FillBitmapMode", 0 };
 
@@ -677,6 +682,8 @@ XclChPropSetHelper::XclChPropSetHelper() :
     maAreaHlpFilled( sppcAreaNamesFilled ),
     maGradHlpCommon( sppcGradNamesCommon ),
     maGradHlpFilled( sppcGradNamesFilled ),
+    maHatchHlpCommon( sppcHatchNamesCommon ),
+    maHatchHlpFilled( sppcHatchNamesFilled ),
     maBitmapHlp( sppcBitmapNames ),
     maRotationHlp( sppcRotationNames ),
     maLegendHlp( sppcLegendNames )
@@ -785,7 +792,7 @@ bool XclChPropSetHelper::ReadAreaProperties( XclChAreaFormat& rAreaFmt,
 
 void XclChPropSetHelper::ReadEscherProperties(
         XclChEscherFormat& rEscherFmt, XclChPicFormat& rPicFmt,
-        XclChObjectTable& rGradientTable, XclChObjectTable& rBitmapTable,
+        XclChObjectTable& rGradientTable, XclChObjectTable& rHatchTable, XclChObjectTable& rBitmapTable,
         const ScfPropertySet& rPropSet, XclChPropertyMode ePropMode )
 {
     namespace cssd = ::com::sun::star::drawing;
@@ -840,6 +847,23 @@ void XclChPropSetHelper::ReadEscherProperties(
         }
         break;
         case cssd::FillStyle_HATCH:
+        {
+            // extract hatch from global hatch table
+            OUString aHatchName;
+            bool bFillBackground;
+            ScfPropSetHelper& rHatchHlp = GetHatchHelper( ePropMode );
+            rHatchHlp.ReadFromPropertySet( rPropSet );
+            rHatchHlp >> eApiStyle >> aHatchName >> aColor >> bFillBackground;
+            cssd::Hatch aHatch;
+            if( rHatchTable.GetObject( aHatchName ) >>= aHatch )
+            {
+                // convert to Escher properties
+                rEscherFmt.mxEscherSet.reset( new EscherPropertyContainer );
+                rEscherFmt.mxEscherSet->CreateEmbeddedHatchProperties( aHatch, aColor, bFillBackground );
+                rPicFmt.mnBmpMode = EXC_CHPICFORMAT_STACK;
+            }
+        }
+        break;
         case cssd::FillStyle_BITMAP:
         {
             // extract bitmap URL from global bitmap table
@@ -913,7 +937,7 @@ void XclChPropSetHelper::ReadMarkerProperties(
 sal_uInt16 XclChPropSetHelper::ReadRotationProperties( const ScfPropertySet& rPropSet )
 {
     // chart2 handles rotation as double in the range [0,360)
-    double fAngle;
+    double fAngle(0);
     bool bStacked;
     maRotationHlp.ReadFromPropertySet( rPropSet );
     maRotationHlp >> fAngle >> bStacked;
@@ -1054,7 +1078,7 @@ void XclChPropSetHelper::WriteAreaProperties( ScfPropertySet& rPropSet,
 }
 
 void XclChPropSetHelper::WriteEscherProperties( ScfPropertySet& rPropSet,
-        XclChObjectTable& rGradientTable, XclChObjectTable& rBitmapTable,
+        XclChObjectTable& rGradientTable, XclChObjectTable& /*rHatchTable*/, XclChObjectTable& rBitmapTable,
         const XclChEscherFormat& rEscherFmt, const XclChPicFormat& rPicFmt,
         XclChPropertyMode ePropMode )
 {
@@ -1253,6 +1277,17 @@ ScfPropSetHelper& XclChPropSetHelper::GetGradientHelper( XclChPropertyMode eProp
     return maGradHlpCommon;
 }
 
+ScfPropSetHelper& XclChPropSetHelper::GetHatchHelper( XclChPropertyMode ePropMode )
+{
+    switch( ePropMode )
+    {
+        case EXC_CHPROPMODE_COMMON:         return maHatchHlpCommon;
+        case EXC_CHPROPMODE_FILLEDSERIES:   return maHatchHlpFilled;
+        default:    DBG_ERRORFILE( "XclChPropSetHelper::GetHatchHelper - unknown property mode" );
+    }
+    return maHatchHlpCommon;
+}
+
 // ============================================================================
 
 XclChRootData::XclChRootData() :
@@ -1283,6 +1318,8 @@ void XclChRootData::InitConversion( XChartDocRef xChartDoc )
         xFactory, SERVICE_DRAWING_DASHTABLE, CREATE_OUSTRING( "Excel line dash " ) ) );
     mxGradientTable.reset( new XclChObjectTable(
         xFactory, SERVICE_DRAWING_GRADIENTTABLE, CREATE_OUSTRING( "Excel gradient " ) ) );
+    mxHatchTable.reset( new XclChObjectTable(
+        xFactory, SERVICE_DRAWING_HATCHTABLE, CREATE_OUSTRING( "Excel hatch " ) ) );
     mxBitmapTable.reset( new XclChObjectTable(
         xFactory, SERVICE_DRAWING_BITMAPTABLE, CREATE_OUSTRING( "Excel bitmap " ) ) );
 }
@@ -1291,6 +1328,7 @@ void XclChRootData::FinishConversion()
 {
     // forget formatting object tables
     mxBitmapTable.reset();
+    mxHatchTable.reset();
     mxGradientTable.reset();
     mxLineDashTable.reset();
     // forget chart document reference

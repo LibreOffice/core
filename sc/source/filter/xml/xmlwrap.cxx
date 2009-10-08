@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: xmlwrap.cxx,v $
- * $Revision: 1.70 $
+ * $Revision: 1.69.32.3 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -96,34 +96,34 @@ ScXMLImportWrapper::ScXMLImportWrapper(ScDocument& rD, SfxMedium* pM, const uno:
     DBG_ASSERT( pMedium || xStorage.is(), "ScXMLImportWrapper: Medium or Storage must be set" );
 }
 
-uno::Reference <task::XStatusIndicator> ScXMLImportWrapper::GetStatusIndicator(
-    uno::Reference < frame::XModel> & rModel)
-{
-    DBG_ERROR( "The status indicator from medium must be used!" );
-
-    uno::Reference<task::XStatusIndicator> xStatusIndicator;
-
-    if (rModel.is())
-    {
-        uno::Reference<frame::XController> xController( rModel->getCurrentController());
-        if( xController.is())
-        {
-            uno::Reference<task::XStatusIndicatorFactory> xFactory( xController->getFrame(), uno::UNO_QUERY );
-            if( xFactory.is())
-            {
-                try
-                {
-                    xStatusIndicator.set(xFactory->createStatusIndicator());
-                }
-                catch( lang::DisposedException e )
-                {
-                    DBG_ERROR("Exception while trying to get a Status Indicator");
-                }
-            }
-        }
-    }
-    return xStatusIndicator;
-}
+//UNUSED2008-05  uno::Reference <task::XStatusIndicator> ScXMLImportWrapper::GetStatusIndicator(
+//UNUSED2008-05          uno::Reference < frame::XModel> & rModel)
+//UNUSED2008-05  {
+//UNUSED2008-05      DBG_ERROR( "The status indicator from medium must be used!" );
+//UNUSED2008-05
+//UNUSED2008-05      uno::Reference<task::XStatusIndicator> xStatusIndicator;
+//UNUSED2008-05
+//UNUSED2008-05      if (rModel.is())
+//UNUSED2008-05      {
+//UNUSED2008-05          uno::Reference<frame::XController> xController( rModel->getCurrentController());
+//UNUSED2008-05          if ( xController.is())
+//UNUSED2008-05          {
+//UNUSED2008-05              uno::Reference<task::XStatusIndicatorFactory> xFactory( xController->getFrame(), uno::UNO_QUERY );
+//UNUSED2008-05              if ( xFactory.is())
+//UNUSED2008-05              {
+//UNUSED2008-05                  try
+//UNUSED2008-05                  {
+//UNUSED2008-05                      xStatusIndicator.set(xFactory->createStatusIndicator());
+//UNUSED2008-05                  }
+//UNUSED2008-05                  catch ( lang::DisposedException e )
+//UNUSED2008-05                  {
+//UNUSED2008-05                      DBG_ERROR("Exception while trying to get a Status Indicator");
+//UNUSED2008-05                  }
+//UNUSED2008-05              }
+//UNUSED2008-05          }
+//UNUSED2008-05      }
+//UNUSED2008-05      return xStatusIndicator;
+//UNUSED2008-05  }
 
 uno::Reference <task::XStatusIndicator> ScXMLImportWrapper::GetStatusIndicator()
 {

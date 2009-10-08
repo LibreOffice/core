@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: xechart.cxx,v $
- * $Revision: 1.11 $
+ * $Revision: 1.10.62.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -35,6 +35,7 @@
 
 #include <com/sun/star/i18n/XBreakIterator.hpp>
 #include <com/sun/star/i18n/ScriptType.hpp>
+#include <com/sun/star/drawing/FillStyle.hpp>
 #include <com/sun/star/chart2/XChartDocument.hpp>
 #include <com/sun/star/chart2/XDiagram.hpp>
 #include <com/sun/star/chart2/XCoordinateSystemContainer.hpp>
@@ -42,6 +43,7 @@
 #include <com/sun/star/chart2/XDataSeriesContainer.hpp>
 #include <com/sun/star/chart2/XRegressionCurveContainer.hpp>
 #include <com/sun/star/chart2/XTitled.hpp>
+#include <com/sun/star/chart2/XColorScheme.hpp>
 #include <com/sun/star/chart2/data/XDataSource.hpp>
 #include <com/sun/star/chart2/AxisType.hpp>
 #include <com/sun/star/chart2/CurveStyle.hpp>
@@ -91,6 +93,7 @@ using ::com::sun::star::chart2::XLegend;
 using ::com::sun::star::chart2::XTitled;
 using ::com::sun::star::chart2::XTitle;
 using ::com::sun::star::chart2::XFormattedString;
+using ::com::sun::star::chart2::XColorScheme;
 
 using ::com::sun::star::chart2::data::XDataSource;
 using ::com::sun::star::chart2::data::XLabeledDataSequence;
@@ -231,7 +234,7 @@ void XclExpChRoot::ConvertEscherFormat(
         const ScfPropertySet& rPropSet, XclChPropertyMode ePropMode ) const
 {
     GetChartPropSetHelper().ReadEscherProperties( rEscherFmt, rPicFmt,
-        mxChData->GetGradientTable(), mxChData->GetBitmapTable(), rPropSet, ePropMode );
+        mxChData->GetGradientTable(), mxChData->GetHatchTable(), mxChData->GetBitmapTable(), rPropSet, ePropMode );
 }
 
 sal_uInt16 XclExpChRoot::ConvertFont( const ScfPropertySet& rPropSet, sal_Int16 nScript ) const
@@ -311,8 +314,8 @@ void XclExpChLineFormat::Convert( const XclExpChRoot& rRoot,
     rRoot.ConvertLineFormat( maData, rPropSet, rFmtInfo.mePropMode );
     if( HasLine() )
     {
-        // detect system color, set color identifier
-        if( rRoot.IsSystemColor( maData.maColor, rFmtInfo.mnAutoLineColorIdx ) )
+        // detect system color, set color identifier (TODO: detect automatic series line)
+        if( (eObjType != EXC_CHOBJTYPE_LINEARSERIES) && rRoot.IsSystemColor( maData.maColor, rFmtInfo.mnAutoLineColorIdx ) )
         {
             // store color index from automatic format data
             mnColorId = XclExpPalette::GetColorIdFromIndex( rFmtInfo.mnAutoLineColorIdx );
@@ -380,8 +383,8 @@ bool XclExpChAreaFormat::Convert( const XclExpChRoot& rRoot,
     if( HasArea() )
     {
         bool bSolid = maData.mnPattern == EXC_PATT_SOLID;
-        // detect system color, set color identifier
-        if( rRoot.IsSystemColor( maData.maPattColor, rFmtInfo.mnAutoPattColorIdx ) )
+        // detect system color, set color identifier (TODO: detect automatic series area)
+        if( (eObjType != EXC_CHOBJTYPE_FILLEDSERIES) && rRoot.IsSystemColor( maData.maPattColor, rFmtInfo.mnAutoPattColorIdx ) )
         {
             // store color index from automatic format data
             mnPattColorId = XclExpPalette::GetColorIdFromIndex( rFmtInfo.mnAutoPattColorIdx );
@@ -686,7 +689,7 @@ sal_uInt16 XclExpChSourceLink::ConvertDataSequence( Reference< XDataSequence > x
             }
             mxLinkFmla = GetFormulaCompiler().CreateFormula( EXC_FMLATYPE_CHART, aNewScRanges );
             maData.mnLinkType = EXC_CHSRCLINK_WORKSHEET;
-            nValueCount = limit_cast< sal_uInt16 >( aScRanges.GetCellCount() );
+            nValueCount = ulimit_cast< sal_uInt16 >( aScRanges.GetCellCount(), EXC_CHDATAFORMAT_MAXPOINTCOUNT );
         }
     }
     return nValueCount;
@@ -1466,7 +1469,8 @@ XclExpChSeries::XclExpChSeries( const XclExpChRoot& rRoot, sal_uInt16 nSeriesIdx
         mxBubbleLink.reset( new XclExpChSourceLink( GetChRoot(), EXC_CHSRCLINK_BUBBLES ) );
 }
 
-bool XclExpChSeries::ConvertDataSeries( Reference< XDataSeries > xDataSeries,
+bool XclExpChSeries::ConvertDataSeries(
+        Reference< XDiagram > xDiagram, Reference< XDataSeries > xDataSeries,
         const XclChExtTypeInfo& rTypeInfo, sal_uInt16 nGroupIdx, sal_uInt16 nFormatIdx )
 {
     bool bOk = false;
@@ -1524,20 +1528,51 @@ bool XclExpChSeries::ConvertDataSeries( Reference< XDataSeries > xDataSeries,
             CreateErrorBars( aSeriesProp, EXC_CHPROP_ERRORBARX, EXC_CHSERERR_XPLUS, EXC_CHSERERR_XMINUS );
             CreateErrorBars( aSeriesProp, EXC_CHPROP_ERRORBARY, EXC_CHSERERR_YPLUS, EXC_CHSERERR_YMINUS );
 
-            // data point formatting
-            Sequence< sal_Int32 > aPointIndexes;
-            if( (maData.mnValueCount > 0) && aSeriesProp.GetProperty( aPointIndexes, EXC_CHPROP_ATTRIBDATAPOINTS ) )
+            if( maData.mnValueCount > 0 )
             {
-                const sal_Int32* pnBeg = aPointIndexes.getConstArray();
-                const sal_Int32* pnEnd = pnBeg + aPointIndexes.getLength();
-                const sal_Int32 nMaxPointIdx = ::std::min< sal_Int32 >( maData.mnValueCount - 1, EXC_CHDATAFORMAT_MAXPOINT );
-                for( const sal_Int32* pnIt = pnBeg; (pnIt != pnEnd) && (*pnIt <= nMaxPointIdx); ++pnIt )
+                const sal_Int32 nMaxPointCount = maData.mnValueCount;
+
+                /*  #i91063# Create missing fill properties in pie/doughnut charts.
+                    If freshly created (never saved to ODF), these charts show
+                    varying point colors but do not return these points via API. */
+                if( xDiagram.is() && (rTypeInfo.meTypeCateg == EXC_CHTYPECATEG_PIE) )
                 {
-                    aPointPos.mnPointIdx = static_cast< sal_uInt16 >( *pnIt );
-                    ScfPropertySet aPointProp = lclGetPointPropSet( xDataSeries, *pnIt );
-                    XclExpChDataFormatRef xPointFmt( new XclExpChDataFormat( GetChRoot(), aPointPos, nFormatIdx ) );
-                    xPointFmt->ConvertDataSeries( aPointProp, rTypeInfo );
-                    maPointFmts.AppendRecord( xPointFmt );
+                    Reference< XColorScheme > xColorScheme = xDiagram->getDefaultColorScheme();
+                    if( xColorScheme.is() )
+                    {
+                        const OUString aFillStyleName = CREATE_OUSTRING( "FillStyle" );
+                        const OUString aColorName = CREATE_OUSTRING( "Color" );
+                        namespace csscd = ::com::sun::star::drawing;
+                        for( sal_Int32 nPointIdx = 0; nPointIdx < nMaxPointCount; ++nPointIdx )
+                        {
+                            aPointPos.mnPointIdx = static_cast< sal_uInt16 >( nPointIdx );
+                            ScfPropertySet aPointProp = lclGetPointPropSet( xDataSeries, nPointIdx );
+                            // test that the point fill style is solid, but no color is set
+                            csscd::FillStyle eFillStyle = csscd::FillStyle_NONE;
+                            if( aPointProp.GetProperty( eFillStyle, aFillStyleName ) &&
+                                (eFillStyle == csscd::FillStyle_SOLID) &&
+                                !aPointProp.HasProperty( aColorName ) )
+                            {
+                                aPointProp.SetProperty( aColorName, xColorScheme->getColorByIndex( nPointIdx ) );
+                            }
+                        }
+                    }
+                }
+
+                // data point formatting
+                Sequence< sal_Int32 > aPointIndexes;
+                if( aSeriesProp.GetProperty( aPointIndexes, EXC_CHPROP_ATTRIBDATAPOINTS ) && aPointIndexes.hasElements() )
+                {
+                    const sal_Int32* pnBeg = aPointIndexes.getConstArray();
+                    const sal_Int32* pnEnd = pnBeg + aPointIndexes.getLength();
+                    for( const sal_Int32* pnIt = pnBeg; (pnIt != pnEnd) && (*pnIt < nMaxPointCount); ++pnIt )
+                    {
+                        aPointPos.mnPointIdx = static_cast< sal_uInt16 >( *pnIt );
+                        ScfPropertySet aPointProp = lclGetPointPropSet( xDataSeries, *pnIt );
+                        XclExpChDataFormatRef xPointFmt( new XclExpChDataFormat( GetChRoot(), aPointPos, nFormatIdx ) );
+                        xPointFmt->ConvertDataSeries( aPointProp, rTypeInfo );
+                        maPointFmts.AppendRecord( xPointFmt );
+                    }
                 }
             }
         }
@@ -1946,7 +1981,8 @@ void XclExpChTypeGroup::ConvertType(
     }
 }
 
-void XclExpChTypeGroup::ConvertSeries( Reference< XChartType > xChartType,
+void XclExpChTypeGroup::ConvertSeries(
+        Reference< XDiagram > xDiagram, Reference< XChartType > xChartType,
         sal_Int32 nGroupAxesSetIdx, bool bPercent, bool bConnectBars )
 {
     Reference< XDataSeriesContainer > xSeriesCont( xChartType, UNO_QUERY );
@@ -2008,7 +2044,7 @@ void XclExpChTypeGroup::ConvertSeries( Reference< XChartType > xChartType,
                 if( maTypeInfo.meTypeId == EXC_CHTYPEID_STOCK )
                     CreateAllStockSeries( xChartType, *aIt );
                 else
-                    CreateDataSeries( *aIt );
+                    CreateDataSeries( xDiagram, *aIt );
             }
         }
     }
@@ -2045,13 +2081,14 @@ sal_uInt16 XclExpChTypeGroup::GetFreeFormatIdx() const
     return static_cast< sal_uInt16 >( maSeries.GetSize() );
 }
 
-void XclExpChTypeGroup::CreateDataSeries( Reference< XDataSeries > xDataSeries )
+void XclExpChTypeGroup::CreateDataSeries(
+        Reference< XDiagram > xDiagram, Reference< XDataSeries > xDataSeries )
 {
     // let chart create series object with correct series index
     XclExpChSeriesRef xSeries = GetChartData().CreateSeries();
     if( xSeries.is() )
     {
-        if( xSeries->ConvertDataSeries( xDataSeries, maTypeInfo, GetGroupIdx(), GetFreeFormatIdx() ) )
+        if( xSeries->ConvertDataSeries( xDiagram, xDataSeries, maTypeInfo, GetGroupIdx(), GetFreeFormatIdx() ) )
             maSeries.AppendRecord( xSeries );
         else
             GetChartData().RemoveLastSeries();
@@ -2485,11 +2522,11 @@ sal_uInt16 XclExpChAxesSet::Convert( Reference< XDiagram > xDiagram, sal_uInt16 
                     XclExpChTypeGroupRef xLastGroup = GetLastTypeGroup();
                     if( xLastGroup.is() && !(xTypeGroup->IsCombinable2d() && xLastGroup->IsCombinable2d()) )
                     {
-                        xLastGroup->ConvertSeries( *pIt, nApiAxesSetIdx, bPercent, bConnectBars );
+                        xLastGroup->ConvertSeries( xDiagram, *pIt, nApiAxesSetIdx, bPercent, bConnectBars );
                     }
                     else
                     {
-                        xTypeGroup->ConvertSeries( *pIt, nApiAxesSetIdx, bPercent, bConnectBars );
+                        xTypeGroup->ConvertSeries( xDiagram, *pIt, nApiAxesSetIdx, bPercent, bConnectBars );
                         if( xTypeGroup->IsValidGroup() )
                         {
                             maTypeGroups.AppendRecord( xTypeGroup );

@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: TitleWrapper.cxx,v $
- * $Revision: 1.8 $
+ * $Revision: 1.8.44.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -41,10 +41,10 @@
 #include "LineProperties.hxx"
 #include "FillProperties.hxx"
 #include "UserDefinedProperties.hxx"
-// #include "NamedProperties.hxx"
-// #include "WrappedNamedProperty.hxx"
 #include "WrappedCharacterHeightProperty.hxx"
 #include "WrappedTextRotationProperty.hxx"
+#include "WrappedAutomaticPositionProperties.hxx"
+#include "WrappedScaleTextProperties.hxx"
 
 #include <algorithm>
 #include <rtl/ustrbuf.hxx>
@@ -199,6 +199,8 @@ const Sequence< Property > & lcl_GetPropertySequence()
         ::chart::FillProperties::AddPropertiesToVector( aProperties );
 //         ::chart::NamedProperties::AddPropertiesToVector( aProperties );
         ::chart::UserDefinedProperties::AddPropertiesToVector( aProperties );
+        ::chart::wrapper::WrappedAutomaticPositionProperties::addProperties( aProperties );
+        ::chart::wrapper::WrappedScaleTextProperties::addProperties( aProperties );
 
         // and sort them for access via bsearch
         ::std::sort( aProperties.begin(), aProperties.end(),
@@ -455,12 +457,15 @@ Any SAL_CALL TitleWrapper::getPropertyDefault( const OUString& rPropertyName )
 // ================================================================================
 
 //ReferenceSizePropertyProvider
-void TitleWrapper::setCurrentSizeAsReference()
+void TitleWrapper::updateReferenceSize()
 {
     Reference< beans::XPropertySet > xProp( this->getTitleObject(), uno::UNO_QUERY );
     if( xProp.is() )
-        xProp->setPropertyValue( C2U("ReferencePageSize"), uno::makeAny(
+    {
+        if( xProp->getPropertyValue( C2U("ReferencePageSize") ).hasValue() )
+            xProp->setPropertyValue( C2U("ReferencePageSize"), uno::makeAny(
                             m_spChart2ModelContact->GetPageSize() ));
+    }
 }
 Any TitleWrapper::getReferenceSize()
 {
@@ -502,8 +507,9 @@ const std::vector< WrappedProperty* > TitleWrapper::createWrappedProperties()
     aWrappedProperties.push_back( new WrappedTitleStringProperty( m_spChart2ModelContact->m_xContext ) );
     aWrappedProperties.push_back( new WrappedTextRotationProperty() );
     aWrappedProperties.push_back( new WrappedStackedTextProperty() );
-//     WrappedNamedProperty::addWrappedProperties( aWrappedProperties, m_spChart2ModelContact );
     WrappedCharacterHeightProperty::addWrappedProperties( aWrappedProperties, this );
+    WrappedAutomaticPositionProperties::addWrappedProperties( aWrappedProperties );
+    WrappedScaleTextProperties::addWrappedProperties( aWrappedProperties, m_spChart2ModelContact );
 
     return aWrappedProperties;
 }

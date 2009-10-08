@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: xmlexprt.hxx,v $
- * $Revision: 1.84 $
+ * $Revision: 1.83.32.3 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -162,9 +162,10 @@ class ScXMLExport : public SvXMLExport
     void FillFieldGroup(ScOutlineArray* pFields, ScMyOpenCloseColumnRowGroup* pGroups);
     void FillColumnRowGroups();
 
-    sal_Bool GetMerge (const com::sun::star::uno::Reference <com::sun::star::sheet::XSpreadsheet>& xTable,
-        sal_Int32 nCol, sal_Int32 nRow,
-        com::sun::star::table::CellRangeAddress& aCellAddress);
+//UNUSED2008-05  sal_Bool GetMerge (const com::sun::star::uno::Reference <com::sun::star::sheet::XSpreadsheet>& xTable,
+//UNUSED2008-05                     sal_Int32 nCol, sal_Int32 nRow,
+//UNUSED2008-05                     com::sun::star::table::CellRangeAddress& aCellAddress);
+
     sal_Bool GetMerged (const com::sun::star::table::CellRangeAddress* pCellRange,
         const com::sun::star::uno::Reference <com::sun::star::sheet::XSpreadsheet>& xTable);
 
@@ -182,10 +183,10 @@ class ScXMLExport : public SvXMLExport
 
     sal_Bool IsCellTypeEqual (const ScMyCell& aCell1, const ScMyCell& aCell2) const;
     sal_Bool IsEditCell(const com::sun::star::table::CellAddress& aAddress) const;
-    sal_Bool IsEditCell(const com::sun::star::uno::Reference <com::sun::star::table::XCell>& xCell) const;
+//UNUSED2008-05  sal_Bool IsEditCell(const com::sun::star::uno::Reference <com::sun::star::table::XCell>& xCell) const;
     sal_Bool IsEditCell(ScMyCell& rCell) const;
-    sal_Bool IsAnnotationEqual(const com::sun::star::uno::Reference<com::sun::star::table::XCell>& xCell1,
-                                const com::sun::star::uno::Reference<com::sun::star::table::XCell>& xCell2);
+//UNUSED2008-05  sal_Bool IsAnnotationEqual(const com::sun::star::uno::Reference<com::sun::star::table::XCell>& xCell1,
+//UNUSED2008-05                             const com::sun::star::uno::Reference<com::sun::star::table::XCell>& xCell2);
     sal_Bool IsCellEqual (ScMyCell& aCell1, ScMyCell& aCell2);
 
     void WriteCalculationSettings(const com::sun::star::uno::Reference <com::sun::star::sheet::XSpreadsheetDocument>& xSpreadDoc);
@@ -215,10 +216,10 @@ public:
     static sal_Int16 GetFieldUnit();
     inline ScDocument*          GetDocument()           { return pDoc; }
     inline const ScDocument*    GetDocument() const     { return pDoc; }
-    sal_Bool IsMatrix (const com::sun::star::uno::Reference <com::sun::star::table::XCellRange>& xCellRange,
-        const com::sun::star::uno::Reference <com::sun::star::sheet::XSpreadsheet>& xTable,
-        const sal_Int32 nCol, const sal_Int32 nRow,
-        com::sun::star::table::CellRangeAddress& aCellAddress, sal_Bool& bIsFirst) const;
+//UNUSED2008-05  sal_Bool IsMatrix (const com::sun::star::uno::Reference <com::sun::star::table::XCellRange>& xCellRange,
+//UNUSED2008-05                     const com::sun::star::uno::Reference <com::sun::star::sheet::XSpreadsheet>& xTable,
+//UNUSED2008-05                     const sal_Int32 nCol, const sal_Int32 nRow,
+//UNUSED2008-05                     com::sun::star::table::CellRangeAddress& aCellAddress, sal_Bool& bIsFirst) const;
     sal_Bool IsMatrix (const ScAddress& aCell,
         com::sun::star::table::CellRangeAddress& aCellAddress, sal_Bool& bIsFirst) const;
 

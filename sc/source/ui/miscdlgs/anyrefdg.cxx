@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: anyrefdg.cxx,v $
- * $Revision: 1.22 $
+ * $Revision: 1.21.30.3 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -179,12 +179,12 @@ void ScRefEdit::StartUpdateData()
     aTimer.Start();
 }
 
-void ScRefEdit::SilentGrabFocus()
-{
-    bSilentFocus = TRUE;
-    GrabFocus();
-    bSilentFocus = FALSE;
-}
+//UNUSED2008-05  void ScRefEdit::SilentGrabFocus()
+//UNUSED2008-05  {
+//UNUSED2008-05      bSilentFocus = TRUE;
+//UNUSED2008-05      GrabFocus();
+//UNUSED2008-05      bSilentFocus = FALSE;
+//UNUSED2008-05  }
 
 void ScRefEdit::SetRefDialog( ScAnyRefDlg* pDlg )
 {

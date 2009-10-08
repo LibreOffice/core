@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: tabview5.cxx,v $
- * $Revision: 1.26 $
+ * $Revision: 1.25.32.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -431,13 +431,13 @@ BOOL ScTabView::IsDrawTextEdit() const
         return FALSE;
 }
 
-String ScTabView::GetSelectedChartName() const
-{
-    if (pDrawView)
-        return pDrawView->GetSelectedChartName();
-    else
-        return EMPTY_STRING;
-}
+//UNUSED2008-05  String ScTabView::GetSelectedChartName() const
+//UNUSED2008-05  {
+//UNUSED2008-05      if (pDrawView)
+//UNUSED2008-05          return pDrawView->GetSelectedChartName();
+//UNUSED2008-05      else
+//UNUSED2008-05          return EMPTY_STRING;
+//UNUSED2008-05  }
 
 SvxZoomType ScTabView::GetZoomType() const
 {
@@ -587,7 +587,6 @@ void ScTabView::DrawEnableAnim(BOOL bSet)
         else
         {
             pDrawView->SetAnimationEnabled(FALSE);
-            //  StopAnimations am Dokument ist nicht mehr noetig
         }
     }
 }

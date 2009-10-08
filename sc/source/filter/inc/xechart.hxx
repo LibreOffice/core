@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: xechart.hxx,v $
- * $Revision: 1.8 $
+ * $Revision: 1.7.62.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -650,6 +650,7 @@ typedef ScfRef< XclExpChSerErrorBar > XclExpChSerErrorBarRef;
 class XclExpChSeries : public XclExpChGroupBase, protected XclExpChRoot
 {
 public:
+    typedef ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XDiagram >                      XDiagramRef;
     typedef ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XDataSeries >                   XDataSeriesRef;
     typedef ::com::sun::star::uno::Reference< ::com::sun::star::chart2::data::XLabeledDataSequence >    XLabeledDataSeqRef;
     typedef ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XRegressionCurve >              XRegressionCurveRef;
@@ -658,11 +659,13 @@ public:
     explicit            XclExpChSeries( const XclExpChRoot& rRoot, sal_uInt16 nSeriesIdx );
 
     /** Converts the passed data series (source links and formatting). */
-    bool                ConvertDataSeries( XDataSeriesRef xDataSeries,
+    bool                ConvertDataSeries(
+                            XDiagramRef xDiagram, XDataSeriesRef xDataSeries,
                             const XclChExtTypeInfo& rTypeInfo,
                             sal_uInt16 nGroupIdx, sal_uInt16 nFormatIdx );
     /** Converts the passed data series for stock charts. */
-    bool                ConvertStockSeries( XDataSeriesRef xDataSeries,
+    bool                ConvertStockSeries(
+                            XDataSeriesRef xDataSeries,
                             const ::rtl::OUString& rValueRole,
                             sal_uInt16 nGroupIdx, sal_uInt16 nFormatIdx, bool bCloseSymbol );
     /** Converts the passed error bar settings (called at trend line child series). */
@@ -847,7 +850,7 @@ public:
     void                ConvertType( XDiagramRef xDiagram, XChartTypeRef xChartType,
                             sal_Int32 nApiAxesSetIdx, bool b3dChart, bool bSwappedAxesSet, bool bHasXLabels );
     /** Converts and inserts all series from the passed chart type. */
-    void                ConvertSeries( XChartTypeRef xChartType,
+    void                ConvertSeries( XDiagramRef xDiagram, XChartTypeRef xChartType,
                             sal_Int32 nGroupAxesSetIdx, bool bPercent, bool bConnectorLines );
     /** Converts and inserts category ranges for all inserted series. */
     void                ConvertCategSequence( XLabeledDataSeqRef xCategSeq );
@@ -876,7 +879,8 @@ private:
     /** Returns an unused format index to be used for the next created series. */
     sal_uInt16          GetFreeFormatIdx() const;
     /** Creates all data series of any chart type except stock charts. */
-    void                CreateDataSeries( XDataSeriesRef xDataSeries );
+    void                CreateDataSeries( XDiagramRef xDiagram,
+                            XDataSeriesRef xDataSeries );
     /** Creates all data series of a stock chart. */
     void                CreateAllStockSeries( XChartTypeRef xChartType,
                             XDataSeriesRef xDataSeries );

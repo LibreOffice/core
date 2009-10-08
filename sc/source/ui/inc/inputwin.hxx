@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: inputwin.hxx,v $
- * $Revision: 1.17 $
+ * $Revision: 1.17.32.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -140,8 +140,7 @@ protected:
 
     virtual long    Notify( NotifyEvent& rNEvt );
 
-    virtual void    SFX_NOTIFY( SfxBroadcaster& rBC, const TypeId& rBCType,
-                            const SfxHint& rHint, const TypeId& rHintType );
+    virtual void    Notify( SfxBroadcaster& rBC, const SfxHint& rHint );
 
 private:
     void            FillRangeNames();
@@ -166,7 +165,6 @@ public:
     void            SetFuncString( const String& rString, BOOL bDoEdit = TRUE );
     void            SetPosString( const String& rStr );
     void            SetTextString( const String& rString );
-    const String&   GetTextString();
 
     void            SetOkCancelMode();
     void            SetSumAssignMode();
@@ -176,8 +174,8 @@ public:
 
     BOOL            IsInputActive();
     EditView*       GetEditView();
-    EditView*       ActivateEdit( const String&     rText,
-                                  const ESelection& rSel );
+//UNUSED2008-05  EditView*      ActivateEdit( const String&     rText,
+//UNUSED2008-05                                const ESelection& rSel );
 
     void            TextGrabFocus();
     void            TextInvalidate();

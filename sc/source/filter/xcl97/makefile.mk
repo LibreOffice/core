@@ -1,14 +1,14 @@
 #*************************************************************************
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-# 
+#
 # Copyright 2008 by Sun Microsystems, Inc.
 #
 # OpenOffice.org - a multi-platform office productivity suite
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.16 $
+# $Revision: 1.16.88.1 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -57,6 +57,7 @@ SLOFILES =									\
         $(SLO)$/XclExpChangeTrack.obj
 
 EXCEPTIONSFILES =							\
+        $(SLO)$/xcl97esc.obj				\
         $(SLO)$/xcl97rec.obj
 
 # --- Targets -------------------------------------------------------

@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: VCoordinateSystem.hxx,v $
- * $Revision: 1.7 $
+ * $Revision: 1.7.36.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -145,8 +145,6 @@ protected: //methods
     VAxisBase* getVAxis( sal_Int32 nDimensionIndex, sal_Int32 nAxisIndex );
 
     void prepareScaleAutomatism( ScaleAutomatism& rScaleAutomatism, double fMin, double fMax, sal_Int32 nDimIndex, sal_Int32 nAxisIndex );
-
-    sal_Int32 getMaximumIncrementIndexByDimension( sal_Int32 nDimensionIndex ) const;
 
     rtl::OUString createCIDForAxis( const ::com::sun::star::uno::Reference<
                     ::com::sun::star::chart2::XAxis >& xAxis

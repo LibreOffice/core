@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: attrib.hxx,v $
- * $Revision: 1.10 $
+ * $Revision: 1.10.32.3 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -74,7 +74,6 @@ public:
     virtual int             operator==( const SfxPoolItem& ) const;
     virtual SfxPoolItem*    Clone( SfxItemPool *pPool = 0 ) const;
     virtual SfxPoolItem*    Create( SvStream& rStream, USHORT nVer ) const;
-    virtual SvStream&       Store( SvStream& rStream, USHORT nVer ) const;
 
             SCsCOL          GetColMerge() const {return nColMerge; }
             SCsROW          GetRowMerge() const {return nRowMerge; }
@@ -136,7 +135,6 @@ public:
     virtual int             operator==( const SfxPoolItem& ) const;
     virtual SfxPoolItem*    Clone( SfxItemPool *pPool = 0 ) const;
     virtual SfxPoolItem*    Create( SvStream& rStream, USHORT nVer ) const;
-    virtual SvStream&       Store( SvStream& rStream, USHORT nVer ) const;
 
     virtual BOOL            QueryValue( com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 ) const;
     virtual BOOL            PutValue( const com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 );
@@ -188,9 +186,6 @@ public:
                                                  String &rText,
                                                  const IntlWrapper* pIntl = 0 ) const;
     virtual SfxPoolItem*        Clone( SfxItemPool *pPool = 0 ) const;
-    virtual USHORT              GetVersion( USHORT nFileVersion ) const;
-    virtual SfxPoolItem*        Create(SvStream &, USHORT) const;
-    virtual SvStream&           Store( SvStream& rStream, USHORT nVer ) const;
 
     const ScRange&  GetRange() const                { return aRange;  }
     void            SetRange( const ScRange& rNew ) { aRange = rNew; }
@@ -235,7 +230,7 @@ public:
 
     inline  ScTableListItem( const USHORT nWhich );
             ScTableListItem( const ScTableListItem& rCpy );
-            ScTableListItem( const USHORT nWhich, const List& rList );
+//UNUSED2008-05  ScTableListItem( const USHORT nWhich, const List& rList );
             ~ScTableListItem();
 
     ScTableListItem& operator=( const ScTableListItem &rCpy );
@@ -248,8 +243,6 @@ public:
                                                  String &rText,
                                                  const IntlWrapper* pIntl = 0 ) const;
     virtual SfxPoolItem*        Clone( SfxItemPool *pPool = 0 ) const;
-    virtual SfxPoolItem*        Create(SvStream &, USHORT) const;
-    virtual SvStream&           Store( SvStream& rStream, USHORT nVer ) const;
 
     BOOL    GetTableList( List& aList ) const;
     void    SetTableList( const List& aList );
@@ -287,9 +280,6 @@ public:
     virtual SfxPoolItem*    Clone( SfxItemPool *pPool = 0 ) const;
 
     virtual SfxPoolItem*    Create( SvStream& rStream, USHORT nVer ) const;
-    virtual SvStream&       Store( SvStream& rStream, USHORT nVer ) const;
-
-    virtual USHORT          GetVersion( USHORT nFileVersion ) const;
 
     virtual BOOL            QueryValue( com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 ) const;
     virtual BOOL            PutValue( const com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 );
@@ -347,7 +337,6 @@ public:
     virtual SfxPoolItem*    Clone( SfxItemPool *pPool = 0 ) const;
 
     virtual SfxPoolItem*    Create( SvStream& rStream, USHORT nVer ) const;
-    virtual SvStream&       Store( SvStream& rStream, USHORT nVer ) const;
 
     double GetValue() const     { return nValue; }
 

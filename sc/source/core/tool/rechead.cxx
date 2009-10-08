@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: rechead.cxx,v $
- * $Revision: 1.6 $
+ * $Revision: 1.6.32.2 $
  *
  * This file is part of OpenOffice.org.
  *

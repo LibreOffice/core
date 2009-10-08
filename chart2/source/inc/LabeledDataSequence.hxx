@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: LabeledDataSequence.hxx,v $
- * $Revision: 1.3 $
+ * $Revision: 1.3.44.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -103,8 +103,6 @@ protected:
     virtual void SAL_CALL removeModifyListener(
         const ::com::sun::star::uno::Reference< ::com::sun::star::util::XModifyListener >& aListener )
         throw (::com::sun::star::uno::RuntimeException);
-
-    void fireModifyEvent();
 
 private:
     ::com::sun::star::uno::Reference< ::com::sun::star::chart2::data::XDataSequence > m_xData;

@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: rangeutl.hxx,v $
- * $Revision: 1.10 $
+ * $Revision: 1.10.32.3 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -116,11 +116,6 @@ public:
                             ::rtl::OUString& rString,
                             const ::rtl::OUString& rNewStr,
                             sal_Bool bAppendStr,
-                            sal_Unicode cSeperator = ' ');
-
-    static void         AppendString(
-                            ::rtl::OUString& rString,
-                            const ::rtl::OUString& rNewStr,
                             sal_Unicode cSeperator = ' ');
 
     static sal_Int32    IndexOf(
@@ -264,13 +259,9 @@ public:
 
             ScArea( const ScArea& r );
 
-    void    Clear       ();
     ScArea& operator=   ( const ScArea& r );
     BOOL    operator==  ( const ScArea& r ) const;
     BOOL    operator!=  ( const ScArea& r ) const  { return !( operator==(r) ); }
-    void    GetString   ( String& rStr,
-                          BOOL bAbsolute = TRUE, ScDocument* pDoc = NULL,
-                          ScAddress::Details const & rDetails = ScAddress::detailsOOOa1 ) const;
 
 public:
     SCTAB nTab;
@@ -279,9 +270,6 @@ public:
     SCCOL nColEnd;
     SCROW nRowEnd;
 };
-
-SvStream& operator<< ( SvStream& rStream, const ScArea& rArea );
-SvStream& operator>> ( SvStream& rStream, ScArea& rArea );
 
 //------------------------------------------------------------------------
 

@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: xlstyle.cxx,v $
- * $Revision: 1.28 $
+ * $Revision: 1.27.32.3 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -1469,11 +1469,16 @@ XclNumFmtBuffer::XclNumFmtBuffer( const XclRoot& rRoot ) :
         InsertBuiltinFormats();
 }
 
-const XclNumFmt* XclNumFmtBuffer::GetFormat( sal_uInt16 nXclNumFmt ) const
+void XclNumFmtBuffer::InitializeImport()
 {
-    XclNumFmtMap::const_iterator aIt = maFmtMap.find( nXclNumFmt );
-    return (aIt != maFmtMap.end()) ? &aIt->second : 0;
+    maFmtMap.clear();
 }
+
+//UNUSED2008-05  const XclNumFmt* XclNumFmtBuffer::GetFormat( sal_uInt16 nXclNumFmt ) const
+//UNUSED2008-05  {
+//UNUSED2008-05      XclNumFmtMap::const_iterator aIt = maFmtMap.find( nXclNumFmt );
+//UNUSED2008-05      return (aIt != maFmtMap.end()) ? &aIt->second : 0;
+//UNUSED2008-05  }
 
 void XclNumFmtBuffer::InsertFormat( sal_uInt16 nXclNumFmt, const String& rFormat )
 {

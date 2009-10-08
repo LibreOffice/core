@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: groupdlg.cxx,v $
- * $Revision: 1.7 $
+ * $Revision: 1.7.32.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -67,13 +67,6 @@ ScGroupDlg::ScGroupDlg( Window* pParent,
     //-------------
     FreeResource();
     aBtnRows.GrabFocus();
-}
-
-//------------------------------------------------------------------------
-
-BOOL ScGroupDlg::GetRowsChecked() const
-{
-    return aBtnRows.IsChecked();
 }
 
 //------------------------------------------------------------------------

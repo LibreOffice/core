@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: viewdata.hxx,v $
- * $Revision: 1.24 $
+ * $Revision: 1.24.24.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -233,9 +233,9 @@ public:
                     ~ScViewData();
 
     void            InitData( ScDocument* pDocument );
-    void            InitFrom( const ScViewData* pRef );
+//UNUSED2008-05  void            InitFrom( const ScViewData* pRef );
+//UNUSED2008-05  void           SetDocShell( ScDocShell* pShell );
 
-    void            SetDocShell( ScDocShell* pShell );
 
     ScDocShell*     GetDocShell() const     { return pDocShell; }
     ScDBFunc*       GetView() const         { return pView; }
@@ -444,11 +444,11 @@ public:
     SCROW           VisibleCellsY( ScVSplitPos eWhichY ) const;
     SCCOL           PrevCellsX( ScHSplitPos eWhichX ) const;        // Zellen auf der vorgehenden Seite
     SCROW           PrevCellsY( ScVSplitPos eWhichY ) const;
-    SCCOL           LastCellsX( ScHSplitPos eWhichX ) const;        // Zellen auf der letzten Seite
-    SCROW           LastCellsY( ScVSplitPos eWhichY ) const;
+//UNUSED2008-05  SCCOL           LastCellsX( ScHSplitPos eWhichX ) const;        // Zellen auf der letzten Seite
+//UNUSED2008-05  SCROW           LastCellsY( ScVSplitPos eWhichY ) const;
 
     BOOL            IsOle();
-    void            UpdateOle( ScSplitPos eWhich );
+//UNUSED2008-05  void            UpdateOle( ScSplitPos eWhich );
     void            SetScreen( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2 );
     void            SetScreen( const Rectangle& rVisArea );
     void            SetScreenPos( const Point& rVisAreaStart );

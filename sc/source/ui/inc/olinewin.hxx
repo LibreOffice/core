@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: olinewin.hxx,v $
- * $Revision: 1.11 $
+ * $Revision: 1.11.32.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -220,8 +220,6 @@ private:
     /** Erases the focus rectangle from the focused button. */
     void                        HideFocus();
 
-    /** Scrolls the window in entry-relative direction. */
-    void                        ScrollRel( long nEntryDiff );
     /** Scrolls the specified range of the window in entry-relative direction. */
     void                        ScrollRel( long nEntryDiff, long nEntryStart, long nEntryEnd );
 

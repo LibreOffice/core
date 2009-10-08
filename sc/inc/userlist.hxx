@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: userlist.hxx,v $
- * $Revision: 1.5 $
+ * $Revision: 1.5.32.3 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -49,11 +49,10 @@ friend class ScUserList;
 public:
                     ScUserListData(const String& rStr);
                     ScUserListData(const ScUserListData& rData);
-                    ScUserListData( SvStream& rStream );
     virtual         ~ScUserListData();
 
     virtual DataObject*     Clone() const { return new ScUserListData(*this); }
-            BOOL            Store( SvStream& rStream ) const;
+
     const   String&         GetString() const { return aStr; }
             void            SetString( const String& rStr);
             USHORT          GetSubCount() const;
@@ -73,8 +72,6 @@ public:
     virtual DataObject*     Clone() const;
 
             ScUserListData* GetData( const String& rSubStr ) const;
-            BOOL            Load( SvStream& rStream );
-            BOOL            Store( SvStream& rStream ) const;
             /// If the list in rStr is already inserted
             BOOL            HasEntry( const String& rStr ) const;
 

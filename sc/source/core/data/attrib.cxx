@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: attrib.cxx,v $
- * $Revision: 1.19 $
+ * $Revision: 1.19.32.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -180,18 +180,6 @@ SfxPoolItem* ScMergeAttr::Create( SvStream& rStream, USHORT /* nVer */ ) const
     rStream >> nCol;
     rStream >> nRow;
     return new ScMergeAttr(static_cast<SCCOL>(nCol),static_cast<SCROW>(nRow));
-}
-
-//------------------------------------------------------------------------
-
-SvStream& ScMergeAttr::Store( SvStream& rStream, USHORT /* nVer */ ) const
-{
-#if SC_ROWLIMIT_STREAM_ACCESS
-#error address types changed!
-    rStream << nColMerge;
-    rStream << nRowMerge;
-#endif
-    return rStream;
 }
 
 //------------------------------------------------------------------------
@@ -427,18 +415,6 @@ SfxPoolItem* ScProtectionAttr::Create( SvStream& rStream, USHORT /* n */ ) const
 
 //------------------------------------------------------------------------
 
-SvStream& ScProtectionAttr::Store( SvStream& rStream, USHORT /* nVer */ ) const
-{
-    rStream << bProtection;
-    rStream << bHideFormula;
-    rStream << bHideCell;
-    rStream << bHidePrint;
-
-    return rStream;
-}
-
-//------------------------------------------------------------------------
-
 BOOL ScProtectionAttr::SetProtection( BOOL bProtect)
 {
     bProtection =  bProtect;
@@ -525,83 +501,6 @@ SfxItemPresentation ScRangeItem::GetPresentation
     return ePres;
 }
 
-//-----------------------------------------------------------------------
-
-USHORT ScRangeItem::GetVersion( USHORT /* nFileVersion */ ) const
-{
-    return 2;
-}
-
-//-----------------------------------------------------------------------
-
-SvStream& ScRangeItem::Store( SvStream& rStrm, USHORT /* nVer */ ) const
-{
-#if SC_ROWLIMIT_STREAM_ACCESS
-#error address types changed!
-    rStrm << aRange;
-    rStrm << nFlags;
-
-#endif // SC_ROWLIMIT_STREAM_ACCESS
-    return rStrm;
-}
-
-//-----------------------------------------------------------------------
-
-SfxPoolItem* ScRangeItem::Create( SvStream& /* rStream */, USHORT /* nVersion */ ) const
-{
-    ScRange aNewRange;
-    BOOL    nNewFlags = FALSE;
-#if SC_ROWLIMIT_STREAM_ACCESS
-#error address types changed!
-
-    switch ( nVersion )
-    {
-        case 2:
-            rStream >> aNewRange;
-            rStream >> nNewFlags;
-            break;
-
-        case 1:
-            rStream >> aNewRange;
-            nNewFlags = 0;
-            break;
-
-        case 0:
-            {
-                // alte Version mit ScArea -> 5 USHORTs lesen
-                ScAddress&  rStart = aNewRange.aStart;
-                ScAddress&  rEnd   = aNewRange.aEnd;
-                USHORT      n;
-
-                rStream >> n;
-
-                if ( n > static_cast<sal_uInt16>(MAXTAB) )
-                {
-                    nNewFlags = SCR_ALLTABS;
-                    rStart.SetTab( 0 ); rEnd.SetTab( 0 );
-                }
-                else
-                {
-                    nNewFlags = 0;
-                    rStart.SetTab( static_cast<SCTAB>(n) ); rEnd.SetTab( static_cast<SCTAB>(n) );
-                }
-
-                rStream >> n; rStart.SetCol( static_cast<SCCOL>(n) );
-                rStream >> n; rStart.SetRow( static_cast<SCROW>(n) );
-                rStream >> n; rEnd  .SetCol( static_cast<SCCOL>(n) );
-                rStream >> n; rEnd  .SetRow( static_cast<SCROW>(n) );
-            }
-            break;
-
-        default:
-            DBG_ERROR( "ScRangeItem::Create: Unknown Version!" );
-    }
-
-#endif // SC_ROWLIMIT_STREAM_ACCESS
-    return ( new ScRangeItem( Which(), aNewRange, nNewFlags ) );
-}
-
-
 // -----------------------------------------------------------------------
 //      ScTableListItem - Liste von Tabellen(-nummern)
 // -----------------------------------------------------------------------
@@ -623,13 +522,13 @@ ScTableListItem::ScTableListItem( const ScTableListItem& rCpy )
 
 // -----------------------------------------------------------------------
 
-ScTableListItem::ScTableListItem( const USHORT nWhichP, const List& rList )
-    :   SfxPoolItem ( nWhichP ),
-        nCount      ( 0 ),
-        pTabArr     ( NULL )
-{
-    SetTableList( rList );
-}
+//UNUSED2008-05  ScTableListItem::ScTableListItem( const USHORT nWhichP, const List& rList )
+//UNUSED2008-05      :   SfxPoolItem ( nWhichP ),
+//UNUSED2008-05          nCount      ( 0 ),
+//UNUSED2008-05          pTabArr     ( NULL )
+//UNUSED2008-05  {
+//UNUSED2008-05      SetTableList( rList );
+//UNUSED2008-05  }
 
 // -----------------------------------------------------------------------
 
@@ -637,45 +536,6 @@ ScTableListItem::~ScTableListItem()
 {
     delete [] pTabArr;
 }
-
-// -----------------------------------------------------------------------
-
-#if 0 /* OBSOLETE */
-void ScTableListItem::Record( SfxArguments& rArgs ) const
-{
-    rArgs.AppendInteger( nCount );
-
-    if ( nCount>0 && pTabArr )
-        for ( USHORT i=0; i<nCount; i++ )
-            rArgs.AppendInteger( pTabArr[i] );
-}
-
-// -----------------------------------------------------------------------
-
-SfxArgumentError ScTableListItem::Construct( USHORT nId, const SfxArguments& rArgs )
-{
-    USHORT nCount = rArgs.Get( 0 ).GetInteger();
-
-    if ( pTabArr )
-        delete [] pTabArr, pTabArr = NULL;
-
-    if ( nCount > 0 )
-    {
-        if ( rArgs.Count()-1 < nCount )
-            return SFX_ARGUMENT_ERROR( rArgs.Count(), SFX_ERR_ARGUMENT_EXPECTED );
-        if ( rArgs.Count()-1 > nCount )
-            return SFX_ARGUMENT_ERROR( rArgs.Count()-1, SFX_ERR_TOO_MANY_ARGUMENTS );
-
-        SetWhich( nId );
-        pTabArr = new SCTAB [nCount];
-
-        for ( USHORT i=0; i<nCount; i++ )
-            pTabArr[i] = rArgs.Get( i+1 ).GetInteger();
-    }
-
-    return 0;
-}
-#endif /* OBSOLETE */
 
 // -----------------------------------------------------------------------
 
@@ -772,55 +632,6 @@ SfxItemPresentation ScTableListItem::GetPresentation
     }
 
     return SFX_ITEM_PRESENTATION_NONE;
-}
-
-//-----------------------------------------------------------------------
-
-SvStream& ScTableListItem::Store( SvStream& rStrm, USHORT /* nVer */ ) const
-{
-#if SC_ROWLIMIT_STREAM_ACCESS
-#error address types changed!
-    rStrm << nCount;
-
-    if ( nCount>0 && pTabArr )
-        for ( USHORT i=0; i<nCount; i++ )
-                rStrm << (USHORT) pTabArr[i];
-
-#endif // SC_ROWLIMIT_STREAM_ACCESS
-    return rStrm;
-}
-
-//-----------------------------------------------------------------------
-
-SfxPoolItem* ScTableListItem::Create( SvStream& /* rStrm */, USHORT ) const
-{
-    ScTableListItem* pNewItem;
-    List             aList;
-    SCTAB*           p;
-//    USHORT           nTabCount;
-//    USHORT           nTabNo;
-
-#if SC_ROWLIMIT_STREAM_ACCESS
-#error address types changed!
-    rStrm >> nTabCount;
-
-    if ( nTabCount > 0 )
-    {
-        for ( USHORT i=0; i<nTabCount; i++ )
-        {
-            rStrm >> nTabNo;
-            aList.Insert( new SCTAB(nTabNo) );
-        }
-    }
-#endif // SC_ROWLIMIT_STREAM_ACCESS
-
-    pNewItem = new ScTableListItem( Which(), aList );
-
-    aList.First();
-    while ( ( p = (SCTAB*)aList.Remove() ) != NULL )
-        delete p;
-
-    return pNewItem;
 }
 
 // -----------------------------------------------------------------------
@@ -979,16 +790,6 @@ SfxPoolItem* ScPageHFItem::Clone( SfxItemPool* ) const
 
 //------------------------------------------------------------------------
 
-USHORT ScPageHFItem::GetVersion( USHORT /* nFileVersion */ ) const
-{
-    // 0 = ohne Feldbefehle
-    // 1 = Titel bzw. Dateiname mit SvxFileField
-    // 2 = Pfad und/oder Dateiname mit SvxExtFileField, Titel mit SvxFileField
-    return 2;
-}
-
-//------------------------------------------------------------------------
-
 void lcl_SetSpace( String& rStr, const ESelection& rSel )
 {
     // Text durch ein Leerzeichen ersetzen, damit Positionen stimmen:
@@ -1141,14 +942,14 @@ class ScFieldChangerEditEngine : public ScEditEngineDefaulter
     BOOL        bConvert;
 
 public:
-                ScFieldChangerEditEngine( SfxItemPool* pEnginePool, BOOL bDeleteEnginePool );
+    ScFieldChangerEditEngine( SfxItemPool* pEnginePool, BOOL bDeleteEnginePool );
     virtual     ~ScFieldChangerEditEngine() {}
 
     virtual String  CalcFieldValue( const SvxFieldItem& rField, USHORT nPara,
                                     USHORT nPos, Color*& rTxtColor,
                                     Color*& rFldColor );
 
-    BOOL            ConvertFields();
+//UNUSED2008-05  BOOL           ConvertFields();
 };
 
 ScFieldChangerEditEngine::ScFieldChangerEditEngine( SfxItemPool* pEnginePoolP,
@@ -1174,96 +975,22 @@ String ScFieldChangerEditEngine::CalcFieldValue( const SvxFieldItem& rField,
     return EMPTY_STRING;
 }
 
-BOOL ScFieldChangerEditEngine::ConvertFields()
-{
-    BOOL bConverted = FALSE;
-    do
-    {
-        bConvert = FALSE;
-        UpdateFields();
-        if ( bConvert )
-        {
-            ESelection aSel( nConvPara, nConvPos, nConvPara, nConvPos+1 );
-            QuickInsertField( SvxFieldItem( SvxFileField(), EE_FEATURE_FIELD), aSel );
-            bConverted = TRUE;
-        }
-    } while ( bConvert );
-    return bConverted;
-}
-
-void lcl_StoreOldFields( ScFieldChangerEditEngine& rEngine,
-            const EditTextObject* pArea, SvStream& rStream )
-{
-    rEngine.SetText( *pArea );
-    if ( rEngine.ConvertFields() )
-    {
-        EditTextObject* pObj = rEngine.CreateTextObject();
-        pObj->Store( rStream );
-        delete pObj;
-    }
-    else
-        pArea->Store( rStream );
-}
-
-SvStream& ScPageHFItem::Store( SvStream& rStream, USHORT /* nVer */ ) const
-{
-    if ( pLeftArea && pCenterArea && pRightArea )
-    {
-        if ( rStream.GetVersion() < SOFFICE_FILEFORMAT_50 )
-        {
-            ScFieldChangerEditEngine aEngine( EditEngine::CreatePool(), TRUE );
-            lcl_StoreOldFields( aEngine, pLeftArea, rStream );
-            lcl_StoreOldFields( aEngine, pCenterArea, rStream );
-            lcl_StoreOldFields( aEngine, pRightArea, rStream );
-        }
-        else
-        {
-            pLeftArea->Store(rStream);
-            pCenterArea->Store(rStream);
-            pRightArea->Store(rStream);
-        }
-    }
-    else
-    {
-        //  soll eigentlich nicht sein, kommt aber vor, wenn das Default-Item
-        //  fuer ein ItemSet kopiert wird (#61826#) ...
-
-        ScFieldChangerEditEngine aEngine( EditEngine::CreatePool(), TRUE );
-        EditTextObject* pEmpytObj = aEngine.CreateTextObject();
-
-        DBG_ASSERT( pEmpytObj, "Error creating empty EditTextObject :-(" );
-
-        if ( rStream.GetVersion() < SOFFICE_FILEFORMAT_50 )
-        {
-            if ( pLeftArea )
-                lcl_StoreOldFields( aEngine, pLeftArea, rStream );
-            else
-                pEmpytObj->Store( rStream );
-
-            if ( pCenterArea )
-                lcl_StoreOldFields( aEngine, pCenterArea, rStream );
-            else
-                pEmpytObj->Store( rStream );
-
-            if ( pRightArea )
-                lcl_StoreOldFields( aEngine, pRightArea, rStream );
-            else
-                pEmpytObj->Store( rStream );
-        }
-        else
-        {
-            (pLeftArea   ? pLeftArea   : pEmpytObj )->Store(rStream);
-            (pCenterArea ? pCenterArea : pEmpytObj )->Store(rStream);
-            (pRightArea  ? pRightArea  : pEmpytObj )->Store(rStream);
-        }
-
-        delete pEmpytObj;
-    }
-
-    return rStream;
-}
-
-//------------------------------------------------------------------------
+//UNUSED2008-05  BOOL ScFieldChangerEditEngine::ConvertFields()
+//UNUSED2008-05  {
+//UNUSED2008-05      BOOL bConverted = FALSE;
+//UNUSED2008-05      do
+//UNUSED2008-05      {
+//UNUSED2008-05          bConvert = FALSE;
+//UNUSED2008-05          UpdateFields();
+//UNUSED2008-05          if ( bConvert )
+//UNUSED2008-05          {
+//UNUSED2008-05              ESelection aSel( nConvPara, nConvPos, nConvPara, nConvPos+1 );
+//UNUSED2008-05              QuickInsertField( SvxFieldItem( SvxFileField(), EE_FEATURE_FIELD), aSel );
+//UNUSED2008-05              bConverted = TRUE;
+//UNUSED2008-05          }
+//UNUSED2008-05      } while ( bConvert );
+//UNUSED2008-05      return bConverted;
+//UNUSED2008-05  }
 
 void ScPageHFItem::SetLeftArea( const EditTextObject& rNew )
 {
@@ -1479,15 +1206,6 @@ SfxPoolItem* ScDoubleItem::Create( SvStream& rStream, USHORT /* nVer */ ) const
     ScDoubleItem* pItem = new ScDoubleItem( Which(), nTmp );
 
     return pItem;
-}
-
-//------------------------------------------------------------------------
-
-SvStream& ScDoubleItem::Store( SvStream& rStream, USHORT /* nVer */ ) const
-{
-    rStream << nValue;
-
-    return rStream;
 }
 
 //------------------------------------------------------------------------

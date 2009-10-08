@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: stlsheet.hxx,v $
- * $Revision: 1.5 $
+ * $Revision: 1.5.46.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -87,8 +87,7 @@ protected:
                               SfxStyleFamily    eFamily,
                               USHORT            nMask );
 
-    virtual void SFX_NOTIFY( SfxBroadcaster& rBC, const TypeId& rBCType,
-                         const SfxHint& rHint, const TypeId& rHintType );
+    virtual void Notify( SfxBroadcaster& rBC, const SfxHint& rHint );
 };
 
 #endif     // SC_STLSHEET_HXX

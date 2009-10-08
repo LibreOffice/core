@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: funcpage.cxx,v $
- * $Revision: 1.7 $
+ * $Revision: 1.7.32.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -57,10 +57,6 @@
 #include "funcdesc.hxx"
 
 //============================================================================
-
-ScListBox::ScListBox( Window* pParent, WinBits nWinStyle):
-    ListBox(pParent,nWinStyle)
-{}
 
 ScListBox::ScListBox( Window* pParent, const ResId& rResId ):
     ListBox(pParent,rResId)

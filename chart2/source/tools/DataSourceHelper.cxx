@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: DataSourceHelper.cxx,v $
- * $Revision: 1.6 $
+ * $Revision: 1.6.16.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -114,43 +114,6 @@ void lcl_addErrorBarRanges(
         ASSERT_EXCEPTION( ex );
     }
 }
-
-struct lcl_migrateData : public ::std::unary_function<
-        Reference< chart2::data::XLabeledDataSequence >, void >
-{
-    lcl_migrateData( const Reference< chart2::data::XDataProvider > & xDataProvider ) :
-            m_xDataProvider( xDataProvider )
-    {}
-
-    Reference< chart2::data::XDataSequence > migrateData(
-        const Reference< chart2::data::XDataSequence > & xOldData )
-    {
-        if( ! xOldData.is())
-            return xOldData;
-
-        OSL_ASSERT( m_xDataProvider.is());
-        Reference< chart2::data::XDataSequence > xNewData(
-            m_xDataProvider->createDataSequenceByRangeRepresentation(
-                xOldData->getSourceRangeRepresentation()));
-        comphelper::copyProperties(
-            Reference< beans::XPropertySet >( xOldData, uno::UNO_QUERY ),
-            Reference< beans::XPropertySet >( xNewData, uno::UNO_QUERY ));
-        return xNewData;
-    }
-
-    void operator()( const Reference< chart2::data::XLabeledDataSequence > & xLSeq )
-    {
-        if( m_xDataProvider.is() && xLSeq.is())
-        {
-            xLSeq->setValues( migrateData( xLSeq->getValues()));
-            xLSeq->setLabel( migrateData( xLSeq->getLabel()));
-        }
-    }
-
-private:
-    Reference< chart2::data::XDataProvider > m_xDataProvider;
-};
-
 
 } // anonymous namespace
 
@@ -553,25 +516,6 @@ Sequence< OUString > DataSourceHelper::getRangesFromDataSource( const Reference<
     }
     return ContainerHelper::ContainerToSequence( aResult );
 }
-
-bool DataSourceHelper::migrateData(
-    const Reference< chart2::XChartDocument > & xChartDoc,
-    const Reference< chart2::data::XDataProvider > & xNewDataProvider )
-{
-    if( ! ( xChartDoc.is() && xNewDataProvider.is()))
-        return false;
-
-    bool bCouldMigrate = true;
-    Reference< chart2::data::XDataSource > xDataSource(
-        DataSourceHelper::getUsedData( xChartDoc, true /* bIncludeUnusedData */ ));
-    Sequence< Reference< chart2::data::XLabeledDataSequence > > aLSeq(
-        xDataSource->getDataSequences());
-    ::std::for_each( aLSeq.getArray(), aLSeq.getArray() + aLSeq.getLength(),
-                     lcl_migrateData( xNewDataProvider ));
-
-    return bCouldMigrate;
-}
-
 
 //.............................................................................
 } //namespace chart

@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: AccessibleText.cxx,v $
- * $Revision: 1.44 $
+ * $Revision: 1.42.32.3 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -284,7 +284,6 @@ public:
     void                SetInvalid();
 
     Rectangle GetVisRect() const;
-    void FillTableInfo() const;
 
     // clips the VisArea and calculates with the negativ coordinates
     Rectangle CorrectVisArea(const Rectangle& rVisArea) const;
@@ -374,15 +373,6 @@ Rectangle ScPreviewViewForwarder::GetVisRect() const
         return aVisRect;
     }
     return Rectangle();
-}
-
-void ScPreviewViewForwarder::FillTableInfo() const
-{
-    if ( mpViewShell && !mpTableInfo )
-    {
-        mpTableInfo = new ScPreviewTableInfo;
-        mpViewShell->GetLocationData().GetTableInfo( GetVisRect(), *mpTableInfo );
-    }
 }
 
 Rectangle ScPreviewViewForwarder::CorrectVisArea(const Rectangle& rVisArea) const
@@ -1312,18 +1302,18 @@ SvxViewForwarder* ScAccessiblePreviewCellTextData::GetViewForwarder()
     return mpViewForwarder;
 }
 
-IMPL_LINK(ScAccessiblePreviewCellTextData, NotifyHdl, EENotify*, aNotify)
-{
-    if( aNotify )
-    {
-        ::std::auto_ptr< SfxHint > aHint = SvxEditSourceHelper::EENotification2Hint( aNotify);
-
-        if( aHint.get() )
-            GetBroadcaster().Broadcast( *aHint.get() );
-    }
-
-    return 0;
-}
+//UNUSED2008-05  IMPL_LINK(ScAccessiblePreviewCellTextData, NotifyHdl, EENotify*, aNotify)
+//UNUSED2008-05  {
+//UNUSED2008-05      if( aNotify )
+//UNUSED2008-05      {
+//UNUSED2008-05          ::std::auto_ptr< SfxHint > aHint = SvxEditSourceHelper::EENotification2Hint( aNotify);
+//UNUSED2008-05
+//UNUSED2008-05          if( aHint.get() )
+//UNUSED2008-05              GetBroadcaster().Broadcast( *aHint.get() );
+//UNUSED2008-05      }
+//UNUSED2008-05
+//UNUSED2008-05      return 0;
+//UNUSED2008-05  }
 
 ScDocShell* ScAccessiblePreviewCellTextData::GetDocShell(ScPreviewShell* pViewShell)
 {
@@ -1440,18 +1430,18 @@ SvxViewForwarder* ScAccessiblePreviewHeaderCellTextData::GetViewForwarder()
     return mpViewForwarder;
 }
 
-IMPL_LINK(ScAccessiblePreviewHeaderCellTextData, NotifyHdl, EENotify*, aNotify)
-{
-    if( aNotify )
-    {
-        ::std::auto_ptr< SfxHint > aHint = SvxEditSourceHelper::EENotification2Hint( aNotify);
-
-        if( aHint.get() )
-            GetBroadcaster().Broadcast( *aHint.get() );
-    }
-
-    return 0;
-}
+//UNUSED2008-05  IMPL_LINK(ScAccessiblePreviewHeaderCellTextData, NotifyHdl, EENotify*, aNotify)
+//UNUSED2008-05  {
+//UNUSED2008-05      if( aNotify )
+//UNUSED2008-05      {
+//UNUSED2008-05          ::std::auto_ptr< SfxHint > aHint = SvxEditSourceHelper::EENotification2Hint( aNotify);
+//UNUSED2008-05
+//UNUSED2008-05          if( aHint.get() )
+//UNUSED2008-05              GetBroadcaster().Broadcast( *aHint.get() );
+//UNUSED2008-05      }
+//UNUSED2008-05
+//UNUSED2008-05      return 0;
+//UNUSED2008-05  }
 
 ScDocShell* ScAccessiblePreviewHeaderCellTextData::GetDocShell(ScPreviewShell* pViewShell)
 {

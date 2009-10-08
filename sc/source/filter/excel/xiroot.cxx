@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: xiroot.cxx,v $
- * $Revision: 1.24 $
+ * $Revision: 1.24.88.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -107,6 +107,13 @@ void XclImpRoot::SetAppFontEncoding( rtl_TextEncoding eAppFontEnc )
 
 void XclImpRoot::InitializeTable( SCTAB /*nScTab*/ )
 {
+    if( GetBiff() <= EXC_BIFF4 )
+    {
+        GetPalette().Initialize();
+        GetFontBuffer().Initialize();
+        GetNumFmtBuffer().Initialize();
+        GetXFBuffer().Initialize();
+    }
     GetXFRangeBuffer().Initialize();
     GetPageSettings().Initialize();
     GetTabViewSettings().Initialize();
@@ -115,6 +122,7 @@ void XclImpRoot::InitializeTable( SCTAB /*nScTab*/ )
 void XclImpRoot::FinalizeTable()
 {
     GetXFRangeBuffer().Finalize();
+    GetOldRoot().pColRowBuff->Convert( GetCurrScTab() );
     GetPageSettings().Finalize();
     GetTabViewSettings().Finalize();
 }

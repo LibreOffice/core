@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: CategoryPositionHelper.cxx,v $
- * $Revision: 1.5 $
+ * $Revision: 1.5.44.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -53,14 +53,6 @@ CategoryPositionHelper::CategoryPositionHelper( const CategoryPositionHelper& rS
     , m_fCategoryWidth( rSource.m_fCategoryWidth )
     , m_fInnerDistance( rSource.m_fInnerDistance )
     , m_fOuterDistance( rSource.m_fOuterDistance )
-{
-}
-
-CategoryPositionHelper::CategoryPositionHelper()
-    : m_fSeriesCount(1.0)
-    , m_fCategoryWidth(1.0)
-    , m_fInnerDistance(0.0)
-    , m_fOuterDistance(0.0)
 {
 }
 

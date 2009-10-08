@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: xmlwrap.hxx,v $
- * $Revision: 1.16 $
+ * $Revision: 1.16.32.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -58,8 +58,8 @@ class ScXMLImportWrapper
     SfxMedium*      pMedium;
     ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage > xStorage;
 
-    com::sun::star::uno::Reference< com::sun::star::task::XStatusIndicator> GetStatusIndicator(
-        com::sun::star::uno::Reference< com::sun::star::frame::XModel >& rModel);
+//UNUSED2008-05  com::sun::star::uno::Reference< com::sun::star::task::XStatusIndicator> GetStatusIndicator(
+//UNUSED2008-05      com::sun::star::uno::Reference< com::sun::star::frame::XModel >& rModel);
     com::sun::star::uno::Reference< com::sun::star::task::XStatusIndicator> GetStatusIndicator();
 
     sal_uInt32 ImportFromComponent(com::sun::star::uno::Reference<com::sun::star::lang::XMultiServiceFactory>& xServiceFactory,

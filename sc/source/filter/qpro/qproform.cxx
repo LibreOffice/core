@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: qproform.cxx,v $
- * $Revision: 1.9 $
+ * $Revision: 1.9.32.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -189,18 +189,6 @@ void QProToSc::DoFunc( DefTokenId eOc, sal_uInt16 nArgs, const sal_Char* pExtStr
 void QProToSc::IncToken( TokenId &rParam )
 {
     aPool << ocOpen << rParam << mnAddToken;
-    rParam = aPool.Store();
-}
-
-void QProToSc::DecToken( TokenId &rParam )
-{
-    aPool << ocOpen << rParam << mnSubToken;
-    rParam = aPool.Store();
-}
-
-void QProToSc::NegToken( TokenId &rParam )
-{
-    aPool << ocNegSub << ocOpen << rParam << ocClose;
     rParam = aPool.Store();
 }
 

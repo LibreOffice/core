@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: funcutl.cxx,v $
- * $Revision: 1.9 $
+ * $Revision: 1.9.32.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -345,46 +345,6 @@ void ArgInput::SetArgSelection  (const Selection& rSel )
 }
 
 /*************************************************************************
-#*  Member:     SetArgSelection                             Datum:13.01.97
-#*------------------------------------------------------------------------
-#*
-#*  Klasse:     ArgInput
-#*
-#*  Funktion:   Liefert die Selection fuer die EditBox zurueck.
-#*
-#*  Input:      String
-#*
-#*  Output:     ---
-#*
-#************************************************************************/
-Selection ArgInput::GetArgSelection ()
-{
-    Selection   aSel;
-    if(pEdArg !=NULL) aSel=pEdArg ->GetSelection();
-    return aSel;
-}
-
-/*************************************************************************
-#*  Member:     SetArgSelection                             Datum:13.01.97
-#*------------------------------------------------------------------------
-#*
-#*  Klasse:     ArgInput
-#*
-#*  Funktion:   Ersetzt die Selection in der EditBox.
-#*
-#*  Input:      String
-#*
-#*  Output:     ---
-#*
-#************************************************************************/
-void ArgInput::ReplaceSelOfArg(const String& rStr )
-{
-    if(pEdArg !=NULL) pEdArg ->ReplaceSelected(rStr );
-}
-
-
-
-/*************************************************************************
 #*  Member:     SetArgVal                                   Datum:13.01.97
 #*------------------------------------------------------------------------
 #*
@@ -702,29 +662,6 @@ IMPL_LINK( ArgInput, EdModifyHdl,ArgEdit*, pEd )
     if(pEd==pEdArg) EdModify();
 
     return 0;
-}
-
-/*************************************************************************
-#*  Member:     ScEditBox                                   Datum:20.01.97
-#*------------------------------------------------------------------------
-#*
-#*  Klasse:     ScEditBox
-#*
-#*  Funktion:   Konstruktor der Klasse ArgInput
-#*
-#*  Input:      Parent, Window-Style
-#*
-#*  Output:     ---
-#*
-#************************************************************************/
-ScEditBox::ScEditBox(   Window* pParent,WinBits nWinStyle)
-        :Control(pParent,nWinStyle|WB_DIALOGCONTROL)
-{
-    pMEdit=new MultiLineEdit(this,WB_LEFT | WB_VSCROLL | nWinStyle & WB_TABSTOP|
-                    WB_NOBORDER | WB_NOHIDESELECTION |WB_IGNORETAB);
-
-    pMEdit->Show();
-    aOldSel=pMEdit->GetSelection();
 }
 
 /*************************************************************************

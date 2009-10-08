@@ -8,7 +8,7 @@
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.8 $
+# $Revision: 1.8.44.1 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -54,9 +54,7 @@ SLOFILES=	\
     $(SLO)$/ChartModel_Persistence.obj		\
     $(SLO)$/DataPoint.obj \
     $(SLO)$/DataPointProperties.obj \
-    $(SLO)$/DataPointStyle.obj \
     $(SLO)$/DataSeries.obj \
-    $(SLO)$/DataSeriesStyle.obj \
     $(SLO)$/Diagram.obj \
     $(SLO)$/DataSeriesProperties.obj \
     $(SLO)$/FormattedString.obj \
@@ -65,8 +63,6 @@ SLOFILES=	\
     $(SLO)$/PageBackground.obj \
     $(SLO)$/PolarCoordinateSystem.obj \
     $(SLO)$/StockBar.obj \
-    $(SLO)$/StyleFamilies.obj \
-    $(SLO)$/StyleFamily.obj \
     $(SLO)$/Title.obj \
     $(SLO)$/Wall.obj \
     $(SLO)$/_serviceregistration_model.obj

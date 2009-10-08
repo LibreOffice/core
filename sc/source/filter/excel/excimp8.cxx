@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: excimp8.cxx,v $
- * $Revision: 1.127 $
+ * $Revision: 1.127.4.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -86,7 +86,6 @@
 #include "docoptio.hxx"
 #include "globstr.hrc"
 #include "fprogressbar.hxx"
-#include "xlocx.hxx"
 #include "xltracer.hxx"
 #include "xihelper.hxx"
 #include "xipage.hxx"
@@ -166,12 +165,6 @@ void ImportExcel8:: WinProtection( void )
     if( aIn.ReaduInt16() != 0 )
         GetExtDocOptions().GetDocSettings().mbWinProtected = true;
 }
-
-void ImportExcel8::Note( void )
-{
-    GetObjectManager().ReadNote( maStrm );
-}
-
 
 void ImportExcel8::Boundsheet( void )
 {

@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: CategoryPositionHelper.hxx,v $
- * $Revision: 1.3 $
+ * $Revision: 1.3.44.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -45,7 +45,6 @@ class CategoryPositionHelper
 public:
     CategoryPositionHelper( double fSeriesCount, double CategoryWidth = 1.0);
     CategoryPositionHelper( const CategoryPositionHelper& rSource );
-    CategoryPositionHelper();
     virtual ~CategoryPositionHelper();
 
     double getSlotWidth() const;

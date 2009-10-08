@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: viewuno.hxx,v $
- * $Revision: 1.13 $
+ * $Revision: 1.12.32.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -211,8 +211,8 @@ private:
     void                    StartActivationListening();
     void                    EndActivationListening();
 
+    ScTabViewObj(); // disabled
 public:
-                            ScTabViewObj();
                             ScTabViewObj(ScTabViewShell* pViewSh);
     virtual                 ~ScTabViewObj();
 

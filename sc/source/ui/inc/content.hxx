@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: content.hxx,v $
- * $Revision: 1.13 $
+ * $Revision: 1.13.32.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -113,7 +113,7 @@ class ScContentTree : public SvTreeListBox
     ULONG   GetChildIndex( SvLBoxEntry* pEntry ) const;
 
     void    DoDrag();
-    void    AdjustTitle();
+//UNUSED2008-05  void   AdjustTitle();
 
     ScDocument* GetSourceDocument();
 

@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: GraphicPropertyItemConverter.hxx,v $
- * $Revision: 1.7 $
+ * $Revision: 1.7.44.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -73,11 +73,6 @@ protected:
         throw( ::com::sun::star::uno::Exception );
     virtual bool ApplySpecialItem( USHORT nWhichId, const SfxItemSet & rItemSet )
         throw( ::com::sun::star::uno::Exception );
-
-    void FillBitmapItem( USHORT nWhichId, SfxItemSet & rOutItemSet ) const
-        throw( ::com::sun::star::beans::UnknownPropertyException );
-    void ApplyBitmapItem( USHORT nWhichId, const SfxItemSet & rItemSet )
-        throw( ::com::sun::star::beans::UnknownPropertyException );
 
 private:
     eGraphicObjectType              m_eGraphicObjectType;

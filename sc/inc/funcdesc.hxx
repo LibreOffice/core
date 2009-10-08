@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: funcdesc.hxx,v $
- * $Revision: 1.3 $
+ * $Revision: 1.3.30.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -148,8 +148,6 @@ public:
                                              xub_StrLen*    pFEnd = NULL,
                                              const ScFuncDesc** ppFDesc = NULL,
                                              String***      pppArgs = NULL );
-
-    static const ScFuncDesc*    GetDefaultFuncDesc();
 
     static xub_StrLen           GetFunctionStart( const String& rFormula, xub_StrLen nStart,
                                                     BOOL bBack, String* pFuncName = NULL );

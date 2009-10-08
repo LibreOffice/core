@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: ObjectIdentifier.cxx,v $
- * $Revision: 1.8 $
+ * $Revision: 1.8.24.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -254,11 +254,6 @@ void lcl_getDiagramAndCooSys( const OUString& rObjectCID
 
 } //anonymous namespace
 
-ObjectIdentifier::ObjectIdentifier()
-{
-}
-
-
 //static
 OUString ObjectIdentifier::createClassifiedIdentifierForObject(
           const Reference< uno::XInterface >& xObject
@@ -408,35 +403,6 @@ OUString ObjectIdentifier::createParticleForCoordinateSystem(
                 aRet = ObjectIdentifier::createParticleForDiagram( xDiagram, xChartModel );
                 aRet.appendAscii(":CS=");
                 aRet.append( OUString::valueOf( nCooSysIndex ) );
-                break;
-            }
-        }
-    }
-
-    return aRet.makeStringAndClear();
-}
-
-//static
-OUString ObjectIdentifier::createParticleForChartType(
-          const Reference< XChartType >& xChartType
-        , const Reference< frame::XModel >& xChartModel )
-{
-    OUStringBuffer aRet;
-
-    Reference< XDiagram > xDiagram( ChartModelHelper::findDiagram( xChartModel ) );
-    Reference< XCoordinateSystem > xCooSys( DiagramHelper::getCoordinateSystemOfChartType( xDiagram, xChartType ) );
-    Reference< XChartTypeContainer > xChartTypeContainer( xCooSys, uno::UNO_QUERY );
-    if( xChartTypeContainer.is() )
-    {
-        uno::Sequence< uno::Reference< XChartType > > aChartTypeList( xChartTypeContainer->getChartTypes() );
-        for( sal_Int32 nT = 0; nT < aChartTypeList.getLength(); ++nT )
-        {
-            uno::Reference< XChartType > xCurrentChartType( aChartTypeList[nT] );
-            if( xChartType == xCurrentChartType )
-            {
-                aRet = ObjectIdentifier::createParticleForCoordinateSystem( xCooSys, xChartModel );
-                aRet.appendAscii(":CT=");
-                aRet.append( OUString::valueOf( nT ) );
                 break;
             }
         }

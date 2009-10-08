@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: funcutl.hxx,v $
- * $Revision: 1.5 $
+ * $Revision: 1.5.32.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -82,8 +82,6 @@ protected:
 
 
 public:
-                    ScEditBox( Window* pParent,
-                                WinBits nWinStyle = WB_LEFT | WB_BORDER );
                     ScEditBox( Window* pParent, const ResId& rResId );
 
                     ~ScEditBox();
@@ -172,10 +170,6 @@ public:
     String      GetArgVal();
 
     void        SetArgSelection (const Selection& rSel );
-    void        ReplaceSelOfArg (const String& rStr );
-
-    Selection   GetArgSelection();
-
 
     ArgEdit*    GetArgEdPtr() {return pEdArg;}
 

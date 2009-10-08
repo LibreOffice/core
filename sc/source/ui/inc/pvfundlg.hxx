@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: pvfundlg.hxx,v $
- * $Revision: 1.7 $
+ * $Revision: 1.7.32.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -67,7 +67,6 @@ class ScDPFunctionListBox : public MultiListBox
 {
 public:
     explicit            ScDPFunctionListBox( Window* pParent, const ResId& rResId );
-    explicit            ScDPFunctionListBox( Window* pParent, WinBits nStyle = 0 );
 
     void                SetSelection( USHORT nFuncMask );
     USHORT              GetSelection() const;

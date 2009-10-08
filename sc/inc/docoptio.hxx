@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: docoptio.hxx,v $
- * $Revision: 1.7 $
+ * $Revision: 1.7.32.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -83,8 +83,6 @@ public:
 
     void        ResetDocOptions();
     inline void     CopyTo(ScDocOptions& rOpt);
-    void        Load(SvStream& rStream);
-    void        Save(SvStream& rStream, BOOL bConfig = FALSE) const;
 
     inline const ScDocOptions&  operator=( const ScDocOptions& rOpt );
     inline int                  operator==( const ScDocOptions& rOpt ) const;
@@ -178,7 +176,7 @@ class SC_DLLPUBLIC ScTpCalcItem : public SfxPoolItem
 {
 public:
                 TYPEINFO();
-                ScTpCalcItem( USHORT nWhich );
+//UNUSED2008-05  ScTpCalcItem( USHORT nWhich );
                 ScTpCalcItem( USHORT nWhich,
                               const ScDocOptions& rOpt );
                 ScTpCalcItem( const ScTpCalcItem& rItem );

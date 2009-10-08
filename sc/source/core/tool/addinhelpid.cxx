@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: addinhelpid.cxx,v $
- * $Revision: 1.6 $
+ * $Revision: 1.5.32.3 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -162,11 +162,11 @@ const ScUnoAddInHelpId pDateFuncHelpIds[] =
 
 // ============================================================================
 
-ScUnoAddInHelpIdGenerator::ScUnoAddInHelpIdGenerator() :
-    pCurrHelpIds( NULL ),
-    nArrayCount( 0 )
-{
-}
+//UNUSED2008-05  ScUnoAddInHelpIdGenerator::ScUnoAddInHelpIdGenerator() :
+//UNUSED2008-05  pCurrHelpIds( NULL ),
+//UNUSED2008-05  nArrayCount( 0 )
+//UNUSED2008-05  {
+//UNUSED2008-05  }
 
 ScUnoAddInHelpIdGenerator::ScUnoAddInHelpIdGenerator( const ::rtl::OUString& rServiceName )
 {

@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: ScaleAutomatism.hxx,v $
- * $Revision: 1.3 $
+ * $Revision: 1.3.44.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -82,6 +82,8 @@ public:
     void                calculateExplicitScaleAndIncrement(
                             ::com::sun::star::chart2::ExplicitScaleData& rExplicitScale,
                             ::com::sun::star::chart2::ExplicitIncrementData& rExplicitIncrement ) const;
+
+    ::com::sun::star::chart2::ScaleData getScale() const;
 
 private:
     /** Fills the passed scale data and increment data for category scaling. */

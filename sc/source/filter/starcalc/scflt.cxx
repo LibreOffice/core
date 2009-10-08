@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: scflt.cxx,v $
- * $Revision: 1.25 $
+ * $Revision: 1.25.30.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -92,71 +92,12 @@ using namespace com::sun::star;
 
 const SCCOL SC10MAXCOL = 255;   // #i85906# don't try to load more columns than there are in the file
 
-void lcl_ReadDateTime(SvStream& rStream, Sc10DateTime& rDateTime)
-{
-    rStream >> rDateTime.Year;
-    rStream >> rDateTime.Month;
-    rStream >> rDateTime.Day;
-    rStream >> rDateTime.Hour;
-    rStream >> rDateTime.Min;
-    rStream >> rDateTime.Sec;
-}
-
 
 void lcl_ReadFileHeader(SvStream& rStream, Sc10FileHeader& rFileHeader)
 {
     rStream.Read(&rFileHeader.CopyRight, sizeof(rFileHeader.CopyRight));
     rStream >> rFileHeader.Version;
     rStream.Read(&rFileHeader.Reserved, sizeof(rFileHeader.Reserved));
-}
-
-
-void lcl_ReadFileInfo(SvStream& rStream, Sc10FileInfo& rFileInfo)
-{
-    rStream.Read(&rFileInfo.Title, sizeof(rFileInfo.Title));
-    rStream.Read(&rFileInfo.Thema, sizeof(rFileInfo.Thema));
-    rStream.Read(&rFileInfo.Keys, sizeof(rFileInfo.Keys));
-    rStream.Read(&rFileInfo.Note, sizeof(rFileInfo.Note));
-    rStream.Read(&rFileInfo.InfoLabel0, sizeof(rFileInfo.InfoLabel0));
-    rStream.Read(&rFileInfo.InfoLabel1, sizeof(rFileInfo.InfoLabel1));
-    rStream.Read(&rFileInfo.InfoLabel2, sizeof(rFileInfo.InfoLabel2));
-    rStream.Read(&rFileInfo.InfoLabel3, sizeof(rFileInfo.InfoLabel3));
-    rStream.Read(&rFileInfo.Info0, sizeof(rFileInfo.Info0));
-    rStream.Read(&rFileInfo.Info1, sizeof(rFileInfo.Info1));
-    rStream.Read(&rFileInfo.Info2, sizeof(rFileInfo.Info2));
-    rStream.Read(&rFileInfo.Info3, sizeof(rFileInfo.Info3));
-    rStream.Read(&rFileInfo.CreateAuthor, sizeof(rFileInfo.CreateAuthor));
-    rStream.Read(&rFileInfo.ChangeAuthor, sizeof(rFileInfo.ChangeAuthor));
-    rStream.Read(&rFileInfo.PrintAuthor, sizeof(rFileInfo.PrintAuthor));
-    lcl_ReadDateTime(rStream, rFileInfo.CreateDate);
-    lcl_ReadDateTime(rStream, rFileInfo.ChangeDate);
-    lcl_ReadDateTime(rStream, rFileInfo.PrintDate);
-    rStream >> rFileInfo.PageCount;
-    rStream >> rFileInfo.ChartCount;
-    rStream >> rFileInfo.PictureCount;
-    rStream >> rFileInfo.GraphCount;
-    rStream >> rFileInfo.OleCount;
-    rStream >> rFileInfo.NoteCount;
-    rStream >> rFileInfo.TextCellCount;
-    rStream >> rFileInfo.ValueCellCount;
-    rStream >> rFileInfo.FormulaCellCount;
-    rStream >> rFileInfo.CellCount;
-    rStream.Read(rFileInfo.Reserved, sizeof(rFileInfo.Reserved));
-}
-
-
-void lcl_ReadEditStateInfo(SvStream& rStream, Sc10EditStateInfo& rInfo)
-{
-    rStream >> rInfo.CarretX;
-    rStream >> rInfo.CarretY;
-    rStream >> rInfo.CarretZ;
-
-    rStream >> rInfo.DeltaX;
-    rStream >> rInfo.DeltaY;
-    rStream >> rInfo.DeltaZ;
-
-    rStream >> rInfo.DataBaseMode;
-    rStream.Read(rInfo.Reserved, sizeof(rInfo.Reserved));
 }
 
 
@@ -1123,7 +1064,6 @@ void Sc10Import::LoadFileInfo()
 {
     Sc10FileInfo FileInfo;
     rStream.Read(&FileInfo, sizeof(FileInfo));
-    //lcl_ReadFileInfo(rStream, FileInfo);
 
     nError = rStream.GetError();
     // Achtung Info Uebertragen
@@ -1135,7 +1075,6 @@ void Sc10Import::LoadEditStateInfo()
 {
     Sc10EditStateInfo EditStateInfo;
     rStream.Read(&EditStateInfo, sizeof(EditStateInfo));
-    //lcl_ReadEditStateInfo(rStream, EditStateInfo);
 
     nError = rStream.GetError();
     nShowTab = static_cast<SCTAB>(EditStateInfo.DeltaZ);

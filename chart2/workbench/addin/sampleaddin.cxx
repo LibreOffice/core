@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: sampleaddin.cxx,v $
- * $Revision: 1.3 $
+ * $Revision: 1.3.44.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -46,13 +46,13 @@ using namespace rtl;
 extern "C" {
 
 void SAL_CALL component_getImplementationEnvironment(
-    const sal_Char ** ppEnvTypeName, uno_Environment ** ppEnv )
+    const sal_Char ** ppEnvTypeName, uno_Environment ** /*ppEnv*/ )
 {
     *ppEnvTypeName = CPPU_CURRENT_LANGUAGE_BINDING_NAME;
 }
 
 sal_Bool SAL_CALL component_writeInfo(
-    void * pServiceManager, registry::XRegistryKey * pRegistryKey )
+    void * /*pServiceManager*/, registry::XRegistryKey * pRegistryKey )
 {
     if( pRegistryKey )
     {
@@ -81,7 +81,7 @@ sal_Bool SAL_CALL component_writeInfo(
 }
 
 void * SAL_CALL component_getFactory(
-    const sal_Char * pImplName, void * pServiceManager, void * pRegistryKey )
+    const sal_Char * pImplName, void * pServiceManager, void * /*pRegistryKey*/ )
 {
     void* pRet = 0;
 
@@ -154,11 +154,11 @@ sal_Bool SampleAddIn::getLogicalPosition( uno::Reference< drawing::XShape >& xAx
                     if( bVertical )
                     {
                         aOutPosition.X = aPos.X;
-                        aOutPosition.Y = aPos.Y + nLength * (1.0 - fPercentage);    // y scale goes from top to bottom
+                        aOutPosition.Y = static_cast<sal_Int32>(aPos.Y + nLength * (1.0 - fPercentage));    // y scale goes from top to bottom
                     }
                     else
                     {
-                        aOutPosition.X = aPos.X + nLength * fPercentage;
+                        aOutPosition.X = static_cast<sal_Int32>(aPos.X + nLength * fPercentage);
                         aOutPosition.Y = aPos.Y;
                     }
                     bRet = sal_True;
@@ -389,7 +389,7 @@ void SAL_CALL SampleAddIn::refresh() throw( uno::RuntimeException )
                     // put the text centered below the red line
                     aPos.X += ( aSize.Width - mxMyRedLine->getPosition().X ) / 2;
                     aPos.Y += 1000;
-                    aPos.Y += 0.1 * xYAxisShape->getSize().Height;
+                    aPos.Y += static_cast<sal_Int32>(0.1 * xYAxisShape->getSize().Height);
                     mxMyText->setPosition( aPos );
                 }
             }
@@ -421,14 +421,14 @@ void SAL_CALL SampleAddIn::refresh() throw( uno::RuntimeException )
 //      }
 }
 
-void SAL_CALL SampleAddIn::addRefreshListener( const uno::Reference< util::XRefreshListener >& l )
+void SAL_CALL SampleAddIn::addRefreshListener( const uno::Reference< util::XRefreshListener >&  )
     throw( uno::RuntimeException )
 {
     // not implemented - this is not necessary
     // (this method exists just because the interface requires it)
 }
 
-void SAL_CALL SampleAddIn::removeRefreshListener( const uno::Reference< util::XRefreshListener >& l )
+void SAL_CALL SampleAddIn::removeRefreshListener( const uno::Reference< util::XRefreshListener >&  )
     throw( uno::RuntimeException )
 {
     // not implemented - this is not necessary

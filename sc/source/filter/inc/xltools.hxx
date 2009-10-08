@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: xltools.hxx,v $
- * $Revision: 1.27 $
+ * $Revision: 1.27.32.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -166,8 +166,9 @@ public:
     /** Returns a text encoding from an Excel code page.
         @return  The corresponding text encoding or RTL_TEXTENCODING_DONTKNOW. */
     static rtl_TextEncoding GetTextEncoding( sal_uInt16 nCodePage );
-    /** Returns an Excel code page from a text encoding. */
-    static sal_uInt16   GetXclCodePage( rtl_TextEncoding eTextEnc );
+
+//UNUSED2008-05  /** Returns an Excel code page from a text encoding. */
+//UNUSED2008-05  static sal_uInt16   GetXclCodePage( rtl_TextEncoding eTextEnc );
 
     // font names -------------------------------------------------------------
 

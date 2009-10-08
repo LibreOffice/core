@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: ItemConverter.cxx,v $
- * $Revision: 1.15 $
+ * $Revision: 1.15.24.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -86,11 +86,6 @@ SfxItemPool & ItemConverter::GetItemPool() const
 SfxItemSet ItemConverter::CreateEmptyItemSet() const
 {
     return SfxItemSet( GetItemPool(), GetWhichPairs() );
-}
-
-bool ItemConverter::IsValid() const
-{
-    return m_bIsValid;
 }
 
 uno::Reference< beans::XPropertySet > ItemConverter::GetPropertySet() const

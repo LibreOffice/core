@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: fmtuno.cxx,v $
- * $Revision: 1.18 $
+ * $Revision: 1.18.32.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -130,9 +130,9 @@ ScConditionMode lcl_ConditionOperatorToMode( sheet::ConditionOperator eOper )
 
 //------------------------------------------------------------------------
 
-ScTableConditionalFormat::ScTableConditionalFormat()
-{
-}
+//UNUSED2008-05  ScTableConditionalFormat::ScTableConditionalFormat()
+//UNUSED2008-05  {
+//UNUSED2008-05  }
 
 ScTableConditionalFormat::ScTableConditionalFormat(ScDocument* pDoc, ULONG nKey,
                                                     const ScGrammar::Grammar eGrammar)
@@ -488,10 +488,10 @@ ScTableConditionalFormat* ScTableConditionalFormat::getImplementation(
 
 //------------------------------------------------------------------------
 
-ScTableConditionalEntry::ScTableConditionalEntry() :
-    pParent( NULL )
-{
-}
+//UNUSED2008-05  ScTableConditionalEntry::ScTableConditionalEntry() :
+//UNUSED2008-05  pParent( NULL )
+//UNUSED2008-05  {
+//UNUSED2008-05  }
 
 ScTableConditionalEntry::ScTableConditionalEntry(ScTableConditionalFormat* pPar,
                                                  const ScCondFormatEntryItem& aItem) :
@@ -599,11 +599,11 @@ void SAL_CALL ScTableConditionalEntry::setStyleName( const rtl::OUString& aStyle
 
 //------------------------------------------------------------------------
 
-ScTableValidationObj::ScTableValidationObj() :
-    aPropSet( lcl_GetValidatePropertyMap() ),
-    meGrammar( ScGrammar::GRAM_UNSPECIFIED )
-{
-}
+//UNUSED2008-05  ScTableValidationObj::ScTableValidationObj() :
+//UNUSED2008-05  aPropSet( lcl_GetValidatePropertyMap() ),
+//UNUSED2008-05  meGrammar( ScGrammar::GRAM_UNSPECIFIED )
+//UNUSED2008-05  {
+//UNUSED2008-05  }
 
 ScTableValidationObj::ScTableValidationObj(ScDocument* pDoc, ULONG nKey,
                                             const ScGrammar::Grammar eGrammar) :

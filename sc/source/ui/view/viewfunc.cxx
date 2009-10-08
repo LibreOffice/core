@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: viewfunc.cxx,v $
- * $Revision: 1.46 $
+ * $Revision: 1.44.22.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -99,11 +99,11 @@ ScViewFunc::ScViewFunc( Window* pParent, ScDocShell& rDocSh, ScTabViewShell* pVi
 {
 }
 
-ScViewFunc::ScViewFunc( Window* pParent, const ScViewFunc& rViewFunc, ScTabViewShell* pViewShell ) :
-    ScTabView( pParent, rViewFunc, pViewShell ),
-    bFormatValid( FALSE )
-{
-}
+//UNUSED2008-05  ScViewFunc::ScViewFunc( Window* pParent, const ScViewFunc& rViewFunc, ScTabViewShell* pViewShell ) :
+//UNUSED2008-05      ScTabView( pParent, rViewFunc, pViewShell ),
+//UNUSED2008-05      bFormatValid( FALSE )
+//UNUSED2008-05  {
+//UNUSED2008-05  }
 
 ScViewFunc::~ScViewFunc()
 {

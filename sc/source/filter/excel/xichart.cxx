@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: xichart.cxx,v $
- * $Revision: 1.21 $
+ * $Revision: 1.20.62.14 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -269,7 +269,8 @@ void XclImpChRoot::ConvertEscherFormat( ScfPropertySet& rPropSet,
         XclChPropertyMode ePropMode ) const
 {
     GetChartPropSetHelper().WriteEscherProperties( rPropSet,
-        mxChData->GetGradientTable(), mxChData->GetBitmapTable(), rEscherFmt, rPicFmt, ePropMode );
+        mxChData->GetGradientTable(), mxChData->GetHatchTable(), mxChData->GetBitmapTable(),
+        rEscherFmt, rPicFmt, ePropMode );
 }
 
 void XclImpChRoot::ConvertFont( ScfPropertySet& rPropSet,
@@ -420,12 +421,12 @@ XclImpChEscherFormat::XclImpChEscherFormat( const XclImpRoot& rRoot )
 void XclImpChEscherFormat::ReadHeaderRecord( XclImpStream& rStrm )
 {
     // read from stream - CHESCHERFORMAT uses own ID for record continuation
-    XclImpEscherPropSet aPropSet( rStrm.GetRoot() );
+    XclImpDffPropSet aPropSet( rStrm.GetRoot() );
     rStrm.ResetRecord( true, rStrm.GetRecId() );
     rStrm >> aPropSet;
     // get the data
     aPropSet.FillToItemSet( *maData.mxItemSet );
-    // get bitmap mode from Escher item set
+    // get bitmap mode from DFF item set
     sal_uInt32 nType = aPropSet.GetPropertyValue( DFF_Prop_fillType, mso_fillSolid );
     maPicFmt.mnBmpMode = (nType == mso_fillPicture) ? EXC_CHPICFORMAT_STRETCH : EXC_CHPICFORMAT_STACK;
 }
@@ -478,13 +479,6 @@ XclImpChFrameBase::XclImpChFrameBase( const XclChFormatInfo& rFmtInfo )
     }
 }
 
-XclImpChFrameBase::XclImpChFrameBase(
-        const XclChLineFormat& rLineFmt, const XclChAreaFormat& rAreaFmt ) :
-    mxLineFmt( new XclImpChLineFormat( rLineFmt ) ),
-    mxAreaFmt( new XclImpChAreaFormat( rAreaFmt ) )
-{
-}
-
 void XclImpChFrameBase::ReadSubRecord( XclImpStream& rStrm )
 {
     switch( rStrm.GetRecId() )
@@ -498,20 +492,22 @@ void XclImpChFrameBase::ReadSubRecord( XclImpStream& rStrm )
             mxAreaFmt->ReadChAreaFormat( rStrm );
         break;
         case EXC_ID_CHESCHERFORMAT:
-            // pass unique object name to escher format object
             mxEscherFmt.reset( new XclImpChEscherFormat( rStrm.GetRoot() ) );
             mxEscherFmt->ReadRecordGroup( rStrm );
         break;
     }
 }
 
-void XclImpChFrameBase::ConvertFrameBase( const XclImpChRoot& rRoot,
+void XclImpChFrameBase::ConvertLineBase( const XclImpChRoot& rRoot,
         ScfPropertySet& rPropSet, XclChObjectType eObjType, sal_uInt16 nFormatIdx ) const
 {
-    // line format
     if( mxLineFmt.is() )
         mxLineFmt->Convert( rRoot, rPropSet, eObjType, nFormatIdx );
-    // area format (only for frame objects)
+}
+
+void XclImpChFrameBase::ConvertAreaBase( const XclImpChRoot& rRoot,
+        ScfPropertySet& rPropSet, XclChObjectType eObjType, sal_uInt16 nFormatIdx ) const
+{
     if( rRoot.GetFormatInfo( eObjType ).mbIsFrame )
     {
         // CHESCHERFORMAT overrides CHAREAFORMAT (even if it is auto)
@@ -520,6 +516,13 @@ void XclImpChFrameBase::ConvertFrameBase( const XclImpChRoot& rRoot,
         else if( mxAreaFmt.is() )
             mxAreaFmt->Convert( rRoot, rPropSet, eObjType, nFormatIdx );
     }
+}
+
+void XclImpChFrameBase::ConvertFrameBase( const XclImpChRoot& rRoot,
+        ScfPropertySet& rPropSet, XclChObjectType eObjType, sal_uInt16 nFormatIdx ) const
+{
+    ConvertLineBase( rRoot, rPropSet, eObjType, nFormatIdx );
+    ConvertAreaBase( rRoot, rPropSet, eObjType, nFormatIdx );
 }
 
 // ----------------------------------------------------------------------------
@@ -531,18 +534,55 @@ XclImpChFrame::XclImpChFrame( const XclImpChRoot& rRoot, XclChObjectType eObjTyp
 {
 }
 
-XclImpChFrame::XclImpChFrame( const XclImpChRoot& rRoot,
-        const XclChLineFormat& rLineFmt, const XclChAreaFormat& rAreaFmt,
-        XclChObjectType eObjType ) :
-    XclImpChFrameBase( rLineFmt, rAreaFmt ),
-    XclImpChRoot( rRoot ),
-    meObjType( eObjType )
-{
-}
-
 void XclImpChFrame::ReadHeaderRecord( XclImpStream& rStrm )
 {
     rStrm >> maData.mnFormat >> maData.mnFlags;
+}
+
+void XclImpChFrame::UpdateObjFrame( const XclObjLineData& rLineData, const XclObjFillData& rFillData )
+{
+    const XclImpPalette& rPal = GetPalette();
+
+    if( rLineData.IsVisible() && (!mxLineFmt || !mxLineFmt->HasLine()) )
+    {
+        // line formatting
+        XclChLineFormat aLineFmt;
+        aLineFmt.maColor = rPal.GetColor( rLineData.mnColorIdx );
+        switch( rLineData.mnStyle )
+        {
+            case EXC_OBJ_LINE_SOLID:        aLineFmt.mnPattern = EXC_CHLINEFORMAT_SOLID;        break;
+            case EXC_OBJ_LINE_DASH:         aLineFmt.mnPattern = EXC_CHLINEFORMAT_DASH;         break;
+            case EXC_OBJ_LINE_DOT:          aLineFmt.mnPattern = EXC_CHLINEFORMAT_DOT;          break;
+            case EXC_OBJ_LINE_DASHDOT:      aLineFmt.mnPattern = EXC_CHLINEFORMAT_DASHDOT;      break;
+            case EXC_OBJ_LINE_DASHDOTDOT:   aLineFmt.mnPattern = EXC_CHLINEFORMAT_DASHDOTDOT;   break;
+            case EXC_OBJ_LINE_MEDTRANS:     aLineFmt.mnPattern = EXC_CHLINEFORMAT_MEDTRANS;     break;
+            case EXC_OBJ_LINE_DARKTRANS:    aLineFmt.mnPattern = EXC_CHLINEFORMAT_DARKTRANS;    break;
+            case EXC_OBJ_LINE_LIGHTTRANS:   aLineFmt.mnPattern = EXC_CHLINEFORMAT_LIGHTTRANS;   break;
+            case EXC_OBJ_LINE_NONE:         aLineFmt.mnPattern = EXC_CHLINEFORMAT_NONE;         break;
+            default:                        aLineFmt.mnPattern = EXC_CHLINEFORMAT_SOLID;
+        }
+        switch( rLineData.mnWidth )
+        {
+            case EXC_OBJ_LINE_HAIR:     aLineFmt.mnWeight = EXC_CHLINEFORMAT_HAIR;      break;
+            case EXC_OBJ_LINE_THIN:     aLineFmt.mnWeight = EXC_CHLINEFORMAT_SINGLE;    break;
+            case EXC_OBJ_LINE_MEDIUM:   aLineFmt.mnWeight = EXC_CHLINEFORMAT_DOUBLE;    break;
+            case EXC_OBJ_LINE_THICK:    aLineFmt.mnWeight = EXC_CHLINEFORMAT_TRIPLE;    break;
+            default:                    aLineFmt.mnWeight = EXC_CHLINEFORMAT_HAIR;
+        }
+        ::set_flag( aLineFmt.mnFlags, EXC_CHLINEFORMAT_AUTO, rLineData.IsAuto() );
+        mxLineFmt.reset( new XclImpChLineFormat( aLineFmt ) );
+    }
+
+    if( rFillData.IsFilled() && (!mxAreaFmt || !mxAreaFmt->HasArea()) && !mxEscherFmt )
+    {
+        // area formatting
+        XclChAreaFormat aAreaFmt;
+        aAreaFmt.maPattColor = rPal.GetColor( rFillData.mnPattColorIdx );
+        aAreaFmt.maBackColor = rPal.GetColor( rFillData.mnBackColorIdx );
+        aAreaFmt.mnPattern = rFillData.mnPattern;
+        ::set_flag( aAreaFmt.mnFlags, EXC_CHAREAFORMAT_AUTO, rFillData.IsAuto() );
+        mxAreaFmt.reset( new XclImpChAreaFormat( aAreaFmt ) );
+    }
 }
 
 void XclImpChFrame::Convert( ScfPropertySet& rPropSet ) const
@@ -763,8 +803,7 @@ void XclImpChText::ReadHeaderRecord( XclImpStream& rStrm )
     else
     {
         // BIFF2-BIFF7: get rotation from text orientation
-        sal_uInt8 nOrient = 0;
-        ::extract_value( nOrient, maData.mnFlags, 8, 3 );
+        sal_uInt8 nOrient = ::extract_value< sal_uInt8 >( maData.mnFlags, 8, 3 );
         maData.mnRotation = XclTools::GetXclRotFromOrient( nOrient );
     }
 }
@@ -1251,16 +1290,14 @@ void XclImpChDataFormat::Convert( ScfPropertySet& rPropSet, const XclChExtTypeIn
         mxMarkerFmt->ConvertColor( GetChRoot(), rPropSet, maData.mnFormatIdx );
 }
 
-void XclImpChDataFormat::ConvertVarPoint( ScfPropertySet& rPropSet, sal_uInt16 nFormatIdx ) const
-{
-    if( !mxEscherFmt && mxAreaFmt.is() && IsAutoArea() )
-        mxAreaFmt->Convert( GetChRoot(), rPropSet, EXC_CHOBJTYPE_FILLEDSERIES, nFormatIdx );
-}
-
 void XclImpChDataFormat::ConvertLine( ScfPropertySet& rPropSet, XclChObjectType eObjType ) const
 {
-    if( mxLineFmt.is() )
-        mxLineFmt->Convert( GetChRoot(), rPropSet, eObjType );
+    ConvertLineBase( GetChRoot(), rPropSet, eObjType );
+}
+
+void XclImpChDataFormat::ConvertArea( ScfPropertySet& rPropSet, sal_uInt16 nFormatIdx ) const
+{
+    ConvertAreaBase( GetChRoot(), rPropSet, EXC_CHOBJTYPE_FILLEDSERIES, nFormatIdx );
 }
 
 void XclImpChDataFormat::RemoveUnusedFormats( const XclChExtTypeInfo& rTypeInfo )
@@ -1691,14 +1728,13 @@ Reference< XDataSeries > XclImpChSeries::CreateDataSeries() const
 #else
         aSeriesProp.SetBoolProperty( EXC_CHPROP_VARYCOLORSBY, rTypeInfo.meTypeCateg == EXC_CHTYPECATEG_PIE );
 #endif
-        if( bVarPointFmt && mxSeriesFmt.is() && mxSeriesFmt->IsAutoArea() )
+        // #i91271# always set area formatting for every point in pie/doughnut charts
+        if( mxSeriesFmt.is() && ((bVarPointFmt && mxSeriesFmt->IsAutoArea()) || (rTypeInfo.meTypeCateg == EXC_CHTYPECATEG_PIE)) )
         {
-            sal_uInt16 nPointCount = mxValueLink->GetCellCount();
-            for( sal_uInt16 nPointIdx = 0; nPointIdx < nPointCount; ++nPointIdx )
+            for( sal_uInt16 nPointIdx = 0, nPointCount = mxValueLink->GetCellCount(); nPointIdx < nPointCount; ++nPointIdx )
             {
                 ScfPropertySet aPointProp = lclGetPointPropSet( xDataSeries, nPointIdx );
-                // nPointIdx is used as automatic format index
-                mxSeriesFmt->ConvertVarPoint( aPointProp, nPointIdx );
+                mxSeriesFmt->ConvertArea( aPointProp, bVarPointFmt ? nPointIdx : mnSeriesIdx );
             }
         }
 
@@ -1766,14 +1802,14 @@ XclImpChDataFormatRef* XclImpChSeries::GetDataFormatRef( sal_uInt16 nPointIdx )
 {
     if( nPointIdx == EXC_CHDATAFORMAT_ALLPOINTS )
         return &mxSeriesFmt;
-    if( nPointIdx <= EXC_CHDATAFORMAT_MAXPOINT )
+    if( nPointIdx < EXC_CHDATAFORMAT_MAXPOINTCOUNT )
         return &maPointFmts[ nPointIdx ];
     return 0;
 }
 
 XclImpChTextRef* XclImpChSeries::GetDataLabelRef( sal_uInt16 nPointIdx )
 {
-    if( (nPointIdx == EXC_CHDATAFORMAT_ALLPOINTS) || (nPointIdx <= EXC_CHDATAFORMAT_MAXPOINT) )
+    if( (nPointIdx == EXC_CHDATAFORMAT_ALLPOINTS) || (nPointIdx < EXC_CHDATAFORMAT_MAXPOINTCOUNT) )
         return &maLabels[ nPointIdx ];
     return 0;
 }
@@ -2628,8 +2664,7 @@ void XclImpChTick::ReadChTick( XclImpStream& rStrm )
     else
     {
         // BIFF2-BIFF7: get rotation from text orientation
-        sal_uInt8 nOrient = 0;
-        ::extract_value( nOrient, maData.mnFlags, 2, 3 );
+        sal_uInt8 nOrient = ::extract_value< sal_uInt8 >( maData.mnFlags, 2, 3 );
         maData.mnRotation = XclTools::GetXclRotFromOrient( nOrient );
     }
 }
@@ -3269,9 +3304,11 @@ void XclImpChChart::ReadChDataFormat( XclImpStream& rStrm )
     }
 }
 
-void XclImpChChart::SetChartFrameFormat( const XclChLineFormat& rLineFmt, const XclChAreaFormat& rAreaFmt )
+void XclImpChChart::UpdateObjFrame( const XclObjLineData& rLineData, const XclObjFillData& rFillData )
 {
-    mxFrame.reset( new XclImpChFrame( GetChRoot(), rLineFmt, rAreaFmt, EXC_CHOBJTYPE_BACKGROUND ) );
+    if( !mxFrame )
+        mxFrame.reset( new XclImpChFrame( GetChRoot(), EXC_CHOBJTYPE_BACKGROUND ) );
+    mxFrame->UpdateObjFrame( rLineData, rFillData );
 }
 
 XclImpChTypeGroupRef XclImpChChart::GetTypeGroup( sal_uInt16 nGroupIdx ) const
@@ -3474,9 +3511,6 @@ void XclImpChart::ReadChartSubStream( XclImpStream& rStrm )
     bool bLoop = true;
     while( bLoop && rStrm.StartNextRecord() )
     {
-        sal_uInt16 nRecId = rStrm.GetRecId();
-        bLoop = nRecId != EXC_ID_EOF;
-
         // page settings - only for charts in entire sheet
         if( mbOwnTab ) switch( rStrm.GetRecId() )
         {
@@ -3493,7 +3527,7 @@ void XclImpChart::ReadChartSubStream( XclImpStream& rStrm )
             case EXC_ID_HCENTER:
             case EXC_ID_VCENTER:        rPageSett.ReadCenter( rStrm );          break;
             case EXC_ID_SETUP:          rPageSett.ReadSetup( rStrm );           break;
-            case EXC_ID_BITMAP:         rPageSett.ReadBitmap( rStrm );          break;
+            case EXC_ID8_IMGDATA:       rPageSett.ReadImgData( rStrm );         break;
 
             case EXC_ID_WINDOW2:        rTabViewSett.ReadWindow2( rStrm, true );break;
             case EXC_ID_SCL:            rTabViewSett.ReadScl( rStrm );          break;
@@ -3501,6 +3535,8 @@ void XclImpChart::ReadChartSubStream( XclImpStream& rStrm )
 
         switch( rStrm.GetRecId() )
         {
+            case EXC_ID_EOF:            bLoop = false;                          break;
+
             // #i31882# ignore embedded chart objects
             case EXC_ID2_BOF:
             case EXC_ID3_BOF:
@@ -3509,6 +3545,7 @@ void XclImpChart::ReadChartSubStream( XclImpStream& rStrm )
 
             case EXC_ID_CHCHART:        ReadChChart( rStrm );                   break;
             case EXC_ID_OBJ:            GetTracer().TraceChartEmbeddedObj();    break;
+
             case EXC_ID8_CHPIVOTREF:
                 GetTracer().TracePivotChartExists();
                 mbIsPivotChart = true;
@@ -3517,11 +3554,11 @@ void XclImpChart::ReadChartSubStream( XclImpStream& rStrm )
     }
 }
 
-void XclImpChart::SetChartFrameFormat( const XclChLineFormat& rLineFmt, const XclChAreaFormat& rAreaFmt )
+void XclImpChart::UpdateObjFrame( const XclObjLineData& rLineData, const XclObjFillData& rFillData )
 {
     if( !mxChartData )
         mxChartData.reset( new XclImpChChart( GetRoot() ) );
-    mxChartData->SetChartFrameFormat( rLineFmt, rAreaFmt );
+    mxChartData->UpdateObjFrame( rLineData, rFillData );
 }
 
 sal_Size XclImpChart::GetProgressSize() const

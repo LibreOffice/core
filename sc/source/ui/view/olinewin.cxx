@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: olinewin.cxx,v $
- * $Revision: 1.15 $
+ * $Revision: 1.15.32.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -149,14 +149,6 @@ void ScOutlineWindow::ScrollPixel( long nDiff )
 
     mbDontDrawFocus = false;
     ShowFocus();
-}
-
-void ScOutlineWindow::ScrollRel( long nEntryDiff )
-{
-    if ( mbHoriz )
-        Scroll( nEntryDiff, 0 );
-    else
-        Scroll( 0, nEntryDiff );
 }
 
 void ScOutlineWindow::ScrollRel( long nEntryDiff, long nEntryStart, long nEntryEnd )

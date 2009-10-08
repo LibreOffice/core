@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: dbcolect.hxx,v $
- * $Revision: 1.13 $
+ * $Revision: 1.13.32.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -129,7 +129,6 @@ public:
                      SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
                      BOOL bByR = TRUE, BOOL bHasH = TRUE);
             ScDBData(const ScDBData& rData);
-            ScDBData( SvStream& rStream, ScMultipleReadHeader& rHdr );
             ~ScDBData();
 
     virtual DataObject* Clone() const;
@@ -137,8 +136,6 @@ public:
             ScDBData&   operator= (const ScDBData& rData);
 
             BOOL        operator== (const ScDBData& rData) const;
-
-            BOOL        Store( SvStream& rStream, ScMultipleWriteHeader& rHdr ) const;
 
             const String& GetName() const               { return aName; }
             void        GetName(String& rName) const    { rName = aName; }
@@ -160,7 +157,7 @@ public:
             BOOL        IsStripData() const             { return bStripData; }
             void        SetStripData(BOOL bSet)         { bStripData = bSet; }
 
-            BOOL        IsBeyond(SCROW nMaxRow) const;
+//UNUSED2008-05  BOOL       IsBeyond(SCROW nMaxRow) const;
 
             String      GetSourceString() const;
             String      GetOperations() const;
@@ -181,8 +178,6 @@ public:
 
             BOOL        IsDBAtCursor(SCCOL nCol, SCROW nRow, SCTAB nTab, BOOL bStartOnly) const;
             BOOL        IsDBAtArea(SCTAB nTab, SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2) const;
-
-            String      GetTargetName(const String& rDocName) const;
 
             BOOL        HasImportParam() const   { return bDBImport; }
             BOOL        HasQueryParam() const    { return bDoQuery[0]; }
@@ -227,9 +222,6 @@ public:
     virtual BOOL        IsEqual(DataObject* pKey1, DataObject* pKey2) const;
             ScDBData*   GetDBAtCursor(SCCOL nCol, SCROW nRow, SCTAB nTab, BOOL bStartOnly) const;
             ScDBData*   GetDBAtArea(SCTAB nTab, SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2) const;
-
-    BOOL    Load( SvStream& rStream );
-    BOOL    Store( SvStream& rStream ) const;
 
     BOOL    SearchName( const String& rName, USHORT& rIndex ) const;
 

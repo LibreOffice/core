@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: xlpivot.cxx,v $
- * $Revision: 1.12 $
+ * $Revision: 1.12.32.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -214,11 +214,6 @@ XclPCNumGroupInfo::XclPCNumGroupInfo() :
     SetNumType();
 }
 
-bool XclPCNumGroupInfo::IsNumType() const
-{
-    return GetXclDataType() == EXC_SXNUMGROUP_TYPE_NUM;
-}
-
 void XclPCNumGroupInfo::SetNumType()
 {
     SetXclDataType( EXC_SXNUMGROUP_TYPE_NUM );
@@ -260,9 +255,7 @@ void XclPCNumGroupInfo::SetScDateType( sal_Int32 nScType )
 
 sal_uInt16 XclPCNumGroupInfo::GetXclDataType() const
 {
-    sal_uInt16 nXclType = 0;
-    ::extract_value( nXclType, mnFlags, 2, 4 );
-    return nXclType;
+    return ::extract_value< sal_uInt16 >( mnFlags, 2, 4 );
 }
 
 void XclPCNumGroupInfo::SetXclDataType( sal_uInt16 nXclType )
@@ -302,10 +295,10 @@ bool XclPCField::IsStandardField() const
     return meFieldType == EXC_PCFIELD_STANDARD;
 }
 
-bool XclPCField::IsCalculatedField() const
-{
-    return meFieldType == EXC_PCFIELD_CALCED;
-}
+//UNUSED2008-05  bool XclPCField::IsCalculatedField() const
+//UNUSED2008-05  {
+//UNUSED2008-05      return meFieldType == EXC_PCFIELD_CALCED;
+//UNUSED2008-05  }
 
 bool XclPCField::IsStdGroupField() const
 {
@@ -621,9 +614,7 @@ void XclPTFieldExtInfo::SetApiAutoShowMode( sal_Int32 nShowMode )
 
 sal_Int32 XclPTFieldExtInfo::GetApiAutoShowCount() const
 {
-    sal_uInt8 nShowCount;
-    ::extract_value( nShowCount, mnFlags, 24, 8 );
-    return nShowCount;
+    return ::extract_value< sal_Int32 >( mnFlags, 24, 8 );
 }
 
 void XclPTFieldExtInfo::SetApiAutoShowCount( sal_Int32 nShowCount )

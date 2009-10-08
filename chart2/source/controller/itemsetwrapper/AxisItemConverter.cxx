@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: AxisItemConverter.cxx,v $
- * $Revision: 1.14 $
+ * $Revision: 1.14.44.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -111,7 +111,7 @@ AxisItemConverter::AxisItemConverter(
                                  xNamedPropertyContainerFactory,
                                  GraphicPropertyItemConverter::LINE_PROPERTIES ));
     m_aConverters.push_back( new CharacterPropertyItemConverter( rPropertySet, rItemPool, pRefSize,
-                                                                 C2U( "ReferenceDiagramSize" ) ));
+                                                                 C2U( "ReferencePageSize" ) ));
 
     m_xAxis.set( Reference< chart2::XAxis >( rPropertySet, uno::UNO_QUERY ) );
     OSL_ASSERT( m_xAxis.is());

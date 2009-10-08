@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: rangeutl.cxx,v $
- * $Revision: 1.14 $
+ * $Revision: 1.12.30.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -450,11 +450,6 @@ sal_Int32 ScRangeStringConverter::GetTokenCount( const OUString& rString, sal_Un
     return nCount;
 }
 
-void ScRangeStringConverter::AppendString( OUString& rString, const OUString& rNewStr, sal_Unicode cSeperator )
-{
-    AssignString( rString, rNewStr, sal_True, cSeperator );
-}
-
 //___________________________________________________________________
 
 sal_Bool ScRangeStringConverter::GetAddressFromString(
@@ -776,15 +771,6 @@ ScArea::ScArea( const ScArea& r ) :
 
 //------------------------------------------------------------------------
 
-void ScArea::Clear()
-{
-    nTab = 0;
-    nColStart = nColEnd = 0;
-    nRowStart = nRowEnd = 0;
-}
-
-//------------------------------------------------------------------------
-
 ScArea& ScArea::operator=( const ScArea& r )
 {
     nTab        = r.nTab;
@@ -804,48 +790,6 @@ BOOL ScArea::operator==( const ScArea& r ) const
             && (nRowStart   == r.nRowStart)
             && (nColEnd     == r.nColEnd)
             && (nRowEnd     == r.nRowEnd) );
-}
-
-//------------------------------------------------------------------------
-
-SvStream& operator>> ( SvStream& rStream, ScArea& /* rArea */ )
-{
-#if SC_ROWLIMIT_STREAM_ACCESS
-#error address types changed!
-    rStream >> rArea.nTab;
-    rStream >> rArea.nColStart;
-    rStream >> rArea.nRowStart;
-    rStream >> rArea.nColEnd;
-    rStream >> rArea.nRowEnd;
-#endif // SC_ROWLIMIT_STREAM_ACCESS
-    return rStream;
-}
-
-//------------------------------------------------------------------------
-
-SvStream& operator<< ( SvStream& rStream, const ScArea& /* rArea */ )
-{
-#if SC_ROWLIMIT_STREAM_ACCESS
-#error address types changed!
-    rStream << rArea.nTab;
-    rStream << rArea.nColStart;
-    rStream << rArea.nRowStart;
-    rStream << rArea.nColEnd;
-    rStream << rArea.nRowEnd;
-#endif // SC_ROWLIMIT_STREAM_ACCESS
-    return rStream;
-}
-
-//------------------------------------------------------------------------
-
-void ScArea::GetString( String& rStr, BOOL bAbsolute, ScDocument* pDoc,
-                        ScAddress::Details const & rDetails ) const
-{
-    ScRange aRange( ScAddress( nColStart, nRowStart, nTab ),
-                    ScAddress( nColEnd,   nRowEnd,   nTab ) );
-    USHORT  nFlags = bAbsolute ? SCA_COL_ABSOLUTE | SCA_ROW_ABSOLUTE : 0;
-
-    aRange.Format( rStr, nFlags, pDoc, rDetails );
 }
 
 //------------------------------------------------------------------------

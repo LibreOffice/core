@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: xistream.hxx,v $
- * $Revision: 1.13 $
+ * $Revision: 1.13.30.3 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -310,8 +310,8 @@ public:
     /** Seeks to last position from user position stack.
         @descr  This position will be removed from the stack. */
     void                PopPosition();
-    /** Removes last position from user position stack, but does not seek to it. */
-    void                RejectPosition();
+//UNUSED2008-05  /** Removes last position from user position stack, but does not seek to it. */
+//UNUSED2008-05  void                RejectPosition();
 
     /** Stores current position. This position keeps valid in all records. */
     void                StoreGlobalPosition();
@@ -357,6 +357,7 @@ public:
     /** Copies nBytes bytes to rOutStrm.
         @return  Count of bytes really written. */
     sal_Size            CopyToStream( SvStream& rOutStrm, sal_Size nBytes );
+
     /** Copies the entire record to rOutStrm. The current record position keeps unchanged.
         @return  Count of bytes really written. */
     sal_Size            CopyRecordToStream( SvStream& rOutStrm );
@@ -430,8 +431,6 @@ public:
     String              ReadRawByteString( sal_uInt16 nChars );
     /** Reads 8/16 bit string length, character array and returns the string. */
     String              ReadByteString( bool b16BitLen );
-    /** Ignores 8/16 bit string length, character array. */
-    void                IgnoreByteString( bool b16BitLen );
 
     // *** SvStream functions *** ---------------------------------------------
 

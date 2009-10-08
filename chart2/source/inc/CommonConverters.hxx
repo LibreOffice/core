@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: CommonConverters.hxx,v $
- * $Revision: 1.10 $
+ * $Revision: 1.10.44.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -83,8 +83,6 @@ com::sun::star::drawing::HomogenMatrix
 com::sun::star::drawing::HomogenMatrix3
                 B2DHomMatrixToHomogenMatrix3( const ::basegfx::B2DHomMatrix& rM );
 
-::basegfx::B2DHomMatrix HomogenMatrix3ToB2DHomMatrix( const com::sun::star::drawing::HomogenMatrix3& rHM );
-
 //-----------------------------------------------------------------------------
 /** Position3D -> B3DPoint
 */
@@ -96,11 +94,6 @@ com::sun::star::drawing::HomogenMatrix3
 com::sun::star::drawing::Direction3D B3DVectorToDirection3D( const ::basegfx::B3DVector& rVector);
 
 //-----------------------------------------------------------------------------
-/** B3DVector -> Position3D
-*/
-com::sun::star::drawing::Position3D B3DVectorToPosition3D( const ::basegfx::B3DVector& rVector);
-
-//-----------------------------------------------------------------------------
 /** B3DPoint -> Position3D
 */
 com::sun::star::drawing::Position3D B3DPointToPosition3D( const ::basegfx::B3DPoint& rPoint);
@@ -109,6 +102,11 @@ com::sun::star::drawing::Position3D B3DPointToPosition3D( const ::basegfx::B3DPo
 /** Direction3D -> B3DPoint
 */
 ::basegfx::B3DPoint Direction3DToB3DPoint( const com::sun::star::drawing::Direction3D& rDirection);
+
+//-----------------------------------------------------------------------------
+/** Direction3D -> B3DVector
+*/
+::basegfx::B3DVector Direction3DToB3DVector( const com::sun::star::drawing::Direction3D& rDirection);
 
 //-----------------------------------------------------------------------------
 /** two drawing::Position3D -> PolyPolygonShape3D
@@ -144,12 +142,6 @@ com::sun::star::drawing::PolyPolygonShape3D BezierToPoly(
     const com::sun::star::drawing::PolyPolygonBezierCoords& rBezier );
 
 //-----------------------------------------------------------------------------
-/** drawing::PointSequenceSequence (2D) -> PolyPolygonShape3D
-*/
-com::sun::star::drawing::PolyPolygonShape3D PointSequenceToPoly(
-                const com::sun::star::drawing::PointSequenceSequence& rPointSequence );
-
-//-----------------------------------------------------------------------------
 /** PolyPolygonShape3D -> drawing::PointSequenceSequence (2D)
 */
 com::sun::star::drawing::PointSequenceSequence PolyToPointSequence(
@@ -160,19 +152,6 @@ com::sun::star::drawing::PointSequenceSequence PolyToPointSequence(
 */
 void appendPointSequence( com::sun::star::drawing::PointSequenceSequence& rTarget
                         , com::sun::star::drawing::PointSequenceSequence& rAdd );
-
-//-----------------------------------------------------------------------------
-/** PolyPolygonShape3D -> Polygon (2D,integer!)
-*/
-Polygon PolyToToolsPoly(
-                const com::sun::star::drawing::PolyPolygonShape3D& rPolyPolygon );
-
-//-----------------------------------------------------------------------------
-/** tools Polygon (2D,integer!) -> PolyPolygonShape3D
-*/
-com::sun::star::drawing::PolyPolygonShape3D ToolsPolyToPoly(
-                const Polygon& rToolsPoly, double zValue  );
-
 
 //-----------------------------------------------------------------------------
 /** Position3D + Direction3D == Position3D
@@ -237,11 +216,6 @@ bool            operator==( const com::sun::star::drawing::Position3D& rPos1
 ::com::sun::star::awt::Size Direction3DToAWTSize( const com::sun::star::drawing::Direction3D& rDirection );
 
 //-----------------------------------------------------------------------------
-/** Sequence<double> -> B3DPoint
-*/
-::basegfx::B3DPoint SequenceToB3DPoint( const com::sun::star::uno::Sequence< double >& rSeq );
-
-//-----------------------------------------------------------------------------
 /** B3DPoint -> Sequence<double>
 */
 com::sun::star::uno::Sequence< double > B3DPointToSequence( const ::basegfx::B3DPoint& rPoint );
@@ -260,30 +234,11 @@ com::sun::star::uno::Sequence< double >
                 Position3DToSequence( const com::sun::star::drawing::Position3D& rPosition );
 
 //-----------------------------------------------------------------------------
-/** Sequence<double> -> drawing::Direction3D
-*/
-com::sun::star::drawing::Direction3D
-                SequenceToDirection3D( const com::sun::star::uno::Sequence< double >& rSeq );
-
-//-----------------------------------------------------------------------------
-/** drawing::Direction3D -> Sequence<double>
-*/
-
-com::sun::star::uno::Sequence< double >
-                Direction3DToSequence( const com::sun::star::drawing::Direction3D& rDirection );
-
-//-----------------------------------------------------------------------------
 /** drawing::Direction3D / double
 */
 
 com::sun::star::drawing::Direction3D
                 operator/( const com::sun::star::drawing::Direction3D& rDirection, double f );
-
-//-----------------------------------------------------------------------------
-/** text::WritingMode2 -> text::WritingMode
-*/
-
-com::sun::star::text::WritingMode WritingMode2ToWritingMode1( sal_Int16 nWritingMode );
 
 //-----------------------------------------------------------------------------
 /** chart2::XDataSequence -> uno::Sequence< double >

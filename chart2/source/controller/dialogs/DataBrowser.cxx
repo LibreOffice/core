@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: DataBrowser.cxx,v $
- * $Revision: 1.9 $
+ * $Revision: 1.9.8.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -228,9 +228,6 @@ public:
     void SetGetFocusHdl( const Link& rLink );
 
     void SetEditChangedHdl( const Link & rLink );
-    const Link & GetEditChangedHdl() const;
-
-    ::boost::shared_ptr< SeriesHeaderEdit >  GetSeriesNameEditField() const;
 
     bool HasFocus() const;
 
@@ -395,11 +392,6 @@ void SeriesHeader::SetEditChangedHdl( const Link & rLink )
     m_aChangeLink = rLink;
 }
 
-const Link & SeriesHeader::GetEditChangedHdl() const
-{
-    return m_aChangeLink;
-}
-
 IMPL_LINK( SeriesHeader, SeriesNameChanged, void * , EMPTYARG )
 {
     notifyChanges();
@@ -415,11 +407,6 @@ IMPL_LINK( SeriesHeader, SeriesNameEdited, void * , EMPTYARG )
 void SeriesHeader::SetGetFocusHdl( const Link& rLink )
 {
     m_spSeriesName->SetGetFocusHdl( rLink );
-}
-
-::boost::shared_ptr< SeriesHeaderEdit > SeriesHeader::GetSeriesNameEditField() const
-{
-    return m_spSeriesName;
 }
 
 bool SeriesHeader::HasFocus() const
@@ -798,11 +785,6 @@ bool DataBrowser::IsReadOnly() const
 }
 
 
-bool DataBrowser::IsDirty() const
-{
-    return m_bIsDirty;
-}
-
 void DataBrowser::SetClean()
 {
     m_bIsDirty = false;
@@ -1032,50 +1014,6 @@ void DataBrowser::SetCursorMovedHdl( const Link& rLink )
 {
     m_aCursorMovedHdlLink = rLink;
 }
-
-const Link& DataBrowser::GetCursorMovedHdl() const
-{
-    return m_aCursorMovedHdlLink;
-}
-
-// void DataBrowser::QuickSortCol()
-// {
-//     DeactivateCell();
-//  m_apMemChart->SortCols( GetCurRow () - 1 );
-//  m_pLogBook->SetValid( FALSE );
-//  Invalidate();
-//     ActivateCell();
-//     SetDirty();
-// }
-
-// void DataBrowser::QuickSortRow()
-// {
-//     DeactivateCell();
-//  m_apMemChart->SortRows( GetCurColumnId () - 2 );
-//  m_pLogBook->SetValid( FALSE );
-//  Invalidate();
-//     ActivateCell();
-//     SetDirty();
-// }
-
-// void DataBrowser::QuickSortTableCols ()
-// {
-//     DeactivateCell();
-//  m_apMemChart->SortTableRows( GetCurColumnId () - 2 );
-//  m_pLogBook->SetValid( FALSE );
-//  Invalidate();
-//     ActivateCell();
-//     SetDirty();
-// }
-
-// void DataBrowser::QuickSortTableRows ()
-// {
-//  m_apMemChart->SortTableCols( GetCurRow () - 1 );
-//  m_pLogBook->SetValid( FALSE );
-//  Invalidate();
-//     ActivateCell();
-//     SetDirty();
-// }
 
 // implementations for ::svt::EditBrowseBox (pure virtual methods)
 void DataBrowser::PaintCell(

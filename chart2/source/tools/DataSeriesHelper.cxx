@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: DataSeriesHelper.cxx,v $
- * $Revision: 1.11 $
+ * $Revision: 1.11.24.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -174,17 +174,6 @@ OUString GetRole( const uno::Reference< chart2::data::XLabeledDataSequence >& xL
             xProp->getPropertyValue( C2U("Role") ) >>= aRet;
     }
     return aRet;
-}
-
-void SetRole( const uno::Reference< chart2::data::XLabeledDataSequence >& xLabeledDataSequence,
-                const ::rtl::OUString& rRole )
-{
-    if( xLabeledDataSequence.is() )
-    {
-        Reference< beans::XPropertySet > xProp( xLabeledDataSequence->getValues(), uno::UNO_QUERY );
-        if( xProp.is() )
-            xProp->setPropertyValue( C2U("Role"), uno::makeAny(rRole) ) ;
-    }
 }
 
 Reference< chart2::data::XLabeledDataSequence >

@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: pivot.hxx,v $
- * $Revision: 1.8 $
+ * $Revision: 1.8.32.3 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -65,12 +65,14 @@ class SubTotal;
 #include <com/sun/star/sheet/DataPilotFieldLayoutInfo.hpp>
 #include <com/sun/star/sheet/DataPilotFieldAutoShowInfo.hpp>
 
+#if OLD_PIVOT_IMPLEMENTATION
 #define PIVOT_STYLE_INNER       0
 #define PIVOT_STYLE_RESULT      1
 #define PIVOT_STYLE_CATEGORY    2
 #define PIVOT_STYLE_TITLE       3
 #define PIVOT_STYLE_FIELDNAME   4
 #define PIVOT_STYLE_TOP         5
+#endif
 
 class SvStream;
 class ScDocument;
@@ -140,6 +142,7 @@ struct ScPivotParam
 
 // -----------------------------------------------------------------------
 
+#if OLD_PIVOT_IMPLEMENTATION
 struct PivotColRef
 {
     SCSIZE nDataIndex;
@@ -153,10 +156,12 @@ struct PivotColRef
         nFuncMask = PIVOT_FUNC_NONE;
     }
 };
+#endif
 
 typedef PivotField          PivotFieldArr[PIVOT_MAXFIELD];
 typedef PivotField          PivotPageFieldArr[PIVOT_MAXPAGEFIELD];
 
+#if OLD_PIVOT_IMPLEMENTATION
 class PivotStrCollection : public StrCollection
 {
     ScUserListData* pUserData;
@@ -357,6 +362,7 @@ public:
 
     String  CreateNewName( USHORT nMin = 1 ) const;
 };
+#endif
 
 //------------------------------------------------------------------------
 

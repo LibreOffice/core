@@ -1086,10 +1086,10 @@ void ScTabView::SetActivePointer( const Pointer& rPointer )
 */
 }
 
-void ScTabView::SetActivePointer( const ResId& )
-{
-    DBG_ERRORFILE( "keine Pointer mit ResId!" );
-}
+//UNUSED2008-05  void ScTabView::SetActivePointer( const ResId& )
+//UNUSED2008-05  {
+//UNUSED2008-05      DBG_ERRORFILE( "keine Pointer mit ResId!" );
+//UNUSED2008-05  }
 
 void ScTabView::ActiveGrabFocus()
 {
@@ -1098,28 +1098,28 @@ void ScTabView::ActiveGrabFocus()
         pGridWin[ePos]->GrabFocus();
 }
 
-void ScTabView::ActiveCaptureMouse()
-{
-    ScSplitPos ePos = aViewData.GetActivePart();
-    if (pGridWin[ePos])
-        pGridWin[ePos]->CaptureMouse();
-}
-
-void ScTabView::ActiveReleaseMouse()
-{
-    ScSplitPos ePos = aViewData.GetActivePart();
-    if (pGridWin[ePos])
-        pGridWin[ePos]->ReleaseMouse();
-}
-
-Point ScTabView::ActivePixelToLogic( const Point& rDevicePoint )
-{
-    ScSplitPos ePos = aViewData.GetActivePart();
-    if (pGridWin[ePos])
-        return pGridWin[ePos]->PixelToLogic(rDevicePoint);
-    else
-        return Point();
-}
+//UNUSED2008-05  void ScTabView::ActiveCaptureMouse()
+//UNUSED2008-05  {
+//UNUSED2008-05      ScSplitPos ePos = aViewData.GetActivePart();
+//UNUSED2008-05      if (pGridWin[ePos])
+//UNUSED2008-05          pGridWin[ePos]->CaptureMouse();
+//UNUSED2008-05  }
+//UNUSED2008-05
+//UNUSED2008-05  void ScTabView::ActiveReleaseMouse()
+//UNUSED2008-05  {
+//UNUSED2008-05      ScSplitPos ePos = aViewData.GetActivePart();
+//UNUSED2008-05      if (pGridWin[ePos])
+//UNUSED2008-05          pGridWin[ePos]->ReleaseMouse();
+//UNUSED2008-05  }
+//UNUSED2008-05
+//UNUSED2008-05  Point ScTabView::ActivePixelToLogic( const Point& rDevicePoint )
+//UNUSED2008-05  {
+//UNUSED2008-05      ScSplitPos ePos = aViewData.GetActivePart();
+//UNUSED2008-05      if (pGridWin[ePos])
+//UNUSED2008-05          return pGridWin[ePos]->PixelToLogic(rDevicePoint);
+//UNUSED2008-05      else
+//UNUSED2008-05          return Point();
+//UNUSED2008-05  }
 
 ScSplitPos ScTabView::FindWindow( Window* pWindow ) const
 {

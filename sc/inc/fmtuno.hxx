@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: fmtuno.hxx,v $
- * $Revision: 1.10 $
+ * $Revision: 1.10.32.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -86,8 +86,8 @@ private:
     ScTableConditionalEntry*    GetObjectByIndex_Impl(USHORT nIndex) const;
     void                        AddEntry_Impl(const ScCondFormatEntryItem& aEntry);
 
+    ScTableConditionalFormat(); // disable
 public:
-                            ScTableConditionalFormat();
                             ScTableConditionalFormat(ScDocument* pDoc, ULONG nKey,
                                                         const ScGrammar::Grammar eGrammar);
     virtual                 ~ScTableConditionalFormat();
@@ -159,8 +159,8 @@ private:
     ScTableConditionalFormat*   pParent;
     ScCondFormatEntryItem       aData;
 
+    ScTableConditionalEntry(); // disabled
 public:
-                            ScTableConditionalEntry();
                             ScTableConditionalEntry(ScTableConditionalFormat* pPar,
                                                     const ScCondFormatEntryItem& aItem);
     virtual                 ~ScTableConditionalEntry();
@@ -229,8 +229,8 @@ private:
 
     void                    ClearData_Impl();
 
+    ScTableValidationObj(); // disabled
 public:
-                            ScTableValidationObj();
                             ScTableValidationObj(ScDocument* pDoc, ULONG nKey,
                                                 const ScGrammar::Grammar eGrammar);
     virtual                 ~ScTableValidationObj();

@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: ChartDebugTrace.cxx,v $
- * $Revision: 1.4 $
+ * $Revision: 1.4.44.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -321,6 +321,8 @@ namespace chart
 namespace debug
 {
 
+#if OSL_DEBUG_LEVEL >= CHART_TRACE_OSL_DEBUG_LEVEL
+
 void ChartDebugTraceDocument(
     const Reference< XChartDocument > & /*xDoc*/,
     int /*nIndent*/ )
@@ -412,6 +414,7 @@ void ChartDebugTraceDiagram(
 
 */
 }
+#endif
 
 } // namespace debug
 } //  namespace chart

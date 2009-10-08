@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: PieChart.cxx,v $
- * $Revision: 1.20 $
+ * $Revision: 1.20.44.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -196,13 +196,6 @@ APPHELPER_XSERVICEINFO_IMPL(PieChart,CHART2_VIEW_PIECHART_SERVICE_IMPLEMENTATION
     return aSNS;
 }
 */
-
-bool PieChart::isSingleRingChart() const
-{
-    if( m_aZSlots.size() == 1 && m_aZSlots[0].size() ==1 )
-        return true;
-    return !m_bUseRings;
-}
 
 uno::Reference< drawing::XShape > PieChart::createDataPoint(
           const uno::Reference< drawing::XShapes >& xTarget

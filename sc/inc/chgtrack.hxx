@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: chgtrack.hxx,v $
- * $Revision: 1.31 $
+ * $Revision: 1.31.32.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -320,10 +320,7 @@ protected:
                                         pLnk->SetLink( pL );
                                         return pLnk;
                                     }
-            void                RemoveLink( ScChangeAction* p );
             void                RemoveAllAnyLinks();
-                                // zeigt ein AnyLink auf p?
-            BOOL                DependsOn( ScChangeAction* p ) const;
 
     virtual ScChangeActionLinkEntry*    GetDeletedIn() const
                                             { return pLinkDeletedIn; }
@@ -343,7 +340,6 @@ protected:
                                         return new ScChangeActionLinkEntry(
                                             &pLinkDeleted, p );
                                     }
-            BOOL                RemoveDeleted( const ScChangeAction* p );
             void                RemoveAllDeleted();
 
             ScChangeActionLinkEntry*    AddDependent( ScChangeAction* p )
@@ -351,7 +347,6 @@ protected:
                                         return new ScChangeActionLinkEntry(
                                             &pLinkDependent, p );
                                     }
-            void                RemoveDependent( ScChangeAction* p );
             void                RemoveAllDependent();
 
             void                RemoveAllLinks();
@@ -611,7 +606,6 @@ class ScChangeActionDel : public ScChangeAction
 
     virtual const ScChangeTrack*    GetChangeTrack() const { return pTrack; }
 
-    virtual BOOL                Store( SvStream&, ScMultipleWriteHeader& ) const;
     virtual BOOL                StoreLinks( SvStream& ) const;
     virtual BOOL                LoadLinks( SvStream&, ScChangeTrack* );
 
@@ -1168,12 +1162,6 @@ class ScChangeTrack : public SfxListener
                                 // Content on top an Position
         ScChangeActionContent*  SearchContentAt( const ScBigAddress&,
                                     ScChangeAction* pButNotThis ) const;
-                                // das gleiche fuer generierte Del-Eintraege,
-                                // wobei der Content nicht in der angegebenen
-                                // Richtung geloescht sein darf
-        ScChangeActionContent*  SearchGeneratedDelContentAt(
-                                    const ScBigAddress&,
-                                    ScChangeActionType eNotInDelType ) const;
             void                DeleteGeneratedDelContent(
                                     ScChangeActionContent* );
         ScChangeActionContent*  GenerateDelContent( const ScAddress&,

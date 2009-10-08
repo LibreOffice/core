@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: content.cxx,v $
- * $Revision: 1.26 $
+ * $Revision: 1.25.30.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -1294,16 +1294,16 @@ IMPL_STATIC_LINK(ScContentTree, ExecDragHdl, void*, EMPTYARG)
     return 0;
 }
 
-void ScContentTree::AdjustTitle()
-{
-    String aTitle = pParentWindow->aTitleBase;
-    if (bHiddenDoc)
-    {
-        aTitle.AppendAscii(RTL_CONSTASCII_STRINGPARAM( " - " ));
-        aTitle += aHiddenTitle;
-    }
-    pParentWindow->SetText(aTitle);
-}
+//UNUSED2008-05  void ScContentTree::AdjustTitle()
+//UNUSED2008-05  {
+//UNUSED2008-05      String aTitle = pParentWindow->aTitleBase;
+//UNUSED2008-05      if (bHiddenDoc)
+//UNUSED2008-05      {
+//UNUSED2008-05          aTitle.AppendAscii(RTL_CONSTASCII_STRINGPARAM( " - " ));
+//UNUSED2008-05          aTitle += aHiddenTitle;
+//UNUSED2008-05      }
+//UNUSED2008-05      pParentWindow->SetText(aTitle);
+//UNUSED2008-05  }
 
 BOOL ScContentTree::LoadFile( const String& rUrl )
 {

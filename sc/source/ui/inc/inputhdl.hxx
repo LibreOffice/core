@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: inputhdl.hxx,v $
- * $Revision: 1.15 $
+ * $Revision: 1.15.32.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -122,7 +122,6 @@ private:
 #ifdef _INPUTHDL_CXX
 private:
     void            UpdateActiveView();
-    void            SetAllUpdateMode( BOOL bUpdate );
     void            SyncViews( EditView* pSourceView = NULL );
     BOOL            StartTable( sal_Unicode cTyped, BOOL bFromCommand );
     void            RemoveSelection();
@@ -232,9 +231,6 @@ public:
     BOOL            IsInOwnChange() const                   { return bInOwnChange; }
 
     BOOL            IsModalMode( SfxObjectShell* pDocSh );
-
-    void            ActivateInputWindow( const String&     rText,
-                                         const ESelection& rSel );
 
     void            ForgetLastPattern();
 

@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: CachedDataSequence.hxx,v $
- * $Revision: 1.6 $
+ * $Revision: 1.6.44.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -107,24 +107,6 @@ public:
 
     virtual ~CachedDataSequence();
 
-    /** optimizes internal storage such that getData() is the fastest method for
-        retrieving data.
-    */
-    void PreferMixedData();
-    /** optimizes internal storage such that getNumericalData() is the fastest
-        method for retrieving data.
-     */
-    void PreferNumericalData();
-    /** optimizes internal storage such that getTextualData() is the fastest
-        method for retrieving data.
-     */
-    void PreferTextualData();
-
-    /** Allows setting the source-identifier.  This should only be called once.
-        (Late initialization)
-     */
-//     void SetSourceIdentifier( const ::rtl::OUString & aId );
-
     /// establish methods for factory instatiation
     APPHELPER_SERVICE_FACTORY_HELPER( CachedDataSequence )
     /// declare XServiceInfo methods
@@ -181,8 +163,6 @@ protected:
     virtual void SAL_CALL initialize(const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any > & aArguments)
         throw (::com::sun::star::uno::RuntimeException, ::com::sun::star::uno::Exception);
 
-    void fireModifyEvent();
-
     // <properties>
     sal_Int32                                       m_nNumberFormatKey;
     ::rtl::OUString                                 m_sRole;
@@ -202,27 +182,15 @@ protected:
      */
     void registerProperties();
 
-    /** is used by interface method getNumericalData() as well as
-        PreferNumericalData().
+    /** is used by interface method getNumericalData().
      */
     ::com::sun::star::uno::Sequence< double > Impl_getNumericalData() const;
-    /** is used by interface method getTextualData() as well as
-        PreferTextualData().
+    /** is used by interface method getTextualData().
      */
     ::com::sun::star::uno::Sequence< ::rtl::OUString > Impl_getTextualData() const;
-    /** is used by interface method getData() as well as PreferMixedData().
+    /** is used by interface method getData().
      */
     ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any > Impl_getMixedData() const;
-
-    /** is used by PreferNumericalData().
-     */
-    void Impl_setNumericalData( const ::com::sun::star::uno::Sequence< double > & rSeq );
-    /** is used by PreferTextualData().
-     */
-    void Impl_setTextualData( const ::com::sun::star::uno::Sequence< ::rtl::OUString > & rSeq );
-    /** is used by PreferMixedData().
-     */
-    void Impl_setMixedData( const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any > & rSeq );
 
 private:
     enum DataType                                       m_eCurrentDataType;

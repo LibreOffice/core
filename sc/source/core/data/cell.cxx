@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: cell.cxx,v $
- * $Revision: 1.44 $
+ * $Revision: 1.42.30.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -198,12 +198,6 @@ ScBaseCell* ScBaseCell::CreateTextCell( const String& rString, ScDocument* pDoc 
         return new ScEditCell( rString, pDoc );
     else
         return new ScStringCell( rString );
-}
-
-void ScBaseCell::LoadNote( SvStream& rStream, ScDocument* pDoc )
-{
-    pNote = new ScPostIt(pDoc);
-    rStream >> *pNote;
 }
 
 void ScBaseCell::SetBroadcaster(SvtBroadcaster* pNew)
@@ -722,18 +716,6 @@ ScFormulaCell::ScFormulaCell( ScDocument* pDoc, const ScAddress& rNewPos,
             CompileTokenArray( TRUE );
         }
     }
-}
-
-BOOL lcl_IsBeyond( ScTokenArray* pCode, SCROW nMaxRow )
-{
-    ScToken* t;
-    pCode->Reset();
-    while ( ( t = pCode->GetNextReferenceRPN() ) != NULL )  // RPN -> also in names
-        if ( t->GetSingleRef().nRow > nMaxRow ||
-                (t->GetType() == svDoubleRef &&
-                t->GetDoubleRef().Ref2.nRow > nMaxRow) )
-            return TRUE;
-    return FALSE;
 }
 
 ScBaseCell* ScFormulaCell::Clone( ScDocument* pDoc, const ScAddress& rPos,

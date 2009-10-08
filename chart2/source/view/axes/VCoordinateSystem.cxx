@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: VCoordinateSystem.cxx,v $
- * $Revision: 1.11 $
+ * $Revision: 1.11.36.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -331,23 +331,6 @@ ExplicitIncrementData VCoordinateSystem::getExplicitIncrement( sal_Int32 nDimens
     }
 
     return aRet;
-}
-
-sal_Int32 VCoordinateSystem::getMaximumIncrementIndexByDimension( sal_Int32 nDimensionIndex ) const
-{
-    sal_Int32 nRet = 0;
-    tFullExplicitIncrementMap::const_iterator aIt = m_aSecondaryExplicitIncrements.begin();
-    tFullExplicitIncrementMap::const_iterator aEnd = m_aSecondaryExplicitIncrements.end();
-    for(; aIt!=aEnd; ++aIt)
-    {
-        if(aIt->first.first==nDimensionIndex)
-        {
-            sal_Int32 nLocalIdx = aIt->first.second;
-            if( nRet < nLocalIdx )
-                nRet = nLocalIdx;
-        }
-    }
-    return nRet;
 }
 
 rtl::OUString VCoordinateSystem::createCIDForAxis( const Reference< chart2::XAxis >& /* xAxis */, sal_Int32 nDimensionIndex, sal_Int32 nAxisIndex )

@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: tp_RangeChooser.hxx,v $
- * $Revision: 1.6 $
+ * $Revision: 1.5.44.2 $
  *
  * This file is part of OpenOffice.org.
  *

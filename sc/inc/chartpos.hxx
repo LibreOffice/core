@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: chartpos.hxx,v $
- * $Revision: 1.3 $
+ * $Revision: 1.3.32.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -135,7 +135,6 @@ private:
     void        CreatePositionMap();
 
 public:
-    ScChartPositioner( ScDocument* pDoc );
     ScChartPositioner( ScDocument* pDoc, SCTAB nTab,
                     SCCOL nStartColP, SCROW nStartRowP,
                     SCCOL nEndColP, SCROW nEndRowP );
@@ -144,13 +143,9 @@ public:
 
     virtual ~ScChartPositioner();
 
-    String  ReadStream( SvStream& rStream, ScMultipleReadHeader& rHdr );
-
     const ScRangeListRef&   GetRangeList() const { return aRangeListRef; }
     void    SetRangeList( const ScRangeListRef& rNew ) { aRangeListRef = rNew; }
     void    SetRangeList( const ScRange& rNew );
-    void    AddToRangeList( const ScRange& rRange );
-    void    AddToRangeList( const ScRangeListRef& rAdd );
 
     void    SetHeaders(BOOL bCol, BOOL bRow) { bColHeaders=bCol; bRowHeaders=bRow; }
     BOOL    HasColHeaders() const            { return bColHeaders; }
@@ -159,8 +154,6 @@ public:
     void    SeteGlue(ScChartGlue eNew) { eGlue = eNew; }
     void    SetStartCol(SCCOL nNew) { nStartCol = nNew; }
     void    SetStartRow(SCROW nNew) { nStartRow = nNew; }
-
-    BOOL    IsAtCursor(const ScAddress& rPos) const;
 
     BOOL    operator==(const ScChartPositioner& rCmp) const;
 

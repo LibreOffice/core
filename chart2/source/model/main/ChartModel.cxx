@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: ChartModel.cxx,v $
- * $Revision: 1.17 $
+ * $Revision: 1.17.8.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -80,46 +80,6 @@ const OUString lcl_aGDIMetaFileMIMEType(
     RTL_CONSTASCII_USTRINGPARAM("application/x-openoffice-gdimetafile;windows_formatname=\"GDIMetaFile\""));
 const OUString lcl_aGDIMetaFileMIMETypeHighContrast(
     RTL_CONSTASCII_USTRINGPARAM("application/x-openoffice-highcontrast-gdimetafile;windows_formatname=\"GDIMetaFile\""));
-
-Reference< chart2::data::XDataProvider > lcl_getDataProviderFromParent(
-    const Reference< frame::XModel > & xParent )
-{
-    Reference< chart2::data::XDataProvider > xResult;
-    const OUString aDataProviderServiceName( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.chart2.data.DataProvider"));
-    Reference< lang::XMultiServiceFactory > xFact( xParent, uno::UNO_QUERY );
-    if( xFact.is())
-    {
-        uno::Sequence< OUString > aServiceNames( xFact->getAvailableServiceNames());
-        const OUString * pBegin = aServiceNames.getConstArray();
-        const OUString * pEnd = pBegin + aServiceNames.getLength();
-        if( ::std::find( pBegin, pEnd, aDataProviderServiceName ) != pEnd )
-        {
-            xResult.set(
-                xFact->createInstance( aDataProviderServiceName ), uno::UNO_QUERY );
-        }
-    }
-    return xResult;
-}
-
-bool lcl_ParentIsTempDocument(
-    const Reference< uno::XInterface > & xParent )
-{
-    bool bResult = false;
-    try
-    {
-        Reference< beans::XPropertySet > xDocProp( xParent, uno::UNO_QUERY );
-        if( xDocProp.is())
-            xDocProp->getPropertyValue( C2U("InternalDocument")) >>= bResult;
-    }
-    catch( const beans::UnknownPropertyException & )
-    {}
-    catch( const uno::Exception & ex )
-    {
-        ASSERT_EXCEPTION( ex );
-    }
-
-    return bResult;
-}
 
 } // anonymous namespace
 
@@ -663,108 +623,6 @@ uno::Reference< document::XDocumentProperties > SAL_CALL
     }
     return m_xDocumentProperties;
 }
-
-/*
-//-----------------------------------------------------------------
-// view::XPrintable (optional interface)
-//-----------------------------------------------------------------
-        uno::Sequence< beans::PropertyValue > SAL_CALL ChartModel
-::getPrinter() throw(uno::RuntimeException)
-{
-    //@todo  guard
-    return m_aPrinterOptions;
-}
-
-        void SAL_CALL ChartModel
-::setPrinter( const uno::Sequence< beans::PropertyValue >& rPrinter )
-        throw(lang::IllegalArgumentException, uno::RuntimeException)
-{
-    //@todo  guard
-    m_aPrinterOptions = rPrinter;
-}
-
-        void SAL_CALL ChartModel
-::print( const uno::Sequence< beans::PropertyValue >& rOptions )
-        throw(lang::IllegalArgumentException, uno::RuntimeException)
-{
-    //@todo
-}
-
-//-----------------------------------------------------------------
-// document::XEventBroadcaster (optional interface)
-//-----------------------------------------------------------------
-
-        void SAL_CALL ChartModel
-::addEventListener( const uno::Reference< document::XEventListener >& xListener )
-        throw(uno::RuntimeException)
-{
-    //@todo
-}
-
-        void SAL_CALL ChartModel
-::removeEventListener( const uno::Reference< document::XEventListener >& xListener )
-        throw(uno::RuntimeException)
-{
-    //@todo
-}
-
-//-----------------------------------------------------------------
-// document::XEventsSupplier (optional interface)
-//-----------------------------------------------------------------
-
-        uno::Reference< container::XNameReplace > SAL_CALL ChartModel
-::getEvents() throw(uno::RuntimeException)
-{
-    //@todo
-}
-
-//-----------------------------------------------------------------
-// document::XViewDataSupplier (optional interface)
-//-----------------------------------------------------------------
-
-        uno::Reference< container::XIndexAccess > SAL_CALL ChartModel
-::getViewData() throw(uno::RuntimeException)
-{
-    //@todo
-}
-
-        void SAL_CALL ChartModel
-::setViewData( const uno::Reference< container::XIndexAccess >& xData )
-        throw(uno::RuntimeException)
-{
-    //m_bModified = sal_True;//@todo? is this really correct
-    //@todo
-}
-*/
-
-//-----------------------------------------------------------------
-// ::com::sun::star::style::XStyleFamiliesSupplier
-//-----------------------------------------------------------------
-// ::com::sun::star::uno::Reference<
-//     ::com::sun::star::container::XNameAccess > SAL_CALL ChartModel
-//     ::getStyleFamilies()
-//         throw (uno::RuntimeException)
-// {
-//     OSL_ASSERT( m_pImplChartModel.get() != 0 );
-//     // /--
-//     MutexGuard aGuard( m_aModelMutex );
-//     return m_pImplChartModel->GetStyleFamilies();
-//     // \--
-// }
-
-//-----------------------------------------------------------------
-// chart2::XModelDataProvider
-//-----------------------------------------------------------------
-//         Sequence< Reference< chart2::XDataSeries > > SAL_CALL ChartModel
-// ::getDataSeries()
-//         throw (uno::RuntimeException)
-// {
-//     OSL_ASSERT( m_pImplChartModel.get() != 0 );
-//     // /--
-//     MutexGuard aGuard( m_aModelMutex );
-//     return m_pImplChartModel->GetDataSeries();
-//     // \--
-// }
 
 //-----------------------------------------------------------------
 // chart2::XChartDocument

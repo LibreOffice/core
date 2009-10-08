@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: formatsh.hxx,v $
- * $Revision: 1.6 $
+ * $Revision: 1.6.32.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -45,6 +45,7 @@ class ScFormatShell: public SfxShell
 protected:
 
     ScViewData*         GetViewData(){return pViewData;}
+    const ScViewData*   GetViewData() const {return pViewData;}
 
 public:
 
@@ -70,9 +71,6 @@ public:
 
     void        ExecuteStyle( SfxRequest& rReq );
     void        GetStyleState( SfxItemSet& rSet );
-
-    void        ExecBckCol( SfxRequest& rReq );
-    void        GetBckColState( SfxItemSet& rSet );
 
     void        ExecuteTextDirection( SfxRequest& rReq );
     void        GetTextDirectionState( SfxItemSet& rSet );

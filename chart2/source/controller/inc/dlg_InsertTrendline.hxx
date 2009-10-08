@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: dlg_InsertTrendline.hxx,v $
- * $Revision: 1.3 $
+ * $Revision: 1.3.44.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -55,7 +55,6 @@ public:
     void adjustSize();
 
 private:
-    void Reset();
     const SfxItemSet & rInAttrs;
 
     OKButton          aBtnOK;

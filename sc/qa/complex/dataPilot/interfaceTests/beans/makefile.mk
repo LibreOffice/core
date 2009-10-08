@@ -8,7 +8,7 @@
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.6 $
+# $Revision: 1.6.138.1 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -40,7 +40,7 @@ PACKAGE = complex$/dataPilot$/interfaceTests$/beans
 
 #----- compile .java files -----------------------------------------
 
-JARFILES        = ridl.jar unoil.jar jurt.jar juh.jar jut.jar java_uno.jar OOoRunner.jar
+JARFILES        = ridl.jar unoil.jar jurt.jar juh.jar java_uno.jar OOoRunner.jar
 JAVAFILES       = _XPropertySet.java
 JAVACLASSFILES	= $(foreach,i,$(JAVAFILES) $(CLASSDIR)$/$(PACKAGE)$/$(i:b).class)
 

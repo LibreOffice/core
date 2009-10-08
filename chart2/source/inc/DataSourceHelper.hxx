@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: DataSourceHelper.hxx,v $
- * $Revision: 1.3 $
+ * $Revision: 1.3.44.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -133,13 +133,6 @@ public:
         static ::com::sun::star::uno::Sequence< ::rtl::OUString > getRangesFromDataSource(
             const ::com::sun::star::uno::Reference<
                 ::com::sun::star::chart2::data::XDataSource > & xSource );
-
-        static bool migrateData(
-            const ::com::sun::star::uno::Reference<
-                ::com::sun::star::chart2::XChartDocument > & xChartDoc,
-            const ::com::sun::star::uno::Reference<
-                ::com::sun::star::chart2::data::XDataProvider > & xNewDataProvider );
-
 };
 
 //.............................................................................

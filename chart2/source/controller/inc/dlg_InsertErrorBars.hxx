@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: dlg_InsertErrorBars.hxx,v $
- * $Revision: 1.4 $
+ * $Revision: 1.4.44.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -65,7 +65,6 @@ public:
     virtual void DataChanged( const DataChangedEvent& rDCEvt );
 
 private:
-    void Reset();
     const SfxItemSet & rInAttrs;
 
     OKButton          aBtnOK;

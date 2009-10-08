@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: xiescher.hxx,v $
- * $Revision: 1.28 $
+ * $Revision: 1.28.90.14 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -32,77 +32,60 @@
 #define SC_XIESCHER_HXX
 
 #include <vector>
-#include <list>
 #include <map>
 #include <svx/msdffimp.hxx>
+#include <svx/msocximex.hxx>
+#include <vcl/graph.hxx>
 #include "xlescher.hxx"
 #include "xiroot.hxx"
 #include "xistring.hxx"
 
 namespace com { namespace sun { namespace star {
-    namespace script { struct ScriptEventDescriptor; }
+    namespace drawing { class XShape; }
+    namespace form { class XForm; }
 } } }
 
 class ScfProgressBar;
 class ScfPropertySet;
+class XclImpChart;
 
-// Text box data ==============================================================
-
-class XclImpTxoData : protected XclImpRoot
-{
-public:
-    explicit            XclImpTxoData( const XclImpRoot& rRoot );
-
-    /** Reads a TXO record and following CONTINUE records for string and formatting data. */
-    void                ReadTxo( XclImpStream& rStrm );
-
-    /** Returns the text orientation. */
-    inline sal_uInt16   GetOrientation() const { return maData.mnOrient; }
-    /** Returns the string data, if there is any. */
-    inline const XclImpString* GetString() const { return mxString.get(); }
-
-    /** Sets the text to the passed SdrObject, if it can take text. */
-    void                ProcessSdrObject( SdrObject& rSdrObj ) const;
-
-private:
-    XclTxoData          maData;         /// Data from the TXO record.
-    XclImpStringRef     mxString;       /// Plain or rich string.
-};
-
-typedef ScfRef< XclImpTxoData > XclImpTxoDataRef;
-
-// Escher objects =============================================================
+// Drawing objects ============================================================
 
 class XclImpDrawObjBase;
 typedef ScfRef< XclImpDrawObjBase > XclImpDrawObjRef;
 
 /** Base class for drawing objects (OBJ records). */
-class XclImpDrawObjBase : protected XclImpRoot, ScfNoCopy
+class XclImpDrawObjBase : protected XclImpRoot
 {
 public:
     explicit            XclImpDrawObjBase( const XclImpRoot& rRoot );
     virtual             ~XclImpDrawObjBase();
 
-    /** Reads the FTCMO subrecord (common object data) in an OBJ record, returns a new object. */
-    static XclImpDrawObjRef ReadObjCmo( XclImpStream& rStrm );
-    /** Reads the contents of the specified subrecord of an OBJ record from stream. */
-    virtual void        ReadSubRecord( XclImpStream& rStrm, sal_uInt16 nSubRecId, sal_uInt16 nSubRecSize );
-    /** Reads the client anchor from an msofbtClientAnchor Escher record. */
-    void                ReadClientAnchor( SvStream& rEscherStrm, const DffRecordHeader& rHeader );
+    /** Reads the BIFF3 OBJ record, returns a new drawing object. */
+    static XclImpDrawObjRef ReadObj3( XclImpStream& rStrm );
+    /** Reads the BIFF4 OBJ record, returns a new drawing object. */
+    static XclImpDrawObjRef ReadObj4( XclImpStream& rStrm );
+    /** Reads the BIFF5 OBJ record, returns a new drawing object. */
+    static XclImpDrawObjRef ReadObj5( XclImpStream& rStrm );
+    /** Reads the BIFF8 OBJ record, returns a new drawing object. */
+    static XclImpDrawObjRef ReadObj8( XclImpStream& rStrm );
 
-    /** Sets common object data from FTCMO subrecord. */
-    void                SetObjData( sal_uInt16 nObjType, sal_uInt16 nObjId, sal_uInt16 nObjFlags );
-    /** Sets shape data from Escher stream. */
-    void                SetShapeData( sal_uInt32 nShapeId, sal_uInt32 nShapeFlags, sal_uInt32 nShapeBlipId );
     /** Sets whether this is an area object (then its width and height must be greater than 0). */
     inline void         SetAreaObj( bool bAreaObj ) { mbAreaObj = bAreaObj; }
-    /** Sets the object anchor explicitly. */
-    void                SetClientAnchor( const XclEscherAnchor& rAnchor );
+    /** If set to true, a new SdrObject will be created while in DFF import. */
+    inline void         SetSimpleMacro( bool bMacro ) { mbSimpleMacro = bMacro; }
 
-    /** If set, the SdrObject will not be created, processed, or inserted into the draw page. */
-    inline void         SetInvalid() { mbValid = false; }
-    /** If set, the SdrObject will be created or processed, but not be inserted into the draw page. */
-    inline void         SetSkipInsertSdr() { mbInsSdr = false; }
+    /** Sets shape data from DFF stream. */
+    void                SetDffData( const DffObjData& rDffObjData, const String& rObjName, const String& rHyperlink, bool bVisible, bool bAutoMargin );
+    /** Sets the object anchor explicitly. */
+    void                SetAnchor( const XclObjAnchor& rAnchor );
+
+    /** If set to false, the SdrObject will not be created, processed, or inserted into the draw page. */
+    inline void         SetProcessSdrObj( bool bProcess ) { mbProcessSdr = bProcess; }
+    /** If set to false, the SdrObject will be created or processed, but not be inserted into the draw page. */
+    inline void         SetInsertSdrObj( bool bInsert ) { mbInsertSdr = bInsert; }
+    /** If set to true, a new SdrObject will be created while in DFF import. */
+    inline void         SetCustomDffObj( bool bCustom ) { mbCustomDff = bCustom; }
 
     /** Returns the Calc sheet index of this object. */
     inline SCTAB        GetScTab() const { return maObjId.mnScTab; }
@@ -110,22 +93,22 @@ public:
     inline const XclObjId& GetObjId() const { return maObjId; }
     /** Returns the Excel object type from OBJ record. */
     inline sal_uInt16   GetObjType() const { return mnObjType; }
+    /** Returns the name of this object, may generate a default name. */
+    String              GetObjName() const;
     /** Returns associated macro name, if set, otherwise zero length string. */
-    const String        GetMacroName() const { return maMacroName; }
+    inline const String& GetMacroName() const { return maMacroName; }
 
-    /** Returns the shape identifier used in the Escher stream. */
-    inline sal_uInt32   GetShapeId() const { return mnShapeId; }
-    /** Returns the shape flags from the Escher stream. */
-    inline sal_uInt32   GetShapeFlags() const { return mnShapeFlags; }
-    /** Returns the BLIP identifier for the meta file. */
-    inline sal_uInt32   GetShapeBlipId() const { return mnShapeBlipId; }
+    /** Returns the shape identifier used in the DFF stream. */
+    inline sal_uInt32   GetDffShapeId() const { return mnDffShapeId; }
+    /** Returns the shape flags from the DFF stream. */
+    inline sal_uInt32   GetDffFlags() const { return mnDffFlags; }
 
-    /** Returns true, if the object is valid and will be processed.. */
-    inline bool         IsValid() const { return mbValid; }
-    /** Returns true, if the SdrObject will be created or processed, but not be inserted into the draw page. */
-    inline bool         IsInsertSdr() const { return mbInsSdr; }
-    /** Returns true, if Escher object is printable. */
-    inline bool         IsPrintable() const { return ::get_flag( mnObjFlags, EXC_OBJ_CMO_PRINTABLE ); }
+    /** Returns true, if the object is hidden. */
+    inline bool         IsHidden() const { return mbHidden; }
+    /** Returns true, if the object is visible. */
+    inline bool         IsVisible() const { return mbVisible; }
+    /** Returns true, if the object is printable. */
+    inline bool         IsPrintable() const { return mbPrintable; }
 
     /** Returns true, if the passed size is valid for this object. */
     bool                IsValidSize( const Rectangle& rAnchorRect ) const;
@@ -134,65 +117,339 @@ public:
     /** Returns the area on the drawing layer for this object. */
     Rectangle           GetAnchorRect() const;
 
+    /** Returns true, if the object is valid and will be processed.. */
+    inline bool         IsProcessSdrObj() const { return mbProcessSdr && !mbHidden; }
+    /** Returns true, if the SdrObject will be created or processed, but not be inserted into the draw page. */
+    inline bool         IsInsertSdrObj() const { return mbInsertSdr; }
+
     /** Returns the needed size on the progress bar (calls virtual DoGetProgressSize() function). */
     sal_Size            GetProgressSize() const;
+    /** Creates and returns an SdrObject from the contained data. Caller takes ownership! */
+    SdrObject*          CreateSdrObject( const Rectangle& rAnchorRect, ScfProgressBar& rProgress, bool bDffImport ) const;
     /** Additional processing for the passed SdrObject (calls virtual DoProcessSdrObj() function). */
     void                ProcessSdrObject( SdrObject& rSdrObj ) const;
 
 protected:
+    /** Reads the object name in a BIFF5 OBJ record. */
+    void                ReadName5( XclImpStream& rStrm, sal_uInt16 nNameLen );
+    /** Reads the macro link in a BIFF3 OBJ record. */
+    void                ReadMacro3( XclImpStream& rStrm, sal_uInt16 nMacroSize );
+    /** Reads the macro link in a BIFF4 OBJ record. */
+    void                ReadMacro4( XclImpStream& rStrm, sal_uInt16 nMacroSize );
+    /** Reads the macro link in a BIFF5 OBJ record. */
+    void                ReadMacro5( XclImpStream& rStrm, sal_uInt16 nMacroSize );
     /** Reads the contents of the ftMacro sub structure in an OBJ record. */
-    void                ReadMacro( XclImpStream& rStrm );
+    void                ReadMacro8( XclImpStream& rStrm );
+
+    /** Converts the passed line formatting to the passed SdrObject. */
+    void                ConvertLineStyle( SdrObject& rSdrObj, const XclObjLineData& rLineData ) const;
+    /** Converts the passed fill formatting to the passed SdrObject. */
+    void                ConvertFillStyle( SdrObject& rSdrObj, const XclObjFillData& rFillData ) const;
+    /** Converts the passed frame flags to the passed SdrObject. */
+    void                ConvertFrameStyle( SdrObject& rSdrObj, sal_uInt16 nFrameFlags ) const;
+
+    /** Returns a solid line color from the passed line data struct. */
+    Color               GetSolidLineColor( const XclObjLineData& rLineData ) const;
+    /** Returns a solid fill color from the passed fill data struct. */
+    Color               GetSolidFillColor( const XclObjFillData& rFillData ) const;
+
+    /** Derived classes read the contents of the a BIFF3 OBJ record from the passed stream. */
+    virtual void        DoReadObj3( XclImpStream& rStrm, sal_uInt16 nMacroSize );
+    /** Derived classes read the contents of the a BIFF4 OBJ record from the passed stream. */
+    virtual void        DoReadObj4( XclImpStream& rStrm, sal_uInt16 nMacroSize );
+    /** Derived classes read the contents of the a BIFF5 OBJ record from the passed stream. */
+    virtual void        DoReadObj5( XclImpStream& rStrm, sal_uInt16 nNameLen, sal_uInt16 nMacroSize );
+    /** Derived classes read the contents of the specified subrecord of a BIFF8 OBJ record from stream. */
+    virtual void        DoReadObj8SubRec( XclImpStream& rStrm, sal_uInt16 nSubRecId, sal_uInt16 nSubRecSize );
 
     /** Derived classes may return a progress bar size different from 1. */
     virtual sal_Size    DoGetProgressSize() const;
+    /** Derived classes create and return a new SdrObject from the contained data. Caller takes ownership! */
+    virtual SdrObject*  DoCreateSdrObj( const Rectangle& rAnchorRect, ScfProgressBar& rProgress ) const;
     /** Derived classes may perform additional processing for the passed SdrObject. */
     virtual void        DoProcessSdrObj( SdrObject& rSdrObj ) const;
 
 private:
-    typedef ScfRef< XclEscherAnchor > XclEscherAnchorRef;
+    /** Reads the contents of a BIFF3 OBJ record. */
+    void                ImplReadObj3( XclImpStream& rStrm );
+    /** Reads the contents of a BIFF4 OBJ record. */
+    void                ImplReadObj4( XclImpStream& rStrm );
+    /** Reads the contents of a BIFF5 OBJ record. */
+    void                ImplReadObj5( XclImpStream& rStrm );
+    /** Reads the contents of a BIFF8 OBJ record. */
+    void                ImplReadObj8( XclImpStream& rStrm );
 
-    XclEscherAnchorRef  mxAnchor;       /// The position of the object in the containing sheet.
+private:
+    typedef ScfRef< XclObjAnchor > XclObjAnchorRef;
+
+    XclObjAnchorRef     mxAnchor;       /// The position of the object in the containing sheet.
     XclObjId            maObjId;        /// Sheet index and object identifier.
     sal_uInt16          mnObjType;      /// The Excel object type from OBJ record.
-    sal_uInt16          mnObjFlags;     /// Additional flags from OBJ record.
-    sal_uInt32          mnShapeId;      /// Shape ID from Escher stream.
-    sal_uInt32          mnShapeFlags;   /// Shape flags from Escher stream.
-    sal_uInt32          mnShapeBlipId;  /// The BLIP identifier (meta file).
+    sal_uInt32          mnDffShapeId;   /// Shape ID from DFF stream.
+    sal_uInt32          mnDffFlags;     /// Shape flags from DFF stream.
+    String              maObjName;      /// Name of the object.
     String              maMacroName;    /// Name of an attached macro.
-    bool                mbValid;        /// true = Object is valid, do processing and insertion.
+    String              maHyperlink;    /// On-click hyperlink URL.
+    bool                mbHidden;       /// true = Object is hidden.
+    bool                mbVisible;      /// true = Object is visible.
+    bool                mbPrintable;    /// true = Object is printable.
     bool                mbAreaObj;      /// true = Width and height must be greater than 0.
-    bool                mbInsSdr;       /// true = Insert the SdrObject into draw page.
+    bool                mbAutoMargin;   /// true = Set automatic text margin.
+    bool                mbSimpleMacro;  /// true = Create simple macro link and hyperlink.
+    bool                mbProcessSdr;   /// true = Object is valid, do processing and insertion.
+    bool                mbInsertSdr;    /// true = Insert the SdrObject into draw page.
+    bool                mbCustomDff;    /// true = Recreate SdrObject in DFF import.
 };
 
 // ----------------------------------------------------------------------------
 
-/** A simple drawing object, e.g. line, rectangle, textbox, or bitmap. */
-class XclImpDrawingObj : public XclImpDrawObjBase
+class XclImpDrawObjVector : public ::std::vector< XclImpDrawObjRef >
 {
 public:
-    /** @param bAreaObj  true = Width and height of the object must be greater than 0. */
-    explicit            XclImpDrawingObj( const XclImpRoot& rRoot, bool bAreaObj );
+    inline explicit     XclImpDrawObjVector() {}
 
-    /** Stores the passed textbox data from a TXO record. */
-    inline void         SetTxoData( XclImpTxoDataRef xTxoData ) { mxTxoData = xTxoData; }
+    /** Tries to insert the passed object into the last group or appends it. */
+    void                InsertGrouped( XclImpDrawObjRef xDrawObj );
 
-    /** Returns the text orientation from the contained textbox data. */
-    inline sal_uInt16   GetOrientation() const { return mxTxoData.is() ? mxTxoData->GetOrientation() : EXC_TXO_TEXTROT_NONE; }
-    /** Returns the string from the contained textbox data. */
-    inline const XclImpString* GetString() const { return mxTxoData.is() ? mxTxoData->GetString() : 0; }
+    /** Returns the needed size on the progress bar for all contained objects. */
+    sal_Size            GetProgressSize() const;
+};
+
+// ----------------------------------------------------------------------------
+
+/** A placeholder object for unknown object types. */
+class XclImpPhObj : public XclImpDrawObjBase
+{
+public:
+    explicit            XclImpPhObj( const XclImpRoot& rRoot );
+};
+
+// ----------------------------------------------------------------------------
+
+/** A group object. */
+class XclImpGroupObj : public XclImpDrawObjBase
+{
+public:
+    explicit            XclImpGroupObj( const XclImpRoot& rRoot );
+
+    /** Tries to insert the drawing object into this or a nested group. */
+    bool                TryInsert( XclImpDrawObjRef xDrawObj );
 
 protected:
+    /** Reads the contents of the a BIFF3 OBJ record from the passed stream. */
+    virtual void        DoReadObj3( XclImpStream& rStrm, sal_uInt16 nMacroSize );
+    /** Reads the contents of the a BIFF4 OBJ record from the passed stream. */
+    virtual void        DoReadObj4( XclImpStream& rStrm, sal_uInt16 nMacroSize );
+    /** Reads the contents of the a BIFF5 OBJ record from the passed stream. */
+    virtual void        DoReadObj5( XclImpStream& rStrm, sal_uInt16 nNameLen, sal_uInt16 nMacroSize );
+    /** Returns a progress bar size that takes all group children into account. */
+    virtual sal_Size    DoGetProgressSize() const;
+    /** Creates and returns a new SdrObject from the contained data. Caller takes ownership! */
+    virtual SdrObject*  DoCreateSdrObj( const Rectangle& rAnchorRect, ScfProgressBar& rProgress ) const;
+
+protected:
+    XclImpDrawObjVector maChildren;         /// Grouped objects.
+    sal_uInt16          mnFirstUngrouped;   /// Object identfier of first object not grouped into this group.
+};
+
+// ----------------------------------------------------------------------------
+
+/** A line object. */
+class XclImpLineObj : public XclImpDrawObjBase
+{
+public:
+    explicit            XclImpLineObj( const XclImpRoot& rRoot );
+
+protected:
+    /** Reads the contents of the a BIFF3 OBJ record from the passed stream. */
+    virtual void        DoReadObj3( XclImpStream& rStrm, sal_uInt16 nMacroSize );
+    /** Reads the contents of the a BIFF4 OBJ record from the passed stream. */
+    virtual void        DoReadObj4( XclImpStream& rStrm, sal_uInt16 nMacroSize );
+    /** Reads the contents of the a BIFF5 OBJ record from the passed stream. */
+    virtual void        DoReadObj5( XclImpStream& rStrm, sal_uInt16 nNameLen, sal_uInt16 nMacroSize );
+    /** Creates and returns a new SdrObject from the contained data. Caller takes ownership! */
+    virtual SdrObject*  DoCreateSdrObj( const Rectangle& rAnchorRect, ScfProgressBar& rProgress ) const;
+
+protected:
+    XclObjLineData      maLineData;     /// BIFF5 line formatting.
+    sal_uInt16          mnArrows;       /// Line arrows.
+    sal_uInt8           mnStartPoint;   /// Starting point.
+};
+
+// ----------------------------------------------------------------------------
+
+/** A rectangle or oval object. */
+class XclImpRectObj : public XclImpDrawObjBase
+{
+public:
+    explicit            XclImpRectObj( const XclImpRoot& rRoot );
+
+protected:
+    /** Reads fil data, line data, and frame flags. */
+    void                ReadFrameData( XclImpStream& rStrm );
+
+    /** Converts fill formatting, line formattind, and frame style. */
+    void                ConvertRectStyle( SdrObject& rSdrObj ) const;
+
+    /** Reads the contents of the a BIFF3 OBJ record from the passed stream. */
+    virtual void        DoReadObj3( XclImpStream& rStrm, sal_uInt16 nMacroSize );
+    /** Reads the contents of the a BIFF4 OBJ record from the passed stream. */
+    virtual void        DoReadObj4( XclImpStream& rStrm, sal_uInt16 nMacroSize );
+    /** Reads the contents of the a BIFF5 OBJ record from the passed stream. */
+    virtual void        DoReadObj5( XclImpStream& rStrm, sal_uInt16 nNameLen, sal_uInt16 nMacroSize );
+    /** Creates and returns a new SdrObject from the contained data. Caller takes ownership! */
+    virtual SdrObject*  DoCreateSdrObj( const Rectangle& rAnchorRect, ScfProgressBar& rProgress ) const;
+
+protected:
+    XclObjFillData      maFillData;     /// BIFF5 fill formatting.
+    XclObjLineData      maLineData;     /// BIFF5 line formatting.
+    sal_uInt16          mnFrameFlags;   /// Additional flags.
+};
+
+// ----------------------------------------------------------------------------
+
+/** An oval object. */
+class XclImpOvalObj : public XclImpRectObj
+{
+public:
+    explicit            XclImpOvalObj( const XclImpRoot& rRoot );
+
+protected:
+    /** Creates and returns a new SdrObject from the contained data. Caller takes ownership! */
+    virtual SdrObject*  DoCreateSdrObj( const Rectangle& rAnchorRect, ScfProgressBar& rProgress ) const;
+};
+
+// ----------------------------------------------------------------------------
+
+/** An arc object. */
+class XclImpArcObj : public XclImpDrawObjBase
+{
+public:
+    explicit            XclImpArcObj( const XclImpRoot& rRoot );
+
+protected:
+    /** Reads the contents of the a BIFF3 OBJ record from the passed stream. */
+    virtual void        DoReadObj3( XclImpStream& rStrm, sal_uInt16 nMacroSize );
+    /** Reads the contents of the a BIFF4 OBJ record from the passed stream. */
+    virtual void        DoReadObj4( XclImpStream& rStrm, sal_uInt16 nMacroSize );
+    /** Reads the contents of the a BIFF5 OBJ record from the passed stream. */
+    virtual void        DoReadObj5( XclImpStream& rStrm, sal_uInt16 nNameLen, sal_uInt16 nMacroSize );
+    /** Creates and returns a new SdrObject from the contained data. Caller takes ownership! */
+    virtual SdrObject*  DoCreateSdrObj( const Rectangle& rAnchorRect, ScfProgressBar& rProgress ) const;
+
+protected:
+    XclObjFillData      maFillData;     /// BIFF5 fill formatting.
+    XclObjLineData      maLineData;     /// BIFF5 line formatting.
+    sal_uInt8           mnQuadrant;     /// Visible quadrant of the circle.
+};
+
+// ----------------------------------------------------------------------------
+
+/** A polygon object. */
+class XclImpPolygonObj : public XclImpRectObj
+{
+public:
+    explicit            XclImpPolygonObj( const XclImpRoot& rRoot );
+
+protected:
+    /** Reads the COORDLIST record following the OBJ record. */
+    void                ReadCoordList( XclImpStream& rStrm );
+
+    /** Reads the contents of the a BIFF4 OBJ record from the passed stream. */
+    virtual void        DoReadObj4( XclImpStream& rStrm, sal_uInt16 nMacroSize );
+    /** Reads the contents of the a BIFF5 OBJ record from the passed stream. */
+    virtual void        DoReadObj5( XclImpStream& rStrm, sal_uInt16 nNameLen, sal_uInt16 nMacroSize );
+    /** Creates and returns a new SdrObject from the contained data. Caller takes ownership! */
+    virtual SdrObject*  DoCreateSdrObj( const Rectangle& rAnchorRect, ScfProgressBar& rProgress ) const;
+
+protected:
+    typedef ::std::vector< Point > PointVector;
+    PointVector         maCoords;       /// Coordinates relative to bounding rectangle.
+    sal_uInt16          mnPolyFlags;    /// Additional flags.
+    sal_uInt16          mnPointCount;   /// Polygon point count.
+};
+
+// ----------------------------------------------------------------------------
+
+struct XclImpObjTextData
+{
+    XclObjTextData      maData;         /// BIFF5 text data.
+    XclImpStringRef     mxString;       /// Plain or rich string.
+
+    /** Reads a byte string from the passed stream. */
+    void                ReadByteString( XclImpStream& rStrm );
+    /** Reads text formatting from the passed stream. */
+    void                ReadFormats( XclImpStream& rStrm );
+};
+
+// ----------------------------------------------------------------------------
+
+/** A drawing object supporting text contents. Used for all simple objects in BIFF8. */
+class XclImpTextObj : public XclImpRectObj
+{
+public:
+    explicit            XclImpTextObj( const XclImpRoot& rRoot );
+
+    /** Stores the passed textbox data. */
+    inline void         SetTextData( const XclImpObjTextData& rTextData ) { maTextData = rTextData; }
+
+protected:
+    /** Reads the contents of the a BIFF3 OBJ record from the passed stream. */
+    virtual void        DoReadObj3( XclImpStream& rStrm, sal_uInt16 nMacroSize );
+    /** Reads the contents of the a BIFF4 OBJ record from the passed stream. */
+    virtual void        DoReadObj4( XclImpStream& rStrm, sal_uInt16 nMacroSize );
+    /** Reads the contents of the a BIFF5 OBJ record from the passed stream. */
+    virtual void        DoReadObj5( XclImpStream& rStrm, sal_uInt16 nNameLen, sal_uInt16 nMacroSize );
+    /** Creates and returns a new SdrObject from the contained data. Caller takes ownership! */
+    virtual SdrObject*  DoCreateSdrObj( const Rectangle& rAnchorRect, ScfProgressBar& rProgress ) const;
     /** Inserts the contained text data at the passed object. */
     virtual void        DoProcessSdrObj( SdrObject& rSdrObj ) const;
 
+protected:
+    XclImpObjTextData   maTextData;     /// Textbox data from BIFF5 OBJ or BIFF8 TXO record.
+};
+
+// ----------------------------------------------------------------------------
+
+/** A chart object. This is the drawing object wrapper for the chart data. */
+class XclImpChartObj : public XclImpRectObj
+{
+public:
+    /** @param bOwnTab  True = chart is on an own sheet; false = chart is an embedded object. */
+    explicit            XclImpChartObj( const XclImpRoot& rRoot, bool bOwnTab = false );
+
+    /** Reads the complete chart substream (BOF/EOF block). */
+    void                ReadChartSubStream( XclImpStream& rStrm );
+
+protected:
+    /** Reads the contents of the a BIFF3 OBJ record from the passed stream. */
+    virtual void        DoReadObj3( XclImpStream& rStrm, sal_uInt16 nMacroSize );
+    /** Reads the contents of the a BIFF4 OBJ record from the passed stream. */
+    virtual void        DoReadObj4( XclImpStream& rStrm, sal_uInt16 nMacroSize );
+    /** Reads the contents of the a BIFF5 OBJ record from the passed stream. */
+    virtual void        DoReadObj5( XclImpStream& rStrm, sal_uInt16 nNameLen, sal_uInt16 nMacroSize );
+    /** Reads the contents of the specified subrecord of a BIFF8 OBJ record from stream. */
+    virtual void        DoReadObj8SubRec( XclImpStream& rStrm, sal_uInt16 nSubRecId, sal_uInt16 nSubRecSize );
+    /** Returns the needed size on the progress bar. */
+    virtual sal_Size    DoGetProgressSize() const;
+    /** Creates and returns a new SdrObject from the contained data. Caller takes ownership! */
+    virtual SdrObject*  DoCreateSdrObj( const Rectangle& rAnchorRect, ScfProgressBar& rProgress ) const;
+
 private:
-    XclImpTxoDataRef    mxTxoData;      /// Textbox data from TXO record.
+    /** Calculates the object anchor of a sheet chart (chart fills one page). */
+    void                FinalizeTabChart();
+
+private:
+    typedef ScfRef< XclImpChart > XclImpChartRef;
+
+    XclImpChartRef      mxChart;        /// The chart itself (BOF/EOF substream data).
+    bool                mbOwnTab;       /// true = own sheet; false = embedded object.
 };
 
 // ----------------------------------------------------------------------------
 
 /** A note object, which is a specialized text box objext. */
-class XclImpNoteObj : public XclImpDrawingObj
+class XclImpNoteObj : public XclImpTextObj
 {
 public:
     explicit            XclImpNoteObj( const XclImpRoot& rRoot );
@@ -211,37 +468,45 @@ private:
 
 // ----------------------------------------------------------------------------
 
-/** Helper class for form controils to manage spreadsheet links . */
-class XclImpControlObjHelper
+/** Helper base class for TBX and OCX form controls to manage spreadsheet links. */
+class XclImpControlHelper
 {
 public:
-    typedef ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlModel > XControlModelRef;
-
-public:
-    explicit            XclImpControlObjHelper( XclCtrlBindMode eBindMode );
-    virtual             ~XclImpControlObjHelper();
-
-    /** Sets the control model from the created form control object. */
-    inline void         SetControlModel( XControlModelRef xCtrlModel ) { mxCtrlModel = xCtrlModel; }
-
-protected:
-    /** Reads the formula for the linked cell from the current position of the stream. */
-    void                ReadCellLinkFormula( XclImpStream& rStrm );
-    /** Reads the formula for the source range from the current position of the stream. */
-    void                ReadSrcRangeFormula( XclImpStream& rStrm );
+    explicit            XclImpControlHelper( const XclImpRoot& rRoot, XclCtrlBindMode eBindMode );
+    virtual             ~XclImpControlHelper();
 
     /** Returns true, if a linked cell address is present. */
     inline bool         HasCellLink() const { return mxCellLink.is(); }
     /** Returns true, if a linked source cell range is present. */
     inline bool         HasSourceRange() const { return mxSrcRange.is(); }
 
-    /** Returns the property set of the form control object. */
-    ScfPropertySet      GetControlPropSet() const;
-    /** Tries to set a spreadsheet cell link and source range link at the passed form control. */
-    void                ConvertSheetLinks( const XclImpRoot& rRoot, SdrObject& rSdrObj ) const;
+    /** Returns the SdrObject from the passed control shape and sets the bounding rectangle. */
+    SdrObject*          CreateSdrObjectFromShape(
+                            const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape >& rxShape,
+                            const Rectangle& rAnchorRect ) const;
+
+    /** Sets additional properties to the form control model, calls virtual DoProcessControl(). */
+    void                ProcessControl( const XclImpDrawObjBase& rDrawObj ) const;
+
+protected:
+    /** Reads the formula for the linked cell from the current position of the stream. */
+    void                ReadCellLinkFormula( XclImpStream& rStrm, bool bWithBoundSize );
+    /** Reads the formula for the source range from the current position of the stream. */
+    void                ReadSourceRangeFormula( XclImpStream& rStrm, bool bWithBoundSize );
+
+    /** Derived classes will set additional properties for the current form control. */
+    virtual void        DoProcessControl( ScfPropertySet& rPropSet ) const;
 
 private:
-    XControlModelRef    mxCtrlModel;    /// Model of the created form control object.
+    /** Reads a list of cell ranges from a formula at the current stream position. */
+    void                ReadRangeList( ScRangeList& rScRanges, XclImpStream& rStrm );
+    /** Reads leading formula size and a list of cell ranges from a formula if the leading size is not zero. */
+    void                ReadRangeList( ScRangeList& rScRanges, XclImpStream& rStrm, bool bWithBoundSize );
+
+private:
+    const XclImpRoot&   mrRoot;         /// Not derived from XclImpRoot to allow multiple inheritance.
+    mutable ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape >
+                        mxShape;        /// The UNO wrapper of the control shape.
     ScfRef< ScAddress > mxCellLink;     /// Linked cell in the Calc document.
     ScfRef< ScRange >   mxSrcRange;     /// Source data range in the Calc document.
     XclCtrlBindMode     meBindMode;     /// Value binding mode.
@@ -249,148 +514,416 @@ private:
 
 // ----------------------------------------------------------------------------
 
-/** An old form control object (does not use the OLE mechanism, but is a "simple" drawing object). */
-class XclImpTbxControlObj : public XclImpDrawingObj, public XclImpControlObjHelper
+/** Base class for textbox based form controls. */
+class XclImpTbxObjBase : public XclImpTextObj, public XclImpControlHelper
 {
 public:
-    explicit            XclImpTbxControlObj( const XclImpRoot& rRoot );
+    explicit            XclImpTbxObjBase( const XclImpRoot& rRoot );
 
-    /** Reads the contents of the specified subrecord of an OBJ record from stream. */
-    virtual void        ReadSubRecord( XclImpStream& rStrm, sal_uInt16 nSubRecId, sal_uInt16 nSubRecSize );
+    /** Sets line and fill formatting from the passed DFF property set. */
+    void                SetDffProperties( const DffPropSet& rDffPropSet );
 
-    /** Returns the complete component service name for this control. */
-    ::rtl::OUString     GetServiceName() const;
-    /** Tries to fill the passed descriptor with imported macro data.
-        @return  true = Control is associated with a macro, rEvent contains valid data. */
+    /** Returns the service name of the control component to be created. */
+    inline ::rtl::OUString GetServiceName() const { return DoGetServiceName(); }
+    /** Fills the passed macro event descriptor. */
     bool                FillMacroDescriptor(
-                            ::com::sun::star::script::ScriptEventDescriptor& rEvent ) const;
+                            ::com::sun::star::script::ScriptEventDescriptor& rDescriptor ) const;
 
 protected:
-    /** Overloaded to do additional processing on the SdrObject. */
+    /** Sets control text formatting. */
+    void                ConvertFont( ScfPropertySet& rPropSet ) const;
+    /** Sets control label and text formatting. */
+    void                ConvertLabel( ScfPropertySet& rPropSet ) const;
+
+    /** Creates and returns a new SdrObject from the contained data. Caller takes ownership! */
+    virtual SdrObject*  DoCreateSdrObj( const Rectangle& rAnchorRect, ScfProgressBar& rProgress ) const;
+    /** Additional processing on the SdrObject, calls new virtual function DoProcessControl(). */
     virtual void        DoProcessSdrObj( SdrObject& rSdrObj ) const;
 
-private:
-    /** Reads the contents of the ftCbls sub structure in an OBJ record. */
-    void                ReadCbls( XclImpStream& rStrm );
-    /** Reads the contents of the ftCblsFmla sub structure in an OBJ record. */
-    void                ReadCblsFmla( XclImpStream& rStrm );
-    /** Reads the contents of the ftLbsData sub structure in an OBJ record. */
-    void                ReadLbsData( XclImpStream& rStrm );
-    /** Reads the contents of the ftSbs sub structure in an OBJ record. */
-    void                ReadSbs( XclImpStream& rStrm );
-    /** Reads the contents of the ftGboData sub structure in an OBJ record. */
-    void                ReadGboData( XclImpStream& rStrm );
-
-private:
-    ScfInt16Vec         maMultiSel;     /// Indexes of all selected entries in a multi selection.
-    sal_uInt16          mnState;        /// Checked/unchecked state.
-    sal_Int16           mnSelEntry;     /// Index of selected entry (1-based).
-    sal_Int16           mnSelType;      /// Selection type.
-    sal_Int16           mnLineCount;    /// Combobox dropdown line count.
-    sal_Int16           mnScrollValue;  /// Scrollbar: Current value.
-    sal_Int16           mnScrollMin;    /// Scrollbar: Minimum value.
-    sal_Int16           mnScrollMax;    /// Scrollbar: Maximum value.
-    sal_Int16           mnScrollStep;   /// Scrollbar: Single step.
-    sal_Int16           mnScrollPage;   /// Scrollbar: Page step.
-    bool                mbFlatButton;   /// False = 3D button style; True = Flat button style.
-    bool                mbFlatBorder;   /// False = 3D border style; True = Flat border style.
-    bool                mbScrollHor;    /// Scrollbar: true = horizontal.
+    /** Derived classes return the service name of the control component to be created. */
+    virtual ::rtl::OUString DoGetServiceName() const = 0;
+    /** Derived classes return the type of the macro event to be created. */
+    virtual XclTbxEventType DoGetEventType() const = 0;
 };
 
 // ----------------------------------------------------------------------------
 
-/** A common Escher OLE object, or an OLE form control. */
-class XclImpOleObj : public XclImpDrawObjBase, public XclImpControlObjHelper
+/** A button control. */
+class XclImpButtonObj : public XclImpTbxObjBase
 {
 public:
-    explicit            XclImpOleObj( const XclImpRoot& rRoot );
-
-    /** Reads the contents of the specified subrecord of an OBJ record from stream. */
-    virtual void        ReadSubRecord( XclImpStream& rStrm, sal_uInt16 nSubRecId, sal_uInt16 nSubRecSize );
-
-    /** Allows to detect whether the object is iconified. */
-    inline bool         IsIconified() const { return mbAsSymbol; }
-    /** Returns true, if this object is a form control, and false, if it is a common OLE object. */
-    inline bool         IsControl() const { return mbControl && mbUseCtlsStrm; }
-
-    /** Returns the OLE storage name used in the Excel document. */
-    inline const String& GetStorageName() const { return maStorageName; }
-    /** Returns the position in Ctrl stream for additional form control data. */
-    inline sal_Size      GetCtlsStreamPos() const { return mnCtlsStrmPos; }
+    explicit            XclImpButtonObj( const XclImpRoot& rRoot );
 
 protected:
+    /** Sets additional properties for the current form control. */
+    virtual void        DoProcessControl( ScfPropertySet& rPropSet ) const;
+    /** Returns the service name of the control component to be created. */
+    virtual ::rtl::OUString DoGetServiceName() const;
+    /** Returns the type of the macro event to be created. */
+    virtual XclTbxEventType DoGetEventType() const;
+};
+
+// ----------------------------------------------------------------------------
+
+/** A checkbox control. */
+class XclImpCheckBoxObj : public XclImpTbxObjBase
+{
+public:
+    explicit            XclImpCheckBoxObj( const XclImpRoot& rRoot );
+
+protected:
+    /** Reads the contents of the a BIFF5 OBJ record from the passed stream. */
+    virtual void        DoReadObj5( XclImpStream& rStrm, sal_uInt16 nNameLen, sal_uInt16 nMacroSize );
+    /** Reads the contents of the specified subrecord of a BIFF8 OBJ record from stream. */
+    virtual void        DoReadObj8SubRec( XclImpStream& rStrm, sal_uInt16 nSubRecId, sal_uInt16 nSubRecSize );
+    /** Sets additional properties for the current form control. */
+    virtual void        DoProcessControl( ScfPropertySet& rPropSet ) const;
+    /** Returns the service name of the control component to be created. */
+    virtual ::rtl::OUString DoGetServiceName() const;
+    /** Returns the type of the macro event to be created. */
+    virtual XclTbxEventType DoGetEventType() const;
+
+protected:
+    sal_uInt16          mnState;
+    sal_uInt16          mnCheckBoxFlags;
+};
+
+// ----------------------------------------------------------------------------
+
+/** An option button control. */
+class XclImpOptionButtonObj : public XclImpCheckBoxObj
+{
+public:
+    explicit            XclImpOptionButtonObj( const XclImpRoot& rRoot );
+
+protected:
+    /** Reads the contents of the a BIFF5 OBJ record from the passed stream. */
+    virtual void        DoReadObj5( XclImpStream& rStrm, sal_uInt16 nNameLen, sal_uInt16 nMacroSize );
+    /** Reads the contents of the specified subrecord of a BIFF8 OBJ record from stream. */
+    virtual void        DoReadObj8SubRec( XclImpStream& rStrm, sal_uInt16 nSubRecId, sal_uInt16 nSubRecSize );
+    /** Sets additional properties for the current form control. */
+    virtual void        DoProcessControl( ScfPropertySet& rPropSet ) const;
+    /** Returns the service name of the control component to be created. */
+    virtual ::rtl::OUString DoGetServiceName() const;
+    /** Returns the type of the macro event to be created. */
+    virtual XclTbxEventType DoGetEventType() const;
+
+protected:
+    sal_uInt16          mnNextInGroup;      /// Next option button in a group.
+    sal_uInt16          mnFirstInGroup;     /// 1 = Button is the first in a group.
+};
+
+// ----------------------------------------------------------------------------
+
+/** A label control. */
+class XclImpLabelObj : public XclImpTbxObjBase
+{
+public:
+    explicit            XclImpLabelObj( const XclImpRoot& rRoot );
+
+protected:
+    /** Sets additional properties for the current form control. */
+    virtual void        DoProcessControl( ScfPropertySet& rPropSet ) const;
+    /** Returns the service name of the control component to be created. */
+    virtual ::rtl::OUString DoGetServiceName() const;
+    /** Returns the type of the macro event to be created. */
+    virtual XclTbxEventType DoGetEventType() const;
+};
+
+// ----------------------------------------------------------------------------
+
+/** A groupbox control. */
+class XclImpGroupBoxObj : public XclImpTbxObjBase
+{
+public:
+    explicit            XclImpGroupBoxObj( const XclImpRoot& rRoot );
+
+protected:
+    /** Reads the contents of the a BIFF5 OBJ record from the passed stream. */
+    virtual void        DoReadObj5( XclImpStream& rStrm, sal_uInt16 nNameLen, sal_uInt16 nMacroSize );
+    /** Reads the contents of the specified subrecord of a BIFF8 OBJ record from stream. */
+    virtual void        DoReadObj8SubRec( XclImpStream& rStrm, sal_uInt16 nSubRecId, sal_uInt16 nSubRecSize );
+    /** Sets additional properties for the current form control. */
+    virtual void        DoProcessControl( ScfPropertySet& rPropSet ) const;
+    /** Returns the service name of the control component to be created. */
+    virtual ::rtl::OUString DoGetServiceName() const;
+    /** Returns the type of the macro event to be created. */
+    virtual XclTbxEventType DoGetEventType() const;
+
+protected:
+    sal_uInt16          mnGroupBoxFlags;
+};
+
+// ----------------------------------------------------------------------------
+
+/** A dialog control. */
+class XclImpDialogObj : public XclImpTbxObjBase
+{
+public:
+    explicit            XclImpDialogObj( const XclImpRoot& rRoot );
+
+protected:
+    /** Sets additional properties for the current form control. */
+    virtual void        DoProcessControl( ScfPropertySet& rPropSet ) const;
+    /** Returns the service name of the control component to be created. */
+    virtual ::rtl::OUString DoGetServiceName() const;
+    /** Returns the type of the macro event to be created. */
+    virtual XclTbxEventType DoGetEventType() const;
+};
+
+// ----------------------------------------------------------------------------
+
+/** An edit control. */
+class XclImpEditObj : public XclImpTbxObjBase
+{
+public:
+    explicit            XclImpEditObj( const XclImpRoot& rRoot );
+
+protected:
+    /** REturns true, if the field type is numeric. */
+    bool                IsNumeric() const;
+
+    /** Reads the contents of the a BIFF5 OBJ record from the passed stream. */
+    virtual void        DoReadObj5( XclImpStream& rStrm, sal_uInt16 nNameLen, sal_uInt16 nMacroSize );
+    /** Reads the contents of the specified subrecord of a BIFF8 OBJ record from stream. */
+    virtual void        DoReadObj8SubRec( XclImpStream& rStrm, sal_uInt16 nSubRecId, sal_uInt16 nSubRecSize );
+    /** Sets additional properties for the current form control. */
+    virtual void        DoProcessControl( ScfPropertySet& rPropSet ) const;
+    /** Returns the service name of the control component to be created. */
+    virtual ::rtl::OUString DoGetServiceName() const;
+    /** Returns the type of the macro event to be created. */
+    virtual XclTbxEventType DoGetEventType() const;
+
+protected:
+    sal_uInt16          mnContentType;
+    sal_uInt16          mnMultiLine;
+    sal_uInt16          mnScrollBar;
+    sal_uInt16          mnListBoxObjId;
+};
+
+// ----------------------------------------------------------------------------
+
+/** Base class of scrollable form controls (spin button, scrollbar, listbox, dropdown). */
+class XclImpTbxObjScrollableBase : public XclImpTbxObjBase
+{
+public:
+    explicit            XclImpTbxObjScrollableBase( const XclImpRoot& rRoot );
+
+protected:
+    /** Reads scrollbar data. */
+    void                ReadSbs( XclImpStream& rStrm );
+
+    /** Reads the contents of the specified subrecord of a BIFF8 OBJ record from stream. */
+    virtual void        DoReadObj8SubRec( XclImpStream& rStrm, sal_uInt16 nSubRecId, sal_uInt16 nSubRecSize );
+
+protected:
+    sal_uInt16          mnValue;
+    sal_uInt16          mnMin;
+    sal_uInt16          mnMax;
+    sal_uInt16          mnStep;
+    sal_uInt16          mnPageStep;
+    sal_uInt16          mnOrient;
+    sal_uInt16          mnThumbWidth;
+    sal_uInt16          mnScrollFlags;
+};
+
+// ----------------------------------------------------------------------------
+
+/** A spinbutton control. */
+class XclImpSpinButtonObj : public XclImpTbxObjScrollableBase
+{
+public:
+    explicit            XclImpSpinButtonObj( const XclImpRoot& rRoot );
+
+protected:
+    /** Reads the contents of the a BIFF5 OBJ record from the passed stream. */
+    virtual void        DoReadObj5( XclImpStream& rStrm, sal_uInt16 nNameLen, sal_uInt16 nMacroSize );
+    /** Sets additional properties for the current form control. */
+    virtual void        DoProcessControl( ScfPropertySet& rPropSet ) const;
+    /** Returns the service name of the control component to be created. */
+    virtual ::rtl::OUString DoGetServiceName() const;
+    /** Returns the type of the macro event to be created. */
+    virtual XclTbxEventType DoGetEventType() const;
+};
+
+// ----------------------------------------------------------------------------
+
+/** A scrollbar control. */
+class XclImpScrollBarObj : public XclImpTbxObjScrollableBase
+{
+public:
+    explicit            XclImpScrollBarObj( const XclImpRoot& rRoot );
+
+protected:
+    /** Reads the contents of the a BIFF5 OBJ record from the passed stream. */
+    virtual void        DoReadObj5( XclImpStream& rStrm, sal_uInt16 nNameLen, sal_uInt16 nMacroSize );
+    /** Sets additional properties for the current form control. */
+    virtual void        DoProcessControl( ScfPropertySet& rPropSet ) const;
+    /** Returns the service name of the control component to be created. */
+    virtual ::rtl::OUString DoGetServiceName() const;
+    /** Returns the type of the macro event to be created. */
+    virtual XclTbxEventType DoGetEventType() const;
+};
+
+// ----------------------------------------------------------------------------
+
+/** Base class for list controls (listbox, dropdown). */
+class XclImpTbxObjListBase : public XclImpTbxObjScrollableBase
+{
+public:
+    explicit            XclImpTbxObjListBase( const XclImpRoot& rRoot );
+
+protected:
+    /** Reads common listbox settings. */
+    void                ReadLbsData( XclImpStream& rStrm );
+    /** Sets common listbox/dropdown formatting attributes. */
+    void                SetBoxFormatting( ScfPropertySet& rPropSet ) const;
+
+protected:
+    sal_uInt16          mnEntryCount;
+    sal_uInt16          mnSelEntry;
+    sal_uInt16          mnListFlags;
+    sal_uInt16          mnEditObjId;
+    bool                mbHasDefFontIdx;
+};
+
+// ----------------------------------------------------------------------------
+
+/** A listbox control. */
+class XclImpListBoxObj : public XclImpTbxObjListBase
+{
+public:
+    explicit            XclImpListBoxObj( const XclImpRoot& rRoot );
+
+protected:
+    /** Reads listbox settings and selection. */
+    void                ReadFullLbsData( XclImpStream& rStrm, sal_Size nRecLeft );
+
+    /** Reads the contents of the a BIFF5 OBJ record from the passed stream. */
+    virtual void        DoReadObj5( XclImpStream& rStrm, sal_uInt16 nNameLen, sal_uInt16 nMacroSize );
+    /** Reads the contents of the specified subrecord of a BIFF8 OBJ record from stream. */
+    virtual void        DoReadObj8SubRec( XclImpStream& rStrm, sal_uInt16 nSubRecId, sal_uInt16 nSubRecSize );
+    /** Sets additional properties for the current form control. */
+    virtual void        DoProcessControl( ScfPropertySet& rPropSet ) const;
+    /** Returns the service name of the control component to be created. */
+    virtual ::rtl::OUString DoGetServiceName() const;
+    /** Returns the type of the macro event to be created. */
+    virtual XclTbxEventType DoGetEventType() const;
+
+protected:
+    ScfUInt8Vec         maSelection;
+};
+
+// ----------------------------------------------------------------------------
+
+/** A dropdown listbox control. */
+class XclImpDropDownObj : public XclImpTbxObjListBase
+{
+public:
+    explicit            XclImpDropDownObj( const XclImpRoot& rRoot );
+
+protected:
+    /** Returns the type of the dropdown control. */
+    sal_uInt16          GetDropDownType() const;
+
+    /** Reads dropdown box settings. */
+    void                ReadFullLbsData( XclImpStream& rStrm );
+
+    /** Reads the contents of the a BIFF5 OBJ record from the passed stream. */
+    virtual void        DoReadObj5( XclImpStream& rStrm, sal_uInt16 nNameLen, sal_uInt16 nMacroSize );
+    /** Reads the contents of the specified subrecord of a BIFF8 OBJ record from stream. */
+    virtual void        DoReadObj8SubRec( XclImpStream& rStrm, sal_uInt16 nSubRecId, sal_uInt16 nSubRecSize );
+    /** Sets additional properties for the current form control. */
+    virtual void        DoProcessControl( ScfPropertySet& rPropSet ) const;
+    /** Returns the service name of the control component to be created. */
+    virtual ::rtl::OUString DoGetServiceName() const;
+    /** Returns the type of the macro event to be created. */
+    virtual XclTbxEventType DoGetEventType() const;
+
+protected:
+    sal_uInt16          mnLeft;
+    sal_uInt16          mnTop;
+    sal_uInt16          mnRight;
+    sal_uInt16          mnBottom;
+    sal_uInt16          mnDropDownFlags;
+    sal_uInt16          mnLineCount;
+    sal_uInt16          mnMinWidth;
+};
+
+// ----------------------------------------------------------------------------
+
+/** A picture, an embedded or linked OLE object, or an OCX form control. */
+class XclImpPictureObj : public XclImpRectObj, public XclImpControlHelper
+{
+public:
+    explicit            XclImpPictureObj( const XclImpRoot& rRoot );
+
+    /** Returns the graphic imported from the IMGDATA record. */
+    inline const Graphic& GetGraphic() const { return maGraphic; }
+    /** Returns the visible area of the imported graphic. */
+    inline const Rectangle& GetVisArea() const { return maVisArea; }
+
+    /** Returns true, if the OLE object will be shown as symbol. */
+    inline bool         IsSymbol() const { return mbSymbol; }
+    /** Returns the storage name for the OLE object. */
+    String              GetOleStorageName() const;
+
+    /** Returns true, if this object is an OCX form control. */
+    inline bool         IsOcxControl() const { return mbEmbedded && mbControl && mbUseCtlsStrm; }
+    /** Returns the position in the 'Ctls' stream for additional form control data. */
+    inline sal_Size     GetCtlsStreamPos() const { return mnCtlsStrmPos; }
+    /** Returns the size in the 'Ctls' stream for additional form control data. */
+    inline sal_Size     GetCtlsStreamSize() const { return mnCtlsStrmSize; }
+
+protected:
+    /** Reads the contents of the a BIFF3 OBJ record from the passed stream. */
+    virtual void        DoReadObj3( XclImpStream& rStrm, sal_uInt16 nMacroSize );
+    /** Reads the contents of the a BIFF4 OBJ record from the passed stream. */
+    virtual void        DoReadObj4( XclImpStream& rStrm, sal_uInt16 nMacroSize );
+    /** Reads the contents of the a BIFF5 OBJ record from the passed stream. */
+    virtual void        DoReadObj5( XclImpStream& rStrm, sal_uInt16 nNameLen, sal_uInt16 nMacroSize );
+    /** Reads the contents of the specified subrecord of a BIFF8 OBJ record from stream. */
+    virtual void        DoReadObj8SubRec( XclImpStream& rStrm, sal_uInt16 nSubRecId, sal_uInt16 nSubRecSize );
+    /** Creates and returns a new SdrObject from the contained data. Caller takes ownership! */
+    virtual SdrObject*  DoCreateSdrObj( const Rectangle& rAnchorRect, ScfProgressBar& rProgress ) const;
     /** Overloaded to do additional processing on the SdrObject. */
     virtual void        DoProcessSdrObj( SdrObject& rSdrObj ) const;
 
 private:
-    /** Reads the contents of the ftPioGrbit sub structure in an OBJ record. */
-    void                ReadPioGrbit( XclImpStream& rStrm );
-    /** Reads the contents of the ftPictFmla sub structure in an OBJ record. */
-    void                ReadPictFmla( XclImpStream& rStrm, sal_uInt16 nRecSize );
+    /** Reads and sets the picture flags from a BIFF3-BIFF5 OBJ picture record. */
+    void                ReadFlags3( XclImpStream& rStrm );
+    /** Reads the contents of the OBJFLAGS subrecord. */
+    void                ReadFlags8( XclImpStream& rStrm );
+    /** Reads the contents of the OBJPICTFMLA subrecord. */
+    void                ReadPictFmla( XclImpStream& rStrm, sal_uInt16 nLinkSize );
 
 private:
-    String              maStorageName;  /// Name of the OLE storage for this object.
-    sal_Size            mnCtlsStrmPos;  /// Position in 'Ctls' stream for controls.
-    bool                mbAsSymbol;     /// true = Show as symbol.
-    bool                mbLinked;       /// true = Linked; false = Embedded.
+    Graphic             maGraphic;      /// Picture or OLE placeholder graphic.
+    Rectangle           maVisArea;      /// Size of graphic.
+    String              maClassName;    /// Class name of embedded OLE object.
+    sal_uInt32          mnStorageId;    /// Identifier of the storage for this object.
+    sal_Size            mnCtlsStrmPos;  /// Position in 'Ctls' stream for this control.
+    sal_Size            mnCtlsStrmSize; /// Size in 'Ctls' stream for this control.
+    bool                mbEmbedded;     /// true = Embedded OLE object.
+    bool                mbLinked;       /// true = Linked OLE object.
+    bool                mbSymbol;       /// true = Show as symbol.
     bool                mbControl;      /// true = Form control, false = OLE object.
     bool                mbUseCtlsStrm;  /// true = Form control data in 'Ctls' stream, false = Own storage.
 };
 
-// ----------------------------------------------------------------------------
-
-struct XclChLineFormat;
-struct XclChAreaFormat;
-class XclImpChart;
-
-/** A chart object. This is the drawing object wrapper for the chart data. */
-class XclImpChartObj : public XclImpDrawObjBase
-{
-public:
-    /** @param bOwnTab  True = chart is on an own sheet; false = chart is an embedded object. */
-    explicit            XclImpChartObj( const XclImpRoot& rRoot, bool bOwnTab );
-
-    /** Reads remaining data from a BIFF5 OBJ record. */
-    void                ReadObj5( XclImpStream& rStrm );
-    /** Reads the complete chart substream (BOF/EOF block).
-        @descr  The passed stream must be located in the BOF record of the chart substream. */
-    void                ReadChartSubStream( XclImpStream& rStrm );
-
-    /** Creates and returns a new SdrObject that contains the chart. Caller takes ownership! */
-    SdrObject*          CreateSdrObject( const Rectangle& rAnchorRect, ScfProgressBar& rProgress ) const;
-
-protected:
-    /** Returns the needed size on the progress bar. */
-    virtual sal_Size    DoGetProgressSize() const;
-
-private:
-    /** Calculates the object anchor of a sheet chart (chart fills one page). */
-    void                FinalizeTabChart();
-
-private:
-    typedef ScfRef< XclImpChart >       XclImpChartRef;
-    typedef ScfRef< XclChLineFormat >   XclChLineFmtRef;
-    typedef ScfRef< XclChAreaFormat >   XclChAreaFmtRef;
-
-    XclImpChartRef      mxChart;        /// The chart itself (BOF/EOF substream data).
-    XclChLineFmtRef     mxLineFmt;      /// Line formatting for chart frame (BIFF5).
-    XclChAreaFmtRef     mxAreaFmt;      /// Area formatting for chart frame (BIFF5).
-    bool                mbOwnTab;       /// true = own sheet; false = embedded object.
-};
-
-// Escher stream conversion ===================================================
+// DFF stream conversion ======================================================
 
 /** The solver container collects all connector rules for connected objects. */
 class XclImpSolverContainer : public SvxMSDffSolverContainer
 {
 public:
     /** Reads the entire solver container. Stream must point to begin of container header. */
-    void                ReadSolverContainer( SvStream& rEscherStrm );
+    void                ReadSolverContainer( SvStream& rDffStrm );
 
-    /** Inserts a new pointer to an SdrObject by the related shape ID. */
-    void                InsertSdrObjectInfo( const XclImpDrawObjBase& rDrawObj, SdrObject* pSdrObj );
-    /** Removes a pointer to an SdrObject by the related shape ID. */
-    void                RemoveSdrObjectInfo( const XclImpDrawObjBase& rDrawObj );
+    /** Inserts information about a new SdrObject. */
+    void                InsertSdrObjectInfo( SdrObject& rSdrObj, sal_uInt32 nDffShapeId, sal_uInt32 nDffFlags );
+    /** Removes inforamtion of an SdrObject (and all child objects if it is a group). */
+    void                RemoveSdrObjectInfo( SdrObject& rSdrObj );
 
     /** Inserts the SdrObject pointers into all connector rules. */
     void                UpdateConnectorRules();
@@ -403,95 +936,113 @@ private:
     /** Returns the next connector rule from the internal list. */
     SvxMSDffConnectorRule* GetNextRule();
     /** Updates the data of a connected shape in a connector rule. */
-    void                UpdateConnection( sal_uInt32 nShapeId, SdrObject*& rpSdrObj, sal_uInt32* pnShapeFlags = 0 );
+    void                UpdateConnection( sal_uInt32 nDffShapeId, SdrObject*& rpSdrObj, sal_uInt32* pnDffFlags = 0 );
 
 private:
     /** Stores data about an SdrObject processed during import. */
     struct XclImpSdrInfo
     {
         SdrObject*          mpSdrObj;       /// Pointer to an SdrObject.
-        sal_uInt32          mnShapeFlags;   /// Shape flags from escher stream.
-        inline explicit     XclImpSdrInfo() : mpSdrObj( 0 ), mnShapeFlags( 0 ) {}
-        inline void         Set( SdrObject* pSdrObj, sal_uInt32 nShapeFlags )
-                                { mpSdrObj = pSdrObj; mnShapeFlags = nShapeFlags; }
+        sal_uInt32          mnDffFlags;     /// Shape flags from DFF stream.
+        inline explicit     XclImpSdrInfo() : mpSdrObj( 0 ), mnDffFlags( 0 ) {}
+        inline void         Set( SdrObject* pSdrObj, sal_uInt32 nDffFlags )
+                                { mpSdrObj = pSdrObj; mnDffFlags = nDffFlags; }
     };
     typedef ::std::map< sal_uInt32, XclImpSdrInfo > XclImpSdrInfoMap;
+    typedef ::std::map< SdrObject*, sal_uInt32 >    XclImpSdrObjMap;
 
-    XclImpSdrInfoMap    maSdrInfoMap;   /// Maps shape IDs to SdrObjects.
+    XclImpSdrInfoMap    maSdrInfoMap;   /// Maps shape IDs to SdrObjects and flags.
+    XclImpSdrObjMap     maSdrObjMap;    /// Maps SdrObjects to shape IDs.
 };
 
 // ----------------------------------------------------------------------------
 
 class XclImpObjectManager;
-class XclImpOcxConverter;
+class SdrObjList;
 
-/** Derived from SvxMSDffManager, contains core implementation of Escher stream import. */
-class XclImpDffManager : public SvxMSDffManager, protected XclImpRoot
+/** Derived from SvxMSDffManager and SvxMSConvertOCXControls, contains core
+    implementation of DFF stream import and OCX form control import.
+ */
+class XclImpDffManager : protected SvxMSDffManager, protected SvxMSConvertOCXControls, protected XclImpRoot
 {
 public:
     explicit            XclImpDffManager(
                             const XclImpRoot& rRoot,
                             XclImpObjectManager& rObjManager,
-                            SvStream& rEscherStrm );
+                            SvStream& rDffStrm );
     virtual             ~XclImpDffManager();
 
     /** Initializes the internal progress bar with the passed size and starts it. */
     void                StartProgressBar( sal_Size nProgressSize );
-    /** Processes the leading drawing group container in the Escher stream. */
-    void                ProcessDrawingGroup( SvStream& rEscherStrm );
-    /** Processes a drawing container for a sheet in the Escher stream, converts all objects. */
-    void                ProcessDrawing( SvStream& rEscherStrm, sal_Size nStrmPos );
-    /** Processes a chart from an Excel chart sheet, converts it to a chart object. */
-    void                ProcessTabChart( const XclImpChartObj& rChartObj );
 
+    /** Processes BIFF5 drawing objects without DFF data, inserts into the passed object list. */
+    void                ProcessObject( SdrObjList* pObjList, const XclImpDrawObjBase& rDrawObj );
+    /** Processes the leading drawing group container in the DFF stream. */
+    void                ProcessDrawingGroup( SvStream& rDffStrm );
+    /** Processes a drawing container for a sheet in the DFF stream, converts all objects. */
+    void                ProcessDrawing( SvStream& rDffStrm, sal_Size nStrmPos );
+
+    /** Creates the SdrObject for the passed Excel TBX form control object. */
+    SdrObject*          CreateSdrObject( const XclImpTbxObjBase& rTbxObj, const Rectangle& rAnchorRect );
+    /** Creates the SdrObject for the passed Excel OLE object or OCX form control object. */
+    SdrObject*          CreateSdrObject( const XclImpPictureObj& rPicObj, const Rectangle& rAnchorRect );
+
+    /** Returns the default text margin in drawing layer units. */
+    inline sal_Int32    GetDefaultTextMargin() const { return mnDefTextMargin; }
     /** Returns the used area in the sheet with the passed index. */
     ScRange             GetUsedArea( SCTAB nScTab ) const;
 
 protected:
-    /** Reads the client anchor from the Escher stream and sets it at the correct Escher object. */
+    // virtual functions of SvxMSDffManager
+
+    /** Reads the client anchor from the DFF stream and sets it at the correct object. */
     virtual void        ProcessClientAnchor2(
-                            SvStream& rEscherStrm,
+                            SvStream& rDffStrm,
                             DffRecordHeader& rHeader,
                             void* pClientData,
                             DffObjData& rObjData );
-    /** Processes an Escher object, reads properties from Escher stream. */
+    /** Processes an DFF object, reads properties from DFF stream. */
     virtual SdrObject*  ProcessObj(
-                            SvStream& rEscherStrm,
-                            DffObjData& rObjData,
+                            SvStream& rDffStrm,
+                            DffObjData& rDffObjData,
                             void* pClientData,
                             Rectangle& rTextRect,
                             SdrObject* pOldSdrObj = 0 );
-    /** Returns the BLIP stream position, based on the passed Escher stream position. */
+    /** Returns the BLIP stream position, based on the passed DFF stream position. */
     virtual ULONG       Calc_nBLIPPos( ULONG nOrgVal, ULONG nStreamPos ) const;
     /** Returns a color from the Excel color palette. */
     virtual FASTBOOL    GetColorFromPalette( USHORT nIndex, Color& rColor ) const;
 
+    // virtual functions of SvxMSConvertOCXControls
+
+    /** Inserts the passed control rxFComp into the form. Needs call to SetCurrentForm() before. */
+    virtual sal_Bool    InsertControl(
+                            const ::com::sun::star::uno::Reference<
+                                ::com::sun::star::form::XFormComponent >& rxFormComp,
+                            const ::com::sun::star::awt::Size& rSize,
+                            ::com::sun::star::uno::Reference<
+                                ::com::sun::star::drawing::XShape >* pxShape,
+                            BOOL bFloatingCtrl );
+
 private:
     /** Reads contents of a hyperlink property and returns the extracted URL. */
-    ::rtl::OUString     ReadHlinkProperty( SvStream& rEscherStrm ) const;
+    String              ReadHlinkProperty( SvStream& rDffStrm ) const;
 
     /** Processes a drawing group container (global drawing data). */
-    void                ProcessDggContainer( SvStream& rEscherStrm, const DffRecordHeader& rDggHeader );
+    void                ProcessDggContainer( SvStream& rDffStrm, const DffRecordHeader& rDggHeader );
     /** Processes a drawing container (all drawing data of a sheet). */
-    void                ProcessDgContainer( SvStream& rEscherStrm, const DffRecordHeader& rDgHeader );
+    void                ProcessDgContainer( SvStream& rDffStrm, const DffRecordHeader& rDgHeader );
     /** Processes the global shape group container (all shapes of a sheet). */
-    void                ProcessShGrContainer( SvStream& rEscherStrm, const DffRecordHeader& rShGrHeader );
+    void                ProcessShGrContainer( SvStream& rDffStrm, const DffRecordHeader& rShGrHeader );
     /** Processes the solver container (connectors of a sheet). */
-    void                ProcessSolverContainer( SvStream& rEscherStrm, const DffRecordHeader& rSolverHeader );
+    void                ProcessSolverContainer( SvStream& rDffStrm, const DffRecordHeader& rSolverHeader );
     /** Processes a shape or shape group container (one top-level shape). */
-    void                ProcessShContainer( SvStream& rEscherStrm, const DffRecordHeader& rShHeader );
+    void                ProcessShContainer( SvStream& rDffStrm, const DffRecordHeader& rShHeader );
 
     /** Inserts the passed SdrObject into the document. This function takes ownership of pSdrObj! */
-    void                InsertSdrObject( const XclImpDrawObjBase& rDrawObj, SdrObject* pSdrObj );
-
-    /** Tries to create a custom SdrObject for specific object types. */
-    SdrObject*          CreateCustomSdrObject( XclImpDrawObjBase& rDrawObj, const Rectangle& rAnchorRect );
-    /** Creates the SdrObject for the passed Excel OLE object. */
-    SdrObject*          CreateSdrObject( XclImpOleObj& rOleObj, const Rectangle& rAnchorRect );
-    /** Creates the SdrObject for the passed Excel textbox control object. */
-    SdrObject*          CreateSdrObject( XclImpTbxControlObj& rTbxCtrlObj, const Rectangle& rAnchorRect );
-    /** Creates the SdrObject for the passed Excel chart object. */
-    SdrObject*          CreateSdrObject( const XclImpChartObj& rChartObj, const Rectangle& rAnchorRect );
+    void                InsertSdrObject( SdrObjList* pObjList, const XclImpDrawObjBase& rDrawObj, SdrObject* pSdrObj );
+    /** Stores the standard controls form for the passed sheet in mxCurrForm member. */
+    void                SetCurrentForm( SCTAB nScTab );
 
     /** Updates the used area of a sheet with the position and size of the passed object. */
     void                UpdateUsedArea( const XclImpDrawObjBase& rDrawObj );
@@ -499,14 +1050,18 @@ private:
 private:
     typedef ::std::map< SCTAB, ScRange >    ScRangeMap;
     typedef ScfRef< ScfProgressBar >        ScfProgressBarRef;
-    typedef ScfRef< XclImpOcxConverter >    XclImpOcxConvRef;
 
     XclImpObjectManager& mrObjManager;      /// The Excel object manager.
     XclImpSolverContainer maSolverCont;     /// The solver container for connector rules.
+    SotStorageStreamRef mxCtlsStrm;         /// The 'Ctls' stream for OCX form controls.
     ScRangeMap          maUsedAreaMap;      /// Used ranges for all sheets.
     ScfProgressBarRef   mxProgress;         /// The progress bar used in ProcessObj().
-    XclImpOcxConvRef    mxOcxConverter;     /// The form controls converter.
+    ::com::sun::star::uno::Reference< ::com::sun::star::form::XForm >
+                        mxCurrForm;         /// Controls form of current sheet (needed in virtual functions).
     sal_uInt32          mnOleImpFlags;      /// Application OLE import settings.
+    sal_Int32           mnDefTextMargin;    /// Default margin in text boxes.
+    sal_Int32           mnLastCtrlIndex;    /// Last insertion index of a form control (for macro events).
+    SCTAB               mnCurrFormScTab;    /// Sheet index of form stored in mxCurrForm.
 };
 
 // The object manager =========================================================
@@ -520,9 +1075,11 @@ public:
 
     // *** Read Excel records *** ---------------------------------------------
 
-    /** Reads the OBJ record (BIFF5 only). */
-    void                ReadObj5( XclImpStream& rStrm );
+    /** Reads and returns a bitmap from the IMGDATA record. */
+    static Graphic      ReadImgData( XclImpStream& rStrm );
 
+    /** Reads a plain OBJ record (without leading DFF data). */
+    void                ReadObj( XclImpStream& rStrm );
     /** Reads the MSODRAWINGGROUP record. */
     void                ReadMsoDrawingGroup( XclImpStream& rStrm );
     /** Reads the MSODRAWING or MSODRAWINGSELECTION record. */
@@ -536,74 +1093,88 @@ public:
 
     // *** Drawing objects *** ------------------------------------------------
 
-    /** Finds the OBJ record data related to the Escher shape at the passed position. */
+    /** Finds the OBJ record data related to the DFF shape at the passed position. */
     XclImpDrawObjRef    FindDrawObj( const DffRecordHeader& rHeader ) const;
     /** Finds the OBJ record data specified by the passed object identifier. */
     XclImpDrawObjRef    FindDrawObj( const XclObjId& rObjId ) const;
-    /** Finds the TXO record data related to the Escher shape at the passed position. */
-    XclImpTxoDataRef    FindTxoData( const DffRecordHeader& rHeader ) const;
+    /** Finds the textbox data related to the DFF shape at the passed position. */
+    const XclImpObjTextData* FindTextData( const DffRecordHeader& rHeader ) const;
 
-    /** Sets the object with the passed identification to be ignored on import. */
-    void                SetInvalidObj( SCTAB nScTab, sal_uInt16 nObjId );
+    /** Sets the object with the passed identification to be skipped on import. */
+    void                SetSkipObj( SCTAB nScTab, sal_uInt16 nObjId );
 
     // *** Drawing object conversion *** --------------------------------------
 
-    /** Returns the DFF manager (Escher stream converter). Don't call before the Escher stream is read. */
+    /** Returns the DFF manager (DFF stream converter). Don't call before the DFF stream is read. */
     XclImpDffManager&   GetDffManager();
     /** Inserts all objects into the Calc document. */
     void                ConvertObjects();
 
+    /** Returns the default name for the passed object. */
+    String              GetDefaultObjName( const XclImpDrawObjBase& rDrawObj ) const;
     /** Returns the used area in the sheet with the passed index. */
     ScRange             GetUsedArea( SCTAB nScTab ) const;
 
     // ------------------------------------------------------------------------
 private:
-    /** Reads contents of an Escher record and append data to internal Escher stream. */
-    void                ReadEscherRecord( XclImpStream& rStrm );
+    /** Reads and returns a bitmap from WMF/PICT format. */
+    static void         ReadWmf( Graphic& rGraphic, XclImpStream& rStrm );
+    /** Reads and returns a bitmap from BMP format. */
+    static void         ReadBmp( Graphic& rGraphic, XclImpStream& rStrm );
+
+    /** Reads contents of an DFF record and append data to internal DFF stream. */
+    void                ReadDffRecord( XclImpStream& rStrm );
     /** Reads a BIFF8 OBJ record following an MSODRAWING record. */
     void                ReadObj8( XclImpStream& rStrm );
-    /** Reads the TXO record. */
+    /** Reads the TXO record and following CONTINUE records containing string and formatting. */
     void                ReadTxo( XclImpStream& rStrm );
 
-    /** Tries to start a complete chart substream by checking if next record is a BOF. */
-    bool                StartChartSubStream( XclImpStream& rStrm );
+    /** Reads a BIFF3-BIFF5 NOTE record. */
+    void                ReadNote3( XclImpStream& rStrm );
+    /** Reads a BIFF8 NOTE record. */
+    void                ReadNote8( XclImpStream& rStrm );
 
     /** Returns the size of the progress bar shown while processing all objects. */
     sal_Size            GetProgressSize() const;
 
     // ------------------------------------------------------------------------
 private:
-    typedef ::std::vector< sal_Size >                   StreamPosVec;
     typedef ::std::map< sal_Size, XclImpDrawObjRef >    XclImpObjMap;
     typedef ::std::map< XclObjId, XclImpDrawObjRef >    XclImpObjMapById;
-    typedef ::std::map< sal_Size, XclImpTxoDataRef >    XclImpTxoMap;
-    typedef ScfRef< XclImpChartObj >                    XclImpChartObjRef;
-    typedef ::std::list< XclImpChartObjRef >            XclImpChartObjList;
-    typedef ScfRef< XclImpDffManager >                  XclImpDffMgrRef;
+    typedef ScfRef< XclImpObjTextData >                 XclImpObjTextRef;
+    typedef ::std::map< sal_Size, XclImpObjTextRef >    XclImpObjTextMap;
     typedef ::std::vector< XclObjId >                   XclObjIdVec;
 
-    SvMemoryStream      maEscherStrm;       /// Copy of Escher stream in memory.
-    StreamPosVec        maTabStrmPos;       /// Start positions of Escher data for sheets.
-    XclImpObjMap        maObjMap;           /// Maps drawing objects to Escher stream position.
-    XclImpObjMapById    maObjMapId;         /// Maps drawing objects to sheet index and object ID.
-    XclImpTxoMap        maTxoMap;           /// Maps TXO textbox data to sheet index and object ID.
-    XclImpChartObjList  maTabCharts;        /// Charts imported from Excel chart sheets.
-    XclImpDffMgrRef     mxDffManager;   /// The Escher stream converter.
-    XclObjIdVec         maInvalidObjs;      /// All Escher objects to skip.
+    typedef ::std::map< sal_uInt16, String >            DefObjNameMap;
+    typedef ::std::vector< sal_Size >                   StreamPosVec;
+    typedef ScfRef< XclImpDffManager >                  XclImpDffMgrRef;
+
+    XclImpDrawObjVector maRawObjs;          /// BIFF5 objects without DFF data.
+    XclImpObjMap        maObjMap;           /// Maps BIFF8 drawing objects to DFF stream position.
+    XclImpObjMapById    maObjMapId;         /// Maps BIFF8 drawing objects to sheet index and object ID.
+    XclImpObjTextMap    maTextMap;          /// Maps BIFF8 TXO textbox data to DFF stream position.
+    XclObjIdVec         maSkipObjs;         /// All objects to be skipped.
+
+    DefObjNameMap       maDefObjNames;      /// Default base names for all object types.
+    SvMemoryStream      maDffStrm;          /// Copy of DFF stream in memory.
+    StreamPosVec        maTabStrmPos;       /// Start positions of DFF stream fragments for all sheets.
+    XclImpDffMgrRef     mxDffManager;       /// The DFF stream converter.
 };
 
-// Escher property set helper =================================================
+// DFF property set helper ====================================================
 
-/** This class reads an Escher property set (msofbtOPT record).
-    @descr  It can return separate property values or an item set which contains
-    items translated from these properties. */
-class XclImpEscherPropSet : protected XclImpRoot
+/** This class reads an DFF property set (msofbtOPT record).
+
+    It can return separate property values or an item set which contains items
+    translated from these properties.
+ */
+class XclImpDffPropSet : protected XclImpRoot
 {
 public:
-    explicit            XclImpEscherPropSet( const XclImpRoot& rRoot );
+    explicit            XclImpDffPropSet( const XclImpRoot& rRoot );
 
-    /** Reads an Escher property set from the stream.
-        @descr  The stream must point to the start of an Escher record containing properties. */
+    /** Reads an DFF property set from the stream.
+        @descr  The stream must point to the start of an DFF record containing properties. */
     void                Read( XclImpStream& rStrm );
 
     /** Returns the specified property or the default value, if not extant. */
@@ -615,12 +1186,12 @@ public:
 private:
     typedef ::std::auto_ptr< SvMemoryStream > SvMemoryStreamPtr;
 
-    XclImpObjectManager maObjManager;   /// Local object manager, contains SVX DFF manager.
-    XclImpDffManager&   mrDffManager;   /// Reference to DFF manager contained in object manager.
+    SvMemoryStream      maDummyStrm;    /// Dummy stream for DFF manager.
+    SvxMSDffManager     maDffManager;   /// DFF manager.
     SvMemoryStreamPtr   mxMemStrm;      /// Helper stream.
 };
 
-XclImpStream& operator>>( XclImpStream& rStrm, XclImpEscherPropSet& rPropSet );
+XclImpStream& operator>>( XclImpStream& rStrm, XclImpDffPropSet& rPropSet );
 
 // ============================================================================
 

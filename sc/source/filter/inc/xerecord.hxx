@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: xerecord.hxx,v $
- * $Revision: 1.14 $
+ * $Revision: 1.14.32.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -51,8 +51,8 @@ public:
     /** Overwrite this method to do any operation while saving the record. */
     virtual void        Save( XclExpStream& rStrm );
 
-    /** Calls Save(XclExpStream&) nCount times. */
-    void                SaveRepeated( XclExpStream& rStrm, size_t nCount );
+//UNUSED2008-05  /** Calls Save(XclExpStream&) nCount times. */
+//UNUSED2008-05  void                SaveRepeated( XclExpStream& rStrm, size_t nCount );
 };
 
 // ----------------------------------------------------------------------------

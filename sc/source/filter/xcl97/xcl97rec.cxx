@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: xcl97rec.cxx,v $
- * $Revision: 1.88 $
+ * $Revision: 1.87.30.3 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -349,26 +349,26 @@ void XclObj::SetEscherShapeType( UINT16 nType )
     switch ( nType )
     {
         case ESCHER_ShpInst_Line :
-            mnObjType = EXC_OBJ_CMO_LINE;
+            mnObjType = EXC_OBJTYPE_LINE;
         break;
         case ESCHER_ShpInst_Rectangle :
         case ESCHER_ShpInst_RoundRectangle :
-            mnObjType = EXC_OBJ_CMO_RECTANGLE;
+            mnObjType = EXC_OBJTYPE_RECTANGLE;
         break;
         case ESCHER_ShpInst_Ellipse :
-            mnObjType = EXC_OBJ_CMO_ELLIPSE;
+            mnObjType = EXC_OBJTYPE_OVAL;
         break;
         case ESCHER_ShpInst_Arc :
-            mnObjType = EXC_OBJ_CMO_ARC;
+            mnObjType = EXC_OBJTYPE_ARC;
         break;
         case ESCHER_ShpInst_TextBox :
-            mnObjType = EXC_OBJ_CMO_TEXT;
+            mnObjType = EXC_OBJTYPE_TEXT;
         break;
         case ESCHER_ShpInst_PictureFrame :
-            mnObjType = EXC_OBJ_CMO_PICTURE;
+            mnObjType = EXC_OBJTYPE_PICTURE;
         break;
         default:
-            mnObjType = EXC_OBJ_CMO_DRAWING;
+            mnObjType = EXC_OBJTYPE_DRAWING;
     }
 }
 
@@ -389,14 +389,14 @@ void XclObj::SetText( const XclExpRoot& rRoot, const SdrTextObj& rObj )
 
 void XclObj::WriteBody( XclExpStream& rStrm )
 {
-    DBG_ASSERT( mnObjType != EXC_OBJ_CMO_UNKNOWN, "XclObj::WriteBody - unknown type" );
+    DBG_ASSERT( mnObjType != EXC_OBJTYPE_UNKNOWN, "XclObj::WriteBody - unknown type" );
 
     // create a substream to be able to create subrecords
     SvMemoryStream aMemStrm;
     ::std::auto_ptr< XclExpStream > pXclStrm( new XclExpStream( aMemStrm, rStrm.GetRoot() ) );
 
     // write the ftCmo subrecord
-    pXclStrm->StartRecord( EXC_ID_OBJ_FTCMO, 18 );
+    pXclStrm->StartRecord( EXC_ID_OBJCMO, 18 );
     *pXclStrm << mnObjType << nObjId << nGrbit;
     pXclStrm->WriteZeroBytes( 12 );
     pXclStrm->EndRecord();
@@ -405,7 +405,7 @@ void XclObj::WriteBody( XclExpStream& rStrm )
     WriteSubRecs( *pXclStrm );
 
     // write the ftEnd subrecord
-    pXclStrm->StartRecord( EXC_ID_OBJ_FTEND, 0 );
+    pXclStrm->StartRecord( EXC_ID_OBJEND, 0 );
     pXclStrm->EndRecord();
 
     // copy the data to the OBJ record
@@ -449,7 +449,7 @@ void XclObj::SaveTextRecs( XclExpStream& rStrm )
 
 XclObjComment::XclObjComment( const XclExpRoot& rRoot, const Rectangle& rRect, const EditTextObject& rEditObj, SdrObject* pCaption, bool bVisible )
             :
-            XclObj( rRoot, EXC_OBJ_CMO_NOTE, true )
+            XclObj( rRoot, EXC_OBJTYPE_NOTE, true )
 {
     ProcessEscherObj(rRoot, rRect, pCaption, bVisible);
     // TXO
@@ -512,7 +512,7 @@ void XclObjComment::ProcessEscherObj( const XclExpRoot& rRoot, const Rectangle& 
     aPropOpt.AddOpt( ESCHER_Prop_fPrint, nFlags );                  // bool field
     aPropOpt.Commit( pEx->GetStream() );
 
-    XclExpEscherNoteAnchor( rRoot, rRect ).WriteData( *pEx);
+    XclExpDffNoteAnchor( rRoot, rRect ).WriteData( *pEx);
 
     pEx->AddAtom( 0, ESCHER_ClientData );                       // OBJ record
     pMsodrawing->UpdateStopPos();
@@ -540,7 +540,7 @@ void XclObjComment::Save( XclExpStream& rStrm )
 // --- class XclObjDropDown ------------------------------------------
 
 XclObjDropDown::XclObjDropDown( const XclExpRoot& rRoot, const ScAddress& rPos, BOOL bFilt ) :
-        XclObj( rRoot, EXC_OBJ_CMO_COMBOBOX, true ),
+        XclObj( rRoot, EXC_OBJTYPE_DROPDOWN, true ),
         bIsFiltered( bFilt )
 {
     SetLocked( TRUE );
@@ -559,7 +559,7 @@ XclObjDropDown::XclObjDropDown( const XclExpRoot& rRoot, const ScAddress& rPos, 
     aPropOpt.AddOpt( ESCHER_Prop_fPrint, 0x000A0000 );              // bool field
     aPropOpt.Commit( pEx->GetStream() );
 
-    XclExpEscherDropDownAnchor( rRoot, rPos ).WriteData( *pEx );
+    XclExpDffDropDownAnchor( rRoot, rPos ).WriteData( *pEx );
 
     pEx->AddAtom( 0, ESCHER_ClientData );                       // OBJ record
     pMsodrawing->UpdateStopPos();
@@ -576,16 +576,17 @@ XclObjDropDown::~XclObjDropDown()
 void XclObjDropDown::WriteSubRecs( XclExpStream& rStrm )
 {
     // ftSbs subrecord - Scroll bars (dummy)
-    rStrm.StartRecord( EXC_ID_OBJ_FTSBS, 20 );
+    rStrm.StartRecord( EXC_ID_OBJSBS, 20 );
     rStrm.WriteZeroBytes( 20 );
     rStrm.EndRecord();
 
     // ftLbsData subrecord - Listbox data
-    sal_uInt16 nComboStyle = EXC_OBJ_LBS_COMBO_SIMPLE;
-    ::set_flag( nComboStyle, EXC_OBJ_LBS_FILTERED, bIsFiltered );
-    rStrm.StartRecord( EXC_ID_OBJ_FTLBSDATA, 16 );
+    sal_uInt16 nDropDownFlags = 0;
+    ::insert_value( nDropDownFlags, EXC_OBJ_DROPDOWN_SIMPLE, 0, 2 );
+    ::set_flag( nDropDownFlags, EXC_OBJ_DROPDOWN_FILTERED, bIsFiltered );
+    rStrm.StartRecord( EXC_ID_OBJLBSDATA, 16 );
     rStrm   << (UINT32)0 << (UINT16)0 << (UINT16)0x0301 << (UINT16)0
-            << nComboStyle << sal_uInt16( 20 ) << sal_uInt16( 130 );
+            << nDropDownFlags << sal_uInt16( 20 ) << sal_uInt16( 130 );
     rStrm.EndRecord();
 }
 
@@ -594,14 +595,14 @@ void XclObjDropDown::WriteSubRecs( XclExpStream& rStrm )
 
 sal_uInt8 lcl_GetHorAlignFromItemSet( const SfxItemSet& rItemSet )
 {
-    sal_uInt8 nHorAlign = EXC_TXO_HOR_LEFT;
+    sal_uInt8 nHorAlign = EXC_OBJ_HOR_LEFT;
 
     switch( static_cast< const SvxAdjustItem& >( rItemSet.Get( EE_PARA_JUST ) ).GetAdjust() )
     {
-        case SVX_ADJUST_LEFT:   nHorAlign = EXC_TXO_HOR_LEFT;      break;
-        case SVX_ADJUST_CENTER: nHorAlign = EXC_TXO_HOR_CENTER;    break;
-        case SVX_ADJUST_RIGHT:  nHorAlign = EXC_TXO_HOR_RIGHT;     break;
-        case SVX_ADJUST_BLOCK:  nHorAlign = EXC_TXO_HOR_JUSTIFY;   break;
+        case SVX_ADJUST_LEFT:   nHorAlign = EXC_OBJ_HOR_LEFT;      break;
+        case SVX_ADJUST_CENTER: nHorAlign = EXC_OBJ_HOR_CENTER;    break;
+        case SVX_ADJUST_RIGHT:  nHorAlign = EXC_OBJ_HOR_RIGHT;     break;
+        case SVX_ADJUST_BLOCK:  nHorAlign = EXC_OBJ_HOR_JUSTIFY;   break;
         default:;
     }
     return nHorAlign;
@@ -609,23 +610,23 @@ sal_uInt8 lcl_GetHorAlignFromItemSet( const SfxItemSet& rItemSet )
 
 sal_uInt8 lcl_GetVerAlignFromItemSet( const SfxItemSet& rItemSet )
 {
-    sal_uInt8 nVerAlign = EXC_TXO_VER_TOP;
+    sal_uInt8 nVerAlign = EXC_OBJ_VER_TOP;
 
     switch( static_cast< const SdrTextVertAdjustItem& >( rItemSet.Get( SDRATTR_TEXT_VERTADJUST ) ).GetValue() )
     {
-        case SDRTEXTVERTADJUST_TOP:     nVerAlign = EXC_TXO_VER_TOP;        break;
-        case SDRTEXTVERTADJUST_CENTER:  nVerAlign = EXC_TXO_VER_CENTER;     break;
-        case SDRTEXTVERTADJUST_BOTTOM:  nVerAlign = EXC_TXO_VER_BOTTOM;     break;
-        case SDRTEXTVERTADJUST_BLOCK:   nVerAlign = EXC_TXO_VER_JUSTIFY;    break;
+        case SDRTEXTVERTADJUST_TOP:     nVerAlign = EXC_OBJ_VER_TOP;       break;
+        case SDRTEXTVERTADJUST_CENTER:  nVerAlign = EXC_OBJ_VER_CENTER;    break;
+        case SDRTEXTVERTADJUST_BOTTOM:  nVerAlign = EXC_OBJ_VER_BOTTOM;    break;
+        case SDRTEXTVERTADJUST_BLOCK:   nVerAlign = EXC_OBJ_VER_JUSTIFY;   break;
     }
     return nVerAlign;
 }
 
 XclTxo::XclTxo( const String& rString, sal_uInt16 nFontIx ) :
     mpString( new XclExpString( rString ) ),
-    mnRotation( EXC_TXO_TEXTROT_NONE ),
-    mnHorAlign( EXC_TXO_HOR_LEFT ),
-    mnVerAlign( EXC_TXO_VER_TOP )
+    mnRotation( EXC_OBJ_ORIENT_NONE ),
+    mnHorAlign( EXC_OBJ_HOR_LEFT ),
+    mnVerAlign( EXC_OBJ_VER_TOP )
 {
     if( mpString->Len() )
     {
@@ -637,9 +638,9 @@ XclTxo::XclTxo( const String& rString, sal_uInt16 nFontIx ) :
 
 XclTxo::XclTxo( const XclExpRoot& rRoot, const SdrTextObj& rTextObj ) :
     mpString( XclExpStringHelper::CreateString( rRoot, rTextObj ) ),
-    mnRotation( EXC_TXO_TEXTROT_NONE ),
-    mnHorAlign( EXC_TXO_HOR_LEFT ),
-    mnVerAlign( EXC_TXO_VER_TOP )
+    mnRotation( EXC_OBJ_ORIENT_NONE ),
+    mnHorAlign( EXC_OBJ_HOR_LEFT ),
+    mnVerAlign( EXC_OBJ_VER_TOP )
 {
     // additional alignment and orientation items
     const SfxItemSet& rItemSet = rTextObj.GetMergedItemSet();
@@ -653,18 +654,18 @@ XclTxo::XclTxo( const XclExpRoot& rRoot, const SdrTextObj& rTextObj ) :
     // rotation
     long nAngle = rTextObj.GetRotateAngle();
     if( (4500 < nAngle) && (nAngle < 13500) )
-        mnRotation = EXC_TXO_TEXTROT_90_CCW;
+        mnRotation = EXC_OBJ_ORIENT_90CCW;
     else if( (22500 < nAngle) && (nAngle < 31500) )
-        mnRotation = EXC_TXO_TEXTROT_90_CW;
+        mnRotation = EXC_OBJ_ORIENT_90CW;
     else
-        mnRotation = EXC_TXO_TEXTROT_NONE;
+        mnRotation = EXC_OBJ_ORIENT_NONE;
 }
 
 XclTxo::XclTxo( const XclExpRoot& rRoot, const EditTextObject& rEditObj, SdrObject* pCaption ) :
     mpString( XclExpStringHelper::CreateString( rRoot, rEditObj ) ),
-    mnRotation( EXC_TXO_TEXTROT_NONE ),
-    mnHorAlign( EXC_TXO_HOR_LEFT ),
-    mnVerAlign( EXC_TXO_VER_TOP )
+    mnRotation( EXC_OBJ_ORIENT_NONE ),
+    mnHorAlign( EXC_OBJ_HOR_LEFT ),
+    mnVerAlign( EXC_OBJ_VER_TOP )
 {
     if(pCaption)
     {
@@ -693,7 +694,7 @@ XclTxo::XclTxo( const XclExpRoot& rRoot, const EditTextObject& rEditObj, SdrObje
         // orientation alignment
         const SvxWritingModeItem& rItem = static_cast< const SvxWritingModeItem& >( rItemSet.Get( SDRATTR_TEXTDIRECTION ) );
         if( rItem.GetValue() == com::sun::star::text::WritingMode_TB_RL )
-            mnRotation = EXC_TXO_TEXTROT_90_CW;
+            mnRotation = EXC_OBJ_ORIENT_90CW;
     }
 }
 
@@ -749,7 +750,7 @@ sal_Size XclTxo::GetLen() const
 // --- class XclObjOle -------------------------------------------
 
 XclObjOle::XclObjOle( const XclExpRoot& rRoot, const SdrObject& rObj ) :
-    XclObj( rRoot, EXC_OBJ_CMO_PICTURE ),
+    XclObj( rRoot, EXC_OBJTYPE_PICTURE ),
     rOleObj( rObj ),
     pRootStorage( rRoot.GetRootStorage() )
 {
@@ -799,26 +800,25 @@ void XclObjOle::WriteSubRecs( XclExpStream& rStrm )
             SvxMSExportOLEObjects   aOLEExpFilt( nFl );
             aOLEExpFilt.ExportOLEObject( xObj, *xOleStg );
 
-            // ftCf subrecord, undocumented as usual
-            rStrm.StartRecord( EXC_ID_OBJ_FTCF, 2 );
+            // OBJCF subrecord, undocumented as usual
+            rStrm.StartRecord( EXC_ID_OBJCF, 2 );
             rStrm << UINT16(0x0002);
             rStrm.EndRecord();
 
-            // ftPioGrbit subrecord, undocumented as usual
-            rStrm.StartRecord( EXC_ID_OBJ_FTPIOGRBIT, 2 );
-            sal_uInt16 nPioGrbit = 0x0001;
-            if ( ((SdrOle2Obj&)rOleObj).GetAspect() == embed::Aspects::MSOLE_ICON )
-                ::set_flag( nPioGrbit, EXC_OBJ_PIO_SYMBOL );
-            rStrm << nPioGrbit;
+            // OBJFLAGS subrecord, undocumented as usual
+            rStrm.StartRecord( EXC_ID_OBJFLAGS, 2 );
+            sal_uInt16 nFlags = EXC_OBJ_PIC_MANUALSIZE;
+            ::set_flag( nFlags, EXC_OBJ_PIC_SYMBOL, ((SdrOle2Obj&)rOleObj).GetAspect() == embed::Aspects::MSOLE_ICON );
+            rStrm << nFlags;
             rStrm.EndRecord();
 
-            // ftPictFmla subrecord, undocumented as usual
+            // OBJPICTFMLA subrecord, undocumented as usual
             XclExpString aName( xOleStg->GetUserName() );
             UINT16 nPadLen = (UINT16)(aName.GetSize() & 0x01);
             UINT16 nFmlaLen = static_cast< sal_uInt16 >( 12 + aName.GetSize() + nPadLen );
             UINT16 nSubRecLen = nFmlaLen + 6;
 
-            rStrm.StartRecord( EXC_ID_OBJ_FTPICTFMLA, nSubRecLen );
+            rStrm.StartRecord( EXC_ID_OBJPICTFMLA, nSubRecLen );
             rStrm   << nFmlaLen
                     << sal_uInt16( 5 ) << sal_uInt32( 0 ) << sal_uInt8( 2 )
                     << sal_uInt32( 0 ) << sal_uInt8( 3 )
@@ -842,7 +842,7 @@ void XclObjOle::Save( XclExpStream& rStrm )
 // --- class XclObjAny -------------------------------------------
 
 XclObjAny::XclObjAny( const XclExpRoot& rRoot ) :
-    XclObj( rRoot, EXC_OBJ_CMO_UNKNOWN )
+    XclObj( rRoot, EXC_OBJTYPE_UNKNOWN )
 {
 }
 
@@ -852,14 +852,14 @@ XclObjAny::~XclObjAny()
 
 void XclObjAny::WriteSubRecs( XclExpStream& rStrm )
 {
-    if( mnObjType == EXC_OBJ_CMO_GROUP )
+    if( mnObjType == EXC_OBJTYPE_GROUP )
         // ftGmo subrecord
-        rStrm << EXC_ID_OBJ_FTGMO << UINT16(2) << UINT16(0);
+        rStrm << EXC_ID_OBJGMO << UINT16(2) << UINT16(0);
 }
 
 void XclObjAny::Save( XclExpStream& rStrm )
 {
-    if( mnObjType == EXC_OBJ_CMO_GROUP )
+    if( mnObjType == EXC_OBJTYPE_GROUP )
         // old size + ftGmo
         AddRecSize( 6 );
 
@@ -916,13 +916,6 @@ ExcBofW8::ExcBofW8()
 }
 
 
-// --- class ExcBofC8 ------------------------------------------------
-
-ExcBofC8::ExcBofC8()
-{
-    nDocType = 0x0020;
-}
-
 // --- class ExcBundlesheet8 -----------------------------------------
 
 ExcBundlesheet8::ExcBundlesheet8( RootData& rRootData, SCTAB nTab ) :
@@ -966,45 +959,6 @@ sal_Size XclObproj::GetLen() const
 {
     return 0;
 }
-
-
-
-// --- class XclDConRef ----------------------------------------------
-
-XclDConRef::XclDConRef( const ScRange& rSrcR, const String& rWB ) :
-        aSourceRange( rSrcR )
-{
-    String  sTemp( ( sal_Unicode ) 0x02 );
-
-    sTemp += rWB;
-    pWorkbook = new XclExpString( sTemp );
-}
-
-XclDConRef::~XclDConRef()
-{
-    delete pWorkbook;
-}
-
-void XclDConRef::SaveCont( XclExpStream& rStrm )
-{
-    rStrm   << (UINT16) aSourceRange.aStart.Row()
-            << (UINT16) aSourceRange.aEnd.Row()
-            << (UINT8)  aSourceRange.aStart.Col()
-            << (UINT8)  aSourceRange.aEnd.Col()
-            << *pWorkbook
-            << (UINT8)  0x00;
-}
-
-UINT16 XclDConRef::GetNum() const
-{
-    return 0x0051;
-}
-
-sal_Size XclDConRef::GetLen() const
-{
-    return 7 + pWorkbook->GetSize();
-}
-
 
 
 // ---- class XclCodename --------------------------------------------

@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: chgtrack.cxx,v $
- * $Revision: 1.32 $
+ * $Revision: 1.31.28.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -377,36 +377,10 @@ void ScChangeAction::RemoveAllLinks()
 }
 
 
-void ScChangeAction::RemoveLink( ScChangeAction* p )
-{
-    ScChangeActionLinkEntry* pL = pLinkAny;
-    while ( pL )
-    {
-        ScChangeActionLinkEntry* pNextLink = pL->GetNext();
-        if ( pL->GetAction() == p )
-            delete pL;
-        pL = pNextLink;
-    }
-}
-
-
 void ScChangeAction::RemoveAllAnyLinks()
 {
     while ( pLinkAny )
         delete pLinkAny;        // rueckt sich selbst hoch
-}
-
-
-BOOL ScChangeAction::DependsOn( ScChangeAction* p ) const
-{
-    ScChangeActionLinkEntry* pL = pLinkAny;
-    while ( pL )
-    {
-        if ( pL->GetAction() == p )
-            return TRUE;
-        pL = pL->GetNext();
-    }
-    return FALSE;
 }
 
 
@@ -495,41 +469,10 @@ void ScChangeAction::SetDeletedIn( ScChangeAction* p )
 }
 
 
-BOOL ScChangeAction::RemoveDeleted( const ScChangeAction* p )
-{
-    BOOL bRemoved = FALSE;
-    ScChangeActionLinkEntry* pL = pLinkDeleted;
-    while ( pL )
-    {
-        ScChangeActionLinkEntry* pNextLink = pL->GetNext();
-        if ( pL->GetAction() == p )
-        {
-            delete pL;
-            bRemoved = TRUE;
-        }
-        pL = pNextLink;
-    }
-    return bRemoved;
-}
-
-
 void ScChangeAction::RemoveAllDeleted()
 {
     while ( pLinkDeleted )
         delete pLinkDeleted;        // rueckt sich selbst hoch
-}
-
-
-void ScChangeAction::RemoveDependent( ScChangeAction* p )
-{
-    ScChangeActionLinkEntry* pL = pLinkDependent;
-    while ( pL )
-    {
-        ScChangeActionLinkEntry* pNextLink = pL->GetNext();
-        if ( pL->GetAction() == p )
-            delete pL;
-        pL = pNextLink;
-    }
 }
 
 
@@ -1311,23 +1254,6 @@ ScChangeActionDel::~ScChangeActionDel()
     while ( pLinkMove )
         delete pLinkMove;
 }
-
-
-BOOL ScChangeActionDel::Store( SvStream& /* rStrm */, ScMultipleWriteHeader& /* rHdr */ ) const
-{
-#if SC_ROWLIMIT_STREAM_ACCESS
-#error address types changed!
-    BOOL bOk = ScChangeAction::Store( rStrm, rHdr );
-    rStrm << (UINT32) ( pCutOff ? pCutOff->GetActionNumber() : 0 );
-    rStrm << (INT16) nCutOff;
-    rStrm << (INT16) nDx;
-    rStrm << (INT16) nDy;
-    return bOk;
-#else
-    return FALSE;
-#endif // SC_ROWLIMIT_STREAM_ACCESS
-}
-
 
 BOOL ScChangeActionDel::StoreLinks( SvStream& rStrm ) const
 {
@@ -3881,21 +3807,6 @@ void ScChangeTrack::DeleteGeneratedDelContent( ScChangeActionContent* pContent )
     NotifyModified( SC_CTM_REMOVE, nAct, nAct );
     if ( nAct == nGeneratedMin )
         ++nGeneratedMin;        //! erst nach NotifyModified wg. IsGenerated
-}
-
-
-ScChangeActionContent* ScChangeTrack::SearchGeneratedDelContentAt(
-        const ScBigAddress& rPos, ScChangeActionType eNotInDelType ) const
-{
-    for ( ScChangeAction* p = pFirstGeneratedDelContent; p; p = p->GetNext() )
-    {
-        if ( p->GetType() == SC_CAT_CONTENT && p->GetBigRange().aStart == rPos
-                && !p->IsDeletedInDelType( eNotInDelType ) )
-        {
-            return (ScChangeActionContent*) p;
-        }
-    }
-    return NULL;
 }
 
 

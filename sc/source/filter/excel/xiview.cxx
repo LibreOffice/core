@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: xiview.cxx,v $
- * $Revision: 1.9 $
+ * $Revision: 1.9.90.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -127,18 +127,18 @@ void XclImpTabViewSettings::ReadWindow2( XclImpStream& rStrm, bool bChart )
         sal_uInt16 nFlags;
         rStrm >> nFlags >> maData.maFirstXclPos;
 
-        // #i59590# real life: Excel ignores some view settings in chart sheets
+        // #i59590# #158194# real life: Excel ignores some view settings in chart sheets
         maData.mbSelected       = ::get_flag( nFlags, EXC_WIN2_SELECTED );
         maData.mbDisplayed      = ::get_flag( nFlags, EXC_WIN2_DISPLAYED );
         maData.mbMirrored       = !bChart && ::get_flag( nFlags, EXC_WIN2_MIRRORED );
         maData.mbFrozenPanes    = !bChart && ::get_flag( nFlags, EXC_WIN2_FROZEN );
         maData.mbPageMode       = !bChart && ::get_flag( nFlags, EXC_WIN2_PAGEBREAKMODE );
         maData.mbDefGridColor   = bChart || ::get_flag( nFlags, EXC_WIN2_DEFGRIDCOLOR );
-        maData.mbShowFormulas   = ::get_flag( nFlags, EXC_WIN2_SHOWFORMULAS );
-        maData.mbShowGrid       = ::get_flag( nFlags, EXC_WIN2_SHOWGRID );
-        maData.mbShowHeadings   = ::get_flag( nFlags, EXC_WIN2_SHOWHEADINGS );
-        maData.mbShowZeros      = ::get_flag( nFlags, EXC_WIN2_SHOWZEROS );
-        maData.mbShowOutline    = ::get_flag( nFlags, EXC_WIN2_SHOWOUTLINE );
+        maData.mbShowFormulas   = !bChart && ::get_flag( nFlags, EXC_WIN2_SHOWFORMULAS );
+        maData.mbShowGrid       = bChart || ::get_flag( nFlags, EXC_WIN2_SHOWGRID );
+        maData.mbShowHeadings   = bChart || ::get_flag( nFlags, EXC_WIN2_SHOWHEADINGS );
+        maData.mbShowZeros      = bChart || ::get_flag( nFlags, EXC_WIN2_SHOWZEROS );
+        maData.mbShowOutline    = bChart || ::get_flag( nFlags, EXC_WIN2_SHOWOUTLINE );
 
         switch( GetBiff() )
         {

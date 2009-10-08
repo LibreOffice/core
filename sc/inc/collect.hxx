@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: collect.hxx,v $
- * $Revision: 1.6 $
+ * $Revision: 1.6.32.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -161,8 +161,8 @@ public:
                   nValue(nVal),
                   nStrType(nType) {}
 
-            TypedStrData( ScDocument* pDoc, SCCOL nCol, SCROW nRow, SCTAB nTab,
-                            BOOL bAllStrings );
+//UNUSED2008-05  TypedStrData( ScDocument* pDoc, SCCOL nCol, SCROW nRow, SCTAB nTab,
+//UNUSED2008-05                  BOOL bAllStrings );
 
             TypedStrData( const TypedStrData& rCpy )
                 : DataObject(),
@@ -178,7 +178,9 @@ public:
 
 private:
     friend class TypedStrCollection;
+#if OLD_PIVOT_IMPLEMENTATION
     friend class PivotStrCollection;
+#endif
 
     String  aStrValue;
     double  nValue;

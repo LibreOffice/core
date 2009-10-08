@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: dapiuno.hxx,v $
- * $Revision: 1.11 $
+ * $Revision: 1.10.30.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -69,7 +69,9 @@ namespace com { namespace sun { namespace star { namespace sheet {
 }}}}
 
 class ScDocShell;
+#if OLD_PIVOT_IMPLEMENTATION
 class ScPivot;
+#endif
 class ScDPSaveDimension;
 class ScDPSaveGroupDimension;
 class ScDPSaveNumGroupDimension;

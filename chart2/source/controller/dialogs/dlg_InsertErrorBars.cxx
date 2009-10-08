@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: dlg_InsertErrorBars.cxx,v $
- * $Revision: 1.4 $
+ * $Revision: 1.4.44.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -76,11 +76,6 @@ InsertErrorBarsDialog::InsertErrorBarsDialog(
 
 InsertErrorBarsDialog::~InsertErrorBarsDialog()
 {
-}
-
-void InsertErrorBarsDialog::Reset()
-{
-    m_apErrorBarResources->Reset(rInAttrs);
 }
 
 void InsertErrorBarsDialog::FillItemSet(SfxItemSet& rOutAttrs)

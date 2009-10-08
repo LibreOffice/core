@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: DiagramWrapper.cxx,v $
- * $Revision: 1.18 $
+ * $Revision: 1.17.32.3 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -61,6 +61,7 @@
 #include "ModifyListenerHelper.hxx"
 #include "DisposeHelper.hxx"
 #include <comphelper/InlineContainer.hxx>
+#include "WrappedAutomaticPositionProperties.hxx"
 
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/chart2/XTitled.hpp>
@@ -73,8 +74,6 @@
 #include "FillProperties.hxx"
 #include "UserDefinedProperties.hxx"
 #include "SceneProperties.hxx"
-// #include "WrappedNamedProperty.hxx"
-// #include "WrappedSceneProperty.hxx"
 
 #include <map>
 #include <algorithm>
@@ -150,7 +149,9 @@ enum
     PROP_DIAGRAM_HAS_SECOND_Y_AXIS_DESCR,
 
     PROP_DIAGRAM_HAS_SECOND_X_AXIS_TITLE,
-    PROP_DIAGRAM_HAS_SECOND_Y_AXIS_TITLE
+    PROP_DIAGRAM_HAS_SECOND_Y_AXIS_TITLE,
+
+    PROP_DIAGRAM_AUTOMATIC_SIZE
 };
 
 void lcl_AddPropertiesToVector(
@@ -418,6 +419,13 @@ void lcl_AddPropertiesToVector(
                   ::getCppuType( reinterpret_cast< const sal_Int32 * >(0)),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEVOID ));
+
+    rOutProperties.push_back(
+        Property( C2U( "AutomaticSize" ),
+                  PROP_DIAGRAM_AUTOMATIC_SIZE,
+                  ::getBooleanCppuType(),
+                  beans::PropertyAttribute::BOUND
+                  | beans::PropertyAttribute::MAYBEDEFAULT ));
 }
 
 const uno::Sequence< Property > & lcl_GetPropertySequence()
@@ -440,6 +448,7 @@ const uno::Sequence< Property > & lcl_GetPropertySequence()
         WrappedDataCaptionProperties::addProperties( aProperties );
         WrappedSplineProperties::addProperties( aProperties );
         WrappedStockProperties::addProperties( aProperties );
+        WrappedAutomaticPositionProperties::addProperties( aProperties );
 
         // and sort them for access via bsearch
         ::std::sort( aProperties.begin(), aProperties.end(),
@@ -1886,6 +1895,81 @@ Any WrappedSolidTypeProperty::getPropertyDefault( const Reference< beans::XPrope
 //-----------------------------------------------------------------------------------------------------------------
 //-----------------------------------------------------------------------------------------------------------------
 
+class WrappedAutomaticSizeProperty : public WrappedProperty
+{
+public:
+    WrappedAutomaticSizeProperty();
+    virtual ~WrappedAutomaticSizeProperty();
+
+    virtual void setPropertyValue( const ::com::sun::star::uno::Any& rOuterValue, const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& xInnerPropertySet ) const
+                        throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::beans::PropertyVetoException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
+
+    virtual ::com::sun::star::uno::Any getPropertyValue( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& xInnerPropertySet ) const
+                        throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
+
+    virtual ::com::sun::star::uno::Any getPropertyDefault( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertyState >& xInnerPropertyState ) const
+                        throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
+};
+
+WrappedAutomaticSizeProperty::WrappedAutomaticSizeProperty()
+            : WrappedProperty( C2U( "AutomaticSize" ), OUString() )
+{
+}
+
+WrappedAutomaticSizeProperty::~WrappedAutomaticSizeProperty()
+{
+}
+
+void WrappedAutomaticSizeProperty::setPropertyValue( const Any& rOuterValue, const Reference< beans::XPropertySet >& xInnerPropertySet ) const
+                throw (beans::UnknownPropertyException, beans::PropertyVetoException, lang::IllegalArgumentException, lang::WrappedTargetException, uno::RuntimeException)
+{
+    if( xInnerPropertySet.is() )
+    {
+        bool bNewValue = true;
+        if( ! (rOuterValue >>= bNewValue) )
+            throw lang::IllegalArgumentException( C2U("Property AutomaticSize requires value of type boolean"), 0, 0 );
+
+        try
+        {
+            if( bNewValue )
+            {
+                Any aRelativeSize( xInnerPropertySet->getPropertyValue( C2U( "RelativeSize" ) ) );
+                if( aRelativeSize.hasValue() )
+                    xInnerPropertySet->setPropertyValue( C2U( "RelativeSize" ), Any() );
+            }
+        }
+        catch( uno::Exception & ex )
+        {
+            ASSERT_EXCEPTION( ex );
+        }
+    }
+}
+
+Any WrappedAutomaticSizeProperty::getPropertyValue( const Reference< beans::XPropertySet >& xInnerPropertySet ) const
+                        throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
+{
+    Any aRet( getPropertyDefault( Reference< beans::XPropertyState >( xInnerPropertySet, uno::UNO_QUERY ) ) );
+    if( xInnerPropertySet.is() )
+    {
+        Any aRelativeSize( xInnerPropertySet->getPropertyValue( C2U( "RelativeSize" ) ) );
+        if( !aRelativeSize.hasValue() )
+            aRet <<= true;
+    }
+    return aRet;
+}
+
+Any WrappedAutomaticSizeProperty::getPropertyDefault( const Reference< beans::XPropertyState >& /*xInnerPropertyState*/ ) const
+                        throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
+{
+    Any aRet;
+    aRet <<= false;
+    return aRet;
+}
+
+//-----------------------------------------------------------------------------------------------------------------
+//-----------------------------------------------------------------------------------------------------------------
+//-----------------------------------------------------------------------------------------------------------------
+
 // ____ XDiagramProvider ____
 Reference< chart2::XDiagram > SAL_CALL DiagramWrapper::getDiagram()
     throw (uno::RuntimeException)
@@ -1917,7 +2001,6 @@ const std::vector< WrappedProperty* > DiagramWrapper::createWrappedProperties()
 {
     ::std::vector< ::chart::WrappedProperty* > aWrappedProperties;
 
-    //WrappedNamedProperty::addWrappedProperties( aWrappedProperties, m_spChart2ModelContact );
     WrappedAxisAndGridExistenceProperties::addWrappedProperties( aWrappedProperties, m_spChart2ModelContact );
     WrappedAxisTitleExistenceProperties::addWrappedProperties( aWrappedProperties, m_spChart2ModelContact );
     WrappedAxisLabelExistenceProperties::addWrappedProperties( aWrappedProperties, m_spChart2ModelContact );
@@ -1929,6 +2012,7 @@ const std::vector< WrappedProperty* > DiagramWrapper::createWrappedProperties()
     WrappedDataCaptionProperties::addWrappedPropertiesForDiagram( aWrappedProperties, m_spChart2ModelContact );
     WrappedSplineProperties::addWrappedProperties( aWrappedProperties, m_spChart2ModelContact );
     WrappedStockProperties::addWrappedProperties( aWrappedProperties, m_spChart2ModelContact );
+    WrappedAutomaticPositionProperties::addWrappedProperties( aWrappedProperties );
 
     aWrappedProperties.push_back( new WrappedDataRowSourceProperty( m_spChart2ModelContact ) );
     aWrappedProperties.push_back( new WrappedStackingProperty( StackMode_Y_STACKED,m_spChart2ModelContact ) );
@@ -1940,6 +2024,7 @@ const std::vector< WrappedProperty* > DiagramWrapper::createWrappedProperties()
     aWrappedProperties.push_back( new WrappedAttributedDataPointsProperty( m_spChart2ModelContact ) );
     aWrappedProperties.push_back( new WrappedProperty( C2U( "StackedBarsConnected" ), C2U( "ConnectBars" ) ) );
     aWrappedProperties.push_back( new WrappedSolidTypeProperty( m_spChart2ModelContact ) );
+    aWrappedProperties.push_back( new WrappedAutomaticSizeProperty() );
     return aWrappedProperties;
 }
 

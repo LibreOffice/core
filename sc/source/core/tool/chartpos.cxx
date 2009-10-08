@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: chartpos.cxx,v $
- * $Revision: 1.4 $
+ * $Revision: 1.4.32.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -39,20 +39,6 @@
 #include "document.hxx"
 #include "rechead.hxx"
 
-
-ScChartPositioner::ScChartPositioner( ScDocument* pDoc) :
-        pDocument( pDoc ),
-        pPositionMap( NULL ),
-        eGlue( SC_CHARTGLUE_NA ),
-        nStartCol(0),
-        nStartRow(0),
-        bColHeaders( FALSE ),
-        bRowHeaders( FALSE ),
-        bDummyUpperLeft( FALSE )
-{
-    SetRangeList( ScRange( 0, 0, 0, 0, 0, 0 ) );
-    CheckColRowHeaders();
-}
 
 ScChartPositioner::ScChartPositioner( ScDocument* pDoc, SCTAB nTab,
                     SCCOL nStartColP, SCROW nStartRowP, SCCOL nEndColP, SCROW nEndRowP) :
@@ -102,31 +88,6 @@ ScChartPositioner::~ScChartPositioner()
     delete pPositionMap;
 }
 
-String ScChartPositioner::ReadStream( SvStream& rStream, ScMultipleReadHeader& rHdr )
-{
-    String aName;
-    SCCOL nCol2;
-    SCROW nRow2;
-    SCTAB nTable;
-
-    rHdr.StartEntry();
-
-    rStream >> nTable;
-    rStream >> nStartCol;
-    rStream >> nStartRow;
-    rStream >> nCol2;
-    rStream >> nRow2;
-    rStream.ReadByteString( aName, rStream.GetStreamCharSet() );
-    rStream >> bColHeaders;
-    rStream >> bRowHeaders;
-
-    rHdr.EndEntry();
-
-    SetRangeList( ScRange( nStartCol, nStartRow, nTable, nCol2, nRow2, nTable ) );
-
-    return aName;
-}
-
 BOOL ScChartPositioner::operator==(const ScChartPositioner& rCmp) const
 {
     return bColHeaders == rCmp.bColHeaders
@@ -134,43 +95,10 @@ BOOL ScChartPositioner::operator==(const ScChartPositioner& rCmp) const
         && *aRangeListRef == *rCmp.aRangeListRef;
 }
 
-BOOL ScChartPositioner::IsAtCursor(const ScAddress& rPos) const
-{
-    for ( ScRangePtr pR = aRangeListRef->First(); pR;
-                     pR = aRangeListRef->Next() )
-    {
-        if ( pR->In( rPos ) )
-            return TRUE;
-    }
-    return FALSE;
-}
-
 void ScChartPositioner::SetRangeList( const ScRange& rRange )
 {
     aRangeListRef = new ScRangeList;
     aRangeListRef->Append( rRange );
-    InvalidateGlue();
-}
-
-void ScChartPositioner::AddToRangeList( const ScRange& rRange )
-{
-    if ( aRangeListRef.Is() )
-        aRangeListRef->Append( rRange );
-    else
-        SetRangeList( rRange );
-    InvalidateGlue();
-}
-
-void ScChartPositioner::AddToRangeList( const ScRangeListRef& rAdd )
-{
-    if ( aRangeListRef.Is() )
-    {
-        ULONG nCount = rAdd->Count();
-        for (ULONG i=0; i<nCount; i++)
-            aRangeListRef->Join( *rAdd->GetObject(i) );
-    }
-    else
-        SetRangeList( rAdd );
     InvalidateGlue();
 }
 

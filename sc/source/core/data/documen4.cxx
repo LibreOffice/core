@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: documen4.cxx,v $
- * $Revision: 1.23 $
+ * $Revision: 1.22.32.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -286,14 +286,6 @@ void ScDocument::InsertTableOp(const ScTabOpParam& rParam,      // Mehrfachopera
             for (i = 0; i <= MAXTAB; i++)
                 if( pTab[i] && rMark.GetTableSelect(i) )
                     pTab[i]->PutCell( j, k, aRefCell.Clone( this, ScAddress( j, k, i ) ) );
-}
-
-USHORT ScDocument::GetErrorData( SCCOL nCol, SCROW nRow, SCTAB nTab ) const
-{
-    if (ValidTab(nTab) && pTab[nTab])
-        return pTab[nTab]->GetErrorData( nCol, nRow );
-    else
-        return 0;
 }
 
 BOOL ScDocument::GetNextSpellingCell(SCCOL& nCol, SCROW& nRow, SCTAB nTab,
@@ -653,26 +645,6 @@ void ScDocument::ConditionalChanged( ULONG nKey )
         ScConditionalFormat* pForm = pCondFormList->GetFormat( nKey );
         if (pForm)
             pForm->InvalidateArea();
-    }
-}
-
-void ScDocument::SetConditionalUsed( ULONG nKey )   // aus dem Speichern der Tabellen
-{
-    if ( nKey && pCondFormList )        // nKey==0 -> noop
-    {
-        ScConditionalFormat* pForm = pCondFormList->GetFormat( nKey );
-        if (pForm)
-            pForm->SetUsed(TRUE);
-    }
-}
-
-void ScDocument::SetValidationUsed( ULONG nKey )    // aus dem Speichern der Tabellen
-{
-    if ( nKey && pValidationList )      // nKey==0 -> noop
-    {
-        ScValidationData* pData = pValidationList->GetData( nKey );
-        if (pData)
-            pData->SetUsed(TRUE);
     }
 }
 

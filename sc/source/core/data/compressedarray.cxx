@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: compressedarray.cxx,v $
- * $Revision: 1.10 $
+ * $Revision: 1.10.32.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -362,27 +362,6 @@ A ScCompressedArray<A,D>::GetLastUnequalAccess( A nStart, const D& rCompare )
         }
     }
     return nEnd;
-}
-
-
-template< typename A, typename D >
-void ScCompressedArray<A,D>::FillDataArray( A nStart, A nEnd, D * pArray ) const
-{
-    size_t nUsed = 0;
-    size_t nIndex = Search( nStart);
-    A nS = ::std::max( (nIndex>0 ? pData[nIndex-1].nEnd+1 : 0), nStart);
-    do
-    {
-        A nE = ::std::min( pData[nIndex].nEnd, nEnd);
-        while (nS <= nE)
-        {
-            pArray[nUsed++] = pData[nIndex].aValue;
-            ++nS;
-        }
-        if (pData[nIndex].nEnd >= nEnd)
-            break;  // while
-        ++nIndex;
-    } while (nIndex < nCount);
 }
 
 

@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: rangenam.cxx,v $
- * $Revision: 1.29 $
+ * $Revision: 1.28.30.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -185,22 +185,6 @@ ScRangeData::~ScRangeData()
 DataObject* ScRangeData::Clone() const
 {
     return new ScRangeData(*this);
-}
-
-BOOL ScRangeData::IsBeyond( SCROW nMaxRow ) const
-{
-    if ( aPos.Row() > nMaxRow )
-        return TRUE;
-
-    ScToken* t;
-    pCode->Reset();
-    while ( ( t = pCode->GetNextReference() ) != NULL )
-        if ( t->GetSingleRef().nRow > nMaxRow ||
-                (t->GetType() == svDoubleRef &&
-                t->GetDoubleRef().Ref2.nRow > nMaxRow) )
-            return TRUE;
-
-    return FALSE;
 }
 
 void ScRangeData::GuessPosition()

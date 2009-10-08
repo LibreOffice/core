@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: exctools.cxx,v $
- * $Revision: 1.62 $
+ * $Revision: 1.61.32.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -283,19 +283,6 @@ void XclImpOutlineBuffer::Reset( void )
     nLast = 0;
     nMaxLevel = 0;
 }
-
-
-void XclImpOutlineBuffer::Reset( ScOutlineArray *pOArray )
-{
-    for( SCSIZE nC = 0 ; nC < nSize ; nC++  )
-    {
-        pLevel[ nC ] = 0;
-        pOuted[ nC ] = pHidden[ nC ] = FALSE;
-    }
-    pOutlineArray = pOArray;
-}
-
-
 
 
 //___________________________________________________________________

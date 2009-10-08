@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: XMLChangeTrackingImportHelper.hxx,v $
- * $Revision: 1.19 $
+ * $Revision: 1.18.32.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -59,7 +59,6 @@ struct ScMyCellInfo
     sal_uInt16         nType;
     sal_uInt8          nMatrixFlag;
 
-    ScMyCellInfo();
     ScMyCellInfo(ScBaseCell* pCell, const rtl::OUString& sFormulaAddress, const rtl::OUString& sFormula,
                 const ScGrammar::Grammar eGrammar, const rtl::OUString& sInputString,
                 const double& fValue, const sal_uInt16 nType, const sal_uInt8 nMatrixFlag, const sal_Int32 nMatrixCols,
@@ -67,6 +66,9 @@ struct ScMyCellInfo
     ~ScMyCellInfo();
 
     ScBaseCell* CreateCell(ScDocument* pDoc);
+
+private:
+    ScMyCellInfo(); // disabled
 };
 
 struct ScMyDeleted

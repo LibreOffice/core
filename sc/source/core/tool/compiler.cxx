@@ -1162,9 +1162,7 @@ static bool lcl_isValidQuotedText( const String& rFormula, xub_StrLen nSrcPos, P
 struct Convention_A1 : public ScCompiler::Convention
 {
     Convention_A1( ScAddress::Convention eConv ) : ScCompiler::Convention( eConv ) { }
-    static String MakeColStr( SCCOL nCol );
     static void MakeColStr( rtl::OUStringBuffer& rBuffer, SCCOL nCol );
-    static String MakeRowStr( SCROW nRow );
     static void MakeRowStr( rtl::OUStringBuffer& rBuffer, SCROW nRow );
 
     ParseResult parseAnyToken( const String& rFormula,
@@ -1185,28 +1183,12 @@ struct Convention_A1 : public ScCompiler::Convention
     }
 };
 
-String Convention_A1::MakeColStr( SCCOL nCol )
-{
-    if ( !ValidCol( nCol) )
-        return ScGlobal::GetRscString(STR_NO_REF_TABLE);
-    else
-        return ::ColToAlpha( nCol);
-}
-
 void Convention_A1::MakeColStr( rtl::OUStringBuffer& rBuffer, SCCOL nCol )
 {
     if ( !ValidCol( nCol) )
         rBuffer.append(ScGlobal::GetRscString(STR_NO_REF_TABLE));
     else
         ::ColToAlpha( rBuffer, nCol);
-}
-
-String Convention_A1::MakeRowStr( SCROW nRow )
-{
-    if ( !ValidRow(nRow) )
-        return ScGlobal::GetRscString(STR_NO_REF_TABLE);
-    else
-        return String::CreateFromInt32( nRow + 1 );
 }
 
 void Convention_A1::MakeRowStr( rtl::OUStringBuffer& rBuffer, SCROW nRow )
@@ -4590,16 +4572,6 @@ S lcl_adjval( S& n, T pos, T max, BOOL bRel )
     if( bRel )
         n = sal::static_int_cast<S>( n - pos );
     return n;
-}
-
-void ScCompiler::AdjustReference( SingleRefData& r )
-{
-    if( r.IsColRel() )
-        r.nCol = lcl_adjval( r.nCol, aPos.Col(), MAXCOL, r.IsColRel() );
-    if( r.IsRowRel() )
-        r.nRow = lcl_adjval( r.nRow, aPos.Row(), MAXROW, r.IsRowRel() );
-    if( r.IsTabRel() )
-        r.nTab = lcl_adjval( r.nTab, aPos.Tab(), static_cast<SCTAB>(nMaxTab), r.IsTabRel() );
 }
 
 // reference of named range with relative references

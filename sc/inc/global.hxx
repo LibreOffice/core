@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: global.hxx,v $
- * $Revision: 1.53 $
+ * $Revision: 1.53.32.8 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -84,6 +84,12 @@ extern "C" {
 #define SC_TRANSLITERATION_CASESENSE 0
 #endif
 
+// Remove the old pivot table implementation that the current data pilot
+// implementation has effectively replaced.  The old pivot code was still
+// around to handle loading of the old binary format.  Now that the old
+// binary filter is handled by binfilter, we can safely remove the old pivot
+// handling code.
+#define OLD_PIVOT_IMPLEMENTATION 0
 
 //------------------------------------------------------------------------
 struct LabelData;
@@ -773,9 +779,6 @@ struct ScQueryEntry
     void            Clear();
     ScQueryEntry&   operator=( const ScQueryEntry& r );
     BOOL            operator==( const ScQueryEntry& r ) const;
-
-    void            Load(SvStream& rStream);
-    void            Store(SvStream& rStream) const;
 };
 
 struct SC_DLLPUBLIC ScQueryParam
@@ -817,9 +820,6 @@ public:
 
     void            MoveToDest();
     void            FillInExcelSyntax(String& aCellStr, SCSIZE nIndex);
-
-    void            Load(SvStream& rStream);
-    void            Store(SvStream& rStream) const;
 };
 
 // -----------------------------------------------------------------------
@@ -881,9 +881,6 @@ struct ScConsolidateParam
     void                Clear           (); // = ClearDataAreas()+Members
     void                ClearDataAreas  ();
     void                SetAreas        ( ScArea* const* ppAreas, USHORT nCount );
-
-    void            Load( SvStream& rStream );
-    void            Store( SvStream& rStream ) const;
 };
 
 // -----------------------------------------------------------------------

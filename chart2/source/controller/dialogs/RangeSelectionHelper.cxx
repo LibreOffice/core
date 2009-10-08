@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: RangeSelectionHelper.cxx,v $
- * $Revision: 1.4 $
+ * $Revision: 1.4.44.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -55,57 +55,6 @@ using ::rtl::OUString;
 
 // ----------------------------------------
 
-namespace
-{
-OUString lcl_getTextFromRanges( const Sequence < Reference< table::XCellRange > >& xRanges )
-{
-    ::rtl::OUStringBuffer aResultBuf;
-
-    try
-    {
-        sal_Int32 nCount(xRanges.getLength());
-        for (sal_Int32 i = 0; i < nCount; ++i)
-        {
-            Reference< sheet::XCellRangeAddressable > xAddressable( xRanges[i], uno::UNO_QUERY );
-            if( xAddressable.is())
-            {
-                // iterate through columns first
-                table::CellRangeAddress aAddr = xAddressable->getRangeAddress();
-                bool bInsSpace = false;
-                for( sal_Int32 nCol=aAddr.StartColumn; nCol<=aAddr.EndColumn; ++nCol )
-                    for( sal_Int32 nRow=aAddr.StartRow; nRow<=aAddr.EndRow; ++nRow )
-                    {
-                        if( bInsSpace )
-                            aResultBuf.append( sal_Unicode( ' ' ));
-                        else
-                            bInsSpace = true;
-                        Reference< text::XText > xText( xRanges[i]->getCellByPosition(
-                                                            nCol - aAddr.StartColumn,
-                                                            nRow - aAddr.StartRow ), uno::UNO_QUERY );
-                        if( xText.is())
-                            aResultBuf.append( xText->getString());
-                    }
-            }
-            else if (xRanges[i].is())
-            {
-                // assert that (0,0) is valid.  Otherwise an exception is thrown
-                Reference< text::XText > xText( xRanges[i]->getCellByPosition( 0, 0 ), uno::UNO_QUERY );
-                if( xText.is() )
-                    aResultBuf.append( xText->getString());
-            }
-        }
-    }
-    catch( uno::Exception & ex )
-    {
-        ASSERT_EXCEPTION( ex );
-    }
-
-    return aResultBuf.makeStringAndClear();
-}
-} // anonymous namespace
-
-// ----------------------------------------
-
 namespace chart
 {
 
@@ -142,37 +91,6 @@ Reference< sheet::XRangeSelection > RangeSelectionHelper::getRangeSelection()
     }
 
     return m_xRangeSelection;
-}
-
-Reference< sheet::XCellRangesAccess > RangeSelectionHelper::getCellRangesAccess()
-{
-    if( ! m_xCellRangesAccess.is() &&
-        m_xChartDocument.is())
-    {
-        try
-        {
-            Reference< sheet::XSpreadsheetDocument > xSpreadDoc;
-
-            // try controller
-            Reference< chart2::data::XDataProvider > xDataProvider( m_xChartDocument->getDataProvider());
-            if( xDataProvider.is())
-            {
-                Reference< frame::XController > xCtrl( xDataProvider->getRangeSelection(), uno::UNO_QUERY );
-
-                if( xCtrl.is() )
-                    xSpreadDoc.set( xCtrl->getModel(), uno::UNO_QUERY_THROW );
-            }
-
-            if( xSpreadDoc.is() )
-                m_xCellRangesAccess.set( xSpreadDoc->getSheets(), uno::UNO_QUERY );
-        }
-        catch( uno::Exception & ex )
-        {
-            ASSERT_EXCEPTION( ex );
-        }
-    }
-
-    return m_xCellRangesAccess;
 }
 
 void RangeSelectionHelper::raiseRangeSelectionDocument()
@@ -278,28 +196,6 @@ bool RangeSelectionHelper::verifyArguments( const Sequence< beans::PropertyValue
         return false;
 
     return xDataProvider->createDataSourcePossible( rArguments );
-}
-
-OUString RangeSelectionHelper::getCellRangeContent( const OUString & rRangeStr )
-{
-    OUString aResult;
-
-    Reference< sheet::XCellRangesAccess > xRangesAccess( getCellRangesAccess());
-    if( xRangesAccess.is())
-    {
-        // @todo: the interface should provide a method to determine if a cell
-        // range is correct, rather than waiting for an exception
-        try
-        {
-            aResult = lcl_getTextFromRanges( xRangesAccess->getCellRangesByName( rRangeStr ) );
-        }
-        catch( const uno::Exception & ex )
-        {
-            ASSERT_EXCEPTION( ex );
-        }
-    }
-
-    return aResult;
 }
 
 } //  namespace chart

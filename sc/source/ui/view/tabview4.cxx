@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: tabview4.cxx,v $
- * $Revision: 1.11 $
+ * $Revision: 1.11.32.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -335,13 +335,13 @@ void ScTabView::InitRefMode( SCCOL nCurX, SCROW nCurY, SCTAB nCurZ, ScRefType eT
     }
 }
 
-void ScTabView::EndSelection()
-{
-    ScModule* pScMod = SC_MOD();
-    BOOL bRefMode = pScMod->IsFormulaMode();
-    if ( bRefMode )
-        pScMod->EndReference();
-}
+//UNUSED2008-05  void ScTabView::EndSelection()
+//UNUSED2008-05  {
+//UNUSED2008-05      ScModule* pScMod = SC_MOD();
+//UNUSED2008-05      BOOL bRefMode = pScMod->IsFormulaMode();
+//UNUSED2008-05      if ( bRefMode )
+//UNUSED2008-05          pScMod->EndReference();
+//UNUSED2008-05  }
 
 // static
 void ScTabView::SetScrollBar( ScrollBar& rScroll, long nRangeMax, long nVisible, long nPos, BOOL bLayoutRTL )

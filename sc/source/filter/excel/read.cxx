@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: read.cxx,v $
- * $Revision: 1.70 $
+ * $Revision: 1.70.88.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -75,8 +75,7 @@ FltError ImportExcel::Read( void )
     XclImpNumFmtBuffer&     rNumFmtBfr      = GetNumFmtBuffer();
     XclImpXFBuffer&         rXFBfr          = GetXFBuffer();
     XclImpNameManager&      rNameMgr        = GetNameManager();
-
-    const BOOL  bWithDrawLayer = pD->GetDrawLayer() != NULL;
+    XclImpObjectManager&    rObjMgr         = GetObjectManager();
 
     enum Zustand {
         Z_BiffNull, // Nicht in gueltigem Biff-Format
@@ -237,7 +236,7 @@ FltError ImportExcel::Read( void )
                     case 0x15:  rPageSett.ReadHeaderFooter( maStrm );   break;
                     case 0x17:  Externsheet(); break;   // EXTERNSHEET  [ 2345]
                     case 0x18:  rNameMgr.ReadName( maStrm );            break;
-                    case 0x1C:  Note(); break;          // NOTE         [ 2345]
+                    case 0x1C:  rObjMgr.ReadNote( maStrm );             break;
                     case 0x1D:  rTabViewSett.ReadSelection( maStrm );   break;
                     case 0x1E:  rNumFmtBfr.ReadFormat( maStrm );        break;
                     case 0x20:  Columndefault(); break; // COLUMNDEFAULT[ 2   ]
@@ -300,7 +299,7 @@ FltError ImportExcel::Read( void )
                     case 0x17:  Externsheet(); break;   // EXTERNSHEET  [ 2345]
                     case 0x1A:
                     case 0x1B:  rPageSett.ReadPageBreaks( maStrm );     break;
-                    case 0x1C:  Note(); break;          // NOTE         [ 2345]
+                    case 0x1C:  rObjMgr.ReadNote( maStrm );             break;
                     case 0x1D:  rTabViewSett.ReadSelection( maStrm );   break;
                     case 0x1E:  rNumFmtBfr.ReadFormat( maStrm );        break;
                     case 0x22:  Rec1904(); break;       // 1904         [ 2345]
@@ -318,6 +317,7 @@ FltError ImportExcel::Read( void )
                     case 0x41:  rTabViewSett.ReadPane( maStrm );        break;
                     case 0x42:  Codepage(); break;      // CODEPAGE     [ 2345]
                     case 0x56:  Builtinfmtcnt(); break; // BUILTINFMTCNT[  34 ]
+                    case 0x5D:  rObjMgr.ReadObj( maStrm );              break;
                     case 0x7D:  Colinfo(); break;       // COLINFO      [  345]
                     case 0x8C:  Country(); break;       // COUNTRY      [  345]
                     case 0x92:  rPal.ReadPalette( maStrm );             break;
@@ -369,7 +369,7 @@ FltError ImportExcel::Read( void )
                     case 0x17:  Externsheet(); break;   // EXTERNSHEET  [ 2345]
                     case 0x1A:
                     case 0x1B:  rPageSett.ReadPageBreaks( maStrm );     break;
-                    case 0x1C:  Note(); break;          // NOTE         [ 2345]
+                    case 0x1C:  rObjMgr.ReadNote( maStrm );             break;
                     case 0x1D:  rTabViewSett.ReadSelection( maStrm );   break;
                     case 0x22:  Rec1904(); break;       // 1904         [ 2345]
                     case 0x26:
@@ -387,6 +387,7 @@ FltError ImportExcel::Read( void )
                     case 0x42:  Codepage(); break;      // CODEPAGE     [ 2345]
                     case 0x55:  DefColWidth(); break;
                     case 0x56:  Builtinfmtcnt(); break; // BUILTINFMTCNT[  34 ]
+                    case 0x5D:  rObjMgr.ReadObj( maStrm );              break;
                     case 0x7D:  Colinfo(); break;       // COLINFO      [  345]
                     case 0x8C:  Country(); break;       // COUNTRY      [  345]
                     case 0x92:  rPal.ReadPalette( maStrm );             break;
@@ -482,7 +483,7 @@ FltError ImportExcel::Read( void )
                     case 0x15:  rPageSett.ReadHeaderFooter( maStrm );   break;
                     case 0x1A:
                     case 0x1B:  rPageSett.ReadPageBreaks( maStrm );     break;
-                    case 0x1C:  Note(); break;
+                    case 0x1C:  rObjMgr.ReadNote( maStrm );             break;
                     case 0x1D:  rTabViewSett.ReadSelection( maStrm );   break;
                     case 0x2F:                          // FILEPASS     [ 2345]
                         eLastErr = XclImpDecryptHelper::ReadFilepass( maStrm );
@@ -493,6 +494,7 @@ FltError ImportExcel::Read( void )
                     case 0x42:  Codepage(); break;      // CODEPAGE     [ 2345]
                     case 0x55:  DefColWidth(); break;
                     case 0x56:  Builtinfmtcnt(); break; // BUILTINFMTCNT[  34 ]
+                    case 0x5D:  rObjMgr.ReadObj( maStrm );              break;
                     case 0x7D:  Colinfo(); break;       // COLINFO      [  345]
                     case 0x8C:  Country(); break;       // COUNTRY      [  345]
                     case 0x8F:  Bundleheader(); break;  // BUNDLEHEADER [   4 ]
@@ -650,7 +652,7 @@ FltError ImportExcel::Read( void )
                     case 0x14:
                     case 0x15:  rPageSett.ReadHeaderFooter( maStrm );   break;
                     case 0x17:  Externsheet(); break;   // EXTERNSHEET  [ 2345]
-                    case 0x1C:  Note(); break;          // NOTE         [ 2345]
+                    case 0x1C:  rObjMgr.ReadNote( maStrm );             break;
                     case 0x1D:  rTabViewSett.ReadSelection( maStrm );   break;
                     case 0x23:  Externname25(); break;  // EXTERNNAME   [ 2  5]
                     case 0x26:
@@ -664,7 +666,7 @@ FltError ImportExcel::Read( void )
                         if( eLastErr != ERRCODE_NONE )
                             eAkt = Z_Ende;
                         break;
-                    case 0x5D:  if( bWithDrawLayer ) Obj();             break;
+                    case 0x5D:  rObjMgr.ReadObj( maStrm );              break;
                     case 0x83:
                     case 0x84:  rPageSett.ReadCenter( maStrm );         break;
                     case 0xA0:  rTabViewSett.ReadScl( maStrm );         break;
@@ -1097,7 +1099,6 @@ FltError ImportExcel8::Read( void )
                     case 0x000C:    Calccount();            break;  // CALCCOUNT
                     case 0x0010:    Delta();                break;  // DELTA
                     case 0x0011:    Iteration();            break;  // ITERATION
-                    case 0x001C:    Note();                 break;  // NOTE         [ 2345   ]
                     case 0x007E:
                     case 0x00AE:    Scenman();              break;  // SCENMAN
                     case 0x00AF:    Scenario();             break;  // SCENARIO
@@ -1121,9 +1122,12 @@ FltError ImportExcel8::Read( void )
                     case EXC_ID_HCENTER:
                     case EXC_ID_VCENTER:        rPageSett.ReadCenter( maStrm );         break;
                     case EXC_ID_SETUP:          rPageSett.ReadSetup( maStrm );          break;
-                    case EXC_ID_BITMAP:         rPageSett.ReadBitmap( maStrm );         break;
+                    case EXC_ID8_IMGDATA:       rPageSett.ReadImgData( maStrm );        break;
 
                     case EXC_ID_MSODRAWING:     rObjMgr.ReadMsoDrawing( maStrm );       break;
+                    // #i61786# weird documents: OBJ without MSODRAWING -> read in BIFF5 format
+                    case EXC_ID_OBJ:            rObjMgr.ReadObj( maStrm );              break;
+                    case EXC_ID_NOTE:           rObjMgr.ReadNote( maStrm );             break;
 
                     case EXC_ID_HLINK:          XclImpHyperlink::ReadHlink( maStrm );   break;
                     case EXC_ID_LABELRANGES:    XclImpLabelranges::ReadLabelranges( maStrm ); break;

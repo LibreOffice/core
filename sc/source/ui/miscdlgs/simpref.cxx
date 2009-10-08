@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: simpref.cxx,v $
- * $Revision: 1.12 $
+ * $Revision: 1.11.30.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -63,8 +63,6 @@
 #define ERRORBOX(s) ErrorBox(this,WinBits(WB_OK|WB_DEF_OK),s).Execute()
 #define QUERYBOX(m) QueryBox(this,WinBits(WB_YES_NO|WB_DEF_YES),m).Execute()
 
-static String aPrivLastRefString;
-
 //============================================================================
 //  class ScSimpleRefDlg
 
@@ -95,15 +93,11 @@ ScSimpleRefDlg::ScSimpleRefDlg( SfxBindings* pB, SfxChildWindow* pCW, Window* pP
     Init();
     FreeResource();
     SetDispatcherLock( TRUE ); // Modal-Modus einschalten
-
-    aPrivLastRefString=String();
 }
 
 //----------------------------------------------------------------------------
 __EXPORT ScSimpleRefDlg::~ScSimpleRefDlg()
 {
-    aPrivLastRefString=aEdAssign.GetText();
-
     SetDispatcherLock( FALSE ); // Modal-Modus einschalten
 }
 
@@ -194,11 +188,6 @@ BOOL ScSimpleRefDlg::IsRefInputMode() const
 String ScSimpleRefDlg::GetRefString() const
 {
     return aEdAssign.GetText();
-}
-
-String ScSimpleRefDlg::GetLastRefString()
-{
-    return aPrivLastRefString;
 }
 
 void ScSimpleRefDlg::SetCloseHdl( const Link& rLink )

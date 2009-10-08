@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: expftext.hxx,v $
- * $Revision: 1.4 $
+ * $Revision: 1.4.32.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -41,8 +41,6 @@ class SC_DLLPUBLIC ScExpandedFixedText: public FixedText
         void RequestHelp( const HelpEvent& rHEvt );
 
     public:
-
-        ScExpandedFixedText( Window* pParent,WinBits nWinStyle = 0);
         ScExpandedFixedText( Window* pWindow, const ResId& rResId);
 };
 

@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: csvruler.cxx,v $
- * $Revision: 1.16 $
+ * $Revision: 1.16.146.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -261,10 +261,10 @@ sal_Int32 ScCsvRuler::FindEmptyPos( sal_Int32 nPos, ScMoveMode eDir ) const
                 nNewPos = Max( nPos, FindEmptyPos( GetPosCount(), MOVE_PREV ) );
             break;
             case MOVE_PREV:
-                while( HasSplit( --nNewPos ) );
+                while( HasSplit( --nNewPos ) ) ;
             break;
             case MOVE_NEXT:
-                while( HasSplit( ++nNewPos ) );
+                while( HasSplit( ++nNewPos ) ) ;
             break;
             default:
             {

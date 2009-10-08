@@ -1898,13 +1898,13 @@ void ScTable::UpdateInsertTabAbs(SCTAB nTable)
         aCol[i].UpdateInsertTabAbs(nTable);
 }
 
-USHORT ScTable::GetErrorData( SCCOL nCol, SCROW nRow ) const
-{
-    if (ValidColRow(nCol,nRow))
-        return aCol[nCol].GetErrorData( nRow );
-    else
-        return 0;
-}
+//UNUSED2008-05  USHORT ScTable::GetErrorData( SCCOL nCol, SCROW nRow ) const
+//UNUSED2008-05  {
+//UNUSED2008-05      if (ValidColRow(nCol,nRow))
+//UNUSED2008-05          return aCol[nCol].GetErrorData( nRow );
+//UNUSED2008-05      else
+//UNUSED2008-05          return 0;
+//UNUSED2008-05  }
 
 BOOL ScTable::GetNextSpellingCell(SCCOL& rCol, SCROW& rRow, BOOL bInSel,
                                     const ScMarkData& rMark) const

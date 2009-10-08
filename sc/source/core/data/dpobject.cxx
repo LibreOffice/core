@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: dpobject.cxx,v $
- * $Revision: 1.24 $
+ * $Revision: 1.23.30.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -1675,226 +1675,6 @@ SCSIZE lcl_FillOldFields( PivotField* pFields,
     return nOutCount;
 }
 
-void lcl_SaveOldFieldArr( SvStream& /* rStream */,
-                            const uno::Reference<sheet::XDimensionsSupplier>& /* xSource */,
-                            USHORT /* nOrient */, SCCOL /* nColAdd */, BOOL /* bAddData */ )
-{
-#if SC_ROWLIMIT_STREAM_ACCESS
-#error address types changed!
-    // PIVOT_MAXFIELD = max. number in old files
-    DBG_ASSERT( nOrient != sheet::DataPilotFieldOrientation_PAGE, "lcl_SaveOldFieldArr - do not try to save page fields" );
-    PivotField aFields[PIVOT_MAXFIELD];
-    SCSIZE nOutCount = lcl_FillOldFields( aFields, xSource, nOrient, nColAdd, bAddData );
-
-    rStream << nOutCount;
-    for (USHORT i=0; i<nOutCount; i++)
-    {
-        rStream << (BYTE) 0x00
-                << aFields[i].nCol
-                << aFields[i].nFuncMask
-                << aFields[i].nFuncCount;
-    }
-#endif
-}
-
-BOOL ScDPObject::StoreNew( SvStream& /* rStream */, ScMultipleWriteHeader& /* rHdr */ ) const
-{
-#if SC_ROWLIMIT_STREAM_ACCESS
-#error address types changed!
-    //  save all data
-
-    rHdr.StartEntry();
-
-    if ( pImpDesc )
-    {
-        rStream << (BYTE) SC_DP_SOURCE_DATABASE;
-        rStream.WriteByteString( pImpDesc->aDBName, rStream.GetStreamCharSet() );
-        rStream.WriteByteString( pImpDesc->aObject, rStream.GetStreamCharSet() );
-        rStream << pImpDesc->nType;     // USHORT
-        rStream << pImpDesc->bNative;
-    }
-    else if ( pServDesc )
-    {
-        rStream << (BYTE) SC_DP_SOURCE_SERVICE;
-        rStream.WriteByteString( pServDesc->aServiceName, rStream.GetStreamCharSet() );
-        rStream.WriteByteString( pServDesc->aParSource,   rStream.GetStreamCharSet() );
-        rStream.WriteByteString( pServDesc->aParName,     rStream.GetStreamCharSet() );
-        rStream.WriteByteString( pServDesc->aParUser,     rStream.GetStreamCharSet() );
-        rStream.WriteByteString( pServDesc->aParPass,     rStream.GetStreamCharSet() );
-    }
-    else
-    {
-        if (!pSheetDesc)
-        {
-            DBG_ERROR("no source descriptor");
-            ((ScDPObject*)this)->pSheetDesc = new ScSheetSourceDesc;        // dummy defaults
-        }
-
-        rStream << (BYTE) SC_DP_SOURCE_SHEET;
-        rStream << pSheetDesc->aSourceRange;
-        pSheetDesc->aQueryParam.Store( rStream );
-    }
-
-    rStream << aOutRange;
-
-    DBG_ASSERT(pSaveData, "ScDPObject::StoreNew no SaveData");
-    pSaveData->Store( rStream );
-
-    //  additional data starting from 561b
-    rStream.WriteByteString( aTableName, rStream.GetStreamCharSet() );
-    rStream.WriteByteString( aTableTag,  rStream.GetStreamCharSet() );
-
-    rHdr.EndEntry();
-    return TRUE;
-#else
-    return FALSE;
-#endif // SC_ROWLIMIT_STREAM_ACCESS
-}
-
-BOOL ScDPObject::LoadNew(SvStream& /* rStream */, ScMultipleReadHeader& /* rHdr */ )
-{
-#if SC_ROWLIMIT_STREAM_ACCESS
-#error address types changed!
-    rHdr.StartEntry();
-
-    DELETEZ( pImpDesc );
-    DELETEZ( pSheetDesc );
-    DELETEZ( pServDesc );
-
-    BYTE nType;
-    rStream >> nType;
-    switch (nType)
-    {
-        case SC_DP_SOURCE_DATABASE:
-            pImpDesc = new ScImportSourceDesc;
-            rStream.ReadByteString( pImpDesc->aDBName, rStream.GetStreamCharSet() );
-            rStream.ReadByteString( pImpDesc->aObject, rStream.GetStreamCharSet() );
-            rStream >> pImpDesc->nType;     // USHORT
-            rStream >> pImpDesc->bNative;
-            break;
-
-        case SC_DP_SOURCE_SHEET:
-            pSheetDesc = new ScSheetSourceDesc;
-            rStream >> pSheetDesc->aSourceRange;
-            pSheetDesc->aQueryParam.Load( rStream );
-            break;
-
-        case SC_DP_SOURCE_SERVICE:
-            {
-                String aServiceName, aParSource, aParName, aParUser, aParPass;
-                rStream.ReadByteString( aServiceName, rStream.GetStreamCharSet() );
-                rStream.ReadByteString( aParSource,   rStream.GetStreamCharSet() );
-                rStream.ReadByteString( aParName,     rStream.GetStreamCharSet() );
-                rStream.ReadByteString( aParUser,     rStream.GetStreamCharSet() );
-                rStream.ReadByteString( aParPass,     rStream.GetStreamCharSet() );
-                pServDesc = new ScDPServiceDesc( aServiceName,
-                                        aParSource, aParName, aParUser, aParPass );
-            }
-            break;
-
-        default:
-            DBG_ERROR("unknown source type");
-    }
-
-    rStream >> aOutRange;
-
-    SetSaveData(ScDPSaveData());
-    pSaveData->Load( rStream );
-
-    if (rHdr.BytesLeft())       //  additional data starting from 561b
-    {
-        rStream.ReadByteString( aTableName, rStream.GetStreamCharSet() );
-        rStream.ReadByteString( aTableTag,  rStream.GetStreamCharSet() );
-    }
-
-    rHdr.EndEntry();
-    return TRUE;
-#else
-    return FALSE;
-#endif // SC_ROWLIMIT_STREAM_ACCESS
-}
-
-BOOL ScDPObject::StoreOld( SvStream& rStream, ScMultipleWriteHeader& rHdr ) const
-{
-    //  write compatible data for office 5.1 and below
-
-    DBG_ASSERT( pSheetDesc, "StoreOld: !pSheetDesc" );
-    ScRange aStoreRange;
-    ScQueryParam aStoreQuery;
-    if (pSheetDesc)
-    {
-        aStoreRange = pSheetDesc->aSourceRange;
-        aStoreQuery = pSheetDesc->aQueryParam;
-    }
-
-    ((ScDPObject*)this)->CreateObjects();       // xSource is needed for field numbers
-
-    rHdr.StartEntry();
-
-    rStream << (BOOL) TRUE;         // bHasHeader
-
-#if SC_ROWLIMIT_STREAM_ACCESS
-#error address types changed!
-    rStream << aStoreRange.aStart.Col();
-    rStream << aStoreRange.aStart.Row();
-    rStream << aStoreRange.aEnd.Col();
-    rStream << aStoreRange.aEnd.Row();
-    rStream << aStoreRange.aStart.Tab();
-
-    //! make sure aOutRange is initialized
-
-    rStream << aOutRange.aStart.Col();
-    rStream << aOutRange.aStart.Row();
-    rStream << aOutRange.aEnd.Col();
-    rStream << aOutRange.aEnd.Row();
-    rStream << aOutRange.aStart.Tab();
-#endif
-
-    BOOL bAddData = ( lcl_GetDataGetOrientation( xSource ) == sheet::DataPilotFieldOrientation_HIDDEN );
-
-    lcl_SaveOldFieldArr( rStream, xSource, sheet::DataPilotFieldOrientation_ROW,    aStoreRange.aStart.Col(), bAddData );
-    lcl_SaveOldFieldArr( rStream, xSource, sheet::DataPilotFieldOrientation_COLUMN, aStoreRange.aStart.Col(), FALSE );
-    lcl_SaveOldFieldArr( rStream, xSource, sheet::DataPilotFieldOrientation_DATA,   aStoreRange.aStart.Col(), FALSE );
-
-    aStoreQuery.Store( rStream );
-
-    BOOL bColumnGrand   = TRUE;
-    BOOL bRowGrand      = TRUE;
-    BOOL bIgnoreEmpty   = FALSE;
-    BOOL bRepeatIfEmpty = FALSE;
-
-    uno::Reference<beans::XPropertySet> xProp( xSource, uno::UNO_QUERY );
-    if (xProp.is())
-    {
-        bColumnGrand = ScUnoHelpFunctions::GetBoolProperty( xProp,
-                        rtl::OUString::createFromAscii(DP_PROP_COLUMNGRAND), TRUE );
-        bRowGrand = ScUnoHelpFunctions::GetBoolProperty( xProp,
-                        rtl::OUString::createFromAscii(DP_PROP_ROWGRAND), TRUE );
-
-        // following properties may be missing for external sources
-        bIgnoreEmpty = ScUnoHelpFunctions::GetBoolProperty( xProp,
-                        rtl::OUString::createFromAscii(DP_PROP_IGNOREEMPTY) );
-        bRepeatIfEmpty = ScUnoHelpFunctions::GetBoolProperty( xProp,
-                        rtl::OUString::createFromAscii(DP_PROP_REPEATIFEMPTY) );
-    }
-
-    rStream << bIgnoreEmpty;        // bIgnoreEmpty
-    rStream << bRepeatIfEmpty;      // bDetectCat
-
-    rStream << bColumnGrand;        // bMakeTotalCol
-    rStream << bRowGrand;           // bMakeTotalRow
-
-    if( rStream.GetVersion() > SOFFICE_FILEFORMAT_40 )
-    {
-        rStream.WriteByteString( aTableName, rStream.GetStreamCharSet() );
-        rStream.WriteByteString( aTableTag,  rStream.GetStreamCharSet() );
-        rStream << (USHORT)0;       // nColNameCount
-    }
-
-    rHdr.EndEntry();
-    return TRUE;
-}
-
 BOOL ScDPObject::FillOldParam(ScPivotParam& rParam, BOOL bForFile) const
 {
     ((ScDPObject*)this)->CreateObjects();       // xSource is needed for field numbers
@@ -2337,6 +2117,7 @@ void ScDPObject::ConvertOrientation( ScDPSaveData& rSaveData,
     }
 }
 
+#if OLD_PIVOT_IMPLEMENTATION
 void ScDPObject::InitFromOldPivot( const ScPivot& rOld, ScDocument* pDocP, BOOL bSetSource )
 {
     ScDPSaveData aSaveData;
@@ -2378,6 +2159,7 @@ void ScDPObject::InitFromOldPivot( const ScPivot& rOld, ScDocument* pDocP, BOOL 
     aTableName = rOld.GetName();
     aTableTag  = rOld.GetTag();
 }
+#endif
 
 // -----------------------------------------------------------------------
 
@@ -2521,82 +2303,6 @@ DataObject* ScDPCollection::Clone() const
     return new ScDPCollection(*this);
 }
 
-BOOL ScDPCollection::StoreOld( SvStream& rStream ) const
-{
-    BOOL bSuccess = TRUE;
-
-    USHORT nSheetCount = 0;
-    USHORT i;
-    for (i=0; i<nCount; i++)
-        if ( ((const ScDPObject*)At(i))->IsSheetData() )
-            ++nSheetCount;
-
-    ScMultipleWriteHeader aHdr( rStream );
-
-    rStream << nSheetCount;         // only tables from sheet data
-
-    for (i=0; i<nCount && bSuccess; i++)
-    {
-        const ScDPObject* pObj = (const ScDPObject*)At(i);
-        if ( pObj->IsSheetData() )
-            bSuccess = pObj->StoreOld( rStream, aHdr );
-    }
-
-    return bSuccess;
-}
-
-BOOL ScDPCollection::StoreNew( SvStream& rStream ) const
-{
-    BOOL bSuccess = TRUE;
-
-    ScMultipleWriteHeader aHdr( rStream );
-
-    rStream << (long)SC_DP_VERSION_CURRENT;
-    rStream << (long)nCount;
-
-    for (USHORT i=0; i<nCount && bSuccess; i++)
-        bSuccess = ((const ScDPObject*)At(i))->StoreNew( rStream, aHdr );
-
-    return bSuccess;
-}
-
-BOOL ScDPCollection::LoadNew( SvStream& rStream )
-{
-    BOOL bSuccess = TRUE;
-
-    FreeAll();
-    ScMultipleReadHeader aHdr( rStream );
-
-    long nVer;
-    rStream >> nVer;
-
-    //  check for all supported versions here..
-
-    if ( nVer != SC_DP_VERSION_CURRENT )
-    {
-        DBG_ERROR("skipping unknown version of data pilot obejct");
-        if ( rStream.GetError() == SVSTREAM_OK )
-            rStream.SetError( SCWARN_IMPORT_INFOLOST );
-        return FALSE;
-    }
-
-    long nNewCount;
-    rStream >> nNewCount;
-    for (long i=0; i<nNewCount; i++)
-    {
-        ScDPObject* pObj = new ScDPObject( pDoc );
-        if ( pObj->LoadNew(rStream, aHdr) )
-        {
-            pObj->SetAlive( TRUE );
-            Insert( pObj );
-        }
-        else
-            delete pObj;
-    }
-
-    return bSuccess;
-}
-
 void ScDPCollection::DeleteOnTab( SCTAB nTab )
 {
     USHORT nPos = 0;
@@ -2694,16 +2400,17 @@ String ScDPCollection::CreateNewName( USHORT nMin ) const
     return String();                    // should not happen
 }
 
-void ScDPCollection::EnsureNames()
-{
-    for (USHORT i=0; i<nCount; i++)
-        if (!((const ScDPObject*)At(i))->GetName().Len())
-            ((ScDPObject*)At(i))->SetName( CreateNewName() );
-}
+//UNUSED2008-05  void ScDPCollection::EnsureNames()
+//UNUSED2008-05  {
+//UNUSED2008-05      for (USHORT i=0; i<nCount; i++)
+//UNUSED2008-05          if (!((const ScDPObject*)At(i))->GetName().Len())
+//UNUSED2008-05              ((ScDPObject*)At(i))->SetName( CreateNewName() );
+//UNUSED2008-05  }
 
 //------------------------------------------------------------------------
 //  convert old pivot tables into new datapilot tables
 
+#if OLD_PIVOT_IMPLEMENTATION
 void ScDPCollection::ConvertOldTables( ScPivotCollection& rOldColl )
 {
     //  convert old pivot tables into new datapilot tables
@@ -2718,6 +2425,7 @@ void ScDPCollection::ConvertOldTables( ScPivotCollection& rOldColl )
     }
     rOldColl.FreeAll();
 }
+#endif
 
 
 

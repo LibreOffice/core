@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: undodat.hxx,v $
- * $Revision: 1.8 $
+ * $Revision: 1.8.32.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -408,41 +408,39 @@ private:
     BOOL            bQuerySize;
 };
 
-
-class ScUndoPivot: public ScSimpleUndo
-{
-public:
-                    TYPEINFO();
-                    ScUndoPivot( ScDocShell* pNewDocShell,
-                            const ScArea& rOld, const ScArea& rNew,
-                            ScDocument* pOldDoc, ScDocument* pNewDoc,
-                            const ScPivot* pOldPivot, const ScPivot* pNewPivot );
-    virtual         ~ScUndoPivot();
-
-    virtual void    Undo();
-    virtual void    Redo();
-    virtual void    Repeat(SfxRepeatTarget& rTarget);
-    virtual BOOL    CanRepeat(SfxRepeatTarget& rTarget) const;
-
-    virtual String  GetComment() const;
-
-private:
-    ScArea          aOldArea;
-    ScArea          aNewArea;
-    ScDocument*     pOldUndoDoc;
-    ScDocument*     pNewUndoDoc;
-    ScPivotParam    aOldParam;              // fuer Redo
-    ScQueryParam    aOldQuery;
-    ScArea          aOldSrc;
-    ScPivotParam    aNewParam;              // fuer Undo in Collection
-    ScQueryParam    aNewQuery;
-    ScArea          aNewSrc;
-    String          aOldName;
-    String          aOldTag;
-    String          aNewName;
-    String          aNewTag;
-};
-
+//UNUSED2008-05  class ScUndoPivot: public ScSimpleUndo
+//UNUSED2008-05  {
+//UNUSED2008-05  public:
+//UNUSED2008-05                      TYPEINFO();
+//UNUSED2008-05                      ScUndoPivot( ScDocShell* pNewDocShell,
+//UNUSED2008-05                              const ScArea& rOld, const ScArea& rNew,
+//UNUSED2008-05                              ScDocument* pOldDoc, ScDocument* pNewDoc,
+//UNUSED2008-05                              const ScPivot* pOldPivot, const ScPivot* pNewPivot );
+//UNUSED2008-05      virtual         ~ScUndoPivot();
+//UNUSED2008-05
+//UNUSED2008-05      virtual void    Undo();
+//UNUSED2008-05      virtual void    Redo();
+//UNUSED2008-05      virtual void    Repeat(SfxRepeatTarget& rTarget);
+//UNUSED2008-05      virtual BOOL    CanRepeat(SfxRepeatTarget& rTarget) const;
+//UNUSED2008-05
+//UNUSED2008-05      virtual String  GetComment() const;
+//UNUSED2008-05
+//UNUSED2008-05  private:
+//UNUSED2008-05      ScArea          aOldArea;
+//UNUSED2008-05      ScArea          aNewArea;
+//UNUSED2008-05      ScDocument*     pOldUndoDoc;
+//UNUSED2008-05      ScDocument*     pNewUndoDoc;
+//UNUSED2008-05      ScPivotParam    aOldParam;              // fuer Redo
+//UNUSED2008-05      ScQueryParam    aOldQuery;
+//UNUSED2008-05      ScArea          aOldSrc;
+//UNUSED2008-05      ScPivotParam    aNewParam;              // fuer Undo in Collection
+//UNUSED2008-05      ScQueryParam    aNewQuery;
+//UNUSED2008-05      ScArea          aNewSrc;
+//UNUSED2008-05      String          aOldName;
+//UNUSED2008-05      String          aOldTag;
+//UNUSED2008-05      String          aNewName;
+//UNUSED2008-05      String          aNewTag;
+//UNUSED2008-05  };
 
 class ScUndoDataPilot: public ScSimpleUndo
 {

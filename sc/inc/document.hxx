@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: document.hxx,v $
- * $Revision: 1.115 $
+ * $Revision: 1.111.20.7 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -96,8 +96,10 @@ class ScFormulaCell;
 class ScMarkData;
 class ScOutlineTable;
 class ScPatternAttr;
+#if OLD_PIVOT_IMPLEMENTATION
 class ScPivot;
 class ScPivotCollection;
+#endif
 class ScPrintRangeSaver;
 class ScRangeData;
 class ScRangeName;
@@ -119,7 +121,6 @@ class ScDPCollection;
 class ScMatrix;
 class ScScriptTypeData;
 class ScPoolHelper;
-class ScImpExpLogMsg;
 struct ScSortParam;
 class ScRefreshTimerControl;
 class ScUnoListenerCalls;
@@ -229,7 +230,9 @@ friend class ScHorizontalCellIterator;
 friend class ScHorizontalAttrIterator;
 friend class ScDocAttrIterator;
 friend class ScAttrRectIterator;
+#if OLD_PIVOT_IMPLEMENTATION
 friend class ScPivot;
+#endif
 
 private:
     ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > xServiceManager;
@@ -250,7 +253,9 @@ private:
     ScTable*            pTab[MAXTABCOUNT];
     ScRangeName*        pRangeName;
     ScDBCollection*     pDBCollection;
+#if OLD_PIVOT_IMPLEMENTATION
     ScPivotCollection*  pPivotCollection;
+#endif
     ScDPCollection*     pDPCollection;
     ScChartCollection*  pChartCollection;
     std::auto_ptr< ScTemporaryChartLock > apTemporaryChartLock;
@@ -285,8 +290,6 @@ private:
     ScDocOptions*       pDocOptions;                    // Dokument-Optionen
     ScExtDocOptions*    pExtDocOptions;                 // fuer Import etc.
     ScConsolidateParam* pConsolidateDlgData;
-
-    List*               pLoadedSymbolStringCellList;    // binary file format import of symbol font string cells
 
     ScRecursionHelper*  pRecursionHelper;               // information for recursive and iterative cell formulas
 
@@ -372,8 +375,6 @@ private:
     BOOL                bChartListenerCollectionNeedsUpdate;
     // ob RC_FORCED Formelzellen im Dokument sind/waren (einmal an immer an)
     BOOL                bHasForcedFormulas;
-    // ist beim Laden/Speichern etwas weggelassen worden?
-    BOOL                bLostData;
     // ob das Doc gerade zerstoert wird (kein Notify-Tracking etc. mehr)
     BOOL                bInDtorClear;
     // ob bei Spalte/Zeile einfuegen am Rand einer Referenz die Referenz
@@ -435,7 +436,6 @@ public:
     XColorTable*    GetColorTable();
 
     SvxLinkManager*     GetLinkManager() { return pLinkManager; }
-    void                SetLinkManager( SvxLinkManager* pNew );
 
     const ScDocOptions&     GetDocOptions() const;
     void                    SetDocOptions( const ScDocOptions& rOpt );
@@ -476,20 +476,19 @@ SC_DLLPUBLIC    ScDBCollection* GetDBCollection() const;
                                         BOOL bStartOnly = FALSE) const;
     ScDBData*       GetDBAtArea(SCTAB nTab, SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2) const;
 
-    ScRangeData*    GetRangeAtCursor(SCCOL nCol, SCROW nRow, SCTAB nTab,
-                                        BOOL bStartOnly = FALSE) const;
+//UNUSED2008-05  ScRangeData*   GetRangeAtCursor(SCCOL nCol, SCROW nRow, SCTAB nTab,
+//UNUSED2008-05                                      BOOL bStartOnly = FALSE) const;
     ScRangeData*    GetRangeAtBlock( const ScRange& rBlock, String* pName=NULL ) const;
 
     ScDPCollection*     GetDPCollection();
     ScDPObject*         GetDPAtCursor(SCCOL nCol, SCROW nRow, SCTAB nTab) const;
     ScDPObject*         GetDPAtBlock( const ScRange& rBlock ) const;
-
+#if OLD_PIVOT_IMPLEMENTATION
     ScPivotCollection*  GetPivotCollection() const;
     void                SetPivotCollection(ScPivotCollection* pNewPivotCollection);
     ScPivot*            GetPivotAtCursor(SCCOL nCol, SCROW nRow, SCTAB nTab) const;
-
+#endif
     ScChartCollection*  GetChartCollection() const;
-    void                SetChartCollection(ScChartCollection* pNewChartCollection);
 
     void                StopTemporaryChartLock();
 
@@ -538,18 +537,8 @@ SC_DLLPUBLIC    ScDBCollection* GetDBCollection() const;
     BOOL            IsBlockEditable( SCTAB nTab, SCCOL nStartCol, SCROW nStartRow,
                                         SCCOL nEndCol, SCROW nEndRow,
                                         BOOL* pOnlyNotBecauseOfMatrix = NULL ) const;
-    BOOL            IsSelectedBlockEditable( SCCOL nStartCol, SCROW nStartRow,
-                                            SCCOL nEndCol, SCROW nEndRow,
-                                            const ScMarkData& rMark ) const;
     BOOL            IsSelectionEditable( const ScMarkData& rMark,
                                         BOOL* pOnlyNotBecauseOfMatrix = NULL ) const;
-    BOOL            IsSelectionOrBlockEditable( SCTAB nTab, SCCOL nStartCol, SCROW nStartRow,
-                                        SCCOL nEndCol, SCROW nEndRow,
-                                        const ScMarkData& rMark ) const;
-    BOOL            IsSelectedOrBlockEditable( SCCOL nStartCol, SCROW nStartRow,
-                                            SCCOL nEndCol, SCROW nEndRow,
-                                            const ScMarkData& rMark ) const;
-
     BOOL            HasSelectedBlockMatrixFragment( SCCOL nStartCol, SCROW nStartRow,
                                             SCCOL nEndCol, SCROW nEndRow,
                                             const ScMarkData& rMark ) const;
@@ -580,7 +569,6 @@ SC_DLLPUBLIC    ScDBCollection* GetDBCollection() const;
                                     BOOL bInsertNew = TRUE,
                                     BOOL bResultsOnly = FALSE );
     void            TransferDrawPage(ScDocument* pSrcDoc, SCTAB nSrcPos, SCTAB nDestPos);
-    void            ClearDrawPage(SCTAB nTab);
     void            SetVisible( SCTAB nTab, BOOL bVisible );
     BOOL            IsVisible( SCTAB nTab ) const;
     void            SetLayoutRTL( SCTAB nTab, BOOL bRTL );
@@ -697,7 +685,6 @@ SC_DLLPUBLIC    ScDBCollection* GetDBCollection() const;
     BOOL            HasControl( SCTAB nTab, const Rectangle& rMMRect );
     void            InvalidateControls( Window* pWin, SCTAB nTab, const Rectangle& rMMRect );
 
-    void            StopAnimations( SCTAB nTab, Window* pWin );
     void            StartAnimations( SCTAB nTab, Window* pWin );
 
     BOOL            HasBackgroundDraw( SCTAB nTab, const Rectangle& rMMRect );
@@ -759,13 +746,12 @@ SC_DLLPUBLIC    ScDBCollection* GetDBCollection() const;
     void            GetCell( SCCOL nCol, SCROW nRow, SCTAB nTab, ScBaseCell*& rpCell ) const;
     ScBaseCell*     GetCell( const ScAddress& rPos ) const;
 
-    void            RefreshNoteFlags();
+//UNUSED2008-05  void           RefreshNoteFlags();
     BOOL            HasNoteObject( SCCOL nCol, SCROW nRow, SCTAB nTab ) const;
 
     BOOL            HasData( SCCOL nCol, SCROW nRow, SCTAB nTab );
     SC_DLLPUBLIC BOOL           HasStringData( SCCOL nCol, SCROW nRow, SCTAB nTab ) const;
     BOOL            HasValueData( SCCOL nCol, SCROW nRow, SCTAB nTab ) const;
-    USHORT          GetErrorData(SCCOL nCol, SCROW nRow, SCTAB nTab) const;
     BOOL            HasStringCells( const ScRange& rRange ) const;
 
     /** Returns true, if there is any data to create a selection list for rPos. */
@@ -801,15 +787,12 @@ SC_DLLPUBLIC    ScDBCollection* GetDBCollection() const;
                                                 ScRange* pLastRange = NULL,
                                                 Rectangle* pLastMM = NULL ) const;
 
-    BOOL            IsOverlapped( SCCOL nCol, SCROW nRow, SCTAB nTab ) const;
     BOOL            IsHorOverlapped( SCCOL nCol, SCROW nRow, SCTAB nTab ) const;
     BOOL            IsVerOverlapped( SCCOL nCol, SCROW nRow, SCTAB nTab ) const;
 
     BOOL            HasAttrib( SCCOL nCol1, SCROW nRow1, SCTAB nTab1,
                             SCCOL nCol2, SCROW nRow2, SCTAB nTab2, USHORT nMask );
     BOOL            HasAttrib( const ScRange& rRange, USHORT nMask );
-
-    BOOL            HasLines( const ScRange& rRange, Rectangle& rSizes ) const;
 
     void            GetBorderLines( SCCOL nCol, SCROW nRow, SCTAB nTab,
                                     const SvxBorderLine** ppLeft,
@@ -821,7 +804,6 @@ SC_DLLPUBLIC    ScDBCollection* GetDBCollection() const;
 
     void            SetDirty();
     void            SetDirty( const ScRange& );
-    void            SetDirtyVar();
     void            SetTableOpDirty( const ScRange& );  // for Interpreter TableOp
     void            CalcAll();
     void            CalcAfterLoad();
@@ -854,7 +836,6 @@ SC_DLLPUBLIC    ScDBCollection* GetDBCollection() const;
                     // if CalcFormulaTree() is currently running
     BOOL            IsCalculatingFormulaTree() { return bCalculatingFormulaTree; }
 
-    void            GetErrCode( SCCOL nCol, SCROW nRow, SCTAB nTab, USHORT& rErrCode );
     USHORT          GetErrCode( const ScAddress& ) const;
 
     void            GetDataArea( SCTAB nTab, SCCOL& rStartCol, SCROW& rStartRow,
@@ -944,7 +925,6 @@ SC_DLLPUBLIC    ScDBCollection* GetDBCollection() const;
     void            DeleteObjectsInArea( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
                                         const ScMarkData& rMark );
     void            DeleteObjectsInSelection( const ScMarkData& rMark );
-    void            DeleteObjects( SCTAB nTab );
 
     void            DeleteArea(SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
                             const ScMarkData& rMark, USHORT nDelFlag);
@@ -1099,10 +1079,8 @@ SC_DLLPUBLIC    ScDBCollection* GetDBCollection() const;
     void            FindConditionalFormat( ULONG nKey, ScRangeList& rRanges );
     void            FindConditionalFormat( ULONG nKey, ScRangeList& rRanges, SCTAB nTab );
     void            ConditionalChanged( ULONG nKey );
-    void            SetConditionalUsed( ULONG nKey );       // beim Speichern
 
     ULONG           AddValidationEntry( const ScValidationData& rNew );
-    void            SetValidationUsed( ULONG nKey );        // beim Speichern
 
     const ScValidationData* GetValidationEntry( ULONG nIndex ) const;
 
@@ -1150,14 +1128,9 @@ SC_DLLPUBLIC    ScDBCollection* GetDBCollection() const;
 
     BOOL            IsStyleSheetUsed( const ScStyleSheet& rStyle, BOOL bGatherAllStyles ) const;
 
-                    // Rueckgabe TRUE bei ApplyFlags: Wert geaendert
-    BOOL            ApplyFlags( SCCOL nStartCol, SCROW nStartRow, SCCOL nEndCol, SCROW nEndRow,
-                                    const ScMarkData& rMark, INT16 nFlags );
     BOOL            ApplyFlagsTab( SCCOL nStartCol, SCROW nStartRow,
                                             SCCOL nEndCol, SCROW nEndRow,
                                             SCTAB nTab, INT16 nFlags );
-    BOOL            RemoveFlags( SCCOL nStartCol, SCROW nStartRow, SCCOL nEndCol, SCROW nEndRow,
-                                    const ScMarkData& rMark, INT16 nFlags );
     BOOL            RemoveFlagsTab( SCCOL nStartCol, SCROW nStartRow,
                                             SCCOL nEndCol, SCROW nEndRow,
                                             SCTAB nTab, INT16 nFlags );
@@ -1262,8 +1235,6 @@ SC_DLLPUBLIC    ScDBCollection* GetDBCollection() const;
     const ScBitMaskCompressedArray< SCROW, BYTE> & GetRowFlagsArray( SCTAB nTab ) const;
           ScBitMaskCompressedArray< SCROW, BYTE> & GetRowFlagsArrayModifiable( SCTAB nTab );
 
-                    /// @return  the index of the last column with any set flags (auto-pagebreak is ignored).
-    SCCOL           GetLastFlaggedCol( SCTAB nTab ) const;
                     /// @return  the index of the last row with any set flags (auto-pagebreak is ignored).
     SCROW           GetLastFlaggedRow( SCTAB nTab ) const;
 
@@ -1303,7 +1274,6 @@ SC_DLLPUBLIC    ScDBCollection* GetDBCollection() const;
     Size            GetPageSize( SCTAB nTab ) const;
     void            SetPageSize( SCTAB nTab, const Size& rSize );
     void            SetRepeatArea( SCTAB nTab, SCCOL nStartCol, SCCOL nEndCol, SCROW nStartRow, SCROW nEndRow );
-    void            UpdatePageBreaks();
     void            UpdatePageBreaks( SCTAB nTab, const ScRange* pUserArea = NULL );
     void            RemoveManualBreaks( SCTAB nTab );
     BOOL            HasManualBreaks( SCTAB nTab ) const;
@@ -1344,12 +1314,6 @@ SC_DLLPUBLIC    ScDBCollection* GetDBCollection() const;
                                 SCCOL nEndCol, SCROW nEndRow, SCTAB nTab );
     ScRange         GetRange( SCTAB nTab, const Rectangle& rMMRect );
 
-    BOOL            LoadPool( SvStream& rStream, BOOL bLoadRefCounts );
-    BOOL            SavePool( SvStream& rStream ) const;
-
-    BOOL            Load( SvStream& rStream, ScProgress* pProgress );
-    BOOL            Save( SvStream& rStream, ScProgress* pProgress ) const;
-
     void            UpdStlShtPtrsFrmNms();
     void            StylesToNames();
 
@@ -1358,9 +1322,6 @@ SC_DLLPUBLIC    ScDBCollection* GetDBCollection() const;
     CharSet         GetSrcCharSet() const   { return eSrcSet; }
     ULONG           GetSrcVersion() const   { return nSrcVer; }
     SCROW           GetSrcMaxRow() const    { return nSrcMaxRow; }
-
-    void            SetLostData();
-    BOOL            HasLostData() const     { return bLostData; }
 
     void            SetSrcCharSet( CharSet eNew )   { eSrcSet = eNew; }
     void            UpdateFontCharSet();
@@ -1439,7 +1400,6 @@ SC_DLLPUBLIC    SvNumberFormatter*  GetFormatTable() const;
     BOOL            GetHasMacroFunc() const      { return bHasMacroFunc; }
     void            SetHasMacroFunc(BOOL bSet)   { bHasMacroFunc = bSet; }
 
-    BOOL            HasMacroCallsAfterLoad();
     BOOL            CheckMacroWarn();
 
     void            SetRangeOverflowType(sal_uInt32 nType)  { nRangeOverflowType = nType; }
@@ -1495,7 +1455,7 @@ SC_DLLPUBLIC    SvNumberFormatter*  GetFormatTable() const;
 
 
 private:
-    void                SetAutoFilterFlags();
+//UNUSED2008-05  void               SetAutoFilterFlags();
     void                FindMaxRotCol( SCTAB nTab, RowInfo* pRowInfo, SCSIZE nArrCount,
                                         SCCOL nX1, SCCOL nX2 ) const;
 
@@ -1683,18 +1643,10 @@ public:
     ScNoteEditEngine&   GetNoteEngine();
     SfxItemPool&            GetNoteItemPool();
 
-    void            AddToImpExpLog( const ScImpExpLogMsg& rMsg );
-    void            AddToImpExpLog( ScImpExpLogMsg* pMsg );
-
     ScRefreshTimerControl*  GetRefreshTimerControl() const
         { return pRefreshTimerControl; }
     ScRefreshTimerControl * const * GetRefreshTimerControlAddress() const
         { return &pRefreshTimerControl; }
-
-                    /// if symbol string cells of old binary file format are in list
-    BOOL            SymbolStringCellsPending() const;
-                    /// get list of ScSymbolStringCellEntry, create if necessary
-    List&           GetLoadedSymbolStringCellsList();
 
     void            SetPastingDrawFromOtherDoc( BOOL bVal )
                         { bPastingDrawFromOtherDoc = bVal; }
@@ -1715,10 +1667,7 @@ public:
                             { return eStorageGrammar; }
 
 private: // CLOOK-Impl-Methoden
-    void    ImplLoadDocOptions( SvStream& rStream );
-    void    ImplLoadViewOptions( SvStream& rStream );
-    void    ImplSaveDocOptions( SvStream& rStream ) const;
-    void    ImplSaveViewOptions( SvStream& rStream ) const;
+
     void    ImplCreateOptions(); // bei Gelegenheit auf on-demand umstellen?
     void    ImplDeleteOptions();
 
@@ -1735,8 +1684,6 @@ private: // CLOOK-Impl-Methoden
 
     void    LoadDdeLinks(SvStream& rStream);
     void    SaveDdeLinks(SvStream& rStream) const;
-    void    LoadAreaLinks(SvStream& rStream);
-    void    SaveAreaLinks(SvStream& rStream) const;
 
     void    DeleteAreaLinksOnTab( SCTAB nTab );
     void    UpdateRefAreaLinks( UpdateRefMode eUpdateRefMode,

@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: LabeledDataSequence.cxx,v $
- * $Revision: 1.4 $
+ * $Revision: 1.4.44.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -162,11 +162,6 @@ void SAL_CALL LabeledDataSequence::removeModifyListener( const Reference< util::
     {
         ASSERT_EXCEPTION( ex );
     }
-}
-
-void LabeledDataSequence::fireModifyEvent()
-{
-    m_xModifyEventForwarder->modified( lang::EventObject( static_cast< uno::XWeak* >( this )));
 }
 
 // ================================================================================

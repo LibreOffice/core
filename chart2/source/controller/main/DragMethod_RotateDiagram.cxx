@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: DragMethod_RotateDiagram.cxx,v $
- * $Revision: 1.6 $
+ * $Revision: 1.6.60.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -46,6 +46,9 @@
 #include <svx/scene3d.hxx>
 #include <basegfx/matrix/b3dhommatrix.hxx>
 #include <com/sun/star/beans/XPropertySet.hpp>
+#include <basegfx/polygon/b2dpolypolygontools.hxx>
+#include <svx/sdr/contact/viewcontactofe3dscene.hxx>
+#include <drawinglayer/geometry/viewinformation3d.hxx>
 
 #define FIXED_SIZE_FOR_3D_CHART_VOLUME (10000.0)
 
@@ -65,7 +68,7 @@ DragMethod_RotateDiagram::DragMethod_RotateDiagram( DrawViewWrapper& rDrawViewWr
     , m_pScene(0)
     , m_aReferenceRect(100,100,100,100)
     , m_aStartPos(0,0)
-    , m_aWireframePoly()
+    , m_aWireframePolyPolygon()
     , m_fInitialXAngleRad(0.0)
     , m_fInitialYAngleRad(0.0)
     , m_fInitialZAngleRad(0.0)
@@ -86,7 +89,7 @@ DragMethod_RotateDiagram::DragMethod_RotateDiagram( DrawViewWrapper& rDrawViewWr
         m_aReferenceRect = pObj->GetLogicRect();
         Rectangle aTemp = m_pScene->GetLogicRect();
 
-        m_pScene->CreateWireframe(m_aWireframePoly, NULL );
+        m_aWireframePolyPolygon = m_pScene->CreateWireframe();
 
         uno::Reference< chart2::XDiagram > xDiagram( ChartModelHelper::findDiagram(this->getChartModel()) );
         uno::Reference< beans::XPropertySet > xDiagramProperties( xDiagram, uno::UNO_QUERY );
@@ -193,26 +196,22 @@ void DragMethod_RotateDiagram::CreateOverlayGeometry(::sdr::overlay::OverlayMana
         aCurrentTransform.shearXY(fResultY,-(fResultX));
     }
 
-    const sal_uInt32 nPntCnt(m_aWireframePoly.count());
-     if(nPntCnt > 1L && m_pScene)
+    if(m_aWireframePolyPolygon.count() && m_pScene)
     {
-        B3dCamera& rCameraSet = m_pScene->GetCameraSet();
-        for(sal_uInt32 b(0L); b < nPntCnt; b += 2L)
-        {
-            ::basegfx::B2DPolygon aLine;
-            ::basegfx::B3DPoint aPnt1(aCurrentTransform * m_aWireframePoly.getB3DPoint(b));
-            aPnt1 = rCameraSet.WorldToViewCoor(aPnt1);
-            aLine.append(::basegfx::B2DPoint(aPnt1.getX(), aPnt1.getY()));
+        const sdr::contact::ViewContactOfE3dScene& rVCScene = static_cast< sdr::contact::ViewContactOfE3dScene& >(m_pScene->GetViewContact());
+        const drawinglayer::geometry::ViewInformation3D aViewInfo3D(rVCScene.getViewInformation3D());
+        const basegfx::B3DHomMatrix aWorldToView(aViewInfo3D.getDeviceToView() * aViewInfo3D.getProjection() * aViewInfo3D.getOrientation());
+        const basegfx::B3DHomMatrix aTransform(aWorldToView * aCurrentTransform);
 
-            ::basegfx::B3DPoint aPnt2(aCurrentTransform * m_aWireframePoly.getB3DPoint(b + 1L));
-            aPnt2 = rCameraSet.WorldToViewCoor(aPnt2);
-            aLine.append(::basegfx::B2DPoint(aPnt2.getX(), aPnt2.getY()));
+        // transform to relative scene coordinates
+        basegfx::B2DPolyPolygon aPolyPolygon(basegfx::tools::createB2DPolyPolygonFromB3DPolyPolygon(m_aWireframePolyPolygon, aTransform));
 
-            basegfx::B2DPolyPolygon aResult(aLine);
-            ::sdr::overlay::OverlayPolyPolygonStriped* pNew = new ::sdr::overlay::OverlayPolyPolygonStriped(aResult);
-            rOverlayManager.add(*pNew);
-            rOverlayList.append(*pNew);
-        }
+        // transform to 2D view coordinates
+        aPolyPolygon.transform(rVCScene.getObjectTransformation());
+
+        sdr::overlay::OverlayPolyPolygonStriped* pNew = new ::sdr::overlay::OverlayPolyPolygonStriped(aPolyPolygon);
+        rOverlayManager.add(*pNew);
+        rOverlayList.append(*pNew);
     }
 }
 

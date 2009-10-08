@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: colrowst.cxx,v $
- * $Revision: 1.34 $
+ * $Revision: 1.34.32.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -145,16 +145,6 @@ void XclImpColRowSettings::SetHeight( SCROW nScRow, sal_uInt16 nHeight )
     }
 }
 
-void XclImpColRowSettings::HideRow( SCROW nScRow )
-{
-    if( ValidRow( nScRow ) )
-    {
-        ::set_flag( maRowFlags[ nScRow ], static_cast< sal_uInt8 >( EXC_COLROW_USED | EXC_COLROW_HIDDEN ) );
-        if( nScRow > mnLastScRow )
-            mnLastScRow = nScRow;
-    }
-}
-
 void XclImpColRowSettings::SetRowSettings( SCROW nScRow, sal_uInt16 nHeight, sal_uInt16 nFlags )
 {
     if( ValidRow( nScRow ) )
@@ -166,6 +156,12 @@ void XclImpColRowSettings::SetRowSettings( SCROW nScRow, sal_uInt16 nHeight, sal
         if( ::get_flag( nFlags, EXC_ROW_HIDDEN ) )
             ::set_flag( rnFlags, EXC_COLROW_HIDDEN );
     }
+}
+
+void XclImpColRowSettings::SetManualRowHeight( SCROW nScRow )
+{
+    if( ValidRow( nScRow ) )
+        ::set_flag( maRowFlags[ nScRow ], EXC_COLROW_MAN );
 }
 
 void XclImpColRowSettings::SetDefaultXF( SCCOL nScCol1, SCCOL nScCol2, sal_uInt16 nXFIndex )

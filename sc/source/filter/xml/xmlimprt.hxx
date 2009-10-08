@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: xmlimprt.hxx,v $
- * $Revision: 1.97 $
+ * $Revision: 1.96.32.3 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -826,9 +826,9 @@ public:
 //  SvXMLImportContextRef           GetStyles() const { return xStyles; }
 
     const SvXMLTokenMap& GetDocElemTokenMap();
-    const SvXMLTokenMap& GetStylesElemTokenMap();
-    const SvXMLTokenMap& GetStylesAttrTokenMap();
-    const SvXMLTokenMap& GetStyleElemTokenMap();
+//UNUSED2008-05  const SvXMLTokenMap& GetStylesElemTokenMap();
+//UNUSED2008-05  const SvXMLTokenMap& GetStylesAttrTokenMap();
+//UNUSED2008-05  const SvXMLTokenMap& GetStyleElemTokenMap();
     const SvXMLTokenMap& GetBodyElemTokenMap();
     const SvXMLTokenMap& GetContentValidationsElemTokenMap();
     const SvXMLTokenMap& GetContentValidationElemTokenMap();
@@ -848,7 +848,7 @@ public:
     const SvXMLTokenMap& GetTableRowElemTokenMap();
     const SvXMLTokenMap& GetTableRowAttrTokenMap();
     const SvXMLTokenMap& GetTableRowCellElemTokenMap();
-    const SvXMLTokenMap& GetTableRowCellAttrTokenMap();
+//UNUSED2008-05  const SvXMLTokenMap& GetTableRowCellAttrTokenMap();
     const SvXMLTokenMap& GetTableAnnotationAttrTokenMap();
     const SvXMLTokenMap& GetDetectiveElemTokenMap();
     const SvXMLTokenMap& GetDetectiveHighlightedAttrTokenMap();

@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: GridWrapper.cxx,v $
- * $Revision: 1.3 $
+ * $Revision: 1.3.44.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -42,9 +42,7 @@
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 
 #include "LineProperties.hxx"
-// #include "NamedLineProperties.hxx"
 #include "UserDefinedProperties.hxx"
-// #include "WrappedNamedProperty.hxx"
 #include "WrappedDefaultProperty.hxx"
 
 #include <algorithm>
@@ -192,7 +190,6 @@ const std::vector< WrappedProperty* > GridWrapper::createWrappedProperties()
 {
     ::std::vector< ::chart::WrappedProperty* > aWrappedProperties;
 
-//     WrappedNamedProperty::addWrappedLineProperties( aWrappedProperties, m_spChart2ModelContact );
     aWrappedProperties.push_back( new WrappedDefaultProperty( C2U("LineColor"), C2U("LineColor"), uno::makeAny( sal_Int32( 0x000000) ) ) ); // black
 
     return aWrappedProperties;

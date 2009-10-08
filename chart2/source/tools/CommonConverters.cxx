@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: CommonConverters.cxx,v $
- * $Revision: 1.12 $
+ * $Revision: 1.12.44.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -129,21 +129,6 @@ drawing::HomogenMatrix3 B2DHomMatrixToHomogenMatrix3( const ::basegfx::B2DHomMat
     return aHM;
 }
 
-::basegfx::B2DHomMatrix HomogenMatrix3ToB2DHomMatrix( const drawing::HomogenMatrix3& rHM )
-{
-    ::basegfx::B2DHomMatrix aM;
-    aM.set(0, 0, rHM.Line1.Column1);
-    aM.set(0, 1, rHM.Line1.Column2);
-    aM.set(0, 2, rHM.Line1.Column3);
-    aM.set(1, 0, rHM.Line2.Column1);
-    aM.set(1, 1, rHM.Line2.Column2);
-    aM.set(1, 2, rHM.Line2.Column3);
-    aM.set(2, 0, rHM.Line3.Column1);
-    aM.set(2, 1, rHM.Line3.Column2);
-    aM.set(2, 2, rHM.Line3.Column3);
-    return aM;
-}
-
 ::basegfx::B3DPoint Position3DToB3DPoint( const drawing::Position3D& rPosition )
 {
     return ::basegfx::B3DPoint(
@@ -155,15 +140,6 @@ drawing::HomogenMatrix3 B2DHomMatrixToHomogenMatrix3( const ::basegfx::B2DHomMat
 drawing::Direction3D B3DVectorToDirection3D( const ::basegfx::B3DVector& rVector)
 {
     return drawing::Direction3D(
-          rVector.getX()
-        , rVector.getY()
-        , rVector.getZ()
-        );
-}
-
-drawing::Position3D B3DVectorToPosition3D( const ::basegfx::B3DVector& rVector)
-{
-    return drawing::Position3D(
           rVector.getX()
         , rVector.getY()
         , rVector.getZ()
@@ -182,6 +158,15 @@ drawing::Position3D B3DPointToPosition3D( const ::basegfx::B3DPoint& rPoint)
 ::basegfx::B3DPoint Direction3DToB3DPoint( const drawing::Direction3D& rDirection)
 {
     return ::basegfx::B3DPoint(
+          rDirection.DirectionX
+        , rDirection.DirectionY
+        , rDirection.DirectionZ
+        );
+}
+
+::basegfx::B3DVector Direction3DToB3DVector( const drawing::Direction3D& rDirection)
+{
+    return ::basegfx::B3DVector(
           rDirection.DirectionX
         , rDirection.DirectionY
         , rDirection.DirectionZ
@@ -467,31 +452,6 @@ drawing::PolyPolygonShape3D BezierToPoly(
     return aRet;
 }
 
-drawing::PolyPolygonShape3D PointSequenceToPoly(
-                const drawing::PointSequenceSequence& rPointSequence )
-{
-    drawing::PolyPolygonShape3D aRet;
-    aRet.SequenceX.realloc( rPointSequence.getLength() );
-    aRet.SequenceY.realloc( rPointSequence.getLength() );
-    aRet.SequenceZ.realloc( rPointSequence.getLength() );
-
-    for(sal_Int32 nN = 0; nN < rPointSequence.getLength(); nN++)
-    {
-        sal_Int32 nInnerLength = rPointSequence[nN].getLength();
-        aRet.SequenceX[nN].realloc( nInnerLength );
-        aRet.SequenceY[nN].realloc( nInnerLength );
-        aRet.SequenceZ[nN].realloc( nInnerLength );
-
-        for( sal_Int32 nM = 0; nM < nInnerLength; nM++)
-        {
-            aRet.SequenceX[nN][nM] = rPointSequence[nN][nM].X;
-            aRet.SequenceY[nN][nM] = rPointSequence[nN][nM].Y;
-            aRet.SequenceZ[nN][nM] = 0.0;
-        }
-    }
-    return aRet;
-}
-
 drawing::PointSequenceSequence PolyToPointSequence(
                 const drawing::PolyPolygonShape3D& rPolyPolygon )
 {
@@ -522,66 +482,6 @@ void appendPointSequence( drawing::PointSequenceSequence& rTarget
     rTarget.realloc(nOldCount+nAddCount);
     for(sal_Int32 nS=0; nS<nAddCount; nS++ )
         rTarget[nOldCount+nS]=rAdd[nS];
-}
-
-Polygon PolyToToolsPoly( const drawing::PolyPolygonShape3D& rPolyPolygon )
-{
-    sal_Int32 nOuterLength = rPolyPolygon.SequenceX.getLength();
-    if(!nOuterLength)
-        return Polygon();
-
-    sal_Int32 nNewSize = nOuterLength;
-    sal_Int32 nNewIndex = 0;
-    Polygon aRet(static_cast<USHORT>(nNewSize));
-
-    for(sal_Int32 nN = 0; nN < nOuterLength; nN++)
-    {
-        sal_Int32 nInnerLength = rPolyPolygon.SequenceX[nN].getLength();
-        nNewSize += nInnerLength-1,
-        aRet.SetSize(static_cast<USHORT>(nNewSize));
-        for( sal_Int32 nM = 0; nM < nInnerLength; nM++)
-        {
-            aRet.SetPoint( Point( static_cast<long>(rPolyPolygon.SequenceX[nN][nM])
-                                , static_cast<long>(rPolyPolygon.SequenceY[nN][nM])
-                                )
-                                , static_cast<USHORT>(nNewIndex) );
-            nNewIndex++;
-        }
-    }
-    return aRet;
-}
-
-drawing::PolyPolygonShape3D ToolsPolyToPoly( const Polygon& rToolsPoly, double zValue )
-{
-    sal_Int32 nPointCount = rToolsPoly.GetSize();
-
-    drawing::PolyPolygonShape3D aPP;
-
-    aPP.SequenceX.realloc(1);
-    aPP.SequenceY.realloc(1);
-    aPP.SequenceZ.realloc(1);
-
-    drawing::DoubleSequence* pOuterSequenceX = aPP.SequenceX.getArray();
-    drawing::DoubleSequence* pOuterSequenceY = aPP.SequenceY.getArray();
-    drawing::DoubleSequence* pOuterSequenceZ = aPP.SequenceZ.getArray();
-
-    pOuterSequenceX->realloc(nPointCount);
-    pOuterSequenceY->realloc(nPointCount);
-    pOuterSequenceZ->realloc(nPointCount);
-
-    double* pInnerSequenceX = pOuterSequenceX->getArray();
-    double* pInnerSequenceY = pOuterSequenceY->getArray();
-    double* pInnerSequenceZ = pOuterSequenceZ->getArray();
-
-    for( sal_Int32 nN = 0; nN<nPointCount; nN++ )
-    {
-        const Point& rPos = rToolsPoly.GetPoint( static_cast<USHORT>(nN) );
-        *pInnerSequenceX++ = rPos.X();
-        *pInnerSequenceY++ = rPos.Y();
-        *pInnerSequenceZ++ = zValue;
-    }
-
-    return aPP;
 }
 
 drawing::Position3D  operator+( const drawing::Position3D& rPos
@@ -668,18 +568,6 @@ awt::Size Direction3DToAWTSize( const drawing::Direction3D& rDirection )
     return aRet;
 }
 
-::basegfx::B3DPoint SequenceToB3DPoint( const uno::Sequence< double >& rSeq )
-{
-    OSL_ENSURE(rSeq.getLength()==3,"The sequence needs to have length 3 for conversion into vector");
-
-    double x=rSeq.getLength()>0?rSeq[0]:0.0;
-    double y=rSeq.getLength()>1?rSeq[1]:0.0;
-    double z=rSeq.getLength()>2?rSeq[2]:0.0;
-
-    ::basegfx::B3DPoint aRet(x,y,z);
-    return aRet;
-}
-
 uno::Sequence< double > B3DPointToSequence( const ::basegfx::B3DPoint& rPoint )
 {
     uno::Sequence< double > aRet(3);
@@ -709,24 +597,6 @@ uno::Sequence< double > Position3DToSequence( const drawing::Position3D& rPositi
     return aRet;
 }
 
-drawing::Direction3D SequenceToDirection3D( const uno::Sequence< double >& rSeq )
-{
-    drawing::Direction3D aRet;
-    aRet.DirectionX = rSeq.getLength()>0?rSeq[0]:0.0;
-    aRet.DirectionY = rSeq.getLength()>1?rSeq[1]:0.0;
-    aRet.DirectionZ = rSeq.getLength()>2?rSeq[2]:0.0;
-    return aRet;
-}
-
-uno::Sequence< double > Direction3DToSequence( const drawing::Direction3D& rDirection )
-{
-    uno::Sequence< double > aRet(3);
-    aRet[0] = rDirection.DirectionX;
-    aRet[1] = rDirection.DirectionY;
-    aRet[2] = rDirection.DirectionZ;
-    return aRet;
-}
-
 drawing::Direction3D operator/( const drawing::Direction3D& rDirection, double f )
 {
     OSL_ENSURE(f,"a Direction3D is divided by NULL");
@@ -735,21 +605,6 @@ drawing::Direction3D operator/( const drawing::Direction3D& rDirection, double f
         , rDirection.DirectionY/f
         , rDirection.DirectionZ/f
         );
-}
-
-text::WritingMode WritingMode2ToWritingMode1( sal_Int16 nWritingMode2 )
-{
-    switch(nWritingMode2)
-    {
-        case text::WritingMode2::RL_TB:
-            return  text::WritingMode_RL_TB;
-        case text::WritingMode2::TB_RL:
-            return  text::WritingMode_TB_RL;
-        case text::WritingMode2::LR_TB:
-            return  text::WritingMode_LR_TB;
-        default: // TL
-            return  text::WritingMode_TB_RL;//there can no correct conversion be done here
-    }
 }
 
 using namespace ::com::sun::star::chart2;

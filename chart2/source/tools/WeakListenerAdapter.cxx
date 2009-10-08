@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: WeakListenerAdapter.cxx,v $
- * $Revision: 1.3 $
+ * $Revision: 1.3.44.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -43,11 +43,6 @@ namespace chart
 {
 
 WeakModifyListenerAdapter::WeakModifyListenerAdapter(
-    const Reference< util::XModifyListener > & xListener ) :
-        WeakListenerAdapter< ::com::sun::star::util::XModifyListener >( xListener )
-{}
-
-WeakModifyListenerAdapter::WeakModifyListenerAdapter(
     const uno::WeakReference< util::XModifyListener > & xListener ) :
         WeakListenerAdapter< ::com::sun::star::util::XModifyListener >( xListener )
 {}
@@ -67,11 +62,6 @@ void SAL_CALL WeakModifyListenerAdapter::modified( const lang::EventObject& aEve
 
 WeakSelectionChangeListenerAdapter::WeakSelectionChangeListenerAdapter(
     const Reference< view::XSelectionChangeListener > & xListener ) :
-        WeakListenerAdapter< ::com::sun::star::view::XSelectionChangeListener >( xListener )
-{}
-
-WeakSelectionChangeListenerAdapter::WeakSelectionChangeListenerAdapter(
-    const uno::WeakReference< view::XSelectionChangeListener > & xListener ) :
         WeakListenerAdapter< ::com::sun::star::view::XSelectionChangeListener >( xListener )
 {}
 

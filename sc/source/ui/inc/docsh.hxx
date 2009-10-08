@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: docsh.hxx,v $
- * $Revision: 1.50 $
+ * $Revision: 1.50.32.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -59,7 +59,9 @@ class INetURLObject;
 class ScPaintItem;
 class ScViewData;
 class ScDocFunc;
+#if OLD_PIVOT_IMPLEMENTATION
 class ScPivot;
+#endif
 class ScDrawLayer;
 class ScTabViewShell;
 class ScSbxDocHelper;
@@ -133,14 +135,9 @@ class SC_DLLPUBLIC ScDocShell: public SfxObjectShell, public SfxListener
     SC_DLLPRIVATE void          InitOptions();
     SC_DLLPRIVATE void          ResetDrawObjectShell();
 
-    SC_DLLPRIVATE BOOL          GetTabParam( const SfxItemSet* pArgs, USHORT nId, SCTAB& rTab );
-    //BOOL            LoadCalc( SotStorage* pStor );
-    //BOOL            SaveCalc( SotStorage* pStor );
     SC_DLLPRIVATE BOOL            LoadXML( SfxMedium* pMedium, const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& );
     SC_DLLPRIVATE BOOL            SaveXML( SfxMedium* pMedium, const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& );
     SC_DLLPRIVATE SCTAB         GetSaveTab();
-
-    SC_DLLPRIVATE void          RemoveUnknownObjects();
 
     SC_DLLPRIVATE ULONG         DBaseImport( const String& rFullFileName, CharSet eCharSet,
                                  BOOL bSimpleColWidth[MAXCOLCOUNT] );
@@ -161,8 +158,7 @@ class SC_DLLPUBLIC ScDocShell: public SfxObjectShell, public SfxListener
 
 protected:
 
-    virtual void SFX_NOTIFY( SfxBroadcaster& rBC, const TypeId& rBCType,
-                         const SfxHint& rHint, const TypeId& rHintType );
+    virtual void Notify( SfxBroadcaster& rBC, const SfxHint& rHint );
 
 public:
                     TYPEINFO();
@@ -281,8 +277,10 @@ public:
     BOOL            AdjustRowHeight( SCROW nStartRow, SCROW nEndRow, SCTAB nTab );
     void            UpdateAllRowHeights();
 
+#if OLD_PIVOT_IMPLEMENTATION
     void            PivotUpdate( ScPivot* pOldPivot, ScPivot* pNewPivot,
                                     BOOL bRecord = TRUE, BOOL bApi = FALSE );
+#endif
     void            RefreshPivotTables( const ScRange& rSource );
     void            DoConsolidate( const ScConsolidateParam& rParam, BOOL bRecord = TRUE );
     void            UseScenario( SCTAB nTab, const String& rName, BOOL bRecord = TRUE );

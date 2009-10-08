@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: appoptio.cxx,v $
- * $Revision: 1.12 $
+ * $Revision: 1.12.32.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -139,117 +139,6 @@ const ScAppOptions& ScAppOptions::operator=( const ScAppOptions& rCpy )
     nDefaultObjectSizeHeight = rCpy.nDefaultObjectSizeHeight;
     mbShowSharedDocumentWarning = rCpy.mbShowSharedDocumentWarning;
     return *this;
-}
-
-//------------------------------------------------------------------------
-
-SvStream& operator>>( SvStream& rStream, ScAppOptions& rOpt )
-{
-    rOpt.SetDefaults();
-
-    ScReadHeader aHdr( rStream );
-
-    BYTE n;
-    rStream >> n; rOpt.eMetric = (FieldUnit)n;
-
-    if ( aHdr.BytesLeft() )
-    {
-        rStream >> n; rOpt.nLRUFuncCount = (USHORT)n;
-
-        delete [] rOpt.pLRUList;
-        rOpt.pLRUList = new USHORT[rOpt.nLRUFuncCount];
-
-        for ( USHORT i=0; i<rOpt.nLRUFuncCount; i++ )
-            rStream >> rOpt.pLRUList[i];
-    }
-
-    // ab 31.10.95: globale benutzerdefinierte Listen einlesen :-/
-    //              (kleiner Hack :-/)
-    if ( aHdr.BytesLeft() )
-    {
-        ScUserList* pUserList = ScGlobal::GetUserList();
-        pUserList->Load( rStream );
-    }
-
-    // ab 11.12.95 (304)
-    // Zoom-Faktor
-    if ( aHdr.BytesLeft() )
-    {
-        USHORT e;
-        rStream >> e; rOpt.eZoomType = (SvxZoomType)e;
-        rStream >> rOpt.nZoom;
-    }
-
-    // ab 23.5.96: Funktion fuer Statusbar-Controller, Flag fuer Auto-Eingabe
-    if ( aHdr.BytesLeft() )
-    {
-        rStream >> rOpt.nStatusFunc;
-        rStream >> rOpt.bAutoComplete;
-    }
-
-    // ab 15.3.98: Farben fuer Change-Tracking
-    if ( aHdr.BytesLeft() )
-    {
-        rStream >> rOpt.nTrackContentColor;
-        rStream >> rOpt.nTrackInsertColor;
-        rStream >> rOpt.nTrackDeleteColor;
-        rStream >> rOpt.nTrackMoveColor;
-    }
-
-    // ab 22.6.98: Automatisches Detektiv-Update
-    if ( aHdr.BytesLeft() )
-        rStream >> rOpt.bDetectiveAuto;
-
-    if ( aHdr.BytesLeft() )
-    {
-        BYTE nLinkMode;
-        rStream >> nLinkMode;
-        rOpt.eLinkMode=(ScLkUpdMode) nLinkMode;
-    }
-
-    return rStream;
-}
-
-//------------------------------------------------------------------------
-
-SvStream& operator<<( SvStream& rStream, const ScAppOptions& rOpt )
-{
-    ScWriteHeader aHdr( rStream, 25 );
-
-    rStream << (BYTE)rOpt.eMetric;
-    rStream << (BYTE)rOpt.nLRUFuncCount;
-
-    if ( rOpt.nLRUFuncCount > 0 )
-    {
-        for ( USHORT i=0; i<rOpt.nLRUFuncCount; i++ )
-            rStream << rOpt.pLRUList[i];
-    }
-
-    // ab 31.10.95: globale benutzerdefinierte Listen speichern
-    //              (kleiner Hack :-/)
-    ScUserList* pUserList = ScGlobal::GetUserList();
-    pUserList->Store( rStream );
-
-    // ab 11.12.95 (304)
-    // Zoom-Faktor
-    rStream << (USHORT)rOpt.eZoomType;
-    rStream << rOpt.nZoom;
-
-    // ab 23.5.96: Funktion fuer Statusbar-Controller, Flag fuer Auto-Eingabe
-    rStream << rOpt.nStatusFunc;
-    rStream << rOpt.bAutoComplete;
-
-    // ab 15.3.98: Farben fuer Change-Tracking
-    rStream << rOpt.nTrackContentColor;
-    rStream << rOpt.nTrackInsertColor;
-    rStream << rOpt.nTrackDeleteColor;
-    rStream << rOpt.nTrackMoveColor;
-
-    // ab 22.6.98: Automatisches Detektiv-Update
-    rStream << rOpt.bDetectiveAuto;
-    rStream << (BYTE) rOpt.eLinkMode;
-
-    return rStream;
 }
 
 //------------------------------------------------------------------------

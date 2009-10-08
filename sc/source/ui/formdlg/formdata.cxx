@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: formdata.cxx,v $
- * $Revision: 1.6 $
+ * $Revision: 1.6.32.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -91,18 +91,6 @@ void ScFormEditData::SaveValues()
 
     Reset();
     pParent = pTemp;
-}
-
-void ScFormEditData::RestoreValues()
-{
-    ScFormEditData* pTemp = pParent;
-    DBG_ASSERT(pTemp,"RestoreValues ohne Parent");
-    if (pTemp)
-    {
-        *this = *pTemp;
-        pTemp->pParent = NULL;      // sonst wird der auch geloescht!
-        delete pTemp;
-    }
 }
 
 

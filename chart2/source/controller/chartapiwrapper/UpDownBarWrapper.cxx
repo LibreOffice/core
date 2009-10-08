@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: UpDownBarWrapper.cxx,v $
- * $Revision: 1.4 $
+ * $Revision: 1.4.44.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -103,11 +103,6 @@ UpDownBarWrapper::UpDownBarWrapper(
         , m_aPropertySetName( bUp ? C2U("WhiteDay") : C2U("BlackDay") )
         , m_xInfo(0)
         , m_pPropertyArrayHelper()
-//        , m_aWrappedFillGradientNameProperty( m_spChart2ModelContact )
-//        , m_aWrappedFillHatchNameProperty( m_spChart2ModelContact )
-//        , m_aWrappedFillBitmapNameProperty( m_spChart2ModelContact )
-//        , m_aWrappedFillTransparenceGradientNameProperty( m_spChart2ModelContact )
-//        , m_aWrappedLineDashNameProperty( m_spChart2ModelContact )
 {
 }
 
@@ -192,20 +187,7 @@ void SAL_CALL UpDownBarWrapper::setPropertyValue( const ::rtl::OUString& rProper
         }
     }
     if(xPropSet.is())
-    {
-//        if( rPropertyName.equals( m_aWrappedFillGradientNameProperty.getOuterName() ) )
-//            m_aWrappedFillGradientNameProperty.setPropertyValue( rValue, xPropSet );
-//        else if( rPropertyName.equals( m_aWrappedFillHatchNameProperty.getOuterName() ) )
-//            m_aWrappedFillHatchNameProperty.setPropertyValue( rValue, xPropSet );
-//        else if( rPropertyName.equals( m_aWrappedFillBitmapNameProperty.getOuterName() ) )
-//            m_aWrappedFillBitmapNameProperty.setPropertyValue( rValue, xPropSet );
-//        else if( rPropertyName.equals( m_aWrappedFillTransparenceGradientNameProperty.getOuterName() ) )
-//            m_aWrappedFillTransparenceGradientNameProperty.setPropertyValue( rValue, xPropSet );
-//        else if( rPropertyName.equals( m_aWrappedLineDashNameProperty.getOuterName() ) )
-//            m_aWrappedLineDashNameProperty.setPropertyValue( rValue, xPropSet );
-//        else
         xPropSet->setPropertyValue( rPropertyName, rValue );
-    }
 }
 uno::Any SAL_CALL UpDownBarWrapper::getPropertyValue( const ::rtl::OUString& rPropertyName )
                     throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
@@ -229,20 +211,7 @@ uno::Any SAL_CALL UpDownBarWrapper::getPropertyValue( const ::rtl::OUString& rPr
         }
     }
     if(xPropSet.is())
-    {
-//        if( rPropertyName.equals( m_aWrappedFillGradientNameProperty.getOuterName() ) )
-//            aRet = m_aWrappedFillGradientNameProperty.getPropertyValue( xPropSet );
-//        else if( rPropertyName.equals( m_aWrappedFillHatchNameProperty.getOuterName() ) )
-//            aRet = m_aWrappedFillHatchNameProperty.getPropertyValue( xPropSet );
-//        else if( rPropertyName.equals( m_aWrappedFillBitmapNameProperty.getOuterName() ) )
-//            aRet = m_aWrappedFillBitmapNameProperty.getPropertyValue( xPropSet );
-//        else if( rPropertyName.equals( m_aWrappedFillTransparenceGradientNameProperty.getOuterName() ) )
-//            aRet = m_aWrappedFillTransparenceGradientNameProperty.getPropertyValue( xPropSet );
-//        else if( rPropertyName.equals( m_aWrappedLineDashNameProperty.getOuterName() ) )
-//            aRet = m_aWrappedLineDashNameProperty.getPropertyValue( xPropSet );
-//        else
         aRet = xPropSet->getPropertyValue( rPropertyName );
-    }
     return aRet;
 }
 

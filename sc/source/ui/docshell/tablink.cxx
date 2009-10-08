@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: tablink.cxx,v $
- * $Revision: 1.31 $
+ * $Revision: 1.31.32.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -311,7 +311,6 @@ BOOL ScTableLink::Refresh(const String& rNewFile, const String& rNewFilter,
             else
             {
                 pDoc->DeleteAreaTab( 0,0,MAXCOL,MAXROW, nTab, IDF_ALL );
-//              pDoc->ClearDrawPage(nTab);
 
                 bool bShowError = true;
                 if ( nMode == SC_LINK_VALUE )

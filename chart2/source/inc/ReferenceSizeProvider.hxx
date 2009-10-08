@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: ReferenceSizeProvider.hxx,v $
- * $Revision: 1.3 $
+ * $Revision: 1.3.44.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -57,20 +57,12 @@ public:
         AUTO_RESIZE_UNKNOWN
     };
 
-    enum ReferenceSizeType
-    {
-        REF_PAGE,
-        REF_DIAGRAM
-    };
-
     ReferenceSizeProvider(
         ::com::sun::star::awt::Size aPageSize,
-        ::com::sun::star::awt::Size aDiagramSize,
         const ::com::sun::star::uno::Reference<
             ::com::sun::star::chart2::XChartDocument > & xChartDoc );
 
     ::com::sun::star::awt::Size getPageSize() const;
-    ::com::sun::star::awt::Size getDiagramSize() const;
     bool useAutoScale() const;
 
     /** Retrieves the state auto-resize from all objects that support this
@@ -102,17 +94,13 @@ public:
     */
     void setAutoResizeState( AutoResizeState eNewState );
 
-
-
     /** Sets the ReferencePageSize according to the internal settings of this
         class at the XPropertySet, and the adapted font sizes if bAdaptFontSizes
-        is </TRUE>.  The type determines whether the diagram or the page is used
-        for reference.
+        is </TRUE>.
      */
     void setValuesAtPropertySet(
         const ::com::sun::star::uno::Reference<
             ::com::sun::star::beans::XPropertySet > & xProp,
-        ReferenceSizeType eType,
         bool bAdaptFontSizes = true );
 
     /** Sets the ReferencePageSize according to the internal settings of this
@@ -125,8 +113,7 @@ public:
 
     /** Sets the internal value at all data series in the currently set model.
         This is useful, if you have changed a chart-type and thus probably added
-        some new data series via model functionality (which does not know the
-        diagram size).
+        some new data series via model functionality.
      */
     void setValuesAtAllDataSeries();
 
@@ -140,7 +127,6 @@ public:
     static void getAutoResizeFromPropSet(
         const ::com::sun::star::uno::Reference<
             ::com::sun::star::beans::XPropertySet > & xProp,
-        ReferenceSizeType eType,
         AutoResizeState & rInOutState );
 
     /** calls getAutoResizeFromPropSet with the title's property set
@@ -160,7 +146,6 @@ private:
         AutoResizeState & rInOutState );
 
     ::com::sun::star::awt::Size m_aPageSize;
-    ::com::sun::star::awt::Size m_aDiagramSize;
     ::com::sun::star::uno::Reference<
             ::com::sun::star::chart2::XChartDocument > m_xChartDoc;
     bool      m_bUseAutoScale;

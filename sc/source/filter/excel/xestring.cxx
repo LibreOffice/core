@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: xestring.cxx,v $
- * $Revision: 1.13 $
+ * $Revision: 1.13.32.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -118,24 +118,24 @@ XclExpString::XclExpString( const String& rString, XclStrFlags nFlags, sal_uInt1
     Assign( rString, nFlags, nMaxLen );
 }
 
-XclExpString::XclExpString(
-    const String& rString, const XclFormatRunVec& rFormats,
-    XclStrFlags nFlags, sal_uInt16 nMaxLen )
-{
-    Assign( rString, rFormats, nFlags, nMaxLen );
-}
-
 XclExpString::XclExpString( const OUString& rString, XclStrFlags nFlags, sal_uInt16 nMaxLen )
 {
     Assign( rString, nFlags, nMaxLen );
 }
 
-XclExpString::XclExpString(
-        const OUString& rString, const XclFormatRunVec& rFormats,
-        XclStrFlags nFlags, sal_uInt16 nMaxLen )
-{
-    Assign( rString, rFormats, nFlags, nMaxLen );
-}
+//UNUSED2008-05  XclExpString::XclExpString(
+//UNUSED2008-05      const String& rString, const XclFormatRunVec& rFormats,
+//UNUSED2008-05      XclStrFlags nFlags, sal_uInt16 nMaxLen )
+//UNUSED2008-05  {
+//UNUSED2008-05      Assign( rString, rFormats, nFlags, nMaxLen );
+//UNUSED2008-05  }
+//UNUSED2008-05
+//UNUSED2008-05  XclExpString::XclExpString(
+//UNUSED2008-05          const OUString& rString, const XclFormatRunVec& rFormats,
+//UNUSED2008-05          XclStrFlags nFlags, sal_uInt16 nMaxLen )
+//UNUSED2008-05  {
+//UNUSED2008-05      Assign( rString, rFormats, nFlags, nMaxLen );
+//UNUSED2008-05  }
 
 // assign ---------------------------------------------------------------------
 
@@ -177,19 +177,19 @@ void XclExpString::AssignByte(
     Build( aByteStr.GetBuffer(), aByteStr.Len(), nFlags, nMaxLen );
 }
 
-void XclExpString::AssignByte( sal_Unicode cChar, rtl_TextEncoding eTextEnc, XclStrFlags nFlags, sal_uInt16 nMaxLen )
-{
-    if( !cChar )
-    {
-        sal_Char cByteChar = 0;
-        Build( &cByteChar, 1, nFlags, nMaxLen );
-    }
-    else
-    {
-        ByteString aByteStr( &cChar, 1, eTextEnc );     // length may be >1
-        Build( aByteStr.GetBuffer(), aByteStr.Len(), nFlags, nMaxLen );
-    }
-}
+//UNUSED2008-05  void XclExpString::AssignByte( sal_Unicode cChar, rtl_TextEncoding eTextEnc, XclStrFlags nFlags, sal_uInt16 nMaxLen )
+//UNUSED2008-05  {
+//UNUSED2008-05      if( !cChar )
+//UNUSED2008-05      {
+//UNUSED2008-05          sal_Char cByteChar = 0;
+//UNUSED2008-05          Build( &cByteChar, 1, nFlags, nMaxLen );
+//UNUSED2008-05      }
+//UNUSED2008-05      else
+//UNUSED2008-05      {
+//UNUSED2008-05          ByteString aByteStr( &cChar, 1, eTextEnc );     // length may be >1
+//UNUSED2008-05          Build( aByteStr.GetBuffer(), aByteStr.Len(), nFlags, nMaxLen );
+//UNUSED2008-05      }
+//UNUSED2008-05  }
 
 // append ---------------------------------------------------------------------
 
@@ -198,20 +198,23 @@ void XclExpString::Append( const String& rString )
     BuildAppend( rString.GetBuffer(), rString.Len() );
 }
 
-void XclExpString::Append( const ::rtl::OUString& rString )
-{
-    BuildAppend( rString.getStr(), rString.getLength() );
-}
-
-void XclExpString::Append( sal_Unicode cChar )
-{
-    BuildAppend( &cChar, 1 );
-}
+//UNUSED2008-05  void XclExpString::Append( const ::rtl::OUString& rString )
+//UNUSED2008-05  {
+//UNUSED2008-05      BuildAppend( rString.getStr(), rString.getLength() );
+//UNUSED2008-05  }
+//UNUSED2008-05
+//UNUSED2008-05  void XclExpString::Append( sal_Unicode cChar )
+//UNUSED2008-05  {
+//UNUSED2008-05      BuildAppend( &cChar, 1 );
+//UNUSED2008-05  }
 
 void XclExpString::AppendByte( const String& rString, rtl_TextEncoding eTextEnc )
 {
-    ByteString aByteStr( rString, eTextEnc );   // length may differ from length of rString
-    BuildAppend( aByteStr.GetBuffer(), aByteStr.Len() );
+    if( rString.Len() > 0 )
+    {
+        ByteString aByteStr( rString, eTextEnc );   // length may differ from length of rString
+        BuildAppend( aByteStr.GetBuffer(), aByteStr.Len() );
+    }
 }
 
 void XclExpString::AppendByte( sal_Unicode cChar, rtl_TextEncoding eTextEnc )

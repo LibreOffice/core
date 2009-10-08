@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: DragMethod_RotateDiagram.hxx,v $
- * $Revision: 1.5 $
+ * $Revision: 1.5.60.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -32,8 +32,8 @@
 
 #include "DragMethod_Base.hxx"
 
-// header for class ::basegfx::B3DPolygon
-#include <basegfx/polygon/b3dpolygon.hxx>
+// header for class ::basegfx::B3DPolyPolygon
+#include <basegfx/polygon/b3dpolypolygon.hxx>
 
 namespace chart
 {
@@ -68,7 +68,7 @@ private:
 
     Rectangle   m_aReferenceRect;
     Point       m_aStartPos;
-    ::basegfx::B3DPolygon m_aWireframePoly;
+    basegfx::B3DPolyPolygon m_aWireframePolyPolygon;
 
     double      m_fInitialXAngleRad;
     double      m_fInitialYAngleRad;

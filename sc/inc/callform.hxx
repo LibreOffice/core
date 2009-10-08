@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: callform.hxx,v $
- * $Revision: 1.3 $
+ * $Revision: 1.3.32.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -98,7 +98,6 @@ public:
             ParamType   GetReturnType() const { return eParamType[0]; }
             ParamType   GetAsyncType() const { return eAsyncType; }
             BOOL        Call(void** ppParam);
-            BOOL        Advice(AdvData pfCallback);
             BOOL        Unadvice(double nHandle);
 
                         // Name und Beschreibung des Parameters nParam.

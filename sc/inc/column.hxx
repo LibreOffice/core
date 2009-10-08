@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: column.hxx,v $
- * $Revision: 1.21 $
+ * $Revision: 1.21.32.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -143,7 +143,6 @@ public:
     void        DeleteAtIndex( SCSIZE nIndex );
     void        FreeAll();
     void        Resize( SCSIZE nSize );
-    void        SetNewRow( SCROW nRow1, SCROW nRow2 );
     void        SwapRow( SCROW nRow1, SCROW nRow2 );
     void        SwapCell( SCROW nRow, ScColumn& rCol);
 
@@ -179,12 +178,6 @@ public:
     USHORT      GetBlockMatrixEdges( SCROW nRow1, SCROW nRow2, USHORT nMask ) const;
     BOOL        HasSelectionMatrixFragment(const ScMarkData& rMark) const;
 
-                // Daten oder Attribute:
-    SCROW       GetFirstEntryPos() const;
-    SCROW       GetLastEntryPos() const;
-
-                // nur Attribute:
-    SCROW       GetLastAttrPos() const;
     BOOL        GetFirstVisibleAttr( SCROW& rFirstRow ) const;
     BOOL        GetLastVisibleAttr( SCROW& rLastRow ) const;
     BOOL        HasVisibleAttrIn( SCROW nStartRow, SCROW nEndRow ) const;
@@ -379,16 +372,8 @@ public:
     void        GetFilterEntries(SCROW nStartRow, SCROW nEndRow, TypedStrCollection& rStrings);
     BOOL        GetDataEntries(SCROW nRow, TypedStrCollection& rStrings, BOOL bLimit);
 
-    SCROW       NoteCount( SCROW nMaxRow = MAXROW ) const;
+//UNUSED2008-05  SCROW      NoteCount( SCROW nMaxRow = MAXROW ) const;
 
-    void        LoadData( SvStream& rStream );
-    void        SaveData( SvStream& rStream ) const;
-
-    void        LoadNotes( SvStream& rStream );
-    void        SaveNotes( SvStream& rStream ) const;
-
-    BOOL        Load( SvStream& rStream, ScMultipleReadHeader& rHdr );
-    BOOL        Save( SvStream& rStream, ScMultipleWriteHeader& rHdr ) const;
     void        UpdateInsertTabAbs(SCTAB nNewPos);
     BOOL        TestTabRefAbs(SCTAB nTable);
     BOOL        GetNextSpellingCell(SCROW& nRow, BOOL bInSel, const ScMarkData& rData) const;
@@ -414,7 +399,7 @@ public:
 private:
     ScBaseCell* CloneCell(SCSIZE nIndex, USHORT nFlags,
                             ScDocument* pDestDoc, const ScAddress& rDestPos);
-    void        CorrectSymbolCells( CharSet eStreamCharSet );
+//UNUSED2008-05  void       CorrectSymbolCells( CharSet eStreamCharSet );
 };
 
 

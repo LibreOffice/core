@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: xistring.cxx,v $
- * $Revision: 1.5 $
+ * $Revision: 1.5.90.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -143,6 +143,21 @@ void XclImpString::ReadFormats( XclImpStream& rStrm, XclFormatRunVec& rFormats, 
             rStrm >> nChar >> nFontIdx;
             AppendFormat( rFormats, nChar, nFontIdx );
         }
+    }
+}
+
+void XclImpString::ReadObjFormats( XclImpStream& rStrm, XclFormatRunVec& rFormats, sal_uInt16 nFormatSize )
+{
+    // number of formatting runs, each takes 8 bytes
+    sal_uInt16 nRunCount = nFormatSize / 8;
+    rFormats.clear();
+    rFormats.reserve( nRunCount );
+    for( sal_uInt16 nIdx = 0; nIdx < nRunCount; ++nIdx )
+    {
+        sal_uInt16 nChar, nFontIdx;
+        rStrm >> nChar >> nFontIdx;
+        rStrm.Ignore( 4 );
+        AppendFormat( rFormats, nChar, nFontIdx );
     }
 }
 

@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: XMLStylesImportHelper.cxx,v $
- * $Revision: 1.22 $
+ * $Revision: 1.22.32.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -529,19 +529,6 @@ void ScMyStylesImportHelper::AddRange(const ScRange& rRange)
         ResetAttributes();
         bPrevRangeAdded = sal_False;
     }
-}
-
-void ScMyStylesImportHelper::AddRange(const com::sun::star::table::CellRangeAddress& rRange)
-{
-    ScRange aScRange( static_cast<SCCOL>(rRange.StartColumn), static_cast<SCROW>(rRange.StartRow), rRange.Sheet,
-        static_cast<SCCOL>(rRange.EndColumn), static_cast<SCROW>(rRange.EndRow), rRange.Sheet );
-    AddRange(aScRange);
-}
-
-void ScMyStylesImportHelper::AddCell(const ScAddress& rAddress)
-{
-    ScRange aScRange( rAddress, rAddress );
-    AddRange(aScRange);
 }
 
 void ScMyStylesImportHelper::AddCell(const com::sun::star::table::CellAddress& rAddress)

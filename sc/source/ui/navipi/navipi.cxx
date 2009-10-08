@@ -670,8 +670,8 @@ ScNavigatorDlg::ScNavigatorDlg( SfxBindings* pB, SfxChildWindowContext* pCW, Win
         aEdRow      ( this, ScResId( ED_ROW ) ),
         aTbxCmd     ( this, ScResId( TBX_CMD ) ),
         aLbEntries  ( this, ScResId( LB_ENTRIES ) ),
-        aLbDocuments( this, ScResId( LB_DOCUMENTS ) ),
         aWndScenarios( this,ScResId( STR_QHLP_SCEN_LISTBOX), ScResId(STR_QHLP_SCEN_COMMENT)),
+        aLbDocuments( this, ScResId( LB_DOCUMENTS ) ),
         aStrDragMode ( ScResId( STR_DRAGMODE ) ),
         aStrDisplay  ( ScResId( STR_DISPLAY ) ),
         aStrActiveWin( ScResId( STR_ACTIVEWIN ) ),
@@ -1004,56 +1004,6 @@ void ScNavigatorDlg::CursorPosChanged()
 
 //  if ( GetDBAtCursor( aStrDbName ) )
 //  if ( GetAreaAtCursor( aStrAreaName ) )
-}
-
-//------------------------------------------------------------------------
-
-BOOL ScNavigatorDlg::GetDBAtCursor( String& rStrName )
-{
-    BOOL bFound = FALSE;
-
-    if ( GetViewData() )
-    {
-        SCCOL nCol = aEdCol.GetCol();
-        SCROW nRow = aEdRow.GetRow();
-
-        if ( nCol > 0 && nRow > 0 )
-        {
-            ScDocument* pDoc  = pViewData->GetDocument();
-            ScDBData*   pData = pDoc->GetDBAtCursor( nCol-1, nRow-1, pViewData->GetTabNo() );
-
-            bFound = ( pData != NULL );
-            if ( bFound )
-                pData->GetName( rStrName );
-        }
-    }
-
-    return bFound;
-}
-
-//------------------------------------------------------------------------
-
-BOOL ScNavigatorDlg::GetAreaAtCursor( String& rStrName )
-{
-    BOOL bFound = FALSE;
-
-    if ( GetViewData() )
-    {
-        SCCOL nCol = aEdCol.GetCol();
-        SCROW nRow = aEdRow.GetRow();
-
-        if ( nCol > 0 && nRow > 0 )
-        {
-            ScDocument*  pDoc  = pViewData->GetDocument();
-            ScRangeData* pData = pDoc->GetRangeAtCursor( nCol-1, nRow-1, pViewData->GetTabNo() );
-
-            bFound = ( pData != NULL );
-            if ( bFound )
-                pData->GetName( rStrName );
-        }
-    }
-
-    return bFound;
 }
 
 //------------------------------------------------------------------------

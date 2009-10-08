@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: table1.cxx,v $
- * $Revision: 1.25 $
+ * $Revision: 1.25.30.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -1235,10 +1235,10 @@ void ScTable::UpdateInsertTab(SCTAB nTable)
     for (SCCOL i=0; i <= MAXCOL; i++) aCol[i].UpdateInsertTab(nTable);
 }
 
-void ScTable::UpdateInsertTabOnlyCells(SCTAB nTable)
-{
-    for (SCCOL i=0; i <= MAXCOL; i++) aCol[i].UpdateInsertTabOnlyCells(nTable);
-}
+//UNUSED2008-05  void ScTable::UpdateInsertTabOnlyCells(SCTAB nTable)
+//UNUSED2008-05  {
+//UNUSED2008-05      for (SCCOL i=0; i <= MAXCOL; i++) aCol[i].UpdateInsertTabOnlyCells(nTable);
+//UNUSED2008-05  }
 
 void ScTable::UpdateDeleteTab( SCTAB nTable, BOOL bIsMove, ScTable* pRefUndo )
 {

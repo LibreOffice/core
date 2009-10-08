@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: DataSource.hxx,v $
- * $Revision: 1.3 $
+ * $Revision: 1.3.44.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -55,17 +55,6 @@ public:
         const ::com::sun::star::uno::Sequence<
             ::com::sun::star::uno::Reference<
                 ::com::sun::star::chart2::data::XLabeledDataSequence > > & rSequences );
-    explicit DataSource(
-        const ::com::sun::star::uno::Sequence<
-            ::com::sun::star::uno::Reference<
-                ::com::sun::star::chart2::data::XDataSequence > > & rSequences );
-    explicit DataSource(
-        const ::com::sun::star::uno::Sequence<
-            ::com::sun::star::uno::Reference<
-                ::com::sun::star::chart2::data::XDataSequence > > & rSequences,
-        const ::com::sun::star::uno::Sequence<
-            ::com::sun::star::uno::Reference<
-                ::com::sun::star::chart2::data::XDataSequence > > & rLabel );
 
     virtual ~DataSource();
 

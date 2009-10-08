@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: acredlin.cxx,v $
- * $Revision: 1.25 $
+ * $Revision: 1.25.32.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -2040,9 +2040,9 @@ void ScAcceptChgDlg::InitFilter()
     }
 }
 
-void ScAcceptChgDlg::SetMyStaticData()
-{
-}
+//UNUSED2008-05  void ScAcceptChgDlg::SetMyStaticData()
+//UNUSED2008-05  {
+//UNUSED2008-05  }
 
 IMPL_LINK( ScAcceptChgDlg, FilterModified, SvxTPFilter*, EMPTYARG )
 {

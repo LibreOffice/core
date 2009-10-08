@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: DataPointProperties.cxx,v $
- * $Revision: 1.18 $
+ * $Revision: 1.18.8.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -326,7 +326,7 @@ void DataPointProperties::AddPropertiesToVector(
                   | beans::PropertyAttribute::MAYBEVOID ));
 
     rOutProperties.push_back(
-        Property( C2U( "ReferenceDiagramSize" ),
+        Property( C2U( "ReferencePageSize" ),
                   PROP_DATAPOINT_REFERENCE_DIAGRAM_SIZE,
                   ::getCppuType( reinterpret_cast< const awt::Size * >(0)),
                   beans::PropertyAttribute::BOUND

@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: editsrc.cxx,v $
- * $Revision: 1.26 $
+ * $Revision: 1.26.32.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -414,15 +414,5 @@ void ScAccessibilityEditSource::UpdateData()
 SfxBroadcaster& ScAccessibilityEditSource::GetBroadcaster() const
 {
     return mpAccessibleTextData->GetBroadcaster();
-}
-
-void ScAccessibilityEditSource::SetDoUpdateData(sal_Bool bValue)
-{
-    mpAccessibleTextData->SetDoUpdate(bValue);
-}
-
-sal_Bool ScAccessibilityEditSource::IsDirty() const
-{
-    return mpAccessibleTextData->IsDirty();
 }
 

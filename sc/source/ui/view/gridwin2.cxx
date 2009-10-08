@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: gridwin2.cxx,v $
- * $Revision: 1.16 $
+ * $Revision: 1.16.32.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -102,10 +102,11 @@ void ScGridWindow::DoPushButton( SCCOL nCol, SCROW nRow, const MouseEvent& rMEvt
     ScDocument* pDoc = pViewData->GetDocument();
     SCTAB nTab = pViewData->GetTabNo();
 
+    ScDPObject* pDPObj  = pDoc->GetDPAtCursor(nCol, nRow, nTab);
+
+#if OLD_PIVOT_IMPLEMENTATION
     ScPivotCollection* pPivotCollection = pDoc->GetPivotCollection();
     ScPivot* pPivot = pPivotCollection->GetPivotAtCursor(nCol, nRow, nTab);
-
-    ScDPObject* pDPObj  = pDoc->GetDPAtCursor(nCol, nRow, nTab);
 
     if (pPivot)             // alte Pivottabellen
     {
@@ -186,7 +187,9 @@ void ScGridWindow::DoPushButton( SCCOL nCol, SCROW nRow, const MouseEvent& rMEvt
             }
         }
     }
-    else if (pDPObj)
+#endif
+
+    if (pDPObj)
     {
         USHORT nOrient = sheet::DataPilotFieldOrientation_HIDDEN;
         ScAddress aPos( nCol, nRow, nTab );
@@ -253,6 +256,7 @@ void ScGridWindow::DoPushButton( SCCOL nCol, SCROW nRow, const MouseEvent& rMEvt
     }
 }
 
+#if OLD_PIVOT_IMPLEMENTATION
 void ScGridWindow::DoPivotDrop( BOOL bDelete, BOOL bToCols, SCSIZE nDestPos )
 {
     if ( nPivotField == PIVOT_DATA_FIELD && bDelete )
@@ -609,6 +613,7 @@ void ScGridWindow::PivotMouseButtonUp( const MouseEvent& rMEvt )
     PivotTestMouse( rMEvt, FALSE );
     SetPointer( Pointer( POINTER_ARROW ) );
 }
+#endif
 
 // -----------------------------------------------------------------------
 //

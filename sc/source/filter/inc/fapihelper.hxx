@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: fapihelper.hxx,v $
- * $Revision: 1.11 $
+ * $Revision: 1.11.32.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -95,11 +95,11 @@ public:
                             const ::rtl::OUString& rServiceName,
                             const UnoAnySequence& rArgs );
 
-    /** Creates an instance from the passed service name, using the service factory of the passed object. */
-    static XInterfaceRef CreateInstanceWithArgs(
-                            SfxObjectShell* pShell,
-                            const ::rtl::OUString& rServiceName,
-                            const UnoAnySequence& rArgs );
+//UNUSED2008-05  /** Creates an instance from the passed service name, using the service factory of the passed object. */
+//UNUSED2008-05  static XInterfaceRef CreateInstanceWithArgs(
+//UNUSED2008-05                          SfxObjectShell* pShell,
+//UNUSED2008-05                          const ::rtl::OUString& rServiceName,
+//UNUSED2008-05                          const UnoAnySequence& rArgs );
 
     /** Creates an instance from the passed service name, using the process service factory. */
     static XInterfaceRef CreateInstanceWithArgs(
@@ -171,6 +171,9 @@ public:
     ::rtl::OUString     GetServiceName() const;
 
     // Get properties ---------------------------------------------------------
+
+    /** Returns true, if the property set contains the specified property. */
+    bool                HasProperty( const ::rtl::OUString& rPropName ) const;
 
     /** Gets the specified property from the property set.
         @return  true, if the Any could be filled with the property value. */

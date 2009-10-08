@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: SelectionHelper.cxx,v $
- * $Revision: 1.11 $
+ * $Revision: 1.11.68.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -699,7 +699,7 @@ bool SelectionHelper::getMarkHandles( SdrHdlList& rHdlList )
                 for( sal_uInt32 nM = 0L; nM < aPolygon.count(); nM++)
                 {
                     const ::basegfx::B2DPoint aPoint(aPolygon.getB2DPoint(nM));
-                    SdrHdl* pHdl = new SdrHdl(Point(FRound(aPoint.getX()), FRound(aPoint.getY())), HDL_POLY);
+                    SdrHdl* pHdl = new SdrHdl(Point(basegfx::fround(aPoint.getX()), basegfx::fround(aPoint.getY())), HDL_POLY);
                     rHdlList.AddHdl(pHdl);
                 }
             }

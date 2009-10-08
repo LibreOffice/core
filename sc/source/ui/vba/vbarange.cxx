@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: vbarange.cxx,v $
- * $Revision: 1.9 $
+ * $Revision: 1.8.30.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -163,6 +163,7 @@
 // end test includes
 
 #include <org/openoffice/excel/Range.hpp>
+#include <com/sun/star/bridge/oleautomation/Date.hpp>
 
 using namespace ::org::openoffice;
 using namespace ::com::sun::star;
@@ -172,7 +173,6 @@ using ::std::vector;
 //    * 1 inch = 72 points = 1440 twips
 //    * 1 cm = 567 twips
 double lcl_hmmToPoints( double nVal ) { return ( (double)((nVal /1000 ) * 567 ) / 20 ); }
-double lcl_pointsToHmm( double nVal ) { return (double)( ( nVal * 20 ) / 567 ) * 1000; }
 
 static const sal_Int16 supportedIndexTable[] = {  excel::XlBordersIndex::xlEdgeLeft, excel::XlBordersIndex::xlEdgeTop, excel::XlBordersIndex::xlEdgeBottom, excel::XlBordersIndex::xlEdgeRight, excel::XlBordersIndex::xlDiagonalDown, excel::XlBordersIndex::xlDiagonalUp, excel::XlBordersIndex::xlInsideVertical, excel::XlBordersIndex::xlInsideHorizontal };
 
@@ -440,6 +440,16 @@ public:
 
         if ( getNumberFormat() & util::NumberFormat::LOGICAL )
             return true;
+        return false;
+    }
+
+    bool isDateType()
+    {
+        sal_Int16 nType = getNumberFormat();
+        if(( nType & util::NumberFormat::DATETIME ))
+        {
+            return true;
+        }
         return false;
     }
 
@@ -716,6 +726,8 @@ void CellValueGetter::visitNode( sal_Int32 x, sal_Int32 y, const uno::Reference<
             NumFormatHelper cellFormat( xRange );
             if ( cellFormat.isBooleanType() )
                 aValue = uno::makeAny( ( xCell->getValue() != 0.0 ) );
+            else if ( cellFormat.isDateType() )
+                aValue = uno::makeAny( bridge::oleautomation::Date( xCell->getValue() ) );
             else
                 aValue <<= xCell->getValue();
         }
@@ -2588,19 +2600,6 @@ ScVbaRange::setHidden( const uno::Any& _hidden ) throw (uno::RuntimeException)
     {
         throw uno::RuntimeException( e.Message, uno::Reference< uno::XInterface >() );
     }
-}
-
-rtl::OUString lcl_replaceAll( const rtl::OUString& rString, rtl::OUString sWhat, rtl::OUString sWith )
-{
-    rtl::OUString sString( rString );
-    sal_Int32 offset = 0;
-    sal_Int32 nWithLen = sWith.getLength();
-    while ((offset = sString.indexOf(sWhat )) >= 0)
-    {
-        sString = sString.replaceAt(offset, nWithLen, sWith);
-        offset += nWithLen;
-    }
-    return sString;
 }
 
 ::sal_Bool SAL_CALL
