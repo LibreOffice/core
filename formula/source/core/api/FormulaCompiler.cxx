@@ -698,7 +698,7 @@ void FormulaCompiler::loadSymbols(USHORT _nSymbols,FormulaGrammar::Grammar _eGra
         if ( FormulaGrammar::GRAM_ENGLISH != _eGrammar )
             fillFromAddInCollectionUpperName( _xMap);
         else
-            fillFromAddInCollectionEnglishName( mxSymbolsEnglish);
+            fillFromAddInCollectionEnglishName( _xMap);
     }
 }
 // -----------------------------------------------------------------------------

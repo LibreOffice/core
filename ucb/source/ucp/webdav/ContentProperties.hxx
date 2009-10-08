@@ -146,11 +146,6 @@ public:
                                     std::vector< rtl::OUString > & resources,
                                     bool bIncludeUnmatched = true );
 
-    // Returns a list of HTTP header names that can be mapped to UCB property
-    // names.
-    static void getMappableHTTPHeaders(
-         std::vector< rtl::OUString > & rHeaderNames );
-
     // return true, if all properties contained in rProps are contained in
     // this ContentProperties instance. Otherwiese, false will be returned.
     // rNamesNotContained contain the missing names.

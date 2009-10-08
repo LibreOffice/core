@@ -191,6 +191,11 @@ sal_Int16 SAL_CALL SalAquaFilePicker::execute() throw( uno::RuntimeException )
 
     implInitialize();
 
+    // if m_pDialog is nil after initialization, something must have gone wrong before
+    if (m_pDialog == nil) {
+        throw uno::RuntimeException(rtl::OUString::createFromAscii("The dialog was not properly initialized!"), static_cast< XFilePicker* >( this ));
+    }
+
     if (m_pFilterHelper) {
         m_pFilterHelper->SetFilters();
     }

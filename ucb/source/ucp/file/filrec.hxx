@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: filrec.hxx,v $
- * $Revision: 1.3 $
+ * $Revision: 1.3.22.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -73,8 +73,6 @@ public:
 
     ::osl::FileBase::RC getPos( sal_uInt64& uPos );
 
-    ::osl::FileBase::RC isEndOfFile( sal_Bool *pIsEOF );
-
     ::osl::FileBase::RC setSize( sal_uInt64 uSize );
 
     ::osl::FileBase::RC getSize( sal_uInt64 &rSize );
@@ -82,8 +80,6 @@ public:
     ::osl::FileBase::RC read( void *pBuffer, sal_uInt64 uBytesRequested, sal_uInt64& rBytesRead );
 
     ::osl::FileBase::RC write(const void *pBuffer, sal_uInt64 uBytesToWrite, sal_uInt64& rBytesWritten);
-
-    ::osl::FileBase::RC readLine( ::rtl::ByteSequence& aSeq );
 
     ::osl::FileBase::RC sync() const;
 };

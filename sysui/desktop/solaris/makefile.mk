@@ -127,6 +127,6 @@ $(PKGFILES) : $(MISC)$/{$(PRODUCTLIST)}$/prototype
     pkgmk -l 1073741824 -r . -f $(MISC)$/$(@:b:b:s/-/ /:1)$/prototype -o -d $(PKGDIR) ARCH=$(PKGARCH) VERSION=$(PKGVERSION.$(@:b:s/-/ /:1)),REV=$(PKGREV).$(PKGDATESTRING) 
     $(FASPAC) $(SOLARBINDIR)/faspac-so.sh -a -d $(PKGDIR) $(@:b:b:s/-/ /:1:s/.//)30-desktop-int
     @tar -cf - -C $(PKGDIR) $(@:b:b:s/-/ /:1:s/.//)30-desktop-int | gzip > $@
-    @rm -rf $(PKGDIR)/$(@:b:b:s/-/ /:1:s/.//)-desktop-int30
+    @rm -rf $(PKGDIR)/$(@:b:b:s/-/ /:1:s/.//)30-desktop-int
 
 .ENDIF

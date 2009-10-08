@@ -71,6 +71,7 @@
 #include <basegfx/point/b2dpoint.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <basegfx/polygon/b2dpolypolygon.hxx>
+#include <basegfx/matrix/b2dhommatrix.hxx>
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -1441,4 +1442,133 @@ USHORT SdrMeasureObj::GetOutlinerViewAnchorMode() const
     return (USHORT)eRet;
 }
 
+//////////////////////////////////////////////////////////////////////////////
+// #i97878#
+// TRGetBaseGeometry/TRSetBaseGeometry needs to be based on two positions,
+// same as line geometry in SdrPathObj. Thus needs to be overloaded and
+// implemented since currently it is derived from SdrTextObj which uses
+// a functionality based on SnapRect which is not useful here
+
+inline double ImplTwipsToMM(double fVal) { return (fVal * (127.0 / 72.0)); }
+inline double ImplMMToTwips(double fVal) { return (fVal * (72.0 / 127.0)); }
+
+sal_Bool SdrMeasureObj::TRGetBaseGeometry(basegfx::B2DHomMatrix& rMatrix, basegfx::B2DPolyPolygon& /*rPolyPolygon*/) const
+{
+    // handle the same as a simple line since the definition is based on two points
+    const basegfx::B2DRange aRange(aPt1.X(), aPt1.Y(), aPt2.X(), aPt2.Y());
+    basegfx::B2DTuple aScale(aRange.getRange());
+    basegfx::B2DTuple aTranslate(aRange.getMinimum());
+
+    // position maybe relative to anchorpos, convert
+    if( pModel->IsWriter() )
+    {
+        if(GetAnchorPos().X() || GetAnchorPos().Y())
+        {
+            aTranslate -= basegfx::B2DTuple(GetAnchorPos().X(), GetAnchorPos().Y());
+        }
+    }
+
+    // force MapUnit to 100th mm
+    SfxMapUnit eMapUnit = pModel->GetItemPool().GetMetric(0);
+    if(eMapUnit != SFX_MAPUNIT_100TH_MM)
+    {
+        switch(eMapUnit)
+        {
+            case SFX_MAPUNIT_TWIP :
+            {
+                // postion
+                aTranslate.setX(ImplTwipsToMM(aTranslate.getX()));
+                aTranslate.setY(ImplTwipsToMM(aTranslate.getY()));
+
+                // size
+                aScale.setX(ImplTwipsToMM(aScale.getX()));
+                aScale.setY(ImplTwipsToMM(aScale.getY()));
+
+                break;
+            }
+            default:
+            {
+                DBG_ERROR("TRGetBaseGeometry: Missing unit translation to 100th mm!");
+            }
+        }
+    }
+
+    // build return value matrix
+    rMatrix.identity();
+
+    if(!basegfx::fTools::equal(aScale.getX(), 1.0) || !basegfx::fTools::equal(aScale.getY(), 1.0))
+    {
+        rMatrix.scale(aScale.getX(), aScale.getY());
+    }
+
+    if(!aTranslate.equalZero())
+    {
+        rMatrix.translate(aTranslate.getX(), aTranslate.getY());
+    }
+
+    return sal_True;
+}
+
+void SdrMeasureObj::TRSetBaseGeometry(const basegfx::B2DHomMatrix& rMatrix, const basegfx::B2DPolyPolygon& /*rPolyPolygon*/)
+{
+    // use given transformation to derive the two defining points from unit line
+    basegfx::B2DPoint aPosA(rMatrix * basegfx::B2DPoint(0.0, 0.0));
+    basegfx::B2DPoint aPosB(rMatrix * basegfx::B2DPoint(1.0, 0.0));
+
+    // force metric to pool metric
+    SfxMapUnit eMapUnit = pModel->GetItemPool().GetMetric(0);
+    if(eMapUnit != SFX_MAPUNIT_100TH_MM)
+    {
+        switch(eMapUnit)
+        {
+            case SFX_MAPUNIT_TWIP :
+            {
+                // position
+                aPosA.setX(ImplMMToTwips(aPosA.getX()));
+                aPosA.setY(ImplMMToTwips(aPosA.getY()));
+                aPosB.setX(ImplMMToTwips(aPosB.getX()));
+                aPosB.setY(ImplMMToTwips(aPosB.getY()));
+
+                break;
+            }
+            default:
+            {
+                DBG_ERROR("TRSetBaseGeometry: Missing unit translation to PoolMetric!");
+            }
+        }
+    }
+
+    if( pModel->IsWriter() )
+    {
+        // if anchor is used, make position relative to it
+        if(GetAnchorPos().X() || GetAnchorPos().Y())
+        {
+            const basegfx::B2DVector aAnchorOffset(GetAnchorPos().X(), GetAnchorPos().Y());
+
+            aPosA += aAnchorOffset;
+            aPosB += aAnchorOffset;
+        }
+    }
+
+    // derive new model data
+    const Point aNewPt1(basegfx::fround(aPosA.getX()), basegfx::fround(aPosA.getY()));
+    const Point aNewPt2(basegfx::fround(aPosB.getX()), basegfx::fround(aPosB.getY()));
+
+    if(aNewPt1 != aPt1 || aNewPt2 != aPt2)
+    {
+        // set model values and broadcast
+        Rectangle aBoundRect0; if (pUserCall!=NULL) aBoundRect0=GetLastBoundRect();
+
+        aPt1 = aNewPt1;
+        aPt2 = aNewPt2;
+
+        SetTextDirty();
+        ActionChanged();
+        SetChanged();
+        BroadcastObjectChange();
+        SendUserCall(SDRUSERCALL_MOVEONLY,aBoundRect0);
+    }
+}
+
+//////////////////////////////////////////////////////////////////////////////
 // eof

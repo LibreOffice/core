@@ -554,6 +554,7 @@ void SfxViewFrame::ExecReload_Impl( SfxRequest& rReq )
                             SfxBoolItem aItem( SID_EDIT_FRAMESET, !bIsReadonly );
                             GetDispatcher()->Execute( SID_EDIT_FRAMESET,
                                     SFX_CALLMODE_RECORD, &aItem, 0L );
+                            pSh->Broadcast( SfxSimpleHint( SFX_HINT_TITLECHANGED ) );
                         }
                         return;
                     }

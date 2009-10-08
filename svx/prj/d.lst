@@ -412,6 +412,7 @@ mkdir: %_DEST%\inc%_EXT%\svx
 ..\source\items\boxobj.hxx %_DEST%\inc%_EXT%\svx\boxobj.hxx
 ..\inc\svx\itemtype.hxx %_DEST%\inc%_EXT%\svx\itemtype.hxx
 ..\inc\svx\outliner.hxx %_DEST%\inc%_EXT%\svx\outliner.hxx
+..\inc\svx\paragraphdata.hxx %_DEST%\inc%_EXT%\svx\paragraphdata.hxx
 ..\inc\svx\outlobj.hxx %_DEST%\inc%_EXT%\svx\outlobj.hxx
 ..\inc\svx\editdata.hxx %_DEST%\inc%_EXT%\svx\editdata.hxx
 ..\inc\svx\editeng.hxx %_DEST%\inc%_EXT%\svx\editeng.hxx

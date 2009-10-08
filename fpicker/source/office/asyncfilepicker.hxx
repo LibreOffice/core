@@ -37,13 +37,19 @@
 #include <tools/link.hxx>
 #include <tools/string.hxx>
 #include <rtl/ref.hxx>
+#include <rtl/ustring.hxx>
+#include <com/sun/star/uno/Sequence.h>
 
 class SvtFileView;
 class SvtFileDialog;
+
+typedef ::com::sun::star::uno::Sequence< ::rtl::OUString >  OUStringList;
+
 //........................................................................
 namespace svt
 {
 //........................................................................
+
 
     //====================================================================
     //= AsyncPickerAction
@@ -82,7 +88,12 @@ namespace svt
                 If smaller than or equal to <arg>_nMinTimeout</arg>, it will be corrected to
                 <arg>_nMinTimeout</arg> + 30000.
         */
-        void execute( const String& _rURL, const String& _rFilter, sal_Int32 _nMinTimeout, sal_Int32 _nMaxTimeout );
+        void execute(
+            const String& _rURL,
+            const String& _rFilter,
+            sal_Int32 _nMinTimeout,
+            sal_Int32 _nMaxTimeout,
+            const OUStringList& rBlackList = OUStringList() );
 
         /// cancels the running action
         void cancel();

@@ -61,6 +61,7 @@
 #include <com/sun/star/document/MacroExecMode.hpp>
 #include <com/sun/star/document/XScriptInvocationContext.hpp>
 #include <com/sun/star/embed/EmbedStates.hpp>
+#include <com/sun/star/embed/XEmbedPersist.hpp>
 #include <com/sun/star/util/XModifiable.hpp>
 #include <com/sun/star/container/XChild.hpp>
 
@@ -336,9 +337,11 @@ sal_Bool SfxObjectShell::IsModified()
     if ( pImp->m_bIsModified )
         return sal_True;
 
-    if ( !pImp->m_xDocStorage.is() )
+    if ( !pImp->m_xDocStorage.is() || IsReadOnly() )
     {
         // if the document still has no storage and is not set to be modified explicitly it is not modified
+        // a readonly document is also not modified
+
         return sal_False;
     }
 
@@ -532,10 +535,30 @@ sal_Bool SfxObjectShell::SwitchToShared( sal_Bool bShared, sal_Bool bSave )
 
     if ( bShared != IsDocShared() )
     {
+        ::rtl::OUString aOrigURL = GetMedium()->GetURLObject().GetMainURL( INetURLObject::NO_DECODE );
+
+        if ( !aOrigURL.getLength() && bSave )
+        {
+            // this is a new document, let it be stored before switching to the shared mode;
+            // the storing should be done without shared flag, since it is possible that the
+            // target location does not allow to create sharing control file;
+            // the shared flag will be set later after creation of sharing control file
+            SfxViewFrame* pViewFrame = SfxViewFrame::GetFirst( this );
+
+            if ( pViewFrame )
+            {
+                // TODO/LATER: currently the application guards against the reentrance problem
+                const SfxPoolItem* pItem = pViewFrame->GetBindings().ExecuteSynchron( HasName() ? SID_SAVEDOC : SID_SAVEASDOC );
+                SfxBoolItem* pResult = PTR_CAST( SfxBoolItem, pItem );
+                bResult = ( pResult && pResult->GetValue() );
+                if ( bResult )
+                    aOrigURL = GetMedium()->GetURLObject().GetMainURL( INetURLObject::NO_DECODE );
+            }
+        }
+
         sal_Bool bOldValue = HasSharedXMLFlagSet();
         SetSharedXMLFlag( bShared );
 
-        ::rtl::OUString aOrigURL = GetMedium()->GetURLObject().GetMainURL( INetURLObject::NO_DECODE );
         sal_Bool bRemoveEntryOnError = sal_False;
         if ( bResult && bShared )
         {
@@ -558,6 +581,7 @@ sal_Bool SfxObjectShell::SwitchToShared( sal_Bool bShared, sal_Bool bSave )
             if ( pViewFrame )
             {
                 // TODO/LATER: currently the application guards against the reentrance problem
+                SetModified( sal_True ); // the modified flag has to be set to let the document be stored with the shared flag
                 const SfxPoolItem* pItem = pViewFrame->GetBindings().ExecuteSynchron( HasName() ? SID_SAVEDOC : SID_SAVEASDOC );
                 SfxBoolItem* pResult = PTR_CAST( SfxBoolItem, pItem );
                 bResult = ( pResult && pResult->GetValue() );

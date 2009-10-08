@@ -637,6 +637,7 @@ TabPage RID_SVXPAGE_CHAR_EFFECTS
         Pos = MAP_APPFONT ( 6 , 168 ) ;
         Size = MAP_APPFONT ( 248 , 16 ) ;
         WordBreak = TRUE ;
+            Hide = TRUE;
     };
     String STR_EFFECTS_CAPITALS
     {
@@ -877,6 +878,7 @@ TabPage RID_SVXPAGE_CHAR_POSITION
         Pos = MAP_APPFONT ( 6 , 168 ) ;
         Size = MAP_APPFONT ( 248 , 16 ) ;
         WordBreak = TRUE ;
+        Hide = TRUE;
     };
 };
 

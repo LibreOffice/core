@@ -123,6 +123,9 @@ namespace sdr
             // recording MetaFile? Default is false
             virtual bool isOutputToRecordingMetaFile() const;
 
+            // pdf export? Default is false
+            virtual bool isOutputToPDFFile() const;
+
             // gray display mode
             virtual bool isDrawModeGray() const;
 

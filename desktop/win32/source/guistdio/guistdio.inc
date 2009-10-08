@@ -45,6 +45,8 @@
 #include <stdlib.h>
 #include <systools/win32/uwinapi.h>
 
+#include <stdio.h>
+
 //---------------------------------------------------------------------------
 // Thread that reads from child process standard output pipe
 //---------------------------------------------------------------------------
@@ -214,9 +216,7 @@ DWORD WINAPI WaitForUIThread( LPVOID pParam )
 #ifndef UNOPKG
 	if ( !_tgetenv( TEXT("UNOPKG") ) )
 		WaitForInputIdle( hProcess, INFINITE );
-	else
 #endif
-		WaitForSingleObject( hProcess, INFINITE );
 
 	return 0;
 }
@@ -353,17 +353,19 @@ int _tmain( int, _TCHAR ** )
 		HANDLE	hWaitForUIThread = CreateThread( NULL, 0, WaitForUIThread, (LPVOID)aProcessInfo.hProcess, 0, &dwWaitForUIThreadId );
 
 		DWORD	dwWaitResult;
-		bool	bDetach = false;
-		int		nOpenPipes = 3;
 		HANDLE	hObjects[] = 
 			{
 				hTargetProcess,
 				hWaitForUIThread,
-				hInputThread,
 				hOutputThread,
 				hErrorThread
 			};
 
+ #ifdef UNOPKG       
+        dwWaitResult = WaitForMultipleObjects( elementsof(hObjects), hObjects, TRUE, INFINITE );
+ #else        
+		bool	bDetach = false;
+		int		nOpenPipes = 2;
 		do
 		{
 			dwWaitResult = WaitForMultipleObjects( elementsof(hObjects), hObjects, FALSE, INFINITE );
@@ -374,9 +376,8 @@ int _tmain( int, _TCHAR ** )
 			case WAIT_OBJECT_0 + 1: // The child process entered input idle
 				bDetach = true;
 				break;
-			case WAIT_OBJECT_0 + 2: // The remote end of stdin pipe was closed
-			case WAIT_OBJECT_0 + 3: // The remote end of stdout pipe was closed
-			case WAIT_OBJECT_0 + 4: // The remote end of stderr pipe was closed
+			case WAIT_OBJECT_0 + 2: // The remote end of stdout pipe was closed
+			case WAIT_OBJECT_0 + 3: // The remote end of stderr pipe was closed
 				bDetach = --nOpenPipes <= 0;
 				break;
 			default: // Something went wrong
@@ -385,15 +386,8 @@ int _tmain( int, _TCHAR ** )
 			}
 		} while( !bDetach );
             
-        //Even if the child process terminates it is not garanteed that all three pipe threads terminate 
-        //as tests have proven. The loop above will be typically terminate because the process has 
-        //terminated. Then the pipe threads may not have read all data from the pipes yet. When we close
-        //the threads then data may be lost. For example running unopkg without arguments shall print out
-        //the help text. Without this workaround some text would be missing.
-        //ifdef only for unopkg
-#ifdef UNOPKG
-        Sleep(1000);    
-#endif        
+#endif
+
 		CloseHandle( hOutputThread );
 		CloseHandle( hErrorThread );
 		CloseHandle( hInputThread );

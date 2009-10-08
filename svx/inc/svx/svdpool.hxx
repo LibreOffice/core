@@ -45,7 +45,9 @@ class SVX_DLLPUBLIC SdrItemPool : public XOutdevItemPool
 public:
     SdrItemPool(SfxItemPool* pMaster = 0L, sal_Bool bLoadRefCounts = sal_True);
     SdrItemPool(const SdrItemPool& rPool);
+protected:
     virtual ~SdrItemPool();
+public:
 
     virtual SfxItemPool* Clone() const;
     virtual SfxItemPresentation GetPresentation(const SfxPoolItem& rItem,

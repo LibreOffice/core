@@ -1317,15 +1317,13 @@ sal_Bool SfxObjectShell::SaveTo_Impl
     else
     {
         // This is SaveAs or export action, prepare the target medium
+        // the alien filters still might write directly to the file, that is of course a bug,
+        // but for now the framework has to be ready for it
+        // TODO/LATER: let the medium be prepared for alien formats as well
         rMedium.CloseAndRelease();
         if ( bStorageBasedTarget )
         {
             rMedium.GetOutputStorage();
-        }
-        else
-        {
-            rMedium.CreateTempFileNoCopy();
-            rMedium.GetOutStream();
         }
     }
 
@@ -2680,6 +2678,8 @@ sal_Bool SfxObjectShell::CommonSaveAs_Impl
         SfxItemSet *pSet = GetMedium()->GetItemSet();
         pSet->ClearItem( SID_INTERACTIONHANDLER );
         pSet->ClearItem( SID_PROGRESS_STATUSBAR_CONTROL );
+        pSet->ClearItem( SID_STANDARD_DIR );
+        pSet->ClearItem( SID_PATH );
 
         if ( !bSaveTo )
         {
@@ -2696,6 +2696,8 @@ sal_Bool SfxObjectShell::CommonSaveAs_Impl
             //pSet->ClearItem( SID_USE_FILTEROPTIONS );
             pSet->ClearItem( SID_EDITDOC );
             pSet->ClearItem( SID_OVERWRITE );
+            pSet->ClearItem( SID_DEFAULTFILEPATH );
+            pSet->ClearItem( SID_DEFAULTFILENAME );
 
             SFX_ITEMSET_GET( (*aParams), pFilterItem, SfxStringItem, SID_FILTER_NAME, sal_False );
             if ( pFilterItem )

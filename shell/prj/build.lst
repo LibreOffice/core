@@ -5,6 +5,7 @@ sl    shell\source\win32\simplemail                nmake   -   w   sl_win32_simp
 sl    shell\source\unix\exec                       nmake   -   u   sl_unix sl_inc NULL
 sl    shell\source\unix\exec                       nmake   -   p   sl_unix sl_inc NULL
 sl    shell\source\unix\misc                       nmake   -   u   sl_unix_misc sl_inc NULL
+sl    shell\source\unix\misc                       nmake   -   p   sl_unix_misc sl_inc NULL
 sl    shell\source\cmdmail                         nmake   -   u   sl_cmdmail sl_inc NULL
 sl    shell\source\cmdmail                         nmake   -   p   sl_cmdmail sl_inc NULL
 sl    shell\source\all                             nmake   -   all sl_all sl_inc NULL

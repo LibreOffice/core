@@ -93,6 +93,8 @@
 // #95114#
 #include <vcl/svapp.hxx>
 #include <svx/sdr/properties/properties.hxx>
+#include <svx/eeitem.hxx>
+#include <svtools/itemset.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -346,11 +348,11 @@ SdrModel::~SdrModel()
     {
         // Pools loeschen, falls es meine sind
         SfxItemPool* pOutlPool=pItemPool->GetSecondaryPool();
-        delete pItemPool;
+        SfxItemPool::Free(pItemPool);
         // Der OutlinerPool muss nach dem ItemPool plattgemacht werden, da der
         // ItemPool SetItems enthaelt die ihrerseits Items des OutlinerPools
         // referenzieren (Joe)
-        delete pOutlPool;
+        SfxItemPool::Free(pOutlPool);
     }
 
     if( mpForbiddenCharactersTable )
@@ -976,17 +978,19 @@ void SdrModel::SetDefaultTabulator(USHORT nVal)
 
 void SdrModel::ImpSetUIUnit()
 {
-    if (aUIScale.GetNumerator()==0 || aUIScale.GetDenominator()==0) aUIScale=Fraction(1,1);
-    FASTBOOL bMapInch=IsInch(eObjUnit);
-    FASTBOOL bMapMetr=IsMetric(eObjUnit);
-    FASTBOOL bUIInch=IsInch(eUIUnit);
-    FASTBOOL bUIMetr=IsMetric(eUIUnit);
-    nUIUnitKomma=0;
-    long nMul=1;
-    long nDiv=1;
+    if(0 == aUIScale.GetNumerator() || 0 == aUIScale.GetDenominator())
+    {
+        aUIScale = Fraction(1,1);
+    }
 
-    // Zunaechst normalisieren auf m bzw. "
-    switch (eObjUnit) {
+    // set start values
+    nUIUnitKomma = 0;
+    sal_Int64 nMul(1);
+    sal_Int64 nDiv(1);
+
+    // normalize on meters resp. inch
+    switch (eObjUnit)
+    {
         case MAP_100TH_MM   : nUIUnitKomma+=5; break;
         case MAP_10TH_MM    : nUIUnitKomma+=4; break;
         case MAP_MM         : nUIUnitKomma+=3; break;
@@ -1010,7 +1014,8 @@ void SdrModel::ImpSetUIUnit()
     // 1 pole    =  5 1/2 yd  =    198" =     5.029,2mm
     // 1 yd      =  3 ft      =     36" =       914,4mm
     // 1 ft      = 12 "       =      1" =       304,8mm
-    switch (eUIUnit) {
+    switch (eUIUnit)
+    {
         case FUNIT_NONE   : break;
         // Metrisch
         case FUNIT_100TH_MM: nUIUnitKomma-=5; break;
@@ -1030,48 +1035,61 @@ void SdrModel::ImpSetUIUnit()
         case FUNIT_PERCENT: nUIUnitKomma+=2; break;
     } // switch
 
-    if (bMapInch && bUIMetr) {
-        nUIUnitKomma+=4;
-        nMul*=254;
-    }
-    if (bMapMetr && bUIInch) {
-        nUIUnitKomma-=4;
-        nDiv*=254;
+    // check if mapping is from metric to inch and adapt
+    const bool bMapInch(IsInch(eObjUnit));
+    const bool bUIMetr(IsMetric(eUIUnit));
+
+    if (bMapInch && bUIMetr)
+    {
+        nUIUnitKomma += 4;
+        nMul *= 254;
     }
 
-    // Temporaere Fraction zum Kuerzen
-    Fraction aTempFract(nMul,nDiv);
-    nMul=aTempFract.GetNumerator();
-    nDiv=aTempFract.GetDenominator();
-    // Nun mit dem eingestellten Masstab verknuepfen
-    BigInt nBigMul(nMul);
-    BigInt nBigDiv(nDiv);
-    BigInt nBig1000(1000);
-    nBigMul*=aUIScale.GetDenominator();
-    nBigDiv*=aUIScale.GetNumerator();
-    while (nBigMul>nBig1000) {
+    // check if mapping is from inch to metric and adapt
+    const bool bMapMetr(IsMetric(eObjUnit));
+    const bool bUIInch(IsInch(eUIUnit));
+
+    if (bMapMetr && bUIInch)
+    {
+        nUIUnitKomma -= 4;
+        nDiv *= 254;
+    }
+
+    // use temporary fraction for reduction (fallback to 32bit here),
+    // may need to be changed in the future, too
+    if(1 != nMul || 1 != nDiv)
+    {
+        const Fraction aTemp(static_cast< long >(nMul), static_cast< long >(nDiv));
+        nMul = aTemp.GetNumerator();
+        nDiv = aTemp.GetDenominator();
+    }
+
+    // #i89872# take Unit of Measurement into account
+    if(1 != aUIScale.GetDenominator() || 1 != aUIScale.GetNumerator())
+    {
+        // divide by UIScale
+        nMul *= aUIScale.GetDenominator();
+        nDiv *= aUIScale.GetNumerator();
+    }
+
+    // shorten trailing zeroes for dividend
+    while(0 == (nMul % 10))
+    {
         nUIUnitKomma--;
-        nBigMul/=10;
+        nMul /= 10;
     }
-    while (nBigDiv>nBig1000) {
+
+    // shorten trailing zeroes for divisor
+    while(0 == (nDiv % 10))
+    {
         nUIUnitKomma++;
-        nBigDiv/=10;
+        nDiv /= 10;
     }
-    nMul=long(nBigMul);
-    nDiv=long(nBigDiv);
-    switch ((short)nMul) {
-        case   10: nMul=1; nUIUnitKomma--; break;
-        case  100: nMul=1; nUIUnitKomma-=2; break;
-        case 1000: nMul=1; nUIUnitKomma-=3; break;
-    } // switch
-    switch ((short)nDiv) {
-        case   10: nDiv=1; nUIUnitKomma++; break;
-        case  100: nDiv=1; nUIUnitKomma+=2; break;
-        case 1000: nDiv=1; nUIUnitKomma+=3; break;
-    } // switch
-    aUIUnitFact=Fraction(nMul,nDiv);
-    bUIOnlyKomma=nMul==nDiv;
-    TakeUnitStr(eUIUnit,aUIUnitStr);
+
+    // end preparations, set member values
+    aUIUnitFact = Fraction(sal_Int32(nMul), sal_Int32(nDiv));
+    bUIOnlyKomma = (nMul == nDiv);
+    TakeUnitStr(eUIUnit, aUIUnitStr);
 }
 
 void SdrModel::SetScaleUnit(MapUnit eMap, const Fraction& rFrac)

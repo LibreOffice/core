@@ -312,12 +312,24 @@ namespace drawinglayer
             basegfx::BColor aObjectColor(rPrimitive.getMaterial().getColor());
             bool bPaintIt(aFill.count());
 
+            // #i98295# get ShadeMode. Correct early when only flat is possible due to missing normals
+            const ::com::sun::star::drawing::ShadeMode aShadeMode(
+                aFill.areNormalsUsed() ?
+                    getSdrSceneAttribute().getShadeMode() : ::com::sun::star::drawing::ShadeMode_FLAT);
+
             if(bPaintIt)
             {
                 // get rid of texture coordinates if there is no texture
                 if(aFill.areTextureCoordinatesUsed() && !getGeoTexSvx() && !getTransparenceGeoTexSvx())
                 {
                     aFill.clearTextureCoordinates();
+                }
+
+                // #i98295# get rid of normals and color early when not needed
+                if(::com::sun::star::drawing::ShadeMode_FLAT == aShadeMode)
+                {
+                    aFill.clearNormals();
+                    aFill.clearBColors();
                 }
 
                 // transform to device coordinates (-1.0 .. 1.0) and check for visibility
@@ -344,7 +356,6 @@ namespace drawinglayer
             if(bPaintIt)
             {
                 // prepare ObjectToEye in NormalTransform
-                ::com::sun::star::drawing::ShadeMode aShadeMode(getSdrSceneAttribute().getShadeMode());
                 basegfx::B3DHomMatrix aNormalTransform(getViewInformation3D().getOrientation() * getViewInformation3D().getObjectTransformation());
 
                 if(getSdrSceneAttribute().getTwoSidedLighting())
@@ -360,27 +371,17 @@ namespace drawinglayer
                     }
                 }
 
-                if(::com::sun::star::drawing::ShadeMode_PHONG == aShadeMode)
+                switch(aShadeMode)
                 {
-                    // phong shading
-                    if(aFill.areNormalsUsed())
+                    case ::com::sun::star::drawing::ShadeMode_PHONG:
                     {
-                        // transform normals to eye coor
+                        // phong shading. Transform normals to eye coor
                         aFill.transformNormals(aNormalTransform);
+                        break;
                     }
-                    else
+                    case ::com::sun::star::drawing::ShadeMode_SMOOTH:
                     {
-                        // fallback to gouraud when no normals available
-                        aShadeMode = ::com::sun::star::drawing::ShadeMode_SMOOTH;
-                    }
-                }
-
-                if(::com::sun::star::drawing::ShadeMode_SMOOTH == aShadeMode)
-                {
-                    // gouraud shading
-                    if(aFill.areNormalsUsed())
-                    {
-                        // transform normals to eye coor
+                        // gouraud shading. Transform normals to eye coor
                         aFill.transformNormals(aNormalTransform);
 
                         // prepare color model parameters, evtl. use blend color
@@ -406,38 +407,30 @@ namespace drawinglayer
                             aPartFill.clearNormals();
                             aFill.setB3DPolygon(a, aPartFill);
                         }
+                        break;
                     }
-                    else
+                    case ::com::sun::star::drawing::ShadeMode_FLAT:
                     {
-                        // fallback to flat when no normals available
-                        aShadeMode = ::com::sun::star::drawing::ShadeMode_FLAT;
+                        // flat shading. Get plane vector in eye coordinates
+                        const basegfx::B3DVector aPlaneEyeNormal(aNormalTransform * rPrimitive.getB3DPolyPolygon().getB3DPolygon(0L).getNormal());
+
+                        // prepare color model parameters, evtl. use blend color
+                        const basegfx::BColor aColor(getModulate() ? basegfx::BColor(1.0, 1.0, 1.0) : rPrimitive.getMaterial().getColor());
+                        const basegfx::BColor& rSpecular(rPrimitive.getMaterial().getSpecular());
+                        const basegfx::BColor& rEmission(rPrimitive.getMaterial().getEmission());
+                        const sal_uInt16 nSpecularIntensity(rPrimitive.getMaterial().getSpecularIntensity());
+
+                        // solve color model for plane vector and use that color for whole plane
+                        aObjectColor = getSdrLightingAttribute().solveColorModel(aPlaneEyeNormal, aColor, rSpecular, rEmission, nSpecularIntensity);
+                        break;
                     }
-                }
-
-                if(::com::sun::star::drawing::ShadeMode_FLAT == aShadeMode)
-                {
-                    // flat shading. Clear normals and colors
-                    aFill.clearNormals();
-                    aFill.clearBColors();
-
-                    // get plane vector in eye coordinates
-                    const basegfx::B3DVector aPlaneEyeNormal(aNormalTransform * rPrimitive.getB3DPolyPolygon().getB3DPolygon(0L).getNormal());
-
-                    // prepare color model parameters, evtl. use blend color
-                    const basegfx::BColor aColor(getModulate() ? basegfx::BColor(1.0, 1.0, 1.0) : rPrimitive.getMaterial().getColor());
-                    const basegfx::BColor& rSpecular(rPrimitive.getMaterial().getSpecular());
-                    const basegfx::BColor& rEmission(rPrimitive.getMaterial().getEmission());
-                    const sal_uInt16 nSpecularIntensity(rPrimitive.getMaterial().getSpecularIntensity());
-
-                    // solve color model for plane vector and use that color for whole plane
-                    aObjectColor = getSdrLightingAttribute().solveColorModel(aPlaneEyeNormal, aColor, rSpecular, rEmission, nSpecularIntensity);
-                }
-
-                if(::com::sun::star::drawing::ShadeMode_DRAFT == aShadeMode)
-                {
-                    // draft, just use object color which is already set. Delete all other infos
-                    aFill.clearNormals();
-                    aFill.clearBColors();
+                    default: // case ::com::sun::star::drawing::ShadeMode_DRAFT:
+                    {
+                        // draft, just use object color which is already set. Delete all other infos
+                        aFill.clearNormals();
+                        aFill.clearBColors();
+                        break;
+                    }
                 }
 
                 // draw it to ZBuffer

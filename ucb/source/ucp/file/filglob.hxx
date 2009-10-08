@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: filglob.hxx,v $
- * $Revision: 1.11 $
+ * $Revision: 1.11.22.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -104,18 +104,6 @@ namespace fileaccess {
     extern osl::FileBase::RC osl_File_move( const rtl::OUString& strPath,
                                             const rtl::OUString& strDestPath,
                                             sal_Bool test = false );
-
-    extern oslFileError getResolvedURL( rtl_uString* ustrPath,
-                                        rtl_uString** pustrResolvedURL);
-
-
-    // Removes ellipses like .. and . from a file path
-    // Needs rework; This seems to be the most time consuming function in
-    // the whole file content provider
-
-    extern sal_Bool SAL_CALL makeAbsolutePath( const rtl::OUString& aRelPath,
-                                               rtl::OUString& aAbsPath );
-
 
     // This function implements the global exception handler of the file_ucp;
     // It never returns;

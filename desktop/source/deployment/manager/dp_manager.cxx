@@ -1009,6 +1009,12 @@ PackageManagerImpl::getDeployedPackages_(
             OSL_ENSURE( 0, ::rtl::OUStringToOString(
                             exc.Message, RTL_TEXTENCODING_UTF8 ).getStr() );
         }
+        catch (deployment::DeploymentException& exc) {
+            // ignore
+            (void) exc; // avoid warnings
+            OSL_ENSURE( 0, ::rtl::OUStringToOString(
+                            exc.Message, RTL_TEXTENCODING_UTF8 ).getStr() );
+        }
     }
     return comphelper::containerToSequence(packages);
 }

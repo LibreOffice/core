@@ -33,6 +33,10 @@
 #include <svx/sdr/primitive2d/sdrprimitivetools.hxx>
 #include <vcl/bmpacc.hxx>
 #include <osl/mutex.hxx>
+#include <basegfx/polygon/b2dpolygon.hxx>
+#include <basegfx/polygon/b2dpolygontools.hxx>
+#include <drawinglayer/primitive2d/polygonprimitive2d.hxx>
+#include <drawinglayer/primitive2d/hittestprimitive2d.hxx>
 
 //////////////////////////////////////////////////////////////////////////////
 // helper methods
@@ -174,6 +178,20 @@ namespace drawinglayer
             }
 
             return *pRetVal;
+        }
+
+        // #i99123#
+        Primitive2DReference createFallbackHitTestPrimitive(const basegfx::B2DHomMatrix& rMatrix)
+        {
+            // create PolygonHairlinePrimitive2D
+            basegfx::B2DPolygon aUnitOutline(basegfx::tools::createPolygonFromRect(basegfx::B2DRange(0.0, 0.0, 1.0, 1.0)));
+            aUnitOutline.transform(rMatrix);
+            const basegfx::BColor aBlack(0.0, 0.0, 0.0);
+            const Primitive2DReference xReference(new PolygonHairlinePrimitive2D(aUnitOutline, aBlack));
+
+            // create HitTestPrimitive2D with it
+            const Primitive2DSequence xSequence(&xReference, 1);
+            return Primitive2DReference(new HitTestPrimitive2D(xSequence));
         }
     } // end of namespace primitive2d
 } // end of namespace drawinglayer

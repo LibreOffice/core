@@ -575,7 +575,7 @@ public:
             ::com::sun::star::uno::XInterface> const & i_xIfc);
 
     // --> OD 2008-11-26 #158694#
-    const sal_Bool exportTextNumberElement() const;
+    sal_Bool exportTextNumberElement() const;
     // <--
 };
 

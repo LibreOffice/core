@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: filglob.cxx,v $
- * $Revision: 1.26 $
+ * $Revision: 1.26.4.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -262,80 +262,6 @@ namespace fileaccess {
 
         return osl::File::move( strPath,strDestPath );
     }
-
-
-    oslFileError getResolvedURL(rtl_uString* ustrPath, rtl_uString** pustrResolvedURL)
-    {
-        /* TODO: If file exist and is a link get link target URL */
-        rtl_uString_assign( pustrResolvedURL, ustrPath );
-
-        return osl_File_E_None;
-    }
-
-
-
-//----------------------------------------------------------------------------
-//  makeAbsolute Path
-//----------------------------------------------------------------------------
-
-
-    sal_Bool SAL_CALL makeAbsolutePath( const rtl::OUString& aRelPath,
-                                        rtl::OUString&       aAbsPath )
-    {
-        // should no longer happen
-        OSL_ASSERT( 0 != aRelPath.compareToAscii( "//./" , 4 ) );
-
-        if ( 0 != aRelPath.compareToAscii( "file://" , 7 ) )
-            return sal_False;
-
-        // The 'upward' ('/../') pattern.
-        static const sal_Unicode pattern[5] =
-        {
-            '/', '.', '.', '/', 0
-        };
-
-        // Ensure 'relative path' contains 'pattern'.
-        if (rtl_ustr_indexOfStr_WithLength (
-            aRelPath.getStr(), aRelPath.getLength(), pattern, 4) < 0)
-        {
-            // Path already absolute.
-            aAbsPath = aRelPath;
-            return sal_True;
-        }
-
-        // Tokenize 'relative path'.
-        std::vector< rtl::OUString > aTokenStack;
-        sal_Int32                    nIndex = 6;
-
-        aRelPath.getToken( 0, '/', nIndex );
-        while ( nIndex >= 0 )
-        {
-            rtl::OUString aToken (aRelPath.getToken( 0, '/', nIndex ));
-
-            if ( aToken.compareToAscii( ".." ) == 0 && ! aTokenStack.empty())
-                aTokenStack.pop_back();
-            else
-                aTokenStack.push_back( aToken );
-        }
-
-        // Reassemble as 'absolute path'.
-        rtl::OUStringBuffer aBuffer (aRelPath.getLength());
-        aBuffer.appendAscii ("file:/", 6);
-
-        std::vector< rtl::OUString >::const_iterator it;
-        for (it = aTokenStack.begin(); it != aTokenStack.end(); ++it)
-        {
-            aBuffer.append (sal_Unicode('/'));
-            aBuffer.append (*it);
-        }
-
-        aAbsPath = aBuffer.makeStringAndClear();
-
-        return sal_True;
-    }
-
-
-
 
     void throw_handler(
         sal_Int32 errorCode,

@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: sortresult.cxx,v $
- * $Revision: 1.18 $
+ * $Revision: 1.18.22.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -1677,7 +1677,7 @@ void SortedResultSet::Move( long nPos, long nCount, long nOffset )
 
     // finally put the remembered entries at there new location
     nTo = nPos + nOffset;
-    for ( i=0; i<nCount; i++ );
+    for ( i=0; i<nCount; i++ )
     {
         maO2S.Replace( (void*)pTmpArr[ i ], (sal_uInt32)( nTo+i ) );
     }

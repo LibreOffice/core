@@ -66,7 +66,7 @@ namespace formula
         virtual void fillLastRecentlyUsedFunctions(::std::vector< const IFunctionDescription*>& _rLastRUFunctions) const = 0;
         virtual const IFunctionDescription* getFunctionByName(const ::rtl::OUString& _sFunctionName) const = 0;
 
-        virtual const sal_Unicode getSingleToken(const EToken _eToken) const = 0;
+        virtual sal_Unicode getSingleToken(const EToken _eToken) const = 0;
     };
 
     class SAL_NO_VTABLE IFunctionCategory

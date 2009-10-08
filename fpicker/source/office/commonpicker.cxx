@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: commonpicker.cxx,v $
- * $Revision: 1.9 $
+ * $Revision: 1.9.12.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -449,13 +449,21 @@ namespace svt
         {
             if ( *pArgument >>= aPropArg )
             {
+                if ( aPropArg.Name.getLength() <= 0)
+                    continue;
+
                 sSettingName = aPropArg.Name;
                 aSettingValue = aPropArg.Value;
             }
             else if ( *pArgument >>= aPairArg )
             {
+                if ( aPairArg.Name.getLength() <= 0)
+                    continue;
+
                 sSettingName = aPairArg.Name;
                 aSettingValue = aPairArg.Value;
+
+
             }
             else
             {

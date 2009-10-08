@@ -265,6 +265,12 @@ void SfxMenuControl::StateChanged
                 GetId() >= SID_OBJECTMENU0 && GetId() < SID_OBJECTMENU_LAST;
 
     // enabled/disabled-Flag pauschal korrigieren
+
+#ifdef UNIX
+    if (nSID == SID_PASTE)
+        pOwnMenu->EnableItem( GetId(), TRUE );
+    else
+#endif
     pOwnMenu->EnableItem( GetId(), bIsObjMenu
                 ? 0 != pOwnMenu->GetSVMenu()->GetPopupMenu( GetId() )
                 : eState != SFX_ITEM_DISABLED );

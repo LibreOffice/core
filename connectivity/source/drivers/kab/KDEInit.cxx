@@ -115,13 +115,13 @@ namespace
 }
 
 // -----------------------------------------------------------------------
-extern "C" void SAL_CALL initKApplication()
+extern "C" SAL_DLLPUBLIC_EXPORT void SAL_CALL initKApplication()
 {
     ::connectivity::kab::KDEInit::Init();
 }
 
 // -----------------------------------------------------------------------
-extern "C" void SAL_CALL shutdownKApplication()
+extern "C" SAL_DLLPUBLIC_EXPORT void SAL_CALL shutdownKApplication()
 {
     ::connectivity::kab::KDEInit::Shutdown();
 }
@@ -143,7 +143,7 @@ extern "C" void SAL_CALL shutdownKApplication()
 
     #i60062# / 2006-01-06 / frank.schoenheit@sun.com
 */
-extern "C" int SAL_CALL matchKDEVersion()
+extern "C" SAL_DLLPUBLIC_EXPORT int SAL_CALL matchKDEVersion()
 {
     double nMinVersion = normalizeVersion( MIN_KDE_VERSION_MAJOR, MIN_KDE_VERSION_MINOR );
     double nCurVersion = normalizeVersion( ::KDE::versionMajor(), ::KDE::versionMinor() );

@@ -73,6 +73,12 @@ class SfxItemSet;
 class SdrModel;
 class SvxDrawPage;
 class SvGlobalName;
+// --> OD 2009-01-16 #i59051#
+namespace basegfx
+    {
+        class B2DPolyPolygon;
+    } // end of namespace basegfx
+// <--
 
 class SvxShapeMutex
 {
@@ -132,6 +138,10 @@ protected:
     // Umrechnungen fuer den Writer, der in TWIPS arbeitet
     void ForceMetricToItemPoolMetric(Pair& rPoint) const throw();
     void ForceMetricTo100th_mm(Pair& rPoint) const throw();
+    // --> OD 2009-01-16 #i59051#
+    void ForceMetricToItemPoolMetric(basegfx::B2DPolyPolygon& rPolyPolygon) const throw();
+    void ForceMetricTo100th_mm(basegfx::B2DPolyPolygon& rPolyPolygon) const throw();
+    // <--
 
     ::com::sun::star::uno::Any GetAnyForItem( SfxItemSet& aSet, const SfxItemPropertyMap* pMap ) const;
 

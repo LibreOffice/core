@@ -329,6 +329,7 @@ USHORT SvxLanguageBox::InsertLanguage( const LanguageType nLangType, USHORT nPos
     String aStrEntry = m_pLangTable->GetString( nLang );
     if (LANGUAGE_NONE == nLang && m_bHasLangNone && m_bLangNoneIsLangAll)
         aStrEntry = m_aAllString;
+    aStrEntry = ApplyLreOrRleEmbedding( aStrEntry );
 
     USHORT nAt = 0;
     if ( m_bWithCheckmark )

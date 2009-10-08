@@ -94,7 +94,7 @@ static const xub_Unicode* Symbol( const xub_Unicode* p, XubString& rSym, const S
         {
             rSym = p;
             // Dann darf es Buchstaben, Zahlen oder Underlines enthalten
-            while( *p && rCharClass.isAlphaNumeric( *p ) || *p == '_' )
+            while( *p && (rCharClass.isAlphaNumeric( *p ) || *p == '_') )
                 p++, nLen++;
             // BASIC-Standard-Suffixe werden ignoriert
             if( *p && (*p == '%' || *p == '&' || *p == '!' || *p == '#' || *p == '$' ) )
@@ -118,7 +118,7 @@ static SbxVariable* QualifiedName
     {
         // Element einlesen
         refVar = Element( pObj, pGbl, &p, t, aCharClass );
-        while( refVar.Is() && *p == '.' || *p == '!' )
+        while( refVar.Is() && (*p == '.' || *p == '!') )
         {
             // Es folgt noch ein Objektelement. Das aktuelle Element
             // muss also ein SBX-Objekt sein oder liefern!

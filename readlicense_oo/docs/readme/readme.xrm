@@ -339,7 +339,7 @@
 
 		<Paragraph id="F2c" os="all">
 			<Text id="access7" xml:lang="en-US">For information on the accessibility features in ${PRODUCTNAME}, see </Text>
-			<Text id="abdfs2b" url="true" path="url" xml:lang="en-US">http://www.openoffice.org/access/</Text>
+			<Text id="abdfs2b" url="true" xml:lang="en-US">http://www.openoffice.org/access/</Text>
 			<Text id="abdfs2c" xml:lang="en-US">.</Text>
 		</Paragraph>
 	

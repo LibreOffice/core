@@ -3278,6 +3278,7 @@ void LayoutManager::implts_updateUIElementsVisibleState( sal_Bool bSetVisible )
 
             WriteGuard aWriteLock( m_aLock );
             m_aDockingArea = css::awt::Rectangle();
+            m_bMustDoLayout = sal_True;
             aWriteLock.unlock();
         }
         catch ( Exception& )

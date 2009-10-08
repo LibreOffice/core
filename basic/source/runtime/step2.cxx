@@ -71,7 +71,7 @@ SbxArray* getVBAGlobals( )
     xCtx.set( xProps->getPropertyValue( rtl::OUString(
         RTL_CONSTASCII_USTRINGPARAM( "DefaultContext" ))),
             UNO_QUERY_THROW );
-    SbUnoObject dGlobs( String( RTL_CONSTASCII_USTRINGPARAM("ExcelGlobals") ), xCtx->getValueByName( ::rtl::OUString::createFromAscii( "/singletons/org.openoffice.vba.theGlobals") ) );
+    SbUnoObject dGlobs( String( RTL_CONSTASCII_USTRINGPARAM("ExcelGlobals") ), xCtx->getValueByName( ::rtl::OUString::createFromAscii( "/singletons/ooo.vba.theGlobals") ) );
 
     SbxVariable *vba = dGlobs.Find( String( RTL_CONSTASCII_USTRINGPARAM("getGlobals") ) , SbxCLASS_DONTCARE );
 

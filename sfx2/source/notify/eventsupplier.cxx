@@ -73,6 +73,8 @@
 #define UNO_QUERY           ::com::sun::star::uno::UNO_QUERY
 
 namespace css = ::com::sun::star;
+using ::com::sun::star::uno::Sequence;
+using ::com::sun::star::beans::PropertyValue;
 
 //--------------------------------------------------------------------------------------------------------
     //  --- XNameReplace ---
@@ -83,55 +85,58 @@ void SAL_CALL SfxEvents_Impl::replaceByName( const OUSTRING & aName, const ANY &
 {
     ::osl::MutexGuard aGuard( maMutex );
 
-    bool bReset = !rElement.hasValue();
     // find the event in the list and replace the data
     long nCount = maEventNames.getLength();
     for ( long i=0; i<nCount; i++ )
     {
         if ( maEventNames[i] == aName )
         {
+            Sequence< PropertyValue > aProperties;
             // check for correct type of the element
-            if ( bReset || ::getCppuType( (const SEQUENCE < PROPERTYVALUE > *)0 ) == rElement.getValueType() )
-            {
-                // create Configuration at first, creation might call this method also and that would overwrite everything
-                // we might have stored before!
-                USHORT nID = (USHORT) SfxEventConfiguration::GetEventId_Impl( aName );
-                if ( nID )
-                {
-                    // pConfig becomes the owner of the new SvxMacro
-                    if ( mpObjShell && !mpObjShell->IsLoading() )
-                        mpObjShell->SetModified( TRUE );
-
-                    if ( bReset )
-                    {
-                        maEventData[i] = ANY();
-                    }
-                    else
-                    {
-                        ANY aValue;
-                        BlowUpMacro( rElement, aValue, mpObjShell );
-
-                        SEQUENCE < PROPERTYVALUE > aProperties;
-                        if ( aValue >>= aProperties )
-                        {
-                            ::rtl::OUString aType;
-                            if (( aProperties[0].Name.compareToAscii( PROP_EVENT_TYPE ) == 0 ) &&
-                                ( aProperties[0].Value >>= aType ) &&
-                                  aType.getLength() == 0 )
-                            {
-                                // An empty event type means no binding. Therefore reset data
-                                // to reflect that state.
-                                maEventData[i] = ANY();
-                            }
-                            else
-                                maEventData[i] = aValue;
-                        }
-                    }
-                }
-            }
-            else
+            if ( rElement.hasValue() && !( rElement >>= aProperties ) )
                 throw ILLEGALARGUMENTEXCEPTION();
 
+            // create Configuration at first, creation might call this method also and that would overwrite everything
+            // we might have stored before!
+            USHORT nID = (USHORT) SfxEventConfiguration::GetEventId_Impl( aName );
+            OSL_ENSURE( nID, "SfxEvents_Impl::replaceByName: no ID for the given event!" );
+            if ( !nID )
+                // throw?
+                return;
+
+            if ( mpObjShell && !mpObjShell->IsLoading() )
+                mpObjShell->SetModified( TRUE );
+
+            if ( aProperties.getLength() )
+            {
+                // "normalize" the macro descriptor
+                ANY aValue;
+                BlowUpMacro( rElement, aValue, mpObjShell );
+                aValue >>= aProperties;
+
+                ::rtl::OUString sType;
+                if  (   ( aProperties.getLength() == 1 )
+                    &&  ( aProperties[0].Name.compareToAscii( PROP_EVENT_TYPE ) == 0 )
+                    &&  ( aProperties[0].Value >>= sType )
+                    &&  ( sType.getLength() == 0 )
+                    )
+                {
+                    // An empty event type means no binding. Therefore reset data
+                    // to reflect that state.
+                    // (that's for compatibility only. Nowadays, the Tools/Customize dialog should
+                    // set an empty sequence to indicate the request for resetting the assignment.)
+                    aProperties.realloc( 0 );
+                }
+            }
+
+            if ( aProperties.getLength() )
+            {
+                maEventData[i] = makeAny( aProperties );
+            }
+            else
+            {
+                maEventData[i].clear();
+            }
             return;
         }
     }

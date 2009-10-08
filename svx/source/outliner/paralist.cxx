@@ -59,6 +59,13 @@ ParagraphData& ParagraphData::operator=( const ParagraphData& r)
     return *this;
 }
 
+bool ParagraphData::operator==(const ParagraphData& rCandidate) const
+{
+    return (nDepth == rCandidate.nDepth
+        && mnNumberingStartValue == rCandidate.mnNumberingStartValue
+        && mbParaIsNumberingRestart == rCandidate.mbParaIsNumberingRestart);
+}
+
 Paragraph::Paragraph( sal_Int16 nDDepth )
 : aBulSize( -1, -1)
 {

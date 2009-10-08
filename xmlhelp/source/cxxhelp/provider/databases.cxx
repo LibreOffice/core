@@ -1062,7 +1062,8 @@ Reference< XHierarchicalNameAccess > Databases::jarFile( const rtl::OUString& ja
 }
 
 Reference< XHierarchicalNameAccess > Databases::findJarFileForPath
-    ( const rtl::OUString& jar, const rtl::OUString& Language, const rtl::OUString& path )
+    ( const rtl::OUString& jar, const rtl::OUString& Language,
+      const rtl::OUString& path, rtl::OUString* o_pExtensionPath )
 {
     Reference< XHierarchicalNameAccess > xNA;
     if( ! jar.getLength() ||
@@ -1074,7 +1075,7 @@ Reference< XHierarchicalNameAccess > Databases::findJarFileForPath
     JarFileIterator aJarFileIt( m_xContext, *this, jar, Language );
     Reference< XHierarchicalNameAccess > xTestNA;
     Reference< deployment::XPackage > xParentPackageBundle;
-    while( (xTestNA = aJarFileIt.nextJarFile( xParentPackageBundle )).is() )
+    while( (xTestNA = aJarFileIt.nextJarFile( xParentPackageBundle, o_pExtensionPath )).is() )
     {
         if( xTestNA.is() && xTestNA->hasByHierarchicalName( path ) )
         {
@@ -1663,7 +1664,7 @@ rtl::OUString KeyDataBaseFileIterator::implGetDbFileFromPackage
 // class JarFileIterator
 
 Reference< XHierarchicalNameAccess > JarFileIterator::nextJarFile
-    ( Reference< deployment::XPackage >& o_xParentPackageBundle )
+    ( Reference< deployment::XPackage >& o_xParentPackageBundle, rtl::OUString* o_pExtensionPath )
 {
     Reference< XHierarchicalNameAccess > xNA;
 
@@ -1687,6 +1688,8 @@ Reference< XHierarchicalNameAccess > JarFileIterator::nextJarFile
                     break;
 
                 xNA = implGetJarFromPackage( xHelpPackage );
+                if( xNA.is() && o_pExtensionPath != NULL )
+                    *o_pExtensionPath = xHelpPackage->getURL();
                 break;
             }
 
@@ -1697,6 +1700,8 @@ Reference< XHierarchicalNameAccess > JarFileIterator::nextJarFile
                     break;
 
                 xNA = implGetJarFromPackage( xHelpPackage );
+                if( xNA.is() && o_pExtensionPath != NULL )
+                    *o_pExtensionPath = xHelpPackage->getURL();
                 break;
             }
             case END_REACHED:

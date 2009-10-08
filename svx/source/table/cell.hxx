@@ -202,6 +202,8 @@ public:
 
     sdr::properties::TextProperties* CloneProperties( SdrObject& rNewObj, Cell& rNewCell );
 
+    static sdr::properties::TextProperties* CloneProperties( sdr::properties::TextProperties* pProperties, SdrObject& rNewObj, Cell& rNewCell );
+
     void notifyModified();
 
 protected:

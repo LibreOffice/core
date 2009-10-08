@@ -185,12 +185,25 @@ namespace sdr
             // update current ViewInformation2D at the ObjectContact
             const double fCurrentTime(getPrimitiveAnimator().GetTime());
             OutputDevice& rTargetOutDev = GetPageWindow().GetPaintWindow().GetTargetOutputDevice();
-            const GDIMetaFile* pMetaFile = rTargetOutDev.GetConnectMetaFile();
-            const bool bOutputToRecordingMetaFile(pMetaFile && pMetaFile->IsRecord() && !pMetaFile->IsPause());
             basegfx::B2DRange aViewRange;
 
             // create ViewRange
-            if(!bOutputToRecordingMetaFile)
+            if(isOutputToRecordingMetaFile())
+            {
+                if(isOutputToPDFFile() || isOutputToPrinter())
+                {
+                    // #i98402# if it's a PDF export, set the ClipRegion as ViewRange. This is
+                    // mainly because SW does not use DrawingLayer Page-Oriented and if not doing this,
+                    // all existing objects will be collected as primitives and processed.
+                    // OD 2009-03-05 #i99876# perform the same also for SW on printing.
+                    const Rectangle aLogicClipRectangle(rDisplayInfo.GetRedrawArea().GetBoundRect());
+
+                    aViewRange = basegfx::B2DRange(
+                        aLogicClipRectangle.Left(), aLogicClipRectangle.Top(),
+                        aLogicClipRectangle.Right(), aLogicClipRectangle.Bottom());
+                }
+            }
+            else
             {
                 // use visible pixels, but transform to world coordinates
                 const Size aOutputSizePixel(rTargetOutDev.GetOutputSizePixel());
@@ -401,6 +414,12 @@ namespace sdr
         {
             GDIMetaFile* pMetaFile = mrPageWindow.GetPaintWindow().GetOutputDevice().GetConnectMetaFile();
             return (pMetaFile && pMetaFile->IsRecord() && !pMetaFile->IsPause());
+        }
+
+        // pdf export?
+        bool ObjectContactOfPageView::isOutputToPDFFile() const
+        {
+            return (0 != mrPageWindow.GetPaintWindow().GetOutputDevice().GetPDFWriter());
         }
 
         // gray display mode

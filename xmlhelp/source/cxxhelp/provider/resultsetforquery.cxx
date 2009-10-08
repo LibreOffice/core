@@ -37,7 +37,6 @@
 #include <com/sun/star/lang/Locale.hpp>
 #include <com/sun/star/script/XInvocation.hpp>
 
-#include <qe/QueryProcessor.hxx>
 #ifndef INCLUDED_STL_ALGORITHM
 #include <algorithm>
 #define INCLUDED_STL_ALGORITHM
@@ -47,6 +46,8 @@
 #define INCLUDED_STL_SET
 #endif
 
+#include <qe/Query.hxx>
+#include <qe/DocGenerator.hxx>
 #include "resultsetforquery.hxx"
 #include "databases.hxx"
 

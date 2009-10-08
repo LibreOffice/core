@@ -36,6 +36,7 @@ TARGET=kab
 TARGET2=$(TARGET)drv
 
 ENABLE_EXCEPTIONS=TRUE
+VISIBILITY_HIDDEN=TRUE
 
 # --- Settings ----------------------------------
 

@@ -580,6 +580,9 @@ private:
     */
     void    impl_checkLoaded();
 
+private:
+    void    impl_removeWithoutChecks( const ::rtl::OUString& _rElementName );
+
 public:
     SfxLibrary(
         ModifiableHelper& _rModifiable,
@@ -650,6 +653,13 @@ public:
     virtual void SAL_CALL removeContainerListener( const ::com::sun::star::uno::Reference<
         ::com::sun::star::container::XContainerListener >& xListener )
             throw (::com::sun::star::uno::RuntimeException);
+
+public:
+    struct LibraryContainerAccess { friend class SfxLibraryContainer; private: LibraryContainerAccess() { } };
+    void    removeElementWithoutChecks( const ::rtl::OUString& _rElementName, LibraryContainerAccess )
+    {
+        impl_removeWithoutChecks( _rElementName );
+    }
 
 protected:
     virtual bool SAL_CALL isLibraryElementValid( ::com::sun::star::uno::Any aElement ) const = 0;

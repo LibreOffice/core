@@ -163,7 +163,18 @@ BYTE GetCharTypeForCompression( xub_Unicode cChar )
     }
 }
 
-void lcl_DrawRedLines( OutputDevice* pOutDev, long nFontHeight, const Point& rPnt, sal_uInt16 nIndex, sal_uInt16 nMaxEnd, const sal_Int32* pDXArray, WrongList* pWrongs, short nOrientation, const Point& rOrigin, BOOL bVertical )
+void lcl_DrawRedLines(
+    OutputDevice* pOutDev,
+    long nFontHeight,
+    const Point& rPnt,
+    sal_uInt16 nIndex,
+    sal_uInt16 nMaxEnd,
+    const sal_Int32* pDXArray,
+    WrongList* pWrongs,
+    short nOrientation,
+    const Point& rOrigin,
+    BOOL bVertical,
+    BOOL bIsRightToLeft )
 {
 #ifndef SVX_LIGHT
     // Aber nur, wenn Font nicht zu klein...
@@ -202,14 +213,24 @@ void lcl_DrawRedLines( OutputDevice* pOutDev, long nFontHeight, const Point& rPn
             if ( nStart > nIndex )
             {
                 if ( !bVertical )
-                    aPnt1.X() += pDXArray[ nStart - nIndex - 1 ];
+                {
+                    // since for RTL portions rPnt is on the visual right end of the portion
+                    // (i.e. at the start of the first RTL char) we need to subtract the offset
+                    // for RTL portions...
+                    aPnt1.X() += (bIsRightToLeft ? -1 : 1) * pDXArray[ nStart - nIndex - 1 ];
+                }
                 else
                     aPnt1.Y() += pDXArray[ nStart - nIndex - 1 ];
             }
             Point aPnt2( rPnt );
             DBG_ASSERT( nEnd > nIndex, "RedLine: aPnt2?" );
             if ( !bVertical )
-                aPnt2.X() += pDXArray[ nEnd - nIndex - 1 ];
+            {
+                // since for RTL portions rPnt is on the visual right end of the portion
+                // (i.e. at the start of the first RTL char) we need to subtract the offset
+                // for RTL portions...
+                aPnt2.X() += (bIsRightToLeft ? -1 : 1) * pDXArray[ nEnd - nIndex - 1 ];
+            }
             else
                 aPnt2.Y() += pDXArray[ nEnd - nIndex - 1 ];
             if ( nOrientation )
@@ -3153,6 +3174,11 @@ void ImpEditEngine::Paint( OutputDevice* pOutDev, Rectangle aClipRec, Point aSta
 
                                 Point aOutPos( aTmpPos );
                                 aRedLineTmpPos = aTmpPos;
+                                // In RTL portions spell markup pos should be at the start of the
+                                // first chara as well. That is on the right end of the portion
+                                if (pTextPortion->IsRightToLeft())
+                                    aRedLineTmpPos.X() += pTextPortion->GetSize().Width();
+
 //L2R                                if ( pTextPortion->GetRightToLeft() )
 //L2R                                {
 //L2R                                    sal_uInt16 nNextPortion = y+1;
@@ -3419,7 +3445,7 @@ void ImpEditEngine::Paint( OutputDevice* pOutDev, Rectangle aClipRec, Point aSta
                                         }
                                         Color aOldColor( pOutDev->GetLineColor() );
                                         pOutDev->SetLineColor( Color( GetColorConfig().GetColorValue( svtools::SPELL ).nColor ) );
-                                        lcl_DrawRedLines( pOutDev, aTmpFont.GetSize().Height(), aRedLineTmpPos, nIndex, nIndex + pTextPortion->GetLen(), pDXArray, pPortion->GetNode()->GetWrongList(), nOrientation, aOrigin, IsVertical() );
+                                        lcl_DrawRedLines( pOutDev, aTmpFont.GetSize().Height(), aRedLineTmpPos, nIndex, nIndex + pTextPortion->GetLen(), pDXArray, pPortion->GetNode()->GetWrongList(), nOrientation, aOrigin, IsVertical(), pTextPortion->IsRightToLeft() );
                                         pOutDev->SetLineColor( aOldColor );
                                     }
 #endif // !SVX_LIGHT

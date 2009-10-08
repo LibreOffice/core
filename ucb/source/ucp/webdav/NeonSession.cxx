@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: NeonSession.cxx,v $
- * $Revision: 1.55 $
+ * $Revision: 1.55.12.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -270,6 +270,8 @@ extern "C" int NeonSession_NeonAuth( void *       inUserData,
  * cancel the request. (if non-zero, username and password are
  * ignored.)  */
 
+
+
 #if 0
     // Give'em only a limited mumber of retries..
     if ( attempt > 9 )
@@ -357,6 +359,7 @@ extern "C" int NeonSession_NeonAuth( void *       inUserData,
             rtl::OUStringToOString( thePassWord, RTL_TEXTENCODING_UTF8 ) );
 
     return theRetVal;
+
 }
 
 // -------------------------------------------------------------------
@@ -390,6 +393,10 @@ extern "C" int NeonSession_CertificationNotify( void *userdata,
 
     xCertificateContainer = uno::Reference< ::com::sun::star::security::XCertificateContainer >(
                     pSession->getMSF().get()->createInstance( rtl::OUString::createFromAscii( "com.sun.star.security.CertificateContainer" )), uno::UNO_QUERY );
+
+    // YD if xmlsecurity is not built (os2), we cannot continue.
+    if (!xCertificateContainer.is())
+        return 1;
 
     char * dn;
 
@@ -760,8 +767,11 @@ void NeonSession::Init()
         // Note: Calling ne_set_[server|proxy]_auth more than once per
         //       m_pHttpSession instance sometimes(?) crashes Neon! ( last
         //       checked: 0.22.0)
-        ne_set_server_auth( m_pHttpSession, NeonSession_NeonAuth, this );
-        ne_set_proxy_auth ( m_pHttpSession, NeonSession_NeonAuth, this );
+        //ne_set_server_auth( m_pHttpSession, NeonSession_NeonAuth, this );
+        ne_add_server_auth( m_pHttpSession, NE_AUTH_ALL, NeonSession_NeonAuth, this );
+        //ne_set_proxy_auth ( m_pHttpSession, NeonSession_NeonAuth, this );
+        ne_add_proxy_auth ( m_pHttpSession, NE_AUTH_ALL, NeonSession_NeonAuth, this );
+
     }
 }
 
@@ -1815,30 +1825,6 @@ bool NeonSession::getDataFromInputStream(
 //static
 
 NeonSession::Map NeonSession::certMap;
-
-bool NeonSession::isCertificate( const ::rtl::OUString & url, const ::rtl::OUString & certificate_name )
-{
-    Map::iterator p = NeonSession::certMap.find(url);
-
-    bool ret = false;
-
-    while( p != NeonSession::certMap.end() )
-    {
-        ret = (*p).second.equals(certificate_name);
-        if( ret )
-            break;
-        p++;
-    }
-
-    return ret;
-}
-
-// -------------------------------------------------------------------
-//static
-void NeonSession::rememberCertificate( const ::rtl::OUString & url, const ::rtl::OUString & certificate_name )
-{
-    NeonSession::certMap.insert( Map::value_type( url, certificate_name ) );
-}
 
 // ---------------------------------------------------------------------
 sal_Bool

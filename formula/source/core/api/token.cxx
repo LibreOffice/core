@@ -880,11 +880,6 @@ BOOL FormulaTokenArray::HasMatrixDoubleRefOps()
 
 // --- POF (plain old formula) rewrite of a token array ---------------------
 
-/* TODO: When both POF OOoXML and ODFF are to be supported differently, the
- * FormulaMissingContext and FormulaTokenArray::*Pof* methods should go to a convention
- * on its own.
- */
-
 #if 0
 // static function can't be compiled if not used (warning)
 //#if OSL_DEBUG_LEVEL > 0
@@ -904,10 +899,10 @@ inline bool MissingConvention::isRewriteNeeded( OpCode eOp ) const
     {
         case ocGammaDist:
         case ocPoissonDist:
+        case ocAddress:
             return true;
         case ocMissing:
         case ocLog:
-        case ocAddress:
             return !isODFF();   // rewrite only for PODF
         default:
             return false;
@@ -917,16 +912,16 @@ inline bool MissingConvention::isRewriteNeeded( OpCode eOp ) const
 class FormulaMissingContext
 {
     public:
-            const FormulaToken*  mpFunc;
-            int             mnCurArg;
+            const FormulaToken* mpFunc;
+            int                 mnCurArg;
 
                     void    Clear() { mpFunc = NULL; mnCurArg = 0; }
             inline  bool    AddDefaultArg( FormulaTokenArray* pNewArr, int nArg, double f ) const;
-    static  inline  bool    IsRewriteNeeded( OpCode eOp );
                     bool    AddMissingExternal( FormulaTokenArray* pNewArr ) const;
                     bool    AddMissing( FormulaTokenArray *pNewArr, const MissingConvention & rConv  ) const;
                     void    AddMoreArgs( FormulaTokenArray *pNewArr, const MissingConvention & rConv  ) const;
 };
+
 void FormulaMissingContext::AddMoreArgs( FormulaTokenArray *pNewArr, const MissingConvention & rConv  ) const
 {
     if ( !mpFunc )
@@ -970,21 +965,10 @@ inline bool FormulaMissingContext::AddDefaultArg( FormulaTokenArray* pNewArr, in
     return false;
 }
 
-inline bool FormulaMissingContext::IsRewriteNeeded( OpCode eOp )
-{
-    switch (eOp)
-    {
-        case ocMissing:
-        case ocLog:
-        case ocAddress:
-            return true;
-        default:
-            return false;
-    }
-}
-
 bool FormulaMissingContext::AddMissingExternal( FormulaTokenArray *pNewArr ) const
 {
+    // Only called for PODF, not ODFF. No need to distinguish.
+
     const String &rName = mpFunc->GetExternal();
 
     // initial (fast) check:
@@ -1011,38 +995,47 @@ bool FormulaMissingContext::AddMissing( FormulaTokenArray *pNewArr, const Missin
         return false;
 
     bool bRet = false;
+    const OpCode eOp = mpFunc->GetOpCode();
+
+    // Add for both, PODF and ODFF
+    switch (eOp)
+    {
+        case ocAddress:
+            return AddDefaultArg( pNewArr, 2, 1.0 );    // abs
+        default:
+            break;
+    }
+
     if (rConv.isODFF())
     {
+        // Add for ODFF
     }
     else
     {
-        switch ( mpFunc->GetOpCode() )
+        // Add for PODF
+        switch (eOp)
         {
             case ocFixed:
                 return AddDefaultArg( pNewArr, 1, 2.0 );
-                //break;
             case ocBetaDist:
             case ocBetaInv:
-            case ocRMZ:  // PMT
+            case ocRMZ:     // PMT
                 return AddDefaultArg( pNewArr, 3, 0.0 );
-                //break;
-            case ocZinsZ: // IPMT
-            case ocKapz:  // PPMT
+            case ocZinsZ:   // IPMT
+            case ocKapz:    // PPMT
                 return AddDefaultArg( pNewArr, 4, 0.0 );
-                //break;
-            case ocBW: // PV
-            case ocZW: // FV
-                bRet |= AddDefaultArg( pNewArr, 2, 0.0 ); // pmt
-                bRet |= AddDefaultArg( pNewArr, 3, 0.0 ); // [fp]v
+            case ocBW:      // PV
+            case ocZW:      // FV
+                bRet |= AddDefaultArg( pNewArr, 2, 0.0 );   // pmt
+                bRet |= AddDefaultArg( pNewArr, 3, 0.0 );   // [fp]v
                 break;
-            case ocZins: // RATE
-                bRet |= AddDefaultArg( pNewArr, 1, 0.0 ); // pmt
-                bRet |= AddDefaultArg( pNewArr, 3, 0.0 ); // fv
-                bRet |= AddDefaultArg( pNewArr, 4, 0.0 ); // type
+            case ocZins:    // RATE
+                bRet |= AddDefaultArg( pNewArr, 1, 0.0 );   // pmt
+                bRet |= AddDefaultArg( pNewArr, 3, 0.0 );   // fv
+                bRet |= AddDefaultArg( pNewArr, 4, 0.0 );   // type
                 break;
             case ocExternal:
                 return AddMissingExternal( pNewArr );
-                //break;
 
                 // --- more complex cases ---
 
@@ -1113,8 +1106,8 @@ FormulaTokenArray * FormulaTokenArray::RewriteMissingToPof( const MissingConvent
                 ++nFn;      // all following operations on _that_ function
                 pCtx[ nFn ].mpFunc = PeekPrevNoSpaces();
                 pCtx[ nFn ].mnCurArg = 0;
-                if (pCtx[ nFn ].mpFunc && pCtx[ nFn ].mpFunc->GetOpCode() == ocAddress)
-                    pOcas[ nOcas++ ] = nFn;     // entering ADDRESS()
+                if (pCtx[ nFn ].mpFunc && pCtx[ nFn ].mpFunc->GetOpCode() == ocAddress && !rConv.isODFF())
+                    pOcas[ nOcas++ ] = nFn;     // entering ADDRESS() if PODF
                 break;
             case ocClose:
                 pCtx[ nFn ].AddMoreArgs( pNewArr, rConv );

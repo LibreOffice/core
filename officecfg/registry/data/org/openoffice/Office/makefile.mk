@@ -88,6 +88,7 @@ MODULEFILES= \
     Writer-defaultfontarial.xcu \
     Writer-directcursor.xcu \
     Writer-javamail.xcu \
+    Impress-ogltrans.xcu \
     Embedding-calc.xcu   \
     Embedding-chart.xcu   \
     Embedding-draw.xcu   \
@@ -105,9 +106,11 @@ LOCALIZEDFILES= \
     DataAccess.xcu \
     TableWizard.xcu \
     UI.xcu \
+    Embedding.xcu \
     WebWizard.xcu \
     FormWizard.xcu \
     Writer.xcu
+
 
 .INCLUDE :  target.mk
 

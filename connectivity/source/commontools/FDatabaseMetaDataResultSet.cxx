@@ -31,7 +31,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_connectivity.hxx"
 
-
+#include "ParameterSubstitution.hxx"
 #include "FDatabaseMetaDataResultSet.hxx"
 #include "FDatabaseMetaDataResultSetMetaData.hxx"
 #include <com/sun/star/sdbc/DataType.hpp>
@@ -48,6 +48,7 @@
 #include <cppuhelper/typeprovider.hxx>
 #include <comphelper/sequence.hxx>
 #include <cppuhelper/factory.hxx>
+#include <cppuhelper/implementationentry.hxx>
 #include "connectivity/dbexception.hxx"
 #include "TConnection.hxx"
 
@@ -864,14 +865,23 @@ void SAL_CALL ODatabaseMetaDataResultSet::initialize( const Sequence< Any >& _aA
     // -------------------------------------------------------------------------
     namespace connectivity
     {
-        Reference< XInterface >  SAL_CALL ODatabaseMetaDataResultSet_CreateInstance(const Reference< XMultiServiceFactory >& ) throw( Exception )
+        Reference< XInterface >  SAL_CALL ODatabaseMetaDataResultSet_CreateInstance(const Reference< XComponentContext >& ) throw( Exception )
         {
             return *(new ODatabaseMetaDataResultSet());
         }
     }
 
 // -----------------------------------------------------------------------------
-
+namespace
+{
+    cppu::ImplementationEntry entries[] = {
+        { &ODatabaseMetaDataResultSet_CreateInstance, &ODatabaseMetaDataResultSet::getImplementationName_Static, &ODatabaseMetaDataResultSet::getSupportedServiceNames_Static,
+            &cppu::createSingleComponentFactory, 0, 0 },
+        { &ParameterSubstitution::create, &ParameterSubstitution::getImplementationName_Static, &ParameterSubstitution::getSupportedServiceNames_Static,
+            &cppu::createSingleComponentFactory, 0, 0 },
+        { 0, 0, 0, 0, 0, 0 }
+    };
+}
 using ::rtl::OUString;
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::Sequence;
@@ -893,56 +903,14 @@ SAL_DLLPUBLIC_EXPORT void SAL_CALL component_getImplementationEnvironment(const 
 }
 
 //---------------------------------------------------------------------------------------
-SAL_DLLPUBLIC_EXPORT sal_Bool SAL_CALL component_writeInfo(void* /*_pServiceManager*/, com::sun::star::registry::XRegistryKey* _pRegistryKey)
+SAL_DLLPUBLIC_EXPORT sal_Bool SAL_CALL component_writeInfo(void* serviceManager, com::sun::star::registry::XRegistryKey* registryKey)
 {
-    ::rtl::OUString sMainKeyName = ::rtl::OUString::createFromAscii("/");
-    sMainKeyName += ODatabaseMetaDataResultSet::getImplementationName_Static();
-    sMainKeyName += ::rtl::OUString::createFromAscii("/UNO/SERVICES");
-
-    try
-    {
-        Reference< XRegistryKey > xMainKey = _pRegistryKey->createKey(sMainKeyName);
-        if (!xMainKey.is())
-            return sal_False;
-
-        Sequence< ::rtl::OUString > sServices = ODatabaseMetaDataResultSet::getSupportedServiceNames_Static();
-        const ::rtl::OUString* pServices = sServices.getConstArray();
-        for (sal_Int32 i=0; i<sServices.getLength(); ++i, ++pServices)
-            xMainKey->createKey(*pServices);
-    }
-    catch(InvalidRegistryException&)
-    {
-        return sal_False;
-    }
-    catch(InvalidValueException&)
-    {
-        return sal_False;
-    }
-    return sal_True;
+    return cppu::component_writeInfoHelper(serviceManager, registryKey, entries);
 }
 //---------------------------------------------------------------------------------------
-SAL_DLLPUBLIC_EXPORT void* SAL_CALL component_getFactory(const sal_Char* _pImplName, ::com::sun::star::lang::XMultiServiceFactory* _pServiceManager, void* /*_pRegistryKey*/)
+SAL_DLLPUBLIC_EXPORT void* SAL_CALL component_getFactory(const sal_Char* implName, ::com::sun::star::lang::XMultiServiceFactory* serviceManager, void* registryKey)
 {
-    void* pRet = NULL;
-
-    if (ODatabaseMetaDataResultSet::getImplementationName_Static().compareToAscii(_pImplName) == 0)
-    {
-        Reference< XSingleServiceFactory > xFactory(
-            ::cppu::createSingleFactory(
-                _pServiceManager,
-                ODatabaseMetaDataResultSet::getImplementationName_Static(),
-                ODatabaseMetaDataResultSet_CreateInstance,
-                ODatabaseMetaDataResultSet::getSupportedServiceNames_Static(),0
-            )
-        );
-        if (xFactory.is())
-        {
-            xFactory->acquire();
-            pRet = xFactory.get();
-        }
-    }
-
-    return pRet;
+    return cppu::component_getFactoryHelper(implName, serviceManager, registryKey, entries);
 }
 
 }   // extern "C"

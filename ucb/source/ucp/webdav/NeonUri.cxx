@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: NeonUri.cxx,v $
- * $Revision: 1.25 $
+ * $Revision: 1.25.16.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -308,20 +308,6 @@ bool NeonUri::operator== ( const NeonUri & rOther ) const
 ::rtl::OUString NeonUri::GetPathBaseNameUnescaped () const
 {
     return unescape( GetPathBaseName() );
-}
-
-::rtl::OUString NeonUri::GetPathDirName () const
-{
-    sal_Int32 nPos = mPath.lastIndexOf ('/');
-    if (nPos == mPath.getLength () - 1)
-    {
-        // Trailing slash found. Skip.
-        nPos = mPath.lastIndexOf ('/', nPos);
-    }
-    if (nPos != -1)
-        return mPath.copy (0, nPos + 1);
-    else
-        return rtl::OUString::createFromAscii ("/");
 }
 
 void NeonUri::AppendPath (const rtl::OUString& rPath)

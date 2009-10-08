@@ -95,7 +95,12 @@ namespace svt
     }
 
     //--------------------------------------------------------------------
-    void AsyncPickerAction::execute( const String& _rURL, const String& _rFilter, sal_Int32 _nMinTimeout, sal_Int32 _nMaxTimeout )
+    void AsyncPickerAction::execute(
+        const String& _rURL,
+        const String& _rFilter,
+        sal_Int32 _nMinTimeout,
+        sal_Int32 _nMaxTimeout,
+        const OUStringList& rBlackList )
     {
         DBG_TESTSOLARMUTEX();
             // if this asserts, we'd need to have an own mutex per instance
@@ -129,7 +134,7 @@ namespace svt
             break;
 
         case eOpenURL:
-            eResult = m_pView->Initialize( _rURL, _rFilter, pActionDescriptor.get() );
+            eResult = m_pView->Initialize( _rURL, _rFilter, pActionDescriptor.get(), rBlackList );
             break;
 
         case eExecuteFilter:

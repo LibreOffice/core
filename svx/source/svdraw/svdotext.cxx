@@ -910,7 +910,10 @@ void SdrTextObj::TakeTextRect( SdrOutliner& rOutliner, Rectangle& rTextRect, FAS
             pTestObj->GetOutlinerParaObject() != pOutlinerParaObject )
         {
             if( bHitTest ) // #i33696# take back fix #i27510#
+            {
                 rOutliner.SetTextObj( this );
+                rOutliner.SetFixedCellHeight(((const SdrTextFixedCellHeightItem&)GetMergedItem(SDRATTR_TEXT_USEFIXEDCELLHEIGHT)).GetValue());
+            }
 
             rOutliner.SetUpdateMode(TRUE);
             rOutliner.SetText(*pPara);
@@ -1338,7 +1341,7 @@ void SdrTextObj::operator=(const SdrObject& rObj)
             }
             else
             {
-                pNewOutlinerParaObject = pTextObj->getActiveText()->GetOutlinerParaObject()->Clone();
+                pNewOutlinerParaObject = new OutlinerParaObject(*pTextObj->getActiveText()->GetOutlinerParaObject());
             }
         }
 
@@ -1714,7 +1717,7 @@ void SdrTextObj::SetVerticalWriting(sal_Bool bVertical)
         pOutlinerParaObject = GetOutlinerParaObject();
     }
 
-    if( pOutlinerParaObject && (pOutlinerParaObject->IsVertical() != bVertical) )
+    if( pOutlinerParaObject && (pOutlinerParaObject->IsVertical() != (bool)bVertical) )
     {
         // get item settings
         const SfxItemSet& rSet = GetObjectItemSet();
