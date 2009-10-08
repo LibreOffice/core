@@ -402,9 +402,9 @@ basegfx::B2DPolyPolygon SdrObjGroup::TakeXorPoly() const
     return aRetval;
 }
 
-FASTBOOL SdrObjGroup::BegDrag(SdrDragStat& /*rDrag*/) const
+bool SdrObjGroup::beginSpecialDrag(SdrDragStat& /*rDrag*/) const
 {
-    return FALSE;
+    return false;
 }
 
 

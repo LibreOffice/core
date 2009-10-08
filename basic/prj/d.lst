@@ -36,7 +36,6 @@ mkdir: %_DEST%\inc%_EXT%\basic
 ..\inc\basic\sberrors.hxx %_DEST%\inc%_EXT%\basic\sberrors.hxx
 ..\inc\basic\basrdll.hxx %_DEST%\inc%_EXT%\basic\basrdll.hxx
 ..\inc\basic\sbstdobj.hxx %_DEST%\inc%_EXT%\basic\sbstdobj.hxx
-..\inc\basic\hilight.hxx %_DEST%\inc%_EXT%\basic\hilight.hxx
 ..\inc\basic\process.hxx %_DEST%\inc%_EXT%\basic\process.hxx
 ..\inc\basic\mybasic.hxx %_DEST%\inc%_EXT%\basic\mybasic.hxx
 ..\inc\basic\testtool.hxx %_DEST%\inc%_EXT%\basic\testtool.hxx

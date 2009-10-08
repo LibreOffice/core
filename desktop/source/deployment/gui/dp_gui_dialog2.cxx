@@ -8,7 +8,7 @@
  *
  * $RCSfile: dp_gui_dialog2.cxx,v $
  *
- * $Revision: 1.9 $
+ * $Revision: 1.8.4.8 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -184,7 +184,7 @@ Entry_Impl::Entry_Impl( const uno::Reference< deployment::XPackage > &xPackage,
 
     m_bLocked = m_xPackageManager->isReadOnly();
 
-    if ( ( eState != REGISTERED ) && ( eState != NOT_REGISTERED ) )
+    if ( eState == AMBIGUOUS )
         m_sErrorText = ExtMgrDialog::getResourceString( RID_STR_ERROR_UNKNOWN_STATUS );
 }
 
@@ -704,11 +704,14 @@ void ExtensionBox_Impl::selectEntry( long nPos )
         }
         SetButtonStatus( m_vEntries[ nPos ] ); //dv
     }
+    else
+    {
+        m_pOptionsBtn->Hide();
+        m_pEnableBtn->Hide();
+        m_pRemoveBtn->Hide();
+    }
     guard.clear();
 
-    m_pOptionsBtn->Show( m_bHasActive );
-    m_pEnableBtn->Show( m_bHasActive );
-    m_pRemoveBtn->Show( m_bHasActive );
 }
 
 // -----------------------------------------------------------------------
@@ -728,7 +731,7 @@ void ExtensionBox_Impl::SetButtonPos( const Rectangle& rRect )
 // -----------------------------------------------------------------------
 void ExtensionBox_Impl::SetButtonStatus( const TEntry_Impl pEntry )
 {
-    if ( pEntry->m_eState == REGISTERED )
+    if ( ( pEntry->m_eState == REGISTERED ) || ( pEntry->m_eState == NOT_AVAILABLE ) )
     {
         m_pEnableBtn->SetText( ExtMgrDialog::getResourceString( RID_CTX_ITEM_DISABLE ) );
         m_pEnableBtn->SetHelpId( HID_EXTENSION_MANAGER_LISTBOX_DISABLE );
@@ -739,8 +742,23 @@ void ExtensionBox_Impl::SetButtonStatus( const TEntry_Impl pEntry )
         m_pEnableBtn->SetHelpId( HID_EXTENSION_MANAGER_LISTBOX_ENABLE );
     }
 
-    m_pOptionsBtn->Enable( pEntry->m_bHasOptions );
-    m_pEnableBtn->Enable( !pEntry->m_bLocked );
+    if ( pEntry->m_eState == NOT_AVAILABLE )
+        m_pEnableBtn->Hide();
+    else
+    {
+        m_pEnableBtn->Enable( !pEntry->m_bLocked );
+        m_pEnableBtn->Show();
+    }
+
+    if ( pEntry->m_bHasOptions )
+    {
+        m_pOptionsBtn->Enable( pEntry->m_bHasOptions );
+        m_pOptionsBtn->Show();
+    }
+    else
+        m_pOptionsBtn->Hide();
+
+    m_pRemoveBtn->Show();
     m_pRemoveBtn->Enable( !pEntry->m_bLocked );
 }
 
@@ -749,10 +767,10 @@ void ExtensionBox_Impl::DrawRow( const Rectangle& rRect, const TEntry_Impl pEntr
 {
     const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
 
-    if ( pEntry->m_eState != REGISTERED )
-        SetTextColor( rStyleSettings.GetDisableColor() );
-    else if ( pEntry->m_bActive )
+    if ( pEntry->m_bActive )
         SetTextColor( rStyleSettings.GetHighlightTextColor() );
+    else if ( ( pEntry->m_eState != REGISTERED ) && ( pEntry->m_eState != NOT_AVAILABLE ) )
+        SetTextColor( rStyleSettings.GetDisableColor() );
     else if ( IsControlForeground() )
         SetTextColor( GetControlForeground() );
     else
@@ -762,7 +780,6 @@ void ExtensionBox_Impl::DrawRow( const Rectangle& rRect, const TEntry_Impl pEntr
     {
         SetLineColor();
         SetFillColor( rStyleSettings.GetHighlightColor() );
-        // SetTextFillColor( rStyleSettings.GetHighlightColor() );
         DrawRect( rRect );
     }
     else
@@ -883,7 +900,7 @@ void ExtensionBox_Impl::DrawRow( const Rectangle& rRect, const TEntry_Impl pEntr
         aPos = rRect.TopRight() + Point( -(RIGHT_ICON_OFFSET + SMALL_ICON_SIZE), TOP_OFFSET );
         DrawImage( aPos, Size( SMALL_ICON_SIZE, SMALL_ICON_SIZE ), isHCMode() ? m_aLockedImageHC : m_aLockedImage );
     }
-    if ( ( pEntry->m_eState != REGISTERED ) && ( pEntry->m_eState != NOT_REGISTERED ) )
+    if ( pEntry->m_eState == AMBIGUOUS )
     {
         aPos = rRect.TopRight() + Point( -(RIGHT_ICON_OFFSET + SPACE_BETWEEN + 2*SMALL_ICON_SIZE), TOP_OFFSET );
         DrawImage( aPos, Size( SMALL_ICON_SIZE, SMALL_ICON_SIZE ), isHCMode() ? m_aWarningImageHC : m_aWarningImage );
@@ -1011,7 +1028,7 @@ MENU_COMMAND ExtensionBox_Impl::ShowPopupMenu( const Point & rPos, const long nP
     {
         if ( m_vEntries[ nPos ]->m_eState == REGISTERED )
             aPopup.InsertItem( CMD_DISABLE, ExtMgrDialog::getResourceString( RID_CTX_ITEM_DISABLE ) );
-        else
+        else if ( m_vEntries[ nPos ]->m_eState != NOT_AVAILABLE )
             aPopup.InsertItem( CMD_ENABLE, ExtMgrDialog::getResourceString( RID_CTX_ITEM_ENABLE ) );
 
         aPopup.InsertItem( CMD_REMOVE, ExtMgrDialog::getResourceString( RID_CTX_ITEM_REMOVE ) );
@@ -1327,7 +1344,7 @@ void ExtensionBox_Impl::updateEntry( const uno::Reference< deployment::XPackage 
             (*iIndex)->m_sVersion = xPackage->getVersion();
             (*iIndex)->m_sDescription = xPackage->getDescription();
 
-            if ( ( eState != REGISTERED ) && ( eState != NOT_REGISTERED ) )
+            if ( eState == AMBIGUOUS )
                 (*iIndex)->m_sErrorText = ExtMgrDialog::getResourceString( RID_STR_ERROR_UNKNOWN_STATUS );
             else
                 (*iIndex)->m_sErrorText = String();
@@ -1382,7 +1399,7 @@ void ExtensionBox_Impl::checkEntries()
             else
             {
                 //We reach this point when we updated an extension.
-                m_vEntries.erase( iIndex );
+                iIndex = m_vEntries.erase( iIndex );
                 bNext = false;
 
                 if ( m_bHasActive )
@@ -1573,7 +1590,7 @@ ExtMgrDialog::ExtMgrDialog( Window *pParent, TheExtensionManager *pManager ) :
     m_bEnableWarning(       false ),
     m_bDisableWarning(      false ),
     m_bDeleteWarning(       false ),
-    m_bHasSharedExtensions( false ),
+    m_bIsBusy(              false ),
     m_nProgress(            0 ),
     m_pManager( pManager )
 {
@@ -1838,9 +1855,14 @@ uno::Sequence< OUString > ExtMgrDialog::raiseAddPicker( const uno::Reference< de
             uno::Sequence< uno::Any >( &mode, 1 ), xContext ), uno::UNO_QUERY_THROW );
     xFilePicker->setTitle( m_sAddPackages );
 
+    if ( m_sLastFolderURL.Len() )
+        xFilePicker->setDisplayDirectory( m_sLastFolderURL );
+
     // collect and set filter list:
     typedef ::std::map< OUString, OUString > t_string2string;
     t_string2string title2filter;
+    OUString sDefaultFilter( StrAllFiles::get() );
+
     const uno::Sequence< uno::Reference< deployment::XPackageTypeInfo > > packageTypes( xPackageManager->getSupportedPackageTypes() );
 
     for ( sal_Int32 pos = 0; pos < packageTypes.getLength(); ++pos )
@@ -1860,6 +1882,8 @@ uno::Sequence< OUString > ExtMgrDialog::raiseAddPicker( const uno::Reference< de
                 buf.append( filter );
                 insertion.first->second = buf.makeStringAndClear();
             }
+            if ( xPackageType->getMediaType() == OUSTR( "application/vnd.sun.star.package-bundle" ) )
+                sDefaultFilter = title;
         }
     }
 
@@ -1879,11 +1903,12 @@ uno::Sequence< OUString > ExtMgrDialog::raiseAddPicker( const uno::Reference< de
             (void) exc;
         }
     }
-    xFilterManager->setCurrentFilter( StrAllFiles::get() );
+    xFilterManager->setCurrentFilter( sDefaultFilter );
 
     if ( xFilePicker->execute() != ui::dialogs::ExecutableDialogResults::OK )
         return uno::Sequence<OUString>(); // cancelled
 
+    m_sLastFolderURL = xFilePicker->getDisplayDirectory();
     uno::Sequence< OUString > files( xFilePicker->getFiles() );
     OSL_ASSERT( files.getLength() > 0 );
     return files;
@@ -1908,9 +1933,10 @@ IMPL_LINK( ExtMgrDialog, HandleCancelBtn, void*, EMPTYARG )
 }
 
 // ------------------------------------------------------------------------------
-IMPL_LINK( ExtMgrDialog, startProgress, ::osl::Condition *, pCond )
+IMPL_LINK( ExtMgrDialog, startProgress, void*, _bLockInterface )
 {
-    bool bLockInterface = true;
+    ::osl::MutexGuard aGuard( m_aMutex );
+    bool bLockInterface = (bool) _bLockInterface;
 
     if ( m_bStartProgress && !m_bHasProgress )
         m_aTimeoutTimer.Start();
@@ -1920,7 +1946,12 @@ IMPL_LINK( ExtMgrDialog, startProgress, ::osl::Condition *, pCond )
         if ( m_aProgressBar.IsVisible() )
             m_aProgressBar.SetValue( 100 );
         m_xAbortChannel.clear();
-        bLockInterface = false;
+//        bLockInterface = false;
+        OSL_TRACE( " startProgress handler: stop\n" );
+    }
+    else
+    {
+        OSL_TRACE( " startProgress handler: start\n" );
     }
 
     m_aCancelBtn.Enable( bLockInterface );
@@ -1928,27 +1959,34 @@ IMPL_LINK( ExtMgrDialog, startProgress, ::osl::Condition *, pCond )
     m_aUpdateBtn.Enable( !bLockInterface && m_pExtensionBox->getItemCount() );
     m_pExtensionBox->enableButtons( !bLockInterface );
 
-    pCond->set();
+//    pCond->set();
     return 0;
 }
 
 // ------------------------------------------------------------------------------
-void ExtMgrDialog::showProgress( bool bStart )
+void ExtMgrDialog::showProgress( bool _bStart )
 {
+    ::osl::MutexGuard aGuard( m_aMutex );
+
+    bool bStart = _bStart;
+
     if ( bStart )
     {
         m_nProgress = 0;
         m_bStartProgress = true;
+        OSL_TRACE( "showProgress start\n" );
     }
     else
     {
         m_nProgress = 100;
         m_bStopProgress = true;
+        OSL_TRACE( "showProgress stop!\n" );
     }
 
-    ::osl::Condition cond;
-    Application::PostUserEvent( LINK( this, ExtMgrDialog, startProgress ), &cond );
-    cond.wait();
+    Application::PostUserEvent( LINK( this, ExtMgrDialog, startProgress ), (void*) bStart );
+//    ::osl::Condition cond;
+//    Application::PostUserEvent( LINK( this, ExtMgrDialog, startProgress ), &cond );
+//    cond.wait();
 }
 
 // -----------------------------------------------------------------------
@@ -1986,14 +2024,17 @@ void ExtMgrDialog::removeEntry( const uno::Reference< deployment::XPackage > &xP
 // -----------------------------------------------------------------------
 IMPL_LINK( ExtMgrDialog, HandleAddBtn, void*, EMPTYARG )
 {
-    uno::Reference< deployment::XPackageManager > xUserPkgMgr = m_pManager->getUserPkgMgr();
+    m_bIsBusy = true;
 
+    uno::Reference< deployment::XPackageManager > xUserPkgMgr = m_pManager->getUserPkgMgr();
     uno::Sequence< OUString > aFileList = raiseAddPicker( xUserPkgMgr );
 
     if ( aFileList.getLength() )
     {
         m_pManager->installPackage( aFileList[0] );
     }
+
+    m_bIsBusy = false;
     return 1;
 }
 
@@ -2073,8 +2114,8 @@ void ExtMgrDialog::Resize()
     aPos.X() -= ( RSC_SP_CTRL_GROUP_Y + aBtnSize.Width() );
     m_aAddBtn.SetPosPixel( aPos );
 
-    Size aDivSize( aTotalSize.Width() - RSC_SP_DLG_INNERBORDER_LEFT - RSC_SP_DLG_INNERBORDER_RIGHT, LINE_SIZE );
-    aPos = Point( RSC_SP_DLG_INNERBORDER_LEFT, aPos.Y() - LINE_SIZE - RSC_SP_DLG_INNERBORDER_BOTTOM );
+    Size aDivSize( aTotalSize.Width(), LINE_SIZE );
+    aPos = Point( 0, aPos.Y() - LINE_SIZE - RSC_SP_DLG_INNERBORDER_BOTTOM );
     m_aDivider.SetPosSizePixel( aPos, aDivSize );
 
     Size aFTSize( m_aGetExtensions.CalcMinimumSize() );

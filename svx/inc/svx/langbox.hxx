@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: langbox.hxx,v $
- * $Revision: 1.4 $
+ * $Revision: 1.4.242.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -40,19 +40,23 @@
 
 class SvtLanguageTable;
 
-#define LANG_LIST_EMPTY         0x0000
-#define LANG_LIST_ALL           0x0001
-#define LANG_LIST_WESTERN       0x0002
-#define LANG_LIST_CTL           0x0004
-#define LANG_LIST_CJK           0x0008
-#define LANG_LIST_FBD_CHARS     0x0010
-#define LANG_LIST_SPELL_AVAIL   0x0020
-#define LANG_LIST_HYPH_AVAIL    0x0040
-#define LANG_LIST_THES_AVAIL    0x0080
-#define LANG_LIST_ONLY_KNOWN    0x0100  // list only locales provided by I18N
-#define LANG_LIST_SPELL_USED    0x0200
-#define LANG_LIST_HYPH_USED     0x0400
-#define LANG_LIST_THES_USED     0x0800
+#define LANG_LIST_EMPTY             0x0000
+#define LANG_LIST_ALL               0x0001
+#define LANG_LIST_WESTERN           0x0002
+#define LANG_LIST_CTL               0x0004
+#define LANG_LIST_CJK               0x0008
+#define LANG_LIST_FBD_CHARS         0x0010
+#define LANG_LIST_SPELL_AVAIL       0x0020
+#define LANG_LIST_HYPH_AVAIL        0x0040
+#define LANG_LIST_THES_AVAIL        0x0080
+#define LANG_LIST_ONLY_KNOWN        0x0100  // list only locales provided by I18N
+#define LANG_LIST_SPELL_USED        0x0200
+#define LANG_LIST_HYPH_USED         0x0400
+#define LANG_LIST_THES_USED         0x0800
+#define LANG_LIST_ALSO_PRIMARY_ONLY 0x1000  // Do not exclude primary-only
+                                            // languages that do not form a
+                                            // locale, such as Arabic as
+                                            // opposed to Arabic-Egypt.
 
 
 class SVX_DLLPUBLIC SvxLanguageBox : public ListBox

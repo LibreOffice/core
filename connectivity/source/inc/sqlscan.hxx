@@ -32,6 +32,7 @@
 
 #include <stdarg.h>
 #include "connectivity/IParseContext.hxx"
+#include "connectivity/dbtoolsdllapi.hxx"
 
 namespace connectivity
 {
@@ -40,7 +41,7 @@ namespace connectivity
     //==========================================================================
     /** Scanner for SQL92
     */
-    class OSQLScanner
+    class OOO_DLLPUBLIC_DBTOOLS OSQLScanner
     {
         const IParseContext*    m_pContext;                 // context for parse, knows all international stuff
         ::rtl::OString          m_sStatement;               // statement to parse

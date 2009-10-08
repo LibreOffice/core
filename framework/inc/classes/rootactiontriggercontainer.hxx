@@ -33,6 +33,7 @@
 
 #include <helper/propertysetcontainer.hxx>
 #include <vcl/menu.hxx>
+#include <com/sun/star/container/XNamed.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XUnoTunnel.hpp>
@@ -48,10 +49,11 @@ class RootActionTriggerContainer :  public PropertySetContainer,
                                     public com::sun::star::lang::XMultiServiceFactory,
                                     public com::sun::star::lang::XServiceInfo,
                                     public com::sun::star::lang::XUnoTunnel,
-                                    public com::sun::star::lang::XTypeProvider
+                                    public com::sun::star::lang::XTypeProvider,
+                                    public com::sun::star::container::XNamed
 {
     public:
-        RootActionTriggerContainer( const Menu* pMenu, const com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory >& rServiceManager );
+        RootActionTriggerContainer( const Menu* pMenu, const ::rtl::OUString* pMenuIdentifier, const com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory >& rServiceManager );
         virtual ~RootActionTriggerContainer();
 
         const Menu* GetMenu();
@@ -109,6 +111,10 @@ class RootActionTriggerContainer :  public PropertySetContainer,
         virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > SAL_CALL getTypes(  ) throw (::com::sun::star::uno::RuntimeException);
         virtual ::com::sun::star::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId(  ) throw (::com::sun::star::uno::RuntimeException);
 
+        // XNamed
+        virtual ::rtl::OUString SAL_CALL getName(  ) throw (::com::sun::star::uno::RuntimeException);
+        virtual void SAL_CALL setName( const ::rtl::OUString& aName ) throw (::com::sun::star::uno::RuntimeException);
+
     private:
         void FillContainer();
 
@@ -116,6 +122,7 @@ class RootActionTriggerContainer :  public PropertySetContainer,
         sal_Bool    m_bContainerChanged;
         sal_Bool    m_bInContainerCreation;
         const Menu* m_pMenu;
+        const ::rtl::OUString* m_pMenuIdentifier;
 };
 
 }

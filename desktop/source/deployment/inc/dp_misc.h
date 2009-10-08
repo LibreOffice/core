@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: dp_misc.h,v $
- * $Revision: 1.13 $
+ * $Revision: 1.13.86.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -106,7 +106,54 @@ oslProcess raiseProcess( ::rtl::OUString const & appURL,
 DESKTOP_DEPLOYMENTMISC_DLLPUBLIC
 ::rtl::OUString getExtensionDefaultUpdateURL();
 
+/** writes the argument string to the console.
+    On Linux/Unix/etc. it converts the UTF16 string to an ANSI string using
+    osl_getThreadTextEncoding() as target encoding. On Windows it uses WriteFile
+    with the standard out stream. unopkg.com reads the data and prints them out using
+    WriteConsoleW.
+*/
+DESKTOP_DEPLOYMENTMISC_DLLPUBLIC
+void writeConsole(::rtl::OUString const & sText);
 
+/** writes the argument string to the console.
+    On Linux/Unix/etc. the string is passed into fprintf without any conversion.
+    On Windows the string is converted to UTF16 assuming the argument is UTF8
+    encoded. The UTF16 string is written to stdout with WriteFile. unopkg.com
+    reads the data and prints them out using WriteConsoleW.
+*/
+DESKTOP_DEPLOYMENTMISC_DLLPUBLIC
+void writeConsole(::rtl::OString const & sText);
+
+/** writes the argument to the console using the error stream.
+    Otherwise the same as writeConsole.
+*/
+DESKTOP_DEPLOYMENTMISC_DLLPUBLIC
+void writeConsoleError(::rtl::OUString const & sText);
+
+
+/** writes the argument to the console using the error stream.
+    Otherwise the same as writeConsole.
+*/
+DESKTOP_DEPLOYMENTMISC_DLLPUBLIC
+void writeConsoleError(::rtl::OString const & sText);
+
+
+/** reads from the console.
+    On Linux/Unix/etc. it uses fgets to read char values and converts them to OUString
+    using osl_getThreadTextEncoding as target encoding. The returned string has a maximum
+    size of 1024 and does NOT include leading and trailing white space(applied OUString::trim())
+*/
+DESKTOP_DEPLOYMENTMISC_DLLPUBLIC
+::rtl::OUString readConsole();
+
+/** print the text to the console in a debug build.
+    The argument is forwarded to writeConsole. The function does not add new line.
+    The code is only executed if  OSL_DEBUG_LEVEL > 1
+*/
+DESKTOP_DEPLOYMENTMISC_DLLPUBLIC
+void TRACE(::rtl::OUString const & sText);
+DESKTOP_DEPLOYMENTMISC_DLLPUBLIC
+void TRACE(::rtl::OString const & sText);
 }
 
 #endif

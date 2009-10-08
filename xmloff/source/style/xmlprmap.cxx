@@ -242,3 +242,14 @@ sal_Int32 XMLPropertySetMapper::FindEntryIndex( const sal_Int16 nContextId ) con
 
     return -1;
 }
+
+void XMLPropertySetMapper::RemoveEntry( sal_Int32 nIndex )
+{
+    const sal_Int32 nEntries = GetEntryCount();
+    if( nIndex>=nEntries || nIndex<0 )
+        return;
+    vector < XMLPropertySetMapperEntry_Impl >::iterator aEIter = aMapEntries.begin();
+    for( sal_Int32 nN=0; nN<nIndex; nN++ )
+        aEIter++;
+    aMapEntries.erase( aEIter );
+}

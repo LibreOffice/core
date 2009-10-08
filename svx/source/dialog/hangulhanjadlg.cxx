@@ -964,7 +964,7 @@ namespace svx
         if ( m_pHangulBelow->IsChecked() )
             return HHC::eRubyHangulBelow;
 
-        DBG_ERROR( "HangulHanjaConversionDialog::GetConversionFormat: no radio checked?" )
+        DBG_ERROR( "HangulHanjaConversionDialog::GetConversionFormat: no radio checked?" );
         return HHC::eSimpleConversion;
     }
 

@@ -59,7 +59,8 @@ SLOFILES=           \
                     $(SLO)$/fwkresid.obj                            \
                     $(SLO)$/framelistanalyzer.obj                   \
                     $(SLO)$/sfxhelperfunctions.obj                  \
-                    $(SLO)$/menuextensionsupplier.obj
+                    $(SLO)$/menuextensionsupplier.obj               \
+                    $(SLO)$/fwktabwindow.obj
 
 SRS1NAME=$(TARGET)
 SRC1FILES =\

@@ -261,6 +261,39 @@ namespace svx
                         ,const ::rtl::OUString& _sActiveCommand);
     };
 
+    //====================================================================
+    //= OMultiColumnTransferable
+    //====================================================================
+    /** class for transfering multiple columns
+    */
+    class SVX_DLLPUBLIC OMultiColumnTransferable : public TransferableHelper
+    {
+        ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >   m_aDescriptors;
+
+    public:
+        OMultiColumnTransferable(const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& _aDescriptors);
+
+        void push_back(ODataAccessDescriptor& _aDescriptor);
+
+        /** checks whether or not an object descriptor can be extracted from the data flavor vector given
+            @param _rFlavors
+                available flavors
+            @param _nFormats
+                formats to accept
+        */
+        static sal_Bool canExtractDescriptor(const DataFlavorExVector& _rFlavors);
+
+        /** extracts a object descriptor from the transferable given
+        */
+        static ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > extractDescriptor(const TransferableDataHelper& _rData);
+
+    protected:
+        virtual void        AddSupportedFormats();
+        virtual sal_Bool    GetData( const ::com::sun::star::datatransfer::DataFlavor& rFlavor );
+        virtual void        ObjectReleased();
+        static sal_uInt32   getDescriptorFormatId();
+    };
+
 //........................................................................
 }   // namespace svx
 //........................................................................

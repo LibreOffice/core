@@ -45,7 +45,6 @@
 #include <com/sun/star/linguistic2/XDictionaryEventListener.hpp>
 #include <com/sun/star/linguistic2/DictionaryEventFlags.hpp>
 #include <com/sun/star/linguistic2/XDictionary.hpp>
-#include <com/sun/star/linguistic2/XDictionary1.hpp>
 
 #ifndef _COM_SUN_STAR_DATATRANSFER_DND_DNDCONSTANS_HPP_
 #include <com/sun/star/datatransfer/dnd/DNDConstants.hpp>
@@ -1162,7 +1161,7 @@ String ImpEditView::SpellIgnoreOrAddWord( sal_Bool bAdd )
             }
             else // Ignore
             {
-                Reference< XDictionary1 >  xDic( SvxGetIgnoreAllList(), UNO_QUERY );
+                Reference< XDictionary >  xDic( SvxGetIgnoreAllList(), UNO_QUERY );
                 if (xDic.is())
                     xDic->add( aWord, sal_False, String() );
             }

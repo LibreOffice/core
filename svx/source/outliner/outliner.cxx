@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: outliner.cxx,v $
- * $Revision: 1.74.6.2 $
+ * $Revision: 1.75.20.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -147,7 +147,7 @@ Paragraph* Outliner::Insert(const XubString& rText, ULONG nAbsPos, sal_Int16 nDe
         pEditEngine->SetUpdateMode( bUpdate );
     }
     bFirstParaIsEmpty = FALSE;
-    DBG_ASSERT(pEditEngine->GetParagraphCount()==pParaList->GetParagraphCount(),"SetText failed")
+    DBG_ASSERT(pEditEngine->GetParagraphCount()==pParaList->GetParagraphCount(),"SetText failed");
     return pPara;
 }
 
@@ -393,7 +393,7 @@ OutlinerParaObject* Outliner::CreateParaObject( USHORT nStartPara, USHORT nCount
 void Outliner::SetText( const XubString& rText, Paragraph* pPara )
 {
     DBG_CHKTHIS(Outliner,0);
-    DBG_ASSERT(pPara,"SetText:No Para")
+    DBG_ASSERT(pPara,"SetText:No Para");
 
     BOOL bUpdate = pEditEngine->GetUpdateMode();
     pEditEngine->SetUpdateMode( FALSE );
@@ -470,7 +470,7 @@ void Outliner::SetText( const XubString& rText, Paragraph* pPara )
         }
     }
 
-    DBG_ASSERT(pParaList->GetParagraphCount()==pEditEngine->GetParagraphCount(),"SetText failed!")
+    DBG_ASSERT(pParaList->GetParagraphCount()==pEditEngine->GetParagraphCount(),"SetText failed!");
     bFirstParaIsEmpty = FALSE;
     ImplBlockInsertionCallbacks( FALSE );
     pEditEngine->SetUpdateMode( bUpdate );
@@ -597,8 +597,8 @@ void Outliner::SetText( const OutlinerParaObject& rPObj )
     ImplBlockInsertionCallbacks( FALSE );
     pEditEngine->SetUpdateMode( bUpdate );
 
-    DBG_ASSERT( pParaList->GetParagraphCount()==rPObj.Count(),"SetText failed")
-    DBG_ASSERT( pEditEngine->GetParagraphCount()==rPObj.Count(),"SetText failed")
+    DBG_ASSERT( pParaList->GetParagraphCount()==rPObj.Count(),"SetText failed");
+    DBG_ASSERT( pEditEngine->GetParagraphCount()==rPObj.Count(),"SetText failed");
 }
 
 void Outliner::AddText( const OutlinerParaObject& rPObj )
@@ -629,7 +629,7 @@ void Outliner::AddText( const OutlinerParaObject& rPObj )
         pPara = new Paragraph( rPObj.pParagraphDataArr[ n ] );
         pParaList->Insert( pPara, LIST_APPEND );
         USHORT nP = sal::static_int_cast< USHORT >(nPara+n);
-        DBG_ASSERT(pParaList->GetAbsPos(pPara)==nP,"AddText:Out of sync")
+        DBG_ASSERT(pParaList->GetAbsPos(pPara)==nP,"AddText:Out of sync");
         ImplInitDepth( nP, pPara->GetDepth(), FALSE );
     }
     DBG_ASSERT( pEditEngine->GetParagraphCount()==pParaList->GetParagraphCount(), "SetText: OutOfSync" );
@@ -894,6 +894,7 @@ Font Outliner::ImpCalcBulletFont( USHORT nPara ) const
     {
         aBulletFont = aStdFont;
         aBulletFont.SetUnderline( UNDERLINE_NONE );
+        aBulletFont.SetOverline( UNDERLINE_NONE );
         aBulletFont.SetStrikeout( STRIKEOUT_NONE );
         aBulletFont.SetEmphasisMark( EMPHASISMARK_NONE );
         aBulletFont.SetRelief( RELIEF_NONE );
@@ -1017,7 +1018,7 @@ void Outliner::PaintBullet( USHORT nPara, const Point& rStartPos,
                     }
 
                     DrawingText(aTextPos, pPara->GetText(), 0, pPara->GetText().Len(), pBuf,
-                        aSvxFont, nPara, 0xFFFF, 0xFF, 0, 0, false, false, true, 0, Color());
+                        aSvxFont, nPara, 0xFFFF, 0xFF, 0, 0, false, false, true, 0, Color(), Color());
 
                     delete[] pBuf;
                 }
@@ -1409,7 +1410,7 @@ void Outliner::DepthChangedHdl()
 ULONG Outliner::GetAbsPos( Paragraph* pPara )
 {
     DBG_CHKTHIS(Outliner,0);
-    DBG_ASSERT(pPara,"GetAbsPos:No Para")
+    DBG_ASSERT(pPara,"GetAbsPos:No Para");
     return pParaList->GetAbsPos( pPara );
 }
 
@@ -1753,6 +1754,7 @@ void Outliner::DrawingText( const Point& rStartPos, const XubString& rText, USHO
     bool bEndOfParagraph,
     bool bEndOfBullet,
     const ::com::sun::star::lang::Locale* pLocale,
+    const Color& rOverlineColor,
     const Color& rTextLineColor)
 {
     DBG_CHKTHIS(Outliner,0);
@@ -1761,7 +1763,7 @@ void Outliner::DrawingText( const Point& rStartPos, const XubString& rText, USHO
     {
         // #101498#
         DrawPortionInfo aInfo( rStartPos, rText, nTextStart, nTextLen, rFont, nPara, nIndex, pDXArray, pWrongSpellVector,
-            pFieldData, pLocale, rTextLineColor, nRightToLeft, bEndOfLine, bEndOfParagraph, bEndOfBullet);
+            pFieldData, pLocale, rOverlineColor, rTextLineColor, nRightToLeft, bEndOfLine, bEndOfParagraph, bEndOfBullet);
 
         aDrawPortionHdl.Call( &aInfo );
     }
@@ -2110,7 +2112,7 @@ sal_Bool DrawPortionInfo::IsRTL() const
         // I do not have this info here. Is it necessary? I'll have to ask MT.
         const BYTE nDefaultDir = UBIDI_LTR; //IsRightToLeft( nPara ) ? UBIDI_RTL : UBIDI_LTR;
 
-        ubidi_setPara(pBidi, mrText.GetBuffer(), mrText.Len(), nDefaultDir, NULL, &nError);
+        ubidi_setPara(pBidi, reinterpret_cast<const UChar *>(mrText.GetBuffer()), mrText.Len(), nDefaultDir, NULL, &nError);    // UChar != sal_Unicode in MinGW
         nError = U_ZERO_ERROR;
 
 //        sal_Int32 nCount(ubidi_countRuns(pBidi, &nError));

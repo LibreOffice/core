@@ -49,6 +49,7 @@
 #include "connectivity/CommonTools.hxx"
 #include <com/sun/star/container/XContainer.hpp>
 #include "connectivity/StdTypeDefs.hxx"
+#include "connectivity/dbtoolsdllapi.hxx"
 #include <memory>
 
 
@@ -71,7 +72,7 @@ namespace connectivity
 
         typedef ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > ObjectType;
 
-        class SAL_NO_VTABLE IObjectCollection
+        class OOO_DLLPUBLIC_DBTOOLS SAL_NO_VTABLE IObjectCollection
         {
         public:
             virtual void reserve(size_t nLength) = 0;
@@ -98,7 +99,8 @@ namespace connectivity
         //************************************************************
         //  OCollection
         //************************************************************
-        class SAL_NO_VTABLE OCollection : public OCollectionBase
+        class OOO_DLLPUBLIC_DBTOOLS SAL_NO_VTABLE OCollection :
+            public OCollectionBase
         {
         protected:
             ::std::auto_ptr<IObjectCollection>      m_pElements;

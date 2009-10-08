@@ -685,7 +685,7 @@ MDatabaseMetaDataHelper::testLDAPConnection( OConnection* _pCon )
 
     sal_Int32 pos = sAbURI.indexOf( MOZ_SCHEMA );
     if ( pos != -1 ) {
-        sAbURI = sAbURI.replaceAt (pos, strlen( MOZ_SCHEMA ), ::rtl::OString(LDAP_SCHEMA) );
+        sAbURI = sAbURI.replaceAt (pos, rtl_str_getLength( MOZ_SCHEMA ), ::rtl::OString(LDAP_SCHEMA) );
     }
 
     pos = sAbURI.indexOf( QUERY_CHAR );
@@ -730,7 +730,7 @@ MDatabaseMetaDataHelper::testLDAPConnection( OConnection* _pCon )
         }
     }
     setError( STR_COULD_NOT_CONNECT_LDAP );
-    return NS_SUCCEEDED( rv );
+    return NS_SUCCEEDED( rv ) ? sal_True : sal_False;
 }
 
 sal_Bool MDatabaseMetaDataHelper::NewAddressBook(OConnection* _pCon,const ::rtl::OUString & aTableName)
@@ -767,7 +767,7 @@ sal_Bool MDatabaseMetaDataHelper::NewAddressBook(OConnection* _pCon,const ::rtl:
         setAbSpecificError( _pCon, !bIsMozillaAB );
     }
     OSL_TRACE( "OUT MDatabaseMetaDataHelper::NewAddressBook()\n" );
-    return( NS_SUCCEEDED(rv) );
+    return( NS_SUCCEEDED(rv) ? sal_True : sal_False );
 }
 nsresult NewAddressBook(const ::rtl::OUString * aName)
 {

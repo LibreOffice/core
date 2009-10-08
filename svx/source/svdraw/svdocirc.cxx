@@ -65,7 +65,7 @@
 
 //////////////////////////////////////////////////////////////////////////////
 
-void SetWinkPnt(const Rectangle& rR, long nWink, Point& rPnt)
+Point GetWinkPnt(const Rectangle& rR, long nWink)
 {
     Point aCenter(rR.Center());
     long nWdt=rR.Right()-rR.Left();
@@ -73,31 +73,32 @@ void SetWinkPnt(const Rectangle& rR, long nWink, Point& rPnt)
     long nMaxRad=((nWdt>nHgt ? nWdt : nHgt)+1) /2;
     double a;
     a=nWink*nPi180;
-    rPnt=Point(Round(cos(a)*nMaxRad),-Round(sin(a)*nMaxRad));
-    if (nWdt==0) rPnt.X()=0;
-    if (nHgt==0) rPnt.Y()=0;
+    Point aRetval(Round(cos(a)*nMaxRad),-Round(sin(a)*nMaxRad));
+    if (nWdt==0) aRetval.X()=0;
+    if (nHgt==0) aRetval.Y()=0;
     if (nWdt!=nHgt) {
         if (nWdt>nHgt) {
             if (nWdt!=0) {
                 // eventuelle Ueberlaeufe bei sehr grossen Objekten abfangen (Bug 23384)
-                if (Abs(nHgt)>32767 || Abs(rPnt.Y())>32767) {
-                    rPnt.Y()=BigMulDiv(rPnt.Y(),nHgt,nWdt);
+                if (Abs(nHgt)>32767 || Abs(aRetval.Y())>32767) {
+                    aRetval.Y()=BigMulDiv(aRetval.Y(),nHgt,nWdt);
                 } else {
-                    rPnt.Y()=rPnt.Y()*nHgt/nWdt;
+                    aRetval.Y()=aRetval.Y()*nHgt/nWdt;
                 }
             }
         } else {
             if (nHgt!=0) {
                 // eventuelle Ueberlaeufe bei sehr grossen Objekten abfangen (Bug 23384)
-                if (Abs(nWdt)>32767 || Abs(rPnt.X())>32767) {
-                    rPnt.X()=BigMulDiv(rPnt.X(),nWdt,nHgt);
+                if (Abs(nWdt)>32767 || Abs(aRetval.X())>32767) {
+                    aRetval.X()=BigMulDiv(aRetval.X(),nWdt,nHgt);
                 } else {
-                    rPnt.X()=rPnt.X()*nWdt/nHgt;
+                    aRetval.X()=aRetval.X()*nWdt/nHgt;
                 }
             }
         }
     }
-    rPnt+=aCenter;
+    aRetval+=aCenter;
+    return aRetval;
 }
 
 //////////////////////////////////////////////////////////////////////////////
@@ -409,10 +410,10 @@ SdrObject* SdrCircObj::CheckHit(const Point& rPnt, USHORT nTol, const SetOfByte*
             if (!bRet) {
                 Rectangle aR(aPtNoStretch.X()-nMyTol,aPtNoStretch.Y()-nMyTol,
                              aPtNoStretch.X()+nMyTol,aPtNoStretch.Y()+nMyTol);
-                Point aP1(aPnt1);
+                Point aP1(GetWinkPnt(aRect,nStartWink));
                 aP1.X()-=aRect.Left()+nXRadReal;
                 aP1.Y()-=aRect.Top()+nYRadReal;
-                Point aP2(aPnt2);
+                Point aP2(GetWinkPnt(aRect,nEndWink));
                 aP2.X()-=aRect.Left()+nXRadReal;
                 aP2.Y()-=aRect.Top()+nYRadReal;
                 if (meCircleKind==OBJ_SECT) { // Kreissektor: nur noch die beiden Strecken testen
@@ -493,8 +494,6 @@ void SdrCircObj::operator=(const SdrObject& rObj)
 
     nStartWink = ((SdrCircObj&)rObj).nStartWink;
     nEndWink = ((SdrCircObj&)rObj).nEndWink;
-    aPnt1 = ((SdrCircObj&)rObj).aPnt1;
-    aPnt2 = ((SdrCircObj&)rObj).aPnt2;
 }
 
 basegfx::B2DPolyPolygon SdrCircObj::TakeXorPoly() const
@@ -545,85 +544,142 @@ sal_uInt32 SdrCircObj::GetHdlCount() const
 SdrHdl* SdrCircObj::GetHdl(sal_uInt32 nHdlNum) const
 {
     if (meCircleKind==OBJ_CIRC)
-        nHdlNum += 2L; // Keine Winkelhandles fuer den Vollkreis
-    SdrHdl* pH=NULL;
-    Point aPnt;
-    SdrHdlKind eLocalKind=HDL_MOVE;
-    sal_uInt32 nPNum(0L);
-    switch (nHdlNum) {
-        case 0: aPnt=aPnt1; eLocalKind=HDL_CIRC; nPNum=1L; break; // StartWink
-        case 1: aPnt=aPnt2; eLocalKind=HDL_CIRC; nPNum=2L; break; // EndWink
-        case 2: aPnt=aRect.TopLeft();      eLocalKind=HDL_UPLFT; break; // Oben links
-        case 3: aPnt=aRect.TopCenter();    eLocalKind=HDL_UPPER; break; // Oben
-        case 4: aPnt=aRect.TopRight();     eLocalKind=HDL_UPRGT; break; // Oben rechts
-        case 5: aPnt=aRect.LeftCenter();   eLocalKind=HDL_LEFT ; break; // Links
-        case 6: aPnt=aRect.RightCenter();  eLocalKind=HDL_RIGHT; break; // Rechts
-        case 7: aPnt=aRect.BottomLeft();   eLocalKind=HDL_LWLFT; break; // Unten links
-        case 8: aPnt=aRect.BottomCenter(); eLocalKind=HDL_LOWER; break; // Unten
-        case 9: aPnt=aRect.BottomRight();  eLocalKind=HDL_LWRGT; break; // Unten rechts
+    {
+        nHdlNum += 2L;
     }
-    if (aGeo.nShearWink!=0) ShearPoint(aPnt,aRect.TopLeft(),aGeo.nTan);
-    if (aGeo.nDrehWink!=0) RotatePoint(aPnt,aRect.TopLeft(),aGeo.nSin,aGeo.nCos);
-    if (eLocalKind!=HDL_MOVE) {
-        pH=new SdrHdl(aPnt,eLocalKind);
+
+    SdrHdl* pH = NULL;
+    Point aPnt;
+    SdrHdlKind eLocalKind(HDL_MOVE);
+    sal_uInt32 nPNum(0);
+
+    switch (nHdlNum)
+    {
+        case 0:
+            aPnt = GetWinkPnt(aRect,nStartWink);
+            eLocalKind = HDL_CIRC;
+            nPNum = 1;
+            break;
+        case 1:
+            aPnt = GetWinkPnt(aRect,nEndWink);
+            eLocalKind = HDL_CIRC;
+            nPNum = 2L;
+            break;
+        case 2:
+            aPnt = aRect.TopLeft();
+            eLocalKind = HDL_UPLFT;
+            break;
+        case 3:
+            aPnt = aRect.TopCenter();
+            eLocalKind = HDL_UPPER;
+            break;
+        case 4:
+            aPnt = aRect.TopRight();
+            eLocalKind = HDL_UPRGT;
+            break;
+        case 5:
+            aPnt = aRect.LeftCenter();
+            eLocalKind = HDL_LEFT;
+            break;
+        case 6:
+            aPnt = aRect.RightCenter();
+            eLocalKind = HDL_RIGHT;
+            break;
+        case 7:
+            aPnt = aRect.BottomLeft();
+            eLocalKind = HDL_LWLFT;
+            break;
+        case 8:
+            aPnt = aRect.BottomCenter();
+            eLocalKind = HDL_LOWER;
+            break;
+        case 9:
+            aPnt = aRect.BottomRight();
+            eLocalKind = HDL_LWRGT;
+            break;
+    }
+
+    if (aGeo.nShearWink)
+    {
+        ShearPoint(aPnt,aRect.TopLeft(),aGeo.nTan);
+    }
+
+    if (aGeo.nDrehWink)
+    {
+        RotatePoint(aPnt,aRect.TopLeft(),aGeo.nSin,aGeo.nCos);
+    }
+
+    if (eLocalKind != HDL_MOVE)
+    {
+        pH = new SdrHdl(aPnt,eLocalKind);
         pH->SetPointNum(nPNum);
         pH->SetObj((SdrObject*)this);
         pH->SetDrehWink(aGeo.nDrehWink);
     }
+
     return pH;
 }
 
-FASTBOOL SdrCircObj::HasSpecialDrag() const
+////////////////////////////////////////////////////////////////////////////////////////////////////
+
+bool SdrCircObj::hasSpecialDrag() const
 {
-    return TRUE;
+    return true;
 }
 
-FASTBOOL SdrCircObj::BegDrag(SdrDragStat& rDrag) const
+bool SdrCircObj::beginSpecialDrag(SdrDragStat& rDrag) const
 {
     const bool bWink(rDrag.GetHdl() && HDL_CIRC == rDrag.GetHdl()->GetKind());
 
     if(bWink)
     {
-        ImpCircUser* pNewUser = new ImpCircUser;
-        pNewUser->nWink = 0;
-        rDrag.SetUser(pNewUser);
-
         if(1 == rDrag.GetHdl()->GetPointNum() || 2 == rDrag.GetHdl()->GetPointNum())
         {
-            rDrag.SetNoSnap(TRUE);
+            rDrag.SetNoSnap(true);
         }
 
         return true;
     }
-    else
-    {
-        return SdrTextObj::BegDrag(rDrag);
-    }
+
+    return SdrTextObj::beginSpecialDrag(rDrag);
 }
 
-FASTBOOL SdrCircObj::MovDrag(SdrDragStat& rDrag) const
+bool SdrCircObj::applySpecialDrag(SdrDragStat& rDrag)
 {
     const bool bWink(rDrag.GetHdl() && HDL_CIRC == rDrag.GetHdl()->GetKind());
 
     if(bWink)
     {
         Point aPt(rDrag.GetNow());
-        // Unrotate:
-        if (aGeo.nDrehWink!=0) RotatePoint(aPt,aRect.TopLeft(),-aGeo.nSin,aGeo.nCos); // -sin fuer Umkehrung
-        // Unshear:
-        if (aGeo.nShearWink!=0) ShearPoint(aPt,aRect.TopLeft(),-aGeo.nTan); // -tan fuer Umkehrung
+
+        if (aGeo.nDrehWink!=0)
+            RotatePoint(aPt,aRect.TopLeft(),-aGeo.nSin,aGeo.nCos);
+
+        if (aGeo.nShearWink!=0)
+            ShearPoint(aPt,aRect.TopLeft(),-aGeo.nTan);
+
         aPt-=aRect.Center();
+
         long nWdt=aRect.Right()-aRect.Left();
         long nHgt=aRect.Bottom()-aRect.Top();
-        if (nWdt>=nHgt) {
+
+        if(nWdt>=nHgt)
+        {
             aPt.Y()=BigMulDiv(aPt.Y(),nWdt,nHgt);
-        } else {
+        }
+        else
+        {
             aPt.X()=BigMulDiv(aPt.X(),nHgt,nWdt);
         }
+
         long nWink=NormAngle360(GetAngle(aPt));
-        if (rDrag.GetView()!=NULL && rDrag.GetView()->IsAngleSnapEnabled()) {
+
+        if (rDrag.GetView() && rDrag.GetView()->IsAngleSnapEnabled())
+        {
             long nSA=rDrag.GetView()->GetSnapAngle();
-            if (nSA!=0) { // Winkelfang
+
+            if (nSA!=0)
+            {
                 nWink+=nSA/2;
                 nWink/=nSA;
                 nWink*=nSA;
@@ -631,95 +687,36 @@ FASTBOOL SdrCircObj::MovDrag(SdrDragStat& rDrag) const
             }
         }
 
-        ImpCircUser* pUserData = (ImpCircUser*)rDrag.GetUser();
-
-        if(pUserData && pUserData->nWink != nWink)
-        {
-            pUserData->nWink = nWink;
-            return TRUE;
-        }
-        else
-        {
-            return FALSE;
-        }
-    }
-    else
-    {
-        return SdrTextObj::MovDrag(rDrag);
-    }
-}
-
-FASTBOOL SdrCircObj::EndDrag(SdrDragStat& rDrag)
-{
-    const bool bWink(rDrag.GetHdl() && HDL_CIRC == rDrag.GetHdl()->GetKind());
-
-    if(bWink)
-    {
-        Rectangle aBoundRect0; if(pUserCall) aBoundRect0 = GetLastBoundRect();
-        ImpCircUser* pUserData = (ImpCircUser*)rDrag.GetUser();
-
         if(1 == rDrag.GetHdl()->GetPointNum())
         {
-            nStartWink = pUserData->nWink;
+            nStartWink = nWink;
         }
         else if(2 == rDrag.GetHdl()->GetPointNum())
         {
-            nEndWink = pUserData->nWink;
+            nEndWink = nWink;
         }
 
         SetRectsDirty();
         SetXPolyDirty();
         ImpSetCircInfoToAttr();
         SetChanged();
-        BroadcastObjectChange();
-        SendUserCall(SDRUSERCALL_RESIZE,aBoundRect0);
 
-        return TRUE;
+        return true;
     }
     else
     {
-        return SdrTextObj::EndDrag(rDrag);
+        return SdrTextObj::applySpecialDrag(rDrag);
     }
 }
 
-void SdrCircObj::BrkDrag(SdrDragStat& rDrag) const
+String SdrCircObj::getSpecialDragComment(const SdrDragStat& rDrag) const
 {
-    SdrTextObj::BrkDrag(rDrag);
-}
-
-XubString SdrCircObj::GetDragComment(const SdrDragStat& rDrag, FASTBOOL bUndoDragComment, FASTBOOL bCreateComment) const
-{
-    if(bCreateComment)
-    {
-        XubString aStr;
-        ImpTakeDescriptionStr(STR_ViewCreateObj, aStr);
-        UINT32 nPntAnz(rDrag.GetPointAnz());
-
-        if(meCircleKind != OBJ_CIRC && nPntAnz > 2)
-        {
-            ImpCircUser* pU = (ImpCircUser*)rDrag.GetUser();
-            INT32 nWink;
-
-            aStr.AppendAscii(" (");
-
-            if(nPntAnz == 3)
-                nWink = pU->nStart;
-            else
-                nWink = pU->nEnd;
-
-            aStr += GetWinkStr(nWink,FALSE);
-            aStr += sal_Unicode(')');
-        }
-        return aStr;
-    }
-
     const bool bWink(rDrag.GetHdl() && HDL_CIRC == rDrag.GetHdl()->GetKind());
 
     if(bWink)
     {
         XubString aStr;
-        ImpCircUser* pUserData = (ImpCircUser*)rDrag.GetUser();
-        const sal_Int32 nWink(pUserData ? pUserData->nWink : 0L);
+        const sal_Int32 nWink(1 == rDrag.GetHdl()->GetPointNum() ? nStartWink : nEndWink);
 
         ImpTakeDescriptionStr(STR_DragCircAngle, aStr);
         aStr.AppendAscii(" (");
@@ -730,38 +727,11 @@ XubString SdrCircObj::GetDragComment(const SdrDragStat& rDrag, FASTBOOL bUndoDra
     }
     else
     {
-        return SdrTextObj::GetDragComment(rDrag, bUndoDragComment, FALSE);
+        return SdrTextObj::getSpecialDragComment(rDrag);
     }
 }
 
-basegfx::B2DPolyPolygon SdrCircObj::TakeDragPoly(const SdrDragStat& rDrag) const
-{
-    const bool bWink(rDrag.GetHdl() && HDL_CIRC == rDrag.GetHdl()->GetKind());
-    long a(nStartWink);
-    long e(nEndWink);
-
-    if(bWink)
-    {
-        ImpCircUser* pUserData = (ImpCircUser*)rDrag.GetUser();
-
-        if(pUserData)
-        {
-            if(1 == rDrag.GetHdl()->GetPointNum())
-            {
-                a = pUserData->nWink;
-            }
-            else
-            {
-                e = pUserData->nWink;
-            }
-        }
-    }
-
-    const Rectangle aTmpRect(bWink ? aRect : ImpDragCalcRect(rDrag));
-    const basegfx::B2DPolygon aCircPolygon(ImpCalcXPolyCirc(meCircleKind, aTmpRect, a, e));
-
-    return basegfx::B2DPolyPolygon(aCircPolygon);
-}
+////////////////////////////////////////////////////////////////////////////////////////////////////
 
 void ImpCircUser::SetCreateParams(SdrDragStat& rStat)
 {
@@ -792,7 +762,7 @@ void ImpCircUser::SetCreateParams(SdrDragStat& rStat)
                 nStart=NormAngle360(nStart);
             }
         }
-        SetWinkPnt(aR,nStart,aP1);
+        aP1 = GetWinkPnt(aR,nStart);
         nEnd=nStart;
         aP2=aP1;
     } else aP1=aCenter;
@@ -813,7 +783,7 @@ void ImpCircUser::SetCreateParams(SdrDragStat& rStat)
                 nEnd=NormAngle360(nEnd);
             }
         }
-        SetWinkPnt(aR,nEnd,aP2);
+        aP2 = GetWinkPnt(aR,nEnd);
     } else aP2=aCenter;
 }
 
@@ -945,8 +915,6 @@ void SdrCircObj::NbcMove(const Size& aSiz)
     MoveRect(aRect,aSiz);
     MoveRect(aOutRect,aSiz);
     MoveRect(maSnapRect,aSiz);
-    MovePoint(aPnt1,aSiz);
-    MovePoint(aPnt2,aSiz);
     SetXPolyDirty();
     SetRectsDirty(sal_True);
 }
@@ -1107,16 +1075,16 @@ void SdrCircObj::TakeUnrotatedSnapRect(Rectangle& rRect) const
 {
     rRect=aRect;
     if (meCircleKind!=OBJ_CIRC) {
-        SetWinkPnt(rRect,nStartWink,((SdrCircObj*)(this))->aPnt1);
-        SetWinkPnt(rRect,nEndWink  ,((SdrCircObj*)(this))->aPnt2);
+        const Point aPntStart(GetWinkPnt(aRect,nStartWink));
+        const Point aPntEnd(GetWinkPnt(aRect,nEndWink));
         long a=nStartWink;
         long e=nEndWink;
         rRect.Left  ()=aRect.Right();
         rRect.Right ()=aRect.Left();
         rRect.Top   ()=aRect.Bottom();
         rRect.Bottom()=aRect.Top();
-        Union(rRect,aPnt1);
-        Union(rRect,aPnt2);
+        Union(rRect,aPntStart);
+        Union(rRect,aPntEnd);
         if ((a<=18000 && e>=18000) || (a>e && (a<=18000 || e>=18000))) {
             Union(rRect,aRect.LeftCenter());
         }
@@ -1196,8 +1164,8 @@ sal_uInt32 SdrCircObj::GetSnapPointCount() const
 Point SdrCircObj::GetSnapPoint(sal_uInt32 i) const
 {
     switch (i) {
-        case 1 : return aPnt1;
-        case 2 : return aPnt2;
+        case 1 : return GetWinkPnt(aRect,nStartWink);
+        case 2 : return GetWinkPnt(aRect,nEndWink);
         default: return aRect.Center();
     }
 }

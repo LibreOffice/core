@@ -36,6 +36,7 @@
 #include <sdrpaintwindow.hxx>
 #include <goodies/grfmgr.hxx>
 #include <svx/svdmodel.hxx>
+#include <svx/fmview.hxx>
 
 #ifdef DBG_UTIL
 #include <svdibrow.hxx>
@@ -228,7 +229,6 @@ void SdrPaintView::ImpClearVars()
     bPageVisible=TRUE;
     bPageBorderVisible=TRUE;
     bBordVisible=TRUE;
-    bBordVisibleOnlyLeftRight=FALSE;
     bGridVisible=TRUE;
     bGridFront  =FALSE;
     bHlplVisible=TRUE;
@@ -791,7 +791,7 @@ void SdrPaintView::CompleteRedraw(OutputDevice* pOut, const Region& rReg, sdr::c
     OSL_ENSURE(pPaintWindow, "SdrPaintView::CompleteRedraw: No OutDev (!)");
 
     DoCompleteRedraw(*pPaintWindow, aOptimizedRepaintRegion, pRedirector);
-    EndCompleteRedraw(*pPaintWindow);
+    EndCompleteRedraw(*pPaintWindow, true);
 
 #ifdef SVX_REPAINT_TIMER_TEST
     }
@@ -868,6 +868,13 @@ SdrPaintWindow* SdrPaintView::BeginCompleteRedraw(OutputDevice* pOut)
         pPaintWindow->setTemporaryTarget(true);
     }
 
+    // the following is a hack, only to be used on the 3.0.1 branch, to prevent becoming
+    // incompatible there
+    // #i94033# / 2008-10-16 / frank.schoenheit@sun.com
+    FmFormView* pMeAsFormView = dynamic_cast< FmFormView* >( this );
+    if ( pMeAsFormView )
+        pMeAsFormView->onBeginCompleteRedraw();
+
     return pPaintWindow;
 }
 
@@ -881,7 +888,7 @@ void SdrPaintView::DoCompleteRedraw(SdrPaintWindow& rPaintWindow, const Region& 
     }
 }
 
-void SdrPaintView::EndCompleteRedraw(SdrPaintWindow& rPaintWindow)
+void SdrPaintView::EndCompleteRedraw(SdrPaintWindow& rPaintWindow, bool bPaintFormLayer)
 {
     if(rPaintWindow.getTemporaryTarget())
     {
@@ -892,7 +899,10 @@ void SdrPaintView::EndCompleteRedraw(SdrPaintWindow& rPaintWindow)
     {
         // draw postprocessing, only for known devices
         // it is necessary to always paint FormLayer
-        ImpFormLayerDrawing(rPaintWindow);
+        if(bPaintFormLayer)
+        {
+            ImpFormLayerDrawing(rPaintWindow);
+        }
 
         // look for active TextEdit. As long as this cannot be painted to a VDev,
         // it cannot get part of buffering. In that case, output evtl. prerender
@@ -928,6 +938,13 @@ void SdrPaintView::EndCompleteRedraw(SdrPaintWindow& rPaintWindow)
             rPaintWindow.OutputPreRenderDevice(rPaintWindow.GetRedrawRegion());
         }
     }
+
+    // the following is a hack, only to be used on the 3.0.1 branch, to prevent becoming
+    // incompatible there
+    // #i94033# / 2008-10-16 / frank.schoenheit@sun.com
+    FmFormView* pMeAsFormView = dynamic_cast< FmFormView* >( this );
+    if ( pMeAsFormView )
+        pMeAsFormView->onEndCompleteRedraw();
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -997,10 +1014,10 @@ SdrPaintWindow* SdrPaintView::BeginDrawLayers(OutputDevice* pOut, const Region& 
     return pPaintWindow;
 }
 
-void SdrPaintView::EndDrawLayers(SdrPaintWindow& rPaintWindow)
+void SdrPaintView::EndDrawLayers(SdrPaintWindow& rPaintWindow, bool bPaintFormLayer)
 {
     // #i74769# use EndCompleteRedraw() as common base
-    EndCompleteRedraw(rPaintWindow);
+    EndCompleteRedraw(rPaintWindow, bPaintFormLayer);
 
     if(mpPageView)
     {

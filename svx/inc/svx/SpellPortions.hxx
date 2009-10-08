@@ -34,7 +34,8 @@
 #include <i18npool/lang.h>
 #include <rtl/ustring.hxx>
 #include <com/sun/star/uno/Reference.h>
-#include <com/sun/star/linguistic2/SingleGrammarError.hpp>
+#include <com/sun/star/linguistic2/SingleProofreadingError.hpp>
+#include <com/sun/star/linguistic2/XProofreader.hpp>
 #include <vector>
 
 namespace com{ namespace sun{ namespace star{ namespace linguistic2{
@@ -71,15 +72,25 @@ struct SpellPortion
     bool bIsGrammarError;
     /** contains the grammar error information
     */
-    com::sun::star::linguistic2::SingleGrammarError aGrammarError;
+    com::sun::star::linguistic2::SingleProofreadingError aGrammarError;
+    /** provides access to the grammar checker interface
+     */
+    ::com::sun::star::uno::Reference< ::com::sun::star::linguistic2::XProofreader > xGrammarChecker;
+    /** marks portion as to-be-ignored. This is a return parameter.
+     */
+    /** contains the proposed dialog title if the proof reading component provides one.
+     */
+    rtl::OUString   sDialogTitle;
 
+    bool bIgnoreThisError;
     SpellPortion() :
         bIsField(false),
         bIsHidden(false),
         eLanguage(LANGUAGE_DONTKNOW),
-        bIsGrammarError(false)
+        bIsGrammarError(false),
+        bIgnoreThisError(false)
         {
-            aGrammarError.nErrorStart = aGrammarError.nErrorLength = aGrammarError.nErrorLevel = aGrammarError.nErrorType = 0;
+            aGrammarError.nErrorStart = aGrammarError.nErrorLength = aGrammarError.nErrorType = 0;
         }
 };
 typedef std::vector<SpellPortion> SpellPortions;

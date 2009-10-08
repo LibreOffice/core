@@ -46,7 +46,6 @@
 #include <sfx2/sfxuno.hxx>
 #include <linguistic/lngprops.hxx>
 #include <com/sun/star/frame/XStorable.hpp>
-#include <com/sun/star/linguistic2/XDictionary1.hpp>
 
 #include <map>
 
@@ -538,9 +537,9 @@ sal_Bool SvxSpellWrapper::SpellNext( )
 
 // -----------------------------------------------------------------------
 
-Reference< XDictionary1 >  SvxSpellWrapper::GetAllRightDic() const
+Reference< XDictionary >  SvxSpellWrapper::GetAllRightDic() const
 {
-    Reference< XDictionary1 >  xDic;
+    Reference< XDictionary >  xDic;
 
     Reference< XDictionaryList >  xDicList( SvxGetDictionaryList() );
     if (xDicList.is())
@@ -552,12 +551,12 @@ Reference< XDictionary1 >  SvxSpellWrapper::GetAllRightDic() const
         sal_Int32 i = 0;
         while (!xDic.is()  &&  i < nCount)
         {
-            Reference< XDictionary1 >  xTmp( pDic[i], UNO_QUERY );
+            Reference< XDictionary >  xTmp( pDic[i], UNO_QUERY );
             if (xTmp.is())
             {
                 if ( xTmp->isActive() &&
                      xTmp->getDictionaryType() != DictionaryType_NEGATIVE &&
-                     xTmp->getLanguage() == LANGUAGE_NONE )
+                     SvxLocaleToLanguage( xTmp->getLocale() ) == LANGUAGE_NONE )
                 {
                     Reference< frame::XStorable >  xStor( xTmp, UNO_QUERY );
                     if (xStor.is() && xStor->hasLocation() && !xStor->isReadonly())
@@ -591,7 +590,7 @@ sal_Bool SvxSpellWrapper::FindSpellError()
     WAIT_ON();
     sal_Bool bSpell = sal_True;
 
-    Reference< XDictionary1 >  xAllRightDic;
+    Reference< XDictionary >  xAllRightDic;
     if (IsAllRight())
         xAllRightDic = GetAllRightDic();
 
@@ -611,7 +610,7 @@ sal_Bool SvxSpellWrapper::FindSpellError()
             else
             {
                 // look up in ChangeAllList for misspelled word
-                Reference< XDictionary1 >   xChangeAllList(
+                Reference< XDictionary >    xChangeAllList(
                         SvxGetChangeAllList(), UNO_QUERY );
                 Reference< XDictionaryEntry >   xEntry;
                 if (xChangeAllList.is())

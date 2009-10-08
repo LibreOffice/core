@@ -40,6 +40,14 @@ ENABLE_EXCEPTIONS=TRUE
 
 .INCLUDE :  settings.mk
 
+.IF "$(GUIBASE)"=="aqua"
+CFLAGS+=-x objective-c++
+.ENDIF
+
+.IF "$(ENABLE_GNOMEVFS)"=="TRUE"
+CFLAGS+=-DGNOME_VFS_ENABLED
+.ENDIF
+
 SHL1TARGET = sofficeapp
 SHL1OBJS = \
     $(SLO)$/app.obj \
@@ -84,8 +92,11 @@ DEF1NAME = $(SHL1TARGET)
 
 OBJFILES = \
     $(OBJ)$/copyright_ascii_ooo.obj \
-    $(OBJ)$/copyright_ascii_sun.obj \
     $(OBJ)$/main.obj
+.IF "$(GUI)" != "OS2"
+OBJFILES += \
+    $(OBJ)$/copyright_ascii_sun.obj
+.ENDIF
 
 SLOFILES = $(SHL1OBJS)
 

@@ -37,6 +37,7 @@
 #include <osl/diagnose.h>
 #include <comphelper/stl_types.hxx>
 #include <vos/ref.hxx>
+#include "connectivity/dbtoolsdllapi.hxx"
 #include "connectivity/CommonTools.hxx"
 #include <com/sun/star/util/DateTime.hpp>
 #include <com/sun/star/util/Date.hpp>
@@ -46,7 +47,7 @@
 
 namespace connectivity
 {
-    class ORowSetValue
+    class OOO_DLLPUBLIC_DBTOOLS ORowSetValue
     {
         union
         {
@@ -255,8 +256,8 @@ namespace connectivity
         ORowSetValue& operator=(const ::com::sun::star::uno::Any& _rAny);
 
         operator sal_Bool() const   {   return isNull() ? sal_False : getBool();    }
-        operator sal_Int8() const   {   return isNull() ? 0         : getInt8();    }
-        operator sal_Int16() const  {   return isNull() ? 0         : getInt16();   }
+        operator sal_Int8() const   {   return isNull() ? static_cast<sal_Int8>(0) : getInt8(); }
+        operator sal_Int16() const  {   return isNull() ? static_cast<sal_Int16>(0) : getInt16();   }
         operator sal_Int32() const  {   return isNull() ? 0         : getInt32();   }
         operator sal_Int64() const  {   return isNull() ? 0         : getLong();    }
         operator float() const      {   return isNull() ? (float)0.0: getFloat();   }
@@ -301,10 +302,10 @@ namespace connectivity
         }
 
         sal_Bool    isBound() const                     { return m_bBound;      }
-        void        setBound(sal_Bool _bBound)          { m_bBound = _bBound;   }
+        void        setBound(sal_Bool _bBound)          { m_bBound = _bBound ? true : false; }
 
         sal_Bool    isModified() const                  { return m_bModified;   }
-        void        setModified(sal_Bool _bMod=sal_True){ m_bModified = _bMod;  }
+        void        setModified(sal_Bool _bMod=sal_True){ m_bModified = _bMod ? true : false;   }
 
         sal_Bool    isSigned() const                    { return m_bSigned; }
         void        setSigned(sal_Bool _bMod=sal_True);
@@ -347,7 +348,7 @@ namespace connectivity
     };
 
     /// ORowSetValueDecorator decorates a ORowSetValue so the value is "refcounted"
-    class ORowSetValueDecorator : public ::vos::OReference
+    class OOO_DLLPUBLIC_DBTOOLS ORowSetValueDecorator : public ::vos::OReference
     {
         ORowSetValue    m_aValue;   // my own value
     public:
@@ -371,7 +372,7 @@ namespace connectivity
 
     // -------------------------------------------------------------------------
     /// TSetBound is a unary_function to set the bound value with e.q. for_each call
-    struct TSetBound : ::std::unary_function<ORowSetValue,void>
+    struct OOO_DLLPUBLIC_DBTOOLS TSetBound : ::std::unary_function<ORowSetValue,void>
     {
         sal_Bool m_bBound;
         TSetBound(sal_Bool _bBound) : m_bBound(_bBound){}
@@ -381,7 +382,7 @@ namespace connectivity
 
     // -------------------------------------------------------------------------
     /// TSetBound is a unary_function to set the bound value with e.q. for_each call
-    struct TSetRefBound : ::std::unary_function<ORowSetValueDecoratorRef,void>
+    struct OOO_DLLPUBLIC_DBTOOLS TSetRefBound : ::std::unary_function<ORowSetValueDecoratorRef,void>
     {
         sal_Bool m_bBound;
         TSetRefBound(sal_Bool _bBound) : m_bBound(_bBound){}
@@ -405,13 +406,13 @@ namespace connectivity
 
     typedef ODeleteVector< ORowSetValue >               OValueVector;
 
-    class OValueRefVector : public ODeleteVector< ORowSetValueDecoratorRef >
+    class OOO_DLLPUBLIC_DBTOOLS OValueRefVector : public ODeleteVector< ORowSetValueDecoratorRef >
     {
     public:
         OValueRefVector(){}
         OValueRefVector(size_t _st) : ODeleteVector< ORowSetValueDecoratorRef >(_st)
         {
-            for(OValueRefVector::iterator aIter = begin() ; aIter != end() ;++aIter)
+            for(OValueRefVector::Vector::iterator aIter = get().begin() ; aIter != get().end() ;++aIter)
                 *aIter = new ORowSetValueDecorator;
         }
     };
@@ -422,7 +423,7 @@ namespace connectivity
         ::std::vector<sal_Int32> m_nParameterIndexes;
     public:
         OAssignValues() : m_nParameterIndexes(1,SQL_NO_PARAMETER){}
-        OAssignValues(size_type n) : OValueRefVector(n),m_nParameterIndexes(n+1,SQL_NO_PARAMETER){}
+        OAssignValues(Vector::size_type n) : OValueRefVector(n),m_nParameterIndexes(n+1,SQL_NO_PARAMETER){}
 
         void setParameterIndex(sal_Int32 _nId,sal_Int32 _nParameterIndex) { m_nParameterIndexes[_nId] = _nParameterIndex;}
         sal_Int32 getParameterIndex(sal_Int32 _nId) const { return m_nParameterIndexes[_nId]; }

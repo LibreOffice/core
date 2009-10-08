@@ -192,9 +192,12 @@ java_util_Properties* connectivity::createStringPropertyArray(const Sequence< Pr
 // --------------------------------------------------------------------------------
 jobject connectivity::convertTypeMapToJavaMap(JNIEnv* /*pEnv*/,const Reference< ::com::sun::star::container::XNameAccess > & _rMap)
 {
-    ::com::sun::star::uno::Sequence< ::rtl::OUString > aNames = _rMap->getElementNames();
-    if ( aNames.getLength() > 0 )
-        ::dbtools::throwFeatureNotImplementedException( "Type maps", NULL );
+    if ( _rMap.is() )
+    {
+        ::com::sun::star::uno::Sequence< ::rtl::OUString > aNames = _rMap->getElementNames();
+        if ( aNames.getLength() > 0 )
+            ::dbtools::throwFeatureNotImplementedException( "Type maps", NULL );
+    }
     return 0;
 }
 // -----------------------------------------------------------------------------

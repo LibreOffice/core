@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: fmtextcontrolshell.cxx,v $
- * $Revision: 1.16 $
+ * $Revision: 1.16.86.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -30,8 +30,20 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_svx.hxx"
-#include "fmtextcontrolshell.hxx"
+
+#include "fmprop.hrc"
+#include "fmresids.hrc"
+#include "fmtextcontroldialogs.hxx"
 #include "fmtextcontrolfeature.hxx"
+#include "fmtextcontrolshell.hxx"
+#include "svx/crsditem.hxx"
+#include "svx/dialmgr.hxx"
+#include "svx/editeng.hxx"
+#include "svx/eeitem.hxx"
+#include "svx/fmglob.hxx"
+#include "svx/scriptspaceitem.hxx"
+#include "svx/svxids.hrc"
+#include "svx/udlnitem.hxx"
 
 /** === begin UNO includes === **/
 #include <com/sun/star/beans/XPropertySet.hpp>
@@ -42,48 +54,28 @@
 #include <com/sun/star/awt/XFocusListener.hpp>
 #include <com/sun/star/awt/XMouseListener.hpp>
 /** === end UNO includes === **/
-#include <sfx2/request.hxx>
-#include <sfx2/bindings.hxx>
-#include <sfx2/msgpool.hxx>
-#include <sfx2/dispatch.hxx>
-#include <sfx2/sfxuno.hxx>
-#include <sfx2/viewfrm.hxx>
-#include <sfx2/objsh.hxx>
-#include <sfx2/sfxuno.hxx>
 
-#include <sfx2/app.hxx>
-#include <vcl/outdev.hxx>
-#include <vcl/msgbox.hxx>
-#include <svtools/languageoptions.hxx>
-#include <svtools/intitem.hxx>
-#include <svtools/whiter.hxx>
-#include <svtools/eitem.hxx>
-#include <svtools/itempool.hxx>
-#include <svtools/stringtransfer.hxx>
-#include <toolkit/helper/vclunohelper.hxx>
-#include <tools/diagnose_ex.h>
 #include <comphelper/componentcontext.hxx>
 #include <comphelper/processfactory.hxx>
 #include <cppuhelper/implbase1.hxx>
-
-#ifndef _SVX_SVXIDS_HRC
-#include <svx/svxids.hrc>
-#endif
-#include <svx/fmglob.hxx>
-#include <svx/dialmgr.hxx>
-#ifndef _SVX_FMRESIDS_HRC
-#include "fmresids.hrc"
-#endif
-#include <svx/editeng.hxx>
-#include <svx/eeitem.hxx>
-#ifndef _SVX_FMPROP_HRC
-#include "fmprop.hrc"
-#endif
-#include "fmtextcontroldialogs.hxx"
-#include <svx/scriptspaceitem.hxx>
-
-#include <svx/udlnitem.hxx>
-#include <svx/crsditem.hxx>
+#include <sfx2/app.hxx>
+#include <sfx2/bindings.hxx>
+#include <sfx2/dispatch.hxx>
+#include <sfx2/msgpool.hxx>
+#include <sfx2/objsh.hxx>
+#include <sfx2/request.hxx>
+#include <sfx2/sfxuno.hxx>
+#include <sfx2/viewfrm.hxx>
+#include <svtools/eitem.hxx>
+#include <svtools/intitem.hxx>
+#include <svtools/itempool.hxx>
+#include <svtools/languageoptions.hxx>
+#include <svtools/stringtransfer.hxx>
+#include <svtools/whiter.hxx>
+#include <toolkit/helper/vclunohelper.hxx>
+#include <tools/diagnose_ex.h>
+#include <vcl/msgbox.hxx>
+#include <vcl/outdev.hxx>
 #include <vos/mutex.hxx>
 
 #include <memory>
@@ -123,6 +115,7 @@ namespace svx
         SID_ATTR_CHAR_CONTOUR,
         SID_ATTR_CHAR_STRIKEOUT,
         SID_ATTR_CHAR_UNDERLINE,
+        SID_ATTR_CHAR_OVERLINE,
         SID_ATTR_CHAR_FONTHEIGHT,
         SID_ATTR_CHAR_COLOR,
         SID_ATTR_CHAR_KERNING,
@@ -227,7 +220,7 @@ namespace svx
             }
             catch( const Exception& )
             {
-                DBG_ERROR( "FmFocusListenerAdapter::FmFocusListenerAdapter: caught an exception!" );
+                DBG_UNHANDLED_EXCEPTION();
             }
         }
         osl_decrementInterlockedCount( &m_refCount );
@@ -324,7 +317,7 @@ namespace svx
             }
             catch( const Exception& )
             {
-                DBG_ERROR( "FmMouseListenerAdapter::FmMouseListenerAdapter: caught an exception!" );
+                DBG_UNHANDLED_EXCEPTION();
             }
         }
         osl_decrementInterlockedCount( &m_refCount );
@@ -517,7 +510,7 @@ namespace svx
             }
             catch( const Exception& )
             {
-                OSL_ENSURE( sal_False, "lcl_determineReadOnly: caught an exception!" );
+                DBG_UNHANDLED_EXCEPTION();
             }
             return bIsReadOnlyModel;
         }
@@ -536,7 +529,7 @@ namespace svx
             }
             catch( const Exception& )
             {
-                OSL_ENSURE( sal_False, "lcl_getWindow: caught an exception!" );
+                DBG_UNHANDLED_EXCEPTION();
             }
 
             return pWindow;
@@ -563,7 +556,7 @@ namespace svx
             }
             catch( const Exception& )
             {
-                OSL_ENSURE( sal_False, "lcl_isRichText: caught an exception!" );
+                DBG_UNHANDLED_EXCEPTION();
             }
             return bIsRichText;
         }
@@ -797,7 +790,7 @@ namespace svx
         }
         catch( const Exception& )
         {
-            OSL_ENSURE( sal_False, "FmTextControlShell::executeSelectAll: caught an exception!" );
+            DBG_UNHANDLED_EXCEPTION();
         }
         return false;   // not handled
     }
@@ -839,7 +832,7 @@ namespace svx
         }
         catch( const Exception& )
         {
-            OSL_ENSURE( sal_False, "FmTextControlShell::executeClipboardSlot: caught an exception!" );
+            DBG_UNHANDLED_EXCEPTION();
         }
         return false;   // not handled
     }
@@ -886,20 +879,25 @@ namespace svx
             {
             case SID_ATTR_CHAR_STRIKEOUT:
             case SID_ATTR_CHAR_UNDERLINE:
+            case SID_ATTR_CHAR_OVERLINE:
             {
                 SfxItemSet aToggled( *_rReq.GetArgs() );
 
                 lcl_translateUnoStateToItem( nSlot, aFeaturePos->second->getFeatureState(), aToggled );
                 WhichId nWhich = aToggled.GetPool()->GetWhich( nSlot );
                 const SfxPoolItem* pItem = aToggled.GetItem( nWhich );
-                if ( SID_ATTR_CHAR_UNDERLINE == nSlot )
+                if ( ( SID_ATTR_CHAR_UNDERLINE == nSlot ) || ( SID_ATTR_CHAR_OVERLINE == nSlot ) )
                 {
-                    const SvxUnderlineItem* pUnderline = PTR_CAST( SvxUnderlineItem, pItem );
-                    DBG_ASSERT( pUnderline, "FmTextControlShell::ExecuteTextAttribute: ooops - no underline item!" );
-                    if ( pUnderline )
+                    const SvxOverlineItem* pTextLine = PTR_CAST( SvxOverlineItem, pItem );
+                    DBG_ASSERT( pTextLine, "FmTextControlShell::ExecuteTextAttribute: ooops - no underline/overline item!" );
+                    if ( pTextLine )
                     {
-                        FontUnderline eFU = pUnderline->GetUnderline();
-                        aToggled.Put( SvxUnderlineItem( eFU == UNDERLINE_SINGLE ? UNDERLINE_NONE : UNDERLINE_SINGLE, nWhich ) );
+                        FontUnderline eTL = pTextLine->GetLineStyle();
+                        if ( SID_ATTR_CHAR_UNDERLINE == nSlot ) {
+                            aToggled.Put( SvxUnderlineItem( eTL == UNDERLINE_SINGLE ? UNDERLINE_NONE : UNDERLINE_SINGLE, nWhich ) );
+                        } else {
+                            aToggled.Put( SvxOverlineItem( eTL == UNDERLINE_SINGLE ? UNDERLINE_NONE : UNDERLINE_SINGLE, nWhich ) );
+                        }
                     }
                 }
                 else
@@ -1085,18 +1083,18 @@ namespace svx
         if ( !_rxController.is() )
             return;
 
+        // sometimes, a form controller notifies activations, even if it's already activated
+        if ( m_xActiveController == _rxController )
+            return;
+
         try
         {
-            if ( m_xActiveController == _rxController )
-                // sometimes, a form controller notifies activations, even if it's already activated
-                return;
-
             startControllerListening( _rxController );
             controlActivated( _rxController->getCurrentControl() );
         }
         catch( const Exception& )
         {
-            DBG_ERROR( "FmTextControlShell::formActivated: caught an exception!" );
+            DBG_UNHANDLED_EXCEPTION();
         }
     }
 
@@ -1119,11 +1117,11 @@ namespace svx
     //------------------------------------------------------------------------
     void FmTextControlShell::startControllerListening( const Reference< XFormController >& _rxController )
     {
-        DBG_ASSERT( _rxController.is(), "FmTextControlShell::startControllerListening: invalid controller!" );
+        OSL_PRECOND( _rxController.is(), "FmTextControlShell::startControllerListening: invalid controller!" );
         if ( !_rxController.is() )
             return;
 
-        DBG_ASSERT( !isControllerListening(), "FmTextControlShell::startControllerListening: already listening!" );
+        OSL_PRECOND( !isControllerListening(), "FmTextControlShell::startControllerListening: already listening!" );
         if ( isControllerListening() )
             stopControllerListening( );
         DBG_ASSERT( !isControllerListening(), "FmTextControlShell::startControllerListening: inconsistence!" );
@@ -1143,7 +1141,7 @@ namespace svx
         }
         catch( const Exception& )
         {
-            DBG_ERROR( "FmTextControlShell::startControllerListening: caught an exception!" );
+            DBG_UNHANDLED_EXCEPTION();
         }
 
         m_xActiveController = _rxController;
@@ -1152,7 +1150,7 @@ namespace svx
     //------------------------------------------------------------------------
     void FmTextControlShell::stopControllerListening( )
     {
-        DBG_ASSERT( isControllerListening(), "FmTextControlShell::stopControllerListening: inconsistence!" );
+        OSL_PRECOND( isControllerListening(), "FmTextControlShell::stopControllerListening: inconsistence!" );
 
         // dispose all listeners associated with the controls of the active controller
         for (   FocusListenerAdapters::iterator aLoop = m_aControlObservers.begin();
@@ -1207,7 +1205,6 @@ namespace svx
     void FmTextControlShell::controlDeactivated( )
     {
         DBG_ASSERT( IsActiveControl(), "FmTextControlShell::controlDeactivated: no active control!" );
-        OSL_TRACE( "deactivated: %X", m_xActiveControl.get() );
 
         m_bActiveControl = false;
 
@@ -1217,8 +1214,6 @@ namespace svx
     //------------------------------------------------------------------------
     void FmTextControlShell::controlActivated( const Reference< XControl >& _rxControl )
     {
-        OSL_TRACE( "activated  : %X", _rxControl.get() );
-
         // ensure that all knittings with the previously active control are lost
         if ( m_xActiveControl.is() )
             implClearActiveControlRef();

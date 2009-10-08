@@ -309,10 +309,6 @@ TabPage RID_SFXPAGE_LINGU
     {
         Text [ en-US ] = "Check special regions";
     };
-    String STR_ALL_LANGUAGES
-    {
-        Text [ en-US ] = "Check in all languages";
-    };
     String STR_SPELL_AUTO
     {
         Text [ en-US ] = "Check spelling as you type";
@@ -320,14 +316,6 @@ TabPage RID_SFXPAGE_LINGU
     String STR_GRAMMAR_AUTO
     {
         Text [ en-US ] = "Check grammar as you type";
-    };
-    String STR_HIDE_MARKINGS
-    {
-        Text [ en-US ] = "Do not mark errors";
-    };
-    String STR_OLD_GERMAN
-    {
-        Text [ en-US ] = "German spelling - old";
     };
     String STR_NUM_MIN_WORDLEN
     {

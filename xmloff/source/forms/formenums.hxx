@@ -63,6 +63,7 @@ namespace xmloff
             epVisualEffect,
             epImagePosition,
             epImageAlign,
+            epImageScaleMode,
 
             KNOWN_ENUM_PROPERTIES
         };

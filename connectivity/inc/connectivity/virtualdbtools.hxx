@@ -40,6 +40,7 @@
 
 #include <vector>
 #include <memory>
+#include "connectivity/dbtoolsdllapi.hxx"
 
 //========================================================================
 //= forward declarations
@@ -99,7 +100,7 @@ namespace comphelper {
         a pointer to an object implementing the IDataAccessToolsFactory interface,
         aquired exactly <em>once</em>.
 */
-extern "C" void* SAL_CALL createDataAccessToolsFactory();
+extern "C" OOO_DLLPUBLIC_DBTOOLS void* SAL_CALL createDataAccessToolsFactory();
 
 //========================================================================
 //=
@@ -120,7 +121,7 @@ namespace connectivity
         //================================================================
         //= IDataAccessTools
         //================================================================
-        class IDataAccessTools : public ::rtl::IReference
+        class OOO_DLLPUBLIC_DBTOOLS IDataAccessTools : public ::rtl::IReference
         {
         public:
             virtual ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection> getConnection_withFeedback(
@@ -234,7 +235,8 @@ namespace connectivity
         //================================================================
         /** simple wrapper for the <type>OCharsetMap</type>
         */
-        class IDataAccessCharSet : public ::rtl::IReference
+        class OOO_DLLPUBLIC_DBTOOLS IDataAccessCharSet :
+            public ::rtl::IReference
         {
             // to be extended if necessary ....
         public:
@@ -249,7 +251,8 @@ namespace connectivity
         //================================================================
         //= IDataAccessTypeConversion
         //================================================================
-        class IDataAccessTypeConversion : public ::rtl::IReference
+        class OOO_DLLPUBLIC_DBTOOLS IDataAccessTypeConversion :
+            public ::rtl::IReference
         {
         public:
             virtual ::com::sun::star::util::Date getStandardDate() const = 0;
@@ -279,7 +282,7 @@ namespace connectivity
         //================================================================
         /** a simple version of the OSQLParseNode, with all methods beeing virtual
         */
-        class ISQLParseNode : public ::rtl::IReference
+        class OOO_DLLPUBLIC_DBTOOLS ISQLParseNode : public ::rtl::IReference
         {
         public:
             virtual void parseNodeToStr(::rtl::OUString& _rString,
@@ -302,7 +305,7 @@ namespace connectivity
         //================================================================
         /** a simple version of the OSQLParser, with all methods beeing virtual
         */
-        class ISQLParser : public ::rtl::IReference
+        class OOO_DLLPUBLIC_DBTOOLS ISQLParser : public ::rtl::IReference
         {
         public:
             virtual ::rtl::Reference< ISQLParseNode > predicateTree(
@@ -320,7 +323,8 @@ namespace connectivity
         //================================================================
         /** the main factory for runtime-loadable tools in the DBTOOLS library
         */
-        class IDataAccessToolsFactory : public ::rtl::IReference
+        class OOO_DLLPUBLIC_DBTOOLS IDataAccessToolsFactory :
+            public ::rtl::IReference
         {
         public:
             /// creates a simple version of the class OSQLParser

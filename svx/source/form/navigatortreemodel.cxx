@@ -41,18 +41,14 @@
 
 
 #include "fmundo.hxx"
-#ifndef _SVX_FMHELP_HRC
 #include "fmhelp.hrc"
-#endif
-#ifndef _SVX_FMEXPL_HRC
 #include "fmexpl.hrc"
-#endif
 #include "fmexpl.hxx"
-#ifndef _SVX_FMRESIDS_HRC
 #include "fmresids.hrc"
-#endif
 #include "fmshimp.hxx"
+#include "fmobj.hxx"
 #include <sfx2/objsh.hxx>
+#include <tools/diagnose_ex.h>
 #include <com/sun/star/container/XContainer.hpp>
 
 //............................................................................
@@ -731,49 +727,55 @@ namespace svxform
     }
 
     //------------------------------------------------------------------------
-    void NavigatorTreeModel::InsertSdrObj(const SdrObject* pObj)
+    void NavigatorTreeModel::InsertSdrObj( const SdrObject* pObj )
     {
-        if (pObj->GetObjInventor() == FmFormInventor)
-        {                                           //////////////////////////////////////////////////////////////////////
-            // Ist dieses Objekt ein XFormComponent?
-            Reference< XFormComponent >  xFormComponent(((SdrUnoObj*)pObj)->GetUnoControlModel(), UNO_QUERY);
-            if (xFormComponent.is())
+        const FmFormObj* pFormObject = FmFormObj::GetFormObject( pObj );
+        if ( pFormObject )
+        {
+            try
             {
-                Reference< XIndexContainer >  xContainer(xFormComponent->getParent(), UNO_QUERY);
-                if (xContainer.is())
-                {
-                    sal_Int32 nPos = getElementPos(Reference< XIndexAccess > (xContainer, UNO_QUERY), xFormComponent);
-                    InsertFormComponent(xFormComponent, nPos);
-                }
+                Reference< XFormComponent > xFormComponent( pFormObject->GetUnoControlModel(), UNO_QUERY_THROW );
+                Reference< XIndexAccess > xContainer( xFormComponent->getParent(), UNO_QUERY_THROW );
+
+                sal_Int32 nPos = getElementPos( xContainer, xFormComponent );
+                InsertFormComponent( xFormComponent, nPos );
+            }
+            catch( const Exception& )
+            {
+                DBG_UNHANDLED_EXCEPTION();
             }
         }
-        else if (pObj->IsGroupObject())
+        else if ( pObj->IsGroupObject() )
         {
-            SdrObjListIter aIter(*pObj->GetSubList());
-            while (aIter.IsMore())
-                InsertSdrObj(aIter.Next());
+            SdrObjListIter aIter( *pObj->GetSubList() );
+            while ( aIter.IsMore() )
+                InsertSdrObj( aIter.Next() );
         }
     }
 
     //------------------------------------------------------------------------
-    void NavigatorTreeModel::RemoveSdrObj(const SdrObject* pObj)
+    void NavigatorTreeModel::RemoveSdrObj( const SdrObject* pObj )
     {
-        if (pObj->GetObjInventor() == FmFormInventor)
-        {                                           //////////////////////////////////////////////////////////////////////
-            // Ist dieses Objekt ein XFormComponent?
-            Reference< XFormComponent >  xFormComponent(((SdrUnoObj*)pObj)->GetUnoControlModel(), UNO_QUERY);
-            if (xFormComponent.is())
+        const FmFormObj* pFormObject = FmFormObj::GetFormObject( pObj );
+        if ( pFormObject )
+        {
+            try
             {
-                FmEntryData* pEntryData = FindData(xFormComponent, GetRootList(), sal_True);
-                if (pEntryData)
-                    Remove(pEntryData);
+                Reference< XFormComponent > xFormComponent( pFormObject->GetUnoControlModel(), UNO_QUERY_THROW );
+                FmEntryData* pEntryData = FindData( xFormComponent, GetRootList(), sal_True );
+                if ( pEntryData )
+                    Remove( pEntryData );
+            }
+            catch( const Exception& )
+            {
+                DBG_UNHANDLED_EXCEPTION();
             }
         }
-        else if (pObj->IsGroupObject())
+        else if ( pObj->IsGroupObject() )
         {
-            SdrObjListIter aIter(*pObj->GetSubList());
-            while (aIter.IsMore())
-                RemoveSdrObj(aIter.Next());
+            SdrObjListIter aIter( *pObj->GetSubList() );
+            while ( aIter.IsMore() )
+                RemoveSdrObj( aIter.Next() );
         }
     }
 
@@ -788,23 +790,29 @@ namespace svxform
                 if (!InsertFormComponent(rHint, pCurrent))
                     return sal_False;
             }
-        } else
-            if (pObject->IsUnoObj())
-            {
-                Reference< XInterface >  xControlModel( ((SdrUnoObj*)pObject)->GetUnoControlModel());
-                // Ist dieses Objekt ein XFormComponent?
-                Reference< XFormComponent >  xFormViewControl(xControlModel, UNO_QUERY);
-                if (xFormViewControl.is())
-                {   // es ist ein Form-Control -> selektieren lassen
-                    FmEntryData* pControlData = FindData( xFormViewControl, GetRootList() );
-                    if (pControlData)
-                        rHint.AddItem( pControlData );
-                } else
-                {   // es ist kein Form-Control -> im Baum ueberhaupt nix selektieren lassen
-                    return sal_False;
-                }
-            } else
+        }
+        else
+        {
+            FmFormObj* pFormObject = FmFormObj::GetFormObject( pObject );
+            if ( !pFormObject )
                 return sal_False;
+
+            try
+            {
+                Reference< XFormComponent > xFormViewControl( pFormObject->GetUnoControlModel(), UNO_QUERY_THROW );
+                FmEntryData* pControlData = FindData( xFormViewControl, GetRootList() );
+                if ( !pControlData )
+                    return sal_False;
+
+                rHint.AddItem( pControlData );
+                return sal_True;
+            }
+            catch( const Exception& )
+            {
+                DBG_UNHANDLED_EXCEPTION();
+                return sal_False;
+            }
+        }
 
         return sal_True;
     }
@@ -1036,20 +1044,18 @@ namespace svxform
         while (rIter.IsMore())
         {
             SdrObject* pObj = rIter.Next();
-            //////////////////////////////////////////////////////////////////////
-            // Es interessieren nur Uno-Objekte
-            if (pObj->GetObjInventor() == FmFormInventor)
-            {                                           //////////////////////////////////////////////////////////////////////
-                // Ist dieses Objekt ein XFormComponent?
-                Reference< XFormComponent >  xFormViewControl(((SdrUnoObj*)pObj)->GetUnoControlModel(), UNO_QUERY);
-                if (xFormViewControl == xComp)
+            FmFormObj* pFormObject = FmFormObj::GetFormObject( pObj );
+            if ( pFormObject )
+            {
+                Reference< XFormComponent > xFormViewControl( pFormObject->GetUnoControlModel(), UNO_QUERY );
+                if ( xFormViewControl == xComp )
                     return pObj;
             }
-            else if (pObj->IsGroupObject())
+            else if ( pObj->IsGroupObject() )
             {
-                SdrObjListIter aIter(*pObj->GetSubList());
-                pObj = Search(aIter, xComp);
-                if (pObj)
+                SdrObjListIter aIter( *pObj->GetSubList() );
+                pObj = Search( aIter, xComp );
+                if ( pObj )
                     return pObj;
             }
         }

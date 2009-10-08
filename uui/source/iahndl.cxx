@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: iahndl.cxx,v $
- * $Revision: 1.67 $
+ * $Revision: 1.67.22.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -48,6 +48,10 @@
 #include "com/sun/star/document/NoSuchFilterRequest.hpp"
 #include "com/sun/star/document/AmbigousFilterRequest.hpp"
 #include "com/sun/star/document/LockedDocumentRequest.hpp"
+#include "com/sun/star/document/OwnLockOnDocumentRequest.hpp"
+#include "com/sun/star/document/LockedOnSavingRequest.hpp"
+#include "com/sun/star/document/ChangedByOthersRequest.hpp"
+#include "com/sun/star/document/LockFileIgnoreRequest.hpp"
 #include "com/sun/star/document/XImporter.hpp"
 #include "com/sun/star/document/XInteractionFilterOptions.hpp"
 #include "com/sun/star/document/XInteractionFilterSelect.hpp"
@@ -55,7 +59,6 @@
 #include "com/sun/star/lang/XMultiServiceFactory.hpp"
 #include "com/sun/star/script/ModuleSizeExceededRequest.hpp"
 #include "com/sun/star/sync2/BadPartnershipException.hpp"
-#include "com/sun/star/task/DocumentMacroConfirmationRequest.hpp"
 #include "com/sun/star/task/DocumentPasswordRequest.hpp"
 #include "com/sun/star/task/ErrorCodeIOException.hpp"
 #include "com/sun/star/task/ErrorCodeRequest.hpp"
@@ -68,6 +71,7 @@
 #include "com/sun/star/task/XInteractionRequest.hpp"
 #include "com/sun/star/task/XInteractionRetry.hpp"
 #include "com/sun/star/task/XPasswordContainer.hpp"
+#include "com/sun/star/task/XInteractionAskLater.hpp"
 #include "com/sun/star/ucb/AuthenticationRequest.hpp"
 #include "com/sun/star/ucb/CertificateValidationRequest.hpp"
 #include "com/sun/star/ucb/HandleCookiesRequest.hpp"
@@ -117,12 +121,25 @@
 #include "unknownauthdlg.hxx"
 #include "sslwarndlg.hxx"
 #include "openlocked.hxx"
+#include "newerverwarn.hxx"
+#include "alreadyopen.hxx"
+#include "filechanged.hxx"
+#include "trylater.hxx"
+#include "lockfailed.hxx"
 #include <comphelper/processfactory.hxx>
 #include <svtools/zforlist.hxx>
 using namespace com::sun;
 
 namespace csss = ::com::sun::star::security;
 
+using ::com::sun::star::uno::Sequence;
+using ::com::sun::star::uno::UNO_QUERY;
+using ::com::sun::star::uno::Reference;
+using ::com::sun::star::task::XInteractionContinuation;
+using ::com::sun::star::task::XInteractionAbort;
+using ::com::sun::star::task::XInteractionApprove;
+using ::com::sun::star::task::XInteractionAskLater;
+using ::com::sun::star::task::FutureDocumentVersionProductUpdateRequest;
 
 namespace {
 
@@ -1147,8 +1164,44 @@ void UUIInteractionHelper::handleDialogRequests(
     star::document::LockedDocumentRequest aLockedDocumentRequest;
     if (aAnyRequest >>= aLockedDocumentRequest )
     {
-        handleLockedDocumentRequest( aLockedDocumentRequest,
-                                 rRequest->getContinuations() );
+        handleLockedDocumentRequest( aLockedDocumentRequest.DocumentURL,
+                                     aLockedDocumentRequest.UserInfo,
+                                     rRequest->getContinuations(),
+                                     UUI_DOC_LOAD_LOCK );
+        return;
+    }
+
+    star::document::OwnLockOnDocumentRequest aOwnLockOnDocumentRequest;
+    if (aAnyRequest >>= aOwnLockOnDocumentRequest )
+    {
+        handleLockedDocumentRequest( aOwnLockOnDocumentRequest.DocumentURL,
+                                     aOwnLockOnDocumentRequest.TimeInfo,
+                                     rRequest->getContinuations(),
+                                     aOwnLockOnDocumentRequest.IsStoring ? UUI_DOC_OWN_SAVE_LOCK : UUI_DOC_OWN_LOAD_LOCK );
+        return;
+    }
+
+    star::document::LockedOnSavingRequest aLockedOnSavingRequest;
+    if (aAnyRequest >>= aLockedOnSavingRequest )
+    {
+        handleLockedDocumentRequest( aLockedOnSavingRequest.DocumentURL,
+                                     aLockedOnSavingRequest.UserInfo,
+                                     rRequest->getContinuations(),
+                                     UUI_DOC_SAVE_LOCK );
+        return;
+    }
+
+    star::document::ChangedByOthersRequest aChangedByOthersRequest;
+    if (aAnyRequest >>= aChangedByOthersRequest )
+    {
+        handleChangedByOthersRequest( rRequest->getContinuations() );
+        return;
+    }
+
+    star::document::LockFileIgnoreRequest aLockFileIgnoreRequest;
+    if (aAnyRequest >>= aLockFileIgnoreRequest )
+    {
+        handleLockFileIgnoreRequest( rRequest->getContinuations() );
         return;
     }
 }
@@ -1177,6 +1230,16 @@ void UUIInteractionHelper::handleErrorHandlerRequests(
     {
         handleMacroConfirmRequest(
             aMacroConfirmRequest,
+            rRequest->getContinuations()
+        );
+        return;
+    }
+
+    FutureDocumentVersionProductUpdateRequest aProductUpdateRequest;
+    if (aAnyRequest >>= aProductUpdateRequest)
+    {
+        handleFutureDocumentVersionUpdateRequest(
+            aProductUpdateRequest,
             rRequest->getContinuations()
         );
         return;
@@ -1604,15 +1667,6 @@ UUIInteractionHelper::executePasswordDialog(
         xDialog(new PasswordCreateDialog(
                             getParentProperty(), xManager.get()));
 
-        ::rtl::OUString aTitle( xDialog->GetText() );
-        if( aDocName.getLength() )
-        {
-        aTitle += ::rtl::OUString::createFromAscii( " [" );
-        aTitle += aDocName;
-        aTitle += ::rtl::OUString::createFromAscii( "]" );
-        xDialog->SetText( aTitle );
-        }
-
         rInfo.SetResult(xDialog->Execute() == RET_OK ? ERRCODE_BUTTON_OK :
                 ERRCODE_BUTTON_CANCEL);
         rInfo.SetPassword( xDialog->GetPassword() );
@@ -1621,16 +1675,7 @@ UUIInteractionHelper::executePasswordDialog(
     {
         std::auto_ptr< PasswordDialog >
         xDialog(new PasswordDialog(
-                            getParentProperty(), nMode, xManager.get()));
-
-        ::rtl::OUString aTitle( xDialog->GetText() );
-        if( aDocName.getLength() )
-        {
-        aTitle += ::rtl::OUString::createFromAscii( " [" );
-        aTitle += aDocName;
-        aTitle += ::rtl::OUString::createFromAscii( "]" );
-        xDialog->SetText( aTitle );
-        }
+                            getParentProperty(), nMode, xManager.get(), aDocName ));
 
         rInfo.SetResult(xDialog->Execute() == RET_OK ? ERRCODE_BUTTON_OK :
                 ERRCODE_BUTTON_CANCEL);
@@ -1918,6 +1963,7 @@ UUIInteractionHelper::handleAuthenticationRequest(
                 aRec.UserList[0].Passwords[0].getStr());
                     }
                     if (aRec.UserList[0].Passwords.getLength() > 1)
+                    {
                         if (rRequest.HasRealm)
                         {
                             if (xSupplyAuthentication->canSetRealm())
@@ -1929,6 +1975,7 @@ UUIInteractionHelper::handleAuthenticationRequest(
                             xSupplyAuthentication->
                                 setAccount(aRec.UserList[0].Passwords[1].
                                            getStr());
+                    }
                     xSupplyAuthentication->select();
                     return;
                 }
@@ -1955,6 +2002,7 @@ UUIInteractionHelper::handleAuthenticationRequest(
                                 setPassword(aRec.UserList[0].Passwords[0].
                                             getStr());
                         if (aRec.UserList[0].Passwords.getLength() > 1)
+                        {
                             if (rRequest.HasRealm)
                             {
                                 if (xSupplyAuthentication->canSetRealm())
@@ -1966,6 +2014,7 @@ UUIInteractionHelper::handleAuthenticationRequest(
                                 xSupplyAuthentication->
                                     setAccount(aRec.UserList[0].Passwords[1].
                                                getStr());
+                        }
                         xSupplyAuthentication->select();
                         return;
                     }
@@ -2786,6 +2835,23 @@ UUIInteractionHelper::handleGenericErrorRequest(
     }
 }
 
+namespace
+{
+    template< class INTERACTION_TYPE >
+    bool lcl_findContinuation( const Sequence< Reference< XInteractionContinuation > >& _rContinuations,
+        Reference< INTERACTION_TYPE >& _rContinuation )
+    {
+        const Reference< XInteractionContinuation >* pContinuation = _rContinuations.getConstArray();
+        const Reference< XInteractionContinuation >* pContinuationEnd = _rContinuations.getConstArray() + _rContinuations.getLength();
+        while ( pContinuation != pContinuationEnd )
+        {
+            if ( _rContinuation.set( *pContinuation++, UNO_QUERY ) )
+                return true;
+        }
+        return false;
+    }
+}
+
 void
 UUIInteractionHelper::handleMacroConfirmRequest(
     const star::task::DocumentMacroConfirmationRequest& _rRequest,
@@ -2794,18 +2860,8 @@ UUIInteractionHelper::handleMacroConfirmRequest(
 )
     SAL_THROW((star::uno::RuntimeException))
 {
-    star::uno::Reference< star::task::XInteractionAbort > xAbort;
-    star::uno::Reference< star::task::XInteractionApprove > xApprove;
-
-    sal_Int32 nCount = rContinuations.getLength();
-    for( sal_Int32 nStep=0; nStep<nCount; ++nStep )
-    {
-        if( !xAbort.is() )
-            xAbort = star::uno::Reference< star::task::XInteractionAbort >( rContinuations[nStep], star::uno::UNO_QUERY );
-
-        if( !xApprove.is() )
-            xApprove = star::uno::Reference< star::task::XInteractionApprove >( rContinuations[nStep], star::uno::UNO_QUERY );
-    }
+    Reference< XInteractionAbort > xAbort; lcl_findContinuation( rContinuations, xAbort );
+    Reference< XInteractionApprove > xApprove; lcl_findContinuation( rContinuations, xApprove );
 
     bool bApprove = false;
 
@@ -2831,7 +2887,65 @@ UUIInteractionHelper::handleMacroConfirmRequest(
     if ( bApprove && xApprove.is() )
         xApprove->select();
     else if ( xAbort.is() )
-            xAbort->select();
+        xAbort->select();
+}
+
+void
+UUIInteractionHelper::handleFutureDocumentVersionUpdateRequest(
+    const FutureDocumentVersionProductUpdateRequest& _rRequest,
+    Sequence< Reference< XInteractionContinuation > > const & rContinuations
+)
+    SAL_THROW((star::uno::RuntimeException))
+{
+    Reference< XInteractionAbort > xAbort; lcl_findContinuation( rContinuations, xAbort );
+    Reference< XInteractionApprove > xApprove; lcl_findContinuation( rContinuations, xApprove );
+    Reference< XInteractionApprove > xAskLater; lcl_findContinuation( rContinuations, xAskLater );
+
+    short nResult = RET_CANCEL;
+
+    static bool s_bDeferredToNextSession = false;
+        // TODO: this static variable is somewhat hacky. Formerly (before the dialog was moved from SFX2 to the
+        // interaction handler implementation), this was stored in SFX_APP()'s impl structure, in member
+        // bODFVersionWarningLater. Of course, we do not have access to it here.
+        //
+        // A proper solution which I would envision would be:
+        // - There's a central implementation (this one here) of css.task.InteractionHandler
+        // - There's a configuration which maps UNO names to service names
+        // - If the handler is confronted with a request, it tries to find the name of the UNO structure describing
+        //   the request in the said configuration.
+        //   - If an entry is found, then
+        //     - the respective service is instantiated
+        //     - the component is queried for css.task.XInteractionHandler, and the request is delegated
+        //   - if no entry is found, then the request is silenced (with calling the AbortContinuation, if possible)
+        // This way, the FutureDocumentVersionProductUpdateRequest could be handled in SFX (or any other
+        // suitable place), again, and we would only have one place where we remember the s_bDeferredToNextSession
+        // flag.
+        //
+        // The side effect (well, actually the more important effect) would be that we do not need to burden
+        // this central implementation with all interactions which are possible. Instead, separate parts of OOo
+        // can define/implement different requests. (for instance, everything which today is done in the
+        // css.sdb.InteractionHandler can then be routed through a "normal" interaction handler, where today we
+        // always need to tell people to instantiate the SDB-version of the handler, not the normal one.)
+
+    if ( !s_bDeferredToNextSession )
+    {
+        std::auto_ptr< ResMgr > pResMgr( ResMgr::CreateResMgr( CREATEVERSIONRESMGR_NAME( uui ) ) );
+        if ( pResMgr.get() )
+        {
+            ::uui::NewerVersionWarningDialog aDialog( getParentProperty(), _rRequest.DocumentODFVersion, *pResMgr.get() );
+            nResult = aDialog.Execute();
+        }
+    }
+
+    switch ( nResult )
+    {
+    case RET_OK:        if ( xApprove.is() )    xApprove->select();     break;
+    case RET_CANCEL:    if ( xAbort.is() )      xAbort->select();       break;
+    case RET_ASK_LATER: if ( xAskLater.is() )   xAskLater->select();    s_bDeferredToNextSession = true;    break;
+    default:
+        OSL_ENSURE( false, "UUIInteractionHelper::handleFutureDocumentVersionUpdateRequest: unexpected dialog return value!" );
+        break;
+    }
 }
 
 void
@@ -3236,10 +3350,12 @@ UUIInteractionHelper::handleBrokenPackageRequest(
 
 void
 UUIInteractionHelper::handleLockedDocumentRequest(
-    star::document::LockedDocumentRequest const & aRequest,
+    const ::rtl::OUString& aDocumentURL,
+    const ::rtl::OUString& aInfo,
     star::uno::Sequence< star::uno::Reference<
         star::task::XInteractionContinuation > > const &
-            rContinuations )
+            rContinuations,
+    sal_uInt16 nMode )
     SAL_THROW((star::uno::RuntimeException))
 {
     star::uno::Reference< star::task::XInteractionApprove > xApprove;
@@ -3259,22 +3375,49 @@ UUIInteractionHelper::handleLockedDocumentRequest(
         if (!xManager.get())
             return;
 
-        ::rtl::OUString aMessage = String( ResId( STR_OPENLOCKED_MSG, *xManager.get() ) );
+        ::rtl::OUString aMessage;
         std::vector< rtl::OUString > aArguments;
-        aArguments.push_back( aRequest.DocumentURL );
-        aArguments.push_back( aRequest.UserInfo.getLength()
-                                ? aRequest.UserInfo
-                                : ::rtl::OUString( String( ResId( STR_OPENLOCKED_UNKNOWNUSER, *xManager.get() ) ) ) );
+        aArguments.push_back( aDocumentURL );
 
-        aMessage = replaceMessageWithArguments( aMessage, aArguments );
+        sal_Int32 nResult = RET_CANCEL;
+        if ( nMode == UUI_DOC_LOAD_LOCK )
+        {
+            aArguments.push_back( aInfo.getLength()
+                                ? aInfo
+                                : ::rtl::OUString( String( ResId( STR_UNKNOWNUSER, *xManager.get() ) ) ) );
+            aMessage = String( ResId( STR_OPENLOCKED_MSG, *xManager.get() ) );
+            aMessage = replaceMessageWithArguments( aMessage, aArguments );
 
-        std::auto_ptr< OpenLockedQueryBox >
-                xDialog(new OpenLockedQueryBox(
-                        getParentProperty(), xManager.get(), aMessage ) );
-        sal_Int32 nResult = xDialog->Execute();
-        if ( nResult == RET_YES ) // open the document readonly
+            std::auto_ptr< OpenLockedQueryBox > xDialog(new OpenLockedQueryBox(
+                            getParentProperty(), xManager.get(), aMessage ) );
+            nResult = xDialog->Execute();
+        }
+        else if ( nMode == UUI_DOC_SAVE_LOCK )
+        {
+            aArguments.push_back( aInfo.getLength()
+                                ? aInfo
+                                : ::rtl::OUString( String( ResId( STR_UNKNOWNUSER, *xManager.get() ) ) ) );
+            aMessage = String( ResId( STR_TRYLATER_MSG, *xManager.get() ) );
+            aMessage = replaceMessageWithArguments( aMessage, aArguments );
+
+            std::auto_ptr< TryLaterQueryBox > xDialog(new TryLaterQueryBox(
+                            getParentProperty(), xManager.get(), aMessage ) );
+            nResult = xDialog->Execute();
+        }
+        else if ( nMode == UUI_DOC_OWN_LOAD_LOCK || nMode == UUI_DOC_OWN_SAVE_LOCK )
+        {
+            aArguments.push_back( aInfo );
+            aMessage = String( ResId( nMode == UUI_DOC_OWN_SAVE_LOCK ? STR_ALREADYOPEN_SAVE_MSG : STR_ALREADYOPEN_MSG, *xManager.get() ) );
+            aMessage = replaceMessageWithArguments( aMessage, aArguments );
+
+            std::auto_ptr< AlreadyOpenQueryBox > xDialog(new AlreadyOpenQueryBox(
+                            getParentProperty(), xManager.get(), aMessage, nMode == UUI_DOC_OWN_SAVE_LOCK ) );
+            nResult = xDialog->Execute();
+        }
+
+        if ( nResult == RET_YES )
             xApprove->select();
-        else if ( nResult == RET_NO ) // open the copy of the document
+        else if ( nResult == RET_NO )
             xDisapprove->select();
         else
             xAbort->select();
@@ -3286,4 +3429,85 @@ UUIInteractionHelper::handleLockedDocumentRequest(
                   star::uno::Reference< star::uno::XInterface >());
     }
 }
+
+void
+UUIInteractionHelper::handleChangedByOthersRequest(
+    star::uno::Sequence< star::uno::Reference<
+        star::task::XInteractionContinuation > > const &
+            rContinuations )
+    SAL_THROW((star::uno::RuntimeException))
+{
+    star::uno::Reference< star::task::XInteractionApprove > xApprove;
+    star::uno::Reference< star::task::XInteractionAbort > xAbort;
+    getContinuations(
+        rContinuations, &xApprove, 0, 0, &xAbort, 0, 0, 0, 0);
+
+    if ( !xApprove.is() || !xAbort.is() )
+        return;
+
+    try
+    {
+        vos::OGuard aGuard(Application::GetSolarMutex());
+        std::auto_ptr< ResMgr > xManager(
+        ResMgr::CreateResMgr(CREATEVERSIONRESMGR_NAME(uui)));
+        if (!xManager.get())
+            return;
+
+        std::auto_ptr< FileChangedQueryBox > xDialog(new FileChangedQueryBox(
+                            getParentProperty(), xManager.get() ) );
+        sal_Int32 nResult = xDialog->Execute();
+
+        if ( nResult == RET_YES )
+            xApprove->select();
+        else
+            xAbort->select();
+    }
+    catch (std::bad_alloc const &)
+    {
+        throw star::uno::RuntimeException(
+                  rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("out of memory")),
+                  star::uno::Reference< star::uno::XInterface >());
+    }
+}
+
+void
+UUIInteractionHelper::handleLockFileIgnoreRequest(
+    star::uno::Sequence< star::uno::Reference<
+        star::task::XInteractionContinuation > > const &
+            rContinuations )
+    SAL_THROW((star::uno::RuntimeException))
+{
+    star::uno::Reference< star::task::XInteractionApprove > xApprove;
+    star::uno::Reference< star::task::XInteractionAbort > xAbort;
+    getContinuations(
+        rContinuations, &xApprove, 0, 0, &xAbort, 0, 0, 0, 0);
+
+    if ( !xApprove.is() || !xAbort.is() )
+        return;
+
+    try
+    {
+        vos::OGuard aGuard(Application::GetSolarMutex());
+        std::auto_ptr< ResMgr > xManager(
+        ResMgr::CreateResMgr(CREATEVERSIONRESMGR_NAME(uui)));
+        if (!xManager.get())
+            return;
+
+        std::auto_ptr< LockFailedQueryBox > xDialog(new LockFailedQueryBox(
+                            getParentProperty(), xManager.get() ) );
+        sal_Int32 nResult = xDialog->Execute();
+
+        if ( nResult == RET_OK )
+            xApprove->select();
+        else
+            xAbort->select();
+    }
+    catch (std::bad_alloc const &)
+    {
+        throw star::uno::RuntimeException(
+                  rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("out of memory")),
+                  star::uno::Reference< star::uno::XInterface >());
+    }
+}
+
 

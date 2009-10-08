@@ -39,6 +39,7 @@
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <basegfx/range/b2drange.hxx>
 #include <basegfx/color/bcolor.hxx>
+#include <basegfx/tools/gradienttools.hxx>
 #include <vector>
 
 //////////////////////////////////////////////////////////////////////////////
@@ -73,13 +74,10 @@ namespace drawinglayer
         class GeoTexSvxGradient : public GeoTexSvx
         {
         protected:
-            basegfx::B2DHomMatrix               maTextureTransform;
-            basegfx::B2DHomMatrix               maBackTextureTransform;
+            basegfx::ODFGradientInfo            maGradientInfo;
             basegfx::B2DRange                   maTargetRange;
             basegfx::BColor                     maStart;
             basegfx::BColor                     maEnd;
-            sal_uInt32                          mnSteps;
-            double                              mfAspect;
             double                              mfBorder;
 
             // helpers
@@ -130,9 +128,6 @@ namespace drawinglayer
     {
         class GeoTexSvxGradientAxial : public GeoTexSvxGradient
         {
-        protected:
-            double                              mfInternalSteps;
-
         public:
             GeoTexSvxGradientAxial(const basegfx::B2DRange& rTargetRange, const basegfx::BColor& rStart, const basegfx::BColor& rEnd, sal_uInt32 nSteps, double fBorder, double fAngle);
             virtual ~GeoTexSvxGradientAxial();

@@ -76,6 +76,7 @@ namespace xmloff
     #define DA_DATA_FIELD               0x00000004
     #define DA_LIST_SOURCE              0x00000008
     #define DA_LIST_SOURCE_TYPE         0x00000010
+    #define DA_INPUT_REQUIRED           0x00000020
 
     // flags for binding related control attributes
     #define BA_LINKED_CELL              0x00000001

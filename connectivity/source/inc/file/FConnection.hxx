@@ -45,7 +45,7 @@
 #include "connectivity/sqlparse.hxx"
 #include "connectivity/sqliterator.hxx"
 #include "TConnection.hxx"
-
+#include "file/filedllapi.hxx"
 
 namespace connectivity
 {
@@ -56,7 +56,8 @@ namespace connectivity
         class ODatabaseMetaData;
         class OFileDriver;
 
-        class OConnection : public connectivity::OMetaConnection,
+        class OOO_DLLPUBLIC_FILE OConnection :
+                            public connectivity::OMetaConnection,
                             public connectivity::OSubComponent<OConnection, connectivity::OMetaConnection>
         {
             friend class connectivity::OSubComponent<OConnection, connectivity::OMetaConnection>;

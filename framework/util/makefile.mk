@@ -297,7 +297,7 @@ SHL4OBJS=       \
                 $(SLO)$/simpletextstatusbarcontroller.obj \
                 $(SLO)$/spinfieldtoolbarcontroller.obj    \
                 $(SLO)$/statusbarcontrollerfactory.obj\
-                $(SLO)$/statusbarfactory.obj            \
+                $(SLO)$/statusbarfactory.obj        \
                 $(SLO)$/statusbarmanager.obj        \
                 $(SLO)$/statusbar.obj               \
                 $(SLO)$/statusbarwrapper.obj        \
@@ -305,30 +305,34 @@ SHL4OBJS=       \
                 $(SLO)$/statusindicatorinterfacewrapper.obj \
                 $(SLO)$/statusindicator.obj         \
                 $(SLO)$/stillinteraction.obj        \
-                $(SLO)$/storageholder.obj                \
-                $(SLO)$/tagwindowasmodified.obj           \
+                $(SLO)$/storageholder.obj           \
+                $(SLO)$/tabwindowservice.obj        \
+                $(SLO)$/fwktabwindow.obj            \
+                $(SLO)$/tagwindowasmodified.obj     \
                 $(SLO)$/targethelper.obj            \
                 $(SLO)$/taskcreator.obj             \
-                $(SLO)$/taskcreatorsrv.obj              \
+                $(SLO)$/taskcreatorsrv.obj          \
                 $(SLO)$/titlebarupdate.obj          \
                 $(SLO)$/togglebuttontoolbarcontroller.obj \
                 $(SLO)$/toolbarcontrollerfactory.obj\
                 $(SLO)$/toolbarmanager.obj          \
-                $(SLO)$/toolbarmerger.obj                 \
+                $(SLO)$/toolbarmerger.obj           \
                 $(SLO)$/toolbar.obj                 \
                 $(SLO)$/toolbarsmenucontroller.obj  \
                 $(SLO)$/toolbarwrapper.obj          \
                 $(SLO)$/toolboxfactory.obj          \
-                $(SLO)$/uicategorydescription.obj       \
+                $(SLO)$/uicategorydescription.obj   \
                 $(SLO)$/uicommanddescription.obj    \
                 $(SLO)$/uiconfigurationmanager.obj  \
                 $(SLO)$/uielementfactorymanager.obj \
-                $(SLO)$/uriabbreviation.obj               \
+                $(SLO)$/uriabbreviation.obj         \
                 $(SLO)$/urltransformer.obj          \
-                $(SLO)$/vclstatusindicator.obj          \
-                $(SLO)$/wakeupthread.obj               \
-                $(SLO)$/windowcommanddispatch.obj         \
-                $(SLO)$/windowstateconfiguration.obj    \
+                $(SLO)$/vclstatusindicator.obj      \
+                $(SLO)$/wakeupthread.obj            \
+                $(SLO)$/windowcommanddispatch.obj   \
+                $(SLO)$/windowstateconfiguration.obj \
+                $(SLO)$/windowcontentfactorymanager.obj \
+                $(SLO)$/startmoduledispatcher.obj
 
 SHL4STDLIBS=    \
                 $(FWILIB)                           \

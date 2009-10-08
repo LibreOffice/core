@@ -53,14 +53,14 @@ TabPage RID_SVXPAGE_INET_MOZPLUGIN
     {
         Pos = MAP_APPFONT ( 6 , 3 ) ;
         Size = MAP_APPFONT (  248 , 8  ) ;
-        Text[ en-US ] = "Mozilla Plug-in";
+        Text[ en-US ] = "Browser Plug-in";
     };
     CheckBox CB_MOZPLUGIN_CODE
     {
         Pos = MAP_APPFONT ( 12 , 14 ) ;
         Size = MAP_APPFONT (  236 , 10  ) ;
         TabStop = TRUE ;
-        Text [ en-US ] = "~Enable" ;
+        Text [ en-US ] = "~Display documents in browser" ;
     };
 };
 
@@ -319,67 +319,67 @@ TabPage RID_SVXPAGE_INET_SEARCH
     RadioButton RB_AND
     {
         Pos = MAP_APPFONT ( EDIT_START_XPOS , GB_SEARCH_TOP + 26 ) ;
-        Size = MAP_APPFONT ( 39 , 10 ) ;
+        Size = MAP_APPFONT ( 125 , 10 ) ;
         Check = TRUE ;
         Text [ en-US ] = "And" ;
     };
     RadioButton RB_OR
     {
-        Pos = MAP_APPFONT ( EDIT_START_XPOS + 39 + 3 , GB_SEARCH_TOP + 26 ) ;
-        Size = MAP_APPFONT ( 38 , 10 ) ;
+        Pos = MAP_APPFONT ( EDIT_START_XPOS , GB_SEARCH_TOP + 39 ) ;
+        Size = MAP_APPFONT ( 125 , 10 ) ;
         Text [ en-US ] = "~Or" ;
     };
     RadioButton RB_EXACT
     {
-        Pos = MAP_APPFONT ( EDIT_START_XPOS + 39 + 3 + 38 + 3 , GB_SEARCH_TOP + 26 ) ;
-        Size = MAP_APPFONT ( 42 , 10 ) ;
+        Pos = MAP_APPFONT ( EDIT_START_XPOS , GB_SEARCH_TOP + 52 ) ;
+        Size = MAP_APPFONT ( 125 , 10 ) ;
         Text [ en-US ] = "E~xact" ;
     };
     FixedText FT_URL
     {
-        Pos = MAP_APPFONT ( LABEL_START_XPOS , GB_SEARCH_TOP + 41 ) ;
+        Pos = MAP_APPFONT ( LABEL_START_XPOS , GB_SEARCH_TOP + 67 ) ;
         Size = MAP_APPFONT ( LABEL_LEN , 8 ) ;
         Text [ en-US ] = "~Prefix" ;
     };
     Edit ED_URL
     {
-        Pos = MAP_APPFONT ( EDIT_START_XPOS , GB_SEARCH_TOP + 39 ) ;
+        Pos = MAP_APPFONT ( EDIT_START_XPOS , GB_SEARCH_TOP + 65 ) ;
         Size = MAP_APPFONT ( 125 , 12 ) ;
         Border = TRUE ;
     };
     FixedText FT_POSTFIX
     {
-        Pos = MAP_APPFONT ( LABEL_START_XPOS , GB_SEARCH_TOP + 56 ) ;
+        Pos = MAP_APPFONT ( LABEL_START_XPOS , GB_SEARCH_TOP + 82 ) ;
         Size = MAP_APPFONT ( LABEL_LEN , 8 ) ;
         Text [ en-US ] = "Su~ffix" ;
     };
     Edit ED_POSTFIX
     {
-        Pos = MAP_APPFONT ( EDIT_START_XPOS , GB_SEARCH_TOP + 54 ) ;
+        Pos = MAP_APPFONT ( EDIT_START_XPOS , GB_SEARCH_TOP + 80 ) ;
         Size = MAP_APPFONT ( 125 , 12 ) ;
         Border = TRUE ;
     };
     FixedText FT_SEPARATOR
     {
-        Pos = MAP_APPFONT ( LABEL_START_XPOS , GB_SEARCH_TOP + 71 ) ;
+        Pos = MAP_APPFONT ( LABEL_START_XPOS , GB_SEARCH_TOP + 97 ) ;
         Size = MAP_APPFONT ( LABEL_LEN , 8 ) ;
         Text [ en-US ] = "~Separator" ;
     };
     Edit ED_SEPARATOR
     {
-        Pos = MAP_APPFONT ( EDIT_START_XPOS , GB_SEARCH_TOP + 69 ) ;
+        Pos = MAP_APPFONT ( EDIT_START_XPOS , GB_SEARCH_TOP + 95 ) ;
         Size = MAP_APPFONT ( 42 , 12 ) ;
         Border = TRUE ;
     };
     FixedText FT_CASE
     {
-        Pos = MAP_APPFONT ( LABEL_START_XPOS, GB_SEARCH_TOP + 86 ) ;
+        Pos = MAP_APPFONT ( LABEL_START_XPOS, GB_SEARCH_TOP + 112 ) ;
         Size = MAP_APPFONT ( LABEL_LEN , 8 ) ;
         Text [ en-US ] = "~Case match" ;
     };
     ListBox ED_CASE
     {
-        Pos = MAP_APPFONT ( EDIT_START_XPOS, GB_SEARCH_TOP + 84 ) ;
+        Pos = MAP_APPFONT ( EDIT_START_XPOS, GB_SEARCH_TOP + 110 ) ;
         Size = MAP_APPFONT ( 42 , 48 ) ;
         Border = TRUE ;
         DropDown = TRUE ;
@@ -392,25 +392,25 @@ TabPage RID_SVXPAGE_INET_SEARCH
     };
     PushButton PB_NEW
     {
-        Pos = MAP_APPFONT ( 39 , 158 ) ;
+        Pos = MAP_APPFONT ( 39 , GB_SEARCH_TOP + 131 + 6 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
         Text [ en-US ] = "N~ew";
     };
     PushButton PB_ADD
     {
-        Pos = MAP_APPFONT ( 92 , 158 ) ;
+        Pos = MAP_APPFONT ( 92 , GB_SEARCH_TOP + 131 + 6 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
         Text [ en-US ] = "~Add" ;
     };
     PushButton PB_CHANGE
     {
-        Pos = MAP_APPFONT ( 145 , 158 ) ;
+        Pos = MAP_APPFONT ( 145 , GB_SEARCH_TOP + 131 + 6 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
         Text [ en-US ] = "~Modify" ;
     };
     PushButton PB_DELETE
     {
-        Pos = MAP_APPFONT ( 198 , 158 ) ;
+        Pos = MAP_APPFONT ( 198 , GB_SEARCH_TOP + 131 + 6 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
         Text [ en-US ] = "~Delete" ;
     };
@@ -434,11 +434,10 @@ TabPage RID_SVXPAGE_INET_SECURITY
     SVLook = TRUE;
     Hide = TRUE;
     Text [ en-US ] = "Security";
-
     FixedLine FL_SEC_SECURITYOPTIONS
     {
         Pos = MAP_APPFONT( COL_0, ROW_0 );
-        Size = MAP_APPFONT( COL_5-COL_0, RSC_CD_FIXEDLINE_HEIGHT );
+        Size = MAP_APPFONT( COL_4-COL_0, RSC_CD_FIXEDLINE_HEIGHT );
         Text [ en-US ] = "Security options and warnings";
     };
     FixedText FI_SEC_SECURITYOPTIONS
@@ -456,75 +455,82 @@ TabPage RID_SVXPAGE_INET_SECURITY
     };
     FixedLine FL_SEC_PASSWORDS
     {
-        Pos = MAP_APPFONT( COL_0, ROW_2 );
-        Size = MAP_APPFONT( COL_5-COL_0, RSC_CD_FIXEDLINE_HEIGHT );
+        Pos = MAP_APPFONT( COL_0, ROW_2 - 2 );
+        Size = MAP_APPFONT( COL_4-COL_0, RSC_CD_FIXEDLINE_HEIGHT );
         Text [ en-US ] = "Passwords for web connections";
     };
     CheckBox CB_SEC_SAVEPASSWORDS
     {
-        Pos = MAP_APPFONT( COL_1, ROW_3 );
-        Size = MAP_APPFONT( COL_2-COL_1, RSC_CD_CHECKBOX_HEIGHT );
-        Text [ en-US ] = "Persistently save passwords protected by a master password";
+        Pos = MAP_APPFONT( COL_1, ROW_3 - 4 );
+        Size = MAP_APPFONT( COL_2-COL_1, 16 );
+        Wordbreak = TRUE;
+        Text [ en-US ] = "Persistently save passwords for web connections";
     };
-    PushButton PB_SEC_MASTERPASSWORD
+    PushButton PB_SEC_CONNECTIONS
     {
-        Pos = MAP_APPFONT( COL_3, ROW_3 - 2 );
+        Pos = MAP_APPFONT( COL_3, ROW_3-1 );
         Size = MAP_APPFONT( RSC_CD_PUSHBUTTON_WIDTH, RSC_CD_PUSHBUTTON_HEIGHT );
-        Text [ en-US ] = "Master Password...";
+        Text [ en-US ] = "Connections...";
+    };
+    CheckBox CB_SEC_MASTERPASSWORD
+    {
+        Pos = MAP_APPFONT( COL_1a, ROW_4 );
+        Size = MAP_APPFONT( COL_2-COL_1a, RSC_CD_CHECKBOX_HEIGHT );
+        Text [ en-US ] = "Protected by a master password (recommended)";
     };
     FixedText FI_SEC_MASTERPASSWORD
     {
-        Pos = MAP_APPFONT( COL_1, ROW_4 );
-        Size = MAP_APPFONT( COL_2-COL_1, 4*RSC_CD_FIXEDLINE_HEIGHT );
+        Pos = MAP_APPFONT( COL_1a, ROW_4a );
+        Size = MAP_APPFONT( COL_2-COL_1a, 4*RSC_CD_FIXEDLINE_HEIGHT );
         Wordbreak = TRUE;
         Text [ en-US ] = "Passwords are protected by a master password. You will be asked to enter it once per session, if %PRODUCTNAME retrieves a password from the protected password list.";
     };
-    PushButton PB_SEC_SHOWPASSWORDS
+    PushButton PB_SEC_MASTERPASSWORD
     {
-        Pos = MAP_APPFONT( COL_3, ROW_5a );
+        Pos = MAP_APPFONT( COL_3, ROW_4a );
         Size = MAP_APPFONT( RSC_CD_PUSHBUTTON_WIDTH, RSC_CD_PUSHBUTTON_HEIGHT );
-        Text [ en-US ] = "Show Passwords...";
+        Text [ en-US ] = "Master Password...";
     };
     FixedLine FL_SEC_MACROSEC
     {
         Pos = MAP_APPFONT( COL_0, ROW_5 );
-        Size = MAP_APPFONT( COL_5-COL_0, RSC_CD_FIXEDLINE_HEIGHT );
+        Size = MAP_APPFONT( COL_4-COL_0, RSC_CD_FIXEDLINE_HEIGHT );
         Text [ en-US ] = "Macro security";
     };
     FixedText FI_SEC_MACROSEC
     {
         Pos = MAP_APPFONT( COL_1, ROW_6 );
-        Size = MAP_APPFONT( COL_2-COL_1, ROW_8 - ROW_6 - RSC_SP_FLGR_SPACE_Y );
+        Size = MAP_APPFONT( COL_2-COL_1, 3*RSC_CD_FIXEDLINE_HEIGHT );
         Wordbreak = TRUE;
         Text [ en-US ] = "Adjust the security level for executing macros and specify trusted macro developers.";
     };
     PushButton PB_SEC_MACROSEC
     {
-        Pos = MAP_APPFONT( COL_3, ROW_7 );
+        Pos = MAP_APPFONT( COL_3, ROW_6-2 );
         Size = MAP_APPFONT( RSC_CD_PUSHBUTTON_WIDTH, RSC_CD_PUSHBUTTON_HEIGHT );
         Text [ en-US ] = "Macro Security...";
     };
     FixedLine FL_SEC_FILESHARING
     {
-        Pos = MAP_APPFONT( COL_0, ROW_8 );
-        Size = MAP_APPFONT( COL_5-COL_0, RSC_CD_FIXEDLINE_HEIGHT );
+        Pos = MAP_APPFONT( COL_0, ROW_7 );
+        Size = MAP_APPFONT( COL_4-COL_0, RSC_CD_FIXEDLINE_HEIGHT );
         Text [ en-US ] = "File sharing options for this document";
     };
     CheckBox CB_SEC_RECOMMREADONLY
     {
-        Pos = MAP_APPFONT( COL_1, ROW_9 );
+        Pos = MAP_APPFONT( COL_1, ROW_8 );
         Size = MAP_APPFONT( COL_2-COL_1, RSC_CD_CHECKBOX_HEIGHT );
         Text [ en-US ] = "Open this document in read-only mode";
     };
     CheckBox CB_SEC_RECORDCHANGES
     {
-        Pos = MAP_APPFONT( COL_1, ROW_10 );
+        Pos = MAP_APPFONT( COL_1, ROW_9 );
         Size = MAP_APPFONT( COL_2-COL_1, RSC_CD_CHECKBOX_HEIGHT );
         Text [ en-US ] = "Record changes";
     };
     PushButton PB_SEC_PROTRECORDS
     {
-        Pos = MAP_APPFONT( COL_3, ROW_11a );
+        Pos = MAP_APPFONT( COL_3, ROW_9-2 );
         Size = MAP_APPFONT( RSC_CD_PUSHBUTTON_WIDTH, RSC_CD_PUSHBUTTON_HEIGHT );
     };
     String STR_SEC_PROTRECORDS

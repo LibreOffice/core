@@ -30,6 +30,7 @@
 #ifndef _CONNECTIVITY_PARSE_SQLITERATOR_HXX_
 #define _CONNECTIVITY_PARSE_SQLITERATOR_HXX_
 
+#include "connectivity/dbtoolsdllapi.hxx"
 #include "connectivity/sqlnode.hxx"
 #include <connectivity/IParseContext.hxx>
 #include <com/sun/star/sdbcx/XColumnsSupplier.hpp>
@@ -61,7 +62,7 @@ namespace connectivity
 
     struct OSQLParseTreeIteratorImpl;
 
-    class OSQLParseTreeIterator
+    class OOO_DLLPUBLIC_DBTOOLS OSQLParseTreeIterator
     {
     private:
         ::com::sun::star::sdbc::SQLException            m_aErrors;          // conatins the error while iterating through the statement

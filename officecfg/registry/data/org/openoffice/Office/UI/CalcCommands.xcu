@@ -218,6 +218,11 @@
                     <value xml:lang="en-US">Margins</value>
                 </prop>
             </node>
+            <node oor:name=".uno:ScalingFactor" oor:op="replace">
+                <prop oor:name="Label" oor:type="xs:string">
+                    <value xml:lang="en-US">Scaling Factor</value>
+                </prop>
+            </node>
             <node oor:name=".uno:ClosePreview" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
                     <value xml:lang="en-US">Close Preview</value>
@@ -701,7 +706,7 @@
             </node>
             <node oor:name=".uno:ViewValueHighlighting" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
-                    <value xml:lang="en-US">~Value Highlighting</value>
+                    <value xml:lang="en-US">Value ~Highlighting</value>
                 </prop>
             </node>
             <node oor:name=".uno:NormalViewMode" oor:op="replace">
@@ -1549,6 +1554,16 @@
             <node oor:name=".uno:DrawGraphicMenu" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
                     <value xml:lang="en-US">Graph~ic</value>
+                </prop>
+            </node>
+            <node oor:name=".uno:ToggleFormula" oor:op="replace">
+                <prop oor:name="Label" oor:type="xs:string">
+                    <value xml:lang="en-US">Show Formula</value>
+                </prop>
+            </node>
+            <node oor:name=".uno:AssignMacro" oor:op="replace">
+                <prop oor:name="Label" oor:type="xs:string">
+                    <value xml:lang="en-US">Assign Macro...</value>
                 </prop>
             </node>
         </node>

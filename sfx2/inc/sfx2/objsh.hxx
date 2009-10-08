@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: objsh.hxx,v $
- * $Revision: 1.14 $
+ * $Revision: 1.14.72.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -695,7 +695,8 @@ public:
                                String * pAppName,
                                String * pFullTypeName,
                                String * pShortTypeName,
-                               sal_Int32 nVersion ) const = 0;
+                               sal_Int32 nVersion,
+                               sal_Bool bTemplate = sal_False) const = 0;
 
     // =================================
 

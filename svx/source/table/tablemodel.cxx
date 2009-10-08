@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: tablemodel.cxx,v $
- * $Revision: 1.4 $
+ * $Revision: 1.4.264.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -248,6 +248,7 @@ void TableModel::UndoInsertRows( sal_Int32 nIndex, sal_Int32 nCount )
 
     // remove the rows
     remove_range<RowVector,RowVector::iterator>( maRows, nIndex, nCount );
+    updateRows();
     setModified(sal_True);
 }
 
@@ -264,6 +265,7 @@ void TableModel::UndoRemoveRows( sal_Int32 nIndex, RowVector& aRows )
     for( sal_Int32 nOffset = 0; nOffset < nCount; ++nOffset )
         maRows[nIndex+nOffset] = aRows[nOffset];
 
+    updateRows();
     setModified(sal_True);
 }
 
@@ -278,6 +280,8 @@ void TableModel::UndoInsertColumns( sal_Int32 nIndex, sal_Int32 nCount )
     sal_Int32 nRows = getRowCountImpl();
     while( nRows-- )
         maRows[nRows]->removeColumns( nIndex, nCount );
+
+    updateColumns();
     setModified(sal_True);
 }
 
@@ -301,6 +305,8 @@ void TableModel::UndoRemoveColumns( sal_Int32 nIndex, ColumnVector& aCols, CellV
     sal_Int32 nRows = getRowCountImpl();
     for( sal_Int32 nRow = 0; nRow < nRows; ++nRow )
         maRows[nRow]->insertColumns( nIndex, nCount, &aIter );
+
+    updateColumns();
     setModified(sal_True);
 }
 
@@ -802,6 +808,7 @@ void TableModel::insertColumns( sal_Int32 nIndex, sal_Int32 nCount )
         {
             DBG_ERROR("sdr::table::TableModel::insertColumns(), exception caught!");
         }
+        updateColumns();
         setModified(sal_True);
     }
 }
@@ -905,6 +912,7 @@ void TableModel::removeColumns( sal_Int32 nIndex, sal_Int32 nCount )
             DBG_ERROR("sdr::table::TableModel::removeColumns(), exception caught!");
         }
 
+        updateColumns();
         setModified(sal_True);
     }
 }
@@ -915,6 +923,8 @@ void TableModel::insertRows( sal_Int32 nIndex, sal_Int32 nCount )
 {
     if( nCount && mpTableObj )
     {
+        SdrModel* pModel = mpTableObj->GetModel();
+        bool bBegUndo = false;
         try
         {
             TableModelNotifyGuard aGuard( this );
@@ -930,13 +940,13 @@ void TableModel::insertRows( sal_Int32 nIndex, sal_Int32 nCount )
                 aNewRows[nOffset] = xNewRow;
             }
 
-            SdrModel* pModel = mpTableObj->GetModel();
             if( pModel && mpTableObj->IsInserted() )
-            {
+                    {
                 pModel->BegUndo( ImpGetResStr(STR_TABLE_INSROW) );
                 pModel->AddUndo( pModel->GetSdrUndoFactory().CreateUndoGeoObject(*mpTableObj) );
                 TableModelRef xThis( this );
                 pModel->AddUndo( new InsertRowUndo( xThis, nIndex, aNewRows ) );
+                bBegUndo = true;
             }
 
             // check if cells merge over new columns
@@ -967,14 +977,15 @@ void TableModel::insertRows( sal_Int32 nIndex, sal_Int32 nCount )
                     }
                 }
             }
-
-            if( pModel )
-                pModel->EndUndo();
         }
         catch( Exception& )
         {
             DBG_ERROR("sdr::table::TableModel::insertRows(), exception caught!");
         }
+        if( pModel && bBegUndo )
+            pModel->EndUndo();
+
+        updateRows();
         setModified(sal_True);
     }
 }
@@ -1063,6 +1074,7 @@ void TableModel::removeRows( sal_Int32 nIndex, sal_Int32 nCount )
             DBG_ERROR("sdr::table::TableModel::removeRows(), exception caught!");
         }
 
+        updateRows();
         setModified(sal_True);
     }
 }
@@ -1174,6 +1186,30 @@ void TableModel::optimize()
     }
     if( bWasModified )
         setModified(sal_True);
+}
+
+// -----------------------------------------------------------------------------
+
+void TableModel::updateRows()
+{
+    sal_Int32 nRow = 0;
+    RowVector::iterator iter = maRows.begin();
+    while( iter != maRows.end() )
+    {
+        (*iter++)->mnRow = nRow++;
+    }
+}
+
+// -----------------------------------------------------------------------------
+
+void TableModel::updateColumns()
+{
+    sal_Int32 nColumn = 0;
+    ColumnVector::iterator iter = maColumns.begin();
+    while( iter != maColumns.end() )
+    {
+        (*iter++)->mnColumn = nColumn++;
+    }
 }
 
 // -----------------------------------------------------------------------------

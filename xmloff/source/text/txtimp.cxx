@@ -520,6 +520,7 @@ XMLTextImportHelper::XMLTextImportHelper(
 // --> OD 2008-04-23 #refactorlists#
 ,   sPropNameDefaultListId(RTL_CONSTASCII_USTRINGPARAM("DefaultListId"))
 ,   sPropNameListId(RTL_CONSTASCII_USTRINGPARAM("ListId"))
+,   sOutlineLevel( RTL_CONSTASCII_USTRINGPARAM("OutlineLevel"))     //#outline level,add by zhaojianwei
 // <--
 {
     Reference< XChapterNumberingSupplier > xCNSupplier( rModel, UNO_QUERY );
@@ -971,10 +972,10 @@ OUString XMLTextImportHelper::SetStyleAndAttrs(
             sStyleName = OUString();
     }
 
-    // --> OD 2008-05-13 #refactorlists#
-    // keep track of setting numbering level
-    bool bNumberingLevelSet( false );
-    // <--
+    // --> OD 2008-09-10 #i70748#
+    // The outline level needs to be only applied as list level, if the heading
+    // is not inside a list and if it by default applies the outline style.
+    bool bApplyOutlineLevelAsListLevel( false );
     // --> OD 2007-08-17 #i80724#
     if ( bSetListAttrs && bPara && xPropSetInfo->hasPropertyByName( sNumberingRules )  )
     // <--
@@ -1079,9 +1080,6 @@ OUString XMLTextImportHelper::SetStyleAndAttrs(
             }
 
             xPropSet->setPropertyValue( sNumberingLevel, Any(nLevel) );
-            // --> OD 2008-05-13 #refactorlists#
-            bNumberingLevelSet = true;
-            // <--
 
             if( pListBlock && pListBlock->IsRestartNumbering() )
             {
@@ -1123,16 +1121,33 @@ OUString XMLTextImportHelper::SetStyleAndAttrs(
             if( xNumRules.is() )
             {
                 bool bRemove( true );
-                if ( xChapterNumbering.is() )
+                // --> OD 2008-12-17 #i70748# - special handling for document from OOo 2.x
+                sal_Int32 nUPD( 0 );
+                sal_Int32 nBuild( 0 );
+                const bool bBuildIdFound = rImport.getBuildIds( nUPD, nBuild );
+                DBG_ASSERT( ( bBuildIdFound && nUPD == 680 ) ||
+                            !pStyle ||
+                            !pStyle->IsListStyleSet() ||
+                            pStyle->GetListStyle().getLength() == 0,
+                            "automatic paragraph style with list style name, but paragraph not in list???" );
+                if ( ( bBuildIdFound && nUPD == 680 ) ||
+                     !pStyle || !pStyle->IsListStyleSet() )
                 {
-                    Reference< XNamed > xNumNamed( xNumRules, UNO_QUERY );
-                    Reference< XNamed > xChapterNumNamed( xChapterNumbering, UNO_QUERY );
-                    if ( xNumNamed.is() && xChapterNumNamed.is() &&
-                         xNumNamed->getName() == xChapterNumNamed->getName() )
+                    if ( xChapterNumbering.is() )
                     {
-                        bRemove = false;
+                        Reference< XNamed > xNumNamed( xNumRules, UNO_QUERY );
+                        Reference< XNamed > xChapterNumNamed( xChapterNumbering, UNO_QUERY );
+                        if ( xNumNamed.is() && xChapterNumNamed.is() &&
+                             xNumNamed->getName() == xChapterNumNamed->getName() )
+                        {
+                            bRemove = false;
+                            // --> OD 2008-09-10 #i70748#
+                            bApplyOutlineLevelAsListLevel = true;
+                            // <--
+                        }
                     }
                 }
+                // <--
                 if ( bRemove )
                 {
                     xPropSet->setPropertyValue( sNumberingRules, Any() );
@@ -1217,90 +1232,112 @@ OUString XMLTextImportHelper::SetStyleAndAttrs(
     //   outline level.
     // - DO NOT set type of numbering rule to outline.
     // - DO NOT set numbering rule directly at the paragraph.
-    if ( bPara && nOutlineLevel != -1 )
-    {
-        // --> OD 2008-05-28 #refactorlists# - no longer needed
-//        // --> OD 2005-08-25 #i53198# - set the outline level at the paragraph.
-//        {
-//            const OUString sParaChapterNumberingLevel(
-//                        RTL_CONSTASCII_USTRINGPARAM("ParaChapterNumberingLevel") );
-//            xPropSet->setPropertyValue( sParaChapterNumberingLevel,
-//                        makeAny( static_cast<sal_Int8>(nOutlineLevel - 1) ) );
-//        }
-//        // <--
-        // --> OD 2005-09-01 #i53198# - set numbering level of the paragraph to
-        // its outline level, if no numbering level is set.
-        {
-            // --> OD 2008-05-13 #refactorlists#
-            sal_Int16 nNumLevel = -1;
-            xPropSet->getPropertyValue( sNumberingLevel ) >>= nNumLevel;
-            if ( nNumLevel == -1 ||
-                 ( !bNumberingLevelSet && nNumLevel != (nOutlineLevel - 1) ) )
-            {
-                xPropSet->setPropertyValue( sNumberingLevel,
-                        makeAny( static_cast<sal_Int8>(nOutlineLevel - 1) ) );
-            }
-            // <--
-        }
-        // <--
-        // --> OD 2006-10-13 #i69629# - correction:
-        // - for text document from version OOo 2.0.4/SO 8 PU4 and earlier
-        //   the paragraph style of a heading should be assigned to the
-        //   corresponding list level of the outline style.
-        // - for other text documents the paragraph style of a heading is only
-        //   a candidate for an assignment to the list level of the outline
-        //   style, if it has no direct list style property and (if exists) the
-        //   automatic paragraph style has also no direct list style set.
-        if( xParaStyles->hasByName( sStyleName ) )
-        {
-            bool bOutlineStyleCandidate( false );
 
-            sal_Int32 nUPD( 0 );
-            sal_Int32 nBuild( 0 );
-            // --> OD 2007-12-19 #152540#
-            const bool bBuildIdFound = rImport.getBuildIds( nUPD, nBuild );
-            // --> OD 2007-07-25 #i73509#
-            // --> OD 2008-03-19 #i86058# - check explicitly on certain versions
-            if ( rImport.IsTextDocInOOoFileFormat() ||
-                 ( bBuildIdFound &&
-                   ( nUPD == 645 || nUPD == 641 ) ) )
+    // --> OD 2008-12-09 #i70748#
+    // Some minor rework and adjust access to paragraph styles
+    if ( bPara )
+    {
+        //if ( bPara && nOutlineLevel != -1 )   //#outline level,removed by zhaojianwei
+        if ( nOutlineLevel > 0 )       //add by zhaojianwei
+        {
+            //#outline level,removed by zhaojianwei
+            if ( xPropSetInfo->hasPropertyByName( sOutlineLevel ) )
             {
-                bOutlineStyleCandidate = true;
-            }
-            else if ( nUPD == 680 && nBuild <= 9073 ) /* BuildId of OOo 2.0.4/SO8 PU4 */
+                sal_Int16 nCurrentOutlineLevelInheritedFromParagraphStyle = 0;
+                xPropSet->getPropertyValue( sOutlineLevel ) >>= nCurrentOutlineLevelInheritedFromParagraphStyle;
+                // In case that the value equals the value of its paragraph style
+                // attribute outline level, the paragraph attribute value is left unset
+                if ( nCurrentOutlineLevelInheritedFromParagraphStyle != nOutlineLevel )
+                {
+                    xPropSet->setPropertyValue( sOutlineLevel,
+                        makeAny( static_cast<sal_Int16>(nOutlineLevel) ) );
+                }
+            }//<-end,zhaojianwei
+
+            // --> OD 2008-09-10 #i70748#
+            if ( bApplyOutlineLevelAsListLevel )
             {
-                bOutlineStyleCandidate = bOutlineLevelAttrFound;
+                sal_Int16 nNumLevel = -1;
+                xPropSet->getPropertyValue( sNumberingLevel ) >>= nNumLevel;
+                if ( nNumLevel == -1 ||
+                     nNumLevel != (nOutlineLevel - 1) )
+                {
+                    xPropSet->setPropertyValue( sNumberingLevel,
+                            makeAny( static_cast<sal_Int8>(nOutlineLevel - 1) ) );
+                }
             }
             // <--
-            else
+            // --> OD 2006-10-13 #i69629# - correction:
+            // - for text document from version OOo 2.0.4/SO 8 PU4 and earlier
+            //   the paragraph style of a heading should be assigned to the
+            //   corresponding list level of the outline style.
+            // - for other text documents the paragraph style of a heading is only
+            //   a candidate for an assignment to the list level of the outline
+            //   style, if it has no direct list style property and (if exists) the
+            //   automatic paragraph style has also no direct list style set.
+            if( xParaStyles->hasByName( sStyleName ) )
             {
-                Reference< XPropertyState > xStylePropState(
-                                xParaStyles->getByName( sStyleName ), UNO_QUERY );
-                if ( xStylePropState.is() &&
-                     xStylePropState->getPropertyState( sNumberingStyleName ) == PropertyState_DIRECT_VALUE )
-                {
-                    bOutlineStyleCandidate = false;
-                }
-                // --> OD 2007-01-11 #i73361#
-                // The automatic paragraph style doesn't have to be considered.
-//                else if ( pStyle && /* automatic paragraph style */
-//                          pStyle->IsListStyleSet() )
-//                {
-//                    bOutlineStyleCandidate = false;
-//                }
-                // <--
-                else
+                bool bOutlineStyleCandidate( false );
+
+                sal_Int32 nUPD( 0 );
+                sal_Int32 nBuild( 0 );
+                // --> OD 2007-12-19 #152540#
+                const bool bBuildIdFound = rImport.getBuildIds( nUPD, nBuild );
+                // --> OD 2007-07-25 #i73509#
+                // --> OD 2008-03-19 #i86058# - check explicitly on certain versions
+                if ( rImport.IsTextDocInOOoFileFormat() ||
+                     ( bBuildIdFound &&
+                       ( nUPD == 645 || nUPD == 641 ) ) )
                 {
                     bOutlineStyleCandidate = true;
                 }
-            }
+                else if ( nUPD == 680 && nBuild <= 9073 ) /* BuildId of OOo 2.0.4/SO8 PU4 */
+                {
+                    bOutlineStyleCandidate = bOutlineLevelAttrFound;
+                }
+                // <--
+//                else
+//                {
+//                    Reference< XPropertyState > xStylePropState(
+//                                    xParaStyles->getByName( sStyleName ), UNO_QUERY );
+//                    if ( xStylePropState.is() &&
+//                         xStylePropState->getPropertyState( sNumberingStyleName ) == PropertyState_DIRECT_VALUE )
+//                    {
+//                        bOutlineStyleCandidate = false;
+//                    }
+//                    // --> OD 2007-01-11 #i73361#
+//                    // The automatic paragraph style doesn't have to be considered.
+//    //                else if ( pStyle && /* automatic paragraph style */
+//    //                          pStyle->IsListStyleSet() )
+//    //                {
+//    //                    bOutlineStyleCandidate = false;
+//    //                }
+//                    // <--
+//                    else
+//                    {
+//                        bOutlineStyleCandidate = true;
+//                    }
+//                  }
 
-            if ( bOutlineStyleCandidate )
-            {
-                AddOutlineStyleCandidate( nOutlineLevel, sStyleName );
+                if ( bOutlineStyleCandidate )
+                {
+                    AddOutlineStyleCandidate( nOutlineLevel, sStyleName );
+                }
             }
+            // <--
         }
-        // <--
+        //-> #outlinelevel added by zhaojianwei
+        //handle for text:p,if the paragraphstyle outlinelevel is set to[1~10]
+        else if( xPropSetInfo->hasPropertyByName( sOutlineLevel ) )
+        {
+            sal_Int16 nCurrentOutlineLevelInheritedFromParagraphStyle = 0;
+            xPropSet->getPropertyValue( sOutlineLevel ) >>= nCurrentOutlineLevelInheritedFromParagraphStyle;
+            if ( nCurrentOutlineLevelInheritedFromParagraphStyle != 0 )
+            {
+                sal_Int16 nZero = 0;
+                xPropSet->setPropertyValue( sOutlineLevel,  makeAny( static_cast<sal_Int16>(nZero) ) );
+            }
+        }//<-end,zhaojianwei
     }
     // <--
 
@@ -1517,7 +1554,7 @@ void XMLTextImportHelper::SetOutlineStyles( sal_Bool bSetEmptyLevels )
 {
     if ( ( mpOutlineStylesCandidates != NULL || bSetEmptyLevels ) &&
          xChapterNumbering.is() &&
-         !( IsInsertMode() || IsStylesOnlyMode() ) )
+         !IsInsertMode() )
     {
         // --> OD 2007-12-19 #152540#
         bool bChooseLastOne( false );

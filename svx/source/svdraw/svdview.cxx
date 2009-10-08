@@ -981,14 +981,14 @@ Pointer SdrView::GetPreferedPointer(const Point& rMousePos, const OutputDevice* 
     {
         return pAktCreate->GetCreatePointer();
     }
-    if (pDragBla!=NULL)
+    if (mpCurrentSdrDragMethod)
     {
         if ((IsDraggingPoints() || IsDraggingGluePoints()) && IsMouseHideWhileDraggingPoints())
             return Pointer(POINTER_NULL);
 
-        OSL_TRACE("SdrView::GetPreferedPointer(%lx) %lx\n", this, pDragBla);
+        OSL_TRACE("SdrView::GetPreferedPointer(%lx) %lx\n", this, mpCurrentSdrDragMethod);
 
-        return pDragBla->GetPointer();
+        return mpCurrentSdrDragMethod->GetSdrDragPointer();
     }
     if (IsMarkObj() || IsMarkPoints() || IsMarkGluePoints() || IsEncirclement() || IsSetPageOrg()) return Pointer(POINTER_ARROW);
     if (IsDragHelpLine()) return GetDraggedHelpLinePointer();
@@ -1207,7 +1207,7 @@ XubString SdrView::GetStatusText()
 
     if (pAktCreate!=NULL)
     {
-        aStr=pAktCreate->GetDragComment(aDragStat,FALSE,TRUE);
+        aStr=pAktCreate->getSpecialDragComment(aDragStat);
 
         if(!aStr.Len())
         {
@@ -1215,7 +1215,7 @@ XubString SdrView::GetStatusText()
             aStr = ImpGetResStr(STR_ViewCreateObj);
         }
     }
-    else if (pDragBla!=NULL)
+    else if (mpCurrentSdrDragMethod)
     {
         if (bInsPolyPoint || IsInsertGluePoint())
         {
@@ -1225,8 +1225,8 @@ XubString SdrView::GetStatusText()
         {
             if (aDragStat.IsMinMoved())
             {
-                OSL_TRACE("SdrView::GetStatusText(%lx) %lx\n", this, pDragBla);
-                pDragBla->TakeComment(aStr);
+                OSL_TRACE("SdrView::GetStatusText(%lx) %lx\n", this, mpCurrentSdrDragMethod);
+                mpCurrentSdrDragMethod->TakeSdrDragComment(aStr);
             }
         }
     }

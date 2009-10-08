@@ -60,7 +60,7 @@ namespace linguistic
 
 static const char *aCH[] =
 {
-    UPN_IS_GERMAN_PRE_REFORM,
+    UPN_IS_GERMAN_PRE_REFORM,   /* deprectaed */
     UPN_IS_IGNORE_CONTROL_CHARACTERS,
     UPN_IS_USE_DICTIONARY_LIST,
 };
@@ -144,7 +144,7 @@ void PropertyChgHelper::GetCurrentValues()
             BOOL *pbVal     = NULL,
                  *pbResVal  = NULL;
 
-            if (pPropName[i].equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( UPN_IS_GERMAN_PRE_REFORM ) ))
+            if (pPropName[i].equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( UPN_IS_GERMAN_PRE_REFORM ) ))    /* deprecated */
             {
                 pbVal    = &bIsGermanPreReform;
                 pbResVal = &bResIsGermanPreReform;
@@ -188,14 +188,14 @@ void PropertyChgHelper::SetTmpPropVals( const PropertyValues &rPropVals )
             switch (pVal[i].Handle)
             {
                 case UPH_IS_GERMAN_PRE_REFORM       :
-                        pbResVal = &bResIsGermanPreReform; break;
+                        pbResVal = &bResIsGermanPreReform; break;   /* deprecated */
                 case UPH_IS_IGNORE_CONTROL_CHARACTERS :
                         pbResVal = &bResIsIgnoreControlCharacters; break;
                 case UPH_IS_USE_DICTIONARY_LIST     :
                         pbResVal = &bResIsUseDictionaryList; break;
                 default:
                         ;
-                    //DBG_ERROR( "unknown property" );
+                    //DBG_ASSERT( 0, "unknown property" );
             }
             if (pbResVal)
                 pVal[i].Value >>= *pbResVal;
@@ -224,7 +224,7 @@ BOOL PropertyChgHelper::propertyChange_Impl( const PropertyChangeEvent& rEvt )
                 nLngSvcFlags = 0;
                 break;
             }
-            case UPH_IS_GERMAN_PRE_REFORM         :
+            case UPH_IS_GERMAN_PRE_REFORM         :     /* deprecated */
             {
                 pbVal = &bIsGermanPreReform;
                 bSCWA = bSWWA = TRUE;
@@ -239,7 +239,7 @@ BOOL PropertyChgHelper::propertyChange_Impl( const PropertyChangeEvent& rEvt )
             default:
             {
                 bRes = FALSE;
-                //DBG_ERROR( "unknown property" );
+                //DBG_ASSERT( 0, "unknown property" );
             }
         }
         if (pbVal)
@@ -502,7 +502,7 @@ BOOL PropertyHelper_Spell::propertyChange_Impl( const PropertyChangeEvent& rEvt 
                 break;
             }
             default:
-                DBG_ERROR( "unknown property" );
+                DBG_ASSERT( 0, "unknown property" );
         }
         if (pbVal)
             rEvt.NewValue >>= *pbVal;
@@ -564,7 +564,7 @@ void PropertyHelper_Spell::SetTmpPropVals( const PropertyValues &rPropVals )
                     case UPH_IS_SPELL_WITH_DIGITS    : pbResVal = &bResIsSpellWithDigits; break;
                     case UPH_IS_SPELL_CAPITALIZATION : pbResVal = &bResIsSpellCapitalization; break;
                     default:
-                        DBG_ERROR( "unknown property" );
+                        DBG_ASSERT( 0, "unknown property" );
                 }
                 if (pbResVal)
                     pVal[i].Value >>= *pbResVal;
@@ -668,7 +668,7 @@ BOOL PropertyHelper_Hyph::propertyChange_Impl( const PropertyChangeEvent& rEvt )
             case UPH_HYPH_MIN_TRAILING    : pnVal = &nHyphMinTrailing; break;
             case UPH_HYPH_MIN_WORD_LENGTH : pnVal = &nHyphMinWordLength; break;
             default:
-                DBG_ERROR( "unknown property" );
+                DBG_ASSERT( 0, "unknown property" );
         }
         if (pnVal)
             rEvt.NewValue >>= *pnVal;
@@ -720,7 +720,7 @@ void PropertyHelper_Hyph::SetTmpPropVals( const PropertyValues &rPropVals )
                 case UPH_HYPH_MIN_TRAILING    : pnResVal = &nResHyphMinTrailing; break;
                 case UPH_HYPH_MIN_WORD_LENGTH : pnResVal = &nResHyphMinWordLength; break;
                 default:
-                    DBG_ERROR( "unknown property" );
+                    DBG_ASSERT( 0, "unknown property" );
             }
             if (pnResVal)
                 pVal[i].Value >>= *pnResVal;

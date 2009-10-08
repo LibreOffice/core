@@ -62,13 +62,13 @@ SfxNavigatorWrapper::SfxNavigatorWrapper( Window* pParentWnd ,
 }
 
 SfxNavigator::SfxNavigator( SfxBindings* pBind ,
-                                        SfxChildWindow* pChildWin ,
-                                        Window* pParent ,
-                                        WinBits nBits )
+                            SfxChildWindow* pChildWin ,
+                            Window* pParent ,
+                            WinBits nBits )
                         : SfxDockingWindow( pBind ,
-                                        pChildWin ,
-                                        pParent ,
-                                        nBits )
+                                            pChildWin ,
+                                            pParent ,
+                                            nBits )
                         , pWrapper( pChildWin )
 {
     SetText( String( SfxResId( SID_NAVIGATOR ) ) );

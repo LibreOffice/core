@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: SfxDocumentMetaData.cxx,v $
- * $Revision: 1.10 $
+ * $Revision: 1.10.32.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -355,8 +355,12 @@ private:
     ::rtl::OUString SAL_CALL getMetaText(const char* i_name) const;
     //    throw (css::uno::RuntimeException);
     /// set text of standard meta data element iff not equal to existing text
-    void SAL_CALL setMetaText(const char* i_name,
-        const ::rtl::OUString & i_rValue, bool i_notifyModified = true);
+    bool SAL_CALL setMetaText(const char* i_name,
+        const ::rtl::OUString & i_rValue);
+    //    throw (css::uno::RuntimeException);
+    /// set text of standard meta data element iff not equal to existing text
+    void SAL_CALL setMetaTextAndNotify(const char* i_name,
+        const ::rtl::OUString & i_rValue);
     //    throw (css::uno::RuntimeException);
     /// get text of standard meta data element's attribute
     ::rtl::OUString SAL_CALL getMetaAttr(const char* i_name,
@@ -367,9 +371,9 @@ private:
         const char* i_name) const;
     //    throw (css::uno::RuntimeException);
     /// set text of a list of standard meta data elements (multiple occ.)
-    void SAL_CALL setMetaList(const char* i_name,
+    bool SAL_CALL setMetaList(const char* i_name,
         const css::uno::Sequence< ::rtl::OUString > & i_rValue,
-        AttrVector const* = 0, bool i_notifyModified = true);
+        AttrVector const* = 0);
     // throw (css::uno::RuntimeException);
 };
 
@@ -660,21 +664,21 @@ SfxDocumentMetaData::getMetaText(const char* i_name) const
 {
     checkInit();
 
-    ::rtl::OUString name = ::rtl::OUString::createFromAscii(i_name);
+    const ::rtl::OUString name( ::rtl::OUString::createFromAscii(i_name) );
     DBG_ASSERT(m_meta.find(name) != m_meta.end(),
         "SfxDocumentMetaData::getMetaText: not found");
     css::uno::Reference<css::xml::dom::XNode> xNode = m_meta.find(name)->second;
     return (xNode.is()) ? getNodeText(xNode) : ::rtl::OUString();
 }
 
-void SAL_CALL
+bool SAL_CALL
 SfxDocumentMetaData::setMetaText(const char* i_name,
-        const ::rtl::OUString & i_rValue, bool i_notifyModified)
+        const ::rtl::OUString & i_rValue)
     // throw (css::uno::RuntimeException)
 {
     checkInit();
 
-    ::rtl::OUString name = ::rtl::OUString::createFromAscii(i_name);
+    const ::rtl::OUString name( ::rtl::OUString::createFromAscii(i_name) );
     DBG_ASSERT(m_meta.find(name) != m_meta.end(),
         "SfxDocumentMetaData::setMetaText: not found");
     css::uno::Reference<css::xml::dom::XNode> xNode = m_meta.find(name)->second;
@@ -685,9 +689,9 @@ SfxDocumentMetaData::setMetaText(const char* i_name,
                 m_xParent->removeChild(xNode);
                 xNode.clear();
                 m_meta[name] = xNode;
-                if (i_notifyModified) {
-                    setModified(true);
-                }
+                return true;
+            } else {
+                return false;
             }
         } else {
             if (xNode.is()) { // update
@@ -698,11 +702,10 @@ SfxDocumentMetaData::setMetaText(const char* i_name,
                     if (c->getNodeType() == css::xml::dom::NodeType_TEXT_NODE) {
                         if (!c->getNodeValue().equals(i_rValue)) {
                             c->setNodeValue(i_rValue);
-                            if (i_notifyModified) {
-                                setModified(true);
-                            }
+                            return true;
+                        } else {
+                            return false;
                         }
-                        return;
                     }
                 }
             } else { // insert
@@ -714,9 +717,7 @@ SfxDocumentMetaData::setMetaText(const char* i_name,
             css::uno::Reference<css::xml::dom::XNode> xTextNode(
                 m_xDoc->createTextNode(i_rValue), css::uno::UNO_QUERY_THROW);
             xNode->appendChild(xTextNode);
-            if (i_notifyModified) {
-                setModified(true);
-            }
+            return true;
         }
     } catch (css::xml::dom::DOMException & e) {
         css::uno::Any a(e);
@@ -724,6 +725,18 @@ SfxDocumentMetaData::setMetaText(const char* i_name,
                 ::rtl::OUString::createFromAscii(
                         "SfxDocumentMetaData::setMetaText: DOM exception"),
                 css::uno::Reference<css::uno::XInterface>(*this), a);
+    }
+}
+
+void SAL_CALL
+SfxDocumentMetaData::setMetaTextAndNotify(const char* i_name,
+        const ::rtl::OUString & i_rValue)
+    // throw (css::uno::RuntimeException)
+{
+    ::osl::ClearableMutexGuard g(m_aMutex);
+    if (setMetaText(i_name, i_rValue)) {
+        g.clear();
+        setModified(true);
     }
 }
 
@@ -763,10 +776,10 @@ SfxDocumentMetaData::getMetaList(const char* i_name) const
     return ret;
 }
 
-void SAL_CALL
+bool SAL_CALL
 SfxDocumentMetaData::setMetaList(const char* i_name,
         const css::uno::Sequence< ::rtl::OUString> & i_rValue,
-        AttrVector const* i_pAttrs, bool i_notifyModified)
+        AttrVector const* i_pAttrs)
     // throw (css::uno::RuntimeException)
 {
     checkInit();
@@ -783,7 +796,7 @@ SfxDocumentMetaData::setMetaList(const char* i_name,
 
         // if nothing changed, do nothing
         // alas, this does not check for permutations, or attributes...
-        if (i_notifyModified && (0 == i_pAttrs)) {
+        if ((0 == i_pAttrs)) {
             if (static_cast<size_t>(i_rValue.getLength()) == vec.size()) {
                 bool isEqual(true);
                 for (sal_Int32 i = 0; i < i_rValue.getLength(); ++i) {
@@ -796,18 +809,28 @@ SfxDocumentMetaData::setMetaList(const char* i_name,
                         }
                     }
                 }
-                if (isEqual) return;
+                if (isEqual) return false;
             }
         }
 
         // remove old meta data nodes
-        for (std::vector<css::uno::Reference<css::xml::dom::XNode> >
-             ::reverse_iterator it = vec.rbegin(); it != vec.rend(); ) {
-            m_xParent->removeChild(*it);
-            ++it;
-            vec.pop_back();
+        {
+            std::vector<css::uno::Reference<css::xml::dom::XNode> >
+                ::reverse_iterator it(vec.rbegin());
+            try {
+                for ( ;it != vec.rend(); ++it)
+                {
+                    m_xParent->removeChild(*it);
+                }
+            }
+            catch (...)
+            {
+                // Clean up already removed nodes
+                vec.erase(it.base(), vec.end());
+                throw;
+            }
+            vec.clear();
         }
-//    vec.clear(); // not so good in case of exception
 
         // insert new meta data nodes into DOM tree
         for (sal_Int32 i = 0; i < i_rValue.getLength(); ++i) {
@@ -832,16 +855,14 @@ SfxDocumentMetaData::setMetaList(const char* i_name,
             m_xParent->appendChild(xNode);
             vec.push_back(xNode);
         }
+
+        return true;
     } catch (css::xml::dom::DOMException & e) {
         css::uno::Any a(e);
         throw css::lang::WrappedTargetRuntimeException(
                 ::rtl::OUString::createFromAscii(
                         "SfxDocumentMetaData::setMetaList: DOM exception"),
                 css::uno::Reference<css::uno::XInterface>(*this), a);
-    }
-
-    if (i_notifyModified) {
-        setModified(true);
     }
 }
 
@@ -979,8 +1000,8 @@ void SAL_CALL SfxDocumentMetaData::updateUserDefinedAndAttributes()
         css::uno::UNO_QUERY_THROW);
     std::pair<css::uno::Sequence< ::rtl::OUString>, AttrVector> udStringsAttrs
         = propsToStrings(xPSet);
-    setMetaList("meta:user-defined", udStringsAttrs.first,
-                &udStringsAttrs.second, false);
+    (void) setMetaList("meta:user-defined", udStringsAttrs.first,
+                &udStringsAttrs.second);
 
     // update elements with attributes
     std::vector<std::pair<const char *, ::rtl::OUString> > attributes;
@@ -1208,10 +1229,14 @@ void SAL_CALL SfxDocumentMetaData::init(
     types[7] = ::cppu::UnoType<sal_Int16>::get();
     types[8] = ::cppu::UnoType<sal_Int32>::get();
     types[9] = ::cppu::UnoType<sal_Int64>::get();
-    css::uno::Sequence<css::uno::Any> args(1);
+    css::uno::Sequence<css::uno::Any> args(2);
     args[0] <<= css::beans::NamedValue(
         ::rtl::OUString::createFromAscii("AllowedTypes"),
         css::uno::makeAny(types));
+    // #i94175#:  ODF 1.1 allows empty user-defined property names!
+    args[1] <<= css::beans::NamedValue(
+        ::rtl::OUString::createFromAscii("AllowEmptyPropertyName"),
+        css::uno::makeAny(sal_True));
     m_xUserDefined.set(
         xMsf->createInstanceWithContext(::rtl::OUString::createFromAscii(
                 "com.sun.star.beans.PropertyBag"), m_xContext),
@@ -1286,15 +1311,9 @@ void SAL_CALL SfxDocumentMetaData::init(
         } catch (css::beans::IllegalTypeException &) {
             DBG_ERROR1("SfxDocumentMetaData: illegal type: %s",
                     OUStringToOString(name, RTL_TEXTENCODING_UTF8).getStr());
-            throw css::uno::RuntimeException(::rtl::OUString::createFromAscii(
-                "SfxDocumentMetaData::init: cannot add property"),
-                *this);
         } catch (css::lang::IllegalArgumentException &) {
             DBG_ERROR1("SfxDocumentMetaData: illegal arg: %s",
                     OUStringToOString(name, RTL_TEXTENCODING_UTF8).getStr());
-            throw css::uno::RuntimeException(::rtl::OUString::createFromAscii(
-                "SfxDocumentMetaData::init: cannot add property"),
-                *this);
         }
     }
 
@@ -1378,8 +1397,7 @@ SfxDocumentMetaData::getAuthor() throw (css::uno::RuntimeException)
 void SAL_CALL SfxDocumentMetaData::setAuthor(const ::rtl::OUString & the_value)
         throw (css::uno::RuntimeException)
 {
-    ::osl::MutexGuard g(m_aMutex);
-    setMetaText("meta:initial-creator", the_value);
+    setMetaTextAndNotify("meta:initial-creator", the_value);
 }
 
 
@@ -1394,8 +1412,7 @@ void SAL_CALL
 SfxDocumentMetaData::setGenerator(const ::rtl::OUString & the_value)
         throw (css::uno::RuntimeException)
 {
-    ::osl::MutexGuard g(m_aMutex);
-    setMetaText("meta:generator", the_value);
+    setMetaTextAndNotify("meta:generator", the_value);
 }
 
 css::util::DateTime SAL_CALL
@@ -1409,8 +1426,7 @@ void SAL_CALL
 SfxDocumentMetaData::setCreationDate(const css::util::DateTime & the_value)
         throw (css::uno::RuntimeException)
 {
-    ::osl::MutexGuard g(m_aMutex);
-    setMetaText("meta:creation-date", dateTimeToText(the_value));
+    setMetaTextAndNotify("meta:creation-date", dateTimeToText(the_value));
 }
 
 ::rtl::OUString SAL_CALL
@@ -1423,8 +1439,7 @@ SfxDocumentMetaData::getTitle() throw (css::uno::RuntimeException)
 void SAL_CALL SfxDocumentMetaData::setTitle(const ::rtl::OUString & the_value)
         throw (css::uno::RuntimeException)
 {
-    ::osl::MutexGuard g(m_aMutex);
-    setMetaText("dc:title", the_value);
+    setMetaTextAndNotify("dc:title", the_value);
 }
 
 ::rtl::OUString SAL_CALL
@@ -1438,8 +1453,7 @@ void SAL_CALL
 SfxDocumentMetaData::setSubject(const ::rtl::OUString & the_value)
         throw (css::uno::RuntimeException)
 {
-    ::osl::MutexGuard g(m_aMutex);
-    setMetaText("dc:subject", the_value);
+    setMetaTextAndNotify("dc:subject", the_value);
 }
 
 ::rtl::OUString SAL_CALL
@@ -1453,8 +1467,7 @@ void SAL_CALL
 SfxDocumentMetaData::setDescription(const ::rtl::OUString & the_value)
         throw (css::uno::RuntimeException)
 {
-    ::osl::MutexGuard g(m_aMutex);
-    setMetaText("dc:description", the_value);
+    setMetaTextAndNotify("dc:description", the_value);
 }
 
 css::uno::Sequence< ::rtl::OUString >
@@ -1469,8 +1482,11 @@ SfxDocumentMetaData::setKeywords(
         const css::uno::Sequence< ::rtl::OUString > & the_value)
         throw (css::uno::RuntimeException)
 {
-    ::osl::MutexGuard g(m_aMutex);
-    setMetaList("meta:keyword", the_value);
+    ::osl::ClearableMutexGuard g(m_aMutex);
+    if (setMetaList("meta:keyword", the_value)) {
+        g.clear();
+        setModified(true);
+    }
 }
 
 css::lang::Locale SAL_CALL
@@ -1493,12 +1509,11 @@ void SAL_CALL
 SfxDocumentMetaData::setLanguage(const css::lang::Locale & the_value)
         throw (css::uno::RuntimeException)
 {
-    ::osl::MutexGuard g(m_aMutex);
     ::rtl::OUString text = the_value.Language;
     if (the_value.Country.getLength() > 0) {
         text += ::rtl::OUString::createFromAscii("-").concat(the_value.Country);
     }
-    setMetaText("dc:language", text);
+    setMetaTextAndNotify("dc:language", text);
 }
 
 ::rtl::OUString SAL_CALL
@@ -1512,8 +1527,7 @@ void SAL_CALL
 SfxDocumentMetaData::setModifiedBy(const ::rtl::OUString & the_value)
         throw (css::uno::RuntimeException)
 {
-    ::osl::MutexGuard g(m_aMutex);
-    setMetaText("dc:creator", the_value);
+    setMetaTextAndNotify("dc:creator", the_value);
 }
 
 css::util::DateTime SAL_CALL
@@ -1527,8 +1541,7 @@ void SAL_CALL
 SfxDocumentMetaData::setModificationDate(const css::util::DateTime & the_value)
         throw (css::uno::RuntimeException)
 {
-    ::osl::MutexGuard g(m_aMutex);
-    setMetaText("dc:date", dateTimeToText(the_value));
+    setMetaTextAndNotify("dc:date", dateTimeToText(the_value));
 }
 
 ::rtl::OUString SAL_CALL
@@ -1542,8 +1555,7 @@ void SAL_CALL
 SfxDocumentMetaData::setPrintedBy(const ::rtl::OUString & the_value)
         throw (css::uno::RuntimeException)
 {
-    ::osl::MutexGuard g(m_aMutex);
-    setMetaText("meta:printed-by", the_value);
+    setMetaTextAndNotify("meta:printed-by", the_value);
 }
 
 css::util::DateTime SAL_CALL
@@ -1557,8 +1569,7 @@ void SAL_CALL
 SfxDocumentMetaData::setPrintDate(const css::util::DateTime & the_value)
         throw (css::uno::RuntimeException)
 {
-    ::osl::MutexGuard g(m_aMutex);
-    setMetaText("meta:print-date", dateTimeToText(the_value));
+    setMetaTextAndNotify("meta:print-date", dateTimeToText(the_value));
 }
 
 ::rtl::OUString SAL_CALL
@@ -1573,10 +1584,11 @@ void SAL_CALL
 SfxDocumentMetaData::setTemplateName(const ::rtl::OUString & the_value)
         throw (css::uno::RuntimeException)
 {
-    ::osl::MutexGuard g(m_aMutex);
+    ::osl::ClearableMutexGuard g(m_aMutex);
     checkInit();
     if (m_TemplateName != the_value) {
         m_TemplateName = the_value;
+        g.clear();
         setModified(true);
     }
 }
@@ -1593,10 +1605,11 @@ void SAL_CALL
 SfxDocumentMetaData::setTemplateURL(const ::rtl::OUString & the_value)
         throw (css::uno::RuntimeException)
 {
-    ::osl::MutexGuard g(m_aMutex);
+    ::osl::ClearableMutexGuard g(m_aMutex);
     checkInit();
     if (m_TemplateURL != the_value) {
         m_TemplateURL = the_value;
+        g.clear();
         setModified(true);
     }
 }
@@ -1613,10 +1626,11 @@ void SAL_CALL
 SfxDocumentMetaData::setTemplateDate(const css::util::DateTime & the_value)
         throw (css::uno::RuntimeException)
 {
-    ::osl::MutexGuard g(m_aMutex);
+    ::osl::ClearableMutexGuard g(m_aMutex);
     checkInit();
     if (!(m_TemplateDate == the_value)) {
         m_TemplateDate = the_value;
+        g.clear();
         setModified(true);
     }
 }
@@ -1633,10 +1647,11 @@ void SAL_CALL
 SfxDocumentMetaData::setAutoloadURL(const ::rtl::OUString & the_value)
         throw (css::uno::RuntimeException)
 {
-    ::osl::MutexGuard g(m_aMutex);
+    ::osl::ClearableMutexGuard g(m_aMutex);
     checkInit();
     if (m_AutoloadURL != the_value) {
         m_AutoloadURL = the_value;
+        g.clear();
         setModified(true);
     }
 }
@@ -1657,10 +1672,11 @@ SfxDocumentMetaData::setAutoloadSecs(::sal_Int32 the_value)
         ::rtl::OUString::createFromAscii(
             "SfxDocumentMetaData::setAutoloadSecs: argument is negative"),
             *this, 0);
-    ::osl::MutexGuard g(m_aMutex);
+    ::osl::ClearableMutexGuard g(m_aMutex);
     checkInit();
     if (m_AutoloadSecs != the_value) {
         m_AutoloadSecs = the_value;
+        g.clear();
         setModified(true);
     }
 }
@@ -1677,10 +1693,11 @@ void SAL_CALL
 SfxDocumentMetaData::setDefaultTarget(const ::rtl::OUString & the_value)
         throw (css::uno::RuntimeException)
 {
-    ::osl::MutexGuard g(m_aMutex);
+    ::osl::ClearableMutexGuard g(m_aMutex);
     checkInit();
     if (m_DefaultTarget != the_value) {
         m_DefaultTarget = the_value;
+        g.clear();
         setModified(true);
     }
 }
@@ -1718,7 +1735,7 @@ SfxDocumentMetaData::setDocumentStatistics(
         const css::uno::Sequence< css::beans::NamedValue > & the_value)
         throw (css::uno::RuntimeException)
 {
-    ::osl::MutexGuard g(m_aMutex);
+    ::osl::ClearableMutexGuard g(m_aMutex);
     checkInit();
     std::vector<std::pair<const char *, ::rtl::OUString> > attributes;
     for (sal_Int32 i = 0; i < the_value.getLength(); ++i) {
@@ -1743,6 +1760,7 @@ SfxDocumentMetaData::setDocumentStatistics(
         }
     }
     updateElement("meta:document-statistic", &attributes);
+    g.clear();
     setModified(true);
 }
 
@@ -1768,10 +1786,9 @@ SfxDocumentMetaData::setEditingCycles(::sal_Int16 the_value)
         ::rtl::OUString::createFromAscii(
                 "SfxDocumentMetaData::setEditingCycles: argument is negative"),
                 *this, 0);
-    ::osl::MutexGuard g(m_aMutex);
     ::rtl::OUStringBuffer buf;
     ::sax::Converter::convertNumber(buf, the_value);
-    setMetaText("meta:editing-cycles", buf.makeStringAndClear());
+    setMetaTextAndNotify("meta:editing-cycles", buf.makeStringAndClear());
 }
 
 ::sal_Int32 SAL_CALL
@@ -1789,31 +1806,34 @@ SfxDocumentMetaData::setEditingDuration(::sal_Int32 the_value)
         ::rtl::OUString::createFromAscii(
             "SfxDocumentMetaData::setEditingDuration: argument is negative"),
             *this, 0);
-    ::osl::MutexGuard g(m_aMutex);
-    setMetaText("meta:editing-duration", durationToText(the_value));
+    setMetaTextAndNotify("meta:editing-duration", durationToText(the_value));
 }
 
 void SAL_CALL
 SfxDocumentMetaData::resetUserData(const ::rtl::OUString & the_value)
     throw (css::uno::RuntimeException)
 {
-    ::osl::MutexGuard g(m_aMutex);
+    ::osl::ClearableMutexGuard g(m_aMutex);
 
-    setMetaText("meta:initial-creator", the_value, false);
+    bool bModified( false );
+    bModified |= setMetaText("meta:initial-creator", the_value);
     ::DateTime now = DateTime();
     css::util::DateTime uDT(now.Get100Sec(), now.GetSec(), now.GetMin(),
         now.GetHour(), now.GetDay(), now.GetMonth(), now.GetYear());
-    setMetaText("meta:creation-date", dateTimeToText(uDT), false);
-    setMetaText("dc:creator", ::rtl::OUString(), false);
-    setMetaText("meta:printed-by", ::rtl::OUString(), false);
-    setMetaText("dc:date", dateTimeToText(css::util::DateTime()), false);
-    setMetaText("meta:print-date",
-        dateTimeToText(css::util::DateTime()), false);
-    setMetaText("meta:editing-duration", durationToText(0), false);
-    setMetaText("meta:editing-cycles",
-        ::rtl::OUString::createFromAscii("1"), false);
+    bModified |= setMetaText("meta:creation-date", dateTimeToText(uDT));
+    bModified |= setMetaText("dc:creator", ::rtl::OUString());
+    bModified |= setMetaText("meta:printed-by", ::rtl::OUString());
+    bModified |= setMetaText("dc:date", dateTimeToText(css::util::DateTime()));
+    bModified |= setMetaText("meta:print-date",
+        dateTimeToText(css::util::DateTime()));
+    bModified |= setMetaText("meta:editing-duration", durationToText(0));
+    bModified |= setMetaText("meta:editing-cycles",
+        ::rtl::OUString::createFromAscii("1"));
 
-    setModified(true);
+    if (bModified) {
+        g.clear();
+        setModified(true);
+    }
 }
 
 
@@ -2160,16 +2180,24 @@ SfxDocumentMetaData::createClone()
         throw (css::uno::RuntimeException)
 {
     ::osl::MutexGuard g(m_aMutex);
+    checkInit();
     css::uno::Reference<css::util::XModifiable> xMB(m_xUserDefined,
-        css::uno::UNO_QUERY_THROW);
-    return m_isModified || xMB->isModified();
+        css::uno::UNO_QUERY);
+    return m_isModified || (xMB.is() ? xMB->isModified() : sal_False);
 }
 
 void SAL_CALL SfxDocumentMetaData::setModified( ::sal_Bool bModified )
         throw (css::beans::PropertyVetoException, css::uno::RuntimeException)
 {
-    ::osl::MutexGuard g(m_aMutex);
-    m_isModified = bModified;
+    css::uno::Reference<css::util::XModifiable> xMB;
+    { // do not lock mutex while notifying (#i93514#) to prevent deadlock
+        ::osl::MutexGuard g(m_aMutex);
+        checkInit();
+        m_isModified = bModified;
+        xMB.set(m_xUserDefined, css::uno::UNO_QUERY);
+        DBG_ASSERT(xMB.is(),
+            "SfxDocumentMetaData::setModified: PropertyBag not Modifiable?");
+    }
     if (bModified) {
         try {
             css::uno::Reference<css::uno::XInterface> xThis(*this);
@@ -2185,9 +2213,9 @@ void SAL_CALL SfxDocumentMetaData::setModified( ::sal_Bool bModified )
             (void) e;
         }
     } else {
-        css::uno::Reference<css::util::XModifiable> xMB(m_xUserDefined,
-            css::uno::UNO_QUERY_THROW);
-        xMB->setModified(false);
+        if (xMB.is()) {
+            xMB->setModified(false);
+        }
     }
 }
 
@@ -2196,20 +2224,28 @@ void SAL_CALL SfxDocumentMetaData::addModifyListener(
         const css::uno::Reference< css::util::XModifyListener > & xListener)
         throw (css::uno::RuntimeException)
 {
+    ::osl::MutexGuard g(m_aMutex);
+    checkInit();
     m_NotifyListeners.addInterface(xListener);
     css::uno::Reference<css::util::XModifyBroadcaster> xMB(m_xUserDefined,
-        css::uno::UNO_QUERY_THROW);
-    xMB->addModifyListener(xListener);
+        css::uno::UNO_QUERY);
+    if (xMB.is()) {
+        xMB->addModifyListener(xListener);
+    }
 }
 
 void SAL_CALL SfxDocumentMetaData::removeModifyListener(
         const css::uno::Reference< css::util::XModifyListener > & xListener)
         throw (css::uno::RuntimeException)
 {
+    ::osl::MutexGuard g(m_aMutex);
+    checkInit();
     m_NotifyListeners.removeInterface(xListener);
     css::uno::Reference<css::util::XModifyBroadcaster> xMB(m_xUserDefined,
-        css::uno::UNO_QUERY_THROW);
-    xMB->removeModifyListener(xListener);
+        css::uno::UNO_QUERY);
+    if (xMB.is()) {
+        xMB->removeModifyListener(xListener);
+    }
 }
 
 // ::com::sun::star::xml::sax::XSAXSerializable

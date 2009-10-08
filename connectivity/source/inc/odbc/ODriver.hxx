@@ -35,6 +35,7 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <cppuhelper/compbase2.hxx>
 #include "odbc/OFunctiondefs.hxx"
+#include "odbc/odbcbasedllapi.hxx"
 #include "connectivity/CommonTools.hxx"
 #include <osl/module.h>
 
@@ -42,11 +43,9 @@ namespace connectivity
 {
     namespace odbc
     {
-        ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL ODBCDriver_CreateInstance(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxFactory) throw( ::com::sun::star::uno::Exception );
-
         typedef ::cppu::WeakComponentImplHelper2< ::com::sun::star::sdbc::XDriver, ::com::sun::star::lang::XServiceInfo > ODriver_BASE;
 
-        class SAL_NO_VTABLE ODBCDriver : public ODriver_BASE
+        class OOO_DLLPUBLIC_ODBCBASE SAL_NO_VTABLE ODBCDriver : public ODriver_BASE
         {
         protected:
             ::osl::Mutex                            m_aMutex;

@@ -38,6 +38,7 @@
 
 #include <drawinglayer/primitive2d/baseprimitive2d.hxx>
 #include <basegfx/color/bcolor.hxx>
+#include <vcl/bitmapex.hxx>
 
 //////////////////////////////////////////////////////////////////////////////
 // MarkerPrimitive2D class
@@ -46,25 +47,11 @@ namespace drawinglayer
 {
     namespace primitive2d
     {
-        enum MarkerStyle2D
-        {
-            /// Point: Uses RGBColor, 1x1 pixel
-            MARKERSTYLE2D_POINT,
-
-            /// Cross: Uses RGBColor, 3x3 pixel, centered, form of a plus sign
-            MARKERSTYLE2D_CROSS,
-
-            /// Gluepoint: Uses RGBColor as outline and hardcoded COL_LIGHTBLUE as inner
-            /// line pen, 7x7 pixel, centered, looks like a x with thee pixel lines
-            MARKERSTYLE2D_GLUEPOINT
-        };
-
         class MarkerArrayPrimitive2D : public BasePrimitive2D
         {
         private:
             std::vector< basegfx::B2DPoint >                maPositions;
-            basegfx::BColor                                 maRGBColor;
-            MarkerStyle2D                                   meStyle;
+            BitmapEx                                        maMarker;
 
         protected:
             // create local decomposition
@@ -73,13 +60,11 @@ namespace drawinglayer
         public:
             MarkerArrayPrimitive2D(
                 const std::vector< basegfx::B2DPoint >& rPositions,
-                MarkerStyle2D eStyle,
-                const basegfx::BColor& rRGBColor);
+                const BitmapEx& rMarker);
 
             // get data
             const std::vector< basegfx::B2DPoint >& getPositions() const { return maPositions; }
-            const basegfx::BColor& getRGBColor() const { return maRGBColor; }
-            MarkerStyle2D getStyle() const { return meStyle; }
+            const BitmapEx& getMarker() const { return maMarker; }
 
             // compare operator
             virtual bool operator==(const BasePrimitive2D& rPrimitive) const;

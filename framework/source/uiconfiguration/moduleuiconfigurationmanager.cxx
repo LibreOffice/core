@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: moduleuiconfigurationmanager.cxx,v $
- * $Revision: 1.20 $
+ * $Revision: 1.19.208.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -1379,7 +1379,7 @@ Reference< XInterface > SAL_CALL ModuleUIConfigurationManager::getShortCutManage
 {
     ResetableGuard aGuard( m_aLock );
     Reference< XMultiServiceFactory > xSMGR   = m_xServiceManager;
-    ::rtl::OUString                   aModule = m_aModuleShortName;
+    ::rtl::OUString                   aModule = /*m_aModuleShortName*/m_aModuleIdentifier;
     aGuard.unlock();
 
     Reference< XInterface >      xManager = xSMGR->createInstance(SERVICENAME_MODULEACCELERATORCONFIGURATION);

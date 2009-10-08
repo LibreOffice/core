@@ -30,7 +30,6 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_svx.hxx"
-#include <svtools/options3d.hxx>
 #include <svx/xfillit.hxx>
 #include <svx/svdopath.hxx>
 #include <svx/svdogrp.hxx>

@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: svdoole2.hxx,v $
- * $Revision: 1.6 $
+ * $Revision: 1.5.60.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -126,6 +126,8 @@ public:
     void SetObjRef(const com::sun::star::uno::Reference < com::sun::star::embed::XEmbeddedObject >& rNewObjRef);
     com::sun::star::uno::Reference < com::sun::star::embed::XEmbeddedObject > GetObjRef() const;
 
+    SVX_DLLPRIVATE com::sun::star::uno::Reference < com::sun::star::embed::XEmbeddedObject > GetObjRef_NoInit() const;
+
     void AbandonObject();
 
     virtual void SetPage(SdrPage* pNewPage);
@@ -138,6 +140,9 @@ public:
      */
     void SetClosedObj( bool bIsClosed );
 
+    // FullDrag support
+    virtual SdrObject* getFullDragClone() const;
+
     virtual void TakeObjInfo(SdrObjTransformInfoRec& rInfo) const;
     virtual UINT16 GetObjIdentifier() const;
     virtual SdrObject* CheckHit(const Point& rPnt, USHORT nTol, const SetOfByte* pVisiLayer) const;
@@ -145,7 +150,6 @@ public:
     virtual void TakeObjNamePlural(String& rName) const;
 
     virtual void operator=(const SdrObject& rObj);
-    virtual FASTBOOL HasSpecialDrag() const;
 
     virtual void NbcMove(const Size& rSize);
     virtual void NbcResize(const Point& rRef, const Fraction& xFact, const Fraction& yFact);

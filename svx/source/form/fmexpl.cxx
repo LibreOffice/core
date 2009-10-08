@@ -30,9 +30,6 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_svx.hxx"
-#ifndef _SVX_FMUNOVW_HXX
-#include "fmvwimp.hxx"
-#endif
 
 #ifndef _SVX_FMRESIDS_HRC
 #include "fmresids.hrc"

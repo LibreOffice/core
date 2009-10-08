@@ -418,13 +418,14 @@
 				</info>
 				<value>false</value>
 			</prop>
-			<prop oor:name="CreateWithAttributes" oor:type="xs:boolean">
+			<prop oor:name="ModifyWithAttributes" oor:type="xs:boolean">
 				<!-- OldPath: Impress/Other -->
 				<!-- OldLocation: soffice.cfg -->
 				<!-- UIHints: Optionbar -->
 				<info>
-					<desc>Indicates whether the current attributes will be assigned to newly created objects.</desc>
-					<label>Create with attributes</label>
+          <author>AF</author>
+          <desc>Indicates whether the object creation and modification will be visualized using the full object attribute set or wireframe.</desc>
+          <label>Modify with attributes</label>
 				</info>
 				<value>false</value>
 			</prop>

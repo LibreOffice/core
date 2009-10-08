@@ -418,7 +418,9 @@ bool RegexpMap< Val >::add(rtl::OUString const & rKey, Val const & rValue,
 
 		typename List< Val >::iterator aEnd(rTheList.end());
 		for (typename List< Val >::iterator aIt(rTheList.begin()); aIt != aEnd; ++aIt)
+		{
 			if (aIt->m_aRegexp == aRegexp)
+			{
 				if (bOverwrite)
 				{
 					rTheList.erase(aIt);
@@ -426,6 +428,8 @@ bool RegexpMap< Val >::add(rtl::OUString const & rKey, Val const & rValue,
 				}
 				else
 					return false;
+			}
+		}
 
 		rTheList.push_back(Entry< Val >(aRegexp, rValue));
 	}
@@ -472,6 +476,7 @@ template< typename Val >
 void RegexpMap< Val >::erase(iterator const & rPos)
 {
 	if (rPos.m_pImpl->getMap() == m_pImpl)
+	{
 		if (rPos.m_pImpl->getList() == -1)
 		{
 			if (m_pImpl->m_pDefault)
@@ -483,6 +488,7 @@ void RegexpMap< Val >::erase(iterator const & rPos)
 		else
 			m_pImpl->m_aList[rPos.m_pImpl->getList()].
 				         erase(rPos.m_pImpl->getIndex());
+	}
 }
 
 //============================================================================

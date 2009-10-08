@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: eeitemid.hxx,v $
- * $Revision: 1.3 $
+ * $Revision: 1.3.212.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -60,6 +60,9 @@
 #ifdef ITEMID_UNDERLINE
 #undef ITEMID_UNDERLINE
 #endif
+#ifdef ITEMID_OVERLINE
+#undef ITEMID_OVERLINE
+#endif
 #ifdef ITEMID_LANGUAGE
 #undef ITEMID_LANGUAGE
 #endif
@@ -87,6 +90,7 @@
 #define ITEMID_CONTOUR          EE_CHAR_OUTLINE
 #define ITEMID_CROSSEDOUT       EE_CHAR_STRIKEOUT
 #define ITEMID_UNDERLINE        EE_CHAR_UNDERLINE
+#define ITEMID_OVERLINE         EE_CHAR_OVERLINE
 #define ITEMID_FONTHEIGHT       EE_CHAR_FONTHEIGHT
 #define ITEMID_CHARSCALE_W      EE_CHAR_FONTWIDTH
 #define ITEMID_COLOR            EE_CHAR_COLOR

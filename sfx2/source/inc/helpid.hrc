@@ -359,7 +359,6 @@
 #define HID_WARNING_ALIENFORMAT                     (HID_SFX_START + 320)
 #define HID_HELP_ONSTARTUP_BOX                      (HID_SFX_START + 321)
 #define HID_DLG_CHECKFORONLINEUPDATE                (HID_SFX_START + 322)
-#define HID_DLG_NEWERVERSIONWARNING                 (HID_SFX_START + 323)
 #define HID_TP_CUSTOMPROPERTIES                     (HID_SFX_START + 324)
 #define HID_CTRL_CUSTOMPROPERTIES                   (HID_SFX_START + 325)
 #define HID_CTRL_CUSTOMPROPS_YES_NO                 (HID_SFX_START + 326)

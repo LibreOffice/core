@@ -384,11 +384,6 @@ sal_Bool isLoadable(const ::com::sun::star::uno::Reference< ::com::sun::star::un
 sal_Bool isRowSetAlive(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface>& _rxRowSet);
     // checks if the ::com::sun::star::sdbcx::XColumnsSupplier provided by _rxRowSet supllies any columns
 
-void    initializeTextFieldLineEnds(
-            const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxModel,
-            const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxORB
-        ) SAL_THROW(());
-
 //==================================================================
 typedef ::std::set  < ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >
                     , ::comphelper::OInterfaceCompare< ::com::sun::star::uno::XInterface >

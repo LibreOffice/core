@@ -47,6 +47,7 @@
 #include <basegfx/polygon/b3dpolypolygontools.hxx>
 #include <drawinglayer/primitive3d/hittestprimitive3d.hxx>
 #include <com/sun/star/uno/Sequence.h>
+#include <drawinglayer/primitive3d/hatchtextureprimitive3d.hxx>
 
 //////////////////////////////////////////////////////////////////////////////
 
@@ -154,6 +155,17 @@ namespace drawinglayer
                     // PolygonHairlinePrimitive3D, not used for hit test with planes, ignore. This
                     // means that also thick line expansion will not be hit-tested as
                     // PolyPolygonMaterialPrimitive3D
+                    break;
+                }
+                case PRIMITIVE3D_ID_HATCHTEXTUREPRIMITIVE3D :
+                {
+                    // #i97321#
+                    // For HatchTexturePrimitive3D, do not use the decomposition since it will produce
+                    // clipped hatch lines in 3D. It can be used when the hatch also has a filling, but for
+                    // simplicity, just use the children which are the PolyPolygonMaterialPrimitive3D
+                    // which define the hatched areas anyways; for HitTest this is more than adequate
+                    const primitive3d::HatchTexturePrimitive3D& rPrimitive = static_cast< const primitive3d::HatchTexturePrimitive3D& >(rCandidate);
+                    process(rPrimitive.getChildren());
                     break;
                 }
                 case PRIMITIVE3D_ID_HITTESTPRIMITIVE3D :

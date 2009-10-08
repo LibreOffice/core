@@ -41,6 +41,9 @@
 #include <comphelper/property.hxx>
 #include <comphelper/types.hxx>
 #include <connectivity/dbexception.hxx>
+#ifdef __MINGW32__
+#include <algorithm>
+#endif
 #include "resource/ado_res.hrc"
 
 using namespace connectivity::ado;

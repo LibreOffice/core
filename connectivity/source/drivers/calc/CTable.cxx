@@ -506,12 +506,12 @@ void OCalcTable::fillColumns()
 
         // check if the column name already exists
         ::rtl::OUString aAlias = aColumnName;
-        OSQLColumns::const_iterator aFind = connectivity::find(m_aColumns->begin(),m_aColumns->end(),aAlias,aCase);
+        OSQLColumns::Vector::const_iterator aFind = connectivity::find(m_aColumns->get().begin(),m_aColumns->get().end(),aAlias,aCase);
         sal_Int32 nExprCnt = 0;
-        while(aFind != m_aColumns->end())
+        while(aFind != m_aColumns->get().end())
         {
             (aAlias = aColumnName) += ::rtl::OUString::valueOf((sal_Int32)++nExprCnt);
-            aFind = connectivity::find(m_aColumns->begin(),m_aColumns->end(),aAlias,aCase);
+            aFind = connectivity::find(m_aColumns->get().begin(),m_aColumns->get().end(),aAlias,aCase);
         }
 
         sdbcx::OColumn* pColumn = new sdbcx::OColumn( aAlias, aTypeName, ::rtl::OUString(),
@@ -519,7 +519,7 @@ void OCalcTable::fillColumns()
                                                 eType, sal_False, sal_False, bCurrency,
                                                 getConnection()->getMetaData()->storesMixedCaseQuotedIdentifiers() );
         Reference< XPropertySet> xCol = pColumn;
-        m_aColumns->push_back(xCol);
+        m_aColumns->get().push_back(xCol);
         m_aTypes.push_back(eType);
         m_aPrecisions.push_back(nPrecision);
         m_aScales.push_back(nDecimals);
@@ -635,8 +635,8 @@ void OCalcTable::refreshColumns()
 
     TStringVector aVector;
 
-    OSQLColumns::const_iterator aEnd = m_aColumns->end();
-    for(OSQLColumns::const_iterator aIter = m_aColumns->begin();aIter != aEnd;++aIter)
+    OSQLColumns::Vector::const_iterator aEnd = m_aColumns->get().end();
+    for(OSQLColumns::Vector::const_iterator aIter = m_aColumns->get().begin();aIter != aEnd;++aIter)
         aVector.push_back(Reference< XNamed>(*aIter,UNO_QUERY)->getName());
 
     if(m_pColumns)
@@ -808,19 +808,19 @@ sal_Bool OCalcTable::fetchRow( OValueRefRow& _rRow, const OSQLColumns & _rCols,
 
     BOOL bIsCurRecordDeleted = sal_False;
     _rRow->setDeleted(bIsCurRecordDeleted);
-    *(*_rRow)[0] = m_nFilePos;
+    *(_rRow->get())[0] = m_nFilePos;
 
     if (!bRetrieveData)
         return TRUE;
 
     // fields
 
-    OSQLColumns::const_iterator aIter = _rCols.begin();
-    OSQLColumns::const_iterator aEnd = _rCols.end();
-    for (OValueRefVector::size_type i = 1; aIter != aEnd && i < _rRow->size();
+    OSQLColumns::Vector::const_iterator aIter = _rCols.get().begin();
+    OSQLColumns::Vector::const_iterator aEnd = _rCols.get().end();
+    for (OValueRefVector::Vector::size_type i = 1; aIter != aEnd && i < _rRow->get().size();
          ++aIter, i++)
     {
-        if ( (*_rRow)[i]->isBound() )
+        if ( (_rRow->get())[i]->isBound() )
         {
             sal_Int32 nType = 0;
             if ( _bUseTableDefs )
@@ -829,7 +829,7 @@ sal_Bool OCalcTable::fetchRow( OValueRefRow& _rRow, const OSQLColumns & _rCols,
                 (*aIter)->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_TYPE)) >>= nType;
 
 
-            lcl_SetValue( (*_rRow)[i]->get(), m_xSheet, m_nStartCol, m_nStartRow, m_bHasHeaders,
+            lcl_SetValue( (_rRow->get())[i]->get(), m_xSheet, m_nStartCol, m_nStartRow, m_bHasHeaders,
                                 m_aNullDate, m_nFilePos, i, nType );
         }
     }

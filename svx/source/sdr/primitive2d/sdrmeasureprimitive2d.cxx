@@ -29,6 +29,7 @@
  *
  ************************************************************************/
 
+#include "precompiled_svx.hxx"
 #include <svx/sdr/primitive2d/sdrmeasureprimitive2d.hxx>
 #include <svx/sdr/primitive2d/sdrdecompositiontools.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
@@ -38,6 +39,7 @@
 #include <basegfx/tools/canvastools.hxx>
 #include <drawinglayer/primitive2d/groupprimitive2d.hxx>
 #include <svx/sdr/primitive2d/svx_primitivetypes2d.hxx>
+#include <drawinglayer/primitive2d/hittestprimitive2d.hxx>
 
 //////////////////////////////////////////////////////////////////////////////
 
@@ -64,22 +66,21 @@ namespace drawinglayer
             {
                 return createPolygonLinePrimitive(aPolygon, rObjectMatrix, *maSdrLSTAttribute.getLine(), 0L);
             }
-            else if(bLeftActive && bRightActive)
+
+            if(bLeftActive && bRightActive)
             {
                 return createPolygonLinePrimitive(aPolygon, rObjectMatrix, *maSdrLSTAttribute.getLine(), maSdrLSTAttribute.getLineStartEnd());
             }
-            else
-            {
-                const attribute::SdrLineStartEndAttribute* pLineStartEnd = maSdrLSTAttribute.getLineStartEnd();
-                const ::basegfx::B2DPolyPolygon aEmpty;
-                const attribute::SdrLineStartEndAttribute aLineStartEnd(
-                    bLeftActive ? pLineStartEnd->getStartPolyPolygon() : aEmpty, bRightActive ? pLineStartEnd->getEndPolyPolygon() : aEmpty,
-                    bLeftActive ? pLineStartEnd->getStartWidth() : 0.0, bRightActive ? pLineStartEnd->getEndWidth() : 0.0,
-                    bLeftActive ? pLineStartEnd->isStartActive() : false, bRightActive ? pLineStartEnd->isEndActive() : false,
-                    bLeftActive ? pLineStartEnd->isStartCentered() : false, bRightActive? pLineStartEnd->isEndCentered() : false);
 
-                return createPolygonLinePrimitive(aPolygon, rObjectMatrix, *maSdrLSTAttribute.getLine(), &aLineStartEnd);
-            }
+            const attribute::SdrLineStartEndAttribute* pLineStartEnd = maSdrLSTAttribute.getLineStartEnd();
+            const ::basegfx::B2DPolyPolygon aEmpty;
+            const attribute::SdrLineStartEndAttribute aLineStartEnd(
+                bLeftActive ? pLineStartEnd->getStartPolyPolygon() : aEmpty, bRightActive ? pLineStartEnd->getEndPolyPolygon() : aEmpty,
+                bLeftActive ? pLineStartEnd->getStartWidth() : 0.0, bRightActive ? pLineStartEnd->getEndWidth() : 0.0,
+                bLeftActive ? pLineStartEnd->isStartActive() : false, bRightActive ? pLineStartEnd->isEndActive() : false,
+                bLeftActive ? pLineStartEnd->isStartCentered() : false, bRightActive? pLineStartEnd->isEndCentered() : false);
+
+            return createPolygonLinePrimitive(aPolygon, rObjectMatrix, *maSdrLSTAttribute.getLine(), &aLineStartEnd);
         }
 
         Primitive2DSequence SdrMeasurePrimitive2D::createLocalDecomposition(const geometry::ViewInformation2D& aViewInformation) const
@@ -128,7 +129,15 @@ namespace drawinglayer
                 aTextRange = pBlockText->getB2DRange(aViewInformation);
             }
 
-            if(maSdrLSTAttribute.getLine())
+            // prepare line attribute and result
+            const attribute::SdrLineAttribute* pLineAttribute(maSdrLSTAttribute.getLine());
+
+            if(!pLineAttribute)
+            {
+                // if initially no line is defined, create one for HitTest and BoundRect
+                pLineAttribute = new attribute::SdrLineAttribute(basegfx::BColor(0.0, 0.0, 0.0));
+            }
+
             {
                 bool bArrowsOutside(false);
                 bool bMainLineSplitted(false);
@@ -167,7 +176,7 @@ namespace drawinglayer
 
                 const double fSpaceNeededByArrows(fStartArrowH + fEndArrowH + ((fStartArrowW + fEndArrowW) * 0.5));
                 const double fArrowsOutsideLen((fStartArrowH + fEndArrowH + fStartArrowW + fEndArrowW) * 0.5);
-                const double fHalfLineWidth(maSdrLSTAttribute.getLine()->getWidth() * 0.5);
+                const double fHalfLineWidth(pLineAttribute->getWidth() * 0.5);
 
                 if(fSpaceNeededByArrows > fDistance)
                 {
@@ -378,6 +387,16 @@ namespace drawinglayer
                         fTextY += (pTextAttribute->getTextUpperDistance() - pTextAttribute->getTextLowerDistance()) / 2L;
                     }
                 }
+            }
+
+            if(!maSdrLSTAttribute.getLine())
+            {
+                // embed line geometry to invisible line group
+                const Primitive2DReference xHiddenLines(new HitTestPrimitive2D(aRetval));
+                aRetval = Primitive2DSequence(&xHiddenLines, 1);
+
+                // delete temporary LineAttribute again
+                delete pLineAttribute;
             }
 
             if(pBlockText)

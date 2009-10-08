@@ -77,7 +77,8 @@ ChildrenManagerImpl::ChildrenManagerImpl (
       mxParent (rxParent),
       maShapeTreeInfo (rShapeTreeInfo),
       mrContext (rContext),
-      mnNewNameIndex(1)
+      mnNewNameIndex(1),
+      mpFocusedShape(NULL)
 {
 }
 
@@ -96,11 +97,17 @@ ChildrenManagerImpl::~ChildrenManagerImpl (void)
 void ChildrenManagerImpl::Init (void)
 {
     // Register as view::XSelectionChangeListener.
+    Reference<frame::XController> xController(maShapeTreeInfo.GetController());
     Reference<view::XSelectionSupplier> xSelectionSupplier (
-        maShapeTreeInfo.GetController(), uno::UNO_QUERY);
+        xController, uno::UNO_QUERY);
     if (xSelectionSupplier.is())
+    {
+        xController->addEventListener(
+            static_cast<document::XEventListener*>(this));
+
         xSelectionSupplier->addSelectionChangeListener (
             static_cast<view::XSelectionChangeListener*>(this));
+    }
 
     // Register at model as document::XEventListener.
     if (maShapeTreeInfo.GetModelBroadcaster().is())
@@ -217,26 +224,46 @@ void ChildrenManagerImpl::Update (bool bCreateNewObjectsOnDemand)
     Rectangle aVisibleArea = maShapeTreeInfo.GetViewForwarder()->GetVisibleArea();
 
     // 1. Create a local list of visible shapes.
-    ChildDescriptorListType aNewChildList;
-    CreateListOfVisibleShapes (aNewChildList);
+    ChildDescriptorListType aChildList;
+    CreateListOfVisibleShapes (aChildList);
 
-    // 2. Find all shapes in the current list that are not in the new list,
-    // send appropriate events and remove the accessible shape.
-    RemoveNonVisibleChildren (aNewChildList);
-
-    // 3. Merge the information that is already known about the visible
+    // 2. Merge the information that is already known about the visible
     // shapes from the current list into the new list.
-    MergeAccessibilityInformation (aNewChildList);
+    MergeAccessibilityInformation (aChildList);
 
-    // 4. Replace the current list of visible shapes with the new one.  Do
+    // 3. Replace the current list of visible shapes with the new one.  Do
     // the same with the visible area.
     {
         ::osl::MutexGuard aGuard (maMutex);
-        adjustIndexInParentOfShapes(aNewChildList);
+        adjustIndexInParentOfShapes(aChildList);
 
         // Use swap to copy the contents of the new list in constant time.
-        maVisibleChildren.swap (aNewChildList);
-        aNewChildList.clear();
+        maVisibleChildren.swap (aChildList);
+
+        // aChildList now contains all the old children, while maVisibleChildren
+        // contains all the current children
+
+        // 4. Find all shapes in the old list that are not in the current list,
+        // send appropriate events and remove the accessible shape.
+        //
+        // Do this *after* we have set our new list of children, because
+        // removing a child may cause
+        //
+        // ChildDescriptor::disposeAccessibleObject -->
+        // AccessibleContextBase::CommitChange -->
+        // AtkListener::notifyEvent ->
+        // AtkListener::handleChildRemoved ->
+        // AtkListener::updateChildList
+        // AccessibleDrawDocumentView::getAccessibleChildCount ->
+        // ChildrenManagerImpl::GetChildCount ->
+        // maVisibleChildren.size()
+        //
+        // to be fired, and so the operations will take place on
+        // the list we are trying to replace
+        //
+        RemoveNonVisibleChildren (maVisibleChildren, aChildList);
+
+        aChildList.clear();
 
         maVisibleArea = aVisibleArea;
     }
@@ -318,15 +345,16 @@ void ChildrenManagerImpl::CreateListOfVisibleShapes (
 
 
 void ChildrenManagerImpl::RemoveNonVisibleChildren (
-    ChildDescriptorListType& raNewChildList)
+    const ChildDescriptorListType& rNewChildList,
+    ChildDescriptorListType& rOldChildList)
 {
     // Iterate over list of formerly visible children and remove those that
     // are not visible anymore, i.e. member of the new list of visible
     // children.
-    ChildDescriptorListType::iterator I, aEnd = maVisibleChildren.end();
-    for (I=maVisibleChildren.begin(); I != aEnd; ++I)
+    ChildDescriptorListType::iterator I, aEnd = rOldChildList.end();
+    for (I=rOldChildList.begin(); I != aEnd; ++I)
     {
-        if (::std::find(raNewChildList.begin(), raNewChildList.end(), *I) == raNewChildList.end())
+        if (::std::find(rNewChildList.begin(), rNewChildList.end(), *I) == rNewChildList.end())
         {
             // The child is disposed when there is a UNO shape from which
             // the accessible shape can be created when the shape becomes
@@ -573,12 +601,14 @@ void ChildrenManagerImpl::SetInfo (const AccessibleShapeTreeInfo& rShapeTreeInfo
 {
     // Remember the current broadcasters and exchange the shape tree info.
     Reference<document::XEventBroadcaster> xCurrentBroadcaster;
+    Reference<frame::XController> xCurrentController;
     Reference<view::XSelectionSupplier> xCurrentSelectionSupplier;
     {
         ::osl::MutexGuard aGuard (maMutex);
         xCurrentBroadcaster = maShapeTreeInfo.GetModelBroadcaster();
+        xCurrentController = maShapeTreeInfo.GetController();
         xCurrentSelectionSupplier = Reference<view::XSelectionSupplier> (
-            maShapeTreeInfo.GetController(), uno::UNO_QUERY);
+            xCurrentController, uno::UNO_QUERY);
         maShapeTreeInfo = rShapeTreeInfo;
     }
 
@@ -597,19 +627,30 @@ void ChildrenManagerImpl::SetInfo (const AccessibleShapeTreeInfo& rShapeTreeInfo
     }
 
     // Move registration to new selection supplier.
+    Reference<frame::XController> xNewController(maShapeTreeInfo.GetController());
     Reference<view::XSelectionSupplier> xNewSelectionSupplier (
-            maShapeTreeInfo.GetController(), uno::UNO_QUERY);
+        xNewController, uno::UNO_QUERY);
     if (xNewSelectionSupplier != xCurrentSelectionSupplier)
     {
         // Register at new broadcaster.
         if (xNewSelectionSupplier.is())
+        {
+            xNewController->addEventListener(
+                static_cast<document::XEventListener*>(this));
+
             xNewSelectionSupplier->addSelectionChangeListener (
                 static_cast<view::XSelectionChangeListener*>(this));
+        }
 
         // Unregister at old broadcaster.
         if (xCurrentSelectionSupplier.is())
+        {
             xCurrentSelectionSupplier->removeSelectionChangeListener (
                 static_cast<view::XSelectionChangeListener*>(this));
+
+            xCurrentController->removeEventListener(
+                static_cast<document::XEventListener*>(this));
+        }
     }
 }
 
@@ -622,20 +663,10 @@ void SAL_CALL
     ChildrenManagerImpl::disposing (const lang::EventObject& rEventObject)
     throw (uno::RuntimeException)
 {
-    if (rEventObject.Source == maShapeTreeInfo.GetModelBroadcaster())
+    if (rEventObject.Source == maShapeTreeInfo.GetModelBroadcaster()
+            || rEventObject.Source == maShapeTreeInfo.GetController())
     {
-        maShapeTreeInfo.SetModelBroadcaster (NULL);
-        // The disposing of a model should be handled elsewhere.  But to be
-        // on the safe side we remove all of our children.
-        ClearAccessibleShapeList ();
-        SetShapeList (NULL);
-    }
-
-    else if (rEventObject.Source
-        == Reference<view::XSelectionSupplier> (
-            maShapeTreeInfo.GetController(), uno::UNO_QUERY))
-    {
-        maShapeTreeInfo.SetController (NULL);
+        impl_dispose();
     }
 
     // Handle disposing UNO shapes.
@@ -696,27 +727,54 @@ void  SAL_CALL
 
 
 
-void SAL_CALL ChildrenManagerImpl::disposing (void)
+void ChildrenManagerImpl::impl_dispose (void)
 {
+    Reference<frame::XController> xController(maShapeTreeInfo.GetController());
+    // Remove from broadcasters.
     try
     {
-        // Remove from broadcasters.
         Reference<view::XSelectionSupplier> xSelectionSupplier (
-            maShapeTreeInfo.GetController(), uno::UNO_QUERY);
+            xController, uno::UNO_QUERY);
         if (xSelectionSupplier.is())
+        {
             xSelectionSupplier->removeSelectionChangeListener (
                 static_cast<view::XSelectionChangeListener*>(this));
+        }
+    }
+    catch( uno::RuntimeException&)
+    {}
 
+    try
+    {
+        if (xController.is())
+            xController->removeEventListener(
+                static_cast<document::XEventListener*>(this));
+    }
+    catch( uno::RuntimeException&)
+    {}
+
+    maShapeTreeInfo.SetController (NULL);
+
+    try
+    {
+        // Remove from broadcaster.
         if (maShapeTreeInfo.GetModelBroadcaster().is())
             maShapeTreeInfo.GetModelBroadcaster()->removeEventListener (
                 static_cast<document::XEventListener*>(this));
+        maShapeTreeInfo.SetModelBroadcaster (NULL);
     }
     catch( uno::RuntimeException& )
-    {
-        // our XSelectionSupplier may be already disposed
-    }
+    {}
 
     ClearAccessibleShapeList ();
+    SetShapeList (NULL);
+}
+
+
+
+void SAL_CALL ChildrenManagerImpl::disposing (void)
+{
+    impl_dispose();
 }
 
 

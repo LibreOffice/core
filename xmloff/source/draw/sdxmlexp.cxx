@@ -208,7 +208,7 @@ DECLARE_LIST(ImpXMLEXPPageMasterList, ImpXMLEXPPageMasterInfo*)
 
 //////////////////////////////////////////////////////////////////////////////
 
-#define IMP_AUTOLAYOUT_INFO_MAX         (32L)
+#define IMP_AUTOLAYOUT_INFO_MAX         (33L)
 
 class ImpXMLAutoLayoutInfo
 {
@@ -385,6 +385,13 @@ ImpXMLAutoLayoutInfo::ImpXMLAutoLayoutInfo(sal_uInt16 nTyp, ImpXMLEXPPageMasterI
         aLayoutSize.Width() = (aClassicLPos.X() + aClassicLSize.Width())
             - (aClassicTSize.Height() + (aClassicLPos.Y() - (aClassicTPos.Y() + aClassicTSize.Height())));
         aLayoutSize.Height() = (aClassicLPos.Y() + aClassicLSize.Height()) - aClassicTPos.Y();
+    }
+    else if( mnType == 32 )
+    {
+        // AUTOLAYOUT_ONLY_TEXT
+        aLayoutPos = aTitlePos;
+        aLayoutSize.Width() = aTitleSize.Width();
+        aLayoutSize.Height() = long( aLayoutSize.Height() * 0.825 );
     }
     else
     {
@@ -1236,6 +1243,11 @@ void SdXMLExport::ImpWriteAutoLayoutInfos()
                         ImpWriteAutoLayoutPlaceholder(XmlPlaceholderTitle, pInfo->GetTitleRectangle());
                         ImpWriteAutoLayoutPlaceholder(XmlPlaceholderGraphic, aLeft);
                         ImpWriteAutoLayoutPlaceholder(XmlPlaceholderVerticalOutline, aRight);
+                        break;
+                    }
+                    case 32 : // AUTOLAYOUT_TITLE
+                    {
+                        ImpWriteAutoLayoutPlaceholder(XmlPlaceholderSubtitle, pInfo->GetPresRectangle());
                         break;
                     }
                     default:

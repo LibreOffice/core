@@ -44,6 +44,7 @@
 #include <svx/sdr/contact/objectcontactofpageview.hxx>
 #include <svx/sdrpagewindow.hxx>
 #include <sdrpaintwindow.hxx>
+#include <svx/sdr/primitive2d/sdrprimitivetools.hxx>
 
 //////////////////////////////////////////////////////////////////////////////
 
@@ -177,11 +178,11 @@ namespace sdr
 
                     if(aGluepointVector.size())
                     {
-                        const ::basegfx::BColor aBackPen(1.0, 1.0, 1.0);
+                        const basegfx::BColor aBackPen(1.0, 1.0, 1.0);
+                        const basegfx::BColor aRGBFrontColor(0.0, 0.0, 1.0); // COL_LIGHTBLUE
                         const drawinglayer::primitive2d::Primitive2DReference xReference(new drawinglayer::primitive2d::MarkerArrayPrimitive2D(
                             aGluepointVector,
-                            drawinglayer::primitive2d::MARKERSTYLE2D_GLUEPOINT,
-                            aBackPen));
+                            drawinglayer::primitive2d::createDefaultGluepoint_7x7(aBackPen, aRGBFrontColor)));
                         xRetval = drawinglayer::primitive2d::Primitive2DSequence(&xReference, 1);
                     }
                 }

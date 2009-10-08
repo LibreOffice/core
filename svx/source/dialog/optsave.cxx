@@ -150,7 +150,7 @@ SvxAlienFilterWarningConfig_Impl::SvxAlienFilterWarningConfig_Impl() :
     aPropNames.getArray()[0] = C2U("ShowAlienFilterWarning");
     Sequence<Any> aValues = GetProperties(aPropNames);
     const Any* pValues = aValues.getConstArray();
-    DBG_ASSERT(aValues.getLength() == aPropNames.getLength(), "GetProperties failed")
+    DBG_ASSERT(aValues.getLength() == aPropNames.getLength(), "GetProperties failed");
     if(aValues.getLength() == aPropNames.getLength() &&
         pValues[0].hasValue() &&
             pValues[0].getValueType() == ::getBooleanCppuType())
@@ -555,7 +555,7 @@ void SfxSaveTabPage::Reset( const SfxItemSet& )
             pImpl->xFact = Reference<XNameContainer>(
                     xMSF->createInstance(C2U("com.sun.star.document.FilterFactory")), UNO_QUERY);
 
-            DBG_ASSERT(pImpl->xFact.is(), "service com.sun.star.document.FilterFactory unavailable")
+            DBG_ASSERT(pImpl->xFact.is(), "service com.sun.star.document.FilterFactory unavailable");
             Reference< XContainerQuery > xQuery(pImpl->xFact, UNO_QUERY);
             if(xQuery.is())
             {
@@ -609,7 +609,7 @@ void SfxSaveTabPage::Reset( const SfxItemSet& )
         }
         catch(Exception& )
         {
-            DBG_ERROR("exception in FilterFactory access")
+            DBG_ERROR("exception in FilterFactory access");
         }
 
         pImpl->bInitialized = sal_True;

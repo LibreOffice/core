@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: impedit4.cxx,v $
- * $Revision: 1.78 $
+ * $Revision: 1.78.54.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -894,13 +894,27 @@ void ImpEditEngine::WriteItemAsRTF( const SfxPoolItem& rItem, SvStream& rOutput,
         {
             // muesste bei WordLineMode ggf. ulw werden,
             // aber die Information fehlt hier
-            FontUnderline e = ((const SvxUnderlineItem&)rItem).GetUnderline();
+            FontUnderline e = ((const SvxUnderlineItem&)rItem).GetLineStyle();
             switch ( e )
             {
                 case UNDERLINE_NONE:    rOutput << sRTF_ULNONE;     break;
                 case UNDERLINE_SINGLE:  rOutput << sRTF_UL;         break;
                 case UNDERLINE_DOUBLE:  rOutput << sRTF_ULDB;       break;
                 case UNDERLINE_DOTTED:  rOutput << sRTF_ULD;        break;
+                default:
+                    break;
+            }
+        }
+        break;
+        case EE_CHAR_OVERLINE:
+        {
+            FontUnderline e = ((const SvxOverlineItem&)rItem).GetLineStyle();
+            switch ( e )
+            {
+                case UNDERLINE_NONE:    rOutput << sRTF_OLNONE;     break;
+                case UNDERLINE_SINGLE:  rOutput << sRTF_OL;         break;
+                case UNDERLINE_DOUBLE:  rOutput << sRTF_OLDB;       break;
+                case UNDERLINE_DOTTED:  rOutput << sRTF_OLD;        break;
                 default:
                     break;
             }
@@ -1945,7 +1959,7 @@ void ImpEditEngine::EndSpelling()
   -----------------------------------------------------------------------*/
 void ImpEditEngine::StartSpelling(EditView& rEditView, sal_Bool bMultipleDoc)
 {
-    DBG_ASSERT(!pSpellInfo, "pSpellInfo already set?")
+    DBG_ASSERT(!pSpellInfo, "pSpellInfo already set?");
     pSpellInfo = new SpellInfo;
     pSpellInfo->bMultipleDoc = bMultipleDoc;
     rEditView.pImpEditView->SetEditSelection( aEditDoc.GetStartPaM() );
@@ -2178,7 +2192,7 @@ void ImpEditEngine::ApplyChangedSentence(EditView& rEditView, const ::svx::Spell
 {
 #ifdef SVX_LIGHT
 #else
-    DBG_ASSERT(pSpellInfo, "pSpellInfo not initialized")
+    DBG_ASSERT(pSpellInfo, "pSpellInfo not initialized");
     if(pSpellInfo)
     {
         UndoActionStart( EDITUNDO_INSERT );
@@ -2270,6 +2284,20 @@ void ImpEditEngine::ApplyChangedSentence(EditView& rEditView, const ::svx::Spell
     }
     FormatAndUpdate();
     aEditDoc.SetModified(TRUE);
+#endif
+}
+/*-- 08.09.2008 11:33:02---------------------------------------------------
+
+  -----------------------------------------------------------------------*/
+void ImpEditEngine::PutSpellingToSentenceStart( EditView& rEditView )
+{
+#ifdef SVX_LIGHT
+#else
+    if( pSpellInfo && pSpellInfo->aLastSpellContentSelections.size() )
+    {
+        rEditView.pImpEditView->SetEditSelection( pSpellInfo->aLastSpellContentSelections.begin()->Min() );
+    }
+
 #endif
 }
 
@@ -2423,7 +2451,7 @@ void ImpEditEngine::DoOnlineSpelling( ContentNode* pThisNodeOnly, sal_Bool bSpel
             }
 
             // Invalidieren?
-            if ( ( nPaintFrom != 0xFFFF ) && ( GetStatus().DoDrawRedLines() ) )
+            if ( ( nPaintFrom != 0xFFFF ) )
             {
                 aStatus.GetStatusWord() |= EE_STAT_WRONGWORDCHANGED;
                 CallStatusHdl();

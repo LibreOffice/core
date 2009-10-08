@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: msdffimp.hxx,v $
- * $Revision: 1.4 $
+ * $Revision: 1.4.214.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -383,12 +383,25 @@ protected :
     SvxMSDffShapeIdContainer    maShapeIdContainer;
 
     void GetCtrlData( long nOffsDgg );
-    void GetDrawingGroupContainerData(  SvStream& rSt, ULONG nLenDgg            );
-    void GetDrawingContainerData(       SvStream& rSt, ULONG nLenDg             );
-    BOOL GetShapeGroupContainerData(    SvStream& rSt, ULONG nLenShapeGroupCont,
-                                        BOOL bPatriarch );
-    BOOL GetShapeContainerData(         SvStream& rSt, ULONG nLenShapeCont,
-                                        ULONG nPosGroup = ULONG_MAX);
+    void GetDrawingGroupContainerData( SvStream& rSt,
+                                       ULONG nLenDgg );
+    // --> OD 2008-08-01 #156763#
+    // Add internal drawing container id as parameter to the sub methods of
+    // reading the control information about the drawing objects.
+    // The drawing container id is used to distinguish the text ids of drawing
+    // objects in different drawing containers.
+    void GetDrawingContainerData( SvStream& rSt,
+                                  ULONG nLenDg,
+                                  const unsigned long nDrawingContainerId );
+    BOOL GetShapeGroupContainerData( SvStream& rSt,
+                                     ULONG nLenShapeGroupCont,
+                                     BOOL bPatriarch,
+                                     const unsigned long nDrawingContainerId );
+    BOOL GetShapeContainerData( SvStream& rSt,
+                                ULONG nLenShapeCont,
+                                ULONG nPosGroup,
+                                const unsigned long nDrawingContainerId );
+    // <--
 
     FASTBOOL ReadGraphic( SvStream& rSt, ULONG nIndex, Graphic& rGraphic ) const;
     SdrObject* ImportFontWork( SvStream&, SfxItemSet&, Rectangle& rBoundRect ) const;

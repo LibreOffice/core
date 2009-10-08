@@ -150,7 +150,7 @@ namespace connectivity
             //load mozilla profiles to m_ProductProfileList
             LoadMozillaProfiles();
 #endif
-            sal_Int32 count=m_ProductProfileList[MozillaProductType_Mozilla].mProfileList.size();
+            sal_Int32 count=static_cast<sal_Int32>(m_ProductProfileList[MozillaProductType_Mozilla].mProfileList.size());
 
             //load thunderbird profiles to m_ProductProfileList
             count += LoadXPToolkitProfiles(MozillaProductType_Thunderbird);
@@ -362,7 +362,7 @@ namespace connectivity
                 }
 
             }
-            return m_Product.mProfileList.size();
+            return static_cast< ::sal_Int32 >(m_Product.mProfileList.size());
         }
 
         ::rtl::OUString ProfileAccess::getProfilePath( ::com::sun::star::mozilla::MozillaProductType product, const ::rtl::OUString& profileName ) throw (::com::sun::star::uno::RuntimeException)
@@ -382,13 +382,13 @@ namespace connectivity
         {
             sal_Int32 index=product;
             ProductStruct &m_Product = m_ProductProfileList[index];
-            return m_Product.mProfileList.size();
+            return static_cast< ::sal_Int32 >(m_Product.mProfileList.size());
         }
         ::sal_Int32 ProfileAccess::getProfileList( ::com::sun::star::mozilla::MozillaProductType product, ::com::sun::star::uno::Sequence< ::rtl::OUString >& list ) throw (::com::sun::star::uno::RuntimeException)
         {
             sal_Int32 index=product;
             ProductStruct &m_Product = m_ProductProfileList[index];
-            list.realloc(m_Product.mProfileList.size());
+            list.realloc(static_cast<sal_Int32>(m_Product.mProfileList.size()));
             sal_Int32 i=0;
             for(ProfileList::iterator itor=m_Product.mProfileList.begin();
                 itor != m_Product.mProfileList.end();
@@ -399,7 +399,7 @@ namespace connectivity
                 i++;
             }
 
-            return m_Product.mProfileList.size();
+            return static_cast< ::sal_Int32 >(m_Product.mProfileList.size());
         }
 
         ::rtl::OUString ProfileAccess::getDefaultProfile( ::com::sun::star::mozilla::MozillaProductType product ) throw (::com::sun::star::uno::RuntimeException)

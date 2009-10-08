@@ -549,14 +549,12 @@ static ::rtl::OUString aResourceResolverPropName = ::rtl::OUString::createFromAs
                 // also add the dialog control itself to the sequence
                 pObjects[nControlCount] = Reference< XInterface >( rxControl, UNO_QUERY );
 
-                if ( !m_xScriptEventsAttacher.is() )
-                    m_xScriptEventsAttacher = new DialogEventsAttacherImpl( m_xContext, m_xModel, rxControl, rxHandler, rxIntrospectionAccess, bDialogProviderMode, ( m_BasicInfo.get() ? m_BasicInfo->mxBasicRTLListener : NULL ) );
+                Reference< XScriptEventsAttacher > xScriptEventsAttacher = new DialogEventsAttacherImpl
+                    ( m_xContext, m_xModel, rxControl, rxHandler, rxIntrospectionAccess,
+                      bDialogProviderMode, ( m_BasicInfo.get() ? m_BasicInfo->mxBasicRTLListener : NULL ) );
 
-                if ( m_xScriptEventsAttacher.is() )
-                {
-                    Any aHelper;
-                    m_xScriptEventsAttacher->attachEvents( aObjects, Reference< XScriptListener >(), aHelper );
-                }
+                Any aHelper;
+                xScriptEventsAttacher->attachEvents( aObjects, Reference< XScriptListener >(), aHelper );
             }
         }
     }

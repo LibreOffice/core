@@ -769,7 +769,7 @@ void SfxProgress::EnterLock()
 void SfxProgress::LeaveLock()
 {
     SfxAppData_Impl *pImp = SFX_APP()->Get_Impl();
-    DBG_ASSERT( 0 != pImp->nRescheduleLocks, "SFxProgress::LeaveLock but no locks" )
+    DBG_ASSERT( 0 != pImp->nRescheduleLocks, "SFxProgress::LeaveLock but no locks" );
     pImp->nRescheduleLocks--;
 }
 

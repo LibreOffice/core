@@ -996,14 +996,12 @@ table_ref:
 			$$->append($3);
 			$$->append($4 = newNode("}", SQL_NODE_PUNCTUATION));
 		}
-    |	'(' joined_table ')' range_variable op_column_commalist
+	|	'(' joined_table ')'
 		{
 			$$ = SQL_NEW_RULE;
 			$$->append($1 = newNode("(", SQL_NODE_PUNCTUATION));
 			$$->append($2);
 			$$->append($3 = newNode(")", SQL_NODE_PUNCTUATION));
-			$$->append($4);
-			$$->append($5);
 		}	
 	;
 where_clause:

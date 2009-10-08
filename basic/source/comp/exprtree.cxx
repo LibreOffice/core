@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: exprtree.cxx,v $
- * $Revision: 1.24 $
+ * $Revision: 1.24.40.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -513,8 +513,15 @@ SbiExprNode* SbiExpression::Operand()
             pParser->Next();
             pRes = new SbiExprNode( pParser, pParser->GetSym() ); break;
         case LPAREN:
-            nParenLevel++;
             pParser->Next();
+            if( nParenLevel == 0 && m_eMode == EXPRMODE_LPAREN_PENDING && pParser->Peek() == RPAREN )
+            {
+                m_eMode = EXPRMODE_EMPTY_PAREN;
+                pRes = new SbiExprNode();   // Dummy node
+                pParser->Next();
+                break;
+            }
+            nParenLevel++;
             pRes = Boolean();
             if( pParser->Peek() != RPAREN )
             {
@@ -589,9 +596,12 @@ SbiExprNode* SbiExpression::Unary()
 SbiExprNode* SbiExpression::Exp()
 {
     SbiExprNode* pNd = Unary();
-    while( pParser->Peek() == EXPON ) {
-        SbiToken eTok = pParser->Next();
-        pNd = new SbiExprNode( pParser, pNd, eTok, Unary() );
+    if( m_eMode != EXPRMODE_EMPTY_PAREN )
+    {
+        while( pParser->Peek() == EXPON ) {
+            SbiToken eTok = pParser->Next();
+            pNd = new SbiExprNode( pParser, pNd, eTok, Unary() );
+        }
     }
     return pNd;
 }
@@ -599,13 +609,16 @@ SbiExprNode* SbiExpression::Exp()
 SbiExprNode* SbiExpression::MulDiv()
 {
     SbiExprNode* pNd = Exp();
-    for( ;; )
+    if( m_eMode != EXPRMODE_EMPTY_PAREN )
     {
-        SbiToken eTok = pParser->Peek();
-        if( eTok != MUL && eTok != DIV )
-            break;
-        eTok = pParser->Next();
-        pNd = new SbiExprNode( pParser, pNd, eTok, Exp() );
+        for( ;; )
+        {
+            SbiToken eTok = pParser->Peek();
+            if( eTok != MUL && eTok != DIV )
+                break;
+            eTok = pParser->Next();
+            pNd = new SbiExprNode( pParser, pNd, eTok, Exp() );
+        }
     }
     return pNd;
 }
@@ -613,9 +626,12 @@ SbiExprNode* SbiExpression::MulDiv()
 SbiExprNode* SbiExpression::IntDiv()
 {
     SbiExprNode* pNd = MulDiv();
-    while( pParser->Peek() == IDIV ) {
-        SbiToken eTok = pParser->Next();
-        pNd = new SbiExprNode( pParser, pNd, eTok, MulDiv() );
+    if( m_eMode != EXPRMODE_EMPTY_PAREN )
+    {
+        while( pParser->Peek() == IDIV ) {
+            SbiToken eTok = pParser->Next();
+            pNd = new SbiExprNode( pParser, pNd, eTok, MulDiv() );
+        }
     }
     return pNd;
 }
@@ -623,9 +639,12 @@ SbiExprNode* SbiExpression::IntDiv()
 SbiExprNode* SbiExpression::Mod()
 {
     SbiExprNode* pNd = IntDiv();
-    while( pParser->Peek() == MOD ) {
-        SbiToken eTok = pParser->Next();
-        pNd = new SbiExprNode( pParser, pNd, eTok, IntDiv() );
+    if( m_eMode != EXPRMODE_EMPTY_PAREN )
+    {
+        while( pParser->Peek() == MOD ) {
+            SbiToken eTok = pParser->Next();
+            pNd = new SbiExprNode( pParser, pNd, eTok, IntDiv() );
+        }
     }
     return pNd;
 }
@@ -633,13 +652,16 @@ SbiExprNode* SbiExpression::Mod()
 SbiExprNode* SbiExpression::AddSub()
 {
     SbiExprNode* pNd = Mod();
-    for( ;; )
+    if( m_eMode != EXPRMODE_EMPTY_PAREN )
     {
-        SbiToken eTok = pParser->Peek();
-        if( eTok != PLUS && eTok != MINUS )
-            break;
-        eTok = pParser->Next();
-        pNd = new SbiExprNode( pParser, pNd, eTok, Mod() );
+        for( ;; )
+        {
+            SbiToken eTok = pParser->Peek();
+            if( eTok != PLUS && eTok != MINUS )
+                break;
+            eTok = pParser->Next();
+            pNd = new SbiExprNode( pParser, pNd, eTok, Mod() );
+        }
     }
     return pNd;
 }
@@ -647,13 +669,16 @@ SbiExprNode* SbiExpression::AddSub()
 SbiExprNode* SbiExpression::Cat()
 {
     SbiExprNode* pNd = AddSub();
-    for( ;; )
+    if( m_eMode != EXPRMODE_EMPTY_PAREN )
     {
-        SbiToken eTok = pParser->Peek();
-        if( eTok != CAT )
-            break;
-        eTok = pParser->Next();
-        pNd = new SbiExprNode( pParser, pNd, eTok, AddSub() );
+        for( ;; )
+        {
+            SbiToken eTok = pParser->Peek();
+            if( eTok != CAT )
+                break;
+            eTok = pParser->Next();
+            pNd = new SbiExprNode( pParser, pNd, eTok, AddSub() );
+        }
     }
     return pNd;
 }
@@ -661,24 +686,27 @@ SbiExprNode* SbiExpression::Cat()
 SbiExprNode* SbiExpression::Comp()
 {
     SbiExprNode* pNd = Cat();
-    short nCount = 0;
-    for( ;; )
+    if( m_eMode != EXPRMODE_EMPTY_PAREN )
     {
-        SbiToken eTok = pParser->Peek();
-        if( m_eMode == EXPRMODE_ARRAY_OR_OBJECT )
-            break;
-        if( eTok != EQ && eTok != NE && eTok != LT
-         && eTok != GT && eTok != LE && eTok != GE )
-            break;
-        eTok = pParser->Next();
-        pNd = new SbiExprNode( pParser, pNd, eTok, Cat() );
-        nCount++;
-    }
-    // Mehrere Operatoren hintereinander gehen nicht
-    if( nCount > 1 )
-    {
-        pParser->Error( SbERR_SYNTAX );
-        bError = TRUE;
+        short nCount = 0;
+        for( ;; )
+        {
+            SbiToken eTok = pParser->Peek();
+            if( m_eMode == EXPRMODE_ARRAY_OR_OBJECT )
+                break;
+            if( eTok != EQ && eTok != NE && eTok != LT
+             && eTok != GT && eTok != LE && eTok != GE )
+                break;
+            eTok = pParser->Next();
+            pNd = new SbiExprNode( pParser, pNd, eTok, Cat() );
+            nCount++;
+        }
+        // Mehrere Operatoren hintereinander gehen nicht
+        if( nCount > 1 )
+        {
+            pParser->Error( SbERR_SYNTAX );
+            bError = TRUE;
+        }
     }
     return pNd;
 }
@@ -686,16 +714,19 @@ SbiExprNode* SbiExpression::Comp()
 SbiExprNode* SbiExpression::Like()
 {
     SbiExprNode* pNd = Comp();
-    short nCount = 0;
-    while( pParser->Peek() == LIKE ) {
-        SbiToken eTok = pParser->Next();
-        pNd = new SbiExprNode( pParser, pNd, eTok, Comp() ), nCount++;
-    }
-    // Mehrere Operatoren hintereinander gehen nicht
-    if( nCount > 1 )
+    if( m_eMode != EXPRMODE_EMPTY_PAREN )
     {
-        pParser->Error( SbERR_SYNTAX );
-        bError = TRUE;
+        short nCount = 0;
+        while( pParser->Peek() == LIKE ) {
+            SbiToken eTok = pParser->Next();
+            pNd = new SbiExprNode( pParser, pNd, eTok, Comp() ), nCount++;
+        }
+        // Mehrere Operatoren hintereinander gehen nicht
+        if( nCount > 1 )
+        {
+            pParser->Error( SbERR_SYNTAX );
+            bError = TRUE;
+        }
     }
     return pNd;
 }
@@ -703,14 +734,17 @@ SbiExprNode* SbiExpression::Like()
 SbiExprNode* SbiExpression::Boolean()
 {
     SbiExprNode* pNd = Like();
-    for( ;; )
+    if( m_eMode != EXPRMODE_EMPTY_PAREN )
     {
-        SbiToken eTok = pParser->Peek();
-        if( eTok != AND && eTok != OR && eTok != XOR
-         && eTok != EQV && eTok != IMP && eTok != IS )
-            break;
-        eTok = pParser->Next();
-        pNd = new SbiExprNode( pParser, pNd, eTok, Like() );
+        for( ;; )
+        {
+            SbiToken eTok = pParser->Peek();
+            if( eTok != AND && eTok != OR && eTok != XOR
+             && eTok != EQV && eTok != IMP && eTok != IS )
+                break;
+            eTok = pParser->Next();
+            pNd = new SbiExprNode( pParser, pNd, eTok, Like() );
+        }
     }
     return pNd;
 }
@@ -931,6 +965,12 @@ SbiParameters::SbiParameters( SbiParser* p, BOOL bStandaloneExpression, BOOL bPa
                     bBracket = TRUE;
                     bAssumeArrayMode = true;
                     eTok = NIL;
+                }
+                else if( eModeAfter == EXPRMODE_EMPTY_PAREN )
+                {
+                    bBracket = TRUE;
+                    delete pExpr;
+                    return;
                 }
             }
             else

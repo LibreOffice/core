@@ -72,21 +72,21 @@
             </prop>
         </group>
 
-        <group oor:name="VendorEntry">
+        <group oor:name="ServiceNameEntry">
             <info>
-                <desc>Provides the service implementation name for further look-up.</desc>
+                <desc>The node name is the service implementation name.</desc>
             </info>
-            <prop oor:name="VendorName" oor:type="xs:string">
+            <prop oor:name="VendorImagesNode" oor:type="xs:string">
                 <info>
-                    <desc>Contains the vendor name (actually the service implementation name).</desc>
-                    <label>Vendor entry</label>
+                    <desc>Contains the node name in the VendorImages set to look for in order to find a specific image.</desc>
+                    <label>Vendor images node</label>
                 </info>
             </prop>
         </group>
 
         <group oor:name="VendorImagesEntry">
             <info>
-                <desc>The bitmaps for vendor specifc branding in the UI. The node name is the service implementation name.</desc>
+                <desc>The images for vendor specifc branding in the UI. The node name is the service implementation name.</desc>
             </info>
             <prop oor:name="SpellAndGrammarDialogImage" oor:type="xs:string">
                 <info>
@@ -94,10 +94,34 @@
                     <label>Spell and grammar dialog image</label>
                 </info>
             </prop>
-            <prop oor:name="SpellAndGrammarContextMenuImage" oor:type="xs:string">
+            <prop oor:name="SpellAndGrammarDialogImage_HC" oor:type="xs:string">
                 <info>
-                    <desc>The path to the image for the spell and grammar checking context menu.</desc>
-                    <label>Spell and grammar context menu image</label>
+                    <desc>The path to the image for the spell and grammar checking dialog in high contrast mode.</desc>
+                    <label>Spell and grammar dialog image</label>
+                </info>
+            </prop>
+            <prop oor:name="SpellAndGrammarContextMenuSuggestionImage" oor:type="xs:string">
+                <info>
+                    <desc>The path to the image for the spell and grammar checking suggestions in the context menu context menu.</desc>
+                    <label>Spell and grammar context menu suggestions image</label>
+                </info>
+            </prop>
+            <prop oor:name="SpellAndGrammarContextMenuSuggestionImage_HC" oor:type="xs:string">
+                <info>
+                    <desc>The path to the image for the spell and grammar checking suggestions in the context menu context menu in high contrast mode.</desc>
+                    <label>Spell and grammar context menu suggestions image</label>
+                </info>
+            </prop>
+            <prop oor:name="SpellAndGrammarContextMenuDictionaryImage" oor:type="xs:string">
+                <info>
+                    <desc>The path to the image for the spell and grammar checking context menu context menu.</desc>
+                    <label>Spell and grammar context menu dictionary image</label>
+                </info>
+            </prop>
+            <prop oor:name="SpellAndGrammarContextMenuDictionaryImage_HC" oor:type="xs:string">
+                <info>
+                    <desc>The path to the image for the spell and grammar checking context menu in high contrast mode.</desc>
+                    <label>Spell and grammar context menu dictionary image</label>
                 </info>
             </prop>
         </group>
@@ -118,31 +142,25 @@
 
 	<component>
 
-        <group oor:name="Bitmaps">
-            <info>
-                <desc>Contains settings for special bitmaps to be used.</desc>
-            </info>
-            <set oor:name="VendorImages" oor:node-type="VendorImagesEntry">
-                <info>
-                    <desc>Contains the images to use. The node names are the service implementation names.</desc>
-                    <label>Vendor images</label>
-                </info>
-            </set>
-
-            <set oor:name="SpellAndGrammarDialog" oor:node-type="VendorEntry">
-                <info>
-                    <desc>Contains the vendor name (service implementation name) to look up for the image to use. The node names are the langauges.</desc>
-                    <label>Spell and grammar dialog vendor list</label>
-                </info>
-            </set>
-
-            <set oor:name="SpellAndGrammarContextMenu" oor:node-type="VendorEntry">
-                <info>
-                    <desc>Contains the vendor name (service implementation name) to look up for the image to use. The node names are the langauges.</desc>
-                    <label>Spell and grammar context menu vendor list</label>
-                </info>
-            </set>
-        </group>
+    <group oor:name="Images">
+      <info>
+          <desc>Contains settings for images to be used.</desc>
+      </info>
+      <set oor:name="ServiceNameEntries" oor:node-type="ServiceNameEntry">
+        <info>
+          <desc>The node name is the service implementation name and and the property states
+                the node name to use in the VendorImages set.
+          </desc>
+          <label>Component entries</label>
+        </info>
+      </set>
+      <set oor:name="VendorImages" oor:node-type="VendorImagesEntry">
+        <info>
+          <desc>Contains the images to use. The node names are the service implementation names.</desc>
+          <label>Vendor images</label>
+        </info>
+      </set>
+    </group>
 
 		<group oor:name="General">
 			<info>
@@ -198,17 +216,6 @@
 				</info>
 				<value/>
 				<!-- JB: Empty default inserted into empty property node. Remove if NIL was intended -->
-			</prop>
-			<prop oor:name="IsGermanPreReform" oor:type="xs:boolean">
-				<!-- OldPath: MiscOptions -->
-				<!-- OldLocation: soffice.ini -->
-				<!-- UIHints: Tools - Options - General - Language -->
-				<info>
-					<author>TL</author>
-					<desc>Determines if the Old German spelling should be used (true) or not (false).</desc>
-					<label>Old German spelling</label>
-				</info>
-				<value>false</value>
 			</prop>
 			<group oor:name="DictionaryList">
 				<info>
@@ -348,17 +355,6 @@
 				</info>
 				<value>true</value>
 			</prop>
-			<prop oor:name="IsHideMarkings" oor:type="xs:boolean">
-				<!-- OldPath: MiscOptions / SpellOptions -->
-				<!-- OldLocation: soffice.ini -->
-				<!-- UIHints: Tools - Options - General - Language -->
-				<info>
-					<author>TL</author>
-					<desc>Hides the wavy lines that underline possible spelling errors when AutoSpellcheck is active.</desc>
-					<label>Hide markings</label>
-				</info>
-				<value>false</value>
-			</prop>
 			<prop oor:name="IsSpellAuto" oor:type="xs:boolean">
 				<!-- OldPath: MiscOptions / SpellOptions -->
 				<!-- OldLocation: soffice.ini -->
@@ -381,17 +377,6 @@
 				</info>
 				<value>true</value>
 			</prop>
-			<prop oor:name="IsSpellInAllLocales" oor:type="xs:boolean">
-				<!-- OldPath: MiscOptions / SpellOptions -->
-				<!-- OldLocation: soffice.ini -->
-				<!-- UIHints: Tools - Options - General - Language -->
-				<info>
-					<author>TL</author>
-					<desc>Checks spelling in all languages.</desc>
-					<label>Check spelling in all languages</label>
-				</info>
-				<value>false</value>
-			</prop>
 			<prop oor:name="IsReverseDirection" oor:type="xs:boolean">
 				<!-- OldPath: MiscOptions / SpellOptions -->
 				<!-- OldLocation: soffice.ini -->
@@ -404,27 +389,27 @@
 				<value>false</value>
 			</prop>
 		</group>
-                <group oor:name="GrammarChecking">
-                        <info>
-                                <desc>Contains grammar checking relevant settings.</desc>
-                        </info>
-                        <prop oor:name="IsAutoCheck" oor:type="xs:boolean">
-                                <info>
-                                        <author>OS</author>
-                                        <desc>determines if grammar is automatically checked.</desc>
-                                        <label>Automatic grammar checking</label>
-                                </info>
-                                <value>false</value>
-                        </prop>
-                        <prop oor:name="IsInteractiveCheck" oor:type="xs:boolean">
-                                <info>
-                                        <author>OS</author>
-                                        <desc>determines if grammar is check in the spelling and grammar dialog.</desc>
-                                        <label>Interactive grammar checking</label>
-                                </info>
-                                <value>false</value>
-                        </prop>
-                </group>
+    <group oor:name="GrammarChecking">
+      <info>
+        <desc>Contains grammar checking relevant settings.</desc>
+      </info>
+      <prop oor:name="IsAutoCheck" oor:type="xs:boolean">
+        <info>
+          <author>OS</author>
+          <desc>determines if grammar is automatically checked.</desc>
+          <label>Automatic grammar checking</label>
+        </info>
+        <value>true</value>
+      </prop>
+      <prop oor:name="IsInteractiveCheck" oor:type="xs:boolean">
+        <info>
+          <author>OS</author>
+          <desc>determines if grammar is check in the spelling and grammar dialog.</desc>
+          <label>Interactive grammar checking</label>
+        </info>
+        <value>true</value>
+      </prop>
+    </group>
 		<group oor:name="Hyphenation">
 			<info>
 				<desc>Contains hyphenation relevant settings.</desc>

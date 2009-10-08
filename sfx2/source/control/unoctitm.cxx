@@ -671,9 +671,13 @@ void SAL_CALL SfxDispatchController_Impl::dispatch( const ::com::sun::star::util
         const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatchResultListener >& rListener ) throw( ::com::sun::star::uno::RuntimeException )
 {
     ::vos::OGuard aGuard( Application::GetSolarMutex() );
-    if ( pDispatch &&
-        ( aURL.Protocol.equalsAsciiL( ".uno:", 5 ) && aURL.Path == aDispatchURL.Path ||
-          aURL.Protocol.equalsAsciiL( "slot:", 5 ) && aURL.Path.toInt32() == GetId() ) )
+    if (
+        pDispatch &&
+        (
+         (aURL.Protocol.equalsAsciiL( ".uno:", 5 ) && aURL.Path == aDispatchURL.Path) ||
+         (aURL.Protocol.equalsAsciiL( "slot:", 5 ) && aURL.Path.toInt32() == GetId())
+        )
+       )
     {
         /*
         if ( !IsBound() && pBindings )

@@ -282,7 +282,7 @@ void SAL_CALL VistaFilePicker::setDefaultName(const ::rtl::OUString& sName )
     throw(css::uno::RuntimeException)
 {
     RequestRef rRequest(new Request());
-    rRequest->setRequest (VistaFilePickerImpl::E_SET_FILENAME);
+    rRequest->setRequest (VistaFilePickerImpl::E_SET_DEFAULT_NAME);
     rRequest->setArgument(PROP_FILENAME, sName);
 
     m_aAsyncExecute.triggerRequestThreadAware(rRequest, AsyncRequests::NON_BLOCKED);
@@ -304,7 +304,12 @@ void SAL_CALL VistaFilePicker::setDisplayDirectory(const ::rtl::OUString& sDirec
 ::rtl::OUString SAL_CALL VistaFilePicker::getDisplayDirectory()
     throw(css::uno::RuntimeException)
 {
-    return ::rtl::OUString();
+    RequestRef rRequest(new Request());
+    rRequest->setRequest (VistaFilePickerImpl::E_GET_DIRECTORY);
+    m_aAsyncExecute.triggerRequestThreadAware(rRequest, AsyncRequests::NON_BLOCKED);
+    const ::rtl::OUString sDirectory = rRequest->getArgumentOrDefault(PROP_FILENAME, ::rtl::OUString());
+
+    return sDirectory;
 }
 
 //-----------------------------------------------------------------------------------------
@@ -343,7 +348,9 @@ css::uno::Sequence< ::rtl::OUString > SAL_CALL VistaFilePicker::getSelectedFiles
     RequestRef rRequest(new Request());
     rRequest->setRequest (VistaFilePickerImpl::E_SHOW_DIALOG_MODAL);
 
-    m_aAsyncExecute.triggerRequestThreadAware(rRequest, AsyncRequests::BLOCKED);
+    // if we want to show a modal window, the calling thread needs to process messages
+    m_aAsyncExecute.triggerRequestThreadAware(rRequest, AsyncRequests::PROCESS_MESSAGES);
+
     const ::sal_Bool bOK          = rRequest->getArgumentOrDefault(PROP_DIALOG_SHOW_RESULT, (::sal_Bool)sal_False                  );
                      m_lLastFiles = rRequest->getArgumentOrDefault(PROP_SELECTED_FILES    , css::uno::Sequence< ::rtl::OUString >());
 
@@ -629,7 +636,7 @@ void SAL_CALL VistaFilePicker::initialize(const css::uno::Sequence< css::uno::An
     else
         rRequest->setRequest (VistaFilePickerImpl::E_CREATE_SAVE_DIALOG);
     rRequest->setArgument(PROP_FEATURES, nFeatures);
-
+    rRequest->setArgument(PROP_TEMPLATE_DESCR, nTemplate);
     if ( ! m_aAsyncExecute.isRunning())
         m_aAsyncExecute.create();
     m_aAsyncExecute.triggerRequestThreadAware(rRequest, AsyncRequests::NON_BLOCKED);

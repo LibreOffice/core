@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: dp_gui_updatedialog.cxx,v $
- * $Revision: 1.18 $
+ * $Revision: 1.18.10.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -599,8 +599,6 @@ bool UpdateDialog::Thread::update(
 UpdateDialog::UpdateDialog(
     css::uno::Reference< css::uno::XComponentContext > const & context,
     Window * parent,
-// TODO: check!
-//    rtl::Reference<dp_gui::DialogImpl> const & extensionManagerDialog ,
     rtl::Reference< dp_gui::SelectedPackage > const & selectedPackage,
     css::uno::Sequence< css::uno::Reference<
         css::deployment::XPackageManager > > const & packageManagers,
@@ -905,8 +903,8 @@ void UpdateDialog::createNotifyJob( bool bPrepareOnly,
     }
     catch( const css::uno::Exception& e )
     {
-         OSL_TRACE( "Caught exception: %s\n thread terminated.\n",
-            rtl::OUStringToOString(e.Message, RTL_TEXTENCODING_UTF8).getStr());
+        dp_misc::TRACE( OUSTR("Caught exception: ")
+            + e.Message + OUSTR("\n thread terminated.\n\n"));
     }
 }
 

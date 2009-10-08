@@ -429,7 +429,9 @@ namespace xmloff
 
         ::rtl::OUString sTargetLocation = comphelper::getString(m_xProps->getPropertyValue(_sPropertyName));
         if ( sTargetLocation.getLength() )
-            sTargetLocation = m_rContext.getGlobalContext().GetRelativeReference(sTargetLocation);
+                    // If this isn't a GraphicObject then GetRelativeReference
+                    // will be called anyway ( in AddEmbeddedGraphic )
+            sTargetLocation = m_rContext.getGlobalContext().AddEmbeddedGraphicObject(sTargetLocation);
         AddAttribute(OAttributeMetaData::getCommonControlAttributeNamespace(_nProperty)
                     ,OAttributeMetaData::getCommonControlAttributeName(_nProperty)
                     , sTargetLocation);
@@ -455,6 +457,8 @@ namespace xmloff
 
         // the "VerticalAlign" property should have been exported at the shape, too
         exportedProperty( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "VerticalAlign" ) ) );
+        // ditto the TextWritingMode
+        exportedProperty( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "WritingMode" ) ) );
     }
 
     //---------------------------------------------------------------------

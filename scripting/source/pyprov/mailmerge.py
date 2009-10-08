@@ -81,7 +81,9 @@ class PyMailSMTPService(unohelper.Base, XSmtpService):
 		if dbg:
 			print >> sys.stderr, connectiontype
 		if connectiontype == 'Ssl':
+			self.server.ehlo()
 			self.server.starttls()
+			self.server.ehlo()
 
 		user = xAuthenticator.getUserName()
 		password = xAuthenticator.getPassword()

@@ -1,5 +1,5 @@
 ..\%__SRC%\lib\idrawinglayer.lib %_DEST%\lib%_EXT%\idrawinglayer.lib
-..\%__SRC%\bin\drawinglayer?????.dll %_DEST%\bin%_EXT%\drawinglayer?????.dll
+..\%__SRC%\bin\drawingl*.dll %_DEST%\bin%_EXT%\drawingl*.dll
 ..\%__SRC%\lib\libdrawinglayer?????.* %_DEST%\lib%_EXT%\libdrawinglayer?????.*
 ..\%__SRC%\lib\*.a %_DEST%\lib%_EXT%\*.a
 ..\%__SRC%\lib\*.dylib %_DEST%\lib%_EXT%\*.dylib
@@ -24,6 +24,7 @@ mkdir: %_DEST%\inc%_EXT%\drawinglayer\primitive2d
 ..\inc\drawinglayer\primitive2d\gridprimitive2d.hxx %_DEST%\inc%_EXT%\drawinglayer\primitive2d\gridprimitive2d.hxx
 ..\inc\drawinglayer\primitive2d\groupprimitive2d.hxx %_DEST%\inc%_EXT%\drawinglayer\primitive2d\groupprimitive2d.hxx
 ..\inc\drawinglayer\primitive2d\helplineprimitive2d.hxx %_DEST%\inc%_EXT%\drawinglayer\primitive2d\helplineprimitive2d.hxx
+..\inc\drawinglayer\primitive2d\hittestprimitive2d.hxx %_DEST%\inc%_EXT%\drawinglayer\primitive2d\hittestprimitive2d.hxx
 ..\inc\drawinglayer\primitive2d\markerarrayprimitive2d.hxx %_DEST%\inc%_EXT%\drawinglayer\primitive2d\markerarrayprimitive2d.hxx
 ..\inc\drawinglayer\primitive2d\maskprimitive2d.hxx %_DEST%\inc%_EXT%\drawinglayer\primitive2d\maskprimitive2d.hxx
 ..\inc\drawinglayer\primitive2d\mediaprimitive2d.hxx %_DEST%\inc%_EXT%\drawinglayer\primitive2d\mediaprimitive2d.hxx

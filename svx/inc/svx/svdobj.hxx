@@ -76,6 +76,7 @@ class SfxItemPool;
 class PolyPolygon;
 class SfxPoolItem;
 class SdrVirtObj;
+class SdrDragView;
 
 namespace sdr
 {
@@ -430,7 +431,6 @@ private:
     virtual sdr::contact::ViewContact* CreateObjectSpecificViewContact();
 public:
     sdr::contact::ViewContact& GetViewContact() const;
-    void FlushViewContact() const;
 
     // DrawContact support: Methods for handling Object changes
     void ActionChanged() const;
@@ -556,7 +556,7 @@ public:
     static  void    Free( SdrObject*& _rpObject );
 
     // This method is only for access from Property objects
-    void SetBoundRectDirty();
+    virtual void SetBoundRectDirty();
 
     virtual void SetObjList(SdrObjList* pNewObjList);
     SdrObjList* GetObjList() const { return pObjList; }
@@ -735,13 +735,21 @@ public:
     // FALSE kann zurueckgegeben werden, wenn das Dragging das Objekt nicht
     // veraendert hat, wobei dir evtl. Tatsache das die Maus nicht bewegt wurde
     // bereits von der View abgefangen wird.
-    virtual FASTBOOL HasSpecialDrag() const;
-    virtual FASTBOOL BegDrag(SdrDragStat& rDrag) const;
-    virtual FASTBOOL MovDrag(SdrDragStat& rDrag) const; // True=Xor muss repainted werden
-    virtual FASTBOOL EndDrag(SdrDragStat& rDrag);
-    virtual void BrkDrag(SdrDragStat& rDrag) const;
-    virtual String GetDragComment(const SdrDragStat& rDrag, FASTBOOL bUndoDragComment, FASTBOOL bCreateComment) const;
-    virtual basegfx::B2DPolyPolygon TakeDragPoly(const SdrDragStat& rDrag) const;
+    virtual bool hasSpecialDrag() const;
+    virtual bool beginSpecialDrag(SdrDragStat& rDrag) const;
+    virtual bool applySpecialDrag(SdrDragStat& rDrag);
+    virtual String getSpecialDragComment(const SdrDragStat& rDrag) const;
+    virtual basegfx::B2DPolyPolygon getSpecialDragPoly(const SdrDragStat& rDrag) const;
+
+    // FullDrag support. This is for standard interactions and for SdrObjOwn
+    // support. If supportsFullDrag() returns true, getFullDragClone has to
+    // return a cloned SdrObject (who's ownership it loses) at which modifications
+    // like Move(), Scale(), etc or applySpecialDrag() will be executed. That
+    // object will be visualized on overlay for full drag, but should not be
+    // part of the model, thus not changing anything since it's only a temporary
+    // helper object for interaction
+    virtual bool supportsFullDrag() const;
+    virtual SdrObject* getFullDragClone() const;
 
     // Jedes Objekt muss in der Lage sein sich selbst interaktiv zu erzeugen.
     // Beim MausDown wird zunaechst ein neues Objekt erzeugt und dann seine
@@ -944,6 +952,23 @@ public:
     virtual void DisconnectFromNode(FASTBOOL bTail1);
     virtual SdrObject* GetConnectedNode(FASTBOOL bTail1) const;
 
+    /** sets the writing mode of the object's context
+
+        Objects which itself do not support different writing modes will ignore this call.
+
+        Objects which support different writing modes, but have an own, explicit writing mode set,
+        will also ignore this call.
+
+        Objects which support different writing modes, and whose own mode is set to css.text.WritingMode2.CONTEXT,
+        will use the given writing mode to calculate their "effective writing mode".
+
+        The behaviour of this method is undefined if you pass css.text.WritingMode2.CONTEXT.
+
+        @param _nContextWritingMode
+            the effective writing mode of the context of the object
+    */
+    virtual void    SetContextWritingMode( const sal_Int16 _nContextWritingMode );
+
     // Wenn ein Objekt in der Lage ist, sich in ein Polygon oder in eine
     // Bezierkurve (oder beides) zu verwandeln, dann sollten die folgenden
     // Methoden ueberladen werden.
@@ -1073,9 +1098,9 @@ public:
     // Give info if object is in destruction
     sal_Bool IsInDestruction() const;
 
-    // #i34682#
     // return if fill is != XFILL_NONE
-    sal_Bool HasFillStyle() const;
+    bool HasFillStyle() const;
+    bool HasLineStyle() const;
 
     // on import of OLE object from MS documents the BLIP size might be retrieved,
     // the following methods are used to control it;

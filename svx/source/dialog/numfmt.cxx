@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: numfmt.cxx,v $
- * $Revision: 1.32 $
+ * $Revision: 1.32.128.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -964,7 +964,10 @@ void SvxNumberFormatTabPage::FillFormatListBox_Impl( SvxDelStrgs& rEntries )
                                 pEntry=rEntries[0];
                                 if(pEntry!=NULL)
                                 {
-                                    aTmpString=*pEntry;
+                                    if (nTmpCatPos == CAT_TEXT)
+                                        aTmpString=*pEntry;
+                                    else
+                                        aTmpString = pNumFmtShell->GetStandardName();
                                     aPrivCat=pNumFmtShell->GetCategory4Entry(0);
                                     aLbFormat.InsertFontEntry( aTmpString, aFont );
                                 }

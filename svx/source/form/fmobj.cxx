@@ -31,12 +31,12 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_svx.hxx"
 #include <tools/resmgr.hxx>
+#include <tools/diagnose_ex.h>
 #include "fmobj.hxx"
-
-#ifndef _SVX_FMPROP_HRC
 #include "fmprop.hrc"
-#endif
+#include "fmvwimp.hxx"
 #include <svx/editeng.hxx>
+#include <svx/svdovirt.hxx>
 
 /** === begin UNO includes === **/
 #include <com/sun/star/awt/XDevice.hpp>
@@ -49,15 +49,11 @@
 #include <tools/shl.hxx>
 #include <svx/dialmgr.hxx>
 
-#ifndef _SVX_FMRESIDS_HRC
 #include "fmresids.hrc"
-#endif
 #include <svx/fmview.hxx>
 #include <svx/fmglob.hxx>
 
-#ifndef _SVX_FMPGEIMP_HXX
 #include "fmpgeimp.hxx"
-#endif
 #include <svx/fmpage.hxx>
 #include <comphelper/property.hxx>
 #include <comphelper/processfactory.hxx>
@@ -79,24 +75,20 @@ TYPEINIT1(FmFormObj, SdrUnoObj);
 DBG_NAME(FmFormObj);
 //------------------------------------------------------------------
 FmFormObj::FmFormObj(const ::rtl::OUString& rModelName,sal_Int32 _nType)
-          :SdrUnoObj                ( rModelName, sal_False )
-          ,m_pControlCreationView   ( 0                     )
-          ,m_nControlCreationEvent  ( 0                     )
-          ,m_nPos                   ( -1                    )
-          ,m_nType                  ( _nType                )
-          ,m_pLastKnownRefDevice    ( NULL                  )
+          :SdrUnoObj                ( rModelName    )
+          ,m_nPos                   ( -1            )
+          ,m_nType                  ( _nType        )
+          ,m_pLastKnownRefDevice    ( NULL          )
 {
     DBG_CTOR(FmFormObj, NULL);
 }
 
 //------------------------------------------------------------------
 FmFormObj::FmFormObj( sal_Int32 _nType )
-          :SdrUnoObj                ( String(), sal_False   )
-          ,m_pControlCreationView   ( 0                     )
-          ,m_nControlCreationEvent  ( 0                     )
-          ,m_nPos                   ( -1                    )
-          ,m_nType                  ( _nType                )
-          ,m_pLastKnownRefDevice    ( NULL                  )
+          :SdrUnoObj                ( String()  )
+          ,m_nPos                   ( -1        )
+          ,m_nType                  ( _nType    )
+          ,m_pLastKnownRefDevice    ( NULL      )
 {
     DBG_CTOR(FmFormObj, NULL);
 }
@@ -105,8 +97,6 @@ FmFormObj::FmFormObj( sal_Int32 _nType )
 FmFormObj::~FmFormObj()
 {
     DBG_DTOR(FmFormObj, NULL);
-    if (m_nControlCreationEvent)
-        Application::RemoveUserEvent(m_nControlCreationEvent);
 
     Reference< XComponent> xHistory(m_xEnvironmentHistory, UNO_QUERY);
     if (xHistory.is())
@@ -117,7 +107,7 @@ FmFormObj::~FmFormObj()
 }
 
 //------------------------------------------------------------------
-void FmFormObj::SetObjEnv(const Reference< XIndexContainer > & xForm, sal_Int32 nIdx,
+void FmFormObj::SetObjEnv(const Reference< XIndexContainer > & xForm, const sal_Int32 nIdx,
                           const Sequence< ScriptEventDescriptor >& rEvts)
 {
     m_xParent = xForm;
@@ -126,71 +116,112 @@ void FmFormObj::SetObjEnv(const Reference< XIndexContainer > & xForm, sal_Int32 
 }
 
 //------------------------------------------------------------------
+void FmFormObj::ClearObjEnv()
+{
+    m_xParent.clear();
+    aEvts.realloc( 0 );
+    m_nPos = -1;
+}
+
+//------------------------------------------------------------------
+void FmFormObj::impl_isolateControlModel_nothrow()
+{
+    try
+    {
+        Reference< XChild > xControlModel( GetUnoControlModel(), UNO_QUERY );
+        if ( xControlModel.is() )
+        {
+            Reference< XIndexContainer> xParent( xControlModel->getParent(), UNO_QUERY );
+            if ( xParent.is() )
+            {
+                sal_Int32 nPos = getElementPos( xParent.get(), xControlModel );
+                xParent->removeByIndex( nPos );
+            }
+        }
+    }
+    catch( const Exception& )
+    {
+        DBG_UNHANDLED_EXCEPTION();
+    }
+}
+
+//------------------------------------------------------------------
 void FmFormObj::SetPage(SdrPage* _pNewPage)
 {
     FmFormPage* pNewFormPage = PTR_CAST(FmFormPage, _pNewPage);
-    if (!pNewFormPage || (GetPage() == _pNewPage))
-    {   // Maybe it makes sense to create an environment history here : if somebody set's our page to NULL, and we have a valid page before,
-        // me may want to remember our place within the old page. For this we could create a new m_pEnvironmentHistory to store it.
-        // So the next SetPage with a valid new page would restore that environment within the new page.
-        // But for the original Bug (#57300#) we don't need that, so I omit it here. Maybe this will be implemented later.
+    if ( GetPage() == _pNewPage )
+    {
         SdrUnoObj::SetPage(_pNewPage);
         return;
     }
 
-    Reference< XIndexContainer >    xNewParent;
+    if ( !pNewFormPage )
+    {   // Maybe it makes sense to create an environment history here : if somebody set's our page to NULL, and we have a valid page before,
+        // me may want to remember our place within the old page. For this we could create a new m_xEnvironmentHistory to store it.
+        // So the next SetPage with a valid new page would restore that environment within the new page.
+        // But for the original Bug (#57300#) we don't need that, so I omit it here. Maybe this will be implemented later.
+        impl_isolateControlModel_nothrow();
+        SdrUnoObj::SetPage(_pNewPage);
+        return;
+    }
+
+    Reference< XIndexContainer >        xNewPageForms( pNewFormPage->GetForms( true ), UNO_QUERY );
+    Reference< XIndexContainer >        xNewParent;
     Sequence< ScriptEventDescriptor>    aNewEvents;
 
     // calc the new parent for my model (within the new page's forms hierarchy)
     // do we have a history ? (from :Clone)
-    if (m_xEnvironmentHistory.is())
+    if ( m_xEnvironmentHistory.is() )
     {
-        // the element in *m_pEnvironmentHistory which is equivalent to my new parent (which (perhaps) has to be created within _pNewPage->GetForms)
+        // the element in m_xEnvironmentHistory which is equivalent to my new parent (which (perhaps) has to be created within _pNewPage->GetForms)
         // is the right-most element in the tree.
-        Reference< XIndexContainer >  xLoop = m_xEnvironmentHistory;
-        do
+        Reference< XIndexContainer > xRightMostLeaf = m_xEnvironmentHistory;
+        try
         {
-            if (xLoop->getCount() == 0)
-                break;
-            Reference< XIndexContainer >  xRightMostChild;
-            xLoop->getByIndex(xLoop->getCount() - 1) >>= xRightMostChild;
-            if (!xRightMostChild.is())
+            while ( xRightMostLeaf->getCount() )
             {
-                DBG_ERROR("FmFormObj::SetPage : invalid elements in environment history !");
-                break;
+                xRightMostLeaf.set(
+                    xRightMostLeaf->getByIndex( xRightMostLeaf->getCount() - 1 ),
+                    UNO_QUERY_THROW
+                );
             }
-            xLoop = xRightMostChild;
-        }
-        while (sal_True);
 
-        xNewParent = Reference< XIndexContainer > (ensureModelEnv(xLoop, Reference< XIndexContainer > (pNewFormPage->GetForms(), ::com::sun::star::uno::UNO_QUERY)), ::com::sun::star::uno::UNO_QUERY);
-        if (xNewParent.is())
-            // we successfully clone the environment in m_pEnvironmentHistory, so we can use m_aEventsHistory
-            // (which describes the events of our model at the moment m_pEnvironmentHistory was created)
+            xNewParent.set( ensureModelEnv( xRightMostLeaf, xNewPageForms ), UNO_QUERY_THROW );
+
+            // we successfully cloned the environment in m_xEnvironmentHistory, so we can use m_aEventsHistory
+            // (which describes the events of our model at the moment m_xEnvironmentHistory was created)
             aNewEvents = m_aEventsHistory;
+        }
+        catch( const Exception& )
+        {
+            DBG_UNHANDLED_EXCEPTION();
+        }
     }
 
-    if (!xNewParent.is())
+    if ( !xNewParent.is() )
     {
         // are we a valid part of our current page forms ?
-        FmFormPage* pOldFormPage = PTR_CAST(FmFormPage, GetPage());
-        Reference< XIndexContainer >  xOldForms = pOldFormPage ? Reference< XIndexContainer > (pOldFormPage->GetForms(), ::com::sun::star::uno::UNO_QUERY) : ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexContainer > ();
-        if (xOldForms.is())
+        Reference< XIndexContainer > xOldForms;
+        FmFormPage* pOldFormPage = dynamic_cast< FmFormPage* >( GetPage() );
+        if ( pOldFormPage )
+            xOldForms.set( pOldFormPage->GetForms(), UNO_QUERY_THROW );
+
+        if ( xOldForms.is() )
         {
             // search (upward from our model) for xOldForms
-            Reference< XChild >  xSearch(GetUnoControlModel(), UNO_QUERY);
+            Reference< XChild > xSearch( GetUnoControlModel(), UNO_QUERY );
             while (xSearch.is())
             {
-                if (xSearch == xOldForms)
+                if ( xSearch == xOldForms )
                     break;
-                xSearch = Reference< XChild > (xSearch->getParent(), UNO_QUERY);
+                xSearch = Reference< XChild >( xSearch->getParent(), UNO_QUERY );
             }
-            if (xSearch.is())   // implies xSearch == xOldForms, which means we're a valid part of our current page forms hierarchy
+            if ( xSearch.is() ) // implies xSearch == xOldForms, which means we're a valid part of our current page forms hierarchy
             {
-                Reference< XChild >  xMeAsChild(GetUnoControlModel(), UNO_QUERY);
-                xNewParent = Reference< XIndexContainer > (ensureModelEnv(xMeAsChild->getParent(), Reference< XIndexContainer > (pNewFormPage->GetForms(), ::com::sun::star::uno::UNO_QUERY)), ::com::sun::star::uno::UNO_QUERY);
+                Reference< XChild >  xMeAsChild( GetUnoControlModel(), UNO_QUERY );
+                xNewParent.set( ensureModelEnv( xMeAsChild->getParent(), xNewPageForms ), UNO_QUERY );
 
-                if (xNewParent.is())
+                if ( xNewParent.is() )
                 {
                     try
                     {
@@ -206,11 +237,10 @@ void FmFormObj::SetPage(SdrPage* _pNewPage)
                         else
                             aNewEvents = aEvts;
                     }
-                    catch(...)
+                    catch( const Exception& )
                     {
-                        DBG_ERROR("FmFormObj::SetPage : could not retrieve script events !");
+                        DBG_UNHANDLED_EXCEPTION();
                     }
-
                 }
             }
         }
@@ -250,9 +280,9 @@ void FmFormObj::SetPage(SdrPage* _pNewPage)
                         xEventManager->registerScriptEvents(nPos, aNewEvents);
                     }
                 }
-                catch(...)
+                catch( const Exception& )
                 {
-                    DBG_ERROR("FmFormObj::SetPage : could not tranfer script events !");
+                    DBG_UNHANDLED_EXCEPTION();
                 }
 
             }
@@ -528,44 +558,81 @@ Reference< XInterface >  FmFormObj::ensureModelEnv(const Reference< XInterface >
 }
 
 //------------------------------------------------------------------
-FASTBOOL FmFormObj::EndCreate(SdrDragStat& rStat, SdrCreateCmd eCmd)
+FmFormObj* FmFormObj::GetFormObject( SdrObject* _pSdrObject )
+{
+    FmFormObj* pFormObject = dynamic_cast< FmFormObj* >( _pSdrObject );
+    if ( !pFormObject )
+    {
+        SdrVirtObj* pVirtualObject = dynamic_cast< SdrVirtObj* >( _pSdrObject );
+        if ( pVirtualObject )
+            pFormObject = dynamic_cast< FmFormObj* >( &pVirtualObject->ReferencedObj() );
+    }
+    return pFormObject;
+}
+
+//------------------------------------------------------------------
+const FmFormObj* FmFormObj::GetFormObject( const SdrObject* _pSdrObject )
+{
+    const FmFormObj* pFormObject = dynamic_cast< const FmFormObj* >( _pSdrObject );
+    if ( !pFormObject )
+    {
+        const SdrVirtObj* pVirtualObject = dynamic_cast< const SdrVirtObj* >( _pSdrObject );
+        if ( pVirtualObject )
+            pFormObject = dynamic_cast< const FmFormObj* >( &pVirtualObject->GetReferencedObj() );
+    }
+    return pFormObject;
+}
+
+//------------------------------------------------------------------
+FASTBOOL FmFormObj::EndCreate( SdrDragStat& rStat, SdrCreateCmd eCmd )
 {
     bool bResult = SdrUnoObj::EndCreate(rStat, eCmd);
-    if (bResult && SDRCREATE_FORCEEND == eCmd && rStat.GetView())
+    if ( bResult && SDRCREATE_FORCEEND == eCmd && rStat.GetView() )
     {
-        // ist das Object teil einer Form?
-        Reference< XFormComponent >  xContent(xUnoControlModel, UNO_QUERY);
-        if (xContent.is() && pPage)
+        if ( pPage )
         {
-            // Komponente gehoert noch keiner Form an
-            if (!xContent->getParent().is())
-            {
-                Reference< XForm >  xTemp = ((FmFormPage*)pPage)->GetImpl()->placeInFormComponentHierarchy(xContent);
-                Reference< XIndexContainer >  xForm(xTemp, UNO_QUERY);
+            FmFormPage& rPage = dynamic_cast< FmFormPage& >( *pPage );
 
-                // Position des Elements
-                sal_Int32 nPos = xForm->getCount();
-                xForm->insertByIndex(nPos, makeAny(xContent));
+            try
+            {
+                Reference< XFormComponent >  xContent( xUnoControlModel, UNO_QUERY_THROW );
+                Reference< XForm > xParentForm( xContent->getParent(), UNO_QUERY );
+
+                Reference< XIndexContainer > xFormToInsertInto;
+
+                if ( !xParentForm.is() )
+                {   // model is not yet part of a form component hierachy
+                    xParentForm.set( rPage.GetImpl()->findPlaceInFormComponentHierarchy( xContent ), UNO_SET_THROW );
+                    xFormToInsertInto.set( xParentForm, UNO_QUERY_THROW );
+                }
+
+                rPage.GetImpl()->setUniqueName( xContent, xParentForm );
+
+                if ( xFormToInsertInto.is() )
+                    xFormToInsertInto->insertByIndex( xFormToInsertInto->getCount(), makeAny( xContent ) );
+            }
+            catch( const Exception& )
+            {
+                DBG_UNHANDLED_EXCEPTION();
             }
         }
 
-        if ( m_nControlCreationEvent )
-            Application::RemoveUserEvent( m_nControlCreationEvent );
-
-        m_pControlCreationView = static_cast< FmFormView* >( rStat.GetView() );
-        m_nControlCreationEvent = Application::PostUserEvent( LINK( this, FmFormObj, OnCreate ) );
+        FmFormView* pView( dynamic_cast< FmFormView* >( rStat.GetView() ) );
+        FmXFormView* pViewImpl = pView ? pView->GetImpl() : NULL;
+        OSL_ENSURE( pViewImpl, "FmFormObj::EndCreate: no view!?" );
+        if ( pViewImpl )
+            pViewImpl->onCreatedFormObject( *this );
     }
     return bResult;
 }
 
 //------------------------------------------------------------------------------
-IMPL_LINK(FmFormObj, OnCreate, void*, /*EMPTYTAG*/)
+void FmFormObj::BrkCreate( SdrDragStat& rStat )
 {
-    m_nControlCreationEvent = 0;
-    if ( m_pControlCreationView )
-        m_pControlCreationView->ObjectCreated( this );
-    return 0;
+    SdrUnoObj::BrkCreate( rStat );
+    impl_isolateControlModel_nothrow();
 }
+
 // -----------------------------------------------------------------------------
 sal_Int32 FmFormObj::getType() const
 {

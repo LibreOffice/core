@@ -40,11 +40,12 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/linguistic2/XSearchableDictionaryList.hpp>
 #include <com/sun/star/linguistic2/XLinguServiceEventBroadcaster.hpp>
-#include <tools/table.hxx>
 
 #include <uno/lbnames.h>            // CPPU_CURRENT_LANGUAGE_BINDING_NAME macro, which specify the environment type
 #include <cppuhelper/implbase1.hxx> // helper for implementations
 
+#include <boost/shared_ptr.hpp>
+#include <map>
 
 #include "lngopt.hxx"
 #include "misc.hxx"
@@ -54,31 +55,6 @@ class LngSvcMgr;
 
 ///////////////////////////////////////////////////////////////////////////
 
-class LangSvcEntry_Hyph
-{
-    friend class HyphenatorDispatcher;
-
-    ::rtl::OUString                                     aSvcImplName;
-    ::com::sun::star::uno::Reference<
-        ::com::sun::star::linguistic2::XHyphenator >    aSvcRef;
-
-//  INT16           nLang;     //used as key in the table
-    SvcFlags        aFlags;
-
-public:
-    LangSvcEntry_Hyph() {}
-    LangSvcEntry_Hyph( const ::rtl::OUString &rSvcImplName );
-    ~LangSvcEntry_Hyph();
-
-    BOOL    IsAlreadyWarned() const     { return aFlags.bAlreadyWarned != 0; }
-    void    SetAlreadyWarned(BOOL bVal) { aFlags.bAlreadyWarned = 0 != bVal; }
-    BOOL    IsDoWarnAgain() const       { return aFlags.bDoWarnAgain != 0; }
-    void    SetDoWarnAgain(BOOL bVal)   { aFlags.bDoWarnAgain = 0 != bVal; }
-};
-
-DECLARE_TABLE( HyphSvcList, LangSvcEntry_Hyph * )
-
-
 class HyphenatorDispatcher :
     public cppu::WeakImplHelper1
     <
@@ -86,7 +62,9 @@ class HyphenatorDispatcher :
     >,
     public LinguDispatcher
 {
-    HyphSvcList     aSvcList;
+    typedef boost::shared_ptr< LangSvcEntries_Hyph >                LangSvcEntries_Hyph_Ptr_t;
+    typedef std::map< LanguageType, LangSvcEntries_Hyph_Ptr_t >     HyphSvcByLangMap_t;
+    HyphSvcByLangMap_t      aSvcMap;
 
     ::com::sun::star::uno::Reference<
         ::com::sun::star::beans::XPropertySet >                     xPropSet;

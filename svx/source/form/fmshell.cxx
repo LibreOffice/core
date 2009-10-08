@@ -187,95 +187,6 @@ using namespace ::com::sun::star::frame;
 using namespace ::svxform;
 
 //========================================================================
-//------------------------------------------------------------------------
-sal_Bool IsFormComponent( const SdrObject& rObj )
-{
-    //////////////////////////////////////////////////////////////////////
-    // Gruppenobjekte rekursiv pruefen
-    if( rObj.IsGroupObject() )
-    {
-        SdrObject* pObj;
-        SdrObjListIter aIter( *rObj.GetSubList() );
-
-        while( aIter.IsMore() )
-        {
-            pObj = aIter.Next();
-
-            if( !IsFormComponent(*pObj) )
-                return sal_False;
-        }
-    }
-
-    //////////////////////////////////////////////////////////////////
-    // ...ansonsten Pruefen, ob SdrObj eine FormComponent ist
-    else
-    {
-        if( !rObj.ISA(SdrUnoObj) )
-            return sal_False;
-
-        Reference< ::com::sun::star::form::XFormComponent >  xFormComponent(((SdrUnoObj*)&rObj)->GetUnoControlModel(), UNO_QUERY);
-        if (!xFormComponent.is())
-            return sal_False;
-    }
-
-    return sal_True;
-}
-
-//------------------------------------------------------------------------
-sal_Bool IsFormComponentList( const SdrMarkList& rMarkList )
-{
-    sal_uInt32 nMarkCount = rMarkList.GetMarkCount();
-
-    if( nMarkCount==0 )
-        return sal_False;
-
-    SdrObject* pObj;
-    for( sal_uInt32 i=0; i<nMarkCount; ++i )
-    {
-        pObj = rMarkList.GetMark(i)->GetMarkedSdrObj();
-        if( !IsFormComponent(*pObj) )
-            return sal_False;
-    }
-
-    return sal_True;
-}
-
-//------------------------------------------------------------------------
-sal_Bool IsFormComponentList( const SdrObjList& rSdrObjList )
-{
-    SdrObject* pSdrObj;
-
-
-    SdrObjListIter aIter( rSdrObjList );
-    while( aIter.IsMore() )
-    {
-        pSdrObj = aIter.Next();
-
-        //////////////////////////////////////////////////////////////////
-        // Gruppenobjekte rekursiv pruefen
-        if( pSdrObj->IsGroupObject() )
-        {
-            if( !IsFormComponentList(*pSdrObj->GetSubList()) )
-                return sal_False;
-        }
-
-        //////////////////////////////////////////////////////////////////
-        // ...ansonsten Pruefen, ob SdrObj eine FormComponent ist
-        else
-        {
-            if (!pSdrObj->ISA(SdrUnoObj))
-                return sal_False;
-
-            Reference< ::com::sun::star::form::XFormComponent >  xFormComponent(((SdrUnoObj*)pSdrObj)->GetUnoControlModel(), UNO_QUERY);
-            if (!xFormComponent.is())
-                return sal_False;
-        }
-    }
-
-    return sal_True;
-}
-
-//========================================================================
 // class FmDesignModeChangedHint
 //========================================================================
 TYPEINIT1( FmDesignModeChangedHint, SfxHint );
@@ -1029,7 +940,7 @@ void FmFormShell::GetState(SfxItemSet &rSet)
                     sal_Bool bLayerLocked = sal_False;
                     if (m_pFormView)
                     {
-                        // Ist der ::com::sun::star::drawing::Layer gelocked, so m�ssen die Slots disabled werden. #36897
+                        // Ist der ::com::sun::star::drawing::Layer gelocked, so m???ssen die Slots disabled werden. #36897
                         SdrPageView* pPV = m_pFormView->GetSdrPageView();
                         if (pPV != NULL)
                             bLayerLocked = pPV->IsLayerLocked(m_pFormView->GetActiveLayer());
@@ -1326,7 +1237,7 @@ void FmFormShell::SetView( FmFormView* _pView )
         if ( IsActive() )
             GetImpl()->viewDeactivated( *m_pFormView );
 
-        m_pFormView->SetFormShell( NULL );
+        m_pFormView->SetFormShell( NULL, FmFormView::FormShellAccess() );
         m_pFormView = NULL;
         m_pFormModel = NULL;
     }
@@ -1335,7 +1246,7 @@ void FmFormShell::SetView( FmFormView* _pView )
         return;
 
     m_pFormView = _pView;
-    m_pFormView->SetFormShell( this );
+    m_pFormView->SetFormShell( this, FmFormView::FormShellAccess() );
     m_pFormModel = (FmFormModel*)m_pFormView->GetModel();
 
     impl_setDesignMode( m_pFormView->IsDesignMode() );

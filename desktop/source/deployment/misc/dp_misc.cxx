@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: dp_misc.cxx,v $
- * $Revision: 1.20 $
+ * $Revision: 1.19.8.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -31,6 +31,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_desktop.hxx"
 
+
 #include "dp_misc.h"
 #include "dp_interact.h"
 #include "rtl/uri.hxx"
@@ -49,10 +50,19 @@
 #include "boost/scoped_array.hpp"
 #include "boost/shared_ptr.hpp"
 
+#ifdef WNT
+//#include "tools/prewin.h"
+#define UNICODE
+#define _UNICODE
+#define WIN32_LEAN_AND_MEAN
+#include <Windows.h>
+//#include "tools/postwin.h"
+#endif
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using ::rtl::OUString;
+using ::rtl::OString;
 
 
 #define SOFFICE1 "soffice.exe"
@@ -349,5 +359,115 @@ OUString getExtensionDefaultUpdateURL()
     return sUrl;
 }
 
+
+#ifdef WNT
+void writeConsoleWithStream(::rtl::OUString const & sText, HANDLE stream)
+{
+    DWORD nWrittenChars = 0;
+    WriteFile(stream, sText.getStr(),
+        sText.getLength() * 2, &nWrittenChars, NULL);
+}
+#else
+void writeConsoleWithStream(::rtl::OUString const & sText, FILE * stream)
+{
+    OString s = OUStringToOString(sText, osl_getThreadTextEncoding());
+    fprintf(stream, "%s", s.getStr());
+    fflush(stream);
+}
+#endif
+
+#ifdef WNT
+void writeConsoleWithStream(::rtl::OString const & sText, HANDLE stream)
+{
+    writeConsoleWithStream(OStringToOUString(
+        sText, RTL_TEXTENCODING_UTF8), stream);
+}
+#else
+void writeConsoleWithStream(::rtl::OString const & sText, FILE * stream)
+{
+    fprintf(stream, "%s", sText.getStr());
+    fflush(stream);
+}
+#endif
+
+void writeConsole(::rtl::OUString const & sText)
+{
+#ifdef WNT
+    writeConsoleWithStream(sText, GetStdHandle(STD_OUTPUT_HANDLE));
+#else
+    writeConsoleWithStream(sText, stdout);
+#endif
+}
+
+void writeConsole(::rtl::OString const & sText)
+{
+#ifdef WNT
+    writeConsoleWithStream(sText, GetStdHandle(STD_OUTPUT_HANDLE));
+#else
+    writeConsoleWithStream(sText, stdout);
+#endif
+}
+
+void writeConsoleError(::rtl::OUString const & sText)
+{
+#ifdef WNT
+    writeConsoleWithStream(sText, GetStdHandle(STD_ERROR_HANDLE));
+#else
+    writeConsoleWithStream(sText, stderr);
+#endif
+}
+
+
+void writeConsoleError(::rtl::OString const & sText)
+{
+#ifdef WNT
+    writeConsoleWithStream(sText, GetStdHandle(STD_ERROR_HANDLE));
+#else
+    writeConsoleWithStream(sText, stderr);
+#endif
+}
+
+
+
+OUString readConsole()
+{
+#ifdef WNT
+    sal_Unicode aBuffer[1024];
+    DWORD   dwRead = 0;
+    //unopkg.com feeds unopkg.exe with wchar_t|s
+    if (ReadFile( GetStdHandle(STD_INPUT_HANDLE), &aBuffer, sizeof(aBuffer), &dwRead, NULL ) )
+    {
+        OSL_ASSERT((dwRead % 2) == 0);
+        OUString value( aBuffer, dwRead / 2);
+        value = value.trim();
+        return value;
+    }
+    return OUString();
+
+#else
+    char buf[1024];
+    rtl_zeroMemory(buf, 1024);
+    // read one char less so that the last char in buf is always zero
+    fgets(buf, 1024, stdin);
+    OUString value = ::rtl::OStringToOUString(::rtl::OString(buf), osl_getThreadTextEncoding());
+    return value.trim();
+#endif
+}
+
+void TRACE(::rtl::OUString const & sText)
+{
+    (void) sText;
+#if OSL_DEBUG_LEVEL > 1
+    writeConsole(sText);
+#endif
+}
+
+void TRACE(::rtl::OString const & sText)
+{
+    (void) sText;
+#if OSL_DEBUG_LEVEL > 1
+    writeConsole(sText);
+#endif
+}
 
 }

@@ -67,7 +67,7 @@ public:
 
     bool IsHorizontalEdge() const { return mbHorizontal; }
 
-    basegfx::B2DPolyPolygon TakeDragPoly( const SdrDragStat* pDrag = 0 ) const;
+    basegfx::B2DPolyPolygon getSpecialDragPoly(const SdrDragStat& rDrag) const;
     basegfx::B2DPolyPolygon GetPolyPolygon( bool bOnlyVisible, const SdrDragStat* pDrag = 0 ) const;
 
 protected:

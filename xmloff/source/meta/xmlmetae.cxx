@@ -114,7 +114,7 @@ void SvXMLMetaExport::SimpleDateTimeElement( const util::DateTime & rDate,
     }
 }
 
-void SvXMLMetaExport::_Export()
+void SvXMLMetaExport::_MExport()
 {
     //  generator
     {
@@ -379,7 +379,7 @@ void SvXMLMetaExport::Export()
         SvXMLElementExport aElem( mrExport, XML_NAMESPACE_OFFICE, XML_META,
                                   sal_True, sal_True );
         // fall back to using public interface of XDocumentProperties
-        _Export();
+        _MExport();
     }
 }
 

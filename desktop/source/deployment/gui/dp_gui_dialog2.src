@@ -8,7 +8,7 @@
  *
  * $RCSfile: dp_gui_dialog2.src,v $
  *
- * $Revision: 1.2 $
+ * $Revision: 1.2.86.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -63,7 +63,7 @@ ModelessDialog RID_DLG_EXTENSION_MANAGER
     {
         NoLabel = TRUE;
         TabStop = TRUE;
-        Text [ en-US ] = "Get more extensions here...";
+        Text [ en-US ] = "Get more extensions online...";
         Size = MAP_APPFONT(RSC_CD_PUSHBUTTON_WIDTH, RSC_CD_FIXEDTEXT_HEIGHT );
     };
 

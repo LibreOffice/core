@@ -31,13 +31,14 @@
 #ifndef CONNECTIVITY_INDEXHELPER_HXX_
 #define CONNECTIVITY_INDEXHELPER_HXX_
 
+#include "connectivity/dbtoolsdllapi.hxx"
 #include "connectivity/sdbcx/VIndex.hxx"
 #include <com/sun/star/sdbc/XDatabaseMetaData.hpp>
 
 namespace connectivity
 {
     class OTableHelper;
-    class OIndexHelper : public connectivity::sdbcx::OIndex
+    class OOO_DLLPUBLIC_DBTOOLS OIndexHelper : public connectivity::sdbcx::OIndex
     {
         OTableHelper*   m_pTable;
     public:

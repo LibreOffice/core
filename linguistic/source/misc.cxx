@@ -48,16 +48,17 @@
 #include <com/sun/star/beans/PropertyValues.hpp>
 #include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/uno/Reference.h>
-#include <com/sun/star/linguistic2/XDictionary1.hpp>
 #include <com/sun/star/linguistic2/DictionaryType.hpp>
 #include <com/sun/star/linguistic2/XSearchableDictionaryList.hpp>
 #include <unotools/processfactory.hxx>
 #include <unotools/localedatawrapper.hxx>
 
+#include <rtl/instance.hxx>
+
 #include "misc.hxx"
 #include "defs.hxx"
 #include "lngprops.hxx"
-#include <hyphdta.hxx>
+#include "hyphdta.hxx"
 
 
 using namespace utl;
@@ -75,10 +76,14 @@ namespace linguistic
 
 ///////////////////////////////////////////////////////////////////////////
 
+//!! multi-thread safe mutex for all platforms !!
+struct LinguMutex : public rtl::Static< osl::Mutex, LinguMutex >
+{
+};
+
 osl::Mutex &    GetLinguMutex()
 {
-    static osl::Mutex   aMutex;
-    return aMutex;
+    return LinguMutex::get();
 }
 
 ///////////////////////////////////////////////////////////////////////////
@@ -105,7 +110,7 @@ LocaleDataWrapper & GetLocaleDataWrapper( INT16 nLang )
  */
 rtl_TextEncoding GetTextEncoding( INT16 nLanguage )
 {
-    DBG_ASSERT( nLanguage != LANGUAGE_NONE, "invalid language argument" )
+    DBG_ASSERT( nLanguage != LANGUAGE_NONE, "invalid language argument" );
     static INT16 nLastLanguage = LANGUAGE_NONE;
 
     // set default value for unknown languages
@@ -163,7 +168,7 @@ rtl_TextEncoding GetTextEncoding( INT16 nLanguage )
                     nEncoding = RTL_TEXTENCODING_ISO_8859_7;   break;
 #endif
             default:
-                    DBG_ERROR( "unexpected language" );
+                    DBG_ASSERT( 0, "unexpected language" );
         }
     }
 
@@ -353,10 +358,10 @@ uno::Reference< XDictionaryEntry > SearchDicList(
     INT32 i;
     for (i = 0;  i < nDics;  i++)
     {
-        uno::Reference< XDictionary1 > axDic( pDic[i], UNO_QUERY );
+        uno::Reference< XDictionary > axDic( pDic[i], UNO_QUERY );
 
         DictionaryType  eType = axDic->getDictionaryType();
-        INT16           nLang = axDic->getLanguage();
+        INT16           nLang = LocaleToLanguage( axDic->getLocale() );
 
         if ( axDic.is() && axDic->isActive()
             && (nLang == nLanguage  ||  nLang == LANGUAGE_NONE) )
@@ -503,12 +508,11 @@ uno::Sequence< INT16 >
     const Locale *pLocale = rLocaleSeq.getConstArray();
     INT32 nCount = rLocaleSeq.getLength();
 
-    uno::Sequence< INT16 >  aLangs( nCount );
+    uno::Sequence< INT16 >   aLangs( nCount );
     INT16 *pLang = aLangs.getArray();
     for (INT32 i = 0;  i < nCount;  ++i)
     {
         pLang[i] = LocaleToLanguage( pLocale[i] );
-
     }
 
     return aLangs;
@@ -687,7 +691,7 @@ uno::Reference< XHyphenatedWord > RebuildHyphensAndControlChars(
 
         if (nOrigHyphenPos == -1  ||  nOrigHyphenationPos == -1)
         {
-            DBG_ERROR( "failed to get nOrigHyphenPos or nOrigHyphenationPos" );
+            DBG_ASSERT( 0, "failed to get nOrigHyphenPos or nOrigHyphenationPos" );
         }
         else
         {
@@ -847,7 +851,7 @@ uno::Reference< XInterface > GetOneInstanceService( const char *pServiceName )
             }
             catch (uno::Exception &)
             {
-                DBG_ERROR( "createInstance failed" );
+                DBG_ASSERT( 0, "createInstance failed" );
             }
         }
     }
@@ -890,7 +894,7 @@ AppExitListener::AppExitListener()
         }
         catch (uno::Exception &)
         {
-            DBG_ERROR( "createInstance failed" );
+            DBG_ASSERT( 0, "createInstance failed" );
         }
     }
 }

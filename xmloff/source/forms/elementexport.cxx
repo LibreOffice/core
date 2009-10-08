@@ -31,24 +31,14 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_xmloff.hxx"
 
-#include <stdio.h>
 #include "elementexport.hxx"
 #include "strings.hxx"
-#include <xmloff/xmlexp.hxx>
-#include <xmloff/nmspmap.hxx>
 #include "xmlnmspe.hxx"
-#include <xmloff/xmluconv.hxx>
-#include <xmloff/xmltoken.hxx>
-#include <tools/time.hxx>
-#include <tools/diagnose_ex.h>
-#include <comphelper/extract.hxx>
 #include "eventexport.hxx"
 #include "formenums.hxx"
-#include <vcl/wintypes.hxx>     // for check states
-#include <xmloff/XMLEventExport.hxx>
 #include "formcellbinding.hxx"
-
-#include <algorithm>
+#include "formcellbinding.hxx"
+#include "xformsexport.hxx"
 
 /** === begin UNO includes === **/
 #include <com/sun/star/text/XText.hpp>
@@ -67,20 +57,36 @@
 #include <com/sun/star/form/ListSourceType.hpp>
 #include <com/sun/star/awt/ImagePosition.hpp>
 /** === end UNO includes === **/
+
 #include <vcl/wintypes.hxx>     // for check states
 #include <xmloff/txtprmap.hxx>
-#include "formcellbinding.hxx"
-#include "xformsexport.hxx"
 #include <com/sun/star/form/binding/XBindableValue.hpp>
 #include <com/sun/star/form/binding/XListEntrySink.hpp>
 #include <tools/urlobj.hxx>
-#include <algorithm>
+#include <xmloff/xmlexp.hxx>
+#include <xmloff/nmspmap.hxx>
+#include <vcl/wintypes.hxx>     // for check states
+#include <xmloff/XMLEventExport.hxx>
+#include <xmloff/xmluconv.hxx>
+#include <xmloff/xmltoken.hxx>
+#include <tools/time.hxx>
+#include <tools/diagnose_ex.h>
+#include <comphelper/extract.hxx>
 
+#include <stdio.h>
+#include <algorithm>
 
 //.........................................................................
 namespace xmloff
 {
 //.........................................................................
+
+    #if OSL_DEBUG_LEVEL > 0
+        #define RESET_BIT( bitfield, bit ) \
+            bitfield = bitfield & ~bit
+    #else
+        #define RESET_BIT( bitfield, bit )
+    #endif
 
     using namespace ::xmloff::token;
     using namespace ::com::sun::star::uno;
@@ -310,7 +316,7 @@ namespace xmloff
         // the control id
         if (CCA_CONTROL_ID & m_nIncludeCommon)
         {
-            OSL_ENSURE(m_sControlId.getLength(), "OControlExport::exportOuterAttributes: have no control id for the control!");
+            OSL_ENSURE(m_sControlId.getLength(), "OControlExport::exportInnerAttributes: have no control id for the control!");
             AddAttribute(
                 OAttributeMetaData::getCommonControlAttributeNamespace(CCA_CONTROL_ID),
                 OAttributeMetaData::getCommonControlAttributeName(CCA_CONTROL_ID),
@@ -789,10 +795,19 @@ namespace xmloff
                 OAttributeMetaData::getDatabaseAttributeNamespace(DA_DATA_FIELD),
                 OAttributeMetaData::getDatabaseAttributeName(DA_DATA_FIELD),
                 PROPERTY_DATAFIELD);
-        #if OSL_DEBUG_LEVEL > 0
-            //  reset the bit for later checking
-            nIncludeDatabase = nIncludeDatabase & ~DA_DATA_FIELD;
-        #endif
+            RESET_BIT( nIncludeDatabase, DA_DATA_FIELD );
+        }
+
+        // InputRequired
+        if ( DA_INPUT_REQUIRED & m_nIncludeDatabase )
+        {
+            exportBooleanPropertyAttribute(
+                OAttributeMetaData::getDatabaseAttributeNamespace( DA_INPUT_REQUIRED ),
+                OAttributeMetaData::getDatabaseAttributeName( DA_INPUT_REQUIRED ),
+                PROPERTY_INPUT_REQUIRED,
+                BOOLATTR_DEFAULT_TRUE
+            );
+            RESET_BIT( nIncludeDatabase, DA_INPUT_REQUIRED );
         }
 
         // the only int16 property: BoundColumn
@@ -803,13 +818,10 @@ namespace xmloff
                 OAttributeMetaData::getDatabaseAttributeName(DA_BOUND_COLUMN),
                 PROPERTY_BOUNDCOLUMN,
                 0);
-        #if OSL_DEBUG_LEVEL > 0
-            //  reset the bit for later checking
-            nIncludeDatabase = nIncludeDatabase & ~DA_BOUND_COLUMN;
-        #endif
+            RESET_BIT( nIncludeDatabase, DA_BOUND_COLUMN );
         }
 
-        // the only boolean property: ConvertEmptyToNull
+        // ConvertEmptyToNull
         if (DA_CONVERT_EMPTY & m_nIncludeDatabase)
         {
             exportBooleanPropertyAttribute(
@@ -818,10 +830,7 @@ namespace xmloff
                 PROPERTY_EMPTY_IS_NULL,
                 BOOLATTR_DEFAULT_FALSE
                 );
-        #if OSL_DEBUG_LEVEL > 0
-            //  reset the bit for later checking
-            nIncludeDatabase = nIncludeDatabase & ~DA_CONVERT_EMPTY;
-        #endif
+            RESET_BIT( nIncludeDatabase, DA_CONVERT_EMPTY );
         }
 
         // the only enum property: ListSourceType
@@ -834,19 +843,13 @@ namespace xmloff
                 OEnumMapper::getEnumMap(OEnumMapper::epListSourceType),
                 ListSourceType_VALUELIST
                 );
-        #if OSL_DEBUG_LEVEL > 0
-            //  reset the bit for later checking
-            nIncludeDatabase = nIncludeDatabase & ~DA_LIST_SOURCE_TYPE;
-        #endif
+            RESET_BIT( nIncludeDatabase, DA_LIST_SOURCE_TYPE );
         }
 
         if (m_nIncludeDatabase & DA_LIST_SOURCE)
         {
             exportListSourceAsAttribute();
-        #if OSL_DEBUG_LEVEL > 0
-            //  reset the bit for later checking
-            nIncludeDatabase = nIncludeDatabase & ~DA_LIST_SOURCE;
-        #endif
+            RESET_BIT( nIncludeDatabase, DA_LIST_SOURCE );
         }
 
 #if OSL_DEBUG_LEVEL > 0
@@ -1151,11 +1154,7 @@ namespace xmloff
         if ( SCA_IMAGE_POSITION & m_nIncludeSpecial )
         {
             exportImagePositionAttributes();
-
-        #if OSL_DEBUG_LEVEL > 0
-            //  reset the bit for later checking
-            m_nIncludeSpecial = m_nIncludeSpecial & ~SCA_IMAGE_POSITION;
-        #endif
+            RESET_BIT( m_nIncludeSpecial, SCA_IMAGE_POSITION );
         }
 
         OSL_ENSURE(0 == m_nIncludeSpecial,
@@ -1446,7 +1445,7 @@ namespace xmloff
                     CCA_PRINTABLE | CCA_TAB_INDEX | CCA_TAB_STOP | CCA_TITLE;
 
                 // database attributes
-                m_nIncludeDatabase = DA_DATA_FIELD;
+                m_nIncludeDatabase = DA_DATA_FIELD | DA_INPUT_REQUIRED;
 
                 // event attributes
                 m_nIncludeEvents = EA_CONTROL_EVENTS | EA_ON_CHANGE | EA_ON_SELECT;
@@ -1508,7 +1507,7 @@ namespace xmloff
                     CCA_DISABLED | CCA_DROPDOWN | CCA_MAX_LENGTH | CCA_PRINTABLE | CCA_READONLY | CCA_SIZE |
                     CCA_TAB_INDEX | CCA_TAB_STOP | CCA_TITLE | CCA_VALUE;
                 m_nIncludeSpecial = SCA_AUTOMATIC_COMPLETION;
-                m_nIncludeDatabase = DA_CONVERT_EMPTY | DA_DATA_FIELD | DA_LIST_SOURCE | DA_LIST_SOURCE_TYPE;
+                m_nIncludeDatabase = DA_CONVERT_EMPTY | DA_DATA_FIELD | DA_INPUT_REQUIRED | DA_LIST_SOURCE | DA_LIST_SOURCE_TYPE;
                 m_nIncludeEvents = EA_CONTROL_EVENTS | EA_ON_CHANGE | EA_ON_SELECT;
                 break;
 
@@ -1518,7 +1517,7 @@ namespace xmloff
                     CCA_NAME | CCA_SERVICE_NAME | CCA_DISABLED | CCA_DROPDOWN |
                     CCA_PRINTABLE | CCA_SIZE | CCA_TAB_INDEX | CCA_TAB_STOP | CCA_TITLE;
                 m_nIncludeSpecial = SCA_MULTIPLE;
-                m_nIncludeDatabase = DA_BOUND_COLUMN | DA_DATA_FIELD | DA_LIST_SOURCE_TYPE;
+                m_nIncludeDatabase = DA_BOUND_COLUMN | DA_DATA_FIELD | DA_INPUT_REQUIRED | DA_LIST_SOURCE_TYPE;
                 m_nIncludeEvents = EA_CONTROL_EVENTS | EA_ON_CHANGE | EA_ON_CLICK | EA_ON_DBLCLICK;
                 // check if we need to export the ListSource as attribute
                 {
@@ -1545,8 +1544,10 @@ namespace xmloff
                 // NO BREAK !
             case FormComponentType::IMAGEBUTTON:
                 if (BUTTON != m_eType)
+                {
                     // not coming from the previous case
                     m_eType = IMAGE;
+                }
                 m_nIncludeCommon |=
                     CCA_NAME | CCA_SERVICE_NAME | CCA_BUTTON_TYPE | CCA_DISABLED |
                     CCA_IMAGE_DATA | CCA_PRINTABLE | CCA_TAB_INDEX | CCA_TARGET_FRAME |
@@ -1569,7 +1570,7 @@ namespace xmloff
                 }
                 if ( m_xPropertyInfo->hasPropertyByName( PROPERTY_IMAGE_POSITION ) )
                     m_nIncludeSpecial |= SCA_IMAGE_POSITION;
-                m_nIncludeDatabase = DA_DATA_FIELD;
+                m_nIncludeDatabase = DA_DATA_FIELD | DA_INPUT_REQUIRED;
                 m_nIncludeEvents = EA_CONTROL_EVENTS | EA_ON_CHANGE;
                 break;
 
@@ -1586,7 +1587,7 @@ namespace xmloff
                 m_nIncludeCommon =
                     CCA_NAME | CCA_SERVICE_NAME | CCA_DISABLED | CCA_IMAGE_DATA |
                     CCA_PRINTABLE | CCA_READONLY | CCA_TITLE;
-                m_nIncludeDatabase = DA_DATA_FIELD;
+                m_nIncludeDatabase = DA_DATA_FIELD | DA_INPUT_REQUIRED;
                 m_nIncludeEvents = EA_CONTROL_EVENTS;
                 break;
 
@@ -1955,7 +1956,7 @@ namespace xmloff
 
         // grid columns miss some properties of the controls they're representing
         m_nIncludeCommon &= ~(CCA_FOR | CCA_PRINTABLE | CCA_TAB_INDEX | CCA_TAB_STOP | CCA_LABEL);
-        m_nIncludeSpecial &= ~(SCA_ECHO_CHAR | SCA_AUTOMATIC_COMPLETION | SCA_MULTIPLE | SCA_MULTI_LINE | SCA_IS_TRISTATE);
+        m_nIncludeSpecial &= ~(SCA_ECHO_CHAR | SCA_AUTOMATIC_COMPLETION | SCA_MULTIPLE | SCA_MULTI_LINE);
 
         if (FormComponentType::DATEFIELD != m_nClassId)
             // except date fields, no column has the DropDown property

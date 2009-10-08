@@ -29,12 +29,16 @@
  *
  ************************************************************************/
 
+#include "precompiled_svx.hxx"
 #include <svx/sdr/primitive2d/sdrellipseprimitive2d.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>
 #include <svx/sdr/primitive2d/sdrdecompositiontools.hxx>
 #include <drawinglayer/primitive2d/groupprimitive2d.hxx>
 #include <svx/sdr/primitive2d/svx_primitivetypes2d.hxx>
+#include <drawinglayer/primitive2d/hittestprimitive2d.hxx>
+#include <basegfx/color/bcolor.hxx>
+#include <drawinglayer/attribute/sdrattribute.hxx>
 
 //////////////////////////////////////////////////////////////////////////////
 
@@ -76,6 +80,15 @@ namespace drawinglayer
             if(getSdrLFSTAttribute().getLine())
             {
                 appendPrimitive2DReferenceToPrimitive2DSequence(aRetval, createPolygonLinePrimitive(aUnitOutline, getTransform(), *getSdrLFSTAttribute().getLine()));
+            }
+            else
+            {
+                // if initially no line is defined, create one for HitTest and BoundRect
+                const attribute::SdrLineAttribute aBlackHairline(basegfx::BColor(0.0, 0.0, 0.0));
+                const Primitive2DReference xHiddenLineReference(createPolygonLinePrimitive(aUnitOutline, getTransform(), aBlackHairline));
+                const Primitive2DSequence xHiddenLineSequence(&xHiddenLineReference, 1);
+
+                appendPrimitive2DReferenceToPrimitive2DSequence(aRetval, Primitive2DReference(new HitTestPrimitive2D(xHiddenLineSequence)));
             }
 
             // add text
@@ -173,6 +186,15 @@ namespace drawinglayer
             if(getSdrLFSTAttribute().getLine())
             {
                 appendPrimitive2DReferenceToPrimitive2DSequence(aRetval, createPolygonLinePrimitive(aUnitOutline, getTransform(), *getSdrLFSTAttribute().getLine(), getSdrLFSTAttribute().getLineStartEnd()));
+            }
+            else
+            {
+                // if initially no line is defined, create one for HitTest and BoundRect
+                const attribute::SdrLineAttribute aBlackHairline(basegfx::BColor(0.0, 0.0, 0.0));
+                const Primitive2DReference xHiddenLineReference(createPolygonLinePrimitive(aUnitOutline, getTransform(), aBlackHairline));
+                const Primitive2DSequence xHiddenLineSequence(&xHiddenLineReference, 1);
+
+                appendPrimitive2DReferenceToPrimitive2DSequence(aRetval, Primitive2DReference(new HitTestPrimitive2D(xHiddenLineSequence)));
             }
 
             // add text

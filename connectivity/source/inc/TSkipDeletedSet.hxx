@@ -32,20 +32,20 @@
 
 #include "TResultSetHelper.hxx"
 #include <rtl/alloc.h>
-#include <map>
+#include <hash_map>
 #include <vector>
+#include "connectivity/dbtoolsdllapi.hxx"
 
 namespace connectivity
 {
     /**
         the class OSkipDeletedSet supports a general method to skip deleted rows
     */
-    class OSkipDeletedSet
+    class OOO_DLLPUBLIC_DBTOOLS OSkipDeletedSet
     {
-        typedef ::std::map<sal_Int32,sal_Int32> TInt2IntMap;
-        TInt2IntMap                             m_aBookmarks;         // map from postion to logical position
-        ::std::vector<TInt2IntMap::iterator>    m_aBookmarksPositions;// vector of iterators to position map, the order is the logical position
+        ::std::vector<sal_Int32>                m_aBookmarksPositions;// vector of iterators to position map, the order is the logical position
         IResultSetHelper*                       m_pHelper;            // used for moving in the resultset
+        bool                                    m_bDeletedVisible;
 
         sal_Bool    moveAbsolute(sal_Int32 _nOffset,sal_Bool _bRetrieveData);
     public:
@@ -100,7 +100,7 @@ namespace connectivity
             getLastPosition returns the last position
             @return the last position
         */
-        sal_Int32   getLastPosition() const { return m_aBookmarksPositions.size(); }
+        inline sal_Int32    getLastPosition() const { return m_aBookmarksPositions.size(); }
     };
 }
 #endif // CONNECTIVITY_SKIPDELETEDSSET_HXX

@@ -74,7 +74,7 @@ SimpleInteractionRequest::SimpleInteractionRequest(
 }
 
 //=========================================================================
-const sal_uInt32 SimpleInteractionRequest::getResponse() const
+sal_uInt32 SimpleInteractionRequest::getResponse() const
 {
     uno::Reference< task::XInteractionContinuation > xSelection = this->getSelection();
     if ( xSelection.is() )

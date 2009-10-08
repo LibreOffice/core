@@ -59,19 +59,10 @@ namespace com { namespace sun { namespace star { namespace form {
 
 class SVX_DLLPUBLIC FmFormView : public E3dView
 {
-    friend class FmXFormController;
-    friend class FmFormShell;
-    friend class FmXFormShell;
-    friend class FmXFormView;
-    friend class FmExplorer;
-    friend class FmFormObj;
-
     FmXFormView*    pImpl;
     FmFormShell*    pFormShell;
 
     void Init();
-    void SetFormShell( FmFormShell* pShell ) { pFormShell = pShell; }
-    FmFormShell* GetFormShell() const { return pFormShell; }
 
 public:
     TYPEINFO();
@@ -100,18 +91,17 @@ public:
     virtual void DeleteWindowFromPaintView(OutputDevice* pOldWin);
 
     static void createControlLabelPair(
-        SdrView* _pView,
         OutputDevice* _pOutDev,
         sal_Int32 _nXOffsetMM,
         sal_Int32 _nYOffsetMM,
         const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxField,
         const ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormats >& _rxNumberFormats,
-        sal_uInt16 _nObjID,
+        sal_uInt16 _nControlObjectID,
         const ::rtl::OUString& _rFieldPostfix,
         UINT32 _nInventor,
-        UINT16 _nIndent,
+        UINT16 _nLabelObjectID,
         SdrPage* _pLabelPage,
-        SdrPage* _pPage,
+        SdrPage* _pControlPage,
         SdrModel* _pModel,
         SdrUnoObj*& _rpLabel,
         SdrUnoObj*& _rpControl
@@ -131,11 +121,11 @@ public:
         @param _bForceSync
             <TRUE/> if the handling should be done synchronously.
     */
-    void    GrabFirstControlFocus( sal_Bool _bForceSync = sal_False );
+    SVX_DLLPRIVATE void GrabFirstControlFocus( sal_Bool _bForceSync = sal_False );
 
     /** returns the form controller for a given form and a given device
     */
-    ::com::sun::star::uno::Reference< ::com::sun::star::form::XFormController >
+    SVX_DLLPRIVATE ::com::sun::star::uno::Reference< ::com::sun::star::form::XFormController >
             GetFormController( const ::com::sun::star::uno::Reference< ::com::sun::star::form::XForm >& _rxForm, const OutputDevice& _rDevice ) const;
 
     // SdrView
@@ -144,24 +134,35 @@ public:
     /// shortcut to "GetSdrPageView() ? PTR_CAST( FmFormPage, GetSdrPageView() ) : NULL"
     FmFormPage* GetCurPage();
 
-protected:
-    void ActivateControls(SdrPageView*);
-    void DeactivateControls(SdrPageView*);
+    SVX_DLLPRIVATE void ActivateControls(SdrPageView*);
+    SVX_DLLPRIVATE void DeactivateControls(SdrPageView*);
 
-    // Hinweis an die UI, daﬂ ein Control erzeugt worden ist
-    void ObjectCreated(FmFormObj* pObj);
-    void ChangeDesignMode(sal_Bool bDesign);
+     SVX_DLLPRIVATE void ChangeDesignMode(sal_Bool bDesign);
 
-public:
-    FmXFormView* GetImpl() const {return pImpl;}
+     SVX_DLLPRIVATE FmXFormView* GetImpl() const { return pImpl; }
+    SVX_DLLPRIVATE FmFormShell* GetFormShell() const { return pFormShell; }
 
-    virtual void InsertControlContainer(const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlContainer >& xCC);
-    virtual void RemoveControlContainer(const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlContainer >& xCC);
-private:
+    struct FormShellAccess { friend class FmFormShell; private: FormShellAccess() { } };
+     void SetFormShell( FmFormShell* pShell, FormShellAccess ) { pFormShell = pShell; }
+
+    struct ImplAccess { friend class FmXFormView; private: ImplAccess() { } };
+    void SetMoveOutside( bool _bMoveOutside, ImplAccess ) { E3dView::SetMoveOutside( _bMoveOutside ); }
+     virtual void InsertControlContainer(const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlContainer >& xCC);
+     virtual void RemoveControlContainer(const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlContainer >& xCC);
+
+    // the following is a hack, only to be used on the 3.0.1 branch, to prevent becoming
+    // incompatible there
+    // #i94033# / 2008-10-16 / frank.schoenheit@sun.com
+    void    onBeginCompleteRedraw();
+    void    onEndCompleteRedraw();
     SVX_DLLPRIVATE const OutputDevice* GetActualOutDev() const {return pActualOutDev;}
-    SVX_DLLPRIVATE void AdjustMarks(const SdrMarkList& rMarkList);
     SVX_DLLPRIVATE sal_Bool checkUnMarkAll(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _xSource);
+
+private:
+    SVX_DLLPRIVATE void AdjustMarks(const SdrMarkList& rMarkList);
     SVX_DLLPRIVATE FmFormObj* getMarkedGrid() const;
+ protected:
+    using E3dView::SetMoveOutside;
 };
 
 #endif          // _FML_FMVIEW_HXX

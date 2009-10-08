@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: svdattr.cxx,v $
- * $Revision: 1.35 $
+ * $Revision: 1.34.212.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -609,6 +609,7 @@ void SdrItemPool::TakeItemName(sal_uInt16 nWhich, String& rItemName)
         case EE_CHAR_FONTWIDTH  : nResId = SIP_EE_CHAR_FONTWIDTH;break;
         case EE_CHAR_WEIGHT     : nResId = SIP_EE_CHAR_WEIGHT;break;
         case EE_CHAR_UNDERLINE  : nResId = SIP_EE_CHAR_UNDERLINE;break;
+        case EE_CHAR_OVERLINE   : nResId = SIP_EE_CHAR_OVERLINE;break;
         case EE_CHAR_STRIKEOUT  : nResId = SIP_EE_CHAR_STRIKEOUT;break;
         case EE_CHAR_ITALIC     : nResId = SIP_EE_CHAR_ITALIC;break;
         case EE_CHAR_OUTLINE    : nResId = SIP_EE_CHAR_OUTLINE;break;

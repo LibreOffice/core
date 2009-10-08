@@ -38,6 +38,7 @@
 
 #include <drawinglayer/texture/texture.hxx>
 #include <basegfx/numeric/ftools.hxx>
+#include <basegfx/tools/gradienttools.hxx>
 
 //////////////////////////////////////////////////////////////////////////////
 
@@ -95,18 +96,18 @@ namespace drawinglayer
             aNew.set(1, 1, rRange.getHeight());
             aNew.set(0, 2, rRange.getMinX());
             aNew.set(1, 2, rRange.getMinY());
-            rMatrices.push_back(maTextureTransform * aNew);
+            rMatrices.push_back(maGradientInfo.maTextureTransform * aNew);
         }
 
         void GeoTexSvxGradient::impAppendColorsRadial(::std::vector< basegfx::BColor >& rColors)
         {
-            if(mnSteps)
+            if(maGradientInfo.mnSteps)
             {
                 rColors.push_back(maStart);
 
-                for(sal_uInt32 a(1L); a < mnSteps - 1L; a++)
+                for(sal_uInt32 a(1L); a < maGradientInfo.mnSteps - 1L; a++)
                 {
-                    rColors.push_back(interpolate(maStart, maEnd, (double)a / (double)mnSteps));
+                    rColors.push_back(interpolate(maStart, maEnd, (double)a / (double)maGradientInfo.mnSteps));
                 }
 
                 rColors.push_back(maEnd);
@@ -117,10 +118,10 @@ namespace drawinglayer
         :   maTargetRange(rTargetRange),
             maStart(rStart),
             maEnd(rEnd),
-            mnSteps(nSteps),
-            mfAspect(1.0),
             mfBorder(fBorder)
         {
+            maGradientInfo.mnSteps = nSteps;
+            maGradientInfo.mfAspectRatio = 1.0;
         }
 
         GeoTexSvxGradient::~GeoTexSvxGradient()
@@ -131,10 +132,10 @@ namespace drawinglayer
         {
             const GeoTexSvxGradient* pCompare = dynamic_cast< const GeoTexSvxGradient* >(&rGeoTexSvx);
             return (pCompare
-                && maTextureTransform == pCompare->maTextureTransform
+                && maGradientInfo.maTextureTransform == pCompare->maGradientInfo.maTextureTransform
                 && maTargetRange == pCompare->maTargetRange
-                && mnSteps == pCompare->mnSteps
-                && mfAspect == pCompare->mfAspect
+                && maGradientInfo.mnSteps == pCompare->maGradientInfo.mnSteps
+                && maGradientInfo.mfAspectRatio == pCompare->maGradientInfo.mfAspectRatio
                 && mfBorder == pCompare->mfBorder);
         }
     } // end of namespace texture
@@ -149,54 +150,11 @@ namespace drawinglayer
         GeoTexSvxGradientLinear::GeoTexSvxGradientLinear(const basegfx::B2DRange& rTargetRange, const basegfx::BColor& rStart, const basegfx::BColor& rEnd, sal_uInt32 nSteps, double fBorder, double fAngle)
         :   GeoTexSvxGradient(rTargetRange, rStart, rEnd, nSteps, fBorder)
         {
-            double fTargetSizeX(maTargetRange.getWidth());
-            double fTargetSizeY(maTargetRange.getHeight());
-            double fTargetOffsetX(maTargetRange.getMinX());
-            double fTargetOffsetY(maTargetRange.getMinY());
-
-            // add object expansion
-            if(0.0 != fAngle)
-            {
-                const double fAbsCos(fabs(cos(fAngle)));
-                const double fAbsSin(fabs(sin(fAngle)));
-                const double fNewX(fTargetSizeX * fAbsCos + fTargetSizeY * fAbsSin);
-                const double fNewY(fTargetSizeY * fAbsCos + fTargetSizeX * fAbsSin);
-                fTargetOffsetX -= (fNewX - fTargetSizeX) / 2.0;
-                fTargetOffsetY -= (fNewY - fTargetSizeY) / 2.0;
-                fTargetSizeX = fNewX;
-                fTargetSizeY = fNewY;
-            }
-
-            // add object scale before rotate
-            maTextureTransform.scale(fTargetSizeX, fTargetSizeY);
-
-            // add texture rotate after scale to keep perpendicular angles
-            if(0.0 != fAngle)
-            {
-                basegfx::B2DPoint aCenter(0.5, 0.5);
-                aCenter *= maTextureTransform;
-
-                maTextureTransform.translate(-aCenter.getX(), -aCenter.getY());
-                maTextureTransform.rotate(fAngle);
-                maTextureTransform.translate(aCenter.getX(), aCenter.getY());
-            }
-
-            // add object translate
-            maTextureTransform.translate(fTargetOffsetX, fTargetOffsetY);
-
-            // prepare aspect for texture
-            mfAspect = (0.0 != fTargetSizeY) ?  fTargetSizeX / fTargetSizeY : 1.0;
-
-            // build transform from u,v to [0.0 .. 1.0]. As base, use inverse texture transform
-            maBackTextureTransform = maTextureTransform;
-            maBackTextureTransform.invert();
-            maBackTextureTransform.translate(0.0, -mfBorder);
-            const double fSizeWithoutBorder(1.0 - mfBorder);
-
-            if(!basegfx::fTools::equal(fSizeWithoutBorder, 0.0))
-            {
-                maBackTextureTransform.scale(1.0, 1.0 / fSizeWithoutBorder);
-            }
+            basegfx::tools::createLinearODFGradientInfo(maGradientInfo,
+                                                        rTargetRange,
+                                                        nSteps,
+                                                        fBorder,
+                                                        fAngle);
         }
 
         GeoTexSvxGradientLinear::~GeoTexSvxGradientLinear()
@@ -205,12 +163,12 @@ namespace drawinglayer
 
         void GeoTexSvxGradientLinear::appendTransformations(::std::vector< basegfx::B2DHomMatrix >& rMatrices)
         {
-            if(mnSteps)
+            if(maGradientInfo.mnSteps)
             {
                 const double fTop(mfBorder);
-                const double fStripeWidth((1.0 - fTop) / mnSteps);
+                const double fStripeWidth((1.0 - fTop) / maGradientInfo.mnSteps);
 
-                for(sal_uInt32 a(1L); a < mnSteps; a++)
+                for(sal_uInt32 a(1L); a < maGradientInfo.mnSteps; a++)
                 {
                     const double fOffsetUpper(fStripeWidth * (double)a);
 
@@ -223,39 +181,20 @@ namespace drawinglayer
 
         void GeoTexSvxGradientLinear::appendColors(::std::vector< basegfx::BColor >& rColors)
         {
-            if(mnSteps)
+            if(maGradientInfo.mnSteps)
             {
                 rColors.push_back(maStart);
 
-                for(sal_uInt32 a(1L); a < mnSteps; a++)
+                for(sal_uInt32 a(1L); a < maGradientInfo.mnSteps; a++)
                 {
-                    rColors.push_back(interpolate(maStart, maEnd, (double)a / (double)(mnSteps + 1L)));
+                    rColors.push_back(interpolate(maStart, maEnd, (double)a / (double)(maGradientInfo.mnSteps + 1L)));
                 }
             }
         }
 
         void GeoTexSvxGradientLinear::modifyBColor(const basegfx::B2DPoint& rUV, basegfx::BColor& rBColor, double& /*rfOpacity*/) const
         {
-            const basegfx::B2DPoint aCoor(maBackTextureTransform * rUV);
-
-            if(basegfx::fTools::lessOrEqual(aCoor.getY(), 0.0))
-            {
-                rBColor = maStart;
-                return;
-            }
-
-            if(basegfx::fTools::moreOrEqual(aCoor.getY(), 1.0))
-            {
-                rBColor = maEnd;
-                return;
-            }
-
-            double fScaler(aCoor.getY());
-
-            if(mnSteps > 2L && mnSteps < 128L)
-            {
-                fScaler = floor(fScaler * (double)mnSteps) / (double)(mnSteps + 1L);
-            }
+            const double fScaler(basegfx::tools::getLinearGradientAlpha(rUV, maGradientInfo));
 
             rBColor = (maStart * (1.0 - fScaler)) + (maEnd * fScaler);
         }
@@ -271,57 +210,11 @@ namespace drawinglayer
         GeoTexSvxGradientAxial::GeoTexSvxGradientAxial(const basegfx::B2DRange& rTargetRange, const basegfx::BColor& rStart, const basegfx::BColor& rEnd, sal_uInt32 nSteps, double fBorder, double fAngle)
         :   GeoTexSvxGradient(rTargetRange, rStart, rEnd, nSteps, fBorder)
         {
-            double fTargetSizeX(maTargetRange.getWidth());
-            double fTargetSizeY(maTargetRange.getHeight());
-            double fTargetOffsetX(maTargetRange.getMinX());
-            double fTargetOffsetY(maTargetRange.getMinY());
-
-            // add object expansion
-            if(0.0 != fAngle)
-            {
-                const double fAbsCos(fabs(cos(fAngle)));
-                const double fAbsSin(fabs(sin(fAngle)));
-                const double fNewX(fTargetSizeX * fAbsCos + fTargetSizeY * fAbsSin);
-                const double fNewY(fTargetSizeY * fAbsCos + fTargetSizeX * fAbsSin);
-                fTargetOffsetX -= (fNewX - fTargetSizeX) / 2.0;
-                fTargetOffsetY -= (fNewY - fTargetSizeY) / 2.0;
-                fTargetSizeX = fNewX;
-                fTargetSizeY = fNewY;
-            }
-
-            // add object scale before rotate
-            maTextureTransform.scale(fTargetSizeX, fTargetSizeY);
-
-            // add texture rotate after scale to keep perpendicular angles
-            if(0.0 != fAngle)
-            {
-                basegfx::B2DPoint aCenter(0.5, 0.5);
-                aCenter *= maTextureTransform;
-
-                maTextureTransform.translate(-aCenter.getX(), -aCenter.getY());
-                maTextureTransform.rotate(fAngle);
-                maTextureTransform.translate(aCenter.getX(), aCenter.getY());
-            }
-
-            // add object translate
-            maTextureTransform.translate(fTargetOffsetX, fTargetOffsetY);
-
-            // prepare aspect for texture
-            mfAspect = (0.0 != fTargetSizeY) ?  fTargetSizeX / fTargetSizeY : 1.0;
-
-            // build transform from u,v to [0.0 .. 1.0]. As base, use inverse texture transform
-            maBackTextureTransform = maTextureTransform;
-            maBackTextureTransform.invert();
-            maBackTextureTransform.translate(0.0, -0.5);
-            const double fSizeWithoutBorder((1.0 - mfBorder) * 0.5);
-
-            if(!basegfx::fTools::equal(fSizeWithoutBorder, 0.0))
-            {
-                maBackTextureTransform.scale(1.0, 1.0 / fSizeWithoutBorder);
-            }
-
-            // fill internal steps for getBColor implementation
-            mfInternalSteps = (double)((mnSteps * 2L) - 1L);
+            basegfx::tools::createAxialODFGradientInfo(maGradientInfo,
+                                                       rTargetRange,
+                                                       nSteps,
+                                                       fBorder,
+                                                       fAngle);
         }
 
         GeoTexSvxGradientAxial::~GeoTexSvxGradientAxial()
@@ -330,14 +223,14 @@ namespace drawinglayer
 
         void GeoTexSvxGradientAxial::appendTransformations(::std::vector< basegfx::B2DHomMatrix >& rMatrices)
         {
-            if(mnSteps)
+            if(maGradientInfo.mnSteps)
             {
                 const double fHalfBorder(mfBorder * 0.5);
                 double fTop(fHalfBorder);
                 double fBottom(1.0 - fHalfBorder);
-                const double fStripeWidth((fBottom - fTop) / ((mnSteps * 2L) - 1L));
+                const double fStripeWidth((fBottom - fTop) / ((maGradientInfo.mnSteps * 2L) - 1L));
 
-                for(sal_uInt32 a(1L); a < mnSteps; a++)
+                for(sal_uInt32 a(1L); a < maGradientInfo.mnSteps; a++)
                 {
                     const double fOffset(fStripeWidth * (double)a);
 
@@ -350,34 +243,20 @@ namespace drawinglayer
 
         void GeoTexSvxGradientAxial::appendColors(::std::vector< basegfx::BColor >& rColors)
         {
-            if(mnSteps)
+            if(maGradientInfo.mnSteps)
             {
                 rColors.push_back(maEnd);
 
-                for(sal_uInt32 a(1L); a < mnSteps; a++)
+                for(sal_uInt32 a(1L); a < maGradientInfo.mnSteps; a++)
                 {
-                    rColors.push_back(interpolate(maEnd, maStart, (double)a / (double)mnSteps));
+                    rColors.push_back(interpolate(maEnd, maStart, (double)a / (double)maGradientInfo.mnSteps));
                 }
             }
         }
 
         void GeoTexSvxGradientAxial::modifyBColor(const basegfx::B2DPoint& rUV, basegfx::BColor& rBColor, double& /*rfOpacity*/) const
         {
-            const basegfx::B2DPoint aCoor(maBackTextureTransform * rUV);
-            const double fAbsY(fabs(aCoor.getY()));
-
-            if(basegfx::fTools::moreOrEqual(fAbsY, 1.0))
-            {
-                rBColor = maEnd;
-                return;
-            }
-
-            double fScaler(fAbsY);
-
-            if(mnSteps > 2L && mnSteps < 128L)
-            {
-                fScaler = floor(((fScaler * mfInternalSteps) + 1.0) / 2.0) / (double)(mnSteps - 1L);
-            }
+            const double fScaler(basegfx::tools::getAxialGradientAlpha(rUV, maGradientInfo));
 
             rBColor = (maStart * (1.0 - fScaler)) + (maEnd * fScaler);
         }
@@ -393,46 +272,11 @@ namespace drawinglayer
         GeoTexSvxGradientRadial::GeoTexSvxGradientRadial(const basegfx::B2DRange& rTargetRange, const basegfx::BColor& rStart, const basegfx::BColor& rEnd, sal_uInt32 nSteps, double fBorder, double fOffsetX, double fOffsetY)
         :   GeoTexSvxGradient(rTargetRange, rStart, rEnd, nSteps, fBorder)
         {
-            double fTargetSizeX(maTargetRange.getWidth());
-            double fTargetSizeY(maTargetRange.getHeight());
-            double fTargetOffsetX(maTargetRange.getMinX());
-            double fTargetOffsetY(maTargetRange.getMinY());
-
-            // add object expansion
-            const double fOriginalDiag(sqrt((fTargetSizeX * fTargetSizeX) + (fTargetSizeY * fTargetSizeY)));
-            fTargetOffsetX -= (fOriginalDiag - fTargetSizeX) / 2.0;
-            fTargetOffsetY -= (fOriginalDiag - fTargetSizeY) / 2.0;
-            fTargetSizeX = fOriginalDiag;
-            fTargetSizeY = fOriginalDiag;
-
-            // add object scale before rotate
-            maTextureTransform.scale(fTargetSizeX, fTargetSizeY);
-
-            // add defined offsets after rotation
-            if(0.5 != fOffsetX || 0.5 != fOffsetY)
-            {
-                // use original target size
-                fTargetOffsetX += (fOffsetX - 0.5) * maTargetRange.getWidth();
-                fTargetOffsetY += (fOffsetY - 0.5) * maTargetRange.getHeight();
-            }
-
-            // add object translate
-            maTextureTransform.translate(fTargetOffsetX, fTargetOffsetY);
-
-            // prepare aspect for texture
-            mfAspect = (0.0 != fTargetSizeY) ?  fTargetSizeX / fTargetSizeY : 1.0;
-
-            // build transform from u,v to [0.0 .. 1.0]. As base, use inverse texture transform
-            maBackTextureTransform = maTextureTransform;
-            maBackTextureTransform.invert();
-            maBackTextureTransform.translate(-0.5, -0.5);
-            const double fHalfBorder((1.0 - mfBorder) * 0.5);
-
-            if(!basegfx::fTools::equal(fHalfBorder, 0.0))
-            {
-                const double fFactor(1.0 / fHalfBorder);
-                maBackTextureTransform.scale(fFactor, fFactor);
-            }
+            basegfx::tools::createRadialODFGradientInfo(maGradientInfo,
+                                                        rTargetRange,
+                                                        basegfx::B2DVector(fOffsetX,fOffsetY),
+                                                        nSteps,
+                                                        fBorder);
         }
 
         GeoTexSvxGradientRadial::~GeoTexSvxGradientRadial()
@@ -441,7 +285,7 @@ namespace drawinglayer
 
         void GeoTexSvxGradientRadial::appendTransformations(::std::vector< basegfx::B2DHomMatrix >& rMatrices)
         {
-            if(mnSteps)
+            if(maGradientInfo.mnSteps)
             {
                 const double fHalfBorder((1.0 - mfBorder) * 0.5);
                 double fLeft(0.5 - fHalfBorder);
@@ -450,18 +294,18 @@ namespace drawinglayer
                 double fBottom(0.5 + fHalfBorder);
                 double fIncrementX, fIncrementY;
 
-                if(mfAspect > 1.0)
+                if(maGradientInfo.mfAspectRatio > 1.0)
                 {
-                    fIncrementY = (fBottom - fTop) / (double)(mnSteps * 2L);
-                    fIncrementX = fIncrementY / mfAspect;
+                    fIncrementY = (fBottom - fTop) / (double)(maGradientInfo.mnSteps * 2L);
+                    fIncrementX = fIncrementY / maGradientInfo.mfAspectRatio;
                 }
                 else
                 {
-                    fIncrementX = (fRight - fLeft) / (double)(mnSteps * 2L);
-                    fIncrementY = fIncrementX * mfAspect;
+                    fIncrementX = (fRight - fLeft) / (double)(maGradientInfo.mnSteps * 2L);
+                    fIncrementY = fIncrementX * maGradientInfo.mfAspectRatio;
                 }
 
-                for(sal_uInt32 a(1L); a < mnSteps; a++)
+                for(sal_uInt32 a(1L); a < maGradientInfo.mnSteps; a++)
                 {
                     // next step
                     fLeft += fIncrementX;
@@ -483,21 +327,7 @@ namespace drawinglayer
 
         void GeoTexSvxGradientRadial::modifyBColor(const basegfx::B2DPoint& rUV, basegfx::BColor& rBColor, double& /*rfOpacity*/) const
         {
-            const basegfx::B2DPoint aCoor(maBackTextureTransform * rUV);
-            const double fDist(aCoor.getX() * aCoor.getX() + aCoor.getY() * aCoor.getY());
-
-            if(basegfx::fTools::moreOrEqual(fDist, 1.0))
-            {
-                rBColor = maStart;
-                return;
-            }
-
-            double fScaler(1.0 - sqrt(fDist));
-
-            if(mnSteps > 2L && mnSteps < 128L)
-            {
-                fScaler = floor(fScaler * (double)mnSteps) / (double)(mnSteps - 1L);
-            }
+            const double fScaler(basegfx::tools::getRadialGradientAlpha(rUV, maGradientInfo));
 
             rBColor = (maStart * (1.0 - fScaler)) + (maEnd * fScaler);
         }
@@ -513,56 +343,12 @@ namespace drawinglayer
         GeoTexSvxGradientElliptical::GeoTexSvxGradientElliptical(const basegfx::B2DRange& rTargetRange, const basegfx::BColor& rStart, const basegfx::BColor& rEnd, sal_uInt32 nSteps, double fBorder, double fOffsetX, double fOffsetY, double fAngle)
         :   GeoTexSvxGradient(rTargetRange, rStart, rEnd, nSteps, fBorder)
         {
-            double fTargetSizeX(maTargetRange.getWidth());
-            double fTargetSizeY(maTargetRange.getHeight());
-            double fTargetOffsetX(maTargetRange.getMinX());
-            double fTargetOffsetY(maTargetRange.getMinY());
-
-            // add object expansion
-            fTargetOffsetX -= (0.4142 / 2.0 ) * fTargetSizeX;
-            fTargetOffsetY -= (0.4142 / 2.0 ) * fTargetSizeY;
-            fTargetSizeX = 1.4142 * fTargetSizeX;
-            fTargetSizeY = 1.4142 * fTargetSizeY;
-
-            // add object scale before rotate
-            maTextureTransform.scale(fTargetSizeX, fTargetSizeY);
-
-            // add texture rotate after scale to keep perpendicular angles
-            if(0.0 != fAngle)
-            {
-                basegfx::B2DPoint aCenter(0.5, 0.5);
-                aCenter *= maTextureTransform;
-
-                maTextureTransform.translate(-aCenter.getX(), -aCenter.getY());
-                maTextureTransform.rotate(fAngle);
-                maTextureTransform.translate(aCenter.getX(), aCenter.getY());
-            }
-
-            // add defined offsets after rotation
-            if(0.5 != fOffsetX || 0.5 != fOffsetY)
-            {
-                // use original target size
-                fTargetOffsetX += (fOffsetX - 0.5) * maTargetRange.getWidth();
-                fTargetOffsetY += (fOffsetY - 0.5) * maTargetRange.getHeight();
-            }
-
-            // add object translate
-            maTextureTransform.translate(fTargetOffsetX, fTargetOffsetY);
-
-            // prepare aspect for texture
-            mfAspect = (0.0 != fTargetSizeY) ?  fTargetSizeX / fTargetSizeY : 1.0;
-
-            // build transform from u,v to [0.0 .. 1.0]. As base, use inverse texture transform
-            maBackTextureTransform = maTextureTransform;
-            maBackTextureTransform.invert();
-            maBackTextureTransform.translate(-0.5, -0.5);
-            const double fHalfBorder((1.0 - mfBorder) * 0.5);
-
-            if(!basegfx::fTools::equal(fHalfBorder, 0.0))
-            {
-                const double fFactor(1.0 / fHalfBorder);
-                maBackTextureTransform.scale(fFactor, fFactor);
-            }
+            basegfx::tools::createEllipticalODFGradientInfo(maGradientInfo,
+                                                            rTargetRange,
+                                                            basegfx::B2DVector(fOffsetX,fOffsetY),
+                                                            nSteps,
+                                                            fBorder,
+                                                            fAngle);
         }
 
         GeoTexSvxGradientElliptical::~GeoTexSvxGradientElliptical()
@@ -571,7 +357,7 @@ namespace drawinglayer
 
         void GeoTexSvxGradientElliptical::appendTransformations(::std::vector< basegfx::B2DHomMatrix >& rMatrices)
         {
-            if(mnSteps)
+            if(maGradientInfo.mnSteps)
             {
                 const double fHalfBorder((1.0 - mfBorder) * 0.5);
                 double fLeft(0.5 - fHalfBorder);
@@ -580,18 +366,18 @@ namespace drawinglayer
                 double fBottom(0.5 + fHalfBorder);
                 double fIncrementX, fIncrementY;
 
-                if(mfAspect > 1.0)
+                if(maGradientInfo.mfAspectRatio > 1.0)
                 {
-                    fIncrementY = (fBottom - fTop) / (double)(mnSteps * 2L);
-                    fIncrementX = fIncrementY / mfAspect;
+                    fIncrementY = (fBottom - fTop) / (double)(maGradientInfo.mnSteps * 2L);
+                    fIncrementX = fIncrementY / maGradientInfo.mfAspectRatio;
                 }
                 else
                 {
-                    fIncrementX = (fRight - fLeft) / (double)(mnSteps * 2L);
-                    fIncrementY = fIncrementX * mfAspect;
+                    fIncrementX = (fRight - fLeft) / (double)(maGradientInfo.mnSteps * 2L);
+                    fIncrementY = fIncrementX * maGradientInfo.mfAspectRatio;
                 }
 
-                for(sal_uInt32 a(1L); a < mnSteps; a++)
+                for(sal_uInt32 a(1L); a < maGradientInfo.mnSteps; a++)
                 {
                     // next step
                     fLeft += fIncrementX;
@@ -613,21 +399,7 @@ namespace drawinglayer
 
         void GeoTexSvxGradientElliptical::modifyBColor(const basegfx::B2DPoint& rUV, basegfx::BColor& rBColor, double& /*rfOpacity*/) const
         {
-            const basegfx::B2DPoint aCoor(maBackTextureTransform * rUV);
-            const double fDist(aCoor.getX() * aCoor.getX() + aCoor.getY() * aCoor.getY());
-
-            if(basegfx::fTools::moreOrEqual(fDist, 1.0))
-            {
-                rBColor = maStart;
-                return;
-            }
-
-            double fScaler(1.0 - sqrt(fDist));
-
-            if(mnSteps > 2L && mnSteps < 128L)
-            {
-                fScaler = floor(fScaler * (double)mnSteps) / (double)(mnSteps - 1L);
-            }
+            const double fScaler(basegfx::tools::getEllipticalGradientAlpha(rUV, maGradientInfo));
 
             rBColor = (maStart * (1.0 - fScaler)) + (maEnd * fScaler);
         }
@@ -643,63 +415,12 @@ namespace drawinglayer
         GeoTexSvxGradientSquare::GeoTexSvxGradientSquare(const basegfx::B2DRange& rTargetRange, const basegfx::BColor& rStart, const basegfx::BColor& rEnd, sal_uInt32 nSteps, double fBorder, double fOffsetX, double fOffsetY, double fAngle)
         :   GeoTexSvxGradient(rTargetRange, rStart, rEnd, nSteps, fBorder)
         {
-            double fTargetSizeX(maTargetRange.getWidth());
-            double fTargetSizeY(maTargetRange.getHeight());
-            double fTargetOffsetX(maTargetRange.getMinX());
-            double fTargetOffsetY(maTargetRange.getMinY());
-
-            // add object expansion
-            if(0.0 != fAngle)
-            {
-                const double fAbsCos(fabs(cos(fAngle)));
-                const double fAbsSin(fabs(sin(fAngle)));
-                const double fNewX(fTargetSizeX * fAbsCos + fTargetSizeY * fAbsSin);
-                const double fNewY(fTargetSizeY * fAbsCos + fTargetSizeX * fAbsSin);
-                fTargetOffsetX -= (fNewX - fTargetSizeX) / 2.0;
-                fTargetOffsetY -= (fNewY - fTargetSizeY) / 2.0;
-                fTargetSizeX = fNewX;
-                fTargetSizeY = fNewY;
-            }
-
-            // add object scale before rotate
-            maTextureTransform.scale(fTargetSizeX, fTargetSizeY);
-
-            // add texture rotate after scale to keep perpendicular angles
-            if(0.0 != fAngle)
-            {
-                basegfx::B2DPoint aCenter(0.5, 0.5);
-                aCenter *= maTextureTransform;
-
-                maTextureTransform.translate(-aCenter.getX(), -aCenter.getY());
-                maTextureTransform.rotate(fAngle);
-                maTextureTransform.translate(aCenter.getX(), aCenter.getY());
-            }
-
-            // add defined offsets after rotation
-            if(0.5 != fOffsetX || 0.5 != fOffsetY)
-            {
-                // use scaled target size
-                fTargetOffsetX += (fOffsetX - 0.5) * fTargetSizeX;
-                fTargetOffsetY += (fOffsetY - 0.5) * fTargetSizeY;
-            }
-
-            // add object translate
-            maTextureTransform.translate(fTargetOffsetX, fTargetOffsetY);
-
-            // prepare aspect for texture
-            mfAspect = (0.0 != fTargetSizeY) ?  fTargetSizeX / fTargetSizeY : 1.0;
-
-            // build transform from u,v to [0.0 .. 1.0]. As base, use inverse texture transform
-            maBackTextureTransform = maTextureTransform;
-            maBackTextureTransform.invert();
-            maBackTextureTransform.translate(-0.5, -0.5);
-            const double fHalfBorder((1.0 - mfBorder) * 0.5);
-
-            if(!basegfx::fTools::equal(fHalfBorder, 0.0))
-            {
-                const double fFactor(1.0 / fHalfBorder);
-                maBackTextureTransform.scale(fFactor, fFactor);
-            }
+            basegfx::tools::createSquareODFGradientInfo(maGradientInfo,
+                                                        rTargetRange,
+                                                        basegfx::B2DVector(fOffsetX,fOffsetY),
+                                                        nSteps,
+                                                        fBorder,
+                                                        fAngle);
         }
 
         GeoTexSvxGradientSquare::~GeoTexSvxGradientSquare()
@@ -708,7 +429,7 @@ namespace drawinglayer
 
         void GeoTexSvxGradientSquare::appendTransformations(::std::vector< basegfx::B2DHomMatrix >& rMatrices)
         {
-            if(mnSteps)
+            if(maGradientInfo.mnSteps)
             {
                 const double fHalfBorder((1.0 - mfBorder) * 0.5);
                 double fLeft(0.5 - fHalfBorder);
@@ -717,26 +438,26 @@ namespace drawinglayer
                 double fBottom(0.5 + fHalfBorder);
                 double fIncrementX, fIncrementY;
 
-                if(mfAspect > 1.0)
+                if(maGradientInfo.mfAspectRatio > 1.0)
                 {
                     const double fWidth(fRight - fLeft);
-                    const double fHalfAspectExpansion(((mfAspect - 1.0) * 0.5) * fWidth);
+                    const double fHalfAspectExpansion(((maGradientInfo.mfAspectRatio - 1.0) * 0.5) * fWidth);
                     fTop -= fHalfAspectExpansion;
                     fBottom += fHalfAspectExpansion;
-                    fIncrementX = fWidth / (double)(mnSteps * 2L);
-                    fIncrementY = fIncrementX * mfAspect;
+                    fIncrementX = fWidth / (double)(maGradientInfo.mnSteps * 2L);
+                    fIncrementY = fIncrementX * maGradientInfo.mfAspectRatio;
                 }
                 else
                 {
                     const double fHeight(fBottom - fTop);
-                    const double fHalfAspectExpansion((((1.0 / mfAspect) - 1.0) * 0.5) * fHeight);
+                    const double fHalfAspectExpansion((((1.0 / maGradientInfo.mfAspectRatio) - 1.0) * 0.5) * fHeight);
                     fLeft -= fHalfAspectExpansion;
                     fRight += fHalfAspectExpansion;
-                    fIncrementY = fHeight / (double)(mnSteps * 2L);
-                    fIncrementX = fIncrementY / mfAspect;
+                    fIncrementY = fHeight / (double)(maGradientInfo.mnSteps * 2L);
+                    fIncrementX = fIncrementY / maGradientInfo.mfAspectRatio;
                 }
 
-                for(sal_uInt32 a(1L); a < mnSteps; a++)
+                for(sal_uInt32 a(1L); a < maGradientInfo.mnSteps; a++)
                 {
                     // next step
                     fLeft += fIncrementX;
@@ -758,22 +479,7 @@ namespace drawinglayer
 
         void GeoTexSvxGradientSquare::modifyBColor(const basegfx::B2DPoint& rUV, basegfx::BColor& rBColor, double& /*rfOpacity*/) const
         {
-            const basegfx::B2DPoint aCoor(maBackTextureTransform * rUV);
-            const double fAbsX(fabs(aCoor.getX()));
-            const double fAbsY(fabs(aCoor.getY()));
-
-            if(basegfx::fTools::moreOrEqual(fAbsX, 1.0) || basegfx::fTools::moreOrEqual(fAbsY, 1.0))
-            {
-                rBColor = maStart;
-                return;
-            }
-
-            double fScaler(1.0 - (fAbsX > fAbsY ? fAbsX : fAbsY));
-
-            if(mnSteps > 2L && mnSteps < 128L)
-            {
-                fScaler = floor(fScaler * (double)mnSteps) / (double)(mnSteps - 1L);
-            }
+            const double fScaler(basegfx::tools::getSquareGradientAlpha(rUV, maGradientInfo));
 
             rBColor = (maStart * (1.0 - fScaler)) + (maEnd * fScaler);
         }
@@ -789,63 +495,12 @@ namespace drawinglayer
         GeoTexSvxGradientRect::GeoTexSvxGradientRect(const basegfx::B2DRange& rTargetRange, const basegfx::BColor& rStart, const basegfx::BColor& rEnd, sal_uInt32 nSteps, double fBorder, double fOffsetX, double fOffsetY, double fAngle)
         :   GeoTexSvxGradient(rTargetRange, rStart, rEnd, nSteps, fBorder)
         {
-            double fTargetSizeX(maTargetRange.getWidth());
-            double fTargetSizeY(maTargetRange.getHeight());
-            double fTargetOffsetX(maTargetRange.getMinX());
-            double fTargetOffsetY(maTargetRange.getMinY());
-
-            // add object expansion
-            if(0.0 != fAngle)
-            {
-                const double fAbsCos(fabs(cos(fAngle)));
-                const double fAbsSin(fabs(sin(fAngle)));
-                const double fNewX(fTargetSizeX * fAbsCos + fTargetSizeY * fAbsSin);
-                const double fNewY(fTargetSizeY * fAbsCos + fTargetSizeX * fAbsSin);
-                fTargetOffsetX -= (fNewX - fTargetSizeX) / 2.0;
-                fTargetOffsetY -= (fNewY - fTargetSizeY) / 2.0;
-                fTargetSizeX = fNewX;
-                fTargetSizeY = fNewY;
-            }
-
-            // add object scale before rotate
-            maTextureTransform.scale(fTargetSizeX, fTargetSizeY);
-
-            // add texture rotate after scale to keep perpendicular angles
-            if(0.0 != fAngle)
-            {
-                basegfx::B2DPoint aCenter(0.5, 0.5);
-                aCenter *= maTextureTransform;
-
-                maTextureTransform.translate(-aCenter.getX(), -aCenter.getY());
-                maTextureTransform.rotate(fAngle);
-                maTextureTransform.translate(aCenter.getX(), aCenter.getY());
-            }
-
-            // add defined offsets after rotation
-            if(0.5 != fOffsetX || 0.5 != fOffsetY)
-            {
-                // use scaled target size
-                fTargetOffsetX += (fOffsetX - 0.5) * fTargetSizeX;
-                fTargetOffsetY += (fOffsetY - 0.5) * fTargetSizeY;
-            }
-
-            // add object translate
-            maTextureTransform.translate(fTargetOffsetX, fTargetOffsetY);
-
-            // prepare aspect for texture
-            mfAspect = (0.0 != fTargetSizeY) ?  fTargetSizeX / fTargetSizeY : 1.0;
-
-            // build transform from u,v to [0.0 .. 1.0]. As base, use inverse texture transform
-            maBackTextureTransform = maTextureTransform;
-            maBackTextureTransform.invert();
-            maBackTextureTransform.translate(-0.5, -0.5);
-            const double fHalfBorder((1.0 - mfBorder) * 0.5);
-
-            if(!basegfx::fTools::equal(fHalfBorder, 0.0))
-            {
-                const double fFactor(1.0 / fHalfBorder);
-                maBackTextureTransform.scale(fFactor, fFactor);
-            }
+            basegfx::tools::createRectangularODFGradientInfo(maGradientInfo,
+                                                             rTargetRange,
+                                                             basegfx::B2DVector(fOffsetX,fOffsetY),
+                                                             nSteps,
+                                                             fBorder,
+                                                             fAngle);
         }
 
         GeoTexSvxGradientRect::~GeoTexSvxGradientRect()
@@ -854,7 +509,7 @@ namespace drawinglayer
 
         void GeoTexSvxGradientRect::appendTransformations(::std::vector< basegfx::B2DHomMatrix >& rMatrices)
         {
-            if(mnSteps)
+            if(maGradientInfo.mnSteps)
             {
                 const double fHalfBorder((1.0 - mfBorder) * 0.5);
                 double fLeft(0.5 - fHalfBorder);
@@ -863,18 +518,18 @@ namespace drawinglayer
                 double fBottom(0.5 + fHalfBorder);
                 double fIncrementX, fIncrementY;
 
-                if(mfAspect > 1.0)
+                if(maGradientInfo.mfAspectRatio > 1.0)
                 {
-                    fIncrementY = (fBottom - fTop) / (double)(mnSteps * 2L);
-                    fIncrementX = fIncrementY / mfAspect;
+                    fIncrementY = (fBottom - fTop) / (double)(maGradientInfo.mnSteps * 2L);
+                    fIncrementX = fIncrementY / maGradientInfo.mfAspectRatio;
                 }
                 else
                 {
-                    fIncrementX = (fRight - fLeft) / (double)(mnSteps * 2L);
-                    fIncrementY = fIncrementX * mfAspect;
+                    fIncrementX = (fRight - fLeft) / (double)(maGradientInfo.mnSteps * 2L);
+                    fIncrementY = fIncrementX * maGradientInfo.mfAspectRatio;
                 }
 
-                for(sal_uInt32 a(1L); a < mnSteps; a++)
+                for(sal_uInt32 a(1L); a < maGradientInfo.mnSteps; a++)
                 {
                     // next step
                     fLeft += fIncrementX;
@@ -896,22 +551,7 @@ namespace drawinglayer
 
         void GeoTexSvxGradientRect::modifyBColor(const basegfx::B2DPoint& rUV, basegfx::BColor& rBColor, double& /*rfOpacity*/) const
         {
-            const basegfx::B2DPoint aCoor(maBackTextureTransform * rUV);
-            const double fAbsX(fabs(aCoor.getX()));
-            const double fAbsY(fabs(aCoor.getY()));
-
-            if(basegfx::fTools::moreOrEqual(fAbsX, 1.0) || basegfx::fTools::moreOrEqual(fAbsY, 1.0))
-            {
-                rBColor = maStart;
-                return;
-            }
-
-            double fScaler(1.0 - (fAbsX > fAbsY ? fAbsX : fAbsY));
-
-            if(mnSteps > 2L && mnSteps < 128L)
-            {
-                fScaler = floor(fScaler * (double)mnSteps) / (double)(mnSteps - 1L);
-            }
+            const double fScaler(basegfx::tools::getRectangularGradientAlpha(rUV, maGradientInfo));
 
             rBColor = (maStart * (1.0 - fScaler)) + (maEnd * fScaler);
         }

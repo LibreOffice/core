@@ -45,12 +45,12 @@ namespace xmloff
     void initializePropertyMaps();
 
     //=====================================================================
-    //= OFormExportPropertyMapper
+    //= OFormComponentStyleExportMapper
     //=====================================================================
-    class OFormExportPropertyMapper : public SvXMLExportPropertyMapper
+    class OFormComponentStyleExportMapper : public SvXMLExportPropertyMapper
     {
     public:
-        OFormExportPropertyMapper( const UniReference< XMLPropertySetMapper >& _rMapper );
+        OFormComponentStyleExportMapper( const UniReference< XMLPropertySetMapper >& _rMapper );
 
         void handleSpecialItem(
             SvXMLAttributeList&                         _rAttrList,

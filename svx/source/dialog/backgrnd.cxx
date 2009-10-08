@@ -983,7 +983,7 @@ BOOL SvxBackgroundTabPage::FillItemSet( SfxItemSet& rCoreSet )
         {
             const SfxPoolItem* pOldChar =
                 GetOldItem( rCoreSet, SID_ATTR_BRUSH_CHAR );
-            DBG_ASSERT(pParaBck_Impl, "pParaBck_Impl == NULL ?")
+            DBG_ASSERT(pParaBck_Impl, "pParaBck_Impl == NULL ?");
             if ( pOldChar &&
                     //#111173#  crash report shows that pParaBck_Impl can be NULL, the cause is unknown
                     pParaBck_Impl &&

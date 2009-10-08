@@ -35,12 +35,13 @@
 #include <com/sun/star/sdbc/XDatabaseMetaData.hpp>
 #include "connectivity/sdbcx/IRefreshable.hxx"
 #include "file/FTable.hxx"
+#include "file/filedllapi.hxx"
 
 namespace connectivity
 {
     namespace file
     {
-        class OColumns : public sdbcx::OCollection
+        class OOO_DLLPUBLIC_FILE OColumns : public sdbcx::OCollection
         {
         protected:
             OFileTable* m_pTable;

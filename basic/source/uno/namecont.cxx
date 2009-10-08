@@ -1154,7 +1154,7 @@ sal_Bool SfxLibraryContainer::init_Impl(
         // #i93163
         if( bCleanUp )
         {
-            DBG_ERROR( "Upgrade of Basic installation failed somehow" )
+            DBG_ERROR( "Upgrade of Basic installation failed somehow" );
 
             static char strErrorSavFolderName[] = "__basic_80_err";
             INetURLObject aPrevUserBasicInetObj_Err( aUserBasicInetObj );
@@ -3224,10 +3224,19 @@ Reference< deployment::XPackage > ScriptExtensionIterator::implGetNextUserScript
 
     if( !m_bUserPackagesLoaded )
     {
-        Reference< XPackageManager > xUserManager =
-            thePackageManagerFactory::get( m_xContext )->getPackageManager( rtl::OUString::createFromAscii("user") );
-        m_aUserPackagesSeq = xUserManager->getDeployedPackages
-            ( Reference< task::XAbortChannel >(), Reference< ucb::XCommandEnvironment >() );
+        try
+        {
+            Reference< XPackageManager > xUserManager =
+                thePackageManagerFactory::get( m_xContext )->getPackageManager( rtl::OUString::createFromAscii("user") );
+            m_aUserPackagesSeq = xUserManager->getDeployedPackages
+                ( Reference< task::XAbortChannel >(), Reference< ucb::XCommandEnvironment >() );
+        }
+        catch( com::sun::star::uno::DeploymentException& )
+        {
+            // Special Office installations may not contain deployment code
+            m_eState = END_REACHED;
+            return xScriptPackage;
+        }
 
         m_bUserPackagesLoaded = true;
     }
@@ -3268,10 +3277,18 @@ Reference< deployment::XPackage > ScriptExtensionIterator::implGetNextSharedScri
 
     if( !m_bSharedPackagesLoaded )
     {
-        Reference< XPackageManager > xSharedManager =
-            thePackageManagerFactory::get( m_xContext )->getPackageManager( rtl::OUString::createFromAscii("shared") );
-        m_aSharedPackagesSeq = xSharedManager->getDeployedPackages
-            ( Reference< task::XAbortChannel >(), Reference< ucb::XCommandEnvironment >() );
+        try
+        {
+            Reference< XPackageManager > xSharedManager =
+                thePackageManagerFactory::get( m_xContext )->getPackageManager( rtl::OUString::createFromAscii("shared") );
+            m_aSharedPackagesSeq = xSharedManager->getDeployedPackages
+                ( Reference< task::XAbortChannel >(), Reference< ucb::XCommandEnvironment >() );
+        }
+        catch( com::sun::star::uno::DeploymentException& )
+        {
+            // Special Office installations may not contain deployment code
+            return xScriptPackage;
+        }
 
         m_bSharedPackagesLoaded = true;
     }

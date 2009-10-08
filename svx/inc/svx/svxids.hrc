@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: svxids.hrc,v $
- * $Revision: 1.11 $
+ * $Revision: 1.10.132.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -137,6 +137,8 @@
 
 #define MID_ZOOMSLIDER_CURRENTZOOM      0x79
 #define MID_ZOOMSLIDER_SNAPPINGPOINTS   0x7a
+#define MID_ZOOMSLIDER_MINZOOM          0x7b
+#define MID_ZOOMSLIDER_MAXZOOM          0x7c
 
 #define MID_ADR_FATHERSNAME     0x80
 #define MID_ADR_APARTMENT       0x81
@@ -1292,8 +1294,8 @@
 #define SID_PAPER_START                                 ( SID_SVX_START + 1039 )
 #define SID_PAPER_END                                   ( SID_SVX_START + 1040 )
 #define SID_COLLECT_LIST                                ( SID_SVX_START + 1041 )
-// 1042: free
-// 1043: free
+#define SID_GROW_FONT_SIZE                              ( SID_SVX_START + 1042 )
+#define SID_SHRINK_FONT_SIZE                            ( SID_SVX_START + 1043 )
 // color subtoolbar on graphictoolbar
 #define SID_COLOR_SETTINGS                              ( SID_SVX_START + 1044 )
 #define SID_FM_MORE_CONTROLS                            ( SID_SVX_START + 1045 )
@@ -1343,7 +1345,11 @@
 #define SID_TABLE_STYLE                                 (SID_SVX_START+1088)
 #define SID_TABLE_STYLE_SETTINGS                        (SID_SVX_START+1089)
 #define SID_CHAR_DLG_PREVIEW_STRING                     (SID_SVX_START+1090)
-#define SID_SVX_FIRSTFREE                               SID_CHAR_DLG_PREVIEW_STRING + 1
+#define SID_RECHECK_DOCUMENT                            (SID_SVX_START+1091)
+#define SID_ATTR_PARA_OUTLINE_LEVEL                     (SID_SVX_START+1092)
+
+// IMPORTANT NOTE: adjust SID_SVX_FIRSTFREE, when adding new slot id
+#define SID_SVX_FIRSTFREE                               SID_ATTR_PARA_OUTLINE_LEVEL + 1
 
 // --------------------------------------------------------------------------
 // Overflow check for slot IDs

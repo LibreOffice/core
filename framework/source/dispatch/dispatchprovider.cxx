@@ -42,11 +42,13 @@
 #include <dispatch/closedispatcher.hxx>
 #include <dispatch/menudispatcher.hxx>
 #include <dispatch/helpagentdispatcher.hxx>
+#include <dispatch/startmoduledispatcher.hxx>
 
 #include <pattern/window.hxx>
 #include <threadhelp/transactionguard.hxx>
 #include <threadhelp/readguard.hxx>
 #include <threadhelp/writeguard.hxx>
+#include <dispatchcommands.h>
 #include <protocols.h>
 #include <services.h>
 #include <targets.h>
@@ -224,6 +226,24 @@ css::uno::Sequence< css::uno::Reference< css::frame::XDispatch > > SAL_CALL Disp
 
 //_________________________________________________________________________________________________________________
 
+::sal_Bool lcl_isCloseDispatch (const css::util::URL& aURL)
+{
+    return (
+            (aURL.Complete.equals(CMD_UNO_CLOSEDOC  )) ||
+            (aURL.Complete.equals(CMD_UNO_CLOSEWIN  )) ||
+            (aURL.Complete.equals(CMD_UNO_CLOSEFRAME))
+           );
+}
+
+//_________________________________________________________________________________________________________________
+
+::sal_Bool lcl_isStartModuleDispatch (const css::util::URL& aURL)
+{
+    return (aURL.Complete.equals(CMD_UNO_SHOWSTARTMODULE));
+}
+
+//_________________________________________________________________________________________________________________
+
 /**
     @short      helper for queryDispatch()
     @descr      Every member of the frame tree (frame, desktop) must handle such request
@@ -277,6 +297,9 @@ css::uno::Reference< css::frame::XDispatch > DispatchProvider::implts_queryDeskt
     {
         if (implts_isLoadableContent(aURL))
             xDispatcher = implts_getOrCreateDispatchHelper( E_DEFAULTDISPATCHER, xDesktop );
+        
+        if (lcl_isStartModuleDispatch(aURL))
+            xDispatcher = implts_getOrCreateDispatchHelper( E_STARTMODULEDISPATCHER, xDesktop );
     }
 
     //-----------------------------------------------------------------------------------------------------
@@ -466,14 +489,8 @@ css::uno::Reference< css::frame::XDispatch > DispatchProvider::implts_queryFrame
        )
     {
         // There exist a hard coded interception for special URLs.
-        if (
-            (aURL.Complete.equalsAscii(".uno:CloseDoc"  )) ||
-            (aURL.Complete.equalsAscii(".uno:CloseWin"  )) ||
-            (aURL.Complete.equalsAscii(".uno:CloseFrame"))
-           )
-        {
+        if (lcl_isCloseDispatch (aURL))
             xDispatcher = implts_getOrCreateDispatchHelper( E_CLOSEDISPATCHER, xFrame );
-        }
 
         if ( ! xDispatcher.is())
         {
@@ -735,6 +752,13 @@ css::uno::Reference< css::frame::XDispatch > DispatchProvider::implts_getOrCreat
         case E_CLOSEDISPATCHER :
                 {
                     CloseDispatcher* pDispatcher = new CloseDispatcher( xFactory, xOwner, sTarget );
+                    xDispatchHelper = css::uno::Reference< css::frame::XDispatch >( static_cast< ::cppu::OWeakObject* >(pDispatcher), css::uno::UNO_QUERY );
+                }
+                break;
+
+        case E_STARTMODULEDISPATCHER :
+                {
+                    StartModuleDispatcher* pDispatcher = new StartModuleDispatcher( xFactory, xOwner, sTarget );
                     xDispatchHelper = css::uno::Reference< css::frame::XDispatch >( static_cast< ::cppu::OWeakObject* >(pDispatcher), css::uno::UNO_QUERY );
                 }
                 break;

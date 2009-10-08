@@ -250,10 +250,8 @@ namespace sdr
                 pOutDev->SetLayoutMode(0); // reset, default is no BiDi/RTL
 
                 // create renderer
-                static bool bTryTestCanvas(false);
-
                 drawinglayer::processor2d::BaseProcessor2D* pProcessor2D = createBaseProcessor2DFromOutputDevice(
-                    rTargetOutDev, getViewInformation2D(), bTryTestCanvas);
+                    rTargetOutDev, getViewInformation2D());
 
                 if(pProcessor2D)
                 {

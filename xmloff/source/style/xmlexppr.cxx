@@ -167,14 +167,7 @@ void XMLPropertyStates_Impl::FillPropertyStateVector(
     if (nCount)
     {
         rVector.resize(nCount, XMLPropertyState(-1));
-        XMLPropertyStateList_Impl::iterator aItr = aPropStates.begin();
-        sal_Int32 i (0);
-        while (aItr != aPropStates.end())
-        {
-            rVector[i] = *aItr;
-            aItr++;
-            i++;
-        }
+        ::std::copy( aPropStates.begin(), aPropStates.end(), rVector.begin() );
     }
 }
 
@@ -447,7 +440,7 @@ void FilterPropertiesInfo_Impl::FillPropertyStateArray(
                 sal_uInt32 nValueCount = 0;
                 sal_uInt32 i;
 
-                for( i = 0; i < nCount; i++, pStates++ )
+                for( i = 0; i < nCount; ++i, ++pStates )
                 {
                     if( (*pStates == PropertyState_DIRECT_VALUE)/* || (bDefault && (*pStates == PropertyState_DEFAULT_VALUE))*/ )
                         nValueCount++;
@@ -459,9 +452,8 @@ void FilterPropertiesInfo_Impl::FillPropertyStateArray(
                     Sequence < OUString > aAPINames( nValueCount );
                     OUString *pAPINames = aAPINames.getArray();
 
-                    FilterPropertyInfoList_Impl::iterator *aPropIters =
-                        new FilterPropertyInfoList_Impl::iterator[nValueCount];
-                    FilterPropertyInfoList_Impl::iterator *pPropIter = aPropIters;
+                    ::std::vector< FilterPropertyInfoList_Impl::iterator > aPropIters;
+                    aPropIters.reserve( nValueCount );
 
                     FilterPropertyInfoList_Impl::iterator aItr = aPropInfos.begin();
                     OSL_ENSURE(aItr != aPropInfos.end(),"Invalid iterator!");
@@ -473,35 +465,38 @@ void FilterPropertiesInfo_Impl::FillPropertyStateArray(
                         if( (*pStates == PropertyState_DIRECT_VALUE)/* || (bDefault && (*pStates == PropertyState_DEFAULT_VALUE))*/ )
                         {
                             *pAPINames++ = aItr->GetApiName();
-                            *pPropIter++ = aItr;
-                            i++;
+                            aPropIters.push_back( aItr );
+                            ++i;
                         }
-                        aItr++;
-                        pStates++;
+                        ++aItr;
+                        ++pStates;
                     }
 
                     aValues = xMultiPropSet->getPropertyValues( aAPINames );
                     const Any *pValues = aValues.getConstArray();
-                    pPropIter = aPropIters;
+
+                    ::std::vector< FilterPropertyInfoList_Impl::iterator >::const_iterator
+                        pPropIter = aPropIters.begin();
+
                     XMLPropertyState aNewProperty( -1 );
                     for( i = 0; i < nValueCount; i++ )
                     {
                         aNewProperty.mnIndex = -1;
                         aNewProperty.maValue = *pValues;
 
-                        for( std::list<sal_uInt32>::iterator aIndexItr =
-                                    (*pPropIter)->GetIndexes().begin();
-                            aIndexItr != (*pPropIter)->GetIndexes().end();
-                            aIndexItr++ )
+                        const ::std::list< sal_uInt32 >& rIndexes( (*pPropIter)->GetIndexes() );
+                        for (   std::list<sal_uInt32>::const_iterator aIndexItr = rIndexes.begin();
+                                aIndexItr != rIndexes.end();
+                                ++aIndexItr
+                            )
                         {
                             aNewProperty.mnIndex = *aIndexItr;
                             aPropStates.AddPropertyState( aNewProperty );
                         }
 
-                        pPropIter++;
-                        pValues++;
+                        ++pPropIter;
+                        ++pValues;
                     }
-                    delete[] aPropIters;
                 }
             }
             else
@@ -540,7 +535,7 @@ void FilterPropertiesInfo_Impl::FillPropertyStateArray(
                     // The value is stored in the PropertySet itself, add to list.
                     sal_Bool bGotValue = sal_False;
                     XMLPropertyState aNewProperty( -1 );
-                    for( std::list<sal_uInt32>::iterator aIndexItr =
+                    for( std::list<sal_uInt32>::const_iterator aIndexItr =
                             aItr->GetIndexes().begin();
                         aIndexItr != aItr->GetIndexes().end();
                         aIndexItr++ )

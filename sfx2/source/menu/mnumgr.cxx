@@ -451,7 +451,8 @@ SfxPopupMenuManager* SfxPopupMenuManager::Popup( const ResId& rResId, SfxViewFra
     aEvent.SourceWindow = VCLUnoHelper::GetInterface( pWindow );
     aEvent.ExecutePosition.X = rPoint.X();
     aEvent.ExecutePosition.Y = rPoint.Y();
-    if ( pFrame->GetViewShell()->TryContextMenuInterception( *pSVMenu, pMenu, aEvent ) )
+    ::rtl::OUString sDummyMenuName;
+    if ( pFrame->GetViewShell()->TryContextMenuInterception( *pSVMenu, sDummyMenuName, pMenu, aEvent ) )
     {
         if ( pMenu )
         {
@@ -496,7 +497,8 @@ void SfxPopupMenuManager::ExecutePopup( const ResId& rResId, SfxViewFrame* pFram
     aEvent.SourceWindow = VCLUnoHelper::GetInterface( pWindow );
     aEvent.ExecutePosition.X = rPoint.X();
     aEvent.ExecutePosition.Y = rPoint.Y();
-    if ( pFrame->GetViewShell()->TryContextMenuInterception( *pSVMenu, pMenu, aEvent ) )
+    ::rtl::OUString sDummyMenuName;
+    if ( pFrame->GetViewShell()->TryContextMenuInterception( *pSVMenu, sDummyMenuName, pMenu, aEvent ) )
     {
         if ( pMenu )
         {

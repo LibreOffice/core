@@ -35,6 +35,7 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/sdbc/XRowSet.hpp>
 #include <com/sun/star/sdbc/XConnection.hpp>
+#include "connectivity/dbtoolsdllapi.hxx"
 
 //.........................................................................
 namespace dbtools
@@ -48,7 +49,7 @@ namespace dbtools
                                         ::com::sun::star::sdbc::XRowSetListener
                                     >   OAutoConnectionDisposer_Base;
 
-    class OAutoConnectionDisposer : public OAutoConnectionDisposer_Base
+    class OOO_DLLPUBLIC_DBTOOLS OAutoConnectionDisposer : public OAutoConnectionDisposer_Base
     {
         ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >
                     m_xOriginalConnection;

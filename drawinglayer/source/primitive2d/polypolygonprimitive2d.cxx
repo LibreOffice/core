@@ -117,6 +117,74 @@ namespace drawinglayer
 {
     namespace primitive2d
     {
+        Primitive2DSequence PolyPolygonMarkerPrimitive2D::createLocalDecomposition(const geometry::ViewInformation2D& /*rViewInformation*/) const
+        {
+            const basegfx::B2DPolyPolygon aPolyPolygon(getB2DPolyPolygon());
+            const sal_uInt32 nCount(aPolyPolygon.count());
+
+            if(nCount)
+            {
+                Primitive2DSequence aRetval(nCount);
+
+                for(sal_uInt32 a(0L); a < nCount; a++)
+                {
+                    aRetval[a] = Primitive2DReference(new PolygonMarkerPrimitive2D(aPolyPolygon.getB2DPolygon(a), getRGBColorA(), getRGBColorB(), getDiscreteDashLength()));
+                }
+
+                return aRetval;
+            }
+            else
+            {
+                return Primitive2DSequence();
+            }
+        }
+
+        PolyPolygonMarkerPrimitive2D::PolyPolygonMarkerPrimitive2D(
+            const basegfx::B2DPolyPolygon& rPolyPolygon,
+            const basegfx::BColor& rRGBColorA,
+            const basegfx::BColor& rRGBColorB,
+            double fDiscreteDashLength)
+        :   BasePrimitive2D(),
+            maPolyPolygon(rPolyPolygon),
+            maRGBColorA(rRGBColorA),
+            maRGBColorB(rRGBColorB),
+            mfDiscreteDashLength(fDiscreteDashLength)
+        {
+        }
+
+        bool PolyPolygonMarkerPrimitive2D::operator==(const BasePrimitive2D& rPrimitive) const
+        {
+            if(BasePrimitive2D::operator==(rPrimitive))
+            {
+                const PolyPolygonMarkerPrimitive2D& rCompare = (PolyPolygonMarkerPrimitive2D&)rPrimitive;
+
+                return (getB2DPolyPolygon() == rCompare.getB2DPolyPolygon()
+                    && getRGBColorA() == rCompare.getRGBColorA()
+                    && getRGBColorB() == rCompare.getRGBColorB()
+                    && getDiscreteDashLength() == rCompare.getDiscreteDashLength());
+            }
+
+            return false;
+        }
+
+        basegfx::B2DRange PolyPolygonMarkerPrimitive2D::getB2DRange(const geometry::ViewInformation2D& /*rViewInformation*/) const
+        {
+            // return range
+            return basegfx::tools::getRange(getB2DPolyPolygon());
+        }
+
+        // provide unique ID
+        ImplPrimitrive2DIDBlock(PolyPolygonMarkerPrimitive2D, PRIMITIVE2D_ID_POLYPOLYGONMARKERPRIMITIVE2D)
+
+    } // end of namespace primitive2d
+} // end of namespace drawinglayer
+
+//////////////////////////////////////////////////////////////////////////////
+
+namespace drawinglayer
+{
+    namespace primitive2d
+    {
         Primitive2DSequence PolyPolygonStrokePrimitive2D::createLocalDecomposition(const geometry::ViewInformation2D& /*rViewInformation*/) const
         {
             const basegfx::B2DPolyPolygon aPolyPolygon(getB2DPolyPolygon());

@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: optcolor.src,v $
- * $Revision: 1.47 $
+ * $Revision: 1.47.196.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -433,6 +433,61 @@ TabPage RID_SVXPAGE_COLORCONFIG
                 Text [ en-US ] = "Error";
             };
             LB_WN( BASICERROR, 42 )
+
+            FixedText FT_SQL_COMMAND
+            {
+                FT_SEP_POS_SIZE( 43 );
+                Text [ en-US ] = "SQL Syntax Highlighting";
+            };
+
+            FixedText FT_SQLIDENTIFIER
+            {
+                FT_POS_SIZE( 44 );
+                Text [ en-US ] = "Identifier";
+            };
+            LB_WN( SQLIDENTIFIER, 44 )
+
+            FixedText FT_SQLNUMBER
+            {
+                FT_POS_SIZE( 45 );
+                Text [ en-US ] = "Number";
+            };
+            LB_WN( SQLNUMBER, 45 )
+
+            FixedText FT_SQLSTRING
+            {
+                FT_POS_SIZE( 46 );
+                Text [ en-US ] = "String";
+            };
+            LB_WN( SQLSTRING, 46 )
+
+            FixedText FT_SQLOPERATOR
+            {
+                FT_POS_SIZE( 47 );
+                Text [ en-US ] = "Operator";
+            };
+            LB_WN( SQLOPERATOR, 47 )
+
+            FixedText FT_SQLKEYWORD
+            {
+                FT_POS_SIZE( 48 );
+                Text [ en-US ] = "Keyword";
+            };
+            LB_WN( SQLKEYWORD, 48 )
+
+            FixedText FT_SQLPARAMETER
+            {
+                FT_POS_SIZE( 49 );
+                Text [ en-US ] = "Parameter";
+            };
+            LB_WN( SQLPARAMETER, 49 )
+
+            FixedText FT_SQLCOMMENT
+            {
+                FT_POS_SIZE( 50 );
+                Text [ en-US ] = "Comment";
+            };
+            LB_WN( SQLCOMMENT, 50 )
 
             String ST_EXTENSION
             {

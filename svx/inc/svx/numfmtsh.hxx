@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: numfmtsh.hxx,v $
- * $Revision: 1.3 $
+ * $Revision: 1.3.242.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -191,6 +191,10 @@ public:
     void                SetCurLanguage( LanguageType eNew ) { eCurLanguage = eNew; }
     sal_uInt32          GetCurNumFmtKey() const             { return nCurFormatKey; }
     LanguageType        GetCurLanguage() const              { return eCurLanguage; }
+
+                        /** Returns the name of Standard, General, ... for the
+                            current language. */
+    String              GetStandardName() const;
 
     String              GetComment4Entry(short nEntry);
     short               GetCategory4Entry(short nEntry);

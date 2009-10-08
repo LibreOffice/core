@@ -54,7 +54,7 @@
 #include "resource/common_res.hrc"
 #include "resource/sharedresources.hxx"
 
-
+#include <rtl/logfile.hxx>
 #include <string.h>
 
 using namespace ::comphelper;
@@ -80,6 +80,7 @@ java_sql_ResultSet::java_sql_ResultSet( JNIEnv * pEnv, jobject myObj, const java
     ,m_aLogger( _rParentLogger, java::sql::ConnectionLog::RESULTSET )
     ,m_pConnection(&_rConnection)
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "jdbc", "Ocke.Janssen@sun.com", "java_sql_ResultSet::java_sql_ResultSet" );
     SDBThreadAttach::addRef();
     osl_incrementInterlockedCount(&m_refCount);
     if ( pStmt )
@@ -100,6 +101,7 @@ java_sql_ResultSet::~java_sql_ResultSet()
 
 jclass java_sql_ResultSet::getMyClass()
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "jdbc", "Ocke.Janssen@sun.com", "java_sql_ResultSet::getMyClass" );
     // die Klasse muss nur einmal geholt werden, daher statisch
     if( !theClass ){
         SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment geloescht worden!");
@@ -114,6 +116,7 @@ jclass java_sql_ResultSet::getMyClass()
 
 void java_sql_ResultSet::saveClassRef( jclass pClass )
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "jdbc", "Ocke.Janssen@sun.com", "java_sql_ResultSet::saveClassRef" );
     if( pClass==0  )
         return;
     // der uebergebe Klassen-Handle ist schon global, daher einfach speichern
@@ -122,6 +125,7 @@ void java_sql_ResultSet::saveClassRef( jclass pClass )
 // -------------------------------------------------------------------------
 void java_sql_ResultSet::disposing(void)
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "jdbc", "Ocke.Janssen@sun.com", "java_sql_ResultSet::disposing" );
     OPropertySetHelper::disposing();
 
     ::osl::MutexGuard aGuard(m_aMutex);
@@ -151,12 +155,14 @@ void java_sql_ResultSet::disposing(void)
 // -------------------------------------------------------------------------
 ::com::sun::star::uno::Any SAL_CALL java_sql_ResultSet::queryInterface( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException)
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "jdbc", "Ocke.Janssen@sun.com", "java_sql_ResultSet::queryInterface" );
     ::com::sun::star::uno::Any aRet = OPropertySetHelper::queryInterface(rType);
     return aRet.hasValue() ? aRet : java_sql_ResultSet_BASE::queryInterface(rType);
 }
 // -------------------------------------------------------------------------
 ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > SAL_CALL java_sql_ResultSet::getTypes(  ) throw(::com::sun::star::uno::RuntimeException)
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "jdbc", "Ocke.Janssen@sun.com", "java_sql_ResultSet::getTypes" );
     ::cppu::OTypeCollection aTypes( ::getCppuType( (const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XMultiPropertySet > *)0 ),
                                     ::getCppuType( (const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XFastPropertySet > *)0 ),
                                     ::getCppuType( (const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > *)0 ));
@@ -167,6 +173,7 @@ void java_sql_ResultSet::disposing(void)
 
 sal_Int32 SAL_CALL java_sql_ResultSet::findColumn( const ::rtl::OUString& columnName ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException)
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "jdbc", "Ocke.Janssen@sun.com", "java_sql_ResultSet::findColumn" );
     jint out(0);
     SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment geloescht worden!");
     if( t.pEnv ){
@@ -195,6 +202,7 @@ sal_Int32 SAL_CALL java_sql_ResultSet::findColumn( const ::rtl::OUString& column
 
 Reference< ::com::sun::star::io::XInputStream > SAL_CALL java_sql_ResultSet::getBinaryStream( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "jdbc", "Ocke.Janssen@sun.com", "java_sql_ResultSet::getBinaryStream" );
     jobject out(0);
     SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment geloescht worden!");
     if( t.pEnv )
@@ -218,6 +226,7 @@ Reference< ::com::sun::star::io::XInputStream > SAL_CALL java_sql_ResultSet::get
 // -------------------------------------------------------------------------
 Reference< ::com::sun::star::io::XInputStream > SAL_CALL java_sql_ResultSet::getCharacterStream( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "jdbc", "Ocke.Janssen@sun.com", "java_sql_ResultSet::getCharacterStream" );
     jobject out(0);
     SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment geloescht worden!");
     if( t.pEnv )
@@ -242,6 +251,7 @@ Reference< ::com::sun::star::io::XInputStream > SAL_CALL java_sql_ResultSet::get
 
 sal_Bool SAL_CALL java_sql_ResultSet::getBoolean( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "jdbc", "Ocke.Janssen@sun.com", "java_sql_ResultSet::getBoolean" );
     jboolean out(sal_False);
     SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment geloescht worden!");
     if( t.pEnv )
@@ -265,6 +275,7 @@ sal_Bool SAL_CALL java_sql_ResultSet::getBoolean( sal_Int32 columnIndex ) throw(
 
 sal_Int8 SAL_CALL java_sql_ResultSet::getByte( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "jdbc", "Ocke.Janssen@sun.com", "java_sql_ResultSet::getByte" );
     jbyte out(0);
     SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment geloescht worden!");
     if( t.pEnv )
@@ -288,6 +299,7 @@ sal_Int8 SAL_CALL java_sql_ResultSet::getByte( sal_Int32 columnIndex ) throw(SQL
 
 Sequence< sal_Int8 > SAL_CALL java_sql_ResultSet::getBytes( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "jdbc", "Ocke.Janssen@sun.com", "java_sql_ResultSet::getBytes" );
         Sequence< sal_Int8 > aSeq;
     SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment geloescht worden!");
     if( t.pEnv )
@@ -317,6 +329,7 @@ Sequence< sal_Int8 > SAL_CALL java_sql_ResultSet::getBytes( sal_Int32 columnInde
 
 ::com::sun::star::util::Date SAL_CALL java_sql_ResultSet::getDate( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "jdbc", "Ocke.Janssen@sun.com", "java_sql_ResultSet::getDate" );
     jobject out(0);
     SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment geloescht worden!");
     if( t.pEnv )
@@ -341,6 +354,7 @@ Sequence< sal_Int8 > SAL_CALL java_sql_ResultSet::getBytes( sal_Int32 columnInde
 
 double SAL_CALL java_sql_ResultSet::getDouble( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "jdbc", "Ocke.Janssen@sun.com", "java_sql_ResultSet::getDouble" );
     jdouble out(0);
     SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment geloescht worden!");
     if( t.pEnv )
@@ -364,6 +378,7 @@ double SAL_CALL java_sql_ResultSet::getDouble( sal_Int32 columnIndex ) throw(SQL
 
 float SAL_CALL java_sql_ResultSet::getFloat( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "jdbc", "Ocke.Janssen@sun.com", "java_sql_ResultSet::getFloat" );
     jfloat out(0);
     SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment geloescht worden!");
     if( t.pEnv )
@@ -387,6 +402,7 @@ float SAL_CALL java_sql_ResultSet::getFloat( sal_Int32 columnIndex ) throw(SQLEx
 
 sal_Int32 SAL_CALL java_sql_ResultSet::getInt( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "jdbc", "Ocke.Janssen@sun.com", "java_sql_ResultSet::getInt" );
     jint out(0);
     SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment geloescht worden!");
     if( t.pEnv )
@@ -410,6 +426,7 @@ sal_Int32 SAL_CALL java_sql_ResultSet::getInt( sal_Int32 columnIndex ) throw(SQL
 
 sal_Int32 SAL_CALL java_sql_ResultSet::getRow(  ) throw(SQLException, RuntimeException)
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "jdbc", "Ocke.Janssen@sun.com", "java_sql_ResultSet::getRow" );
     jint out(0);
     SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment geloescht worden!");
     if( t.pEnv ){
@@ -432,6 +449,7 @@ sal_Int32 SAL_CALL java_sql_ResultSet::getRow(  ) throw(SQLException, RuntimeExc
 
 sal_Int64 SAL_CALL java_sql_ResultSet::getLong( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "jdbc", "Ocke.Janssen@sun.com", "java_sql_ResultSet::getLong" );
     jlong out(0);
     SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment geloescht worden!");
     if( t.pEnv ){
@@ -454,6 +472,7 @@ sal_Int64 SAL_CALL java_sql_ResultSet::getLong( sal_Int32 columnIndex ) throw(SQ
 
 ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSetMetaData > SAL_CALL java_sql_ResultSet::getMetaData(  ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException)
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "jdbc", "Ocke.Janssen@sun.com", "java_sql_ResultSet::getMetaData" );
     jobject out(0);
     SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment geloescht worden!");
     if( t.pEnv )
@@ -477,6 +496,7 @@ sal_Int64 SAL_CALL java_sql_ResultSet::getLong( sal_Int32 columnIndex ) throw(SQ
 // -------------------------------------------------------------------------
 Reference< XArray > SAL_CALL java_sql_ResultSet::getArray( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "jdbc", "Ocke.Janssen@sun.com", "java_sql_ResultSet::getArray" );
     jobject out(0);
     SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment geloescht worden!");
     if( t.pEnv ){
@@ -500,6 +520,7 @@ Reference< XArray > SAL_CALL java_sql_ResultSet::getArray( sal_Int32 columnIndex
 
 Reference< XClob > SAL_CALL java_sql_ResultSet::getClob( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "jdbc", "Ocke.Janssen@sun.com", "java_sql_ResultSet::getClob" );
     jobject out(0);
     SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment geloescht worden!");
     if( t.pEnv ){
@@ -522,6 +543,7 @@ Reference< XClob > SAL_CALL java_sql_ResultSet::getClob( sal_Int32 columnIndex )
 // -------------------------------------------------------------------------
 Reference< XBlob > SAL_CALL java_sql_ResultSet::getBlob( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "jdbc", "Ocke.Janssen@sun.com", "java_sql_ResultSet::getBlob" );
     jobject out(0);
     SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment geloescht worden!");
     if( t.pEnv ){
@@ -545,6 +567,7 @@ Reference< XBlob > SAL_CALL java_sql_ResultSet::getBlob( sal_Int32 columnIndex )
 
 Reference< XRef > SAL_CALL java_sql_ResultSet::getRef( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "jdbc", "Ocke.Janssen@sun.com", "java_sql_ResultSet::getRef" );
     jobject out(0);
     SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment geloescht worden!");
     if( t.pEnv ){
@@ -568,6 +591,7 @@ Reference< XRef > SAL_CALL java_sql_ResultSet::getRef( sal_Int32 columnIndex ) t
 
 Any SAL_CALL java_sql_ResultSet::getObject( sal_Int32 columnIndex, const Reference< ::com::sun::star::container::XNameAccess >& typeMap ) throw(SQLException, RuntimeException)
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "jdbc", "Ocke.Janssen@sun.com", "java_sql_ResultSet::getObject" );
     jobject out(0);
     SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment geloescht worden!");
     if( t.pEnv ){
@@ -596,6 +620,7 @@ Any SAL_CALL java_sql_ResultSet::getObject( sal_Int32 columnIndex, const Referen
 
 sal_Int16 SAL_CALL java_sql_ResultSet::getShort( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "jdbc", "Ocke.Janssen@sun.com", "java_sql_ResultSet::getShort" );
     jshort out(0);
     SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment geloescht worden!");
     if( t.pEnv ){
@@ -619,6 +644,7 @@ sal_Int16 SAL_CALL java_sql_ResultSet::getShort( sal_Int32 columnIndex ) throw(S
 
 ::rtl::OUString SAL_CALL java_sql_ResultSet::getString( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "jdbc", "Ocke.Janssen@sun.com", "java_sql_ResultSet::getString" );
     SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment geloescht worden!");
     ::rtl::OUString aStr;
     if( t.pEnv ){
@@ -644,6 +670,7 @@ sal_Int16 SAL_CALL java_sql_ResultSet::getShort( sal_Int32 columnIndex ) throw(S
 
 ::com::sun::star::util::Time SAL_CALL java_sql_ResultSet::getTime( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "jdbc", "Ocke.Janssen@sun.com", "java_sql_ResultSet::getTime" );
     jobject out(0);
     SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment geloescht worden!");
     if( t.pEnv )
@@ -669,6 +696,7 @@ sal_Int16 SAL_CALL java_sql_ResultSet::getShort( sal_Int32 columnIndex ) throw(S
 
 ::com::sun::star::util::DateTime SAL_CALL java_sql_ResultSet::getTimestamp( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "jdbc", "Ocke.Janssen@sun.com", "java_sql_ResultSet::getTimestamp" );
     jobject out(0);
     SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment geloescht worden!");
     if( t.pEnv ){
@@ -692,6 +720,7 @@ sal_Int16 SAL_CALL java_sql_ResultSet::getShort( sal_Int32 columnIndex ) throw(S
 
 sal_Bool SAL_CALL java_sql_ResultSet::isAfterLast(  ) throw(SQLException, RuntimeException)
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "jdbc", "Ocke.Janssen@sun.com", "java_sql_ResultSet::isAfterLast" );
     jboolean out(sal_False);
     SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment geloescht worden!");
     if( t.pEnv )
@@ -714,6 +743,7 @@ sal_Bool SAL_CALL java_sql_ResultSet::isAfterLast(  ) throw(SQLException, Runtim
 // -------------------------------------------------------------------------
 sal_Bool SAL_CALL java_sql_ResultSet::isFirst(  ) throw(SQLException, RuntimeException)
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "jdbc", "Ocke.Janssen@sun.com", "java_sql_ResultSet::isFirst" );
     jboolean out(sal_False);
     SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment geloescht worden!");
     if( t.pEnv )
@@ -736,6 +766,7 @@ sal_Bool SAL_CALL java_sql_ResultSet::isFirst(  ) throw(SQLException, RuntimeExc
 // -------------------------------------------------------------------------
 sal_Bool SAL_CALL java_sql_ResultSet::isLast(  ) throw(SQLException, RuntimeException)
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "jdbc", "Ocke.Janssen@sun.com", "java_sql_ResultSet::isLast" );
     jboolean out(sal_False);
     SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment geloescht worden!");
     if( t.pEnv )
@@ -758,6 +789,7 @@ sal_Bool SAL_CALL java_sql_ResultSet::isLast(  ) throw(SQLException, RuntimeExce
 // -------------------------------------------------------------------------
 void SAL_CALL java_sql_ResultSet::beforeFirst(  ) throw(SQLException, RuntimeException)
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "jdbc", "Ocke.Janssen@sun.com", "java_sql_ResultSet::beforeFirst" );
     SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment geloescht worden!");
     if( t.pEnv )
 
@@ -778,6 +810,7 @@ void SAL_CALL java_sql_ResultSet::beforeFirst(  ) throw(SQLException, RuntimeExc
 // -------------------------------------------------------------------------
 void SAL_CALL java_sql_ResultSet::afterLast(  ) throw(SQLException, RuntimeException)
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "jdbc", "Ocke.Janssen@sun.com", "java_sql_ResultSet::afterLast" );
     SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment geloescht worden!");
     if( t.pEnv )
 
@@ -799,12 +832,14 @@ void SAL_CALL java_sql_ResultSet::afterLast(  ) throw(SQLException, RuntimeExcep
 
 void SAL_CALL java_sql_ResultSet::close(  ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException)
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "jdbc", "Ocke.Janssen@sun.com", "java_sql_ResultSet::close" );
     dispose();
 }
 // -------------------------------------------------------------------------
 
 sal_Bool SAL_CALL java_sql_ResultSet::first(  ) throw(SQLException, RuntimeException)
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "jdbc", "Ocke.Janssen@sun.com", "java_sql_ResultSet::first" );
     jboolean out(sal_False);
     SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment geloescht worden!");
     if( t.pEnv )
@@ -827,6 +862,7 @@ sal_Bool SAL_CALL java_sql_ResultSet::first(  ) throw(SQLException, RuntimeExcep
 
 sal_Bool SAL_CALL java_sql_ResultSet::last(  ) throw(SQLException, RuntimeException)
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "jdbc", "Ocke.Janssen@sun.com", "java_sql_ResultSet::last" );
     jboolean out(sal_False);
     SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment geloescht worden!");
     if( t.pEnv )
@@ -848,6 +884,7 @@ sal_Bool SAL_CALL java_sql_ResultSet::last(  ) throw(SQLException, RuntimeExcept
 // -------------------------------------------------------------------------
 sal_Bool SAL_CALL java_sql_ResultSet::absolute( sal_Int32 row ) throw(SQLException, RuntimeException)
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "jdbc", "Ocke.Janssen@sun.com", "java_sql_ResultSet::absolute" );
     jboolean out(sal_False);
     SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment geloescht worden!");
     if( t.pEnv )
@@ -869,6 +906,7 @@ sal_Bool SAL_CALL java_sql_ResultSet::absolute( sal_Int32 row ) throw(SQLExcepti
 // -------------------------------------------------------------------------
 sal_Bool SAL_CALL java_sql_ResultSet::relative( sal_Int32 row ) throw(SQLException, RuntimeException)
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "jdbc", "Ocke.Janssen@sun.com", "java_sql_ResultSet::relative" );
     jboolean out(sal_False);
     SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment geloescht worden!");
     if( t.pEnv )
@@ -890,6 +928,7 @@ sal_Bool SAL_CALL java_sql_ResultSet::relative( sal_Int32 row ) throw(SQLExcepti
 // -------------------------------------------------------------------------
 sal_Bool SAL_CALL java_sql_ResultSet::previous(  ) throw(SQLException, RuntimeException)
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "jdbc", "Ocke.Janssen@sun.com", "java_sql_ResultSet::previous" );
     jboolean out(sal_False);
     SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment geloescht worden!");
     if( t.pEnv )
@@ -912,12 +951,14 @@ sal_Bool SAL_CALL java_sql_ResultSet::previous(  ) throw(SQLException, RuntimeEx
 // -------------------------------------------------------------------------
 Reference< XInterface > SAL_CALL java_sql_ResultSet::getStatement(  ) throw(SQLException, RuntimeException)
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "jdbc", "Ocke.Janssen@sun.com", "java_sql_ResultSet::getStatement" );
     return m_xStatement;
 }
 // -------------------------------------------------------------------------
 
 sal_Bool SAL_CALL java_sql_ResultSet::rowDeleted(  ) throw(SQLException, RuntimeException)
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "jdbc", "Ocke.Janssen@sun.com", "java_sql_ResultSet::rowDeleted" );
     jboolean out(sal_False);
     SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment geloescht worden!");
     if( t.pEnv )
@@ -939,6 +980,7 @@ sal_Bool SAL_CALL java_sql_ResultSet::rowDeleted(  ) throw(SQLException, Runtime
 // -------------------------------------------------------------------------
 sal_Bool SAL_CALL java_sql_ResultSet::rowInserted(  ) throw(SQLException, RuntimeException)
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "jdbc", "Ocke.Janssen@sun.com", "java_sql_ResultSet::rowInserted" );
     jboolean out(sal_False);
     SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment geloescht worden!");
     if( t.pEnv )
@@ -960,6 +1002,7 @@ sal_Bool SAL_CALL java_sql_ResultSet::rowInserted(  ) throw(SQLException, Runtim
 // -------------------------------------------------------------------------
 sal_Bool SAL_CALL java_sql_ResultSet::rowUpdated(  ) throw(SQLException, RuntimeException)
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "jdbc", "Ocke.Janssen@sun.com", "java_sql_ResultSet::rowUpdated" );
     jboolean out(sal_False);
     SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment geloescht worden!");
     if( t.pEnv )
@@ -982,6 +1025,7 @@ sal_Bool SAL_CALL java_sql_ResultSet::rowUpdated(  ) throw(SQLException, Runtime
 
 sal_Bool SAL_CALL java_sql_ResultSet::isBeforeFirst(  ) throw(SQLException, RuntimeException)
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "jdbc", "Ocke.Janssen@sun.com", "java_sql_ResultSet::isBeforeFirst" );
     jboolean out(sal_False);
     SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment geloescht worden!");
     if( t.pEnv )
@@ -1004,6 +1048,7 @@ sal_Bool SAL_CALL java_sql_ResultSet::isBeforeFirst(  ) throw(SQLException, Runt
 
 sal_Bool SAL_CALL java_sql_ResultSet::next(  ) throw(SQLException, RuntimeException)
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "jdbc", "Ocke.Janssen@sun.com", "java_sql_ResultSet::next" );
     jboolean out(sal_False);
     SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment geloescht worden!");
     if( t.pEnv )
@@ -1027,6 +1072,7 @@ sal_Bool SAL_CALL java_sql_ResultSet::next(  ) throw(SQLException, RuntimeExcept
 
 sal_Bool SAL_CALL java_sql_ResultSet::wasNull(  ) throw(SQLException, RuntimeException)
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "jdbc", "Ocke.Janssen@sun.com", "java_sql_ResultSet::wasNull" );
     jboolean out(sal_False);
     SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment geloescht worden!");
     if( t.pEnv )
@@ -1049,6 +1095,7 @@ sal_Bool SAL_CALL java_sql_ResultSet::wasNull(  ) throw(SQLException, RuntimeExc
 
 void SAL_CALL java_sql_ResultSet::cancel(  ) throw(::com::sun::star::uno::RuntimeException)
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "jdbc", "Ocke.Janssen@sun.com", "java_sql_ResultSet::cancel" );
     SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment geloescht worden!");
     if( t.pEnv )
     {
@@ -1069,6 +1116,7 @@ void SAL_CALL java_sql_ResultSet::cancel(  ) throw(::com::sun::star::uno::Runtim
 // -------------------------------------------------------------------------
 void SAL_CALL java_sql_ResultSet::clearWarnings(  ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException)
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "jdbc", "Ocke.Janssen@sun.com", "java_sql_ResultSet::clearWarnings" );
     SDBThreadAttach t;
     if( t.pEnv )
     {
@@ -1088,6 +1136,7 @@ void SAL_CALL java_sql_ResultSet::clearWarnings(  ) throw(::com::sun::star::sdbc
 // -------------------------------------------------------------------------
 ::com::sun::star::uno::Any SAL_CALL java_sql_ResultSet::getWarnings(  ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException)
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "jdbc", "Ocke.Janssen@sun.com", "java_sql_ResultSet::getWarnings" );
     jobject out(NULL);
     SDBThreadAttach t;
     if( t.pEnv )
@@ -1119,6 +1168,7 @@ void SAL_CALL java_sql_ResultSet::clearWarnings(  ) throw(::com::sun::star::sdbc
 
 void SAL_CALL java_sql_ResultSet::insertRow(  ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException)
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "jdbc", "Ocke.Janssen@sun.com", "java_sql_ResultSet::insertRow" );
     SDBThreadAttach t;
     if( t.pEnv )
     {
@@ -1138,6 +1188,7 @@ void SAL_CALL java_sql_ResultSet::insertRow(  ) throw(::com::sun::star::sdbc::SQ
 // -------------------------------------------------------------------------
 void SAL_CALL java_sql_ResultSet::updateRow(  ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException)
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "jdbc", "Ocke.Janssen@sun.com", "java_sql_ResultSet::updateRow" );
     SDBThreadAttach t;
     if( t.pEnv )
     {
@@ -1157,6 +1208,7 @@ void SAL_CALL java_sql_ResultSet::updateRow(  ) throw(::com::sun::star::sdbc::SQ
 // -------------------------------------------------------------------------
 void SAL_CALL java_sql_ResultSet::deleteRow(  ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException)
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "jdbc", "Ocke.Janssen@sun.com", "java_sql_ResultSet::deleteRow" );
     SDBThreadAttach t;
     if( t.pEnv )
     {
@@ -1177,6 +1229,7 @@ void SAL_CALL java_sql_ResultSet::deleteRow(  ) throw(::com::sun::star::sdbc::SQ
 
 void SAL_CALL java_sql_ResultSet::cancelRowUpdates(  ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException)
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "jdbc", "Ocke.Janssen@sun.com", "java_sql_ResultSet::cancelRowUpdates" );
     SDBThreadAttach t;
     if( t.pEnv )
     {
@@ -1197,6 +1250,7 @@ void SAL_CALL java_sql_ResultSet::cancelRowUpdates(  ) throw(::com::sun::star::s
 
 void SAL_CALL java_sql_ResultSet::moveToInsertRow(  ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException)
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "jdbc", "Ocke.Janssen@sun.com", "java_sql_ResultSet::moveToInsertRow" );
     SDBThreadAttach t;
     if( t.pEnv )
     {
@@ -1217,6 +1271,7 @@ void SAL_CALL java_sql_ResultSet::moveToInsertRow(  ) throw(::com::sun::star::sd
 
 void SAL_CALL java_sql_ResultSet::moveToCurrentRow(  ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException)
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "jdbc", "Ocke.Janssen@sun.com", "java_sql_ResultSet::moveToCurrentRow" );
     SDBThreadAttach t;
     if( t.pEnv )
     {
@@ -1237,6 +1292,7 @@ void SAL_CALL java_sql_ResultSet::moveToCurrentRow(  ) throw(::com::sun::star::s
 
 void SAL_CALL java_sql_ResultSet::updateNull( sal_Int32 columnIndex ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException)
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "jdbc", "Ocke.Janssen@sun.com", "java_sql_ResultSet::updateNull" );
     SDBThreadAttach t;
     if( t.pEnv )
     {
@@ -1257,6 +1313,7 @@ void SAL_CALL java_sql_ResultSet::updateNull( sal_Int32 columnIndex ) throw(::co
 
 void SAL_CALL java_sql_ResultSet::updateBoolean( sal_Int32 columnIndex, sal_Bool x ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException)
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "jdbc", "Ocke.Janssen@sun.com", "java_sql_ResultSet::updateBoolean" );
     SDBThreadAttach t;
     if( t.pEnv )
     {
@@ -1276,6 +1333,7 @@ void SAL_CALL java_sql_ResultSet::updateBoolean( sal_Int32 columnIndex, sal_Bool
 // -------------------------------------------------------------------------
 void SAL_CALL java_sql_ResultSet::updateByte( sal_Int32 columnIndex, sal_Int8 x ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException)
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "jdbc", "Ocke.Janssen@sun.com", "java_sql_ResultSet::updateByte" );
     SDBThreadAttach t;
     if( t.pEnv )
     {
@@ -1296,6 +1354,7 @@ void SAL_CALL java_sql_ResultSet::updateByte( sal_Int32 columnIndex, sal_Int8 x 
 
 void SAL_CALL java_sql_ResultSet::updateShort( sal_Int32 columnIndex, sal_Int16 x ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException)
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "jdbc", "Ocke.Janssen@sun.com", "java_sql_ResultSet::updateShort" );
     SDBThreadAttach t;
     if( t.pEnv )
     {
@@ -1315,6 +1374,7 @@ void SAL_CALL java_sql_ResultSet::updateShort( sal_Int32 columnIndex, sal_Int16 
 // -------------------------------------------------------------------------
 void SAL_CALL java_sql_ResultSet::updateInt( sal_Int32 columnIndex, sal_Int32 x ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException)
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "jdbc", "Ocke.Janssen@sun.com", "java_sql_ResultSet::updateInt" );
     SDBThreadAttach t;
     if( t.pEnv )
     {
@@ -1334,6 +1394,7 @@ void SAL_CALL java_sql_ResultSet::updateInt( sal_Int32 columnIndex, sal_Int32 x 
 // -------------------------------------------------------------------------
 void SAL_CALL java_sql_ResultSet::updateLong( sal_Int32 columnIndex, sal_Int64 x ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException)
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "jdbc", "Ocke.Janssen@sun.com", "java_sql_ResultSet::updateLong" );
     SDBThreadAttach t;
     if( t.pEnv )
     {
@@ -1355,6 +1416,7 @@ void SAL_CALL java_sql_ResultSet::updateLong( sal_Int32 columnIndex, sal_Int64 x
 // -----------------------------------------------------------------------
 void SAL_CALL java_sql_ResultSet::updateFloat( sal_Int32 columnIndex, float x ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException)
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "jdbc", "Ocke.Janssen@sun.com", "java_sql_ResultSet::updateFloat" );
     SDBThreadAttach t;
     if( t.pEnv )
     {
@@ -1375,6 +1437,7 @@ void SAL_CALL java_sql_ResultSet::updateFloat( sal_Int32 columnIndex, float x ) 
 
 void SAL_CALL java_sql_ResultSet::updateDouble( sal_Int32 columnIndex, double x ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException)
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "jdbc", "Ocke.Janssen@sun.com", "java_sql_ResultSet::updateDouble" );
     SDBThreadAttach t;
     if( t.pEnv )
     {
@@ -1395,6 +1458,7 @@ void SAL_CALL java_sql_ResultSet::updateDouble( sal_Int32 columnIndex, double x 
 
 void SAL_CALL java_sql_ResultSet::updateString( sal_Int32 columnIndex, const ::rtl::OUString& x ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException)
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "jdbc", "Ocke.Janssen@sun.com", "java_sql_ResultSet::updateString" );
     SDBThreadAttach t;
     if( t.pEnv )
     {
@@ -1420,6 +1484,7 @@ void SAL_CALL java_sql_ResultSet::updateString( sal_Int32 columnIndex, const ::r
 
 void SAL_CALL java_sql_ResultSet::updateBytes( sal_Int32 columnIndex, const ::com::sun::star::uno::Sequence< sal_Int8 >& x ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException)
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "jdbc", "Ocke.Janssen@sun.com", "java_sql_ResultSet::updateBytes" );
     SDBThreadAttach t;
     if( t.pEnv )
     {
@@ -1445,6 +1510,7 @@ void SAL_CALL java_sql_ResultSet::updateBytes( sal_Int32 columnIndex, const ::co
 
 void SAL_CALL java_sql_ResultSet::updateDate( sal_Int32 columnIndex, const ::com::sun::star::util::Date& x ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException)
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "jdbc", "Ocke.Janssen@sun.com", "java_sql_ResultSet::updateDate" );
     SDBThreadAttach t;
     if( t.pEnv )
     {
@@ -1471,6 +1537,7 @@ void SAL_CALL java_sql_ResultSet::updateDate( sal_Int32 columnIndex, const ::com
 
 void SAL_CALL java_sql_ResultSet::updateTime( sal_Int32 columnIndex, const ::com::sun::star::util::Time& x ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException)
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "jdbc", "Ocke.Janssen@sun.com", "java_sql_ResultSet::updateTime" );
     SDBThreadAttach t;
     if( t.pEnv )
     {
@@ -1496,6 +1563,7 @@ void SAL_CALL java_sql_ResultSet::updateTime( sal_Int32 columnIndex, const ::com
 
 void SAL_CALL java_sql_ResultSet::updateTimestamp( sal_Int32 columnIndex, const ::com::sun::star::util::DateTime& x ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException)
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "jdbc", "Ocke.Janssen@sun.com", "java_sql_ResultSet::updateTimestamp" );
     SDBThreadAttach t;
     if( t.pEnv )
     {
@@ -1521,16 +1589,19 @@ void SAL_CALL java_sql_ResultSet::updateTimestamp( sal_Int32 columnIndex, const 
 
 void SAL_CALL java_sql_ResultSet::updateBinaryStream( sal_Int32 /*columnIndex*/, const ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream >& /*x*/, sal_Int32 /*length*/ ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException)
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "jdbc", "Ocke.Janssen@sun.com", "java_sql_ResultSet::updateBinaryStream" );
     ::dbtools::throwFeatureNotImplementedException( "XParameters::updateBinaryStream", *this );
 }
 // -------------------------------------------------------------------------
 void SAL_CALL java_sql_ResultSet::updateCharacterStream( sal_Int32 /*columnIndex*/, const ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream >& /*x*/, sal_Int32 /*length*/ ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException)
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "jdbc", "Ocke.Janssen@sun.com", "java_sql_ResultSet::updateCharacterStream" );
     ::dbtools::throwFeatureNotImplementedException( "XRowUpdate::updateCharacterStream", *this );
 }
 // -------------------------------------------------------------------------
 void SAL_CALL java_sql_ResultSet::updateObject( sal_Int32 columnIndex, const ::com::sun::star::uno::Any& x ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException)
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "jdbc", "Ocke.Janssen@sun.com", "java_sql_ResultSet::updateObject" );
     if(!::dbtools::implUpdateObject(this,columnIndex,x))
     {
         ::connectivity::SharedResources aResources;
@@ -1545,6 +1616,7 @@ void SAL_CALL java_sql_ResultSet::updateObject( sal_Int32 columnIndex, const ::c
 
 void SAL_CALL java_sql_ResultSet::updateNumericObject( sal_Int32 columnIndex, const ::com::sun::star::uno::Any& x, sal_Int32 scale ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException)
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "jdbc", "Ocke.Janssen@sun.com", "java_sql_ResultSet::updateNumericObject" );
     //  OSL_ENSURE(0,"java_sql_ResultSet::updateNumericObject: NYI");
     try
     {
@@ -1584,6 +1656,7 @@ void SAL_CALL java_sql_ResultSet::updateNumericObject( sal_Int32 columnIndex, co
 //------------------------------------------------------------------------------
 sal_Int32 java_sql_ResultSet::getResultSetConcurrency() const throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException)
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "jdbc", "Ocke.Janssen@sun.com", "java_sql_ResultSet::getResultSetConcurrency" );
     jint out(0);
     SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment geloescht worden!");
     if( t.pEnv ){
@@ -1607,6 +1680,7 @@ sal_Int32 java_sql_ResultSet::getResultSetConcurrency() const throw(::com::sun::
 //------------------------------------------------------------------------------
 sal_Int32 java_sql_ResultSet::getResultSetType() const throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException)
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "jdbc", "Ocke.Janssen@sun.com", "java_sql_ResultSet::getResultSetType" );
     jint out(0);
     SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment geloescht worden!");
     if( t.pEnv ){
@@ -1629,6 +1703,7 @@ sal_Int32 java_sql_ResultSet::getResultSetType() const throw(::com::sun::star::s
 //------------------------------------------------------------------------------
 sal_Int32 java_sql_ResultSet::getFetchDirection() const throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException)
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "jdbc", "Ocke.Janssen@sun.com", "java_sql_ResultSet::getFetchDirection" );
     jint out(0);
     SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment geloescht worden!");
     if( t.pEnv ){
@@ -1651,6 +1726,7 @@ sal_Int32 java_sql_ResultSet::getFetchDirection() const throw(::com::sun::star::
 //------------------------------------------------------------------------------
 sal_Int32 java_sql_ResultSet::getFetchSize() const throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException)
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "jdbc", "Ocke.Janssen@sun.com", "java_sql_ResultSet::getFetchSize" );
     jint out(0);
     SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment geloescht worden!");
     if( t.pEnv ){
@@ -1673,6 +1749,7 @@ sal_Int32 java_sql_ResultSet::getFetchSize() const throw(::com::sun::star::sdbc:
 //------------------------------------------------------------------------------
 ::rtl::OUString java_sql_ResultSet::getCursorName() const throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException)
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "jdbc", "Ocke.Janssen@sun.com", "java_sql_ResultSet::getCursorName" );
     SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment geloescht worden!");
     ::rtl::OUString aStr;
     if( t.pEnv )
@@ -1697,6 +1774,7 @@ sal_Int32 java_sql_ResultSet::getFetchSize() const throw(::com::sun::star::sdbc:
 //------------------------------------------------------------------------------
 void java_sql_ResultSet::setFetchDirection(sal_Int32 _par0) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException)
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "jdbc", "Ocke.Janssen@sun.com", "java_sql_ResultSet::setFetchDirection" );
     SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment geloescht worden!");
     if( t.pEnv ){
         // temporaere Variable initialisieren
@@ -1718,6 +1796,7 @@ void java_sql_ResultSet::setFetchDirection(sal_Int32 _par0) throw(::com::sun::st
 //------------------------------------------------------------------------------
 void SAL_CALL java_sql_ResultSet::refreshRow(  ) throw(SQLException, RuntimeException)
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "jdbc", "Ocke.Janssen@sun.com", "java_sql_ResultSet::refreshRow" );
     SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment geloescht worden!");
     if( t.pEnv )
     {
@@ -1737,6 +1816,7 @@ void SAL_CALL java_sql_ResultSet::refreshRow(  ) throw(SQLException, RuntimeExce
 //------------------------------------------------------------------------------
 void java_sql_ResultSet::setFetchSize(sal_Int32 _par0) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException)
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "jdbc", "Ocke.Janssen@sun.com", "java_sql_ResultSet::setFetchSize" );
     SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment geloescht worden!");
     if( t.pEnv ){
         // temporaere Variable initialisieren
@@ -1757,6 +1837,7 @@ void java_sql_ResultSet::setFetchSize(sal_Int32 _par0) throw(::com::sun::star::s
 // -------------------------------------------------------------------------
 ::cppu::IPropertyArrayHelper* java_sql_ResultSet::createArrayHelper( ) const
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "jdbc", "Ocke.Janssen@sun.com", "java_sql_ResultSet::createArrayHelper" );
     Sequence< Property > aProps(5);
     Property* pProperties = aProps.getArray();
     sal_Int32 nPos = 0;
@@ -1771,6 +1852,7 @@ void java_sql_ResultSet::setFetchSize(sal_Int32 _par0) throw(::com::sun::star::s
 // -------------------------------------------------------------------------
 ::cppu::IPropertyArrayHelper & java_sql_ResultSet::getInfoHelper()
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "jdbc", "Ocke.Janssen@sun.com", "java_sql_ResultSet::getInfoHelper" );
     return *const_cast<java_sql_ResultSet*>(this)->getArrayHelper();
 }
 // -------------------------------------------------------------------------
@@ -1781,6 +1863,7 @@ sal_Bool java_sql_ResultSet::convertFastPropertyValue(
                             const ::com::sun::star::uno::Any& rValue )
                                 throw (::com::sun::star::lang::IllegalArgumentException)
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "jdbc", "Ocke.Janssen@sun.com", "java_sql_ResultSet::convertFastPropertyValue" );
     sal_Bool bRet = sal_False;
     switch(nHandle)
     {
@@ -1806,6 +1889,7 @@ void java_sql_ResultSet::setFastPropertyValue_NoBroadcast(
                                                  )
                                                  throw (::com::sun::star::uno::Exception)
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "jdbc", "Ocke.Janssen@sun.com", "java_sql_ResultSet::setFastPropertyValue_NoBroadcast" );
     switch(nHandle)
     {
         case PROPERTY_ID_CURSORNAME:
@@ -1828,6 +1912,7 @@ void java_sql_ResultSet::getFastPropertyValue(
                                 sal_Int32 nHandle
                                      ) const
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "jdbc", "Ocke.Janssen@sun.com", "java_sql_ResultSet::getFastPropertyValue" );
     try
     {
         switch(nHandle)
@@ -1866,6 +1951,7 @@ void SAL_CALL java_sql_ResultSet::release() throw()
 // -----------------------------------------------------------------------------
 ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo > SAL_CALL java_sql_ResultSet::getPropertySetInfo(  ) throw(::com::sun::star::uno::RuntimeException)
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "jdbc", "Ocke.Janssen@sun.com", "java_sql_ResultSet::getPropertySetInfo" );
     return ::cppu::OPropertySetHelper::createPropertySetInfo(getInfoHelper());
 }
 // -----------------------------------------------------------------------------

@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: editeng.cxx,v $
- * $Revision: 1.118 $
+ * $Revision: 1.117.12.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -38,6 +38,7 @@
 #define _SVSTDARR_USHORTS
 #include <svtools/svstdarr.hxx>
 #include <svtools/ctloptions.hxx>
+#include <svtools/ctrltool.hxx>
 
 #include <svx/svxfont.hxx>
 #include <impedit.hxx>
@@ -929,16 +930,22 @@ sal_Bool EditEngine::PostKeyEvent( const KeyEvent& rKeyEvent, EditView* pEditVie
             case KEY_END:
             case KEY_PAGEUP:
             case KEY_PAGEDOWN:
+            case com::sun::star::awt::Key::MOVE_WORD_FORWARD:
+            case com::sun::star::awt::Key::SELECT_WORD_FORWARD:
+            case com::sun::star::awt::Key::MOVE_WORD_BACKWARD:
+            case com::sun::star::awt::Key::SELECT_WORD_BACKWARD:
             case com::sun::star::awt::Key::MOVE_TO_BEGIN_OF_LINE:
             case com::sun::star::awt::Key::MOVE_TO_END_OF_LINE:
+            case com::sun::star::awt::Key::SELECT_TO_BEGIN_OF_LINE:
+            case com::sun::star::awt::Key::SELECT_TO_END_OF_LINE:
             case com::sun::star::awt::Key::MOVE_TO_BEGIN_OF_PARAGRAPH:
             case com::sun::star::awt::Key::MOVE_TO_END_OF_PARAGRAPH:
-            case com::sun::star::awt::Key::MOVE_WORD_BACKWARD:
-            case com::sun::star::awt::Key::MOVE_WORD_FORWARD:
-            case com::sun::star::awt::Key::SELECT_BACKWARD:
-            case com::sun::star::awt::Key::SELECT_FORWARD:
-            case com::sun::star::awt::Key::SELECT_WORD_BACKWARD:
-            case com::sun::star::awt::Key::SELECT_WORD_FORWARD:
+            case com::sun::star::awt::Key::SELECT_TO_BEGIN_OF_PARAGRAPH:
+            case com::sun::star::awt::Key::SELECT_TO_END_OF_PARAGRAPH:
+            case com::sun::star::awt::Key::MOVE_TO_BEGIN_OF_DOCUMENT:
+            case com::sun::star::awt::Key::MOVE_TO_END_OF_DOCUMENT:
+            case com::sun::star::awt::Key::SELECT_TO_BEGIN_OF_DOCUMENT:
+            case com::sun::star::awt::Key::SELECT_TO_END_OF_DOCUMENT:
             {
                 if ( !rKeyEvent.GetKeyCode().IsMod2() || ( nCode == KEY_LEFT ) || ( nCode == KEY_RIGHT ) )
                 {
@@ -968,6 +975,8 @@ sal_Bool EditEngine::PostKeyEvent( const KeyEvent& rKeyEvent, EditView* pEditVie
             case KEY_DELETE:
             case com::sun::star::awt::Key::DELETE_WORD_BACKWARD:
             case com::sun::star::awt::Key::DELETE_WORD_FORWARD:
+            case com::sun::star::awt::Key::DELETE_TO_BEGIN_OF_PARAGRAPH:
+            case com::sun::star::awt::Key::DELETE_TO_END_OF_PARAGRAPH:
             {
                 if ( !bReadOnly && !rKeyEvent.GetKeyCode().IsMod2() )
                 {
@@ -1750,9 +1759,8 @@ void EditEngine::SetControlWord( sal_uInt32 nWord )
         }
 
         sal_Bool bSpellingChanged = nChanges & EE_CNTRL_ONLINESPELLING ? sal_True : sal_False;
-        sal_Bool bRedLinesChanged = nChanges & EE_CNTRL_NOREDLINES ? sal_True : sal_False;
 
-        if ( bSpellingChanged || bRedLinesChanged )
+        if ( bSpellingChanged )
         {
             pImpEditEngine->StopOnlineSpellTimer();
             if ( bSpellingChanged && ( nWord & EE_CNTRL_ONLINESPELLING ) )
@@ -2181,6 +2189,14 @@ bool EditEngine::SpellSentence(EditView& rView, ::svx::SpellPortions& rToFill, b
     DBG_CHKTHIS( EditEngine, 0 );
     return pImpEditEngine->SpellSentence( rView, rToFill, bIsGrammarChecking  );
 }
+/*-- 08.09.2008 11:38:32---------------------------------------------------
+
+  -----------------------------------------------------------------------*/
+void EditEngine::PutSpellingToSentenceStart( EditView& rEditView )
+{
+    DBG_CHKTHIS( EditEngine, 0 );
+    pImpEditEngine->PutSpellingToSentenceStart( rEditView );
+}
 /*-- 13.10.2003 16:43:27---------------------------------------------------
 
   -----------------------------------------------------------------------*/
@@ -2439,7 +2455,8 @@ ParagraphInfos EditEngine::GetParagraphInfos( sal_uInt16 nPara )
 void __EXPORT EditEngine::DrawingText( const Point&, const XubString&, USHORT, USHORT,
     const sal_Int32*, const SvxFont&, sal_uInt16, sal_uInt16, BYTE,
     const EEngineData::WrongSpellVector*, const SvxFieldData*, bool, bool, bool,
-    const ::com::sun::star::lang::Locale*, const Color&)
+    const ::com::sun::star::lang::Locale*, const Color&, const Color&)
+
 {
     DBG_CHKTHIS( EditEngine, 0 );
 }
@@ -2626,6 +2643,7 @@ void EditEngine::SetFontInfoInItemSet( SfxItemSet& rSet, const SvxFont& rFont )
     rSet.Put( SvxWeightItem( rFont.GetWeight(), EE_CHAR_WEIGHT )  );
     rSet.Put( SvxColorItem( rFont.GetColor(), EE_CHAR_COLOR )  );
     rSet.Put( SvxUnderlineItem( rFont.GetUnderline(), EE_CHAR_UNDERLINE )  );
+    rSet.Put( SvxOverlineItem( rFont.GetOverline(), EE_CHAR_OVERLINE )  );
     rSet.Put( SvxCrossedOutItem( rFont.GetStrikeout(), EE_CHAR_STRIKEOUT )  );
     rSet.Put( SvxPostureItem( rFont.GetItalic(), EE_CHAR_ITALIC )  );
     rSet.Put( SvxContourItem( rFont.IsOutline(), EE_CHAR_OUTLINE )  );

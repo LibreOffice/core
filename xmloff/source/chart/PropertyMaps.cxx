@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: PropertyMaps.cxx,v $
- * $Revision: 1.56 $
+ * $Revision: 1.56.40.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -54,6 +54,7 @@
 #include "XMLErrorBarStylePropertyHdl.hxx"
 #include "XMLTextOrientationHdl.hxx"
 #include "XMLSymbolTypePropertyHdl.hxx"
+#include "XMLAxisPositionPropertyHdl.hxx"
 #include <com/sun/star/chart/ChartAxisMarks.hpp>
 #include <com/sun/star/chart/ChartDataCaption.hpp>
 #include <com/sun/star/chart/ChartSymbolType.hpp>
@@ -61,6 +62,7 @@
 #include <com/sun/star/drawing/FillStyle.hpp>
 #include <com/sun/star/drawing/LineJoint.hpp>
 #include <com/sun/star/chart/ChartDataRowSource.hpp>
+#include <com/sun/star/chart/ChartAxisPosition.hpp>
 
 // header for any2enum
 #include <comphelper/extract.hxx>
@@ -94,6 +96,23 @@ const XMLPropertyHandler* XMLChartPropHdlFactory::GetPropertyHandler( sal_Int32 
     {
         switch( nType )
         {
+            case XML_SCH_TYPE_AXIS_POSITION:
+                pHdl = new XMLAxisPositionPropertyHdl( false );
+                break;
+            case XML_SCH_TYPE_AXIS_POSITION_VALUE:
+                pHdl = new XMLAxisPositionPropertyHdl( true );
+                break;
+
+            case XML_SCH_TYPE_AXIS_LABEL_POSITION:
+                pHdl = new XMLEnumPropertyHdl( aXMLChartAxisLabelPositionEnumMap,
+                                               ::getCppuType((const chart::ChartAxisLabelPosition*)0) );
+                break;
+
+            case XML_SCH_TYPE_TICK_MARK_POSITION:
+                pHdl = new XMLEnumPropertyHdl( aXMLChartAxisMarkPositionEnumMap,
+                                               ::getCppuType((const chart::ChartAxisMarkPosition*)0) );
+                break;
+
             case XML_SCH_TYPE_AXIS_ARRANGEMENT:
                 pHdl = new XMLEnumPropertyHdl( aXMLChartAxisArrangementEnumMap,
                                                ::getCppuType((const chart::ChartAxisArrangeOrderType*)0) );
@@ -464,6 +483,12 @@ XMLChartImportPropertyMapper::XMLChartImportPropertyMapper( const UniReference< 
     // give an empty model. It is only used for numbering rules that don't exist in chart
     uno::Reference< frame::XModel > xEmptyModel;
     ChainImportMapper( XMLShapeImportHelper::CreateShapePropMapper( xEmptyModel, mrImport ));
+
+    //#i14365# save and load writing-mode for chart elements
+    //The property TextWritingMode is mapped wrongly in the underlying draw mapper, but for draw it is necessary
+    //We remove that property here only for chart thus the chart can use the correct mapping from the writer paragraph settings (attribute 'writing-mode' <-> property 'WritingMode')
+    sal_Int32 nUnwantedWrongEntry = maPropMapper->FindEntryIndex( "TextWritingMode", XML_NAMESPACE_STYLE, GetXMLToken(XML_WRITING_MODE) );
+    maPropMapper->RemoveEntry(nUnwantedWrongEntry);
 
     // do not chain text properties: on import this is done by shape mapper
     // to import old documents

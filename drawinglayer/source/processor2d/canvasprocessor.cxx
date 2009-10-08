@@ -1313,7 +1313,11 @@ namespace drawinglayer
                     {
                         // get logic range of transparent part, clip with ViewRange
                         basegfx::B2DRange aLogicRange(aMask.getB2DRange());
-                        aLogicRange.intersect(getViewInformation2D().getViewport());
+
+                        if(!getViewInformation2D().getViewport().isEmpty())
+                        {
+                            aLogicRange.intersect(getViewInformation2D().getViewport());
+                        }
 
                         if(!aLogicRange.isEmpty())
                         {
@@ -1335,9 +1339,12 @@ namespace drawinglayer
                                 uno::Reference< rendering::XCanvas > xLastCanvas(mxCanvas);
                                 const geometry::ViewInformation2D aLastViewInformation2D(getViewInformation2D());
 
-                                // prepare discrete offset for XBitmap
+                                // prepare discrete offset for XBitmap, do not forget that the buffer bitmap
+                                // may be truncated to discrete visible pixels
                                 basegfx::B2DHomMatrix aDiscreteOffset;
-                                aDiscreteOffset.translate(-aDiscreteRange.getMinX(), -aDiscreteRange.getMinY());
+                                aDiscreteOffset.translate(
+                                    aDiscreteRange.getMinX() > 0.0 ? -aDiscreteRange.getMinX() : 0.0,
+                                    aDiscreteRange.getMinY() > 0.0 ? -aDiscreteRange.getMinY() : 0.0);
 
                                 // create new local ViewInformation2D with new transformation
                                 const geometry::ViewInformation2D aViewInformation2D(
@@ -1623,7 +1630,11 @@ namespace drawinglayer
             {
                 // get logic range of transparent part and clip with ViewRange
                 basegfx::B2DRange aLogicRange(primitive2d::getB2DRangeFromPrimitive2DSequence(rChildren, getViewInformation2D()));
-                aLogicRange.intersect(getViewInformation2D().getViewport());
+
+                if(!getViewInformation2D().getViewport().isEmpty())
+                {
+                    aLogicRange.intersect(getViewInformation2D().getViewport());
+                }
 
                 if(!aLogicRange.isEmpty())
                 {
@@ -1645,9 +1656,12 @@ namespace drawinglayer
                         uno::Reference< rendering::XCanvas > xLastCanvas(mxCanvas);
                         const geometry::ViewInformation2D aLastViewInformation2D(getViewInformation2D());
 
-                        // prepare discrete offset for XBitmap
+                        // prepare discrete offset for XBitmap, do not forget that the buffer bitmap
+                        // may be truncated to discrete visible pixels
                         basegfx::B2DHomMatrix aDiscreteOffset;
-                        aDiscreteOffset.translate(-aDiscreteRange.getMinX(), -aDiscreteRange.getMinY());
+                        aDiscreteOffset.translate(
+                            aDiscreteRange.getMinX() > 0.0 ? -aDiscreteRange.getMinX() : 0.0,
+                            aDiscreteRange.getMinY() > 0.0 ? -aDiscreteRange.getMinY() : 0.0);
 
                         // create new local ViewInformation2D with new transformation
                         const geometry::ViewInformation2D aViewInformation2D(
@@ -2166,7 +2180,7 @@ namespace drawinglayer
             // number display for arabic/hindi numerals
             if(SvtCTLOptions::NUMERALS_HINDI == aSvtCTLOptions.GetCTLTextNumerals())
             {
-                meLang = LANGUAGE_ARABIC;
+                meLang = LANGUAGE_ARABIC_SAUDI_ARABIA;
             }
             else if(SvtCTLOptions::NUMERALS_ARABIC == aSvtCTLOptions.GetCTLTextNumerals())
             {

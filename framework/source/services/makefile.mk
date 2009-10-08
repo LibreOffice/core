@@ -1,7 +1,7 @@
 #*************************************************************************
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-# 
+#
 # Copyright 2008 by Sun Microsystems, Inc.
 #
 # OpenOffice.org - a multi-platform office productivity suite
@@ -41,22 +41,23 @@ ENABLE_EXCEPTIONS=	TRUE
 
 # --- Generate -----------------------------------------------------
 
-SLOFILES=			\
-                    $(SLO)$/desktop.obj								\
-                    $(SLO)$/frame.obj								\
-                    $(SLO)$/urltransformer.obj						\
-                    $(SLO)$/mediatypedetectionhelper.obj			\
-                    $(SLO)$/substitutepathvars.obj					\
-                    $(SLO)$/pathsettings.obj                        \
-                    $(SLO)$/backingcomp.obj							\
-                    $(SLO)$/backingwindow.obj						\
-                    $(SLO)$/dispatchhelper.obj                      \
-                    $(SLO)$/license.obj                      		\
-                    $(SLO)$/modulemanager.obj                       \
-                    $(SLO)$/autorecovery.obj                        \
-                    $(SLO)$/sessionlistener.obj                     \
-                    $(SLO)$/taskcreatorsrv.obj						\
-                    $(SLO)$/uriabbreviation.obj
+SLOFILES=\
+        $(SLO)$/desktop.obj \
+        $(SLO)$/frame.obj \
+        $(SLO)$/urltransformer.obj \
+        $(SLO)$/mediatypedetectionhelper.obj \
+        $(SLO)$/substitutepathvars.obj \
+        $(SLO)$/pathsettings.obj \
+        $(SLO)$/backingcomp.obj \
+        $(SLO)$/backingwindow.obj \
+        $(SLO)$/dispatchhelper.obj \
+        $(SLO)$/license.obj \
+        $(SLO)$/modulemanager.obj \
+        $(SLO)$/autorecovery.obj \
+        $(SLO)$/sessionlistener.obj \
+        $(SLO)$/taskcreatorsrv.obj \
+        $(SLO)$/uriabbreviation.obj \
+        $(SLO)$/tabwindowservice.obj
 
 SRS1NAME=$(TARGET)
 SRC1FILES= fwk_services.src

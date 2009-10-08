@@ -119,7 +119,6 @@ namespace sdr
             void ImpDrawLineStriped(OutputDevice& rOutputDevice, double x1, double y1, double x2, double y2);
             void ImpDrawLineStriped(OutputDevice& rOutputDevice, const basegfx::B2DPoint& rStart, const basegfx::B2DPoint& rEnd);
             void ImpDrawPolygonStriped(OutputDevice& rOutputDevice, const basegfx::B2DPolygon& rPolygon);
-            void ImpDrawStripes(OutputDevice& rOutputDevice, const basegfx::B2DPolyPolygon& rPolyPolygon);
 
         public:
             OverlayObject(Color aBaseColor);

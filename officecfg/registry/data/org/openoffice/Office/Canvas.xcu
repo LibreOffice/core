@@ -18,6 +18,8 @@
     4139 1317 54005803 4 5 12 1 1200
     <!-- Mobility Radeon M6 16MB - blank screen 1st slide on internal LCD -->
     4098 19545 -2132340659 0 6 13 3265 0
+    <!-- ATI Mobility 128 AGP 2X - blank screen -->
+    4098 19526 11604008 2 5 10 0 1028
    </value>
   </prop>
  </node>
@@ -32,6 +34,19 @@
                              com.sun.star.comp.rendering.Canvas.VCL
     </value>
    </prop>
+   <prop oor:name="AcceleratedImplementations" oor:type="oor:string-list">
+    <value oor:separator=",">com.sun.star.comp.rendering.Canvas.GL,
+                             com.sun.star.comp.rendering.Canvas.Java
+    </value>
+   </prop>
+   <prop oor:name="AntialiasingImplementations" oor:type="oor:string-list">
+    <value oor:separator=",">com.sun.star.comp.rendering.BitmapCanvas.GDI+,
+                             com.sun.star.comp.rendering.Canvas.GDI+,
+                             com.sun.star.comp.rendering.Canvas.Cairo,
+                             com.sun.star.comp.rendering.Canvas.GL,
+                             com.sun.star.comp.rendering.Canvas.Java
+    </value>
+   </prop>
   </node>
   <node oor:name="com.sun.star.rendering.SpriteCanvas" oor:op="replace">
    <prop oor:name="PreferredImplementations" oor:type="oor:string-list">
@@ -41,6 +56,22 @@
                              com.sun.star.comp.rendering.SpriteCanvas.GL,
                              com.sun.star.comp.rendering.SpriteCanvas.Java,
                              com.sun.star.comp.rendering.SpriteCanvas.VCL
+    </value>
+   </prop>
+   <prop oor:name="AcceleratedImplementations" oor:type="oor:string-list">
+    <value oor:separator=",">com.sun.star.comp.rendering.SpriteCanvas.DX9,
+                             com.sun.star.comp.rendering.SpriteCanvas.DX5,
+                             com.sun.star.comp.rendering.SpriteCanvas.Cairo,
+                             com.sun.star.comp.rendering.SpriteCanvas.GL,
+                             com.sun.star.comp.rendering.SpriteCanvas.Java
+    </value>
+   </prop>
+   <prop oor:name="AntialiasingImplementations" oor:type="oor:string-list">
+    <value oor:separator=",">com.sun.star.comp.rendering.SpriteCanvas.DX9,
+                             com.sun.star.comp.rendering.SpriteCanvas.DX5,
+                             com.sun.star.comp.rendering.SpriteCanvas.Cairo,
+                             com.sun.star.comp.rendering.SpriteCanvas.GL,
+                             com.sun.star.comp.rendering.SpriteCanvas.Java
     </value>
    </prop>
   </node>

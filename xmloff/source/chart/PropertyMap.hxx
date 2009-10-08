@@ -37,6 +37,8 @@
 #include <xmloff/contextid.hxx>
 #include <xmloff/xmlement.hxx>
 #include <com/sun/star/chart/ChartAxisArrangeOrderType.hpp>
+#include <com/sun/star/chart/ChartAxisLabelPosition.hpp>
+#include <com/sun/star/chart/ChartAxisMarkPosition.hpp>
 #include <com/sun/star/chart/ErrorBarStyle.hpp>
 #include <com/sun/star/chart/ChartErrorIndicatorType.hpp>
 #include <com/sun/star/chart/ChartRegressionCurveType.hpp>
@@ -59,6 +61,10 @@
 #define XML_SCH_TYPE_NAMED_SYMBOL           ( XML_SCH_TYPES_START + 10 )
 #define XML_SCH_TYPE_LABEL_PLACEMENT_TYPE   ( XML_SCH_TYPES_START + 11 )
 #define XML_SCH_TYPE_MISSING_VALUE_TREATMENT    ( XML_SCH_TYPES_START + 12 )
+#define XML_SCH_TYPE_AXIS_POSITION          ( XML_SCH_TYPES_START + 13 )
+#define XML_SCH_TYPE_AXIS_POSITION_VALUE    ( XML_SCH_TYPES_START + 14 )
+#define XML_SCH_TYPE_AXIS_LABEL_POSITION    ( XML_SCH_TYPES_START + 15 )
+#define XML_SCH_TYPE_TICK_MARK_POSITION     ( XML_SCH_TYPES_START + 16 )
 
 // context ids
 #define XML_SCH_CONTEXT_USER_SYMBOL                 ( XML_SCH_CTF_START + 0 )
@@ -87,12 +93,12 @@
 #define XML_SCH_CONTEXT_SPECIAL_SYMBOL_IMAGE        ( XML_SCH_CTF_START + 23 )
 #define XML_SCH_CONTEXT_SPECIAL_LABEL_SEPARATOR     ( XML_SCH_CTF_START + 24 )
 
+#define MAP_FULL( ApiName, NameSpace, XMLTokenName, XMLType, ContextId, EarliestODFVersionForExport ) { ApiName, sizeof(ApiName)-1, XML_NAMESPACE_##NameSpace, xmloff::token::XMLTokenName, XMLType|XML_TYPE_PROP_CHART, ContextId, EarliestODFVersionForExport }
 #define MAP_ENTRY( a, ns, nm, t )            { a, sizeof(a)-1, XML_NAMESPACE_##ns, xmloff::token::nm, t|XML_TYPE_PROP_CHART, 0, SvtSaveOptions::ODFVER_010 }
 #define MAP_ENTRY_ODF12( a, ns, nm, t )      { a, sizeof(a)-1, XML_NAMESPACE_##ns, xmloff::token::nm, t|XML_TYPE_PROP_CHART, 0, SvtSaveOptions::ODFVER_012 }
-#define MAP_CONTEXT( a, ns, nm, t, c )       { a, sizeof(a)-1, XML_NAMESPACE_##ns, xmloff::token::nm, t|XML_TYPE_PROP_CHART, XML_SCH_CONTEXT_##c, SvtSaveOptions::ODFVER_010 }
-#define MAP_SPECIAL( a, ns, nm, t, c )       { a, sizeof(a)-1, XML_NAMESPACE_##ns, xmloff::token::nm, t|XML_TYPE_PROP_CHART | MID_FLAG_SPECIAL_ITEM, XML_SCH_CONTEXT_SPECIAL_##c, SvtSaveOptions::ODFVER_010 }
-#define MAP_SPECIAL_ODF12( a, ns, nm, t, c ) { a, sizeof(a)-1, XML_NAMESPACE_##ns, xmloff::token::nm, t|XML_TYPE_PROP_CHART | MID_FLAG_SPECIAL_ITEM, XML_SCH_CONTEXT_SPECIAL_##c, SvtSaveOptions::ODFVER_012 }
-#define MAP_SPECIAL_IMP( a, ns, nm, t, c )   { a, sizeof(a)-1, XML_NAMESPACE_##ns, xmloff::token::nm, t|XML_TYPE_PROP_CHART | MID_FLAG_SPECIAL_ITEM_IMPORT, XML_SCH_CONTEXT_SPECIAL_##c, SvtSaveOptions::ODFVER_010 }
+#define MAP_CONTEXT( a, ns, nm, t, c )       { a, sizeof(a)-1, XML_NAMESPACE_##ns, xmloff::token::nm, t|XML_TYPE_PROP_CHART, c, SvtSaveOptions::ODFVER_010 }
+#define MAP_SPECIAL( a, ns, nm, t, c )       { a, sizeof(a)-1, XML_NAMESPACE_##ns, xmloff::token::nm, t|XML_TYPE_PROP_CHART | MID_FLAG_SPECIAL_ITEM, c, SvtSaveOptions::ODFVER_010 }
+#define MAP_SPECIAL_ODF12( a, ns, nm, t, c ) { a, sizeof(a)-1, XML_NAMESPACE_##ns, xmloff::token::nm, t|XML_TYPE_PROP_CHART | MID_FLAG_SPECIAL_ITEM, c, SvtSaveOptions::ODFVER_012 }
 #define MAP_ENTRY_END { 0,0,0,xmloff::token::XML_TOKEN_INVALID,0,0,SvtSaveOptions::ODFVER_010 }
 
 // ---------------------------------------------------------
@@ -110,7 +116,7 @@ const XMLPropertyMapEntry aXMLChartPropMap[] =
 {
     // chart subtypes
     MAP_ENTRY( "UpDown", CHART, XML_JAPANESE_CANDLE_STICK, XML_TYPE_BOOL ), // formerly XML_STOCK_UPDOWN_BARS
-     MAP_CONTEXT( "Volume", CHART, XML_STOCK_WITH_VOLUME, XML_TYPE_BOOL, STOCK_WITH_VOLUME ),
+     MAP_CONTEXT( "Volume", CHART, XML_STOCK_WITH_VOLUME, XML_TYPE_BOOL, XML_SCH_CONTEXT_STOCK_WITH_VOLUME ),
     MAP_ENTRY( "Dim3D", CHART, XML_THREE_DIMENSIONAL, XML_TYPE_BOOL ),
     MAP_ENTRY( "Deep", CHART, XML_DEEP, XML_TYPE_BOOL ),
     MAP_ENTRY( "Lines", CHART, XML_LINES, XML_TYPE_BOOL ),
@@ -123,13 +129,13 @@ const XMLPropertyMapEntry aXMLChartPropMap[] =
     // if type=="named-symbol" => name of symbol (square, diamond, ...)
     MAP_ENTRY( "SymbolType", CHART, XML_SYMBOL_NAME, XML_SCH_TYPE_NAMED_SYMBOL | MID_FLAG_MULTI_PROPERTY ),
     // if type=="image" => an xlink:href element with a linked (package) URI
-    MAP_SPECIAL( "SymbolBitmapURL", CHART, XML_SYMBOL_IMAGE, XML_TYPE_STRING | MID_FLAG_ELEMENT_ITEM, SYMBOL_IMAGE ),
-    MAP_SPECIAL( "SymbolSize", CHART, XML_SYMBOL_WIDTH, XML_TYPE_MEASURE | MID_FLAG_MERGE_PROPERTY, SYMBOL_WIDTH ),
-    MAP_SPECIAL( "SymbolSize", CHART, XML_SYMBOL_HEIGHT, XML_TYPE_MEASURE | MID_FLAG_MERGE_PROPERTY, SYMBOL_HEIGHT ),
+    MAP_SPECIAL( "SymbolBitmapURL", CHART, XML_SYMBOL_IMAGE, XML_TYPE_STRING | MID_FLAG_ELEMENT_ITEM, XML_SCH_CONTEXT_SPECIAL_SYMBOL_IMAGE ),
+    MAP_SPECIAL( "SymbolSize", CHART, XML_SYMBOL_WIDTH, XML_TYPE_MEASURE | MID_FLAG_MERGE_PROPERTY, XML_SCH_CONTEXT_SPECIAL_SYMBOL_WIDTH ),
+    MAP_SPECIAL( "SymbolSize", CHART, XML_SYMBOL_HEIGHT, XML_TYPE_MEASURE | MID_FLAG_MERGE_PROPERTY, XML_SCH_CONTEXT_SPECIAL_SYMBOL_HEIGHT ),
     MAP_ENTRY( "Vertical", CHART, XML_VERTICAL, XML_TYPE_BOOL ),
     // #i32368# property should no longer be used as XML-property (in OASIS
     // format), but is still ex-/imported for compatibility with the OOo file format
-      MAP_CONTEXT( "NumberOfLines", CHART, XML_LINES_USED, XML_TYPE_NUMBER, LINES_USED  ),
+      MAP_CONTEXT( "NumberOfLines", CHART, XML_LINES_USED, XML_TYPE_NUMBER, XML_SCH_CONTEXT_LINES_USED  ),
     MAP_ENTRY( "StackedBarsConnected", CHART, XML_CONNECT_BARS, XML_TYPE_BOOL ),
 
     MAP_ENTRY_ODF12( "GroupBarsPerAxis", CHART, XML_GROUP_BARS_PER_AXIS, XML_TYPE_BOOL ),
@@ -150,25 +156,30 @@ const XMLPropertyMapEntry aXMLChartPropMap[] =
 
     // axis properties
     MAP_ENTRY( "DisplayLabels", CHART, XML_DISPLAY_LABEL, XML_TYPE_BOOL ),
-    MAP_SPECIAL( "Marks", CHART, XML_TICK_MARKS_MAJOR_INNER, XML_TYPE_NUMBER | MID_FLAG_MERGE_PROPERTY, TICKS_MAJ_INNER ),          // convert one constant
-    MAP_SPECIAL( "Marks", CHART, XML_TICK_MARKS_MAJOR_OUTER, XML_TYPE_NUMBER | MID_FLAG_MERGE_PROPERTY, TICKS_MAJ_OUTER ),          // to two bools
-    MAP_SPECIAL( "HelpMarks", CHART, XML_TICK_MARKS_MINOR_INNER, XML_TYPE_NUMBER | MID_FLAG_MERGE_PROPERTY, TICKS_MIN_INNER ),      // see above
-    MAP_SPECIAL( "HelpMarks", CHART, XML_TICK_MARKS_MINOR_OUTER, XML_TYPE_NUMBER | MID_FLAG_MERGE_PROPERTY, TICKS_MIN_OUTER ),
-    MAP_CONTEXT( "Logarithmic", CHART, XML_LOGARITHMIC, XML_TYPE_BOOL, LOGARITHMIC ),
-    MAP_CONTEXT( "Min", CHART, XML_MINIMUM, XML_TYPE_DOUBLE, MIN ),
-    MAP_CONTEXT( "Max", CHART, XML_MAXIMUM, XML_TYPE_DOUBLE, MAX ),
-    MAP_CONTEXT( "Origin", CHART, XML_ORIGIN, XML_TYPE_DOUBLE, ORIGIN ),
-    MAP_CONTEXT( "StepMain", CHART, XML_INTERVAL_MAJOR, XML_TYPE_DOUBLE, STEP_MAIN ),
-     MAP_CONTEXT( "StepHelpCount", CHART, XML_INTERVAL_MINOR_DIVISOR, XML_TYPE_NUMBER, STEP_HELP_COUNT ),
+    MAP_SPECIAL( "Marks", CHART, XML_TICK_MARKS_MAJOR_INNER, XML_TYPE_NUMBER | MID_FLAG_MERGE_PROPERTY, XML_SCH_CONTEXT_SPECIAL_TICKS_MAJ_INNER ),          // convert one constant
+    MAP_SPECIAL( "Marks", CHART, XML_TICK_MARKS_MAJOR_OUTER, XML_TYPE_NUMBER | MID_FLAG_MERGE_PROPERTY, XML_SCH_CONTEXT_SPECIAL_TICKS_MAJ_OUTER ),          // to two bools
+    MAP_SPECIAL( "HelpMarks", CHART, XML_TICK_MARKS_MINOR_INNER, XML_TYPE_NUMBER | MID_FLAG_MERGE_PROPERTY, XML_SCH_CONTEXT_SPECIAL_TICKS_MIN_INNER ),      // see above
+    MAP_SPECIAL( "HelpMarks", CHART, XML_TICK_MARKS_MINOR_OUTER, XML_TYPE_NUMBER | MID_FLAG_MERGE_PROPERTY, XML_SCH_CONTEXT_SPECIAL_TICKS_MIN_OUTER ),
+    MAP_CONTEXT( "Logarithmic", CHART, XML_LOGARITHMIC, XML_TYPE_BOOL, XML_SCH_CONTEXT_LOGARITHMIC ),
+    MAP_CONTEXT( "Min", CHART, XML_MINIMUM, XML_TYPE_DOUBLE, XML_SCH_CONTEXT_MIN ),
+    MAP_CONTEXT( "Max", CHART, XML_MAXIMUM, XML_TYPE_DOUBLE, XML_SCH_CONTEXT_MAX ),
+    MAP_CONTEXT( "Origin", CHART, XML_ORIGIN, XML_TYPE_DOUBLE, XML_SCH_CONTEXT_ORIGIN ),
+    MAP_CONTEXT( "StepMain", CHART, XML_INTERVAL_MAJOR, XML_TYPE_DOUBLE, XML_SCH_CONTEXT_STEP_MAIN ),
+     MAP_CONTEXT( "StepHelpCount", CHART, XML_INTERVAL_MINOR_DIVISOR, XML_TYPE_NUMBER, XML_SCH_CONTEXT_STEP_HELP_COUNT ),
     MAP_ENTRY( "GapWidth", CHART, XML_GAP_WIDTH, XML_TYPE_NUMBER ),
     MAP_ENTRY( "Overlap", CHART, XML_OVERLAP, XML_TYPE_NUMBER ),
     MAP_ENTRY( "TextCanOverlap", CHART, XML_TEXT_OVERLAP, XML_TYPE_BOOL ),
     MAP_ENTRY_ODF12( "ReverseDirection", CHART, XML_REVERSE_DIRECTION, XML_TYPE_BOOL ),
     MAP_ENTRY( "TextBreak", TEXT, XML_LINE_BREAK, XML_TYPE_BOOL ),
     MAP_ENTRY( "ArrangeOrder", CHART, XML_LABEL_ARRANGEMENT, XML_SCH_TYPE_AXIS_ARRANGEMENT ),
-    MAP_SPECIAL( "NumberFormat", STYLE, XML_DATA_STYLE_NAME, XML_TYPE_NUMBER, NUMBER_FORMAT ),
+    MAP_SPECIAL( "NumberFormat", STYLE, XML_DATA_STYLE_NAME, XML_TYPE_NUMBER, XML_SCH_CONTEXT_SPECIAL_NUMBER_FORMAT ),
     MAP_ENTRY( "LinkNumberFormatToSource", CHART, XML_LINK_DATA_STYLE_TO_SOURCE, XML_TYPE_BOOL ),
     MAP_ENTRY( "Visible", CHART, XML_VISIBLE, XML_TYPE_BOOL ),
+
+    MAP_FULL( "CrossoverPosition",   CHART, XML_AXIS_POSITION, XML_SCH_TYPE_AXIS_POSITION|MID_FLAG_MERGE_ATTRIBUTE|MID_FLAG_MULTI_PROPERTY,                                                              0, SvtSaveOptions::ODFVER_012 ),
+    MAP_FULL( "CrossoverValue",   CHART, XML_AXIS_POSITION, XML_SCH_TYPE_AXIS_POSITION_VALUE|MID_FLAG_MERGE_ATTRIBUTE|MID_FLAG_MULTI_PROPERTY,                                                              0, SvtSaveOptions::ODFVER_012 ),
+    MAP_FULL( "LabelPosition",   CHART, XML_AXIS_LABEL_POSITION, XML_SCH_TYPE_AXIS_LABEL_POSITION,                                                              0, SvtSaveOptions::ODFVER_012 ),
+    MAP_FULL( "MarkPosition",   CHART, XML_TICK_MARK_POSITION, XML_SCH_TYPE_TICK_MARK_POSITION,                                                              0, SvtSaveOptions::ODFVER_012 ),
 
     // statistical properties
     MAP_ENTRY( "MeanValue", CHART, XML_MEAN_VALUE, XML_TYPE_BOOL ),
@@ -184,20 +195,20 @@ const XMLPropertyMapEntry aXMLChartPropMap[] =
       MAP_ENTRY_ODF12( "ErrorBarRangeNegative", CHART, XML_ERROR_LOWER_RANGE, XML_TYPE_STRING ),
 
     // series/data-point properties
-    MAP_SPECIAL( "DataCaption", CHART, XML_DATA_LABEL_NUMBER, XML_TYPE_NUMBER | MID_FLAG_MERGE_PROPERTY, DATA_LABEL_NUMBER ),   // convert one constant
-    MAP_SPECIAL( "DataCaption", CHART, XML_DATA_LABEL_TEXT, XML_TYPE_NUMBER | MID_FLAG_MERGE_PROPERTY, DATA_LABEL_TEXT ),       // to 'tristate' and two bools
-    MAP_SPECIAL( "DataCaption", CHART, XML_DATA_LABEL_SYMBOL, XML_TYPE_NUMBER | MID_FLAG_MERGE_PROPERTY, DATA_LABEL_SYMBOL ),
-    MAP_SPECIAL_ODF12( "LabelSeparator", CHART, XML_LABEL_SEPARATOR, XML_TYPE_STRING | MID_FLAG_ELEMENT_ITEM, LABEL_SEPARATOR ),
+    MAP_SPECIAL( "DataCaption", CHART, XML_DATA_LABEL_NUMBER, XML_TYPE_NUMBER | MID_FLAG_MERGE_PROPERTY, XML_SCH_CONTEXT_SPECIAL_DATA_LABEL_NUMBER ),   // convert one constant
+    MAP_SPECIAL( "DataCaption", CHART, XML_DATA_LABEL_TEXT, XML_TYPE_NUMBER | MID_FLAG_MERGE_PROPERTY, XML_SCH_CONTEXT_SPECIAL_DATA_LABEL_TEXT ),       // to 'tristate' and two bools
+    MAP_SPECIAL( "DataCaption", CHART, XML_DATA_LABEL_SYMBOL, XML_TYPE_NUMBER | MID_FLAG_MERGE_PROPERTY, XML_SCH_CONTEXT_SPECIAL_DATA_LABEL_SYMBOL ),
+    MAP_SPECIAL_ODF12( "LabelSeparator", CHART, XML_LABEL_SEPARATOR, XML_TYPE_STRING | MID_FLAG_ELEMENT_ITEM, XML_SCH_CONTEXT_SPECIAL_LABEL_SEPARATOR ),
     MAP_ENTRY_ODF12( "LabelPlacement", CHART, XML_LABEL_POSITION, XML_SCH_TYPE_LABEL_PLACEMENT_TYPE ),
     MAP_ENTRY( "SegmentOffset", CHART, XML_PIE_OFFSET, XML_TYPE_NUMBER ),
-    MAP_SPECIAL_ODF12( "PercentageNumberFormat", STYLE, XML_PERCENTAGE_DATA_STYLE_NAME, XML_TYPE_NUMBER, NUMBER_FORMAT ),
+    MAP_SPECIAL_ODF12( "PercentageNumberFormat", STYLE, XML_PERCENTAGE_DATA_STYLE_NAME, XML_TYPE_NUMBER, XML_SCH_CONTEXT_SPECIAL_NUMBER_FORMAT ),
 
     // text properties for titles
-    MAP_SPECIAL( "TextRotation", STYLE, XML_ROTATION_ANGLE, XML_TYPE_NUMBER, TEXT_ROTATION ),   // convert 1/100th degrees to degrees
+    MAP_SPECIAL( "TextRotation", STYLE, XML_ROTATION_ANGLE, XML_TYPE_NUMBER, XML_SCH_CONTEXT_SPECIAL_TEXT_ROTATION ),   // convert 1/100th degrees to degrees
     MAP_ENTRY( "StackedText", STYLE, XML_DIRECTION, XML_SCH_TYPE_TEXT_ORIENTATION ),
 
     // for compatability to pre 6.0beta documents
-//     MAP_SPECIAL( "SymbolBitmapURL", CHART, XML_SYMBOL_IMAGE_NAME, XML_TYPE_STRING, SYMBOL_IMAGE_NAME ),
+//     MAP_SPECIAL( "SymbolBitmapURL", CHART, XML_SYMBOL_IMAGE_NAME, XML_TYPE_STRING, XML_SCH_CONTEXT_SPECIAL_SYMBOL_IMAGE_NAME ),
 
     MAP_ENTRY( "ChartUserDefinedAttributes", TEXT, XML_XMLNS, XML_TYPE_ATTRIBUTE_CONTAINER | MID_FLAG_SPECIAL_ITEM ),
 
@@ -207,6 +218,23 @@ const XMLPropertyMapEntry aXMLChartPropMap[] =
 // ----------------------------------------
 // maps for enums to XML attributes
 // ----------------------------------------
+
+SvXMLEnumMapEntry aXMLChartAxisLabelPositionEnumMap[] =
+{
+    { ::xmloff::token::XML_NEAR_AXIS,               ::com::sun::star::chart::ChartAxisLabelPosition_NEAR_AXIS },
+    { ::xmloff::token::XML_NEAR_AXIS_OTHER_SIDE,    ::com::sun::star::chart::ChartAxisLabelPosition_NEAR_AXIS_OTHER_SIDE },
+    { ::xmloff::token::XML_OUTSIDE_START,           ::com::sun::star::chart::ChartAxisLabelPosition_OUTSIDE_START },
+    { ::xmloff::token::XML_OUTSIDE_END,             ::com::sun::star::chart::ChartAxisLabelPosition_OUTSIDE_END },
+    { ::xmloff::token::XML_TOKEN_INVALID, 0 }
+};
+
+SvXMLEnumMapEntry aXMLChartAxisMarkPositionEnumMap[] =
+{
+    { ::xmloff::token::XML_AT_LABELS,           ::com::sun::star::chart::ChartAxisMarkPosition_AT_LABELS },
+    { ::xmloff::token::XML_AT_AXIS,             ::com::sun::star::chart::ChartAxisMarkPosition_AT_AXIS },
+    { ::xmloff::token::XML_AT_LABELS_AND_AXIS,  ::com::sun::star::chart::ChartAxisMarkPosition_AT_LABELS_AND_AXIS },
+    { ::xmloff::token::XML_TOKEN_INVALID, 0 }
+};
 
 SvXMLEnumMapEntry aXMLChartAxisArrangementEnumMap[] =
 {

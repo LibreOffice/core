@@ -95,7 +95,7 @@ void SpellDialogChildWindow::AddAutoCorrection(
         const String& /*rNew*/,
         LanguageType /*eLanguage*/)
 {
-    DBG_ERROR("AutoCorrection should have been overloaded - if available")
+    DBG_ERROR("AutoCorrection should have been overloaded - if available");
 }
 /*-- 16.06.2008 10:11:57---------------------------------------------------
 
@@ -109,7 +109,7 @@ bool SpellDialogChildWindow::HasGrammarChecking()
   -----------------------------------------------------------------------*/
 bool SpellDialogChildWindow::IsGrammarChecking()
 {
-    DBG_ERROR("Grammar checking should have been overloaded - if available")
+    DBG_ERROR("Grammar checking should have been overloaded - if available");
     return false;
 }
 /*-- 18.06.2008 12:26:35---------------------------------------------------
@@ -117,28 +117,6 @@ bool SpellDialogChildWindow::IsGrammarChecking()
   -----------------------------------------------------------------------*/
 void SpellDialogChildWindow::SetGrammarChecking(bool )
 {
-    DBG_ERROR("Grammar checking should have been overloaded - if available")
+    DBG_ERROR("Grammar checking should have been overloaded - if available");
 }
-/*-- 16.06.2008 10:12:22---------------------------------------------------
-
-  -----------------------------------------------------------------------*/
-bool SpellDialogChildWindow::HasAnyVendor()
-{
-    return false;
-}
-/*-- 16.06.2008 11:34:35---------------------------------------------------
-
-  -----------------------------------------------------------------------*/
-String SpellDialogChildWindow::GetVendorForLanguage( LanguageType )
-{
-    return String();
-}
-/*-- 19.06.2008 15:55:08---------------------------------------------------
-
-  -----------------------------------------------------------------------*/
-Image SpellDialogChildWindow::GetVendorLogoForLanguage( LanguageType )
-{
-    return Image();
-}
-
 } // end of namespace ::svx

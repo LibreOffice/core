@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: sfxhelp.cxx,v $
- * $Revision: 1.82 $
+ * $Revision: 1.82.78.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -549,25 +549,22 @@ String SfxHelp::GetHelpModuleName_Impl()
             aFactoryShortName = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "schart" ) );
         else if ( aFactoryShortName.equalsAscii( "BasicIDE" ) )
             aFactoryShortName = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "sbasic" ) );
-        else if ( aFactoryShortName.equalsAscii( "sweb" ) )
+        else if ( aFactoryShortName.equalsAscii( "sweb" )
+                || aFactoryShortName.equalsAscii( "sglobal" )
+                || aFactoryShortName.equalsAscii( "swxform" ) )
             aFactoryShortName = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "swriter" ) );
-        else if ( aFactoryShortName.equalsAscii( "sglobal" ) )
-            aFactoryShortName = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "swriter" ) );
-        else if ( aFactoryShortName.equalsAscii( "dbquery" ) )
+        else if ( aFactoryShortName.equalsAscii( "dbquery" )
+                || aFactoryShortName.equalsAscii( "dbbrowser" )
+                || aFactoryShortName.equalsAscii( "dbrelation" )
+                || aFactoryShortName.equalsAscii( "dbtable" )
+                || aFactoryShortName.equalsAscii( "dbapp" )
+                || aFactoryShortName.equalsAscii( "dbreport" )
+                || aFactoryShortName.equalsAscii( "swreport" )
+                || aFactoryShortName.equalsAscii( "dbbrowser" )
+                || aFactoryShortName.equalsAscii( "swform" ) )
             aFactoryShortName = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "sdatabase" ) );
-        else if ( aFactoryShortName.equalsAscii( "dbbrowser" ) )
-            aFactoryShortName = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "sdatabase" ) );
-        else if ( aFactoryShortName.equalsAscii( "dbrelation" ) )
-            aFactoryShortName = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "sdatabase" ) );
-        else if ( aFactoryShortName.equalsAscii( "dbtable" ) )
-            aFactoryShortName = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "sdatabase" ) );
-        else if ( aFactoryShortName.equalsAscii( "dbapp" ) )
-            aFactoryShortName = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "sdatabase" ) );
-        else if ( aFactoryShortName.equalsAscii( "dbreport" ) )
-            aFactoryShortName = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "sdatabase" ) );
-        else if ( aFactoryShortName.equalsAscii( "sbibliography" ) )
-            aFactoryShortName = sDefaultModule;
-        else if ( aFactoryShortName.equalsAscii( "StartModule" ) )
+        else if ( aFactoryShortName.equalsAscii( "sbibliography" )
+                || aFactoryShortName.equalsAscii( "StartModule" ) )
             aFactoryShortName = sDefaultModule;
     }
     else
@@ -782,11 +779,20 @@ BOOL SfxHelp::Start( const String& rURL, const Window* pWindow )
     INetProtocol nProtocol = aParser.GetProtocol();
     if ( nProtocol != INET_PROT_VND_SUN_STAR_HELP )
     {
-        // #90162 Accept anything that is not invalid as help id, as both
+        // #i90162 Accept anything that is not invalid as help id, as both
         // uno: URLs used as commands/help ids in the Office and the scheme
         // used in extension help ids (e.g. com.foocorp.foo-ext:FooDialogButton)
         // are accepted as INET_PROT_UNO respectively INET_PROT_GENERIC
-        if ( nProtocol != INET_PROT_NOT_VALID )
+        bool bAcceptAsURL = ( nProtocol != INET_PROT_NOT_VALID );
+
+        // #i94891 As in some extensions help ids like foo.bar.dummy without
+        // any : have been used that worked before the fix of #i90162 (see
+        // above) strings containing . will be also accepted to avoid brea-
+        // king the help of existing extensions.
+        if( !bAcceptAsURL )
+            bAcceptAsURL = ( rURL.Search( '.' ) != STRING_NOTFOUND );
+
+        if ( bAcceptAsURL )
         {
             aHelpURL = CreateHelpURL_Impl( rURL, GetHelpModuleName_Impl( ) );
         }

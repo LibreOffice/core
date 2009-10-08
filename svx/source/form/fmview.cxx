@@ -56,25 +56,15 @@
 #include "svditer.hxx"
 #include <svx/svdpagv.hxx>
 #include <svx/svdogrp.hxx>
-#ifndef _FM_FMVIEW_HXX
 #include <svx/fmview.hxx>
-#endif
-#ifndef _FM_FMMODEL_HXX
 #include <svx/fmmodel.hxx>
-#endif
-#ifndef _FM_FMPAGE_HXX
 #include <svx/fmpage.hxx>
-#endif
 #include <svx/fmshell.hxx>
-#ifndef _SVX_FMPGEIMP_HXX
 #include "fmpgeimp.hxx"
-#endif
 #include "fmtools.hxx"
 #include "fmshimp.hxx"
 #include "fmservs.hxx"
-#ifndef _SVX_FMPROP_HRC
 #include "fmprop.hrc"
-#endif
 #include "fmundo.hxx"
 #include <svx/dataaccessdescriptor.hxx>
 #include <comphelper/processfactory.hxx>
@@ -85,6 +75,7 @@
 #include <com/sun/star/form/FormComponentType.hpp>
 #include <vcl/svapp.hxx>
 #include <tools/urlobj.hxx>
+#include <tools/diagnose_ex.h>
 #include <vcl/stdtext.hxx>
 #include <svx/fmglob.hxx>
 #include <svx/sdrpagewindow.hxx>
@@ -95,7 +86,6 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star::sdb;
-using namespace ::com::sun::star::ui::dialogs;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::form;
@@ -445,97 +435,6 @@ void FmFormView::DeactivateControls(SdrPageView* pPageView)
 }
 
 //------------------------------------------------------------------------
-void FmFormView::ObjectCreated(FmFormObj* pObj)
-{
-    // it is valid that the form shell's forms collection is not initialized, yet
-    if ( pFormShell && pFormShell->GetImpl() )
-        pFormShell->GetImpl()->UpdateForms( sal_True );
-
-    Reference< XPropertySet > xSet( pObj->GetUnoControlModel(), UNO_QUERY );
-    if ( !xSet.is() )
-        return;
-
-    // some initial property defaults
-    sal_Int16 nClassId = pImpl->implInitializeNewControlModel( xSet, pObj );
-
-    if ( !pFormShell->GetImpl()->GetWizardUsing() )
-        return;
-
-    // #i31958# don't call wizards in XForms mode
-    if ( pFormShell->GetImpl()->isEnhancedForm() )
-        return;
-
-    // #i46898# no wizards if there is no Base installed - currently, all wizards are
-    // database related
-    if ( !SvtModuleOptions().IsModuleInstalled( SvtModuleOptions::E_SDATABASE ) )
-        return;
-
-    Reference< XChild >  xChild(xSet, UNO_QUERY);
-    Reference< XRowSet >  xForm(xChild->getParent(), UNO_QUERY);
-    String sWizardName;
-    Any aObj;
-
-    switch (nClassId)
-    {
-        case FormComponentType::GRIDCONTROL:
-            sWizardName.AssignAscii("com.sun.star.sdb.GridControlAutoPilot");
-            aObj <<= xChild;
-            break;
-        case FormComponentType::LISTBOX:
-        case FormComponentType::COMBOBOX:
-            sWizardName.AssignAscii("com.sun.star.sdb.ListComboBoxAutoPilot");
-            aObj <<= xChild;
-            break;
-        case FormComponentType::GROUPBOX:
-            sWizardName.AssignAscii("com.sun.star.sdb.GroupBoxAutoPilot");
-            aObj <<= xChild;
-            break;
-    }
-
-    if (sWizardName.Len() != 0)
-    {
-        // build the argument list
-        Sequence< Any > aWizardArgs(1);
-        // the object affected
-        aWizardArgs[0] = makeAny(PropertyValue(
-            ::rtl::OUString::createFromAscii("ObjectModel"),
-            0,
-            makeAny(xChild),
-            PropertyState_DIRECT_VALUE
-        ));
-
-        // create the wizard object
-        Reference< XExecutableDialog > xWizard;
-        try
-        {
-            Reference< XMultiServiceFactory > xORB = ::comphelper::getProcessServiceFactory();
-            xWizard = Reference< XExecutableDialog >(
-                ::comphelper::getProcessServiceFactory()->createInstanceWithArguments(sWizardName, aWizardArgs),
-                UNO_QUERY);
-        }
-        catch(Exception&)
-        {
-        }
-        if (!xWizard.is())
-        {
-            ShowServiceNotAvailableError(NULL, sWizardName, sal_True);
-            return;
-        }
-
-        // execute the wizard
-        try
-        {
-            xWizard->execute();
-        }
-        catch(Exception&)
-        {
-            DBG_ERROR("FmFormView::ObjectCreated: could not execute the AutoPilot!");
-            // TODO: real error handling
-        }
-    }
-}
-
-//------------------------------------------------------------------------
 SdrObject* FmFormView::CreateFieldControl( const ODataAccessDescriptor& _rColumnDescriptor )
 {
     return pImpl->implCreateFieldControl( _rColumnDescriptor );
@@ -597,6 +496,19 @@ void FmFormView::RemoveControlContainer(const Reference< ::com::sun::star::awt::
         pImpl->removeWindow( xCC );
     }
 }
+
+// -----------------------------------------------------------------------------
+void FmFormView::onBeginCompleteRedraw()
+{
+    pImpl->suspendTabOrderUpdate();
+}
+
+// -----------------------------------------------------------------------------
+void FmFormView::onEndCompleteRedraw()
+{
+    pImpl->resumeTabOrderUpdate();
+}
+
 // -----------------------------------------------------------------------------
 BOOL FmFormView::KeyInput(const KeyEvent& rKEvt, Window* pWin)
 {
@@ -630,7 +542,7 @@ BOOL FmFormView::KeyInput(const KeyEvent& rKEvt, Window* pWin)
                 }
             }
         }
-        // Alt-RETURN alone enters shows the properties of the selection
+        // Alt-RETURN alone shows the properties of the selection
         if  (   pFormShell
             &&  pFormShell->GetImpl()
             &&  !rKeyCode.IsShift()
@@ -676,37 +588,39 @@ BOOL FmFormView::MouseButtonDown( const MouseEvent& _rMEvt, Window* _pWin )
 // -----------------------------------------------------------------------------
 FmFormObj* FmFormView::getMarkedGrid() const
 {
-    FmFormObj* pObj = NULL;
+    FmFormObj* pFormObject = NULL;
     const SdrMarkList& rMarkList = GetMarkedObjectList();
     if ( 1 == rMarkList.GetMarkCount() )
     {
         SdrMark* pMark = rMarkList.GetMark(0);
         if ( pMark )
         {
-            pObj = PTR_CAST(FmFormObj,pMark->GetMarkedSdrObj());
-            if ( pObj )
+            pFormObject = FmFormObj::GetFormObject( pMark->GetMarkedSdrObj() );
+            if ( pFormObject )
             {
-                Reference<XServiceInfo> xServInfo(pObj->GetUnoControlModel(),UNO_QUERY);
-                if ( !xServInfo.is() || !xServInfo->supportsService(FM_SUN_COMPONENT_GRIDCONTROL) )
-                    pObj = NULL;
+                Reference< XServiceInfo > xServInfo( pFormObject->GetUnoControlModel(), UNO_QUERY );
+                if ( !xServInfo.is() || !xServInfo->supportsService( FM_SUN_COMPONENT_GRIDCONTROL ) )
+                    pFormObject = NULL;
             }
         }
     }
-    return pObj;
+    return pFormObject;
 }
 
 // -----------------------------------------------------------------------------
-void FmFormView::createControlLabelPair(SdrView* _pView,OutputDevice* _pOutDev, sal_Int32 _nXOffsetMM, sal_Int32 _nYOffsetMM,
+void FmFormView::createControlLabelPair( OutputDevice* _pOutDev, sal_Int32 _nXOffsetMM, sal_Int32 _nYOffsetMM,
     const Reference< XPropertySet >& _rxField, const Reference< XNumberFormats >& _rxNumberFormats,
-    sal_uInt16 _nObjID, const ::rtl::OUString& _rFieldPostfix,UINT32 _nInventor,UINT16 _nIndent,
-    SdrPage* _pLabelPage,SdrPage* _pPage,SdrModel* _pModel,
-    SdrUnoObj*& _rpLabel, SdrUnoObj*& _rpControl)
+    sal_uInt16 _nControlObjectID, const ::rtl::OUString& _rFieldPostfix, UINT32 _nInventor, UINT16 _nLabelObjectID,
+    SdrPage* _pLabelPage, SdrPage* _pControlPage, SdrModel* _pModel, SdrUnoObj*& _rpLabel, SdrUnoObj*& _rpControl )
 {
-    FmXFormView::createControlLabelPair(_pView,_pOutDev,_nXOffsetMM, _nYOffsetMM,
-    _rxField, _rxNumberFormats,
-    _nObjID, _rFieldPostfix,_nInventor,_nIndent,
-    _pLabelPage,_pPage,_pModel,
-    _rpLabel, _rpControl);
+    FmXFormView::createControlLabelPair(
+        ::comphelper::getProcessServiceFactory(),
+        *_pOutDev, _nXOffsetMM, _nYOffsetMM,
+        _rxField, _rxNumberFormats,
+        _nControlObjectID, _rFieldPostfix, _nInventor, _nLabelObjectID,
+        _pLabelPage, _pControlPage, _pModel,
+        _rpLabel, _rpControl
+    );
 }
 // -----------------------------------------------------------------------------
 Reference< XFormController > FmFormView::GetFormController( const Reference< XForm >& _rxForm, const OutputDevice& _rDevice ) const

@@ -47,6 +47,8 @@ class XMLOFF_DLLPUBLIC XMLTextStyleContext : public XMLPropStyleContext
     const ::rtl::OUString       sIsAutoUpdate;
     const ::rtl::OUString       sCategory;
     const ::rtl::OUString       sNumberingStyleName;
+    const ::rtl::OUString       sOutlineLevel; //#outline level,add by zhaojianwei
+
 public:
     const ::rtl::OUString       sDropCapCharStyleName;
 private:

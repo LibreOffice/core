@@ -43,6 +43,7 @@
 #include <osl/interlck.h>
 #include <jvmaccess/virtualmachine.hxx>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#include "connectivity/dbtoolsdllapi.hxx"
 
 namespace com { namespace sun { namespace star { namespace util {
     struct Date;
@@ -54,12 +55,12 @@ namespace com { namespace sun { namespace star { namespace util {
 namespace connectivity
 {
     //------------------------------------------------------------------------------
-    sal_Bool match(const sal_Unicode* pWild, const sal_Unicode* pStr, const sal_Unicode cEscape);
+    OOO_DLLPUBLIC_DBTOOLS sal_Bool match(const sal_Unicode* pWild, const sal_Unicode* pStr, const sal_Unicode cEscape);
     //------------------------------------------------------------------------------
-    rtl::OUString toString(const ::com::sun::star::uno::Any& rValue);
-    rtl::OUString toDateString(const ::com::sun::star::util::Date& rDate);
-    rtl::OUString toTimeString(const ::com::sun::star::util::Time& rTime);
-    rtl::OUString toDateTimeString(const ::com::sun::star::util::DateTime& rDateTime);
+    OOO_DLLPUBLIC_DBTOOLS rtl::OUString toString(const ::com::sun::star::uno::Any& rValue);
+    OOO_DLLPUBLIC_DBTOOLS rtl::OUString toDateString(const ::com::sun::star::util::Date& rDate);
+    OOO_DLLPUBLIC_DBTOOLS rtl::OUString toTimeString(const ::com::sun::star::util::Time& rTime);
+    OOO_DLLPUBLIC_DBTOOLS rtl::OUString toDateTimeString(const ::com::sun::star::util::DateTime& rDateTime);
 
     // typedefs
     typedef std::vector< ::com::sun::star::uno::WeakReferenceHelper > OWeakRefArray;
@@ -70,29 +71,34 @@ namespace connectivity
     // -------------------------------------------------------------------------
     // class ORefVector allows reference counting on a std::vector
     // -------------------------------------------------------------------------
-    template< class VectorVal > class ORefVector : public ::std::vector< VectorVal >
+    template< class VectorVal > class ORefVector
     {
+        std::vector< VectorVal > m_vector;
         oslInterlockedCount         m_refCount;
         //  ORefVector(const ORefVector&);
         //  ORefVector& operator=(const ORefVector&);
 
-        typedef ::std::vector< VectorVal > BaseClass;
     protected:
         virtual ~ORefVector(){}
     public:
+        typedef std::vector< VectorVal > Vector;
+
         ORefVector() : m_refCount(0) {}
-        ORefVector(size_t _st) : ::std::vector< VectorVal > (_st) , m_refCount(0) {}
-        ORefVector(const ORefVector& _rRH) : ::std::vector< VectorVal > (_rRH),m_refCount(0)
+        ORefVector(size_t _st) : m_vector(_st) , m_refCount(0) {}
+        ORefVector(const ORefVector& _rRH) : m_vector(_rRH.m_vector),m_refCount(0)
         {
         }
         ORefVector& operator=(const ORefVector& _rRH)
         {
             if ( &_rRH != this )
             {
-                BaseClass::operator=(_rRH);
+                m_vector = _rRH.m_vector;
             }
             return *this;
         }
+
+        std::vector< VectorVal > & get() { return m_vector; }
+        std::vector< VectorVal > const & get() const { return m_vector; }
 
         inline static void * SAL_CALL operator new( size_t nSize ) SAL_THROW( () )
             { return ::rtl_allocateMemory( nSize ); }
@@ -132,15 +138,17 @@ namespace connectivity
     // =======================================================================================
     // search from __first to __last the column with the name _rVal
     // when no such column exist __last is returned
-    OSQLColumns::const_iterator find(   OSQLColumns::const_iterator __first,
-                                        OSQLColumns::const_iterator __last,
+    OOO_DLLPUBLIC_DBTOOLS
+    OSQLColumns::Vector::const_iterator find(   OSQLColumns::Vector::const_iterator __first,
+                                        OSQLColumns::Vector::const_iterator __last,
                                         const ::rtl::OUString& _rVal,
                                         const ::comphelper::UStringMixEqual& _rCase);
     // =======================================================================================
     // search from __first to __last the column with the realname _rVal
     // when no such column exist __last is returned
-    OSQLColumns::const_iterator findRealName(   OSQLColumns::const_iterator __first,
-                                                OSQLColumns::const_iterator __last,
+    OOO_DLLPUBLIC_DBTOOLS
+    OSQLColumns::Vector::const_iterator findRealName(   OSQLColumns::Vector::const_iterator __first,
+                                                OSQLColumns::Vector::const_iterator __last,
                                                 const ::rtl::OUString& _rVal,
                                                 const ::comphelper::UStringMixEqual& _rCase);
 
@@ -149,13 +157,14 @@ namespace connectivity
     // =======================================================================================
     // search from __first to __last the column with the property _rProp equals the value _rVal
     // when no such column exist __last is returned
-    OSQLColumns::const_iterator find(   OSQLColumns::const_iterator __first,
-                                        OSQLColumns::const_iterator __last,
+    OOO_DLLPUBLIC_DBTOOLS
+    OSQLColumns::Vector::const_iterator find(   OSQLColumns::Vector::const_iterator __first,
+                                        OSQLColumns::Vector::const_iterator __last,
                                         const ::rtl::OUString& _rProp,
                                         const ::rtl::OUString& _rVal,
                                         const ::comphelper::UStringMixEqual& _rCase);
 
-    void checkDisposed(sal_Bool _bThrow) throw ( ::com::sun::star::lang::DisposedException );
+    OOO_DLLPUBLIC_DBTOOLS void checkDisposed(sal_Bool _bThrow) throw ( ::com::sun::star::lang::DisposedException );
 
 
     /** creates a java virtual machine
@@ -164,7 +173,7 @@ namespace connectivity
         @return
             The JavaVM.
     */
-    ::rtl::Reference< jvmaccess::VirtualMachine > getJavaVM(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxFactory);
+    OOO_DLLPUBLIC_DBTOOLS ::rtl::Reference< jvmaccess::VirtualMachine > getJavaVM(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxFactory);
 
     /** return <TRUE/> if the java class exists, otherwise <FALSE/>.
         @param  _pJVM
@@ -172,7 +181,7 @@ namespace connectivity
         @param  _sClassName
             The class name to look for.
     */
-    sal_Bool existsJavaClassByName( const ::rtl::Reference< jvmaccess::VirtualMachine >& _pJVM,const ::rtl::OUString& _sClassName );
+    OOO_DLLPUBLIC_DBTOOLS sal_Bool existsJavaClassByName( const ::rtl::Reference< jvmaccess::VirtualMachine >& _pJVM,const ::rtl::OUString& _sClassName );
 }
 
 //==================================================================================

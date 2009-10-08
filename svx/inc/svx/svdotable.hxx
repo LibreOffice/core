@@ -246,13 +246,12 @@ public:
     virtual SdrHdl* GetHdl(sal_uInt32 nHdlNum) const;
     virtual void AddToHdlList(SdrHdlList& rHdlList) const;
 
-    virtual FASTBOOL HasSpecialDrag() const;
-    virtual FASTBOOL BegDrag(SdrDragStat& rDrag) const;
-    virtual FASTBOOL MovDrag(SdrDragStat& rDrag) const;
-    virtual FASTBOOL EndDrag(SdrDragStat& rDrag);
-    virtual void BrkDrag(SdrDragStat& rDrag) const;
-    virtual String GetDragComment(const SdrDragStat& rDrag, FASTBOOL bUndoDragComment, FASTBOOL bCreateComment) const;
-    virtual basegfx::B2DPolyPolygon TakeDragPoly(const SdrDragStat& rDrag) const;
+    // special drag methods
+    virtual bool hasSpecialDrag() const;
+    virtual bool beginSpecialDrag(SdrDragStat& rDrag) const;
+    virtual bool applySpecialDrag(SdrDragStat& rDrag);
+    virtual String getSpecialDragComment(const SdrDragStat& rDrag) const;
+    virtual basegfx::B2DPolyPolygon getSpecialDragPoly(const SdrDragStat& rDrag) const;
 
     virtual FASTBOOL BegCreate(SdrDragStat& rStat);
     virtual FASTBOOL MovCreate(SdrDragStat& rStat);
@@ -264,16 +263,11 @@ public:
 
     virtual void NbcMove(const Size& rSiz);
     virtual void NbcResize(const Point& rRef, const Fraction& xFact, const Fraction& yFact);
-//  virtual void NbcRotate(const Point& rRef, long nWink, double sn, double cs);
-//  virtual void NbcMirror(const Point& rRef1, const Point& rRef2);
-//  virtual void NbcShear(const Point& rRef, long nWink, double tn, FASTBOOL bVShear);
 
-//  virtual FASTBOOL HasTextEdit() const;
     virtual sal_Bool BegTextEdit(SdrOutliner& rOutl);
     virtual void EndTextEdit(SdrOutliner& rOutl);
     virtual void TakeTextEditArea(Size* pPaperMin, Size* pPaperMax, Rectangle* pViewInit, Rectangle* pViewMin) const;
     virtual void TakeTextEditArea(const sdr::table::CellPos& rPos, Size* pPaperMin, Size* pPaperMax, Rectangle* pViewInit, Rectangle* pViewMin) const;
-//  virtual SdrObject* CheckTextEditHit(const Point& rPnt, USHORT nTol, const SetOfByte* pVisiLayer) const;
     virtual USHORT GetOutlinerViewAnchorMode() const;
 
     virtual void NbcSetOutlinerParaObject(OutlinerParaObject* pTextObject);
@@ -283,10 +277,6 @@ public:
 
     virtual void NbcReformatText();
     virtual void ReformatText();
-
-//  virtual FASTBOOL CalcFieldValue(const SvxFieldItem& rField, USHORT nPara, USHORT nPos, FASTBOOL bEdit, Color*& rpTxtColor, Color*& rpFldColor, String& rRet) const;
-
-//  virtual SdrObject* DoConvertToPolyObj(BOOL bBezier) const;
 
     void SetTextEditOutliner(SdrOutliner* pOutl) { pEdtOutl=pOutl; }
 

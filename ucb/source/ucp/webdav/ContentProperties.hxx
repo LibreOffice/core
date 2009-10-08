@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: ContentProperties.hxx,v $
- * $Revision: 1.12 $
+ * $Revision: 1.12.34.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -165,10 +165,19 @@ public:
     void addProperties( const std::vector< rtl::OUString > & rProps,
                         const ContentProperties & rContentProps );
 
+    // overwrites probably existing entries.
+    void addProperties( const ContentProperties & rProps );
+
+    // overwrites probably existing entries.
+    void addProperties( const std::vector< DAVPropertyValue > & rProps );
+
     // overwrites probably existing entry.
     void addProperty( const rtl::OUString & rName,
-                      const com::sun::star::uno::Any & rValue,
-                      bool bIsCaseSensitive );
+                     const com::sun::star::uno::Any & rValue,
+                     bool bIsCaseSensitive );
+
+    // overwrites probably existing entry.
+    void addProperty( const DAVPropertyValue & rProp );
 
     bool isTrailingSlash() const { return m_bTrailingSlash; }
 

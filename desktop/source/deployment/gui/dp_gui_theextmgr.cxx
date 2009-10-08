@@ -8,7 +8,7 @@
  *
  * $RCSfile: dp_gui_theextmgr.cxx,v $
  *
- * $Revision: 1.3 $
+ * $Revision: 1.3.14.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -281,7 +281,6 @@ void TheExtensionManager::createPackageList()
         if ( ! createPackageList( m_sPackageManagers[i] ) )
             break;
     }
-    m_pDialog->selectEntry( 0 );
 }
 
 //------------------------------------------------------------------------------
@@ -394,13 +393,15 @@ void TheExtensionManager::disposing( lang::EventObject const & rEvt )
 void TheExtensionManager::queryTermination( ::lang::EventObject const & )
     throw ( frame::TerminationVetoException, uno::RuntimeException )
 {
-    if ( m_pExecuteCmdQueue->isBusy() )
+    if ( m_pExecuteCmdQueue->isBusy() || ( m_pDialog && m_pDialog->isBusy() ) )
     {
         ToTop( TOTOP_RESTOREWHENMIN );
         throw frame::TerminationVetoException(
             OUSTR("The office cannot be closed while the Extension Manager is running"),
             uno::Reference<XInterface>(static_cast<frame::XTerminateListener*>(this), uno::UNO_QUERY));
     }
+    else if ( m_pDialog )
+        m_pDialog->Close();
 }
 
 //------------------------------------------------------------------------------

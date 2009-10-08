@@ -61,7 +61,6 @@ IMPL_LINK( PasswordCreateDialog, OKHdl_Impl, OKButton *, EMPTYARG )
         String aErrorMsg( ResId( STR_ERROR_PASSWORDS_NOT_IDENTICAL, *pResourceMgr ));
         ErrorBox aErrorBox( this, WB_OK, aErrorMsg );
         aErrorBox.Execute();
-        aEDPasswordCrt.SetText( String() );
         aEDPasswordRepeat.SetText( String() );
         aEDPasswordCrt.GrabFocus();
     }
@@ -70,23 +69,19 @@ IMPL_LINK( PasswordCreateDialog, OKHdl_Impl, OKButton *, EMPTYARG )
 
 // -----------------------------------------------------------------------
 
-PasswordCreateDialog::PasswordCreateDialog
-(
-    Window*                                     pParent,
-    ResMgr*                                     pResMgr
-) :
-
-    ModalDialog( pParent, ResId( DLG_UUI_PASSWORD_CRT, *pResMgr ) ),
-
-    aFTPasswordCrt      ( this, ResId( FT_PASSWORD_CRT, *pResMgr ) ),
-    aEDPasswordCrt      ( this, ResId( ED_PASSWORD_CRT, *pResMgr ) ),
-    aFTPasswordRepeat   ( this, ResId( FT_PASSWORD_REPEAT, *pResMgr ) ),
-    aEDPasswordRepeat   ( this, ResId( ED_PASSWORD_REPEAT, *pResMgr ) ),
-    aOKBtn                  ( this, ResId( BTN_PASSCRT_OK, *pResMgr ) ),
-    aCancelBtn              ( this, ResId( BTN_PASSCRT_CANCEL, *pResMgr ) ),
-    aHelpBtn                ( this, ResId( BTN_PASSCRT_HELP, *pResMgr ) ),
-    pResourceMgr            ( pResMgr ),
-    nMinLen(5)
+PasswordCreateDialog::PasswordCreateDialog( Window* _pParent, ResMgr * pResMgr )
+    :ModalDialog( _pParent, ResId( DLG_UUI_PASSWORD_CRT, *pResMgr ) )
+    ,aFTPasswordCrt           ( this, ResId( FT_PASSWORD_CRT, *pResMgr )             )
+    ,aEDPasswordCrt       ( this, ResId( ED_PASSWORD_CRT, *pResMgr )        )
+    ,aFTPasswordRepeat           ( this, ResId( FT_PASSWORD_REPEAT, *pResMgr )             )
+    ,aEDPasswordRepeat       ( this, ResId( ED_PASSWORD_REPEAT, *pResMgr )        )
+    ,aFTWarning           ( this, ResId( FT_PASSWORD_WARNING, *pResMgr )             )
+    ,aFixedLine1       ( this, ResId( FL_FIXED_LINE_1, *pResMgr )        )
+    ,aOKBtn   ( this, ResId( BTN_PASSCRT_OK, *pResMgr )    )
+    ,aCancelBtn   ( this, ResId( BTN_PASSCRT_CANCEL, *pResMgr )    )
+    ,aHelpBtn   ( this, ResId( BTN_PASSCRT_HELP, *pResMgr )    )
+    ,pResourceMgr           ( pResMgr )
+    ,nMinLen(5)
 {
     FreeResource();
 
@@ -94,5 +89,36 @@ PasswordCreateDialog::PasswordCreateDialog
     aEDPasswordCrt.SetModifyHdl( LINK( this, PasswordCreateDialog, EditHdl_Impl ) );
 
     aOKBtn.Enable( sal_False );
-};
 
+    long nLabelWidth = aFTWarning.GetSizePixel().Width();
+    long nLabelHeight = aFTWarning.GetSizePixel().Height();
+    long nTextWidth = aFTWarning.GetCtrlTextWidth( aFTWarning.GetText() );
+    long nTextHeight = aFTWarning.GetTextHeight();
+
+    Rectangle aLabelRect( aFTWarning.GetPosPixel(), aFTWarning.GetSizePixel() );
+    Rectangle aRect = aFTWarning.GetTextRect( aLabelRect, aFTWarning.GetText() );
+
+    long nNewLabelHeight = 0;
+    for( nNewLabelHeight = ( nTextWidth / nLabelWidth + 1 ) * nTextHeight;
+        nNewLabelHeight < aRect.GetHeight();
+        nNewLabelHeight += nTextHeight );
+
+    long nDelta = nNewLabelHeight - nLabelHeight;
+
+    Size aNewDlgSize = GetSizePixel();
+    aNewDlgSize.Height() += nDelta;
+    SetSizePixel( aNewDlgSize );
+
+    Size aNewWarningSize = aFTWarning.GetSizePixel();
+    aNewWarningSize.Height() = nNewLabelHeight;
+    aFTWarning.SetPosSizePixel( aFTWarning.GetPosPixel(), aNewWarningSize );
+
+    Window* pControls[] = { &aFixedLine1, &aOKBtn, &aCancelBtn, &aHelpBtn };
+    const sal_Int32 nCCount = sizeof( pControls ) / sizeof( pControls[0] );
+    for ( int i = 0; i < nCCount; ++i )
+    {
+        Point aNewPos =(*pControls[i]).GetPosPixel();
+        aNewPos.Y() += nDelta;
+        pControls[i]->SetPosSizePixel( aNewPos, pControls[i]->GetSizePixel() );
+    }
+}

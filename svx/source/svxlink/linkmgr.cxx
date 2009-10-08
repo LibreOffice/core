@@ -351,6 +351,7 @@ BOOL SvxInternalLink::Connect( sfx2::SvBaseLink* pLink )
             SfxStringItem aTarget( SID_TARGETNAME, String::CreateFromAscii("_blank") );
             SfxStringItem aReferer( SID_REFERER, sReferer );
             SfxUInt16Item aUpdate( SID_UPDATEDOCMODE, nUpdateMode );
+            SfxBoolItem aReadOnly(SID_DOC_READONLY, TRUE);
 
             // #i14200# (DDE-link crashes wordprocessor)
             SfxAllItemSet aArgs( SFX_APP()->GetPool() );
@@ -360,6 +361,7 @@ BOOL SvxInternalLink::Connect( sfx2::SvBaseLink* pLink )
             aArgs.Put(aMinimized);
             aArgs.Put(aName);
             aArgs.Put(aUpdate);
+            aArgs.Put(aReadOnly);
             pFndShell = SfxObjectShell::CreateAndLoadObject( aArgs );
         }
     }

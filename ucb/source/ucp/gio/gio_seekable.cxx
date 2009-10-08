@@ -94,22 +94,33 @@ sal_Int64 SAL_CALL Seekable::getLength() throw( io::IOException, uno::RuntimeExc
     if (!mpStream)
         throw io::NotConnectedException();
 
+    bool bOk = false;
+    sal_uInt64 nSize = 0;
+
     GFileInfo* pInfo = G_IS_FILE_INPUT_STREAM(mpStream)
         ? g_file_input_stream_query_info(G_FILE_INPUT_STREAM(mpStream), const_cast<char*>(G_FILE_ATTRIBUTE_STANDARD_SIZE), NULL, NULL)
         : g_file_output_stream_query_info(G_FILE_OUTPUT_STREAM(mpStream), const_cast<char*>(G_FILE_ATTRIBUTE_STANDARD_SIZE), NULL, NULL);
 
-    if (!pInfo)
-        throw io::IOException(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Getting attributes unsupported")),
-            static_cast< cppu::OWeakObject * >(this));
+    if (pInfo)
+    {
+        if (g_file_info_has_attribute(pInfo, G_FILE_ATTRIBUTE_STANDARD_SIZE))
+        {
+            nSize = g_file_info_get_size(pInfo);
+            bOk = true;
+        }
+        g_object_unref(pInfo);
+    }
 
-    bool bOk = true;
-    sal_uInt64 nSize = 0;
-    if (g_file_info_has_attribute(pInfo, G_FILE_ATTRIBUTE_STANDARD_SIZE))
-        nSize = g_file_info_get_size(pInfo);
-    else
-        bOk = false;
-
-    g_object_unref(pInfo);
+    if (!bOk)
+    {
+        GError *pError=NULL;
+        sal_Int64 nCurr = getPosition();
+        if (!g_seekable_seek(mpStream, 0, G_SEEK_END, NULL, &pError))
+            convertToException(pError, static_cast< cppu::OWeakObject * >(this));
+        nSize = getPosition();
+        seek(nCurr);
+        bOk = true;
+    }
 
     if (!bOk)
         throw io::IOException(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Getting size unsupported")),

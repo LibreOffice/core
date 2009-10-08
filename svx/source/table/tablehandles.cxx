@@ -132,9 +132,9 @@ sal_Int32 TableEdgeHdl::GetValidDragOffset( const SdrDragStat& rDrag ) const
     return std::min( std::max( static_cast<sal_Int32>(mbHorizontal ? rDrag.GetDY() : rDrag.GetDX()), mnMin ), mnMax );
 }
 
-basegfx::B2DPolyPolygon TableEdgeHdl::TakeDragPoly( const SdrDragStat* pDrag /*= 0*/ ) const
+basegfx::B2DPolyPolygon TableEdgeHdl::getSpecialDragPoly(const SdrDragStat& rDrag) const
 {
-    return GetPolyPolygon(false, pDrag);
+    return GetPolyPolygon(false, &rDrag);
 }
 
 bool TableEdgeHdl::IsHdlHit(const Point& rPnt) const

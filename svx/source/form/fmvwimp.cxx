@@ -30,27 +30,40 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_svx.hxx"
-#include <fmctrler.hxx>
-#include "fmvwimp.hxx"
-#include <svx/fmglob.hxx>
-#include <svx/dialmgr.hxx>
-#ifndef _SVX_FMRESIDS_HRC
-#include "fmresids.hrc"
-#endif
-#include "fmobj.hxx"
-#include <svx/svdogrp.hxx>
-#include "svditer.hxx"
-#include "fmservs.hxx"
+
+#include "fmctrler.hxx"
 #include "fmdocumentclassification.hxx"
-#include "fmcontrollayout.hxx"
+#include "fmobj.hxx"
+#include "fmpgeimp.hxx"
+#include "fmprop.hrc"
+#include "fmresids.hrc"
+#include "fmservs.hxx"
+#include "fmshimp.hxx"
+#include "fmtools.hxx"
+#include "fmundo.hxx"
+#include "fmvwimp.hxx"
+#include "formcontrolfactory.hxx"
+#include "sdrpaintwindow.hxx"
+#include "svditer.hxx"
+#include "svx/dataaccessdescriptor.hxx"
+#include "svx/dialmgr.hxx"
+#include "svx/fmglob.hxx"
+#include "svx/fmmodel.hxx"
+#include "svx/fmpage.hxx"
+#include "svx/fmshell.hxx"
+#include "svx/fmview.hxx"
+#include "svx/sdrpagewindow.hxx"
+#include "svx/svdogrp.hxx"
+#include "svx/svdpagv.hxx"
+#include "xmlexchg.hxx"
 
 /** === begin UNO includes === **/
+#include <com/sun/star/ui/dialogs/XExecutableDialog.hpp>
 #include <com/sun/star/style/VerticalAlignment.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/sdbc/XRowSet.hpp>
 #include <com/sun/star/form/XLoadable.hpp>
 #include <com/sun/star/awt/VisualEffect.hpp>
-#include <com/sun/star/awt/ScrollBarOrientation.hpp>
 #include <com/sun/star/util/XNumberFormatsSupplier.hpp>
 #include <com/sun/star/util/XNumberFormats.hpp>
 #include <com/sun/star/sdb/CommandType.hpp>
@@ -71,31 +84,16 @@
 #include <com/sun/star/sdbcx/XTablesSupplier.hpp>
 #include <com/sun/star/sdbc/XPreparedStatement.hpp>
 #include <com/sun/star/sdb/XQueriesSupplier.hpp>
-#include <com/sun/star/style/XStyleFamiliesSupplier.hpp>
 /** === end UNO includes === **/
-#include <svx/fmmodel.hxx>
-#include "fmundo.hxx"
-#include <svx/fmpage.hxx>
-#include "fmpgeimp.hxx"
-#include <svx/fmview.hxx>
-#include <svx/fmshell.hxx>
-#include "fmshimp.hxx"
-#include "fmtools.hxx"
-#ifndef _SVX_FMPROP_HRC
-#include "fmprop.hrc"
-#endif
-#include <vcl/msgbox.hxx>
-#include <svx/svdpagv.hxx>
-#include "xmlexchg.hxx"
-#include <svx/dataaccessdescriptor.hxx>
-#include <comphelper/extract.hxx>
+
 #include <comphelper/enumhelper.hxx>
-#include <comphelper/property.hxx>
+#include <comphelper/extract.hxx>
 #include <comphelper/numbers.hxx>
-#include <svtools/syslocale.hxx>
+#include <comphelper/property.hxx>
+#include <svtools/moduleoptions.hxx>
 #include <tools/diagnose_ex.h>
-#include <svx/sdrpagewindow.hxx>
-#include "sdrpaintwindow.hxx"
+#include <vcl/msgbox.hxx>
+#include <vcl/stdtext.hxx>
 
 #include <algorithm>
 
@@ -113,6 +111,7 @@ using namespace ::com::sun::star::util;
 using namespace ::com::sun::star::script;
 using namespace ::com::sun::star::style;
 using namespace ::com::sun::star::task;
+using namespace ::com::sun::star::ui::dialogs;
 using namespace ::comphelper;
 using namespace ::svxform;
 using namespace ::svx;
@@ -159,9 +158,9 @@ public:
 //========================================================================
 DBG_NAME(FmXPageViewWinRec)
 //------------------------------------------------------------------------
-FmXPageViewWinRec::FmXPageViewWinRec(const Reference< XMultiServiceFactory >& _rxORB, const SdrPageWindow& _rWindow, FmXFormView* _pViewImpl )
+FmXPageViewWinRec::FmXPageViewWinRec( const ::comphelper::ComponentContext& _rContext, const SdrPageWindow& _rWindow, FmXFormView* _pViewImpl )
 :   m_xControlContainer( _rWindow.GetControlContainer() ),
-    m_xORB( _rxORB ),
+    m_aContext( _rContext ),
     m_pViewImpl( _pViewImpl ),
     m_pWindow( dynamic_cast< Window* >( &_rWindow.GetPaintWindow().GetOutputDevice() ) )
 {
@@ -215,7 +214,6 @@ void FmXPageViewWinRec::dispose()
         xComp->dispose();
     }
     m_aControllerList.clear(); // this call deletes the formcontrollers
-    m_xORB = NULL;
 }
 
 
@@ -310,7 +308,7 @@ void FmXPageViewWinRec::setController(const Reference< XForm > & xForm,  FmXForm
     Reference< XTabControllerModel >  xTabOrder(xForm, UNO_QUERY);
 
     // create a form controller
-    FmXFormController* pController = new FmXFormController( m_xORB,m_pViewImpl->getView(), m_pWindow );
+    FmXFormController* pController = new FmXFormController( m_aContext.getLegacyServiceFactory(), m_pViewImpl->getView(), m_pWindow );
     Reference< XFormController > xController( pController );
 
     Reference< XInteractionHandler > xHandler;
@@ -366,15 +364,15 @@ void FmXPageViewWinRec::setController(const Reference< XForm > & xForm,  FmXForm
 }
 
 //------------------------------------------------------------------------
-void FmXPageViewWinRec::updateTabOrder( const Reference< XControl > & xControl,
-                                       const Reference< XControlContainer >& /*_rxCC*/ )
+void FmXPageViewWinRec::updateTabOrder( const Reference< XForm >& _rxForm )
 {
+    OSL_PRECOND( _rxForm.is(), "FmXPageViewWinRec::updateTabOrder: illegal argument!" );
+    if ( !_rxForm.is() )
+        return;
+
     try
     {
-        Reference< XFormComponent > xControlModel( xControl->getModel(), UNO_QUERY_THROW );
-        Reference< XForm > xForm( xControlModel->getParent(), UNO_QUERY_THROW );
-
-        Reference< XTabController > xTabCtrl( getController( xForm ), UNO_QUERY );
+        Reference< XTabController > xTabCtrl( getController( _rxForm ).get() );
         if ( xTabCtrl.is() )
         {   // if there already is a TabController for this form, then delegate the "updateTabOrder" request
             xTabCtrl->activateTabOrder();
@@ -384,7 +382,7 @@ void FmXPageViewWinRec::updateTabOrder( const Reference< XControl > & xControl,
 
             // if it's a sub form, then we must ensure there exist TabControllers
             // for all its ancestors, too
-            Reference< XForm > xParentForm( xForm->getParent(), UNO_QUERY );
+            Reference< XForm > xParentForm( _rxForm->getParent(), UNO_QUERY );
             FmXFormController* pFormController = NULL;
             // there is a parent form -> look for the respective controller
             if ( xParentForm.is() )
@@ -396,7 +394,7 @@ void FmXPageViewWinRec::updateTabOrder( const Reference< XControl > & xControl,
                 pFormController = reinterpret_cast< FmXFormController* >( xTunnel->getSomething( FmXFormController::getUnoTunnelImplementationId() ) );
             }
 
-            setController( xForm, pFormController );
+            setController( _rxForm, pFormController );
         }
     }
     catch( const Exception& )
@@ -406,16 +404,17 @@ void FmXPageViewWinRec::updateTabOrder( const Reference< XControl > & xControl,
 }
 
 //------------------------------------------------------------------------
-FmXFormView::FmXFormView(const Reference< XMultiServiceFactory >&   _xORB,
-            FmFormView* _pView)
-    :m_xORB( _xORB )
+FmXFormView::FmXFormView(const ::comphelper::ComponentContext& _rContext, FmFormView* _pView )
+    :m_aContext( _rContext )
     ,m_pMarkedGrid(NULL)
     ,m_pView(_pView)
     ,m_nActivationEvent(0)
     ,m_nErrorMessageEvent( 0 )
     ,m_nAutoFocusEvent( 0 )
+    ,m_nControlWizardEvent( 0 )
     ,m_pWatchStoredList( NULL )
-    ,m_bFirstActivation( sal_True )
+    ,m_bFirstActivation( true )
+    ,m_isTabOrderUpdateSuspended( false )
 {
 }
 
@@ -438,6 +437,12 @@ void FmXFormView::cancelEvents()
     {
         Application::RemoveUserEvent( m_nAutoFocusEvent );
         m_nAutoFocusEvent = 0;
+    }
+
+    if ( m_nControlWizardEvent )
+    {
+        Application::RemoveUserEvent( m_nControlWizardEvent );
+        m_nControlWizardEvent = 0;
     }
 }
 
@@ -487,18 +492,30 @@ void SAL_CALL FmXFormView::formDeactivated(const EventObject& rEvent) throw( Run
 //------------------------------------------------------------------------------
 void SAL_CALL FmXFormView::elementInserted(const ContainerEvent& evt) throw( RuntimeException )
 {
-    Reference< XControlContainer > xCC( evt.Source, UNO_QUERY );
-    if( xCC.is() )
+    try
     {
-        FmWinRecList::iterator i = findWindow( xCC );
+        Reference< XControlContainer > xControlContainer( evt.Source, UNO_QUERY_THROW );
+        Reference< XControl > xControl( evt.Element, UNO_QUERY_THROW );
+        Reference< XFormComponent > xControlModel( xControl->getModel(), UNO_QUERY_THROW );
+        Reference< XForm > xForm( xControlModel->getParent(), UNO_QUERY_THROW );
 
-        if ( i != m_aWinList.end() )
+        if ( m_isTabOrderUpdateSuspended )
         {
-            Reference< XControl >  xControl;
-            evt.Element >>= xControl;
-            if( xControl.is() )
-                (*i)->updateTabOrder( xControl, xCC );
+            // remember the container and the control, so we can update the tab order on resumeTabOrderUpdate
+            m_aNeedTabOrderUpdate[ xControlContainer ].insert( xForm );
         }
+        else
+        {
+            FmWinRecList::iterator pos = findWindow( xControlContainer );
+            if ( pos != m_aWinList.end() )
+            {
+                (*pos)->updateTabOrder( xForm );
+            }
+        }
+    }
+    catch( const Exception& )
+    {
+        DBG_UNHANDLED_EXCEPTION();
     }
 }
 
@@ -547,7 +564,7 @@ void FmXFormView::addWindow(const SdrPageWindow& rWindow)
     Reference< XControlContainer > xCC = rWindow.GetControlContainer();
     if ( xCC.is() && findWindow( xCC ) == m_aWinList.end())
     {
-        FmXPageViewWinRec *pFmRec = new FmXPageViewWinRec(m_xORB, rWindow, this);
+        FmXPageViewWinRec *pFmRec = new FmXPageViewWinRec( m_aContext, rWindow, this );
         pFmRec->acquire();
 
         m_aWinList.push_back(pFmRec);
@@ -604,6 +621,40 @@ void FmXFormView::onFirstViewActivation( const FmFormModel* _pDocModel )
 {
     if ( _pDocModel && _pDocModel->GetAutoControlFocus() )
         m_nAutoFocusEvent = Application::PostUserEvent( LINK( this, FmXFormView, OnAutoFocus ) );
+}
+
+//------------------------------------------------------------------------------
+void FmXFormView::suspendTabOrderUpdate()
+{
+    OSL_ENSURE( !m_isTabOrderUpdateSuspended, "FmXFormView::suspendTabOrderUpdate: nesting not allowed!" );
+    m_isTabOrderUpdateSuspended = true;
+}
+
+//------------------------------------------------------------------------------
+void FmXFormView::resumeTabOrderUpdate()
+{
+    OSL_ENSURE( m_isTabOrderUpdateSuspended, "FmXFormView::resumeTabOrderUpdate: not suspended!" );
+    m_isTabOrderUpdateSuspended = false;
+
+    // update the tab orders for all components which were collected since the suspendTabOrderUpdate call.
+    for (   MapControlContainerToSetOfForms::const_iterator container = m_aNeedTabOrderUpdate.begin();
+            container != m_aNeedTabOrderUpdate.end();
+            ++container
+        )
+    {
+        FmWinRecList::iterator pos = findWindow( container->first );
+        if ( pos == m_aWinList.end() )
+            continue;
+
+        for (   SetOfForms::const_iterator form = container->second.begin();
+                form != container->second.end();
+                ++form
+            )
+        {
+            (*pos)->updateTabOrder( *form );
+        }
+    }
+    m_aNeedTabOrderUpdate.clear();
 }
 
 //------------------------------------------------------------------------------
@@ -771,17 +822,17 @@ namespace
             SdrObjListIter aSdrObjectLoop( _rPage, IM_DEEPNOGROUPS );
             while ( aSdrObjectLoop.IsMore() )
             {
-                const SdrUnoObj* pUnoObject = dynamic_cast< const SdrUnoObj* >( aSdrObjectLoop.Next() );
-                if ( !pUnoObject )
+                FmFormObj* pFormObject = FmFormObj::GetFormObject( aSdrObjectLoop.Next() );
+                if ( !pFormObject )
                     continue;
 
-                Reference< XChild > xModel( pUnoObject->GetUnoControlModel(), UNO_QUERY_THROW );
+                Reference< XChild > xModel( pFormObject->GetUnoControlModel(), UNO_QUERY_THROW );
                 Reference< XInterface > xModelParent( xModel->getParent(), UNO_QUERY_THROW );
 
                 if ( xNormalizedForm.get() != xModelParent.get() )
                     continue;
 
-                pUnoObject->GetUnoControl( _rView, _rWindow );
+                pFormObject->GetUnoControl( _rView, _rWindow );
             }
         }
         catch( const Exception& )
@@ -890,324 +941,142 @@ IMPL_LINK(FmXFormView, OnAutoFocus, void*, /*EMPTYTAG*/)
 // -----------------------------------------------------------------------------
 namespace
 {
-    /*
-        ATTENTION!
-        Broken for solaris? It seems that the old used template argument TYPE was already
-        defined as a macro ... which expand to ... "TYPE "!?
-        All platforms are OK - excepting Solaris. There the line "template< class TYPE >"
-        was expanded to "template < class TYPE " where the closing ">" was missing.
-    */
-    #ifdef MYTYPE
-        #error "Who defines the macro MYTYPE, which is used as template argument here?"
-    #endif
-
-    //....................................................................
-    template< class MYTYPE >
-    Reference< MYTYPE > getTypedModelNode( const Reference< XInterface >& _rxModelNode )
-    {
-        Reference< MYTYPE > xTypedNode( _rxModelNode, UNO_QUERY );
-        if ( xTypedNode.is() )
-            return xTypedNode;
-        else
-        {
-            Reference< XChild > xChild( _rxModelNode, UNO_QUERY );
-            if ( xChild.is() )
-                return getTypedModelNode< MYTYPE >( xChild->getParent() );
-            else
-                return NULL;
-        }
-    }
-
-    //....................................................................
-    static bool lcl_getDocumentDefaultStyleAndFamily( const Reference< XInterface >& _rxDocument, ::rtl::OUString& _rFamilyName, ::rtl::OUString& _rStyleName ) SAL_THROW(( Exception ))
-    {
-        bool bSuccess = true;
-        Reference< XServiceInfo > xDocumentSI( _rxDocument, UNO_QUERY );
-        if ( xDocumentSI.is() )
-        {
-            if (  xDocumentSI->supportsService( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.text.TextDocument" ) ) )
-               || xDocumentSI->supportsService( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.text.WebDocument" ) ) )
-               )
-            {
-                _rFamilyName = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ParagraphStyles" ) );
-                _rStyleName = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Standard" ) );
-            }
-            else if ( xDocumentSI->supportsService( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.sheet.SpreadsheetDocument" ) ) ) )
-            {
-                _rFamilyName = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "CellStyles" ) );
-                _rStyleName = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Default" ) );
-            }
-            else if (  xDocumentSI->supportsService( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.drawing.DrawingDocument" ) ) )
-                    || xDocumentSI->supportsService( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.presentation.PresentationDocument" ) ) )
-                    )
-            {
-                _rFamilyName = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "graphics" ) );
-                _rStyleName = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "standard" ) );
-            }
-            else
-                bSuccess = false;
-        }
-        return bSuccess;
-    }
-
-    static const sal_Char* aCharacterAndParagraphProperties[] =
-    {
-        "CharFontName",
-        "CharFontStyleName",
-        "CharFontFamily",
-        "CharFontCharSet",
-        "CharFontPitch",
-        "CharColor",
-        "CharEscapement",
-        "CharHeight",
-        "CharUnderline",
-        "CharWeight",
-        "CharPosture",
-        "CharAutoKerning",
-        "CharBackColor",
-        "CharBackTransparent",
-        "CharCaseMap",
-        "CharCrossedOut",
-        "CharFlash",
-        "CharStrikeout",
-        "CharWordMode",
-        "CharKerning",
-        "CharLocale",
-        "CharKeepTogether",
-        "CharNoLineBreak",
-        "CharShadowed",
-        "CharFontType",
-        "CharStyleName",
-        "CharContoured",
-        "CharCombineIsOn",
-        "CharCombinePrefix",
-        "CharCombineSuffix",
-        "CharEmphasize",
-        "CharRelief",
-        "RubyText",
-        "RubyAdjust",
-        "RubyCharStyleName",
-        "RubyIsAbove",
-        "CharRotation",
-        "CharRotationIsFitToLine",
-        "CharScaleWidth",
-        "HyperLinkURL",
-        "HyperLinkTarget",
-        "HyperLinkName",
-        "VisitedCharStyleName",
-        "UnvisitedCharStyleName",
-        "CharEscapementHeight",
-        "CharNoHyphenation",
-        "CharUnderlineColor",
-        "CharUnderlineHasColor",
-        "CharStyleNames",
-        "CharHeightAsian",
-        "CharWeightAsian",
-        "CharFontNameAsian",
-        "CharFontStyleNameAsian",
-        "CharFontFamilyAsian",
-        "CharFontCharSetAsian",
-        "CharFontPitchAsian",
-        "CharPostureAsian",
-        "CharLocaleAsian",
-        "ParaIsCharacterDistance",
-        "ParaIsForbiddenRules",
-        "ParaIsHangingPunctuation",
-        "CharHeightComplex",
-        "CharWeightComplex",
-        "CharFontNameComplex",
-        "CharFontStyleNameComplex",
-        "CharFontFamilyComplex",
-        "CharFontCharSetComplex",
-        "CharFontPitchComplex",
-        "CharPostureComplex",
-        "CharLocaleComplex",
-        "ParaAdjust",
-        "ParaLineSpacing",
-        "ParaBackColor",
-        "ParaBackTransparent",
-        "ParaBackGraphicURL",
-        "ParaBackGraphicFilter",
-        "ParaBackGraphicLocation",
-        "ParaLastLineAdjust",
-        "ParaExpandSingleWord",
-        "ParaLeftMargin",
-        "ParaRightMargin",
-        "ParaTopMargin",
-        "ParaBottomMargin",
-        "ParaLineNumberCount",
-        "ParaLineNumberStartValue",
-        "PageDescName",
-        "PageNumberOffset",
-        "ParaRegisterModeActive",
-        "ParaTabStops",
-        "ParaStyleName",
-        "DropCapFormat",
-        "DropCapWholeWord",
-        "ParaKeepTogether",
-        "Setting",
-        "ParaSplit",
-        "Setting",
-        "NumberingLevel",
-        "NumberingRules",
-        "NumberingStartValue",
-        "ParaIsNumberingRestart",
-        "NumberingStyleName",
-        "ParaOrphans",
-        "ParaWidows",
-        "ParaShadowFormat",
-        "LeftBorder",
-        "RightBorder",
-        "TopBorder",
-        "BottomBorder",
-        "BorderDistance",
-        "LeftBorderDistance",
-        "RightBorderDistance",
-        "TopBorderDistance",
-        "BottomBorderDistance",
-        "BreakType",
-        "DropCapCharStyleName",
-        "ParaFirstLineIndent",
-        "ParaIsAutoFirstLineIndent",
-        "ParaIsHyphenation",
-        "ParaHyphenationMaxHyphens",
-        "ParaHyphenationMaxLeadingChars",
-        "ParaHyphenationMaxTrailingChars",
-        "ParaVertAlignment",
-        "ParaUserDefinedAttributes",
-        "NumberingIsNumber",
-        "ParaIsConnectBorder",
-        NULL
-    };
-
-    //....................................................................
-    static void lcl_initializeCharacterAttributes( const Reference< XPropertySet >& _rxModel )
-    {
-        // need to initialize the attributes from the "Default" style of the document we live in
-
-        try
-        {
-            // the style family collection
-            Reference< XStyleFamiliesSupplier > xSuppStyleFamilies = getTypedModelNode< XStyleFamiliesSupplier >( _rxModel.get() );
-            Reference< XNameAccess > xStyleFamilies;
-            if ( xSuppStyleFamilies.is() )
-                xStyleFamilies = xSuppStyleFamilies->getStyleFamilies();
-            OSL_ENSURE( xStyleFamilies.is(), "lcl_initializeCharacterAttributes: could not obtain the style families!" );
-            if ( !xStyleFamilies.is() )
-                return;
-
-            // the names of the family, and the style - depends on the document type we live in
-            ::rtl::OUString sFamilyName, sStyleName;
-            bool bKnownDocumentType = lcl_getDocumentDefaultStyleAndFamily( xSuppStyleFamilies.get(), sFamilyName, sStyleName );
-            OSL_ENSURE( bKnownDocumentType, "lcl_initializeCharacterAttributes: Huh? What document type is this?" );
-            if ( !bKnownDocumentType )
-                return;
-
-            // the concrete style
-            Reference< XNameAccess > xStyleFamily( xStyleFamilies->getByName( sFamilyName ), UNO_QUERY );
-            Reference< XPropertySet > xStyle;
-            if ( xStyleFamily.is() )
-                xStyleFamily->getByName( sStyleName ) >>= xStyle;
-            OSL_ENSURE( xStyle.is(), "lcl_initializeCharacterAttributes: could not retrieve the style!" );
-            if ( !xStyle.is() )
-                return;
-
-            // transfer all properties which are described by the com.sun.star.style.
-            Reference< XPropertySetInfo > xSourcePropInfo( xStyle->getPropertySetInfo() );
-            Reference< XPropertySetInfo > xDestPropInfo( _rxModel->getPropertySetInfo() );
-            OSL_ENSURE( xSourcePropInfo.is() && xDestPropInfo.is(), "lcl_initializeCharacterAttributes: no property set info!" );
-            if ( !xSourcePropInfo.is() || !xDestPropInfo.is() )
-                return;
-
-            ::rtl::OUString sPropertyName;
-            const sal_Char** pCharacterProperty = aCharacterAndParagraphProperties;
-            while ( *pCharacterProperty )
-            {
-                sPropertyName = ::rtl::OUString::createFromAscii( *pCharacterProperty );
-
-                if ( xSourcePropInfo->hasPropertyByName( sPropertyName ) && xDestPropInfo->hasPropertyByName( sPropertyName ) )
-                    _rxModel->setPropertyValue( sPropertyName, xStyle->getPropertyValue( sPropertyName ) );
-
-                ++pCharacterProperty;
-            }
-        }
-        catch( const Exception& )
-        {
-            OSL_ENSURE( sal_False, "lcl_initializeCharacterAttributes: caught an exception!" );
-        }
-    }
 }
 
 // -----------------------------------------------------------------------------
-sal_Int16 FmXFormView::implInitializeNewControlModel( const Reference< XPropertySet >& _rxModel, const SdrObject* _pObject ) const
+void FmXFormView::onCreatedFormObject( FmFormObj& _rFormObject )
 {
-    OSL_ENSURE( _rxModel.is() && _pObject, "FmXFormView::implInitializeNewControlModel: invalid model!" );
+    FmFormShell* pShell = m_pView ? m_pView->GetFormShell() : NULL;
+    FmXFormShell* pShellImpl = pShell ? pShell->GetImpl() : NULL;
+    OSL_ENSURE( pShellImpl, "FmXFormView::onCreatedFormObject: no form shell!" );
+    if ( !pShellImpl )
+        return;
+
+    // it is valid that the form shell's forms collection is not initialized, yet
+    pShellImpl->UpdateForms( sal_True );
+
+    m_xLastCreatedControlModel.set( _rFormObject.GetUnoControlModel(), UNO_QUERY );
+    if ( !m_xLastCreatedControlModel.is() )
+        return;
+
+    // some initial property defaults
+    FormControlFactory aControlFactory( m_aContext );
+    aControlFactory.initializeControlModel( pShellImpl->getDocumentType(), _rFormObject );
+
+    if ( !pShellImpl->GetWizardUsing() )
+        return;
+
+    // #i31958# don't call wizards in XForms mode
+    if ( pShellImpl->isEnhancedForm() )
+        return;
+
+    // #i46898# no wizards if there is no Base installed - currently, all wizards are
+    // database related
+    if ( !SvtModuleOptions().IsModuleInstalled( SvtModuleOptions::E_SDATABASE ) )
+        return;
+
+    if ( m_nControlWizardEvent )
+        Application::RemoveUserEvent( m_nControlWizardEvent );
+    m_nControlWizardEvent = Application::PostUserEvent( LINK( this, FmXFormView, OnStartControlWizard ) );
+}
+
+// -----------------------------------------------------------------------------
+IMPL_LINK( FmXFormView, OnStartControlWizard, void*, /**/ )
+{
+    m_nControlWizardEvent = 0;
+    OSL_PRECOND( m_xLastCreatedControlModel.is(), "FmXFormView::OnStartControlWizard: illegal call!" );
+    if ( !m_xLastCreatedControlModel.is() )
+        return 0L;
 
     sal_Int16 nClassId = FormComponentType::CONTROL;
-    if ( !_rxModel.is() || !_pObject )
-        return nClassId;
-
     try
     {
-        DocumentType eDocumentType = GetFormShell() ? GetFormShell()->GetImpl()->getDocumentType() : eUnknownDocumentType;
-        ControlLayouter::initializeControlLayout( _rxModel, eDocumentType );
-
-        _rxModel->getPropertyValue( FM_PROP_CLASSID ) >>= nClassId;
-        Reference< XPropertySetInfo> xPSI(_rxModel->getPropertySetInfo());
-        switch ( nClassId )
-        {
-            case FormComponentType::SCROLLBAR:
-                _rxModel->setPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "LiveScroll" ) ), makeAny( (sal_Bool)sal_True ) );
-                // NO break!
-            case FormComponentType::SPINBUTTON:
-            {
-                const ::Rectangle& rBoundRect = _pObject->GetCurrentBoundRect();
-                sal_Int32 eOrientation = ScrollBarOrientation::HORIZONTAL;
-                if ( rBoundRect.GetWidth() < rBoundRect.GetHeight() )
-                    eOrientation = ScrollBarOrientation::VERTICAL;
-                _rxModel->setPropertyValue( FM_PROP_ORIENTATION, makeAny( eOrientation ) );
-            }
-            break;
-
-            case FormComponentType::LISTBOX:
-            case FormComponentType::COMBOBOX:
-            {
-                const ::Rectangle& rBoundRect = _pObject->GetCurrentBoundRect();
-                sal_Bool bDropDown = ( rBoundRect.GetWidth() >= 3 * rBoundRect.GetHeight() );
-                _rxModel->setPropertyValue( FM_PROP_DROPDOWN, makeAny( (sal_Bool)bDropDown ) );
-            }
-            break;
-
-            case FormComponentType::TEXTFIELD:
-            {
-                initializeTextFieldLineEnds( _rxModel, m_xORB );
-                lcl_initializeCharacterAttributes( _rxModel );
-
-                const ::Rectangle& rBoundRect = _pObject->GetCurrentBoundRect();
-                if ( !( rBoundRect.GetWidth() > 4 * rBoundRect.GetHeight() ) )  // heuristics
-                {
-                    if ( xPSI.is() && xPSI->hasPropertyByName( FM_PROP_MULTILINE ) )
-                        _rxModel->setPropertyValue( FM_PROP_MULTILINE, makeAny( (sal_Bool)sal_True ) );
-                }
-            }
-            break;
-
-            case FormComponentType::RADIOBUTTON:
-            case FormComponentType::CHECKBOX:
-            case FormComponentType::FIXEDTEXT:
-            {
-                ::rtl::OUString sVertAlignPropertyName( RTL_CONSTASCII_USTRINGPARAM( "VerticalAlign" ) );
-                if ( xPSI.is() && xPSI->hasPropertyByName( sVertAlignPropertyName ) )
-                    _rxModel->setPropertyValue( sVertAlignPropertyName, makeAny( VerticalAlignment_MIDDLE ) );
-            }
-            break;
-        }
+        OSL_VERIFY( m_xLastCreatedControlModel->getPropertyValue( FM_PROP_CLASSID ) >>= nClassId );
     }
     catch( const Exception& )
     {
-        OSL_ENSURE( sal_False, "FmXFormView::implInitializeNewControlModel: caught an exception!" );
+        DBG_UNHANDLED_EXCEPTION();
     }
-    return nClassId;
+
+    const sal_Char* pWizardAsciiName = NULL;
+    switch ( nClassId )
+    {
+        case FormComponentType::GRIDCONTROL:
+            pWizardAsciiName = "com.sun.star.sdb.GridControlAutoPilot";
+            break;
+        case FormComponentType::LISTBOX:
+        case FormComponentType::COMBOBOX:
+            pWizardAsciiName = "com.sun.star.sdb.ListComboBoxAutoPilot";
+            break;
+        case FormComponentType::GROUPBOX:
+            pWizardAsciiName = "com.sun.star.sdb.GroupBoxAutoPilot";
+            break;
+    }
+
+    if ( pWizardAsciiName )
+    {
+        // build the argument list
+        Sequence< Any > aWizardArgs(1);
+        // the object affected
+        aWizardArgs[0] = makeAny( PropertyValue(
+            ::rtl::OUString::createFromAscii("ObjectModel"),
+            0,
+            makeAny( m_xLastCreatedControlModel ),
+            PropertyState_DIRECT_VALUE
+        ) );
+
+        // create the wizard object
+        Reference< XExecutableDialog > xWizard;
+        try
+        {
+            m_aContext.createComponentWithArguments( pWizardAsciiName, aWizardArgs, xWizard );
+        }
+        catch( const Exception& )
+        {
+            DBG_UNHANDLED_EXCEPTION();
+        }
+
+        if ( !xWizard.is() )
+        {
+            ShowServiceNotAvailableError( NULL, String::CreateFromAscii( pWizardAsciiName ), sal_True );
+        }
+        else
+        {
+            // execute the wizard
+            try
+            {
+                xWizard->execute();
+            }
+            catch( const Exception& )
+            {
+                DBG_UNHANDLED_EXCEPTION();
+            }
+        }
+    }
+
+    m_xLastCreatedControlModel.clear();
+    return 1L;
+}
+
+// -----------------------------------------------------------------------------
+namespace
+{
+    void lcl_insertIntoFormComponentHierarchy_throw( const FmFormView& _rView, const SdrUnoObj& _rSdrObj,
+        const Reference< XDataSource >& _rxDataSource = NULL, const ::rtl::OUString& _rDataSourceName = ::rtl::OUString(),
+        const ::rtl::OUString& _rCommand = ::rtl::OUString(), const sal_Int32 _nCommandType = -1 )
+    {
+        FmFormPage& rPage = static_cast< FmFormPage& >( *_rView.GetSdrPageView()->GetPage() );
+
+        Reference< XFormComponent > xFormComponent( _rSdrObj.GetUnoControlModel(), UNO_QUERY_THROW );
+        Reference< XForm > xTargetForm(
+            rPage.GetImpl()->findPlaceInFormComponentHierarchy( xFormComponent, _rxDataSource, _rDataSourceName, _rCommand, _nCommandType ),
+            UNO_SET_THROW );
+
+        Reference< XIndexContainer > xFormAsContainer( xTargetForm, UNO_QUERY_THROW );
+        xFormAsContainer->insertByIndex( xFormAsContainer->getCount(), makeAny( xFormComponent ) );
+
+        rPage.GetImpl()->setUniqueName( xFormComponent, xTargetForm );
+    }
 }
 
 // -----------------------------------------------------------------------------
@@ -1254,7 +1123,7 @@ SdrObject* FmXFormView::implCreateFieldControl( const ::svx::ODataAccessDescript
 
         // obtain the data source
         if ( !xDataSource.is() )
-            xDataSource = OStaticDataAccessTools().getDataSource(sDataSource, getORB());
+            xDataSource = OStaticDataAccessTools().getDataSource( sDataSource, m_aContext.getLegacyServiceFactory() );
 
         // and the connection, if necessary
         if ( !xConnection.is() )
@@ -1262,7 +1131,7 @@ SdrObject* FmXFormView::implCreateFieldControl( const ::svx::ODataAccessDescript
                 sDataSource,
                 ::rtl::OUString(),
                 ::rtl::OUString(),
-                getORB()
+                m_aContext.getLegacyServiceFactory()
             ) );
     }
     catch(const SQLContext& e) { aError.Reason <<= e; }
@@ -1287,8 +1156,6 @@ SdrObject* FmXFormView::implCreateFieldControl( const ::svx::ODataAccessDescript
     // go
     try
     {
-        FmFormPage& rPage = *static_cast<FmFormPage*>(m_pView->GetSdrPageView()->GetPage());
-
         // determine the table/query field which we should create a control for
         Reference< XPropertySet >   xField;
 
@@ -1310,13 +1177,13 @@ SdrObject* FmXFormView::implCreateFieldControl( const ::svx::ODataAccessDescript
 
         ////////////////////////////////////////////////////////////////
         // nur fuer Textgroesse
-        OutputDevice* _pOutDev = NULL;
+        OutputDevice* pOutDev = NULL;
         if (m_pView->GetActualOutDev() && m_pView->GetActualOutDev()->GetOutDevType() == OUTDEV_WINDOW)
-            _pOutDev = const_cast<OutputDevice*>(m_pView->GetActualOutDev());
+            pOutDev = const_cast<OutputDevice*>(m_pView->GetActualOutDev());
         else
         {// OutDev suchen
             SdrPageView* pPageView = m_pView->GetSdrPageView();
-            if( pPageView && !_pOutDev )
+            if( pPageView && !pOutDev )
             {
                 // const SdrPageViewWinList& rWinList = pPageView->GetWinList();
                 // const SdrPageViewWindows& rPageViewWindows = pPageView->GetPageViewWindows();
@@ -1327,14 +1194,14 @@ SdrObject* FmXFormView::implCreateFieldControl( const ::svx::ODataAccessDescript
 
                     if( rPageWindow.GetPaintWindow().OutputToWindow())
                     {
-                        _pOutDev = &rPageWindow.GetPaintWindow().GetOutputDevice();
+                        pOutDev = &rPageWindow.GetPaintWindow().GetOutputDevice();
                         break;
                     }
                 }
             }
         }
 
-        if (!_pOutDev)
+        if ( !pOutDev )
             return NULL;
 
         sal_Int32 nDataType = ::comphelper::getINT32(xField->getPropertyValue(FM_PROP_FIELDTYPE));
@@ -1398,31 +1265,14 @@ SdrObject* FmXFormView::implCreateFieldControl( const ::svx::ODataAccessDescript
         if (!nOBJID)
             return NULL;
 
-        SdrUnoObj* pLabel;
-        SdrUnoObj* pControl;
-        createControlLabelPair(m_pView,_pOutDev, 0,0, xField, xNumberFormats, nOBJID, sLabelPostfix, FmFormInventor,OBJ_FM_FIXEDTEXT,NULL,NULL,NULL,pLabel, pControl);
-        if (!pLabel || !pControl)
+        SdrUnoObj* pLabel( NULL );
+        SdrUnoObj* pControl( NULL );
+        if  (   !createControlLabelPair( *pOutDev, 0, 0, xField, xNumberFormats, nOBJID, sLabelPostfix,
+                    pLabel, pControl, xDataSource, sDataSource, sCommand, nCommandType )
+            )
         {
-            delete pLabel;
-            delete pControl;
             return NULL;
         }
-
-        //////////////////////////////////////////////////////////////////////
-        // Feststellen ob eine form erzeugt werden muss
-        // Dieses erledigt die Page fuer uns bzw. die PageImpl
-        Reference< XFormComponent >  xContent(pLabel->GetUnoControlModel(), UNO_QUERY);
-        Reference< XIndexContainer >  xContainer(rPage.GetImpl()->placeInFormComponentHierarchy(xContent, xDataSource, sDataSource, sCommand, nCommandType), UNO_QUERY);
-        if (xContainer.is())
-            xContainer->insertByIndex(xContainer->getCount(), makeAny(xContent));
-        implInitializeNewControlModel( Reference< XPropertySet >( xContent, UNO_QUERY ), pLabel );
-
-        xContent = Reference< XFormComponent > (pControl->GetUnoControlModel(), UNO_QUERY);
-        xContainer = Reference< XIndexContainer > (rPage.GetImpl()->placeInFormComponentHierarchy(xContent, xDataSource,
-            sDataSource, sCommand, nCommandType), UNO_QUERY);
-        if (xContainer.is())
-            xContainer->insertByIndex(xContainer->getCount(), makeAny(xContent));
-        implInitializeNewControlModel( Reference< XPropertySet >( xContent, UNO_QUERY ), pLabel );
 
         //////////////////////////////////////////////////////////////////////
         // Objekte gruppieren
@@ -1432,24 +1282,16 @@ SdrObject* FmXFormView::implCreateFieldControl( const ::svx::ODataAccessDescript
         pObjList->InsertObject(pControl);
 
 
-        if (bDateNTimeField)
-        {   // wir haben bis jetzt nur ein Datums-Feld eingefuegt, brauchen aber noch ein extra Feld fuer
-            // die Zeit-Komponente
+        if ( bDateNTimeField )
+        {   // so far we created a date field only, but we also need a time field
             pLabel = pControl = NULL;
-            createControlLabelPair(m_pView,_pOutDev, 0,1000, xField, xNumberFormats, OBJ_FM_TIMEFIELD,
-                String( SVX_RES( RID_STR_POSTFIX_TIME ) ), FmFormInventor,OBJ_FM_FIXEDTEXT,
-                NULL,NULL,NULL,
-                pLabel, pControl);
-
-            if (pLabel && pControl)
+            if  (   createControlLabelPair( *pOutDev, 0, 1000, xField, xNumberFormats, OBJ_FM_TIMEFIELD,
+                        String( SVX_RES( RID_STR_POSTFIX_TIME ) ), pLabel, pControl,
+                        xDataSource, sDataSource, sCommand, nCommandType )
+                )
             {
-                pObjList->InsertObject(pLabel);
-                pObjList->InsertObject(pControl);
-            }
-            else
-            {
-                delete pLabel;
-                delete pControl;
+                pObjList->InsertObject( pLabel );
+                pObjList->InsertObject( pControl );
             }
         }
 
@@ -1476,8 +1318,6 @@ SdrObject* FmXFormView::implCreateXFormsControl( const ::svx::OXFormsDescriptor 
     // go
     try
     {
-        FmFormPage& rPage = *static_cast<FmFormPage*>(m_pView->GetSdrPageView()->GetPage());
-
         // determine the table/query field which we should create a control for
         Reference< XPropertySet >   xField;
         Reference< XNumberFormats > xNumberFormats;
@@ -1485,13 +1325,13 @@ SdrObject* FmXFormView::implCreateXFormsControl( const ::svx::OXFormsDescriptor 
 
         ////////////////////////////////////////////////////////////////
         // nur fuer Textgroesse
-        OutputDevice* _pOutDev = NULL;
+        OutputDevice* pOutDev = NULL;
         if (m_pView->GetActualOutDev() && m_pView->GetActualOutDev()->GetOutDevType() == OUTDEV_WINDOW)
-            _pOutDev = const_cast<OutputDevice*>(m_pView->GetActualOutDev());
+            pOutDev = const_cast<OutputDevice*>(m_pView->GetActualOutDev());
         else
         {// OutDev suchen
             SdrPageView* pPageView = m_pView->GetSdrPageView();
-            if( pPageView && !_pOutDev )
+            if( pPageView && !pOutDev )
             {
                 // const SdrPageViewWinList& rWinList = pPageView->GetWinList();
                 // const SdrPageViewWindows& rPageViewWindows = pPageView->GetPageViewWindows();
@@ -1502,14 +1342,14 @@ SdrObject* FmXFormView::implCreateXFormsControl( const ::svx::OXFormsDescriptor 
 
                     if( rPageWindow.GetPaintWindow().GetOutputDevice().GetOutDevType() == OUTDEV_WINDOW)
                     {
-                        _pOutDev = &rPageWindow.GetPaintWindow().GetOutputDevice();
+                        pOutDev = &rPageWindow.GetPaintWindow().GetOutputDevice();
                         break;
                     }
                 }
             }
         }
 
-        if (!_pOutDev)
+        if ( !pOutDev )
             return NULL;
 
         //////////////////////////////////////////////////////////////////////
@@ -1528,13 +1368,12 @@ SdrObject* FmXFormView::implCreateXFormsControl( const ::svx::OXFormsDescriptor 
         // xform control or submission button?
         if ( !xSubmission.is() )
         {
-
-            SdrUnoObj* pLabel;
-            SdrUnoObj* pControl;
-            createControlLabelPair(m_pView,_pOutDev, 0,0, xField, xNumberFormats, nOBJID, sLabelPostfix, FmFormInventor,OBJ_FM_FIXEDTEXT,NULL,NULL,NULL,pLabel, pControl);
-            if (!pLabel || !pControl) {
-                delete pLabel;
-                delete pControl;
+            SdrUnoObj* pLabel( NULL );
+            SdrUnoObj* pControl( NULL );
+            if  (   !createControlLabelPair( *pOutDev, 0, 0, xField, xNumberFormats, nOBJID, sLabelPostfix,
+                        pLabel, pControl )
+                )
+            {
                 return NULL;
             }
 
@@ -1548,22 +1387,7 @@ SdrObject* FmXFormView::implCreateXFormsControl( const ::svx::OXFormsDescriptor 
                 xBindableValue->setValueBinding(xValueBinding);
 
             //////////////////////////////////////////////////////////////////////
-            // Feststellen ob eine ::com::sun::star::form erzeugt werden muss
-            // Dieses erledigt die Page fuer uns bzw. die PageImpl
-            Reference< XFormComponent >  xContent(pLabel->GetUnoControlModel(), UNO_QUERY);
-            Reference< XIndexContainer >  xContainer(rPage.GetImpl()->placeInFormComponentHierarchy( xContent ), UNO_QUERY);
-            if (xContainer.is())
-                xContainer->insertByIndex(xContainer->getCount(), makeAny(xContent));
-            implInitializeNewControlModel( Reference< XPropertySet >( xContent, UNO_QUERY ), pControl );
-
-            xContent = Reference< XFormComponent > (pControl->GetUnoControlModel(), UNO_QUERY);
-            xContainer = Reference< XIndexContainer > (rPage.GetImpl()->placeInFormComponentHierarchy( xContent ), UNO_QUERY);
-            if (xContainer.is())
-                xContainer->insertByIndex(xContainer->getCount(), makeAny(xContent));
-            implInitializeNewControlModel( Reference< XPropertySet >( xContent, UNO_QUERY ), pControl );
-
-            //////////////////////////////////////////////////////////////////////
-            // Objekte gruppieren
+            // group objects
             SdrObjGroup* pGroup  = new SdrObjGroup();
             SdrObjList* pObjList = pGroup->GetSubList();
             pObjList->InsertObject(pLabel);
@@ -1574,15 +1398,15 @@ SdrObject* FmXFormView::implCreateXFormsControl( const ::svx::OXFormsDescriptor 
         else {
 
             // create a button control
-            const MapMode eTargetMode(_pOutDev->GetMapMode());
+            const MapMode eTargetMode( pOutDev->GetMapMode() );
             const MapMode eSourceMode(MAP_100TH_MM);
             const sal_uInt16 nObjID = OBJ_FM_BUTTON;
             ::Size controlSize(4000, 500);
             FmFormObj *pControl = static_cast<FmFormObj*>(SdrObjFactory::MakeNewObject( FmFormInventor, nObjID, NULL, NULL ));
             controlSize.Width() = Fraction(controlSize.Width(), 1) * eTargetMode.GetScaleX();
             controlSize.Height() = Fraction(controlSize.Height(), 1) * eTargetMode.GetScaleY();
-            ::Point controlPos(_pOutDev->LogicToLogic(::Point(controlSize.Width(),0),eSourceMode,eTargetMode));
-            ::Rectangle controlRect(controlPos,_pOutDev->LogicToLogic(controlSize, eSourceMode, eTargetMode));
+            ::Point controlPos( pOutDev->LogicToLogic( ::Point( controlSize.Width(), 0 ), eSourceMode, eTargetMode ) );
+            ::Rectangle controlRect( controlPos, pOutDev->LogicToLogic( controlSize, eSourceMode, eTargetMode ) );
             pControl->SetLogicRect(controlRect);
 
             // set the button label
@@ -1609,73 +1433,98 @@ SdrObject* FmXFormView::implCreateXFormsControl( const ::svx::OXFormsDescriptor 
 }
 
 //------------------------------------------------------------------------
-void FmXFormView::createControlLabelPair(SdrView* /*_pView*/,OutputDevice* _pOutDev, sal_Int32 _nXOffsetMM, sal_Int32 _nYOffsetMM,
-    const Reference< XPropertySet >& _rxField, const Reference< XNumberFormats >& _rxNumberFormats,
-    sal_uInt16 _nObjID, const ::rtl::OUString& _rFieldPostfix,UINT32 _nInventor,UINT16 _nIndent
-    ,SdrPage* _pLabelPage,SdrPage* _pPage,SdrModel* _pModel,
-    SdrUnoObj*& _rpLabel, SdrUnoObj*& _rpControl)
+bool FmXFormView::createControlLabelPair( OutputDevice& _rOutDev, sal_Int32 _nXOffsetMM, sal_Int32 _nYOffsetMM,
+        const Reference< XPropertySet >& _rxField, const Reference< XNumberFormats >& _rxNumberFormats,
+        sal_uInt16 _nControlObjectID, const ::rtl::OUString& _rFieldPostfix,
+        SdrUnoObj*& _rpLabel, SdrUnoObj*& _rpControl,
+        const Reference< XDataSource >& _rxDataSource, const ::rtl::OUString& _rDataSourceName,
+        const ::rtl::OUString& _rCommand, const sal_Int32 _nCommandType )
+{
+    if  (   !createControlLabelPair( m_aContext, _rOutDev, _nXOffsetMM, _nYOffsetMM,
+                _rxField, _rxNumberFormats, _nControlObjectID, _rFieldPostfix, FmFormInventor, OBJ_FM_FIXEDTEXT,
+                NULL, NULL, NULL, _rpLabel, _rpControl )
+        )
+        return false;
+
+    // insert the control model(s) into the form component hierachy
+    lcl_insertIntoFormComponentHierarchy_throw( *m_pView, *_rpLabel, _rxDataSource, _rDataSourceName, _rCommand, _nCommandType );
+    lcl_insertIntoFormComponentHierarchy_throw( *m_pView, *_rpControl, _rxDataSource, _rDataSourceName, _rCommand, _nCommandType );
+
+    // some context-dependent initializations
+    FormControlFactory aControlFactory( m_aContext );
+    aControlFactory.initializeControlModel( impl_getDocumentType(), *_rpLabel );
+    aControlFactory.initializeControlModel( impl_getDocumentType(), *_rpControl );
+
+    return true;
+}
+
+//------------------------------------------------------------------------
+bool FmXFormView::createControlLabelPair( const ::comphelper::ComponentContext& _rContext,
+    OutputDevice& _rOutDev, sal_Int32 _nXOffsetMM, sal_Int32 _nYOffsetMM, const Reference< XPropertySet >& _rxField,
+    const Reference< XNumberFormats >& _rxNumberFormats, sal_uInt16 _nControlObjectID,
+    const ::rtl::OUString& _rFieldPostfix, UINT32 _nInventor, UINT16 _nLabelObjectID,
+    SdrPage* _pLabelPage, SdrPage* _pControlPage, SdrModel* _pModel, SdrUnoObj*& _rpLabel, SdrUnoObj*& _rpControl)
 {
     sal_Int32 nDataType = 0;
-    sal_Int32 nFormatKey = 0;
     ::rtl::OUString sFieldName;
     Any aFieldName;
     if ( _rxField.is() )
     {
         nDataType = ::comphelper::getINT32(_rxField->getPropertyValue(FM_PROP_FIELDTYPE));
-        Reference< XPropertySetInfo > xPSI( _rxField->getPropertySetInfo() );
-        if ( xPSI.is() && xPSI->hasPropertyByName( FM_PROP_FORMATKEY ) )
-            nFormatKey = ::comphelper::getINT32(_rxField->getPropertyValue(FM_PROP_FORMATKEY));
-        else
-            nFormatKey = OStaticDataAccessTools().getDefaultNumberFormat(
-                _rxField,
-                Reference< XNumberFormatTypes >( _rxNumberFormats, UNO_QUERY ),
-                SvtSysLocale().GetLocaleData().getLocale()
-            );
-
         aFieldName = Any(_rxField->getPropertyValue(FM_PROP_NAME));
         aFieldName >>= sFieldName;
     }
 
-    // das Label
-    _rpLabel = static_cast<SdrUnoObj*>(SdrObjFactory::MakeNewObject( _nInventor, _nIndent, _pLabelPage,_pModel ));
-    Reference< XPropertySet > xLabelSet(_rpLabel->GetUnoControlModel(), UNO_QUERY);
-    xLabelSet->setPropertyValue(FM_PROP_LABEL, makeAny(sFieldName + _rFieldPostfix));
+    // the label
+    ::std::auto_ptr< SdrUnoObj > pLabel( dynamic_cast< SdrUnoObj* >(
+        SdrObjFactory::MakeNewObject( _nInventor, _nLabelObjectID, _pLabelPage, _pModel ) ) );
+    OSL_ENSURE( pLabel.get(), "FmXFormView::createControlLabelPair: could not create the label!" );
+    if ( !pLabel.get() )
+        return false;
+
+    Reference< XPropertySet > xLabelSet( pLabel->GetUnoControlModel(), UNO_QUERY );
+    xLabelSet->setPropertyValue( FM_PROP_LABEL, makeAny( sFieldName + _rFieldPostfix ) );
 
     // positionieren unter Beachtung der Einstellungen des Ziel-Output-Devices
-    ::Size aTextSize(_pOutDev->GetTextWidth(sFieldName + _rFieldPostfix), _pOutDev->GetTextHeight());
+    ::Size aTextSize( _rOutDev.GetTextWidth(sFieldName + _rFieldPostfix), _rOutDev.GetTextHeight() );
 
-    MapMode   eTargetMode(_pOutDev->GetMapMode()),
-              eSourceMode(MAP_100TH_MM);
+    MapMode   eTargetMode( _rOutDev.GetMapMode() ),
+              eSourceMode( MAP_100TH_MM );
 
-    // Textbreite ist mindestens 5cm
+    // Textbreite ist mindestens 4cm
     // Texthoehe immer halber cm
-    ::Size aDefTxtSize(3000, 500);
+    ::Size aDefTxtSize(4000, 500);
     ::Size aDefSize(4000, 500);
     ::Size aDefImageSize(4000, 4000);
-    // Abstand zwischen Text und Control
-    ::Size aDelta(500, 0);
 
-    ::Size aRealSize = _pOutDev->LogicToLogic(aTextSize, eTargetMode, eSourceMode);
-    aRealSize.Width() = std::max(aRealSize.Width(), aDefTxtSize.Width()) + aDelta.Width();
+    ::Size aRealSize = _rOutDev.LogicToLogic(aTextSize, eTargetMode, eSourceMode);
+    aRealSize.Width() = std::max(aRealSize.Width(), aDefTxtSize.Width());
     aRealSize.Height()= aDefSize.Height();
 
     // je nach Skalierung des Zieldevices muss die Groesse noch normiert werden (#53523#)
     aRealSize.Width() = long(Fraction(aRealSize.Width(), 1) * eTargetMode.GetScaleX());
     aRealSize.Height() = long(Fraction(aRealSize.Height(), 1) * eTargetMode.GetScaleY());
-    _rpLabel->SetLogicRect(
-        ::Rectangle(    _pOutDev->LogicToLogic(::Point(_nXOffsetMM, _nYOffsetMM), eSourceMode, eTargetMode),
-                    _pOutDev->LogicToLogic(aRealSize, eSourceMode, eTargetMode)
-        ));
+    pLabel->SetLogicRect( ::Rectangle(
+        _rOutDev.LogicToLogic( ::Point( _nXOffsetMM, _nYOffsetMM ), eSourceMode, eTargetMode ),
+        _rOutDev.LogicToLogic( aRealSize, eSourceMode, eTargetMode )
+    ) );
 
-    // jetzt das Control
-    _rpControl = static_cast<SdrUnoObj*>(SdrObjFactory::MakeNewObject( _nInventor, _nObjID, _pPage,_pModel ));
-    Reference< XPropertySet > xControlSet( _rpControl->GetUnoControlModel(), UNO_QUERY );
+    // the control
+    ::std::auto_ptr< SdrUnoObj > pControl( dynamic_cast< SdrUnoObj* >(
+        SdrObjFactory::MakeNewObject( _nInventor, _nControlObjectID, _pControlPage, _pModel ) ) );
+    OSL_ENSURE( pControl.get(), "FmXFormView::createControlLabelPair: could not create the control!" );
+    if ( !pControl.get() )
+        return false;
 
-    // positionieren
+    Reference< XPropertySet > xControlSet( pControl->GetUnoControlModel(), UNO_QUERY );
+    if ( !xControlSet.is() )
+        return false;
+
+    // position
     ::Size szControlSize;
     if (DataType::BIT == nDataType || nDataType == DataType::BOOLEAN )
         szControlSize = aDefSize;
-    else if (OBJ_FM_IMAGECONTROL == _nObjID || DataType::LONGVARCHAR == nDataType || DataType::LONGVARBINARY == nDataType )
+    else if (OBJ_FM_IMAGECONTROL == _nControlObjectID || DataType::LONGVARCHAR == nDataType || DataType::LONGVARBINARY == nDataType )
         szControlSize = aDefImageSize;
     else
         szControlSize = aDefSize;
@@ -1683,101 +1532,46 @@ void FmXFormView::createControlLabelPair(SdrView* /*_pView*/,OutputDevice* _pOut
     // normieren wie oben
     szControlSize.Width() = long(Fraction(szControlSize.Width(), 1) * eTargetMode.GetScaleX());
     szControlSize.Height() = long(Fraction(szControlSize.Height(), 1) * eTargetMode.GetScaleY());
-    _rpControl->SetLogicRect(
-        ::Rectangle(    _pOutDev->LogicToLogic(::Point(aRealSize.Width() + _nXOffsetMM, _nYOffsetMM), eSourceMode, eTargetMode),
-                    _pOutDev->LogicToLogic(szControlSize, eSourceMode, eTargetMode)
-        ));
+    pControl->SetLogicRect( ::Rectangle(
+        _rOutDev.LogicToLogic( ::Point( aRealSize.Width() + _nXOffsetMM, _nYOffsetMM ), eSourceMode, eTargetMode ),
+        _rOutDev.LogicToLogic( szControlSize, eSourceMode, eTargetMode )
+    ) );
 
-    // ein paar initiale Einstellungen am ControlModel
-    if (xControlSet.is())
+    // some initializations
+    Reference< XPropertySetInfo > xControlPropInfo = xControlSet->getPropertySetInfo();
+
+    if ( aFieldName.hasValue() )
     {
-        Reference< XPropertySetInfo > xControlPropInfo = xControlSet->getPropertySetInfo();
-        // ein paar numersiche Eigenschaften durchschleifen
-        if (xControlPropInfo->hasPropertyByName(FM_PROP_DECIMAL_ACCURACY))
+        xControlSet->setPropertyValue(FM_PROP_CONTROLSOURCE, aFieldName);
+        xControlSet->setPropertyValue(FM_PROP_NAME, aFieldName);
+    }
+
+    if ( nDataType == DataType::LONGVARCHAR && xControlPropInfo->hasPropertyByName( FM_PROP_MULTILINE ) )
+    {
+        xControlSet->setPropertyValue( FM_PROP_MULTILINE, makeAny( sal_Bool( sal_True ) ) );
+    }
+
+    // announce the label to the control
+    if (xControlPropInfo->hasPropertyByName(FM_PROP_CONTROLLABEL))
+    {
+        // (try-catch as the control may refuse a model without the right service name - which we don't know
+        // usually a fixed text we use as label should be accepted, but to be sure ....)
+        try
         {
-            // Number braucht eine Scale
-            Any aScaleVal(::comphelper::getNumberFormatDecimals(_rxNumberFormats, nFormatKey));
-            xControlSet->setPropertyValue(FM_PROP_DECIMAL_ACCURACY, aScaleVal);
+            xControlSet->setPropertyValue(FM_PROP_CONTROLLABEL, makeAny(xLabelSet));
         }
-        if (xControlPropInfo->hasPropertyByName(FM_PROP_VALUEMIN) && xControlPropInfo->hasPropertyByName(FM_PROP_VALUEMAX))
+        catch( const Exception& )
         {
-            // die minimale/maximale Zahl in diesem Feld
-            sal_Int32 nMinValue = -1000000000, nMaxValue = 1000000000;
-            switch (nDataType)
-            {
-                case DataType::TINYINT  : nMinValue = 0; nMaxValue = 255; break;
-                case DataType::SMALLINT : nMinValue = -32768; nMaxValue = 32767; break;
-                case DataType::INTEGER  : nMinValue = 0x80000000; nMaxValue = 0x7FFFFFFF; break;
-                    // um die doubles/singles kuemmere ich mich nicht, da es ein wenig sinnlos ist
-            }
-
-            Any aVal;
-
-            Property aMinProp = xControlPropInfo->getPropertyByName(FM_PROP_VALUEMIN);
-            if (aMinProp.Type.getTypeClass() == TypeClass_DOUBLE)
-                aVal <<= (double)nMinValue;
-            else if (aMinProp.Type.getTypeClass() == TypeClass_LONG)
-                aVal <<= (sal_Int32)nMinValue;
-            else
-            {
-                DBG_ERROR("FmXFormView::createControlLabelPair: unexpected property type (MinValue)!");
-            }
-            xControlSet->setPropertyValue(FM_PROP_VALUEMIN,aVal);
-
-            Property aMaxProp = xControlPropInfo->getPropertyByName(FM_PROP_VALUEMAX);
-            if (aMaxProp.Type.getTypeClass() == TypeClass_DOUBLE)
-                aVal <<= (double)nMaxValue;
-            else if (aMaxProp.Type.getTypeClass() == TypeClass_LONG)
-                aVal <<= (sal_Int32)nMaxValue;
-            else
-            {
-                DBG_ERROR("FmXFormView::createControlLabelPair: unexpected property type (MaxValue)!");
-            }
-            xControlSet->setPropertyValue(FM_PROP_VALUEMAX,aVal);
-        }
-
-        if (xControlPropInfo->hasPropertyByName(FM_PROP_STRICTFORMAT))
-        {   // Formatueberpruefung fue numeric fields standardmaessig sal_True
-            sal_Bool bB(sal_True);
-            Any aVal(&bB,getBooleanCppuType());
-            xControlSet->setPropertyValue(FM_PROP_STRICTFORMAT, aVal);
-        }
-
-        if ( aFieldName.hasValue() )
-        {
-            xControlSet->setPropertyValue(FM_PROP_CONTROLSOURCE, aFieldName);
-            xControlSet->setPropertyValue(FM_PROP_NAME, aFieldName);
-        }
-
-        if (nDataType == DataType::LONGVARCHAR && xControlPropInfo->hasPropertyByName(FM_PROP_MULTILINE) )
-        {
-            sal_Bool bB(sal_True);
-            xControlSet->setPropertyValue(FM_PROP_MULTILINE,Any(&bB,getBooleanCppuType()));
-        }
-
-        if (_nObjID == OBJ_FM_CHECKBOX)
-        {
-            sal_Int32 nNullable = ColumnValue::NULLABLE_UNKNOWN;
-            if( _rxField.is() )
-                _rxField->getPropertyValue( FM_PROP_ISNULLABLE ) >>= nNullable;
-            xControlSet->setPropertyValue( FM_PROP_TRISTATE, makeAny( sal_Bool( ColumnValue::NULLABLE == nNullable ) ) );
-        }
-
-        // announce the label to the control
-        if (xControlPropInfo->hasPropertyByName(FM_PROP_CONTROLLABEL))
-        {
-            // (try-catch as the control may refuse a model without the right service name - which we don't know
-            // usually a fixed text we use as label should be accepted, but to be sure ....)
-            try
-            {
-                xControlSet->setPropertyValue(FM_PROP_CONTROLLABEL, makeAny(xLabelSet));
-            }
-            catch(Exception&)
-            {
-                DBG_ERROR("FmXFormView::createControlLabelPair : could not marry the control and the label !");
-            }
+            DBG_UNHANDLED_EXCEPTION();
         }
     }
+
+    FormControlFactory aControlFactory( _rContext );
+    aControlFactory.initializeFieldDependentProperties( _rxField, xControlSet, _rxNumberFormats );
+
+    _rpLabel = pLabel.release();
+    _rpControl = pControl.release();
+    return true;
 }
 
 //------------------------------------------------------------------------------
@@ -1992,8 +1786,7 @@ void SAL_CALL FmXFormView::focusGained( const FocusEvent& /*e*/ ) throw (Runtime
 {
     if ( m_xWindow.is() && m_pView )
     {
-        m_pView->SetMoveOutside(TRUE);
-        //OLMm_pView->RefreshAllIAOManagers();
+        m_pView->SetMoveOutside( TRUE, FmFormView::ImplAccess() );
     }
 }
 // -----------------------------------------------------------------------------
@@ -2003,8 +1796,7 @@ void SAL_CALL FmXFormView::focusLost( const FocusEvent& /*e*/ ) throw (RuntimeEx
     // so we can not remove us as focus listener
     if ( m_xWindow.is() && m_pView )
     {
-        m_pView->SetMoveOutside(FALSE);
-        //OLMm_pView->RefreshAllIAOManagers();
+        m_pView->SetMoveOutside( FALSE, FmFormView::ImplAccess() );
     }
 }
 // -----------------------------------------------------------------------------
@@ -2015,12 +1807,16 @@ void FmXFormView::removeGridWindowListening()
         m_xWindow->removeFocusListener(this);
         if ( m_pView )
         {
-            m_pView->SetMoveOutside(FALSE);
-            //OLMm_pView->RefreshAllIAOManagers();
+            m_pView->SetMoveOutside( FALSE, FmFormView::ImplAccess() );
         }
         m_xWindow = NULL;
     }
 }
+
 // -----------------------------------------------------------------------------
-
-
+DocumentType FmXFormView::impl_getDocumentType() const
+{
+    if ( GetFormShell() && GetFormShell()->GetImpl() )
+        return GetFormShell()->GetImpl()->getDocumentType();
+    return eUnknownDocumentType;
+}

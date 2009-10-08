@@ -45,23 +45,5 @@ namespace connectivity
     }
 }
 
-// MConfigAccess was invented to allow non-UNO parts access to the configuration.
-// Unfortunately, configuration access requires a XMultiServiceFactory - which the
-// mozilla side does not have.
-// So we create a "library-local" service factory here: Every need for a service
-// factory can be fullfilled by this factory (similar to the get/setProcessServiceFactory
-// in comphelper).
-// This is halfway valid, as usually, the mozabdrv library is invoked from the mozab library
-// only. The latter contains the driver class (and only this class and nothing more), and
-// the driver class is a singleton. The driver itself is created with a service factory,
-// which (by definition) can and should be used for all subsequent service requests.
-// And this is exactly what we're allowing with the following functions ....
-
-/** _pFactory must point to an XMultiServiceFactory, which must be aquired once
-    for purpose of safely transfering it. The callee will release this interface
-    when it has stored the pointer somewhere else.
-*/
-extern "C" void SAL_CALL setMozabServiceFactory( void* _pFactory );
-
 #endif // CONNECTIVITY_MOZAB_MEXTCONFIGACCESS_HXX
 

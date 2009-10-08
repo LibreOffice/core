@@ -191,6 +191,11 @@
         </node>
       </node>
     </node>
+    <node oor:name="Table">
+        <prop oor:name="RepeatHeader" oor:type="xs:boolean">
+         <value>true</value>
+        </prop>
+    </node>
   </node>
  <node oor:name="Wizards">
   <node oor:name="Letter">

@@ -94,6 +94,10 @@ using ::com::sun::star::util::XNumberFormatter;
 
 using ::com::sun::star::util::XNumberFormatter;
 
+String INVALIDTEXT     = String::CreateFromAscii("###");
+String OBJECTTEXT      = String::CreateFromAscii("<OBJECT>");
+    // TODO: resource
+
 //==================================================================
 //= helper
 //==================================================================
@@ -521,10 +525,10 @@ void DbGridColumn::Paint(OutputDevice& rDev,
 }
 
 //------------------------------------------------------------------------------
-void DbGridColumn::ImplInitSettings(Window& rParent, sal_Bool bFont, sal_Bool bForeground, sal_Bool bBackground)
+void DbGridColumn::ImplInitWindow( Window& rParent, const InitWindowFacet _eInitWhat )
 {
-    if (m_pCell)
-        m_pCell->ImplInitSettings(rParent, bFont, bForeground, bBackground);
+    if ( m_pCell )
+        m_pCell->ImplInitWindow( rParent, _eInitWhat );
 }
 
 //==============================================================================
@@ -681,10 +685,20 @@ sal_Bool DbCellControl::Commit()
 }
 
 //------------------------------------------------------------------------------
-void DbCellControl::ImplInitSettings(Window& rParent, sal_Bool bFont, sal_Bool bForeground, sal_Bool bBackground)
+void DbCellControl::ImplInitWindow( Window& rParent, const InitWindowFacet _eInitWhat )
 {
     Window* pWindows[] = { m_pPainter, m_pWindow };
-    if (bFont)
+
+    if ( ( _eInitWhat & InitWritingMode ) != 0 )
+    {
+        for ( size_t i=0; i < sizeof( pWindows ) / sizeof( pWindows[0] ); ++i )
+        {
+            if ( pWindows[i] )
+                pWindows[i]->EnableRTL( rParent.IsRTLEnabled() );
+        }
+    }
+
+    if ( ( _eInitWhat & InitFont ) != 0 )
     {
         for (size_t i=0; i < sizeof(pWindows)/sizeof(pWindows[0]); ++i)
         {
@@ -709,7 +723,9 @@ void DbCellControl::ImplInitSettings(Window& rParent, sal_Bool bFont, sal_Bool b
         }
     }
 
-    if (bFont || bForeground)
+    if  (   ( ( _eInitWhat & InitFont ) != 0 )
+        ||  ( ( _eInitWhat & InitForeground ) != 0 )
+        )
     {
         Color aTextColor( rParent.IsControlForeground() ? rParent.GetControlForeground() : rParent.GetTextColor() );
 
@@ -732,7 +748,7 @@ void DbCellControl::ImplInitSettings(Window& rParent, sal_Bool bFont, sal_Bool b
         }
     }
 
-    if (bBackground)
+    if ( ( _eInitWhat & InitBackground ) != 0 )
     {
         if (rParent.IsControlBackground())
         {
@@ -807,7 +823,8 @@ void DbCellControl::implAdjustEnabled( const Reference< XPropertySet >& _rxModel
 //------------------------------------------------------------------------------
 void DbCellControl::Init( Window& rParent, const Reference< XRowSet >& _rxCursor )
 {
-    ImplInitSettings( rParent, sal_True, sal_True, sal_True );
+    ImplInitWindow( rParent, InitAll );
+
     if ( m_pWindow )
     {
         // align the control
@@ -1596,17 +1613,22 @@ void DbCheckBox::Init( Window& rParent, const Reference< XRowSet >& xCursor )
 
     try
     {
-        Reference< XPropertySet > xModel( m_rColumn.getModel() );
+        Reference< XPropertySet > xModel( m_rColumn.getModel(), UNO_SET_THROW );
+
         sal_Int16 nStyle = awt::VisualEffect::LOOK3D;
-        if ( xModel.is() )
-            xModel->getPropertyValue( FM_PROP_VISUALEFFECT ) >>= nStyle;
+        OSL_VERIFY( xModel->getPropertyValue( FM_PROP_VISUALEFFECT ) >>= nStyle );
 
         setCheckBoxStyle( m_pWindow, nStyle == awt::VisualEffect::FLAT ? STYLE_CHECKBOX_MONO : STYLE_CHECKBOX_WIN );
         setCheckBoxStyle( m_pPainter, nStyle == awt::VisualEffect::FLAT ? STYLE_CHECKBOX_MONO : STYLE_CHECKBOX_WIN );
+
+        sal_Bool bTristate = sal_True;
+        OSL_VERIFY( xModel->getPropertyValue( FM_PROP_TRISTATE ) >>= bTristate );
+        static_cast< CheckBoxControl* >( m_pWindow )->GetBox().EnableTriState( bTristate );
+        static_cast< CheckBoxControl* >( m_pPainter )->GetBox().EnableTriState( bTristate );
     }
     catch( const Exception& )
     {
-        OSL_ENSURE( sal_False, "DbCheckBox::Init: caught an exception!" );
+        DBG_UNHANDLED_EXCEPTION();
     }
 
     DbCellControl::Init( rParent, xCursor );

@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: svdoole2.cxx,v $
- * $Revision: 1.90 $
+ * $Revision: 1.89.60.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -88,6 +88,7 @@
 #include "impgrf.hxx"
 #include <svtools/chartprettypainter.hxx>
 #include <svx/sdr/contact/viewcontactofsdrole2obj.hxx>
+#include <svx/svdograf.hxx>
 
 using namespace ::rtl;
 using namespace ::com::sun::star;
@@ -1466,6 +1467,29 @@ void SdrOle2Obj::SetClosedObj( bool bIsClosed )
 
 // -----------------------------------------------------------------------------
 
+SdrObject* SdrOle2Obj::getFullDragClone() const
+{
+    // special handling for OLE. The default handling works, but is too
+    // slow when the whole OLE needs to be cloned. Get the Metafile and
+    // create a graphic object with it
+    Graphic* pOLEGraphic = GetGraphic();
+
+    if(Application::GetSettings().GetStyleSettings().GetHighContrastMode())
+    {
+        pOLEGraphic = getEmbeddedObjectRef().GetHCGraphic();
+    }
+
+    SdrObject* pClone = new SdrGrafObj(*pOLEGraphic, GetSnapRect());
+
+    // this would be the place where to copy all attributes
+    // when OLE will support fill and line style
+    // pClone->SetMergedItem(pOleObject->GetMergedItemSet());
+
+    return pClone;
+}
+
+// -----------------------------------------------------------------------------
+
 void SdrOle2Obj::SetPersistName( const String& rPersistName )
 {
     DBG_ASSERT( !mpImpl->aPersistName.Len(), "Persist name changed!");
@@ -1632,13 +1656,6 @@ void SdrOle2Obj::operator=(const SdrObject& rObj)
             }
         }
     }
-}
-
-// -----------------------------------------------------------------------------
-
-FASTBOOL SdrOle2Obj::HasSpecialDrag() const
-{
-    return FALSE;
 }
 
 // -----------------------------------------------------------------------------
@@ -2021,6 +2038,11 @@ void SdrOle2Obj::GetObjRef_Impl()
 uno::Reference < embed::XEmbeddedObject > SdrOle2Obj::GetObjRef() const
 {
     const_cast<SdrOle2Obj*>(this)->GetObjRef_Impl();
+    return xObjRef.GetObject();
+}
+
+uno::Reference < embed::XEmbeddedObject > SdrOle2Obj::GetObjRef_NoInit() const
+{
     return xObjRef.GetObject();
 }
 

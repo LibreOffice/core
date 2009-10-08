@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: textitem.cxx,v $
- * $Revision: 1.74 $
+ * $Revision: 1.74.86.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -142,7 +142,9 @@ TYPEINIT1_FACTORY(SvxPostureItem, SfxEnumItem, new SvxPostureItem(ITALIC_NONE, 0
 TYPEINIT1_FACTORY(SvxWeightItem, SfxEnumItem, new SvxWeightItem(WEIGHT_NORMAL, 0));
 TYPEINIT1_FACTORY(SvxFontHeightItem, SfxPoolItem, new SvxFontHeightItem(240, 100, 0));
 TYPEINIT1_FACTORY(SvxFontWidthItem, SfxPoolItem, new SvxFontWidthItem(0, 100, 0));
+TYPEINIT1_FACTORY(SvxTextLineItem, SfxEnumItem, new SvxTextLineItem(UNDERLINE_NONE, 0));
 TYPEINIT1_FACTORY(SvxUnderlineItem, SfxEnumItem, new SvxUnderlineItem(UNDERLINE_NONE, 0));
+TYPEINIT1_FACTORY(SvxOverlineItem, SfxEnumItem, new SvxOverlineItem(UNDERLINE_NONE, 0));
 TYPEINIT1_FACTORY(SvxCrossedOutItem, SfxEnumItem, new SvxCrossedOutItem(STRIKEOUT_NONE, 0));
 TYPEINIT1_FACTORY(SvxShadowedItem, SfxBoolItem, new SvxShadowedItem(sal_False, 0));
 TYPEINIT1_FACTORY(SvxAutoKernItem, SfxBoolItem, new SvxAutoKernItem(sal_False, 0));
@@ -1322,53 +1324,53 @@ SfxItemPresentation SvxFontWidthItem::GetPresentation
     return SFX_ITEM_PRESENTATION_NONE;
 }
 
-// class SvxUnderlineItem ------------------------------------------------
+// class SvxTextLineItem ------------------------------------------------
 
-SvxUnderlineItem::SvxUnderlineItem( const FontUnderline eSt, const USHORT nId )
+SvxTextLineItem::SvxTextLineItem( const FontUnderline eSt, const USHORT nId )
     : SfxEnumItem( nId, (USHORT)eSt ), mColor( COL_TRANSPARENT )
 {
 }
 
 // -----------------------------------------------------------------------
 
-int SvxUnderlineItem::HasBoolValue() const
+int SvxTextLineItem::HasBoolValue() const
 {
     return sal_True;
 }
 
 // -----------------------------------------------------------------------
 
-sal_Bool SvxUnderlineItem::GetBoolValue() const
+sal_Bool SvxTextLineItem::GetBoolValue() const
 {
     return  (FontUnderline)GetValue() != UNDERLINE_NONE;
 }
 
 // -----------------------------------------------------------------------
 
-void SvxUnderlineItem::SetBoolValue( sal_Bool bVal )
+void SvxTextLineItem::SetBoolValue( sal_Bool bVal )
 {
     SetValue( (USHORT)(bVal ? UNDERLINE_SINGLE : UNDERLINE_NONE) );
 }
 
 // -----------------------------------------------------------------------
 
-SfxPoolItem* SvxUnderlineItem::Clone( SfxItemPool * ) const
+SfxPoolItem* SvxTextLineItem::Clone( SfxItemPool * ) const
 {
-    SvxUnderlineItem* pNew = new SvxUnderlineItem( *this );
+    SvxTextLineItem* pNew = new SvxTextLineItem( *this );
     pNew->SetColor( GetColor() );
     return pNew;
 }
 
 // -----------------------------------------------------------------------
 
-USHORT SvxUnderlineItem::GetValueCount() const
+USHORT SvxTextLineItem::GetValueCount() const
 {
     return UNDERLINE_DOTTED + 1;    // auch UNDERLINE_NONE geh"ort dazu
 }
 
 // -----------------------------------------------------------------------
 
-SvStream& SvxUnderlineItem::Store( SvStream& rStrm , USHORT /*nItemVersion*/ ) const
+SvStream& SvxTextLineItem::Store( SvStream& rStrm , USHORT /*nItemVersion*/ ) const
 {
     rStrm << (BYTE)GetValue();
     return rStrm;
@@ -1376,16 +1378,16 @@ SvStream& SvxUnderlineItem::Store( SvStream& rStrm , USHORT /*nItemVersion*/ ) c
 
 // -----------------------------------------------------------------------
 
-SfxPoolItem* SvxUnderlineItem::Create(SvStream& rStrm, USHORT) const
+SfxPoolItem* SvxTextLineItem::Create(SvStream& rStrm, USHORT) const
 {
     BYTE nState;
     rStrm >> nState;
-    return new SvxUnderlineItem(  (FontUnderline)nState, Which() );
+    return new SvxTextLineItem(  (FontUnderline)nState, Which() );
 }
 
 //------------------------------------------------------------------------
 
-SfxItemPresentation SvxUnderlineItem::GetPresentation
+SfxItemPresentation SvxTextLineItem::GetPresentation
 (
     SfxItemPresentation ePres,
     SfxMapUnit          /*eCoreUnit*/,
@@ -1413,31 +1415,31 @@ SfxItemPresentation SvxUnderlineItem::GetPresentation
 
 // -----------------------------------------------------------------------
 
-XubString SvxUnderlineItem::GetValueTextByPos( USHORT nPos ) const
+XubString SvxTextLineItem::GetValueTextByPos( USHORT /*nPos*/ ) const
 {
-    DBG_ASSERT( nPos <= (USHORT)UNDERLINE_BOLDWAVE, "enum overflow!" );
-    return SVX_RESSTR( RID_SVXITEMS_UL_BEGIN + nPos );
+    DBG_ERROR("SvxTextLineItem::GetValueTextByPos: Pure virtual method");
+    return XubString();
 }
 
 /*-----------------13.03.98 16:25-------------------
 
 --------------------------------------------------*/
-sal_Bool SvxUnderlineItem::QueryValue( uno::Any& rVal, BYTE nMemberId ) const
+sal_Bool SvxTextLineItem::QueryValue( uno::Any& rVal, BYTE nMemberId ) const
 {
 //    sal_Bool bConvert = 0!=(nMemberId&CONVERT_TWIPS);
     nMemberId &= ~CONVERT_TWIPS;
     switch(nMemberId)
     {
-    case MID_UNDERLINED:
+    case MID_TEXTLINED:
         rVal = Bool2Any(GetBoolValue());
         break;
-    case MID_UNDERLINE:
+    case MID_TL_STYLE:
         rVal <<= (sal_Int16)(GetValue());
         break;
-    case MID_UL_COLOR:
+    case MID_TL_COLOR:
         rVal <<= (sal_Int32)( mColor.GetColor() );
         break;
-    case MID_UL_HASCOLOR:
+    case MID_TL_HASCOLOR:
         rVal = Bool2Any( !mColor.GetTransparency() );
         break;
     }
@@ -1447,17 +1449,17 @@ sal_Bool SvxUnderlineItem::QueryValue( uno::Any& rVal, BYTE nMemberId ) const
 /*-----------------13.03.98 16:28-------------------
 
 --------------------------------------------------*/
-sal_Bool SvxUnderlineItem::PutValue( const uno::Any& rVal, BYTE nMemberId )
+sal_Bool SvxTextLineItem::PutValue( const uno::Any& rVal, BYTE nMemberId )
 {
 //    sal_Bool bConvert = 0!=(nMemberId&CONVERT_TWIPS);
     nMemberId &= ~CONVERT_TWIPS;
     sal_Bool bRet = sal_True;
     switch(nMemberId)
     {
-    case MID_UNDERLINED:
+    case MID_TEXTLINED:
         SetBoolValue(Any2Bool(rVal));
     break;
-    case MID_UNDERLINE:
+    case MID_TL_STYLE:
     {
         sal_Int32 nValue = 0;
         if(!(rVal >>= nValue))
@@ -1466,7 +1468,7 @@ sal_Bool SvxUnderlineItem::PutValue( const uno::Any& rVal, BYTE nMemberId )
             SetValue((sal_Int16)nValue);
     }
     break;
-    case MID_UL_COLOR:
+    case MID_TL_COLOR:
     {
         sal_Int32 nCol = 0;
         if( !( rVal >>= nCol ) )
@@ -1481,18 +1483,84 @@ sal_Bool SvxUnderlineItem::PutValue( const uno::Any& rVal, BYTE nMemberId )
         }
     }
     break;
-    case MID_UL_HASCOLOR:
+    case MID_TL_HASCOLOR:
         mColor.SetTransparency( Any2Bool( rVal ) ? 0 : 0xff );
     break;
     }
     return bRet;
 }
 
-int SvxUnderlineItem::operator==( const SfxPoolItem& rItem ) const
+int SvxTextLineItem::operator==( const SfxPoolItem& rItem ) const
 {
     DBG_ASSERT( SfxPoolItem::operator==( rItem ), "unequal type" );
     return SfxEnumItem::operator==( rItem ) &&
-           GetColor() == ((SvxUnderlineItem&)rItem).GetColor();
+           GetColor() == ((SvxTextLineItem&)rItem).GetColor();
+}
+
+// class SvxUnderlineItem ------------------------------------------------
+
+SvxUnderlineItem::SvxUnderlineItem( const FontUnderline eSt, const USHORT nId )
+    : SvxTextLineItem( eSt, nId )
+{
+}
+
+//------------------------------------------------------------------------
+
+SfxPoolItem* SvxUnderlineItem::Clone( SfxItemPool * ) const
+{
+    SvxUnderlineItem* pNew = new SvxUnderlineItem( *this );
+    pNew->SetColor( GetColor() );
+    return pNew;
+}
+
+// -----------------------------------------------------------------------
+
+SfxPoolItem* SvxUnderlineItem::Create(SvStream& rStrm, USHORT) const
+{
+    BYTE nState;
+    rStrm >> nState;
+    return new SvxUnderlineItem(  (FontUnderline)nState, Which() );
+}
+
+// -----------------------------------------------------------------------
+
+XubString SvxUnderlineItem::GetValueTextByPos( USHORT nPos ) const
+{
+    DBG_ASSERT( nPos <= (USHORT)UNDERLINE_BOLDWAVE, "enum overflow!" );
+    return SVX_RESSTR( RID_SVXITEMS_UL_BEGIN + nPos );
+}
+
+// class SvxOverlineItem ------------------------------------------------
+
+SvxOverlineItem::SvxOverlineItem( const FontUnderline eSt, const USHORT nId )
+    : SvxTextLineItem( eSt, nId )
+{
+}
+
+//------------------------------------------------------------------------
+
+SfxPoolItem* SvxOverlineItem::Clone( SfxItemPool * ) const
+{
+    SvxOverlineItem* pNew = new SvxOverlineItem( *this );
+    pNew->SetColor( GetColor() );
+    return pNew;
+}
+
+// -----------------------------------------------------------------------
+
+SfxPoolItem* SvxOverlineItem::Create(SvStream& rStrm, USHORT) const
+{
+    BYTE nState;
+    rStrm >> nState;
+    return new SvxOverlineItem(  (FontUnderline)nState, Which() );
+}
+
+// -----------------------------------------------------------------------
+
+XubString SvxOverlineItem::GetValueTextByPos( USHORT nPos ) const
+{
+    DBG_ASSERT( nPos <= (USHORT)UNDERLINE_BOLDWAVE, "enum overflow!" );
+    return SVX_RESSTR( RID_SVXITEMS_OL_BEGIN + nPos );
 }
 
 // class SvxCrossedOutItem -----------------------------------------------

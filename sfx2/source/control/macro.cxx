@@ -604,7 +604,7 @@ void SfxMacro::Replace
 
 {
     DBG_ASSERT( pImp->eMode != SFX_MACRO_EXISTING, "invalid call to non-recording SfxMacro" );
-    DBG_ASSERT( pImp->aList.Count(), "no replaceable statement available" )
+    DBG_ASSERT( pImp->aList.Count(), "no replaceable statement available" );
     pImp->aList.Remove( pImp->aList.Count() - 1 );
     pImp->aList.C40_INSERT( SfxMacroStatement,pStatement, pImp->aList.Count() );
 }
@@ -645,7 +645,7 @@ void SfxMacro::Remove()
 
 {
     DBG_ASSERT( pImp->eMode != SFX_MACRO_EXISTING, "invalid call to non-recording SfxMacro" );
-    DBG_ASSERT( pImp->aList.Count(), "no replaceable statement available" )
+    DBG_ASSERT( pImp->aList.Count(), "no replaceable statement available" );
     pImp->aList.Remove( pImp->aList.Count() - 1 );
 }
 

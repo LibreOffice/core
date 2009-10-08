@@ -38,7 +38,9 @@
 #include <readonlyimage.hxx>
 #define FOLDERWEBVIEW_DEFAULTFILE   "folder.so"
 
+// predeclarations
 class CanvasSettings;
+class SvtOptionsDrawinglayer;
 
 // class OfaMiscTabPage --------------------------------------------------
 
@@ -116,14 +118,9 @@ private:
     CheckBox        aFontShowCB;
     CheckBox        aFontHistoryCB;
 
-    FixedLine       a3DGB;
-    CheckBox        a3DOpenGLCB;
-    CheckBox        a3DOpenGLFasterCB;
-    CheckBox        a3DDitheringCB;
-    CheckBox        a3DShowFullCB;
-
     FixedLine       aRenderingFL;
     CheckBox        aUseHardwareAccell;
+    CheckBox        aUseAntiAliase;
 
     FixedLine       aMouseFL;
     FixedText       aMousePosFT;
@@ -135,10 +132,10 @@ private:
     UINT16          nStyleLB_InitialSelection;
     BOOL            bSfxSymbolsAuto;
 
-    SvtTabAppearanceCfg* pAppearanceCfg;
-    CanvasSettings*      pCanvasSettings;
+    SvtTabAppearanceCfg*    pAppearanceCfg;
+    CanvasSettings*         pCanvasSettings;
+    SvtOptionsDrawinglayer* mpDrawinglayerOpt;
 
-    DECL_LINK( OpenGLHdl, CheckBox* );
 #if defined( UNX )
     DECL_LINK( OnAntialiasingToggled, void* );
 #endif

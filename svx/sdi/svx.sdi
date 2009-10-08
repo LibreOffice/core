@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: svx.sdi,v $
- * $Revision: 1.79 $
+ * $Revision: 1.78.198.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -5691,33 +5691,6 @@ SfxVoidItem HideDetail SID_OUTLINE_HIDE
 ]
 
 //--------------------------------------------------------------------------
-SfxBoolItem HideSpellMark SID_AUTOSPELL_MARKOFF
-
-[
-    /* flags: */
-    AutoUpdate = TRUE,
-    Cachable = Cachable,
-    FastCall = FALSE,
-    HasCoreId = FALSE,
-    HasDialog = FALSE,
-    ReadOnlyDoc = TRUE,
-    Toggle = TRUE,
-    Container = FALSE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
-    Synchron;
-
-    Readonly = FALSE,
-
-    /* config: */
-    AccelConfig = TRUE,
-    MenuConfig = TRUE,
-    StatusBarConfig = FALSE,
-    ToolBoxConfig = TRUE,
-    GroupId = GID_VIEW;
-]
-
-//--------------------------------------------------------------------------
 SfxBoolItem HScrollbar SID_INSERT_HSCROLLBAR
 
 [
@@ -6028,10 +6001,10 @@ SfxVoidItem InsertApplet SID_INSERT_APPLET
     Asynchron;
 
     /* config: */
-    AccelConfig = TRUE,
-    MenuConfig = TRUE,
+        AccelConfig = FALSE,
+        MenuConfig = FALSE,
     StatusBarConfig = FALSE,
-    ToolBoxConfig = TRUE,
+        ToolBoxConfig = FALSE,
     GroupId = GID_INSERT;
 ]
 
@@ -11023,7 +10996,34 @@ SfxVoidItem TwainTransfer SID_TWAIN_TRANSFER
 ]
 
 //--------------------------------------------------------------------------
-SvxUnderlineItem Underline SID_ATTR_CHAR_UNDERLINE
+SvxTextLineItem Underline SID_ATTR_CHAR_UNDERLINE
+
+[
+    /* flags: */
+    AutoUpdate = TRUE,
+    Cachable = Cachable,
+    FastCall = FALSE,
+    HasCoreId = FALSE,
+    HasDialog = FALSE,
+    ReadOnlyDoc = FALSE,
+    Toggle = TRUE,
+    Container = FALSE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+    Synchron;
+
+    Readonly = FALSE,
+
+    /* config: */
+    AccelConfig = TRUE,
+    MenuConfig = TRUE,
+    StatusBarConfig = FALSE,
+    ToolBoxConfig = TRUE,
+    GroupId = GID_FORMAT;
+]
+
+//--------------------------------------------------------------------------
+SvxTextLineItem Overline SID_ATTR_CHAR_OVERLINE
 
 [
     /* flags: */
@@ -14827,9 +14827,87 @@ SfxVoidItem FontDialogForParagraph SID_CHAR_DLG_FOR_PARAGRAPH
     Asynchron;
 
     /* config: */
+    AccelConfig = FALSE,
+    MenuConfig = FALSE,
+    StatusBarConfig = FALSE,
+    ToolBoxConfig = FALSE,
+    GroupId = GID_FORMAT;
+]
+
+//--------------------------------------------------------------------------
+
+SfxVoidItem Grow SID_GROW_FONT_SIZE
+()
+[
+    /* flags: */
+    AutoUpdate = TRUE,
+    Cachable = Cachable,
+    FastCall = FALSE,
+    HasCoreId = FALSE,
+    HasDialog = FALSE,
+    ReadOnlyDoc = FALSE,
+    Toggle = FALSE,
+    Container = FALSE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+    Synchron;
+
+    /* config: */
     AccelConfig = TRUE,
-    MenuConfig = TRUE,
+    MenuConfig = FALSE,
     StatusBarConfig = FALSE,
     ToolBoxConfig = TRUE,
     GroupId = GID_FORMAT;
 ]
+
+//--------------------------------------------------------------------------
+
+SfxVoidItem Shrink SID_SHRINK_FONT_SIZE
+()
+[
+    /* flags: */
+    AutoUpdate = TRUE,
+    Cachable = Cachable,
+    FastCall = FALSE,
+    HasCoreId = FALSE,
+    HasDialog = FALSE,
+    ReadOnlyDoc = FALSE,
+    Toggle = FALSE,
+    Container = FALSE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+    Synchron;
+
+    /* config: */
+    AccelConfig = TRUE,
+    MenuConfig = FALSE,
+    StatusBarConfig = FALSE,
+    ToolBoxConfig = TRUE,
+    GroupId = GID_FORMAT;
+]
+//--------------------------------------------------------------------------
+
+SfxVoidItem RecheckDocument SID_RECHECK_DOCUMENT
+()
+[
+    /* flags: */
+    AutoUpdate = FALSE,
+    Cachable = Cachable,
+    FastCall = FALSE,
+    HasCoreId = FALSE,
+    HasDialog = TRUE,
+    ReadOnlyDoc = FALSE,
+    Toggle = FALSE,
+    Container = FALSE,
+    RecordAbsolute = FALSE,
+    RecordPerItem;
+    Asynchron;
+
+    /* config: */
+    AccelConfig = TRUE,
+    MenuConfig = TRUE,
+    StatusBarConfig = FALSE,
+    ToolBoxConfig = TRUE,
+    GroupId = GID_DOCUMENT;
+]
+

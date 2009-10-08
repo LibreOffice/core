@@ -54,7 +54,8 @@ namespace drawinglayer
             const basegfx::BColor& rRGBColor)
         :   BasePrimitive2D(),
             maPositions(rPositions),
-            maRGBColor(rRGBColor)
+            maRGBColor(rRGBColor),
+            maB2DRange()
         {
         }
 
@@ -73,15 +74,21 @@ namespace drawinglayer
 
         basegfx::B2DRange PointArrayPrimitive2D::getB2DRange(const geometry::ViewInformation2D& /*rViewInformation*/) const
         {
-            basegfx::B2DRange aRetval;
-
-            // get the basic range from the position vector
-            for(std::vector< basegfx::B2DPoint >::const_iterator aIter(getPositions().begin()); aIter != getPositions().end(); aIter++)
+            if(maB2DRange.isEmpty())
             {
-                aRetval.expand(*aIter);
+                basegfx::B2DRange aNewRange;
+
+                // get the basic range from the position vector
+                for(std::vector< basegfx::B2DPoint >::const_iterator aIter(getPositions().begin()); aIter != getPositions().end(); aIter++)
+                {
+                    aNewRange.expand(*aIter);
+                }
+
+                // assign to buffered value
+                const_cast< PointArrayPrimitive2D* >(this)->maB2DRange = aNewRange;
             }
 
-            return aRetval;
+            return maB2DRange;
         }
 
         // provide unique ID

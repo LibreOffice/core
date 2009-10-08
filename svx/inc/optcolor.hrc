@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: optcolor.hrc,v $
- * $Revision: 1.8 $
+ * $Revision: 1.8.196.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -165,7 +165,33 @@
 #define FT_BASICERROR              163
 #define LB_BASICERROR              164
 #define WN_BASICERROR              165
+
+#define FT_SQL_COMMAND           173
+#define FT_SQLIDENTIFIER         174
+#define LB_SQLIDENTIFIER         175
+#define WN_SQLIDENTIFIER         176
+#define FT_SQLNUMBER             177
+#define LB_SQLNUMBER             178
+#define WN_SQLNUMBER             179
+#define FT_SQLSTRING             180
+#define LB_SQLSTRING             181
+#define WN_SQLSTRING             182
+#define FT_SQLOPERATOR           183
+#define LB_SQLOPERATOR           184
+#define WN_SQLOPERATOR           185
+#define FT_SQLKEYWORD            186
+#define LB_SQLKEYWORD            187
+#define WN_SQLKEYWORD            188
+#define FT_SQLPARAMETER          189
+#define LB_SQLPARAMETER          190
+#define WN_SQLPARAMETER          191
+#define FT_SQLCOMMENT            192
+#define LB_SQLCOMMENT            193
+#define WN_SQLCOMMENT            194
+
 #define ST_EXTENSION                166
+
+
 
 #define _FT_WIDTH               120
 #define _LINE_HEIGHT            15

@@ -273,7 +273,7 @@ void SvxLineWidthToolBoxControl::StateChanged(
 
             if ( eState == SFX_ITEM_AVAILABLE )
             {
-                DBG_ASSERT( pState->ISA(XLineWidthItem), "falscher ItemType" )
+                DBG_ASSERT( pState->ISA(XLineWidthItem), "falscher ItemType" );
 
                 // Core-Unit an MetricField uebergeben
                 // Darf nicht in CreateItemWin() geschehen!

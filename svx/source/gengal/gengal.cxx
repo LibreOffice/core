@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: gengal.cxx,v $
- * $Revision: 1.10 $
+ * $Revision: 1.10.288.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -84,23 +84,12 @@ class GalApp : public Application
 {
 public:
     virtual void Main();
+
+protected:
+    Reference<XMultiServiceFactory> xMSF;
+    void Init();
+    void InitUCB();
 };
-
-Reference< XMultiServiceFactory > createApplicationServiceManager()
-{
-    Reference< XMultiServiceFactory > xMS;
-    try
-    {
-        Reference< XComponentContext > xComponentContext = ::cppu::defaultBootstrap_InitialComponentContext();
-        if ( xComponentContext.is() )
-            xMS = xMS.query( xComponentContext->getServiceManager() );
-    }
-    catch( ::com::sun::star::uno::Exception& )
-    {
-    }
-
-    return xMS;
-}
 
 Gallery* createGallery( const rtl::OUString& aGalleryURL )
 {
@@ -239,31 +228,40 @@ static OUString Smartify( const OUString &rPath )
     return aURL.GetMainURL( INetURLObject::NO_DECODE );
 }
 
-// Cut/paste [ evilness ] from Desktop::CreateApplicationServiceManager()
-Reference< XMultiServiceFactory > CreateApplicationServiceManager()
+#define OUSTRING_CSTR( str ) \
+    rtl::OUStringToOString( str, RTL_TEXTENCODING_ASCII_US ).getStr()
+
+void GalApp::Init()
 {
-    try
-    {
-        Reference<XComponentContext> xComponentContext = ::cppu::defaultBootstrap_InitialComponentContext();
-        Reference<XMultiServiceFactory> xMS(xComponentContext->getServiceManager(), UNO_QUERY);
-
-        return xMS;
+    if( getenv( "OOO_INSTALL_PREFIX" ) == NULL ) {
+        OUString fileName = GetAppFileName();
+        int lastSlash = fileName.lastIndexOf( '/' );
+#ifdef WNT
+        // Don't know which directory separators GetAppFileName() returns on Windows.
+        // Be safe and take into consideration they might be backslashes.
+        if( fileName.lastIndexOf( '\\' ) > lastSlash )
+            lastSlash = fileName.lastIndexOf( '\\' );
+#endif
+        OUString baseBinDir = fileName.copy( 0, lastSlash );
+        OUString installPrefix = baseBinDir + OUString::createFromAscii( "/../.." );
+        OUString assignment = OUString::createFromAscii( "OOO_INSTALL_PREFIX=" ) + installPrefix;
+        putenv( strdup( OUSTRING_CSTR( assignment )));
     }
-    catch( ::com::sun::star::uno::Exception& )
-    {
-    }
+    OSL_TRACE( "OOO_INSTALL_PREFIX=%s", getenv( "OOO_INSTALL_PREFIX" ) );
 
-    return Reference< XMultiServiceFactory >();
-}
-
-void GalApp::Main()
-{
-    Reference<XComponentContext> xComponentContext = ::cppu::defaultBootstrap_InitialComponentContext();
-    Reference<XMultiServiceFactory> xMSF(xComponentContext->getServiceManager(), UNO_QUERY);
+    Reference<XComponentContext> xComponentContext
+        = ::cppu::defaultBootstrap_InitialComponentContext();
+    xMSF = Reference<XMultiServiceFactory>
+        ( xComponentContext->getServiceManager(), UNO_QUERY );
     if( !xMSF.is() )
         fprintf( stderr, "Failed to bootstrap\n" );
     ::comphelper::setProcessServiceFactory( xMSF );
 
+    InitUCB();
+}
+
+void GalApp::InitUCB()
+{
     OUString aEmpty;
     Sequence< Any > aArgs(6);
     aArgs[0]
@@ -277,7 +275,10 @@ void GalApp::Main()
 
     if (! ::ucbhelper::ContentBroker::initialize( xMSF, aArgs ) )
         fprintf( stderr, "Failed to init content broker\n" );
+}
 
+void GalApp::Main()
+{
     bool bHelp = false;
     rtl::OUString aPath, aDestDir;
     rtl::OUString aName = rtl::OUString::createFromAscii( "Default name" );

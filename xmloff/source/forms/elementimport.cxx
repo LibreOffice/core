@@ -331,7 +331,12 @@ namespace xmloff
                 {
                     if ( !xDynamicProperties.is() )
                     {
-                        OSL_ENSURE( false, "OElementImport::implImportGenericProperties: encountered an unknown property, but component is no PropertyBag!" );
+                    #if OSL_DEBUG_LEVEL > 0
+                        ::rtl::OString aMessage( "OElementImport::implImportGenericProperties: encountered an unknown property (" );
+                        aMessage += ::rtl::OUStringToOString( aPropValues->Name, RTL_TEXTENCODING_ASCII_US );
+                        aMessage += "), but component is no PropertyBag!";
+                        OSL_ENSURE( false, aMessage.getStr() );
+                    #endif
                         continue;
                     }
 
@@ -1133,10 +1138,10 @@ namespace xmloff
                     )
                 );
 
-        if ( bMakeAbsolute )
+        if ( bMakeAbsolute && ( _rValue.getLength() > 0  ) )
         {
             // make a global URL out of the local one
-            ::rtl::OUString sAdjustedValue = m_rContext.getGlobalContext().GetAbsoluteReference( _rValue );
+            ::rtl::OUString sAdjustedValue = m_rContext.getGlobalContext().ResolveGraphicObjectURL( _rValue, FALSE );
             OImagePositionImport::handleAttribute( _nNamespaceKey, _rLocalName, sAdjustedValue );
         }
         else
@@ -1824,8 +1829,8 @@ namespace xmloff
                                     m_xMeAsContainer);
         else if ( token::IsXMLToken(_rLocalName, token::XML_CONNECTION_RESOURCE) )
             return new OXMLDataSourceImport(GetImport(), _nPrefix, _rLocalName, _rxAttrList,m_xElement);
-        else if( token::IsXMLToken(_rLocalName, token::XML_EVENT_LISTENERS) &&
-                 (XML_NAMESPACE_OFFICE == _nPrefix) ||
+        else if( (token::IsXMLToken(_rLocalName, token::XML_EVENT_LISTENERS) &&
+                 (XML_NAMESPACE_OFFICE == _nPrefix)) ||
                  token::IsXMLToken( _rLocalName, token::XML_PROPERTIES) )
             return OElementImport::CreateChildContext( _nPrefix, _rLocalName,
                                                        _rxAttrList );
@@ -1989,10 +1994,8 @@ namespace xmloff
 
             case OControlElement::BUTTON:
             case OControlElement::IMAGE:
-                return new OButtonImport(m_rFormImport, *this, _nPrefix, _rLocalName, m_xMeAsContainer, _eType);
-
             case OControlElement::IMAGE_FRAME:
-                return new OURLReferenceImport( m_rFormImport, *this, _nPrefix, _rLocalName, m_xMeAsContainer, _eType );
+                return new OButtonImport( m_rFormImport, *this, _nPrefix, _rLocalName, m_xMeAsContainer, _eType );
 
             case OControlElement::COMBOBOX:
             case OControlElement::LISTBOX:

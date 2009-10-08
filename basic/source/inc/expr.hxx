@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: expr.hxx,v $
- * $Revision: 1.15 $
+ * $Revision: 1.15.40.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -67,9 +67,10 @@ enum SbiExprMode {                  // Expression context:
     EXPRMODE_STANDALONE,            // a param1, param2 OR a( param1, param2 ) = 42
     EXPRMODE_LPAREN_PENDING,        // start of parameter list with bracket, special handling
     EXPRMODE_LPAREN_NOT_NEEDED,     // pending LPAREN has not been used
-    EXPRMODE_ARRAY_OR_OBJECT        // '=' or '(' or '.' found after ')' on ParenLevel 0, stopping
+    EXPRMODE_ARRAY_OR_OBJECT,       // '=' or '(' or '.' found after ')' on ParenLevel 0, stopping
                                     // expression, assuming array syntax a(...)[(...)] = ?
                                     // or a(...).b(...)
+    EXPRMODE_EMPTY_PAREN            // It turned out that the paren don't contain anything: a()
 };
 
 enum SbiNodeType {
@@ -77,7 +78,8 @@ enum SbiNodeType {
     SbxSTRVAL,                      // aStrVal = Wert, before #i59791/#i45570: nStringId = Wert
     SbxVARVAL,                      // aVar = Wert
     SbxTYPEOF,                      // TypeOf ObjExpr Is Type
-    SbxNODE                         // Node
+    SbxNODE,                        // Node
+    SbxDUMMY
 };
 
 enum RecursiveMode
@@ -117,6 +119,7 @@ class SbiExprNode {                  // Operatoren (und Operanden)
     void  GenElement( SbiOpcode );  // Element
     void  BaseInit( SbiParser* p ); // Hilfsfunktion fuer Ctor, AB 17.12.95
 public:
+    SbiExprNode( void );
     SbiExprNode( SbiParser*, double, SbxDataType );
     SbiExprNode( SbiParser*, const String& );
     SbiExprNode( SbiParser*, const SbiSymDef&, SbxDataType, SbiExprList* = NULL );

@@ -66,7 +66,7 @@
 #include <tools/urlobj.hxx>
 #include <classes/resource.hrc>
 #include <classes/fwkresid.hxx>
-#include <comphelper/uieventslogger.hxx>
+#include <dispatch/uieventloghelper.hxx>
 
 using namespace ::com::sun::star::awt;
 using namespace ::com::sun::star::uno;
@@ -203,6 +203,8 @@ throw ( RuntimeException )
         pExecuteInfo->xDispatch     = xDispatch;
         pExecuteInfo->aTargetURL    = aTargetURL;
         pExecuteInfo->aArgs         = aArgs;
+        if(::comphelper::UiEventsLogger::isEnabled()) //#i88653#
+            UiEventLogHelper(::rtl::OUString::createFromAscii("GenericToolbarController")).log( m_xServiceManager, m_xFrame, aTargetURL, aArgs);
         Application::PostUserEvent( STATIC_LINK(0, GenericToolbarController , ExecuteHdl_Impl), pExecuteInfo );
     }
 }
@@ -310,12 +312,6 @@ IMPL_STATIC_LINK_NOINSTANCE( GenericToolbarController, ExecuteHdl_Impl, ExecuteI
    const sal_uInt32 nRef = Application::ReleaseSolarMutex();
    try
    {
-        if(::comphelper::UiEventsLogger::isEnabled()) //#i88653#
-        {
-            Sequence<PropertyValue> source;
-            ::comphelper::UiEventsLogger::appendDispatchOrigin(source, rtl::OUString::createFromAscii("GenericToolbarController"));
-            ::comphelper::UiEventsLogger::logDispatch(pExecuteInfo->aTargetURL, source);
-        }
         // Asynchronous execution as this can lead to our own destruction!
         // Framework can recycle our current frame and the layout manager disposes all user interface
         // elements if a component gets detached from its frame!

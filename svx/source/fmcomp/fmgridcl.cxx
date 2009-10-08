@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: fmgridcl.cxx,v $
- * $Revision: 1.64 $
+ * $Revision: 1.64.94.3 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -30,83 +30,67 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_svx.hxx"
-#include <svx/fmgridcl.hxx>
-#include "gridcell.hxx"
-#include "fmurl.hxx"
-#include <svtools/fmtfield.hxx>
 
-#include <math.h>
-#ifndef _SVX_FMPROP_HRC
-#include "fmprop.hrc"
-#endif
-#ifndef _SVX_DBEXCH_HRC
 #include "dbexch.hrc"
-#endif
-#include <sfx2/viewfrm.hxx>
-#include <com/sun/star/uno/XNamingService.hpp>
-#include <com/sun/star/sdbcx/XDeleteRows.hpp>
+#include "fmgridif.hxx"
+#include "fmitems.hxx"
+#include "fmprop.hrc"
+#include "fmresids.hrc"
+#include "fmservs.hxx"
+#include "fmurl.hxx"
+#include "formcontrolfactory.hxx"
+#include "gridcell.hxx"
+#include "gridcols.hxx"
+#include "svx/dbaexchange.hxx"
+#include "svx/dialmgr.hxx"
+#include "svx/dialogs.hrc"
+#include "svx/fmgridcl.hxx"
+#include "svx/svxdlg.hxx"
+#include "svx/svxids.hrc"
+#include "trace.hxx"
+
+#include <com/sun/star/form/XConfirmDeleteListener.hpp>
+#include <com/sun/star/form/XFormComponent.hpp>
+#include <com/sun/star/form/XGridColumnFactory.hpp>
+#include <com/sun/star/io/XPersistObject.hpp>
 #include <com/sun/star/sdb/CommandType.hpp>
+#include <com/sun/star/sdb/RowChangeAction.hpp>
+#include <com/sun/star/sdb/XQueriesSupplier.hpp>
 #include <com/sun/star/sdbc/DataType.hpp>
 #include <com/sun/star/sdbc/XPreparedStatement.hpp>
-#ifndef _COM_SUN_STAR_SDDB_XCOLUMNSSUPPLIER_HPP_
 #include <com/sun/star/sdbcx/XColumnsSupplier.hpp>
-#endif
-#include <com/sun/star/sdb/XQueriesSupplier.hpp>
-#ifndef _COM_SUN_STAR_SDDB_XTABLESSUPPLIER_HPP_
+#include <com/sun/star/sdbcx/XDeleteRows.hpp>
 #include <com/sun/star/sdbcx/XTablesSupplier.hpp>
-#endif
-#include <com/sun/star/view/XSelectionSupplier.hpp>
-#include <com/sun/star/sdb/RowChangeAction.hpp>
-#include <com/sun/star/form/XConfirmDeleteListener.hpp>
-#include <com/sun/star/form/XGridColumnFactory.hpp>
-#include <com/sun/star/form/XFormComponent.hpp>
-#include <com/sun/star/util/XNumberFormatsSupplier.hpp>
+#include <com/sun/star/uno/XNamingService.hpp>
 #include <com/sun/star/util/XNumberFormats.hpp>
-#include <com/sun/star/io/XPersistObject.hpp>
-// #100312# ---------------------------
+#include <com/sun/star/util/XNumberFormatsSupplier.hpp>
 #include <com/sun/star/util/XURLTransformer.hpp>
-#include <comphelper/processfactory.hxx>
-#include <vcl/help.hxx>
-#include <sfx2/dispatch.hxx>
-#include <svtools/eitem.hxx>
-#include <vcl/menu.hxx>
-#include <vcl/image.hxx>
-#include <vcl/longcurr.hxx>
-#include "fmservs.hxx"
-#include "fmitems.hxx"
-
-#ifndef _SVX_FMRESIDS_HRC
-#include "fmresids.hrc"
-#endif
-
-#ifndef _SVX_SVXIDS_HRC
-#include <svx/svxids.hrc>
-#endif
-#include <tools/shl.hxx>
-#include <svx/dialmgr.hxx>
-#include "gridcols.hxx"
+#include <com/sun/star/view/XSelectionSupplier.hpp>
 
 #ifndef _SVSTDARR_STRINGSDTOR
 #define _SVSTDARR_STRINGSDTOR
 #define _SVSTDARR_ULONGS
 #include <svtools/svstdarr.hxx>
 #endif
-#include <svtools/numuno.hxx>
-#include "fmgridif.hxx"
 
-//CHINA001 #ifndef _SVX_SHOWCOLS_HXX
-//CHINA001 #include "showcols.hxx"
-//CHINA001 #endif
 #include <comphelper/extract.hxx>
-#include <connectivity/dbtools.hxx>
-#include <comphelper/property.hxx>
 #include <comphelper/numbers.hxx>
-#include "trace.hxx"
-#include <svx/dbaexchange.hxx>
+#include <comphelper/processfactory.hxx>
+#include <comphelper/property.hxx>
+#include <connectivity/dbtools.hxx>
+#include <sfx2/dispatch.hxx>
+#include <sfx2/viewfrm.hxx>
+#include <svtools/eitem.hxx>
+#include <svtools/fmtfield.hxx>
+#include <svtools/numuno.hxx>
 #include <tools/multisel.hxx>
+#include <tools/shl.hxx>
+#include <vcl/help.hxx>
+#include <vcl/image.hxx>
+#include <vcl/longcurr.hxx>
+#include <vcl/menu.hxx>
 
-#include <svx/svxdlg.hxx> //CHINA001
-#include <svx/dialogs.hrc> //CHINA001
+#include <math.h>
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::view;
@@ -551,12 +535,8 @@ IMPL_LINK( FmGridHeader, OnAsyncExecuteDrop, void*, /*NOTINTERESTEDIN*/ )
 
                 sFieldService = FieldServiceFromId(nPreferedType);
                 Reference< XPropertySet >  xThisRoundCol;
-                if (sFieldService.getLength())
-                {
+                if ( sFieldService.getLength() )
                     xThisRoundCol = xFactory->createColumn(sFieldService);
-                    if (xThisRoundCol.is() && ::comphelper::hasProperty(FM_PROP_STRICTFORMAT, xThisRoundCol))
-                        xThisRoundCol->setPropertyValue(FM_PROP_STRICTFORMAT, ::cppu::bool2any(sal_False));
-                }
                 if (nColCount)
                     xSecondCol = xThisRoundCol;
                 else
@@ -583,37 +563,12 @@ IMPL_LINK( FmGridHeader, OnAsyncExecuteDrop, void*, /*NOTINTERESTEDIN*/ )
         else
             xCol->setPropertyValue(FM_PROP_LABEL, makeAny(sFieldName));
 
-        if (nPreferedType == SID_FM_NUMERICFIELD)
-        {
-            // set properties for numeric field
-            Reference< XPropertySetInfo > xPSI( xField->getPropertySetInfo() );
-            if ( xPSI.is() && xPSI->hasPropertyByName( FM_PROP_FORMATKEY ) )
-            {
-                sal_Int32 nFormatKey = 0;
-                xField->getPropertyValue(FM_PROP_FORMATKEY) >>= nFormatKey;
-                Any aScaleVal(::comphelper::getNumberFormatDecimals(xNumberFormats, nFormatKey));
-                xCol->setPropertyValue(FM_PROP_DECIMAL_ACCURACY,aScaleVal);
-            }
-
-            // set the max and min value for this field
-            sal_Int32 nMinValue = 0, nMaxValue = 1000000000;
-            switch (nDataType)
-            {
-                case DataType::TINYINT  : nMinValue = 0;            nMaxValue = 255; break;
-                case DataType::SMALLINT : nMinValue = -32768;       nMaxValue = 32767; break;
-                case DataType::INTEGER  : nMinValue = 0x80000000;   nMaxValue = 0x7FFFFFFF; break;
-                    // um die doubles/singles kuemmere ich mich nicht, da es ein wenig sinnlos ist
-                    // double and singles are ignored
-            }
-            xCol->setPropertyValue(FM_PROP_VALUEMIN,makeAny((double)nMinValue));
-            xCol->setPropertyValue(FM_PROP_VALUEMAX,makeAny((double)nMaxValue));
-
-            // format checking for numeric fields is default sal_True
-            xCol->setPropertyValue(FM_PROP_STRICTFORMAT, bool2any(sal_True));
-        }
+        FormControlFactory aControlFactory( ::comphelper::getProcessServiceFactory() );
+        aControlFactory.initializeControlModel( DocumentClassification::classifyHostDocument( xCols ), xCol );
+        aControlFactory.initializeFieldDependentProperties( xField, xCol, xNumberFormats );
 
         xCol->setPropertyValue(FM_PROP_CONTROLSOURCE, makeAny(sFieldName));
-        if (bDateNTimeCol)
+        if ( xSecondCol.is() )
             xSecondCol->setPropertyValue(FM_PROP_CONTROLSOURCE, makeAny(sFieldName));
 
         if (bDateNTimeCol)
@@ -996,8 +951,6 @@ void FmGridHeader::PostExecuteColumnContextMenu(sal_uInt16 nColId, const PopupMe
         Reference< ::com::sun::star::beans::XPropertySet >  xCol = xFactory->createColumn(aFieldType);
         if (xCol.is())
         {
-            Any aNew;
-            aNew <<= xCol;
             if (bReplace)
             {
                 // ein paar Properties hinueberretten
@@ -1009,7 +962,7 @@ void FmGridHeader::PostExecuteColumnContextMenu(sal_uInt16 nColId, const PopupMe
 
                 OStaticDataAccessTools().TransferFormComponentProperties(xReplaced, xCol, aAppLocale);
 
-                xCols->replaceByIndex(nPos, aNew);
+                xCols->replaceByIndex( nPos, makeAny( xCol ) );
                 ::comphelper::disposeComponent(xReplaced);
             }
             else
@@ -1029,7 +982,11 @@ void FmGridHeader::PostExecuteColumnContextMenu(sal_uInt16 nColId, const PopupMe
                 // no fallback in case the name is not unique (which is rather improbable) ....
                 xCol->setPropertyValue(FM_PROP_LABEL, makeAny(sLabel));
                 xCol->setPropertyValue(FM_PROP_NAME, makeAny(sLabel));
-                xCols->insertByIndex(nPos, aNew);
+
+                FormControlFactory determine( ::comphelper::getProcessServiceFactory() );
+                determine.initializeControlModel( DocumentClassification::classifyHostDocument( xCols ), xCol );
+
+                xCols->insertByIndex( nPos, makeAny( xCol ) );
             }
 
         }
@@ -1729,9 +1686,11 @@ void FmGridControl::InitColumnByField(
     // lookup the column which belongs to the control source
     ::rtl::OUString sFieldName;
     _rxColumnModel->getPropertyValue( FM_PROP_CONTROLSOURCE ) >>= sFieldName;
-
     Reference< XPropertySet > xField;
-    if ( sFieldName.getLength() && _rxFieldsByNames->hasByName( sFieldName ) )
+    _rxColumnModel->getPropertyValue( FM_PROP_BOUNDFIELD ) >>= xField;
+
+
+    if ( !xField.is() && /*sFieldName.getLength() && */_rxFieldsByNames->hasByName( sFieldName ) ) // #i93452# do not check for name length
         _rxFieldsByNames->getByName( sFieldName ) >>= xField;
 
     // determine the position of this column

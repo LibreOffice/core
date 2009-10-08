@@ -422,7 +422,6 @@ private:
     virtual sdr::contact::ViewContact* CreateObjectSpecificViewContact();
 public:
     sdr::contact::ViewContact& GetViewContact() const;
-    void FlushViewContact() const;
 
     // #110094# DrawContact support: Methods for handling Page changes
     void ActionChanged() const;
@@ -458,10 +457,15 @@ protected:
 
     SetOfByte  aPrefVisiLayers;
     USHORT     nPageNum;
-    bool       bMaster;  // TRUE: Ich bin eine Stammseite
-    FASTBOOL   bInserted;
-    FASTBOOL   bObjectsNotPersistent;
-    FASTBOOL   bSwappingLocked;
+
+    // bitfield
+    unsigned            mbMaster : 1;               // flag if this is a MasterPage
+    unsigned            mbInserted : 1;
+    unsigned            mbObjectsNotPersistent : 1;
+    unsigned            mbSwappingLocked : 1;
+
+    // #i93597#
+    unsigned            mbPageBorderOnlyLeftRight : 1;
 
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > createUnoPage();
 
@@ -471,18 +475,23 @@ public:
     // Copy-Ctor und Zuweisungeoperator sind nicht getestet!
     SdrPage(const SdrPage& rSrcPage);
     virtual ~SdrPage();
-    // pModel, pPage, pUpList, pOwnerObj und bInserted werden Zuweisungeoperator nicht veraendert!
+    // pModel, pPage, pUpList, pOwnerObj und mbInserted werden Zuweisungeoperator nicht veraendert!
     virtual void operator=(const SdrPage& rSrcPage);
     virtual SdrPage* Clone() const;
     virtual SdrPage* Clone(SdrModel* pNewModel) const;
-    bool IsMasterPage() const       { return bMaster; }
-    void SetInserted(FASTBOOL bJa=TRUE);
-    FASTBOOL IsInserted() const         { return bInserted; }
+    bool IsMasterPage() const       { return mbMaster; }
+    void SetInserted(bool bNew = true);
+    FASTBOOL IsInserted() const         { return mbInserted; }
     virtual void SetChanged();
 
     // #i68775# React on PageNum changes (from Model in most cases)
     void SetPageNum(sal_uInt16 nNew);
     sal_uInt16 GetPageNum() const;
+
+    // #i93597# Allow page border definition to not be the full rectangle but to
+    // use only the left and right vertical edges (reportdesigner)
+    void setPageBorderOnlyLeftRight(bool bNew) { mbPageBorderOnlyLeftRight = bNew; }
+    bool getPageBorderOnlyLeftRight() const { return mbPageBorderOnlyLeftRight; }
 
     virtual void SetSize(const Size& aSiz);
     virtual Size GetSize() const;
@@ -545,16 +554,16 @@ public:
     // wenn pRect!=NULL, dann die Seiten, die von diesem Rect intersected werden
     // ansonsten die sichtbaren Seiten.
     virtual const SdrPageGridFrameList* GetGridFrameList(const SdrPageView* pPV, const Rectangle* pRect) const;
-    FASTBOOL IsObjectsNotPersistent() const          { return bObjectsNotPersistent; }
-    void     SetObjectsNotPersistent(FASTBOOL b)     { bObjectsNotPersistent=b; }
+    bool IsObjectsNotPersistent() const          { return mbObjectsNotPersistent; }
+    void SetObjectsNotPersistent(bool b)     { mbObjectsNotPersistent = b; }
     // Durch Setzen dieses Flags, kann das Auslagern (Swappen) von
     // Teilen der Page (z.B. Grafiken) unterbunden werden.
     // Es werden hierdurch jedoch nicht automatisch alle ausgelagerten
     // Teile nachgeladen, dies geschieht erst bei konkretem Bedarf oder
     // durch Aufruf von SwapInAll().
     // Fuer die MasterPage(s) der Page muss dies ggf. separat gemacht werden.
-    FASTBOOL IsSwappingLocked() const                { return bSwappingLocked; }
-    void     SetSwappingLocked(FASTBOOL bLock)       { bSwappingLocked=bLock; }
+    bool IsSwappingLocked() const { return mbSwappingLocked; }
+    void SetSwappingLocked(bool bLock) { mbSwappingLocked = bLock; }
 
     SdrObject* GetBackgroundObj() const { return pBackgroundObj; }
     void       SetBackgroundObj( SdrObject* pObj );

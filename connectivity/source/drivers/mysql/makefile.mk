@@ -35,6 +35,7 @@ PRJNAME=connectivity
 TARGET=mysql
 
 ENABLE_EXCEPTIONS=TRUE
+VISIBILITY_HIDDEN=TRUE
 
 # --- Settings ----------------------------------
 .IF "$(DBGUTIL_OJ)"!=""

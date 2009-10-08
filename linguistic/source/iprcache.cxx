@@ -85,7 +85,7 @@ static const struct
     INT32       nPropHdl;
 } aFlushProperties[ NUM_FLUSH_PROPS ] =
 {
-    { UPN_IS_GERMAN_PRE_REFORM,           UPH_IS_GERMAN_PRE_REFORM },
+    { UPN_IS_GERMAN_PRE_REFORM,           UPH_IS_GERMAN_PRE_REFORM },   /* deprecated */
     { UPN_IS_USE_DICTIONARY_LIST,         UPH_IS_USE_DICTIONARY_LIST },
     { UPN_IS_IGNORE_CONTROL_CHARACTERS,   UPH_IS_IGNORE_CONTROL_CHARACTERS },
     { UPN_IS_SPELL_UPPER_CASE,            UPH_IS_SPELL_UPPER_CASE },
@@ -239,62 +239,7 @@ void SAL_CALL FlushListener::propertyChange(
 
 ///////////////////////////////////////////////////////////////////////////
 
-class IPRCachedWord
-{
-    String           aWord;
-    IPRCachedWord   *pNext;
-    IPRCachedWord   *pPrev;
-    IPRCachedWord   *pFollow;
-    INT16            nLanguage;
-    ULONG            nFound;
-
-    // don't allow to use copy-constructor and assignment-operator
-    IPRCachedWord(const IPRCachedWord &);
-    IPRCachedWord & operator = (const IPRCachedWord &);
-
-public:
-    IPRCachedWord( const String& rWord, IPRCachedWord* pFollowPtr,  INT16 nLang )
-        : aWord( rWord ), pNext( 0 ), pPrev( 0 ), pFollow( pFollowPtr ),
-          nLanguage( nLang ), nFound( 0 ) {}
-    ~IPRCachedWord(){}
-
-    const String&   GetWord()                       { return aWord; }
-    void            SetWord( const String& aNew )   { aWord = aNew; }
-
-    USHORT          GetLang()                       { return nLanguage; }
-    void            SetLang( INT16 nNew )           { nLanguage = nNew; }
-
-    IPRCachedWord*  GetNext()                       { return pNext; }
-    void            SetNext( IPRCachedWord* pNew )  { pNext = pNew; }
-
-    IPRCachedWord*  GetPrev()                       { return pPrev; }
-    void            SetPrev( IPRCachedWord* pNew )  { pPrev = pNew; }
-
-    IPRCachedWord*  GetFollow()                     { return pFollow; }
-    void            SetFollow( IPRCachedWord* pNew ){ pFollow = pNew; }
-
-    void            IncFound()                      { ++nFound; }
-    ULONG           GetFound()                      { return nFound; }
-    void            SetFound( ULONG nNew )          { nFound = nNew; }
-};
-
-///////////////////////////////////////////////////////////////////////////
-
-IPRSpellCache::IPRSpellCache( ULONG nSize ) :
-    ppHash      ( NULL ),
-    pFirst      ( NULL ),
-    pLast       ( NULL ),
-    nIndex      ( 0 ),
-    nCount      ( 0 ),
-    nInputPos   ( 0 ),
-    nInputValue ( 0 ),
-    nTblSize    ( nSize )
-#ifdef DBG_STATISTIC
-    ,nMax       ( IPR_DEF_CACHE_MAX ),
-    nMaxInput   ( IPR_DEF_CACHE_MAXINPUT ),
-    nFound      ( 0 ),
-    nLost       ( 0 )
-#endif
+SpellCache::SpellCache()
 {
     pFlushLstnr = new FlushListener( this );
     xFlushLstnr = pFlushLstnr;
@@ -304,235 +249,39 @@ IPRSpellCache::IPRSpellCache( ULONG nSize ) :
     pFlushLstnr->SetPropSet( aPropertySet );    //! after reference is established
 }
 
-IPRSpellCache::~IPRSpellCache()
+SpellCache::~SpellCache()
 {
-    MutexGuard  aGuard( GetLinguMutex() );
-
-    Reference<XDictionaryList> aDictionaryList;
-    pFlushLstnr->SetDicList( aDictionaryList );
-    Reference<XPropertySet> aPropertySet;
-    pFlushLstnr->SetPropSet( aPropertySet );
-
-#ifdef DBG_STATISTIC
-    // Binary File oeffnen
-    String aOutTmp( String::CreateFromAscii( "iprcache.stk" ) )
-    SvFileStream aOut( aOutTmp, STREAM_STD_WRITE );
-
-    if( aOut.IsOpen() && !aOut.GetError() && ppHash )
-    {
-        ByteString aStr( "Gefunden: ");
-        aStr += nFound;
-        aStr += "   Verloren: ";
-        aStr += nLost;
-        ULONG nSumSum = 0;
-        aOut << aStr.GetBuffer() << endl;
-        for( ULONG i = 0; i < nTblSize; ++i )
-        {
-            aStr = "Index: ";
-            aStr += i;
-            aStr += "    Tiefe: ";
-            ULONG nDeep = 0;
-            ULONG nSum = 0;
-            IPRCachedWord* pTmp = *( ppHash + i );
-            while( pTmp )
-            {
-                ++nDeep;
-                nSum += pTmp->GetFound();
-                pTmp = pTmp->GetNext();
-            }
-            aStr += nDeep;
-            aStr += "  Anzahl: ";
-            aStr += nSum;
-            nSumSum += nSum;
-            aOut << aStr.GetBuffer() << endl;
-            pTmp = *( ppHash + i );
-            aStr = "                 Found: ";
-            while( pTmp )
-            {
-                aStr += pTmp->GetFound();
-                aStr += "  ";
-                pTmp = pTmp->GetNext();
-            }
-            aOut << aStr.GetBuffer() << endl;
-        }
-        aStr = "Summe: ";
-        aStr += nSumSum;
-        aOut << aStr.GetBuffer() << endl;
-    }
-#endif
-
-    while( pFirst )
-    {
-        pLast = pFirst->GetNext();
-        delete pFirst;
-        pFirst = pLast;
-    }
-    delete ppHash;
+    Reference<XDictionaryList>  aEmptyList;
+    Reference<XPropertySet>     aEmptySet;
+    pFlushLstnr->SetDicList( aEmptyList );
+    pFlushLstnr->SetPropSet( aEmptySet );
 }
 
-void IPRSpellCache::Flush()
+void SpellCache::Flush()
 {
     MutexGuard  aGuard( GetLinguMutex() );
-
-    if( ppHash )
-    {
-        while( pFirst )
-        {
-            pLast = pFirst->GetNext();
-            delete pFirst;
-            pFirst = pLast;
-        }
-        delete ppHash;
-        ppHash = NULL;
-        nIndex = 0;
-        nCount = 0;
-        nInputPos = 0;
-        nInputValue = 0;
-#ifdef DBG_STATISTIC
-        nFound = 0;
-        nLost = 0;
-#endif
-    }
+    // clear word list
+    LangWordList_t aEmpty;
+    aWordLists.swap( aEmpty );
 }
 
-BOOL IPRSpellCache::CheckWord( const String& rWord, INT16 nLang, BOOL bAllLang )
+bool SpellCache::CheckWord( const OUString& rWord, LanguageType nLang )
 {
     MutexGuard  aGuard( GetLinguMutex() );
-
-    BOOL bRet = FALSE;
-    // Hash-Index-Berechnung
-    nIndex = 0;
-    const sal_Unicode* pp = rWord.GetBuffer();
-    while( *pp )
-        nIndex = nIndex << 1 ^ *pp++;
-    nIndex %= nTblSize;
-
-    if( ppHash )
-    {
-        pRun = *(ppHash + nIndex);
-
-        if( pRun && FALSE == ( bRet = (rWord == pRun->GetWord() &&
-            (nLang == pRun->GetLang() || bAllLang)) ) )
-        {
-            IPRCachedWord* pTmp = pRun->GetNext();
-            while( pTmp && FALSE ==( bRet = ( rWord == pTmp->GetWord() &&
-                (nLang == pTmp->GetLang() || bAllLang) ) ) )
-            {
-                pRun = pTmp;
-                pTmp = pTmp->GetNext();
-            }
-            if ( bRet )
-            {   // Gefunden: Umsortieren in der Hash-Liste
-                pRun->SetNext( pTmp->GetNext() );
-                pTmp->SetNext( *( ppHash + nIndex ) );
-                *( ppHash + nIndex ) = pTmp;
-                pRun = pTmp;
-            }
-        }
-           if( bRet )
-        {
-            if ( pRun->GetPrev() )
-            {   // Wenn wir noch nicht erster sind, werden wir es jetzt:
-                if ( ( pRun->GetFound() <= nInputValue ) &&
-                         ( ++nInputPos > IPR_CACHE_MAXINPUT )
-                    || ( pInput == pRun ) && NULL == ( pInput = pRun->GetFollow() ) )
-
-                {   // Wenn die Input-Stelle am Maximum anlangt, erhoehen
-                    ++nInputValue; // wir den InputValue und gehen wieder
-                    nInputPos = 0; // an den Anfang
-                    pInput = pFirst;
-                }
-                IPRCachedWord* pTmp = pRun->GetFollow();
-                pRun->GetPrev()->SetFollow( pTmp ); //Unser Ex-Prev -> Ex-Follow
-                pRun->SetFollow( pFirst );    // Wir selbst -> Ex-First
-                pFirst->SetPrev( pRun );      // Wir selbst <- Ex-First
-                if( pTmp )
-                    pTmp->SetPrev( pRun->GetPrev() ); // Ex-Prev <- Ex-Follow
-                else
-                    pLast = pRun->GetPrev(); // falls wir letzter waren
-                pRun->SetPrev( NULL );  // Erste haben keinen Prev
-                pFirst = pRun;          // Wir sind Erster!
-            }
-            pRun->IncFound(); // Mitzaehlen, wie oft wiedergefunden
-        }
-    }
-    return bRet;
+    WordList_t &rList = aWordLists[ nLang ];
+    const WordList_t::const_iterator aIt = rList.find( rWord );
+    return aIt != rList.end();
 }
 
-void IPRSpellCache::AddWord( const String& rWord, INT16 nLang )
+void SpellCache::AddWord( const OUString& rWord, LanguageType nLang )
 {
     MutexGuard  aGuard( GetLinguMutex() );
-
-    if( !ppHash )
-    {
-        ppHash = new  IPRCachedWord* [ nTblSize ];
-        memset( (void *)ppHash, 0, ( sizeof( IPRCachedWord* ) * nTblSize ) );
-    }
-    IPRCachedWord* pTmp;
-    if( nCount == IPR_CACHE_MAX-1 )
-    {
-        ULONG nDel = 0;
-        pRun = pLast;  // Der letzte wird ueberschrieben
-        const sal_Unicode* pp = pRun->GetWord().GetBuffer();
-        while( *pp )
-            nDel = nDel << 1 ^ *pp++;
-        nDel %= nTblSize; // Hash-Index des letzten
-        // Der letzte wird aus seiner alten Hash-Liste entfernt
-        if( ( pTmp = *( ppHash + nDel ) ) == pRun )
-            *( ppHash + nDel ) = pRun->GetNext();
-        else
-        {
-            while( pTmp->GetNext() != pRun )
-                pTmp = pTmp->GetNext();
-            pTmp->SetNext( pRun->GetNext() );
-        }
-        pRun->SetWord( rWord ); // Ueberschreiben des alten Inhalts
-        pRun->SetLang( nLang );
-        pRun->SetFound( 0 );
-    }
-    else
-    {
-        ++nCount;
-        pRun = new IPRCachedWord( rWord, pFirst, nLang );
-        if( pFirst )
-            pFirst->SetPrev( pRun );
-        pFirst = pRun; // Ganz Neue kommen erstmal nach vorne
-        if ( !pLast )
-        {
-            pLast = pRun;
-            pInput = pRun;
-        }
-    }
-
-    pRun->SetNext( *( ppHash + nIndex ) );  // In der Hash-Liste
-    *(ppHash + nIndex ) = pRun;             // vorne einsortieren
-
-    // In der LRU-Kette umsortieren ...
-    if ( pRun != pInput && pRun != pInput->GetPrev() )
-    {
-        pTmp = pRun->GetPrev();
-        IPRCachedWord* pFoll = pRun->GetFollow();
-        // Entfernen aus der alten Position
-        if( pTmp )
-            pTmp->SetFollow( pFoll );
-        else
-            pFirst = pFoll; // wir waren erster
-        if( pFoll )
-            pFoll->SetPrev( pTmp );
-        else
-            pLast = pTmp; // wir waren letzter
-        // Einfuegen vor pInput
-        if( NULL != (pTmp = pInput->GetPrev()) )
-            pTmp->SetFollow( pRun );
-        else
-            pFirst = pRun; // pInput war erster
-        pRun->SetPrev( pTmp );
-        pRun->SetFollow( pInput );
-        pInput->SetPrev( pRun );
-    }
-    pInput = pRun; // pInput zeigt auf den zuletzt einsortierten
+    WordList_t & rList = aWordLists[ nLang ];
+    // occasional clean-up...
+    if (rList.size() > 500)
+        rList.clear();
+    rList.insert( rWord );
 }
-
 ///////////////////////////////////////////////////////////////////////////
 
 }   // namespace linguistic

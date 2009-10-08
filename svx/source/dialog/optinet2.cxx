@@ -122,7 +122,7 @@
 #include <comphelper/processfactory.hxx>
 
 #include "com/sun/star/ui/dialogs/TemplateDescription.hpp"
-#include "com/sun/star/task/XMasterPasswordHandling.hpp"
+#include "com/sun/star/task/XMasterPasswordHandling2.hpp"
 #include "com/sun/star/task/XPasswordContainer.hpp"
 #include "securityoptions.hxx"
 #include "webconninfo.hxx"
@@ -777,6 +777,7 @@ SvxSearchTabPage::SvxSearchTabPage(Window* pParent, const SfxItemSet& rSet ) :
     sModifyMsg(SVX_RES(MSG_MODIFY))
 {
     FreeResource();
+
     SetExchangeSupport();
     aCaseED.SelectEntryPos(0); // falls kein Eintrag vorhanden ist, kann es sonst "Arger geben
 
@@ -797,6 +798,8 @@ SvxSearchTabPage::SvxSearchTabPage(Window* pParent, const SfxItemSet& rSet ) :
     aAndRB.SetClickHdl( aLink );
     aOrRB.SetClickHdl( aLink );
     aExactRB.SetClickHdl( aLink );
+
+    InitControls_Impl();
 }
 
 // -----------------------------------------------------------------------
@@ -921,6 +924,52 @@ BOOL SvxSearchTabPage::ConfirmLeave( const String& rStringSelection)
     }
     return TRUE;
 }
+
+// -----------------------------------------------------------------------
+
+void SvxSearchTabPage::InitControls_Impl()
+{
+    // detect longest label text
+    sal_Int32 i = 0;
+    long nLabelTextWidth = 0;
+    Window* pLabels[] = { &aSearchNameFT, &aSearchFT, &aURLFT, &aPostFixFT, &aSeparatorFT, &aCaseFT };
+    Window** pLabel = pLabels;
+    const sal_Int32 nLabelCount = sizeof( pLabels ) / sizeof( pLabels[0] );
+    for ( ; i < nLabelCount; ++i, ++pLabel )
+    {
+        long nTemp = (*pLabel)->GetCtrlTextWidth( (*pLabel)->GetText() );
+        if ( nTemp > nLabelTextWidth )
+            nLabelTextWidth = nTemp;
+    }
+
+    // resize all labels
+    nLabelTextWidth = nLabelTextWidth * 120 / 100; // additional space looks better
+    const long nLabelWidth = aSearchNameFT.GetSizePixel().Width();
+    const long nDelta = nLabelWidth - nLabelTextWidth;
+    pLabel = pLabels;
+    for ( i = 0; i < nLabelCount; ++i, ++pLabel )
+    {
+        Size aNewSize = (*pLabel)->GetSizePixel();
+        aNewSize.Width() += nDelta;
+        (*pLabel)->SetSizePixel( aNewSize );
+    }
+
+    // resize and move the edits
+    Window* pEdits[] = { &aSearchNameED, &aAndRB, &aOrRB,
+        &aExactRB, &aURLED, &aPostFixED, &aSeparatorED, &aCaseED };
+    Window** pEdit = pEdits;
+    const sal_Int32 nCCount = sizeof( pEdits ) / sizeof( pEdits[ 0 ] );
+    for ( i = 0; i < nCCount; ++i, ++pEdit )
+    {
+        Point aNewPos = (*pEdit)->GetPosPixel();
+        aNewPos.X() -= nDelta;
+        Size aNewSize = (*pEdit)->GetSizePixel();
+        if ( (*pEdit) != &aSeparatorED && (*pEdit) != &aCaseED )
+            aNewSize.Width() += nDelta;
+        (*pEdit)->SetPosSizePixel( aNewPos, aNewSize );
+    }
+}
+
 // -----------------------------------------------------------------------
 
 IMPL_LINK( SvxSearchTabPage, NewSearchHdl_Impl, PushButton *, EMPTYARG )
@@ -991,7 +1040,7 @@ IMPL_LINK( SvxSearchTabPage, DeleteSearchHdl_Impl, PushButton *, EMPTYARG)
 {
     aChangePB.Enable(FALSE);     //add by BerryJia for fixing Bug102610 Time:2002-8-29 11:00 (China Standard Time GMT+08:00)
     USHORT nPos = aSearchLB.GetSelectEntryPos();
-    DBG_ASSERT(nPos != LISTBOX_ENTRY_NOTFOUND, "kein Eintrag selektiert!")
+    DBG_ASSERT(nPos != LISTBOX_ENTRY_NOTFOUND, "kein Eintrag selektiert!");
     aSearchConfig.RemoveData(aSearchLB.GetSelectEntry());
     aSearchLB.RemoveEntry(nPos);
     aSearchLB.SelectEntryPos(0);
@@ -1012,7 +1061,7 @@ IMPL_LINK( SvxSearchTabPage, SearchEntryHdl_Impl, ListBox*, pBox )
             return 0;
 
         const SvxSearchEngineData* pData = aSearchConfig.GetData(sSelection);
-        DBG_ASSERT(pData, "SearchEngine not available")
+        DBG_ASSERT(pData, "SearchEngine not available");
         if(pData)
         {
             aSearchNameED.SetText(sSelection);
@@ -1293,11 +1342,14 @@ SvxSecurityTabPage::SvxSecurityTabPage( Window* pParent, const SfxItemSet& rSet 
     ,maSecurityOptionsFL( this, SVX_RES( FL_SEC_SECURITYOPTIONS ) )
     ,maSecurityOptionsFI( this, SVX_RES( FI_SEC_SECURITYOPTIONS ) )
     ,maSecurityOptionsPB( this, SVX_RES( PB_SEC_SECURITYOPTIONS ) )
+
     ,maPasswordsFL      ( this, SVX_RES( FL_SEC_PASSWORDS ) )
     ,maSavePasswordsCB  ( this, SVX_RES( CB_SEC_SAVEPASSWORDS ) )
-    ,maMasterPasswordPB ( this, SVX_RES( PB_SEC_MASTERPASSWORD ) )
+    ,maShowConnectionsPB( this, SVX_RES( PB_SEC_CONNECTIONS ) )
+    ,maMasterPasswordCB ( this, SVX_RES( CB_SEC_MASTERPASSWORD ) )
     ,maMasterPasswordFI ( this, SVX_RES( FI_SEC_MASTERPASSWORD ) )
-    ,maShowPasswordsPB  ( this, SVX_RES( PB_SEC_SHOWPASSWORDS ) )
+    ,maMasterPasswordPB ( this, SVX_RES( PB_SEC_MASTERPASSWORD ) )
+
     ,maMacroSecFL       ( this, SVX_RES( FL_SEC_MACROSEC ) )
     ,maMacroSecFI       ( this, SVX_RES( FI_SEC_MACROSEC ) )
     ,maMacroSecPB       ( this, SVX_RES( PB_SEC_MACROSEC ) )
@@ -1309,9 +1361,11 @@ SvxSecurityTabPage::SvxSecurityTabPage( Window* pParent, const SfxItemSet& rSet 
     ,mpSecOptions       ( new SvtSecurityOptions )
     ,mpSecOptDlg        ( NULL )
     ,meRedlingMode      ( RL_NONE )
-    ,msProtectRecordsStr(       SVX_RES( STR_SEC_PROTRECORDS ) )
-    ,msUnprotectRecordsStr(     SVX_RES( STR_SEC_UNPROTRECORDS ) )
-    ,msPasswordStoringDeactivateStr( SVX_RES( STR_SEC_NOPASSWDSAVE ) )
+
+    ,msProtectRecordsStr(               SVX_RES( STR_SEC_PROTRECORDS ) )
+    ,msUnprotectRecordsStr(             SVX_RES( STR_SEC_UNPROTRECORDS ) )
+    ,msPasswordStoringDeactivateStr(    SVX_RES( STR_SEC_NOPASSWDSAVE ) )
+
 {
     FreeResource();
 
@@ -1320,7 +1374,8 @@ SvxSecurityTabPage::SvxSecurityTabPage( Window* pParent, const SfxItemSet& rSet 
     maSecurityOptionsPB.SetClickHdl( LINK( this, SvxSecurityTabPage, SecurityOptionsHdl ) );
     maSavePasswordsCB.SetClickHdl( LINK( this, SvxSecurityTabPage, SavePasswordHdl ) );
     maMasterPasswordPB.SetClickHdl( LINK( this, SvxSecurityTabPage, MasterPasswordHdl ) );
-    maShowPasswordsPB.SetClickHdl( LINK( this, SvxSecurityTabPage, ShowPasswordsHdl ) );
+    maMasterPasswordCB.SetClickHdl( LINK( this, SvxSecurityTabPage, MasterPasswordCBHdl ) );
+    maShowConnectionsPB.SetClickHdl( LINK( this, SvxSecurityTabPage, ShowPasswordsHdl ) );
     maMacroSecPB.SetClickHdl( LINK( this, SvxSecurityTabPage, MacroSecPBHdl ) );
     maProtectRecordsPB.SetClickHdl( LINK( this, SvxSecurityTabPage, ProtectRecordsPBHdl ) );
     maRecordChangesCB.SetClickHdl( LINK( this, SvxSecurityTabPage, RecordChangesCBHdl ) );
@@ -1358,7 +1413,10 @@ IMPL_LINK( SvxSecurityTabPage, SavePasswordHdl, void*, EMPTYARG )
             if ( xMasterPasswd->changeMasterPassword( Reference< task::XInteractionHandler >() ) )
             {
                 maMasterPasswordPB.Enable( TRUE );
-                maShowPasswordsPB.Enable( TRUE );
+                maMasterPasswordCB.Check( TRUE );
+                maMasterPasswordCB.Enable( TRUE );
+                maMasterPasswordFI.Enable( TRUE );
+                maShowConnectionsPB.Enable( TRUE );
             }
             else
             {
@@ -1374,14 +1432,17 @@ IMPL_LINK( SvxSecurityTabPage, SavePasswordHdl, void*, EMPTYARG )
             if( RET_YES == nRet )
             {
                 xMasterPasswd->allowPersistentStoring( sal_False );
+                maMasterPasswordCB.Check( TRUE );
                 maMasterPasswordPB.Enable( FALSE );
-                maShowPasswordsPB.Enable( FALSE );
+                maMasterPasswordCB.Enable( FALSE );
+                maMasterPasswordFI.Enable( FALSE );
+                maShowConnectionsPB.Enable( FALSE );
             }
             else
             {
                 maSavePasswordsCB.Check( TRUE );
                 maMasterPasswordPB.Enable( TRUE );
-                maShowPasswordsPB.Enable( TRUE );
+                maShowConnectionsPB.Enable( TRUE );
             }
         }
     }
@@ -1407,6 +1468,52 @@ IMPL_LINK( SvxSecurityTabPage, MasterPasswordHdl, PushButton*, EMPTYARG )
     }
     catch( Exception& )
     {}
+
+    return 0;
+}
+
+IMPL_LINK( SvxSecurityTabPage, MasterPasswordCBHdl, void*, EMPTYARG )
+{
+    try
+    {
+        Reference< task::XMasterPasswordHandling2 > xMasterPasswd(
+            comphelper::getProcessServiceFactory()->createInstance(
+                rtl::OUString( RTL_CONSTASCII_USTRINGPARAM ( "com.sun.star.task.PasswordContainer" ) ) ),
+            UNO_QUERY_THROW );
+
+        if ( maMasterPasswordCB.IsChecked() )
+        {
+            if ( xMasterPasswd->isPersistentStoringAllowed() && xMasterPasswd->changeMasterPassword( Reference< task::XInteractionHandler >() ) )
+            {
+                maMasterPasswordPB.Enable( TRUE );
+                maMasterPasswordFI.Enable( TRUE );
+            }
+            else
+            {
+                maMasterPasswordCB.Check( FALSE );
+                maMasterPasswordPB.Enable( TRUE );
+                maMasterPasswordFI.Enable( TRUE );
+            }
+        }
+        else
+        {
+            if ( xMasterPasswd->isPersistentStoringAllowed() && xMasterPasswd->useDefaultMasterPassword( Reference< task::XInteractionHandler >() ) )
+            {
+                maMasterPasswordPB.Enable( FALSE );
+                maMasterPasswordFI.Enable( FALSE );
+            }
+            else
+            {
+                maMasterPasswordCB.Check( TRUE );
+                maMasterPasswordPB.Enable( TRUE );
+                maShowConnectionsPB.Enable( TRUE );
+            }
+        }
+    }
+    catch( Exception& )
+    {
+        maSavePasswordsCB.Check( !maSavePasswordsCB.IsChecked() );
+    }
 
     return 0;
 }
@@ -1601,7 +1708,7 @@ void SvxSecurityTabPage::InitControls()
     sal_Int32 i = 0;
     long nBtnTextWidth = 0;
     Window* pButtons[] = { &maSecurityOptionsPB, &maMasterPasswordPB,
-                            &maShowPasswordsPB, &maMacroSecPB, &maProtectRecordsPB };
+                            &maShowConnectionsPB, &maMacroSecPB, &maProtectRecordsPB };
     Window** pButton = pButtons;
     const sal_Int32 nBCount = sizeof( pButtons ) / sizeof( pButtons[ 0 ] );
     for ( ; i < nBCount; ++i, ++pButton )
@@ -1610,21 +1717,33 @@ void SvxSecurityTabPage::InitControls()
         if ( nTemp > nBtnTextWidth )
             nBtnTextWidth = nTemp;
     }
+
     nBtnTextWidth = nBtnTextWidth * 115 / 100; // a little offset
-    long nButtonWidth = maSecurityOptionsPB.GetSizePixel().Width();
-    long nMaxWidth = nButtonWidth * 130 / 100;
+    const long nButtonWidth = maSecurityOptionsPB.GetSizePixel().Width();
+    const long nMaxWidth = nButtonWidth * 140 / 100;
+    long nExtra = ( nBtnTextWidth > nMaxWidth ) ? nBtnTextWidth - nMaxWidth : 0;
     nBtnTextWidth = std::min( nBtnTextWidth, nMaxWidth );
+
     if ( nBtnTextWidth > nButtonWidth )
     {
         // so make the buttons broader and its control in front of it smaller
         long nDelta = nBtnTextWidth - nButtonWidth;
         pButton = pButtons;
+
+        if ( nExtra > 0 )
+        {
+            long nPos = (*pButton)->GetPosPixel().X() - nDelta;
+            long nWidth = (*pButton)->GetSizePixel().Width() + nDelta;
+            long nMaxExtra = GetOutputSizePixel().Width() - ( nPos + nWidth ) - 2;
+            nExtra = ( nExtra < nMaxExtra ) ? nExtra : nMaxExtra;
+        }
+
         for ( i = 0; i < nBCount; ++i, ++pButton )
         {
             Point aNewPos = (*pButton)->GetPosPixel();
             aNewPos.X() -= nDelta;
             Size aNewSize = (*pButton)->GetSizePixel();
-            aNewSize.Width() += nDelta;
+            aNewSize.Width() += ( nDelta + nExtra );
             (*pButton)->SetPosSizePixel( aNewPos, aNewSize );
         }
 
@@ -1642,7 +1761,10 @@ void SvxSecurityTabPage::InitControls()
     }
 
     maMasterPasswordPB.Enable( FALSE );
-    maShowPasswordsPB.Enable( FALSE );
+    maMasterPasswordCB.Enable( FALSE );
+    maMasterPasswordCB.Check( TRUE );
+    maMasterPasswordFI.Enable( FALSE );
+    maShowConnectionsPB.Enable( FALSE );
 
     // initialize the password saving checkbox
     try
@@ -1654,9 +1776,19 @@ void SvxSecurityTabPage::InitControls()
 
         if ( xMasterPasswd->isPersistentStoringAllowed() )
         {
-            maMasterPasswordPB.Enable( TRUE );
-            maShowPasswordsPB.Enable( TRUE );
+            maMasterPasswordCB.Enable( TRUE );
+            maShowConnectionsPB.Enable( TRUE );
             maSavePasswordsCB.Check( TRUE );
+
+            Reference< task::XMasterPasswordHandling2 > xMasterPasswd2( xMasterPasswd, UNO_QUERY );
+            if ( xMasterPasswd2.is() && xMasterPasswd2->isDefaultMasterPasswordUsed() )
+                maMasterPasswordCB.Check( FALSE );
+            else
+            {
+                maMasterPasswordPB.Enable( TRUE );
+                maMasterPasswordCB.Check( TRUE );
+                maMasterPasswordFI.Enable( TRUE );
+            }
         }
     }
     catch( Exception& )
@@ -1773,7 +1905,7 @@ void SvxSecurityTabPage::Reset( const SfxItemSet& )
         if( pCurDocShell->HasSecurityOptOpenReadOnly() && !bIsHTMLDoc )
         {
             maRecommReadOnlyCB.Check( pCurDocShell->IsSecurityOptOpenReadOnly() );
-//!         maRecommReadOnlyCB.Enable( !bIsReadonly );
+            maRecommReadOnlyCB.Enable( !bIsReadonly );
         }
         else
             maRecommReadOnlyCB.Disable();

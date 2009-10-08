@@ -439,6 +439,10 @@ VAR_SAMP                                        {SQL_NEW_KEYWORD(SQL_TOKEN_VAR_S
  
 #endif 
 
+// Versions of flex apparently differ in whether input() resp. yyinput() returns
+// zero or EOF upon end of file:
+inline bool checkeof(int c) { return c == 0 || c == EOF; }
+
 /*
  * Read SQL string literal
  * Valid strings:
@@ -459,13 +463,13 @@ sal_Int32 gatherString( sal_Int32 delim, sal_Int32 nTyp)
 	sal_Char *s = Buffer;
 	sal_Int32 nPos = 0;
 
-	while ((ch = yyinput()) != EOF) 
+	while (!checkeof(ch = yyinput())) 
 	{
 		if (ch == delim) 
 		{
 			if ((ch = yyinput()) != delim) 
 			{
-				if (ch != EOF)
+				if (!checkeof(ch))
 					unput(ch);
 				
 				*s = '\0';		 		
@@ -715,13 +719,13 @@ void OSQLScanner::SQLyyerror(sal_Char *fmt)
 		sal_Int32 nPos = 1;
 		sal_Int32 ch = SQLyytext ? (SQLyytext[0] == 0 ? ' ' : SQLyytext[0]): ' ';
 		*s++ = ch;
-		while ((ch = yyinput()) != EOF) 
+		while (!checkeof(ch = yyinput())) 
 		{
 			if (ch == ' ') 
 			{
 				if ((ch = yyinput()) != ' ') 
 				{
-					if (ch != EOF)
+					if (!checkeof(ch))
 						unput(ch);
 				}
 				*s = '\0';

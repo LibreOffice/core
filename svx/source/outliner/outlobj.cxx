@@ -169,10 +169,10 @@ OutlinerParaObject* OutlinerParaObject::Create( SvStream& rStream, SfxItemPool* 
             while ( nCount )
             {
                 EditTextObject* pText = EditTextObject::Create( rStream, NULL );
-                DBG_ASSERT(pText,"CreateEditTextObject failed")
+                DBG_ASSERT(pText,"CreateEditTextObject failed");
                 sal_uInt32 nSync = 0;
                 rStream >> nSync;
-                DBG_ASSERT(nSync==nSyncRef,"Stream out of sync")
+                DBG_ASSERT(nSync==nSyncRef,"Stream out of sync");
                 USHORT nDepth;
                 rStream >> nDepth;
                 Paragraph* pPara = new Paragraph( nDepth );
@@ -216,7 +216,7 @@ OutlinerParaObject* OutlinerParaObject::Create( SvStream& rStream, SfxItemPool* 
                 {
                     sal_uInt32 _nSync = 0;
                     rStream >> _nSync;
-                    DBG_ASSERT(_nSync==nSyncRef,"Stream out of sync")
+                    DBG_ASSERT(_nSync==nSyncRef,"Stream out of sync");
                 }
             }
             if( nVersion == 3 )

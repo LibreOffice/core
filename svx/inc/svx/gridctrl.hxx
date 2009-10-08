@@ -50,9 +50,6 @@
 #include <svtools/transfer.hxx>
 #include "svx/svxdllapi.h"
 
-extern XubString INVALIDTEXT;
-extern XubString OBJECTTEXT;
-
 class DbGridControl;
 class CursorWrapper;
 
@@ -123,6 +120,18 @@ public:
 };
 
 #define GRID_COLUMN_NOT_FOUND   ((sal_uInt16)-1)
+
+//==================================================================
+// InitWindowFacet, describing which aspect of a column's Window to (re-)initialize
+//==================================================================
+enum InitWindowFacet
+{
+    InitFont        = 0x01,
+    InitForeground  = 0x02,
+    InitBackground  = 0x04,
+    InitWritingMode = 0x08,
+    InitAll         = 0xFF
+};
 
 //==================================================================
 class FmXGridSourcePropListener;
@@ -588,7 +597,7 @@ protected:
 protected:
     virtual void InitController(::svt::CellControllerRef& rController, long nRow, sal_uInt16 nCol);
     void Construct();
-    void ImplInitSettings( sal_Bool bFont, sal_Bool bForeground, sal_Bool bBackground );
+    void ImplInitWindow( const InitWindowFacet _eInitWhat );
     DECL_LINK(OnDelete, void*);
 
     DECL_LINK(OnAsyncAdjust, void*);

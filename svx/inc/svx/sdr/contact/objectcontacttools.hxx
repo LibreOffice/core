@@ -54,8 +54,7 @@ namespace sdr
         // deletion is duty of the caller
         drawinglayer::processor2d::BaseProcessor2D* createBaseProcessor2DFromOutputDevice(
             OutputDevice& rTargetOutDev,
-            const drawinglayer::geometry::ViewInformation2D& rViewInformation2D,
-            bool bTryToTestCanvas = false);
+            const drawinglayer::geometry::ViewInformation2D& rViewInformation2D);
 
     } // end of namespace contact
 } // end of namespace sdr

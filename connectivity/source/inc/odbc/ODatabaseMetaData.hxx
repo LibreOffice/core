@@ -32,6 +32,7 @@
 #define _CONNECTIVITY_ODBC_ODATABASEMETADATA_HXX_
 
 #include "odbc/OConnection.hxx"
+#include "odbc/odbcbasedllapi.hxx"
 #include "TDatabaseMetaDataBase.hxx"
 
 namespace connectivity
@@ -42,7 +43,8 @@ namespace connectivity
         //************ Class: ODatabaseMetaData
         //**************************************************************
 
-        class ODatabaseMetaData :       public ODatabaseMetaDataBase
+        class OOO_DLLPUBLIC_ODBCBASE ODatabaseMetaData :
+            public ODatabaseMetaDataBase
         {
             SQLHANDLE       m_aConnectionHandle;
             OConnection*    m_pConnection;

@@ -48,6 +48,7 @@
 #include <com/sun/star/text/WritingMode.hpp>
 #include <xmloff/EnumPropertyHdl.hxx>
 #include <xmloff/NamedBoolPropertyHdl.hxx>
+#include <xmloff/WordWrapPropertyHdl.hxx>
 #include "numithdl.hxx"
 #include "XMLBitmapRepeatOffsetPropertyHandler.hxx"
 #include "XMLFillBitmapSizePropertyHandler.hxx"
@@ -59,7 +60,7 @@
 #include <com/sun/star/drawing/TextFitToSizeType.hpp>
 #include <com/sun/star/drawing/MeasureTextHorzPos.hpp>
 #include <com/sun/star/drawing/MeasureTextVertPos.hpp>
-#include <xmloff/ControlBorderHandler.hxx>
+#include <xmloff/controlpropertyhdl.hxx>
 #include <xmloff/xmltoken.hxx>
 #include "sdpropls.hxx"
 #include "propimp0.hxx"
@@ -134,7 +135,7 @@ const XMLPropertyMapEntry aXMLSDProperties[] =
     GMAP( "FillBitmapLogicalSize",          XML_NAMESPACE_DRAW, XML_FILL_IMAGE_WIDTH,       XML_SD_TYPE_LOGICAL_SIZE|MID_FLAG_MULTI_PROPERTY, 0 ),
     GMAP( "FillBitmapSizeY",                    XML_NAMESPACE_DRAW, XML_FILL_IMAGE_HEIGHT,      XML_SD_TYPE_FILLBITMAPSIZE|MID_FLAG_MULTI_PROPERTY, 0 ),
     GMAP( "FillBitmapLogicalSize",          XML_NAMESPACE_DRAW, XML_FILL_IMAGE_HEIGHT,      XML_SD_TYPE_LOGICAL_SIZE|MID_FLAG_MULTI_PROPERTY, 0 ),
-    GMAP( "FillBitmapMode",                 XML_NAMESPACE_STYLE,XML_REPEAT,                 XML_SD_TYPE_BITMAP_MODE, 0 ),
+    GMAP( "FillBitmapMode",                 XML_NAMESPACE_STYLE,XML_REPEAT,                 XML_SD_TYPE_BITMAP_MODE|MID_FLAG_MULTI_PROPERTY, 0 ),
     GMAP( "FillBitmapPositionOffsetX",      XML_NAMESPACE_DRAW, XML_FILL_IMAGE_REF_POINT_X, XML_TYPE_PERCENT, 0 ),
     GMAP( "FillBitmapPositionOffsetY",      XML_NAMESPACE_DRAW, XML_FILL_IMAGE_REF_POINT_Y, XML_TYPE_PERCENT, 0 ),
     GMAP( "FillBitmapRectanglePoint",       XML_NAMESPACE_DRAW, XML_FILL_IMAGE_REF_POINT,   XML_SD_TYPE_BITMAP_REFPOINT, 0 ),
@@ -156,7 +157,7 @@ const XMLPropertyMapEntry aXMLSDProperties[] =
     GMAP( "TextLowerDistance",              XML_NAMESPACE_FO,   XML_PADDING_BOTTOM,         XML_TYPE_MEASURE|MID_FLAG_MULTI_PROPERTY, 0 ),  // exists in SW, too
     GMAP( "TextLeftDistance",               XML_NAMESPACE_FO,   XML_PADDING_LEFT,           XML_TYPE_MEASURE|MID_FLAG_MULTI_PROPERTY, 0 ),  // exists in SW, too
     GMAP( "TextRightDistance",              XML_NAMESPACE_FO,   XML_PADDING_RIGHT,          XML_TYPE_MEASURE|MID_FLAG_MULTI_PROPERTY, 0 ),  // exists in SW, too
-    PMAP( "TextWritingMode",                XML_NAMESPACE_STYLE,XML_WRITING_MODE,           XML_SD_TYPE_WRITINGMODE, CTF_WRITINGMODE ),
+    PMAP( "TextWritingMode",                XML_NAMESPACE_STYLE,XML_WRITING_MODE,           XML_SD_TYPE_WRITINGMODE|MID_FLAG_MULTI_PROPERTY, CTF_WRITINGMODE ),
     GMAP( "NumberingRules",                 XML_NAMESPACE_TEXT, XML_LIST_STYLE,             XML_SD_TYPE_NUMBULLET|MID_FLAG_ELEMENT_ITEM, CTF_NUMBERINGRULES ),
     GMAP( "NumberingRules",                 XML_NAMESPACE_TEXT, XML_LIST_STYLE_NAME,        XML_TYPE_STRING, CTF_SD_NUMBERINGRULES_NAME ),
     GMAP( "TextWordWrap",                   XML_NAMESPACE_FO,   XML_WRAP_OPTION,            XML_TYPE_WRAP_OPTION, 0 ),
@@ -266,6 +267,8 @@ const XMLPropertyMapEntry aXMLSDProperties[] =
     GMAP( "ControlBorderColor",             XML_NAMESPACE_FO,   XML_BORDER,                 XML_SD_TYPE_CONTROL_BORDER_COLOR|MID_FLAG_MULTI_PROPERTY|MID_FLAG_MERGE_ATTRIBUTE, 0 ),
     GMAP( "ControlDataStyle",               XML_NAMESPACE_STYLE,XML_DATA_STYLE_NAME,        XML_TYPE_STRING|MID_FLAG_NO_PROPERTY_EXPORT|MID_FLAG_SPECIAL_ITEM, CTF_SD_CONTROL_SHAPE_DATA_STYLE ),
     GMAP( "ControlTextEmphasis",            XML_NAMESPACE_STYLE,XML_TEXT_EMPHASIZE,         XML_TYPE_CONTROL_TEXT_EMPHASIZE, 0 ),
+    GMAP( "ImageScaleMode",                 XML_NAMESPACE_STYLE,XML_REPEAT,                 XML_SD_TYPE_IMAGE_SCALE_MODE|MID_FLAG_MULTI_PROPERTY, 0 ),
+    GMAP( "ControlWritingMode",             XML_NAMESPACE_STYLE,XML_WRITING_MODE,           XML_TYPE_TEXT_WRITING_MODE_WITH_DEFAULT|MID_FLAG_MULTI_PROPERTY, 0 ),
 
     // special entries for floating frames
     GMAP( "FrameIsAutoScroll",          XML_NAMESPACE_DRAW, XML_FRAME_DISPLAY_SCROLLBAR,    XML_TYPE_BOOL|MID_FLAG_MULTI_PROPERTY,              CTF_FRAME_DISPLAY_SCROLLBAR ),
@@ -1086,10 +1089,13 @@ const XMLPropertyHandler* XMLSdPropHdlFactory::GetPropertyHandler( sal_Int32 nTy
                 break;
 
             case XML_SD_TYPE_CONTROL_BORDER:
-                pHdl = xmloff::OControlBorderHandlerFactory::createBorderHandler();
+                pHdl = new ::xmloff::OControlBorderHandler( ::xmloff::OControlBorderHandler::STYLE );
                 break;
             case XML_SD_TYPE_CONTROL_BORDER_COLOR:
-                pHdl = xmloff::OControlBorderHandlerFactory::createBorderColorHandler();
+                pHdl = new ::xmloff::OControlBorderHandler( ::xmloff::OControlBorderHandler::COLOR );
+                break;
+            case XML_SD_TYPE_IMAGE_SCALE_MODE:
+                pHdl = new ::xmloff::ImageScaleModeHandler;
                 break;
             case XML_TYPE_CONTROL_TEXT_EMPHASIZE:
                 pHdl = new ::xmloff::OControlTextEmphasisHandler;
@@ -1131,7 +1137,7 @@ const XMLPropertyHandler* XMLSdPropHdlFactory::GetPropertyHandler( sal_Int32 nTy
                 pHdl = new XMLNamedBoolPropertyHdl( GetXMLToken(XML_FORWARD), GetXMLToken(XML_REVERSE) );
                 break;
             case XML_TYPE_WRAP_OPTION:
-                pHdl = new XMLNamedBoolPropertyHdl( GetXMLToken( XML_WRAP ), GetXMLToken( XML_NO_WRAP ) );
+                pHdl = new XMLWordWrapPropertyHdl( mpImport );
                 break;
 
             case XML_SD_TYPE_MOVE_PROTECT:

@@ -55,3 +55,4 @@
 #define IMG_VENDOR                  56
 #define IMG_DEFAULT_VENDOR          57
 #define IMG_DEFAULT_VENDOR_HC       58
+#define PB_IGNORERULE               59

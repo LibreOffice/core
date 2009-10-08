@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: fmvwimp.hxx,v $
- * $Revision: 1.34 $
+ * $Revision: 1.34.260.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -30,9 +30,10 @@
 #ifndef _SVX_FMVWIMP_HXX
 #define _SVX_FMVWIMP_HXX
 
-#include <comphelper/stl_types.hxx>
+#include "svx/svdmark.hxx"
+#include "fmdocumentclassification.hxx"
 
-
+/** === begin UNO includes === **/
 #include <com/sun/star/form/XForm.hpp>
 #include <com/sun/star/container/XIndexAccess.hpp>
 #include <com/sun/star/container/XEnumeration.hpp>
@@ -42,12 +43,16 @@
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/awt/XFocusListener.hpp>
 #include <com/sun/star/sdb/SQLErrorEvent.hpp>
+#include <com/sun/star/sdbc/XDataSource.hpp>
+/** === end UNO includes === **/
+
+#include <comphelper/stl_types.hxx>
 #include <tools/link.hxx>
 #include <tools/string.hxx>
 #include <cppuhelper/implbase1.hxx>
 #include <cppuhelper/implbase3.hxx>
 #include <comphelper/uno3.hxx>
-#include <svx/svdmark.hxx>
+#include <comphelper/componentcontext.hxx>
 
 //class SdrPageViewWinRec;
 class SdrPageWindow;
@@ -85,12 +90,12 @@ class FmXPageViewWinRec : public ::cppu::WeakImplHelper1< ::com::sun::star::cont
 
     ::std::vector< ::com::sun::star::uno::Reference< ::com::sun::star::form::XFormController > >    m_aControllerList;
     ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlContainer >                    m_xControlContainer;
-    ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >                m_xORB;
+    ::comphelper::ComponentContext                                                                  m_aContext;
     FmXFormView*                m_pViewImpl;
     Window*                     m_pWindow;
 
 public:
-    FmXPageViewWinRec(  const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _xORB,
+    FmXPageViewWinRec(  const ::comphelper::ComponentContext& _rContext,
         const SdrPageWindow&, FmXFormView* pView);
         //const SdrPageViewWinRec*, FmXFormView* pView);
     ~FmXPageViewWinRec();
@@ -115,13 +120,19 @@ protected:
     void setController( const ::com::sun::star::uno::Reference< ::com::sun::star::form::XForm >& xForm,
                         FmXFormController* pParent = NULL);
     ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlContainer >  getControlContainer() const { return m_xControlContainer; }
-    void updateTabOrder( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControl >& xControl,
-                         const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlContainer >& _rxCC );
+    void updateTabOrder( const ::com::sun::star::uno::Reference< ::com::sun::star::form::XForm >& _rxForm );
     void dispose();
     Window* getWindow() const {return m_pWindow;}
 };
 
 typedef ::std::vector<FmXPageViewWinRec*> FmWinRecList;
+typedef ::std::set  <   ::com::sun::star::uno::Reference< ::com::sun::star::form::XForm >
+                    ,   ::comphelper::OInterfaceCompare< ::com::sun::star::form::XForm >
+                    >   SetOfForms;
+typedef ::std::map  <   ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlContainer >
+                    ,   SetOfForms
+                    ,   ::comphelper::OInterfaceCompare< ::com::sun::star::awt::XControlContainer >
+                    >   MapControlContainerToSetOfForms;
 class SdrModel;
 //==================================================================
 // FmXFormView
@@ -138,33 +149,37 @@ class FmXFormView : public ::cppu::WeakImplHelper3<
     class ObjectRemoveListener;
     friend class ObjectRemoveListener;
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >    m_xORB;
+    ::comphelper::ComponentContext                                                      m_aContext;
     ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow>                   m_xWindow;
+    ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >           m_xLastCreatedControlModel;
 
     FmFormObj*      m_pMarkedGrid;
     FmFormView*     m_pView;
     sal_uIntPtr     m_nActivationEvent;
     sal_uIntPtr     m_nErrorMessageEvent;   // event for an asynchronous error message. See also m_aAsyncError
     sal_uIntPtr     m_nAutoFocusEvent;      // event for asynchronously setting the focus to a control
+    sal_uIntPtr     m_nControlWizardEvent;  // event for asynchronously setting the focus to a control
 
     ::com::sun::star::sdb::SQLErrorEvent
                     m_aAsyncError;          // error event which is to be displayed asyn. See m_nErrorMessageEvent.
 
     FmWinRecList    m_aWinList;             // to be filled in alive mode only
+    MapControlContainerToSetOfForms
+                    m_aNeedTabOrderUpdate;
 
     // Liste der markierten Object, dient zur Restauration beim Umschalten von Alive in DesignMode
     SdrMarkList             m_aMark;
     ObjectRemoveListener*   m_pWatchStoredList;
 
-    sal_Bool        m_bFirstActivation  : 1;
+    bool            m_bFirstActivation;
+    bool            m_isTabOrderUpdateSuspended;
 
     FmFormShell* GetFormShell() const;
 
     void removeGridWindowListening();
 
 protected:
-    FmXFormView(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _xORB,
-                FmFormView* _pView);
+    FmXFormView( const ::comphelper::ComponentContext& _rContext, FmFormView* _pView );
     ~FmXFormView();
 
     void    saveMarkList( sal_Bool _bSmartUnmark = sal_True );
@@ -201,13 +216,24 @@ public:
     ::com::sun::star::uno::Reference< ::com::sun::star::form::XFormController >
             getFormController( const ::com::sun::star::uno::Reference< ::com::sun::star::form::XForm >& _rxForm, const OutputDevice& _rDevice ) const;
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > getORB() { return m_xORB; }
-
     // activation handling
-    inline  sal_Bool    hasEverBeenActivated( ) const { return !m_bFirstActivation; }
-    inline  void        setHasBeenActivated( ) { m_bFirstActivation = sal_False; }
+    inline  bool        hasEverBeenActivated( ) const { return !m_bFirstActivation; }
+    inline  void        setHasBeenActivated( ) { m_bFirstActivation = false; }
 
             void        onFirstViewActivation( const FmFormModel* _pDocModel );
+
+    /** suspends the calls to activateTabOrder, which normally happen whenever for any ControlContainer of the view,
+        new controls are inserted. Cannot be nested, i.e. you need to call resumeTabOrderUpdate before calling
+        suspendTabOrderUpdate, again.
+    */
+    void    suspendTabOrderUpdate();
+
+    /** resumes calls to activateTabOrder, and also does all pending calls which were collected since the last
+        suspendTabOrderUpdate call.
+    */
+    void    resumeTabOrderUpdate();
+
+    void    onCreatedFormObject( FmFormObj& _rFormObject );
 
 private:
     FmWinRecList::iterator findWindow( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlContainer >& _rxCC );
@@ -220,25 +246,38 @@ private:
     SdrObject*  implCreateFieldControl( const ::svx::ODataAccessDescriptor& _rColumnDescriptor );
     SdrObject*  implCreateXFormsControl( const ::svx::OXFormsDescriptor &_rDesc );
 
-    /// does some initializations to the newly created control model, returns the ClassId
-    sal_Int16   implInitializeNewControlModel( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxModel, const SdrObject* _pObject ) const;
-
-    static void createControlLabelPair(
-        SdrView* _pView,
-        OutputDevice* _pOutDev,
+    static bool createControlLabelPair(
+        const ::comphelper::ComponentContext& _rContext,
+        OutputDevice& _rOutDev,
         sal_Int32 _nXOffsetMM,
         sal_Int32 _nYOffsetMM,
         const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxField,
         const ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormats >& _rxNumberFormats,
-        sal_uInt16 _nObjID,
+        sal_uInt16 _nControlObjectID,
         const ::rtl::OUString& _rFieldPostfix,
         UINT32 _nInventor,
-        UINT16 _nIndent,
+        UINT16 _nLabelObjectID,
         SdrPage* _pLabelPage,
-        SdrPage* _pPage,
+        SdrPage* _pControlPage,
         SdrModel* _pModel,
         SdrUnoObj*& _rpLabel,
         SdrUnoObj*& _rpControl
+    );
+
+    bool    createControlLabelPair(
+        OutputDevice& _rOutDev,
+        sal_Int32 _nXOffsetMM,
+        sal_Int32 _nYOffsetMM,
+        const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxField,
+        const ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormats >& _rxNumberFormats,
+        sal_uInt16 _nControlObjectID,
+        const ::rtl::OUString& _rFieldPostfix,
+        SdrUnoObj*& _rpLabel,
+        SdrUnoObj*& _rpControl,
+        const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDataSource >& _rxDataSource = NULL,
+        const ::rtl::OUString& _rDataSourceName = ::rtl::OUString(),
+        const ::rtl::OUString& _rCommand= ::rtl::OUString(),
+        const sal_Int32 _nCommandType = -1
     );
 
     void ObjectRemovedInAliveMode(const SdrObject* pObject);
@@ -254,6 +293,10 @@ private:
     DECL_LINK( OnActivate, void* );
     DECL_LINK( OnAutoFocus, void* );
     DECL_LINK( OnDelayedErrorMessage, void* );
+    DECL_LINK( OnStartControlWizard, void* );
+
+private:
+    ::svxform::DocumentType impl_getDocumentType() const;
 };
 
 

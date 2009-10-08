@@ -77,8 +77,6 @@ protected:
      SdrObjKind                 meCircleKind;
     long                        nStartWink;
     long                        nEndWink;
-    Point                       aPnt1;
-    Point                       aPnt2;
 
     // bitfield
     unsigned                    mbPolygonIsLine : 1;
@@ -128,15 +126,13 @@ public:
 
     virtual sal_uInt32 GetHdlCount() const;
     virtual SdrHdl* GetHdl(sal_uInt32 nHdlNum) const;
-    virtual FASTBOOL HasSpecialDrag() const;
-    virtual FASTBOOL BegDrag(SdrDragStat& rDrag) const;
-    virtual FASTBOOL MovDrag(SdrDragStat& rDrag) const;
-    virtual FASTBOOL EndDrag(SdrDragStat& rDrag);
-    virtual void BrkDrag(SdrDragStat& rDrag)  const;
 
-    virtual String GetDragComment(const SdrDragStat& rDrag, FASTBOOL bUndoDragComment, FASTBOOL bCreateComment) const;
+    // special drag methods
+    virtual bool hasSpecialDrag() const;
+    virtual bool beginSpecialDrag(SdrDragStat& rDrag) const;
+    virtual bool applySpecialDrag(SdrDragStat& rDrag);
+    virtual String getSpecialDragComment(const SdrDragStat& rDrag) const;
 
-    virtual basegfx::B2DPolyPolygon TakeDragPoly(const SdrDragStat& rDrag) const;
     virtual FASTBOOL BegCreate(SdrDragStat& rStat);
     virtual FASTBOOL MovCreate(SdrDragStat& rStat);
     virtual FASTBOOL EndCreate(SdrDragStat& rStat, SdrCreateCmd eCmd);

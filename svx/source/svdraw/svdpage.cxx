@@ -257,9 +257,9 @@ void SdrObjList::Clear()
         SdrObject* pObj = maList.back();
         RemoveObjectFromContainer(maList.size()-1);
 
-        // FlushViewContact() is done since SdrObject::Free is not guaranteed
+        // flushViewObjectContacts() is done since SdrObject::Free is not guaranteed
         // to delete the object and thus refresh visualisations
-        pObj->FlushViewContact();
+        pObj->GetViewContact().flushViewObjectContacts(true);
 
         bObjectsRemoved = sal_True;
 
@@ -441,8 +441,8 @@ SdrObject* SdrObjList::NbcRemoveObject(ULONG nObjNum)
     SdrObject* pObj=maList[nObjNum];
     RemoveObjectFromContainer(nObjNum);
 
-    // FlushViewContact() clears the VOC's and those invalidate
-    pObj->FlushViewContact();
+    // flushViewObjectContacts() clears the VOC's and those invalidate
+    pObj->GetViewContact().flushViewObjectContacts(true);
 
     DBG_ASSERT(pObj!=NULL,"Object zum Removen nicht gefunden");
     if (pObj!=NULL) {
@@ -475,8 +475,8 @@ SdrObject* SdrObjList::RemoveObject(ULONG nObjNum)
     DBG_ASSERT(pObj!=NULL,"Object zum Removen nicht gefunden");
     if(pObj)
     {
-        // FlushViewContact() clears the VOC's and those invalidate
-        pObj->FlushViewContact();
+        // flushViewObjectContacts() clears the VOC's and those invalidate
+        pObj->GetViewContact().flushViewObjectContacts(true);
 
         DBG_ASSERT(pObj->IsInserted(),"ZObjekt hat keinen Inserted-Status");
         if (pModel!=NULL) {
@@ -526,8 +526,8 @@ SdrObject* SdrObjList::NbcReplaceObject(SdrObject* pNewObj, ULONG nObjNum)
         pObj->SetPage(NULL);
         ReplaceObjectInContainer(*pNewObj,nObjNum);
 
-        // FlushViewContact() clears the VOC's and those invalidate
-        pObj->FlushViewContact();
+        // flushViewObjectContacts() clears the VOC's and those invalidate
+        pObj->GetViewContact().flushViewObjectContacts(true);
 
         pNewObj->SetOrdNum(nObjNum);
         pNewObj->SetObjList(this);
@@ -573,8 +573,8 @@ SdrObject* SdrObjList::ReplaceObject(SdrObject* pNewObj, ULONG nObjNum)
         pObj->SetPage(NULL);
         ReplaceObjectInContainer(*pNewObj,nObjNum);
 
-        // FlushViewContact() clears the VOC's and those invalidate
-        pObj->FlushViewContact();
+        // flushViewObjectContacts() clears the VOC's and those invalidate
+        pObj->GetViewContact().flushViewObjectContacts(true);
 
         pNewObj->SetOrdNum(nObjNum);
         pNewObj->SetObjList(this);
@@ -1231,15 +1231,6 @@ sdr::contact::ViewContact& SdrPage::GetViewContact() const
     return *mpViewContact;
 }
 
-void SdrPage::FlushViewContact() const
-{
-    if(mpViewContact)
-    {
-        delete mpViewContact;
-        ((SdrPage*)this)->mpViewContact = 0;
-    }
-}
-
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
 TYPEINIT1(SdrPage,SdrObjList);
@@ -1257,10 +1248,11 @@ SdrPage::SdrPage(SdrModel& rNewModel, bool bMasterPage)
     pBackgroundObj(0L),
     mpMasterPageDescriptor(0L),
     nPageNum(0L),
-    bMaster(bMasterPage),
-    bInserted(sal_False),
-    bObjectsNotPersistent(sal_False),
-    bSwappingLocked(sal_False)
+    mbMaster(bMasterPage),
+    mbInserted(false),
+    mbObjectsNotPersistent(false),
+    mbSwappingLocked(false),
+    mbPageBorderOnlyLeftRight(false)
 {
     DBG_CTOR(SdrPage,NULL);
     aPrefVisiLayers.SetAll();
@@ -1281,14 +1273,15 @@ SdrPage::SdrPage(const SdrPage& rSrcPage)
     pBackgroundObj(0L),
     mpMasterPageDescriptor(0L),
     nPageNum(rSrcPage.nPageNum),
-    bMaster(rSrcPage.bMaster),
-    bInserted(sal_False),
-    bObjectsNotPersistent(rSrcPage.bObjectsNotPersistent),
-    bSwappingLocked(rSrcPage.bSwappingLocked)
+    mbMaster(rSrcPage.mbMaster),
+    mbInserted(false),
+    mbObjectsNotPersistent(rSrcPage.mbObjectsNotPersistent),
+    mbSwappingLocked(rSrcPage.mbSwappingLocked),
+    mbPageBorderOnlyLeftRight(rSrcPage.mbPageBorderOnlyLeftRight)
 {
     DBG_CTOR(SdrPage,NULL);
     aPrefVisiLayers.SetAll();
-    eListKind = (bMaster) ? SDROBJLIST_MASTERPAGE : SDROBJLIST_DRAWPAGE;
+    eListKind = (mbMaster) ? SDROBJLIST_MASTERPAGE : SDROBJLIST_DRAWPAGE;
 
     // copy things from source
     // Warning: this leads to slicing (see issue 93186) and has to be
@@ -1297,7 +1290,7 @@ SdrPage::SdrPage(const SdrPage& rSrcPage)
 
     // be careful and correct eListKind, a member of SdrObjList which
     // will be changed by the SdrOIbjList::operator= before...
-    eListKind = (bMaster) ? SDROBJLIST_MASTERPAGE : SDROBJLIST_DRAWPAGE;
+    eListKind = (mbMaster) ? SDROBJLIST_MASTERPAGE : SDROBJLIST_DRAWPAGE;
 
     // The previous assignment to *this may have resulted in a call to
     // createUnoPage at a partially initialized (sliced) SdrPage object.
@@ -1377,8 +1370,9 @@ void SdrPage::operator=(const SdrPage& rSrcPage)
     // copy all the local parameters to make this instance
     // a valid copy od source page before copying and inserting
     // the contained objects
-    bMaster = rSrcPage.bMaster;
-    bSwappingLocked = rSrcPage.bSwappingLocked;
+    mbMaster = rSrcPage.mbMaster;
+    mbSwappingLocked = rSrcPage.mbSwappingLocked;
+    mbPageBorderOnlyLeftRight = rSrcPage.mbPageBorderOnlyLeftRight;
     aPrefVisiLayers = rSrcPage.aPrefVisiLayers;
     nWdt = rSrcPage.nWdt;
     nHgt = rSrcPage.nHgt;
@@ -1399,7 +1393,7 @@ void SdrPage::operator=(const SdrPage& rSrcPage)
     }
     //aMasters = rSrcPage.aMasters;
 
-    bObjectsNotPersistent = rSrcPage.bObjectsNotPersistent;
+    mbObjectsNotPersistent = rSrcPage.mbObjectsNotPersistent;
 
     if(rSrcPage.pBackgroundObj)
     {
@@ -1621,8 +1615,10 @@ void SdrPage::SetPageNum(sal_uInt16 nNew)
 
 USHORT SdrPage::GetPageNum() const
 {
-    if (!bInserted) return 0;
-    if (bMaster) {
+    if (!mbInserted)
+        return 0;
+
+    if (mbMaster) {
         if (pModel && pModel->IsMPgNumsDirty())
             ((SdrModel*)pModel)->RecalcPageNums(TRUE);
     } else {
@@ -1666,8 +1662,8 @@ void SdrPage::TRG_ClearMasterPage()
     {
         SetChanged();
 
-        // the FlushViewContact() will do needed invalidates by deleting the involved VOCs
-        mpMasterPageDescriptor->GetUsedPage().FlushViewContact();
+        // the flushViewObjectContacts() will do needed invalidates by deleting the involved VOCs
+        mpMasterPageDescriptor->GetUsedPage().GetViewContact().flushViewObjectContacts(true);
 
         delete mpMasterPageDescriptor;
         mpMasterPageDescriptor = 0L;
@@ -1718,7 +1714,7 @@ FASTBOOL SdrPage::ImplGetFillColor(const Point& rPnt, const SetOfByte& rVisLayer
 {
     if (pModel==NULL) return FALSE;
     FASTBOOL bRet=SdrObjList::GetFillColor(rPnt,rVisLayers,/*bLayerSorted,*/rCol);
-    if (!bRet && !bMaster)
+    if (!bRet && !mbMaster)
     {
         // nun zu den Masterpages
         if(TRG_HasMasterPage())
@@ -1787,11 +1783,11 @@ void SdrPage::SetBackgroundObj( SdrObject* pObj )
     pBackgroundObj = pObj;
 }
 
-void SdrPage::SetInserted( FASTBOOL bIns )
+void SdrPage::SetInserted( bool bIns )
 {
-    if( bInserted != bIns )
+    if( mbInserted != bIns )
     {
-        bInserted = bIns;
+        mbInserted = bIns;
 
         SdrObjListIter aIter( *this, IM_FLAT );
          while ( aIter.IsMore() )
@@ -1799,7 +1795,7 @@ void SdrPage::SetInserted( FASTBOOL bIns )
             SdrObject* pObj = aIter.Next();
             if ( pObj->ISA(SdrOle2Obj) )
             {
-                if( bInserted )
+                if( mbInserted )
                     ( (SdrOle2Obj*) pObj)->Connect();
                 else
                     ( (SdrOle2Obj*) pObj)->Disconnect();

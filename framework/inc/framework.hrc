@@ -80,5 +80,9 @@
 #define BMP_BACKING_BACKGROUND_RTL_LEFT     4
 #define BMP_BACKING_BACKGROUND_RTL_RIGHT    5
 
+// Ids of TabWindow
+#define WIN_TABWINDOW                       (RID_FWK_DIALOG_START+101)
+#define TC_TABCONTROL                        1
 
 #endif
+

@@ -51,15 +51,11 @@
 #include <comphelper/processfactory.hxx>
 #include <com/sun/star/security/CertificateValidity.hpp>
 
-#ifndef _COM_SUN_STAR_SECURITY_DOCUMENTSIGNATURESINFORMATION_HPP_
 #include <com/sun/star/security/DocumentSignatureInformation.hpp>
-#endif
 #include <com/sun/star/security/XDocumentDigitalSignatures.hpp>
 #include <tools/urlobj.hxx>
 #include <svtools/whiter.hxx>
-#ifndef _MSGBOX_HXX //autogen
 #include <vcl/msgbox.hxx>
-#endif
 #include <svtools/intitem.hxx>
 #include <svtools/eitem.hxx>
 #include <vcl/wrkwin.hxx>
@@ -106,13 +102,9 @@
 #include <com/sun/star/document/XDocumentSubStorageSupplier.hpp>
 #include <com/sun/star/embed/XTransactedObject.hpp>
 #include <com/sun/star/util/XCloneable.hpp>
-#include <com/sun/star/document/XDocumentInfo.hpp>
-#include <com/sun/star/document/XDocumentInfoSupplier.hpp>
 #include <com/sun/star/document/XDocumentProperties.hpp>
 
-#ifndef _SFX_HELPID_HRC
 #include "helpid.hrc"
-#endif
 
 #include "guisaveas.hxx"
 
@@ -423,10 +415,7 @@ void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
             if ( pDocInfItem )
             {
                 // parameter, e.g. from replayed macro
-                uno::Reference<document::XDocumentInfoSupplier> xDIS(
-                    GetModel(), uno::UNO_QUERY_THROW);
-                pDocInfItem->updateDocumentInfo(getDocProperties(),
-                    xDIS->getDocumentInfo());
+                pDocInfItem->updateDocumentInfo(getDocProperties());
                 SetUseUserData( pDocInfItem->IsUseUserData() );
             }
             else
@@ -467,10 +456,8 @@ void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
                     aTitle = GetTitle();
                 }
 
-                uno::Reference<document::XDocumentInfoSupplier> xDIS(
-                    GetModel(), uno::UNO_QUERY_THROW);
                 SfxDocumentInfoItem aDocInfoItem( aURL, getDocProperties(),
-                    xDIS->getDocumentInfo(), IsUseUserData() );
+                    IsUseUserData() );
                 if ( !GetSlotState( SID_DOCTEMPLATE ) )
                     // templates not supported
                     aDocInfoItem.SetTemplate(FALSE);
@@ -491,14 +478,12 @@ void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
                     if ( pDocInfoItem )
                     {
                         // user has done some changes to DocumentInfo
-                        pDocInfoItem->updateDocumentInfo(getDocProperties(),
-                            xDIS->getDocumentInfo());
+                        pDocInfoItem->updateDocumentInfo(getDocProperties());
                         SetUseUserData( ((const SfxDocumentInfoItem *)pDocInfoItem)->IsUseUserData() );
 
                         // add data from dialog for possible recording purposes
                         rReq.AppendItem( SfxDocumentInfoItem( GetTitle(),
-                            getDocProperties(), xDIS->getDocumentInfo(),
-                            IsUseUserData() ) );
+                            getDocProperties(), IsUseUserData() ) );
                     }
 
                     rReq.Done();

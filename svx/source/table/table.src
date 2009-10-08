@@ -28,3 +28,10 @@
  *
  ************************************************************************/
 
+#include "svx/dialogs.hrc"
+
+String RID_SVXSTR_STYLEFAMILY_TABLEDESIGN
+{
+    Text [ en-US ] = "Table Design Styles";
+};
+

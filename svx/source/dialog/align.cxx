@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: align.cxx,v $
- * $Revision: 1.26 $
+ * $Revision: 1.26.272.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -145,7 +145,7 @@ AlignmentTabPage::AlignmentTabPage( Window* pParent, const SfxItemSet& rCoreAttr
     maVsRefEdge     ( this, SVX_RES( CTR_BORDER_LOCK ) ),
     maCbStacked     ( this, SVX_RES( BTN_TXTSTACKED ) ),
     maCbAsianMode   ( this, SVX_RES( BTN_ASIAN_VERTICAL ) ),
-    maOrientHlp     ( this, maCtrlDial, maNfRotate, maCbStacked ),
+    maOrientHlp     ( maCtrlDial, maNfRotate, maCbStacked ),
 
     maFlProperties  ( this, SVX_RES( FL_WRAP ) ),
     maBtnWrap       ( this, SVX_RES( BTN_WRAP ) ),

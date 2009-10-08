@@ -77,16 +77,13 @@
 #define ROW_CB_FONT_SHOW        (ROW_FL_FONTLISTS + RSC_CD_FIXEDLINE_HEIGHT + ROWSPACE)
 #define ROW_CB_FONT_HISTORY     (ROW_CB_FONT_SHOW + RSC_CD_CHECKBOX_HEIGHT + ROWSPACE)
 
-#define ROW_FL_3D               (3)
-#define ROW_CB_3D_OPENGL        (ROW_FL_3D + RSC_CD_FIXEDLINE_HEIGHT + ROWSPACE)
-#define ROW_CB_3D_OPENGL_FASTER (ROW_CB_3D_OPENGL + RSC_CD_CHECKBOX_HEIGHT + ROWSPACE)
-#define ROW_CB_3D_DITHERING     (ROW_CB_3D_OPENGL_FASTER + RSC_CD_CHECKBOX_HEIGHT + ROWSPACE)
-#define ROW_CB_3D_SHOWFULL      (ROW_CB_3D_DITHERING + RSC_CD_CHECKBOX_HEIGHT + ROWSPACE)
-
-#define ROW_FL_RENDERING        (ROW_CB_3D_SHOWFULL + RSC_CD_FIXEDLINE_HEIGHT + RSC_SP_FLGR_SPACE_X)
+// #i95644# start on top with rendering section
+#define ROW_FL_RENDERING        (3)
 #define ROW_CB_USE_HARDACCELL   (ROW_FL_RENDERING + RSC_CD_FIXEDLINE_HEIGHT + ROWSPACE)
+#define ROW_CB_USE_ANTIALIASE   (ROW_CB_USE_HARDACCELL + RSC_CD_CHECKBOX_HEIGHT + ROWSPACE)
 
-#define ROW_FL_MOUSE            (ROW_FL_MENU)  // the same Y position as the menu - according to the spec.
+// #i95644# set Menu to follow vertically (was (ROW_FL_MENU)) previously)
+#define ROW_FL_MOUSE            (ROW_CB_USE_ANTIALIASE + RSC_CD_FIXEDLINE_HEIGHT + RSC_SP_FLGR_SPACE_X)
 #define ROW_FT_MOUSEPOS         (ROW_FL_MOUSE + RSC_CD_FIXEDLINE_HEIGHT + ROWSPACE)
 #define ROW_LB_MOUSEPOS         (ROW_FT_MOUSEPOS + RSC_CD_FIXEDTEXT_HEIGHT + ROWSPACE)
 #define ROW_FT_MOUSEMIDDLE      (ROW_LB_MOUSEPOS + RSC_CD_DROPDOWN_HEIGHT + ROWSPACE)
@@ -116,12 +113,7 @@
 #define CB_PRINTDLG                 45
 
 // tabpage view ----------------------------------------------------------
-
-#define FL_3D                       10
-#define CB_3D_OPENGL                11
-#define CB_3D_OPENGL_FASTER         12
-#define CB_3D_DITHERING             13
-#define CB_3D_SHOWFULL              14
+// #i95644# 10 .. 14 freed, may be reused
 
 #define FL_USERINTERFACE            20
 #define FT_WINDOWSIZE               21
@@ -153,6 +145,7 @@
 
 #define FL_RENDERING                67
 #define CB_USE_HARDACCELL           68
+#define CB_USE_ANTIALIASE           69
 
 // tabpage languages -----------------------------------------------------
 

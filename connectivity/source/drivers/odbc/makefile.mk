@@ -32,10 +32,10 @@
 PRJ=..$/..$/..
 PRJINC=..$/..
 PRJNAME=connectivity
-TARGET=odbcbase
-TARGET2=odbc
+TARGET=odbc
 
 ENABLE_EXCEPTIONS=TRUE
+VISIBILITY_HIDDEN=TRUE
 USE_DEFFILE=TRUE
 LDUMP=ldump2.exe
 
@@ -52,83 +52,31 @@ ENVCFLAGS+=/FR$(SLO)$/
 CFLAGS+=-DSYSTEM_ODBC_HEADERS
 .ENDIF
 
-# --- Files -------------------------------------
-
-SLOFILES=\
-        $(SLO)$/OPreparedStatement.obj			\
-        $(SLO)$/OStatement.obj					\
-        $(SLO)$/OResultSetMetaData.obj			\
-        $(SLO)$/OResultSet.obj					\
-        $(SLO)$/OTools.obj						\
-        $(SLO)$/ODatabaseMetaDataResultSet.obj	\
-        $(SLO)$/ODatabaseMetaData.obj			\
-        $(SLO)$/ODriver.obj						\
-        $(SLO)$/OConnection.obj
-
-# --- ODBC BASE Library -----------------------------------
-
-SHL1TARGET=	$(ODBC2_TARGET)$(DLLPOSTFIX)
-SHL1OBJS=$(SLOFILES)
-SHL1STDLIBS=\
-    $(DBTOOLSLIB)				\
-    $(COMPHELPERLIB)			\
-    $(CPPUHELPERLIB)			\
-    $(CPPULIB)					\
-    $(VOSLIB)					\
-    $(SALLIB)
-
-SHL1DEPN=
-SHL1IMPLIB=	i$(ODBC2_TARGET)
-
-SHL1DEF=	$(MISC)$/$(SHL1TARGET).def
-
-DEF1NAME=	$(SHL1TARGET)
-DEF1DEPN=	$(MISC)$/$(SHL1TARGET).flt \
-            $(SLB)$/$(TARGET).lib
-DEFLIB1NAME=$(TARGET)
-
 # --- ODBC Library -----------------------------------
 # --- Files -------------------------------------
 
-SLO2FILES=\
+SLOFILES=\
         $(SLO)$/oservices.obj	\
         $(SLO)$/ORealDriver.obj	\
         $(SLO)$/OFunctions.obj
 
 # --- ODBC Library -----------------------------------
 
-SHL2TARGET=	$(ODBC_TARGET)$(DLLPOSTFIX)
-SHL2OBJS=$(SLO2FILES)
-SHL2STDLIBS=\
+SHL1TARGET=	$(ODBC_TARGET)$(DLLPOSTFIX)
+SHL1OBJS=$(SLOFILES)
+SHL1STDLIBS=\
     $(ODBCBASELIB)				\
     $(CPPUHELPERLIB)			\
     $(CPPULIB)					\
     $(SALLIB)
 
-.IF "$(ODBCBASELIB)" == ""
-SHL2STDLIBS+= $(ODBCBASELIB)
-.ENDIF
+SHL1IMPLIB=	i$(ODBC_TARGET)
 
-SHL2DEPN=$(SHL1TARGETN)
-SHL2IMPLIB=	i$(ODBC_TARGET)
+SHL1DEF=	$(MISC)$/$(SHL1TARGET).def
 
-SHL2DEF=	$(MISC)$/$(SHL2TARGET).def
-
-DEF2NAME=	$(SHL2TARGET)
-SHL2VERSIONMAP=odbc.map
+DEF1NAME=	$(SHL1TARGET)
+SHL1VERSIONMAP=odbc.map
 
 # --- Targets ----------------------------------
 
 .INCLUDE : target.mk
-
-# --- filter file ------------------------------
-
-.IF "$(depend)"==""
-
-$(MISC)$/$(SHL1TARGET).flt: makefile.mk
-    @echo ------------------------------
-    @echo CLEAR_THE_FILE	> $@
-    @echo _TI				>>$@
-    @echo _real				>>$@
-.ENDIF
-

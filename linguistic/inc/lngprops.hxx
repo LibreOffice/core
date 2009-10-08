@@ -40,7 +40,7 @@
 // WIDs for property names
 //!! Don't change values! They are used as the property handles in
 //!! the service description
-#define WID_IS_GERMAN_PRE_REFORM            UPH_IS_GERMAN_PRE_REFORM
+#define WID_IS_GERMAN_PRE_REFORM            UPH_IS_GERMAN_PRE_REFORM        /*! deprecated !*/
 #define WID_IS_USE_DICTIONARY_LIST          UPH_IS_USE_DICTIONARY_LIST
 #define WID_IS_IGNORE_CONTROL_CHARACTERS    UPH_IS_IGNORE_CONTROL_CHARACTERS
 #define WID_IS_SPELL_UPPER_CASE             UPH_IS_SPELL_UPPER_CASE
@@ -51,8 +51,8 @@
 #define WID_HYPH_MIN_WORD_LENGTH            UPH_HYPH_MIN_WORD_LENGTH
 #define WID_DEFAULT_LOCALE                  UPH_DEFAULT_LOCALE
 #define WID_IS_SPELL_AUTO                   UPH_IS_SPELL_AUTO
-#define WID_IS_SPELL_HIDE                   UPH_IS_SPELL_HIDE
-#define WID_IS_SPELL_IN_ALL_LANGUAGES       UPH_IS_SPELL_IN_ALL_LANGUAGES
+#define WID_IS_SPELL_HIDE                   UPH_IS_SPELL_HIDE               /*! deprecated !*/
+#define WID_IS_SPELL_IN_ALL_LANGUAGES       UPH_IS_SPELL_IN_ALL_LANGUAGES   /*! deprecated !*/
 #define WID_IS_SPELL_SPECIAL                UPH_IS_SPELL_SPECIAL
 #define WID_IS_HYPH_AUTO                    UPH_IS_HYPH_AUTO
 #define WID_IS_HYPH_SPECIAL                 UPH_IS_HYPH_SPECIAL

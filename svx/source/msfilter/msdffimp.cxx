@@ -346,11 +346,11 @@ void Impl_OlePres::Write( SvStream & rStm )
         // Immer auf 1/100 mm, bis Mtf-Loesung gefunden
         // Annahme (keine Skalierung, keine Org-Verschiebung)
         DBG_ASSERT( pMtf->GetPrefMapMode().GetScaleX() == Fraction( 1, 1 ),
-                    "X-Skalierung im Mtf" )
+                    "X-Skalierung im Mtf" );
         DBG_ASSERT( pMtf->GetPrefMapMode().GetScaleY() == Fraction( 1, 1 ),
-                    "Y-Skalierung im Mtf" )
+                    "Y-Skalierung im Mtf" );
         DBG_ASSERT( pMtf->GetPrefMapMode().GetOrigin() == Point(),
-                    "Origin-Verschiebung im Mtf" )
+                    "Origin-Verschiebung im Mtf" );
         MapUnit nMU = pMtf->GetPrefMapMode().GetMapUnit();
         if( MAP_100TH_MM != nMU )
         {
@@ -367,7 +367,7 @@ void Impl_OlePres::Write( SvStream & rStm )
     }
     else
     {
-        DBG_ERROR( "unknown format" )
+        DBG_ERROR( "unknown format" );
     }
     ULONG nEndPos = rStm.Tell();
     rStm.Seek( nPos );
@@ -6177,14 +6177,23 @@ void SvxMSDffManager::CheckTxBxStoryChain()
         {
             pObj->bLastBoxInChain = FALSE;
             // Gruppenwechsel ?
-            if( nChain != (pObj->nTxBxComp & 0xFFFF0000) )
+            // --> OD 2008-07-28 #156763#
+            // the text id also contains an internal drawing container id
+            // to distinguish between text id of drawing objects in different
+            // drawing containers.
+//            if( nChain != (pObj->nTxBxComp & 0xFFFF0000) )
+            if( nChain != pObj->nTxBxComp )
+            // <--
             {
                 // voriger war letzter seiner Gruppe
                 if( nObj )
                     pOld->GetObject( nObj-1 )->bLastBoxInChain = TRUE;
                 // Merker und Hilfs-Flag zuruecksetzen
                 nObjMark = nObj;
-                nChain   = pObj->nTxBxComp & 0xFFFF0000;
+                // --> OD 2008-07-28 #156763#
+//                nChain   = pObj->nTxBxComp & 0xFFFF0000;
+                nChain = pObj->nTxBxComp;
+                // <--
                 bSetReplaceFALSE = !pObj->bReplaceByFly;
             }
             else
@@ -6206,6 +6215,9 @@ void SvxMSDffManager::CheckTxBxStoryChain()
         // alle Shape-Info-Objekte in pShapeInfos umkopieren
         // (aber nach nShapeId sortieren)
         pObj->bSortByShapeId = TRUE;
+        // --> OD 2008-07-28 #156763#
+        pObj->nTxBxComp = pObj->nTxBxComp & 0xFFFF0000;
+        // <--
         pShapeInfos->Insert( pObj );
     }
     // voriger war letzter seiner Gruppe
@@ -6252,6 +6264,9 @@ void SvxMSDffManager::GetCtrlData( long nOffsDgg_ )
         UINT32 nMaxStrPos = rStCtrl.Tell();
 
         nPos += nLength;
+        // --> OD 2008-07-28 #156763#
+        unsigned long nDrawingContainerId = 1;
+        // <--
         do
         {
             rStCtrl.Seek( nPos );
@@ -6266,8 +6281,15 @@ void SvxMSDffManager::GetCtrlData( long nOffsDgg_ )
                         && ( DFF_msofbtDgContainer == nFbt );
             }
             if( bOk )
-                GetDrawingContainerData( rStCtrl, nLength );
+            {
+                // --> OD 2008-07-28 #156763#
+                GetDrawingContainerData( rStCtrl, nLength, nDrawingContainerId );
+                // <--
+            }
             nPos += DFF_COMMON_RECORD_HEADER_SIZE + nLength;
+            // --> OD 2008-07-28 #156763#
+            ++nDrawingContainerId;
+            // <--
         }
         while( nPos < nMaxStrPos && bOk );
     }
@@ -6363,7 +6385,8 @@ void SvxMSDffManager::GetDrawingGroupContainerData( SvStream& rSt, ULONG nLenDgg
 // ab hier: Drawing Container  d.h. Seiten (Blatt, Dia) - weit gueltige Daten
 //                      =================               ======
 //
-void SvxMSDffManager::GetDrawingContainerData( SvStream& rSt, ULONG nLenDg )
+void SvxMSDffManager::GetDrawingContainerData( SvStream& rSt, ULONG nLenDg,
+                                               const unsigned long nDrawingContainerId )
 {
     BYTE nVer;USHORT nInst;USHORT nFbt;UINT32 nLength;
 
@@ -6379,13 +6402,13 @@ void SvxMSDffManager::GetDrawingContainerData( SvStream& rSt, ULONG nLenDg )
         // Patriarch gefunden (der oberste Shape Group Container) ?
         if( DFF_msofbtSpgrContainer == nFbt )
         {
-            if(!this->GetShapeGroupContainerData( rSt, nLength, TRUE)) return;
+            if(!this->GetShapeGroupContainerData( rSt, nLength, TRUE, nDrawingContainerId )) return;
         }
         else
         // blanker Shape Container ? (ausserhalb vom Shape Group Container)
         if( DFF_msofbtSpContainer == nFbt )
         {
-            if(!this->GetShapeContainerData( rSt, nLength)) return;
+            if(!this->GetShapeContainerData( rSt, nLength, ULONG_MAX, nDrawingContainerId )) return;
         }
         else
             rSt.SeekRel( nLength );
@@ -6396,7 +6419,8 @@ void SvxMSDffManager::GetDrawingContainerData( SvStream& rSt, ULONG nLenDg )
 
 BOOL SvxMSDffManager::GetShapeGroupContainerData( SvStream& rSt,
                                                   ULONG nLenShapeGroupCont,
-                                                  BOOL bPatriarch )
+                                                  BOOL bPatriarch,
+                                                  const unsigned long nDrawingContainerId )
 {
     BYTE nVer;USHORT nInst;USHORT nFbt;UINT32 nLength;
     long nStartShapeGroupCont = rSt.Tell();
@@ -6414,7 +6438,7 @@ BOOL SvxMSDffManager::GetShapeGroupContainerData( SvStream& rSt,
         if( DFF_msofbtSpContainer == nFbt )
         {
             ULONG nGroupOffs = bFirst ? nStartShapeGroupCont - DFF_COMMON_RECORD_HEADER_SIZE : ULONG_MAX;
-            if ( !this->GetShapeContainerData( rSt, nLength, nGroupOffs ) )
+            if ( !this->GetShapeContainerData( rSt, nLength, nGroupOffs, nDrawingContainerId ) )
                 return FALSE;
             bFirst = FALSE;
         }
@@ -6422,7 +6446,7 @@ BOOL SvxMSDffManager::GetShapeGroupContainerData( SvStream& rSt,
         // eingeschachtelter Shape Group Container ?
         if( DFF_msofbtSpgrContainer == nFbt )
         {
-            if ( !this->GetShapeGroupContainerData( rSt, nLength, FALSE ) )
+            if ( !this->GetShapeGroupContainerData( rSt, nLength, FALSE, nDrawingContainerId ) )
                 return FALSE;
         }
         else
@@ -6435,7 +6459,10 @@ BOOL SvxMSDffManager::GetShapeGroupContainerData( SvStream& rSt,
     return TRUE;
 }
 
-BOOL SvxMSDffManager::GetShapeContainerData( SvStream& rSt, ULONG nLenShapeCont, ULONG nPosGroup )
+BOOL SvxMSDffManager::GetShapeContainerData( SvStream& rSt,
+                                             ULONG nLenShapeCont,
+                                             ULONG nPosGroup,
+                                             const unsigned long nDrawingContainerId )
 {
     BYTE nVer;USHORT nInst;USHORT nFbt;UINT32 nLength;
     long  nStartShapeCont = rSt.Tell();
@@ -6619,6 +6646,15 @@ BOOL SvxMSDffManager::GetShapeContainerData( SvStream& rSt, ULONG nLenShapeCont,
         else if( ( DFF_msofbtClientTextbox == nFbt ) && ( 4 == nLength ) )  // Text-Box-Story-Eintrag gefunden
         {
             rSt >> aInfo.nTxBxComp;
+            // --> OD 2008-07-28 #156763#
+            // Add internal drawing container id to text id.
+            // Note: The text id uses the first two bytes, while the internal
+            // drawing container id used the second two bytes.
+            aInfo.nTxBxComp = ( aInfo.nTxBxComp & 0xFFFF0000 ) +
+                              nDrawingContainerId;
+            DBG_ASSERT( (aInfo.nTxBxComp & 0x0000FFFF) == nDrawingContainerId,
+                        "<SvxMSDffManager::GetShapeContainerData(..)> - internal drawing container Id could not be correctly merged into DFF_msofbtClientTextbox value." );
+            // <--
         }
         else
         {
@@ -7516,9 +7552,19 @@ com::sun::star::uno::Reference < com::sun::star::embed::XEmbeddedObject >  SvxMS
             ::rtl::OUString aName( aDstStgName );
             comphelper::EmbeddedObjectContainer aCnt( rDestStorage );
             xObj = aCnt.InsertEmbeddedObject( aMedium, aName );
+
             if ( !xObj.is() )
-                // TODO/LATER: error handling
-                return xObj;
+            {
+                if( aFilterName.getLength() )
+                {
+                    // throw the filter parameter away as workaround
+                    aMedium.realloc( 2 );
+                    xObj = aCnt.InsertEmbeddedObject( aMedium, aName );
+                }
+
+                if ( !xObj.is() )
+                     return xObj;
+            }
 
             // TODO/LATER: ViewAspect must be passed from outside!
             sal_Int64 nViewAspect = embed::Aspects::MSOLE_CONTENT;

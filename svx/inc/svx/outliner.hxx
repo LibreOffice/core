@@ -396,6 +396,11 @@ public:
     */
     void        ToggleBullets();
 
+    /** enables numbering for the selected paragraphs that are not enabled and ignore all selected
+        paragraphs that already have numbering enabled.
+    */
+    void        EnableBullets();
+
     BOOL        IsCursorAtWrongSpelledWord( BOOL bMarkIfWrong = FALSE );
     BOOL        IsWrongSpelledWordAtPos( const Point& rPosPixel, BOOL bMarkIfWrong = FALSE );
     void        SpellIgnoreWord();
@@ -426,6 +431,7 @@ public:
     const EEngineData::WrongSpellVector*  mpWrongSpellVector;
     const SvxFieldData* mpFieldData;
     const ::com::sun::star::lang::Locale* mpLocale;
+    const Color maOverlineColor;
     const Color maTextLineColor;
 
     // #101498# BiDi level needs to be transported, too.
@@ -451,6 +457,7 @@ public:
         const EEngineData::WrongSpellVector* pWrongSpellVector,
         const SvxFieldData* pFieldData,
         const ::com::sun::star::lang::Locale* pLocale,
+        const Color& rOverlineColor,
         const Color& rTextLineColor,
         BYTE nBiDiLevel,
         bool bEndOfLine,
@@ -467,6 +474,7 @@ public:
         mpWrongSpellVector(pWrongSpellVector),
         mpFieldData(pFieldData),
         mpLocale(pLocale),
+        maOverlineColor(rOverlineColor),
         maTextLineColor(rTextLineColor),
         mnBiDiLevel(nBiDiLevel),
         mbEndOfLine(bEndOfLine),
@@ -899,6 +907,7 @@ public:
         bool bEndOfParagraph,
         bool bEndOfBullet,
         const ::com::sun::star::lang::Locale* pLocale,
+        const Color& rOverlineColor,
         const Color& rTextLineColor);
 
     Size            CalcTextSize();
@@ -1026,6 +1035,8 @@ public:
     void            StartSpelling(EditView& rEditView, sal_Bool bMultipleDoc);
     //spell and return a sentence
     bool            SpellSentence(EditView& rEditView, ::svx::SpellPortions& rToFill, bool bIsGrammarChecking );
+    // put spell position to start of current sentence
+    void            PutSpellingToSentenceStart( EditView& rEditView );
     //applies a changed sentence
     void            ApplyChangedSentence(EditView& rEditView, const ::svx::SpellPortions& rNewPortions, bool bIsGrammarChecking );
     void            EndSpelling();

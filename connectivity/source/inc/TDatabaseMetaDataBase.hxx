@@ -37,11 +37,13 @@
 #include <com/sun/star/lang/XEventListener.hpp>
 #include "FDatabaseMetaDataResultSet.hxx"
 #include <functional>
+#include "connectivity/dbtoolsdllapi.hxx"
 
 namespace connectivity
 {
         typedef ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >  TConditions;
-        class ODatabaseMetaDataBase :   public  comphelper::OBaseMutex,
+        class OOO_DLLPUBLIC_DBTOOLS ODatabaseMetaDataBase :
+                                        public  comphelper::OBaseMutex,
                                         public ::cppu::WeakImplHelper2< ::com::sun::star::sdbc::XDatabaseMetaData2,
                                                                         ::com::sun::star::lang::XEventListener>
         {

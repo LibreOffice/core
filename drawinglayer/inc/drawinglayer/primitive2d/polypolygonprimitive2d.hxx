@@ -45,7 +45,7 @@
 #include <drawinglayer/attribute/linestartendattribute.hxx>
 
 //////////////////////////////////////////////////////////////////////////////
-// PolyPolygonStrokePrimitive2D class
+// PolyPolygonHairlinePrimitive2D class
 
 namespace drawinglayer
 {
@@ -67,6 +67,50 @@ namespace drawinglayer
             // get data
             basegfx::B2DPolyPolygon getB2DPolyPolygon() const { return maPolyPolygon; }
             const basegfx::BColor& getBColor() const { return maBColor; }
+
+            // compare operator
+            virtual bool operator==(const BasePrimitive2D& rPrimitive) const;
+
+            // get range
+            virtual basegfx::B2DRange getB2DRange(const geometry::ViewInformation2D& rViewInformation) const;
+
+            // provide unique ID
+            DeclPrimitrive2DIDBlock()
+        };
+    } // end of namespace primitive2d
+} // end of namespace drawinglayer
+
+//////////////////////////////////////////////////////////////////////////////
+// PolyPolygonMarkerPrimitive2D class
+
+namespace drawinglayer
+{
+    namespace primitive2d
+    {
+        class PolyPolygonMarkerPrimitive2D : public BasePrimitive2D
+        {
+        private:
+            basegfx::B2DPolyPolygon                 maPolyPolygon;
+            basegfx::BColor                         maRGBColorA;
+            basegfx::BColor                         maRGBColorB;
+            double                                  mfDiscreteDashLength;
+
+        protected:
+            // local decomposition.
+            virtual Primitive2DSequence createLocalDecomposition(const geometry::ViewInformation2D& rViewInformation) const;
+
+        public:
+            PolyPolygonMarkerPrimitive2D(
+                const basegfx::B2DPolyPolygon& rPolyPolygon,
+                const basegfx::BColor& rRGBColorA,
+                const basegfx::BColor& rRGBColorB,
+                double fDiscreteDashLength);
+
+            // get data
+            basegfx::B2DPolyPolygon getB2DPolyPolygon() const { return maPolyPolygon; }
+            const basegfx::BColor& getRGBColorA() const { return maRGBColorA; }
+            const basegfx::BColor& getRGBColorB() const { return maRGBColorB; }
+            double getDiscreteDashLength() const { return mfDiscreteDashLength; }
 
             // compare operator
             virtual bool operator==(const BasePrimitive2D& rPrimitive) const;

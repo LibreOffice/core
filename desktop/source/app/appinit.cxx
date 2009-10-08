@@ -134,6 +134,7 @@ static bool configureUcb(bool bServer, rtl::OUString const & rPortalConnect)
     bool ret =
         ::ucbhelper::ContentBroker::initialize( xServiceFactory, aArgs ) != false;
 
+#ifdef GNOME_VFS_ENABLED
     // register GnomeUCP if necessary
     ::ucbhelper::ContentBroker* cb = ::ucbhelper::ContentBroker::get();
     if(cb) {
@@ -191,6 +192,7 @@ static bool configureUcb(bool bServer, rtl::OUString const & rPortalConnect)
         } catch (RuntimeException e) {
         }
     }
+#endif // GNOME_VFS_ENABLED
 
     return ret;;
 }

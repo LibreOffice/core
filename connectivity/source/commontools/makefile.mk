@@ -40,6 +40,7 @@ ENVCFLAGS+=/FR$(SLO)$/
 .ENDIF
 
 .INCLUDE : settings.mk
+.INCLUDE : $(PRJ)$/dbtools.pmk
 
 # Disable optimization for SunCC SPARC and MACOSX (funny loops
 # when parsing e.g. "x+width/2"),

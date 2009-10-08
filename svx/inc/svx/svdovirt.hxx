@@ -96,14 +96,17 @@ public:
     virtual sal_uInt32 GetPlusHdlCount(const SdrHdl& rHdl) const;
     virtual SdrHdl* GetPlusHdl(const SdrHdl& rHdl, sal_uInt32 nPlNum) const;
     virtual void AddToHdlList(SdrHdlList& rHdlList) const;
-    virtual FASTBOOL HasSpecialDrag() const;
-    virtual FASTBOOL BegDrag(SdrDragStat& rDrag) const;
-    virtual FASTBOOL MovDrag(SdrDragStat& rDrag) const;
-    virtual FASTBOOL EndDrag(SdrDragStat& rDrag);
-    virtual void BrkDrag(SdrDragStat& rDrag) const;
 
-    virtual String GetDragComment(const SdrDragStat& rDrag, FASTBOOL bUndoDragComment, FASTBOOL bCreateComment) const;
-    virtual basegfx::B2DPolyPolygon TakeDragPoly(const SdrDragStat& rDrag) const;
+    // special drag methods
+    virtual bool hasSpecialDrag() const;
+    virtual bool beginSpecialDrag(SdrDragStat& rDrag) const;
+    virtual bool applySpecialDrag(SdrDragStat& rDrag);
+    virtual String getSpecialDragComment(const SdrDragStat& rDrag) const;
+    virtual basegfx::B2DPolyPolygon getSpecialDragPoly(const SdrDragStat& rDrag) const;
+
+    // FullDrag support
+    virtual bool supportsFullDrag() const;
+    virtual SdrObject* getFullDragClone() const;
 
     virtual FASTBOOL BegCreate(SdrDragStat& rStat);
     virtual FASTBOOL MovCreate(SdrDragStat& rStat);

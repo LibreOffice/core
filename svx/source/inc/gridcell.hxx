@@ -183,7 +183,8 @@ public:
 
     void    SetReadOnly(sal_Bool bRead){m_bReadOnly = bRead;}
     void    SetObject(sal_Int16 nPos) {m_bObject = m_bReadOnly = sal_True; m_nFieldPos = nPos;}
-    void    ImplInitSettings( Window& rParent, sal_Bool bFont, sal_Bool bForeground, sal_Bool bBackground );
+
+    void    ImplInitWindow( Window& rParent, const InitWindowFacet _eInitWhat );
 
     // Properties, die auf den ::com::sun::star::frame::Controller durchschlagen koennen
     sal_Int16   SetAlignment(sal_Int16 _nAlign);
@@ -308,7 +309,7 @@ public:
     virtual void PaintFieldToCell( OutputDevice& rDev, const Rectangle& rRect, const ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XColumn >& _rxField, const ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatter >& xFormatter);
     virtual void PaintCell( OutputDevice& _rDev, const Rectangle& _rRect );
 
-    void  ImplInitSettings( Window& rParent, sal_Bool bFont, sal_Bool bForeground, sal_Bool bBackground );
+    void  ImplInitWindow( Window& rParent, const InitWindowFacet _eInitWhat );
 
     double GetValue(const ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XColumn >& _rxField, const ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatter >& xFormatter) const;
 
@@ -781,8 +782,8 @@ public:
     virtual void SAL_CALL setLock(sal_Bool _bLock) throw(::com::sun::star::uno::RuntimeException);
 
     sal_Bool Commit() {return m_pCellControl->Commit();}
-    void ImplInitSettings( Window& rParent, sal_Bool bFont, sal_Bool bForeground, sal_Bool bBackground )
-        { m_pCellControl->ImplInitSettings( rParent, bFont, bForeground, bBackground ); }
+    void ImplInitWindow( Window& rParent, const InitWindowFacet _eInitWhat )
+        { m_pCellControl->ImplInitWindow( rParent, _eInitWhat ); }
 
     sal_Bool isAlignedController() const { return m_pCellControl->isAlignedController(); }
     void AlignControl(sal_Int16 nAlignment)

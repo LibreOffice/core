@@ -51,7 +51,7 @@ EXCEPTIONSFILES=\
         $(SLO)$/recfloat.obj        \
         $(SLO)$/templdlg.obj        \
         $(SLO)$/dinfdlg.obj         \
-        $(SLO)$/newerverwarn.obj
+        $(SLO)$/dockwin.obj
 
 SLOFILES =\
         $(EXCEPTIONSFILES)			\
@@ -59,7 +59,6 @@ SLOFILES =\
         $(SLO)$/alienwarn.obj       \
         $(SLO)$/basedlgs.obj		\
         $(SLO)$/dinfedt.obj			\
-        $(SLO)$/dockwin.obj			\
         $(SLO)$/intro.obj			\
         $(SLO)$/macropg.obj         \
         $(SLO)$/mgetempl.obj		\
@@ -95,8 +94,7 @@ SRC1FILES =\
         templdlg.src		\
         versdlg.src			\
         printopt.src        \
-        srchdlg.src         \
-        newerverwarn.src
+        srchdlg.src
 
 .IF "$(BUILD_VER_STRING)"!=""
 .IF "$(GUI)"=="UNX"

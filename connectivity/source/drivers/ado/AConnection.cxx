@@ -44,7 +44,7 @@
 #include <cppuhelper/typeprovider.hxx>
 #include "connectivity/dbexception.hxx"
 #include <osl/file.hxx>
-
+#include "resource/ado_res.hrc"
 
 using namespace dbtools;
 using namespace connectivity::ado;
@@ -135,30 +135,37 @@ void OConnection::construct(const ::rtl::OUString& url,const Sequence< PropertyV
         else if(!pIter->Name.compareToAscii("password"))
             pIter->Value >>= aPWD;
     }
-
-    if(m_pAdoConnection)
+    try
     {
-        if(m_pAdoConnection->Open(aDSN,aUID,aPWD,adConnectUnspecified))
-            m_pAdoConnection->PutCommandTimeout(nTimeout);
+        if(m_pAdoConnection)
+        {
+            if(m_pAdoConnection->Open(aDSN,aUID,aPWD,adConnectUnspecified))
+                m_pAdoConnection->PutCommandTimeout(nTimeout);
+            else
+                ADOS::ThrowException(*m_pAdoConnection,*this);
+            if(m_pAdoConnection->get_State() != adStateOpen)
+                throwGenericSQLException( STR_NO_CONNECTION,*this );
+
+            WpADOProperties aProps = m_pAdoConnection->get_Properties();
+            if(aProps.IsValid())
+            {
+                OTools::putValue(aProps,::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Jet OLEDB:ODBC Parsing")),sal_True);
+                OLEVariant aVar(OTools::getValue(aProps,::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Jet OLEDB:Engine Type"))));
+                if(!aVar.isNull() && !aVar.isEmpty())
+                    m_nEngineType = aVar;
+            }
+            buildTypeInfo();
+            //bErg = TRUE;
+        }
         else
-            ADOS::ThrowException(*m_pAdoConnection,*this);
-        if(m_pAdoConnection->get_State() != adStateOpen)
             ::dbtools::throwFunctionSequenceException(*this);
 
-        WpADOProperties aProps = m_pAdoConnection->get_Properties();
-        if(aProps.IsValid())
-        {
-            OTools::putValue(aProps,::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Jet OLEDB:ODBC Parsing")),sal_True);
-            OLEVariant aVar(OTools::getValue(aProps,::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Jet OLEDB:Engine Type"))));
-            if(!aVar.isNull() && !aVar.isEmpty())
-                m_nEngineType = aVar;
-        }
-        buildTypeInfo();
-        //bErg = TRUE;
     }
-    else
-        ::dbtools::throwFunctionSequenceException(*this);
-
+    catch(const Exception )
+    {
+        osl_decrementInterlockedCount( &m_refCount );
+        throw;
+    }
     osl_decrementInterlockedCount( &m_refCount );
 }
 //-----------------------------------------------------------------------------

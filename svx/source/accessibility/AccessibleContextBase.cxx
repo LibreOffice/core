@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: AccessibleContextBase.cxx,v $
- * $Revision: 1.28 $
+ * $Revision: 1.28.144.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -662,13 +662,19 @@ void AccessibleContextBase::CommitChange (
     const uno::Any& rNewValue,
     const uno::Any& rOldValue)
 {
-    AccessibleEventObject aEvent (
-        static_cast<XAccessibleContext*>(this),
-        nEventId,
-        rNewValue,
-        rOldValue);
+    // Do not call FireEvent and do not even create the event object when no
+    // listener has been registered yet.  Creating the event object can
+    // otherwise lead to a crash.  See issue 93419 for details.
+    if (mnClientId != 0)
+    {
+        AccessibleEventObject aEvent (
+            static_cast<XAccessibleContext*>(this),
+            nEventId,
+            rNewValue,
+            rOldValue);
 
-    FireEvent (aEvent);
+        FireEvent (aEvent);
+    }
 }
 
 

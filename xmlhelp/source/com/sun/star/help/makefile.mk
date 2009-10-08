@@ -8,7 +8,7 @@
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.39 $
+# $Revision: 1.38 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -98,11 +98,13 @@ DEFLIB1NAME	=$(TARGET)
 JAVACLASSFILES = \
     $(CLASSDIR)$/$(PACKAGE)$/HelpSearch.class			        \
     $(CLASSDIR)$/$(PACKAGE)$/HelpIndexer.class			        \
+    $(CLASSDIR)$/$(PACKAGE)$/HelpComponent.class			        \
     $(CLASSDIR)$/$(PACKAGE)$/HelpFileDocument.class
 
 JARFILES  = ridl.jar jurt.jar unoil.jar juh.jar
 .IF "$(SYSTEM_LUCENE)" == "YES"
 XCLASSPATH!:=$(XCLASSPATH)$(PATH_SEPERATOR)$(LUCENE_CORE_JAR)$(PATH_SEPERATOR)$(LUCENE_ANALYZERS_JAR)
+COMP=fix_system_lucene
 .ELSE
 JARFILES += lucene-core-2.3.jar lucene-analyzers-2.3.jar
 .ENDIF
@@ -115,3 +117,12 @@ CUSTOMMANIFESTFILE = MANIFEST.MF
 # --- Targets ------------------------------------------------------
 
 .INCLUDE :  target.mk
+
+.IF "$(JARTARGETN)"!=""
+$(JARTARGETN) : $(COMP)
+.ENDIF
+
+fix_system_lucene:
+    @echo "Fix Java Class-Path entry for Lucene libraries from system."
+    @$(SED) -r -e "s#^(Class-Path:).*#\1 file://$(LUCENE_CORE_JAR) file://$(LUCENE_ANALYZERS_JAR)#" \
+    -i ../../../../../$(INPATH)/class/HelpLinker/META-INF/MANIFEST.MF

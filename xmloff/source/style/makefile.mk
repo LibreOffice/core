@@ -209,6 +209,7 @@ SLOFILES =	\
         $(SLO)$/PagePropertySetContext.obj		\
         $(SLO)$/PageHeaderFooterContext.obj		\
         $(SLO)$/StyleMap.obj					\
+        $(SLO)$/WordWrapPropertyHdl.obj			\
         $(SLO)$/XMLBitmapRepeatOffsetPropertyHandler.obj \
         $(SLO)$/XMLFillBitmapSizePropertyHandler.obj	\
         $(SLO)$/XMLBitmapLogicalSizePropertyHandler.obj	\

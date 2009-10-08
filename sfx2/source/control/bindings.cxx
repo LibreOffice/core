@@ -74,7 +74,9 @@
 #include <sfx2/topfrm.hxx>
 #include <sfx2/objsh.hxx>
 #include <sfx2/msgpool.hxx>
+
 #include <comphelper/uieventslogger.hxx>
+#include <com/sun/star/frame/XModuleManager.hpp>
 
 
 using namespace ::com::sun::star;
@@ -135,12 +137,6 @@ IMPL_LINK(SfxAsyncExec_Impl, TimerHdl, Timer*, pTimer)
     (void)pTimer; // unused
     aTimer.Stop();
 
-    if(::comphelper::UiEventsLogger::isEnabled()) //#i88653#
-    {
-        Sequence<beans::PropertyValue> source;
-        ::comphelper::UiEventsLogger::appendDispatchOrigin(source, rtl::OUString::createFromAscii("SfxAsyncExec"));
-        ::comphelper::UiEventsLogger::logDispatch(aCommand, source);
-    }
     Sequence<beans::PropertyValue> aSeq;
     xDisp->dispatch( aCommand, aSeq );
 
@@ -2088,7 +2084,7 @@ IMPL_LINK( SfxBindings, NextJob_Impl, Timer *, pTimer )
 
     // modifying the SfxObjectInterface-stack without SfxBindings => nothing to do
     SfxViewFrame* pFrame = pDispatcher->GetFrame();
-    if ( pFrame && pFrame->GetObjectShell()->IsInModalMode() || pSfxApp->IsDowning() || !pImp->pCaches->Count() )
+    if ( (pFrame && pFrame->GetObjectShell()->IsInModalMode()) || pSfxApp->IsDowning() || !pImp->pCaches->Count() )
     {
         DBG_PROFSTOP(SfxBindingsNextJob_Impl0);
         return sal_True;
@@ -2839,6 +2835,25 @@ BOOL SfxBindings::ExecuteCommand_Impl( const String& rCommand )
     ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatch >  xDisp = pImp->xProv->queryDispatch( aURL, ::rtl::OUString(), 0 );
     if ( xDisp.is() )
     {
+        if(::comphelper::UiEventsLogger::isEnabled()) //#i88653#
+        {
+            ::rtl::OUString sAppName;
+            try
+            {
+                static ::rtl::OUString our_aModuleManagerName = ::rtl::OUString::createFromAscii("com.sun.star.frame.ModuleManager");
+                ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > xServiceManager =
+                    ::comphelper::getProcessServiceFactory();
+                ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModuleManager > xModuleManager(
+                    xServiceManager->createInstance(our_aModuleManagerName)
+                    , ::com::sun::star::uno::UNO_QUERY_THROW);
+                ::com::sun::star::uno::Reference < ::com::sun::star::frame::XFrame > xFrame(
+                    pDispatcher->GetFrame()->GetFrame()->GetFrameInterface(), UNO_QUERY_THROW);
+                sAppName = xModuleManager->identify(xFrame);
+            } catch(::com::sun::star::uno::Exception&) {}
+            Sequence<beans::PropertyValue> source;
+            ::comphelper::UiEventsLogger::appendDispatchOrigin(source, sAppName, ::rtl::OUString::createFromAscii("SfxAsyncExec"));
+            ::comphelper::UiEventsLogger::logDispatch(aURL, source);
+        }
         new SfxAsyncExec_Impl( aURL, xDisp );
         return TRUE;
     }

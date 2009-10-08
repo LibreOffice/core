@@ -56,7 +56,9 @@
 #include <com/sun/star/embed/ElementModes.hpp>
 #include <com/sun/star/container/XEnumeration.hpp>
 #include <com/sun/star/container/XContainerQuery.hpp>
+#include <com/sun/star/task/XInteractionRequest.hpp>
 #include <com/sun/star/ucb/InteractiveAugmentedIOException.hpp>
+
 #include <comphelper/processfactory.hxx>
 #include <comphelper/types.hxx>
 #include <comphelper/sequenceashashmap.hxx>
@@ -84,6 +86,7 @@
 #include <svtools/helpid.hrc>
 #endif
 #include <svtools/pickerhelper.hxx>
+#include <svtools/docpasswdrequest.hxx>
 #include <ucbhelper/content.hxx>
 #include <comphelper/storagehelper.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
@@ -1325,8 +1328,10 @@ sal_Int16 FileDialogHelper_Impl::implDoExecute()
 
     sal_Int16 nRet = ExecutableDialogResults::CANCEL;
 
-#if !(defined(MACOSX) && defined(QUARTZ))
 //On MacOSX the native file picker has to run in the primordial thread because of drawing issues
+//On Linux the native gtk file picker, when backed by gnome-vfs2, needs to be run in the same
+//primordial thread as the ucb gnome-vfs2 provider was initialized in.
+#ifdef WNT
     if ( mbSystemPicker )
     {
         PickerThread_Impl* pThread = new PickerThread_Impl( mxFileDlg );
@@ -1542,31 +1547,6 @@ ErrCode FileDialogHelper_Impl::execute( SvStringsDtor*& rpURLList,
         if( !rpSet )
             rpSet = new SfxAllItemSet( SFX_APP()->GetPool() );
 
-        // check, wether or not we have to display a password box
-        if ( mbHasPassword && mbIsPwdEnabled && xCtrlAccess.is() )
-        {
-            try
-            {
-                Any aValue = xCtrlAccess->getValue( ExtendedFilePickerElementIds::CHECKBOX_PASSWORD, 0 );
-                sal_Bool bPassWord = sal_False;
-                if ( ( aValue >>= bPassWord ) && bPassWord )
-                {
-                    // ask for the password
-                    SfxPasswordDialog aPasswordDlg( NULL );
-                    aPasswordDlg.ShowExtras( SHOWEXTRAS_CONFIRM );
-                    short nRet = aPasswordDlg.Execute();
-                    if ( RET_OK == nRet )
-                    {
-                        String aPasswd = aPasswordDlg.GetPassword();
-                        rpSet->Put( SfxStringItem( SID_PASSWORD, aPasswd ) );
-                    }
-                    else
-                        return ERRCODE_ABORT;
-                }
-            }
-            catch( IllegalArgumentException ){}
-        }
-
         // the item should remain only if it was set by the dialog
         rpSet->ClearItem( SID_SELECTION );
 
@@ -1625,8 +1605,37 @@ ErrCode FileDialogHelper_Impl::execute( SvStringsDtor*& rpURLList,
 
         // fill the rpURLList
         implGetAndCacheFiles(mxFileDlg, rpURLList, getCurentSfxFilter());
-        if ( rpURLList == NULL )
+        if ( rpURLList == NULL || rpURLList->GetObject(0) == NULL )
             return ERRCODE_ABORT;
+
+        // check, wether or not we have to display a password box
+        if ( mbHasPassword && mbIsPwdEnabled && xCtrlAccess.is() )
+        {
+            try
+            {
+                Any aValue = xCtrlAccess->getValue( ExtendedFilePickerElementIds::CHECKBOX_PASSWORD, 0 );
+                sal_Bool bPassWord = sal_False;
+                if ( ( aValue >>= bPassWord ) && bPassWord )
+                {
+                    // ask for the password
+                    uno::Reference < ::com::sun::star::task::XInteractionHandler > xInteractionHandler( ::comphelper::getProcessServiceFactory()->createInstance(::rtl::OUString::createFromAscii("com.sun.star.comp.uui.UUIInteractionHandler")), UNO_QUERY );
+
+                    if( xInteractionHandler.is() )
+                    {
+                        RequestDocumentPassword* pPasswordRequest = new RequestDocumentPassword(
+                            ::com::sun::star::task::PasswordRequestMode_PASSWORD_CREATE, *(rpURLList->GetObject(0)) );
+
+                        uno::Reference< com::sun::star::task::XInteractionRequest > rRequest( pPasswordRequest );
+                        xInteractionHandler->handle( rRequest );
+                        if ( pPasswordRequest->isPassword() )
+                            rpSet->Put( SfxStringItem( SID_PASSWORD, pPasswordRequest->getPassword() ) );
+                        else
+                            return ERRCODE_ABORT;
+                    }
+                }
+            }
+            catch( IllegalArgumentException ){}
+        }
 
         SaveLastUsedFilter();
         return ERRCODE_NONE;

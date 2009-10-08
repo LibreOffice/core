@@ -73,12 +73,8 @@
 #include "fmservs.hxx"
 #include "sdbdatacolumn.hxx"
 
-#define CURSORPOSITION_UNKNOWN -2
-
 #define HANDLE_ID   0
 
-String INVALIDTEXT  = String::CreateFromAscii("###");
-String OBJECTTEXT   = String::CreateFromAscii("<OBJECT>");
 #include <comphelper/stl_types.hxx>
 #include <comphelper/property.hxx>
 #include "trace.hxx"
@@ -758,32 +754,44 @@ void DbGridControl::NavigationBar::Paint(const Rectangle& rRect)
 //------------------------------------------------------------------------------
 void DbGridControl::NavigationBar::StateChanged( StateChangedType nType )
 {
-    Control::StateChanged(nType);
-    if (STATE_CHANGE_ZOOM == nType)
+    Control::StateChanged( nType );
+
+    Window* pWindows[] = {  &m_aRecordText,
+                            &m_aAbsolute,
+                            &m_aRecordOf,
+                            &m_aRecordCount,
+                            &m_aFirstBtn,
+                            &m_aPrevBtn,
+                            &m_aNextBtn,
+                            &m_aLastBtn,
+                            &m_aNewBtn
+                        };
+
+    switch ( nType )
     {
-        Fraction aZoom = GetZoom();
-
-        Window* pWindows[] = {
-                                &m_aRecordText,
-                                &m_aAbsolute,
-                                &m_aRecordOf,
-                                &m_aRecordCount,
-                                &m_aFirstBtn,
-                                &m_aPrevBtn,
-                                &m_aNextBtn,
-                                &m_aLastBtn,
-                                &m_aNewBtn
-                            };
-
-        // not all of these controls need to know the new zoom, but to be sure ...
-        Font aFont( IsControlFont() ? GetControlFont() : GetPointFont());
-        for (size_t i=0; i < sizeof(pWindows)/sizeof(pWindows[0]); ++i)
+        case STATE_CHANGE_MIRRORING:
         {
-            pWindows[i]->SetZoom(aZoom);
-            pWindows[i]->SetZoomedPointFont(aFont);
+            BOOL bIsRTLEnabled = IsRTLEnabled();
+            for ( size_t i=0; i < sizeof( pWindows ) / sizeof( pWindows[0] ); ++i )
+                pWindows[i]->EnableRTL( bIsRTLEnabled );
         }
-        // rearrange the controls
-        m_nDefaultWidth = ArrangeControls();
+        break;
+
+        case STATE_CHANGE_ZOOM:
+        {
+            Fraction aZoom = GetZoom();
+
+            // not all of these controls need to know the new zoom, but to be sure ...
+            Font aFont( IsControlFont() ? GetControlFont() : GetPointFont());
+            for (size_t i=0; i < sizeof(pWindows)/sizeof(pWindows[0]); ++i)
+            {
+                pWindows[i]->SetZoom(aZoom);
+                pWindows[i]->SetZoomedPointFont(aFont);
+            }
+            // rearrange the controls
+            m_nDefaultWidth = ArrangeControls();
+        }
+        break;
     }
 }
 
@@ -939,7 +947,7 @@ DbGridControl::DbGridControl(
     String sName(SVX_RES(RID_STR_NAVIGATIONBAR));
     m_aBar.SetAccessibleName(sName);
     m_aBar.Show();
-    ImplInitSettings(sal_True,sal_True,sal_True);
+    ImplInitWindow( InitAll );
 }
 
 //------------------------------------------------------------------------------
@@ -1006,11 +1014,17 @@ DbGridControl::~DbGridControl()
 void DbGridControl::StateChanged( StateChangedType nType )
 {
     DbGridControl_Base::StateChanged( nType );
+
     switch (nType)
     {
+        case STATE_CHANGE_MIRRORING:
+            ImplInitWindow( InitWritingMode );
+            Invalidate();
+            break;
+
         case STATE_CHANGE_ZOOM:
         {
-            ImplInitSettings( sal_True, sal_False, sal_False );
+            ImplInitWindow( InitFont );
 
             // and give it a chance to rearrange
             Point aPoint = GetControlArea().TopLeft();
@@ -1020,15 +1034,15 @@ void DbGridControl::StateChanged( StateChangedType nType )
         }
         break;
         case STATE_CHANGE_CONTROLFONT:
-            ImplInitSettings( sal_True, sal_False, sal_False );
+            ImplInitWindow( InitFont );
             Invalidate();
             break;
         case STATE_CHANGE_CONTROLFOREGROUND:
-            ImplInitSettings( sal_False, sal_True, sal_False );
+            ImplInitWindow( InitForeground );
             Invalidate();
             break;
         case STATE_CHANGE_CONTROLBACKGROUND:
-            ImplInitSettings( sal_False, sal_False, sal_True );
+            ImplInitWindow( InitBackground );
             Invalidate();
             break;
     }
@@ -1041,7 +1055,7 @@ void DbGridControl::DataChanged( const DataChangedEvent& rDCEvt )
     if ( (rDCEvt.GetType() == DATACHANGED_SETTINGS ) &&
          (rDCEvt.GetFlags() & SETTINGS_STYLE) )
     {
-        ImplInitSettings( sal_True, sal_True, sal_True );
+        ImplInitWindow( InitAll );
         Invalidate();
     }
 }
@@ -1059,16 +1073,24 @@ void DbGridControl::Select()
 }
 
 //------------------------------------------------------------------------------
-void DbGridControl::ImplInitSettings( sal_Bool bFont, sal_Bool bForeground, sal_Bool bBackground )
+void DbGridControl::ImplInitWindow( const InitWindowFacet _eInitWhat )
 {
-    for (sal_uInt32 i = 0; i < m_aColumns.Count(); i++)
+    for ( sal_uInt32 i = 0; i < m_aColumns.Count(); ++i )
     {
         DbGridColumn* pCol = m_aColumns.GetObject(i);
         if (pCol)
-            pCol->ImplInitSettings( GetDataWindow(), bFont, bForeground, bBackground );
+            pCol->ImplInitWindow( GetDataWindow(), _eInitWhat );
     }
 
-    if ( bFont )
+    if ( ( _eInitWhat & InitWritingMode ) != 0 )
+    {
+        if ( m_bNavigationBar )
+        {
+            m_aBar.EnableRTL( IsRTLEnabled() );
+        }
+    }
+
+    if ( ( _eInitWhat & InitFont ) != 0 )
     {
         if ( m_bNavigationBar )
         {
@@ -1087,7 +1109,7 @@ void DbGridControl::ImplInitSettings( sal_Bool bFont, sal_Bool bForeground, sal_
         }
     }
 
-    if (bBackground)
+    if ( ( _eInitWhat & InitBackground ) != 0 )
     {
         if (IsControlBackground())
         {
@@ -1522,7 +1544,7 @@ void DbGridControl::setDataSource(const Reference< XRowSet >& _xCursor, sal_uInt
         }
         catch( const Exception& )
         {
-            OSL_ENSURE( sal_False, "DbGridControl::setDataSource: caught an exception while checking the privileges!" );
+            DBG_UNHANDLED_EXCEPTION();
         }
 
         sal_Bool bPermanentCursor = IsPermanentCursorEnabled();
@@ -2020,12 +2042,22 @@ void DbGridControl::PaintCell(OutputDevice& rDev, const Rectangle& rRect, sal_uI
 sal_Bool DbGridControl::CursorMoving(long nNewRow, sal_uInt16 nNewCol)
 {
     DBG_CHKTHIS( DbGridControl, NULL );
-    if (m_pDataCursor &&
-        m_nCurrentPos != nNewRow &&
-        !SetCurrent(nNewRow))
+
+    DeactivateCell( sal_False );
+
+    if  (   m_pDataCursor
+        &&  ( m_nCurrentPos != nNewRow )
+        && !SetCurrent( nNewRow )
+        )
+    {
+        ActivateCell();
+        return sal_False;
+    }
+
+    if ( !DbGridControl_Base::CursorMoving( nNewRow, nNewCol ) )
         return sal_False;
 
-    return DbGridControl_Base::CursorMoving(nNewRow, nNewCol);
+    return sal_True;
 }
 
 //------------------------------------------------------------------------------
@@ -2103,15 +2135,9 @@ sal_Bool DbGridControl::SetCurrent(long nNewRow)
             return sal_False;
         }
     }
-    catch(com::sun::star::sdbc::SQLException& )
+    catch ( const Exception& )
     {
-        DBG_ERROR("DbGridControl::SetCurrent : caught an exception !");
-        EndCursorAction();
-        return sal_False;
-    }
-    catch (Exception)
-    {
-        DBG_ERROR("DbGridControl::SetCurrent : caught an exception !");
+        DBG_UNHANDLED_EXCEPTION();
         EndCursorAction();
         return sal_False;
     }
@@ -2544,7 +2570,7 @@ void DbGridControl::MoveToNext()
         }
         catch(SQLException &)
         {
-            DBG_ERROR("DbGridControl::MoveToNext: SQLException caught");
+            DBG_UNHANDLED_EXCEPTION();
         }
 
         if(!bOk)
@@ -3138,6 +3164,7 @@ void DbGridControl::Undo()
         }
         catch(Exception&)
         {
+            DBG_UNHANDLED_EXCEPTION();
         }
 
         EndCursorAction();

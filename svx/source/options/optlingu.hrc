@@ -45,10 +45,7 @@
 #define STR_WORDS_WITH_DIGITS   202
 #define STR_CAPITALIZATION      203
 #define STR_SPELL_SPECIAL       204
-#define STR_ALL_LANGUAGES       205
 #define STR_SPELL_AUTO          206
-#define STR_HIDE_MARKINGS       207
-#define STR_OLD_GERMAN          208
 #define STR_NUM_PRE_BREAK       209
 #define STR_NUM_POST_BREAK      210
 #define STR_HYPH_AUTO           211

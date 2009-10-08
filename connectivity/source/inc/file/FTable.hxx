@@ -37,6 +37,7 @@
 #ifndef _CONNECTIVITY_FILE_BCONNECTION_HXX_
 #include "file/FConnection.hxx"
 #endif
+#include "file/filedllapi.hxx"
 #include <tools/stream.hxx>
 #include "connectivity/FValue.hxx"
 #include "TResultSetHelper.hxx"
@@ -47,7 +48,7 @@ namespace connectivity
     {
         typedef connectivity::sdbcx::OTable OTable_TYPEDEF;
 
-        class OFileTable :  public OTable_TYPEDEF
+        class OOO_DLLPUBLIC_FILE OFileTable :   public OTable_TYPEDEF
         {
         protected:
             ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDatabaseMetaData >   m_xMetaData;

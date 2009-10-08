@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: dp_sfwk.cxx,v $
- * $Revision: 1.16 $
+ * $Revision: 1.16.66.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -153,8 +153,7 @@ BackendImpl::PackageImpl::PackageImpl(
         rtl_UriDecodeWithCharset, RTL_TEXTENCODING_UTF8 );
     m_name = m_displayName;
 
-    OSL_TRACE("PakageImpl displayName is %s",
-        ::rtl::OUStringToOString( m_displayName , RTL_TEXTENCODING_ASCII_US ).pData->buffer );
+    dp_misc::TRACE(OUSTR("PakageImpl displayName is ") + m_displayName);
 }
 
 //______________________________________________________________________________
@@ -294,12 +293,10 @@ Reference<deployment::XPackage> BackendImpl::bindPackage_(
                 sal_Int32 startOfReplace = sfwkLibType.indexOf( MACRONAME );
                 sal_Int32 charsToReplace = MACRONAME.getLength();
                 sfwkLibType = sfwkLibType.replaceAt( startOfReplace, charsToReplace, lang );
-                OSL_TRACE("******************************");
-                OSL_TRACE(" BackEnd detected lang = %s  ",
-                     rtl::OUStringToOString( lang, RTL_TEXTENCODING_ASCII_US ).getStr() );
-                OSL_TRACE(" for url %s",
-                     rtl::OUStringToOString( sParcelDescURL, RTL_TEXTENCODING_ASCII_US ).getStr() );
-                OSL_TRACE("******************************");
+                dp_misc::TRACE("******************************\n");
+                dp_misc::TRACE(OUSTR(" BackEnd detected lang = ") + lang + OUSTR("\n"));
+                dp_misc::TRACE(OUSTR(" for url ") + sParcelDescURL + OUSTR("\n") );
+                dp_misc::TRACE("******************************\n");
                 return new PackageImpl( this, url, sfwkLibType );
             }
         }
@@ -374,7 +371,7 @@ void BackendImpl::PackageImpl::processPackage_(
 {
     if ( !m_xNameCntrPkgHandler.is() )
     {
-        OSL_TRACE("no package handler!!!!");
+        dp_misc::TRACE("no package handler!!!!\n");
         throw RuntimeException( OUSTR("No package Handler " ),
             Reference< XInterface >() );
     }

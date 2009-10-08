@@ -39,6 +39,7 @@
 #include <cppuhelper/compbase4.hxx>
 #include "propertyids.hxx"
 #include "connectivity/CommonTools.hxx"
+#include "connectivity/dbtoolsdllapi.hxx"
 #include "resource/sharedresources.hxx"
 
 namespace connectivity
@@ -51,7 +52,7 @@ namespace connectivity
 
     typedef ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >  TConditions;
 
-    class OMetaConnection : public OMetaConnection_BASE
+    class OOO_DLLPUBLIC_DBTOOLS OMetaConnection : public OMetaConnection_BASE
     {
     protected:
         ::osl::Mutex                    m_aMutex;

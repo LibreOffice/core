@@ -38,7 +38,7 @@ $(RPMFILES) : $(SPECFILE)
     -$(RM) $(@:d)$(@:b:s/-/ /:1)-$(SPECFILE:b)-*
     $(RPM) -bb $< $(RPMMACROS) \
         --buildroot $(ABSLOCALOUT)$/misc$/$(@:b) \
-        --define "_builddir $(COMMONMISC)$/$(@:b:s/-/ /:1)" \
+        --define "_builddir $(shell @cd $(COMMONMISC)$/$(@:b:s/-/ /:1) && pwd)" \
         --define "productname $(PRODUCTNAME.$(@:b:s/-/ /:1))" \
         --define "pkgprefix $(@:b:s/-/ /:1)$(PRODUCTVERSION.$(@:b:s/-/ /:1))" \
         --define "unixfilename $(UNIXFILENAME.$(@:b:s/-/ /:1))" \

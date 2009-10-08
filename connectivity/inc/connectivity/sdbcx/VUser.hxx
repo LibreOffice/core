@@ -42,7 +42,7 @@
 #include <com/sun/star/container/XNamed.hpp>
 #include "connectivity/sdbcx/IRefreshable.hxx"
 #include "connectivity/sdbcx/VDescriptor.hxx"
-
+#include "connectivity/dbtoolsdllapi.hxx"
 
 namespace connectivity
 {
@@ -55,7 +55,8 @@ namespace connectivity
                                                   ::com::sun::star::container::XNamed,
                                                   ::com::sun::star::lang::XServiceInfo> OUser_BASE;
 
-        class OUser :   public comphelper::OBaseMutex,
+        class OOO_DLLPUBLIC_DBTOOLS OUser :
+                        public comphelper::OBaseMutex,
                         public OUser_BASE,
                         public IRefreshableGroups,
                         public ::comphelper::OPropertyArrayUsageHelper<OUser>,

@@ -62,6 +62,7 @@ MasterPasswordDialog::MasterPasswordDialog
 
     aFTMasterPassword       ( this, ResId( FT_MASTERPASSWORD, *pResMgr ) ),
     aEDMasterPassword       ( this, ResId( ED_MASTERPASSWORD, *pResMgr ) ),
+    aFL ( this, ResId( FL_FIXED_LINE, *pResMgr ) ),
     aOKBtn                  ( this, ResId( BTN_MASTERPASSWORD_OK, *pResMgr ) ),
     aCancelBtn              ( this, ResId( BTN_MASTERPASSWORD_CANCEL, *pResMgr ) ),
     aHelpBtn                ( this, ResId( BTN_MASTERPASSWORD_HELP, *pResMgr ) ),

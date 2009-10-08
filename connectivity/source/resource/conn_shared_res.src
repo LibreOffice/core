@@ -372,6 +372,11 @@ String STR_VIEW_NO_COMMAND_ERROR
     Text [ en-US ] = "Could not create view: no command object.";
 };
 
+String STR_NO_CONNECTION
+{
+    Text [ en-US ] = "The connection could not be created. May be the necessary data provider is not installed.";
+};
+
 // dbase
 String STR_COULD_NOT_DELETE_INDEX
 {
@@ -430,7 +435,7 @@ String STR_DUPLICATE_VALUE_IN_COLUMN
 
 String STR_INVALID_COLUMN_DECIMAL_VALUE
 {
-    Text [ en-US ] = "The '$columnname$' column has been defined as a \"Decimal\" type, the max. length is $precision$ characters (with $scale$ decimal places).\n\nThe specified value is longer than the number of digits allowed.";
+    Text [ en-US ] = "The '$columnname$' column has been defined as a \"Decimal\" type, the max. length is $precision$ characters (with $scale$ decimal places).\n\nThe specified value \"$value$ is longer than the number of digits allowed.";
 };
 
 String STR_COLUMN_NOT_ALTERABLE
@@ -497,7 +502,7 @@ String STR_ROW_ALREADY_DELETED
 };
 String STR_QUERY_MORE_TABLES
 {
-    Text [ en-US ] = "The query can not be executed. It is contains more then one table.";
+    Text [ en-US ] = "The query can not be executed. It contains more than one table.";
 };
 String STR_QUERY_NO_TABLE
 {

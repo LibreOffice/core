@@ -37,6 +37,7 @@
 #include <com/sun/star/util/XNumberFormatter.hpp>
 #include <com/sun/star/i18n/XLocaleData.hpp>
 #include <connectivity/sqlparse.hxx>
+#include "connectivity/dbtoolsdllapi.hxx"
 
 //.........................................................................
 namespace dbtools
@@ -49,7 +50,7 @@ namespace dbtools
     /** A class which allows input of an SQL predicate for a row set column
         into a edit field.
     */
-    class OPredicateInputController
+    class OOO_DLLPUBLIC_DBTOOLS OPredicateInputController
     {
     private:
         ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >

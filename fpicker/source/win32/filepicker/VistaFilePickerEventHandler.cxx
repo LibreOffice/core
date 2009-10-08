@@ -42,6 +42,7 @@
 #include <com/sun/star/embed/XStorage.hpp>
 #include <com/sun/star/document/XDocumentRevisionListPersistence.hpp>
 #include <com/sun/star/util/RevisionTag.hpp>
+#include <com/sun/star/ui/dialogs/CommonFilePickerElementIds.hpp>
 #include <com/sun/star/ui/dialogs/ExtendedFilePickerElementIds.hpp>
 
 #include <comphelper/processfactory.hxx>
@@ -264,7 +265,8 @@ STDMETHODIMP VistaFilePickerEventHandler::OnShareViolation(IFileDialog*         
                                                            IShellItem*                  pItem    ,
                                                            FDE_SHAREVIOLATION_RESPONSE* pResponse)
 {
-    return E_NOTIMPL;
+    impl_sendEvent(E_CONTROL_STATE_CHANGED, css::ui::dialogs::CommonFilePickerElementIds::LISTBOX_FILTER);
+    return S_OK;
 }
 
 //-----------------------------------------------------------------------------------------
@@ -294,7 +296,9 @@ STDMETHODIMP VistaFilePickerEventHandler::OnTypeChange(IFileDialog* pDialog)
 
     */
 
-    return E_NOTIMPL;
+    impl_sendEvent(E_CONTROL_STATE_CHANGED, css::ui::dialogs::CommonFilePickerElementIds::LISTBOX_FILTER);
+
+    return S_OK;
 }
 
 //-----------------------------------------------------------------------------------------
@@ -480,6 +484,8 @@ void VistaFilePickerEventHandler::impl_sendEvent(  EEventType eEventType,
             RequestRef rRequest(new Request());
             rRequest->setRequest (eEventType);
             rRequest->setArgument(PROP_PICKER_LISTENER, xListener);
+            if ( nControlID )
+                rRequest->setArgument(PROP_CONTROL_ID, nControlID);
 
             aNotify.triggerRequestDirectly(rRequest);
             //aNotify.triggerRequestNonBlocked(rRequest);

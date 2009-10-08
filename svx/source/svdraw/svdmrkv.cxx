@@ -657,7 +657,7 @@ BOOL SdrMarkView::ImpIsFrameHandles() const
         for (ULONG nMarkNum=0; nMarkNum<nMarkAnz && !bFrmHdl; nMarkNum++) {
             const SdrMark* pM=GetSdrMarkByIndex(nMarkNum);
             const SdrObject* pObj=pM->GetMarkedSdrObj();
-            bFrmHdl=!pObj->HasSpecialDrag();
+            bFrmHdl=!pObj->hasSpecialDrag();
         }
     }
     return bFrmHdl;
@@ -696,10 +696,15 @@ void SdrMarkView::SetMarkHandles()
     {
         ULONG nMarkAnz=GetMarkedObjectCount();
         BOOL bStdDrag=eDragMode==SDRDRAG_MOVE;
+        BOOL bSingleTextObjMark=FALSE;
 
         if (nMarkAnz==1)
         {
             pMarkedObj=GetMarkedObjectByIndex(0);
+            bSingleTextObjMark =
+                pMarkedObj &&
+                pMarkedObj->ISA(SdrTextObj) &&
+                static_cast<SdrTextObj*>(pMarkedObj)->IsTextFrame();
         }
 
         BOOL bFrmHdl=ImpIsFrameHandles();
@@ -732,8 +737,20 @@ void SdrMarkView::SetMarkHandles()
 
             if(!aRect.IsEmpty() && !bHideHandlesWhenInTextEdit)
             { // sonst nix gefunden
-
-                if( eDragMode==SDRDRAG_CROP )
+                if( bSingleTextObjMark )
+                {
+                    const ULONG nSiz0=aHdl.GetHdlCount();
+                    pMarkedObj->AddToHdlList(aHdl);
+                    const ULONG nSiz1=aHdl.GetHdlCount();
+                    for (ULONG i=nSiz0; i<nSiz1; i++)
+                    {
+                        SdrHdl* pHdl=aHdl.GetHdl(i);
+                        pHdl->SetObj(pMarkedObj);
+                        pHdl->SetPageView(pMarkedPV);
+                        pHdl->SetObjHdlNum(USHORT(i-nSiz0));
+                    }
+                }
+                else if( eDragMode==SDRDRAG_CROP )
                 {
                     aHdl.AddHdl(new SdrCropHdl(aRect.TopLeft()     ,HDL_UPLFT));
                     aHdl.AddHdl(new SdrCropHdl(aRect.TopCenter()   ,HDL_UPPER));
@@ -778,9 +795,9 @@ void SdrMarkView::SetMarkHandles()
                 const SdrMark* pM=GetSdrMarkByIndex(nMarkNum);
                 SdrObject* pObj=pM->GetMarkedSdrObj();
                 SdrPageView* pPV=pM->GetPageView();
-                ULONG nSiz0=aHdl.GetHdlCount();
+                const ULONG nSiz0=aHdl.GetHdlCount();
                 pObj->AddToHdlList(aHdl);
-                ULONG nSiz1=aHdl.GetHdlCount();
+                const ULONG nSiz1=aHdl.GetHdlCount();
                 bool bPoly=pObj->IsPolyObj();
                 const SdrUShortCont* pMrkPnts=pM->GetMarkedPoints();
                 for (ULONG i=nSiz0; i<nSiz1; i++)
@@ -1572,47 +1589,69 @@ void SdrMarkView::SetMarkHdlSizePixel(USHORT nSiz)
 #define SDRSEARCH_IMPISMASTER 0x80000000 /* MasterPage wird gerade durchsucht */
 SdrObject* SdrMarkView::ImpCheckObjHit(const Point& rPnt, USHORT nTol, SdrObject* pObj, SdrPageView* pPV, ULONG nOptions, const SetOfByte* pMVisLay) const
 {
-    if ((nOptions & SDRSEARCH_IMPISMASTER) !=0 && pObj->IsNotVisibleAsMaster()) {
+    if((nOptions & SDRSEARCH_IMPISMASTER) && pObj->IsNotVisibleAsMaster())
+    {
         return NULL;
     }
-    BOOL bCheckIfMarkable=(nOptions & SDRSEARCH_TESTMARKABLE)!=0;
-    //BOOL bBack=(nOptions & SDRSEARCH_BACKWARD)!=0;
-    BOOL bDeep=(nOptions & SDRSEARCH_DEEP)!=0;
-    BOOL bOLE=pObj->ISA(SdrOle2Obj);
+
+    const bool bCheckIfMarkable(nOptions & SDRSEARCH_TESTMARKABLE);
+    const bool bDeep(nOptions & SDRSEARCH_DEEP);
+    const bool bOLE(pObj->ISA(SdrOle2Obj));
+    const bool bTXT(pObj->ISA(SdrTextObj) && ((SdrTextObj*)pObj)->IsTextFrame());
     SdrObject* pRet=NULL;
     Rectangle aRect(pObj->GetCurrentBoundRect());
-    USHORT nTol2=nTol;
-    // Doppelte Tolezanz fuer ein an dieser View im TextEdit befindliches Objekt
-    if (bOLE || pObj==((SdrObjEditView*)this)->GetTextEditObject()) nTol2*=2;
+    USHORT nTol2(nTol);
+
+    // double tolerance for OLE, text frames and objects in
+    // active text edit
+    if(bOLE || bTXT || pObj==((SdrObjEditView*)this)->GetTextEditObject())
+    {
+        nTol2*=2;
+    }
+
     aRect.Left  ()-=nTol2; // Einmal Toleranz drauf fuer alle Objekte
     aRect.Top   ()-=nTol2;
     aRect.Right ()+=nTol2;
     aRect.Bottom()+=nTol2;
-    if (aRect.IsInside(rPnt)) {
-        if ((!bCheckIfMarkable || IsObjMarkable(pObj,pPV))) {
+
+    if (aRect.IsInside(rPnt))
+    {
+        if ((!bCheckIfMarkable || IsObjMarkable(pObj,pPV)))
+        {
             SdrObjList* pOL=pObj->GetSubList();
-            if (pOL!=NULL && pOL->GetObjCount()!=0) {
+
+            if (pOL!=NULL && pOL->GetObjCount()!=0)
+            {
                 SdrObject* pTmpObj;
                 // OD 30.06.2003 #108784# - adjustment hit point for virtual
                 // objects.
                 Point aPnt( rPnt );
+
                 if ( pObj->ISA(SdrVirtObj) )
                 {
                     Point aOffset = static_cast<SdrVirtObj*>(pObj)->GetOffset();
                     aPnt.Move( -aOffset.X(), -aOffset.Y() );
                 }
+
                 pRet=ImpCheckObjHit(aPnt,nTol,pOL,pPV,nOptions,pMVisLay,pTmpObj);
-            } else {
+            }
+            else
+            {
                 SdrLayerID nLay=pObj->GetLayer();
-                if (pPV->GetVisibleLayers().IsSet(nLay) &&
-                    (pMVisLay==NULL || pMVisLay->IsSet(nLay)))
+
+                if(pPV->GetVisibleLayers().IsSet(nLay) && (pMVisLay==NULL || pMVisLay->IsSet(nLay)))
                 {
                     pRet=pObj->CheckHit(rPnt,nTol2,&pPV->GetVisibleLayers());
                 }
             }
         }
     }
-    if (!bDeep && pRet!=NULL) pRet=pObj;
+
+    if (!bDeep && pRet!=NULL)
+    {
+        pRet=pObj;
+    }
+
     return pRet;
 }
 

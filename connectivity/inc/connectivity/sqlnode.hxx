@@ -30,6 +30,7 @@
 #ifndef _CONNECTIVITY_SQLNODE_HXX
 #define _CONNECTIVITY_SQLNODE_HXX
 
+#include "connectivity/dbtoolsdllapi.hxx"
 #include "connectivity/dbmetadata.hxx"
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/util/XNumberFormatTypes.hpp>
@@ -80,7 +81,7 @@ namespace connectivity
     //==================================================================
     //= SQLParseNodeParameter
     //==================================================================
-    struct SQLParseNodeParameter
+    struct OOO_DLLPUBLIC_DBTOOLS SQLParseNodeParameter
     {
         const ::com::sun::star::lang::Locale&   rLocale;
         ::dbtools::DatabaseMetaData             aMetaData;
@@ -114,7 +115,7 @@ namespace connectivity
     //==========================================================================
     //= OSQLParseNode
     //==========================================================================
-    class OSQLParseNode
+    class OOO_DLLPUBLIC_DBTOOLS OSQLParseNode
     {
         friend class OSQLParser;
 

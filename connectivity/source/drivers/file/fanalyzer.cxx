@@ -203,7 +203,7 @@ void OSQLAnalyzer::describeParam(::vos::ORef<OSQLColumns> rParameterColumns)
 
     if (!rCodeList.size())
         return;     // kein Praedikat
-    if (!rParameterColumns->size())
+    if (!rParameterColumns->get().size())
         return; // keine Parameter
 
     // Anlegen von Columns, die eine genauere Beschreibung fuer die enthalten
@@ -211,7 +211,7 @@ void OSQLAnalyzer::describeParam(::vos::ORef<OSQLColumns> rParameterColumns)
 
 
     // Anlegen einer Testzeile, wird benoetigt um die Parameter zu beschreiben
-    OValueRefRow aParameterRow  = new OValueRefVector(rParameterColumns->size());
+    OValueRefRow aParameterRow  = new OValueRefVector(rParameterColumns->get().size());
     bindParameterRow(aParameterRow);
 
     OValueRefRow aTestRow = new OValueRefVector(Reference< XIndexAccess>(m_aCompiler->getOrigColumns(),UNO_QUERY)->getCount());
@@ -295,7 +295,7 @@ void OSQLAnalyzer::setSelectionEvaluationResult(OValueRefRow& _pRow,const ::std:
             // the first column (index 0) is for convenience only. The first real select column is no 1.
             if ( (nPos > 0) && (nPos < static_cast<sal_Int32>(_rColumnMapping.size())) )
                 map = _rColumnMapping[nPos];
-            aIter->second->startSelection((*_pRow)[map]);
+            aIter->second->startSelection((_pRow->get())[map]);
         }
     }
 }

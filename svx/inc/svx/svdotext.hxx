@@ -448,13 +448,11 @@ public:
 
     virtual sal_uInt32 GetHdlCount() const;
     virtual SdrHdl* GetHdl(sal_uInt32 nHdlNum) const;
-    virtual FASTBOOL HasSpecialDrag() const;
-    virtual FASTBOOL BegDrag(SdrDragStat& rDrag) const;
-    virtual FASTBOOL MovDrag(SdrDragStat& rDrag) const;
-    virtual FASTBOOL EndDrag(SdrDragStat& rDrag);
-    virtual void BrkDrag(SdrDragStat& rDrag) const;
-    virtual String GetDragComment(const SdrDragStat& rDrag, FASTBOOL bUndoDragComment, FASTBOOL bCreateComment) const;
-    virtual basegfx::B2DPolyPolygon TakeDragPoly(const SdrDragStat& rDrag) const;
+
+    // special drag methods
+    virtual bool hasSpecialDrag() const;
+    virtual bool applySpecialDrag(SdrDragStat& rDrag);
+    virtual String getSpecialDragComment(const SdrDragStat& rDrag) const;
 
     virtual FASTBOOL BegCreate(SdrDragStat& rStat);
     virtual FASTBOOL MovCreate(SdrDragStat& rStat);
@@ -570,6 +568,11 @@ public:
     // Access to TextAnimationAllowed flag
     bool IsTextAnimationAllowed() const;
     void SetTextAnimationAllowed(sal_Bool bNew);
+
+    // #i8824#
+    // Set single item at the local ItemSet. *Does not use* AllowItemChange(),
+    // ItemChange(), PostItemChange() and ItemSetChanged() calls.
+    void SetObjectItemNoBroadcast(const SfxPoolItem& rItem);
 
 public:
     //////////////////////////////////////////////////////////////////////////////

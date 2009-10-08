@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <!--***********************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -8,7 +8,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: GenericCommands.xcu,v $
- * $Revision: 1.74 $
+ * $Revision: 1.72.24.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -1438,6 +1438,14 @@
                     <value>1</value>
                 </prop>
             </node>
+            <node oor:name=".uno:Overline" oor:op="replace">
+                <prop oor:name="Label" oor:type="xs:string">
+                    <value xml:lang="en-US">Overline</value>
+                </prop>
+                <prop oor:name="Properties" oor:type="xs:int">
+                    <value>1</value>
+                </prop>
+            </node>
             <node oor:name=".uno:HelpIndex" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
                     <value xml:lang="en-US">%PRODUCTNAME ~Help</value>
@@ -1457,9 +1465,6 @@
             <node oor:name=".uno:ExtendedHelp" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
                     <value xml:lang="en-US">What's ~This?</value>
-                </prop>
-                <prop oor:name="Properties" oor:type="xs:int">
-                    <value>1</value>
                 </prop>
             </node>
             <node oor:name=".uno:ActiveHelp" oor:op="replace">
@@ -2950,6 +2955,11 @@
                     <value xml:lang="en-US">~Spelling...</value>
                 </prop>
             </node>
+            <node oor:name=".uno:RecheckDocument" oor:op="replace">
+                <prop oor:name="Label" oor:type="xs:string">
+                    <value xml:lang="en-US">~Recheck Document...</value>
+                </prop>
+            </node>
             <node oor:name=".uno:SpellingAndGrammarDialog" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
                     <value xml:lang="en-US">~Spelling and Grammar...</value>
@@ -3404,7 +3414,7 @@
             </node>
             <node oor:name=".uno:Navigator" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
-                    <value xml:lang="en-US">~Navigator</value>
+                    <value xml:lang="en-US">Na~vigator</value>
                 </prop>
                 <prop oor:name="Properties" oor:type="xs:int">
                     <value>1</value>
@@ -3702,7 +3712,7 @@
             </node>
             <node oor:name=".uno:AutoCorrectDlg" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
-                    <value xml:lang="en-US">~AutoCorrect...</value>
+                    <value xml:lang="en-US">~AutoCorrect Options...</value>
                 </prop>
             </node>
             <node oor:name=".uno:AutoPilotPresentations" oor:op="replace">
@@ -5167,7 +5177,7 @@
             </node>
             <node oor:name=".uno:ObjectMenu" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
-                    <value xml:lang="en-US">~Object</value>
+                    <value xml:lang="en-US">Drawing ~Object</value>
                 </prop>
             </node>
             <node oor:name=".uno:EditMenu" oor:op="replace">
@@ -5368,6 +5378,26 @@
             <node oor:name=".uno:MoreDictionaries" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
                     <value xml:lang="en-US">More Dictionaries Online...</value>
+                </prop>
+            </node>
+            <node oor:name=".uno:ActivateStyleApply" oor:op="replace">
+                <prop oor:name="Label" oor:type="xs:string">
+                    <value xml:lang="en-US">Set Focus in Combo Box</value>
+                </prop>
+            </node>
+            <node oor:name=".uno:MacroOrganizer" oor:op="replace">
+                <prop oor:name="Label" oor:type="xs:string">
+                    <value xml:lang="en-US">%PRODUCTNAME Basic Macro Organizer...</value>
+                </prop>
+            </node>
+            <node oor:name=".uno:SendMailDocAsMS" oor:op="replace">
+                <prop oor:name="Label" oor:type="xs:string">
+                    <value xml:lang="en-US">E-mail as ~Microsoft Format...</value>
+                </prop>
+            </node>
+            <node oor:name=".uno:SendMailDocAsOOo" oor:op="replace">
+                <prop oor:name="Label" oor:type="xs:string">
+                    <value xml:lang="en-US">E-mail as ~OpenDocument Format...</value>
                 </prop>
             </node>
         </node>

@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: animationimport.cxx,v $
- * $Revision: 1.15 $
+ * $Revision: 1.15.62.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -804,6 +804,7 @@ void AnimationNodeContext::init_node(  const ::com::sun::star::uno::Reference< :
 
         // query for optional interfaces that are often used later
         Reference< XAnimate > xAnimate( mxNode, UNO_QUERY );
+        Reference< XCommand > xCommand( mxNode, UNO_QUERY );
         Reference< XTransitionFilter > xTransitionFilter( mxNode, UNO_QUERY );
         Reference< XIterateContainer > xIter( mxNode, UNO_QUERY );
 
@@ -949,6 +950,10 @@ void AnimationNodeContext::init_node(  const ::com::sun::star::uno::Reference< :
                     else if( xIter.is() )
                     {
                         xIter->setTarget( aTarget );
+                    }
+                    else if( xCommand.is() )
+                    {
+                        xCommand->setTarget( aTarget );
                     }
                 }
             }
@@ -1230,11 +1235,10 @@ void AnimationNodeContext::init_node(  const ::com::sun::star::uno::Reference< :
 
             case ANA_Command:
             {
-                if( nNodeType == AnimationNodeType::COMMAND )
+                if( xCommand.is() && nNodeType == AnimationNodeType::COMMAND )
                 {
                     if( SvXMLUnitConverter::convertEnum( nEnum, rValue, getAnimationsEnumMap(Animations_EnumMap_Command) ) )
                     {
-                        Reference< XCommand > xCommand( mxNode, UNO_QUERY_THROW );
                         xCommand->setCommand( (sal_Int16)nEnum );
                     }
                 }

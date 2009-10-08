@@ -8,7 +8,7 @@
  *
  * $RCSfile: dp_gui_extensioncmdqueue.cxx,v $
  *
- * $Revision: 1.7 $
+ * $Revision: 1.7.4.3 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -98,20 +98,6 @@
 #include <queue>
 #include <boost/shared_ptr.hpp>
 
-#if 0
-#include "dp_gui.hrc"
-#include "dp_gui.h"
-#include "dp_gui_cmdenv.h"
-#include "comphelper/anytostring.hxx"
-#include "com/sun/star/lang/WrappedTargetException.hpp"
-#include "tools/resid.hxx"
-#include "tools/rcid.h"
-#include "vcl/msgbox.hxx"
-#include "vcl/threadex.hxx"
-#include "boost/bind.hpp"
-
-#endif
-
 #if (defined(_MSC_VER) && (_MSC_VER < 1400))
 #define _WIN32_WINNT 0x0400
 #endif
@@ -140,9 +126,6 @@ OUString getVersion( const uno::Reference< deployment::XPackage > &rPackage )
 namespace dp_gui {
 
 //==============================================================================
-//Only if the class is consructed with the DialogImpl then the ProgressDialog can be
-//displayed. Otherwise this class can still be used to forward an interaction. This
-//is done by the interaction handler of the "Download and Installation" dialog.
 
 class ProgressCmdEnv
     : public ::cppu::WeakImplHelper3< ucb::XCommandEnvironment,
@@ -185,6 +168,7 @@ public:
 
     Dialog * activeDialog() { return m_pDialog; }
 
+    void setTitle( const OUString& rNewTitle ) { m_sTitle = rNewTitle; }
     void startProgress();
     void stopProgress();
     void progressSection( const OUString &rText,
@@ -312,6 +296,7 @@ private:
     const OUString   m_sDisablingPackages;
     const OUString   m_sAddingPackages;
     const OUString   m_sRemovingPackages;
+    const OUString   m_sDefaultCmd;
     osl::Condition   m_wakeup;
     osl::Mutex       m_mutex;
     Input            m_eInput;
@@ -388,11 +373,8 @@ void ProgressCmdEnv::handle( uno::Reference< task::XInteractionRequest > const &
 {
     uno::Any request( xRequest->getRequest() );
     OSL_ASSERT( request.getValueTypeClass() == uno::TypeClass_EXCEPTION );
-#if OSL_DEBUG_LEVEL > 1
-    OSL_TRACE( "[dp_gui_cmdenv.cxx] incoming request:\n%s\n",
-               ::rtl::OUStringToOString( ::comphelper::anyToString(request),
-                                         RTL_TEXTENCODING_UTF8 ).getStr() );
-#endif
+    dp_misc::TRACE( OUSTR("[dp_gui_cmdenv.cxx] incoming request:\n")
+        + ::comphelper::anyToString(request) + OUSTR("\n"));
 
     lang::WrappedTargetException wtExc;
     deployment::DependencyException depExc;
@@ -659,6 +641,7 @@ ExtensionCmdQueue::Thread::Thread( ExtMgrDialog *pDialog,
     m_sDisablingPackages( ExtMgrDialog::getResourceString( RID_STR_DISABLING_PACKAGES ) ),
     m_sAddingPackages( ExtMgrDialog::getResourceString( RID_STR_ADDING_PACKAGES ) ),
     m_sRemovingPackages( ExtMgrDialog::getResourceString( RID_STR_REMOVING_PACKAGES ) ),
+    m_sDefaultCmd( ExtMgrDialog::getResourceString( RID_STR_ADD_PACKAGES ) ),
     m_eInput( NONE ),
     m_bTerminated( false ),
     m_bStopped( false ),
@@ -804,8 +787,8 @@ void ExtensionCmdQueue::Thread::execute()
     {
         if ( m_wakeup.wait() != osl::Condition::result_ok )
         {
-            OSL_TRACE( "dp_gui::ExtensionCmdQueue::Thread::run: ignored "
-                       "osl::Condition::wait failure" );
+            dp_misc::TRACE( "dp_gui::ExtensionCmdQueue::Thread::run: ignored "
+                       "osl::Condition::wait failure\n" );
         }
         m_wakeup.reset();
 
@@ -830,7 +813,7 @@ void ExtensionCmdQueue::Thread::execute()
         if ( eInput == STOP )
             break;
 
-        ::rtl::Reference< ProgressCmdEnv > currentCmdEnv( new ProgressCmdEnv( m_xContext, m_pDialog, m_sAddingPackages ) );
+        ::rtl::Reference< ProgressCmdEnv > currentCmdEnv( new ProgressCmdEnv( m_xContext, m_pDialog, m_sDefaultCmd ) );
 
         // Do not lock the following part with addExtension. addExtension may be called in the main thread.
         // If the message box "Do you want to install the extension (or similar)" is shown and then
@@ -935,6 +918,12 @@ void ExtensionCmdQueue::Thread::execute()
             }
         }
 
+        {
+            // when leaving the while loop with break, we should set working to false, too
+            osl::MutexGuard aGuard( m_mutex );
+            m_bWorking = false;
+        }
+
         if ( !bStartProgress )
             currentCmdEnv->stopProgress();
     }
@@ -955,7 +944,16 @@ void ExtensionCmdQueue::Thread::_addExtension( ::rtl::Reference< ProgressCmdEnv 
 {
     //check if we have a string in anyTitle. For example "unopkg gui \" caused anyTitle to be void
     //and anyTitle.get<OUString> throws as RuntimeException.
-    uno::Any anyTitle = ::ucbhelper::Content( rPackageURL, rCmdEnv.get() ).getPropertyValue( OUSTR("Title") );
+    uno::Any anyTitle;
+    try
+    {
+        anyTitle = ::ucbhelper::Content( rPackageURL, rCmdEnv.get() ).getPropertyValue( OUSTR("Title") );
+    }
+    catch ( uno::Exception & )
+    {
+        return;
+    }
+
     OUString sName;
     if ( ! (anyTitle >>= sName) )
     {
@@ -974,8 +972,6 @@ void ExtensionCmdQueue::Thread::_addExtension( ::rtl::Reference< ProgressCmdEnv 
                                                             rPackageURL, OUString() /* detect media-type */,
                                                             xAbortChannel, rCmdEnv.get() ) );
         OSL_ASSERT( xPackage.is() );
-//        long nPos = m_pDialog->addPackageToList( xPackage, xPackageManager );
-//        m_pDialog->selectEntry( nPos );
    }
     catch ( ucb::CommandFailedException & )
     {
@@ -1204,6 +1200,13 @@ bool ExtensionCmdQueue::hasTerminated()
 bool ExtensionCmdQueue::isBusy()
 {
     return m_thread->isBusy();
+}
+
+void handleInteractionRequest( const uno::Reference< uno::XComponentContext > & xContext,
+                               const uno::Reference< task::XInteractionRequest > & xRequest )
+{
+    ::rtl::Reference< ProgressCmdEnv > xCmdEnv( new ProgressCmdEnv( xContext, NULL, OUSTR("Extension Manager") ) );
+    xCmdEnv->handle( xRequest );
 }
 
 } //namespace dp_gui

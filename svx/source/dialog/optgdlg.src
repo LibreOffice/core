@@ -323,37 +323,6 @@ TabPage OFA_TP_VIEW
         Size = MAP_APPFONT ( 118 , RSC_CD_CHECKBOX_HEIGHT ) ;
         Text [ en-US ] = "Show font h~istory" ;
     };
-    FixedLine FL_3D
-    {
-        Pos = MAP_APPFONT (  133, ROW_FL_3D ) ;
-        Size = MAP_APPFONT ( 121 , 8 ) ;
-        Text [ en-US ] = "3D view" ;
-    };
-    CheckBox CB_3D_OPENGL
-    {
-        Pos = MAP_APPFONT ( 139, ROW_CB_3D_OPENGL ) ;
-        Size = MAP_APPFONT ( 120 , RSC_CD_CHECKBOX_HEIGHT ) ;
-        Text [ en-US ] = "Use ~OpenGL" ;
-    };
-    CheckBox CB_3D_OPENGL_FASTER
-    {
-        Pos = MAP_APPFONT ( 148 , ROW_CB_3D_OPENGL_FASTER ) ;
-        Size = MAP_APPFONT ( 111 , RSC_CD_CHECKBOX_HEIGHT ) ;
-        Text [ en-US ] = "O~ptimized output";
-    };
-    CheckBox CB_3D_DITHERING
-    {
-        Pos = MAP_APPFONT ( 139 , ROW_CB_3D_DITHERING ) ;
-        Size = MAP_APPFONT ( 120 , RSC_CD_CHECKBOX_HEIGHT ) ;
-        Text [ en-US ] = "Use ~dithering" ;
-    };
-    CheckBox CB_3D_SHOWFULL
-    {
-        Pos = MAP_APPFONT ( 139 , ROW_CB_3D_SHOWFULL ) ;
-        Size = MAP_APPFONT ( 120 , RSC_CD_CHECKBOX_HEIGHT ) ;
-        Text [ en-US ] = "Ob~ject refresh during interaction" ;
-    };
-
     FixedLine FL_RENDERING
     {
         Pos = MAP_APPFONT ( 133 , ROW_FL_RENDERING ) ;
@@ -366,6 +335,13 @@ TabPage OFA_TP_VIEW
         Pos = MAP_APPFONT ( 139, ROW_CB_USE_HARDACCELL ) ;
         Size = MAP_APPFONT ( 118 , RSC_CD_CHECKBOX_HEIGHT ) ;
         Text [ en-US ] = "Use hardware acceleration" ;
+    };
+
+    CheckBox CB_USE_ANTIALIASE
+    {
+        Pos = MAP_APPFONT ( 139, ROW_CB_USE_ANTIALIASE ) ;
+        Size = MAP_APPFONT ( 118 , RSC_CD_CHECKBOX_HEIGHT ) ;
+        Text [ en-US ] = "Use Anti-Aliasing" ;
     };
 
     FixedLine FL_MOUSE

@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: editview.cxx,v $
- * $Revision: 1.52 $
+ * $Revision: 1.52.74.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -32,14 +32,19 @@
 #include "precompiled_svx.hxx"
 #include <eeng_pch.hxx>
 
+#include <com/sun/star/i18n/WordType.hpp>
+#include <vcl/metric.hxx>
+
 #define _SOLAR__PRIVATE 1
 
 #include <i18npool/mslangid.hxx>
 #include <svtools/languageoptions.hxx>
+#include <svtools/ctrltool.hxx>
 
-#ifndef SVX_LIGHT
 #include <sfx2/srchitem.hxx>
-#endif
+
+#define _SVSTDARR_USHORTS
+#include <svtools/svstdarr.hxx>
 
 #include <impedit.hxx>
 #include <svx/editeng.hxx>
@@ -47,6 +52,7 @@
 #include <svx/flditem.hxx>
 #include <svx/svxacorr.hxx>
 #include <svx/langitem.hxx>
+#include <svx/fhgtitem.hxx>
 #include <eerdll.hxx>
 #include <eerdll2.hxx>
 #include <editeng.hrc>
@@ -56,9 +62,9 @@
 #include <vcl/menu.hxx>
 #include <acorrcfg.hxx>
 #include <unolingu.hxx>
+#include <fontitem.hxx>
 
 #include <com/sun/star/frame/XStorable.hpp>
-#include <com/sun/star/linguistic2/XDictionary1.hpp>
 #ifndef _COM_SUN_STAR_BEANS_PROPERTYVALUES_HDL_
 #include <com/sun/star/beans/PropertyValues.hdl>
 #endif
@@ -1122,10 +1128,10 @@ void EditView::ExecuteSpellPopup( const Point& rPosPixel, Link* pCallBack )
         sal_uInt16 nDicCount = (USHORT)aDics.getLength();
         for ( sal_uInt16 i = 0; i < nDicCount; i++ )
         {
-            Reference< XDictionary1 >  xDic( pDic[i], UNO_QUERY );
+            Reference< XDictionary >  xDic( pDic[i], UNO_QUERY );
             if (xDic.is())
             {
-                sal_uInt16 nActLanguage = xDic->getLanguage();
+                sal_uInt16 nActLanguage = SvxLocaleToLanguage( xDic->getLocale() );
                 if( xDic->isActive() &&
                     xDic->getDictionaryType() == DictionaryType_POSITIVE &&
                     (nLanguage == nActLanguage || LANGUAGE_NONE == nActLanguage ) )
@@ -1205,7 +1211,7 @@ void EditView::ExecuteSpellPopup( const Point& rPosPixel, Link* pCallBack )
         }
         else if ( nId >= MN_DICTSTART )
         {
-            Reference< XDictionary1 >  xDic( pDic[nId - MN_DICTSTART], UNO_QUERY );
+            Reference< XDictionary >  xDic( pDic[nId - MN_DICTSTART], UNO_QUERY );
             if (xDic.is())
                 xDic->add( aSelected, sal_False, String() );
             // save modified user-dictionary if it is persistent
@@ -1385,4 +1391,158 @@ sal_uInt16 EditView::GetInvalidateMore() const
     return (sal_uInt16)pImpEditView->GetInvalidateMore();
 }
 
+static void ChangeFontSizeImpl( EditView* pEditView, bool bGrow, const ESelection& rSel, const FontList* pFontList )
+{
+    pEditView->SetSelection( rSel );
 
+    SfxItemSet aSet( pEditView->GetAttribs() );
+    if( EditView::ChangeFontSize( bGrow, aSet, pFontList ) )
+    {
+        SfxItemSet aNewSet( pEditView->GetEmptyItemSet() );
+        aNewSet.Put( aSet.Get( EE_CHAR_FONTHEIGHT ), EE_CHAR_FONTHEIGHT );
+        aNewSet.Put( aSet.Get( EE_CHAR_FONTHEIGHT_CJK ), EE_CHAR_FONTHEIGHT_CJK );
+        aNewSet.Put( aSet.Get( EE_CHAR_FONTHEIGHT_CTL ), EE_CHAR_FONTHEIGHT_CTL );
+        pEditView->SetAttribs( aNewSet );
+    }
+}
+
+void EditView::ChangeFontSize( bool bGrow, const FontList* pFontList )
+{
+    DBG_CHKTHIS( EditView, 0 );
+    DBG_CHKOBJ( pImpEditView->pEditEngine, EditEngine, 0 );
+
+    EditEngine& rEditEngine = *pImpEditView->pEditEngine;
+
+    ESelection aSel( GetSelection() );
+    ESelection aOldSelection( aSel );
+    aSel.Adjust();
+
+    if( !aSel.HasRange() )
+    {
+        aSel = rEditEngine.GetWord( aSel, com::sun::star::i18n::WordType::DICTIONARY_WORD );
+    }
+
+    if( aSel.HasRange() )
+    {
+        for( USHORT nPara = aSel.nStartPara; nPara <= aSel.nEndPara; nPara++ )
+        {
+            SvUShorts aPortions;
+            rEditEngine.GetPortions( nPara, aPortions );
+
+            if( aPortions.Count() == 0 )
+                aPortions.Insert( rEditEngine.GetTextLen(nPara), 0 );
+
+            const USHORT nBeginPos = (nPara == aSel.nStartPara) ? aSel.nStartPos : 0;
+            const USHORT nEndPos = (nPara == aSel.nEndPara) ? aSel.nEndPos : 0xffff;
+
+            for ( USHORT nPos = 0; nPos < aPortions.Count(); ++nPos )
+            {
+                USHORT nPortionEnd   = aPortions.GetObject( nPos );
+                USHORT nPortionStart = nPos > 0 ? aPortions.GetObject( nPos - 1 ) : 0;
+
+                if( (nPortionEnd < nBeginPos) || (nPortionStart > nEndPos) )
+                    continue;
+
+                if( nPortionStart < nBeginPos )
+                    nPortionStart = nBeginPos;
+                if( nPortionEnd > nEndPos )
+                    nPortionEnd = nEndPos;
+
+                if( nPortionStart == nPortionEnd )
+                    continue;
+
+                ESelection aPortionSel( nPara, nPortionStart, nPara, nPortionEnd );
+                ChangeFontSizeImpl( this, bGrow, aPortionSel, pFontList );
+            }
+        }
+    }
+    else
+    {
+        ChangeFontSizeImpl( this, bGrow, aSel, pFontList );
+    }
+
+    SetSelection( aOldSelection );
+}
+
+bool EditView::ChangeFontSize( bool bGrow, SfxItemSet& rSet, const FontList* pFontList )
+{
+    static const sal_uInt16 gFontSizeWichMap[] = { EE_CHAR_FONTHEIGHT, EE_CHAR_FONTHEIGHT_CJK, EE_CHAR_FONTHEIGHT_CTL, 0 };
+
+    const SvxFontItem* pFontItem = static_cast<const SvxFontItem*>(&rSet.Get( EE_CHAR_FONTINFO ));
+    if( !pFontItem || !pFontList )
+        return false;
+
+    bool bRet = false;
+
+    const sal_uInt16* pWhich = gFontSizeWichMap;
+    while( *pWhich )
+    {
+        SvxFontHeightItem aFontHeightItem( static_cast<const SvxFontHeightItem&>(rSet.Get( *pWhich )) );
+        long nHeight = aFontHeightItem.GetHeight();
+        const SfxMapUnit eUnit = rSet.GetPool()->GetMetric( *pWhich );
+        nHeight = OutputDevice::LogicToLogic( nHeight * 10, (MapUnit)eUnit, MAP_POINT );
+
+        FontInfo aFontInfo = pFontList->Get( pFontItem->GetFamilyName(), pFontItem->GetStyleName() );
+        const long* pAry = pFontList->GetSizeAry( aFontInfo );
+
+        if( bGrow )
+        {
+            while( *pAry )
+            {
+                if( *pAry > nHeight )
+                {
+                    nHeight = *pAry;
+                    break;
+                }
+                pAry++;
+            }
+
+            if( *pAry == 0 )
+            {
+                nHeight += (nHeight + 5) / 10;
+                if( nHeight > 9999 )
+                    nHeight = 9999;
+            }
+
+        }
+        else if( *pAry )
+        {
+            bool bFound = false;
+            if( *pAry < nHeight )
+            {
+                pAry++;
+                while( *pAry )
+                {
+                    if( *pAry >= nHeight )
+                    {
+                        nHeight = pAry[-1];
+                        bFound = true;
+                        break;
+                    }
+                    pAry++;
+                }
+            }
+
+            if( !bFound )
+            {
+                nHeight -= (nHeight + 5) / 10;
+                if( nHeight < 2 )
+                    nHeight = 2;
+            }
+        }
+
+        if( (nHeight >= 2) && (nHeight <= 9999 ) )
+        {
+            nHeight = OutputDevice::LogicToLogic( nHeight, MAP_POINT, (MapUnit)eUnit  ) / 10;
+
+            if( nHeight != (long)aFontHeightItem.GetHeight() )
+            {
+                aFontHeightItem.SetHeight( nHeight );
+                rSet.Put( aFontHeightItem, *pWhich );
+                bRet = true;
+            }
+        }
+        pWhich++;
+    }
+    return bRet;
+}

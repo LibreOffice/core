@@ -290,6 +290,7 @@ done
 /usr/share/applications/%unixfilename-math.desktop
 /usr/share/applications/%unixfilename-base.desktop
 /usr/share/applications/%unixfilename-printeradmin.desktop
+/usr/share/applications/%unixfilename-startcenter.desktop
 /opt/gnome/share/mime-info/*.keys
 /opt/gnome/share/mime-info/*.mime
 /opt/kde3/share/mimelnk/application/*.desktop

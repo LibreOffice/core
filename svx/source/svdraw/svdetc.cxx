@@ -32,6 +32,9 @@
 #include "precompiled_svx.hxx"
 #include "forbiddencharacterstable.hxx"
 
+#include <com/sun/star/embed/XEmbeddedObject.hpp>
+#include <com/sun/star/embed/EmbedStates.hpp>
+
 #include <svx/svdetc.hxx>
 #include "svditext.hxx"
 #include <svx/svdmodel.hxx>
@@ -74,6 +77,8 @@
 
 //#i80528#
 #include <svx/sdr/contact/viewcontact.hxx>
+
+using namespace ::com::sun::star;
 
 /******************************************************************************
 * Globale Daten der DrawingEngine
@@ -126,17 +131,8 @@ OLEObjCache::~OLEObjCache()
     delete pTimer;
 }
 
-void OLEObjCache::SetSize(ULONG nNewSize)
+void OLEObjCache::UnloadOnDemand()
 {
-    nSize = nNewSize;
-}
-
-void OLEObjCache::InsertObj(SdrOle2Obj* pObj)
-{
-    // insert object into first position
-    Remove(pObj);
-    Insert(pObj, (ULONG) 0L);
-
     if ( nSize < Count() )
     {
         // more objects than configured cache size try to remove objects
@@ -145,12 +141,63 @@ void OLEObjCache::InsertObj(SdrOle2Obj* pObj)
         ULONG nIndex = nCount2-1;
         while( nIndex && nCount2 > nSize )
         {
-            SdrOle2Obj* pCacheObj = (SdrOle2Obj*) GetObject(nIndex--);
-            if ( UnloadObj(pCacheObj) )
-                // object was successfully unloaded
-                nCount2--;
+            SdrOle2Obj* pUnloadObj = (SdrOle2Obj*) GetObject(nIndex--);
+            if ( pUnloadObj )
+            {
+                try
+                {
+                    sal_Bool bUnload = sal_True;
+                    // it is important to get object without reinitialization to avoid reentrance
+                    uno::Reference< embed::XEmbeddedObject > xUnloadObj = pUnloadObj->GetObjRef_NoInit();
+                    if ( xUnloadObj.is() )
+                    {
+                        uno::Reference< frame::XModel > xUnloadModel( xUnloadObj->getComponent(), uno::UNO_QUERY );
+                        if ( xUnloadModel.is() )
+                        {
+                            for ( ULONG nCheckInd = 0; nCheckInd < Count(); nCheckInd++ )
+                            {
+                                SdrOle2Obj* pCacheObj = (SdrOle2Obj*) GetObject(nCheckInd);
+                                if ( pCacheObj && pCacheObj != pUnloadObj )
+                                {
+                                    uno::Reference< frame::XModel > xParentModel = pCacheObj->GetParentXModel();
+                                    if ( xUnloadModel == xParentModel )
+                                        bUnload = sal_False; // the object has running embedded objects
+                                }
+                            }
+                        }
+                    }
+
+                    if ( bUnload && UnloadObj(pUnloadObj) )
+                        // object was successfully unloaded
+                        nCount2--;
+                }
+                catch( uno::Exception& )
+                {}
+            }
         }
     }
+}
+
+void OLEObjCache::SetSize(ULONG nNewSize)
+{
+    nSize = nNewSize;
+}
+
+void OLEObjCache::InsertObj(SdrOle2Obj* pObj)
+{
+    if ( Count() )
+    {
+        SdrOle2Obj* pExistingObj = (SdrOle2Obj*)GetObject( 0 );
+        if ( pObj == pExistingObj )
+            // the object is already on the top, nothing has to be changed
+            return;
+    }
+
+    // insert object into first position
+    Remove(pObj);
+    Insert(pObj, (ULONG) 0L);
+
+    UnloadOnDemand();
 }
 
 void OLEObjCache::RemoveObj(SdrOle2Obj* pObj)
@@ -184,21 +231,7 @@ BOOL OLEObjCache::UnloadObj(SdrOle2Obj* pObj)
 
 IMPL_LINK(OLEObjCache, UnloadCheckHdl, AutoTimer*, /*pTim*/)
 {
-    if ( nSize < Count() )
-    {
-        ULONG nCount2 = Count();
-        ULONG nIndex = nCount2;
-        while ( nCount2 > nSize )
-        {
-            SdrOle2Obj* pCacheObj = (SdrOle2Obj*) GetObject( --nIndex );
-            if ( UnloadObj(pCacheObj) )
-                nCount2--;
-
-            if ( !nIndex )
-                break;
-        }
-    }
-
+    UnloadOnDemand();
     return 0;
 }
 

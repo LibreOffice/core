@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: DocumentMetaData.java,v $
- * $Revision: 1.3 $
+ * $Revision: 1.3.170.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -363,6 +363,8 @@ public class DocumentMetaData extends ComplexTestCase
             udpc.addProperty("Pi", PropertyAttribute.REMOVEABLE, new Double(d));
             udpc.addProperty("Foo", PropertyAttribute.REMOVEABLE, "bar");
             udpc.addProperty("Removed", PropertyAttribute.REMOVEABLE, "bar");
+            // #i94175#: empty property name is valid ODF 1.1
+            udpc.addProperty("", PropertyAttribute.REMOVEABLE, "eeeeek");
             try {
                 udpc.removeProperty("Info 1");
                 udpc.removeProperty("Removed");
@@ -389,6 +391,8 @@ public class DocumentMetaData extends ComplexTestCase
                     udps.getPropertyValue("Pi")));
             assure ("UserDefined string", "bar".equals(
                     udps.getPropertyValue("Foo")));
+            assure ("UserDefined empty name", "eeeeek".equals(
+                    udps.getPropertyValue("")));
 
             try {
                 udps.getPropertyValue("Removed");

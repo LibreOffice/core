@@ -46,6 +46,7 @@
 #include <osl/file.hxx>
 #include <cppuhelper/weak.hxx>
 #include <cppuhelper/queryinterface.hxx>
+#include <comphelper/processfactory.hxx>
 #include <rtl/uri.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <libxslt/xslt.h>
@@ -63,6 +64,7 @@
 #include <com/sun/star/ucb/XContentProvider.hpp>
 #include <com/sun/star/ucb/XContentIdentifierFactory.hpp>
 #include <com/sun/star/container/XHierarchicalNameAccess.hpp>
+#include <com/sun/star/beans/XPropertySet.hpp>
 
 #include "urlparameter.hxx"
 #include "databases.hxx"
@@ -92,6 +94,7 @@ using namespace com::sun::star::io;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::ucb;
+using namespace com::sun::star::beans;
 using namespace com::sun::star::container;
 using namespace berkeleydbproxy;
 using namespace chelp;
@@ -876,12 +879,24 @@ fileClose(void * context) {
 
 } // extern "C"
 
+/*
+// For debugging only
+extern "C" void StructuredXMLErrorFunction(void *userData, xmlErrorPtr error)
+{
+    (void)userData;
+    (void)error;
+
+    // Reset error handler
+    xmlSetStructuredErrorFunc( NULL, NULL );
+}
+*/
+
 InputStreamTransformer::InputStreamTransformer( URLParameter* urlParam,
                                                 Databases*    pDatabases,
                                                 bool isRoot )
     : len( 0 ),
       pos( 0 ),
-      buffer( new char[0] )
+      buffer( new char[1] ) // Initializing with one element to avoid gcc compiler warning
 {
     if( isRoot )
     {
@@ -905,20 +920,24 @@ InputStreamTransformer::InputStreamTransformer( URLParameter* urlParam,
 
         // Uses the implementation detail, that rtl::OString::getStr returns a zero terminated character-array
 
-        const char* parameter[44];
-        rtl::OString parString[43];
+        const char* parameter[47];
+        rtl::OString parString[46];
         int last = 0;
 
         parString[last++] = "Program";
-        parString[last++] = rtl::OString('\'') + urlParam->getByName( "Program" ) + rtl::OString('\'');
+        rtl::OString aPureProgramm( urlParam->getByName( "Program" ) );
+        parString[last++] = rtl::OString('\'') + aPureProgramm + rtl::OString('\'');
         parString[last++] = "Database";
         parString[last++] = rtl::OString('\'') + urlParam->getByName( "DatabasePar" ) + rtl::OString('\'');
         parString[last++] = "Id";
         parString[last++] = rtl::OString('\'') + urlParam->getByName( "Id" ) + rtl::OString('\'');
         parString[last++] = "Path";
-        parString[last++] = rtl::OString('\'') + urlParam->getByName( "Path" ) + rtl::OString('\'');
+        rtl::OString aPath( urlParam->getByName( "Path" ) );
+        parString[last++] = rtl::OString('\'') + aPath + rtl::OString('\'');
+
+        rtl::OString aPureLanguage = urlParam->getByName( "Language" );
         parString[last++] = "Language";
-        parString[last++] = rtl::OString('\'') + urlParam->getByName( "Language" ) + rtl::OString('\'');
+        parString[last++] = rtl::OString('\'') + aPureLanguage + rtl::OString('\'');
         parString[last++] = "System";
         parString[last++] = rtl::OString('\'') + urlParam->getByName( "System" ) + rtl::OString('\'');
         parString[last++] = "productname";
@@ -973,6 +992,57 @@ InputStreamTransformer::InputStreamTransformer( URLParameter* urlParam,
                               RTL_TEXTENCODING_UTF8 ) + rtl::OString('\'');
         }
 
+        rtl::OString aPureExtensionId;
+        rtl::OString aExpandedExtensionPath;
+        if( !aPureProgramm.getLength() )
+        {
+            // Extension jar file? Search for ?
+            rtl::OUString aJar = urlParam->get_jar();
+            sal_Int32 nQuestionMark1 = aJar.indexOf( sal_Unicode('?') );
+            sal_Int32 nQuestionMark2 = aJar.lastIndexOf( sal_Unicode('?') );
+            if( nQuestionMark1 != -1 && nQuestionMark2 != -1 && nQuestionMark1 != nQuestionMark2 )
+            {
+                // ExtensionPath
+                ::rtl::OUString aExtensionPath = aJar.copy( nQuestionMark1 + 1, nQuestionMark2 - nQuestionMark1 - 1 );
+
+                Reference< XMultiServiceFactory > xFactory = comphelper::getProcessServiceFactory();
+                Reference< XPropertySet > xProps( xFactory, UNO_QUERY );
+                OSL_ASSERT( xProps.is() );
+                Reference< XComponentContext > xContext;
+                if (xProps.is())
+                {
+                    xProps->getPropertyValue(
+                        ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("DefaultContext") ) ) >>= xContext;
+                }
+                if( !xContext.is() )
+                {
+                    throw RuntimeException(
+                        ::rtl::OUString::createFromAscii( "InputStreamTransformer::InputStreamTransformer(), no XComponentContext" ),
+                        Reference< XInterface >() );
+                }
+
+                rtl::OUString aOUExpandedExtensionPath = Databases::expandURL( aExtensionPath, xContext );
+                aExpandedExtensionPath = rtl::OUStringToOString( aOUExpandedExtensionPath, osl_getThreadTextEncoding() );
+
+                // Add extension language part
+                rtl::OString aExtensionLanguage = aPureLanguage;
+                if( aExtensionLanguage.getLength() > 2 )
+                    aExtensionLanguage = aExtensionLanguage.copy( 0, 2 );
+                aExpandedExtensionPath += rtl::OString('/');
+                aExpandedExtensionPath += aExtensionLanguage;
+                parString[last++] = "ExtensionPath";
+                parString[last++] = rtl::OString('\'') + aExpandedExtensionPath + rtl::OString('\'');
+
+                // ExtensionId
+                sal_Int32 iSlash = aPath.indexOf( '/' );
+                if( iSlash != -1 )
+                    aPureExtensionId = aPath.copy( 0, iSlash );
+
+                parString[last++] = "ExtensionId";
+                parString[last++] = rtl::OString('\'') + aPureExtensionId + rtl::OString('\'');
+            }
+        }
+
         for( int i = 0; i < last; ++i )
             parameter[i] = parString[i].getStr();
         parameter[last] = 0;
@@ -990,6 +1060,7 @@ InputStreamTransformer::InputStreamTransformer( URLParameter* urlParam,
         xmlRegisterInputCallbacks(pkgMatch, pkgOpen, pkgRead, uriClose);
         xmlRegisterInputCallbacks(helpMatch, helpOpen, helpRead, uriClose);
         xmlRegisterInputCallbacks(fileMatch, fileOpen, fileRead, fileClose);
+        //xmlSetStructuredErrorFunc( NULL, (xmlStructuredErrorFunc)StructuredXMLErrorFunction );
 
         xsltStylesheetPtr cur =
             xsltParseStylesheetFile((const xmlChar *)xslURLascii.getStr());

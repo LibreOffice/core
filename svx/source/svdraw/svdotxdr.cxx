@@ -88,9 +88,11 @@ SdrHdl* SdrTextObj::GetHdl(sal_uInt32 nHdlNum) const
     return pH;
 }
 
-FASTBOOL SdrTextObj::HasSpecialDrag() const
+////////////////////////////////////////////////////////////////////////////////////////////////////
+
+bool SdrTextObj::hasSpecialDrag() const
 {
-    return TRUE;
+    return true;
 }
 
 Rectangle SdrTextObj::ImpDragCalcRect(const SdrDragStat& rDrag) const
@@ -167,96 +169,39 @@ Rectangle SdrTextObj::ImpDragCalcRect(const SdrDragStat& rDrag) const
     return aTmpRect;
 }
 
-struct ImpTextDragUser : public SdrDragStatUserData
-{
-    Rectangle aR;
-};
+////////////////////////////////////////////////////////////////////////////////////////////////////
+// drag
 
-FASTBOOL SdrTextObj::BegDrag(SdrDragStat& rDrag) const
+bool SdrTextObj::applySpecialDrag(SdrDragStat& rDrag)
 {
-    if (bSizProt) return FALSE; // Groesse geschuetzt
-    const SdrHdl* pHdl=rDrag.GetHdl();
-    SdrHdlKind eHdl=pHdl==NULL ? HDL_MOVE : pHdl->GetKind();
-    if (eHdl==HDL_UPLFT || eHdl==HDL_UPPER || eHdl==HDL_UPRGT ||
-        eHdl==HDL_LEFT  ||                    eHdl==HDL_RIGHT ||
-        eHdl==HDL_LWLFT || eHdl==HDL_LOWER || eHdl==HDL_LWRGT)
-    {
-        ImpTextDragUser* pUser=new ImpTextDragUser;
-        pUser->aR=aRect;
-        rDrag.SetUser(pUser);
-        return TRUE;
-    }
-    return FALSE;
-}
+    Rectangle aNewRect(ImpDragCalcRect(rDrag));
 
-FASTBOOL SdrTextObj::MovDrag(SdrDragStat& rDrag) const
-{
-    FASTBOOL bRet = TRUE;
-    ImpTextDragUser* pUser=(ImpTextDragUser*)rDrag.GetUser();
-    if ( pUser )
-    {
-         Rectangle aOldRect(pUser->aR);
-        pUser->aR=ImpDragCalcRect(rDrag);
-        return pUser->aR != aOldRect;
-    }
-    return bRet;
-}
-
-FASTBOOL SdrTextObj::EndDrag(SdrDragStat& rDrag)
-{
-    ImpTextDragUser* pUser=(ImpTextDragUser*)rDrag.GetUser();
-    Rectangle aNewRect(pUser->aR);
-    if (aNewRect.TopLeft()!=aRect.TopLeft() &&
-        (aGeo.nDrehWink!=0 || aGeo.nShearWink!=0))
+    if(aNewRect.TopLeft() != aRect.TopLeft() && (aGeo.nDrehWink || aGeo.nShearWink))
     {
         Point aNewPos(aNewRect.TopLeft());
-        if (aGeo.nShearWink!=0) ShearPoint(aNewPos,aRect.TopLeft(),aGeo.nTan);
-        if (aGeo.nDrehWink!=0) RotatePoint(aNewPos,aRect.TopLeft(),aGeo.nSin,aGeo.nCos);
+
+        if(aGeo.nShearWink)
+            ShearPoint(aNewPos,aRect.TopLeft(),aGeo.nTan);
+
+        if(aGeo.nDrehWink)
+            RotatePoint(aNewPos,aRect.TopLeft(),aGeo.nSin,aGeo.nCos);
+
         aNewRect.SetPos(aNewPos);
     }
-    if (aNewRect!=aRect) {
-        //long nHgt0=aRect.Bottom()-aRect.Top();
-        //long nHgt1=aNewRect.Bottom()-aNewRect.Top();
-        //long nWdt0=aRect.Right()-aRect.Left();
-        //long nWdt1=aNewRect.Right()-aNewRect.Left();
-        SetLogicRect(aNewRect);
+
+    if(aNewRect != aRect)
+    {
+          NbcSetLogicRect(aNewRect);
     }
-    delete pUser;
-    rDrag.SetUser(NULL);
-    return TRUE;
+
+    return true;
 }
 
-void SdrTextObj::BrkDrag(SdrDragStat& rDrag) const
-{
-    delete rDrag.GetUser();
-    rDrag.SetUser(NULL);
-}
-
-XubString SdrTextObj::GetDragComment(const SdrDragStat& /*rDrag*/, FASTBOOL /*bUndoDragComment*/, FASTBOOL bCreateComment) const
+String SdrTextObj::getSpecialDragComment(const SdrDragStat& /*rDrag*/) const
 {
     XubString aStr;
-    if (!bCreateComment) ImpTakeDescriptionStr(STR_DragRectResize,aStr);
+    ImpTakeDescriptionStr(STR_DragRectResize,aStr);
     return aStr;
-}
-
-basegfx::B2DPolyPolygon SdrTextObj::TakeDragPoly(const SdrDragStat& rDrag) const
-{
-    XPolyPolygon aXPP;
-    Rectangle aTmpRect(ImpDragCalcRect(rDrag));
-
-    if(aGeo.nDrehWink || aGeo.nShearWink)
-    {
-        Polygon aPoly(aTmpRect);
-        if (aGeo.nShearWink!=0) ShearPoly(aPoly,aRect.TopLeft(),aGeo.nTan);
-        if (aGeo.nDrehWink!=0) RotatePoly(aPoly,aRect.TopLeft(),aGeo.nSin,aGeo.nCos);
-        aXPP.Insert(XPolygon(aPoly));
-    }
-    else
-    {
-        aXPP.Insert(XPolygon(aTmpRect));
-    }
-
-    return aXPP.getB2DPolyPolygon();
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////

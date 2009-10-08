@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: editdoc.cxx,v $
- * $Revision: 1.48 $
+ * $Revision: 1.48.148.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -218,6 +218,7 @@ SfxItemInfo aItemInfos[EDITITEMCOUNT] = {
         { SID_ATTR_CHAR_RELIEF, SFX_ITEM_POOLABLE },
         { 0, SFX_ITEM_POOLABLE },                           // EE_CHAR_RUBI_DUMMY
         { 0, SFX_ITEM_POOLABLE },                           // EE_CHAR_XMLATTRIBS
+        { SID_ATTR_CHAR_OVERLINE, SFX_ITEM_POOLABLE },
         { 0, SFX_ITEM_POOLABLE },                           // EE_FEATURE_TAB
         { 0, SFX_ITEM_POOLABLE },                           // EE_FEATURE_LINEBR
         { SID_ATTR_CHAR_CHARSETCOLOR, SFX_ITEM_POOLABLE },  // EE_FEATURE_NOTCONV
@@ -246,6 +247,15 @@ USHORT aV4Map[] = {
     4014, 4015, 4016, 4017, 4018,
     /* CJK Items inserted here: EE_CHAR_LANGUAGE - EE_CHAR_XMLATTRIBS */
     4034, 4035, 4036, 4037
+};
+
+USHORT aV5Map[] = {
+    3994, 3995, 3996, 3997, 3998, 3999, 4000, 4001, 4002, 4003,
+    4004, 4005, 4006, 4007, 4008, 4009, 4010, 4011, 4012, 4013,
+    4014, 4015, 4016, 4017, 4018, 4019, 4020, 4021, 4022, 4023,
+    4024, 4025, 4026, 4027, 4028, 4029, 4030, 4031, 4032, 4033,
+    /* EE_CHAR_OVERLINE inserted here */
+    4035, 4036, 4037, 4038
 };
 
 SV_IMPL_PTRARR( ContentList, ContentNode* );
@@ -312,6 +322,11 @@ EditCharAttrib* MakeCharAttrib( SfxItemPool& rPool, const SfxPoolItem& rAttr, US
         case EE_CHAR_UNDERLINE:
         {
             pNew = new EditCharAttribUnderline( (const SvxUnderlineItem&)rNew, nS, nE );
+        }
+        break;
+        case EE_CHAR_OVERLINE:
+        {
+            pNew = new EditCharAttribOverline( (const SvxOverlineItem&)rNew, nS, nE );
         }
         break;
         case EE_CHAR_EMPHASISMARK:
@@ -640,8 +655,8 @@ BOOL EditSelection::IsInvalid() const
 
 BOOL EditSelection::Adjust( const ContentList& rNodes )
 {
-    DBG_ASSERT( aStartPaM.GetIndex() <= aStartPaM.GetNode()->Len(), "Index im Wald in Adjust(1)" )
-    DBG_ASSERT( aEndPaM.GetIndex() <= aEndPaM.GetNode()->Len(), "Index im Wald in Adjust(2)" )
+    DBG_ASSERT( aStartPaM.GetIndex() <= aStartPaM.GetNode()->Len(), "Index im Wald in Adjust(1)" );
+    DBG_ASSERT( aEndPaM.GetIndex() <= aEndPaM.GetNode()->Len(), "Index im Wald in Adjust(2)" );
 
     ContentNode* pStartNode = aStartPaM.GetNode();
     ContentNode* pEndNode = aEndPaM.GetNode();
@@ -649,8 +664,8 @@ BOOL EditSelection::Adjust( const ContentList& rNodes )
     USHORT nStartNode = rNodes.GetPos( pStartNode );
     USHORT nEndNode = rNodes.GetPos( pEndNode );
 
-    DBG_ASSERT( nStartNode != USHRT_MAX, "Node im Wald in Adjust(1)" )
-    DBG_ASSERT( nEndNode != USHRT_MAX, "Node im Wald in Adjust(2)" )
+    DBG_ASSERT( nStartNode != USHRT_MAX, "Node im Wald in Adjust(1)" );
+    DBG_ASSERT( nEndNode != USHRT_MAX, "Node im Wald in Adjust(2)" );
 
     BOOL bSwap = FALSE;
     if ( nStartNode > nEndNode )
@@ -1278,7 +1293,9 @@ void CreateFont( SvxFont& rFont, const SfxItemSet& rSet, bool bSearchInParent, s
     if ( bSearchInParent || ( rSet.GetItemState( nWhich_Weight ) == SFX_ITEM_ON ) )
         rFont.SetWeight( ((const SvxWeightItem&)rSet.Get( nWhich_Weight )).GetWeight() );
     if ( bSearchInParent || ( rSet.GetItemState( EE_CHAR_UNDERLINE ) == SFX_ITEM_ON ) )
-        rFont.SetUnderline( ((const SvxUnderlineItem&)rSet.Get( EE_CHAR_UNDERLINE )).GetUnderline() );
+        rFont.SetUnderline( ((const SvxUnderlineItem&)rSet.Get( EE_CHAR_UNDERLINE )).GetLineStyle() );
+    if ( bSearchInParent || ( rSet.GetItemState( EE_CHAR_OVERLINE ) == SFX_ITEM_ON ) )
+        rFont.SetOverline( ((const SvxOverlineItem&)rSet.Get( EE_CHAR_OVERLINE )).GetLineStyle() );
     if ( bSearchInParent || ( rSet.GetItemState( EE_CHAR_STRIKEOUT ) == SFX_ITEM_ON ) )
         rFont.SetStrikeout( ((const SvxCrossedOutItem&)rSet.Get( EE_CHAR_STRIKEOUT )).GetStrikeout() );
     if ( bSearchInParent || ( rSet.GetItemState( nWhich_Italic ) == SFX_ITEM_ON ) )
@@ -2261,6 +2278,7 @@ EditEngineItemPool::EditEngineItemPool( BOOL bPersistenRefCounts )
     SetVersionMap( 2, 3999, 4019, aV2Map );
     SetVersionMap( 3, 3997, 4020, aV3Map );
     SetVersionMap( 4, 3994, 4022, aV4Map );
+    SetVersionMap( 5, 3994, 4037, aV5Map );
 
     DBG_ASSERT( EE_DLL(), "EditDLL?!" );
     SfxPoolItem** ppDefItems = EE_DLL()->GetGlobalData()->GetDefItems();

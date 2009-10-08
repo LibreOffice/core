@@ -203,10 +203,10 @@ void OStatement_Base::createTable( )
 
             const OColumnAlias& aColumnAlias = m_pConnection->getColumnAlias();
 
-            OSQLColumns::const_iterator aIter = xCreateColumn->begin();
+            OSQLColumns::Vector::const_iterator aIter = xCreateColumn->get().begin();
             const ::rtl::OUString sProprtyName = OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_NAME);
             ::rtl::OUString sName;
-            for (sal_Int32 i = 1; aIter != xCreateColumn->end();++aIter, i++)
+            for (sal_Int32 i = 1; aIter != xCreateColumn->get().end();++aIter, i++)
             {
                 (*aIter)->getPropertyValue(sProprtyName) >>= sName;
                 if ( !aColumnAlias.hasAlias( sName ) )
@@ -279,8 +279,8 @@ sal_Bool OStatement_Base::parseSql( const ::rtl::OUString& sql , sal_Bool bAdjus
             xNames = Reference<XIndexAccess>(m_xColNames,UNO_QUERY);
             // set the binding of the resultrow
             m_aRow          = new OValueVector(xNames->getCount());
-            (*m_aRow)[0].setBound(sal_True);
-            ::std::for_each(m_aRow->begin()+1,m_aRow->end(),TSetBound(sal_False));
+            (m_aRow->get())[0].setBound(sal_True);
+            ::std::for_each(m_aRow->get().begin()+1,m_aRow->get().end(),TSetBound(sal_False));
             // create the column mapping
             createColumnMapping();
 
@@ -506,7 +506,7 @@ void OStatement_Base::createColumnMapping()
 
     // initialize the column index map (mapping select columns to table columns)
     ::vos::ORef<connectivity::OSQLColumns>  xColumns = m_pSQLIterator->getSelectColumns();
-    m_aColMapping.resize(xColumns->size() + 1);
+    m_aColMapping.resize(xColumns->get().size() + 1);
     for (i=0; i<m_aColMapping.size(); ++i)
         m_aColMapping[i] = i;
 

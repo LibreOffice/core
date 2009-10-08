@@ -63,6 +63,7 @@
 #include <comphelper/propertycontainer.hxx>
 #include "file/fanalyzer.hxx"
 #include "file/FTable.hxx"
+#include "file/filedllapi.hxx"
 #include <comphelper/broadcasthelper.hxx>
 #include "connectivity/StdTypeDefs.hxx"
 #include "TSortIndex.hxx"
@@ -89,7 +90,8 @@ namespace connectivity
                                                     ::com::sun::star::lang::XEventListener,
                                                     ::com::sun::star::lang::XUnoTunnel> OResultSet_BASE;
 
-        class OResultSet :  public  comphelper::OBaseMutex,
+        class OOO_DLLPUBLIC_FILE OResultSet :
+                            public  comphelper::OBaseMutex,
                             public  ::connectivity::IResultSetHelper,
                             public  OResultSet_BASE,
                             public  ::comphelper::OPropertyContainer,
@@ -119,7 +121,7 @@ namespace connectivity
             OSkipDeletedSet                         m_aSkipDeletedSet;
 
             ::vos::ORef<OKeySet>                    m_pFileSet;
-            OKeySet::iterator                       m_aFileSetIter;
+            OKeySet::Vector::iterator               m_aFileSetIter;
 
 
 

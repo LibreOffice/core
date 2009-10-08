@@ -29,11 +29,13 @@
  *
  ************************************************************************/
 
+#include "precompiled_svx.hxx"
 #include <svx/sdr/primitive2d/sdrrectangleprimitive2d.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>
 #include <svx/sdr/primitive2d/sdrdecompositiontools.hxx>
 #include <drawinglayer/primitive2d/groupprimitive2d.hxx>
 #include <svx/sdr/primitive2d/svx_primitivetypes2d.hxx>
+#include <drawinglayer/primitive2d/hittestprimitive2d.hxx>
 
 //////////////////////////////////////////////////////////////////////////////
 
@@ -50,31 +52,40 @@ namespace drawinglayer
             Primitive2DSequence aRetval;
 
             // create unit outline polygon
-            ::basegfx::B2DPolygon aUnitOutline(::basegfx::tools::createPolygonFromRect(::basegfx::B2DRange(0.0, 0.0, 1.0, 1.0), mfCornerRadiusX, mfCornerRadiusY));
+            ::basegfx::B2DPolygon aUnitOutline(::basegfx::tools::createPolygonFromRect(::basegfx::B2DRange(0.0, 0.0, 1.0, 1.0), getCornerRadiusX(), getCornerRadiusY()));
 
             // add fill
-            if(maSdrLFSTAttribute.getFill())
+            if(getSdrLFSTAttribute().getFill())
             {
-                appendPrimitive2DReferenceToPrimitive2DSequence(aRetval, createPolyPolygonFillPrimitive(::basegfx::B2DPolyPolygon(aUnitOutline), maTransform, *maSdrLFSTAttribute.getFill(), maSdrLFSTAttribute.getFillFloatTransGradient()));
+                appendPrimitive2DReferenceToPrimitive2DSequence(aRetval, createPolyPolygonFillPrimitive(::basegfx::B2DPolyPolygon(aUnitOutline), getTransform(), *getSdrLFSTAttribute().getFill(), getSdrLFSTAttribute().getFillFloatTransGradient()));
             }
 
             // add line
-            if(maSdrLFSTAttribute.getLine())
+            if(getSdrLFSTAttribute().getLine())
             {
-                appendPrimitive2DReferenceToPrimitive2DSequence(aRetval, createPolygonLinePrimitive(aUnitOutline, maTransform, *maSdrLFSTAttribute.getLine()));
+                appendPrimitive2DReferenceToPrimitive2DSequence(aRetval, createPolygonLinePrimitive(aUnitOutline, getTransform(), *getSdrLFSTAttribute().getLine()));
+            }
+            else
+            {
+                // if initially no line is defined, create one for HitTest and BoundRect
+                const attribute::SdrLineAttribute aBlackHairline(basegfx::BColor(0.0, 0.0, 0.0));
+                const Primitive2DReference xHiddenLineReference(createPolygonLinePrimitive(aUnitOutline, getTransform(), aBlackHairline));
+                const Primitive2DSequence xHiddenLineSequence(&xHiddenLineReference, 1);
+
+                appendPrimitive2DReferenceToPrimitive2DSequence(aRetval, Primitive2DReference(new HitTestPrimitive2D(xHiddenLineSequence)));
             }
 
             // add text
-            if(maSdrLFSTAttribute.getText())
+            if(getSdrLFSTAttribute().getText())
             {
-                appendPrimitive2DReferenceToPrimitive2DSequence(aRetval, createTextPrimitive(::basegfx::B2DPolyPolygon(aUnitOutline), maTransform, *maSdrLFSTAttribute.getText(), maSdrLFSTAttribute.getLine(), false, false));
+                appendPrimitive2DReferenceToPrimitive2DSequence(aRetval, createTextPrimitive(::basegfx::B2DPolyPolygon(aUnitOutline), getTransform(), *getSdrLFSTAttribute().getText(), getSdrLFSTAttribute().getLine(), false, false));
             }
 
             // add shadow
-            if(maSdrLFSTAttribute.getShadow())
+            if(getSdrLFSTAttribute().getShadow())
             {
                 // attention: shadow is added BEFORE object stuff to render it BEHIND object (!)
-                const Primitive2DReference xShadow(createShadowPrimitive(aRetval, *maSdrLFSTAttribute.getShadow()));
+                const Primitive2DReference xShadow(createShadowPrimitive(aRetval, *getSdrLFSTAttribute().getShadow()));
 
                 if(xShadow.is())
                 {
@@ -107,10 +118,10 @@ namespace drawinglayer
             {
                 const SdrRectanglePrimitive2D& rCompare = (SdrRectanglePrimitive2D&)rPrimitive;
 
-                return (mfCornerRadiusX == rCompare.mfCornerRadiusX
-                    && mfCornerRadiusY == rCompare.mfCornerRadiusY
-                    && maTransform == rCompare.maTransform
-                    && maSdrLFSTAttribute == rCompare.maSdrLFSTAttribute);
+                return (getCornerRadiusX() == rCompare.getCornerRadiusX()
+                    && getCornerRadiusY() == rCompare.getCornerRadiusY()
+                    && getTransform() == rCompare.getTransform()
+                    && getSdrLFSTAttribute() == rCompare.getSdrLFSTAttribute());
             }
 
             return false;

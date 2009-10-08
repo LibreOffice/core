@@ -284,9 +284,16 @@ ModelessDialog RID_SVXDLG_SEARCH
         TabStop = TRUE ;
         Hide = TRUE ;
     };
-    CheckBox CB_JAP_MATCH_FULL_HALF_WIDTH
+    CheckBox CB_NOTES
     {
         Pos = MAP_APPFONT ( 12 , 232 ) ;
+        Size = MAP_APPFONT ( 126 , 10 ) ;
+        TabStop = TRUE ;
+        Text [ en-US ] = "Notes";
+    };
+    CheckBox CB_JAP_MATCH_FULL_HALF_WIDTH
+    {
+        Pos = MAP_APPFONT ( 12 , 247 ) ;
         Size = MAP_APPFONT ( 126 , 10 ) ;
         TabStop = TRUE ;
         Text [ en-US ] = "Match character width";
@@ -294,7 +301,7 @@ ModelessDialog RID_SVXDLG_SEARCH
     };
     CheckBox CB_JAP_SOUNDS_LIKE
     {
-        Pos = MAP_APPFONT ( 12 , 247 ) ;
+        Pos = MAP_APPFONT ( 12 , 260 ) ;
         Size = MAP_APPFONT ( 109 , 10 ) ;
         TabStop = TRUE ;
         Text [ en-US ] = "Sounds like (Japanese)";
@@ -302,7 +309,7 @@ ModelessDialog RID_SVXDLG_SEARCH
     };
     PushButton PB_JAP_OPTIONS
     {
-        Pos = MAP_APPFONT ( 124 , 245 ) ;
+        Pos = MAP_APPFONT ( 124 , 258 ) ;
         Size = MAP_APPFONT ( 14 , 14 ) ;
         Text = "..." ;
         TabStop = TRUE ;
@@ -334,13 +341,13 @@ ModelessDialog RID_SVXDLG_SEARCH
     };
     FixedLine FL_CALC
     {
-        Pos = MAP_APPFONT ( 6 , 259 ) ;
+        Pos = MAP_APPFONT ( 6 , 272 ) ;
         Size = MAP_APPFONT ( 191 , 8 ) ;
         Hide = TRUE ;
     };
     FixedText FT_CALC_SEARCHIN
     {
-        Pos = MAP_APPFONT ( 12 , 272 ) ;
+        Pos = MAP_APPFONT ( 12 , 285 ) ;
         Size = MAP_APPFONT ( 60 , 8 ) ;
         Text [ en-US ] = "~Search in" ;
         Hide = TRUE ;
@@ -348,7 +355,7 @@ ModelessDialog RID_SVXDLG_SEARCH
     ListBox LB_CALC_SEARCHIN
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 75 , 270 ) ;
+        Pos = MAP_APPFONT ( 75 , 283 ) ;
         Size = MAP_APPFONT ( 63 , 48 ) ;
         TabStop = TRUE ;
         DropDown = TRUE ;
@@ -362,28 +369,28 @@ ModelessDialog RID_SVXDLG_SEARCH
     };
     FixedText FT_CALC_SEARCHDIR
     {
-        Pos = MAP_APPFONT ( 12 , 287 ) ;
+        Pos = MAP_APPFONT ( 12 , 300 ) ;
         Size = MAP_APPFONT ( 60 , 8 ) ;
         Text [ en-US ] = "~Search direction" ;
         Hide = TRUE ;
     };
     RadioButton RB_CALC_ROWS
     {
-        Pos = MAP_APPFONT ( 75 , 287 ) ;
+        Pos = MAP_APPFONT ( 75 , 300 ) ;
         Size = MAP_APPFONT ( 63 , 10 ) ;
         Text [ en-US ] = "Ro~ws" ;
         Hide = TRUE ;
     };
     RadioButton RB_CALC_COLUMNS
     {
-        Pos = MAP_APPFONT ( 75 , 300 ) ;
+        Pos = MAP_APPFONT ( 75 , 313 ) ;
         Size = MAP_APPFONT ( 63 , 10 ) ;
         Text [ en-US ] = "Col~umns" ;
         Hide = TRUE ;
     };
     CheckBox CB_ALL_SHEETS
     {
-        Pos = MAP_APPFONT ( 12 , 313 ) ;
+        Pos = MAP_APPFONT ( 12 , 326 ) ;
         Size = MAP_APPFONT ( 126 , 10 ) ;
         Text [ en-US ] = "Search in all sheets" ;
         Hide = TRUE ;
@@ -399,7 +406,7 @@ ModelessDialog RID_SVXDLG_SEARCH
     };
     String STR_LESS_BTN
     {
-        Text [ en-US ] = "Less ~Options" ;
+        Text [ en-US ] = "Fewer ~Options" ;
     };
 };
 

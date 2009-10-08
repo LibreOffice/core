@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: xmltoken.cxx,v $
- * $Revision: 1.130.2.3 $
+ * $Revision: 1.131.6.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -2420,6 +2420,12 @@ namespace xmloff { namespace token {
         TOKEN( "text-underline-type",              XML_TEXT_UNDERLINE_TYPE ),
         TOKEN( "text-underline-width",             XML_TEXT_UNDERLINE_WIDTH ),
 
+        TOKEN( "text-overline-type",               XML_TEXT_OVERLINE_TYPE ),
+        TOKEN( "text-overline-style",              XML_TEXT_OVERLINE_STYLE ),
+        TOKEN( "text-overline-width",              XML_TEXT_OVERLINE_WIDTH ),
+        TOKEN( "text-overline-color",              XML_TEXT_OVERLINE_COLOR ),
+        TOKEN( "text-overline-mode",               XML_TEXT_OVERLINE_MODE ),
+
         TOKEN( "text-line-through-style",          XML_TEXT_LINE_THROUGH_STYLE ),
         TOKEN( "text-line-through-type",           XML_TEXT_LINE_THROUGH_TYPE ),
         TOKEN( "text-line-through-width",          XML_TEXT_LINE_THROUGH_WIDTH ),
@@ -3051,6 +3057,21 @@ namespace xmloff { namespace token {
         TOKEN( "fieldmark-end",         XML_FIELDMARK_END ),
         TOKEN( "urn:openoffice:names:experimental:ooo-ms-interop:xmlns:field:1.0",   XML_N_FIELD ),
         TOKEN( "field",         XML_NP_FIELD ),
+
+        TOKEN( "image-scale",           XML_IMAGE_SCALE  ),
+        TOKEN( "isotropic",             XML_ISOTROPIC  ),
+        TOKEN( "anisotropic",           XML_ANISOTROPIC ),
+
+        TOKEN( "axis-position",         XML_AXIS_POSITION ),
+        TOKEN( "axis-label-position",   XML_AXIS_LABEL_POSITION ),
+        TOKEN( "near-axis",             XML_NEAR_AXIS ),
+        TOKEN( "near-axis-other-side",  XML_NEAR_AXIS_OTHER_SIDE ),
+        TOKEN( "outside-minimum",       XML_OUTSIDE_START ),
+        TOKEN( "outside-maximum",       XML_OUTSIDE_END ),
+        TOKEN( "tick-mark-position",    XML_TICK_MARK_POSITION ),
+        TOKEN( "at-labels",             XML_AT_LABELS ),
+        TOKEN( "at-axis",               XML_AT_AXIS ),
+        TOKEN( "at-labels-and-axis",    XML_AT_LABELS_AND_AXIS ),
 
 #if OSL_DEBUG_LEVEL > 0
         { 0, NULL, NULL,                       XML_TOKEN_END }

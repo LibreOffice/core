@@ -31,6 +31,7 @@
 #define _CONNECTIVITY_FILE_FCOMP_HXX_
 
 #include "file/fcode.hxx"
+#include "file/filedllapi.hxx"
 #ifndef _LIST_
 #include <list>
 #endif
@@ -45,7 +46,7 @@ namespace connectivity
         class OSQLAnalyzer;
         typedef::std::vector<OCode*> OCodeList;
 
-        class OPredicateCompiler : public ::vos::OReference
+        class OOO_DLLPUBLIC_FILE OPredicateCompiler : public ::vos::OReference
         {
             friend class OPredicateInterpreter;
             friend class OSQLAnalyzer;
@@ -91,7 +92,8 @@ namespace connectivity
         };
 
 
-        class OPredicateInterpreter : public ::vos::OReference
+        class OOO_DLLPUBLIC_FILE OPredicateInterpreter :
+            public ::vos::OReference
         {
             OCodeStack          m_aStack;
             ::vos::ORef<OPredicateCompiler> m_rCompiler;

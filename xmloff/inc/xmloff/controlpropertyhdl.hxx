@@ -37,10 +37,9 @@
 #include <vos/ref.hxx>
 #include <rtl/ustring.hxx>
 #include <xmloff/xmlexppr.hxx>
-#include <xmloff/ControlBorderHandler.hxx>
+#include <xmloff/XMLConstantsPropertyHandler.hxx>
 
 struct SvXMLEnumMapEntry;
-class XMLConstantsPropertyHandler;
 class Color;
 //.........................................................................
 namespace xmloff
@@ -77,58 +76,54 @@ namespace xmloff
     //=====================================================================
     //= OControlBorderHandlerBase
     //=====================================================================
-    class OControlBorderHandlerBase : public XMLPropertyHandler
+    class OControlBorderHandler : public XMLPropertyHandler
     {
     public:
-        OControlBorderHandlerBase();
+        enum BorderFacet
+        {
+            STYLE,
+            COLOR
+        };
+
+        OControlBorderHandler( const BorderFacet _eFacet );
 
         virtual sal_Bool importXML( const ::rtl::OUString& _rStrImpValue, ::com::sun::star::uno::Any& _rValue, const SvXMLUnitConverter& _rUnitConverter ) const;
-        virtual sal_Bool exportXML( ::rtl::OUString& _rStrExpValue, const ::com::sun::star::uno::Any& _rValue, const SvXMLUnitConverter& _rUnitConverter ) const = 0;
+        virtual sal_Bool exportXML( ::rtl::OUString& _rStrExpValue, const ::com::sun::star::uno::Any& _rValue, const SvXMLUnitConverter& _rUnitConverter ) const;
 
-    protected:
-        /** called during importXML, after the string value has been split
-        */
-        virtual void pickOne( const Color& _rColor, sal_Int16 _nStyle, ::com::sun::star::uno::Any& _rValue ) const = 0;
+    private:
+        BorderFacet m_eFacet;
     };
 
     //=====================================================================
-    //= OControlBorderStyleHandler
+    //= OControlTextEmphasisHandler
     //=====================================================================
-    class OControlBorderStyleHandler : public OControlBorderHandlerBase
+    class OControlTextEmphasisHandler : public XMLPropertyHandler
     {
     public:
-        OControlBorderStyleHandler();
+        OControlTextEmphasisHandler();
 
+        virtual sal_Bool importXML( const ::rtl::OUString& _rStrImpValue, ::com::sun::star::uno::Any& _rValue, const SvXMLUnitConverter& _rUnitConverter ) const;
         virtual sal_Bool exportXML( ::rtl::OUString& _rStrExpValue, const ::com::sun::star::uno::Any& _rValue, const SvXMLUnitConverter& _rUnitConverter ) const;
-
-    protected:
-        virtual void pickOne( const Color& _rColor, sal_Int16 _nStyle, ::com::sun::star::uno::Any& _rValue ) const;
     };
 
     //=====================================================================
-    //= OControlBorderStyleHandler
+    //= ImageScaleModeHandler
     //=====================================================================
-    class OControlBorderColorHandler : public OControlBorderHandlerBase
+    class ImageScaleModeHandler : public XMLConstantsPropertyHandler
     {
     public:
-        OControlBorderColorHandler();
-
-        virtual sal_Bool exportXML( ::rtl::OUString& _rStrExpValue, const ::com::sun::star::uno::Any& _rValue, const SvXMLUnitConverter& _rUnitConverter ) const;
-
-    protected:
-        virtual void pickOne( const Color& _rColor, sal_Int16 _nStyle, ::com::sun::star::uno::Any& _rValue ) const;
+        ImageScaleModeHandler();
     };
 
     //=====================================================================
     //= OControlPropertyHandlerFactory
     //=====================================================================
-    class XMLOFF_DLLPUBLIC OControlPropertyHandlerFactory:
-        public XMLPropertyHandlerFactory
+    class XMLOFF_DLLPUBLIC OControlPropertyHandlerFactory : public XMLPropertyHandlerFactory
     {
     protected:
         mutable XMLConstantsPropertyHandler*    m_pTextAlignHandler;
-        mutable OControlBorderStyleHandler*     m_pControlBorderStyleHandler;
-        mutable OControlBorderColorHandler*     m_pControlBorderColorHandler;
+        mutable OControlBorderHandler*          m_pControlBorderStyleHandler;
+        mutable OControlBorderHandler*          m_pControlBorderColorHandler;
         mutable ORotationAngleHandler*          m_pRotationAngleHandler;
         mutable OFontWidthHandler*              m_pFontWidthHandler;
         mutable XMLConstantsPropertyHandler*    m_pFontEmphasisHandler;

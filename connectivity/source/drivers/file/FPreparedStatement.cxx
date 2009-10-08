@@ -99,7 +99,7 @@ void OPreparedStatement::disposing()
     m_xMetaData = NULL;
     if(m_aParameterRow.isValid())
     {
-        m_aParameterRow->clear();
+        m_aParameterRow->get().clear();
         m_aParameterRow = NULL;
     }
 
@@ -111,7 +111,7 @@ void OPreparedStatement::construct(const ::rtl::OUString& sql)  throw(SQLExcepti
     OStatement_Base::construct(sql);
 
     m_aParameterRow = new OValueRefVector();
-    m_aParameterRow->push_back(new ORowSetValueDecorator(sal_Int32(0)) );
+    m_aParameterRow->get().push_back(new ORowSetValueDecorator(sal_Int32(0)) );
 
     Reference<XIndexAccess> xNames(m_xColNames,UNO_QUERY);
 
@@ -280,9 +280,9 @@ void SAL_CALL OPreparedStatement::setNull( sal_Int32 parameterIndex, sal_Int32 /
     checkAndResizeParameters(parameterIndex);
 
     if ( m_aAssignValues.isValid() )
-        (*m_aAssignValues)[m_aParameterIndexes[parameterIndex]]->setNull();
+        (m_aAssignValues->get())[m_aParameterIndexes[parameterIndex]]->setNull();
     else
-        (*m_aParameterRow)[parameterIndex]->setNull();
+        (m_aParameterRow->get())[parameterIndex]->setNull();
 }
 // -------------------------------------------------------------------------
 
@@ -366,7 +366,7 @@ void SAL_CALL OPreparedStatement::setBinaryStream( sal_Int32 parameterIndex, con
         ::dbtools::throwFunctionSequenceException(*this);
 
     Sequence<sal_Int8> aSeq;
-    x->readSomeBytes(aSeq,length);
+    x->readBytes(aSeq,length);
     setParameter(parameterIndex,aSeq);
 }
 // -------------------------------------------------------------------------
@@ -376,8 +376,8 @@ void SAL_CALL OPreparedStatement::clearParameters(  ) throw(SQLException, Runtim
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OStatement_BASE::rBHelper.bDisposed);
 
-    m_aParameterRow->clear();
-    m_aParameterRow->push_back(new ORowSetValueDecorator(sal_Int32(0)) );
+    m_aParameterRow->get().clear();
+    m_aParameterRow->get().push_back(new ORowSetValueDecorator(sal_Int32(0)) );
 }
 // -------------------------------------------------------------------------
 OResultSet* OPreparedStatement::createResultSet()
@@ -391,8 +391,8 @@ Reference<XResultSet> OPreparedStatement::initResultSet()
     Reference<XResultSet> xRs(m_pResultSet);
 
     // check if we got enough paramters
-    if ( (m_aParameterRow.isValid() && ( m_aParameterRow->size() -1 ) < m_xParamColumns->size()) ||
-         (m_xParamColumns.isValid() && !m_aParameterRow.isValid() && !m_aParameterRow->empty()) )
+    if ( (m_aParameterRow.isValid() && ( m_aParameterRow->get().size() -1 ) < m_xParamColumns->get().size()) ||
+         (m_xParamColumns.isValid() && !m_aParameterRow.isValid() && !m_aParameterRow->get().empty()) )
          m_pConnection->throwGenericSQLException(STR_INVALID_PARA_COUNT,*this);
 
     m_pResultSet->OpenImpl();
@@ -416,14 +416,14 @@ void OPreparedStatement::checkAndResizeParameters(sal_Int32 parameterIndex)
     ::connectivity::checkDisposed(OStatement_BASE::rBHelper.bDisposed);
     if ( m_aAssignValues.isValid() && (parameterIndex < 1 || parameterIndex >= static_cast<sal_Int32>(m_aParameterIndexes.size())) )
         throwInvalidIndexException(*this);
-    else if ( static_cast<sal_Int32>((*m_aParameterRow).size()) <= parameterIndex )
+    else if ( static_cast<sal_Int32>((m_aParameterRow->get()).size()) <= parameterIndex )
     {
-        sal_Int32 i = m_aParameterRow->size();
-        (*m_aParameterRow).resize(parameterIndex+1);
+        sal_Int32 i = m_aParameterRow->get().size();
+        (m_aParameterRow->get()).resize(parameterIndex+1);
         for ( ;i <= parameterIndex+1; ++i )
         {
-            if ( !(*m_aParameterRow)[i].isValid() )
-                (*m_aParameterRow)[i] = new ORowSetValueDecorator;
+            if ( !(m_aParameterRow->get())[i].isValid() )
+                (m_aParameterRow->get())[i] = new ORowSetValueDecorator;
         }
     }
 }
@@ -434,9 +434,9 @@ void OPreparedStatement::setParameter(sal_Int32 parameterIndex, const ORowSetVal
     checkAndResizeParameters(parameterIndex);
 
     if(m_aAssignValues.isValid())
-        *(*m_aAssignValues)[m_aParameterIndexes[parameterIndex]] = x;
+        *(m_aAssignValues->get())[m_aParameterIndexes[parameterIndex]] = x;
     else
-        *((*m_aParameterRow)[parameterIndex]) = x;
+        *((m_aParameterRow->get())[parameterIndex]) = x;
 }
 // -----------------------------------------------------------------------------
 UINT32 OPreparedStatement::AddParameter(OSQLParseNode * pParameter, const Reference<XPropertySet>& _xCol)
@@ -478,8 +478,8 @@ UINT32 OPreparedStatement::AddParameter(OSQLParseNode * pParameter, const Refere
                                                     ,sal_False
                                                     ,sal_False
                                                     ,m_aSQLIterator.isCaseSensitive());
-    m_xParamColumns->push_back(xParaColumn);
-    return m_xParamColumns->size();
+    m_xParamColumns->get().push_back(xParaColumn);
+    return m_xParamColumns->get().size();
 }
 // -----------------------------------------------------------------------------
 void OPreparedStatement::describeColumn(OSQLParseNode* _pParameter,OSQLParseNode* _pNode,const OSQLTable& _xTable)
@@ -529,13 +529,13 @@ void OPreparedStatement::initializeResultSet(OResultSet* _pResult)
     m_pResultSet->setParameterRow(m_aParameterRow);
 
     // Parameter substituieren (AssignValues und Kriterien):
-    if (!m_xParamColumns->empty())
+    if (!m_xParamColumns->get().empty())
     {
         // Zunaechst AssignValues
         USHORT nParaCount=0; // gibt die aktuelle Anzahl der bisher gesetzen Parameter an
 
         // Nach zu substituierenden Parametern suchen:
-        size_t nCount = m_aAssignValues.isValid() ? m_aAssignValues->size() : 1; // 1 ist wichtig fuer die Kriterien
+        size_t nCount = m_aAssignValues.isValid() ? m_aAssignValues->get().size() : 1; // 1 ist wichtig fuer die Kriterien
         for (size_t j = 1; j < nCount; j++)
         {
             UINT32 nParameter = (*m_aAssignValues).getParameterIndex(j);
@@ -548,19 +548,19 @@ void OPreparedStatement::initializeResultSet(OResultSet* _pResult)
             //  (*m_aAssignValues)[j] = (*m_aParameterRow)[(UINT16)nParameter];
         }
 
-        if (m_aParameterRow.isValid() &&  (m_xParamColumns->size()+1) != m_aParameterRow->size() )
+        if (m_aParameterRow.isValid() &&  (m_xParamColumns->get().size()+1) != m_aParameterRow->get().size() )
         {
-            sal_Int32 i = m_aParameterRow->size();
-            sal_Int32 nParamColumns = m_xParamColumns->size()+1;
-            m_aParameterRow->resize(nParamColumns);
+            sal_Int32 i = m_aParameterRow->get().size();
+            sal_Int32 nParamColumns = m_xParamColumns->get().size()+1;
+            m_aParameterRow->get().resize(nParamColumns);
             for ( ;i < nParamColumns; ++i )
             {
-                if ( !(*m_aParameterRow)[i].isValid() )
-                    (*m_aParameterRow)[i] = new ORowSetValueDecorator;
+                if ( !(m_aParameterRow->get())[i].isValid() )
+                    (m_aParameterRow->get())[i] = new ORowSetValueDecorator;
             }
             //m_aParameterRow->resize(m_xParamColumns->size()+1);
         }
-        if (m_aParameterRow.isValid() && nParaCount < m_aParameterRow->size() )
+        if (m_aParameterRow.isValid() && nParaCount < m_aParameterRow->get().size() )
         {
 
             m_pSQLAnalyzer->bindParameterRow(m_aParameterRow);
@@ -575,9 +575,9 @@ void OPreparedStatement::parseParamterElem(const String& _sColumnName,OSQLParseN
     sal_Int32 nParameter = -1;
     if(m_xParamColumns.isValid())
     {
-        OSQLColumns::const_iterator aIter = find(m_xParamColumns->begin(),m_xParamColumns->end(),_sColumnName,::comphelper::UStringMixEqual(m_pTable->isCaseSensitive()));
-        if(aIter != m_xParamColumns->end())
-            nParameter = m_xParamColumns->size() - (m_xParamColumns->end() - aIter) + 1;// +1 because the rows start at 1
+        OSQLColumns::Vector::const_iterator aIter = find(m_xParamColumns->get().begin(),m_xParamColumns->get().end(),_sColumnName,::comphelper::UStringMixEqual(m_pTable->isCaseSensitive()));
+        if(aIter != m_xParamColumns->get().end())
+            nParameter = m_xParamColumns->get().size() - (m_xParamColumns->get().end() - aIter) + 1;// +1 because the rows start at 1
     }
     if(nParameter == -1)
         nParameter = AddParameter(pRow_Value_Constructor_Elem,xCol);

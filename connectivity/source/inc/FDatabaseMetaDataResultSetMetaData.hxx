@@ -39,6 +39,7 @@
 #include "FDatabaseMetaDataResultSet.hxx"
 #include "OColumn.hxx"
 #include "connectivity/StdTypeDefs.hxx"
+#include "connectivity/dbtoolsdllapi.hxx"
 
 namespace connectivity
 {
@@ -47,7 +48,7 @@ namespace connectivity
     //**************************************************************
     typedef ::cppu::WeakImplHelper1< ::com::sun::star::sdbc::XResultSetMetaData>   ODatabaseMetaResultSetMetaData_BASE;
 
-    class ODatabaseMetaDataResultSetMetaData :  public  ODatabaseMetaResultSetMetaData_BASE
+    class OOO_DLLPUBLIC_DBTOOLS ODatabaseMetaDataResultSetMetaData :    public  ODatabaseMetaResultSetMetaData_BASE
     {
         TIntVector                                  m_vMapping; // when not every column is needed
         ::std::map<sal_Int32,connectivity::OColumn> m_mColumns;

@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: ContentProperties.cxx,v $
- * $Revision: 1.12 $
+ * $Revision: 1.12.18.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -128,127 +128,7 @@ ContentProperties::ContentProperties( const DAVResource& rResource )
 
       while ( it != end )
       {
-        DAVPropertyValue aProp = (*it);
-
-        if ( aProp.Name.equals( DAVProperties::CREATIONDATE ) )
-        {
-            // Map DAV:creationdate to UCP:DateCreated
-            rtl::OUString aValue;
-            aProp.Value >>= aValue;
-            util::DateTime aDate;
-            DateTimeHelper::convert( aValue, aDate );
-
-            (*m_xProps)[ rtl::OUString::createFromAscii( "DateCreated" ) ]
-                = PropertyValue( uno::makeAny( aDate ), true );
-        }
-//      else if ( aProp.Name.equals( DAVProperties::DISPLAYNAME ) )
-//      {
-//      }
-//      else if ( aProp.Name.equals( DAVProperties::GETCONTENTLANGUAGE ) )
-//      {
-//      }
-        else if ( aProp.Name.equals( DAVProperties::GETCONTENTLENGTH ) )
-        {
-            // Map DAV:getcontentlength to UCP:Size
-            rtl::OUString aValue;
-            aProp.Value >>= aValue;
-
-            (*m_xProps)[ rtl::OUString::createFromAscii( "Size" ) ]
-                = PropertyValue( uno::makeAny( aValue.toInt64() ), true );
-        }
-        else if ( aProp.Name.equalsAsciiL(
-                    RTL_CONSTASCII_STRINGPARAM( "Content-Length" ) ) )
-        {
-            // Do NOT map Content-Lenght entity header to DAV:getcontentlength!
-            // Only DAV resources have this property.
-
-            // Map Content-Length entity header to UCP:Size
-            rtl::OUString aValue;
-            aProp.Value >>= aValue;
-
-            (*m_xProps)[ rtl::OUString::createFromAscii( "Size" ) ]
-                = PropertyValue( uno::makeAny( aValue.toInt64() ), true );
-        }
-        else if ( aProp.Name.equals( DAVProperties::GETCONTENTTYPE ) )
-        {
-            // Map DAV:getcontenttype to UCP:MediaType (1:1)
-            (*m_xProps)[ rtl::OUString::createFromAscii( "MediaType" ) ]
-                = PropertyValue( aProp.Value, true );
-        }
-        else if ( aProp.Name.equalsAsciiL(
-                    RTL_CONSTASCII_STRINGPARAM( "Content-Type" ) ) )
-        {
-            // Do NOT map Content-Type entity header to DAV:getcontenttype!
-            // Only DAV resources have this property.
-
-            // Map DAV:getcontenttype to UCP:MediaType (1:1)
-            (*m_xProps)[ rtl::OUString::createFromAscii( "MediaType" ) ]
-                = PropertyValue( aProp.Value, true );
-        }
-//      else if ( aProp.Name.equals( DAVProperties::GETETAG ) )
-//      {
-//      }
-        else if ( aProp.Name.equals( DAVProperties::GETLASTMODIFIED ) )
-        {
-            // Map the DAV:getlastmodified entity header to UCP:DateModified
-            rtl::OUString aValue;
-            aProp.Value >>= aValue;
-            util::DateTime aDate;
-            DateTimeHelper::convert( aValue, aDate );
-
-            (*m_xProps)[ rtl::OUString::createFromAscii( "DateModified" ) ]
-                = PropertyValue( uno::makeAny( aDate ), true );
-        }
-        else if ( aProp.Name.equalsAsciiL(
-                    RTL_CONSTASCII_STRINGPARAM( "Last-Modified" ) ) )
-        {
-            // Do not map Last-Modified entity header to DAV:getlastmodified!
-            // Only DAV resources have this property.
-
-            // Map the Last-Modified entity header to UCP:DateModified
-            rtl::OUString aValue;
-            aProp.Value >>= aValue;
-            util::DateTime aDate;
-            DateTimeHelper::convert( aValue, aDate );
-
-            (*m_xProps)[ rtl::OUString::createFromAscii( "DateModified" ) ]
-                = PropertyValue( uno::makeAny( aDate ), true );
-        }
-//      else if ( aProp.Name.equals( DAVProperties::LOCKDISCOVERY ) )
-//      {
-//      }
-        else if ( aProp.Name.equals( DAVProperties::RESOURCETYPE ) )
-        {
-            rtl::OUString aValue;
-            aProp.Value >>= aValue;
-
-            // Map DAV:resourceype to UCP:IsFolder, UCP:IsDocument, UCP:ContentType
-            sal_Bool bFolder =
-                aValue.equalsIgnoreAsciiCaseAsciiL(
-                    RTL_CONSTASCII_STRINGPARAM( "collection" ) );
-
-            (*m_xProps)[ rtl::OUString::createFromAscii( "IsFolder" ) ]
-                = PropertyValue( uno::makeAny( bFolder ), true );
-            (*m_xProps)[ rtl::OUString::createFromAscii( "IsDocument" ) ]
-                = PropertyValue( uno::makeAny( sal_Bool( !bFolder ) ), true );
-            (*m_xProps)[ rtl::OUString::createFromAscii( "ContentType" ) ]
-                    = PropertyValue( uno::makeAny( bFolder
-                        ? rtl::OUString::createFromAscii(
-                            WEBDAV_COLLECTION_TYPE )
-                        : rtl::OUString::createFromAscii(
-                            WEBDAV_CONTENT_TYPE ) ), true );
-        }
-//      else if ( aProp.Name.equals( DAVProperties::SOURCE ) )
-//      {
-//      }
-//      else if ( aProp.Name.equals( DAVProperties::SUPPORTEDLOCK ) )
-//      {
-//      }
-
-        // Save property.
-        (*m_xProps)[ aProp.Name ]
-            = PropertyValue( aProp.Value, aProp.IsCaseSensitive );
-
+        addProperty( (*it) );
         ++it;
       }
 
@@ -551,17 +431,49 @@ void ContentProperties::addProperties(
             if ( pProp )
             {
                 // Add it.
-                (*m_xProps)[ rName ] = PropertyValue( *pProp );
+                addProperty( rName, pProp->value(), pProp->isCaseSensitive() );
             }
             else
             {
-                (*m_xProps)[ rName ] = PropertyValue( uno::Any(), false );
+                addProperty( rName, uno::Any(), false );
             }
-
         }
-
         ++it;
     }
+}
+
+//=========================================================================
+void ContentProperties::addProperties( const ContentProperties & rProps )
+{
+    PropertyValueMap::const_iterator it = rProps.m_xProps->begin();
+    const PropertyValueMap::const_iterator end = rProps.m_xProps->end();
+
+    while ( it != end )
+    {
+        addProperty(
+            (*it).first, (*it).second.value(), (*it).second.isCaseSensitive() );
+        ++it;
+    }
+}
+
+//=========================================================================
+void ContentProperties::addProperties(
+    const std::vector< DAVPropertyValue > & rProps )
+{
+    std::vector< DAVPropertyValue >::const_iterator it  = rProps.begin();
+    std::vector< DAVPropertyValue >::const_iterator end = rProps.end();
+
+    while ( it != end )
+    {
+        addProperty( (*it) );
+        ++it;
+    }
+}
+
+//=========================================================================
+void ContentProperties::addProperty( const DAVPropertyValue & rProp )
+{
+    addProperty( rProp.Name, rProp.Value, rProp.IsCaseSensitive );
 }
 
 //=========================================================================
@@ -569,5 +481,118 @@ void ContentProperties::addProperty( const rtl::OUString & rName,
                                      const com::sun::star::uno::Any & rValue,
                                      bool bIsCaseSensitive )
 {
+    if ( rName.equals( DAVProperties::CREATIONDATE ) )
+    {
+        // Map DAV:creationdate to UCP:DateCreated
+        rtl::OUString aValue;
+        rValue >>= aValue;
+        util::DateTime aDate;
+        DateTimeHelper::convert( aValue, aDate );
+
+        (*m_xProps)[ rtl::OUString::createFromAscii( "DateCreated" ) ]
+            = PropertyValue( uno::makeAny( aDate ), true );
+    }
+    //  else if ( rName.equals( DAVProperties::DISPLAYNAME ) )
+    //  {
+    //  }
+    //  else if ( rName.equals( DAVProperties::GETCONTENTLANGUAGE ) )
+    //  {
+    //  }
+    else if ( rName.equals( DAVProperties::GETCONTENTLENGTH ) )
+    {
+        // Map DAV:getcontentlength to UCP:Size
+        rtl::OUString aValue;
+        rValue >>= aValue;
+
+        (*m_xProps)[ rtl::OUString::createFromAscii( "Size" ) ]
+            = PropertyValue( uno::makeAny( aValue.toInt64() ), true );
+    }
+    else if ( rName.equalsAsciiL(
+                RTL_CONSTASCII_STRINGPARAM( "Content-Length" ) ) )
+    {
+        // Do NOT map Content-Lenght entity header to DAV:getcontentlength!
+        // Only DAV resources have this property.
+
+        // Map Content-Length entity header to UCP:Size
+        rtl::OUString aValue;
+        rValue >>= aValue;
+
+        (*m_xProps)[ rtl::OUString::createFromAscii( "Size" ) ]
+            = PropertyValue( uno::makeAny( aValue.toInt64() ), true );
+    }
+    else if ( rName.equals( DAVProperties::GETCONTENTTYPE ) )
+    {
+        // Map DAV:getcontenttype to UCP:MediaType (1:1)
+        (*m_xProps)[ rtl::OUString::createFromAscii( "MediaType" ) ]
+            = PropertyValue( rValue, true );
+    }
+    else if ( rName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Content-Type" ) ) )
+    {
+        // Do NOT map Content-Type entity header to DAV:getcontenttype!
+        // Only DAV resources have this property.
+
+        // Map DAV:getcontenttype to UCP:MediaType (1:1)
+        (*m_xProps)[ rtl::OUString::createFromAscii( "MediaType" ) ]
+            = PropertyValue( rValue, true );
+    }
+    //  else if ( rName.equals( DAVProperties::GETETAG ) )
+    //  {
+    //  }
+    else if ( rName.equals( DAVProperties::GETLASTMODIFIED ) )
+    {
+        // Map the DAV:getlastmodified entity header to UCP:DateModified
+        rtl::OUString aValue;
+        rValue >>= aValue;
+        util::DateTime aDate;
+        DateTimeHelper::convert( aValue, aDate );
+
+        (*m_xProps)[ rtl::OUString::createFromAscii( "DateModified" ) ]
+            = PropertyValue( uno::makeAny( aDate ), true );
+    }
+    else if ( rName.equalsAsciiL(
+                RTL_CONSTASCII_STRINGPARAM( "Last-Modified" ) ) )
+    {
+        // Do not map Last-Modified entity header to DAV:getlastmodified!
+        // Only DAV resources have this property.
+
+        // Map the Last-Modified entity header to UCP:DateModified
+        rtl::OUString aValue;
+        rValue >>= aValue;
+        util::DateTime aDate;
+        DateTimeHelper::convert( aValue, aDate );
+
+        (*m_xProps)[ rtl::OUString::createFromAscii( "DateModified" ) ]
+            = PropertyValue( uno::makeAny( aDate ), true );
+    }
+    //  else if ( rName.equals( DAVProperties::LOCKDISCOVERY ) )
+    //  {
+    //  }
+    else if ( rName.equals( DAVProperties::RESOURCETYPE ) )
+    {
+        rtl::OUString aValue;
+        rValue >>= aValue;
+
+        // Map DAV:resourceype to UCP:IsFolder, UCP:IsDocument, UCP:ContentType
+        sal_Bool bFolder =
+            aValue.equalsIgnoreAsciiCaseAsciiL(
+                RTL_CONSTASCII_STRINGPARAM( "collection" ) );
+
+        (*m_xProps)[ rtl::OUString::createFromAscii( "IsFolder" ) ]
+            = PropertyValue( uno::makeAny( bFolder ), true );
+        (*m_xProps)[ rtl::OUString::createFromAscii( "IsDocument" ) ]
+            = PropertyValue( uno::makeAny( sal_Bool( !bFolder ) ), true );
+        (*m_xProps)[ rtl::OUString::createFromAscii( "ContentType" ) ]
+            = PropertyValue( uno::makeAny( bFolder
+                ? rtl::OUString::createFromAscii( WEBDAV_COLLECTION_TYPE )
+                : rtl::OUString::createFromAscii( WEBDAV_CONTENT_TYPE ) ), true );
+    }
+    //  else if ( rName.equals( DAVProperties::SOURCE ) )
+    //  {
+    //  }
+    //  else if ( rName.equals( DAVProperties::SUPPORTEDLOCK ) )
+    //  {
+    //  }
+
+    // Save property.
     (*m_xProps)[ rName ] = PropertyValue( rValue, bIsCaseSensitive );
 }

@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: unopkgio.cxx,v $
- * $Revision: 1.3 $
+ * $Revision: 1.3.86.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -30,5 +30,5 @@
 
 #include "precompiled_desktop.hxx"
 
-#define GUISTDIO_KEEPRUNNING
+#define UNOPKG
 #include "guistdio.inc"

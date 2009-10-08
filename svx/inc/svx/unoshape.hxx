@@ -483,11 +483,6 @@ public:
 ***********************************************************************/
 class SVX_DLLPUBLIC SvxShapeControl : public ::com::sun::star::drawing::XControlShape, public SvxShapeText
 {
-private:
-    void convertPropertyName( const rtl::OUString& rApiName, rtl::OUString& rInternalName );
-    void valueAlignToParaAdjust(::com::sun::star::uno::Any& rValue);  //added by BerryJia for fixing Bug102407 2002-11-04
-    void valueParaAdjustToAlign(::com::sun::star::uno::Any& rValue);  //added by BerryJia for fixing Bug102407 2002-11-04
-
 protected:
     using SvxUnoTextRangeBase::setPropertyValue;
     using SvxUnoTextRangeBase::getPropertyValue;

@@ -930,7 +930,7 @@ bool SdrTextObj::impDecomposePathTextPrimitive(
     drawinglayer::primitive2d::appendPrimitive2DSequenceToPrimitive2DSequence(rTarget, aRetvalA);
     drawinglayer::primitive2d::appendPrimitive2DSequenceToPrimitive2DSequence(rTarget, aRetvalB);
 
-    return (rOutliner.GetControlWord() & EE_CNTRL_NOREDLINES);
+    return false;
 }
 
 //////////////////////////////////////////////////////////////////////////////

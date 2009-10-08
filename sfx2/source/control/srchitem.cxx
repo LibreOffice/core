@@ -140,6 +140,7 @@ SvxSearchItem::SvxSearchItem( const sal_uInt16 nId ) :
     nAppFlag        ( SVX_SEARCHAPP_WRITER ),
     bRowDirection   ( sal_True ),
     bAllTables      ( sal_False ),
+    bNotes          ( sal_False),
     bBackward       ( sal_False ),
     bPattern        ( sal_False ),
     bContent        ( sal_False ),
@@ -151,6 +152,7 @@ SvxSearchItem::SvxSearchItem( const sal_uInt16 nId ) :
 
     bBackward       = aOpt.IsBackwards();
     bAsianOptions   = aOpt.IsUseAsianOptions();
+    bNotes = aOpt.IsNotes();
 
     if (aOpt.IsUseRegularExpression())
         aSearchOpt.algorithmType = SearchAlgorithms_REGEXP;
@@ -215,6 +217,7 @@ SvxSearchItem::SvxSearchItem( const SvxSearchItem& rItem ) :
     nAppFlag        ( rItem.nAppFlag ),
     bRowDirection   ( rItem.bRowDirection ),
     bAllTables      ( rItem.bAllTables ),
+    bNotes          ( rItem.bNotes),
     bBackward       ( rItem.bBackward ),
     bPattern        ( rItem.bPattern ),
     bContent        ( rItem.bContent ),
@@ -266,7 +269,8 @@ int SvxSearchItem::operator==( const SfxPoolItem& rItem ) const
            ( nCellType      == rSItem.nCellType )       &&
            ( nAppFlag       == rSItem.nAppFlag )        &&
            ( bAsianOptions  == rSItem.bAsianOptions )   &&
-           ( aSearchOpt     == rSItem.aSearchOpt );
+           ( aSearchOpt     == rSItem.aSearchOpt )      &&
+           ( bNotes         == rSItem.bNotes );
 }
 
 
@@ -400,9 +404,9 @@ void SvxSearchItem::SetSelection( sal_Bool bVal )
 
 void SvxSearchItem::SetRegExp( sal_Bool bVal )
 {
-    if (bVal)
+    if ( bVal )
         aSearchOpt.algorithmType = SearchAlgorithms_REGEXP;
-    else
+    else if ( SearchAlgorithms_REGEXP == aSearchOpt.algorithmType )
         aSearchOpt.algorithmType = SearchAlgorithms_ABSOLUTE;
 }
 
@@ -418,9 +422,9 @@ void SvxSearchItem::SetLEVRelaxed( sal_Bool bVal )
 
 void SvxSearchItem::SetLevenshtein( sal_Bool bVal )
 {
-    if (bVal)
+    if ( bVal )
         aSearchOpt.algorithmType = SearchAlgorithms_APPROXIMATE;
-    else
+    else if ( SearchAlgorithms_APPROXIMATE == aSearchOpt.algorithmType )
         aSearchOpt.algorithmType = SearchAlgorithms_ABSOLUTE;
 }
 

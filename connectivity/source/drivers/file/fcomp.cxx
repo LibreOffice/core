@@ -410,7 +410,7 @@ OOperand* OPredicateCompiler::execute_BETWEEN(OSQLParseNode* pPredicateNode) thr
 OOperand* OPredicateCompiler::execute_ISNULL(OSQLParseNode* pPredicateNode) throw(SQLException, RuntimeException)
 {
     DBG_ASSERT(pPredicateNode->count() >= 3,"OFILECursor: Fehler im Parse Tree");
-    DBG_ASSERT(SQL_ISTOKEN(pPredicateNode->getChild(1),IS),"OFILECursor: Fehler im Parse Tree")
+    DBG_ASSERT(SQL_ISTOKEN(pPredicateNode->getChild(1),IS),"OFILECursor: Fehler im Parse Tree");
 
     sal_Int32 ePredicateType;
     if (SQL_ISTOKEN(pPredicateNode->getChild(2),NOT))

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2008 by Sun Microsystems, Inc.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -27,14 +27,18 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
+
 package com.sun.star.help;
 
 import com.sun.star.lib.uno.helper.Factory;
 import com.sun.star.lang.XMultiComponentFactory;
 import com.sun.star.lang.XSingleComponentFactory;
 import com.sun.star.lib.uno.helper.WeakBase;
+import com.sun.star.uno.UnoRuntime;
 import com.sun.star.uno.XComponentContext;
 import com.sun.star.registry.XRegistryKey;
+import com.sun.star.lang.XInitialization;
+import com.sun.star.lang.XTypeProvider;
 import com.sun.star.lang.XServiceInfo;
 import com.sun.star.uno.Type;
 import com.sun.star.uno.Any;
@@ -44,6 +48,7 @@ import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.analysis.standard.StandardAnalyzer;
 import org.apache.lucene.analysis.cjk.CJKAnalyzer;
 import org.apache.lucene.document.Document;
+import org.apache.lucene.index.FilterIndexReader;
 import org.apache.lucene.index.IndexReader;
 import org.apache.lucene.index.Term;
 import org.apache.lucene.search.Hits;
@@ -61,46 +66,51 @@ import com.sun.star.beans.XIntrospectionAccess;
  * method, that writes the information into the given registry key
  * (<CODE>__writeRegistryServiceInfo</CODE>).
  */
-public class HelpSearch {
-
+public class HelpSearch
+{
     /** This class implements the component. At least the interfaces XServiceInfo,
      * XTypeProvider, and XInitialization should be provided by the service.
      */
     public static class _HelpSearch extends WeakBase
-            implements XServiceInfo, XInvocation {
-
+        implements XServiceInfo, XInvocation
+    {
         /** The service name, that must be used to get an instance of this service.
          */
         static private final String __serviceName =
-                "com.sun.star.help.HelpSearch";
+            "com.sun.star.help.HelpSearch";
         static private final String aSearchMethodName = "search";
+    
         /** The initial component contextr, that gives access to
          * the service manager, supported singletons, ...
          * It's often later used
          */
         private XComponentContext m_cmpCtx;
+
         /** The service manager, that gives access to all registered services.
          * It's often later used
          */
         private XMultiComponentFactory m_xMCF;
-
+    
         /** The constructor of the inner class has a XMultiServiceFactory parameter.
          * @param xmultiservicefactoryInitialization A special service factory
          * could be introduced while initializing.
          */
-        public _HelpSearch(XComponentContext xCompContext) {
+        public _HelpSearch(XComponentContext xCompContext)
+        {
             try {
                 m_cmpCtx = xCompContext;
-                m_xMCF = m_cmpCtx.getServiceManager();
-            } catch (Exception e) {
+                m_xMCF = m_cmpCtx.getServiceManager();                
+            }
+            catch( Exception e ) {
                 e.printStackTrace();
             }
         }
-
+        
         /** This method returns an array of all supported service names.
          * @return Array of supported service names.
          */
-        public String[] getSupportedServiceNames() {
+        public String[] getSupportedServiceNames()
+        {
             return getServiceNames();
         }
 
@@ -108,143 +118,181 @@ public class HelpSearch {
          * static component initialisation functions as well as in
          * getSupportedServiceNames.
          */
-        public static String[] getServiceNames() {
-            String[] sSupportedServiceNames = {__serviceName};
+        public static String[] getServiceNames()
+        {
+            String[] sSupportedServiceNames = { __serviceName };
             return sSupportedServiceNames;
         }
-
+      
         /** This method returns true, if the given service will be
          * supported by the component.
          * @param sServiceName Service name.
          * @return True, if the given service name will be supported.
          */
-        public boolean supportsService(String sServiceName) {
-            return sServiceName.equals(__serviceName);
+        public boolean supportsService( String sServiceName )
+        {
+            return sServiceName.equals( __serviceName );
         }
-
+    
         /** Return the class name of the component.
          * @return Class name of the component.
          */
-        public String getImplementationName() {
-            return _HelpSearch.class.getName();
-        }
+        public String getImplementationName()
+        {
+            return  _HelpSearch.class.getName();
+        }        
 
         //===================================================
         // XInvocation
-        public XIntrospectionAccess getIntrospection() {
-            return null;
-        }
+        public XIntrospectionAccess getIntrospection()
+        {
+            return  null;
+        }        
 
-        public Object invoke(String aFunctionName, java.lang.Object[] aParams,
-                short[][] aOutParamIndex, java.lang.Object[][] aOutParam)
-                throws com.sun.star.lang.IllegalArgumentException,
-                com.sun.star.script.CannotConvertException,
-                com.sun.star.reflection.InvocationTargetException {
-            aOutParamIndex[0] = new short[0];
-            aOutParam[0] = new Object[0];
-
+        public Object invoke( String aFunctionName, java.lang.Object[] aParams,
+            short[][] aOutParamIndex, java.lang.Object[][] aOutParam )
+                throws  com.sun.star.lang.IllegalArgumentException,
+                        com.sun.star.script.CannotConvertException,
+                        com.sun.star.reflection.InvocationTargetException
+        {
             String[] aRet = null;
-            if (!aFunctionName.equals(aSearchMethodName)) {
+            if( !aFunctionName.equals( aSearchMethodName ) )
                 throw new com.sun.star.lang.IllegalArgumentException();
-            }
 
-            try {
-                aRet = doQuery(aParams);
-            } catch (Exception e) {
+            Object[] aScoreOutArray = new Object[1];
+            aScoreOutArray[0] = null;
+            try
+            {
+                aRet =  doQuery( aParams, aScoreOutArray );
+            }
+            catch( Exception e )
+            {
                 aRet = null;
             }
 
-            Any aRetAny = new Any(new Type(String[].class), aRet);
+            Object aScoreArray = aScoreOutArray[0];
+            if( aScoreArray == null )
+            {
+                aOutParamIndex[0] = new short[0];
+                aOutParam[0] = new Object[0];
+            }
+            else
+            {
+                short nInParamCount = (short)aParams.length;
+                aOutParamIndex[0] = new short[1];
+                aOutParamIndex[0][0] = nInParamCount;
+                aOutParam[0] = new Object[1];
+                aOutParam[0][0] = aScoreArray;
+            }
+
+            Any aRetAny = new Any( new Type( String[].class ), aRet );
             return aRetAny;
         }
 
-        public void setValue(String aPropertyName, java.lang.Object aValue)
-                throws com.sun.star.beans.UnknownPropertyException,
-                com.sun.star.script.CannotConvertException,
-                com.sun.star.reflection.InvocationTargetException {
+        public void setValue( String aPropertyName, java.lang.Object aValue )
+            throws  com.sun.star.beans.UnknownPropertyException,
+                    com.sun.star.script.CannotConvertException,
+                    com.sun.star.reflection.InvocationTargetException {
             throw new com.sun.star.beans.UnknownPropertyException();
         }
 
-        public Object getValue(String aPropertyName)
-                throws com.sun.star.beans.UnknownPropertyException {
+        public Object getValue( String aPropertyName )
+            throws com.sun.star.beans.UnknownPropertyException {
             throw new com.sun.star.beans.UnknownPropertyException();
         }
-
-        public boolean hasMethod(String aMethodName) {
-            boolean bRet = (aMethodName.equals(aSearchMethodName));
+        
+        public boolean hasMethod( String aMethodName ) {
+            boolean bRet = (aMethodName.equals( aSearchMethodName ) );
             return bRet;
         }
-
-        public boolean hasProperty(String aName) {
+        public boolean hasProperty( String aName ) {
             return false;
         }
-
+        
         // Command line interface for testing
-        private static String[] doQuery(Object[] args) throws Exception {
-            String aLanguageStr = "";
-            String aIndexStr = "";
+        private static String[] doQuery( Object[] args, Object[] aScoreOutArray ) throws Exception
+        {
+             String aLanguageStr = "";
+             String aIndexStr = "";
             String aQueryStr = "";
             boolean bCaptionOnly = false;
 
             int nParamCount = args.length;
             String aStrs[] = new String[nParamCount];
-            for (int i = 0; i < nParamCount; i++) {
-                try {
-                    aStrs[i] = AnyConverter.toString(args[i]);
-                } catch (IllegalArgumentException e) {
+            for( int i = 0 ; i < nParamCount ; i++ )
+            {
+                try
+                {
+                    aStrs[i] = AnyConverter.toString( args[i] );
+                }
+                catch( IllegalArgumentException e )
+                {
                     aStrs[i] = "";
                 }
             }
 
             // TODO: Error handling
-            for (int i = 0; i < nParamCount; i++) {
-                if ("-lang".equals(aStrs[i])) {
+            for( int i = 0 ; i < nParamCount ; i++ )
+            {
+                if ("-lang".equals(aStrs[i]) )
+                {
                     aLanguageStr = aStrs[i + 1];
                     i++;
-                } else if ("-index".equals(aStrs[i])) {
-                    aIndexStr = aStrs[i + 1];
+                }
+                else if( "-index".equals(aStrs[i]) )
+                {
+                    aIndexStr = aStrs[i+1];
                     i++;
-                } else if ("-query".equals(aStrs[i])) {
-                    aQueryStr = aStrs[i + 1];
+                }
+                else if( "-query".equals(aStrs[i]) )
+                {
+                    aQueryStr = aStrs[i+1];
                     i++;
-                } else if ("-caption".equals(aStrs[i])) {
+                }
+                else if( "-caption".equals(aStrs[i]) )
+                {
                     bCaptionOnly = true;
                 }
             }
-            String[] aDocs = queryImpl(aLanguageStr, aIndexStr, aQueryStr, bCaptionOnly);
+            String[] aDocs = queryImpl( aLanguageStr, aIndexStr, aQueryStr, bCaptionOnly, aScoreOutArray );
 
             return aDocs;
         }
 
-        private static String[] queryImpl(String aLanguageStr, String aIndexStr, String aQueryStr, boolean bCaptionOnly) throws Exception {
-            IndexReader reader = IndexReader.open(aIndexStr);
-            Searcher searcher = new IndexSearcher(reader);
+        private static String[] queryImpl( String aLanguageStr, String aIndexStr, String aQueryStr, 
+            boolean bCaptionOnly, Object[] aScoreOutArray ) throws Exception
+        {
+            IndexReader reader = IndexReader.open( aIndexStr );
+            Searcher searcher = new IndexSearcher( reader );
             Analyzer analyzer = aLanguageStr.equals("ja") ? (Analyzer)new CJKAnalyzer() : (Analyzer)new StandardAnalyzer();
 
             String aField;
-            if (bCaptionOnly) {
+            if( bCaptionOnly )
                 aField = "caption";
-            } else {
+            else
                 aField = "content";
-            }
 
             Query aQuery;
-            if (aQueryStr.endsWith("*")) {
-                aQuery = new WildcardQuery(new Term(aField, aQueryStr));
-            } else {
-                aQuery = new TermQuery(new Term(aField, aQueryStr));
-            }
+            if( aQueryStr.endsWith( "*" ) )
+                aQuery = new WildcardQuery( new Term( aField, aQueryStr ) );
+            else
+                aQuery = new TermQuery( new Term( aField, aQueryStr ) );
 
             // Perform search
-            Hits aHits = searcher.search(aQuery);
+            Hits aHits = searcher.search( aQuery );
             int nHitCount = aHits.length();
 
-            String aDocs[] = new String[nHitCount];
-            for (int iHit = 0; iHit < nHitCount; iHit++) {
-                Document aDoc = aHits.doc(iHit);
-                String aPath = aDoc.get("path");
-                aDocs[iHit] = (aPath != null) ? aPath : "";
+            String aDocs[] = new String[nHitCount]; 
+            float aScores[] = null;
+            aScores = new float[nHitCount];
+            for( int iHit = 0 ; iHit < nHitCount ; iHit++ )
+            {
+                Document aDoc = aHits.doc( iHit );
+                String aPath = aDoc.get( "path" );
+                aDocs[iHit] = ( aPath != null ) ? aPath : "";
+                aScores[iHit] = aHits.score( iHit );
             }
+            aScoreOutArray[0] = aScores;
 
             reader.close();
 
@@ -262,14 +310,14 @@ public class HelpSearch {
      *          service is desired
      * @see     com.sun.star.comp.loader.JavaLoader
      */
-    public static XSingleComponentFactory __getComponentFactory(String sImplName) {
+    public static XSingleComponentFactory __getComponentFactory(String sImplName)
+    {
         XSingleComponentFactory xFactory = null;
-
-        if (sImplName.equals(_HelpSearch.class.getName())) {
+    
+        if ( sImplName.equals( _HelpSearch.class.getName() ) )
             xFactory = Factory.createComponentFactory(_HelpSearch.class,
-                    _HelpSearch.getServiceNames());
-        }
-
+                                             _HelpSearch.getServiceNames());
+        
         return xFactory;
     }
 
@@ -283,22 +331,21 @@ public class HelpSearch {
      */
     public static boolean __writeRegistryServiceInfo(XRegistryKey regKey) {
         return Factory.writeRegistryServiceInfo(_HelpSearch.class.getName(),
-                _HelpSearch.getServiceNames(),
-                regKey);
+                                                _HelpSearch.getServiceNames(),
+                                                regKey);
     }
-
-    /** This method is a member of the interface for initializing an object
-     * directly after its creation.
-     * @param object This array of arbitrary objects will be passed to the
-     * component after its creation.
-     * @throws Exception Every exception will not be handled, but will be
-     * passed to the caller.
-     */
-    public void initialize(Object[] object)
+        /** This method is a member of the interface for initializing an object
+         * directly after its creation.
+         * @param object This array of arbitrary objects will be passed to the
+         * component after its creation.
+         * @throws Exception Every exception will not be handled, but will be
+         * passed to the caller.
+         */
+        public void initialize( Object[] object )
             throws com.sun.star.uno.Exception {
-    /* The component describes what arguments its expected and in which
-     * order!At this point you can read the objects and can intialize
-     * your component using these objects.
-     */
-    }
+            /* The component describes what arguments its expected and in which
+             * order!At this point you can read the objects and can intialize
+             * your component using these objects.
+             */
+        }
 }

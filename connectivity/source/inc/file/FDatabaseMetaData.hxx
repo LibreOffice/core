@@ -33,7 +33,7 @@
 
 #include "TDatabaseMetaDataBase.hxx"
 #include "file/FConnection.hxx"
-
+#include "file/filedllapi.hxx"
 
 namespace connectivity
 {
@@ -43,7 +43,8 @@ namespace connectivity
         //************ Class: ODatabaseMetaData
         //**************************************************************
 
-        class SAL_NO_VTABLE ODatabaseMetaData : public  ODatabaseMetaDataBase
+        class OOO_DLLPUBLIC_FILE SAL_NO_VTABLE ODatabaseMetaData :
+            public  ODatabaseMetaDataBase
         {
             virtual ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSet > impl_getTypeInfo_throw();
             // cached database information

@@ -139,7 +139,7 @@ TabPage RID_SVX_FONT_SUBSTITUTION
     {
         Pos = MAP_APPFONT ( 6 , 129 ) ;
         Size = MAP_APPFONT ( 248 , 8 ) ;
-        Text [ en-US ] = "Font settings for HTML and Basic sources" ;
+        Text [ en-US ] = "Font settings for HTML, Basic and SQL sources" ;
     };
     FixedText FT_FONTNAME
     {

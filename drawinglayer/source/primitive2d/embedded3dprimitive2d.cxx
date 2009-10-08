@@ -110,6 +110,7 @@ namespace drawinglayer
             mfShadowSlant(fShadowSlant),
             maScene3DRange(rScene3DRange),
             maShadowPrimitives(),
+            maB2DRange(),
             mbShadow3DChecked(false)
         {
             maLightNormal.normalize();
@@ -134,29 +135,35 @@ namespace drawinglayer
 
         basegfx::B2DRange Embedded3DPrimitive2D::getB2DRange(const geometry::ViewInformation2D& rViewInformation) const
         {
-            // use the 3d transformation stack to create a projection of the 3D range
-            basegfx::B3DRange a3DRange(primitive3d::getB3DRangeFromPrimitive3DSequence(getChildren3D(), getViewInformation3D()));
-            a3DRange.transform(getViewInformation3D().getObjectToView());
-
-            // create 2d range from projected 3d and transform with scene's object transformation
-            basegfx::B2DRange aRetval;
-            aRetval.expand(basegfx::B2DPoint(a3DRange.getMinX(), a3DRange.getMinY()));
-            aRetval.expand(basegfx::B2DPoint(a3DRange.getMaxX(), a3DRange.getMaxY()));
-            aRetval.transform(getObjectTransformation());
-
-            // cehck for 3D shadows and their 2D projections. If those exist, they need to be
-            // taken into account
-            if(impGetShadow3D(rViewInformation))
+            if(maB2DRange.isEmpty())
             {
-                const basegfx::B2DRange aShadow2DRange(getB2DRangeFromPrimitive2DSequence(maShadowPrimitives, rViewInformation));
+                // use the 3d transformation stack to create a projection of the 3D range
+                basegfx::B3DRange a3DRange(primitive3d::getB3DRangeFromPrimitive3DSequence(getChildren3D(), getViewInformation3D()));
+                a3DRange.transform(getViewInformation3D().getObjectToView());
 
-                if(!aShadow2DRange.isEmpty())
+                // create 2d range from projected 3d and transform with scene's object transformation
+                basegfx::B2DRange aNewRange;
+                aNewRange.expand(basegfx::B2DPoint(a3DRange.getMinX(), a3DRange.getMinY()));
+                aNewRange.expand(basegfx::B2DPoint(a3DRange.getMaxX(), a3DRange.getMaxY()));
+                aNewRange.transform(getObjectTransformation());
+
+                // cehck for 3D shadows and their 2D projections. If those exist, they need to be
+                // taken into account
+                if(impGetShadow3D(rViewInformation))
                 {
-                    aRetval.expand(aShadow2DRange);
+                    const basegfx::B2DRange aShadow2DRange(getB2DRangeFromPrimitive2DSequence(maShadowPrimitives, rViewInformation));
+
+                    if(!aShadow2DRange.isEmpty())
+                    {
+                        aNewRange.expand(aShadow2DRange);
+                    }
                 }
+
+                // assign to buffered value
+                const_cast< Embedded3DPrimitive2D* >(this)->maB2DRange = aNewRange;
             }
 
-            return aRetval;
+            return maB2DRange;
         }
 
         // provide unique ID

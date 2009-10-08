@@ -39,6 +39,7 @@ ENABLE_EXCEPTIONS=TRUE
 # --- Settings ---
 
 .INCLUDE : settings.mk
+.INCLUDE : $(PRJ)$/makefile.pmk
 
 .IF "$(OS)"=="SOLARIS" && "$(COM)"!="GCC"
 CFLAGSCXX+=-instances=static

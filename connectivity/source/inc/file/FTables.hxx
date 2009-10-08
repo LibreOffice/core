@@ -31,6 +31,7 @@
 #ifndef _CONNECTIVITY_FILE_TABLES_HXX_
 #define _CONNECTIVITY_FILE_TABLES_HXX_
 
+#include "file/filedllapi.hxx"
 #include "connectivity/sdbcx/VCollection.hxx"
 #include <com/sun/star/sdbc/XDatabaseMetaData.hpp>
 
@@ -38,7 +39,8 @@ namespace connectivity
 {
     namespace file
     {
-        class SAL_NO_VTABLE OTables : public sdbcx::OCollection
+        class OOO_DLLPUBLIC_FILE SAL_NO_VTABLE OTables :
+            public sdbcx::OCollection
         {
         protected:
             ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDatabaseMetaData >   m_xMetaData;

@@ -714,75 +714,90 @@ SvxShapeControlPropertyMapping[] =
     { MAP_CHAR_LEN("ControlBorder"), MAP_CHAR_LEN("Border") },
     { MAP_CHAR_LEN("ControlBorderColor"), MAP_CHAR_LEN("BorderColor") },
     { MAP_CHAR_LEN("ControlTextEmphasis"),  MAP_CHAR_LEN("FontEmphasisMark") },
+    { MAP_CHAR_LEN("ImageScaleMode"),  MAP_CHAR_LEN("ScaleMode") },
+    { MAP_CHAR_LEN("ControlWritingMode"), MAP_CHAR_LEN("WritingMode") },
     { NULL,0, NULL, 0 }
 };
 
-void SvxShapeControl::convertPropertyName( const OUString& rApiName, OUString& rInternalName )
-{
-    sal_uInt16 i = 0;
-    while( SvxShapeControlPropertyMapping[i].mpAPIName )
-    {
-        if( rApiName.reverseCompareToAsciiL( SvxShapeControlPropertyMapping[i].mpAPIName, SvxShapeControlPropertyMapping[i].mnAPINameLen ) == 0 )
-        {
-            rInternalName = OUString( SvxShapeControlPropertyMapping[i].mpFormName, SvxShapeControlPropertyMapping[i].mnFormNameLen, RTL_TEXTENCODING_ASCII_US );
-        }
-        ++i;
-    }
-}
-
-//added by BerryJia for fixing Bug102407 2002-11-04
-static struct
-{
-    sal_Int16 nAPIValue;
-    sal_Int16 nFormValue;
-}
-SvxShapeControlPropertyValueMapping[] =
-{
-    // note that order matters:
-    // valueAlignToParaAdjust and valueParaAdjustToAlign search this map from the _beginning_
-    // and use the first matching entry
-    {style::ParagraphAdjust_LEFT,           (sal_Int16)awt::TextAlign::LEFT},
-    {style::ParagraphAdjust_CENTER,         (sal_Int16)awt::TextAlign::CENTER},
-    {style::ParagraphAdjust_RIGHT,          (sal_Int16)awt::TextAlign::RIGHT},
-    {style::ParagraphAdjust_BLOCK,          (sal_Int16)awt::TextAlign::RIGHT},
-    {style::ParagraphAdjust_STRETCH,        (sal_Int16)awt::TextAlign::LEFT},
-    {-1,-1}
-};
-
-void SvxShapeControl::valueAlignToParaAdjust(Any& rValue)
-{
-    sal_Int16 nValue = sal_Int16();
-    rValue >>= nValue;
-    sal_uInt16 i = 0;
-    while (-1 != SvxShapeControlPropertyValueMapping[i].nFormValue)
-    {
-        if (nValue == SvxShapeControlPropertyValueMapping[i].nFormValue)
-        {
-            rValue <<= (SvxShapeControlPropertyValueMapping[i].nAPIValue);
-            return;
-        }
-        i++;
-    }
-}
-
-void SvxShapeControl::valueParaAdjustToAlign(Any& rValue)
-{
-    sal_Int32 nValue = 0;
-    rValue >>= nValue;
-    sal_uInt16 i = 0;
-    while (-1 != SvxShapeControlPropertyValueMapping[i].nAPIValue)
-    {
-        if ( nValue == SvxShapeControlPropertyValueMapping[i].nAPIValue)
-        {
-            rValue <<= (SvxShapeControlPropertyValueMapping[i].nFormValue);
-            return;
-        }
-        i++;
-    }
-}
-
 namespace
 {
+    static bool lcl_convertPropertyName( const OUString& rApiName, OUString& rInternalName )
+    {
+        sal_uInt16 i = 0;
+        while( SvxShapeControlPropertyMapping[i].mpAPIName )
+        {
+            if( rApiName.reverseCompareToAsciiL( SvxShapeControlPropertyMapping[i].mpAPIName, SvxShapeControlPropertyMapping[i].mnAPINameLen ) == 0 )
+            {
+                rInternalName = OUString( SvxShapeControlPropertyMapping[i].mpFormName, SvxShapeControlPropertyMapping[i].mnFormNameLen, RTL_TEXTENCODING_ASCII_US );
+            }
+            ++i;
+        }
+        return rInternalName.getLength() > 0;
+    }
+
+    struct EnumConversionMap
+    {
+        sal_Int16   nAPIValue;
+        sal_Int16   nFormValue;
+    };
+
+    EnumConversionMap aMapAdjustToAlign[] =
+    {
+        // note that order matters:
+        // lcl_convertTextAlignmentToParaAdjustment and lcl_convertParaAdjustmentToTextAlignment search this map from the _beginning_
+        // and use the first matching entry
+        {style::ParagraphAdjust_LEFT,           (sal_Int16)awt::TextAlign::LEFT},
+        {style::ParagraphAdjust_CENTER,         (sal_Int16)awt::TextAlign::CENTER},
+        {style::ParagraphAdjust_RIGHT,          (sal_Int16)awt::TextAlign::RIGHT},
+        {style::ParagraphAdjust_BLOCK,          (sal_Int16)awt::TextAlign::RIGHT},
+        {style::ParagraphAdjust_STRETCH,        (sal_Int16)awt::TextAlign::LEFT},
+        {-1,-1}
+    };
+
+    static void lcl_mapFormToAPIValue( Any& _rValue, const EnumConversionMap* _pMap )
+    {
+        sal_Int16 nValue = sal_Int16();
+        OSL_VERIFY( _rValue >>= nValue );
+
+        const EnumConversionMap* pEntry = _pMap;
+        while ( pEntry && ( pEntry->nFormValue != -1 ) )
+        {
+            if ( nValue == pEntry->nFormValue )
+            {
+                _rValue <<= pEntry->nAPIValue;
+                return;
+            }
+            ++pEntry;
+        }
+    }
+
+    static void lcl_mapAPIToFormValue( Any& _rValue, const EnumConversionMap* _pMap )
+    {
+        sal_Int32 nValue = 0;
+        OSL_VERIFY( _rValue >>= nValue );
+
+        const EnumConversionMap* pEntry = _pMap;
+        while ( pEntry && ( pEntry->nAPIValue != -1 ) )
+        {
+            if ( nValue == pEntry->nAPIValue )
+            {
+                _rValue <<= pEntry->nFormValue;
+                return;
+            }
+            ++pEntry;
+        }
+    }
+
+    static void lcl_convertTextAlignmentToParaAdjustment( Any& rValue )
+    {
+        lcl_mapFormToAPIValue( rValue, aMapAdjustToAlign );
+    }
+
+    static void lcl_convertParaAdjustmentToTextAlignment( Any& rValue )
+    {
+        lcl_mapAPIToFormValue( rValue, aMapAdjustToAlign );
+    }
+
     void convertVerticalAdjustToVerticalAlign( Any& _rValue ) SAL_THROW( ( lang::IllegalArgumentException ) )
     {
         if ( !_rValue.hasValue() )
@@ -822,8 +837,7 @@ void SAL_CALL SvxShapeControl::setPropertyValue( const OUString& aPropertyName, 
     throw( beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException, com::sun::star::beans::PropertyVetoException, com::sun::star::lang::IllegalArgumentException)
 {
     OUString aFormsName;
-    convertPropertyName( aPropertyName, aFormsName );
-    if( aFormsName.getLength() )
+    if ( lcl_convertPropertyName( aPropertyName, aFormsName ) )
     {
         uno::Reference< beans::XPropertySet > xControl( getControl(), uno::UNO_QUERY );
         if( xControl.is() )
@@ -841,7 +855,7 @@ void SAL_CALL SvxShapeControl::setPropertyValue( const OUString& aPropertyName, 
                 }
                 else if ( aFormsName.equalsAscii( "Align" ) )
                 {
-                    valueParaAdjustToAlign( aConvertedValue );
+                    lcl_convertParaAdjustmentToTextAlignment( aConvertedValue );
                 }
                 else if ( aFormsName.equalsAscii( "VerticalAlign" ) )
                 {
@@ -862,8 +876,7 @@ uno::Any SAL_CALL SvxShapeControl::getPropertyValue( const OUString& aPropertyNa
     throw( beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
 {
     OUString aFormsName;
-    convertPropertyName( aPropertyName, aFormsName );
-    if( aFormsName.getLength() )
+    if ( lcl_convertPropertyName( aPropertyName, aFormsName ) )
     {
         uno::Reference< beans::XPropertySet > xControl( getControl(), uno::UNO_QUERY );
 
@@ -890,7 +903,7 @@ uno::Any SAL_CALL SvxShapeControl::getPropertyValue( const OUString& aPropertyNa
                 }
                 else if ( aFormsName.equalsAscii( "Align" ) )
                 {
-                    valueAlignToParaAdjust( aValue );
+                    lcl_convertTextAlignmentToParaAdjustment( aValue );
                 }
                 else if ( aFormsName.equalsAscii( "VerticalAlign" ) )
                 {
@@ -912,8 +925,7 @@ uno::Any SAL_CALL SvxShapeControl::getPropertyValue( const OUString& aPropertyNa
 beans::PropertyState SAL_CALL SvxShapeControl::getPropertyState( const ::rtl::OUString& PropertyName ) throw( beans::UnknownPropertyException, uno::RuntimeException )
 {
     OUString aFormsName;
-    convertPropertyName( PropertyName, aFormsName );
-    if( aFormsName.getLength() )
+    if ( lcl_convertPropertyName( PropertyName, aFormsName ) )
     {
         uno::Reference< beans::XPropertyState > xControl( getControl(), uno::UNO_QUERY );
         uno::Reference< beans::XPropertySet > xPropSet( getControl(), uno::UNO_QUERY );
@@ -938,8 +950,7 @@ beans::PropertyState SAL_CALL SvxShapeControl::getPropertyState( const ::rtl::OU
 void SAL_CALL SvxShapeControl::setPropertyToDefault( const ::rtl::OUString& PropertyName ) throw( beans::UnknownPropertyException, uno::RuntimeException )
 {
     OUString aFormsName;
-    convertPropertyName( PropertyName, aFormsName );
-    if( aFormsName.getLength() )
+    if ( lcl_convertPropertyName( PropertyName, aFormsName ) )
     {
         uno::Reference< beans::XPropertyState > xControl( getControl(), uno::UNO_QUERY );
         uno::Reference< beans::XPropertySet > xPropSet( getControl(), uno::UNO_QUERY );
@@ -963,8 +974,7 @@ uno::Any SAL_CALL SvxShapeControl::getPropertyDefault( const ::rtl::OUString& aP
     throw( beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException )
 {
     OUString aFormsName;
-    convertPropertyName( aPropertyName, aFormsName );
-    if( aFormsName.getLength() )
+    if ( lcl_convertPropertyName( aPropertyName, aFormsName ) )
     {
         uno::Reference< beans::XPropertyState > xControl( getControl(), uno::UNO_QUERY );
 
@@ -979,7 +989,7 @@ uno::Any SAL_CALL SvxShapeControl::getPropertyDefault( const ::rtl::OUString& aP
             }
             else if ( aFormsName.equalsAscii( "Align" ) )
             {
-                valueAlignToParaAdjust( aDefault );
+                lcl_convertTextAlignmentToParaAdjustment( aDefault );
             }
             else if ( aFormsName.equalsAscii( "VerticalAlign" ) )
             {

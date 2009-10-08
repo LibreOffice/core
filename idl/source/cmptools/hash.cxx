@@ -122,7 +122,7 @@ BOOL SvHashTable::Test_Insert( const void * pElement, BOOL bInsert,
 
     if( bInsert )
     {
-        DBG_ASSERT( nMax != nLoop, "Hash table full" )
+        DBG_ASSERT( nMax != nLoop, "Hash table full" );
         if( nMax != nLoop )
         {
             nFill++;
@@ -177,7 +177,7 @@ SvStringHashTable::~SvStringHashTable()
 #ifdef DBG_UTIL
     while( pPos != pEnd )
     {
-        DBG_ASSERT( pPos->GetRefCount() == 1, "Reference count != 1" )
+        DBG_ASSERT( pPos->GetRefCount() == 1, "Reference count != 1" );
         pPos++;
     }
 #endif

@@ -82,8 +82,6 @@ protected:
 
     Rectangle     aMarkBound; // wird
     Rectangle     aMarkSnap;  // von
-    basegfx::B2DPolyPolygon     maDragPoly0; // SdrView
-    basegfx::B2DPolyPolygon     maDragPoly;  //
     sal_Bool                                                        mbHasMarked;
     sal_Bool                                                        mbVisible;
 
@@ -282,11 +280,6 @@ public:
 
     // Die Namen aller z.Zt. betretenen Gruppen
     String GetActualPathName(sal_Unicode cSep = sal_Unicode('|')) const;
-
-    const basegfx::B2DPolyPolygon& getDragPoly0() const { return maDragPoly0; }
-    const basegfx::B2DPolyPolygon& getDragPoly() const { return maDragPoly;  }
-    void setDragPoly0(const basegfx::B2DPolyPolygon& rNew) { maDragPoly0 = rNew; }
-    void setDragPoly(const basegfx::B2DPolyPolygon& rNew) { maDragPoly = rNew;  }
 
     // #103834# Set background color for svx at SdrPageViews
     void SetApplicationBackgroundColor(Color aBackgroundColor);

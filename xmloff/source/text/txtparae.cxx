@@ -53,6 +53,7 @@
 #include <com/sun/star/text/XTextSectionsSupplier.hpp>
 #include <com/sun/star/text/XTextTablesSupplier.hpp>
 #include <com/sun/star/text/XNumberingRulesSupplier.hpp>
+#include <com/sun/star/text/XChapterNumberingSupplier.hpp>//#outline level,add by zhaojianwei
 #include <com/sun/star/text/XTextTable.hpp>
 #include <com/sun/star/text/XText.hpp>
 #include <com/sun/star/text/XTextContent.hpp>
@@ -199,7 +200,10 @@ enum eParagraphPropertyNamesEnumAuto
 static const sal_Char* aParagraphPropertyNames[] =
 {
     "NumberingIsNumber",
-    "ParaChapterNumberingLevel",
+    "NumberingStyleName",           //#outline level,add by zhaojianwei
+
+    //"ParaChapterNumberingLevel",  //#outline level,remove by zhaojianwei
+    "OutlineLevel",                 //<-end,add by zhaojianwei
     "ParaConditionalStyleName",
     "ParaStyleName",
     "TextSection",
@@ -209,10 +213,12 @@ static const sal_Char* aParagraphPropertyNames[] =
 enum eParagraphPropertyNamesEnum
 {
     NUMBERING_IS_NUMBER = 0,
-    PARA_CHAPTER_NUMERBING_LEVEL = 1,
-    PARA_CONDITIONAL_STYLE_NAME = 2,
-    PARA_STYLE_NAME = 3,
-    TEXT_SECTION = 4
+    PARA_NUMBERING_STYLENAME = 1,       //#outline level,add by zhaojianwei
+    //PARA_CHAPTER_NUMERBING_LEVEL = 1, //#outline level,remove by zhaojianwei
+    PARA_OUTLINE_LEVEL=2,               //<-end.add by zhaojianwei
+    PARA_CONDITIONAL_STYLE_NAME = 3,
+    PARA_STYLE_NAME = 4,
+    TEXT_SECTION = 5
 };
 
 void XMLTextParagraphExport::Add( sal_uInt16 nFamily,
@@ -567,7 +573,7 @@ OUString XMLTextParagraphExport::FindTextStyleAndHyperlink(
         }
         OUString sParent; // AutoStyles should not have parents!
         sName = GetAutoStylePool().Find( XML_STYLE_FAMILY_TEXT_TEXT, sParent, xPropStates );
-        DBG_ASSERT( sName.getLength(), "AutoStyle could not be found" )
+        DBG_ASSERT( sName.getLength(), "AutoStyle could not be found" );
         rbHasAutoStyle = sal_True;
     }
 
@@ -666,6 +672,10 @@ void XMLTextParagraphExport::exportListChange(
             bool bExportListStyle( true );
             bool bRestartNumberingAtContinuedRootList( false );
             sal_Int16 nRestartValueForContinuedRootList( -1 );
+            // --> OD 2008-11-26 #158694#
+            bool bContinueingPreviousSubList = !bRootListToBeStarted &&
+                                               rNextInfo.IsContinueingPreviousSubTree();
+            // <--
             do {
                 GetExport().CheckAttrList();
 
@@ -760,6 +770,15 @@ void XMLTextParagraphExport::exportListChange(
                     bExportListStyle = false;
                 }
 
+                // --> OD 2008-11-26 #158694#
+                if ( bContinueingPreviousSubList )
+                {
+                    GetExport().AddAttribute( XML_NAMESPACE_TEXT,
+                                              XML_CONTINUE_NUMBERING, XML_TRUE );
+                    bContinueingPreviousSubList = false;
+                }
+                // <--
+
                 enum XMLTokenEnum eLName = XML_LIST;
 
                 OUString *pElem = new OUString(
@@ -807,6 +826,23 @@ void XMLTextParagraphExport::exportListChange(
                 GetExport().StartElement( *pElem, sal_False );
 
                 pListElements->Insert( pElem, pListElements->Count() );
+
+                // --> OD 2008-11-26 #158694#
+                // export of <text:number> element for last opened <text:list-item>, if requested
+                if ( GetExport().exportTextNumberElement() &&
+                     eLName == XML_LIST_ITEM && nListLevelsToBeOpened == 1 && // last iteration --> last opened <text:list-item>
+                     rNextInfo.ListLabelString().getLength() > 0 )
+                {
+                    const ::rtl::OUString aTextNumberElem =
+                            OUString( GetExport().GetNamespaceMap().GetQNameByKey(
+                                      XML_NAMESPACE_TEXT,
+                                      GetXMLToken(XML_NUMBER) ) );
+                    GetExport().IgnorableWhitespace();
+                    GetExport().StartElement( aTextNumberElem, sal_False );
+                    GetExport().Characters( rNextInfo.ListLabelString() );
+                    GetExport().EndElement( aTextNumberElem, sal_True );
+                }
+                // <--
 
                 --nListLevelsToBeOpened;
             } while ( nListLevelsToBeOpened > 0 );
@@ -869,6 +905,22 @@ void XMLTextParagraphExport::exportListChange(
         GetExport().StartElement( *pElem, sal_False );
 
         pListElements->Insert( pElem, pListElements->Count() );
+
+        // --> OD 2008-11-26 #158694#
+        // export of <text:number> element for <text:list-item>, if requested
+        if ( GetExport().exportTextNumberElement() &&
+             rNextInfo.ListLabelString().getLength() > 0 )
+        {
+            const ::rtl::OUString aTextNumberElem =
+                    OUString( GetExport().GetNamespaceMap().GetQNameByKey(
+                              XML_NAMESPACE_TEXT,
+                              GetXMLToken(XML_NUMBER) ) );
+            GetExport().IgnorableWhitespace();
+            GetExport().StartElement( aTextNumberElem, sal_False );
+            GetExport().Characters( rNextInfo.ListLabelString() );
+            GetExport().EndElement( aTextNumberElem, sal_True );
+        }
+        // <--
     }
 }
 // <--
@@ -1800,9 +1852,13 @@ sal_Bool XMLTextParagraphExport::exportTextContentEnumeration(
                     // --> OD 2006-09-27 #i69627#
                     // --> OD 2008-04-24 #refactorlists#
                     // pass list auto style pool to <XMLTextNumRuleInfo> instance
+                    // --> OD 2008-11-26 #158694#
+                    // pass info about request to export <text:number> element
+                    // to <XMLTextNumRuleInfo> instance
                     aNextNumInfo.Set( xTxtCntnt,
                                       GetExport().writeOutlineStyleAsNormalListStyle(),
-                                      GetListAutoStylePool() );
+                                      GetListAutoStylePool(),
+                                      GetExport().exportTextNumberElement() );
                     // <--
 
                     exportListAndSectionChange( xCurrentTextSection, aPropSetHelper,
@@ -1914,7 +1970,7 @@ void XMLTextParagraphExport::exportParagraph(
         sal_Bool bAutoStyles, sal_Bool bIsProgress, sal_Bool bExportParagraph,
         MultiPropertySetHelper& rPropSetHelper)
 {
-    sal_Int8 nOutlineLevel = -1;
+    sal_Int16 nOutlineLevel = -1;
 
     if( bIsProgress )
     {
@@ -1991,19 +2047,24 @@ void XMLTextParagraphExport::exportParagraph(
                 }
             }
 
-            if( rPropSetHelper.hasProperty( PARA_CHAPTER_NUMERBING_LEVEL ) )
+            //if( rPropSetHelper.hasProperty( PARA_CHAPTER_NUMERBING_LEVEL ) )  //#outline level,zhaojianwei
+            if( rPropSetHelper.hasProperty( PARA_OUTLINE_LEVEL ) )              //<-end
             {
                 if( xMultiPropSet.is() )
-                    rPropSetHelper.getValue( PARA_CHAPTER_NUMERBING_LEVEL,
+                    //rPropSetHelper.getValue( PARA_CHAPTER_NUMERBING_LEVEL,    //#outline level,zhaojianwei
+                    rPropSetHelper.getValue( PARA_OUTLINE_LEVEL,                //<-end
                                                      xMultiPropSet ) >>= nOutlineLevel;
                 else
-                    rPropSetHelper.getValue( PARA_CHAPTER_NUMERBING_LEVEL,
+                    //rPropSetHelper.getValue( PARA_CHAPTER_NUMERBING_LEVEL,    //#outline level,zhaojianwei
+                    rPropSetHelper.getValue( PARA_OUTLINE_LEVEL,                //<-end
                                                      xPropSet ) >>= nOutlineLevel;
 
-                if( -1 != nOutlineLevel )
+                //if( -1 != nOutlineLevel ) //#outline level,zhaojianwei
+                if( 0 < nOutlineLevel ) //<-end,zhaojianwei
                 {
                     OUStringBuffer sTmp;
-                    sTmp.append( sal_Int32( nOutlineLevel + 1 ) );
+                    //sTmp.append( sal_Int32( nOutlineLevel + 1 ) );    //#outline level,zhaojianwei
+                    sTmp.append( sal_Int32( nOutlineLevel) );       //<-end,zhaojianwei
                     GetExport().AddAttribute( XML_NAMESPACE_TEXT,
                                               XML_OUTLINE_LEVEL,
                                   sTmp.makeStringAndClear() );
@@ -2018,7 +2079,39 @@ void XMLTextParagraphExport::exportParagraph(
                             rPropSetHelper.getValue(
                                        NUMBERING_IS_NUMBER, xPropSet ) >>= bIsNumber;
 
-                        if( ! bIsNumber )
+                        OUString sListStyleName;
+                        if( xMultiPropSet.is() )
+                            rPropSetHelper.getValue(
+                                       PARA_NUMBERING_STYLENAME, xMultiPropSet ) >>= sListStyleName;
+                        else
+                            rPropSetHelper.getValue(
+                                       PARA_NUMBERING_STYLENAME, xPropSet ) >>= sListStyleName;
+
+
+
+                        bool bAssignedtoOutlineStyle = false;//#outline level,add by zhaojianwei
+                        {
+                            Reference< XChapterNumberingSupplier > xCNSupplier( GetExport().GetModel(), UNO_QUERY );
+
+                            OUString sOutlineName;
+                            if (xCNSupplier.is())
+                            {
+                                Reference< XIndexReplace > xNumRule ( xCNSupplier->getChapterNumberingRules() );
+                                DBG_ASSERT( xNumRule.is(), "no chapter numbering rules" );
+
+                                if (xNumRule.is())
+                                {
+                                    Reference< XPropertySet > xNumRulePropSet( xNumRule, UNO_QUERY );
+                                    xNumRulePropSet->getPropertyValue(
+                                        OUString(RTL_CONSTASCII_USTRINGPARAM("Name")) ) >>= sOutlineName;
+                                    bAssignedtoOutlineStyle = ( sListStyleName == sOutlineName );
+                                }
+                            }
+
+                        }   //<end,zhaojianwei
+
+                        //if( ! bIsNumber )         //#outline level,removed by zhaojianwei
+                        if( ! bIsNumber && bAssignedtoOutlineStyle )    //#outline level,add by zhaojianwei
                             GetExport().AddAttribute( XML_NAMESPACE_TEXT,
                                                       XML_IS_LIST_HEADER,
                                                       XML_TRUE );
@@ -2127,7 +2220,8 @@ void XMLTextParagraphExport::exportParagraph(
     {
         sal_Bool bPrevCharIsSpace = sal_True;
         enum XMLTokenEnum eElem =
-            -1 == nOutlineLevel ? XML_P : XML_H;
+            //-1 == nOutlineLevel ? XML_P : XML_H;  //#outline level,zhaojianwei
+            0 < nOutlineLevel ? XML_H : XML_P;  //<-end,zhaojianwei
         SvXMLElementExport aElem( GetExport(), XML_NAMESPACE_TEXT, eElem,
                                   sal_True, sal_False );
         if( bHasContentEnum )

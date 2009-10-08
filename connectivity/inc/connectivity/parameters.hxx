@@ -45,6 +45,7 @@
 #include <com/sun/star/sdb/XSingleSelectQueryComposer.hpp>
 /** === end UNO includes === **/
 
+#include "connectivity/dbtoolsdllapi.hxx"
 #include "connectivity/paramwrapper.hxx"
 #include <unotools/sharedunocomponent.hxx>
 #include <comphelper/implementationreference.hxx>
@@ -62,7 +63,7 @@ namespace dbtools
     //= ParameterManager
     //====================================================================
     class FilterManager;
-    class ParameterManager
+    class OOO_DLLPUBLIC_DBTOOLS ParameterManager
     {
     public:
         /// classifies the origin of the data to fill a parameter
@@ -116,7 +117,7 @@ namespace dbtools
         ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >
                                             m_xORB;
 
-        ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >
+        ::com::sun::star::uno::WeakReference< ::com::sun::star::beans::XPropertySet >
                                             m_xComponent;                // the database component whose parameters we're handling
         ::com::sun::star::uno::Reference< ::com::sun::star::uno::XAggregation >
                                             m_xAggregatedRowSet;    // the aggregated row set - necessary for unwrapped access to some interfaces
@@ -257,7 +258,7 @@ namespace dbtools
 
     private:
         /// checkes whether the object is already initialized, and not yet disposed
-        inline  bool    isAlive() const { return m_xComponent.is() && m_xInnerParamUpdate.is(); }
+        inline  bool    isAlive() const { return m_xComponent.get().is() && m_xInnerParamUpdate.is(); }
 
         /** creates a filter expression from a master-detail link where the detail denotes a column name
         */

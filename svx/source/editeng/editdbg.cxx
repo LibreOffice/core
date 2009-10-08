@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: editdbg.cxx,v $
- * $Revision: 1.22 $
+ * $Revision: 1.22.148.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -237,7 +237,11 @@ ByteString DbgOutItem( const SfxItemPool& rPool, const SfxPoolItem& rItem )
         break;
         case EE_CHAR_UNDERLINE:
             aDebStr += "FontUnderline=";
-            aDebStr += ByteString::CreateFromInt32( (USHORT)((SvxUnderlineItem&)rItem).GetUnderline() );
+            aDebStr += ByteString::CreateFromInt32( (USHORT)((SvxUnderlineItem&)rItem).GetLineStyle() );
+        break;
+        case EE_CHAR_OVERLINE:
+            aDebStr += "FontOverline=";
+            aDebStr += ByteString::CreateFromInt32( (USHORT)((SvxOverlineItem&)rItem).GetLineStyle() );
         break;
         case EE_CHAR_EMPHASISMARK:
             aDebStr += "FontUnderline=";

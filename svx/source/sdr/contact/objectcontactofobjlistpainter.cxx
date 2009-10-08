@@ -142,7 +142,7 @@ namespace sdr
                     if(xPrimitiveSequence.hasElements())
                     {
                         drawinglayer::processor2d::BaseProcessor2D* pProcessor2D = createBaseProcessor2DFromOutputDevice(
-                            *pTargetDevice, getViewInformation2D(), false);
+                            *pTargetDevice, getViewInformation2D());
 
                         if(pProcessor2D)
                         {

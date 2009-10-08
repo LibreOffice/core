@@ -808,7 +808,7 @@
 #define HID_COLORPAGE_DBDETAIL_LB                   (HID_SVX_EXT0_START + 206)
 
 #define HID_NUMBERFORMAT_WND_NUMBER_PREVIEW         (HID_SVX_EXT0_START + 207)
-
+#define HID_SPLDLG_BUTTON_IGNORERULE                (HID_SVX_EXT0_START + 208)
 // please adjust ACT_SVX_HID_END2 below if you add entries here!
 
 // -----------------------------------------------------------------------
@@ -820,7 +820,7 @@
 #error Resource-Ueberlauf in #line, #file
 #endif
 
-#define ACT_SVX_HID_END2    HID_NUMBERFORMAT_WND_NUMBER_PREVIEW
+#define ACT_SVX_HID_END2    HID_SPLDLG_BUTTON_IGNORERULE
 #if ACT_SVX_HID_END2 > HID_SVX_EXT0_END
 #error resource overrun in #line, #file
 #endif

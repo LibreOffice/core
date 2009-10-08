@@ -130,14 +130,14 @@ BOOL LinguOptions::SetValue( Any &rOld, const Any &rVal, INT32 nWID )
 
     switch( nWID )
     {
-        case WID_IS_GERMAN_PRE_REFORM :     pbVal = &pData->bIsGermanPreReform; break;
+        case WID_IS_GERMAN_PRE_REFORM :     /*! deprecated !*/ break;
         case WID_IS_USE_DICTIONARY_LIST :   pbVal = &pData->bIsUseDictionaryList;   break;
         case WID_IS_IGNORE_CONTROL_CHARACTERS : pbVal = &pData->bIsIgnoreControlCharacters; break;
         case WID_IS_HYPH_AUTO :             pbVal = &pData->bIsHyphAuto;    break;
         case WID_IS_HYPH_SPECIAL :          pbVal = &pData->bIsHyphSpecial; break;
         case WID_IS_SPELL_AUTO :            pbVal = &pData->bIsSpellAuto;   break;
-        case WID_IS_SPELL_HIDE :            pbVal = &pData->bIsSpellHideMarkings;   break;
-        case WID_IS_SPELL_IN_ALL_LANGUAGES :pbVal = &pData->bIsSpellInAllLanguages; break;
+        case WID_IS_SPELL_HIDE :            /*! deprecated !*/ break;
+        case WID_IS_SPELL_IN_ALL_LANGUAGES :/*! deprecated !*/ break;
         case WID_IS_SPELL_SPECIAL :         pbVal = &pData->bIsSpellSpecial;    break;
         case WID_IS_WRAP_REVERSE :          pbVal = &pData->bIsSpellReverse;    break;
         case WID_DEFAULT_LANGUAGE :         pnVal = &pData->nDefaultLanguage;   break;
@@ -164,7 +164,7 @@ BOOL LinguOptions::SetValue( Any &rOld, const Any &rVal, INT32 nWID )
         }
         default :
         {
-            DBG_ERROR("lng : unknown WID");
+            DBG_ASSERT( 0,"lng : unknown WID");
             bRes = FALSE;
         }
     }
@@ -207,14 +207,14 @@ void LinguOptions::GetValue( Any &rVal, INT32 nWID ) const
 
     switch( nWID )
     {
-        case WID_IS_GERMAN_PRE_REFORM :     pbVal = &pData->bIsGermanPreReform; break;
+        case WID_IS_GERMAN_PRE_REFORM :     /*! deprecated !*/ break;
         case WID_IS_USE_DICTIONARY_LIST :   pbVal = &pData->bIsUseDictionaryList;   break;
         case WID_IS_IGNORE_CONTROL_CHARACTERS : pbVal = &pData->bIsIgnoreControlCharacters; break;
         case WID_IS_HYPH_AUTO :             pbVal = &pData->bIsHyphAuto;    break;
         case WID_IS_HYPH_SPECIAL :          pbVal = &pData->bIsHyphSpecial; break;
         case WID_IS_SPELL_AUTO :            pbVal = &pData->bIsSpellAuto;   break;
-        case WID_IS_SPELL_HIDE :            pbVal = &pData->bIsSpellHideMarkings;   break;
-        case WID_IS_SPELL_IN_ALL_LANGUAGES :pbVal = &pData->bIsSpellInAllLanguages; break;
+        case WID_IS_SPELL_HIDE :            /*! deprecated !*/ break;
+        case WID_IS_SPELL_IN_ALL_LANGUAGES :/*! deprecated !*/ break;
         case WID_IS_SPELL_SPECIAL :         pbVal = &pData->bIsSpellSpecial;    break;
         case WID_IS_WRAP_REVERSE :          pbVal = &pData->bIsSpellReverse;    break;
         case WID_DEFAULT_LANGUAGE :         pnVal = &pData->nDefaultLanguage;   break;
@@ -244,7 +244,7 @@ void LinguOptions::GetValue( Any &rVal, INT32 nWID ) const
         }
         default :
         {
-            DBG_ERROR("lng : unknown WID");
+            DBG_ASSERT( 0,"lng : unknown WID");
         }
     }
 
@@ -265,7 +265,7 @@ struct WID_Name
 //! since the WID is used as index in this table!
 WID_Name aWID_Name[] =
 {
-    { WID_IS_GERMAN_PRE_REFORM,           UPN_IS_GERMAN_PRE_REFORM },
+    { 0,                                  0 },
     { WID_IS_USE_DICTIONARY_LIST,         UPN_IS_USE_DICTIONARY_LIST },
     { WID_IS_IGNORE_CONTROL_CHARACTERS,   UPN_IS_IGNORE_CONTROL_CHARACTERS },
     { WID_IS_SPELL_UPPER_CASE,            UPN_IS_SPELL_UPPER_CASE },
@@ -276,8 +276,8 @@ WID_Name aWID_Name[] =
     { WID_HYPH_MIN_WORD_LENGTH,           UPN_HYPH_MIN_WORD_LENGTH },
     { WID_DEFAULT_LOCALE,                 UPN_DEFAULT_LOCALE },
     { WID_IS_SPELL_AUTO,                  UPN_IS_SPELL_AUTO },
-    { WID_IS_SPELL_HIDE,                  UPN_IS_SPELL_HIDE },
-    { WID_IS_SPELL_IN_ALL_LANGUAGES,      UPN_IS_SPELL_IN_ALL_LANGUAGES },
+    { 0,                                  0 },
+    { 0,                                  0 },
     { WID_IS_SPELL_SPECIAL,               UPN_IS_SPELL_SPECIAL },
     { WID_IS_HYPH_AUTO,                   UPN_IS_HYPH_AUTO },
     { WID_IS_HYPH_SPECIAL,                UPN_IS_HYPH_SPECIAL },
@@ -292,7 +292,7 @@ WID_Name aWID_Name[] =
 };
 
 
-OUString LinguOptions::GetName( INT32 nWID ) const
+OUString LinguOptions::GetName( INT32 nWID )
 {
     MutexGuard  aGuard( GetLinguMutex() );
 
@@ -307,7 +307,7 @@ OUString LinguOptions::GetName( INT32 nWID ) const
     }
     else
     {
-        DBG_ERROR("lng : unknown WID");
+        DBG_ASSERT( 0,"lng : unknown WID");
     }
 
     return aRes;
@@ -333,7 +333,7 @@ static SfxItemPropertyMap aLinguProps[] =
             &::getCppuType( (sal_Int16*)0 ),    0, 0 },
     { MAP_CHAR_LEN(UPN_HYPH_MIN_WORD_LENGTH),       WID_HYPH_MIN_WORD_LENGTH,
             &::getCppuType( (sal_Int16*)0 ),    0, 0 },
-    { MAP_CHAR_LEN(UPN_IS_GERMAN_PRE_REFORM),       WID_IS_GERMAN_PRE_REFORM,
+    { MAP_CHAR_LEN(UPN_IS_GERMAN_PRE_REFORM),       WID_IS_GERMAN_PRE_REFORM,       /*! deprecated !*/
             &::getBooleanCppuType(),            0, 0 },
     { MAP_CHAR_LEN(UPN_IS_HYPH_AUTO),               WID_IS_HYPH_AUTO,
             &::getBooleanCppuType(),            0, 0 },
@@ -345,9 +345,9 @@ static SfxItemPropertyMap aLinguProps[] =
             &::getBooleanCppuType(),            0, 0 },
     { MAP_CHAR_LEN(UPN_IS_SPELL_CAPITALIZATION),    WID_IS_SPELL_CAPITALIZATION,
             &::getBooleanCppuType(),            0, 0 },
-    { MAP_CHAR_LEN(UPN_IS_SPELL_HIDE),              WID_IS_SPELL_HIDE,
+    { MAP_CHAR_LEN(UPN_IS_SPELL_HIDE),              WID_IS_SPELL_HIDE,              /*! deprecated !*/
             &::getBooleanCppuType(),            0, 0 },
-    { MAP_CHAR_LEN(UPN_IS_SPELL_IN_ALL_LANGUAGES),  WID_IS_SPELL_IN_ALL_LANGUAGES,
+    { MAP_CHAR_LEN(UPN_IS_SPELL_IN_ALL_LANGUAGES),  WID_IS_SPELL_IN_ALL_LANGUAGES,  /*! deprecated !*/
             &::getBooleanCppuType(),            0, 0 },
     { MAP_CHAR_LEN(UPN_IS_SPELL_SPECIAL),           WID_IS_SPELL_SPECIAL,
             &::getBooleanCppuType(),            0, 0 },
@@ -405,7 +405,7 @@ Reference< XPropertySetInfo > SAL_CALL LinguProps::getPropertySetInfo()
 }
 
 void SAL_CALL LinguProps::setPropertyValue(
-            const OUString& rPropertyName, const Any& aValue )
+            const OUString& rPropertyName, const Any& rValue )
         throw(UnknownPropertyException, PropertyVetoException,
               IllegalArgumentException, WrappedTargetException, RuntimeException)
 {
@@ -415,11 +415,11 @@ void SAL_CALL LinguProps::setPropertyValue(
             SfxItemPropertyMap::GetByName(pMap, rPropertyName);
     if (pCur)
     {
-        Any aOld;
-        if (aOpt.SetValue( aOld, aValue, pCur->nWID ))
+        Any aOld( aConfig.GetProperty( pCur->nWID ) );
+        if (aOld != rValue && aConfig.SetProperty( pCur->nWID, rValue ))
         {
             PropertyChangeEvent aChgEvt( (XPropertySet *) this, rPropertyName,
-                    FALSE, pCur->nWID, aOld, aValue );
+                    FALSE, pCur->nWID, aOld, rValue );
             launchEvent( aChgEvt );
         }
     }
@@ -441,7 +441,7 @@ Any SAL_CALL LinguProps::getPropertyValue( const OUString& rPropertyName )
     const SfxItemPropertyMap* pCur = SfxItemPropertyMap::GetByName(pMap, rPropertyName);
     if(pCur)
     {
-        aOpt.GetValue( aRet, pCur->nWID );
+        aRet = aConfig.GetProperty( pCur->nWID );
     }
 #ifdef LINGU_EXCEPTIONS
     else
@@ -520,11 +520,11 @@ void SAL_CALL LinguProps::setFastPropertyValue( sal_Int32 nHandle, const Any& rV
 {
     MutexGuard  aGuard( GetLinguMutex() );
 
-    Any aOld;
-    if (aOpt.SetValue( aOld, rValue, nHandle ))
+    Any aOld( aConfig.GetProperty( nHandle ) );
+    if (aOld != rValue && aConfig.SetProperty( nHandle, rValue ))
     {
         PropertyChangeEvent aChgEvt( (XPropertySet *) this,
-                aOpt.GetName( nHandle ), FALSE, nHandle, aOld, rValue );
+                LinguOptions::GetName( nHandle ), FALSE, nHandle, aOld, rValue );
         launchEvent( aChgEvt );
     }
 }
@@ -535,8 +535,7 @@ Any SAL_CALL LinguProps::getFastPropertyValue( sal_Int32 nHandle )
 {
     MutexGuard  aGuard( GetLinguMutex() );
 
-    Any aRes;
-    aOpt.GetValue( aRes, nHandle );
+    Any aRes( aConfig.GetProperty( nHandle ) );
     return aRes;
 }
 
@@ -554,8 +553,7 @@ Sequence< PropertyValue > SAL_CALL
     {
         PropertyValue &rVal = pProp[i];
         SfxItemPropertyMap &rItem = aLinguProps[i];
-        Any aAny;
-        aOpt.GetValue( aAny, rItem.nWID );
+        Any aAny( aConfig.GetProperty( rItem.nWID ) );
 
         rVal.Name   = OUString( rItem.pName, rItem.nNameLen, RTL_TEXTENCODING_ASCII_US );
         rVal.Handle = rItem.nWID;
@@ -576,14 +574,8 @@ void SAL_CALL
     const PropertyValue *pVal = rProps.getConstArray();
     for (INT32 i = 0;  i < nLen;  ++i)
     {
-        Any aOld;
         const PropertyValue &rVal = pVal[i];
-        if (aOpt.SetValue( aOld, rVal.Value, rVal.Handle ))
-        {
-            PropertyChangeEvent aChgEvt( (XPropertySet *) this,
-                    rVal.Name, FALSE, rVal.Handle, aOld, rVal.Value );
-            launchEvent( aChgEvt );
-        }
+        setPropertyValue( rVal.Name, rVal.Value );
     }
 }
 

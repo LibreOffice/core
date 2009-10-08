@@ -225,6 +225,26 @@
                     <value xml:lang="en-US">H~yperlink</value>
                 </prop>
             </node>
+            <node oor:name=".uno:RemoveHyperlink" oor:op="replace">
+                <prop oor:name="Label" oor:type="xs:string">
+                    <value xml:lang="en-US">Remove Hyperlink</value>
+                </prop>
+            </node>
+            <node oor:name=".uno:CopyHyperlinkLocation" oor:op="replace">
+                <prop oor:name="Label" oor:type="xs:string">
+                    <value xml:lang="en-US">Copy Hyperlink Location</value>
+                </prop>
+            </node>
+            <node oor:name=".uno:AcceptChange" oor:op="replace">
+                <prop oor:name="Label" oor:type="xs:string">
+                    <value xml:lang="en-US">Accept Change</value>
+                </prop>
+            </node>
+            <node oor:name=".uno:RejectChange" oor:op="replace">
+                <prop oor:name="Label" oor:type="xs:string">
+                    <value xml:lang="en-US">Reject Change</value>
+                </prop>
+            </node>
             <node oor:name=".uno:InsertBookmark" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
                     <value xml:lang="en-US">Bookmar~k...</value>
@@ -274,7 +294,7 @@
             </node>
             <node oor:name=".uno:InsertFootnoteDialog" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
-                    <value xml:lang="en-US">Footnote~...</value>
+                    <value xml:lang="en-US">Footnote/Endnote~...</value>
                 </prop>
             </node>
             <node oor:name=".uno:InsertReferenceField" oor:op="replace">
@@ -403,7 +423,7 @@
             </node>
             <node oor:name=".uno:MailMergeWizard" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
-                    <value xml:lang="en-US">~Mail Merge Wizard...</value>
+                    <value xml:lang="en-US">Mail Merge Wi~zard...</value>
                 </prop>
             </node>
             <node oor:name=".uno:SetAnchorToFrame" oor:op="replace">
@@ -506,7 +526,7 @@
             </node>
             <node oor:name=".uno:InsertTitleField" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
-                    <value xml:lang="en-US">~Title</value>
+                    <value xml:lang="en-US">T~itle</value>
                 </prop>
                 <prop oor:name="Properties" oor:type="xs:int">
                     <value>1</value>
@@ -522,7 +542,7 @@
             </node>
             <node oor:name=".uno:InsertFootnote" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
-                    <value xml:lang="en-US">Insert Footnote Directly</value>
+                    <value xml:lang="en-US">Insert Footnote/Endnote Directly</value>
                 </prop>
                 <prop oor:name="Properties" oor:type="xs:int">
                     <value>1</value>
@@ -530,7 +550,7 @@
             </node>
             <node oor:name=".uno:AutoFormatApply" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
-                    <value xml:lang="en-US">~Apply</value>
+                    <value xml:lang="en-US">Appl~y</value>
                 </prop>
             </node>
             <node oor:name=".uno:OnlineAutoFormat" oor:op="replace">
@@ -825,7 +845,7 @@
                     <value xml:lang="en-US">Frame Properties</value>
                 </prop>
                 <prop oor:name="ContextLabel" oor:type="xs:string">
-                    <value xml:lang="en-US">Fram~e...</value>
+                    <value xml:lang="en-US">Fra~me/Object...</value>
                 </prop>
                 <prop oor:name="Properties" oor:type="xs:int">
                     <value>1</value>
@@ -849,7 +869,7 @@
             </node>
             <node oor:name=".uno:FootnoteDialog" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
-                    <value xml:lang="en-US">~Footnotes...</value>
+                    <value xml:lang="en-US">~Footnotes/Endnotes...</value>
                 </prop>
             </node>
             <node oor:name=".uno:ResetAttributes" oor:op="replace">
@@ -1507,7 +1527,7 @@
             </node>
             <node oor:name=".uno:EditFootnote" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
-                    <value xml:lang="en-US">Footnote~...</value>
+                    <value xml:lang="en-US">Footnote/Endnote~...</value>
                 </prop>
             </node>
             <node oor:name=".uno:Escape" oor:op="replace">
@@ -2214,12 +2234,22 @@
             </node>
             <node oor:name=".uno:AutoFormatMenu" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
-                    <value xml:lang="en-US">Auto~Format</value>
+                    <value xml:lang="en-US">AutoCorr~ect</value>
                 </prop>
             </node>
             <node oor:name=".uno:SelectionModeMenu" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
                     <value xml:lang="en-US">Selection Mode</value>
+                </prop>
+            </node>
+            <node oor:name=".uno:SaveGraphic" oor:op="replace">
+                <prop oor:name="Label" oor:type="xs:string">
+                    <value xml:lang="en-US">Save Graphics...</value>
+                </prop>
+            </node>
+            <node oor:name=".uno:ContinueNumbering" oor:op="replace">
+                <prop oor:name="Label" oor:type="xs:string">
+                    <value xml:lang="en-US">Continue previous numbering</value>
                 </prop>
             </node>
         </node>

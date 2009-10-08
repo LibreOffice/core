@@ -462,7 +462,7 @@ long SfxViewFrame::DdeSetData
 BOOL SfxApplication::InitializeDde()
 {
     DBG_ASSERT( !pAppData_Impl->pDdeService,
-                "Dde kann nicht mehrfach initialisiert werden" )
+                "Dde kann nicht mehrfach initialisiert werden" );
 
     pAppData_Impl->pDdeService = new ImplDdeService( Application::GetAppName() );
     int nError = pAppData_Impl->pDdeService->GetError();
@@ -498,7 +498,7 @@ void SfxAppData_Impl::DeInitDDE()
 
 void SfxApplication::AddDdeTopic( SfxObjectShell* pSh )
 {
-    DBG_ASSERT( pAppData_Impl->pDocTopics, "es gibt gar keinen Dde-Service" )
+    DBG_ASSERT( pAppData_Impl->pDocTopics, "es gibt gar keinen Dde-Service" );
     //OV: Im Serverbetrieb ist DDE abgeklemmt!
     if( !pAppData_Impl->pDocTopics )
         return;
@@ -530,7 +530,7 @@ void SfxApplication::AddDdeTopic( SfxObjectShell* pSh )
 
 void SfxApplication::RemoveDdeTopic( SfxObjectShell* pSh )
 {
-    DBG_ASSERT( pAppData_Impl->pDocTopics, "es gibt gar keinen Dde-Service" )
+    DBG_ASSERT( pAppData_Impl->pDocTopics, "es gibt gar keinen Dde-Service" );
     //OV: Im Serverbetrieb ist DDE abgeklemmt!
     if( !pAppData_Impl->pDocTopics )
         return;

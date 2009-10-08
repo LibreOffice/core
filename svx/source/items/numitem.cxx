@@ -86,7 +86,7 @@ SvxNumberType::SvxNumberType(sal_Int16 nType) :
             Reference < XInterface > xI = xMSF->createInstance(
                 ::rtl::OUString::createFromAscii( "com.sun.star.text.DefaultNumberingProvider" ) );
             Reference<XDefaultNumberingProvider> xRet(xI, UNO_QUERY);
-            DBG_ASSERT(xRet.is(), "service missing: \"com.sun.star.text.DefaultNumberingProvider\"")
+            DBG_ASSERT(xRet.is(), "service missing: \"com.sun.star.text.DefaultNumberingProvider\"");
             xFormatter = Reference<XNumberingFormatter> (xRet, UNO_QUERY);
         }
         catch(Exception& )
@@ -446,14 +446,22 @@ BOOL  SvxNumberFormat::operator==( const SvxNumberFormat& rFormat) const
         sCharStyleName      != rFormat.sCharStyleName
         )
         return FALSE;
-    if(pGraphicBrush && !rFormat.pGraphicBrush ||
-            !pGraphicBrush && rFormat.pGraphicBrush ||
-                pGraphicBrush && *pGraphicBrush != *rFormat.pGraphicBrush )
+    if (
+        (pGraphicBrush && !rFormat.pGraphicBrush) ||
+        (!pGraphicBrush && rFormat.pGraphicBrush) ||
+        (pGraphicBrush && *pGraphicBrush != *rFormat.pGraphicBrush)
+       )
+    {
         return FALSE;
-    if(pBulletFont && !rFormat.pBulletFont ||
-            !pBulletFont && rFormat.pBulletFont ||
-                pBulletFont && *pBulletFont != *rFormat.pBulletFont)
+    }
+    if (
+        (pBulletFont && !rFormat.pBulletFont) ||
+        (!pBulletFont && rFormat.pBulletFont) ||
+        (pBulletFont && *pBulletFont != *rFormat.pBulletFont)
+       )
+    {
         return FALSE;
+    }
     return TRUE;
 }
 /* -----------------28.10.98 09:53-------------------
@@ -467,7 +475,7 @@ void SvxNumberFormat::SetGraphicBrush( const SvxBrushItem* pBrushItem,
         delete pGraphicBrush;
         pGraphicBrush = 0;
     }
-    else if(!pGraphicBrush || pGraphicBrush && !(*pBrushItem == *pGraphicBrush))
+    else if ( !pGraphicBrush || (pGraphicBrush && !(*pBrushItem == *pGraphicBrush)) )
     {
         delete pGraphicBrush;
         pGraphicBrush =  (SvxBrushItem*)pBrushItem->Clone();
@@ -947,11 +955,15 @@ int   SvxNumRule::operator==( const SvxNumRule& rCopy) const
             return FALSE;
     for(USHORT i = 0; i < nLevelCount; i++)
     {
-        if( aFmtsSet[i] != rCopy.aFmtsSet[i] ||
-            !aFmts[i] &&  rCopy.aFmts[i] ||
-            aFmts[i] &&  !rCopy.aFmts[i] ||
-            aFmts[i] && *aFmts[i] !=  *rCopy.aFmts[i] )
+        if (
+            (aFmtsSet[i] != rCopy.aFmtsSet[i]) ||
+            (!aFmts[i] && rCopy.aFmts[i]) ||
+            (aFmts[i] && !rCopy.aFmts[i]) ||
+            (aFmts[i] && *aFmts[i] !=  *rCopy.aFmts[i])
+           )
+        {
             return FALSE;
+        }
     }
     return TRUE;
 }
@@ -960,7 +972,7 @@ int   SvxNumRule::operator==( const SvxNumRule& rCopy) const
  * --------------------------------------------------*/
 const SvxNumberFormat*  SvxNumRule::Get(USHORT nLevel)const
 {
-    DBG_ASSERT(nLevel < SVX_MAX_NUM, "falsches Level" )
+    DBG_ASSERT(nLevel < SVX_MAX_NUM, "falsches Level" );
     if( nLevel < SVX_MAX_NUM )
         return aFmtsSet[nLevel] ? aFmts[nLevel] : 0;
     else
@@ -977,7 +989,7 @@ const SvxNumberFormat&  SvxNumRule::GetLevel(USHORT nLevel)const
          pStdOutlineNumFmt = new SvxNumberFormat(SVX_NUM_NUMBER_NONE);
     }
 
-    DBG_ASSERT(nLevel < SVX_MAX_NUM, "falsches Level" )
+    DBG_ASSERT(nLevel < SVX_MAX_NUM, "falsches Level" );
 
     return ( ( nLevel < SVX_MAX_NUM ) && aFmts[nLevel] ) ?
             *aFmts[nLevel] :  eNumberingType == SVX_RULETYPE_NUMBERING ?
@@ -989,7 +1001,7 @@ const SvxNumberFormat&  SvxNumRule::GetLevel(USHORT nLevel)const
  * --------------------------------------------------*/
 void SvxNumRule::SetLevel( USHORT i, const SvxNumberFormat& rNumFmt, BOOL bIsValid )
 {
-    DBG_ASSERT(i < SVX_MAX_NUM, "falsches Level" )
+    DBG_ASSERT(i < SVX_MAX_NUM, "falsches Level" );
 
     if( (i < SVX_MAX_NUM) && (!aFmtsSet[i] || !(rNumFmt == *Get( i ))) )
     {
@@ -1004,7 +1016,7 @@ void SvxNumRule::SetLevel( USHORT i, const SvxNumberFormat& rNumFmt, BOOL bIsVal
  * --------------------------------------------------*/
 void SvxNumRule::SetLevel(USHORT nLevel, const SvxNumberFormat* pFmt)
 {
-    DBG_ASSERT(nLevel < SVX_MAX_NUM, "falsches Level" )
+    DBG_ASSERT(nLevel < SVX_MAX_NUM, "falsches Level" );
 
     if( nLevel < SVX_MAX_NUM )
     {

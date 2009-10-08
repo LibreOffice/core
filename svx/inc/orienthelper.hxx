@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: orienthelper.hxx,v $
- * $Revision: 1.5 $
+ * $Revision: 1.5.274.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -63,25 +63,20 @@ struct OrientationHelper_Impl;
     direct modifications of the "Stacked text" check box. Otherwise the update
     mechanism of registered controls will not work.
  */
-class SVX_DLLPUBLIC OrientationHelper : public Window
+class SVX_DLLPUBLIC OrientationHelper
 {
 public:
     explicit            OrientationHelper(
-                            Window* pParent,
                             DialControl& rCtrlDial,
                             CheckBox& rCbStacked );
 
     /** @param rNfRotation  A numeric field that will be connected to the DialControl. */
     explicit            OrientationHelper(
-                            Window* pParent,
                             DialControl& rCtrlDial,
                             NumericField& rNfRotation,
                             CheckBox& rCbStacked );
 
     virtual             ~OrientationHelper();
-
-    /** Handles Enable/Show events for all registered windows. */
-    virtual void        StateChanged( StateChangedType nStateChange );
 
     /** Registers the passed window to be enabled/disabled on call of Enable().
         @param eDisableIfStacked
@@ -89,6 +84,16 @@ public:
         STATE_NOCHECK:  Window always disabled, if stacked text is turned off.
         STATE_DONTKNOW: Window will be enabled/disabled independent from stacked text. */
     void                AddDependentWindow( Window& rWindow, TriState eDisableIfStacked = STATE_DONTKNOW );
+
+    /** Enables or disables the dial control and all dependent windows. */
+    void                Enable( bool bEnable = true );
+    /** Disables the dial control and all dependent windows. */
+    inline void         Disable() { Enable( false ); }
+
+    /** Shows or hides the dial control and all dependent windows. */
+    void                Show( bool bShow = true );
+    /** Hides the dial control and all dependent windows. */
+    inline void         Hide() { Show( false ); }
 
     /** Sets the "stacked" check box to the passed state and updates dependent controls. */
     void                SetStackedState( TriState eState );

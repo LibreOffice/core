@@ -81,16 +81,26 @@ static rtl::OUString aHelpMediaType( rtl::OUString::createFromAscii( "applicatio
 
 rtl::OUString Databases::expandURL( const rtl::OUString& aURL )
 {
+    osl::MutexGuard aGuard( m_aMutex );
+    rtl::OUString aRetURL = expandURL( aURL, m_xContext );
+    return aRetURL;
+}
+
+rtl::OUString Databases::expandURL( const rtl::OUString& aURL, Reference< uno::XComponentContext > xContext )
+{
     static Reference< util::XMacroExpander > xMacroExpander;
     static Reference< uri::XUriReferenceFactory > xFac;
 
-    osl::MutexGuard aGuard( m_aMutex );
+    if( !xContext.is() )
+        return rtl::OUString();
 
     if( !xMacroExpander.is() || !xFac.is() )
     {
+        Reference< XMultiComponentFactory > xSMgr( xContext->getServiceManager(), UNO_QUERY );
+
         xFac = Reference< uri::XUriReferenceFactory >(
-            m_xSMgr->createInstanceWithContext( rtl::OUString::createFromAscii(
-            "com.sun.star.uri.UriReferenceFactory"), m_xContext ) , UNO_QUERY );
+            xSMgr->createInstanceWithContext( rtl::OUString::createFromAscii(
+            "com.sun.star.uri.UriReferenceFactory"), xContext ) , UNO_QUERY );
         if( !xFac.is() )
         {
             throw RuntimeException(
@@ -99,7 +109,7 @@ rtl::OUString Databases::expandURL( const rtl::OUString& aURL )
         }
 
         xMacroExpander = Reference< util::XMacroExpander >(
-            m_xContext->getValueByName(
+            xContext->getValueByName(
             ::rtl::OUString::createFromAscii( "/singletons/com.sun.star.util.theMacroExpander" ) ),
             UNO_QUERY_THROW );
      }
@@ -1205,7 +1215,7 @@ void Databases::cascadingStylesheet( const rtl::OUString& Language,
         if( error )
         {
             m_nCustomCSSDocLength = 0;
-            m_pCustomCSSDoc = new char[ 0 ];
+            m_pCustomCSSDoc = new char[ 1 ]; // Initialize with 1 to avoid gcc compiler warning
         }
     }
 
@@ -1275,7 +1285,7 @@ void Databases::setActiveText( const rtl::OUString& Module,
     else
     {
         *byteCount = 0;
-        *buffer = new char[0];
+        *buffer = new char[1]; // Initialize with 1 to avoid compiler warnings
         if( !bFoundAsEmpty )
             m_aEmptyActiveTextSet.insert( id );
     }
@@ -1481,6 +1491,34 @@ Reference< deployment::XPackage > ExtensionIteratorBase::implGetNextSharedHelpPa
     return xHelpPackage;
 }
 
+rtl::OUString ExtensionIteratorBase::implGetFileFromPackage( const rtl::OUString& rFileExtension,
+    com::sun::star::uno::Reference< com::sun::star::deployment::XPackage > xPackage )
+{
+    rtl::OUString aFile;
+    rtl::OUString aLanguage = m_aCorrectedLanguage;
+    for( sal_Int32 iPass = 0 ; iPass < 2 ; ++iPass )
+    {
+        rtl::OUStringBuffer aStrBuf;
+        aStrBuf.append( xPackage->getURL() );
+        aStrBuf.append( aSlash );
+        aStrBuf.append( aLanguage );
+        aStrBuf.append( aSlash );
+        aStrBuf.append( aHelpFilesBaseName );
+        aStrBuf.append( rFileExtension );
+
+        aFile = m_rDatabases.expandURL( aStrBuf.makeStringAndClear() );
+        if( iPass == 0 )
+        {
+            if( m_xSFA->exists( aFile ) )
+                break;
+            if( m_aCorrectedLanguage.equals( aEnglishFallbackLang ) )
+                break;
+            aLanguage = aEnglishFallbackLang;
+        }
+    }
+    return aFile;
+}
+
 
 //===================================================================
 // class DataBaseIterator
@@ -1611,28 +1649,9 @@ rtl::OUString KeyDataBaseFileIterator::nextDbFile( bool& o_rbExtension )
 rtl::OUString KeyDataBaseFileIterator::implGetDbFileFromPackage
     ( Reference< deployment::XPackage > xPackage )
 {
-    rtl::OUString aExpandedURL;
-    rtl::OUString aLanguage = m_aCorrectedLanguage;
-    for( sal_Int32 iPass = 0 ; iPass < 2 ; ++iPass )
-    {
-        rtl::OUStringBuffer aStrBuf;
-        aStrBuf.append( xPackage->getURL() );
-        aStrBuf.append( aSlash );
-        aStrBuf.append( aLanguage );
-        aStrBuf.append( aSlash );
-        aStrBuf.append( aHelpFilesBaseName );
-        aStrBuf.appendAscii( ".key" );
+    rtl::OUString aExpandedURL =
+        implGetFileFromPackage( rtl::OUString::createFromAscii( ".key" ), xPackage );
 
-        aExpandedURL = m_rDatabases.expandURL( aStrBuf.makeStringAndClear() );
-        if( iPass == 0 )
-        {
-            if( m_xSFA->exists( aExpandedURL ) )
-                break;
-            if( m_aCorrectedLanguage.equals( aEnglishFallbackLang ) )
-                break;
-            aLanguage = aEnglishFallbackLang;
-        }
-    }
     rtl::OUString aRetFile;
     osl::FileBase::getSystemPathFromFileURL( aExpandedURL, aRetFile );
 
@@ -1694,30 +1713,8 @@ Reference< XHierarchicalNameAccess > JarFileIterator::implGetJarFromPackage
 {
     Reference< XHierarchicalNameAccess > xNA;
 
-    rtl::OUString aExtensionPath = xPackage->getURL();
-
-    rtl::OUString zipFile;
-    rtl::OUString aLanguage = m_aCorrectedLanguage;
-    for( sal_Int32 iPass = 0 ; iPass < 2 ; ++iPass )
-    {
-        rtl::OUStringBuffer aStrBuf;
-        aStrBuf.append( aExtensionPath );
-        aStrBuf.append( aSlash );
-        aStrBuf.append( aLanguage );
-        aStrBuf.append( aSlash );
-        aStrBuf.append( aHelpFilesBaseName );
-        aStrBuf.append( rtl::OUString::createFromAscii( ".jar" ) );
-
-        zipFile = m_rDatabases.expandURL( aStrBuf.makeStringAndClear() );
-        if( iPass == 0 )
-        {
-            if( m_xSFA->exists( zipFile ) )
-                break;
-            if( m_aCorrectedLanguage.equals( aEnglishFallbackLang ) )
-                break;
-            aLanguage = aEnglishFallbackLang;
-        }
-    }
+    rtl::OUString zipFile =
+        implGetFileFromPackage( rtl::OUString::createFromAscii( ".jar" ), xPackage );
 
     try
     {
@@ -1749,5 +1746,71 @@ Reference< XHierarchicalNameAccess > JarFileIterator::implGetJarFromPackage
     {}
 
     return xNA;
+}
+
+
+//===================================================================
+// class IndexFolderIterator
+
+rtl::OUString IndexFolderIterator::nextIndexFolder( bool& o_rbExtension )
+{
+    rtl::OUString aIndexFolder;
+
+    while( !aIndexFolder.getLength() && m_eState != END_REACHED )
+    {
+        switch( m_eState )
+        {
+            case INITIAL_MODULE:
+                aIndexFolder =
+                    m_rDatabases.getInstallPathAsURL() +
+                    m_aCorrectedLanguage + aSlash + m_aInitialModule +
+                    rtl::OUString::createFromAscii( ".idxl" );
+
+                o_rbExtension = false;
+
+                m_eState = USER_EXTENSIONS;     // Later: SHARED_MODULE
+                break;
+
+            // Later:
+            //case SHARED_MODULE
+                //...
+
+            case USER_EXTENSIONS:
+            {
+                Reference< deployment::XPackage > xParentPackageBundle;
+                Reference< deployment::XPackage > xHelpPackage = implGetNextUserHelpPackage( xParentPackageBundle );
+                if( !xHelpPackage.is() )
+                    break;
+
+                aIndexFolder = implGetIndexFolderFromPackage( xHelpPackage );
+                o_rbExtension = true;
+                break;
+            }
+
+            case SHARED_EXTENSIONS:
+            {
+                Reference< deployment::XPackage > xParentPackageBundle;
+                Reference< deployment::XPackage > xHelpPackage = implGetNextSharedHelpPackage( xParentPackageBundle );
+                if( !xHelpPackage.is() )
+                    break;
+
+                aIndexFolder = implGetIndexFolderFromPackage( xHelpPackage );
+                o_rbExtension = true;
+                break;
+            }
+            case END_REACHED:
+                VOS_ENSURE( false, "IndexFolderIterator::nextIndexFolder(): Invalid case END_REACHED" );
+                break;
+        }
+    }
+
+    return aIndexFolder;
+}
+
+rtl::OUString IndexFolderIterator::implGetIndexFolderFromPackage( Reference< deployment::XPackage > xPackage )
+{
+    rtl::OUString aIndexFolder =
+        implGetFileFromPackage( rtl::OUString::createFromAscii( ".idxl" ), xPackage );
+    return aIndexFolder;
 }
 

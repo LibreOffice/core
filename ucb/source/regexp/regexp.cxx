@@ -158,6 +158,7 @@ bool Regexp::matches(rtl::OUString const & rString,
         }
 
         if (bMatches)
+        {
             if (m_bTranslation)
             {
                 if (pTranslation)
@@ -178,6 +179,7 @@ bool Regexp::matches(rtl::OUString const & rString,
                 if (pTranslated)
                     *pTranslated = false;
             }
+        }
     }
 
     return bMatches;
@@ -188,7 +190,7 @@ namespace unnamed_ucb_regexp {
 
 inline bool isAlpha(sal_Unicode c)
 {
-    return c >= 'A' && c <= 'Z' || c >= 'a' && c <= 'z';
+    return (c >= 'A' && c <= 'Z') || (c >= 'a' && c <= 'z');
 }
 
 inline bool isDigit(sal_Unicode c)
@@ -447,7 +449,7 @@ Regexp Regexp::parse(rtl::OUString const & rRegexp)
         if (!matchString(&p, pEnd, RTL_CONSTASCII_STRINGPARAM("[^/?#]")))
             throw lang::IllegalArgumentException();
 
-        if (p == pEnd || *p != '*' && *p != '+')
+        if (p == pEnd || (*p != '*' && *p != '+'))
             throw lang::IllegalArgumentException();
         bool bEmptyDomain = *p++ == '*';
 

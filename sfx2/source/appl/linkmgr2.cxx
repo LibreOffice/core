@@ -185,7 +185,7 @@ BOOL SvLinkManager::InsertDDELink( SvBaseLink * pLink,
 
 BOOL SvLinkManager::InsertDDELink( SvBaseLink * pLink )
 {
-    DBG_ASSERT( OBJECT_CLIENT_SO & pLink->GetObjType(), "no OBJECT_CLIENT_SO" )
+    DBG_ASSERT( OBJECT_CLIENT_SO & pLink->GetObjType(), "no OBJECT_CLIENT_SO" );
     if( !( OBJECT_CLIENT_SO & pLink->GetObjType() ) )
         return FALSE;
 

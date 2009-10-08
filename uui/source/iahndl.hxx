@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: iahndl.hxx,v $
- * $Revision: 1.21 $
+ * $Revision: 1.21.22.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -42,6 +42,7 @@
 #include "com/sun/star/task/InteractionClassification.hpp"
 #include "com/sun/star/task/PasswordRequestMode.hpp"
 #include "com/sun/star/task/DocumentMacroConfirmationRequest.hpp"
+#include "com/sun/star/task/FutureDocumentVersionProductUpdateRequest.hpp"
 #include "tools/solar.h"
 #include "tools/errcode.hxx"
 #include "vcl/wintypes.hxx"
@@ -59,6 +60,11 @@ struct CntHTTPCookieRequest;
 #define DESCRIPTION_2 2
 #define TITLE 3
 
+#define UUI_DOC_LOAD_LOCK       0
+#define UUI_DOC_OWN_LOAD_LOCK   1
+#define UUI_DOC_SAVE_LOCK       2
+#define UUI_DOC_OWN_SAVE_LOCK   3
+
 namespace cssu = com::sun::star::uno;
 namespace dcss = ::com::sun::star;
 
@@ -67,7 +73,6 @@ namespace com { namespace sun { namespace star {
         class AmbigousFilterRequest;
         class FilterOptionsRequest;
         class NoSuchFilterRequest;
-        class LockedDocumentRequest;
     }
     namespace lang {
         class XMultiServiceFactory;
@@ -330,6 +335,16 @@ private:
         SAL_THROW((com::sun::star::uno::RuntimeException));
 
     void
+    handleFutureDocumentVersionUpdateRequest(
+        const ::com::sun::star::task::FutureDocumentVersionProductUpdateRequest& _rRequest,
+        com::sun::star::uno::Sequence<
+            com::sun::star::uno::Reference<
+                com::sun::star::task::XInteractionContinuation > > const &
+                    rContinuations
+    )
+        SAL_THROW((com::sun::star::uno::RuntimeException));
+
+    void
     handleBrokenPackageRequest(
     std::vector< rtl::OUString > const & rArguments,
     ::com::sun::star::uno::Sequence<
@@ -363,11 +378,26 @@ private:
     rtl::OUString & rErrorString);
 
     void handleLockedDocumentRequest(
-    ::com::sun::star::document::LockedDocumentRequest const & aRequest,
+    const ::rtl::OUString& aDocumentURL,
+    const ::rtl::OUString& aInfo,
+    ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference<
+        ::com::sun::star::task::XInteractionContinuation > > const &
+            rContinuations,
+    sal_uInt16 nMode )
+        SAL_THROW((::com::sun::star::uno::RuntimeException));
+
+    void handleChangedByOthersRequest(
     ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference<
         ::com::sun::star::task::XInteractionContinuation > > const &
             rContinuations )
         SAL_THROW((::com::sun::star::uno::RuntimeException));
+
+    void handleLockFileIgnoreRequest(
+    ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference<
+        ::com::sun::star::task::XInteractionContinuation > > const &
+            rContinuations )
+        SAL_THROW((::com::sun::star::uno::RuntimeException));
+
 };
 
 #endif // UUI_IAHNDL_HXX

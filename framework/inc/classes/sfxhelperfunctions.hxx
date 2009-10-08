@@ -41,6 +41,8 @@
 typedef svt::ToolboxController* ( *pfunc_setToolBoxControllerCreator)( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rFrame, ToolBox* pToolbox, unsigned short nID, const ::rtl::OUString& aCommandURL );
 typedef svt::StatusbarController* ( *pfunc_setStatusBarControllerCreator)( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rFrame, StatusBar* pStatusBar, unsigned short nID, const ::rtl::OUString& aCommandURL );
 typedef void ( *pfunc_getRefreshToolbars)( ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rFrame );
+typedef void ( *pfunc_createDockingWindow)( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rFrame, const ::rtl::OUString& rResourceURL );
+typedef bool ( *pfunc_isDockingWindowVisible)( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rFrame, const ::rtl::OUString& rResourceURL );
 
 namespace framework
 {
@@ -57,6 +59,13 @@ pfunc_getRefreshToolbars SAL_CALL SetRefreshToolbars( pfunc_getRefreshToolbars p
 
 void SAL_CALL RefreshToolbars( ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rFrame );
 
+pfunc_createDockingWindow SAL_CALL SetDockingWindowCreator( pfunc_createDockingWindow pCreateDockingWindow );
+
+void SAL_CALL CreateDockingWindow( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rFrame, const ::rtl::OUString& rResourceURL );
+
+pfunc_isDockingWindowVisible SAL_CALL SetIsDockingWindowVisible( pfunc_isDockingWindowVisible pIsDockingWindowVisible );
+
+bool SAL_CALL IsDockingWindowVisible( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rFrame, const ::rtl::OUString& rResourceURL );
 }
 
 #endif // __FRAMEWORK_CLASSES_SFXHELPERFUNCTIONS_HXX_

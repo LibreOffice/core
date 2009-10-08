@@ -56,10 +56,6 @@ namespace sdr
         class SVX_DLLPUBLIC DisplayInfo
         {
         protected:
-            // For being able to detect the processed page, allow setting
-            // it at DisplayInfo
-            //SdrPage*                                      mpProcessedPage;
-
             // The Layers which shall be processed (visible)
             SetOfByte                                       maProcessLayers;
 
@@ -101,38 +97,29 @@ namespace sdr
             // destructor
             virtual ~DisplayInfo();
 
-            // access to ProcessedPage, write is for internal use only.
-            // read is used from various places eventually, to identify the
-            // currently painting page
-            //void SetProcessedPage(SdrPage* pNew);
-            //const SdrPage* GetProcessedPage() const;
-
             // access to ProcessLayers
             void SetProcessLayers(const SetOfByte& rSet);
-            const SetOfByte& GetProcessLayers() const;
+            const SetOfByte& GetProcessLayers() const { return maProcessLayers; }
 
             // access to RedrawArea
             void SetRedrawArea(const Region& rRegion);
-            const Region& GetRedrawArea() const;
+            const Region& GetRedrawArea() const { return maRedrawArea; }
 
             // Access to ControlLayerProcessingActive flag
             void SetControlLayerProcessingActive(bool bDoPaint);
-            bool GetControlLayerProcessingActive() const;
+            bool GetControlLayerProcessingActive() const { return mbControlLayerProcessingActive; }
 
             // Access to PageProcessingActive flag
             void SetPageProcessingActive(bool bDoPaint);
-            bool GetPageProcessingActive() const;
-
-            // Access to svtools::ColorConfig
-            const svtools::ColorConfig& GetColorConfig() const;
+            bool GetPageProcessingActive() const { return mbPageProcessingActive; }
 
             // Save the original DrawMode from outdev
             void ClearGhostedDrawMode();
             void SetGhostedDrawMode();
-            bool IsGhostedDrawModeActive() const;
+            bool IsGhostedDrawModeActive() const { return mbGhostedDrawModeActive; }
 
             // access to master page painting flag
-            bool GetSubContentActive() const;
+            bool GetSubContentActive() const { return mbSubContentActive; }
             void SetSubContentActive(bool bNew);
         };
     } // end of namespace contact

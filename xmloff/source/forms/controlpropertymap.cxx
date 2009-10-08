@@ -134,16 +134,16 @@ namespace xmloff
     }
 
     //=====================================================================
-    //= OFormExportPropertyMapper
+    //= OFormComponentStyleExportMapper
     //=====================================================================
     //---------------------------------------------------------------------
-    OFormExportPropertyMapper::OFormExportPropertyMapper( const UniReference< XMLPropertySetMapper >& _rMapper )
+    OFormComponentStyleExportMapper::OFormComponentStyleExportMapper( const UniReference< XMLPropertySetMapper >& _rMapper )
         :SvXMLExportPropertyMapper( _rMapper )
     {
     }
 
     //---------------------------------------------------------------------
-    void OFormExportPropertyMapper::handleSpecialItem( SvXMLAttributeList& _rAttrList, const XMLPropertyState& _rProperty, const SvXMLUnitConverter& _rUnitConverter,
+    void OFormComponentStyleExportMapper::handleSpecialItem( SvXMLAttributeList& _rAttrList, const XMLPropertyState& _rProperty, const SvXMLUnitConverter& _rUnitConverter,
         const SvXMLNamespaceMap& _rNamespaceMap, const ::std::vector< XMLPropertyState >* _pProperties,
         sal_uInt32 _nIdx ) const
     {

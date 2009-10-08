@@ -305,18 +305,40 @@ namespace sdr
 
         drawinglayer::primitive2d::Primitive2DSequence ViewContactOfOuterPageBorder::createViewIndependentPrimitive2DSequence() const
         {
+            drawinglayer::primitive2d::Primitive2DSequence xRetval;
             const SdrPage& rPage = getPage();
             const basegfx::B2DRange aPageBorderRange(0.0, 0.0, (double)rPage.GetWdt(), (double)rPage.GetHgt());
-            const basegfx::B2DPolygon aPageBorderPolygon(basegfx::tools::createPolygonFromRect(aPageBorderRange));
 
             // We have only the page information, not the view information. Use the
             // svtools::FONTCOLOR color for initialisation
             const svtools::ColorConfig aColorConfig;
             const Color aBorderColor(aColorConfig.GetColorValue(svtools::FONTCOLOR).nColor);
             const basegfx::BColor aRGBBorderColor(aBorderColor.getBColor());
-            const drawinglayer::primitive2d::Primitive2DReference xReference(new drawinglayer::primitive2d::PolygonHairlinePrimitive2D(aPageBorderPolygon, aRGBBorderColor));
 
-            return drawinglayer::primitive2d::Primitive2DSequence(&xReference, 1);
+            if(rPage.getPageBorderOnlyLeftRight())
+            {
+                // #i93597# for Report Designer, the page border shall be only displayed right and left,
+                // but not top and bottom. Create simplified geometry.
+                basegfx::B2DPolygon aLeft, aRight;
+
+                aLeft.append(basegfx::B2DPoint(aPageBorderRange.getMinX(), aPageBorderRange.getMinY()));
+                aLeft.append(basegfx::B2DPoint(aPageBorderRange.getMinX(), aPageBorderRange.getMaxY()));
+
+                aRight.append(basegfx::B2DPoint(aPageBorderRange.getMaxX(), aPageBorderRange.getMinY()));
+                aRight.append(basegfx::B2DPoint(aPageBorderRange.getMaxX(), aPageBorderRange.getMaxY()));
+
+                xRetval.realloc(2);
+                xRetval[0] = drawinglayer::primitive2d::Primitive2DReference(new drawinglayer::primitive2d::PolygonHairlinePrimitive2D(aLeft, aRGBBorderColor));
+                xRetval[1] = drawinglayer::primitive2d::Primitive2DReference(new drawinglayer::primitive2d::PolygonHairlinePrimitive2D(aRight, aRGBBorderColor));
+            }
+            else
+            {
+                xRetval.realloc(1);
+                const basegfx::B2DPolygon aPageBorderPolygon(basegfx::tools::createPolygonFromRect(aPageBorderRange));
+                xRetval[0] = drawinglayer::primitive2d::Primitive2DReference(new drawinglayer::primitive2d::PolygonHairlinePrimitive2D(aPageBorderPolygon, aRGBBorderColor));
+            }
+
+            return xRetval;
         }
 
         ViewContactOfOuterPageBorder::ViewContactOfOuterPageBorder(ViewContactOfSdrPage& rParentViewContactOfSdrPage)

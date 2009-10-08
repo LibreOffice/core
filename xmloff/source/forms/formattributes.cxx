@@ -150,6 +150,7 @@ namespace xmloff
             case DA_DATA_FIELD:         return "data-field";
             case DA_LIST_SOURCE:        return "list-source";
             case DA_LIST_SOURCE_TYPE:   return "list-source-type";
+            case DA_INPUT_REQUIRED:     return "input-required";
             default:
                 OSL_ENSURE(sal_False, "OAttributeMetaData::getDatabaseAttributeName: invalid id (maybe you or-ed two flags?)!");
         }

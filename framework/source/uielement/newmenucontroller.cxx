@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: newmenucontroller.cxx,v $
- * $Revision: 1.12 $
+ * $Revision: 1.12.40.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -69,7 +69,7 @@
 #include <svtools/menuoptions.hxx>
 #include <svtools/acceleratorexecute.hxx>
 #include <svtools/moduleoptions.hxx>
-#include <comphelper/uieventslogger.hxx>
+#include <dispatch/uieventloghelper.hxx>
 
 //_________________________________________________________________________________________________________________
 //  Defines
@@ -476,6 +476,8 @@ void SAL_CALL NewMenuController::select( const css::awt::MenuEvent& rEvent ) thr
         pNewDocument->xDispatch  = xDispatch;
         pNewDocument->aTargetURL = aTargetURL;
         pNewDocument->aArgSeq    = aArgsList;
+        if(::comphelper::UiEventsLogger::isEnabled()) //#i88653#
+            UiEventLogHelper(::rtl::OUString::createFromAscii("NewMenuController")).log(m_xServiceManager, m_xFrame, aTargetURL, aArgsList);
         Application::PostUserEvent( STATIC_LINK(0, NewMenuController, ExecuteHdl_Impl), pNewDocument );
     }
 }
@@ -634,12 +636,6 @@ IMPL_STATIC_LINK_NOINSTANCE( NewMenuController, ExecuteHdl_Impl, NewDocument*, p
         // Asynchronous execution as this can lead to our own destruction!
         // Framework can recycle our current frame and the layout manager disposes all user interface
         // elements if a component gets detached from its frame!
-        if(::comphelper::UiEventsLogger::isEnabled()) //#i88653#
-        {
-            Sequence<PropertyValue> source;
-            ::comphelper::UiEventsLogger::appendDispatchOrigin(source, rtl::OUString::createFromAscii("NewMenuController"));
-            ::comphelper::UiEventsLogger::logDispatch(pNewDocument->aTargetURL, source);
-        }
         pNewDocument->xDispatch->dispatch( pNewDocument->aTargetURL, pNewDocument->aArgSeq );
 /*
     }

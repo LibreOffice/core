@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: fontmenucontroller.cxx,v $
- * $Revision: 1.10 $
+ * $Revision: 1.10.40.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -62,7 +62,7 @@
 #ifndef _VCL_MNEMONIC_HXX_
 #include <vcl/mnemonic.hxx>
 #endif
-#include <comphelper/uieventslogger.hxx>
+#include <dispatch/uieventloghelper.hxx>
 
 //_________________________________________________________________________________________________________________
 //  Defines
@@ -215,11 +215,11 @@ void SAL_CALL FontMenuController::select( const css::awt::MenuEvent& rEvent ) th
 
             xURLTransformer->parseStrict( aTargetURL );
             if(::comphelper::UiEventsLogger::isEnabled()) //#i88653#
-            {
-                Sequence<PropertyValue> source;
-                ::comphelper::UiEventsLogger::appendDispatchOrigin(source, rtl::OUString::createFromAscii("FontMenuController"));
-                ::comphelper::UiEventsLogger::logDispatch(aTargetURL, source);
-            }
+                UiEventLogHelper(::rtl::OUString::createFromAscii("FontMenuController")).log(
+                    m_xServiceManager,
+                    m_xFrame,
+                    aTargetURL,
+                    Sequence<PropertyValue>());
             xDispatch->dispatch( aTargetURL, aArgs );
         }
     }

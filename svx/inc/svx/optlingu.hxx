@@ -52,7 +52,7 @@ namespace beans{
 namespace linguistic2{
     class XDictionary;
     class XDictionaryList;
-    class XSpellChecker1;
+    class XSpellChecker;
 }}}}
 
 class SvLBoxEntry;
@@ -83,6 +83,7 @@ class SvxEditModulesDlg : public ModalDialog
     String              sSpell;
     String              sHyph;
     String              sThes;
+    String              sGrammar;
 
     SvxLinguData_Impl*  pDefaultLinguData;
     SvxLinguData_Impl&  rLinguData;
@@ -130,10 +131,8 @@ private:
     String              sWordsWithDigits;
     String              sCapitalization;
     String              sSpellSpecial;
-    String              sAllLanguages;
     String              sSpellAuto;
-    String              sHideMarkings;
-    String              sOldGerman;
+    String              sGrammarAuto;
     String              sNumMinWordlen;
     String              sNumPreBreak;
     String              sNumPostBreak;

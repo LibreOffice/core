@@ -688,6 +688,81 @@ namespace svx
         m_sCompatibleObjectDescription += sSeparator;
     }
 
+    //--------------------------------------------------------------------
+    OMultiColumnTransferable::OMultiColumnTransferable(const Sequence< PropertyValue >& _aDescriptors) : m_aDescriptors(_aDescriptors)
+    {
+    }
+    //--------------------------------------------------------------------
+    sal_uInt32 OMultiColumnTransferable::getDescriptorFormatId()
+    {
+        static sal_uInt32 s_nFormat = (sal_uInt32)-1;
+        if ((sal_uInt32)-1 == s_nFormat)
+        {
+            s_nFormat = SotExchange::RegisterFormatName(String::CreateFromAscii("application/x-openoffice;windows_formatname=\"dbaccess.MultipleColumnDescriptorTransfer\""));
+            OSL_ENSURE((sal_uInt32)-1 != s_nFormat, "OColumnTransferable::getDescriptorFormatId: bad exchange id!");
+        }
+        return s_nFormat;
+    }
+    //--------------------------------------------------------------------
+    void OMultiColumnTransferable::AddSupportedFormats()
+    {
+        AddFormat(getDescriptorFormatId());
+    }
+    //--------------------------------------------------------------------
+    void OMultiColumnTransferable::push_back(ODataAccessDescriptor& _aDescriptor)
+    {
+        const sal_Int32 nCount = m_aDescriptors.getLength();
+        m_aDescriptors.realloc(nCount+1);
+        m_aDescriptors[nCount].Value <<= _aDescriptor.createPropertyValueSequence();
+    }
+    //--------------------------------------------------------------------
+    sal_Bool OMultiColumnTransferable::GetData( const DataFlavor& _rFlavor )
+    {
+        const sal_uInt32 nFormatId = SotExchange::GetFormat(_rFlavor);
+        if (nFormatId == getDescriptorFormatId())
+        {
+            return SetAny( makeAny( m_aDescriptors ), _rFlavor );
+        }
+
+        return sal_False;
+    }
+
+    //--------------------------------------------------------------------
+    sal_Bool OMultiColumnTransferable::canExtractDescriptor(const DataFlavorExVector& _rFlavors)
+    {
+        DataFlavorExVector::const_iterator aCheck = _rFlavors.begin();
+        for (   ;
+                aCheck != _rFlavors.end() && getDescriptorFormatId() == aCheck->mnSotId;
+                ++aCheck
+            )
+            ;
+
+        return aCheck == _rFlavors.end();
+    }
+
+    //--------------------------------------------------------------------
+    Sequence< PropertyValue > OMultiColumnTransferable::extractDescriptor(const TransferableDataHelper& _rData)
+    {
+        Sequence< PropertyValue > aList;
+        if (_rData.HasFormat(getDescriptorFormatId()))
+        {
+            // extract the any from the transferable
+            DataFlavor aFlavor;
+#if OSL_DEBUG_LEVEL > 0
+            sal_Bool bSuccess =
+#endif
+            SotExchange::GetFormatDataFlavor(getDescriptorFormatId(), aFlavor);
+            OSL_ENSURE(bSuccess, "OColumnTransferable::extractColumnDescriptor: invalid data format (no flavor)!");
+
+            _rData.GetAny(aFlavor) >>= aList;
+        } // if (_rData.HasFormat(getDescriptorFormatId()))
+        return aList;
+    }
+    // -----------------------------------------------------------------------------
+    void OMultiColumnTransferable::ObjectReleased()
+    {
+        m_aDescriptors.realloc(0);
+    }
 
 //........................................................................
 }   // namespace svx

@@ -65,6 +65,7 @@
 #include <svx/sdr/overlay/overlaybitmap.hxx>
 #include <svx/sdr/overlay/overlaylinestriped.hxx>
 #include <svx/sdr/overlay/overlaytriangle.hxx>
+#include <svx/sdr/overlay/overlayhatchrect.hxx>
 #include <svx/sdrpagewindow.hxx>
 #include <sdrpaintwindow.hxx>
 #include <vcl/svapp.hxx>
@@ -815,55 +816,50 @@ bool SdrHdl::IsHdlHit(const Point& rPnt) const
 Pointer SdrHdl::GetPointer() const
 {
     PointerStyle ePtr=POINTER_MOVE;
-    BOOL bSize=eKind>=HDL_UPLFT && eKind<=HDL_LWRGT;
-    // Fuer Resize von gedrehten Rechtecken die Mauszeiger etwas mitdrehen
-    if (bSize && nDrehWink!=0)
-    {
-        long nHdlWink=0;
+    const BOOL bSize=eKind>=HDL_UPLFT && eKind<=HDL_LWRGT;
+    const BOOL bRot=pHdlList!=NULL && pHdlList->IsRotateShear();
+    const BOOL bDis=pHdlList!=NULL && pHdlList->IsDistortShear();
+    if (bSize && pHdlList!=NULL && (bRot || bDis)) {
         switch (eKind) {
-            case HDL_UPLFT: nHdlWink=13500; break;
-            case HDL_UPPER: nHdlWink=9000;  break;
-            case HDL_UPRGT: nHdlWink=4500;  break;
-            case HDL_LEFT : nHdlWink=0;     break;
-            case HDL_RIGHT: nHdlWink=0;     break;
-            case HDL_LWLFT: nHdlWink=4500;  break;
-            case HDL_LOWER: nHdlWink=9000;  break;
-            case HDL_LWRGT: nHdlWink=13500; break;
+            case HDL_UPLFT: case HDL_UPRGT:
+            case HDL_LWLFT: case HDL_LWRGT: ePtr=bRot ? POINTER_ROTATE : POINTER_REFHAND; break;
+            case HDL_LEFT : case HDL_RIGHT: ePtr=POINTER_VSHEAR; break;
+            case HDL_UPPER: case HDL_LOWER: ePtr=POINTER_HSHEAR; break;
             default:
                 break;
         }
-        nHdlWink+=nDrehWink+2249; // und etwas drauf (zum runden)
-        while (nHdlWink<0) nHdlWink+=18000;
-        while (nHdlWink>=18000) nHdlWink-=18000;
-        nHdlWink/=4500;
-        switch ((BYTE)nHdlWink)
-        {
-            case 0: ePtr=POINTER_ESIZE;    break;
-            case 1: ePtr=POINTER_NESIZE; break;
-            case 2: ePtr=POINTER_SSIZE;    break;
-            case 3: ePtr=POINTER_SESIZE; break;
-        } // switch
-    }
-    if (ePtr==POINTER_MOVE)
-    {
-        BOOL bRot=pHdlList!=NULL && pHdlList->IsRotateShear();
-        BOOL bDis=pHdlList!=NULL && pHdlList->IsDistortShear();
-        if (bSize && pHdlList!=NULL && (bRot || bDis))
-        {
-            switch (eKind)
-            {
-                case HDL_UPLFT: case HDL_UPRGT:
-                case HDL_LWLFT: case HDL_LWRGT: ePtr=bRot ? POINTER_ROTATE : POINTER_REFHAND; break;
-                case HDL_LEFT : case HDL_RIGHT: ePtr=POINTER_VSHEAR; break;
-                case HDL_UPPER: case HDL_LOWER: ePtr=POINTER_HSHEAR; break;
+    } else {
+        // Fuer Resize von gedrehten Rechtecken die Mauszeiger etwas mitdrehen
+        if (bSize && nDrehWink!=0) {
+            long nHdlWink=0;
+            switch (eKind) {
+                case HDL_LWRGT: nHdlWink=31500; break;
+                case HDL_LOWER: nHdlWink=27000; break;
+                case HDL_LWLFT: nHdlWink=22500; break;
+                case HDL_LEFT : nHdlWink=18000; break;
+                case HDL_UPLFT: nHdlWink=13500; break;
+                case HDL_UPPER: nHdlWink=9000;  break;
+                case HDL_UPRGT: nHdlWink=4500;  break;
+                case HDL_RIGHT: nHdlWink=0;     break;
                 default:
                     break;
             }
-        }
-        else
-        {
-            switch (eKind)
-            {
+            nHdlWink+=nDrehWink+2249; // und etwas drauf (zum runden)
+            while (nHdlWink<0) nHdlWink+=36000;
+            while (nHdlWink>=36000) nHdlWink-=36000;
+            nHdlWink/=4500;
+            switch ((BYTE)nHdlWink) {
+                case 0: ePtr=POINTER_ESIZE;  break;
+                case 1: ePtr=POINTER_NESIZE; break;
+                case 2: ePtr=POINTER_NSIZE;  break;
+                case 3: ePtr=POINTER_NWSIZE; break;
+                case 4: ePtr=POINTER_WSIZE;  break;
+                case 5: ePtr=POINTER_SWSIZE; break;
+                case 6: ePtr=POINTER_SSIZE;  break;
+                case 7: ePtr=POINTER_SESIZE; break;
+            } // switch
+        } else {
+            switch (eKind) {
                 case HDL_UPLFT: ePtr=POINTER_NWSIZE;  break;
                 case HDL_UPPER: ePtr=POINTER_NSIZE;     break;
                 case HDL_UPRGT: ePtr=POINTER_NESIZE;  break;
@@ -1651,6 +1647,65 @@ Pointer ImpMeasureHdl::GetPointer() const
         case 4: case 5: return SdrHdl::GetPointer(); // wird dann entsprechend gedreht
     } // switch
     return Pointer(POINTER_NOTALLOWED);
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+
+ImpTextframeHdl::ImpTextframeHdl(const Rectangle& rRect) :
+    SdrHdl(rRect.TopLeft(),HDL_MOVE),
+    maRect(rRect)
+{
+}
+
+void ImpTextframeHdl::CreateB2dIAObject()
+{
+    // first throw away old one
+    GetRidOfIAObject();
+
+    if(pHdlList)
+    {
+        SdrMarkView* pView = pHdlList->GetView();
+
+        if(pView && !pView->areMarkHandlesHidden())
+        {
+            SdrPageView* pPageView = pView->GetSdrPageView();
+
+            if(pPageView)
+            {
+                for(sal_uInt32 b(0L); b < pPageView->PageWindowCount(); b++)
+                {
+                    const SdrPageWindow& rPageWindow = *pPageView->GetPageWindow(b);
+
+                    if(rPageWindow.GetPaintWindow().OutputToWindow())
+                    {
+                        if(rPageWindow.GetOverlayManager())
+                        {
+                            const basegfx::B2DPoint aTopLeft(maRect.Left(), maRect.Top());
+                            const basegfx::B2DPoint aBottomRight(maRect.Right(), maRect.Bottom());
+                            const svtools::ColorConfig aColorConfig;
+                            const Color aHatchCol( aColorConfig.GetColorValue( svtools::FONTCOLOR ).nColor );
+
+                            ::sdr::overlay::OverlayHatchRect* pNewOverlayObject = new ::sdr::overlay::OverlayHatchRect(
+                                aTopLeft,
+                                aBottomRight,
+                                aHatchCol,
+                                6.0,
+                                45 * F_PI180,
+                                nDrehWink * -F_PI18000);
+                            pNewOverlayObject->setHittable(false);
+
+                            // OVERLAYMANAGER
+                            if(pNewOverlayObject)
+                            {
+                                rPageWindow.GetOverlayManager()->add(*pNewOverlayObject);
+                                maOverlayGroup.append(*pNewOverlayObject);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////

@@ -33,10 +33,11 @@
 
 #include <rtl/ustring.hxx>
 #include <sal/types.h>
+#include "connectivity/dbtoolsdllapi.hxx"
 
 namespace connectivity
 {
-    class OColumn
+    class OOO_DLLPUBLIC_DBTOOLS OColumn
     {
         ::rtl::OUString m_CatalogName;
         ::rtl::OUString m_SchemaName;

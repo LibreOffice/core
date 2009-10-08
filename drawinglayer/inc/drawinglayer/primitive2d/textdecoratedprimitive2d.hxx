@@ -55,6 +55,7 @@ namespace drawinglayer
 {
     namespace primitive2d
     {
+        // This is used for both underline and overline
         enum FontUnderline
         {
             FONT_UNDERLINE_NONE,
@@ -106,7 +107,9 @@ namespace drawinglayer
         class TextDecoratedPortionPrimitive2D : public TextSimplePortionPrimitive2D
         {
         private:
+            basegfx::BColor                             maOverlineColor;
             basegfx::BColor                             maTextlineColor;
+            FontUnderline                               meFontOverline;
             FontUnderline                               meFontUnderline;
             FontStrikeout                               meFontStrikeout;
             FontEmphasisMark                            meFontEmphasisMark;
@@ -120,6 +123,16 @@ namespace drawinglayer
             unsigned                                    mbShadow : 1;
 
             // helper methods
+            void impCreateTextLine(
+                std::vector< Primitive2DReference >& rTarget,
+                basegfx::DecomposedB2DHomMatrixContainer& rDecTrans,
+                const basegfx::B2DHomMatrix &rUnscaledTransform,
+                FontUnderline eLineStyle,
+                double fLineOffset,
+                double fLineHeight,
+                double fLineWidth,
+                const basegfx::BColor& rLineColor) const;
+
             void impCreateGeometryContent(
                 std::vector< Primitive2DReference >& rTarget,
                 basegfx::DecomposedB2DHomMatrixContainer& rDecTrans,
@@ -154,7 +167,9 @@ namespace drawinglayer
                 const basegfx::BColor& rFontColor,
 
                 // local parameters
+                const basegfx::BColor& rOverlineColor,
                 const basegfx::BColor& rTextlineColor,
+                FontUnderline eFontOverline = FONT_UNDERLINE_NONE,
                 FontUnderline eFontUnderline = FONT_UNDERLINE_NONE,
                 bool bUnderlineAbove = false,
                 FontStrikeout eFontStrikeout = FONT_STRIKEOUT_NONE,
@@ -166,10 +181,12 @@ namespace drawinglayer
                 bool bShadow = false);
 
             // get data
+            FontUnderline getFontOverline() const { return meFontOverline; }
             FontUnderline getFontUnderline() const { return meFontUnderline; }
             FontStrikeout getFontStrikeout() const { return meFontStrikeout; }
             FontEmphasisMark getFontEmphasisMark() const { return meFontEmphasisMark; }
             FontRelief getFontRelief() const { return meFontRelief; }
+            basegfx::BColor getOverlineColor() const { return maOverlineColor; }
             basegfx::BColor getTextlineColor() const { return maTextlineColor; }
 
             bool getUnderlineAbove() const { return mbUnderlineAbove; }

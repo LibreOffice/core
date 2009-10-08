@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: moduleacceleratorconfiguration.hxx,v $
- * $Revision: 1.5 $
+ * $Revision: 1.4.300.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -61,7 +61,7 @@ namespace framework
     implements a read/write access to a module
     dependend accelerator configuration.
  */
-class ModuleAcceleratorConfiguration : public AcceleratorConfiguration
+class ModuleAcceleratorConfiguration : public XCUBasedAcceleratorConfiguration
                                      , public css::lang::XServiceInfo
                                      , public css::lang::XInitialization
 {
@@ -74,6 +74,7 @@ class ModuleAcceleratorConfiguration : public AcceleratorConfiguration
         /** identify the application module, where this accelerator
             configuration cache should work on. */
         ::rtl::OUString m_sModule;
+        ::rtl::OUString m_sLocale;
 
     //______________________________________
     // interface

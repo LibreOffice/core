@@ -181,7 +181,7 @@ IMPL_LINK( SvxNewDictionaryDialog, OKHdl_Impl, Button *, EMPTYARG )
         {
             lang::Locale aLocale( SvxCreateLocale(nLang) );
             String aURL( linguistic::GetWritableDictionaryURL( sDict ) );
-            xNewDic = Reference< XDictionary1 > (
+            xNewDic = Reference< XDictionary > (
                     xDicList->createDictionary( sDict, aLocale, eType, aURL ) , UNO_QUERY );
         }
         DBG_ASSERT(xNewDic.is(), "NULL pointer");
@@ -297,13 +297,13 @@ SvxEditDictionaryDialog::SvxEditDictionaryDialog(
     String aLookUpEntry;
     for ( sal_Int32 i = 0; i < nCount; ++i )
     {
-        Reference< XDictionary1 >  xDic( pDic[i], UNO_QUERY );
+        Reference< XDictionary >  xDic( pDic[i], UNO_QUERY );
         if (xDic.is())
         {
             sal_Bool bNegative = xDic->getDictionaryType() == DictionaryType_NEGATIVE ?
                                 sal_True : sal_False;
             String aDicName( xDic->getName() );
-            const String aTxt( ::GetDicInfoStr( aDicName, xDic->getLanguage(),
+            const String aTxt( ::GetDicInfoStr( aDicName, SvxLocaleToLanguage( xDic->getLocale() ),
                                                  bNegative ) );
             aAllDictsLB.InsertEntry( aTxt );
 
@@ -327,11 +327,11 @@ SvxEditDictionaryDialog::SvxEditDictionaryDialog(
             nPos = 0;
             aAllDictsLB.SelectEntryPos( nPos );
         }
-        Reference< XDictionary1 >  xDic;
+        Reference< XDictionary >  xDic;
         if (nPos != LISTBOX_ENTRY_NOTFOUND)
-            xDic = Reference< XDictionary1 > ( aDics.getConstArray()[ nPos ], UNO_QUERY );
+            xDic = Reference< XDictionary > ( aDics.getConstArray()[ nPos ], UNO_QUERY );
         if (xDic.is())
-            SetLanguage_Impl( xDic->getLanguage() );
+            SetLanguage_Impl( SvxLocaleToLanguage( xDic->getLocale() ) );
 
         // check if dictionary is read-only
         SetDicReadonly_Impl(xDic);
@@ -372,7 +372,7 @@ void SvxEditDictionaryDialog::Paint( const Rectangle& rRect )
 // -----------------------------------------------------------------------
 
 void SvxEditDictionaryDialog::SetDicReadonly_Impl(
-            Reference< XDictionary1 >  &xDic )
+            Reference< XDictionary >  &xDic )
 {
     // enable or disable new and delete button according to file attributes
     bDicIsReadonly = sal_True;
@@ -448,9 +448,9 @@ IMPL_LINK( SvxEditDictionaryDialog, SelectBookHdl_Impl, ListBox *, EMPTYARG )
         // Dictionary anzeigen
         ShowWords_Impl( nPos );
         // enable or disable new and delete button according to file attributes
-        Reference< XDictionary1 >  xDic( aDics.getConstArray()[ nPos ], UNO_QUERY );
+        Reference< XDictionary >  xDic( aDics.getConstArray()[ nPos ], UNO_QUERY );
         if (xDic.is())
-            SetLanguage_Impl( xDic->getLanguage() );
+            SetLanguage_Impl( SvxLocaleToLanguage( xDic->getLocale() ) );
 
         SetDicReadonly_Impl(xDic);
         sal_Bool bEnable = !IsDicReadonly_Impl();
@@ -466,8 +466,8 @@ IMPL_LINK( SvxEditDictionaryDialog, SelectLangHdl_Impl, ListBox *, EMPTYARG )
 {
     sal_uInt16 nDicPos = aAllDictsLB.GetSelectEntryPos();
     sal_uInt16 nLang = aLangLB.GetSelectLanguage();
-    Reference< XDictionary1 >  xDic( aDics.getConstArray()[ nDicPos ], UNO_QUERY );
-    INT16 nOldLang = xDic->getLanguage();
+    Reference< XDictionary >  xDic( aDics.getConstArray()[ nDicPos ], UNO_QUERY );
+    INT16 nOldLang = SvxLocaleToLanguage( xDic->getLocale() );
 
     if ( nLang != nOldLang )
     {
@@ -478,12 +478,12 @@ IMPL_LINK( SvxEditDictionaryDialog, SelectLangHdl_Impl, ListBox *, EMPTYARG )
 
         if ( aBox.Execute() == RET_YES )
         {
-            xDic->setLanguage( nLang );
+            xDic->setLocale( SvxCreateLocale( nLang ) );
             sal_Bool bNegativ = xDic->getDictionaryType() == DictionaryType_NEGATIVE;
 
             const String sName(
                 ::GetDicInfoStr( xDic->getName(),
-                                 xDic->getLanguage(),
+                                 SvxLocaleToLanguage( xDic->getLocale() ),
                                  bNegativ ) );
             aAllDictsLB.RemoveEntry( nDicPos );
             aAllDictsLB.InsertEntry( sName, nDicPos );
@@ -602,7 +602,7 @@ IMPL_LINK(SvxEditDictionaryDialog, NewDelHdl, PushButton*, pBtn)
 
     if(pBtn == &aDeletePB)
     {
-        DBG_ASSERT(pEntry, "keine Eintrag selektiert")
+        DBG_ASSERT(pEntry, "keine Eintrag selektiert");
         String aStr;
 
         aWordED.SetText(aStr);
@@ -623,7 +623,7 @@ IMPL_LINK(SvxEditDictionaryDialog, NewDelHdl, PushButton*, pBtn)
         if ( nPos != LISTBOX_ENTRY_NOTFOUND && aNewWord.Len() > 0)
         {
             DBG_ASSERT(nPos < aDics.getLength(), "invalid dictionary index");
-            Reference< XDictionary1 >  xDic( aDics.getConstArray()[ nPos ], UNO_QUERY );
+            Reference< XDictionary >  xDic( aDics.getConstArray()[ nPos ], UNO_QUERY );
             if (xDic.is())
             {
                 // make changes in dic
@@ -643,7 +643,7 @@ IMPL_LINK(SvxEditDictionaryDialog, NewDelHdl, PushButton*, pBtn)
                 Reference<XDictionary> aXDictionary(xDic, UNO_QUERY);
                 nAddRes = linguistic::AddEntryToDic( aXDictionary,
                             aNewWord, bIsNegEntry,
-                            aRplcText, xDic->getLanguage(), sal_False );
+                            aRplcText, SvxLocaleToLanguage( xDic->getLocale() ), sal_False );
              }
         }
         if (DIC_ERR_NONE != nAddRes)

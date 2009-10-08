@@ -62,7 +62,13 @@
 #include <drawinglayer/primitive2d/fillhatchprimitive2d.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>
 #include <vcl/hatch.hxx>
+#include <tools/diagnose_ex.h>
+#include <com/sun/star/awt/PosSize.hpp>
 #include <cstdio>
+
+//////////////////////////////////////////////////////////////////////////////
+
+using namespace com::sun::star;
 
 //////////////////////////////////////////////////////////////////////////////
 
@@ -242,9 +248,9 @@ namespace drawinglayer
                     const primitive2d::Primitive2DSequence rContent = rUniAlphaCandidate.getChildren();
                     bool bDrawTransparentUsed(false);
 
-                    // ATM need to disable this since OutputDevice::DrawTransparent uses the
-                    // old tools::Polygon classes and may not be sufficient here. HDU is evaluating...
-                    static bool bAllowUsingDrawTransparent(false);
+                    // since DEV300 m33 DrawTransparent is supported in VCL (for some targets
+                    // natively), so i am now enabling this shortcut
+                    static bool bAllowUsingDrawTransparent(true);
 
                     if(bAllowUsingDrawTransparent && rContent.hasElements() && 1 == rContent.getLength())
                     {
@@ -268,8 +274,8 @@ namespace drawinglayer
 
                     if(!bDrawTransparentUsed)
                     {
-                        // use decomposition
-                        process(rCandidate.get2DDecomposition(getViewInformation2D()));
+                        // unified sub-transparence. Draw to VDev first.
+                        RenderUnifiedAlphaPrimitive2D(rUniAlphaCandidate);
                     }
 
                     break;
@@ -308,35 +314,47 @@ namespace drawinglayer
                 {
                     // control primitive
                     const primitive2d::ControlPrimitive2D& rControlPrimitive = static_cast< const primitive2d::ControlPrimitive2D& >(rCandidate);
+                    const uno::Reference< awt::XControl >& rXControl(rControlPrimitive.getXControl());
 
-                    // if control primitive is a xWindow2 and visible, it oes not need to be painted
-                    bool bControlIsVisibleAsChildWindow(false);
-
-                    if(rControlPrimitive.getXControl().is())
+                    try
                     {
-                        com::sun::star::uno::Reference< com::sun::star::awt::XWindow2 > xControlWindow(rControlPrimitive.getXControl(), com::sun::star::uno::UNO_QUERY_THROW);
+                        // remember old graphics and create new
+                        uno::Reference< awt::XView > xControlView(rXControl, uno::UNO_QUERY_THROW);
+                        const uno::Reference< awt::XGraphics > xOriginalGraphics(xControlView->getGraphics());
+                        const uno::Reference< awt::XGraphics > xNewGraphics(mpOutputDevice->CreateUnoGraphics());
 
-                        if(xControlWindow.is())
+                        if(xNewGraphics.is())
                         {
-                            if(xControlWindow->isVisible())
+                            // link graphics and view
+                            xControlView->setGraphics(xNewGraphics);
+
+                            // get position
+                            const basegfx::B2DHomMatrix aObjectToPixel(maCurrentTransformation * rControlPrimitive.getTransform());
+                            const basegfx::B2DPoint aTopLeftPixel(aObjectToPixel * basegfx::B2DPoint(0.0, 0.0));
+
+                            // find out if the control is already visualized as a VCL-ChildWindow. If yes,
+                            // it does not need to be painted at all.
+                            uno::Reference< awt::XWindow2 > xControlWindow(rXControl, uno::UNO_QUERY_THROW);
+                            const bool bControlIsVisibleAsChildWindow(rXControl->getPeer().is() && xControlWindow->isVisible());
+
+                            if(!bControlIsVisibleAsChildWindow)
                             {
-                                bControlIsVisibleAsChildWindow = true;
+                                // draw it. Do not forget to use the evtl. offsetted origin of the target device,
+                                // e.g. when used with mask/transparence buffer device
+                                const Point aOrigin(mpOutputDevice->GetMapMode().GetOrigin());
+                                xControlView->draw(
+                                    aOrigin.X() + basegfx::fround(aTopLeftPixel.getX()),
+                                    aOrigin.Y() + basegfx::fround(aTopLeftPixel.getY()));
                             }
+
+                            // restore original graphics
+                            xControlView->setGraphics(xOriginalGraphics);
                         }
                     }
-
-                    if(bControlIsVisibleAsChildWindow)
+                    catch(const uno::Exception&)
                     {
-                        // update position and size as VCL Child Window
-                        static bool bDoSizeAndPositionControlsB(false);
+                        DBG_UNHANDLED_EXCEPTION();
 
-                        if(bDoSizeAndPositionControlsB)
-                        {
-                            PositionAndSizeControl(rControlPrimitive);
-                        }
-                    }
-                    else
-                    {
                         // process recursively and use the decomposition as Bitmap
                         process(rCandidate.get2DDecomposition(getViewInformation2D()));
                     }
@@ -452,7 +470,7 @@ namespace drawinglayer
 
                         // create hatch
                         const basegfx::B2DVector aDiscreteDistance(maCurrentTransformation * basegfx::B2DVector(rFillHatchAttributes.getDistance(), 0.0));
-                        const sal_uInt32 nDistance(basegfx::fround(aDiscreteDistance.getX()));
+                        const sal_uInt32 nDistance(basegfx::fround(aDiscreteDistance.getLength()));
                         const sal_uInt16 nAngle10((sal_uInt16)basegfx::fround(rFillHatchAttributes.getAngle() / F_PI1800));
                         ::Hatch aVCLHatch(eHatchStyle, Color(rFillHatchAttributes.getColor()), nDistance, nAngle10);
 

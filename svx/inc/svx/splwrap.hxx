@@ -40,7 +40,7 @@
 // forward ---------------------------------------------------------------
 
 namespace com { namespace sun { namespace star { namespace linguistic2 {
-    class XDictionary1;
+    class XDictionary;
     class XSpellChecker1;
     class XHyphenator;
 }}}}
@@ -144,7 +144,7 @@ protected:
     virtual void ReplaceAll( const String &rNewText, sal_Int16 nLanguage ); // Wort aus Replace-Liste ersetzen
     virtual void StartThesaurus( const String &rWord, sal_uInt16 nLang );   // Thesaurus starten
     virtual ::com::sun::star::uno::Reference<
-        ::com::sun::star::linguistic2::XDictionary1 >
+        ::com::sun::star::linguistic2::XDictionary >
                  GetAllRightDic() const;
     virtual void SpellEnd();                        // Bereich abschliessen
     virtual void ScrollArea();                      // ScrollArea einstellen

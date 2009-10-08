@@ -30,6 +30,7 @@
 #ifndef _CONNECTIVITY_SQLINTERNALNODE_HXX
 #define _CONNECTIVITY_SQLINTERNALNODE_HXX
 
+#include "connectivity/dbtoolsdllapi.hxx"
 #include <connectivity/sqlnode.hxx>
 
 namespace connectivity
@@ -39,7 +40,7 @@ namespace connectivity
     //==========================================================================
     /** special node for avoiding memory leaks
     */
-    class OSQLInternalNode : public OSQLParseNode
+    class OOO_DLLPUBLIC_DBTOOLS OSQLInternalNode : public OSQLParseNode
     {
     public:
         OSQLInternalNode(const sal_Char* pNewValue,

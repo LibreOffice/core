@@ -2632,17 +2632,28 @@ void SfxBaseModel::impl_store(  const   ::rtl::OUString&                   sURL 
         if ( bCopyTo )
         {
             xOldDocProps = getDocumentProperties();
-            xOldDocInfo = getDocumentInfo();
-            Reference<util::XCloneable> xCloneable(xOldDocInfo,
-                UNO_QUERY_THROW);
-            Reference<document::XDocumentInfo> xNewDocInfo(
-                xCloneable->createClone(), UNO_QUERY_THROW);
-            Reference<document::XDocumentPropertiesSupplier> xDPS(
-                xNewDocInfo, UNO_QUERY_THROW);
-            Reference<document::XDocumentProperties> xNewDocProps(
-                xDPS->getDocumentProperties());
-            m_pData->m_xDocumentProperties = xNewDocProps;
-            m_pData->m_xDocumentInfo = xNewDocInfo;
+            if (m_pData->m_xDocumentInfo.is())
+            {
+                xOldDocInfo = getDocumentInfo();
+                const Reference<util::XCloneable> xCloneable(xOldDocInfo,
+                    UNO_QUERY_THROW);
+                const Reference<document::XDocumentInfo> xNewDocInfo(
+                    xCloneable->createClone(), UNO_QUERY_THROW);
+                const Reference<document::XDocumentPropertiesSupplier> xDPS(
+                    xNewDocInfo, UNO_QUERY_THROW);
+                const Reference<document::XDocumentProperties> xNewDocProps(
+                    xDPS->getDocumentProperties());
+                m_pData->m_xDocumentProperties = xNewDocProps;
+                m_pData->m_xDocumentInfo = xNewDocInfo;
+            }
+            else // try not to create DocumentInfo if it does not exist...
+            {
+                const Reference<util::XCloneable> xCloneable(xOldDocProps,
+                    UNO_QUERY_THROW);
+                const Reference<document::XDocumentProperties> xNewDocProps(
+                    xCloneable->createClone(), UNO_QUERY_THROW);
+                m_pData->m_xDocumentProperties = xNewDocProps;
+            }
         }
 
         sal_Bool bRet = m_pData->m_pObjectShell->APISaveAs_Impl( sURL, aParams );
@@ -3585,10 +3596,21 @@ css::uno::Reference< css::frame::XUntitledNumbers > SfxBaseModel::impl_getUntitl
     ::rtl::OUString aResult = impl_getTitleHelper()->getTitle ();
     if ( m_pData->m_pObjectShell )
     {
+        SfxMedium* pMedium = m_pData->m_pObjectShell->GetMedium();
+        if ( pMedium )
+        {
+            SFX_ITEMSET_ARG( pMedium->GetItemSet(), pRepairedDocItem, SfxBoolItem, SID_REPAIRPACKAGE, sal_False );
+            if ( pRepairedDocItem && pRepairedDocItem->GetValue() )
+                aResult += String( SfxResId(STR_REPAIREDDOCUMENT) );
+        }
+
         if ( m_pData->m_pObjectShell->IsReadOnlyUI() || m_pData->m_pObjectShell->GetMedium() && m_pData->m_pObjectShell->GetMedium()->IsReadOnly() )
             aResult += ::rtl::OUString( String( SfxResId(STR_READONLY) ) );
         else if ( m_pData->m_pObjectShell->IsDocShared() )
             aResult += ::rtl::OUString( String( SfxResId(STR_SHARED) ) );
+
+        if ( m_pData->m_pObjectShell->GetDocumentSignatureState() == SIGNATURESTATE_SIGNATURES_OK )
+            aResult += String( SfxResId( RID_XMLSEC_DOCUMENTSIGNED ) );
     }
 
     return aResult;

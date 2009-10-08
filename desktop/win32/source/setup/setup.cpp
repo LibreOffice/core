@@ -61,11 +61,12 @@
 #define SECTION_SETUP       TEXT( "Setup" )
 #define SECTION_LANGUAGE    TEXT( "Languages" )
 #define PRODUCT_NAME_VAR    TEXT( "%PRODUCTNAME" )
-
+#define PRODUCT_VERSION     TEXT( "ProductVersion" )
 #define ERROR_SHOW_USAGE      -2
 
 #define PARAM_SETUP_USED    TEXT( " SETUP_USED=1 " )
 #define PARAM_PACKAGE       TEXT( "/I " )
+#define PARAM_MINOR_UPGRADE TEXT( "/FVOMUS " )
 #define PARAM_ADMIN         TEXT( "/A " )
 #define PARAM_TRANSFORM     TEXT( " TRANSFORMS=" )
 #define PARAM_REBOOT        TEXT( " REBOOT=Force" )
@@ -132,6 +133,8 @@ SetupAppX::SetupAppX()
     m_pModuleFile   = NULL;
     m_pPatchFiles   = NULL;
     m_pMSIErrorCode = NULL;
+    m_pUpgradeKey   = NULL;
+    m_pProductVersion = NULL;
 
     m_pErrorText    = new TCHAR[ MAX_TEXT_LENGTH ];
     m_pErrorText[0] = '\0';
@@ -143,6 +146,7 @@ SetupAppX::SetupAppX()
     m_bQuiet          = false;
     m_bRegNoMsoTypes  = false;
     m_bRegAllMsoTypes = false;
+    m_bIsMinorUpgrade = false;
 
     m_bIgnoreAlreadyRunning = false;
 }
@@ -186,6 +190,8 @@ SetupAppX::~SetupAppX()
     if ( m_pErrorText )   delete [] m_pErrorText;
     if ( m_pModuleFile )  delete [] m_pModuleFile;
     if ( m_pPatchFiles )  delete [] m_pPatchFiles;
+    if ( m_pUpgradeKey )  delete [] m_pUpgradeKey;
+    if ( m_pProductVersion ) delete [] m_pProductVersion;
 }
 
 //--------------------------------------------------------------------------
@@ -358,6 +364,20 @@ boolean SetupAppX::ReadProfile()
                     m_pProductName = pValue;
                     Log( TEXT( "    productname = %s\r\n" ), pValue );
                     m_pAppTitle = SetProdToAppTitle( m_pProductName );
+                }
+                else if ( lstrcmpi( TEXT( "upgradekey" ), pName ) == 0 )
+                {
+                    m_pUpgradeKey = pValue;
+                    Log( TEXT( "    upgradekey = %s\r\n" ), pValue );
+                }
+                else if ( lstrcmpi( TEXT( "productversion" ), pName ) == 0 )
+                {
+                    m_pProductVersion = pValue;
+                    Log( TEXT( "    productversion = %s\r\n" ), pValue );
+                }
+                else if ( lstrcmpi( TEXT( "productcode" ), pName ) == 0 )
+                {
+                    delete [] pValue;
                 }
                 else
                 {
@@ -916,6 +936,8 @@ boolean SetupAppX::Install( long nLanguage )
 
     if ( m_pAdvertise )
         nParLen += lstrlen( m_pAdvertise ) + 1;     // one for the space
+    else if ( m_bIsMinorUpgrade )
+        nParLen += lstrlen( PARAM_MINOR_UPGRADE );
     else
         nParLen += lstrlen( PARAM_PACKAGE );
 
@@ -952,6 +974,8 @@ boolean SetupAppX::Install( long nLanguage )
         StringCchCat( pParams, nParLen, m_pAdvertise );
     else if ( IsAdminInstall() )
         StringCchCat( pParams, nParLen, PARAM_ADMIN );
+    else if ( m_bIsMinorUpgrade )
+        StringCchCat( pParams, nParLen, PARAM_MINOR_UPGRADE );
     else
         StringCchCat( pParams, nParLen, PARAM_PACKAGE );
 
@@ -1178,6 +1202,59 @@ boolean SetupAppX::CheckVersion()
     }
 
     return bRet;
+}
+
+//--------------------------------------------------------------------------
+boolean SetupAppX::CheckForUpgrade()
+{
+    // When we have patch files we will never try an Minor upgrade
+    if ( m_pPatchFiles ) return true;
+
+    if ( !m_pUpgradeKey || ( _tcslen( m_pUpgradeKey ) == 0 ) )
+    {
+        Log( TEXT( "    No Upgrade Key Found -> continue with standard installation!\r\n" ) );
+        return true;
+    }
+
+    HKEY hInstKey = NULL;
+
+    if ( ERROR_SUCCESS == RegOpenKeyEx( HKEY_LOCAL_MACHINE, m_pUpgradeKey, 0, KEY_READ, &hInstKey ) )
+    {
+        Log( TEXT( " Found Upgrade Key in Registry (HKLM) -> will try minor upgrade!\r\n" ) );
+        m_bIsMinorUpgrade = true;
+    }
+    else if ( ERROR_SUCCESS == RegOpenKeyEx( HKEY_CURRENT_USER, m_pUpgradeKey, 0, KEY_READ, &hInstKey ) )
+    {
+        Log( TEXT( " Found Upgrade Key in Registry (HKCU) -> will try minor upgrade!\r\n" ) );
+        m_bIsMinorUpgrade = true;
+    }
+    else
+    {
+        Log( TEXT( " Didn't Find Upgrade Key in Registry -> continue with standard installation!\r\n" ) );
+        return true;
+    }
+
+    if ( m_pProductVersion && ( _tcslen( m_pProductVersion ) > 0 ) )
+    {
+        TCHAR  *sProductVersion = new TCHAR[ MAX_PATH + 1 ];
+        DWORD   nSize = MAX_PATH + 1;
+
+        sProductVersion[0] = '\0';
+
+        // get product version
+        if ( ERROR_SUCCESS == RegQueryValueEx( hInstKey, PRODUCT_VERSION, NULL, NULL, (LPBYTE)sProductVersion, &nSize ) )
+        {
+            if ( lstrcmpi( sProductVersion, m_pProductVersion ) == 0 )
+            {
+                Log( TEXT( " Same Product Version already installed, no minor upgrade!\r\n" ) );
+                m_bIsMinorUpgrade = false;
+            }
+        }
+
+        delete [] sProductVersion;
+    }
+
+    return true;
 }
 
 //--------------------------------------------------------------------------

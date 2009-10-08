@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: prhdlfac.cxx,v $
- * $Revision: 1.30 $
+ * $Revision: 1.30.68.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -323,6 +323,22 @@ const XMLPropertyHandler* XMLPropertyHandlerFactory::CreatePropertyHandler( sal_
             pPropHdl = new XMLColorTransparentPropHdl( XML_FONT_COLOR );
             break;
         case XML_TYPE_TEXT_UNDERLINE_HASCOLOR:
+            pPropHdl = new XMLIsTransparentPropHdl( XML_FONT_COLOR,
+                                                     sal_False );
+            break;
+        case XML_TYPE_TEXT_OVERLINE_TYPE:
+            pPropHdl = new XMLUnderlineTypePropHdl;
+            break;
+        case XML_TYPE_TEXT_OVERLINE_STYLE:
+            pPropHdl = new XMLUnderlineStylePropHdl;
+            break;
+        case XML_TYPE_TEXT_OVERLINE_WIDTH:
+            pPropHdl = new XMLUnderlineWidthPropHdl;
+            break;
+        case XML_TYPE_TEXT_OVERLINE_COLOR:
+            pPropHdl = new XMLColorTransparentPropHdl( XML_FONT_COLOR );
+            break;
+        case XML_TYPE_TEXT_OVERLINE_HASCOLOR:
             pPropHdl = new XMLIsTransparentPropHdl( XML_FONT_COLOR,
                                                      sal_False );
             break;

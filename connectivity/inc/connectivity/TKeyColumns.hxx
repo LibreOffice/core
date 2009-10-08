@@ -33,11 +33,11 @@
 
 #include "connectivity/sdbcx/VCollection.hxx"
 #include "connectivity/TKey.hxx"
-
+#include "connectivity/dbtoolsdllapi.hxx"
 
 namespace connectivity
 {
-    class OKeyColumnsHelper : public connectivity::sdbcx::OCollection
+    class OOO_DLLPUBLIC_DBTOOLS OKeyColumnsHelper : public connectivity::sdbcx::OCollection
     {
         OTableKeyHelper* m_pKey;
     protected:

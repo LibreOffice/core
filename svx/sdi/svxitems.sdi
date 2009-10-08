@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: svxitems.sdi,v $
- * $Revision: 1.32 $
+ * $Revision: 1.32.212.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -426,13 +426,13 @@ struct SvxCrossedOut
 };
 item SvxCrossedOut SvxCrossedOutItem;
 
-struct SvxUnderline
+struct SvxTextLine
 {
-    FontUnderline   Underline   MID_UNDERLINE;
-    BOOL            HasColor    MID_UL_HASCOLOR;
-    INT32           Color       MID_UL_COLOR;
+    FontUnderline   LineStyle   MID_TL_STYLE;
+    BOOL            HasColor    MID_TL_HASCOLOR;
+    INT32           Color       MID_TL_COLOR;
 };
-item SvxUnderline SvxUnderlineItem;
+item SvxTextLine SvxTextLineItem;
 
 struct SvxBrush
 {
@@ -696,6 +696,8 @@ struct ZoomSlider
 {
     INT16  CurrentZoom          MID_ZOOMSLIDER_CURRENTZOOM;
     Points SnappingPoints       MID_ZOOMSLIDER_SNAPPINGPOINTS;
+    INT16  SvxMinZoom           MID_ZOOMSLIDER_MINZOOM;
+    INT16  SvxMaxZoom           MID_ZOOMSLIDER_MAXZOOM;
 };
 item ZoomSlider SvxZoomSliderItem;
 

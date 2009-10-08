@@ -184,6 +184,9 @@ public:
 
     /** searches for an entry that matches the given ContextId or gives -1 if nothing found */
     sal_Int32 FindEntryIndex( const sal_Int16 nContextId ) const;
+
+    /** Remove an entry */
+    void RemoveEntry( sal_Int32 nIndex );
 };
 
 #endif // _XMLOFF_PROPERTYSETMAPPER_HXX

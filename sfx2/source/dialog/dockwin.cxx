@@ -30,11 +30,15 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sfx2.hxx"
+
 #include <svtools/eitem.hxx>
 #include <vcl/decoview.hxx>
 
 #include <vcl/svapp.hxx>
 #include <vcl/timer.hxx>
+#include <rtl/instance.hxx>
+#include <toolkit/helper/vclunohelper.hxx>
+#include <comphelper/processfactory.hxx>
 
 #include <sfx2/dockwin.hxx>
 #include <sfx2/bindings.hxx>
@@ -44,13 +48,392 @@
 #include "splitwin.hxx"
 #include <sfx2/viewsh.hxx>
 #include "sfxhelp.hxx"
+#include <sfx2/objsh.hxx>
+
+#include <com/sun/star/frame/XController.hpp>
+#include <com/sun/star/lang/XUnoTunnel.hpp>
+#include <com/sun/star/lang/XSingleComponentFactory.hpp>
+#include <com/sun/star/awt/XWindow.hpp>
+#include <com/sun/star/uno/XComponentContext.hpp>
+#include <com/sun/star/frame/XModuleManager.hpp>
+#include <com/sun/star/container/XNameAccess.hpp>
 
 #define MAX_TOGGLEAREA_WIDTH        20
 #define MAX_TOGGLEAREA_HEIGHT       20
 
+using namespace ::com::sun::star;
+
 // implemented in 'sfx2/source/appl/childwin.cxx'
 extern sal_Bool GetPosSizeFromString( const String& rStr, Point& rPos, Size& rSize );
 extern sal_Bool GetSplitSizeFromString( const String& rStr, Size& rSize );
+
+// If you want to change the number you also have to:
+// - Add new slot ids to sfxsids.hrc
+// - Add new slots to frmslots.sdi
+// - Add new slot definitions to sfx.sdi
+static const int NUM_OF_DOCKINGWINDOWS = 10;
+
+class SfxTitleDockingWindow;
+class SfxTitleDockingWindow : public SfxDockingWindow
+{
+    Window*             m_pWrappedWindow;
+    USHORT              m_nID;
+
+public:
+                        SfxTitleDockingWindow(
+                            SfxBindings* pBindings ,
+                            SfxChildWindow* pChildWin ,
+                            Window* pParent ,
+                            WinBits nBits,
+                            USHORT  nID);
+    virtual             ~SfxTitleDockingWindow();
+
+    Window*             GetWrappedWindow() const { return m_pWrappedWindow; }
+    void                SetWrappedWindow(Window* const pWindow);
+
+    virtual void        StateChanged( StateChangedType nType );
+    virtual long        Notify( NotifyEvent& rNEvt );
+    virtual void        Resize();
+    virtual void        Resizing( Size& rSize );
+    virtual BOOL        Close();
+};
+
+namespace
+{
+    struct WindowState
+    {
+        ::rtl::OUString sTitle;
+    };
+}
+
+static uno::WeakReference< container::XNameAccess > m_xWindowStateConfiguration;
+static uno::WeakReference< frame::XModuleManager >  m_xModuleManager;
+
+static bool lcl_getWindowState( const uno::Reference< container::XNameAccess >& xWindowStateMgr, const ::rtl::OUString& rResourceURL, WindowState& rWindowState )
+{
+    bool bResult = false;
+
+    try
+    {
+        uno::Any a;
+        uno::Sequence< beans::PropertyValue > aWindowState;
+        a = xWindowStateMgr->getByName( rResourceURL );
+        if ( a >>= aWindowState )
+        {
+            for ( sal_Int32 n = 0; n < aWindowState.getLength(); n++ )
+            {
+                if ( aWindowState[n].Name.equalsAscii( "UIName" ))
+                {
+                    aWindowState[n].Value >>= rWindowState.sTitle;
+                }
+            }
+        }
+
+        bResult = true;
+    }
+    catch ( container::NoSuchElementException& )
+    {
+        bResult = false;
+    }
+
+    return bResult;
+}
+
+SfxDockingWrapper::SfxDockingWrapper( Window* pParentWnd ,
+                                      USHORT nId ,
+                                      SfxBindings* pBindings ,
+                                      SfxChildWinInfo* pInfo )
+                    : SfxChildWindow( pParentWnd , nId )
+{
+    uno::Reference< lang::XMultiServiceFactory > xServiceManager = ::comphelper::getProcessServiceFactory();
+    const rtl::OUString aDockWindowResourceURL( RTL_CONSTASCII_USTRINGPARAM( "private:resource/dockingwindow/" ));
+
+    SfxTitleDockingWindow* pTitleDockWindow = new SfxTitleDockingWindow( pBindings, this, pParentWnd,
+        WB_STDDOCKWIN | WB_CLIPCHILDREN | WB_SIZEABLE | WB_3DLOOK | WB_ROLLABLE, nId);
+    pWindow = pTitleDockWindow;
+    eChildAlignment = SFX_ALIGN_NOALIGNMENT;
+
+    // Use factory manager to retrieve XWindow factory. That can be used to instanciate
+    // the real window factory.
+    uno::Reference< lang::XSingleComponentFactory > xFactoryMgr(
+            xServiceManager->createInstance(
+                rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(
+                    "com.sun.star.ui.WindowContentFactoryManager"))),
+                uno::UNO_QUERY );
+
+    if (xFactoryMgr.is())
+    {
+        SfxDispatcher* pDispatcher = pBindings->GetDispatcher();
+        uno::Reference< frame::XFrame > xFrame( pDispatcher->GetFrame()->GetFrame()->GetFrameInterface(), uno::UNO_QUERY );
+        uno::Sequence< uno::Any > aArgs(2);
+        beans::PropertyValue      aPropValue;
+        aPropValue.Name  = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Frame" ));
+        aPropValue.Value = uno::makeAny( xFrame );
+        aArgs[0] <<= aPropValue;
+        aPropValue.Name  = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ResourceURL" ));
+
+        // create a resource URL from the nId provided by the sfx2
+        ::rtl::OUString aResourceURL( aDockWindowResourceURL );
+        aResourceURL += ::rtl::OUString::valueOf(sal_Int32(nId));
+        aPropValue.Value = uno::makeAny( aResourceURL );
+        aArgs[1] <<= aPropValue;
+
+        uno::Reference< awt::XWindow > xWindow;
+        try
+        {
+            uno::Reference< beans::XPropertySet >    xProps( xServiceManager, uno::UNO_QUERY );
+            uno::Reference< uno::XComponentContext > xContext;
+
+            if ( xProps.is() )
+                xProps->getPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "DefaultContext" ))) >>= xContext;
+            if ( xContext.is() )
+            {
+                xWindow = uno::Reference< awt::XWindow>(
+                            xFactoryMgr->createInstanceWithArgumentsAndContext( aArgs, xContext ),
+                          uno::UNO_QUERY );
+            }
+
+            uno::Reference< frame::XModuleManager > xModuleManager( m_xModuleManager );
+            if ( !xModuleManager.is() )
+            {
+                xModuleManager = uno::Reference< frame::XModuleManager >(
+                                    xServiceManager->createInstance(
+                                        rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.frame.ModuleManager" ))),
+                                    uno::UNO_QUERY );
+                m_xModuleManager = xModuleManager;
+            }
+
+            uno::Reference< container::XNameAccess > xWindowStateConfiguration( m_xWindowStateConfiguration );
+            if ( !xWindowStateConfiguration.is() )
+            {
+                xWindowStateConfiguration = uno::Reference< container::XNameAccess >(
+                                                xServiceManager->createInstance(
+                                                    rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.ui.WindowStateConfiguration" ))),
+                                                uno::UNO_QUERY );
+                m_xWindowStateConfiguration = xWindowStateConfiguration;
+            }
+
+            ::rtl::OUString sModuleIdentifier = xModuleManager->identify( xFrame );
+
+            uno::Reference< container::XNameAccess > xModuleWindowState(
+                                                        xWindowStateConfiguration->getByName( sModuleIdentifier ),
+                                                        uno::UNO_QUERY );
+            if ( xModuleWindowState.is() )
+            {
+                WindowState aDockWinState;
+                if ( lcl_getWindowState( xModuleWindowState, aResourceURL, aDockWinState ))
+                    pTitleDockWindow->SetText( aDockWinState.sTitle );
+            }
+        }
+        catch ( beans::UnknownPropertyException& )
+        {
+        }
+        catch ( uno::RuntimeException& )
+        {
+        }
+        catch ( uno::Exception& )
+        {
+        }
+
+        Window* pContentWindow = VCLUnoHelper::GetWindow(xWindow);
+        pTitleDockWindow->SetWrappedWindow(pContentWindow);
+    }
+
+    pWindow->SetOutputSizePixel( Size( 270, 240 ) );
+
+    ( ( SfxDockingWindow* ) pWindow )->Initialize( pInfo );
+    SetHideNotDelete( TRUE );
+}
+
+SfxChildWindow*  SfxDockingWrapper::CreateImpl(
+Window *pParent, sal_uInt16 nId, SfxBindings *pBindings, SfxChildWinInfo* pInfo )
+{
+    SfxChildWindow *pWin = new SfxDockingWrapper(pParent, nId, pBindings, pInfo); return pWin;
+}
+
+sal_uInt16 SfxDockingWrapper::GetChildWindowId ()
+{
+    DBG_ASSERT( false, "This method shouldn't be called!" );
+    return 0;
+}
+
+void SfxDockingWrapper::RegisterChildWindow (sal_Bool bVis, SfxModule *pMod, sal_uInt16 nFlags)
+{
+    // pre-register a couple of docking windows
+    for (int i=0; i < NUM_OF_DOCKINGWINDOWS; i++ )
+    {
+        USHORT nID = USHORT(SID_DOCKWIN_START+i);
+        SfxChildWinFactory *pFact = new SfxChildWinFactory( SfxDockingWrapper::CreateImpl, nID, 0xffff );
+        pFact->aInfo.nFlags |= nFlags;
+        pFact->aInfo.bVisible = bVis;
+        SfxChildWindow::RegisterChildWindow(pMod, pFact);
+    }
+}
+
+SfxChildWinInfo  SfxDockingWrapper::GetInfo() const
+{
+    SfxChildWinInfo aInfo = SfxChildWindow::GetInfo();
+    ((SfxDockingWindow*)GetWindow())->FillInfo( aInfo );
+    return aInfo;
+};
+
+SfxTitleDockingWindow::SfxTitleDockingWindow( SfxBindings* pBind ,
+                                              SfxChildWindow* pChildWin ,
+                                              Window* pParent ,
+                                              WinBits nBits,
+                                              USHORT  nID ) :
+                          SfxDockingWindow( pBind ,
+                                            pChildWin ,
+                                            pParent ,
+                                            nBits ),
+                          m_pWrappedWindow(0),
+                          m_nID(nID)
+{
+}
+
+SfxTitleDockingWindow::~SfxTitleDockingWindow()
+{
+    delete m_pWrappedWindow;
+}
+
+void SfxTitleDockingWindow::SetWrappedWindow( Window* const pWindow )
+{
+    m_pWrappedWindow = pWindow;
+    if (m_pWrappedWindow)
+    {
+        m_pWrappedWindow->SetParent(this);
+        m_pWrappedWindow->SetSizePixel( GetOutputSizePixel() );
+        m_pWrappedWindow->Show();
+    }
+}
+
+long SfxTitleDockingWindow::Notify( NotifyEvent& rNEvt )
+{
+    return SfxDockingWindow::Notify( rNEvt );
+}
+
+void SfxTitleDockingWindow::StateChanged( StateChangedType nType )
+{
+    if ( nType == STATE_CHANGE_INITSHOW )
+    {
+        Window* pWindow = GetWrappedWindow();
+        if ( pWindow )
+        {
+            pWindow->SetSizePixel( GetOutputSizePixel() );
+            pWindow->Show();
+        }
+    }
+
+    SfxDockingWindow::StateChanged(nType);
+}
+
+void SfxTitleDockingWindow::Resize()
+{
+    SfxDockingWindow::Resize();
+    if (m_pWrappedWindow)
+        m_pWrappedWindow->SetSizePixel( GetOutputSizePixel() );
+}
+
+void SfxTitleDockingWindow::Resizing( Size &rSize )
+{
+    SfxDockingWindow::Resizing( rSize );
+    if (m_pWrappedWindow)
+        m_pWrappedWindow->SetSizePixel( GetOutputSizePixel() );
+}
+
+BOOL SfxTitleDockingWindow::Close()
+{
+    return SfxDockingWindow::Close();
+}
+
+namespace
+{
+    struct ChildrenRegisteredMap : public rtl::Static< bool, ChildrenRegisteredMap > {};
+}
+
+static bool lcl_checkDockingWindowID( USHORT nID )
+{
+    if (nID < SID_DOCKWIN_START || nID >= USHORT(SID_DOCKWIN_START+NUM_OF_DOCKINGWINDOWS))
+        return false;
+    else
+        return true;
+}
+
+static SfxWorkWindow* lcl_getWorkWindowFromXFrame( const uno::Reference< frame::XFrame >& rFrame )
+{
+    // We need to find the corresponding SfxFrame of our XFrame
+    SfxFrame* pFrame  = SfxFrame::GetFirst();
+    SfxFrame* pXFrame = 0;
+    while ( pFrame )
+    {
+        uno::Reference< frame::XFrame > xViewShellFrame( pFrame->GetFrameInterface() );
+        if ( xViewShellFrame == rFrame )
+        {
+            pXFrame = pFrame;
+            break;
+        }
+        else
+            pFrame = SfxFrame::GetNext( *pFrame );
+    }
+
+    // If we have a SfxFrame we can retrieve the work window (Sfx layout manager for docking windows)
+    if ( pXFrame )
+        return pXFrame->GetWorkWindow_Impl();
+    else
+        return NULL;
+}
+
+/*
+    Factory function used by the framework layout manager to "create" a docking window with a special name.
+    The string rDockingWindowName MUST BE a valid ID! The ID is pre-defined by a certain slot range located
+    in sfxsids.hrc (currently SID_DOCKWIN_START = 9800).
+*/
+void SAL_CALL SfxDockingWindowFactory( const uno::Reference< frame::XFrame >& rFrame, const rtl::OUString& rDockingWindowName )
+{
+    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    USHORT nID = USHORT(rDockingWindowName.toInt32());
+
+    // Check the range of the provided ID otherwise nothing will happen
+    if ( lcl_checkDockingWindowID( nID ))
+    {
+        SfxWorkWindow* pWorkWindow = lcl_getWorkWindowFromXFrame( rFrame );
+        if ( pWorkWindow )
+        {
+            SfxChildWindow* pChildWindow = pWorkWindow->GetChildWindow_Impl(nID);
+            if ( !pChildWindow )
+            {
+                // Register window at the workwindow child window list
+                pWorkWindow->SetChildWindow_Impl( nID, true, false );
+            }
+        }
+    }
+}
+
+/*
+    Function used by the framework layout manager to determine the visibility state of a docking window with
+    a special name. The string rDockingWindowName MUST BE a valid ID! The ID is pre-defined by a certain slot
+    range located in sfxsids.hrc (currently SID_DOCKWIN_START = 9800).
+*/
+bool SAL_CALL IsDockingWindowVisible( const uno::Reference< frame::XFrame >& rFrame, const rtl::OUString& rDockingWindowName )
+{
+    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+
+    USHORT nID = USHORT(rDockingWindowName.toInt32());
+
+    // Check the range of the provided ID otherwise nothing will happen
+    if ( lcl_checkDockingWindowID( nID ))
+    {
+        SfxWorkWindow* pWorkWindow = lcl_getWorkWindowFromXFrame( rFrame );
+        if ( pWorkWindow )
+        {
+            SfxChildWindow* pChildWindow = pWorkWindow->GetChildWindow_Impl(nID);
+            if ( pChildWindow )
+                return true;
+        }
+    }
+
+    return false;
+}
 
 class SfxDockingWindow_Impl
 {
@@ -157,7 +540,7 @@ BOOL SfxDockingWindow::PrepareToggleFloatingMode()
     if (!pImp->bConstructed)
         return TRUE;
 
-    if ( Application::IsInModalMode() && IsFloatingMode() || !pMgr )
+    if ( (Application::IsInModalMode() && IsFloatingMode()) || !pMgr )
         return FALSE;
 
     if ( pImp->bDockingPrevented )
@@ -719,9 +1102,13 @@ void SfxDockingWindow::Initialize(SfxChildWinInfo *pInfo)
     if ( GetAlignment() != SFX_ALIGN_NOALIGNMENT )
     {
         // check if SfxWorkWindow is able to allow docking at its border
-        if ( !pWorkWin->IsDockingAllowed() || !pWorkWin->IsInternalDockingAllowed() || ( GetFloatStyle() & WB_STANDALONE )
-            && Application::IsInModalMode() )
+        if (
+            !pWorkWin->IsDockingAllowed() ||
+            !pWorkWin->IsInternalDockingAllowed() ||
+            ( (GetFloatStyle() & WB_STANDALONE) && Application::IsInModalMode()) )
+        {
             SetAlignment( SFX_ALIGN_NOALIGNMENT );
+        }
     }
 
     // detect floating mode

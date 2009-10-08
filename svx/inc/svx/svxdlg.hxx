@@ -45,7 +45,6 @@ using namespace svx;
 namespace com{namespace sun{namespace star{
 namespace linguistic2{
     class XDictionary;
-    class XDictionary1;
     class XSpellChecker1;
     class XSpellChecker;
 }}}}
@@ -227,7 +226,7 @@ public:
 class AbstractSvxNewDictionaryDialog :public VclAbstractDialog  //add for SvxNewDictionaryDialog
 {
 public:
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::linguistic2::XDictionary1 > GetNewDictionary() = 0;
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::linguistic2::XDictionary >  GetNewDictionary() = 0;
 };
 
 class AbstractSvxNameDialog :public VclAbstractDialog  //add for SvxNameDialog

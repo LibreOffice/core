@@ -35,6 +35,7 @@ PRJNAME=fpicker
 TARGET=fps_office
 LIBTARGET=NO
 ENABLE_EXCEPTIONS=TRUE
+VISIBILITY_HIDDEN=TRUE
 GEN_HID=TRUE
 
 # --- Settings -----------------------------------------------------

@@ -255,7 +255,6 @@ public :
     virtual basegfx::B2DPolyPolygon TakeXorPoly() const;
     virtual sal_uInt32 GetHdlCount() const;
     virtual void    AddToHdlList(SdrHdlList& rHdlList) const;
-    virtual FASTBOOL HasSpecialDrag() const;
 
     // DoubleSided: TRUE/FALSE
     BOOL GetDoubleSided() const

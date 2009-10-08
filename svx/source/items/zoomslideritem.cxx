@@ -107,10 +107,8 @@ int SvxZoomSliderItem::operator==( const SfxPoolItem& rAttr ) const
 
     SvxZoomSliderItem& rItem = (SvxZoomSliderItem&)rAttr;
 
-    return ( (GetValue() == rItem.GetValue())   &&
-             (maValues == rItem.maValues ) &&
-             (mnMinZoom == rItem.mnMinZoom) &&
-             (mnMaxZoom == rItem.mnMaxZoom) );
+    return ( GetValue() == rItem.GetValue() && maValues == rItem.maValues &&
+             mnMinZoom == rItem.mnMinZoom && mnMaxZoom == rItem.mnMaxZoom );
 }
 
 sal_Bool SvxZoomSliderItem::QueryValue( com::sun::star::uno::Any& rVal, BYTE nMemberId ) const
@@ -119,25 +117,40 @@ sal_Bool SvxZoomSliderItem::QueryValue( com::sun::star::uno::Any& rVal, BYTE nMe
     switch ( nMemberId )
     {
         case 0 :
-        {
-            ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > aSeq( ZOOMSLIDER_PARAMS );
-            aSeq[0].Name = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ZOOMSLIDER_PARAM_CURRENTZOOM ));
-            aSeq[0].Value <<= sal_Int32( GetValue() );
-            aSeq[1].Name = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ZOOMSLIDER_PARAM_SNAPPINGPOINTS ));
-            aSeq[1].Value <<= maValues;
-            aSeq[2].Name = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ZOOMSLIDER_PARAM_MINZOOM ) );
-            aSeq[2].Value <<= (sal_Int32)mnMinZoom;
-            aSeq[3].Name = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ZOOMSLIDER_PARAM_MAXZOOM ) );
-            aSeq[3].Value <<= (sal_Int32)mnMaxZoom;
-            rVal <<= aSeq;
-        }
-        break;
+            {
+                ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > aSeq( ZOOMSLIDER_PARAMS );
+                aSeq[0].Name = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ZOOMSLIDER_PARAM_CURRENTZOOM ));
+                aSeq[0].Value <<= sal_Int32( GetValue() );
+                aSeq[1].Name = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ZOOMSLIDER_PARAM_SNAPPINGPOINTS ));
+                aSeq[1].Value <<= maValues;
+                aSeq[2].Name = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ZOOMSLIDER_PARAM_MINZOOM ) );
+                aSeq[2].Value <<= mnMinZoom;
+                aSeq[3].Name = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ZOOMSLIDER_PARAM_MAXZOOM ) );
+                aSeq[3].Value <<= mnMaxZoom;
+                rVal <<= aSeq;
+            }
+            break;
 
-        case MID_ZOOMSLIDER_CURRENTZOOM : rVal <<= (sal_Int32) GetValue(); break;
+        case MID_ZOOMSLIDER_CURRENTZOOM :
+            {
+                rVal <<= (sal_Int32) GetValue();
+            }
+            break;
         case MID_ZOOMSLIDER_SNAPPINGPOINTS:
             {
-                 rVal <<= maValues; break;
+                 rVal <<= maValues;
             }
+            break;
+        case MID_ZOOMSLIDER_MINZOOM:
+            {
+                rVal <<= mnMinZoom;
+            }
+            break;
+        case MID_ZOOMSLIDER_MAXZOOM:
+            {
+                rVal <<= mnMaxZoom;
+            }
+            break;
         default:
             DBG_ERROR("svx::SvxZoomSliderItem::QueryValue(), Wrong MemberId!");
             return sal_False;
@@ -153,79 +166,100 @@ sal_Bool SvxZoomSliderItem::PutValue( const com::sun::star::uno::Any& rVal, BYTE
     switch ( nMemberId )
     {
         case 0 :
-        {
-            ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > aSeq;
-            if (( rVal >>= aSeq ) && ( aSeq.getLength() == ZOOMSLIDER_PARAMS ))
             {
-                sal_Int32 nCurrentZoom( 0 );
-                com::sun::star::uno::Sequence < sal_Int32 > aValues;
-
-                sal_Bool  bAllConverted( sal_True );
-                sal_Int16 nConvertedCount( 0 );
-                sal_Int32 nMinZoom( 0 ), nMaxZoom( 0 );
-
-                for ( sal_Int32 i = 0; i < aSeq.getLength(); i++ )
+                ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > aSeq;
+                if (( rVal >>= aSeq ) && ( aSeq.getLength() == ZOOMSLIDER_PARAMS ))
                 {
-                    if ( aSeq[i].Name.equalsAscii( ZOOMSLIDER_PARAM_CURRENTZOOM ))
+                    sal_Int32 nCurrentZoom( 0 );
+                    com::sun::star::uno::Sequence < sal_Int32 > aValues;
+
+                    sal_Bool  bAllConverted( sal_True );
+                    sal_Int16 nConvertedCount( 0 );
+                    sal_Int32 nMinZoom( 0 ), nMaxZoom( 0 );
+
+                    for ( sal_Int32 i = 0; i < aSeq.getLength(); i++ )
                     {
-                        bAllConverted &= ( aSeq[i].Value >>= nCurrentZoom );
-                        ++nConvertedCount;
+                        if ( aSeq[i].Name.equalsAscii( ZOOMSLIDER_PARAM_CURRENTZOOM ))
+                        {
+                            bAllConverted &= ( aSeq[i].Value >>= nCurrentZoom );
+                            ++nConvertedCount;
+                        }
+                        else if ( aSeq[i].Name.equalsAscii( ZOOMSLIDER_PARAM_SNAPPINGPOINTS ))
+                        {
+                            bAllConverted &= ( aSeq[i].Value >>= aValues );
+                            ++nConvertedCount;
+                        }
+                        else if( aSeq[i].Name.equalsAscii( ZOOMSLIDER_PARAM_MINZOOM ) )
+                        {
+                            bAllConverted &= ( aSeq[i].Value >>= nMinZoom );
+                            ++nConvertedCount;
+                        }
+                        else if( aSeq[i].Name.equalsAscii( ZOOMSLIDER_PARAM_MAXZOOM ) )
+                        {
+                            bAllConverted &= ( aSeq[i].Value >>= nMaxZoom );
+                            ++nConvertedCount;
+                        }
                     }
-                    else if ( aSeq[i].Name.equalsAscii( ZOOMSLIDER_PARAM_SNAPPINGPOINTS ))
+
+                    if ( bAllConverted && nConvertedCount == ZOOMSLIDER_PARAMS )
                     {
-                        bAllConverted &= ( aSeq[i].Value >>= aValues );
-                        ++nConvertedCount;
-                    }
-                    else if( aSeq[i].Name.equalsAscii( ZOOMSLIDER_PARAM_MINZOOM ) )
-                    {
-                        bAllConverted &= ( aSeq[i].Value >>= nMinZoom );
-                        ++nConvertedCount;
-                    }
-                    else if( aSeq[i].Name.equalsAscii( ZOOMSLIDER_PARAM_MAXZOOM ) )
-                    {
-                        bAllConverted &= ( aSeq[i].Value >>= nMaxZoom );
-                        ++nConvertedCount;
+                        SetValue( (UINT16)nCurrentZoom );
+                        maValues = aValues;
+                        mnMinZoom = sal::static_int_cast< USHORT >( nMinZoom );
+                        mnMaxZoom = sal::static_int_cast< USHORT >( nMaxZoom );
+
+                        return sal_True;
                     }
                 }
 
-                if ( bAllConverted && nConvertedCount == ZOOMSLIDER_PARAMS )
-                {
-                    SetValue( (UINT16)nCurrentZoom );
-                    maValues = aValues;
-                    mnMinZoom = sal::static_int_cast< USHORT >( nMinZoom );
-                    mnMaxZoom = sal::static_int_cast< USHORT >( nMaxZoom );
-
-                    return sal_True;
-                }
+                return sal_False;
             }
-
-            return sal_False;
-        }
 
         case MID_ZOOMSLIDER_CURRENTZOOM:
-        {
-            sal_Int32 nVal = 0;
-            if ( rVal >>= nVal )
             {
-                SetValue( (UINT16)nVal );
-                return sal_True;
+                sal_Int32 nVal = 0;
+                if ( rVal >>= nVal )
+                {
+                    SetValue( (UINT16)nVal );
+                    return sal_True;
+                }
+                else
+                    return sal_False;
             }
-            else
-                return sal_False;
-        }
 
         case MID_ZOOMSLIDER_SNAPPINGPOINTS:
-        {
-            com::sun::star::uno::Sequence < sal_Int32 > aValues;
-            if ( rVal >>= aValues )
             {
-                maValues = aValues;
-                return sal_True;
+                com::sun::star::uno::Sequence < sal_Int32 > aValues;
+                if ( rVal >>= aValues )
+                {
+                    maValues = aValues;
+                    return sal_True;
+                }
+                else
+                    return sal_False;
             }
-            else
-                return sal_False;
-        }
-
+        case MID_ZOOMSLIDER_MINZOOM:
+            {
+                sal_Int32 nVal = 0;
+                if( rVal >>= nVal )
+                {
+                    mnMinZoom = (UINT16)nVal;
+                    return sal_True;
+                }
+                else
+                    return sal_False;
+            }
+        case MID_ZOOMSLIDER_MAXZOOM:
+            {
+                sal_Int32 nVal = 0;
+                if( rVal >>= nVal )
+                {
+                    mnMaxZoom = (UINT16)nVal;
+                    return sal_True;
+                }
+                else
+                    return sal_False;
+            }
         default:
             DBG_ERROR("svx::SvxZoomSliderItem::PutValue(), Wrong MemberId!");
             return sal_False;

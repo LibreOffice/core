@@ -8,7 +8,7 @@
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.20 $
+# $Revision: 1.18.112.3 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -40,6 +40,7 @@ PACKAGE=org.openoffice.Office
 # --- Targets ------------------------------------------------------
 
 XCSFILES= \
+    Accelerators.xcs \
     Addons.xcs \
     Calc.xcs \
     CalcAddIns.xcs \
@@ -77,7 +78,8 @@ XCSFILES= \
     ExtendedColorScheme.xcs \
     TypeDetection.xcs \
     TabBrowse.xcs \
-    Paths.xcs
+    Paths.xcs	\
+    Histories.xcs
 
 .INCLUDE :  target.mk
 

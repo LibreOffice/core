@@ -439,9 +439,21 @@ void SfxApplication::MiscExec_Impl( SfxRequest& rReq )
         // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
         case SID_ABOUT:
         {
-            ::rtl::OUString sDefault;
+            const String sCWSSchema( String::CreateFromAscii( "[CWS:" ) );
+            rtl::OUString sDefault;
             String sBuildId( utl::Bootstrap::getBuildIdData( sDefault ) );
             OSL_ENSURE( sBuildId.Len() > 0, "No BUILDID in bootstrap file" );
+            if ( sBuildId.Len() > 0 && sBuildId.Search( sCWSSchema ) == STRING_NOTFOUND )
+            {
+                // no cws part in brand buildid -> try basis buildid
+                rtl::OUString sBasisBuildId( DEFINE_CONST_OUSTRING(
+                    "${$OOO_BASE_DIR/program/" SAL_CONFIGFILE("version") ":buildid}" ) );
+                rtl::Bootstrap::expandMacros( sBasisBuildId );
+                sal_Int32 nIndex = sBasisBuildId.indexOf( sCWSSchema );
+                if ( nIndex != -1 )
+                    sBuildId += String( sBasisBuildId.copy( nIndex ) );
+            }
+
             String sProductSource( utl::Bootstrap::getProductSource( sDefault ) );
             OSL_ENSURE( sProductSource.Len() > 0, "No ProductSource in bootstrap file" );
 
@@ -461,6 +473,26 @@ void SfxApplication::MiscExec_Impl( SfxRequest& rReq )
                 // prepend the product source
                 sBuildId.Insert( sProductSource, 0 );
             }
+
+            // --> PB 2008-10-30 #i94693#
+            /* if the build ids of the basis or ure layer are different from the build id
+             * of the brand layer then show them */
+            rtl::OUString aBasisProductBuildId( DEFINE_CONST_OUSTRING(
+                "${$OOO_BASE_DIR/program/" SAL_CONFIGFILE("version") ":ProductBuildid}" ) );
+            rtl::Bootstrap::expandMacros( aBasisProductBuildId );
+            rtl::OUString aUREProductBuildId( DEFINE_CONST_OUSTRING(
+                "${$URE_BIN_DIR/" SAL_CONFIGFILE("version") ":ProductBuildid}" ) );
+            rtl::Bootstrap::expandMacros( aUREProductBuildId );
+            if ( sBuildId.Search( String( aBasisProductBuildId ) ) == STRING_NOTFOUND
+                || sBuildId.Search( String( aUREProductBuildId ) ) == STRING_NOTFOUND )
+            {
+                String sTemp( '-' );
+                sTemp += String( aBasisProductBuildId );
+                sTemp += '-';
+                sTemp += String( aUREProductBuildId );
+                sBuildId.Insert( sTemp, sBuildId.Search( ')' ) );
+            }
+            // <--
 
             // the build id format is "milestone(build)[cwsname]". For readability, it would
             // be nice to have some more spaces in there.

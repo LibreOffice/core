@@ -154,6 +154,7 @@ Interceptor::dispatch(
 {
     osl::MutexGuard aGuard(m_aMutex);
     if( m_pDocHolder )
+    {
         if(URL.Complete == m_aInterceptedURL[0])
             m_pDocHolder->GetEmbedObject()->SaveObject_Impl();
         else if(URL.Complete == m_aInterceptedURL[2] ||
@@ -194,6 +195,7 @@ Interceptor::dispatch(
             if ( xDispatch.is() )
                 xDispatch->dispatch( URL, aNewArgs );
         }
+    }
 }
 
 void SAL_CALL

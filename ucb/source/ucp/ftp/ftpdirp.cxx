@@ -349,7 +349,7 @@ sal_Bool FTPDirectoryParser::parseDOS (
             case STATE_2_SIZE_LWS:
                 if (*p == 'd' || *p == 'D')
                     eState = STATE_2_D;
-                else if (*p >= 'a' && *p <= 'z' || *p >= 'A' && *p <= 'Z')
+                else if ((*p >= 'a' && *p <= 'z') || (*p >= 'A' && *p <= 'Z'))
                     eState = STATE_2_ATTRIB;
                 else if (*p >= '0' && *p <= '9')
                 {
@@ -603,10 +603,12 @@ sal_Bool FTPDirectoryParser::parseVMS (
                 ++p;
 
             if (*p != '.' || p == pFileName || p - pFileName > 39)
+            {
                 if (aFirstLineName.getLength())
                     continue;
                 else
                     return sal_False;
+            }
 
             // Parse <filetype ";"> part:
             const sal_Char *pFileType = ++p;
@@ -617,10 +619,12 @@ sal_Bool FTPDirectoryParser::parseVMS (
                 ++p;
 
             if (*p != ';' || p == pFileName || p - pFileName > 39)
+            {
                 if (aFirstLineName.getLength())
                     continue;
                 else
                     return sal_False;
+            }
             ++p;
 
             // Set entry's name and mode (ISDIR flag):
@@ -640,10 +644,12 @@ sal_Bool FTPDirectoryParser::parseVMS (
 
             // Skip <version> part:
             if (*p < '1' || *p > '9')
+            {
                 if (aFirstLineName.getLength())
                     continue;
                 else
                     return sal_False;
+            }
             ++p;
             while (*p >= '0' && *p <= '9')
                 ++p;
@@ -658,10 +664,12 @@ sal_Bool FTPDirectoryParser::parseVMS (
             if (*p)
             {
                 if (!bLWS)
+                {
                     if (aFirstLineName.getLength())
                         continue;
                     else
                         return sal_False;
+                }
             }
             else
             {
@@ -740,10 +748,10 @@ sal_Bool FTPDirectoryParser::parseVMS (
         // Parse <month "-"> part and set entry date's month:
         sal_Char const * pMonth = p;
         sal_Int32 const monthLen = 3;
-        for (int i = 0; i < monthLen; ++i) {
-            if (!(*p >= 'A' && *p <= 'Z' || *p >= 'a' && *p <= 'z')) {
+        for (int i = 0; i < monthLen; ++i)
+        {
+            if (!((*p >= 'A' && *p <= 'Z') || (*p >= 'a' && *p <= 'z')))
                 return sal_False;
-            }
             ++p;
         }
         if (rtl_str_compareIgnoreAsciiCase_WithLength(

@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: dp_gui_updatedialog.hxx,v $
- * $Revision: 1.9 $
+ * $Revision: 1.9.86.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -70,8 +70,6 @@ namespace dp_gui {
 }
 
 namespace dp_gui {
-
-    struct DialogImpl;
 
 /**
    The modal &ldquo;Check for Updates&rdquo; dialog.
@@ -230,10 +228,6 @@ private:
     Size m_aFirstLineSize;
     long m_nFirstLineDelta;
     long m_nOneLineMissing;
-    // TODO: check
-    // The dialog only knows if we already showed the warning about
-    // updating a shared extension during this session.
-    // const ::rtl::Reference<DialogImpl> m_extensionManagerDialog;
 };
 
 }

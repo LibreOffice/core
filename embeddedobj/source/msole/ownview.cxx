@@ -323,11 +323,15 @@ sal_Bool OwnView_Impl::ReadContentsAndGenerateTempFile( const uno::Reference< io
             if ( xInStream->readBytes( aReadSeq, 1 ) != 1 )
                 return sal_False;
 
-            if ( aReadSeq[0] >= '0' && aReadSeq[0] <= '9'
-              || aReadSeq[0] >= 'a' && aReadSeq[0] <= 'z'
-              || aReadSeq[0] >= 'A' && aReadSeq[0] <= 'Z'
-              || aReadSeq[0] == '.' )
+            if (
+                (aReadSeq[0] >= '0' && aReadSeq[0] <= '9') ||
+                (aReadSeq[0] >= 'a' && aReadSeq[0] <= 'z') ||
+                (aReadSeq[0] >= 'A' && aReadSeq[0] <= 'Z') ||
+                aReadSeq[0] == '.'
+               )
+            {
                 aFileSuffix += ::rtl::OUString::valueOf( (sal_Unicode) aReadSeq[0] );
+            }
 
         } while( aReadSeq[0] );
 

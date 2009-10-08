@@ -49,6 +49,7 @@
 #include <svtools/rectitem.hxx>
 #include <svtools/eitem.hxx>
 #include <svtools/urihelper.hxx>
+#include <svtools/ctloptions.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/storagehelper.hxx>
 #include <svtools/securityoptions.hxx>
@@ -83,6 +84,7 @@
 #include <sfx2/docfile.hxx>
 #include <sfx2/request.hxx>
 #include "openflag.hxx"
+#include "querytemplate.hxx"
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -171,6 +173,18 @@ SfxObjectShell::CreatePreviewMetaFile_Impl( sal_Bool bFullContent, sal_Bool bHig
                 "size of first page is 0, overload GetFirstPageSize or set vis-area!" );
 
     pFile->Record( &aDevice );
+
+    LanguageType eLang;
+    SvtCTLOptions*  pCTLOptions = new SvtCTLOptions;
+    if ( SvtCTLOptions::NUMERALS_HINDI == pCTLOptions->GetCTLTextNumerals() )
+        eLang = LANGUAGE_ARABIC_SAUDI_ARABIA;
+    else if ( SvtCTLOptions::NUMERALS_ARABIC == pCTLOptions->GetCTLTextNumerals() )
+        eLang = LANGUAGE_ENGLISH;
+    else
+        eLang = (LanguageType) Application::GetSettings().GetLanguage();
+
+    aDevice.SetDigitLanguage( eLang );
+
     ((SfxObjectShell*)this)->DoDraw( &aDevice, Point(0,0), aTmpSize, JobSetup(), nAspect );
     pFile->Stop();
 
@@ -514,9 +528,15 @@ void SfxObjectShell::UpdateTime_Impl(
     }
 
     pImp->nTime = aNow;
-    i_xDocProps->setEditingDuration(
-        aOldTime.GetHour()*3600+aOldTime.GetMin()*60+aOldTime.GetSec());
-    i_xDocProps->setEditingCycles(i_xDocProps->getEditingCycles() + 1);
+    try {
+        i_xDocProps->setEditingDuration(
+            aOldTime.GetHour()*3600+aOldTime.GetMin()*60+aOldTime.GetSec());
+        i_xDocProps->setEditingCycles(i_xDocProps->getEditingCycles() + 1);
+    }
+    catch (lang::IllegalArgumentException &)
+    {
+        // ignore overflow
+    }
 }
 
 //--------------------------------------------------------------------
@@ -1301,7 +1321,9 @@ void SfxObjectShell::UpdateFromTemplate_Impl(  )
                         bLoad = TRUE;
                     else if ( bCanUpdateFromTemplate == document::UpdateDocMode::ACCORDING_TO_CONFIG )
                     {
-                        QueryBox aBox( GetDialogParent(), SfxResId(MSG_QUERY_LOAD_TEMPLATE) );
+                        String sMessage( SfxResId( STR_QRYTEMPL_MESSAGE ) );
+                        sMessage.SearchAndReplace( String::CreateFromAscii("$(ARG1)"), aTemplName );
+                        sfx2::QueryTemplateBox aBox( GetDialogParent(), sMessage );
                         if ( RET_YES == aBox.Execute() )
                             bLoad = TRUE;
                     }

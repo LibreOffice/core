@@ -776,7 +776,7 @@ long AbstractFmInputRecordNoDialog_Impl::GetValue() const
 
 //for SvxNewDictionaryDialog begin
 ::Reference<
-        ::com::sun::star::linguistic2::XDictionary1 > AbstractSvxNewDictionaryDialog_Impl::GetNewDictionary()
+        ::com::sun::star::linguistic2::XDictionary > AbstractSvxNewDictionaryDialog_Impl::GetNewDictionary()
 {
     return pDlg->GetNewDictionary();
 }

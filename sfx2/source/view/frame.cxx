@@ -329,7 +329,7 @@ SfxFrame* SfxFrame::GetChildFrame( sal_uInt16 nPos ) const
 {
     if ( pChildArr && pChildArr->Count() > nPos )
     {
-        DBG_ASSERT( nPos < pChildArr->Count(), "Falscher Index!")
+        DBG_ASSERT( nPos < pChildArr->Count(), "Falscher Index!");
         return (*pChildArr)[nPos];
     }
 

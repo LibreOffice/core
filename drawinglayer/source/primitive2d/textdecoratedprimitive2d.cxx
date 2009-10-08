@@ -55,6 +55,212 @@ namespace drawinglayer
 {
     namespace primitive2d
     {
+        void TextDecoratedPortionPrimitive2D::impCreateTextLine(
+            std::vector< Primitive2DReference >& rTarget,
+            basegfx::DecomposedB2DHomMatrixContainer& rDecTrans,
+            const basegfx::B2DHomMatrix &rUnscaledTransform,
+            FontUnderline eLineStyle,
+            double fLineOffset,
+            double fLineHeight,
+            double fLineWidth,
+            const basegfx::BColor& rLineColor) const
+        {
+            bool bDoubleLine(false);
+            bool bWaveLine(false);
+            bool bBoldLine(false);
+            const int* pDotDashArray(0);
+            basegfx::B2DLineJoin eLineJoin(basegfx::B2DLINEJOIN_NONE);
+
+            static const int aDottedArray[]     = { 1, 1, 0};               // DOTTED LINE
+            static const int aDotDashArray[]    = { 1, 1, 4, 1, 0};         // DASHDOT
+            static const int aDashDotDotArray[] = { 1, 1, 1, 1, 4, 1, 0};   // DASHDOTDOT
+            static const int aDashedArray[]     = { 5, 2, 0};               // DASHED LINE
+            static const int aLongDashArray[]   = { 7, 2, 0};               // LONGDASH
+
+            switch(eLineStyle)
+            {
+                default: // case FONT_UNDERLINE_SINGLE:
+                {
+                    break;
+                }
+                case FONT_UNDERLINE_DOUBLE:
+                {
+                    bDoubleLine = true;
+                    break;
+                }
+                case FONT_UNDERLINE_DOTTED:
+                {
+                    pDotDashArray = aDottedArray;
+                    break;
+                }
+                case FONT_UNDERLINE_DASH:
+                {
+                    pDotDashArray = aDashedArray;
+                    break;
+                }
+                case FONT_UNDERLINE_LONGDASH:
+                {
+                    pDotDashArray = aLongDashArray;
+                    break;
+                }
+                case FONT_UNDERLINE_DASHDOT:
+                {
+                    pDotDashArray = aDotDashArray;
+                    break;
+                }
+                case FONT_UNDERLINE_DASHDOTDOT:
+                {
+                    pDotDashArray = aDashDotDotArray;
+                    break;
+                }
+                case FONT_UNDERLINE_SMALLWAVE:
+                {
+                    bWaveLine = true;
+                    break;
+                }
+                case FONT_UNDERLINE_WAVE:
+                {
+                    bWaveLine = true;
+                    break;
+                }
+                case FONT_UNDERLINE_DOUBLEWAVE:
+                {
+                    bDoubleLine = true;
+                    bWaveLine = true;
+                    break;
+                }
+                case FONT_UNDERLINE_BOLD:
+                {
+                    bBoldLine = true;
+                    break;
+                }
+                case FONT_UNDERLINE_BOLDDOTTED:
+                {
+                    bBoldLine = true;
+                    pDotDashArray = aDottedArray;
+                    break;
+                }
+                case FONT_UNDERLINE_BOLDDASH:
+                {
+                    bBoldLine = true;
+                    pDotDashArray = aDashedArray;
+                    break;
+                }
+                case FONT_UNDERLINE_BOLDLONGDASH:
+                {
+                    bBoldLine = true;
+                    pDotDashArray = aLongDashArray;
+                    break;
+                }
+                case FONT_UNDERLINE_BOLDDASHDOT:
+                {
+                    bBoldLine = true;
+                    pDotDashArray = aDotDashArray;
+                    break;
+                }
+                case FONT_UNDERLINE_BOLDDASHDOTDOT:
+                {
+                    bBoldLine = true;
+                    pDotDashArray = aDashDotDotArray;
+                    break;
+                }
+                case FONT_UNDERLINE_BOLDWAVE:
+                {
+                    bWaveLine = true;
+                    bBoldLine = true;
+                    break;
+                }
+            }
+
+            if(bBoldLine)
+            {
+                fLineHeight *= 2.0;
+            }
+
+            if(bDoubleLine)
+            {
+                fLineOffset -= 0.50 * fLineHeight;
+                fLineHeight *= 0.64;
+            }
+
+            if(bWaveLine)
+            {
+                eLineJoin = basegfx::B2DLINEJOIN_ROUND;
+                fLineHeight *= 0.5;
+            }
+
+            // prepare Line and Stroke Attributes
+            const attribute::LineAttribute aLineAttribute(rLineColor, fLineHeight, eLineJoin);
+            attribute::StrokeAttribute aStrokeAttribute;
+
+            if(pDotDashArray)
+            {
+                ::std::vector< double > aDoubleArray;
+
+                for(const int* p = pDotDashArray; *p; ++p)
+                {
+                    aDoubleArray.push_back((double)(*p) * fLineHeight);
+                }
+
+                aStrokeAttribute = attribute::StrokeAttribute(aDoubleArray);
+            }
+
+            // create base polygon and new primitive
+            basegfx::B2DPolygon aLine;
+            Primitive2DReference aNewPrimitive;
+
+            aLine.append(basegfx::B2DPoint(0.0, fLineOffset));
+            aLine.append(basegfx::B2DPoint(fLineWidth, fLineOffset));
+            aLine.transform(rUnscaledTransform);
+
+            if(bWaveLine)
+            {
+                double fWaveWidth(4.0 * fLineHeight);
+
+                if(FONT_UNDERLINE_SMALLWAVE == eLineStyle)
+                {
+                    fWaveWidth *= 0.7;
+                }
+                else if(FONT_UNDERLINE_WAVE == eLineStyle)
+                {
+                    // extra multiply to get the same WaveWidth as with the bold version
+                    fWaveWidth *= 2.0;
+                }
+
+                aNewPrimitive = Primitive2DReference(new PolygonWavePrimitive2D(aLine, aLineAttribute, aStrokeAttribute, fWaveWidth, 0.5 * fWaveWidth));
+            }
+            else
+            {
+                aNewPrimitive = Primitive2DReference(new PolygonStrokePrimitive2D(aLine, aLineAttribute, aStrokeAttribute));
+            }
+
+            // add primitive
+            rTarget.push_back(aNewPrimitive);
+
+            if(bDoubleLine)
+            {
+                // double line, create 2nd primitive with offset using TransformPrimitive based on
+                // already created NewPrimitive
+                const double fLineDist((bWaveLine ? 3.0 : 2.0) * fLineHeight);
+                basegfx::B2DHomMatrix aTransform;
+
+                // move base point of text to 0.0 and de-rotate
+                aTransform.translate(-rDecTrans.getTranslate().getX(), -rDecTrans.getTranslate().getY());
+                aTransform.rotate(-rDecTrans.getRotate());
+
+                // translate in Y by offset
+                aTransform.translate(0.0, fLineDist);
+
+                // move back and rotate
+                aTransform.rotate(rDecTrans.getRotate());
+                aTransform.translate(rDecTrans.getTranslate().getX(), rDecTrans.getTranslate().getY());
+
+                // add transform primitive
+                const Primitive2DSequence aContent(&aNewPrimitive, 1);
+                rTarget.push_back(Primitive2DReference(new TransformPrimitive2D(aTransform, aContent)));
+            }
+        }
+
         void TextDecoratedPortionPrimitive2D::impCreateGeometryContent(
             std::vector< Primitive2DReference >& rTarget,
             basegfx::DecomposedB2DHomMatrixContainer& rDecTrans,
@@ -76,10 +282,11 @@ namespace drawinglayer
                 getFontColor())));
 
             // see if something else needs to be done
+            const bool bOverlineUsed(FONT_UNDERLINE_NONE != getFontOverline());
             const bool bUnderlineUsed(FONT_UNDERLINE_NONE != getFontUnderline());
             const bool bStrikeoutUsed(FONT_STRIKEOUT_NONE != getFontStrikeout());
 
-            if(bUnderlineUsed || bStrikeoutUsed)
+            if(bUnderlineUsed || bStrikeoutUsed || bOverlineUsed)
             {
                 // common preparations
                 basegfx::B2DHomMatrix aUnscaledTransform;
@@ -106,205 +313,18 @@ namespace drawinglayer
                     fTextWidth = rDXArray.back() * rDecTrans.getScale().getX();
                 }
 
+                if(bOverlineUsed)
+                {
+                    // create primitive geometry for overline
+                    impCreateTextLine(rTarget, rDecTrans, aUnscaledTransform, getFontOverline(), aTextLayouter.getOverlineOffset(),
+                                      aTextLayouter.getOverlineHeight(), fTextWidth, getOverlineColor());
+                }
+
                 if(bUnderlineUsed)
                 {
                     // create primitive geometry for underline
-                    bool bDoubleLine(false);
-                    bool bWaveLine(false);
-                    bool bBoldLine(false);
-                    const int* pDotDashArray(0);
-                    basegfx::B2DLineJoin eLineJoin(basegfx::B2DLINEJOIN_NONE);
-                    double fUnderlineOffset(aTextLayouter.getUnderlineOffset());
-                    double fUnderlineHeight(aTextLayouter.getUnderlineHeight());
-
-                    static const int aDottedArray[]     = { 1, 1, 0};               // DOTTED LINE
-                    static const int aDotDashArray[]    = { 1, 1, 4, 1, 0};         // DASHDOT
-                    static const int aDashDotDotArray[] = { 1, 1, 1, 1, 4, 1, 0};   // DASHDOTDOT
-                    static const int aDashedArray[]     = { 5, 2, 0};               // DASHED LINE
-                    static const int aLongDashArray[]   = { 7, 2, 0};               // LONGDASH
-
-                    switch(getFontUnderline())
-                    {
-                        default: // case FONT_UNDERLINE_SINGLE:
-                        {
-                            break;
-                        }
-                        case FONT_UNDERLINE_DOUBLE:
-                        {
-                            bDoubleLine = true;
-                            break;
-                        }
-                        case FONT_UNDERLINE_DOTTED:
-                        {
-                            pDotDashArray = aDottedArray;
-                            break;
-                        }
-                        case FONT_UNDERLINE_DASH:
-                        {
-                            pDotDashArray = aDashedArray;
-                            break;
-                        }
-                        case FONT_UNDERLINE_LONGDASH:
-                        {
-                            pDotDashArray = aLongDashArray;
-                            break;
-                        }
-                        case FONT_UNDERLINE_DASHDOT:
-                        {
-                            pDotDashArray = aDotDashArray;
-                            break;
-                        }
-                        case FONT_UNDERLINE_DASHDOTDOT:
-                        {
-                            pDotDashArray = aDashDotDotArray;
-                            break;
-                        }
-                        case FONT_UNDERLINE_SMALLWAVE:
-                        {
-                            bWaveLine = true;
-                            break;
-                        }
-                        case FONT_UNDERLINE_WAVE:
-                        {
-                            bWaveLine = true;
-                            break;
-                        }
-                        case FONT_UNDERLINE_DOUBLEWAVE:
-                        {
-                            bDoubleLine = true;
-                            bWaveLine = true;
-                            break;
-                        }
-                        case FONT_UNDERLINE_BOLD:
-                        {
-                            bBoldLine = true;
-                            break;
-                        }
-                        case FONT_UNDERLINE_BOLDDOTTED:
-                        {
-                            bBoldLine = true;
-                            pDotDashArray = aDottedArray;
-                            break;
-                        }
-                        case FONT_UNDERLINE_BOLDDASH:
-                        {
-                            bBoldLine = true;
-                            pDotDashArray = aDashedArray;
-                            break;
-                        }
-                        case FONT_UNDERLINE_BOLDLONGDASH:
-                        {
-                            bBoldLine = true;
-                            pDotDashArray = aLongDashArray;
-                            break;
-                        }
-                        case FONT_UNDERLINE_BOLDDASHDOT:
-                        {
-                            bBoldLine = true;
-                            pDotDashArray = aDotDashArray;
-                            break;
-                        }
-                        case FONT_UNDERLINE_BOLDDASHDOTDOT:
-                        {
-                            bBoldLine = true;
-                            pDotDashArray = aDashDotDotArray;
-                            break;
-                        }
-                        case FONT_UNDERLINE_BOLDWAVE:
-                        {
-                            bWaveLine = true;
-                            bBoldLine = true;
-                            break;
-                        }
-                    }
-
-                    if(bBoldLine)
-                    {
-                        fUnderlineHeight *= 2.0;
-                    }
-
-                    if(bDoubleLine)
-                    {
-                        fUnderlineOffset -= 0.50 * fUnderlineHeight;
-                        fUnderlineHeight *= 0.64;
-                    }
-
-                    if(bWaveLine)
-                    {
-                        eLineJoin = basegfx::B2DLINEJOIN_ROUND;
-                        fUnderlineHeight *= 0.5;
-                    }
-
-                    // prepare Line and Stroke Attributes
-                    const attribute::LineAttribute aLineAttribute(getTextlineColor(), fUnderlineHeight, eLineJoin);
-                    attribute::StrokeAttribute aStrokeAttribute;
-
-                    if(pDotDashArray)
-                    {
-                        ::std::vector< double > aDoubleArray;
-
-                        for(const int* p = pDotDashArray; *p; ++p)
-                        {
-                            aDoubleArray.push_back((double)(*p) * fUnderlineHeight);
-                        }
-
-                        aStrokeAttribute = attribute::StrokeAttribute(aDoubleArray);
-                    }
-
-                    // create base polygon and new primitive
-                    basegfx::B2DPolygon aUnderline;
-                    Primitive2DReference aNewPrimitive;
-
-                    aUnderline.append(basegfx::B2DPoint(0.0, fUnderlineOffset));
-                    aUnderline.append(basegfx::B2DPoint(fTextWidth, fUnderlineOffset));
-                    aUnderline.transform(aUnscaledTransform);
-
-                    if(bWaveLine)
-                    {
-                        double fWaveWidth(4.0 * fUnderlineHeight);
-
-                        if(primitive2d::FONT_UNDERLINE_SMALLWAVE == getFontUnderline())
-                        {
-                            fWaveWidth *= 0.7;
-                        }
-                        else if(primitive2d::FONT_UNDERLINE_WAVE == getFontUnderline())
-                        {
-                            // extra multiply to get the same WaveWidth as with the bold version
-                            fWaveWidth *= 2.0;
-                        }
-
-                        aNewPrimitive = Primitive2DReference(new PolygonWavePrimitive2D(aUnderline, aLineAttribute, aStrokeAttribute, fWaveWidth, 0.5 * fWaveWidth));
-                    }
-                    else
-                    {
-                        aNewPrimitive = Primitive2DReference(new PolygonStrokePrimitive2D(aUnderline, aLineAttribute, aStrokeAttribute));
-                    }
-
-                    // add primitive
-                    rTarget.push_back(aNewPrimitive);
-
-                    if(bDoubleLine)
-                    {
-                        // double line, create 2nd primitive with offset using TransformPrimitive based on
-                        // already created NewPrimitive
-                        const double fLineDist((bWaveLine ? 3.0 : 2.0) * fUnderlineHeight);
-                        basegfx::B2DHomMatrix aTransform;
-
-                        // move base point of text to 0.0 and de-rotate
-                        aTransform.translate(-rDecTrans.getTranslate().getX(), -rDecTrans.getTranslate().getY());
-                        aTransform.rotate(-rDecTrans.getRotate());
-
-                        // translate in Y by offset
-                        aTransform.translate(0.0, fLineDist);
-
-                        // move back and rotate
-                        aTransform.rotate(rDecTrans.getRotate());
-                        aTransform.translate(rDecTrans.getTranslate().getX(), rDecTrans.getTranslate().getY());
-
-                        // add transform primitive
-                        const Primitive2DSequence aContent(&aNewPrimitive, 1);
-                        rTarget.push_back(Primitive2DReference(new TransformPrimitive2D(aTransform, aContent)));
-                    }
+                    impCreateTextLine(rTarget, rDecTrans, aUnscaledTransform, getFontUnderline(), aTextLayouter.getUnderlineOffset(),
+                                      aTextLayouter.getUnderlineHeight(), fTextWidth, getTextlineColor());
                 }
 
                 if(bStrikeoutUsed)
@@ -347,7 +367,7 @@ namespace drawinglayer
                         double fStrikeoutOffset(aTextLayouter.getStrikeoutOffset());
                         bool bDoubleLine(false);
 
-                        // set Underline attribute
+                        // set line attribute
                         switch(getFontStrikeout())
                         {
                             default : // case primitive2d::FONT_STRIKEOUT_SINGLE:
@@ -483,6 +503,16 @@ namespace drawinglayer
                 }
                 else
                 {
+                    // prepare TextLayouter
+                    const bool bNoDXArray(getDXArray().empty());
+                    TextLayouterDevice aTextLayouter;
+
+                    if(bNoDXArray)
+                    {
+                        // ..but only completely when no DXArray
+                        aTextLayouter.setFontAttributes(getFontAttributes(), rDecTrans.getScale().getX(), rDecTrans.getScale().getY());
+                    }
+
                     // do iterate over single words
                     while(aNextWordBoundary.startPos != aNextWordBoundary.endPos)
                     {
@@ -492,37 +522,56 @@ namespace drawinglayer
 
                         // prepare transform for the single word
                         basegfx::B2DHomMatrix aNewTransform;
-                        double fDistance(0.0);
+                        ::std::vector< double > aNewDXArray;
                         const bool bNewStartIsNotOldStart(nNewTextStart > getTextPosition());
 
-                        if(bNewStartIsNotOldStart)
+                        if(!bNoDXArray)
                         {
-                            // needs to be moved to a new start position (get from DXArray)
-                            const sal_uInt32 nIndex(static_cast< sal_uInt32 >(nNewTextStart - getTextPosition()));
-                            fDistance = getDXArray()[nIndex - 1];
-                            aNewTransform.translate(fDistance, 0.0);
+                            // prepare new DXArray for the single word
+                            aNewDXArray = ::std::vector< double >(
+                                getDXArray().begin() + static_cast< sal_uInt32 >(nNewTextStart - getTextPosition()),
+                                getDXArray().begin() + static_cast< sal_uInt32 >(nNewTextEnd - getTextPosition()));
                         }
 
-                        aNewTransform *= rDecTrans.getB2DHomMatrix();
-
-                        // prepare new DXArray for the single word
-                        ::std::vector< double > aNewDXArray(
-                            getDXArray().begin() + static_cast< sal_uInt32 >(nNewTextStart - getTextPosition()),
-                            getDXArray().begin() + static_cast< sal_uInt32 >(nNewTextEnd - getTextPosition()));
-
                         if(bNewStartIsNotOldStart)
                         {
-                            // DXArray values need to be corrected
-                            const sal_uInt32 nArraySize(aNewDXArray.size());
+                            // needs to be moved to a new start position
+                            double fOffset(0.0);
 
-                            for(sal_uInt32 a(0); a < nArraySize; a++)
+                            if(bNoDXArray)
                             {
-                                aNewDXArray[a] -= fDistance;
+                                // evaluate using TextLayouter
+                                fOffset = aTextLayouter.getTextWidth(getText(), getTextPosition(), nNewTextStart);
+                            }
+                            else
+                            {
+                                // get from DXArray
+                                const sal_uInt32 nIndex(static_cast< sal_uInt32 >(nNewTextStart - getTextPosition()));
+                                fOffset = getDXArray()[nIndex - 1];
+                            }
+
+                            // apply needed offset to transformation
+                            aNewTransform.translate(fOffset, 0.0);
+
+                            if(!bNoDXArray)
+                            {
+                                // DXArray values need to be corrected with the offset, too
+                                const sal_uInt32 nArraySize(aNewDXArray.size());
+
+                                for(sal_uInt32 a(0); a < nArraySize; a++)
+                                {
+                                    aNewDXArray[a] -= fOffset;
+                                }
                             }
                         }
 
-                        // create geometry content for the single word
+                        // add text transformation to new transformation
+                        aNewTransform *= rDecTrans.getB2DHomMatrix();
+
+                        // create geometry content for the single word. Do not forget
+                        // to use the new transformation
                         basegfx::DecomposedB2DHomMatrixContainer aDecTrans(aNewTransform);
+
                         impCreateGeometryContent(rTarget, aDecTrans, getText(), nNewTextStart,
                             nNewTextEnd - nNewTextStart, aNewDXArray, aNewFontAttributes);
 
@@ -530,6 +579,7 @@ namespace drawinglayer
                         aNextWordBoundary = xLocalBreakIterator->nextWord(
                             getText(), aNextWordBoundary.endPos, getLocale(),
                             ::com::sun::star::i18n::WordType::ANYWORD_IGNOREWHITESPACES);
+
                         impCorrectTextBoundary(aNextWordBoundary);
                     }
                 }
@@ -542,8 +592,8 @@ namespace drawinglayer
             basegfx::DecomposedB2DHomMatrixContainer aDecTrans(getTextTransform());
             Primitive2DSequence aRetval;
 
-            // create basic geometry such as SimpleTextPrimitive, Underline,
-            // Strikeuot, etc...
+            // create basic geometry such as SimpleTextPrimitive, Overline, Underline,
+            // Strikeout, etc...
             if(getWordLineMode())
             {
                 // support for single word mode
@@ -690,7 +740,9 @@ namespace drawinglayer
             const basegfx::BColor& rFontColor,
 
             // local parameters
+            const basegfx::BColor& rOverlineColor,
             const basegfx::BColor& rTextlineColor,
+            FontUnderline eFontOverline,
             FontUnderline eFontUnderline,
             bool bUnderlineAbove,
             FontStrikeout eFontStrikeout,
@@ -701,7 +753,9 @@ namespace drawinglayer
             FontRelief eFontRelief,
             bool bShadow)
         :   TextSimplePortionPrimitive2D(rNewTransform, rText, aTextPosition, aTextLength, rDXArray, rFontAttributes, rLocale, rFontColor),
+            maOverlineColor(rOverlineColor),
             maTextlineColor(rTextlineColor),
+            meFontOverline(eFontOverline),
             meFontUnderline(eFontUnderline),
             meFontStrikeout(eFontStrikeout),
             meFontEmphasisMark(eFontEmphasisMark),
@@ -720,7 +774,9 @@ namespace drawinglayer
             {
                 const TextDecoratedPortionPrimitive2D& rCompare = (TextDecoratedPortionPrimitive2D&)rPrimitive;
 
-                return (getTextlineColor() == rCompare.getTextlineColor()
+                return (getOverlineColor() == rCompare.getOverlineColor()
+                    && getTextlineColor() == rCompare.getTextlineColor()
+                    && getFontOverline() == rCompare.getFontOverline()
                     && getFontUnderline() == rCompare.getFontUnderline()
                     && getFontStrikeout() == rCompare.getFontStrikeout()
                     && getFontEmphasisMark() == rCompare.getFontEmphasisMark()

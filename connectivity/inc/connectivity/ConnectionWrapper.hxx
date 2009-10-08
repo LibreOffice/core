@@ -38,6 +38,7 @@
 #include <com/sun/star/sdbc/XConnection.hpp>
 #include <comphelper/broadcasthelper.hxx>
 #include "connectivity/CommonTools.hxx"
+#include "connectivity/dbtoolsdllapi.hxx"
 
 namespace connectivity
 {
@@ -50,7 +51,7 @@ namespace connectivity
                                         ::com::sun::star::lang::XUnoTunnel
                                 > OConnection_BASE;
 
-    class OConnectionWrapper :   public OConnection_BASE
+    class OOO_DLLPUBLIC_DBTOOLS OConnectionWrapper :     public OConnection_BASE
     {
     protected:
         ::com::sun::star::uno::Reference< ::com::sun::star::uno::XAggregation > m_xProxyConnection;

@@ -36,6 +36,7 @@
 #endif
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#include <com/sun/star/loader/CannotActivateFactoryException.hpp>
 #include <com/sun/star/linguistic2/XDictionaryList.hpp>
 #include <com/sun/star/frame/XDesktop.hpp>
 #include <com/sun/star/frame/XFrame.hpp>
@@ -1101,7 +1102,7 @@ IMPL_LINK( OfaTreeOptionsDialog, SelectHdl_Impl, Timer*, EMPTYARG )
     SvLBoxEntry* pParent = pBox->GetParent(pEntry);
     pBox->EndSelection();
 
-    DBG_ASSERT(!bInSelectHdl_Impl, "Timeout handler called twice")
+    DBG_ASSERT(!bInSelectHdl_Impl, "Timeout handler called twice");
     if(bInSelectHdl_Impl || pCurrentPageEntry == pEntry)
         return 0;
     //#111938# lock the SelectHdl_Impl to prevent multiple executes
@@ -1242,7 +1243,7 @@ IMPL_LINK( OfaTreeOptionsDialog, SelectHdl_Impl, Timer*, EMPTYARG )
                 rColPage.Construct();
             }
 
-            DBG_ASSERT( pPageInfo->m_pPage, "tabpage could not created")
+            DBG_ASSERT( pPageInfo->m_pPage, "tabpage could not created");
             if ( pPageInfo->m_pPage )
             {
                 SvtViewOptions aTabPageOpt( E_TABPAGE, String::CreateFromInt32( pPageInfo->m_nPageId ) );
@@ -1537,7 +1538,7 @@ SfxItemSet* OfaTreeOptionsDialog::CreateItemSet( sal_uInt16 nId )
             pRet = new SfxItemSet(
                 SFX_APP()->GetPool(),
                 SID_ATTR_METRIC, SID_ATTR_SPELL,
-                SID_AUTOSPELL_CHECK, SID_AUTOSPELL_MARKOFF,
+                SID_AUTOSPELL_CHECK, SID_AUTOSPELL_CHECK,
                 SID_ATTR_QUICKLAUNCHER, SID_ATTR_QUICKLAUNCHER,
                 SID_ATTR_YEAR2000, SID_ATTR_YEAR2000,
                 SID_HTML_MODE, SID_HTML_MODE,
@@ -1576,7 +1577,7 @@ SfxItemSet* OfaTreeOptionsDialog::CreateItemSet( sal_uInt16 nId )
         case SID_LANGUAGE_OPTIONS :
         {
             pRet = new SfxItemSet(SFX_APP()->GetPool(),
-                    SID_ATTR_LANGUAGE, SID_AUTOSPELL_MARKOFF,
+                    SID_ATTR_LANGUAGE, SID_AUTOSPELL_CHECK,
                     SID_ATTR_CHAR_CJK_LANGUAGE, SID_ATTR_CHAR_CTL_LANGUAGE,
                     SID_OPT_LOCALE_CHANGED, SID_OPT_LOCALE_CHANGED,
                     SID_SET_DOCUMENT_LANGUAGE, SID_SET_DOCUMENT_LANGUAGE,
@@ -1629,22 +1630,6 @@ SfxItemSet* OfaTreeOptionsDialog::CreateItemSet( sal_uInt16 nId )
                         }
 
                         pRet->Put(SfxBoolItem(SID_AUTOSPELL_CHECK, bVal));
-                }
-
-                if(SFX_ITEM_AVAILABLE <= pDispatch->QueryState(SID_AUTOSPELL_MARKOFF, pItem))
-                {
-                    pClone = pItem->Clone();
-                    pRet->Put(*pClone);
-                    delete pClone;
-                }
-                else
-                {
-                    sal_Bool bVal = sal_False;
-                    if (xProp.is())
-                    {
-                        xProp->getPropertyValue( String::CreateFromAscii( UPN_IS_SPELL_HIDE) ) >>= bVal;
-                    }
-                    pRet->Put(SfxBoolItem(SID_AUTOSPELL_MARKOFF, bVal));
                 }
             }
             pRet->Put( SfxBoolItem( SID_SET_DOCUMENT_LANGUAGE, bIsForSetDocumentLanguage ) );
@@ -1835,19 +1820,6 @@ void OfaTreeOptionsDialog::ApplyLanguageOptions(const SfxItemSet& rSet)
             }
         }
 
-        if( SFX_ITEM_SET == rSet.GetItemState(SID_AUTOSPELL_MARKOFF, sal_False, &pItem ))
-        {
-            sal_Bool bHideSpell = ((const SfxBoolItem*)pItem)->GetValue();
-            pDispatch->Execute(SID_AUTOSPELL_MARKOFF, SFX_CALLMODE_ASYNCHRON|SFX_CALLMODE_RECORD, pItem, 0L);
-
-            if (xProp.is())
-            {
-                xProp->setPropertyValue(
-                        String::CreateFromAscii(UPN_IS_SPELL_HIDE),
-                        makeAny(bHideSpell) );
-            }
-        }
-
         if( bSaveSpellCheck )
         {
             //! the config item has changed since we modified the
@@ -1928,16 +1900,25 @@ void OfaTreeOptionsDialog::Initialize( const Reference< XFrame >& _xFrame )
             // Disable Online Update page if service not installed
             if( RID_SVXPAGE_ONLINEUPDATE == nPageId || RID_SVXPAGE_IMPROVEMENT == nPageId )
             {
-                    bImprovePage = ( RID_SVXPAGE_IMPROVEMENT == nPageId );
+                bImprovePage = ( RID_SVXPAGE_IMPROVEMENT == nPageId );
                 ::rtl::OUString sService = bImprovePage ?
                     C2U("com.sun.star.oooimprovement.CoreController") :
                     C2U("com.sun.star.setup.UpdateCheck");
-                Reference < XMultiServiceFactory > xFactory( ::comphelper::getProcessServiceFactory() );
-                Reference < XInterface > xService( xFactory->createInstance( sService ) );
 
-                if( ! xService.is() )
+                try
+                {
+                    Reference < XMultiServiceFactory > xFactory( ::comphelper::getProcessServiceFactory() );
+                    Reference < XInterface > xService( xFactory->createInstance( sService ) );
+
+                    if( ! xService.is() )
+                        continue;
+                }
+                catch ( ::com::sun::star::loader::CannotActivateFactoryException& )
+                {
                     continue;
-                else if ( bImprovePage )
+                }
+
+                if ( bImprovePage )
                 {
                     SvxEmptyPage* pTempPage = new SvxEmptyPage( this );
                     sPageTitle = pTempPage->GetText();

@@ -89,6 +89,7 @@ extern const XMLPropertyMapEntry aXMLSDPresPageProps_onlyHeadersFooter[];
 #define XML_SD_TYPE_MEASURE_PLACING                 (XML_SD_TYPES_START + 31 )
 #define XML_SD_TYPE_CONTROL_BORDER                  (XML_SD_TYPES_START + 32 )
 #define XML_SD_TYPE_CONTROL_BORDER_COLOR            (XML_SD_TYPES_START + 33 )
+#define XML_SD_TYPE_IMAGE_SCALE_MODE                (XML_SD_TYPES_START + 34 )
 
 // 3D property types
 #define XML_SD_TYPE_BACKFACE_CULLING                (XML_SD_TYPES_START + 40 )

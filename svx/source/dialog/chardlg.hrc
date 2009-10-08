@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: chardlg.hrc,v $
- * $Revision: 1.15 $
+ * $Revision: 1.15.212.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -76,41 +76,56 @@
 
 // EffectsPage --------------------------------------------------------------
 
-#define FT_UNDERLINE            200
-#define LB_UNDERLINE            201
-#define FT_UNDERLINE_COLOR      202
-#define LB_UNDERLINE_COLOR      203
-#define FT_STRIKEOUT            204
-#define LB_STRIKEOUT            205
-#define CB_INDIVIDUALWORDS      206
-#define FT_EMPHASIS             207
-#define LB_EMPHASIS             208
-#define FT_POSITION             209
-#define LB_POSITION             210
-#define FT_FONTCOLOR            211
-#define LB_FONTCOLOR            212
+#define FT_FONTCOLOR            201
+#define LB_FONTCOLOR            202
 
-#define FT_EFFECTS              220
-#define LB_EFFECTS              221
-#define LB_EFFECTS2             222
-#define CB_OUTLINE              223
-#define CB_SHADOW               224
-#define CB_BLINKING             225
-#define FT_RELIEF               226
-#define LB_RELIEF               227
-#define CB_CHARHIDDEN           228
+#define FT_EFFECTS              203
+#define LB_EFFECTS              204
+#define LB_EFFECTS2             205
 
-#define WIN_EFFECTS_PREVIEW     231
-#define FT_EFFECTS_FONTTYPE     232
+#define FT_RELIEF               206
+#define LB_RELIEF               207
 
-#define STR_EFFECTS_TRANSPARENT 240
-#define STR_EFFECTS_CAPITALS    241
-#define STR_EFFECTS_LOWERCASE   242
-#define STR_EFFECTS_TITLE       243
-#define STR_EFFECTS_SMALL       244
-#define STR_EFFECTS_OUTLINE     245
-#define STR_EFFECTS_SHADOW      246
-#define STR_EFFECTS_BLINKING    247
+#define CB_OUTLINE              208
+#define CB_SHADOW               209
+#define CB_BLINKING             210
+#define CB_CHARHIDDEN           211
+
+#define FL_EFFECTS_VERTICAL     220
+
+#define FT_OVERLINE             221
+#define LB_OVERLINE             222
+#define FT_OVERLINE_COLOR       223
+#define LB_OVERLINE_COLOR       224
+
+#define FT_STRIKEOUT            225
+#define LB_STRIKEOUT            226
+
+#define FT_UNDERLINE            227
+#define LB_UNDERLINE            228
+#define FT_UNDERLINE_COLOR      229
+#define LB_UNDERLINE_COLOR      230
+
+#define CB_INDIVIDUALWORDS      231
+
+#define FL_EFFECTS_ASIAN        240
+
+#define FT_EMPHASIS             241
+#define LB_EMPHASIS             242
+#define FT_POSITION             243
+#define LB_POSITION             244
+
+#define WIN_EFFECTS_PREVIEW     251
+#define FT_EFFECTS_FONTTYPE     252
+
+#define STR_EFFECTS_TRANSPARENT 260
+#define STR_EFFECTS_CAPITALS    261
+#define STR_EFFECTS_LOWERCASE   262
+#define STR_EFFECTS_TITLE       263
+#define STR_EFFECTS_SMALL       264
+#define STR_EFFECTS_OUTLINE     265
+#define STR_EFFECTS_SHADOW      266
+#define STR_EFFECTS_BLINKING    267
 
 // PositionPage -------------------------------------------------------------
 

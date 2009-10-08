@@ -630,9 +630,11 @@ SfxItemPropertyMap* ImplGetSvxControlShapePropertyMap()
         { MAP_CHAR_LEN("ControlBorder"),                    0,  &::getCppuType((const sal_Int16*)0),        0, 0 },
         { MAP_CHAR_LEN("ControlBorderColor"),               0,  &::getCppuType((const sal_Int32*)0),        0, 0 },
         { MAP_CHAR_LEN("ControlSymbolColor"),               0,  &::getCppuType((const sal_Int16*)0),        0, 0 },
+        { MAP_CHAR_LEN("ImageScaleMode"),                   0,  &::getCppuType((const sal_Int16*)0),        0, 0 },
         { MAP_CHAR_LEN(UNO_NAME_MISC_OBJ_MOVEPROTECT),      SDRATTR_OBJMOVEPROTECT, &::getBooleanCppuType(),0, 0},
         { MAP_CHAR_LEN(UNO_NAME_MISC_OBJ_SIZEPROTECT),      SDRATTR_OBJSIZEPROTECT, &::getBooleanCppuType(),0, 0},
         { MAP_CHAR_LEN("ControlTextEmphasis"),              0,  &::getCppuType((const sal_Int16*)0),        0, 0 },
+        { MAP_CHAR_LEN("ControlWritingMode"),               0,  &::cppu::UnoType< sal_Int16 >::get(), 0, 0},
         // the following properties are handled by SvxShape
         { MAP_CHAR_LEN("Transformation"),           OWN_ATTR_TRANSFORMATION     , &::getCppuType((const struct com::sun::star::drawing::HomogenMatrix3*)0), 0, 0 },
         { MAP_CHAR_LEN(UNO_NAME_MISC_OBJ_ZORDER),   OWN_ATTR_ZORDER             , &::getCppuType((const sal_Int32*)0),      0,      0},
@@ -955,7 +957,7 @@ void SvxUnoPropertyMapProvider::Sort(USHORT nId)
 
 SfxItemPropertyMap* SvxUnoPropertyMapProvider::GetMap(UINT16 nPropertyId)
 {
-    DBG_ASSERT(nPropertyId < SVXMAP_END, "Id ?" )
+    DBG_ASSERT(nPropertyId < SVXMAP_END, "Id ?" );
     if(!aMapArr[nPropertyId]) {
         switch(nPropertyId) {
             case SVXMAP_SHAPE: aMapArr[SVXMAP_SHAPE]=ImplGetSvxShapePropertyMap(); break;

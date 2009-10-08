@@ -297,14 +297,14 @@ sal_uInt32 CheckPasswd_Impl
                             sal_Bool bRetry = sal_True;
                             sal_Bool bGotPasswd = sal_False;
                             ::rtl::OUString aPassword;
+                            ::com::sun::star::task::PasswordRequestMode nDlgMode = ::com::sun::star::task::PasswordRequestMode_PASSWORD_ENTER;
 
                             while( bRetry )
                             {
                                 bRetry = sal_False;
 
-                                RequestDocumentPassword* pPasswordRequest = new RequestDocumentPassword(
-                                    ::com::sun::star::task::PasswordRequestMode_PASSWORD_ENTER,
-                                    INetURLObject( pFile->GetOrigURL() ).GetName( INetURLObject::DECODE_WITH_CHARSET ) );
+                                RequestDocumentPassword* pPasswordRequest = new RequestDocumentPassword( nDlgMode,
+                                    INetURLObject( pFile->GetOrigURL() ).GetMainURL( INetURLObject::DECODE_WITH_CHARSET ) );
 
                                 Reference< XInteractionRequest > rRequest( pPasswordRequest );
                                 xInteractionHandler->handle( rRequest );
@@ -330,7 +330,7 @@ sal_uInt32 CheckPasswd_Impl
                                     catch( const packages::WrongPasswordException& )
                                     {
                                         // reask for the password
-                                        ErrorHandler::HandleError( ERRCODE_SFX_WRONGPASSWORD );
+                                        nDlgMode = ::com::sun::star::task::PasswordRequestMode_PASSWORD_REENTER;
                                         bRetry = sal_True;
                                     }
                                     catch( const uno::Exception& )

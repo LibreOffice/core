@@ -860,47 +860,55 @@ SdrHdl* SdrMeasureObj::GetHdl(sal_uInt32 nHdlNum) const
     return pHdl;
 }
 
-FASTBOOL SdrMeasureObj::HasSpecialDrag() const
+////////////////////////////////////////////////////////////////////////////////////////////////////
+
+bool SdrMeasureObj::hasSpecialDrag() const
 {
-    return TRUE;
+    return true;
 }
 
-FASTBOOL SdrMeasureObj::BegDrag(SdrDragStat& rDrag) const
+bool SdrMeasureObj::beginSpecialDrag(SdrDragStat& rDrag) const
 {
-    const SdrHdl* pHdl=rDrag.GetHdl();
-    if (pHdl!=NULL) {
-        sal_uInt32 nHdlNum(pHdl->GetObjHdlNum());
-        if (nHdlNum!=2L && nHdlNum!=3L) {
-            rDrag.SetEndDragChangesAttributes(TRUE);
+    const SdrHdl* pHdl = rDrag.GetHdl();
+
+    if(pHdl)
+    {
+        const sal_uInt32 nHdlNum(pHdl->GetObjHdlNum());
+
+        if(nHdlNum != 2 && nHdlNum != 3)
+        {
+            rDrag.SetEndDragChangesAttributes(true);
         }
-        ImpMeasureRec* pMR=new ImpMeasureRec; // #48544#
-        ImpTakeAttr(*pMR);
-        rDrag.SetUser(pMR);
+
+        return true;
     }
-    return pHdl!=NULL;
+
+    return false;
 }
 
-FASTBOOL SdrMeasureObj::MovDrag(SdrDragStat& rDrag) const
+bool SdrMeasureObj::applySpecialDrag(SdrDragStat& rDrag)
 {
-    ImpMeasureRec* pMR=(ImpMeasureRec*)rDrag.GetUser();
-    if (pMR!=NULL) { // #48544#
-        ImpTakeAttr(*pMR);
-        ImpEvalDrag(*pMR,rDrag);
-    }
-    return TRUE;
-}
+    ImpMeasureRec aMeasureRec;
+    const SdrHdl* pHdl = rDrag.GetHdl();
+    const sal_uInt32 nHdlNum(pHdl->GetObjHdlNum());
 
-FASTBOOL SdrMeasureObj::EndDrag(SdrDragStat& rDrag)
-{
-    Rectangle aBoundRect0; if (pUserCall!=NULL) aBoundRect0=GetLastBoundRect();
-    ImpMeasureRec* pMR=(ImpMeasureRec*)rDrag.GetUser(); // #48544#
-    ImpMeasureRec aRec0;
-    ImpTakeAttr(aRec0);
-    const SdrHdl* pHdl=rDrag.GetHdl();
-    sal_uInt32 nHdlNum(pHdl->GetObjHdlNum());
-    switch (nHdlNum) {
-        case 2: aPt1=pMR->aPt1; SetTextDirty(); break;
-        case 3: aPt2=pMR->aPt2; SetTextDirty(); break;
+    ImpTakeAttr(aMeasureRec);
+    ImpEvalDrag(aMeasureRec, rDrag);
+
+    switch (nHdlNum)
+    {
+        case 2:
+        {
+            aPt1 = aMeasureRec.aPt1;
+            SetTextDirty();
+            break;
+        }
+        case 3:
+        {
+            aPt2 = aMeasureRec.aPt2;
+            SetTextDirty();
+            break;
+        }
         default:
         {
             switch(nHdlNum)
@@ -908,14 +916,17 @@ FASTBOOL SdrMeasureObj::EndDrag(SdrDragStat& rDrag)
                 case 0:
                 case 1:
                 {
-                    if(pMR->nHelpline1Len!=aRec0.nHelpline1Len)
+                    ImpMeasureRec aOrigMeasureRec;
+                    ImpTakeAttr(aOrigMeasureRec);
+
+                    if(aMeasureRec.nHelpline1Len != aOrigMeasureRec.nHelpline1Len)
                     {
-                        SetObjectItem(SdrMeasureHelpline1LenItem(pMR->nHelpline1Len));
+                        SetObjectItem(SdrMeasureHelpline1LenItem(aMeasureRec.nHelpline1Len));
                     }
 
-                    if(pMR->nHelpline2Len!=aRec0.nHelpline2Len)
+                    if(aMeasureRec.nHelpline2Len != aOrigMeasureRec.nHelpline2Len)
                     {
-                        SetObjectItem(SdrMeasureHelpline2LenItem(pMR->nHelpline2Len));
+                        SetObjectItem(SdrMeasureHelpline2LenItem(aMeasureRec.nHelpline2Len));
                     }
 
                     break;
@@ -924,43 +935,30 @@ FASTBOOL SdrMeasureObj::EndDrag(SdrDragStat& rDrag)
                 case 4:
                 case 5:
                 {
-                    if (pMR->nLineDist!=aRec0.nLineDist)
+                    ImpMeasureRec aOrigMeasureRec;
+                    ImpTakeAttr(aOrigMeasureRec);
+
+                    if(aMeasureRec.nLineDist != aOrigMeasureRec.nLineDist)
                     {
-                        SetObjectItem(SdrMeasureLineDistItem(pMR->nLineDist));
+                        SetObjectItem(SdrMeasureLineDistItem(aMeasureRec.nLineDist));
                     }
 
-                    if(pMR->bBelowRefEdge!=aRec0.bBelowRefEdge)
+                    if(aMeasureRec.bBelowRefEdge != aOrigMeasureRec.bBelowRefEdge)
                     {
-                        SetObjectItem(SdrMeasureBelowRefEdgeItem(pMR->bBelowRefEdge));
+                        SetObjectItem(SdrMeasureBelowRefEdgeItem(aMeasureRec.bBelowRefEdge));
                     }
                 }
             }
         }
     } // switch
+
     SetRectsDirty();
-
-    // Here is a SetCHanged() missing, object gets changed.
     SetChanged();
-    BroadcastObjectChange();
 
-    if (pMR!=NULL) {
-        delete pMR; // #48544#
-        rDrag.SetUser(NULL);
-    }
-    SendUserCall(SDRUSERCALL_RESIZE,aBoundRect0);
-    return TRUE;
+    return true;
 }
 
-void SdrMeasureObj::BrkDrag(SdrDragStat& rDrag) const
-{
-    ImpMeasureRec* pMR=(ImpMeasureRec*)rDrag.GetUser();
-    if (pMR!=NULL) {
-        delete pMR; // #48544#
-        rDrag.SetUser(NULL);
-    }
-}
-
-XubString SdrMeasureObj::GetDragComment(const SdrDragStat& /*rDrag*/, FASTBOOL /*bUndoDragComment*/, FASTBOOL /*bCreateComment*/) const
+String SdrMeasureObj::getSpecialDragComment(const SdrDragStat& /*rDrag*/) const
 {
     XubString aStr;
     return aStr;
@@ -1034,20 +1032,7 @@ void SdrMeasureObj::ImpEvalDrag(ImpMeasureRec& rRec, const SdrDragStat& rDrag) c
     } // switch
 }
 
-basegfx::B2DPolyPolygon SdrMeasureObj::TakeDragPoly(const SdrDragStat& rDrag) const
-{
-    basegfx::B2DPolyPolygon aRetval;
-    ImpMeasureRec* pMR = (ImpMeasureRec*)rDrag.GetUser(); // #48544#
-
-    if(pMR)
-    {
-        ImpMeasurePoly aMPol;
-        ImpCalcGeometrics(*pMR, aMPol);
-        aRetval.append(ImpCalcXPoly(aMPol));
-    }
-
-    return aRetval;
-}
+////////////////////////////////////////////////////////////////////////////////////////////////////
 
 FASTBOOL SdrMeasureObj::BegCreate(SdrDragStat& rStat)
 {

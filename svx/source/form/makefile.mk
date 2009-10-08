@@ -8,7 +8,7 @@
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.35 $
+# $Revision: 1.35.2.2 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -105,7 +105,9 @@ SLOFILES = \
     $(SLO)$/datalistener.obj \
     $(SLO)$/fmscriptingenv.obj \
     $(SLO)$/stringlistresource.obj \
-    $(SLO)$/databaselocationinput.obj
+    $(SLO)$/databaselocationinput.obj \
+    $(SLO)$/delayedevent.obj \
+    $(SLO)$/formcontrolfactory.obj
 
 .IF "$(OS)$(CPU)"=="SOLARISI"
 NOOPTFILES=$(SLO)$/fmprop.obj

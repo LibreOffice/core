@@ -93,10 +93,10 @@ struct TKeyValueFunc : ::std::binary_function<OSortIndex::TIntValuePairVector::v
     Freeze();
 
     ::vos::ORef<OKeySet> pKeySet = new OKeySet();
-    pKeySet->reserve(m_aKeyValues.size());
+    pKeySet->get().reserve(m_aKeyValues.size());
     ::std::transform(m_aKeyValues.begin()
                     ,m_aKeyValues.end()
-                    ,::std::back_inserter(*pKeySet)
+                    ,::std::back_inserter(pKeySet->get())
                     ,::std::select1st<TIntValuePairVector::value_type>());
     pKeySet->setFrozen();
     return pKeySet;

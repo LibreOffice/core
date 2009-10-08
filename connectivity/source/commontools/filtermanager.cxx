@@ -63,12 +63,10 @@ namespace dbtools
     }
 
     //--------------------------------------------------------------------
-    void FilterManager::initialize( const Reference< XPropertySet >& _rxComponent, const Reference< XPropertySet >& _rxComponentAggregate )
+    void FilterManager::initialize( const Reference< XPropertySet >& _rxComponentAggregate )
     {
-        OSL_ENSURE( !m_xComponent.is(), "FilterManager::initialize: already initialized!" );
-        m_xComponent          = _rxComponent;
         m_xComponentAggregate = _rxComponentAggregate;
-        OSL_ENSURE( m_xComponent.is() && m_xComponentAggregate.is(), "FilterManager::initialize: invalid arguments!" );
+        OSL_ENSURE( m_xComponentAggregate.is(), "FilterManager::initialize: invalid arguments!" );
 
         if ( m_xComponentAggregate.is() )
             m_xComponentAggregate->setPropertyValue( OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_APPLYFILTER), makeAny( (sal_Bool)sal_True ) );
@@ -77,7 +75,6 @@ namespace dbtools
     //--------------------------------------------------------------------
     void FilterManager::dispose( )
     {
-        m_xComponent.clear();
         m_xComponentAggregate.clear();
     }
 
@@ -160,11 +157,13 @@ namespace dbtools
         for ( i = getFirstApplicableFilterIndex(); i < FC_COMPONENT_COUNT; ++i )
         {
             if ( m_aFilterComponents[ i ].getLength() )
+            {
                 if ( nOnlyNonEmpty != -1 )
                     // it's the second non-empty component
                     break;
                 else
                     nOnlyNonEmpty = i;
+            }
         }
         if ( nOnlyNonEmpty == -1 )
         {

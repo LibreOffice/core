@@ -157,9 +157,6 @@ protected:
     MapMode                     aActualMapMode;
     Size                        aGridBig; // muss dann mal raus
     Size                        aGridFin; // muss dann mal raus
-    Size                        aGridSubdiv;
-    Fraction                    aGridWdtX;
-    Fraction                    aGridWdtY;
     SdrDragStat                 aDragStat;
     Rectangle                   aMaxWorkArea;
     SfxItemSet                  aDefaultAttr;
@@ -216,7 +213,6 @@ protected:
 
     // is this a preview renderer?
     unsigned                    mbPreviewRenderer : 1;
-    unsigned                    bBordVisibleOnlyLeftRight : 1;
 
     // flags for calc for suppressing OLE, CHART or DRAW objects
     unsigned                    mbHideOle : 1;
@@ -389,14 +385,14 @@ public:
     // SdrPaintWindow again. This means: the SdrPaintWindow is no longer safe after this closing call.
     SdrPaintWindow* BeginCompleteRedraw(OutputDevice* pOut);
     void DoCompleteRedraw(SdrPaintWindow& rPaintWindow, const Region& rReg, sdr::contact::ViewObjectContactRedirector* pRedirector = 0);
-    void EndCompleteRedraw(SdrPaintWindow& rPaintWindow);
+    void EndCompleteRedraw(SdrPaintWindow& rPaintWindow, bool bPaintFormLayer);
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////
     // used for the other applications basctl/sc/sw which call DrawLayer at PageViews
     // #i74769# Interface change to use common BeginCompleteRedraw/EndCompleteRedraw
     // #i76114# bDisableIntersect disables intersecting rReg with the Window's paint region
     SdrPaintWindow* BeginDrawLayers(OutputDevice* pOut, const Region& rReg, bool bDisableIntersect = false);
-    void EndDrawLayers(SdrPaintWindow& rPaintWindow);
+    void EndDrawLayers(SdrPaintWindow& rPaintWindow, bool bPaintFormLayer);
 
 protected:
     ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -412,7 +408,6 @@ public:
     BOOL IsPageVisible() const { return bPageVisible; }             // Seite (weisse Flaeche) malen oder nicht
     BOOL IsPageBorderVisible() const { return bPageBorderVisible; } // Seite (weisse Flaeche) malen oder nicht
     BOOL IsBordVisible() const { return bBordVisible; }             // Seitenrandlinie malen oder nicht
-    BOOL IsBordVisibleOnlyLeftRight() const { return bBordVisibleOnlyLeftRight; } // draw only left and right border
     BOOL IsGridVisible() const { return bGridVisible; }             // Rastergitter malen oder nicht
     BOOL IsGridFront() const { return bGridFront  ; }               // Rastergitter ueber die Objekte druebermalen oder dahinter
     BOOL IsHlplVisible() const { return bHlplVisible; }             // Hilfslinien der Seiten malen oder nicht
@@ -422,7 +417,6 @@ public:
     void SetPageVisible(bool bOn = true) { bPageVisible=bOn; InvalidateAllWin(); }
     void SetPageBorderVisible(bool bOn = true) { bPageBorderVisible=bOn; InvalidateAllWin(); }
     void SetBordVisible(bool bOn = true) { bBordVisible=bOn; InvalidateAllWin(); }
-    void SetBordVisibleOnlyLeftRight(bool bOn = true) { bBordVisibleOnlyLeftRight=bOn; InvalidateAllWin(); }
     void SetGridVisible(bool bOn = true) { bGridVisible=bOn; InvalidateAllWin(); }
     void SetGridFront(bool bOn = true) { bGridFront  =bOn; InvalidateAllWin(); }
     void SetHlplVisible(bool bOn = true) { bHlplVisible=bOn; InvalidateAllWin(); }
@@ -441,18 +435,10 @@ public:
     void setHideChart(bool bNew) { if(bNew != (bool)mbHideChart) mbHideChart = bNew; }
     void setHideDraw(bool bNew) { if(bNew != (bool)mbHideDraw) mbHideDraw = bNew; }
 
-    /*alt*/void SetGridCoarse(const Size& rSiz) { aGridBig=rSiz; SetGridWidth(Fraction(rSiz.Width(),1),Fraction(rSiz.Height(),1)); }
-    /*alt*/void SetGridFine(const Size& rSiz) { aGridFin=rSiz; if (aGridFin.Height()==0) aGridFin.Height()=aGridFin.Width(); if (bGridVisible) InvalidateAllWin(); } // #40479#
-    /*alt*/const Size& GetGridCoarse() const { return aGridBig; }
-    /*alt*/const Size& GetGridFine() const { return aGridFin; }
-
-    // SetGridSubdivision(): Werte fuer X und Y sind die Anzahl der
-    // Zwischenraeume, also = Anzahl der Zwischenpunkte+1
-    void SetGridWidth(const Fraction& rX, const Fraction& rY) { aGridWdtX=rX; aGridWdtY=rY; if (bGridVisible) InvalidateAllWin(); }
-    void SetGridSubdivision(const Size& rSubdiv) { aGridSubdiv=rSubdiv; if (bGridVisible) InvalidateAllWin(); }
-    const Fraction& GetGridWidthX() const { return aGridWdtX; }
-    const Fraction& GetGridWidthY() const { return aGridWdtY; }
-    const Size& GetGridSubdivision() const { return aGridSubdiv; }
+    void SetGridCoarse(const Size& rSiz) { aGridBig=rSiz; }
+    void SetGridFine(const Size& rSiz) { aGridFin=rSiz; if (aGridFin.Height()==0) aGridFin.Height()=aGridFin.Width(); if (bGridVisible) InvalidateAllWin(); } // #40479#
+    const Size& GetGridCoarse() const { return aGridBig; }
+    const Size& GetGridFine() const { return aGridFin; }
 
     void InvalidateAllWin();
     void InvalidateAllWin(const Rectangle& rRect, BOOL bPlus1Pix=FALSE);

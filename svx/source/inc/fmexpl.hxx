@@ -46,28 +46,13 @@
 #include <com/sun/star/container/XContainerListener.hpp>
 #include <com/sun/star/container/XContainer.hpp>
 
-
 #include <svtools/svtreebx.hxx>
 
-#ifndef _DIALOG_HXX //autogen
 #include <vcl/dialog.hxx>
-#endif
-
-#ifndef _GROUP_HXX //autogen
 #include <vcl/group.hxx>
-#endif
-
-#ifndef _BUTTON_HXX //autogen
 #include <vcl/button.hxx>
-#endif
-
-#ifndef _FIXED_HXX //autogen
 #include <vcl/fixed.hxx>
-#endif
-
-#ifndef _EDIT_HXX //autogen
 #include <vcl/edit.hxx>
-#endif
 #include <vcl/dockwin.hxx>
 #include <svx/fmview.hxx>
 
@@ -78,6 +63,8 @@ class SdrObjListIter;
 class FmFormShell;
 class SdrObject;
 class FmFormModel;
+class FmFormView;
+class SdrMarkList;
 
 //========================================================================
 class FmEntryData;

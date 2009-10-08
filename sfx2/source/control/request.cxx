@@ -31,13 +31,7 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sfx2.hxx"
-/*==================================================================
-// class SfxRequest
-//
-// (C) 1996 - 2000 StarDivision GmbH, Hamburg, Germany
-// $Author: rt $ $Date: 2008-04-11 12:25:48 $ $Revision: 1.21 $
-// $Logfile:   T:/sfx2/source/control/request.cxv  $ $Workfile:   REQUEST.CXX  $
-//------------------------------------------------------------------*/
+
 #include <com/sun/star/frame/DispatchStatement.hpp>
 #include <com/sun/star/container/XIndexReplace.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>

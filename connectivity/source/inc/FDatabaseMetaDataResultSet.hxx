@@ -47,6 +47,7 @@
 #include "connectivity/CommonTools.hxx"
 #include <comphelper/propertycontainer.hxx>
 #include "connectivity/FValue.hxx"
+#include "connectivity/dbtoolsdllapi.hxx"
 #include <comphelper/broadcasthelper.hxx>
 #include <vos/refernce.hxx>
 
@@ -66,7 +67,8 @@ namespace connectivity
     //  typedef ORefVector<ORowSetValue>    ORow;
     //  typedef ORefVector<ORow>            ORows;
 
-    class ODatabaseMetaDataResultSet :  public comphelper::OBaseMutex,
+    class OOO_DLLPUBLIC_DBTOOLS ODatabaseMetaDataResultSet :
+                                        public comphelper::OBaseMutex,
                                         public  ODatabaseMetaDataResultSet_BASE,
                                         public  ::comphelper::OPropertyContainer,
                                         public  ::comphelper::OPropertyArrayUsageHelper<ODatabaseMetaDataResultSet>

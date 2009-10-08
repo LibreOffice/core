@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: impedit2.cxx,v $
- * $Revision: 1.124 $
+ * $Revision: 1.124.40.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -895,11 +895,37 @@ EditSelection ImpEditEngine::MoveCursor( const KeyEvent& rKeyEvent, EditView* pE
                             break;
         case com::sun::star::awt::Key::MOVE_TO_BEGIN_OF_PARAGRAPH:
                             aPaM = CursorStartOfParagraph( aPaM );
+                            if( aPaM == aOldPaM )
+                            {
+                                aPaM = CursorLeft( aPaM, i18n::CharacterIteratorMode::SKIPCELL );
+                                aPaM = CursorStartOfParagraph( aPaM );
+                            }
                             bKeyModifySelection = false;
                             break;
         case com::sun::star::awt::Key::MOVE_TO_END_OF_PARAGRAPH:
                             aPaM = CursorEndOfParagraph( aPaM );
+                            if( aPaM == aOldPaM )
+                            {
+                                aPaM = CursorRight( aPaM, i18n::CharacterIteratorMode::SKIPCELL );
+                                aPaM = CursorEndOfParagraph( aPaM );
+                            }
                             bKeyModifySelection = false;
+                            break;
+        case com::sun::star::awt::Key::MOVE_TO_BEGIN_OF_DOCUMENT:
+                            aPaM = CursorStartOfDoc();
+                            bKeyModifySelection = false;
+                            break;
+        case com::sun::star::awt::Key::MOVE_TO_END_OF_DOCUMENT:
+                            aPaM = CursorEndOfDoc();
+                            bKeyModifySelection = false;
+                            break;
+        case com::sun::star::awt::Key::SELECT_TO_BEGIN_OF_LINE:
+                            aPaM = CursorStartOfLine( aPaM );
+                            bKeyModifySelection = true;
+                            break;
+        case com::sun::star::awt::Key::SELECT_TO_END_OF_LINE:
+                            aPaM = CursorEndOfLine( aPaM );
+                            bKeyModifySelection = true;
                             break;
         case com::sun::star::awt::Key::SELECT_BACKWARD:
                             aPaM = CursorLeft( aPaM, i18n::CharacterIteratorMode::SKIPCELL );
@@ -915,6 +941,32 @@ EditSelection ImpEditEngine::MoveCursor( const KeyEvent& rKeyEvent, EditView* pE
                             break;
         case com::sun::star::awt::Key::SELECT_WORD_FORWARD:
                             aPaM = WordRight( aPaM );
+                            bKeyModifySelection = true;
+                            break;
+        case com::sun::star::awt::Key::SELECT_TO_BEGIN_OF_PARAGRAPH:
+                            aPaM = CursorStartOfParagraph( aPaM );
+                            if( aPaM == aOldPaM )
+                            {
+                                aPaM = CursorLeft( aPaM, i18n::CharacterIteratorMode::SKIPCELL );
+                                aPaM = CursorStartOfParagraph( aPaM );
+                            }
+                            bKeyModifySelection = true;
+                            break;
+        case com::sun::star::awt::Key::SELECT_TO_END_OF_PARAGRAPH:
+                            aPaM = CursorEndOfParagraph( aPaM );
+                            if( aPaM == aOldPaM )
+                            {
+                                aPaM = CursorRight( aPaM, i18n::CharacterIteratorMode::SKIPCELL );
+                                aPaM = CursorEndOfParagraph( aPaM );
+                            }
+                            bKeyModifySelection = true;
+                            break;
+        case com::sun::star::awt::Key::SELECT_TO_BEGIN_OF_DOCUMENT:
+                            aPaM = CursorStartOfDoc();
+                            bKeyModifySelection = true;
+                            break;
+        case com::sun::star::awt::Key::SELECT_TO_END_OF_DOCUMENT:
+                            aPaM = CursorEndOfDoc();
                             bKeyModifySelection = true;
                             break;
     }
@@ -972,7 +1024,7 @@ EditPaM ImpEditEngine::CursorVisualStartEnd( EditView* pEditView, const EditPaM&
         UBiDi* pBidi = ubidi_openSized( aLine.Len(), 0, &nError );
 
         const UBiDiLevel  nBidiLevel = IsRightToLeft( nPara ) ? 1 /*RTL*/ : 0 /*LTR*/;
-        ubidi_setPara( pBidi, pLineString, aLine.Len(), nBidiLevel, NULL, &nError );
+        ubidi_setPara( pBidi, reinterpret_cast<const UChar *>(pLineString), aLine.Len(), nBidiLevel, NULL, &nError );   // UChar != sal_Unicode in MinGW
 
         USHORT nVisPos = bStart ? 0 : aLine.Len()-1;
         USHORT nLogPos = (USHORT)ubidi_getLogicalIndex( pBidi, nVisPos, &nError );
@@ -1094,7 +1146,7 @@ EditPaM ImpEditEngine::CursorVisualLeftRight( EditView* pEditView, const EditPaM
         UBiDi* pBidi = ubidi_openSized( aLine.Len(), 0, &nError );
 
         const UBiDiLevel  nBidiLevel = IsRightToLeft( nPara ) ? 1 /*RTL*/ : 0 /*LTR*/;
-        ubidi_setPara( pBidi, pLineString, aLine.Len(), nBidiLevel, NULL, &nError );
+        ubidi_setPara( pBidi, reinterpret_cast<const UChar *>(pLineString), aLine.Len(), nBidiLevel, NULL, &nError );   // UChar != sal_Unicode in MinGW
 
         if ( !pEditView->IsInsertMode() )
         {
@@ -1620,12 +1672,29 @@ sal_Bool ImpEditEngine::IsInputSequenceCheckingRequired( sal_Unicode nChar, cons
     return bIsSequenceChecking;
 }
 
+/*************************************************************************
+ *                 lcl_HasStrongLTR
+ *************************************************************************/
+ bool lcl_HasStrongLTR ( const String& rTxt, xub_StrLen nStart, xub_StrLen nEnd )
+ {
+     for ( xub_StrLen nCharIdx = nStart; nCharIdx < nEnd; ++nCharIdx )
+     {
+         const UCharDirection nCharDir = u_charDirection ( rTxt.GetChar ( nCharIdx ));
+         if ( nCharDir == U_LEFT_TO_RIGHT ||
+              nCharDir == U_LEFT_TO_RIGHT_EMBEDDING ||
+              nCharDir == U_LEFT_TO_RIGHT_OVERRIDE )
+             return true;
+     }
+     return false;
+ }
+
+
+
 void ImpEditEngine::InitScriptTypes( USHORT nPara )
 {
     ParaPortion* pParaPortion = GetParaPortions().SaveGetObject( nPara );
     ScriptTypePosInfos& rTypes = pParaPortion->aScriptInfos;
     rTypes.Remove( 0, rTypes.Count() );
-
 
 //  pParaPortion->aExtraCharInfos.Remove( 0, pParaPortion->aExtraCharInfos.Count() );
 
@@ -1685,19 +1754,6 @@ void ImpEditEngine::InitScriptTypes( USHORT nPara )
             nScriptType = _xBI->getScriptType( aOUText, nPos );
             long nEndPos = _xBI->endOfScript( aOUText, nPos, nScriptType );
 
-            // #96850# Handle blanks as weak, remove if BreakIterator returns WEAK for spaces.
-            if ( ( nScriptType == i18n::ScriptType::LATIN ) && ( aOUText.getStr()[ nPos ] == 0x20 ) )
-            {
-                BOOL bOnlySpaces = TRUE;
-                for ( long n = nPos+1; ( n < nEndPos ) && bOnlySpaces; n++ )
-                {
-                    if ( aOUText.getStr()[ n ] != 0x20 )
-                        bOnlySpaces = FALSE;
-                }
-                if ( bOnlySpaces )
-                    nScriptType = i18n::ScriptType::WEAK;
-            }
-
             if ( ( nScriptType == i18n::ScriptType::WEAK ) || ( nScriptType == rTypes[rTypes.Count()-1].nScriptType ) )
             {
                 // Expand last ScriptTypePosInfo, don't create weak or unecessary portions
@@ -1713,6 +1769,61 @@ void ImpEditEngine::InitScriptTypes( USHORT nPara )
 
         if ( rTypes[0].nScriptType == i18n::ScriptType::WEAK )
             rTypes[0].nScriptType = ( rTypes.Count() > 1 ) ? rTypes[1].nScriptType : GetI18NScriptTypeOfLanguage( GetDefaultLanguage() );
+
+        // create writing direction information:
+        if ( !pParaPortion->aWritingDirectionInfos.Count() )
+            InitWritingDirections( nPara );
+
+        // i89825: Use CTL font for numbers embedded into an RTL run:
+        WritingDirectionInfos& rDirInfos = pParaPortion->aWritingDirectionInfos;
+        for ( USHORT n = 0; n < rDirInfos.Count(); ++n )
+        {
+            const xub_StrLen nStart = rDirInfos[n].nStartPos;
+            const xub_StrLen nEnd   = rDirInfos[n].nEndPos;
+            const BYTE nCurrDirType = rDirInfos[n].nType;
+
+            if ( nCurrDirType % 2 == UBIDI_RTL  || // text in RTL run
+                ( nCurrDirType > UBIDI_LTR && !lcl_HasStrongLTR( aText, nStart, nEnd ) ) ) // non-strong text in embedded LTR run
+            {
+                USHORT nIdx = 0;
+
+                // Skip entries in ScriptArray which are not inside the RTL run:
+                while ( nIdx < rTypes.Count() && rTypes[nIdx].nStartPos < nStart )
+                    ++nIdx;
+
+                // Remove any entries *inside* the current run:
+                while ( nIdx < rTypes.Count() && rTypes[nIdx].nEndPos <= nEnd )
+                    rTypes.Remove( nIdx );
+
+                // special case:
+                if(nIdx < rTypes.Count() && rTypes[nIdx].nStartPos < nStart && rTypes[nIdx].nEndPos > nEnd)
+                {
+                    rTypes.Insert( ScriptTypePosInfo( rTypes[nIdx].nScriptType, (USHORT)nEnd, rTypes[nIdx].nEndPos ), nIdx );
+                    rTypes[nIdx].nEndPos = nStart;
+                }
+
+                if( nIdx )
+                    rTypes[nIdx - 1].nEndPos = nStart;
+
+                rTypes.Insert( ScriptTypePosInfo( i18n::ScriptType::COMPLEX, (USHORT)nStart, (USHORT)nEnd), nIdx );
+                ++nIdx;
+
+                if( nIdx < rTypes.Count() )
+                    rTypes[nIdx].nStartPos = nEnd;
+            }
+        }
+
+#if OSL_DEBUG_LEVEL > 1
+        USHORT nDebugStt = 0;
+        USHORT nDebugEnd = 0;
+        short nDebugType = 0;
+        for ( USHORT n = 0; n < rTypes.Count(); ++n )
+        {
+            nDebugStt  = rTypes[n].nStartPos;
+            nDebugEnd  = rTypes[n].nEndPos;
+            nDebugType = rTypes[n].nScriptType;
+        }
+#endif
     }
 }
 
@@ -1864,7 +1975,7 @@ void ImpEditEngine::InitWritingDirections( USHORT nPara )
         UBiDi* pBidi = ubidi_openSized( aText.Len(), 0, &nError );
         nError = U_ZERO_ERROR;
 
-        ubidi_setPara( pBidi, aText.GetBuffer(), aText.Len(), nBidiLevel, NULL, &nError );
+        ubidi_setPara( pBidi, reinterpret_cast<const UChar *>(aText.GetBuffer()), aText.Len(), nBidiLevel, NULL, &nError ); // UChar != sal_Unicode in MinGW
         nError = U_ZERO_ERROR;
 
         long nCount = ubidi_countRuns( pBidi, &nError );
@@ -2242,7 +2353,7 @@ EditPaM ImpEditEngine::ImpConnectParagraphs( ContentNode* pLeft, ContentNode* pR
 
 EditPaM ImpEditEngine::DeleteLeftOrRight( const EditSelection& rSel, BYTE nMode, BYTE nDelMode )
 {
-    DBG_ASSERT( !EditSelection( rSel ).DbgIsBuggy( aEditDoc ), "Index im Wald in DeleteLeftOrRight" )
+    DBG_ASSERT( !EditSelection( rSel ).DbgIsBuggy( aEditDoc ), "Index im Wald in DeleteLeftOrRight" );
 
     if ( rSel.HasRange() )  // dann nur Sel. loeschen
         return ImpDeleteSelection( rSel );
@@ -2337,8 +2448,8 @@ EditPaM ImpEditEngine::ImpDeleteSelection( EditSelection aSel )
     CursorMoved( aStartPaM.GetNode() ); // nur damit neu eingestellte Attribute verschwinden...
     CursorMoved( aEndPaM.GetNode() );   // nur damit neu eingestellte Attribute verschwinden...
 
-    DBG_ASSERT( aStartPaM.GetIndex() <= aStartPaM.GetNode()->Len(), "Index im Wald in ImpDeleteSelection" )
-    DBG_ASSERT( aEndPaM.GetIndex() <= aEndPaM.GetNode()->Len(), "Index im Wald in ImpDeleteSelection" )
+    DBG_ASSERT( aStartPaM.GetIndex() <= aStartPaM.GetNode()->Len(), "Index im Wald in ImpDeleteSelection" );
+    DBG_ASSERT( aEndPaM.GetIndex() <= aEndPaM.GetNode()->Len(), "Index im Wald in ImpDeleteSelection" );
 
     USHORT nStartNode = aEditDoc.GetPos( aStartPaM.GetNode() );
     USHORT nEndNode = aEditDoc.GetPos( aEndPaM.GetNode() );
@@ -3108,6 +3219,7 @@ sal_uInt32 ImpEditEngine::CalcLineWidth( ParaPortion* pPortion, EditLine* pLine,
                     SvxFont aTmpFont( pPortion->GetNode()->GetCharAttribs().GetDefFont() );
                     SeekCursor( pPortion->GetNode(), nPos+1, aTmpFont );
                     aTmpFont.SetPhysFont( GetRefDevice() );
+                    ImplInitDigitMode( GetRefDevice(), 0, 0, 0, aTmpFont.GetLanguage() );
                     nWidth += aTmpFont.QuickGetTextSize( GetRefDevice(), *pPortion->GetNode(), nPos, pTextPortion->GetLen(), NULL ).Width();
                 }
             }

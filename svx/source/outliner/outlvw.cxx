@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: outlvw.cxx,v $
- * $Revision: 1.34 $
+ * $Revision: 1.34.150.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -648,7 +648,7 @@ void OutlinerView::Indent( short nDiff )
                 // Absatz gesucht und aufgeplustert.
 #ifdef DBG_UTIL
                 Paragraph* _pPara = pOwner->pParaList->GetParagraph( aSel.nStartPara );
-                DBG_ASSERT(_pPara->IsVisible(),"Selected Paragraph invisible ?!")
+                DBG_ASSERT(_pPara->IsVisible(),"Selected Paragraph invisible ?!");
 #endif
                 Paragraph* pPrev= pOwner->pParaList->GetParagraph( aSel.nStartPara-1 );
 
@@ -1201,6 +1201,37 @@ void OutlinerView::ToggleBullets()
     pOwner->UndoActionEnd( OLUNDO_DEPTH );
 }
 
+void OutlinerView::EnableBullets()
+{
+    pOwner->UndoActionStart( OLUNDO_DEPTH );
+
+    ESelection aSel( pEditView->GetSelection() );
+    aSel.Adjust();
+
+    const bool bUpdate = pOwner->pEditEngine->GetUpdateMode();
+    pOwner->pEditEngine->SetUpdateMode( FALSE );
+
+    for ( USHORT nPara = aSel.nStartPara; nPara <= aSel.nEndPara; nPara++ )
+    {
+        Paragraph* pPara = pOwner->pParaList->GetParagraph( nPara );
+        DBG_ASSERT(pPara, "OutlinerView::ToggleBullets(), illegal selection?");
+
+        if( pPara && (pOwner->GetDepth(nPara) == -1) )
+        {
+            pOwner->SetDepth( pPara, 0 );
+        }
+    }
+
+    USHORT nParaCount = (USHORT) (pOwner->pParaList->GetParagraphCount()-1);
+    pOwner->ImplCheckParagraphs( aSel.nStartPara, nParaCount );
+    pOwner->pEditEngine->QuickMarkInvalid( ESelection( aSel.nStartPara, 0, nParaCount, 0 ) );
+
+    pOwner->pEditEngine->SetUpdateMode( bUpdate );
+
+    pOwner->UndoActionEnd( OLUNDO_DEPTH );
+}
+
+
 void OutlinerView::RemoveAttribsKeepLanguages( BOOL bRemoveParaAttribs )
 {
     RemoveAttribs( bRemoveParaAttribs, 0, TRUE /*keep language attribs*/ );
@@ -1360,11 +1391,14 @@ void OutlinerView::StartTextConversion(
     INT32 nOptions, BOOL bIsInteractive, BOOL bMultipleDoc )
 {
     DBG_CHKTHIS(OutlinerView,0);
-    if (LANGUAGE_KOREAN == nSrcLang && LANGUAGE_KOREAN == nDestLang ||
-        LANGUAGE_CHINESE_SIMPLIFIED  == nSrcLang && LANGUAGE_CHINESE_TRADITIONAL == nDestLang ||
-        LANGUAGE_CHINESE_TRADITIONAL == nSrcLang && LANGUAGE_CHINESE_SIMPLIFIED  == nDestLang
-        )
+    if (
+        (LANGUAGE_KOREAN == nSrcLang && LANGUAGE_KOREAN == nDestLang) ||
+        (LANGUAGE_CHINESE_SIMPLIFIED  == nSrcLang && LANGUAGE_CHINESE_TRADITIONAL == nDestLang) ||
+        (LANGUAGE_CHINESE_TRADITIONAL == nSrcLang && LANGUAGE_CHINESE_SIMPLIFIED  == nDestLang)
+       )
+    {
         pEditView->StartTextConversion( nSrcLang, nDestLang, pDestFont, nOptions, bIsInteractive, bMultipleDoc );
+    }
     else
     {
         DBG_ERROR( "unexpected language" );

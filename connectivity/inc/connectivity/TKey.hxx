@@ -31,13 +31,14 @@
 #ifndef CONNECTIVITY_TKEY_HXX
 #define CONNECTIVITY_TKEY_HXX
 
+#include "connectivity/dbtoolsdllapi.hxx"
 #include <connectivity/sdbcx/VKey.hxx>
 #include <com/sun/star/sdbc/XDatabaseMetaData.hpp>
 
 namespace connectivity
 {
     class OTableHelper;
-    class OTableKeyHelper : public connectivity::sdbcx::OKey
+    class OOO_DLLPUBLIC_DBTOOLS OTableKeyHelper : public connectivity::sdbcx::OKey
     {
         OTableHelper*   m_pTable;
     public:

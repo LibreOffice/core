@@ -73,7 +73,12 @@ namespace sdr
 
         ViewContact::~ViewContact()
         {
-            // get rid of all contacts
+            deleteAllVOCs();
+        }
+
+        void ViewContact::deleteAllVOCs()
+        {
+            // get rid of all VOCs
             // #i84257# To avoid that each 'delete pCandidate' again uses
             // the local RemoveViewObjectContact with a search and removal in the
             // vector, simply copy and clear local vector.
@@ -300,6 +305,24 @@ namespace sdr
         {
             // default returns empty reference
             return drawinglayer::primitive2d::Primitive2DSequence();
+        }
+
+        void ViewContact::flushViewObjectContacts(bool bWithHierarchy)
+        {
+            if(bWithHierarchy)
+            {
+                // flush DrawingLayer hierarchy
+                const sal_uInt32 nCount(GetObjectCount());
+
+                for(sal_uInt32 a(0); a < nCount; a++)
+                {
+                    ViewContact& rChild = GetViewContact(a);
+                    rChild.flushViewObjectContacts(bWithHierarchy);
+                }
+            }
+
+            // delete local VOCs
+            deleteAllVOCs();
         }
     } // end of namespace contact
 } // end of namespace sdr

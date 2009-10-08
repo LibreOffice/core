@@ -43,6 +43,7 @@ ENVCFLAGS+=/FR$(SLO)$/
 .ENDIF
 
 .INCLUDE : settings.mk
+.INCLUDE : $(PRJ)$/makefile.pmk
 
 # --- Files ---
 

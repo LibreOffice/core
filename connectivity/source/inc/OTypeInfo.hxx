@@ -33,6 +33,7 @@
 
 #include <com/sun/star/sdbc/ColumnSearch.hpp>
 #include <com/sun/star/sdbc/DataType.hpp>
+#include "connectivity/dbtoolsdllapi.hxx"
 
 namespace connectivity
 {

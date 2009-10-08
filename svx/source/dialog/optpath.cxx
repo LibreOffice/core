@@ -644,7 +644,7 @@ IMPL_LINK( SvxPathTabPage, PathHdl_Impl, PushButton *, EMPTYARG )
         }
         catch( Exception& )
         {
-            DBG_ERRORFILE( "SvxPathTabPage::PathHdl_Impl: exception from folder picker" )
+            DBG_ERRORFILE( "SvxPathTabPage::PathHdl_Impl: exception from folder picker" );
         }
     }
     return 0;

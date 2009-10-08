@@ -96,13 +96,13 @@ namespace xmloff
 
             case XML_TYPE_CONTROL_BORDER:
                 if (!m_pControlBorderStyleHandler)
-                    m_pControlBorderStyleHandler = new OControlBorderStyleHandler;
+                    m_pControlBorderStyleHandler = new OControlBorderHandler( OControlBorderHandler::STYLE );
                 pHandler = m_pControlBorderStyleHandler;
                 break;
 
             case XML_TYPE_CONTROL_BORDER_COLOR:
                 if ( !m_pControlBorderColorHandler )
-                    m_pControlBorderColorHandler = new OControlBorderColorHandler;
+                    m_pControlBorderColorHandler = new OControlBorderHandler( OControlBorderHandler::COLOR );
                 pHandler = m_pControlBorderColorHandler;
                 break;
 
@@ -225,30 +225,16 @@ namespace xmloff
     }
 
     //=====================================================================
-    //= OControlBorderHandlerFactory
-    //=====================================================================
-    //---------------------------------------------------------------------
-    const XMLPropertyHandler* OControlBorderHandlerFactory::createBorderHandler()
-    {
-        return new OControlBorderStyleHandler;
-    }
-
-    //---------------------------------------------------------------------
-    const XMLPropertyHandler* OControlBorderHandlerFactory::createBorderColorHandler()
-    {
-        return new OControlBorderColorHandler;
-    }
-
-    //=====================================================================
     //= OControlBorderHandlerBase
     //=====================================================================
     //---------------------------------------------------------------------
-    OControlBorderHandlerBase::OControlBorderHandlerBase()
+    OControlBorderHandler::OControlBorderHandler( const OControlBorderHandler::BorderFacet _eFacet )
+        :m_eFacet( _eFacet )
     {
     }
 
     //---------------------------------------------------------------------
-    sal_Bool OControlBorderHandlerBase::importXML( const ::rtl::OUString& _rStrImpValue, Any& _rValue, const SvXMLUnitConverter& ) const
+    sal_Bool OControlBorderHandler::importXML( const ::rtl::OUString& _rStrImpValue, Any& _rValue, const SvXMLUnitConverter& ) const
     {
         ::rtl::OUString sToken;
         SvXMLTokenEnumerator aTokens(_rStrImpValue);
@@ -256,92 +242,70 @@ namespace xmloff
         sal_uInt16 nStyle = 1;
         Color aColor;
 
-        sal_Bool bFoundStyle = sal_False;
-        sal_Bool bFoundColor = sal_False;
-
-        while   (   !( bFoundStyle && bFoundColor ) // did not yet find both aspects
-                &&  aTokens.getNextToken(sToken)    // have a new token
+        while   (   aTokens.getNextToken(sToken)    // have a new token
                 &&  (0 != sToken.getLength())       // really have a new token
                 )
         {
-            // is it a valid enum value?
-            if ( !bFoundStyle )
-                bFoundStyle = SvXMLUnitConverter::convertEnum(nStyle, sToken, OEnumMapper::getEnumMap(OEnumMapper::epBorderWidth));
-            // is it a color value?
-            if ( !bFoundColor )
-                bFoundColor = SvXMLUnitConverter::convertColor( aColor, sToken );
+            // try interpreting the token as border style
+            if ( m_eFacet == STYLE )
+            {
+                // is it a valid enum value?
+                if ( SvXMLUnitConverter::convertEnum( nStyle, sToken, OEnumMapper::getEnumMap( OEnumMapper::epBorderWidth ) ) )
+                {
+                    _rValue <<= nStyle;
+                    return sal_True;
+                }
+            }
+
+            // try interpreting it as color value
+            if ( m_eFacet == COLOR )
+            {
+                if ( SvXMLUnitConverter::convertColor( aColor, sToken ) )
+                {
+                    _rValue <<= (sal_Int32)aColor.GetColor();
+                    return sal_True;
+                }
+            }
         }
 
-        if ( !bFoundStyle && !bFoundColor )
+        return sal_False;
+    }
+
+    //---------------------------------------------------------------------
+    sal_Bool OControlBorderHandler::exportXML( ::rtl::OUString& _rStrExpValue, const Any& _rValue, const SvXMLUnitConverter& ) const
+    {
+        sal_Bool bSuccess = sal_False;
+
+        ::rtl::OUStringBuffer aOut;
+        switch ( m_eFacet )
+        {
+        case STYLE:
+        {
+            sal_Int16 nBorder = 0;
+            bSuccess =  (_rValue >>= nBorder)
+                    &&  SvXMLUnitConverter::convertEnum( aOut, nBorder, OEnumMapper::getEnumMap( OEnumMapper::epBorderWidth ) );
+        }
+        break;
+        case COLOR:
+        {
+            sal_Int32 nBorderColor = 0;
+            if ( _rValue >>= nBorderColor )
+            {
+                SvXMLUnitConverter::convertColor( aOut, Color( nBorderColor ) );
+                bSuccess = sal_True;
+            }
+        }
+        break;
+        }   // switch ( m_eFacet )
+
+        if ( !bSuccess )
             return sal_False;
 
-        // if we're here, the string could have had more or less than the requested 3 tokens, but we ignore this.
-        // At least we have a valid style or a valid, which is everything we're interested in.
-        pickOne( aColor, (sal_Int16)nStyle, _rValue );
+        if ( _rStrExpValue.getLength() )
+            _rStrExpValue += ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( " " ) );
+        _rStrExpValue += aOut.makeStringAndClear();
+
         return sal_True;
-    }
-
-    //=====================================================================
-    //= OControlBorderStyleHandler
-    //=====================================================================
-    //---------------------------------------------------------------------
-    OControlBorderStyleHandler::OControlBorderStyleHandler()
-    {
-    }
-
-    //---------------------------------------------------------------------
-    sal_Bool OControlBorderStyleHandler::exportXML( ::rtl::OUString& _rStrExpValue, const Any& _rValue, const SvXMLUnitConverter& ) const
-    {
-        sal_Bool bSuccess = sal_False;
-        sal_Int16 nBorder = 0;
-
-        ::rtl::OUStringBuffer aOut;
-        bSuccess =  (_rValue >>= nBorder)
-                &&  SvXMLUnitConverter::convertEnum(aOut, nBorder, OEnumMapper::getEnumMap(OEnumMapper::epBorderWidth));
-
-        if ( _rStrExpValue.getLength() )
-            _rStrExpValue += ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( " " ) );
-        _rStrExpValue += aOut.makeStringAndClear();
-        return bSuccess;
-    }
-
-    //---------------------------------------------------------------------
-    void OControlBorderStyleHandler::pickOne( const Color&, sal_Int16 _nStyle, Any& _rValue ) const
-    {
-        _rValue <<= _nStyle;
-    }
-
-    //=====================================================================
-    //= OControlBorderColorHandler
-    //=====================================================================
-    //---------------------------------------------------------------------
-    OControlBorderColorHandler::OControlBorderColorHandler()
-    {
-    }
-
-    //---------------------------------------------------------------------
-    sal_Bool OControlBorderColorHandler::exportXML( ::rtl::OUString& _rStrExpValue, const Any& _rValue, const SvXMLUnitConverter& ) const
-    {
-        sal_Bool bSuccess = sal_False;
-        sal_Int32 nBorderColor = 0;
-
-        ::rtl::OUStringBuffer aOut;
-        if ( _rValue >>= nBorderColor )
-        {
-            SvXMLUnitConverter::convertColor( aOut, Color( nBorderColor ) );
-            bSuccess = sal_True;
-        }
-
-        if ( _rStrExpValue.getLength() )
-            _rStrExpValue += ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( " " ) );
-        _rStrExpValue += aOut.makeStringAndClear();
-        return bSuccess;
-    }
-
-    //---------------------------------------------------------------------
-    void OControlBorderColorHandler::pickOne( const Color& _rColor, sal_Int16 /*_nStyle*/, Any& _rValue ) const
-    {
-        _rValue <<= (sal_Int32)_rColor.GetColor();
     }
 
     //=====================================================================
@@ -412,6 +376,15 @@ namespace xmloff
         }
 
         return bSuccess;
+    }
+
+    //=====================================================================
+    //= ImageScaleModeHandler
+    //=====================================================================
+    //---------------------------------------------------------------------
+    ImageScaleModeHandler::ImageScaleModeHandler()
+        :XMLConstantsPropertyHandler( OEnumMapper::getEnumMap( OEnumMapper::epImageScaleMode ), XML_STRETCH )
+    {
     }
 
 //.........................................................................

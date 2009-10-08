@@ -249,21 +249,22 @@ void SvxLinguConfigUpdate::UpdateAll( sal_Bool bForceCheck )
         DBG_ASSERT( nNeedUpdating == 1, "SvxLinguConfigUpdate::UpdateAll already updated!" );
 
         uno::Reference< XLinguServiceManager > xLngSvcMgr( GetLngSvcMgr_Impl() );
-        DBG_ASSERT( xLngSvcMgr.is(), "service manager missing")
+        DBG_ASSERT( xLngSvcMgr.is(), "service manager missing");
         if (!xLngSvcMgr.is())
             return;
 
         SvtLinguConfig aCfg;
 
-        const sal_Char * apServices[3]       =  { SN_THESAURUS,         SN_SPELLCHECKER,            SN_HYPHENATOR };
-        const sal_Char * apCurLists[3]       =  { "ServiceManager/ThesaurusList",      "ServiceManager/SpellCheckerList",         "ServiceManager/HyphenatorList" };
-        const sal_Char * apLastFoundLists[3] =  { "ServiceManager/LastFoundThesauri",  "ServiceManager/LastFoundSpellCheckers",   "ServiceManager/LastFoundHyphenators" };
+        const int nNumServices = 4;
+        const sal_Char * apServices[nNumServices]       =  { SN_SPELLCHECKER, SN_GRAMMARCHECKER, SN_HYPHENATOR, SN_THESAURUS };
+        const sal_Char * apCurLists[nNumServices]       =  { "ServiceManager/SpellCheckerList",       "ServiceManager/GrammarCheckerList",       "ServiceManager/HyphenatorList",       "ServiceManager/ThesaurusList" };
+        const sal_Char * apLastFoundLists[nNumServices] =  { "ServiceManager/LastFoundSpellCheckers", "ServiceManager/LastFoundGrammarCheckers", "ServiceManager/LastFoundHyphenators", "ServiceManager/LastFoundThesauri" };
 
-        // usage of indices as above: O = thesaurus, 1 = spellchecker, 2 = hyphenator
-        std::vector< list_entry_map_t > aLastFoundSvcs(3);
-        std::vector< list_entry_map_t > aCurSvcs(3);
+        // usage of indices as above: 0 = spell checker, 1 = grammar checker, 2 = hyphenator, 3 = thesaurus
+        std::vector< list_entry_map_t > aLastFoundSvcs(nNumServices);
+        std::vector< list_entry_map_t > aCurSvcs(nNumServices);
 
-        for (int k = 0;  k < 3;  ++k)
+        for (int k = 0;  k < nNumServices;  ++k)
         {
             OUString aService( A2OU( apServices[k] ) );
             OUString aActiveList( A2OU( apCurLists[k] ) );
@@ -283,6 +284,12 @@ void SvxLinguConfigUpdate::UpdateAll( sal_Bool bForceCheck )
                         xLngSvcMgr->getConfiguredServices( aService, aLocale ));
                 Sequence< OUString > aAvailSvcs(
                         xLngSvcMgr->getAvailableServices( aService, aLocale ));
+#if OSL_DEBUG_LEVEL > 1
+                const OUString * pCfgSvcs   = aCfgSvcs.getConstArray();;
+                const OUString * pAvailSvcs = aAvailSvcs.getConstArray();;
+                (void) pCfgSvcs;
+                (void) pAvailSvcs;
+#endif
                 aCfgSvcs = lcl_RemoveMissingEntries( aCfgSvcs, aAvailSvcs );
 
                 aCurSvcs[k][ pNodeName[i] ] = aCfgSvcs;
@@ -299,10 +306,18 @@ void SvxLinguConfigUpdate::UpdateAll( sal_Bool bForceCheck )
             {
                 Sequence< OUString > aAvailSvcs(
                         xLngSvcMgr->getAvailableServices( aService, pAvailLocale[i] ));
-                Sequence< OUString > _aLastFoundSvcs(
+                Sequence< OUString > aLastSvcs(
                         lcl_GetLastFoundSvcs( aCfg, aLastFoundList , pAvailLocale[i] ));
                 Sequence< OUString > aNewSvcs =
-                        lcl_GetNewEntries( _aLastFoundSvcs, aAvailSvcs );
+                        lcl_GetNewEntries( aLastSvcs, aAvailSvcs );
+#if OSL_DEBUG_LEVEL > 1
+                const OUString * pAvailSvcs = aAvailSvcs.getConstArray();
+                const OUString * pLastSvcs  = aLastSvcs.getConstArray();
+                const OUString * pNewSvcs   = aNewSvcs.getConstArray();
+                (void) pAvailSvcs;
+                (void) pLastSvcs;
+                (void) pNewSvcs;
+#endif
 
                 OUString aCfgLocaleStr( MsLangId::convertLanguageToIsoString(
                                             SvxLocaleToLanguage( pAvailLocale[i] ) ) );
@@ -326,7 +341,7 @@ void SvxLinguConfigUpdate::UpdateAll( sal_Bool bForceCheck )
             for (i = 0;  i < nAvailLocales;  ++i)
             {
                 Sequence< OUString > aSvcImplNames(
-                        xLngSvcMgr->getConfiguredServices( aService, pAvailLocale[i] ) );
+                        xLngSvcMgr->getAvailableServices( aService, pAvailLocale[i] ) );
 
 #if OSL_DEBUG_LEVEL > 1
                 INT32 nSvcs = aSvcImplNames.getLength();
@@ -346,7 +361,7 @@ void SvxLinguConfigUpdate::UpdateAll( sal_Bool bForceCheck )
         //
         // write new data back to configuration
         //
-        for (int k = 0;  k < 3;  ++k)
+        for (int k = 0;  k < nNumServices;  ++k)
         {
             for (int i = 0;  i < 2;  ++i)
             {
@@ -423,176 +438,12 @@ void SvxLinguConfigUpdate::UpdateAll( sal_Bool bForceCheck )
 }
 
 
-static void StringUpdateHashValue( INT32 &h, const String &rString )
-{
-    INT32 /*h,*/ nLen;
-    /*h =*/ nLen = rString.Len();
-    const sal_Unicode *pStr = rString.GetBuffer();
-
-    if ( nLen < 16 )
-        while ( nLen-- > 0 )
-            h = (h*37) + *(pStr++);
-    else
-    {
-        sal_Int32               nSkip;
-        const sal_Unicode* pEndStr = pStr+nLen-5;
-
-        /* only sample some characters */
-        /* the first 3, some characters between, and the last 5 */
-        h = (h*39) + *(pStr++);
-        h = (h*39) + *(pStr++);
-        h = (h*39) + *(pStr++);
-
-        nSkip = nLen / nLen < 32 ? 4 : 8;
-        nLen -= 8;
-        while ( nLen > 0 )
-        {
-            h = (h*39) + ( *pStr );
-            pStr += nSkip;
-            nLen -= nSkip;
-        }
-
-        h = (h*39) + *(pEndStr++);
-        h = (h*39) + *(pEndStr++);
-        h = (h*39) + *(pEndStr++);
-        h = (h*39) + *(pEndStr++);
-        h = (h*39) + *(pEndStr++);
-    }
-    //return h;
-}
-
-
 INT32 SvxLinguConfigUpdate::CalcDataFilesChangedCheckValue()
 {
     RTL_LOGFILE_CONTEXT( aLog, "svx: SvxLinguConfigUpdate::CalcDataFilesChangedCheckValue" );
 
-    // get linguistic multi-path for directories to check...
-    const String        aLinguPath( SvtPathOptions().GetLinguisticPath() );
-    const xub_StrLen    nPathes ( aLinguPath.GetTokenCount(';') );
-    xub_StrLen          nIdx = 0;
-    std::vector< String >   aPathes;
-    for (xub_StrLen k = 0;  k < nPathes; ++k)
-    {
-        String aPath( aLinguPath.GetToken( 0, ';', nIdx ) );
-        aPathes.push_back( aPath );
-    }
-    // list of directories to scan for changed/new/deleted files should be
-    // 0: regular SO dictionary path
-    // 1: regular OOo dictionary path
-    // 2: user-dictionary path (where OOo linguistic by bad choice places downloaded dictionaries
-    //    when the permissions for the share tree are missing. E.g. in user installations.)
-    DBG_ASSERT( nPathes == 3, "Linguistic-Path configuration changed" );
-
     INT32 nHashVal = 0;
-    for (int i = 0;  i < nPathes;  ++i )
-    {
-        const String rURL = aPathes[i];
-
-        if( !utl::UCBContentHelper::IsFolder( rURL ) )
-            continue;
-
-        INetURLObject aFolderObj( rURL );
-        DBG_ASSERT( aFolderObj.GetProtocol() != INET_PROT_NOT_VALID, "Invalid URL!" );
-
-        try
-        {
-            uno::Reference< XMultiServiceFactory > xFactory = ::comphelper::getProcessServiceFactory();
-
-            ::ucbhelper::Content aCnt( aFolderObj.GetMainURL( INetURLObject::NO_DECODE ),
-                          new ::ucbhelper::CommandEnvironment( uno::Reference< task::XInteractionHandler >(),
-                                                         uno::Reference< CSS::ucb::XProgressHandler >() ) );
-            uno::Reference< sdbc::XResultSet > xResultSet;
-            Sequence< OUString > aProps(3);
-            OUString* pProps = aProps.getArray();
-            pProps[0] = OUString( RTL_CONSTASCII_USTRINGPARAM( "Title" ) );
-            pProps[1] = OUString::createFromAscii( "Size" );
-            pProps[2] = OUString::createFromAscii( "DateModified" );
-
-            try
-            {
-                uno::Reference< CSS::ucb::XDynamicResultSet > xDynResultSet;
-                ::ucbhelper::ResultSetInclude eInclude = ::ucbhelper::INCLUDE_DOCUMENTS_ONLY;
-                xDynResultSet = aCnt.createDynamicCursor( aProps, eInclude );
-
-                uno::Reference < CSS::ucb::XAnyCompareFactory > xCompare;
-                uno::Reference < CSS::ucb::XSortedDynamicResultSetFactory > xSRSFac(
-                    xFactory->createInstance( OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.ucb.SortedDynamicResultSetFactory") ) ), UNO_QUERY );
-
-                uno::Sequence< CSS::ucb::NumberedSortingInfo > aSortInfo( 2 );
-                CSS::ucb::NumberedSortingInfo* pInfo = aSortInfo.getArray();
-                pInfo[ 0 ].ColumnIndex = 3;
-                pInfo[ 0 ].Ascending   = sal_False;
-                pInfo[ 1 ].ColumnIndex = 1;
-                pInfo[ 1 ].Ascending   = sal_True;
-
-                uno::Reference< CSS::ucb::XDynamicResultSet > xDynamicResultSet;
-                xDynamicResultSet =
-                        xSRSFac->createSortedDynamicResultSet( xDynResultSet, aSortInfo, xCompare );
-
-                if (xDynamicResultSet.is())
-                    xResultSet = xDynamicResultSet->getStaticResultSet();
-            }
-            catch( uno::Exception& )
-            {
-            }
-
-            if (xResultSet.is())
-            {
-                uno::Reference< sdbc::XRow > xRow( xResultSet, UNO_QUERY );
-                uno::Reference< CSS::ucb::XContentAccess > xContentAccess( xResultSet, UNO_QUERY );
-
-                try
-                {
-                    while (xResultSet->next())
-                    {
-                        //!! needed to work-around the bad directory choice for OOo downloadable
-                        //!! dictionaries in restricted installations.
-                        //!! This is required because that directory holds the user-dictionaries as well
-                        //!! and changing those should not trigger updating the configuration.
-                        //!! Especially bad is that both of those different types of dictionaries
-                        //!! (downloaded dictionaries and user-dictionaries) have the same extension
-                        //!! thus we try to evaluate the need of updating the configuration in this
-                        //!! directory by only looking at the dictionary.lst file(s).
-                        sal_Bool bUseFile = (i != 2) || /* always use the regular directories */
-                                            xRow->getString(1).matchAsciiL( "dictionary.lst", 14, 0 );
-
-                        if (bUseFile)
-                        {
-                            String   aTitle     = xRow->getString(1);
-                            sal_Int64 nSize     = xRow->getLong(2);
-                            util::DateTime aDT  = xRow->getTimestamp(3);
-
-                            String aDateTime( String::CreateFromInt32( aDT.Day ) );
-                            aDateTime.Append( (sal_Unicode) '.' );
-                            aDateTime += String::CreateFromInt32( aDT.Month );
-                            aDateTime.Append( (sal_Unicode) '.' );
-                            aDateTime += String::CreateFromInt32( aDT.Year );
-                            aDateTime.Append( (sal_Unicode) ' ' );
-                            aDateTime += String::CreateFromInt32( aDT.Hours );
-                            aDateTime.Append( (sal_Unicode) ':' );
-                            aDateTime += String::CreateFromInt32( aDT.Minutes );
-                            aDateTime.Append( (sal_Unicode) '_' );
-                            aDateTime += String::CreateFromInt32( aDT.Seconds );
-
-                            String aSize( String::CreateFromInt64( nSize ) );
-
-                            StringUpdateHashValue( nHashVal, aTitle );
-                            StringUpdateHashValue( nHashVal, aSize );
-                            StringUpdateHashValue( nHashVal, aDateTime );
-                        }
-                    }
-                }
-                catch( uno::Exception& )
-                {
-                }
-            }
-        }
-        catch( uno::Exception& )
-        {
-        }
-
-    }
-
+    // nothing to be checked anymore since those old directory paths are gone by now
     return nHashVal;
 }
 
@@ -1107,8 +958,8 @@ uno::Reference< XHyphenator >       LinguMgr::xHyph         = 0;
 uno::Reference< XThesaurus >        LinguMgr::xThes         = 0;
 uno::Reference< XDictionaryList >   LinguMgr::xDicList      = 0;
 uno::Reference< XPropertySet >      LinguMgr::xProp         = 0;
-uno::Reference< XDictionary1 >      LinguMgr::xIgnoreAll    = 0;
-uno::Reference< XDictionary1 >      LinguMgr::xChangeAll    = 0;
+uno::Reference< XDictionary >       LinguMgr::xIgnoreAll    = 0;
+uno::Reference< XDictionary >       LinguMgr::xChangeAll    = 0;
 
 
 uno::Reference< XLinguServiceManager > LinguMgr::GetLngSvcMgr()
@@ -1151,7 +1002,7 @@ uno::Reference< XPropertySet > LinguMgr::GetLinguPropertySet()
     return xProp.is() ? xProp : GetProp();
 }
 
-uno::Reference< XDictionary1 > LinguMgr::GetStandardDic()
+uno::Reference< XDictionary > LinguMgr::GetStandardDic()
 {
     //! don't hold reference to this
     //! (it may be removed from dictionary list and needs to be
@@ -1159,12 +1010,12 @@ uno::Reference< XDictionary1 > LinguMgr::GetStandardDic()
     return GetStandard();
 }
 
-uno::Reference< XDictionary1 > LinguMgr::GetIgnoreAllList()
+uno::Reference< XDictionary > LinguMgr::GetIgnoreAllList()
 {
     return xIgnoreAll.is() ? xIgnoreAll : GetIgnoreAll();
 }
 
-uno::Reference< XDictionary1 > LinguMgr::GetChangeAllList()
+uno::Reference< XDictionary > LinguMgr::GetChangeAllList()
 {
     return xChangeAll.is() ? xChangeAll : GetChangeAll();
 }
@@ -1280,7 +1131,7 @@ uno::Reference< XPropertySet > LinguMgr::GetProp()
     return xProp;
 }
 
-uno::Reference< XDictionary1 > LinguMgr::GetIgnoreAll()
+uno::Reference< XDictionary > LinguMgr::GetIgnoreAll()
 {
     if (bExiting)
         return 0;
@@ -1291,13 +1142,13 @@ uno::Reference< XDictionary1 > LinguMgr::GetIgnoreAll()
     uno::Reference< XDictionaryList >  xTmpDicList( GetDictionaryList() );
     if (xTmpDicList.is())
     {
-        xIgnoreAll = uno::Reference< XDictionary1 > ( xTmpDicList->getDictionaryByName(
+        xIgnoreAll = uno::Reference< XDictionary > ( xTmpDicList->getDictionaryByName(
                     A2OU("IgnoreAllList") ), UNO_QUERY );
     }
     return xIgnoreAll;
 }
 
-uno::Reference< XDictionary1 > LinguMgr::GetChangeAll()
+uno::Reference< XDictionary > LinguMgr::GetChangeAll()
 {
     if (bExiting)
         return 0;
@@ -1308,7 +1159,7 @@ uno::Reference< XDictionary1 > LinguMgr::GetChangeAll()
     uno::Reference< XDictionaryList > _xDicList( GetDictionaryList() , UNO_QUERY );
     if (_xDicList.is())
     {
-        xChangeAll = uno::Reference< XDictionary1 > (
+        xChangeAll = uno::Reference< XDictionary > (
                         _xDicList->createDictionary(
                             A2OU("ChangeAllList"),
                             SvxCreateLocale( LANGUAGE_NONE ),
@@ -1317,7 +1168,7 @@ uno::Reference< XDictionary1 > LinguMgr::GetChangeAll()
     return xChangeAll;
 }
 
-uno::Reference< XDictionary1 > LinguMgr::GetStandard()
+uno::Reference< XDictionary > LinguMgr::GetStandard()
 {
     // Tries to return a dictionary which may hold positive entries is
     // persistent and not read-only.
@@ -1330,7 +1181,7 @@ uno::Reference< XDictionary1 > LinguMgr::GetStandard()
         return NULL;
 
     const OUString aDicName( RTL_CONSTASCII_USTRINGPARAM( "standard.dic" ) );
-    uno::Reference< XDictionary1 >  xDic( xTmpDicList->getDictionaryByName( aDicName ),
+    uno::Reference< XDictionary >   xDic( xTmpDicList->getDictionaryByName( aDicName ),
                                       UNO_QUERY );
     if (!xDic.is())
     {
@@ -1350,13 +1201,13 @@ uno::Reference< XDictionary1 > LinguMgr::GetStandard()
         // add new dictionary to list
         if (xTmp.is())
             xTmpDicList->addDictionary( xTmp );
-        xDic = uno::Reference< XDictionary1 > ( xTmp, UNO_QUERY );
+        xDic = uno::Reference< XDictionary > ( xTmp, UNO_QUERY );
     }
 #if OSL_DEBUG_LEVEL > 1
     uno::Reference< XStorable >      xStor( xDic, UNO_QUERY );
     DBG_ASSERT( xDic.is() && xDic->getDictionaryType() == DictionaryType_POSITIVE,
             "wrong dictionary type");
-    DBG_ASSERT( xDic.is() && xDic->getLanguage() == LANGUAGE_NONE,
+    DBG_ASSERT( xDic.is() && SvxLocaleToLanguage( xDic->getLocale() ) == LANGUAGE_NONE,
             "wrong dictionary language");
     DBG_ASSERT( !xStor.is() || (xStor->hasLocation() && !xStor->isReadonly()),
             "dictionary not editable" );
@@ -1393,18 +1244,18 @@ uno::Reference< XPropertySet >  SvxGetLinguPropertySet()
 }
 
 //TL:TODO: remove argument or provide SvxGetIgnoreAllList with the same one
-uno::Reference< XDictionary1 >  SvxGetOrCreatePosDic(
+uno::Reference< XDictionary >  SvxGetOrCreatePosDic(
         uno::Reference< XDictionaryList >  /* xDicList */ )
 {
     return LinguMgr::GetStandardDic();
 }
 
-uno::Reference< XDictionary1 >  SvxGetIgnoreAllList()
+uno::Reference< XDictionary >  SvxGetIgnoreAllList()
 {
     return LinguMgr::GetIgnoreAllList();
 }
 
-uno::Reference< XDictionary1 >  SvxGetChangeAllList()
+uno::Reference< XDictionary >  SvxGetChangeAllList()
 {
     return LinguMgr::GetChangeAllList();
 }

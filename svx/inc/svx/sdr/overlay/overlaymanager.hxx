@@ -39,6 +39,8 @@
 #include "svx/svxdllapi.h"
 #include <svtools/optionsdrawinglayer.hxx>
 #include <boost/shared_ptr.hpp>
+#include <basegfx/matrix/b2dhommatrix.hxx>
+#include <drawinglayer/geometry/viewinformation2d.hxx>
 
 //////////////////////////////////////////////////////////////////////////////
 // predeclarations
@@ -46,18 +48,13 @@
 class OutputDevice;
 class Region;
 
-namespace sdr
-{
-    namespace overlay
-    {
-        class OverlayObject;
-    } // end of namespace overlay
-} // end of namespace sdr
+namespace sdr { namespace overlay {
+    class OverlayObject;
+}}
 
-namespace basegfx
-{
+namespace basegfx {
     class B2DRange;
-} // end of namespace basegfx
+}
 
 //////////////////////////////////////////////////////////////////////////////
 
@@ -69,29 +66,38 @@ namespace sdr
         {
         protected:
             // the OutputDevice to work on, set on construction and not to be changed
-            OutputDevice&                           rmOutputDevice;
+            OutputDevice&                               rmOutputDevice;
 
             // start, end and number of the double linked list of OverlayObjects
             // managed by this manager
-            OverlayObject*                          mpOverlayObjectStart;
-            OverlayObject*                          mpOverlayObjectEnd;
+            OverlayObject*                              mpOverlayObjectStart;
+            OverlayObject*                              mpOverlayObjectEnd;
 
             // MapMode for MapMode change watching
-            MapMode                                 maMapMode;
+            MapMode                                     maMapMode;
 
             // Stripe support. All striped OverlayObjects use these stripe
             // values. Changes change all those objects.
-            Color                                   maStripeColorA; // defaults to Color(COL_BLACK)
-            Color                                   maStripeColorB; // defaults to Color(COL_WHITE)
-            sal_uInt32                              mnStripeLengthPixel; // defaults to 4L
+            Color                                       maStripeColorA; // defaults to Color(COL_BLACK)
+            Color                                       maStripeColorB; // defaults to Color(COL_WHITE)
+            sal_uInt32                                  mnStripeLengthPixel; // defaults to 4L
 
             // hold an incarnation of Drawinglayer configuration options
-            SvtOptionsDrawinglayer                  maDrawinglayerOpt;
+            SvtOptionsDrawinglayer                      maDrawinglayerOpt;
+
+            // hold buffered the logic length of discrete vector (1.0, 0.0) and the
+            // view transformation belonging to it. Update happens in getDiscreteOne()
+            basegfx::B2DHomMatrix                       maViewTransformation;
+            double                                      mfDiscreteOne;
 
             // internal
             void ImpDrawMembers(const basegfx::B2DRange& rRange, OutputDevice& rDestinationDevice) const;
             void ImpCheckMapModeChange() const;
             void ImpStripeDefinitionChanged();
+
+            // return mfDiscreteOne to derivations, but also check for buffered local
+            // ViewTransformation and evtl. correct mfDiscreteOne
+            const double getDiscreteOne() const;
 
         public:
             OverlayManager(OutputDevice& rOutputDevice);
@@ -130,6 +136,9 @@ namespace sdr
             // stripe support StripeLengthPixel
             sal_uInt32 getStripeLengthPixel() const { return mnStripeLengthPixel; }
             void setStripeLengthPixel(sal_uInt32 nNew = 5L);
+
+            // access to maDrawinglayerOpt
+            const SvtOptionsDrawinglayer& getDrawinglayerOpt() const { return maDrawinglayerOpt; }
 
             /** Return a list of all OverlayObjects that currently belong to
                 the called OverlayManager.  Subsequent calls to add() or

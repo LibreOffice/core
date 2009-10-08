@@ -56,6 +56,7 @@
 #include <basegfx/polygon/b2dpolypolygontools.hxx>
 #include <vclhelperbufferdevice.hxx>
 #include <drawinglayer/primitive2d/modifiedcolorprimitive2d.hxx>
+#include <drawinglayer/primitive2d/unifiedalphaprimitive2d.hxx>
 #include <drawinglayer/primitive2d/alphaprimitive2d.hxx>
 #include <drawinglayer/primitive2d/transformprimitive2d.hxx>
 #include <drawinglayer/primitive2d/markerarrayprimitive2d.hxx>
@@ -64,6 +65,7 @@
 #include <svtools/ctloptions.hxx>
 #include <vcl/svapp.hxx>
 #include <drawinglayer/primitive2d/pagepreviewprimitive2d.hxx>
+#include <tools/diagnose_ex.h>
 
 //////////////////////////////////////////////////////////////////////////////
 // control support
@@ -94,10 +96,39 @@ namespace drawinglayer
         using ::com::sun::star::uno::Reference;
         using ::com::sun::star::uno::UNO_QUERY;
         using ::com::sun::star::uno::UNO_QUERY_THROW;
+        using ::com::sun::star::uno::Exception;
         using ::com::sun::star::awt::XView;
         using ::com::sun::star::awt::XGraphics;
         using ::com::sun::star::awt::XWindow;
         using ::com::sun::star::awt::PosSize::POSSIZE;
+
+        static FontUnderline mapTextLineStyle(primitive2d::FontUnderline eLineStyle)
+        {
+            switch(eLineStyle)
+            {
+                default:
+                    DBG_WARNING1( "DrawingLayer: Unknown text line style attribute (%d)!", eLineStyle );
+                    // fall through
+                case primitive2d::FONT_UNDERLINE_NONE:          return UNDERLINE_NONE;
+                case primitive2d::FONT_UNDERLINE_SINGLE:        return UNDERLINE_SINGLE;
+                case primitive2d::FONT_UNDERLINE_DOUBLE:        return UNDERLINE_DOUBLE;
+                case primitive2d::FONT_UNDERLINE_DOTTED:        return UNDERLINE_DOTTED;
+                case primitive2d::FONT_UNDERLINE_DASH:          return UNDERLINE_DASH;
+                case primitive2d::FONT_UNDERLINE_LONGDASH:      return UNDERLINE_LONGDASH;
+                case primitive2d::FONT_UNDERLINE_DASHDOT:       return UNDERLINE_DASHDOT;
+                case primitive2d::FONT_UNDERLINE_DASHDOTDOT:    return UNDERLINE_DASHDOTDOT;
+                case primitive2d::FONT_UNDERLINE_SMALLWAVE:     return UNDERLINE_SMALLWAVE;
+                case primitive2d::FONT_UNDERLINE_WAVE:          return UNDERLINE_WAVE;
+                case primitive2d::FONT_UNDERLINE_DOUBLEWAVE:    return UNDERLINE_DOUBLEWAVE;
+                case primitive2d::FONT_UNDERLINE_BOLD:          return UNDERLINE_BOLD;
+                case primitive2d::FONT_UNDERLINE_BOLDDOTTED:    return UNDERLINE_BOLDDOTTED;
+                case primitive2d::FONT_UNDERLINE_BOLDDASH:      return UNDERLINE_BOLDDASH;
+                case primitive2d::FONT_UNDERLINE_BOLDLONGDASH:  return UNDERLINE_LONGDASH;
+                case primitive2d::FONT_UNDERLINE_BOLDDASHDOT:   return UNDERLINE_BOLDDASHDOT;
+                case primitive2d::FONT_UNDERLINE_BOLDDASHDOTDOT:return UNDERLINE_BOLDDASHDOT;
+                case primitive2d::FONT_UNDERLINE_BOLDWAVE:      return UNDERLINE_BOLDWAVE;
+            }
+        }
 
         //////////////////////////////////////////////////////////////////////////////
         // rendering support
@@ -137,33 +168,17 @@ namespace drawinglayer
 
                     if( pTCPP != NULL )
                     {
-                        // set Underline attribute
-                        FontUnderline eFontUnderline = UNDERLINE_NONE;
-                        switch( pTCPP->getFontUnderline() )
+                        // set Overline attribute
+                        FontUnderline eFontOverline = mapTextLineStyle( pTCPP->getFontOverline() );
+                        if( eFontOverline != UNDERLINE_NONE )
                         {
-                            default:
-                                DBG_WARNING1( "DrawingLayer: Unknown underline attribute (%d)!", pTCPP->getFontUnderline() );
-                                // fall through
-                            case primitive2d::FONT_UNDERLINE_NONE:      eFontUnderline = UNDERLINE_NONE; break;
-                            case primitive2d::FONT_UNDERLINE_SINGLE:    eFontUnderline = UNDERLINE_SINGLE; break;
-                            case primitive2d::FONT_UNDERLINE_DOUBLE:    eFontUnderline = UNDERLINE_DOUBLE; break;
-                            case primitive2d::FONT_UNDERLINE_DOTTED:    eFontUnderline = UNDERLINE_DOTTED; break;
-                            case primitive2d::FONT_UNDERLINE_DASH:      eFontUnderline = UNDERLINE_DASH; break;
-                            case primitive2d::FONT_UNDERLINE_LONGDASH:  eFontUnderline = UNDERLINE_LONGDASH; break;
-                            case primitive2d::FONT_UNDERLINE_DASHDOT:   eFontUnderline = UNDERLINE_DASHDOT; break;
-                            case primitive2d::FONT_UNDERLINE_DASHDOTDOT:eFontUnderline = UNDERLINE_DASHDOTDOT; break;
-                            case primitive2d::FONT_UNDERLINE_SMALLWAVE: eFontUnderline = UNDERLINE_SMALLWAVE; break;
-                            case primitive2d::FONT_UNDERLINE_WAVE:      eFontUnderline = UNDERLINE_WAVE; break;
-                            case primitive2d::FONT_UNDERLINE_DOUBLEWAVE:eFontUnderline = UNDERLINE_DOUBLEWAVE; break;
-                            case primitive2d::FONT_UNDERLINE_BOLD:      eFontUnderline = UNDERLINE_BOLD; break;
-                            case primitive2d::FONT_UNDERLINE_BOLDDOTTED:eFontUnderline = UNDERLINE_BOLDDOTTED; break;
-                            case primitive2d::FONT_UNDERLINE_BOLDDASH:  eFontUnderline = UNDERLINE_BOLDDASH; break;
-                            case primitive2d::FONT_UNDERLINE_BOLDLONGDASH:eFontUnderline = UNDERLINE_LONGDASH; break;
-                            case primitive2d::FONT_UNDERLINE_BOLDDASHDOT:eFontUnderline = UNDERLINE_BOLDDASHDOT; break;
-                            case primitive2d::FONT_UNDERLINE_BOLDDASHDOTDOT:eFontUnderline = UNDERLINE_BOLDDASHDOT; break;
-                            case primitive2d::FONT_UNDERLINE_BOLDWAVE:  eFontUnderline = UNDERLINE_BOLDWAVE; break;
+                            aFont.SetOverline( eFontOverline );
+                            if( pTCPP->getWordLineMode() )
+                                aFont.SetWordLineMode( true );
                         }
 
+                        // set Underline attribute
+                        FontUnderline eFontUnderline = mapTextLineStyle( pTCPP->getFontUnderline() );
                         if( eFontUnderline != UNDERLINE_NONE )
                         {
                             aFont.SetUnderline( eFontUnderline );
@@ -178,7 +193,7 @@ namespace drawinglayer
                         switch( pTCPP->getFontStrikeout() )
                         {
                             default:
-                                DBG_WARNING1( "DrawingLayer: Unknown strikeout attribute (%d)!", pTCPP->getFontUnderline() );
+                               DBG_WARNING1( "DrawingLayer: Unknown strikeout attribute (%d)!", pTCPP->getFontStrikeout() );
                                 // fall through
                             case primitive2d::FONT_STRIKEOUT_NONE:      eFontStrikeout = STRIKEOUT_NONE; break;
                             case primitive2d::FONT_STRIKEOUT_SINGLE:    eFontStrikeout = STRIKEOUT_SINGLE; break;
@@ -243,11 +258,11 @@ namespace drawinglayer
                     {
                         aTransformedDXArray.reserve(rTextCandidate.getDXArray().size());
                         const basegfx::B2DVector aPixelVector(aLocalTransform * basegfx::B2DVector(1.0, 0.0));
-                        const double fPixelVectorLength(aPixelVector.getLength());
+                        const double fPixelVectorFactor(aPixelVector.getLength());
 
                         for(::std::vector< double >::const_iterator aStart(rTextCandidate.getDXArray().begin()); aStart != rTextCandidate.getDXArray().end(); aStart++)
                         {
-                            aTransformedDXArray.push_back(basegfx::fround((*aStart) * fPixelVectorLength));
+                            aTransformedDXArray.push_back(basegfx::fround((*aStart) * fPixelVectorFactor));
                         }
                     }
 
@@ -267,12 +282,23 @@ namespace drawinglayer
                     mpOutputDevice->SetFont(aFont);
                     mpOutputDevice->SetTextColor(Color(aRGBFontColor));
 
-                    mpOutputDevice->DrawTextArray(
-                        aStartPoint,
-                        rTextCandidate.getText(),
-                        aTransformedDXArray.size() ? &(aTransformedDXArray[0]) : NULL,
-                        rTextCandidate.getTextPosition(),
-                        rTextCandidate.getTextLength());
+                    if(aTransformedDXArray.size())
+                    {
+                        mpOutputDevice->DrawTextArray(
+                            aStartPoint,
+                            rTextCandidate.getText(),
+                            &(aTransformedDXArray[0]),
+                            rTextCandidate.getTextPosition(),
+                            rTextCandidate.getTextLength());
+                    }
+                    else
+                    {
+                        mpOutputDevice->DrawText(
+                            aStartPoint,
+                            rTextCandidate.getText(),
+                            rTextCandidate.getTextPosition(),
+                            rTextCandidate.getTextLength());
+                    }
 
                     if(rTextCandidate.getFontAttributes().getRTL())
                     {
@@ -418,82 +444,70 @@ namespace drawinglayer
                         sal_Int32 nOWidth(aObjBR.X() - aObjTL.X());
                         sal_Int32 nOHeight(aObjBR.Y() - aObjTL.Y());
 
-                        if(nOWidth < 0L)
+                        // only do something when object has a size in discrete units
+                        if(nOWidth > 0 && nOHeight > 0)
                         {
-                            nOWidth = 1L;
-                        }
+                            sal_Int32 nBWidth(aBmpBR.X() - aBmpTL.X());
+                            sal_Int32 nBHeight(aBmpBR.Y() - aBmpTL.Y());
 
-                        if(nOHeight < 0L)
-                        {
-                            nOHeight = 1L;
-                        }
-
-                        sal_Int32 nBWidth(aBmpBR.X() - aBmpTL.X());
-                        sal_Int32 nBHeight(aBmpBR.Y() - aBmpTL.Y());
-
-                        if(nBWidth < 0L)
-                        {
-                            nBWidth = 1L;
-                        }
-
-                        if(nBHeight < 0L)
-                        {
-                            nBHeight = 1L;
-                        }
-
-                        sal_Int32 nBLeft(aBmpTL.X());
-                        sal_Int32 nBTop(aBmpTL.Y());
-
-                        if(nBLeft > aObjTL.X())
-                        {
-                            nBLeft -= ((nBLeft / nBWidth) + 1L) * nBWidth;
-                        }
-
-                        if(nBLeft + nBWidth <= aObjTL.X())
-                        {
-                            nBLeft -= (nBLeft / nBWidth) * nBWidth;
-                        }
-
-                        if(nBTop > aObjTL.Y())
-                        {
-                            nBTop -= ((nBTop / nBHeight) + 1L) * nBHeight;
-                        }
-
-                        if(nBTop + nBHeight <= aObjTL.Y())
-                        {
-                            nBTop -= (nBTop / nBHeight) * nBHeight;
-                        }
-
-                        // nBWidth, nBHeight is the pixel size of the neede bitmap. To not need to scale it
-                        // in vcl many times, create a size-optimized version
-                        const Size aNeededBitmapSizePixel(nBWidth, nBHeight);
-
-                        if(aNeededBitmapSizePixel != aBitmapEx.GetSizePixel())
-                        {
-                            aBitmapEx.Scale(aNeededBitmapSizePixel);
-                        }
-
-                        // prepare OutDev
-                        const Point aEmptyPoint(0, 0);
-                        const Rectangle aVisiblePixel(aEmptyPoint, mpOutputDevice->GetOutputSizePixel());
-                        const bool bWasEnabled(mpOutputDevice->IsMapModeEnabled());
-                        mpOutputDevice->EnableMapMode(false);
-
-                        for(sal_Int32 nXPos(nBLeft); nXPos < aObjTL.X() + nOWidth; nXPos += nBWidth)
-                        {
-                            for(sal_Int32 nYPos(nBTop); nYPos < aObjTL.Y() + nOHeight; nYPos += nBHeight)
+                            // only do something when bitmap fill has a size in discrete units
+                            if(nBWidth > 0 && nBHeight > 0)
                             {
-                                const Rectangle aOutRectPixel(Point(nXPos, nYPos), aNeededBitmapSizePixel);
+                                sal_Int32 nBLeft(aBmpTL.X());
+                                sal_Int32 nBTop(aBmpTL.Y());
 
-                                if(aOutRectPixel.IsOver(aVisiblePixel))
+                                if(nBLeft > aObjTL.X())
                                 {
-                                    mpOutputDevice->DrawBitmapEx(aOutRectPixel.TopLeft(), aBitmapEx);
+                                    nBLeft -= ((nBLeft / nBWidth) + 1L) * nBWidth;
                                 }
+
+                                if(nBLeft + nBWidth <= aObjTL.X())
+                                {
+                                    nBLeft -= (nBLeft / nBWidth) * nBWidth;
+                                }
+
+                                if(nBTop > aObjTL.Y())
+                                {
+                                    nBTop -= ((nBTop / nBHeight) + 1L) * nBHeight;
+                                }
+
+                                if(nBTop + nBHeight <= aObjTL.Y())
+                                {
+                                    nBTop -= (nBTop / nBHeight) * nBHeight;
+                                }
+
+                                // nBWidth, nBHeight is the pixel size of the neede bitmap. To not need to scale it
+                                // in vcl many times, create a size-optimized version
+                                const Size aNeededBitmapSizePixel(nBWidth, nBHeight);
+
+                                if(aNeededBitmapSizePixel != aBitmapEx.GetSizePixel())
+                                {
+                                    aBitmapEx.Scale(aNeededBitmapSizePixel);
+                                }
+
+                                // prepare OutDev
+                                const Point aEmptyPoint(0, 0);
+                                const Rectangle aVisiblePixel(aEmptyPoint, mpOutputDevice->GetOutputSizePixel());
+                                const bool bWasEnabled(mpOutputDevice->IsMapModeEnabled());
+                                mpOutputDevice->EnableMapMode(false);
+
+                                for(sal_Int32 nXPos(nBLeft); nXPos < aObjTL.X() + nOWidth; nXPos += nBWidth)
+                                {
+                                    for(sal_Int32 nYPos(nBTop); nYPos < aObjTL.Y() + nOHeight; nYPos += nBHeight)
+                                    {
+                                        const Rectangle aOutRectPixel(Point(nXPos, nYPos), aNeededBitmapSizePixel);
+
+                                        if(aOutRectPixel.IsOver(aVisiblePixel))
+                                        {
+                                            mpOutputDevice->DrawBitmapEx(aOutRectPixel.TopLeft(), aBitmapEx);
+                                        }
+                                    }
+                                }
+
+                                // restore OutDev
+                                mpOutputDevice->EnableMapMode(bWasEnabled);
                             }
                         }
-
-                        // restore OutDev
-                        mpOutputDevice->EnableMapMode(bWasEnabled);
                     }
                 }
             }
@@ -712,6 +726,52 @@ namespace drawinglayer
             }
         }
 
+        // unified sub-transparence. Draw to VDev first.
+        void VclProcessor2D::RenderUnifiedAlphaPrimitive2D(const primitive2d::UnifiedAlphaPrimitive2D& rTransCandidate)
+        {
+            static bool bForceToDecomposition(false);
+
+            if(rTransCandidate.getChildren().hasElements())
+            {
+                if(bForceToDecomposition)
+                {
+                    // use decomposition
+                    process(rTransCandidate.get2DDecomposition(getViewInformation2D()));
+                }
+                else
+                {
+                    if(0.0 == rTransCandidate.getAlpha())
+                    {
+                        // no transparence used, so just use the content
+                        process(rTransCandidate.getChildren());
+                    }
+                    else if(rTransCandidate.getAlpha() > 0.0 && rTransCandidate.getAlpha() < 1.0)
+                    {
+                        // alpha is in visible range
+                        basegfx::B2DRange aRange(primitive2d::getB2DRangeFromPrimitive2DSequence(rTransCandidate.getChildren(), getViewInformation2D()));
+                        aRange.transform(maCurrentTransformation);
+                        impBufferDevice aBufferDevice(*mpOutputDevice, aRange, true);
+
+                        if(aBufferDevice.isVisible())
+                        {
+                            // remember last OutDev and set to content
+                            OutputDevice* pLastOutputDevice = mpOutputDevice;
+                            mpOutputDevice = &aBufferDevice.getContent();
+
+                            // paint content to it
+                            process(rTransCandidate.getChildren());
+
+                            // back to old OutDev
+                            mpOutputDevice = pLastOutputDevice;
+
+                            // dump buffer to outdev using given alpha
+                            aBufferDevice.paint(rTransCandidate.getAlpha());
+                        }
+                    }
+                }
+            }
+        }
+
         // sub-transparence group. Draw to VDev first.
         void VclProcessor2D::RenderAlphaPrimitive2D(const primitive2d::AlphaPrimitive2D& rTransCandidate)
         {
@@ -812,69 +872,42 @@ namespace drawinglayer
                 return;
             }
 
-            switch(rMarkArrayCandidate.getStyle())
+            // get data
+            const std::vector< basegfx::B2DPoint >& rPositions = rMarkArrayCandidate.getPositions();
+            const sal_uInt32 nCount(rPositions.size());
+
+            if(nCount && !rMarkArrayCandidate.getMarker().IsEmpty())
             {
-                default :
+                // get pixel size
+                const BitmapEx& rMarker(rMarkArrayCandidate.getMarker());
+                const Size aBitmapSize(rMarker.GetSizePixel());
+
+                if(aBitmapSize.Width() && aBitmapSize.Height())
                 {
-                    // not handled/unknown MarkerArrayPrimitive2D, use decomposition
-                    process(rMarkArrayCandidate.get2DDecomposition(getViewInformation2D()));
-                    break;
-                }
-                case primitive2d::MARKERSTYLE2D_CROSS :
-                case primitive2d::MARKERSTYLE2D_GLUEPOINT :
-                {
-                    // directly supported markers
-                    const std::vector< basegfx::B2DPoint >& rPositions = rMarkArrayCandidate.getPositions();
-                    const basegfx::BColor aRGBColor(maBColorModifierStack.getModifiedColor(rMarkArrayCandidate.getRGBColor()));
-                    const Color aVCLColor(aRGBColor);
-                    const basegfx::B2DHomMatrix aTransObjectToDiscrete(mpOutputDevice->GetViewTransformation() * maCurrentTransformation);
+                    // get discrete half size
+                    const basegfx::B2DVector aDiscreteHalfSize(
+                        (aBitmapSize.getWidth() - 1.0) * 0.5,
+                        (aBitmapSize.getHeight() - 1.0) * 0.5);
+                    const bool bWasEnabled(mpOutputDevice->IsMapModeEnabled());
+
+                    // do not forget evtl. moved origin in target device MapMode when
+                    // switching it off; it would be missing and lead to wrong positions.
+                    // All his could be done using logic sizes and coordinates, too, but
+                    // we want a 1:1 bitmap rendering here, so it's more safe and faster
+                    // to work with switching off MapMode usage completely.
+                    const Point aOrigin(mpOutputDevice->GetMapMode().GetOrigin());
+
+                    mpOutputDevice->EnableMapMode(false);
 
                     for(std::vector< basegfx::B2DPoint >::const_iterator aIter(rPositions.begin()); aIter != rPositions.end(); aIter++)
                     {
-                        const basegfx::B2DPoint aDiscretePosition(aTransObjectToDiscrete * (*aIter));
-                        const Point aPos(basegfx::fround(aDiscretePosition.getX()), basegfx::fround(aDiscretePosition.getY()));
+                        const basegfx::B2DPoint aDiscreteTopLeft((maCurrentTransformation * (*aIter)) - aDiscreteHalfSize);
+                        const Point aDiscretePoint(basegfx::fround(aDiscreteTopLeft.getX()), basegfx::fround(aDiscreteTopLeft.getY()));
 
-                        switch(rMarkArrayCandidate.getStyle())
-                        {
-                            default :
-                            {
-                                // this would be an error, ther cases here need to be consistent with the initially
-                                // accepted ones
-                                OSL_ENSURE(false, "Inconsistent RenderMarkerArrayPrimitive2D implementation (!)");
-                                break;
-                            }
-                            case primitive2d::MARKERSTYLE2D_CROSS :
-                            {
-                                mpOutputDevice->DrawPixel(aPos, aVCLColor);
-                                mpOutputDevice->DrawPixel(Point(aPos.X() - 1L, aPos.Y()), aVCLColor);
-                                mpOutputDevice->DrawPixel(Point(aPos.X() + 1L, aPos.Y()), aVCLColor);
-                                mpOutputDevice->DrawPixel(Point(aPos.X(), aPos.Y() - 1L), aVCLColor);
-                                mpOutputDevice->DrawPixel(Point(aPos.X(), aPos.Y() + 1L), aVCLColor);
-
-                                break;
-                            }
-                            case primitive2d::MARKERSTYLE2D_GLUEPOINT :
-                            {
-                                // backpen
-                                mpOutputDevice->SetLineColor(aVCLColor);
-                                mpOutputDevice->DrawLine(aPos + Point(-2, -3), aPos + Point(+3, +2));
-                                mpOutputDevice->DrawLine(aPos + Point(-3, -2), aPos + Point(+2, +3));
-                                mpOutputDevice->DrawLine(aPos + Point(-3, +2), aPos + Point(+2, -3));
-                                mpOutputDevice->DrawLine(aPos + Point(-2, +3), aPos + Point(+3, -2));
-
-                                // frontpen (hard coded)
-                                const basegfx::BColor aRGBFrontColor(maBColorModifierStack.getModifiedColor(Color(COL_LIGHTBLUE).getBColor()));
-                                mpOutputDevice->SetLineColor(Color(aRGBFrontColor));
-                                mpOutputDevice->DrawLine(aPos + Point(-2, -2), aPos + Point(+2, +2));
-                                mpOutputDevice->DrawLine(aPos + Point(-2, +2), aPos + Point(+2, -2));
-
-                                break;
-                            }
-                        }
-
+                        mpOutputDevice->DrawBitmapEx(aDiscretePoint + aOrigin, rMarker);
                     }
 
-                    break;
+                    mpOutputDevice->EnableMapMode(bWasEnabled);
                 }
             }
         }
@@ -903,8 +936,8 @@ namespace drawinglayer
 
             if(basegfx::fTools::more(fLineWidth, 0.0))
             {
-                const basegfx::B2DVector aDiscreteUnit(maCurrentTransformation * basegfx::B2DVector(1.0, 1.0));
-                const double fDiscreteLineWidth((fLineWidth * aDiscreteUnit.getX() + fLineWidth * aDiscreteUnit.getY()) * 0.5);
+                const basegfx::B2DVector aDiscreteUnit(maCurrentTransformation * basegfx::B2DVector(fLineWidth, 0.0));
+                const double fDiscreteLineWidth(aDiscreteUnit.getLength());
 
                 if(basegfx::fTools::lessOrEqual(fDiscreteLineWidth, 2.5))
                 {
@@ -1100,32 +1133,6 @@ namespace drawinglayer
             }
         }
 
-        basegfx::B2DPoint VclProcessor2D::PositionAndSizeControl(const primitive2d::ControlPrimitive2D& rControlPrimitive2D)
-        {
-            // prepare output for given device
-            Reference< XGraphics > xGraphics(mpOutputDevice->CreateUnoGraphics());
-            Reference< XView > xControlView(rControlPrimitive2D.getXControl(), UNO_QUERY_THROW);
-            xControlView->setGraphics(xGraphics);
-
-            // set position and size (in pixel)
-            const basegfx::B2DHomMatrix aObjectToPixel(maCurrentTransformation * rControlPrimitive2D.getTransform());
-            const basegfx::B2DPoint aTopLeftPixel(aObjectToPixel * basegfx::B2DPoint(0.0, 0.0));
-            Reference< XWindow > xControlWindow(rControlPrimitive2D.getXControl(), UNO_QUERY);
-
-            if(xControlWindow.is())
-            {
-                const basegfx::B2DPoint aBottomRightPixel(aObjectToPixel * basegfx::B2DPoint(1.0, 1.0));
-
-                xControlWindow->setPosSize(
-                    basegfx::fround(aTopLeftPixel.getX()), basegfx::fround(aTopLeftPixel.getY()),
-                    basegfx::fround(aBottomRightPixel.getX() - aTopLeftPixel.getX()),
-                    basegfx::fround(aBottomRightPixel.getY() - aTopLeftPixel.getY()),
-                    POSSIZE);
-            }
-
-            return aTopLeftPixel;
-        }
-
         //////////////////////////////////////////////////////////////////////////////
         // process support
 
@@ -1146,7 +1153,7 @@ namespace drawinglayer
 
             if(SvtCTLOptions::NUMERALS_HINDI == aSvtCTLOptions.GetCTLTextNumerals())
             {
-                eLang = LANGUAGE_ARABIC;
+                eLang = LANGUAGE_ARABIC_SAUDI_ARABIA;
             }
             else if(SvtCTLOptions::NUMERALS_ARABIC == aSvtCTLOptions.GetCTLTextNumerals())
             {

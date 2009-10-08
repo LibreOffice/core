@@ -38,12 +38,12 @@
 
 #include <drawinglayer/primitive2d/markerarrayprimitive2d.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
-#include <drawinglayer/primitive2d/pointarrayprimitive2d.hxx>
 #include <drawinglayer/geometry/viewinformation2d.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <drawinglayer/primitive2d/polygonprimitive2d.hxx>
 #include <drawinglayer/primitive2d/transformprimitive2d.hxx>
 #include <drawinglayer/primitive2d/drawinglayer_primitivetypes2d.hxx>
+#include <drawinglayer/primitive2d/bitmapprimitive2d.hxx>
 
 //////////////////////////////////////////////////////////////////////////////
 
@@ -58,121 +58,39 @@ namespace drawinglayer
         Primitive2DSequence MarkerArrayPrimitive2D::createLocalDecomposition(const geometry::ViewInformation2D& rViewInformation) const
         {
             Primitive2DSequence xRetval;
+            const std::vector< basegfx::B2DPoint >& rPositions = getPositions();
+            const sal_uInt32 nMarkerCount(rPositions.size());
 
-            switch(getStyle())
+            if(nMarkerCount && !getMarker().IsEmpty())
             {
-                default : // MARKERSTYLE2D_POINT
-                {
-                    // the default produces single points in given color, thus it is a good fallback for
-                    // all evtl. non-implented decompositions, too
-                    const Primitive2DReference xReference(new PointArrayPrimitive2D(getPositions(), getRGBColor()));
-                    xRetval = Primitive2DSequence(&xReference, 1);
-                    break;
-                }
-                case MARKERSTYLE2D_CROSS :
-                case MARKERSTYLE2D_GLUEPOINT :
-                {
-                    // schema to use here: create one ZeroPoint-centered template incarnation of the marker using other primitives
-                    // and multiply it using a seuence of TransformPrimitive2D containing it
-                    const std::vector< basegfx::B2DPoint >& rPositions = getPositions();
-                    const sal_uInt32 nMarkerCount(rPositions.size());
+                // get pixel size
+                Size aBitmapSize(getMarker().GetSizePixel());
 
-                    if(nMarkerCount)
+                if(aBitmapSize.Width() && aBitmapSize.Height())
+                {
+                    // get logic half pixel size
+                    basegfx::B2DVector aLogicHalfSize(rViewInformation.getInverseObjectToViewTransformation() *
+                        basegfx::B2DVector(aBitmapSize.getWidth() - 1.0, aBitmapSize.getHeight() - 1.0));
+
+                    // use half size for expand
+                    aLogicHalfSize *= 0.5;
+
+                    // number of primitives is known; realloc accordingly
+                    xRetval.realloc(nMarkerCount);
+
+                    for(sal_uInt32 a(0); a < nMarkerCount; a++)
                     {
-                        // get the size of one dicscrete display unit in logic size
-                        const basegfx::B2DVector aDist(rViewInformation.getInverseObjectToViewTransformation() * basegfx::B2DVector(1.0, 1.0));
-                        Primitive2DSequence aTemplate;
+                        const basegfx::B2DPoint& rPosition(rPositions[a]);
+                        const basegfx::B2DRange aRange(rPosition - aLogicHalfSize, rPosition + aLogicHalfSize);
+                        basegfx::B2DHomMatrix aTransform;
 
-                        switch(getStyle())
-                        {
-                            case MARKERSTYLE2D_CROSS :
-                            {
-                                // two lines forming the intended cross. Prefer vector decompose
-                                // over also possible bitmap/PointArrayPrimitive decompose for better quality.
-                                // Also make the discrete unit based lines one pixel longer since non-closed
-                                // polygon primitives will be rendered without the last point by convention
-                                aTemplate.realloc(2);
-                                basegfx::B2DPolygon aPolygon;
+                        aTransform.set(0, 0, aRange.getWidth());
+                        aTransform.set(1, 1, aRange.getHeight());
+                        aTransform.set(0, 2, aRange.getMinX());
+                        aTransform.set(1, 2, aRange.getMinY());
 
-                                aPolygon.append(basegfx::B2DPoint(aDist.getX() * -1.0, 0.0));
-                                aPolygon.append(basegfx::B2DPoint(aDist.getX() *  2.0, 0.0));
-                                aTemplate[0] = Primitive2DReference(new PolygonHairlinePrimitive2D(aPolygon, getRGBColor()));
-
-                                aPolygon.clear();
-                                aPolygon.append(basegfx::B2DPoint(0.0, aDist.getY() * -1.0));
-                                aPolygon.append(basegfx::B2DPoint(0.0, aDist.getY() *  2.0));
-                                aTemplate[1] = Primitive2DReference(new PolygonHairlinePrimitive2D(aPolygon, getRGBColor()));
-
-                                break;
-                            }
-                            case MARKERSTYLE2D_GLUEPOINT :
-                            {
-                                // six lines forming the intended gluepoint cross. Prefer vector decompose
-                                // over also possible bitmap/PointArrayPrimitive decompose for better quality
-                                // Also make the discrete unit based lines one pixel longer since non-closed
-                                // polygon primitives will be rendered without the last point by convention
-                                aTemplate.realloc(6);
-                                basegfx::B2DPolygon aPolygon;
-
-                                aPolygon.append(basegfx::B2DPoint(aDist.getX() * -2.0, aDist.getY() * -3.0));
-                                aPolygon.append(basegfx::B2DPoint(aDist.getX() *  4.0, aDist.getY() *  3.0));
-                                aTemplate[0] = Primitive2DReference(new PolygonHairlinePrimitive2D(aPolygon, getRGBColor()));
-
-                                aPolygon.clear();
-                                aPolygon.append(basegfx::B2DPoint(aDist.getX() * -3.0, aDist.getY() * -2.0));
-                                aPolygon.append(basegfx::B2DPoint(aDist.getX() *  3.0, aDist.getY() *  4.0));
-                                aTemplate[1] = Primitive2DReference(new PolygonHairlinePrimitive2D(aPolygon, getRGBColor()));
-
-                                aPolygon.clear();
-                                aPolygon.append(basegfx::B2DPoint(aDist.getX() * -3.0, aDist.getY() *  2.0));
-                                aPolygon.append(basegfx::B2DPoint(aDist.getX() *  3.0, aDist.getY() * -4.0));
-                                aTemplate[2] = Primitive2DReference(new PolygonHairlinePrimitive2D(aPolygon, getRGBColor()));
-
-                                aPolygon.clear();
-                                aPolygon.append(basegfx::B2DPoint(aDist.getX() * -2.0, aDist.getY() *  3.0));
-                                aPolygon.append(basegfx::B2DPoint(aDist.getX() *  4.0, aDist.getY() * -3.0));
-                                aTemplate[3] = Primitive2DReference(new PolygonHairlinePrimitive2D(aPolygon, getRGBColor()));
-
-                                const basegfx::BColor aRGBFrontColor(0.0, 0.0, 1.0); // COL_LIGHTBLUE
-
-                                aPolygon.clear();
-                                aPolygon.append(basegfx::B2DPoint(aDist.getX() * -2.0, aDist.getY() * -2.0));
-                                aPolygon.append(basegfx::B2DPoint(aDist.getX() *  3.0, aDist.getY() *  3.0));
-                                aTemplate[4] = Primitive2DReference(new PolygonHairlinePrimitive2D(aPolygon, aRGBFrontColor));
-
-                                aPolygon.clear();
-                                aPolygon.append(basegfx::B2DPoint(aDist.getX() * -2.0, aDist.getY() *  2.0));
-                                aPolygon.append(basegfx::B2DPoint(aDist.getX() *  3.0, aDist.getY() * -3.0));
-                                aTemplate[5] = Primitive2DReference(new PolygonHairlinePrimitive2D(aPolygon, aRGBFrontColor));
-
-                                break;
-                            }
-                            default :
-                            {
-                                // nothing to do, keep template empty
-                                break;
-                            }
-                        }
-
-                        if(aTemplate.hasElements())
-                        {
-                            xRetval.realloc(nMarkerCount);
-
-                            for(sal_uInt32 a(0); a < nMarkerCount; a++)
-                            {
-                                const basegfx::B2DPoint& rPosition(rPositions[a]);
-                                basegfx::B2DHomMatrix aTransform;
-
-                                aTransform.set(0, 2, rPosition.getX());
-                                aTransform.set(1, 2, rPosition.getY());
-
-                                xRetval[a] = Primitive2DReference(new TransformPrimitive2D(aTransform, aTemplate));
-                            }
-                        }
-
-                        return xRetval;
+                        xRetval[a] = Primitive2DReference(new BitmapPrimitive2D(getMarker(), aTransform));
                     }
-                    break;
                 }
             }
 
@@ -181,12 +99,10 @@ namespace drawinglayer
 
         MarkerArrayPrimitive2D::MarkerArrayPrimitive2D(
             const std::vector< basegfx::B2DPoint >& rPositions,
-            MarkerStyle2D eStyle,
-            const basegfx::BColor& rRGBColor)
+            const BitmapEx& rMarker)
         :   BasePrimitive2D(),
             maPositions(rPositions),
-            maRGBColor(rRGBColor),
-            meStyle(eStyle)
+            maMarker(rMarker)
         {
         }
 
@@ -197,8 +113,7 @@ namespace drawinglayer
                 const MarkerArrayPrimitive2D& rCompare = (MarkerArrayPrimitive2D&)rPrimitive;
 
                 return (getPositions() == rCompare.getPositions()
-                    && getRGBColor() == rCompare.getRGBColor()
-                    && getStyle() == rCompare.getStyle());
+                    && getMarker() == rCompare.getMarker());
             }
 
             return false;
@@ -208,34 +123,32 @@ namespace drawinglayer
         {
             basegfx::B2DRange aRetval;
 
-            // get the basic range from the position vector
-            for(std::vector< basegfx::B2DPoint >::const_iterator aIter(getPositions().begin()); aIter != getPositions().end(); aIter++)
+            if(getPositions().size())
             {
-                aRetval.expand(*aIter);
-            }
+                // get the basic range from the position vector
+                for(std::vector< basegfx::B2DPoint >::const_iterator aIter(getPositions().begin()); aIter != getPositions().end(); aIter++)
+                {
+                    aRetval.expand(*aIter);
+                }
 
-            switch(getStyle())
-            {
-                default : // MARKERSTYLE2D_POINT
+                if(!getMarker().IsEmpty())
                 {
-                    // nothing to do; aRetval is already valid
-                    break;
-                }
-                case MARKERSTYLE2D_CROSS :
-                {
-                    // size is 3x3 centered, expand
-                    const basegfx::B2DVector aDiscreteVector(rViewInformation.getInverseObjectToViewTransformation() * basegfx::B2DVector(1.5, 1.5));
-                    aRetval.expand(aRetval.getMinimum() - aDiscreteVector);
-                    aRetval.expand(aRetval.getMinimum() + aDiscreteVector);
-                    break;
-                }
-                case MARKERSTYLE2D_GLUEPOINT :
-                {
-                    // size is 7x7 centered, expand
-                    const basegfx::B2DVector aDiscreteVector(rViewInformation.getInverseObjectToViewTransformation() * basegfx::B2DVector(3.5, 3.5));
-                    aRetval.expand(aRetval.getMinimum() - aDiscreteVector);
-                    aRetval.expand(aRetval.getMinimum() + aDiscreteVector);
-                    break;
+                    // get pixel size
+                    const Size aBitmapSize(getMarker().GetSizePixel());
+
+                    if(aBitmapSize.Width() && aBitmapSize.Height())
+                    {
+                        // get logic half size
+                        basegfx::B2DVector aLogicHalfSize(rViewInformation.getInverseObjectToViewTransformation() *
+                            basegfx::B2DVector(aBitmapSize.getWidth(), aBitmapSize.getHeight()));
+
+                        // use half size for expand
+                        aLogicHalfSize *= 0.5;
+
+                        // apply aLogicHalfSize
+                        aRetval.expand(aRetval.getMinimum() - aLogicHalfSize);
+                        aRetval.expand(aRetval.getMaximum() + aLogicHalfSize);
+                    }
                 }
             }
 

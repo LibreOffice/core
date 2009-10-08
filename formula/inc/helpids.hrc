@@ -1,0 +1,65 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ * 
+ * Copyright 2008 by Sun Microsystems, Inc.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * $RCSfile: helpids.hrc,v $
+ * $Revision: 1.7 $
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+#ifndef FORMULA_HELPID_HRC
+#define FORMULA_HELPID_HRC
+
+#ifndef _SOLAR_HRC
+#include <svtools/solar.hrc>    // HID_FORMULA_START
+#endif
+
+#define HID_FORMULADLG_FORMULA                          (HID_FORMULA_START + 0)
+#define HID_FORMULA_FAP_FORMULA                         (HID_FORMULA_START + 1)
+#define HID_FORMULA_FAP_STRUCT                          (HID_FORMULA_START + 2)
+#define HID_FORMULA_FAP_PAGE                            (HID_FORMULA_START + 3)
+#define HID_FORMULA_FAP_EDIT1                           (HID_FORMULA_START + 4)
+#define HID_FORMULA_FAP_EDIT2                           (HID_FORMULA_START + 5)
+#define HID_FORMULA_FAP_EDIT3                           (HID_FORMULA_START + 6)
+#define HID_FORMULA_FAP_EDIT4                           (HID_FORMULA_START + 7)
+#define HID_FORMULA_FAP_BTN_FX1                         (HID_FORMULA_START + 8)
+#define HID_FORMULA_FAP_BTN_FX2                         (HID_FORMULA_START + 9)
+#define HID_FORMULA_FAP_BTN_FX3                         (HID_FORMULA_START +10)
+#define HID_FORMULA_FAP_BTN_FX4                         (HID_FORMULA_START +11)
+#define HID_FORMULA_FAP_BTN_REF1                        (HID_FORMULA_START +12)
+#define HID_FORMULA_FAP_BTN_REF2                        (HID_FORMULA_START +13)
+#define HID_FORMULA_FAP_BTN_REF3                        (HID_FORMULA_START +14)
+#define HID_FORMULA_FAP_BTN_REF4                        (HID_FORMULA_START +15)
+#define HID_FORMULA_LB_CATEGORY                         (HID_FORMULA_START +16)
+#define HID_FORMULA_LB_FUNCTION                         (HID_FORMULA_START +17)
+#define HID_FORMULATAB_FUNCTION                         (HID_FORMULA_START +18)
+#define HID_FORMULATAB_STRUCT                           (HID_FORMULA_START +19)
+
+    
+#if HID_FORMULATAB_STRUCT > HID_FORMULA_END
+#error Help-Id Ueberlauf in #file, #line       
+#endif                                             
+// don't forget to update the file util/hidother.src
+
+#endif //FORMULA_HELPID_HRC
+

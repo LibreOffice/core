@@ -63,17 +63,11 @@ class SVX_DLLPUBLIC SdrDragView: public SdrExchangeView
 
 protected:
     SdrHdl*                     pDragHdl;
-    SdrDragMethod*              pDragBla;
+    SdrDragMethod*              mpCurrentSdrDragMethod;
     SdrUndoGeoObj*              pInsPointUndo;
-
-    // for migrating stuff from XOR, use ImpSdrDragViewExtraData ATM to not need to
-    // compile the apps all the time
-    ImpSdrDragViewExtraData*    mpDragViewExtraData;
-
     Rectangle                   aDragLimit;
     XubString                   aInsPointUndoStr;
     SdrMarkList                 aFollowingEdges; // Wenn Knoten gedraggd werden, sollen alle Kanten als Xor folgen
-
     SdrHdlKind                  eDragHdl;
 
     ULONG                       nDragXorPolyLimit;
@@ -87,14 +81,12 @@ protected:
     unsigned                    bDragLimit : 1;      // Limit auf SnapRect statt BoundRect
     unsigned                    bDragHdl : 1;        // TRUE: RefPt wird verschoben
     unsigned                    bDragStripes : 1;    // Persistent
-    //HMHunsigned                   bNoDragHdl : 1;      // Persistent - Handles waehrend des Draggens verstecken
     unsigned                    bMirrRefDragObj : 1; // Persistent - Waehrend des Draggens der Spiegelachse die gespiegelten Objekte als Xor zeigen
-    unsigned                    bSolidDragging : 1;  // Dragging und Create in Echtzeit erlaubt
+    unsigned                    mbSolidDragging : 1;  // allow solid create/drag of objects
     unsigned                    bMouseHideWhileDraggingPoints : 1;
     unsigned                    bResizeAtCenter : 1;
     unsigned                    bCrookAtCenter : 1;
     unsigned                    bDragWithCopy : 1;
-//  unsigned                    bInsAfter : 1;       // Parameter zum Einfuegen von Folgepunkten
     unsigned                    bInsGluePoint : 1;
     unsigned                    bInsObjPointMode : 1;
     unsigned                    bInsGluePointMode : 1;
@@ -111,8 +103,6 @@ private:
 
 protected:
     virtual void SetMarkHandles();
-    // aDragPoly0 an den PageViews setzen
-    void SetDragPolys(bool bReset = false);
     void ShowDragObj();
     void HideDragObj();
     sal_Bool ImpBegInsObjPoint(sal_Bool bIdxZwang, sal_uInt32 nIdx, const Point& rPnt, sal_Bool bNewObj, OutputDevice* pOut);
@@ -149,10 +139,9 @@ public:
     void MovDragObj(const Point& rPnt);
     BOOL EndDragObj(BOOL bCopy=FALSE);
     void BrkDragObj();
-    BOOL IsDragObj() const { return pDragBla!=NULL && !bInsPolyPoint && !bInsGluePoint; }
+    BOOL IsDragObj() const { return mpCurrentSdrDragMethod && !bInsPolyPoint && !bInsGluePoint; }
     SdrHdl* GetDragHdl() const { return pDragHdl; }
-    SdrDragMethod* GetDragMethod() const { return pDragBla; }
-    BOOL IsMoveOnlyDragObj(BOOL bAskRTTI=FALSE) const;
+    SdrDragMethod* GetDragMethod() const { return mpCurrentSdrDragMethod; }
     BOOL IsDraggingPoints() const { return eDragHdl==HDL_POLY; }
     BOOL IsDraggingGluePoints() const { return eDragHdl==HDL_GLUE; }
 
@@ -172,7 +161,7 @@ public:
     void MovInsObjPoint(const Point& rPnt) { MovDragObj(rPnt); }
     BOOL EndInsObjPoint(SdrCreateCmd eCmd);
     void BrkInsObjPoint() { BrkDragObj(); }
-    BOOL IsInsObjPoint() const { return pDragBla!=NULL && bInsPolyPoint; }
+    BOOL IsInsObjPoint() const { return mpCurrentSdrDragMethod && bInsPolyPoint; }
 
     // Fuer die App zum Verwalten des Status. GetPreferedPointer() wird
     // spaeter vielleicht einen passenden Pointer dafuer liefern
@@ -184,7 +173,7 @@ public:
     void MovInsGluePoint(const Point& rPnt) { MovDragObj(rPnt); }
     BOOL EndInsGluePoint() { return EndDragObj(); }
     void BrkInsGluePoint() { BrkDragObj(); }
-    BOOL IsInsGluePoint() const { return pDragBla!=NULL && bInsGluePoint; }
+    BOOL IsInsGluePoint() const { return mpCurrentSdrDragMethod && bInsGluePoint; }
 
     // Fuer die App zum Verwalten des Status. GetPreferedPointer() wird
     // spaeter vielleicht einen passenden Pointer dafuer liefern
@@ -229,8 +218,8 @@ public:
     void  SetDragXorPointLimit(ULONG nPntAnz) { nDragXorPointLimit=nPntAnz; }
     ULONG GetDragXorPointLimit() const { return nDragXorPointLimit; }
 
-    void SetSolidDragging(BOOL bOn) { bSolidDragging = bOn; }
-    BOOL IsSolidDragging() const { return bSolidDragging; }
+    void SetSolidDragging(bool bOn);
+    bool IsSolidDragging() const;
 
     // Dragging/Creating von Verbindern:
     // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

@@ -8,7 +8,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: UI.xcs,v $
- * $Revision: 1.30 $
+ * $Revision: 1.30.126.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -532,6 +532,76 @@
 					</info>
 				</prop>
 			</group>
+			<group oor:name="SQLIdentifier">
+				<info>
+					<desc>Specifies the settings for SQL identifiers, as used the Query Designer.</desc>
+				</info>
+				<prop oor:name="Color" oor:type="xs:int">
+					<info>
+						<desc>Specifies the color used for SQL identifiers.</desc>
+					</info>
+				</prop>
+			</group>
+      <group oor:name="SQLNumber">
+        <info>
+          <desc>Specifies the settings for SQL numbers, as used the Query Designer.</desc>
+        </info>
+        <prop oor:name="Color" oor:type="xs:int">
+          <info>
+            <desc>Specifies the color used for SQL numbers.</desc>
+          </info>
+        </prop>
+      </group>
+      <group oor:name="SQLString">
+        <info>
+          <desc>Specifies the settings for SQL strings, as used the Query Designer.</desc>
+        </info>
+        <prop oor:name="Color" oor:type="xs:int">
+          <info>
+            <desc>Specifies the color used for SQL strings.</desc>
+          </info>
+        </prop>
+      </group>
+      <group oor:name="SQLOperator">
+        <info>
+          <desc>Specifies the settings for SQL operators, as used the Query Designer.</desc>
+        </info>
+        <prop oor:name="Color" oor:type="xs:int">
+          <info>
+            <desc>Specifies the color used for SQL operators.</desc>
+          </info>
+        </prop>
+      </group>
+      <group oor:name="SQLKeyword">
+        <info>
+          <desc>Specifies the settings for SQL keywords, as used the Query Designer.</desc>
+        </info>
+        <prop oor:name="Color" oor:type="xs:int">
+          <info>
+            <desc>Specifies the color used for SQL keywords.</desc>
+          </info>
+        </prop>
+      </group>
+      <group oor:name="SQLParameter">
+        <info>
+          <desc>Specifies the settings for SQL parameters, as used the Query Designer.</desc>
+        </info>
+        <prop oor:name="Color" oor:type="xs:int">
+          <info>
+            <desc>Specifies the color used for SQL parameters.</desc>
+          </info>
+        </prop>
+      </group>
+      <group oor:name="SQLComment">
+        <info>
+          <desc>Specifies the settings for SQL comments, as used the Query Designer.</desc>
+        </info>
+        <prop oor:name="Color" oor:type="xs:int">
+          <info>
+            <desc>Specifies the color used for SQL parameters.</desc>
+          </info>
+        </prop>
+      </group>
 		</group>
 	</templates>
 	<component>

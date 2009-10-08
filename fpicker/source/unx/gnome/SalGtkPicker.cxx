@@ -104,12 +104,6 @@ rtl::OString SalGtkPicker::unicodetouri(const rtl::OUString &rURL)
     return sURL;
 }
 
-gboolean rundialog(RunDialog *pDialog)
-{
-    pDialog->run();
-    return false;
-}
-
 gboolean canceldialog(RunDialog *pDialog)
 {
     pDialog->cancel();
@@ -124,7 +118,7 @@ extern "C"
 
 RunDialog::RunDialog( GtkWidget *pDialog, uno::Reference< awt::XExtendedToolkit >& rToolkit ) :
     cppu::WeakComponentImplHelper1< awt::XTopWindowListener >( maLock ),
-    mbFinished(false), mpDialog(pDialog), mpCreatedParent(NULL), mxToolkit(rToolkit)
+    mpDialog(pDialog), mpCreatedParent(NULL), mxToolkit(rToolkit)
 {
     awt::SystemDependentXWindow aWindowHandle;
 
@@ -178,39 +172,20 @@ void RunDialog::cancel()
     gtk_widget_hide( mpDialog );
 }
 
-void RunDialog::run()
+gint RunDialog::run()
 {
     if (mxToolkit.is())
         mxToolkit->addTopWindowListener(this);
 
-    mnStatus = gtk_dialog_run( GTK_DIALOG( mpDialog ) );
+    gint nStatus = gtk_dialog_run( GTK_DIALOG( mpDialog ) );
 
     if (mxToolkit.is())
         mxToolkit->removeTopWindowListener(this);
 
-
-    if (mnStatus != 1)  //PLAY
+    if (nStatus != 1)   //PLAY
         gtk_widget_hide( mpDialog );
 
-    maLock.acquire();
-    mbFinished = true;
-    maLock.release();
-
-    Application::EndYield();
-}
-
-gint RunDialog::runandwaitforresult()
-{
-    g_timeout_add_full(G_PRIORITY_HIGH_IDLE, 0, (GSourceFunc)rundialog, this, NULL);
-    while (1)
-    {
-    maLock.acquire();
-        if (mbFinished)
-            break;
-    maLock.release();
-        Application::Yield();
-    }
-    return mnStatus;
+    return nStatus;
 }
 
 SalGtkPicker::~SalGtkPicker()

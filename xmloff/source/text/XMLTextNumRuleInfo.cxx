@@ -7,11 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: XMLTextNumRuleInfo.cxx,v $
-<<<<<<< XMLTextNumRuleInfo.cxx
  * $Revision: 1.16 $
-=======
- * $Revision: 1.16 $
->>>>>>> 1.12.12.6
  *
  * This file is part of OpenOffice.org.
  *
@@ -64,6 +60,10 @@ XMLTextNumRuleInfo::XMLTextNumRuleInfo()
     , msNumberingIsOutline(RTL_CONSTASCII_USTRINGPARAM("NumberingIsOutline"))
     , msPropNameListId(RTL_CONSTASCII_USTRINGPARAM("ListId"))
     , msPropNameStartWith(RTL_CONSTASCII_USTRINGPARAM("StartWith"))
+    // --> OD 2008-11-26 #158694#
+    , msContinueingPreviousSubTree(RTL_CONSTASCII_USTRINGPARAM("ContinueingPreviousSubTree"))
+    , msListLabelStringProp(RTL_CONSTASCII_USTRINGPARAM("ListLabelString"))
+    // <--
     , mxNumRules()
     , msNumRulesName()
     , msListId()
@@ -82,7 +82,10 @@ void XMLTextNumRuleInfo::Set(
         const ::com::sun::star::uno::Reference <
                         ::com::sun::star::text::XTextContent > & xTextContent,
         const sal_Bool bOutlineStyleAsNormalListStyle,
-        const XMLTextListAutoStylePool& rListAutoPool )
+        const XMLTextListAutoStylePool& rListAutoPool,
+        // --> OD 2008-11-26 #158694#
+        const sal_Bool bExportTextNumberElement )
+        // <--
 {
     Reset();
     // --> OD 2006-09-27 #i69627#
@@ -109,6 +112,16 @@ void XMLTextNumRuleInfo::Set(
         // so a void property no numbering
         mnListLevel = 0;
     }
+
+    // --> OD 2008-12-17 #i97312#
+    if ( mxNumRules.is() && mxNumRules->getCount() < 1 )
+    {
+        DBG_ASSERT( false,
+                    "<XMLTextNumRuleInfo::Set(..)> - numbering rules instance does not contain any numbering rule" );
+        Reset();
+        return;
+    }
+    // <--
 
     // --> OD 2006-09-27 #i69627#
     bool bSuppressListStyle( false );
@@ -151,6 +164,14 @@ void XMLTextNumRuleInfo::Set(
         {
             xPropSet->getPropertyValue( msPropNameListId ) >>= msListId;
         }
+
+        // --> OD 2008-11-26 #158694#
+        mbContinueingPreviousSubTree = sal_False;
+        if( xPropSetInfo->hasPropertyByName( msContinueingPreviousSubTree ) )
+        {
+            xPropSet->getPropertyValue( msContinueingPreviousSubTree ) >>= mbContinueingPreviousSubTree;
+        }
+        // <--
 
         mbIsNumbered = sal_True;
         if( xPropSetInfo->hasPropertyByName( msNumberingIsNumber ) )
@@ -196,6 +217,15 @@ void XMLTextNumRuleInfo::Set(
                 break;
             }
         }
+
+        // --> OD 2008-11-26 #158694#
+        msListLabelString = ::rtl::OUString();
+        if ( bExportTextNumberElement &&
+             xPropSetInfo->hasPropertyByName( msListLabelStringProp ) )
+        {
+            xPropSet->getPropertyValue( msListLabelStringProp ) >>= msListLabelString;
+        }
+        // <--
 
         // paragraph's list level range is [0..9] representing list levels [1..10]
         ++mnListLevel;

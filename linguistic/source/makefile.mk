@@ -59,11 +59,9 @@ SLOFILES = \
         $(SLO)$/prophelp.obj\
         $(SLO)$/spelldsp.obj\
         $(SLO)$/spelldta.obj\
-        $(SLO)$/supplang.obj\
         $(SLO)$/thesdsp.obj\
         $(SLO)$/thesdta.obj\
-        $(SLO)$/gciterator.obj\
-        $(SLO)$/grammarchecker.obj
+        $(SLO)$/gciterator.obj
 
 SHL1TARGET= $(TARGET)$(DLLPOSTFIX)
 

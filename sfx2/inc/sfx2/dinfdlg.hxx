@@ -54,22 +54,12 @@ namespace com { namespace sun { namespace star {
         class XPropertyContainer;
     }
     namespace document {
-        class XDocumentInfo;
         class XDocumentProperties;
     }
 } } }
 
-struct CustomProperty
-{
-    ::rtl::OUString             m_sName;
-    com::sun::star::uno::Any    m_aValue;
+struct CustomProperty;
 
-    CustomProperty( const ::rtl::OUString& sName, const com::sun::star::uno::Any& rValue ) :
-        m_sName( sName ), m_aValue( rValue ) {}
-
-    inline bool operator==( const CustomProperty& rProp )
-                    { return m_sName.equals( rProp.m_sName ) && m_aValue == rProp.m_aValue; }
-};
 
 // class SfxDocumentInfoItem ---------------------------------------------
 
@@ -103,23 +93,18 @@ private:
 public:
     TYPEINFO();
     SfxDocumentInfoItem();
-//FIXME: remove XDocumentInfo when implementing "Custom" tab
     SfxDocumentInfoItem( const String &rFileName,
         const ::com::sun::star::uno::Reference<
             ::com::sun::star::document::XDocumentProperties> & i_xDocProps,
-        const ::com::sun::star::uno::Reference<
-            ::com::sun::star::document::XDocumentInfo> & i_xDocInfo,
         sal_Bool bUseUserData );
     SfxDocumentInfoItem( const SfxDocumentInfoItem& );
     virtual ~SfxDocumentInfoItem();
 
-//FIXME: remove XDocumentInfo when implementing "Custom" tab
     /// update i_xDocProps with the data in this object
     void updateDocumentInfo(
         const ::com::sun::star::uno::Reference<
-            ::com::sun::star::document::XDocumentProperties> & i_xDocProps,
-        const ::com::sun::star::uno::Reference<
-            ::com::sun::star::document::XDocumentInfo> & i_xDocInfo) const;
+            ::com::sun::star::document::XDocumentProperties> & i_xDocProps)
+        const;
 
     sal_Bool    isAutoloadEnabled() const { return m_isAutoloadEnabled; }
     void        setAutoloadEnabled(sal_Bool i_val) { m_isAutoloadEnabled = i_val; }

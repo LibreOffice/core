@@ -86,6 +86,7 @@ using namespace ::svxform;
 using com::sun::star::uno::Reference;
 using com::sun::star::uno::UNO_QUERY;
 using com::sun::star::container::XChild;
+using com::sun::star::container::XNameContainer;
 
 TYPEINIT1(FmFormPage, SdrPage);
 
@@ -131,20 +132,19 @@ void FmFormPage::SetModel(SdrModel* pNewModel)
     // doesn't, so get the old model to do a check.
     SdrModel *pOldModel = GetModel();
 
-
     SdrPage::SetModel( pNewModel );
-
 
     /* #35055# */
     if ( ( pOldModel != pNewModel ) && m_pImpl )
     {
         try
         {
-            if ( m_pImpl->m_xForms.is() )
+            Reference< XNameContainer > xForms( m_pImpl->getForms( false ) );
+            if ( xForms.is() )
             {
                 // we want to keep the current collection, just reset the model
                 // with which it's associated.
-                Reference< XChild > xAsChild( m_pImpl->m_xForms, UNO_QUERY );
+                Reference< XChild > xAsChild( xForms, UNO_QUERY );
                 if ( xAsChild.is() )
                 {
                     FmFormModel* pDrawModel = (FmFormModel*) GetModel();
@@ -183,7 +183,13 @@ void FmFormPage::InsertObject(SdrObject* pObj, ULONG nPos,
 const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer > & FmFormPage::GetForms( bool _bForceCreate ) const
 {
 #ifndef SVX_LIGHT
-    return m_pImpl->getForms( _bForceCreate );
+    const SdrPage& rMasterPage( *this );
+    const FmFormPage* pFormPage = dynamic_cast< const FmFormPage* >( &rMasterPage );
+    OSL_ENSURE( pFormPage, "FmFormPage::GetForms: referenced page is no FmFormPage - is this allowed?!" );
+    if ( !pFormPage )
+        pFormPage = this;
+
+    return pFormPage->m_pImpl->getForms( _bForceCreate );
 #else
     static ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer >  aRef;
     return aRef;
@@ -195,68 +201,67 @@ sal_Bool FmFormPage::RequestHelp( Window* pWindow, SdrView* pView,
                               const HelpEvent& rEvt )
 {
 #ifndef SVX_LIGHT
-    if( !pView->IsAction() )
+    if( pView->IsAction() )
+        return sal_False;
+
+    Point aPos = rEvt.GetMousePosPixel();
+    aPos = pWindow->ScreenToOutputPixel( aPos );
+    aPos = pWindow->PixelToLogic( aPos );
+
+    SdrObject* pObj = NULL;
+    SdrPageView* pPV = NULL;
+    if ( !pView->PickObj( aPos, 0, pObj, pPV, SDRSEARCH_DEEP ) )
+        return sal_False;
+
+    FmFormObj* pFormObject = FmFormObj::GetFormObject( pObj );
+    if ( !pFormObject )
+        return sal_False;
+
+    UniString aHelpText;
+    ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >  xSet( pFormObject->GetUnoControlModel(), ::com::sun::star::uno::UNO_QUERY );
+    if (xSet.is())
     {
-        Point aPos = rEvt.GetMousePosPixel();
-        aPos = pWindow->ScreenToOutputPixel( aPos );
-        aPos = pWindow->PixelToLogic( aPos );
+        if (::comphelper::hasProperty(FM_PROP_HELPTEXT, xSet))
+            aHelpText = ::comphelper::getString(xSet->getPropertyValue(FM_PROP_HELPTEXT)).getStr();
 
-        SdrObject* pObj = NULL;
-        SdrPageView* pPV = NULL;
-        if( pView->PickObj( aPos, 0, pObj, pPV, SDRSEARCH_DEEP ) )
+        if (!aHelpText.Len() && ::comphelper::hasProperty(FM_PROP_TARGET_URL, xSet))
         {
-            // Ein Object getroffen
-            if( pObj->ISA(FmFormObj) )
-            {
-                UniString aHelpText;
-                ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >  xSet(((FmFormObj*)pObj)->GetUnoControlModel(), ::com::sun::star::uno::UNO_QUERY);
-                if (xSet.is())
-                {
-                    if (::comphelper::hasProperty(FM_PROP_HELPTEXT, xSet))
-                        aHelpText = ::comphelper::getString(xSet->getPropertyValue(FM_PROP_HELPTEXT)).getStr();
+            ::rtl::OUString aText = ::comphelper::getString(xSet->getPropertyValue(FM_PROP_TARGET_URL));
+            INetURLObject aUrl(aText);
 
-                    if (!aHelpText.Len() && ::comphelper::hasProperty(FM_PROP_TARGET_URL, xSet))
-                    {
-                        ::rtl::OUString aText = ::comphelper::getString(xSet->getPropertyValue(FM_PROP_TARGET_URL));
-                        INetURLObject aUrl(aText);
-
-                        // testen, ob es ein Protokoll-Typ ist, den ich anzeigen will
-                        INetProtocol aProtocol = aUrl.GetProtocol();
-                        static const INetProtocol s_aQuickHelpSupported[] =
-                            {   INET_PROT_FTP, INET_PROT_HTTP, INET_PROT_FILE, INET_PROT_MAILTO, INET_PROT_NEWS,
-                                INET_PROT_HTTPS, INET_PROT_JAVASCRIPT, INET_PROT_IMAP, INET_PROT_POP3,
-                                INET_PROT_VIM, INET_PROT_LDAP
-                            };
-                        for (sal_uInt16 i=0; i<sizeof(s_aQuickHelpSupported)/sizeof(s_aQuickHelpSupported[0]); ++i)
-                            if (s_aQuickHelpSupported[i] == aProtocol)
-                            {
-                                aHelpText = INetURLObject::decode(aUrl.GetURLNoPass(), '%', INetURLObject::DECODE_UNAMBIGUOUS);
-                                break;
-                            }
-                    }
-                }
-                if ( aHelpText.Len() != 0 )
+            // testen, ob es ein Protokoll-Typ ist, den ich anzeigen will
+            INetProtocol aProtocol = aUrl.GetProtocol();
+            static const INetProtocol s_aQuickHelpSupported[] =
+                {   INET_PROT_FTP, INET_PROT_HTTP, INET_PROT_FILE, INET_PROT_MAILTO, INET_PROT_NEWS,
+                    INET_PROT_HTTPS, INET_PROT_JAVASCRIPT, INET_PROT_IMAP, INET_PROT_POP3,
+                    INET_PROT_VIM, INET_PROT_LDAP
+                };
+            for (sal_uInt16 i=0; i<sizeof(s_aQuickHelpSupported)/sizeof(s_aQuickHelpSupported[0]); ++i)
+                if (s_aQuickHelpSupported[i] == aProtocol)
                 {
-                    // Hilfe anzeigen
-                    Rectangle aItemRect = pObj->GetCurrentBoundRect();
-                    aItemRect = pWindow->LogicToPixel( aItemRect );
-                    Point aPt = pWindow->OutputToScreenPixel( aItemRect.TopLeft() );
-                    aItemRect.Left()   = aPt.X();
-                    aItemRect.Top()    = aPt.Y();
-                    aPt = pWindow->OutputToScreenPixel( aItemRect.BottomRight() );
-                    aItemRect.Right()  = aPt.X();
-                    aItemRect.Bottom() = aPt.Y();
-                    if( rEvt.GetMode() == HELPMODE_BALLOON )
-                        Help::ShowBalloon( pWindow, aItemRect.Center(), aItemRect, aHelpText);
-                    else
-                        Help::ShowQuickHelp( pWindow, aItemRect, aHelpText );
+                    aHelpText = INetURLObject::decode(aUrl.GetURLNoPass(), '%', INetURLObject::DECODE_UNAMBIGUOUS);
+                    break;
                 }
-                return sal_True;
-            }
         }
     }
+    if ( aHelpText.Len() != 0 )
+    {
+        // Hilfe anzeigen
+        Rectangle aItemRect = pObj->GetCurrentBoundRect();
+        aItemRect = pWindow->LogicToPixel( aItemRect );
+        Point aPt = pWindow->OutputToScreenPixel( aItemRect.TopLeft() );
+        aItemRect.Left()   = aPt.X();
+        aItemRect.Top()    = aPt.Y();
+        aPt = pWindow->OutputToScreenPixel( aItemRect.BottomRight() );
+        aItemRect.Right()  = aPt.X();
+        aItemRect.Bottom() = aPt.Y();
+        if( rEvt.GetMode() == HELPMODE_BALLOON )
+            Help::ShowBalloon( pWindow, aItemRect.Center(), aItemRect, aHelpText);
+        else
+            Help::ShowQuickHelp( pWindow, aItemRect, aHelpText );
+    }
 #endif
-    return sal_False;
+    return sal_True;
 }
 
 //------------------------------------------------------------------

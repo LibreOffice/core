@@ -131,7 +131,7 @@ APP5STACK=10000000
 .IF "$(GUI)" == "OS2"
 APP5DEF= # automatic
 APP5RES=    $(RES)$/oodesktop.res
-APP5ICON=$(SOLARRESDIR)$/icons/ooo3_main_app.ico
+APP5ICON=$(SOLARRESDIR)$/icons/ooo-main-app.ico
 APP5VERINFO=ooverinfo2.rc
 APP5LINKRES=$(MISC)$/ooffice.res
 .ENDIF # OS2
@@ -210,6 +210,16 @@ ALLTAR : $(BIN)$/so$/soffice_so$(EXECPOST) $(BIN)$/soffice_oo$(EXECPOST)
 
 .ENDIF
 
+.IF "$(OS)" == "MACOSX"
+$(BIN)$/so$/soffice_mac$(EXECPOST) : $(APP1TARGETN)
+    $(COPY) $< $@
+    
+$(BIN)$/soffice_mac$(EXECPOST) : $(APP5TARGETN)
+    $(COPY) $< $@
+
+ALLTAR : $(BIN)$/so$/soffice_mac$(EXECPOST) $(BIN)$/soffice_mac$(EXECPOST)
+
+.ENDIF
 
 .IF "$(GUI)" == "WNT"
 

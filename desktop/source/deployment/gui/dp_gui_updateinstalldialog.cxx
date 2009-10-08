@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: dp_gui_updateinstalldialog.cxx,v $
- * $Revision: 1.9 $
+ * $Revision: 1.9.76.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -69,7 +69,6 @@
 #include "com/sun/star/task/XInteractionApprove.hpp"
 
 #include "dp_descriptioninfoset.hxx"
-#include "dp_gui_cmdenv.h"
 #include "dp_gui.hrc"
 #include "dp_gui_updateinstalldialog.hxx"
 #include "dp_gui_shared.hxx"
@@ -78,6 +77,7 @@
 #include "dp_misc.h"
 #include "dp_version.hxx"
 #include "dp_gui_thread.hxx"
+#include "dp_gui_extensioncmdqueue.hxx"
 #include "ucbhelper/content.hxx"
 #include "osl/mutex.hxx"
 #include "vos/mutex.hxx"
@@ -85,7 +85,6 @@
 #include "com/sun/star/uno/Sequence.h"
 #include "comphelper/anytostring.hxx"
 #include "toolkit/helper/vclunohelper.hxx"
-//#include "com/sun/star/uno/Type.hxx"
 
 #include <vector>
 
@@ -94,7 +93,6 @@ class Window;
 namespace cssu = ::com::sun::star::uno;
 namespace css = ::com::sun::star;
 
-using ::com::sun::star::uno::Reference;
 using ::rtl::OUString;
 
 
@@ -103,7 +101,7 @@ namespace dp_gui {
 class UpdateInstallDialog::Thread: public dp_gui::Thread {
     friend class UpdateCommandEnv;
 public:
-    Thread(::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > ctx,
+    Thread(cssu::Reference< cssu::XComponentContext > ctx,
         UpdateInstallDialog & dialog, std::vector< dp_gui::UpdateData > & aVecUpdateData);
 
     void stop();
@@ -123,12 +121,12 @@ private:
     void removeTempDownloads();
 
     UpdateInstallDialog & m_dialog;
-    ::com::sun::star::uno::Reference< ::com::sun::star::deployment::XUpdateInformationProvider >
+    cssu::Reference< css::deployment::XUpdateInformationProvider >
         m_updateInformation;
 
     // guarded by Application::GetSolarMutex():
-    ::com::sun::star::uno::Reference< ::com::sun::star::task::XAbortChannel > m_abort;
-    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > m_xComponentContext;
+    cssu::Reference< css::task::XAbortChannel > m_abort;
+    cssu::Reference< cssu::XComponentContext > m_xComponentContext;
     std::vector< dp_gui::UpdateData > & m_aVecUpdateData;
     ::rtl::Reference<UpdateCommandEnv> m_updateCmdEnv;
 
@@ -148,36 +146,36 @@ class UpdateCommandEnv
 
     UpdateInstallDialog & m_updateDialog;
     ::rtl::Reference<UpdateInstallDialog::Thread> m_installThread;
-    Reference<css::task::XInteractionHandler> m_xMainDialogHandler;
+    cssu::Reference< cssu::XComponentContext > m_xContext;
 
 public:
     virtual ~UpdateCommandEnv();
-    UpdateCommandEnv( Reference< cssu::XComponentContext > const & xCtx,
+    UpdateCommandEnv( cssu::Reference< cssu::XComponentContext > const & xCtx,
         UpdateInstallDialog & updateDialog,
         ::rtl::Reference<UpdateInstallDialog::Thread>const & thread);
 
     // XCommandEnvironment
-    virtual css::uno::Reference<css::task::XInteractionHandler > SAL_CALL
-    getInteractionHandler() throw (css::uno::RuntimeException);
-    virtual css::uno::Reference<css::ucb::XProgressHandler >
-    SAL_CALL getProgressHandler() throw (css::uno::RuntimeException);
+    virtual cssu::Reference<css::task::XInteractionHandler > SAL_CALL
+    getInteractionHandler() throw (cssu::RuntimeException);
+    virtual cssu::Reference<css::ucb::XProgressHandler >
+    SAL_CALL getProgressHandler() throw (cssu::RuntimeException);
 
     // XInteractionHandler
     virtual void SAL_CALL handle(
-        css::uno::Reference<css::task::XInteractionRequest > const & xRequest )
-        throw (css::uno::RuntimeException);
+        cssu::Reference<css::task::XInteractionRequest > const & xRequest )
+        throw (cssu::RuntimeException);
 
     // XProgressHandler
-    virtual void SAL_CALL push( css::uno::Any const & Status )
-        throw (css::uno::RuntimeException);
-    virtual void SAL_CALL update( css::uno::Any const & Status )
-        throw (css::uno::RuntimeException);
-    virtual void SAL_CALL pop() throw (css::uno::RuntimeException);
+    virtual void SAL_CALL push( cssu::Any const & Status )
+        throw (cssu::RuntimeException);
+    virtual void SAL_CALL update( cssu::Any const & Status )
+        throw (cssu::RuntimeException);
+    virtual void SAL_CALL pop() throw (cssu::RuntimeException);
 };
 
 
 UpdateInstallDialog::Thread::Thread(
-    Reference< cssu::XComponentContext> xCtx,
+    cssu::Reference< cssu::XComponentContext> xCtx,
     UpdateInstallDialog & dialog,
     std::vector< dp_gui::UpdateData > & aVecUpdateData):
     m_dialog(dialog),
@@ -188,7 +186,7 @@ UpdateInstallDialog::Thread::Thread(
 {}
 
 void UpdateInstallDialog::Thread::stop() {
-    css::uno::Reference< css::task::XAbortChannel > abort;
+    cssu::Reference< css::task::XAbortChannel > abort;
     {
         vos::OGuard g(Application::GetSolarMutex());
         abort = m_abort;
@@ -231,7 +229,7 @@ void UpdateInstallDialog::Thread::execute()
 UpdateInstallDialog::UpdateInstallDialog(
     Window * parent,
     std::vector<dp_gui::UpdateData> & aVecUpdateData,
-    Reference< cssu::XComponentContext > const & xCtx):
+    cssu::Reference< cssu::XComponentContext > const & xCtx):
     ModalDialog(
         parent,
         DpGuiResId(RID_DLG_UPDATEINSTALL)),
@@ -492,14 +490,14 @@ void UpdateInstallDialog::Thread::installExtensions()
 //       osl::Thread::wait(v);
         bool bError = false;
         bool bLicenseDeclined = false;
-        Reference<css::deployment::XPackage> xPackage;
+        cssu::Reference<css::deployment::XPackage> xPackage;
         UpdateData & curData = *i;
         cssu::Exception exc;
         try
         {
             if (curData.sLocalURL.getLength() == 0)
                 continue;
-            Reference< css::task::XAbortChannel > xAbortChannel(
+            cssu::Reference< css::task::XAbortChannel > xAbortChannel(
                 curData.aPackageManager->createAbortChannel() );
             {
                 vos::OGuard g(Application::GetSolarMutex());
@@ -564,10 +562,10 @@ void UpdateInstallDialog::Thread::removeTempDownloads()
     if (m_sDownloadFolder.getLength())
     {
         dp_misc::erase_path(m_sDownloadFolder,
-            Reference<css::ucb::XCommandEnvironment>(),false /* no throw: ignore errors */ );
+            cssu::Reference<css::ucb::XCommandEnvironment>(),false /* no throw: ignore errors */ );
         //remove also the temp file which we have used to create the unique name
         OUString tempFile = m_sDownloadFolder.copy(0, m_sDownloadFolder.getLength() - 1);
-        dp_misc::erase_path(tempFile, Reference<css::ucb::XCommandEnvironment>(),false);
+        dp_misc::erase_path(tempFile, cssu::Reference<css::ucb::XCommandEnvironment>(),false);
         m_sDownloadFolder = OUString();
     }
 }
@@ -624,14 +622,13 @@ void UpdateInstallDialog::Thread::download(OUString const & sDownloadURL, Update
 
 // -------------------------------------------------------------------------------------------------------
 
-UpdateCommandEnv::UpdateCommandEnv( Reference< cssu::XComponentContext > const & xCtx,
+UpdateCommandEnv::UpdateCommandEnv( cssu::Reference< cssu::XComponentContext > const & xCtx,
     UpdateInstallDialog & updateDialog,
     ::rtl::Reference<UpdateInstallDialog::Thread>const & thread)
     : m_updateDialog( updateDialog ),
-    m_installThread(thread)
+    m_installThread(thread),
+    m_xContext(xCtx)
 {
-    m_xMainDialogHandler = new ProgressCommandEnv(xCtx, &updateDialog,
-        OUSTR("Extension Manager"));
 }
 
 UpdateCommandEnv::~UpdateCommandEnv()
@@ -641,14 +638,14 @@ UpdateCommandEnv::~UpdateCommandEnv()
 
 // XCommandEnvironment
 //______________________________________________________________________________
-Reference<css::task::XInteractionHandler> UpdateCommandEnv::getInteractionHandler()
+cssu::Reference<css::task::XInteractionHandler> UpdateCommandEnv::getInteractionHandler()
 throw (cssu::RuntimeException)
 {
     return this;
 }
 
 //______________________________________________________________________________
-Reference<css::ucb::XProgressHandler> UpdateCommandEnv::getProgressHandler()
+cssu::Reference<css::ucb::XProgressHandler> UpdateCommandEnv::getProgressHandler()
 throw (cssu::RuntimeException)
 {
     return this;
@@ -656,16 +653,13 @@ throw (cssu::RuntimeException)
 
 // XInteractionHandler
 void UpdateCommandEnv::handle(
-    Reference< css::task::XInteractionRequest> const & xRequest )
+    cssu::Reference< css::task::XInteractionRequest> const & xRequest )
     throw (cssu::RuntimeException)
 {
     cssu::Any request( xRequest->getRequest() );
     OSL_ASSERT( request.getValueTypeClass() == cssu::TypeClass_EXCEPTION );
-#if OSL_DEBUG_LEVEL > 1
-    OSL_TRACE( "[dp_gui_cmdenv.cxx] incoming request:\n%s\n",
-               ::rtl::OUStringToOString( ::comphelper::anyToString(request),
-                                         RTL_TEXTENCODING_UTF8 ).getStr() );
-#endif
+    dp_misc::TRACE(OUSTR("[dp_gui_cmdenv.cxx] incoming request:\n")
+        + ::comphelper::anyToString(request) + OUSTR("\n\n"));
 
     css::deployment::VersionException verExc;
     bool approve = false;
@@ -683,20 +677,20 @@ void UpdateCommandEnv::handle(
     if (approve == false && abort == false)
     {
         //forward to interaction handler for main dialog.
-        m_xMainDialogHandler->handle( xRequest );
+        handleInteractionRequest( m_xContext, xRequest );
     }
     else
     {
         // select:
-        cssu::Sequence< Reference< css::task::XInteractionContinuation > > conts(
+        cssu::Sequence< cssu::Reference< css::task::XInteractionContinuation > > conts(
             xRequest->getContinuations() );
-        Reference< css::task::XInteractionContinuation > const * pConts =
+        cssu::Reference< css::task::XInteractionContinuation > const * pConts =
             conts.getConstArray();
         sal_Int32 len = conts.getLength();
         for ( sal_Int32 pos = 0; pos < len; ++pos )
         {
             if (approve) {
-                Reference< css::task::XInteractionApprove > xInteractionApprove(
+                cssu::Reference< css::task::XInteractionApprove > xInteractionApprove(
                     pConts[ pos ], cssu::UNO_QUERY );
                 if (xInteractionApprove.is()) {
                     xInteractionApprove->select();
@@ -705,7 +699,7 @@ void UpdateCommandEnv::handle(
                 }
             }
             else if (abort) {
-                Reference< css::task::XInteractionAbort > xInteractionAbort(
+                cssu::Reference< css::task::XInteractionAbort > xInteractionAbort(
                     pConts[ pos ], cssu::UNO_QUERY );
                 if (xInteractionAbort.is()) {
                     xInteractionAbort->select();

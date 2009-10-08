@@ -178,6 +178,16 @@ SvxShadowTabPage::SvxShadowTabPage( Window* pParent, const SfxItemSet& rInAttrs 
     {
         rXFSet.Put( XFillColorItem( String(), COL_LIGHTRED ) );
     }
+
+    if(XFILL_NONE == eXFS)
+    {
+        // #i96350#
+        // fallback to solid fillmode when no fill mode is provided to have
+        // a reasonable shadow preview. The used color will be a set one or
+        // the default (currently blue8)
+        eXFS = XFILL_SOLID;
+    }
+
     rXFSet.Put( XFillStyleItem( eXFS ) );
     aCtlXRectPreview.SetRectangleAttributes(aXFillAttr.GetItemSet());
     //aCtlXRectPreview.SetFillAttr( aXFillAttr );

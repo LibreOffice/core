@@ -122,6 +122,8 @@ class Request
         //---------------------------------------------------------------------
         void wait(::sal_Int32 nMilliSeconds = WAIT_INFINITE);
 
+        void waitProcessMessages();
+
         //---------------------------------------------------------------------
         void notify();
 
@@ -157,9 +159,9 @@ class AsyncRequests : private ::cppu::BaseMutex
                     , public  ::osl::Thread
 {
     public:
-
-        static const ::sal_Bool  BLOCKED       = sal_True;
-        static const ::sal_Bool  NON_BLOCKED   = sal_False;
+        static const ::sal_Int16  PROCESS_MESSAGES = 2;
+        static const ::sal_Int16  BLOCKED       = 1;
+        static const ::sal_Int16  NON_BLOCKED   = 0;
 
         //---------------------------------------------------------------------
         /** creates the new asynchronous request executor.
@@ -175,6 +177,11 @@ class AsyncRequests : private ::cppu::BaseMutex
         /** does nothing special / excepting to make sure our class wont be inline .-)
          */
         virtual ~AsyncRequests();
+
+        //---------------------------------------------------------------------
+        /** @todo document me
+         */
+        void triggerRequestProcessMessages (const RequestRef& rRequest);
 
         //---------------------------------------------------------------------
         /** @todo document me
@@ -195,7 +202,7 @@ class AsyncRequests : private ::cppu::BaseMutex
         /** @todo document me
          */
         void triggerRequestThreadAware(const RequestRef& rRequest,
-                                             ::sal_Bool  bWait   );
+                                             ::sal_Int16  nWait   );
 
     private:
 

@@ -29,11 +29,13 @@
  *
  ************************************************************************/
 
+#include "precompiled_svx.hxx"
 #include <svx/sdr/primitive2d/sdrconnectorprimitive2d.hxx>
 #include <svx/sdr/primitive2d/sdrdecompositiontools.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <drawinglayer/primitive2d/groupprimitive2d.hxx>
 #include <svx/sdr/primitive2d/svx_primitivetypes2d.hxx>
+#include <drawinglayer/primitive2d/hittestprimitive2d.hxx>
 
 //////////////////////////////////////////////////////////////////////////////
 
@@ -56,6 +58,15 @@ namespace drawinglayer
             if(getSdrLSTAttribute().getLine())
             {
                 appendPrimitive2DReferenceToPrimitive2DSequence(aRetval, createPolygonLinePrimitive(getUnitPolygon(), aEmptyMatrix, *getSdrLSTAttribute().getLine(), getSdrLSTAttribute().getLineStartEnd()));
+            }
+            else
+            {
+                // if initially no line is defined, create one for HitTest and BoundRect
+                const attribute::SdrLineAttribute aBlackHairline(basegfx::BColor(0.0, 0.0, 0.0));
+                const Primitive2DReference xHiddenLineReference(createPolygonLinePrimitive(getUnitPolygon(), aEmptyMatrix, aBlackHairline));
+                const Primitive2DSequence xHiddenLineSequence(&xHiddenLineReference, 1);
+
+                appendPrimitive2DReferenceToPrimitive2DSequence(aRetval, Primitive2DReference(new HitTestPrimitive2D(xHiddenLineSequence)));
             }
 
             // add text

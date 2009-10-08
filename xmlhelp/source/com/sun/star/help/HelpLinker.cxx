@@ -43,6 +43,7 @@
 
 #include <sal/types.h>
 #include <osl/time.h>
+#include <rtl/bootstrap.hxx>
 
 #ifdef SYSTEM_EXPAT
 #include <expat.h>
@@ -344,7 +345,7 @@ void HelpLinker::initIndexerPreProcessor()
 */
 void HelpLinker::link() throw( HelpProcessingException )
 {
-    bool bIndexForExtension = false;        // TODO
+    bool bIndexForExtension = true;
 
     if( bExtensionMode )
     {
@@ -660,6 +661,8 @@ void HelpLinker::link() throw( HelpProcessingException )
 void HelpLinker::main(std::vector<std::string> &args, std::string* pExtensionPath)
     throw( HelpProcessingException )
 {
+    rtl::OUString aOfficeHelpPath;
+
     bExtensionMode = false;
     if( pExtensionPath && pExtensionPath->length() > 0 )
     {
@@ -667,6 +670,9 @@ void HelpLinker::main(std::vector<std::string> &args, std::string* pExtensionPat
         bExtensionMode = true;
         extensionPath = *pExtensionPath;
         sourceRoot = fs::path(extensionPath);
+
+        aOfficeHelpPath = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("$OOO_BASE_DIR/help") );
+        rtl::Bootstrap::expandMacros( aOfficeHelpPath );
     }
     if (args.size() > 0 && args[0][0] == '@')
     {
@@ -839,11 +845,33 @@ void HelpLinker::main(std::vector<std::string> &args, std::string* pExtensionPat
         aStrStream << "no index caption stylesheet given" << std::endl;
         throw HelpProcessingException( HELPPROCESSING_GENERAL_ERROR, aStrStream.str() );
     }
+    else if ( bExtensionMode )
+    {
+        rtl::OUString aIdxCaptionPathFileURL( aOfficeHelpPath );
+        aIdxCaptionPathFileURL += rtl::OUString::createFromAscii( "/idxcaption.xsl" );
+
+        rtl::OString aOStr_IdxCaptionPathFileURL( rtl::OUStringToOString
+            ( aIdxCaptionPathFileURL, fs::getThreadTextEncoding() ) );
+        std::string aStdStr_IdxCaptionPathFileURL( aOStr_IdxCaptionPathFileURL.getStr() );
+
+        idxCaptionStylesheet = fs::path( aStdStr_IdxCaptionPathFileURL );
+    }
     if (!bExtensionMode && idxContentStylesheet.empty())
     {
         std::stringstream aStrStream;
         aStrStream << "no index content stylesheet given" << std::endl;
         throw HelpProcessingException( HELPPROCESSING_GENERAL_ERROR, aStrStream.str() );
+    }
+    else if ( bExtensionMode )
+    {
+        rtl::OUString aIdxContentPathFileURL( aOfficeHelpPath );
+        aIdxContentPathFileURL += rtl::OUString::createFromAscii( "/idxcontent.xsl" );
+
+        rtl::OString aOStr_IdxContentPathFileURL( rtl::OUStringToOString
+            ( aIdxContentPathFileURL, fs::getThreadTextEncoding() ) );
+        std::string aStdStr_IdxContentPathFileURL( aOStr_IdxContentPathFileURL.getStr() );
+
+        idxContentStylesheet = fs::path( aStdStr_IdxContentPathFileURL );
     }
     if (!bExtensionMode && embeddStylesheet.empty())
     {

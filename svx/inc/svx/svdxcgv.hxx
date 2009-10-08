@@ -114,7 +114,7 @@ public:
         @return a graphical representation of the given object, as it
         appears on screen (e.g. with rotation, if any, applied).
      */
-    static Graphic  GetObjGraphic( SdrModel* pModel, SdrObject* pObj );
+    static Graphic  GetObjGraphic( const SdrModel* pModel, const SdrObject* pObj );
 
     // Bestimmung des View-Mittelpunktes, z.B. zum Pasten
     Point           GetViewCenter(const OutputDevice* pOut=NULL) const;

@@ -135,6 +135,9 @@ namespace drawinglayer
             ::com::sun::star::lang::Locale          maLocale;           // the Locale for the text
             basegfx::BColor                         maFontColor;        // font color
 
+            // #i96669# add simple range buffering for this primitive
+            basegfx::B2DRange                       maB2DRange;
+
         protected:
             // local decomposition.
             virtual Primitive2DSequence createLocalDecomposition(const geometry::ViewInformation2D& rViewInformation) const;

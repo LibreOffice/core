@@ -82,15 +82,6 @@ namespace sdr
         return *mpViewContact;
     }
 
-    void MasterPageDescriptor::FlushViewContact() const
-    {
-        if(mpViewContact)
-        {
-            delete mpViewContact;
-            ((MasterPageDescriptor*)this)->mpViewContact = 0;
-        }
-    }
-
     // this method is called form the destructor of the referenced page.
     // do all necessary action to forget the page. It is not necessary to call
     // RemovePageUser(), that is done form the destructor.

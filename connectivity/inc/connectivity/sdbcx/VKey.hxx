@@ -39,6 +39,7 @@
 #include <com/sun/star/container/XNamed.hpp>
 #include "connectivity/sdbcx/IRefreshable.hxx"
 #include "connectivity/sdbcx/VDescriptor.hxx"
+#include "connectivity/dbtoolsdllapi.hxx"
 #include <cppuhelper/implbase1.hxx>
 #include <com/sun/star/sdbcx/XDataDescriptorFactory.hpp>
 #include <boost/shared_ptr.hpp>
@@ -48,7 +49,7 @@ namespace connectivity
     namespace sdbcx
     {
 
-        struct KeyProperties
+        struct OOO_DLLPUBLIC_DBTOOLS KeyProperties
         {
             ::rtl::OUString m_ReferencedTable;
             sal_Int32       m_Type;
@@ -69,7 +70,8 @@ namespace connectivity
         typedef ::cppu::ImplHelper1< ::com::sun::star::sdbcx::XDataDescriptorFactory > OKey_BASE;
         class OCollection;
 
-        class OKey :            public comphelper::OBaseMutex,
+        class OOO_DLLPUBLIC_DBTOOLS OKey :
+                                public comphelper::OBaseMutex,
                                 public ODescriptor_BASE,
                                 public IRefreshableColumns,
                                 public ::comphelper::OIdPropertyArrayUsageHelper<OKey>,

@@ -133,7 +133,7 @@ void SbiExprNode::Gen( RecursiveMode eRecMode )
             SbiProcDef* pProc = aVar.pDef->GetProcDef();
             if ( pGen->GetParser()->bClassModule )
                 eOp = _FIND_CM;
-            else if ( aVar.pDef->IsStatic() || pProc && pProc->IsStatic() )
+            else if ( aVar.pDef->IsStatic() || (pProc && pProc->IsStatic()) )
             {
                 eOp = _FIND_STATIC;
             }

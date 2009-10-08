@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: editattr.hxx,v $
- * $Revision: 1.13 $
+ * $Revision: 1.13.212.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -42,6 +42,7 @@ class SvxEscapementItem;
 class SvxContourItem;
 class SvxCrossedOutItem;
 class SvxUnderlineItem;
+class SvxOverlineItem;
 class SvxFontHeightItem;
 class SvxCharScaleWidthItem;
 class SvxColorItem;
@@ -253,6 +254,17 @@ class EditCharAttribUnderline : public EditCharAttrib
 {
 public:
     EditCharAttribUnderline( const SvxUnderlineItem& rAttr, USHORT nStart, USHORT nEnd );
+
+    virtual void    SetFont( SvxFont& rFont, OutputDevice* pOutDev );
+};
+
+// -------------------------------------------------------------------------
+// class EditCharAttribOverline
+// -------------------------------------------------------------------------
+class EditCharAttribOverline : public EditCharAttrib
+{
+public:
+    EditCharAttribOverline( const SvxOverlineItem& rAttr, USHORT nStart, USHORT nEnd );
 
     virtual void    SetFont( SvxFont& rFont, OutputDevice* pOutDev );
 };

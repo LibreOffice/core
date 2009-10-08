@@ -403,24 +403,34 @@ SdrHdl* SdrRectObj::GetHdl(sal_uInt32 nHdlNum) const
     SdrHdl* pH=NULL;
     Point aPnt;
     SdrHdlKind eKind=HDL_MOVE;
-    switch (nHdlNum) {
-        case 0: {
-            long a=GetEckenradius();
-            long b=Max(aRect.GetWidth(),aRect.GetHeight())/2; // Wird aufgerundet, da GetWidth() eins draufaddiert
-            if (a>b) a=b;
-            if (a<0) a=0;
-            aPnt=aRect.TopLeft();
-            aPnt.X()+=a;
-            eKind=HDL_CIRC;
-        } break; // Eckenradius
-        case 1: aPnt=aRect.TopLeft();      eKind=HDL_UPLFT; break; // Oben links
-        case 2: aPnt=aRect.TopCenter();    eKind=HDL_UPPER; break; // Oben
-        case 3: aPnt=aRect.TopRight();     eKind=HDL_UPRGT; break; // Oben rechts
-        case 4: aPnt=aRect.LeftCenter();   eKind=HDL_LEFT ; break; // Links
-        case 5: aPnt=aRect.RightCenter();  eKind=HDL_RIGHT; break; // Rechts
-        case 6: aPnt=aRect.BottomLeft();   eKind=HDL_LWLFT; break; // Unten links
-        case 7: aPnt=aRect.BottomCenter(); eKind=HDL_LOWER; break; // Unten
-        case 8: aPnt=aRect.BottomRight();  eKind=HDL_LWRGT; break; // Unten rechts
+    if( IsTextFrame() && !nHdlNum )
+    {
+        pH=new ImpTextframeHdl(aRect);
+        pH->SetObj((SdrObject*)this);
+        pH->SetDrehWink(aGeo.nDrehWink);
+        return pH;
+    }
+    else
+    {
+        switch (nHdlNum) {
+            case 0: {
+                long a=GetEckenradius();
+                long b=Max(aRect.GetWidth(),aRect.GetHeight())/2; // Wird aufgerundet, da GetWidth() eins draufaddiert
+                if (a>b) a=b;
+                if (a<0) a=0;
+                aPnt=aRect.TopLeft();
+                aPnt.X()+=a;
+                eKind=HDL_CIRC;
+            } break; // Eckenradius
+            case 1: aPnt=aRect.TopLeft();      eKind=HDL_UPLFT; break; // Oben links
+            case 2: aPnt=aRect.TopCenter();    eKind=HDL_UPPER; break; // Oben
+            case 3: aPnt=aRect.TopRight();     eKind=HDL_UPRGT; break; // Oben rechts
+            case 4: aPnt=aRect.LeftCenter();   eKind=HDL_LEFT ; break; // Links
+            case 5: aPnt=aRect.RightCenter();  eKind=HDL_RIGHT; break; // Rechts
+            case 6: aPnt=aRect.BottomLeft();   eKind=HDL_LWLFT; break; // Unten links
+            case 7: aPnt=aRect.BottomCenter(); eKind=HDL_LOWER; break; // Unten
+            case 8: aPnt=aRect.BottomRight();  eKind=HDL_LWRGT; break; // Unten rechts
+        }
     }
     if (aGeo.nShearWink!=0) ShearPoint(aPnt,aRect.TopLeft(),aGeo.nTan);
     if (aGeo.nDrehWink!=0) RotatePoint(aPnt,aRect.TopLeft(),aGeo.nSin,aGeo.nCos);
@@ -432,71 +442,60 @@ SdrHdl* SdrRectObj::GetHdl(sal_uInt32 nHdlNum) const
     return pH;
 }
 
-FASTBOOL SdrRectObj::HasSpecialDrag() const
+////////////////////////////////////////////////////////////////////////////////////////////////////
+
+bool SdrRectObj::hasSpecialDrag() const
 {
-    return TRUE;
+    return true;
 }
 
-FASTBOOL SdrRectObj::BegDrag(SdrDragStat& rDrag) const
+bool SdrRectObj::beginSpecialDrag(SdrDragStat& rDrag) const
 {
-    FASTBOOL bRad=rDrag.GetHdl()!=NULL && rDrag.GetHdl()->GetKind()==HDL_CIRC;
-    if (bRad) {
-        rDrag.SetEndDragChangesAttributes(TRUE);
-        return TRUE;
-    } else {
-        return SdrTextObj::BegDrag(rDrag);
+    const bool bRad(rDrag.GetHdl() && HDL_CIRC == rDrag.GetHdl()->GetKind());
+
+    if(bRad)
+    {
+        rDrag.SetEndDragChangesAttributes(true);
+
+        return true;
     }
+
+    return SdrTextObj::beginSpecialDrag(rDrag);
 }
 
-FASTBOOL SdrRectObj::MovDrag(SdrDragStat& rDrag) const
+bool SdrRectObj::applySpecialDrag(SdrDragStat& rDrag)
 {
-    FASTBOOL bRad=rDrag.GetHdl()!=NULL && rDrag.GetHdl()->GetKind()==HDL_CIRC;
-    if (bRad) {
-        return TRUE;
-    } else {
-        return SdrTextObj::MovDrag(rDrag);
-    }
-}
+    const bool bRad(rDrag.GetHdl() && HDL_CIRC == rDrag.GetHdl()->GetKind());
 
-FASTBOOL SdrRectObj::EndDrag(SdrDragStat& rDrag)
-{
-    FASTBOOL bRad=rDrag.GetHdl()!=NULL && rDrag.GetHdl()->GetKind()==HDL_CIRC;
-    if (bRad) {
-        Rectangle aBoundRect0; if (pUserCall!=NULL) aBoundRect0=GetLastBoundRect();
-        // #110094#-14 SendRepaintBroadcast();
+    if (bRad)
+    {
+        Rectangle aBoundRect0;
         Point aPt(rDrag.GetNow());
-        if (aGeo.nDrehWink!=0) RotatePoint(aPt,aRect.TopLeft(),-aGeo.nSin,aGeo.nCos); // -sin fuer Umkehrung
-        // Shear nicht noetig, da Pt auf einer Linie mit dem RefPt (LiOb Ecke des Rect)
-        long nRad=aPt.X()-aRect.Left();
-        if (nRad<0) nRad=0;
-        long nAltRad=GetEckenradius();
-        if (nRad!=nAltRad) NbcSetEckenradius(nRad);
-        SetChanged();
-        SetRectsDirty();
-        SetXPolyDirty();
-        BroadcastObjectChange();
-        SendUserCall(SDRUSERCALL_RESIZE,aBoundRect0);
-        return TRUE;
-    } else {
-        return SdrTextObj::EndDrag(rDrag);
+
+        if(aGeo.nDrehWink)
+            RotatePoint(aPt,aRect.TopLeft(),-aGeo.nSin,aGeo.nCos);
+
+        sal_Int32 nRad(aPt.X() - aRect.Left());
+
+        if (nRad < 0)
+            nRad = 0;
+
+        if(nRad != GetEckenradius())
+        {
+            NbcSetEckenradius(nRad);
+        }
+
+        return true;
+    }
+    else
+    {
+        return SdrTextObj::applySpecialDrag(rDrag);
     }
 }
 
-void SdrRectObj::BrkDrag(SdrDragStat& rDrag) const
+String SdrRectObj::getSpecialDragComment(const SdrDragStat& rDrag) const
 {
-    FASTBOOL bRad=rDrag.GetHdl()!=NULL && rDrag.GetHdl()->GetKind()==HDL_CIRC;
-    if (bRad) {
-    } else {
-        SdrTextObj::BrkDrag(rDrag);
-    }
-}
-
-XubString SdrRectObj::GetDragComment(const SdrDragStat& rDrag, FASTBOOL bUndoDragComment, FASTBOOL bCreateComment) const
-{
-    if(bCreateComment)
-        return String();
-
-    BOOL bRad(rDrag.GetHdl() && rDrag.GetHdl()->GetKind() == HDL_CIRC);
+    const bool bRad(rDrag.GetHdl() && HDL_CIRC == rDrag.GetHdl()->GetKind());
 
     if(bRad)
     {
@@ -506,7 +505,7 @@ XubString SdrRectObj::GetDragComment(const SdrDragStat& rDrag, FASTBOOL bUndoDra
         if(aGeo.nDrehWink)
             RotatePoint(aPt, aRect.TopLeft(), -aGeo.nSin, aGeo.nCos);
 
-        INT32 nRad(aPt.X() - aRect.Left());
+        sal_Int32 nRad(aPt.X() - aRect.Left());
 
         if(nRad < 0)
             nRad = 0;
@@ -522,31 +521,11 @@ XubString SdrRectObj::GetDragComment(const SdrDragStat& rDrag, FASTBOOL bUndoDra
     }
     else
     {
-        return SdrTextObj::GetDragComment(rDrag, bUndoDragComment, FALSE);
+        return SdrTextObj::getSpecialDragComment(rDrag);
     }
 }
 
-basegfx::B2DPolyPolygon SdrRectObj::TakeDragPoly(const SdrDragStat& rDrag) const
-{
-    XPolyPolygon aXPP;
-    const bool bRad(rDrag.GetHdl() && HDL_CIRC == rDrag.GetHdl()->GetKind());
-
-    if(bRad)
-    {
-        Point aPt(rDrag.GetNow());
-        if (aGeo.nDrehWink!=0) RotatePoint(aPt,aRect.TopLeft(),-aGeo.nSin,aGeo.nCos); // -sin fuer Umkehrung
-        // Shear nicht noetig, da Pt auf einer Linie mit dem RefPt (LiOb Ecke des Rect)
-        long nRad=aPt.X()-aRect.Left();
-        if (nRad<0) nRad=0;
-        aXPP.Insert(ImpCalcXPoly(aRect,nRad));
-    }
-    else
-    {
-        aXPP.Insert(ImpCalcXPoly(ImpDragCalcRect(rDrag),GetEckenradius()));
-    }
-
-    return aXPP.getB2DPolyPolygon();
-}
+////////////////////////////////////////////////////////////////////////////////////////////////////
 
 basegfx::B2DPolyPolygon SdrRectObj::TakeCreatePoly(const SdrDragStat& rDrag) const
 {

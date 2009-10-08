@@ -57,6 +57,7 @@
 #include <sfx2/request.hxx>
 #include <sfx2/sfxsids.hrc>
 #include <svtools/eitem.hxx>
+#include <svtools/languageoptions.hxx>
 #include <svx/SmartTagMgr.hxx>
 #include <com/sun/star/smarttags/XSmartTagRecognizer.hpp>
 #include <com/sun/star/smarttags/XSmartTagAction.hpp>
@@ -143,7 +144,11 @@ OfaAutoCorrDlg::OfaAutoCorrDlg(Window* pParent, const SfxItemSet* _pSet ) :
     // initialize languages
     //! LANGUAGE_NONE is displayed as '[All]' and the LanguageType
     //! will be set to LANGUAGE_DONTKNOW
-    aLanguageLB.SetLanguageList( LANG_LIST_WESTERN, TRUE, TRUE );
+    sal_Int16 nLangList = LANG_LIST_WESTERN;
+
+    if( SvtLanguageOptions().IsCTLFontEnabled() )
+        nLangList |= LANG_LIST_CTL;
+    aLanguageLB.SetLanguageList( nLangList, TRUE, TRUE );
     aLanguageLB.SelectLanguage( LANGUAGE_NONE );
     USHORT nPos = aLanguageLB.GetSelectEntryPos();
     DBG_ASSERT( LISTBOX_ENTRY_NOTFOUND != nPos, "listbox entry missing" );
@@ -927,7 +932,7 @@ void OfaACorrCheckListBox::SetCheckButtonState( SvLBoxEntry* pEntry, USHORT nCol
 {
     SvLBoxButton* pItem = (SvLBoxButton*)(pEntry->GetItem(nCol + 1));
 
-    DBG_ASSERT(pItem,"SetCheckButton:Item not found")
+    DBG_ASSERT(pItem,"SetCheckButton:Item not found");
     if (((SvLBoxItem*)pItem)->IsA() == SV_ITEM_ID_LBOXBUTTON)
     {
         switch( eState )
@@ -956,7 +961,7 @@ SvButtonState OfaACorrCheckListBox::GetCheckButtonState( SvLBoxEntry* pEntry, US
 {
     SvButtonState eState = SV_BUTTON_UNCHECKED;
     SvLBoxButton* pItem = (SvLBoxButton*)(pEntry->GetItem(nCol + 1));
-    DBG_ASSERT(pItem,"GetChButnState:Item not found")
+    DBG_ASSERT(pItem,"GetChButnState:Item not found");
 
     if (((SvLBoxItem*)pItem)->IsA() == SV_ITEM_ID_LBOXBUTTON)
     {
@@ -1446,7 +1451,7 @@ IMPL_LINK(OfaAutocorrReplacePage, NewDelHdl, PushButton*, pBtn)
     SvLBoxEntry* _pEntry = aReplaceTLB.FirstSelected();
     if(pBtn == &aDeleteReplacePB)
     {
-        DBG_ASSERT(_pEntry, "keine Eintrag selektiert")
+        DBG_ASSERT(_pEntry, "keine Eintrag selektiert");
         if(_pEntry)
         {
             aReplaceTLB.GetModel()->Remove(_pEntry);

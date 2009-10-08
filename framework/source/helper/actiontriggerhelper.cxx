@@ -404,9 +404,10 @@ void ActionTriggerHelper::FillActionTriggerContainerFromMenu(
 Reference< XIndexContainer > ActionTriggerHelper::CreateActionTriggerContainerFromMenu(
     // #110897#
     const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xServiceFactory,
-    const Menu* pMenu )
+    const Menu* pMenu,
+    const ::rtl::OUString* pMenuIdentifier )
 {
-    return new RootActionTriggerContainer( pMenu, xServiceFactory );
+    return new RootActionTriggerContainer( pMenu, pMenuIdentifier, xServiceFactory );
 }
 
 }

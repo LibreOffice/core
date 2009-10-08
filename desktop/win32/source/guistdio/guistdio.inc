@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: guistdio.inc,v $
- * $Revision: 1.3 $
+ * $Revision: 1.3.86.3 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -49,12 +49,81 @@
 // Thread that reads from child process standard output pipe
 //---------------------------------------------------------------------------
 
+#ifdef UNOPKG
+
+DWORD passOutputToConsole(HANDLE readPipe, HANDLE console)
+{
+	BYTE aBuffer[1024];
+	DWORD dwRead = 0;
+	HANDLE hReadPipe = readPipe;
+	BOOL fSuccess;
+	DWORD dwWritten;
+
+	//Indicates that we read an odd number of bytes. That is, we only read half of the last
+	//wchar_t
+	bool bIncompleteWchar = false;
+	//fprintf, fwprintf will both send char data without the terminating zero. 
+	//fwprintf converts the unicode string first.
+	//We expect here to receive unicode without the terminating zero. 
+	//unopkg and the extension manager code MUST 
+	//use dp_misc::writeConsole instead of using fprintf, etc.
+	
+	DWORD dwToRead = sizeof(aBuffer);
+	BYTE * pBuffer = aBuffer;
+	while ( ReadFile( hReadPipe, pBuffer, dwToRead, &dwRead, NULL ) )
+	{
+		//If the previous ReadFile call read an odd number of bytes, then the last one was
+		//put at the front of the buffer. We increase the number of read bytes by one to reflect
+		//that one byte.
+		if (bIncompleteWchar)
+			dwRead++;
+		//We must make sure that only complete wchar_t|s are written. WriteConsolse takes
+		//the number of wchar_t|s as argument. ReadFile, however, reads bytes.
+		bIncompleteWchar = dwRead % 2 ? true : false;
+		if (bIncompleteWchar)
+		{
+			//To test this case, give aBuffer a small odd size, e.g. aBuffer[3]
+			//The last byte, which is the incomplete wchar_t (half of it), will not be written.
+			fSuccess = WriteConsoleW( console, aBuffer, 
+				(dwRead - 1) / 2, &dwWritten, NULL );
+			
+			//Move the last byte to the front of the buffer, so that it is the start of the 
+			//next string
+			aBuffer[0] = aBuffer[dwRead - 1];
+			
+			//Make sure that ReadFile does not overwrite the first byte the next time
+			dwToRead = sizeof(aBuffer) - 1;
+			pBuffer = aBuffer + 1;
+			
+		}
+		else
+		{	//We have read an even number of bytes. Therefore, we do not put the last incomplete
+			//wchar_t at the front of the buffer. We will use the complete buffer the next time 
+			//when ReadFile is called.
+			dwToRead = sizeof(aBuffer);
+			pBuffer = aBuffer;
+			fSuccess = WriteConsoleW( console, 
+				aBuffer, dwRead / 2, &dwWritten, NULL );
+		}
+	}
+
+	return 0;
+}
+
+#endif
+
+#ifdef UNOPKG
+DWORD WINAPI OutputThread( LPVOID pParam )
+{
+	return passOutputToConsole((HANDLE)pParam, GetStdHandle( STD_OUTPUT_HANDLE ));
+}
+
+#else
 DWORD WINAPI OutputThread( LPVOID pParam )
 {
 	BYTE	aBuffer[256];
 	DWORD	dwRead = 0;
 	HANDLE	hReadPipe = (HANDLE)pParam;
-
 	while ( ReadFile( hReadPipe, &aBuffer, sizeof(aBuffer), &dwRead, NULL ) )
 	{
 		BOOL	fSuccess;
@@ -65,11 +134,18 @@ DWORD WINAPI OutputThread( LPVOID pParam )
 
 	return 0;
 }
-
+#endif
 //---------------------------------------------------------------------------
 // Thread that reads from child process standard error pipe
 //---------------------------------------------------------------------------
 
+#ifdef UNOPKG
+DWORD WINAPI ErrorThread( LPVOID pParam )
+{
+	return passOutputToConsole((HANDLE)pParam, GetStdHandle( STD_ERROR_HANDLE ));
+}
+
+#else
 DWORD WINAPI ErrorThread( LPVOID pParam )
 {
 	BYTE	aBuffer[256];
@@ -86,11 +162,29 @@ DWORD WINAPI ErrorThread( LPVOID pParam )
 
 	return 0;
 }
-
+#endif
 //---------------------------------------------------------------------------
 // Thread that writes to child process standard input pipe
 //---------------------------------------------------------------------------
+#ifdef UNOPKG
+DWORD WINAPI InputThread( LPVOID pParam )
+{
+	const DWORD dwBufferSize = 256;
+	wchar_t	aBuffer[dwBufferSize];
+	DWORD	dwRead = 0;
+	HANDLE	hWritePipe = (HANDLE)pParam;
+		
+	while (ReadConsoleW( GetStdHandle( STD_INPUT_HANDLE ), &aBuffer, dwBufferSize, &dwRead, NULL ) )
+	{
+		BOOL	fSuccess;
+		DWORD	dwWritten;
 
+		fSuccess = WriteFile( hWritePipe, aBuffer, dwRead * 2, &dwWritten, NULL );
+	}
+
+	return 0;
+}
+#else
 DWORD WINAPI InputThread( LPVOID pParam )
 {
 	BYTE	aBuffer[256];
@@ -107,6 +201,7 @@ DWORD WINAPI InputThread( LPVOID pParam )
 
 	return 0;
 }
+#endif
 
 //---------------------------------------------------------------------------
 // Thread that waits until child process reached input idle
@@ -116,8 +211,8 @@ DWORD WINAPI WaitForUIThread( LPVOID pParam )
 {
 	HANDLE	hProcess = (HANDLE)pParam;
 
-#ifndef GUISTDIO_KEEPRUNNING
-	if ( !_tgetenv( TEXT("GUISTDIO_KEEPRUNNING") ) )
+#ifndef UNOPKG
+	if ( !_tgetenv( TEXT("UNOPKG") ) )
 		WaitForInputIdle( hProcess, INFINITE );
 	else
 #endif
@@ -296,7 +391,7 @@ int _tmain( int, _TCHAR ** )
         //the threads then data may be lost. For example running unopkg without arguments shall print out
         //the help text. Without this workaround some text would be missing.
         //ifdef only for unopkg
-#ifdef GUISTDIO_KEEPRUNNING
+#ifdef UNOPKG
         Sleep(1000);    
 #endif        
 		CloseHandle( hOutputThread );

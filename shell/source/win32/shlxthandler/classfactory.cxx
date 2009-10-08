@@ -35,6 +35,11 @@
 #include "internal/infotips.hxx"
 #include "internal/propsheets.hxx"
 #include "internal/columninfo.hxx"
+#ifdef __MINGW32__
+#include <algorithm>
+using ::std::max;
+using ::std::min;
+#endif
 #include "internal/thumbviewer.hxx"
 #include "internal/shlxthdl.hxx"
 

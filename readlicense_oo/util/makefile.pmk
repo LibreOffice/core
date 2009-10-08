@@ -8,8 +8,6 @@
 #
 # $RCSfile: makefile.pmk,v $
 #
-# $Revision: 1.19 $
-#
 # This file is part of OpenOffice.org.
 #
 # OpenOffice.org is free software: you can redistribute it and/or modify
@@ -32,64 +30,42 @@
 # --- Targets ------------------------------------------------------
 
 .IF "$(GUI)"=="UNX"
-SYSDOCS=$(foreach,j,$(READMEFILES) $(j:d)$(j:b:u)$(j:e:s/.txt//))
-.ELSE          # "$(GUI)"=="UNX"
-SYSDOCS=$(foreach,j,$(READMEFILES) $(j:d)$(j:b)$(j:e))
-.ENDIF          # "$(GUI)"=="UNX"
+# uppercase and no filename extension for txt
+SYSTEXTDOCS=$(foreach,i,$(alllangiso) $(MISC)$/$(GUI)$/README_$i)
+SYSHTMLDOCS=$(SYSTEXTDOCS:+".html")
+.ELSE		# "$(GUI)"=="UNX"
+SYSTEXTDOCS=$(foreach,i,$(alllangiso) $(MISC)$/$(GUI)$/readme_$i.txt)
+SYSHTMLDOCS=$(SYSTEXTDOCS:s/.txt/.html/)
+.ENDIF		# "$(GUI)"=="UNX"
 
-ALLDOCS:=$(foreach,i,$(alllangiso) $(foreach,j,$(READMEFILES) $(j:d)$(j:b)_$i$(j:e)))
-ALLSYSDOCS:=$(foreach,i,$(alllangiso) $(foreach,j,$(SYSDOCS) $(j:d)$(GUI)$/$(j:b)_$i$(j:e)))
-
-.IF "$(WITH_LANG)"!="en-US"
-MERGEDXRM=$(COMMONMISC)$/$(TARGET)$/$(READMEFILES:b:+".xrm")
-MERGEDXRMDIR=$(COMMONMISC)$/$(TARGET)
-.ELSE			# "$(WITH_LANG)"!="en-US"
-MERGEDXRM=$(READMEFILES:b:+".xrm")
-MERGEDXRMDIR=.
-.ENDIF			# "$(WITH_LANG)"!="en-US"
+.IF "$(WITH_LANG)"!=""
+MERGEDXRM=$(COMMONMISC)$/$(TARGET)$/readme.xrm
+.ELSE		# "$(WITH_LANG)"!=""
+MERGEDXRM=.$/readme.xrm
+.ENDIF		# "$(WITH_LANG)"!=""
 
 .INCLUDE : target.mk
 
-ALLTAR : $(ALLSYSDOCS)
+ALLTAR : $(SYSTEXTDOCS) $(SYSHTMLDOCS)
 
-$(ALLDOCS) : $(MERGEDXRMDIR)$/$(READMEFILES:b:+".xrm") $(PRJ)$/docs/readme.xsl $(COMMONMISC)$/readme.dtd
-
-$(COMMONMISC)$/readme.dtd : ..$/readme.dtd
+$(COMMONMISC)$/readme.dtd : ..$/readme.dtd  
+    $(MKDIRHIER) $(MISC)$/$(GUI)
     $(COPY) $< $@
 
-$(MISC)$/$(GUI)$/README%.html : $(MISC)$/readme%.html
-    @+-$(MKDIRHIER) $(@:d)
-    +$(COPY) $< $@
-   
-$(MISC)$/$(GUI)$/README% : $(MISC)$/readme%.txt
-    @+-$(MKDIRHIER) $(@:d)
-    +$(COPY) $< $@
-   
-$(MISC)$/$(GUI)$/readme% : $(MISC)$/readme%
-    @+-$(MKDIRHIER) $(@:d)
-    +$(COPY) $< $@
-   
-$(MISC)$/readme%.html :
-    @+-$(MKDIRHIER) $(@:d)
-    $(XSLTPROC) --nonet -o $@ \
-             --stringparam os1 $(OS) \
-             --stringparam gui1 $(GUI) \
-             --stringparam cp1 $(CPUNAME) \
-             --stringparam com1 $(COM) \
-             --stringparam lang1 $(@:b:s/_/./:e:s/.//) \
-             --stringparam type html \
-         ..$/readme.xsl \
-             $(subst,_$(@:b:s/_/./:e:s/.//), $(MERGEDXRMDIR)$/$(@:b).xrm)
+virtual : $(MERGEDXRM) $(COMMONMISC)$/readme.dtd $(PRJ)$/docs/readme.xsl
 
-$(MISC)$/readme%.txt :
-    @+-$(MKDIRHIER) $(@:d)
-    $(SED) "s#method=\(.\)html..*#method=\1text\1/>#" < ..$/readme.xsl | \
-             $(XSLTPROC) --nonet -o $@ \
-             --stringparam os1 $(OS) \
-             --stringparam gui1 $(GUI) \
-             --stringparam cp1 $(CPUNAME) \
-             --stringparam com1 $(COM) \
-             --stringparam lang1 $(@:b:s/_/./:e:s/.//) \
-             --stringparam type text \
-             - \
-             $(subst,_$(@:b:s/_/./:e:s/.//), $(MERGEDXRMDIR)$/$(@:b).xrm)
+$(MISC)$/readme_text.xsl : virtual
+    $(SED) "s/method=\"html\".*>/method=\"text\"\/>/" < ..$/readme.xsl > $@
+
+$(MISC)$/$(GUI)$/$(eq,$(GUI),WNT readme README)_%.html : 'virtual'
+    $(XSLTPROC) --nonet -o $@ \
+    --stringparam os1 $(OS)	--stringparam gui1 $(GUI)	--stringparam com1  $(COM) \
+    --stringparam cp1 $(CPUNAME)	--stringparam type html	--stringparam lang1 $* \
+    ..$/readme.xsl	$(MERGEDXRM)
+
+# no percent-rule to avoid ambiguous inference chains for README_<lang>.html 
+$(SYSTEXTDOCS) : $(MISC)$/readme_text.xsl
+    $(XSLTPROC) --nonet -o $@ \
+    --stringparam os1 $(OS)	--stringparam gui1 $(GUI)	--stringparam com1  $(COM) \
+    --stringparam cp1 $(CPUNAME)	--stringparam type text	--stringparam lang1 $(@:b:s/readme_//:s/README_//) \
+    $<	$(MERGEDXRM) 

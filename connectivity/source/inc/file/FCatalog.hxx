@@ -33,12 +33,15 @@
 
 #include "connectivity/sdbcx/VCatalog.hxx"
 
+#include "file/filedllapi.hxx"
+
 namespace connectivity
 {
     namespace file
     {
         class OConnection;
-        class SAL_NO_VTABLE OFileCatalog : public connectivity::sdbcx::OCatalog
+        class OOO_DLLPUBLIC_FILE SAL_NO_VTABLE OFileCatalog :
+            public connectivity::sdbcx::OCatalog
         {
         protected:
             OConnection*                                        m_pConnection;

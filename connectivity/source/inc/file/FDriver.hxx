@@ -36,6 +36,7 @@
 #include <com/sun/star/sdbcx/XDataDefinitionSupplier.hpp>
 #include <cppuhelper/compbase3.hxx>
 #include "connectivity/CommonTools.hxx"
+#include "file/filedllapi.hxx"
 
 namespace connectivity
 {
@@ -45,7 +46,7 @@ namespace connectivity
                                                     ::com::sun::star::lang::XServiceInfo,
                                                     ::com::sun::star::sdbcx::XDataDefinitionSupplier> ODriver_BASE;
 
-        class SAL_NO_VTABLE OFileDriver : public ODriver_BASE
+        class OOO_DLLPUBLIC_FILE SAL_NO_VTABLE OFileDriver : public ODriver_BASE
         {
         protected:
             ::osl::Mutex                                        m_aMutex;

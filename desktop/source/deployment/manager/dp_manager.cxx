@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: dp_manager.cxx,v $
- * $Revision: 1.34 $
+ * $Revision: 1.33.8.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -627,7 +627,7 @@ bool PackageManagerImpl::checkInstall(
     {
         Any request(
             deployment::InstallException(
-                OUSTR("Extension ") + id + OUSTR("is about to be installed."),
+                OUSTR("Extension ") + id + OUSTR(" is about to be installed."),
                 static_cast<OWeakObject *>(this), package));
         bool approve = false, abort = false;
         if (! interactContinuation(

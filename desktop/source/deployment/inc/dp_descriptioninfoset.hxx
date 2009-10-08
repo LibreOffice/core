@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: dp_descriptioninfoset.hxx,v $
- * $Revision: 1.9 $
+ * $Revision: 1.9.34.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -162,6 +162,11 @@ public:
     */
     ::boost::optional< ::rtl::OUString > getLocalizedUpdateWebsiteURL() const;
 
+    /** returns the relative URL to the description.
+
+       The URL is relative to the root directory of the extensions.
+    */
+    ::rtl::OUString getLocalizedDescriptionURL() const;
     /**
        Return the dependencies.
 

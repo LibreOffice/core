@@ -44,6 +44,7 @@ ModelessDialog RID_SVXDLG_SPELLCHECK
     OutputSize = TRUE;
     Closeable = TRUE ;
     SVLook = TRUE;
+    Hide = TRUE;
     Text [ en-US ] = "Spellcheck: " ;
 
     Moveable = TRUE ;
@@ -59,7 +60,7 @@ ModelessDialog RID_SVXDLG_SPELLCHECK
     {
         Pos = MAP_APPFONT(  6, 8 );
         Size = MAP_APPFONT( 100, 8 );
-        Text [ en-US ] = "Dictionary languag~e" ;
+        Text [ en-US ] = "Text languag~e" ;
     };
     ListBox LB_LANGUAGE
     {
@@ -118,6 +119,13 @@ ModelessDialog RID_SVXDLG_SPELLCHECK
         Pos = MAP_APPFONT( 209, 54 );
         Size = MAP_APPFONT( 55, 14 );
         Text [ en-US ] = "I~gnore All" ;
+    };
+    PushButton PB_IGNORERULE
+    {
+        Pos = MAP_APPFONT( 209, 54 );
+        Size = MAP_APPFONT( 55, 14 );
+        Text [ en-US ] = "I~gnore Rule" ;
+        Hide = TRUE;
     };
     MenuButton MB_ADDTODICT
     {

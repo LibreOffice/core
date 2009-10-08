@@ -61,8 +61,9 @@
 #include <memory>
 #include <svx/sdrpagewindow.hxx>
 #include <sdrpaintwindow.hxx>
+#include <tools/diagnose_ex.h>
+#include <svx/svdograf.hxx>
 
-using namespace ::rtl;
 using namespace ::com::sun::star;
 using namespace ::sdr::contact;
 
@@ -251,6 +252,22 @@ UINT16 SdrUnoObj::GetObjIdentifier() const
     return UINT16(OBJ_UNO);
 }
 
+void SdrUnoObj::SetContextWritingMode( const sal_Int16 _nContextWritingMode )
+{
+    try
+    {
+        uno::Reference< beans::XPropertySet > xModelProperties( GetUnoControlModel(), uno::UNO_QUERY_THROW );
+        xModelProperties->setPropertyValue(
+            ::rtl::OUString::intern( RTL_CONSTASCII_USTRINGPARAM( "ContextWritingMode" ) ),
+            uno::makeAny( _nContextWritingMode )
+        );
+    }
+    catch( const uno::Exception& )
+    {
+        DBG_UNHANDLED_EXCEPTION();
+    }
+}
+
 // ----------------------------------------------------------------------------
 namespace
 {
@@ -379,7 +396,7 @@ void SdrUnoObj::operator = (const SdrObject& rObj)
     if (xSet.is())
     {
         uno::Any aValue( xSet->getPropertyValue( rtl::OUString::createFromAscii("DefaultControl")) );
-        OUString aStr;
+        ::rtl::OUString aStr;
 
         if( aValue >>= aStr )
             aUnoControlTypeName = String(aStr);
@@ -388,11 +405,6 @@ void SdrUnoObj::operator = (const SdrObject& rObj)
     uno::Reference< lang::XComponent > xComp(xUnoControlModel, uno::UNO_QUERY);
     if (xComp.is())
         m_pImpl->pEventListener->StartListening(xComp);
-}
-
-FASTBOOL SdrUnoObj::HasSpecialDrag() const
-{
-    return FALSE;
 }
 
 void SdrUnoObj::NbcResize(const Point& rRef, const Fraction& xFact, const Fraction& yFact)
@@ -414,6 +426,46 @@ void SdrUnoObj::NbcResize(const Point& rRef, const Fraction& xFact, const Fracti
         aGeo.nTan       = 0.0;
         SetRectsDirty();
     }
+}
+
+// -----------------------------------------------------------------------------
+
+bool SdrUnoObj::hasSpecialDrag() const
+{
+    // no special drag; we have no rounding rect and
+    // do want frame handles
+    return false;
+}
+
+bool SdrUnoObj::supportsFullDrag() const
+{
+    // overloaded to have the possibility to enable/disable in debug and
+    // to ckeck some things out. Current solution is working, so default is
+    // enabled
+    static bool bDoSupportFullDrag(true);
+
+    return bDoSupportFullDrag;
+}
+
+SdrObject* SdrUnoObj::getFullDragClone() const
+{
+    SdrObject* pRetval = 0;
+    static bool bHandleSpecial(false);
+
+    if(bHandleSpecial)
+    {
+        // special handling for SdrUnoObj (FormControl). Create a SdrGrafObj
+        // for drag containing the graphical representation. This does not work too
+        // well, so the default is to simply clone
+        pRetval = new SdrGrafObj(SdrDragView::GetObjGraphic(GetModel(), this), GetLogicRect());
+    }
+    else
+    {
+        // call parent (simply clone)
+        pRetval = SdrRectObj::getFullDragClone();
+    }
+
+    return pRetval;
 }
 
 // -----------------------------------------------------------------------------
@@ -545,7 +597,7 @@ void SdrUnoObj::SetUnoControlModel( uno::Reference< awt::XControlModel > xModel)
         if (xSet.is())
         {
             uno::Any aValue( xSet->getPropertyValue(String("DefaultControl", gsl_getSystemTextEncoding())) );
-            OUString aStr;
+            ::rtl::OUString aStr;
             if( aValue >>= aStr )
                 aUnoControlTypeName = String(aStr);
         }
@@ -559,9 +611,9 @@ void SdrUnoObj::SetUnoControlModel( uno::Reference< awt::XControlModel > xModel)
     ViewContactOfUnoControl* pVC = NULL;
     if ( impl_getViewContact( pVC ) )
     {
-        // FlushViewContact() removes all existing VOCs. This is always allowed
-        // since they will be re-created on demand (and with the changed model)
-        FlushViewContact();
+        // flushViewObjectContacts() removes all existing VOCs for the local DrawHierarchy. This
+        // is always allowed since they will be re-created on demand (and with the changed model)
+        GetViewContact().flushViewObjectContacts(true);
     }
 }
 

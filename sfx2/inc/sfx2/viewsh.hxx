@@ -304,7 +304,7 @@ public:
                                 GetController();
 
     ::cppu::OInterfaceContainerHelper& GetContextMenuInterceptors() const;
-    BOOL                        TryContextMenuInterception( Menu& rIn, Menu*& rpOut, ::com::sun::star::ui::ContextMenuExecuteEvent aEvent );
+    BOOL                        TryContextMenuInterception( Menu& rIn, const ::rtl::OUString& rMenuIdentifier, Menu*& rpOut, ::com::sun::star::ui::ContextMenuExecuteEvent aEvent );
 
     void                        SetAdditionalPrintOptions( const com::sun::star::uno::Sequence < com::sun::star::beans::PropertyValue >& );
 

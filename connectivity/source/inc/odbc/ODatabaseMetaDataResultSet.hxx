@@ -44,6 +44,7 @@
 #include <comphelper/proparrhlp.hxx>
 #include "odbc/OStatement.hxx"
 #include "odbc/ODatabaseMetaData.hxx"
+#include "odbc/odbcbasedllapi.hxx"
 #include <comphelper/broadcasthelper.hxx>
 #include "connectivity/StdTypeDefs.hxx"
 
@@ -63,7 +64,8 @@ namespace connectivity
                                                     ::com::sun::star::sdbc::XCloseable,
                                                     ::com::sun::star::sdbc::XColumnLocate> ODatabaseMetaDataResultSet_BASE;
 
-        class ODatabaseMetaDataResultSet :  public comphelper::OBaseMutex,
+        class OOO_DLLPUBLIC_ODBCBASE ODatabaseMetaDataResultSet :
+                                    public comphelper::OBaseMutex,
                                     public  ODatabaseMetaDataResultSet_BASE,
                                     public  ::cppu::OPropertySetHelper,
                                     public  ::comphelper::OPropertyArrayUsageHelper<ODatabaseMetaDataResultSet>

@@ -32,23 +32,24 @@
 #define _LINGUISTIC_IPRCACHE_HXX_
 
 
-#include <com/sun/star/uno/Reference.h>
-
 #include <uno/lbnames.h>            // CPPU_CURRENT_LANGUAGE_BINDING_NAME macro, which specify the environment type
 #include <cppuhelper/implbase2.hxx> // helper for implementations
+
+#include <com/sun/star/uno/Reference.h>
 #include <com/sun/star/document/XEventListener.hpp>
 #include <com/sun/star/beans/XPropertyChangeListener.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
-
 #include <com/sun/star/linguistic2/XDictionaryListEventListener.hpp>
 #include <com/sun/star/linguistic2/XDictionaryList.hpp>
-#include <tools/string.hxx>
 
+#include <rtl/string.hxx>
+#include <i18npool/lang.h>
+
+#include <set>
+#include <map>
 
 namespace linguistic
 {
-
-class IPRCachedWord;
 
 ///////////////////////////////////////////////////////////////////////////
 
@@ -83,33 +84,22 @@ public:
 
     inline void SetFlushObj( Flushable *pFO)    { pFlushObj = pFO; }
 
-    void        SetDicList(
-                    ::com::sun::star::uno::Reference<
-                        ::com::sun::star::linguistic2::XDictionaryList > &rDL );
-    void        SetPropSet(
-                    ::com::sun::star::uno::Reference<
-                        ::com::sun::star::beans::XPropertySet > &rPS );
+    void        SetDicList( ::com::sun::star::uno::Reference< ::com::sun::star::linguistic2::XDictionaryList > &rDL );
+    void        SetPropSet( ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > &rPS );
 
     //XEventListener
-    virtual void SAL_CALL
-        disposing( const ::com::sun::star::lang::EventObject& rSource )
-            throw(::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL disposing( const ::com::sun::star::lang::EventObject& rSource ) throw(::com::sun::star::uno::RuntimeException);
 
     // XDictionaryListEventListener
-    virtual void SAL_CALL
-        processDictionaryListEvent(
-                const ::com::sun::star::linguistic2::DictionaryListEvent& rDicListEvent )
-            throw(::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL processDictionaryListEvent( const ::com::sun::star::linguistic2::DictionaryListEvent& rDicListEvent ) throw(::com::sun::star::uno::RuntimeException);
 
     // XPropertyChangeListener
-    virtual void SAL_CALL
-        propertyChange( const ::com::sun::star::beans::PropertyChangeEvent& rEvt )
-            throw(::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL propertyChange( const ::com::sun::star::beans::PropertyChangeEvent& rEvt ) throw(::com::sun::star::uno::RuntimeException);
 };
 
 ///////////////////////////////////////////////////////////////////////////
 
-class IPRSpellCache :
+class SpellCache :
     public Flushable
 {
     ::com::sun::star::uno::Reference<
@@ -117,36 +107,23 @@ class IPRSpellCache :
                         xFlushLstnr;
     FlushListener      *pFlushLstnr;
 
-    IPRCachedWord   **ppHash;
-    IPRCachedWord    *pFirst;
-    IPRCachedWord    *pLast;
-    IPRCachedWord    *pRun;
-    IPRCachedWord    *pInput;
-    ULONG             nIndex;
-    ULONG             nCount;
-    ULONG             nInputPos;
-    ULONG             nInputValue;
-    ULONG             nTblSize;
-#ifdef DBG_STATISTIC
-    ULONG nMaxInput;
-    ULONG nMax;
-    ULONG nFound;
-    ULONG nLost;
-#endif
+    typedef std::set< ::rtl::OUString >             WordList_t;
+    typedef std::map< LanguageType, WordList_t >    LangWordList_t;
+    LangWordList_t  aWordLists;
 
     // don't allow to use copy-constructor and assignment-operator
-    IPRSpellCache(const IPRSpellCache &);
-    IPRSpellCache & operator = (const IPRSpellCache &);
+    SpellCache(const SpellCache &);
+    SpellCache & operator = (const SpellCache &);
 
 public:
-    IPRSpellCache( ULONG nSize );
-    virtual ~IPRSpellCache();
+    SpellCache();
+    virtual ~SpellCache();
 
     // Flushable
     virtual void    Flush();
 
-    void    AddWord( const String& rWord, INT16 nLang );
-    BOOL    CheckWord( const String& rWord, INT16 nLang, BOOL bAllLang );
+    void    AddWord( const ::rtl::OUString& rWord, LanguageType nLang );
+    bool    CheckWord( const ::rtl::OUString& rWord, LanguageType nLang );
 };
 
 ///////////////////////////////////////////////////////////////////////////

@@ -1920,7 +1920,7 @@ void OSQLParseNode::negateSearchCondition(OSQLParseNode*& pSearchCondition,sal_B
     }
     // row_value_constructor comparison row_value_constructor
     // row_value_constructor comparison any_all_some subquery
-    else if(bNegate  && SQL_ISRULE(pSearchCondition,comparison_predicate) || SQL_ISRULE(pSearchCondition,all_or_any_predicate))
+    else if(bNegate && (SQL_ISRULE(pSearchCondition,comparison_predicate) || SQL_ISRULE(pSearchCondition,all_or_any_predicate)))
     {
         OSQLParseNode* pComparison = pSearchCondition->getChild(1);
         OSQLParseNode* pNewComparison = NULL;
@@ -2571,7 +2571,7 @@ OSQLParseNode::Rule OSQLParseNode::getKnownRuleID() const
     OSL_ENSURE(_pTableRef && _pTableRef->count() > 1 && _pTableRef->getKnownRuleID() == OSQLParseNode::table_ref,"Invalid node give, only table ref is allowed!");
     const sal_uInt32 nCount = _pTableRef->count();
     ::rtl::OUString sTableRange;
-    if ( nCount == 2 || nCount == 3 || nCount == 5)
+    if ( nCount == 2 || (nCount == 3 && !_pTableRef->getChild(0)->isToken()) || nCount == 5 )
     {
         const OSQLParseNode* pNode = _pTableRef->getChild(nCount - (nCount == 2 ? 1 : 2));
         OSL_ENSURE(pNode && (pNode->getKnownRuleID() == OSQLParseNode::table_primary_as_range_column

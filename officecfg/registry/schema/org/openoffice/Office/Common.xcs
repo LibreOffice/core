@@ -8,7 +8,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: Common.xcs,v $
- * $Revision: 1.156 $
+ * $Revision: 1.156.14.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -1098,12 +1098,27 @@ Dymamic border coloring means that when the mouse is hovered over a control, and
       <prop oor:name="AntiAliasing" oor:type="xs:boolean">
         <info>
           <author>AW</author>
-          <desc>This switch allows to switch DrawingLayer based views to be rendered using AntiAliasing or not.
-                Of course this takes only effect when AntiAliasing is supported for the System OOo is running on.
+          <desc>
+            This switch allows to switch DrawingLayer based views to be rendered using AntiAliasing or not.
+            Of course this takes only effect when AntiAliasing is supported for the System OOo is running on.
           </desc>
           <label>This switch determines if DrawingLayer based views use AntiAliasing.</label>
         </info>
-        <value>false</value>
+        <value>true</value>
+      </prop>
+      <prop oor:name="SolidDragCreate" oor:type="xs:boolean">
+        <info>
+          <author>AW</author>
+          <desc>
+            This switch decides if Interactions in the DrawingLayer are visualized using Wireframe or Full-Object
+            previews. If false, only Wireframe will be used. If true, Full-Object preview which gives a much better
+            feedback about the object interaction will be used. This mode is used for modification and creation of 
+            objects. During interaction, a geometric copy of the object(s) is shown with 50% transparence in the 
+            foreground. That copy shows exactly what You will get when You end the interaction.
+          </desc>
+          <label>This switch determines if DrawingLayer Interactions show Wireframe or Full-Object preview.</label>
+        </info>
+        <value>true</value>
       </prop>
       <prop oor:name="Quadratic3DRenderLimit" oor:type="xs:int">
         <info>
@@ -5559,6 +5574,14 @@ Dymamic border coloring means that when the mouse is hovered over a control, and
 				</info>
 				<value>true</value>
 			</prop>
+			<prop oor:name="UseDocumentSystemFileLocking" oor:type="xs:boolean">
+				<info>
+					<author>MAV</author>
+					<desc>Allows to specify whether the OOo document file locking mechanics should use the system file locking additionaly.</desc>
+				</info>
+				<value>true</value>
+			</prop>
+
 			<prop oor:name="UseSystemPrintDialog" oor:type="xs:boolean">
 				<info>
 					<author>PL</author>
@@ -5867,6 +5890,14 @@ Dymamic border coloring means that when the mouse is hovered over a control, and
                     <author>OS</author>
                     <desc>Specifies the label of the second component-based search command.</desc>
                 </info>
+            </prop>
+            <prop oor:name="IsNotes" oor:type="xs:boolean">
+   	        <!-- UIHints: Edit Search/Replace  -->
+		<info>
+               		<author>mod</author>
+                	<desc>Specifies if search includes notes(SwPostItFields)</desc>
+                </info>
+		<value>false</value>
             </prop>
             <group oor:name="Japanese">
 				<info>
@@ -6316,7 +6347,7 @@ Dymamic border coloring means that when the mouse is hovered over a control, and
 				<prop oor:name="CTLTextNumerals" oor:type="xs:int">
 					<!-- UIHints: options-->
 					<info>
-						<desc>Specifies the type of numerals (Arabic (0), Hindi (1) or system settings (2)) is used per default in all applications.</desc>
+                                                <desc>Specifies the type of numerals (Arabic (0), Hindi (1), system settings (2) or Context(3)) is used per default in all applications.</desc>
 					</info>
 					<value>0</value>
 				</prop>

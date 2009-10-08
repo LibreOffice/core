@@ -884,7 +884,7 @@ void SfxDispatcher::DoDeactivate_Impl( sal_Bool bMDI, SfxViewFrame* pNew )
                 for (sal_uInt16 n=0; n<pImp->aChildWins.Count();)
                 {
                     SfxChildWindow *pWin = pWorkWin->GetChildWindow_Impl( (sal_uInt16) ( pImp->aChildWins[n] & 0xFFFF ) );
-                    if (!pWin || pWin && pWin->GetAlignment() == SFX_ALIGN_NOALIGNMENT)
+                    if (!pWin || (pWin && pWin->GetAlignment() == SFX_ALIGN_NOALIGNMENT))
                         pImp->aChildWins.Remove(n);
                     else
                         n++;
@@ -1824,7 +1824,7 @@ sal_uInt32 SfxDispatcher::_Update_Impl( sal_Bool bUIActive, sal_Bool bIsMDIApp, 
 
     // bQuiet : own shells aren't considered for UI and SlotServer
     // bNoUI: own Shells aren't considered fors UI
-    if ( pImp->bQuiet || pImp->bNoUI || pImp->pFrame && pImp->pFrame->GetObjectShell()->IsPreview() )
+    if ( pImp->bQuiet || pImp->bNoUI || (pImp->pFrame && pImp->pFrame->GetObjectShell()->IsPreview()) )
         return nHelpId;
 
     sal_uInt32 nStatBarId=0;

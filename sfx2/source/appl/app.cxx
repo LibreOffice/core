@@ -125,6 +125,7 @@
 #include <sfx2/sfxdlg.hxx>
 #include "stbitem.hxx"
 #include "eventsupplier.hxx"
+#include <sfx2/dockwin.hxx>
 
 #ifdef DBG_UTIL
 #include <sfx2/tbxctrl.hxx>
@@ -323,6 +324,8 @@ SfxApplication* SfxApplication::GetOrCreate()
         ::framework::SetRefreshToolbars( RefreshToolbars );
         ::framework::SetToolBoxControllerCreator( SfxToolBoxControllerFactory );
         ::framework::SetStatusBarControllerCreator( SfxStatusBarControllerFactory );
+        ::framework::SetDockingWindowCreator( SfxDockingWindowFactory );
+        ::framework::SetIsDockingWindowVisible( IsDockingWindowVisible );
 
         SfxHelp* pSfxHelp = new SfxHelp;
         Application::SetHelp( pSfxHelp );
@@ -366,7 +369,7 @@ SfxApplication::SfxApplication()
             aStr += ByteString::CreateFromInt32(GetDdeService()->GetError());
         else
             aStr += '?';
-        DBG_ASSERT( sal_False, aStr.GetBuffer() )
+        DBG_ASSERT( sal_False, aStr.GetBuffer() );
     }
 #endif
 #endif

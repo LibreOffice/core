@@ -27,14 +27,6 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-//=========================================================================
-//
-// Misc. ID-definitions for "CHAOS"
-//
-// (C) 1997 StarDivision GmbH, Hamburg, Germany
-// $Author: rt $ $Date: 2008-04-11 11:20:39 $ $Revision: 1.3 $
-// $Logfile:   T:/chaos/source/inc/cntids.hrv  $ $Workfile:   cntids.hrc  $
-//=========================================================================
 
 #ifndef _CNTIDS_HRC
 #define _CNTIDS_HRC
@@ -59,8 +51,10 @@
 #define SID_DELETE                      (SID_SFX_START + 713)
 #define SID_INTERNET_ONLINE             (SID_SFX_START + 1370)
 
+// Don't let SID_CHAOS_END grow. Internal docking windows use the range between
+// SID_CHAOS_END and SID_LIB_START!! Look into sfxsids.hrc for more information!
 #define SID_CHAOS_START                 9000
-#define SID_CHAOS_END                   9999
+#define SID_CHAOS_END                   9799
 
 #define SID_BCC                         (SID_CHAOS_START +  2)
 #define SID_CC                          (SID_CHAOS_START +  3)

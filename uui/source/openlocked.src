@@ -40,7 +40,7 @@ String STR_OPENLOCKED_TITLE
 };
 String STR_OPENLOCKED_MSG
 {
-    Text [ en-US ] = "Document file '$(ARG1)' is locked for editing by:\n\n$(ARG2)\n\nOpen document read-only or open a copy of the document for editing.";
+    Text [ en-US ] = "Document file '$(ARG1)' is locked for editing by:\n\n$(ARG2)\n\nOpen document read-only or open a copy of the document for editing.\n\n";
 };
 String STR_OPENLOCKED_OPENREADONLY_BTN
 {
@@ -50,7 +50,7 @@ String STR_OPENLOCKED_OPENCOPY_BTN
 {
     Text [ en-US ] = "Open ~Copy";
 };
-String STR_OPENLOCKED_UNKNOWNUSER
+String STR_UNKNOWNUSER
 {
     Text [ en-US ] = "Unknown User";
 };

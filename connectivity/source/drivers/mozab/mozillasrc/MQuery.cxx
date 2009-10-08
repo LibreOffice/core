@@ -800,7 +800,7 @@ MQuery::resyncRow(sal_Int32 nDBRow)
     args.arg2 = (void*)&nDBRow;
     nsresult rv = xMProxy.StartProxy(&args,m_Product,m_Profile);
     setError( m_aQueryHelper->getErrorResourceId() );
-    return NS_SUCCEEDED( rv );
+    return NS_SUCCEEDED( rv ) ? sal_True : sal_False;
 }
 
 sal_Int32

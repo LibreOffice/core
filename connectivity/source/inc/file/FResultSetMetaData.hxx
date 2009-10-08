@@ -35,6 +35,7 @@
 #include <cppuhelper/implbase1.hxx>
 #include "connectivity/CommonTools.hxx"
 #include <vos/ref.hxx>
+#include "file/filedllapi.hxx"
 
 namespace connectivity
 {
@@ -46,7 +47,8 @@ namespace connectivity
         //**************************************************************
         typedef ::cppu::WeakImplHelper1<        ::com::sun::star::sdbc::XResultSetMetaData>   OResultSetMetaData_BASE;
 
-        class OResultSetMetaData :  public  OResultSetMetaData_BASE
+        class OOO_DLLPUBLIC_FILE OResultSetMetaData :
+            public  OResultSetMetaData_BASE
         {
             ::rtl::OUString     m_aTableName;
             ::vos::ORef<connectivity::OSQLColumns>  m_xColumns;

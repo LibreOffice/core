@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: exprnode.cxx,v $
- * $Revision: 1.19 $
+ * $Revision: 1.19.40.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -38,6 +38,13 @@
 #include "expr.hxx"
 
 //////////////////////////////////////////////////////////////////////////
+
+SbiExprNode::SbiExprNode( void )
+{
+    pLeft = NULL;
+    pRight = NULL;
+    eNodeType = SbxDUMMY;
+}
 
 SbiExprNode::SbiExprNode( SbiParser* p, SbiExprNode* l, SbiToken t, SbiExprNode* r )
 {

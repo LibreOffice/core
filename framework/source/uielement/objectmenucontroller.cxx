@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: objectmenucontroller.cxx,v $
- * $Revision: 1.10 $
+ * $Revision: 1.10.40.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -62,7 +62,7 @@
 #include <vcl/i18nhelp.hxx>
 #include <tools/urlobj.hxx>
 #include <rtl/ustrbuf.hxx>
-#include <comphelper/uieventslogger.hxx>
+#include <dispatch/uieventloghelper.hxx>
 
 //_________________________________________________________________________________________________________________
 //  Defines
@@ -192,11 +192,7 @@ void SAL_CALL ObjectMenuController::select( const css::awt::MenuEvent& rEvent ) 
 
             xURLTransformer->parseStrict( aTargetURL );
             if(::comphelper::UiEventsLogger::isEnabled()) //#i88653#
-            {
-                Sequence<PropertyValue> source;
-                ::comphelper::UiEventsLogger::appendDispatchOrigin(source, rtl::OUString::createFromAscii("ObjectMenuController"));
-                ::comphelper::UiEventsLogger::logDispatch(aTargetURL, source);
-            }
+                UiEventLogHelper(::rtl::OUString::createFromAscii("ObjectMenuController")).log(m_xServiceManager, m_xFrame, aTargetURL, aArgs);
             xDispatch->dispatch( aTargetURL, aArgs );
         }
     }

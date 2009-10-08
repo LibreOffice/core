@@ -71,6 +71,7 @@ void SfxApplication::Registrations_Impl()
     SfxNavigatorWrapper::RegisterChildWindow( FALSE, NULL, SFX_CHILDWIN_NEVERHIDE );
     SfxPartChildWnd_Impl::RegisterChildWindow();
     SfxTemplateDialogWrapper::RegisterChildWindow(TRUE);
+    SfxDockingWrapper::RegisterChildWindow();
 
     // Controller
     SfxToolBoxControl::RegisterControl(SID_REPEAT);

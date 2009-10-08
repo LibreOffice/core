@@ -35,6 +35,8 @@
 /** === end UNO includes === **/
 
 #include <rtl/ustring.hxx>
+#include <list>
+#include "connectivity/dbtoolsdllapi.hxx"
 
 //........................................................................
 namespace connectivity
@@ -48,7 +50,7 @@ namespace connectivity
     /** helper class for accessing resources shared by different libraries
         in the connectivity module
     */
-    class SharedResources
+    class OOO_DLLPUBLIC_DBTOOLS SharedResources
     {
     public:
         SharedResources();
@@ -142,6 +144,19 @@ namespace connectivity
                 const sal_Char* _pAsciiPatternToReplace3,
                 const ::rtl::OUString& _rStringToSubstitute3
             ) const;
+
+        /** loads a string from the shared resource file, and replaces a given ASCII pattern with a given string
+
+            @param  _nResId
+                the resource ID of the string to load
+            @param  _aStringToSubstitutes
+                A list of substitutions.
+
+            @return
+                the string from the resource file, with applied string substitution
+        */
+        ::rtl::OUString getResourceStringWithSubstitution( ResourceId _nResId,
+                    const ::std::list< ::std::pair<const sal_Char* , ::rtl::OUString > > _aStringToSubstitutes) const;
     };
 
 //........................................................................

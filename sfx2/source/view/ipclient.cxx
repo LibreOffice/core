@@ -868,8 +868,16 @@ sal_Bool SfxInPlaceClient::IsObjectUIActive() const
 sal_Bool SfxInPlaceClient::IsObjectInPlaceActive() const
 {
     try {
-        return ( m_pImp->m_xObject.is() && ( m_pImp->m_xObject->getCurrentState() == embed::EmbedStates::INPLACE_ACTIVE ) ||
-                 m_pImp->m_xObject.is() && ( m_pImp->m_xObject->getCurrentState() == embed::EmbedStates::UI_ACTIVE ) );
+        return(
+               (
+                m_pImp->m_xObject.is() &&
+                (m_pImp->m_xObject->getCurrentState() == embed::EmbedStates::INPLACE_ACTIVE)
+               ) ||
+               (
+                m_pImp->m_xObject.is() &&
+                (m_pImp->m_xObject->getCurrentState() == embed::EmbedStates::UI_ACTIVE)
+               )
+              );
     }
     catch( uno::Exception& )
     {}

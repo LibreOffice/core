@@ -39,6 +39,7 @@
 #include <rtl/ustring.hxx>
 
 #include <vector>
+#include "connectivity/dbtoolsdllapi.hxx"
 
 //........................................................................
 namespace dbtools
@@ -68,7 +69,7 @@ namespace dbtools
         controls which act as live filter, which could be implemented with a third component), but
         at the moment there are only these two.
     */
-    class FilterManager
+    class OOO_DLLPUBLIC_DBTOOLS FilterManager
     {
     public:
         enum FilterComponent
@@ -84,8 +85,6 @@ namespace dbtools
         ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >
                                             m_xORB;
         ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >
-                                            m_xComponent;
-        ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >
                                             m_xComponentAggregate;
         ::std::vector< ::rtl::OUString >    m_aFilterComponents;
         sal_Bool                            m_bApplyPublicFilter;
@@ -97,10 +96,7 @@ namespace dbtools
         );
 
         /// late ctor
-        void    initialize(
-                    const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxForm,
-                    const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxFormAggregate
-                );
+        void    initialize(const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxComponentAggregate );
 
         /// makes the object forgetting the references to the database component
         void    dispose( );

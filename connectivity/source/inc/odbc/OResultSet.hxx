@@ -46,6 +46,7 @@
 #include <comphelper/proparrhlp.hxx>
 #include "odbc/OFunctions.hxx"
 #include "odbc/OStatement.hxx"
+#include "odbc/odbcbasedllapi.hxx"
 #include "connectivity/CommonTools.hxx"
 #include "connectivity/FValue.hxx"
 #include "TSkipDeletedSet.hxx"
@@ -77,7 +78,7 @@ namespace connectivity
         typedef ::std::vector<TVoidPtr> TVoidVector;
         //  typedef ::com::sun::star::uno::Sequence<TVoidPtr> TVoidVector;
         /// unary_function Functor object for class ZZ returntype is void
-        struct TBookmarkPosMapCompare : ::std::less< ::com::sun::star::uno::Sequence<sal_Int8> >
+        struct OOO_DLLPUBLIC_ODBCBASE TBookmarkPosMapCompare : ::std::binary_function< ::com::sun::star::uno::Sequence<sal_Int8>, ::com::sun::star::uno::Sequence<sal_Int8>, bool >
         {
             inline bool operator()( const ::com::sun::star::uno::Sequence<sal_Int8>& _rLH,
                                     const ::com::sun::star::uno::Sequence<sal_Int8>& _rRH) const
@@ -114,7 +115,8 @@ namespace connectivity
 
         typedef ::std::map< ::com::sun::star::uno::Sequence<sal_Int8>, sal_Int32,TBookmarkPosMapCompare > TBookmarkPosMap;
 
-        class OResultSet :  public  comphelper::OBaseMutex,
+        class OOO_DLLPUBLIC_ODBCBASE OResultSet :
+                            public  comphelper::OBaseMutex,
                             public  ::connectivity::IResultSetHelper,
                             public  OResultSet_BASE,
                             public  ::cppu::OPropertySetHelper,
@@ -127,7 +129,7 @@ namespace connectivity
 
             TVoidVector                                 m_aBindVector;
             ::std::vector<sal_Int32>                    m_aLengthVector;
-            ::std::vector<sal_Int32>                    m_aColMapping; // pos 0 is unused so we don't have to decrement 1 everytime
+            ::std::map<sal_Int32,SWORD>                 m_aODBCColumnTypes;
             ::com::sun::star::uno::Sequence<sal_Int8>   m_aBookmark;
 
             TDataRow                                    m_aRow; // only used when SQLGetData can't be called in any order
@@ -142,6 +144,7 @@ namespace connectivity
             rtl_TextEncoding                            m_nTextEncoding;
             sal_Int32                                   m_nRowPos;
             sal_Int32                                   m_nLastColumnPos;       // used for m_aRow just to know where we are
+            mutable sal_uInt32                          m_nUseBookmarks;
             SQLRETURN                                   m_nCurrentFetchState;
             sal_Bool                                    m_bWasNull;
             sal_Bool                                    m_bEOF;                 // after last record
@@ -309,9 +312,6 @@ namespace connectivity
             virtual sal_Int32 SAL_CALL hashBookmark( const ::com::sun::star::uno::Any& bookmark ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
             // XDeleteRows
             virtual ::com::sun::star::uno::Sequence< sal_Int32 > SAL_CALL deleteRows( const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& rows ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
-
-            // special methods
-            sal_Int32 mapColumn(sal_Int32   column);
 
             // IResultSetHelper
             virtual sal_Bool move(IResultSetHelper::Movement _eCursorPosition, sal_Int32 _nOffset, sal_Bool _bRetrieveData);

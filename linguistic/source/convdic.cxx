@@ -187,7 +187,7 @@ BOOL IsConvDic( const String &rFileURL, INT16 &nLang, sal_Int16 &nConvType )
     ReadThroughDic( rFileURL, *pImport );    // will implicitly add the entries
     bRes =  pImport->GetLanguage() != LANGUAGE_NONE &&
             pImport->GetConversionType() != -1;
-    DBG_ASSERT( bRes, "conversion dictionary corrupted?" )
+    DBG_ASSERT( bRes, "conversion dictionary corrupted?" );
 
     if (bRes)
     {

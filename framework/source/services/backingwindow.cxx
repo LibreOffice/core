@@ -446,7 +446,7 @@ void BackingWindow::initControls()
                          maOpenButton, maOpenText, aMnemns, maOpenString );
     nYPos += 10;
 
-    DBG_ASSERT( nYPos < maControlRect.GetHeight(), "misformatting !" )
+    DBG_ASSERT( nYPos < maControlRect.GetHeight(), "misformatting !" );
     if( mnColumnWidth[0] + mnColumnWidth[1] + nBtnPos + 20 > maControlRect.GetWidth() )
         maControlRect.Right() = maControlRect.Left() + mnColumnWidth[0] + mnColumnWidth[1] + nBtnPos + 20;
 

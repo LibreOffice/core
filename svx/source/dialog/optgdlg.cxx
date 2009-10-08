@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: optgdlg.cxx,v $
- * $Revision: 1.54 $
+ * $Revision: 1.53.20.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -48,7 +48,6 @@
 #include <i18npool/mslangid.hxx>
 #include <svtools/useroptions.hxx>
 #include <svtools/cacheoptions.hxx>
-#include <svtools/options3d.hxx>
 #include <svtools/fontoptions.hxx>
 #include <svtools/menuoptions.hxx>
 #include <svtools/startoptions.hxx>
@@ -62,9 +61,7 @@
 #include <sfx2/objsh.hxx>
 #include <comphelper/types.hxx>
 #include <svtools/ctloptions.hxx>
-
 #include <svtools/langtab.hxx>
-
 #include <unotools/localfilehelper.hxx>
 #include <unotools/configmgr.hxx>
 #include "cuioptgenrl.hxx"
@@ -113,6 +110,7 @@
 #include "optgdlg.hxx"
 #include "ofaitem.hxx"
 #include <svtools/apearcfg.hxx>
+#include <svtools/optionsdrawinglayer.hxx>
 
 #define CONFIG_LANGUAGES "OfficeLanguages"
 
@@ -661,13 +659,6 @@ void CanvasSettings::EnabledHardwareAcceleration( BOOL _bEnabled ) const
 }
 
 // class OfaViewTabPage --------------------------------------------------
-// -----------------------------------------------------------------------
-IMPL_LINK_INLINE_START( OfaViewTabPage, OpenGLHdl, CheckBox*, EMPTYARG )
-{
-    a3DOpenGLFasterCB.Enable( a3DOpenGLCB.IsChecked() );
-    return 0;
-}
-IMPL_LINK_INLINE_END( OfaViewTabPage, OpenGLHdl, CheckBox*, EMPTYARG )
 
 OfaViewTabPage::OfaViewTabPage(Window* pParent, const SfxItemSet& rSet ) :
 
@@ -691,13 +682,9 @@ OfaViewTabPage::OfaViewTabPage(Window* pParent, const SfxItemSet& rSet ) :
     aFontListsFL        ( this, SVX_RES( FL_FONTLISTS) ),
     aFontShowCB         ( this, SVX_RES( CB_FONT_SHOW ) ),
     aFontHistoryCB      ( this, SVX_RES( CB_FONT_HISTORY ) ),
-    a3DGB               ( this, SVX_RES( FL_3D ) ),
-    a3DOpenGLCB         ( this, SVX_RES( CB_3D_OPENGL ) ),
-    a3DOpenGLFasterCB   ( this, SVX_RES( CB_3D_OPENGL_FASTER ) ),
-    a3DDitheringCB      ( this, SVX_RES( CB_3D_DITHERING ) ),
-    a3DShowFullCB       ( this, SVX_RES( CB_3D_SHOWFULL ) ),
     aRenderingFL        ( this, SVX_RES( FL_RENDERING ) ),
     aUseHardwareAccell  ( this, SVX_RES( CB_USE_HARDACCELL ) ),
+    aUseAntiAliase      ( this, SVX_RES( CB_USE_ANTIALIASE ) ),
     aMouseFL            ( this, SVX_RES( FL_MOUSE ) ),
     aMousePosFT         ( this, SVX_RES( FT_MOUSEPOS ) ),
     aMousePosLB         ( this, SVX_RES( LB_MOUSEPOS ) ),
@@ -706,17 +693,9 @@ OfaViewTabPage::OfaViewTabPage(Window* pParent, const SfxItemSet& rSet ) :
     nSizeLB_InitialSelection(0),
     nStyleLB_InitialSelection(0),
     pAppearanceCfg(new SvtTabAppearanceCfg),
-    pCanvasSettings(new CanvasSettings)
+    pCanvasSettings(new CanvasSettings),
+    mpDrawinglayerOpt(new SvtOptionsDrawinglayer)
 {
-
-    a3DOpenGLCB.SetClickHdl( LINK( this, OfaViewTabPage, OpenGLHdl ) );
-
-    if ( !pCanvasSettings->IsHardwareAccelerationAvailable() )
-    {
-        aRenderingFL.Hide();
-        aUseHardwareAccell.Hide();
-    }
-
 #if defined( UNX )
     aFontAntiAliasing.SetToggleHdl( LINK( this, OfaViewTabPage, OnAntialiasingToggled ) );
 
@@ -806,6 +785,7 @@ OfaViewTabPage::OfaViewTabPage(Window* pParent, const SfxItemSet& rSet ) :
 
 OfaViewTabPage::~OfaViewTabPage()
 {
+    delete mpDrawinglayerOpt;
     delete pCanvasSettings;
     delete pAppearanceCfg;
 }
@@ -960,40 +940,34 @@ BOOL OfaViewTabPage::FillItemSet( SfxItemSet& )
         bModified = TRUE;
     }
 
-    if ( pCanvasSettings->IsHardwareAccelerationAvailable() )
-        if ( pCanvasSettings && aUseHardwareAccell.IsChecked() != aUseHardwareAccell.GetSavedValue() )
+    // #i95644#  if disabled, do not use value, see in ::Reset()
+    if(aUseHardwareAccell.IsEnabled())
+    {
+        if(aUseHardwareAccell.IsChecked() != aUseHardwareAccell.GetSavedValue())
         {
-            pCanvasSettings->EnabledHardwareAcceleration( aUseHardwareAccell.IsChecked() );
+            pCanvasSettings->EnabledHardwareAcceleration(aUseHardwareAccell.IsChecked());
             bModified = TRUE;
         }
-
-    // Workingset
-    SvtOptions3D a3DOpt;
-    BOOL bTemp = a3DOpt.IsOpenGL();
-
-    if ( bTemp != a3DOpenGLCB.IsChecked() )
-    {
-        a3DOpt.SetOpenGL( a3DOpenGLCB.IsChecked() );
-        bModified = TRUE;
     }
 
-    BOOL bCheck = ( a3DOpenGLCB.IsChecked() && a3DOpenGLFasterCB.IsChecked() );
-    if ( a3DOpt.IsOpenGL_Faster() != bCheck )
+    // #i95644#  if disabled, do not use value, see in ::Reset()
+    if(aUseAntiAliase.IsEnabled())
     {
-        a3DOpt.SetOpenGL_Faster( bCheck );
-        bModified = TRUE;
-    }
+        if(aUseAntiAliase.IsChecked() != mpDrawinglayerOpt->IsAntiAliasing())
+        {
+            mpDrawinglayerOpt->SetAntiAliasing(aUseAntiAliase.IsChecked());
+            bModified = TRUE;
 
-    if ( a3DOpt.IsDithering() != a3DDitheringCB.IsChecked() )
-    {
-        a3DOpt.SetDithering( a3DDitheringCB.IsChecked() );
-        bModified = TRUE;
-    }
+            // react on AA change; invalidate all windows to force
+            // a repaint when changing from AA to non-AA or vice-versa
+            Window* pAppWindow = Application::GetFirstTopLevelWindow();
 
-    if ( a3DOpt.IsShowFull() != a3DShowFullCB.IsChecked() )
-    {
-        a3DOpt.SetShowFull( a3DShowFullCB.IsChecked() );
-        bModified = TRUE;
+            while(pAppWindow)
+            {
+                pAppWindow->Invalidate();
+                pAppWindow = Application::GetNextTopLevelWindow(pAppWindow);
+            }
+        }
     }
 
     SvtAccessibilityOptions     aAccessibilityOptions;
@@ -1026,13 +1000,6 @@ BOOL OfaViewTabPage::FillItemSet( SfxItemSet& )
 --------------------------------------------------*/
 void OfaViewTabPage::Reset( const SfxItemSet& )
 {
-    SvtOptions3D a3DOpt;
-    a3DOpenGLCB.Check( a3DOpt.IsOpenGL() );
-    a3DOpenGLFasterCB.Check( a3DOpenGLCB.IsChecked() && a3DOpt.IsOpenGL_Faster() );
-    OpenGLHdl( NULL );
-    a3DDitheringCB.Check( a3DOpt.IsDithering() );
-    a3DShowFullCB.Check( a3DOpt.IsShowFull() );
-
     SvtMiscOptions aMiscOptions;
 
     if( aMiscOptions.GetSymbolsSize() != SFX_SYMBOLS_SIZE_AUTO )
@@ -1084,10 +1051,35 @@ void OfaViewTabPage::Reset( const SfxItemSet& )
     SvtMenuOptions aMenuOpt;
     aMenuIconsCB.Check(aMenuOpt.IsMenuIconsEnabled());
     aMenuIconsCB.SaveValue();
-
     aFontHistoryCB.Check( aFontOpt.IsFontHistoryEnabled() );
-    if ( pCanvasSettings && pCanvasSettings->IsHardwareAccelerationAvailable() )
-        aUseHardwareAccell.Check( pCanvasSettings->IsHardwareAccelerationEnabled() );
+
+    { // #i95644# HW accel (unified to disable mechanism)
+        if(pCanvasSettings->IsHardwareAccelerationAvailable())
+        {
+            aUseHardwareAccell.Check(pCanvasSettings->IsHardwareAccelerationEnabled());
+        }
+        else
+        {
+            aUseHardwareAccell.Check(false);
+            aUseHardwareAccell.Disable();
+        }
+
+        aUseHardwareAccell.SaveValue();
+    }
+
+    { // #i95644# AntiAliasing
+        if(mpDrawinglayerOpt->IsAAPossibleOnThisSystem())
+        {
+            aUseAntiAliase.Check(mpDrawinglayerOpt->IsAntiAliasing());
+        }
+        else
+        {
+            aUseAntiAliase.Check(false);
+            aUseAntiAliase.Disable();
+        }
+
+        aUseAntiAliase.SaveValue();
+    }
 
 #if defined( UNX )
     aFontAntiAliasing.SaveValue();
@@ -1095,8 +1087,6 @@ void OfaViewTabPage::Reset( const SfxItemSet& )
 #endif
     aFontShowCB.SaveValue();
     aFontHistoryCB.SaveValue();
-    if ( pCanvasSettings->IsHardwareAccelerationAvailable() )
-        aUseHardwareAccell.SaveValue();
 
 #if defined( UNX )
     LINK( this, OfaViewTabPage, OnAntialiasingToggled ).Call( NULL );
@@ -1385,10 +1375,7 @@ BOOL OfaLanguagesTabPage::FillItemSet( SfxItemSet& rSet )
     {
         //sequence checking has to be switched on depending on the selected CTL language
         LanguageType eCTLLang = aComplexLanguageLB.GetSelectLanguage();
-        sal_Bool bOn = eCTLLang == LANGUAGE_THAI ||
-                eCTLLang == LANGUAGE_LAO ||
-                eCTLLang == LANGUAGE_VIETNAMESE ||
-                eCTLLang == LANGUAGE_KHMER;
+        sal_Bool bOn = MsLangId::needsSequenceChecking( eCTLLang);
         pLangConfig->aLanguageOptions.SetCTLSequenceCheckingRestricted(bOn);
         pLangConfig->aLanguageOptions.SetCTLSequenceChecking(bOn);
         pLangConfig->aLanguageOptions.SetCTLSequenceCheckingTypeAndReplace(bOn);

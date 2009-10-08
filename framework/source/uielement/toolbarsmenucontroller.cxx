@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: toolbarsmenucontroller.cxx,v $
- * $Revision: 1.21 $
+ * $Revision: 1.21.40.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -84,7 +84,7 @@
 #include <vcl/window.hxx>
 #include <svtools/menuoptions.hxx>
 #include <svtools/cmdoptions.hxx>
-#include <comphelper/uieventslogger.hxx>
+#include <dispatch/uieventloghelper.hxx>
 
 //_________________________________________________________________________________________________________________
 //  Defines
@@ -760,6 +760,8 @@ void SAL_CALL ToolbarsMenuController::select( const css::awt::MenuEvent& rEvent 
                     pExecuteInfo->xDispatch     = xDispatch;
                     pExecuteInfo->aTargetURL    = aTargetURL;
                     pExecuteInfo->aArgs         = aArgs;
+                    if(::comphelper::UiEventsLogger::isEnabled()) //#i88653#
+                        UiEventLogHelper(::rtl::OUString::createFromAscii("ToolbarsMenuController")).log(m_xServiceManager, m_xFrame, aTargetURL, aArgs);
                     Application::PostUserEvent( STATIC_LINK(0, ToolbarsMenuController, ExecuteHdl_Impl), pExecuteInfo );
                 }
             }
@@ -948,12 +950,6 @@ IMPL_STATIC_LINK_NOINSTANCE( ToolbarsMenuController, ExecuteHdl_Impl, ExecuteInf
         // elements if a component gets detached from its frame!
         if ( pExecuteInfo->xDispatch.is() )
         {
-            if(::comphelper::UiEventsLogger::isEnabled()) //#i88653#
-            {
-                Sequence<PropertyValue> source;
-                ::comphelper::UiEventsLogger::appendDispatchOrigin(source, rtl::OUString::createFromAscii("ToolbarsMenuController"));
-                ::comphelper::UiEventsLogger::logDispatch(pExecuteInfo->aTargetURL, source);
-            }
             pExecuteInfo->xDispatch->dispatch( pExecuteInfo->aTargetURL, pExecuteInfo->aArgs );
         }
     }

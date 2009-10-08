@@ -29,10 +29,12 @@
  *
  ************************************************************************/
 
+#include "precompiled_svx.hxx"
 #include <svx/sdr/primitive2d/sdrole2primitive2d.hxx>
 #include <svx/sdr/primitive2d/svx_primitivetypes2d.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>
 #include <svx/sdr/primitive2d/sdrdecompositiontools.hxx>
+#include <drawinglayer/primitive2d/hittestprimitive2d.hxx>
 
 //////////////////////////////////////////////////////////////////////////////
 
@@ -64,30 +66,42 @@ namespace drawinglayer
             }
 
             // add line
-            if(!bBehaveCompatibleToPaintVersion && getSdrLFSTAttribute().getLine())
+            if(getSdrLFSTAttribute().getLine())
             {
-                // if line width is given, polygon needs to be grown by half of it to make the
-                // outline to be outside of the bitmap
-                if(0.0 != getSdrLFSTAttribute().getLine()->getWidth())
+                if(bBehaveCompatibleToPaintVersion)
                 {
-                    // decompose to get scale
-                    basegfx::B2DVector aScale, aTranslate;
-                    double fRotate, fShearX;
-                    getTransform().decompose(aScale, aTranslate, fRotate, fShearX);
+                    // if line width is given, polygon needs to be grown by half of it to make the
+                    // outline to be outside of the bitmap
+                    if(0.0 != getSdrLFSTAttribute().getLine()->getWidth())
+                    {
+                        // decompose to get scale
+                        basegfx::B2DVector aScale, aTranslate;
+                        double fRotate, fShearX;
+                        getTransform().decompose(aScale, aTranslate, fRotate, fShearX);
 
-                    // create expanded range (add relative half line width to unit rectangle)
-                    double fHalfLineWidth(getSdrLFSTAttribute().getLine()->getWidth() * 0.5);
-                    double fScaleX(0.0 != aScale.getX() ? fHalfLineWidth / fabs(aScale.getX()) : 1.0);
-                    double fScaleY(0.0 != aScale.getY() ? fHalfLineWidth / fabs(aScale.getY()) : 1.0);
-                    const basegfx::B2DRange aExpandedRange(-fScaleX, -fScaleY, 1.0 + fScaleX, 1.0 + fScaleY);
-                    basegfx::B2DPolygon aExpandedUnitOutline(basegfx::tools::createPolygonFromRect(aExpandedRange));
+                        // create expanded range (add relative half line width to unit rectangle)
+                        double fHalfLineWidth(getSdrLFSTAttribute().getLine()->getWidth() * 0.5);
+                        double fScaleX(0.0 != aScale.getX() ? fHalfLineWidth / fabs(aScale.getX()) : 1.0);
+                        double fScaleY(0.0 != aScale.getY() ? fHalfLineWidth / fabs(aScale.getY()) : 1.0);
+                        const basegfx::B2DRange aExpandedRange(-fScaleX, -fScaleY, 1.0 + fScaleX, 1.0 + fScaleY);
+                        basegfx::B2DPolygon aExpandedUnitOutline(basegfx::tools::createPolygonFromRect(aExpandedRange));
 
-                    appendPrimitive2DReferenceToPrimitive2DSequence(aRetval, createPolygonLinePrimitive(aExpandedUnitOutline, getTransform(), *getSdrLFSTAttribute().getLine()));
+                        appendPrimitive2DReferenceToPrimitive2DSequence(aRetval, createPolygonLinePrimitive(aExpandedUnitOutline, getTransform(), *getSdrLFSTAttribute().getLine()));
+                    }
+                    else
+                    {
+                        appendPrimitive2DReferenceToPrimitive2DSequence(aRetval, createPolygonLinePrimitive(aUnitOutline, getTransform(), *getSdrLFSTAttribute().getLine()));
+                    }
                 }
-                else
-                {
-                    appendPrimitive2DReferenceToPrimitive2DSequence(aRetval, createPolygonLinePrimitive(aUnitOutline, getTransform(), *getSdrLFSTAttribute().getLine()));
-                }
+            }
+            else
+            {
+                // if initially no line is defined, create one for HitTest and BoundRect
+                const attribute::SdrLineAttribute aBlackHairline(basegfx::BColor(0.0, 0.0, 0.0));
+                const Primitive2DReference xHiddenLineReference(createPolygonLinePrimitive(aUnitOutline, getTransform(), aBlackHairline));
+                const Primitive2DSequence xHiddenLineSequence(&xHiddenLineReference, 1);
+
+                appendPrimitive2DReferenceToPrimitive2DSequence(aRetval, Primitive2DReference(new HitTestPrimitive2D(xHiddenLineSequence)));
             }
 
             // add graphic content

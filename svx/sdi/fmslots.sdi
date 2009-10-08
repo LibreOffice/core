@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: fmslots.sdi,v $
- * $Revision: 1.16 $
+ * $Revision: 1.15.212.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -416,6 +416,11 @@ interface FormTextAttributeShell
         StateMethod = GetTextAttributeState;
     ]
     SID_ATTR_CHAR_UNDERLINE
+    [
+        ExecMethod = ExecuteTextAttribute;
+        StateMethod = GetTextAttributeState;
+    ]
+    SID_ATTR_CHAR_OVERLINE
     [
         ExecMethod = ExecuteTextAttribute;
         StateMethod = GetTextAttributeState;

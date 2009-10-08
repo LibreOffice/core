@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: optcolor.cxx,v $
- * $Revision: 1.18 $
+ * $Revision: 1.18.256.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -62,7 +62,7 @@
 using namespace ::com::sun::star;
 using namespace ::svtools;
 
-#define GROUP_COUNT     6
+#define GROUP_COUNT     7
 #define GROUP_UNKNOWN   -1
 #define GROUP_GENERAL   0
 #define GROUP_WRITER    1
@@ -70,6 +70,7 @@ using namespace ::svtools;
 #define GROUP_CALC      3
 #define GROUP_DRAW      4
 #define GROUP_BASIC     5
+#define GROUP_SQL       6
 
 /* -----------------------------2002/06/26 10:48------------------------------
 
@@ -221,6 +222,29 @@ class ColorConfigWindow_Impl : public Window
     FixedText       aBasicErrorFT;
     ColorListBox    aBasicErrorLB;
     Window          aBasicErrorWN;
+    Window          aSQLBackWN;
+    SvxExtFixedText_Impl    aSQLFT;
+    FixedText       aSQLIdentifierFT;
+    ColorListBox    aSQLIdentifierLB;
+    Window          aSQLIdentifierWN;
+    FixedText       aSQLNumberFT;
+    ColorListBox    aSQLNumberLB;
+    Window          aSQLNumberWN;
+    FixedText       aSQLStringFT;
+    ColorListBox    aSQLStringLB;
+    Window          aSQLStringWN;
+    FixedText       aSQLOperatorFT;
+    ColorListBox    aSQLOperatorLB;
+    Window          aSQLOperatorWN;
+    FixedText       aSQLKeywordFT;
+    ColorListBox    aSQLKeywordLB;
+    Window          aSQLKeywordWN;
+    FixedText       aSQLParameterFT;
+    ColorListBox    aSQLParameterLB;
+    Window          aSQLParameterWN;
+    FixedText       aSQLCommentFT;
+    ColorListBox    aSQLCommentLB;
+    Window          aSQLCommentWN;
 
     ::std::vector< SvxExtFixedText_Impl*>   aChapters;
     ::std::vector< Window* >                aChapterWins;
@@ -267,6 +291,11 @@ sal_Bool lcl_isGroupVisible( sal_Int32 _nGroup, const SvtModuleOptions& _rModOpt
         {
             bRet = ( _rModOptions.IsModuleInstalled( SvtModuleOptions::E_SDRAW ) ||
                      _rModOptions.IsModuleInstalled( SvtModuleOptions::E_SIMPRESS ) );
+            break;
+        }
+        case GROUP_SQL :
+        {
+            bRet = _rModOptions.IsModuleInstalled( SvtModuleOptions::E_SDATABASE );
             break;
         }
     }
@@ -352,8 +381,18 @@ sal_Int16 lcl_getGroup( sal_Int32 _nFeature )
             nRet = GROUP_BASIC;
             break;
         }
+        case SQLIDENTIFIER :
+        case SQLNUMBER:
+        case SQLSTRING:
+        case SQLOPERATOR:
+        case SQLKEYWORD:
+        case SQLPARAMETER:
+        case SQLCOMMENT:
+        {
+            nRet = GROUP_SQL;
+            break;
+        }
     }
-
     return nRet;
 }
 
@@ -484,7 +523,37 @@ ColorConfigWindow_Impl::ColorConfigWindow_Impl(Window* pParent, const ResId& rRe
         aBasicKeywordWN(this, ResId( WN_BASICKEYWORD, *rResId.GetResMgr())),
         aBasicErrorFT(this, ResId( FT_BASICERROR, *rResId.GetResMgr())),
         aBasicErrorLB(this, ResId( LB_BASICERROR, *rResId.GetResMgr())),
-        aBasicErrorWN(this, ResId( WN_BASICERROR, *rResId.GetResMgr()))
+        aBasicErrorWN(this, ResId( WN_BASICERROR, *rResId.GetResMgr())),
+
+        aSQLBackWN(this),
+        aSQLFT(this, ResId(            FT_SQL_COMMAND, *rResId.GetResMgr())),
+        aSQLIdentifierFT(this, ResId( FT_SQLIDENTIFIER, *rResId.GetResMgr())),
+        aSQLIdentifierLB(this, ResId( LB_SQLIDENTIFIER, *rResId.GetResMgr())),
+        aSQLIdentifierWN(this, ResId( WN_SQLIDENTIFIER, *rResId.GetResMgr())),
+
+        aSQLNumberFT(this, ResId( FT_SQLNUMBER, *rResId.GetResMgr())),
+        aSQLNumberLB(this, ResId( LB_SQLNUMBER, *rResId.GetResMgr())),
+        aSQLNumberWN(this, ResId( WN_SQLNUMBER, *rResId.GetResMgr())),
+
+        aSQLStringFT(this, ResId( FT_SQLSTRING, *rResId.GetResMgr())),
+        aSQLStringLB(this, ResId( LB_SQLSTRING, *rResId.GetResMgr())),
+        aSQLStringWN(this, ResId( WN_SQLSTRING, *rResId.GetResMgr())),
+
+        aSQLOperatorFT(this, ResId( FT_SQLOPERATOR, *rResId.GetResMgr())),
+        aSQLOperatorLB(this, ResId( LB_SQLOPERATOR, *rResId.GetResMgr())),
+        aSQLOperatorWN(this, ResId( WN_SQLOPERATOR, *rResId.GetResMgr())),
+
+        aSQLKeywordFT(this, ResId( FT_SQLKEYWORD, *rResId.GetResMgr())),
+        aSQLKeywordLB(this, ResId( LB_SQLKEYWORD, *rResId.GetResMgr())),
+        aSQLKeywordWN(this, ResId( WN_SQLKEYWORD, *rResId.GetResMgr())),
+
+        aSQLParameterFT(this, ResId( FT_SQLPARAMETER, *rResId.GetResMgr())),
+        aSQLParameterLB(this, ResId( LB_SQLPARAMETER, *rResId.GetResMgr())),
+        aSQLParameterWN(this, ResId( WN_SQLPARAMETER, *rResId.GetResMgr())),
+
+        aSQLCommentFT(this, ResId( FT_SQLCOMMENT, *rResId.GetResMgr())),
+        aSQLCommentLB(this, ResId( LB_SQLCOMMENT, *rResId.GetResMgr())),
+        aSQLCommentWN(this, ResId( WN_SQLCOMMENT, *rResId.GetResMgr()))
 {
     aFixedTexts.resize(ColorConfigEntryCount);
     aCheckBoxes.resize(ColorConfigEntryCount);
@@ -505,7 +574,7 @@ ColorConfigWindow_Impl::ColorConfigWindow_Impl(Window* pParent, const ResId& rRe
     aCheckBoxes[WRITERFIELDSHADINGS ] = &aWrtFieldCB             ;
     aCheckBoxes[WRITERIDXSHADINGS   ] = &aWrtIdxShadingBackCB       ;
     aFixedTexts[WRITERDIRECTCURSOR  ]=& aWrtDirectCrsrFT;
-     aFixedTexts[WRITERSCRIPTINDICATOR   ]=& aWrtScriptIndicatorFT;
+    aFixedTexts[WRITERSCRIPTINDICATOR   ]=& aWrtScriptIndicatorFT;
     aCheckBoxes[WRITERSECTIONBOUNDARIES ]=& aWrtSectionBoundCB;
     aFixedTexts[HTMLSGML         ]=& aHTMLSGMLFT;
     aFixedTexts[HTMLCOMMENT      ]=& aHTMLCommentFT;
@@ -527,7 +596,14 @@ ColorConfigWindow_Impl::ColorConfigWindow_Impl(Window* pParent, const ResId& rRe
     aFixedTexts[BASICSTRING     ] = &aBasicStringFT;
     aFixedTexts[BASICOPERATOR   ] = &aBasicOperatorFT;
     aFixedTexts[BASICKEYWORD    ] = &aBasicKeywordFT;
-    aFixedTexts[BASICERROR    ] = &aBasicErrorFT;
+    aFixedTexts[BASICERROR      ] = &aBasicErrorFT;
+    aFixedTexts[SQLIDENTIFIER   ] = &aSQLIdentifierFT;
+    aFixedTexts[SQLNUMBER       ] = &aSQLNumberFT;
+    aFixedTexts[SQLSTRING       ] = &aSQLStringFT;
+    aFixedTexts[SQLOPERATOR     ] = &aSQLOperatorFT;
+    aFixedTexts[SQLKEYWORD      ] = &aSQLKeywordFT;
+    aFixedTexts[SQLPARAMETER    ] = &aSQLParameterFT;
+    aFixedTexts[SQLCOMMENT      ] = &aSQLCommentFT;
 
     aColorBoxes[DOCCOLOR            ] = &aDocColorLB             ;
     aColorBoxes[DOCBOUNDARIES       ] = &aDocBoundLB             ;
@@ -559,13 +635,20 @@ ColorConfigWindow_Impl::ColorConfigWindow_Impl(Window* pParent, const ResId& rRe
     aColorBoxes[CALCREFERENCE       ] = &aCalcReferenceLB        ;
     aColorBoxes[CALCNOTESBACKGROUND     ] = &aCalcNotesBackLB            ;
     aColorBoxes[DRAWGRID            ] = &aDrawGridLB             ;
-    aColorBoxes[BASICIDENTIFIER    ] = &aBasicIdentifierLB;
-    aColorBoxes[BASICCOMMENT       ] = &aBasicCommentLB;
-    aColorBoxes[BASICNUMBER        ] = &aBasicNumberLB;
-    aColorBoxes[BASICSTRING        ] = &aBasicStringLB;
-    aColorBoxes[BASICOPERATOR      ] = &aBasicOperatorLB;
-    aColorBoxes[BASICKEYWORD       ] = &aBasicKeywordLB;
-    aColorBoxes[BASICERROR       ] = &aBasicErrorLB;
+    aColorBoxes[BASICIDENTIFIER     ] = &aBasicIdentifierLB;
+    aColorBoxes[BASICCOMMENT        ] = &aBasicCommentLB;
+    aColorBoxes[BASICNUMBER         ] = &aBasicNumberLB;
+    aColorBoxes[BASICSTRING         ] = &aBasicStringLB;
+    aColorBoxes[BASICOPERATOR       ] = &aBasicOperatorLB;
+    aColorBoxes[BASICKEYWORD        ] = &aBasicKeywordLB;
+    aColorBoxes[BASICERROR          ] = &aBasicErrorLB;
+    aColorBoxes[SQLIDENTIFIER       ] = &aSQLIdentifierLB;
+    aColorBoxes[SQLNUMBER           ] = &aSQLNumberLB;
+    aColorBoxes[SQLSTRING           ] = &aSQLStringLB;
+    aColorBoxes[SQLOPERATOR         ] = &aSQLOperatorLB;
+    aColorBoxes[SQLKEYWORD          ] = &aSQLKeywordLB;
+    aColorBoxes[SQLPARAMETER        ] = &aSQLParameterLB;
+    aColorBoxes[SQLCOMMENT          ] = &aSQLCommentLB;
 
     aWindows[DOCCOLOR            ] = &aDocColorWN             ;
     aWindows[DOCBOUNDARIES       ] = &aDocBoundWN             ;
@@ -604,6 +687,13 @@ ColorConfigWindow_Impl::ColorConfigWindow_Impl(Window* pParent, const ResId& rRe
     aWindows[BASICOPERATOR       ] = &aBasicOperatorWN;
     aWindows[BASICKEYWORD        ] = &aBasicKeywordWN;
     aWindows[BASICERROR          ] = &aBasicErrorWN;
+    aWindows[SQLIDENTIFIER       ] = &aSQLIdentifierWN;
+    aWindows[SQLNUMBER           ] = &aSQLNumberWN;
+    aWindows[SQLSTRING           ] = &aSQLStringWN;
+    aWindows[SQLOPERATOR         ] = &aSQLOperatorWN;
+    aWindows[SQLKEYWORD          ] = &aSQLKeywordWN;
+    aWindows[SQLPARAMETER        ] = &aSQLParameterWN;
+    aWindows[SQLCOMMENT          ] = &aSQLCommentWN;
 
     aChapters.push_back(&aGeneralFT); aChapterWins.push_back(&aGeneralBackWN);
     aChapters.push_back(&aWriterFT);  aChapterWins.push_back(&aWriterBackWN);
@@ -611,19 +701,21 @@ ColorConfigWindow_Impl::ColorConfigWindow_Impl(Window* pParent, const ResId& rRe
     aChapters.push_back(&aCalcFT);    aChapterWins.push_back(&aCalcBackWN);
     aChapters.push_back(&aDrawFT);    aChapterWins.push_back(&aDrawBackWN);
     aChapters.push_back(&aBasicFT);   aChapterWins.push_back(&aBasicBackWN);
+    aChapters.push_back(&aSQLFT);   aChapterWins.push_back(&aSQLBackWN);
 
     // calculate heights of groups which can be hidden
     aChapters[GROUP_WRITER  ]->SetGroupHeight( aChapters[GROUP_HTML]->GetPosPixel().Y() -  aChapters[GROUP_WRITER]->GetPosPixel().Y() );
     aChapters[GROUP_HTML    ]->SetGroupHeight( aChapters[GROUP_CALC]->GetPosPixel().Y() -  aChapters[GROUP_HTML]->GetPosPixel().Y() );
     aChapters[GROUP_CALC    ]->SetGroupHeight( aChapters[GROUP_DRAW]->GetPosPixel().Y() -  aChapters[GROUP_CALC]->GetPosPixel().Y() );
     aChapters[GROUP_DRAW    ]->SetGroupHeight( aChapters[GROUP_BASIC]->GetPosPixel().Y() - aChapters[GROUP_DRAW]->GetPosPixel().Y() );
+    aChapters[GROUP_BASIC   ]->SetGroupHeight( aChapters[GROUP_SQL]->GetPosPixel().Y() - aChapters[GROUP_BASIC]->GetPosPixel().Y() );
 
     ExtendedColorConfig aExtConfig;
     sal_Int32 nExtCount = aExtConfig.GetComponentCount();
     if ( nExtCount )
     {
         // calculate position behind last chapter
-        sal_Int32 nLastY = aBasicErrorWN.GetPosPixel().Y() + aBasicErrorWN.GetSizePixel().Height();
+        sal_Int32 nLastY = aSQLCommentWN.GetPosPixel().Y() + aSQLCommentWN.GetSizePixel().Height();
         nLastY = nLastY + LogicToPixel( Size( 0, 3 ), MAP_APPFONT ).Height();
         // to calculate the number of lines
         sal_Int32 nHeight = LogicToPixel( Size( 0, _LINE_HEIGHT ), MAP_APPFONT ).Height();
@@ -639,7 +731,7 @@ ColorConfigWindow_Impl::ColorConfigWindow_Impl(Window* pParent, const ResId& rRe
         {
             ::rtl::OUString sComponentName = aExtConfig.GetComponentName(j);
             aChapterWins.push_back(new Window(this));
-            ::boost::shared_ptr<SvxExtFixedText_Impl> pTitle(new SvxExtFixedText_Impl(this,ResId(FT_BASIC, *rResId.GetResMgr())));
+            ::boost::shared_ptr<SvxExtFixedText_Impl> pTitle(new SvxExtFixedText_Impl(this,ResId(FT_SQL_COMMAND, *rResId.GetResMgr())));
             m_aExtensionTitles.push_back(pTitle);
             pTitle->SetPosSizePixel(LogicToPixel( Point( _FT_XPOS, nLineNum * _LINE_HEIGHT ), MAP_APPFONT ),aFixedSize);
             pTitle->SetText(aExtConfig.GetComponentDisplayName(sComponentName));
@@ -1018,7 +1110,7 @@ ColorConfigCtrl_Impl::~ColorConfigCtrl_Impl()
  ---------------------------------------------------------------------------*/
 void ColorConfigCtrl_Impl::Update()
 {
-    DBG_ASSERT(pColorConfig, "Configuration not set" )
+    DBG_ASSERT(pColorConfig, "Configuration not set" );
     sal_Int32 i;
     for( i = 0; i < ColorConfigEntryCount; i++ )
     {
@@ -1237,7 +1329,7 @@ void ColorConfigCtrl_Impl::DataChanged( const DataChangedEvent& rDCEvt )
  ---------------------------------------------------------------------------*/
 IMPL_LINK(ColorConfigCtrl_Impl, ClickHdl, CheckBox*, pBox)
 {
-    DBG_ASSERT(pColorConfig, "Configuration not set" )
+    DBG_ASSERT(pColorConfig, "Configuration not set" );
 
     for( sal_Int32 i = 0; i < ColorConfigEntryCount; i++ )
     {
@@ -1258,7 +1350,7 @@ IMPL_LINK(ColorConfigCtrl_Impl, ClickHdl, CheckBox*, pBox)
  ---------------------------------------------------------------------------*/
 IMPL_LINK(ColorConfigCtrl_Impl, ColorHdl, ColorListBox*, pBox)
 {
-    DBG_ASSERT(pColorConfig, "Configuration not set" )
+    DBG_ASSERT(pColorConfig, "Configuration not set" );
     sal_Int32 i = 0;
     for( ; i < ColorConfigEntryCount; i++ )
     {
@@ -1514,7 +1606,7 @@ IMPL_LINK(SvxColorOptionsTabPage, SaveDeleteHdl_Impl, PushButton*, pButton )
     }
     else
     {
-        DBG_ASSERT(aColorSchemeLB.GetEntryCount() > 1, "don't delete the last scheme")
+        DBG_ASSERT(aColorSchemeLB.GetEntryCount() > 1, "don't delete the last scheme");
         QueryBox aQuery(pButton, SVX_RES(RID_SVXQB_DELETE_COLOR_CONFIG));
         aQuery.SetText(String(SVX_RES(RID_SVXSTR_COLOR_CONFIG_DELETE)));
         if(RET_YES == aQuery.Execute())

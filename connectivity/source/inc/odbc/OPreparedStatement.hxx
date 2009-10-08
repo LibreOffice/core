@@ -31,7 +31,7 @@
 #ifndef _CONNECTIVITY_ODBC_OPREPAREDSTATEMENT_HXX_
 #define _CONNECTIVITY_ODBC_OPREPAREDSTATEMENT_HXX_
 
-
+#include "odbc/odbcbasedllapi.hxx"
 #include "odbc/OStatement.hxx"
 #include <com/sun/star/sdbc/XPreparedStatement.hpp>
 #include <com/sun/star/sdbc/XParameters.hpp>
@@ -52,7 +52,8 @@ namespace connectivity
                                         ::com::sun::star::sdbc::XResultSetMetaDataSupplier,
                                         ::com::sun::star::lang::XServiceInfo> OPreparedStatement_BASE;
 
-        class OPreparedStatement :  public  OStatement_BASE2,
+        class OOO_DLLPUBLIC_ODBCBASE OPreparedStatement :
+                                    public  OStatement_BASE2,
                                     public  OPreparedStatement_BASE
         {
         protected:
@@ -92,7 +93,7 @@ namespace connectivity
             void FreeParams();
             void putParamData (sal_Int32 index) throw(::com::sun::star::sdbc::SQLException);
             void setStream (sal_Int32 ParameterIndex,const ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream>& x,
-                                                        sal_Int32 length,sal_Int32 SQLtype,sal_Int32 streamType) throw(::com::sun::star::sdbc::SQLException);
+                                                        sal_Int32 length,sal_Int32 SQLtype) throw(::com::sun::star::sdbc::SQLException);
             sal_Int32 getParamLength (  sal_Int32 index);
             sal_Int8* getLengthBuf (sal_Int32 index);
             sal_Int8* getDataBuf (sal_Int32 index);

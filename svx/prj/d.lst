@@ -12,18 +12,12 @@ mkdir: %_DEST%\xml%_EXT%\uiconfig\global\accelerator\es
 ..\%__SRC%\lib\lib*.* %_DEST%\lib%_EXT%\lib*.*
 ..\%__SRC%\lib\isvx.lib %_DEST%\lib%_EXT%\isvx.lib
 ..\%__SRC%\bin\gengal* %_DEST%\bin%_EXT%\gengal*
+..\%__SRC%\bin\gengalrc %_DEST%\bin%_EXT%\gengal.ini
 ..\%__SRC%\bin\cui*.dll %_DEST%\bin%_EXT%\cui*.dll
 ..\%__SRC%\bin\svx*.dll %_DEST%\bin%_EXT%\svx*.dll
 ..\%__SRC%\bin\textconv*.dll %_DEST%\bin%_EXT%\textconv*.dll
 ..\%__SRC%\bin\txcnv*.dll %_DEST%\bin%_EXT%\txcnv*.dll
 ..\%__SRC%\bin\*.res %_DEST%\bin%_EXT%\*.res
-
-mkdir: %COMMON_DEST%\pck%_EXT%\starsuite_bitmap
-mkdir: %COMMON_DEST%\pck%_EXT%\staroffice_bitmap
-mkdir: %COMMON_DEST%\pck%_EXT%\openoffice
-mkdir: %COMMON_DEST%\pck%_EXT%\openoffice_dev
-mkdir: %COMMON_DEST%\pck%_EXT%\broffice
-mkdir: %COMMON_DEST%\pck%_EXT%\broffice_dev
 
 mkdir: %_DEST%\inc%_EXT%\svx
 ..\inc\flagsdef.hxx %_DEST%\inc%_EXT%\svx\flagsdef.hxx

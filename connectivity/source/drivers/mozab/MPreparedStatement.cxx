@@ -98,7 +98,7 @@ void SAL_CALL OPreparedStatement::disposing()
     m_xMetaData = NULL;
     if(m_aParameterRow.isValid())
     {
-        m_aParameterRow->clear();
+        m_aParameterRow->get().clear();
         m_aParameterRow = NULL;
     }
     m_xParamColumns = NULL;
@@ -322,7 +322,7 @@ void SAL_CALL OPreparedStatement::setNull( sal_Int32 parameterIndex, sal_Int32 /
 
     checkAndResizeParameters(parameterIndex);
 
-    (*m_aParameterRow)[parameterIndex].setNull();
+    (m_aParameterRow->get())[parameterIndex].setNull();
 }
 // -------------------------------------------------------------------------
 
@@ -426,11 +426,11 @@ void OPreparedStatement::checkAndResizeParameters(sal_Int32 parameterIndex)
 
     if ( !m_aParameterRow.isValid() ) {
         m_aParameterRow = new OValueVector();
-        m_aParameterRow->push_back(sal_Int32(0));
+        m_aParameterRow->get().push_back(sal_Int32(0));
     }
 
-    if ((sal_Int32)(*m_aParameterRow).size() <= parameterIndex)
-        (*m_aParameterRow).resize(parameterIndex+1);
+    if ((sal_Int32)(m_aParameterRow->get()).size() <= parameterIndex)
+        (m_aParameterRow->get()).resize(parameterIndex+1);
 }
 // -----------------------------------------------------------------------------
 void OPreparedStatement::setParameter(sal_Int32 parameterIndex, const
@@ -440,7 +440,7 @@ ORowSetValue& x)
     checkAndResizeParameters(parameterIndex);
 
     OSL_TRACE("setParameter( %d, '%s')", parameterIndex, OUtoCStr(x) );
-    (*m_aParameterRow)[parameterIndex] = x;
+    (m_aParameterRow->get())[parameterIndex] = x;
 }
 
 //------------------------------------------------------------------
@@ -448,7 +448,7 @@ sal_uInt32 OPreparedStatement::AddParameter(OSQLParseNode * pParameter, const Re
 {
     OSL_UNUSED( pParameter );
     // Nr. des neu hinzuzufuegenden Parameters:
-    sal_uInt32 nParameter = m_xParamColumns->size()+1;
+    sal_uInt32 nParameter = m_xParamColumns->get().size()+1;
 
     OSL_ENSURE(SQL_ISRULE(pParameter,parameter),"OResultSet::AddParameter: Argument ist kein Parameter");
     OSL_ENSURE(pParameter->count() > 0,"OResultSet: Fehler im Parse Tree");
@@ -488,7 +488,7 @@ sal_uInt32 OPreparedStatement::AddParameter(OSQLParseNode * pParameter, const Re
                                                     ,sal_False
                                                     ,sal_False
                                                     ,m_pSQLIterator->isCaseSensitive());
-    m_xParamColumns->push_back(xParaColumn);
+    m_xParamColumns->get().push_back(xParaColumn);
     return nParameter;
 }
 // -----------------------------------------------------------------------------

@@ -34,7 +34,7 @@
 #include <ids.hrc>
 #endif
 #ifndef UUI_PASSCRTDLG_HRC
-#include <passcrtdlg.hrc>
+#include "passcrtdlg.hrc"
 #endif
 
 ModalDialog DLG_UUI_PASSWORD_CRT
@@ -44,74 +44,61 @@ ModalDialog DLG_UUI_PASSWORD_CRT
     Moveable = TRUE ;
     OutputSize = TRUE ;
     SVLook = TRUE ;
-    Size = MAP_APPFONT ( 165 , 67 ) ;
+    Size = MAP_APPFONT( 145, 129 );
     FixedText FT_PASSWORD_CRT
     {
-        Pos = MAP_APPFONT ( 6 , 5 ) ;
-        Size = MAP_APPFONT ( 94 , 10 ) ;
-        Text [ en-US ] = "~Enter password";
+        Pos = MAP_APPFONT( 3, 4 );
+        Size = MAP_APPFONT( 139, 9 );
+        Text [ en-US ] = "Enter password";
     };
     Edit ED_PASSWORD_CRT
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 6 , 15 ) ;
-        Size = MAP_APPFONT ( 94 , 12 ) ;
+        Pos = MAP_APPFONT( 3, 17 );
+        Size = MAP_APPFONT( 139, 13 );
         PassWord = TRUE ;
-    };
-    FixedText FT_PASSWORD_REPEAT
-    {
-        Pos = MAP_APPFONT ( 6 , 34 ) ;
-        Size = MAP_APPFONT ( 94 , 10 ) ;
-        Text [ en-US ] = "~Confirm password";
     };
     Edit ED_PASSWORD_REPEAT
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 6 , 44 ) ;
-        Size = MAP_APPFONT ( 94 , 12 ) ;
+        Pos = MAP_APPFONT( 3, 47 );
+        Size = MAP_APPFONT( 139, 13 );
         PassWord = TRUE ;
     };
-
     OKButton BTN_PASSCRT_OK
     {
-        Pos = MAP_APPFONT ( 109 , 6 ) ;
-        Size = MAP_APPFONT ( 50 , 14 ) ;
+        Pos = MAP_APPFONT( 27, 110 );
+        Size = MAP_APPFONT( 37, 15 );
         DefButton = TRUE ;
     };
     CancelButton BTN_PASSCRT_CANCEL
     {
-        Pos = MAP_APPFONT ( 109 , 23 ) ;
-        Size = MAP_APPFONT ( 50 , 14 ) ;
+        Pos = MAP_APPFONT( 66, 110 );
+        Size = MAP_APPFONT( 37, 15 );
     };
     HelpButton BTN_PASSCRT_HELP
     {
-        Pos = MAP_APPFONT ( 109 , 43 ) ;
-        Size = MAP_APPFONT ( 50 , 14 ) ;
+        Pos = MAP_APPFONT( 105, 110 );
+        Size = MAP_APPFONT( 37, 15 );
     };
-    Text [ en-US ] = "Password";
+    FixedText FT_PASSWORD_REPEAT
+    {
+        Pos = MAP_APPFONT( 3, 34 );
+        Size = MAP_APPFONT( 139, 9 );
+        Text [ en-US ] = "Reenter password";
+    };
+    FixedText FT_PASSWORD_WARNING
+    {
+        Pos = MAP_APPFONT( 4, 64 );
+        Size = MAP_APPFONT( 137, 40 );
+        Text [ en-US ] = "WARNING: If you lose or forget the password, it cannot be recovered. It is advisable to keep passwords in a safe place. Passwords are case-sensitive and at least five characters long.";
+        WordBreak = TRUE;
+    };
+    FixedLine FL_FIXED_LINE_1
+    {
+        Pos = MAP_APPFONT( 0, 104 );
+        Size = MAP_APPFONT( 145, 6 );
+    };
+    Text [ en-US ] = "Enter Password";
 };
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 

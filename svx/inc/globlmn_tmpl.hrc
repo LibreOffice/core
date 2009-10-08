@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: globlmn_tmpl.hrc,v $
- * $Revision: 1.11 $
+ * $Revision: 1.11.212.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -139,6 +139,12 @@
     Command = ".uno:Underline" ; \
     HelpID = SID_ATTR_CHAR_UNDERLINE ; \
     Text [ en-US ] = "Underline" ;\
+
+#define ITEM_FORMAT_ATTR_CHAR_OVERLINE \
+    Identifier = SID_ATTR_CHAR_OVERLINE ; \
+        Command = ".uno:Overline" ; \
+    HelpID = SID_ATTR_CHAR_OVERLINE ; \
+    Text [ en-US ] = "Overline" ;\
 
 #define ITEM_FORMAT_ATTR_CHAR_STRIKEOUT \
     Identifier = SID_ATTR_CHAR_STRIKEOUT ; \

@@ -47,6 +47,7 @@ class MasterPasswordDialog : public ModalDialog
 {
     FixedText       aFTMasterPassword;
     Edit            aEDMasterPassword;
+    FixedLine       aFL;
     OKButton        aOKBtn;
     CancelButton    aCancelBtn;
     HelpButton      aHelpBtn;

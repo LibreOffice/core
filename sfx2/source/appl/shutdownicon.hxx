@@ -44,6 +44,7 @@ typedef ::cppu::WeakComponentImplHelper4<
 #define DRAW_URL        "private:factory/sdraw"
 #define MATH_URL        "private:factory/smath"
 #define BASE_URL        "private:factory/sdatabase?Interactive"
+#define STARTMODULE_URL ".uno:ShowStartModule"
 #endif
 
 class SFX2_DLLPUBLIC ShutdownIcon : public ShutdownIconServiceBase

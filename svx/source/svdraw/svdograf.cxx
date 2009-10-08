@@ -717,13 +717,6 @@ basegfx::B2DPolyPolygon SdrGrafObj::TakeXorPoly() const
 
 // -----------------------------------------------------------------------------
 
-FASTBOOL SdrGrafObj::HasSpecialDrag() const
-{
-    return TRUE;
-}
-
-// -----------------------------------------------------------------------------
-
 sal_uInt32 SdrGrafObj::GetHdlCount() const
 {
     return 8L;

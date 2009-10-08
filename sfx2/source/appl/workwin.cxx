@@ -667,7 +667,7 @@ void SfxWorkWindow::Lock_Impl( BOOL bLock )
         --m_nLock;
     if ( m_nLock<0 )
     {
-        DBG_ERROR("Lock count underflow!")
+        DBG_ERROR("Lock count underflow!");
         m_nLock = 0;
     }
 

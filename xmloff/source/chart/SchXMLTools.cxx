@@ -108,6 +108,21 @@ rtl::OUString lcl_getGeneratorFromModel( const uno::Reference< frame::XModel >& 
     return aGenerator;
 }
 
+sal_Int32 lcl_getBuildIDFromGenerator( const ::rtl::OUString& rGenerator )
+{
+    //returns -1 if nothing found
+    sal_Int32 nBuildId = -1;
+    const OUString sBuildCompare( RTL_CONSTASCII_USTRINGPARAM( "$Build-" ) );
+    sal_Int32 nEnd = -1;
+    sal_Int32 nBegin = rGenerator.indexOf( sBuildCompare, nEnd );
+    if( nBegin != -1 )
+    {
+        OUString sBuildId( rGenerator.copy( nBegin + sBuildCompare.getLength() ) );
+        nBuildId = sBuildId.toInt32();
+    }
+    return nBuildId;
+}
+
 } // anonymous namespace
 
 // ----------------------------------------
@@ -578,6 +593,20 @@ bool isDocumentGeneratedWithOpenOfficeOlderThan3_0( const uno::Reference< frame:
             bResult= true;
     }
     return bResult;
+}
+
+bool isDocumentGeneratedWithOpenOfficeOlderThan2_4( const uno::Reference< frame::XModel >& xChartModel )
+{
+    if( isDocumentGeneratedWithOpenOfficeOlderThan2_3( xChartModel ) )
+        return true;
+
+    if( isDocumentGeneratedWithOpenOfficeOlderThan3_0( xChartModel ) )
+    {
+        sal_Int32 nBuilId = lcl_getBuildIDFromGenerator( lcl_getGeneratorFromModel(xChartModel) );
+        if( nBuilId>0 && nBuilId<=9238 ) //9238 is build id of OpenOffice.org 2.3.1
+            return true;
+    }
+    return false;
 }
 
 bool isDocumentGeneratedWithOpenOfficeOlderThan2_3( const uno::Reference< frame::XModel >& xChartModel )

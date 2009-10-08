@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: moduleacceleratorconfiguration.cxx,v $
- * $Revision: 1.7 $
+ * $Revision: 1.6.244.6 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -56,6 +56,22 @@
 #endif
 #include <vcl/svapp.hxx>
 
+#ifndef _COMPHELPER_CONFIGURATIONHELPER_HXX_
+#include <comphelper/configurationhelper.hxx>
+#endif
+
+#ifndef _COM_SUN_STAR_UTIL_XCHANGESNOTIFIER_HPP_
+#include <com/sun/star/util/XChangesNotifier.hpp>
+#endif
+
+#ifndef _RTL_LOGFILE_HXX_
+#include <rtl/logfile.hxx>
+#endif
+
+#ifndef _RTL_LOGFILE_HXX_
+#include <rtl/logfile.h>
+#endif
+
 //_______________________________________________
 // const
 
@@ -65,12 +81,12 @@ namespace framework
 //-----------------------------------------------
 // XInterface, XTypeProvider, XServiceInfo
 DEFINE_XINTERFACE_2(ModuleAcceleratorConfiguration              ,
-                    AcceleratorConfiguration                    ,
+                    XCUBasedAcceleratorConfiguration                    ,
                     DIRECT_INTERFACE(css::lang::XServiceInfo)   ,
                     DIRECT_INTERFACE(css::lang::XInitialization))
 
 DEFINE_XTYPEPROVIDER_2_WITH_BASECLASS(ModuleAcceleratorConfiguration,
-                                      AcceleratorConfiguration      ,
+                                      XCUBasedAcceleratorConfiguration      ,
                                       css::lang::XServiceInfo       ,
                                       css::lang::XInitialization    )
 
@@ -91,14 +107,14 @@ DEFINE_INIT_SERVICE(ModuleAcceleratorConfiguration,
 
 //-----------------------------------------------
 ModuleAcceleratorConfiguration::ModuleAcceleratorConfiguration(const css::uno::Reference< css::lang::XMultiServiceFactory > xSMGR)
-    : AcceleratorConfiguration(xSMGR)
+    : XCUBasedAcceleratorConfiguration(xSMGR)
 {
 }
 
 //-----------------------------------------------
 ModuleAcceleratorConfiguration::~ModuleAcceleratorConfiguration()
 {
-    m_aPresetHandler.removeStorageListener(this);
+   // m_aPresetHandler.removeStorageListener(this);
 }
 
 //-----------------------------------------------
@@ -111,6 +127,7 @@ void SAL_CALL ModuleAcceleratorConfiguration::initialize(const css::uno::Sequenc
 
     ::comphelper::SequenceAsHashMap lArgs(lArguments);
     m_sModule = lArgs.getUnpackedValueOrDefault(::rtl::OUString::createFromAscii("ModuleIdentifier"), ::rtl::OUString());
+    m_sLocale = lArgs.getUnpackedValueOrDefault(::rtl::OUString::createFromAscii("Locale")          , ::rtl::OUString::createFromAscii("x-default"));
 
     if (!m_sModule.getLength())
         throw css::uno::RuntimeException(
@@ -129,37 +146,24 @@ void ModuleAcceleratorConfiguration::impl_ts_fillCache()
     // SAFE -> ----------------------------------
     ReadGuard aReadLock(m_aLock);
     ::rtl::OUString sModule = m_sModule;
+    m_sModuleCFG = m_sModule;
     aReadLock.unlock();
     // <- SAFE ----------------------------------
 
     // get current office locale ... but dont cache it.
     // Otherwise we must be listener on the configuration layer
     // which seems to superflous for this small implementation .-)
-    ::comphelper::Locale aLocale = impl_ts_getLocale();
+    ::comphelper::Locale aLocale = ::comphelper::Locale(m_sLocale);
 
     // May be the current app module does not have any
     // accelerator config? Handle it gracefully :-)
     try
     {
-        // Note: The used preset class is threadsafe by itself ... and live if we live!
-        // We do not need any mutex here.
+        m_sGlobalOrModules = CFG_ENTRY_MODULES;
+        XCUBasedAcceleratorConfiguration::reload();
 
-        // open the folder, where the configuration exists
-        m_aPresetHandler.connectToResource(
-            PresetHandler::E_MODULES,
-            PresetHandler::RESOURCETYPE_ACCELERATOR(),
-            sModule,
-            css::uno::Reference< css::embed::XStorage >(),
-            aLocale);
-
-        // check if the user already has a current configuration
-        // if not - se the default preset as new current one.
-        // means: copy "share/default.xml" => "user/current.xml"
-        if (!m_aPresetHandler.existsTarget(PresetHandler::TARGET_CURRENT()))
-            m_aPresetHandler.copyPresetToTarget(PresetHandler::PRESET_DEFAULT(), PresetHandler::TARGET_CURRENT());
-
-        AcceleratorConfiguration::reload();
-        m_aPresetHandler.addStorageListener(this);
+        css::uno::Reference< css::util::XChangesNotifier > xBroadcaster(m_xCfg, css::uno::UNO_QUERY_THROW);
+        xBroadcaster->addChangesListener(static_cast< css::util::XChangesListener* >(this));
     }
     catch(const css::uno::RuntimeException& exRun)
         { throw exRun; }

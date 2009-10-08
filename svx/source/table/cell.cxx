@@ -677,6 +677,7 @@ SdrTextHorzAdjust Cell::GetTextHorizontalAdjust() const
 void Cell::SetOutlinerParaObject( OutlinerParaObject* pTextObject )
 {
     SdrText::SetOutlinerParaObject( pTextObject );
+    maSelection.nStartPara = 0xffff;
 }
 
 // -----------------------------------------------------------------------------
@@ -1579,26 +1580,16 @@ Sequence< Any > SAL_CALL Cell::getPropertyDefaults( const Sequence< OUString >& 
 void SAL_CALL Cell::setFastPropertyValue( sal_Int32 nHandle, const Any& aValue ) throw (UnknownPropertyException, PropertyVetoException, IllegalArgumentException, WrappedTargetException, RuntimeException)
 {
     (void)aValue;
-    switch( nHandle )
-    {
-    case 0:
-    default:
-        throw UnknownPropertyException();
-    }
-
-    notifyModified();
+    (void)nHandle;
+    throw UnknownPropertyException();
 }
 
 // -----------------------------------------------------------------------------
-
+// TODO: Refactor this method!
 Any SAL_CALL Cell::getFastPropertyValue( sal_Int32 nHandle ) throw (UnknownPropertyException, WrappedTargetException, RuntimeException)
 {
-    switch( nHandle )
-    {
-    case 0:
-    default:
-        throw UnknownPropertyException();
-    }
+    (void)nHandle;
+    throw UnknownPropertyException();
 }
 
 // -----------------------------------------------------------------------------
@@ -1678,6 +1669,7 @@ Reference< XTextRange > SAL_CALL Cell::getEnd(  ) throw (RuntimeException)
 
 OUString SAL_CALL Cell::getString(  ) throw (RuntimeException)
 {
+    maSelection.nStartPara = 0xffff;
     return SvxUnoTextBase::getString();
 }
 

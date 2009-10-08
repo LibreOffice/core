@@ -35,6 +35,7 @@ PRJNAME=connectivity
 TARGET=file
 
 USE_DEFFILE=TRUE
+VISIBILITY_HIDDEN=TRUE
 
 # --- Settings ----------------------------------
 .IF "$(DBGUTIL_OJ)"!=""
@@ -43,6 +44,8 @@ ENVCFLAGS+=/FR$(SLO)$/
 
 .INCLUDE : settings.mk
 .INCLUDE :  $(PRJ)$/version.mk
+
+CDEFS += -DOOO_DLLIMPLEMENTATION_FILE
 
 # --- Files -------------------------------------
 EXCEPTIONSFILES=\

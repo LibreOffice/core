@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: tablertfexporter.cxx,v $
- * $Revision: 1.3 $
+ * $Revision: 1.3.212.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -262,7 +262,7 @@ void SdrTableRtfExporter::WriteCell( sal_Int32 nCol, sal_Int32 nRow )
         bResetAttr = true;
         mrStrm << sRTF_I;
     }
-    if ( rUnderlineItem.GetUnderline() != UNDERLINE_NONE )
+    if ( rUnderlineItem.GetLineStyle() != UNDERLINE_NONE )
     {   // underline
         bResetAttr = true;
         mrStrm << sRTF_UL;

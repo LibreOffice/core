@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: unopkg_shared.h,v $
- * $Revision: 1.9 $
+ * $Revision: 1.9.8.3 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -29,22 +29,50 @@
  ************************************************************************/
 
 #include "dp_misc.h"
+#include "com/sun/star/uno/Exception.hpp"
 #include "com/sun/star/lang/XComponent.hpp"
 #include "com/sun/star/uno/XComponentContext.hpp"
 #include "com/sun/star/ucb/XCommandEnvironment.hpp"
 #include "com/sun/star/deployment/XPackage.hpp"
 #include "tools/resmgr.hxx"
+#include "rtl/ustring.hxx"
+#include "unotools/configmgr.hxx"
 
 
+#define APP_NAME "unopkg"
 
 namespace css = ::com::sun::star;
 
 namespace unopkg {
 
+    inline ::com::sun::star::lang::Locale toLocale( ::rtl::OUString const & slang )
+    {
+        ::com::sun::star::lang::Locale locale;
+        sal_Int32 nIndex = 0;
+        locale.Language = slang.getToken( 0, '-', nIndex );
+        locale.Country = slang.getToken( 0, '-', nIndex );
+        locale.Variant = slang.getToken( 0, '-', nIndex );
+        return locale;
+    }
+
+
+    struct OfficeLocale :
+        public rtl::StaticWithInit<const css::lang::Locale, OfficeLocale> {
+            const css::lang::Locale operator () () {
+                ::rtl::OUString slang;
+        if (! (::utl::ConfigManager::GetDirectConfigProperty(
+                   ::utl::ConfigManager::LOCALE ) >>= slang))
+            throw css::uno::RuntimeException( OUSTR("Cannot determine language!"), 0 );
+        if (slang.getLength() == 0)
+            slang = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("en-US"));
+        return toLocale(slang);
+    }
+};
+
 struct DeploymentResMgr :  public rtl::StaticWithInit< ResMgr *, DeploymentResMgr >
 {
     ResMgr * operator () () {
-        return ResMgr::CreateResMgr( "deployment" );
+        return ResMgr::CreateResMgr( "deployment", OfficeLocale::get());
     }
 };
 
@@ -56,8 +84,14 @@ struct OptionInfo
     bool m_has_argument;
 };
 
+struct LockFileException : public css::uno::Exception
+{
+    LockFileException(::rtl::OUString const & sMessage) :
+        css::uno::Exception(sMessage, css::uno::Reference< css::uno::XInterface > ()) {}
+};
+
 //==============================================================================
-::rtl::OString toString( OptionInfo const * info );
+::rtl::OUString toString( OptionInfo const * info );
 
 //==============================================================================
 OptionInfo const * getOptionInfo(

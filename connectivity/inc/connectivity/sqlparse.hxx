@@ -45,6 +45,7 @@
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/i18n/XLocaleData.hpp>
 #include "connectivity/IParseContext.hxx"
+#include "connectivity/dbtoolsdllapi.hxx"
 
 #include <map>
 
@@ -78,7 +79,7 @@ namespace connectivity
     //==========================================================================
     //= OParseContext
     //==========================================================================
-    class OParseContext : public IParseContext
+    class OOO_DLLPUBLIC_DBTOOLS OParseContext : public IParseContext
     {
     public:
         OParseContext();
@@ -116,7 +117,7 @@ namespace connectivity
     struct OSQLParser_Data;
     /** Parser for SQL92
     */
-    class OSQLParser
+    class OOO_DLLPUBLIC_DBTOOLS OSQLParser
     {
         friend class OSQLParseNode;
         friend class OSQLInternalNode;

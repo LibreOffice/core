@@ -32,13 +32,14 @@
 #define _CONNECTIVITY_FILE_FANALYZER_HXX_
 
 #include "file/fcomp.hxx"
+#include "file/filedllapi.hxx"
 
 namespace connectivity
 {
     namespace file
     {
         class OConnection;
-        class OSQLAnalyzer
+        class OOO_DLLPUBLIC_FILE OSQLAnalyzer
         {
             typedef ::std::list<OEvaluateSet*>      OEvaluateSetList;
             typedef ::std::pair< ::vos::ORef<OPredicateCompiler>,::vos::ORef<OPredicateInterpreter> > TPredicates;

@@ -378,6 +378,8 @@ protected:
         ::com::sun::star::accessibility::XAccessible>& xChild) const
         throw (::com::sun::star::uno::RuntimeException);
 
+    void impl_dispose (void);
+
 private:
     /** Names of new accessible objects are disambiguated with this index.
         It gets increased every time a new object is created and (at the
@@ -406,14 +408,19 @@ private:
     */
     void CreateListOfVisibleShapes (ChildDescriptorListType& raChildList);
 
-    /** From the internal list of (former) visible shapes remove those that
-        are not member of the given list.  Send appropriate events for every
+    /** From the old list of (former) visible shapes remove those that
+        are not member of the new list.  Send appropriate events for every
         such shape.
-        @param raChildList
-            The new list of visible children against which the internal one
+        @param raNewChildList
+            The new list of visible children against which the old one
+            is compared.
+        @param raOldChildList
+            The old list of visible children against which the new one
             is compared.
     */
-    void RemoveNonVisibleChildren (ChildDescriptorListType& raChildList);
+    void RemoveNonVisibleChildren (
+        const ChildDescriptorListType& raNewChildList,
+        ChildDescriptorListType& raOldChildList);
 
     /** Merge the information that is already known about the visible shapes
         from the current list into the new list.
@@ -548,16 +555,22 @@ public:
         descriptor may be based on a UNO shape or, already, on an accessible
         shape.
     */
-    inline bool operator == (const ChildDescriptor& aDescriptor)
+    inline bool operator == (const ChildDescriptor& aDescriptor) const
     {
-        return (this == &aDescriptor || (mxShape.get() == aDescriptor.mxShape.get() ) && ( mxShape.is() || mxAccessibleShape.get() == aDescriptor.mxAccessibleShape.get()));
+        return (
+                this == &aDescriptor ||
+                (
+                 (mxShape.get() == aDescriptor.mxShape.get() ) &&
+                 (mxShape.is() || mxAccessibleShape.get() == aDescriptor.mxAccessibleShape.get())
+                )
+               );
     }
 
     /** The ordering defined by this operator is only used in order to be able
         to put child descriptors in some STL containers.  The ordering itself is
         not so important, its 'features' are not used.
     */
-    inline bool operator < (const ChildDescriptor& aDescriptor)
+    inline bool operator < (const ChildDescriptor& aDescriptor) const
     {
         return (mxShape.get() < aDescriptor.mxShape.get());
     }

@@ -1410,40 +1410,74 @@ void SdrEditView::SetGeoAttrToMarked(const SfxItemSet& rAttr)
         MoveMarkedObj(Size(nPosDX,nPosDY));
     }
 
-    // Position geschuetzt
-    if (SFX_ITEM_SET==rAttr.GetItemState(SID_ATTR_TRANSFORM_PROTECT_POS,TRUE,&pPoolItem))
+    // protect position
+    if(SFX_ITEM_SET == rAttr.GetItemState(SID_ATTR_TRANSFORM_PROTECT_POS, TRUE, &pPoolItem))
     {
-        BOOL bProtPos=((const SfxBoolItem*)pPoolItem)->GetValue();
-        for (ULONG i=0; i<nMarkCount; i++) {
-            pObj=rMarkList.GetMark(i)->GetMarkedSdrObj();
-            pObj->SetMoveProtect(bProtPos);
-            if( bProtPos )
-                pObj->SetResizeProtect(true);
+        const sal_Bool bProtPos(((const SfxBoolItem*)pPoolItem)->GetValue());
+        bool bChanged(false);
+
+        for(sal_uInt32 i(0); i < nMarkCount; i++)
+        {
+            pObj = rMarkList.GetMark(i)->GetMarkedSdrObj();
+
+            if(pObj->IsMoveProtect() != bProtPos)
+            {
+                bChanged = true;
+                pObj->SetMoveProtect(bProtPos);
+
+                if(bProtPos)
+                {
+                    pObj->SetResizeProtect(true);
+                }
+            }
         }
-        // BugFix 13897: hier muesste besser ein Broadcast her!
-        // Ausserdem fehlt Undo
-        // oder -> bProtPos/Size als Item (Interface)
-        bMoveProtect=bProtPos;
-        if( bProtPos )
-            bResizeProtect=true;
+
+        if(bChanged)
+        {
+            bMoveProtect = bProtPos;
+
+            if(bProtPos)
+            {
+                bResizeProtect = true;
+            }
+
+            // #i77187# there is no simple method to get the toolbars updated
+            // in the application. The App is listening to selection change and i
+            // will use it here (even if not true). It's acceptable since changing
+            // this model data is pretty rare and only possible using the F4 dialog
+            MarkListHasChanged();
+        }
     }
 
-    if( !bMoveProtect )
+    if(!bMoveProtect)
     {
-        // Groesse geschuetzt
-        if (SFX_ITEM_SET==rAttr.GetItemState(SID_ATTR_TRANSFORM_PROTECT_SIZE,TRUE,&pPoolItem))
+        // protect size
+        if(SFX_ITEM_SET == rAttr.GetItemState(SID_ATTR_TRANSFORM_PROTECT_SIZE, TRUE, &pPoolItem))
         {
-            BOOL bProtSize=((const SfxBoolItem*)pPoolItem)->GetValue();
-            for (ULONG i=0; i<nMarkCount; i++) {
-                pObj=rMarkList.GetMark(i)->GetMarkedSdrObj();
-                pObj->SetResizeProtect(bProtSize);
+            const sal_Bool bProtSize(((const SfxBoolItem*)pPoolItem)->GetValue());
+            bool bChanged(false);
+
+            for(sal_uInt32 i(0); i < nMarkCount; i++)
+            {
+                pObj = rMarkList.GetMark(i)->GetMarkedSdrObj();
+
+                if(pObj->IsResizeProtect() != bProtSize)
+                {
+                    bChanged = true;
+                    pObj->SetResizeProtect(bProtSize);
+                }
             }
-            // BugFix 13897: hier muesste besser ein Broadcast her!
-            // Ausserdem fehlt Undo
-            // oder -> bProtPos/Size als Item (Interface)
-            bResizeProtect=bProtSize;
+
+            if(bChanged)
+            {
+                bResizeProtect = bProtSize;
+
+                // #i77187# see above
+                MarkListHasChanged();
+            }
         }
     }
+
     EndUndo();
 }
 

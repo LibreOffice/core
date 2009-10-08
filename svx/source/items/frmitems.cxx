@@ -4426,7 +4426,7 @@ CntWallpaperItem* SvxBrushItem::CreateCntWallpaperItem() const
  ---------------------------------------------------------------------------*/
 void  SvxBrushItem::ApplyGraphicTransparency_Impl()
 {
-    DBG_ASSERT(pImpl->pGraphicObject, "no GraphicObject available" )
+    DBG_ASSERT(pImpl->pGraphicObject, "no GraphicObject available" );
     if(pImpl->pGraphicObject)
     {
         GraphicAttr aAttr(pImpl->pGraphicObject->GetAttr());

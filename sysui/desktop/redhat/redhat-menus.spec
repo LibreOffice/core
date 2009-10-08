@@ -278,6 +278,7 @@ done
 /usr/share/applications/%unixfilename-math.desktop
 /usr/share/applications/%unixfilename-base.desktop
 /usr/share/applications/%unixfilename-printeradmin.desktop
+/usr/share/applications/%unixfilename-startcenter.desktop
 /usr/share/applnk-redhat/Office/%unixfilename-writer.desktop
 /usr/share/applnk-redhat/Office/%unixfilename-calc.desktop
 /usr/share/applnk-redhat/Office/%unixfilename-draw.desktop
@@ -285,6 +286,7 @@ done
 /usr/share/applnk-redhat/Office/%unixfilename-math.desktop
 /usr/share/applnk-redhat/Office/%unixfilename-base.desktop
 /usr/share/applnk-redhat/Office/%unixfilename-printeradmin.desktop
+/usr/share/applnk-redhat/Office/%unixfilename-startcenter.desktop
 /usr/share/mime-info/*.keys
 /usr/share/mime-info/*.mime
 /usr/share/mimelnk/application/*.desktop

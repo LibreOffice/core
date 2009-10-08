@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: rtfitem.cxx,v $
- * $Revision: 1.35 $
+ * $Revision: 1.35.212.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -108,8 +108,6 @@ inline const SvxEscapementItem& GetEscapement(const SfxItemSet& rSet,USHORT nId,
     { return (const SvxEscapementItem&)rSet.Get( nId,bInP); }
 inline const SvxLineSpacingItem& GetLineSpacing(const SfxItemSet& rSet,USHORT nId,BOOL bInP=TRUE)
     { return (const SvxLineSpacingItem&)rSet.Get( nId,bInP); }
-inline const SvxUnderlineItem& GetUnderline(const SfxItemSet& rSet,USHORT nId,BOOL bInP=TRUE)
-    { return (const SvxUnderlineItem&)rSet.Get( nId,bInP); }
 // frm
 inline const SvxLRSpaceItem& GetLRSpace(const SfxItemSet& rSet,USHORT nId,BOOL bInP=TRUE)
     { return (const SvxLRSpaceItem&)rSet.Get( nId,bInP); }
@@ -229,6 +227,7 @@ void SvxRTFParser::ReadAttr( int nToken, SfxItemSet* pSet )
     int bFirstToken = TRUE, bWeiter = TRUE;
     USHORT nStyleNo = 0;        // default
     FontUnderline eUnderline;
+    FontUnderline eOverline;
     FontEmphasisMark eEmphasis;
     bPardTokenRead = FALSE;
     RTF_CharTypeDef eCharType = NOTDEF_CHARTYPE;
@@ -847,25 +846,119 @@ ATTR_SETUNDERLINE:
             case RTF_ULC:
                 if( PLAINID->nUnderline )
                 {
-                    SvxUnderlineItem aUL( UNDERLINE_SINGLE,
-                                            PLAINID->nUnderline );
+                    SvxUnderlineItem aUL( UNDERLINE_SINGLE, PLAINID->nUnderline );
                     const SfxPoolItem* pItem;
                     if( SFX_ITEM_SET == pSet->GetItemState(
                         PLAINID->nUnderline, FALSE, &pItem ) )
                     {
                         // is switched off ?
                         if( UNDERLINE_NONE ==
-                            ((SvxUnderlineItem*)pItem)->GetUnderline() )
+                            ((SvxUnderlineItem*)pItem)->GetLineStyle() )
                             break;
                         aUL = *(SvxUnderlineItem*)pItem;
                     }
                     else
-                        aUL = GetUnderline( *pSet, PLAINID->nUnderline, FALSE );
+                        aUL = (const SvxUnderlineItem&)pSet->Get( PLAINID->nUnderline, FALSE );
 
-                    if( UNDERLINE_NONE == aUL.GetUnderline() )
-                        aUL.SetUnderline( UNDERLINE_SINGLE );
+                    if( UNDERLINE_NONE == aUL.GetLineStyle() )
+                        aUL.SetLineStyle( UNDERLINE_SINGLE );
                     aUL.SetColor( GetColor( USHORT(nTokenValue) ));
                     pSet->Put( aUL );
+                }
+                break;
+
+            case RTF_OL:
+                if( !IsAttrSttPos() )
+                    break;
+                eOverline = nTokenValue ? UNDERLINE_SINGLE : UNDERLINE_NONE;
+                goto ATTR_SETOVERLINE;
+
+            case RTF_OLD:
+                eOverline = UNDERLINE_DOTTED;
+                goto ATTR_SETOVERLINE;
+            case RTF_OLDASH:
+                eOverline = UNDERLINE_DASH;
+                goto ATTR_SETOVERLINE;
+            case RTF_OLDASHD:
+                eOverline = UNDERLINE_DASHDOT;
+                goto ATTR_SETOVERLINE;
+            case RTF_OLDASHDD:
+                eOverline = UNDERLINE_DASHDOTDOT;
+                goto ATTR_SETOVERLINE;
+            case RTF_OLDB:
+                eOverline = UNDERLINE_DOUBLE;
+                goto ATTR_SETOVERLINE;
+            case RTF_OLNONE:
+                eOverline = UNDERLINE_NONE;
+                goto ATTR_SETOVERLINE;
+            case RTF_OLTH:
+                eOverline = UNDERLINE_BOLD;
+                goto ATTR_SETOVERLINE;
+            case RTF_OLWAVE:
+                eOverline = UNDERLINE_WAVE;
+                goto ATTR_SETOVERLINE;
+            case RTF_OLTHD:
+                eOverline = UNDERLINE_BOLDDOTTED;
+                goto ATTR_SETOVERLINE;
+            case RTF_OLTHDASH:
+                eOverline = UNDERLINE_BOLDDASH;
+                goto ATTR_SETOVERLINE;
+            case RTF_OLLDASH:
+                eOverline = UNDERLINE_LONGDASH;
+                goto ATTR_SETOVERLINE;
+            case RTF_OLTHLDASH:
+                eOverline = UNDERLINE_BOLDLONGDASH;
+                goto ATTR_SETOVERLINE;
+            case RTF_OLTHDASHD:
+                eOverline = UNDERLINE_BOLDDASHDOT;
+                goto ATTR_SETOVERLINE;
+            case RTF_OLTHDASHDD:
+                eOverline = UNDERLINE_BOLDDASHDOTDOT;
+                goto ATTR_SETOVERLINE;
+            case RTF_OLHWAVE:
+                eOverline = UNDERLINE_BOLDWAVE;
+                goto ATTR_SETOVERLINE;
+            case RTF_OLOLDBWAVE:
+                eOverline = UNDERLINE_DOUBLEWAVE;
+                goto ATTR_SETOVERLINE;
+
+            case RTF_OLW:
+                eOverline = UNDERLINE_SINGLE;
+
+                if( PLAINID->nWordlineMode )
+                {
+                    pSet->Put( SvxWordLineModeItem( TRUE, PLAINID->nWordlineMode ));
+                }
+                goto ATTR_SETOVERLINE;
+
+ATTR_SETOVERLINE:
+                if( PLAINID->nUnderline )
+                {
+                    pSet->Put( SvxOverlineItem( eOverline, PLAINID->nOverline ));
+                }
+                break;
+
+            case RTF_OLC:
+                if( PLAINID->nOverline )
+                {
+                    SvxOverlineItem aOL( UNDERLINE_SINGLE, PLAINID->nOverline );
+                    const SfxPoolItem* pItem;
+                    if( SFX_ITEM_SET == pSet->GetItemState(
+                        PLAINID->nOverline, FALSE, &pItem ) )
+                    {
+                        // is switched off ?
+                        if( UNDERLINE_NONE ==
+                            ((SvxOverlineItem*)pItem)->GetLineStyle() )
+                            break;
+                        aOL = *(SvxOverlineItem*)pItem;
+                    }
+                    else
+                        aOL = (const SvxOverlineItem&)pSet->Get( PLAINID->nUnderline, FALSE );
+
+                    if( UNDERLINE_NONE == aOL.GetLineStyle() )
+                        aOL.SetLineStyle( UNDERLINE_SINGLE );
+                    aOL.SetColor( GetColor( USHORT(nTokenValue) ));
+                    pSet->Put( aOL );
                 }
                 break;
 

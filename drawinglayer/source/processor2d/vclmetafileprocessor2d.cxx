@@ -98,23 +98,14 @@
 
 //////////////////////////////////////////////////////////////////////////////
 
+using namespace com::sun::star;
+
+//////////////////////////////////////////////////////////////////////////////
+
 namespace drawinglayer
 {
     namespace processor2d
     {
-        //////////////////////////////////////////////////////////////////////////////
-        // UNO usings
-        using ::com::sun::star::uno::Reference;
-        using ::com::sun::star::uno::UNO_QUERY;
-        using ::com::sun::star::uno::UNO_QUERY_THROW;
-        using ::com::sun::star::uno::Exception;
-        using ::com::sun::star::beans::XPropertySet;
-        using ::com::sun::star::beans::XPropertySetInfo;
-        using ::com::sun::star::awt::XView;
-        //using ::com::sun::star::awt::XGraphics;
-        //using ::com::sun::star::awt::XWindow;
-        //using ::com::sun::star::awt::PosSize::POSSIZE;
-
         Rectangle VclMetafileProcessor2D::impDumpToMetaFile(
             const primitive2d::Primitive2DSequence& rContent,
             GDIMetaFile& o_rContentMetafile)
@@ -387,7 +378,7 @@ namespace drawinglayer
         }
 
         // init static break iterator
-        Reference< ::com::sun::star::i18n::XBreakIterator > VclMetafileProcessor2D::mxBreakIterator;
+        uno::Reference< ::com::sun::star::i18n::XBreakIterator > VclMetafileProcessor2D::mxBreakIterator;
 
         VclMetafileProcessor2D::VclMetafileProcessor2D(const geometry::ViewInformation2D& rViewInformation, OutputDevice& rOutDev)
         :   VclProcessor2D(rViewInformation, rOutDev),
@@ -691,93 +682,113 @@ namespace drawinglayer
                 case PRIMITIVE2D_ID_CONTROLPRIMITIVE2D :
                 {
                     const primitive2d::ControlPrimitive2D& rControlPrimitive = static_cast< const primitive2d::ControlPrimitive2D& >(rCandidate);
-                    bool bDoProcessRecursively(true);
-                    static bool bSuppressPDFExtOutDevDataSupport(false);
-                    static bool bSuppressPrinterOutput(false);
+                    const uno::Reference< awt::XControl >& rXControl(rControlPrimitive.getXControl());
+                    bool bIsPrintableControl(false);
 
-                    if(mpPDFExtOutDevData && !bSuppressPDFExtOutDevDataSupport && mpPDFExtOutDevData->GetIsExportFormFields())
+                    // find out if control is printable
+                    if(rXControl.is())
                     {
-                        // emulate data handling from UnoControlPDFExportContact
-                        // I have now moved describePDFControl to toolkit, thus i can implement the PDF
-                        // form control support now as follows
-                        ::std::auto_ptr< ::vcl::PDFWriter::AnyWidget > pPDFControl;
-                        ::toolkitform::describePDFControl( rControlPrimitive.getXControl(), pPDFControl );
-
-                        if(pPDFControl.get())
+                        try
                         {
-                            // still need to fill in the location (is a class Rectangle)
-                            const basegfx::B2DRange aRangeLogic(rControlPrimitive.getB2DRange(getViewInformation2D()));
-                            const Rectangle aRectLogic(
-                                (sal_Int32)floor(aRangeLogic.getMinX()), (sal_Int32)floor(aRangeLogic.getMinY()),
-                                (sal_Int32)ceil(aRangeLogic.getMaxX()), (sal_Int32)ceil(aRangeLogic.getMaxY()));
-                            pPDFControl->Location = aRectLogic;
+                            uno::Reference< beans::XPropertySet > xModelProperties(rXControl->getModel(), uno::UNO_QUERY);
+                            uno::Reference< beans::XPropertySetInfo > xPropertyInfo(xModelProperties.is()
+                                ? xModelProperties->getPropertySetInfo()
+                                : uno::Reference< beans::XPropertySetInfo >());
+                            const ::rtl::OUString sPrintablePropertyName(RTL_CONSTASCII_USTRINGPARAM("Printable"));
 
-                            Size aFontSize(pPDFControl->TextFont.GetSize());
-                            aFontSize = mpOutputDevice->LogicToLogic(aFontSize, MapMode(MAP_POINT), mpOutputDevice->GetMapMode());
-                            pPDFControl->TextFont.SetSize(aFontSize);
-
-                            mpPDFExtOutDevData->BeginStructureElement(vcl::PDFWriter::Form);
-                            mpPDFExtOutDevData->CreateControl(*pPDFControl.get());
-                            mpPDFExtOutDevData->EndStructureElement();
-
-                            // no normal paint needed (see original UnoControlPDFExportContact::do_PaintObject);
-                            // do not process recursively
-                            bDoProcessRecursively = false;
+                            if(xPropertyInfo.is() && xPropertyInfo->hasPropertyByName(sPrintablePropertyName))
+                            {
+                                OSL_VERIFY(xModelProperties->getPropertyValue(sPrintablePropertyName) >>= bIsPrintableControl);
+                            }
+                        }
+                        catch(const uno::Exception&)
+                        {
+                            OSL_ENSURE(false, "VclMetafileProcessor2D: No access to printable flag of Control, caught an exception!");
                         }
                     }
 
-                    // printer output preparation
-                    if(bDoProcessRecursively && !bSuppressPrinterOutput)
+                    // PDF export and printing only for printable controls
+                    if(bIsPrintableControl)
                     {
-                        // this needs to do the same as UnoControlPrintOrPreviewContact::do_PaintObject
-                        // does ATM. This means prepare_PrintOrPrintPreview and paint_Control
-                        bool bIsPrintableControl(false);
+                        const bool bPDFExport(mpPDFExtOutDevData && mpPDFExtOutDevData->GetIsExportFormFields());
+                        bool bDoProcessRecursively(true);
 
-                        if(rControlPrimitive.getXControl().is())
+                        if(bPDFExport)
                         {
-                            try
-                            {
-                                // find out if control is printable
-                                Reference< XPropertySet > xModelProperties(rControlPrimitive.getXControl()->getModel(), UNO_QUERY);
-                                Reference< XPropertySetInfo > xPropertyInfo(xModelProperties.is()
-                                    ? xModelProperties->getPropertySetInfo()
-                                    : Reference< XPropertySetInfo >());
-                                const ::rtl::OUString sPrintablePropertyName(RTL_CONSTASCII_USTRINGPARAM("Printable"));
+                            // PDF export. Emulate data handling from UnoControlPDFExportContact
+                            // I have now moved describePDFControl to toolkit, thus i can implement the PDF
+                            // form control support now as follows
+                            ::std::auto_ptr< ::vcl::PDFWriter::AnyWidget > pPDFControl;
+                            ::toolkitform::describePDFControl(rXControl, pPDFControl);
 
-                                if(xPropertyInfo.is() && xPropertyInfo->hasPropertyByName(sPrintablePropertyName))
-                                {
-                                    OSL_VERIFY(xModelProperties->getPropertyValue(sPrintablePropertyName) >>= bIsPrintableControl);
-                                }
-                            }
-                            catch(const Exception&)
+                            if(pPDFControl.get())
                             {
-                                OSL_ENSURE(false, "VclMetafileProcessor2D: No access to printable flag of Control, caught an exception!");
+                                // still need to fill in the location (is a class Rectangle)
+                                const basegfx::B2DRange aRangeLogic(rControlPrimitive.getB2DRange(getViewInformation2D()));
+                                const Rectangle aRectLogic(
+                                    (sal_Int32)floor(aRangeLogic.getMinX()), (sal_Int32)floor(aRangeLogic.getMinY()),
+                                    (sal_Int32)ceil(aRangeLogic.getMaxX()), (sal_Int32)ceil(aRangeLogic.getMaxY()));
+                                pPDFControl->Location = aRectLogic;
+
+                                Size aFontSize(pPDFControl->TextFont.GetSize());
+                                aFontSize = mpOutputDevice->LogicToLogic(aFontSize, MapMode(MAP_POINT), mpOutputDevice->GetMapMode());
+                                pPDFControl->TextFont.SetSize(aFontSize);
+
+                                mpPDFExtOutDevData->BeginStructureElement(vcl::PDFWriter::Form);
+                                mpPDFExtOutDevData->CreateControl(*pPDFControl.get());
+                                mpPDFExtOutDevData->EndStructureElement();
+
+                                // no normal paint needed (see original UnoControlPDFExportContact::do_PaintObject);
+                                // do not process recursively
+                                bDoProcessRecursively = false;
+                            }
+                            else
+                            {
+                                // PDF export did not work, try simple output.
+                                // Fallback to printer output by not setting bDoProcessRecursively
+                                // to false.
                             }
                         }
 
-                        if(bIsPrintableControl)
+                        // #i93169# used flag the wrong way; true means that nothing was done yet
+                        if(bDoProcessRecursively)
                         {
+                            // printer output
                             try
                             {
-                                // update position and size
-                                const basegfx::B2DPoint aTopLeftPixel(PositionAndSizeControl(rControlPrimitive));
+                                // remember old graphics and create new
+                                uno::Reference< awt::XView > xControlView(rXControl, uno::UNO_QUERY_THROW);
+                                const uno::Reference< awt::XGraphics > xOriginalGraphics(xControlView->getGraphics());
+                                const uno::Reference< awt::XGraphics > xNewGraphics(mpOutputDevice->CreateUnoGraphics());
 
-                                // output to given device
-                                Reference< XView > xControlView(rControlPrimitive.getXControl(), UNO_QUERY_THROW);
-                                xControlView->draw(basegfx::fround(aTopLeftPixel.getX()), basegfx::fround(aTopLeftPixel.getY()));
-                                bDoProcessRecursively = false;
+                                if(xNewGraphics.is())
+                                {
+                                    // link graphics and view
+                                    xControlView->setGraphics(xNewGraphics);
+
+                                    // get position
+                                    const basegfx::B2DHomMatrix aObjectToDiscrete(getViewInformation2D().getObjectToViewTransformation() * rControlPrimitive.getTransform());
+                                    const basegfx::B2DPoint aTopLeftDiscrete(aObjectToDiscrete * basegfx::B2DPoint(0.0, 0.0));
+
+                                    // draw it
+                                    xControlView->draw(basegfx::fround(aTopLeftDiscrete.getX()), basegfx::fround(aTopLeftDiscrete.getY()));
+                                    bDoProcessRecursively = false;
+
+                                    // restore original graphics
+                                    xControlView->setGraphics(xOriginalGraphics);
+                                }
                             }
-                            catch( const Exception& )
+                            catch( const uno::Exception& )
                             {
                                 OSL_ENSURE(false, "VclMetafileProcessor2D: Printing of Control failed, caught an exception!");
                             }
                         }
-                    }
 
-                    // process recursively and add MetaFile comment
-                    if(bDoProcessRecursively)
-                    {
-                        process(rControlPrimitive.get2DDecomposition(getViewInformation2D()));
+                        // process recursively if not done yet to export as decomposition (bitmap)
+                        if(bDoProcessRecursively)
+                        {
+                            process(rControlPrimitive.get2DDecomposition(getViewInformation2D()));
+                        }
                     }
 
                     break;
@@ -917,8 +928,8 @@ namespace drawinglayer
                         // support for TEXT_ MetaFile actions only for decorated texts
                         if(!mxBreakIterator.is())
                         {
-                            Reference< ::com::sun::star::lang::XMultiServiceFactory > xMSF(::comphelper::getProcessServiceFactory());
-                            mxBreakIterator.set(xMSF->createInstance(rtl::OUString::createFromAscii("com.sun.star.i18n.BreakIterator")), UNO_QUERY);
+                            uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > xMSF(::comphelper::getProcessServiceFactory());
+                            mxBreakIterator.set(xMSF->createInstance(rtl::OUString::createFromAscii("com.sun.star.i18n.BreakIterator")), uno::UNO_QUERY);
                         }
 
                         if(mxBreakIterator.is())

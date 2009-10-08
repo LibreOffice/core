@@ -384,7 +384,7 @@ void SvxRubyDialog::Activate()
                 }
                 catch(Exception&)
                 {
-                    DBG_ERROR("exception in style access")
+                    DBG_ERROR("exception in style access");
                 }
                 if(sCharStyleSelect.Len())
                     aCharStyleLB.SelectEntry(sCharStyleSelect);
@@ -443,7 +443,7 @@ void SvxRubyDialog::GetText()
             aEditArr[i + 1]->GetText() != aEditArr[i + 1]->GetSavedValue()))
         {
             Sequence<PropertyValues>& aRubyValues = pImpl->GetRubyValues();
-            DBG_ASSERT(aRubyValues.getLength() > (i / 2 + nTempLastPos), "wrong index" )
+            DBG_ASSERT(aRubyValues.getLength() > (i / 2 + nTempLastPos), "wrong index" );
             SetModified(TRUE);
             Sequence<PropertyValue> &rProps = aRubyValues.getArray()[i / 2 + nTempLastPos];
             PropertyValue* pProps = rProps.getArray();
@@ -494,7 +494,7 @@ void SvxRubyDialog::Update()
                 sal_Bool bTmp = *(sal_Bool*)pProps[nProp].Value.getValue();
                 if(!nRuby)
                     nPosition = bTmp ? 0 : 1;
-                else  if(!nPosition && !bTmp || nPosition == 1 && bTmp  )
+                else if( (!nPosition && !bTmp) || (nPosition == 1 && bTmp)  )
                     nPosition = -2;
             }
             if(bCharStyleEqual &&
@@ -520,7 +520,7 @@ void SvxRubyDialog::Update()
         aAdjustLB.SetNoSelection();
     if(nPosition > -1)
         aPositionLB.SelectEntryPos(nPosition ? 1 : 0);
-    if(!nLen || bCharStyleEqual && !sCharStyleName.getLength())
+    if(!nLen || (bCharStyleEqual && !sCharStyleName.getLength()))
         sCharStyleName = C2U(cRubies);
     if(sCharStyleName.getLength())
     {
@@ -591,7 +591,7 @@ IMPL_LINK(SvxRubyDialog, ApplyHdl_Impl, PushButton*, EMPTYARG)
         }
         catch(Exception& )
         {
-            DBG_ERROR("Exception caught")
+            DBG_ERROR("Exception caught");
         }
     }
     return 0;

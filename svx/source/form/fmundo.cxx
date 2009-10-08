@@ -306,47 +306,59 @@ void FmXUndoEnvironment::Inserted(FmFormObj* pObj)
     Reference< XFormComponent >  xContent(xModel, UNO_QUERY);
     if (xContent.is() && pObj->GetPage())
     {
-        // Komponente gehoert noch keiner Form an
+        // if the component doesn't belong to a form, yet, find one to insert into
         if (!xContent->getParent().is())
         {
-            // Einfuegen in den Parent falls noetig
-            Reference< XIndexContainer >  xParent = pObj->GetParent();
-            // Suchen des Form in der aktuellen Page
-            Reference< XIndexContainer >  xForm;
-            Reference< XInterface >  xIface(xParent, UNO_QUERY);
-            Reference< XIndexAccess >  xForms(((FmFormPage*)pObj->GetPage())->GetForms(), UNO_QUERY);;
-
-            if (searchElement(xForms, xIface))
-                xForm = xParent;
-            else
+            try
             {
-                Reference< XForm >  xTemp = ((FmFormPage*)pObj->GetPage())->GetImpl()->placeInFormComponentHierarchy(xContent);
-                xForm = Reference< XIndexContainer > (xTemp, UNO_QUERY);
-            }
+                Reference< XIndexContainer > xObjectParent = pObj->GetOriginalParent();
 
-            // Position des Elements
-            sal_Int32 nPos = xForm->getCount();
-            if ((XIndexContainer*)xForm.get() == (XIndexContainer*)xParent.get())
+                FmFormPage& rPage = dynamic_cast< FmFormPage& >( *pObj->GetPage() );
+                Reference< XIndexAccess >  xForms( rPage.GetForms(), UNO_QUERY_THROW );
+
+                Reference< XIndexContainer > xNewParent;
+                Reference< XForm >           xForm;
+                sal_Int32 nPos = -1;
+                if ( searchElement( xForms, xObjectParent ) )
+                {
+                    // the form which was the parent of the object when it was removed is still
+                    // part of the form component hierachy of the current page
+                    xNewParent = xObjectParent;
+                    xForm.set( xNewParent, UNO_QUERY_THROW );
+                    nPos = ::std::min( pObj->GetOriginalIndex(), xNewParent->getCount() );
+                }
+                else
+                {
+                    xForm.set( rPage.GetImpl()->findPlaceInFormComponentHierarchy( xContent ), UNO_SET_THROW );
+                    xNewParent.set( xForm, UNO_QUERY_THROW );
+                    nPos = xNewParent->getCount();
+                }
+
+                rPage.GetImpl()->setUniqueName( xContent, xForm );
+                xNewParent->insertByIndex( nPos, makeAny( xContent ) );
+
+                Reference< XEventAttacherManager >  xManager( xNewParent, UNO_QUERY_THROW );
+                xManager->registerScriptEvents( nPos, pObj->GetOriginalEvents() );
+            }
+            catch( const Exception& )
             {
-                if (nPos > pObj->GetPos())
-                    nPos = xForm->getCount();
+                DBG_UNHANDLED_EXCEPTION();
             }
-
-            xForm->insertByIndex(nPos, makeAny(xContent));
-
-            Reference< XEventAttacherManager >  xManager(xForm, UNO_QUERY);
-            if (xManager.is())
-                xManager->registerScriptEvents(nPos, pObj->GetEvents());
         }
 
         // FormObject zuruecksetzen
-        pObj->SetObjEnv(Reference< XIndexContainer > ());
+        pObj->ClearObjEnv();
     }
 }
 
 //------------------------------------------------------------------
 void FmXUndoEnvironment::Removed(SdrObject* pObj)
 {
+    if ( pObj->IsVirtualObj() )
+        // for virtual objects, we've already been notified of the removal of the master
+        // object, which is sufficient here
+        return;
+
     if (pObj->GetObjInventor() == FmFormInventor)
     {
         FmFormObj* pFormObj = PTR_CAST(FmFormObj, pObj);
@@ -398,6 +410,7 @@ void FmXUndoEnvironment::Removed(FmFormObj* pObj)
                 }
                 catch(Exception&)
                 {
+                    DBG_UNHANDLED_EXCEPTION();
                 }
 
             }
@@ -492,8 +505,9 @@ void SAL_CALL FmXUndoEnvironment::propertyChange(const PropertyChangeEvent& evt)
                     Any aCurrentControlSource = xSet->getPropertyValue(FM_PROP_CONTROLSOURCE);
                     aNewEntry.bHasEmptyControlSource = !aCurrentControlSource.hasValue() || (::comphelper::getString(aCurrentControlSource).getLength() == 0);
                 }
-                catch(Exception&)
+                catch(const Exception&)
                 {
+                    DBG_UNHANDLED_EXCEPTION();
                 }
             }
             aSetPos = pCache->insert(PropertySetInfoCache::value_type(xSet,aNewEntry)).first;
@@ -532,8 +546,9 @@ void SAL_CALL FmXUndoEnvironment::propertyChange(const PropertyChangeEvent& evt)
                     aNewEntry.bIsValueProperty = (sControlSourceProperty.equals(evt.PropertyName));
                 }
             }
-            catch(Exception&)
+            catch(const Exception&)
             {
+                DBG_UNHANDLED_EXCEPTION();
             }
 
             // insert the new entry
@@ -735,10 +750,12 @@ void FmXUndoEnvironment::switchListening( const Reference< XIndexContainer >& _r
         // script events
         Reference< XEventAttacherManager > xManager( _rxContainer, UNO_QUERY );
         if ( xManager.is() )
+        {
             if ( _bStartListening )
                 m_pScriptingEnv->registerEventAttacherManager( xManager );
             else
                 m_pScriptingEnv->revokeEventAttacherManager( xManager );
+        }
 
         // also handle all children of this element
         sal_uInt32 nCount = _rxContainer->getCount();
@@ -756,10 +773,12 @@ void FmXUndoEnvironment::switchListening( const Reference< XIndexContainer >& _r
         Reference< XContainer > xSimpleContainer( _rxContainer, UNO_QUERY );
         OSL_ENSURE( xSimpleContainer.is(), "FmXUndoEnvironment::switchListening: how are we expected to be notified of changes in the container?" );
         if ( xSimpleContainer.is() )
+        {
             if ( _bStartListening )
                 xSimpleContainer->addContainerListener( this );
             else
                 xSimpleContainer->removeContainerListener( this );
+        }
     }
     catch( const Exception& )
     {
@@ -778,18 +797,22 @@ void FmXUndoEnvironment::switchListening( const Reference< XInterface >& _rxObje
         {
             Reference< XPropertySet > xProps( _rxObject, UNO_QUERY );
             if ( xProps.is() )
+            {
                 if ( _bStartListening )
                     xProps->addPropertyChangeListener( ::rtl::OUString(), this );
                 else
                     xProps->removePropertyChangeListener( ::rtl::OUString(), this );
+            }
         }
 
         Reference< XModifyBroadcaster > xBroadcaster( _rxObject, UNO_QUERY );
         if ( xBroadcaster.is() )
+        {
             if ( _bStartListening )
                 xBroadcaster->addModifyListener( this );
             else
                 xBroadcaster->removeModifyListener( this );
+        }
     }
     catch( const Exception& )
     {

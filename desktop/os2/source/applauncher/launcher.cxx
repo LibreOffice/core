@@ -1,3 +1,30 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ * 
+ * Copyright 2008 by Sun Microsystems, Inc.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+
 #include "launcher.hxx"
 
 #include <stdio.h>
@@ -19,6 +46,7 @@ int main( int argc, char* argv[])
     erridErrorCode = WinGetLastError(hab);
 
     // Calculate application name
+    CHAR    szLibpath[_MAX_PATH*2];
     CHAR    szApplicationName[_MAX_PATH];
     CHAR    szDrive[_MAX_PATH];
     CHAR    szDir[_MAX_PATH];
@@ -28,24 +56,30 @@ int main( int argc, char* argv[])
     // get executable fullpath
     DosGetInfoBlocks(NULL, &pib);
     DosQueryModuleName(pib->pib_hmte, sizeof(szApplicationName), szApplicationName);
-    _splitpath( szApplicationName, szDrive, szDir, szFileName, szExt );
-
+    
     // adjust libpath
-    _makepath( szApplicationName, szDrive, szDir, NULL, NULL);
-    strcat( szApplicationName, ";%BeginLIBPATH%");
-    DosSetExtLIBPATH( (PCSZ)szApplicationName, BEGIN_LIBPATH);
+    _splitpath( szApplicationName, szDrive, szDir, szFileName, szExt );
+    char* basedir = strstr( szDir, "\\PROGRAM\\");
+    if (basedir) *basedir = 0;
+    sprintf( szLibpath, "%s%s\\URE\\BIN;%s%s\\BASIS\\PROGRAM;%BeginLIBPATH%",
+        szDrive, szDir, szDrive, szDir);
+    DosSetExtLIBPATH( (PCSZ)szLibpath, BEGIN_LIBPATH);
+    // make sure we load DLL from our path only, so multiple instances/versions
+    // can be loaded.
+    DosSetExtLIBPATH( (PCSZ)"T", LIBPATHSTRICT);
 
     // adjust exe name
+    _splitpath( szApplicationName, szDrive, szDir, szFileName, szExt );
     _makepath( szApplicationName, szDrive, szDir, OFFICE_IMAGE_NAME, (".bin") );
 
     // copy command line parameters
     int i, len;
-    len = strlen(szApplicationName)+1;
-    for( i=1; i<argc; i++)
+    len = strlen(szApplicationName) + 1 + strlen( APPLICATION_SWITCH) + 1 + 1;
+    for( i=1; i<argc; i++) 
         len += strlen( argv[i]) + 1;
-
+    
     char* pszCommandLine, *pszArgs;
-    pszCommandLine = (char*) malloc( len);
+    pszCommandLine = (char*) calloc( 1, len);
     strcpy( pszCommandLine, szApplicationName);
     pszArgs = pszCommandLine + strlen(szApplicationName) + 1;
     strcat( pszArgs, APPLICATION_SWITCH);
@@ -76,10 +110,9 @@ int main( int argc, char* argv[])
         WinTerminate( hab);
         exit(1);
     }
-
+    
     WinDestroyMsgQueue( hmq);
     WinTerminate( hab);
-
+    
     exit( result.codeResult);
 }
-

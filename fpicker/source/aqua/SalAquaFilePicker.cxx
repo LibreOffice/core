@@ -776,6 +776,8 @@ void SalAquaFilePicker::updateSaveFileNameExtension() {
     ensureFilterHelper();
 
     OUStringList aStringList = m_pFilterHelper->getCurrentFilterSuffixList();
+    if( aStringList.empty()) // #i9328#
+        return;
 
     rtl::OUString suffix = (*(aStringList.begin())).copy(1);
     NSString *requiredFileType = [NSString stringWithOUString:suffix];

@@ -7,7 +7,6 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: app.cxx,v $
- * $Revision: 1.224.14.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -541,6 +540,16 @@ void Desktop::DeInit()
 
 BOOL Desktop::QueryExit()
 {
+    try
+    {
+        RTL_LOGFILE_CONTEXT_TRACE( aLog, "<- store config items" );
+        utl::ConfigManager::GetConfigManager()->StoreConfigItems();
+        RTL_LOGFILE_CONTEXT_TRACE( aLog, "<- store config items" );
+    }
+    catch ( RuntimeException& )
+    {
+    }
+
     const sal_Char SUSPEND_QUICKSTARTVETO[] = "SuspendQuickstartVeto";
 
     Reference< ::com::sun::star::frame::XDesktop >
@@ -563,7 +572,19 @@ BOOL Desktop::QueryExit()
         Any a;
         a <<= (sal_Bool)sal_False;
         xPropertySet->setPropertyValue( OUSTRING(RTL_CONSTASCII_USTRINGPARAM( SUSPEND_QUICKSTARTVETO )), a );
-    } else {
+    }
+    else
+    {
+        try
+        {
+            // it is no problem to call DisableOfficeIPCThread() more than once
+            // it also looks to be threadsafe
+            OfficeIPCThread::DisableOfficeIPCThread();
+        }
+        catch ( RuntimeException& )
+        {
+        }
+
         if (m_pLockfile != NULL) m_pLockfile->clean();
     }
 
@@ -1037,6 +1058,29 @@ sal_Bool Desktop::SaveTasks()
         sal_False);
 }
 
+#ifdef MACOSX
+static void DoRestart()
+{
+    oslProcess      process;
+    oslProcessError error;
+    OUString    sExecutableFile;
+
+    osl_getExecutableFile( &sExecutableFile.pData );
+
+    error = osl_executeProcess(
+        sExecutableFile.pData,
+        NULL,
+        0,
+        0,
+        NULL,
+        NULL,
+        NULL,
+        0,
+        &process
+        );
+}
+#endif
+
 USHORT Desktop::Exception(USHORT nError)
 {
     // protect against recursive calls
@@ -1124,6 +1168,10 @@ USHORT Desktop::Exception(USHORT nError)
                 if (m_pLockfile != NULL) {
                     m_pLockfile->clean();
                 }
+
+#ifdef MACOSX
+                DoRestart();
+#endif
                 _exit( ExitHelper::E_CRASH_WITH_RESTART );
             }
             else
@@ -1464,7 +1512,7 @@ void Desktop::Main()
     SvtFontSubstConfig().Apply();
 
     SvtTabAppearanceCfg aAppearanceCfg;
-    //aAppearanceCfg.SetInitialized();
+    aAppearanceCfg.SetInitialized();
     aAppearanceCfg.SetApplicationDefaults( this );
     SvtAccessibilityOptions aOptions;
     aOptions.SetVCLSettings();
@@ -1555,12 +1603,12 @@ void Desktop::Main()
     }
     catch(const com::sun::star::document::CorruptedFilterConfigurationException& exFilterCfg)
     {
-        OfficeIPCThread::BlockAllRequests();
+        OfficeIPCThread::SetDowning();
         FatalError( MakeStartupErrorMessage(exFilterCfg.Message) );
     }
     catch(const com::sun::star::configuration::CorruptedConfigurationException& exAnyCfg)
     {
-        OfficeIPCThread::BlockAllRequests();
+        OfficeIPCThread::SetDowning();
         FatalError( MakeStartupErrorMessage(exAnyCfg.Message) );
     }
 
@@ -2389,6 +2437,8 @@ void Desktop::OpenClients()
             }
         }
     }
+
+    OfficeIPCThread::EnableRequests();
 
     sal_Bool bShutdown( sal_False );
     if ( !pArgs->IsServer() )

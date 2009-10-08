@@ -57,7 +57,7 @@ class SalMainPipeExchangeSignalHandler : public vos::OSignalHandler
 struct ProcessDocumentsRequest
 {
     ProcessDocumentsRequest(boost::optional< rtl::OUString > const & cwdUrl):
-        aCwdUrl(cwdUrl) {}
+        aCwdUrl(cwdUrl), pcProcessed( NULL ) {}
 
     boost::optional< ::rtl::OUString > aCwdUrl;
     ::rtl::OUString aModule;
@@ -82,7 +82,8 @@ class OfficeIPCThread : public vos::OThread
     vos::OPipe                  maPipe;
     vos::OStreamPipe            maStreamPipe;
     rtl::OUString               maPipeIdent;
-    sal_Bool                    mbBlockRequests;
+    bool                        mbDowning;
+    bool                        mbRequestsEnabled;
     int                         mnPendingRequests;
     DispatchWatcher*            mpDispatchWatcher;
 
@@ -119,7 +120,8 @@ class OfficeIPCThread : public vos::OThread
     virtual ~OfficeIPCThread();
 
     // controlling pipe communication during shutdown
-    static void                 BlockAllRequests();
+    static void                 SetDowning();
+    static void                 EnableRequests( bool i_bEnable = true );
     static sal_Bool             AreRequestsPending();
     static void                 RequestsCompleted( int n = 1 );
     static sal_Bool             ExecuteCmdLineRequests( ProcessDocumentsRequest& );
@@ -129,6 +131,8 @@ class OfficeIPCThread : public vos::OThread
     static void                 DisableOfficeIPCThread();
     // start dispatching events...
     static void                 SetReady(OfficeIPCThread* pThread = NULL);
+
+    bool                        AreRequestsEnabled() const { return mbRequestsEnabled && ! mbDowning; }
 };
 
 

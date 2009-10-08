@@ -503,7 +503,7 @@ void TransformParameters( sal_uInt16 nSlotId, const ::com::sun::star::uno::Seque
                 {
                     Reference< ::com::sun::star::task::XStatusIndicator > xVal;
                     sal_Bool bOK = ((rProp.Value >>= xVal) && xVal.is());
-                    DBG_ASSERT( bOK, "invalid type for StatusIndicator" )
+                    DBG_ASSERT( bOK, "invalid type for StatusIndicator" );
                     if (bOK)
                         rSet.Put( SfxUnoAnyItem( SID_PROGRESS_STATUSBAR_CONTROL, rProp.Value ) );
                 }
@@ -511,7 +511,7 @@ void TransformParameters( sal_uInt16 nSlotId, const ::com::sun::star::uno::Seque
                 {
                     Reference< ::com::sun::star::task::XInteractionHandler > xVal;
                     sal_Bool bOK = ((rProp.Value >>= xVal) && xVal.is());
-                    DBG_ASSERT( bOK, "invalid type for InteractionHandler" )
+                    DBG_ASSERT( bOK, "invalid type for InteractionHandler" );
                     if (bOK)
                         rSet.Put( SfxUnoAnyItem( SID_INTERACTIONHANDLER, rProp.Value ) );
                 }
@@ -523,7 +523,7 @@ void TransformParameters( sal_uInt16 nSlotId, const ::com::sun::star::uno::Seque
                 {
                     Reference< XInputStream > xVal;
                     sal_Bool bOK = ((rProp.Value >>= xVal) && xVal.is());
-                    DBG_ASSERT( bOK, "invalid type for InputStream" )
+                    DBG_ASSERT( bOK, "invalid type for InputStream" );
                     if (bOK)
                         rSet.Put( SfxUnoAnyItem( SID_INPUTSTREAM, rProp.Value ) );
                 }
@@ -531,7 +531,7 @@ void TransformParameters( sal_uInt16 nSlotId, const ::com::sun::star::uno::Seque
                 {
                     Reference< XInputStream > xVal;
                     sal_Bool bOK = ((rProp.Value >>= xVal) && xVal.is());
-                    DBG_ASSERT( bOK, "invalid type for Stream" )
+                    DBG_ASSERT( bOK, "invalid type for Stream" );
                     if (bOK)
                         rSet.Put( SfxUnoAnyItem( SID_STREAM, rProp.Value ) );
                 }
@@ -539,7 +539,7 @@ void TransformParameters( sal_uInt16 nSlotId, const ::com::sun::star::uno::Seque
                 {
                     Reference< XContent > xVal;
                     sal_Bool bOK = ((rProp.Value >>= xVal) && xVal.is());
-                    DBG_ASSERT( bOK, "invalid type for UCBContent" )
+                    DBG_ASSERT( bOK, "invalid type for UCBContent" );
                     if (bOK)
                         rSet.Put( SfxUnoAnyItem( SID_CONTENT, rProp.Value ) );
                 }
@@ -547,7 +547,7 @@ void TransformParameters( sal_uInt16 nSlotId, const ::com::sun::star::uno::Seque
                 {
                     Reference< XOutputStream > xVal;
                     sal_Bool bOK = ((rProp.Value >>= xVal) && xVal.is());
-                    DBG_ASSERT( bOK, "invalid type for OutputStream" )
+                    DBG_ASSERT( bOK, "invalid type for OutputStream" );
                     if (bOK)
                         rSet.Put( SfxUnoAnyItem( SID_OUTPUTSTREAM, rProp.Value ) );
                 }
@@ -555,7 +555,7 @@ void TransformParameters( sal_uInt16 nSlotId, const ::com::sun::star::uno::Seque
                 {
                     Reference< XInputStream > xVal;
                     sal_Bool bOK = (rProp.Value >>= xVal);
-                    DBG_ASSERT( bOK, "invalid type for PostData" )
+                    DBG_ASSERT( bOK, "invalid type for PostData" );
                     if (bOK)
                         rSet.Put( SfxUnoAnyItem( SID_POSTDATA, rProp.Value ) );
                 }
@@ -563,7 +563,7 @@ void TransformParameters( sal_uInt16 nSlotId, const ::com::sun::star::uno::Seque
                 {
                     Reference< XFrame > xVal;
                     sal_Bool bOK = (rProp.Value >>= xVal);
-                    DBG_ASSERT( bOK, "invalid type for Frame" )
+                    DBG_ASSERT( bOK, "invalid type for Frame" );
                     if (bOK)
                         rSet.Put( SfxUnoAnyItem( SID_FILLFRAME, rProp.Value ) );
                 }
@@ -571,7 +571,7 @@ void TransformParameters( sal_uInt16 nSlotId, const ::com::sun::star::uno::Seque
                 {
                     sal_Bool bVal = sal_False;
                     sal_Bool bOK = (rProp.Value >>= bVal);
-                    DBG_ASSERT( bOK, "invalid type for AsTemplate" )
+                    DBG_ASSERT( bOK, "invalid type for AsTemplate" );
                     if (bOK)
                         rSet.Put( SfxBoolItem( SID_TEMPLATE, bVal ) );
                 }
@@ -579,7 +579,7 @@ void TransformParameters( sal_uInt16 nSlotId, const ::com::sun::star::uno::Seque
                 {
                     sal_Bool bVal = sal_False;
                     sal_Bool bOK = (rProp.Value >>= bVal);
-                    DBG_ASSERT( bOK, "invalid type for OpenNewView" )
+                    DBG_ASSERT( bOK, "invalid type for OpenNewView" );
                     if (bOK)
                         rSet.Put( SfxBoolItem( SID_OPEN_NEW_VIEW, bVal ) );
                 }
@@ -587,7 +587,7 @@ void TransformParameters( sal_uInt16 nSlotId, const ::com::sun::star::uno::Seque
                 {
                     sal_Int16 nVal = -1;
                     sal_Bool bOK = ((rProp.Value >>= nVal) && (nVal != -1));
-                    DBG_ASSERT( bOK, "invalid type for ViewId" )
+                    DBG_ASSERT( bOK, "invalid type for ViewId" );
                     if (bOK)
                         rSet.Put( SfxUInt16Item( SID_VIEW_ID, nVal ) );
                 }
@@ -595,7 +595,7 @@ void TransformParameters( sal_uInt16 nSlotId, const ::com::sun::star::uno::Seque
                 {
                     sal_Int16 nVal = -1;
                     sal_Bool bOK = ((rProp.Value >>= nVal) && (nVal != -1));
-                    DBG_ASSERT( bOK, "invalid type for PluginMode" )
+                    DBG_ASSERT( bOK, "invalid type for PluginMode" );
                     if (bOK)
                         rSet.Put( SfxUInt16Item( SID_PLUGIN_MODE, nVal ) );
                 }
@@ -603,7 +603,7 @@ void TransformParameters( sal_uInt16 nSlotId, const ::com::sun::star::uno::Seque
                 {
                     sal_Bool bVal = sal_False;
                     sal_Bool bOK = (rProp.Value >>= bVal);
-                    DBG_ASSERT( bOK, "invalid type for ReadOnly" )
+                    DBG_ASSERT( bOK, "invalid type for ReadOnly" );
                     if (bOK)
                         rSet.Put( SfxBoolItem( SID_DOC_READONLY, bVal ) );
                 }
@@ -611,7 +611,7 @@ void TransformParameters( sal_uInt16 nSlotId, const ::com::sun::star::uno::Seque
                 {
                     sal_Bool bVal = sal_False;
                     sal_Bool bOK = (rProp.Value >>= bVal);
-                    DBG_ASSERT( bOK, "invalid type for StartPresentation" )
+                    DBG_ASSERT( bOK, "invalid type for StartPresentation" );
                     if (bOK)
                         rSet.Put( SfxBoolItem( SID_DOC_STARTPRESENTATION, bVal ) );
                 }
@@ -619,7 +619,7 @@ void TransformParameters( sal_uInt16 nSlotId, const ::com::sun::star::uno::Seque
                 {
                     sal_Bool bVal = sal_False;
                     sal_Bool bOK = (rProp.Value >>= bVal);
-                    DBG_ASSERT( bOK, "invalid type for SelectionOnly" )
+                    DBG_ASSERT( bOK, "invalid type for SelectionOnly" );
                     if (bOK)
                         rSet.Put( SfxBoolItem( SID_SELECTION, bVal ) );
                 }
@@ -627,7 +627,7 @@ void TransformParameters( sal_uInt16 nSlotId, const ::com::sun::star::uno::Seque
                 {
                     sal_Bool bVal = sal_False;
                     sal_Bool bOK = (rProp.Value >>= bVal);
-                    DBG_ASSERT( bOK, "invalid type for Hidden" )
+                    DBG_ASSERT( bOK, "invalid type for Hidden" );
                     if (bOK)
                         rSet.Put( SfxBoolItem( SID_HIDDEN, bVal ) );
                 }
@@ -635,7 +635,7 @@ void TransformParameters( sal_uInt16 nSlotId, const ::com::sun::star::uno::Seque
                 {
                     sal_Bool bVal = sal_False;
                     sal_Bool bOK = (rProp.Value >>= bVal);
-                    DBG_ASSERT( bOK, "invalid type for Minimized" )
+                    DBG_ASSERT( bOK, "invalid type for Minimized" );
                     if (bOK)
                         rSet.Put( SfxBoolItem( SID_MINIMIZED, bVal ) );
                 }
@@ -643,7 +643,7 @@ void TransformParameters( sal_uInt16 nSlotId, const ::com::sun::star::uno::Seque
                 {
                     sal_Bool bVal = sal_False;
                     sal_Bool bOK = (rProp.Value >>= bVal);
-                    DBG_ASSERT( bOK, "invalid type for Silent" )
+                    DBG_ASSERT( bOK, "invalid type for Silent" );
                     if (bOK)
                         rSet.Put( SfxBoolItem( SID_SILENT, bVal ) );
                 }
@@ -651,7 +651,7 @@ void TransformParameters( sal_uInt16 nSlotId, const ::com::sun::star::uno::Seque
                 {
                     sal_Bool bVal = sal_False;
                     sal_Bool bOK = (rProp.Value >>= bVal);
-                    DBG_ASSERT( bOK, "invalid type for Preview" )
+                    DBG_ASSERT( bOK, "invalid type for Preview" );
                     if (bOK)
                         rSet.Put( SfxBoolItem( SID_PREVIEW, bVal ) );
                 }
@@ -659,7 +659,7 @@ void TransformParameters( sal_uInt16 nSlotId, const ::com::sun::star::uno::Seque
                 {
                     sal_Bool bVal = sal_False;
                     sal_Bool bOK = (rProp.Value >>= bVal);
-                    DBG_ASSERT( bOK, "invalid type for ViewOnly" )
+                    DBG_ASSERT( bOK, "invalid type for ViewOnly" );
                     if (bOK)
                         rSet.Put( SfxBoolItem( SID_VIEWONLY, bVal ) );
                 }
@@ -667,7 +667,7 @@ void TransformParameters( sal_uInt16 nSlotId, const ::com::sun::star::uno::Seque
                 {
                     sal_Bool bVal = sal_False;
                     sal_Bool bOK = (rProp.Value >>= bVal);
-                    DBG_ASSERT( bOK, "invalid type for ViewOnly" )
+                    DBG_ASSERT( bOK, "invalid type for ViewOnly" );
                     if (bOK)
                         rSet.Put( SfxBoolItem( SID_EDITDOC, !bVal ) );
                 }
@@ -675,7 +675,7 @@ void TransformParameters( sal_uInt16 nSlotId, const ::com::sun::star::uno::Seque
                 {
                     sal_Bool bVal = sal_False;
                     sal_Bool bOK = (rProp.Value >>= bVal);
-                    DBG_ASSERT( bOK, "invalid type for ViewOnly" )
+                    DBG_ASSERT( bOK, "invalid type for ViewOnly" );
                     if (bOK)
                         rSet.Put( SfxBoolItem( SID_FILE_DIALOG, bVal ) );
                 }
@@ -683,7 +683,7 @@ void TransformParameters( sal_uInt16 nSlotId, const ::com::sun::star::uno::Seque
                 {
                     ::rtl::OUString sVal;
                     sal_Bool bOK = ((rProp.Value >>= sVal) && sVal.getLength());
-                    DBG_ASSERT( bOK, "invalid type or value for FileName" )
+                    DBG_ASSERT( bOK, "invalid type or value for FileName" );
                     if (bOK)
                         rSet.Put( SfxStringItem( SID_STANDARD_DIR, sVal ) );
                 }
@@ -691,7 +691,7 @@ void TransformParameters( sal_uInt16 nSlotId, const ::com::sun::star::uno::Seque
                 {
                     ::rtl::OUString sVal;
                     sal_Bool bOK = ((rProp.Value >>= sVal) && sVal.getLength());
-                    DBG_ASSERT( bOK, "invalid type or value for FileName" )
+                    DBG_ASSERT( bOK, "invalid type or value for FileName" );
                     if (bOK)
                         rSet.Put( SfxStringItem( SID_FILE_NAME, sVal ) );
                 }
@@ -699,7 +699,7 @@ void TransformParameters( sal_uInt16 nSlotId, const ::com::sun::star::uno::Seque
                 {
                     ::rtl::OUString sVal;
                     sal_Bool bOK = (rProp.Value >>= sVal);
-                    DBG_ASSERT( bOK, "invalid type or value for SalvageURL" )
+                    DBG_ASSERT( bOK, "invalid type or value for SalvageURL" );
                     if (bOK)
                         rSet.Put( SfxStringItem( SID_DOC_SALVAGE, sVal ) );
                 }
@@ -707,7 +707,7 @@ void TransformParameters( sal_uInt16 nSlotId, const ::com::sun::star::uno::Seque
                 {
                     ::rtl::OUString sVal;
                     sal_Bool bOK = (rProp.Value >>= sVal);
-                    DBG_ASSERT( bOK, "invalid type or value for SalvageURL" )
+                    DBG_ASSERT( bOK, "invalid type or value for SalvageURL" );
                     if (bOK)
                         rSet.Put( SfxStringItem( SID_PATH, sVal ) );
                 }
@@ -715,7 +715,7 @@ void TransformParameters( sal_uInt16 nSlotId, const ::com::sun::star::uno::Seque
                 {
                     ::rtl::OUString sVal;
                     sal_Bool bOK = (rProp.Value >>= sVal);
-                    DBG_ASSERT( bOK, "invalid type for FrameName" )
+                    DBG_ASSERT( bOK, "invalid type for FrameName" );
                     if (bOK && sVal.getLength())
                         rSet.Put( SfxStringItem( SID_TARGETNAME, sVal ) );
                 }
@@ -723,7 +723,7 @@ void TransformParameters( sal_uInt16 nSlotId, const ::com::sun::star::uno::Seque
                 {
                     ::rtl::OUString sVal;
                     sal_Bool bOK = ((rProp.Value >>= sVal) && sVal.getLength());
-                    DBG_ASSERT( bOK, "invalid type or value for MediaType" )
+                    DBG_ASSERT( bOK, "invalid type or value for MediaType" );
                     if (bOK)
                         rSet.Put( SfxStringItem( SID_CONTENTTYPE, sVal ) );
                 }
@@ -731,7 +731,7 @@ void TransformParameters( sal_uInt16 nSlotId, const ::com::sun::star::uno::Seque
                 {
                     ::rtl::OUString sVal;
                     sal_Bool bOK = ((rProp.Value >>= sVal) && sVal.getLength());
-                    DBG_ASSERT( bOK, "invalid type or value for WindowState" )
+                    DBG_ASSERT( bOK, "invalid type or value for WindowState" );
                     if (bOK)
                         rSet.Put( SfxStringItem( SID_WIN_POSSIZE, sVal ) );
                 }
@@ -739,7 +739,7 @@ void TransformParameters( sal_uInt16 nSlotId, const ::com::sun::star::uno::Seque
                 {
                     ::rtl::OUString sVal;
                     sal_Bool bOK = ((rProp.Value >>= sVal) && sVal.getLength());
-                    DBG_ASSERT( bOK, "invalid type or value for TemplateName" )
+                    DBG_ASSERT( bOK, "invalid type or value for TemplateName" );
                     if (bOK)
                         rSet.Put( SfxStringItem( SID_TEMPLATE_NAME, sVal ) );
                 }
@@ -747,7 +747,7 @@ void TransformParameters( sal_uInt16 nSlotId, const ::com::sun::star::uno::Seque
                 {
                     ::rtl::OUString sVal;
                     sal_Bool bOK = ((rProp.Value >>= sVal) && sVal.getLength());
-                    DBG_ASSERT( bOK, "invalid type or value for TemplateRegionName" )
+                    DBG_ASSERT( bOK, "invalid type or value for TemplateRegionName" );
                     if (bOK)
                         rSet.Put( SfxStringItem( SID_TEMPLATE_REGIONNAME, sVal ) );
                 }
@@ -755,7 +755,7 @@ void TransformParameters( sal_uInt16 nSlotId, const ::com::sun::star::uno::Seque
                 {
                     ::rtl::OUString sVal;
                     sal_Bool bOK = ((rProp.Value >>= sVal) && sVal.getLength());
-                    DBG_ASSERT( bOK, "invalid type or value for JumpMark" )
+                    DBG_ASSERT( bOK, "invalid type or value for JumpMark" );
                     if (bOK)
                         rSet.Put( SfxStringItem( SID_JUMPMARK, sVal ) );
                 }
@@ -763,7 +763,7 @@ void TransformParameters( sal_uInt16 nSlotId, const ::com::sun::star::uno::Seque
                 {
                     ::rtl::OUString sVal;
                     sal_Bool bOK = ((rProp.Value >>= sVal) && sVal.getLength());
-                    DBG_ASSERT( bOK, "invalid type or value for CharacterSet" )
+                    DBG_ASSERT( bOK, "invalid type or value for CharacterSet" );
                     if (bOK)
                         rSet.Put( SfxStringItem( SID_CHARSET, sVal ) );
                 }
@@ -771,7 +771,7 @@ void TransformParameters( sal_uInt16 nSlotId, const ::com::sun::star::uno::Seque
                 {
                     ::rtl::OUString sVal;
                     sal_Bool bOK = ((rProp.Value >>= sVal) && sVal.getLength());
-                    DBG_ASSERT( bOK, "invalid type or value for FilterFlags" )
+                    DBG_ASSERT( bOK, "invalid type or value for FilterFlags" );
                     if (bOK)
                         rSet.Put( SfxStringItem( SID_FILE_FILTEROPTIONS, sVal ) );
                 }
@@ -779,7 +779,7 @@ void TransformParameters( sal_uInt16 nSlotId, const ::com::sun::star::uno::Seque
                 {
                     sal_Int16 nVal =-1;
                     sal_Bool bOK = ((rProp.Value >>= nVal) && (nVal != -1));
-                    DBG_ASSERT( bOK, "invalid type for MacroExecMode" )
+                    DBG_ASSERT( bOK, "invalid type for MacroExecMode" );
                     if (bOK)
                         rSet.Put( SfxUInt16Item( SID_MACROEXECMODE, nVal ) );
                 }
@@ -787,7 +787,7 @@ void TransformParameters( sal_uInt16 nSlotId, const ::com::sun::star::uno::Seque
                 {
                     sal_Int16 nVal =-1;
                     sal_Bool bOK = ((rProp.Value >>= nVal) && (nVal != -1));
-                    DBG_ASSERT( bOK, "invalid type for UpdateDocMode" )
+                    DBG_ASSERT( bOK, "invalid type for UpdateDocMode" );
                     if (bOK)
                         rSet.Put( SfxUInt16Item( SID_UPDATEDOCMODE, nVal ) );
                 }
@@ -795,7 +795,7 @@ void TransformParameters( sal_uInt16 nSlotId, const ::com::sun::star::uno::Seque
                 {
                     sal_Bool bVal = sal_False;
                     sal_Bool bOK = (rProp.Value >>= bVal);
-                    DBG_ASSERT( bOK, "invalid type for RepairPackage" )
+                    DBG_ASSERT( bOK, "invalid type for RepairPackage" );
                     if (bOK)
                         rSet.Put( SfxBoolItem( SID_REPAIRPACKAGE, bVal ) );
                 }
@@ -803,7 +803,7 @@ void TransformParameters( sal_uInt16 nSlotId, const ::com::sun::star::uno::Seque
                 {
                     ::rtl::OUString sVal;
                     sal_Bool bOK = ((rProp.Value >>= sVal) && sVal.getLength());
-                    DBG_ASSERT( bOK, "invalid type or value for DocumentTitle" )
+                    DBG_ASSERT( bOK, "invalid type or value for DocumentTitle" );
                     if (bOK)
                         rSet.Put( SfxStringItem( SID_DOCINFO_TITLE, sVal ) );
                 }
@@ -812,7 +812,7 @@ void TransformParameters( sal_uInt16 nSlotId, const ::com::sun::star::uno::Seque
                     ::rtl::OUString sVal;
                     // the base url can be set to empty ( for embedded objects for example )
                     sal_Bool bOK = (rProp.Value >>= sVal);
-                    DBG_ASSERT( bOK, "invalid type or value for DocumentBaseURL" )
+                    DBG_ASSERT( bOK, "invalid type or value for DocumentBaseURL" );
                     if (bOK)
                         rSet.Put( SfxStringItem( SID_DOC_BASEURL, sVal ) );
                 }
@@ -820,7 +820,7 @@ void TransformParameters( sal_uInt16 nSlotId, const ::com::sun::star::uno::Seque
                 {
                     ::rtl::OUString sVal;
                     sal_Bool bOK = ((rProp.Value >>= sVal) && sVal.getLength());
-                    DBG_ASSERT( bOK, "invalid type or value for HierarchicalDocumentName" )
+                    DBG_ASSERT( bOK, "invalid type or value for HierarchicalDocumentName" );
                     if (bOK)
                         rSet.Put( SfxStringItem( SID_DOC_HIERARCHICALNAME, sVal ) );
                 }
@@ -828,7 +828,7 @@ void TransformParameters( sal_uInt16 nSlotId, const ::com::sun::star::uno::Seque
                 {
                     sal_Bool bVal = sal_False;
                     sal_Bool bOK = (rProp.Value >>= bVal);
-                    DBG_ASSERT( bOK, "invalid type for CopyStreamIfPossible" )
+                    DBG_ASSERT( bOK, "invalid type for CopyStreamIfPossible" );
                     if (bOK)
                         rSet.Put( SfxBoolItem( SID_COPY_STREAM_IF_POSSIBLE, bVal ) );
                 }
@@ -836,7 +836,7 @@ void TransformParameters( sal_uInt16 nSlotId, const ::com::sun::star::uno::Seque
                 {
                     sal_Bool bVal = sal_False;
                     sal_Bool bOK = (rProp.Value >>= bVal);
-                    DBG_ASSERT( bOK, "invalid type for NoAutoSave" )
+                    DBG_ASSERT( bOK, "invalid type for NoAutoSave" );
                     if (bOK)
                         rSet.Put( SfxBoolItem( SID_NOAUTOSAVE, bVal ) );
                 }

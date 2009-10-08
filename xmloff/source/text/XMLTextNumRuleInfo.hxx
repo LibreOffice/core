@@ -7,11 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: XMLTextNumRuleInfo.hxx,v $
-<<<<<<< XMLTextNumRuleInfo.hxx
  * $Revision: 1.10.64.1 $
-=======
- * $Revision: 1.10.64.1 $
->>>>>>> 1.6.266.4
  *
  * This file is part of OpenOffice.org.
  *
@@ -61,6 +57,10 @@ class XMLTextNumRuleInfo
     const ::rtl::OUString msNumberingIsOutline;
     const ::rtl::OUString msPropNameListId;
     const ::rtl::OUString msPropNameStartWith;
+    // --> OD 2008-11-26 #158694#
+    const ::rtl::OUString msContinueingPreviousSubTree;
+    const ::rtl::OUString msListLabelStringProp;
+    // <--
 
     // numbering rules instance and its name
     ::com::sun::star::uno::Reference <
@@ -83,17 +83,22 @@ class XMLTextNumRuleInfo
     sal_Bool mbOutlineStyleAsNormalListStyle;
     // <--
 
+    // --> OD 2008-11-26 #158694#
+    sal_Bool mbContinueingPreviousSubTree;
+    ::rtl::OUString msListLabelString;
+    // <--
 public:
 
     XMLTextNumRuleInfo();
 
     inline XMLTextNumRuleInfo& operator=( const XMLTextNumRuleInfo& rInfo );
 
-    // --> OD 2006-09-27 #i69627#
+    // --> OD 2008-11-26 #158694#
     void Set( const ::com::sun::star::uno::Reference <
                         ::com::sun::star::text::XTextContent > & rTextContnt,
               const sal_Bool bOutlineStyleAsNormalListStyle,
-              const XMLTextListAutoStylePool& rListAutoPool );
+              const XMLTextListAutoStylePool& rListAutoPool,
+              const sal_Bool bExportTextNumberElement );
     // <--
     inline void Reset();
 
@@ -145,6 +150,17 @@ public:
     {
         return rCmp.msNumRulesName == msNumRulesName;
     }
+
+    // --> OD 2008-11-26 #158694#
+    inline sal_Bool IsContinueingPreviousSubTree() const
+    {
+        return mbContinueingPreviousSubTree;
+    }
+    inline const ::rtl::OUString& ListLabelString() const
+    {
+        return msListLabelString;
+    }
+    // <--
 };
 
 inline XMLTextNumRuleInfo& XMLTextNumRuleInfo::operator=(
@@ -160,6 +176,10 @@ inline XMLTextNumRuleInfo& XMLTextNumRuleInfo::operator=(
     // --> OD 2006-09-27 #i69627#
     mbOutlineStyleAsNormalListStyle = rInfo.mbOutlineStyleAsNormalListStyle;
     // <--
+    // --> OD 2008-11-26 #158694#
+    mbContinueingPreviousSubTree = rInfo.mbContinueingPreviousSubTree;
+    msListLabelString = rInfo.msListLabelString;
+    // <--
 
     return *this;
 }
@@ -174,6 +194,10 @@ inline void XMLTextNumRuleInfo::Reset()
     // --> OD 2006-09-27 #i69627#
     mbIsNumbered = mbIsRestart =
     mbOutlineStyleAsNormalListStyle = sal_False;
+    // <--
+    // --> OD 2008-11-26 #158694#
+    mbContinueingPreviousSubTree = sal_False;
+    msListLabelString = ::rtl::OUString();
     // <--
 }
 #endif  //  _XMLOFF_XMLTEXTNUMRULEINFO_HXX

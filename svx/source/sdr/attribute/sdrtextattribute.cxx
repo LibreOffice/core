@@ -29,6 +29,7 @@
  *
  ************************************************************************/
 
+#include "precompiled_svx.hxx"
 #include <svx/sdr/attribute/sdrtextattribute.hxx>
 #include <svx/svdotext.hxx>
 #include <svx/outlobj.hxx>

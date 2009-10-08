@@ -35,20 +35,21 @@
 
 #define _SVSTDARR_STRINGSDTOR
 #define _SVSTDARR_USHORTS
-#ifndef _SVSTDARR_HXX
-#include <svtools/svstdarr.hxx>
-#endif
+//#ifndef _SVSTDARR_HXX
+//#include <svtools/svstdarr.hxx>
+//#endif
 #include <vcl/msgbox.hxx>
 #include <vcl/field.hxx>
 #include <vcl/fixed.hxx>
 #include <tools/shl.hxx>
 #include <tools/dynary.hxx>
 #include <i18npool/mslangid.hxx>
-#include <svtools/svarray.hxx>
+//#include <svtools/svarray.hxx>
 #include <svtools/lingucfg.hxx>
 #include <unolingu.hxx>
 #include <dlgutil.hxx>
 #include <linguistic/lngprops.hxx>
+#include <linguistic/misc.hxx>
 #include <unolingu.hxx>
 #include <sfx2/sfxuno.hxx>
 #include <sfx2/dispatch.hxx>
@@ -56,6 +57,7 @@
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <comphelper/processfactory.hxx>
 #include <com/sun/star/linguistic2/XSpellChecker.hpp>
+#include <com/sun/star/linguistic2/XProofreader.hpp>
 #include <com/sun/star/linguistic2/XHyphenator.hpp>
 #include <com/sun/star/linguistic2/XThesaurus.hpp>
 #include <com/sun/star/linguistic2/XAvailableLocales.hpp>
@@ -105,9 +107,10 @@ namespace css = com::sun::star;
 #define CBCOL_SECOND    1
 #define CBCOL_BOTH      2
 
-static const sal_Char cSpell[] = "com.sun.star.linguistic2.SpellChecker";
-static const sal_Char cHyph[] = "com.sun.star.linguistic2.Hyphenator";
-static const sal_Char cThes[] = "com.sun.star.linguistic2.Thesaurus";
+static const sal_Char cSpell[]   = SN_SPELLCHECKER;
+static const sal_Char cGrammar[] = SN_GRAMMARCHECKER;
+static const sal_Char cHyph[]    = SN_HYPHENATOR;
+static const sal_Char cThes[]    = SN_THESAURUS;
 
 // static ----------------------------------------------------------------
 
@@ -214,13 +217,14 @@ sal_Bool KillFile_Impl( const String& rURL )
  ---------------------------------------------------------------------------*/
 // 0x 0p 0t 0c nn
 // p: 1 -> parent
-// t: 1 -> spell, 2 -> hyph, 3 -> thes
+// t: 1 -> spell, 2 -> hyph, 3 -> thes, 4 -> grammar
 // c: 1 -> checked 0 -> unchecked
 // n: index
 
-#define TYPE_SPELL  (BYTE)1
-#define TYPE_HYPH   (BYTE)2
-#define TYPE_THES   (BYTE)3
+#define TYPE_SPELL      (BYTE)1
+#define TYPE_GRAMMAR    (BYTE)2
+#define TYPE_HYPH       (BYTE)3
+#define TYPE_THES       (BYTE)4
 
 class ModuleUserData_Impl
 {
@@ -297,7 +301,7 @@ void lcl_SetCheckButton( SvLBoxEntry* pEntry, BOOL bCheck )
 {
     SvLBoxButton* pItem = (SvLBoxButton*)(pEntry->GetFirstItem(SV_ITEM_ID_LBOXBUTTON));
 
-    DBG_ASSERT(pItem,"SetCheckButton:Item not found")
+    DBG_ASSERT(pItem,"SetCheckButton:Item not found");
     if (((SvLBoxItem*)pItem)->IsA() == SV_ITEM_ID_LBOXBUTTON)
     {
         if (bCheck)
@@ -378,13 +382,11 @@ public:
 enum EID_OPTIONS
 {
     EID_SPELL_AUTO,
+    EID_GRAMMAR_AUTO,
     EID_CAPITAL_WORDS,
     EID_WORDS_WITH_DIGITS,
     EID_CAPITALIZATION,
     EID_SPELL_SPECIAL,
-    EID_ALL_LANGUAGES,
-    EID_HIDE_MARKINGS,
-    EID_OLD_GERMAN,
     EID_NUM_MIN_WORDLEN,
     EID_NUM_PRE_BREAK,
     EID_NUM_POST_BREAK,
@@ -396,19 +398,17 @@ enum EID_OPTIONS
 //  It is used to get the respective property name.
 static const char * aEidToPropName[] =
 {
-    "IsSpellAuto",              // EID_SPELL_AUTO
-    "IsSpellUpperCase",         // EID_CAPITAL_WORDS
-    "IsSpellWithDigits",        // EID_WORDS_WITH_DIGITS
-    "IsSpellCapitalization",    // EID_CAPITALIZATION
-    "IsSpellSpecial",           // EID_SPELL_SPECIAL
-    "IsSpellInAllLanguages",    // EID_ALL_LANGUAGES
-    "IsSpellHide",              // EID_HIDE_MARKINGS
-    "IsGermanPreReform",        // EID_OLD_GERMAN
-    "HyphMinWordLength",        // EID_NUM_MIN_WORDLEN,
-    "HyphMinLeading",           // EID_NUM_PRE_BREAK
-    "HyphMinTrailing",          // EID_NUM_POST_BREAK
-    "IsHyphAuto",               // EID_HYPH_AUTO
-    "IsHyphSpecial"             // EID_HYPH_SPECIAL
+    UPN_IS_SPELL_AUTO,              // EID_SPELL_AUTO
+    UPN_IS_GRAMMAR_AUTO,            // EID_GRAMMAR_AUTO
+    UPN_IS_SPELL_UPPER_CASE,        // EID_CAPITAL_WORDS
+    UPN_IS_SPELL_WITH_DIGITS,       // EID_WORDS_WITH_DIGITS
+    UPN_IS_SPELL_CAPITALIZATION,    // EID_CAPITALIZATION
+    UPN_IS_SPELL_SPECIAL,           // EID_SPELL_SPECIAL
+    UPN_HYPH_MIN_WORD_LENGTH,       // EID_NUM_MIN_WORDLEN,
+    UPN_HYPH_MIN_LEADING,           // EID_NUM_PRE_BREAK
+    UPN_HYPH_MIN_TRAILING,          // EID_NUM_POST_BREAK
+    UPN_IS_HYPH_AUTO,               // EID_HYPH_AUTO
+    UPN_IS_HYPH_SPECIAL             // EID_HYPH_SPECIAL
 };
 
 
@@ -537,9 +537,11 @@ struct ServiceInfo_Impl
     OUString                    sSpellImplName;
     OUString                    sHyphImplName;
     OUString                    sThesImplName;
-    uno::Reference <XSpellChecker> xSpell;
-    uno::Reference <XHyphenator>   xHyph;
-    uno::Reference <XThesaurus>    xThes;
+    OUString                    sGrammarImplName;
+    uno::Reference< XSpellChecker >     xSpell;
+    uno::Reference< XHyphenator >       xHyph;
+    uno::Reference< XThesaurus >        xThes;
+    uno::Reference< XProofreader >      xGrammar;
     BOOL                        bConfigured;
 
     ServiceInfo_Impl() : bConfigured(sal_False) {}
@@ -561,6 +563,7 @@ class SvxLinguData_Impl
     LangImplNameTable                   aCfgSpellTable;
     LangImplNameTable                   aCfgHyphTable;
     LangImplNameTable                   aCfgThesTable;
+    LangImplNameTable                   aCfgGrammarTable;
     uno::Reference< XMultiServiceFactory >   xMSF;
     uno::Reference< XLinguServiceManager >   xLinguSrvcMgr;
 
@@ -588,6 +591,8 @@ public:
     LangImplNameTable &         GetHyphTable()          { return aCfgHyphTable; }
     const LangImplNameTable &   GetThesTable() const    { return aCfgThesTable; }
     LangImplNameTable &         GetThesTable()          { return aCfgThesTable; }
+    const LangImplNameTable &   GetGrammarTable() const { return aCfgGrammarTable; }
+    LangImplNameTable &         GetGrammarTable()       { return aCfgGrammarTable; }
 
     const ServiceInfoArr &      GetDisplayServiceArray() const  { return aDisplayServiceArr; }
     ServiceInfoArr &            GetDisplayServiceArray()        { return aDisplayServiceArr; }
@@ -627,9 +632,10 @@ Sequence< OUString > SvxLinguData_Impl::GetSortedImplNames( INT16 nLang, BYTE nT
     LangImplNameTable *pTable = 0;
     switch (nType)
     {
-        case TYPE_SPELL : pTable = &aCfgSpellTable; break;
-        case TYPE_HYPH  : pTable = &aCfgHyphTable; break;
-        case TYPE_THES  : pTable = &aCfgThesTable; break;
+        case TYPE_SPELL     : pTable = &aCfgSpellTable; break;
+        case TYPE_HYPH      : pTable = &aCfgHyphTable; break;
+        case TYPE_THES      : pTable = &aCfgThesTable; break;
+        case TYPE_GRAMMAR   : pTable = &aCfgGrammarTable; break;
     }
     Sequence< OUString > aRes;
     if (pTable->count( nLang ))
@@ -646,9 +652,10 @@ Sequence< OUString > SvxLinguData_Impl::GetSortedImplNames( INT16 nLang, BYTE nT
         OUString aImplName;
         switch (nType)
         {
-            case TYPE_SPELL : aImplName = rInfo.sSpellImplName; break;
-            case TYPE_HYPH  : aImplName = rInfo.sHyphImplName; break;
-            case TYPE_THES  : aImplName = rInfo.sThesImplName; break;
+            case TYPE_SPELL     : aImplName = rInfo.sSpellImplName; break;
+            case TYPE_HYPH      : aImplName = rInfo.sHyphImplName; break;
+            case TYPE_THES      : aImplName = rInfo.sThesImplName; break;
+            case TYPE_GRAMMAR   : aImplName = rInfo.sGrammarImplName; break;
         }
 
         if (aImplName.getLength()  &&  (lcl_SeqGetIndex( aRes, aImplName) == -1))    // name not yet added
@@ -674,7 +681,8 @@ ServiceInfo_Impl * SvxLinguData_Impl::GetInfoByImplName( const OUString &rSvcImp
         ServiceInfo_Impl &rTmp = aDisplayServiceArr[ i ];
         if (rTmp.sSpellImplName == rSvcImplName ||
             rTmp.sHyphImplName  == rSvcImplName ||
-            rTmp.sThesImplName  == rSvcImplName)
+            rTmp.sThesImplName  == rSvcImplName ||
+            rTmp.sGrammarImplName == rSvcImplName)
             pInfo = &rTmp;
     }
     return pInfo;
@@ -732,15 +740,23 @@ void lcl_MergeDisplayArray(
             {
                 DBG_ASSERT( !pEntry->xSpell.is() &&
                             pEntry->sSpellImplName.getLength() == 0,
-                            "merge conflict" )
+                            "merge conflict" );
                 pEntry->sSpellImplName = rToAdd.sSpellImplName;
                 pEntry->xSpell = rToAdd.xSpell;
+            }
+            if(rToAdd.xGrammar.is())
+            {
+                DBG_ASSERT( !pEntry->xGrammar.is() &&
+                            pEntry->sGrammarImplName.getLength() == 0,
+                            "merge conflict" );
+                pEntry->sGrammarImplName = rToAdd.sGrammarImplName;
+                pEntry->xGrammar = rToAdd.xGrammar;
             }
             if(rToAdd.xHyph.is())
             {
                 DBG_ASSERT( !pEntry->xHyph.is() &&
                             pEntry->sHyphImplName.getLength() == 0,
-                            "merge conflict" )
+                            "merge conflict" );
                 pEntry->sHyphImplName = rToAdd.sHyphImplName;
                 pEntry->xHyph = rToAdd.xHyph;
             }
@@ -748,7 +764,7 @@ void lcl_MergeDisplayArray(
             {
                 DBG_ASSERT( !pEntry->xThes.is() &&
                             pEntry->sThesImplName.getLength() == 0,
-                            "merge conflict" )
+                            "merge conflict" );
                 pEntry->sThesImplName = rToAdd.sThesImplName;
                 pEntry->xThes = rToAdd.xThes;
             }
@@ -769,7 +785,7 @@ SvxLinguData_Impl::SvxLinguData_Impl() :
     uno::Reference < XInterface > xI = xMSF->createInstance(
         C2U( "com.sun.star.linguistic2.LinguServiceManager" ) );
     xLinguSrvcMgr = uno::Reference<XLinguServiceManager>(xI, UNO_QUERY);
-    DBG_ASSERT(xLinguSrvcMgr.is(), "No linguistic service available!")
+    DBG_ASSERT(xLinguSrvcMgr.is(), "No linguistic service available!");
     if(xLinguSrvcMgr.is())
     {
         Locale aCurrentLocale;
@@ -796,6 +812,30 @@ SvxLinguData_Impl::SvxLinguData_Impl() :
                 aInfo.sDisplayName = xDispName->getServiceDisplayName( aCurrentLocale );
 
             const Sequence< Locale > aLocales( aInfo.xSpell->getLocales() );
+            //! suppress display of entries with no supported languages (see feature 110994)
+            if (aLocales.getLength())
+            {
+                lcl_MergeLocales( aAllServiceLocales, aLocales );
+                lcl_MergeDisplayArray( *this, aInfo );
+            }
+        }
+
+        //read grammar checker
+        Sequence< OUString > aGrammarNames = xLinguSrvcMgr->getAvailableServices(
+                        C2U(cGrammar), Locale() );
+        const OUString* pGrammarNames = aGrammarNames.getConstArray();
+        for(nIdx = 0; nIdx < aGrammarNames.getLength(); nIdx++)
+        {
+            ServiceInfo_Impl aInfo;
+            aInfo.sGrammarImplName = pGrammarNames[nIdx];
+            aInfo.xGrammar = uno::Reference<XProofreader>(
+                            xMSF->createInstanceWithArguments(aInfo.sGrammarImplName, aArgs), UNO_QUERY);
+
+            uno::Reference<XServiceDisplayName> xDispName(aInfo.xGrammar, UNO_QUERY);
+            if(xDispName.is())
+                aInfo.sDisplayName = xDispName->getServiceDisplayName( aCurrentLocale );
+
+            const Sequence< Locale > aLocales( aInfo.xGrammar->getLocales() );
             //! suppress display of entries with no supported languages (see feature 110994)
             if (aLocales.getLength())
             {
@@ -863,6 +903,11 @@ SvxLinguData_Impl::SvxLinguData_Impl() :
             if (aCfgSvcs.getLength())
                 aCfgSpellTable[ nLang ] = aCfgSvcs;
 
+            aCfgSvcs = xLinguSrvcMgr->getConfiguredServices(C2U(cGrammar), pAllLocales[nLocale]);
+            SetChecked( aCfgSvcs );
+            if (aCfgSvcs.getLength())
+                aCfgGrammarTable[ nLang ] = aCfgSvcs;
+
             aCfgSvcs = xLinguSrvcMgr->getConfiguredServices(C2U(cHyph), pAllLocales[nLocale]);
             SetChecked( aCfgSvcs );
             if (aCfgSvcs.getLength())
@@ -885,6 +930,7 @@ SvxLinguData_Impl::SvxLinguData_Impl( const SvxLinguData_Impl &rData ) :
     aCfgSpellTable      (rData.aCfgSpellTable),
     aCfgHyphTable       (rData.aCfgHyphTable),
     aCfgThesTable       (rData.aCfgThesTable),
+    aCfgGrammarTable    (rData.aCfgGrammarTable),
     xMSF                (rData.xMSF),
     xLinguSrvcMgr       (rData.xLinguSrvcMgr)
 {
@@ -900,6 +946,7 @@ SvxLinguData_Impl & SvxLinguData_Impl::operator = (const SvxLinguData_Impl &rDat
     aCfgSpellTable      = rData.aCfgSpellTable;
     aCfgHyphTable       = rData.aCfgHyphTable;
     aCfgThesTable       = rData.aCfgThesTable;
+    aCfgGrammarTable    = rData.aCfgGrammarTable;
     aDisplayServiceArr  = rData.aDisplayServiceArr;
     nDisplayServices    = rData.nDisplayServices;
     return *this;
@@ -927,6 +974,7 @@ void SvxLinguData_Impl::SetChecked(const Sequence<OUString>& rConfiguredServices
                 const OUString &rSrvcImplName = pConfiguredServices[n];
                 if (rSrvcImplName.getLength()  &&
                     (pEntry->sSpellImplName == rSrvcImplName  ||
+                        pEntry->sGrammarImplName  == rSrvcImplName  ||
                         pEntry->sHyphImplName  == rSrvcImplName  ||
                         pEntry->sThesImplName  == rSrvcImplName))
                 {
@@ -1011,6 +1059,22 @@ void SvxLinguData_Impl::Reconfigure( const OUString &rDisplayName, BOOL bEnable 
             }
         }
 
+        // update configured grammar checker entries
+        if (pInfo->xGrammar.is())
+        {
+            aLocales = pInfo->xGrammar->getLocales();
+            pLocale = aLocales.getConstArray();
+            nLocales = aLocales.getLength();
+            for (i = 0;  i < nLocales;  ++i)
+            {
+                INT16 nLang = SvxLocaleToLanguage( pLocale[i] );
+                if (!aCfgGrammarTable.count( nLang ) && bEnable)
+                    aCfgGrammarTable[ nLang ] = Sequence< OUString >();
+                if (aCfgGrammarTable.count( nLang ))
+                    AddRemove( aCfgGrammarTable[ nLang ], pInfo->sGrammarImplName, bEnable );
+            }
+        }
+
         // update configured hyphenator entries
         if (pInfo->xHyph.is())
         {
@@ -1074,10 +1138,8 @@ SvxLinguTabPage::SvxLinguTabPage( Window* pParent,
     sWordsWithDigits    ( SVX_RES( STR_WORDS_WITH_DIGITS ) ),
     sCapitalization     ( SVX_RES( STR_CAPITALIZATION ) ),
     sSpellSpecial       ( SVX_RES( STR_SPELL_SPECIAL ) ),
-    sAllLanguages       ( SVX_RES( STR_ALL_LANGUAGES ) ),
     sSpellAuto          ( SVX_RES( STR_SPELL_AUTO ) ),
-    sHideMarkings       ( SVX_RES( STR_HIDE_MARKINGS ) ),
-    sOldGerman          ( SVX_RES( STR_OLD_GERMAN ) ),
+    sGrammarAuto        ( SVX_RES( STR_GRAMMAR_AUTO ) ),
     sNumMinWordlen      ( SVX_RES( STR_NUM_MIN_WORDLEN ) ),
     sNumPreBreak        ( SVX_RES( STR_NUM_PRE_BREAK ) ),
     sNumPostBreak       ( SVX_RES( STR_NUM_POST_BREAK ) ),
@@ -1118,6 +1180,13 @@ SvxLinguTabPage::SvxLinguTabPage( Window* pParent,
         RTL_CONSTASCII_STRINGPARAM( "http://extensions.services.openoffice.org/dictionary?cid=926386" ) ) );
     aMoreDictsLink.SetClickHdl( LINK( this, SvxLinguTabPage, OpenURLHdl_Impl ) );
 
+
+    // force recalculation of hash value used for checking the need of updating
+    // because new dictionaries might be installed / downloaded.
+    //! Thus it needs to be called now since it may infuence the supported languages
+    //! to be reported AND the found user-dictionaries(!) as well.
+    SvxLinguConfigUpdate::UpdateAll( sal_True );
+
     xProp = uno::Reference< XPropertySet >( SvxGetLinguPropertySet(), UNO_QUERY );
     xDicList = uno::Reference< XDictionaryList >( SvxGetDictionaryList(), UNO_QUERY );
     if (xDicList.is())
@@ -1156,10 +1225,6 @@ SvxLinguTabPage::SvxLinguTabPage( Window* pParent,
         pItem = NULL;
 
     FreeResource();
-
-    // force recalculation of hash value used for checking the need of updating
-    // because new dictionaries might be installed / downloaded
-    SvxLinguConfigUpdate::UpdateAll( sal_True );
 }
 
 // -----------------------------------------------------------------------
@@ -1216,8 +1281,8 @@ sal_Bool SvxLinguTabPage::FillItemSet( SfxItemSet& rCoreSet )
         LangImplNameTable::const_iterator aIt;
 
         // update spellchecker configuration entries
-        const LangImplNameTable &rTable1 = pLinguData->GetSpellTable();
-        for (aIt = rTable1.begin();  aIt != rTable1.end();  ++aIt)
+        const LangImplNameTable *pTable = &pLinguData->GetSpellTable();
+        for (aIt = pTable->begin();  aIt != pTable->end();  ++aIt)
         {
             INT16 nLang = aIt->first;
             const Sequence< OUString > aImplNames( aIt->second );
@@ -1231,12 +1296,32 @@ sal_Bool SvxLinguTabPage::FillItemSet( SfxItemSet& rCoreSet )
                 xMgr->setConfiguredServices( C2U(cSpell), aLocale, aImplNames );
         }
 
-        // update hyphenator configuration entries
-        const LangImplNameTable &rTable2 = pLinguData->GetHyphTable();
-        for (aIt = rTable2.begin();  aIt != rTable2.end();  ++aIt)
+        // update grammar checker configuration entries
+        pTable = &pLinguData->GetGrammarTable();
+        for (aIt = pTable->begin();  aIt != pTable->end();  ++aIt)
         {
             INT16 nLang = aIt->first;
             const Sequence< OUString > aImplNames( aIt->second );
+#if OSL_DEBUG_LEVEL > 1
+            const OUString *pTmpStr;
+            pTmpStr = aImplNames.getConstArray();
+#endif
+            uno::Reference< XLinguServiceManager > xMgr( pLinguData->GetManager() );
+            Locale aLocale( SvxCreateLocale(nLang) );
+            if (xMgr.is())
+                xMgr->setConfiguredServices( C2U(cGrammar), aLocale, aImplNames );
+        }
+
+        // update hyphenator configuration entries
+        pTable = &pLinguData->GetHyphTable();
+        for (aIt = pTable->begin();  aIt != pTable->end();  ++aIt)
+        {
+            INT16 nLang = aIt->first;
+            const Sequence< OUString > aImplNames( aIt->second );
+#if OSL_DEBUG_LEVEL > 1
+            const OUString *pTmpStr;
+            pTmpStr = aImplNames.getConstArray();
+#endif
             uno::Reference< XLinguServiceManager > xMgr( pLinguData->GetManager() );
             Locale aLocale( SvxCreateLocale(nLang) );
             if (xMgr.is())
@@ -1244,11 +1329,15 @@ sal_Bool SvxLinguTabPage::FillItemSet( SfxItemSet& rCoreSet )
         }
 
         // update thesaurus configuration entries
-        const LangImplNameTable &rTable3 = pLinguData->GetThesTable();
-        for (aIt = rTable3.begin();  aIt != rTable3.end();  ++aIt)
+        pTable = &pLinguData->GetThesTable();
+        for (aIt = pTable->begin();  aIt != pTable->end();  ++aIt)
         {
             INT16 nLang = aIt->first;
             const Sequence< OUString > aImplNames( aIt->second );
+#if OSL_DEBUG_LEVEL > 1
+            const OUString *pTmpStr;
+            pTmpStr = aImplNames.getConstArray();
+#endif
             uno::Reference< XLinguServiceManager > xMgr( pLinguData->GetManager() );
             Locale aLocale( SvxCreateLocale(nLang) );
             if (xMgr.is())
@@ -1302,8 +1391,6 @@ sal_Bool SvxLinguTabPage::FillItemSet( SfxItemSet& rCoreSet )
     aLngCfg.SetProperty( UPH_ACTIVE_DICTIONARIES, aTmp );
 
 
-    BOOL bCheckAllLangChanged = FALSE;
-
     nEntries = aLinguOptionsCLB.GetEntryCount();
     for (USHORT j = 0;  j < nEntries;  ++j)
     {
@@ -1311,11 +1398,6 @@ sal_Bool SvxLinguTabPage::FillItemSet( SfxItemSet& rCoreSet )
 
         OptionsUserData aData( (ULONG)pEntry->GetUserData() );
         String aPropName( lcl_GetPropertyName( (EID_OPTIONS) aData.GetEntryId() ) );
-
-        if (EID_ALL_LANGUAGES == (EID_OPTIONS) aData.GetEntryId())
-        {
-            bCheckAllLangChanged = aData.IsChecked() != aLinguOptionsCLB.IsChecked( j );
-        }
 
         Any aAny;
         if (aData.IsCheckable())
@@ -1333,8 +1415,6 @@ sal_Bool SvxLinguTabPage::FillItemSet( SfxItemSet& rCoreSet )
             xProp->setPropertyValue( aPropName, aAny );
         aLngCfg.SetProperty( aPropName, aAny );
     }
-
-    rCoreSet.Put( SfxBoolItem( SID_SPELL_MODIFIED, bCheckAllLangChanged ) );
 
     SvLBoxEntry *pPreBreakEntry  = aLinguOptionsCLB.GetEntry( (USHORT) EID_NUM_PRE_BREAK );
     SvLBoxEntry *pPostBreakEntry = aLinguOptionsCLB.GetEntry( (USHORT) EID_NUM_POST_BREAK );
@@ -1354,23 +1434,13 @@ sal_Bool SvxLinguTabPage::FillItemSet( SfxItemSet& rCoreSet )
     }
 
 
-    // Autom. Rechtschreibung
+    // automatic spell checking
     BOOL bNewAutoCheck = aLinguOptionsCLB.IsChecked( (USHORT) EID_SPELL_AUTO );
     const SfxPoolItem* pOld = GetOldItem( rCoreSet, SID_AUTOSPELL_CHECK );
     if ( !pOld || ( (SfxBoolItem*)pOld )->GetValue() != bNewAutoCheck )
     {
         rCoreSet.Put( SfxBoolItem( GetWhich( SID_AUTOSPELL_CHECK ),
                                 bNewAutoCheck ) );
-        bModified |= sal_True;
-    }
-
-    // pOld ist alte Wert wenn wert ge�ndert mit neuen Wert ins Item Set
-    BOOL bNewMarkOff = aLinguOptionsCLB.IsChecked( (USHORT) EID_HIDE_MARKINGS );
-    pOld = GetItem( rCoreSet, SID_AUTOSPELL_MARKOFF );
-    if ( !pOld || ( (SfxBoolItem*)pOld )->GetValue() != bNewMarkOff )
-    {
-        rCoreSet.Put( SfxBoolItem( GetWhich( SID_AUTOSPELL_MARKOFF ),
-                                   bNewMarkOff ) );
         bModified |= sal_True;
     }
 
@@ -1503,6 +1573,16 @@ void SvxLinguTabPage::Reset( const SfxItemSet& rSet )
     pModel->Insert( pEntry );
     lcl_SetCheckButton( pEntry, bVal );
 
+    pEntry = CreateEntry( sGrammarAuto,       CBCOL_FIRST );
+    aLngCfg.GetProperty( C2U(UPN_IS_GRAMMAR_AUTO) ) >>= bVal;
+//    const SfxPoolItem* pItem = GetItem( rSet, SID_AUTOSPELL_CHECK );
+//    if (pItem)
+//        bVal = ((SfxBoolItem *) pItem)->GetValue();
+    nUserData = OptionsUserData( EID_GRAMMAR_AUTO, FALSE, 0, TRUE, bVal).GetUserData();
+    pEntry->SetUserData( (void *)nUserData );
+    pModel->Insert( pEntry );
+    lcl_SetCheckButton( pEntry, bVal );
+
     pEntry = CreateEntry( sCapitalWords,    CBCOL_FIRST );
     aLngCfg.GetProperty( C2U(UPN_IS_SPELL_UPPER_CASE) ) >>= bVal;
     nUserData = OptionsUserData( EID_CAPITAL_WORDS, FALSE, 0, TRUE, bVal).GetUserData();
@@ -1527,30 +1607,6 @@ void SvxLinguTabPage::Reset( const SfxItemSet& rSet )
     pEntry = CreateEntry( sSpellSpecial,    CBCOL_FIRST );
     aLngCfg.GetProperty( C2U(UPN_IS_SPELL_SPECIAL) ) >>= bVal;
     nUserData = OptionsUserData( EID_SPELL_SPECIAL, FALSE, 0, TRUE, bVal).GetUserData();
-    pEntry->SetUserData( (void *)nUserData );
-    pModel->Insert( pEntry );
-    lcl_SetCheckButton( pEntry, bVal );
-
-    pEntry = CreateEntry( sAllLanguages,    CBCOL_FIRST );
-    aLngCfg.GetProperty( C2U(UPN_IS_SPELL_IN_ALL_LANGUAGES) ) >>= bVal;
-    nUserData = OptionsUserData( EID_ALL_LANGUAGES, FALSE, 0, TRUE, bVal).GetUserData();
-    pEntry->SetUserData( (void *)nUserData );
-    pModel->Insert( pEntry );
-    lcl_SetCheckButton( pEntry, bVal );
-
-    pEntry = CreateEntry( sHideMarkings,    CBCOL_FIRST );
-    aLngCfg.GetProperty( C2U(UPN_IS_SPELL_HIDE) ) >>= bVal;
-    pItem = GetItem( rSet, SID_AUTOSPELL_MARKOFF );
-    if (pItem)
-        bVal = ((SfxBoolItem *) pItem)->GetValue();
-    nUserData = OptionsUserData( EID_HIDE_MARKINGS, FALSE, 0, TRUE, bVal).GetUserData();
-    pEntry->SetUserData( (void *)nUserData );
-    pModel->Insert( pEntry );
-    lcl_SetCheckButton( pEntry, bVal );
-
-    pEntry = CreateEntry( sOldGerman,       CBCOL_FIRST );
-    aLngCfg.GetProperty( C2U(UPN_IS_GERMAN_PRE_REFORM) ) >>= bVal;
-    nUserData = OptionsUserData( EID_OLD_GERMAN, FALSE, 0, TRUE, bVal).GetUserData();
     pEntry->SetUserData( (void *)nUserData );
     pModel->Insert( pEntry );
     lcl_SetCheckButton( pEntry, bVal );
@@ -1691,6 +1747,8 @@ IMPL_LINK( SvxLinguTabPage, ClickHdl_Impl, PushButton *, pBtn )
             INT16 nLang = SvxLocaleToLanguage( pAllLocales[k] );
             if (pLinguData->GetSpellTable().count( nLang ))
                 pLinguData->SetChecked( pLinguData->GetSpellTable()[ nLang ] );
+            if (pLinguData->GetGrammarTable().count( nLang ))
+                pLinguData->SetChecked( pLinguData->GetGrammarTable()[ nLang ] );
             if (pLinguData->GetHyphTable().count( nLang ))
                 pLinguData->SetChecked( pLinguData->GetHyphTable()[ nLang ] );
             if (pLinguData->GetThesTable().count( nLang ))
@@ -1984,6 +2042,7 @@ SvxEditModulesDlg::SvxEditModulesDlg(Window* pParent, SvxLinguData_Impl& rData) 
     sSpell          (       SVX_RES( ST_SPELL ) ),
     sHyph           (       SVX_RES( ST_HYPH ) ),
     sThes           (       SVX_RES( ST_THES ) ),
+    sGrammar        (       SVX_RES( ST_GRAMMAR ) ),
     rLinguData      ( rData )
 {
     pCheckButtonData = NULL;
@@ -2143,9 +2202,10 @@ OUString lcl_GetServiceName(BYTE nType)
 {
     switch(nType)
     {
-        case  TYPE_SPELL:   return C2U(cSpell);
-        case  TYPE_HYPH:    return C2U(cHyph);
-        case  TYPE_THES:    return C2U(cThes);
+        case  TYPE_SPELL    : return C2U(cSpell);
+        case  TYPE_GRAMMAR  : return C2U(cGrammar);
+        case  TYPE_HYPH     : return C2U(cHyph);
+        case  TYPE_THES     : return C2U(cThes);
     }
     return OUString();
 }
@@ -2182,9 +2242,10 @@ IMPL_LINK( SvxEditModulesDlg, LangSelectHdl_Impl, ListBox *, pBox )
                     BYTE nType = pData->GetType();
                     switch (nType - 1)
                     {
-                        case  TYPE_SPELL : pTable = &rLinguData.GetSpellTable(); break;
-                        case  TYPE_HYPH  : pTable = &rLinguData.GetHyphTable();  break;
-                        case  TYPE_THES  : pTable = &rLinguData.GetThesTable();  break;
+                        case  TYPE_SPELL    : pTable = &rLinguData.GetSpellTable(); break;
+                        case  TYPE_GRAMMAR  : pTable = &rLinguData.GetGrammarTable();  break;
+                        case  TYPE_HYPH     : pTable = &rLinguData.GetHyphTable();  break;
+                        case  TYPE_THES     : pTable = &rLinguData.GetThesTable();  break;
                     }
                     if (pTable)
                     {
@@ -2268,6 +2329,50 @@ IMPL_LINK( SvxEditModulesDlg, LangSelectHdl_Impl, ListBox *, pBox )
                 lcl_SetCheckButton( pNewEntry, bCheck );
                 pUserData = new ModuleUserData_Impl( aImplName, FALSE,
                                         bCheck, TYPE_SPELL, (BYTE)nLocalIndex++ );
+                pNewEntry->SetUserData( (void *)pUserData );
+                pModel->Insert( pNewEntry );
+            }
+        }
+
+        //
+        // grammar checker entries
+        //
+        pEntry = CreateEntry( sGrammar,    CBCOL_SECOND );
+        pUserData = new ModuleUserData_Impl( String(), TRUE, FALSE, TYPE_GRAMMAR, 0 );
+        pEntry->SetUserData( (void *)pUserData );
+        pModel->Insert( pEntry );
+        //
+        aNames = rLinguData.GetSortedImplNames( eCurLanguage, TYPE_GRAMMAR );
+        pName = aNames.getConstArray();
+        nNames = (ULONG) aNames.getLength();
+        nLocalIndex = 0;
+        for (n = 0;  n < nNames;  ++n)
+        {
+            OUString aImplName;
+            BOOL     bIsSuppLang = FALSE;
+
+            pInfo = rLinguData.GetInfoByImplName( pName[n] );
+            if (pInfo)
+            {
+                bIsSuppLang = pInfo->xGrammar.is()  &&
+                              pInfo->xGrammar->hasLocale( aCurLocale );
+                aImplName = pInfo->sGrammarImplName;
+            }
+            if (aImplName.getLength() && bIsSuppLang)
+            {
+                String aTxt( pInfo->sDisplayName );
+                SvLBoxEntry* pNewEntry = CreateEntry( aTxt, CBCOL_FIRST );
+
+                LangImplNameTable &rTable = rLinguData.GetGrammarTable();
+                const bool bHasLang = rTable.count( eCurLanguage );
+                if (!bHasLang)
+                {
+                    DBG_WARNING( "language entry missing" );    // only relevant if all languages found should be supported
+                }
+                const bool bCheck = bHasLang && lcl_SeqGetEntryPos( rTable[ eCurLanguage ], aImplName ) >= 0;
+                lcl_SetCheckButton( pNewEntry, bCheck );
+                pUserData = new ModuleUserData_Impl( aImplName, FALSE,
+                                        bCheck, TYPE_GRAMMAR, (BYTE)nLocalIndex++ );
                 pNewEntry->SetUserData( (void *)pUserData );
                 pModel->Insert( pNewEntry );
             }

@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: impedit.hxx,v $
- * $Revision: 1.89 $
+ * $Revision: 1.89.40.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -60,6 +60,8 @@
 #ifndef _COM_SUN_STAR_I18N_XEXTENDEDINPUTSEQUENCECHECKER_HDL_
 #include <com/sun/star/i18n/XExtendedInputSequenceChecker.hpp>
 #endif
+
+#include <i18npool/lang.h>
 
 #include <vos/ref.hxx>
 
@@ -635,6 +637,7 @@ private:
     void                ImplExpandCompressedPortions( EditLine* pLine, ParaPortion* pParaPortion, long nRemainingWidth );
 
     void                ImplInitLayoutMode( OutputDevice* pOutDev, USHORT nPara, USHORT nIndex );
+    void                ImplInitDigitMode( OutputDevice* pOutDev, String* pString, xub_StrLen nStt, xub_StrLen nLen, LanguageType eLang );
 
     EditPaM             ReadText( SvStream& rInput, EditSelection aSel );
     EditPaM             ReadRTF( SvStream& rInput, EditSelection aSel );
@@ -955,6 +958,8 @@ public:
     void            StartSpelling(EditView& rEditView, sal_Bool bMultipleDoc);
     //spell and return a sentence
     bool                SpellSentence(EditView& rView, ::svx::SpellPortions& rToFill, bool bIsGrammarChecking );
+    //put spelling back to start of current sentence - needed after switch of grammar support
+    void                PutSpellingToSentenceStart( EditView& rEditView );
     //applies a changed sentence
     void                ApplyChangedSentence(EditView& rEditView, const ::svx::SpellPortions& rNewPortions, bool bIsGrammarChecking );
     //deinitialize sentence spelling

@@ -1010,7 +1010,7 @@ IMPL_LINK( GenericOptions, CheckButtonsHdl, ComboBox*, pCB )
 void GenericOptions::Save( Config &aConfig )
 {
     (void) aConfig; /* avoid warning about unused parameter */
-    DBG_ASSERT( &aConfig == &aConf, "Saving to different Configuration" )
+    DBG_ASSERT( &aConfig == &aConf, "Saving to different Configuration" );
 
     // eventuelle �nderungen Speichern
     LINK( this, GenericOptions, LoadGroup ).Call( NULL );

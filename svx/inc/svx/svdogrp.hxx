@@ -93,7 +93,9 @@ public:
     virtual void RecalcSnapRect();
     virtual basegfx::B2DPolyPolygon TakeXorPoly() const;
 
-    virtual FASTBOOL BegDrag(SdrDragStat& rDrag)  const;
+    // special drag methods
+    virtual bool beginSpecialDrag(SdrDragStat& rDrag) const;
+
     virtual FASTBOOL BegCreate(SdrDragStat& rStat);
 
     virtual long GetRotateAngle() const;

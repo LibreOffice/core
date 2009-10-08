@@ -61,7 +61,7 @@ namespace drawinglayer
             HelplineStyle2D                                 meStyle;
             basegfx::BColor                                 maRGBColA;
             basegfx::BColor                                 maRGBColB;
-            double                                          mfViewDashLength;
+            double                                          mfDiscreteDashLength;
 
             // the last used object to view transformtion and the last Viewport,
             // used from getDecomposition for decide buffering
@@ -79,7 +79,7 @@ namespace drawinglayer
                 HelplineStyle2D eStyle,
                 const basegfx::BColor& rRGBColA,
                 const basegfx::BColor& aRGBColB,
-                double fViewDashLength);
+                double fDiscreteDashLength);
 
             // get data
             const basegfx::B2DPoint getPosition() const { return maPosition; }
@@ -87,7 +87,7 @@ namespace drawinglayer
             HelplineStyle2D getStyle() const { return meStyle; }
             const basegfx::BColor& getRGBColA() const { return maRGBColA; }
             const basegfx::BColor& getRGBColB() const { return maRGBColB; }
-            double getViewDashLength() const { return mfViewDashLength; }
+            double getDiscreteDashLength() const { return mfDiscreteDashLength; }
 
             // compare operator
             virtual bool operator==(const BasePrimitive2D& rPrimitive) const;

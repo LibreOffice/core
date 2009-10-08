@@ -38,6 +38,8 @@
 #include <svx/svdhdl.hxx>
 #include <svx/sdr/contact/viewcontactofvirtobj.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
+#include <svx/svdograf.hxx>
+#include <svx/svddrgv.hxx>
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -299,40 +301,59 @@ void SdrVirtObj::AddToHdlList(SdrHdlList& rHdlList) const
     }
 }
 
-FASTBOOL SdrVirtObj::HasSpecialDrag() const
+////////////////////////////////////////////////////////////////////////////////////////////////////
+
+bool SdrVirtObj::hasSpecialDrag() const
 {
-    return rRefObj.HasSpecialDrag();
+    return rRefObj.hasSpecialDrag();
 }
 
-FASTBOOL SdrVirtObj::BegDrag(SdrDragStat& rDrag) const
+bool SdrVirtObj::supportsFullDrag() const
 {
-    return rRefObj.BegDrag(rDrag);
+    return false;
 }
 
-FASTBOOL SdrVirtObj::MovDrag(SdrDragStat& rDrag) const
+SdrObject* SdrVirtObj::getFullDragClone() const
 {
-    return rRefObj.MovDrag(rDrag);
+    static bool bSpecialHandling(false);
+    SdrObject* pRetval = 0;
+
+    if(bSpecialHandling)
+    {
+        // special handling for VirtObj. Do not create another
+        // reference to rRefObj, this would allow to change that
+        // one on drag. Instead, create a SdrGrafObj for drag containing
+        // the graphical representation
+        pRetval = new SdrGrafObj(SdrDragView::GetObjGraphic(GetModel(), this), GetLogicRect());
+    }
+    else
+    {
+        SdrObject& rReferencedObject = ((SdrVirtObj*)this)->ReferencedObj();
+        pRetval = new SdrGrafObj(SdrDragView::GetObjGraphic(GetModel(), &rReferencedObject), GetLogicRect());
+    }
+
+    return pRetval;
 }
 
-FASTBOOL SdrVirtObj::EndDrag(SdrDragStat& rDrag)
+bool SdrVirtObj::beginSpecialDrag(SdrDragStat& rDrag) const
 {
-    return rRefObj.EndDrag(rDrag);
+    return rRefObj.beginSpecialDrag(rDrag);
 }
 
-void SdrVirtObj::BrkDrag(SdrDragStat& rDrag) const
+bool SdrVirtObj::applySpecialDrag(SdrDragStat& rDrag)
 {
-    rRefObj.BrkDrag(rDrag);
+    return rRefObj.applySpecialDrag(rDrag);
 }
 
-basegfx::B2DPolyPolygon SdrVirtObj::TakeDragPoly(const SdrDragStat& rDrag) const
+basegfx::B2DPolyPolygon SdrVirtObj::getSpecialDragPoly(const SdrDragStat& rDrag) const
 {
-    return rRefObj.TakeDragPoly(rDrag);
+    return rRefObj.getSpecialDragPoly(rDrag);
     // Offset handlen !!!!!! fehlt noch !!!!!!!
 }
 
-XubString SdrVirtObj::GetDragComment(const SdrDragStat& rDrag, FASTBOOL bUndoDragComment, FASTBOOL bCreateComment) const
+String SdrVirtObj::getSpecialDragComment(const SdrDragStat& rDrag) const
 {
-    return rRefObj.GetDragComment(rDrag,bUndoDragComment,bCreateComment);
+    return rRefObj.getSpecialDragComment(rDrag);
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////

@@ -348,7 +348,7 @@ void GraphCtrl::Paint( const Rectangle& rRect )
 
         const Region aRepaintRegion(rRect);
         pView->DoCompleteRedraw(*pPaintWindow, aRepaintRegion);
-        pView->EndCompleteRedraw(*pPaintWindow);
+        pView->EndCompleteRedraw(*pPaintWindow, true);
     }
     else
     {

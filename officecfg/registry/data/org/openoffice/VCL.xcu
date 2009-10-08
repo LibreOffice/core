@@ -8,7 +8,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: VCL.xcu,v $
- * $Revision: 1.62 $
+ * $Revision: 1.62.116.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -783,6 +783,26 @@
       </prop>
       <prop oor:name="CTL_TEXT" oor:op="replace" oor:type="xs:string">
         <value>Phetsarath OT;Arial Unicode MS;Dok Champa;Saysettha OT;Saysettha Unicode;JG Basic Lao;JG Chantabouli Lao</value>
+      </prop>
+    </node>
+    <node oor:name="my" oor:op="replace">
+      <prop oor:name="UI_SANS" oor:op="replace" oor:type="xs:string">
+        <value>Padauk;Myanmar3;MyMyanmar Unicode;Parabaik</value>
+      </prop>
+      <prop oor:name="CTL_DISPLAY" oor:op="replace" oor:type="xs:string">
+        <value>Padauk;Myanmar3;MyMyanmar Unicode;Parabaik</value>
+      </prop>
+      <prop oor:name="CTL_HEADING" oor:op="replace" oor:type="xs:string">
+        <value>Padauk;Myanmar3;MyMyanmar Unicode;Parabaik</value>
+      </prop>
+      <prop oor:name="CTL_PRESENTATION" oor:op="replace" oor:type="xs:string">
+        <value>Padauk;Myanmar3;MyMyanmar Unicode;Parabaik</value>
+      </prop>
+      <prop oor:name="CTL_SPREADSHEET" oor:op="replace" oor:type="xs:string">
+        <value>Padauk;Myanmar3;MyMyanmar Unicode;Parabaik</value>
+      </prop>
+      <prop oor:name="CTL_TEXT" oor:op="replace" oor:type="xs:string">
+        <value>Padauk;Myanmar3;MyMyanmar Unicode;Parabaik</value>
       </prop>
     </node>
     <node oor:name="ne" oor:op="replace">

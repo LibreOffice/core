@@ -29,6 +29,7 @@
  *
  ************************************************************************/
 
+#include "precompiled_svx.hxx"
 #include <svx/sdr/primitive2d/sdrtextprimitive2d.hxx>
 #include <svx/svdotext.hxx>
 #include <basegfx/color/bcolor.hxx>

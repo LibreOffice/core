@@ -17,6 +17,16 @@
 	    			<desc>List of implementation names.</desc>
                 </info>
             </prop>
+			<prop oor:name="AcceleratedImplementations" oor:type="oor:string-list">
+                <info>
+	    			<desc>List of implementations that are hardware-accelerated.</desc>
+                </info>
+            </prop>
+			<prop oor:name="AntialiasingImplementations" oor:type="oor:string-list">
+                <info>
+	    			<desc>List of implementations that do anti-aliasing.</desc>
+                </info>
+            </prop>
 		</group>
 	</templates>
 	<component>
@@ -88,6 +98,28 @@
 				<label>Force fallback canvas impl</label>
 			</info>
 			<value>false</value>
+		</prop>
+		<prop oor:name="UseAcceleratedCanvas" oor:type="xs:boolean">
+			<info>
+				<author>THB</author>
+				<desc>When true, suggest canvas factory to use a
+				      canvas service listed in the
+				      AcceleratedImplementations lists. 
+				</desc>
+				<label>Use a canvas listed among the AcceleratedImplementations</label>
+			</info>
+			<value>true</value>
+		</prop>
+		<prop oor:name="UseAntialiasingCanvas" oor:type="xs:boolean">
+			<info>
+				<author>THB</author>
+				<desc>When true, suggest canvas factory to use a
+				      canvas service listed in the
+				      AntialiasingImplementations lists. 
+				</desc>
+				<label>Use a canvas listed among the AntialiasingImplementations</label>
+			</info>
+			<value>true</value>
 		</prop>
 	</component>
 </oor:component-schema>

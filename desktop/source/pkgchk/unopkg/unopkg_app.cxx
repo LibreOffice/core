@@ -30,6 +30,7 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 
+#include "dp_misc.h"
 #include "unopkg_main.h"
 #include "unopkg_shared.h"
 #include "dp_identifier.hxx"
@@ -52,8 +53,6 @@
 #include "com/sun/star/bridge/XBridgeFactory.hpp"
 #include <stdio.h>
 #include <vector>
-
-#define APP_NAME "unopkg"
 
 
 using namespace ::com::sun::star;
@@ -94,8 +93,8 @@ const char s_usingText [] =
 " --deployment-context    expert feature: explicit deployment context\n"
 "     <context>\n"
 "\n"
-"For details concerning deployment and this tool, please read the developer's\n"
-"guide: http://api.openoffice.org/DevelopersGuide/" APP_NAME ".html\n";
+"To learn more about the Extension Manager and extensions, see:\n"
+"http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/Extensions/Extensions\n\n";
 
 //------------------------------------------------------------------------------
 const OptionInfo s_option_infos [] = {
@@ -205,7 +204,6 @@ extern "C" int unopkg_main()
 {
     tools::extendApplicationEnvironment();
     DisposeGuard disposeGuard;
-    rtl_TextEncoding textenc = osl_getThreadTextEncoding();
     bool bNoOtherErrorMsg = false;
     OUString subCommand;
     bool option_shared = false;
@@ -244,15 +242,15 @@ extern "C" int unopkg_main()
         sal_uInt32 nCount = osl_getCommandArgCount();
         if (nCount == 0 || isOption( info_help, &nPos ))
         {
-            printf( "%s\n", s_usingText );
+            dp_misc::writeConsole(s_usingText);
             return 0;
         }
         else if (isOption( info_version, &nPos )) {
-            printf( "\n%s Version 1.0\n", APP_NAME );
+            dp_misc::writeConsole("\n"APP_NAME" Version 3.0\n");
             return 0;
         }
         //consume all bootstrap variables which may occur before the subcommannd
-        while(isBootstrapVariable(&nPos)) ;
+        while(isBootstrapVariable(&nPos));
 
         if(nPos >= nCount)
             return 0;
@@ -287,13 +285,13 @@ extern "C" int unopkg_main()
                     if (cmdArg[ 0 ] == '-')
                     {
                         // is option:
-                        fprintf( stderr,
-                                 "\nERROR: unexpected option %s!\n"
-                                 "       Use " APP_NAME
-                                 " %s to print all options.\n",
-                                 ::rtl::OUStringToOString(
-                                     cmdArg, textenc ).getStr(),
-                                 toString( info_help ).getStr() );
+                        dp_misc::writeConsoleError(
+                                 OUSTR("\nERROR: unexpected option ") +
+                                 cmdArg +
+                                 OUSTR("!\n") +
+                                 OUSTR("       Use " APP_NAME " ") +
+                                 toString(info_help) +
+                                 OUSTR(" to print all options.\n"));
                         return 1;
                     }
                     else
@@ -312,7 +310,7 @@ extern "C" int unopkg_main()
         //make sure the bundled option was provided together with shared
         if (option_bundled && !option_shared)
         {
-            fprintf( stderr,
+            dp_misc::writeConsoleError(
                 "\nERROR: option --bundled can only be used together with --shared!");
             return 1;
         }
@@ -332,10 +330,11 @@ extern "C" int unopkg_main()
                 option_shared = true;
             }
             else if (option_shared) {
-                fprintf( stderr,
-                         "WARNING: explicit context given!  "
-                         "Ignoring option %s!\n",
-                         toString( info_shared ).getStr() );
+                dp_misc::writeConsoleError(
+                    OUSTR("WARNING: explicit context given!  ") +
+                    OUSTR("Ignoring option ") +
+                    toString( info_shared ) +
+                    OUSTR("!\n") );
             }
         }
 
@@ -404,9 +403,8 @@ extern "C" int unopkg_main()
             {
                 packages = xPackageManager->getDeployedPackages(
                     Reference<task::XAbortChannel>(), xCmdEnv );
-                printf( "all deployed %s packages:\n",
-                        ::rtl::OUStringToOString(
-                            deploymentContext, textenc ).getStr() );
+                dp_misc::writeConsole(
+                    OUSTR("all deployed ") + deploymentContext + OUSTR(" packages:\n"));
             }
             else
             {
@@ -445,49 +443,59 @@ extern "C" int unopkg_main()
         }
         else
         {
-            fprintf( stderr,
-                     "\nERROR: unknown sub-command %s!\n"
-                     "       Use " APP_NAME " %s to print all options.\n",
-                     ::rtl::OUStringToOString( subCommand, textenc ).getStr(),
-                     toString( info_help ).getStr() );
+            dp_misc::writeConsoleError(
+                OUSTR("\nERROR: unknown sub-command ") +
+                subCommand +
+                OUSTR("!\n") +
+                OUSTR("       Use " APP_NAME " ") +
+                toString(info_help) +
+                OUSTR(" to print all options.\n"));
             return 1;
         }
 
         if (option_verbose)
-            printf( "\n%s done.\n", APP_NAME );
+            dp_misc::writeConsole(OUSTR("\n"APP_NAME" done.\n"));
         //Force to release all bridges which connect us to the child processes
         disposeBridges(xLocalComponentContext);
         return 0;
     }
-    catch (ucb::CommandFailedException &e) {
-        fprintf(stderr, "%s\n", ::rtl::OUStringToOString(e.Message, textenc).getStr());
+    catch (ucb::CommandFailedException &e)
+    {
+        dp_misc::writeConsoleError(e.Message + OUSTR("\n"));
         bNoOtherErrorMsg = true;
     }
-    catch (ucb::CommandAbortedException &) {
-        fprintf( stderr, "\n%s aborted!\n", APP_NAME );
+    catch (ucb::CommandAbortedException &)
+    {
+        dp_misc::writeConsoleError("\n"APP_NAME" aborted!\n");
     }
-    catch (deployment::DeploymentException & exc) {
-        fprintf( stderr,
-                 "\nERROR: %s\n"
-                 "       Cause: %s\n",
-                 ::rtl::OUStringToOString(
-                     exc.Message, textenc ).getStr(),
-                 ::rtl::OUStringToOString(
-                     option_verbose
-                     ? ::comphelper::anyToString(exc.Cause)
-                     : reinterpret_cast<
-                     ::com::sun::star::uno::Exception const *>(
-                         exc.Cause.getValue())->Message, textenc).getStr() );
+    catch (deployment::DeploymentException & exc)
+    {
+        dp_misc::writeConsoleError(
+            OUSTR("\nERROR: ") +
+            exc.Message + OUSTR("\n") +
+            OUSTR("       Cause: ") +
+            OUString(option_verbose ? ::comphelper::anyToString(exc.Cause):
+                reinterpret_cast< css::uno::Exception const *>(
+                         exc.Cause.getValue())->Message) +
+            OUSTR("\n"));
+    }
+    catch (LockFileException & e)
+    {
+        if (!subcmd_gui)
+            dp_misc::writeConsoleError(e.Message);
+        bNoOtherErrorMsg = true;
     }
     catch (::com::sun::star::uno::Exception & e ) {
         Any exc( ::cppu::getCaughtException() );
 
-        fprintf( stderr, "\nERROR: %s\n", ::rtl::OUStringToOString(
-            option_verbose  ? e.Message + OUSTR("\nException details: \n") +
-            ::comphelper::anyToString(exc) : e.Message, textenc).getStr() );
+        dp_misc::writeConsoleError(
+            OUSTR("\nERROR: ") +
+            OUString(option_verbose  ? e.Message + OUSTR("\nException details: \n") +
+            ::comphelper::anyToString(exc) : e.Message) +
+            OUSTR("\n"));
     }
     if (!bNoOtherErrorMsg)
-        fprintf( stderr, "\n%s failed.\n", APP_NAME );
+        dp_misc::writeConsoleError("\n"APP_NAME" failed.\n");
     disposeBridges(xLocalComponentContext);
     return 1;
 }

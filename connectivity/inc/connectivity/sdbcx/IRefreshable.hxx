@@ -31,24 +31,25 @@
 #define _CONNECTIVITY_SDBCX_IREFRESHABLE_HXX_
 
 #include "connectivity/CommonTools.hxx"
+#include "connectivity/dbtoolsdllapi.hxx"
 
 namespace connectivity
 {
     namespace sdbcx
     {
-        class SAL_NO_VTABLE IRefreshableGroups
+        class OOO_DLLPUBLIC_DBTOOLS SAL_NO_VTABLE IRefreshableGroups
         {
         public:
             virtual void refreshGroups() = 0;
         };
 
-        class SAL_NO_VTABLE IRefreshableUsers
+        class OOO_DLLPUBLIC_DBTOOLS SAL_NO_VTABLE IRefreshableUsers
         {
         public:
             virtual void refreshUsers() = 0;
         };
 
-        class SAL_NO_VTABLE IRefreshableColumns
+        class OOO_DLLPUBLIC_DBTOOLS SAL_NO_VTABLE IRefreshableColumns
         {
         public:
             virtual void refreshColumns()   = 0;

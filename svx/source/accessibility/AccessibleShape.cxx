@@ -415,10 +415,12 @@ uno::Reference<XAccessibleStateSet> SAL_CALL
         {
             // Merge current FOCUSED state from edit engine.
             if (mpText != NULL)
+            {
                 if (mpText->HaveFocus())
                     pStateSet->AddState (AccessibleStateType::FOCUSED);
                 else
                     pStateSet->RemoveState (AccessibleStateType::FOCUSED);
+            }
 
             // Create a copy of the state set that may be modified by the
             // caller without affecting the current state set.

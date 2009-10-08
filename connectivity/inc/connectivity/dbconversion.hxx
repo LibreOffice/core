@@ -34,7 +34,7 @@
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
 #include <com/sun/star/util/Date.hpp>
 #include <com/sun/star/uno/Reference.hxx>
-
+#include "connectivity/dbtoolsdllapi.hxx"
 
 // forward declarations
 namespace rtl
@@ -84,7 +84,7 @@ namespace dbtools
 {
 //.........................................................................
 
-    class DBTypeConversion
+    class OOO_DLLPUBLIC_DBTOOLS DBTypeConversion
     {
     public:
         static ::com::sun::star::util::Date getStandardDate();

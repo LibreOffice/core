@@ -662,6 +662,8 @@ def expandUri(  uri ):
         uri = uri.replace( "vnd.sun.star.expand:", "",1)
         uri = uno.getComponentContext().getByName(
                     "/singletons/com.sun.star.util.theMacroExpander" ).expandMacros( uri )
+    if uri.startswith( "file:" ):
+        uri = uno.absolutize("",uri)   # necessary to get rid of .. in uri
     return uri
     
 #--------------------------------------------------------------

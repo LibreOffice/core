@@ -52,6 +52,7 @@ public:
     virtual boolean GetPatches() = 0;
     virtual boolean ChooseLanguage( long& rLanguage ) = 0;
     virtual boolean CheckVersion() = 0;
+    virtual boolean CheckForUpgrade() = 0;
     virtual boolean Install( long nLanguage ) = 0;
 
     virtual UINT    GetError() const = 0;

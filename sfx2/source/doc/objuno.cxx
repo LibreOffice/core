@@ -136,7 +136,7 @@ inline USHORT DaysInMonth( USHORT nMonth, USHORT nYear )
         return aDaysInMonth[nMonth-1];
     else
     {
-        if ( ((nYear % 4) == 0) && ((nYear % 100) != 0) ||
+        if ( (((nYear % 4) == 0) && ((nYear % 100) != 0)) ||
              ((nYear % 400) == 0) )
             return aDaysInMonth[nMonth-1] + 1;
         else

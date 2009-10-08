@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: xmlxtimp.cxx,v $
- * $Revision: 1.17 $
+ * $Revision: 1.17.264.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -260,8 +260,15 @@ void SvxXMLTableImportContext::importMarker( USHORT nPrfx, const OUString& rLoca
     (void)nPrfx;
     (void)rLocalName;
 
-    XMLMarkerStyleImport aMarkerStyle( GetImport() );
-    aMarkerStyle.importXML( xAttrList, rAny, rName );
+    try
+    {
+        XMLMarkerStyleImport aMarkerStyle( GetImport() );
+        aMarkerStyle.importXML( xAttrList, rAny, rName );
+    }
+    catch( Exception& )
+    {
+        DBG_ERROR("SvxXMLTableImportContext::importMarker(), exception caught!");
+    }
 }
 
 void SvxXMLTableImportContext::importDash( USHORT nPrfx, const OUString& rLocalName, const uno::Reference< XAttributeList >& xAttrList, Any& rAny, OUString& rName )
@@ -269,8 +276,15 @@ void SvxXMLTableImportContext::importDash( USHORT nPrfx, const OUString& rLocalN
     (void)nPrfx;
     (void)rLocalName;
 
-    XMLDashStyleImport aDashStyle( GetImport() );
-    aDashStyle.importXML( xAttrList, rAny, rName );
+    try
+    {
+        XMLDashStyleImport aDashStyle( GetImport() );
+        aDashStyle.importXML( xAttrList, rAny, rName );
+    }
+    catch( Exception& )
+    {
+        DBG_ERROR("SvxXMLTableImportContext::importDash(), exception caught!");
+    }
 }
 
 void SvxXMLTableImportContext::importHatch( USHORT nPrfx, const OUString& rLocalName, const uno::Reference< XAttributeList >& xAttrList, Any& rAny, OUString& rName )
@@ -278,8 +292,15 @@ void SvxXMLTableImportContext::importHatch( USHORT nPrfx, const OUString& rLocal
     (void)nPrfx;
     (void)rLocalName;
 
-    XMLHatchStyleImport aHatchStyle( GetImport() );
-    aHatchStyle.importXML( xAttrList, rAny, rName );
+    try
+    {
+        XMLHatchStyleImport aHatchStyle( GetImport() );
+        aHatchStyle.importXML( xAttrList, rAny, rName );
+    }
+    catch( Exception& )
+    {
+        DBG_ERROR("SvxXMLTableImportContext::importHatch(), exception caught!");
+    }
 }
 
 void SvxXMLTableImportContext::importGradient( USHORT nPrfx, const OUString& rLocalName, const uno::Reference< XAttributeList >& xAttrList, Any& rAny, OUString& rName )
@@ -287,8 +308,15 @@ void SvxXMLTableImportContext::importGradient( USHORT nPrfx, const OUString& rLo
     (void)nPrfx;
     (void)rLocalName;
 
-    XMLGradientStyleImport aGradientStyle( GetImport() );
-    aGradientStyle.importXML( xAttrList, rAny, rName );
+    try
+    {
+        XMLGradientStyleImport aGradientStyle( GetImport() );
+        aGradientStyle.importXML( xAttrList, rAny, rName );
+    }
+    catch( Exception& )
+    {
+        DBG_ERROR("SvxXMLTableImportContext::importGradient(), exception caught!");
+    }
 }
 
 void SvxXMLTableImportContext::importBitmap( USHORT nPrfx, const OUString& rLocalName, const uno::Reference< XAttributeList >& xAttrList, Any& rAny, OUString& rName )
@@ -296,8 +324,15 @@ void SvxXMLTableImportContext::importBitmap( USHORT nPrfx, const OUString& rLoca
     (void)nPrfx;
     (void)rLocalName;
 
-    XMLImageStyle aImageStyle;
-    aImageStyle.importXML( xAttrList, rAny, rName, GetImport() );
+    try
+    {
+        XMLImageStyle aImageStyle;
+        aImageStyle.importXML( xAttrList, rAny, rName, GetImport() );
+    }
+    catch( Exception& )
+    {
+        DBG_ERROR("SvxXMLTableImportContext::importBitmap(), exception caught!");
+    }
 }
 
 ///////////////////////////////////////////////////////////////////////

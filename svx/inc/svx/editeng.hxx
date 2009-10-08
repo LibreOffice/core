@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: editeng.hxx,v $
- * $Revision: 1.9 $
+ * $Revision: 1.8.14.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -64,6 +64,7 @@ class SvxLRSpaceItem;
 class SvKeyValueIterator;
 class SvxForbiddenCharactersTable;
 class SvxNumberFormat;
+class FontList;
 
 #include <vos/ref.hxx>
 #include <vector>
@@ -393,6 +394,8 @@ public:
     void            StartSpelling(EditView& rEditView, sal_Bool bMultipleDoc);
     //spell and return a sentence
     bool            SpellSentence(EditView& rEditView, ::svx::SpellPortions& rToFill, bool bIsGrammarChecking );
+    // put spell position to start of current sentence
+    void            PutSpellingToSentenceStart( EditView& rEditView );
     //applies a changed sentence
     void            ApplyChangedSentence(EditView& rEditView, const ::svx::SpellPortions& rNewPortions, bool bIsGrammarChecking );
     //deinitialize sentence spelling
@@ -437,6 +440,7 @@ public:
         bool bEndOfParagraph,
         bool bEndOfBullet,
         const ::com::sun::star::lang::Locale* pLocale,
+        const Color& rOverlineColor,
         const Color& rTextLineColor);
 
     virtual String  GetUndoComment( USHORT nUndoId ) const;

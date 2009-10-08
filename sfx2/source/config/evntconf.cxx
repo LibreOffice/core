@@ -794,9 +794,9 @@ void SfxEventConfiguration::PropagateEvent_Impl( SfxObjectShell *pDoc,
                 xEvents->replaceByName( aEventName, aEventData );
             }
             catch( ::com::sun::star::lang::IllegalArgumentException )
-            { DBG_ERRORFILE( "PropagateEvents_Impl: caught IllegalArgumentException" ) }
+            { DBG_ERRORFILE( "PropagateEvents_Impl: caught IllegalArgumentException" ); }
             catch( ::com::sun::star::container::NoSuchElementException )
-            { DBG_ERRORFILE( "PropagateEvents_Impl: caught NoSuchElementException" ) }
+            { DBG_ERRORFILE( "PropagateEvents_Impl: caught NoSuchElementException" ); }
         }
         else {
             DBG_WARNING( "PropagateEvents_Impl: Got unkown event" );

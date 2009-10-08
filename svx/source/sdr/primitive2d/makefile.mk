@@ -37,6 +37,7 @@ ENABLE_EXCEPTIONS=TRUE
 # --- Settings -----------------------------------------------------
 
 .INCLUDE :  settings.mk
+.INCLUDE :  $(PRJ)$/util$/makefile.pmk
 
 # --- Files --------------------------------------------------------
 
@@ -51,6 +52,7 @@ SLOFILES=\
         $(SLO)$/sdrgrafprimitive2d.obj				\
         $(SLO)$/sdrole2primitive2d.obj				\
         $(SLO)$/sdrpathprimitive2d.obj				\
+        $(SLO)$/sdrprimitivetools.obj				\
         $(SLO)$/sdrmeasureprimitive2d.obj			\
         $(SLO)$/sdrconnectorprimitive2d.obj			\
         $(SLO)$/sdrtextprimitive2d.obj

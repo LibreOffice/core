@@ -1029,6 +1029,11 @@ String STR_QUICKSTART_FILE
     Text [ en-US ] = "File";
 };
 
+String STR_QUICKSTART_STARTCENTER
+{
+    Text [ en-US ] = "Startcenter";
+};
+
 String STR_QUERY_UPDATE_LINKS
 {
     Text [ en-US ] = "Update all links?" ;
@@ -1100,7 +1105,7 @@ InfoBox RID_XMLSEC_INFO_WRONGDOCFORMAT
 
 String RID_XMLSEC_DOCUMENTSIGNED
 {
-    Text [ en-US ] = "(Signed)" ;
+    Text [ en-US ] = " (Signed)" ;
 };
 
 Image IMG_MISSING_1

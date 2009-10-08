@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: numfmtsh.cxx,v $
- * $Revision: 1.20 $
+ * $Revision: 1.20.128.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -988,8 +988,8 @@ short SvxNumberFormatShell::FillEListWithUserCurrencys( SvStrings& rList,short n
                 sal_Bool bInsFlag=sal_False;
                 if ( pNumEntry->HasNewCurrency() )
                     bInsFlag = sal_True;    // merge locale formats into currency selection
-                else if(!bTmpBanking && aNewFormNInfo.Search(rSymbol)!=STRING_NOTFOUND||
-                   bTmpBanking && aNewFormNInfo.Search(rBankSymbol)!=STRING_NOTFOUND)
+                else if( (!bTmpBanking && aNewFormNInfo.Search(rSymbol)!=STRING_NOTFOUND) ||
+                   (bTmpBanking && aNewFormNInfo.Search(rBankSymbol)!=STRING_NOTFOUND) )
                 {
                     bInsFlag=sal_True;
                 }
@@ -1516,6 +1516,11 @@ short SvxNumberFormatShell::GetListPos4Entry( const String& rFmtString )
         }
     }
     return nSelP;
+}
+
+String SvxNumberFormatShell::GetStandardName() const
+{
+    return pFormatter->GetStandardName( eCurLanguage);
 }
 
 void SvxNumberFormatShell::GetCurrencySymbols(SvStringsDtor& rList,const XubString& rStrEurope, sal_uInt16* pPos)

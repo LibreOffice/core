@@ -999,13 +999,13 @@ sal_Int16 SAL_CALL SalGtkFilePicker::execute() throw( uno::RuntimeException )
     uno::Reference< awt::XExtendedToolkit > xToolkit(
         m_xServiceMgr->createInstance( ::rtl::OUString::createFromAscii("com.sun.star.awt.Toolkit") ), uno::UNO_QUERY);
 
-    RunDialog* pRunInMain = new RunDialog(m_pDialog, xToolkit);
-    uno::Reference < awt::XTopWindowListener > xLifeCycle(pRunInMain);
+    RunDialog* pRunDialog = new RunDialog(m_pDialog, xToolkit);
+    uno::Reference < awt::XTopWindowListener > xLifeCycle(pRunDialog);
     while( GTK_RESPONSE_NO == btn )
     {
         btn = GTK_RESPONSE_YES; // we dont want to repeat unless user clicks NO for file save.
 
-        gint nStatus = pRunInMain->runandwaitforresult();
+        gint nStatus = pRunDialog->run();
         switch( nStatus )
         {
             case GTK_RESPONSE_ACCEPT:
@@ -1032,9 +1032,9 @@ sal_Int16 SAL_CALL SalGtkFilePicker::execute() throw( uno::RuntimeException )
                                 OUStringToOString(aResProvider.getResString(FILE_PICKER_TITLE_SAVE ),
                                 RTL_TEXTENCODING_UTF8 ).getStr() );
 
-                            RunDialog* pAnotherRunInMain = new RunDialog(dlg, xToolkit);
-                            uno::Reference < awt::XTopWindowListener > xAnotherLifeCycle(pAnotherRunInMain);
-                            btn = pAnotherRunInMain->runandwaitforresult();
+                            RunDialog* pAnotherDialog = new RunDialog(dlg, xToolkit);
+                            uno::Reference < awt::XTopWindowListener > xAnotherLifeCycle(pAnotherDialog);
+                            btn = pAnotherDialog->run();
 
                             gtk_widget_destroy( dlg );
                         }

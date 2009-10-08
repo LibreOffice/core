@@ -31,9 +31,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_svx.hxx"
 
-
 #include <vcl/wrkwin.hxx>
-#include <svtools/options3d.hxx>
 #include <svx/svdogrp.hxx>
 #include <svx/svdopath.hxx>
 #include <tools/shl.hxx>
@@ -42,12 +40,10 @@
 #include <svx/svdorect.hxx>
 #include <svx/svdmodel.hxx>
 #include <svx/svdpagv.hxx>
-
 #include <svx/svxids.hrc>
 #include <svx/colritem.hxx>
 #include <svx/xtable.hxx>
 #include <svx/svdview.hxx>
-
 #include <svx/dialogs.hrc>
 #include <svx/dialmgr.hxx>
 #include "globl3d.hxx"
@@ -68,13 +64,19 @@
 #include <basegfx/range/b2drange.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>
 #include <basegfx/polygon/b2dpolypolygontools.hxx>
-
 #include <svx/xlnwtit.hxx>
 #include <svx/sdr/overlay/overlaypolypolygon.hxx>
 #include <svx/sdr/overlay/overlaymanager.hxx>
 #include <sdrpaintwindow.hxx>
 #include <svx/sdr/contact/viewcontactofe3dscene.hxx>
 #include <drawinglayer/geometry/viewinformation3d.hxx>
+#include <svx/sdrpagewindow.hxx>
+#include <svx/sdr/contact/displayinfo.hxx>
+#include <svx/sdr/contact/objectcontact.hxx>
+#include <svx/sdr/contact/viewobjectcontact.hxx>
+#include <drawinglayer/primitive2d/unifiedalphaprimitive2d.hxx>
+#include <svx/sdr/overlay/overlayprimitive2dsequenceobject.hxx>
+#include <drawinglayer/primitive2d/transformprimitive2d.hxx>
 
 #define ITEMVALUE(ItemSet,Id,Cast)  ((const Cast&)(ItemSet).Get(Id)).GetValue()
 
@@ -91,9 +93,14 @@ class Impl3DMirrorConstructOverlay
     // the view
     const E3dView&                                  mrView;
 
-    // the unmirrored polygons and their count
+    // the object count
     sal_uInt32                                      mnCount;
+
+    // the unmirrored polygons
     basegfx::B2DPolyPolygon*                        mpPolygons;
+
+    // the overlay geometry from selected objects
+    drawinglayer::primitive2d::Primitive2DSequence  maFullOverlay;
 
 public:
     Impl3DMirrorConstructOverlay(const E3dView& rView);
@@ -103,17 +110,51 @@ public:
 };
 
 Impl3DMirrorConstructOverlay::Impl3DMirrorConstructOverlay(const E3dView& rView)
-:   mrView(rView)
+:   maObjects(),
+    mrView(rView),
+    mnCount(rView.GetMarkedObjectCount()),
+    mpPolygons(0),
+    maFullOverlay()
 {
-    const SdrMarkList& rMarkList = mrView.GetMarkedObjectList();
-    mnCount = rMarkList.GetMarkCount();
-    mpPolygons = new basegfx::B2DPolyPolygon[mnCount];
-
-    for(sal_uInt32 a(0L); a < mnCount; a++)
+    if(mnCount)
     {
-        SdrMark *pMark = rMarkList.GetMark(a);
-        SdrObject *pObj = pMark->GetMarkedSdrObj();
-        mpPolygons[mnCount - (a + 1L)] = pObj->TakeXorPoly();
+        if(mrView.IsSolidDragging())
+        {
+            SdrPageView* pPV = rView.GetSdrPageView();
+
+            if(pPV && pPV->PageWindowCount())
+            {
+                sdr::contact::ObjectContact& rOC = pPV->GetPageWindow(0)->GetObjectContact();
+                sdr::contact::DisplayInfo aDisplayInfo;
+
+                // Do not use the last ViewPort set at the OC at the last ProcessDisplay()
+                rOC.resetViewPort();
+
+                for(sal_uInt32 a(0);a < mnCount;a++)
+                {
+                    SdrObject* pObject = mrView.GetMarkedObjectByIndex(a);
+
+                    if(pObject)
+                    {
+                        sdr::contact::ViewContact& rVC = pObject->GetViewContact();
+                        sdr::contact::ViewObjectContact& rVOC = rVC.GetViewObjectContact(rOC);
+
+                        const drawinglayer::primitive2d::Primitive2DSequence aNewSequence(rVOC.getPrimitive2DSequenceHierarchy(aDisplayInfo));
+                        drawinglayer::primitive2d::appendPrimitive2DSequenceToPrimitive2DSequence(maFullOverlay, aNewSequence);
+                    }
+                }
+            }
+        }
+        else
+        {
+            mpPolygons = new basegfx::B2DPolyPolygon[mnCount];
+
+            for(sal_uInt32 a(0); a < mnCount; a++)
+            {
+                SdrObject* pObject = mrView.GetMarkedObjectByIndex(a);
+                mpPolygons[mnCount - (a + 1)] = pObject->TakeXorPoly();
+            }
+        }
     }
 }
 
@@ -122,7 +163,10 @@ Impl3DMirrorConstructOverlay::~Impl3DMirrorConstructOverlay()
     // The OverlayObjects are cleared using the destructor of OverlayObjectList.
     // That destructor calls clear() at the list which removes all objects from the
     // OverlayManager and deletes them.
-    delete[] mpPolygons;
+    if(!mrView.IsSolidDragging())
+    {
+        delete[] mpPolygons;
+    }
 }
 
 void Impl3DMirrorConstructOverlay::SetMirrorAxis(Point aMirrorAxisA, Point aMirrorAxisB)
@@ -131,33 +175,60 @@ void Impl3DMirrorConstructOverlay::SetMirrorAxis(Point aMirrorAxisA, Point aMirr
     maObjects.clear();
 
     // create new ones
-    for(sal_uInt32 a(0L); a < mrView.PaintWindowCount(); a++)
+    for(sal_uInt32 a(0); a < mrView.PaintWindowCount(); a++)
     {
         SdrPaintWindow* pCandidate = mrView.GetPaintWindow(a);
         ::sdr::overlay::OverlayManager* pTargetOverlay = pCandidate->GetOverlayManager();
 
         if(pTargetOverlay)
         {
-            for(sal_uInt32 b(0L); b < mnCount; b++)
+            // buld transfoprmation: translate and rotate so that given edge is
+            // on x axis, them mirror in y and translate back
+            const basegfx::B2DVector aEdge(aMirrorAxisB.X() - aMirrorAxisA.X(), aMirrorAxisB.Y() - aMirrorAxisA.Y());
+            basegfx::B2DHomMatrix aMatrixTransform;
+
+            aMatrixTransform.translate(-aMirrorAxisA.X(), -aMirrorAxisA.Y());
+            aMatrixTransform.rotate(-atan2(aEdge.getY(), aEdge.getX()));
+            aMatrixTransform.scale(1.0, -1.0);
+            aMatrixTransform.rotate(atan2(aEdge.getY(), aEdge.getX()));
+            aMatrixTransform.translate(aMirrorAxisA.X(), aMirrorAxisA.Y());
+
+            if(mrView.IsSolidDragging())
             {
-                basegfx::B2DPolyPolygon aPolyPolygon(mpPolygons[b]);
+                if(maFullOverlay.hasElements())
+                {
+                    drawinglayer::primitive2d::Primitive2DSequence aContent(maFullOverlay);
 
-                // translate and rotate polygon so that given edge is on x axis, them mirror in y and translate back
-                const basegfx::B2DVector aEdge(aMirrorAxisB.X() - aMirrorAxisA.X(), aMirrorAxisB.Y() - aMirrorAxisA.Y());
-                basegfx::B2DHomMatrix aMatrixTransform;
+                    if(!aMatrixTransform.isIdentity())
+                    {
+                        // embed in transformation group
+                        drawinglayer::primitive2d::Primitive2DReference aTransformPrimitive2D(new drawinglayer::primitive2d::TransformPrimitive2D(aMatrixTransform, aContent));
+                        aContent = drawinglayer::primitive2d::Primitive2DSequence(&aTransformPrimitive2D, 1);
+                    }
 
-                aMatrixTransform.translate(-aMirrorAxisA.X(), -aMirrorAxisA.Y());
-                aMatrixTransform.rotate(-atan2(aEdge.getY(), aEdge.getX()));
-                aMatrixTransform.scale(1.0, -1.0);
-                aMatrixTransform.rotate(atan2(aEdge.getY(), aEdge.getX()));
-                aMatrixTransform.translate(aMirrorAxisA.X(), aMirrorAxisA.Y());
+                    // if we have full overlay from selected objects, embed with 50% transparence, the
+                    // transformation is added to the OverlayPrimitive2DSequenceObject
+                    drawinglayer::primitive2d::Primitive2DReference aUnifiedAlphaPrimitive2D(new drawinglayer::primitive2d::UnifiedAlphaPrimitive2D(aContent, 0.5));
+                    aContent = drawinglayer::primitive2d::Primitive2DSequence(&aUnifiedAlphaPrimitive2D, 1);
 
-                // apply to polygon
-                aPolyPolygon.transform(aMatrixTransform);
+                    sdr::overlay::OverlayPrimitive2DSequenceObject* pNew = new sdr::overlay::OverlayPrimitive2DSequenceObject(aContent);
 
-                ::sdr::overlay::OverlayPolyPolygonStriped* pNew = new ::sdr::overlay::OverlayPolyPolygonStriped(aPolyPolygon);
-                pTargetOverlay->add(*pNew);
-                maObjects.append(*pNew);
+                    pTargetOverlay->add(*pNew);
+                    maObjects.append(*pNew);
+                }
+            }
+            else
+            {
+                for(sal_uInt32 b(0); b < mnCount; b++)
+                {
+                    // apply to polygon
+                    basegfx::B2DPolyPolygon aPolyPolygon(mpPolygons[b]);
+                    aPolyPolygon.transform(aMatrixTransform);
+
+                    ::sdr::overlay::OverlayPolyPolygonStriped* pNew = new ::sdr::overlay::OverlayPolyPolygonStriped(aPolyPolygon);
+                    pTargetOverlay->add(*pNew);
+                    maObjects.append(*pNew);
+                }
             }
         }
     }
@@ -1288,8 +1359,7 @@ BOOL E3dView::BegDragObj(const Point& rPnt, OutputDevice* pOut,
 
                         // die nicht erlaubten Rotationen ausmaskieren
                         eConstraint = E3dDragConstraint(eConstraint& eDragConstraint);
-                        pForcedMeth = new E3dDragRotate(*this, GetMarkedObjectList(), eConstraint,
-                                                        SvtOptions3D().IsShowFull() );
+                        pForcedMeth = new E3dDragRotate(*this, GetMarkedObjectList(), eConstraint, IsSolidDragging());
                     }
                     break;
 
@@ -1297,8 +1367,7 @@ BOOL E3dView::BegDragObj(const Point& rPnt, OutputDevice* pOut,
                     {
                         if(!bThereAreRootScenes)
                         {
-                            pForcedMeth = new E3dDragMove(*this, GetMarkedObjectList(), eDragHdl, eConstraint,
-                                                          SvtOptions3D().IsShowFull() );
+                            pForcedMeth = new E3dDragMove(*this, GetMarkedObjectList(), eDragHdl, eConstraint, IsSolidDragging());
                         }
                     }
                     break;

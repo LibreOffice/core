@@ -650,15 +650,17 @@ void SAL_CALL java_sql_PreparedStatement::setCharacterStream( sal_Int32 paramete
             mID  = t.pEnv->GetMethodID( getMyClass(), cMethodName, cSignature );OSL_ENSURE(mID,"Unknown method id!");
         if( mID )
         {
+            Sequence< sal_Int8 > aSeq;
+            if ( x.is() )
+                x->readBytes( aSeq, length );
+            sal_Int32 actualLength = aSeq.getLength();
+
             jvalue args2[3];
-            jbyteArray pByteArray = t.pEnv->NewByteArray(length);
-            Sequence< sal_Int8> aSeq;
-            if(x.is())
-                x->readBytes(aSeq,length);
-            t.pEnv->SetByteArrayRegion(pByteArray,0,length,(jbyte*)aSeq.getConstArray());
+            jbyteArray pByteArray = t.pEnv->NewByteArray( actualLength );
+            t.pEnv->SetByteArrayRegion(pByteArray,0,actualLength,(jbyte*)aSeq.getConstArray());
             args2[0].l =  pByteArray;
             args2[1].i =  0;
-            args2[2].i =  (sal_Int32)length;
+            args2[2].i =  actualLength;
             // temporaere Variable initialisieren
             const char * cSignatureStream = "([BII)V";
             // Java-Call absetzen
@@ -670,7 +672,7 @@ void SAL_CALL java_sql_PreparedStatement::setCharacterStream( sal_Int32 paramete
             if(mID2)
                 tempObj = t.pEnv->NewObjectA( aClass, mID2, args2 );
 
-            t.pEnv->CallVoidMethod( object, mID, parameterIndex,tempObj,length);
+            t.pEnv->CallVoidMethod( object, mID, parameterIndex,tempObj,actualLength);
             // und aufraeumen
             t.pEnv->DeleteLocalRef(pByteArray);
             t.pEnv->DeleteLocalRef(tempObj);
@@ -698,14 +700,17 @@ void SAL_CALL java_sql_PreparedStatement::setBinaryStream( sal_Int32 parameterIn
             mID  = t.pEnv->GetMethodID( getMyClass(), cMethodName, cSignature );OSL_ENSURE(mID,"Unknown method id!");
         if( mID )
         {
+            Sequence< sal_Int8 > aSeq;
+            if ( x.is() )
+                x->readBytes( aSeq, length );
+            sal_Int32 actualLength = aSeq.getLength();
+
             jvalue args2[3];
-            jbyteArray pByteArray = t.pEnv->NewByteArray(length);
-            Sequence< sal_Int8> aSeq;
-            x->readBytes(aSeq,length);
-            t.pEnv->SetByteArrayRegion(pByteArray,0,length,(jbyte*)aSeq.getConstArray());
+            jbyteArray pByteArray = t.pEnv->NewByteArray(actualLength);
+            t.pEnv->SetByteArrayRegion(pByteArray,0,actualLength,(jbyte*)aSeq.getConstArray());
             args2[0].l =  pByteArray;
             args2[1].i =  0;
-            args2[2].i =  (sal_Int32)length;
+            args2[2].i =  (sal_Int32)actualLength;
 
             // temporaere Variable initialisieren
             const char * cSignatureStream = "([BII)V";
@@ -717,7 +722,7 @@ void SAL_CALL java_sql_PreparedStatement::setBinaryStream( sal_Int32 parameterIn
             jobject tempObj = NULL;
             if(mID2)
                 tempObj = t.pEnv->NewObjectA( aClass, mID2, args2 );
-            t.pEnv->CallVoidMethod( object, mID, parameterIndex,tempObj,(sal_Int32)length);
+            t.pEnv->CallVoidMethod( object, mID, parameterIndex,tempObj,(sal_Int32)actualLength);
             // und aufraeumen
             t.pEnv->DeleteLocalRef(pByteArray);
             t.pEnv->DeleteLocalRef(tempObj);
