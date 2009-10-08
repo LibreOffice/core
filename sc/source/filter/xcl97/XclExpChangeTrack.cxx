@@ -1072,7 +1072,6 @@ XclExpChangeTrack::XclExpChangeTrack( const XclExpRoot& rRoot ) :
     aTabIdBufferList(),
     pTabIdBuffer( NULL ),
     pTempDoc( NULL ),
-    pTempChangeTrack( NULL ),
     nNewAction( 1 ),
     pHeader( NULL ),
     bValidGUID( sal_False )
@@ -1081,7 +1080,8 @@ XclExpChangeTrack::XclExpChangeTrack( const XclExpRoot& rRoot ) :
     if( !GetOldRoot().pTabId )
         return;
 
-    if( !CreateTempChangeTrack() )
+    ScChangeTrack* pTempChangeTrack = CreateTempChangeTrack();
+    if (!pTempChangeTrack)
         return;
 
     pTabIdBuffer = new XclExpChTrTabIdBuffer( GetTabInfo().GetXclTabCount() );
@@ -1143,25 +1143,23 @@ XclExpChangeTrack::XclExpChangeTrack( const XclExpRoot& rRoot ) :
 
 XclExpChangeTrack::~XclExpChangeTrack()
 {
-    if( pTempChangeTrack )
-        delete pTempChangeTrack;
     if( pTempDoc )
         delete pTempDoc;
 }
 
-sal_Bool XclExpChangeTrack::CreateTempChangeTrack()
+ScChangeTrack* XclExpChangeTrack::CreateTempChangeTrack()
 {
     // get original change track
     ScChangeTrack* pOrigChangeTrack = GetDoc().GetChangeTrack();
     DBG_ASSERT( pOrigChangeTrack, "XclExpChangeTrack::CreateTempChangeTrack - no change track data" );
     if( !pOrigChangeTrack )
-        return sal_False;
+        return NULL;
 
     // create empty document
     pTempDoc = new ScDocument;
     DBG_ASSERT( pTempDoc, "XclExpChangeTrack::CreateTempChangeTrack - no temp document" );
     if( !pTempDoc )
-        return sal_False;
+        return NULL;
 
     // adjust table count
     SCTAB nOrigCount = GetDoc().GetTableCount();
@@ -1176,26 +1174,13 @@ sal_Bool XclExpChangeTrack::CreateTempChangeTrack()
     if( nOrigCount != pTempDoc->GetTableCount() )
         return sal_False;
 
-    // create empty change track
-    pTempChangeTrack = new ScChangeTrack( pTempDoc );
-    DBG_ASSERT( pTempChangeTrack, "XclExpChangeTrack::CreateTempChangeTrack - no temp change track" );
-    if( !pTempChangeTrack )
-        return sal_False;
-
-    // copy original change track
-    SvMemoryStream aMemStrm;
-    if( !pOrigChangeTrack->Store( aMemStrm ) )
-        return sal_False;
-    aMemStrm.Seek( STREAM_SEEK_TO_BEGIN );
-    if( !pTempChangeTrack->Load( aMemStrm, (USHORT) pTempDoc->GetSrcVersion() ) )
-        return sal_False;
-
-    return sal_True;
+    return pOrigChangeTrack->Clone(pTempDoc);
 }
 
 void XclExpChangeTrack::PushActionRecord( const ScChangeAction& rAction )
 {
     XclExpChTrAction* pXclAction = NULL;
+    ScChangeTrack* pTempChangeTrack = pTempDoc->GetChangeTrack();
     switch( rAction.GetType() )
     {
         case SC_CAT_CONTENT:
@@ -1205,7 +1190,8 @@ void XclExpChangeTrack::PushActionRecord( const ScChangeAction& rAction )
         case SC_CAT_INSERT_COLS:
         case SC_CAT_DELETE_ROWS:
         case SC_CAT_DELETE_COLS:
-            pXclAction = new XclExpChTrInsert( rAction, GetRoot(), *pTabIdBuffer, *pTempChangeTrack );
+            if (pTempChangeTrack)
+                pXclAction = new XclExpChTrInsert( rAction, GetRoot(), *pTabIdBuffer, *pTempChangeTrack );
         break;
         case SC_CAT_INSERT_TABS:
         {
@@ -1217,7 +1203,8 @@ void XclExpChangeTrack::PushActionRecord( const ScChangeAction& rAction )
         }
         break;
         case SC_CAT_MOVE:
-            pXclAction = new XclExpChTrMoveRange( (const ScChangeActionMove&) rAction, GetRoot(), *pTabIdBuffer, *pTempChangeTrack );
+            if (pTempChangeTrack)
+                pXclAction = new XclExpChTrMoveRange( (const ScChangeActionMove&) rAction, GetRoot(), *pTabIdBuffer, *pTempChangeTrack );
         break;
         default:;
     }

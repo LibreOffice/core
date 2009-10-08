@@ -31,6 +31,10 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sc.hxx"
 
+#if ! ENABLE_LAYOUT_EXPERIMENTAL
+#undef ENABLE_LAYOUT
+#endif
+
 #undef SC_DLLIMPLEMENTATION
 
 #include "scdlgfact.hxx"
@@ -79,6 +83,7 @@
 
 // ause
 #include "editutil.hxx"
+#include <sfx2/layout.hxx>
 
 IMPL_ABSTDLG_BASE(VclAbstractDialog_Impl); //add for ScColOrRowDlg
 IMPL_ABSTDLG_BASE(AbstractScImportAsciiDlg_Impl);//CHINA001 add for ScImportAsciiDlg
@@ -112,6 +117,40 @@ IMPL_ABSTDLG_BASE(AbstractScStringInputDlg_Impl); //add for ScStringInputDlg
 IMPL_ABSTDLG_BASE(AbstractScImportOptionsDlg_Impl); //add for ScImportOptionsDlg
 IMPL_ABSTDLG_BASE(AbstractTabDialog_Impl); //add for ScAttrDlg, ScHFEditDlg, ScStyleDlg, ScSubTotalDlg,ScCharDlg, ScParagraphDlg, ScValidationDlg, ScSortDlg
 
+// AbstractTabDialog_Impl begin
+void AbstractTabDialog_Impl::SetCurPageId( USHORT nId )
+{
+    pDlg->SetCurPageId( nId );
+}
+
+const SfxItemSet* AbstractTabDialog_Impl::GetOutputItemSet() const
+{
+    return pDlg->GetOutputItemSet();
+}
+//add by CHINA001
+const USHORT* AbstractTabDialog_Impl::GetInputRanges(const SfxItemPool& pItem )
+{
+    return pDlg->GetInputRanges( pItem );
+}
+//add by CHINA001
+void AbstractTabDialog_Impl::SetInputSet( const SfxItemSet* pInSet )
+{
+     pDlg->SetInputSet( pInSet );
+}
+//From class Window.
+void AbstractTabDialog_Impl::SetText( const XubString& rStr )
+{
+    pDlg->SetText( rStr );
+}
+String AbstractTabDialog_Impl::GetText() const
+{
+    return pDlg->GetText();
+}
+
+#if ENABLE_LAYOUT
+namespace layout
+{
+IMPL_ABSTDLG_BASE(AbstractTabDialog_Impl); //add for ScAttrDlg, ScHFEditDlg, ScStyleDlg, ScSubTotalDlg,ScCharDlg, ScParagraphDlg, ScValidationDlg, ScSortDlg
 
 // AbstractTabDialog_Impl begin
 void AbstractTabDialog_Impl::SetCurPageId( USHORT nId )
@@ -142,6 +181,8 @@ String AbstractTabDialog_Impl::GetText() const
 {
     return pDlg->GetText();
 }
+}
+#endif /* ENABLE_LAYOUT */
 
 //add for AbstractTabDialog_Impl end
 // AbstractScImportAsciiDlg_Impl begin
@@ -1227,6 +1268,10 @@ AbstractScImportOptionsDlg * ScAbstractDialogFactory_Impl::CreateScImportOptions
 }
 //add for ScImportOptionsDlg end
 
+#if ENABLE_LAYOUT && !LAYOUT_SFX_TABDIALOG_BROKEN
+#define SfxTabDialog layout::SfxTabDialog
+#define AbstractTabDialog_Impl layout::AbstractTabDialog_Impl
+#endif /* ENABLE_LAYOUT */
 //add for ScAttrDlg begin
 SfxAbstractTabDialog * ScAbstractDialogFactory_Impl::CreateScAttrDlg( SfxViewFrame*  pFrame,
                                                                         Window*          pParent,
@@ -1249,6 +1294,8 @@ SfxAbstractTabDialog * ScAbstractDialogFactory_Impl::CreateScAttrDlg( SfxViewFra
 
 }
 //add for ScAttrDlg end
+#undef SfxTabDialog
+#undef AbstractTabDialog_Impl
 
 //add for ScHFEditDlg begin
 SfxAbstractTabDialog * ScAbstractDialogFactory_Impl::CreateScHFEditDlg( SfxViewFrame*       pFrame,
@@ -1378,6 +1425,10 @@ SfxAbstractTabDialog * ScAbstractDialogFactory_Impl::CreateScValidationDlg( Wind
 }
 //add for ScValidationDlg end
 
+#if ENABLE_LAYOUT && !LAYOUT_SFX_TABDIALOG_BROKEN
+#define SfxTabDialog layout::SfxTabDialog
+#define AbstractTabDialog_Impl layout::AbstractTabDialog_Impl
+#endif /* ENABLE_LAYOUT */
 //add for ScSortDlg begin
 SfxAbstractTabDialog * ScAbstractDialogFactory_Impl::CreateScSortDlg( Window*            pParent,
                                                     const SfxItemSet* pArgSet,int nId )
@@ -1396,6 +1447,9 @@ SfxAbstractTabDialog * ScAbstractDialogFactory_Impl::CreateScSortDlg( Window*   
         return new AbstractTabDialog_Impl( pDlg );
     return 0;
 }
+#undef SfxTabDialog
+#undef AbstractTabDialog_Impl
+
 //add for ScSortDlg end
 //------------------ Factories for TabPages--------------------
 CreateTabPage ScAbstractDialogFactory_Impl::GetTabPageCreatorFunc( USHORT nId )

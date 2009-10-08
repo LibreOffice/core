@@ -43,6 +43,14 @@
 #include "scresid.hxx"
 #include "miscdlgs.hrc"
 
+#include <layout/layout-pre.hxx>
+
+#if ENABLE_LAYOUT
+#undef ScResId
+#define ScResId(x) #x
+#undef ModalDialog
+#define ModalDialog( parent, id ) Dialog( parent, "string-input.xml", id )
+#endif /* ENABLE_LAYOUT */
 
 //==================================================================
 

@@ -949,25 +949,6 @@ BOOL ScDBFunc::HasSelectionForNumGroup( ScDPNumGroupInfo& rOldInfo )
     return bFound;
 }
 
-String lcl_GetDatePartName( sal_Int32 nPart )
-{
-    String aRet;        //! globstr-ID
-    switch (nPart)
-    {
-        //! use translated strings from globstr.src
-        case com::sun::star::sheet::DataPilotFieldGroupBy::SECONDS:  aRet = String::CreateFromAscii("Seconds");  break;
-        case com::sun::star::sheet::DataPilotFieldGroupBy::MINUTES:  aRet = String::CreateFromAscii("Minutes");  break;
-        case com::sun::star::sheet::DataPilotFieldGroupBy::HOURS:    aRet = String::CreateFromAscii("Hours");    break;
-        case com::sun::star::sheet::DataPilotFieldGroupBy::DAYS:     aRet = String::CreateFromAscii("Days");     break;
-        case com::sun::star::sheet::DataPilotFieldGroupBy::MONTHS:   aRet = String::CreateFromAscii("Months");   break;
-        case com::sun::star::sheet::DataPilotFieldGroupBy::QUARTERS: aRet = String::CreateFromAscii("Quarters"); break;
-        case com::sun::star::sheet::DataPilotFieldGroupBy::YEARS:    aRet = String::CreateFromAscii("Years");    break;
-        default:
-            DBG_ERROR("invalid date part");
-    }
-    return aRet;
-}
-
 void ScDBFunc::DateGroupDataPilot( const ScDPNumGroupInfo& rInfo, sal_Int32 nParts )
 {
     ScDPObject* pDPObj = GetViewData()->GetDocument()->GetDPAtCursor( GetViewData()->GetCurX(),
@@ -987,25 +968,22 @@ void ScDBFunc::DateGroupDataPilot( const ScDPNumGroupInfo& rInfo, sal_Int32 nPar
             ScDPDimensionSaveData* pDimData = aData.GetDimensionData();     // created if not there
 
             // find original base
-            String aBaseDimName( aDimName );
-            const ScDPSaveGroupDimension* pBaseGroupDim = pDimData->GetNamedGroupDim( aDimName );
-            if ( pBaseGroupDim )
-            {
-                // any entry's SourceDimName is the original base
+            String aBaseDimName = aDimName;
+            if( const ScDPSaveGroupDimension* pBaseGroupDim = pDimData->GetNamedGroupDim( aDimName ) )
                 aBaseDimName = pBaseGroupDim->GetSourceDimName();
-            }
 
             // remove all existing parts (the grouping is built completely new)
 
-            const ScDPSaveNumGroupDimension* pExistingNum = pDimData->GetNumGroupDim( aBaseDimName );
-            if ( pExistingNum )
-            {
-                pDimData->RemoveNumGroupDimension( aBaseDimName );
-                // no changed names - SaveData is not affected
-            }
+            /*  Remove numeric group dimension (exists once at most). No need
+                to delete anything in save data (grouping was done inplace in
+                an existing base dimension). */
+            pDimData->RemoveNumGroupDimension( aBaseDimName );
 
-            std::vector<String> aDeletedNames;
-
+            /*  Remove named group dimension(s). Collect deleted dimension
+                names which may be reused while recreating the groups.
+                Dimensions have to be removed from dimension save data and from
+                save data too. */
+            std::vector< String > aDeletedNames;
             const ScDPSaveGroupDimension* pExistingGroup = pDimData->GetGroupDimForBase( aBaseDimName );
             while ( pExistingGroup )
             {
@@ -1015,8 +993,8 @@ void ScDBFunc::DateGroupDataPilot( const ScDPNumGroupInfo& rInfo, sal_Int32 nPar
                 // also remove SaveData settings for the dimension that no longer exists
                 aData.RemoveDimensionByName( aGroupDimName );
 
-                // the name can be used for the new group dimensions, although it is still in use
-                // with the DataPilotSource
+                /*  The name can be used for the new group dimensions, although
+                    it is still in use with the DataPilotSource. */
                 aDeletedNames.push_back( aGroupDimName );
 
                 // see if there are more group dimensions
@@ -1046,7 +1024,7 @@ void ScDBFunc::DateGroupDataPilot( const ScDPNumGroupInfo& rInfo, sal_Int32 nPar
                             // innermost part: create NumGroupDimension (replacing original values)
                             // Dimension name is left unchanged
 
-                            if ( nParts == com::sun::star::sheet::DataPilotFieldGroupBy::DAYS && rInfo.Step != 0.0 )
+                            if ( (nParts == sheet::DataPilotFieldGroupBy::DAYS) && (rInfo.Step >= 1.0) )
                             {
                                 // only days, and a step value specified: use numerical grouping
                                 // with DateValues flag, not date grouping
@@ -1059,8 +1037,7 @@ void ScDBFunc::DateGroupDataPilot( const ScDPNumGroupInfo& rInfo, sal_Int32 nPar
                             }
                             else
                             {
-                                ScDPSaveNumGroupDimension aNumGroupDim( aBaseDimName, aEmpty );
-                                aNumGroupDim.SetDateInfo( rInfo, nMask );
+                                ScDPSaveNumGroupDimension aNumGroupDim( aBaseDimName, rInfo, nMask );
                                 pDimData->AddNumGroupDimension( aNumGroupDim );
                             }
 
@@ -1069,10 +1046,7 @@ void ScDBFunc::DateGroupDataPilot( const ScDPNumGroupInfo& rInfo, sal_Int32 nPar
                         else
                         {
                             // additional parts: create GroupDimension (shown as additional dimensions)
-
-                            String aPartName = lcl_GetDatePartName( nMask );
-                            String aGroupDimName = pDimData->CreateGroupDimName(
-                                                aPartName, *pDPObj, true, &aDeletedNames );
+                            String aGroupDimName = pDimData->CreateDateGroupDimName( nMask, *pDPObj, true, &aDeletedNames );
                             ScDPSaveGroupDimension aGroupDim( aBaseDimName, aGroupDimName );
                             aGroupDim.SetDateInfo( rInfo, nMask );
                             pDimData->AddGroupDimension( aGroupDim );

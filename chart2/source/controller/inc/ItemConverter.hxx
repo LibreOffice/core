@@ -38,8 +38,6 @@
 // for pair
 #include <utility>
 
-struct SfxItemPropertyMap;
-
 namespace comphelper
 {
 

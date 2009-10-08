@@ -661,8 +661,9 @@ void XclFontPropSetHelper::ReadFontProperties( XclFontData& rFontData,
                 fApiHeight, fApiWeight, eApiPosture, nApiUnderl, nApiStrikeout );
 
             // font escapement
-            sal_Int16 nApiEscapement;
-            sal_Int8 nApiEscHeight;
+            sal_Int16 nApiEscapement = 0;
+            sal_Int8 nApiEscHeight = 0;
+            maHlpChEscapement.ReadFromPropertySet( rPropSet );
             maHlpChEscapement >> nApiEscapement >> nApiEscHeight;
             rFontData.SetApiEscapement( nApiEscapement );
         }
@@ -724,6 +725,7 @@ void XclFontPropSetHelper::WriteFontProperties(
             // font escapement
             if( rFontData.GetScEscapement() != SVX_ESCAPEMENT_OFF )
             {
+                maHlpChEscapement.InitializeWrite();
                 maHlpChEscapement << rFontData.GetApiEscapement() << EXC_API_ESC_HEIGHT;
                 maHlpChEscapement.WriteToPropertySet( rPropSet );
             }

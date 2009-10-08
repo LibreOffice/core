@@ -31,7 +31,6 @@
 #define CHART2_RANGEHIGHLIGHTER_HXX
 
 #include "MutexContainer.hxx"
-#include "charttoolsdllapi.hxx"
 #include <cppuhelper/compbase2.hxx>
 #include <com/sun/star/chart2/data/XRangeHighlighter.hpp>
 #include <com/sun/star/view/XSelectionSupplier.hpp>
@@ -56,7 +55,7 @@ typedef ::cppu::WeakComponentImplHelper2<
     RangeHighlighter_Base;
 }
 
-class OOO_DLLPUBLIC_CHARTTOOLS RangeHighlighter :
+class RangeHighlighter :
         public MutexContainer,
         public impl::RangeHighlighter_Base
 {
@@ -111,6 +110,7 @@ private:
     ::com::sun::star::uno::Sequence< ::com::sun::star::chart2::data::HighlightedRange >
         m_aSelectedRanges;
     sal_Int32 m_nAddedListenerCount;
+    bool m_bIncludeHiddenCells;
 };
 
 } //  namespace chart

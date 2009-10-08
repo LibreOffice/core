@@ -77,7 +77,7 @@ public:
         been changed to the given one.  The passed object size is taken into
         account for shifting the position.
      */
-    static ::com::sun::star::chart2::RelativePosition
+    SAL_DLLPRIVATE static ::com::sun::star::chart2::RelativePosition
         getReanchoredPosition(
             const ::com::sun::star::chart2::RelativePosition & rPosition,
             const ::com::sun::star::chart2::RelativeSize & rObjectSize,

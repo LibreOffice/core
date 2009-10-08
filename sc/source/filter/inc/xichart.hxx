@@ -433,7 +433,7 @@ public:
     /** Converts and writes the contained font settings to the passed property set. */
     void                ConvertFontBase( const XclImpChRoot& rRoot, ScfPropertySet& rPropSet ) const;
     /** Converts and writes the contained rotation settings to the passed property set. */
-    void                ConvertRotationBase( const XclImpChRoot& rRoot, ScfPropertySet& rPropSet ) const;
+    void                ConvertRotationBase( const XclImpChRoot& rRoot, ScfPropertySet& rPropSet, bool bSupportsStacked ) const;
 };
 
 // ----------------------------------------------------------------------------
@@ -500,6 +500,8 @@ public:
 
     /** Converts and writes the contained font settings to the passed property set. */
     void                ConvertFont( ScfPropertySet& rPropSet ) const;
+    /** Converts and writes the contained rotation settings to the passed property set. */
+    void                ConvertRotation( ScfPropertySet& rPropSet, bool bSupportsStacked ) const;
     /** Converts and writes the contained frame data to the passed property set. */
     void                ConvertFrame( ScfPropertySet& rPropSet ) const;
     /** Converts and writes the contained number format to the passed property set. */
@@ -512,13 +514,19 @@ public:
 private:
     using               XclImpChRoot::ConvertFont;
 
+    /** Reads a CHFRLABELPROPS record. */
+    void                ReadChFrLabelProps( XclImpStream& rStrm );
+
 private:
+    typedef ScfRef< XclChFrLabelProps > XclChFrLabelPropsRef;
+
     XclChText           maData;             /// Contents of the CHTEXT record.
     XclChObjectLink     maObjLink;          /// Link target for this text object.
     XclFormatRunVec     maFormats;          /// Formatting runs (CHFORMATRUNS record).
     XclImpChSourceLinkRef mxSrcLink;        /// Linked data (CHSOURCELINK with CHSTRING record).
     XclImpChFrameRef    mxFrame;            /// Text object frame properties (CHFRAME group).
     XclImpChFontRef     mxFont;             /// Index into font buffer (CHFONT record).
+    XclChFrLabelPropsRef mxLabelProps;      /// Extended data label properties (CHFRLABELPROPS record).
 };
 
 typedef ScfRef< XclImpChText > XclImpChTextRef;
@@ -1100,6 +1108,8 @@ public:
     void                ReadChLabelRange( XclImpStream& rStrm );
     /** Converts category axis scaling settings. */
     void                Convert( ScfPropertySet& rPropSet, ScaleData& rScaleData, bool bMirrorOrient ) const;
+    /** Converts position settings of this axis at a crossing axis. */
+    void                ConvertAxisPosition( ScfPropertySet& rPropSet, bool b3dChart ) const;
 
 private:
     XclChLabelRange     maData;             /// Contents of the CHLABELRANGE record.
@@ -1120,6 +1130,8 @@ public:
     void                ReadChValueRange( XclImpStream& rStrm );
     /** Converts value axis scaling settings. */
     void                Convert( ScaleData& rScaleData, bool bMirrorOrient ) const;
+    /** Converts position settings of this axis at a crossing axis. */
+    void                ConvertAxisPosition( ScfPropertySet& rPropSet ) const;
 
 private:
     XclChValueRange     maData;             /// Contents of the CHVALUERANGE record.
@@ -1196,9 +1208,11 @@ public:
     inline bool         HasMinorGrid() const { return mxMinorGrid.is(); }
 
     /** Creates an API axis object. */
-    XAxisRef            CreateAxis( const XclImpChTypeGroup& rTypeGroup, bool bPrimary ) const;
+    XAxisRef            CreateAxis( const XclImpChTypeGroup& rTypeGroup, const XclImpChAxis* pCrossingAxis ) const;
     /** Converts and writes 3D wall/floor properties to the passed property set. */
     void                ConvertWall( ScfPropertySet& rPropSet ) const;
+    /** Converts position settings of this axis at a crossing axis. */
+    void                ConvertAxisPosition( ScfPropertySet& rPropSet, const XclImpChTypeGroup& rTypeGroup ) const;
 
 private:
     /** Reads a CHAXISLINE record specifying the target for following line properties. */
@@ -1282,9 +1296,9 @@ private:
     XCoordSystemRef     CreateCoordSystem( XDiagramRef xDiagram ) const;
     /** Creates and inserts an axis into the container and registers the coordinate system. */
     void                ConvertAxis( XclImpChAxisRef xChAxis, XclImpChTextRef xChAxisTitle,
-                            XCoordSystemRef xCoordSystem ) const;
+                            XCoordSystemRef xCoordSystem, const XclImpChAxis* pCrossingAxis ) const;
     /** Creates and returns an API axis object. */
-    XAxisRef            CreateAxis( const XclImpChAxis& rChAxis ) const;
+    XAxisRef            CreateAxis( const XclImpChAxis& rChAxis, const XclImpChAxis* pCrossingAxis ) const;
     /** Writes all properties of the background area to the passed diagram. */
     void                ConvertBackground( XDiagramRef xDiagram ) const;
 
@@ -1316,7 +1330,8 @@ typedef ScfRef< XclImpChAxesSet > XclImpChAxesSetRef;
 class XclImpChChart : public XclImpChGroupBase, protected XclImpChRoot
 {
 public:
-    typedef ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XChartDocument > XChartDocRef;
+    typedef ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XChartDocument >    XChartDocRef;
+    typedef ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XDiagram >          XDiagramRef;
 
 public:
     explicit            XclImpChChart( const XclImpRoot& rRoot );
@@ -1347,6 +1362,8 @@ public:
 private:
     /** Reads a CHSERIES group (data series source and formatting). */
     void                ReadChSeries( XclImpStream& rStrm );
+    /** Reads a CHPROPERTIES record (global chart properties). */
+    void                ReadChProperties( XclImpStream& rStrm );
     /** Reads a CHAXESSET group (primary/secondary axes set). */
     void                ReadChAxesSet( XclImpStream& rStrm );
     /** Reads a CHTEXT group (chart title and series/point captions). */
@@ -1360,6 +1377,9 @@ private:
     void                FinalizeDataFormats();
     /** Finalizes chart title, tries to detect title auto-generated from series name. */
     void                FinalizeTitle();
+
+    /** Creates and returns a new diagram object and converts global chart settings. */
+    XDiagramRef         CreateDiagram() const;
 
 private:
     typedef ::std::vector< XclImpChSeriesRef >                  XclImpChSeriesVec;

@@ -472,6 +472,7 @@ public:
 
     void            SelectAll( BOOL bContinue = FALSE );
     void            SelectAllTables();
+    void            DeselectAllTables();
 
     void            MarkCursor( SCCOL nCurX, SCROW nCurY, SCTAB nCurZ,
                                 BOOL bCols = FALSE, BOOL bRows = FALSE, BOOL bCellSelection = FALSE );

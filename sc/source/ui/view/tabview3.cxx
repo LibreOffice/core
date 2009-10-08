@@ -1624,34 +1624,36 @@ void ScTabView::SetTabNo( SCTAB nTab, BOOL bNew, BOOL bExtendSelection )
         SfxBindings& rBindings = aViewData.GetBindings();
         ScMarkData& rMark = aViewData.GetMarkData();
 
-        BOOL bSelectOneTable = FALSE;
-        if (bExtendSelection)
+        bool bAllSelected = true;
+        for (SCTAB nSelTab = 0; nSelTab < nTabCount; ++nSelTab)
         {
-            // #i6327# if all tables are selected, a selection event (#i6330#) will deselect all
-            BOOL bAllSelected = TRUE;
-            for( SCTAB nSelTab = 0; bAllSelected && (nSelTab < nTabCount); ++nSelTab )
-                bAllSelected = !pDoc->IsVisible( nSelTab ) || rMark.GetTableSelect( nSelTab );
-            if( bAllSelected )
+            if (!pDoc->IsVisible(nSelTab) || rMark.GetTableSelect(nSelTab))
             {
-                bExtendSelection = FALSE;
-                bSelectOneTable = TRUE;
+                if (nTab == nSelTab)
+                    // This tab is already in selection.  Keep the current
+                    // selection.
+                    bExtendSelection = true;
+            }
+            else
+            {
+                bAllSelected = false;
+                if (bExtendSelection)
+                    // We got what we need.  No need to stay in the loop.
+                    break;
             }
         }
-        else
-        {
-            // move from multi-selection to unselected table
-            bSelectOneTable = !rMark.GetTableSelect( nTab );
-        }
+        if (bAllSelected && !bNew)
+            // #i6327# if all tables are selected, a selection event (#i6330#) will deselect all
+            // (not if called with bNew to update settings)
+            bExtendSelection = false;
 
         if (bExtendSelection)
-        {
-            // #i6330# multi-selection with keyboard
             rMark.SelectTable( nTab, TRUE );
-        }
-        else if (bSelectOneTable)
+        else
         {
             rMark.SelectOneTable( nTab );
             rBindings.Invalidate( FID_FILL_TAB );
+            rBindings.Invalidate( FID_TAB_DESELECTALL );
         }
 
         bool bUnoRefDialog = pScMod->IsRefDialogOpen() && pScMod->GetCurRefDlgId() == WID_SIMPLE_REF;

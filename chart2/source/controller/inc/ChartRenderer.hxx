@@ -53,12 +53,10 @@ class ChartRenderer : public ::cppu::WeakImplHelper2<
 {
 public:
     ChartRenderer( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >& xChartModel );
-    ChartRenderer( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& xContext);
     virtual ~ChartRenderer();
 
     // ___lang::XServiceInfo___
     APPHELPER_XSERVICEINFO_DECL()
-    APPHELPER_SERVICE_FACTORY_HELPER(ChartRenderer)
 
     // ____ XUnoTunnel ___
     virtual ::sal_Int64 SAL_CALL getSomething( const ::com::sun::star::uno::Sequence< ::sal_Int8 >& aIdentifier )

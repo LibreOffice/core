@@ -66,7 +66,6 @@
 #include <sot/formats.hxx>
 #include <svx/postattr.hxx>
 #include <svx/fontitem.hxx>
-#include <svx/charmap.hxx>
 #include <svx/clipfmtitem.hxx>
 #include <sfx2/passwd.hxx>
 #include <svx/hlnkitem.hxx>
@@ -1996,52 +1995,67 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
         case SID_CHARMAP:
             if( pReqArgs != NULL )
             {
-                const SvxFontItem&   rFontItem   = (const SvxFontItem&) rReq.GetArgs()->Get(SID_CHARMAP);
-                const SfxStringItem& rStringItem = (const SfxStringItem&) rReq.GetArgs()->Get(SID_ATTR_SECIALCHAR);
-                Font    aFont;
+                String aChars, aFontName;
+                const SfxItemSet *pArgs = rReq.GetArgs();
+                const SfxPoolItem* pItem = 0;
+                if ( pArgs )
+                    pArgs->GetItemState(GetPool().GetWhich(SID_CHARMAP), FALSE, &pItem);
+                if ( pItem )
+                {
+                    const SfxStringItem* pStringItem = PTR_CAST( SfxStringItem, pItem );
+                    if ( pStringItem )
+                        aChars = pStringItem->GetValue();
+                    const SfxPoolItem* pFtItem = NULL;
+                    pArgs->GetItemState( GetPool().GetWhich(SID_ATTR_SPECIALCHAR), FALSE, &pFtItem);
+                    const SfxStringItem* pFontItem = PTR_CAST( SfxStringItem, pFtItem );
+                    if ( pFontItem )
+                        aFontName = pFontItem->GetValue();
+                }
 
-                aFont.SetName( rFontItem.GetFamilyName() );
-                aFont.SetStyleName( rFontItem.GetStyleName() );
-                aFont.SetFamily( rFontItem.GetFamily() );
-                aFont.SetPitch( rFontItem.GetPitch() );
-                aFont.SetCharSet( rFontItem.GetCharSet() );
-
-                pTabViewShell->InsertSpecialChar( rStringItem.GetValue(), aFont );
-                if( ! rReq.IsAPI() )
-                    rReq.Done();
+                if ( aChars.Len() )
+                {
+                    Font aFont;
+                    pTabViewShell->GetSelectionPattern()->GetFont( aFont, SC_AUTOCOL_BLACK, NULL, NULL, NULL,
+                                                                pTabViewShell->GetSelectionScriptType() );
+                    if ( aFontName.Len() )
+                        aFont = Font( aFontName, Size(1,1) );
+                    pTabViewShell->InsertSpecialChar( aChars, aFont );
+                    if( ! rReq.IsAPI() )
+                        rReq.Done();
+                }
             }
             else
             {
                 //CHINA001 SvxCharacterMap* pDlg = new SvxCharacterMap(     pTabViewShell->GetDialogParent(), FALSE );
                 SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
-                DBG_ASSERT(pFact, "Dialogdiet fail!");//CHINA001
-                AbstractSvxCharacterMap* pDlg = pFact->CreateSvxCharacterMap( pTabViewShell->GetDialogParent(), RID_SVXDLG_CHARMAP, FALSE);
-                DBG_ASSERT(pDlg, "Dialogdiet fail!");//CHINA001
-                Font             aCurFont;
 
                 // font color doesn't matter here
+                Font             aCurFont;
                 pTabViewShell->GetSelectionPattern()->GetFont( aCurFont, SC_AUTOCOL_BLACK, NULL, NULL, NULL,
                                                                 pTabViewShell->GetSelectionScriptType() );
-                pDlg->SetCharFont( aCurFont );
+
+                SfxAllItemSet aSet( GetPool() );
+                aSet.Put( SfxBoolItem( FN_PARAM_1, FALSE ) );
+                aSet.Put( SvxFontItem( aCurFont.GetFamily(), aCurFont.GetName(), aCurFont.GetStyleName(), aCurFont.GetPitch(), aCurFont.GetCharSet(), GetPool().GetWhich(SID_ATTR_CHAR_FONT) ) );
+
+                SfxAbstractDialog* pDlg = pFact->CreateSfxDialog( pTabViewShell->GetDialogParent(), aSet,
+                    pTabViewShell->GetViewFrame()->GetFrame()->GetFrameInterface(), RID_SVXDLG_CHARMAP );
 
                 if ( pDlg->Execute() == RET_OK )
                 {
-                    Font aNewFont( pDlg->GetCharFont() );
+                    SFX_ITEMSET_ARG( pDlg->GetOutputItemSet(), pItem, SfxStringItem, SID_CHARMAP, FALSE );
+                    SFX_ITEMSET_ARG( pDlg->GetOutputItemSet(), pFontItem, SvxFontItem, SID_ATTR_CHAR_FONT, FALSE );
 
-                    pTabViewShell->InsertSpecialChar( pDlg->GetCharacters(), aNewFont );
-
-                    SfxStringItem aStringItem( SID_ATTR_SECIALCHAR,
-                                               pDlg->GetCharacters() );
-                    SvxFontItem   aFontItem( aNewFont.GetFamily(),
-                                             aNewFont.GetName(),
-                                             aNewFont.GetStyleName(),
-                                             aNewFont.GetPitch(),
-                                             aNewFont.GetCharSet(),
-                                             SID_CHARMAP );
-
-                    rReq.AppendItem( aFontItem );
-                    rReq.AppendItem( aStringItem );
-                    rReq.Done();
+                    if ( pItem && pFontItem )
+                    {
+                        Font aNewFont( pFontItem->GetFamilyName(), pFontItem->GetStyleName(), Size(1,1) );
+                        aNewFont.SetCharSet( pFontItem->GetCharSet() );
+                        aNewFont.SetPitch( pFontItem->GetPitch() );
+                        pTabViewShell->InsertSpecialChar( pItem->GetValue(), aNewFont );
+                        rReq.AppendItem( *pFontItem );
+                        rReq.AppendItem( *pItem );
+                        rReq.Done();
+                    }
                 }
                 delete pDlg;
             }

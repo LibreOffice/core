@@ -36,6 +36,7 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/beans/XPropertyState.hpp>
 #include <cppuhelper/implbase3.hxx>
+#include <svtools/itemprop.hxx>
 
 class ScDocShell;
 
@@ -48,6 +49,7 @@ class ScDocDefaultsObj : public ::cppu::WeakImplHelper3<
 {
 private:
     ScDocShell*             pDocShell;
+    SfxItemPropertyMap      aPropertyMap;
 
     void                    ItemsChanged();
 

@@ -832,6 +832,7 @@
 #define FID_TAB_APPEND          (TAB_POPUP_START+5)
 #define FID_TAB_INDEX           (TAB_POPUP_START+6)
 #define FID_TAB_RTL             (TAB_POPUP_START+7)
+#define FID_TAB_DESELECTALL     (TAB_POPUP_START+8)
 
 #define TAB_POPUP_END           (DATA_MENU_END + 20)
 
@@ -1305,6 +1306,8 @@
 #define SCSTR_DPFUNCLISTBOX         (STR_START + 92)
 #define STR_PRINT_NOTHING           (STR_START + 93)
 #define SCSTR_ALLFILTER             (STR_START + 94)
+#define SCSTR_MOREBTN_MOREOPTIONS   (STR_START + 95)
+#define SCSTR_MOREBTN_FEWEROPTIONS   (STR_START + 96)
 
 // Items
 

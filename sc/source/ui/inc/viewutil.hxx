@@ -38,6 +38,8 @@ class String;
 class SfxItemSet;
 class SfxBindings;
 class SvxFontItem;
+class SfxViewShell;
+class SfxViewFrame;
 
 class ScChangeAction;
 class ScChangeViewSettings;
@@ -54,6 +56,7 @@ class ScViewUtil                                // static Methoden
 {
 public:
     static BOOL ExecuteCharMap( const SvxFontItem&  rOldFont,
+                                SfxViewFrame&       rFrame,
                                 SvxFontItem&        rNewFont,
                                 String&             rString );
 
@@ -75,6 +78,11 @@ public:
     static void UnmarkFiltered( ScMarkData& rMark, ScDocument* pDoc );
 
     static void HideDisabledSlot( SfxItemSet& rSet, SfxBindings& rBindings, USHORT nSlotId );
+
+    /** Returns true, if the passed view shell is in full screen mode. */
+    static bool IsFullScreen( SfxViewShell& rViewShell );
+    /** Enters or leaves full screen mode at the passed view shell. */
+    static void SetFullScreen( SfxViewShell& rViewShell, bool bSet );
 };
 
 // ---------------------------------------------------------------------------

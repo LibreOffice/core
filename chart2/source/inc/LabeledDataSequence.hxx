@@ -31,7 +31,6 @@
 #define CHART2_LABELEDDATASEQUENCE_HXX
 #include "ServiceMacros.hxx"
 #include "MutexContainer.hxx"
-#include "charttoolsdllapi.hxx"
 #include <comphelper/uno3.hxx>
 #include <cppuhelper/implbase4.hxx>
 
@@ -56,7 +55,7 @@ typedef cppu::WeakImplHelper4<
     LabeledDataSequence_Base;
 }
 
-class OOO_DLLPUBLIC_CHARTTOOLS LabeledDataSequence :
+class LabeledDataSequence :
         public MutexContainer,
         public impl::LabeledDataSequence_Base
 {

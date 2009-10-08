@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- This is a template.  i18n translation is not performed in-place;
+     i18n translated XML files are generated from this template by
+     transex3/layout/tralay.  !-->
+
+<modaldialog sizeable="true" closeable="true" moveable="true" output-size="true" id="RID_SCDLG_INSERT_TABLE" sv-look="true" _title="Insert Sheet" xmlns="http://openoffice.org/2007/layout" xmlns:cnt="http://openoffice.org/2007/layout/container">
+    <vbox spacing="5" border="5">
+        <fixedline id="FL_POSITION" _text="Position"/>
+    <hbox>
+        <vbox cnt:padding="13" spacing="5">
+        <radiobutton radiogroup="insert-sheet-position" id="RB_BEFORE" tabstop="true" _label="B~efore current sheet"/>
+        <radiobutton radiogroup="insert-sheet-position" id="RB_BEHIND" tabstop="true" _label="~After current sheet"/>
+        </vbox>
+    </hbox>
+        <fixedline id="FL_TABLE" _text="Sheet"/>
+    <hbox>
+        <vbox cnt:padding="13" spacing="5">
+        <radiobutton radiogroup="insert-sheet-source" id="RB_NEW" _label="~New sheet"/>
+        <hbox>
+            <vbox cnt:padding="13" spacing="5" cnt:fill="false" cnt:expand="false">
+            <fixedtext id="FT_COUNT" _label="N~o. of sheets"/>
+            <fixedtext id="FT_NAME" _label="Na~me"/>
+            </vbox>
+            <vbox>
+            <hbox>
+                <numericfield has_border="true" maximum="256" minimum="1" repeat="true" id="NF_COUNT" spin="true" spin-size="1" tabstop="true" value="1" cnt:fill="true" cnt:expand="false"/>
+            </hbox>
+            <edit has_border="true" id="ED_TABNAME"  cnt:fill="true" cnt:expand="true"/>
+            </vbox>
+        </hbox>
+        </vbox>
+    </hbox>
+    <hbox>
+        <vbox cnt:padding="13" spacing="5">
+        <radiobutton radiogroup="insert-sheet-source" id="RB_FROMFILE" _label="~From file"/>
+        <hbox>
+            <vbox cnt:padding="13" spacing="5">
+            <hbox>
+                <multilistbox auto-hscroll="true" has_border="true" id="LB_TABLES" simple-mode="true" string-item-list=" : : : : " cnt:fill="true" cnt:expand="true"/>
+                <vbox cnt:fill="false" cnt:expand="false" spacing="5">
+                <pushbutton id="BTN_BROWSE" _label="~Browse..." cnt:expand="false"/>
+                <checkbox id="CB_LINK" _label="Lin~k" cnt:expand="false"/>
+                <flow/>
+                </vbox>
+            </hbox>
+            <fixedtext id="FT_PATH" label="FT-PATH"/>
+            </vbox>
+        </hbox>
+        </vbox>
+    </hbox>
+    <dialogbuttonhbox border="5" spacing="5">
+            <okbutton defbutton="true" id="BTN_OK"/>
+            <cancelbutton id="BTN_CANCEL"/>
+            <helpbutton id="BTN_HELP"/>
+    </dialogbuttonhbox>
+    </vbox>
+</modaldialog>

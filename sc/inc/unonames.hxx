@@ -239,6 +239,7 @@
 
 //  data pilot field
 #define SC_UNONAME_FUNCTION         "Function"
+#define SC_UNONAME_SUBTOTALS        "Subtotals"
 #define SC_UNONAME_SELPAGE          "SelectedPage"
 #define SC_UNONAME_USESELPAGE       "UseSelectedPage"
 #define SC_UNONAME_HASREFERENCE     "HasReference"
@@ -570,7 +571,6 @@
 #define SC_UNO_DRILLDOWN            "DrillDownOnDoubleClick"
 #define SC_UNO_SHOWFILT             "ShowFilterButton"
 
-
 //  range selection
 #define SC_UNONAME_INITVAL          "InitialValue"
 #define SC_UNONAME_TITLE            "Title"
@@ -608,8 +608,9 @@
 #define SC_UNO_COMPILEFAP           "CompileFAP"
 
 // Chart2
-#define SC_UNONAME_ISHIDDEN         "IsHidden"
-#define SC_UNONAME_ROLE             "Role"
+#define SC_UNONAME_ROLE                 "Role"
+#define SC_UNONAME_HIDDENVALUES         "HiddenValues"
+#define SC_UNONAME_INCLUDEHIDDENCELLS   "IncludeHiddenCells"
 #define SC_UNONAME_HIDDENVALUES     "HiddenValues"
 
 // Solver

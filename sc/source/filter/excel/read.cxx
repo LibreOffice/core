@@ -54,20 +54,11 @@
 #include "XclImpChangeTrack.hxx"
 
 #include "root.hxx"
-#include "biffdump.hxx"
 #include "imp_op.hxx"
 #include "excimp8.hxx"
 
 FltError ImportExcel::Read( void )
 {
-#if EXC_INCL_DUMPER
-    {
-        Biff8RecDumper aDumper( GetRoot(), FALSE );
-        if( aDumper.Dump( aIn ) )
-            return ERRCODE_ABORT;
-    }
-#endif
-
     XclImpPageSettings&     rPageSett       = GetPageSettings();
     XclImpTabViewSettings&  rTabViewSett    = GetTabViewSettings();
     XclImpPalette&          rPal            = GetPalette();

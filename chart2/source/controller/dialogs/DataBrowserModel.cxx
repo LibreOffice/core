@@ -103,7 +103,7 @@ OUString lcl_getUIRoleName(
 {
     OUString aResult( lcl_getRole( xLSeq ));
     if( aResult.getLength())
-        aResult = chart::DialogModel::ConvertRoleFromInternalToUI( aResult );
+        aResult = ::chart::DialogModel::ConvertRoleFromInternalToUI( aResult );
     return aResult;
 }
 
@@ -279,8 +279,8 @@ struct DataBrowserModel::implColumnLess : public ::std::binary_function<
     {
         if( rLeft.m_xLabeledDataSequence.is() && rRight.m_xLabeledDataSequence.is())
         {
-            return chart::DialogModel::GetRoleIndexForSorting( lcl_getRole( rLeft.m_xLabeledDataSequence )) <
-                chart::DialogModel::GetRoleIndexForSorting( lcl_getRole( rRight.m_xLabeledDataSequence ));
+            return DialogModel::GetRoleIndexForSorting( lcl_getRole( rLeft.m_xLabeledDataSequence )) <
+                DialogModel::GetRoleIndexForSorting( lcl_getRole( rRight.m_xLabeledDataSequence ));
         }
         return true;
     }
@@ -708,7 +708,7 @@ void DataBrowserModel::updateFromModel()
         tDataColumn aCategories;
         aCategories.m_xLabeledDataSequence.set( xCategories );
         if( lcl_ShowCategoriesAsDataLabel( xDiagram ))
-            aCategories.m_aUIRoleName = chart::DialogModel::GetRoleDataLabel();
+            aCategories.m_aUIRoleName = DialogModel::GetRoleDataLabel();
         else
             aCategories.m_aUIRoleName = lcl_getUIRoleName( xCategories );
         aCategories.m_eCellType = TEXT;

@@ -76,6 +76,7 @@
 #include <com/sun/star/accessibility/XAccessible.hpp>
 #include "AccessibilityHints.hxx"
 #include <vcl/svapp.hxx>
+#include "viewutil.hxx"
 
 // STATIC DATA -----------------------------------------------------------
 
@@ -696,7 +697,7 @@ void __EXPORT ScPreview::KeyInput( const KeyEvent& rKEvt )
         switch(nKey)
         {
             case KEY_ADD:      nSlot = SID_PREVIEW_ZOOMIN;  break;
-            case KEY_ESCAPE:   nSlot = SID_PREVIEW_CLOSE; break;
+            case KEY_ESCAPE:   nSlot = ScViewUtil::IsFullScreen( *pViewShell ) ? SID_CANCEL : SID_PREVIEW_CLOSE; break;
             case KEY_SUBTRACT: nSlot = SID_PREVIEW_ZOOMOUT; break;
         }
         if(nSlot)

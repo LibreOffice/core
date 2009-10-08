@@ -34,7 +34,7 @@
 #include "PropertyHelper.hxx"
 #include "macros.hxx"
 #include "PolarCoordinateSystem.hxx"
-#include "Scaling.hxx"
+#include "AxisHelper.hxx"
 #include "servicenames_charttypes.hxx"
 #include "ContainerHelper.hxx"
 #include "AxisIndexDefines.hxx"
@@ -156,7 +156,7 @@ Reference< chart2::XCoordinateSystem > SAL_CALL
         //hhhh todo make axis invisible
 
         chart2::ScaleData aScaleData = xAxis->getScaleData();
-        aScaleData.Scaling = new LinearScaling( 1.0, 0.0 );
+        aScaleData.Scaling = AxisHelper::createLinearScaling();
         aScaleData.AxisType = chart2::AxisType::REALNUMBER;
 
         if( i == 0 )

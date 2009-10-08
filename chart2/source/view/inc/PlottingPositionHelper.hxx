@@ -193,7 +193,9 @@ public:
 
     using PlottingPositionHelper::transformScaledLogicToScene;
 
+#ifdef NOTYET
     double  getInnerLogicRadius() const;
+#endif
     double  getOuterLogicRadius() const;
 
     inline bool isMathematicalOrientationAngle() const;

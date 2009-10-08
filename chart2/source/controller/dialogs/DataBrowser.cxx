@@ -101,33 +101,6 @@ using namespace ::svt;
 
 namespace
 {
-void lcl_setNumberFormat(
-    SvNumberFormatter * pNumFormatter, long nFmt,
-    double fData, String & rOutString )
-{
-    short eType = pNumFormatter->GetType( nFmt );
-
-    // change nFmt to an editable format (without loss of information)
-    if( eType == NUMBERFORMAT_CURRENCY )    // for currencies just display decimals
-    {
-        nFmt = pNumFormatter->GetStandardIndex();
-    }
-    else
-    {
-        const SvNumberformat* pFormat = pNumFormatter->GetEntry( nFmt );
-        if( pFormat )
-        {
-            LanguageType eLanguage = pFormat->GetLanguage();
-            nFmt = pNumFormatter->GetStandardFormat( nFmt, eType, eLanguage );
-        }
-        // else: format is 'standard'
-    }
-
-    // format string to an editable format (without loss of information)
-    Color* pDummy = NULL;
-    pNumFormatter->GetOutputString( fData, nFmt, rOutString, &pDummy );
-}
-
 sal_Int32 lcl_getRowInData( long nRow )
 {
     return static_cast< sal_Int32 >( nRow );
@@ -218,7 +191,6 @@ public:
     sal_Int32 GetEndColumn() const;
 
     void Show();
-    void Hide();
 
     /** call this before destroying the class.  This notifies the listeners to
         changes of the edit field for the series name.
@@ -378,13 +350,6 @@ void SeriesHeader::Show()
     m_spSymbol->Show();
     m_spSeriesName->Show();
     m_spColorBar->Show();
-}
-
-void SeriesHeader::Hide()
-{
-    m_spSymbol->Hide();
-    m_spSeriesName->Hide();
-    m_spColorBar->Hide();
 }
 
 void SeriesHeader::SetEditChangedHdl( const Link & rLink )
@@ -1313,12 +1278,10 @@ void DataBrowser::ImplAdjustHeaderControls()
             {
                 (*aIt)->SetPixelPosX( nStartPos + 2 );
                 (*aIt)->SetPixelWidth( nCurrentPos - nStartPos - 3 );
-//                 (*aIt)->Show();
             }
             else
                 // do not hide, to get focus events. Move outside the dialog for "hiding"
                 (*aIt)->SetPixelPosX( nMaxPos + 42 );
-//                 (*aIt)->Hide();
             ++aIt;
         }
     }

@@ -80,9 +80,9 @@ using namespace com::sun::star;
 
 //  alles ohne Which-ID, Map nur fuer PropertySetInfo
 
-const SfxItemPropertyMap* lcl_GetViewOptPropertyMap()
+const SfxItemPropertyMapEntry* lcl_GetViewOptPropertyMap()
 {
-    static SfxItemPropertyMap aViewOptPropertyMap_Impl[] =
+    static SfxItemPropertyMapEntry aViewOptPropertyMap_Impl[] =
     {
         {MAP_CHAR_LEN(OLD_UNO_COLROWHDR),   0,  &getBooleanCppuType(),          0, 0},
         {MAP_CHAR_LEN(SC_UNO_GRIDCOLOR),    0,  &getCppuType((sal_Int32*)0),    0, 0},

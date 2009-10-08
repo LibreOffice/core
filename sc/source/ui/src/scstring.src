@@ -728,6 +728,16 @@ String RID_SCSTR_ONCLICK
     Text [ en-US ] = "Mouse button pressed";
 };
 
+String SCSTR_MOREBTN_MOREOPTIONS
+{
+    Text [ en-US ] = "More ~Options";
+};
+
+String SCSTR_MOREBTN_FEWEROPTIONS
+{
+    Text [ en-US ] = "Fewer ~Options";
+};
+
 StringArray SCSTR_PRINT_OPTIONS
 {
     ItemList [en-US] =
@@ -752,3 +762,4 @@ StringArray SCSTR_PRINT_OPTIONS
         < "Print only some pages of the printable content."; >;
     };
 };
+

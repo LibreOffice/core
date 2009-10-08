@@ -166,7 +166,7 @@ namespace chart
 
 Legend::Legend( Reference< uno::XComponentContext > const & /* xContext */ ) :
         ::property::OPropertySet( m_aMutex ),
-        m_xModifyEventForwarder( new ModifyListenerHelper::ModifyEventForwarder())
+        m_xModifyEventForwarder( ModifyListenerHelper::createModifyEventForwarder())
 {
 }
 
@@ -174,7 +174,7 @@ Legend::Legend( const Legend & rOther ) :
         MutexContainer(),
         impl::Legend_Base(),
         ::property::OPropertySet( rOther, m_aMutex ),
-    m_xModifyEventForwarder( new ModifyListenerHelper::ModifyEventForwarder())
+    m_xModifyEventForwarder( ModifyListenerHelper::createModifyEventForwarder())
 {
     CloneHelper::CloneRefVector< Reference< chart2::XLegendEntry > >( rOther.m_aLegendEntries, m_aLegendEntries );
     ModifyListenerHelper::addListenerToAllElements( m_aLegendEntries, m_xModifyEventForwarder );

@@ -77,8 +77,11 @@ FltError ScFormatFilterPluginImpl::ScImportExcel( SfxMedium& rMedium, ScDocument
     using namespace ::com::sun::star;
     using namespace ::comphelper;
 
-    // false = use old sc filter for import (OOX only as file dumper), true = use new OOX filter for import
-    bool bUseOoxFilter = false;
+    /*  Environment variable "OOO_OOXBIFFFILTER":
+        - "1" = use new OOX filter for import;
+        - undef/other = use old sc filter for import (OOX only as file dumper). */
+    const sal_Char* pcFileName = ::getenv( "OOO_OOXBIFFFILTER" );
+    bool bUseOoxFilter = pcFileName && (*pcFileName == '1') && (*(pcFileName + 1) == 0);
     if( SfxObjectShell* pDocShell = pDocument->GetDocumentShell() ) try
     {
         uno::Reference< lang::XComponent > xComponent( pDocShell->GetModel(), uno::UNO_QUERY_THROW );
@@ -87,7 +90,7 @@ FltError ScFormatFilterPluginImpl::ScImportExcel( SfxMedium& rMedium, ScDocument
         aArgs[ 0 ] <<= getProcessServiceFactory();
         aArgs[ 1 ] <<= !bUseOoxFilter;
         uno::Reference< document::XImporter > xImporter( ScfApiHelper::CreateInstanceWithArgs(
-            CREATE_STRING( "com.sun.star.comp.oox.ExcelBiffFilter" ), aArgs ), uno::UNO_QUERY_THROW );
+            CREATE_OUSTRING( "com.sun.star.comp.oox.ExcelBiffFilter" ), aArgs ), uno::UNO_QUERY_THROW );
         xImporter->setTargetDocument( xComponent );
 
         MediaDescriptor aDescriptor;

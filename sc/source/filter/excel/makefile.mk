@@ -51,7 +51,6 @@ VISIBILITY_HIDDEN=TRUE
 # --- Files --------------------------------------------------------
 
 SLOFILES =	\
-        $(SLO)$/biffdump.obj				\
         $(SLO)$/colrowst.obj				\
         $(SLO)$/excdoc.obj					\
         $(SLO)$/excel.obj					\

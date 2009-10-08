@@ -141,15 +141,15 @@ void ScHTMLExport::WriteGraphEntry( ScHTMLGraphEntry* pE )
 {
     SdrObject* pObject = pE->pObject;
     ByteString aOpt;
-    (((aOpt += ' ') += sHTML_O_width) += '=') +=
+    (((aOpt += ' ') += OOO_STRING_SVTOOLS_HTML_O_width) += '=') +=
         ByteString::CreateFromInt32( pE->aSize.Width() );
-    (((aOpt += ' ') += sHTML_O_height) += '=') +=
+    (((aOpt += ' ') += OOO_STRING_SVTOOLS_HTML_O_height) += '=') +=
         ByteString::CreateFromInt32( pE->aSize.Height() );
     if ( pE->bInCell )
     {
-        (((aOpt += ' ') += sHTML_O_hspace) += '=') +=
+        (((aOpt += ' ') += OOO_STRING_SVTOOLS_HTML_O_hspace) += '=') +=
             ByteString::CreateFromInt32( pE->aSpace.Width() );
-        (((aOpt += ' ') += sHTML_O_vspace) += '=') +=
+        (((aOpt += ' ') += OOO_STRING_SVTOOLS_HTML_O_vspace) += '=') +=
             ByteString::CreateFromInt32( pE->aSpace.Height() );
     }
     switch ( pObject->GetObjIdentifier() )
@@ -237,7 +237,7 @@ void ScHTMLExport::WriteImage( String& rLinkName, const Graphic& rGrf,
     }
     if( rLinkName.Len() )
     {   // <IMG SRC="..."[ rImgOptions]>
-        rStrm << '<' << sHTML_image << ' ' << sHTML_O_src << "=\"";
+        rStrm << '<' << OOO_STRING_SVTOOLS_HTML_image << ' ' << OOO_STRING_SVTOOLS_HTML_O_src << "=\"";
         HTMLOutFuncs::Out_String( rStrm, URIHelper::simpleNormalizedMakeRelative(
                     aBaseURL,
                     rLinkName ), eDestEnc ) << '\"';

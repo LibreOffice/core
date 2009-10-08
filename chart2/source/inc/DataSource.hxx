@@ -37,12 +37,11 @@
 #include <cppuhelper/implbase3.hxx>
 #include <comphelper/uno3.hxx>
 #include "ServiceMacros.hxx"
-#include "charttoolsdllapi.hxx"
 
 namespace chart
 {
 
-class OOO_DLLPUBLIC_CHARTTOOLS DataSource : public
+class DataSource : public
     ::cppu::WeakImplHelper3<
         ::com::sun::star::lang::XServiceInfo,
         ::com::sun::star::chart2::data::XDataSource,

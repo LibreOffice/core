@@ -32,7 +32,10 @@
 #include "precompiled_chart2.hxx"
 
 #include "ChartData.hxx"
-#include "InternalDataProvider.hxx"
+#include "ChartModelHelper.hxx"
+
+#include <com/sun/star/lang/XInitialization.hpp>
+#include <com/sun/star/beans/NamedValue.hpp>
 
 using namespace ::com::sun::star;
 
@@ -45,7 +48,8 @@ namespace chart
 
 ChartData::ChartData( const Reference< uno::XComponentContext > & xContext ) :
         m_xContext( xContext ),
-        m_pInternalDataProvider( 0 )
+        m_xDataProvider( 0 ),
+        m_xInternalDataProvider( 0 )
 {}
 
 ChartData::~ChartData()
@@ -55,7 +59,7 @@ void ChartData::setDataProvider(
     const Reference< chart2::data::XDataProvider > & xDataProvider ) throw()
 {
     m_xDataProvider.set( xDataProvider );
-    m_pInternalDataProvider = 0;
+    m_xInternalDataProvider.clear();
 }
 
 Reference< chart2::data::XDataProvider > ChartData::getDataProvider() const throw()
@@ -70,25 +74,32 @@ bool ChartData::createInternalData(
         return false;
 
     if( bCloneOldData )
-        m_pInternalDataProvider = new InternalDataProvider( xChartDoc );
+        m_xInternalDataProvider = ChartModelHelper::createInternalDataProvider( xChartDoc );
     else
-        m_pInternalDataProvider = new InternalDataProvider();
+        m_xInternalDataProvider = ChartModelHelper::createInternalDataProvider();
 
-    m_xDataProvider.set( m_pInternalDataProvider );
+    m_xDataProvider.set( m_xInternalDataProvider );
     return true;
 }
 
 bool ChartData::hasInternalData() const
 {
-    return (m_xDataProvider.is() && m_pInternalDataProvider != 0);
+    return (m_xDataProvider.is() && m_xInternalDataProvider.is());
 }
 
 bool ChartData::createDefaultData() throw()
 {
     if( hasInternalData() )
     {
-        m_pInternalDataProvider->createDefaultData();
-        return true;
+        uno::Reference< lang::XInitialization > xIni(m_xInternalDataProvider,uno::UNO_QUERY);
+        if ( xIni.is() )
+        {
+            uno::Sequence< uno::Any > aArgs(1);
+            beans::NamedValue aParam(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("CreateDefaultData")),uno::makeAny(sal_True));
+            aArgs[0] <<= aParam;
+            xIni->initialize(aArgs);
+            return true;
+        }
     }
     return false;
 }

@@ -338,7 +338,7 @@ TOPIC DifParser::GetNextTopic( void )
 
     while( eS != S_END )
     {
-        if( !rIn.ReadUniOrByteStringLine( aLine ) )
+        if( !ReadNextLine( aLine ) )
         {
             eS = S_END;
             eRet = T_END;
@@ -406,10 +406,10 @@ TOPIC DifParser::GetNextTopic( void )
                 break;
             case S_UNKNOWN:
                 // 2 Zeilen ueberlesen
-                rIn.ReadUniOrByteStringLine( aLine );
+                ReadNextLine( aLine );
             case S_ERROR_L2:                // Fehler in Line 2 aufgetreten
                 // eine Zeile ueberlesen
-                rIn.ReadUniOrByteStringLine( aLine );
+                ReadNextLine( aLine );
                 eS = S_END;
                 break;
             default:
@@ -421,7 +421,7 @@ TOPIC DifParser::GetNextTopic( void )
 }
 
 
-void lcl_DeEscapeQuotesDif( String& rString )
+static void lcl_DeEscapeQuotesDif( String& rString )
 {
     //  Special handling for DIF import: Escaped (duplicated) quotes are resolved.
     //  Single quote characters are left in place because older versions didn't
@@ -437,25 +437,107 @@ void lcl_DeEscapeQuotesDif( String& rString )
     }
 }
 
+// Determine if passed in string is numeric data and set fVal/nNumFormat if so
+DATASET DifParser::GetNumberDataset( const sal_Unicode* pPossibleNumericData )
+{
+    DATASET eRet = D_SYNT_ERROR;
+    if( bPlain )
+    {
+        if( ScanFloatVal( pPossibleNumericData ) )
+            eRet = D_NUMERIC;
+        else
+            eRet = D_SYNT_ERROR;
+    }
+    else
+    {   // ...und zur Strafe mit'm Numberformatter...
+        DBG_ASSERT( pNumFormatter, "-DifParser::GetNextDataset(): No Formatter, more fun!" );
+        String aTestVal( pPossibleNumericData );
+        sal_uInt32 nFormat = 0;
+        double fTmpVal;
+        if( pNumFormatter->IsNumberFormat( aTestVal, nFormat, fTmpVal ) )
+        {
+            fVal = fTmpVal;
+            nNumFormat = nFormat;
+            eRet = D_NUMERIC;
+        }
+        else
+            eRet = D_SYNT_ERROR;
+    }
+    return eRet;
+}
+
+bool DifParser::ReadNextLine( String& rStr )
+{
+    if( aLookAheadLine.Len() == 0 )
+    {
+        return rIn.ReadUniOrByteStringLine( rStr );
+    }
+    else
+    {
+        rStr = aLookAheadLine;
+        aLookAheadLine.Erase();
+        return true;
+    }
+}
+
+// Look ahead in the stream to determine if the next line is the first line of
+// a valid data record structure
+bool DifParser::LookAhead()
+{
+    const sal_Unicode* pAktBuffer;
+    bool bValidStructure = false;
+
+    DBG_ASSERT( aLookAheadLine.Len() == 0, "*DifParser::LookAhead(): LookAhead called twice in a row" );
+    rIn.ReadUniOrByteStringLine( aLookAheadLine );
+
+    pAktBuffer = aLookAheadLine.GetBuffer();
+
+    switch( *pAktBuffer )
+    {
+        case '-':                   // Special Datatype
+            pAktBuffer++;
+
+            if( Is1_0( pAktBuffer ) )
+            {
+                bValidStructure = true;
+            }
+            break;
+        case '0':                   // Numeric Data
+            pAktBuffer++;
+            if( *pAktBuffer == ',' )
+            {
+                pAktBuffer++;
+                bValidStructure = ( GetNumberDataset(pAktBuffer) != D_SYNT_ERROR );
+            }
+            break;
+        case '1':                   // String Data
+            if( Is1_0( aLookAheadLine.GetBuffer() ) )
+            {
+                bValidStructure = true;
+            }
+            break;
+    }
+    return bValidStructure;
+}
 
 DATASET DifParser::GetNextDataset( void )
 {
     DATASET             eRet = D_UNKNOWN;
     String              aLine;
-    const sal_Unicode*      pAkt;
+    const sal_Unicode*      pAktBuffer;
 
-    rIn.ReadUniOrByteStringLine( aLine );
+    ReadNextLine( aLine );
 
-    pAkt = aLine.GetBuffer();
+    pAktBuffer = aLine.GetBuffer();
 
-    switch( *pAkt )
+    switch( *pAktBuffer )
     {
         case '-':                   // Special Datatype
-            pAkt++;
+            pAktBuffer++;
 
-            if( Is1_0( pAkt ) )
+            if( Is1_0( pAktBuffer ) )
             {
-                rIn.ReadUniOrByteStringLine( aLine );
+                ReadNextLine( aLine );
                 if( IsBOT( aLine.GetBuffer() ) )
                     eRet = D_BOT;
                 else if( IsEOD( aLine.GetBuffer() ) )
@@ -463,37 +545,16 @@ DATASET DifParser::GetNextDataset( void )
             }
             break;
         case '0':                   // Numeric Data
-            pAkt++;                 // Wert in fVal, 2. Zeile in aData
-            if( *pAkt == ',' )
+            pAktBuffer++;           // Wert in fVal, 2. Zeile in aData
+            if( *pAktBuffer == ',' )
             {
-                pAkt++;
-                if( bPlain )
-                {
-                    if( ScanFloatVal( pAkt ) )
-                        eRet = D_NUMERIC;
-                    else
-                        eRet = D_SYNT_ERROR;
-                }
-                else
-                {   // ...und zur Strafe mit'm Numberformatter...
-                    DBG_ASSERT( pNumFormatter, "-DifParser::GetNextDataset(): No Formatter, more fun!" );
-                    String          aTestVal( pAkt );
-                    sal_uInt32      nFormat = 0;
-                    double          fTmpVal;
-                    if( pNumFormatter->IsNumberFormat( aTestVal, nFormat, fTmpVal ) )
-                    {
-                        fVal = fTmpVal;
-                        nNumFormat = nFormat;
-                        eRet = D_NUMERIC;
-                    }
-                    else
-                        eRet = D_SYNT_ERROR;
-                }
-                rIn.ReadUniOrByteStringLine( aData );
+                pAktBuffer++;
+                eRet = GetNumberDataset(pAktBuffer);
+                ReadNextLine( aData );
                 if ( eRet == D_SYNT_ERROR )
                 {   // for broken records write "#ERR: data" to cell
                     String aTmp( RTL_CONSTASCII_USTRINGPARAM( "#ERR: " ));
-                    aTmp += pAkt;
+                    aTmp += pAktBuffer;
                     aTmp.AppendAscii( " (" );
                     aTmp += aData;
                     aTmp += sal_Unicode(')');
@@ -505,18 +566,62 @@ DATASET DifParser::GetNextDataset( void )
         case '1':                   // String Data
             if( Is1_0( aLine.GetBuffer() ) )
             {
-                rIn.ReadUniOrByteStringLine( aLine );
-                DBG_ASSERT( aLine.Len() >= 2,
-                    "*DifParser::GetNextTopic(): Text ist zu kurz (mind. \"\")!" );
-                aData = aLine.Copy( 1, aLine.Len() - 2 );
-                lcl_DeEscapeQuotesDif( aData );
-                eRet = D_STRING;
+                ReadNextLine( aLine );
+                xub_StrLen nLineLength = aLine.Len();
+                const sal_Unicode* pLine = aLine.GetBuffer();
+
+                if( nLineLength >= 1 && *pLine == '"' )
+                {
+                    // Quotes are not always escaped (duplicated), see lcl_DeEscapeQuotesDif
+                    // A look ahead into the next line is needed in order to deal with
+                    // multiline strings containing quotes
+                    if( LookAhead() )
+                    {
+                        // Single line string
+                        if( nLineLength >= 2 && pLine[nLineLength - 1] == '"' )
+                        {
+                            aData = aLine.Copy( 1, nLineLength - 2 );
+                            lcl_DeEscapeQuotesDif( aData );
+                            eRet = D_STRING;
+                        }
+                    }
+                    else
+                    {
+                        // Multiline string
+                        aData = aLine.Copy( 1 );
+                        bool bContinue = true;
+                        while ( bContinue )
+                        {
+                            aData.Append( '\n' );
+                            bContinue = !rIn.IsEof() && ReadNextLine( aLine );
+                            if( bContinue )
+                            {
+                                nLineLength = aLine.Len();
+                                if( nLineLength >= 1 )
+                                {
+                                    pLine = aLine.GetBuffer();
+                                    bContinue = !LookAhead();
+                                    if( bContinue )
+                                    {
+                                        aData.Append( aLine );
+                                    }
+                                    else if( pLine[nLineLength - 1] == '"' )
+                                    {
+                                        aData.Append( pLine, nLineLength - 1 );
+                                        lcl_DeEscapeQuotesDif( aData );
+                                        eRet = D_STRING;
+                                    }
+                                }
+                            }
+                        };
+                    }
+                }
             }
             break;
     }
 
     if( eRet == D_UNKNOWN )
-        rIn.ReadUniOrByteStringLine( aLine );
+        ReadNextLine( aLine );
 
     if( rIn.IsEof() )
         eRet = D_EOD;

@@ -50,6 +50,7 @@
 #include "WrappedDataCaptionProperties.hxx"
 #include "WrappedSeriesAreaOrLineProperty.hxx"
 #include "WrappedScaleTextProperties.hxx"
+#include "WrappedTextRotationProperty.hxx"
 #include <rtl/ustrbuf.hxx>
 #include <rtl/math.hxx>
 // header for define DBG_ASSERT
@@ -90,7 +91,8 @@ enum
     PROP_SERIES_PERCENTAGE_NUMBERFORMAT,
     PROP_SERIES_DATAPOINT_LABEL_PLACEMENT,
     //other series properties
-    PROP_SERIES_ATTACHED_AXIS
+    PROP_SERIES_ATTACHED_AXIS,
+    PROP_SERIES_DATAPOINT_TEXT_ROTATION
 };
 
 void lcl_AddPropertiesToVector_PointProperties(
@@ -145,6 +147,13 @@ void lcl_AddPropertiesToVector_PointProperties(
                   ::getCppuType( reinterpret_cast< const sal_Int32 * >(0)),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEVOID ));
+
+    rOutProperties.push_back(
+        Property( C2U( "TextRotation" ),
+                  PROP_SERIES_DATAPOINT_TEXT_ROTATION,
+                  ::getCppuType( reinterpret_cast< const sal_Int32 * >(0)),
+                  beans::PropertyAttribute::BOUND
+                  | beans::PropertyAttribute::MAYBEDEFAULT ));
 }
 
 void lcl_AddPropertiesToVector_SeriesOnly(
@@ -749,6 +758,8 @@ const std::vector< WrappedProperty* > DataSeriesPointWrapper::createWrappedPrope
     aWrappedProperties.push_back( new WrappedProperty( C2U( "SolidType" ), C2U( "Geometry3D" ) ) );
     aWrappedProperties.push_back( new WrappedSegmentOffsetProperty() );
     aWrappedProperties.push_back( new WrappedProperty( C2U( "D3DPercentDiagonal" ), C2U( "PercentDiagonal" ) ) );
+
+    aWrappedProperties.push_back( new WrappedTextRotationProperty() );
 
     return aWrappedProperties;
 }

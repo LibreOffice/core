@@ -40,6 +40,7 @@
 #include "ContainerHelper.hxx"
 #include "servicenames_coosystems.hxx"
 #include "DataSeriesHelper.hxx"
+#include "Scaling.hxx"
 
 #include <svtools/saveopt.hxx>
 
@@ -66,6 +67,17 @@ using namespace ::com::sun::star::chart2;
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::Sequence;
 
+//static
+Reference< chart2::XScaling > AxisHelper::createLinearScaling()
+{
+    return new LinearScaling( 1.0, 0.0 );
+}
+
+//static
+Reference< chart2::XScaling > AxisHelper::createLogarithmicScaling( double fBase )
+{
+    return new LogarithmicScaling( fBase );
+}
 
 //static
 ScaleData AxisHelper::createDefaultScale()

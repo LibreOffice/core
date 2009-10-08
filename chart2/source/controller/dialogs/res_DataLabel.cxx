@@ -112,7 +112,7 @@ void lcl_setBoolItemToCheckBox( const SfxItemSet& rInAttrs, USHORT nWhichId, Che
 
 }//end anonymous namespace
 
-DataLabelResources::DataLabelResources( Window* pWindow, const SfxItemSet& rInAttrs, bool bShowTextDirectionListBox )
+DataLabelResources::DataLabelResources( Window* pWindow, const SfxItemSet& rInAttrs )
     : m_aCBNumber(pWindow, SchResId(CB_VALUE_AS_NUMBER)),
     m_aPB_NumberFormatForValue(pWindow, SchResId(PB_NUMBERFORMAT)),
     m_aCBPercent(pWindow, SchResId(CB_VALUE_AS_PERCENTAGE)),
@@ -122,6 +122,10 @@ DataLabelResources::DataLabelResources( Window* pWindow, const SfxItemSet& rInAt
     m_aSeparatorResources(pWindow),
     m_aFT_LabelPlacement(pWindow, SchResId(FT_LABEL_PLACEMENT)),
     m_aLB_LabelPlacement(pWindow, SchResId(LB_LABEL_PLACEMENT)),
+    m_aFL_Rotate(pWindow, SchResId(FL_LABEL_ROTATE)),
+    m_aDC_Dial(pWindow, SchResId(CT_LABEL_DIAL)),
+    m_aFT_Degrees(pWindow, SchResId(FT_LABEL_DEGREES)),
+    m_aNF_Degrees(pWindow, SchResId(NF_LABEL_DEGREES)),
     m_aFT_TextDirection(pWindow, SchResId(FT_LABEL_TEXTDIR)),
     m_aLB_TextDirection(pWindow, SchResId(LB_LABEL_TEXTDIR), &m_aFT_TextDirection),
     m_pNumberFormatter(0),
@@ -136,6 +140,7 @@ DataLabelResources::DataLabelResources( Window* pWindow, const SfxItemSet& rInAt
     m_pWindow(pWindow),
     m_pPool(rInAttrs.GetPool())
 {
+    //fill label placement list
     std::map< sal_Int32, XubString > aPlacementToStringMap;
     for( sal_Int32 nEnum=0; nEnum<m_aLB_LabelPlacement.GetEntryCount(); ++nEnum )
         aPlacementToStringMap[nEnum]=m_aLB_LabelPlacement.GetEntry(static_cast<USHORT>(nEnum));
@@ -146,7 +151,6 @@ DataLabelResources::DataLabelResources( Window* pWindow, const SfxItemSet& rInAt
         aAvailabelPlacementList =((const SfxIntegerListItem*)pPoolItem)->GetConstSequence();
 
     m_aLB_LabelPlacement.Clear();
-
     for( sal_Int32 nN=0; nN<aAvailabelPlacementList.getLength(); ++nN )
     {
         USHORT nListBoxPos = static_cast<USHORT>( nN );
@@ -155,55 +159,52 @@ DataLabelResources::DataLabelResources( Window* pWindow, const SfxItemSet& rInAt
         m_aListBoxToPlacementMap[nListBoxPos]=nPlacement;
         m_aLB_LabelPlacement.InsertEntry( aPlacementToStringMap[nPlacement] );
     }
-
     m_aLB_LabelPlacement.SetDropDownLineCount(m_aLB_LabelPlacement.GetEntryCount());
 
-    Size aPBSize( m_aPB_NumberFormatForPercent.GetSizePixel() );
-    long nMinWidth = ::std::max( m_aPB_NumberFormatForPercent.CalcMinimumSize().getWidth(), m_aPB_NumberFormatForValue.CalcMinimumSize().getWidth() );
-    aPBSize.setWidth( nMinWidth+20 );//the min with is to small to fit, hm... so add alittle
+    //replace&resize push buttons and resize checkboxes
+    Size aControlDistance( pWindow->LogicToPixel( Size(RSC_SP_CTRL_DESC_X,RSC_SP_CTRL_GROUP_Y), MapMode(MAP_APPFONT) ) );
+    long nPBWidth = ::std::max( m_aPB_NumberFormatForPercent.CalcMinimumSize().getWidth(), m_aPB_NumberFormatForValue.CalcMinimumSize().getWidth() )
+        + 20; //the min with is to small to fit, hm... so add alittle
+    long nCBXWidth = ::std::max( m_aCBNumber.CalcMinimumSize().getWidth(), m_aCBPercent.CalcMinimumSize().getWidth() );
+    long nNewPBXPos = m_aCBNumber.GetPosPixel().X() + nCBXWidth + aControlDistance.Width();
+    long nPageWidth = pWindow->LogicToPixel( Size(260,185), MapMode(MAP_APPFONT) ).getWidth();
+    if( nNewPBXPos + nPBWidth > nPageWidth )
+    {
+        if( nPBWidth > nPageWidth/2 )
+            nPBWidth = nPageWidth/2;
+        nNewPBXPos = nPageWidth-nPBWidth;
+        nCBXWidth = nPageWidth-m_aCBNumber.GetPosPixel().X()-nPBWidth-aControlDistance.Width();
+    }
+    m_aPB_NumberFormatForValue.SetPosPixel( Point( nNewPBXPos, m_aPB_NumberFormatForValue.GetPosPixel().Y() ) );
+    m_aPB_NumberFormatForPercent.SetPosPixel( Point( nNewPBXPos, m_aPB_NumberFormatForPercent.GetPosPixel().Y() ) );
 
+    Size aPBSize( m_aPB_NumberFormatForPercent.GetSizePixel() );
+    aPBSize.setWidth( nPBWidth );
     m_aPB_NumberFormatForValue.SetSizePixel( aPBSize );
     m_aPB_NumberFormatForPercent.SetSizePixel( aPBSize );
 
-    long nWantedMinRightBorder = m_aPB_NumberFormatForPercent.GetPosPixel().X() +  m_aPB_NumberFormatForPercent.GetSizePixel().Width() - 1;
+    Size aCBSize( m_aCBNumber.GetSizePixel() );
+    aCBSize.setWidth(nCBXWidth);
+    m_aCBNumber.SetSizePixel( aCBSize );
+    m_aCBPercent.SetSizePixel( aCBSize );
 
+    //place and align separator and label placement listboxes
     Size aSize( m_aFT_LabelPlacement.GetSizePixel() );
     aSize.setWidth( m_aFT_LabelPlacement.CalcMinimumSize().getWidth() );
     m_aFT_LabelPlacement.SetSizePixel(aSize);
 
-    Size aControlDistance( pWindow->LogicToPixel( Size(RSC_SP_CTRL_DESC_X,RSC_SP_CTRL_GROUP_Y), MapMode(MAP_APPFONT) ) );
-    long nWantedMinLeftBorder = m_aFT_LabelPlacement.GetPosPixel().X() + aSize.getWidth () + aControlDistance.Width();;
+    long nWantedMinLeftBorder = m_aFT_LabelPlacement.GetPosPixel().X() + aSize.getWidth () + aControlDistance.Width();
 
     m_aSeparatorResources.PositionBelowControl(m_aCBSymbol);
-    m_aSeparatorResources.AlignListBoxWidthAndXPos( nWantedMinLeftBorder, nWantedMinRightBorder, m_aLB_LabelPlacement.CalcMinimumSize().getWidth() );
+    m_aSeparatorResources.AlignListBoxWidthAndXPos( nWantedMinLeftBorder, -1, m_aLB_LabelPlacement.CalcMinimumSize().getWidth() );
     m_aSeparatorResources.Show(true);
 
     aSize = m_aLB_LabelPlacement.GetSizePixel();
     aSize.setWidth( m_aSeparatorResources.GetCurrentListBoxSize().getWidth() );
     m_aLB_LabelPlacement.SetSizePixel(aSize);
+    m_aLB_LabelPlacement.SetPosPixel( Point( m_aSeparatorResources.GetCurrentListBoxPosition().X(), m_aLB_LabelPlacement.GetPosPixel().Y() ) );
 
-    long nYDiff = m_aFT_LabelPlacement.GetPosPixel().Y() - m_aLB_LabelPlacement.GetPosPixel().Y();
-    Point aPos( m_aSeparatorResources.GetCurrentListBoxPosition() );
-    aPos.Y() = m_aSeparatorResources.GetBottom();
-    aPos.Y() += aControlDistance.Height();
-    m_aLB_LabelPlacement.SetPosPixel(aPos);
-
-    aPos.X() = m_aFT_LabelPlacement.GetPosPixel().X();
-    aPos.Y() += nYDiff;
-    m_aFT_LabelPlacement.SetPosPixel(aPos);
-
-    // hide "text direction" listbox is specified by caller
-    if( !bShowTextDirectionListBox )
-    {
-        m_aFT_TextDirection.Hide();
-        m_aLB_TextDirection.Hide();
-    }
-    // move "text direction" listbox down below "label placement" listbox
-    long nNewY = m_aLB_LabelPlacement.GetPosPixel().Y() + m_aLB_LabelPlacement.GetSizePixel().Height() + aControlDistance.Height();
-    nYDiff = nNewY - m_aLB_TextDirection.GetPosPixel().Y();
-    m_aFT_TextDirection.SetPosPixel( m_aFT_TextDirection.GetPosPixel() + Point( 0, nYDiff ) );
-    m_aLB_TextDirection.SetPosPixel( m_aLB_TextDirection.GetPosPixel() + Point( 0, nYDiff ) );
-
+    //some click handler
     m_aPB_NumberFormatForValue.SetClickHdl( LINK( this, DataLabelResources, NumberFormatDialogHdl ) );
     m_aPB_NumberFormatForPercent.SetClickHdl( LINK( this, DataLabelResources, NumberFormatDialogHdl ) );
     m_aCBNumber.SetClickHdl( LINK( this, DataLabelResources, CheckHdl ));
@@ -213,6 +214,8 @@ DataLabelResources::DataLabelResources( Window* pWindow, const SfxItemSet& rInAt
 
     m_bNumberFormatMixedState = !lcl_ReadNumberFormatFromItemSet( rInAttrs, SID_ATTR_NUMBERFORMAT_VALUE, SID_ATTR_NUMBERFORMAT_SOURCE, m_nNumberFormatForValue, m_bSourceFormatForValue, m_bSourceFormatMixedState );
     m_bPercentFormatMixedState = !lcl_ReadNumberFormatFromItemSet( rInAttrs, SCHATTR_PERCENT_NUMBERFORMAT_VALUE, SCHATTR_PERCENT_NUMBERFORMAT_SOURCE, m_nNumberFormatForPercent, m_bSourceFormatForPercent , m_bPercentSourceMixedState);
+
+    m_aDC_Dial.SetLinkedField( &m_aNF_Degrees );
 }
 
 DataLabelResources::~DataLabelResources()
@@ -305,6 +308,12 @@ void DataLabelResources::EnableControls()
 
     m_aPB_NumberFormatForValue.Enable( m_pNumberFormatter && m_aCBNumber.IsChecked() );
     m_aPB_NumberFormatForPercent.Enable( m_pNumberFormatter && m_aCBPercent.IsChecked() );
+
+    bool bEnableRotation = ( m_aCBNumber.IsChecked() || m_aCBPercent.IsChecked() || m_aCBCategory.IsChecked() );
+    m_aFL_Rotate.Enable( bEnableRotation );
+    m_aDC_Dial.Enable( bEnableRotation );
+    m_aFT_Degrees.Enable( bEnableRotation );
+    m_aNF_Degrees.Enable( bEnableRotation );
 }
 
 BOOL DataLabelResources::FillItemSet( SfxItemSet& rOutAttrs ) const
@@ -343,6 +352,12 @@ BOOL DataLabelResources::FillItemSet( SfxItemSet& rOutAttrs ) const
 
     if( m_aLB_TextDirection.GetSelectEntryCount() > 0 )
         rOutAttrs.Put( SfxInt32Item( EE_PARA_WRITINGDIR, m_aLB_TextDirection.GetSelectEntryValue() ) );
+
+    if( m_aDC_Dial.IsVisible() )
+    {
+        sal_Int32 nDegrees = m_aDC_Dial.GetRotation();
+        rOutAttrs.Put(SfxInt32Item( SCHATTR_TEXT_DEGREES, nDegrees ) );
+    }
 
     return TRUE;
 }
@@ -383,6 +398,14 @@ void DataLabelResources::Reset(const SfxItemSet& rInAttrs)
 
     if( rInAttrs.GetItemState(EE_PARA_WRITINGDIR, TRUE, &pPoolItem ) == SFX_ITEM_SET )
         m_aLB_TextDirection.SelectEntryValue( SvxFrameDirection(((const SvxFrameDirectionItem*)pPoolItem)->GetValue()) );
+
+    if( rInAttrs.GetItemState( SCHATTR_TEXT_DEGREES, TRUE, &pPoolItem ) == SFX_ITEM_SET )
+    {
+        sal_Int32 nDegrees = static_cast< const SfxInt32Item * >( pPoolItem )->GetValue();
+        m_aDC_Dial.SetRotation( nDegrees );
+    }
+    else
+    m_aDC_Dial.SetRotation( 0 );
 
     EnableControls();
 }

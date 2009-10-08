@@ -463,6 +463,13 @@ void CharacterProperties::AddPropertiesToVector(
                   ::getCppuType( reinterpret_cast< const sal_Int16 * >(0)), /*com::sun::star::text::WritingMode2*/
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT ));
+
+    rOutProperties.push_back(
+        Property( C2U( "ParaIsCharacterDistance" ),
+                  PROP_PARA_IS_CHARACTER_DISTANCE,
+                  ::getBooleanCppuType(),
+                  beans::PropertyAttribute::BOUND
+                  | beans::PropertyAttribute::MAYBEDEFAULT ));
 }
 
 void CharacterProperties::AddDefaultsToMap(
@@ -541,6 +548,7 @@ void CharacterProperties::AddDefaultsToMap(
     ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_CHAR_COMPLEX_FONT_PITCH, sal_Int16(aFontCTL.GetPitch()) );
 
     ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_WRITING_MODE, sal_Int16( com::sun::star::text::WritingMode2::PAGE ) );
+    ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_PARA_IS_CHARACTER_DISTANCE, sal_True );
 }
 
 bool CharacterProperties::IsCharacterPropertyHandle( sal_Int32 nHandle )

@@ -35,7 +35,6 @@
 #include "StackMode.hxx"
 #include "ContainerHelper.hxx"
 
-#include "Scaling.hxx"
 #include "CartesianCoordinateSystem.hxx"
 
 #include "LineChartTypeTemplate.hxx"

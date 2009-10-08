@@ -35,6 +35,7 @@
 #include "address.hxx"
 #include <tools/fract.hxx>
 #include <tools/gen.hxx>
+#include <svx/svxenum.hxx>
 
 class ScDocument;
 class ScTabView;
@@ -101,7 +102,7 @@ private:
     BOOL                    bProtected;
     BOOL                    bCellHasPercentFormat;
     ULONG                   nValidation;
-    USHORT                  nAttrAdjust;                // enum SvxCellHorJustify
+    SvxCellHorJustify       eAttrAdjust;
 
     Fraction                aScaleX;                    // fuer Ref-MapMode
     Fraction                aScaleY;
@@ -189,6 +190,7 @@ public:
     void            NotifyChange( const ScInputHdlState* pState, BOOL bForce = FALSE,
                                     ScTabViewShell* pSourceSh = NULL,
                                     BOOL bStopEditing = TRUE);
+    void            UpdateCellAdjust( SvxCellHorJustify eJust );
 
     void            ResetDelayTimer(); //BugId 54702
 

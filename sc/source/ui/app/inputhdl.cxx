@@ -437,7 +437,7 @@ ScInputHandler::ScInputHandler()
         bProtected( FALSE ),
         bCellHasPercentFormat( FALSE ),
         nValidation( 0 ),
-        nAttrAdjust( SVX_HOR_JUSTIFY_STANDARD ),
+        eAttrAdjust( SVX_HOR_JUSTIFY_STANDARD ),
         aScaleX( 1,1 ),
         aScaleY( 1,1 ),
         pRefViewSh( NULL ),
@@ -1706,7 +1706,7 @@ void ScInputHandler::ForgetLastPattern()
 void ScInputHandler::UpdateAdjust( sal_Unicode cTyped )
 {
     SvxAdjust eSvxAdjust;
-    switch (nAttrAdjust)
+    switch (eAttrAdjust)
     {
         case SVX_HOR_JUSTIFY_STANDARD:
             {
@@ -1895,13 +1895,13 @@ BOOL ScInputHandler::StartTable( sal_Unicode cTyped, BOOL bFromCommand )
 
                     //  Ausrichtung
 
-                    nAttrAdjust = ((const SvxHorJustifyItem&)pPattern->
+                    eAttrAdjust = (SvxCellHorJustify)((const SvxHorJustifyItem&)pPattern->
                                     GetItem(ATTR_HOR_JUSTIFY)).GetValue();
-                    if ( nAttrAdjust == SVX_HOR_JUSTIFY_REPEAT &&
+                    if ( eAttrAdjust == SVX_HOR_JUSTIFY_REPEAT &&
                          static_cast<const SfxBoolItem&>(pPattern->GetItem(ATTR_LINEBREAK)).GetValue() )
                     {
                         // #i31843# "repeat" with "line breaks" is treated as default alignment
-                        nAttrAdjust = SVX_HOR_JUSTIFY_STANDARD;
+                        eAttrAdjust = SVX_HOR_JUSTIFY_STANDARD;
                     }
                 }
 
@@ -3462,6 +3462,12 @@ void ScInputHandler::NotifyChange( const ScInputHdlState* pState,
     HideTip();
     HideTipBelow();
     bInOwnChange = FALSE;
+}
+
+void ScInputHandler::UpdateCellAdjust( SvxCellHorJustify eJust )
+{
+    eAttrAdjust = eJust;
+    UpdateAdjust( 0 );
 }
 
 void ScInputHandler::ResetDelayTimer()

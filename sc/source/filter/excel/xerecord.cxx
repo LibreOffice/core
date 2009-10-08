@@ -240,6 +240,24 @@ void XclExpDummyRecord::WriteBody( XclExpStream& rStrm )
     rStrm.Write( mpData, GetRecSize() );
 }
 
+// Future records =============================================================
+
+XclExpFutureRecord::XclExpFutureRecord( XclFutureRecType eRecType, sal_uInt16 nRecId, sal_Size nRecSize ) :
+    XclExpRecord( nRecId, nRecSize ),
+    meRecType( eRecType )
+{
+}
+
+void XclExpFutureRecord::Save( XclExpStream& rStrm )
+{
+    rStrm.StartRecord( GetRecId(), GetRecSize() + ((meRecType == EXC_FUTUREREC_UNUSEDREF) ? 12 : 4) );
+    rStrm << GetRecId() << sal_uInt16( 0 );
+    if( meRecType == EXC_FUTUREREC_UNUSEDREF )
+        rStrm.WriteZeroBytes( 8 );
+    WriteBody( rStrm );
+    rStrm.EndRecord();
+}
+
 // ============================================================================
 
 XclExpSubStream::XclExpSubStream( sal_uInt16 nSubStrmType ) :

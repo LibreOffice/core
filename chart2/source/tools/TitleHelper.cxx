@@ -191,7 +191,7 @@ uno::Reference< XTitle > TitleHelper::createTitle(
             switch( eTitleType )
             {
                 case TitleHelper::SUB_TITLE:
-                    chart::TitleHelper::setCompleteString(
+                    TitleHelper::setCompleteString(
                         rTitleText, xTitle, xContext, & fDefaultCharHeightSub );
                     break;
                 case TitleHelper::X_AXIS_TITLE:
@@ -201,11 +201,11 @@ uno::Reference< XTitle > TitleHelper::createTitle(
                 case TitleHelper::TITLE_AT_STANDARD_Y_AXIS_POSITION:
                 case TitleHelper::SECONDARY_X_AXIS_TITLE:
                 case TitleHelper::SECONDARY_Y_AXIS_TITLE:
-                    chart::TitleHelper::setCompleteString(
+                    TitleHelper::setCompleteString(
                         rTitleText, xTitle, xContext, & fDefaultCharHeightAxis );
                     break;
                 default:
-                    chart::TitleHelper::setCompleteString( rTitleText, xTitle, xContext );
+                    TitleHelper::setCompleteString( rTitleText, xTitle, xContext );
                     break;
             }
 

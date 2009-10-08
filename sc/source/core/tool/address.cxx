@@ -729,7 +729,7 @@ lcl_ScRange_Parse_XL_A1( ScRange& r,
                          const uno::Sequence< const sheet::ExternalLinkInfo > * pExternalLinks )
 {
     const sal_Unicode* tmp1, *tmp2;
-    String aExternDocName, aStartTabName, aEndTabName;
+    String aExternDocName, aStartTabName, aEndTabName; // for external link table
     USHORT nFlags = SCA_VALID | SCA_VALID_TAB, nFlags2 = SCA_VALID_TAB;
 
 #if 0
