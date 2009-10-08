@@ -51,6 +51,7 @@ APP1TARGET	= 	adjustvisibility
 APP1OBJS	=	$(OBJ)$/adjustvisibility.obj
 DEPOBJFILES	=	$(APP1OBJ)
 APP1STDLIBS =   -lelf
+APP1RPATH   =   NONE
 
 .ENDIF "$(OS)"=="SOLARIS"
 

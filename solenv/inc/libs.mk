@@ -8,7 +8,7 @@
 #
 # $RCSfile: libs.mk,v $
 #
-# $Revision: 1.141 $
+# $Revision: 1.134.2.3 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -28,7 +28,7 @@
 # for a copy of the LGPLv3 License.
 #
 #*************************************************************************
-LIBSMKREV!:="$$Revision: 1.141 $$"
+LIBSMKREV!:="$$Revision: 1.134.2.3 $$"
 
 .IF ("$(GUI)"=="UNX" || "$(COM)"=="GCC") && "$(GUI)"!="OS2"
 
@@ -86,7 +86,11 @@ OPENSSLLIB=$(OPENSSL_LIBS)
 OPENSSLLIBST=$(STATIC) $(OPENSSL_LIBS) $(DYNAMIC)
 .ELSE           # "$(SYSTEM_OPENSSL)" == "YES
 OPENSSLLIB=-lssl -lcrypto
+.IF "$(GUI)$(COM)"=="WNTGCC"
+OPENSSLLIBST=-lssl_static -lcrypto_static
+.ELSE          # "$(GUI)$(COM)"=="WNTGCC"
 OPENSSLLIBST=$(STATIC) -lssl -lcrypto $(DYNAMIC)
+.ENDIF          # "$(GUI)$(COM)"=="WNTGCC"
 .ENDIF          # "$(SYSTEM_OPENSSL)" == "YES"
 .IF "$(GUI)$(COM)"=="WNTGCC"
 REGLIB=-lreg$(UDK_MAJOR)
@@ -121,7 +125,11 @@ OTXLIB=-lotx_ind
 OSXLIB=-losx
 UNOTOOLSLIB=-lutl$(DLLPOSTFIX)
 SOTLIB=-lsot$(DLLPOSTFIX)
+.IF "$(GUI)$(COM)"=="WNTGCC"
+MOZBASELIBST=$(STATIC) -lnspr4_s -lxpcombase_s
+.ELSE			# "$(GUI)$(COM)"=="WNTGCC"
 MOZBASELIBST=$(STATIC) -lnspr4 -lxpcombase_s $(DYNAMIC)
+.ENDIF			# "$(GUI)$(COM)"=="WNTGCC"
 MOZBASELIB=-lnspr4 -lxpcom
 .IF "$(GUI)$(COM)"=="WNTGCC"
 LDAPSDKLIB=-lnsldap32v50
@@ -151,26 +159,16 @@ AGGLIB=-lagg$(DLLPOSTFIX)
 .ENDIF
 FREETYPE_LIBS*=-lfreetype
 FREETYPELIB=$(FREETYPE_LIBS)
-PSPLIB=-lpsp$(DLLPOSTFIX)
 TKLIB=-ltk$(DLLPOSTFIX)
 LAYOUTLIB=-ltklayout$(DLLPOSTFIX)
 SVTOOLLIB=-lsvt$(DLLPOSTFIX)
-.IF "$(GUI)$(COM)"=="WNTGCC"
-XMLSECLIB=-lxmlsec1-1
-XMLSECLIB-NSS=-lxmlsec1-nss-1
-.ELSE			# "$(GUI)$(COM)"=="WNTGCC"
 XMLSECLIB=-lxmlsec1
 XMLSECLIB-NSS=-lxmlsec1-nss
-.ENDIF			# "$(GUI)$(COM)"=="WNTGCC"
-.IF "$(GUI)$(COM)"=="WNTGCC"
-LIBXML2LIB=-lxml2-2
-.ELSE			# "$(GUI)$(COM)"=="WNTGCC"
 .IF "$(SYSTEM_LIBXML)"=="YES"
 LIBXML2LIB=$(LIBXML_LIBS)
 .ELSE
 LIBXML2LIB=-lxml2
 .ENDIF
-.ENDIF			# "$(GUI)$(COM)"=="WNTGCC"
 NSS3LIB=-lnss3
 NSPR4LIB=-lnspr4
 PLC4LIB=-lplc4
@@ -232,11 +230,6 @@ NEON3RDLIB=$(SOLARLIBDIR)$/libneon.a
 .ELSE
 NEON3RDLIB=$(STATIC) -lneon $(DYNAMIC)
 .ENDIF
-.IF "$(GUI)$(COM)"=="WNTGCC"
-BERKELEYLIB=-ldb42
-BERKELEYCPPLIB=-ldb_cxx42
-CURLLIB=-lcurl-3
-.ELSE			# "$(GUI)$(COM)"=="WNTGCC"
 .IF "$(SYSTEM_DB)" == "YES"
 BERKELEYLIB=-ldb
 BERKELEYCPPLIB=-ldb_cxx
@@ -245,7 +238,6 @@ BERKELEYLIB=-ldb-4.2
 BERKELEYCPPLIB=-ldb_cxx-4.2
 .ENDIF
 CURLLIB=-lcurl
-.ENDIF			# "$(GUI)$(COM)"=="WNTGCC"
 SFX2LIB=-lsfx$(DLLPOSTFIX)
 SFXLIB=-lsfx$(DLLPOSTFIX)
 EGGTRAYLIB=-leggtray$(DLLPOSTFIX)
@@ -280,15 +272,14 @@ JVMACCESSLIB = -ljvmaccess$(UDK_MAJOR)$(COMID)
 JVMACCESSLIB = -ljvmaccess$(COMID)
 .ENDIF			# "$(GUI)$(COM)"=="WNTGCC"
 CPPUNITLIB = -lcppunit$(DLLPOSTFIX)
-.IF "$(GUI)$(COM)"=="WNTGCC"
-XSLTLIB=-lxslt-1 $(ZLIB3RDLIB) $(LIBXML2LIB)
-JVMFWKLIB = -ljvmfwk$(UDK_MAJOR)
-.ELSE			# "$(GUI)$(COM)"=="WNTGCC"
 .IF "$(SYSTEM_LIBXSLT)"=="YES"
 XSLTLIB=$(LIBXSLT_LIBS)
 .ELSE
 XSLTLIB=-lxslt $(ZLIB3RDLIB) $(LIBXML2LIB)
 .ENDIF
+.IF "$(GUI)$(COM)"=="WNTGCC"
+JVMFWKLIB = -ljvmfwk$(UDK_MAJOR)
+.ELSE			# "$(GUI)$(COM)"=="WNTGCC"
 JVMFWKLIB = -ljvmfwk
 .ENDIF			# "$(GUI)$(COM)"=="WNTGCC"
 .IF "$(SYSTEM_REDLAND)"=="YES"
@@ -346,7 +337,7 @@ ULINGULIB=-lulingu
 .IF "$(SYSTEM_HUNSPELL)" == "YES"
 HUNSPELLLIB=$(HUNSPELL_LIBS)
 .ELSE
-HUNSPELLLIB=-lhunspell-1.1
+HUNSPELLLIB=-lhunspell-1.2
 .ENDIF
 MYTHESLIB=-lmythes
 PYUNOLIB=-lpyuno
@@ -476,7 +467,6 @@ CPPCANVASLIB=icppcanvas.lib
 FORLIB=ifor.lib
 FORUILIB=iforui.lib
 AGGLIB=iagg.lib
-PSPLIB=apsp.lib
 TKLIB=itk.lib
 LAYOUTLIB=itklayout.lib
 SVXLLIB=svxl.lib

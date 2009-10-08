@@ -178,7 +178,6 @@ OLEAUT32LIB=-loleaut32
 UUIDLIB=$(PSDK_HOME)$/lib$/uuid.lib
 WINSPOOLLIB=-lwinspool
 IMM32LIB=-limm32
-PSPLIB=-lpsp
 VERSIONLIB=-lversion
 WINMMLIB=-lwinmm
 WSOCK32LIB=-lwsock32

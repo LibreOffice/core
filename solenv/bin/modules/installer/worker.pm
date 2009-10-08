@@ -463,7 +463,11 @@ sub analyze_and_save_logfile
             if ( $installdir =~ /_download_inprogress/ ) { $destdir = installer::systemactions::rename_string_in_directory($installdir, "_download_inprogress", "_download"); }
             elsif ( $installdir =~ /_jds_inprogress/ ) { $destdir = installer::systemactions::rename_string_in_directory($installdir, "_jds_inprogress", "_jds"); }
             elsif ( $installdir =~ /_msp_inprogress/ ) { $destdir = installer::systemactions::rename_string_in_directory($installdir, "_msp_inprogress", "_msp"); }
-            else { $destdir = installer::systemactions::rename_string_in_directory($installdir, "_inprogress", "_packed"); }
+            else
+            {
+                if ( $installdir =~ /_packed/ ) { $destdir = installer::systemactions::rename_string_in_directory($installdir, "_inprogress", ""); }
+                else { $destdir = installer::systemactions::rename_string_in_directory($installdir, "_inprogress", "_packed"); }
+            }
             installer::mail::send_success_mail($allsettingsarrayref, $languagestringref, $destdir);
         }
         else
@@ -1240,7 +1244,7 @@ sub select_langpack_items
         # Items with style "LANGUAGEPACK" have to be included into the patch
         my $styles = "";
         if ( $oneitem->{'Styles'} ) { $styles = $oneitem->{'Styles'}; }
-        if ( $styles =~ /\bLANGUAGEPACK\b/ ) { push(@itemsarray, $oneitem); }
+        if (( $styles =~ /\bLANGUAGEPACK\b/ ) || ( $styles =~ /\bFORCELANGUAGEPACK\b/ )) { push(@itemsarray, $oneitem); }
     }
 
     return \@itemsarray;
@@ -2324,6 +2328,19 @@ sub add_variables_from_inc_to_hashref
             }
         }
     }
+
+    # Allowing different Java versions for Windows and Unix. Instead of "JAVAVERSION"
+    # the property "WINDOWSJAVAVERSION" has to be used, if it is set.
+
+    if ( $installer::globals::iswindowsbuild )
+    {
+        if (( exists($allvariables->{'WINDOWSJAVAVERSION'})) && ( $allvariables->{'WINDOWSJAVAVERSION'} ne "" ))
+        {
+            $allvariables->{'JAVAVERSION'} = $allvariables->{'WINDOWSJAVAVERSION'};
+            $infoline = "Changing value of property \"JAVAVERSION\" to $allvariables->{'JAVAVERSION'} (property \"WINDOWSJAVAVERSION\").\n";
+            push( @installer::globals::globallogfileinfo, $infoline);
+        }
+    }
 }
 
 ##############################################
@@ -2697,7 +2714,6 @@ sub fix_solaris_x86_patch
     chdir($subdir);
 
     # $packagename is: "SUNWstaroffice-core01"
-    # $installer::globals::subdir is "packages"
     # Current working directory is: "<path>/install/en-US_inprogress"
 
     # create new folder in "packages": $packagename . ".i"
@@ -2765,7 +2781,6 @@ sub fix2_solaris_x86_patch
         chdir($subdir);
 
         # $packagename is: "SUNWstaroffice-core01"
-        # $installer::globals::subdir is "packages"
         # Current working directory is: "<path>/install/en-US_inprogress"
 
         # create new package in "packages": $packagename . ".i"
@@ -2951,6 +2966,15 @@ sub set_spellcheckerlanguages
             my $onelang = $1;
             my $languagelist = $2;
             $spellcheckhash{$onelang} = $languagelist;
+
+            # Special handling for language packs. Do only include that one language of the language pack, no further language.
+            # And this only, if the language of the language pack is also already part of the language list
+
+            if ( $installer::globals::languagepack )
+            {
+                if ( $languagelist =~ /\b$onelang\b/ ) { $spellcheckhash{$onelang} = $onelang; }
+                else { $spellcheckhash{$onelang} = ""; }
+            }
         }
     }
 
@@ -3009,6 +3033,130 @@ sub put_license_into_setup
 
     # Write setup
     installer::files::save_file($setupfilename, $setupfile);
+}
+
+################################################
+# Setting global path to getuid.so library
+################################################
+
+sub set_getuid_path
+{
+    my ($includepatharrayref) = @_;
+
+    my $getuidlibraryname = "getuid.so";
+    my $getuidlibraryref = installer::scriptitems::get_sourcepath_from_filename_and_includepath(\$getuidlibraryname, $includepatharrayref, 0);
+    if ($$getuidlibraryref eq "") { installer::exiter::exit_program("ERROR: Could not find $getuidlibraryname!", "set_getuid_path"); }
+
+    $installer::globals::getuidpath = $$getuidlibraryref;
+    $installer::globals::getuidpathset = 1;
+}
+
+#########################################################
+# Create a tar file from the binary package
+#########################################################
+
+sub tar_package
+{
+    my ( $installdir, $packagename, $tarfilename, $getuidlibrary) = @_;
+
+    my $ldpreloadstring = "";
+    if ( $getuidlibrary ne "" ) { $ldpreloadstring = "LD_PRELOAD=" . $getuidlibrary; }
+
+    my $systemcall = "cd $installdir; $ldpreloadstring tar -cf - $packagename > $tarfilename";
+    # my $systemcall = "cd $installdir; $ldpreloadstring tar -cf - * > $tarfilename";
+
+    my $returnvalue = system($systemcall);
+
+    my $infoline = "Systemcall: $systemcall\n";
+    push( @installer::globals::logfileinfo, $infoline);
+
+    if ($returnvalue)
+    {
+        $infoline = "ERROR: Could not execute \"$systemcall\"!\n";
+        push( @installer::globals::logfileinfo, $infoline);
+    }
+    else
+    {
+        $infoline = "Success: Executed \"$systemcall\" successfully!\n";
+        push( @installer::globals::logfileinfo, $infoline);
+    }
+
+    my $localcall = "chmod 775 $tarfilename \>\/dev\/null 2\>\&1";
+    $returnvalue = system($localcall);
+
+    my $fulltarfile = $installdir . $installer::globals::separator . $tarfilename;
+    my $filesize = ( -s $fulltarfile );
+
+    return $filesize;
+}
+
+#########################################################
+# Create a tar file from the binary package
+#########################################################
+
+sub untar_package
+{
+    my ( $installdir, $tarfilename, $getuidlibrary) = @_;
+
+    my $ldpreloadstring = "";
+    if ( $getuidlibrary ne "" ) { $ldpreloadstring = "LD_PRELOAD=" . $getuidlibrary; }
+
+    my $systemcall = "cd $installdir; $ldpreloadstring tar -xf $tarfilename";
+
+    my $returnvalue = system($systemcall);
+
+    my $infoline = "Systemcall: $systemcall\n";
+    push( @installer::globals::logfileinfo, $infoline);
+
+    if ($returnvalue)
+    {
+        $infoline = "ERROR: Could not execute \"$systemcall\"!\n";
+        push( @installer::globals::logfileinfo, $infoline);
+    }
+    else
+    {
+        $infoline = "Success: Executed \"$systemcall\" successfully!\n";
+        push( @installer::globals::logfileinfo, $infoline);
+    }
+
+    my $localcall = "chmod 775 $tarfilename \>\/dev\/null 2\>\&1";
+    $returnvalue = system($localcall);
+}
+
+#########################################################
+# Shuffle an array (Fisher Yates shuffle)
+#########################################################
+
+sub shuffle_array
+{
+    my ( $arrayref ) = @_;
+
+    # my $counter = 0;
+    # my $infoline = "Old package order: \n";
+    # push( @installer::globals::logfileinfo, $infoline);
+    # foreach my $onepackage ( @{$arrayref} )
+    # {
+    #   $counter++;
+    #   $infoline = "$counter: $onepackage->{'module'}\n";
+    #   push( @installer::globals::logfileinfo, $infoline);
+    # }
+
+    my $i = @$arrayref;
+    while (--$i)
+    {
+        my $j = int rand ($i+1);
+        @$arrayref[$i,$j] = @$arrayref[$j,$i];
+    }
+
+    # $counter = 0;
+    # $infoline = "New package order: \n";
+    # push( @installer::globals::logfileinfo, $infoline);
+    # foreach my $onepackage ( @{$arrayref} )
+    # {
+    #   $counter++;
+    #   $infoline = "$counter: $onepackage->{'module'}\n";
+    #   push( @installer::globals::logfileinfo, $infoline);
+    # }
 }
 
 1;

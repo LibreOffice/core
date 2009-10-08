@@ -47,7 +47,7 @@ my @platforms = (
         "common",
         "unxlngi6",
         "unxlngx6",
-        "unxols4",
+        "unxsols4",
         "unxsolu4",
         "unxsoli4",
         "wntmsci12",

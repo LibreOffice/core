@@ -59,6 +59,30 @@ sub include_header_into_logfile
 }
 
 ####################################################
+# Including header files into the logfile
+####################################################
+
+sub include_header_into_globallogfile
+{
+    my ($message) = @_;
+
+    my $infoline;
+
+    $infoline = "\n" . get_time_string();
+    push( @installer::globals::globallogfileinfo, $infoline);
+
+    $infoline = "######################################################\n";
+    push( @installer::globals::globallogfileinfo, $infoline);
+
+    $infoline = "$message\n";
+    push( @installer::globals::globallogfileinfo, $infoline);
+
+
+    $infoline = "######################################################\n";
+    push( @installer::globals::globallogfileinfo, $infoline);
+}
+
+####################################################
 # Write timestamp into log file
 ####################################################
 
@@ -224,6 +248,19 @@ sub get_time_string
 }
 
 ###############################################################
+# Returning the age of a file (in seconds)
+###############################################################
+
+sub get_file_age
+{
+    my ( $filename ) = @_;
+
+    my $filetime = (stat($filename))[9];
+    my $timediff = time() - $filetime;
+    return $timediff;
+}
+
+###############################################################
 # Stopping the time
 ###############################################################
 
@@ -266,6 +303,14 @@ sub print_message
     chomp $message;
     my $force = shift || 0;
     print "$message\n" if ( $force || ! $installer::globals::quiet );
+    return;
+}
+
+sub print_message_without_newline
+{
+    my $message = shift;
+    chomp $message;
+    print "$message" if ( ! $installer::globals::quiet );
     return;
 }
 

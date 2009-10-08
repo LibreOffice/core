@@ -50,6 +50,7 @@ sub get_registry_component_name
     # All registryitems belonging to one module can get the same component.
 
     my $componentname = "";
+    my $isrootmodule = 0;
 
     if ( $registryref->{'ModuleID'} ) { $componentname = $registryref->{'ModuleID'}; }
 
@@ -59,6 +60,8 @@ sub get_registry_component_name
     $componentname =~ s/\_\s*$//g;
 
     $componentname = lc($componentname);    # componentnames always lowercase
+
+    if ( $componentname eq "gid_module_root" ) { $isrootmodule = 1; }
 
     # Attention: Maximum length for the componentname is 72
 
@@ -95,6 +98,8 @@ sub get_registry_component_name
 
     if (( $styles =~ /\bLANGUAGEPACK\b/ ) && ( $installer::globals::languagepack )) { $componentname = $componentname . "_lang"; }
     if ( $styles =~ /\bALWAYS_REQUIRED\b/ ) { $componentname = $componentname . "_forced"; }
+
+    if ( $isrootmodule ) { $installer::globals::registryrootcomponent = $componentname; }
 
     return $componentname;
 }

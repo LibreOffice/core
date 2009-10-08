@@ -865,6 +865,17 @@ sub set_patch_state
         push( @installer::globals::logfileinfo, $infoline);
     }
 
+    if ( ( $installer::globals::is_special_epm ) && (($installer::globals::islinuxrpmbuild) || ($installer::globals::issolarispkgbuild)) )
+    {
+        # Special postprocess handling only for Linux RPM and Solaris packages
+        $installer::globals::postprocess_specialepm = 1;
+        $installer::globals::postprocess_standardepm = 0;
+    }
+    else
+    {
+        $installer::globals::postprocess_specialepm = 0;
+        $installer::globals::postprocess_standardepm = 1;
+    }
 }
 
 #################################################
@@ -1034,7 +1045,7 @@ sub set_revision_in_pkginfo
     my $pkgversion = "SOLSPARCPKGVERSION";
     if ( $installer::globals::issolarisx86build ) { $pkgversion = "SOLIAPKGVERSION"; }
 
-    if ( $variables->{$pkgversion} )
+    if (( $variables->{$pkgversion} ) &&  ( $variables->{$pkgversion} ne "" ))
     {
         if ( $variables->{$pkgversion} ne "FINALVERSION" )
         {
@@ -2459,20 +2470,32 @@ sub create_packages_without_epm
         my $specfilename = $epmdir . $packagename . ".spec";
         if (! -f $specfilename) { installer::exiter::exit_program("ERROR: Did not find file: $specfilename", "create_packages_without_epm"); }
 
-        my $rpmcommand = "rpm";
+        # my $rpmcommand = "rpm";
+        my $rpmcommand = $installer::globals::rpm;
         my $rpmversion = determine_rpm_version();
 
-        if ( $rpmversion >= 4 ) { $rpmcommand = "rpmbuild"; }
+        # if ( $rpmversion >= 4 ) { $rpmcommand = "rpmbuild"; }
 
         # saving globally for later usage
         $installer::globals::rpmcommand = $rpmcommand;
-        $installer::globals::rpmquerycommand = "rpm"; # For queries "rpm" is used, not "rpmbuild"
+        $installer::globals::rpmquerycommand = "rpm"; # For queries "rpm" is used, not "rpmbuild" (for this call the LD_LIBRARY_PATH is not required!)
 
         my $target = "";
         if ( $installer::globals::compiler =~ /unxlngi/) { $target = "i586"; }
         elsif ( $installer::globals::compiler =~ /unxlng/) {$target = (POSIX::uname())[4]; }
 
-        my $systemcall = "$rpmcommand -bb $specfilename --target $target 2\>\&1 |";
+        # rpm 4.6 ignores buildroot tag in spec file
+
+        my $buildrootstring = "";
+
+        if ( $rpmversion >= 4 )
+        {
+            my $dir = getcwd;
+            my $buildroot = $dir . "/" . $epmdir . "buildroot/";
+            $buildrootstring = "--buildroot=$buildroot";
+        }
+
+        my $systemcall = "$rpmcommand -bb $specfilename --target $target $buildrootstring 2\>\&1 |";
 
         installer::logger::print_message( "... $systemcall ...\n" );
 
@@ -2708,8 +2731,6 @@ sub create_new_directory_structure
         $callinfoline = "Success: Executed \"$localcall\" successfully!\n";
         push( @installer::globals::logfileinfo, $callinfoline);
     }
-
-    return $newdir;
 }
 
 ######################################################

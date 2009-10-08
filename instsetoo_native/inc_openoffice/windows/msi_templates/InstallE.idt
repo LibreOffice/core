@@ -58,7 +58,6 @@ MoveFiles		1900
 MsiPublishAssemblies		3025
 MsiUnpublishAssemblies		875
 NewProductFound	NEWPRODUCTS	110
-OldProductFound	OLDPRODUCTSSAMEMAJOR And (VersionNT > 599)	115
 PatchFiles		2000
 ProcessComponents		800
 PublishComponents		3000
@@ -82,7 +81,7 @@ RemoveIniValues		1550
 RemoveODBC		1200
 RemoveRegistryValues		1300
 RemoveShortcuts		1600
-RunningOffice	OFFICERUNS="1" And VersionNT < 600	65
+RunningOffice	OFFICERUNS="1"	135
 RMCCPSearch	Not CCP_SUCCESS And CCP_TEST	250
 SameProductFound	SAMEPRODUCTS	120
 ScheduleReboot	ISSCHEDULEREBOOT	3125

@@ -600,6 +600,13 @@ sub get_current_milestone
     return $self->get_current_milestone_from_eis($master);
 }
 
+sub get_milestone_integrated
+{
+    my $self      = shift;
+
+    return $self->get_milestone_integrated_from_eis();
+}
+
 # Get masters
 sub get_masters
 {
@@ -1670,6 +1677,27 @@ sub get_creation_master_from_eis
     eval { $result = $eis->getCreationMasterWorkspace($id) };
     if ( $@ ) {
         carp("ERROR: get_creation_master(): EIS database transaction failed. Reason:\n$@\n");
+    }
+    return $result;
+
+}
+
+sub get_milestone_integrated_from_eis
+{
+    my $self      = shift;
+
+    # check if child workspace is valid
+    my $id = $self->eis_id();
+    if ( !$id ) {
+        carp("ERROR: Childworkspace not (yet) registered with EIS.\n");
+        return undef;
+    }
+
+    my $eis = Cws::eis();
+    my $result;
+    eval { $result = $eis->getMilestoneIntegrated($id) };
+    if ( $@ ) {
+        carp("ERROR: get_milestone_integrated(): EIS database transaction failed. Reason:\n$@\n");
     }
     return $result;
 

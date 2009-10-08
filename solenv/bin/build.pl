@@ -48,15 +48,9 @@
     my $in_so_env = 0;
     if (defined $ENV{COMMON_ENV_TOOLS}) {
         unshift(@INC, "$ENV{COMMON_ENV_TOOLS}/modules");
-        require CopyPrj; import CopyPrj;
         $in_so_env++;
     };
     if (defined $ENV{CWS_WORK_STAMP}) {
-        eval {
-            require Cws; import Cws;
-            require CwsConfig; import CwsConfig;
-            require CvsModule; import CvsModule;
-        };
         require GenInfoParser; import GenInfoParser;
         require IO::Handle; import IO::Handle;
     };
@@ -78,7 +72,7 @@
 
     ( $script_name = $0 ) =~ s/^.*\b(\w+)\.pl$/$1/;
 
-    $id_str = ' $Revision: 1.171 $ ';
+    $id_str = ' $Revision$ ';
     $id_str =~ /Revision:\s+(\S+)\s+\$/
       ? ($script_rev = $1) : ($script_rev = "-");
 
@@ -177,7 +171,6 @@
     $html_file = CorrectPath($ENV{SRC_ROOT} . '/' . $ENV{INPATH}. '.build.html');
     $build_finished = 0;
     %had_error = (); # hack for misteriuos windows problems - try run dmake 2 times if first time there was an error
-    $chekoutmissing = 1; # chekout missing modules (links still will be broken anyway)
     $mkout = CorrectPath("$ENV{SOLARENV}/bin/mkout.pl");
     %weights_hash = (); # hash contains info about how many modules are dependent from one module
 #    %weight_stored = ();
@@ -195,7 +188,6 @@
                             # the server considered as an error/client crash
     my %lost_client_jobs = (); # hash containing lost jobs
     my %job_jobdir = (); # hash containing job-dir pairs
-    my $is_svn = 0;
 ### main ###
 
     get_options();
@@ -218,7 +210,6 @@
     };
 
     $StandDir = get_stand_dir();   # This also sets $CurrentPrj
-    $is_svn++ if (-e $StandDir.$CurrentPrj.'/.svn');
     provide_consistency() if (defined $ENV{CWS_WORK_STAMP} && defined($ENV{COMMON_ENV_TOOLS}));
 
     $deliver_command = $ENV{DELIVER};
@@ -1243,7 +1234,6 @@ sub get_options {
 
         $arg =~ /^--with_branches$/        and $BuildAllParents = 1
                                 and $build_from = shift @ARGV         and next;
-        $arg =~ /^--dontchekoutmissingmodules$/    and $chekoutmissing = 0    and next;
         $arg =~ /^-b$/        and $BuildAllParents = 1
                                 and $build_from = shift @ARGV         and next;
 
@@ -1306,10 +1296,6 @@ sub get_options {
     $incompatible = scalar keys %incompatibles;
     if ($prepare) {
         print_error("--prepare is for use with --from switch only!\n") if (!$incompatible);
-        if ( $^O eq 'MSWin32' && !$is_svn) {
-            print "\nATTENTION: Using Windows OS to prepare the CWS is highly unrecommended! It is unsequre and veeeery slooooow. The links will not be broken, the delivered files from the linked modules will not be undelivered, moreover file removal can fail. Use UNIX if possible. Proceed only if you exactly know what you do, otherwise break the build with Ctrl+C\n\n";
-            sleep(10);
-        };
     };
     if ($QuantityToBuild) {
         if ($ignore && !$html) {
@@ -1816,75 +1802,6 @@ sub are_all_dependent {
     return '1';
 };
 
-#
-# Procedure checks out module or its image ($prj_name/prj)
-#
-sub checkout_module {
-    my ($prj_name, $image, $path) = @_;
-    return '' if (!defined($ENV{CWS_WORK_STAMP}));
-    $path = $StandDir if (!$path);
-    my $cws = Cws->new();
-    $cws->child($ENV{CWS_WORK_STAMP});
-    $cws->master($ENV{WORK_STAMP});
-    my $cvs_module = get_cvs_module($cws, $prj_name);
-    print_error("Cannot get cvs_module for $prj_name") if (!$cvs_module);
-    my ($master_branch_tag, $cws_branch_tag, $cws_root_tag, $master_milestone_tag) = $cws->get_tags();
-
-    $cvs_module->verbose(1);
-    $cvs_module->{MODULE} .= '/prj' if ($image);
-    if ($show && ($path ne $tmp_dir)) {
-        print "Checking out $prj_name...\n";
-        return;
-    };
-    $cvs_module->checkout($path, $master_milestone_tag, '');
-    # Check if the module is there
-    if (!-d CorrectPath($path.'/'.$prj_name)) {
-        $cvs_module->checkout($path, '', '');
-        if (!-d CorrectPath($path.'/'.$prj_name)) {
-            $dead_parents{$prj_name}++;
-            my $warning_string = "Cannot checkout $prj_name. Check if you have to login to server or all build dependencies are consistent";
-            push(@warnings, $warning_string);
-            print STDERR ($warning_string);
-            return;
-        };
-    };
-    return 1 if ($image);
-    copy_output_trees($prj_name, $path) if (defined $only_platform);
-};
-
-#
-# Procedure unpacks output trees after checkout
-#
-sub copy_output_trees {
-    return if (!defined $ENV{COMMON_ENV_TOOLS});
-    return if (!scalar keys %platforms_to_copy);
-    my $module_name = shift;
-    my $src_dest = shift;
-    print "copyprj $module_name\n";
-
-    # hash, that should contain all the
-    # data needed by CopyPrj module
-    my %ENVHASH = ();
-    my %projects_to_copy = ();
-    $ENVHASH{'projects_hash'} = \%projects_to_copy;
-    $ENVHASH{'prj_to_copy'} = '';
-    $ENVHASH{'platforms_hash'} = \%platforms_to_copy;
-    $ENVHASH{'no_otree'} = 1;
-    $ENVHASH{'no_path'} = 1;
-    $ENVHASH{'only_otree'} = 1;
-    $ENVHASH{'only_update'} = 0;
-    $ENVHASH{'last_minor'} = 0;
-    $ENVHASH{'spec_src'} = 0;
-    $ENVHASH{'dest'} = "$src_dest";
-    $ENVHASH{'i_server'} = '';
-    $ENVHASH{'current_dir'} = getcwd();
-    $ENVHASH{'remote'} = '';
-    # hack for SO environment
-    $ENVHASH{'SRC_ROOT'} = '/so/ws/' . $ENV{WORK_STAMP} . '/src';
-    $ENVHASH{'SRC_ROOT'} .= $ENV{UPDMINOREXT} if (defined $ENV{UPDMINOREXT});
-    $projects_to_copy{$module_name}++;
-    CopyPrj::copy_projects(\%ENVHASH);
-};
 
 #
 # Procedure defines if the local directory is a
@@ -1919,113 +1836,10 @@ sub provide_consistency {
         if ($$var_ref) {
             return if (-d $StandDir.$$var_ref);
             $$var_ref .= '.lnk' and return if (-d $StandDir.$$var_ref.'.lnk');
-            my $current_dir = getcwd();
-            checkout_module($$var_ref, 'image');
-            chdir $current_dir;
-            getcwd();
+            print_error("Cannot find module '$$var_ref'", 9);
             return;
         };
     };
-};
-
-#
-# Retrieve CvsModule object for passed module.
-# (Heiner's proprietary :)
-#
-sub get_cvs_module
-{
-    my $cws    = shift;
-    my $module = shift;
-
-    my $cvs_module = CvsModule->new();
-    my ($method, $vcsid, $server, $repository) = get_cvs_root($cws, $module);
-
-    return undef if  !($method && $vcsid && $server && $repository);
-
-    $cvs_module->module($module);
-    $cvs_module->cvs_method($method);
-    if (defined $ENV{VCSID}) {
-        $cvs_module->vcsid($ENV{VCSID});
-    } elsif (!$cvs_module->vcsid()) {
-        $cvs_module->vcsid($vcsid);
-    };
-    if ($cvs_module->cvs_remote() && (!$in_so_env)) {
-        # default: use information from user config files:
-        $cvs_module->cvs_server($cvs_module->cvs_remote());
-    } else {
-        $cvs_module->cvs_server($server);
-    };
-    $cvs_module->cvs_repository($repository);
-
-    return $cvs_module;
-};
-
-#
-# Try to get cvs coordinates via module link
-#
-sub get_link_cvs_root{
-    my $module = shift;
-    my $cvs_root_file = $StandDir.$module.'.lnk'.'/CVS/Root';
-    if (!open(CVS_ROOT, $cvs_root_file)) {
-        #print STDERR "Attention: cannot read $cvs_root_file!!\n";
-        return '';
-    };
-    my @cvs_root = <CVS_ROOT>;
-    close CVS_ROOT;
-    $cvs_root[0] =~    s/[\r\n]+//o;
-    return $cvs_root[0] if (!($cvs_root[0] =~ /\^\s*$/));
-    return '';
-};
-
-#
-# Find out which CVS server holds the module, returns
-# the elements of CVSROOT.
-# (Heiner's proprietary)
-#
-sub get_cvs_root
-{
-    my $cws    = shift;
-    my $module = shift;
-    my $cvsroot = get_link_cvs_root($module);
-    if (!$cvsroot) {
-        my $master = $cws->master();
-
-        my $workspace_lst = get_workspace_lst();
-        if ($workspace_lst) {
-            my $workspace_db = GenInfoParser->new();
-            my $success = $workspace_db->load_list($workspace_lst);
-            if ( !$success ) {
-                print_error("Can't load workspace list '$workspace_lst'.", 4);
-            };
-
-            my $key = "$master/drives/o:/projects/$module/scs";
-            $cvsroot = $workspace_db->get_value($key);
-
-            if ( !$cvsroot  ) {
-                print STDERR "\nWarning: No such module '$module' for '$master' in workspace database $workspace_lst. Maybe you should correct build lists.\n";
-                $dead_parents{$module}++;
-                return (undef, undef, undef, undef);
-            };
-        } elsif (open(CVSROOT, CorrectPath("$StandDir$CurrentPrj/CVS/Root"))) {
-            $cvsroot = <CVSROOT>;
-            close CVSROOT;
-            chomp $cvsroot;
-        } else {
-            print_error('Cannot figure out cvs parameters for checkout. No CVS/Root...', 1);
-        };
-    };
-    my ($dummy1, $method, $user_at_server, $repository) = split(/:/, $cvsroot);
-    my ($vcsid, $server) = split(/@/, $user_at_server);
-    if ((!defined $vcsid) || ((defined $ENV{VCSID}) && ($vcsid ne $ENV{VCSID}))) {
-        $vcsid = $ENV{VCSID};
-    };
-
-    if ( ! ($method && $server && $repository ) ) {
-        print_error("Can't determine CVS server for module '$module'.", 0);
-        return (undef, undef, undef, undef);
-    }
-
-    return ($method, $vcsid, $server, $repository);
 };
 
 #
@@ -2071,44 +1885,9 @@ sub ensure_clear_module {
         };
     };
     if ($module_type eq 'lnk') {
-        if ($is_svn) {
-            if(!rename("$StandDir$lnk_name", "$StandDir$module")) {
-                $action = 'rename';
-            };
-        } else {
-            if ( $^O eq 'MSWin32' ) {
-                my $message = "The link $lnk_name will not be broken. This can cause inconsistent build";
-                print STDERR "\nWarning: $message\n";
-                push(@warnings, $message);
-                return;
-            } else {
-                print "\nBreaking link $lnk_name...\n";
-                return if ($show);
-                checkout_module($module);
-                my $action = '';
-            };
-            if ( $^O eq 'MSWin32' ) {
-                if(!rename("$StandDir$lnk_name", "$StandDir$module.backup.lnk")) {
-                    $action = 'rename';
-                };
-            } else {
-                if(!unlink $StandDir.$lnk_name) {
-                    $action = 'remove';
-                }
-            };
+        if(!rename("$StandDir$lnk_name", "$StandDir$module")) {
+            print_error("Cannot rename $StandDir$lnk_name. Please rename it manually");
         };
-        print_error("Cannot $action $StandDir$lnk_name. Please $action it manually") if ($action);
-    } else {
-        if ($chekoutmissing) {
-            if ( $^O eq 'MSWin32' ) {
-                my $message = "No module $module check out. This can cause inconsistent build";
-                print STDERR "\nWarning: $message\n";
-                push(@warnings, $message);
-            } else {
-                print "Checking out consistent " . $module . "...\n";
-                checkout_module ($module) if (!$show);
-            };
-        }
     };
 };
 
@@ -2125,7 +1904,7 @@ sub clear_module {
     foreach (@dir_content) {
         next if (/^\.+$/);
         my $dir = CorrectPath($StandDir.$module.'/'.$_);
-        if ((!-d $dir.'/CVS') && is_output_tree($dir)) {
+        if ((!-d $dir.'/.svn') && is_output_tree($dir)) {
             #print "I would delete $dir\n";
             rmtree("$dir", 0, 1) if ($ENV{USE_SHELL} ne '4nt');
             if (-d $dir) {
@@ -2171,7 +1950,7 @@ sub get_tmp_dir {
     $tmp_dir .= $$ while (-e $tmp_dir);
     $tmp_dir = CorrectPath($tmp_dir);
     eval {mkpath($tmp_dir)};
-    print_error("Cannot create temporary directory for checkout in $tmp_dir") if ($@);
+    print_error("Cannot create temporary directory in $tmp_dir") if ($@);
     return $tmp_dir;
 };
 
@@ -2180,7 +1959,7 @@ sub retrieve_build_list {
     my $module = shift;
     my $old_fh = select(STDOUT);
 
-    # First try to get global depencies from solver's build.lst if such exists
+    # Try to get global depencies from solver's build.lst if such exists
     my $solver_inc_dir = "$ENV{SOLARVER}/common";
     $solver_inc_dir .= $ENV{PROEXT} if (defined $ENV{PROEXT});
     $solver_inc_dir .= '/inc';
@@ -2197,44 +1976,13 @@ sub retrieve_build_list {
             return $possible_build_lst;
         };
     }
-    print " failed...\n";
-    print "Fetching from CVS... ";
-    if (!checkout_module($module, 'image', $tmp_dir)) {
-        print " failed\n";
-        if (!defined $dead_parents{$module}) {
-            print "WARNING: Cannot figure out CWS for $module. Forgot to set CWS?\n";
-        }
-        select($old_fh);
-        return undef;
-    };
-    # no need to announce this module
-    print "-> ok\n";
-    eval {
-        mkpath($solver_inc_dir) if (!-e $solver_inc_dir);
-    };
-    print_error("Cannot create $solver_inc_dir") if (!-d $solver_inc_dir);
-    my $success;
-    foreach (@possible_build_lists) {
-        my $tmp_build_lst = $tmp_dir . '/' . $module . '/prj/' . $_;
-        $possible_build_lst = undef;
-        next if (!-e $tmp_build_lst);
-        $possible_build_lst = $solver_inc_dir . '/' .$_;
-         my @from_stat = stat($tmp_build_lst);
-        if (!File::Copy::move($tmp_build_lst, $solver_inc_dir)) {
-            print_error("Cannot copy build list to $solver_inc_dir");
-        };
-        $success++;
-        my @to_stat = stat($possible_build_lst);
-        $from_stat[9]-- if $from_stat[9] % 2;
-        utime ($from_stat[9], $from_stat[9], $possible_build_lst);
-        last;
-    };
-    my $temp_checkout_path = CorrectPath($tmp_dir . '/' . $module);
-    find(\&fix_permissions ,$temp_checkout_path);
-    rmtree($temp_checkout_path, 0, 1);
+    print " failed\n";
+
+    if (!defined $dead_parents{$module}) {
+        print "WARNING: Cannot figure out CWS for $module. Forgot to set CWS?\n";
+    }
     select($old_fh);
-    return undef if (!$success);
-    return $possible_build_lst;
+    return undef;
 };
 
 sub fix_permissions {
@@ -2473,7 +2221,7 @@ sub clear_delivered {
 # write all variables needed in %solar_vars hash
 #
 sub read_ssolar_vars {
-    my ($setsolar, $entries_file, $tmp_file);
+    my ($setsolar, $tmp_file);
     $setsolar = $ENV{ENV_ROOT} . '/etools/setsolar.pl';
     my ($platform, $solar_vars) = @_;
     if ( $^O eq 'MSWin32' ) {
@@ -2499,7 +2247,6 @@ sub read_ssolar_vars {
 
     my $param = "-$ENV{WORK_STAMP} $verswitch $source_root $cws_name $pro $platform";
     my $ss_command = "$perl $setsolar -file $tmp_file $param $nul";
-    $entries_file = '/CVS/Entries';
     if (system($ss_command)) {
         unlink $tmp_file;
         print_error("Cannot run command:\n$ss_command");
@@ -2534,27 +2281,21 @@ sub get_solar_vars {
 }
 
 #
-# Procedure checks out the module when we're
-# in link
+# Procedure renames <module>.lnk into <module>
 #
-sub checkout_current_module {
+sub get_current_module {
     my $module_name = shift;
     my $link_name = $module_name . '.lnk';
     chdir $StandDir;
     getcwd();
     print "\nBreaking link to module $module_name";
-    checkout_module($module_name);
-    if (!-d $module_name && !$show) {
-        print_error("Cannot checkout $module_name");
-    };
-    my $action;
-    if ( $^O eq 'MSWin32' ) {
-        $action = 'rename' if (!rename($link_name,
-                                $module_name.'.backup.lnk'));
-    } else {
-        $action = 'remove' if (!unlink $link_name);
-    };
-    print_error("Cannot $action $link_name. Please $action it manually") if ($action);
+    my $result = rename $link_name, $module_name;
+    if ( ! $result ) {
+        print_error("Cannot rename $module_name: $!\n");
+    }
+    if ( $CurrentPrj eq $link_name) {
+        $CurrentPrj = $module_name;
+    }
     chdir $module_name;
     getcwd();
 };
@@ -2569,13 +2310,13 @@ sub check_dir {
         $start_dir =~ s/\\/\//go;
         $link_name =~ s/\\/\//go;
         if (lc($start_dir) eq lc($link_name)) {
-            checkout_current_module($current_module);
+            get_current_module($current_module);
         };
     } elsif ((-l $link_name) && (chdir $link_name)) {
         if ($start_dir eq getcwd()) {
             # we're dealing with link => fallback to SRC_ROOT under UNIX
             $StandDir = $ENV{SRC_ROOT}.'/';
-            checkout_current_module($current_module);
+            get_current_module($current_module);
             return;
         } else {
             chdir $start_dir;

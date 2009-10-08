@@ -629,6 +629,7 @@ Module gid_Module_Root_Files_6
 	gid_File_Oo_Inet_Xcs,
 	gid_File_Oo_Inet_Xcu,
 	gid_File_Oo_Office_Addons_Xcs,
+	gid_File_Oo_Office_OOoImprovement_Settings_Xcs,
 	gid_File_Oo_Office_Ui_Basicidecommands_Xcs,
 	gid_File_Oo_Office_Ui_Basicidecommands_Xcu,
 	gid_File_Oo_Office_Ui_Windowstate_Xcs,
@@ -733,6 +734,7 @@ Module gid_Module_Root_Files_6
 	gid_File_Oo_Typedetection_Types_Xcs,
 	gid_File_Oo_Ucb_Configuration_Xcs,
 	gid_File_Oo_Ucb_Configuration_Xcu,
+	gid_File_Oo_Ucb_InteractionHandler_Xcs,
 	gid_File_Oo_Ucb_Hierarchy_Xcs,
 	gid_File_Oo_Ucb_Store_Xcs,
 	gid_File_Oo_Userprofile_Xcs,
@@ -1149,6 +1151,17 @@ Module gid_Module_Root_Extension_Dictionary_Sl
 	Files = (gid_File_Extension_Dictionary_Sl);
 	InstallOrder = "2000";
 	Spellcheckerlanguage = "sl";
+	PackageInfo = "packinfo_office.txt";
+	ParentID = gid_Module_Root;
+	Styles = (HIDDEN_ROOT);
+End
+
+Module gid_Module_Root_Extension_Dictionary_Sr
+	Name = "gid_Module_Root_Extension_Dictionary_Sr";
+	Description = "gid_Module_Root_Extension_Dictionary_Sr";
+	Files = (gid_File_Extension_Dictionary_Sr);
+	InstallOrder = "2000";
+	Spellcheckerlanguage = "sr";
 	PackageInfo = "packinfo_office.txt";
 	ParentID = gid_Module_Root;
 	Styles = (HIDDEN_ROOT);

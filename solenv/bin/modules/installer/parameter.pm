@@ -325,6 +325,8 @@ sub setglobalvariables
             {
                 $installer::globals::islinuxx86_64rpmbuild = 1;
             }
+
+            if ( $installer::globals::rpm eq "" ) { installer::exiter::exit_program("ERROR: Environment variable \"\$RPM\" has to be defined!", "setglobalvariables"); }
         }
 
         # Creating Debian packages ?
@@ -415,10 +417,11 @@ sub setglobalvariables
 
     # setting and creating the temppath
 
-    if (( $ENV{'TMP'} ) || ( $ENV{'TEMP'} ))
+    if (( $ENV{'TMP'} ) || ( $ENV{'TEMP'} ) || ( $ENV{'TMPDIR'} ))
     {
         if ( $ENV{'TMP'} ) { $installer::globals::temppath = $ENV{'TMP'}; }
         elsif ( $ENV{'TEMP'} )  { $installer::globals::temppath = $ENV{'TEMP'}; }
+        elsif ( $ENV{'TMPDIR'} )  { $installer::globals::temppath = $ENV{'TMPDIR'}; }
         $installer::globals::temppath =~ s/\Q$installer::globals::separator\E\s*$//;    # removing ending slashes and backslashes
         $installer::globals::temppath = $installer::globals::temppath . $installer::globals::separator . $installer::globals::globaltempdirname;
         installer::systemactions::create_directory_with_privileges($installer::globals::temppath, "777");

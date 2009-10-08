@@ -94,7 +94,6 @@ LOCALUNPACKDIR=$DESTPATH/unpack
 export LOCALINSTALLDIR
 export LOCALUNPACKDIR
 
-unset LD_LIBRARY_PATH
 unset FORCE2ARCHIVE
 
 echo "### $SOLARENV/bin/installoffice.pl $PARAM -cleanup true $@"

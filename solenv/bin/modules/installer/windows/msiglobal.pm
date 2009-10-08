@@ -2006,7 +2006,12 @@ sub set_msiproductversion
     }
     else
     {
-        $productversion = $productversion . "\." . "00" . "\." . $installer::globals::buildid;
+        my $productminor = "00";
+        if (( $allvariables->{'PACKAGEVERSION'} ) && ( $allvariables->{'PACKAGEVERSION'} ne "" ))
+        {
+            if ( $allvariables->{'PACKAGEVERSION'} =~ /^\s*(\d+)\.(\d+)\.(\d+)\s*$/ ) { $productminor = $2; }
+        }
+        $productversion = $productversion . "\." . $productminor . "\." . $installer::globals::buildid;
     }
 
     $installer::globals::msiproductversion = $productversion;
@@ -2096,6 +2101,40 @@ sub update_reglocat_table
             my $infoline = "Updated idt file: $reglocatfilename\n";
             push(@installer::globals::logfileinfo, $infoline);
         }
+    }
+}
+
+
+
+####################################################################################
+# Updating the file RemoveRe.idt dynamically (RemoveRegistry.idt)
+# The name of the component has to be replaced.
+####################################################################################
+
+sub update_removere_table
+{
+    my ($basedir) = @_;
+
+    my $removeregistryfilename = $basedir . $installer::globals::separator . "RemoveRe.idt";
+
+    # Only do something, if this file exists
+
+    if ( -f $removeregistryfilename )
+    {
+        my $removeregistryfile = installer::files::read_file($removeregistryfilename);
+
+        for ( my $i = 0; $i <= $#{$removeregistryfile}; $i++ )
+        {
+            for ( my $i = 0; $i <= $#{$removeregistryfile}; $i++ )
+            {
+                ${$removeregistryfile}[$i] =~ s/\bREGISTRYROOTCOMPONENT\b/$installer::globals::registryrootcomponent/;
+            }
+        }
+
+        # Saving the file
+        installer::files::save_file($removeregistryfilename ,$removeregistryfile);
+        my $infoline = "Updated idt file: $removeregistryfilename \n";
+        push(@installer::globals::logfileinfo, $infoline);
     }
 }
 

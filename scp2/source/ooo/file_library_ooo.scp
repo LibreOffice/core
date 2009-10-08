@@ -602,7 +602,11 @@ File gid_File_Lib_Cairo
        Name = STRING(CONCAT3(libcairo,UNXSUFFIX,.2));
     #endif
   #elif defined(WNT)
-    Name = "cairo.dll";
+    #ifdef _gcc3
+       Name = "libcairo-2.dll";
+    #else
+       Name = "cairo.dll";
+    #endif
   #endif
 End
 
@@ -899,13 +903,10 @@ File gid_File_Lib_Mcnttype
   #endif
 End
 
-#if !defined(SYSTEM_MOZILLA) && !defined(WITHOUT_MOZILLA)
-
-// (#i91209#)
-#if !defined(MACOSX)
+#if !defined(SYSTEM_MOZILLA) && !defined(WITHOUT_MOZILLA) && !defined(MACOSX)
+                                                                // #i91209#
 STD_UNO_LIB_FILE(gid_File_Lib_Mozab,mozab)
 STD_LIB_FILE(gid_File_Lib_Mozabdrv,mozabdrv)
-#endif
 
 #else
 
@@ -1083,15 +1084,6 @@ STD_UNO_LIB_FILE_PATCH( gid_File_Lib_Pl , pl)
 STD_UNO_LIB_FILE( gid_File_Lib_Preload, preload)
 
 SPECIAL_UNO_COMPONENT_LIB_FILE( gid_File_Lib_Productregistration, productregistration.uno )
-
-#if defined(UNX) && !defined(QUARTZ)
-File gid_File_Lib_Psp
-    Name = LIBNAME(psp);
-    TXT_FILE_BODY;
-    Styles = (PACKED);
-    Dir = gid_Dir_Program;
-End
-#endif
 
 #if defined(UNX) && ! defined(QUARTZ)
 File gid_File_Lib_Vclplug_Gen

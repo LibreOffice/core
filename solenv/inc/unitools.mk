@@ -30,16 +30,16 @@
 #*************************************************************************
 
 # Common tools - move this to the end / consolidate
-TRANSEX*=transex3
-ULFEX*=ulfex
-XMLEX*=xmlex
-XRMEX*=xrmex
-CFGEX*=cfgex
-XSLTPROC*=xsltproc
+TRANSEX*=$(AUGMENT_LIBRARY_PATH) transex3
+ULFEX*=$(AUGMENT_LIBRARY_PATH) ulfex
+XMLEX*=$(AUGMENT_LIBRARY_PATH) xmlex
+XRMEX*=$(AUGMENT_LIBRARY_PATH) xrmex
+CFGEX*=$(AUGMENT_LIBRARY_PATH) cfgex
+XSLTPROC*=$(AUGMENT_LIBRARY_PATH) xsltproc
 
-ULFCONV*=ulfconv
+ULFCONV*=$(AUGMENT_LIBRARY_PATH) ulfconv
 
-MAKEDEPEND*=$(SOLARBINDIR)$/makedepend
+MAKEDEPEND*=$(AUGMENT_LIBRARY_PATH) $(SOLARBINDIR)$/makedepend
 
 SCP_CHECK_TOOL:=checkscp$E
 
@@ -109,6 +109,7 @@ MKDEPFLAGS=-n
 AWK*=awk
 SORT*=sort
 SED*=sed
+GNUPATCH*=patch
 .IF "$(USE_SHELL)"!="4nt"
 # change drive and directory
 CDD=cd
@@ -128,11 +129,6 @@ PERL*:=perl
 RENAME*=mv
 TOUCH*=touch
 TYPE*=cat
-TRANSEX*=transex3
-ULFEX*=ulfex
-XMLEX*=xmlex
-XRMEX*=xrmex
-CFGEX*=cfgex
 .ELSE			# "$(USE_SHELL)"!="4nt"
 CDD=+cdd
 COPY*=+copy
@@ -227,7 +223,7 @@ RMDIR*=rmdir
 XARGS*=xargs
 
 RM+=$(RMFLAGS)
-ADJUSTVISIBILITY*:=adjustvisibility
+ADJUSTVISIBILITY*=$(AUGMENT_LIBRARY_PATH) adjustvisibility
 CONVERT*:=$(PERL) $(SOLARENV)$/bin$/leconvert.pl
 EXECTEST := $(PERL) -w $(SOLARENV)$/bin$/exectest.pl
 GCCINSTLIB:=$(PERL) -w $(SOLARENV)$/bin$/gccinstlib.pl

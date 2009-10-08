@@ -285,8 +285,7 @@ sub get_master_url
         $url .= 'trunk';
     }
     else {
-        # TODO: reconsider naming
-        my $master_label = 'mws_' . lc($master);
+        my $master_label = uc($master);
         $url .= "branches/$master_label";
     }
 
@@ -355,6 +354,10 @@ sub get_cws_by_name
     if ( !$id ) {
         print_error("Child workspace $child not found in EIS database.", 2);
     }
+
+    # Update masterws part of Cws object.
+    my $masterws = $cws->get_mws();
+    $cws->master($masterws);
     return ($cws);
 }
 
@@ -432,7 +435,7 @@ sub query_cws
         print_error("Can't determine master workspace environment.\n", 30);
     }
 
-    if ( ($query_mode eq 'incompatible' || $query_mode eq 'taskids' || $query_mode eq 'state' || $query_mode eq 'current' || $query_mode eq 'owner' || $query_mode eq 'qarep' || $query_mode eq 'issubversion' || $query_mode eq 'ispublic' || $query_mode eq 'build') && !defined($childws) ) {
+    if ( ($query_mode eq 'integratedinto' || $query_mode eq 'incompatible' || $query_mode eq 'taskids' || $query_mode eq 'state' || $query_mode eq 'current' || $query_mode eq 'owner' || $query_mode eq 'qarep' || $query_mode eq 'issubversion' || $query_mode eq 'ispublic' || $query_mode eq 'build') && !defined($childws) ) {
         print_error("Can't determine child workspace environment.\n", 30);
     }
 
@@ -446,6 +449,18 @@ sub query_cws
 
     no strict;
     &{"query_".$query_mode}($cws, $milestone);
+    return;
+}
+
+sub query_integratedinto
+{
+    my $cws = shift;
+
+    if ( is_valid_cws($cws) ) {
+        my $milestone = $cws->get_milestone_integrated();
+        print_message("Integrated into:");
+        print defined($milestone) ? "$milestone\n" : "unkown\n";
+    }
     return;
 }
 
@@ -1061,23 +1076,27 @@ sub relink_workspace {
     if ( !chdir($linkdir) ) {
         print_error("Can't chdir() to directory '$linkdir': $!.", 44);
     }
-    my $suffix = 'lnk';
+    my $suffix = '.lnk';
     foreach(@ooo_top_level_dirs) {
-        # skip non directory files like REBASE.LOG and REBASE.CONFIG_DONT_DELETE
-        if ( ! -d "../ooo/$_" ) {
+        if ( $_ eq 'REBASE.LOG' || $_ eq 'REBASE.CONFIG_DONT_DELETE'  ) {
             next;
         }
-        my $target = exists $added_modules_hash{$_} ? $_ : "$_.$suffix";
+        my $target = $_;
+        if ( -d "../ooo/$_" && !exists $added_modules_hash{$_} ) {
+            $target .= $suffix;
+        }
         if ( !symlink("../ooo/$_", $target) ) {
             print_error("Can't symlink directory '../ooo/$_ -> $target': $!.", 44);
         }
     }
     foreach(@so_top_level_dirs) {
-        # skip non directory files like REBASE.LOG and REBASE.CONFIG_DONT_DELETE
-        if ( ! -d "../sun/$_" ) {
+        if ( $_ eq 'REBASE.LOG' || $_ eq 'REBASE.CONFIG_DONT_DELETE'  ) {
             next;
         }
-        my $target = exists $added_modules_hash{$_} ? $_ : "$_.$suffix";
+        my $target = $_;
+        if ( -d "../sun/$_" && !exists $added_modules_hash{$_} ) {
+            $target .= $suffix;
+        }
         if ( !symlink("../sun/$_", $target) ) {
             print_error("Can't symlink directory '../sun/$_ -> $target': $!.", 44);
         }
@@ -1250,7 +1269,7 @@ sub do_help
     }
     elsif ($arg eq 'query') {
         print STDERR "query: Query child workspace for miscellaneous information\n";
-        print STDERR "usage: query [-M master] [-c child] <current|incompatible|owner|qarep|status|taskids>\n";
+        print STDERR "usage: query [-M master] [-c child] <current|integratedinto|incompatible|owner|qarep|status|taskids>\n";
         print STDERR "       query [-M master] [-c child] <release|due|due_qa|help|ui|ispublic|vcs|build>\n";
         print STDERR "       query [-M master] <latest|milestones|ispublicmaster>\n";
         print STDERR "       query  <masters>\n";
@@ -1278,6 +1297,7 @@ sub do_help
         print STDERR "\tlatest\t\tquery the latest milestone available for resync\n";
         print STDERR "\tbuildid\t\tquery build ID for milestone\n";
         print STDERR "\tintegrated\tquery integrated CWSs for milestone\n";
+        print STDERR "\tintegratedinto\tquery milestone which CWS was integrated into\n";
         print STDERR "\tplanned\t\tquery for planned CWSs\n";
         print STDERR "\tnew\t\tquery for new CWSs\n";
         print STDERR "\tapproved\tquery CWSs approved by QA\n";
@@ -1557,9 +1577,10 @@ sub do_rebase
         print_error("cws rebase requires svn-1.5.4 or later (merge tracking and bug fixes). Please upgrade your svn client.", 1);
     }
 
+    my $cws = get_cws_from_environment();
+    my $old_masterws = $cws->master();
     my $new_masterws;
     my $new_milestone;
-    my $cws = get_cws_from_environment();
 
     my $workspace = $args_ref->[0];
 
@@ -1574,14 +1595,13 @@ sub do_rebase
     elsif( exists($options_ref->{'milestone'}) ) {
         $milestone = $options_ref->{'milestone'};
         if ( $milestone eq 'latest' ) {
-            my $masterws = $cws->master();
-            my $latest = $cws->get_current_milestone($masterws);
+            my $latest = $cws->get_current_milestone($old_masterws);
 
             if ( !$latest ) {
-                print_error("Can't determine latest milestone of '$masterws' available for rebase.", 22);
+                print_error("Can't determine latest milestone of '$old_masterws' available for rebase.", 22);
             }
-            $new_masterws  = $masterws;
-            $new_milestone = $cws->get_current_milestone($masterws);
+            $new_masterws  = $old_masterws;
+            $new_milestone = $cws->get_current_milestone($old_masterws);
         }
         else {
             ($new_masterws, $new_milestone) =  verify_milestone($cws, $milestone);
@@ -1598,10 +1618,10 @@ sub do_rebase
     # This is only needed as long the build system still relies
     # on having "modules" from different repositories in the same
     # directory besides each other.
-    if ( -d "$workspace/$new_masterws/sun" ) {
+    if ( -d "$workspace/$old_masterws/sun" ) {
         $so_setup = 1;
-        $ooo_path = "$workspace/$new_masterws/ooo";
-        $so_path = "$workspace/$new_masterws/sun";
+        $ooo_path = "$workspace/$old_masterws/ooo";
+        $so_path = "$workspace/$old_masterws/sun";
     }
     else {
         $ooo_path = "$workspace";
@@ -1625,31 +1645,6 @@ sub do_rebase
         $so_cws_url = get_cws_url($so_svn_server, $cws->child());
     }
 
-    # check if working directory is switched to the right cws branch
-    my $ooo_wc_url;
-    my $so_wc_url;
-    my $cwsname = $cws->child();
-    print_message("... verifying if  workspace '$workspace' is switched to CWS '$cwsname'.");
-    if ( $so_setup ) {
-        $ooo_wc_url = svn_wc_url($ooo_path);
-        $so_wc_url = svn_wc_url($so_path);
-
-        if ( $ooo_wc_url !~ /\/$cwsname$/ || $so_wc_url !~ /\/$cwsname$/ ) {
-            print_error("Your working copy is not switched to the cws branch.\nPlease fix and restart rebasing.", 24);
-        }
-    }
-    $ooo_wc_url = svn_wc_url($ooo_path);
-    if ( $ooo_wc_url !~ /\/$cwsname$/ ) {
-        print_error("Your working copy '$ooo_path' is not switched to the cws branch.\nPlease fix and restart rebasing.", 24);
-    }
-    if ( $so_setup ) {
-        $so_wc_url = svn_wc_url($so_path);
-
-        if ( $so_wc_url !~ /\/$cwsname$/ ) {
-            print_error("Your working copy '$so_path' is not switched to the cws branch.\nPlease fix and restart rebasing.", 24);
-        }
-    }
-
     my $ooo_milestone_revision;
     my $so_milestone_revision;
 
@@ -1667,9 +1662,9 @@ sub do_rebase
     my $ooo_master_url;
     my $so_master_url;
 
-    $ooo_master_url = get_master_url($ooo_svn_server, $cws->master(), $ooo_milestone_revision);
+    $ooo_master_url = get_master_url($ooo_svn_server, $new_masterws, $ooo_milestone_revision);
     if ( defined($so_svn_server) ) {
-        $so_master_url = get_master_url($so_svn_server, $cws->master(), $so_milestone_revision);
+        $so_master_url = get_master_url($so_svn_server, $new_masterws, $so_milestone_revision);
     }
 
     if ( $commit_phase ) {
@@ -1684,6 +1679,10 @@ sub do_rebase
             svn_commit($so_path, $commit_message);
         }
         if ( $so_setup) {
+            print_message("... rename '$workspace/$old_masterws' -> '$workspace/$new_masterws'\n");
+            if ( !rename("$workspace/$old_masterws", "$workspace/$new_masterws") ) {
+                print_error("Can't rename '$workspace/$old_masterws' -> '$workspace/$new_masterws': $!", 98);
+            }
             print_message("... relinking workspace\n");
             relink_workspace("$workspace/$new_masterws/src.$new_milestone", 1);
             if ( !unlink("$workspace/REBASE.CONFIG_DONT_DELETE") ) {
@@ -1694,16 +1693,35 @@ sub do_rebase
 
         print_message("... updating EIS database\n");
         my $push_return = $cws->set_master_and_milestone($new_masterws, $new_milestone);
-        if ( $$push_return[0] ne $new_masterws) {
-            print_error("Couldn't push new master '$new_masterws' to database", 0);
-        }
+        # sanity check
         if ( $$push_return[1] ne $new_milestone) {
             print_error("Couldn't push new milestone '$new_milestone' to database", 0);
         }
     }
     else {
-        # merge
-        # determine the revision from which the milestone was copied
+        # merge phase
+
+        # check if working directory is switched to the right cws branch
+        my $ooo_wc_url;
+        my $so_wc_url;
+        my $cwsname = $cws->child();
+        print_message("... verifying if  workspace '$workspace' is switched to CWS '$cwsname'.");
+        $ooo_wc_url = svn_wc_url($ooo_path);
+        if ( $ooo_wc_url !~ /\/$cwsname$/ ) {
+            print_error("Your working copy '$ooo_path' is not switched to the cws branch.\nPlease fix and restart rebasing.", 24);
+        }
+        if ( $so_setup ) {
+            $so_wc_url = svn_wc_url($so_path);
+
+            if ( $so_wc_url !~ /\/$cwsname$/ ) {
+                print_error("Your working copy '$so_path' is not switched to the cws branch.\nPlease fix and restart rebasing.", 24);
+            }
+        }
+        # check for mixed revisions, locally modified files etc
+        if ( !svn_wc_is_clean($ooo_path) || ($so_setup && !svn_wc_is_clean($so_path)) ) {
+            print_error("Please fix and restart rebasing.", 25);
+        }
+
         print_message("... merging changes up to '$new_masterws:$new_milestone' to workspace '$workspace'.");
         svn_merge($ooo_milestone_url, $ooo_path);
         if ( $so_setup ) {
@@ -1965,7 +1983,7 @@ sub do_query
     my $options_ref = shift;
 
     # list of available query modes
-    my @query_modes = qw(incompatible taskids status latest current owner qarep build buildid integrated approved nominated ready new planned release due due_qa help ui milestones masters vcs ispublic ispublicmaster);
+    my @query_modes = qw(integratedinto incompatible taskids status latest current owner qarep build buildid integrated approved nominated ready new planned release due due_qa help ui milestones masters vcs ispublic ispublicmaster);
     my %query_modes_hash = ();
     foreach (@query_modes) {
         $query_modes_hash{$_}++;
@@ -2204,6 +2222,34 @@ sub usage
 # con:
 #       - the bindings are difficult to install, mostly due to subtle install bugs
 #       - we do not really use much of the SVN functionality here
+
+sub svn_wc_is_clean
+{
+    my $wc_path = shift;
+
+    my $result = execute_svnversion_command($wc_path);
+
+    my $error = 0;
+
+    if ( $result =~ /:/ ) {
+        print_error("Working copy '$wc_path' contains mixed revisions. Please run 'svn update'!", 0);
+        $error++;
+    }
+    if ( $result =~ /M/ ) {
+        print_error("Working copy '$wc_path' contains locally modified files. Please commit or revert all modified files.", 0);
+        $error++;
+    }
+    if ( $result =~ /S/ ) {
+        print_error("Working copy '$wc_path' is partially switched. The whole working copy needs to be switched to the CWS branch.", 0);
+        $error++;
+    }
+    if ( $result =~ /P/ ) {
+        print_error("Working copy '$wc_path' is only partially checked out. CWS tools can't work on partially checked out working copies.", 0);
+        $error++;
+    }
+
+    return !$error;
+}
 
 sub svn_version_check
 {
@@ -2483,4 +2529,27 @@ sub execute_svn_command
     return wantarray ? @result : \@result;
 }
 
+sub execute_svnversion_command
+{
+    my $options = shift;
+    my @args    = @_;
+
+    my $args_str = join(" ", @args);
+
+    # we can only parse english strings, hopefully a C locale is available everywhere
+    $ENV{LC_ALL}='C';
+    $command = "svnversion $options $args_str";
+
+    if ( $debug ) {
+        print STDERR "\nCWS-DEBUG: ... execute command line: '$command'\n";
+    }
+
+    my $result = `$command`;
+    my $rc = $? >> 8;
+    if ($rc > 0) {
+        print_error("The subversion command line tool 'svnversion' failed with exit status '$rc'", 99);
+    }
+
+    return $result;
+}
 # vim: set ts=4 shiftwidth=4 expandtab syntax=perl:

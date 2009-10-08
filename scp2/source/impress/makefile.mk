@@ -58,5 +58,12 @@ ULFFILES= \
         registryitem_impress.ulf        \
         folderitem_impress.ulf
 
+.IF "$(ENABLE_OPENGL)" == "TRUE"
+PARFILES+=\
+        module_ogltrans.par
+ULFFILES+=\
+    module_ogltrans.ulf
+.ENDIF
+
 # --- File ---------------------------------------------------------
 .INCLUDE :  target.mk

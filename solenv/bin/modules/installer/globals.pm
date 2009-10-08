@@ -76,10 +76,18 @@ BEGIN
         "ga",
         "uk",
         "gd",
-        "my"
+        "my",
+        "mai",
+        "brx",
+        "dgo",
+        "kok",
+        "mni",
+        "sat"
+
     );
     @items_at_modules = ("Files", "Dirs", "Unixlinks");
     @asianlanguages = ("ja", "ko", "zh-CN", "zh-TW");
+    @bidilanguages = ("ar", "he");
 
     $ziplistname = "";
     $pathfilename = "";
@@ -110,6 +118,7 @@ BEGIN
     $servicesrdb_can_be_created = 0;
     $islinux = 0;
     $issolaris = 0;
+    $ismacosx = 0;
     $iswindowsbuild = 0;
     $islinuxbuild = 0;
     $islinuxrpmbuild = 0;
@@ -148,6 +157,7 @@ BEGIN
     $templatefolder = "TemplateFolder";
     $templatefoldername = "Templates";
     $programmenufolder = "ProgramMenuFolder";
+    $systemfolder = "SystemFolder";
     $encodinglistname = "msi-encodinglist.txt";
     $msiencoding = "";  # hash reference for msi encodings
     $msilanguage = "";  # hash reference for msi languages LCID
@@ -159,6 +169,7 @@ BEGIN
     $jdstemppathdefined = 0;
     $packageversion = 1;
     $packagerevision = 1;
+    $rpm = "";
     $rpmcommand = "";
     $rpmquerycommand = "";
     $debian = "";
@@ -254,7 +265,14 @@ BEGIN
     $created_new_component_guid = 0;
     @allddffiles = ();
     $infodirectory = "";
-    $currentcontent = "";
+    @currentcontent = ();
+    @installsetcontent = ();
+    %xpdpackageinfo = ();
+    $signfiles_checked = 0;
+    $dosign = 0;
+    $pwfile = "";
+    $pwfile = "";
+    $pfxfile = "";
 
     %mergemodules = ();
     %merge_media_line = ();
@@ -294,6 +312,7 @@ BEGIN
     $ooodownloadfilename = "";
     $downloadfilename = "";
     $downloadfileextension = "";
+    $followmeinfofilename = "";
     $oooversionstring = "";
     $shellnewfilesadded = 0;
     %multilingual_only_modules = ();
@@ -315,11 +334,32 @@ BEGIN
     $nopatchfilecollector = "";
     @userregistrycollector = ();
     $addeduserregitrykeys = 0;
+    $poolpathset = 0;
+    $poolpath = 0;
+    $poollockfilename = "";
+    $poolcheckfilename = "";
+    %poolshiftedpackages = ();
+    %poolpackages = ();
+    %createpackages = ();
+    $processhaspoolcheckfile = 0;
+    $processhaspoollockfile = 0;
+    $newpcfcontentcalculated = 0;
+    $sessionid = 0;
+    $sessionidset = 0;
+    $savelockfilecontent = "";
+    $savelockfilename = "";
+    $getuidpath = "";
+    $getuidpathset = 0;
+    $newpcfcontent = "";
+    %pcfdifflist = ();
+    @pcfdiffcomment = ();
+    @epmdifflist = ();
     $desktoplinkexists = 0;
     $sundirexists = 0;
     $analyze_spellcheckerlanguage = 0;
     %spellcheckerlanguagehash = ();
     %spellcheckerfilehash = ();
+    $registryrootcomponent = "";
 
     $officeinstalldirectory = "";
     $officeinstalldirectoryset = 0;
@@ -363,6 +403,7 @@ BEGIN
     $msitranpath = "";
     $insert_file_at_end = 0;
     $newfilesexist = 0;
+    $usesharepointpath = 0;
     %newfilescollector = ();
 
     $saveinstalldir = "";
@@ -379,7 +420,6 @@ BEGIN
     $javafile = "";
     $urefile = "";
 
-    $subdir = "";
     $postprocess_specialepm = 0;
     $postprocess_standardepm = 0;
     $mergemodules_analyzed = 0;
@@ -501,6 +541,7 @@ BEGIN
 
     if ( $plat =~ /linux/i ) { $islinux = 1; }
     if ( $plat =~ /solaris/i ) { $issolaris = 1; }
+    if ( $plat =~ /darwin/i ) { $ismacosx = 1; }
 
     # ToDo: Needs to be expanded for additional platforms
 

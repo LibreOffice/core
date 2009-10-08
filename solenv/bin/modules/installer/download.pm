@@ -120,8 +120,11 @@ sub save_script_file
     my $infoline = "Saving script file $newscriptfilename\n";
     push( @installer::globals::logfileinfo, $infoline);
 
-    my $localcall = "chmod 775 $newscriptfilename \>\/dev\/null 2\>\&1";
-    system($localcall);
+    if ( ! $installer::globals::iswindowsbuild )
+    {
+        my $localcall = "chmod 775 $newscriptfilename \>\/dev\/null 2\>\&1";
+        system($localcall);
+    }
 
     return $newscriptfilename;
 }
@@ -1031,6 +1034,7 @@ sub nsis_language_converter
     elsif ( $language eq "pt" ) { $nsislanguage = "Portuguese"; }
     elsif ( $language eq "ro" ) { $nsislanguage = "Romanian"; }
     elsif ( $language eq "ru" ) { $nsislanguage = "Russian"; }
+    elsif ( $language eq "sh" ) { $nsislanguage = "SerbianLatin"; }
     elsif ( $language eq "sr" ) { $nsislanguage = "Serbian"; }
     elsif ( $language eq "sr-SP" ) { $nsislanguage = "Serbian"; }
     elsif ( $language eq "uk" ) { $nsislanguage = "Ukrainian"; }
@@ -1042,7 +1046,6 @@ sub nsis_language_converter
     elsif ( $language eq "zh-CN" ) { $nsislanguage = "SimpChinese"; }
     elsif ( $language eq "zh-TW" ) { $nsislanguage = "TradChinese"; }
     else {
-
         my $infoline = "NSIS language_converter : Could not find nsis language for $language!\n";
         push( @installer::globals::logfileinfo, $infoline);
         $nsislanguage = "English";
@@ -1074,7 +1077,14 @@ sub put_language_list_into_template
     {
         # Syntax: !insertmacro MUI_LANGUAGE "English"
         my $langstring = "\!insertmacro MUI_LANGUAGE_PACK " . $nsislanguage . "\n";
-        $alllangstring = $alllangstring . $langstring;
+        if ( $nsislanguage eq "English" )
+        {
+            $alllangstring = $langstring . $alllangstring;
+        }
+        else
+        {
+            $alllangstring = $alllangstring . $langstring;
+        }
     }
 
     $alllangstring =~ s/\s*$//;
@@ -1346,6 +1356,8 @@ sub copy_and_translate_nsis_language_files
     my $nlffilepath = $nsispath . $installer::globals::separator . "Contrib" . $installer::globals::separator . "Language\ files" . $installer::globals::separator;
     my $nshfilepath = $nsispath . $installer::globals::separator . "Contrib" . $installer::globals::separator . "Modern\ UI" . $installer::globals::separator . "Language files" . $installer::globals::separator;
 
+    my $infoline = "";
+
     for ( my $i = 0; $i <= $#{$languagesarrayref}; $i++ )
     {
         my $onelanguage = ${$languagesarrayref}[$i];
@@ -1380,6 +1392,8 @@ sub copy_and_translate_nsis_language_files
 
         if ( $installer::globals::unicodensis )
         {
+            $infoline = "This is Unicode NSIS!\n";
+            push( @installer::globals::logfileinfo, $infoline);
             convert_utf16_to_utf8($nshfilename);
             convert_utf16_to_utf8($nlffilename);
             $nshfile = installer::files::read_file($nshfilename);   # read nsh file again
@@ -1589,10 +1603,13 @@ sub get_translation_file
     my ($allvariableshashref) = @_;
     my $translationfilename = $installer::globals::idtlanguagepath . $installer::globals::separator . $installer::globals::nsisfilename;
     if ( $installer::globals::unicodensis ) { $translationfilename = $translationfilename . ".uulf"; }
-    else {  { $translationfilename = $translationfilename . ".mlf"; } }
+    else { $translationfilename = $translationfilename . ".mlf"; }
     if ( ! -f $translationfilename ) { installer::exiter::exit_program("ERROR: Could not find language file $translationfilename!", "get_translation_file"); }
     my $translationfile = installer::files::read_file($translationfilename);
     replace_variables($translationfile, $allvariableshashref);
+
+    my $infoline = "Reading translation file: $translationfilename\n";
+    push( @installer::globals::logfileinfo, $infoline);
 
     return $translationfile;
 }

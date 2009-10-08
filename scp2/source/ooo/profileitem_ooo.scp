@@ -380,28 +380,6 @@ ProfileItem gid_Profileitem_Soffice_Logo
     Value = "1";
 End
 
-#ifdef MACOSX
-
-ProfileItem gid_ProfileItem_Soffice_Macosxrc
-    ProfileID = gid_Profile_Soffice_Ini;
-    ModuleID = gid_Module_Root;
-    Section = "Bootstrap";
-    Order = 5;
-    Key = "MacOSXIntegrationUserFile";
-    Value = "${$ORIGIN/bootstraprc:UserInstallation}/user/macosxrc.txt";
-End
-
-ProfileItem gid_ProfileItem_Soffice_Macosxrc2
-    ProfileID = gid_Profile_Soffice_Ini;
-    ModuleID = gid_Module_Root;
-    Section = "Bootstrap";
-    Order = 6;
-    Key = "MacOSXIntegrationDefaultFile";
-    Value = "${$ORIGIN/bootstraprc:BaseInstallation}/presets/macosxrc.txt";
-End
-
-#endif
-
 ProfileItem gid_Profileitem_Soffice_ProgressBarColor
     ProfileID = gid_Profile_Soffice_Ini;
     ModuleID = gid_Module_Root;

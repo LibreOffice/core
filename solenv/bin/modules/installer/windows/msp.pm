@@ -182,11 +182,20 @@ sub execute_msimsp
     my $returnvalue = "";
     my $logfilename = $localmspdir . $installer::globals::separator . "msimsp.log";
 
+    # Using a specific temp for each msimsp.exe process
+    # Creating temp directory again (should already have happened)
+    installer::systemactions::create_directory_structure($installer::globals::temppath);
+
+    # Creating old installation directory
+    my $dirname = "msimsptemp";
+    my $msimsptemppath = $installer::globals::temppath . $installer::globals::separator . $dirname;
+    if ( ! -d $msimsptemppath) { installer::systemactions::create_directory($msimsptemppath); }
+
     # r:\msvc9p\PlatformSDK\v6.1\bin\msimsp.exe -s c:\patch\hotfix_qfe1.pcp -p c:\patch\patch_ooo3_m2_m3.msp -l c:\patch\patch_ooo3_m2_m3.log
 
     if ( -f $logfilename ) { unlink $logfilename; }
 
-    $systemcall = $msimsp . " -s " . $fullpcpfilename . " -p " . $mspfilename . " -l " . $logfilename;
+    $systemcall = $msimsp . " -s " . $fullpcpfilename . " -p " . $mspfilename . " -l " . $logfilename . " -f " . $msimsptemppath;
     installer::logger::print_message( "... $systemcall ...\n" );
 
     $returnvalue = system($systemcall);

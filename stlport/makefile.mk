@@ -66,18 +66,18 @@ $(INCCOM)$/stlport$/vector: systemstl$/$$(@:f)
 .EXPORT : CC CXX
 .IF "$(COMID)"=="gcc3"
     TARFILE_NAME=STLport-4.5
-    PATCH_FILE_NAME=STLport-4.5.patch
+    PATCH_FILES=STLport-4.5.patch
 .ELIF "$(GUI)"=="WNT"
     .IF "$(CCNUMVER)"<="001300000000"
         TARFILE_NAME=STLport-4.0
-        PATCH_FILE_NAME=STLport-4.0.patch
+        PATCH_FILES=STLport-4.0.patch
     .ELSE
         TARFILE_NAME=STLport-4.5-0119
-        PATCH_FILE_NAME=STLport-4.5-0119.patch
+        PATCH_FILES=STLport-4.5-0119.patch
     .ENDIF
 .ELSE
     TARFILE_NAME=STLport-4.0
-    PATCH_FILE_NAME=STLport-4.0.patch
+    PATCH_FILES=STLport-4.0.patch
         # To disable warnings from within STLport headers on unxsoli4 and
         # unxsols4, STLport-4.0.patch had to be extended mechanically by
         #
@@ -167,7 +167,7 @@ OUT2INC= \
 
 .IF "$(OS)"=="IRIX"
 TARFILE_NAME=STLport-4.5
-PATCH_FILE_NAME=STLport-4.5.patch
+PATCH_FILES=STLport-4.5.patch
 BUILD_ACTION=gmake
 BUILD_FLAGS=-f gcc-3.0.mak
 BUILD_FLAGS+= -j$(MAXPROCESS)

@@ -62,12 +62,15 @@ sub select_language_items
 
         if (!($ismultilingual))
         {
-            # Files with style "LANGUAGEPACK" also have to be included into the language pack
+            # Files with style "LANGUAGEPACK" and "FORCELANGUAGEPACK" also have to be included into the language pack.
+            # Files with style "LANGUAGEPACK" are only included into language packs.
+            # Files with style "FORCELANGUAGEPACK" are included into language packs and non language packs. They are
+            # forced, because otherwise they not not be included into languagepacks.
 
             my $styles = "";
             if ( $oneitem->{'Styles'} ) { $styles = $oneitem->{'Styles'}; }
 
-            if ( $styles =~ /\bLANGUAGEPACK\b/ ) { push(@itemsarray, $oneitem); }
+            if (( $styles =~ /\bLANGUAGEPACK\b/ ) || ( $styles =~ /\bFORCELANGUAGEPACK\b/ )) { push(@itemsarray, $oneitem); }
 
             next;   # single language files are not included into language pack
         }
@@ -296,7 +299,7 @@ sub put_packagename_into_script
 
     if ( $installer::globals::issolarisbuild ) { $installline = "  /usr/sbin/pkgadd -d \$outdir -a \$adminfile"; }
 
-    if ( $installer::globals::islinuxrpmbuild ) { $installline = "  rpm --prefix \$PRODUCTINSTALLLOCATION -i"; }
+    if ( $installer::globals::islinuxrpmbuild ) { $installline = "  rpm --prefix \$PRODUCTINSTALLLOCATION --replacepkgs -i"; }
 
     for ( my $i = 0; $i <= $#{$allnames}; $i++ )
     {
@@ -561,7 +564,6 @@ sub build_installer_for_languagepack
 
     # remove rpm or package
     remove_package($installdir, $packagename);
-
 }
 
 1;
