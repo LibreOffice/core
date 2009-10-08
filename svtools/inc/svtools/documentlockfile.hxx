@@ -41,36 +41,18 @@
 #include <com/sun/star/io/XTruncate.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 
-#include <osl/mutex.hxx>
-
-// TODO/LATER: should be combined with sharecontrolfile
-#define LOCKFILE_OOOUSERNAME_ID   0
-#define LOCKFILE_SYSUSERNAME_ID   1
-#define LOCKFILE_LOCALHOST_ID     2
-#define LOCKFILE_EDITTIME_ID      3
-#define LOCKFILE_USERURL_ID       4
-#define LOCKFILE_ENTRYSIZE        5
+#include <svtools/lockfilecommon.hxx>
 
 namespace svt {
 
-class SVT_DLLPUBLIC DocumentLockFile
+class SVT_DLLPUBLIC DocumentLockFile : public LockFileCommon
 {
     // the workaround for automated testing!
     static sal_Bool m_bAllowInteraction;
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > m_xFactory;
-    ::rtl::OUString m_aURL;
-
-
     ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream > OpenStream();
 
     void WriteEntryToStream( ::com::sun::star::uno::Sequence< ::rtl::OUString > aEntry, ::com::sun::star::uno::Reference< ::com::sun::star::io::XOutputStream > xStream );
-
-    ::com::sun::star::uno::Sequence< ::rtl::OUString > ParseEntry( const ::com::sun::star::uno::Sequence< sal_Int8 >& aBuffer );
-    ::rtl::OUString ParseName( const ::com::sun::star::uno::Sequence< sal_Int8 >& aBuffer, sal_Int32& o_nCurPos );
-    ::rtl::OUString EscapeCharacters( const ::rtl::OUString& aSource );
-    ::rtl::OUString GetOOOUserName();
-    ::rtl::OUString GetCurrentLocalTime();
 
 public:
     DocumentLockFile( const ::rtl::OUString& aOrigURL, const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xFactory = ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >() );
@@ -78,7 +60,6 @@ public:
 
     sal_Bool CreateOwnLockFile();
     ::com::sun::star::uno::Sequence< ::rtl::OUString > GetLockData();
-    ::com::sun::star::uno::Sequence< ::rtl::OUString > GenerateOwnEntry();
     sal_Bool OverwriteOwnLockFile();
     void RemoveFile();
 

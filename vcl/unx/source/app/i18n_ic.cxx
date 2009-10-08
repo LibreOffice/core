@@ -340,7 +340,7 @@ SalI18N_InputContext::SalI18N_InputContext ( SalFrame *pFrame ) :
 
         if ( mnPreeditStyle != XIMPreeditNone )
         {
-#if defined LINUX || defined FREEBSD || defined NETBSD || defined IRIX || defined MACOSX
+#if defined LINUX || defined FREEBSD || defined NETBSD || defined IRIX
             if ( mpPreeditAttributes != NULL )
 #endif
                 mpAttributes = XVaAddToNestedList( mpAttributes,
@@ -348,7 +348,7 @@ SalI18N_InputContext::SalI18N_InputContext ( SalFrame *pFrame ) :
         }
         if ( mnStatusStyle != XIMStatusNone )
         {
-#if defined LINUX || defined FREEBSD || defined NETBSD || defined IRIX || defined MACOSX
+#if defined LINUX || defined FREEBSD || defined NETBSD || defined IRIX
             if ( mpStatusAttributes != NULL )
 #endif
                 mpAttributes = XVaAddToNestedList( mpAttributes,

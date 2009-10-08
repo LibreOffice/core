@@ -32,14 +32,14 @@
 #include "precompiled_transex3.hxx"
 #include <iterator> /* std::iterator*/
 
-
 #include <stdio.h>
 #include <sal/alloca.h>
 
 #include "xmlparse.hxx"
 #include <fstream>
 #include <iostream>
-#include "osl/mutex.hxx"
+#include <osl/mutex.hxx>
+#include <osl/thread.hxx>
 #ifdef __MINGW32__
 #include <tools/prewin.h>
 #include <tools/postwin.h>
@@ -281,11 +281,11 @@ BOOL XMLFile::Write( ByteString &aFilename )
             if( !aFStream )     // From time to time the stream can not be opened the first time on NFS volumes,
             {                   // I wasn't able to track this down. I think this is an NFS issue .....
                 //cerr << "ERROR: - helpex - Can't write to tempfile " << aFilename.GetBuffer() << " No#" << x << "\n";
-#if defined(UNX) || defined(OS2)
-                sleep( 3 );
-#else
-                Sleep( 3 );
-#endif
+                TimeValue aTime;
+                aTime.Seconds = 3;
+                aTime.Nanosec = 0;
+
+                osl::Thread::wait( aTime );
             }
             else
             {

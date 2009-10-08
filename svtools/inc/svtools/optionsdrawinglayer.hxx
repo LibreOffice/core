@@ -175,12 +175,18 @@ class SVL_DLLPUBLIC SvtOptionsDrawinglayer
 
         // primitives
         sal_Bool    IsAntiAliasing() const;
+        sal_Bool    IsSnapHorVerLinesToDiscrete() const;
         sal_Bool    IsSolidDragCreate() const;
+        sal_Bool    IsRenderDecoratedTextDirect() const;
+        sal_Bool    IsRenderSimpleTextDirect() const;
         sal_uInt32  GetQuadratic3DRenderLimit() const;
         sal_uInt32  GetQuadraticFormControlRenderLimit() const;
 
         void        SetAntiAliasing( sal_Bool bState );
+        void        SetSnapHorVerLinesToDiscrete( sal_Bool bState );
         void        SetSolidDragCreate( sal_Bool bState );
+        void        SetRenderDecoratedTextDirect( sal_Bool bState );
+        void        SetRenderSimpleTextDirect( sal_Bool bState );
            void        SetQuadratic3DRenderLimit(sal_uInt32 nNew);
            void        SetQuadraticFormControlRenderLimit(sal_uInt32 nNew);
 

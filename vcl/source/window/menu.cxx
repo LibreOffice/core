@@ -31,42 +31,36 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_vcl.hxx"
 
-#ifndef _SV_SVSYS_HXX
-#include <svsys.h>
-#endif
-#include <vcl/salinst.hxx>
-#include <tools/list.hxx>
-#include <tools/debug.hxx>
-#include <vcl/svdata.hxx>
-#include <vcl/svapp.hxx>
-#include <vcl/mnemonic.hxx>
-#include <vcl/image.hxx>
-#include <vcl/event.hxx>
-#include <vcl/help.hxx>
-#ifndef _SV_SVIDS_HRC
-#include <vcl/svids.hrc>
-#endif
-#include <vcl/floatwin.hxx>
-#include <vcl/wrkwin.hxx>
-#include <vcl/timer.hxx>
-#include <vcl/sound.hxx>
-#include <vcl/decoview.hxx>
-#include <vcl/bitmap.hxx>
-#ifndef _SV_RC_H
-#include <tools/rc.h>
-#endif
-#include <vcl/menu.hxx>
-#include <vcl/button.hxx>
-#include <vcl/gradient.hxx>
-#include <vcl/i18nhelp.hxx>
-#include <vcl/taskpanelist.hxx>
-#include <vcl/window.h>
-#include <vcl/controllayout.hxx>
-#include <vcl/toolbox.hxx>
-#include <tools/stream.hxx>
-#include <vcl/salmenu.hxx>
-#include <vcl/salframe.hxx>
-#include <vcl/dockingarea.hxx>
+#include "svsys.h"
+#include "vcl/salinst.hxx"
+#include "tools/list.hxx"
+#include "tools/debug.hxx"
+#include "vcl/svdata.hxx"
+#include "vcl/svapp.hxx"
+#include "vcl/mnemonic.hxx"
+#include "vcl/image.hxx"
+#include "vcl/event.hxx"
+#include "vcl/help.hxx"
+#include "vcl/svids.hrc"
+#include "vcl/floatwin.hxx"
+#include "vcl/wrkwin.hxx"
+#include "vcl/timer.hxx"
+#include "vcl/sound.hxx"
+#include "vcl/decoview.hxx"
+#include "vcl/bitmap.hxx"
+#include "tools/rc.h"
+#include "vcl/menu.hxx"
+#include "vcl/button.hxx"
+#include "vcl/gradient.hxx"
+#include "vcl/i18nhelp.hxx"
+#include "vcl/taskpanelist.hxx"
+#include "vcl/window.h"
+#include "vcl/controllayout.hxx"
+#include "vcl/toolbox.hxx"
+#include "tools/stream.hxx"
+#include "vcl/salmenu.hxx"
+#include "vcl/salframe.hxx"
+#include "vcl/dockingarea.hxx"
 
 
 #include <com/sun/star/uno/Reference.h>
@@ -352,10 +346,12 @@ MenuItemData* MenuItemList::SearchItem( xub_Unicode cSelectChar, KeyCode aKeyCod
         {
             MenuItemData* pData = GetDataFromPos( rPos );
             if ( pData->bEnabled && rI18nHelper.MatchMnemonic( pData->aText, cSelectChar ) )
+            {
                 if( nDuplicates > 1 && rPos == nCurrentPos )
                     continue;   // select next entry with the same mnemonic
                 else
                     return pData;
+            }
         }
     }
 
@@ -1588,10 +1584,12 @@ void Menu::SetPopupMenu( USHORT nItemId, PopupMenu* pMenu )
 
     // set native submenu
     if( ImplGetSalMenu() && pData->pSalMenuItem )
+    {
         if( pMenu )
             ImplGetSalMenu()->SetSubMenu( pData->pSalMenuItem, pMenu->ImplGetSalMenu(), nPos );
         else
             ImplGetSalMenu()->SetSubMenu( pData->pSalMenuItem, NULL, nPos );
+    }
 
     ImplCallEventListeners( VCLEVENT_MENU_SUBMENUCHANGED, nPos );
 }
@@ -3568,7 +3566,7 @@ USHORT PopupMenu::ImplExecute( Window* pW, const Rectangle& rRect, ULONG nPopupM
 
     pWin->SetFocusId( nFocusId );
     pWin->SetOutputSizePixel( aSz );
-    // #102158# menues must never grab the focus, otherwise
+    // #102158# menus must never grab the focus, otherwise
     // they will be closed immediately
     // from now on focus grabbing is only prohibited automatically if
     // FLOATWIN_POPUPMODE_GRABFOCUS was set (which is done below), because some
@@ -3577,15 +3575,7 @@ USHORT PopupMenu::ImplExecute( Window* pW, const Rectangle& rRect, ULONG nPopupM
     if ( GetItemCount() )
     {
         SalMenu* pMenu = ImplGetSalMenu();
-        Rectangle aNativeRect( aRect );
-        if( pW->IsRTLEnabled() && Application::GetSettings().GetLayoutRTL() )
-        {
-            Point aPt( aRect.TopLeft() );
-            aPt.X() += aSz.Width();
-            pW->ImplMirrorFramePos( aPt );
-            aNativeRect = Rectangle( aPt, aNativeRect.GetSize() );
-        }
-        if( pMenu && pMenu->ShowNativePopupMenu( pWin, aNativeRect, nPopupModeFlags | FLOATWIN_POPUPMODE_GRABFOCUS ) )
+        if( pMenu && pMenu->ShowNativePopupMenu( pWin, aRect, nPopupModeFlags | FLOATWIN_POPUPMODE_GRABFOCUS ) )
         {
             pWin->StopExecute(0);
             pWin->doShutdown();
@@ -4669,10 +4659,12 @@ void MenuFloatingWindow::ImplCursorUpDown( BOOL bUp, BOOL bHomeEnd )
         {
             n++;
             if ( n >= pMenu->GetItemCount() )
+            {
                 if ( !IsScrollMenu() || ( nHighlightedItem == ITEMPOS_INVALID ) )
                     n = 0;
                 else
                     break;
+            }
         }
 
         MenuItemData* pData = (MenuItemData*)pMenu->GetItemList()->GetDataFromPos( n );

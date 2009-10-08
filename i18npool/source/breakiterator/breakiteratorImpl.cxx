@@ -102,7 +102,7 @@ static sal_Int32 skipSpace(const OUString& Text, sal_Int32 nPos, sal_Int32 len, 
                 if (bDirection)
                     while (nPos < len && (u_isUWhiteSpace(ch = Text.iterateCodePoints(&pos, 1)) || isZWSP(ch))) nPos=pos;
                 else
-                    while (nPos > 0 && (u_isUWhiteSpace(ch = Text.iterateCodePoints(&pos, -1))) || isZWSP(ch)) nPos=pos;
+                    while (nPos > 0 && (u_isUWhiteSpace(ch = Text.iterateCodePoints(&pos, -1)) || isZWSP(ch))) nPos=pos;
             break;
         }
         return nPos;

@@ -3553,6 +3553,66 @@ namespace basegfx
             return equal(rCandidateA, rCandidateB, fSmallValue);
         }
 
+        // snap points of horizontal or vertical edges to discrete values
+        B2DPolygon snapPointsOfHorizontalOrVerticalEdges(const B2DPolygon& rCandidate)
+        {
+            const sal_uInt32 nPointCount(rCandidate.count());
+
+            if(nPointCount > 1)
+            {
+                // Start by copying the source polygon to get a writeable copy. The closed state is
+                // copied by aRetval's initialisation, too, so no need to copy it in this method
+                B2DPolygon aRetval(rCandidate);
+
+                // prepare geometry data. Get rounded from original
+                B2ITuple aPrevTuple(basegfx::fround(rCandidate.getB2DPoint(nPointCount - 1)));
+                B2DPoint aCurrPoint(rCandidate.getB2DPoint(0));
+                B2ITuple aCurrTuple(basegfx::fround(aCurrPoint));
+
+                // loop over all points. This will also snap the implicit closing edge
+                // even when not closed, but that's no problem here
+                for(sal_uInt32 a(0); a < nPointCount; a++)
+                {
+                    // get next point. Get rounded from original
+                    const bool bLastRun(a + 1 == nPointCount);
+                    const sal_uInt32 nNextIndex(bLastRun ? 0 : a + 1);
+                    const B2DPoint aNextPoint(rCandidate.getB2DPoint(nNextIndex));
+                    const B2ITuple aNextTuple(basegfx::fround(aNextPoint));
+
+                    // get the states
+                    const bool bPrevVertical(aPrevTuple.getX() == aCurrTuple.getX());
+                    const bool bNextVertical(aNextTuple.getX() == aCurrTuple.getX());
+                    const bool bPrevHorizontal(aPrevTuple.getY() == aCurrTuple.getY());
+                    const bool bNextHorizontal(aNextTuple.getY() == aCurrTuple.getY());
+                    const bool bSnapX(bPrevVertical || bNextVertical);
+                    const bool bSnapY(bPrevHorizontal || bNextHorizontal);
+
+                    if(bSnapX || bSnapY)
+                    {
+                        const B2DPoint aSnappedPoint(
+                            bSnapX ? aCurrTuple.getX() : aCurrPoint.getX(),
+                            bSnapY ? aCurrTuple.getY() : aCurrPoint.getY());
+
+                        aRetval.setB2DPoint(a, aSnappedPoint);
+                    }
+
+                    // prepare next point
+                    if(!bLastRun)
+                    {
+                        aPrevTuple = aCurrTuple;
+                        aCurrPoint = aNextPoint;
+                        aCurrTuple = aNextTuple;
+                    }
+                }
+
+                return aRetval;
+            }
+            else
+            {
+                return rCandidate;
+            }
+        }
+
     } // end of namespace tools
 } // end of namespace basegfx
 

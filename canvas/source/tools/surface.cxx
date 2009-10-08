@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: surface.cxx,v $
- * $Revision: 1.6 $
+ * $Revision: 1.6.16.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -262,7 +262,7 @@ namespace canvas
 
         ::basegfx::B2IPoint aDestOffset;
         if( mpFragment )
-            mpFragment->getPos();
+            aDestOffset = mpFragment->getPos();
 
         // convert size to normalized device coordinates
         const ::basegfx::B2DRectangle& rUV(

@@ -50,7 +50,7 @@
 extern "C" {
 #endif
 
-#if defined(LINUX) || defined(FREEBSD) || defined(MACOSX) // should really check for xfree86 or for X11R6.1 and higher
+#if defined(LINUX) || defined(FREEBSD) // should really check for xfree86 or for X11R6.1 and higher
 #define __XKeyboardExtension__ 1
 #else
 #define __XKeyboardExtension__ 0

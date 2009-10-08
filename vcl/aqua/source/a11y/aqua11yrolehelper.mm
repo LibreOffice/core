@@ -264,58 +264,12 @@ using namespace ::com::sun::star::uno;
     return nativeSubrole;
 }
 
-// TODO: the role description requires a localized string with a short description of the specific control
-//       i.e. "button" if the Role is AccessibleRole::PUSH_BUTTON. the OOo-a11y-API does not have such an attribute
-//       possible solution: hard-coded, non localized (english) descriptions (better than nothing, and voiceover
-//       reads the text in english pronounciation anyway)
-//       Use: NSAccessibilityRoleDescription
 +(id)getRoleDescriptionFrom: (NSString *) role with: (NSString *) subRole {
-    id roleDescription = @"";
-    if ( [ role isEqualToString: NSAccessibilityUnknownRole ] ) {
-        roleDescription = @"unknown";
-    } else if ( [ role isEqualToString: NSAccessibilityComboBoxRole ] ) {
-        roleDescription = @"combo box";
-    } else if ( [ role isEqualToString: NSAccessibilityStaticTextRole ] ) {
-        roleDescription = @"text";
-    } else if ( [ role isEqualToString: NSAccessibilityListRole ] ) {
-        roleDescription = @"list";
-    } else if ( [ role isEqualToString: NSAccessibilityMenuRole ] ) {
-        roleDescription = @"menu";
-    } else if ( [ role isEqualToString: NSAccessibilityMenuItemRole ] ) {
-        roleDescription = @"menu item";
-    } else if ( [ role isEqualToString: NSAccessibilityButtonRole ] ) {
-        roleDescription = @"button";
-    } else if ( [ role isEqualToString: NSAccessibilityScrollBarRole ] ) {
-        roleDescription = @"scroll bar";
-    } else if ( [ role isEqualToString: NSAccessibilityScrollAreaRole ] ) {
-        roleDescription = @"scroll area";
-    } else if ( [ role isEqualToString: NSAccessibilityGroupRole ] ) {
-        roleDescription = @"group";
-    } else if ( [ role isEqualToString: NSAccessibilityTextAreaRole ] ) {
-        roleDescription = @"text entry area";
-    } else if ( [ role isEqualToString: NSAccessibilityToolbarRole ] ) {
-        roleDescription = @"toolbar";
-    } else if ( [ role isEqualToString: NSAccessibilityTableRole ] ) {
-        roleDescription = @"table";
-    } else if ( [ role isEqualToString: NSAccessibilityTabGroupRole ] ) {
-        roleDescription = @"tab group";
-    } else if ( [ role isEqualToString: NSAccessibilityCheckBoxRole ] ) {
-        roleDescription = @"check box";
-    } else if ( [ role isEqualToString: NSAccessibilityRadioGroupRole ] ) {
-        roleDescription = @"radio group";
-    } else if ( [ role isEqualToString: NSAccessibilityRadioButtonRole ] ) {
-        roleDescription = @"radio button";
-    } else if ( [ role isEqualToString: NSAccessibilityRowRole ] ) {
-        if ( [ subRole isEqualToString: NSAccessibilityOutlineRowSubrole ] ) {
-            roleDescription = @"outline row";
-        } else if ( [ subRole isEqualToString: NSAccessibilityTableRowSubrole ] ) {
-            roleDescription = @"table row";
-        }
-    } else if ( [ role isEqualToString: NSAccessibilityMenuButtonRole ] ) {
-        roleDescription = @"menu button";
-    } else if ( [ role isEqualToString: NSAccessibilityPopUpButtonRole ] ) {
-        roleDescription = @"popup menu button";
-    }
+	id roleDescription;
+	if ( [ subRole length ] == 0 )
+		roleDescription = NSAccessibilityRoleDescription( role, nil );
+	else
+		roleDescription = NSAccessibilityRoleDescription( role, subRole );
     return roleDescription;
 }
 

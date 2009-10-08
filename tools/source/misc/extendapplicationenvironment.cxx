@@ -71,7 +71,12 @@ void extendApplicationEnvironment() {
     if (rtl::Bootstrap::get(
             rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("URE_BOOTSTRAP")), uri))
     {
-        env.append(rtl::Bootstrap::encode(uri));
+        if (!uri.matchIgnoreAsciiCaseAsciiL(
+                RTL_CONSTASCII_STRINGPARAM("vnd.sun.star.pathname:")))
+        {
+            uri = rtl::Bootstrap::encode(uri);
+        }
+        env.append(uri);
     } else {
         if (osl_getExecutableFile(&uri.pData) != osl_Process_E_None) {
             abort();

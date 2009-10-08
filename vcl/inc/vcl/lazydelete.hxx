@@ -205,6 +205,60 @@ namespace vcl
             }
         }
     };
+
+    /*
+    class DeleteOnDeinit matches a similar need as LazyDelete for static objects:
+    you may not access vcl objects after DeInitVCL has been called this includes their destruction
+    therefore disallowing the existance of static vcl object like e.g. a static BitmapEx
+    To work around this use DeleteOnDeinit<BitmapEx> which will allow you to have a static object container,
+    that will have its contents destroyed on DeinitVCL. The single drawback is that you need to check on the
+    container object whether it still contains content before actually accessing it.
+
+    caveat: when constructing a vcl object, you certainly want to ensure that InitVCL has run already.
+    However this is not necessarily the case when using a class static member or a file level static variable.
+    In these cases make judicious use of the set() method of DeleteOnDeinit, but beware of the changing
+    ownership.
+
+    example use case: use a lazy initialized on call BitmapEx in a paint method. Of course a paint method
+    would not normally be called after DeInitVCL anyway, so the check might not be necessary in a
+    Window::Paint implementation, but always checking is a good idea.
+
+    SomeWindow::Paint()
+    {
+        static vcl::DeleteOnDeinitBase< BitmapEx > aBmp( new BitmapEx( ResId( 1000, myResMgr ) ) );
+
+        if( aBmp.get() ) // check whether DeInitVCL has been called already
+            DrawBitmapEx( Point( 10, 10 ), *aBmp.get() );
+    }
+    */
+
+    class VCL_DLLPUBLIC DeleteOnDeinitBase
+    {
+    public:
+        static void SAL_DLLPRIVATE ImplDeleteOnDeInit();
+        virtual ~DeleteOnDeinitBase();
+    protected:
+        static void addDeinitContainer( DeleteOnDeinitBase* i_pContainer );
+
+        virtual void doCleanup() = 0;
+    };
+
+    template < typename T >
+    class VCL_DLLPUBLIC DeleteOnDeinit : public DeleteOnDeinitBase
+    {
+        T* m_pT;
+        virtual void doCleanup() { delete m_pT; m_pT = NULL; }
+    public:
+        DeleteOnDeinit( T* i_pT ) : m_pT( i_pT ) { addDeinitContainer( this ); }
+        virtual ~DeleteOnDeinit() {}
+
+        // get contents
+        T* get() { return m_pT; }
+
+        // set contents, returning old contents
+        // ownership is transfered !
+        T* set( T* i_pNew ) { T* pOld = m_pT; m_pT = i_pNew; return pOld; }
+    };
 }
 
 #endif

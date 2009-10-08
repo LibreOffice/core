@@ -1743,7 +1743,7 @@ void SvtDocumentTemplateDialog::InitImpl( )
     pImpl->aTitle = GetText();
 
     aMoreTemplatesLink.SetURL( String(
-        RTL_CONSTASCII_STRINGPARAM( "http://extensions.services.openoffice.org/templates?cid=923508" ) ) );
+        RTL_CONSTASCII_STRINGPARAM( "http://templates.services.openoffice.org/?cid=923508" ) ) );
     aMoreTemplatesLink.SetClickHdl( LINK( this, SvtDocumentTemplateDialog, OpenLinkHdl_Impl ) );
 
     aManageBtn.SetClickHdl( LINK( this, SvtDocumentTemplateDialog, OrganizerHdl_Impl ) );

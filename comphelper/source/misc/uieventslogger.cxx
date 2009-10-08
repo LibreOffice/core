@@ -97,6 +97,7 @@ namespace
         abbrs[OUString::createFromAscii("ToolbarsMenuController")] = OUString::createFromAscii("15");
         abbrs[OUString::createFromAscii("SfxToolBoxControl")] = OUString::createFromAscii("16");
         abbrs[OUString::createFromAscii("SfxAsyncExec")] = OUString::createFromAscii("17");
+        abbrs[OUString::createFromAscii("AcceleratorExecute")] = OUString::createFromAscii("18");
     };
 }
 
@@ -132,7 +133,6 @@ namespace comphelper
 
             bool m_Active;
             TimeValue m_LastLogEventTime;
-            Mutex m_LogMutex;
             const OUString m_LogPath;
             const TimeValue m_IdleTimeout;
             sal_Int32 m_SessionLogEventCount;
@@ -145,6 +145,7 @@ namespace comphelper
 
             // static methods and data
             static ptr getInstance();
+            static void prepareMutex();
             static bool shouldActivate();
             static bool getEnabledFromCoreController();
             static bool getEnabledFromCfg();
@@ -218,17 +219,19 @@ namespace comphelper
     sal_Bool UiEventsLogger::isEnabled()
     {
         try {
-            UiEventsLogger_Impl::ptr inst = UiEventsLogger_Impl::getInstance();
-            if(inst==UiEventsLogger_Impl::ptr()) return false;
-            return inst->m_Active;
+            UiEventsLogger_Impl::prepareMutex();
+            Guard<Mutex> singleton_guard(UiEventsLogger_Impl::singleton_mutex);
+            return UiEventsLogger_Impl::getInstance()->m_Active;
         } catch(...) { return false; } // never throws
     }
 
     sal_Int32 UiEventsLogger::getSessionLogEventCount()
     {
-        UiEventsLogger_Impl::ptr inst = UiEventsLogger_Impl::getInstance();
-        if(inst==UiEventsLogger_Impl::ptr()) return 0;
-        return inst->m_SessionLogEventCount;
+        try {
+            UiEventsLogger_Impl::prepareMutex();
+            Guard<Mutex> singleton_guard(UiEventsLogger_Impl::singleton_mutex);
+            return UiEventsLogger_Impl::getInstance()->m_SessionLogEventCount;
+        } catch(...) { return 0; } // never throws
     }
 
     void UiEventsLogger::appendDispatchOrigin(
@@ -262,8 +265,9 @@ namespace comphelper
         const Sequence<PropertyValue>& args)
     {
         try {
-            UiEventsLogger_Impl::ptr inst = UiEventsLogger_Impl::getInstance();
-            if(inst!=UiEventsLogger_Impl::ptr()) inst->logDispatch(url, args);
+            UiEventsLogger_Impl::prepareMutex();
+            Guard<Mutex> singleton_guard(UiEventsLogger_Impl::singleton_mutex);
+            UiEventsLogger_Impl::getInstance()->logDispatch(url, args);
         } catch(...) { } // never throws
     }
 
@@ -275,8 +279,9 @@ namespace comphelper
         const OUString& param)
     {
         try {
-            UiEventsLogger_Impl::ptr inst = UiEventsLogger_Impl::getInstance();
-            if(inst!=UiEventsLogger_Impl::ptr()) inst->logVcl(parent_id, window_type, id, method, param);
+            UiEventsLogger_Impl::prepareMutex();
+            Guard<Mutex> singleton_guard(UiEventsLogger_Impl::singleton_mutex);
+            UiEventsLogger_Impl::getInstance()->logVcl(parent_id, window_type, id, method, param);
         } catch(...) { } // never throws
     }
 
@@ -303,8 +308,23 @@ namespace comphelper
 
     void UiEventsLogger::disposing()
     {
+        // we dont want to create an instance just to dispose it
+        UiEventsLogger_Impl::prepareMutex();
+        Guard<Mutex> singleton_guard(UiEventsLogger_Impl::singleton_mutex);
         if(UiEventsLogger_Impl::instance!=UiEventsLogger_Impl::ptr())
+            UiEventsLogger_Impl::getInstance()->disposing();
+    }
+
+    void UiEventsLogger::reinit()
+    {
+        UiEventsLogger_Impl::prepareMutex();
+        Guard<Mutex> singleton_guard(UiEventsLogger_Impl::singleton_mutex);
+        if(UiEventsLogger_Impl::instance)
+        {
             UiEventsLogger_Impl::instance->disposing();
+            delete UiEventsLogger_Impl::instance;
+            UiEventsLogger_Impl::instance = NULL;
+        }
     }
 
     // private UiEventsLogger_Impl methods
@@ -325,7 +345,6 @@ namespace comphelper
         const URL& url,
         const Sequence<PropertyValue>& args)
     {
-        Guard<Mutex> log_guard(m_LogMutex);
         if(!m_Active) return;
         if(!url.Complete.match(URL_UNO) && !url.Complete.match(URL_FILE)) return;
         checkIdleTimeout();
@@ -377,7 +396,6 @@ namespace comphelper
         const OUString& method,
         const OUString& param)
     {
-        Guard<Mutex> log_guard(m_LogMutex);
         if(!m_Active) return;
         checkIdleTimeout();
 
@@ -600,19 +618,22 @@ namespace comphelper
     }
 
     UiEventsLogger_Impl::ptr UiEventsLogger_Impl::instance = UiEventsLogger_Impl::ptr();
-    Mutex * UiEventsLogger_Impl::singleton_mutex = NULL;
     UiEventsLogger_Impl::ptr UiEventsLogger_Impl::getInstance()
     {
-        if(singleton_mutex==NULL)
-        {
-            Guard<Mutex> global_guard(Mutex::getGlobalMutex());
-            if(singleton_mutex==NULL)
-                singleton_mutex = new Mutex();
-        }
-        Guard<Mutex> singleton_guard(singleton_mutex);
-        if(instance == 0)
+        if(instance == NULL)
             instance = UiEventsLogger_Impl::ptr(new UiEventsLogger_Impl());
         return instance;
+    }
+
+    Mutex * UiEventsLogger_Impl::singleton_mutex = NULL;
+    void UiEventsLogger_Impl::prepareMutex()
+    {
+        if(singleton_mutex == NULL)
+        {
+            Guard<Mutex> global_guard(Mutex::getGlobalMutex());
+            if(singleton_mutex == NULL)
+                singleton_mutex = new Mutex();
+        }
     }
 
     sal_Int32 UiEventsLogger_Impl::findIdx(const Sequence<PropertyValue>& args, const OUString& key)
@@ -625,7 +646,6 @@ namespace comphelper
 
     void UiEventsLogger_Impl::disposing()
     {
-        Guard<Mutex> log_guard(m_LogMutex);
         m_Active = false;
         m_Logger.clear() ;
         m_LogHandler.clear();

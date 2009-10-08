@@ -177,6 +177,11 @@ public class XUnitConversionTest extends ComplexTestCase
                 assure("Size.Width  not correct", delta(aSizeInMM_100TH.Width, aSizeInMM_10TH.Width * 10) < 10);
                 assure("Size.Height not correct", delta(aSizeInMM_100TH.Height, aSizeInMM_10TH.Height * 10) < 10);
 
+                // new
+                checkSize(aSize, com.sun.star.util.MeasureUnit.PIXEL, "pixel");
+                checkSize(aSize, com.sun.star.util.MeasureUnit.APPFONT, "appfont");
+                checkSize(aSize, com.sun.star.util.MeasureUnit.SYSFONT, "sysfont");
+
                 // simply check some more parameters
                 checkSize(aSize, com.sun.star.util.MeasureUnit.MM, "mm");
                 checkSize(aSize, com.sun.star.util.MeasureUnit.CM, "cm");

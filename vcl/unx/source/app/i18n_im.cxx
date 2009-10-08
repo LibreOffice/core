@@ -55,10 +55,6 @@
 #include "i18n_im.hxx"
 #include <i18n_status.hxx>
 
-#ifdef MACOSX
-#include <osl/process.h>
-#include <tools/string.hxx>
-#endif
 #include <osl/thread.h>
 
 using namespace vcl;
@@ -253,13 +249,8 @@ SalI18N_InputMethod::SetLocale( const char* pLocale )
         char *locale = SetSystemLocale( pLocale );
         if ( (!IsXWindowCompatibleLocale(locale)) || IsPosixLocale(locale) )
         {
-            #ifdef MACOSX // MacOS X always uses UTF-8 for the filesystem
-            osl_setThreadTextEncoding (RTL_TEXTENCODING_UTF8);
-            locale = SetSystemLocale( "en_US.UTF-8" );
-            #else
             osl_setThreadTextEncoding (RTL_TEXTENCODING_ISO_8859_1);
             locale = SetSystemLocale( "en_US" );
-            #endif
             #ifdef SOLARIS
             SetSystemEnvironment( "en_US" );
             #endif

@@ -32,22 +32,20 @@
 #include "precompiled_vcl.hxx"
 
 #include <stdio.h>
-
-#include <salunx.h>
 #include <poll.h>
-#include <saldata.hxx>
-#include <saldisp.hxx>
-#include <salbmp.h>
-#include <vcl/salbtype.hxx>
-#include <salgdi.h>
-#include <salframe.h>
-#include <salvd.h>
-#include <xrender_peer.hxx>
 
-#ifndef _USE_PRINT_EXTENSION_
-#include <psprint/printergfx.hxx>
-#include <vcl/bmpacc.hxx>
-#endif
+#include "salunx.h"
+#include "saldata.hxx"
+#include "saldisp.hxx"
+#include "salbmp.h"
+#include "salgdi.h"
+#include "salframe.h"
+#include "salvd.h"
+#include "xrender_peer.hxx"
+
+#include "vcl/salbtype.hxx"
+#include "vcl/printergfx.hxx"
+#include "vcl/bmpacc.hxx"
 
 #undef SALGDI2_TESTTRANS
 
@@ -421,9 +419,12 @@ extern "C"
 }
 
 
-void X11SalGraphics::YieldGraphicsExpose( Display* pDisplay, SalFrame* pFrame, Drawable aWindow )
+void X11SalGraphics::YieldGraphicsExpose()
 {
     // get frame if necessary
+    SalFrame* pFrame    = m_pFrame;
+    Display* pDisplay   = GetXDisplay();
+    XLIB_Window aWindow = GetDrawable();
     if( ! pFrame )
     {
         const std::list< SalFrame* >& rFrames = GetX11SalData()->GetDisplay()->getFrames();
@@ -446,24 +447,10 @@ void X11SalGraphics::YieldGraphicsExpose( Display* pDisplay, SalFrame* pFrame, D
 
     do
     {
-        if( ! XCheckIfEvent( pDisplay, &aEvent, GraphicsExposePredicate, (XPointer)aWindow ) )
-        {
-            // wait for some event to arrive
-            struct pollfd aFD;
-            aFD.fd = ConnectionNumber(pDisplay);
-            aFD.events = POLLIN;
-            aFD.revents = 0;
-            poll( &aFD, 1, 1000 );
-            if( ! XCheckIfEvent( pDisplay, &aEvent, GraphicsExposePredicate, (XPointer)aWindow ) )
-            {
-                poll( &aFD, 1, 1000 ); // try once more for a packet of events from the Xserver
-                if( ! XCheckIfEvent( pDisplay, &aEvent, GraphicsExposePredicate, (XPointer)aWindow ) )
-                {
-                    // this should not happen at all; still sometimes it happens
-                    break;
-                }
-            }
-        }
+        if( ! GetDisplay()->XIfEventWithTimeout( &aEvent, (XPointer)aWindow, GraphicsExposePredicate ) )
+            // this should not happen at all; still sometimes it happens
+            break;
+
         if( aEvent.type == NoExpose )
             break;
 
@@ -583,7 +570,7 @@ void X11SalGraphics::copyBits( const SalTwoRect *pPosAry,
 
         if( bNeedGraphicsExposures )
         {
-            YieldGraphicsExpose( GetXDisplay(), m_pFrame, GetDrawable() );
+            YieldGraphicsExpose();
 
             if( pCopyGC )
                 XSetGraphicsExposures( GetXDisplay(),

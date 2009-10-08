@@ -75,8 +75,8 @@
 #endif
 
 #ifndef __SUBFONT_H
-#include <psprint/list.h>
-#include <psprint/sft.h>
+#include <list.h>
+#include <sft.h>
 #endif
 
 #ifdef GCP_KERN_HACK

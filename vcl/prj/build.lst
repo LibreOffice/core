@@ -1,4 +1,4 @@
-vc	vcl	:	apple_remote BOOST:boost psprint rsc sot ucbhelper unotools ICU:icu i18npool i18nutil unoil ridljar X11_EXTENSIONS:x11_extensions offuh basegfx basebmp tools transex3 icc NULL
+vc	vcl	:	apple_remote BOOST:boost rsc sot ucbhelper unotools ICU:icu i18npool i18nutil unoil ridljar X11_EXTENSIONS:x11_extensions offuh basegfx basebmp tools transex3 icc NULL
 vc	vcl										usr1	-	all	vc_mkout NULL
 vc	vcl\inc									nmake	-	all	vc_inc NULL
 vc	vcl\source\glyphs						nmake	-	all	vc_glyphs vc_inc NULL
@@ -8,6 +8,7 @@ vc	vcl\source\window						nmake	-	all	vc_win vc_inc NULL
 vc	vcl\source\control						nmake	-	all	vc_ctrl vc_inc NULL
 vc	vcl\source\src							nmake	-	all	vc_src vc_inc NULL
 vc	vcl\source\helper						nmake	-	all	vc_hlp vc_inc NULL
+vc	vcl\source\fontsubset					nmake	-	all	vc_fts vc_inc NULL
 vc  vcl\source\salmain                      nmake   -   all vc_salmain vc_inc NULL
 vc	vcl\os2\source\app						nmake	-	p	vc__appp vc_inc NULL
 vc	vcl\os2\source\gdi						nmake	-	p	vc__gdip vc_inc NULL
@@ -20,7 +21,10 @@ vc	vcl\win\source\window					nmake	-	w	vc__winw vc_inc NULL
 vc	vcl\win\source\src						nmake	-	w	vc__srcw vc_inc NULL
 vc  vcl\unx\source\plugadapt				nmake	-	u	vc__plug vc_inc NULL
 vc	vcl\unx\source\app						nmake	-	u	vc__appu vc_inc NULL
+vc	vcl\unx\source\fontmanager				nmake	-	u	vc__ftmu vc_inc NULL
 vc	vcl\unx\source\gdi						nmake	-	u	vc__gdiu vc_inc NULL
+vc	vcl\unx\source\printer   				nmake	-	u	vc__prnu vc_inc NULL
+vc	vcl\unx\source\printergfx  				nmake	-	u	vc__prgu vc_inc NULL
 vc	vcl\unx\source\window					nmake	-	u	vc__winu vc_inc NULL
 vc  vcl\unx\gtk\a11y						nmake   -   u   vc__gtky vc_inc NULL
 vc  vcl\unx\gtk\app							nmake   -   u   vc__gtka vc_inc NULL
@@ -37,6 +41,6 @@ vc	vcl\mac\source\app						nmake	-	m	vc__appm vc_inc NULL
 vc	vcl\mac\source\gdi						nmake	-	m	vc__gdim vc_inc NULL
 vc	vcl\mac\source\window					nmake	-	m	vc__winm vc_inc NULL
 vc	vcl\mac\source\src						nmake	-	m	vc__srcm vc_inc NULL
-vc	vcl\util								nmake	-	all	vc_util vc__plug.u vc__aquy.u vc__appa.u vc__appm.m vc__appu.u vc__appw.w vc__appp.p vc__gdia.u vc__gdim.m vc__gdiu.u vc__gdiw.w vc__gdip.p vc__srcm.m vc__srcw.w vc__srcp.p vc__wina.u vc__winm.m vc__winu.u vc__winw.w vc__winp.p vc__gtka.u vc__gtky.u vc__gtkw.u vc__gtkg.u vc__kde.u vc__hl.u vc_app vc_ctrl vc_gdi vc_hlp vc_src vc_win vc_glyphs vc_components NULL
+vc	vcl\util								nmake	-	all	vc_util vc__plug.u vc__aquy.u vc__appa.u vc__appm.m vc__appu.u vc__appw.w vc__appp.p vc__gdia.u vc__gdim.m vc__gdiu.u vc__gdiw.w vc__gdip.p vc__srcm.m vc__srcw.w vc__srcp.p vc__wina.u vc__winm.m vc__winu.u vc__winw.w vc__winp.p vc__gtka.u vc__gtky.u vc__gtkw.u vc__gtkg.u vc__kde.u vc__hl.u vc__ftmu.u vc__prgu.u vc__prnu.u vc_app vc_ctrl vc_gdi vc_hlp vc_src vc_win vc_glyphs vc_fts vc_components NULL
 vc  vcl\util\linksvp                        nmake   -   u   vc_lsvp vc_util NULL
 vc	vcl\workben								nmake	-	all	vc_wrkb vc_util vc_salmain NULL

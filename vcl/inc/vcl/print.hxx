@@ -404,8 +404,11 @@ public:
     *   on JobSetup will be preferred. However if no "IsQuickJob" value is set,
     *   setting SetNextJobIsQuick will cause the following StartJob to set this value
     *   to "true" in the current JobSetup.
+    *
+    *   the paramter can be set to "false" again in case a job was not started and the
+    *   printer is to be reused.
     */
-    void                        SetNextJobIsQuick();
+    void                        SetNextJobIsQuick( bool bQuick = true );
 
     /** checks the printer list and updates it necessary
     *

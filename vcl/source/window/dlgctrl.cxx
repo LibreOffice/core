@@ -44,9 +44,6 @@
 
 using namespace ::com::sun::star;
 
-
-
-
 // =======================================================================
 
 static Window* ImplGetSubChildWindow( Window* pParent, USHORT n, USHORT& nIndex )
@@ -274,65 +271,6 @@ Window* Window::ImplGetDlgWindow( USHORT nIndex, USHORT nType,
 
 // -----------------------------------------------------------------------
 
-static Window* ImplFindAccelWindow( Window* pParent, USHORT& rIndex, xub_Unicode cCharCode,
-                                    USHORT nFormStart, USHORT nFormEnd, BOOL bCheckEnable = TRUE )
-{
-    DBG_ASSERT( (rIndex >= nFormStart) && (rIndex <= nFormEnd),
-                "Window::ImplFindAccelWindow() - rIndex not in Form" );
-
-    xub_Unicode cCompareChar;
-    USHORT  nStart = rIndex;
-    USHORT  i = rIndex;
-    int     bSearch = TRUE;
-    Window* pWindow;
-
-    // MT: Where can we keep the CharClass?!
-    static uno::Reference< i18n::XCharacterClassification > xCharClass;
-    if ( !xCharClass.is() )
-        xCharClass = vcl::unohelper::CreateCharacterClassification();
-
-    const ::com::sun::star::lang::Locale& rLocale = Application::GetSettings().GetUILocale();
-    cCharCode = xCharClass->toUpper( String(cCharCode), 0, 1, rLocale )[0];
-
-    if ( i < nFormEnd )
-        pWindow = ImplGetNextWindow( pParent, i, i, TRUE );
-    else
-        pWindow = ImplGetChildWindow( pParent, nFormStart, i, TRUE );
-    while ( bSearch )
-    {
-        const XubString aStr = pWindow->GetText();
-        USHORT nPos = aStr.Search( '~' );
-        while ( nPos != STRING_NOTFOUND )
-        {
-            cCompareChar = aStr.GetChar( nPos+1 );
-            cCompareChar = xCharClass->toUpper( String(cCompareChar), 0, 1, rLocale )[0];
-            if ( cCompareChar == cCharCode )
-            {
-                // Bei Static-Controls auf das naechste Controlm weiterschalten
-                if ( (pWindow->GetType() == WINDOW_FIXEDTEXT)   ||
-                     (pWindow->GetType() == WINDOW_FIXEDLINE)   ||
-                     (pWindow->GetType() == WINDOW_GROUPBOX) )
-                    pWindow = pParent->ImplGetDlgWindow( i, DLGWINDOW_NEXT );
-                rIndex = i;
-                return pWindow;
-            }
-            nPos = aStr.Search( '~', nPos+1 );
-        }
-
-        if ( i == nStart )
-            break;
-
-        if ( i < nFormEnd )
-            pWindow = ImplGetNextWindow( pParent, i, i, bCheckEnable );
-        else
-            pWindow = ImplGetChildWindow( pParent, nFormStart, i, bCheckEnable );
-    }
-
-    return NULL;
-}
-
-// -----------------------------------------------------------------------
-
 static Window* ImplFindDlgCtrlWindow( Window* pParent, Window* pWindow, USHORT& rIndex,
                                       USHORT& rFormStart, USHORT& rFormEnd )
 {
@@ -347,6 +285,10 @@ static Window* ImplFindDlgCtrlWindow( Window* pParent, Window* pWindow, USHORT& 
 
     // Focus-Fenster in der Child-Liste suchen
     pSWindow = ImplGetChildWindow( pParent, 0, i, FALSE );
+
+    if( pWindow == NULL )
+        pWindow = pSWindow;
+
     while ( pSWindow )
     {
         if ( pSWindow->ImplGetWindow()->IsDialogControlStart() )
@@ -400,6 +342,89 @@ static Window* ImplFindDlgCtrlWindow( Window* pParent, Window* pWindow, USHORT& 
     rFormEnd = nFormEnd;
 
     return pSWindow;
+}
+
+// -----------------------------------------------------------------------
+
+static Window* ImplFindAccelWindow( Window* pParent, USHORT& rIndex, xub_Unicode cCharCode,
+                                    USHORT nFormStart, USHORT nFormEnd, BOOL bCheckEnable = TRUE )
+{
+    DBG_ASSERT( (rIndex >= nFormStart) && (rIndex <= nFormEnd),
+                "Window::ImplFindAccelWindow() - rIndex not in Form" );
+
+    xub_Unicode cCompareChar;
+    USHORT  nStart = rIndex;
+    USHORT  i = rIndex;
+    int     bSearch = TRUE;
+    Window* pWindow;
+
+    // MT: Where can we keep the CharClass?!
+    static uno::Reference< i18n::XCharacterClassification > xCharClass;
+    if ( !xCharClass.is() )
+        xCharClass = vcl::unohelper::CreateCharacterClassification();
+
+    const ::com::sun::star::lang::Locale& rLocale = Application::GetSettings().GetUILocale();
+    cCharCode = xCharClass->toUpper( String(cCharCode), 0, 1, rLocale )[0];
+
+    if ( i < nFormEnd )
+        pWindow = ImplGetNextWindow( pParent, i, i, TRUE );
+    else
+        pWindow = ImplGetChildWindow( pParent, nFormStart, i, TRUE );
+    while( bSearch && pWindow )
+    {
+        const XubString aStr = pWindow->GetText();
+        USHORT nPos = aStr.Search( '~' );
+        while ( nPos != STRING_NOTFOUND )
+        {
+            cCompareChar = aStr.GetChar( nPos+1 );
+            cCompareChar = xCharClass->toUpper( String(cCompareChar), 0, 1, rLocale )[0];
+            if ( cCompareChar == cCharCode )
+            {
+                // Bei Static-Controls auf das naechste Controlm weiterschalten
+                if ( (pWindow->GetType() == WINDOW_FIXEDTEXT)   ||
+                     (pWindow->GetType() == WINDOW_FIXEDLINE)   ||
+                     (pWindow->GetType() == WINDOW_GROUPBOX) )
+                    pWindow = pParent->ImplGetDlgWindow( i, DLGWINDOW_NEXT );
+                rIndex = i;
+                return pWindow;
+            }
+            nPos = aStr.Search( '~', nPos+1 );
+        }
+
+        // #i93011# it would have made sense to have this really recursive
+        // right from the start. However this would cause unpredictable side effects now
+        // so instead we have a style bit for some child windows, that want their
+        // children checked for accelerators
+        if( (pWindow->GetStyle() & WB_CHILDDLGCTRL) != 0 )
+        {
+            USHORT  nChildIndex;
+            USHORT  nChildFormStart;
+            USHORT  nChildFormEnd;
+
+            // get form start and end
+            ::ImplFindDlgCtrlWindow( pWindow, NULL,
+                                     nChildIndex, nChildFormStart, nChildFormEnd );
+            Window* pAccelWin = ImplFindAccelWindow( pWindow, nChildIndex, cCharCode,
+                                                     nChildFormStart, nChildFormEnd,
+                                                     bCheckEnable );
+            if( pAccelWin )
+                return pAccelWin;
+        }
+
+        if ( i == nStart )
+            break;
+
+        if ( i < nFormEnd )
+        {
+            pWindow = ImplGetNextWindow( pParent, i, i, bCheckEnable );
+            if( ! pWindow )
+                pWindow = ImplGetChildWindow( pParent, nFormStart, i, bCheckEnable );
+        }
+        else
+            pWindow = ImplGetChildWindow( pParent, nFormStart, i, bCheckEnable );
+    }
+
+    return NULL;
 }
 
 // -----------------------------------------------------------------------
@@ -848,7 +873,7 @@ void Window::ImplDlgCtrlNextWindow()
             ((pDlgCtrlParent->GetStyle() & (WB_DIALOGCONTROL | WB_NODIALOGCONTROL)) != WB_DIALOGCONTROL) )
         pDlgCtrlParent = pDlgCtrlParent->ImplGetParent();
 
-    if ( !pDlgCtrlParent || ((pDlgCtrlParent->GetStyle() & (WB_DIALOGCONTROL | WB_NODIALOGCONTROL)) != WB_DIALOGCONTROL) )
+if ( !pDlgCtrlParent || (GetStyle() & WB_NODIALOGCONTROL) || ((pDlgCtrlParent->GetStyle() & (WB_DIALOGCONTROL | WB_NODIALOGCONTROL)) != WB_DIALOGCONTROL) )
         return;
 
     // lookup window in child list

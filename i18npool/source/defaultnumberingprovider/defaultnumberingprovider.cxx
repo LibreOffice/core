@@ -830,8 +830,8 @@ Sequence< sal_Int16 > DefaultNumberingProvider::getSupportedNumberingTypes(  )
 
         for(sal_Int16 i = 0; i < nSupported_NumberingTypes; i++) {
             if ( (aSupportedTypes[i].langOption & LANG_ALL) ||
-                    (aSupportedTypes[i].langOption & LANG_CJK) && cjkEnabled ||
-                    (aSupportedTypes[i].langOption & LANG_CTL) && ctlEnabled)
+                    ((aSupportedTypes[i].langOption & LANG_CJK) && cjkEnabled) ||
+                    ((aSupportedTypes[i].langOption & LANG_CTL) && ctlEnabled) )
                 pArray[i] = aSupportedTypes[i].nType;
         }
         return aRet;

@@ -367,7 +367,7 @@ const Polygon* ImplLineConverter::ImplGetNext()
                         {
                             // Spitzer Winkel :
                             mnFloat0Points = 6;
-                            mpFloat0[ 4 + nFirst ^ 1 ] = aDestPoint;
+                            mpFloat0[ (4 + nFirst) ^ 1 ] = aDestPoint;
                             aDestPoint -= aN2Vec;
                             mpFloat0[ 4 + nFirst ] = aDestPoint;
                             mpFloat0[ 1 + nFirst ] += aN1Vec;

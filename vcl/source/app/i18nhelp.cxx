@@ -31,25 +31,15 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_vcl.hxx"
 
+#include "vcl/i18nhelp.hxx"
 
+#include "com/sun/star/lang/XMultiServiceFactory.hpp"
+#include "com/sun/star/i18n/TransliterationModules.hpp"
+#include "unotools/localedatawrapper.hxx"
+#include "unotools/transliterationwrapper.hxx"
+#include "i18npool/mslangid.hxx"
 
-#include <vcl/i18nhelp.hxx>
-
-/*
-#include <com/sun/star/lang/XSingleServiceFactory.hpp>
-
-
-#include <comphelper/processfactory.hxx>
-*/
-
-// #include <cppuhelper/servicefactory.hxx>
-
-
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#include <com/sun/star/i18n/TransliterationModules.hpp>
-#include <unotools/localedatawrapper.hxx>
-#include <unotools/transliterationwrapper.hxx>
-#include <i18npool/mslangid.hxx>
+#include "rtl/ustrbuf.hxx"
 
 using namespace ::com::sun::star;
 
@@ -104,6 +94,37 @@ const ::com::sun::star::lang::Locale& vcl::I18nHelper::getLocale() const
     return maLocale;
 }
 
+inline bool is_formatting_mark( sal_Unicode c )
+{
+    if( (c >= 0x200B) && (c <= 0x200F) )    // BiDi and zero-width-markers
+        return true;
+    if( (c >= 0x2028) && (c <= 0x202E) )    // BiDi and paragraph-markers
+        return true;
+    return false;
+}
+
+/* #i100057# filter formatting marks out of strings before passing them to
+   the transliteration. The real solution would have been an additional TransliterationModule
+   to ignore these marks during transliteration; however changin the code in i18npool that actually
+   implements this could produce unwanted side effects.
+
+   Of course this copying around is not really good, but looking at i18npool, one more time
+   will not hurt.
+*/
+String vcl::I18nHelper::filterFormattingChars( const String& rStr )
+{
+    sal_Int32 nUnicodes = rStr.Len();
+    rtl::OUStringBuffer aBuf( nUnicodes );
+    const sal_Unicode* pStr = rStr.GetBuffer();
+    while( nUnicodes-- )
+    {
+        if( ! is_formatting_mark( *pStr ) )
+            aBuf.append( *pStr );
+        pStr++;
+    }
+    return aBuf.makeStringAndClear();
+}
+
 sal_Int32 vcl::I18nHelper::CompareString( const String& rStr1, const String& rStr2 ) const
 {
     ::osl::Guard< ::osl::Mutex > aGuard( ((vcl::I18nHelper*)this)->maMutex );
@@ -117,7 +138,10 @@ sal_Int32 vcl::I18nHelper::CompareString( const String& rStr1, const String& rSt
         ((vcl::I18nHelper*)this)->mpTransliterationWrapper = NULL;
     }
 
-    return ImplGetTransliterationWrapper().compareString( rStr1, rStr2 );
+
+    String aStr1( filterFormattingChars(rStr1) );
+    String aStr2( filterFormattingChars(rStr2) );
+    return ImplGetTransliterationWrapper().compareString( aStr1, aStr2 );
 }
 
 sal_Bool vcl::I18nHelper::MatchString( const String& rStr1, const String& rStr2 ) const
@@ -133,7 +157,9 @@ sal_Bool vcl::I18nHelper::MatchString( const String& rStr1, const String& rStr2 
         ((vcl::I18nHelper*)this)->mpTransliterationWrapper = NULL;
     }
 
-    return ImplGetTransliterationWrapper().isMatch( rStr1, rStr2 );
+    String aStr1( filterFormattingChars(rStr1) );
+    String aStr2( filterFormattingChars(rStr2) );
+    return ImplGetTransliterationWrapper().isMatch( aStr1, aStr2 );
 }
 
 sal_Bool vcl::I18nHelper::MatchMnemonic( const String& rString, sal_Unicode cMnemonicChar ) const

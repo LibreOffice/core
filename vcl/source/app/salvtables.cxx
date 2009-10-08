@@ -65,6 +65,11 @@ SalInstance::~SalInstance()
 {
 }
 
+void SalInstance::FillFontPathList( std::list< rtl::OString >& )
+{
+    // do nothing
+}
+
 SalTimer::~SalTimer()
 {
 }

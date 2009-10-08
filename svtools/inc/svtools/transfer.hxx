@@ -204,8 +204,8 @@ private:
     mutable ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::clipboard::XClipboard >   mxClipboard;
     ::com::sun::star::uno::Reference< ::com::sun::star::frame::XTerminateListener >                     mxTerminateListener;
     DataFlavorExVector*                                                                                 mpFormats;
+    TransferableObjectDescriptor*                                                                       mpObjDesc;
     void*                                                                                               mpDummy1;
-    void*                                                                                               mpDummy2;
 
 protected:
     inline const ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::clipboard::XClipboard >&
@@ -288,6 +288,8 @@ public:
 
                         TransferableHelper();
 
+    void                PrepareOLE( const TransferableObjectDescriptor& rObjDesc );
+
     void                CopyToClipboard( Window *pWindow ) const;
     void                CopyToSelection( Window *pWindow ) const;
     void                StartDrag( Window* pWindow, sal_Int8 nDragSourceActions,
@@ -319,7 +321,7 @@ private:
     ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::XTransferable >           mxTransfer;
     ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::clipboard::XClipboard >   mxClipboard;
     DataFlavorExVector*                                                                         mpFormats;
-    void*                                                                                       mpDummy2;
+    TransferableObjectDescriptor*                                                               mpObjDesc;
     TransferableDataHelper_Impl*                                                                mpImpl;
     void*                                                                                       mpDummy4;
 

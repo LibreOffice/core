@@ -33,34 +33,33 @@
 #include <unistd.h>
 #include <string.h>
 #include <math.h>
-#include <vcl/msgbox.hxx>
-#include <vcl/print.hxx>
-#include <vcl/gradient.hxx>
-#include <vcl/bitmap.hxx>
-#include <vcl/lineinfo.hxx>
-#include <vcl/svapp.hxx>
-#include <vcl/event.hxx>
-#include <tools/stream.hxx>
-#include <tools/color.hxx>
-#ifndef _PAD_PADIALOG_HRC_
-#include <padialog.hrc>
-#endif
-#include <fontentry.hxx>
-#include <helper.hxx>
-#ifndef _PSP_PRINTERINFOMANAGER_HXX_
-#include <psprint/printerinfomanager.hxx>
-#endif
-#include <padialog.hxx>
-#include <adddlg.hxx>
-#include <prtsetup.hxx>
-#include <osl/file.hxx>
-#include <unotools/localedatawrapper.hxx>
-#include <unotools/configitem.hxx>
-#include <unotools/configmgr.hxx>
-#ifndef _RTL_USTRBUF_HXX
-#include <rtl/ustrbuf.hxx>
-#endif
 
+#include "padialog.hrc"
+#include "fontentry.hxx"
+#include "helper.hxx"
+#include "padialog.hxx"
+#include "adddlg.hxx"
+#include "prtsetup.hxx"
+
+#include "vcl/msgbox.hxx"
+#include "vcl/print.hxx"
+#include "vcl/gradient.hxx"
+#include "vcl/bitmap.hxx"
+#include "vcl/lineinfo.hxx"
+#include "vcl/svapp.hxx"
+#include "vcl/event.hxx"
+#include "vcl/printerinfomanager.hxx"
+
+#include "tools/stream.hxx"
+#include "tools/color.hxx"
+
+#include "osl/file.hxx"
+
+#include "rtl/ustrbuf.hxx"
+
+#include "unotools/localedatawrapper.hxx"
+#include "unotools/configitem.hxx"
+#include "unotools/configmgr.hxx"
 using namespace psp;
 using namespace rtl;
 using namespace padmin;

@@ -65,7 +65,7 @@ LIB1OBJFILES=$(SHL1OBJS)
 
 APP1TARGET = genconv_dict
 $(MISC)$/%.cxx : %.dic
-    $(BIN)$/genconv_dict $* $< $@
+    $(AUGMENT_LIBRARY_PATH) $(BIN)$/genconv_dict $* $< $@
 
 # ugly - is this dependency really required here?
 $(foreach,i,$(shell @$(FIND) . -name "*.dic") $(MISC)$/dict_$(i:b).cxx) : $(BIN)$/genconv_dict$(EXECPOST)

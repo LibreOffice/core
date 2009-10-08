@@ -346,7 +346,6 @@ bool AquaSalMenu::ShowNativePopupMenu(FloatingWindow * pWin, const Rectangle& rR
 
     // set offsets for positioning
     const float offset = 9.0;
-    const float lineHeight = 17.0;
 
     // get the pointers
     AquaSalFrame * pParentAquaSalFrame = (AquaSalFrame *) pWin->ImplGetWindowImpl()->mpRealParent->ImplGetFrame();
@@ -360,21 +359,19 @@ bool AquaSalMenu::ShowNativePopupMenu(FloatingWindow * pWin, const Rectangle& rR
     NSMenu* pCopyMenu = [mpMenu copy];
 
     // filter disabled elements
-    sal_Int32 drawnItems = removeUnusedItemsRunner( pCopyMenu );
+    removeUnusedItemsRunner( pCopyMenu );
 
     // create frame rect
     NSRect displayPopupFrame = NSMakeRect( rRect.nLeft+(offset-1), rRect.nTop+(offset+1), popupFrame.size.width, 0 );
     pParentAquaSalFrame->VCLToCocoa(displayPopupFrame, false);
 
-    // adjust frame rect when necessary
+    // do the same strange semantics as vcl popup windows to arrive at a frame geometry
+    // in mirrored UI case; best done by actually executing the same code
     USHORT nArrangeIndex;
-    Point position = pWin->ImplCalcPos( pWin, rRect, nFlags, nArrangeIndex );
-    if( position.Y() < rRect.nTop ) {
-        displayPopupFrame.origin.y += ( lineHeight*drawnItems );
-    }
-    if( position.X() < rRect.nLeft ) {
-        displayPopupFrame.origin.x -= popupFrame.size.width;
-    }
+    pWin->SetPosPixel( pWin->ImplCalcPos( pWin, rRect, nFlags, nArrangeIndex ) );
+    displayPopupFrame.origin.x = pWin->ImplGetFrame()->maGeometry.nX - pParentAquaSalFrame->maGeometry.nX + offset;
+    displayPopupFrame.origin.y = pWin->ImplGetFrame()->maGeometry.nY - pParentAquaSalFrame->maGeometry.nY + offset;
+    pParentAquaSalFrame->VCLToCocoa(displayPopupFrame, false);
 
     // open popup menu
     NSPopUpButtonCell * pPopUpButtonCell = [[NSPopUpButtonCell alloc] initTextCell:@"" pullsDown:NO];

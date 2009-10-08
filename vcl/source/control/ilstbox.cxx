@@ -275,7 +275,8 @@ USHORT ImplEntryList::FindEntry( const XubString& rString, BOOL bSearchMRUArea )
     for ( USHORT n = bSearchMRUArea ? 0 : GetMRUCount(); n < nEntries; n++ )
     {
         ImplEntryType* pImplEntry = GetEntry( n );
-        if ( pImplEntry->maStr == rString )
+        String aComp( vcl::I18nHelper::filterFormattingChars( pImplEntry->maStr ) );
+        if ( aComp == rString )
             return n;
     }
     return LISTBOX_ENTRY_NOTFOUND;
@@ -782,6 +783,7 @@ void ImplListBoxWindow::ImplCallSelect()
             ImplEntryType* pNewEntry = new ImplEntryType( aSelected );
             pNewEntry->mbIsSelected = bSelectNewEntry;
             GetEntryList()->InsertEntry( 0, pNewEntry, FALSE );
+            ImplUpdateEntryMetrics( *pNewEntry );
             GetEntryList()->SetMRUCount( ++nMRUCount );
             SetSeparatorPos( nMRUCount ? nMRUCount-1 : 0 );
             maMRUChangedHdl.Call( NULL );
@@ -893,8 +895,12 @@ USHORT ImplListBoxWindow::GetLastVisibleEntry() const
     USHORT nPos = mnTop;
     long nWindowHeight = GetSizePixel().Height();
     USHORT nCount = mpEntryList->GetEntryCount();
-    for( long nDiff = 0; nDiff < nWindowHeight && nPos < nCount; nDiff = mpEntryList->GetAddedHeight( nPos, mnTop ) )
+    long nDiff;
+    for( nDiff = 0; nDiff < nWindowHeight && nPos < nCount; nDiff = mpEntryList->GetAddedHeight( nPos, mnTop ) )
         nPos++;
+
+    if( nDiff > nWindowHeight && nPos > mnTop )
+        nPos--;
 
     if( nPos >= nCount )
         nPos = nCount-1;
@@ -1531,7 +1537,7 @@ BOOL ImplListBoxWindow::ProcessKeyInput( const KeyEvent& rKEvt )
                 else if ( (mnCurrentPos+1) < mpEntryList->GetEntryCount() )
                 {
                     USHORT nCount = mpEntryList->GetEntryCount();
-                    USHORT nCurVis = GetLastVisibleEntry() - mnTop +1;
+                    USHORT nCurVis = GetLastVisibleEntry() - mnTop;
                     USHORT nTmp = Min( nCurVis, nCount );
                     nTmp += mnTop - 1;
                     if( mnCurrentPos == nTmp && mnCurrentPos != nCount - 1 )
