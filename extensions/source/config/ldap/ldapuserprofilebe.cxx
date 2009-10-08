@@ -49,30 +49,6 @@
 //==============================================================================
 namespace extensions { namespace config { namespace ldap {
 
-
-static void checkIOError(
-    osl::File::RC aErrorCode,
-    const rtl::OUString& aFileUrl)
-{
-    switch (aErrorCode)
-    {
-        case osl::File::E_None: // got it
-        {
-
-        }
-        break;
-        default:
-        {
-            rtl::OUStringBuffer sMsg;
-            sMsg.appendAscii("LdapUserProfileBe: Cannot Read Meta-Configuration file:");
-            sMsg.append(aFileUrl);
-            throw css::uno::RuntimeException(sMsg.makeStringAndClear(),
-                NULL);
-        }
-    }
-}
-
-//------------------------------------------------------------------------------
 LdapUserProfileBe::LdapUserProfileBe( const uno::Reference<uno::XComponentContext>& xContext)
 : LdapProfileMutexHolder(),
   BackendBase(mMutex)
