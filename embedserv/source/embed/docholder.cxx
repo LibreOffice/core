@@ -676,7 +676,7 @@ void DocumentHolder::FreeOffice()
     }
 }
 
-void DocumentHolder::DisconnectFrameDocument()
+void DocumentHolder::DisconnectFrameDocument( sal_Bool bComplete )
 {
     try
     {
@@ -704,6 +704,12 @@ void DocumentHolder::DisconnectFrameDocument()
     catch( uno::Exception& )
     {}
 
+    if ( bComplete )
+    {
+        m_xFrame = uno::Reference< frame::XFrame>();
+        m_pIDispatch = NULL;
+        m_xDocument = uno::Reference< frame::XModel >();
+    }
 }
 
 void DocumentHolder::CloseDocument()

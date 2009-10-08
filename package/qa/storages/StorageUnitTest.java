@@ -82,6 +82,7 @@ public class StorageUnitTest  extends ComplexTestCase
                                 "ExecuteTest13",
                                 "ExecuteTest14",
                                 "ExecuteTest15",
+                                "ExecuteTest16",
                                 "ExecuteRegressionTest_114358",
                                 "ExecuteRegressionTest_i29169",
                                 "ExecuteRegressionTest_i30400",
@@ -219,6 +220,13 @@ public class StorageUnitTest  extends ComplexTestCase
         StorageTest aTest = new Test15( m_xMSF, m_xStorageFactory, log );
         assure( "Test15 failed!", aTest.test() );
     }
+
+    public void ExecuteTest16()
+    {
+        StorageTest aTest = new Test16( m_xMSF, m_xStorageFactory, log );
+        assure( "Test16 failed!", aTest.test() );
+    }
+
 
     public void ExecuteRegressionTest_114358()
     {

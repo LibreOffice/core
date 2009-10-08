@@ -415,6 +415,7 @@ Reference< lang::XMultiServiceFactory > SAL_CALL start_office(NSP_PIPE_FD read_f
                 break;
             default:
                 debug_fprintf(NSP_LOG_APPEND, "unmapped error!\n");
+                return Reference< lang::XMultiServiceFactory >(NULL);
         }
 #endif
 

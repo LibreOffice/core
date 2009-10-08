@@ -10,12 +10,14 @@ bn       0  2117   # Bengali
 bn-BD    0  2117   # Bengali Bangladesh
 bn-IN    0  1093   # Bengali India
 br    1252  1150   # Breton
+brx      0  1603   # Bodo (India)
 bs       0  5146   # bosnian
 ca    1252  1027   # Catalan
 cs    1250  1029   # Czech
 cy    1252  1106   # Welsh
 da    1252  1030
 de    1252  1031
+dgo      0  1604   # Dogri (India)
 dz       0  2129   # Dzongkha (same ID as tibetan bhutan (s. i40713))
 el    1253  1032
 en-GB 1252  2057
@@ -48,14 +50,19 @@ ja     932  1041
 ka       0  1079   # Georgian
 km       0  1107   # Khmer
 kn       0  1099   # Kannada
+kn-IN    0  1099   # Kannada
 ko     949  1042
+kok      0  1111   # Konkani
+ks       0  1120   # Kashmiri
 ku       0  1574
 lo       0  1108   # Lao
 lt    1257  1063   # Lithuanian
 lv    1257  1062   # Latvian
+mai      0  1605   # Maithili (India)
 mk    1251  1071   # Macedonian
 ml-IN    0  1100
 mn       0  1104   # Mongolian
+mni      0  1112   # Manipuri
 mn-TR    0  2128   # Mongolian Classical/traditional
 mr       0  1102   # Marathi
 mr-IN    0  1102
@@ -81,8 +88,10 @@ rm       0  1047   # Raeto-Romance
 ro    1250  1048   # Romanian
 ru    1251  1049
 rw       0  1569   # Kinyarwanda
-sa       0  1103   # Sanskrit
+sa-IN    0  1103   # Sanskrit
+sat      0  1606   # Santali
 sb       0  1070   # Sorbian
+sd       0  1113   # Sindhi
 sh       0  2074   # Serbian Latin
 sk    1250  1051   # Slovak
 sl    1250  1060   # Slovenian

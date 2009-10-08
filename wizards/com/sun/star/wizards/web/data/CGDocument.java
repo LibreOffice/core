@@ -38,8 +38,8 @@ import com.sun.star.beans.Property;
 import com.sun.star.beans.PropertyValue;
 import com.sun.star.document.MacroExecMode;
 import com.sun.star.document.UpdateDocMode;
-import com.sun.star.document.XDocumentInfoSupplier;
-import com.sun.star.document.XStandaloneDocumentInfo;
+import com.sun.star.document.XDocumentProperties;
+import com.sun.star.document.XDocumentPropertiesSupplier;
 import com.sun.star.frame.XComponentLoader;
 import com.sun.star.frame.XDesktop;
 import com.sun.star.lang.XComponent;
@@ -170,38 +170,31 @@ public class CGDocument extends ConfigSetItem implements XMLProvider
          * We try to open the document to get some properties
          */
 
-        //first get the info object which is a DocumentInfo service.
-        Object info = null;
-        if (isSODocument)
-        {//for SO documents, use StandaloneDocumentInfo service.
-            info = xmsf.createInstance("com.sun.star.document.StandaloneDocumentInfo");
-            ((XStandaloneDocumentInfo) UnoRuntime.queryInterface(XStandaloneDocumentInfo.class, info)).loadFromURL(cp_URL);
-        }
+        XDocumentProperties xProps = null;
 
         task.advance(true); //3
 
-        if (!isSODocument && isSOOpenable)
-        { //for other documents which are openable through SO, use DocumentInfo service.
+        if (isSOOpenable)
+        { // for documents which are openable through SO, use DocumentProperties service.
             XDesktop desktop = Desktop.getDesktop(xmsf);
             PropertyValue[] props = new PropertyValue[3];
             props[0] = Properties.createProperty("Hidden", Boolean.TRUE);
             props[1] = Properties.createProperty("MacroExecutionMode", new Short(MacroExecMode.NEVER_EXECUTE));
             props[2] = Properties.createProperty("UpdateDocMode", new Short(UpdateDocMode.NO_UPDATE));
             XComponent component = ((XComponentLoader) UnoRuntime.queryInterface(XComponentLoader.class, desktop)).loadComponentFromURL(cp_URL, "_default", 0, props);
-            info = ((XDocumentInfoSupplier) UnoRuntime.queryInterface(XDocumentInfoSupplier.class, component)).getDocumentInfo();
+            xProps = ((XDocumentPropertiesSupplier) UnoRuntime.queryInterface(XDocumentPropertiesSupplier.class, component)).getDocumentProperties();
         }
 
         task.advance(true); //4
 
         //now use the object to read some document properties.
-        if (isSODocument || isSOOpenable)
+        if (xProps != null)
         {
-            title = (String) Helper.getUnoPropertyValue(info, "Title");
-            description = (String) Helper.getUnoPropertyValue(info, "Description");
-            author = (String) Helper.getUnoPropertyValue(info, "Author");
-            createDate = (DateTime) Helper.getUnoPropertyValue(info, "CreationDate", DateTime.class);
-            updateDate = (DateTime) Helper.getUnoPropertyValue(info, "ModifyDate", DateTime.class);
-        //TODO get pages here.
+            title = xProps.getTitle();
+            description = xProps.getDescription();
+            author = xProps.getAuthor();
+            createDate = xProps.getCreationDate();
+            updateDate = xProps.getModificationDate();
         }
         else
         { //get some information from OS.
@@ -238,7 +231,7 @@ public class CGDocument extends ConfigSetItem implements XMLProvider
 
     /**
      * Analyzes a type-detection string, returned from the TypeDetection service,
-     * and sets the appType, isSOOpenable and isSODocument memebres.
+     * and sets the appType, isSOOpenable and isSODocument members.
      */
     private void analyzeFileType(PropertyValue[] mediaDesc)
     {

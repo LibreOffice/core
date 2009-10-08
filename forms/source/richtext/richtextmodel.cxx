@@ -225,8 +225,9 @@ namespace frm
         }
         if ( m_pEngine.get() )
         {
-            ::std::auto_ptr<SfxItemPool> pPool(m_pEngine->getPool());
+            SfxItemPool* pPool = m_pEngine->getPool();
             m_pEngine.reset();
+            SfxItemPool::Free(pPool);
         }
 
 

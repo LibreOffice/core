@@ -180,7 +180,7 @@ IMPL_LINK( MacroRecorder, EventListener, VclSimpleEvent*, pEvent )
             }
             if ( m_bLog )
             {
-                LogVCL( SmartId(), 0, aKeyUniqueID, CUniString("TypeKeys"), aKeyString.Len() );
+//  HACK Too many KeyEvents generated              LogVCL( SmartId(), 0, aKeyUniqueID, CUniString("TypeKeys"), aKeyString.Len() );
             }
             // cleanup
             aKeyString.Erase();
@@ -682,8 +682,8 @@ IMPL_LINK( MacroRecorder, EventListener, VclSimpleEvent*, pEvent )
                                 aKeyUniqueID = pIdWin->GetSmartUniqueOrHelpId();
                                 if ( m_bLog )
                                 {
-                                    if ( aKeyString.Len() == 0 )
-                                        LogVCL( SmartId(), 0, aKeyUniqueID, CUniString("TypeKeysStart") );
+//   HACK Too many KeyEvents generated                                 if ( aKeyString.Len() == 0 )
+//   HACK Too many KeyEvents generated                                     LogVCL( SmartId(), 0, aKeyUniqueID, CUniString("TypeKeysStart") );
                                 }
                                 if ( ( !aKeyCode.IsMod1() && !aKeyCode.IsMod2() ) &&
                                       (( aKeyCode.GetGroup() == KEYGROUP_NUM)   ||
@@ -706,7 +706,7 @@ IMPL_LINK( MacroRecorder, EventListener, VclSimpleEvent*, pEvent )
                                     aKeyString += sal_Unicode(1);   // mask it
                                     // extra for '>' which is coded as <SHIFT GREATER>
                                     if ( pKeyEvent->GetCharCode() == '>' )
-                                        aKeyString += sal_Unicode( KEY_GREATER | aKeyCode.GetAllModifier() & ~KEY_SHIFT );
+                                        aKeyString += sal_Unicode( KEY_GREATER | (aKeyCode.GetAllModifier() & ~KEY_SHIFT) );
                                     else
                                         aKeyString += sal_Unicode( aKeyCode.GetCode() | aKeyCode.GetAllModifier() );
                                 }

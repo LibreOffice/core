@@ -29,9 +29,9 @@
  ************************************************************************/
 
 package org.openoffice.setup;
-import org.openoffice.setup.Util.SystemManager;
 import java.awt.BorderLayout;
 import java.awt.CardLayout;
+import java.awt.ComponentOrientation;
 import java.awt.Dimension;
 import java.awt.Insets;
 import java.awt.event.WindowAdapter;
@@ -258,6 +258,15 @@ public class SetupFrame extends WindowAdapter {
         mCancelButton.addActionListener(mActionListener);
         mHelpButton.addActionListener(mActionListener);
 
+        InstallData data = InstallData.getInstance();
+
+        if (data.useRtl()) {
+            mPreviousButton.setComponentOrientation(ComponentOrientation.RIGHT_TO_LEFT);
+            mNextButton.setComponentOrientation(ComponentOrientation.RIGHT_TO_LEFT);
+            mCancelButton.setComponentOrientation(ComponentOrientation.RIGHT_TO_LEFT);
+            mHelpButton.setComponentOrientation(ComponentOrientation.RIGHT_TO_LEFT);
+        }
+
         Box ButtonBox   = new Box(BoxLayout.X_AXIS);
         ButtonBox.setBorder(new EmptyBorder(new Insets(5, 10, 5, 10)));
         ButtonBox.add(mPreviousButton);
@@ -267,6 +276,9 @@ public class SetupFrame extends WindowAdapter {
         ButtonBox.add(mCancelButton);
         ButtonBox.add(Box.createHorizontalStrut(10));
         ButtonBox.add(mHelpButton);
+        if (data.useRtl()) {
+            ButtonBox.setComponentOrientation(ComponentOrientation.RIGHT_TO_LEFT);
+        }
 
         JPanel ButtonPanel = new JPanel();
         JSeparator Separator = new JSeparator();

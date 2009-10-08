@@ -39,6 +39,8 @@
 #include <com/sun/star/util/XCloseable.hpp>
 #include <com/sun/star/lang/DisposedException.hpp>
 #include <com/sun/star/ucb/XSimpleFileAccess.hpp>
+#include <com/sun/star/presentation/XPresentation.hpp>
+#include <com/sun/star/presentation/XPresentationSupplier.hpp>
 #include <tools/debug.hxx>
 #include <tools/color.hxx>
 #include <vcl/window.hxx>
@@ -344,6 +346,18 @@ sal_Bool SoPluginInstance::LoadDocument(NSP_HWND hParent)
         m_dParentStyl = ::NSP_ResetWinStyl (m_hParent);
 #endif
         m_bInit = sal_True;
+
+        try
+        {
+            // in case of presentation try to set the mode of slide-show, and start it
+            uno::Reference< presentation::XPresentationSupplier > xPresSuppl( m_xComponent, uno::UNO_QUERY_THROW );
+            uno::Reference< presentation::XPresentation > xPres( xPresSuppl->getPresentation(), uno::UNO_SET_THROW );
+            uno::Reference< beans::XPropertySet > xProps( xPresSuppl->getPresentation(), uno::UNO_QUERY_THROW );
+            xProps->setPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "IsFullScreen" ) ), uno::makeAny( sal_False ) );
+            xPres->start();
+        }
+        catch( uno::Exception& )
+        {}
     }
     catch( uno::Exception& e )
     {

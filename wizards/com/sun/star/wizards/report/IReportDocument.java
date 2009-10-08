@@ -257,4 +257,10 @@ public interface IReportDocument
     public void setCommandType(int CommandType);
 
     public void setCommand(String Command);
+
+    /**
+     * check internal invariants
+     * @throws a
+     */
+    public void checkInvariants() throws java.lang.Exception;
 }

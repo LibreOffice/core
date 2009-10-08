@@ -35,6 +35,7 @@ import org.openoffice.setup.Util.Controller;
 import org.openoffice.setup.Util.SystemManager;
 import java.io.File;
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Vector;
 
 public class InstallData
@@ -74,6 +75,7 @@ public class InstallData
     static private boolean dontUpdate = false;
     static private boolean hideEula = false;
     static private boolean databaseQueried = false;
+    static private boolean useRtl = false;
     static private String installType;            /* custom or typical installation */
     static private String osType;                 /* Linux, SunOS, ...              */
     static private String installDir = null;
@@ -124,6 +126,7 @@ public class InstallData
         setInstallationMode();
         setSolarisUserInstall();
         setHtmlFileExistence();
+        setBidiSupport();
     }
 
     public void setInstallationType(String installationtype) {
@@ -178,6 +181,14 @@ public class InstallData
         // After inforoot is determined, the existence of files in subdirectory "html" can be checked
         File htmlDirectory = getInfoRoot("html");
         ResourceManager.checkFileExistence(htmlDirectory);
+    }
+
+    private void setBidiSupport() {
+        Locale locale = Locale.getDefault();
+        if (( locale.getLanguage().equals(new Locale("he", "", "").getLanguage()) )
+            || ( locale.getLanguage().equals(new Locale("ar", "", "").getLanguage()) )) {
+            useRtl = true;
+        }
     }
 
     private void setInstallationPrivileges(boolean isUserInstallation) {
@@ -257,6 +268,10 @@ public class InstallData
 
     public boolean isSolarisUserInstallation() {
         return isSolarisUserInstallation;
+    }
+
+    public boolean useRtl() {
+        return useRtl;
     }
 
     public String getDefaultDir() {

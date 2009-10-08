@@ -30,12 +30,14 @@
 
 package org.openoffice.setup.PanelHelper;
 
+import java.awt.ComponentOrientation;
 import java.awt.FlowLayout;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JSeparator;
+import org.openoffice.setup.InstallData;
 
 public class PanelTitle extends Box {
 
@@ -74,10 +76,17 @@ public class PanelTitle extends Box {
 
     private void init(String title, String subtitle, int rows, int columns) {
 
+        InstallData data = InstallData.getInstance();
+
         TitleLabel = new JLabel(title);
         TitleLabel.setFocusable(false);
         JPanel TitlePanel = new JPanel();
-        TitlePanel.setLayout(new FlowLayout(FlowLayout.LEFT, 0, 0));
+        if ( data.useRtl() ) {
+            TitlePanel.setLayout(new FlowLayout(FlowLayout.RIGHT, 0, 0));
+            TitleLabel.setComponentOrientation(ComponentOrientation.RIGHT_TO_LEFT);
+        } else {
+            TitlePanel.setLayout(new FlowLayout(FlowLayout.LEFT, 0, 0));
+        }
         TitlePanel.add(TitleLabel);
 
         add(createVerticalStrut(10));
@@ -96,7 +105,12 @@ public class PanelTitle extends Box {
             SubtitleLabel.setFocusable(false);
             // PanelLabel SubtitleLabel = new PanelLabel(subtitle, true);
             JPanel SubtitlePanel = new JPanel();
-            SubtitlePanel.setLayout(new FlowLayout(FlowLayout.LEFT, 0, 0));
+            if ( data.useRtl() ) {
+                SubtitlePanel.setLayout(new FlowLayout(FlowLayout.RIGHT, 0, 0));
+                SubtitleLabel.setComponentOrientation(ComponentOrientation.RIGHT_TO_LEFT);
+            } else {
+                SubtitlePanel.setLayout(new FlowLayout(FlowLayout.LEFT, 0, 0));
+            }
             SubtitlePanel.add(SubtitleLabel);
 
             add(SubtitlePanel);

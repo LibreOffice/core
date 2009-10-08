@@ -192,7 +192,7 @@ uno::Reference< io::XInputStream > ZipPackageStream::GetRawEncrStreamNoHeaderCop
 //--------------------------------------------------------------------------
 Reference< io::XInputStream > ZipPackageStream::TryToGetRawFromDataStream( sal_Bool bAddHeaderForEncr )
 {
-    if ( m_nStreamMode != PACKAGE_STREAM_DATA || !GetOwnSeekStream().is() || bAddHeaderForEncr && !bToBeEncrypted )
+    if ( m_nStreamMode != PACKAGE_STREAM_DATA || !GetOwnSeekStream().is() || (bAddHeaderForEncr && !bToBeEncrypted) )
         throw packages::NoEncryptionException(); // TODO
 
     Sequence< sal_Int8 > aKey;

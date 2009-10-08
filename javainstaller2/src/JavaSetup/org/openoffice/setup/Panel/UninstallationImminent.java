@@ -34,6 +34,7 @@ import org.openoffice.setup.PanelHelper.PanelLabel;
 import org.openoffice.setup.PanelHelper.PanelTitle;
 import org.openoffice.setup.ResourceManager;
 import java.awt.BorderLayout;
+import java.awt.ComponentOrientation;
 import java.awt.Dimension;
 import java.awt.Insets;
 import javax.swing.JEditorPane;
@@ -41,6 +42,7 @@ import javax.swing.JPanel;
 import javax.swing.JScrollBar;
 import javax.swing.JScrollPane;
 import javax.swing.border.EmptyBorder;
+import org.openoffice.setup.InstallData;
 
 public class UninstallationImminent extends JPanel {
 
@@ -49,6 +51,9 @@ public class UninstallationImminent extends JPanel {
     private JScrollPane ProductPane;
 
     public UninstallationImminent() {
+
+        InstallData data = InstallData.getInstance();
+
         setLayout(new java.awt.BorderLayout());
         setBorder(new EmptyBorder(new Insets(10, 10, 10, 10)));
 
@@ -58,16 +63,20 @@ public class UninstallationImminent extends JPanel {
 
         JPanel contentpanel = new JPanel();
         contentpanel.setLayout(new java.awt.BorderLayout());
+        if ( data.useRtl() ) { contentpanel.setComponentOrientation(ComponentOrientation.RIGHT_TO_LEFT); }
 
         String text1 = ResourceManager.getString("String_UninstallationImminent2");
         PanelLabel label1 = new PanelLabel(text1);
+        if ( data.useRtl() ) { label1.setComponentOrientation(ComponentOrientation.RIGHT_TO_LEFT); }
 
         ProductInformation = new JEditorPane("text/html", getInfoText());
         ProductInformation.setEditable(false);
+        if ( data.useRtl() ) { ProductInformation.setComponentOrientation(ComponentOrientation.RIGHT_TO_LEFT); }
 
         ProductPane = new JScrollPane(ProductInformation);
         ProductPane.setPreferredSize(new Dimension(250, 145));
         ProductPane.setBorder(new EmptyBorder(10, 0, 10, 0));
+        if ( data.useRtl() ) { ProductPane.setComponentOrientation(ComponentOrientation.RIGHT_TO_LEFT); }
 
         contentpanel.add(label1, BorderLayout.NORTH);
         contentpanel.add(ProductPane, BorderLayout.CENTER);

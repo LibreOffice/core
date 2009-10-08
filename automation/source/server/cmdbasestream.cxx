@@ -234,19 +234,44 @@ void CmdBaseStream::Write( comm_ULONG nNr )
 void CmdBaseStream::Write( const comm_UniChar* aString, comm_USHORT nLenInChars )
 {
     *pCommStream << comm_USHORT(BinString);
-    *pCommStream << nLenInChars;
+
+    comm_USHORT n;
+
+    // remove BiDi and zero-width-markers    0x200B - 0x200F
+    // remove BiDi and paragraph-markers     0x2028 - 0x202E
+
+    comm_UniChar* aNoBiDiString;
+    aNoBiDiString = new comm_UniChar [nLenInChars];
+    comm_USHORT nNewLenInChars = 0;
+    for ( n = 0 ; n < nLenInChars ; n++ )
+    {
+        comm_UniChar c = aString[ n ];
+        if (  ((c >= 0x200B) && (c <= 0x200F))
+            ||((c >= 0x2028) && (c <= 0x202E)) )
+        {   //Ignore character
+        }
+        else
+        {
+            aNoBiDiString[ nNewLenInChars ] = c;
+            nNewLenInChars++;
+        }
+    }
+
+    *pCommStream << nNewLenInChars;
+
 #ifdef OSL_BIGENDIAN
     // we have to change the byteorder
     comm_UniChar* aNewString;
-    aNewString = new comm_UniChar [nLenInChars];
-    comm_USHORT n;
-    for ( n = 0 ; n < nLenInChars ; n++ )
-        aNewString[ n ] = aString[ n ] >> 8 | aString[ n ] << 8;
-    pCommStream->Write( aNewString, ((comm_ULONG)nLenInChars) * sizeof( comm_UniChar ) );
+    aNewString = new comm_UniChar [nNewLenInChars];
+    for ( n = 0 ; n < nNewLenInChars ; n++ )
+        aNewString[ n ] = aNoBiDiString[ n ] >> 8 | aNoBiDiString[ n ] << 8;
+    pCommStream->Write( aNewString, ((comm_ULONG)nNewLenInChars) * sizeof( comm_UniChar ) );
     delete [] aNewString;
 #else
-    pCommStream->Write( aString, ((comm_ULONG)nLenInChars) * sizeof( comm_UniChar ) );
+    pCommStream->Write( aNoBiDiString, ((comm_ULONG)nNewLenInChars) * sizeof( comm_UniChar ) );
 #endif
+
+    delete [] aNoBiDiString;
 }
 
 void CmdBaseStream::Write( comm_BOOL bBool )

@@ -18,6 +18,7 @@ to and from this encoding if necessary.
 
      Strings currently recognized by OpenOffice.org are:
 
+     UTF-8
      ISO8859-1
      ISO8859-2
      ISO8859-3

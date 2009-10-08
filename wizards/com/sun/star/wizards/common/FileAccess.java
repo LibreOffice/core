@@ -48,6 +48,8 @@ import com.sun.star.ucb.*;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.uno.XInterface;
 import com.sun.star.util.DateTime;
+import com.sun.star.beans.PropertyValue;
+import com.sun.star.document.XDocumentProperties;
 
 /**
  * This class delivers static convenience methods
@@ -76,9 +78,7 @@ public class FileAccess
         // As there are several conventions about the look of Url  (e.g. with " " or with "%20") you cannot make a
         // simple String comparison to find out, if a path is already in "ResultPath"
         String[] PathList = JavaTools.ArrayoutofString(ResultPath, ";");
-        boolean badd = false;
         int MaxIndex = PathList.length - 1;
-        int iPos;
         String CompCurPath;
         //  sAddPath.replace(null, (char) 47);
         String CompAddPath = JavaTools.replaceSubString(sAddPath, "", "/");
@@ -607,8 +607,8 @@ public class FileAccess
             java.util.Vector TitleVector = null;
             java.util.Vector NameVector = null;
 
-            XInterface xDocInterface = (XInterface) xMSF.createInstance("com.sun.star.document.StandaloneDocumentInfo");
-            com.sun.star.document.XStandaloneDocumentInfo xDocInfo = (com.sun.star.document.XStandaloneDocumentInfo) UnoRuntime.queryInterface(com.sun.star.document.XStandaloneDocumentInfo.class, xDocInterface);
+            XInterface xDocInterface = (XInterface) xMSF.createInstance("com.sun.star.document.DocumentProperties");
+            XDocumentProperties xDocProps = (XDocumentProperties) UnoRuntime.queryInterface(XDocumentProperties.class, xDocInterface);
 
             XInterface xInterface = (XInterface) xMSF.createInstance("com.sun.star.ucb.SimpleFileAccess");
             com.sun.star.ucb.XSimpleFileAccess xSimpleFileAccess = (com.sun.star.ucb.XSimpleFileAccess) UnoRuntime.queryInterface(com.sun.star.ucb.XSimpleFileAccess.class, xInterface);
@@ -621,17 +621,16 @@ public class FileAccess
             FilterName = FilterName == null || FilterName.equals("") ? null : FilterName + "-";
 
             String fileName = "";
+            PropertyValue[] noArgs = { };
             for (int i = 0; i < nameList.length; i++)
             {
                 fileName = getFilename(nameList[i]);
 
                 if (FilterName == null || fileName.startsWith(FilterName))
                 {
-
-                    xDocInfo.loadFromURL(nameList[i]);
+                    xDocProps.loadFromMedium(nameList[i], noArgs);
                     NameVector.addElement(nameList[i]);
-                    TitleVector.addElement(com.sun.star.uno.AnyConverter.toString(Helper.getUnoPropertyValue(xDocInterface, "Title")));
-
+                    TitleVector.addElement(xDocProps.getTitle());
                 }
             }
             String[] LocNameList = new String[NameVector.size()];
@@ -715,11 +714,11 @@ public class FileAccess
         String sTitle = "";
         try
         {
-            XInterface xDocInterface = (XInterface) xMSF.createInstance("com.sun.star.document.StandaloneDocumentInfo");
-            com.sun.star.document.XStandaloneDocumentInfo xDocInfo = (com.sun.star.document.XStandaloneDocumentInfo) UnoRuntime.queryInterface(com.sun.star.document.XStandaloneDocumentInfo.class, xDocInterface);
-
-            xDocInfo.loadFromURL(_sFile);
-            sTitle = com.sun.star.uno.AnyConverter.toString(Helper.getUnoPropertyValue(xDocInterface, "Title"));
+            XInterface xDocInterface = (XInterface) xMSF.createInstance("com.sun.star.document.DocumentProperties");
+            XDocumentProperties xDocProps = (XDocumentProperties) UnoRuntime.queryInterface(XDocumentProperties.class, xDocInterface);
+            PropertyValue[] noArgs = { };
+            xDocProps.loadFromMedium(_sFile, noArgs);
+            sTitle = xDocProps.getTitle();
         }
         catch (Exception e)
         {
