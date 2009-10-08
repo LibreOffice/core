@@ -31,61 +31,52 @@
 #ifndef CONFIGMGR_ROOTTREE_HXX_
 #define CONFIGMGR_ROOTTREE_HXX_
 
-#include "utility.hxx"
+#include "sal/config.h"
 
-#ifndef INCLUDED_MEMORY
 #include <memory>
-#define INCLUDED_MEMORY
-#endif
+
+#include "boost/utility.hpp"
+#include "rtl/ref.hxx"
+
+#include "utility.hxx"
 
 namespace configmgr
 {
 //-----------------------------------------------------------------------------
-
+    namespace sharable { union Node; }
     class SubtreeChange;
     struct TreeChangeList;
-//-----------------------------------------------------------------------------
-
-    namespace data
-    {
-        class NodeAccess;
-    }
-//-----------------------------------------------------------------------------
 
     namespace configuration
     {
 //-----------------------------------------------------------------------------
-        class Tree; typedef Tree RootTree;
-        class TreeRef;
-        class TreeImpl;
+        class Tree;
         class NodeRef;
         class NodeChangesInformation;
         class AbsolutePath;
         class TemplateProvider;
-        typedef unsigned int NodeOffset;
-        typedef unsigned int TreeDepth;
 
 //-----------------------------------------------------------------------------
 
-        RootTree createReadOnlyTree(    AbsolutePath const& aRootPath,
-                                        data::NodeAccess const& _aCacheNode,
-                                        TreeDepth nDepth,
+        rtl::Reference< Tree > createReadOnlyTree(  AbsolutePath const& aRootPath,
+                                                    sharable::Node * _aCacheNode,
+                                        unsigned int nDepth,
                                         TemplateProvider const& aTemplateProvider);
 
-        RootTree createUpdatableTree(   AbsolutePath const& aRootPath,
-                                        data::NodeAccess const& _aCacheNode,
-                                        TreeDepth nDepth,
+        rtl::Reference< Tree > createUpdatableTree( AbsolutePath const& aRootPath,
+                                                    sharable::Node * _aCacheNode,
+                                        unsigned int nDepth,
                                         TemplateProvider const& aTemplateProvider);
 
 //-----------------------------------------------------------------------------
-        class CommitHelper : Noncopyable
+        class CommitHelper: private boost::noncopyable
         {
             struct Data;
 
             std::auto_ptr<Data> m_pData;
-            TreeImpl*           m_pTree;
+            Tree*           m_pTree;
         public:
-            CommitHelper(TreeRef const& aTree);
+            CommitHelper(rtl::Reference< Tree > const& aTree);
             ~CommitHelper();
 
             // collect all changes into rChangeList
@@ -105,7 +96,7 @@ namespace configmgr
             @param aExternalChanges
                 a structured change that has already been applied to the master tree.
             @param aBaseTree
-                the Tree that contains (directly) the affected node of <var>aExternalChanges</var>.
+                the tree that contains (directly) the affected node of <var>aExternalChanges</var>.
             @param aBaseNode
                 a NodeRef referring to the (directly) affected node of <var>aExternalChanges</var>.
             @return
@@ -113,7 +104,7 @@ namespace configmgr
 
         */
         bool adjustToChanges(   NodeChangesInformation& rLocalChanges,
-                                Tree const& aBaseTree, NodeRef const& aBaseNode,
+                                rtl::Reference< Tree > const& aBaseTree, NodeRef const& aBaseNode,
                                 SubtreeChange const& aExternalChange) ;
 
 

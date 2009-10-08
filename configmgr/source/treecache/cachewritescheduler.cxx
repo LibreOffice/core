@@ -123,13 +123,13 @@ void OCacheWriteScheduler::runWriter()
 }
 
 // -----------------------------------------------------------------------------
-void OCacheWriteScheduler::writeOneTreeFoundByOption(RequestOptions const& _aOptions) CFG_UNO_THROW_ALL(  )
+void OCacheWriteScheduler::writeOneTreeFoundByOption(RequestOptions const& _aOptions) SAL_THROW((com::sun::star::uno::Exception))
 {
     CFG_TRACE_INFO("Writeing one cache tree for user '%s' with locale '%s'",
            OUSTRING2ASCII(_aOptions.getEntity()),
                    OUSTRING2ASCII(_aOptions.getLocale()));
 
-    backend::CacheController::CacheRef aCache;
+    rtl::Reference<CacheLoadingAccess> aCache;
     aCache = m_rTreeManager.m_aCacheMap.get(_aOptions);
 
     if (aCache.is())
@@ -196,7 +196,7 @@ void OCacheWriteScheduler::implStartBefore(TimeStamp const& _aTime)
 }
 
 // -----------------------------------------------------------------------------
-void OCacheWriteScheduler::scheduleWrite(backend::ComponentRequest _aComponent)  CFG_UNO_THROW_ALL(  )
+void OCacheWriteScheduler::scheduleWrite(backend::ComponentRequest _aComponent)  SAL_THROW((com::sun::star::uno::Exception))
 {
     OSL_ENSURE(_aComponent.getOptions().hasLocale(), "ERROR: OTreeDisposeScheduler: cannot handle complete user scheduling");
 

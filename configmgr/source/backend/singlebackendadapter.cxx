@@ -45,7 +45,7 @@ namespace configmgr { namespace backend {
 
 SingleBackendAdapter::SingleBackendAdapter(
         const uno::Reference<uno::XComponentContext>& xContext)
-        : BackendBase(mMutex), mFactory(xContext->getServiceManager(),uno::UNO_QUERY) {
+        : cppu::WeakComponentImplHelper5< backenduno::XBackend, backenduno::XBackendEntities, backenduno::XSchemaSupplier, lang::XInitialization, lang::XServiceInfo >(mMutex), mFactory(xContext->getServiceManager(),uno::UNO_QUERY) {
 }
 //------------------------------------------------------------------------------
 
@@ -67,13 +67,13 @@ void SAL_CALL SingleBackendAdapter::initialize(
     if (!mBackend.is())
     {
         throw com::sun::star::configuration::CannotLoadConfigurationException(
-            OUString::createFromAscii("Online SingleBackend Adapter: Cannot operate without real (Single)Backend"),
+            rtl::OUString::createFromAscii("Online SingleBackend Adapter: Cannot operate without real (Single)Backend"),
             *this);
     }
 }
 //------------------------------------------------------------------------------
-static inline OUString getSingleLayerDummyEntity()
-{ return OUString(RTL_CONSTASCII_USTRINGPARAM("*")); }
+static inline rtl::OUString getSingleLayerDummyEntity()
+{ return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("*")); }
 //------------------------------------------------------------------------------
 bool SingleBackendAdapter::checkOkState()
 {
@@ -284,7 +284,7 @@ static const sal_Char * const kOnlineService  = "com.sun.star.configuration.back
 static const sal_Char * const kImplementation =
                 "com.sun.star.comp.configuration.backend.SingleBackendAdapter" ;
 
-static const AsciiServiceName kServiceNames [] =
+static sal_Char const * const kServiceNames [] =
 {
     kOnlineService,
     kAdapterService,
@@ -305,7 +305,7 @@ const ServiceRegistrationInfo *getSingleBackendAdapterServiceInfo()
 }
 
 uno::Reference<uno::XInterface> SAL_CALL
-    instantiateSingleBackendAdapter(const CreationContext& xContext)
+    instantiateSingleBackendAdapter(const uno::Reference< uno::XComponentContext >& xContext)
 {
     return *new SingleBackendAdapter(xContext) ;
 }

@@ -56,7 +56,7 @@ namespace configmgr
         namespace backenduno = ::com::sun::star::configuration::backend;
 // -----------------------------------------------------------------------------
 
-AsciiServiceName const aUpdateMergerServices[] =
+sal_Char const * const aUpdateMergerServices[] =
 {
     "com.sun.star.configuration.backend.LayerUpdateMerger",
     0
@@ -81,13 +81,13 @@ ServiceInfoHelper UpdateService::getServiceInfo()
 // -----------------------------------------------------------------------------
 
 
-UpdateService::UpdateService(CreationArg _xContext)
+UpdateService::UpdateService(uno::Reference< uno::XComponentContext > const & _xContext)
 : m_xServiceFactory(_xContext->getServiceManager(),uno::UNO_QUERY)
 , m_aSourceMode(merge)
 {
     if (!m_xServiceFactory.is())
     {
-        OUString sMessage( RTL_CONSTASCII_USTRINGPARAM("Configuration Update Merger: Context has no service manager (or missing interface)"));
+        rtl::OUString sMessage( RTL_CONSTASCII_USTRINGPARAM("Configuration Update Merger: Context has no service manager (or missing interface)"));
         throw uno::RuntimeException(sMessage,NULL);
     }
 }
@@ -103,7 +103,7 @@ void SAL_CALL
 
     if (sal_Int32(nCount) != aArguments.getLength())
     {
-        OUString sMessage( RTL_CONSTASCII_USTRINGPARAM("Too many arguments to initialize a Configuration Update Merger"));
+        rtl::OUString sMessage( RTL_CONSTASCII_USTRINGPARAM("Too many arguments to initialize a Configuration Update Merger"));
         throw lang::IllegalArgumentException(sMessage,*this,0);
     }
 
@@ -134,7 +134,7 @@ void SAL_CALL
             continue;
         }
 
-        OUString sMessage( RTL_CONSTASCII_USTRINGPARAM("Cannot use argument to initialize a Configuration Update Merger"
+        rtl::OUString sMessage( RTL_CONSTASCII_USTRINGPARAM("Cannot use argument to initialize a Configuration Update Merger"
                                                         "- XLayer, XLayerHandler or XUpdatableLayer expected"));
         throw lang::IllegalArgumentException(sMessage,*this,i);
     }
@@ -142,7 +142,7 @@ void SAL_CALL
 
 // -----------------------------------------------------------------------------
 
-sal_Bool UpdateService::setImplementationProperty(OUString const & aName, uno::Any const & aValue)
+sal_Bool UpdateService::setImplementationProperty(rtl::OUString const & aName, uno::Any const & aValue)
 {
     if (aName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("Overwrite")))
     {
@@ -197,7 +197,7 @@ bool UpdateService::validateSourceLayerAndCheckNotEmpty() SAL_THROW( (lang::Ille
 }
 // -----------------------------------------------------------------------------
 
-UpdateService::Layer UpdateService::getSourceLayer() SAL_THROW( (lang::IllegalAccessException) )
+uno::Reference< backenduno::XLayer > UpdateService::getSourceLayer() SAL_THROW( (lang::IllegalAccessException) )
 {
     if ( validateSourceLayerAndCheckNotEmpty() )
         return m_xSourceLayer;
@@ -209,18 +209,18 @@ UpdateService::Layer UpdateService::getSourceLayer() SAL_THROW( (lang::IllegalAc
 void UpdateService::raiseIllegalAccessException(sal_Char const * pMsg)
     SAL_THROW( (lang::IllegalAccessException) )
 {
-    OUString sMsg = OUString::createFromAscii(pMsg);
+    rtl::OUString sMsg = rtl::OUString::createFromAscii(pMsg);
     throw lang::IllegalAccessException(sMsg,*this);
 }
 // -----------------------------------------------------------------------------
 
-void UpdateService::writeUpdatedLayer(Layer const & _xLayer)
+void UpdateService::writeUpdatedLayer(uno::Reference< backenduno::XLayer > const & _xLayer)
 {
     OSL_ENSURE( _xLayer.is(), "UpdateService: Trying to write NULL XLayer");
 
     if (!_xLayer.is())
     {
-        OUString sMessage( RTL_CONSTASCII_USTRINGPARAM("Update Merger - Internal error: trying to write a NULL Layer"));
+        rtl::OUString sMessage( RTL_CONSTASCII_USTRINGPARAM("Update Merger - Internal error: trying to write a NULL Layer"));
         throw uno::RuntimeException(sMessage,*this);
     }
 
@@ -239,7 +239,7 @@ void UpdateService::writeUpdatedLayer(Layer const & _xLayer)
         return;
     }
 
-    OUString sMessage( RTL_CONSTASCII_USTRINGPARAM("Update Merger: Cannot write merge results - no recipient available."));
+    rtl::OUString sMessage( RTL_CONSTASCII_USTRINGPARAM("Update Merger: Cannot write merge results - no recipient available."));
     throw uno::RuntimeException(sMessage,*this);
 }
 // -----------------------------------------------------------------------------

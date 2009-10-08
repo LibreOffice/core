@@ -40,32 +40,24 @@
 namespace configmgr
 {
 //= dummy helpe ============================================================
-bool isGenericSetElementType(OUString const& _aElementType)
+bool isGenericSetElementType(rtl::OUString const& _aElementType)
 {
-    return !! _aElementType.equals( getGenericSetElementType().toString() );
+    return !! _aElementType.equals( getGenericSetElementType() );
 }
 
-bool isDummySetElementModule(OUString const& _aElementModule)
+bool isDummySetElementModule(rtl::OUString const& _aElementModule)
 {
-    return !! _aElementModule.equals( getDummySetElementModule().toString() );
+    return !! _aElementModule.equals( getDummySetElementModule() );
 }
 
-configuration::Name getGenericSetElementType()
+rtl::OUString getGenericSetElementType()
 {
-    using namespace configuration;
-    static const Name c_aGenericTypeName =
-        makeName( OUString(RTL_CONSTASCII_USTRINGPARAM("*")), Name::NoValidate() );
-
-    return c_aGenericTypeName;
+    return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("*"));
 }
 
-configuration::Name getDummySetElementModule()
+rtl::OUString getDummySetElementModule()
 {
-    using namespace configuration;
-    static const Name c_aDummyModuleName =
-        makeName( OUString(RTL_CONSTASCII_USTRINGPARAM("cfg:dummy-change")), Name::NoValidate() );
-
-    return c_aDummyModuleName;
+    return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("cfg:dummy-change"));
 }
 
 //= static default ============================================================
@@ -77,20 +69,19 @@ OTreeChangeFactory& getDefaultTreeChangeFactory()
 
 //= SubtreeChanges ============================================================
 std::auto_ptr<SubtreeChange> OTreeChangeFactory::createDummyChange(
-                                    configuration::Name const& _aName,
-                                    configuration::Name const& _aElementTypeName)
+    rtl::OUString const& _aName, rtl::OUString const& _aElementTypeName)
 {
     std::auto_ptr<SubtreeChange> pResult;
 
-    if (_aElementTypeName.isEmpty())
+    if (_aElementTypeName.getLength() == 0)
     {
-        pResult.reset( new SubtreeChange(_aName.toString(),node::Attributes()) );
+        pResult.reset( new SubtreeChange(_aName, node::Attributes()) );
     }
     else
     {
-        pResult.reset( new SubtreeChange(_aName.toString(),
-                                         _aElementTypeName.toString(),
-                                         getDummySetElementModule().toString(),
+        pResult.reset( new SubtreeChange(_aName,
+                                         _aElementTypeName,
+                                         getDummySetElementModule(),
                                          node::Attributes()) );
     }
     return pResult;
@@ -98,9 +89,9 @@ std::auto_ptr<SubtreeChange> OTreeChangeFactory::createDummyChange(
 
 //-----------------------------------------------
 std::auto_ptr<SubtreeChange> OTreeChangeFactory::createSetNodeChange(
-                                Name const& _aName,
-                                Name const& _aTemplateName,
-                                Name const& _aTemplateModule,
+                                rtl::OUString const& _aName,
+                                rtl::OUString const& _aTemplateName,
+                                rtl::OUString const& _aTemplateModule,
                                 node::Attributes _aAttrs,
                                 bool _bToDefault)
 {
@@ -113,8 +104,8 @@ std::auto_ptr<SubtreeChange> OTreeChangeFactory::createSetNodeChange(
 
 //= Set Changes ============================================================
 std::auto_ptr<AddNode> OTreeChangeFactory::createAddNodeChange(
-                                data::TreeSegment const & _aNewTree,
-                                Name const& _aName,
+    rtl::Reference< data::TreeSegment > const & _aNewTree,
+                                rtl::OUString const& _aName,
                                 bool _bToDefault)
 {
     return std::auto_ptr<AddNode>(new AddNode(_aNewTree,_aName,_bToDefault));
@@ -122,7 +113,7 @@ std::auto_ptr<AddNode> OTreeChangeFactory::createAddNodeChange(
 
 //-----------------------------------------------
 std::auto_ptr<RemoveNode> OTreeChangeFactory::createRemoveNodeChange(
-                                Name const& _aName,
+                                rtl::OUString const& _aName,
                                 bool _bToDefault)
 {
     return std::auto_ptr<RemoveNode>(new RemoveNode(_aName,_bToDefault));

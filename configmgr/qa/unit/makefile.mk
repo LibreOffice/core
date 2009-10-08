@@ -55,9 +55,8 @@ ALLTAR: test
 $(MISC)$/$(TARGET).rdb .ERRREMOVE:
     $(COPY) $(SOLARBINDIR)$/types.rdb $@
     regcomp -register -r $@ -c $(subst,$/,/ $(DLLDEST)$/configmgr2.uno$(DLLPOST))
-    regcomp -register -r $@ -c $(subst,$/,/ $(SOLARLIBDIR)/typeconverter.uno$(DLLPOST))
     regcomp -register -r $@ -c $(subst,$/,/ $(SOLARLIBDIR)/sax.uno$(DLLPOST))
-    regcomp -register -r $@ -c $(subst,$/,/ $(SOLARLIBDIR)/simplereg.uno$(DLLPOST))
+    regcomp -register -r $@ -c $(subst,$/,/ $(SOLARLIBDIR)/stocservices.uno$(DLLPOST))
     regcomp -register -r $@ -c $(subst,$/,/ $(SOLARLIBDIR)/streams.uno$(DLLPOST))
 
 test .PHONY: $(SHL1TARGETN) $(MISC)$/$(TARGET).rdb

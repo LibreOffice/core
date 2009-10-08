@@ -32,6 +32,7 @@
 #include "precompiled_configmgr.hxx"
 
 #include "treefragment.hxx"
+#include "utility.hxx"
 #include "attributes.hxx"
 #include <rtl/ustring.hxx>
 
@@ -46,8 +47,15 @@ namespace configmgr
 //-----------------------------------------------------------------------------
 rtl::OUString TreeFragment::getName() const
 {
-    return readString(this->header.name);
+    return rtl::OUString(this->header.name);
 }
+
+void TreeFragment::setName(rtl::OUString const & name) {
+    rtl_uString * old = header.name;
+    header.name = acquireString(name);
+    rtl_uString_release(old);
+}
+
 //-----------------------------------------------------------------------------
 
 bool TreeFragment::isNamed(rtl::OUString const & _aName) const
@@ -59,20 +67,20 @@ bool TreeFragment::isNamed(rtl::OUString const & _aName) const
 
 bool TreeFragment::hasDefaultsAvailable() const
 {
-    return (this->header.state & State::flag_default_avail) || isDefault();
+    return (this->header.state & data::State::flag_default_avail) || isDefault();
 }
 //-----------------------------------------------------------------------------
 
 
 bool TreeFragment::isDefault() const
 {
-    return (this->header.state & State::mask_state) == State::defaulted;
+    return (this->header.state & data::State::mask_state) == data::State::defaulted;
 }
 //-----------------------------------------------------------------------------
 
 bool TreeFragment::isNew() const
 {
-    return (this->header.state & State::mask_state) == State::added;
+    return (this->header.state & data::State::mask_state) == data::State::added;
 }
 //-----------------------------------------------------------------------------
 
@@ -80,26 +88,26 @@ configmgr::node::Attributes TreeFragment::getAttributes() const
 {
     configmgr::node::Attributes aResult;
 
-    switch (this->header.state & State::mask_state)
+    switch (this->header.state & data::State::mask_state)
     {
-    case State::merged:     aResult.setState(configmgr::node::isMerged);   break;
-    case State::defaulted:  aResult.setState(configmgr::node::isDefault);  break;
-    case State::replaced:   aResult.setState(configmgr::node::isReplaced); break;
-    case State::added:      aResult.setState(configmgr::node::isAdded);    break;
+    case data::State::merged:     aResult.setState(configmgr::node::isMerged);   break;
+    case data::State::defaulted:  aResult.setState(configmgr::node::isDefault);  break;
+    case data::State::replaced:   aResult.setState(configmgr::node::isReplaced); break;
+    case data::State::added:      aResult.setState(configmgr::node::isAdded);    break;
     default: OSL_ASSERT(false); break; // not reachable
     }
 
-    aResult.setRemovability(!!(this->header.state & State::flag_removable),
-                            !!(this->header.state & State::flag_mandatory));
+    aResult.setRemovability(!!(this->header.state & data::State::flag_removable),
+                            !!(this->header.state & data::State::flag_mandatory));
 
 
     OSL_ASSERT( header.count != 0 );
-    NodeInfo const & aRootNodeInfo = this->nodes[0].node.info;
+    NodeInfo const & aRootNodeInfo = this->nodes[0].info;
 
-    aResult.setAccess(  !!(this->header.state & State::flag_readonly),
-                        !!(aRootNodeInfo.flags & Flags::finalized)  );
+    aResult.setAccess(  !!(this->header.state & data::State::flag_readonly),
+                        !!(aRootNodeInfo.flags & data::Flags::finalized)  );
 
-    aResult.setLocalized ( !!(aRootNodeInfo.flags & Flags::localized));
+    aResult.setLocalized ( !!(aRootNodeInfo.flags & data::Flags::localized));
 
     return aResult;
 }

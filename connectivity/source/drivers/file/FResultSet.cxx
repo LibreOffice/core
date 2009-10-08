@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: FResultSet.cxx,v $
- * $Revision: 1.102 $
+ * $Revision: 1.102.30.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -36,13 +36,9 @@
 #include <iostream>
 #endif
 #include "connectivity/sdbcx/VColumn.hxx"
-#ifndef _CONNECTIVITY_FILE_ORESULTSET_HXX_
 #include "file/FResultSet.hxx"
-#endif
 #include "file/FResultSetMetaData.hxx"
-#ifndef _COM_SUN_STAR_SQLC_DATATYPE_HPP_
 #include <com/sun/star/sdbc/DataType.hpp>
-#endif
 #include <com/sun/star/sdbc/ColumnValue.hpp>
 #include <comphelper/property.hxx>
 #include <com/sun/star/lang/DisposedException.hpp>
@@ -53,20 +49,19 @@
 #include "connectivity/dbconversion.hxx"
 #include "connectivity/dbtools.hxx"
 #include <cppuhelper/propshlp.hxx>
-#ifndef _ITERATOR_
 #include <iterator>
-#endif
 #include <tools/debug.hxx>
 #include <com/sun/star/sdbc/ResultSetType.hpp>
 #include <com/sun/star/sdbc/FetchDirection.hpp>
 #include <com/sun/star/sdbc/ResultSetConcurrency.hpp>
 #include <com/sun/star/sdbcx/XIndexesSupplier.hpp>
 
-
 #include <algorithm>
 #include <comphelper/extract.hxx>
 #include "connectivity/dbexception.hxx"
 #include <comphelper/types.hxx>
+#include "resource/file_res.hrc"
+#include "resource/sharedresources.hxx"
 
 
 using namespace ::comphelper;
@@ -88,6 +83,16 @@ using namespace com::sun::star::container;
 #else
 #define MAX_KEYSET_SIZE 0x40000 // 256K
 #endif
+
+namespace
+{
+    void lcl_throwError(sal_uInt16 _nErrorId,const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface>& _xContext)
+    {
+        ::connectivity::SharedResources aResources;
+        const ::rtl::OUString sMessage = aResources.getResourceString(_nErrorId);
+        ::dbtools::throwGenericSQLException(sMessage ,_xContext);
+    }
+}
 //------------------------------------------------------------------------------
 IMPLEMENT_SERVICE_INFO(OResultSet,"com.sun.star.sdbcx.drivers.file.ResultSet","com.sun.star.sdbc.ResultSet");
 DBG_NAME( file_OResultSet )
@@ -602,7 +607,8 @@ void SAL_CALL OResultSet::updateRow(  ) throw(SQLException, RuntimeException)
     checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
 
     if(!m_pTable || m_pTable->isReadOnly())
-        ::dbtools::throwGenericSQLException( ::rtl::OUString::createFromAscii( "Table is readonly."), *this );
+        lcl_throwError(STR_TABLE_READONLY,*this);
+
     m_bRowUpdated = m_pTable->UpdateRow(m_aInsertRow.getBody(), m_aRow,m_xColsIdx);
     *(*m_aInsertRow)[0] = (sal_Int32)(*m_aRow)[0]->getValue();
 
@@ -616,11 +622,11 @@ void SAL_CALL OResultSet::deleteRow() throw(SQLException, RuntimeException)
 
 
     if(!m_pTable || m_pTable->isReadOnly())
-        ::dbtools::throwGenericSQLException( ::rtl::OUString::createFromAscii( "Table is readonly." ), *this );
+        lcl_throwError(STR_TABLE_READONLY,*this);
     if (m_bShowDeleted)
-        ::dbtools::throwGenericSQLException( ::rtl::OUString::createFromAscii( "Row could not be deleted. The option \"Display inactive records\" is set."), *this );
+        lcl_throwError(STR_DELETE_ROW,*this);
     if(m_aRow->isDeleted())
-        ::dbtools::throwGenericSQLException( ::rtl::OUString::createFromAscii( "Row was already deleted."), *this );
+        lcl_throwError(STR_ROW_ALREADY_DELETED,*this);
 
     sal_Int32 nPos = (sal_Int32)(*m_aRow)[0]->getValue();
     m_bRowDeleted = m_pTable->DeleteRow(m_xColumns.getBody());
@@ -661,7 +667,7 @@ void SAL_CALL OResultSet::moveToInsertRow(  ) throw(SQLException, RuntimeExcepti
     checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
 
     if(!m_pTable || m_pTable->isReadOnly())
-        ::dbtools::throwGenericSQLException( ::rtl::OUString::createFromAscii( "Table is readonly!" ), *this );
+        lcl_throwError(STR_TABLE_READONLY,*this);
 
     m_bInserted     = sal_True;
 
@@ -1272,14 +1278,10 @@ BOOL OResultSet::OpenImpl()
     {
         const OSQLTables& xTabs = m_aSQLIterator.getTables();
         if ((xTabs.begin() == xTabs.end()) || !xTabs.begin()->second.is())
-            throwGenericSQLException(   ::rtl::OUString::createFromAscii("The statement is invalid."),
-                                        static_cast<XWeak*>(this),
-                                        makeAny( m_aSQLIterator.getErrors() )
-                                    );
+            lcl_throwError(STR_QUERY_TOO_COMPLEX,*this);
+
         if ( xTabs.size() > 1 || m_aSQLIterator.hasErrors() )
-            throwGenericSQLException(   ::rtl::OUString::createFromAscii("The statement is invalid. it contains more than one table."),
-                                        static_cast<XWeak*>(this),
-                                        makeAny( m_aSQLIterator.getErrors() ) );
+            lcl_throwError(STR_QUERY_MORE_TABLES,*this);
 
         OSQLTable xTable = xTabs.begin()->second;
         m_xColumns = m_aSQLIterator.getSelectColumns();
@@ -1323,7 +1325,8 @@ BOOL OResultSet::OpenImpl()
             if(isCount())
             {
                 if(m_xColumns->size() > 1)
-                    throwGenericSQLException(::rtl::OUString::createFromAscii("Count can only be used as single column!"),*this );
+                    lcl_throwError(STR_QUERY_COMPLEX_COUNT,*this);
+
                 m_nRowCountResult = 0;
                 // Vorlaeufig einfach ueber alle Datensaetze iterieren und
                 // dabei die Aktionen bearbeiten (bzw. einfach nur zaehlen):

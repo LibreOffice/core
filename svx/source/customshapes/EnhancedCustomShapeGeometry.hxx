@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: EnhancedCustomShapeGeometry.hxx,v $
- * $Revision: 1.8 $
+ * $Revision: 1.8.216.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -92,12 +92,12 @@ struct mso_CustomShape
 
 #define MSO_I | (sal_Int32)0x80000000
 
-const sal_Bool          SortFilledObjectsToBackByDefault( MSO_SPT eSpType );
-const sal_Bool          IsCustomShapeFilledByDefault( MSO_SPT eSpType );
-const sal_Int16         GetCustomShapeConnectionTypeDefault( MSO_SPT eSpType );
+sal_Bool            SortFilledObjectsToBackByDefault( MSO_SPT eSpType );
+sal_Bool            IsCustomShapeFilledByDefault( MSO_SPT eSpType );
+sal_Int16           GetCustomShapeConnectionTypeDefault( MSO_SPT eSpType );
 
 // #i28269#
-const sal_Bool          IsCustomShapeStrokedByDefault( MSO_SPT eSpType );
+sal_Bool            IsCustomShapeStrokedByDefault( MSO_SPT eSpType );
 
 const mso_CustomShape*  GetCustomShapeContent( MSO_SPT eSpType );
 

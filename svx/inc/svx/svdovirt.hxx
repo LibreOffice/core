@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: svdovirt.hxx,v $
- * $Revision: 1.4 $
+ * $Revision: 1.4.18.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -58,7 +58,7 @@ protected:
     Rectangle                   aSnapRect;
 
 protected:
-    virtual void SFX_NOTIFY(SfxBroadcaster& rBC, const TypeId& rBCType, const SfxHint& rHint, const TypeId& rHintType);
+    virtual void Notify(SfxBroadcaster& rBC, const SfxHint& rHint);
 
     virtual SdrObjGeoData* NewGeoData() const;
     virtual void SaveGeoData(SdrObjGeoData& rGeo) const;
@@ -90,7 +90,7 @@ public:
     virtual void TakeObjNameSingul(String& rName) const;
     virtual void TakeObjNamePlural(String& rName) const;
 
-    virtual basegfx::B2DPolyPolygon TakeXorPoly(sal_Bool bDetail) const;
+    virtual basegfx::B2DPolyPolygon TakeXorPoly() const;
     virtual sal_uInt32 GetHdlCount() const;
     virtual SdrHdl* GetHdl(sal_uInt32 nHdlNum) const;
     virtual sal_uInt32 GetPlusHdlCount(const SdrHdl& rHdl) const;

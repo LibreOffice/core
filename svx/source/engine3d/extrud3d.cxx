@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: extrud3d.cxx,v $
- * $Revision: 1.25 $
+ * $Revision: 1.25.18.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -48,6 +48,7 @@
 #include <basegfx/polygon/b2dpolypolygontools.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>
 #include <basegfx/polygon/b3dpolygontools.hxx>
+#include <basegfx/polygon/b3dpolypolygontools.hxx>
 
 //////////////////////////////////////////////////////////////////////////////
 // #110094# DrawContact section
@@ -89,9 +90,6 @@ E3dExtrudeObj::E3dExtrudeObj(E3dDefaultAttributes& rDefault, const basegfx::B2DP
 
     // set extrude depth
     GetProperties().SetObjectItemDirect(Svx3DDepthItem((sal_uInt32)(fDepth + 0.5)));
-
-    // Geometrie erzeugen
-    CreateGeometry();
 }
 
 E3dExtrudeObj::E3dExtrudeObj()
@@ -113,183 +111,6 @@ void E3dExtrudeObj::SetDefaultAttributes(E3dDefaultAttributes& rDefault)
     // Bei extrudes defaultmaessig StdTexture in X und Y
     GetProperties().SetObjectItemDirect(Svx3DTextureProjectionXItem(1));
     GetProperties().SetObjectItemDirect(Svx3DTextureProjectionYItem(1));
-}
-
-/*************************************************************************
-|*
-|* Geometrieerzeugung
-|*
-\************************************************************************/
-
-basegfx::B3DPolyPolygon E3dExtrudeObj::GetFrontSide()
-{
-    basegfx::B3DPolyPolygon aRetval;
-
-    if(maExtrudePolygon.count())
-    {
-        basegfx::B2DPolyPolygon aTemp(maExtrudePolygon);
-        aTemp.removeDoublePoints();
-        aTemp = basegfx::tools::correctOrientations(aTemp);
-        const basegfx::B2VectorOrientation aOrient = basegfx::tools::getOrientation(aTemp.getB2DPolygon(0L));
-
-        if(basegfx::ORIENTATION_POSITIVE == aOrient)
-        {
-            aTemp.flip();
-        }
-
-        aRetval = basegfx::tools::createB3DPolyPolygonFromB2DPolyPolygon(aTemp);
-    }
-
-    return aRetval;
-}
-
-basegfx::B3DPolyPolygon E3dExtrudeObj::GetBackSide(const basegfx::B3DPolyPolygon& rFrontSide)
-{
-    basegfx::B3DPolyPolygon aBackSide(rFrontSide);
-
-    if(GetExtrudeDepth() != 0)
-    {
-        // eventuell Skalieren
-        if(GetPercentBackScale() != 100)
-        {
-            // #i74056#
-            aBackSide = ImpScalePoly(aBackSide, (double)GetPercentBackScale() / 100.0);
-        }
-
-        // Verschieben
-        basegfx::B3DHomMatrix aTrans;
-        aTrans.translate(0.0, 0.0, (double)GetExtrudeDepth());
-        aBackSide.transform(aTrans);
-    }
-
-    return aBackSide;
-}
-
-/*************************************************************************
-|*
-|* Give out simple line geometry
-|*
-\************************************************************************/
-
-basegfx::B3DPolyPolygon E3dExtrudeObj::Get3DLineGeometry() const
-{
-    return maLinePolyPolygon;
-}
-
-void E3dExtrudeObj::CreateGeometry()
-{
-    // Start der Geometrieerzeugung ankuendigen
-    StartCreateGeometry();
-
-    // #78972# prepare new line geometry creation
-    maLinePolyPolygon.clear();
-
-    // Polygon als Grundlage holen
-    basegfx::B3DPolyPolygon aFrontSide(GetFrontSide());
-
-    if(aFrontSide.count())
-    {
-        if(GetExtrudeDepth() != 0)
-        {
-            // Hinteres Polygon erzeugen
-            basegfx::B3DPolyPolygon aBackSide(GetBackSide(aFrontSide));
-
-            // Was muss erzeugt werden?
-            if(!aFrontSide.isClosed())
-            {
-                GetProperties().SetObjectItemDirect(Svx3DDoubleSidedItem(TRUE));
-            }
-
-            double fTextureDepth(1.0);
-            double fTextureStart(0.0);
-
-            // Texturen erzeugen?
-            if(!GetCreateTexture())
-            {
-                fTextureStart = fTextureDepth = 0.0;
-            }
-
-            // Falls Texturen erzeugen Randbreite fuer diese bestimmen
-            double fSurroundFactor(1.0);
-
-            if(GetCreateTexture())
-            {
-                const basegfx::B3DPolygon aFirstPolygon(aFrontSide.getB3DPolygon(0L));
-                const double fLength(basegfx::tools::getLength(aFirstPolygon));
-                const double fArea(basegfx::tools::getArea(aFirstPolygon));
-                fSurroundFactor = fLength / sqrt(fArea);
-                fSurroundFactor = (double)((long)(fSurroundFactor - 0.5));
-                if(fSurroundFactor == 0.0)
-                    fSurroundFactor = 1.0;
-            }
-
-            // #i28528#
-            basegfx::B3DPolyPolygon aFrontLines;
-            basegfx::B3DPolyPolygon aBackLines;
-            basegfx::B3DPolyPolygon aInBetweenLines;
-
-            // Segment erzeugen
-            ImpCreateSegment(
-                aFrontSide,
-                aBackSide,
-                0L,
-                0L,
-                GetCloseFront(), // #107245# bExtrudeCloseFront,
-                GetCloseBack(), // #107245# bExtrudeCloseBack,
-                (double)GetPercentDiagonal() / 200.0,
-                GetSmoothNormals(), // #107245# GetExtrudeSmoothed(),
-                GetSmoothNormals(), // #107245# GetExtrudeSmoothed(),
-                GetSmoothLids(), // #107245# GetExtrudeSmoothFrontBack(),
-                fSurroundFactor,
-                fTextureStart,
-                fTextureDepth,
-                GetCreateNormals(),
-                GetCreateTexture(),
-                GetCharacterMode(), // #107245# bExtrudeCharacterMode,
-                FALSE,
-                // #78972#
-                &aFrontLines,
-                &aBackLines,
-                &aInBetweenLines);
-
-            // #78972#
-            // Simply add them for Extrudes
-            maLinePolyPolygon.append(aFrontLines);
-            maLinePolyPolygon.append(aInBetweenLines);
-            maLinePolyPolygon.append(aBackLines);
-        }
-        else
-        {
-            // nur ein Polygon erzeugen
-            GetProperties().SetObjectItemDirect(Svx3DDoubleSidedItem(TRUE));
-
-            // Fuer evtl. selbst erzeugte Normalen
-            basegfx::B3DPolyPolygon aNormalsFront(ImpCreateByPattern(aFrontSide));
-
-            // Extrudevektor bilden
-            basegfx::B3DVector aNormal(0.0, 0.0, (double)GetExtrudeDepth());
-
-            // Normalen und Vorderseite selbst erzeugen
-            aNormalsFront = ImpAddFrontNormals(aNormalsFront, aNormal);
-            ImpCreateFront(aFrontSide, aNormalsFront, GetCreateNormals(), GetCreateTexture());
-
-            // #78972#
-            maLinePolyPolygon.append(aFrontSide);
-        }
-
-        // #i28528#
-        if(!GetReducedLineGeometry())
-        {
-            basegfx::B3DPolyPolygon aNewPolyPoly(ImpCompleteLinePolygon(maLinePolyPolygon, aFrontSide.count(), sal_False));
-            // append horizontal lines
-            maLinePolyPolygon.append(aNewPolyPoly);
-        }
-
-        //ImpCorrectLinePolygon(maLinePolyPolygon, aFrontSide.count());
-    }
-
-    // call parent
-    E3dCompoundObject::CreateGeometry();
 }
 
 /*************************************************************************
@@ -318,9 +139,6 @@ void E3dExtrudeObj::operator=(const SdrObject& rObj)
     const E3dExtrudeObj& r3DObj = (const E3dExtrudeObj&)rObj;
 
     maExtrudePolygon = r3DObj.maExtrudePolygon;
-
-    // #95519# copy LinePolygon info, too
-    maLinePolyPolygon = r3DObj.maLinePolyPolygon;
 }
 
 /*************************************************************************
@@ -334,7 +152,7 @@ void E3dExtrudeObj::SetExtrudePolygon(const basegfx::B2DPolyPolygon &rNew)
     if(maExtrudePolygon != rNew)
     {
         maExtrudePolygon = rNew;
-        bGeometryValid = FALSE;
+        ActionChanged();
     }
 }
 
@@ -382,22 +200,68 @@ BOOL E3dExtrudeObj::IsBreakObjPossible()
 
 SdrAttrObj* E3dExtrudeObj::GetBreakObj()
 {
-    // create PathObj
-    basegfx::B2DPolyPolygon aPoly = TransformToScreenCoor(GetBackSide(GetFrontSide()));
-    SdrPathObj* pPathObj = new SdrPathObj(OBJ_PLIN, aPoly);
+    basegfx::B3DPolyPolygon aFrontSide;
+    basegfx::B3DPolyPolygon aBackSide;
 
-    if(pPathObj)
+    if(maExtrudePolygon.count())
     {
-        // Attribute setzen
-        SfxItemSet aSet(GetObjectItemSet());
+        basegfx::B2DPolyPolygon aTemp(maExtrudePolygon);
+        aTemp.removeDoublePoints();
+        aTemp = basegfx::tools::correctOrientations(aTemp);
+        const basegfx::B2VectorOrientation aOrient = basegfx::tools::getOrientation(aTemp.getB2DPolygon(0L));
 
-        // Linien aktivieren, um Objekt garantiert sichtbar zu machen
-        aSet.Put(XLineStyleItem(XLINE_SOLID));
+        if(basegfx::ORIENTATION_POSITIVE == aOrient)
+        {
+            aTemp.flip();
+        }
 
-        pPathObj->SetMergedItemSet(aSet);
+        aFrontSide = basegfx::tools::createB3DPolyPolygonFromB2DPolyPolygon(aTemp);
     }
 
-    return pPathObj;
+    if(aFrontSide.count())
+    {
+        aBackSide = aFrontSide;
+
+        if(GetExtrudeDepth())
+        {
+            basegfx::B3DHomMatrix aTransform;
+
+            if(100 != GetPercentBackScale())
+            {
+                // scale polygon from center
+                const double fScaleFactor(GetPercentBackScale() / 100.0);
+                const basegfx::B3DRange aPolyPolyRange(basegfx::tools::getRange(aBackSide));
+                const basegfx::B3DPoint aCenter(aPolyPolyRange.getCenter());
+
+                aTransform.translate(-aCenter.getX(), -aCenter.getY(), -aCenter.getZ());
+                aTransform.scale(fScaleFactor, fScaleFactor, fScaleFactor);
+                aTransform.translate(aCenter.getX(), aCenter.getY(), aCenter.getZ());
+            }
+
+            // translate by extrude depth
+            aTransform.translate(0.0, 0.0, (double)GetExtrudeDepth());
+
+            aBackSide.transform(aTransform);
+        }
+    }
+
+    if(aBackSide.count())
+    {
+    // create PathObj
+        basegfx::B2DPolyPolygon aPoly = TransformToScreenCoor(aBackSide);
+        SdrPathObj* pPathObj = new SdrPathObj(OBJ_PLIN, aPoly);
+
+        if(pPathObj)
+        {
+            SfxItemSet aSet(GetObjectItemSet());
+            aSet.Put(XLineStyleItem(XLINE_SOLID));
+            pPathObj->SetMergedItemSet(aSet);
+        }
+
+        return pPathObj;
+    }
+
+    return 0;
 }
 
 // eof

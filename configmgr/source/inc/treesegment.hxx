@@ -28,94 +28,49 @@
  *
  ************************************************************************/
 
-#ifndef CONFIGMGR_TREESEGMENT_HXX
-#define CONFIGMGR_TREESEGMENT_HXX
+#ifndef INCLUDED_CONFIGMGR_SOURCE_INC_TREESEGMENT_HXX
+#define INCLUDED_CONFIGMGR_SOURCE_INC_TREESEGMENT_HXX
 
-#include "valuenode.hxx"
-#include <rtl/ref.hxx>
-#include "treefragment.hxx"
-#ifndef INCLUDED_MEMORY
+#include "sal/config.h"
+
 #include <memory>
-#define INCLUDED_MEMORY
-#endif // INCLUDED_MEMORY
 
+#include "rtl/ref.hxx"
+#include "salhelper/simplereferenceobject.hxx"
 
-// -----------------------------------------------------------------------------
 namespace rtl { class OUString; }
-// -----------------------------------------------------------------------------
-namespace configmgr
-{
-// -----------------------------------------------------------------------------
-    class INode; // for RawTreeData
-    namespace sharable { struct TreeFragment; union Node; } // for TreeData (sharable)
-// -----------------------------------------------------------------------------
-    namespace configuration { class Name; }
-    // -------------------------------------------------------------------------
-    namespace data
-    {
-    // -------------------------------------------------------------------------
-        class TreeAccessor;
-    // -------------------------------------------------------------------------
-        class TreeSegment
-        {
-            struct Impl;
-            rtl::Reference<Impl> m_pImpl;
+
+namespace configmgr {
+    class INode;
+    namespace sharable { struct TreeFragment; }
+
+    namespace data {
+        // rtl::Reference< TreeSegment > is a reference counted
+        // sharable::TreeFragment *.  A null reference is always modeled as an
+        // empty rtl::Reference< TreeSegment >, never as a null fragment.
+        class TreeSegment: public salhelper::SimpleReferenceObject {
         public:
-            typedef configuration::Name  Name;
-            typedef std::auto_ptr<INode> RawTreeData;
-            typedef rtl::OUString        RawName;
+            static rtl::Reference< TreeSegment > create(
+                std::auto_ptr< INode > tree, rtl::OUString const & type);
 
-            typedef sharable::Node const         * NodeDataPtr;
-            typedef sharable::TreeFragment const * TreeDataPtr;
-            typedef sharable::TreeFragment       * TreeDataUpdatePtr;
+            static rtl::Reference< TreeSegment > create(
+                rtl::OUString const & name, std::auto_ptr< INode > tree);
 
-            static TreeSegment createNew(RawTreeData _aTree, RawName const & _aTypeName)
-            { return createNewSegment(_aTree,_aTypeName); }
+            static rtl::Reference< TreeSegment > create(
+                sharable::TreeFragment * tree);
 
-            static TreeSegment createNew(RawName const & _aTreeName, RawTreeData _aTree)
-            { return createNewSegment(_aTreeName, _aTree); }
+            static rtl::Reference< TreeSegment > create(
+                rtl::Reference< TreeSegment > const & tree)
+            { return create(tree.is() ? tree->fragment : 0); }
 
-            static TreeSegment createNew(TreeAccessor const & _aTree)
-            { return createNewSegment(_aTree); }
-
-            TreeSegment();
-            TreeSegment(TreeSegment const & );
-            TreeSegment& operator=(TreeSegment const & );
-            ~TreeSegment();
-
-            TreeSegment cloneSegment() const;
-
-            bool is() const;
-            void clear();
-
-            Name getName() const;
-            void setName(Name const & _aNewName);
-            void markRemovable();
-
-            TreeAddress     getBaseAddress() const;
-            TreeAccessor    getTreeAccess() const;
-
-         //   RawTreeData releaseData();
-            void clearData() { clear(); }
-            RawTreeData cloneData(bool bUseTreeName) const;
-
-            TreeDataPtr getTreeData() const;
-            NodeDataPtr getSegmentRootNode() const;
-        private:
-            TreeDataUpdatePtr getTreeDataForUpdate() const;
+            sharable::TreeFragment * const fragment; // non-null
 
         private:
-            bool hasData() const { return !!m_pImpl.is(); }
-            static Impl* createNewSegment(RawName const & _aTreeName, RawTreeData& _aTree);
-            static Impl* createNewSegment(RawTreeData& _aTree, RawName const & _aTypeName);
-            static Impl* createNewSegment(TreeAccessor const & _aTree);
-            TreeSegment(Impl *);
+            TreeSegment(sharable::TreeFragment * tree);
+
+            virtual ~TreeSegment();
         };
-
-    // -------------------------------------------------------------------------
     }
-// -----------------------------------------------------------------------------
-} // namespace configmgr
+}
 
-#endif // CONFIGMGR_SEGMENT_HXX
-
+#endif

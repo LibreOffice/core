@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: svdoedge.cxx,v $
- * $Revision: 1.45 $
+ * $Revision: 1.45.18.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -1579,7 +1579,7 @@ je Objekt variiert von 0-3:
 'C':  n  0-3  0-3   = 1+U+1
 */
 
-void __EXPORT SdrEdgeObj::SFX_NOTIFY(SfxBroadcaster& rBC, const TypeId&, const SfxHint& rHint, const TypeId&)
+void __EXPORT SdrEdgeObj::Notify(SfxBroadcaster& rBC, const SfxHint& rHint)
 {
     SfxSimpleHint* pSimple=PTR_CAST(SfxSimpleHint,&rHint);
     ULONG nId=pSimple==0 ? 0 : pSimple->GetId();
@@ -1598,7 +1598,7 @@ void __EXPORT SdrEdgeObj::SFX_NOTIFY(SfxBroadcaster& rBC, const TypeId&, const S
     {
         bEdgeTrackUserDefined = sal_False;
     }
-    SdrTextObj::SFX_NOTIFY(rBC,rBCType,rHint,rHintType);
+    SdrTextObj::Notify(rBC,rHint);
     if (nNotifyingCount==0) { // Hier nun auch ein VerriegelungsFlag
         ((SdrEdgeObj*)this)->nNotifyingCount++;
         SdrHint* pSdrHint=PTR_CAST(SdrHint,&rHint);
@@ -1634,13 +1634,13 @@ void SdrEdgeObj::Reformat()
     if( NULL != aCon1.pObj )
     {
         SfxSimpleHint aHint( SFX_HINT_DATACHANGED );
-        SFX_NOTIFY( *const_cast<SfxBroadcaster*>(aCon1.pObj->GetBroadcaster()), NULL, aHint, NULL );
+        Notify( *const_cast<SfxBroadcaster*>(aCon1.pObj->GetBroadcaster()), aHint );
     }
 
     if( NULL != aCon2.pObj )
     {
         SfxSimpleHint aHint( SFX_HINT_DATACHANGED );
-        SFX_NOTIFY( *const_cast<SfxBroadcaster*>(aCon2.pObj->GetBroadcaster()), NULL, aHint, NULL );
+        Notify( *const_cast<SfxBroadcaster*>(aCon2.pObj->GetBroadcaster()), aHint );
     }
 }
 
@@ -1675,7 +1675,7 @@ void SdrEdgeObj::TakeObjNamePlural(XubString& rName) const
     rName=ImpGetResStr(STR_ObjNamePluralEDGE);
 }
 
-basegfx::B2DPolyPolygon SdrEdgeObj::TakeXorPoly(sal_Bool /*bDetail*/) const
+basegfx::B2DPolyPolygon SdrEdgeObj::TakeXorPoly() const
 {
     basegfx::B2DPolyPolygon aPolyPolygon;
 

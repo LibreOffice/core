@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: templdgi.hxx,v $
- * $Revision: 1.18 $
+ * $Revision: 1.18.46.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -226,8 +226,7 @@ protected:
     USHORT              StyleNrToInfoOffset( USHORT i );
     USHORT              InfoOffsetToStyleNr( USHORT i );
 
-    void                SFX_NOTIFY( SfxBroadcaster& rBC, const TypeId& rBCType,
-                                    const SfxHint& rHint, const TypeId& rHintType );
+    void                Notify( SfxBroadcaster& rBC, const SfxHint& rHint );
 
     void                FamilySelect( USHORT nId );
     void                SetFamily( USHORT nId );

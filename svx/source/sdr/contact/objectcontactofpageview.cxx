@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: objectcontactofpageview.cxx,v $
- * $Revision: 1.20 $
+ * $Revision: 1.20.18.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -194,7 +194,7 @@ namespace sdr
             {
                 // use visible pixels, but transform to world coordinates
                 const Size aOutputSizePixel(rTargetOutDev.GetOutputSizePixel());
-                aViewRange = ::basegfx::B2DRange(0.0, 0.0, aOutputSizePixel.getWidth(), aOutputSizePixel.getHeight());
+                aViewRange = basegfx::B2DRange(0.0, 0.0, aOutputSizePixel.getWidth(), aOutputSizePixel.getHeight());
 
                 // if a clip region is set, use it
                 if(!rDisplayInfo.GetRedrawArea().IsEmpty())
@@ -238,7 +238,11 @@ namespace sdr
             // and may use the MapMode from the Target OutDev in the DisplayInfo
             drawinglayer::primitive2d::Primitive2DSequence xPrimitiveSequence(rDrawPageVOContact.getPrimitive2DSequenceHierarchy(rDisplayInfo));
 
-            // if there is something to show, use a vclProcessor to render it
+            // if there is something to show, use a primitive processor to render it. There
+            // is a choice between VCL and Canvas processors currently. The decision is made in
+            // createBaseProcessor2DFromOutputDevice and takes into accout things like the
+            // Target is a MetaFile, a VDev or something else. The Canvas renderer is triggered
+            // currently using the shown boolean. Canvas is not yet the default.
             if(xPrimitiveSequence.hasElements())
             {
                 // prepare OutputDevice (historical stuff, maybe soon removed)

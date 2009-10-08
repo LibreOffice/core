@@ -33,8 +33,6 @@
 
 #include "common.hxx"
 
-using namespace css;
-
 void Test::setUp()
 {
     mpMagic = new Magic();
@@ -137,11 +135,11 @@ void Test::normalizePathKey (rtl::OString &rPath, rtl::OString &rKey)
     }
 }
 
-uno::Any Test::getKey (const sal_Char *pPath, rtl::OUString aName)
+css::uno::Any Test::getKey (const sal_Char *pPath, rtl::OUString aName)
 {
-    uno::Reference< container::XHierarchicalNameAccess > xNameAccess(
+    css::uno::Reference< css::container::XHierarchicalNameAccess > xNameAccess(
         createView(pPath, false), css::uno::UNO_QUERY_THROW);
-    uno::Any aVal;
+    css::uno::Any aVal;
     aVal = xNameAccess->getByHierarchicalName (aName);
     disposeComponent (xNameAccess);
     return aVal;
@@ -149,11 +147,11 @@ uno::Any Test::getKey (const sal_Char *pPath, rtl::OUString aName)
 
 void Test::setKey (const sal_Char *pPath, rtl::OUString aName, css::uno::Any a)
 {
-    uno::Reference< util::XChangesBatch > xAppView;
+    css::uno::Reference< css::util::XChangesBatch > xAppView;
 
-    xAppView = uno::Reference< util::XChangesBatch > (
-        createView(pPath, true), uno::UNO_QUERY_THROW );
-    uno::Reference< container::XNameReplace > xSettings(xAppView, uno::UNO_QUERY_THROW);
+    xAppView = css::uno::Reference< css::util::XChangesBatch > (
+        createView(pPath, true), css::uno::UNO_QUERY_THROW );
+    css::uno::Reference< css::container::XNameReplace > xSettings(xAppView, css::uno::UNO_QUERY_THROW);
     rtl::OUString aStr;
 
     // set key
@@ -165,13 +163,13 @@ void Test::setKey (const sal_Char *pPath, rtl::OUString aName, css::uno::Any a)
 
 void Test::resetKey (const sal_Char *pPath, rtl::OUString aName)
 {
-    uno::Reference< util::XChangesBatch > xAppView;
+    css::uno::Reference< css::util::XChangesBatch > xAppView;
 
     // reset to default
-    xAppView = uno::Reference< util::XChangesBatch > ( createView(pPath, true), uno::UNO_QUERY_THROW );
-    uno::Reference< container::XNameReplace > xSettings(xAppView, uno::UNO_QUERY_THROW);
+    xAppView = css::uno::Reference< css::util::XChangesBatch > ( createView(pPath, true), css::uno::UNO_QUERY_THROW );
+    css::uno::Reference< css::container::XNameReplace > xSettings(xAppView, css::uno::UNO_QUERY_THROW);
 
-    uno::Reference< beans::XPropertyState > xSettingsState(xSettings, uno::UNO_QUERY);
+    css::uno::Reference< css::beans::XPropertyState > xSettingsState(xSettings, css::uno::UNO_QUERY);
     xSettingsState->setPropertyToDefault(aName);
     xAppView->commitChanges();
 
@@ -194,7 +192,7 @@ void Test::keySet()
     try {
         setKey ("/org.openoffice.Setup/Test",
                 rtl::OUString::createFromAscii("AString"),
-                uno::makeAny (rtl::OUString::createFromAscii("baa")));
+                css::uno::makeAny (rtl::OUString::createFromAscii("baa")));
 
         // check value
         rtl::OUString aStr;
@@ -229,14 +227,14 @@ void Test::readCommands()
     rtl::OUString aPropProperties( RTL_CONSTASCII_USTRINGPARAM( "Properties" ));
 
     try {
-        uno::Reference< container::XNameAccess > xNameAccess (
+        css::uno::Reference< css::container::XNameAccess > xNameAccess (
             createView("/org.openoffice.UI.GenericCommands/UserInterface/Commands", false),
             css::uno::UNO_QUERY_THROW);
 
         CPPUNIT_ASSERT_MESSAGE ("fetched UI generic commands", xNameAccess.is());
 
-        uno::Any a;
-        uno::Sequence< rtl::OUString > aNameSeq = xNameAccess->getElementNames();
+        css::uno::Any a;
+        css::uno::Sequence< rtl::OUString > aNameSeq = xNameAccess->getElementNames();
 
         CPPUNIT_ASSERT_MESSAGE ("right element / sequence", aNameSeq.getLength() == 696);
         sal_uInt32 end, start = osl_getGlobalTimer();
@@ -247,7 +245,7 @@ void Test::readCommands()
                 try
                 {
                     {
-                        uno::Reference< container::XNameAccess > xChildNameAccess;
+                        css::uno::Reference< css::container::XNameAccess > xChildNameAccess;
                         // This is the slow bit ! ...
                         // Creating the @#$@#$ing XNameAccess object [ 650 times ]
                         // which we then use to 'getByName' etc.

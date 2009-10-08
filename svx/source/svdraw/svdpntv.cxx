@@ -320,7 +320,7 @@ SdrPaintView::~SdrPaintView()
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-void __EXPORT SdrPaintView::SFX_NOTIFY(SfxBroadcaster& /*rBC*/, const TypeId& rBCType, const SfxHint& rHint, const TypeId& rHintType)
+void __EXPORT SdrPaintView::Notify(SfxBroadcaster& /*rBC*/, const SfxHint& rHint)
 {
     BOOL bObjChg=!bSomeObjChgdFlag; // TRUE= auswerten fuer ComeBack-Timer
     if (bObjChg) {

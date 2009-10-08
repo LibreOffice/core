@@ -39,21 +39,16 @@
 namespace configmgr
 {
 
-    using uno::Reference;
-    using uno::Sequence;
-    using uno::Any;
-    using uno::RuntimeException;
-
 // XHierarchicalName
 //------------------------------------------------------------------------------------------------------------------
-OUString SAL_CALL BasicGroupAccess::getHierarchicalName(  ) throw(RuntimeException)
+rtl::OUString SAL_CALL BasicGroupAccess::getHierarchicalName(  ) throw(uno::RuntimeException)
 {
     return configapi::implGetHierarchicalName( getNode() );
 }
 
 //------------------------------------------------------------------------------------------------------------------
-OUString SAL_CALL BasicGroupAccess::composeHierarchicalName( const OUString& sRelativeName )
-    throw(css::lang::IllegalArgumentException, css::lang::NoSupportException, RuntimeException)
+rtl::OUString SAL_CALL BasicGroupAccess::composeHierarchicalName( const rtl::OUString& sRelativeName )
+    throw(css::lang::IllegalArgumentException, css::lang::NoSupportException, uno::RuntimeException)
 {
     return configapi::implComposeHierarchicalName( getNode(), sRelativeName );
 }
@@ -64,13 +59,13 @@ OUString SAL_CALL BasicGroupAccess::composeHierarchicalName( const OUString& sRe
 //-----------------------------------------------------------------------------------
 
 //-----------------------------------------------------------------------------------
-uno::Type SAL_CALL BasicGroupAccess::getElementType(  ) throw(RuntimeException)
+uno::Type SAL_CALL BasicGroupAccess::getElementType(  ) throw(uno::RuntimeException)
 {
     return configapi::implGetElementType( getNode() );
 }
 
 //-----------------------------------------------------------------------------------
-sal_Bool SAL_CALL BasicGroupAccess::hasElements(  ) throw(RuntimeException)
+sal_Bool SAL_CALL BasicGroupAccess::hasElements(  ) throw(uno::RuntimeException)
 {
     return configapi::implHasElements( getNode() );
 }
@@ -78,7 +73,7 @@ sal_Bool SAL_CALL BasicGroupAccess::hasElements(  ) throw(RuntimeException)
 // XExactName
 //-----------------------------------------------------------------------------------
 
-OUString SAL_CALL BasicGroupAccess::getExactName( const OUString& rApproximateName ) throw(RuntimeException)
+rtl::OUString SAL_CALL BasicGroupAccess::getExactName( const rtl::OUString& rApproximateName ) throw(uno::RuntimeException)
 {
     return configapi::implGetExactName( getNode(), rApproximateName);
 }
@@ -94,34 +89,34 @@ css::beans::Property SAL_CALL BasicGroupAccess::getAsProperty(  ) throw(uno::Run
 // XNameAccess
 //-----------------------------------------------------------------------------------
 
-sal_Bool SAL_CALL BasicGroupAccess::hasByName( const OUString& sName ) throw(RuntimeException)
+sal_Bool SAL_CALL BasicGroupAccess::hasByName( const rtl::OUString& sName ) throw(uno::RuntimeException)
 {
     return configapi::implHasByName( getNode(), sName);
 }
 
 //-----------------------------------------------------------------------------------
-Any SAL_CALL BasicGroupAccess::getByName( const OUString& sName )
-    throw(css::container::NoSuchElementException, css::lang::WrappedTargetException, RuntimeException)
+uno::Any SAL_CALL BasicGroupAccess::getByName( const rtl::OUString& sName )
+    throw(css::container::NoSuchElementException, css::lang::WrappedTargetException, uno::RuntimeException)
 {
     return configapi::implGetByName( getNode(), sName );
 }
 
 //-----------------------------------------------------------------------------------
-Sequence< OUString > SAL_CALL BasicGroupAccess::getElementNames(  ) throw( RuntimeException)
+uno::Sequence< rtl::OUString > SAL_CALL BasicGroupAccess::getElementNames(  ) throw( uno::RuntimeException)
 {
     return configapi::implGetElementNames( getNode() );
 }
 
 // XHierarchicalNameAccess
 //-----------------------------------------------------------------------------------
-sal_Bool SAL_CALL BasicGroupAccess::hasByHierarchicalName( const OUString& sName ) throw(RuntimeException)
+sal_Bool SAL_CALL BasicGroupAccess::hasByHierarchicalName( const rtl::OUString& sName ) throw(uno::RuntimeException)
 {
     return configapi::implHasByHierarchicalName( getNode(), sName);
 }
 
 //-----------------------------------------------------------------------------------
-Any SAL_CALL BasicGroupAccess::getByHierarchicalName( const OUString& sName )
-    throw(css::container::NoSuchElementException, RuntimeException)
+uno::Any SAL_CALL BasicGroupAccess::getByHierarchicalName( const rtl::OUString& sName )
+    throw(css::container::NoSuchElementException, uno::RuntimeException)
 {
     return configapi::implGetByHierarchicalName( getNode(), sName );
 }
@@ -130,15 +125,15 @@ Any SAL_CALL BasicGroupAccess::getByHierarchicalName( const OUString& sName )
 // XContainer
 //-----------------------------------------------------------------------------------
 
-void SAL_CALL BasicGroupAccess::addContainerListener( const Reference< css::container::XContainerListener >& xListener )
-    throw(RuntimeException)
+void SAL_CALL BasicGroupAccess::addContainerListener( const uno::Reference< css::container::XContainerListener >& xListener )
+    throw(uno::RuntimeException)
 {
     configapi::implAddListener( getNode(), xListener );
 }
 
 //-----------------------------------------------------------------------------------
-void SAL_CALL BasicGroupAccess::removeContainerListener( const Reference< css::container::XContainerListener >& xListener )
-    throw(RuntimeException)
+void SAL_CALL BasicGroupAccess::removeContainerListener( const uno::Reference< css::container::XContainerListener >& xListener )
+    throw(uno::RuntimeException)
 {
     configapi::implRemoveListener( getNode(), xListener );
 }

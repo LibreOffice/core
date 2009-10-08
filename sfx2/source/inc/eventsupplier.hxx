@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: eventsupplier.hxx,v $
- * $Revision: 1.14 $
+ * $Revision: 1.14.28.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -36,6 +36,8 @@
 #include <com/sun/star/container/XSet.hpp>
 #include <com/sun/star/document/XEventListener.hpp>
 #include <com/sun/star/document/XEventBroadcaster.hpp>
+#include <com/sun/star/document/XDocumentEventBroadcaster.hpp>
+#include <com/sun/star/document/XDocumentEventListener.hpp>
 #include <com/sun/star/document/XEventsSupplier.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/task/XJobExecutor.hpp>
@@ -48,7 +50,7 @@
 #include <cppuhelper/implbase2.hxx>
 #include <cppuhelper/implbase3.hxx>
 #include <cppuhelper/implbase4.hxx>
-#include <cppuhelper/implbase5.hxx>
+#include <cppuhelper/implbase7.hxx>
 #include <comphelper/sequenceashashmap.hxx>
 #include <comphelper/sequenceasvector.hxx>
 #include <sfx2/sfxuno.hxx>
@@ -178,17 +180,20 @@ class ModelCollectionEnumeration : public ModelCollectionMutexBase
 
 //=============================================================================
 class SfxGlobalEvents_Impl : public ModelCollectionMutexBase
-                           , public ::cppu::WeakImplHelper5< ::com::sun::star::lang::XServiceInfo
+                           , public ::cppu::WeakImplHelper7< ::com::sun::star::lang::XServiceInfo
                                                            , ::com::sun::star::document::XEventsSupplier
                                                            , ::com::sun::star::document::XEventBroadcaster
+                                                           , ::com::sun::star::document::XDocumentEventBroadcaster
                                                            , ::com::sun::star::document::XEventListener
+                                                           , ::com::sun::star::document::XDocumentEventListener
                                                            , ::com::sun::star::container::XSet >
                            , public SfxListener
 {
     ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > m_xSMGR;
     ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameReplace > m_xEvents;
-    ::com::sun::star::uno::WeakReference< ::com::sun::star::task::XJobExecutor > m_xJobsBinding;
-    OINTERFACECONTAINERHELPER m_aInterfaceContainer;
+    ::com::sun::star::uno::WeakReference< ::com::sun::star::document::XEventListener > m_xJobExecutorListener;
+    OINTERFACECONTAINERHELPER m_aLegacyListeners;
+    OINTERFACECONTAINERHELPER m_aDocumentListeners;
     TModelList m_lModels;
     GlobalEventConfig* pImp;
 
@@ -210,9 +215,17 @@ public:
     virtual void SAL_CALL removeEventListener( const ::com::sun::star::uno::Reference< ::com::sun::star::document::XEventListener >& xListener)
         throw(::com::sun::star::uno::RuntimeException);
 
+    // css.document.XDocumentEventBroadcaster
+    virtual void SAL_CALL addDocumentEventListener( const ::com::sun::star::uno::Reference< ::com::sun::star::document::XDocumentEventListener >& _Listener ) throw (::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL removeDocumentEventListener( const ::com::sun::star::uno::Reference< ::com::sun::star::document::XDocumentEventListener >& _Listener ) throw (::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL notifyDocumentEvent( const ::rtl::OUString& _EventName, const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XController2 >& _ViewController, const ::com::sun::star::uno::Any& _Supplement ) throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::NoSupportException, ::com::sun::star::uno::RuntimeException);
+
     // css.document.XEventListener
     virtual void SAL_CALL notifyEvent(const ::com::sun::star::document::EventObject& aEvent)
         throw(::com::sun::star::uno::RuntimeException);
+
+    // css.document.XDocumentEventListener
+    virtual void SAL_CALL documentEventOccured( const ::com::sun::star::document::DocumentEvent& Event ) throw (::com::sun::star::uno::RuntimeException);
 
     // css.container.XSet
     virtual sal_Bool SAL_CALL has(const ::com::sun::star::uno::Any& aElement)
@@ -247,8 +260,8 @@ private:
 
     // threadsafe
     void implts_notifyJobExecution(const ::com::sun::star::document::EventObject& aEvent);
-    void implts_checkAndExecuteEventBindings(const ::com::sun::star::document::EventObject& aEvent);
-    void implts_notifyListener(const ::com::sun::star::document::EventObject& aEvent);
+    void implts_checkAndExecuteEventBindings(const ::com::sun::star::document::DocumentEvent& aEvent);
+    void implts_notifyListener(const ::com::sun::star::document::DocumentEvent& aEvent);
 
     // not threadsafe
     TModelList::iterator impl_searchDoc(const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >& xModel);

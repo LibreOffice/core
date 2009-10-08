@@ -46,8 +46,6 @@ namespace configmgr
     namespace localehelper
     {
     // -------------------------------------------------------------------------
-        using ::rtl::OUString;
-        using ::com::sun::star::lang::Locale;
         namespace uno       = ::com::sun::star::uno;
         namespace lang      = ::com::sun::star::lang;
 
@@ -55,40 +53,36 @@ namespace configmgr
         extern char const * const c_sAnyLanguage;
         extern char const * const c_sDefLanguage;
 
-        extern bool isAnyLanguage(OUString const & _sLanguage);
-        extern bool isDefaultLanguage(OUString const & _sLanguage);
+        extern bool isAnyLanguage(rtl::OUString const & _sLanguage);
+        extern bool isDefaultLanguage(rtl::OUString const & _sLanguage);
 
-        extern OUString getAnyLanguage();
-        extern OUString getDefaultLanguage();
+        extern rtl::OUString getAnyLanguage();
+        extern rtl::OUString getDefaultLanguage();
 
-        extern Locale getAnyLocale();
-        extern Locale getDefaultLocale();
+        extern com::sun::star::lang::Locale getAnyLocale();
+        extern com::sun::star::lang::Locale getDefaultLocale();
 
     // -------------------------------------------------------------------------
-    /// Type for storing a list of Locales
-        typedef std::vector< Locale > LocaleSequence;
-        typedef LocaleSequence::size_type SequencePos;
-
-        // the max value of SequencePos - marks out-of-range (Value == -1 == ~0)
-        SequencePos const c_noPosition = SequencePos(0)-SequencePos(1);
+        // the max value of std::vector< com::sun::star::lang::Locale >::size_type - marks out-of-range (Value == -1 == ~0)
+        std::vector< com::sun::star::lang::Locale >::size_type const c_noPosition = std::vector< com::sun::star::lang::Locale >::size_type(0)-std::vector< com::sun::star::lang::Locale >::size_type(1);
 
         // conversion helpers
-        Locale makeLocale(OUString const& sLocaleName_);
-        OUString makeIsoLocale(Locale const& aUnoLocale_);
+        com::sun::star::lang::Locale makeLocale(rtl::OUString const& sLocaleName_);
+        rtl::OUString makeIsoLocale(com::sun::star::lang::Locale const& aUnoLocale_);
 
-        LocaleSequence makeLocaleSequence(uno::Sequence<OUString> const& sLocaleNames_);
-        uno::Sequence<OUString> makeIsoSequence(LocaleSequence const& aLocales_);
+        std::vector< com::sun::star::lang::Locale > makeLocaleSequence(uno::Sequence<rtl::OUString> const& sLocaleNames_);
+        uno::Sequence<rtl::OUString> makeIsoSequence(std::vector< com::sun::star::lang::Locale > const& aLocales_);
 
         inline
-        bool equalLocale(Locale const & lhs, Locale const & rhs)
+        bool equalLocale(com::sun::star::lang::Locale const & lhs, com::sun::star::lang::Locale const & rhs)
         { return lhs.Language == rhs.Language && lhs.Country == rhs.Country; }
 
         inline
-        bool equalLanguage(Locale const & lhs, Locale const & rhs)
+        bool equalLanguage(com::sun::star::lang::Locale const & lhs, com::sun::star::lang::Locale const & rhs)
         { return lhs.Language == rhs.Language; }
     // -------------------------------------------------------------------------
-        bool designatesAllLocales(Locale const& aLocale_);
-        bool designatesAllLocales(LocaleSequence const& aLocales_);
+        bool designatesAllLocales(com::sun::star::lang::Locale const& aLocale_);
+        bool designatesAllLocales(std::vector< com::sun::star::lang::Locale > const& aLocales_);
     // -------------------------------------------------------------------------
 
         /// result of matching a locale against a target locale
@@ -102,14 +96,14 @@ namespace configmgr
         };
 
         /// compare two locales for 'nearness'
-        MatchQuality match(Locale const& aLocale_, Locale const& aTarget_);
+        MatchQuality match(com::sun::star::lang::Locale const& aLocale_, com::sun::star::lang::Locale const& aTarget_);
 
 
     // -------------------------------------------------------------------------
         /// result of matching a Locale against a target sequence of locales
         class MatchResult
         {
-            SequencePos     m_nPos;
+            std::vector< com::sun::star::lang::Locale >::size_type      m_nPos;
             MatchQuality    m_eQuality;
 
         public:
@@ -118,7 +112,7 @@ namespace configmgr
             { reset(); }
 
             /// construct a result from given parameters - use with care
-            MatchResult(SequencePos nPos_, MatchQuality eQuality_)
+            MatchResult(std::vector< com::sun::star::lang::Locale >::size_type nPos_, MatchQuality eQuality_)
             : m_nPos( nPos_ )
             , m_eQuality(eQuality_)
             {}
@@ -132,12 +126,12 @@ namespace configmgr
             bool isBest() const { return m_nPos == 0 && m_eQuality == MATCH_LOCALE; }
 
             /// retrieve the position that was matched
-            SequencePos position() const { return m_nPos; }
+            std::vector< com::sun::star::lang::Locale >::size_type position() const { return m_nPos; }
             /// retrieve the quality of match
             MatchQuality quality() const { return m_eQuality; }
 
             /// assign the given position and quality, if they are an improvement
-            bool improve(SequencePos nPos, MatchQuality eQuality_);
+            bool improve(std::vector< com::sun::star::lang::Locale >::size_type nPos, MatchQuality eQuality_);
 
             /// reset to no match or best match state
             void reset()
@@ -177,21 +171,21 @@ namespace configmgr
         { return !(lhs < rhs); }
 
         /// improve an existing match of a locale against a sequence of locales
-        bool improveMatch(MatchResult& rMatch_, Locale const& aLocale_, LocaleSequence const& aTarget_);
+        bool improveMatch(MatchResult& rMatch_, com::sun::star::lang::Locale const& aLocale_, std::vector< com::sun::star::lang::Locale > const& aTarget_);
 
         /// match a locale against a sequence of locales for a given quality level
-        bool isMatch(Locale const& aLocales, LocaleSequence const& aTarget_, MatchQuality eRequiredQuality_);
+        bool isMatch(com::sun::star::lang::Locale const& aLocales, std::vector< com::sun::star::lang::Locale > const& aTarget_, MatchQuality eRequiredQuality_);
 
     // -------------------------------------------------------------------------
         /// add defaults to a sequence of locales
-        void addFallbackLocales(LocaleSequence& aTargetList_);
+        void addFallbackLocales(std::vector< com::sun::star::lang::Locale >& aTargetList_);
 
     // -------------------------------------------------------------------------
         class FindBestLocale
         {
         public:
             /// construct a MatchLocale with a single target locale
-            FindBestLocale(Locale const& aTarget_);
+            FindBestLocale(com::sun::star::lang::Locale const& aTarget_);
 
             /// is there any match ?
             bool isMatch() const { return m_aResult.isMatch(); }
@@ -203,15 +197,15 @@ namespace configmgr
             MatchQuality getMatchQuality() const { return m_aResult.quality(); }
 
             /// check, if the given locale improves the quality. if it does, accept it
-            bool accept(Locale const& aLocale_);
+            bool accept(com::sun::star::lang::Locale const& aLocale_);
 
             /// reset the match result, indicating whether a match is needed at all
             void reset(bool bNeedLocale_ = true);
 
         private:
-            void implSetTarget(LocaleSequence const& aTarget_);
+            void implSetTarget(std::vector< com::sun::star::lang::Locale > const& aTarget_);
 
-            LocaleSequence  m_aTarget;
+            std::vector< com::sun::star::lang::Locale > m_aTarget;
             MatchResult     m_aResult;
         };
 

@@ -31,7 +31,8 @@
 #ifndef INCLUDED_SHARABLE_ANYDATA_HXX
 #define INCLUDED_SHARABLE_ANYDATA_HXX
 
-#include "types.hxx"
+#include "rtl/ustring.h"
+#include "sal/types.h"
 
 //-----------------------------------------------------------------------------
 namespace com { namespace sun { namespace star { namespace uno {
@@ -50,27 +51,25 @@ namespace configmgr
 
         union AnyData
         {
-            typedef sal_uInt8 TypeCode;
-
             sal_Bool    boolValue;
             sal_Int16   shortValue;
             sal_Int32   intValue;
             sal_Int64  *longValue;
             double     *doubleValue;
-            Vector      binaryValue;    // points to counted sal_(u)Int8 []
-            String      stringValue;    // points to counted sal_Unicode []
-            Vector      sequenceValue;  // points to counted AnyData [] (or SomeType [] ?)
+            sal_uInt8 *      binaryValue;    // points to counted sal_(u)Int8 []
+            rtl_uString *      stringValue;    // points to counted sal_Unicode []
+            sal_uInt8 *      sequenceValue;  // points to counted AnyData [] (or SomeType [] ?)
             void       *data;           // used to initialize to 0
         };
 
     //-----------------------------------------------------------------------------
 
-        AnyData::TypeCode getTypeCode(::com::sun::star::uno::Type const & _aType);
-        ::com::sun::star::uno::Type getUnoType( AnyData::TypeCode _aType);
+        sal_uInt8 getTypeCode(::com::sun::star::uno::Type const & _aType);
+        ::com::sun::star::uno::Type getUnoType( sal_uInt8 _aType);
 
-        AnyData allocData(AnyData::TypeCode _aType, ::com::sun::star::uno::Any const & _aAny);
-        void    freeData(AnyData::TypeCode _aType, AnyData _aData);
-        ::com::sun::star::uno::Any readData(AnyData::TypeCode _aType, AnyData _aData);
+        AnyData allocData(sal_uInt8 _aType, ::com::sun::star::uno::Any const & _aAny);
+        void    freeData(sal_uInt8 _aType, AnyData _aData);
+        ::com::sun::star::uno::Any readData(sal_uInt8 _aType, AnyData _aData);
 
     //-----------------------------------------------------------------------------
     }

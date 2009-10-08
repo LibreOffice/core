@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: configgroup.cxx,v $
- * $Revision: 1.14 $
+ * $Revision: 1.14.14.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -37,7 +37,7 @@
 #include "anynoderef.hxx"
 #include "nodechange.hxx"
 #include "nodechangeimpl.hxx"
-#include "treeimpl.hxx"
+#include "tree.hxx"
 #include "groupnodeimpl.hxx"
 #include "valuenodeimpl.hxx"
 #include "typeconverter.hxx"
@@ -53,29 +53,26 @@ namespace configmgr
 // class GroupUpdateHelper
 //-----------------------------------------------------------------------------
 
-GroupUpdateHelper::GroupUpdateHelper(Tree const& aParentTree, NodeRef const& aGroupNode)
+GroupUpdateHelper::GroupUpdateHelper(rtl::Reference< Tree > const& aParentTree, NodeRef const& aGroupNode)
 : m_aTree(aParentTree)
 , m_aNode(aGroupNode)
 {
     implValidateTree(m_aTree);
     implValidateNode(m_aTree,m_aNode);
 
-    if (! m_aTree.getView().isGroupNode(m_aNode) )
+    if (! view::ViewTreeAccess(m_aTree.get()).isGroupNode(m_aNode) )
         throw Exception("INTERNAL ERROR: Group Member Update: node is not a group");
 }
 //-----------------------------------------------------------------------------
 
-void GroupUpdateHelper::implValidateTree(Tree const& aTree) const
+void GroupUpdateHelper::implValidateTree(rtl::Reference< Tree > const& aTree) const
 {
-    if (aTree.isEmpty())
+    if (isEmpty(aTree.get()))
         throw Exception("INTERNAL ERROR: Group Member Update: Unexpected NULL tree");
 
-    typedef rtl::Reference<TreeImpl> TreeHolder;
-
     // check for proper nesting
-    TreeHolder const aParentTree = TreeImplHelper::impl(m_aTree);
-    for(TreeHolder aTestTree =  TreeImplHelper::impl(aTree);
-        aTestTree != aParentTree;           // search this as ancestor tree
+    for(rtl::Reference<Tree> aTestTree = aTree;
+        aTestTree != m_aTree;           // search this as ancestor tree
         aTestTree = aTestTree->getContextTree() )
     {
         if (!aTestTree.is()) // no more trees to look for
@@ -84,25 +81,25 @@ void GroupUpdateHelper::implValidateTree(Tree const& aTree) const
 }
 //-----------------------------------------------------------------------------
 
-void GroupUpdateHelper::implValidateNode(Tree const& aTree, NodeRef const& aNode) const
+void GroupUpdateHelper::implValidateNode(rtl::Reference< Tree > const& aTree, NodeRef const& aNode) const
 {
     if (!aNode.isValid())
         throw Exception("INTERNAL ERROR: Group Member Update: Unexpected NULL node");
 
-    if (!aTree.isValidNode(aNode))
+    if (!aTree->isValidNode(aNode.getOffset()))
         throw Exception("INTERNAL ERROR: Group Member Update: node does not match tree");
 }
 //-----------------------------------------------------------------------------
 
-void GroupUpdateHelper::implValidateNode(Tree const& aTree, ValueRef const& aNode) const
+void GroupUpdateHelper::implValidateNode(rtl::Reference< Tree > const& aTree, ValueRef const& aNode) const
 {
     if (!aNode.isValid())
         throw Exception("INTERNAL ERROR: Group Member Update: Unexpected NULL node");
 
-    if (!aTree.isValidNode(aNode))
+    if (!aTree->isValidValueNode(aNode))
         throw Exception("INTERNAL ERROR: Group Member Update: changed node does not match tree");
 
-    if (aTree.getAttributes(aNode).isReadonly())
+    if (aTree->getAttributes(aNode).isReadonly())
         throw ConstraintViolation( "Group Member Update: Node is read-only !" );
 
 }
@@ -123,14 +120,14 @@ void GroupUpdateHelper::validateNode(NodeRef const& aNode) const
 /** a helper that gets the UNO <type scope='com::sun::star::uno'>Type</type>
     for a UNO <type scope='com::sun::star::uno'>Any</type>.
 */
-static inline UnoType getUnoAnyType()
+static inline com::sun::star::uno::Type getUnoAnyType()
 {
-    UnoAny const * const selectAny = 0;
+    com::sun::star::uno::Any const * const selectAny = 0;
     return ::getCppuType(selectAny);
 }
 //-----------------------------------------------------------------------------
 
-bool isPossibleValueType(UnoType const& aValueType)
+bool isPossibleValueType(com::sun::star::uno::Type const& aValueType)
 {
     switch(aValueType.getTypeClass())
     {
@@ -171,7 +168,7 @@ bool isPossibleValueType(UnoType const& aValueType)
 }
 
 //-----------------------------------------------------------------------------
-bool convertCompatibleValue(UnoTypeConverter const& xTypeConverter, uno::Any& rConverted, UnoAny const& rNewValue, UnoType const& rTargetType)
+bool convertCompatibleValue(com::sun::star::uno::Reference<com::sun::star::script::XTypeConverter> const& xTypeConverter, uno::Any& rConverted, com::sun::star::uno::Any const& rNewValue, com::sun::star::uno::Type const& rTargetType)
 {
     OSL_ASSERT( isPossibleValueType(rTargetType) );
 
@@ -197,8 +194,6 @@ bool convertCompatibleValue(UnoTypeConverter const& xTypeConverter, uno::Any& rC
     catch(css::script::CannotConvertException&)
     {
         // try to do more conversion here ?!
-
-        // throw a WrappedUnoException here ?!
         return false;
     }
     catch(uno::Exception&)
@@ -216,31 +211,31 @@ bool convertCompatibleValue(UnoTypeConverter const& xTypeConverter, uno::Any& rC
 // class GroupUpdater
 //-----------------------------------------------------------------------------
 
-GroupUpdater::GroupUpdater(Tree const& aParentTree, NodeRef const& aGroupNode, UnoTypeConverter const& xConverter)
+GroupUpdater::GroupUpdater(rtl::Reference< Tree > const& aParentTree, NodeRef const& aGroupNode, com::sun::star::uno::Reference<com::sun::star::script::XTypeConverter> const& xConverter)
 : m_aHelper(aParentTree,aGroupNode)
 , m_xTypeConverter(xConverter)
 {
 }
 //-----------------------------------------------------------------------------
 
-UnoAny GroupUpdater::implValidateValue(Tree const& aTree, ValueRef const& aNode, UnoAny const& aValue) const
+com::sun::star::uno::Any GroupUpdater::implValidateValue(rtl::Reference< Tree > const& aTree, ValueRef const& aNode, com::sun::star::uno::Any const& aValue) const
 {
-    UnoType aValueType  = aValue.getValueType();
-    UnoType aTargetType = aTree.getUnoType(aNode);
+    com::sun::star::uno::Type aValueType    = aValue.getValueType();
+    com::sun::star::uno::Type aTargetType = aTree->getUnoType(aNode);
 
     OSL_ENSURE( aTargetType.getTypeClass() == uno::TypeClass_ANY || isPossibleValueType(aTargetType),
                 "Invalid value type found on existing property" );
 
     OSL_ASSERT( aValueType.getTypeClass() != uno::TypeClass_ANY);
 
-    UnoAny aRet;
+    com::sun::star::uno::Any aRet;
 
     if (!aValue.hasValue())
     {
-        if (!aTree.getAttributes(aNode).isNullable())
+        if (!aTree->getAttributes(aNode).isNullable())
         {
             rtl::OString sError("Group Member Update: Node (");
-            sError += OUSTRING2ASCII(aTree.getName(aNode).toString());
+            sError += OUSTRING2ASCII(aNode.m_sNodeName);
             sError += ") is not nullable !";
             throw ConstraintViolation( sError );
         }
@@ -274,19 +269,19 @@ UnoAny GroupUpdater::implValidateValue(Tree const& aTree, ValueRef const& aNode,
 }
 //-----------------------------------------------------------------------------
 
-NodeChange GroupUpdater::validateSetValue(ValueRef const& aValueNode, UnoAny const& newValue )
+NodeChange GroupUpdater::validateSetValue(ValueRef const& aValueNode, com::sun::star::uno::Any const& newValue )
 {
     m_aHelper.validateNode(aValueNode);
 
-    UnoAny aNewValue = implValidateValue(m_aHelper.tree(), aValueNode, newValue);
+    com::sun::star::uno::Any aNewValue = implValidateValue(m_aHelper.tree(), aValueNode, newValue);
 
     // now build the specific change
     std::auto_ptr<ValueChangeImpl> pChange( new ValueReplaceImpl(aNewValue) );
 
-    NodeRef aParent = m_aHelper.tree().getParent(aValueNode);
+    NodeRef aParent = m_aHelper.tree()->getParent(aValueNode);
     pChange->setTarget(
-                m_aHelper.tree().getView().toGroupNode(aParent),
-                m_aHelper.tree().getName(aValueNode)
+               view::ViewTreeAccess(m_aHelper.tree().get()).toGroupNode(aParent),
+                aValueNode.m_sNodeName
             );
 
     return NodeChange(pChange.release());
@@ -309,10 +304,10 @@ namespace
         NodeDefaulter(GroupDefaulter& _rUpdater) : updater(_rUpdater), result() {}
 
         /// do the operation on <var>aNode</var>. needs to be implemented by concrete visitor classes
-        Result handle(Tree const& aTree, NodeRef const& aNode);
+        Result handle(rtl::Reference< Tree > const& aTree, NodeRef const& aNode);
 
         /// do the operation on <var>aValue</var>. needs to be implemented by concrete visitor classes
-        Result handle(Tree const& aTree, ValueRef const& aValue);
+        Result handle(rtl::Reference< Tree > const& aTree, ValueRef const& aValue);
 
         inline void addResult(NodeChange const& aChange)
         {
@@ -321,13 +316,13 @@ namespace
         }
     };
 
-    NodeVisitor::Result NodeDefaulter::handle(Tree const& , NodeRef const& aNode)
+    NodeVisitor::Result NodeDefaulter::handle(rtl::Reference< Tree > const& , NodeRef const& aNode)
     {
         addResult( updater.validateSetToDefaultState(aNode) );
         return CONTINUE;
     }
 
-    NodeVisitor::Result NodeDefaulter::handle(Tree const& , ValueRef const& aValue)
+    NodeVisitor::Result NodeDefaulter::handle(rtl::Reference< Tree > const& , ValueRef const& aValue)
     {
         addResult( updater.validateSetToDefaultValue(aValue) );
         return CONTINUE;
@@ -339,21 +334,19 @@ namespace
 // class GroupDefaulter
 //-----------------------------------------------------------------------------
 
-GroupDefaulter::GroupDefaulter(Tree const& _aParentTree, NodeRef const& _aGroupNode, DefaultProvider const& _aProvider)
+GroupDefaulter::GroupDefaulter(rtl::Reference< Tree > const& _aParentTree, NodeRef const& _aGroupNode, DefaultProvider const& _aProvider)
 : m_aHelper(_aParentTree,_aGroupNode)
 , m_aDefaultProvider(_aProvider)
 , m_bHasDoneSet(false)
 {
 }
 //-----------------------------------------------------------------------------
-bool GroupDefaulter::isDataAvailable(TreeRef const& _aParentTree, NodeRef const& _aGroupNode)
+bool GroupDefaulter::isDataAvailable(rtl::Reference< Tree > const& _aParentTree, NodeRef const& _aGroupNode)
 {
-    Tree aTempTree(_aParentTree);
-
-    return aTempTree.areValueDefaultsAvailable(_aGroupNode);
+    return _aParentTree->areValueDefaultsAvailable(_aGroupNode);
 }
 //-----------------------------------------------------------------------------
-bool GroupDefaulter::ensureDataAvailable(TreeRef const& _aParentTree, NodeRef const& _aGroupNode, DefaultProvider const& _aDataSource)
+bool GroupDefaulter::ensureDataAvailable(rtl::Reference< Tree > const& _aParentTree, NodeRef const& _aGroupNode, DefaultProvider const& _aDataSource)
 {
     return  isDataAvailable(_aParentTree, _aGroupNode) ||
             _aDataSource.fetchDefaultData( _aParentTree );
@@ -362,7 +355,7 @@ bool GroupDefaulter::ensureDataAvailable(TreeRef const& _aParentTree, NodeRef co
 
 bool GroupDefaulter::isDataAvailable()
 {
-    return m_aHelper.tree().areValueDefaultsAvailable(m_aHelper.node());
+    return m_aHelper.tree()->areValueDefaultsAvailable(m_aHelper.node());
 }
 //-----------------------------------------------------------------------------
 
@@ -370,19 +363,16 @@ NodeChange GroupDefaulter::validateSetToDefaultValue(ValueRef const& aValueNode)
 {
     m_aHelper.validateNode(aValueNode);
 
-    //if (!TreeImplHelper::member_node(aValueNode).canGetDefaultValue())
-    //  m_aTree.ensureDefaults();
-
-    if (!m_aHelper.tree().hasNodeDefault(aValueNode))
+    if (!m_aHelper.tree()->hasNodeDefault(aValueNode))
         throw Exception("INTERNAL ERROR: Group Member Update: Node has no default value" );
 
     // now build the specific change
     std::auto_ptr<ValueChangeImpl> pChange( new ValueResetImpl() );
 
-    NodeRef aParent = m_aHelper.tree().getParent(aValueNode);
+    NodeRef aParent = m_aHelper.tree()->getParent(aValueNode);
     pChange->setTarget(
-                m_aHelper.tree().getView().toGroupNode(aParent),
-                m_aHelper.tree().getName(aValueNode)
+               view::ViewTreeAccess(m_aHelper.tree().get()).toGroupNode(aParent),
+                aValueNode.m_sNodeName
             );
 
     return NodeChange(pChange.release());
@@ -396,7 +386,7 @@ NodeChange GroupDefaulter::validateSetToDefaultState(NodeRef const& aNode)
     NodeChange aResult;
 
     // only works for set nodes - groups are left alone
-    if ( m_aHelper.tree().getView().isSetNode(aNode) )
+    if ( view::ViewTreeAccess(m_aHelper.tree().get()).isSetNode(aNode) )
     {
        aResult = SetDefaulter( m_aHelper.tree(), aNode, m_aDefaultProvider ).validateSetToDefaultState();
     }
@@ -411,7 +401,7 @@ NodeChanges GroupDefaulter::validateSetAllToDefault()
 {
     NodeDefaulter aDefaulter(*this);
 
-    m_aHelper.tree().dispatchToChildren(m_aHelper.node(),aDefaulter);
+    m_aHelper.tree()->dispatchToChildren(m_aHelper.node(),aDefaulter);
 
     return aDefaulter.result;
 }

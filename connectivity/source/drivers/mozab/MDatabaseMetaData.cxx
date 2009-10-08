@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: MDatabaseMetaData.cxx,v $
- * $Revision: 1.16 $
+ * $Revision: 1.16.56.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -40,7 +40,7 @@
 #include <connectivity/FValue.hxx>
 #include <com/sun/star/sdbc/ColumnValue.hpp>
 #include <com/sun/star/sdbc/ColumnSearch.hpp>
-
+#include "resource/common_res.hrc"
 #include <vector>
 
 #if OSL_DEBUG_LEVEL > 0
@@ -97,7 +97,7 @@ ODatabaseMetaDataResultSet::ORows& SAL_CALL ODatabaseMetaData::getColumnRows(
     ::std::vector< ::rtl::OUString > tables;
     ::std::vector< ::rtl::OUString > types;
     if ( !m_pDbMetaDataHelper->getTableStrings( m_pConnection, tables, types) ) {
-        getOwnConnection()->throwGenericSQLException( m_pDbMetaDataHelper->getErrorResourceId() );
+        getOwnConnection()->throwGenericSQLException( m_pDbMetaDataHelper->getErrorResourceId(),*this );
     }
 
     // ****************************************************
@@ -961,7 +961,7 @@ Reference< XResultSet > SAL_CALL ODatabaseMetaData::getTables(
     // pResultSet->setRows( aRows );
     ODatabaseMetaDataResultSet::ORows _rRows;
     if ( !m_pDbMetaDataHelper->getTables( m_pConnection, tableNamePattern, types,_rRows ) ) {
-        getOwnConnection()->throwGenericSQLException( m_pDbMetaDataHelper->getErrorResourceId() );
+        getOwnConnection()->throwGenericSQLException( m_pDbMetaDataHelper->getErrorResourceId() ,*this);
     }
     pResultSet->setRows( _rRows );
 
@@ -979,7 +979,7 @@ Reference< XResultSet > SAL_CALL ODatabaseMetaData::getTablePrivileges(
     ::std::vector< ::rtl::OUString > tables;
     ::std::vector< ::rtl::OUString > types;
     if ( !m_pDbMetaDataHelper->getTableStrings( m_pConnection, tables, types ) )
-        getOwnConnection()->throwGenericSQLException( m_pDbMetaDataHelper->getErrorResourceId() );
+        getOwnConnection()->throwGenericSQLException( m_pDbMetaDataHelper->getErrorResourceId() ,*this);
 
     ::connectivity::ODatabaseMetaDataResultSet::ORows aRows;
     ::connectivity::ODatabaseMetaDataResultSet::ORow aRow(8);

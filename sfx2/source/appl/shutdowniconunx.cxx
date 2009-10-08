@@ -291,6 +291,7 @@ static void refresh_menu( GtkWidget *pMenu )
     gtk_widget_set_sensitive( pOpenMenuItem, !bModal);
 }
 
+extern "C" {
 static void
 layout_menu( GtkMenu *menu,
              gint *x, gint *y, gboolean *push_in,
@@ -311,6 +312,7 @@ layout_menu( GtkMenu *menu,
         (*y) += ebox->allocation.height;
 
     *push_in = TRUE;
+}
 }
 
 static gboolean display_menu_cb( GtkWidget *,

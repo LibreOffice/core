@@ -34,6 +34,7 @@
 #include "configexcept.hxx"
 #include "configpath.hxx"
 #include <rtl/ref.hxx>
+#include <salhelper/simplereferenceobject.hxx>
 #ifndef _CONFIGMGR_UTILITY_HXX_
 #include <utility.hxx>
 #endif
@@ -41,22 +42,14 @@
 namespace configmgr
 {
 //-----------------------------------------------------------------------------
-    struct IConfigTemplateManager;
     class RequestOptions;
-//-----------------------------------------------------------------------------
-    namespace data { class SetNodeAccess; }
-//-----------------------------------------------------------------------------
+    class TreeManager;
+    namespace sharable { struct SetNode; }
     namespace configuration
     {
 //-----------------------------------------------------------------------------
 
-        class Name;
         class AbsolutePath;
-        //---------------------------------------------------------------------
-
-        typedef com::sun::star::uno::Type       UnoType;
-        typedef com::sun::star::uno::Any        UnoAny;
-
 //-----------------------------------------------------------------------------
 
         struct TemplateProvider_Impl;
@@ -67,10 +60,8 @@ namespace configmgr
 
             rtl::Reference<TemplateProvider_Impl> m_aImpl;
         public:
-            typedef rtl::Reference< IConfigTemplateManager > TemplateManagerRef;
-        public:
             TemplateProvider(); // creates an empty (invalid) template instance provider
-            TemplateProvider(TemplateManagerRef const & xProvider, RequestOptions const& xOptions);
+            TemplateProvider(rtl::Reference< TreeManager > const & xProvider, RequestOptions const& xOptions);
             TemplateProvider(TemplateProvider const& aOther);
             TemplateProvider& operator=(TemplateProvider const& aOther);
             ~TemplateProvider();
@@ -79,17 +70,14 @@ namespace configmgr
         };
 //-----------------------------------------------------------------------------
 
-        class Template;
-        typedef rtl::Reference<Template> TemplateHolder;
-
         /// provides information about the elements of a <type>Node</type> that is a Container ("set").
-        class Template : public configmgr::SimpleReferenceObject
+        class Template : public salhelper::SimpleReferenceObject
         {
-            Name        m_aName;
-            Name        m_aModule;
-            UnoType     m_aInstanceType;
+            rtl::OUString m_aName;
+            rtl::OUString m_aModule;
+            com::sun::star::uno::Type       m_aInstanceType;
         private:
-            explicit Template(Name const& aName, Name const& aModule,UnoType const& aType);
+            explicit Template(rtl::OUString const& aName, rtl::OUString const& aModule,com::sun::star::uno::Type const& aType);
 
         public:
         /// checks if the type of an instance of this is known
@@ -99,22 +87,22 @@ namespace configmgr
             bool            isInstanceValue() const;
 
         /// get the UNO type for instances (primarily (only ?) for 'value' templates) <p> PRE: the instance type is known </p>
-            UnoType         getInstanceType() const;
+            com::sun::star::uno::Type           getInstanceType() const;
 
         /// get the path where the template is located
-            OUString        getPathString() const;
+            rtl::OUString       getPathString() const;
 
         /// get the local name of the template
-            Name            getName() const { return m_aName; }
+            rtl::OUString getName() const { return m_aName; }
 
         /// get the package name of the template
-            Name            getModule() const { return m_aModule; }
+            rtl::OUString getModule() const { return m_aModule; }
 
             friend class TemplateImplHelper;
         };
 
         /// make a template instance that matches the elements of the given set. Ensures that the element type is known
-        TemplateHolder makeSetElementTemplate(data::SetNodeAccess const& _aSet, TemplateProvider const& _aProvider);
+        rtl::Reference<Template> makeSetElementTemplate(sharable::SetNode * set, TemplateProvider const& _aProvider);
 //-----------------------------------------------------------------------------
     }
 }

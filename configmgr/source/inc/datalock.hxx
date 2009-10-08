@@ -31,7 +31,11 @@
 #ifndef CONFIGMGR_DATALOCK_HXX_
 #define CONFIGMGR_DATALOCK_HXX_
 
-#include <osl/mutex.hxx>
+#include "sal/config.h"
+
+#include "osl/interlck.h"
+#include "osl/mutex.hxx"
+
 namespace configmgr {
 
     class UnoApiLock
@@ -63,7 +67,5 @@ namespace configmgr {
         void clear() { if (mbSet) { mbSet = false; release(); } }
     };
 }
-
-using configmgr::UnoApiLock;
 
 #endif // CONFIGMGR_DATALOCK_HXX_

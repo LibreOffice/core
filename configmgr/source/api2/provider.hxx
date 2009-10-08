@@ -43,6 +43,7 @@
 #include <rtl/ustring.hxx>
 #include <vos/ref.hxx>
 #include <cppuhelper/implbase4.hxx>
+#include <comphelper/proparrhlp.hxx>
 #include <comphelper/propertycontainer.hxx>
 
 namespace configmgr
@@ -52,18 +53,10 @@ namespace configmgr
     namespace lang = css::lang;
     namespace beans = css::beans;
     namespace util = css::util;
-    using ::rtl::OUString;
-    using ::vos::ORef;
 
     class Module;
     class ContextReader;
     class OProviderImpl;
-
-    typedef ::cppu::ImplHelper4 <    lang::XMultiServiceFactory
-                                    ,lang::XLocalizable
-                                    ,util::XRefreshable
-                                    ,util::XFlushable
-                                >   OProvider_Base;
 
     //==========================================================================
     //= OProvider
@@ -71,20 +64,23 @@ namespace configmgr
     /** Base class to receive access to the configuration data. A provider for configuration is
         a factory for service which allow a readonly or update access to the configuration trees.
     */
-    class OProvider : protected ServiceComponentImpl
-                    , protected ::comphelper::OPropertyContainer
+    class OProvider:
+        private ServiceComponentImpl, private comphelper::OPropertyContainer,
+        public comphelper::OPropertyArrayUsageHelper< OProvider >
             // don't want to allow our derivees to access the mutex of ServiceComponentImpl
             // (this helps to prevent deadlocks: The mutex of the base class is used by the OComponentHelper to
             // protect addEvenetListener calls. Unfortunately these calls are made from within API object we create,
             // too, which can lead do deadlocks ....)
-                    , public OProvider_Base
+                    , public cppu::ImplHelper4< lang::XMultiServiceFactory, lang::XLocalizable, util::XRefreshable, util::XFlushable >
     {
-//      friend class OProviderFactory;
+    private:
         friend class OProviderDisposingListener;
 
-    protected:
         uno::Reference< uno::XComponentContext >            m_xContext;
         uno::Reference< lang::XEventListener >              m_xDisposeListener;
+        OProviderImpl * m_pImpl;
+        uno::Sequence< ::rtl::OUString >    m_aPrefetchNodes;
+        sal_Bool                            m_bEnableAsync;
 
     public:
         // make ServiceComponentImpl allocation functions public
@@ -93,10 +89,10 @@ namespace configmgr
         static void SAL_CALL operator delete( void * pMem ) throw()
             { ServiceComponentImpl::operator delete( pMem ); }
 
-        typedef uno::Reference< uno::XComponentContext > CreationContext;
-
-        OProvider(CreationContext const & xContext, ServiceImplementationInfo const* pInfo);
+        OProvider(uno::Reference< uno::XComponentContext > const & xContext, ServiceImplementationInfo const* pInfo);
         virtual ~OProvider();
+
+        void connect() throw (uno::Exception);
 
         /// XTypeOProvider
         virtual uno::Sequence< uno::Type > SAL_CALL getTypes(  ) throw(uno::RuntimeException);
@@ -109,23 +105,64 @@ namespace configmgr
         // XPropertySet
         virtual uno::Reference< beans::XPropertySetInfo > SAL_CALL getPropertySetInfo(  ) throw(uno::RuntimeException);
 
+        /// XMultiServiceFactory
+        virtual uno::Reference< uno::XInterface > SAL_CALL
+            createInstance( const rtl::OUString& aServiceSpecifier )
+                throw(uno::Exception, uno::RuntimeException);
+
+        virtual uno::Reference< uno::XInterface > SAL_CALL
+            createInstanceWithArguments( const ::rtl::OUString& ServiceSpecifier, const uno::Sequence< uno::Any >& Arguments )
+                throw(uno::Exception, uno::RuntimeException);
+
+        virtual uno::Sequence< rtl::OUString > SAL_CALL
+            getAvailableServiceNames(  )
+                throw(uno::RuntimeException);
+
+        /// XLocalizable
+        virtual void SAL_CALL
+            setLocale( const lang::Locale& eLocale )
+                throw (uno::RuntimeException);
+
+        virtual lang::Locale SAL_CALL
+            getLocale(  )
+                throw (uno::RuntimeException);
+
+
+        //XRefreshable
+         virtual void SAL_CALL
+            refresh(  )
+                throw (uno::RuntimeException);
+        virtual void SAL_CALL
+            addRefreshListener(
+                const uno::Reference< util::XRefreshListener >& aListener )
+                    throw (uno::RuntimeException);
+        virtual void SAL_CALL
+            removeRefreshListener(
+                const uno::Reference< util::XRefreshListener >& aListener )
+                    throw (uno::RuntimeException);
+        //XFlushable
+         virtual void SAL_CALL
+            flush(  )
+                throw (uno::RuntimeException);
+        virtual void SAL_CALL
+            addFlushListener(
+                const uno::Reference< util::XFlushListener >& aListener )
+                    throw (uno::RuntimeException);
+        virtual void SAL_CALL
+            removeFlushListener(
+                const uno::Reference< util::XFlushListener >& aListener )
+                    throw (uno::RuntimeException);
+
         // OPropertSetHelper
         virtual void SAL_CALL setFastPropertyValue_NoBroadcast(
-                                sal_Int32 nHandle,
-                                const uno::Any& rValue
-                                                 )
-                                                 throw (uno::Exception)
-        {
-            OPropertyContainer::setFastPropertyValue_NoBroadcast(nHandle, rValue);
-        }
+            sal_Int32 nHandle, const uno::Any& rValue) throw (uno::Exception);
 
         static sal_Int32 countServices(ServiceRegistrationInfo const* aInfo) { return ServiceRegistrationHelper(aInfo).countServices(); }
 
-    protected:
+    private:
         // creates a new session
         void implConnect(OProviderImpl& rFreshProviderImpl, const ContextReader& _rSettings) throw (uno::Exception);
 
-    protected:
         // disambuiguated access
         cppu::OBroadcastHelper & getBroadcastHelper()
         { return ServiceComponentImpl::rBHelper; }
@@ -134,9 +171,14 @@ namespace configmgr
         virtual void SAL_CALL disposing();
         virtual void SAL_CALL disposing(lang::EventObject const& rEvt) throw();
 
+        // OPropertyArrayUsageHelper
+        virtual ::cppu::IPropertyArrayHelper* createArrayHelper( ) const;
+
+        // OPropertySetHelper
+        virtual ::cppu::IPropertyArrayHelper & SAL_CALL getInfoHelper();
 
         // OPropertyContainer
-        void    registerProperty(const OUString& _rName, sal_Int32 _nHandle, sal_Int32 _nAttributes,
+        void    registerProperty(const rtl::OUString& _rName, sal_Int32 _nHandle, sal_Int32 _nAttributes,
                                  void* _pPointerToMember, const uno::Type& _rMemberType)
             { OPropertyContainer::registerProperty(_rName, _nHandle, _nAttributes, _pPointerToMember, _rMemberType);}
 
@@ -147,7 +189,6 @@ namespace configmgr
         uno::Any SAL_CALL queryPropertyInterface(uno::Type const& rType) throw (uno::RuntimeException)
         { return OPropertyContainer::queryInterface(rType);}
 
-    private:
         void attachToContext();
         uno::Reference< lang::XComponent > releaseContext();
         void discardContext(uno::Reference< lang::XComponent > const & xContext);

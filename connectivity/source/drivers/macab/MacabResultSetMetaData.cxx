@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: MacabResultSetMetaData.cxx,v $
- * $Revision: 1.3 $
+ * $Revision: 1.3.56.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -36,6 +36,7 @@
 #include "MacabRecords.hxx"
 #include "MacabAddressBook.hxx"
 #include "macabutilities.hxx"
+#include "resource/macab_res.hrc"
 
 using namespace connectivity::macab;
 using namespace com::sun::star::uno;
@@ -65,10 +66,7 @@ void MacabResultSetMetaData::setMacabFields(const ::vos::ORef<connectivity::OSQL
     // In case, somehow, we don't have anything with the name m_sTableName
     if(aRecords == NULL)
     {
-        ::dbtools::throwGenericSQLException(
-            ::rtl::OUString::createFromAscii("No Such Table!"),
-            NULL);
-        return;
+        impl_throwError(STR_NO_TABLE);
     }
 
     aHeader = aRecords->getHeader();
@@ -102,10 +100,7 @@ sal_Int32 SAL_CALL MacabResultSetMetaData::getColumnType(sal_Int32 column) throw
     // In case, somehow, we don't have anything with the name m_sTableName
     if(aRecords == NULL)
     {
-        ::dbtools::throwGenericSQLException(
-            ::rtl::OUString::createFromAscii("No Such Table!"),
-            NULL);
-        return -1;
+        impl_throwError(STR_NO_TABLE);
     }
 
     aHeader = aRecords->getHeader();
@@ -113,11 +108,7 @@ sal_Int32 SAL_CALL MacabResultSetMetaData::getColumnType(sal_Int32 column) throw
 
     if(aField == NULL)
     {
-        ::dbtools::throwGenericSQLException(
-            ::rtl::OUString::createFromAscii("No column at location: ") +
-            ::rtl::OUString::valueOf(column),
-            NULL);
-
+        ::dbtools::throwInvalidIndexException(*this,Any());
         return -1;
     }
 
@@ -150,10 +141,7 @@ sal_Bool SAL_CALL MacabResultSetMetaData::isCaseSensitive(sal_Int32) throw(SQLEx
     // In case, somehow, we don't have anything with the name m_sTableName
     if(aRecords == NULL)
     {
-        ::dbtools::throwGenericSQLException(
-            ::rtl::OUString::createFromAscii("No Such Table!"),
-            NULL);
-        return ::rtl::OUString();
+        impl_throwError(STR_NO_TABLE);
     }
 
     aHeader = aRecords->getHeader();

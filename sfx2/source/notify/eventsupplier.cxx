@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: eventsupplier.cxx,v $
- * $Revision: 1.36 $
+ * $Revision: 1.36.12.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -83,6 +83,7 @@ void SAL_CALL SfxEvents_Impl::replaceByName( const OUSTRING & aName, const ANY &
 {
     ::osl::MutexGuard aGuard( maMutex );
 
+    bool bReset = !rElement.hasValue();
     // find the event in the list and replace the data
     long nCount = maEventNames.getLength();
     for ( long i=0; i<nCount; i++ )
@@ -90,34 +91,41 @@ void SAL_CALL SfxEvents_Impl::replaceByName( const OUSTRING & aName, const ANY &
         if ( maEventNames[i] == aName )
         {
             // check for correct type of the element
-            if ( ::getCppuType( (const SEQUENCE < PROPERTYVALUE > *)0 ) == rElement.getValueType() )
+            if ( bReset || ::getCppuType( (const SEQUENCE < PROPERTYVALUE > *)0 ) == rElement.getValueType() )
             {
                 // create Configuration at first, creation might call this method also and that would overwrite everything
                 // we might have stored before!
                 USHORT nID = (USHORT) SfxEventConfiguration::GetEventId_Impl( aName );
                 if ( nID )
                 {
-                    ANY aValue;
-                    BlowUpMacro( rElement, aValue, mpObjShell );
-
                     // pConfig becomes the owner of the new SvxMacro
                     if ( mpObjShell && !mpObjShell->IsLoading() )
                         mpObjShell->SetModified( TRUE );
 
-                    SEQUENCE < PROPERTYVALUE > aProperties;
-                    if ( aValue >>= aProperties )
+                    if ( bReset )
                     {
-                        ::rtl::OUString aType;
-                        if (( aProperties[0].Name.compareToAscii( PROP_EVENT_TYPE ) == 0 ) &&
-                            ( aProperties[0].Value >>= aType ) &&
-                              aType.getLength() == 0 )
+                        maEventData[i] = ANY();
+                    }
+                    else
+                    {
+                        ANY aValue;
+                        BlowUpMacro( rElement, aValue, mpObjShell );
+
+                        SEQUENCE < PROPERTYVALUE > aProperties;
+                        if ( aValue >>= aProperties )
                         {
-                            // An empty event type means no binding. Therefore reset data
-                            // to reflect that state.
-                            maEventData[i] = ANY();
+                            ::rtl::OUString aType;
+                            if (( aProperties[0].Name.compareToAscii( PROP_EVENT_TYPE ) == 0 ) &&
+                                ( aProperties[0].Value >>= aType ) &&
+                                  aType.getLength() == 0 )
+                            {
+                                // An empty event type means no binding. Therefore reset data
+                                // to reflect that state.
+                                maEventData[i] = ANY();
+                            }
+                            else
+                                maEventData[i] = aValue;
                         }
-                        else
-                            maEventData[i] = aValue;
                     }
                 }
             }
@@ -197,7 +205,7 @@ sal_Bool SAL_CALL SfxEvents_Impl::hasElements() throw ( RUNTIMEEXCEPTION )
         return sal_False;
 }
 
-static void Execute( ANY& aEventData, SfxObjectShell* pDoc )
+static void Execute( ANY& aEventData, const css::document::DocumentEvent& aTrigger, SfxObjectShell* pDoc )
 {
     SEQUENCE < PROPERTYVALUE > aProperties;
     if ( aEventData >>= aProperties )
@@ -284,7 +292,11 @@ static void Execute( ANY& aEventData, SfxObjectShell* pDoc )
                     //aArgs[0].Name = rtl::OUString::createFromAscii("Referer");
                     //aArs[0].Value <<= ::rtl::OUString( pDoc->GetMedium()->GetName() );
                     //xDisp->dispatch( aURL, aArgs );
-                    xDisp->dispatch( aURL, ::com::sun::star::uno::Sequence < ::com::sun::star::beans::PropertyValue >() );
+
+                    css::beans::PropertyValue aEventParam;
+                    aEventParam.Value <<= aTrigger;
+                    css::uno::Sequence< css::beans::PropertyValue > aDispatchArgs( &aEventParam, 1 );
+                    xDisp->dispatch( aURL, aDispatchArgs );
                 }
             }
         }
@@ -326,7 +338,7 @@ void SAL_CALL SfxEvents_Impl::notifyEvent( const DOCEVENTOBJECT& aEvent ) throw(
 
     ANY aEventData = maEventData[ nIndex ];
     aGuard.clear();
-    Execute( aEventData, mpObjShell );
+    Execute( aEventData, css::document::DocumentEvent(aEvent.Source, aEvent.EventName, NULL, css::uno::Any()), mpObjShell );
 }
 
 //--------------------------------------------------------------------------------------------------------
@@ -609,14 +621,15 @@ SFX_IMPL_ONEINSTANCEFACTORY( SfxGlobalEvents_Impl );
 SfxGlobalEvents_Impl::SfxGlobalEvents_Impl( const com::sun::star::uno::Reference < ::com::sun::star::lang::XMultiServiceFactory >& xSMGR)
     : ModelCollectionMutexBase(       )
     , m_xSMGR                 (xSMGR  )
-    , m_aInterfaceContainer   (m_aLock)
+    , m_aLegacyListeners      (m_aLock)
+    , m_aDocumentListeners    (m_aLock)
     , pImp                    (0      )
 {
     m_refCount++;
     SFX_APP();
-    pImp           = new GlobalEventConfig();
-    m_xEvents      = pImp;
-    m_xJobsBinding = css::uno::Reference< css::task::XJobExecutor >(
+    pImp                   = new GlobalEventConfig();
+    m_xEvents              = pImp;
+    m_xJobExecutorListener = css::uno::Reference< css::document::XEventListener >(
                         xSMGR->createInstance(::rtl::OUString::createFromAscii("com.sun.star.task.JobExecutor")),
                         UNO_QUERY);
     m_refCount--;
@@ -660,7 +673,7 @@ void SAL_CALL SfxGlobalEvents_Impl::addEventListener(const css::uno::Reference< 
     throw(css::uno::RuntimeException)
 {
     // container is threadsafe
-    m_aInterfaceContainer.addInterface(xListener);
+    m_aLegacyListeners.addInterface(xListener);
 }
 
 //-----------------------------------------------------------------------------
@@ -668,16 +681,49 @@ void SAL_CALL SfxGlobalEvents_Impl::removeEventListener(const css::uno::Referenc
     throw(css::uno::RuntimeException)
 {
     // container is threadsafe
-    m_aInterfaceContainer.removeInterface(xListener);
+    m_aLegacyListeners.removeInterface(xListener);
+}
+
+//-----------------------------------------------------------------------------
+void SAL_CALL SfxGlobalEvents_Impl::addDocumentEventListener( const css::uno::Reference< css::document::XDocumentEventListener >& _Listener )
+    throw(css::uno::RuntimeException)
+{
+    m_aDocumentListeners.addInterface( _Listener );
+}
+
+//-----------------------------------------------------------------------------
+void SAL_CALL SfxGlobalEvents_Impl::removeDocumentEventListener( const css::uno::Reference< css::document::XDocumentEventListener >& _Listener )
+    throw(css::uno::RuntimeException)
+{
+    m_aDocumentListeners.removeInterface( _Listener );
+}
+
+//-----------------------------------------------------------------------------
+void SAL_CALL SfxGlobalEvents_Impl::notifyDocumentEvent( const ::rtl::OUString& /*_EventName*/,
+        const css::uno::Reference< css::frame::XController2 >& /*_ViewController*/, const css::uno::Any& /*_Supplement*/ )
+        throw (css::lang::IllegalArgumentException, css::lang::NoSupportException, css::uno::RuntimeException)
+{
+    // we're a multiplexer only, no change to generate artifical events here
+    throw css::lang::NoSupportException(::rtl::OUString(), *this);
 }
 
 //-----------------------------------------------------------------------------
 void SAL_CALL SfxGlobalEvents_Impl::notifyEvent(const css::document::EventObject& aEvent)
     throw(css::uno::RuntimeException)
 {
+    css::document::DocumentEvent aDocEvent(aEvent.Source, aEvent.EventName, NULL, css::uno::Any());
     implts_notifyJobExecution(aEvent);
-    implts_checkAndExecuteEventBindings(aEvent);
-    implts_notifyListener(aEvent);
+    implts_checkAndExecuteEventBindings(aDocEvent);
+    implts_notifyListener(aDocEvent);
+}
+
+//-----------------------------------------------------------------------------
+void SAL_CALL SfxGlobalEvents_Impl::documentEventOccured( const ::css::document::DocumentEvent& _Event )
+    throw (::css::uno::RuntimeException)
+{
+    implts_notifyJobExecution(css::document::EventObject(_Event.Source, _Event.EventName));
+    implts_checkAndExecuteEventBindings(_Event);
+    implts_notifyListener(_Event);
 }
 
 //-----------------------------------------------------------------------------
@@ -740,9 +786,16 @@ void SAL_CALL SfxGlobalEvents_Impl::insert( const css::uno::Any& aElement )
     aLock.clear();
     // <- SAFE
 
-    css::uno::Reference< css::document::XEventBroadcaster > xDocBroadcast(xDoc, UNO_QUERY);
-    if (xDocBroadcast.is())
-        xDocBroadcast->addEventListener(static_cast< css::document::XEventListener* >(this));
+    css::uno::Reference< css::document::XDocumentEventBroadcaster > xDocBroadcaster(xDoc, UNO_QUERY );
+    if (xDocBroadcaster.is())
+        xDocBroadcaster->addDocumentEventListener(this);
+    else
+    {
+        // try the "legacy version" of XDocumentEventBroadcaster, which is XEventBroadcaster
+        css::uno::Reference< css::document::XEventBroadcaster > xBroadcaster(xDoc, UNO_QUERY);
+        if (xBroadcaster.is())
+            xBroadcaster->addEventListener(static_cast< css::document::XEventListener* >(this));
+    }
 }
 
 //-----------------------------------------------------------------------------
@@ -770,9 +823,16 @@ void SAL_CALL SfxGlobalEvents_Impl::remove( const css::uno::Any& aElement )
     aLock.clear();
     // <- SAFE
 
-    css::uno::Reference< css::document::XEventBroadcaster > xDocBroadcast(xDoc, UNO_QUERY);
-    if (xDocBroadcast.is())
-        xDocBroadcast->removeEventListener(static_cast< css::document::XEventListener* >(this));
+    css::uno::Reference< css::document::XDocumentEventBroadcaster > xDocBroadcaster(xDoc, UNO_QUERY );
+    if (xDocBroadcaster.is())
+        xDocBroadcaster->removeDocumentEventListener(this);
+    else
+    {
+        // try the "legacy version" of XDocumentEventBroadcaster, which is XEventBroadcaster
+        css::uno::Reference< css::document::XEventBroadcaster > xBroadcaster(xDoc, UNO_QUERY);
+        if (xBroadcaster.is())
+            xBroadcaster->removeEventListener(static_cast< css::document::XEventListener* >(this));
+    }
 }
 
 //-----------------------------------------------------------------------------
@@ -816,7 +876,7 @@ void SfxGlobalEvents_Impl::implts_notifyJobExecution(const css::document::EventO
     {
         // SAFE ->
         ::osl::ResettableMutexGuard aLock(m_aLock);
-        css::uno::Reference< css::document::XEventListener > xJobExecutor(m_xJobsBinding.get(), UNO_QUERY);
+        css::uno::Reference< css::document::XEventListener > xJobExecutor(m_xJobExecutorListener);
         aLock.clear();
         // <- SAFE
         if (xJobExecutor.is())
@@ -829,7 +889,7 @@ void SfxGlobalEvents_Impl::implts_notifyJobExecution(const css::document::EventO
 }
 
 //-----------------------------------------------------------------------------
-void SfxGlobalEvents_Impl::implts_checkAndExecuteEventBindings(const css::document::EventObject& aEvent)
+void SfxGlobalEvents_Impl::implts_checkAndExecuteEventBindings(const css::document::DocumentEvent& aEvent)
 {
     try
     {
@@ -842,7 +902,7 @@ void SfxGlobalEvents_Impl::implts_checkAndExecuteEventBindings(const css::docume
         css::uno::Any aAny;
         if (xEvents.is())
             aAny = xEvents->getByName(aEvent.EventName);
-        Execute(aAny, 0);
+        Execute(aAny, aEvent, 0);
     }
     catch(const css::uno::RuntimeException& exRun)
         { throw exRun; }
@@ -851,19 +911,13 @@ void SfxGlobalEvents_Impl::implts_checkAndExecuteEventBindings(const css::docume
 }
 
 //-----------------------------------------------------------------------------
-void SfxGlobalEvents_Impl::implts_notifyListener(const css::document::EventObject& aEvent)
+void SfxGlobalEvents_Impl::implts_notifyListener(const css::document::DocumentEvent& aEvent)
 {
-    // container is threadsafe
-    ::cppu::OInterfaceIteratorHelper aIt(m_aInterfaceContainer);
-    while (aIt.hasMoreElements())
-    {
-        try
-        {
-            ((css::document::XEventListener*)aIt.next())->notifyEvent(aEvent);
-        }
-        catch(const css::uno::Exception&)
-            { aIt.remove(); }
-    }
+    // containers are threadsafe
+    css::document::EventObject aLegacyEvent(aEvent.Source, aEvent.EventName);
+    m_aLegacyListeners.notifyEach( &css::document::XEventListener::notifyEvent, aLegacyEvent );
+
+    m_aDocumentListeners.notifyEach( &css::document::XDocumentEventListener::documentEventOccured, aEvent );
 }
 
 //-----------------------------------------------------------------------------

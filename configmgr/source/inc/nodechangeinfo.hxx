@@ -46,17 +46,12 @@ namespace configmgr
     namespace configuration
     {
 //-----------------------------------------------------------------------------
-        typedef com::sun::star::uno::Type       UnoType;
-        typedef com::sun::star::uno::Any        UnoAny;
-//-----------------------------------------------------------------------------
-        class Tree;
         class NodeRef;
         class ValueRef;
         class NodeID;
         class SubNodeID;
 
-        class ElementTreeImpl;
-        typedef rtl::Reference<ElementTreeImpl> ElementTreeHolder;
+        class ElementTree;
 
 //-----------------------------------------------------------------------------
         /// captures the values of something changing
@@ -114,8 +109,8 @@ namespace configmgr
 
         //-------------------------------------------------
         // wrapper object creation
-            Tree    getNewElementTree() const;
-            Tree    getOldElementTree() const;
+            rtl::Reference< Tree > getNewElementTree() const;
+            rtl::Reference< Tree > getOldElementTree() const;
 
             NodeID  getNewElementNodeID() const;
             NodeID  getOldElementNodeID() const;
@@ -130,9 +125,9 @@ namespace configmgr
             Type type;
 
             // Value change: old/new value; Set change: new/old api element (if known); Rename: old/new name
-            DataChange< UnoAny              > unoData;
+            DataChange< com::sun::star::uno::Any                > unoData;
             // Value change: NULL,NULL; Set change: new/old tree element; Rename: the affected element-tree (twice)
-            DataChange< ElementTreeHolder   > element;
+            DataChange< rtl::Reference<ElementTree> > element;
         //-------------------------------------------------
         };
 
@@ -156,12 +151,12 @@ namespace configmgr
             RelativePath getAccessor() const { return m_path; }
 
             /// retrieve the tree where the change is actually initiated/reported
-            Tree getBaseTree() const;
+            rtl::Reference< Tree > getBaseTree() const;
             /// retrieve the node where the change is actually initiated/reported
             NodeRef getBaseNode() const;
 
             /// retrieve the tree where the change is actually taking place (may be Empty, if the tree has never been accessed)
-            TreeRef getAffectedTreeRef() const;
+            rtl::Reference< Tree > getAffectedTreeRef() const;
             /// identify the node where the change is actually taking place
             NodeID getAffectedNodeID() const;
 
@@ -172,11 +167,11 @@ namespace configmgr
             void setAccessor( RelativePath const& aAccessor );
 
             void setBase( NodeID const& aBaseID );
-            void setBase( Tree const& aBaseTree, NodeRef const& aBaseNode )
+            void setBase( rtl::Reference< Tree > const& aBaseTree, NodeRef const& aBaseNode )
             { setBase( NodeID(aBaseTree,aBaseNode) ); }
 
             void setAffected( NodeID const& aTargetID );
-            void setAffected( Tree const& aTargetTree, NodeRef const& aTargetNode )
+            void setAffected( rtl::Reference< Tree > const& aTargetTree, NodeRef const& aTargetNode )
             { setAffected( NodeID(aTargetTree,aTargetNode) ); }
 
             void setChangingSubnode( bool bSubnode = true );
@@ -221,24 +216,21 @@ namespace configmgr
 
         class NodeChangesInformation
         {
-            typedef std::vector< NodeChangeInformation > Rep;
         public:
-            typedef Rep::const_iterator Iterator;
-
-            Rep::size_type size() const { return m_data.size(); }
+            std::vector< NodeChangeInformation >::size_type size() const { return m_data.size(); }
             bool empty() const { return m_data.empty(); }
 
-            void reserve(Rep::size_type sz_)    { m_data.reserve(sz_); }
+            void reserve(std::vector< NodeChangeInformation >::size_type sz_)   { m_data.reserve(sz_); }
             void clear() { m_data.clear(); }
             void swap(NodeChangesInformation& aOther) throw() { m_data.swap(aOther.m_data); }
 
             void push_back(NodeChangeInformation const& aChange_)
             { m_data.push_back(aChange_); }
 
-            Iterator begin() const { return m_data.begin(); }
-            Iterator end() const { return m_data.end(); }
+            std::vector< NodeChangeInformation >::const_iterator begin() const { return m_data.begin(); }
+            std::vector< NodeChangeInformation >::const_iterator end() const { return m_data.end(); }
         private:
-            Rep m_data;
+            std::vector< NodeChangeInformation > m_data;
         };
 //-----------------------------------------------------------------------------
     }

@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: FPreparedStatement.cxx,v $
- * $Revision: 1.42 $
+ * $Revision: 1.42.56.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -48,6 +48,7 @@
 #include <comphelper/types.hxx>
 #include <com/sun/star/sdbc/ColumnValue.hpp>
 #include <tools/debug.hxx>
+#include "resource/file_res.hrc"
 
 using namespace connectivity;
 using namespace comphelper;
@@ -392,11 +393,7 @@ Reference<XResultSet> OPreparedStatement::initResultSet()
     // check if we got enough paramters
     if ( (m_aParameterRow.isValid() && ( m_aParameterRow->size() -1 ) < m_xParamColumns->size()) ||
          (m_xParamColumns.isValid() && !m_aParameterRow.isValid() && !m_aParameterRow->empty()) )
-        throw SQLException(::rtl::OUString::createFromAscii("Invalid count of parameters supplied!")
-                            ,*this
-                            ,::rtl::OUString::createFromAscii("S1000")
-                            ,1000
-                            ,Any());
+         m_pConnection->throwGenericSQLException(STR_INVALID_PARA_COUNT,*this);
 
     m_pResultSet->OpenImpl();
     m_pResultSet->setMetaData(getMetaData());

@@ -49,14 +49,9 @@ namespace configmgr
         namespace uno       = ::com::sun::star::uno;
         namespace sax       = ::com::sun::star::xml::sax;
 
-        using rtl::OUString;
-
 // -----------------------------------------------------------------------------
         class ElementFormatter
         {
-        public:
-            typedef uno::Reference< sax::XAttributeList > SaxAttributeList;
-            typedef ElementInfo::FlagsType FlagsType;
         public:
             ElementFormatter();
             ~ElementFormatter();
@@ -71,42 +66,42 @@ namespace configmgr
             void prepareSimpleElement(ElementType::Enum _eType);
 
             /// sets the instantiated type of a set item,
-            void addInstanceType(OUString const & _aElementType, OUString const & _aElementTypeModule);
+            void addInstanceType(rtl::OUString const & _aElementType, rtl::OUString const & _aElementTypeModule);
 
             /// retrieve element type and associated module name of a set,
             void addPropertyValueType(uno::Type const& _aType);
 
             /// add a language for the current element
-            void addLanguage(OUString const & _sLanguage);
+            void addLanguage(rtl::OUString const & _sLanguage);
 
             /// adds a value attribute to the attribute list
             void addIsNull(bool _bIsNull = true);
 
             /// adds a value attribute to the attribute list
-            void addSeparator(OUString const& _sSeparator);
+            void addSeparator(rtl::OUString const& _sSeparator);
 
             /// retrieve the tag to use for the current element
-            OUString getElementTag() const;
+            rtl::OUString getElementTag() const;
 
             /// retrieve the attributes to use for the current element
-            SaxAttributeList getElementAttributes() const;
+            uno::Reference< sax::XAttributeList > getElementAttributes() const;
 
             /// retrieve the attributes to use for an element with associated component
         private:
             void addNamespaces();
             /// sets an attributes for a node
-            void addName(OUString const & _aName);
+            void addName(rtl::OUString const & _aName);
             /// sets attributes for nodes from the flags
-            void addNodeFlags(FlagsType _eFlags);
+            void addNodeFlags(sal_Int16 _eFlags);
             /// sets attributes for nodes from the flags
             void addOperation(Operation::Enum _eOp);
             /// sets attributes for nodes from the flags
-            void maybeAddFlag(FlagsType _eFlags, FlagsType _eSelect,
-                                OUString const & _anAttributeName, bool _bValue = true);
+            void maybeAddFlag(sal_Int16 _eFlags, sal_Int16 _eSelect,
+                                rtl::OUString const & _anAttributeName, bool _bValue = true);
 
             /// sets attributes for nodes
-            void addAttribute(OUString const & _anAttributeName, OUString const & _aValue);
-            void addAttribute(OUString const & _anAttributeName, bool _bValue);
+            void addAttribute(rtl::OUString const & _anAttributeName, rtl::OUString const & _aValue);
+            void addAttribute(rtl::OUString const & _anAttributeName, bool _bValue);
 
         private:
             ElementType::Enum                   m_aElementType;

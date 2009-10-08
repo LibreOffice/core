@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: cube3d.hxx,v $
- * $Revision: 1.4 $
+ * $Revision: 1.4.18.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -60,12 +60,12 @@ private:
     virtual sdr::contact::ViewContact* CreateObjectSpecificViewContact();
 
     // Parameter
-    basegfx::B3DPoint           aCubePos;
-    basegfx::B3DVector      aCubeSize;
-    UINT16              nSideFlags;
+    basegfx::B3DPoint                   aCubePos;
+    basegfx::B3DVector                  aCubeSize;
+    UINT16                              nSideFlags;
 
     // BOOLeans
-    unsigned            bPosIsCenter            : 1;
+    unsigned                            bPosIsCenter : 1;
 
 protected:
     void SetDefaultAttributes(E3dDefaultAttributes& rDefault);
@@ -79,12 +79,6 @@ public:
     virtual SdrObject* DoConvertToPolyObj(BOOL bBezier) const;
 
     virtual void operator=(const SdrObject&);
-
-    // Geometrieerzeugung
-    virtual void CreateGeometry();
-
-    // Give out simple line geometry
-    virtual basegfx::B3DPolyPolygon Get3DLineGeometry() const;
 
     // Lokale Parameter setzen mit Geometrieneuerzeugung
     void SetCubePos(const basegfx::B3DPoint& rNew);

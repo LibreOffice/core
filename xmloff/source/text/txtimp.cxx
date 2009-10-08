@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: txtimp.cxx,v $
- * $Revision: 1.146 $
+ * $Revision: 1.143.2.3 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -46,9 +46,7 @@
 #include <com/sun/star/text/XTextFramesSupplier.hpp>
 #include <com/sun/star/text/XTextGraphicObjectsSupplier.hpp>
 #include <com/sun/star/text/XTextEmbeddedObjectsSupplier.hpp>
-#ifndef _COM_SUN_STAR_TEXT_TEXTCONTENTANCHORTYPE_HPP
 #include <com/sun/star/text/TextContentAnchorType.hpp>
-#endif
 #include <com/sun/star/text/XTextFrame.hpp>
 #include <com/sun/star/drawing/XShapes.hpp>
 #include <com/sun/star/util/DateTime.hpp>
@@ -62,15 +60,9 @@
 #include <xmloff/xmlnumfi.hxx>
 #include <xmloff/xmlnumi.hxx>
 
-#ifndef _XMLOFF_TXTPARAI_HXX
 #include "txtparai.hxx"
-#endif
-#ifndef _XMLOFF_TXTIMP_HXX
 #include <xmloff/txtimp.hxx>
-#endif
-#ifndef _XMLOFF_TXTPRMAP_HXX
 #include <xmloff/txtprmap.hxx>
-#endif
 #include "txtimppr.hxx"
 #include <xmloff/xmlimp.hxx>
 #include "txtvfldi.hxx"
@@ -78,15 +70,11 @@
 #include "XMLTextListItemContext.hxx"
 #include "XMLTextListBlockContext.hxx"
 #include "XMLTextFrameContext.hxx"
-#ifndef _XMLOFF_XMLPROPERTYBACKPATCHTER_HXX
 #include "XMLPropertyBackpatcher.hxx"
-#endif
 #include "XMLTextFrameHyperlinkContext.hxx"
 #include "XMLSectionImportContext.hxx"
 #include "XMLIndexTOCContext.hxx"
-#ifndef _XMLOFF_XMLFONTSTYLESCONTEXT_HXX
 #include <xmloff/XMLFontStylesContext.hxx>
-#endif
 #include <xmloff/ProgressBarHelper.hxx>
 #include <xmloff/nmspmap.hxx>
 #include <xmloff/XMLEventsImportContext.hxx>
@@ -94,9 +82,7 @@
 #include "XMLChangeImportContext.hxx"
 #include "XMLAutoMarkFileContext.hxx"
 
-#ifndef _XMLOFF_XMLCALCULATION_SETTINGS_CONTEXT_HXX
 #include "XMLCalculationSettingsContext.hxx"
-#endif
 #include <xmloff/formsimp.hxx>
 #include "XMLNumberStylesImport.hxx"
 // --> OD 2006-10-12 #i69629#
@@ -353,6 +339,21 @@ static __FAR_DATA SvXMLTokenMapEntry aTextPAttrTokenMap[] =
     XML_TOKEN_MAP_END
 };
 
+static __FAR_DATA SvXMLTokenMapEntry aTextNumberedParagraphAttrTokenMap[] =
+{
+    { XML_NAMESPACE_XML , XML_ID,    XML_TOK_TEXT_NUMBERED_PARAGRAPH_XMLID },
+    { XML_NAMESPACE_TEXT, XML_LIST_ID,
+        XML_TOK_TEXT_NUMBERED_PARAGRAPH_LIST_ID },
+    { XML_NAMESPACE_TEXT, XML_LEVEL, XML_TOK_TEXT_NUMBERED_PARAGRAPH_LEVEL },
+    { XML_NAMESPACE_TEXT, XML_STYLE_NAME,
+        XML_TOK_TEXT_NUMBERED_PARAGRAPH_STYLE_NAME },
+    { XML_NAMESPACE_TEXT, XML_CONTINUE_NUMBERING,
+        XML_TOK_TEXT_NUMBERED_PARAGRAPH_CONTINUE_NUMBERING },
+    { XML_NAMESPACE_TEXT, XML_START_VALUE,
+        XML_TOK_TEXT_NUMBERED_PARAGRAPH_START_VALUE },
+    XML_TOKEN_MAP_END
+};
+
 static __FAR_DATA SvXMLTokenMapEntry aTextListBlockAttrTokenMap[] =
 {
     { XML_NAMESPACE_XML , XML_ID,           XML_TOK_TEXT_LIST_BLOCK_XMLID },
@@ -453,6 +454,7 @@ XMLTextImportHelper::XMLTextImportHelper(
 ,   pTextPElemTokenMap( 0 )
 ,   pTextPAttrTokenMap( 0 )
 ,   pTextFieldAttrTokenMap( 0 )
+,   pTextNumberedParagraphAttrTokenMap( 0 )
 ,   pTextListBlockAttrTokenMap( 0 )
 ,   pTextListBlockElemTokenMap( 0 )
 ,   pTextFrameAttrTokenMap( 0 )
@@ -626,25 +628,6 @@ XMLTextImportHelper::XMLTextImportHelper(
 
 XMLTextImportHelper::~XMLTextImportHelper()
 {
-    delete pTextElemTokenMap;
-    delete pTextPElemTokenMap;
-    delete pTextPAttrTokenMap;
-    delete pTextListBlockAttrTokenMap;
-    delete pTextListBlockElemTokenMap;
-    delete pTextFieldAttrTokenMap;
-    delete pTextFrameAttrTokenMap;
-    delete pTextContourAttrTokenMap;
-    delete pTextHyperlinkAttrTokenMap;
-    delete pTextMasterPageElemTokenMap;
-
-    delete pRenameMap;
-
-    delete pPrevFrmNames;
-    delete pNextFrmNames;
-
-    // --> OD 2008-04-25 #refactorlists#
-    delete mpTextListsHelper;
-    // <--
     // --> OD 2006-10-12 #i69629#
     delete [] mpOutlineStylesCandidates;
     // <--
@@ -999,26 +982,60 @@ OUString XMLTextImportHelper::SetStyleAndAttrs(
         // Set numbering rules
         Reference < XIndexReplace > xNumRules(xPropSet->getPropertyValue( sNumberingRules ), UNO_QUERY);
 
-        if( IsInList() )
-        {
-            XMLTextListBlockContext *pListBlock = GetListBlock();
+        XMLTextListBlockContext * pListBlock(0);
+        XMLTextListItemContext  * pListItem(0);
+        XMLNumberedParaContext  * pNumberedParagraph(0);
+        GetTextListHelper().ListContextTop(
+            pListBlock, pListItem, pNumberedParagraph);
+
+        OSL_ENSURE(!(pListBlock && pNumberedParagraph), "XMLTextImportHelper::"
+            "SetStyleAndAttrs: both list and numbered-paragraph???");
+
+        Reference < XIndexReplace > xNewNumRules;
+        sal_Int8 nLevel(-1);
+        ::rtl::OUString sListId;
+        sal_Int16 nStartValue(-1);
+        bool bNumberingIsNumber(true);
+
+        if (pListBlock) {
+
+            if (!pListItem) {
+                bNumberingIsNumber = false; // list-header
+            }
             // --> OD 2008-05-08 #refactorlists#
             // consider text:style-override property of <text:list-item>
-//            Reference < XIndexReplace > xNewNumRules(
-//                pListBlock->GetNumRules());
-            XMLTextListItemContext* pListItem = GetListItem();
-            Reference < XIndexReplace > xNewNumRules(
-                            pListItem != 0 && pListItem->HasNumRulesOverride()
-                            ? pListItem->GetNumRulesOverride()
-                            : pListBlock->GetNumRules() );
+            xNewNumRules.set(
+                (pListItem != 0 && pListItem->HasNumRulesOverride())
+                    ? pListItem->GetNumRulesOverride()
+                    : pListBlock->GetNumRules() );
             // <--
+            nLevel = static_cast<sal_Int8>(pListBlock->GetLevel());
 
+            if ( pListItem && pListItem->HasStartValue() ) {
+               nStartValue = pListItem->GetStartValue();
+            }
+
+            // --> OD 2008-08-15 #i92811#
+            sListId = mpTextListsHelper->GetListIdForListBlock( *pListBlock );
+            // <--
+        }
+        else if (pNumberedParagraph)
+        {
+            xNewNumRules.set(pNumberedParagraph->GetNumRules());
+            nLevel = static_cast<sal_Int8>(pNumberedParagraph->GetLevel());
+            sListId = pNumberedParagraph->GetListId();
+            nStartValue = pNumberedParagraph->GetStartValue();
+        }
+
+
+        if (pListBlock || pNumberedParagraph)
+        {
             sal_Bool bSameNumRules = xNewNumRules == xNumRules;
             if( !bSameNumRules && xNewNumRules.is() && xNumRules.is() )
             {
                 // If the interface pointers are different then this does
                 // not mean that the num rules are different. Further tests
-                // are rquired then. However, if only one num rule is
+                // are required then. However, if only one num rule is
                 // set, no tests are required of course.
                 Reference< XNamed > xNewNamed( xNewNumRules, UNO_QUERY );
                 Reference< XNamed > xNamed( xNumRules, UNO_QUERY );
@@ -1055,8 +1072,7 @@ OUString XMLTextImportHelper::SetStyleAndAttrs(
                 }
             }
 
-            sal_Int8 nLevel = (sal_Int8)pListBlock->GetLevel();
-            if( !pListItem &&
+            if (!bNumberingIsNumber &&
                 xPropSetInfo->hasPropertyByName( sNumberingIsNumber ) )
             {
                 xPropSet->setPropertyValue( sNumberingIsNumber, Any(sal_False) );
@@ -1067,7 +1083,7 @@ OUString XMLTextImportHelper::SetStyleAndAttrs(
             bNumberingLevelSet = true;
             // <--
 
-            if( pListBlock->IsRestartNumbering() )
+            if( pListBlock && pListBlock->IsRestartNumbering() )
             {
                 // TODO: property missing
                 if( xPropSetInfo->hasPropertyByName( sParaIsNumberingRestart ) )
@@ -1078,27 +1094,25 @@ OUString XMLTextImportHelper::SetStyleAndAttrs(
                 }
                 pListBlock->ResetRestartNumbering();
             }
-            if( pListItem && pListItem->HasStartValue() &&
+
+            if ( 0 <= nStartValue &&
                 xPropSetInfo->hasPropertyByName( sNumberingStartValue ) )
             {
                 xPropSet->setPropertyValue(sNumberingStartValue,
-                                           makeAny(pListItem->GetStartValue()));
+                                           makeAny(nStartValue));
             }
+
             // --> OD 2008-04-23 #refactorlists#
             if ( xPropSetInfo->hasPropertyByName( sPropNameListId ) )
             {
-                // --> OD 2008-08-15 #i92811#
-                const ::rtl::OUString sListBlockListId(
-                    mpTextListsHelper->GetListIdForListBlock( *pListBlock ) );
-                if ( sListBlockListId.getLength() != 0 )
-                {
+                if (sListId.getLength()) {
                     xPropSet->setPropertyValue( sPropNameListId,
-                                                makeAny( sListBlockListId ) );
+                        makeAny(sListId) );
                 }
-                // <--
             }
             // <--
-            SetListItem( (XMLTextListItemContext *)0 );
+
+            GetTextListHelper().SetListItem( (XMLTextListItemContext *)0 );
         }
         else
         {
@@ -1769,8 +1783,9 @@ SvXMLImportContext *XMLTextImportHelper::CreateTextChildContext(
             rImport.GetProgressBarHelper()->Increment();
         }
         break;
-     case XML_TOK_TEXT_NUMBERED_PARAGRAPH:
-         pContext = new XMLNumberedParaContext( rImport, nPrefix, rLocalName );
+    case XML_TOK_TEXT_NUMBERED_PARAGRAPH:
+        pContext = new XMLNumberedParaContext(
+                        rImport, nPrefix, rLocalName, xAttrList );
         break;
     case XML_TOK_TEXT_LIST:
         pContext = new XMLTextListBlockContext( rImport, *this,
@@ -2063,58 +2078,49 @@ XMLPropStyleContext* XMLTextImportHelper::FindPageMaster(
     return pStyle;
 }
 
-XMLTextListItemContext *XMLTextImportHelper::GetListItem()
+
+void XMLTextImportHelper::PushListContext(XMLTextListBlockContext *i_pListBlock)
 {
-    return (XMLTextListItemContext *)&xListItem;
+    GetTextListHelper().PushListContext(i_pListBlock);
 }
 
-void XMLTextImportHelper::SetListItem( XMLTextListItemContext *pListItem )
+void XMLTextImportHelper::PopListContext()
 {
-    xListItem = pListItem;
+    GetTextListHelper().PopListContext();
 }
 
-void XMLTextImportHelper::_SetListItem( SvXMLImportContext *pListItem )
-{
-    xListItem = PTR_CAST( XMLTextListItemContext, pListItem );
-}
 
-XMLTextListBlockContext *XMLTextImportHelper::GetListBlock()
+const SvXMLTokenMap& XMLTextImportHelper::GetTextNumberedParagraphAttrTokenMap()
 {
-    return (XMLTextListBlockContext *)&xListBlock;
-}
+    if( !pTextNumberedParagraphAttrTokenMap.get() )
+        pTextNumberedParagraphAttrTokenMap.reset(
+            new SvXMLTokenMap( aTextNumberedParagraphAttrTokenMap ) );
 
-void XMLTextImportHelper::SetListBlock( XMLTextListBlockContext *pListBlock )
-{
-    xListBlock = pListBlock;
-}
-
-void XMLTextImportHelper::_SetListBlock( SvXMLImportContext *pListBlock )
-{
-    xListBlock = PTR_CAST( XMLTextListBlockContext, pListBlock );
+    return *pTextNumberedParagraphAttrTokenMap;
 }
 
 const SvXMLTokenMap& XMLTextImportHelper::GetTextListBlockAttrTokenMap()
 {
-    if( !pTextListBlockAttrTokenMap )
-        pTextListBlockAttrTokenMap =
-            new SvXMLTokenMap( aTextListBlockAttrTokenMap );
+    if( !pTextListBlockAttrTokenMap.get() )
+        pTextListBlockAttrTokenMap.reset(
+            new SvXMLTokenMap( aTextListBlockAttrTokenMap ) );
 
     return *pTextListBlockAttrTokenMap;
 }
 
 const SvXMLTokenMap& XMLTextImportHelper::GetTextListBlockElemTokenMap()
 {
-    if( !pTextListBlockElemTokenMap )
-        pTextListBlockElemTokenMap =
-            new SvXMLTokenMap( aTextListBlockElemTokenMap );
+    if( !pTextListBlockElemTokenMap.get() )
+        pTextListBlockElemTokenMap.reset(
+            new SvXMLTokenMap( aTextListBlockElemTokenMap ) );
 
     return *pTextListBlockElemTokenMap;
 }
 
 SvI18NMap& XMLTextImportHelper::GetRenameMap()
 {
-    if( 0 == pRenameMap )
-        pRenameMap = new SvI18NMap();
+    if( !pRenameMap.get() )
+        pRenameMap.reset( new SvI18NMap() );
     return *pRenameMap;
 }
 
@@ -2241,10 +2247,10 @@ void XMLTextImportHelper::ConnectFrameChains(
         }
         else
         {
-            if( !pPrevFrmNames )
+            if( !pPrevFrmNames.get() )
             {
-                pPrevFrmNames = new SvStringsDtor;
-                pNextFrmNames = new SvStringsDtor;
+                pPrevFrmNames.reset( new SvStringsDtor );
+                pNextFrmNames.reset( new SvStringsDtor );
             }
             pPrevFrmNames->Insert( new String( rFrmName ),
                                    pPrevFrmNames->Count() );
@@ -2252,7 +2258,7 @@ void XMLTextImportHelper::ConnectFrameChains(
                                    pNextFrmNames->Count() );
         }
     }
-    if( pPrevFrmNames && pPrevFrmNames->Count() )
+    if( pPrevFrmNames.get() && pPrevFrmNames->Count() )
     {
         sal_uInt16 nCount = pPrevFrmNames->Count();
         for( sal_uInt16 i=0; i<nCount; i++ )
@@ -2426,42 +2432,3 @@ void XMLTextImportHelper::ResetOpenRedlineId()
     SetOpenRedlineId(sEmpty);
 }
 
-// --> OD 2008-04-25 #refactorlists#
-// --> OD 2008-08-15 #i92811#
-void XMLTextImportHelper::KeepListAsProcessed( ::rtl::OUString sListId,
-                                               ::rtl::OUString sListStyleName,
-                                               ::rtl::OUString sContinueListId,
-                                               ::rtl::OUString sListStyleDefaultListId )
-{
-    mpTextListsHelper->KeepListAsProcessed( sListId, sListStyleName,
-                                            sContinueListId,
-                                            sListStyleDefaultListId );
-}
-// <--
-
-sal_Bool XMLTextImportHelper::IsListProcessed( const ::rtl::OUString sListId ) const
-{
-    return mpTextListsHelper->IsListProcessed( sListId );
-}
-
-::rtl::OUString XMLTextImportHelper::GetContinueListIdOfProcessedList(
-                                        const ::rtl::OUString sListId ) const
-{
-    return mpTextListsHelper->GetContinueListIdOfProcessedList( sListId );
-}
-
-const ::rtl::OUString& XMLTextImportHelper::GetLastProcessedListId() const
-{
-    return mpTextListsHelper->GetLastProcessedListId();
-}
-
-const ::rtl::OUString& XMLTextImportHelper::GetListStyleOfLastProcessedList() const
-{
-    return mpTextListsHelper->GetListStyleOfLastProcessedList();
-}
-
-::rtl::OUString XMLTextImportHelper::GenerateNewListId() const
-{
-    return mpTextListsHelper->GenerateNewListId();
-}
-// <--

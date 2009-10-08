@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: EnhancedCustomShape3d.hxx,v $
- * $Revision: 1.7 $
+ * $Revision: 1.7.226.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -70,13 +70,9 @@ class EnhancedCustomShape3d
     friend class Transformation2D;
 
     protected :
-
-//      static void Rotate( Vector3D& rPoint, const double x, const double y, const double z );
-//      static void Rotate( basegfx::B3DPolyPolygon&, const Point3D& rRotateCenter, const double x, const double y, const double z );
         static Rectangle CalculateNewSnapRect( const SdrObject* pCustomShape, const Rectangle& rBoundRect, const double* pMap );
 
     public :
-
         static SdrObject* Create3DObject( const SdrObject* pShape2d, const SdrObject* pCustomShape );
 };
 

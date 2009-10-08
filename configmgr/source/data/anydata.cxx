@@ -44,10 +44,9 @@ namespace configmgr
 //-----------------------------------------------------------------------------
         namespace Type = data::Type;
         namespace uno = ::com::sun::star::uno;
-        typedef AnyData::TypeCode TypeCode;
 //-----------------------------------------------------------------------------
 
-TypeCode getTypeCode(uno::Type const & _aType)
+sal_uInt8 getTypeCode(uno::Type const & _aType)
 {
     switch (_aType.getTypeClass())
     {
@@ -82,14 +81,14 @@ TypeCode getTypeCode(uno::Type const & _aType)
                 return Type::value_binary;
 
             OSL_ASSERT(aElementType != _aType); // would cause infinite recursion
-            TypeCode aElementTC = getTypeCode(aElementType);
+            sal_uInt8 aElementTC = getTypeCode(aElementType);
 
             OSL_ASSERT(Type::value_invalid & Type::flag_sequence); // ensure check works for invalid types
 
             if (aElementTC & Type::flag_sequence) // no sequence of sequence
                 return Type::value_invalid;
 
-            return TypeCode( aElementTC | Type::flag_sequence );
+            return sal_uInt8( aElementTC | Type::flag_sequence );
         }
     default:
         return Type::value_invalid;
@@ -97,7 +96,7 @@ TypeCode getTypeCode(uno::Type const & _aType)
 }
 //-----------------------------------------------------------------------------
 
-static uno::Type getUnoSimpleType( TypeCode _aSimpleType)
+static uno::Type getUnoSimpleType( sal_uInt8 _aSimpleType)
 {
     OSL_ENSURE( _aSimpleType == (_aSimpleType & Type::mask_basetype), "Invalid type code" );
 
@@ -135,7 +134,7 @@ static uno::Type getUnoSimpleType( TypeCode _aSimpleType)
 }
 //-----------------------------------------------------------------------------
 
-static uno::Type getUnoSequenceType( TypeCode _aSimpleType)
+static uno::Type getUnoSequenceType( sal_uInt8 _aSimpleType)
 {
     OSL_ENSURE( _aSimpleType == (_aSimpleType & Type::mask_basetype), "Invalid type code" );
 
@@ -170,12 +169,12 @@ static uno::Type getUnoSequenceType( TypeCode _aSimpleType)
 }
 //-----------------------------------------------------------------------------
 
-uno::Type getUnoType( TypeCode _aType)
+uno::Type getUnoType( sal_uInt8 _aType)
 {
     OSL_ENSURE( _aType == (_aType & Type::mask_valuetype), "Invalid type code" );
 
     if (_aType & Type::flag_sequence)
-        return getUnoSequenceType( TypeCode(_aType & Type::mask_basetype));
+        return getUnoSequenceType( sal_uInt8(_aType & Type::mask_basetype));
 
     else
         return getUnoSimpleType(_aType);
@@ -183,7 +182,7 @@ uno::Type getUnoType( TypeCode _aType)
 //-----------------------------------------------------------------------------
 
 static
-AnyData allocSimpleData(TypeCode _aSimpleType, uno::Any const & _aAny)
+AnyData allocSimpleData(sal_uInt8 _aSimpleType, uno::Any const & _aAny)
 {
     OSL_ENSURE( _aSimpleType == (_aSimpleType & Type::mask_basetype), "Invalid type code" );
 
@@ -196,7 +195,7 @@ AnyData allocSimpleData(TypeCode _aSimpleType, uno::Any const & _aAny)
         {
             rtl::OUString sValue;
             OSL_VERIFY(_aAny >>= sValue );
-            aResult.stringValue = allocString(sValue);
+            aResult.stringValue = acquireString(sValue);
         }
         break;
 
@@ -269,11 +268,11 @@ sal_Sequence const * extractSequenceData(uno::Sequence< E > & _rSeq, uno::Any co
 //-----------------------------------------------------------------------------
 
 static
-AnyData allocSequenceData(TypeCode _aSimpleType, uno::Any const & _aAny)
+AnyData allocSequenceData(sal_uInt8 _aSimpleType, uno::Any const & _aAny)
 {
     OSL_ENSURE( _aSimpleType == (_aSimpleType & Type::mask_basetype), "Invalid type code" );
 
-    Sequence aSequence = 0;
+    sal_uInt8 * aSequence = 0;
 
     switch (_aSimpleType)
     {
@@ -345,27 +344,27 @@ AnyData allocSequenceData(TypeCode _aSimpleType, uno::Any const & _aAny)
 }
 //-----------------------------------------------------------------------------
 
-AnyData allocData(TypeCode _aType, uno::Any const & _aAny)
+AnyData allocData(sal_uInt8 _aType, uno::Any const & _aAny)
 {
     OSL_ENSURE( _aType == (_aType & Type::mask_valuetype), "Invalid type code" );
     OSL_ENSURE( _aType == getTypeCode(_aAny.getValueType()), "Type code does not match value" );
 
     if (_aType & Type::flag_sequence)
-        return allocSequenceData(TypeCode( _aType & Type::mask_basetype),_aAny);
+        return allocSequenceData(sal_uInt8( _aType & Type::mask_basetype),_aAny);
     else
         return allocSimpleData(_aType,_aAny);
 }
 //-----------------------------------------------------------------------------
 
 static
-void freeSimpleData(TypeCode _aSimpleType, AnyData const & _aData)
+void freeSimpleData(sal_uInt8 _aSimpleType, AnyData const & _aData)
 {
     OSL_ENSURE( _aSimpleType == (_aSimpleType & Type::mask_basetype), "Invalid type code" );
 
     switch (_aSimpleType)
     {
     case Type::value_string:
-        freeString(_aData.stringValue);
+        rtl_uString_release(_aData.stringValue);
         break;
 
     case Type::value_boolean:
@@ -398,12 +397,12 @@ void freeSimpleData(TypeCode _aSimpleType, AnyData const & _aData)
 }
 //-----------------------------------------------------------------------------
 
-void    freeData(TypeCode _aType, AnyData _aData)
+void    freeData(sal_uInt8 _aType, AnyData _aData)
 {
     OSL_ENSURE( _aType == (_aType & Type::mask_valuetype), "Invalid type code" );
 
     if (_aType & Type::flag_sequence)
-        freeSequence(TypeCode(_aType & Type::mask_basetype),_aData.sequenceValue);
+        freeSequence(sal_uInt8(_aType & Type::mask_basetype),_aData.sequenceValue);
 
     else
         freeSimpleData(_aType,_aData);
@@ -411,7 +410,7 @@ void    freeData(TypeCode _aType, AnyData _aData)
 //-----------------------------------------------------------------------------
 
 static
-uno::Any readSimpleData(TypeCode _aSimpleType, AnyData const & _aData)
+uno::Any readSimpleData(sal_uInt8 _aSimpleType, AnyData const & _aData)
 {
     OSL_ENSURE( _aSimpleType == (_aSimpleType & Type::mask_basetype), "Invalid type code" );
 
@@ -419,7 +418,7 @@ uno::Any readSimpleData(TypeCode _aSimpleType, AnyData const & _aData)
     {
     case Type::value_string:
         {
-            rtl::OUString sValue = readString(_aData.stringValue);
+            rtl::OUString sValue = rtl::OUString(_aData.stringValue);
             return uno::makeAny(sValue);
         }
 
@@ -454,12 +453,12 @@ uno::Any readSimpleData(TypeCode _aSimpleType, AnyData const & _aData)
 }
 //-----------------------------------------------------------------------------
 
-uno::Any readData(TypeCode _aType, AnyData _aData)
+uno::Any readData(sal_uInt8 _aType, AnyData _aData)
 {
     OSL_ENSURE( _aType == (_aType & Type::mask_valuetype), "Invalid type code" );
 
     if (_aType & Type::flag_sequence)
-        return readAnySequence(TypeCode(_aType & Type::mask_basetype),_aData.sequenceValue);
+        return readAnySequence(sal_uInt8(_aType & Type::mask_basetype),_aData.sequenceValue);
 
     else
         return readSimpleData(_aType,_aData);

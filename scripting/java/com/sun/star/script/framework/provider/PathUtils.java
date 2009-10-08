@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: PathUtils.java,v $
- * $Revision: 1.8 $
+ * $Revision: 1.8.6.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -76,7 +76,7 @@ public class PathUtils {
         {
             try
             {
-                Method getOid = IQueryInterface.class.getMethod("getOid", null);
+                Method getOid = IQueryInterface.class.getMethod("getOid", (java.lang.Class[])null);
                 if ( getOid != null )
                 {
                     oid = (String)getOid.invoke( xModel, new Object[0] );

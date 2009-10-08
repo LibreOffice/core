@@ -31,9 +31,9 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_configmgr.hxx"
 
+#include "node.hxx"
 #include "template.hxx"
 #include "templateimpl.hxx"
-#include "setnodeaccess.hxx"
 #include "apitypes.hxx"
 
 namespace configmgr
@@ -51,7 +51,7 @@ TemplateProvider::TemplateProvider()
 }
 
 //-----------------------------------------------------------------------------
-TemplateProvider::TemplateProvider(TemplateManagerRef const & xProvider, RequestOptions const& aOptions)
+TemplateProvider::TemplateProvider(rtl::Reference< TreeManager > const & xProvider, RequestOptions const& aOptions)
 : m_aImpl( new TemplateProvider_Impl(xProvider,aOptions) )
 {
 }
@@ -78,7 +78,7 @@ TemplateProvider::~TemplateProvider()
 // class Template
 //-----------------------------------------------------------------------------
 
-Template::Template(Name const& aName, Name const& aModule,UnoType const& aType)
+Template::Template(rtl::OUString const& aName, rtl::OUString const& aModule,com::sun::star::uno::Type const& aType)
 : m_aName(aName)
 , m_aModule(aModule)
 , m_aInstanceType(aType)
@@ -101,7 +101,7 @@ bool Template::isInstanceValue() const
 }
 //-----------------------------------------------------------------------------
 
-UnoType Template::getInstanceType() const
+com::sun::star::uno::Type   Template::getInstanceType() const
 {
     OSL_ENSURE( isInstanceTypeKnown(), "Template instance type unknown - returning invalid (VOID) type");
     return m_aInstanceType;
@@ -109,17 +109,17 @@ UnoType Template::getInstanceType() const
 //-----------------------------------------------------------------------------
 
 /// get the path where the template is located
-OUString Template::getPathString() const
+rtl::OUString Template::getPathString() const
 {
     TemplateName aNames(m_aName,m_aModule);
     return aNames.makePathString( );
 }
 //-----------------------------------------------------------------------------
 
-TemplateHolder makeSetElementTemplate(data::SetNodeAccess const& _aSet, TemplateProvider const& _aProvider)
+rtl::Reference<Template> makeSetElementTemplate(sharable::SetNode * set, TemplateProvider const& _aProvider)
 {
-    TemplateName aNames( _aSet.getElementTemplateName(), _aSet.getElementTemplateModule() );
-    return TemplateImplHelper::makeElementTemplateWithType(aNames, _aProvider, _aSet);
+    TemplateName aNames( set->getElementTemplateName(), set->getElementTemplateModule() );
+    return TemplateImplHelper::makeElementTemplateWithType(aNames, _aProvider, set);
 }
 //-----------------------------------------------------------------------------
     }

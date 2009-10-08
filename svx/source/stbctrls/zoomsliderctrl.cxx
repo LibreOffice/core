@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: zoomsliderctrl.cxx,v $
- * $Revision: 1.4 $
+ * $Revision: 1.3.138.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -205,8 +205,11 @@ SvxZoomSliderControl::~SvxZoomSliderControl()
 
 void SvxZoomSliderControl::StateChanged( USHORT /*nSID*/, SfxItemState eState, const SfxPoolItem* pState )
 {
-    if ( SFX_ITEM_AVAILABLE != eState || pState->ISA( SfxVoidItem ) )
+    if ( (SFX_ITEM_AVAILABLE != eState) || pState->ISA( SfxVoidItem ) )
+    {
         GetStatusBar().SetItemText( GetId(), String() );
+        mpImpl->mbValuesSet   = false;
+    }
     else
     {
         OSL_ENSURE( pState->ISA( SvxZoomSliderItem ), "invalid item type: should be a SvxZoomSliderItem" );

@@ -54,7 +54,7 @@ static inline rtl::OUString getLocalisedDataSubPath()
 //------------------------------------------------------------------------------
 
 LocalSingleStratumBase::LocalSingleStratumBase(const uno::Reference<uno::XComponentContext>& xContext)
-: SingleStratumImplBase(xContext)
+: cppu::ImplInheritanceHelper1< LocalStratumBase, backend::XSingleLayerStratum >(xContext)
 {
 }
 //------------------------------------------------------------------------------
@@ -131,7 +131,7 @@ void LocalDataStratum::getLayerDirectories(rtl::OUString& aLayerUrl,
                                              rtl::OUString& aSubLayerUrl) const
 {
     impl_getLayerDataDirectory(getBaseUrl(),aLayerUrl);
-    aSubLayerUrl = OUString();
+    aSubLayerUrl = rtl::OUString();
 }
 //------------------------------------------------------------------------------
 
@@ -139,7 +139,7 @@ void LocalReadonlyStratum::getLayerDirectories(rtl::OUString& aLayerUrl,
                                              rtl::OUString& aSubLayerUrl) const
 {
     impl_getLayerDataDirectory(getBaseUrl(),aLayerUrl);
-    aSubLayerUrl = OUString();
+    aSubLayerUrl = rtl::OUString();
 }
 //------------------------------------------------------------------------------
 
@@ -152,7 +152,7 @@ void LocalResourceStratum::adjustBaseURL(rtl::OUString& aBaseUrl)
 void LocalResourceStratum::getLayerDirectories(rtl::OUString& aLayerUrl,
                                              rtl::OUString& aSubLayerUrl) const
 {
-   aLayerUrl = OUString();
+   aLayerUrl = rtl::OUString();
    aSubLayerUrl = getBaseUrl();
    // impl_getLayerResDirectory(getBaseUrl(),aSubLayerUrl);
 }
@@ -172,7 +172,7 @@ static const sal_Char * const kBackendService =
 static const sal_Char * const kLocalService =
                 "com.sun.star.configuration.backend.LocalSingleStratum" ;
 
-static AsciiServiceName kServiceNames [] = { kLocalService, 0, kBackendService, 0 } ;
+static sal_Char const * kServiceNames [] = { kLocalService, 0, kBackendService, 0 } ;
 static const ServiceImplementationInfo kLegacyStratumServiceInfo   = { kLegacyStratumImplementation  , kServiceNames, kServiceNames + 2 } ;
 static const ServiceImplementationInfo kDataStratumServiceInfo     = { kDataStratumImplementation    , kServiceNames, kServiceNames + 2 } ;
 static const ServiceImplementationInfo kReadonlyStratumServiceInfo = { kReadonlyStratumImplementation, kServiceNames, kServiceNames + 2 } ;
@@ -191,22 +191,22 @@ const ServiceRegistrationInfo *getLocalResourceStratumServiceInfo()
 { return getRegistrationInfo(&kResourceStratumServiceInfo) ; }
 
 uno::Reference<uno::XInterface> SAL_CALL
-instantiateLocalLegacyStratum(const CreationContext& xContext) {
+instantiateLocalLegacyStratum(const uno::Reference< uno::XComponentContext >& xContext) {
     return *new LocalSingleStratum(xContext) ;
 }
 
 uno::Reference<uno::XInterface> SAL_CALL
-instantiateLocalDataStratum(const CreationContext& xContext) {
+instantiateLocalDataStratum(const uno::Reference< uno::XComponentContext >& xContext) {
     return *new LocalDataStratum(xContext) ;
 }
 
 uno::Reference<uno::XInterface> SAL_CALL
-instantiateLocalReadonlyStratum(const CreationContext& xContext) {
+instantiateLocalReadonlyStratum(const uno::Reference< uno::XComponentContext >& xContext) {
     return *new LocalReadonlyStratum(xContext) ;
 }
 
 uno::Reference<uno::XInterface> SAL_CALL
-instantiateLocalResourceStratum(const CreationContext& xContext) {
+instantiateLocalResourceStratum(const uno::Reference< uno::XComponentContext >& xContext) {
     return *new LocalResourceStratum(xContext) ;
 }
 //------------------------------------------------------------------------------

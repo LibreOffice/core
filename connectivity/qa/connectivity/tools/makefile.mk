@@ -8,7 +8,7 @@
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.8 $
+# $Revision: 1.8.60.1 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -44,7 +44,7 @@ all:
 
 #----- compile .java files -----------------------------------------
 
-JARFILES        = ridl.jar unoil.jar jurt.jar juh.jar jut.jar java_uno.jar
+JARFILES        = ridl.jar unoil.jar jurt.jar juh.jar java_uno.jar
 # Do not use $/ with the $(FIND) command as for W32-4nt this leads to a backslash
 # in a posix command. In this special case use / instead of $/
 .IF "$(GUI)"=="OS2"

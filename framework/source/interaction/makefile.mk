@@ -8,7 +8,7 @@
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.5 $
+# $Revision: 1.5.82.1 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -46,7 +46,6 @@ CDEFS+=-DCOMPMOD_NAMESPACE=framework
 # --- Generate -----------------------------------------------------
 
 SLOFILES=		$(SLO)$/stillinteraction.obj		    \
-                $(SLO)$/restricteduiinteraction.obj     \
                 $(SLO)$/preventduplicateinteraction.obj
 
 # --- Targets ------------------------------------------------------

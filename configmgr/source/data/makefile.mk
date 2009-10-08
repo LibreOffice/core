@@ -30,7 +30,7 @@
 #*************************************************************************
 
 PRJ=..$/..
-PRJINC=$(PRJ)$/source
+PRJINC=$(PRJ)$/source$/inc
 PRJNAME=configmgr
 TARGET=data
 

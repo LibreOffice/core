@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: ODriver.cxx,v $
- * $Revision: 1.18 $
+ * $Revision: 1.18.56.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -35,6 +35,8 @@
 #include "odbc/OFunctions.hxx"
 #include "odbc/OTools.hxx"
 #include "connectivity/dbexception.hxx"
+#include "resource/common_res.hrc"
+#include "resource/sharedresources.hxx"
 
 using namespace connectivity::odbc;
 using namespace com::sun::star::uno;
@@ -209,7 +211,9 @@ Sequence< DriverPropertyInfo > SAL_CALL ODBCDriver::getPropertyInfo( const ::rtl
 
         return Sequence< DriverPropertyInfo >(&aDriverInfo[0],aDriverInfo.size());
     }
-    ::dbtools::throwGenericSQLException(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Invalid URL!")) ,*this);
+    ::connectivity::SharedResources aResources;
+    const ::rtl::OUString sMessage = aResources.getResourceString(STR_URI_SYNTAX_ERROR);
+    ::dbtools::throwGenericSQLException(sMessage ,*this);
     return Sequence< DriverPropertyInfo >();
 }
 // --------------------------------------------------------------------------------

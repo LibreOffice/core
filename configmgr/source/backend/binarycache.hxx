@@ -50,7 +50,6 @@ namespace configmgr
         // -----------------------------------------------------------------------------
         class MergedComponentData;
 
-        typedef uno::Reference< lang::XMultiServiceFactory > MultiServiceFactory;
         // -----------------------------------------------------------------------------
 
         class BinaryCache
@@ -67,22 +66,22 @@ namespace configmgr
             rtl::OUString getCacheFileURL(rtl::OUString const & aComponent) const;
 
             bool readComponentData(MergedComponentData & aComponentData,
-                                    MultiServiceFactory const & aFactory,
+                                    uno::Reference< lang::XMultiServiceFactory > const & aFactory,
                                     rtl::OUString const & aComponent,
                                     rtl::OUString const & aSchemaVersion,
                                     rtl::OUString const & aEntity,
-                                    localehelper::Locale const & aRequestedLocale,
-                                    localehelper::LocaleSequence & outKnownLocales,
+                                    com::sun::star::lang::Locale const & aRequestedLocale,
+                                    std::vector< com::sun::star::lang::Locale > & outKnownLocales,
                                     const uno::Reference<backenduno::XLayer> * pLayers,
                                     sal_Int32 nNumLayers,
                                     bool bIncludeTemplates = true);
 
             bool writeComponentData(MergedComponentData const & aComponentData,
-                                    MultiServiceFactory const & aFactory,
+                                    uno::Reference< lang::XMultiServiceFactory > const & aFactory,
                                     rtl::OUString const & aComponent,
                                     rtl::OUString const & aSchemaVersion,
                                     rtl::OUString const & aEntity,
-                                    localehelper::LocaleSequence const & aKnownLocales,
+                                    std::vector< com::sun::star::lang::Locale > const & aKnownLocales,
                                     const uno::Reference<backenduno::XLayer> * pLayers,
                                     sal_Int32 nNumLayers);
         private:

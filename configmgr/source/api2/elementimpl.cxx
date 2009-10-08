@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: elementimpl.cxx,v $
- * $Revision: 1.17 $
+ * $Revision: 1.17.14.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -57,20 +57,6 @@ namespace configmgr
         namespace lang = css::lang;
         namespace util = css::util;
 
-        using uno::RuntimeException;
-        using uno::Reference;
-        using uno::Any;
-        using uno::Sequence;
-        using lang::NoSupportException;
-        using lang::WrappedTargetException;
-
-        using configuration::NodeRef;
-        using configuration::Tree;
-        using configuration::ElementTree;
-        using configuration::Name;
-        using configuration::AbsolutePath;
-        using configuration::RelativePath;
-
 //-----------------------------------------------------------------------------------
 
 // Interface methods
@@ -79,18 +65,18 @@ namespace configmgr
 // XChild
 //-----------------------------------------------------------------------------------
 
-Reference< uno::XInterface > implGetParent(NodeAccess& rNode, InnerElement&) throw(RuntimeException)
+uno::Reference< uno::XInterface > implGetParent(NodeAccess& rNode, InnerElement&) throw(uno::RuntimeException)
 {
-    Reference<uno::XInterface> xRet;
+    uno::Reference<uno::XInterface> xRet;
 
     try
     {
-        GuardedNodeDataAccess impl( rNode ); // no provider lock needed - tree must be prebuilt already
+        GuardedNodeData<NodeAccess> impl( rNode ); // no provider lock needed - tree must be prebuilt already
 
-        Tree aTree(impl.getTree());
-        NodeRef aParentNode = aTree.getParent(impl.getNode());
+        rtl::Reference< configuration::Tree > aTree(impl.getTree());
+        configuration::NodeRef aParentNode = aTree->getParent(impl.getNode());
 
-        Any aAny = configapi::makeInnerElement( rNode.getFactory(), aTree, aParentNode );
+        uno::Any aAny = configapi::makeInnerElement( rNode.getFactory(), aTree, aParentNode );
 
         if (!(aAny >>= xRet)) // no parent available
         {
@@ -110,25 +96,25 @@ Reference< uno::XInterface > implGetParent(NodeAccess& rNode, InnerElement&) thr
 
 //-----------------------------------------------------------------------------------
 
-Reference< uno::XInterface > implGetParent(NodeAccess& rNode, SetElement& /*rElement*/) throw(RuntimeException)
+uno::Reference< uno::XInterface > implGetParent(NodeAccess& rNode, SetElement& /*rElement*/) throw(uno::RuntimeException)
 {
-    Reference<uno::XInterface> xRet;
+    uno::Reference<uno::XInterface> xRet;
 
     try
     {
         // assume shared lock for connected trees
-        GuardedNodeDataAccess impl( rNode ); // no provider lock needed - tree must be prebuilt already
+        GuardedNodeData<NodeAccess> impl( rNode ); // no provider lock needed - tree must be prebuilt already
 
-        Tree aTree(impl.getTree());
+        rtl::Reference< configuration::Tree > aTree(impl.getTree());
 
-        Tree aParentTree( aTree.getContextTree() );
+        rtl::Reference< configuration::Tree > aParentTree( aTree->getContextTree() );
 
-        if (!aParentTree.isEmpty())
+        if (!configuration::isEmpty(aParentTree.get()))
         {
-            NodeRef aParentNode( aTree.getContextNode() );
+            configuration::NodeRef aParentNode( aTree->getContextNodeRef() );
 
             // assume shared factory for connected trees
-            Any aAny = configapi::makeInnerElement( rNode.getFactory(), aParentTree, aParentNode );
+            uno::Any aAny = configapi::makeInnerElement( rNode.getFactory(), aParentTree, aParentNode );
 
             if (!(aAny >>= xRet)) // no parent available
             {
@@ -154,84 +140,82 @@ Reference< uno::XInterface > implGetParent(NodeAccess& rNode, SetElement& /*rEle
 //-----------------------------------------------------------------------------------
 
 // UNSUPPORTED method
-void implSetParent(NodeAccess& rNode, InnerElement& /*rElement*/, const Reference< uno::XInterface >& /*xParent*/ )
-    throw(NoSupportException, RuntimeException)
+void implSetParent(NodeAccess& rNode, InnerElement& /*rElement*/, const uno::Reference< uno::XInterface >& /*xParent*/ )
+    throw(lang::NoSupportException, uno::RuntimeException)
 {
     UnoApiLock aLock;
 
     rNode.checkAlive(); // Does locking internally, checks for disposed nodes
 
     // TODO(?): allow for xParent == getParent()
-    throw NoSupportException(
-            OUString(RTL_CONSTASCII_USTRINGPARAM("configmgr: BasicElement::setParent: cannot move Entry")),
+    throw lang::NoSupportException(
+            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("configmgr: BasicElement::setParent: cannot move Entry")),
             rNode.getUnoInstance() );
 }
 //-----------------------------------------------------------------------------------
 
 // preliminary implementation
-void implSetParent(NodeAccess& rNode, SetElement& rElement, const Reference< uno::XInterface >& xParent )
-    throw(NoSupportException, RuntimeException)
+void implSetParent(NodeAccess& rNode, SetElement& rElement, const uno::Reference< uno::XInterface >& xParent )
+    throw(lang::NoSupportException, uno::RuntimeException)
 {
     UnoApiLock aLock;
 
     //implSetParent(rNode,xParent);
     // TODO: lock the whole transaction ???? - would need Uno Tunneling ?
-    using css::container::XNameContainer;
-
-    Reference< uno::XInterface > xGotParent( implGetParent(rNode,rElement) );
-    Reference< XNameContainer > xOldParent( xGotParent, uno::UNO_QUERY );
-    Reference< XNameContainer > xNewParent( xParent, uno::UNO_QUERY );
+    uno::Reference< uno::XInterface > xGotParent( implGetParent(rNode,rElement) );
+    uno::Reference< css::container::XNameContainer > xOldParent( xGotParent, uno::UNO_QUERY );
+    uno::Reference< css::container::XNameContainer > xNewParent( xParent, uno::UNO_QUERY );
 
     if (xGotParent.is() && !xOldParent.is())
     {
-        throw NoSupportException(
-                OUString(RTL_CONSTASCII_USTRINGPARAM("Config API: implSetParent: this is not element of a container")),
+        throw lang::NoSupportException(
+                rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Config API: implSetParent: this is not element of a container")),
                 rNode.getUnoInstance() );
     }
     if (xParent.is() && !xNewParent.is())
     {
-        throw NoSupportException(
-                OUString(RTL_CONSTASCII_USTRINGPARAM("Config API: implSetParent: new parent is no container")),
+        throw lang::NoSupportException(
+                rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Config API: implSetParent: new parent is no container")),
                 rNode.getUnoInstance() );
     }
 
-    Reference< uno::XInterface > xThis(rNode.getUnoInstance());
+    uno::Reference< uno::XInterface > xThis(rNode.getUnoInstance());
     OSL_ASSERT(xThis.is());
 
     if (xOldParent != xNewParent)
     {
-        OUString const sName( implGetName(rNode,rElement) );
+        rtl::OUString const sName( implGetName(rNode,rElement) );
 
         if (xParent.is())
         {
-            OUString const sTemplate( implGetTemplateName(rElement) );
+            rtl::OUString const sTemplate( implGetTemplateName(rElement) );
 
             if (sTemplate.getLength() == 0)
             {
-                throw NoSupportException(
-                        OUString(RTL_CONSTASCII_USTRINGPARAM("Config API: implSetParent: object has no recognizable type")),
+                throw lang::NoSupportException(
+                        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Config API: implSetParent: object has no recognizable type")),
                         xThis );
             }
 
-            Reference< css::configuration::XTemplateContainer > xNewTemplate( xParent, uno::UNO_QUERY );
+            uno::Reference< css::configuration::XTemplateContainer > xNewTemplate( xParent, uno::UNO_QUERY );
             if (!xNewTemplate.is())
             {
-                throw NoSupportException(
-                        OUString(RTL_CONSTASCII_USTRINGPARAM("Config API: implSetParent: new parent has no element template")),
+                throw lang::NoSupportException(
+                        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Config API: implSetParent: new parent has no element template")),
                         xThis );
             }
 
             if ( sTemplate != xNewTemplate->getElementTemplateName())
             {
-                throw NoSupportException(
-                        OUString(RTL_CONSTASCII_USTRINGPARAM("Config API: implSetParent: object has wrong type")),
+                throw lang::NoSupportException(
+                        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Config API: implSetParent: object has wrong type")),
                         xThis );
             }
 
             if ( xNewParent->hasByName( sName ) )
             {
-                throw NoSupportException(
-                        OUString(RTL_CONSTASCII_USTRINGPARAM("Config API: implSetParent: an object of this name already exists in new parent")),
+                throw lang::NoSupportException(
+                        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Config API: implSetParent: an object of this name already exists in new parent")),
                         xThis );
             }
 
@@ -247,7 +231,7 @@ void implSetParent(NodeAccess& rNode, SetElement& rElement, const Reference< uno
         }
         catch (uno::Exception& e)
         {
-            e.Message = OUString(RTL_CONSTASCII_USTRINGPARAM("Config API: implSetParent: changing parent failed: "))
+            e.Message = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Config API: implSetParent: changing parent failed: "))
                 += e.Message;
 
             if (xOldParent.is())
@@ -257,10 +241,10 @@ void implSetParent(NodeAccess& rNode, SetElement& rElement, const Reference< uno
             }
             catch(uno::Exception& bad)
             {
-                e.Message += OUString(RTL_CONSTASCII_USTRINGPARAM("\n\t ! Could not restore old parent: ")) += bad.Message;
+                e.Message += rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("\n\t ! Could not restore old parent: ")) += bad.Message;
             }
 
-            throw RuntimeException(e.Message,xThis);
+            throw uno::RuntimeException(e.Message,xThis);
         }
 
     }
@@ -270,17 +254,17 @@ void implSetParent(NodeAccess& rNode, SetElement& rElement, const Reference< uno
 
 // XNamed
 //-----------------------------------------------------------------------------
-OUString implGetName(NodeAccess& rNode, NodeElement& ) throw(RuntimeException)
+rtl::OUString implGetName(NodeAccess& rNode, NodeElement& ) throw(uno::RuntimeException)
 {
-    OUString sRet;
+    rtl::OUString sRet;
     try
     {
-        GuardedNodeDataAccess impl( rNode ); // maybe passive only ?
+        GuardedNodeData<NodeAccess> impl( rNode ); // maybe passive only ?
 
-        Tree    aTree(impl.getTree());
-        NodeRef aNode(impl.getNode());
+        rtl::Reference< configuration::Tree > aTree(impl.getTree());
+        configuration::NodeRef aNode(impl.getNode());
 
-        sRet = aTree.getName(aNode).toString();
+        sRet = aTree->getSimpleNodeName(aNode.getOffset());
     }
     catch (configuration::Exception& ex)
     {
@@ -294,23 +278,21 @@ OUString implGetName(NodeAccess& rNode, NodeElement& ) throw(RuntimeException)
 //-----------------------------------------------------------------------------
 
 // UNSUPPORTED method
-void implSetName(NodeAccess & rNode, NodeElement& /*rElement*/, const OUString& /*aName*/ ) throw(RuntimeException)
+void implSetName(NodeAccess & rNode, NodeElement& /*rElement*/, const rtl::OUString& /*aName*/ ) throw(uno::RuntimeException)
 {
     UnoApiLock aLock;
-
-    typedef RuntimeException CantRenameException;
 
     rNode.checkAlive(); // Does locking internally, checks for disposed nodes
 
     // TODO(?): allow for aName == getName()
-    throw CantRenameException(
-        OUString(RTL_CONSTASCII_USTRINGPARAM("configmgr: BasicElement::setName: cannot rename Entry")),
+    throw uno::RuntimeException(
+        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("configmgr: BasicElement::setName: cannot rename Entry")),
         rNode.getUnoInstance() );
 }
 //-----------------------------------------------------------------------------
 
 // TODO: Implementations for elements to be added to a container node
-void implSetName(NodeAccess& rNode, SetElement& rElement, const OUString& aName ) throw(RuntimeException)
+void implSetName(NodeAccess& rNode, SetElement& rElement, const rtl::OUString& aName ) throw(uno::RuntimeException)
 {
     UnoApiLock aLock;
 
@@ -332,7 +314,7 @@ void implDispose( SetElement& rElement) throw(uno::RuntimeException)
     if (!rElement.disposeTree(false))
     {
         throw uno::RuntimeException(
-                OUString(RTL_CONSTASCII_USTRINGPARAM("CONFIGURATION: Can't dispose an object that has an owner")),
+                rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("CONFIGURATION: Can't dispose an object that has an owner")),
                 rElement.getUnoInstance() );
     }
 }
@@ -345,7 +327,7 @@ void implDispose( RootElement& rElement) throw(uno::RuntimeException)
     if (!rElement.disposeTree())
     {
         throw lang::DisposedException(
-                OUString(RTL_CONSTASCII_USTRINGPARAM("CONFIGURATION: Can't dispose an object that already was disposed")),
+                rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("CONFIGURATION: Can't dispose an object that already was disposed")),
                 rElement.getUnoInstance() );
     }
 }
@@ -390,7 +372,7 @@ uno::Sequence<sal_Int8> implGetImplementationId(NodeAccess& rNode, NodeElement& 
 
     OSL_ENSURE(pInfo, "Configuration: Object has no implementation (service) info - cannot get implementation id");
     if (!pInfo)
-        throw uno::RuntimeException( OUString(RTL_CONSTASCII_USTRINGPARAM("CONFIGURATION: Object has no implementation information - cannot get implementation id")),rElement.getUnoInstance() );
+        throw uno::RuntimeException( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("CONFIGURATION: Object has no implementation information - cannot get implementation id")),rElement.getUnoInstance() );
 
     return ServiceComponentImpl::getStaticImplementationId(pInfo);
 }
@@ -399,7 +381,7 @@ uno::Sequence<sal_Int8> implGetImplementationId(NodeAccess& rNode, NodeElement& 
 // XServiceInfo
 //-----------------------------------------------------------------------------
 
-OUString implGetImplementationName( NodeAccess& rNode, NodeElement& rElement ) throw(uno::RuntimeException)
+rtl::OUString implGetImplementationName( NodeAccess& rNode, NodeElement& rElement ) throw(uno::RuntimeException)
 {
     DisposeGuard aLock(rNode);
     ServiceImplementationInfo const* pInfo = rElement.getServiceInfo();
@@ -409,7 +391,7 @@ OUString implGetImplementationName( NodeAccess& rNode, NodeElement& rElement ) t
 }
 //-----------------------------------------------------------------------------
 
-sal_Bool implSupportsService( NodeAccess& rNode, NodeElement& rElement, const OUString& ServiceName ) throw(uno::RuntimeException)
+sal_Bool implSupportsService( NodeAccess& rNode, NodeElement& rElement, const rtl::OUString& ServiceName ) throw(uno::RuntimeException)
 {
     DisposeGuard aLock(rNode);
     ServiceImplementationInfo const* pInfo = rElement.getServiceInfo();
@@ -419,7 +401,7 @@ sal_Bool implSupportsService( NodeAccess& rNode, NodeElement& rElement, const OU
 }
 //-----------------------------------------------------------------------------
 
-uno::Sequence< OUString > implGetSupportedServiceNames( NodeAccess& rNode, NodeElement& rElement ) throw(uno::RuntimeException)
+uno::Sequence< rtl::OUString > implGetSupportedServiceNames( NodeAccess& rNode, NodeElement& rElement ) throw(uno::RuntimeException)
 {
     DisposeGuard aLock(rNode);
     ServiceImplementationInfo const* pInfo = rElement.getServiceInfo();
@@ -452,7 +434,7 @@ void implSetLocale( RootElement& rElement, const css::lang::Locale& /*eLocale*/ 
 
     OSL_ENSURE(false,"CONFIGURATION: Changing the set Locale is not supported.");
     throw uno::RuntimeException(
-        OUString(RTL_CONSTASCII_USTRINGPARAM("CONFIGURATION: Changing the locale is currently not supported")),
+        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("CONFIGURATION: Changing the locale is currently not supported")),
         rElement.getUnoInstance()
     );
 }
@@ -473,13 +455,6 @@ void implCommitChanges( UpdateRootElement& rElement ) throw(css::lang::WrappedTa
         rElement.getCommitter().commit();
     }
 
-    // map configuration::Exceptions
-    catch (configuration::WrappedUnoException& ex)
-    {
-        Reference<uno::XInterface> xContext( rElement.getUnoInstance() );
-        OUString sMessage( RTL_CONSTASCII_USTRINGPARAM("Configuration: can't commit Changes: ") );
-        throw WrappedTargetException( sMessage += ex.extractMessage(), xContext, ex.getAnyUnoException() );
-    }
     catch (configuration::Exception& ex)
     {
         ExceptionMapper e(ex);
@@ -488,13 +463,13 @@ void implCommitChanges( UpdateRootElement& rElement ) throw(css::lang::WrappedTa
     }
 
     // filter/wrap uno::Exceptions
-    catch (WrappedTargetException& )    { throw; }
-    catch (RuntimeException& )          { throw; }
+    catch (lang::WrappedTargetException& )  { throw; }
+    catch (uno::RuntimeException& )         { throw; }
     catch (uno::Exception& ex)
     {
-        Reference<uno::XInterface> xContext( rElement.getUnoInstance() );
-        OUString sMessage( RTL_CONSTASCII_USTRINGPARAM("Configuration: can't commit Changes: ") );
-        throw WrappedTargetException( sMessage += ex.Message, xContext, uno::makeAny(ex));
+        uno::Reference<uno::XInterface> xContext( rElement.getUnoInstance() );
+        rtl::OUString sMessage( RTL_CONSTASCII_USTRINGPARAM("Configuration: can't commit Changes: ") );
+        throw lang::WrappedTargetException( sMessage += ex.Message, xContext, uno::makeAny(ex));
     }
 }
 //-----------------------------------------------------------------------------
@@ -504,7 +479,7 @@ sal_Bool implHasPendingChanges( RootElement& rElement ) throw(uno::RuntimeExcept
     try
     {
         GuardedRootElement aLocked(rElement);
-        return aLocked.getTree().hasChanges();
+        return aLocked.get().getTree()->hasChanges();
     }
     catch (configuration::Exception& ex)
     {
@@ -521,21 +496,18 @@ sal_Bool implHasPendingChanges( RootElement& rElement ) throw(uno::RuntimeExcept
 uno::Sequence< css::util::ElementChange > implGetPendingChanges( RootElement& rElement )
         throw(uno::RuntimeException)
 {
-    using css::util::ElementChange;
-    using configuration::NodeChangesInformation;
-
-    std::vector<ElementChange> aResult;
+    std::vector<css::util::ElementChange> aResult;
     try
     {
         GuardedRootElement aLocked(rElement);
 
-        Tree aTree( aLocked.getTree() );
+        rtl::Reference< configuration::Tree > aTree( aLocked.get().getTree() );
 
-        NodeChangesInformation aInfos;
+        configuration::NodeChangesInformation aInfos;
 
         {
-            NodeChanges aChanges;
-            if (aTree.collectChanges(aChanges))
+            configuration::NodeChanges aChanges;
+            if (aTree->collectChanges(aChanges))
             {
                 aChanges.getChangesInfos(aInfos);
             }
@@ -543,11 +515,11 @@ uno::Sequence< css::util::ElementChange > implGetPendingChanges( RootElement& rE
 
         Factory& rFactory = rElement.getFactory();
 
-        for(NodeChangesInformation::Iterator it = aInfos.begin(), stop = aInfos.end();
+        for(std::vector< configuration::NodeChangeInformation >::const_iterator it = aInfos.begin(), stop = aInfos.end();
             it != stop;
             ++it)
         {
-            ElementChange aChange;
+            css::util::ElementChange aChange;
             fillChange(aChange,*it,aTree,rFactory);
             aResult.push_back(aChange);
         }
@@ -568,13 +540,13 @@ uno::Sequence< css::util::ElementChange > implGetPendingChanges( RootElement& rE
 // XTemplateInstance
 //-----------------------------------------------------------------------------------
 
-OUString implGetTemplateName(SetElement& rElement)
+rtl::OUString implGetTemplateName(SetElement& rElement)
     throw(uno::RuntimeException)
 {
     try
     {
         GuardedTreeElement aLocked(rElement);
-        return rElement.getTemplateInfo().getTemplatePathString();
+        return rElement.getTemplateInfo()->getPathString();
     }
     catch (configuration::Exception& ex)
     {
@@ -584,7 +556,7 @@ OUString implGetTemplateName(SetElement& rElement)
     }
 
     OSL_ENSURE(false,"Unreachable Code");
-    return OUString();
+    return rtl::OUString();
 }
 //-----------------------------------------------------------------------------------
 

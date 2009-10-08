@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: viewsh.hxx,v $
- * $Revision: 1.5 $
+ * $Revision: 1.5.46.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -186,10 +186,8 @@ protected:
 
     virtual void                Move();
 
-    virtual void                SFX_NOTIFY( SfxBroadcaster& rBC,
-                                        const TypeId& rBCType,
-                                        const SfxHint& rHint,
-                                        const TypeId& rHintType );
+    virtual void                Notify( SfxBroadcaster& rBC, const SfxHint& rHint );
+
 public:
     // Iteration
     static SfxViewShell*        GetFirst( const TypeId* pType = 0, BOOL bOnlyVisible = TRUE );

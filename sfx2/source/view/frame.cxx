@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: frame.cxx,v $
- * $Revision: 1.55 $
+ * $Revision: 1.55.142.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -532,7 +532,7 @@ void SfxFrame::CancelTransfers( sal_Bool /*bCancelLoadEnv*/ )
             SfxViewFrame* pFrm;
             for( pFrm = SfxViewFrame::GetFirst( pObj );
                  pFrm && pFrm->GetFrame() == this;
-                 pFrm = SfxViewFrame::GetNext( *pFrm, pObj ) );
+                 pFrm = SfxViewFrame::GetNext( *pFrm, pObj ) ) ;
             // Keine anderer Frame mehr auf Doc -> Cancel
             if( !pFrm )
             {

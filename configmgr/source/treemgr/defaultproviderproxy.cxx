@@ -33,7 +33,7 @@
 
 #include "defaultproviderproxy.hxx"
 #include "defaultprovider.hxx"
-#include "treeprovider.hxx"
+#include "treemanager.hxx"
 #include "valuenode.hxx"
 #include "options.hxx"
 
@@ -45,7 +45,7 @@ namespace configmgr
 //-----------------------------------------------------------------------------
 
 DefaultProviderProxy::DefaultProviderProxy(
-        rtl::Reference< IConfigDefaultProvider > const & _xDefaultTreeProvider,
+        rtl::Reference< TreeManager > const & _xDefaultTreeProvider,
         IDefaultableTreeManager *   _pDefaultTreeManager,
         AbsolutePath        const&  _aBaseLocation,
         RequestOptions      const&  _aOptions
@@ -66,7 +66,7 @@ DefaultProviderProxy::~DefaultProviderProxy()
 /// tries to load a default instance of the specified node (which must be within the request range owned)
 std::auto_ptr<ISubtree> DefaultProviderProxy::getDefaultTree(
                             AbsolutePath const& _aLocation
-                       ) const CFG_UNO_THROW_ALL()
+                       ) const SAL_THROW((com::sun::star::uno::Exception))
 {
     OSL_ENSURE( Path::hasPrefix(_aLocation,m_aBaseLocation),
                 "ERROR: DefaultProviderProxy called for out-of-scope location" );
@@ -81,7 +81,7 @@ std::auto_ptr<ISubtree> DefaultProviderProxy::getDefaultTree(
 
 //-----------------------------------------------------------------------------
 /// tries to load default data into the specified tree
-bool DefaultProviderProxy::fetchDefaultData()  CFG_UNO_THROW_ALL()
+bool DefaultProviderProxy::fetchDefaultData()  SAL_THROW((com::sun::star::uno::Exception))
 {
     OSL_PRECOND(m_pDefaultTreeManager, "No tree to fetch defaults into");
     if (!m_pDefaultTreeManager) return false;

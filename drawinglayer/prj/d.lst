@@ -50,6 +50,7 @@ mkdir: %_DEST%\inc%_EXT%\drawinglayer\primitive3d
 ..\inc\drawinglayer\primitive3d\baseprimitive3d.hxx %_DEST%\inc%_EXT%\drawinglayer\primitive3d\baseprimitive3d.hxx
 ..\inc\drawinglayer\primitive3d\groupprimitive3d.hxx %_DEST%\inc%_EXT%\drawinglayer\primitive3d\groupprimitive3d.hxx
 ..\inc\drawinglayer\primitive3d\hatchtextureprimitive3d.hxx %_DEST%\inc%_EXT%\drawinglayer\primitive3d\hatchtextureprimitive3d.hxx
+..\inc\drawinglayer\primitive3d\hittestprimitive3d.hxx %_DEST%\inc%_EXT%\drawinglayer\primitive3d\hittestprimitive3d.hxx
 ..\inc\drawinglayer\primitive3d\modifiedcolorprimitive3d.hxx %_DEST%\inc%_EXT%\drawinglayer\primitive3d\modifiedcolorprimitive3d.hxx
 ..\inc\drawinglayer\primitive3d\polygonprimitive3d.hxx %_DEST%\inc%_EXT%\drawinglayer\primitive3d\polygonprimitive3d.hxx
 ..\inc\drawinglayer\primitive3d\polygontubeprimitive3d.hxx %_DEST%\inc%_EXT%\drawinglayer\primitive3d\polygontubeprimitive3d.hxx

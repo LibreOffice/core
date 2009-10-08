@@ -567,6 +567,30 @@ Resource RID_BASIC_START
     {
         Text [ en-US ] = "An exception occurred $(ARG1)." ;
     };
+    String ERRCODE_BASIC_ARRAY_FIX & ERRCODE_RES_MASK
+    {
+        Text [ en-US ] = "This array is fixed or temporarily locked." ;
+    };
+    String ERRCODE_BASIC_STRING_OVERFLOW & ERRCODE_RES_MASK
+    {
+        Text [ en-US ] = "Out of string space." ;
+    };
+    String ERRCODE_BASIC_EXPR_TOO_COMPLEX & ERRCODE_RES_MASK
+    {
+        Text [ en-US ] = "Expression Too Complex." ;
+    };
+    String ERRCODE_BASIC_OPER_NOT_PERFORM & ERRCODE_RES_MASK
+    {
+        Text [ en-US ] = "Can't perform requested operation." ;
+    };
+    String ERRCODE_BASIC_TOO_MANY_DLL & ERRCODE_RES_MASK
+    {
+        Text [ en-US ] = "Too many DLL application clients." ;
+    };
+    String ERRCODE_BASIC_LOOP_NOT_INIT & ERRCODE_RES_MASK
+    {
+        Text [ en-US ] = "For loop not initialized." ;
+    };
 };
  // Hinweis: IDS_SBERR_TERMINATED = IDS_SBERR_START+2000.
 String IDS_SBERR_TERMINATED

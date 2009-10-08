@@ -32,7 +32,7 @@
 #define CONFIGMGR_SETNODEBEHAVIOR_HXX_
 
 #include "nodeimpl.hxx"
-#include "treeimpl.hxx"
+#include "tree.hxx"
 #include "template.hxx"
 #include <rtl/ref.hxx>
 
@@ -51,6 +51,7 @@ namespace configmgr
     class SubtreeChange;
     class AddNode;
     class RemoveNode;
+    namespace view { class ViewTreeAccess; }
 //-----------------------------------------------------------------------------
 
     namespace configuration
@@ -59,21 +60,18 @@ namespace configmgr
         class SetElementChangeImpl;
 
 //-----------------------------------------------------------------------------
-        typedef rtl::Reference<ElementTreeImpl>     ElementTreeHolder; // also in configset.hxx
-        typedef std::vector< ElementTreeHolder >    ElementList; // also in treeimpl.hxx
-//-----------------------------------------------------------------------------
 
         struct SetEntry
         {
-            SetEntry(ElementTreeImpl* _pTree);
+            SetEntry(ElementTree* _pTree);
 
             bool isValid()  const { return m_pTree != 0; }
 
-            ElementTreeImpl* tree() const { return m_pTree; };
+            ElementTree* tree() const { return m_pTree; };
 
             view::ViewTreeAccess    getTreeView() const;
         private:
-            ElementTreeImpl* m_pTree;
+            ElementTree* m_pTree;
         };
     //-------------------------------------------------------------------------
 
@@ -90,22 +88,20 @@ namespace configmgr
 
         struct ElementTreeData
         {
-            typedef rtl::Reference<ElementTreeImpl> ElementTreeHolder;
-
             // construction
             ElementTreeData() : tree(), inDefault(false) {}
 
-            ElementTreeData(ElementTreeHolder const& _tree, bool _bDefault)
+            ElementTreeData(rtl::Reference<ElementTree> const& _tree, bool _bDefault)
              : tree(_tree), inDefault(_bDefault) {}
 
             // ORef compatibility
             sal_Bool isValid() const { return this->tree.is(); }
-            ElementTreeImpl* get() const { return this->tree.get(); }
-            ElementTreeHolder const& operator->() const { return this->tree; }
-            ElementTreeImpl& operator*() const { return *get(); }
+            ElementTree* get() const { return this->tree.get(); }
+            rtl::Reference<ElementTree> const& operator->() const { return this->tree; }
+            ElementTree& operator*() const { return *get(); }
 
             // data
-            ElementTreeHolder   tree;
+            rtl::Reference<ElementTree>   tree;
             bool                inDefault;
         };
     //-----------------------------------------------------------------------------
@@ -113,19 +109,19 @@ namespace configmgr
         class ElementSet
         {
         public:
-            typedef std::map<Name, ElementTreeData> Data;
+            typedef std::map<rtl::OUString, ElementTreeData>    Data;
 
         // the following must be implemented by derived classes
             bool isEmpty() const { return m_aData.empty(); }
 
-            bool hasElement(Name const& aName) const;
-            ElementTreeData* getElement(Name const& aName);
-            ElementTreeData const* getElement(Name const& aName) const;
-            ElementTreeData findElement(Name const& aName);
+            bool hasElement(rtl::OUString const& aName) const;
+            ElementTreeData* getElement(rtl::OUString const& aName);
+            ElementTreeData const* getElement(rtl::OUString const& aName) const;
+            ElementTreeData findElement(rtl::OUString const& aName);
 
-            void insertElement(Name const& aName, ElementTreeData const& aNewEntry);
-            ElementTreeData replaceElement(Name const& aName, ElementTreeData const& aNewEntry);
-            ElementTreeData removeElement(Name const& aName);
+            void insertElement(rtl::OUString const& aName, ElementTreeData const& aNewEntry);
+            ElementTreeData replaceElement(rtl::OUString const& aName, ElementTreeData const& aNewEntry);
+            ElementTreeData removeElement(rtl::OUString const& aName);
 
             void clearElements() {  m_aData.clear(); }
 
@@ -134,9 +130,8 @@ namespace configmgr
         // STL style iteration
             class ConstIterator
             {
-                typedef Data::const_iterator It;
             public:
-                ConstIterator(It const& it) : m_base(it) {}
+                ConstIterator(Data::const_iterator const& it) : m_base(it) {}
 
                 ElementTreeData const& operator* () const { return  m_base->second; }
                 ElementTreeData const* operator->() const { return &m_base->second; }
@@ -152,16 +147,15 @@ namespace configmgr
                 friend bool operator !=(ConstIterator const& lhs, ConstIterator const& rhs)
                 { return lhs.m_base != rhs.m_base; }
             private:
-                It m_base;
+                Data::const_iterator m_base;
             };
             ConstIterator begin() const { return ConstIterator(m_aData.begin()); }
             ConstIterator end()   const { return ConstIterator(m_aData.end()); }
 
             class Iterator
             {
-                typedef Data::iterator It;
             public:
-                Iterator(It const& it) : m_base(it) {}
+                Iterator(Data::iterator const& it) : m_base(it) {}
 
                 ElementTreeData& operator* () const { return  m_base->second; }
                 ElementTreeData* operator->() const { return &m_base->second; }
@@ -179,14 +173,13 @@ namespace configmgr
 
                 operator ConstIterator() const { return ConstIterator(m_base); }
             private:
-                It m_base;
+                Data::iterator m_base;
             };
             Iterator begin()    { return Iterator(m_aData.begin()); }
             Iterator end()      { return Iterator(m_aData.end()); }
 
-            typedef Data::const_iterator PairIterator;
-            PairIterator beginNative()  const { return m_aData.begin(); }
-            PairIterator endNative()    const { return m_aData.end(); }
+            Data::const_iterator beginNative()  const { return m_aData.begin(); }
+            Data::const_iterator endNative()    const { return m_aData.end(); }
         private:
             Data m_aData;
         };
@@ -199,34 +192,31 @@ namespace configmgr
     {
             friend class view::ViewStrategy;
             ElementSet          m_aDataSet;
-            TemplateHolder      m_aTemplate;
+            rtl::Reference<Template>        m_aTemplate;
             TemplateProvider    m_aTemplateProvider;
-            TreeImpl*           m_pParentTree;
-            NodeOffset          m_nContextPos;
+            Tree*           m_pParentTree;
+            unsigned int            m_nContextPos;
 
-            typedef NodeOffset InitHelper;
-            InitHelper      m_aInit;
+            unsigned int        m_aInit;
 
         public:
-            typedef ElementTreeData Element;
+            SetNodeImpl(sharable::SetNode * _pNodeRef, Template* pTemplate);
 
-            SetNodeImpl(data::SetNodeAddress _pNodeRef, Template* pTemplate);
-
-            data::SetNodeAccess getDataAccess() const;
+            sharable::SetNode * getDataAccess() const;
 
             /// Get the template that describes elements of this set
-            TemplateHolder getElementTemplate() const { return m_aTemplate; }
+            rtl::Reference<Template> getElementTemplate() const { return m_aTemplate; }
 
             /// Get a template provider that can create new elements for this set
             TemplateProvider getTemplateProvider() const { return m_aTemplateProvider; }
 
-            void convertChanges(NodeChangesInformation& rLocalChanges, SubtreeChange const& rExternalChange, TreeDepth nDepth);
+            void convertChanges(NodeChangesInformation& rLocalChanges, SubtreeChange const& rExternalChange, unsigned int nDepth);
 
-            void    insertElement(Name const& aName, Element const& aNewElement);
-            Element replaceElement(Name const& aName, Element const& aNewElement);
-            Element removeElement(Name const& aName);
+            void    insertElement(rtl::OUString const& aName, ElementTreeData const& aNewElement);
+            ElementTreeData replaceElement(rtl::OUString const& aName, ElementTreeData const& aNewElement);
+            ElementTreeData removeElement(rtl::OUString const& aName);
 
-            void rebuildFrom(SetNodeImpl& rOldData,data::SetNodeAccess const& _aNewNode);
+            void rebuildFrom(SetNodeImpl& rOldData, sharable::SetNode * newNode);
 
         protected:
             ~SetNodeImpl();
@@ -234,66 +224,66 @@ namespace configmgr
         protected:
         // new overrideables
             virtual bool                    doIsEmpty() const;
-            virtual ElementTreeImpl*        doFindElement(Name const& aName) ;
+            virtual ElementTree*        doFindElement(rtl::OUString const& aName) ;
             virtual SetNodeVisitor::Result  doDispatchToElements( SetNodeVisitor& aVisitor);
             virtual void doDifferenceToDefaultState( SubtreeChange& _rChangeToDefault, ISubtree& _rDefaultTree);
 
-            virtual SetElementChangeImpl* doAdjustToAddedElement( Name const& aName, AddNode const& aAddNodeChange, Element const & aNewElement);
-            virtual SetElementChangeImpl* doAdjustToRemovedElement( Name const& aName, RemoveNode const& aRemoveNodeChange);
-            virtual SetElementChangeImpl* doAdjustChangedElement( NodeChangesInformation& rLocalChanges, Name const& aName, Change const& aChange);
+            virtual SetElementChangeImpl* doAdjustToAddedElement( rtl::OUString const& aName, AddNode const& aAddNodeChange, ElementTreeData const & aNewElement);
+            virtual SetElementChangeImpl* doAdjustToRemovedElement( rtl::OUString const& aName, RemoveNode const& aRemoveNodeChange);
+            virtual SetElementChangeImpl* doAdjustChangedElement( NodeChangesInformation& rLocalChanges, rtl::OUString const& aName, Change const& aChange);
 
             virtual void doTransferElements(ElementSet& rReplacement);
 
         protected:
         // helpers
-            TreeImpl*   getParentTree() const;
-            NodeOffset  getContextOffset() const;
+            Tree*   getParentTree() const;
+            unsigned int    getContextOffset() const;
 
-            Element makeElement( SetEntry const & _anEntry);
-            static Element entryToElement(SetEntry const& _anEntry);
+            ElementTreeData makeElement( SetEntry const & _anEntry);
+            static ElementTreeData entryToElement(SetEntry const& _anEntry);
             view::ViewTreeAccess getElementView();
 
             /// Initialize the set data: Set context information, and build the view (actually loading the elements may be deferred)
             friend class TreeImplBuilder;
-            void initElements(TemplateProvider const& aTemplateProvider, TreeImpl& rParentTree, NodeOffset nPos, TreeDepth nDepth);
+            void initElements(TemplateProvider const& aTemplateProvider, Tree& rParentTree, unsigned int nPos, unsigned int nDepth);
 
         protected:
             /// does this set contain any elements (loads elements if needed)
             bool implHasLoadedElements() const;
             bool implLoadElements();
             void implEnsureElementsLoaded();
-            void implInitElements(data::SetNodeAccess const& _aNode, TreeDepth nDepth);
-            void implInitElement(Element const& aNewElement);
+            void implInitElements(sharable::SetNode * node, unsigned int nDepth);
+            void implInitElement(ElementTreeData const& aNewElement);
 
-            void implRebuildElements(data::SetNodeAccess const& _aNewNode);
+            void implRebuildElements(sharable::SetNode * newNode);
         protected:
-            SetElementChangeImpl* implCreateInsert    ( Name const& aName, Element const& aNewElement) const;
-            SetElementChangeImpl* implCreateReplace   ( Name const& aName, Element const& aNewElement, Element const& aOldElement) const;
-            SetElementChangeImpl* implCreateRemove    ( Name const& aName, Element const& aOldElement) const;
+            SetElementChangeImpl* implCreateInsert    ( rtl::OUString const& aName, ElementTreeData const& aNewElement) const;
+            SetElementChangeImpl* implCreateReplace   ( rtl::OUString const& aName, ElementTreeData const& aNewElement, ElementTreeData const& aOldElement) const;
+            SetElementChangeImpl* implCreateRemove    ( rtl::OUString const& aName, ElementTreeData const& aOldElement) const;
 
-            SetElementChangeImpl* implAdjustToAddedElement( Name const& aName, Element const& aNewElement, bool _bReplacing);
-            SetElementChangeImpl* implAdjustToRemovedElement( Name const& aName);
+            SetElementChangeImpl* implAdjustToAddedElement( rtl::OUString const& aName, ElementTreeData const& aNewElement, bool _bReplacing);
+            SetElementChangeImpl* implAdjustToRemovedElement( rtl::OUString const& aName);
 
-            Element makeAdditionalElement( rtl::Reference<view::ViewStrategy> const& _xStrategy, AddNode const& aAddNodeChange, TreeDepth nDepth);
+            ElementTreeData makeAdditionalElement( rtl::Reference<view::ViewStrategy> const& _xStrategy, AddNode const& aAddNodeChange, unsigned int nDepth);
 
-            Element implValidateElement(Element const& aNewElement);
+            ElementTreeData implValidateElement(ElementTreeData const& aNewElement);
 
             void implDifferenceToDefaultState( SubtreeChange& _rChangeToDefault, ISubtree& _rDefaultTree) const;
         protected:
-            bool hasStoredElement(Name const& aName) const
+            bool hasStoredElement(rtl::OUString const& aName) const
             { return m_aDataSet.hasElement(aName); }
-            Element* getStoredElement(Name const& aName)
+            ElementTreeData* getStoredElement(rtl::OUString const& aName)
             { return m_aDataSet.getElement(aName); }
-            Element const* getStoredElement(Name const& aName) const
+            ElementTreeData const* getStoredElement(rtl::OUString const& aName) const
             { return m_aDataSet.getElement(aName); }
 
-            ElementSet::PairIterator beginElementSet() const
+            ElementSet::Data::const_iterator beginElementSet() const
             { return m_aDataSet.beginNative(); }
-            ElementSet::PairIterator endElementSet() const
+            ElementSet::Data::const_iterator endElementSet() const
             { return m_aDataSet.endNative(); }
 
-            void attach(Element const& aNewElement, Name const& aName);
-            void detach(Element const& aNewElement);
+            void attach(ElementTreeData const& aNewElement, rtl::OUString const& aName);
+            void detach(ElementTreeData const& aNewElement);
         };
 
 //-----------------------------------------------------------------------------

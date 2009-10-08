@@ -277,6 +277,19 @@ typedef ULONG SbError;
 #define ERRCODE_BASMGR_REMOVELIB            (LAST_SBX_ERROR_ID+101UL) | ERRCODE_AREA_SBX
 #define ERRCODE_BASMGR_UNLOADLIB            (LAST_SBX_ERROR_ID+102UL) | ERRCODE_AREA_SBX
 
+#define ERRCODE_BASIC_ARRAY_FIX             ((LAST_SBX_ERROR_ID+104UL) | ERRCODE_AREA_SBX | \
+                                            ERRCODE_CLASS_COMPILER)             // This array is fixed
+#define ERRCODE_BASIC_STRING_OVERFLOW       ((LAST_SBX_ERROR_ID+105UL) | ERRCODE_AREA_SBX | \
+                                            ERRCODE_CLASS_COMPILER)             // Out of string space
+#define ERRCODE_BASIC_EXPR_TOO_COMPLEX      ((LAST_SBX_ERROR_ID+106UL) | ERRCODE_AREA_SBX | \
+                                            ERRCODE_CLASS_COMPILER)             // Expression too complex
+#define ERRCODE_BASIC_OPER_NOT_PERFORM      ((LAST_SBX_ERROR_ID+107UL) | ERRCODE_AREA_SBX | \
+                                            ERRCODE_CLASS_COMPILER)             // Can't perform requested operation
+#define ERRCODE_BASIC_TOO_MANY_DLL          ((LAST_SBX_ERROR_ID+108UL) | ERRCODE_AREA_SBX | \
+                                            ERRCODE_CLASS_COMPILER)             // Too many dll application clients
+#define ERRCODE_BASIC_LOOP_NOT_INIT         ((LAST_SBX_ERROR_ID+109UL) | ERRCODE_AREA_SBX | \
+                                            ERRCODE_CLASS_COMPILER)             // For loop not initialized
+
 // Alte Codes auf neue mappen
 #define SbERR_SYNTAX                        ERRCODE_BASIC_SYNTAX
 #define SbERR_NO_GOSUB                      ERRCODE_BASIC_NO_GOSUB
@@ -400,6 +413,12 @@ typedef ULONG SbError;
 #define SbERR_PROG_TOO_LARGE                ERRCODE_BASIC_PROG_TOO_LARGE
 #define SbERR_NO_STRINGS_ARRAYS             ERRCODE_BASIC_NO_STRINGS_ARRAYS
 #define SbERR_BASIC_EXCEPTION               ERRCODE_BASIC_EXCEPTION
+#define SbERR_BASIC_ARRAY_FIX               ERRCODE_BASIC_ARRAY_FIX
+#define SbERR_BASIC_STRING_OVERFLOW         ERRCODE_BASIC_STRING_OVERFLOW
+#define SbERR_BASIC_EXPR_TOO_COMPLEX        ERRCODE_BASIC_EXPR_TOO_COMPLEX
+#define SbERR_BASIC_OPER_NOT_PERFORM        ERRCODE_BASIC_OPER_NOT_PERFORM
+#define SbERR_BASIC_TOO_MANY_DLL            ERRCODE_BASIC_TOO_MANY_DLL
+#define SbERR_BASIC_LOOP_NOT_INIT           ERRCODE_BASIC_LOOP_NOT_INIT
 // #define  SbERR_COMPILER_END                  ERRCODE_BASIC_COMPILER_END
 
 /* ALT

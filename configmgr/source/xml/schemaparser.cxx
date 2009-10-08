@@ -60,7 +60,7 @@ namespace configmgr
         namespace sax       = ::com::sun::star::xml::sax;
 // -----------------------------------------------------------------------------
 
-SchemaParser::SchemaParser(Context const & _xContext, uno::Reference< backenduno::XSchemaHandler > const & _xHandler, Select _selector)
+SchemaParser::SchemaParser(uno::Reference< uno::XComponentContext > const & _xContext, uno::Reference< backenduno::XSchemaHandler > const & _xHandler, Select _selector)
 : BasicParser(_xContext)
 , m_xHandler(_xHandler)
 , m_sComponent()
@@ -69,7 +69,7 @@ SchemaParser::SchemaParser(Context const & _xContext, uno::Reference< backenduno
 {
     if (!m_xHandler.is())
     {
-        OUString sMessage(RTL_CONSTASCII_USTRINGPARAM("Cannot create SchemaParser: Unexpected NULL Handler"));
+        rtl::OUString sMessage(RTL_CONSTASCII_USTRINGPARAM("Cannot create SchemaParser: Unexpected NULL Handler"));
         throw uno::RuntimeException(sMessage, *this);
     }
     OSL_ENSURE(m_selector != selectNone, "Warning: Schema handler will handle no part of the schema");
@@ -88,7 +88,7 @@ void SAL_CALL SchemaParser::startDocument(  )
 
     OSL_ENSURE(isEmptyNode(), "BasicParser does not mark new document as empty");
 
-    m_sComponent = OUString();
+    m_sComponent = rtl::OUString();
     m_selected = selectNone;
 }
 // -----------------------------------------------------------------------------
@@ -104,7 +104,7 @@ void SAL_CALL SchemaParser::endDocument(  ) throw (sax::SAXException, uno::Runti
 }
 // -----------------------------------------------------------------------------
 
-void SAL_CALL SchemaParser::startElement( const OUString& aName, const uno::Reference< sax::XAttributeList >& xAttribs )
+void SAL_CALL SchemaParser::startElement( const rtl::OUString& aName, const uno::Reference< sax::XAttributeList >& xAttribs )
         throw (sax::SAXException, uno::RuntimeException)
 {
     if ( this->isSkipping() )
@@ -187,7 +187,7 @@ void SAL_CALL SchemaParser::startElement( const OUString& aName, const uno::Refe
 }
 // -----------------------------------------------------------------------------
 
-void SAL_CALL SchemaParser::endElement( const OUString& aName )
+void SAL_CALL SchemaParser::endElement( const rtl::OUString& aName )
         throw (sax::SAXException, uno::RuntimeException)
 {
     if ( this->wasSkipping(aName) )
@@ -225,7 +225,7 @@ void SchemaParser::startSchema( ElementInfo const & aInfo, const uno::Reference<
 void SchemaParser::endSchema( )
 {
     m_xHandler->endSchema();
-    m_sComponent = OUString();
+    m_sComponent = rtl::OUString();
 }
 // -----------------------------------------------------------------------------
 
@@ -266,7 +266,7 @@ void SchemaParser::endSection( )
 
 void SchemaParser::handleImport( ElementInfo const & /*aInfo*/, const uno::Reference< sax::XAttributeList >& xAttribs )
 {
-    OUString aComponent;
+    rtl::OUString aComponent;
     if (getDataParser().getImportComponent(xAttribs,aComponent))
         m_xHandler->importComponent(aComponent);
 
@@ -305,25 +305,23 @@ void SchemaParser::startNode( ElementInfo const & aInfo, const uno::Reference< s
 
     OSL_ASSERT(aInfo.type == ElementType::set || aInfo.type == ElementType::group);
 
-    using backenduno::TemplateIdentifier;
-
     if (aInfo.type == ElementType::group)
     {
         if (bStartTemplate)
-            m_xHandler->startGroupTemplate( TemplateIdentifier(aInfo.name,m_sComponent), aInfo.flags );
+            m_xHandler->startGroupTemplate( backenduno::TemplateIdentifier(aInfo.name,m_sComponent), aInfo.flags );
 
         else
             m_xHandler->startGroup( aInfo.name, aInfo.flags );
     }
     else
     {
-        TemplateIdentifier aItemType;
+        backenduno::TemplateIdentifier aItemType;
 
         if (!getDataParser().getSetElementType(xAttribs, aItemType.Name, aItemType.Component))
             raiseParseException("Schema XML parser - Invalid data: Missing item-type information for set node.\n");
 
         if (bStartTemplate)
-            m_xHandler->startSetTemplate( TemplateIdentifier(aInfo.name,m_sComponent), aInfo.flags, aItemType );
+            m_xHandler->startSetTemplate( backenduno::TemplateIdentifier(aInfo.name,m_sComponent), aInfo.flags, aItemType );
 
         else
             m_xHandler->startSet( aInfo.name, aInfo.flags, aItemType );

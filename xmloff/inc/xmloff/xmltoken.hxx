@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: xmltoken.hxx,v $
- * $Revision: 1.28 $
+ * $Revision: 1.26.2.3 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -2961,6 +2961,8 @@ namespace xmloff { namespace token {
         XML_PERCENTAGE_DATA_STYLE_NAME,
         XML_VALUE_AND_PERCENTAGE,
         XML_GROUP_BARS_PER_AXIS,
+        XML_AUTOMATIC_POSITION,
+        XML_AUTOMATIC_SIZE,
         XML_REVERSE_DIRECTION,
         XML_LABEL_SEPARATOR,
         XML_LABEL_POSITION,
@@ -3028,7 +3030,13 @@ namespace xmloff { namespace token {
         // fs: #i90243#
         XML_XFORM_MODEL_SETTINGS,
 
+        // ODF 1.2 metadata
         XML_META_FIELD,
+        XML_ABOUT,
+        XML_DATATYPE,
+
+        // ODF 1.2 numbered-paragraph
+        XML_LIST_ID,
 
         XML_TREAT_EMPTY_CELLS,
         XML_LEAVE_GAP,

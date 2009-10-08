@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: XMLTextListItemContext.cxx,v $
- * $Revision: 1.12 $
+ * $Revision: 1.12.2.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -35,13 +35,10 @@
 #include <xmloff/nmspmap.hxx>
 #include "xmlnmspe.hxx"
 #include <xmloff/xmltoken.hxx>
-#ifndef _XMLOFF_TXTPARAI_HXX
 #include "txtparai.hxx"
-#endif
+#include "txtlists.hxx"
 #include "XMLTextListBlockContext.hxx"
-#ifndef _XMLOFF_TXTIMP_HXX
 #include <xmloff/txtimp.hxx>
-#endif
 // --> OD 2008-05-08 #refactorlists#
 #include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/style/XStyle.hpp>
@@ -49,6 +46,7 @@
 // <--
 
 #include "XMLTextListItemContext.hxx"
+
 
 using ::rtl::OUString;
 using ::rtl::OUStringBuffer;
@@ -138,13 +136,12 @@ XMLTextListItemContext::XMLTextListItemContext(
         }
     }
 
-    DBG_ASSERT( !rTxtImport.GetListItem(),
-        "SwXMLListItemContext::SwXMLListItemContext: list item is existing" );
-
     // If this is a <text:list-item> element, then remember it as a sign
     // that a bullet has to be generated.
-    if( !bIsHeader )
-        rTxtImport.SetListItem( this );
+    if( !bIsHeader ) {
+        rTxtImport.GetTextListHelper().SetListItem( this );
+    }
+
 }
 
 XMLTextListItemContext::~XMLTextListItemContext()
@@ -154,7 +151,7 @@ XMLTextListItemContext::~XMLTextListItemContext()
 void XMLTextListItemContext::EndElement()
 {
     // finish current list item
-    rTxtImport.SetListItem( 0 );
+    rTxtImport.GetTextListHelper().SetListItem( 0 );
 }
 
 SvXMLImportContext *XMLTextListItemContext::CreateChildContext(

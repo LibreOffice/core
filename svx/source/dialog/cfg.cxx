@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: cfg.cxx,v $
- * $Revision: 1.50 $
+ * $Revision: 1.50.84.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -2376,7 +2376,7 @@ bool SvxConfigPage::MoveEntryData(
             SvxEntries::const_iterator end = pEntries->end();
 
             // advance the iterator to the position of the target entry
-            while (*iter != pTargetData && ++iter != end);
+            while (*iter != pTargetData && ++iter != end) ;
 
             // insert the source entry at the position after the target
             pEntries->insert( ++iter, pSourceData );
@@ -3042,8 +3042,8 @@ IMPL_LINK( SvxMainMenuOrganizerDialog, MoveHdl, Button *, pButton )
         SvxEntries::const_iterator end = GetEntries()->end();
 
         // Advance the iterators to the positions of the source and target
-        while (*iter1 != pSourceData && ++iter1 != end);
-        while (*iter2 != pTargetData && ++iter2 != end);
+        while (*iter1 != pSourceData && ++iter1 != end) ;
+        while (*iter2 != pTargetData && ++iter2 != end) ;
 
         // Now swap the entries in the menu list and in the UI
         if ( iter1 != end && iter2 != end )

@@ -8,7 +8,7 @@
  *
  * $RCSfile: sdrattributecreator.hxx,v $
  *
- * $Revision: 1.2 $
+ * $Revision: 1.2.18.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -38,7 +38,6 @@
 // predefines
 class SfxItemSet;
 class SdrText;
-class B3dLightGroup;
 
 namespace drawinglayer { namespace attribute {
     class SdrLineAttribute;
@@ -80,7 +79,7 @@ namespace drawinglayer
         attribute::SdrLineFillShadowTextAttribute* createNewSdrLineFillShadowTextAttribute(const SfxItemSet& rSet, const SdrText& rText);
         attribute::SdrLineFillShadowAttribute* createNewSdrLineFillShadowAttribute(const SfxItemSet& rSet, bool bSuppressFill);
         attribute::SdrSceneAttribute* createNewSdrSceneAttribute(const SfxItemSet& rSet);
-        attribute::SdrLightingAttribute* createNewSdrLightingAttribute(const SfxItemSet& rSet, const B3dLightGroup& rLightGroup);
+        attribute::SdrLightingAttribute* createNewSdrLightingAttribute(const SfxItemSet& rSet);
         attribute::SdrFillTextAttribute* createNewSdrFillTextAttribute(const SfxItemSet& rSet, const SdrText* pSdrText);
 
         // helpers

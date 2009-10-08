@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: logoimagestatusbarcontroller.cxx,v $
- * $Revision: 1.7 $
+ * $Revision: 1.7.82.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -60,12 +60,6 @@ DEFINE_XSERVICEINFO_MULTISERVICE        (   LogoImageStatusbarController        
                                         )
 
 DEFINE_INIT_SERVICE                     (   LogoImageStatusbarController, {} )
-
-LogoImageStatusbarController::LogoImageStatusbarController()
-{
-    Image aImage( FwkResId( RID_IMAGE_STATUSBAR_LOGO ));
-    m_aLogoImage = aImage;
-}
 
 LogoImageStatusbarController::LogoImageStatusbarController( const uno::Reference< lang::XMultiServiceFactory >& xServiceManager ) :
     svt::StatusbarController( xServiceManager, uno::Reference< frame::XFrame >(), rtl::OUString(), 0 )

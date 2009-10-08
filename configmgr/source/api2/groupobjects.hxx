@@ -42,17 +42,6 @@
 namespace configmgr
 {
 //........................................................................
-    using configapi::ApiTreeImpl;
-    using configapi::ApiProvider;
-
-    using configapi::NodeAccess;
-    using configapi::NodeGroupInfoAccess;
-    using configapi::NodeGroupAccess;
-
-    using configapi::InnerElement;
-    using configapi::SetElement;
-    using configapi::RootElement;
-    using configapi::UpdateRootElement;
 
 //==========================================================================
 //= Inner Group Instances
@@ -67,7 +56,7 @@ namespace configmgr
     {
     public:
         // Construction/Destruction
-        OInnerGroupInfo(ApiTreeImpl& rTree, configuration::NodeRef const& aNode)
+        OInnerGroupInfo(configapi::ApiTreeImpl& rTree, configuration::NodeRef const& aNode)
             : m_aAccessElement(static_cast<css::container::XChild*>(this),rTree,aNode)
         {
         }
@@ -84,12 +73,12 @@ namespace configmgr
         uno::Sequence< sal_Int8 > SAL_CALL getImplementationId( ) throw (uno::RuntimeException );
 
     // Base class implementation
-        virtual NodeAccess&             getNodeAccess();
-        virtual NodeGroupInfoAccess&    getNode();
-        virtual NodeGroupAccess*        maybeGetUpdateAccess();
-        virtual InnerElement&           getElementClass();
+        virtual configapi::NodeAccess&              getNodeAccess();
+        virtual configapi::NodeGroupInfoAccess& getNode();
+        virtual configapi::NodeGroupAccess*     maybeGetUpdateAccess();
+        virtual configapi::InnerElement&            getElementClass();
     private:
-        configapi::OInnerGroupInfoAccess m_aAccessElement;
+        configapi::OInnerElement<configapi::NodeGroupInfoAccess> m_aAccessElement;
     };
 
 /** updating access class for configuration nodes which are inner nodes and groups of other nodes
@@ -101,7 +90,7 @@ namespace configmgr
     {
     public:
         // Construction/Destruction
-        OInnerGroupUpdate(ApiTreeImpl& rTree, configuration::NodeRef const& aNode)
+        OInnerGroupUpdate(configapi::ApiTreeImpl& rTree, configuration::NodeRef const& aNode)
         : m_aAccessElement(static_cast<css::container::XChild*>(this),rTree,aNode)
         {
         }
@@ -118,12 +107,12 @@ namespace configmgr
         uno::Sequence< sal_Int8 > SAL_CALL getImplementationId( ) throw (uno::RuntimeException );
 
     // Base class implementation
-        virtual NodeAccess&             getNodeAccess();
-        virtual NodeGroupInfoAccess&    getNode();
-        virtual NodeGroupAccess*        maybeGetUpdateAccess();
-        virtual InnerElement&           getElementClass();
+        virtual configapi::NodeAccess&              getNodeAccess();
+        virtual configapi::NodeGroupInfoAccess& getNode();
+        virtual configapi::NodeGroupAccess*     maybeGetUpdateAccess();
+        virtual configapi::InnerElement&            getElementClass();
     private:
-        configapi::OInnerGroupUpdateAccess m_aAccessElement;
+        configapi::OInnerElement<configapi::NodeGroupAccess> m_aAccessElement;
     };
 
 
@@ -140,11 +129,11 @@ namespace configmgr
     {
     public:
         // Construction/Destruction
-        OSetElementGroupInfo(configuration::TreeRef const& aTree, ApiTreeImpl& rParentTree)
+        OSetElementGroupInfo(rtl::Reference< configuration::Tree > const& aTree, configapi::ApiTreeImpl& rParentTree)
         : m_aAccessElement(static_cast<css::container::XChild*>(this),aTree,rParentTree)
         {
         }
-        OSetElementGroupInfo(configuration::TreeRef const& aTree, ApiProvider& rProvider, ApiTreeImpl* pParentTree = 0)
+        OSetElementGroupInfo(rtl::Reference< configuration::Tree > const& aTree, configapi::ApiProvider& rProvider, configapi::ApiTreeImpl* pParentTree = 0)
         : m_aAccessElement(static_cast<css::container::XChild*>(this),aTree,rProvider,pParentTree)
         {
         }
@@ -161,12 +150,12 @@ namespace configmgr
         uno::Sequence< sal_Int8 > SAL_CALL getImplementationId( ) throw (uno::RuntimeException );
 
     // Base class implementation
-        virtual NodeAccess&             getNodeAccess();
-        virtual NodeGroupInfoAccess&    getNode();
-        virtual NodeGroupAccess*        maybeGetUpdateAccess();
-        virtual SetElement&             getElementClass();
+        virtual configapi::NodeAccess&              getNodeAccess();
+        virtual configapi::NodeGroupInfoAccess& getNode();
+        virtual configapi::NodeGroupAccess*     maybeGetUpdateAccess();
+        virtual configapi::SetElement&              getElementClass();
     private:
-        configapi::OSetElementGroupInfoAccess m_aAccessElement;
+        configapi::OSetElement<configapi::NodeGroupInfoAccess> m_aAccessElement;
     };
 
 /** updating access class for configuration nodes which are set elements and groups of other nodes
@@ -178,11 +167,11 @@ namespace configmgr
     {
     public:
         // Construction/Destruction
-        OSetElementGroupUpdate(configuration::TreeRef const& aTree, ApiTreeImpl& rParentTree)
+        OSetElementGroupUpdate(rtl::Reference< configuration::Tree > const& aTree, configapi::ApiTreeImpl& rParentTree)
         : m_aAccessElement(static_cast<css::container::XChild*>(this),aTree,rParentTree)
         {
         }
-        OSetElementGroupUpdate(configuration::TreeRef const& aTree, ApiProvider& rProvider, ApiTreeImpl* pParentTree = 0)
+        OSetElementGroupUpdate(rtl::Reference< configuration::Tree > const& aTree, configapi::ApiProvider& rProvider, configapi::ApiTreeImpl* pParentTree = 0)
         : m_aAccessElement(static_cast<css::container::XChild*>(this),aTree,rProvider,pParentTree)
         {
         }
@@ -199,12 +188,12 @@ namespace configmgr
         uno::Sequence< sal_Int8 > SAL_CALL getImplementationId( ) throw (uno::RuntimeException );
 
     // Base class implementation
-        virtual NodeAccess&             getNodeAccess();
-        virtual NodeGroupInfoAccess&    getNode();
-        virtual NodeGroupAccess*        maybeGetUpdateAccess();
-        virtual SetElement&             getElementClass();
+        virtual configapi::NodeAccess&              getNodeAccess();
+        virtual configapi::NodeGroupInfoAccess& getNode();
+        virtual configapi::NodeGroupAccess*     maybeGetUpdateAccess();
+        virtual configapi::SetElement&              getElementClass();
     private:
-        configapi::OSetElementGroupUpdateAccess m_aAccessElement;
+        configapi::OSetElement<configapi::NodeGroupAccess> m_aAccessElement;
     };
 
 
@@ -221,7 +210,7 @@ namespace configmgr
     {
     public:
         // Construction/Destruction
-        ORootElementGroupInfo(ApiProvider& rProvider, configuration::Tree const& aTree, vos::ORef< OOptions >const& _xOptions)
+        ORootElementGroupInfo(configapi::ApiProvider& rProvider, rtl::Reference< configuration::Tree > const& aTree, vos::ORef< OOptions >const& _xOptions)
         : m_aAccessElement(static_cast<css::lang::XComponent*>(this),rProvider,aTree, _xOptions)
         {
         }
@@ -238,12 +227,12 @@ namespace configmgr
         uno::Sequence< sal_Int8 > SAL_CALL getImplementationId( ) throw (uno::RuntimeException );
 
     // Base class implementation
-        virtual NodeAccess&             getNodeAccess();
-        virtual NodeGroupInfoAccess&    getNode();
-        virtual NodeGroupAccess*        maybeGetUpdateAccess();
-        virtual RootElement&            getElementClass();
+        virtual configapi::NodeAccess&              getNodeAccess();
+        virtual configapi::NodeGroupInfoAccess& getNode();
+        virtual configapi::NodeGroupAccess*     maybeGetUpdateAccess();
+        virtual configapi::RootElement&         getElementClass();
     private:
-        configapi::ORootElementGroupInfoAccess m_aAccessElement;
+        configapi::OReadRootElement<configapi::NodeGroupInfoAccess> m_aAccessElement;
     };
 
 /** updating access class for configuration nodes which are root nodes and groups of other nodes
@@ -255,7 +244,7 @@ namespace configmgr
     {
     public:
         // Construction/Destruction
-        ORootElementGroupUpdate(ApiProvider& rProvider, configuration::Tree const& aTree, vos::ORef< OOptions >const& _xOptions)
+        ORootElementGroupUpdate(configapi::ApiProvider& rProvider, rtl::Reference< configuration::Tree > const& aTree, vos::ORef< OOptions >const& _xOptions)
         : m_aAccessElement(static_cast<css::lang::XComponent*>(this),rProvider,aTree, _xOptions)
         {
         }
@@ -272,12 +261,12 @@ namespace configmgr
         uno::Sequence< sal_Int8 > SAL_CALL getImplementationId( ) throw (uno::RuntimeException );
 
     // Base class implementation
-        virtual NodeAccess&             getNodeAccess();
-        virtual NodeGroupInfoAccess&    getNode();
-        virtual NodeGroupAccess*        maybeGetUpdateAccess();
-        virtual UpdateRootElement&      getElementClass();
+        virtual configapi::NodeAccess&              getNodeAccess();
+        virtual configapi::NodeGroupInfoAccess& getNode();
+        virtual configapi::NodeGroupAccess*     maybeGetUpdateAccess();
+        virtual configapi::UpdateRootElement&       getElementClass();
     private:
-        configapi::ORootElementGroupUpdateAccess m_aAccessElement;
+        configapi::OUpdateRootElement<configapi::NodeGroupAccess> m_aAccessElement;
     };
 
 

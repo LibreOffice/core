@@ -31,6 +31,10 @@
 #ifndef CONFIGMGR_API_NODEUPDATE_HXX_
 #define CONFIGMGR_API_NODEUPDATE_HXX_
 
+#include "sal/config.h"
+
+#include "boost/utility.hpp"
+
 #include "apinodeaccess.hxx"
 #include "utility.hxx"
 
@@ -44,16 +48,12 @@ namespace configmgr
         class ValueSetUpdater;
         class SetDefaulter;
         class SetElementFactory;
-        class ElementTree;
 
         class NodeUpdate;
     }
     namespace configapi
     {
         class SetElement;
-
-        typedef uno::XInterface UnoInterface;
-        typedef uno::Any UnoAny;
 
     // API object implementation wrappers
         // these objects just provide the pieces needed to navigate and manipulate trees and nodes
@@ -104,17 +104,17 @@ namespace configmgr
         void attachSetElement(NodeTreeSetAccess& aSet, SetElement& aElement);
 
         /// informs a <type>SetElement</type> that it should now link to the given SetElement
-        bool attachSetElement(NodeTreeSetAccess& aSet, configuration::ElementTree const& aElementTree);
+        bool attachSetElement(NodeTreeSetAccess& aSet, rtl::Reference< configuration::ElementTree > const& aElementTree);
 
         /// informs a <type>SetElement</type> that it should now unlink from its owning SetElement
         void detachSetElement(SetElement& aElement);
 
         /// informs a <type>SetElement</type> that it should now unlink from its owning SetElement
-        bool detachSetElement(Factory& rFactory, configuration::ElementRef const& aElementTree);
+        bool detachSetElement(Factory& rFactory, rtl::Reference< configuration::ElementTree > const& aElementTree);
 
         /// Guarding and locking implementations
         /// guards a NodeGroupAccess, or NodeSetAccess; provides an object (write)/provider(read) lock; ensures object was not disposed
-        class UpdateGuardImpl : Noncopyable
+        class UpdateGuardImpl : private boost::noncopyable
         {
             NodeAccess&      m_rNode;
         public:
@@ -139,20 +139,17 @@ namespace configmgr
         public:
             Access& get()        const { return static_cast<Access&>(m_aImpl.get()); }
 
-            configuration::Tree     getTree() const;
+            rtl::Reference< configuration::Tree > getTree() const;
             configuration::NodeRef  getNode() const;
 
-            typedef typename Access::NodeUpdater    Updater;
-            typedef typename Access::NodeDefaulter  Defaulter;
-
-            Updater    getNodeUpdater() const;
-            Defaulter  getNodeDefaulter() const;
+            typename Access::NodeUpdater    getNodeUpdater() const;
+            typename Access::NodeDefaulter  getNodeDefaulter() const;
 
             void clearForBroadcast() { m_aImpl.downgrade(); }
         };
 
         template <class Access>
-        configuration::Tree GuardedNodeUpdate<Access>::getTree() const
+        rtl::Reference< configuration::Tree > GuardedNodeUpdate<Access>::getTree() const
         {
             return get().getTree();
         }
@@ -164,22 +161,16 @@ namespace configmgr
         }
 
         template <class Access>
-        typename GuardedNodeUpdate<Access>::Updater GuardedNodeUpdate<Access>::getNodeUpdater() const
+        typename Access::NodeUpdater GuardedNodeUpdate<Access>::getNodeUpdater() const
         {
             return get().getNodeUpdater();
         }
 
         template <class Access>
-        typename GuardedNodeUpdate<Access>::Defaulter GuardedNodeUpdate<Access>::getNodeDefaulter() const
+        typename Access::NodeDefaulter GuardedNodeUpdate<Access>::getNodeDefaulter() const
         {
             return get().getNodeDefaulter();
         }
-
-        /// wraps a NodeGroupAccess; provides an object (write) lock, ensures object was not disposed
-        typedef GuardedNodeUpdate<NodeGroupAccess>  GuardedGroupUpdateAccess;
-        typedef GuardedNodeUpdate<NodeSetAccess>    GuardedSetUpdateAccess;
-        typedef GuardedNodeUpdate<NodeTreeSetAccess>    GuardedTreeSetUpdateAccess;
-        typedef GuardedNodeUpdate<NodeValueSetAccess>   GuardedValueSetUpdateAccess;
     }
 }
 

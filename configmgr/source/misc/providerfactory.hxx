@@ -48,47 +48,40 @@ namespace configmgr
     namespace uno   = ::com::sun::star::uno;
     namespace lang  = ::com::sun::star::lang;
     namespace beans = ::com::sun::star::beans;
-    using rtl::OUString;
     //------------------------------------------------------------------------
     class ContextReader;
     class ArgumentHelper;
     //------------------------------------------------------------------------
     //= OProviderFactory
     //------------------------------------------------------------------------
-    typedef ::cppu::WeakImplHelper1< lang::XSingleComponentFactory > ProviderFactory_Base;
-
     /** a special factory for the configuration provider,
         which maps creation arguments into a context.
     */
-    class ProviderFactory : public ProviderFactory_Base
+    class ProviderFactory : public cppu::WeakImplHelper1< lang::XSingleComponentFactory >
     {
-        OUString const m_aImplementationName;
+        rtl::OUString const m_aImplementationName;
         bool m_bAdmin;
 
     public:
-        typedef uno::Reference< uno::XComponentContext > Context;
-        typedef uno::Sequence < uno::Any >          Arguments;
-        typedef uno::Sequence < beans::NamedValue > NamedValues;
-    public:
         explicit
-        ProviderFactory(OUString const & aImplementationName, bool bAdmin);
+        ProviderFactory(rtl::OUString const & aImplementationName, bool bAdmin);
         ~ProviderFactory();
 
         virtual uno::Reference< uno::XInterface >
-            SAL_CALL createInstanceWithContext(Context const & xContext )
+            SAL_CALL createInstanceWithContext(uno::Reference< uno::XComponentContext > const & xContext )
                 throw (uno::Exception, uno::RuntimeException);
 
         virtual uno::Reference< uno::XInterface > SAL_CALL
-            createInstanceWithArgumentsAndContext( Arguments const & aArguments, Context const & xContext )
+            createInstanceWithArgumentsAndContext( uno::Sequence < uno::Any > const & aArguments, uno::Reference< uno::XComponentContext > const & xContext )
                 throw (uno::Exception, uno::RuntimeException);
 
     private:
-        uno::Reference< uno::XInterface > getProviderFromContext(Context const & aContext);
-        uno::Reference< uno::XInterface > getProviderAlways(Context const & xContext);
-        uno::Reference< uno::XInterface > createProviderWithArguments(Context const & xContext, Arguments const & _aArguments);
-        uno::Reference< uno::XInterface > createProvider(Context const & xContext,bool bAdmin);
-        uno::Reference< uno::XInterface > createProvider(Context const & xContext);
-        sal_Int32 parseArguments(ArgumentHelper & aParser, NamedValues & rValues, Arguments const & _aArguments);
+        uno::Reference< uno::XInterface > getProviderFromContext(uno::Reference< uno::XComponentContext > const & aContext);
+        uno::Reference< uno::XInterface > getProviderAlways(uno::Reference< uno::XComponentContext > const & xContext);
+        uno::Reference< uno::XInterface > createProviderWithArguments(uno::Reference< uno::XComponentContext > const & xContext, uno::Sequence < uno::Any > const & _aArguments);
+        uno::Reference< uno::XInterface > createProvider(uno::Reference< uno::XComponentContext > const & xContext,bool bAdmin);
+        uno::Reference< uno::XInterface > createProvider(uno::Reference< uno::XComponentContext > const & xContext);
+        sal_Int32 parseArguments(ArgumentHelper & aParser, uno::Sequence < beans::NamedValue > & rValues, uno::Sequence < uno::Any > const & _aArguments);
     };
 //------------------------------------------------------------------------
 }   // namespace configmgr

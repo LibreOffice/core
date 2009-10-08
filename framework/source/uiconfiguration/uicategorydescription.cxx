@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: uicategorydescription.cxx,v $
- * $Revision: 1.8 $
+ * $Revision: 1.8.34.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -147,7 +147,6 @@ class ConfigurationAccess_UICategory : // interfaces
         Any                       getUINameFromID( const rtl::OUString& rId );
         Any                       getUINameFromCache( const rtl::OUString& rId );
         Sequence< rtl::OUString > getAllIds();
-        void                      resetCache();
         sal_Bool                  fillCache();
 
     private:
@@ -266,12 +265,6 @@ throw ( RuntimeException )
 {
     // There must be global categories!
     return sal_True;
-}
-
-void ConfigurationAccess_UICategory::resetCache()
-{
-    m_aIdCache.clear();
-    m_bCacheFilled = sal_False;
 }
 
 sal_Bool ConfigurationAccess_UICategory::fillCache()

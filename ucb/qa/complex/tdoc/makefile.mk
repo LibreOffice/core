@@ -8,7 +8,7 @@
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.7 $
+# $Revision: 1.7.32.1 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -40,7 +40,7 @@ PACKAGE = complex.tdoc
 
 #----- compile .java files -----------------------------------------
 
-JARFILES = sandbox.jar ridl.jar unoil.jar jurt.jar juh.jar jut.jar java_uno.jar OOoRunner.jar
+JARFILES = sandbox.jar ridl.jar unoil.jar jurt.jar juh.jar java_uno.jar OOoRunner.jar
 JAVAFILES = CheckContentProvider.java \
             CheckTransientDocumentsContent.java \
             CheckTransientDocumentsContentProvider.java \

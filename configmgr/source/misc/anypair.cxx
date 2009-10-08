@@ -61,7 +61,7 @@ namespace configmgr
     }
 
 // -----------------------------------------------------------------------------
-    static inline void * impl_getDataPointer(cfgmgr_AnyPair_Data const * _pAnyPairData)
+    static inline void * impl_getDataPointer(const void * const * _pAnyPairData)
     {
         const void * const pResult = *_pAnyPairData;
 
@@ -69,7 +69,7 @@ namespace configmgr
     }
 
 // -----------------------------------------------------------------------------
-    static inline void * impl_getData(cfgmgr_AnyPair_Data const * _pAnyPairData, bool _bStoredData)
+    static inline void * impl_getData(const void * const * _pAnyPairData, bool _bStoredData)
     {
         const void * const pResult = _bStoredData ? _pAnyPairData : *_pAnyPairData;
 
@@ -77,7 +77,7 @@ namespace configmgr
     }
 
 // -----------------------------------------------------------------------------
-    static inline void impl_setDataPointer(cfgmgr_AnyPair_Data * _pAnyPairData, void* _pData)
+    static inline void impl_setDataPointer(const void * * _pAnyPairData, void* _pData)
     {
         *_pAnyPairData = _pData;
     }
@@ -85,9 +85,9 @@ namespace configmgr
     static const unsigned SHIFT_DATA_FLAG = 4;
 // -----------------------------------------------------------------------------
     static
-    inline void impl_state_setState(cfgmgr_SelectorType* _pState, cfgmgr_SelectorType _nState, cfgmgr_SelectorType  _nSelect)
+    inline void impl_state_setState(sal_uInt8* _pState, sal_uInt8 _nState, sal_uInt8  _nSelect)
     {
-        cfgmgr_SelectorType const nSelectMask = _nSelect | (_nSelect<<SHIFT_DATA_FLAG);
+        sal_uInt8 const nSelectMask = _nSelect | (_nSelect<<SHIFT_DATA_FLAG);
         OSL_ENSURE( (_nState & nSelectMask) == _nState, "State specified does not belong to the selector");
 
         *_pState &= ~nSelectMask;
@@ -96,23 +96,23 @@ namespace configmgr
 
 // -----------------------------------------------------------------------------
     static
-    inline void impl_state_setNull(cfgmgr_SelectorType* _pState, cfgmgr_SelectorType  _nSelect)
+    inline void impl_state_setNull(sal_uInt8* _pState, sal_uInt8  _nSelect)
     {
-        cfgmgr_SelectorType const nSelectMask = _nSelect | (_nSelect<<SHIFT_DATA_FLAG);
+        sal_uInt8 const nSelectMask = _nSelect | (_nSelect<<SHIFT_DATA_FLAG);
         *_pState &= ~nSelectMask;
     }
 
 // -----------------------------------------------------------------------------
     static inline
-    void impl_state_setData(cfgmgr_SelectorType* _pState, cfgmgr_SelectorType  _nSelect)
+    void impl_state_setData(sal_uInt8* _pState, sal_uInt8  _nSelect)
     {
-        cfgmgr_SelectorType const nSelectMask = _nSelect | (_nSelect<<SHIFT_DATA_FLAG);
+        sal_uInt8 const nSelectMask = _nSelect | (_nSelect<<SHIFT_DATA_FLAG);
         *_pState |= nSelectMask;
     }
 
 // -----------------------------------------------------------------------------
     static inline
-    void impl_state_setValue(cfgmgr_SelectorType* _pState, cfgmgr_SelectorType  _nSelect, bool _bStoresData)
+    void impl_state_setValue(sal_uInt8* _pState, sal_uInt8  _nSelect, bool _bStoresData)
     {
         *_pState |= _nSelect;
 
@@ -125,14 +125,14 @@ namespace configmgr
 
 // -----------------------------------------------------------------------------
     static
-    inline bool impl_state_isNull(cfgmgr_SelectorType const _nState, cfgmgr_SelectorType  _nSelect)
+    inline bool impl_state_isNull(sal_uInt8 const _nState, sal_uInt8  _nSelect)
     {
         return 0 == (_nState & _nSelect);
     }
 
 // -----------------------------------------------------------------------------
     static
-    inline bool impl_state_isData(cfgmgr_SelectorType const _nState, cfgmgr_SelectorType  _nSelect)
+    inline bool impl_state_isData(sal_uInt8 const _nState, sal_uInt8  _nSelect)
     {
         return 0 != (_nState & (_nSelect<<SHIFT_DATA_FLAG));
     }
@@ -166,7 +166,7 @@ namespace configmgr
 
 // -----------------------------------------------------------------------------
     static inline
-    void anypair_empty_set_Data( cfgmgr_AnyPair_Data* _pAnyPairData )
+    void anypair_empty_set_Data( const void ** _pAnyPairData )
     {
         impl_setDataPointer(_pAnyPairData, NULL);
         OSL_DEBUG_ONLY( impl_setDataPointer(_pAnyPairData, reinterpret_cast<void*>(0xdeadbeef)) );
@@ -175,11 +175,11 @@ namespace configmgr
 // -----------------------------------------------------------------------------
     // returns a state for the specified selector
     static inline
-    cfgmgr_SelectorType anypair_any_set_Data( cfgmgr_AnyPair_Data* _pAnyPairData,
-                                              cfgmgr_SelectorType  _nSelect,
+    sal_uInt8 anypair_any_set_Data( const void ** _pAnyPairData,
+                                              sal_uInt8  _nSelect,
                                               uno_Any const *_pUnoAny)
     {
-        cfgmgr_SelectorType nState = 0;
+        sal_uInt8 nState = 0;
 
         bool bValue = impl_Any_hasValue(_pUnoAny);
         if (bValue)
@@ -201,12 +201,12 @@ namespace configmgr
 
 // -----------------------------------------------------------------------------
     static inline
-    cfgmgr_SelectorType anypair_copy_Data( cfgmgr_AnyPair_Data* _pAnyPairData,
-                                           cfgmgr_SelectorType  _nSelect,
+    sal_uInt8 anypair_copy_Data( const void ** _pAnyPairData,
+                                           sal_uInt8  _nSelect,
                                            cfgmgr_AnyPair_Desc const* _pAnyPairDescFrom,
-                                           cfgmgr_AnyPair_Data const* _pAnyPairDataFrom )
+                                           const void * const* _pAnyPairDataFrom )
     {
-        cfgmgr_SelectorType nState = 0;
+        sal_uInt8 nState = 0;
 
         if (impl_state_isNull(_pAnyPairDescFrom->nState, _nSelect))
         {
@@ -244,8 +244,8 @@ namespace configmgr
 
 // -----------------------------------------------------------------------------
     static
-    void anypair_clear_Data( cfgmgr_AnyPair_Data* _pAnyPairData,
-                             cfgmgr_SelectorType  _nSelect,
+    void anypair_clear_Data( const void ** _pAnyPairData,
+                             sal_uInt8  _nSelect,
                              cfgmgr_AnyPair_Desc const* _pAnyPairDesc
                            )
     {
@@ -277,8 +277,8 @@ namespace configmgr
     static
     void anypair_Data_fill_Any( uno_Any* _pUnoAny,
                                 cfgmgr_AnyPair_Desc const* _pAnyPairDesc,
-                                cfgmgr_AnyPair_Data const* _pAnyPairData,
-                                cfgmgr_SelectorType  _nSelect )
+                                const void * const* _pAnyPairData,
+                                sal_uInt8  _nSelect )
     {
         if (impl_state_isNull(_pAnyPairDesc->nState,_nSelect))
         {
@@ -325,8 +325,8 @@ namespace configmgr
 // -----------------------------------------------------------------------------
     static
     sal_Bool anypair_any_assign_Data(   cfgmgr_AnyPair_Desc* _pAnyPairDesc,
-                                        cfgmgr_AnyPair_Data* _pAnyPairData,
-                                        cfgmgr_SelectorType  _nSelect,
+                                        const void ** _pAnyPairData,
+                                        sal_uInt8  _nSelect,
                                         uno_Any const *_pUnoAny)
     {
         typelib_TypeDescriptionReference* pOldType = _pAnyPairDesc->pType;
@@ -345,7 +345,7 @@ namespace configmgr
                                 reinterpret_cast< uno_AcquireFunc >( uno::cpp_acquire ),
                                 reinterpret_cast< uno_AcquireFunc >( uno::cpp_release ));
 
-            cfgmgr_SelectorType nNewState = anypair_any_set_Data(_pAnyPairData,_nSelect,&aTmpAny);
+            sal_uInt8 nNewState = anypair_any_set_Data(_pAnyPairData,_nSelect,&aTmpAny);
             impl_state_setState(&_pAnyPairDesc->nState, nNewState, _nSelect);
 
             uno_any_destruct(
@@ -452,7 +452,7 @@ namespace configmgr
 
         anypair_type_construct_Desc(&_pAnyPair->desc, bHasFirst ? _pFirstAny->pType : _pSecondAny->pType);
 
-        cfgmgr_SelectorType nState = 0;
+        sal_uInt8 nState = 0;
 
         nState |= anypair_any_set_Data (&_pAnyPair->first,  cfgmgr_SELECT_FIRST,  _pFirstAny);
         nState |= anypair_any_set_Data (&_pAnyPair->second, cfgmgr_SELECT_SECOND, _pSecondAny);
@@ -476,7 +476,7 @@ namespace configmgr
 
         anypair_type_construct_Desc(&_pAnyPair->desc, _pAnyPairFrom->desc.pType);
 
-        cfgmgr_SelectorType nState = 0;
+        sal_uInt8 nState = 0;
 
         nState |= anypair_copy_Data(&_pAnyPair->first,  cfgmgr_SELECT_FIRST,
                                     &_pAnyPairFrom->desc, &_pAnyPairFrom->first );
@@ -567,8 +567,8 @@ namespace configmgr
     static
     inline
     uno::Any anypair_Data_toAny(cfgmgr_AnyPair_Desc const* _pAnyPairDesc,
-                                cfgmgr_AnyPair_Data const* _pAnyPairData,
-                                cfgmgr_SelectorType  _nSelect)
+                                const void * const* _pAnyPairData,
+                                sal_uInt8  _nSelect)
     {
         uno_Any aTmpAny;
         anypair_Data_fill_Any(&aTmpAny,_pAnyPairDesc,_pAnyPairData,_nSelect);

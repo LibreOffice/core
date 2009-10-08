@@ -61,124 +61,119 @@ namespace configmgr
         namespace uno        = ::com::sun::star::uno;
         namespace backenduno = ::com::sun::star::configuration::backend;
 
-        using  backenduno::TemplateIdentifier;
-
-        using ::rtl::OUString;
-
 // -----------------------------------------------------------------------------
 
         class DataBuilderContext
         {
             Logger                      m_aLogger;
             Stack< ISubtree * >         m_aParentStack;
-            OUString                    m_aActiveComponent;
+            rtl::OUString                    m_aActiveComponent;
             uno::XInterface *           m_pContext;
-            OUString                    m_aExpectedComponentName;
+            rtl::OUString                   m_aExpectedComponentName;
             ITemplateDataProvider *     m_aTemplateProvider;
         public:
-            typedef uno::Reference< uno::XComponentContext > UnoContext;
-            explicit DataBuilderContext(UnoContext const & xContext);
-            DataBuilderContext(UnoContext const & xContext, uno::XInterface * _pContext , ITemplateDataProvider*  aTemplateProvider = NULL);
-            DataBuilderContext(UnoContext const & xContext, uno::XInterface * _pContext, const OUString& aExpectedComponentName,ITemplateDataProvider*  aTemplateProvider = NULL );
+            explicit DataBuilderContext(uno::Reference< uno::XComponentContext > const & xContext);
+            DataBuilderContext(uno::Reference< uno::XComponentContext > const & xContext, uno::XInterface * _pContext , ITemplateDataProvider*  aTemplateProvider = NULL);
+            DataBuilderContext(uno::Reference< uno::XComponentContext > const & xContext, uno::XInterface * _pContext, const rtl::OUString& aExpectedComponentName,ITemplateDataProvider*  aTemplateProvider = NULL );
             DataBuilderContext(DataBuilderContext const & aBaseContext, uno::XInterface * _pContext);
             ~DataBuilderContext();
 
             bool        isDone() const;
 
             bool        hasActiveComponent()    const { return m_aActiveComponent.getLength() != 0; }
-            OUString    getActiveComponent()    const { return m_aActiveComponent; }
+            rtl::OUString    getActiveComponent()    const { return m_aActiveComponent; }
 
             ISubtree &          getCurrentParent()
-                CFG_UNO_THROW1( configuration::backend::MalformedDataException )
+                SAL_THROW((com::sun::star::configuration::backend::MalformedDataException , com::sun::star::uno::RuntimeException))
                 { return implGetCurrentParent(); }
 
             ISubtree const &    getCurrentParent() const
-                CFG_UNO_THROW1( configuration::backend::MalformedDataException )
+                SAL_THROW((com::sun::star::configuration::backend::MalformedDataException , com::sun::star::uno::RuntimeException))
                 { return implGetCurrentParent(); }
 
             node::Attributes    getCurrentAttributes() const
-                CFG_UNO_THROW1( configuration::backend::MalformedDataException )
+                SAL_THROW((com::sun::star::configuration::backend::MalformedDataException , com::sun::star::uno::RuntimeException))
                 { return implGetCurrentParent().getAttributes(); }
 
             ITemplateDataProvider * getTemplateProvider() const
             { return  m_aTemplateProvider; }
 
-            OUString getTemplateComponent(TemplateIdentifier const & aItemType ) const;
+            rtl::OUString getTemplateComponent(backenduno::TemplateIdentifier const & aItemType ) const;
 
-            TemplateIdentifier completeComponent(TemplateIdentifier const & aItemType ) const;
+            backenduno::TemplateIdentifier completeComponent(backenduno::TemplateIdentifier const & aItemType ) const;
 
-            TemplateIdentifier getCurrentItemType() const
-                CFG_UNO_THROW1( configuration::backend::MalformedDataException );
-            TemplateIdentifier getValidItemType(TemplateIdentifier const & aItemType) const
-                CFG_UNO_THROW1( configuration::backend::MalformedDataException );
+            backenduno::TemplateIdentifier getCurrentItemType() const
+                SAL_THROW((com::sun::star::configuration::backend::MalformedDataException , com::sun::star::uno::RuntimeException));
+            backenduno::TemplateIdentifier getValidItemType(backenduno::TemplateIdentifier const & aItemType) const
+                SAL_THROW((com::sun::star::configuration::backend::MalformedDataException , com::sun::star::uno::RuntimeException));
 
-            void startActiveComponent(OUString const & _aComponent)
-                CFG_UNO_THROW1( configuration::backend::MalformedDataException );
+            void startActiveComponent(rtl::OUString const & _aComponent)
+                SAL_THROW((com::sun::star::configuration::backend::MalformedDataException , com::sun::star::uno::RuntimeException));
             void endActiveComponent()
-                CFG_UNO_THROW1( configuration::backend::MalformedDataException );
+                SAL_THROW((com::sun::star::configuration::backend::MalformedDataException , com::sun::star::uno::RuntimeException));
 
             bool isProperty(INode * pProp) const
-                CFG_UNO_THROW_RTE();
+                SAL_THROW((com::sun::star::uno::RuntimeException));
 
-            bool isNode(INode * pNode) const CFG_UNO_THROW_RTE()
+            bool isNode(INode * pNode) const SAL_THROW((com::sun::star::uno::RuntimeException))
             { return !isProperty(pNode); }
 
             void pushNode(ISubtree * pTree)
-                CFG_UNO_THROW_RTE();
+                SAL_THROW((com::sun::star::uno::RuntimeException));
             void popNode()
-                CFG_UNO_THROW1( configuration::backend::MalformedDataException );
+                SAL_THROW((com::sun::star::configuration::backend::MalformedDataException , com::sun::star::uno::RuntimeException));
 
-            INode    * findProperty(OUString const & _aName)
-                CFG_UNO_THROW1( configuration::backend::MalformedDataException );
-            ISubtree * findNode(OUString const & _aName)
-                CFG_UNO_THROW1( configuration::backend::MalformedDataException );
+            INode    * findProperty(rtl::OUString const & _aName)
+                SAL_THROW((com::sun::star::configuration::backend::MalformedDataException , com::sun::star::uno::RuntimeException));
+            ISubtree * findNode(rtl::OUString const & _aName)
+                SAL_THROW((com::sun::star::configuration::backend::MalformedDataException , com::sun::star::uno::RuntimeException));
 
             bool isWritable(INode const * pNode) const
-                CFG_NOTHROW(  );
+                SAL_THROW(());
             bool isRemovable(ISubtree const * pItem) const
-                CFG_NOTHROW(  );
+                SAL_THROW(());
 
             ISubtree  * addNodeToCurrent(std::auto_ptr<ISubtree>  _aNode)
-                CFG_UNO_THROW1( configuration::backend::MalformedDataException );
+                SAL_THROW((com::sun::star::configuration::backend::MalformedDataException , com::sun::star::uno::RuntimeException));
             ISubtree  * addLocalizedToCurrent(std::auto_ptr<ISubtree>  _aNode)
-                CFG_UNO_THROW1( configuration::backend::MalformedDataException );
+                SAL_THROW((com::sun::star::configuration::backend::MalformedDataException , com::sun::star::uno::RuntimeException));
             ValueNode * addPropertyToCurrent(std::auto_ptr<ValueNode> _aNode, bool _bMayReplace = false)
-                CFG_UNO_THROW1( configuration::backend::MalformedDataException );
+                SAL_THROW((com::sun::star::configuration::backend::MalformedDataException , com::sun::star::uno::RuntimeException));
 
             void markCurrentMerged();
 
             // Logging support
             Logger const & getLogger() const { return m_aLogger; }
 
-            OUString getNodeParentagePath() const;
-            OUString getNodePath(OUString const & aNodeName) const;
+            rtl::OUString getNodeParentagePath() const;
+            rtl::OUString getNodePath(rtl::OUString const & aNodeName) const;
 
             // Exception support
             void raiseMalformedDataException    (sal_Char const * _pText) const
-                CFG_UNO_THROW1( configuration::backend::MalformedDataException );
+                SAL_THROW((com::sun::star::configuration::backend::MalformedDataException , com::sun::star::uno::RuntimeException));
             void raiseIllegalArgumentException  (sal_Char const * _pText, sal_Int16 _nPos = 0) const
-                CFG_UNO_THROW1( configuration::backend::MalformedDataException );
-            void raiseElementExistException     (sal_Char const * _pText, OUString const & _sElement) const
-                CFG_UNO_THROW1( configuration::backend::MalformedDataException );
-            void raiseNoSuchElementException    (sal_Char const * _pText, OUString const & _sElement) const
-                CFG_UNO_THROW1( configuration::backend::MalformedDataException );
-            void raisePropertyExistException    (sal_Char const * _pText, OUString const & _sElement) const
-                CFG_UNO_THROW1( configuration::backend::MalformedDataException );
+                SAL_THROW((com::sun::star::configuration::backend::MalformedDataException , com::sun::star::uno::RuntimeException));
+            void raiseElementExistException     (sal_Char const * _pText, rtl::OUString const & _sElement) const
+                SAL_THROW((com::sun::star::configuration::backend::MalformedDataException , com::sun::star::uno::RuntimeException));
+            void raiseNoSuchElementException    (sal_Char const * _pText, rtl::OUString const & _sElement) const
+                SAL_THROW((com::sun::star::configuration::backend::MalformedDataException , com::sun::star::uno::RuntimeException));
+            void raisePropertyExistException    (sal_Char const * _pText, rtl::OUString const & _sElement) const
+                SAL_THROW((com::sun::star::configuration::backend::MalformedDataException , com::sun::star::uno::RuntimeException));
             void raiseIllegalTypeException  (sal_Char const * _pText) const
-                CFG_UNO_THROW1( configuration::backend::MalformedDataException );
-            TemplateResult getTemplateData (TemplateRequest const & _aRequest  );
+                SAL_THROW((com::sun::star::configuration::backend::MalformedDataException , com::sun::star::uno::RuntimeException));
+            ResultHolder< TemplateInstance > getTemplateData (TemplateRequest const & _aRequest  );
         private:
-            INode * findChild(OUString const & _aName)
-                CFG_UNO_THROW1( configuration::backend::MalformedDataException );
+            INode * findChild(rtl::OUString const & _aName)
+                SAL_THROW((com::sun::star::configuration::backend::MalformedDataException , com::sun::star::uno::RuntimeException));
 
-            OUString makeMessageWithPath(sal_Char const * _pText) const
-                CFG_UNO_THROW_RTE(  );
+            rtl::OUString makeMessageWithPath(sal_Char const * _pText) const
+                SAL_THROW((com::sun::star::uno::RuntimeException));
 
-            OUString makeMessageWithName(sal_Char const * _pText, OUString const & _aName) const
-                CFG_UNO_THROW_RTE(  );
+            rtl::OUString makeMessageWithName(sal_Char const * _pText, rtl::OUString const & _aName) const
+                SAL_THROW((com::sun::star::uno::RuntimeException));
 
             ISubtree & implGetCurrentParent() const
-                CFG_UNO_THROW1( configuration::backend::MalformedDataException );
+                SAL_THROW((com::sun::star::configuration::backend::MalformedDataException , com::sun::star::uno::RuntimeException));
 
         };
 // -----------------------------------------------------------------------------
@@ -196,24 +191,24 @@ namespace configmgr
         public:
             OTreeNodeFactory&   getNodeFactory() const { return m_rNodeFactory; }
 
-            std::auto_ptr<ISubtree> createGroup(OUString const & _aName,
+            std::auto_ptr<ISubtree> createGroup(rtl::OUString const & _aName,
                                                 bool _bExtensible,
                                                 node::Attributes const & _aAttributes) const;
 
-            std::auto_ptr<ISubtree> createSet( OUString const & _aName,
-                                                TemplateIdentifier const & aItemType,
+            std::auto_ptr<ISubtree> createSet( rtl::OUString const & _aName,
+                                                backenduno::TemplateIdentifier const & aItemType,
                                                 bool _bExtensible,
                                                 node::Attributes const & _aAttributes) const;
 
-            std::auto_ptr<ISubtree> createLocalizedContainer(OUString const & _aName,
+            std::auto_ptr<ISubtree> createLocalizedContainer(rtl::OUString const & _aName,
                                                              uno::Type const & _aValueType,
                                                              node::Attributes const & _aAttributes) const;
 
-            std::auto_ptr<ISubtree> createPlaceHolder(OUString const & _aName,
-                                                        TemplateIdentifier const & _aInstanceType) const;
+            std::auto_ptr<ISubtree> createPlaceHolder(rtl::OUString const & _aName,
+                                                        backenduno::TemplateIdentifier const & _aInstanceType) const;
 
             static bool isInstancePlaceHolder(ISubtree const & _aInstanceTree);
-            static TemplateIdentifier getInstanceType(ISubtree const & _aInstanceTree);
+            static backenduno::TemplateIdentifier getInstanceType(ISubtree const & _aInstanceTree);
         };
 // -----------------------------------------------------------------------------
     } // namespace backend

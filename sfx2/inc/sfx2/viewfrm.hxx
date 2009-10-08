@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: viewfrm.hxx,v $
- * $Revision: 1.5 $
+ * $Revision: 1.5.46.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -145,8 +145,7 @@ private:
 #endif
 
 protected:
-    virtual void            SFX_NOTIFY( SfxBroadcaster& rBC, const TypeId& rBCType,
-                                    const SfxHint& rHint, const TypeId& rHintType );
+    virtual void            Notify( SfxBroadcaster& rBC, const SfxHint& rHint );
 
     SAL_DLLPRIVATE void SetWindow_Impl( Window *pWin );
 

@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: KDriver.cxx,v $
- * $Revision: 1.10 $
+ * $Revision: 1.10.56.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -42,6 +42,8 @@
 /** === end UNO includes === **/
 #include <rtl/ustrbuf.hxx>
 #include <tools/diagnose_ex.h>
+#include "resource/kab_res.hrc"
+#include "resource/sharedresources.hxx"
 
 using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;
@@ -216,20 +218,23 @@ bool KabImplModule::impl_doAllowNewKDEVersion()
 // --------------------------------------------------------------------------------
 void KabImplModule::impl_throwNoKdeException()
 {
-    impl_throwGenericSQLException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "No suitable KDE installation was found." ) ) );
+    ::connectivity::SharedResources aResources;
+    const ::rtl::OUString sError( aResources.getResourceString(
+            STR_NO_KDE_INST
+         ) );
+    impl_throwGenericSQLException( sError );
 }
 
 // --------------------------------------------------------------------------------
 void KabImplModule::impl_throwKdeTooOldException()
 {
-    ::rtl::OUStringBuffer aMessage;
-    aMessage.appendAscii( "KDE version " );
-    aMessage.append( (sal_Int32)MIN_KDE_VERSION_MAJOR );
-    aMessage.append( (sal_Unicode)'.' );
-    aMessage.append( (sal_Int32)MIN_KDE_VERSION_MINOR );
-    aMessage.appendAscii( " or higher is required to access the KDE Address Book." );
-
-    impl_throwGenericSQLException( aMessage.makeStringAndClear() );
+    ::connectivity::SharedResources aResources;
+    const ::rtl::OUString sError( aResources.getResourceStringWithSubstitution(
+            STR_KDE_VERSION_TOO_OLD,
+            "$major$",::rtl::OUString::valueOf((sal_Int32)MIN_KDE_VERSION_MAJOR),
+            "$minor$",::rtl::OUString::valueOf((sal_Int32)MIN_KDE_VERSION_MINOR)
+         ) );
+    impl_throwGenericSQLException( sError );
 }
 
 // --------------------------------------------------------------------------------
@@ -245,21 +250,20 @@ void KabImplModule::impl_throwGenericSQLException( const ::rtl::OUString& _rMess
 // --------------------------------------------------------------------------------
 void KabImplModule::impl_throwKdeTooNewException()
 {
-    ::rtl::OUStringBuffer aMessage;
-    aMessage.appendAscii( "The found KDE version is too new. Only KDE up to version " );
-    aMessage.append( (sal_Int32)MAX_KDE_VERSION_MAJOR );
-    aMessage.append( (sal_Unicode)'.' );
-    aMessage.append( (sal_Int32)MAX_KDE_VERSION_MINOR );
-    aMessage.appendAscii( " is known to work with this product.\n" );
+    ::connectivity::SharedResources aResources;
 
     SQLException aError;
-    aError.Message = aMessage.makeStringAndClear();
+    aError.Message = aResources.getResourceStringWithSubstitution(
+            STR_KDE_VERSION_TOO_NEW,
+            "$major$",::rtl::OUString::valueOf((sal_Int32)MIN_KDE_VERSION_MAJOR),
+            "$minor$",::rtl::OUString::valueOf((sal_Int32)MIN_KDE_VERSION_MINOR)
+         );
     aError.SQLState = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "S1000" ) );
     aError.ErrorCode = 0;
 
     SQLContext aDetails;
-    aMessage.appendAscii( "If you are sure that your KDE version works, " );
-    aMessage.appendAscii( "you might execute the following Basic macro to disable this version check:\n\n" );
+    ::rtl::OUStringBuffer aMessage;
+    aMessage.append( aResources.getResourceString(STR_KDE_VERSION_TOO_NEW_WORK_AROUND) );
 
     aMessage.appendAscii( "Sub disableKDEMaxVersionCheck\n" );
     aMessage.appendAscii( "  BasicLibraries.LoadLibrary( \"Tools\" )\n" );

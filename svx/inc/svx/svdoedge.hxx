@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: svdoedge.hxx,v $
- * $Revision: 1.5 $
+ * $Revision: 1.5.18.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -42,13 +42,9 @@
 class SdrDragMethod;
 class SdrPageView;
 
-namespace sdr
-{
-    namespace properties
-    {
-        class ConnectorProperties;
-    } // end of namespace properties
-} // end of namespace sdr
+namespace sdr { namespace properties {
+    class ConnectorProperties;
+}}
 
 //************************************************************
 //   Hilfsklasse SdrObjConnection
@@ -210,7 +206,7 @@ public:
     sal_Bool IsBoundRectCalculationRunning() const { return mbBoundRectCalculationRunning; }
 
 protected:
-    virtual void SFX_NOTIFY(SfxBroadcaster& rBC, const TypeId& rBCType, const SfxHint& rHint, const TypeId& rHintType);
+    virtual void Notify(SfxBroadcaster& rBC, const SfxHint& rHint);
 
     XPolygon ImpCalcObjToCenter(const Point& rStPt, long nEscAngle, const Rectangle& rRect, const Point& rCenter) const;
     void ImpRecalcEdgeTrack();  // Neuberechnung des Verbindungsverlaufs
@@ -264,7 +260,7 @@ public:
     void    SetEdgeTrackPath( const basegfx::B2DPolyPolygon& rPoly );
     basegfx::B2DPolyPolygon GetEdgeTrackPath() const;
 
-    virtual basegfx::B2DPolyPolygon TakeXorPoly(sal_Bool bDetail) const;
+    virtual basegfx::B2DPolyPolygon TakeXorPoly() const;
     virtual sal_uInt32 GetHdlCount() const;
     virtual SdrHdl* GetHdl(sal_uInt32 nHdlNum) const;
 

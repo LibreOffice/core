@@ -49,37 +49,34 @@ namespace configmgr
         class ObjectRegistry : public vos::OReference
         {
         public:
-            typedef configuration::NodeID Key;
-            typedef NodeElement*    Element;
-            typedef NodeElement*    ElementArg;
-            static Element notFound() { return 0; }
+            static NodeElement* notFound() { return 0; }
 
             struct KeyHash
             {
-                size_t operator() (const Key& rKey) const {return rKey.hashCode();}
+                size_t operator() (const configuration::NodeID& rKey) const {return rKey.hashCode();}
             };
             struct KeyEq
             {
-                bool operator() (const Key& lhs,const Key& rhs) const {return lhs == rhs;}
+                bool operator() (const configuration::NodeID& lhs,const configuration::NodeID& rhs) const {return lhs == rhs;}
             };
-            typedef std::hash_map<Key,Element,KeyHash, KeyEq> ObjectMap;
+            typedef std::hash_map<configuration::NodeID,NodeElement*,KeyHash, KeyEq> ObjectMap;
         public:
             ObjectRegistry() {}
             ~ObjectRegistry();
 
-            Element findElement(Key const& aNode) const
+            NodeElement*    findElement(configuration::NodeID const& aNode) const
             {
                 ObjectMap::const_iterator aFound = m_aMap.find(aNode);
 
                 return (aFound != m_aMap.end()) ? aFound->second : notFound();
             }
-            void registerElement(Key const& aNode, ElementArg aElement)
+            void registerElement(configuration::NodeID const& aNode, NodeElement* aElement)
             {
                 OSL_ENSURE(m_aMap.find(aNode) == m_aMap.end(), "ERROR: Node is already registered");
 
                 m_aMap[aNode] = aElement;
             }
-            void revokeElement(Key const& aNode, ElementArg aElement)
+            void revokeElement(configuration::NodeID const& aNode, NodeElement* aElement)
             {
                 ObjectMap::iterator aFound = m_aMap.find(aNode);
 

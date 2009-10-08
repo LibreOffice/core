@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: svdocapt.cxx,v $
- * $Revision: 1.30 $
+ * $Revision: 1.30.18.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -303,9 +303,9 @@ void SdrCaptionObj::TakeObjNamePlural(XubString& rName) const
     rName=ImpGetResStr(STR_ObjNamePluralCAPTION);
 }
 
-basegfx::B2DPolyPolygon SdrCaptionObj::TakeXorPoly(sal_Bool bDetail) const
+basegfx::B2DPolyPolygon SdrCaptionObj::TakeXorPoly() const
 {
-    basegfx::B2DPolyPolygon aPolyPoly(SdrRectObj::TakeXorPoly(bDetail));
+    basegfx::B2DPolyPolygon aPolyPoly(SdrRectObj::TakeXorPoly());
     aPolyPoly.append(aTailPoly.getB2DPolygon());
 
     return aPolyPoly;
@@ -792,9 +792,9 @@ void SdrCaptionObj::SetModel(SdrModel* pNewModel)
     ImpRecalcTail();
 }
 
-void SdrCaptionObj::SFX_NOTIFY(SfxBroadcaster& rBC, const TypeId& rBCType, const SfxHint& rHint, const TypeId& rHintType)
+void SdrCaptionObj::Notify(SfxBroadcaster& rBC, const SfxHint& rHint)
 {
-    SdrRectObj::SFX_NOTIFY(rBC,rBCType,rHint,rHintType);
+    SdrRectObj::Notify(rBC,rHint);
     ImpRecalcTail();
 }
 

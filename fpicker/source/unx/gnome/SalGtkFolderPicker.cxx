@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: SalGtkFolderPicker.cxx,v $
- * $Revision: 1.11 $
+ * $Revision: 1.11.42.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -173,8 +173,12 @@ sal_Int16 SAL_CALL SalGtkFolderPicker::execute() throw( uno::RuntimeException )
 
     sal_Int16 retVal = 0;
 
-        RunDialog aRunInMain(m_pDialog);
-        gint nStatus = aRunInMain.runandwaitforresult();
+    uno::Reference< awt::XExtendedToolkit > xToolkit(
+        m_xServiceMgr->createInstance( ::rtl::OUString::createFromAscii("com.sun.star.awt.Toolkit") ), uno::UNO_QUERY);
+
+    RunDialog* pRunInMain = new RunDialog(m_pDialog, xToolkit);
+    uno::Reference < awt::XTopWindowListener > xLifeCycle(pRunInMain);
+    gint nStatus = pRunInMain->runandwaitforresult();
     switch( nStatus )
     {
         case GTK_RESPONSE_ACCEPT:

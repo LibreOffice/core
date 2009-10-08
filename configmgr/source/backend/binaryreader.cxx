@@ -63,8 +63,6 @@ namespace configmgr
     // -----------------------------------------------------------------------------
     namespace backend
     {
-        using ::rtl::OUString;
-        using namespace ::osl;
         namespace uno = com::sun::star::uno;
         namespace io = com::sun::star::io;
 
@@ -190,7 +188,7 @@ namespace configmgr
     }
     static void raiseBufferError()
     {
-        OUString sMsg = OUString::createFromAscii("Cannot allocate Buffer: Too large");
+        rtl::OUString sMsg = rtl::OUString::createFromAscii("Cannot allocate Buffer: Too large");
         throw io:: BufferSizeExceededException(sMsg, NULL);
     }
     // -------------------------------------------------------------------------
@@ -223,7 +221,7 @@ namespace configmgr
             if (nRead != nLength)
             {
                 rtl_freeMemory (pBuffer);
-                OUString sMsg = OUString::createFromAscii("BinaryCache - Could not read entire size of file: ");
+                rtl::OUString sMsg = rtl::OUString::createFromAscii("BinaryCache - Could not read entire size of file: ");
                 throw io::UnexpectedEOFException(sMsg.concat(rFileUrl),NULL);
             }
             m_pBuffer = pBuffer;
@@ -243,7 +241,7 @@ namespace configmgr
         {
             if (!m_pBuffer)
             {
-                OUString sMsg = OUString::createFromAscii("BinaryCache - Stream is not open. No data available for reading.");
+                rtl::OUString sMsg = rtl::OUString::createFromAscii("BinaryCache - Stream is not open. No data available for reading.");
                 throw io::NotConnectedException(sMsg,*this);
             }
             OSL_ASSERT(m_nLength >= m_nOffset);
@@ -255,7 +253,7 @@ namespace configmgr
         {
             if (nRequest < 0)
             {
-                OUString sMsg = OUString::createFromAscii("BinaryCache - Invalid read request - negative byte count requested.");
+                rtl::OUString sMsg = rtl::OUString::createFromAscii("BinaryCache - Invalid read request - negative byte count requested.");
                 throw io::BufferSizeExceededException(sMsg,*this);
             }
             sal_uInt32 const uRequest = sal_uInt32(nRequest);
@@ -269,7 +267,7 @@ namespace configmgr
             sal_uInt32 const nAvail = checkAvail ();
             if (nRequest > nAvail)
             {
-                OUString sMsg = OUString::createFromAscii("BinaryCache - Invalid file format - read past end-of-file.");
+                rtl::OUString sMsg = rtl::OUString::createFromAscii("BinaryCache - Invalid file format - read past end-of-file.");
                 throw io::UnexpectedEOFException(sMsg,*this);
             }
             sal_uInt8 const * pData = m_pBuffer + m_nOffset;
@@ -491,9 +489,8 @@ namespace configmgr
                 (sal_uInt32(pData[2]) <<  8) |
                 (sal_uInt32(pData[3]) <<  0)   );
 
-            using binary::STR_ASCII_MASK;
-            bool bIsAscii = (nLength & STR_ASCII_MASK) == STR_ASCII_MASK;
-            nLength &=~STR_ASCII_MASK;
+            bool bIsAscii = (nLength & binary::STR_ASCII_MASK) == binary::STR_ASCII_MASK;
+            nLength &=~binary::STR_ASCII_MASK;
 
             rtl::OUString result;
             if (nLength != 0)
@@ -617,7 +614,7 @@ namespace configmgr
 
         // --------------------------------------------------------------------------
 
-        void BinaryReader::read (Binary &_aValue)
+        void BinaryReader::read (uno::Sequence< sal_Int8 > &_aValue)
             SAL_THROW( (io::IOException, uno::RuntimeException) )
         {
             readSequence(*this, _aValue);
@@ -625,7 +622,7 @@ namespace configmgr
 
         // --------------------------------------------------------------------------
 
-        void BinaryReader::read (StringList &_aValue)
+        void BinaryReader::read (uno::Sequence< rtl::OUString > &_aValue)
             SAL_THROW( (io::IOException, uno::RuntimeException) )
         {
             readSequence(*this, _aValue);
@@ -633,8 +630,7 @@ namespace configmgr
 
         // --------------------------------------------------------------------------
 
-        typedef BinaryReader::Binary Binary;
-        Binary const * const for_binary = 0;
+        uno::Sequence< sal_Int8 > const * const for_binary = 0;
 
         #define CASE_READ_SEQUENCE(TYPE_CLASS, DATA_TYPE)   \
             case TYPE_CLASS:                                \
@@ -668,7 +664,7 @@ namespace configmgr
             case uno::TypeClass_SEQUENCE:
                 if (_aElementType == ::getCppuType(for_binary))
                 {
-                    Binary aData;
+                    uno::Sequence< sal_Int8 > aData;
                     readSequence(_rReader, aData);
                     _aValue <<= aData;
                     break;

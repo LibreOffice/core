@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: desktop.cxx,v $
- * $Revision: 1.64 $
+ * $Revision: 1.64.80.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -50,7 +50,6 @@
 #include <dispatch/interceptionhelper.hxx>
 #endif
 #include <classes/taskcreator.hxx>
-#include <classes/targetfinder.hxx>
 #include <threadhelp/transactionguard.hxx>
 #include <threadhelp/writeguard.hxx>
 #include <threadhelp/readguard.hxx>

@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: DIndexes.cxx,v $
- * $Revision: 1.18 $
+ * $Revision: 1.18.56.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -35,6 +35,7 @@
 #include <connectivity/dbexception.hxx>
 #include <unotools/ucbhelper.hxx>
 #include <comphelper/types.hxx>
+#include "resource/dbase_res.hrc"
 
 using namespace ::comphelper;
 
@@ -60,11 +61,14 @@ sdbcx::ObjectType ODbaseIndexes::createObject(const ::rtl::OUString& _rName)
     sFile += OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_DELIMITER);
     sFile += _rName;
     sFile += ::rtl::OUString::createFromAscii(".ndx");
-    if(!UCBContentHelper::Exists(sFile))
-        ::dbtools::throwGenericSQLException(
-            ::rtl::OUString::createFromAscii( "Index file doesn't exists." ),
-            // TODO: resource
-            *m_pTable );
+    if ( !UCBContentHelper::Exists(sFile) )
+    {
+        const ::rtl::OUString sError( m_pTable->getConnection()->getResources().getResourceStringWithSubstitution(
+                STR_COULD_NOT_LOAD_FILE,
+                "$filename$", sFile
+            ) );
+        ::dbtools::throwGenericSQLException( sError, *m_pTable );
+    }
 
     sdbcx::ObjectType xRet;
     SvStream* pFileStream = ::connectivity::file::OFileTable::createStream_simpleError(sFile,STREAM_READ | STREAM_NOCREATE| STREAM_SHARE_DENYWRITE);
@@ -83,10 +87,13 @@ sdbcx::ObjectType ODbaseIndexes::createObject(const ::rtl::OUString& _rName)
         pIndex->openIndexFile();
     }
     else
-        ::dbtools::throwGenericSQLException(
-            ::rtl::OUString::createFromAscii( "Could not open index file."),
-            // TODO: resource
-            *m_pTable );
+    {
+        const ::rtl::OUString sError( m_pTable->getConnection()->getResources().getResourceStringWithSubstitution(
+                STR_COULD_NOT_LOAD_FILE,
+                "$filename$", sFile
+             ) );
+        ::dbtools::throwGenericSQLException( sError, *m_pTable );
+    }
     return xRet;
 }
 // -------------------------------------------------------------------------

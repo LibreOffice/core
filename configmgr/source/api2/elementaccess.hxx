@@ -49,7 +49,6 @@ namespace configmgr
 //-----------------------------------------------------------------------------
     namespace css = ::com::sun::star;
     namespace uno = ::com::sun::star::uno;
-    using rtl::OUString;
 
 //-----------------------------------------------------------------------------
     namespace configapi
@@ -68,16 +67,8 @@ namespace configmgr
             <type scope='configmgr::configapi'>NodeAccess</type> and
             <type scope='configmgr::configapi'>InnerElement</type>.</p>
     */
-    typedef  ::cppu::WeakImplHelper3
-                < css::container::XChild
-                , css::container::XNamed
-                , css::lang::XServiceInfo
-                >
-                InnerElementImplHelper;
-
-    class BasicInnerElement : public InnerElementImplHelper
+    class BasicInnerElement : public cppu::WeakImplHelper3< css::container::XChild, css::container::XNamed, css::lang::XServiceInfo >
     {
-        typedef InnerElementImplHelper BaseImplHelper;
     protected:
     // Destructors
         virtual ~BasicInnerElement() {}
@@ -103,24 +94,24 @@ namespace configmgr
                 throw(css::lang::NoSupportException, css::uno::RuntimeException);
 
         // XNamed
-        virtual OUString SAL_CALL
+        virtual rtl::OUString SAL_CALL
             getName(  )
                 throw(uno::RuntimeException);
 
         virtual void SAL_CALL  // not supported (! - missing exception)
-            setName( const OUString& aName )
+            setName( const rtl::OUString& aName )
                 throw(uno::RuntimeException);
 
         // XServiceInfo
-        virtual OUString SAL_CALL
+        virtual rtl::OUString SAL_CALL
             getImplementationName(  )
                 throw(uno::RuntimeException);
 
         virtual sal_Bool SAL_CALL
-            supportsService( const OUString& ServiceName )
+            supportsService( const rtl::OUString& ServiceName )
                 throw(uno::RuntimeException);
 
-        virtual uno::Sequence< OUString > SAL_CALL
+        virtual uno::Sequence< rtl::OUString > SAL_CALL
             getSupportedServiceNames(  )
                 throw(uno::RuntimeException);
 
@@ -136,19 +127,8 @@ namespace configmgr
             <type scope='configmgr::configapi'>NodeAccess</type> and
             <type scope='configmgr::configapi'>SetElement</type>.</p>
     */
-    typedef ::cppu::WeakImplHelper6
-                < css::container::XChild
-                , css::container::XNamed
-                , css::lang::XComponent
-                , css::lang::XServiceInfo
-                , css::configuration::XTemplateInstance
-                , css::lang::XUnoTunnel
-                >
-                SetElementImplHelper;
-
-    class BasicSetElement : public SetElementImplHelper
+    class BasicSetElement : public cppu::WeakImplHelper6< css::container::XChild, css::container::XNamed, css::lang::XComponent, css::lang::XServiceInfo, css::configuration::XTemplateInstance, css::lang::XUnoTunnel >
     {
-        typedef SetElementImplHelper BaseImplHelper;
     protected:
     // Destructors
         virtual ~BasicSetElement() {}
@@ -174,12 +154,12 @@ namespace configmgr
                 throw(css::lang::NoSupportException, css::uno::RuntimeException);
 
         // XNamed
-        virtual OUString SAL_CALL
+        virtual rtl::OUString SAL_CALL
             getName(  )
                 throw(uno::RuntimeException);
 
         virtual void SAL_CALL  // generally not supported (! - missing exception)
-            setName( const OUString& aName )
+            setName( const rtl::OUString& aName )
                 throw(uno::RuntimeException);
 
         // XComponent
@@ -196,20 +176,20 @@ namespace configmgr
                 throw(uno::RuntimeException);
 
         // XServiceInfo
-        virtual OUString SAL_CALL
+        virtual rtl::OUString SAL_CALL
             getImplementationName(  )
                 throw(uno::RuntimeException);
 
         virtual sal_Bool SAL_CALL
-            supportsService( const OUString& ServiceName )
+            supportsService( const rtl::OUString& ServiceName )
                 throw(uno::RuntimeException);
 
-        virtual uno::Sequence< OUString > SAL_CALL
+        virtual uno::Sequence< rtl::OUString > SAL_CALL
             getSupportedServiceNames(  )
                 throw(uno::RuntimeException);
 
         // XTemplateInstance
-        virtual OUString SAL_CALL
+        virtual rtl::OUString SAL_CALL
             getTemplateName( )
                 throw(uno::RuntimeException);
 
@@ -230,18 +210,8 @@ namespace configmgr
             <type scope='configmgr::configapi'>NodeAccess</type> and
             <type scope='configmgr::configapi'>SetElement</type>.</p>
     */
-    typedef ::cppu::WeakImplHelper5
-                < css::container::XNamed
-                , css::util::XChangesNotifier
-                , css::lang::XComponent
-                , css::lang::XServiceInfo
-                , css::lang::XLocalizable
-                >
-                RootElementImplHelper;
-
-    class BasicRootElement : public RootElementImplHelper
+    class BasicRootElement : public cppu::WeakImplHelper5< css::container::XNamed, css::util::XChangesNotifier, css::lang::XComponent, css::lang::XServiceInfo, css::lang::XLocalizable >
     {
-        typedef RootElementImplHelper BaseImplHelper;
     protected:
     // Destructors
         virtual ~BasicRootElement() {}
@@ -258,12 +228,12 @@ namespace configmgr
                 throw(uno::RuntimeException);
 
         // XNamed
-        virtual OUString SAL_CALL
+        virtual rtl::OUString SAL_CALL
             getName(  )
                 throw(uno::RuntimeException);
 
         virtual void SAL_CALL  // generally not supported (! - missing exception)
-            setName( const OUString& aName )
+            setName( const rtl::OUString& aName )
                 throw(uno::RuntimeException);
 
         // XChangesNotifier
@@ -289,15 +259,15 @@ namespace configmgr
                 throw(uno::RuntimeException);
 
         // XServiceInfo
-        virtual OUString SAL_CALL
+        virtual rtl::OUString SAL_CALL
             getImplementationName(  )
                 throw(uno::RuntimeException);
 
         virtual sal_Bool SAL_CALL
-            supportsService( const OUString& ServiceName )
+            supportsService( const rtl::OUString& ServiceName )
                 throw(uno::RuntimeException);
 
-        virtual uno::Sequence< OUString > SAL_CALL
+        virtual uno::Sequence< rtl::OUString > SAL_CALL
             getSupportedServiceNames(  )
                 throw(uno::RuntimeException);
 
@@ -322,19 +292,8 @@ namespace configmgr
             <type scope='configmgr::configapi'>NodeAccess</type> and
             <type scope='configmgr::configapi'>SetElement</type>.</p>
     */
-    typedef ::cppu::WeakImplHelper6
-                < css::container::XNamed
-                , css::util::XChangesNotifier
-                , css::lang::XComponent
-                , css::lang::XServiceInfo
-                , css::lang::XLocalizable
-                , css::util::XChangesBatch
-                >
-                UpdateElementImplHelper;
-
-    class BasicUpdateElement : public UpdateElementImplHelper
+    class BasicUpdateElement : public cppu::WeakImplHelper6< css::container::XNamed, css::util::XChangesNotifier, css::lang::XComponent, css::lang::XServiceInfo, css::lang::XLocalizable, css::util::XChangesBatch >
     {
-        typedef UpdateElementImplHelper BaseImplHelper;
     protected:
     // Destructors
         virtual ~BasicUpdateElement() {}
@@ -351,12 +310,12 @@ namespace configmgr
                 throw(uno::RuntimeException);
 
         // XNamed
-        virtual OUString SAL_CALL
+        virtual rtl::OUString SAL_CALL
             getName(  )
                 throw(uno::RuntimeException);
 
         virtual void SAL_CALL  // generally not supported (! - missing exception)
-            setName( const OUString& aName )
+            setName( const rtl::OUString& aName )
                 throw(uno::RuntimeException);
 
         // XChangesNotifier
@@ -382,15 +341,15 @@ namespace configmgr
                 throw(uno::RuntimeException);
 
         // XServiceInfo
-        virtual OUString SAL_CALL
+        virtual rtl::OUString SAL_CALL
             getImplementationName(  )
                 throw(uno::RuntimeException);
 
         virtual sal_Bool SAL_CALL
-            supportsService( const OUString& ServiceName )
+            supportsService( const rtl::OUString& ServiceName )
                 throw(uno::RuntimeException);
 
-        virtual uno::Sequence< OUString > SAL_CALL
+        virtual uno::Sequence< rtl::OUString > SAL_CALL
             getSupportedServiceNames(  )
                 throw(uno::RuntimeException);
 

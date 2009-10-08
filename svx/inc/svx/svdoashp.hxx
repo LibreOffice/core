@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: svdoashp.hxx,v $
- * $Revision: 1.7 $
+ * $Revision: 1.6.90.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -32,9 +32,7 @@
 #define _SVDOASHP_HXX
 
 #include <svx/svdobj.hxx>
-#ifndef _SVDOATTR_HXX
 #include <svx/svdotext.hxx>
-#endif
 #include <svx/svdhdl.hxx>
 #include <vector>
 #include <com/sun/star/uno/Reference.h>
@@ -134,8 +132,8 @@ public:
     // #i37011#
     const SdrObject* GetSdrObjectFromCustomShape() const;
     const SdrObject* GetSdrObjectShadowFromCustomShape() const;
-    const sal_Bool GetTextBounds( Rectangle& rTextBound ) const;
-    const sal_Bool IsTextPath() const;
+    sal_Bool GetTextBounds( Rectangle& rTextBound ) const;
+    sal_Bool IsTextPath() const;
     static SVX_DLLPRIVATE basegfx::B2DPolyPolygon GetLineGeometry( const SdrObjCustomShape* pCustomShape, const sal_Bool bBezierAllowed );
 
 protected:
@@ -144,15 +142,15 @@ protected:
 
 public:
 
-    const sal_Bool UseNoFillStyle() const;
+    sal_Bool UseNoFillStyle() const;
 
-    const sal_Bool IsMirroredX() const;
-    const sal_Bool IsMirroredY() const;
+    sal_Bool IsMirroredX() const;
+    sal_Bool IsMirroredY() const;
     void SetMirroredX( const sal_Bool bMirroredX );
     void SetMirroredY( const sal_Bool bMirroredY );
 
-    const double GetObjectRotation() const;
-    const double GetExtraTextRotation() const;
+    double GetObjectRotation() const;
+    double GetExtraTextRotation() const;
 
     TYPEINFO();
     SdrObjCustomShape();
@@ -236,7 +234,7 @@ public:
 
     virtual basegfx::B2DPolyPolygon TakeCreatePoly( const SdrDragStat& rDrag) const;
 
-    virtual basegfx::B2DPolyPolygon TakeXorPoly(sal_Bool bDetail) const;
+    virtual basegfx::B2DPolyPolygon TakeXorPoly() const;
     virtual basegfx::B2DPolyPolygon TakeContour() const;
 
     virtual void NbcSetOutlinerParaObject(OutlinerParaObject* pTextObject);

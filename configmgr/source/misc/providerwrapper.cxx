@@ -47,21 +47,20 @@ namespace configmgr
     //==========================================================================
     namespace uno = com::sun::star::uno;
     namespace lang = com::sun::star::lang;
-    using rtl::OUString;
     //==========================================================================
     //= ProviderWrapper
     //==========================================================================
 
-    uno::Reference< uno::XInterface > ProviderWrapper::create( uno::Reference< uno::XInterface > xDelegate, NamedValues const & aPresets)
+    uno::Reference< uno::XInterface > ProviderWrapper::create( uno::Reference< uno::XInterface > xDelegate, uno::Sequence< com::sun::star::beans::NamedValue > const & aPresets)
     {
-        Provider xProvDelegate(xDelegate, uno::UNO_QUERY);
+        uno::Reference< lang::XMultiServiceFactory > xProvDelegate(xDelegate, uno::UNO_QUERY);
         if (!xProvDelegate.is())
         {
-            OUString sMsg(RTL_CONSTASCII_USTRINGPARAM("ProviderWrapper: Cannot wrap a NULL provider"));
+            rtl::OUString sMsg(RTL_CONSTASCII_USTRINGPARAM("ProviderWrapper: Cannot wrap a NULL provider"));
             throw lang::NullPointerException(sMsg,NULL);
         }
         //Strip prefixes
-        NamedValues aStrippedPresets = aPresets;
+        uno::Sequence< com::sun::star::beans::NamedValue > aStrippedPresets = aPresets;
 
         for (sal_Int32 i = 0; i < aPresets.getLength(); ++i)
         {
@@ -71,16 +70,15 @@ namespace configmgr
             }
         }
 
-        Provider xResult( new ProviderWrapper(xProvDelegate,aStrippedPresets) );
+        uno::Reference< lang::XMultiServiceFactory > xResult( new ProviderWrapper(xProvDelegate,aStrippedPresets) );
 
-        typedef uno::Reference< lang::XComponent > Comp;
-        DisposingForwarder::forward( Comp::query(xProvDelegate),Comp::query(xResult) );
+        DisposingForwarder::forward( uno::Reference< lang::XComponent >::query(xProvDelegate),uno::Reference< lang::XComponent >::query(xResult) );
         return uno::Reference< uno::XInterface >( xResult, uno::UNO_QUERY );
     }
 
 
-    ProviderWrapper::ProviderWrapper(Provider const & xDelegate, NamedValues const & aPresets)
-    : ProviderWrapper_Base( PWMutexHolder::mutex )
+    ProviderWrapper::ProviderWrapper(uno::Reference< lang::XMultiServiceFactory > const & xDelegate, uno::Sequence< com::sun::star::beans::NamedValue > const & aPresets)
+    : cppu::WeakComponentImplHelper2< lang::XMultiServiceFactory, lang::XServiceInfo >( PWMutexHolder::mutex )
     , m_xDelegate(xDelegate)
     , m_aDefaults(aPresets.getLength())
     {
@@ -100,12 +98,12 @@ namespace configmgr
         m_xDelegate.clear();
     }
 
-    ProviderWrapper::Provider ProviderWrapper::getDelegate()
+    uno::Reference< lang::XMultiServiceFactory > ProviderWrapper::getDelegate()
     {
         osl::MutexGuard lock(mutex);
         if (!m_xDelegate.is())
         {
-            OUString sMsg(RTL_CONSTASCII_USTRINGPARAM("ProviderWrapper: Delegate Provider has been disposed"));
+            rtl::OUString sMsg(RTL_CONSTASCII_USTRINGPARAM("ProviderWrapper: Delegate Provider has been disposed"));
             throw lang::DisposedException(sMsg,*this);
         }
         return m_xDelegate;
@@ -117,28 +115,28 @@ namespace configmgr
         uno::Reference<lang::XServiceInfo> xDelegate( this->getDelegate(), uno::UNO_QUERY );
         if (!xDelegate.is())
         {
-            OUString sMsg(RTL_CONSTASCII_USTRINGPARAM("ProviderWrapper: Delegate Provider has no service info"));
+            rtl::OUString sMsg(RTL_CONSTASCII_USTRINGPARAM("ProviderWrapper: Delegate Provider has no service info"));
             throw uno::RuntimeException(sMsg,*this);
         }
         return xDelegate;
     }
 
     /// XMultiServiceFactory
-    static inline uno::Any const * begin(ProviderWrapper::Arguments const & aArgs)
+    static inline uno::Any const * begin(uno::Sequence< uno::Any > const & aArgs)
     { return aArgs.getConstArray(); }
-    static inline uno::Any const * end(ProviderWrapper::Arguments const & aArgs)
+    static inline uno::Any const * end(uno::Sequence< uno::Any > const & aArgs)
     { return aArgs.getConstArray() + aArgs.getLength(); }
-    static inline uno::Any * begin(ProviderWrapper::Arguments & aArgs)
+    static inline uno::Any * begin(uno::Sequence< uno::Any > & aArgs)
     { return aArgs.getArray(); }
-    static inline uno::Any * end(ProviderWrapper::Arguments & aArgs)
+    static inline uno::Any * end(uno::Sequence< uno::Any > & aArgs)
     { return aArgs.getArray() + aArgs.getLength(); }
 
-    ProviderWrapper::Arguments ProviderWrapper::patchArguments(Arguments const & aArgs) const
+    uno::Sequence< uno::Any > ProviderWrapper::patchArguments(uno::Sequence< uno::Any > const & aArgs) const
     {
         // rely on evaluation order front to back
         if (m_aDefaults.getLength() == 0) return aArgs;
 
-        Arguments aResult(m_aDefaults.getLength() + aArgs.getLength());
+        uno::Sequence< uno::Any > aResult(m_aDefaults.getLength() + aArgs.getLength());
 
         uno::Any * pNext = std::copy(begin(m_aDefaults),end(m_aDefaults),begin(aResult));
         pNext = std::copy(begin(aArgs),end(aArgs),pNext);
@@ -149,7 +147,7 @@ namespace configmgr
     }
 
     uno::Reference< uno::XInterface > SAL_CALL
-        ProviderWrapper::createInstance( const OUString& aServiceSpecifier )
+        ProviderWrapper::createInstance( const rtl::OUString& aServiceSpecifier )
             throw(uno::Exception, uno::RuntimeException)
     {
         return getDelegate()->createInstanceWithArguments(aServiceSpecifier,m_aDefaults);
@@ -162,7 +160,7 @@ namespace configmgr
         return getDelegate()->createInstanceWithArguments(ServiceSpecifier,patchArguments(rArguments));
     }
 
-    uno::Sequence< OUString > SAL_CALL
+    uno::Sequence< rtl::OUString > SAL_CALL
         ProviderWrapper::getAvailableServiceNames(  )
             throw(uno::RuntimeException)
     {
@@ -170,11 +168,11 @@ namespace configmgr
     }
 
     /// XServiceInfo
-    OUString SAL_CALL
+    rtl::OUString SAL_CALL
         ProviderWrapper::getImplementationName(  )
             throw(uno::RuntimeException)
     {
-        return OUString::createFromAscii("com.sun.star.comp.configuration.ConfigurationProviderWrapper");
+        return rtl::OUString::createFromAscii("com.sun.star.comp.configuration.ConfigurationProviderWrapper");
     }
 
     sal_Bool SAL_CALL
@@ -184,7 +182,7 @@ namespace configmgr
         return getDelegateInfo()->supportsService( ServiceName );
     }
 
-    uno::Sequence< OUString > SAL_CALL
+    uno::Sequence< rtl::OUString > SAL_CALL
         ProviderWrapper::getSupportedServiceNames(  )
             throw(uno::RuntimeException)
     {

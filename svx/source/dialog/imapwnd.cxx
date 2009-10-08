@@ -64,6 +64,9 @@
 #include <basegfx/point/b2dpoint.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
 
+using ::com::sun::star::frame::XFrame;
+using ::com::sun::star::uno::Reference;
+
 #define TRANSCOL Color( COL_WHITE )
 
 /*************************************************************************
@@ -112,9 +115,10 @@ URLDlg::URLDlg( Window* pWindow, const String& rURL,
 |*
 \************************************************************************/
 
-IMapWindow::IMapWindow( Window* pParent, const ResId& rResId ) :
+IMapWindow::IMapWindow( Window* pParent, const ResId& rResId, const Reference< XFrame >& rxDocumentFrame ) :
             GraphCtrl( pParent, rResId ),
-            DropTargetHelper( this )
+            DropTargetHelper( this ),
+            mxDocumentFrame( rxDocumentFrame )
 {
     SetWinStyle( WB_SDRMODE );
 
@@ -862,7 +866,7 @@ void IMapWindow::DoMacroAssign()
         aMacroItem.SetMacroTable( pIMapObj->GetMacroTable() );
         aSet.Put( aMacroItem, SID_ATTR_MACROITEM );
 
-        SfxMacroAssignDlg   aMacroDlg( this, aSet );
+        SfxMacroAssignDlg   aMacroDlg( this, mxDocumentFrame, aSet );
         SfxMacroTabPage*    pMacroTabPage = (SfxMacroTabPage*) aMacroDlg.GetTabPage();
 
         if ( pMacroTabPage )

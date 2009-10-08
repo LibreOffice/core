@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: imagemanager.cxx,v $
- * $Revision: 1.16 $
+ * $Revision: 1.16.82.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -498,13 +498,6 @@ throw (::com::sun::star::uno::RuntimeException)
 
     m_xUserConfigStorage = Storage;
     implts_initialize();
-}
-
-sal_Bool ImageManager::hasStorage()
-throw (::com::sun::star::uno::RuntimeException)
-{
-    ResetableGuard aLock( m_aLock );
-    return ( m_xUserConfigStorage.is() );
 }
 
 // XInitialization

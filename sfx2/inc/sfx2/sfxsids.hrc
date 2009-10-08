@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: sfxsids.hrc,v $
- * $Revision: 1.12 $
+ * $Revision: 1.12.58.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -529,7 +529,8 @@
 #define SID_PRINT_SELECTEDSHEET             (SID_SFX_START + 1712)
 #define SID_OPTIONS_PAGEURL                 (SID_SFX_START + 1713)
 #define SID_MORE_DICTIONARIES               (SID_SFX_START + 1714)
-#define SID_SFX_free_START                  (SID_SFX_START + 1715)
+#define SID_ACTIVATE_STYLE_APPLY            (SID_SFX_START + 1715)
+#define SID_SFX_free_START                  (SID_SFX_START + 1716)
 #define SID_SFX_free_END                    (SID_SFX_START + 3999)
 
 #define SID_OPEN_NEW_VIEW                   (SID_SFX_START + 520)

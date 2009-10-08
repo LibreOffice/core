@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: viewcontactofe3dscene.cxx,v $
- * $Revision: 1.10 $
+ * $Revision: 1.10.18.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -289,7 +289,7 @@ namespace sdr
         void ViewContactOfE3dScene::createSdrLightingAttribute()
         {
             const SfxItemSet& rItemSet = GetE3dScene().GetMergedItemSet();
-            mpSdrLightingAttribute = drawinglayer::primitive2d::createNewSdrLightingAttribute(rItemSet, GetE3dScene().GetLightGroup());
+            mpSdrLightingAttribute = drawinglayer::primitive2d::createNewSdrLightingAttribute(rItemSet);
         }
 
         drawinglayer::primitive2d::Primitive2DSequence ViewContactOfE3dScene::createScenePrimitive2DSequence(const SetOfByte* pLayerVisibility) const
@@ -303,7 +303,7 @@ namespace sdr
                 drawinglayer::primitive3d::Primitive3DSequence aAllSequence;
                 drawinglayer::primitive3d::Primitive3DSequence aVisibleSequence;
                 const bool bTestLayerVisibility(0 != pLayerVisibility);
-                const bool bTestSelectedVisibility(GetE3dScene().DoDrawOnlySelected());
+                const bool bTestSelectedVisibility(GetE3dScene().GetDrawOnlySelected());
                 const bool bTestVisibility(bTestLayerVisibility || bTestSelectedVisibility);
 
                 // add children recursively. Do NOT start with (*this), this would create

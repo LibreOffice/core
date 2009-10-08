@@ -33,7 +33,6 @@
 #include <stdio.h>
 
 #include "apitreeimplobj.hxx"
-#include "confproviderimpl2.hxx"
 #include "confignotifier.hxx"
 #include "notifierimpl.hxx"
 #include "apifactory.hxx"
@@ -41,10 +40,12 @@
 #include "nodechangeinfo.hxx"
 #include "broadcaster.hxx"
 #include "change.hxx"
+#include "providerimpl.hxx"
 #include "roottree.hxx"
 #include "noderef.hxx"
 #include "anynoderef.hxx"
 #include "tracer.hxx"
+#include "treemanager.hxx"
 #include <cppuhelper/queryinterface.hxx>
 #include <vos/refernce.hxx>
 
@@ -161,7 +162,7 @@ void SAL_CALL ApiTreeImpl::ComponentAdapter::disposing(com::sun::star::lang::Eve
     {
         CFG_TRACE_INFO("ApiTreeImpl:ComponentAdapter: Providing UNO object is disposed - relaying to my owner");
         // ensure our owner stays alive
-        UnoInterfaceRef xKeepOwnerAlive( this->pOwner->getUnoInstance() );
+        uno::Reference<uno::XInterface> xKeepOwnerAlive( this->pOwner->getUnoInstance() );
         // and we stay alive too
         rtl::Reference< ApiTreeImpl::ComponentAdapter > xKeepAlive( this );
 
@@ -200,28 +201,28 @@ void ApiTreeImpl::ComponentAdapter::clear()
 class ApiRootTreeImpl::NodeListener : public INodeListener
 {
     ApiRootTreeImpl*    pParent;
-    IConfigBroadcaster* pSource;
+    TreeManager * pSource;
 
-    TreeOptions           m_xOptions;
-    AbsolutePath          m_aLocationPath;
+    vos::ORef< OOptions >           m_xOptions;
+    configuration::AbsolutePath       m_aLocationPath;
 public:
     NodeListener(ApiRootTreeImpl& _rParent)
         : pParent(&_rParent)
         , pSource(NULL)
-        , m_aLocationPath( AbsolutePath::root() )
+        , m_aLocationPath( configuration::AbsolutePath::root() )
     {}
     ~NodeListener()
     {
         unbind();
     }
 
-    IConfigBroadcaster* getSource()
+    TreeManager * getSource()
     {
         UnoApiLock aGuard;
         return pSource;
     }
 
-    void setSource(IConfigBroadcaster* pNew)
+    void setSource(TreeManager * pNew)
     {
         UnoApiLock aGuard;
         if (pParent)
@@ -247,7 +248,7 @@ public:
         }
     }
 
-    void setLocation(AbsolutePath const& _aLocation, TreeOptions const& _xOptions)
+    void setLocation(configuration::AbsolutePath const& _aLocation, vos::ORef< OOptions > const& _xOptions)
     {
         OSL_ASSERT(_xOptions.isValid());
 
@@ -276,7 +277,7 @@ public:
             OSL_ASSERT(m_xOptions.isValid());
             pSource->removeListener(m_xOptions->getRequestOptions(), this);
             m_xOptions.unbind();
-            m_aLocationPath = AbsolutePath::root();
+            m_aLocationPath = configuration::AbsolutePath::root();
         }
 
     }
@@ -290,12 +291,12 @@ public:
 
             if (pSource)
             {
-                IConfigBroadcaster* pOrgSource = pSource;
-                TreeOptions xOptions = m_xOptions;
+                TreeManager * pOrgSource = pSource;
+                vos::ORef< OOptions > xOptions = m_xOptions;
 
                 pSource = 0;
                 m_xOptions.unbind();
-                m_aLocationPath = AbsolutePath::root();
+                m_aLocationPath = configuration::AbsolutePath::root();
 
                 aGuard.clear();
 
@@ -306,9 +307,9 @@ public:
     }
 
     // Interfaces
-    virtual void disposing(IConfigBroadcaster* pSource);
-    virtual void nodeChanged(Change const& aChange, AbsolutePath const& sPath, IConfigBroadcaster* pSource);
-    virtual void nodeDeleted(AbsolutePath const& sPath, IConfigBroadcaster* pSource);
+    virtual void disposing(TreeManager * pSource);
+    virtual void nodeChanged(Change const& aChange, configuration::AbsolutePath const& sPath, TreeManager * pSource);
+    virtual void nodeDeleted(configuration::AbsolutePath const& sPath, TreeManager * pSource);
 };
 
 //-------------------------------------------------------------------------
@@ -322,7 +323,7 @@ ApiProvider::ApiProvider(Factory& rFactory, OProviderImpl& rProviderImpl )
 {}
 //-------------------------------------------------------------------------
 
-UnoTypeConverter ApiProvider::getTypeConverter() const
+uno::Reference<com::sun::star::script::XTypeConverter> ApiProvider::getTypeConverter() const
 {
     return m_rProviderImpl.getTypeConverter();
 }
@@ -331,12 +332,12 @@ static
 inline
 configuration::DefaultProvider createDefaultProvider(
                                     ApiProvider& rProvider,
-                                    configuration::Tree const& aTree,
-                                    TreeOptions const& _xOptions
+                                    rtl::Reference< configuration::Tree > const& aTree,
+                                    vos::ORef< OOptions > const& _xOptions
                                )
 {
     OProviderImpl& rProviderImpl        = rProvider.getProviderImpl();
-    rtl::Reference< IConfigDefaultProvider > xDefaultProvider  = rProviderImpl.getDefaultProvider();
+    rtl::Reference< TreeManager > xDefaultProvider  = rProviderImpl.getDefaultProvider();
 
     OSL_ASSERT(_xOptions.isValid());
     RequestOptions const aOptions = _xOptions.isValid() ? _xOptions->getRequestOptions() : RequestOptions();
@@ -355,7 +356,7 @@ configuration::DefaultProvider extractDefaultProvider(ApiTreeImpl* pParentTree)
         return configuration::DefaultProvider::createEmpty();
 }
 //-------------------------------------------------------------------------
-ApiTreeImpl::ApiTreeImpl(UnoInterface* pInstance, configuration::TreeRef const& aTree, ApiTreeImpl& rParentTree)
+ApiTreeImpl::ApiTreeImpl(uno::XInterface* pInstance, rtl::Reference< configuration::Tree > const& aTree, ApiTreeImpl& rParentTree)
 : m_aTree(aTree)
 , m_aNotifier(new NotifierImpl(aTree))
 , m_aDefaultProvider(rParentTree.getDefaultProvider())
@@ -364,11 +365,11 @@ ApiTreeImpl::ApiTreeImpl(UnoInterface* pInstance, configuration::TreeRef const& 
 , m_pParentTree(0)
 , m_pInstance(pInstance)
 {
-    setNodeInstance(aTree.getRootNode(), pInstance);
+    setNodeInstance(aTree->getRootNode(), pInstance);
     init(&rParentTree);
 }
 //-------------------------------------------------------------------------
-ApiTreeImpl::ApiTreeImpl(UnoInterface* pInstance, ApiProvider& rProvider, configuration::TreeRef const& aTree, ApiTreeImpl* pParentTree)
+ApiTreeImpl::ApiTreeImpl(uno::XInterface* pInstance, ApiProvider& rProvider, rtl::Reference< configuration::Tree > const& aTree, ApiTreeImpl* pParentTree)
 : m_aTree(aTree)
 , m_aNotifier(new NotifierImpl(aTree))
 , m_aDefaultProvider(extractDefaultProvider(pParentTree))
@@ -378,11 +379,11 @@ ApiTreeImpl::ApiTreeImpl(UnoInterface* pInstance, ApiProvider& rProvider, config
 , m_pInstance(pInstance)
 {
     OSL_ENSURE(pParentTree == NULL || &rProvider == &pParentTree->m_rProvider,"WARNING: Parent tree has a different provider - trouble may be ahead");
-    setNodeInstance(aTree.getRootNode(), pInstance);
+    setNodeInstance(aTree->getRootNode(), pInstance);
     init(pParentTree);
 }
 //-------------------------------------------------------------------------
-ApiTreeImpl::ApiTreeImpl(UnoInterface* _pInstance, ApiProvider& _rProvider, configuration::TreeRef const& _aTree, DefaultProvider const& _aDefaultProvider)
+ApiTreeImpl::ApiTreeImpl(uno::XInterface* _pInstance, ApiProvider& _rProvider, rtl::Reference< configuration::Tree > const& _aTree, configuration::DefaultProvider const& _aDefaultProvider)
 : m_aTree(_aTree)
 , m_aNotifier(new NotifierImpl(_aTree))
 , m_aDefaultProvider(_aDefaultProvider)
@@ -391,7 +392,7 @@ ApiTreeImpl::ApiTreeImpl(UnoInterface* _pInstance, ApiProvider& _rProvider, conf
 , m_pParentTree(0)
 , m_pInstance(_pInstance)
 {
-    setNodeInstance(_aTree.getRootNode(), _pInstance);
+    setNodeInstance(_aTree->getRootNode(), _pInstance);
     init(NULL);
 }
 //-------------------------------------------------------------------------
@@ -403,8 +404,8 @@ ApiTreeImpl::~ApiTreeImpl()
 }
 //-------------------------------------------------------------------------
 
-ApiRootTreeImpl::ApiRootTreeImpl(UnoInterface* pInstance, ApiProvider& rProvider, configuration::Tree const& aTree, TreeOptions const& _xOptions)
-: m_aTreeImpl(pInstance, rProvider, aTree.getRef(), createDefaultProvider(rProvider, aTree, _xOptions))
+ApiRootTreeImpl::ApiRootTreeImpl(uno::XInterface* pInstance, ApiProvider& rProvider, rtl::Reference< configuration::Tree > const& aTree, vos::ORef< OOptions > const& _xOptions)
+: m_aTreeImpl(pInstance, rProvider, aTree, createDefaultProvider(rProvider, aTree, _xOptions))
 , m_aLocationPath( configuration::Path::Rep() )
 , m_pNotificationListener(NULL)
 , m_xOptions(_xOptions)
@@ -423,10 +424,10 @@ ApiRootTreeImpl::~ApiRootTreeImpl()
 }
 //-------------------------------------------------------------------------
 
-void ApiTreeImpl::setNodeInstance(configuration::NodeRef const& aNode, UnoInterface* pInstance)
+void ApiTreeImpl::setNodeInstance(configuration::NodeRef const& aNode, uno::XInterface* pInstance)
 {
     OSL_ENSURE(aNode.isValid(),"ERROR: adding invalid node to ApiTree");
-    OSL_ENSURE(m_aTree.isValidNode(aNode),"ERROR: foreign node being added to ApiTree");
+    OSL_ENSURE(m_aTree->isValidNode(aNode.getOffset()),"ERROR: foreign node being added to ApiTree");
     m_aNotifier->m_aListeners.setObjectAt( configuration::NodeID(m_aTree, aNode).toIndex(), pInstance );
 }
 
@@ -452,9 +453,9 @@ Notifier ApiTreeImpl::getNotifier() const
 
 bool ApiRootTreeImpl::enableNotification(bool bEnable)
 {
-    IConfigBroadcaster* pSource = bEnable ? getApiTree().getProvider().getProviderImpl().getNotifier() : 0;
+    TreeManager * pSource = bEnable ? getApiTree().getProvider().getProviderImpl().getNotifier() : 0;
 
-    IConfigBroadcaster* pOld = this->implSetNotificationSource(pSource);
+    TreeManager * pOld = this->implSetNotificationSource(pSource);
 
     return pOld != 0;
 }
@@ -465,9 +466,9 @@ bool ApiTreeImpl::disposeTree(bool bForce)
     CFG_TRACE_INFO("ApiTreeImpl: Disposing Tree (may throw if already disposed)");
 
     // ensure our provider stays alive
-    UnoInterfaceRef xKeepParentAlive(this->getParentComponent());
+    uno::Reference<uno::XInterface> xKeepParentAlive(this->getParentComponent());
     // ensure we stay alive too
-    UnoInterfaceRef xKeepAlive(this->getUnoInstance());
+    uno::Reference<uno::XInterface> xKeepAlive(this->getUnoInstance());
 
     // #109077# If already disposed, we may have no source data or data lock
     if (!isAlive())
@@ -502,9 +503,9 @@ bool ApiTreeImpl::disposeTreeNow()
 //-------------------------------------------------------------------------
 bool ApiRootTreeImpl::disposeTree()
 {
-    CFG_TRACE_INFO("Api Root TreeImpl: Disposing Tree And Releasing (unless disposed)");
+    CFG_TRACE_INFO("Api Root Tree: Disposing Tree And Releasing (unless disposed)");
     // ensure our provider stays alive
-    UnoInterfaceRef xKeepProvider( m_aTreeImpl.getUnoProviderInstance() );
+    uno::Reference<uno::XInterface> xKeepProvider( m_aTreeImpl.getUnoProviderInstance() );
 
     rtl::Reference<NodeListener> xListener = m_pNotificationListener;
     if (xListener.is())
@@ -520,7 +521,7 @@ bool ApiRootTreeImpl::disposeTree()
     if (!m_xOptions.isEmpty())
     {
         OSL_ENSURE(!bDisposed, "Disposing/Releasing should clear the options");
-        CFG_TRACE_INFO2("Api Root TreeImpl: data was not released in disposeTree");
+        CFG_TRACE_INFO2("Api Root Tree: data was not released in disposeTree");
     }
 
     return bDisposed;
@@ -530,22 +531,17 @@ bool ApiTreeImpl::implDisposeTree()
 {
     OSL_ENSURE(m_pParentTree == 0,"WARNING: Disposing a tree that still has a parent tree set");
 
-    NotifierImpl::SpecialContainer& aContainer = m_aNotifier->m_aListeners;
+    SpecialListenerContainer <configuration::SubNodeID,SubNodeHash,SubNodeEq,SubNodeToIndex>& aContainer = m_aNotifier->m_aListeners;
     if (aContainer.beginDisposing())
     {
         CFG_TRACE_INFO("ApiTreeImpl: Tree is now disposed");
-        using configuration::NodeIDList;
-        using configuration::NodeID;
-        using configuration::Tree;
-        using configuration::getAllContainedNodes;
-        using com::sun::star::lang::EventObject;
 
         Factory& rFactory = getFactory();
 
-        NodeIDList aChildNodes;
-        getAllContainedNodes( Tree(m_aTree), aChildNodes);
+        std::vector<configuration::NodeID> aChildNodes;
+        configuration::getAllContainedNodes( m_aTree, aChildNodes);
 
-        for (NodeIDList::reverse_iterator it = aChildNodes.rbegin(), stop = aChildNodes.rend();
+        for (std::vector<configuration::NodeID>::reverse_iterator it = aChildNodes.rbegin(), stop = aChildNodes.rend();
             it != stop;
             ++it)
         {
@@ -572,24 +568,21 @@ bool ApiTreeImpl::implDisposeTree()
     }
 }
 //-------------------------------------------------------------------------
-void ApiTreeImpl::disposeNode(NodeRef const& aNode, UnoInterface* pInstance)
+void ApiTreeImpl::disposeNode(configuration::NodeRef const& aNode, uno::XInterface* pInstance)
 {
     // This used to contain 3 nested 'isAlive()' calls; why !?
     if (isAlive())
         implDisposeNode(aNode,pInstance);
 }
 //-------------------------------------------------------------------------
-void ApiTreeImpl::implDisposeNode(NodeRef const& aNode, UnoInterface* )
+void ApiTreeImpl::implDisposeNode(configuration::NodeRef const& aNode, uno::XInterface* )
 {
     CFG_TRACE_INFO("ApiTreeImpl: Disposing a single node.");
     OSL_ENSURE(aNode.isValid(),"INTERNAL ERROR: Disposing NULL node");
-    OSL_ENSURE(m_aTree.isValidNode(aNode),"INTERNAL ERROR: Disposing: node does not match tree");
-    OSL_ENSURE( !m_aTree.isRootNode(aNode),"INTERNAL ERROR: Disposing the root node of the tree");
+    OSL_ENSURE(m_aTree->isValidNode(aNode.getOffset()),"INTERNAL ERROR: Disposing: node does not match tree");
+    OSL_ENSURE( !m_aTree->isRootNode(aNode),"INTERNAL ERROR: Disposing the root node of the tree");
 
-    using configuration::NodeID;
-    using com::sun::star::lang::EventObject;
-
-    NodeID aNodeID(m_aTree,aNode);
+    configuration::NodeID aNodeID(m_aTree,aNode);
 
     if (m_aNotifier->m_aListeners.disposeOne(aNodeID.toIndex()) )
     {
@@ -612,7 +605,7 @@ void ApiTreeImpl::deinit()
 {
     setParentTree(0);
 
-    ComponentRef xAdapter = m_xProvider;
+    uno::Reference<ComponentAdapter> xAdapter = m_xProvider;
     m_xProvider.clear();
 
     if (xAdapter.is())
@@ -641,12 +634,11 @@ void ApiTreeImpl::setParentTree(ApiTreeImpl*    pParentTree) // internal impleme
 #if OSL_DEBUG_LEVEL > 0
     if (pParentTree)
     {
-        using configuration::NodeID;
-        TreeRef aContext = m_aTree.getContextTree();
-        TreeRef aParent = pParentTree->m_aTree;
+        rtl::Reference< configuration::Tree > aContext = m_aTree->getContextTree();
+        rtl::Reference< configuration::Tree > aParent = pParentTree->m_aTree;
 
-        NodeID aContextID( aContext, aContext.getRootNode() );
-        NodeID aParentID( aParent, aParent.getRootNode() );
+        configuration::NodeID aContextID( aContext, aContext->getRootNode() );
+        configuration::NodeID aParentID( aParent, aParent->getRootNode() );
 
         OSL_ENSURE( aContextID == aParentID, "Parent relationship mismatch !");
     }
@@ -654,7 +646,7 @@ void ApiTreeImpl::setParentTree(ApiTreeImpl*    pParentTree) // internal impleme
 
     if (m_pParentTree != pParentTree)
     {
-        ComponentRef xAdapter = m_xProvider;
+        uno::Reference<ComponentAdapter> xAdapter = m_xProvider;
 
         m_pParentTree = pParentTree;
 
@@ -670,11 +662,11 @@ void ApiTreeImpl::setParentTree(ApiTreeImpl*    pParentTree) // internal impleme
 }
 //-------------------------------------------------------------------------
 
-UnoInterfaceRef ApiTreeImpl::getUnoProviderInstance() const
+uno::Reference<uno::XInterface> ApiTreeImpl::getUnoProviderInstance() const
 {
-    ComponentRef xAdapter = m_xProvider;
+    uno::Reference<ComponentAdapter> xAdapter = m_xProvider;
 
-    UnoInterfaceRef xReturn;
+    uno::Reference<uno::XInterface> xReturn;
     if (xAdapter.is())
         xReturn = xAdapter->getProvider();
     return xReturn;
@@ -715,9 +707,9 @@ void ApiTreeImpl::disposing(com::sun::star::lang::EventObject const& ) throw()
     // if (xThis.is()) xThis->dispose();
 }
 //-------------------------------------------------------------------------
-IConfigBroadcaster* ApiRootTreeImpl::implSetNotificationSource(IConfigBroadcaster* pNew)
+TreeManager * ApiRootTreeImpl::implSetNotificationSource(TreeManager * pNew)
 {
-    IConfigBroadcaster* pOld = m_pNotificationListener.is() ? m_pNotificationListener->getSource() : 0;
+    TreeManager * pOld = m_pNotificationListener.is() ? m_pNotificationListener->getSource() : 0;
     if (pOld != pNew)
     {
         OSL_ENSURE(m_xOptions.isValid(), "Cannot change notification source without options");
@@ -732,17 +724,17 @@ IConfigBroadcaster* ApiRootTreeImpl::implSetNotificationSource(IConfigBroadcaste
 }
 // ---------------------------------------------------------------------------------------------------
 
-void ApiRootTreeImpl::implSetLocation(configuration::Tree const& _aTree)
+void ApiRootTreeImpl::implSetLocation(rtl::Reference< configuration::Tree > const& _aTree)
 {
-    OSL_ASSERT( configuration::equalTreeRef(_aTree.getRef(), getApiTree().getTree()) );
-    if (!_aTree.isEmpty())
+    OSL_ASSERT(_aTree == getApiTree().getTree());
+    if (!configuration::isEmpty(_aTree.get()))
     {
-        m_aLocationPath = _aTree.getRootPath();
-        OSL_ENSURE(!m_aLocationPath.isRoot(), "Setting up a RootTree without location");
+        m_aLocationPath = _aTree->getRootPath();
+        OSL_ENSURE(!m_aLocationPath.isRoot(), "Setting up a root tree without location");
     }
     else
     {
-        OSL_ENSURE(false, "Setting up a RootTree without data");
+        OSL_ENSURE(false, "Setting up a root tree without data");
         m_aLocationPath = configuration::AbsolutePath::root();
     }
 
@@ -758,11 +750,13 @@ void ApiRootTreeImpl::implSetLocation(configuration::Tree const& _aTree)
 
 void ApiRootTreeImpl::releaseData()
 {
-    CFG_TRACE_INFO("Api Root TreeImpl at %s: releasing the Data",OUSTRING2ASCII(m_aLocationPath.toString()));
-    configuration::TreeRef aTree( m_aTreeImpl.getTree() );
+    CFG_TRACE_INFO("Api Root Tree at %s: releasing the Data",OUSTRING2ASCII(m_aLocationPath.toString()));
+    rtl::Reference< configuration::Tree > aTree( m_aTreeImpl.getTree() );
 
-    aTree.disposeData();
-    OSL_ASSERT(aTree.isEmpty());
+    if (aTree.is()) {
+        aTree->disposeData();
+    }
+    OSL_ASSERT(configuration::isEmpty(aTree.get()));
 
     OSL_ENSURE( !m_aLocationPath.isRoot() && !m_aLocationPath.isDetached(), "Location still needed to release data" );
     OSL_ENSURE( m_xOptions.isValid(), "Options still needed to release data" );
@@ -774,7 +768,7 @@ void ApiRootTreeImpl::releaseData()
 }
 // ---------------------------------------------------------------------------------------------------
 
-void ApiRootTreeImpl::NodeListener::disposing(IConfigBroadcaster* _pSource)
+void ApiRootTreeImpl::NodeListener::disposing(TreeManager * _pSource)
 {
     UnoApiLockClearable aGuard;
 
@@ -782,19 +776,19 @@ void ApiRootTreeImpl::NodeListener::disposing(IConfigBroadcaster* _pSource)
     if (pParent)
     {
         // this is a non-UNO external entry point - we need to keep this object alive for the duration of the call
-        UnoInterfaceRef xKeepAlive( pParent->m_aTreeImpl.getUnoInstance() );
+        uno::Reference<uno::XInterface> xKeepAlive( pParent->m_aTreeImpl.getUnoInstance() );
         ApiRootTreeImpl* pKeepParent = pParent;
         aGuard.clear();
 
         pKeepParent->disposing(_pSource);
     }
 }
-void ApiRootTreeImpl::disposing(IConfigBroadcaster* /*pSource*/)
+void ApiRootTreeImpl::disposing(TreeManager *)
 {
-    CFG_TRACE_INFO("Api Root TreeImpl at %s: Cache data is disposed - dispose and release own data",
+    CFG_TRACE_INFO("Api Root Tree at %s: Cache data is disposed - dispose and release own data",
                     OUSTRING2ASCII(m_aLocationPath.toString()));
         // ensure our provider stays alive
-    UnoInterfaceRef xKeepProvider( m_aTreeImpl.getUnoProviderInstance() );
+    uno::Reference<uno::XInterface> xKeepProvider( m_aTreeImpl.getUnoProviderInstance() );
 
     rtl::Reference<NodeListener> xListener = m_pNotificationListener;
     if (xListener.is())
@@ -815,13 +809,13 @@ void disposeOneRemovedNode(configuration::NodeChangeInformation const& aRemoveIn
     {
         OSL_ENSURE(aRemoveInfo.change.element.isDataChange(), "ERROR: Disposing replaced element: Element did not really change !");
 
-        configuration::ElementRef aElementRef( aRemoveInfo.change.element.oldValue.get() );
+        rtl::Reference< configuration::ElementTree > aElementRef( aRemoveInfo.change.element.oldValue.get() );
 
         SetElement* pSetElement = aFactory.findSetElement(aElementRef );
         if (pSetElement)
         {
             // factory always does an extra acquire
-            UnoInterfaceRef xReleaseSetElement(pSetElement->getUnoInstance(), uno::UNO_REF_NO_ACQUIRE);
+            uno::Reference<uno::XInterface> xReleaseSetElement(pSetElement->getUnoInstance(), uno::UNO_REF_NO_ACQUIRE);
 
             pSetElement->haveNewParent(0);
             pSetElement->disposeTree(true);
@@ -839,20 +833,18 @@ void disposeOneRemovedNode(configuration::NodeChangeInformation const& aRemoveIn
 static
 void disposeRemovedNodes(configuration::NodeChangesInformation const& aChanges, Factory& aFactory)
 {
-    using configuration::NodeChangeData;
-    using configuration::NodeChangesInformation;
-    for (NodeChangesInformation::Iterator it = aChanges.begin(); it != aChanges.end(); ++it)
+    for (std::vector< configuration::NodeChangeInformation >::const_iterator it = aChanges.begin(); it != aChanges.end(); ++it)
     {
         switch (it->change.type)
         {
-        case NodeChangeData::eReplaceElement:
+        case configuration::NodeChangeData::eReplaceElement:
             // check if element is actually unchanged !
             // (cannot dispose of the tree, if it is still in use)
             if (! it->change.element.isDataChange()) break;
 
             // else dispose the old one: fall thru
 
-        case NodeChangeData::eRemoveElement:
+        case configuration::NodeChangeData::eRemoveElement:
             disposeOneRemovedNode( *it, aFactory );
             break;
 
@@ -862,7 +854,7 @@ void disposeRemovedNodes(configuration::NodeChangesInformation const& aChanges, 
 }
 // ---------------------------------------------------------------------------------------------------
 //INodeListener : IConfigListener
-void ApiRootTreeImpl::NodeListener::nodeChanged(Change const& aChange, AbsolutePath const& sPath, IConfigBroadcaster* _pSource)
+void ApiRootTreeImpl::NodeListener::nodeChanged(Change const& aChange, configuration::AbsolutePath const& sPath, TreeManager * _pSource)
 {
     UnoApiLockClearable aGuard;
 
@@ -870,7 +862,7 @@ void ApiRootTreeImpl::NodeListener::nodeChanged(Change const& aChange, AbsoluteP
     if (pParent)
     {
         // this is a non-UNO external entry point - we need to keep this object alive for the duration of the call
-        UnoInterfaceRef xKeepAlive( pParent->m_aTreeImpl.getUnoInstance() );
+        uno::Reference<uno::XInterface> xKeepAlive( pParent->m_aTreeImpl.getUnoInstance() );
         ApiRootTreeImpl* pKeepParent = pParent;
         aGuard.clear();
 
@@ -880,34 +872,29 @@ void ApiRootTreeImpl::NodeListener::nodeChanged(Change const& aChange, AbsoluteP
 // ---------------------------------------------------------------------------------------------------
 
 //INodeListener : IConfigListener
-void ApiRootTreeImpl::nodeChanged(Change const& aChange, AbsolutePath const& aChangePath, IConfigBroadcaster* /*pSource*/)
+void ApiRootTreeImpl::nodeChanged(Change const& aChange, configuration::AbsolutePath const& aChangePath, TreeManager *)
 {
-    using configuration::AnyNodeRef;
-    using configuration::NodeChanges;
-    using configuration::RelativePath;
-    using configuration::AbsolutePath;
-
     // do not dipatch if we are dying/dead anyway
     if (m_aTreeImpl.isAlive())
     try
     {
-        configuration::Tree aTree(m_aTreeImpl.getTree());
+        rtl::Reference< configuration::Tree > aTree(m_aTreeImpl.getTree());
 
         OSL_ENSURE(configuration::Path::hasPrefix(aChangePath, m_aLocationPath),
                     "'changed' Path does not indicate this tree or its context: ");
 
-        RelativePath aLocalChangePath = configuration::Path::stripPrefix(aChangePath,m_aLocationPath);
+        configuration::RelativePath aLocalChangePath = configuration::Path::stripPrefix(aChangePath,m_aLocationPath);
 
         // find the node and change
-        NodeRef  aNode;
+        configuration::NodeRef  aNode;
 
         if ( !aLocalChangePath.isEmpty() )
         {
-            NodeRef aBaseNode = aTree.getRootNode();
+            configuration::NodeRef aBaseNode = aTree->getRootNode();
 
 #ifdef DBG_UTIL
             try {
-                RelativePath aLocalPathOld = configuration::validateAndReducePath(aChangePath.toString(), aTree, aBaseNode);
+                configuration::RelativePath aLocalPathOld = configuration::validateAndReducePath(aChangePath.toString(), aTree, aBaseNode);
                 OSL_ENSURE( configuration::matches(aLocalPathOld,aLocalChangePath),
                             "New local path different from validateAndReducePath(...) result in notification dispatch");
             }
@@ -918,7 +905,7 @@ void ApiRootTreeImpl::nodeChanged(Change const& aChange, AbsolutePath const& aCh
             }
 #endif // DBG_UTIL
 
-            AnyNodeRef aFoundNode = configuration::getDeepDescendant(aTree, aBaseNode, aLocalChangePath);
+            configuration::AnyNodeRef aFoundNode = configuration::getDeepDescendant(aTree, aBaseNode, aLocalChangePath);
             if ( aFoundNode.isValid() )
             {
                 if (aFoundNode.isNode())
@@ -934,22 +921,19 @@ void ApiRootTreeImpl::nodeChanged(Change const& aChange, AbsolutePath const& aCh
         }
         else
         {
-            aNode = aTree.getRootNode();
+            aNode = aTree->getRootNode();
         }
 
         SubtreeChange const* pTreeChange = NULL;
         if (aNode.isValid())
         {
-            if (aChange.ISA(SubtreeChange))
-                pTreeChange = static_cast<SubtreeChange const*>(&aChange);
-
-            else // TODO: Notify set change using parent (if available) and temporary dummy change
-                OSL_ENSURE( false, "Notification broken: Change to inner node is not a subtree change");
+            pTreeChange = dynamic_cast<SubtreeChange const*>(&aChange);
+            OSL_ENSURE(pTreeChange != 0, "Notification broken: Change to inner node is not a subtree change"); // TODO: Notify set change using parent (if available) and temporary dummy change
         }
 
         if (pTreeChange != NULL) // implies aNode.isValid()
         {
-            OSL_ENSURE( aChange.getNodeName() == aTree.getName(aNode).toString(),
+            OSL_ENSURE( aChange.getNodeName() == aTree->getSimpleNodeName(aNode.getOffset()),
                         "Change's node-name does not match found node's name - erratic notification");
 
             configuration::NodeChangesInformation aChanges;
@@ -984,7 +968,7 @@ void ApiRootTreeImpl::nodeChanged(Change const& aChange, AbsolutePath const& aCh
 }
 // ---------------------------------------------------------------------------------------------------
 
-void ApiRootTreeImpl::NodeListener::nodeDeleted(AbsolutePath const& _aPath, IConfigBroadcaster* _pSource)
+void ApiRootTreeImpl::NodeListener::nodeDeleted(configuration::AbsolutePath const& _aPath, TreeManager * _pSource)
 {
     UnoApiLockClearable aGuard;
 
@@ -992,7 +976,7 @@ void ApiRootTreeImpl::NodeListener::nodeDeleted(AbsolutePath const& _aPath, ICon
     if (pParent)
     {
         // this is a non-UNO external entry point - we need to keep this object alive for the duration of the call
-        UnoInterfaceRef xKeepAlive( pParent->m_aTreeImpl.getUnoInstance() );
+        uno::Reference<uno::XInterface> xKeepAlive( pParent->m_aTreeImpl.getUnoInstance() );
         ApiRootTreeImpl* pKeepParent = pParent;
         aGuard.clear();
 
@@ -1000,19 +984,19 @@ void ApiRootTreeImpl::NodeListener::nodeDeleted(AbsolutePath const& _aPath, ICon
     }
 }
 // ---------------------------------------------------------------------------------------------------
-void ApiRootTreeImpl::nodeDeleted(AbsolutePath const& _aDeletedPath, IConfigBroadcaster* /*pSource*/)
+void ApiRootTreeImpl::nodeDeleted(configuration::AbsolutePath const& _aDeletedPath, TreeManager *)
 {
     { (void)_aDeletedPath; }
 
     // this is a non-UNO external entry point - we need to keep this object alive for the duration of the call
-    UnoInterfaceRef xKeepAlive( m_aTreeImpl.getUnoInstance() );
+    uno::Reference<uno::XInterface> xKeepAlive( m_aTreeImpl.getUnoInstance() );
 
 #ifdef DBG_UTIL
     OSL_ENSURE(configuration::Path::hasPrefix(m_aLocationPath, _aDeletedPath),
                "'deleted' Path does not indicate this tree or its context: ");
 #endif
     // ensure our provider stays alive
-    UnoInterfaceRef xKeepProvider( m_aTreeImpl.getUnoProviderInstance() );
+    uno::Reference<uno::XInterface> xKeepProvider( m_aTreeImpl.getUnoProviderInstance() );
 
     rtl::Reference<NodeListener> xListener = m_pNotificationListener;
     if (xListener.is())

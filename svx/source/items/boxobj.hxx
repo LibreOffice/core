@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: boxobj.hxx,v $
- * $Revision: 1.3 $
+ * $Revision: 1.3.76.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -66,8 +66,7 @@ private:
 
 protected:
     // Schnittstelle zum SbxObject/SvDispatch/SfxShell..Object
-    void                    SFX_NOTIFY( SfxBroadcaster& rBC, const TypeId& rBCType,
-                                    const SfxHint& rHint, const TypeId& rHintType );
+    void                    Notify( SfxBroadcaster& rBC, const SfxHint& rHint );
     virtual ULONG           SetProperty( USHORT nSID, SbxVariable &rRet );
     virtual ULONG           GetProperty( USHORT nSID, SbxVariable &rRet );
 

@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: BTable.cxx,v $
- * $Revision: 1.36 $
+ * $Revision: 1.36.56.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -144,9 +144,6 @@ void SAL_CALL OAdabasTable::alterColumnByName( const ::rtl::OUString& colName, c
 
     if(!isNew())
     {
-//      if(getString(descriptor->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_NAME))) != colName)
-//          throw SQLException(::rtl::OUString::createFromAscii("Not supported by this driver!"),*this,::rtl::OUString::createFromAscii("S1000"),0,Any() );
-
         beginTransAction();
 
         try

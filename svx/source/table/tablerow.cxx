@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: tablerow.cxx,v $
- * $Revision: 1.3 $
+ * $Revision: 1.3.148.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -129,36 +129,15 @@ void TableRow::insertColumns( sal_Int32 nIndex, sal_Int32 nCount, CellVector::it
     throwIfDisposed();
     if( nCount )
     {
-        if( nIndex < static_cast< sal_Int32 >( maCells.size() ) )
-        {
-            CellVector::iterator aIter( maCells.begin() );
-            while( nIndex-- )
-                aIter++;
-            while( nCount-- )
-            {
-                CellRef xCell;
-                if( pIter )
-                    xCell = (*(*pIter)++);
-                else
-                    xCell = mxTableModel->createCell();
-
-                maCells.insert( aIter, xCell );
-            }
-        }
+        if( nIndex >= static_cast< sal_Int32 >( maCells.size() ) )
+            nIndex = static_cast< sal_Int32 >( maCells.size() );
+        if ( pIter )
+            maCells.insert( maCells.begin() + nIndex, *pIter, (*pIter) + nCount );
         else
         {
-            nIndex = static_cast< sal_Int32 >( maCells.size() );
-            maCells.resize( nIndex + nCount );
-            while(nCount--)
-            {
-                CellRef xCell;
-                if( pIter )
-                    xCell = (*(*pIter)++);
-                else
-                    xCell = mxTableModel->createCell();
-
-                maCells[nIndex++] = xCell;
-            }
+            maCells.reserve( maCells.size() + nCount );
+            for ( sal_Int32 i = 0; i < nCount; i++ )
+                maCells.insert( maCells.begin() + nIndex + i, mxTableModel->createCell() );
         }
     }
 }

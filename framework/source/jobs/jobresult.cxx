@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: jobresult.cxx,v $
- * $Revision: 1.8 $
+ * $Revision: 1.8.82.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -248,16 +248,6 @@ css::uno::Sequence< css::beans::NamedValue > JobResult::getArguments() const
     /* SAFE { */
     ReadGuard aReadLock(m_aLock);
     return m_lArguments;
-    /* } SAFE */
-}
-
-//________________________________
-
-sal_Bool JobResult::getDeactivate() const
-{
-    /* SAFE { */
-    ReadGuard aReadLock(m_aLock);
-    return m_bDeactivate;
     /* } SAFE */
 }
 

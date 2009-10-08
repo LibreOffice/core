@@ -33,12 +33,9 @@
 
 #include <stdio.h>
 #include "templateimpl.hxx"
-#include "treeprovider.hxx"
+#include "treemanager.hxx"
+#include "node.hxx"
 #include "nodevisitor.hxx"
-#include "treeaccessor.hxx"
-#include "nodeaccess.hxx"
-#include "valuenodeaccess.hxx"
-#include "setnodeaccess.hxx"
 #include "strdecl.hxx"
 #include "typeconverter.hxx"
 #include "localizedtreeactions.hxx"
@@ -56,30 +53,28 @@ namespace configmgr
     {
 //-----------------------------------------------------------------------------
 
-UnoType TemplateName::resolveSimpleTypeName(Name const& aName)
+com::sun::star::uno::Type TemplateName::resolveSimpleTypeName(rtl::OUString const& aName)
 {
-    OUString sTypeName = aName.toString();
+    rtl::OUString sTypeName = aName;
     return parseTemplateName(sTypeName);
 }
 //-----------------------------------------------------------------------------
 #if OSL_DEBUG_LEVEL > 0
-Name TemplateName::makeNativeTypeModuleName()
+rtl::OUString TemplateName::makeNativeTypeModuleName()
 {
-    OUString aModuleName( TEMPLATE_MODULE_NATIVE_VALUE );
-    return makeName(aModuleName, Name::NoValidate());
+    return rtl::OUString( TEMPLATE_MODULE_NATIVE_VALUE );
 }
 
 //-----------------------------------------------------------------------------
-Name TemplateName::makeLocalizedTypeModuleName()
+rtl::OUString TemplateName::makeLocalizedTypeModuleName()
 {
-    OUString aModuleName( TEMPLATE_MODULE_LOCALIZED_VALUE );
-    return makeName(aModuleName, Name::NoValidate());
+    return rtl::OUString( TEMPLATE_MODULE_LOCALIZED_VALUE );
 }
 #endif
 //-----------------------------------------------------------------------------
 bool TemplateName::isSimpleTypeName() const
 {
-    bool bIsSimple = (aModule.toString().compareToAscii(TEMPLATE_MODULE_NATIVE_PREFIX,
+    bool bIsSimple = (aModule.compareToAscii(TEMPLATE_MODULE_NATIVE_PREFIX,
                                                         TEMPLATE_MODULE_NATIVE_PREFIX.getLength()) == 0);
 
     OSL_ENSURE(!bIsSimple ||
@@ -91,9 +86,9 @@ bool TemplateName::isSimpleTypeName() const
 }
 //-----------------------------------------------------------------------------
 
-UnoType TemplateName::resolveToSimpleType() const
+com::sun::star::uno::Type TemplateName::resolveToSimpleType() const
 {
-    UnoType aType;
+    com::sun::star::uno::Type aType;
     if ( isSimpleTypeName() )
     {
         aType = resolveSimpleTypeName( aName );
@@ -106,25 +101,25 @@ UnoType TemplateName::resolveToSimpleType() const
 // class TemplateImplHelper
 //-----------------------------------------------------------------------------
 
-TemplateHolder TemplateImplHelper::createNew (TemplateName const& aNames,UnoType const& aType)
+rtl::Reference<Template> TemplateImplHelper::createNew (TemplateName const& aNames,com::sun::star::uno::Type const& aType)
 {
     return new Template(aNames.aName, aNames.aModule, aType);
 }
 //-----------------------------------------------------------------------------
 
-TemplateHolder TemplateImplHelper::makeElementTemplateWithType(TemplateName const& _aNames, TemplateProvider const& _aProvider, data::SetNodeAccess const& _aSet)
+rtl::Reference<Template> TemplateImplHelper::makeElementTemplateWithType(TemplateName const& _aNames, TemplateProvider const& _aProvider, sharable::SetNode * set)
 {
     OSL_ENSURE(_aProvider.m_aImpl.is(), "ERROR: Cannot find a template without a provider");
 
     if (_aProvider.m_aImpl.is())
-        return _aProvider.m_aImpl->makeElementTemplateWithType(_aNames,_aSet);
+        return _aProvider.m_aImpl->makeElementTemplateWithType(_aNames, set);
 
     else
-        return TemplateHolder(0);
+        return rtl::Reference<Template>(0);
 }
 //-----------------------------------------------------------------------------
 
-void TemplateImplHelper::assignActualType (Template& aTemplate,UnoType const& aType)
+void TemplateImplHelper::assignActualType (Template& aTemplate,com::sun::star::uno::Type const& aType)
 {
     OSL_PRECOND( aType != getNoTypeAvailable(), "ERROR: Assigning NO type to a template" );
 
@@ -140,7 +135,7 @@ void TemplateImplHelper::assignActualType (Template& aTemplate,UnoType const& aT
 // class TemplateProvider_Impl
 //-----------------------------------------------------------------------------
 
-TemplateProvider_Impl::TemplateProvider_Impl(TemplateManagerRef const & xProvider, RequestOptions const& aOptions)
+TemplateProvider_Impl::TemplateProvider_Impl(rtl::Reference< TreeManager > const & xProvider, RequestOptions const& aOptions)
 : m_xProvider(xProvider)
 , m_aOptions(aOptions)
 , m_aRepository()
@@ -148,25 +143,24 @@ TemplateProvider_Impl::TemplateProvider_Impl(TemplateManagerRef const & xProvide
 }
 //-----------------------------------------------------------------------------
 
-data::TreeSegment TemplateProvider_Impl::instantiate(TemplateHolder const& aTemplate)
+rtl::Reference< data::TreeSegment > TemplateProvider_Impl::instantiate(rtl::Reference<Template> const& aTemplate)
 {
-    data::TreeSegment pRet;
     if (aTemplate.is())
     {
-        data::TreeAccessor aTemplateData = m_xProvider->requestTemplate(aTemplate->getName(), aTemplate->getModule());
+        sharable::TreeFragment * aTemplateData = m_xProvider->requestTemplate(aTemplate->getName(), aTemplate->getModule());
 
-        pRet = cloneExpandedForLocale(aTemplateData, m_aOptions.getLocale());
+        return cloneExpandedForLocale(aTemplateData, m_aOptions.getLocale());
+    } else {
+        return rtl::Reference< data::TreeSegment >();
     }
-    return pRet;
 }
 //-----------------------------------------------------------------------------
 
 //-----------------------------------------------------------------------------
 namespace
 {
-    using namespace data;
 //-----------------------------------------------------------------------------
-    struct TypeDetector : SetVisitor
+    struct TypeDetector : data::SetVisitor
     {
         enum State
         {
@@ -178,25 +172,23 @@ namespace
         };
 
         State   result;
-        UnoType type;
+        com::sun::star::uno::Type type;
 
         TypeDetector() : result(NotFound), type() {}
 
-       protected:
-            using SetVisitor::handle;
-
-    private: // NodeAction implementation
-        Result handle(ValueNodeAccess const& _aValueNode);
-        Result handle(NodeAccess const& _aNonValueNode);
+    private:
+        using SetVisitor::handle;
+        virtual bool handle(sharable::Node * node);
+        virtual bool handle(sharable::ValueNode * node);
     };
 //-----------------------------------------------------------------------------
-    static UnoType detectNodeType(TreeAccessor const& _aElement)
+    static com::sun::star::uno::Type detectNodeType(sharable::TreeFragment * element)
     {
-        if (_aElement == NULL)
+        if (element == 0)
             throw configuration::Exception("Could not load required template to detect set elements");
 
         TypeDetector aDetector;
-        aDetector.visitTree( _aElement );
+        aDetector.visitTree(element);
 
         switch(aDetector.result)
         {
@@ -217,10 +209,10 @@ namespace
     }
 
     //-------------------------------------------------------------------------
-    static bool detectElementType(UnoType& aType, data::SetNodeAccess const& _aSet)
+    static bool detectElementType(com::sun::star::uno::Type& aType, sharable::SetNode * set)
     {
         TypeDetector aDetector;
-        aDetector.visitElements( _aSet );
+        aDetector.visitElements(set);
 
         bool bResult = false;
         switch(aDetector.result)
@@ -247,15 +239,13 @@ namespace
 
 }
 //-----------------------------------------------------------------------------
-TemplateHolder TemplateProvider_Impl::makeElementTemplateWithType(TemplateName const& _aNames, data::SetNodeAccess const& _aSet)
+rtl::Reference<Template> TemplateProvider_Impl::makeElementTemplateWithType(TemplateName const& _aNames, sharable::SetNode * set)
 {
-    typedef TemplateRepository::value_type Entry;
-
     TemplateRepository::iterator it = m_aRepository.find(_aNames);
 
     if (it == m_aRepository.end() || !it->second->isInstanceTypeKnown())
     {
-        UnoType aType;
+        com::sun::star::uno::Type aType;
         if (_aNames.isSimpleTypeName()) // native type found
         {
             aType = _aNames.resolveToSimpleType();
@@ -264,19 +254,19 @@ TemplateHolder TemplateProvider_Impl::makeElementTemplateWithType(TemplateName c
                 throw configuration::Exception("INTERNAL ERROR: Could not resolve native type");
         }
 
-        else if (!detectElementType(aType,_aSet))
+        else if (!detectElementType(aType, set))
         {
-            OSL_ASSERT(_aNames.aName == _aSet.getElementTemplateName());
-            OSL_ASSERT(_aNames.aModule == _aSet.getElementTemplateModule());
+            OSL_ASSERT(_aNames.aName == set->getElementTemplateName());
+            OSL_ASSERT(_aNames.aModule == set->getElementTemplateModule());
 
-            data::TreeAccessor aTemplateData = m_xProvider->requestTemplate(_aNames.aName, _aNames.aModule);
+            sharable::TreeFragment * aTemplateData = m_xProvider->requestTemplate(_aNames.aName, _aNames.aModule);
 
             aType = detectNodeType(aTemplateData); // throws if necessary
         }
         OSL_ASSERT( aType != TemplateImplHelper::getNoTypeAvailable() );
 
         if (it == m_aRepository.end())
-            it = m_aRepository.insert( Entry( _aNames, TemplateImplHelper::createNew(_aNames,aType) ) ).first;
+            it = m_aRepository.insert( TemplateRepository::value_type( _aNames, TemplateImplHelper::createNew(_aNames,aType) ) ).first;
 
         else
             TemplateImplHelper::assignActualType(*it->second, aType);
@@ -289,8 +279,8 @@ TemplateHolder TemplateProvider_Impl::makeElementTemplateWithType(TemplateName c
     else
     {
         OSL_ENSURE(it->second->isInstanceTypeKnown(), "No type assigned to Template");
-        UnoType aTestType;
-        if (detectElementType(aTestType,_aSet))
+        com::sun::star::uno::Type aTestType;
+        if (detectElementType(aTestType, set))
             OSL_ENSURE(it->second->getInstanceType() == aTestType, "Inconsistent type found for Template");
     }
 #endif // DBG_UTIL
@@ -303,9 +293,9 @@ TemplateHolder TemplateProvider_Impl::makeElementTemplateWithType(TemplateName c
 namespace
 {
 //-----------------------------------------------------------------------------
-    TypeDetector::Result TypeDetector::handle(ValueNodeAccess const& _aValueNode)
+    bool TypeDetector::handle(sharable::ValueNode * node)
     {
-        UnoType aFoundType = _aValueNode.getValueType();
+        com::sun::star::uno::Type aFoundType = node->getValueType();
 
         bool isNullType = (aFoundType.getTypeClass() == uno::TypeClass_VOID);
         bool isAnyType  = (aFoundType.getTypeClass() == uno::TypeClass_ANY);
@@ -340,13 +330,13 @@ namespace
             this->result = Contradicting;
             break;
         }
-        return CONTINUE; // always continue to detect errors in data
+        return false; // always continue to detect errors in data
     }
 //-----------------------------------------------------------------------------
-    TypeDetector::Result TypeDetector::handle(NodeAccess const& _aNonValueNode)
+    bool TypeDetector::handle(sharable::Node * node)
     {
-            { (void)_aNonValueNode; }
-        OSL_ENSURE(!ValueNodeAccess::isInstance(_aNonValueNode),"Value node dipatched to wrong handler");
+        (void) node; // avoid warnings
+        OSL_ENSURE(!node->isValue(), "Value node dipatched to wrong handler");
         switch (this->result) // transition depends on previous state
         {
         case NotFound:
@@ -363,7 +353,7 @@ namespace
             this->result = Contradicting;
             break;
         }
-        return CONTINUE; // always continue to detect errors in data
+        return false; // always continue to detect errors in data
     }
 
 //-----------------------------------------------------------------------------

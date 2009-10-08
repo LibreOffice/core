@@ -50,19 +50,13 @@ namespace configmgr
         namespace lang      = ::com::sun::star::lang;
 
         namespace backenduno = ::com::sun::star::configuration::backend;
-
-        using backenduno::MalformedDataException;
 // -----------------------------------------------------------------------------
 
-        typedef ::cppu::WeakImplHelper1<backenduno::XSchemaHandler> SchemaBuilder_Base;
-
         class SchemaBuilder
-        :   public SchemaBuilder_Base
+        :   public cppu::WeakImplHelper1<backenduno::XSchemaHandler>
         {
         public:
-            typedef uno::Reference< uno::XComponentContext > Context;
-
-            SchemaBuilder(Context const & xContext, const OUString& aExpectedComponentName, MergedComponentData & rData, ITemplateDataProvider* aTemplateProvider = NULL );
+            SchemaBuilder(uno::Reference< uno::XComponentContext > const & xContext, const rtl::OUString& aExpectedComponentName, MergedComponentData & rData, ITemplateDataProvider* aTemplateProvider = NULL );
             virtual ~SchemaBuilder();
 
         // checking the result
@@ -75,63 +69,63 @@ namespace configmgr
         public:
             virtual void SAL_CALL
                 startSchema(  )
-                    throw (MalformedDataException, lang::WrappedTargetException, uno::RuntimeException);
+                    throw (backenduno::MalformedDataException, lang::WrappedTargetException, uno::RuntimeException);
 
             virtual void SAL_CALL
                 endSchema(  )
-                    throw (MalformedDataException, lang::WrappedTargetException, uno::RuntimeException);
+                    throw (backenduno::MalformedDataException, lang::WrappedTargetException, uno::RuntimeException);
 
             virtual void SAL_CALL
-                importComponent( const OUString& aName )
-                    throw (MalformedDataException, lang::WrappedTargetException, uno::RuntimeException);
+                importComponent( const rtl::OUString& aName )
+                    throw (backenduno::MalformedDataException, lang::WrappedTargetException, uno::RuntimeException);
 
             virtual void SAL_CALL
-                startComponent( const OUString& aName )
-                    throw (MalformedDataException, lang::WrappedTargetException, uno::RuntimeException);
+                startComponent( const rtl::OUString& aName )
+                    throw (backenduno::MalformedDataException, lang::WrappedTargetException, uno::RuntimeException);
 
             virtual void SAL_CALL
                 endComponent(  )
-                    throw (MalformedDataException, lang::WrappedTargetException, uno::RuntimeException);
+                    throw (backenduno::MalformedDataException, lang::WrappedTargetException, uno::RuntimeException);
 
             virtual void SAL_CALL
-                startGroupTemplate( const TemplateIdentifier& aTemplate, sal_Int16 aAttributes )
-                    throw (MalformedDataException, lang::WrappedTargetException, uno::RuntimeException);
+                startGroupTemplate( const backenduno::TemplateIdentifier& aTemplate, sal_Int16 aAttributes )
+                    throw (backenduno::MalformedDataException, lang::WrappedTargetException, uno::RuntimeException);
 
             virtual void SAL_CALL
-                startSetTemplate( const TemplateIdentifier& aTemplate, sal_Int16 aAttributes, const TemplateIdentifier& aItemType )
-                    throw (MalformedDataException, lang::WrappedTargetException, uno::RuntimeException);
+                startSetTemplate( const backenduno::TemplateIdentifier& aTemplate, sal_Int16 aAttributes, const backenduno::TemplateIdentifier& aItemType )
+                    throw (backenduno::MalformedDataException, lang::WrappedTargetException, uno::RuntimeException);
 
             virtual void SAL_CALL
                 endTemplate(  )
-                    throw (MalformedDataException, lang::WrappedTargetException, uno::RuntimeException);
+                    throw (backenduno::MalformedDataException, lang::WrappedTargetException, uno::RuntimeException);
 
             virtual void SAL_CALL
-                startGroup( const OUString& aName, sal_Int16 aAttributes )
-                    throw (MalformedDataException, lang::WrappedTargetException, uno::RuntimeException);
+                startGroup( const rtl::OUString& aName, sal_Int16 aAttributes )
+                    throw (backenduno::MalformedDataException, lang::WrappedTargetException, uno::RuntimeException);
 
             virtual void SAL_CALL
-                startSet( const OUString& aName, sal_Int16 aAttributes, const TemplateIdentifier& aItemType )
-                    throw (MalformedDataException, lang::WrappedTargetException, uno::RuntimeException);
+                startSet( const rtl::OUString& aName, sal_Int16 aAttributes, const backenduno::TemplateIdentifier& aItemType )
+                    throw (backenduno::MalformedDataException, lang::WrappedTargetException, uno::RuntimeException);
 
             virtual void SAL_CALL
                 endNode(  )
-                    throw (MalformedDataException, lang::WrappedTargetException, uno::RuntimeException);
+                    throw (backenduno::MalformedDataException, lang::WrappedTargetException, uno::RuntimeException);
 
             virtual void SAL_CALL
-                addProperty( const OUString& aName, sal_Int16 aAttributes, const uno::Type& aType )
-                    throw (MalformedDataException, lang::WrappedTargetException, uno::RuntimeException);
+                addProperty( const rtl::OUString& aName, sal_Int16 aAttributes, const uno::Type& aType )
+                    throw (backenduno::MalformedDataException, lang::WrappedTargetException, uno::RuntimeException);
 
             virtual void SAL_CALL
-                addPropertyWithDefault( const OUString& aName, sal_Int16 aAttributes, const uno::Any& aDefaultValue )
-                    throw (MalformedDataException, lang::WrappedTargetException, uno::RuntimeException);
+                addPropertyWithDefault( const rtl::OUString& aName, sal_Int16 aAttributes, const uno::Any& aDefaultValue )
+                    throw (backenduno::MalformedDataException, lang::WrappedTargetException, uno::RuntimeException);
 
             virtual void SAL_CALL
-                addInstance( const OUString& aName, const TemplateIdentifier& aTemplate )
-                    throw (MalformedDataException, lang::WrappedTargetException, uno::RuntimeException);
+                addInstance( const rtl::OUString& aName, const backenduno::TemplateIdentifier& aTemplate )
+                    throw (backenduno::MalformedDataException, lang::WrappedTargetException, uno::RuntimeException);
 
             virtual void SAL_CALL
-                addItemType( const TemplateIdentifier& aItemType )
-                    throw (MalformedDataException, lang::WrappedTargetException, uno::RuntimeException);
+                addItemType( const backenduno::TemplateIdentifier& aItemType )
+                    throw (backenduno::MalformedDataException, lang::WrappedTargetException, uno::RuntimeException);
 
         private:
             static node::Attributes getComponentRootAttributes();

@@ -1120,6 +1120,27 @@ USHORT StarBASIC::GetVBErrorCode( SbError nError )
 {
     USHORT nRet = 0;
 
+    if( SbiRuntime::isVBAEnabled() )
+    {
+        switch( nError )
+        {
+            case SbERR_BASIC_ARRAY_FIX:
+                return 10;
+            case SbERR_BASIC_STRING_OVERFLOW:
+                return 14;
+            case SbERR_BASIC_EXPR_TOO_COMPLEX:
+                return 16;
+            case SbERR_BASIC_OPER_NOT_PERFORM:
+                return 17;
+            case SbERR_BASIC_TOO_MANY_DLL:
+                return 47;
+            case SbERR_BASIC_LOOP_NOT_INIT:
+                return 92;
+            default:
+                nRet = 0;
+        }
+    }
+
     // Suchschleife
     const SFX_VB_ErrorItem* pErrItem;
     USHORT nIndex = 0;
@@ -1141,7 +1162,33 @@ SbError StarBASIC::GetSfxFromVBError( USHORT nError )
 {
     SbError nRet = 0L;
 
-    // Suchschleife
+    if( SbiRuntime::isVBAEnabled() )
+    {
+        switch( nError )
+        {
+            case 1:
+            case 2:
+            case 4:
+            case 8:
+            case 12:
+            case 73:
+                return 0L;
+            case 10:
+                return SbERR_BASIC_ARRAY_FIX;
+            case 14:
+                return SbERR_BASIC_STRING_OVERFLOW;
+            case 16:
+                return SbERR_BASIC_EXPR_TOO_COMPLEX;
+            case 17:
+                return SbERR_BASIC_OPER_NOT_PERFORM;
+            case 47:
+                return SbERR_BASIC_TOO_MANY_DLL;
+            case 92:
+                return SbERR_BASIC_LOOP_NOT_INIT;
+            default:
+                nRet = 0L;
+        }
+    }
     const SFX_VB_ErrorItem* pErrItem;
     USHORT nIndex = 0;
     do

@@ -33,7 +33,9 @@
 
 #include "configexcept.hxx"
 #include "configpath.hxx"
+#include "datalock.hxx"
 #include "utility.hxx"
+#include <boost/utility.hpp>
 #include <vos/ref.hxx>
 #include <com/sun/star/lang/DisposedException.hpp>
 #include <com/sun/star/uno/Sequence.hxx>
@@ -66,26 +68,14 @@ namespace configmgr
         class ValueRef;
         class NodeChange;
         class NodeChanges;
-
-        class Name;
-
-        typedef uno::RuntimeException UnoError;
     }
 // ---------------------------------------------------------------------------------------------------
     namespace configapi
     {
-        using configuration::NodeRef;
-        using configuration::ValueRef;
-        using configuration::NodeChange;
-        using configuration::NodeChanges;
-
-        using configuration::Name;
-
 // ---------------------------------------------------------------------------------------------------
         class Broadcaster;
         class NotifierImpl;
         class ApiTreeImpl;
-        typedef vos::ORef<NotifierImpl> NotifierHolder;
 
         namespace css = ::com::sun::star;
 // ---------------------------------------------------------------------------------------------------
@@ -94,72 +84,72 @@ namespace configmgr
         {
             friend class Broadcaster;
             friend class BroadcasterHelper;
-            NotifierHolder          m_aImpl;
+            vos::ORef<NotifierImpl>             m_aImpl;
             ApiTreeImpl const*const m_pTree;
         public:
             /// construct this around the given Implementation, for the given tree
-            explicit Notifier(NotifierHolder const & aImpl, ApiTreeImpl const* pTree);
+            explicit Notifier(vos::ORef<NotifierImpl> const & aImpl, ApiTreeImpl const* pTree);
             Notifier(Notifier const& aOther);
             ~Notifier();
 
         // ---------------------------------------------------------------------------------------------------
             /// create a broadcaster for a single change (either local or (possibly) nested)
-            Broadcaster makeBroadcaster(NodeChange const& aChange, bool bLocal) const;
+            Broadcaster makeBroadcaster(configuration::NodeChange const& aChange, bool bLocal) const;
             /// create a broadcaster for a collection of changes (either local or (possibly) nested)
-            Broadcaster makeBroadcaster(NodeChanges const& aChange, bool bLocal) const;
+            Broadcaster makeBroadcaster(configuration::NodeChanges const& aChange, bool bLocal) const;
 
         // ---------------------------------------------------------------------------------------------------
             bool checkAlive(uno::XInterface* pObject) const throw(css::lang::DisposedException);
 
         // ---------------------------------------------------------------------------------------------------
             /// Add a <type scope='com::sun::star::lang'>XEventListener</type> observing <var>aNode</var>.
-            void add(NodeRef const& aNode, uno::Reference< css::lang::XEventListener > const& xListener) const;
+            void add(configuration::NodeRef const& aNode, uno::Reference< css::lang::XEventListener > const& xListener) const;
 
             /// Add a <type scope='com::sun::star::container'>XContainerListener</type> observing <var>aNode</var>.
-            void add(NodeRef const& aNode, uno::Reference< css::container::XContainerListener > const& xListener) const;
+            void add(configuration::NodeRef const& aNode, uno::Reference< css::container::XContainerListener > const& xListener) const;
 
             /// Add a <type scope='com::sun::star::util'>XChangesListener</type> observing <var>aNode</var> and its descendants.
-            void add(NodeRef const& aNode, uno::Reference< css::util::XChangesListener > const& xListener) const;
+            void add(configuration::NodeRef const& aNode, uno::Reference< css::util::XChangesListener > const& xListener) const;
 
             /// Add a <type scope='com::sun::star::beans'>XPropertyChangeListener</type> observing all children of <var>aNode</var>.
-            void addForAll(NodeRef const& aNode, uno::Reference< css::beans::XPropertyChangeListener > const& xListener) const;
+            void addForAll(configuration::NodeRef const& aNode, uno::Reference< css::beans::XPropertyChangeListener > const& xListener) const;
             /// Add a <type scope='com::sun::star::beans'>XPropertyChangeListener</type> observing only the child named <var>aName</var> of <var>aNode</var>.
-            void addForOne(NodeRef const& aNode, uno::Reference< css::beans::XPropertyChangeListener > const& xListener, Name const& aName) const;
+            void addForOne(configuration::NodeRef const& aNode, uno::Reference< css::beans::XPropertyChangeListener > const& xListener, rtl::OUString const& aName) const;
             /// Add a <type scope='com::sun::star::beans'>XVetoableChangeListener</type> constraining all children of <var>aNode</var>.
-            void addForAll(NodeRef const& aNode, uno::Reference< css::beans::XVetoableChangeListener > const& xListener) const;
+            void addForAll(configuration::NodeRef const& aNode, uno::Reference< css::beans::XVetoableChangeListener > const& xListener) const;
             /// Add a <type scope='com::sun::star::beans'>XVetoableChangeListener</type> constraining only the child named <var>aName</var> of <var>aNode</var>.
-            void addForOne(NodeRef const& aNode, uno::Reference< css::beans::XVetoableChangeListener > const& xListener, Name const& aName) const;
+            void addForOne(configuration::NodeRef const& aNode, uno::Reference< css::beans::XVetoableChangeListener > const& xListener, rtl::OUString const& aName) const;
 
             /** Add a <type scope='com::sun::star::beans'>XPropertiesChangeListener</type>
                 observing the properties of <var>aNode</var> (optimally only those given by <var>aNames</var>.
             */
-            void add(NodeRef const& aNode, uno::Reference< css::beans::XPropertiesChangeListener > const& xListener, uno::Sequence<OUString> const& aNames) const;
+            void add(configuration::NodeRef const& aNode, uno::Reference< css::beans::XPropertiesChangeListener > const& xListener, uno::Sequence<rtl::OUString> const& aNames) const;
 
         // ---------------------------------------------------------------------------------------------------
             /// Remove a <type scope='com::sun::star::lang'>XEventListener</type> observing <var>aNode</var>.
-            void remove(NodeRef const& aNode, uno::Reference< css::lang::XEventListener > const& xListener) const;
+            void remove(configuration::NodeRef const& aNode, uno::Reference< css::lang::XEventListener > const& xListener) const;
 
             /// Remove a <type scope='com::sun::star::container'>XContainerListener</type> observing <var>aNode</var>.
-            void remove(NodeRef const& aNode, uno::Reference< css::container::XContainerListener > const& xListener) const;
+            void remove(configuration::NodeRef const& aNode, uno::Reference< css::container::XContainerListener > const& xListener) const;
 
             /// Remove a <type scope='com::sun::star::util'>XChangesListener</type> observing <var>aNode</var> and its descendants.
-            void remove(NodeRef const& aNode, uno::Reference< css::util::XChangesListener > const& xListener) const;
+            void remove(configuration::NodeRef const& aNode, uno::Reference< css::util::XChangesListener > const& xListener) const;
 
             /// Remove a <type scope='com::sun::star::beans'>XPropertyChangeListener</type> observing <var>aNode</var>.
-            void removeForAll(NodeRef const& aNode, uno::Reference< css::beans::XPropertyChangeListener > const& xListener) const;
+            void removeForAll(configuration::NodeRef const& aNode, uno::Reference< css::beans::XPropertyChangeListener > const& xListener) const;
             /// Remove a <type scope='com::sun::star::beans'>XPropertyChangeListener</type> observing the child named <var>aName</var> of <var>aNode</var>.
-            void removeForOne(NodeRef const& aNode, uno::Reference< css::beans::XPropertyChangeListener > const& xListener, Name const& aName) const;
+            void removeForOne(configuration::NodeRef const& aNode, uno::Reference< css::beans::XPropertyChangeListener > const& xListener, rtl::OUString const& aName) const;
             /// Remove a <type scope='com::sun::star::beans'>XVetoableChangeListener</type> constraining <var>aNode</var>.
-            void removeForAll(NodeRef const& aNode, uno::Reference< css::beans::XVetoableChangeListener > const& xListener) const;
+            void removeForAll(configuration::NodeRef const& aNode, uno::Reference< css::beans::XVetoableChangeListener > const& xListener) const;
             /// Remove a <type scope='com::sun::star::beans'>XVetoableChangeListener</type> constraining the child named <var>aName</var> of <var>aNode</var>.
-            void removeForOne(NodeRef const& aNode, uno::Reference< css::beans::XVetoableChangeListener > const& xListener, Name const& aName) const;
+            void removeForOne(configuration::NodeRef const& aNode, uno::Reference< css::beans::XVetoableChangeListener > const& xListener, rtl::OUString const& aName) const;
 
             /// Remove a <type scope='com::sun::star::beans'>XVetoableChangeListener</type> constraining <var>aNode</var>.
-            void remove(NodeRef const& aNode, uno::Reference< css::beans::XVetoableChangeListener > const& xListener) const;
+            void remove(configuration::NodeRef const& aNode, uno::Reference< css::beans::XVetoableChangeListener > const& xListener) const;
             /** Remove a <type scope='com::sun::star::beans'>XPropertiesChangeListener</type>
                 observing any properties of <var>aNode</var>.
             */
-            void remove(NodeRef const& aNode, uno::Reference< css::beans::XPropertiesChangeListener > const& xListener) const;
+            void remove(configuration::NodeRef const& aNode, uno::Reference< css::beans::XPropertiesChangeListener > const& xListener) const;
         // ---------------------------------------------------------------------------------------------------
         private:
             void operator=(Notifier const& aOther);
@@ -172,7 +162,7 @@ namespace configmgr
         class TreeElement;
 
         ///  guards a NodeAccess; provides a simple lock for non-data access, does not check for disposed state
-        class DisposeGuardImpl : Noncopyable
+        class DisposeGuardImpl: private boost::noncopyable
         {
         public:
             DisposeGuardImpl(Notifier const& rNotifier) throw();

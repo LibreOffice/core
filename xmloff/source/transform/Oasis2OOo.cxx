@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: Oasis2OOo.cxx,v $
- * $Revision: 1.24 $
+ * $Revision: 1.24.56.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -2026,17 +2026,6 @@ Oasis2OOoTransformer::~Oasis2OOoTransformer() throw()
     Sequence< sal_Int8 > aSeq( 16 );
     rtl_createUuid( (sal_uInt8*)aSeq.getArray(), 0, sal_True );
     return aSeq;
-}
-
-// XUnoTunnelHelper
-Oasis2OOoTransformer* Oasis2OOoTransformer::getImplementation( Reference< XInterface > xInt ) throw()
-{
-    Reference< XUnoTunnel > xUT( xInt, UNO_QUERY );
-    if( xUT.is() )
-        return reinterpret_cast< Oasis2OOoTransformer* >(
-            xUT->getSomething( Oasis2OOoTransformer::getUnoTunnelId() ));
-    else
-        return NULL;
 }
 
 const Sequence< sal_Int8 > & Oasis2OOoTransformer::getUnoTunnelId() throw()

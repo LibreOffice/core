@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: docstoragemodifylistener.hxx,v $
- * $Revision: 1.4 $
+ * $Revision: 1.4.28.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -39,6 +39,11 @@
 
 #include <cppuhelper/implbase1.hxx>
 
+namespace vos
+{
+    class IMutex;
+}
+
 //........................................................................
 namespace sfx2
 {
@@ -64,9 +69,10 @@ namespace sfx2
     class SFX2_DLLPUBLIC DocumentStorageModifyListener : public DocumentStorageModifyListener_Base
     {
         IModifiableDocument*    m_pDocument;
+        ::vos::IMutex&          m_rMutex;
 
     public:
-        DocumentStorageModifyListener( IModifiableDocument& _rDocument );
+        DocumentStorageModifyListener( IModifiableDocument& _rDocument, ::vos::IMutex& _rMutex );
 
         void dispose();
 

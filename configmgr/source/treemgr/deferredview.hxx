@@ -59,35 +59,35 @@ namespace configmgr
             virtual void doCollectChanges(Node const& _aNode, configuration::NodeChanges& rChanges) const;
 
             // commit protocol
-            virtual std::auto_ptr<SubtreeChange> doPreCommitChanges(Tree const& _aTree, configuration::ElementList& _rRemovedElements);
-            virtual void doFailedCommit(Tree const& _aTree, SubtreeChange& rChanges);
-            virtual void doFinishCommit(Tree const& _aTree, SubtreeChange& rChanges);
-            virtual void doRevertCommit(Tree const& _aTree, SubtreeChange& rChanges);
+            virtual std::auto_ptr<SubtreeChange> doPreCommitChanges(configuration::Tree * tree, std::vector< rtl::Reference<configuration::ElementTree> >& _rRemovedElements);
+            virtual void doFailedCommit(configuration::Tree * tree, SubtreeChange& rChanges);
+            virtual void doFinishCommit(configuration::Tree * tree, SubtreeChange& rChanges);
+            virtual void doRevertCommit(configuration::Tree * tree, SubtreeChange& rChanges);
 
             // notification protocol
-            virtual configuration::ValueChangeImpl* doAdjustToValueChange(GroupNode const& _aGroupNode, Name const& aName, ValueChange const& rExternalChange);
+            virtual configuration::ValueChangeImpl* doAdjustToValueChange(GroupNode const& _aGroupNode, rtl::OUString const& aName, ValueChange const& rExternalChange);
         //  virtual void doAdjustToElementChanges(configuration::NodeChangesInformation& rLocalChanges, SetNode const& _aNode, SubtreeChange const& rExternalChanges, TreeDepth nDepth);
 
             // common attributes
             virtual node::Attributes doAdjustAttributes(node::Attributes const& _aAttributes) const;
 
             // group member access
-            virtual configuration::ValueMemberNode doGetValueMember(GroupNode const& _aNode, Name const& _aName, bool _bForUpdate) const;
+            virtual configuration::ValueMemberNode doGetValueMember(GroupNode const& _aNode, rtl::OUString const& _aName, bool _bForUpdate) const;
 
             // set element access
-            virtual void doInsertElement(SetNode const& _aNode, Name const& aName, configuration::SetEntry const& aNewEntry);
-            virtual void doRemoveElement(SetNode const& _aNode, Name const& aName);
+            virtual void doInsertElement(SetNode const& _aNode, rtl::OUString const& aName, configuration::SetEntry const& aNewEntry);
+            virtual void doRemoveElement(SetNode const& _aNode, rtl::OUString const& aName);
 
             virtual NodeFactory& doGetNodeFactory();
         private:
-            void implCollectChangesIn(Node const& _aNode, NodeChanges& rChanges) const;
+            void implCollectChangesIn(Node const& _aNode, configuration::NodeChanges& rChanges) const;
             // commit protocol
-            std::auto_ptr<SubtreeChange> implPreCommitChanges(Node const& _aNode, configuration::ElementList& _rRemovedElements);
+            std::auto_ptr<SubtreeChange> implPreCommitChanges(Node const& _aNode, std::vector< rtl::Reference<configuration::ElementTree> >& _rRemovedElements);
             void implFailedCommit(Node const& _aNode, SubtreeChange& rChanges);
             void implFinishCommit(Node const& _aNode, SubtreeChange& rChanges);
             void implRevertCommit(Node const& _aNode, SubtreeChange& rChanges);
 
-            void implPreCommitSubChanges(GroupNode const & _aGroup, configuration::ElementList& _rRemovedElements, SubtreeChange& _rParentChange);
+            void implPreCommitSubChanges(GroupNode const & _aGroup, std::vector< rtl::Reference<configuration::ElementTree> >& _rRemovedElements, SubtreeChange& _rParentChange);
             void implFailedSubCommitted(GroupNode const & _aGroup, SubtreeChange& rChanges);
             void implFinishSubCommitted(GroupNode const & _aGroup, SubtreeChange& rChanges);
             void implRevertSubCommitted(GroupNode const & _aGroup, SubtreeChange& rChanges);

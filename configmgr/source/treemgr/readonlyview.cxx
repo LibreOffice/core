@@ -68,7 +68,7 @@ node::Attributes ReadOnlyViewStrategy::doAdjustAttributes(node::Attributes const
 }
 //-----------------------------------------------------------------------------
 
-configuration::ValueMemberNode ReadOnlyViewStrategy::doGetValueMember(GroupNode const& _aNode, Name const& _aName, bool _bForUpdate) const
+configuration::ValueMemberNode ReadOnlyViewStrategy::doGetValueMember(GroupNode const& _aNode, rtl::OUString const& _aName, bool _bForUpdate) const
 {
     if (_bForUpdate) failReadOnly();
 
@@ -76,13 +76,13 @@ configuration::ValueMemberNode ReadOnlyViewStrategy::doGetValueMember(GroupNode 
 }
 //-----------------------------------------------------------------------------
 
-void ReadOnlyViewStrategy::doInsertElement(SetNode const& , Name const& , SetNodeEntry const& )
+void ReadOnlyViewStrategy::doInsertElement(SetNode const& , rtl::OUString const& , configuration::SetEntry const& )
 {
     failReadOnly();
 }
 //-----------------------------------------------------------------------------
 
-void ReadOnlyViewStrategy::doRemoveElement(SetNode const& /*_aNode*/, Name const& /*_aName*/)
+void ReadOnlyViewStrategy::doRemoveElement(SetNode const& /*_aNode*/, rtl::OUString const& /*_aName*/)
 {
     failReadOnly();
 }
@@ -97,7 +97,7 @@ NodeFactory& ReadOnlyViewStrategy::doGetNodeFactory()
 //-----------------------------------------------------------------------------
 //-----------------------------------------------------------------------------
 
-ViewStrategyRef createReadOnlyStrategy()
+rtl::Reference<ViewStrategy> createReadOnlyStrategy()
 {
     return new ReadOnlyViewStrategy();
 }

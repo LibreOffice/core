@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: logoimagestatusbarcontroller.hxx,v $
- * $Revision: 1.5 $
+ * $Revision: 1.5.82.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -45,7 +45,6 @@ namespace framework
 class LogoImageStatusbarController : public svt::StatusbarController
 {
     public:
-        LogoImageStatusbarController();
         LogoImageStatusbarController( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xServiceManager );
         virtual ~LogoImageStatusbarController();
 

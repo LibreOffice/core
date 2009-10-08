@@ -31,38 +31,30 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_configmgr.hxx"
 
-#include <stdio.h>
-
+#include "builddata.hxx"
 #include "mergechange.hxx"
 #include "updatehelper.hxx"
 #include "treeactions.hxx"
+#include "treefragment.hxx"
 #include "change.hxx"
 #include "treechangefactory.hxx"
 #include "treechangelist.hxx"
 #include "configexcept.hxx"
-#include "treeaccessor.hxx"
-
-
 #include "tracer.hxx"
 
 #define ASCII(x) rtl::OUString::createFromAscii(x)
 
 namespace configmgr
 {
-    using namespace com::sun::star::uno;
-    using namespace configuration;
-    using namespace std;
-
     // -----------------------------------------------------------------------------
 // -----------------------------------------------------------------------------
 
     // -----------------------------------------------------------------------------
-    class OMergeChanges : private ChangeTreeAction, private OPathCreator<RelativePath>
+    class OMergeChanges : private ChangeTreeAction, private OPathCreator<configuration::RelativePath>
     {
         SubtreeChange &m_rSubtreeChange;          // ChangeList, which will be grown
         SubtreeChange *m_pCurrentParent;          // our current position
 
-        typedef configuration::RelativePath RelativePath;
         // ------- Helper for Path stack -------
         SubtreeChange* pushTree(SubtreeChange& _rTree);
         void popTree(SubtreeChange* _pSaveTree);
@@ -73,11 +65,11 @@ namespace configmgr
 
         // start function, with the Change we want to do.
         // WARNING this could be a big tree, because a change can contain subtreechanges!
-        void mergeChanges(const SubtreeChange &_rChange, const RelativePath& _aPathToChange);
+        void mergeChanges(const SubtreeChange &_rChange, const configuration::RelativePath& _aPathToChange);
         void mergeChanges(const SubtreeChange &_rChange);
 
     private:
-        void initRoot(const SubtreeChange &_rRootChange, const RelativePath& _aPathToChange);
+        void initRoot(const SubtreeChange &_rRootChange, const configuration::RelativePath& _aPathToChange);
     private:
         virtual void handle(ValueChange const& _rValueNode);
         virtual void handle(AddNode const& _rAddNode);
@@ -93,23 +85,23 @@ namespace configmgr
     }
     // -----------------------------------------------------------------------------
 
-    Path::Component ONameCreator::createName(Change const& _rChange, SubtreeChange const* _pParent)
+    configuration::Path::Component ONameCreator::createName(Change const& _rChange, SubtreeChange const* _pParent)
     {
         OSL_ENSURE(_pParent, "ONameCreator: Cannot create proper name without a parent");
         if (_pParent && _pParent->isSetNodeChange())
         {
-            OUString sElementName = _rChange.getNodeName();
-            OUString sTypeName = _pParent->getElementTemplateName();
+            rtl::OUString sElementName = _rChange.getNodeName();
+            rtl::OUString sTypeName = _pParent->getElementTemplateName();
 
-            return Path::makeCompositeName(sElementName, sTypeName);
+            return configuration::Path::makeCompositeName(sElementName, sTypeName);
         }
         else
         {
-            OUString sElementName = _rChange.getNodeName();
+            rtl::OUString sElementName = _rChange.getNodeName();
 
         //    OSL_ENSURE(isSimpleName(sElementName),"Unexpected: Non-simple name in non-set node");
 
-            return Path::wrapSafeName(sElementName);
+            return configuration::Path::wrapSafeName(sElementName);
         }
     }
 
@@ -198,7 +190,8 @@ namespace configmgr
         else
         {
             // POST: Handle ValueChange in AddNode
-            std::auto_ptr<INode> pAddedNode = _rAddNode.getNewTree().cloneData(false);
+            rtl::Reference< data::TreeSegment > seg(_rAddNode.getNewTree());
+            std::auto_ptr<INode> pAddedNode = data::convertTree(seg.is() ? seg->fragment : 0, false);
 
             if (ValueNode *pValueNode = pAddedNode->asValueNode())
             {
@@ -236,7 +229,7 @@ namespace configmgr
 
             if (pAddedNode.get() != NULL)
             {
-                data::TreeSegment aNewTree = data::TreeSegment::createNew(_rAddNode.getNodeName(),pAddedNode);
+                rtl::Reference< data::TreeSegment > aNewTree = data::TreeSegment::create(_rAddNode.getNodeName(),pAddedNode);
 
                 std::auto_ptr<AddNode> pNewAdd( new AddNode(aNewTree,m_aValueChange.getNodeName(), m_aValueChange.isToDefault()) );
                 if (_rAddNode.isReplacing())
@@ -315,11 +308,11 @@ namespace configmgr
 
     static
     inline
-    Change* findExistingChange(SubtreeChange* pCurrentParent, Path::Component const & _aName)
+    Change* findExistingChange(SubtreeChange* pCurrentParent, configuration::Path::Component const & _aName)
     {
         OSL_ASSERT(pCurrentParent);
 
-        Change *pChange = pCurrentParent->getChange(_aName.getName().toString());
+        Change *pChange = pCurrentParent->getChange(_aName.getName());
 
         if (!pChange && !_aName.isSimpleName())
         {
@@ -332,7 +325,7 @@ namespace configmgr
 
     static
     inline
-    Change* findExistingChange(SubtreeChange* pCurrentParent, OUString const & _aName)
+    Change* findExistingChange(SubtreeChange* pCurrentParent, rtl::OUString const & _aName)
     {
         OSL_ASSERT(pCurrentParent);
 
@@ -377,18 +370,18 @@ namespace configmgr
     }
     // -----------------------------------------------------------------------------
 
-    void OMergeChanges::initRoot(const SubtreeChange &_rRootChange, const RelativePath& _aPathToChange)
+    void OMergeChanges::initRoot(const SubtreeChange &_rRootChange, const configuration::RelativePath& _aPathToChange)
     {
         SubtreeChange* pCurrentParent = &m_rSubtreeChange;
 
         if (!_aPathToChange.isEmpty())
         {
-            OSL_PRECOND(_aPathToChange.getLocalName().getName().toString() == _rRootChange.getNodeName(),
+            OSL_PRECOND(_aPathToChange.getLocalName().getName() == _rRootChange.getNodeName(),
                             "Path to change root does not match change being merged" );
 
-            RelativePath::Iterator const firstEnsure = _aPathToChange.begin();
-            RelativePath::Iterator lastEnsure = _aPathToChange.end();
-            RelativePath::Iterator it;
+            std::vector<configuration::Path::Component>::const_reverse_iterator const firstEnsure = _aPathToChange.begin();
+            std::vector<configuration::Path::Component>::const_reverse_iterator lastEnsure = _aPathToChange.end();
+            std::vector<configuration::Path::Component>::const_reverse_iterator it;
 
             OSL_ASSERT( firstEnsure != lastEnsure );
             --lastEnsure; // last to ensure is the actual root
@@ -402,10 +395,10 @@ namespace configmgr
                 if (!pChange)
                 {
                     OSL_ASSERT( it+1 != _aPathToChange.end());
-                    Name const aElementTypeName = (it+1)->getTypeName();
+                    rtl::OUString const aElementTypeName = (it+1)->getTypeName();
 
                     // create a correspondens for the name, we did not find.
-                    auto_ptr<SubtreeChange> pNewChange =
+                    std::auto_ptr<SubtreeChange> pNewChange =
                         OTreeChangeFactory::createDummyChange(it->getName(), aElementTypeName);
 
                     pChange = pNewChange.get();
@@ -416,12 +409,12 @@ namespace configmgr
                                 "ERROR: Newly added change cannot be found in parent change");
                 }
 
-                if (!pChange->ISA(SubtreeChange))
+                pCurrentParent = dynamic_cast<SubtreeChange*>( pChange);
+                if (pCurrentParent == 0)
                 {
                     OSL_ENSURE(false, "Change to merge does not point to a Subtree Change");
-                    throw InvalidName(_aPathToChange.toString(), "points to a non- subtree change in this changes list, but a subtree change is required as root.");
+                    throw configuration::InvalidName(_aPathToChange.toString(), "points to a non- subtree change in this changes list, but a subtree change is required as root.");
                 }
-                pCurrentParent = static_cast<SubtreeChange*>( pChange);
             }
 
             Change *pRootChange = findExistingChange(pCurrentParent,*lastEnsure);
@@ -429,8 +422,8 @@ namespace configmgr
             if (!pRootChange)
             {
                 // create a correspondens for the name, we did not find.
-                auto_ptr<SubtreeChange> pNewChange(
-                        new SubtreeChange(_rRootChange, SubtreeChange::NoChildCopy()) );
+                std::auto_ptr<SubtreeChange> pNewChange(
+                        new SubtreeChange(_rRootChange, treeop::NoChildCopy()) );
 
                 pRootChange = pNewChange.get();
 
@@ -440,12 +433,12 @@ namespace configmgr
                             "ERROR: Newly added change cannot be found in parent change");
             }
 
-            if (!pRootChange->ISA(SubtreeChange))
+            pCurrentParent = dynamic_cast<SubtreeChange*>( pRootChange);
+            if (pCurrentParent == 0)
             {
                 OSL_ENSURE(false, "Change to merge does not point to a Subtree Change");
-                throw InvalidName(_aPathToChange.toString(), "points to a non-subtree change in this changes list, but a subtree change is required as root.");
+                throw configuration::InvalidName(_aPathToChange.toString(), "points to a non-subtree change in this changes list, but a subtree change is required as root.");
             }
-            pCurrentParent = static_cast<SubtreeChange*>( pRootChange);
         }
 
         OSL_ENSURE(pCurrentParent->getNodeName() == _rRootChange.getNodeName(),
@@ -480,13 +473,13 @@ namespace configmgr
     // WARNING this could be a big tree, because a change can contain subtreechanges!
     void OMergeChanges::mergeChanges(const SubtreeChange &_rChange)
     {
-        mergeChanges(_rChange, RelativePath());
+        mergeChanges(_rChange, configuration::RelativePath());
     }
     // -----------------------------------------------------------------------------
 
     // start function, with the Change we want to do.
     // WARNING this could be a big tree, because a change can contain subtreechanges!
-    void OMergeChanges::mergeChanges(const SubtreeChange &_rChange, const RelativePath& _aPathToChange)
+    void OMergeChanges::mergeChanges(const SubtreeChange &_rChange, const configuration::RelativePath& _aPathToChange)
     {
         initRoot(_rChange, _aPathToChange); // path location being merged must exist
 
@@ -506,7 +499,7 @@ namespace configmgr
     void OMergeChanges::handle(ValueChange const& _rValueNode)
     {
         // Handle a ValueChange,
-        OUString aNodeName = _rValueNode.getNodeName();
+        rtl::OUString aNodeName = _rValueNode.getNodeName();
 
         if (Change *pChange = findExistingChange(m_pCurrentParent,aNodeName))
         {
@@ -517,7 +510,7 @@ namespace configmgr
         else
         {
             // there is no ValueChange in the List, insert new one
-            auto_ptr<Change> pNewChange(new ValueChange(_rValueNode));
+            std::auto_ptr<Change> pNewChange(new ValueChange(_rValueNode));
             m_pCurrentParent->addChange(pNewChange);
         }
     }
@@ -528,11 +521,11 @@ namespace configmgr
         // Handle an AddNode
         bool bReplacing = _rAddNode.isReplacing();
 
-        OUString aNodeName = _rAddNode.getNodeName();
+        rtl::OUString aNodeName = _rAddNode.getNodeName();
 
         if (Change *pChange = findExistingChange(m_pCurrentParent,aNodeName))
         {
-            OSL_ENSURE(pChange->ISA(RemoveNode) || bReplacing, "OMergeChanges::handle(AddNode): the changes tree given already contains a change for this!");
+            OSL_ENSURE(dynamic_cast< RemoveNode * >(pChange) != 0 || bReplacing, "OMergeChanges::handle(AddNode): the changes tree given already contains a change for this!");
 
             m_pCurrentParent->removeChange(pChange->getNodeName());
 
@@ -540,13 +533,13 @@ namespace configmgr
         }
 
         // insert manually
-        data::TreeSegment aAddedTree = _rAddNode.getNewTree().cloneSegment();
+        rtl::Reference< data::TreeSegment > aAddedTree = data::TreeSegment::create(_rAddNode.getNewTree());
 
-        auto_ptr<AddNode> pNewAdd(new AddNode(aAddedTree, _rAddNode.getNodeName(), _rAddNode.isToDefault()));
+        std::auto_ptr<AddNode> pNewAdd(new AddNode(aAddedTree, _rAddNode.getNodeName(), _rAddNode.isToDefault()));
         if (bReplacing)
             pNewAdd->setReplacing();
 
-        auto_ptr<Change> pNewChange( pNewAdd.release() );
+        std::auto_ptr<Change> pNewChange( pNewAdd.release() );
         m_pCurrentParent->addChange(pNewChange);
     }
     // -----------------------------------------------------------------------------
@@ -554,7 +547,7 @@ namespace configmgr
     void OMergeChanges::handle(RemoveNode const& _rRemoveNode)
     {
         // Handle a RemoveNode
-        OUString aNodeName = _rRemoveNode.getNodeName();
+        rtl::OUString aNodeName = _rRemoveNode.getNodeName();
 
         Change *pChange = findExistingChange(m_pCurrentParent,aNodeName);
 
@@ -578,7 +571,7 @@ namespace configmgr
             // defaulting this so that the node will be marked as deleted
         case OMergeRemoveNode::FlagDeleted:
         {
-            auto_ptr<Change> pNewChange(new RemoveNode(_rRemoveNode.getNodeName(),_rRemoveNode.isToDefault()));
+            std::auto_ptr<Change> pNewChange(new RemoveNode(_rRemoveNode.getNodeName(),_rRemoveNode.isToDefault()));
             m_pCurrentParent->addChange(pNewChange);
         }
         break;
@@ -601,7 +594,7 @@ namespace configmgr
     {
         if (_rAddNode.isToDefault())
         {
-            data::TreeSegment::TreeDataPtr pAdded = _rAddNode.getNewTreeData();
+            sharable::TreeFragment const * pAdded = _rAddNode.getNewTreeData();
             OSL_ENSURE(pAdded,"No Data in AddNode");
             if (pAdded == NULL || pAdded->getAttributes().isDefault())
                 stripOne(_rAddNode);
@@ -623,9 +616,7 @@ namespace configmgr
 
     OStripDefaults& OStripDefaults::strip()
     {
-        typedef SubtreeChange::MutatingChildIterator Iter;
-
-        Iter it = m_rParent.begin_changes(), stop = m_rParent.end_changes();
+        SubtreeChange::MutatingChildIterator it = m_rParent.begin_changes(), stop = m_rParent.end_changes();
 
         while (it != stop)
         {
@@ -664,29 +655,30 @@ namespace configmgr
         // with the pointer m_pCurrentParent we remember our SubtreeChange in witch we
         // add all other Changes.
 
-        OUString aNodeName = _rSubtree.getNodeName();
+        rtl::OUString aNodeName = _rSubtree.getNodeName();
 
         Change *pChange = findExistingChange(m_pCurrentParent,aNodeName);
 
         // const sal_Char* pType = pChange ? pChange->getType() : NULL;
         SubtreeChange* pSubtreeChange = NULL;
-        if (pChange == NULL || pChange->ISA(SubtreeChange))
+        if (pChange == NULL || dynamic_cast< SubtreeChange * >(pChange) != 0)
         {
             // need to create a new Subtreechange
             if (!pChange)
             {
                 // create a new SubtreeChange
-                auto_ptr<SubtreeChange> pNewChange(new SubtreeChange(_rSubtree, SubtreeChange::NoChildCopy()));
+                std::auto_ptr<SubtreeChange> pNewChange(new SubtreeChange(_rSubtree, treeop::NoChildCopy()));
                 pSubtreeChange = pNewChange.get();
 
                 // add the new SubtreeChange in m_aTreeChangeList
-                m_pCurrentParent->addChange(auto_ptr<Change>(pNewChange.release()));
+                m_pCurrentParent->addChange(std::auto_ptr<Change>(pNewChange.release()));
                 // check list for this new SubtreeChange
                 OSL_ASSERT(pSubtreeChange == findExistingChange(m_pCurrentParent,aNodeName));
             }
-            else // hard cast(!) to SubtreeChange because we are a SubtreeChange
+            else
             {
-                pSubtreeChange = static_cast<SubtreeChange*>(pChange);
+                pSubtreeChange = dynamic_cast<SubtreeChange*>(pChange);
+                OSL_ASSERT(pSubtreeChange != 0);
                 adjustElementTemplate(*pSubtreeChange,_rSubtree);
             }
 
@@ -695,13 +687,10 @@ namespace configmgr
             this->applyToChildren(_rSubtree);
             popTree( pSaveParent );
         }
-        else if (pChange->ISA(AddNode))
+        else if (AddNode* pAddNode = dynamic_cast<AddNode*>(pChange))
         {
-            AddNode* pAddNode = static_cast<AddNode*>(pChange);
-
-// -----------------------------------------------------------------------------
-// -----------------------------------------------------------------------------
-            std::auto_ptr<INode> pAddedNode = pAddNode->getNewTree().cloneData(false);
+            rtl::Reference< data::TreeSegment > seg(pAddNode->getNewTree());
+            std::auto_ptr<INode> pAddedNode = data::convertTree(seg.is() ? seg->fragment : 0, false);
             ISubtree* pSubtree = pAddedNode.get() ? pAddedNode->asISubtree() : 0;
             if (pSubtree)
             {
@@ -712,7 +701,7 @@ namespace configmgr
                 aTreeUpdate.applyToChildren(_rSubtree);
 
                 // make a new subtree with the changed data
-                data::TreeSegment aNewTree = data::TreeSegment::createNew(pAddNode->getNodeName(), pAddedNode);
+                rtl::Reference< data::TreeSegment > aNewTree = data::TreeSegment::create(pAddNode->getNodeName(), pAddedNode);
 
                 std::auto_ptr<AddNode> pNewAdd( new AddNode(aNewTree, pAddNode->getNodeName(), pAddNode->isToDefault()) );
                 if (pAddNode->isReplacing())
@@ -779,7 +768,8 @@ namespace configmgr
 #endif
             }
 
-            auto_ptr<INode> pNode = auto_ptr<INode>(aAddNode.getNewTree().cloneData(true));
+            rtl::Reference< data::TreeSegment > seg(aAddNode.getNewTree());
+            std::auto_ptr<INode> pNode(data::convertTree(seg.is() ? seg->fragment : 0, true));
 
             m_pCurrentSubtree->addChild(pNode);
         }

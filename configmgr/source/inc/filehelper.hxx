@@ -96,7 +96,7 @@ namespace configmgr
 
         /** replaces a file specified by _aToURL with a file specified by _aFromURL.
         */
-        void replaceFile(const rtl::OUString& _aToURL, const rtl::OUString &_aFromURL) CFG_THROW1(io::IOException);
+        void replaceFile(const rtl::OUString& _aToURL, const rtl::OUString &_aFromURL) SAL_THROW((io::IOException));
 
         /** removes a file specified by _aURL. Ignores the case of a non-existing file.
         */

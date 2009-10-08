@@ -53,13 +53,13 @@ void NodeElement::checkAlive() const
 }
 //-----------------------------------------------------------------------------
 
-configuration::Tree TreeElement::getTree() const
+rtl::Reference< configuration::Tree > TreeElement::getTree() const
 {
-    return configuration::Tree(this->getTreeRef());
+    return getTreeRef();
 }
 //-----------------------------------------------------------------------------
 
-configuration::TreeRef  TreeElement::getTreeRef() const
+rtl::Reference< configuration::Tree > TreeElement::getTreeRef() const
 {
     return getApiTree().getTree();
 }
@@ -76,17 +76,17 @@ Factory& TreeElement::getFactory()
 }
 //-----------------------------------------------------------------------------
 
-configuration::ElementRef SetElement::getElementRef() const
+rtl::Reference< configuration::ElementTree > SetElement::getElementRef() const
 {
-    return configuration::ElementRef::extract(getTreeRef());
+    return dynamic_cast< configuration::ElementTree * >(getTreeRef().get());
 }
 //-----------------------------------------------------------------------------
 
-configuration::TemplateInfo SetElement::getTemplateInfo() const
+rtl::Reference< configuration::Template > SetElement::getTemplateInfo() const
 {
-    configuration::ElementRef aTree = configuration::ElementRef::extract(getTreeRef());
-    OSL_ENSURE(aTree.isValid(), "This really must be a set element");
-    return configuration::TemplateInfo(aTree.getTemplate());
+    rtl::Reference< configuration::ElementTree > aTree(dynamic_cast< configuration::ElementTree * >(getTreeRef().get()));
+    OSL_ENSURE(aTree.is(), "This really must be a set element");
+    return aTree->getTemplate();
 }
 //-----------------------------------------------------------------------------
 
@@ -96,9 +96,6 @@ void SetElement::haveNewParent(NodeSetInfoAccess* pNewParent)
 
     this->getApiTree().haveNewParent( pNewParentImpl );
 }
-//-----------------------------------------------------------------------------
-// configuration::RootTree  RootElement::getRootTree() const;
-
 //-----------------------------------------------------------------------------
 
 bool RootElement::disposeTree()
@@ -111,32 +108,6 @@ Committer UpdateRootElement::getCommitter()
 {
     return Committer(getRootTree());
 }
-//-----------------------------------------------------------------------------
-
-TreeReadGuardImpl::TreeReadGuardImpl(TreeElement& rTree)
-: m_rTree(rTree)
-{
-    rTree.checkAlive();
-}
-//-----------------------------------------------------------------------------
-
-TreeReadGuardImpl::~TreeReadGuardImpl() throw ()
-{
-}
-//-----------------------------------------------------------------------------
-
-GuardedRootElement::GuardedRootElement(RootElement& rTree)
-: m_aImpl(rTree)
-{
-}
-//-----------------------------------------------------------------------------
-
-configuration::Tree GuardedRootElement::getTree() const
-{
-    return this->get().getTree();
-}
-
-//-----------------------------------------------------------------------------
     }
 }
 

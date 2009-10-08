@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: AUsers.cxx,v $
- * $Revision: 1.12 $
+ * $Revision: 1.12.56.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -33,11 +33,13 @@
 #include "ado/AUsers.hxx"
 #include "ado/AUser.hxx"
 #include "ado/ATable.hxx"
+#include "ado/AConnection.hxx"
 #include <com/sun/star/sdbc/XRow.hpp>
 #include <com/sun/star/sdbc/XResultSet.hpp>
 #include "connectivity/sdbcx/IRefreshable.hxx"
 #include <comphelper/types.hxx>
 #include <connectivity/dbexception.hxx>
+#include "resource/ado_res.hrc"
 
 using namespace comphelper;
 using namespace connectivity;
@@ -70,10 +72,7 @@ sdbcx::ObjectType OUsers::appendObject( const ::rtl::OUString& _rForName, const 
 {
     OUserExtend* pUser = NULL;
     if ( !getImplementation( pUser, descriptor ) || pUser == NULL )
-        ::dbtools::throwGenericSQLException(
-            ::rtl::OUString::createFromAscii( "Could not create user: invalid object descriptor." ),
-            static_cast<XTypeProvider*>(this)
-        );
+        m_pCatalog->getConnection()->throwGenericSQLException( STR_INVALID_USER_DESCRIPTOR_ERROR,static_cast<XTypeProvider*>(this) );
 
     ADOUsers* pUsers = (ADOUsers*)m_aCollection;
     pUsers->Append(OLEVariant(pUser->getImpl()),OLEString(pUser->getPassword()));

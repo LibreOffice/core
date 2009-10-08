@@ -52,10 +52,10 @@ namespace configmgr
     uno::Any toAny( const uno::Reference< script::XTypeConverter >& xTypeConverter,
                     const ::rtl::OUString& _rValue,
                     const uno::TypeClass& _rTypeClass)
-                CFG_UNO_THROW1( script::CannotConvertException );
+                SAL_THROW((script::CannotConvertException , com::sun::star::uno::RuntimeException));
 
     rtl::OUString toString(const uno::Reference< script::XTypeConverter >& xTypeConverter, const uno::Any& rValue)
-                CFG_UNO_THROW1( script::CannotConvertException );
+                SAL_THROW((script::CannotConvertException , com::sun::star::uno::RuntimeException));
 
     // Type conversion
     ::rtl::OUString toTypeName(const uno::TypeClass& _rTypeClass);

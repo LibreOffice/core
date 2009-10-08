@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: fcomp.cxx,v $
- * $Revision: 1.30 $
+ * $Revision: 1.30.30.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -42,10 +42,11 @@
 #include "connectivity/dbexception.hxx"
 #include "connectivity/dbconversion.hxx"
 #include <com/sun/star/sdb/SQLFilterOperator.hpp>
-
+#include "resource/file_res.hrc"
 #include "file/FStringFunctions.hxx"
 #include "file/FDateFunctions.hxx"
 #include "file/FNumericFunctions.hxx"
+#include "file/FConnection.hxx"
 #include <com/sun/star/sdb/SQLFilterOperator.hpp>
 
 using namespace connectivity;
@@ -112,7 +113,7 @@ void OPredicateCompiler::start(OSQLParseNode* pSQLParseNode)
                 OSQLParseNode *pColumnRef = pSelection->getChild(i)->getChild(0);
                 if ( SQL_ISRULE(pColumnRef,general_set_fct) && pColumnRef->count() != 4 )
                 {
-                    ::dbtools::throwGenericSQLException(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Statement too complex. Only \"COUNT(*)\" is supported.")),NULL);
+                    m_pAnalyzer->getConnection()->throwGenericSQLException(STR_QUERY_COMPLEX_COUNT,NULL);
                 }
             }
         }
@@ -253,7 +254,7 @@ OOperand* OPredicateCompiler::execute_COMPARE(OSQLParseNode* pPredicateNode)  th
           // upper, lower etc.
           SQL_ISRULE(pPredicateNode->getChild(2),fold)) )
     {
-        ::dbtools::throwGenericSQLException(::rtl::OUString::createFromAscii("Statement too complex"),NULL);
+        m_pAnalyzer->getConnection()->throwGenericSQLException(STR_QUERY_TOO_COMPLEX,NULL);
         return NULL;
     }
 
@@ -279,44 +280,6 @@ OOperand* OPredicateCompiler::execute_COMPARE(OSQLParseNode* pPredicateNode)  th
     execute(pPredicateNode->getChild(2));
     m_aCodeList.push_back( new OOp_COMPARE(ePredicateType) );
 
-    // wenn es sich um eine Vergleichsoperation auf datum/Zeit handelt, dann
-    // erfolgt jetzt bereits eine Umwandlung fuer die Konstante
-//  if (pOb)
-//  {
-//      switch (pPredicateNode->getChild(2)->getNodeType())
-//      {
-//          case SQL_NODE_STRING:
-//          {
-//              OOperandConst* pConst = PTR_CAST(OOperandConst,m_aCodeList[m_aCodeList.size() - 2]);
-//              switch (pOb->getDBType())
-//              {
-//                  case DataType::DECIMAL:
-//                  case DataType::NUMERIC:
-//                  case DataType::REAL:
-//                  case DataType::DOUBLE:
-//                  case DataType::TIMESTAMP:
-//                  case DataType::DATE:
-//                  case DataType::TIME:
-//                  {
-//                      try
-//                      {
-//                          pConst->setValue(makeAny(pConst->getValue().getDouble()));
-//                      }
-//                      catch( Exception&)
-//                      {
-//                          ::dbtools::throwGenericSQLException(::rtl::OUString::createFromAscii("Datatype mismatch"),NULL);
-//                      }
-//                  }   break;
-//                  case DataType::TINYINT:
-//                  case DataType::SMALLINT:
-//                  case DataType::INTEGER:
-//                  case DataType::BIT:
-//                      ;
-//                      ::dbtools::throwGenericSQLException(::rtl::OUString::createFromAscii("Datatype mismatch"),NULL);
-//              }
-//          }
-//      }
-//  }
     return NULL;
 }
 
@@ -337,21 +300,18 @@ OOperand* OPredicateCompiler::execute_LIKE(OSQLParseNode* pPredicateNode) throw(
 
     if (!(pAtom->getNodeType() == SQL_NODE_STRING || SQL_ISRULE(pAtom,parameter)))
     {
-        ::dbtools::throwGenericSQLException(::rtl::OUString::createFromAscii("Invalid Statement"),NULL);
-        return NULL;
+        m_pAnalyzer->getConnection()->throwGenericSQLException(STR_QUERY_INVALID_LIKE_STRING,NULL);
     }
     if (pOptEscape->count() != 0)
     {
         if (pOptEscape->count() != 2)
         {
-            ::dbtools::throwGenericSQLException(::rtl::OUString::createFromAscii("Invalid Statement"),NULL);
-            return NULL;
+            m_pAnalyzer->getConnection()->throwGenericSQLException(STR_QUERY_INVALID_LIKE_STRING,NULL);
         }
         OSQLParseNode *pEscNode = pOptEscape->getChild(1);
         if (pEscNode->getNodeType() != SQL_NODE_STRING)
         {
-            ::dbtools::throwGenericSQLException(::rtl::OUString::createFromAscii("Invalid Statement"),NULL);
-            return NULL;
+            m_pAnalyzer->getConnection()->throwGenericSQLException(STR_QUERY_INVALID_LIKE_STRING,NULL);
         }
         else
             cEscape = pEscNode->getTokenValue().toChar();
@@ -381,8 +341,7 @@ OOperand* OPredicateCompiler::execute_BETWEEN(OSQLParseNode* pPredicateNode) thr
         &&  !(p2ndtValue->getNodeType() == SQL_NODE_STRING || SQL_ISRULE(p2ndtValue,parameter))
         )
     {
-        ::dbtools::throwGenericSQLException(::rtl::OUString::createFromAscii("Invalid Statement"),NULL);
-        return NULL;
+        m_pAnalyzer->getConnection()->throwGenericSQLException(STR_QUERY_INVALID_BETWEEN,NULL);
     }
 
     sal_Bool bNot = SQL_ISTOKEN(pPredicateNode->getChild(1),NOT);
@@ -489,9 +448,11 @@ OOperand* OPredicateCompiler::execute_Operand(OSQLParseNode* pPredicateNode) thr
 
         if(!m_orgColumns->hasByName(aColumnName))
         {
-            ::rtl::OUString sMsg = ::rtl::OUString::createFromAscii("Column not found: ");
-            sMsg += aColumnName;
-            ::dbtools::throwGenericSQLException( sMsg, NULL );
+            const ::rtl::OUString sError( m_pAnalyzer->getConnection()->getResources().getResourceStringWithSubstitution(
+                    STR_INVALID_COLUMNNAME,
+                    "$columnname$", aColumnName
+                 ) );
+            ::dbtools::throwGenericSQLException( sError, NULL );
         }
         ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet> xCol;
         try
@@ -502,7 +463,11 @@ OOperand* OPredicateCompiler::execute_Operand(OSQLParseNode* pPredicateNode) thr
             }
             else
             {// Column existiert nicht im Resultset
-                ::dbtools::throwGenericSQLException(::rtl::OUString::createFromAscii("Invalid Statement"),NULL);
+                const ::rtl::OUString sError( m_pAnalyzer->getConnection()->getResources().getResourceStringWithSubstitution(
+                    STR_INVALID_COLUMNNAME,
+                    "$columnname$", aColumnName
+                 ) );
+                ::dbtools::throwGenericSQLException( sError, NULL );
             }
         }
         catch(Exception &)
@@ -559,7 +524,7 @@ OOperand* OPredicateCompiler::execute_Operand(OSQLParseNode* pPredicateNode) thr
             }
         }
         else
-            ::dbtools::throwGenericSQLException(::rtl::OUString::createFromAscii("Statement too complex"),NULL);
+            m_pAnalyzer->getConnection()->throwGenericSQLException(STR_QUERY_TOO_COMPLEX,NULL);
 
     }
     else if( SQL_ISRULE(pPredicateNode,fold) )
@@ -579,7 +544,7 @@ OOperand* OPredicateCompiler::execute_Operand(OSQLParseNode* pPredicateNode) thr
     }
     else
     {
-        ::dbtools::throwGenericSQLException(::rtl::OUString::createFromAscii("Statement too complex"),NULL);
+        m_pAnalyzer->getConnection()->throwGenericSQLException(STR_QUERY_TOO_COMPLEX,NULL);
     }
     if (pOperand)
         m_aCodeList.push_back(pOperand);
@@ -942,7 +907,7 @@ OOperand* OPredicateCompiler::executeFunction(OSQLParseNode* pPredicateNode)    
             pOperator = new OOp_Locate();
             break;
         default:
-            ::dbtools::throwGenericSQLException(::rtl::OUString::createFromAscii("Function not supported, yet."),NULL);
+            m_pAnalyzer->getConnection()->throwGenericSQLException(STR_QUERY_FUNCTION_NOT_SUPPORTED,NULL);
     }
 
     m_aCodeList.push_back(pOperator);

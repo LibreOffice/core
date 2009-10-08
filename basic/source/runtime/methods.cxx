@@ -1378,26 +1378,33 @@ RTLFUNC(Replace)
         if ( nArgCount == 6 )
             bTextMode = rPar.Get(6)->GetInteger();
 
-        USHORT nStrLen = aExpStr.Len();
+        USHORT nExpStrLen = aExpStr.Len();
+        USHORT nFindStrLen = aFindStr.Len();
+        USHORT nReplaceStrLen = aReplaceStr.Len();
 
-        if( lStartPos <= nStrLen )
+        if( lStartPos <= nExpStrLen )
         {
-            String aSrcStr( aExpStr );
-            if( bTextMode )
+            USHORT nPos = static_cast<USHORT>( lStartPos - 1 );
+            USHORT nCounts = 0;
+            while( lCount == -1 || lCount > nCounts )
             {
+                String aSrcStr( aExpStr );
+                if( bTextMode )
+                {
                     aSrcStr.ToUpperAscii();
                     aFindStr.ToUpperAscii();
-            }
-
-            USHORT nPos = aSrcStr.Search( aFindStr, static_cast<USHORT>( lStartPos - 1 ) );
-            USHORT nCounts = 0;
-            USHORT nReplaceLength = aReplaceStr.Len() ? aReplaceStr.Len():1;
-            while( nPos != STRING_NOTFOUND && (lCount == -1 || lCount > nCounts) )
-            {
-                aExpStr.Replace( nPos, aFindStr.Len(), aReplaceStr );
-                nPos = nPos + nReplaceLength;
+                }
                 nPos = aSrcStr.Search( aFindStr, nPos );
-                nCounts++;
+                if( nPos != STRING_NOTFOUND )
+                {
+                    aExpStr.Replace( nPos, nFindStrLen, aReplaceStr );
+                    nPos = nPos - nFindStrLen + nReplaceStrLen + 1;
+                    nCounts++;
+                }
+                else
+                {
+                    break;
+                }
             }
         }
         rPar.Get(0)->PutString( aExpStr.Copy( static_cast<USHORT>(lStartPos - 1) )  );
@@ -1779,17 +1786,52 @@ INT16 implGetDateYear( double aDate )
 
 BOOL implDateSerial( INT16 nYear, INT16 nMonth, INT16 nDay, double& rdRet )
 {
+    if ( nYear < 30 )
+        nYear += 2000;
     if ( nYear < 100 )
         nYear += 1900;
-    if ((nYear < 100 || nYear > 9999)   ||
-        (nMonth < 1 || nMonth > 12 )    ||
-        (nDay < 1 || nDay > 31 ))
+    Date aCurDate( nDay, nMonth, nYear );
+    if ((nYear < 100 || nYear > 9999) )
     {
         StarBASIC::Error( SbERR_BAD_ARGUMENT );
         return FALSE;
     }
+    if ( !SbiRuntime::isVBAEnabled() )
+    {
+        if ( (nMonth < 1 || nMonth > 12 )||
+        (nDay < 1 || nDay > 31 ) )
+        {
+            StarBASIC::Error( SbERR_BAD_ARGUMENT );
+            return FALSE;
+        }
+    }
+    else
+    {
+        // grab the year & month
+        aCurDate = Date( 1, (( nMonth % 12 ) > 0 ) ? ( nMonth % 12 ) : 12 + ( nMonth % 12 ), nYear );
 
-    Date aCurDate( nDay, nMonth, nYear );
+        // adjust year based on month value
+        // e.g. 2000, 0, xx = 1999, 12, xx ( or December of the previous year )
+        //      2000, 13, xx = 2001, 1, xx ( or January of the following year )
+        if( ( nMonth < 1 ) || ( nMonth > 12 ) )
+        {
+            // inacurrate around leap year, don't use days to calculate,
+            // just modify the months directory
+            INT16 nYearAdj = ( nMonth /12 ); // default to positive months inputed
+            if ( nMonth <=0 )
+                nYearAdj = ( ( nMonth -12 ) / 12 );
+            aCurDate.SetYear( aCurDate.GetYear() + nYearAdj );
+        }
+
+        // adjust day value,
+        // e.g. 2000, 2, 0 = 2000, 1, 31 or the last day of the previous month
+        //      2000, 1, 32 = 2000, 2, 1 or the first day of the following month
+        if( ( nDay < 1 ) || ( nDay > aCurDate.GetDaysInMonth() ) )
+            aCurDate += nDay - 1;
+        else
+            aCurDate.SetDay( nDay );
+    }
+
     long nDiffDays = GetDayDiff( aCurDate );
     rdRet = (double)nDiffDays;
     return TRUE;
@@ -1916,6 +1958,22 @@ RTLFUNC(DateValue)
         String aStr( rPar.Get(1)->GetString() );
         BOOL bSuccess = pFormatter->IsNumberFormat( aStr, nIndex, fResult );
         short nType = pFormatter->GetType( nIndex );
+
+        // DateValue("February 12, 1969") raises error if the system locale is not en_US
+        // by using SbiInstance::GetNumberFormatter.
+        // It seems that both locale number formatter and English number formatter
+        // are supported in Visual Basic.
+        LanguageType eLangType = GetpApp()->GetSettings().GetLanguage();
+        if( !bSuccess && ( eLangType != LANGUAGE_ENGLISH_US ) )
+        {
+            // Create a new SvNumberFormatter by using LANGUAGE_ENGLISH to get the date value;
+            com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory >
+                xFactory = comphelper::getProcessServiceFactory();
+            SvNumberFormatter aFormatter( xFactory, LANGUAGE_ENGLISH_US );
+            bSuccess = aFormatter.IsNumberFormat( aStr, nIndex, fResult );
+            nType = aFormatter.GetType( nIndex );
+        }
+
         if(bSuccess && (nType==NUMBERFORMAT_DATE || nType==NUMBERFORMAT_DATETIME))
         {
             if ( nType == NUMBERFORMAT_DATETIME )

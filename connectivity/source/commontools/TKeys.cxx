@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: TKeys.cxx,v $
- * $Revision: 1.13 $
+ * $Revision: 1.13.30.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -140,6 +140,9 @@ void OKeysHelper::cloneDescriptorColumns( const sdbcx::ObjectType& _rSourceDescr
 // XAppend
 sdbcx::ObjectType OKeysHelper::appendObject( const ::rtl::OUString& _rForName, const Reference< XPropertySet >& descriptor )
 {
+    Reference< XConnection> xConnection = m_pTable->getConnection();
+    if ( !xConnection.is() )
+        return NULL;
     if ( m_pTable->isNew() )
     {
         Reference< XPropertySet > xNewDescriptor( cloneDescriptor( descriptor ) );
@@ -263,7 +266,8 @@ sdbcx::ObjectType OKeysHelper::appendObject( const ::rtl::OUString& _rForName, c
 // XDrop
 void OKeysHelper::dropObject(sal_Int32 _nPos,const ::rtl::OUString _sElementName)
 {
-    if ( !m_pTable->isNew() )
+    Reference< XConnection> xConnection = m_pTable->getConnection();
+    if ( xConnection.is() && !m_pTable->isNew() )
     {
         ::rtl::OUString aSql    = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ALTER TABLE "));
 

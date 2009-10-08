@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: svdorect.cxx,v $
- * $Revision: 1.31 $
+ * $Revision: 1.31.18.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -364,7 +364,7 @@ void SdrRectObj::operator=(const SdrObject& rObj)
     SdrTextObj::operator=(rObj);
 }
 
-basegfx::B2DPolyPolygon SdrRectObj::TakeXorPoly(sal_Bool /*bDetail*/) const
+basegfx::B2DPolyPolygon SdrRectObj::TakeXorPoly() const
 {
     XPolyPolygon aXPP;
     aXPP.Insert(ImpCalcXPoly(aRect,GetEckenradius()));
@@ -679,9 +679,9 @@ SdrObject* SdrRectObj::DoConvertToPolyObj(BOOL bBezier) const
     return pRet;
 }
 
-void SdrRectObj::SFX_NOTIFY(SfxBroadcaster& rBC, const TypeId& rBCType, const SfxHint& rHint, const TypeId& rHintType)
+void SdrRectObj::Notify(SfxBroadcaster& rBC, const SfxHint& rHint)
 {
-    SdrTextObj::SFX_NOTIFY(rBC,rBCType,rHint,rHintType);
+    SdrTextObj::Notify(rBC,rHint);
     SetXPolyDirty(); // wg. Eckenradius
 }
 

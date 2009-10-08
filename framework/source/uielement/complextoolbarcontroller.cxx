@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: complextoolbarcontroller.cxx,v $
- * $Revision: 1.10 $
+ * $Revision: 1.10.26.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -344,11 +344,6 @@ uno::Reference< frame::XDispatch > ComplexToolbarController::getDispatchFromComm
 }
 
 // --------------------------------------------------------
-
-void ComplexToolbarController::executeControlCommand( const ::com::sun::star::frame::ControlCommand& )
-{
-    // must be implemented by sub class!
-}
 
 const ::com::sun::star::util::URL& ComplexToolbarController::getInitializedURL()
 {

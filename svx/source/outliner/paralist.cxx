@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: paralist.cxx,v $
- * $Revision: 1.11 $
+ * $Revision: 1.11.6.3 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -37,10 +37,30 @@
 
 DBG_NAME(Paragraph)
 
-Paragraph::Paragraph( sal_Int16 nDDepth )
-: aBulSize( -1, -1)
+ParagraphData::ParagraphData()
+: nDepth( -1 )
 , mnNumberingStartValue( -1 )
 , mbParaIsNumberingRestart( sal_False )
+{
+}
+
+ParagraphData::ParagraphData( const ParagraphData& r )
+: nDepth( r.nDepth )
+, mnNumberingStartValue( r.mnNumberingStartValue )
+, mbParaIsNumberingRestart( r.mbParaIsNumberingRestart )
+{
+}
+
+ParagraphData& ParagraphData::operator=( const ParagraphData& r)
+{
+    nDepth = r.nDepth;
+    mnNumberingStartValue = r.mnNumberingStartValue;
+    mbParaIsNumberingRestart = r.mbParaIsNumberingRestart;
+    return *this;
+}
+
+Paragraph::Paragraph( sal_Int16 nDDepth )
+: aBulSize( -1, -1)
 {
     DBG_CTOR( Paragraph, 0 );
 
@@ -52,16 +72,27 @@ Paragraph::Paragraph( sal_Int16 nDDepth )
 }
 
 Paragraph::Paragraph( const Paragraph& rPara )
-: aBulText( rPara.aBulText )
+: ParagraphData( rPara )
+, aBulText( rPara.aBulText )
 , aBulSize( rPara.aBulSize )
-, mnNumberingStartValue( -1 )
-, mbParaIsNumberingRestart( sal_False )
 {
     DBG_CTOR( Paragraph, 0 );
 
     nDepth = rPara.nDepth;
     nFlags = rPara.nFlags;
     bVisible = rPara.bVisible;
+}
+
+Paragraph::Paragraph( const ParagraphData& rData )
+: nFlags( 0 )
+, aBulSize( -1, -1)
+, bVisible( TRUE )
+{
+    DBG_CTOR( Paragraph, 0 );
+
+    nDepth = rData.nDepth;
+    mnNumberingStartValue = rData.mnNumberingStartValue;
+    mbParaIsNumberingRestart = rData.mbParaIsNumberingRestart;
 }
 
 Paragraph::~Paragraph()
@@ -72,12 +103,17 @@ Paragraph::~Paragraph()
 void Paragraph::SetNumberingStartValue( sal_Int16 nNumberingStartValue )
 {
     mnNumberingStartValue = nNumberingStartValue;
+    if( mnNumberingStartValue != -1 )
+        mbParaIsNumberingRestart = true;
 }
 
 void Paragraph::SetParaIsNumberingRestart( sal_Bool bParaIsNumberingRestart )
 {
     mbParaIsNumberingRestart = bParaIsNumberingRestart;
+    if( !mbParaIsNumberingRestart )
+        mnNumberingStartValue = -1;
 }
+
 void ParagraphList::Clear( BOOL bDestroyParagraphs )
 {
     if ( bDestroyParagraphs )

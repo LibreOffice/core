@@ -34,7 +34,7 @@
 #include "nodechangeinfo.hxx"
 
 #include "noderef.hxx"
-#include "treeimpl.hxx"
+#include "tree.hxx"
 
 namespace configmgr
 {
@@ -81,24 +81,24 @@ bool NodeChangeData::isDataChange() const
 }
 //-----------------------------------------------------------------------------
 
-Tree NodeChangeData::getNewElementTree() const
+rtl::Reference< Tree > NodeChangeData::getNewElementTree() const
 {
-    return Tree( element.newValue.get() );
+    return element.newValue.get();
 }
 //-----------------------------------------------------------------------------
 
-Tree NodeChangeData::getOldElementTree() const
+rtl::Reference< Tree > NodeChangeData::getOldElementTree() const
 {
-    return Tree( element.oldValue.get() );
+    return element.oldValue.get();
 }
 //-----------------------------------------------------------------------------
 
 NodeID NodeChangeData::getNewElementNodeID() const
 {
-    ElementTreeHolder newElement = this->element.newValue;
+    rtl::Reference<ElementTree> newElement = this->element.newValue;
     if ( newElement.is() &&  newElement->nodeCount() > 0)
     {
-        return NodeID( newElement.get(), newElement->root_() );
+        return NodeID( newElement.get(), Tree::ROOT );
     }
     else
         return NodeID(0,0);
@@ -107,10 +107,10 @@ NodeID NodeChangeData::getNewElementNodeID() const
 
 NodeID NodeChangeData::getOldElementNodeID() const
 {
-    ElementTreeHolder oldElement = this->element.oldValue;
+    rtl::Reference<ElementTree> oldElement = this->element.oldValue;
     if ( oldElement.is() &&  oldElement->nodeCount() > 0)
     {
-        return NodeID( oldElement.get(), oldElement->root_() );
+        return NodeID( oldElement.get(), Tree::ROOT );
     }
     else
         return NodeID(0,0);
@@ -179,24 +179,24 @@ void NodeChangeLocation::setChangingSubnode( bool bSubnode )
 }
 //-----------------------------------------------------------------------------
 
-Tree NodeChangeLocation::getBaseTree() const
+rtl::Reference< Tree > NodeChangeLocation::getBaseTree() const
 {
     OSL_ENSURE(m_base.isValidNode(), "Invalid base location set in NodeChangeLocation");
-    return Tree( TreeImplHelper::tree(m_base) );
+    return m_base.getTree();
 }
 //-----------------------------------------------------------------------------
 
 NodeRef NodeChangeLocation::getBaseNode() const
 {
     OSL_ENSURE(m_base.isValidNode(), "Invalid base location set in NodeChangeLocation");
-    return TreeImplHelper::makeNode(m_base);
+    return m_base.getNode();
 }
 //-----------------------------------------------------------------------------
 
-TreeRef NodeChangeLocation::getAffectedTreeRef() const
+rtl::Reference< Tree > NodeChangeLocation::getAffectedTreeRef() const
 {
     NodeID aAffected = this->getAffectedNodeID();
-    return TreeRef( TreeImplHelper::tree(aAffected) );
+    return aAffected.getTree();
 }
 //-----------------------------------------------------------------------------
 

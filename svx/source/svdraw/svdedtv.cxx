@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: svdedtv.cxx,v $
- * $Revision: 1.25 $
+ * $Revision: 1.24.148.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -45,6 +45,7 @@
 #include <svx/svdpoev.hxx>  // fuer die PolyPossiblities
 #include "svdstr.hrc"   // Namen aus der Resource
 #include "svdglob.hxx"  // StringCache
+#include <svx/e3dsceneupdater.hxx>
 
 // #i13033#
 #include <clonelist.hxx>
@@ -688,28 +689,54 @@ void SdrEditView::DeleteMarkedList(const SdrMarkList& rMark)
     if (rMark.GetMarkCount()!=0) {
         rMark.ForceSort();
         BegUndo();
-        ULONG nMarkAnz=rMark.GetMarkCount();
-        ULONG nm;
-        for (nm=nMarkAnz; nm>0;) {
-            nm--;
-            SdrMark* pM=rMark.GetMark(nm);
-            AddUndo(GetModel()->GetSdrUndoFactory().CreateUndoDeleteObject(*pM->GetMarkedSdrObj()));
+        const sal_uInt32 nMarkAnz(rMark.GetMarkCount());
+
+        if(nMarkAnz)
+        {
+            sal_uInt32 nm(0);
+            std::vector< E3DModifySceneSnapRectUpdater* > aUpdaters;
+
+            for(nm = nMarkAnz; nm > 0;)
+            {
+                nm--;
+                SdrMark* pM = rMark.GetMark(nm);
+                SdrObject* pObj = pM->GetMarkedSdrObj();
+
+                // extra undo actions for changed connector which now may hold it's layouted path (SJ)
+                std::vector< SdrUndoAction* > vConnectorUndoActions( CreateConnectorUndo( *pObj ) );
+                AddUndoActions( vConnectorUndoActions );
+
+                AddUndo(GetModel()->GetSdrUndoFactory().CreateUndoDeleteObject(*pObj));
+            }
+
+            // Sicherstellen, dass die OrderNums stimmen:
+            rMark.GetMark(0)->GetMarkedSdrObj()->GetOrdNum();
+
+            for(nm = nMarkAnz; nm > 0;)
+            {
+                nm--;
+                SdrMark* pM = rMark.GetMark(nm);
+                SdrObject* pObj = pM->GetMarkedSdrObj();
+                SdrObjList*  pOL = pObj->GetObjList(); //#52680#
+                const sal_uInt32 nOrdNum(pObj->GetOrdNumDirect());
+
+                // set up a scene updater if object is a 3d object
+                if(dynamic_cast< E3dObject* >(pObj))
+                {
+                    aUpdaters.push_back(new E3DModifySceneSnapRectUpdater(pObj));
+                }
+
+                pOL->RemoveObject(nOrdNum);
+            }
+
+            // fire scene updaters
+            while(aUpdaters.size())
+            {
+                delete aUpdaters.back();
+                aUpdaters.pop_back();
+            }
         }
-        // Sicherstellen, dass die OrderNums stimmen:
-        rMark.GetMark(0)->GetMarkedSdrObj()->GetOrdNum();
-        for (nm=nMarkAnz; nm>0;) {
-            nm--;
-            SdrMark* pM=rMark.GetMark(nm);
-            SdrObject*   pObj=pM->GetMarkedSdrObj();
-            //SdrPageView* pPV =pM->GetPageView();
-            SdrObjList*  pOL =pObj->GetObjList(); //#52680#
-            UINT32 nOrdNum=pObj->GetOrdNumDirect();
-#ifdef DBG_UTIL
-            SdrObject* pChkObj=
-#endif
-            pOL->RemoveObject(nOrdNum);
-            DBG_ASSERT(pChkObj==pObj,"DeleteMarkedList(MarkList): pChkObj!=pObj beim RemoveObject()");
-        }
+
         EndUndo();
     }
 }

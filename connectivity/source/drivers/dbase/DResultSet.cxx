@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: DResultSet.cxx,v $
- * $Revision: 1.25 $
+ * $Revision: 1.25.56.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -39,6 +39,7 @@
 #include "dbase/DCode.hxx"
 #include <comphelper/types.hxx>
 #include <connectivity/dbexception.hxx>
+#include "resource/dbase_res.hrc"
 
 using namespace ::comphelper;
 
@@ -135,7 +136,11 @@ sal_Int32 SAL_CALL ODbaseResultSet::compareBookmarks( const Any& lhs, const Any&
 {
     sal_Int32 nFirst(0),nSecond(0),nResult(0);
     if ( !( lhs  >>= nFirst ) || !( rhs >>= nSecond ) )
-        ::dbtools::throwSQLException( "XRowLocate::compareBookmarks: Invalid bookmark value", "HY111", *this );
+    {
+        ::connectivity::SharedResources aResources;
+        const ::rtl::OUString sMessage = aResources.getResourceString(STR_INVALID_BOOKMARK);
+        ::dbtools::throwGenericSQLException(sMessage ,*this);
+    } // if ( !( lhs  >>= nFirst ) || !( rhs >>= nSecond ) )
 
     // have a look at CompareBookmark
     // we can't use the names there because we already have defines with the same name from the parser
@@ -235,7 +240,7 @@ void SAL_CALL ODbaseResultSet::release() throw()
 // -----------------------------------------------------------------------------
 OSQLAnalyzer* ODbaseResultSet::createAnalyzer()
 {
-    return new OFILEAnalyzer();
+    return new OFILEAnalyzer(m_pTable->getConnection());
 }
 // -----------------------------------------------------------------------------
 sal_Int32 ODbaseResultSet::getCurrentFilePos() const

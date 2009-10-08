@@ -31,6 +31,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_configmgr.hxx"
 
+#include "datalock.hxx"
 #include "sequence.hxx"
 #include "flags.hxx"
 
@@ -58,10 +59,9 @@ namespace configmgr
 //-----------------------------------------------------------------------------
         namespace Type = data::Type;
         namespace uno = ::com::sun::star::uno;
-        typedef AnyData::TypeCode TypeCode;
 //-----------------------------------------------------------------------------
 static
-sal_uInt32 implGetElementSize(TypeCode _aElementType)
+sal_uInt32 implGetElementSize(sal_uInt8 _aElementType)
 {
     OSL_ASSERT(_aElementType == (_aElementType & Type::mask_basetype));
     switch (_aElementType)
@@ -77,9 +77,9 @@ sal_uInt32 implGetElementSize(TypeCode _aElementType)
 
     case Type::value_double:    return sizeof(double);
 
-    case Type::value_string:    return sizeof(String);
+    case Type::value_string:    return sizeof(rtl_uString *);
 
-    case Type::value_binary:    return sizeof(Vector);
+    case Type::value_binary:    return sizeof(sal_uInt8 *);
 
     case Type::value_any: // results from value_invalid
     default:
@@ -100,18 +100,18 @@ sal_uInt32 implGetHeaderSize(sal_uInt32 _nElemSize)
 //-----------------------------------------------------------------------------
 static
 inline
-sal_Int32& implGetSize(Sequence _aSeq)
+sal_Int32& implGetSize(sal_uInt8 * _aSeq)
 {
     return * (sal_Int32 *) _aSeq;
 }
 
 //-----------------------------------------------------------------------------
 static
-Sequence implSeqAlloc(sal_Int32 _nElements, sal_uInt32 _nElemSize)
+sal_uInt8 * implSeqAlloc(sal_Int32 _nElements, sal_uInt32 _nElemSize)
 {
     sal_uInt32 nTotalSize = implGetHeaderSize(_nElemSize) + _nElements * _nElemSize;
 
-    Sequence aResult = (Sequence) (new sal_uInt8[nTotalSize]);
+    sal_uInt8 * aResult = (sal_uInt8 *) (new sal_uInt8[nTotalSize]);
 
     implGetSize(aResult) = _nElements;
 
@@ -122,7 +122,7 @@ Sequence implSeqAlloc(sal_Int32 _nElements, sal_uInt32 _nElemSize)
 
 static
 void allocSeqData(sal_uInt8 *_pDestAddr,
-                 TypeCode _aElementType,
+                 sal_uInt8 _aElementType,
                  sal_Int32 _nElements, sal_uInt32 _nElementSize,
                  void const * _pSourceData)
 {
@@ -140,15 +140,15 @@ void allocSeqData(sal_uInt8 *_pDestAddr,
 
     case Type::value_string:
         {
-            OSL_ASSERT(_nElementSize == sizeof(String));
+            OSL_ASSERT(_nElementSize == sizeof(rtl_uString *));
 
             rtl::OUString const * pSource = static_cast<rtl::OUString const *>(_pSourceData);
 
             while (--_nElements >= 0)
             {
-                String aElement = allocString(*pSource);
+                rtl_uString * aElement = acquireString(*pSource);
 
-                String * pDest = reinterpret_cast<String*>(_pDestAddr);
+                rtl_uString * * pDest = reinterpret_cast<rtl_uString **>(_pDestAddr);
                 *pDest = aElement;
 
                 ++pSource;
@@ -159,16 +159,15 @@ void allocSeqData(sal_uInt8 *_pDestAddr,
 
     case Type::value_binary:
         {
-            OSL_ASSERT(_nElementSize == sizeof(Vector));
+            OSL_ASSERT(_nElementSize == sizeof(sal_uInt8 *));
 
-            typedef uno::Sequence< sal_Int8 > BinSequence;
-            BinSequence const * pSource = static_cast<BinSequence const *>(_pSourceData);
+            uno::Sequence< sal_Int8 > const * pSource = static_cast<uno::Sequence< sal_Int8 > const *>(_pSourceData);
 
             while (--_nElements >= 0)
             {
-                Vector aElement = allocBinary(*pSource);
+                sal_uInt8 * aElement = allocBinary(*pSource);
 
-                Vector * pDest = (Vector *) _pDestAddr;
+                sal_uInt8 * * pDest = (sal_uInt8 * *) _pDestAddr;
                 *pDest = aElement;
 
                 ++pSource;
@@ -185,7 +184,7 @@ void allocSeqData(sal_uInt8 *_pDestAddr,
 }
 
 //-----------------------------------------------------------------------------
-Sequence allocSequence(TypeCode _aElementType, ::sal_Sequence const * _pSeqData)
+sal_uInt8 * allocSequence(sal_uInt8 _aElementType, ::sal_Sequence const * _pSeqData)
 {
     OSL_ENSURE(_aElementType == (_aElementType & Type::mask_valuetype), "Invalid type code");
 
@@ -198,7 +197,7 @@ Sequence allocSequence(TypeCode _aElementType, ::sal_Sequence const * _pSeqData)
     sal_uInt32 const nElementSize = implGetElementSize(_aElementType);
     sal_Int32  const nElements = _pSeqData->nElements;
 
-    Sequence aResult = implSeqAlloc(nElements,nElementSize);
+    sal_uInt8 * aResult = implSeqAlloc(nElements,nElementSize);
 
     if (aResult)
         allocSeqData( aResult + implGetHeaderSize(nElementSize),
@@ -209,12 +208,12 @@ Sequence allocSequence(TypeCode _aElementType, ::sal_Sequence const * _pSeqData)
 }
 
 //-----------------------------------------------------------------------------
-Sequence allocBinary(uno::Sequence<sal_Int8> const & _aBinaryValue)
+sal_uInt8 * allocBinary(uno::Sequence<sal_Int8> const & _aBinaryValue)
 {
     sal_uInt32 const nElementSize = 1;
     sal_Int32  const nLength = _aBinaryValue.getLength();
 
-    Sequence aResult = implSeqAlloc(nLength,nElementSize);
+    sal_uInt8 * aResult = implSeqAlloc(nLength,nElementSize);
 
     if (aResult)
     {
@@ -228,7 +227,7 @@ Sequence allocBinary(uno::Sequence<sal_Int8> const & _aBinaryValue)
 //-----------------------------------------------------------------------------
 static
 void freeSeqData(sal_uInt8 *_pDataAddr,
-                 TypeCode _aElementType, sal_Int32 _nElements)
+                 sal_uInt8 _aElementType, sal_Int32 _nElements)
 {
     OSL_ASSERT(_aElementType == (_aElementType & Type::mask_basetype));
 
@@ -244,18 +243,18 @@ void freeSeqData(sal_uInt8 *_pDataAddr,
 
     case Type::value_string:
         {
-            String * pElements = reinterpret_cast<String*>( _pDataAddr );
+            rtl_uString * * pElements = reinterpret_cast<rtl_uString **>( _pDataAddr );
 
             for (sal_Int32 i = 0; i < _nElements; ++i)
             {
-                freeString(pElements[i]);
+                rtl_uString_release(pElements[i]);
             }
         }
         break;
 
     case Type::value_binary:
         {
-            Vector * pElements = reinterpret_cast<Vector*>( _pDataAddr );
+            sal_uInt8 * * pElements = reinterpret_cast<sal_uInt8 **>( _pDataAddr );
 
             for (sal_Int32 i = 0; i < _nElements; ++i)
             {
@@ -272,7 +271,7 @@ void freeSeqData(sal_uInt8 *_pDataAddr,
 }
 
 //-----------------------------------------------------------------------------
-void freeSequence(TypeCode _aElementType, Sequence _aSeq)
+void freeSequence(sal_uInt8 _aElementType, sal_uInt8 * _aSeq)
 {
     OSL_ENSURE(_aElementType == (_aElementType & Type::mask_valuetype), "Invalid type code");
 
@@ -290,7 +289,7 @@ void freeSequence(TypeCode _aElementType, Sequence _aSeq)
 }
 
 //-----------------------------------------------------------------------------
-void freeBinary(Sequence _aSeq)
+void freeBinary(sal_uInt8 * _aSeq)
 {
     OSL_ENSURE(_aSeq, "ERROR: Trying to free a NULL sequence");
     if (_aSeq == 0) return;
@@ -301,9 +300,9 @@ void freeBinary(Sequence _aSeq)
 //-----------------------------------------------------------------------------
 
 static inline
-sal_Sequence * implCreateSequence(void const * _pElements, TypeCode _aElementType, sal_Int32 _nElements)
+sal_Sequence * implCreateSequence(void const * _pElements, sal_uInt8 _aElementType, sal_Int32 _nElements)
 {
-    uno::Type aUnoType = getUnoType( TypeCode( _aElementType | Type::flag_sequence ));
+    uno::Type aUnoType = getUnoType( sal_uInt8( _aElementType | Type::flag_sequence ));
 
     sal_Sequence * pResult = NULL;
     ::uno_type_sequence_construct( &pResult, aUnoType.getTypeLibType(),
@@ -316,7 +315,7 @@ sal_Sequence * implCreateSequence(void const * _pElements, TypeCode _aElementTyp
 
 //-----------------------------------------------------------------------------
 static
-sal_Sequence * readSeqData(sal_uInt8 *_pDataAddr, TypeCode _aElementType, sal_Int32 _nElements)
+sal_Sequence * readSeqData(sal_uInt8 *_pDataAddr, sal_uInt8 _aElementType, sal_Int32 _nElements)
 {
     OSL_ASSERT(_aElementType == (_aElementType & Type::mask_basetype));
 
@@ -335,11 +334,11 @@ sal_Sequence * readSeqData(sal_uInt8 *_pDataAddr, TypeCode _aElementType, sal_In
             uno::Sequence<rtl::OUString> aResult(_nElements);
             rtl::OUString * pResult = aResult.getArray();
 
-            String const * pElements = static_cast<String const *>( pElementData );
+            rtl_uString * const * pElements = static_cast<rtl_uString * const *>( pElementData );
 
             for (sal_Int32 i = 0; i < _nElements; ++i)
             {
-                pResult[i] = readString(pElements[i]);
+                pResult[i] = rtl::OUString(pElements[i]);
             }
 
             sal_Sequence * pRet = aResult.get();
@@ -349,12 +348,10 @@ sal_Sequence * readSeqData(sal_uInt8 *_pDataAddr, TypeCode _aElementType, sal_In
 
     case Type::value_binary:
         {
-            typedef uno::Sequence< sal_Int8 > BinSequence;
+            uno::Sequence< uno::Sequence< sal_Int8 > > aResult(_nElements);
+            uno::Sequence< sal_Int8 > * pResult = aResult.getArray();
 
-            uno::Sequence<BinSequence> aResult(_nElements);
-            BinSequence * pResult = aResult.getArray();
-
-            Vector const * pElements = static_cast<Vector const *>( pElementData );
+            sal_uInt8 * const * pElements = static_cast<sal_uInt8 * const *>( pElementData );
 
             for (sal_Int32 i = 0; i < _nElements; ++i)
             {
@@ -375,7 +372,7 @@ sal_Sequence * readSeqData(sal_uInt8 *_pDataAddr, TypeCode _aElementType, sal_In
 
 //-----------------------------------------------------------------------------
 
-::sal_Sequence * readSequence(TypeCode _aElementType, Sequence _aSeq)
+::sal_Sequence * readSequence(sal_uInt8 _aElementType, sal_uInt8 * _aSeq)
 {
     OSL_ENSURE(_aElementType == (_aElementType & Type::mask_valuetype), "Invalid type code");
 
@@ -391,7 +388,7 @@ sal_Sequence * readSeqData(sal_uInt8 *_pDataAddr, TypeCode _aElementType, sal_In
 }
 
 //-----------------------------------------------------------------------------
-uno::Any readAnySequence(TypeCode _aElementType, Sequence _aSeq)
+uno::Any readAnySequence(sal_uInt8 _aElementType, sal_uInt8 * _aSeq)
 {
     sal_Sequence * pRawSequence = readSequence(_aElementType, _aSeq);
 
@@ -455,13 +452,13 @@ uno::Any readAnySequence(TypeCode _aElementType, Sequence _aSeq)
             break;
         }
 
-    OSL_ASSERT(!aResult.hasValue() || aResult.getValueType() == getUnoType(TypeCode(_aElementType | Type::flag_sequence)));
+    OSL_ASSERT(!aResult.hasValue() || aResult.getValueType() == getUnoType(sal_uInt8(_aElementType | Type::flag_sequence)));
 
     return aResult;
 }
 
 //-----------------------------------------------------------------------------
-uno::Sequence<sal_Int8> readBinary(Sequence _aSeq)
+uno::Sequence<sal_Int8> readBinary(sal_uInt8 * _aSeq)
 {
     OSL_ENSURE(_aSeq, "ERROR: Trying to read from a NULL sequence");
     if (_aSeq == 0) return uno::Sequence<sal_Int8>();
@@ -492,31 +489,5 @@ namespace configmgr
     {
         for (oslInterlockedCount i = 0; i < mnCount; i++)
             UnoApiLock::acquire();
-    }
-
-#ifndef SIMPLE_REFERENCE_FAST
-    void SimpleReferenceObject::acquire() SAL_THROW(())
-    {
-        if (!UnoApiLock::isHeld())
-        {
-            fprintf (stderr, "Locking disaster\n");
-            fscanf (stdin, "");
-        }
-        m_nCount++;
-    }
-    void SimpleReferenceObject::release() SAL_THROW(())
-    {
-        if (!UnoApiLock::isHeld())
-        {
-            fprintf (stderr, "Locking disaster\n");
-            fscanf (stdin, "");
-        }
-        if (--m_nCount == 0)
-            delete this;
-    }
-#endif
-    SimpleReferenceObject::~SimpleReferenceObject() SAL_THROW(())
-    {
-        OSL_ASSERT(m_nCount == 0);
     }
 } // namespace configmgr

@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: BDriver.cxx,v $
- * $Revision: 1.24 $
+ * $Revision: 1.24.56.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -44,6 +44,9 @@
 #include <unotools/ucbhelper.hxx>
 #include <unotools/ucbstreamhelper.hxx>
 #include <unotools/localfilehelper.hxx>
+#include "resource/adabas_res.hrc"
+#include "resource/sharedresources.hxx"
+
 
 #include <memory>
 #include <sys/stat.h>
@@ -437,7 +440,9 @@ Sequence< DriverPropertyInfo > SAL_CALL ODriver::getPropertyInfo( const ::rtl::O
         return Sequence< DriverPropertyInfo >(&aDriverInfo[0],aDriverInfo.size());
     }
 
-    ::dbtools::throwGenericSQLException(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Invalid URL!")) ,*this);
+    SharedResources aResources;
+    const ::rtl::OUString sMessage = aResources.getResourceString(STR_URI_SYNTAX_ERROR);
+    ::dbtools::throwGenericSQLException(sMessage ,*this);
     return Sequence< DriverPropertyInfo >();
 }
 // --------------------------------------------------------------------------------
@@ -472,7 +477,14 @@ void SAL_CALL ODriver::createCatalog( const Sequence< PropertyValue >& info ) th
 
         createNeededDirs(aDBInfo.sDBName);
         if(CreateFiles(aDBInfo))
-            throw SQLException(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Could not create the database files")),*this,::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("HY0000")),1000,Any());
+        {
+            ::connectivity::SharedResources aResources;
+            const ::rtl::OUString sError( aResources.getResourceStringWithSubstitution(
+                    STR_NO_DISK_SPACE,
+                    "$filename$",aDBInfo.sDBName
+                 ) );
+            ::dbtools::throwGenericSQLException(sError,*this);
+        } // if(CreateFiles(aDBInfo))
 
         createDb(aDBInfo);
     }
@@ -557,7 +569,11 @@ Reference< XTablesSupplier > SAL_CALL ODriver::getDataDefinitionByConnection( co
 Reference< XTablesSupplier > SAL_CALL ODriver::getDataDefinitionByURL( const ::rtl::OUString& url, const Sequence< PropertyValue >& info ) throw(::com::sun::star::sdbc::SQLException, RuntimeException)
 {
     if ( ! acceptsURL(url) )
-        ::dbtools::throwGenericSQLException(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Invalid URL!")) ,*this);
+    {
+        SharedResources aResources;
+        const ::rtl::OUString sMessage = aResources.getResourceString(STR_URI_SYNTAX_ERROR);
+        ::dbtools::throwGenericSQLException(sMessage ,*this);
+    } // if ( ! acceptsURL(url) )
 
     return getDataDefinitionByConnection(connect(url,info));
 }
@@ -1059,10 +1075,12 @@ OSL_TRACE("CreateFile %d",_nSize);
         ::std::auto_ptr<SvStream> pFileStream( UcbStreamHelper::CreateStream(_FileName,STREAM_WRITE));
         if( !pFileStream.get())
         {
-            ::rtl::OUString sMsg = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Could not create the database file: '"));
-            sMsg += _FileName;
-            sMsg += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("'. Not enough space available!")) ;
-            throw SQLException(sMsg,*this,::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("HY0000")),1000,Any());
+            ::connectivity::SharedResources aResources;
+            const ::rtl::OUString sError( aResources.getResourceStringWithSubstitution(
+                    STR_NO_DISK_SPACE,
+                    "$filename$",_FileName
+                 ) );
+            ::dbtools::throwGenericSQLException(sError,*this);
         }
         (*pFileStream).SetFiller('\0');
         sal_Int32 nNewSize = 0;
@@ -1082,10 +1100,12 @@ OSL_TRACE("CreateFile %d",_nSize);
     }
     if(!bOK)
     {
-        ::rtl::OUString sMsg = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Could not create the database file: '"));
-        sMsg += _FileName;
-        sMsg += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("'. Not enough space available!")) ;
-        throw SQLException(sMsg,*this,::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("HY0000")),1000,Any());
+        ::connectivity::SharedResources aResources;
+        const ::rtl::OUString sError( aResources.getResourceStringWithSubstitution(
+                STR_NO_DISK_SPACE,
+                "$filename$",_FileName
+             ) );
+        ::dbtools::throwGenericSQLException(sError,*this);
     }
 
     return bOK;
@@ -1113,13 +1133,13 @@ int ODriver::X_START(const ::rtl::OUString& sDBName)
 
     if(eError == OProcess::E_NotFound)
     {
-        ::rtl::OUString sMsg = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Program "));
-        sMsg += sCommand;
-        sMsg += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" not found!"));
-        SQLException aNext(sMsg,*this,::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("01000")),1000,Any());
-        ::rtl::OUString sMsg2(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Could not start database: ")));
-        sMsg2 += sDBName;
-        throw SQLException(sMsg2,*this,::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("01000")),1000,makeAny(aNext));
+        ::connectivity::SharedResources aResources;
+        const ::rtl::OUString sError( aResources.getResourceStringWithSubstitution(
+                STR_COMMAND_NOT_FOUND,
+                "$databasename$",sDBName,
+                "$progname$",sCommand
+             ) );
+        ::dbtools::throwGenericSQLException(sError,*this);
     }
     OSL_ASSERT(eError == OProcess::E_None);
 
@@ -1758,7 +1778,9 @@ void ODriver::convertOldVersion(const ::rtl::OUString& sDBName,const TDatabaseSt
         if (    !_rDbInfo.sControlUser.getLength()
             ||  !_rDbInfo.sControlPassword.getLength())
         {
-            throw SQLException(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("The current database need to be converted. Please insert control user  and password.")),*this,::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("S1000")),1000,Any());
+            ::connectivity::SharedResources aResources;
+            const ::rtl::OUString sError( aResources.getResourceString(STR_DATABASE_NEEDS_CONVERTING) );
+            ::dbtools::throwGenericSQLException(sError,*this);
         }
         String sCommandFile = m_sDbWorkURL;
         sCommandFile += String::CreateFromAscii("/xparam.prt");

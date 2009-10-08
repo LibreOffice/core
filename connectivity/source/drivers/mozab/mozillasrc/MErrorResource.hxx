@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: MErrorResource.hxx,v $
- * $Revision: 1.3 $
+ * $Revision: 1.3.56.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -40,15 +40,15 @@ namespace connectivity
         class ErrorResourceAccess
         {
         private:
-            mutable sal_Int32               m_nErrorResourceId;
+            mutable sal_uInt16               m_nErrorResourceId;
 
         protected:
             ErrorResourceAccess() : m_nErrorResourceId(0) { }
 
-            inline void setError( sal_Int32 _nErrorResourceId ) const { const_cast< ErrorResourceAccess* >( this )->m_nErrorResourceId = _nErrorResourceId; }
+            inline void setError( sal_uInt16 _nErrorResourceId ) const { const_cast< ErrorResourceAccess* >( this )->m_nErrorResourceId = _nErrorResourceId; }
             inline void resetError( ) const { const_cast< ErrorResourceAccess* >( this )->m_nErrorResourceId = 0; }
         public:
-            inline sal_Int32    getErrorResourceId() const
+            inline sal_uInt16    getErrorResourceId() const
                                 { return m_nErrorResourceId; }
         };
     }

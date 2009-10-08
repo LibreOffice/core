@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: txtparai.cxx,v $
- * $Revision: 1.69 $
+ * $Revision: 1.68.2.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -64,6 +64,7 @@
 #include "XMLTextFrameHyperlinkContext.hxx"
 #include <xmloff/XMLEventsImportContext.hxx>
 #include "XMLChangeImportContext.hxx"
+#include "txtlists.hxx"
 
 
 // OD 2004-04-21 #i26791#
@@ -658,7 +659,8 @@ SvXMLImportContext *XMLImpRubyContext_Impl::CreateChildContext(
                                                        xAttrList,
                                                        pHint );
         else
-            pContext = 0; //  TODO What value should this be?
+            pContext = new SvXMLImportContext(
+                GetImport(), nPrefix, rLocalName );
     }
     else
         pContext = SvXMLImportContext::CreateChildContext( nPrefix, rLocalName,
@@ -2068,28 +2070,121 @@ void XMLParaContext::Characters( const OUString& rChars )
 TYPEINIT1( XMLNumberedParaContext, SvXMLImportContext );
 
 XMLNumberedParaContext::XMLNumberedParaContext(
-        SvXMLImport& rImport,
-        sal_uInt16 nPrfx,
-        const OUString& rLName ) :
-     SvXMLImportContext( rImport, nPrfx, rLName )
- {
- }
+        SvXMLImport& i_rImport,
+        sal_uInt16 i_nPrefix,
+        const OUString& i_rLocalName,
+        const Reference< xml::sax::XAttributeList > & i_xAttrList ) :
+    SvXMLImportContext( i_rImport, i_nPrefix, i_rLocalName ),
+    m_Level(0),
+    m_StartValue(-1),
+    m_ListId(),
+    m_xNumRules()
+{
+    ::rtl::OUString StyleName;
+    bool ContinuteNumbering(false);
 
- XMLNumberedParaContext::~XMLNumberedParaContext()
- {
- }
+    const SvXMLTokenMap& rTokenMap(
+        i_rImport.GetTextImport()->GetTextNumberedParagraphAttrTokenMap() );
 
- SvXMLImportContext *XMLNumberedParaContext::CreateChildContext(
-         sal_uInt16 nPrefix, const OUString& rLocalName,
-         const Reference< xml::sax::XAttributeList > & xAttrList )
- {
-    //FIXME #i52127#: currently <text:numbered-paragraph> is not implemented!
-     SvXMLImportContext *pContext = GetImport().GetTextImport()->CreateTextChildContext(
-             GetImport(), nPrefix, rLocalName, xAttrList, XML_TEXT_TYPE_BODY );
-     return pContext;
- }
+    const sal_Int16 nAttrCount( i_xAttrList.is() ?
+        i_xAttrList->getLength() : 0 );
+    for ( sal_Int16 i=0; i < nAttrCount; i++ )
+    {
+        const ::rtl::OUString& rAttrName( i_xAttrList->getNameByIndex( i )  );
+        const ::rtl::OUString& rValue   ( i_xAttrList->getValueByIndex( i ) );
 
- void XMLNumberedParaContext::Characters( const OUString& )
- {
- }
+        ::rtl::OUString aLocalName;
+        const sal_uInt16 nPrefix(
+            GetImport().GetNamespaceMap().GetKeyByAttrName(
+                rAttrName, &aLocalName ) );
+        switch( rTokenMap.Get( nPrefix, aLocalName ) )
+        {
+            case XML_TOK_TEXT_NUMBERED_PARAGRAPH_XMLID:
+                m_XmlId = rValue;
+//FIXME: there is no UNO API for lists
+                break;
+            case XML_TOK_TEXT_NUMBERED_PARAGRAPH_LIST_ID:
+                m_ListId = rValue;
+                break;
+            case XML_TOK_TEXT_NUMBERED_PARAGRAPH_LEVEL:
+                {
+                    sal_Int32 nTmp = rValue.toInt32();
+                    if ( nTmp >= 1 && nTmp <= SHRT_MAX ) {
+                        m_Level = static_cast<sal_uInt16>(nTmp) - 1;
+                    }
+                }
+                break;
+            case XML_TOK_TEXT_NUMBERED_PARAGRAPH_STYLE_NAME:
+                StyleName = rValue;
+                break;
+            case XML_TOK_TEXT_NUMBERED_PARAGRAPH_CONTINUE_NUMBERING:
+                ContinuteNumbering = IsXMLToken(rValue, XML_TRUE);
+// ??? what in Fred's name is this supposed to do?
+                break;
+            case XML_TOK_TEXT_NUMBERED_PARAGRAPH_START_VALUE:
+                {
+                    sal_Int32 nTmp = rValue.toInt32();
+                    if ( nTmp >= 0 && nTmp <= SHRT_MAX ) {
+                        m_StartValue = static_cast<sal_Int16>(nTmp);
+                    }
+                }
+                break;
+        }
+    }
 
+    XMLTextListsHelper& rTextListsHelper(
+        i_rImport.GetTextImport()->GetTextListHelper() );
+    if (!m_ListId.getLength()) {
+        OSL_ENSURE( ! i_rImport.GetODFVersion().equalsAsciiL(
+                        RTL_CONSTASCII_STRINGPARAM("1.2") ),
+            "invalid numbered-paragraph: no list-id (1.2)");
+        m_ListId = rTextListsHelper.GetNumberedParagraphListId(m_Level,
+            StyleName);
+        OSL_ENSURE(m_ListId.getLength(), "numbered-paragraph: no ListId");
+        if (!m_ListId.getLength()) {
+            return;
+        }
+    }
+    m_xNumRules = rTextListsHelper.EnsureNumberedParagraph( i_rImport,
+        m_ListId, m_Level, StyleName);
+
+    OSL_ENSURE(m_xNumRules.is(), "numbered-paragraph: no NumRules");
+
+    i_rImport.GetTextImport()->GetTextListHelper().PushListContext( this );
+}
+
+XMLNumberedParaContext::~XMLNumberedParaContext()
+{
+}
+
+void XMLNumberedParaContext::EndElement()
+{
+    if (m_ListId.getLength()) {
+        GetImport().GetTextImport()->PopListContext();
+    }
+}
+
+SvXMLImportContext *XMLNumberedParaContext::CreateChildContext(
+    sal_uInt16 i_nPrefix, const OUString& i_rLocalName,
+    const Reference< xml::sax::XAttributeList > & i_xAttrList )
+{
+    SvXMLImportContext *pContext( 0 );
+
+    if ( XML_NAMESPACE_TEXT == i_nPrefix )
+    {
+        bool bIsHeader( IsXMLToken( i_rLocalName, XML_H ) );
+        if ( bIsHeader || IsXMLToken( i_rLocalName, XML_P ) )
+        {
+            pContext = new XMLParaContext( GetImport(),
+                i_nPrefix, i_rLocalName, i_xAttrList, bIsHeader );
+// ignore text:number       } else if (IsXMLToken( i_rLocalName, XML_NUMBER )) {
+        }
+    }
+
+    if (!pContext) {
+        pContext = SvXMLImportContext::CreateChildContext(
+            i_nPrefix, i_rLocalName, i_xAttrList );
+    }
+
+    return pContext;
+}

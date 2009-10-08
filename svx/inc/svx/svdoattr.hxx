@@ -70,7 +70,7 @@ protected:
     FASTBOOL ImpGetShadowDist(sal_Int32& nXDist, sal_Int32& nYDist) const;
 
     // Zuhoeren, ob sich ein StyleSheet aendert
-    virtual void SFX_NOTIFY(SfxBroadcaster& rBC, const TypeId& rBCType, const SfxHint& rHint, const TypeId& rHintType);
+    virtual void Notify(SfxBroadcaster& rBC, const SfxHint& rHint);
 
     SdrAttrObj();
     virtual ~SdrAttrObj();

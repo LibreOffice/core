@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: svdocirc.cxx,v $
- * $Revision: 1.37 $
+ * $Revision: 1.37.18.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -497,7 +497,7 @@ void SdrCircObj::operator=(const SdrObject& rObj)
     aPnt2 = ((SdrCircObj&)rObj).aPnt2;
 }
 
-basegfx::B2DPolyPolygon SdrCircObj::TakeXorPoly(sal_Bool /*bDetail*/) const
+basegfx::B2DPolyPolygon SdrCircObj::TakeXorPoly() const
 {
     const basegfx::B2DPolygon aCircPolygon(ImpCalcXPolyCirc(meCircleKind, aRect, nStartWink, nEndWink));
     return basegfx::B2DPolyPolygon(aCircPolygon);
@@ -1202,10 +1202,10 @@ Point SdrCircObj::GetSnapPoint(sal_uInt32 i) const
     }
 }
 
-void __EXPORT SdrCircObj::SFX_NOTIFY(SfxBroadcaster& rBC, const TypeId& rBCType, const SfxHint& rHint, const TypeId& rHintType)
+void __EXPORT SdrCircObj::Notify(SfxBroadcaster& rBC, const SfxHint& rHint)
 {
     SetXPolyDirty();
-    SdrRectObj::SFX_NOTIFY(rBC,rBCType,rHint,rHintType);
+    SdrRectObj::Notify(rBC,rHint);
     ImpSetAttrToCircInfo();
 }
 

@@ -8,7 +8,7 @@
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.34 $
+# $Revision: 1.34.82.1 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -45,8 +45,7 @@ CDEFS+=-DCOMPMOD_NAMESPACE=framework
 
 # --- Generate -----------------------------------------------------
 
-SLOFILES=			$(SLO)$/timerhelper.obj	 						\
-                    $(SLO)$/ocomponentaccess.obj					\
+SLOFILES= 			$(SLO)$/ocomponentaccess.obj					\
                     $(SLO)$/ocomponentenumeration.obj				\
                     $(SLO)$/oframes.obj								\
                     $(SLO)$/statusindicatorfactory.obj				\

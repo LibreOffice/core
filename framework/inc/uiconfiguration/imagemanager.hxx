@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: imagemanager.hxx,v $
- * $Revision: 1.7 $
+ * $Revision: 1.7.82.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -125,7 +125,6 @@ namespace framework
 
             // Non-UNO methods
             void setStorage( const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& Storage ) throw (::com::sun::star::uno::RuntimeException);
-            sal_Bool hasStorage() throw (::com::sun::star::uno::RuntimeException);
 
         private:
             typedef std::hash_map< rtl::OUString,

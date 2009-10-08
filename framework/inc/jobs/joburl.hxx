@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: joburl.hxx,v $
- * $Revision: 1.4 $
+ * $Revision: 1.4.82.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -137,9 +137,6 @@ class JobURL : private ThreadHelpBase
         sal_Bool getEvent      (       ::rtl::OUString& sEvent       ) const;
         sal_Bool getAlias      (       ::rtl::OUString& sAlias       ) const;
         sal_Bool getService    (       ::rtl::OUString& sService     ) const;
-        sal_Bool getEventArgs  (       ::rtl::OUString& sEventArgs   ) const;
-        sal_Bool getAliasArgs  (       ::rtl::OUString& sAliasArgs   ) const;
-        sal_Bool getServiceArgs(       ::rtl::OUString& sServiceArgs ) const;
 
     //___________________________________
     // private helper
@@ -170,6 +167,10 @@ class JobURL : private ThreadHelpBase
                                       const sal_Char*  pExpectedAliasArgs   ,
                                       const sal_Char*  pExpectedServiceArgs );
         ::rtl::OUString impldbg_toString() const;
+
+        sal_Bool getServiceArgs(       ::rtl::OUString& sServiceArgs ) const;
+        sal_Bool getEventArgs  (       ::rtl::OUString& sEventArgs   ) const;
+        sal_Bool getAliasArgs  (       ::rtl::OUString& sAliasArgs   ) const;
 
     #endif // ENABLE_COMPONENT_SELF_CHECK
 };

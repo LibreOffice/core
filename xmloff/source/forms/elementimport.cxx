@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: elementimport.cxx,v $
- * $Revision: 1.60 $
+ * $Revision: 1.60.56.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -543,7 +543,10 @@ namespace xmloff
     //---------------------------------------------------------------------
     void OElementImport::simulateDefaultedAttribute(const sal_Char* _pAttributeName, const ::rtl::OUString& _rPropertyName, const sal_Char* _pAttributeDefault)
     {
-        Reference< XPropertySetInfo > xPropsInfo = m_xElement->getPropertySetInfo();
+        Reference< XPropertySetInfo > xPropsInfo;
+        if ( m_xElement.is()) {
+            xPropsInfo=m_xElement->getPropertySetInfo();
+        }
         OSL_ENSURE( xPropsInfo.is(), "OPropertyImport::simulateDefaultedAttribute: the component should be more gossipy about it's properties!" );
 
         if ( !xPropsInfo.is() || xPropsInfo->hasPropertyByName( _rPropertyName ) )

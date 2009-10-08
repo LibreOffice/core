@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: unoshape.cxx,v $
- * $Revision: 1.178 $
+ * $Revision: 1.178.104.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -44,6 +44,7 @@
 #include <vos/mutex.hxx>
 #include <svx/unotext.hxx>
 #include <svx/svdobj.hxx>
+#include <svx/svdoole2.hxx>
 #include <osl/mutex.hxx>
 #include <comphelper/extract.hxx>
 
@@ -2291,8 +2292,8 @@ bool SvxShape::setPropertyValueImpl( const SfxItemPropertyMap* pProperty, const 
             basegfx::B2DHomMatrix aNewHomogenMatrix;
             mpObj->TRGetBaseGeometry(aNewHomogenMatrix, aNewPolyPolygon);
 
-            aVclPoint.X() += FRound(aNewHomogenMatrix.get(0, 2));
-            aVclPoint.Y() += FRound(aNewHomogenMatrix.get(1, 2));
+            aVclPoint.X() += basegfx::fround(aNewHomogenMatrix.get(0, 2));
+            aVclPoint.Y() += basegfx::fround(aNewHomogenMatrix.get(1, 2));
 
             // #88657# metric of pool maybe twips (writer)
             ForceMetricToItemPoolMetric(aVclPoint);
@@ -2715,8 +2716,8 @@ bool SvxShape::getPropertyValueImpl( const SfxItemPropertyMap* pProperty, ::com:
         basegfx::B2DHomMatrix aNewHomogenMatrix;
         mpObj->TRGetBaseGeometry(aNewHomogenMatrix, aNewPolyPolygon);
 
-        aVclPoint.X() -= FRound(aNewHomogenMatrix.get(0, 2));
-        aVclPoint.Y() -= FRound(aNewHomogenMatrix.get(1, 2));
+        aVclPoint.X() -= basegfx::fround(aNewHomogenMatrix.get(0, 2));
+        aVclPoint.Y() -= basegfx::fround(aNewHomogenMatrix.get(1, 2));
 
         awt::Point aPnt( aVclPoint.X(), aVclPoint.Y() );
         rValue <<= aPnt;
@@ -3025,6 +3026,53 @@ bool SvxShape::getPropertyValueImpl( const SfxItemPropertyMap* pProperty, ::com:
         rValue <<= OUString( aTmp );
         break;
     }
+    case OWN_ATTR_METAFILE:
+    {
+        SdrOle2Obj* pObj = dynamic_cast<SdrOle2Obj*>(mpObj.get());
+        if( pObj )
+        {
+            Graphic* pGraphic = pObj->GetGraphic();
+            if( pGraphic )
+            {
+                BOOL bIsWMF = FALSE;
+                if ( pGraphic->IsLink() )
+                {
+                    GfxLink aLnk = pGraphic->GetLink();
+                    if ( aLnk.GetType() == GFX_LINK_TYPE_NATIVE_WMF )
+                    {
+                        bIsWMF = TRUE;
+                        uno::Sequence<sal_Int8> aSeq((sal_Int8*)aLnk.GetData(), (sal_Int32) aLnk.GetDataSize());
+                        rValue <<= aSeq;
+                    }
+                }
+                if ( !bIsWMF )
+                {
+                    GDIMetaFile aMtf;
+                    if ( pGraphic->GetType() != GRAPHIC_BITMAP )
+                        aMtf = pObj->GetGraphic()->GetGDIMetaFile();
+                    else
+                    {
+                        VirtualDevice aVirDev;
+                        aMtf.Record( &aVirDev );
+                        pGraphic->Draw( &aVirDev, Point(),  pGraphic->GetPrefSize() );
+                        aMtf.Stop();
+                        aMtf.SetPrefSize( pGraphic->GetPrefSize() );
+                        aMtf.SetPrefMapMode( pGraphic->GetPrefMapMode() );
+                    }
+                    SvMemoryStream aDestStrm( 65535, 65535 );
+                    ConvertGDIMetaFileToWMF( aMtf, aDestStrm, NULL, sal_False );
+                    uno::Sequence<sal_Int8> aSeq((sal_Int8*)aDestStrm.GetData(), aDestStrm.GetSize());
+                    rValue <<= aSeq;
+                }
+            }
+        }
+        else
+        {
+            rValue = GetBitmap( sal_True );
+        }
+        break;
+    }
+
 
     default:
         return false;

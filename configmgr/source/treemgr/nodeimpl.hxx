@@ -35,24 +35,17 @@
 #include "node.hxx"
 #include "utility.hxx"
 #include <rtl/ref.hxx>
-
-#include "nodeaccess.hxx"
+#include <salhelper/simplereferenceobject.hxx>
 
 namespace configmgr
 {
 //-----------------------------------------------------------------------------
-    namespace data { class NodeAccess; }
     namespace view { class ViewStrategy; }
 //-----------------------------------------------------------------------------
     namespace configuration
     {
     //-----------------------------------------------------------------------------
-    typedef unsigned int NodeOffset;
-
-    class TreeImpl;
-
-    class Name;
-
+    class Tree;
     class NodeChange;
     class NodeChanges;
     class NodeChangesInformation;
@@ -65,22 +58,18 @@ namespace configmgr
     struct INodeHandler;
 
     // Almost an interface, but derives from concrete OReference
-    class NodeImpl : public configmgr::SimpleReferenceObject
+    class NodeImpl : public salhelper::SimpleReferenceObject
     {
         friend class view::ViewStrategy;
-            data::NodeAddress m_pNodeRef;
+            sharable::Node * m_pNodeRef;
     public:
-            NodeImpl(data::NodeAddress _pNodeRef)
+            NodeImpl(sharable::Node * _pNodeRef)
         : m_pNodeRef(_pNodeRef) {}
 
     public:
-        /// provide access to the address of the underlying node
-        data::NodeAddress getOriginalNodeAddress() const
-            { return m_pNodeRef; }
-
         /// provide access to the data of the underlying node
-        data::NodeAccess getOriginalNodeAccess() const
-        { return data::NodeAccess( m_pNodeRef ); }
+        sharable::Node * getOriginalNodeAccess() const
+        { return m_pNodeRef; }
     };
 
 //-----------------------------------------------------------------------------

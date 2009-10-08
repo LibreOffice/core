@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: svdoattr.cxx,v $
- * $Revision: 1.53 $
+ * $Revision: 1.53.18.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -115,8 +115,9 @@ const Rectangle& SdrAttrObj::GetSnapRect() const
     if(bSnapRectDirty)
     {
         ((SdrAttrObj*)this)->RecalcSnapRect();
-        ((SdrAttrObj*)this)->bSnapRectDirty = FALSE;
+        ((SdrAttrObj*)this)->bSnapRectDirty = false;
     }
+
     return maSnapRect;
 }
 
@@ -140,8 +141,7 @@ void SdrAttrObj::SetModel(SdrModel* pNewModel)
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 // syntactical sugar for ItemSet accesses
 
-void __EXPORT SdrAttrObj::SFX_NOTIFY(SfxBroadcaster& /*rBC*/, const TypeId& rBCType,
-    const SfxHint& rHint, const TypeId& rHintType)
+void __EXPORT SdrAttrObj::Notify(SfxBroadcaster& /*rBC*/, const SfxHint& rHint)
 {
     SfxSimpleHint *pSimple = PTR_CAST(SfxSimpleHint, &rHint);
     BOOL bDataChg(pSimple && SFX_HINT_DATACHANGED == pSimple->GetId());

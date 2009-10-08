@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: presethandler.hxx,v $
- * $Revision: 1.9 $
+ * $Revision: 1.9.82.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -356,46 +356,6 @@ class PresetHandler : private ThreadHelpBase // attention! Must be the first bas
                                const css::uno::Reference< css::embed::XStorage >& xDocumentRoot ,
                                const ::comphelper::Locale&                        aLocale       = ::comphelper::Locale(::comphelper::Locale::X_NOTRANSLATE()));
 
-        //---------------------------------------
-        /** @short  return a list of all presets, which are available
-                    in the share layer of the current configuration set.
-
-            @descr  Note: The returned strings are ALIAS names of the presets.
-                    Because there is no special configuration, which map
-                    ALIAS to real PRESET names, we strip the extension
-                    of every file. Further all PRESET and ALIAS names
-                    are used case insensitive!
-
-            @return A list of all current available presets.
-         */
-        css::uno::Sequence< ::rtl::OUString > getAllPresetNames() const;
-
-        //---------------------------------------
-        /** @short  return a list of all targets, which are available
-                    in the user layer of the current configuration set.
-
-            @descr  Note: The returned strings are ALIAS names of the targets.
-                    Because there is no special configuration, which map
-                    ALIAS to real TARGET names, we strip the extension
-                    of every file. Further all TARGET and ALIAS names
-                    are used case insensitive!
-
-            @return A list of all current available targets.
-         */
-        css::uno::Sequence< ::rtl::OUString > getAllTargetNames() const;
-
-        //---------------------------------------
-        /** @short  can be used to know, if a required item exists.
-
-            @descr  Of course this operation can work only, if connectToResource()
-                    was called before.
-
-            @param  sPreset/sTarget
-                    specify the searched item. (ALIAS name!)
-
-            @return TRUE if the requested item exists.
-         */
-        sal_Bool existsPreset(const ::rtl::OUString& sPreset) const;
         sal_Bool existsTarget(const ::rtl::OUString& sTarget) const;
 
         //---------------------------------------
@@ -461,10 +421,6 @@ class PresetHandler : private ThreadHelpBase // attention! Must be the first bas
          */
         css::uno::Reference< css::io::XStream > openTarget(const ::rtl::OUString& sTarget         ,
                                                                  sal_Bool         bCreateIfMissing);
-
-        //---------------------------------------
-        /** TODO */
-        void removeTarget(const ::rtl::OUString& sTarget);
 
         //---------------------------------------
         /** @short  do anything which is neccessary to flush all changes

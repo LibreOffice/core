@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: SalGtkPicker.cxx,v $
- * $Revision: 1.17 $
+ * $Revision: 1.17.32.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -37,16 +37,19 @@
 #include <com/sun/star/lang/DisposedException.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/uri/XExternalUriReferenceTranslator.hpp>
+#include <com/sun/star/lang/SystemDependent.hpp>
+#include <com/sun/star/awt/XSystemDependentWindowPeer.hpp>
+#include <com/sun/star/awt/SystemDependentXWindow.hpp>
+#include <com/sun/star/beans/NamedValue.hpp>
 #include <comphelper/processfactory.hxx>
 #include <cppuhelper/interfacecontainer.h>
+#include <rtl/process.h>
 #include <osl/diagnose.h>
 #include <com/sun/star/uno/Any.hxx>
 #include <FPServiceInfo.hxx>
 #include <vos/mutex.hxx>
 #include <vcl/svapp.hxx>
-#ifndef _SALGTKPICKER_HXX_
 #include "SalGtkPicker.hxx"
-#endif
 #include <tools/urlobj.hxx>
 #include <stdio.h>
 
@@ -107,11 +110,87 @@ gboolean rundialog(RunDialog *pDialog)
     return false;
 }
 
+gboolean canceldialog(RunDialog *pDialog)
+{
+    pDialog->cancel();
+    return false;
+}
+
+extern "C"
+{
+    struct Display;
+    extern GdkDisplay* gdk_x11_lookup_xdisplay (void*xdisplay);
+}
+
+RunDialog::RunDialog( GtkWidget *pDialog, uno::Reference< awt::XExtendedToolkit >& rToolkit ) :
+    cppu::WeakComponentImplHelper1< awt::XTopWindowListener >( maLock ),
+    mbFinished(false), mpDialog(pDialog), mpCreatedParent(NULL), mxToolkit(rToolkit)
+{
+    awt::SystemDependentXWindow aWindowHandle;
+
+    if (mxToolkit.is())
+    {
+        uno::Reference< awt::XTopWindow > xWindow(mxToolkit->getActiveTopWindow());
+        if (xWindow.is())
+        {
+            uno::Reference< awt::XSystemDependentWindowPeer > xSystemDepParent(xWindow, uno::UNO_QUERY);
+            if (xSystemDepParent.is())
+            {
+
+                sal_Int8 processID[16];
+
+                rtl_getGlobalProcessId( (sal_uInt8*)processID );
+                uno::Sequence<sal_Int8> processIdSeq(processID, 16);
+                uno::Any anyHandle = xSystemDepParent->getWindowHandle(processIdSeq, SystemDependent::SYSTEM_XWINDOW);
+
+                anyHandle >>= aWindowHandle;
+            }
+        }
+    }
+
+    GdkDisplay *pDisplay = aWindowHandle.DisplayPointer ? gdk_x11_lookup_xdisplay(reinterpret_cast<void*>(static_cast<sal_IntPtr>(aWindowHandle.DisplayPointer))) : NULL;
+    GdkWindow* pParent = pDisplay ? gdk_window_lookup_for_display(pDisplay, aWindowHandle.WindowHandle) : NULL;
+    if (!pParent && pDisplay)
+        pParent = mpCreatedParent = gdk_window_foreign_new_for_display( pDisplay, aWindowHandle.WindowHandle);
+    if (pParent)
+    {
+        gtk_widget_realize(mpDialog);
+        gdk_window_set_transient_for(mpDialog->window, pParent);
+    }
+}
+
+
+RunDialog::~RunDialog()
+{
+    if (mpCreatedParent)
+        gdk_window_destroy (mpCreatedParent);
+}
+
+void SAL_CALL RunDialog::windowOpened( const ::com::sun::star::lang::EventObject& )
+    throw (::com::sun::star::uno::RuntimeException)
+{
+    g_timeout_add_full(G_PRIORITY_HIGH_IDLE, 0, (GSourceFunc)canceldialog, this, NULL);
+}
+
+void RunDialog::cancel()
+{
+    gtk_dialog_response( GTK_DIALOG( mpDialog ), GTK_RESPONSE_CANCEL );
+    gtk_widget_hide( mpDialog );
+}
+
 void RunDialog::run()
 {
-    mnStatus = gtk_dialog_run( GTK_DIALOG( m_pDialog ) );
+    if (mxToolkit.is())
+        mxToolkit->addTopWindowListener(this);
+
+    mnStatus = gtk_dialog_run( GTK_DIALOG( mpDialog ) );
+
+    if (mxToolkit.is())
+        mxToolkit->removeTopWindowListener(this);
+
+
     if (mnStatus != 1)  //PLAY
-        gtk_widget_hide( m_pDialog );
+        gtk_widget_hide( mpDialog );
 
     maLock.acquire();
     mbFinished = true;

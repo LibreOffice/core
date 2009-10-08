@@ -33,9 +33,6 @@
 #include <stdio.h>
 #include "nodefactory.hxx"
 #include "nodeimplobj.hxx"
-#include "valuenodeaccess.hxx"
-#include "groupnodeaccess.hxx"
-#include "setnodeaccess.hxx"
 #include "configpath.hxx"
 #include <osl/diagnose.h>
 
@@ -50,107 +47,58 @@ namespace view
 namespace
 {
 //---------------------------------------------------------------------
-    using configuration::NodeImpl;
-    using configuration::Template;
-    using data::ValueNodeAccess;
-    using data::GroupNodeAccess;
-    using data::SetNodeAccess;
-//---------------------------------------------------------------------
-/*  static bool isTreeSet(SetNodeAccess const& _aNodeAccess, Template* pTemplate)
-    {
-        OSL_ENSURE(pTemplate,"ERROR: Trying to instantiate a set without a template");
-        if (!pTemplate) throw Exception("ERROR: Trying to instantiate a set without a template");
-
-        OSL_ENSURE(pTemplate->getName().toString() == _aNodeAccess.getElementTemplateName(),
-                    "WARNING: Template name mismatch creating a set node");
-
-        return ! pTemplate->isInstanceValue();
-    }
-*/
-//---------------------------------------------------------------------
     struct BasicNodeFactory : NodeFactory
     {
-        rtl::Reference<NodeImpl> makeValueNode(ValueNodeAccess const& _aNodeAccess);
-        rtl::Reference<NodeImpl> makeGroupNode(GroupNodeAccess const& _aNodeAccess);
-        rtl::Reference<NodeImpl> makeSetNode  (SetNodeAccess const& _aNodeAccess, Template* pTemplate);
+        rtl::Reference<configuration::NodeImpl> makeValueNode(sharable::ValueNode * node);
+        rtl::Reference<configuration::NodeImpl> makeGroupNode(sharable::GroupNode * node);
+        rtl::Reference<configuration::NodeImpl> makeSetNode(sharable::SetNode * node, configuration::Template* pTemplate);
     };
     //-------------------------------------------------------------------------
 
-    rtl::Reference<NodeImpl> BasicNodeFactory::makeValueNode(ValueNodeAccess const& _aNodeAccess)
+    rtl::Reference<configuration::NodeImpl> BasicNodeFactory::makeValueNode(sharable::ValueNode * node)
     {
-        return new configuration::ValueElementNodeImpl(_aNodeAccess);
+        return new configuration::ValueElementNodeImpl(node);
     }
     //-------------------------------------------------------------------------
 
-    rtl::Reference<NodeImpl> BasicNodeFactory::makeGroupNode(GroupNodeAccess const& _aNodeAccess)
+    rtl::Reference<configuration::NodeImpl> BasicNodeFactory::makeGroupNode(sharable::GroupNode * node)
     {
-        return new configuration::GroupNodeImpl(_aNodeAccess);
+        return new configuration::GroupNodeImpl(node);
     }
     //-------------------------------------------------------------------------
 
-    rtl::Reference<NodeImpl> BasicNodeFactory::makeSetNode  (SetNodeAccess const& _aNodeAccess, Template* pTemplate)
+    rtl::Reference<configuration::NodeImpl> BasicNodeFactory::makeSetNode(sharable::SetNode * node, configuration::Template* pTemplate)
     {
-        return new configuration::SetNodeImpl(_aNodeAccess,pTemplate);
+        return new configuration::SetNodeImpl(node, pTemplate);
     }
     //-------------------------------------------------------------------------
 
-//-----------------------------------------------------------------------------
-/*
-    struct DirectNodeFactory : NodeFactory
-    {
-        rtl::Reference<NodeImpl> makeValueNode(ValueNodeAccess const& _aNodeAccess);
-        rtl::Reference<NodeImpl> makeGroupNode(GroupNodeAccess const& _aNodeAccess);
-        rtl::Reference<NodeImpl> makeSetNode  (SetNodeAccess const& _aNodeAccess, Template* pTemplate);
-    };
-    //-------------------------------------------------------------------------
-
-    rtl::Reference<NodeImpl> DirectNodeFactory::makeValueNode(ValueNodeAccess const& _aNodeAccess)
-    {
-        return new DirectValueElementNodeImpl(_aNodeAccess);
-    }
-    //-------------------------------------------------------------------------
-
-    rtl::Reference<NodeImpl> DirectNodeFactory::makeGroupNode(GroupNodeAccess const& _aNodeAccess)
-    {
-        return new DirectGroupNodeImpl(_aNodeAccess);
-    }
-    //-------------------------------------------------------------------------
-
-    rtl::Reference<NodeImpl> DirectNodeFactory::makeSetNode  (SetNodeAccess const& _aNodeAccess, Template* pTemplate)
-    {
-        if (isTreeSet(_aNodeAccess,pTemplate))
-            return new DirectTreeSetNodeImpl(_aNodeAccess,pTemplate);
-        else
-            return new DirectValueSetNodeImpl(_aNodeAccess,pTemplate);
-    }
-    //-------------------------------------------------------------------------
-*/
 //-----------------------------------------------------------------------------
 
     struct DeferredNodeFactory : NodeFactory
     {
-        rtl::Reference<NodeImpl> makeValueNode(ValueNodeAccess const& _aNodeAccess);
-        rtl::Reference<NodeImpl> makeGroupNode(GroupNodeAccess const& _aNodeAccess);
-        rtl::Reference<NodeImpl> makeSetNode  (SetNodeAccess const& _aNodeAccess, Template* pTemplate);
+        rtl::Reference<configuration::NodeImpl> makeValueNode(sharable::ValueNode * node);
+        rtl::Reference<configuration::NodeImpl> makeGroupNode(sharable::GroupNode * node);
+        rtl::Reference<configuration::NodeImpl> makeSetNode(sharable::SetNode * node, configuration::Template* pTemplate);
     };
     //-------------------------------------------------------------------------
 
-    rtl::Reference<NodeImpl> DeferredNodeFactory::makeValueNode(ValueNodeAccess const& _aNodeAccess)
+    rtl::Reference<configuration::NodeImpl> DeferredNodeFactory::makeValueNode(sharable::ValueNode * node)
     {
     //    OSL_ENSURE(false, "Wrong factory for value elements - should be immutable (=read-only)");
-        return new configuration::ValueElementNodeImpl(_aNodeAccess);
+        return new configuration::ValueElementNodeImpl(node);
     }
     //-------------------------------------------------------------------------
 
-    rtl::Reference<NodeImpl> DeferredNodeFactory::makeGroupNode(GroupNodeAccess const& _aNodeAccess)
+    rtl::Reference<configuration::NodeImpl> DeferredNodeFactory::makeGroupNode(sharable::GroupNode * node)
     {
-        return new configuration::DeferredGroupNodeImpl(_aNodeAccess);
+        return new configuration::DeferredGroupNodeImpl(node);
     }
     //-------------------------------------------------------------------------
 
-    rtl::Reference<NodeImpl> DeferredNodeFactory::makeSetNode  (SetNodeAccess const& _aNodeAccess, Template* pTemplate)
+    rtl::Reference<configuration::NodeImpl> DeferredNodeFactory::makeSetNode(sharable::SetNode * node, configuration::Template* pTemplate)
     {
-        return new configuration::DeferredSetNodeImpl(_aNodeAccess,pTemplate);
+        return new configuration::DeferredSetNodeImpl(node, pTemplate);
     }
     //-------------------------------------------------------------------------
 

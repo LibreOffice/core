@@ -46,16 +46,12 @@ namespace configmgr
 //==========================================================================
 //= OConfigurationRegistry
 //==========================================================================
-typedef ::cppu::ImplHelper2 <   ::com::sun::star::registry::XSimpleRegistry
-                            ,   ::com::sun::star::util::XFlushable
-                            >   OConfigurationRegistry_Base;
-
 /** an object implmenting the <service scope="com.sun.star.configuration">ConfigurationRegistry</service>
     service.
 */
 class OConfigurationRegistry
         :public ServiceComponentImpl
-        ,public OConfigurationRegistry_Base
+        ,public cppu::ImplHelper2< com::sun::star::registry::XSimpleRegistry,   com::sun::star::util::XFlushable >
 {
 public:
     static const ServiceImplementationInfo s_aServiceInfo;

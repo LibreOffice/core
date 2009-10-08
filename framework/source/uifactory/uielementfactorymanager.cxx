@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: uielementfactorymanager.cxx,v $
- * $Revision: 1.10 $
+ * $Revision: 1.10.12.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -113,7 +113,6 @@ class ConfigurationAccess_UIElementFactoryManager : // interfaces
         rtl::OUString                           getFactorySpecifierFromTypeNameModule( const rtl::OUString& rType, const rtl::OUString& rName, const rtl::OUString& rModule ) const;
         void                                    addFactorySpecifierToTypeNameModule( const rtl::OUString& rType, const rtl::OUString& rName, const rtl::OUString& rModule, const rtl::OUString& aServiceSpecifier );
         void                                    removeFactorySpecifierFromTypeNameModule( const rtl::OUString& rType, const rtl::OUString& rName, const rtl::OUString& rModule );
-        Sequence< rtl::OUString >               getAllFactories() const;
         Sequence< Sequence< PropertyValue > >   getFactoriesDescription() const;
 
         // container.XContainerListener
@@ -256,24 +255,6 @@ void ConfigurationAccess_UIElementFactoryManager::removeFactorySpecifierFromType
         throw NoSuchElementException();
     else
         m_aUIElementFactoryManagerMap.erase( aHashKey );
-}
-
-Sequence< rtl::OUString > ConfigurationAccess_UIElementFactoryManager::getAllFactories() const
-{
-    // SAFE
-    ResetableGuard aLock( m_aLock );
-
-    Sequence< rtl::OUString > aSeq( m_aUIElementFactoryManagerMap.size() );
-
-    sal_Int32 nIndex = 0;
-    UIElementFactoryManagerMap::const_iterator pIter = m_aUIElementFactoryManagerMap.begin();
-    while ( pIter != m_aUIElementFactoryManagerMap.end() );
-    {
-        aSeq[nIndex++] = pIter->second;
-        ++pIter;
-    }
-
-    return aSeq;
 }
 
 Sequence< Sequence< PropertyValue > > ConfigurationAccess_UIElementFactoryManager::getFactoriesDescription() const

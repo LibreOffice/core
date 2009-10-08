@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: about.cxx,v $
- * $Revision: 1.41 $
+ * $Revision: 1.41.4.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -208,20 +208,15 @@ AboutDialog::AboutDialog( Window* pParent, const ResId& rId, const String& rVerS
     const StyleSettings& rSettings = GetSettings().GetStyleSettings();
     Color aWhiteCol( rSettings.GetWindowColor() );
     Wallpaper aWall( aWhiteCol );
-    #if 0
-    // pl: FIXME #i78884#
     SetBackground( aWall );
-    #else
-    SetControlBackground( aWhiteCol );
-    #endif
     Font aNewFont( aCopyrightText.GetFont() );
     aNewFont.SetTransparent( TRUE );
 
     aVersionText.SetFont( aNewFont );
     aCopyrightText.SetFont( aNewFont );
 
-    aVersionText.SetBackground( aWall );
-    aCopyrightText.SetBackground( aWall );
+    aVersionText.SetBackground();
+    aCopyrightText.SetBackground();
 
     Color aTextColor( rSettings.GetWindowTextColor() );
     aVersionText.SetControlForeground( aTextColor );

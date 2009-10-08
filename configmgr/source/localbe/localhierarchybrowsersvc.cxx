@@ -53,7 +53,7 @@ namespace configmgr
     {
 // -----------------------------------------------------------------------------
 
-AsciiServiceName const aLocalHierarchyBrowserServices[] =
+sal_Char const * const aLocalHierarchyBrowserServices[] =
 {
     "com.sun.star.configuration.backend.LocalHierarchyBrowser",
     0,
@@ -80,18 +80,18 @@ ServiceInfoHelper LocalHierarchyBrowserService::getServiceInfo()
 // -----------------------------------------------------------------------------
 
 uno::Reference< uno::XInterface > SAL_CALL instantiateLocalHierarchyBrowser
-( CreationContext const& rServiceManager )
+( uno::Reference< uno::XComponentContext > const& rServiceManager )
 {
     return * new LocalHierarchyBrowserService( rServiceManager );
 }
 // -----------------------------------------------------------------------------
 
-LocalHierarchyBrowserService::LocalHierarchyBrowserService(CreationArg _xContext)
+LocalHierarchyBrowserService::LocalHierarchyBrowserService(uno::Reference< uno::XComponentContext > const & _xContext)
 : m_xServiceFactory(_xContext->getServiceManager(), uno::UNO_QUERY)
 {
     if (!m_xServiceFactory.is())
     {
-        OUString sMessage( RTL_CONSTASCII_USTRINGPARAM("Configuration Importer: Unexpected NULL context"));
+        rtl::OUString sMessage( RTL_CONSTASCII_USTRINGPARAM("Configuration Importer: Unexpected NULL context"));
         throw lang::NullPointerException(sMessage,NULL);
     }
 }
@@ -110,8 +110,8 @@ namespace
         enum Mode   { findNone, findSchemas, findLayers };
         enum Result { getDefault,getUrls, getNames };
 
-        OUString                    aBaseDataUrl;
-        uno::Sequence< OUString >   aExcludeList;
+        rtl::OUString                    aBaseDataUrl;
+        uno::Sequence< rtl::OUString >   aExcludeList;
         Mode                        mode;
         Result                      result_type;
     };
@@ -126,7 +126,7 @@ namespace
 
         if (sal_Int32(nCount) != aArguments.getLength())
         {
-            OUString sMessage = OUSTRING("Too many arguments for LocalHierarchyBrowser Job");
+            rtl::OUString sMessage = OUSTRING("Too many arguments for LocalHierarchyBrowser Job");
             throw lang::IllegalArgumentException(sMessage,pJob,0);
         }
 
@@ -145,12 +145,12 @@ namespace
             {
                 bKnown = true;
 
-                OUString aLayerBaseUrl;
+                rtl::OUString aLayerBaseUrl;
                 bGood  = (aArguments[i].Value >>= aLayerBaseUrl);
 
                 if (aLayerBaseUrl.getLength())
                 {
-                    OUString aLocalizedSubDir;
+                    rtl::OUString aLocalizedSubDir;
                     LocalSingleBackend::getLayerSubDirectories(aLayerBaseUrl,this->aBaseDataUrl,aLocalizedSubDir);
 
                     mode = findLayers;
@@ -170,7 +170,7 @@ namespace
                 {
                 case uno::TypeClass_STRING:
                     {
-                        OUString aComponent;
+                        rtl::OUString aComponent;
                         bGood = (aArguments[i].Value >>= aComponent);
 
                         OSL_ASSERT(bGood);
@@ -182,7 +182,7 @@ namespace
 
                 case uno::TypeClass_SEQUENCE:
                     {
-                        uno::Sequence<OUString> aComponentList;
+                        uno::Sequence<rtl::OUString> aComponentList;
                         bGood = (aArguments[i].Value >>= aComponentList);
 
                         if (bGood)
@@ -190,7 +190,7 @@ namespace
                             sal_Int32 const nCompListCount = aComponentList.getLength();
                             aExcludeList.realloc(nNextIndex + nCompListCount);
 
-                            OUString const * pSrc = aComponentList.getConstArray();
+                            rtl::OUString const * pSrc = aComponentList.getConstArray();
                             std::copy(pSrc,pSrc+nCompListCount,aExcludeList.getArray());
                         }
                     }
@@ -246,13 +246,13 @@ namespace
 
     static
     inline
-    OUString getDataFileExtension(JobDesc::Mode mode)
+    rtl::OUString getDataFileExtension(JobDesc::Mode mode)
     {
         switch (mode)
         {
         case JobDesc::findSchemas: return OUSTRING(".xcs");
         case JobDesc::findLayers:  return OUSTRING(".xcu");
-        default: OSL_ASSERT(false); return OUString();
+        default: OSL_ASSERT(false); return rtl::OUString();
         }
     }
 }
@@ -266,15 +266,13 @@ uno::Any SAL_CALL
 {
     JobDesc const aJob(this,Arguments);
 
-    typedef uno::Sequence< OUString > (LocalHierarchyBrowserService::*Finder)( OUString const & _aBaseDirectory, OUString const & _aComponentFileExtension, uno::Sequence< OUString > const & aExcludeList);
-
     OSL_ASSERT(JobDesc::getUrls == aJob.result_type || JobDesc::getNames == aJob.result_type);
 
-    Finder const find = (JobDesc::getUrls == aJob.result_type) ?
+    uno::Sequence< rtl::OUString > (LocalHierarchyBrowserService::* const find)( rtl::OUString const & _aBaseDirectory, rtl::OUString const & _aComponentFileExtension, uno::Sequence< rtl::OUString > const & aExcludeList) = (JobDesc::getUrls == aJob.result_type) ?
         &LocalHierarchyBrowserService::findLocalComponentUrls :
         &LocalHierarchyBrowserService::findLocalComponentNames;
 
-    uno::Sequence< OUString > aComponents = (this->*find)(aJob.aBaseDataUrl,getDataFileExtension(aJob.mode), aJob.aExcludeList);
+    uno::Sequence< rtl::OUString > aComponents = (this->*find)(aJob.aBaseDataUrl,getDataFileExtension(aJob.mode), aJob.aExcludeList);
 
     return uno::makeAny(aComponents);
 }
@@ -282,7 +280,7 @@ uno::Any SAL_CALL
 
 // XServiceInfo
 
-OUString SAL_CALL
+rtl::OUString SAL_CALL
     LocalHierarchyBrowserService::getImplementationName(  )
         throw (uno::RuntimeException)
 {
@@ -291,7 +289,7 @@ OUString SAL_CALL
 // -----------------------------------------------------------------------------
 
 sal_Bool SAL_CALL
-    LocalHierarchyBrowserService::supportsService( const OUString& ServiceName )
+    LocalHierarchyBrowserService::supportsService( const rtl::OUString& ServiceName )
         throw (uno::RuntimeException)
 {
     return getServiceInfo().supportsService( ServiceName );
@@ -321,7 +319,6 @@ uno::Sequence< ::rtl::OUString > SAL_CALL
 #include <vector>
 // -----------------------------------------------------------------------------
 
-    using rtl::OUString;
     namespace uno = com::sun::star::uno;
     // -----------------------------------------------------------------------------
 
@@ -329,7 +326,7 @@ uno::Sequence< ::rtl::OUString > SAL_CALL
     //------------------------------------------------------------------------------
     static
     inline
-    bool matchesExtension( OUString const & aFileName, OUString const & aExt )
+    bool matchesExtension( rtl::OUString const & aFileName, rtl::OUString const & aExt )
     {
         sal_Int32 const nExtStart = aFileName.getLength() - aExt.getLength();
         return nExtStart > 0 && !!aFileName.copy(nExtStart).equalsIgnoreAsciiCase(aExt);
@@ -337,7 +334,7 @@ uno::Sequence< ::rtl::OUString > SAL_CALL
     //------------------------------------------------------------------------------
     static
     inline
-    OUString stripExtension( OUString const & aFileName, OUString const & aExt )
+    rtl::OUString stripExtension( rtl::OUString const & aFileName, rtl::OUString const & aExt )
     {
         OSL_PRECOND( matchesExtension(aFileName,aExt), "File name doesn't have expected extension");
 
@@ -347,7 +344,7 @@ uno::Sequence< ::rtl::OUString > SAL_CALL
 //------------------------------------------------------------------------------
     static
     inline
-    bool matchesExtension( osl::FileStatus const & aFileDescriptor, OUString const & aExt )
+    bool matchesExtension( osl::FileStatus const & aFileDescriptor, rtl::OUString const & aExt )
     {
         OSL_PRECOND( aFileDescriptor.isValid(FileStatusMask_Type | FileStatusMask_FileName),
                     "Not all required file-status fields available for filter" );
@@ -360,28 +357,26 @@ uno::Sequence< ::rtl::OUString > SAL_CALL
 //------------------------------------------------------------------------------
 
     static
-    bool makeAbsoluteURL(OUString & rURL )
+    bool makeAbsoluteURL(rtl::OUString & rURL )
     {
-        using osl::File;
-        OUString aBaseDir; tools::getProcessWorkingDir(&aBaseDir);
+        rtl::OUString aBaseDir; tools::getProcessWorkingDir(&aBaseDir);
 
-        File::RC errcode = osl::File::getAbsoluteFileURL(aBaseDir,rURL,rURL);
+        osl::File::RC errcode = osl::File::getAbsoluteFileURL(aBaseDir,rURL,rURL);
 
-        return File::E_None == errcode;
+        return osl::File::E_None == errcode;
     }
 //------------------------------------------------------------------------------
     static
     inline
     bool getNextDirectoryItem(osl::Directory & aDirectory, osl::DirectoryItem & aItem, osl::Directory::RC & errcode)
     {
-        using osl::Directory;
         switch (errcode = aDirectory.getNextItem(aItem))
         {
-        case Directory::E_None:
+        case osl::Directory::E_None:
             return true;
 
-        case Directory::E_NOENT:
-            errcode = Directory::E_None;
+        case osl::Directory::E_NOENT:
+            errcode = osl::Directory::E_None;
             return false;
 
         default:
@@ -389,7 +384,7 @@ uno::Sequence< ::rtl::OUString > SAL_CALL
         }
     }
 //------------------------------------------------------------------------------
-    static inline bool isExcluded(OUString const & aName, uno::Sequence< OUString > const & aExcludeList)
+    static inline bool isExcluded(rtl::OUString const & aName, uno::Sequence< rtl::OUString > const & aExcludeList)
     {
         for (sal_Int32 i = 0; i<aExcludeList.getLength(); ++i)
         {
@@ -399,23 +394,19 @@ uno::Sequence< ::rtl::OUString > SAL_CALL
     }
 //------------------------------------------------------------------------------
     static
-    osl::FileBase::RC findComponents( std::vector<OUString> * componentNames, std::vector<OUString> * componentUrls,
-                                        OUString const& aDirectoryPath, OUString const& aComponentExtension,
-                                        OUString const& aPackagePrefix, OUString const & aComponentSeparator,
-                                        uno::Sequence< OUString > const & aExcludeList)
+    osl::FileBase::RC findComponents( std::vector<rtl::OUString> * componentNames, std::vector<rtl::OUString> * componentUrls,
+                                        rtl::OUString const& aDirectoryPath, rtl::OUString const& aComponentExtension,
+                                        rtl::OUString const& aPackagePrefix, rtl::OUString const & aComponentSeparator,
+                                        uno::Sequence< rtl::OUString > const & aExcludeList)
     {
-        using osl::Directory;
-        using osl::DirectoryItem;
-        using osl::FileStatus;
-
         static sal_Unicode const chDirSep = '/';
-        static OUString    const sDirectorySeparator(&chDirSep,1);
+        static rtl::OUString    const sDirectorySeparator(&chDirSep,1);
 
-        Directory aDirectory(aDirectoryPath);
+        osl::Directory aDirectory(aDirectoryPath);
 
         osl::Directory::RC errcode = aDirectory.open();
 
-        if (errcode == Directory::E_None)
+        if (errcode == osl::Directory::E_None)
         {
             sal_uInt32 n_STATUS_FIELDS =  FileStatusMask_Type | FileStatusMask_FileName;
             if (componentUrls) n_STATUS_FIELDS |= FileStatusMask_FileURL;
@@ -424,10 +415,10 @@ uno::Sequence< ::rtl::OUString > SAL_CALL
             while( getNextDirectoryItem(aDirectory,aItem,errcode) )
             {
 
-                FileStatus aItemDescriptor( n_STATUS_FIELDS );
+                osl::FileStatus aItemDescriptor( n_STATUS_FIELDS );
                 errcode = aItem.getFileStatus(aItemDescriptor);
 
-                if ( errcode != DirectoryItem::E_None )
+                if ( errcode != osl::DirectoryItem::E_None )
                 {
                     OSL_TRACE("Locating Configuration Components - Error (%u) getting status of directory item - skipping\n", unsigned(errcode));
                     continue;
@@ -435,13 +426,13 @@ uno::Sequence< ::rtl::OUString > SAL_CALL
 
                 OSL_ENSURE( aItemDescriptor.isValid(FileStatusMask_Type), "Could not get type of directory item");
 
-                if (aItemDescriptor.getFileType() == FileStatus::Directory)
+                if (aItemDescriptor.getFileType() == osl::FileStatus::Directory)
                 {
-                    OSL_ENSURE( aItemDescriptor.isValid(FileStatusMask_FileName), "Could not get Name of subdirectory");
+                    OSL_ENSURE( aItemDescriptor.isValid(FileStatusMask_FileName), "Could not get name of subdirectory");
 
-                    OUString const aSubdirName = aItemDescriptor.getFileName();
-                    OUString const aSubdirPath = aDirectoryPath + sDirectorySeparator + aSubdirName;
-                    OUString const aSubpackagePrefix = aPackagePrefix + aSubdirName + aComponentSeparator;
+                    rtl::OUString const aSubdirName = aItemDescriptor.getFileName();
+                    rtl::OUString const aSubdirPath = aDirectoryPath + sDirectorySeparator + aSubdirName;
+                    rtl::OUString const aSubpackagePrefix = aPackagePrefix + aSubdirName + aComponentSeparator;
                     // recurse
                     if (!isExcluded(aSubpackagePrefix,aExcludeList))
                         OSL_VERIFY_RC( findComponents( componentNames,  componentUrls,
@@ -451,10 +442,10 @@ uno::Sequence< ::rtl::OUString > SAL_CALL
                 }
                 else if (matchesExtension(aItemDescriptor,aComponentExtension))
                 {
-                    OSL_ENSURE( aItemDescriptor.isValid(FileStatusMask_FileName), "Could not get Name of component found");
+                    OSL_ENSURE( aItemDescriptor.isValid(FileStatusMask_FileName), "Could not get name of component found");
 
-                    OUString const aComponentName = stripExtension( aItemDescriptor.getFileName(), aComponentExtension );
-                    OUString const aFullComponentName = aPackagePrefix + aComponentName;
+                    rtl::OUString const aComponentName = stripExtension( aItemDescriptor.getFileName(), aComponentExtension );
+                    rtl::OUString const aFullComponentName = aPackagePrefix + aComponentName;
 
                     if (!isExcluded(aFullComponentName,aExcludeList))
                     {
@@ -478,18 +469,18 @@ uno::Sequence< ::rtl::OUString > SAL_CALL
     }
 // -----------------------------------------------------------------------------
 
-    uno::Sequence< OUString > configmgr::localbe::LocalHierarchyBrowserService::findLocalComponentNames( OUString const & _aBaseDirectory, OUString const & _aComponentFileExtension, uno::Sequence< OUString > const & aExcludeList)
+    uno::Sequence< rtl::OUString > configmgr::localbe::LocalHierarchyBrowserService::findLocalComponentNames( rtl::OUString const & _aBaseDirectory, rtl::OUString const & _aComponentFileExtension, uno::Sequence< rtl::OUString > const & aExcludeList)
     {
-        OUString aBaseDirectory(_aBaseDirectory);
+        rtl::OUString aBaseDirectory(_aBaseDirectory);
         OSL_VERIFY( makeAbsoluteURL(aBaseDirectory) );
 
         static const sal_Unicode chPkgSep = '.';
 
-        std::vector< OUString > components;
+        std::vector< rtl::OUString > components;
 
         osl::Directory::RC errcode = findComponents(&components, NULL,
                                                     aBaseDirectory, _aComponentFileExtension,
-                                                    OUString(), OUString(&chPkgSep,1),
+                                                    rtl::OUString(), rtl::OUString(&chPkgSep,1),
                                                     aExcludeList );
 
         if (errcode != osl::Directory::E_None)
@@ -498,29 +489,29 @@ uno::Sequence< ::rtl::OUString > SAL_CALL
 
             if (errcode != osl::Directory::E_NOENT)
             {
-                OUString sMsg = OUSTRING("LocalHierarchyBrowser - IO Error while scanning for components: ") +
+                rtl::OUString sMsg = OUSTRING("LocalHierarchyBrowser - IO Error while scanning for components: ") +
                                 FileHelper::createOSLErrorString(errcode);
 
                 throw com::sun::star::io::IOException(sMsg,*this);
             }
         }
 
-        return uno::Sequence< OUString >(&components.front(),components.size());
+        return uno::Sequence< rtl::OUString >(&components.front(),components.size());
     }
 // -----------------------------------------------------------------------------
 
-    uno::Sequence< OUString > configmgr::localbe::LocalHierarchyBrowserService::findLocalComponentUrls( OUString const & _aBaseDirectory, OUString const & _aComponentFileExtension, uno::Sequence< OUString > const & aExcludeList)
+    uno::Sequence< rtl::OUString > configmgr::localbe::LocalHierarchyBrowserService::findLocalComponentUrls( rtl::OUString const & _aBaseDirectory, rtl::OUString const & _aComponentFileExtension, uno::Sequence< rtl::OUString > const & aExcludeList)
     {
-        OUString aBaseDirectory(_aBaseDirectory);
+        rtl::OUString aBaseDirectory(_aBaseDirectory);
         OSL_VERIFY( makeAbsoluteURL(aBaseDirectory) );
 
         static const sal_Unicode chPkgSep = '.';
 
-        std::vector< OUString > components;
+        std::vector< rtl::OUString > components;
 
         osl::Directory::RC errcode = findComponents(NULL, &components,
                                                     aBaseDirectory, _aComponentFileExtension,
-                                                    OUString(), OUString(&chPkgSep,1),
+                                                    rtl::OUString(), rtl::OUString(&chPkgSep,1),
                                                     aExcludeList );
 
         if (errcode != osl::Directory::E_None)
@@ -529,14 +520,14 @@ uno::Sequence< ::rtl::OUString > SAL_CALL
 
             if (errcode != osl::Directory::E_NOENT)
             {
-                OUString sMsg = OUSTRING("LocalHierarchyBrowser - IO Error while scanning for component files: ") +
+                rtl::OUString sMsg = OUSTRING("LocalHierarchyBrowser - IO Error while scanning for component files: ") +
                                 FileHelper::createOSLErrorString(errcode);
 
                 throw com::sun::star::io::IOException(sMsg,*this);
             }
         }
 
-        return uno::Sequence< OUString >(&components.front(),components.size());
+        return uno::Sequence< rtl::OUString >(&components.front(),components.size());
     }
 //------------------------------------------------------------------------------
 

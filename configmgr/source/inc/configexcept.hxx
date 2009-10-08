@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: configexcept.hxx,v $
- * $Revision: 1.6 $
+ * $Revision: 1.6.10.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -41,7 +41,6 @@ namespace configmgr
 //-------------------------------------------------------------------------
     namespace uno  = ::com::sun::star::uno;
     namespace lang = ::com::sun::star::lang;
-    using rtl::OUString;
 //-----------------------------------------------------------------------------
     namespace configuration
     {
@@ -55,7 +54,7 @@ namespace configmgr
             Exception(rtl::OString const& sAsciiMessage);
             virtual ~Exception() {}
 
-            virtual OUString message() const;
+            virtual rtl::OUString message() const;
             virtual char const* what() const;
         };
     //-------------------------------------------------------------------------
@@ -64,9 +63,9 @@ namespace configmgr
         {
             rtl::OUString m_sName;
         public:
-            InvalidName(OUString const& sName, char const* sAsciiDescription);
+            InvalidName(rtl::OUString const& sName, char const* sAsciiDescription);
 
-            virtual OUString message() const;
+            virtual rtl::OUString message() const;
         };
     //-------------------------------------------------------------------------
 
@@ -80,33 +79,14 @@ namespace configmgr
 
         class TypeMismatch : public Exception
         {
-            OUString m_sTypes;
-            static OUString describe(OUString const& sFoundType, OUString const& sExpectedType);
+            rtl::OUString m_sTypes;
+            static rtl::OUString describe(rtl::OUString const& sFoundType, rtl::OUString const& sExpectedType);
         public:
-            TypeMismatch(OUString const& sFoundType, OUString const& sExpectedType);
-            TypeMismatch(OUString const& sFoundType, OUString const& sExpectedType, char const* sAsciiDescription);
+            TypeMismatch(rtl::OUString const& sFoundType, rtl::OUString const& sExpectedType);
+            TypeMismatch(rtl::OUString const& sFoundType, rtl::OUString const& sExpectedType, char const* sAsciiDescription);
 
-            virtual OUString message() const;
+            virtual rtl::OUString message() const;
         };
-    //-------------------------------------------------------------------------
-
-        class WrappedUnoException : public Exception
-        {
-            uno::Any m_aUnoException;
-        public:
-            WrappedUnoException(uno::Any const& aUnoException);
-
-            OUString extractMessage() const;
-            uno::Exception extractUnoException() const;
-            uno::Any const& getAnyUnoException() const;
-
-            virtual OUString message() const;
-        };
-        template <class Except>
-        WrappedUnoException rethrowWrapped(Except const& anException)
-        {
-            throw WrappedUnoException( uno::makeAny(anException) );
-        }
     //-------------------------------------------------------------------------
     }
 
@@ -119,14 +99,14 @@ namespace configmgr
         {
             configuration::Exception& m_eOriginal;
             uno::Reference<uno::XInterface> m_xContext;
-            OUString m_sMessage;
+            rtl::OUString m_sMessage;
         public:
             ExceptionMapper(configuration::Exception& e);
             ~ExceptionMapper();
 
             void setContext(uno::XInterface* pContext);
 
-            OUString message() const;
+            rtl::OUString message() const;
             uno::Reference<uno::XInterface> context() const;
 
             void illegalArgument(sal_Int16 nArgument = -1) throw(lang::IllegalArgumentException);

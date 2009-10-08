@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: MPreparedStatement.hxx,v $
- * $Revision: 1.8 $
+ * $Revision: 1.8.56.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -115,6 +115,7 @@ namespace connectivity
             DECLARE_SERVICE_INFO();
             // ein Konstruktor, der fuer das Returnen des Objektes benoetigt wird:
             OPreparedStatement( OConnection* _pConnection,const ::rtl::OUString& sql);
+            sal_Bool lateInit();
 
             //XInterface
             virtual ::com::sun::star::uno::Any SAL_CALL queryInterface( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException);

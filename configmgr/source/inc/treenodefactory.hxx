@@ -46,14 +46,9 @@ namespace configmgr
     namespace uno = ::com::sun::star::uno;
 
     //==========================================================================
-    namespace configuration { class Name;}
-
-    //==========================================================================
 
     class OTreeNodeFactory
     {
-    public:
-        typedef configuration::Name Name;
     public:
     //= ValueNodes ============================================================
         std::auto_ptr<ValueNode> createValueNode(

@@ -54,14 +54,10 @@ namespace configmgr
         namespace lang          = ::com::sun::star::lang;
 
         namespace sax           = ::com::sun::star::xml::sax;
-
-        using rtl::OUString;
 // -----------------------------------------------------------------------------
 
-        typedef ::cppu::WeakImplHelper1<sax::XDocumentHandler> Parser_Base;
-
         class BasicParser
-        :   public Parser_Base
+        :   public cppu::WeakImplHelper1<sax::XDocumentHandler>
         {
             struct ValueData;
 
@@ -78,16 +74,14 @@ namespace configmgr
 
 #if OSL_DEBUG_LEVEL > 0
 #ifdef DBG_UTIL
-            OUString  dbgPublicId,    dbgSystemId;
+            rtl::OUString  dbgPublicId,    dbgSystemId;
             sal_Int32 dbgLineNo,      dbgColumnNo;
 #endif // DBG_UTIL
             void dbgUpdateLocation();
 #endif // OSL_DEBUG_LEVEL
 
         public:
-            typedef uno::Reference< uno::XComponentContext > Context;
-
-            explicit BasicParser(Context const & _xContext);
+            explicit BasicParser(uno::Reference< uno::XComponentContext > const & _xContext);
             virtual ~BasicParser();
 
         // XDocumentHandler
@@ -100,15 +94,15 @@ namespace configmgr
                 endDocument(  ) throw (sax::SAXException, uno::RuntimeException);
 
             virtual void SAL_CALL
-                characters( const OUString& aChars )
+                characters( const rtl::OUString& aChars )
                     throw (sax::SAXException, uno::RuntimeException);
 
             virtual void SAL_CALL
-                ignorableWhitespace( const OUString& aWhitespaces )
+                ignorableWhitespace( const rtl::OUString& aWhitespaces )
                     throw (sax::SAXException, uno::RuntimeException);
 
             virtual void SAL_CALL
-                processingInstruction( const OUString& aTarget, const OUString& aData )
+                processingInstruction( const rtl::OUString& aTarget, const rtl::OUString& aData )
                     throw (sax::SAXException, uno::RuntimeException);
 
             virtual void SAL_CALL
@@ -151,26 +145,26 @@ namespace configmgr
             /// check if the current value data has a locale set
             bool isValueDataLocalized();
             /// get the locale of the current value data, if localized
-            OUString getValueDataLocale();
+            rtl::OUString getValueDataLocale();
             /// return the collected value
             uno::Any getCurrentValue();
             /// end collecting data for a value
             void endValueData();
 
             /// start a node to be skipped
-            void startSkipping( const OUString& aTag, const uno::Reference< sax::XAttributeList >& xAttribs );
+            void startSkipping( const rtl::OUString& aTag, const uno::Reference< sax::XAttributeList >& xAttribs );
             /// are we inside a skipped node ?
             bool isSkipping( );
             /// ending a node: was this skipped ?
-            bool wasSkipping( const OUString& aTag );
+            bool wasSkipping( const rtl::OUString& aTag );
 
         protected:
             void raiseParseException( uno::Any const & _aTargetException, sal_Char const * _pMsg = NULL)
-                    CFG_THROW2 (sax::SAXException, uno::RuntimeException);
+                SAL_THROW((sax::SAXException, uno::RuntimeException));
             void raiseParseException( sal_Char const * _pMsg )
-                    CFG_THROW2 (sax::SAXException, uno::RuntimeException);
-            void raiseParseException( OUString const & aMsg )
-                    CFG_THROW2 (sax::SAXException, uno::RuntimeException);
+                SAL_THROW((sax::SAXException, uno::RuntimeException));
+            void raiseParseException( rtl::OUString const & aMsg )
+                SAL_THROW((sax::SAXException, uno::RuntimeException));
         };
 // -----------------------------------------------------------------------------
     } // namespace xml

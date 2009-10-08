@@ -48,6 +48,9 @@
 
 #include "hyperdlg.hrc"
 
+using ::com::sun::star::uno::Reference;
+using ::com::sun::star::frame::XFrame;
+
 //########################################################################
 //#                                                                      #
 //# Childwindow-Wrapper-Class                                            #
@@ -403,3 +406,18 @@ void SvxHpLinkDlg::SetReadOnlyMode( sal_Bool bRdOnly )
         GetOKButton().Enable();
 }
 
+/*************************************************************************
+|*
+|* late-initialization of newly created pages
+|*
+|************************************************************************/
+
+void SvxHpLinkDlg::PageCreated( USHORT /*nId*/, IconChoicePage& rPage )
+{
+    SvxHyperlinkTabPageBase& rHyperlinkPage = dynamic_cast< SvxHyperlinkTabPageBase& >( rPage );
+    Reference< XFrame > xDocumentFrame;
+    if ( mpBindings )
+        xDocumentFrame = mpBindings->GetActiveFrame();
+    OSL_ENSURE( xDocumentFrame.is(), "SvxHpLinkDlg::PageCreated: macro assignment functionality won't work with a proper frame!" );
+    rHyperlinkPage.SetDocumentFrame( xDocumentFrame );
+}

@@ -63,15 +63,15 @@ configuration::NodeRef NodeAccess::getNodeRef() const
 }
 //-----------------------------------------------------------------------------
 
-configuration::TreeRef  NodeAccess::getTreeRef() const
+rtl::Reference< configuration::Tree > NodeAccess::getTreeRef() const
 {
     return getApiTree().getTree();
 }
 //-----------------------------------------------------------------------------
 
-configuration::Tree NodeAccess::getTree() const
+rtl::Reference< configuration::Tree > NodeAccess::getTree() const
 {
-    return configuration::Tree(getApiTree().getTree());
+    return getApiTree().getTree();
 }
 //-----------------------------------------------------------------------------
 
@@ -101,13 +101,13 @@ Notifier NodeAccess::getNotifier() const
 
 //-----------------------------------------------------------------------------
 
-UnoAny  makeElement(configapi::Factory& rFactory, configuration::Tree const& aTree, configuration::AnyNodeRef const& aNode)
+uno::Any    makeElement(configapi::Factory& rFactory, rtl::Reference< configuration::Tree > const& aTree, configuration::AnyNodeRef const& aNode)
 {
-    if (!aTree.isEmpty() && aNode.isValid())
+    if (!configuration::isEmpty(aTree.get()) && aNode.isValid())
     {
         if (aNode.isNode())
         {
-            NodeRef aInnerNode = aNode.toNode();
+            configuration::NodeRef aInnerNode = aNode.toNode();
 
             if (configuration::isStructuralNode(aTree,aInnerNode))
                 return uno::makeAny( rFactory.makeUnoElement(aTree,aInnerNode) );
@@ -121,75 +121,60 @@ UnoAny  makeElement(configapi::Factory& rFactory, configuration::Tree const& aTr
         }
     }
 
-    return UnoAny();
+    return uno::Any();
 }
 //-----------------------------------------------------------------------------
 
-UnoAny  makeInnerElement(configapi::Factory& rFactory, configuration::Tree const& aTree, configuration::NodeRef const& aNode)
+uno::Any    makeInnerElement(configapi::Factory& rFactory, rtl::Reference< configuration::Tree > const& aTree, configuration::NodeRef const& aNode)
 {
-    if (!aTree.isEmpty() && aNode.isValid())
+    if (!configuration::isEmpty(aTree.get()) && aNode.isValid())
     {
         OSL_ENSURE(configuration::isStructuralNode(aTree,aNode), "Trying to makeInnerElement for a simple value");
 
         return uno::makeAny( rFactory.makeUnoElement(aTree,aNode) );
     }
 
-    return UnoAny();
+    return uno::Any();
 }
 //-----------------------------------------------------------------------------
 
-UnoAny  makeElement(configapi::Factory& rFactory, configuration::ElementTree const& aTree)
+uno::Any    makeElement(configapi::Factory& rFactory, rtl::Reference< configuration::ElementTree > const& aTree)
 {
-    if (aTree.isValid())
+    if (aTree.is())
     {
         return uno::makeAny( rFactory.makeUnoSetElement(aTree) );
     }
 
-    return UnoAny();
+    return uno::Any();
 }
 //-----------------------------------------------------------------------------
 
-configuration::ElementRef extractElementRef(configapi::Factory& rFactory, UnoAny const& aElement, configuration::TemplateInfo const& aTemplateInfo )
+rtl::Reference< configuration::ElementTree > extractElementTree(configapi::Factory& rFactory, uno::Any const& aElement, rtl::Reference< configuration::Template > const& aTemplate )
 {
-    using configuration::ElementRef;
-    configuration::TemplateHolder const aRequestedTemplate = aTemplateInfo.getTemplate();
-    OSL_ENSURE(aRequestedTemplate.is(), "ERROR: Need a template to extract a matching set element");
-    if (!aRequestedTemplate.is())
-        return ElementRef(NULL);
+    OSL_ENSURE(aTemplate.is(), "ERROR: Need a template to extract a matching set element");
 
     if (SetElement* pSetElement = rFactory.extractSetElement(aElement))
     {
-        configuration::TemplateHolder aFoundTemplate = pSetElement->getTemplateInfo().getTemplate();
+        rtl::Reference<configuration::Template> aFoundTemplate = pSetElement->getTemplateInfo();
         if (aFoundTemplate.is())
         {
-            if (aFoundTemplate != aRequestedTemplate)
-                throw configuration::TypeMismatch(aFoundTemplate->getPathString(), aRequestedTemplate->getPathString());
+            if (aFoundTemplate != aTemplate)
+                throw configuration::TypeMismatch(aFoundTemplate->getPathString(), aTemplate->getPathString());
 
             return pSetElement->getElementRef( );
         }
     }
-    return ElementRef(NULL);
+    return rtl::Reference< configuration::ElementTree >();
 }
 //-----------------------------------------------------------------------------
 
-configuration::ElementTree extractElementTree(configapi::Factory& rFactory, UnoAny const& aElement, configuration::SetElementInfo const& aElementInfo )
+rtl::Reference< configuration::Template > NodeSetInfoAccess::getElementInfo() const
 {
-    using namespace configuration;
-    ElementRef aExtractedRef = extractElementRef(rFactory,aElement,aElementInfo.getTemplateInfo());
-    return aExtractedRef.getElementTree();
-}
-//-----------------------------------------------------------------------------
-
-configuration::SetElementInfo NodeSetInfoAccess::getElementInfo() const
-{
-    using configuration::SetElementInfo;
-    using configuration::TemplateHolder;
-
-    TemplateHolder aTemplate = SetElementInfo::extractElementInfo(getTree(),getNodeRef());
+    rtl::Reference<configuration::Template> aTemplate = getTree()->extractElementInfo(getNodeRef());
 
     OSL_ENSURE(aTemplate.is(), "ERROR: Set must have an element template");
 
-    return SetElementInfo(aTemplate);
+    return aTemplate;
 }
 
 }

@@ -68,10 +68,7 @@ struct OChangeActionCounter : public ChangeTreeAction
 class CollectNames :  public NodeAction
 {
 public:
-    typedef std::vector<OUString> NameList;
-
-public:
-    NameList const& list() const { return aList; }
+    std::vector<rtl::OUString> const& list() const { return aList; }
 
     CollectNames() : aList() {}
 
@@ -83,7 +80,7 @@ public:
         aList.push_back(aNode.getName());
     }
 private:
-    NameList aList;
+    std::vector<rtl::OUString> aList;
 };
 
 //..........................................................................

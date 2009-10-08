@@ -34,7 +34,6 @@
 #include "directview.hxx"
 #include "viewfactory.hxx"
 #include "setnodeimpl.hxx"
-#include "setnodeaccess.hxx"
 
 namespace configmgr
 {
@@ -44,13 +43,13 @@ namespace configmgr
 
 void DirectViewStrategy::implMarkNondefault(SetNode const& _aSetNode)
 {
-    data::SetNodeAccess aSetAccess = _aSetNode.getAccess();
+    sharable::SetNode * set = _aSetNode.getAccess();
 
-    OSL_ASSERT(aSetAccess.isValid());
+    OSL_ASSERT(set != 0);
 
     sharable::SetNode* pNode = NULL;
     if (m_aTreeSegment.is())
-        pNode = aSetAccess;
+        pNode = set;
 
     OSL_ASSERT(pNode);
 
@@ -81,18 +80,18 @@ node::Attributes DirectViewStrategy::doAdjustAttributes(node::Attributes const& 
 }
 //-----------------------------------------------------------------------------
 
-configuration::ValueMemberNode DirectViewStrategy::doGetValueMember(GroupNode const& _aNode, Name const& _aName, bool _bForUpdate) const
+configuration::ValueMemberNode DirectViewStrategy::doGetValueMember(GroupNode const& _aNode, rtl::OUString const& _aName, bool _bForUpdate) const
 {
     return ViewStrategy::doGetValueMember(_aNode,_aName,_bForUpdate);
 }
 //-----------------------------------------------------------------------------
-void DirectViewStrategy::doInsertElement(SetNode const& _aNode, Name const& _aName, SetNodeEntry const& _aNewEntry)
+void DirectViewStrategy::doInsertElement(SetNode const& _aNode, rtl::OUString const& _aName, configuration::SetEntry const& _aNewEntry)
 {
     // move to this memory segment
     // should already be direct (as any free-floating one)
 
     //implMakeElement(aNewEntry)
-    SetNodeElement aNewElement = implMakeElement(_aNode, _aNewEntry );
+    configuration::ElementTreeData aNewElement = implMakeElement(_aNode, _aNewEntry );
  //   _aNewEntry.tree()->rebuild(this, _aNode.accessor());
 
     _aNode.get_impl()->insertElement(_aName, aNewElement);
@@ -103,9 +102,9 @@ void DirectViewStrategy::doInsertElement(SetNode const& _aNode, Name const& _aNa
 }
 //-----------------------------------------------------------------------------
 
-void DirectViewStrategy::doRemoveElement(SetNode const& _aNode, Name const& _aName)
+void DirectViewStrategy::doRemoveElement(SetNode const& _aNode, rtl::OUString const& _aName)
 {
-    SetNodeElement aOldElement = _aNode.get_impl()->removeElement(_aName);
+    configuration::ElementTreeData aOldElement = _aNode.get_impl()->removeElement(_aName);
 
     aOldElement->detachFrom( _aNode.getAccess(), _aName);
 
@@ -121,7 +120,7 @@ NodeFactory& DirectViewStrategy::doGetNodeFactory()
 }
 //-----------------------------------------------------------------------------
 
-ViewStrategyRef createDirectAccessStrategy(data::TreeSegment const & _aTreeSegment)
+rtl::Reference<ViewStrategy> createDirectAccessStrategy(rtl::Reference< data::TreeSegment > const & _aTreeSegment)
 {
     return new DirectViewStrategy(_aTreeSegment);
 }

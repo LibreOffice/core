@@ -32,14 +32,11 @@
 #include "precompiled_configmgr.hxx"
 
 #include "cacheaccess.hxx"
-#include "nodeaccess.hxx"
 #include "tracer.hxx"
 #include "configpath.hxx"
 
 namespace configmgr
 {
-    using namespace configuration;
-
 // -------------------------------------------------------------------------
 
 CacheClientAccess::CacheClientAccess(ConfigChangeBroadcastHelper *  _pBroadcastHelper)
@@ -63,28 +60,28 @@ ConfigChangeBroadcastHelper *  CacheClientAccess::releaseBroadcaster()
 
 // -------------------------------------------------------------------------
 
-bool CacheClientAccess::hasModule(const CacheLine::Path& _aLocation)
+bool CacheClientAccess::hasModule(const configuration::AbsolutePath& _aLocation)
 {
     return this->m_aData.hasModule(_aLocation.getModuleName());
 }
 // -------------------------------------------------------------------------
 
-bool CacheClientAccess::hasModuleDefaults(CacheLine::Path const& _aLocation)
+bool CacheClientAccess::hasModuleDefaults(configuration::AbsolutePath const& _aLocation)
 {
     return this->m_aData.hasModuleDefaults(_aLocation.getModuleName());
 }
 // -------------------------------------------------------------------------
-void CacheClientAccess::attachModule(data::TreeAddress _aLocation, CacheLine::Name const & _aModule)
+void CacheClientAccess::attachModule(sharable::TreeFragment * _aLocation, rtl::OUString const & _aModule)
 {
     this->m_aData.attachModule(_aLocation, _aModule);
 }
 // -------------------------------------------------------------------------
 
-data::NodeAddress CacheClientAccess::acquireNode(CacheLine::Path const& rLocation )
+sharable::Node * CacheClientAccess::acquireNode(configuration::AbsolutePath const& rLocation )
 {
     CFG_TRACE_INFO("CacheClientAccess: Requesting data for path '%s'", OUSTRING2ASCII(rLocation.toString()) );
 
-    data::NodeAddress aResult = this->m_aData.acquireNode(rLocation);
+    sharable::Node * aResult = this->m_aData.acquireNode(rLocation);
 
     if (aResult != NULL)
     {
@@ -97,7 +94,7 @@ data::NodeAddress CacheClientAccess::acquireNode(CacheLine::Path const& rLocatio
 }
 // -------------------------------------------------------------------------
 
-oslInterlockedCount CacheClientAccess::releaseNode( CacheLine::Path const& rLocation )
+oslInterlockedCount CacheClientAccess::releaseNode( configuration::AbsolutePath const& rLocation )
 {
     CFG_TRACE_INFO("Tree Info: Releasing subtree data for path '%s'", OUSTRING2ASCII(rLocation.toString()) );
 
@@ -107,7 +104,7 @@ oslInterlockedCount CacheClientAccess::releaseNode( CacheLine::Path const& rLoca
 }
 // -----------------------------------------------------------------------------
 
-void CacheClientAccess::applyUpdate(backend::UpdateInstance & _aUpdate) CFG_UNO_THROW_RTE( )
+void CacheClientAccess::applyUpdate(backend::UpdateInstance & _aUpdate) SAL_THROW((com::sun::star::uno::RuntimeException))
 {
     CFG_TRACE_INFO("CacheClientAccess: Merging changes into subtree '%s'", OUSTRING2ASCII(_aUpdate.root().toString()) );
 
@@ -115,19 +112,15 @@ void CacheClientAccess::applyUpdate(backend::UpdateInstance & _aUpdate) CFG_UNO_
 }
 
 // -----------------------------------------------------------------------------
-data::NodeAddress CacheClientAccess::findInnerNode( CacheLine::Path const& aComponentName )
+sharable::Node * CacheClientAccess::findInnerNode( configuration::AbsolutePath const& aComponentName )
 {
-    data::NodeAddress aNode = this->m_aData.getNode(aComponentName);
-
-    if (aNode != NULL && data::NodeAccess(aNode)->isValue() )
-        aNode = data::NodeAddress();
-
-    return aNode;
+    sharable::Node * node = m_aData.getNode(aComponentName);
+    return node == 0 || node->isValue() ? 0 : node;
 }
 
 // -------------------------------------------------------------------------
 
-bool CacheClientAccess::insertDefaults( backend::NodeInstance const & _aDefaultData ) CFG_UNO_THROW_RTE(  )
+bool CacheClientAccess::insertDefaults( backend::NodeInstance const & _aDefaultData ) SAL_THROW((com::sun::star::uno::RuntimeException))
 {
     CFG_TRACE_INFO("Tree Info: Adding default data for path '%s'", OUSTRING2ASCII(_aDefaultData.root().toString()) );
 
@@ -151,25 +144,25 @@ CacheLoadingAccess::~CacheLoadingAccess()
 // -------------------------------------------------------------------------
 
 /// gets a tree reference for the given path if exists
-data::TreeAddress CacheLoadingAccess::getTreeAddress(CacheLine::Name const & _aModule)
+sharable::TreeFragment * CacheLoadingAccess::getTreeAddress(rtl::OUString const & _aModule)
 {
     return this->m_aData.getTreeAddress(_aModule);
 }
 // -------------------------------------------------------------------------
-void CacheLoadingAccess::createModule(CacheLine::Name const & _aModule)
+void CacheLoadingAccess::createModule(rtl::OUString const & _aModule)
 {
     this->m_aData.createModule(_aModule);
 }
 // -------------------------------------------------------------------------
-bool CacheLoadingAccess::hasModule(CacheLine::Name const & _aModule)
+bool CacheLoadingAccess::hasModule(rtl::OUString const & _aModule)
 {
     return this->m_aData.hasModule(_aModule);
 }
 // -------------------------------------------------------------------------
 
-bool CacheLoadingAccess::acquireModule(CacheLine::Name const & _aModule)
+bool CacheLoadingAccess::acquireModule(rtl::OUString const & _aModule)
 {
-    CFG_TRACE_INFO("Tree Info: Requesting data for module '%s'", OUSTRING2ASCII(_aModule.toString()));
+    CFG_TRACE_INFO("Tree Info: Requesting data for module '%s'", OUSTRING2ASCII(_aModule));
 
     if (this->m_aData.acquireModule(_aModule))
     {
@@ -185,9 +178,9 @@ bool CacheLoadingAccess::acquireModule(CacheLine::Name const & _aModule)
 }
 // -------------------------------------------------------------------------
 
-oslInterlockedCount CacheLoadingAccess::releaseModule( CacheLine::Name const & _aModule )
+oslInterlockedCount CacheLoadingAccess::releaseModule( rtl::OUString const & _aModule )
 {
-    CFG_TRACE_INFO("Tree Info: Releasing data for module '%s'", OUSTRING2ASCII(_aModule.toString()) );
+    CFG_TRACE_INFO("Tree Info: Releasing data for module '%s'", OUSTRING2ASCII(_aModule) );
 
     oslInterlockedCount nRet = this->m_aData.releaseModule(_aModule,true); // keep
     if (nRet == 0)
@@ -213,15 +206,15 @@ bool CacheLoadingAccess::isEmpty()
 }
 // -------------------------------------------------------------------------
 
-data::TreeAddress CacheLoadingAccess::addComponentData( backend::ComponentInstance const & _aComponentInstance,
+sharable::TreeFragment * CacheLoadingAccess::addComponentData( backend::ComponentInstance const & _aComponentInstance,
                                                         bool _bIncludesDefaults
-                                                       ) CFG_UNO_THROW_RTE()
+                                                       ) SAL_THROW((com::sun::star::uno::RuntimeException))
 {
     CFG_TRACE_INFO("CacheLoadingAccess: Adding component data for module '%s' : %s",
-                    OUSTRING2ASCII(_aComponentInstance.component().toString()),
+                    OUSTRING2ASCII(_aComponentInstance.component()),
                     _bIncludesDefaults ? "Data includes defaults." : "Data does not include defaults." );
 
-    data::TreeAddress aResult = this->m_aData.addComponentData(_aComponentInstance, _bIncludesDefaults);
+    sharable::TreeFragment * aResult = this->m_aData.addComponentData(_aComponentInstance, _bIncludesDefaults);
     if (aResult != NULL)
     {
         m_aDeadModules.erase( _aComponentInstance.component() );
@@ -234,7 +227,7 @@ data::TreeAddress CacheLoadingAccess::addComponentData( backend::ComponentInstan
 }
 // -------------------------------------------------------------------------
 // -----------------------------------------------------------------------------
-void CacheLoadingAccess::addChangesToPending( backend::ConstUpdateInstance const& _anUpdate ) CFG_UNO_THROW_RTE(  )
+void CacheLoadingAccess::addChangesToPending( backend::ConstUpdateInstance const& _anUpdate ) SAL_THROW((com::sun::star::uno::RuntimeException))
 {
     // NICE: m_pPending[_rLocation] += pSubtreeChange;
     CFG_TRACE_INFO("CacheLoadingAccess: Adding pending changes for subtree '%s'", OUSTRING2ASCII(_anUpdate.root().toString()) );
@@ -243,29 +236,27 @@ void CacheLoadingAccess::addChangesToPending( backend::ConstUpdateInstance const
 }
 
 // -----------------------------------------------------------------------------
-std::auto_ptr<SubtreeChange> CacheLoadingAccess::releasePendingChanges(CacheLine::Name const& _aComponentName)
+std::auto_ptr<SubtreeChange> CacheLoadingAccess::releasePendingChanges(rtl::OUString const& _aComponentName)
 {
-    CFG_TRACE_INFO("Tree Info: extract pending changes from subtree '%s'", OUSTRING2ASCII(_aComponentName.toString()) );
+    CFG_TRACE_INFO("Tree Info: extract pending changes from subtree '%s'", OUSTRING2ASCII(_aComponentName) );
     return this->m_aData.releasePending(_aComponentName);
 }
 
 // -----------------------------------------------------------------------------
-bool CacheLoadingAccess::findPendingChangedModules( ExtendedCacheData::PendingModuleList & _rPendingList )
+bool CacheLoadingAccess::findPendingChangedModules( std::vector< rtl::OUString > & _rPendingList )
 {
     this->m_aData.findPendingModules(_rPendingList);
     return !_rPendingList.empty();
 }
 
 // -----------------------------------------------------------------------------
-void CacheLoadingAccess::clearData(DisposeList& _rList) CFG_NOTHROW()
+void CacheLoadingAccess::clearData(std::vector< rtl::Reference<CacheLine> >& _rList) SAL_THROW(())
 {
     CFG_TRACE_INFO("Tree Info: Removing all module trees for cleanup" );
 
-    typedef ExtendedCacheData::ModuleList ModuleList;
+    ExtendedCacheData::ModuleList& rModules = this->m_aData.accessModuleList();
 
-    ModuleList& rModules = this->m_aData.accessModuleList();
-
-    for(ModuleList::iterator it = rModules.begin();
+    for(ExtendedCacheData::ModuleList::iterator it = rModules.begin();
         it != rModules.end();
         ++it)
     {
@@ -278,7 +269,7 @@ void CacheLoadingAccess::clearData(DisposeList& _rList) CFG_NOTHROW()
 }
 // -------------------------------------------------------------------------
 
-TimeStamp CacheLoadingAccess::collectDisposeList(CacheLoadingAccess::DisposeList & _rList, TimeStamp const & _aLimitTime, TimeInterval const & _aDelay)
+TimeStamp CacheLoadingAccess::collectDisposeList(std::vector< rtl::Reference<CacheLine> > & _rList, TimeStamp const & _aLimitTime, TimeInterval const & _aDelay)
 {
     TimeStamp aRetTime = TimeStamp::never();
 
@@ -286,16 +277,16 @@ TimeStamp CacheLoadingAccess::collectDisposeList(CacheLoadingAccess::DisposeList
 
     ExtendedCacheData::ModuleList& rActiveModules = this->m_aData.accessModuleList();
 
-    DeadModuleList::iterator it = m_aDeadModules.begin();
+    std::map< rtl::OUString, TimeStamp >::iterator it = m_aDeadModules.begin();
 
     while (it != m_aDeadModules.end())
     {
-        DeadModuleList::iterator current = it;
+        std::map< rtl::OUString, TimeStamp >::iterator current = it;
         // increment here, as we may later erase(current)
         ++it;
 
 #if (OSL_DEBUG_LEVEL > 0) || defined _DBG_UTIL || defined CFG_TRACE_ENABLE
-        OUString sCurrentName( current->first.toString() );
+        rtl::OUString sCurrentName( current->first );
 #endif
         TimeStamp aExpireTime = current->second + _aDelay;
         if (aExpireTime <= _aLimitTime)
@@ -304,7 +295,7 @@ TimeStamp CacheLoadingAccess::collectDisposeList(CacheLoadingAccess::DisposeList
 
             if (itModule != rActiveModules.end())
             {
-                CacheLineRef xModule = itModule->second;
+                rtl::Reference<CacheLine> xModule = itModule->second;
 
                 bool bHandled = false;
 

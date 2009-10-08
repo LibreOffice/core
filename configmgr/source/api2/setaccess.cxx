@@ -39,21 +39,16 @@
 namespace configmgr
 {
 
-    using uno::Reference;
-    using uno::Sequence;
-    using uno::Any;
-    using uno::RuntimeException;
-
 // XHierarchicalName
 //------------------------------------------------------------------------------------------------------------------
-OUString SAL_CALL BasicSetAccess::getHierarchicalName(  ) throw(RuntimeException)
+rtl::OUString SAL_CALL BasicSetAccess::getHierarchicalName(  ) throw(uno::RuntimeException)
 {
     return configapi::implGetHierarchicalName( getNode() );
 }
 
 //------------------------------------------------------------------------------------------------------------------
-OUString SAL_CALL BasicSetAccess::composeHierarchicalName( const OUString& sRelativeName )
-    throw(css::lang::IllegalArgumentException, css::lang::NoSupportException, RuntimeException)
+rtl::OUString SAL_CALL BasicSetAccess::composeHierarchicalName( const rtl::OUString& sRelativeName )
+    throw(css::lang::IllegalArgumentException, css::lang::NoSupportException, uno::RuntimeException)
 {
     return configapi::implComposeHierarchicalName( getNode(), sRelativeName );
 }
@@ -63,13 +58,13 @@ OUString SAL_CALL BasicSetAccess::composeHierarchicalName( const OUString& sRela
 // XElementAccess, base class of XNameAccess (and XHierarchicalNameAccess ? )
 //-----------------------------------------------------------------------------------
 
-uno::Type SAL_CALL BasicSetAccess::getElementType(  ) throw(RuntimeException)
+uno::Type SAL_CALL BasicSetAccess::getElementType(  ) throw(uno::RuntimeException)
 {
     return configapi::implGetElementType( getNode() );
 }
 
 //-----------------------------------------------------------------------------------
-sal_Bool SAL_CALL BasicSetAccess::hasElements(  ) throw(RuntimeException)
+sal_Bool SAL_CALL BasicSetAccess::hasElements(  ) throw(uno::RuntimeException)
 {
     return configapi::implHasElements( getNode() );
 }
@@ -77,7 +72,7 @@ sal_Bool SAL_CALL BasicSetAccess::hasElements(  ) throw(RuntimeException)
 // XExactName
 //-----------------------------------------------------------------------------------
 
-OUString SAL_CALL BasicSetAccess::getExactName( const OUString& rApproximateName ) throw(RuntimeException)
+rtl::OUString SAL_CALL BasicSetAccess::getExactName( const rtl::OUString& rApproximateName ) throw(uno::RuntimeException)
 {
     return configapi::implGetExactName( getNode(), rApproximateName);
 }
@@ -85,7 +80,7 @@ OUString SAL_CALL BasicSetAccess::getExactName( const OUString& rApproximateName
 // XProperty
 //-----------------------------------------------------------------------------------
 
-css::beans::Property SAL_CALL BasicSetAccess::getAsProperty(  ) throw(RuntimeException)
+css::beans::Property SAL_CALL BasicSetAccess::getAsProperty(  ) throw(uno::RuntimeException)
 {
     return configapi::implGetAsProperty( getNode() );
 }
@@ -93,54 +88,54 @@ css::beans::Property SAL_CALL BasicSetAccess::getAsProperty(  ) throw(RuntimeExc
 // XPropertySetInfo
 //-----------------------------------------------------------------------------------
 
-Sequence< css::beans::Property > SAL_CALL BasicSetAccess::getProperties(  ) throw (uno::RuntimeException)
+uno::Sequence< css::beans::Property > SAL_CALL BasicSetAccess::getProperties(  ) throw (uno::RuntimeException)
 {
     return configapi::implGetProperties( getNode() );
 }
 
-css::beans::Property SAL_CALL BasicSetAccess::getPropertyByName( const OUString& aName )
-    throw (css::beans::UnknownPropertyException, RuntimeException)
+css::beans::Property SAL_CALL BasicSetAccess::getPropertyByName( const rtl::OUString& aName )
+    throw (css::beans::UnknownPropertyException, uno::RuntimeException)
 {
     return configapi::implGetPropertyByName( getNode(), aName );
 }
 
-sal_Bool SAL_CALL BasicSetAccess::hasPropertyByName( const OUString& Name ) throw (RuntimeException)
+sal_Bool SAL_CALL BasicSetAccess::hasPropertyByName( const rtl::OUString& name ) throw (uno::RuntimeException)
 {
-    return configapi::implHasPropertyByName( getNode(), Name );
+    return configapi::implHasPropertyByName( getNode(), name );
 }
 
 
 // XNameAccess
 //-----------------------------------------------------------------------------------
 
-sal_Bool SAL_CALL BasicSetAccess::hasByName( const OUString& sName ) throw(RuntimeException)
+sal_Bool SAL_CALL BasicSetAccess::hasByName( const rtl::OUString& sName ) throw(uno::RuntimeException)
 {
     return configapi::implHasByName( getNode(), sName);
 }
 
 //-----------------------------------------------------------------------------------
-Any SAL_CALL BasicSetAccess::getByName( const OUString& sName )
-    throw(css::container::NoSuchElementException, css::lang::WrappedTargetException, RuntimeException)
+uno::Any SAL_CALL BasicSetAccess::getByName( const rtl::OUString& sName )
+    throw(css::container::NoSuchElementException, css::lang::WrappedTargetException, uno::RuntimeException)
 {
     return configapi::implGetByName( getNode(), sName );
 }
 
 //-----------------------------------------------------------------------------------
-Sequence< OUString > SAL_CALL BasicSetAccess::getElementNames(  ) throw( RuntimeException)
+uno::Sequence< rtl::OUString > SAL_CALL BasicSetAccess::getElementNames(  ) throw( uno::RuntimeException)
 {
     return configapi::implGetElementNames( getNode() );
 }
 
 // XHierarchicalNameAccess
 //-----------------------------------------------------------------------------------
-sal_Bool SAL_CALL BasicSetAccess::hasByHierarchicalName( const OUString& sName ) throw(RuntimeException)
+sal_Bool SAL_CALL BasicSetAccess::hasByHierarchicalName( const rtl::OUString& sName ) throw(uno::RuntimeException)
 {
     return configapi::implHasByHierarchicalName( getNode(), sName);
 }
 
 //-----------------------------------------------------------------------------------
-Any SAL_CALL BasicSetAccess::getByHierarchicalName( const OUString& sName )
-    throw(css::container::NoSuchElementException, RuntimeException)
+uno::Any SAL_CALL BasicSetAccess::getByHierarchicalName( const rtl::OUString& sName )
+    throw(css::container::NoSuchElementException, uno::RuntimeException)
 {
     return configapi::implGetByHierarchicalName( getNode(), sName );
 }
@@ -149,14 +144,14 @@ Any SAL_CALL BasicSetAccess::getByHierarchicalName( const OUString& sName )
 // XContainer
 //-----------------------------------------------------------------------------------
 
-void SAL_CALL BasicSetAccess::addContainerListener( const Reference< css::container::XContainerListener >& xListener )
-    throw(RuntimeException)
+void SAL_CALL BasicSetAccess::addContainerListener( const uno::Reference< css::container::XContainerListener >& xListener )
+    throw(uno::RuntimeException)
 {
     configapi::implAddListener( getNode(), xListener );
 }
 
-void SAL_CALL BasicSetAccess::removeContainerListener( const Reference< css::container::XContainerListener >& xListener )
-    throw(RuntimeException)
+void SAL_CALL BasicSetAccess::removeContainerListener( const uno::Reference< css::container::XContainerListener >& xListener )
+    throw(uno::RuntimeException)
 {
     configapi::implRemoveListener( getNode(), xListener );
 }
@@ -167,7 +162,7 @@ void SAL_CALL BasicSetAccess::removeContainerListener( const Reference< css::con
 
 // XTemplateContainer
 //-----------------------------------------------------------------------------------
-OUString SAL_CALL BasicSetAccess::getElementTemplateName(  )
+rtl::OUString SAL_CALL BasicSetAccess::getElementTemplateName(  )
     throw(uno::RuntimeException)
 {
     return configapi::implGetElementTemplateName( getNode() );
@@ -175,14 +170,14 @@ OUString SAL_CALL BasicSetAccess::getElementTemplateName(  )
 
 // XStringEscape
 //-----------------------------------------------------------------------------------
-OUString SAL_CALL BasicSetAccess::escapeString( const OUString& aString )
-    throw(css::lang::IllegalArgumentException, RuntimeException)
+rtl::OUString SAL_CALL BasicSetAccess::escapeString( const rtl::OUString& aString )
+    throw(css::lang::IllegalArgumentException, uno::RuntimeException)
 {
     return aString;
 }
 
-OUString SAL_CALL BasicSetAccess::unescapeString( const OUString& aEscapedString )
-    throw(css::lang::IllegalArgumentException, RuntimeException)
+rtl::OUString SAL_CALL BasicSetAccess::unescapeString( const rtl::OUString& aEscapedString )
+    throw(css::lang::IllegalArgumentException, uno::RuntimeException)
 {
     return aEscapedString;
 }

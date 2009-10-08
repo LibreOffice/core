@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: DTable.cxx,v $
- * $Revision: 1.107 $
+ * $Revision: 1.107.30.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -60,6 +60,7 @@
 #include "connectivity/dbtools.hxx"
 #include "connectivity/FValue.hxx"
 #include "connectivity/dbconversion.hxx"
+#include "resource/dbase_res.hrc"
 
 #include <algorithm>
 
@@ -795,10 +796,11 @@ BOOL ODbaseTable::CreateImpl()
 
     if ( m_pConnection->isCheckEnabled() && ::dbtools::convertName2SQLName(m_Name,::rtl::OUString()) != m_Name )
     {
-        ::rtl::OUString sError(RTL_CONSTASCII_USTRINGPARAM("The Name '"));
-        sError += m_Name;
-        sError += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("' doesn't match SQL naming constraints."));
-        ::dbtools::throwGenericSQLException(sError,*this);
+        const ::rtl::OUString sError( getConnection()->getResources().getResourceStringWithSubstitution(
+                STR_SQL_NAME_ERROR,
+                "$name$", m_Name
+             ) );
+        ::dbtools::throwGenericSQLException( sError, *this );
     }
 
     INetURLObject aURL;
@@ -881,10 +883,12 @@ BOOL ODbaseTable::CreateImpl()
             }
             catch(const Exception&)
             {
-                ::rtl::OUString sMessage = ::rtl::OUString::createFromAscii("[StarOffice Base dbase] The memo file '");
-                sMessage += aName;
-                sMessage += ::rtl::OUString::createFromAscii(" already exists.");
-                throwGenericSQLException(sMessage, static_cast<XNamed*>(this));
+
+                const ::rtl::OUString sError( getConnection()->getResources().getResourceStringWithSubstitution(
+                        STR_COULD_NOT_DELETE_FILE,
+                        "$name$", aName
+                     ) );
+                ::dbtools::throwGenericSQLException( sError, *this );
             }
         }
         if (!CreateMemoFile(aURL))
@@ -899,17 +903,10 @@ BOOL ODbaseTable::CreateImpl()
     else
         m_aHeader.db_typ = dBaseIII;
 
-//  if (GetDBFConnection()->GetShowDeleted())
-//      nPrivileges = SDB_PR_READ | SDB_PR_INSERT | SDB_PR_UPDATE |
-//          SDB_PR_ALTER | SDB_PR_DROP;
-//  else
-        //  nPrivileges = SDB_PR_READ | SDB_PR_INSERT | SDB_PR_UPDATE |
-            //  SDB_PR_DELETE | SDB_PR_ALTER | SDB_PR_DROP;
-
     return TRUE;
 }
 // -----------------------------------------------------------------------------
-void ODbaseTable::throwInvalidColumnType(const ::rtl::OUString& _sError,const ::rtl::OUString& _sColumnName)
+void ODbaseTable::throwInvalidColumnType(const sal_uInt16 _nErrorId,const ::rtl::OUString& _sColumnName)
 {
     try
     {
@@ -920,11 +917,11 @@ void ODbaseTable::throwInvalidColumnType(const ::rtl::OUString& _sError,const ::
     {
     }
 
-    ::rtl::OUString sMsg = _sError;
-    sMsg += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("\""));
-    sMsg += _sColumnName;
-    sMsg += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("\" !"));
-    ::dbtools::throwGenericSQLException( sMsg, *this );
+    const ::rtl::OUString sError( getConnection()->getResources().getResourceStringWithSubstitution(
+            _nErrorId,
+            "$columnname$", _sColumnName
+         ) );
+    ::dbtools::throwGenericSQLException( sError, *this );
 }
 //------------------------------------------------------------------
 // erzeugt grundsaetzlich dBase IV Datei Format
@@ -974,10 +971,7 @@ BOOL ODbaseTable::CreateFile(const INetURLObject& aFile, BOOL& bCreateMemo)
             ::rtl::OString aCol;
             if ( DBTypeConversion::convertUnicodeString( aName, aCol, m_eEncoding ) > nMaxFieldLength)
             {
-                ::rtl::OUString sMsg = ::rtl::OUString::createFromAscii("Invalid column name length for column: ");
-                sMsg += aName;
-                sMsg += ::rtl::OUString::createFromAscii("!");
-                ::dbtools::throwGenericSQLException( sMsg, *this );
+                throwInvalidColumnType( STR_INVALID_COLUMN_NAME_LENGTH, aName );
             }
 
             (*m_pFileStream) << aCol.getStr();
@@ -1011,7 +1005,7 @@ BOOL ODbaseTable::CreateFile(const INetURLObject& aFile, BOOL& bCreateMemo)
                     break;
                 default:
                     {
-                        throwInvalidColumnType(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Invalid column type for column: ")), aName);
+                        throwInvalidColumnType(STR_INVALID_COLUMN_TYPE, aName);
                     }
             }
 
@@ -1029,7 +1023,7 @@ BOOL ODbaseTable::CreateFile(const INetURLObject& aFile, BOOL& bCreateMemo)
                     OSL_ENSURE(nPrecision < 255, "ODbaseTable::Create: Column zu lang!");
                     if (nPrecision > 254)
                     {
-                        throwInvalidColumnType(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Invalid precision for column: ")), aName);
+                        throwInvalidColumnType(STR_INVALID_COLUMN_PRECISION, aName);
                     }
                     (*m_pFileStream) << (BYTE) Min((ULONG)nPrecision, 255UL);      //Feldlaenge
                     nRecLength = nRecLength + (USHORT)::std::min((USHORT)nPrecision, (USHORT)255UL);
@@ -1041,7 +1035,7 @@ BOOL ODbaseTable::CreateFile(const INetURLObject& aFile, BOOL& bCreateMemo)
                             "ODbaseTable::Create: Feldlaenge muss groesser Nachkommastellen sein!");
                     if (nPrecision <  nScale)
                     {
-                        throwInvalidColumnType(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Precision is less than scale for column: ")), aName);
+                        throwInvalidColumnType(STR_INVALID_PRECISION_SCALE, aName);
                     }
                     if (getBOOL(xCol->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_ISCURRENCY)))) // Currency wird gesondert behandelt
                     {
@@ -1075,9 +1069,7 @@ BOOL ODbaseTable::CreateFile(const INetURLObject& aFile, BOOL& bCreateMemo)
                     nRecLength += 10;
                     break;
                 default:
-                    {
-                        throwInvalidColumnType(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Invalid column type for column: ")), aName);
-                    }
+                    throwInvalidColumnType(STR_INVALID_COLUMN_TYPE, aName);
             }
             m_pFileStream->Write(aBuffer, 14);
         }
@@ -1438,17 +1430,14 @@ BOOL ODbaseTable::UpdateBuffer(OValueRefVector& rRow, OValueRefRow pOrgRow,const
                 if (pIndex->Find(0,*rRow[nPos]))
                 {
                     // es existiert kein eindeutiger Wert
-                    ::rtl::OUString sMessage(RTL_CONSTASCII_USTRINGPARAM("Duplicate value found in column \""));
                     if ( !aColName.getLength() )
                     {
                         m_pColumns->getByIndex(i) >>= xCol;
                         OSL_ENSURE(xCol.is(),"ODbaseTable::UpdateBuffer column is null!");
                         xCol->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_NAME)) >>= aColName;
                         xCol = NULL;
-                    }
-                    sMessage += aColName;
-                    sMessage += ::rtl::OUString::createFromAscii( "\"!");
-                    ::dbtools::throwGenericSQLException( sMessage, *this );
+                    } // if ( !aColName.getLength() )
+                    throwInvalidColumnType(STR_DUPLICATE_VALUE_IN_COLUMN,aColName);
                 }
             }
         }
@@ -1582,7 +1571,7 @@ BOOL ODbaseTable::UpdateBuffer(OValueRefVector& rRow, OValueRefRow pOrgRow,const
                     // ein const_cast, da GetFormatPrecision am SvNumberFormat nicht const ist, obwohl es das eigentlich
                     // sein koennte und muesste
 
-                    ByteString aDefaultValue = ::rtl::math::doubleToString( n, rtl_math_StringFormat_F, nScale, '.', NULL, 0);
+                    const ByteString aDefaultValue( ::rtl::math::doubleToString( n, rtl_math_StringFormat_F, nScale, '.', NULL, 0));
                     sal_Int32 nRealLen = aDefaultValue.Len();
                     BOOL bValidLength  = nRealLen <= nLen;
                     if ( bValidLength )
@@ -1593,7 +1582,7 @@ BOOL ODbaseTable::UpdateBuffer(OValueRefVector& rRow, OValueRefRow pOrgRow,const
                         if ( n < 0.0 ) // for the sign '-'
                             --nRealLen;
 
-                        bValidLength = nRealLen < nRealPrecision;
+                        bValidLength = nRealLen <= nRealPrecision;
                         if ( bValidLength )
                         {
                             strncpy(pData,aDefaultValue.GetBuffer(),nLen);
@@ -1607,15 +1596,13 @@ BOOL ODbaseTable::UpdateBuffer(OValueRefVector& rRow, OValueRefRow pOrgRow,const
                         OSL_ENSURE(xCol.is(),"ODbaseTable::UpdateBuffer column is null!");
                         xCol->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_NAME)) >>= aColName;
 
-                        String sError;
-                        sError.AppendAscii("The \"");
-                        sError += aColName.getStr();
-                        sError.AppendAscii("\" column has been defined as a \"Decimal\" type, the max. length is ");
-                        sError += String::CreateFromInt32(nRealPrecision);
-                        sError.AppendAscii(" characters (with ");
-                        sError += String::CreateFromInt32(nScale);
-                        sError.AppendAscii(" decimal places).\n\nThe specified value is longer than the number of digits allowed.");
-                        throwGenericSQLException(sError, static_cast<XNamed*>(this));
+                        const ::rtl::OUString sError( getConnection()->getResources().getResourceStringWithSubstitution(
+                                STR_INVALID_COLUMN_DECIMAL_VALUE,
+                                "$columnname$", aColName,
+                                "$precision$", String::CreateFromInt32(nRealPrecision),
+                                "$scale$", String::CreateFromInt32(nScale)
+                             ) );
+                        ::dbtools::throwGenericSQLException( sError, *this );
                     }
                 } break;
                 case DataType::BIT:
@@ -1673,11 +1660,11 @@ BOOL ODbaseTable::UpdateBuffer(OValueRefVector& rRow, OValueRefRow pOrgRow,const
             if ( xCol.is() )
                 xCol->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_NAME)) >>= aColName;
 
-            ::rtl::OUString sMsg = ::rtl::OUString::createFromAscii( "invalid value for column '" );
-            sMsg += aColName;
-            sMsg += ::rtl::OUString::createFromAscii("'");
-
-            throw SQLException( sMsg, *this, sSQLState, nErrorCode, aSQLError );
+            const ::rtl::OUString sError( getConnection()->getResources().getResourceStringWithSubstitution(
+                    STR_INVALID_COLUMN_VALUE,
+                    "$columnname$", aColName
+                 ) );
+            ::dbtools::throwGenericSQLException( sError, *this );
         }
         // Und weiter ...
         nByteOffset += nLen;
@@ -1909,10 +1896,11 @@ void ODbaseTable::alterColumn(sal_Int32 index,
         // construct the new table
         if(!pNewTable->CreateImpl())
         {
-            ::rtl::OUString sError = ::rtl::OUString::createFromAscii("Could not alter column \"");
-            sError += ::comphelper::getString(descriptor->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_NAME)));
-            sError += ::rtl::OUString::createFromAscii("\". May be the file system is write protected.");
-            throwGenericSQLException(sError,*this );
+            const ::rtl::OUString sError( getConnection()->getResources().getResourceStringWithSubstitution(
+                    STR_COLUMN_NOT_ALTERABLE,
+                    "$columnname$", ::comphelper::getString(descriptor->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_NAME)))
+                 ) );
+            ::dbtools::throwGenericSQLException( sError, *this );
         }
 
         pNewTable->construct();
@@ -2063,10 +2051,11 @@ void ODbaseTable::addColumn(const Reference< XPropertySet >& _xNewColumn)
     // construct the new table
     if(!pNewTable->CreateImpl())
     {
-        ::rtl::OUString sError = ::rtl::OUString::createFromAscii("Could not add new column \"");
-        sError += ::comphelper::getString(_xNewColumn->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_NAME)));
-        sError += ::rtl::OUString::createFromAscii("\". May be the file system is write protected.");
-        throwGenericSQLException(sError,*this );
+        const ::rtl::OUString sError( getConnection()->getResources().getResourceStringWithSubstitution(
+                STR_COLUMN_NOT_ADDABLE,
+                "$columnname$", ::comphelper::getString(_xNewColumn->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_NAME)))
+             ) );
+        ::dbtools::throwGenericSQLException( sError, *this );
     }
 
     BOOL bAlreadyDroped = FALSE;
@@ -2134,10 +2123,11 @@ void ODbaseTable::dropColumn(sal_Int32 _nPos)
     if(!pNewTable->CreateImpl())
     {
         xHold = pNewTable = NULL;
-        ::rtl::OUString sError = ::rtl::OUString::createFromAscii("Could not drop column at position \"");
-        sError += ::rtl::OUString::valueOf(_nPos);
-        sError += ::rtl::OUString::createFromAscii("\". May be the file system is write protected.");
-        throwGenericSQLException(sError,*this );
+        const ::rtl::OUString sError( getConnection()->getResources().getResourceStringWithSubstitution(
+                STR_COLUMN_NOT_DROP,
+                "$position$", ::rtl::OUString::valueOf(_nPos)
+             ) );
+        ::dbtools::throwGenericSQLException( sError, *this );
     }
     pNewTable->construct();
     // copy the data
@@ -2166,9 +2156,7 @@ String ODbaseTable::createTempFile()
     String sName(m_Name);
     TempFile aTempFile(sName,&sExt,&sTempName);
     if(!aTempFile.IsValid())
-        ::dbtools::throwGenericSQLException( ::rtl::OUString::createFromAscii( "Error while alter table." ),
-        // TODO: resource
-        *this );
+        getConnection()->throwGenericSQLException(STR_COULD_NOT_ALTER_TABLE,*this);
 
     INetURLObject aURL;
     aURL.SetSmartProtocol(INET_PROT_FILE);
@@ -2240,10 +2228,12 @@ void ODbaseTable::throwInvalidDbaseFormat()
 {
     FileClose();
     // no dbase file
-    ::rtl::OUString sMessage = ::rtl::OUString::createFromAscii("[StarOffice Base dbase] The file '");
-    sMessage += getEntry(m_pConnection,m_Name);
-    sMessage += ::rtl::OUString::createFromAscii(" is an invalid (or unrecognized) dBase file.");
-    throwGenericSQLException(sMessage, static_cast<XNamed*>(this));
+
+    const ::rtl::OUString sError( getConnection()->getResources().getResourceStringWithSubstitution(
+                STR_SQL_NAME_ERROR,
+                "$filename$", getEntry(m_pConnection,m_Name)
+             ) );
+    ::dbtools::throwGenericSQLException( sError, *this );
 }
 // -----------------------------------------------------------------------------
 void ODbaseTable::refreshHeader()

@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: MResultSet.cxx,v $
- * $Revision: 1.33 $
+ * $Revision: 1.33.22.3 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -44,17 +44,15 @@
 #include <connectivity/dbexception.hxx>
 #include <connectivity/dbtools.hxx>
 
-#ifndef _CONNECTIVITY_TSORTINDEX_HXX_
 #include <TSortIndex.hxx>
-#endif
 #include <rtl/string.hxx>
 #include <vector>
 #include <algorithm>
-#ifndef CONNECTIVITY_SRESULTSET_HXX
 #include "MResultSet.hxx"
-#endif
 #include "MResultSetMetaData.hxx"
 #include "FDatabaseMetaDataResultSet.hxx"
+#include "resource/mozab_res.hrc"
+#include "resource/common_res.hrc"
 
 #if OSL_DEBUG_LEVEL > 0
 # define OUtoCStr( x ) ( ::rtl::OUStringToOString ( (x), RTL_TEXTENCODING_ASCII_US).getStr())
@@ -360,7 +358,7 @@ sal_Bool OResultSet::pushCard(sal_uInt32 cardNumber) throw(SQLException, Runtime
             // Everything in the addressbook is a string!
             //
             if ( !m_aQuery.setRowValue( (*m_aRow)[i], cardNumber, m_aColumnNames[i-1], DataType::VARCHAR )) {
-                m_pStatement->getOwnConnection()->throwGenericSQLException( m_aQuery.getErrorResourceId() );
+                m_pStatement->getOwnConnection()->throwGenericSQLException( m_aQuery.getErrorResourceId(),*this );
             }
         }
     }
@@ -401,7 +399,7 @@ sal_Bool OResultSet::fetchRow(sal_Int32 cardNumber,sal_Bool bForceReload) throw(
             // Everything in the addressbook is a string!
             //
             if ( !m_aQuery.getRowValue( (*m_aRow)[i], cardNumber, m_aColumnNames[i-1], DataType::VARCHAR )) {
-                m_pStatement->getOwnConnection()->throwGenericSQLException( m_aQuery.getErrorResourceId() );
+                m_pStatement->getOwnConnection()->throwGenericSQLException( m_aQuery.getErrorResourceId(),*this );
             }
         }
     }
@@ -615,8 +613,7 @@ void SAL_CALL OResultSet::refreshRow(  ) throw(SQLException, RuntimeException)
 {
     OSL_TRACE("In/Out: OResultSet::refreshRow" );
     if (fetchRow(getCurrentCardNumber(),sal_True))  //force fetch current row will cause we lose all change to the current row
-        ::dbtools::throwGenericSQLException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("Error refresh row")), NULL );
-
+        m_pStatement->getOwnConnection()->throwGenericSQLException(STR_ERROR_REFRESH_ROW,*this);
 }
 // -------------------------------------------------------------------------
 IPropertyArrayHelper* OResultSet::createArrayHelper( ) const
@@ -855,8 +852,7 @@ void OResultSet::analyseWhereClause( const OSQLParseNode*                 parseT
           // odbc date
           (SQL_ISRULE(parseTree->getChild(2),set_fct_spec) && SQL_ISPUNCTUATION(parseTree->getChild(2)->getChild(0),"{"))))
         {
-            ::dbtools::throwGenericSQLException(
-                        ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("Statement too complex")),NULL);
+            m_pStatement->getOwnConnection()->throwGenericSQLException(STR_QUERY_TOO_COMPLEX,*this);
         }
 
         OSQLParseNode *pPrec = parseTree->getChild(1);
@@ -893,8 +889,7 @@ void OResultSet::analyseWhereClause( const OSQLParseNode*                 parseT
 
         if ( !(SQL_ISRULE(parseTree->getChild(0), column_ref)) )
         {
-            ::dbtools::throwGenericSQLException(
-                    ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("Invalid Statement - Not a Column")),NULL);
+            m_pStatement->getOwnConnection()->throwGenericSQLException(STR_QUERY_INVALID_LIKE_COLUMN,*this);
         }
 
 
@@ -914,8 +909,7 @@ void OResultSet::analyseWhereClause( const OSQLParseNode*                 parseT
         {
             OSL_TRACE("analyseSQL : pAtom->count() = %d\n", pAtom->count() );
 
-            ::dbtools::throwGenericSQLException(
-                    ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("Invalid Statement - Not a String")),NULL);
+            m_pStatement->getOwnConnection()->throwGenericSQLException(STR_QUERY_INVALID_LIKE_STRING,*this);
         }
 
         const sal_Unicode WILDCARD = '%';
@@ -977,8 +971,7 @@ void OResultSet::analyseWhereClause( const OSQLParseNode*                 parseT
         {
             // We currently can't handle a 'NOT LIKE' when there are '%' or
             // '_' dispersed throughout
-            ::dbtools::throwGenericSQLException(
-                        ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("Statement too complex")),NULL);
+            m_pStatement->getOwnConnection()->throwGenericSQLException(STR_QUERY_NOT_LIKE_TOO_COMPLEX,*this);
         }
         else
         {
@@ -1033,7 +1026,7 @@ void OResultSet::analyseWhereClause( const OSQLParseNode*                 parseT
 
         if (!SQL_ISRULE(parseTree->getChild(0),column_ref))
         {
-            ::dbtools::throwGenericSQLException(::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("Invalid Statement - Not a Column")),NULL);
+            m_pStatement->getOwnConnection()->throwGenericSQLException(STR_QUERY_INVALID_IS_NULL_COLUMN,*this);
         }
 
         if (SQL_ISTOKEN(parseTree->getChild(2),NOT))
@@ -1052,7 +1045,7 @@ void OResultSet::analyseWhereClause( const OSQLParseNode*                 parseT
     {
         OSL_TRACE( "Unexpected statement!!!" );
 
-        ::dbtools::throwGenericSQLException(::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("Invalid Statement - Unexpected")),NULL);
+        m_pStatement->getOwnConnection()->throwGenericSQLException(STR_QUERY_TOO_COMPLEX,*this);
     }
 }
 
@@ -1138,8 +1131,7 @@ void OResultSet::fillRowData()
 
     sal_Int32 rv = m_aQuery.executeQuery(xConnection);
     if ( rv == -1 ) {
-        ::dbtools::throwGenericSQLException(
-                    ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("Error querying addressbook")),NULL);
+        m_pStatement->getOwnConnection()->throwGenericSQLException(STR_ERR_EXECUTING_QUERY,*this);
     }
     //determine whether the address book is readonly
     determineReadOnly();
@@ -1187,7 +1179,7 @@ sal_Int32 OResultSet::getRowForCardNumber(sal_Int32 nCardNum)
         }
     }
 
-    ::dbtools::throwSQLException( "Invalid bookmark value", "HY111", *this );
+    m_pStatement->getOwnConnection()->throwGenericSQLException(STR_INVALID_BOOKMARK,*this);
     return 0;
 }
 
@@ -1202,10 +1194,7 @@ void SAL_CALL OResultSet::executeQuery() throw( ::com::sun::star::sdbc::SQLExcep
     {
         const OSQLTables& xTabs = m_pSQLIterator->getTables();
         if ((xTabs.begin() == xTabs.end()) || !xTabs.begin()->second.is())
-            ::dbtools::throwGenericSQLException(   ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("The statement is invalid.")),
-                                        static_cast<XWeak*>(this),
-                                        makeAny( m_pSQLIterator->getErrors() )
-                                    );
+            m_pStatement->getOwnConnection()->throwGenericSQLException(STR_QUERY_TOO_COMPLEX,*this);
 
         m_pTable = static_cast< OTable* > ((xTabs.begin()->second).get());
 
@@ -1230,7 +1219,7 @@ void SAL_CALL OResultSet::executeQuery() throw( ::com::sun::star::sdbc::SQLExcep
             }
             else if(isCount())
             {
-                ::dbtools::throwFunctionNotSupportedException(::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("COUNT() - Driver does not support this function.")), NULL);
+                m_pStatement->getOwnConnection()->throwGenericSQLException(STR_NO_COUNT_SUPPORT,*this);
             }
             else
             {
@@ -1296,7 +1285,7 @@ void SAL_CALL OResultSet::executeQuery() throw( ::com::sun::star::sdbc::SQLExcep
                     OSL_TRACE("Query is to be sorted");
                     if( ! m_aQuery.queryComplete() )
                         if ( !m_aQuery.waitForQueryComplete() ) {
-                            m_pStatement->getOwnConnection()->throwGenericSQLException( m_aQuery.getErrorResourceId() );
+                            m_pStatement->getOwnConnection()->throwGenericSQLException( m_aQuery.getErrorResourceId(),*this );
                         }
 
                     OSL_ENSURE( m_aQuery.queryComplete(), "Query not complete!!");
@@ -1371,7 +1360,7 @@ void SAL_CALL OResultSet::executeQuery() throw( ::com::sun::star::sdbc::SQLExcep
         case SQL_STATEMENT_INSERT:
             break;
         default:
-            ::dbtools::throwFunctionNotSupportedException(::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("statement type not supported by this database driver.")), NULL);
+            m_pStatement->getOwnConnection()->throwGenericSQLException(STR_STMT_TYPE_NOT_SUPPORTED,*this);
             break;
     }
 }
@@ -1484,7 +1473,7 @@ sal_Bool OResultSet::validRow( sal_uInt32 nRow )
 #endif
             m_aQuery.checkRowAvailable( nRow );
             if ( m_aQuery.errorOccurred() ) {
-                m_pStatement->getOwnConnection()->throwGenericSQLException( m_aQuery.getErrorResourceId() );
+                m_pStatement->getOwnConnection()->throwGenericSQLException( m_aQuery.getErrorResourceId() ,*this);
             }
             nNumberOfRecords = m_aQuery.getRealRowCount();
     }
@@ -1526,7 +1515,7 @@ sal_Bool OResultSet::seekRow( eRowPosition pos, sal_Int32 nOffset )
 {
     ResultSetEntryGuard aGuard( *this );
     if ( !m_pKeySet.isValid() )
-        ::dbtools::throwGenericSQLException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Illegal cursor movement" ) ), *this );
+        m_pStatement->getOwnConnection()->throwGenericSQLException(STR_ILLEGAL_MOVEMENT,*this);
 
     sal_Int32  nNumberOfRecords = m_aQuery.getRealRowCount();
     sal_Int32  nRetrivedRows = currentRowCount();
@@ -1579,7 +1568,7 @@ sal_Bool OResultSet::seekRow( eRowPosition pos, sal_Int32 nOffset )
     while ( nCurCard > nNumberOfRecords && !m_aQuery.queryComplete() ) {
             m_aQuery.checkRowAvailable( nCurCard );
             if ( m_aQuery.errorOccurred() ) {
-                m_pStatement->getOwnConnection()->throwGenericSQLException( m_aQuery.getErrorResourceId() );
+                m_pStatement->getOwnConnection()->throwGenericSQLException( m_aQuery.getErrorResourceId(),*this );
             }
             nNumberOfRecords = m_aQuery.getRealRowCount();
     }
@@ -1613,7 +1602,7 @@ void OResultSet::setColumnMapping(const ::std::vector<sal_Int32>& _aColumnMappin
     OSL_TRACE("getBookmark, m_nRowPos = %u", m_nRowPos );
     ResultSetEntryGuard aGuard( *this );
     if ( fetchCurrentRow() == sal_False )
-        ::dbtools::throwGenericSQLException(::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("Can't get current row")),NULL);
+        m_pStatement->getOwnConnection()->throwGenericSQLException(STR_ERROR_GET_ROW,*this);
 
     OSL_ENSURE((!m_aRow->isDeleted()),"getBookmark called for deleted row");
     return makeAny((sal_Int32)(*m_aRow)[0]);
@@ -1644,7 +1633,7 @@ sal_Int32 OResultSet::compareBookmarks( const ::com::sun::star::uno::Any& lhs, c
         sal_Int32 nResult=0;
 
     if ( !( lhs >>= nFirst ) || !( rhs >>= nSecond ) )
-        ::dbtools::throwSQLException( "XRowLocate::compareBookmarks: Invalid bookmark value", "HY111", *this );
+        m_pStatement->getOwnConnection()->throwGenericSQLException(STR_INVALID_BOOKMARK,*this);
 
     if(nFirst < nSecond)
          nResult = -1;
@@ -1684,10 +1673,11 @@ void OResultSet::checkPendingUpdate() throw(SQLException, RuntimeException)
     if ((m_nNewRow && nCurrentRow != m_nNewRow)
         || ( m_nUpdatedRow && m_nUpdatedRow != nCurrentRow))
     {
-        const ::rtl::OUString errorMsg=::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(" Please commit row "))
-                                                    + ::rtl::OUString::valueOf(nCurrentRow)
-                                                    +   ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(" before  update rows or insert new rows. ")) ;
-        ::dbtools::throwGenericSQLException( errorMsg, *this );
+        const ::rtl::OUString sError( m_pStatement->getOwnConnection()->getResources().getResourceStringWithSubstitution(
+                STR_COMMIT_ROW,
+                "$position$", ::rtl::OUString::valueOf(nCurrentRow)
+             ) );
+        ::dbtools::throwGenericSQLException(sError,*this);
     }
 
 }
@@ -1696,7 +1686,7 @@ void OResultSet::updateValue(sal_Int32 columnIndex ,const ORowSetValue& x) throw
     OSL_TRACE("updateValue, m_nRowPos = %u", m_nRowPos );
     ResultSetEntryGuard aGuard( *this );
     if ( fetchCurrentRow() == sal_False )
-        ::dbtools::throwGenericSQLException(::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("Can't get current row")),NULL);
+        m_pStatement->getOwnConnection()->throwGenericSQLException(STR_ERROR_GET_ROW,*this);
 
 
     checkPendingUpdate();
@@ -1716,7 +1706,7 @@ void SAL_CALL OResultSet::updateNull( sal_Int32 columnIndex ) throw(SQLException
     OSL_TRACE("updateNull, m_nRowPos = %u", m_nRowPos );
     ResultSetEntryGuard aGuard( *this );
     if ( fetchCurrentRow() == sal_False )
-        ::dbtools::throwGenericSQLException(::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("Can't get current row")),NULL);
+        m_pStatement->getOwnConnection()->throwGenericSQLException(STR_ERROR_GET_ROW,*this);
 
     checkPendingUpdate();
     checkIndex(columnIndex );
@@ -1799,7 +1789,7 @@ void SAL_CALL OResultSet::updateBinaryStream( sal_Int32 columnIndex, const Refer
     ResultSetEntryGuard aGuard( *this );
 
     if(!x.is())
-        ::dbtools::throwGenericSQLException(::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("Invalid use of null pointer")),*this);
+        ::dbtools::throwFunctionSequenceException(*this);
 
     Sequence<sal_Int8> aSeq;
     x->readSomeBytes(aSeq,length);
@@ -1813,15 +1803,27 @@ void SAL_CALL OResultSet::updateCharacterStream( sal_Int32 columnIndex, const Re
 // -------------------------------------------------------------------------
 void SAL_CALL OResultSet::updateObject( sal_Int32 columnIndex, const Any& x ) throw(SQLException, RuntimeException)
 {
- if (!::dbtools::implUpdateObject(this, columnIndex, x))
-    ::dbtools::throwGenericSQLException(::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("Error updating object")),*this);
+    if (!::dbtools::implUpdateObject(this, columnIndex, x))
+    {
+        const ::rtl::OUString sError( m_pStatement->getOwnConnection()->getResources().getResourceStringWithSubstitution(
+                STR_COLUMN_NOT_UPDATEABLE,
+                "$position$", ::rtl::OUString::valueOf(columnIndex)
+             ) );
+        ::dbtools::throwGenericSQLException(sError,*this);
+    } // if (!::dbtools::implUpdateObject(this, columnIndex, x))
  }
 // -------------------------------------------------------------------------
 
 void SAL_CALL OResultSet::updateNumericObject( sal_Int32 columnIndex, const Any& x, sal_Int32 /*scale*/ ) throw(SQLException, RuntimeException)
 {
     if (!::dbtools::implUpdateObject(this, columnIndex, x))
-        ::dbtools::throwGenericSQLException(::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("Error updating object")),*this);
+    {
+        const ::rtl::OUString sError( m_pStatement->getOwnConnection()->getResources().getResourceStringWithSubstitution(
+                STR_COLUMN_NOT_UPDATEABLE,
+                "$position$", ::rtl::OUString::valueOf(columnIndex)
+             ) );
+        ::dbtools::throwGenericSQLException(sError,*this);
+    }
 }
 
 // XResultSetUpdate
@@ -1845,22 +1847,21 @@ void SAL_CALL OResultSet::updateRow(  ) throw(::com::sun::star::sdbc::SQLExcepti
     impl_ensureKeySet();
 
     if (!m_nRowPos || m_pKeySet->size() < m_nRowPos )
-        ::dbtools::throwGenericSQLException(::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("Call update on invalid row")),NULL);
+        m_pStatement->getOwnConnection()->throwGenericSQLException(STR_INVALID_ROW_UPDATE,*this);
 
     const sal_Int32 nCurrentCard = getCurrentCardNumber();
 
     if (!pushCard(nCurrentCard))
     {
         m_RowStates = RowStates_Error;
-            ::dbtools::throwGenericSQLException(::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("Can't save current row")),NULL);
-
+        m_pStatement->getOwnConnection()->throwGenericSQLException(STR_ROW_CAN_NOT_SAVE,*this);
     }
 
     if (!m_aQuery.commitRow(nCurrentCard))
     {
         m_RowStates = RowStates_Error;
         m_nUpdatedRow = 0;
-        m_pStatement->getOwnConnection()->throwGenericSQLException( m_aQuery.getErrorResourceId() );
+        m_pStatement->getOwnConnection()->throwGenericSQLException( m_aQuery.getErrorResourceId() ,*this);
     }
 
     m_nUpdatedRow = 0;
@@ -1873,16 +1874,16 @@ void SAL_CALL OResultSet::deleteRow(  ) throw(::com::sun::star::sdbc::SQLExcepti
     OSL_TRACE("deleteRow, m_nRowPos = %u", m_nRowPos );
     ResultSetEntryGuard aGuard( *this );
     if (rowDeleted())
-        ::dbtools::throwGenericSQLException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("Row Already deleted")), *this );
+        m_pStatement->getOwnConnection()->throwGenericSQLException(STR_ROW_ALREADY_DELETED,*this);
 
     const sal_Int32 nCurrentRow = getCurrentCardNumber();
     //fetchRow(nCurrentRow);
     if (!nCurrentRow)
-        ::dbtools::throwGenericSQLException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(" Can't get Current Row")), *this );
+        m_pStatement->getOwnConnection()->throwGenericSQLException(STR_ERROR_GET_ROW,*this);
 
     sal_Bool m_bRowDeleted = ( m_aQuery.deleteRow( nCurrentRow ) > 0 );
     if (!m_bRowDeleted)
-        m_pStatement->getOwnConnection()->throwGenericSQLException( m_aQuery.getErrorResourceId() );
+        m_pStatement->getOwnConnection()->throwGenericSQLException( m_aQuery.getErrorResourceId() ,*this);
 
     m_aQuery.setRowStates(nCurrentRow,RowStates_Deleted);
     m_pKeySet->erase(m_pKeySet->begin() + m_nRowPos -1);
@@ -1895,7 +1896,7 @@ void SAL_CALL OResultSet::cancelRowUpdates(  ) throw(::com::sun::star::sdbc::SQL
     ResultSetEntryGuard aGuard( *this );
     OSL_TRACE("cancelRowUpdates, m_nRowPos = %u", m_nRowPos );
     if (fetchRow(getCurrentCardNumber(),sal_True))  //force fetch current row will cause we lose all change to the current row
-        ::dbtools::throwGenericSQLException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("Can't cancel row updates")), NULL );
+        m_pStatement->getOwnConnection()->throwGenericSQLException(STR_CAN_NOT_CANCEL_ROW_UPDATE,*this);
 }
 // -------------------------------------------------------------------------
 void SAL_CALL OResultSet::moveToInsertRow(  ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException)
@@ -1915,7 +1916,8 @@ void SAL_CALL OResultSet::moveToInsertRow(  ) throw(::com::sun::star::sdbc::SQLE
         }
         m_nNewRow = m_aQuery.createNewCard();
         if (!m_nNewRow)
-            ::dbtools::throwGenericSQLException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("Error creating new rows")), NULL );
+            m_pStatement->getOwnConnection()->throwGenericSQLException(STR_CAN_NOT_CREATE_ROW,*this);
+
         m_RowStates = RowStates_Normal;
         fillKeySet(m_nNewRow);
     }

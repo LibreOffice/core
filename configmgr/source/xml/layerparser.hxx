@@ -53,10 +53,7 @@ namespace configmgr
         class LayerParser : public BasicParser
         {
         public:
-            typedef uno::Reference< backenduno::XLayerHandler > HandlerRef;
-
-        public:
-            LayerParser(Context const & _xContext, HandlerRef const & _xHandler);
+            LayerParser(uno::Reference< uno::XComponentContext > const & _xContext, uno::Reference< backenduno::XLayerHandler > const & _xHandler);
             virtual ~LayerParser();
 
         // XDocumentHandler
@@ -69,11 +66,11 @@ namespace configmgr
                 endDocument(  ) throw (sax::SAXException, uno::RuntimeException);
 
             virtual void SAL_CALL
-                startElement( const OUString& aName, const uno::Reference< sax::XAttributeList >& xAttribs )
+                startElement( const rtl::OUString& aName, const uno::Reference< sax::XAttributeList >& xAttribs )
                     throw (sax::SAXException, uno::RuntimeException);
 
             virtual void SAL_CALL
-                endElement( const OUString& aName )
+                endElement( const rtl::OUString& aName )
                     throw (sax::SAXException, uno::RuntimeException);
 
         private:
@@ -106,7 +103,7 @@ namespace configmgr
             bool isInRemoved() const { return m_bRemoved; }
             void checkNotRemoved();
         private:
-            HandlerRef  m_xHandler;
+            uno::Reference< backenduno::XLayerHandler >  m_xHandler;
             bool        m_bRemoved;
             bool        m_bNewProp;
         };

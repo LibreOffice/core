@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: hltpbase.cxx,v $
- * $Revision: 1.37 $
+ * $Revision: 1.37.216.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -289,7 +289,7 @@ long SvxHyperURLBox::PreNotify( NotifyEvent& rNEvt )
 
 SvxHyperlinkTabPageBase::SvxHyperlinkTabPageBase ( Window *pParent,
                                                    const ResId &rResId,
-                                                   const SfxItemSet& rItemSet)
+                                                   const SfxItemSet& rItemSet )
 :   IconChoicePage          ( pParent, rResId, rItemSet ),
     mpGrpMore               ( NULL ),
     mpFtFrame               ( NULL ),
@@ -539,7 +539,7 @@ void SvxHyperlinkTabPageBase::SetInitFocus()
 |*
 |************************************************************************/
 
-const BOOL SvxHyperlinkTabPageBase::IsHTMLDoc() const
+BOOL SvxHyperlinkTabPageBase::IsHTMLDoc() const
 {
     return ((SvxHpLinkDlg*)mpDialog)->IsHTMLDoc();
 }
@@ -589,7 +589,7 @@ IMPL_LINK ( SvxHyperlinkTabPageBase, ClickScriptHdl_Impl, void *, EMPTYARG )
         if ( bIsInputEnabled )
             GetParent()->EnableInput( FALSE );
         // <--
-        SfxMacroAssignDlg aDlg( this, *pItemSet );
+        SfxMacroAssignDlg aDlg( this, mxDocumentFrame, *pItemSet );
 
         // add events
         SfxMacroTabPage *pMacroPage = (SfxMacroTabPage*) aDlg.GetTabPage();

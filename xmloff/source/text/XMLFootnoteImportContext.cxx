@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: XMLFootnoteImportContext.cxx,v $
- * $Revision: 1.15 $
+ * $Revision: 1.15.66.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -34,10 +34,7 @@
 
 #include "XMLFootnoteImportContext.hxx"
 
-
-#ifndef _RTL_USTRING
 #include <rtl/ustring.hxx>
-#endif
 #include <tools/debug.hxx>
 #include <xmloff/xmlimp.hxx>
 #include <xmloff/txtimp.hxx>
@@ -45,23 +42,15 @@
 #include "xmlnmspe.hxx"
 #include <xmloff/xmltoken.hxx>
 
-#ifndef _XMLOFF_XMLFOOTNOTEBODYIMPORTCONTEXT_HXX
 #include "XMLFootnoteBodyImportContext.hxx"
-#endif
-
-#ifndef _XMLOFF_XMLTEXTLISTBLOCKCONTEXT_HXX
 #include "XMLTextListBlockContext.hxx"
-#endif
-
-#ifndef _XMLOFF_XMLTEXTLISTITEMCONTEXT_HXX
 #include "XMLTextListItemContext.hxx"
-#endif
+
 #include <com/sun/star/xml/sax/XAttributeList.hpp>
 #include <com/sun/star/text/XTextContent.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/text/XFootnote.hpp>
-
 
 
 using ::rtl::OUString;
@@ -100,6 +89,7 @@ XMLFootnoteImportContext::XMLFootnoteImportContext(
     const OUString& rLocalName )
 :   SvXMLImportContext(rImport, nPrfx, rLocalName)
 ,   sPropertyReferenceId(RTL_CONSTASCII_USTRINGPARAM("ReferenceId"))
+,   mbListContextPushed(false)
 ,   rHelper(rHlp)
 {
 }
@@ -171,10 +161,8 @@ void XMLFootnoteImportContext::StartElement(
 
         // remember old list item and block (#89891#) and reset them
         // for the footnote
-        xListBlock = rHelper.GetListBlock();
-        xListItem = rHelper.GetListItem();
-        rHelper.SetListBlock( NULL );
-        rHelper.SetListItem( NULL );
+        rHelper.PushListContext();
+        mbListContextPushed = true;
 
         // remember footnote (for CreateChildContext)
         Reference<XFootnote> xNote(xTextContent, UNO_QUERY);
@@ -198,8 +186,9 @@ void XMLFootnoteImportContext::EndElement()
     rHelper.SetCursor(xOldCursor);
 
     // reinstall old list item
-    rHelper.SetListBlock( (XMLTextListBlockContext*)&xListBlock );
-    rHelper.SetListItem( (XMLTextListItemContext*)&xListItem );
+    if (mbListContextPushed) {
+        rHelper.PopListContext();
+    }
 }
 
 

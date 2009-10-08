@@ -28,14 +28,14 @@
  *
  ************************************************************************/
 
-/* PLEASE DON'T DELETE ANY COMMENT LINES, ALSO IT'S UNNECESSARY. */
-
-
 #ifndef CONFIGMGR_BACKEND_CACHECONTROLLER_HXX
 #define CONFIGMGR_BACKEND_CACHECONTROLLER_HXX
 
+#include "sal/config.h"
+
+#include "salhelper/simplereferenceobject.hxx"
+
 #include "utility.hxx"
-#include "cacheddataprovider.hxx"
 #include "mergeddataprovider.hxx"
 #include "cacheaccess.hxx"
 #include "cachemulticaster.hxx"
@@ -57,27 +57,19 @@ namespace configmgr
         trying to ensure consistency with a backend
         and provides access to the data for clients
     */
-    class CacheController
-
-    : public ICachedDataProvider
-    , public IDirectDataProvider // Refcounted
-    , public INodeDataListener
+    class CacheController:
+            public salhelper::SimpleReferenceObject,
+            public ITemplateDataProvider, public INodeDataListener
     {
-        typedef backend::IMergedDataProvider Backend;
-        typedef rtl::Reference< Backend > BackendRef;
-        typedef ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >
-            CreationContext;
     public:
         /** ctor
         */
         explicit
-        CacheController(BackendRef const & _xBackend,
+        CacheController(rtl::Reference< backend::IMergedDataProvider > const & _xBackend,
                         const uno::Reference<uno::XComponentContext>& xContext);
 
-    // ICachedDataProvider implementation
-    public:
         // disposing the cache before destroying
-        virtual void dispose() CFG_UNO_THROW_RTE();
+        void dispose() SAL_THROW((com::sun::star::uno::RuntimeException));
 
         /** locates data of a component in the cache.
 
@@ -93,8 +85,8 @@ namespace configmgr
                 if loading the data fails.
                 The exact exception being thrown may depend on the underlying backend.
         */
-        virtual CacheLocation loadComponent(ComponentRequest const & _aRequest)
-            CFG_UNO_THROW_ALL();
+        sharable::TreeFragment * loadComponent(ComponentRequest const & _aRequest)
+            SAL_THROW((com::sun::star::uno::Exception));
 
         /** releases data of a component from the cache.
 
@@ -109,8 +101,8 @@ namespace configmgr
             @returns
                 data that can be used to locate the loaded data in the cache.
         */
-        virtual void freeComponent(ComponentRequest const & _aRequest)
-            CFG_NOTHROW();
+        void freeComponent(ComponentRequest const & _aRequest)
+            SAL_THROW(());
 
         /** refreshes data of an existing component from the backend
 
@@ -135,8 +127,8 @@ namespace configmgr
                 if loading the data fails.
                 The exact exception being thrown may depend on the underlying backend.
         */
-        virtual CacheLocation refreshComponent(ComponentRequest const & _aRequest)
-            CFG_UNO_THROW_ALL();
+        sharable::TreeFragment * refreshComponent(ComponentRequest const & _aRequest)
+            SAL_THROW((com::sun::star::uno::Exception));
          /** refreshes data of all existing components from the backend
 
             <p> If the data is in the cache already, it is refreshed from the
@@ -152,8 +144,15 @@ namespace configmgr
                 if loading the data fails.
                 The exact exception being thrown may depend on the underlying backend.
         */
-        virtual void refreshAllComponents()
-            CFG_UNO_THROW_ALL();
+        void refreshAllComponents()
+            SAL_THROW((com::sun::star::uno::Exception));
+
+        /** flushes data of all pending updates from cache to the backend(s)
+                @throws com::sun::star::uno::Exception
+                if flushing the data fails.
+                The exact exception being thrown may depend on the underlying backend.
+        */
+        void flushPendingUpdates() SAL_THROW((com::sun::star::uno::Exception));
 
         /** locates a template in the cache.
 
@@ -171,8 +170,8 @@ namespace configmgr
                 if loading the template data fails.
                 The exact exception being thrown may depend on the underlying backend.
         */
-        virtual CacheLocation loadTemplate(TemplateRequest const & _aRequest)
-            CFG_UNO_THROW_ALL();
+        sharable::TreeFragment * loadTemplate(TemplateRequest const & _aRequest)
+            SAL_THROW((com::sun::star::uno::Exception));
 
         /** saves changes to the backend and notifies them to registered listeners.
 
@@ -194,30 +193,18 @@ namespace configmgr
                 if saving the changes to the backend fails.
                 The exact exception being thrown may depend on the underlying backend.
         */
-        virtual void saveAndNotify(UpdateRequest const & _anUpdate)
-            CFG_UNO_THROW_ALL();
+        void saveAndNotify(UpdateRequest const & _anUpdate)
+            SAL_THROW((com::sun::star::uno::Exception));
 
        /** @returns
                 an object that can used to broadcast changes done through this object.
                 <p> The object returned is guaranteed to live as long
-                    as this ICachedDataProvider lives.
+                    as this object lives.
                 </p>
         */
-        virtual ICachedDataNotifier & getNotifier() CFG_NOTHROW()
+        CacheChangeMulticaster & getNotifier() SAL_THROW(())
         { return m_aNotifier; }
 
-       /**  @returns
-                an object that can be used to retrieve owned copies of the data,
-                defaults and templates.
-                <p> The object returned is guaranteed to live as long
-                    as this ICachedDataProvider lives.
-                </p>
-        */
-        virtual IDirectDataProvider & getDirectDataProvider() CFG_NOTHROW()
-        { return *this; }
-
-    // IDirectDataProvider implementation
-    public:
         /** loads merged data for a (complete) tree and returns it as return value.
 
             @param _aRequest
@@ -234,9 +221,9 @@ namespace configmgr
                 The exact exception being thrown may depend on the underlying backend.
 
         */
-        virtual ComponentResult getComponentData(ComponentRequest const & _aRequest,
+        ResultHolder< ComponentInstance > getComponentData(ComponentRequest const & _aRequest,
                                                  bool _bAddListenter)
-            CFG_UNO_THROW_ALL();
+            SAL_THROW((com::sun::star::uno::Exception));
 
         /** loads default data for a (partial) tree and returns it as return value
 
@@ -252,8 +239,8 @@ namespace configmgr
                 if the default cannot be retrieved.
                 The exact exception being thrown may depend on the underlying backend.
         */
-        virtual NodeResult getDefaultData(NodeRequest const & _aRequest)
-            CFG_UNO_THROW_ALL();
+        ResultHolder< NodeInstance > getDefaultData(NodeRequest const & _aRequest)
+            SAL_THROW((com::sun::star::uno::Exception));
 
         /** loads a given template and returns it as return value
 
@@ -272,58 +259,53 @@ namespace configmgr
                 if the template cannot be retrieved.
                 The exact exception being thrown may depend on the underlying backend.
         */
-        virtual TemplateResult getTemplateData(TemplateRequest const & _aRequest)
-            CFG_UNO_THROW_ALL();
+        virtual ResultHolder< TemplateInstance > getTemplateData(TemplateRequest const & _aRequest)
+            SAL_THROW((com::sun::star::uno::Exception));
         //INodeDataListener Implementation
         /** Triggered when component data is changed
 
             @param _aRequest
                 identifies the data that changed
         */
-        virtual void dataChanged(const ComponentRequest& _aRequest) CFG_NOTHROW();
+        virtual void dataChanged(const ComponentRequest& _aRequest) SAL_THROW(());
     protected:
         // ref counted, that's why no public dtor
         ~CacheController();
     // implementation
     private:
-        typedef CacheLoadingAccess      Cache;
-        typedef rtl::Reference<Cache>   CacheRef;
+        configuration::AbsolutePath encodeTemplateLocation(rtl::OUString const & _rName, rtl::OUString const & _rModule) const;
 
-    private:
-        AbsolutePath encodeTemplateLocation(const Name& _rName, const Name &_rModule) const;
-
-        AbsolutePath ensureTemplate(Name const& _rName, Name const& _rModule) CFG_UNO_THROW_ALL(  );
+        configuration::AbsolutePath ensureTemplate(rtl::OUString const& _rName, rtl::OUString const& _rModule) SAL_THROW((com::sun::star::uno::Exception));
 
         // adjust a node result for locale, ...
         bool normalizeResult(std::auto_ptr<ISubtree> &  _aResult, RequestOptions const & _aOptions);
 
         // reads data from the backend directly
-        ComponentResult loadDirectly(ComponentRequest const & _aRequest, bool _bAddListenter )
-            CFG_UNO_THROW_ALL(  );
+        ResultHolder< ComponentInstance > loadDirectly(ComponentRequest const & _aRequest, bool _bAddListenter )
+            SAL_THROW((com::sun::star::uno::Exception));
         // reads default data from the backend directly
-        NodeResult loadDefaultsDirectly(NodeRequest const & _aRequest) CFG_UNO_THROW_ALL(  );
+        ResultHolder< NodeInstance > loadDefaultsDirectly(NodeRequest const & _aRequest) SAL_THROW((com::sun::star::uno::Exception));
         // writes an update  to the backend directly
-        void saveDirectly(UpdateRequest const & _anUpdate) CFG_UNO_THROW_ALL(  );
+        void saveDirectly(UpdateRequest const & _anUpdate) SAL_THROW((com::sun::star::uno::Exception));
 
         // writes updates for a component to the backend directly
-        void savePendingChanges(CacheRef const & _aCache, ComponentRequest const & _aComponent)
-            CFG_UNO_THROW_ALL(  );
+        void savePendingChanges(rtl::Reference<CacheLoadingAccess> const & _aCache, ComponentRequest const & _aComponent)
+            SAL_THROW((com::sun::star::uno::Exception));
         // saves all pending changes from a cache access to the backend
-        bool saveAllPendingChanges(CacheRef const & _aCache, RequestOptions const & _aOptions)
-            CFG_UNO_THROW_RTE(  );
+        bool saveAllPendingChanges(rtl::Reference<CacheLoadingAccess> const & _aCache, RequestOptions const & _aOptions)
+            SAL_THROW((com::sun::star::uno::RuntimeException));
         // load templates componentwise from backend
         std::auto_ptr<ISubtree> loadTemplateData(TemplateRequest const & _aRequest)
-            CFG_UNO_THROW_ALL(  );
+            SAL_THROW((com::sun::star::uno::Exception));
 
-        void flushPendingUpdates() CFG_UNO_THROW_ALL();
 
-        void flushCacheWriter() CFG_NOTHROW();
+        void flushCacheWriter() SAL_THROW(());
         // add templates componentwise to cache
-        data::TreeAddress addTemplates ( backend::ComponentData const & _aComponentInstance );
-        CacheRef getCacheAlways(RequestOptions const & _aOptions);
+        sharable::TreeFragment * addTemplates ( backend::ComponentDataStruct const & _aComponentInstance );
+        rtl::Reference<CacheLoadingAccess> getCacheAlways(RequestOptions const & _aOptions);
 
-        OTreeDisposeScheduler   * createDisposer(const CreationContext& _xContext);
-        OCacheWriteScheduler    * createCacheWriter(const CreationContext& _xContext);
+        OTreeDisposeScheduler   * createDisposer(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& _xContext);
+        OCacheWriteScheduler    * createCacheWriter(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& _xContext);
 
 
 
@@ -331,14 +313,14 @@ namespace configmgr
         void disposeAll(bool _bFlushRemainingUpdates);
         void disposeOne(RequestOptions const & _aOptions, bool _bFlushUpdates = true);
         void disposeUser(RequestOptions const & _aUserOptions, bool _bFlushUpdates = true);
-        void implDisposeOne(CacheRef const & _aCache, RequestOptions const & _aOptions, bool _bFlushUpdates);
+        void implDisposeOne(rtl::Reference<CacheLoadingAccess> const & _aCache, RequestOptions const & _aOptions, bool _bFlushUpdates);
 
-        void closeModules(Cache::DisposeList & _aList, RequestOptions const & _aOptions);
+        void closeModules(std::vector< rtl::Reference<CacheLine> > & _aList, RequestOptions const & _aOptions);
     private:
-        typedef AutoReferenceMap<RequestOptions,Cache,lessRequestOptions>   CacheMap;
+        typedef AutoReferenceMap<RequestOptions,CacheLoadingAccess,lessRequestOptions>   CacheMap;
 
         CacheChangeMulticaster  m_aNotifier;
-        BackendRef      m_xBackend;
+        rtl::Reference< backend::IMergedDataProvider >      m_xBackend;
         CacheMap        m_aCacheMap;
         TemplateCacheData   m_aTemplates;
 

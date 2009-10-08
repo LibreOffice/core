@@ -212,6 +212,7 @@ protected :
     void                    ShowPageImpl ( IconChoicePageData* pData );
     void                    HidePageImpl ( IconChoicePageData* pData );
 
+    virtual void            PageCreated( USHORT nId, IconChoicePage& rPage );
     virtual SfxItemSet*     CreateInputItemSet( USHORT nId );
     inline SfxItemSet*      GetInputSetImpl() { return (SfxItemSet*)pSet; }
     inline IconChoicePage*  GetTabPage( USHORT nPageId )

@@ -8,9 +8,9 @@
  *
  * $RCSfile: XMLTextNumRuleInfo.hxx,v $
 <<<<<<< XMLTextNumRuleInfo.hxx
- * $Revision: 1.10 $
+ * $Revision: 1.10.64.1 $
 =======
- * $Revision: 1.10 $
+ * $Revision: 1.10.64.1 $
 >>>>>>> 1.6.266.4
  *
  * This file is part of OpenOffice.org.
@@ -106,7 +106,7 @@ public:
     {
         return mxNumRules;
     }
-    inline const sal_Int16 GetListLevelStartValue() const
+    inline sal_Int16 GetListLevelStartValue() const
     {
         return mnListLevelStartValue;
     }

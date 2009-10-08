@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: fanalyzer.cxx,v $
- * $Revision: 1.26 $
+ * $Revision: 1.26.56.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -37,7 +37,8 @@
 #include <comphelper/extract.hxx>
 #include "connectivity/sqlnode.hxx"
 #include "connectivity/dbexception.hxx"
-
+#include "file/FConnection.hxx"
+#include "resource/file_res.hrc"
 
 using namespace ::connectivity;
 using namespace ::connectivity::file;
@@ -48,8 +49,9 @@ using namespace ::com::sun::star::container;
 
 DBG_NAME( file_OSQLAnalyzer )
 //------------------------------------------------------------------
-OSQLAnalyzer::OSQLAnalyzer()
-               :m_bHasSelectionCode(sal_False)
+OSQLAnalyzer::OSQLAnalyzer(OConnection* _pConnection)
+               :m_pConnection(_pConnection)
+               ,m_bHasSelectionCode(sal_False)
                ,m_bSelectionFirstTime(sal_True)
 {
     DBG_CTOR( file_OSQLAnalyzer, NULL );
@@ -98,7 +100,7 @@ void OSQLAnalyzer::start(OSQLParseNode* pSQLParseNode)
                 }
                 else if ( ( SQL_ISRULE(pColumnRef,general_set_fct) && pColumnRef->count() != 4 ) )
                 {
-                    ::dbtools::throwGenericSQLException(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Statement too complex. Only \"COUNT(*)\" is supported.")),NULL);
+                    m_pConnection->throwGenericSQLException(STR_QUERY_COMPLEX_COUNT,NULL);
                 }
                 else
                     m_aSelectionEvaluations.push_back( TPredicates() );

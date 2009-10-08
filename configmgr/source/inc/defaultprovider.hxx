@@ -31,62 +31,25 @@
 #ifndef CONFIGMGR_DEFAULTPROVIDER_HXX
 #define CONFIGMGR_DEFAULTPROVIDER_HXX
 
-#include "valuenode.hxx"
+#include "sal/config.h"
+
+#include "com/sun/star/uno/Exception.hpp"
+#include "sal/types.h"
+
 #include "utility.hxx"
-#include <com/sun/star/uno/Exception.hpp>
-#include <com/sun/star/uno/RuntimeException.hpp>
-
-#ifndef INCLUDED_MEMORY
-#include <memory>
-#define INCLUDED_MEMORY
-#endif
-
 
 namespace configmgr
 {
-
-    namespace uno = com::sun::star::uno;
-    using ::rtl::OUString;
-
-////////////////////////////////////////////////////////////////////////////////
     namespace configuration
     {
         class AbsolutePath;
     }
     //-------------------------
-    class ISubtree;
     class RequestOptions;
-    //==========================================================================
-    //= IDefaultProvider
-    //==========================================================================
-    /* is an interface that can be implemented by an <type>ITreeProvider</type>
-       or <type>ITreeManager</type>.
-       <p>Supports functionality to fetch only the default data corresponding to a tree</p>
-    */
-    class SAL_NO_VTABLE IDefaultProvider
-    {
-    public:
-        /** load the default version of the tree named by a path
-            using certain options and requiring a specific loading depth
-            @returns
-                the default data tree, yielding ownership of it
-                <NULL/>if no default data is available for the tree
-        */
-        virtual std::auto_ptr<ISubtree> requestDefaultData( configuration::AbsolutePath const& aSubtreePath,
-                                                            const RequestOptions& _aOptions
-                                                           ) CFG_UNO_THROW_ALL(  ) = 0;
-    };
-
-    //==========================================================================
-    /// a refcounted <type>IDefaultProvider</type>.
-    class SAL_NO_VTABLE IConfigDefaultProvider  : public Refcounted
-                                                , public IDefaultProvider
-    {
-    };
     //==========================================================================
     //= IDefaultableTreeManager
     //==========================================================================
-    /* is a supplementary interface for a <type>ITreeManager</type>.
+    /* is a supplementary interface for an <type>OProviderImpl</type>.
        <p>Supports functionality to load default data into the managed tree</p>
     */
     class SAL_NO_VTABLE IDefaultableTreeManager
@@ -101,7 +64,7 @@ namespace configmgr
         */
         virtual sal_Bool fetchDefaultData(configuration::AbsolutePath const& aSubtreePath,
                                           const RequestOptions& _xOptions
-                                          ) CFG_UNO_THROW_ALL(  ) = 0;
+                                          ) SAL_THROW((com::sun::star::uno::Exception)) = 0;
 
     };
 

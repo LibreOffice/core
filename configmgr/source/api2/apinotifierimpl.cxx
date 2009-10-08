@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: apinotifierimpl.cxx,v $
- * $Revision: 1.8 $
+ * $Revision: 1.8.20.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -48,21 +48,13 @@ namespace configmgr
         namespace util = css::util;
         namespace beans = css::beans;
 
-        using uno::RuntimeException;
-        using uno::Reference;
-
-        using configuration::NodeRef;
-        using configuration::ValueRef;
-        using configuration::Tree;
-
-
 // Generic Notifier Support Implementations
 //-----------------------------------------------------------------------------------
 
 /// add a Listener to the notifier of a NodeAccess
 template <class Listener>
 inline
-void genericAddListener(NodeAccess& rNode, const Reference< Listener >& xListener )
+void genericAddListener(NodeAccess& rNode, const uno::Reference< Listener >& xListener )
 {
     GuardedNotifier aGuardedNotifier( rNode );  // guard the notifier
     aGuardedNotifier->add(rNode.getNodeRef(), xListener);
@@ -71,7 +63,7 @@ void genericAddListener(NodeAccess& rNode, const Reference< Listener >& xListene
 /// remove a Listener from the notifier of a NodeAccess
 template <class Listener>
 inline
-void genericRemoveListener(NodeAccess& rNode, const Reference< Listener >& xListener )
+void genericRemoveListener(NodeAccess& rNode, const uno::Reference< Listener >& xListener )
 {
     GuardedNotifier aGuardedNotifier( rNode );  // guard the notifier
     aGuardedNotifier->remove(rNode.getNodeRef(), xListener);
@@ -86,21 +78,19 @@ void genericRemoveListener(NodeAccess& rNode, const Reference< Listener >& xList
 */
 template <class Listener>
 inline
-bool genericAddChildListener(NodeGroupInfoAccess& rNode, const Reference< Listener >& xListener, const OUString& sName )
+bool genericAddChildListener(NodeGroupInfoAccess& rNode, const uno::Reference< Listener >& xListener, const rtl::OUString& sName )
 {
-    using configuration::validateChildName;
-
     if (sName.getLength() != 0)
     {
-        GuardedNodeDataAccess       aGuardedNode( rNode );      // guard access to children
+        GuardedNodeData<NodeAccess>     aGuardedNode( rNode );      // guard access to children
         GuardedNotifier             aGuardedNotifier( rNode );  // guard the notifier
 
-        Tree        aTree( aGuardedNode.getTree() );
-        NodeRef     aNode( aGuardedNode.getNode() );
+        rtl::Reference< configuration::Tree > aTree( aGuardedNode.getTree() );
+        configuration::NodeRef      aNode( aGuardedNode.getNode() );
 
-        Name        aChildName = validateChildName(sName,aTree,aNode);
+        rtl::OUString        aChildName = configuration::validateChildName(sName,aTree,aNode);
 
-        if (!aTree.hasChild(aNode,aChildName)) return false;
+        if (!aTree->hasChild(aNode,aChildName)) return false;
 
         aGuardedNotifier->addForOne(aNode, xListener, aChildName);
     }
@@ -123,21 +113,19 @@ bool genericAddChildListener(NodeGroupInfoAccess& rNode, const Reference< Listen
 */
 template <class Listener>
 inline
-bool genericRemoveChildListener(NodeGroupInfoAccess& rNode, const Reference< Listener >& xListener, const OUString& sName )
+bool genericRemoveChildListener(NodeGroupInfoAccess& rNode, const uno::Reference< Listener >& xListener, const rtl::OUString& sName )
 {
-    using configuration::validateChildName;
-
     if (sName.getLength() != 0)
     {
-        GuardedNodeDataAccess       aGuardedNode( rNode );      // guard access to children
+        GuardedNodeData<NodeAccess>     aGuardedNode( rNode );      // guard access to children
         GuardedNotifier             aGuardedNotifier( rNode );  // guard the notifier
 
-        Tree        aTree( aGuardedNode.getTree() );
-        NodeRef     aNode( aGuardedNode.getNode() );
+        rtl::Reference< configuration::Tree > aTree( aGuardedNode.getTree() );
+        configuration::NodeRef      aNode( aGuardedNode.getNode() );
 
-        Name        aChildName = validateChildName(sName,aTree,aNode);
+        rtl::OUString aChildName = configuration::validateChildName(sName,aTree,aNode);
 
-        if (!aTree.hasChild(aNode,aChildName)) return false;
+        if (!aTree->hasChild(aNode,aChildName)) return false;
 
         aGuardedNotifier->removeForOne(aNode, xListener, aChildName);
     }
@@ -156,28 +144,28 @@ bool genericRemoveChildListener(NodeGroupInfoAccess& rNode, const Reference< Lis
 
 // XComponent
 //-----------------------------------------------------------------------------------
-void implAddListener(NodeAccess& rNode, const Reference< css::lang::XEventListener >& xListener )
-    throw(RuntimeException)
+void implAddListener(NodeAccess& rNode, const uno::Reference< css::lang::XEventListener >& xListener )
+    throw(uno::RuntimeException)
 {
     genericAddListener(rNode,xListener);
 }
 
-void implRemoveListener(NodeAccess& rNode, const Reference< css::lang::XEventListener >& xListener )
-    throw(RuntimeException)
+void implRemoveListener(NodeAccess& rNode, const uno::Reference< css::lang::XEventListener >& xListener )
+    throw(uno::RuntimeException)
 {
     genericRemoveListener(rNode,xListener);
 }
 
 // XContainer
 //-----------------------------------------------------------------------------------
-void implAddListener(NodeAccess& rNode, const Reference< css::container::XContainerListener >& xListener )
-    throw(RuntimeException)
+void implAddListener(NodeAccess& rNode, const uno::Reference< css::container::XContainerListener >& xListener )
+    throw(uno::RuntimeException)
 {
     genericAddListener(rNode,xListener);
 }
 
-void implRemoveListener(NodeAccess& rNode, const Reference< css::container::XContainerListener >& xListener )
-    throw(RuntimeException)
+void implRemoveListener(NodeAccess& rNode, const uno::Reference< css::container::XContainerListener >& xListener )
+    throw(uno::RuntimeException)
 {
     genericRemoveListener(rNode,xListener);
 }
@@ -185,14 +173,14 @@ void implRemoveListener(NodeAccess& rNode, const Reference< css::container::XCon
 // XChangesNotifier
 //-----------------------------------------------------------------------------------
 
-void implAddListener(NodeAccess& rNode, const Reference< css::util::XChangesListener >& xListener )
-    throw(RuntimeException)
+void implAddListener(NodeAccess& rNode, const uno::Reference< css::util::XChangesListener >& xListener )
+    throw(uno::RuntimeException)
 {
     genericAddListener(rNode,xListener);
 }
 
-void implRemoveListener(NodeAccess& rNode, const Reference< css::util::XChangesListener >& xListener )
-    throw(RuntimeException)
+void implRemoveListener(NodeAccess& rNode, const uno::Reference< css::util::XChangesListener >& xListener )
+    throw(uno::RuntimeException)
 {
     genericRemoveListener(rNode,xListener);
 }
@@ -200,7 +188,7 @@ void implRemoveListener(NodeAccess& rNode, const Reference< css::util::XChangesL
 // XMultiPropertySet
 //-----------------------------------------------------------------------------------
 
-void implAddListener( NodeAccess& rNode, const uno::Reference< beans::XPropertiesChangeListener >& xListener, const uno::Sequence< OUString >& aPropertyNames )
+void implAddListener( NodeAccess& rNode, const uno::Reference< beans::XPropertiesChangeListener >& xListener, const uno::Sequence< rtl::OUString >& aPropertyNames )
     throw(uno::RuntimeException)
 {
 
@@ -223,32 +211,24 @@ void implRemoveListener( NodeAccess& rNode, const uno::Reference< beans::XProper
 // XPropertySet - VetoableChangeListeners
 //-----------------------------------------------------------------------------------
 
-void implAddListener( NodeGroupInfoAccess& rNode, const uno::Reference< beans::XVetoableChangeListener >& xListener, const OUString& sPropertyName )
+void implAddListener( NodeGroupInfoAccess& rNode, const uno::Reference< beans::XVetoableChangeListener >& xListener, const rtl::OUString& sPropertyName )
     throw(beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
 {
-    using namespace css::beans;
     try
     {
         if (!genericAddChildListener(rNode,xListener,sPropertyName))
         {
-            throw UnknownPropertyException(
-                    OUString(RTL_CONSTASCII_USTRINGPARAM("Configuration: cannot add listener - node not found !")),
+            throw css::beans::UnknownPropertyException(
+                    rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Configuration: cannot add listener - node not found !")),
                     rNode.getUnoInstance() );
         }
     }
     catch (configuration::InvalidName& ex)
     {
         ExceptionMapper e(ex);
-        throw UnknownPropertyException(
-                OUString(RTL_CONSTASCII_USTRINGPARAM("Configuration: cannot add listener - node not found:")) += ex.message(),
+        throw css::beans::UnknownPropertyException(
+                rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Configuration: cannot add listener - node not found:")) += ex.message(),
                 rNode.getUnoInstance() );
-    }
-    catch (configuration::WrappedUnoException& ex)
-    {
-        throw css::lang::WrappedTargetException(
-                OUString(RTL_CONSTASCII_USTRINGPARAM("Configuration: adding a listener failed: ")) += ex.message(),
-                rNode.getUnoInstance(),
-                ex.getAnyUnoException());
     }
     catch (configuration::Exception& ex)
     {
@@ -260,32 +240,24 @@ void implAddListener( NodeGroupInfoAccess& rNode, const uno::Reference< beans::X
 }
 
 
-void implRemoveListener( NodeGroupInfoAccess& rNode, const uno::Reference< beans::XVetoableChangeListener >& xListener, const OUString& sPropertyName )
+void implRemoveListener( NodeGroupInfoAccess& rNode, const uno::Reference< beans::XVetoableChangeListener >& xListener, const rtl::OUString& sPropertyName )
     throw(beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
 {
-    using namespace css::beans;
     try
     {
         if (!genericRemoveChildListener(rNode,xListener,sPropertyName))
         {
-            throw UnknownPropertyException(
-                    OUString(RTL_CONSTASCII_USTRINGPARAM("Configuration: cannot remove listener - node not found !")),
+            throw css::beans::UnknownPropertyException(
+                    rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Configuration: cannot remove listener - node not found !")),
                     rNode.getUnoInstance() );
         }
     }
     catch (configuration::InvalidName& ex)
     {
         ExceptionMapper e(ex);
-        throw UnknownPropertyException(
-                OUString(RTL_CONSTASCII_USTRINGPARAM("Configuration: cannot remove listener - node not found:")) += ex.message(),
+        throw css::beans::UnknownPropertyException(
+                rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Configuration: cannot remove listener - node not found:")) += ex.message(),
                 rNode.getUnoInstance() );
-    }
-    catch (configuration::WrappedUnoException& ex)
-    {
-        throw css::lang::WrappedTargetException(
-                OUString(RTL_CONSTASCII_USTRINGPARAM("Configuration: removing a listener failed: ")) += ex.message(),
-                rNode.getUnoInstance(),
-                ex.getAnyUnoException());
     }
     catch (configuration::Exception& ex)
     {
@@ -298,32 +270,24 @@ void implRemoveListener( NodeGroupInfoAccess& rNode, const uno::Reference< beans
 // XPropertySet - PropertyChangeListeners
 //-----------------------------------------------------------------------------------
 
-void implAddListener( NodeGroupInfoAccess& rNode, const uno::Reference< beans::XPropertyChangeListener >& xListener, const OUString& sPropertyName )
+void implAddListener( NodeGroupInfoAccess& rNode, const uno::Reference< beans::XPropertyChangeListener >& xListener, const rtl::OUString& sPropertyName )
     throw(beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
 {
-    using namespace css::beans;
     try
     {
         if (!genericAddChildListener(rNode,xListener,sPropertyName))
         {
-            throw UnknownPropertyException(
-                    OUString(RTL_CONSTASCII_USTRINGPARAM("Configuration: cannot add listener - node not found !")),
+            throw css::beans::UnknownPropertyException(
+                    rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Configuration: cannot add listener - node not found !")),
                     rNode.getUnoInstance() );
         }
     }
     catch (configuration::InvalidName& ex)
     {
         ExceptionMapper e(ex);
-        throw UnknownPropertyException(
-                OUString(RTL_CONSTASCII_USTRINGPARAM("Configuration: cannot add listener - node not found:")) += ex.message(),
+        throw css::beans::UnknownPropertyException(
+                rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Configuration: cannot add listener - node not found:")) += ex.message(),
                 rNode.getUnoInstance() );
-    }
-    catch (configuration::WrappedUnoException& ex)
-    {
-        throw css::lang::WrappedTargetException(
-                OUString(RTL_CONSTASCII_USTRINGPARAM("Configuration: adding a listener failed: ")) += ex.message(),
-                rNode.getUnoInstance(),
-                ex.getAnyUnoException());
     }
     catch (configuration::Exception& ex)
     {
@@ -333,32 +297,24 @@ void implAddListener( NodeGroupInfoAccess& rNode, const uno::Reference< beans::X
     }
 }
 
-void implRemoveListener( NodeGroupInfoAccess& rNode, const uno::Reference< beans::XPropertyChangeListener >& xListener, const OUString& sPropertyName )
+void implRemoveListener( NodeGroupInfoAccess& rNode, const uno::Reference< beans::XPropertyChangeListener >& xListener, const rtl::OUString& sPropertyName )
     throw(beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
 {
-    using namespace css::beans;
     try
     {
         if (!genericRemoveChildListener(rNode,xListener,sPropertyName))
         {
-            throw UnknownPropertyException(
-                    OUString(RTL_CONSTASCII_USTRINGPARAM("Configuration: cannot remove listener - node not found !")),
+            throw css::beans::UnknownPropertyException(
+                    rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Configuration: cannot remove listener - node not found !")),
                     rNode.getUnoInstance() );
         }
     }
     catch (configuration::InvalidName& ex)
     {
         ExceptionMapper e(ex);
-        throw UnknownPropertyException(
-                OUString(RTL_CONSTASCII_USTRINGPARAM("Configuration: cannot remove listener - node not found:")) += ex.message(),
+        throw css::beans::UnknownPropertyException(
+                rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Configuration: cannot remove listener - node not found:")) += ex.message(),
                 rNode.getUnoInstance() );
-    }
-    catch (configuration::WrappedUnoException& ex)
-    {
-        throw css::lang::WrappedTargetException(
-                OUString(RTL_CONSTASCII_USTRINGPARAM("Configuration: removing a listener failed: ")) += ex.message(),
-                rNode.getUnoInstance(),
-                ex.getAnyUnoException());
     }
     catch (configuration::Exception& ex)
     {

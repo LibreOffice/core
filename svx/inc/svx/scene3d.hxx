@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: scene3d.hxx,v $
- * $Revision: 1.5 $
+ * $Revision: 1.5.18.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -32,20 +32,19 @@
 #define _E3D_SCENE3D_HXX
 
 #include <svx/camera3d.hxx>
-#include <goodies/base3d.hxx>
 #include <goodies/b3dtrans.hxx>
 #include <tools/time.hxx>
 #include <svx/svxdllapi.h>
 #include <svx/obj3d.hxx>
 
-namespace sdr
-{
-    namespace properties
-    {
-        class BaseProperties;
-        class E3dSceneProperties;
-    } // end of namespace properties
-} // end of namespace sdr
+namespace sdr { namespace properties {
+    class BaseProperties;
+    class E3dSceneProperties;
+}}
+
+namespace drawinglayer { namespace geometry {
+    class ViewInformation3D;
+}}
 
 /*************************************************************************
 |*
@@ -85,45 +84,20 @@ private:
 protected:
     // Transformationen
     B3dCamera                   aCameraSet;
-
-    // Beleuchtung
-    B3dLightGroup               aLightGroup;
-
     Camera3D                    aCamera;
-
-    // Zeit, die der letzte Paint() benoetigte
-    Time                        aPaintTime;
-
-    // Darstellungsqualitaet, wird in Base3D verwendet
-    UINT8                       nDisplayQuality;
 
     // #110988#
     Imp3DDepthRemapper*         mp3DDepthRemapper;
 
-    // BOOLean Flags
-    unsigned                    bDoubleBuffered         : 1;
-    unsigned                    bClipping               : 1;
-    unsigned                    bFitInSnapRect          : 1;
-    unsigned                    bDither                 : 1;
-
-    // Merker, ob die Szene urspruenglich selektiert war
-    unsigned                    bWasSelectedWhenCopy    : 1;
-
     // Flag to determine if only selected objects should be drawn
     unsigned                    bDrawOnlySelected       : 1;
 
-     // #i71618#
-     double                     mfPolygonOffset;
-
     virtual void NewObjectInserted(const E3dObject* p3DObj);
-    virtual void StructureChanged(const E3dObject* p3DObj);
+    virtual void StructureChanged();
 
     void RebuildLists();
 
-    virtual void SFX_NOTIFY(SfxBroadcaster &rBC,
-                            const TypeId   &rBCType,
-                            const SfxHint  &rHint,
-                            const TypeId   &rHintType);
+    virtual void Notify(SfxBroadcaster &rBC, const SfxHint  &rHint);
 
 protected:
     void SetDefaultAttributes(E3dDefaultAttributes& rDefault);
@@ -137,21 +111,10 @@ public:
     E3dScene(E3dDefaultAttributes& rDefault);
     virtual ~E3dScene();
 
-     // #i71618#
-     // support for value for PolygonOffset. Value is relative to Z-Buffer depth. Used
-     // for 3d rendering. See Base3D for more info
-     void setPolygonOffset(double fNew)
-     {
-         if(fNew != mfPolygonOffset)
-         {
-             mfPolygonOffset = fNew;
-         }
-     }
+    // access to cleanup of depth mapper
+    void Cleanup3DDepthMapper() { ImpCleanup3DDepthMapper(); }
 
-     double getPolygonOffset() const
-     {
-         return mfPolygonOffset;
-     }
+    virtual basegfx::B2DPolyPolygon TakeXorPoly() const;
 
     // #110988#
     sal_uInt32 RemapOrdNum(sal_uInt32 nOrdNum) const;
@@ -240,15 +203,8 @@ public:
 
     // set flag to draw only selected
     void SetDrawOnlySelected(BOOL bNew) { bDrawOnlySelected = bNew; }
-    BOOL DoDrawOnlySelected() const { return bDrawOnlySelected; }
-
-    virtual basegfx::B3DRange FitInSnapRect();
-
+    bool GetDrawOnlySelected() const { return bDrawOnlySelected; }
     virtual UINT16 GetObjIdentifier() const;
-
-    virtual sal_uInt32 GetHdlCount() const;
-    virtual void    AddToHdlList(SdrHdlList& rHdlList) const;
-    virtual FASTBOOL HasSpecialDrag() const;
 
     virtual void    NbcSetSnapRect(const Rectangle& rRect);
     virtual void    NbcMove(const Size& rSize);
@@ -257,37 +213,18 @@ public:
     virtual void    RecalcSnapRect();
 
     virtual E3dScene* GetScene() const;
-
-    // TransformationSet vorbereiten
-    void InitTransformationSet();
-
-    Time GetLastPaintTime() { return aPaintTime; }
-
-    // Darstellungsqualitaet
-    void SetDisplayQuality(UINT8 nNew) { nDisplayQuality = nNew; }
-    UINT8 GetDisplayQuality() { return nDisplayQuality; }
-
     void SetCamera(const Camera3D& rNewCamera);
     const Camera3D& GetCamera() const { return aCamera; }
+    void removeAllNonSelectedObjects();
 
-    void SetDoubleBuffered(FASTBOOL bBuff = TRUE);
-    FASTBOOL IsDoubleBuffered() const { return bDoubleBuffered; }
-
-    // Clipping auf umschliessendes Rechteck der Szene
-    // (Double Buffering ist immer geclipt!)
-    void SetClipping(FASTBOOL bClip = TRUE);
-    FASTBOOL IsClipping() const { return bClipping; }
-
-    void SetFitInSnapRect(FASTBOOL bFit = TRUE);
-    void CorrectSceneDimensions();
-    FASTBOOL IsFitInSnapRect() const { return bFitInSnapRect; }
-
-    void FitSnapRectToBoundVol();
     virtual void operator=(const SdrObject&);
 
     virtual SdrObjGeoData *NewGeoData() const;
     virtual void          SaveGeoData(SdrObjGeoData& rGeo) const;
     virtual void          RestGeoData(const SdrObjGeoData& rGeo);
+
+    virtual void NbcSetTransform(const basegfx::B3DHomMatrix& rMatrix);
+    virtual void SetTransform(const basegfx::B3DHomMatrix& rMatrix);
 
     virtual void NbcRotate(const Point& rRef, long nWink, double sn, double cs);
     void RotateScene(const Point& rRef, long nWink, double sn, double cs);
@@ -299,28 +236,11 @@ public:
     // Transformationen rausgeben
     B3dCamera& GetCameraSet() { return aCameraSet; }
 
-    // Beleuchtung rausgeben
-    B3dLightGroup& GetLightGroup() { return aLightGroup; }
-
-    // Dithering
-    BOOL GetDither() { return bDither; }
-    void SetDither(BOOL bNew) { bDither = bNew; }
-
-    // Marker fuer WasSelectedWhenCopy
-    BOOL GetWasSelectedWhenCopy() { return bWasSelectedWhenCopy; }
-    void SetWasSelectedWhenCopy(BOOL bNew) { bWasSelectedWhenCopy = bNew; }
-
     // Aufbrechen
     virtual BOOL IsBreakObjPossible();
 
     basegfx::B3DVector GetShadowPlaneDirection() const;
     void SetShadowPlaneDirection(const basegfx::B3DVector& rVec);
-
-    // #115662#
-    // For new chart, calculate the number of hit contained 3D objects at given point,
-    // give back the count and a depth-sorted list of SdrObjects (a Vector). The vector will be
-    // changed, at least cleared.
-    sal_uInt32 HitTest(const Point& rHitTestPosition, ::std::vector< SdrObject* >& o_rResult);
 
     // Polygon das waehrend des Erzeugens aufgezogen wird
     virtual basegfx::B2DPolyPolygon TakeCreatePoly(const SdrDragStat& rDrag) const;

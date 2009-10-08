@@ -176,7 +176,7 @@ namespace drawinglayer
 
 namespace drawinglayer
 {
-    namespace
+    namespace primitive2d
     {
         BufferedMatrixDecompose::BufferedMatrixDecompose(const basegfx::B2DHomMatrix& rMatrix)
         :   maB2DHomMatrix(rMatrix),

@@ -265,7 +265,7 @@ void SdrPageView::RemovePaintWindowFromPageView(SdrPaintWindow& rPaintWindow)
     return xReturn;
 }
 
-void __EXPORT SdrPageView::SFX_NOTIFY(SfxBroadcaster& /*rBC*/, const TypeId& /*rBCType*/, const SfxHint& /*rHint*/, const TypeId& /*rHintType*/)
+void __EXPORT SdrPageView::Notify(SfxBroadcaster& /*rBC*/, const SfxHint& /*rHint*/)
 {
     // not really interested in
 }

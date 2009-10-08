@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: OOo2Oasis.hxx,v $
- * $Revision: 1.6 $
+ * $Revision: 1.6.56.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -65,7 +65,6 @@ public:
     virtual ~OOo2OasisTransformer() throw();
 
     static const ::com::sun::star::uno::Sequence< sal_Int8 > & getUnoTunnelId() throw();
-    static OOo2OasisTransformer * getImplementation( ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > ) throw();
 
     // XInterface
 

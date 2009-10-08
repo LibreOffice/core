@@ -39,18 +39,12 @@
 #include "treeactions.hxx"
 #include "treechangefactory.hxx"
 #include "treenodefactory.hxx"
-#include "treeprovider.hxx"
 
 // -----------------------------------------------------------------------------
 #include "node.hxx"
 #include "treefragment.hxx"
-#include "nodeaccess.hxx"
-#include "treeaccessor.hxx"
 #include "builddata.hxx"
 #include "nodevisitor.hxx"
-#include "valuenodeaccess.hxx"
-#include "groupnodeaccess.hxx"
-#include "setnodeaccess.hxx"
 // -----------------------------------------------------------------------------
 #include "tracer.hxx"
 #include <osl/diagnose.h>
@@ -69,30 +63,30 @@ namespace configmgr
 class AdjustUpdate : ChangeTreeModification
 {
     SubtreeChange&      m_rChangeList;  // list which containes changes merged with the existing nodes
-    data::NodeAccess    m_aRefNode;     // reference node needed for merging
+    sharable::Node * m_refNode; // reference node needed for merging
     OTreeNodeConverter  m_aNodeConverter;
 public:
     static bool adjust(SubtreeChange& _rResultTree, SubtreeChange& _aUpdateTree,
-                        data::NodeAccess const& _aTargetNode)
+                       sharable::Node * targetNode)
     {
-        return AdjustUpdate(_rResultTree,_aTargetNode).impl_adjust(_aUpdateTree);
+        return AdjustUpdate(_rResultTree, targetNode).impl_adjust(_aUpdateTree);
     }
     static bool adjust(SubtreeChange& _rResultTree, SubtreeChange& _aUpdateTree,
-                        data::NodeAccess const& _aTargetNode,
+                       sharable::Node * targetNode,
                         OTreeNodeFactory& _rNodeFactory)
     {
-        return AdjustUpdate(_rResultTree,_aTargetNode,_rNodeFactory).impl_adjust(_aUpdateTree);
+        return AdjustUpdate(_rResultTree, targetNode, _rNodeFactory).impl_adjust(_aUpdateTree);
     }
 private:
-    AdjustUpdate(SubtreeChange& rList, data::NodeAccess const & _aNode)
+    AdjustUpdate(SubtreeChange& rList, sharable::Node * node)
         :m_rChangeList(rList)
-        ,m_aRefNode(_aNode)
+        ,m_refNode(node)
         ,m_aNodeConverter()
     {}
 
-    AdjustUpdate(SubtreeChange& rList, data::NodeAccess const & _aNode, OTreeNodeFactory& _rNodeFactory)
+    AdjustUpdate(SubtreeChange& rList, sharable::Node * node, OTreeNodeFactory& _rNodeFactory)
         :m_rChangeList(rList)
-        ,m_aRefNode(_aNode)
+        ,m_refNode(node)
         ,m_aNodeConverter(_rNodeFactory)
     {}
 
@@ -111,9 +105,9 @@ private:
 
 class ApplyUpdate : public ChangeTreeModification
 {
-    data::NodeAddress           m_aCurrentNode;
+    sharable::Node *           m_aCurrentNode;
 public:
-    ApplyUpdate(data::NodeAddress _aNode)
+    ApplyUpdate(sharable::Node * _aNode)
     : m_aCurrentNode(_aNode)
     {}
 
@@ -121,9 +115,6 @@ public:
     void handle(AddNode& aAddNode);
     void handle(RemoveNode& aRemoveNode);
     void handle(SubtreeChange& aSubtree);
-
-    static
-    void applyChange(ValueChange& _rValueChange, data::ValueNodeAddress & _aValueNodeAddr);
 };
 //--------------------------------------------------------------------------
 class ApplyValueChange
@@ -133,45 +124,25 @@ class ApplyValueChange
 
 public:
     static
-    data::ValueNodeAccess node(data::ValueNodeAddress & _aValueNodeAddr)
-    { return data::ValueNodeAccess(_aValueNodeAddr); }
-
-    static
-    uno::Any getValue(data::ValueNodeAddress & _aValueNodeAddr)
-    { return node(_aValueNodeAddr).getValue(); }
-
-    static
-    uno::Any getDefault(data::ValueNodeAddress & _aValueNodeAddr)
-    { return node(_aValueNodeAddr).getDefaultValue(); }
-
-    static
-    void apply(ValueChange& _rValueChange, data::ValueNodeAddress & _aValueNodeAddr);
+    void apply(ValueChange& _rValueChange, sharable::ValueNode * valueNode);
 };
 //--------------------------------------------------------------------------
 //--------------------------------------------------------------------------
 
 // apply a already matching set of changes to the target tree
-    void applyUpdateToTree(SubtreeChange& _anUpdateTree, data::NodeAddress _aRootNode)
+    void applyUpdateToTree(SubtreeChange& _anUpdateTree, sharable::Node * _aRootNode)
     {
         ApplyUpdate aUpdater(_aRootNode);
         _anUpdateTree.forEachChange(aUpdater);
     }
 //--------------------------------------------------------------------------
-    static inline
-    bool adjust_helper(SubtreeChange& _rResultTree, SubtreeChange& _aUpdateTree,
-               data::NodeAddress _aTargetAddress )
-    {
-        data::NodeAccess aTargetNode(_aTargetAddress);
-        return AdjustUpdate::adjust(_rResultTree, _aUpdateTree, aTargetNode);
-    }
-//--------------------------------------------------------------------------
 // apply a set of changes to the target tree
-    void applyUpdateWithAdjustmentToTree(SubtreeChange& _anUpdateTree, data::NodeAddress _aRootNode)
+    void applyUpdateWithAdjustmentToTree(SubtreeChange& _anUpdateTree, sharable::Node * _aRootNode)
     {
     // POST: pSubtree = pSubtree + aChangeList
-    SubtreeChange aActualChanges(_anUpdateTree, SubtreeChange::NoChildCopy());
+    SubtreeChange aActualChanges(_anUpdateTree, treeop::NoChildCopy());
 
-        if ( adjust_helper(aActualChanges,_anUpdateTree, _aRootNode) )
+        if ( AdjustUpdate::adjust(aActualChanges,_anUpdateTree, _aRootNode) )
         {
         applyUpdateToTree(aActualChanges, _aRootNode);
         }
@@ -182,16 +153,16 @@ public:
 //--------------------------------------------------------------------------
 
 static inline
-configuration::Name getNodeName(INode const & _aNode)
+rtl::OUString getNodeName(INode const & _aNode)
 {
-    return configuration::makeName( _aNode.getName(), configuration::Name::NoValidate() );
+    return _aNode.getName();
 }
 //--------------------------------------------------------------------------
 
 static inline
-configuration::Name getChangeNodeName(Change const & _aChange)
+rtl::OUString getChangeNodeName(Change const & _aChange)
 {
-    return configuration::makeName( _aChange.getNodeName(), configuration::Name::NoValidate() );
+    return _aChange.getNodeName();
 }
 //--------------------------------------------------------------------------
 
@@ -212,9 +183,9 @@ bool AdjustUpdate::impl_adjust(SubtreeChange& _aUpdateTree)
 inline bool AdjustUpdate::checkNode() const
 {
     // Change a Value
-    OSL_ENSURE(m_aRefNode.isValid(),"AdjustUpdate: no data");
+    OSL_ENSURE(m_refNode != 0, "AdjustUpdate: no data");
 
-    return m_aRefNode.isValid();
+    return m_refNode != 0;
 }
 //--------------------------------------------------------------------------
 
@@ -223,13 +194,12 @@ void AdjustUpdate::handle(ValueChange& _rChange)
     if (checkNode())
     {
         // We need to find the element in the tree
-        data::NodeAccess aChildNodeAcc = data::getSubnode(m_aRefNode, getChangeNodeName(_rChange));
-        data::NodeAccess aChildNode(aChildNodeAcc);
+        sharable::Node * childNode = m_refNode->getSubnode(getChangeNodeName(_rChange));
 
         // We have a node so we can keep the Change and the values do not differ
-        if (aChildNode.isValid())
+        if (childNode != 0)
         {
-            bool bIsValue = data::ValueNodeAccess::isInstance(aChildNode);
+            bool bIsValue = childNode->isValue();
             OSL_ENSURE(bIsValue, "AdjustUpdate : node must be a value node!");
 
             if (bIsValue && _rChange.isChange())
@@ -243,9 +213,9 @@ void AdjustUpdate::handle(ValueChange& _rChange)
             std::auto_ptr<ValueNode> pNode = m_aNodeConverter.createCorrespondingNode(_rChange);
 
             OSL_ENSURE(m_rChangeList.isSetNodeChange(), "Adding a new value to a non-set node");
-            OUString sTypeName = m_rChangeList.getElementTemplateName();
+            rtl::OUString sTypeName = m_rChangeList.getElementTemplateName();
 
-            data::TreeSegment aNewTree = data::TreeSegment::createNew(base_ptr(pNode),sTypeName);
+            rtl::Reference< data::TreeSegment > aNewTree = data::TreeSegment::create(base_ptr(pNode),sTypeName);
             // add the tree to the change list
             std::auto_ptr<Change> pChange( new AddNode( aNewTree,_rChange.getNodeName(), _rChange.isToDefault()) );
             m_rChangeList.addChange(pChange);
@@ -259,23 +229,21 @@ void AdjustUpdate::handle(SubtreeChange& _rChange)
     if (checkNode())
     {
         // We need to find the element in the tree
-        data::NodeAccess aChildNodeAcc = data::getSubnode(m_aRefNode, getChangeNodeName(_rChange));
-        data::NodeAccess aChildNode(aChildNodeAcc);
+        sharable::Node * childNode = m_refNode->getSubnode(getChangeNodeName(_rChange));
 
         // if there is a node we continue
-        if (aChildNode.isValid())
+        if (childNode != 0)
         {
-            bool bIsSubtree =   data::GroupNodeAccess::isInstance(aChildNode) ||
-                                data::SetNodeAccess::isInstance(aChildNode);
+            bool bIsSubtree = childNode->isGroup() || childNode->isSet();
             OSL_ENSURE(bIsSubtree, "AdjustUpdate : node must be a inner node!");
 
             if (bIsSubtree)
             {
                 // generate a new change
-                std::auto_ptr<SubtreeChange> pChange( new SubtreeChange(_rChange, SubtreeChange::NoChildCopy()) );
+                std::auto_ptr<SubtreeChange> pChange( new SubtreeChange(_rChange, treeop::NoChildCopy()) );
 
                 // recurse
-                if ( adjust(*pChange,_rChange,aChildNode,m_aNodeConverter.nodeFactory()) )
+                if ( adjust(*pChange,_rChange,childNode,m_aNodeConverter.nodeFactory()) )
                     m_rChangeList.addChange(base_ptr(pChange));
             }
             else
@@ -291,9 +259,9 @@ void AdjustUpdate::handle(SubtreeChange& _rChange)
             pNode->setLevels(treeop::ALL_LEVELS,treeop::ALL_LEVELS);
 
             OSL_ENSURE(m_rChangeList.isSetNodeChange(), "Adding a new value to a non-set node");
-            OUString sTypeName = m_rChangeList.getElementTemplateName();
+            rtl::OUString sTypeName = m_rChangeList.getElementTemplateName();
 
-            data::TreeSegment aNewTree = data::TreeSegment::createNew(base_ptr(pNode), sTypeName);
+            rtl::Reference< data::TreeSegment > aNewTree = data::TreeSegment::create(base_ptr(pNode), sTypeName);
 
             // add the tree to the change list
             std::auto_ptr<Change> pChange( new AddNode(aNewTree,_rChange.getNodeName(), _rChange.isToDefault()) );
@@ -308,10 +276,10 @@ void AdjustUpdate::handle(RemoveNode& _rChange)
     if (checkNode())
     {
         // We need to find the element in the tree
-        data::NodeAccess aChildNode = data::getSubnode(m_aRefNode, getChangeNodeName(_rChange));
+        sharable::Node * childNode = m_refNode->getSubnode(getChangeNodeName(_rChange));
 
         // only if there is a node, we will keep the change
-        if (aChildNode.isValid())
+        if (childNode != 0)
         {
             // generate a new change
             std::auto_ptr<Change> pChange( new RemoveNode(_rChange.getNodeName(),_rChange.isToDefault()) );
@@ -326,11 +294,11 @@ void AdjustUpdate::handle(AddNode& _rChange)
     if (checkNode())
     {
         // We need to find the element in the tree
-        data::NodeAccess aChildNode = data::getSubnode(m_aRefNode, getChangeNodeName(_rChange));
+        sharable::Node * childNode = m_refNode->getSubnode(getChangeNodeName(_rChange));
 
-        data::TreeSegment aNewNode = _rChange.getNewTree();
+        rtl::Reference< data::TreeSegment > aNewNode = _rChange.getNewTree();
         std::auto_ptr<AddNode> pChange( new AddNode(aNewNode,_rChange.getNodeName(),_rChange.isToDefault()) );
-        if (aChildNode.isValid())
+        if (childNode != 0)
         {
             pChange->setReplacing();
         }
@@ -350,29 +318,27 @@ void ApplyValueChange::adjust(uno::Any& aActual, uno::Any const& aTarget)
 
 //--------------------------------------------------------------------------
 // _rValueChange.applyTo(_aValueNode)
-void ApplyValueChange::apply(ValueChange& _rValueChange, data::ValueNodeAddress & _aValueNodeAddr)
+void ApplyValueChange::apply(ValueChange& _rValueChange, sharable::ValueNode * valueNode)
 {
-    using data::ValueNodeAccess;
-
     switch (_rValueChange.getMode())
     {
     case ValueChange::wasDefault:
-        OSL_ASSERT(node(_aValueNodeAddr).isDefault());
+        OSL_ASSERT(valueNode->info.isDefault());
 
     case ValueChange::changeValue:
-        adjust( _rValueChange.m_aOldValue, getValue(_aValueNodeAddr));
-        ValueNodeAccess::setValue(_aValueNodeAddr,_rValueChange.getNewValue());
+        adjust( _rValueChange.m_aOldValue, valueNode->getValue());
+        valueNode->setValue(_rValueChange.getNewValue());
         break;
 
     case ValueChange::setToDefault:
-        adjust( _rValueChange.m_aOldValue,  getValue(_aValueNodeAddr));
-        adjust( _rValueChange.m_aValue,     getDefault(_aValueNodeAddr));
-        ValueNodeAccess::setToDefault(_aValueNodeAddr);
+        adjust(_rValueChange.m_aOldValue, valueNode->getValue());
+        adjust(_rValueChange.m_aValue, valueNode->getDefaultValue());
+        valueNode->setToDefault();
         break;
 
     case ValueChange::changeDefault:
-        adjust( _rValueChange.m_aOldValue,  getDefault(_aValueNodeAddr));
-        ValueNodeAccess::changeDefault(_aValueNodeAddr,_rValueChange.getNewValue());
+        adjust(_rValueChange.m_aOldValue, valueNode->getDefaultValue());
+        valueNode->changeDefault(_rValueChange.getNewValue());
         break;
 
     default:
@@ -387,10 +353,10 @@ void ApplyUpdate::handle(ValueChange& _rChange)
     // Change a Value
     OSL_ENSURE(m_aCurrentNode != NULL,"Cannot apply ValueChange without node");
 
-    data::NodeAddress aChildNodeAddr = data::getSubnodeAddress(m_aCurrentNode, getChangeNodeName(_rChange));
-    OSL_ENSURE(aChildNodeAddr != NULL,"Cannot apply Change: No node to change");
+    sharable::Node * childNode = m_aCurrentNode->getSubnode(getChangeNodeName(_rChange));
+    OSL_ENSURE(childNode != 0, "Cannot apply Change: No node to change");
 
-    data::ValueNodeAddress aValueAddr = aChildNodeAddr->valueData();
+    sharable::ValueNode * aValueAddr = childNode->valueData();
     OSL_ENSURE(aValueAddr != NULL,"Cannot apply ValueChange: Node is not a value");
 
     if (aValueAddr != NULL)
@@ -403,19 +369,18 @@ void ApplyUpdate::handle(SubtreeChange& _rChange)
     // handle traversion
     OSL_ENSURE(m_aCurrentNode != NULL,"Cannot apply SubtreeChange without node");
 
-    data::NodeAddress aChildNodeAddr = data::getSubnodeAddress(m_aCurrentNode, getChangeNodeName(_rChange));
-    OSL_ENSURE(aChildNodeAddr != NULL,"Cannot apply Change: No node to change");
+    sharable::Node * childNode = m_aCurrentNode->getSubnode(getChangeNodeName(_rChange));
+    OSL_ENSURE(childNode != 0, "Cannot apply Change: No node to change");
 
-    OSL_ENSURE( data::toGroupNodeAddress(aChildNodeAddr) != NULL ||
-                data::toSetNodeAddress(aChildNodeAddr) != NULL ,
+    OSL_ENSURE( childNode->isGroup() || childNode->isSet(),
                 "Cannot Apply SubtreeChange: Node is not an inner node");
 
-    if (aChildNodeAddr != NULL)
+    if (childNode != 0)
     {
-        aChildNodeAddr->node.info.markAsDefault( _rChange.isToDefault() );
+        childNode->info.markAsDefault( _rChange.isToDefault() );
 
-        data::NodeAddress aOldNode = m_aCurrentNode;
-        m_aCurrentNode = aChildNodeAddr;
+        sharable::Node * aOldNode = m_aCurrentNode;
+        m_aCurrentNode = childNode;
 
         _rChange.forEachChange(*this);
 
@@ -428,7 +393,7 @@ void ApplyUpdate::handle(AddNode& _rChange)
 {
     OSL_ENSURE(m_aCurrentNode != NULL,"Cannot apply AddNode without node");
 
-    data::SetNodeAddress aSetNodeAddr = data::toSetNodeAddress(m_aCurrentNode);
+    sharable::SetNode * aSetNodeAddr = sharable::SetNode::from(m_aCurrentNode);
     OSL_ENSURE(aSetNodeAddr != NULL,"Cannot apply AddNode: Node is not a set node");
 
     // Add a new element
@@ -436,19 +401,15 @@ void ApplyUpdate::handle(AddNode& _rChange)
     {
     if (_rChange.isReplacing())
     {
-            data::TreeAddress aOldNodeAddr =
-                data::SetNodeAccess::removeElement(aSetNodeAddr,getChangeNodeName(_rChange));
+        sharable::TreeFragment * old = aSetNodeAddr->removeElement(getChangeNodeName(_rChange));
+        OSL_ASSERT(old != 0);
+        _rChange.takeReplacedTree(data::TreeSegment::create(old));
+    }
 
-            OSL_ENSURE(aOldNodeAddr != NULL, "ApplyUpdate: AddNode: can't recover node being replaced");
-
-            data::TreeAccessor aOldNodeAccess(aOldNodeAddr);
-            _rChange.takeReplacedTree( data::TreeSegment::createNew(aOldNodeAccess) );
-        }
-
-        data::TreeAddress aNewAddress = data::buildTree(_rChange.getNewTree().getTreeAccess());
+    sharable::TreeFragment * aNewAddress = data::buildTree(_rChange.getNewTree()->fragment);
         OSL_ENSURE(aNewAddress != NULL, "ApplyUpdate: AddNode: could not create new element");
 
-        data::SetNodeAccess::addElement(aSetNodeAddr,aNewAddress);
+        aSetNodeAddr->addElement(aNewAddress);
 
         _rChange.setInsertedAddress( aNewAddress );
     }
@@ -459,19 +420,15 @@ void ApplyUpdate::handle(RemoveNode& _rChange)
 {
     OSL_ENSURE(m_aCurrentNode != NULL,"Cannot apply RemoveNode without node");
 
-    data::SetNodeAddress aSetNodeAddr = data::toSetNodeAddress(m_aCurrentNode);
+    sharable::SetNode * aSetNodeAddr = sharable::SetNode::from(m_aCurrentNode);
     OSL_ENSURE(aSetNodeAddr != NULL,"Cannot apply RemoveNode: Node is not a set node");
 
     // Remove an element
     if (aSetNodeAddr != NULL)
     {
-        data::TreeAddress aOldNodeAddr =
-            data::SetNodeAccess::removeElement(aSetNodeAddr,getChangeNodeName(_rChange));
-
-        OSL_ENSURE(aOldNodeAddr != NULL, "ApplyUpdate: Remove: can't recover node being removed");
-
-        data::TreeAccessor aOldNodeAccess(aOldNodeAddr);
-        _rChange.takeRemovedTree( data::TreeSegment::createNew(aOldNodeAccess) );
+        sharable::TreeFragment * old = aSetNodeAddr->removeElement(getChangeNodeName(_rChange));
+        OSL_ASSERT(old != 0);
+        _rChange.takeRemovedTree(data::TreeSegment::create(old));
     }
 }
 //--------------------------------------------------------------------------
@@ -481,30 +438,30 @@ void ApplyUpdate::handle(RemoveNode& _rChange)
     {
     protected:
         SubtreeChange&      m_rChangeList;
-        data::NodeAccess    m_aCacheNode;
+        sharable::Node * m_cacheNode;
 
     public:
-        ForwardTreeDifferenceBuilder(SubtreeChange& rList, data::NodeAccess const & _aCacheNode)
+        ForwardTreeDifferenceBuilder(SubtreeChange& rList, sharable::Node * cacheNode)
         : m_rChangeList(rList)
-        , m_aCacheNode(_aCacheNode)
+        , m_cacheNode(cacheNode)
         {
         }
 
         virtual void handle(ValueNode const& _aNewNode)
         {
-            data::NodeAccess aChildNode = data::getSubnode(m_aCacheNode,getNodeName(_aNewNode));
+            sharable::Node * childNode = m_cacheNode->getSubnode(getNodeName(_aNewNode));
 
-            OSL_ENSURE(aChildNode.isValid(), "TreeDifferenceBuilder: could not find expected node !");
+            OSL_ENSURE(childNode != 0, "TreeDifferenceBuilder: could not find expected node !");
 
-            data::ValueNodeAccess aValueNode( aChildNode );
+            sharable::ValueNode * valueNode = childNode->valueData();
 
-            OSL_ENSURE(aValueNode.isValid(), "TreeDifferenceBuilder: node must be a value node!");
+            OSL_ENSURE(valueNode != 0, "TreeDifferenceBuilder: node must be a value node!");
 
             // if the values differ add a new change
-            if (aValueNode.isValid() && _aNewNode.getValue() != aValueNode.getValue())
+            if (_aNewNode.getValue() != valueNode->getValue())
             {
                 bool bNewDefault = _aNewNode.isDefault();
-                bool bOldDefault = aValueNode.isDefault();
+                bool bOldDefault = valueNode->info.isDefault();
 
                 ValueChange::Mode eMode;
                 if (bNewDefault)
@@ -520,26 +477,25 @@ void ApplyUpdate::handle(RemoveNode& _rChange)
 
                 std::auto_ptr<Change> pChange(
                     new ValueChange(_aNewNode.getName(), _aNewNode.getAttributes(), eMode,
-                                    _aNewNode.getValue(), aValueNode.getValue()) );
+                                    _aNewNode.getValue(), valueNode->getValue()) );
 
                 m_rChangeList.addChange(pChange);
             }
         }
         virtual void handle(ISubtree const& _aNewNode)
         {
-            data::NodeAccess aChildNode = data::getSubnode(m_aCacheNode,getNodeName(_aNewNode));
+            sharable::Node * childNode = m_cacheNode->getSubnode(getNodeName(_aNewNode));
 
-            if (aChildNode.isValid())
+            if (childNode != 0)
             {
-                OSL_ENSURE( data::GroupNodeAccess::isInstance(aChildNode) ||
-                            data::SetNodeAccess::isInstance(aChildNode) ,
+                OSL_ENSURE( childNode->isGroup() || childNode->isSet(),
                             "ForwardTreeDifferenceBuilder: Node must be an inner node");
 
                 // generate a new change
                 std::auto_ptr<SubtreeChange> pNewChange( new SubtreeChange(_aNewNode) );
 
                 // .. and recurse
-                ForwardTreeDifferenceBuilder aNextLevel(*pNewChange, aChildNode);
+                ForwardTreeDifferenceBuilder aNextLevel(*pNewChange, childNode);
                 aNextLevel.applyToChildren(_aNewNode);
 
                 // now count if there are any changes
@@ -549,15 +505,15 @@ void ApplyUpdate::handle(RemoveNode& _rChange)
                 if (aCounter.hasChanges())
                     m_rChangeList.addChange(base_ptr(pNewChange));
             }
-            else if (data::SetNodeAccess::isInstance(m_aCacheNode))
+            else if (m_cacheNode != 0 && m_cacheNode->isSet())
             {
                 // Subtree not in Cache, add in TreeChangeList
                 // SubtreeChange* pChange = new SubtreeChange(_rSubtree);
                 OSL_ENSURE(m_rChangeList.isSetNodeChange(), "Found newly added node in non-set node");
-                OUString sTypeName = m_rChangeList.getElementTemplateName();
+                rtl::OUString sTypeName = m_rChangeList.getElementTemplateName();
 
                 std::auto_ptr<INode> pSubtree( _aNewNode.clone() );
-                data::TreeSegment aNewTree = data::TreeSegment::createNew(pSubtree,sTypeName);
+                rtl::Reference< data::TreeSegment > aNewTree = data::TreeSegment::create(pSubtree,sTypeName);
 
                 std::auto_ptr<Change> pAdd(new AddNode(aNewTree, _aNewNode.getName(), _aNewNode.isDefault()));
 
@@ -570,149 +526,93 @@ void ApplyUpdate::handle(RemoveNode& _rChange)
     };
 // -----------------------------------------------------------------------------
 
-    struct BackwardTreeDifferenceBuilder : data::SetVisitor
-    {
-    protected:
-        SubtreeChange&      m_rChangeList;
-        ISubtree const *    m_pNewNode;
+class BackwardTreeDifferenceBuilder: public data::SetVisitor {
+public:
+    BackwardTreeDifferenceBuilder(SubtreeChange & list, ISubtree const * node):
+        m_changeList(list), m_newNode(node) {}
 
-              using NodeVisitor::handle;
-    public:
-        BackwardTreeDifferenceBuilder(SubtreeChange& rList, ISubtree const* pNode)
-        : m_rChangeList(rList)
-        , m_pNewNode(pNode)
-        {
+    void applyToChildren(sharable::Node * cacheNode) {
+        OSL_ASSERT(cacheNode != 0);
+        if (cacheNode->isGroup()) {
+            OSL_ASSERT(!m_changeList.isSetNodeChange());
+            visitChildren(&cacheNode->group);
+        } else if (cacheNode->isSet()) {
+            OSL_ASSERT(m_changeList.isSetNodeChange());
+            visitElements(&cacheNode->set);
+        } else {
+            OSL_ASSERT(false);
         }
+    }
 
-        Result applyToChildren(data::NodeAccess const & _aCacheNode)
-        {
-            if (data::GroupNodeAccess::isInstance(_aCacheNode))
-            {
-                OSL_ENSURE( !m_rChangeList.isSetNodeChange(), "Building a set change for a group node" );
-                return visitChildren( data::GroupNodeAccess(_aCacheNode) );
+private:
+    using NodeVisitor::handle;
+
+    virtual bool handle(sharable::Node * node) {
+        OSL_ASSERT(!node->isValue());
+        INode const * newChild = m_newNode->getChild(node->getName());
+        ISubtree const * newTree = newChild == 0 ? 0 : newChild->asISubtree();
+        if (newTree != 0) {
+            // Traverse down to next change:
+            Change * change = m_changeList.getChange(node->getName());
+            std::auto_ptr< Change > newChange;
+            SubtreeChange * groupChange = 0;
+            if (change == 0) {
+                groupChange = new SubtreeChange(*newTree);
+                newChange.reset(groupChange);
+            } else {
+                groupChange = dynamic_cast< SubtreeChange * >(change);
+                OSL_ASSERT(groupChange != 0);
             }
-            else if (data::SetNodeAccess::isInstance(_aCacheNode))
-            {
-                OSL_ENSURE(  m_rChangeList.isSetNodeChange(), "Building a group change for a set node" );
-                return visitElements( data::SetNodeAccess(_aCacheNode) );
-            }
-            else
-            {
-                OSL_ENSURE(  m_rChangeList.ISA(ValueChange), "BackwardTreeDifferenceBuilder: Unknown node type" );
-                OSL_ENSURE( !m_rChangeList.ISA(ValueChange), "Trying to build a change tree for a value node" );
-                return DONE;
-            }
-        }
-
-    private:
-        virtual Result handle(data::ValueNodeAccess const & /*_aCacheNode*/)
-        {
-#if 0 // do we really need to do nothing here?
-            OUString aNodeName = _aCacheNode.getName().toString();
-
-            INode const* pNewChild = m_pNewNode->getChild(aNodeName);
-
-            //OSL_ENSURE(pNewChild, "BackwardTreeDifferenceBuilder: New (value) node is missing !");
-
-            // if (!pNewChild) return DONE; // error stop !
-#endif
-
-            return CONTINUE;
-        }
-
-        virtual Result handle(data::NodeAccess const & _aCacheNode)
-        {
-            // value nodes are handled separately
-            OSL_ASSERT(!data::ValueNodeAccess::isInstance(_aCacheNode));
-
-            OUString aNodeName = _aCacheNode.getName().toString();
-
-            INode const* pNewChild = m_pNewNode->getChild(aNodeName);
-            //OSL_ENSURE(pNewChild, "BackwardTreeDifferenceBuilder: New node is missing !");
-
-            ISubtree const * pNewTree = pNewChild ? pNewChild->asISubtree() : NULL;
-            //OSL_ENSURE(pNewChild, "BackwardTreeDifferenceBuilder: Inner node expected !");
-
-            if (pNewTree)
-            {
-                // Traverse down to next change
-                Change* pChange = m_rChangeList.getChange(aNodeName);
-
-                std::auto_ptr<Change> pNewChange;
-                SubtreeChange * pGroupChange = NULL;
-
-                if (pChange)
-                {
-                    OSL_ENSURE(pChange->ISA(SubtreeChange),"BackwardTreeDifferenceBuilder: Found wrong change for this Group Node");
-                    if (pChange->ISA(SubtreeChange))
-                        pGroupChange = static_cast<SubtreeChange*>(pChange);
-                }
-                else
-                {
-                    pGroupChange = new SubtreeChange(*pNewTree);
-                    pNewChange.reset( pGroupChange );
-                }
-
-                if (pGroupChange)
-                {
-                    BackwardTreeDifferenceBuilder aNextLevel(*pGroupChange, pNewTree);
-                    aNextLevel.applyToChildren(_aCacheNode);
-
-                    if (pNewChange.get())
-                    {
-                        // now count if there are any real changes
-                        OChangeActionCounter aCounter;
-                        aCounter.applyToChange(*pNewChange);
-
-                        if (aCounter.hasChanges())
-                            m_rChangeList.addChange(pNewChange);
+            if (groupChange != 0) {
+                BackwardTreeDifferenceBuilder(*groupChange, newTree).
+                    applyToChildren(node);
+                if (newChange.get() != 0) {
+                    // Now count if there are any real changes:
+                    OChangeActionCounter counter;
+                    counter.applyToChange(*newChange);
+                    if (counter.hasChanges()) {
+                        m_changeList.addChange(newChange);
                     }
                 }
             }
-            else
-            {
-                // return DONE; // error stop !
-            }
-
-            return CONTINUE;
         }
+        return false;
+    }
 
-        virtual Result handle(data::TreeAccessor const & _aCacheElement)
-        {
-            OUString aElementName = _aCacheElement.getName().toString();
+    virtual bool handle(sharable::ValueNode *) {
+        return false;
+    }
 
-            INode const* pNewElement = m_pNewNode->getChild(aElementName);
-
-            if (pNewElement)
-            {
-                // continue: handle the root node
-                return SetVisitor::handle(_aCacheElement);
-            }
-            else
-            {
-                // Remove Node
-                std::auto_ptr<Change> pRemove(new RemoveNode(aElementName,
-                                 _aCacheElement->isNew()));
-
-                m_rChangeList.addChange(pRemove);
-
-                return CONTINUE;
-            }
+    virtual bool handle(sharable::TreeFragment * tree) {
+        INode const * newElement = m_newNode->getChild(tree->getName());
+        if (newElement == 0) {
+            // Remove node:
+            std::auto_ptr< Change > remove(
+                new RemoveNode(tree->getName(), tree->isNew()));
+            m_changeList.addChange(remove);
+            return false;
+        } else {
+            // Handle the root node:
+            return SetVisitor::handle(tree);
         }
-    };
-// -----------------------------------------------------------------------------
+    }
+
+    SubtreeChange & m_changeList;
+    ISubtree const * m_newNode;
+};
+
 //--------------------------------------------------------------------------
 
 // apply a set of changes to the target tree, return true, if there are changes found
-    bool createUpdateFromDifference(SubtreeChange& _rResultingUpdateTree, data::NodeAccess const & _aExistingData, ISubtree const & _aNewData)
+    bool createUpdateFromDifference(SubtreeChange& _rResultingUpdateTree, sharable::Node * existingData, ISubtree const & _aNewData)
     {
-        OSL_ENSURE( _aExistingData.isValid(), "Trying to create diffrence for empty data" );
+        OSL_ENSURE(existingData != 0, "Trying to create diffrence for empty data");
     // create the differences
-        ForwardTreeDifferenceBuilder aForwardTreeDifference(_rResultingUpdateTree, _aExistingData);
+        ForwardTreeDifferenceBuilder aForwardTreeDifference(_rResultingUpdateTree, existingData);
         aForwardTreeDifference.applyToChildren(_aNewData);
 
         BackwardTreeDifferenceBuilder aBackwardTreeDifference(_rResultingUpdateTree, & _aNewData);
-        aBackwardTreeDifference.applyToChildren(_aExistingData);
+        aBackwardTreeDifference.applyToChildren(existingData);
 
         return true;
     }

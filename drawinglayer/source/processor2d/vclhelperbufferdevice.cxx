@@ -48,7 +48,8 @@ namespace drawinglayer
 {
     impBufferDevice::impBufferDevice(
         OutputDevice& rOutDev,
-        const basegfx::B2DRange& rRange)
+        const basegfx::B2DRange& rRange,
+        bool bAddOffsetToMapping)
     :   mrOutDev(rOutDev),
         maContent(rOutDev),
         mpMask(0L),
@@ -73,8 +74,12 @@ namespace drawinglayer
             rOutDev.EnableMapMode(bWasEnabledSrc);
 
             MapMode aNewMapMode(rOutDev.GetMapMode());
-            const Point aLogicTopLeft(rOutDev.PixelToLogic(maDestPixel.TopLeft()));
-            aNewMapMode.SetOrigin(Point(-aLogicTopLeft.X(), -aLogicTopLeft.Y()));
+
+            if(bAddOffsetToMapping)
+            {
+                const Point aLogicTopLeft(rOutDev.PixelToLogic(maDestPixel.TopLeft()));
+                aNewMapMode.SetOrigin(Point(-aLogicTopLeft.X(), -aLogicTopLeft.Y()));
+            }
 
             maContent.SetMapMode(aNewMapMode);
 

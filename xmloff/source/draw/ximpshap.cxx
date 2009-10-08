@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: ximpshap.cxx,v $
- * $Revision: 1.129 $
+ * $Revision: 1.128.2.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -162,6 +162,7 @@ SdXMLShapeContext::SdXMLShapeContext(
 :   SvXMLShapeContext( rImport, nPrfx, rLocalName, bTemporaryShape )
 ,   mxShapes( rShapes )
 ,   mxAttrList(xAttrList)
+,   mbListContextPushed( false )
 ,   mnStyleFamily(XML_STYLE_FAMILY_SD_GRAPHICS_ID)
 ,   mbIsPlaceholder(FALSE)
 ,   mbClearDefaultAttributes( true )
@@ -239,10 +240,8 @@ SvXMLImportContext *SdXMLShapeContext::CreateChildContext( USHORT p_nPrefix,
 
                 // remember old list item and block (#91964#) and reset them
                 // for the text frame
-                mxOldListBlock = xTxtImport->_GetListBlock();
-                mxOldListItem = xTxtImport->_GetListItem();
-                xTxtImport->_SetListBlock( NULL );
-                xTxtImport->_SetListItem( NULL );
+                xTxtImport->PushListContext();
+                mbListContextPushed = true;
             }
         }
 
@@ -370,10 +369,8 @@ void SdXMLShapeContext::EndElement()
         GetImport().GetTextImport()->SetCursor( mxOldCursor );
 
     // reinstall old list item (if necessary) #91964#
-    if ( mxOldListBlock.Is() )
-    {
-        GetImport().GetTextImport()->_SetListBlock( mxOldListBlock );
-        GetImport().GetTextImport()->_SetListItem( mxOldListItem );
+    if (mbListContextPushed) {
+        GetImport().GetTextImport()->PopListContext();
     }
 
     if( msHyperlink.getLength() != 0 ) try
@@ -3622,12 +3619,13 @@ void SdXMLTableShapeContext::EndElement()
     if( mxTableImportContext.Is() )
         mxTableImportContext->EndElement();
 
+    SdXMLShapeContext::EndElement();
+
     if( mxShape.is() )
     {
         // set pos, size, shear and rotate
         SetTransformation();
     }
-    SdXMLShapeContext::EndElement();
 }
 
 // this is called from the parent group for each unparsed attribute in the attribute list

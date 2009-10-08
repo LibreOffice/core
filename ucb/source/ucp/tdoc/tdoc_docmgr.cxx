@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: tdoc_docmgr.cxx,v $
- * $Revision: 1.19 $
+ * $Revision: 1.19.24.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -188,7 +188,7 @@ void SAL_CALL OfficeDocumentsManager::notifyEvent(
 
                 uno::Reference< embed::XStorage > xStorage
                     = xDoc->getDocumentStorage();
-                OSL_ENSURE( xDoc.is(), "Got no document storage!" );
+                OSL_ENSURE( xStorage.is(), "Got no document storage!" );
 
                 rtl:: OUString aDocId = getDocumentId( Event.Source );
                 rtl:: OUString aTitle = DocumentInfo::getDocumentTitle( uno::Reference< frame::XModel >( Event.Source, uno::UNO_QUERY ) );
@@ -269,7 +269,7 @@ void SAL_CALL OfficeDocumentsManager::notifyEvent(
 
                     uno::Reference< embed::XStorage > xStorage
                         = xDoc->getDocumentStorage();
-                    OSL_ENSURE( xDoc.is(), "Got no document storage!" );
+                    OSL_ENSURE( xStorage.is(), "Got no document storage!" );
 
                     (*it).second.xStorage = xStorage;
                     break;
@@ -305,7 +305,7 @@ void SAL_CALL OfficeDocumentsManager::notifyEvent(
 
                     uno::Reference< embed::XStorage > xStorage
                         = xDoc->getDocumentStorage();
-                    OSL_ENSURE( xDoc.is(), "Got no document storage!" );
+                    OSL_ENSURE( xStorage.is(), "Got no document storage!" );
 
                     (*it).second.xStorage = xStorage;
 

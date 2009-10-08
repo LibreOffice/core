@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: viewfrm.cxx,v $
- * $Revision: 1.136 $
+ * $Revision: 1.136.8.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -1221,13 +1221,8 @@ void SfxViewFrame::ReleaseObjectShell_Impl( sal_Bool bStoreView )
         pDispatcher->Flush();
         EndListening( *xObjSh );
 
-        SFX_NOTIFY( *xObjSh, xObjSh->Type(),
-                SfxSimpleHint(SFX_HINT_TITLECHANGED),
-                TYPE(SfxSimpleHint) );
-
-        SFX_NOTIFY( *xObjSh, xObjSh->Type(),
-                SfxSimpleHint(SFX_HINT_DOCCHANGED),
-                TYPE(SfxSimpleHint) );
+        Notify( *xObjSh, SfxSimpleHint(SFX_HINT_TITLECHANGED) );
+        Notify( *xObjSh, SfxSimpleHint(SFX_HINT_DOCCHANGED) );
 
         if ( 1 == xObjSh->GetOwnerLockCount() && pImp->bObjLocked && xObjSh->GetCreateMode() == SFX_CREATE_MODE_EMBEDDED )
             xObjSh->DoClose();
@@ -2898,7 +2893,7 @@ void SfxViewFrame::StateView_Impl
 
                 case SID_NEWWINDOW:
                 {
-                    if ( !GetViewShell()->NewWindowAllowed() && !pDocSh->HasName() )
+                    if ( !GetViewShell()->NewWindowAllowed() /* && !pDocSh->HasName() */ )
                             rSet.DisableItem( nWhich );
                     else
                     {

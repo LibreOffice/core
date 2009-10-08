@@ -8,7 +8,7 @@
  *
  * $RCSfile: sdrdecompositiontools.hxx,v $
  *
- * $Revision: 1.2 $
+ * $Revision: 1.2.18.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -74,7 +74,8 @@ namespace drawinglayer
             const ::basegfx::B2DHomMatrix& rObjectTransform,
             const attribute::SdrTextAttribute& rText,
             const attribute::SdrLineAttribute* pStroke,
-            bool bCellText);
+            bool bCellText,
+            bool bWordWrap);
 
         Primitive2DReference createShadowPrimitive(
             const Primitive2DSequence& rSource,

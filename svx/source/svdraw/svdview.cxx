@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: svdview.cxx,v $
- * $Revision: 1.29 $
+ * $Revision: 1.29.18.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -123,7 +123,7 @@ void SdrDropMarkerOverlay::ImplCreateOverlays(const SdrView& rView, const basegf
 
 SdrDropMarkerOverlay::SdrDropMarkerOverlay(const SdrView& rView, const SdrObject& rObject)
 {
-    ImplCreateOverlays(rView, rObject.TakeXorPoly(true));
+    ImplCreateOverlays(rView, rObject.TakeXorPoly());
 }
 
 SdrDropMarkerOverlay::SdrDropMarkerOverlay(const SdrView& rView, const Rectangle& rRectangle)
@@ -1555,14 +1555,14 @@ BOOL SdrView::IsDeleteMarkedPossible() const
     return IsDeleteMarkedObjPossible();
 }
 
-void SdrView::SFX_NOTIFY(SfxBroadcaster& rBC, const TypeId& rBCType, const SfxHint& rHint, const TypeId& rHintType)
+void SdrView::Notify(SfxBroadcaster& rBC, const SfxHint& rHint)
 {
     if( rHint.ISA( SfxSimpleHint ) && ( (SfxSimpleHint&) rHint ).GetId() == SFX_HINT_ACCESSIBILITY_CHANGED )
     {
         onAccessibilityOptionsChanged();
     }
 
-     SdrCreateView::SFX_NOTIFY(rBC, rBCType, rHint, rHintType );
+     SdrCreateView::Notify(rBC, rHint);
 }
 
 SvtAccessibilityOptions& SdrView::getAccessibilityOptions()

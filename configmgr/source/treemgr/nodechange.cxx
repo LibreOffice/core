@@ -36,7 +36,7 @@
 #include "nodechangeinfo.hxx"
 
 #include "noderef.hxx"
-#include "treeimpl.hxx"
+#include "tree.hxx"
 
 #include <algorithm>
 #include <osl/diagnose.h>
@@ -117,9 +117,9 @@ sal_uInt32 NodeChange::getChangeInfos(NodeChangesInformation& _rInfos) const
     sal_uInt32 nCount = 0;
     if (m_pImpl)
     {
-        NodeChangeImpl::ChangeCount nChanges = m_pImpl->getChangeDataCount();
+        sal_uInt32 nChanges = m_pImpl->getChangeDataCount();
 
-        for (NodeChangeImpl::ChangeCount ix = 0; ix < nChanges; ++ix)
+        for (sal_uInt32 ix = 0; ix < nChanges; ++ix)
         {
         NodeChangeInformation aSingleInfo;
             aSingleInfo.change.type = NodeChangeData::eNoChange;
@@ -144,34 +144,34 @@ bool NodeChange::getChangeLocation(NodeChangeLocation& rLoc) const
 }
 //-----------------------------------------------------------------------------
 
-Tree NodeChange::getBaseTree() const
+rtl::Reference< Tree > NodeChange::getBaseTree() const
 {
-    return Tree(m_pImpl->getTargetTree().get());
+    return m_pImpl->getTargetTree().get();
 }
 //-----------------------------------------------------------------------------
 
 // retrieve the tree where the change is actually taking place
 NodeRef NodeChange::getBaseNode() const
 {
-    TreeHolder aTree = m_pImpl->getTargetTree();
-    NodeOffset nOffset = m_pImpl->getTargetNode();
+    rtl::Reference<Tree> aTree = m_pImpl->getTargetTree();
+    unsigned int nOffset = m_pImpl->getTargetNode();
 
     OSL_ASSERT(aTree.is() && aTree->isValidNode(nOffset));
 
     if (aTree.is() && nOffset)
-        return TreeImplHelper::makeNode(*aTree,nOffset);
+        return aTree->getNode(nOffset);
 
     return NodeRef();
 }
 //-----------------------------------------------------------------------------
 
 // retrieve the tree where the change is actually taking place
-Tree NodeChange::getAffectedTree() const
+rtl::Reference< Tree > NodeChange::getAffectedTree() const
 {
     if (this->maybeChange())
-        return Tree(m_pImpl->getTargetTree().get());
+        return m_pImpl->getTargetTree().get();
     else
-        return Tree(NULL);
+        return NULL;
 }
 //-----------------------------------------------------------------------------
 
@@ -180,13 +180,13 @@ NodeRef NodeChange::getAffectedNode() const
 {
     if (this->maybeChange())
     {
-        TreeHolder aTree = m_pImpl->getTargetTree();
-        NodeOffset nOffset = m_pImpl->getTargetNode();
+        rtl::Reference<Tree> aTree = m_pImpl->getTargetTree();
+        unsigned int nOffset = m_pImpl->getTargetNode();
 
         OSL_ASSERT(aTree.is() && aTree->isValidNode(nOffset));
 
         if (aTree.is() && nOffset)
-            return TreeImplHelper::makeNode(*aTree,nOffset );
+            return aTree->getNode(nOffset);
     }
     return NodeRef();
 }
@@ -194,8 +194,8 @@ NodeRef NodeChange::getAffectedNode() const
 
 NodeID NodeChange::getAffectedNodeID() const
 {
-    TreeHolder aTree = m_pImpl->getTargetTree();
-    NodeOffset nOffset = m_pImpl->getTargetNode();
+    rtl::Reference<Tree> aTree = m_pImpl->getTargetTree();
+    unsigned int nOffset = m_pImpl->getTargetNode();
 
     OSL_ASSERT(aTree.is() ? aTree->isValidNode(nOffset) : 0==nOffset);
 
@@ -264,7 +264,7 @@ NodeChanges& NodeChanges::compact()
 
 void NodeChanges::implTest() const
 {
-    for(Iterator it = begin(), stop = end(); it != stop; ++it)
+    for(std::vector<NodeChange>::const_iterator it = begin(), stop = end(); it != stop; ++it)
     {
         it ->test();
     }
@@ -272,18 +272,12 @@ void NodeChanges::implTest() const
 //-----------------------------------------------------------------------------
 void NodeChanges::implApply() const
 {
-    for(Iterator it = begin(), stop = end(); it != stop; ++it)
+    for(std::vector<NodeChange>::const_iterator it = begin(), stop = end(); it != stop; ++it)
     {
         it ->apply();
     }
 }
 //-----------------------------------------------------------------------------
-/// gets the nearest common ancestor node of all changes this tree
-//Node getBaseNode() const;
-
-/// gets the tree the base node belongs to, if available
-//Tree getBaseTree() const;
-
 /** insert a change into this collection
 */
 void NodeChanges::add(NodeChange const& aChange)
@@ -313,7 +307,7 @@ sal_uInt32 NodeChanges::getChangesInfos(NodeChangesInformation& _rInfos) const
     _rInfos.reserve(_rInfos.size() + this->getCount());
 
     sal_Int32 nResult = 0;
-    for (Iterator it = begin(); it != end(); ++it)
+    for (std::vector<NodeChange>::const_iterator it = begin(); it != end(); ++it)
     {
         nResult += it->getChangeInfos(_rInfos);
     }

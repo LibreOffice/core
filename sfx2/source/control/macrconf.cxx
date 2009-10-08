@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: macrconf.cxx,v $
- * $Revision: 1.25 $
+ * $Revision: 1.25.142.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -662,7 +662,7 @@ void SfxMacroConfig::RegisterSlotId(sal_uInt16 nId)
 
 //==========================================================================
 
-const SfxMacroInfoPtr SfxMacroConfig::GetMacroInfo(sal_uInt16 nId) const
+SfxMacroInfo* SfxMacroConfig::GetMacroInfo(sal_uInt16 nId) const
 {
     sal_uInt16 nCount = pImp->aArr.Count();
     for (sal_uInt16 i=0; i<nCount; i++)
@@ -674,7 +674,7 @@ const SfxMacroInfoPtr SfxMacroConfig::GetMacroInfo(sal_uInt16 nId) const
 
 //==========================================================================
 
-const SfxMacroInfoPtr SfxMacroConfig::GetMacroInfo_Impl( const SvxMacro *pMacro ) const
+const SfxMacroInfo* SfxMacroConfig::GetMacroInfo_Impl( const SvxMacro *pMacro ) const
 {
     sal_uInt16 nCount = pImp->aArr.Count();
     for (sal_uInt16 i=0; i<nCount; i++)
@@ -687,7 +687,7 @@ const SfxMacroInfoPtr SfxMacroConfig::GetMacroInfo_Impl( const SvxMacro *pMacro 
 
 sal_Bool SfxMacroConfig::ExecuteMacro( sal_uInt16 nId, const String& rArgs ) const
 {
-    const SfxMacroInfoPtr pInfo = GetMacroInfo( nId );
+    const SfxMacroInfo* pInfo = GetMacroInfo( nId );
     if ( !pInfo )
         return sal_False;
 
@@ -790,7 +790,7 @@ sal_Bool SfxMacroConfig::CheckMacro( SfxObjectShell *pSh, const SvxMacro* pMacro
 
 sal_Bool SfxMacroConfig::CheckMacro( sal_uInt16 nId ) const
 {
-    const SfxMacroInfoPtr pInfo = GetMacroInfo( nId );
+    const SfxMacroInfo* pInfo = GetMacroInfo( nId );
     if ( !pInfo )
         return sal_False;
 

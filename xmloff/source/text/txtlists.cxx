@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: txtlists.cxx,v $
- * $Revision: 1.4 $
+ * $Revision: 1.2.24.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -36,12 +36,22 @@
 #include <tools/date.hxx>
 #include <tools/time.hxx>
 
-// --> OD 2008-08-15 #i92811#
+#include <xmloff/txtimp.hxx>
+#include <xmloff/xmlimp.hxx>
+#include <xmloff/xmlnumi.hxx>
+
+#include <com/sun/star/style/XStyle.hpp>
+#include <com/sun/star/beans/XPropertySet.hpp>
+#include "XMLTextListItemContext.hxx"
 #include "XMLTextListBlockContext.hxx"
-// <--
+#include "txtparai.hxx"
+
+
+using namespace ::com::sun::star;
+
 
 XMLTextListsHelper::XMLTextListsHelper()
-    : mpProcessedLists( 0 ),
+   :  mpProcessedLists( 0 ),
       msLastProcessedListId(),
       msListStyleOfLastProcessedList(),
       // --> OD 2008-08-15 #i92811#
@@ -75,6 +85,63 @@ XMLTextListsHelper::~XMLTextListsHelper()
     {
         mpListStack->clear();
         delete mpListStack;
+    }
+}
+
+void XMLTextListsHelper::PushListContext(
+    XMLTextListBlockContext *i_pListBlock)
+{
+//    fprintf(stderr, "PushListContext\n");
+    mListStack.push(::boost::make_tuple(i_pListBlock,
+        static_cast<XMLTextListItemContext*>(0),
+        static_cast<XMLNumberedParaContext*>(0)));
+}
+
+void XMLTextListsHelper::PushListContext(
+    XMLNumberedParaContext *i_pNumberedParagraph)
+{
+//    fprintf(stderr, "PushListContext(NP)\n");
+    mListStack.push(::boost::make_tuple(
+        static_cast<XMLTextListBlockContext*>(0),
+        static_cast<XMLTextListItemContext*>(0), i_pNumberedParagraph));
+}
+
+void XMLTextListsHelper::PopListContext()
+{
+    OSL_ENSURE(mListStack.size(),
+        "internal error: PopListContext: mListStack empty");
+//    fprintf(stderr, "PopListContext\n");
+    if (mListStack.size()) mListStack.pop();
+}
+
+void XMLTextListsHelper::ListContextTop(
+    XMLTextListBlockContext*& o_pListBlockContext,
+    XMLTextListItemContext*& o_pListItemContext,
+    XMLNumberedParaContext*& o_pNumberedParagraphContext )
+{
+    if (mListStack.size()) {
+        o_pListBlockContext =
+            static_cast<XMLTextListBlockContext*>(&mListStack.top().get<0>());
+        o_pListItemContext  =
+            static_cast<XMLTextListItemContext *>(&mListStack.top().get<1>());
+        o_pNumberedParagraphContext =
+            static_cast<XMLNumberedParaContext *>(&mListStack.top().get<2>());
+    }
+}
+
+void XMLTextListsHelper::SetListItem( XMLTextListItemContext *i_pListItem )
+{
+    // may be cleared by ListBlockContext for upper list...
+    if (i_pListItem) {
+        OSL_ENSURE(mListStack.size(),
+            "internal error: SetListItem: mListStack empty");
+        OSL_ENSURE(mListStack.top().get<0>(),
+            "internal error: SetListItem: mListStack has no ListBlock");
+        OSL_ENSURE(!mListStack.top().get<1>(),
+            "error: SetListItem: list item already exists");
+    }
+    if (mListStack.size()) {
+        mListStack.top().get<1>() = i_pListItem;
     }
 }
 
@@ -286,3 +353,190 @@ sal_Bool XMLTextListsHelper::EqualsToTopListStyleOnStack( const ::rtl::OUString 
            ? sListId == mpListStack->back().second
            : sal_False;
 }
+
+::rtl::OUString
+XMLTextListsHelper::GetNumberedParagraphListId(
+    const sal_uInt16 i_Level,
+    const ::rtl::OUString i_StyleName)
+{
+    if (!i_StyleName.getLength()) {
+        OSL_ENSURE(false, "invalid numbered-paragraph: no style-name");
+    }
+    if (i_StyleName.getLength()
+        && (i_Level < mLastNumberedParagraphs.size())
+        && (mLastNumberedParagraphs[i_Level].first == i_StyleName) )
+    {
+        OSL_ENSURE(mLastNumberedParagraphs[i_Level].second.getLength(),
+            "internal error: numbered-paragraph style-name but no list-id?");
+        return mLastNumberedParagraphs[i_Level].second;
+    } else {
+        return GenerateNewListId();
+    }
+}
+
+static void
+ClampLevel(uno::Reference<container::XIndexReplace> const& i_xNumRules,
+    sal_Int16 & io_rLevel)
+{
+    OSL_ENSURE(i_xNumRules.is(), "internal error: ClampLevel: NumRules null");
+    if (i_xNumRules.is()) {
+        const sal_Int32 nLevelCount( i_xNumRules->getCount() );
+        if ( io_rLevel >= nLevelCount ) {
+            io_rLevel = sal::static_int_cast< sal_Int16 >(nLevelCount-1);
+        }
+    }
+}
+
+uno::Reference<container::XIndexReplace>
+XMLTextListsHelper::EnsureNumberedParagraph(
+    SvXMLImport & i_rImport,
+    const ::rtl::OUString i_ListId,
+    sal_Int16 & io_rLevel, const ::rtl::OUString i_StyleName)
+{
+    OSL_ENSURE(i_ListId.getLength(), "inavlid ListId");
+    OSL_ENSURE(io_rLevel >= 0, "inavlid Level");
+    NumParaList_t & rNPList( mNPLists[i_ListId] );
+    const ::rtl::OUString none; // default
+    if (!rNPList.size() && (0 != io_rLevel)) {
+        // create default list style for top level
+        sal_Int16 lev(0);
+        rNPList.push_back(::std::make_pair(none,
+            MakeNumRule(i_rImport, 0, none, none, lev) ));
+    }
+    // create num rule first because this might clamp the level...
+    uno::Reference<container::XIndexReplace> xNumRules;
+    if ((0 == io_rLevel) || !rNPList.size() || i_StyleName.getLength()) {
+        // no parent to inherit from, or explicit style given => new numrules!
+        // index of parent: level - 1, but maybe that does not exist
+        const size_t parent( std::min(static_cast<size_t>(io_rLevel),
+            rNPList.size()) - 1 );
+        xNumRules = MakeNumRule(i_rImport,
+            io_rLevel > 0 ? rNPList[parent].second : 0,
+            io_rLevel > 0 ? rNPList[parent].first  : none,
+            i_StyleName, io_rLevel);
+    } else {
+        // no style given, but has a parent => reuse parent numrules!
+        ClampLevel(rNPList.back().second, io_rLevel);
+    }
+    if (static_cast<sal_uInt16>(io_rLevel) + 1U > rNPList.size()) {
+        // new level: need to enlarge
+        for (size_t i = rNPList.size();
+                i < static_cast<size_t>(io_rLevel); ++i) {
+            rNPList.push_back(rNPList.back());
+        }
+        rNPList.push_back(xNumRules.is()
+            ? ::std::make_pair(i_StyleName, xNumRules)
+            : rNPList.back());
+    } else {
+        // old level: no need to enlarge; possibly shrink
+        if (xNumRules.is()) {
+            rNPList[io_rLevel] = std::make_pair(i_StyleName, xNumRules);
+        }
+        if (static_cast<sal_uInt16>(io_rLevel) + 1U < rNPList.size()) {
+            rNPList.erase(rNPList.begin() + io_rLevel + 1, rNPList.end());
+        }
+    }
+    // remember the list id
+    if (mLastNumberedParagraphs.size() <= static_cast<size_t>(io_rLevel)) {
+        mLastNumberedParagraphs.resize(io_rLevel+1);
+    }
+    mLastNumberedParagraphs[io_rLevel] = std::make_pair(i_StyleName, i_ListId);
+    return rNPList.back().second;
+}
+
+/** extracted from the XMLTextListBlockContext constructor */
+uno::Reference<container::XIndexReplace>
+XMLTextListsHelper::MakeNumRule(
+    SvXMLImport & i_rImport,
+    const uno::Reference<container::XIndexReplace>& i_rNumRule,
+    const ::rtl::OUString i_ParentStyleName,
+    const ::rtl::OUString i_StyleName,
+    sal_Int16 & io_rLevel,
+    sal_Bool* o_pRestartNumbering,
+    sal_Bool* io_pSetDefaults)
+{
+    uno::Reference<container::XIndexReplace> xNumRules(i_rNumRule);
+    if ( i_StyleName.getLength() &&
+         i_StyleName != i_ParentStyleName )
+    {
+        const ::rtl::OUString sDisplayStyleName(
+            i_rImport.GetStyleDisplayName( XML_STYLE_FAMILY_TEXT_LIST,
+                                             i_StyleName) );
+        const uno::Reference < container::XNameContainer >& rNumStyles(
+                            i_rImport.GetTextImport()->GetNumberingStyles() );
+        if( rNumStyles.is() && rNumStyles->hasByName( sDisplayStyleName ) )
+        {
+            uno::Reference < style::XStyle > xStyle;
+            uno::Any any = rNumStyles->getByName( sDisplayStyleName );
+            any >>= xStyle;
+
+            // --> OD 2008-05-07 #refactorlists# - no longer needed
+//            // If the style has not been used, the restart numbering has
+//            // to be set never.
+//            if ( mbRestartNumbering && !xStyle->isInUse() )
+//            {
+//                mbRestartNumbering = sal_False;
+//            }
+            // <--
+
+            uno::Reference< beans::XPropertySet > xPropSet( xStyle,
+                uno::UNO_QUERY );
+            any = xPropSet->getPropertyValue(
+                i_rImport.GetTextImport()->sNumberingRules );
+            any >>= xNumRules;
+        }
+        else
+        {
+            const SvxXMLListStyleContext *pListStyle(
+                i_rImport.GetTextImport()->FindAutoListStyle( i_StyleName ) );
+            if( pListStyle )
+            {
+                xNumRules = pListStyle->GetNumRules();
+                // --> OD 2008-05-07 #refactorlists# - no longer needed
+//                sal_Bool bUsed = mxNumRules.is();
+                // <--
+                if( !xNumRules.is() )
+                {
+                    pListStyle->CreateAndInsertAuto();
+                    xNumRules = pListStyle->GetNumRules();
+                }
+                // --> OD 2008-05-07 #refactorlists# - no longer needed
+//                if( mbRestartNumbering && !bUsed )
+//                    mbRestartNumbering = sal_False;
+                // <--
+            }
+        }
+    }
+
+    sal_Bool bSetDefaults(io_pSetDefaults ? *io_pSetDefaults : sal_False);
+    if ( !xNumRules.is() )
+    {
+        // If no style name has been specified for this style and for any
+        // parent or if no num rule with the specified name exists,
+        // create a new one.
+
+        xNumRules =
+            SvxXMLListStyleContext::CreateNumRule( i_rImport.GetModel() );
+        DBG_ASSERT( xNumRules.is(), "got no numbering rule" );
+        if ( !xNumRules.is() )
+            return xNumRules;
+
+        // Because it is a new num rule, numbering must not be restarted.
+        if (o_pRestartNumbering) *o_pRestartNumbering = sal_False;
+        bSetDefaults = sal_True;
+        if (io_pSetDefaults) *io_pSetDefaults = bSetDefaults;
+    }
+
+    ClampLevel(xNumRules, io_rLevel);
+
+    if ( bSetDefaults )
+    {
+        // Because there is no list style sheet for this style, a default
+        // format must be set for any level of this num rule.
+        SvxXMLListStyleContext::SetDefaultStyle( xNumRules, io_rLevel,
+            sal_False );
+    }
+
+    return xNumRules;
+}
+

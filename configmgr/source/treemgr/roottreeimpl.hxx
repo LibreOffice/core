@@ -31,38 +31,33 @@
 #ifndef CONFIGMGR_ROOTTREEIMPL_HXX_
 #define CONFIGMGR_ROOTTREEIMPL_HXX_
 
-#include "treeimpl.hxx"
+#include "tree.hxx"
 
 namespace configmgr
 {
-//-----------------------------------------------------------------------------
-    namespace data { class NodeAccess; }
 //-----------------------------------------------------------------------------
     namespace configuration
     {
 //-----------------------------------------------------------------------------
         /** is the Implementation class for class <type>Tree</type>.
             <p> Holds a list of <type>Node</type> which it allows to access by
-                <type>NodeOffset</type> (which is basically a one-based index).
+                <type>unsigned int</type> (which is basically a one-based index).
             </p>
             <p> Also provides for navigation to the context this tree is located in
             </p>
         */
-        class RootTreeImpl : public TreeImpl
+        class RootTree : public Tree
         {
         public:
         //  Construction
-            /// creates a TreeImpl without a parent tree
-            RootTreeImpl(   rtl::Reference<view::ViewStrategy> const& _xStrategy,
+            /// creates a Tree without a parent tree
+            RootTree(   rtl::Reference<view::ViewStrategy> const& _xStrategy,
                             AbsolutePath const& aRootPath,
-                            data::NodeAccess const& _aCacheNode, TreeDepth nDepth,
+                            sharable::Node * cacheNode, unsigned int nDepth,
                             TemplateProvider const& aTemplateProvider);
 
             // make it public
         private:
-            virtual RootTreeImpl const* doCastToRootTree() const;
-            virtual ElementTreeImpl const* doCastToElementTree() const;
-
             virtual Path::Component doGetRootName() const;
             virtual void doFinishRootPath(Path::Rep& rPath) const;
 

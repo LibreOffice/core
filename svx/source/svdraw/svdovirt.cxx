@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: svdovirt.cxx,v $
- * $Revision: 1.21 $
+ * $Revision: 1.21.18.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -91,7 +91,7 @@ SdrObject& SdrVirtObj::ReferencedObj()
     return rRefObj;
 }
 
-void __EXPORT SdrVirtObj::SFX_NOTIFY(SfxBroadcaster& /*rBC*/, const TypeId& rBCType, const SfxHint& /*rHint*/, const TypeId& rHintType)
+void __EXPORT SdrVirtObj::Notify(SfxBroadcaster& /*rBC*/, const SfxHint& /*rHint*/)
 {
     bClosedObj=rRefObj.IsClosedObj();
     SetRectsDirty(); // hier noch Optimieren.
@@ -215,9 +215,9 @@ void operator +=(PolyPolygon& rPoly, const Point& rOfs)
     }
 }
 
-basegfx::B2DPolyPolygon SdrVirtObj::TakeXorPoly(sal_Bool bDetail) const
+basegfx::B2DPolyPolygon SdrVirtObj::TakeXorPoly() const
 {
-    basegfx::B2DPolyPolygon aPolyPolygon(rRefObj.TakeXorPoly(bDetail));
+    basegfx::B2DPolyPolygon aPolyPolygon(rRefObj.TakeXorPoly());
 
     if(aAnchor.X() || aAnchor.Y())
     {

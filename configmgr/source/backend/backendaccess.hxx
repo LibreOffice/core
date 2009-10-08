@@ -71,50 +71,49 @@ class BackendAccess : public IMergedDataProvider
         ~BackendAccess(void) ;
 
         // IMergedDataProvider
-        virtual ComponentResult getNodeData(const ComponentRequest& aRequest,
+        virtual ResultHolder< ComponentInstance > getNodeData(const ComponentRequest& aRequest,
                                             ITemplateDataProvider* aTemplateProvider,
                                             INodeDataListener *aListener = NULL)
-            CFG_UNO_THROW_ALL() ;
+            SAL_THROW((com::sun::star::uno::Exception)) ;
         virtual void removeRequestListener(INodeDataListener *aListener,
                                            const ComponentRequest& aRequest)
-            CFG_NOTHROW();
+            SAL_THROW(());
         virtual void updateNodeData(const UpdateRequest& aUpdate)
-            CFG_UNO_THROW_ALL() ;
-        virtual NodeResult getDefaultData(const NodeRequest& aRequest)
-            CFG_UNO_THROW_ALL() ;
-        virtual TemplateResult getTemplateData(const TemplateRequest& aRequest)
-            CFG_UNO_THROW_ALL() ;
-        virtual bool isStrippingDefaults(void) CFG_NOTHROW() { return false ; }
+            SAL_THROW((com::sun::star::uno::Exception)) ;
+        virtual ResultHolder< NodeInstance > getDefaultData(const NodeRequest& aRequest)
+            SAL_THROW((com::sun::star::uno::Exception)) ;
+        virtual ResultHolder< TemplateInstance > getTemplateData(const TemplateRequest& aRequest)
+            SAL_THROW((com::sun::star::uno::Exception)) ;
 
     private :
 
         /**
           Retrieves the schema of a component.
           */
-        uno::Reference< backenduno::XSchema > getSchema(const OUString& aComponent) ;
+        uno::Reference< backenduno::XSchema > getSchema(const rtl::OUString& aComponent) ;
 
         /**
           Retrieves the schema version of a component.
           */
-        OUString getSchemaVersion(const OUString& aComponent) ;
+        rtl::OUString getSchemaVersion(const rtl::OUString& aComponent) ;
 
         /**
           Retrieves the layers for a request.
           */
-        uno::Sequence< uno::Reference<backenduno::XLayer> > getLayers(const OUString& aComponent,const RequestOptions& aOptions) ;
+        uno::Sequence< uno::Reference<backenduno::XLayer> > getLayers(const rtl::OUString& aComponent,const RequestOptions& aOptions) ;
 
         /**
           Reads merged default data with a given number of layers.
           */
         bool readDefaultData( MergedComponentData & aComponentData,
-                                OUString const & aComponent,
+                                rtl::OUString const & aComponent,
                                 RequestOptions const & aOptions,
                                 bool bIncludeTemplates,
                                 const uno::Reference<backenduno::XLayer> * pLayers,
                                 sal_Int32 nNumLayers,
                                 ITemplateDataProvider *aTemplateProvider,
                                 sal_Int32 * pLayersMerged = 0)
-            CFG_UNO_THROW_ALL();
+            SAL_THROW((com::sun::star::uno::Exception));
         /**
           Merges layers onto component data.
           */
@@ -122,11 +121,11 @@ class BackendAccess : public IMergedDataProvider
                 MergedComponentData& aData,
                 const uno::Reference<backenduno::XLayer> * pLayers,
                 sal_Int32 aNumLayers,
-                localehelper::Locale const & aRequestedLocale,
-                localehelper::LocaleSequence & inoutMergedLocales,
+                com::sun::star::lang::Locale const & aRequestedLocale,
+                std::vector< com::sun::star::lang::Locale > & inoutMergedLocales,
                 ITemplateDataProvider *aTemplateProvider,
                 sal_Int32 * pLayersMerged = 0)
-            CFG_UNO_THROW_ALL();
+            SAL_THROW((com::sun::star::uno::Exception));
     private :
         /**
           Decides if merging should be retried after an exception.
@@ -138,7 +137,7 @@ class BackendAccess : public IMergedDataProvider
                 const uno::Any & aMergeException,
                 const uno::Reference<backenduno::XLayer>  & aBrokenLayer,
                 bool bUserLayerData)
-            CFG_UNO_THROW_ALL();
+            SAL_THROW((com::sun::star::uno::Exception));
 
     private :
         /** Get the factory used for service invocation */

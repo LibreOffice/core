@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: dindexnode.cxx,v $
- * $Revision: 1.21 $
+ * $Revision: 1.21.66.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -214,7 +214,7 @@ BOOL ONDXPage::Insert(ONDXNode& rNode, sal_uInt32 nRowsLeft)
                 else  // Position unbekannt
                 {
                     USHORT nPos = NODE_NOTFOUND;
-                    while (++nPos < nCount && rNode.GetKey() > ((*this)[nPos]).GetKey());
+                    while (++nPos < nCount && rNode.GetKey() > ((*this)[nPos]).GetKey()) ;
 
                     --nCount;   // (sonst bekomme ich u.U. Assertions und GPFs - 60593)
                     bResult = Insert(nPos, rNode);

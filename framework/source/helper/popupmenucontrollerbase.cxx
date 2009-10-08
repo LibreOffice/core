@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: popupmenucontrollerbase.cxx,v $
- * $Revision: 1.8 $
+ * $Revision: 1.8.82.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -166,12 +166,6 @@ throw (::com::sun::star::uno::RuntimeException)
     m_aListenerContainer.removeInterface( ::getCppuType( (const css::uno::Reference< css::lang::XEventListener >*)NULL ), xListener );
 }
 
-// XStatusListener
-void SAL_CALL PopupMenuControllerBase::statusChanged( const FeatureStateEvent& ) throw ( RuntimeException )
-{
-    // must be implemented by sub class
-}
-
 // XEventListener
 void SAL_CALL PopupMenuControllerBase::disposing( const EventObject& ) throw ( RuntimeException )
 {
@@ -242,18 +236,6 @@ void SAL_CALL PopupMenuControllerBase::deactivate( const css::awt::MenuEvent& ) 
 
     if ( m_bDisposed )
         throw DisposedException();
-}
-
-// XPopupMenuController
-void SAL_CALL PopupMenuControllerBase::setPopupMenu( const Reference< css::awt::XPopupMenu >& PopupMenu ) throw (RuntimeException)
-{
-    ResetableGuard aLock( m_aLock );
-
-    if ( m_bDisposed )
-        throw DisposedException();
-
-    if ( m_xFrame.is() && !m_xPopupMenu.is() )
-        m_xPopupMenu = PopupMenu;
 }
 
 void SAL_CALL PopupMenuControllerBase::updatePopupMenu() throw ( ::com::sun::star::uno::RuntimeException )

@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: graphicproperties.cxx,v $
- * $Revision: 1.12 $
+ * $Revision: 1.12.76.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -91,7 +91,7 @@ namespace sdr
             rObj.SetXPolyDirty();
 
             // #i29367# Update GraphicAttr, too. This was formerly
-            // triggered by SdrGrafObj::SFX_NOTIFY, which is no longer
+            // triggered by SdrGrafObj::Notify, which is no longer
             // called nowadays. BTW: strictly speaking, the whole
             // ImpSetAttrToGrafInfo/ImpSetGrafInfoToAttr stuff could
             // be dumped, when SdrGrafObj::aGrafInfo is removed and

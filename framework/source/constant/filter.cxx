@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: filter.cxx,v $
- * $Revision: 1.5 $
+ * $Revision: 1.5.82.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -117,30 +117,6 @@ const sal_Int32 Filter::FLAGVALUE_PACKED                                 = 0x001
 const sal_Int32 Filter::FLAGVALUE_SILENTEXPORT                           = 0x00200000L;     // 2097152
 const sal_Int32 Filter::FLAGVALUE_BROWSERPREFERED                        = 0x00400000L;     // 4194304
 const sal_Int32 Filter::FLAGVALUE_PREFERED                               = 0x10000000L;     // 268435456
-
-/*-----------------------------------------------
-    06.08.2003 09:47
------------------------------------------------*/
-sal_Bool Filter::areFlagsSet(sal_Int32 nField, sal_Int32 nMask)
-{
-    return ((nField & nMask) == nMask);
-}
-
-/*-----------------------------------------------
-    06.08.2003 09:48
------------------------------------------------*/
-void Filter::addFlags(sal_Int32& nField, sal_Int32 nFlags)
-{
-    nField |= nFlags;
-}
-
-/*-----------------------------------------------
-    06.08.2003 09:48
------------------------------------------------*/
-void Filter::removeFlags(sal_Int32& nField, sal_Int32 nFlags)
-{
-    nField &= ~nFlags;
-}
 
     } // namespace constant
 } // namespace framework

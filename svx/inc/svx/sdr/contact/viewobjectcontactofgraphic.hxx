@@ -8,7 +8,7 @@
  *
  * $RCSfile: viewobjectcontactofgraphic.hxx,v $
  *
- * $Revision: 1.2 $
+ * $Revision: 1.2.18.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -60,7 +60,8 @@ namespace sdr
 
             // async graphics loading helpers. Only to be used internally or from the
             // event helper class (in .cxx file)
-            bool impPrepareForPaint();
+            bool impPrepareGraphicWithAsynchroniousLoading();
+            bool impPrepareGraphicWithSynchroniousLoading();
             void doAsynchGraphicLoading();
             void forgetAsynchGraphicLoadingEvent(sdr::event::AsynchGraphicLoadingEvent* pEvent);
 

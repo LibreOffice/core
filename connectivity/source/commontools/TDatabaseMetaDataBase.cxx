@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: TDatabaseMetaDataBase.cxx,v $
- * $Revision: 1.8 $
+ * $Revision: 1.8.56.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -36,6 +36,9 @@
 #include <comphelper/sequenceashashmap.hxx>
 #include <comphelper/evtlistenerhlp.hxx>
 #include <com/sun/star/lang/XComponent.hpp>
+#include "resource/sharedresources.hxx"
+#include "resource/common_res.hrc"
+#include <connectivity/dbexception.hxx>
 
 using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;
@@ -136,7 +139,9 @@ Reference< XResultSet > SAL_CALL ODatabaseMetaDataBase::getTypeInfo(  ) throw(SQ
                 }
                 catch(ParseError&)
                 {
-                    throw SQLException(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Invalid Formula for TypeInfoSettings!")),*this,::rtl::OUString(),1000,Any());
+                    ::connectivity::SharedResources aResources;
+                    const ::rtl::OUString sError( aResources.getResourceString(STR_FORMULA_WRONG));
+                    ::dbtools::throwGenericSQLException(sError,*this);
                 }
             }
 

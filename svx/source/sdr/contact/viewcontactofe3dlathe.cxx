@@ -8,7 +8,7 @@
  *
  * $RCSfile: viewcontactofe3dlathe.cxx,v $
  *
- * $Revision: 1.2 $
+ * $Revision: 1.2.18.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -70,13 +70,7 @@ namespace sdr
             }
 
             // get extrude geometry
-            basegfx::B3DHomMatrix aWorldTransform;
-
-            // get polygon (2d)
             const basegfx::B2DPolyPolygon aPolyPolygon(GetE3dLatheObj().GetPolyPoly2D());
-
-            // add object to world transformation
-            aWorldTransform *= GetE3dLatheObj().GetTransform();
 
             // get 3D Object Attributes
             drawinglayer::attribute::Sdr3DObjectAttribute* pSdr3DObjectAttribute = drawinglayer::primitive2d::createNewSdr3DObjectAttribute(rItemSet);
@@ -112,6 +106,7 @@ namespace sdr
             const bool bCloseBack(GetE3dLatheObj().GetCloseBack());
 
             // create primitive and add
+            const basegfx::B3DHomMatrix aWorldTransform;
             const drawinglayer::primitive3d::Primitive3DReference xReference(new drawinglayer::primitive3d::SdrLathePrimitive3D(
                 aWorldTransform, aTextureSize, *pAttribute, *pSdr3DObjectAttribute,
                 aPolyPolygon, nHorizontalSegments, nVerticalSegments,

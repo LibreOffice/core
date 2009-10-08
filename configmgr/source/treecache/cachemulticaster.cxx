@@ -32,6 +32,7 @@
 #include "precompiled_configmgr.hxx"
 
 #include "cachemulticaster.hxx"
+#include "treemanager.hxx"
 
 #ifndef INCLUDED_ALGORITHM
 #include <algorithm>
@@ -51,50 +52,46 @@ namespace configmgr
 namespace
 {
 // manually implemented helpers, as rtl::References don't work well with std binders
-    typedef CacheChangeMulticaster::ListenerRef ListenerRef;
 // ---------------------------------------------------------------------------
 
     // replacing  std::bind2nd( std::mem_fun(&aFunc), aArg )
-    struct NotifyDisposing : std::unary_function<ListenerRef,void>
+    struct NotifyDisposing : std::unary_function<rtl::Reference<TreeManager>,void>
     {
-        typedef ICachedDataProvider Arg;
-        Arg & m_arg;
+        CacheController & m_arg;
 
-        NotifyDisposing(Arg * _pProvider) CFG_NOTHROW()
+        NotifyDisposing(CacheController * _pProvider) SAL_THROW(())
         : m_arg(*_pProvider)
         {}
 
-        void operator()(ListenerRef const & _xListener) const CFG_NOTHROW()
+        void operator()(rtl::Reference<TreeManager> const & _xListener) const SAL_THROW(())
         { _xListener->disposing(m_arg); }
     };
 // ---------------------------------------------------------------------------
 
-    // replacing  std::bind2nd( std::mem_fun(&ICachedDataListener::componentCreated), _aComponentName )
-    struct NotifyCreated : std::unary_function<ListenerRef,void>
+    // replacing  std::bind2nd( std::mem_fun(&TreeManager::componentCreated), _aComponentName )
+    struct NotifyCreated : std::unary_function<rtl::Reference<TreeManager>,void>
     {
-        typedef ComponentRequest const Arg;
-        Arg & m_arg;
+        ComponentRequest const & m_arg;
 
-        NotifyCreated(Arg * _pComponent) CFG_NOTHROW()
+        NotifyCreated(ComponentRequest const * _pComponent) SAL_THROW(())
         : m_arg(*_pComponent)
         {}
 
-        void operator()(ListenerRef const & _xListener) const CFG_NOTHROW()
+        void operator()(rtl::Reference<TreeManager> const & _xListener) const SAL_THROW(())
         { _xListener->componentCreated(m_arg); }
     };
 // ---------------------------------------------------------------------------
 
-    // replacing  std::bind2nd( std::mem_fun(&ICachedDataListener::componentChanged), _aComponentName )
-    struct NotifyChanged : std::unary_function<ListenerRef,void>
+    // replacing  std::bind2nd( std::mem_fun(&TreeManager::componentChanged), _aComponentName )
+    struct NotifyChanged : std::unary_function<rtl::Reference<TreeManager>,void>
     {
-        typedef UpdateRequest const Arg;
-        Arg & m_arg;
+        UpdateRequest const & m_arg;
 
-        NotifyChanged(Arg * _pUpdate) CFG_NOTHROW()
+        NotifyChanged(UpdateRequest const * _pUpdate) SAL_THROW(())
         : m_arg(*_pUpdate)
         {}
 
-        void operator()(ListenerRef const & _xListener) const CFG_NOTHROW()
+        void operator()(rtl::Reference<TreeManager> const & _xListener) const SAL_THROW(())
         { _xListener->componentChanged(m_arg); }
     };
 // ---------------------------------------------------------------------------
@@ -114,43 +111,30 @@ CacheChangeMulticaster::~CacheChangeMulticaster()
 }
 // ---------------------------------------------------------------------------
 
-inline CacheChangeMulticaster::ListenerList CacheChangeMulticaster::copyListenerList()
+inline std::list< rtl::Reference<TreeManager> > CacheChangeMulticaster::copyListenerList()
 {
     osl::MutexGuard aListGuard(m_aMutex);
     return m_aListeners;
 }
 // ---------------------------------------------------------------------------
 
-void CacheChangeMulticaster::dispose(ICachedDataProvider & _rProvider) CFG_NOTHROW()
+void CacheChangeMulticaster::notifyCreated(ComponentRequest const & _aComponent) SAL_THROW(())
 {
-    osl::ClearableMutexGuard aListGuard(m_aMutex);
-
-    ListenerList aNotifyListeners;
-    aNotifyListeners.swap(m_aListeners);
-
-    aListGuard.clear();
-
-    std::for_each( aNotifyListeners.begin(), aNotifyListeners.end(), NotifyDisposing(&_rProvider) );
-}
-// ---------------------------------------------------------------------------
-
-void CacheChangeMulticaster::notifyCreated(ComponentRequest const & _aComponent) CFG_NOTHROW()
-{
-    ListenerList aNotifyListeners( this->copyListenerList() );
+    std::list< rtl::Reference<TreeManager> > aNotifyListeners( this->copyListenerList() );
 
     std::for_each( aNotifyListeners.begin(), aNotifyListeners.end(), NotifyCreated(&_aComponent) );
 }
 // ---------------------------------------------------------------------------
 
-void CacheChangeMulticaster::notifyChanged(UpdateRequest const & _anUpdate) CFG_NOTHROW()
+void CacheChangeMulticaster::notifyChanged(UpdateRequest const & _anUpdate) SAL_THROW(())
 {
-    ListenerList aNotifyListeners( this->copyListenerList() );
+    std::list< rtl::Reference<TreeManager> > aNotifyListeners( this->copyListenerList() );
 
     std::for_each( aNotifyListeners.begin(), aNotifyListeners.end(), NotifyChanged(&_anUpdate) );
 }
 // ---------------------------------------------------------------------------
 
-void CacheChangeMulticaster::addListener(ListenerRef _xListener) CFG_NOTHROW()
+void CacheChangeMulticaster::addListener(rtl::Reference<TreeManager> _xListener) SAL_THROW(())
 {
     osl::MutexGuard aListGuard(m_aMutex);
 
@@ -164,7 +148,7 @@ void CacheChangeMulticaster::addListener(ListenerRef _xListener) CFG_NOTHROW()
 }
 // ---------------------------------------------------------------------------
 
-void CacheChangeMulticaster::removeListener(ListenerRef _xListener) CFG_NOTHROW()
+void CacheChangeMulticaster::removeListener(rtl::Reference<TreeManager> _xListener) SAL_THROW(())
 {
     osl::MutexGuard aListGuard(m_aMutex);
     m_aListeners.remove(_xListener);

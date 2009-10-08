@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: MutableAttrList.hxx,v $
- * $Revision: 1.4 $
+ * $Revision: 1.4.56.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -59,7 +59,6 @@ public:
     ~XMLMutableAttributeList();
 
     static const ::com::sun::star::uno::Sequence< sal_Int8 > & getUnoTunnelId() throw();
-    static XMLMutableAttributeList* getImplementation( ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > ) throw();
 
     // XUnoTunnel
     virtual sal_Int64 SAL_CALL getSomething( const ::com::sun::star::uno::Sequence< sal_Int8 >& aIdentifier ) throw(::com::sun::star::uno::RuntimeException);

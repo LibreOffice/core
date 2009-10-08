@@ -42,13 +42,6 @@
 namespace configmgr
 {
 //////////////////////////////////////////////////////////////////////////////////
-
-    using uno::Reference;
-    using uno::Sequence;
-    using uno::Any;
-    using uno::RuntimeException;
-
-//////////////////////////////////////////////////////////////////////////////////
 // class BasicGroup
 //////////////////////////////////////////////////////////////////////////////////
 
@@ -56,7 +49,7 @@ namespace configmgr
 //////////////////////////////////////////////////////////////////////////////////
 uno::Any SAL_CALL BasicGroup::queryInterface( uno::Type const& rType ) throw (uno::RuntimeException )
 {
-    Any aRet = BasicGroupAccess::queryInterface( rType );
+    uno::Any aRet = BasicGroupAccess::queryInterface( rType );
     if (!aRet.hasValue())
     {
         aRet = cppu::queryInterface(rType
@@ -92,7 +85,7 @@ configapi::NodeGroupAccess& BasicGroup::getGroupNode()
     if (!pAccess)
     {
         throw uno::RuntimeException(
-                OUString(RTL_CONSTASCII_USTRINGPARAM("Configuration: Invalid Object - internal update interface missing.")),
+                rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Configuration: Invalid Object - internal update interface missing.")),
                 static_cast< css::container::XNameReplace * >(this)
             );
     }
@@ -102,7 +95,7 @@ configapi::NodeGroupAccess& BasicGroup::getGroupNode()
 // New Interface methods
 // XNameReplace
 //////////////////////////////////////////////////////////////////////////////////
-void SAL_CALL BasicGroup::replaceByName( const OUString& rName, const uno::Any& rElement )
+void SAL_CALL BasicGroup::replaceByName( const rtl::OUString& rName, const uno::Any& rElement )
         throw(css::lang::IllegalArgumentException, css::container::NoSuchElementException, css::lang::WrappedTargetException, uno::RuntimeException)
 {
     configapi::implReplaceByName( getGroupNode(), rName, rElement );

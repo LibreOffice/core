@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: MDatabaseMetaDataHelper.cxx,v $
- * $Revision: 1.16 $
+ * $Revision: 1.16.56.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -596,7 +596,7 @@ sal_Bool MDatabaseMetaDataHelper::getTableStrings( OConnection*                 
     args.arg5 = (void*)&m_aTableTypes;
     args.arg6 = (void*)&nErrorResourceId;
     rv = xMProxy.StartProxy(&args,m_ProductType,m_ProfileName);
-    setError( nErrorResourceId );
+    setError( static_cast<sal_uInt16>(nErrorResourceId) );
 
     if (NS_FAILED(rv))
     {

@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: JConnection.cxx,v $
- * $Revision: 1.13 $
+ * $Revision: 1.13.56.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -55,6 +55,7 @@
 #include <comphelper/namedvaluecollection.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <jni.h>
+#include "resource/common_res.hrc"
 
 #include <list>
 #include <memory>
@@ -875,21 +876,21 @@ Any SAL_CALL java_sql_Connection::getWarnings(  ) throw(SQLException, RuntimeExc
 // -----------------------------------------------------------------------------
 namespace
 {
-    ::rtl::OUString lcl_getDriverLoadErrorMessage( const ::rtl::OUString& _rDriverClass, const ::rtl::OUString& _rDriverClassPath )
+    ::rtl::OUString lcl_getDriverLoadErrorMessage( const ::connectivity::SharedResources& _aResource,const ::rtl::OUString& _rDriverClass, const ::rtl::OUString& _rDriverClassPath )
     {
-        ::rtl::OUStringBuffer aMessageBuf;
-        // TODO: resource
-        aMessageBuf.appendAscii( "The driver class '" );
-        aMessageBuf.append( _rDriverClass );
-        aMessageBuf.appendAscii( "' could not be loaded" );
+        ::rtl::OUString sError1( _aResource.getResourceStringWithSubstitution(
+                STR_NO_CLASSNAME,
+                "$class$", _rDriverClass
+             ) );
         if ( _rDriverClassPath.getLength() )
         {
-            aMessageBuf.appendAscii( " (additional driver class path: " );
-            aMessageBuf.append( _rDriverClassPath );
-            aMessageBuf.appendAscii( ")" );
-        }
-        aMessageBuf.appendAscii( "." );
-        return aMessageBuf.makeStringAndClear();
+            const ::rtl::OUString sError2( _aResource.getResourceStringWithSubstitution(
+                STR_NO_CLASSNAME_PATH,
+                "$classpath$", _rDriverClassPath
+             ) );
+            sError1 += sError2;
+        } // if ( _rDriverClassPath.getLength() )
+        return sError1;
     }
 }
 
@@ -966,7 +967,10 @@ void java_sql_Connection::loadDriverFromProperties( const ::rtl::OUString& _sDri
             if ( !_sDriverClass.getLength() )
             {
                 m_aLogger.log( LogLevel::SEVERE, STR_LOG_NO_DRIVER_CLASS );
-                throw SQLException(::rtl::OUString::createFromAscii("The specified driver was empty!"),*this,::rtl::OUString(),1000,Any());
+                ::dbtools::throwGenericSQLException(
+                    lcl_getDriverLoadErrorMessage( getResources(),_sDriverClass, _sDriverClassPath ),
+                    *this
+                );
             }
             else
             {
@@ -1018,7 +1022,7 @@ void java_sql_Connection::loadDriverFromProperties( const ::rtl::OUString& _sDri
     catch( const SQLException& e )
     {
         throw SQLException(
-            lcl_getDriverLoadErrorMessage( _sDriverClass, _sDriverClassPath ),
+            lcl_getDriverLoadErrorMessage( getResources(),_sDriverClass, _sDriverClassPath ),
             *this,
             ::rtl::OUString(),
             1000,
@@ -1028,7 +1032,7 @@ void java_sql_Connection::loadDriverFromProperties( const ::rtl::OUString& _sDri
     catch( Exception& )
     {
         ::dbtools::throwGenericSQLException(
-            lcl_getDriverLoadErrorMessage( _sDriverClass, _sDriverClassPath ),
+            lcl_getDriverLoadErrorMessage( getResources(),_sDriverClass, _sDriverClassPath ),
             *this
         );
     }
@@ -1044,12 +1048,12 @@ sal_Bool java_sql_Connection::construct(const ::rtl::OUString& url,
     { // initialize the java vm
         ::rtl::Reference< jvmaccess::VirtualMachine > xTest = java_lang_Object::getVM(getORB());
         if ( !xTest.is() )
-            throw SQLException(::rtl::OUString::createFromAscii("No Java installation could be found. Please check your installation!"),*this,::rtl::OUString::createFromAscii("S1000"),1000 ,Any());
+            throwGenericSQLException(STR_NO_JAVA,*this);
     }
     SDBThreadAttach t;
     t.addRef();      // will be released in dtor
     if ( !t.pEnv )
-            throw SQLException(::rtl::OUString::createFromAscii("No Java installation could be found. Please check your installation!"),*this,::rtl::OUString::createFromAscii("S1000"),1000 ,Any());
+        throwGenericSQLException(STR_NO_JAVA,*this);
 
     ::rtl::OUString     sGeneratedValueStatement; // contains the statement which should be used when query for automatically generated values
     sal_Bool            bAutoRetrievingEnabled = sal_False; // set to <TRUE/> when we should allow to query for generated values

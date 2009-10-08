@@ -49,24 +49,19 @@ namespace configmgr
         namespace lang      = ::com::sun::star::lang;
 
         namespace backenduno = ::com::sun::star::configuration::backend;
-        using backenduno::MalformedDataException;
 // -----------------------------------------------------------------------------
 
-        typedef ::cppu::WeakImplHelper1<backenduno::XLayerHandler> LayerMergeHandler_Base;
-
         class LayerMergeHandler
-        :   public LayerMergeHandler_Base
+        :   public cppu::WeakImplHelper1<backenduno::XLayerHandler>
         {
         public:
-            typedef uno::Reference< uno::XComponentContext > Context;
-
             explicit
-            LayerMergeHandler(Context const & _xContext, MergedComponentData & _rData, ITemplateDataProvider* aTemplateProvider = NULL);
+            LayerMergeHandler(uno::Reference< uno::XComponentContext > const & _xContext, MergedComponentData & _rData, ITemplateDataProvider* aTemplateProvider = NULL);
             virtual ~LayerMergeHandler();
 
         // prepare merging
             void prepareLayer();
-            bool prepareSublayer(OUString const & aLocale);
+            bool prepareSublayer(rtl::OUString const & aLocale);
 
         // checking the result
             bool isDone() const { return m_aContext.isDone(); }
@@ -76,94 +71,94 @@ namespace configmgr
         public:
             virtual void SAL_CALL
                 startLayer(  )
-                    throw (MalformedDataException, lang::WrappedTargetException, uno::RuntimeException);
+                    throw (backenduno::MalformedDataException, lang::WrappedTargetException, uno::RuntimeException);
 
             virtual void SAL_CALL
                 endLayer(  )
-                    throw (MalformedDataException, lang::WrappedTargetException, uno::RuntimeException);
+                    throw (backenduno::MalformedDataException, lang::WrappedTargetException, uno::RuntimeException);
 
             virtual void SAL_CALL
-                overrideNode( const OUString& aName, sal_Int16 aAttributes, sal_Bool bClear )
-                    throw (MalformedDataException, lang::WrappedTargetException, uno::RuntimeException);
+                overrideNode( const rtl::OUString& aName, sal_Int16 aAttributes, sal_Bool bClear )
+                    throw (backenduno::MalformedDataException, lang::WrappedTargetException, uno::RuntimeException);
 
             virtual void SAL_CALL
-                addOrReplaceNode( const OUString& aName, sal_Int16 aAttributes )
-                    throw (MalformedDataException, lang::WrappedTargetException, uno::RuntimeException);
+                addOrReplaceNode( const rtl::OUString& aName, sal_Int16 aAttributes )
+                    throw (backenduno::MalformedDataException, lang::WrappedTargetException, uno::RuntimeException);
 
             virtual void SAL_CALL
-                addOrReplaceNodeFromTemplate( const OUString& aName, const TemplateIdentifier& aTemplate, sal_Int16 aAttributes )
-                    throw (MalformedDataException, lang::WrappedTargetException, uno::RuntimeException);
+                addOrReplaceNodeFromTemplate( const rtl::OUString& aName, const backenduno::TemplateIdentifier& aTemplate, sal_Int16 aAttributes )
+                    throw (backenduno::MalformedDataException, lang::WrappedTargetException, uno::RuntimeException);
 
             virtual void SAL_CALL
                 endNode(  )
-                    throw (MalformedDataException, lang::WrappedTargetException, uno::RuntimeException);
+                    throw (backenduno::MalformedDataException, lang::WrappedTargetException, uno::RuntimeException);
 
             virtual void SAL_CALL
-                dropNode( const OUString& aName )
-                    throw (MalformedDataException, lang::WrappedTargetException, uno::RuntimeException);
+                dropNode( const rtl::OUString& aName )
+                    throw (backenduno::MalformedDataException, lang::WrappedTargetException, uno::RuntimeException);
 
             virtual void SAL_CALL
-                overrideProperty( const OUString& aName, sal_Int16 aAttributes, const uno::Type& aType, sal_Bool bClear )
-                    throw (MalformedDataException, lang::WrappedTargetException, uno::RuntimeException);
+                overrideProperty( const rtl::OUString& aName, sal_Int16 aAttributes, const uno::Type& aType, sal_Bool bClear )
+                    throw (backenduno::MalformedDataException, lang::WrappedTargetException, uno::RuntimeException);
 
             virtual void SAL_CALL
-                addProperty( const OUString& aName, sal_Int16 aAttributes, const uno::Type& aType )
-                    throw (MalformedDataException, lang::WrappedTargetException, uno::RuntimeException);
+                addProperty( const rtl::OUString& aName, sal_Int16 aAttributes, const uno::Type& aType )
+                    throw (backenduno::MalformedDataException, lang::WrappedTargetException, uno::RuntimeException);
 
             virtual void SAL_CALL
-                addPropertyWithValue( const OUString& aName, sal_Int16 aAttributes, const uno::Any& aValue )
-                    throw (MalformedDataException, lang::WrappedTargetException, uno::RuntimeException);
+                addPropertyWithValue( const rtl::OUString& aName, sal_Int16 aAttributes, const uno::Any& aValue )
+                    throw (backenduno::MalformedDataException, lang::WrappedTargetException, uno::RuntimeException);
 
             virtual void SAL_CALL
                 endProperty(  )
-                    throw (MalformedDataException, lang::WrappedTargetException, uno::RuntimeException);
+                    throw (backenduno::MalformedDataException, lang::WrappedTargetException, uno::RuntimeException);
 
             virtual void SAL_CALL
                 setPropertyValue( const uno::Any& aValue )
-                    throw (MalformedDataException, lang::WrappedTargetException, uno::RuntimeException);
+                    throw (backenduno::MalformedDataException, lang::WrappedTargetException, uno::RuntimeException);
 
             virtual void SAL_CALL
-                setPropertyValueForLocale( const uno::Any& aValue, const OUString & aLocale )
-                    throw (MalformedDataException, lang::WrappedTargetException, uno::RuntimeException);
+                setPropertyValueForLocale( const uno::Any& aValue, const rtl::OUString & aLocale )
+                    throw (backenduno::MalformedDataException, lang::WrappedTargetException, uno::RuntimeException);
 
         private:
             void propagateAttributes(ISubtree & _rParent);
 
             node::Attributes makePropertyAttributes(sal_Int16 aSchemaAttributes)
-                CFG_UNO_THROW1( configuration::backend::MalformedDataException );
+                SAL_THROW((com::sun::star::configuration::backend::MalformedDataException , com::sun::star::uno::RuntimeException));
 
             void checkPropertyType(uno::Type const & _aType)
-                CFG_UNO_THROW1( configuration::backend::MalformedDataException );
+                SAL_THROW((com::sun::star::configuration::backend::MalformedDataException , com::sun::star::uno::RuntimeException));
 
             void applyPropertyValue(uno::Any const & _aValue)
-                CFG_UNO_THROW1( configuration::backend::MalformedDataException );
+                SAL_THROW((com::sun::star::configuration::backend::MalformedDataException , com::sun::star::uno::RuntimeException));
 
-            void applyPropertyValue(uno::Any const & _aValue, OUString const & _aLocale)
-                CFG_UNO_THROW1( configuration::backend::MalformedDataException );
+            void applyPropertyValue(uno::Any const & _aValue, rtl::OUString const & _aLocale)
+                SAL_THROW((com::sun::star::configuration::backend::MalformedDataException , com::sun::star::uno::RuntimeException));
 
             void applyAttributes(INode * pNode, sal_Int16 aNodeAttributes)
-                CFG_UNO_THROW1( configuration::backend::MalformedDataException );
+                SAL_THROW((com::sun::star::configuration::backend::MalformedDataException , com::sun::star::uno::RuntimeException));
 
-            void overrideLayerRoot( const OUString& aName, sal_Int16 aAttributes, sal_Bool bClear )
-                CFG_UNO_THROW1( configuration::backend::MalformedDataException );
+            void overrideLayerRoot( const rtl::OUString& aName, sal_Int16 aAttributes, sal_Bool bClear )
+                SAL_THROW((com::sun::star::configuration::backend::MalformedDataException , com::sun::star::uno::RuntimeException));
 
             bool startOverride(INode * pNode, sal_Bool bClear) /* check if writable, mark merged */
-                CFG_NOTHROW( );
+                SAL_THROW(());
 
             void implOverrideNode(
                 ISubtree * node, sal_Int16 attributes, bool clear);
 
-            void implAddOrReplaceNode(const OUString& aName, const TemplateIdentifier& aTemplate, sal_Int16 aAttributes)
-                CFG_UNO_THROW1( configuration::backend::MalformedDataException );
+            void implAddOrReplaceNode(const rtl::OUString& aName, const backenduno::TemplateIdentifier& aTemplate, sal_Int16 aAttributes)
+                SAL_THROW((com::sun::star::configuration::backend::MalformedDataException , com::sun::star::uno::RuntimeException));
 
             void ensureUnchanged(INode const * pNode) const
-                CFG_UNO_THROW1( configuration::backend::MalformedDataException );
+                SAL_THROW((com::sun::star::configuration::backend::MalformedDataException , com::sun::star::uno::RuntimeException));
 
-            void setLocalizedValue(ISubtree * pProperty, uno::Any const & _aValue, OUString const & _aLocale)
-                CFG_UNO_THROW1( configuration::backend::MalformedDataException );
+            void setLocalizedValue(ISubtree * pProperty, uno::Any const & _aValue, rtl::OUString const & _aLocale)
+                SAL_THROW((com::sun::star::configuration::backend::MalformedDataException , com::sun::star::uno::RuntimeException));
 
             void setValueAndCheck(ValueNode & _rValueNode, uno::Any const & _aValue)
-                CFG_UNO_THROW1( configuration::backend::MalformedDataException );
+                SAL_THROW((com::sun::star::configuration::backend::MalformedDataException , com::sun::star::uno::RuntimeException));
        private:
            void skipNode()          { ++m_nSkipping; }
            bool isSkipping() const  { return m_nSkipping != 0; }
@@ -173,7 +168,7 @@ namespace configmgr
             MergedComponentData &   m_rData;
             DataBuilderContext      m_aContext;
             ComponentDataFactory    m_aFactory;
-            OUString                m_aLocale;
+            rtl::OUString                m_aLocale;
             INode *                 m_pProperty;
             Converter *             m_pConverter;
 

@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: viewprn.cxx,v $
- * $Revision: 1.36.128.3 $
+ * $Revision: 1.36.84.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -753,7 +753,10 @@ void SfxViewShell::ExecPrint_Impl( SfxRequest &rReq )
                 // Collate
                 SFX_REQUEST_ARG(rReq, pCollateItem, SfxBoolItem, SID_PRINT_COLLATE, FALSE);
                 if ( pCollateItem )
+                {
                     bCollate = pCollateItem->GetValue();
+                    pPrintDlg->CheckCollate( bCollate );
+                }
 
                 // Selection
                 SFX_REQUEST_ARG(rReq, pSelectItem, SfxBoolItem, SID_SELECTION, FALSE);

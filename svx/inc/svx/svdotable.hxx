@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: svdotable.hxx,v $
- * $Revision: 1.4 $
+ * $Revision: 1.4.18.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -230,7 +230,7 @@ public:
     virtual void TakeObjNameSingul(String& rName) const;
     virtual void TakeObjNamePlural(String& rName) const;
     virtual void operator=(const SdrObject& rObj);
-    virtual basegfx::B2DPolyPolygon TakeXorPoly(sal_Bool bDetail) const;
+    virtual basegfx::B2DPolyPolygon TakeXorPoly() const;
     virtual basegfx::B2DPolyPolygon TakeContour() const;
     virtual void RecalcSnapRect();
     virtual const Rectangle& GetSnapRect() const;

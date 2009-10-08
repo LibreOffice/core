@@ -36,6 +36,7 @@
 #include "setnodeimpl.hxx"
 #include "utility.hxx"
 #include <rtl/ref.hxx>
+#include <salhelper/simplereferenceobject.hxx>
 
 namespace configmgr
 {
@@ -51,30 +52,21 @@ namespace configmgr
 //-----------------------------------------------------------------------------
         struct NodeFactory;
 //-----------------------------------------------------------------------------
-        using configuration::Name;
-        using configuration::NodeOffset;
-        using configuration::TreeDepth;
-
-        typedef com::sun::star::uno::Any    UnoAny;
-        typedef com::sun::star::uno::Type   UnoType;
-//-----------------------------------------------------------------------------
-        class ViewStrategy : public configmgr::SimpleReferenceObject
+        class ViewStrategy : public salhelper::SimpleReferenceObject
         {
         // node attributes
         public:
             /// retrieve the attributes of the node
-            Name getName(Node const& _aNode)    const;
+            rtl::OUString getName(Node const& _aNode)   const;
 
             /// retrieve the attributes of the node
             node::Attributes getAttributes(Node const& _aNode)  const;
 
         // tracking pending changes
         public:
-            typedef configuration::NodeChanges NodeChanges;
+            void collectChanges(configuration::Tree * tree, configuration::NodeChanges& rChanges) const;
 
-            void collectChanges(Tree const& _aTree, NodeChanges& rChanges) const;
-
-            bool hasChanges(Tree const& _aTree) const;
+            bool hasChanges(configuration::Tree * tree) const;
 
             bool hasChanges(Node const& _aNode) const;
 
@@ -82,48 +74,40 @@ namespace configmgr
 
         // commit protocol
         public:
-            std::auto_ptr<SubtreeChange> preCommitChanges(Tree const& _aTree, configuration::ElementList& _rRemovedElements);
+            std::auto_ptr<SubtreeChange> preCommitChanges(configuration::Tree * tree, std::vector< rtl::Reference<configuration::ElementTree> >& _rRemovedElements);
 
-            void finishCommit(Tree const& _aTree, SubtreeChange& rRootChange);
+            void finishCommit(configuration::Tree * tree, SubtreeChange& rRootChange);
 
-            void revertCommit(Tree const& _aTree, SubtreeChange& rRootChange);
+            void revertCommit(configuration::Tree * tree, SubtreeChange& rRootChange);
 
-            void recoverFailedCommit(Tree const& _aTree, SubtreeChange& rRootChange);
+            void recoverFailedCommit(configuration::Tree * tree, SubtreeChange& rRootChange);
 
         // notification protocol
         public:
-            typedef configuration::NodeChangesInformation NodeChangesInformation;
-
             /// Adjust the internal representation after external changes to the original data - build NodeChangeInformation objects for notification
-            void    adjustToChanges(NodeChangesInformation& rLocalChanges, Node const & _aNode, SubtreeChange const& aExternalChange);
+            void    adjustToChanges(configuration::NodeChangesInformation& rLocalChanges, Node const & _aNode, SubtreeChange const& aExternalChange);
 
         // visitor dispatch
         public:
-            typedef configuration::GroupMemberVisitor GroupMemberVisitor;
-            typedef configuration::SetNodeVisitor SetNodeVisitor;
-
-            GroupMemberVisitor::Result dispatchToValues(GroupNode const& _aNode, GroupMemberVisitor& _aVisitor);
+            configuration::GroupMemberVisitor::Result dispatchToValues(GroupNode const& _aNode, configuration::GroupMemberVisitor& _aVisitor);
 
             /// Call <code>aVisitor.visit(aElement)</code> for each element in this set until SetNodeVisitor::DONE is returned.
-            SetNodeVisitor::Result dispatchToElements(SetNode const& _aNode, SetNodeVisitor& _aVisitor);
+            configuration::SetNodeVisitor::Result dispatchToElements(SetNode const& _aNode, configuration::SetNodeVisitor& _aVisitor);
 
         // value (element) node specific operations
         public:
             /// Does this node assume its default value
             /// retrieve the current value of this node
-            UnoAny  getValue(ValueNode const& _aNode) const;
+            com::sun::star::uno::Any    getValue(ValueNode const& _aNode) const;
 #if OSL_DEBUG_LEVEL > 0
             /// get the type of this value
-            UnoType getValueType(ValueNode const& _aNode)   const;
+            com::sun::star::uno::Type   getValueType(ValueNode const& _aNode)   const;
 #endif
 
         // group node specific operations
         public:
-            typedef configuration::ValueMemberNode   ValueMemberNode;
-            typedef configuration::ValueMemberUpdate ValueMemberUpdate;
-
             /// does this hold a child value of the given name
-            bool hasValue(GroupNode const& _aNode, Name const& _aName) const;
+            bool hasValue(GroupNode const& _aNode, rtl::OUString const& _aName) const;
 
             /// does this hold a child value
             bool hasValue(GroupNode const& _aNode) const;
@@ -132,30 +116,27 @@ namespace configmgr
             bool areValueDefaultsAvailable(GroupNode const& _aNode) const;
 
             /// retrieve data for the child value of the given name
-            ValueMemberNode getValue(GroupNode const& _aNode, Name const& _aName) const;
+            configuration::ValueMemberNode getValue(GroupNode const& _aNode, rtl::OUString const& _aName) const;
 
             /// retrieve data for updating the child value of the given name
-            ValueMemberUpdate getValueForUpdate(GroupNode const & _aNode, Name const& _aName);
+            configuration::ValueMemberUpdate getValueForUpdate(GroupNode const & _aNode, rtl::OUString const& _aName);
 
         // set node specific operations
         public:
-            typedef configuration::ElementTreeData  SetNodeElement;
-            typedef configuration::SetEntry         SetNodeEntry;
-
             /// does this set contain any elements (loads elements if needed)
             bool isEmpty(SetNode const& _aNode) const;
 
             /// does this set contain an element named <var>aName</var> (loads elements if needed)
-            SetNodeEntry    findElement(SetNode const& _aNode, Name const& aName) const;
+            configuration::SetEntry findElement(SetNode const& _aNode, rtl::OUString const& aName) const;
 
             /// does this set contain an element named <var>aName</var> (and is that element loaded ?)
-            SetNodeEntry    findAvailableElement(SetNode const& _aNode, Name const& aName) const;
+            configuration::SetEntry findAvailableElement(SetNode const& _aNode, rtl::OUString const& aName) const;
 
             /// insert a new entry into this set
-            void        insertElement(SetNode const& _aNode, Name const& aName, SetNodeEntry const& aNewEntry);
+            void        insertElement(SetNode const& _aNode, rtl::OUString const& aName, configuration::SetEntry const& aNewEntry);
 
             /// remove an existing entry into this set
-            void        removeElement(SetNode const& _aNode, Name const& aName);
+            void        removeElement(SetNode const& _aNode, rtl::OUString const& aName);
 
             /** Create a Subtree change as 'diff' which allows transforming the set to its default state
                 (given that <var>_rDefaultTree</var> points to a default instance of this set)
@@ -164,13 +145,13 @@ namespace configmgr
             std::auto_ptr<SubtreeChange> differenceToDefaultState(SetNode const& _aNode, ISubtree& _rDefaultTree) const;
 
             /// Get the template that describes elements of this set
-            configuration::TemplateHolder getElementTemplate(SetNode const& _aNode) const;
+            rtl::Reference<configuration::Template> getElementTemplate(SetNode const& _aNode) const;
 
             /// Get a template provider that can create new elements for this set
             configuration::TemplateProvider getTemplateProvider(SetNode const& _aNode) const;
 
-            // create a view::Tree from a configuration::SetEntry
-            Tree extractTree(SetNodeEntry const& _anEntry);
+            // create a configuration::Tree * from a configuration::SetEntry
+            configuration::Tree * extractTree(configuration::SetEntry const& _anEntry);
 
         // creating/changing state/strategy
         public:
@@ -179,26 +160,26 @@ namespace configmgr
         // access to node innards
         protected:
             /// provide access to the address of the underlying node
-            data::NodeAddress getNodeAddress(Node const& _aNode) const;
+            sharable::Node * getNodeAddress(Node const& _aNode) const;
 
             /// retrieve the attributes of the underlying node
             node::Attributes getNodeAttributes(Node const& _aNode) const;
 
         protected:
             //helper for migration to new (info based) model for adjusting to changes
-            static void addLocalChangeHelper( NodeChangesInformation& rLocalChanges, configuration::NodeChange const& aChange);
+            static void addLocalChangeHelper( configuration::NodeChangesInformation& rLocalChanges, configuration::NodeChange const& aChange);
 
         private:
-            void implAdjustToValueChanges(NodeChangesInformation& rLocalChanges, GroupNode const& _aGroupNode, SubtreeChange const& rExternalChanges);
-            void implAdjustToSubChanges(NodeChangesInformation& rLocalChanges, GroupNode const & _aGroupNode, SubtreeChange const& rExternalChanges);
-            void implAdjustToElementChanges(NodeChangesInformation& rLocalChanges, SetNode const& _aNode, SubtreeChange const& rExternalChanges, TreeDepth nDepth);
-            void implAdjustToElementChange (NodeChangesInformation& rLocalChanges, SetNode const& _aNode, Change const& rElementChange, TreeDepth nElementDepth);
-            void implCommitDirectIn(data::TreeAccessor const& _aPlaceHolder, Node const& _aNode);
+            void implAdjustToValueChanges(configuration::NodeChangesInformation& rLocalChanges, GroupNode const& _aGroupNode, SubtreeChange const& rExternalChanges);
+            void implAdjustToSubChanges(configuration::NodeChangesInformation& rLocalChanges, GroupNode const & _aGroupNode, SubtreeChange const& rExternalChanges);
+            void implAdjustToElementChanges(configuration::NodeChangesInformation& rLocalChanges, SetNode const& _aNode, SubtreeChange const& rExternalChanges, unsigned int nDepth);
+            void implAdjustToElementChange (configuration::NodeChangesInformation& rLocalChanges, SetNode const& _aNode, Change const& rElementChange, unsigned int nElementDepth);
+            void implCommitDirectIn(sharable::TreeFragment * placeHolder, Node const& _aNode);
 
         protected:
-            void            checkInstance(Tree const& _aTreeForThis) const;
-            SetNodeEntry    implFindElement(SetNode const& _aNode, Name const& aName) const;
-            SetNodeElement  implMakeElement(SetNode const& _aNode, SetNodeEntry const& anEntry) const;
+            void            checkInstance(configuration::Tree * tree) const;
+            configuration::SetEntry    implFindElement(SetNode const& _aNode, rtl::OUString const& aName) const;
+            configuration::ElementTreeData  implMakeElement(SetNode const& _aNode, configuration::SetEntry const& anEntry) const;
 
         // virtual interface - these functions must be provided
         private:
@@ -211,26 +192,26 @@ namespace configmgr
         // virtual interface - these functions all have default implementations without support for pending changes
         protected:
             // change handling
-            virtual void doCollectChanges(Node const& _aNode, NodeChanges& rChanges) const;
+            virtual void doCollectChanges(Node const& _aNode, configuration::NodeChanges& rChanges) const;
 
             // commit protocol
-            virtual std::auto_ptr<SubtreeChange> doPreCommitChanges(Tree const& _aTree, configuration::ElementList& _rRemovedElements);
-            virtual void doFailedCommit(Tree const& _aTree, SubtreeChange& rChanges);
-            virtual void doFinishCommit(Tree const& _aTree, SubtreeChange& rChanges);
-            virtual void doRevertCommit(Tree const& _aTree, SubtreeChange& rChanges);
+            virtual std::auto_ptr<SubtreeChange> doPreCommitChanges(configuration::Tree * tree, std::vector< rtl::Reference<configuration::ElementTree> >& _rRemovedElements);
+            virtual void doFailedCommit(configuration::Tree * tree, SubtreeChange& rChanges);
+            virtual void doFinishCommit(configuration::Tree * tree, SubtreeChange& rChanges);
+            virtual void doRevertCommit(configuration::Tree * tree, SubtreeChange& rChanges);
 
             // notification protocol
-            virtual configuration::ValueChangeImpl* doAdjustToValueChange(GroupNode const& _aGroupNode, Name const& aName, ValueChange const& rExternalChange);
+            virtual configuration::ValueChangeImpl* doAdjustToValueChange(GroupNode const& _aGroupNode, rtl::OUString const& aName, ValueChange const& rExternalChange);
 
             // common attributes
             virtual node::Attributes doAdjustAttributes(node::Attributes const& _aAttributes) const = 0;
 
             // group member access
-            virtual ValueMemberNode doGetValueMember(GroupNode const& _aNode, Name const& _aName, bool _bForUpdate) const = 0;
+            virtual configuration::ValueMemberNode doGetValueMember(GroupNode const& _aNode, rtl::OUString const& _aName, bool _bForUpdate) const = 0;
 
             // set element access
-            virtual void doInsertElement(SetNode const& _aNode, Name const& aName, SetNodeEntry const& aNewEntry) = 0;
-            virtual void doRemoveElement(SetNode const& _aNode, Name const& aName) = 0;
+            virtual void doInsertElement(SetNode const& _aNode, rtl::OUString const& aName, configuration::SetEntry const& aNewEntry) = 0;
+            virtual void doRemoveElement(SetNode const& _aNode, rtl::OUString const& aName) = 0;
         };
 
         inline node::Attributes ViewStrategy::getAttributes(Node const& _aNode) const

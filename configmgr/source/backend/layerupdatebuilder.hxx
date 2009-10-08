@@ -46,7 +46,6 @@ namespace configmgr
     namespace backend
     {
 // -----------------------------------------------------------------------------
-        using rtl::OUString;
         namespace uno = ::com::sun::star::uno;
         namespace backenduno = ::com::sun::star::configuration::backend;
 // -----------------------------------------------------------------------------
@@ -65,22 +64,22 @@ namespace configmgr
             /// initialize the update
             bool init();
 
-            bool modifyNode(OUString const & _aName, sal_Int16 _nFlags, sal_Int16 _nFlagsMask, sal_Bool _bReset);
-            bool replaceNode(OUString const & _aName, sal_Int16 _nFlags, backenduno::TemplateIdentifier const * _pTemplate = NULL);
+            bool modifyNode(rtl::OUString const & _aName, sal_Int16 _nFlags, sal_Int16 _nFlagsMask, sal_Bool _bReset);
+            bool replaceNode(rtl::OUString const & _aName, sal_Int16 _nFlags, backenduno::TemplateIdentifier const * _pTemplate = NULL);
             bool finishNode();
 
-            bool removeNode(OUString const & _aName);
+            bool removeNode(rtl::OUString const & _aName);
 
-            bool modifyProperty(OUString const & _aName, sal_Int16 _nFlags, sal_Int16 _nFlagsMask, uno::Type const & _aType);
+            bool modifyProperty(rtl::OUString const & _aName, sal_Int16 _nFlags, sal_Int16 _nFlagsMask, uno::Type const & _aType);
             bool setPropertyValue(uno::Any const & _aValue);
-            bool setPropertyValueForLocale(uno::Any const & _aValue, OUString const & _aLocale);
+            bool setPropertyValueForLocale(uno::Any const & _aValue, rtl::OUString const & _aLocale);
             bool resetPropertyValue();
-            bool resetPropertyValueForLocale(OUString const & _aLocale);
+            bool resetPropertyValueForLocale(rtl::OUString const & _aLocale);
             bool finishProperty();
 
-            bool addNullProperty(OUString const & _aName, sal_Int16 _nFlags, uno::Type const & _aType);
-            bool addProperty(OUString const & _aName, sal_Int16 _nFlags, uno::Any const & _aValue);
-            bool resetProperty(OUString const & _aName);
+            bool addNullProperty(rtl::OUString const & _aName, sal_Int16 _nFlags, uno::Type const & _aType);
+            bool addProperty(rtl::OUString const & _aName, sal_Int16 _nFlags, uno::Any const & _aValue);
+            bool resetProperty(rtl::OUString const & _aName);
 
             bool finish();
             void clear();

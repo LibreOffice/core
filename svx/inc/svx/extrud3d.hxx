@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: extrud3d.hxx,v $
- * $Revision: 1.4 $
+ * $Revision: 1.4.18.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -54,13 +54,8 @@ private:
     // Geometrie, die dieses Objekt bestimmt
     basegfx::B2DPolyPolygon         maExtrudePolygon;
 
-    // #78972#
-    basegfx::B3DPolyPolygon         maLinePolyPolygon;
-
 protected:
     void SetDefaultAttributes(E3dDefaultAttributes& rDefault);
-    basegfx::B3DPolyPolygon GetFrontSide();
-    basegfx::B3DPolyPolygon GetBackSide(const basegfx::B3DPolyPolygon& rFrontSide);
 
 public:
     TYPEINFO();
@@ -107,12 +102,6 @@ public:
     // TakeObjName...() ist fuer die Anzeige in der UI, z.B. "3 Rahmen selektiert".
     virtual void TakeObjNameSingul(String& rName) const;
     virtual void TakeObjNamePlural(String& rName) const;
-
-    // Geometrieerzeugung
-    virtual void CreateGeometry();
-
-    // Give out simple line geometry
-    virtual basegfx::B3DPolyPolygon Get3DLineGeometry() const;
 
     // Lokale Parameter setzen/lesen mit Geometrieneuerzeugung
     void SetExtrudePolygon(const basegfx::B2DPolyPolygon &rNew);

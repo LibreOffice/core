@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: MNSMozabProxy.cxx,v $
- * $Revision: 1.10 $
+ * $Revision: 1.10.66.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -319,7 +319,7 @@ MNSMozabProxy::testLDAPConnection( )
         {
             const MLDAPMessageListener* pListener( static_cast< const MLDAPMessageListener* >( m_Args->arg5 ) );
             if ( pListener->initialized() )
-                rv = pListener->goodConnection() ? 0 : PR_NOT_CONNECTED_ERROR;
+                rv = pListener->goodConnection() ? 0 : (nsresult)PR_NOT_CONNECTED_ERROR;
             else
                 rv = (nsresult)PR_CONNECT_TIMEOUT_ERROR;
         }

@@ -34,6 +34,7 @@
 #include <com/sun/star/lang/XEventListener.hpp>
 #include <com/sun/star/lang/DisposedException.hpp>
 #include <cppuhelper/interfacecontainer.hxx>
+#include "datalock.hxx"
 #include "utility.hxx"
 
 #include <osl/diagnose.h>
@@ -47,13 +48,7 @@ namespace configmgr
         namespace css   = ::com::sun::star;
         namespace uno       = css::uno;
         namespace lang      = css::lang;
-
-        typedef uno::Type                       UnoType;
-        typedef uno::XInterface                 UnoInterface;
-        typedef uno::Reference<uno::XInterface> UnoInterfaceRef;
 //-----------------------------------------------------------------------------
-        typedef cppu::OInterfaceContainerHelper ListenerContainer;
-
         template <class Listener>
         class ListenerContainerIterator
         {
@@ -67,7 +62,7 @@ namespace configmgr
              *
              * @param rCont the container of the elements.
              */
-            ListenerContainerIterator(  ListenerContainer& rCont )
+            ListenerContainerIterator(  cppu::OInterfaceContainerHelper& rCont )
             : m_aIter(rCont)
             , m_xNext()
             { advance(); }
@@ -94,42 +89,31 @@ namespace configmgr
 //-----------------------------------------------------------------------------
         class DisposeNotifier
         {
-            typedef uno::Reference< lang::XEventListener > Listener;
-            typedef std::vector< Listener > Listeners;
             lang::EventObject aEvent;
-            Listeners aListeners;
+            std::vector< uno::Reference< lang::XEventListener > > aListeners;
         public:
             explicit
-            DisposeNotifier(UnoInterfaceRef const& aInterface) : aEvent(aInterface) {}
+            DisposeNotifier(uno::Reference<uno::XInterface> const& aInterface) : aEvent(aInterface) {}
 
-            void appendAndClearContainer(ListenerContainer* pContainer);
+            void appendAndClearContainer(cppu::OInterfaceContainerHelper* pContainer);
             void notify();
         };
 //-----------------------------------------------------------------------------
+        struct BasicContainerInfo
+        {
+            uno::XInterface*            pInterface;
+            cppu::OMultiTypeInterfaceContainerHelper*   pContainer;
+            BasicContainerInfo() : pInterface(0), pContainer(0) {}
+        };
+
         template <class Key_, class KeyHash_, class KeyEq_, class KeyToIndex_>
         class SpecialListenerContainer
         {
         public:
-            typedef cppu::OMultiTypeInterfaceContainerHelper    BasicContainerHelper;
-            struct BasicContainerInfo
-            {
-                UnoInterface*           pInterface;
-                BasicContainerHelper*   pContainer;
-                BasicContainerInfo() : pInterface(0), pContainer(0) {}
-            };
-            typedef std::vector<BasicContainerInfo>         BasicContainerHelperArray;
-            typedef typename BasicContainerHelperArray::size_type   Index;
-
-            typedef Key_ Key;
-            typedef cppu::OMultiTypeInterfaceContainerHelperVar< Key_,KeyHash_,KeyEq_ > SpecialContainerHelper;
-            typedef cppu::OBroadcastHelperVar< SpecialContainerHelper, Key >            SpecialBroadcastHelper;
-            typedef std::vector<Key> KeyList;
-
-        public:
             /**
              * Create a container of interface containers.
              */
-            SpecialListenerContainer(Index nCount, KeyToIndex_ aMapper)
+            SpecialListenerContainer(std::vector<BasicContainerInfo>::size_type nCount, KeyToIndex_ aMapper)
             : m_aSpecialHelper(UnoApiLock::getLock())
             , m_aContainers(nCount)
             , m_aMapper(aMapper)
@@ -160,18 +144,18 @@ namespace configmgr
             bool isDisposed()volatile  const throw();
 
             /// return whether the object is present in this container
-            bool isAvailable(Index nIndex)  const throw()
+            bool isAvailable(std::vector<BasicContainerInfo>::size_type nIndex)  const throw()
             {
                 return nIndex < m_aContainers.size() && m_aContainers[nIndex].pInterface;
             }
 
-            Index getSize() const
+            std::vector<BasicContainerInfo>::size_type getSize() const
             {
                 return m_aContainers.size();
             }
 
             /// return the interface associated with an index
-            void setObjectAt(Index nIndex, UnoInterface* pInterface)
+            void setObjectAt(std::vector<BasicContainerInfo>::size_type nIndex, uno::XInterface* pInterface)
             {
                 OSL_ENSURE( !isDisposed(), "object is disposed" );
 
@@ -191,17 +175,17 @@ namespace configmgr
 
 
             /// return the interface associated with an index
-            UnoInterfaceRef getObjectAt(Index nIndex) const
+            uno::Reference<uno::XInterface> getObjectAt(std::vector<BasicContainerInfo>::size_type nIndex) const
             {
-                UnoInterfaceRef xRet( nIndex < m_aContainers.size() ? m_aContainers[nIndex].pInterface : 0 );
+                uno::Reference<uno::XInterface> xRet( nIndex < m_aContainers.size() ? m_aContainers[nIndex].pInterface : 0 );
                 return xRet;
             }
 
             /// return the interface associated with an index
-            UnoInterfaceRef getObjectForKey(Key const& aKey ) const
+            uno::Reference<uno::XInterface> getObjectForKey(Key_ const& aKey ) const
             {
-                Index nIndex = m_aMapper.findIndexForKey(aKey);
-                UnoInterfaceRef xRet( nIndex < m_aContainers.size() ? m_aContainers[nIndex].pInterface : 0 );
+                std::vector<BasicContainerInfo>::size_type nIndex = m_aMapper.findIndexForKey(aKey);
+                uno::Reference<uno::XInterface> xRet( nIndex < m_aContainers.size() ? m_aContainers[nIndex].pInterface : 0 );
                 return xRet;
             }
 
@@ -210,7 +194,7 @@ namespace configmgr
              * and in the containers for the associated indices
              * support XEventListener. Then clear the container.
              */
-            bool disposeOne( Index anIndex ) throw();
+            bool disposeOne( std::vector<BasicContainerInfo>::size_type anIndex ) throw();
 
             /**
              * Start disposing this object
@@ -241,7 +225,7 @@ namespace configmgr
              * @return the container created under this key. If the container
              *          was not created, null was returned.
              */
-            ListenerContainer *  getSpecialContainer( const Key_ & aKey) const
+            cppu::OInterfaceContainerHelper *  getSpecialContainer( const Key_ & aKey) const
             { return m_aSpecialHelper.aLC.getContainer(aKey); }
 
             /**
@@ -249,7 +233,7 @@ namespace configmgr
              * @return the container helper created under this key. If the container helper
              *  was not created, null was returned.
              */
-            BasicContainerHelper *  getContainerHelper( Index nIndex) const
+            cppu::OMultiTypeInterfaceContainerHelper *  getContainerHelper( std::vector<BasicContainerInfo>::size_type nIndex) const
             {
                 return ((nIndex < m_aContainers.size()) ? m_aContainers[nIndex].pContainer : 0 );
             }
@@ -258,9 +242,9 @@ namespace configmgr
              * @return the container created under this key. If the container
              *          was not created, null was returned.
              */
-            ListenerContainer *  getContainer( Index nIndex, const UnoType & aType) const
+            cppu::OInterfaceContainerHelper *  getContainer( std::vector<BasicContainerInfo>::size_type nIndex, const uno::Type & aType) const
             {
-                BasicContainerHelper* pContainer = (nIndex < m_aContainers.size()) ? m_aContainers[nIndex].pContainer : 0 ;
+                cppu::OMultiTypeInterfaceContainerHelper* pContainer = (nIndex < m_aContainers.size()) ? m_aContainers[nIndex].pContainer : 0 ;
 
                 return pContainer ? pContainer->getContainer(aType) : 0;
             }
@@ -273,7 +257,7 @@ namespace configmgr
              *                  the same pointer more than once.
              * @return the new count of elements in the container (or 0 if the object is ready being disposed).
              */
-            sal_Int32 addListener( Index nIndex, const UnoType& aType, uno::Reference< lang::XEventListener > const& xListener) throw();
+            sal_Int32 addListener( std::vector<BasicContainerInfo>::size_type nIndex, const uno::Type& aType, uno::Reference< lang::XEventListener > const& xListener) throw();
 
             /**
              * Remove an element from the container specified with the index and type.
@@ -282,7 +266,7 @@ namespace configmgr
              * @param xListener the removed interface.
              * @return the new count of elements in the container (or 0 if the object is ready being disposed).
              */
-            sal_Int32 removeListener( Index nIndex, const UnoType& aType, uno::Reference< lang::XEventListener > const& xListener) throw();
+            sal_Int32 removeListener( std::vector<BasicContainerInfo>::size_type nIndex, const uno::Type& aType, uno::Reference< lang::XEventListener > const& xListener) throw();
 
 
             /**
@@ -305,10 +289,10 @@ namespace configmgr
             sal_Int32 removeSpecialListener( const Key_& aKey, uno::Reference< lang::XEventListener > const& xListener) throw();
 
         private:
-            void implFillDisposer(DisposeNotifier& aNotifier, Index nIndex);
+            void implFillDisposer(DisposeNotifier& aNotifier, std::vector<BasicContainerInfo>::size_type nIndex);
 
-            SpecialBroadcastHelper      m_aSpecialHelper;
-            BasicContainerHelperArray   m_aContainers;
+            cppu::OBroadcastHelperVar< cppu::OMultiTypeInterfaceContainerHelperVar< Key_,KeyHash_,KeyEq_ >, Key_ >      m_aSpecialHelper;
+            std::vector<BasicContainerInfo> m_aContainers;
             KeyToIndex_                 m_aMapper;
             bool m_bDisposeLock;
         };
@@ -348,14 +332,14 @@ namespace configmgr
         }
 //-----------------------------------------------------------------------------
         template <class Key_, class KeyHash_, class KeyEq_, class KeyToIndex_>
-        bool SpecialListenerContainer<Key_,KeyHash_,KeyEq_, KeyToIndex_>::disposeOne(Index nIndex) throw()
+        bool SpecialListenerContainer<Key_,KeyHash_,KeyEq_, KeyToIndex_>::disposeOne(std::vector<BasicContainerInfo>::size_type nIndex) throw()
         {
     //      OSL_ENSURE(!isDisposed(),"Object is already disposed in toto");
             if (isAlive())
             {
                 if (nIndex < m_aContainers.size())
                 {
-                    if (UnoInterface* pObject = m_aContainers[nIndex].pInterface)
+                    if (uno::XInterface* pObject = m_aContainers[nIndex].pInterface)
                     {
                         DisposeNotifier aNotifier(pObject);
 
@@ -398,12 +382,12 @@ namespace configmgr
                 lang::EventObject aBaseEvt;
                 std::vector<DisposeNotifier> aNotifiers;
 
-                if (Index size = m_aContainers.size())
+                if (std::vector<BasicContainerInfo>::size_type size = m_aContainers.size())
                 {
                     aNotifiers.reserve(m_aContainers.size());
 
                     aBaseEvt.Source = m_aContainers[0].pInterface;
-                    for(Index ix = 0; ix < size; ++ix)
+                    for(std::vector<BasicContainerInfo>::size_type ix = 0; ix < size; ++ix)
                     {
                         if (m_aContainers[ix].pInterface)
                         {
@@ -417,7 +401,7 @@ namespace configmgr
 
                 m_bDisposeLock = false;
 
-                for(Index jx = 0, count = aNotifiers.size(); jx < count; ++jx)
+                for(std::vector<BasicContainerInfo>::size_type jx = 0, count = aNotifiers.size(); jx < count; ++jx)
                 {
                     aNotifiers[jx].notify();
                 }
@@ -446,14 +430,14 @@ namespace configmgr
         }
 //-----------------------------------------------------------------------------
         template <class Key_, class KeyHash_, class KeyEq_, class KeyToIndex_>
-        sal_Int32 SpecialListenerContainer<Key_,KeyHash_,KeyEq_, KeyToIndex_>::addListener( Index nIndex, const UnoType& aType, const uno::Reference< lang::XEventListener > & xListener ) throw()
+        sal_Int32 SpecialListenerContainer<Key_,KeyHash_,KeyEq_, KeyToIndex_>::addListener( std::vector<BasicContainerInfo>::size_type nIndex, const uno::Type& aType, const uno::Reference< lang::XEventListener > & xListener ) throw()
         {
             if ( nIndex < m_aContainers.size() && m_aContainers[nIndex].pInterface  )
             {
                 if ( isAlive() )
                 {
                     if (m_aContainers[nIndex].pContainer == 0)
-                        m_aContainers[nIndex].pContainer = new BasicContainerHelper(UnoApiLock::getLock());
+                        m_aContainers[nIndex].pContainer = new cppu::OMultiTypeInterfaceContainerHelper(UnoApiLock::getLock());
 
                     return m_aContainers[nIndex].pContainer->addInterface(aType,xListener);
                 }
@@ -474,7 +458,7 @@ namespace configmgr
         template <class Key_, class KeyHash_, class KeyEq_, class KeyToIndex_>
         sal_Int32 SpecialListenerContainer<Key_,KeyHash_,KeyEq_, KeyToIndex_>::addSpecialListener( const Key_& aKey, const uno::Reference< lang::XEventListener > & xListener ) throw()
         {
-            Index nIndex = m_aMapper.findIndexForKey(aKey);
+            std::vector<BasicContainerInfo>::size_type nIndex = m_aMapper.findIndexForKey(aKey);
             if ( nIndex < m_aContainers.size() && m_aContainers[nIndex].pInterface  )
             {
                 if ( isAlive() )
@@ -496,7 +480,7 @@ namespace configmgr
 //-----------------------------------------------------------------------------
 
         template <class Key_, class KeyHash_, class KeyEq_, class KeyToIndex_>
-        sal_Int32 SpecialListenerContainer<Key_,KeyHash_,KeyEq_, KeyToIndex_>::removeListener( Index nIndex, const UnoType& aType, const uno::Reference< lang::XEventListener > & xListener ) throw()
+        sal_Int32 SpecialListenerContainer<Key_,KeyHash_,KeyEq_, KeyToIndex_>::removeListener( std::vector<BasicContainerInfo>::size_type nIndex, const uno::Type& aType, const uno::Reference< lang::XEventListener > & xListener ) throw()
         {
             OSL_ENSURE( !isDisposed(), "object is disposed" );
 
@@ -533,7 +517,7 @@ namespace configmgr
 //-----------------------------------------------------------------------------
     // relation function. Uses KeyToIndex
         template <class Key_, class KeyHash_, class KeyEq_, class KeyToIndex_>
-        bool SpecialListenerContainer<Key_,KeyHash_,KeyEq_, KeyToIndex_>::findKeysForIndex(Index nIndex, KeyList & aKeys)
+        bool SpecialListenerContainer<Key_,KeyHash_,KeyEq_, KeyToIndex_>::findKeysForIndex(std::vector<BasicContainerInfo>::size_type nIndex, std::vector<Key_> & aKeys)
         {
             aKeys.clear();
             m_aMapper.findKeysForIndex(nIndex,aKeys);
@@ -542,25 +526,25 @@ namespace configmgr
 *///-----------------------------------------------------------------------------
     // relation function. Uses KeyToIndex
         template <class Key_, class KeyHash_, class KeyEq_, class KeyToIndex_>
-        void SpecialListenerContainer<Key_,KeyHash_,KeyEq_, KeyToIndex_>::implFillDisposer(DisposeNotifier& aNotifier, Index nIndex)
+        void SpecialListenerContainer<Key_,KeyHash_,KeyEq_, KeyToIndex_>::implFillDisposer(DisposeNotifier& aNotifier, std::vector<BasicContainerInfo>::size_type nIndex)
         {
-            if (BasicContainerHelper* pMultiContainer = m_aContainers[nIndex].pContainer)
+            if (cppu::OMultiTypeInterfaceContainerHelper* pMultiContainer = m_aContainers[nIndex].pContainer)
             {
-                uno::Sequence< UnoType > aTypes(pMultiContainer->getContainedTypes());
+                uno::Sequence< uno::Type > aTypes(pMultiContainer->getContainedTypes());
                 for (sal_Int32 ix = 0; ix < aTypes.getLength(); ++ix)
                 {
-                    ListenerContainer* pContainer = pMultiContainer->getContainer(aTypes[ix]);
+                    cppu::OInterfaceContainerHelper* pContainer = pMultiContainer->getContainer(aTypes[ix]);
                     OSL_ENSURE(pContainer,"No container, but the type ?");
                     if (pContainer)
                         aNotifier.appendAndClearContainer(pContainer);
                 }
             }
-            KeyList aKeys;
+            std::vector<Key_> aKeys;
             if (m_aMapper.findKeysForIndex(nIndex,aKeys))
             {
-                for(typename KeyList::iterator it = aKeys.begin(); it != aKeys.end(); ++it)
+                for(typename std::vector<Key_>::iterator it = aKeys.begin(); it != aKeys.end(); ++it)
                 {
-                    if (ListenerContainer* pContainer = m_aSpecialHelper.aLC.getContainer(*it))
+                    if (cppu::OInterfaceContainerHelper* pContainer = m_aSpecialHelper.aLC.getContainer(*it))
                     {
                         aNotifier.appendAndClearContainer(pContainer);
                     }

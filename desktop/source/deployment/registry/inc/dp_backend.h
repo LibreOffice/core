@@ -240,7 +240,6 @@ typedef ::cppu::WeakComponentImplHelper2<
 class PackageRegistryBackend
     : protected ::dp_misc::MutexHolder, public t_BackendBase
 {
-    css::uno::Reference<css::uno::XComponentContext> m_xComponentContext;
     ::rtl::OUString m_cachePath;
 
     typedef ::std::hash_map<
@@ -249,6 +248,8 @@ class PackageRegistryBackend
     t_string2weakref m_bound;
 
 protected:
+    css::uno::Reference<css::uno::XComponentContext> m_xComponentContext;
+
     ::rtl::OUString m_context;
     // currently only for library containers:
     enum context {

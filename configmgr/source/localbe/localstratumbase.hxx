@@ -55,11 +55,6 @@ namespace lang = css::lang ;
 namespace backend = css::configuration::backend ;
 //------------------------------------------------------------------------------
 
-
-typedef cppu::WeakComponentImplHelper3<lang::XInitialization,
-                                       backend::XBackendEntities,
-                                       lang::XServiceInfo> LocalStratumImplBase ;
-
 struct LocalStratumMutexHolder { osl::Mutex mMutex; };
 //------------------------------------------------------------------------------
 static const char kLocalDataSuffix[] = ".xcu";
@@ -68,7 +63,7 @@ static const char kLocalDataSuffix[] = ".xcu";
 /**
   Helper for implementing the [Single|Multi]LayerStratum service for local file access.
   */
-class LocalStratumBase : protected LocalStratumMutexHolder, public LocalStratumImplBase
+class LocalStratumBase : protected LocalStratumMutexHolder, public cppu::WeakComponentImplHelper3<lang::XInitialization, backend::XBackendEntities, lang::XServiceInfo>
 {
 protected :
     /**

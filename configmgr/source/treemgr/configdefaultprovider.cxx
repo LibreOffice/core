@@ -35,7 +35,7 @@
 #include "defaultproviderproxy.hxx"
 #include "noderef.hxx"
 #include "valuenode.hxx"
-#include "treeimpl.hxx"
+#include "tree.hxx"
 #include "options.hxx"
 
 namespace configmgr
@@ -54,18 +54,18 @@ DefaultProvider DefaultProvider::createEmpty()
 }
 //-----------------------------------------------------------------------------
 
-DefaultProvider DefaultProvider::create(Tree const& _aRootTree, RequestOptions const& _aOptions,
-                                          rtl::Reference< IConfigDefaultProvider > const &  _xDefaultProvider,
+DefaultProvider DefaultProvider::create(rtl::Reference< Tree > const& _aRootTree, RequestOptions const& _aOptions,
+                                          rtl::Reference< TreeManager > const &  _xDefaultProvider,
                                           IDefaultableTreeManager* _pDefaultableTree)
 {
-    OSL_PRECOND( !_aRootTree.isEmpty(), "ERROR: Cannot create DefaultProvider for NULL tree");
+    OSL_PRECOND( !isEmpty(_aRootTree.get()), "ERROR: Cannot create DefaultProvider for NULL tree");
 
     rtl::Reference< DefaultProviderProxy > xNewProxy;
 
-    if (!_aRootTree.isEmpty())
+    if (!isEmpty(_aRootTree.get()))
     {
         xNewProxy = new DefaultProviderProxy(_xDefaultProvider,_pDefaultableTree,
-                                             _aRootTree.getRootPath(), _aOptions );
+                                             _aRootTree->getRootPath(), _aOptions );
     }
 
     return DefaultProvider( xNewProxy );
@@ -98,31 +98,29 @@ DefaultProvider::DefaultProvider(rtl::Reference< DefaultProviderProxy > const& _
 
 /// tries to load a default instance of the specified node
 std::auto_ptr<ISubtree> DefaultProvider::getDefaultTree(
-            Tree const& _aTree, NodeRef const& _aNode
-     ) const CFG_UNO_THROW_ALL()
+            rtl::Reference< Tree > const& _aTree, NodeRef const& _aNode
+     ) const SAL_THROW((com::sun::star::uno::Exception))
 {
     std::auto_ptr<ISubtree> aRet;
 
-    node::Attributes aAttributes = _aTree.getAttributes(_aNode);
+    node::Attributes aAttributes = _aTree->getAttributes(_aNode);
 
 //    if (aAttributes.bDefaulted)
 //        clone the ISubtree (no interface for that) :-(
 
     if (m_aProxy.is() && aAttributes.existsInDefault())
-        aRet = m_aProxy->getDefaultTree(_aTree.getAbsolutePath(_aNode));
+        aRet = m_aProxy->getDefaultTree(_aTree->getAbsolutePath(_aNode));
 
     return aRet;
 }
 
 //-----------------------------------------------------------------------------
 /// tries to load default data into the specified tree
-static bool shouldFetchDefaultData(TreeRef const& _aTreeRef, bool & _rbHasDefaults)
+static bool shouldFetchDefaultData(rtl::Reference< Tree > const& _aTreeRef, bool & _rbHasDefaults)
 {
     bool bShouldFetch = false;
 
-    Tree aTempTree(_aTreeRef);
-
-    node::Attributes aAttributes = aTempTree.getAttributes(aTempTree.getRootNode());
+    node::Attributes aAttributes = _aTreeRef->getAttributes(_aTreeRef->getRootNode());
 
     if (aAttributes.isDefault())
         _rbHasDefaults = true;
@@ -139,7 +137,7 @@ static bool shouldFetchDefaultData(TreeRef const& _aTreeRef, bool & _rbHasDefaul
 
 //-----------------------------------------------------------------------------
 /// tries to load default data into the specified tree
-bool DefaultProvider::fetchDefaultData(TreeRef const& _aTreeRef) const CFG_UNO_THROW_ALL()
+bool DefaultProvider::fetchDefaultData(rtl::Reference< Tree > const& _aTreeRef) const SAL_THROW((com::sun::star::uno::Exception))
 {
     bool bHasDefaults = false;
 

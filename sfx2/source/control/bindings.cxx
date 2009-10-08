@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: bindings.cxx,v $
- * $Revision: 1.53 $
+ * $Revision: 1.53.46.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -232,9 +232,9 @@ struct SfxFoundCache_Impl
     {}
 
     int operator<( const SfxFoundCache_Impl &r ) const
-    { return nWhichId < r.nWhichId; } const
+    { return nWhichId < r.nWhichId; }
 
-    int operator==( const SfxFoundCache_Impl &r )
+    int operator==( const SfxFoundCache_Impl &r ) const
     { return nWhichId== r.nWhichId; }
 };
 

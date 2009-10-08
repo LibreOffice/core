@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: svdocirc.hxx,v $
- * $Revision: 1.5 $
+ * $Revision: 1.5.18.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -38,13 +38,9 @@
 //   Vorausdeklarationen
 //************************************************************
 
-namespace sdr
-{
-    namespace properties
-    {
-        class CircleProperties;
-    } // end of namespace properties
-} // end of namespace sdr
+namespace sdr { namespace properties {
+    class CircleProperties;
+}}
 
 //************************************************************
 //   Hilfsklasse SdrCircObjGeoData
@@ -98,7 +94,7 @@ private:
     SVX_DLLPRIVATE virtual void RecalcXPoly();
 
 protected:
-    virtual void SFX_NOTIFY(SfxBroadcaster& rBC, const TypeId& rBCType, const SfxHint& rHint, const TypeId& rHintType);
+    virtual void Notify(SfxBroadcaster& rBC, const SfxHint& rHint);
 
 public:
     TYPEINFO();
@@ -125,7 +121,7 @@ public:
     virtual void operator=(const SdrObject& rObj);
     virtual void RecalcSnapRect();
     virtual void NbcSetSnapRect(const Rectangle& rRect);
-    virtual basegfx::B2DPolyPolygon TakeXorPoly(sal_Bool bDetail) const;
+    virtual basegfx::B2DPolyPolygon TakeXorPoly() const;
 
     virtual sal_uInt32 GetSnapPointCount() const;
     virtual Point GetSnapPoint(sal_uInt32 i) const;

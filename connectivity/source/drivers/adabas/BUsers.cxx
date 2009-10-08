@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: BUsers.cxx,v $
- * $Revision: 1.19 $
+ * $Revision: 1.19.56.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -39,6 +39,7 @@
 #include <comphelper/types.hxx>
 #include "connectivity/dbexception.hxx"
 #include "connectivity/dbtools.hxx"
+#include "resource/adabas_res.hrc"
 
 using namespace ::comphelper;
 using namespace connectivity;
@@ -108,7 +109,7 @@ void OUsers::dropObject(sal_Int32 /*_nPos*/,const ::rtl::OUString _sElementName)
                 if(xRow->getString(1) == sDbaUser)
                 {
                     ::comphelper::disposeComponent(xStmt);
-                    ::dbtools::throwGenericSQLException(::rtl::OUString::createFromAscii("This user couldn't be deleted. Otherwise the database stays in a inconsistent state."),static_cast<XTypeProvider*>(this));
+                    m_pConnection->throwGenericSQLException(STR_USER_NO_DELETE,static_cast< XDrop* >( this ));
                 }
             }
             ::comphelper::disposeComponent(xStmt);

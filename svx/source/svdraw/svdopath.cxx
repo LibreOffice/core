@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: svdopath.cxx,v $
- * $Revision: 1.51 $
+ * $Revision: 1.51.18.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -2043,7 +2043,7 @@ void SdrPathObj::TakeObjNamePlural(XubString& rName) const
     }
 }
 
-basegfx::B2DPolyPolygon SdrPathObj::TakeXorPoly(sal_Bool /*bDetail*/) const
+basegfx::B2DPolyPolygon SdrPathObj::TakeXorPoly() const
 {
     return GetPathPoly();
 }

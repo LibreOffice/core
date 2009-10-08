@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: svdorect.hxx,v $
- * $Revision: 1.5 $
+ * $Revision: 1.5.18.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -40,13 +40,9 @@
 
 class XPolygon;
 
-namespace sdr
-{
-    namespace properties
-    {
-        class RectangleProperties;
-    } // end of namespace properties
-} // end of namespace sdr
+namespace sdr { namespace properties {
+    class RectangleProperties;
+}}
 
 //************************************************************
 //   SdrRectObj
@@ -116,7 +112,7 @@ public:
     virtual void RecalcSnapRect();
     virtual void NbcSetSnapRect(const Rectangle& rRect);
     virtual void NbcSetLogicRect(const Rectangle& rRect);
-    virtual basegfx::B2DPolyPolygon TakeXorPoly(sal_Bool bDetail) const;
+    virtual basegfx::B2DPolyPolygon TakeXorPoly() const;
 
     virtual sal_uInt32 GetHdlCount() const;
     virtual SdrHdl* GetHdl(sal_uInt32 nHdlNum) const;
@@ -146,7 +142,7 @@ public:
 
     virtual SdrObject* DoConvertToPolyObj(BOOL bBezier) const;
 
-    virtual void SFX_NOTIFY(SfxBroadcaster& rBC, const TypeId& rBCType, const SfxHint& rHint, const TypeId& rHintType);
+    virtual void Notify(SfxBroadcaster& rBC, const SfxHint& rHint);
 };
 
 #endif //_SVDORECT_HXX

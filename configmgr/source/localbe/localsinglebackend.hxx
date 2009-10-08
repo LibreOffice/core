@@ -49,17 +49,11 @@ namespace uno = css::uno ;
 namespace lang = css::lang ;
 namespace backend = css::configuration::backend ;
 
-typedef cppu::WeakComponentImplHelper5<backend::XSchemaSupplier,
-                                       backend::XMultiLayerStratum,
-                                       backend::XBackendEntities,
-                                       lang::XInitialization,
-                                       lang::XServiceInfo> SingleBackendBase ;
-
 /**
   Implements the SingleBackend service for local file access.
   Layer identifiers in that backend are file URLs.
   */
-class LocalSingleBackend : public SingleBackendBase {
+class LocalSingleBackend : public cppu::WeakComponentImplHelper5<backend::XSchemaSupplier, backend::XMultiLayerStratum, backend::XBackendEntities, lang::XInitialization, lang::XServiceInfo> {
     public :
         /**
           Service constructor from a service factory.

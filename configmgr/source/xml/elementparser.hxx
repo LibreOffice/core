@@ -44,22 +44,18 @@ namespace configmgr
         namespace uno       = ::com::sun::star::uno;
         namespace sax       = ::com::sun::star::xml::sax;
 
-        using rtl::OUString;
-
 // -----------------------------------------------------------------------------
         class ElementParser
         {
             Logger mLogger;
         public:
-            typedef uno::Reference< sax::XAttributeList > SaxAttributeList;
-
             class BadValueType
             {
-                OUString mMessage;
+                rtl::OUString mMessage;
             public:
-                BadValueType(OUString const & aMessage) : mMessage(aMessage) {}
+                BadValueType(rtl::OUString const & aMessage) : mMessage(aMessage) {}
 
-                OUString message() const { return mMessage.getStr(); }
+                rtl::OUString message() const { return mMessage.getStr(); }
             };
         public:
             explicit
@@ -74,49 +70,49 @@ namespace configmgr
             {}
 
             /// retrieve the (almost) complete information for an element
-            ElementInfo parseElementInfo(OUString const& _sTag, SaxAttributeList const& _xAttribs) const;
+            ElementInfo parseElementInfo(rtl::OUString const& _sTag, uno::Reference< sax::XAttributeList > const& _xAttribs) const;
 
             /// retrieve the node name for an element
-            ElementType::Enum getNodeType(OUString const& _sTag, SaxAttributeList const& xAttribs) const;
+            ElementType::Enum getNodeType(rtl::OUString const& _sTag, uno::Reference< sax::XAttributeList > const& xAttribs) const;
 
             /// retrieve the node name for an element
-            ElementName getName(OUString const& _sTag, SaxAttributeList const& xAttribs, ElementType::Enum eType = ElementType::unknown) const;
+            rtl::OUString getName(rtl::OUString const& _sTag, uno::Reference< sax::XAttributeList > const& xAttribs, ElementType::Enum eType = ElementType::unknown) const;
 
             /// query whether the node has an operation
-            Operation::Enum getOperation(SaxAttributeList const& xAttribs, ElementType::Enum _eType) const;
+            Operation::Enum getOperation(uno::Reference< sax::XAttributeList > const& xAttribs, ElementType::Enum _eType) const;
 
             /// retrieve the language (if any) stored in the attribute list
-            bool getLanguage(SaxAttributeList const& xAttribs, OUString & _rsLanguage) const;
+            bool getLanguage(uno::Reference< sax::XAttributeList > const& xAttribs, rtl::OUString & _rsLanguage) const;
 
             /// reads attributes for nodes from the attribute list
-            ElementInfo::FlagsType getNodeFlags(SaxAttributeList const& xAttribs, ElementType::Enum _eType) const;
+            sal_Int16 getNodeFlags(uno::Reference< sax::XAttributeList > const& xAttribs, ElementType::Enum _eType) const;
 
             /// retrieve element type and associated module name of a set,
-            bool getSetElementType(SaxAttributeList const& _xAttribs, OUString& _rsElementType, OUString& _rsElementTypeModule) const;
+            bool getSetElementType(uno::Reference< sax::XAttributeList > const& _xAttribs, rtl::OUString& _rsElementType, rtl::OUString& _rsElementTypeModule) const;
 
             /// retrieve the instance type and associated module name of a instance,
-            bool getInstanceType(SaxAttributeList const& _xAttribs, OUString& _rsElementType, OUString& _rsElementTypeModule) const;
+            bool getInstanceType(uno::Reference< sax::XAttributeList > const& _xAttribs, rtl::OUString& _rsElementType, rtl::OUString& _rsElementTypeModule) const;
 
             /// retrieve the component for an import or uses element,
-            bool getImportComponent(SaxAttributeList const& _xAttribs, OUString& _rsComponent) const;
+            bool getImportComponent(uno::Reference< sax::XAttributeList > const& _xAttribs, rtl::OUString& _rsComponent) const;
 
             /// retrieve element type and associated module name of a set,
-            uno::Type getPropertyValueType(SaxAttributeList const& _xAttribs) const;
+            uno::Type getPropertyValueType(uno::Reference< sax::XAttributeList > const& _xAttribs) const;
                 // throw( BadValueType )
 
             /// reads a value attribute from the attribute list
-            bool isNull(SaxAttributeList const& _xAttribs) const;
+            bool isNull(uno::Reference< sax::XAttributeList > const& _xAttribs) const;
 
             /// reads a value attribute from the attribute list
-            OUString getSeparator(SaxAttributeList const& _xAttribs) const;
+            rtl::OUString getSeparator(uno::Reference< sax::XAttributeList > const& _xAttribs) const;
 
         // low-level internal methods
 
             /// checks for presence of a boolean attribute and assigns its value if it exists (and is a bool)
-            bool maybeGetAttribute(SaxAttributeList const& _xAttribs, OUString const& _aAttributeName, bool& _rbAttributeValue) const;
+            bool maybeGetAttribute(uno::Reference< sax::XAttributeList > const& _xAttribs, rtl::OUString const& _aAttributeName, bool& _rbAttributeValue) const;
 
             /// checks for presence of an attribute and assigns its value if it exists
-            bool maybeGetAttribute(SaxAttributeList const& _xAttribs, OUString const& _aAttributeName, OUString& _rsAttributeValue) const;
+            bool maybeGetAttribute(uno::Reference< sax::XAttributeList > const& _xAttribs, rtl::OUString const& _aAttributeName, rtl::OUString& _rsAttributeValue) const;
         };
 // -----------------------------------------------------------------------------
 

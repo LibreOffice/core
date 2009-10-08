@@ -208,7 +208,7 @@ SvxIMapDlg::SvxIMapDlg( SfxBindings *_pBindings, SfxChildWindow *pCW,
         pCheckObj           ( NULL ),
         aIMapItem           ( SID_IMAP_EXEC, *this, *_pBindings )
 {
-    pIMapWnd = new IMapWindow( this, SVX_RES( RID_SVXCTL_IMAP ) );
+    pIMapWnd = new IMapWindow( this, SVX_RES( RID_SVXCTL_IMAP ), _pBindings->GetActiveFrame() );
 
     ApplyImageList();
 

@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: NResultSet.cxx,v $
- * $Revision: 1.8 $
+ * $Revision: 1.8.56.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -40,9 +40,7 @@
 #include <com/sun/star/sdbc/ResultSetConcurrency.hpp>
 #include <comphelper/types.hxx>
 #include <connectivity/dbexception.hxx>
-#ifndef _CONNECTIVITY_TSORTINDEX_HXX_
 #include <TSortIndex.hxx>
-#endif
 #include <rtl/string.hxx>
 #include <vector>
 #include <algorithm>
@@ -53,9 +51,8 @@
 #include <cppuhelper/typeprovider.hxx>
 #include <com/sun/star/lang/DisposedException.hpp>
 #include "propertyids.hxx"
-#ifndef _SVTOOLS_LOGINDLG_HXX
 #include <svtools/logindlg.hxx>
-#endif
+#include "resource/evoab2_res.hrc"
 
 using namespace ::comphelper;
 using namespace connectivity;
@@ -225,9 +222,7 @@ void OEvoabResultSet::construct( EBookQuery *pQuery, rtl::OString aTable, bool b
         if( bIsWithoutWhere && !isLocal( pBook ) )
         {
             OSL_TRACE( "large query on non-local book - ignored" );
-            ::dbtools::throwGenericSQLException(
-                ::rtl::OUString::createFromAscii(
-                "Use SQL Query with \"where clause\" or \"criteria\", to get the results." ), NULL );
+            m_pConnection->throwGenericSQLException(STR_USE_WHERE_CRIT,*this);
         }
         else
         {

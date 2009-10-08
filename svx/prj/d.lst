@@ -169,6 +169,7 @@ mkdir: %_DEST%\inc%_EXT%\svx
 ..\inc\svx\ruler.hxx %_DEST%\inc%_EXT%\svx\ruler.hxx
 ..\inc\rulritem.hxx %_DEST%\inc%_EXT%\svx\rulritem.hxx
 ..\inc\svx\scene3d.hxx %_DEST%\inc%_EXT%\svx\scene3d.hxx
+..\inc\svx\e3dsceneupdater.hxx %_DEST%\inc%_EXT%\svx\e3dsceneupdater.hxx
 ..\inc\svx\sdangitm.hxx %_DEST%\inc%_EXT%\svx\sdangitm.hxx
 ..\inc\svx\sderitm.hxx %_DEST%\inc%_EXT%\svx\sderitm.hxx
 ..\inc\svx\sdgcoitm.hxx %_DEST%\inc%_EXT%\svx\sdgcoitm.hxx
@@ -555,6 +556,7 @@ mkdir: %_DEST%\inc%_EXT%\svx
 ..\inc\svx\SmartTagItem.hxx %_DEST%\inc%_EXT%\svx\SmartTagItem.hxx
 ..\inc\svx\SmartTagCtl.hxx %_DEST%\inc%_EXT%\svx\SmartTagCtl.hxx
 ..\inc\svx\databaselocationinput.hxx %_DEST%\inc%_EXT%\svx\databaselocationinput.hxx
+..\inc\xlinjoit.hxx %_DEST%\inc%_EXT%\svx\xlinjoit.hxx
 
 mkdir: %_DEST%\inc%_EXT%\svx\sdr
 mkdir: %_DEST%\inc%_EXT%\svx\sdr\properties
@@ -655,6 +657,7 @@ mkdir: %_DEST%\inc%_EXT%\svx\sdr\table
 ..\inc\svx\svdtext.hxx %_DEST%\inc%_EXT%\svx\svdtext.hxx
 ..\inc\svx\svdotable.hxx %_DEST%\inc%_EXT%\svx\svdotable.hxx
 ..\inc\svx\selectioncontroller.hxx %_DEST%\inc%_EXT%\svx\selectioncontroller.hxx
+..\inc\svx\helperhittest3d.hxx %_DEST%\inc%_EXT%\svx\helperhittest3d.hxx
 ..\inc\svx\optimprove.hxx %_DEST%\inc%_EXT%\svx\optimprove.hxx
 
 ..\%__SRC%\bin\*-layout.zip %_DEST%\pck%_EXT%\*.*

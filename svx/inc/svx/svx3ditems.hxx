@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: svx3ditems.hxx,v $
- * $Revision: 1.4 $
+ * $Revision: 1.4.226.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -196,7 +196,7 @@ public:
     Svx3DTwoSidedLightingItem(BOOL bVal = 0);
 };
 
-class Svx3DLightcolor1Item : public SvxColorItem {
+class SVX_DLLPUBLIC Svx3DLightcolor1Item : public SvxColorItem {
 public:
     Svx3DLightcolor1Item(const Color& rCol = Color(0xffcccccc));
 };
@@ -206,37 +206,37 @@ public:
     Svx3DLightcolor2Item(const Color& rCol = Color(0x00000000));
 };
 
-class Svx3DLightcolor3Item : public SvxColorItem {
+class SVX_DLLPUBLIC Svx3DLightcolor3Item : public SvxColorItem {
 public:
     Svx3DLightcolor3Item(const Color& rCol = Color(0x00000000));
 };
 
-class Svx3DLightcolor4Item : public SvxColorItem {
+class SVX_DLLPUBLIC Svx3DLightcolor4Item : public SvxColorItem {
 public:
     Svx3DLightcolor4Item(const Color& rCol = Color(0x00000000));
 };
 
-class Svx3DLightcolor5Item : public SvxColorItem {
+class SVX_DLLPUBLIC Svx3DLightcolor5Item : public SvxColorItem {
 public:
     Svx3DLightcolor5Item(const Color& rCol = Color(0x00000000));
 };
 
-class Svx3DLightcolor6Item : public SvxColorItem {
+class SVX_DLLPUBLIC Svx3DLightcolor6Item : public SvxColorItem {
 public:
     Svx3DLightcolor6Item(const Color& rCol = Color(0x00000000));
 };
 
-class Svx3DLightcolor7Item : public SvxColorItem {
+class SVX_DLLPUBLIC Svx3DLightcolor7Item : public SvxColorItem {
 public:
     Svx3DLightcolor7Item(const Color& rCol = Color(0x00000000));
 };
 
-class Svx3DLightcolor8Item : public SvxColorItem {
+class SVX_DLLPUBLIC Svx3DLightcolor8Item : public SvxColorItem {
 public:
     Svx3DLightcolor8Item(const Color& rCol = Color(0x00000000));
 };
 
-class Svx3DAmbientcolorItem : public SvxColorItem {
+class SVX_DLLPUBLIC Svx3DAmbientcolorItem : public SvxColorItem {
 public:
     Svx3DAmbientcolorItem(const Color& rCol = Color(0x00666666));
 };
@@ -251,37 +251,37 @@ public:
     Svx3DLightOnOff2Item(BOOL bVal = 0);
 };
 
-class Svx3DLightOnOff3Item : public SfxBoolItem {
+class SVX_DLLPUBLIC Svx3DLightOnOff3Item : public SfxBoolItem {
 public:
     Svx3DLightOnOff3Item(BOOL bVal = 0);
 };
 
-class Svx3DLightOnOff4Item : public SfxBoolItem {
+class SVX_DLLPUBLIC Svx3DLightOnOff4Item : public SfxBoolItem {
 public:
     Svx3DLightOnOff4Item(BOOL bVal = 0);
 };
 
-class Svx3DLightOnOff5Item : public SfxBoolItem {
+class SVX_DLLPUBLIC Svx3DLightOnOff5Item : public SfxBoolItem {
 public:
     Svx3DLightOnOff5Item(BOOL bVal = 0);
 };
 
-class Svx3DLightOnOff6Item : public SfxBoolItem {
+class SVX_DLLPUBLIC Svx3DLightOnOff6Item : public SfxBoolItem {
 public:
     Svx3DLightOnOff6Item(BOOL bVal = 0);
 };
 
-class Svx3DLightOnOff7Item : public SfxBoolItem {
+class SVX_DLLPUBLIC Svx3DLightOnOff7Item : public SfxBoolItem {
 public:
     Svx3DLightOnOff7Item(BOOL bVal = 0);
 };
 
-class Svx3DLightOnOff8Item : public SfxBoolItem {
+class SVX_DLLPUBLIC Svx3DLightOnOff8Item : public SfxBoolItem {
 public:
     Svx3DLightOnOff8Item(BOOL bVal = 0);
 };
 
-class Svx3DLightDirection1Item : public SvxB3DVectorItem {
+class SVX_DLLPUBLIC Svx3DLightDirection1Item : public SvxB3DVectorItem {
 public:
     Svx3DLightDirection1Item(const basegfx::B3DVector& rVec = basegfx::B3DVector(0.57735026918963, 0.57735026918963, 0.57735026918963));
 };
@@ -291,32 +291,32 @@ public:
     Svx3DLightDirection2Item(const basegfx::B3DVector& rVec = basegfx::B3DVector(0.0,0.0,1.0));
 };
 
-class Svx3DLightDirection3Item : public SvxB3DVectorItem {
+class SVX_DLLPUBLIC Svx3DLightDirection3Item : public SvxB3DVectorItem {
 public:
     Svx3DLightDirection3Item(const basegfx::B3DVector& rVec = basegfx::B3DVector(0.0,0.0,1.0));
 };
 
-class Svx3DLightDirection4Item : public SvxB3DVectorItem {
+class SVX_DLLPUBLIC Svx3DLightDirection4Item : public SvxB3DVectorItem {
 public:
     Svx3DLightDirection4Item(const basegfx::B3DVector& rVec = basegfx::B3DVector(0.0,0.0,1.0));
 };
 
-class Svx3DLightDirection5Item : public SvxB3DVectorItem {
+class SVX_DLLPUBLIC Svx3DLightDirection5Item : public SvxB3DVectorItem {
 public:
     Svx3DLightDirection5Item(const basegfx::B3DVector& rVec = basegfx::B3DVector(0.0,0.0,1.0));
 };
 
-class Svx3DLightDirection6Item : public SvxB3DVectorItem {
+class SVX_DLLPUBLIC Svx3DLightDirection6Item : public SvxB3DVectorItem {
 public:
     Svx3DLightDirection6Item(const basegfx::B3DVector& rVec = basegfx::B3DVector(0.0,0.0,1.0));
 };
 
-class Svx3DLightDirection7Item : public SvxB3DVectorItem {
+class SVX_DLLPUBLIC Svx3DLightDirection7Item : public SvxB3DVectorItem {
 public:
     Svx3DLightDirection7Item(const basegfx::B3DVector& rVec = basegfx::B3DVector(0.0,0.0,1.0));
 };
 
-class Svx3DLightDirection8Item : public SvxB3DVectorItem {
+class SVX_DLLPUBLIC Svx3DLightDirection8Item : public SvxB3DVectorItem {
 public:
     Svx3DLightDirection8Item(const basegfx::B3DVector& rVec = basegfx::B3DVector(0.0,0.0,1.0));
 };

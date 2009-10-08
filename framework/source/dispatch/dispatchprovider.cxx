@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: dispatchprovider.cxx,v $
- * $Revision: 1.37 $
+ * $Revision: 1.37.82.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -42,7 +42,6 @@
 #include <dispatch/closedispatcher.hxx>
 #include <dispatch/menudispatcher.hxx>
 #include <dispatch/helpagentdispatcher.hxx>
-#include <classes/targetfinder.hxx>
 
 #include <pattern/window.hxx>
 #include <threadhelp/transactionguard.hxx>
@@ -50,6 +49,7 @@
 #include <threadhelp/writeguard.hxx>
 #include <protocols.h>
 #include <services.h>
+#include <targets.h>
 #include <general.h>
 
 //_________________________________________________________________________________________________________________

@@ -40,18 +40,7 @@ namespace configmgr
     namespace configuration
     {
     //-------------------------------------------------------------------------
-        class Name;
-    //-------------------------------------------------------------------------
-
-        namespace argument { struct NoValidate; }
-
-        typedef com::sun::star::uno::Type       UnoType;
-        typedef com::sun::star::uno::Any        UnoAny;
-    //-------------------------------------------------------------------------
-
-        class TreeImpl;
-
-        typedef unsigned int NodeOffset;
+        class Tree;
     //-------------------------------------------------------------------------
 
         /// represents a value node in some tree
@@ -60,6 +49,8 @@ namespace configmgr
         public:
             /// constructs an empty (invalid) node
             ValueRef();
+
+            ValueRef(rtl::OUString const& aName, unsigned int nParentPos);
 
             /// copy a node (with reference semantics)
             ValueRef(ValueRef const& rOther);
@@ -73,23 +64,18 @@ namespace configmgr
             /// checks, if this represents an existing node
             inline bool isValid() const;
 
-        private:
-            friend class Tree;
-            friend class TreeImplHelper;
-            ValueRef(Name const& aName, NodeOffset nParentPos);
-
             bool checkValidState() const;
-        private:
-            Name        m_sNodeName;
-            NodeOffset  m_nParentPos;
+
+            rtl::OUString m_sNodeName;
+            unsigned int    m_nParentPos;
         };
     //-------------------------------------------------------------------------
 
         /** extract the value from a plain value
         */
         inline
-        UnoAny getSimpleValue(Tree const& aTree, ValueRef const& aNode)
-        { return aTree.getNodeValue( aNode ); }
+        com::sun::star::uno::Any getSimpleValue(rtl::Reference< Tree > const& aTree, ValueRef const& aNode)
+        { return aTree->getNodeValue( aNode ); }
 
     //-------------------------------------------------------------------------
         inline bool ValueRef::isValid() const
@@ -104,8 +90,8 @@ namespace configmgr
         {
         public:
             static SubNodeID createEmpty() { return SubNodeID(); }
-            SubNodeID(TreeRef const& rTree, NodeRef const& rParentNode, Name const& aName);
-            SubNodeID(NodeID const& rParentNodeID, Name const& aName);
+            SubNodeID(rtl::Reference< Tree > const& rTree, NodeRef const& rParentNode, rtl::OUString const& aName);
+            SubNodeID(NodeID const& rParentNodeID, rtl::OUString const& aName);
 
         // comparison
             // equality
@@ -120,17 +106,15 @@ namespace configmgr
             // containing node this
             NodeID getParentID() const { return m_aParentID; }
             // containing node this
-            Name getNodeName() const { return m_sNodeName; }
+            rtl::OUString getNodeName() const { return m_sNodeName; }
         private:
             SubNodeID(); // create an empty one
-            friend class TreeImplHelper;
-            Name    m_sNodeName;
+            rtl::OUString m_sNodeName;
             NodeID  m_aParentID;
         };
     //-------------------------------------------------------------------------
 
-        typedef std::vector<SubNodeID>      SubNodeIDList;
-        void getAllChildrenHelper(NodeID const& aNode, SubNodeIDList& aList);
+        void getAllChildrenHelper(NodeID const& aNode, std::vector<SubNodeID>& aList);
 
     //-------------------------------------------------------------------------
         inline bool operator!=(SubNodeID const& lhs, SubNodeID const& rhs)

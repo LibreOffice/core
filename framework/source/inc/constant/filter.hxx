@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: filter.hxx,v $
- * $Revision: 1.4 $
+ * $Revision: 1.4.82.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -121,43 +121,6 @@ struct Filter
         //FREE! ... 0x00800000L
         static const sal_Int32       FLAGVALUE_PREFERED;
 
-        //_______________________________________________
-
-        /** @short  checks if the given flag mask is set.
-
-            @param  nField
-                    the flag field, which should be checked.
-
-            @param  nMask
-                    these flags should be checked against the field.
-
-            @return <TRUE/> if mask match to the given flag field.
-         */
-        sal_Bool areFlagsSet(sal_Int32 nField, sal_Int32 nMask);
-
-        //_______________________________________________
-
-        /** @short  set the specified flags on the given field.
-
-            @param  nField
-                    the flag field, which should be changed.
-
-            @param  nMask
-                    this flags field should be set on the field.
-         */
-        void addFlags(sal_Int32& nField, sal_Int32 nFlags);
-
-        //_______________________________________________
-
-        /** @short  remove the specified flags from the given field.
-
-            @param  nField
-                    the flag field, which should be changed.
-
-            @param  nMask
-                    this flags field should be removed from the field.
-         */
-        void removeFlags(sal_Int32& nField, sal_Int32 nFlags);
 };
 
     } // namespace constant

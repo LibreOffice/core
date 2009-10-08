@@ -51,10 +51,6 @@ namespace configmgr
     // -----------------------------------------------------------------------------
     namespace backend
     {
-        using namespace ::rtl;
-        using namespace ::std;
-        using namespace ::com::sun::star;
-        using namespace ::com::sun::star::uno;
         namespace uno = com::sun::star::uno;
         namespace io = com::sun::star::io;
 

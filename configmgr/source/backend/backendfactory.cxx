@@ -67,7 +67,7 @@ const sal_Char k_DefaultBackendServiceAndImplName[]         = K_DefaultBackendSe
 const sal_Char k_GenericBackendServiceAndImplName[]         = "com.sun.star.configuration.backend.Backend" ;
 
 // -------------------------------------------------------------------------
-static AsciiServiceName const k_BackendServiceNames [] =
+static sal_Char const * const k_BackendServiceNames [] =
 {
     k_DefaultBackendServiceAndImplName,
     k_GenericBackendServiceAndImplName,
@@ -109,7 +109,7 @@ const ServiceRegistrationInfo   * getDefaultBackendServiceInfo()
 // -------------------------------------------------------------------------
 
 uno::Reference<uno::XInterface> SAL_CALL
-    getDefaultBackendSingleton( CreationContext const& xContext )
+    getDefaultBackendSingleton( com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext > const& xContext )
 {
     OSL_ENSURE( xContext.is(), "ERROR: NULL context has no singletons" );
 
@@ -146,12 +146,8 @@ uno::Reference<uno::XInterface> SAL_CALL
 // -------------------------------------------------------------------------
 // -------------------------------------------------------------------------
 
-typedef BackendFactory::CreationContext CreationContext;
-typedef uno::Sequence< uno::Any >       UnoInitArgs;
-// -------------------------------------------------------------------------
-
 static
-UnoInitArgs createInitArgs(ContextReader const & _aContext)
+uno::Sequence< uno::Any > createInitArgs(ContextReader const & _aContext)
 {
     OSL_ASSERT(_aContext.hasBootstrapContext());
     uno::Sequence< uno::Any > aResult( 1 );
@@ -162,50 +158,47 @@ UnoInitArgs createInitArgs(ContextReader const & _aContext)
 
 static
 inline
-uno::Reference< uno::XInterface > createService(ContextReader const & _aCtx, UnoInitArgs const & _aInitArgs, OUString const & _aSvc)
+uno::Reference< uno::XInterface > createService(ContextReader const & _aCtx, uno::Sequence< uno::Any > const & _aInitArgs, rtl::OUString const & _aSvc)
 {
     uno::Reference< lang::XMultiComponentFactory > xFactory = _aCtx.getServiceManager();
     OSL_ENSURE(xFactory.is(),"ERROR: ComponentContext has no service manager\n");
-    if (!xFactory.is()) throw uno::RuntimeException( OUString::createFromAscii("ERROR: ComponentContext has no service manager\n"), NULL );
+    if (!xFactory.is()) throw uno::RuntimeException( rtl::OUString::createFromAscii("ERROR: ComponentContext has no service manager\n"), NULL );
     return xFactory->createInstanceWithArgumentsAndContext( _aSvc, _aInitArgs, _aCtx.getBaseContext());
 }
 // -------------------------------------------------------------------------
 
-typedef uno::Reference< backenduno::XMultiLayerStratum >    UnoSingleBackend;
-typedef uno::Reference< backenduno::XBackend >              UnoBackend;
-
 static
-UnoBackend wrapSingleBackend(ContextReader const & _aSettings, UnoInitArgs const & _aInitArgs, UnoSingleBackend const & _xWrappedBackend)
+uno::Reference< backenduno::XBackend > wrapSingleBackend(ContextReader const & _aSettings, uno::Sequence< uno::Any > const & _aInitArgs, uno::Reference< backenduno::XMultiLayerStratum > const & _xWrappedBackend)
 {
     OSL_ASSERT(_aSettings.hasUnoBackendWrapper() || _aSettings.hasBootstrapContext());
 
-    OUString aWrapperSvc = _aSettings.hasUnoBackendWrapper() ?
+    rtl::OUString aWrapperSvc = _aSettings.hasUnoBackendWrapper() ?
                                 _aSettings.getUnoBackendWrapper() :
-                                OUString::createFromAscii(k_DefaultBackendWrapper);
+                                rtl::OUString::createFromAscii(k_DefaultBackendWrapper);
 
     OSL_ENSURE (aWrapperSvc.getLength(), "ERROR: No wrapper service for wrapped configuration");
     OSL_ENSURE (_xWrappedBackend.is(), "ERROR: No backend to wrap for wrapped configuration");
 
     sal_Int32 const nBaseArgsCount = _aInitArgs.getLength();
-    UnoInitArgs aExtendedArgs( _aInitArgs );
+    uno::Sequence< uno::Any > aExtendedArgs( _aInitArgs );
     aExtendedArgs.realloc( nBaseArgsCount + 1 );
     aExtendedArgs[nBaseArgsCount] <<= _xWrappedBackend;
 
-    return UnoBackend::query( createService(_aSettings,aExtendedArgs,aWrapperSvc) );
+    return uno::Reference< backenduno::XBackend >::query( createService(_aSettings,aExtendedArgs,aWrapperSvc) );
 }
 // -------------------------------------------------------------------------
 
 static
-UnoBackend createOfflineBackend(ContextReader const & _aSettings, UnoInitArgs const & _aInitArgs)
+uno::Reference< backenduno::XBackend > createOfflineBackend(ContextReader const & _aSettings, uno::Sequence< uno::Any > const & _aInitArgs)
 {
     OSL_ASSERT(_aSettings.hasUnoBackendWrapper() || _aSettings.hasBootstrapContext());
 
-    UnoBackend xResult;
+    uno::Reference< backenduno::XBackend > xResult;
     if ( _aSettings.hasUnoBackendWrapper() )
     {
-        OUString const aWrapperSvc = _aSettings.getUnoBackendWrapper();
+        rtl::OUString const aWrapperSvc = _aSettings.getUnoBackendWrapper();
 
-        xResult = UnoBackend::query( createService(_aSettings,_aInitArgs,aWrapperSvc) );
+        xResult = uno::Reference< backenduno::XBackend >::query( createService(_aSettings,_aInitArgs,aWrapperSvc) );
     }
 
     return xResult;
@@ -213,13 +206,13 @@ UnoBackend createOfflineBackend(ContextReader const & _aSettings, UnoInitArgs co
 // -------------------------------------------------------------------------
 
 static
-uno::Reference< uno::XInterface > createRealBackend(ContextReader const & _aSettings, UnoInitArgs const & _aInitArgs)
+uno::Reference< uno::XInterface > createRealBackend(ContextReader const & _aSettings, uno::Sequence< uno::Any > const & _aInitArgs)
 {
     OSL_ASSERT(_aSettings.hasUnoBackendService() || _aSettings.hasBootstrapContext());
 
-    OUString const aBackendServiceName = _aSettings.hasUnoBackendService() ?
+    rtl::OUString const aBackendServiceName = _aSettings.hasUnoBackendService() ?
                                         _aSettings.getUnoBackendService() :
-                                        OUString::createFromAscii(k_DefaultBackendService);
+                                        rtl::OUString::createFromAscii(k_DefaultBackendService);
 
     uno::Reference< uno::XInterface > xResult =
         createService(_aSettings,_aInitArgs,aBackendServiceName);
@@ -229,18 +222,18 @@ uno::Reference< uno::XInterface > createRealBackend(ContextReader const & _aSett
 // -------------------------------------------------------------------------
 
 static
-UnoBackend createOnlineBackend(ContextReader const & _aSettings, UnoInitArgs const & _aInitArgs)
+uno::Reference< backenduno::XBackend > createOnlineBackend(ContextReader const & _aSettings, uno::Sequence< uno::Any > const & _aInitArgs)
 {
     OSL_ENSURE( _aSettings.isUnoBackend(), "ERROR - BackendFactory: For legacy backends use createSessionBackend()");
 
-    UnoBackend xResult;
+    uno::Reference< backenduno::XBackend > xResult;
 
     uno::Reference< uno::XInterface > xRealBackend = createRealBackend(_aSettings,_aInitArgs);
 
     if (_aSettings.hasUnoBackendWrapper())
     {
         // try wrapping a single backend
-        UnoSingleBackend xSingleRealBackend( xRealBackend, uno::UNO_QUERY);
+        uno::Reference< backenduno::XMultiLayerStratum > xSingleRealBackend( xRealBackend, uno::UNO_QUERY);
         if (xSingleRealBackend.is())
             xResult = wrapSingleBackend(_aSettings,_aInitArgs,xSingleRealBackend);
 
@@ -255,7 +248,7 @@ UnoBackend createOnlineBackend(ContextReader const & _aSettings, UnoInitArgs con
         if (!xResult.is())
         {
             // try the default wrapper if we only have a single backend
-            UnoSingleBackend xSingleRealBackend( xRealBackend, uno::UNO_QUERY);
+            uno::Reference< backenduno::XMultiLayerStratum > xSingleRealBackend( xRealBackend, uno::UNO_QUERY);
             if (xSingleRealBackend.is())
                 xResult = wrapSingleBackend(_aSettings,_aInitArgs,xSingleRealBackend);
 
@@ -268,16 +261,16 @@ UnoBackend createOnlineBackend(ContextReader const & _aSettings, UnoInitArgs con
 }
 // -------------------------------------------------------------------------
 
-static UnoBackend createUnoBackend(CreationContext const& _xCtx)
+static uno::Reference< backenduno::XBackend > createUnoBackend(com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext > const& _xCtx)
 {
     ContextReader aSettings(_xCtx);
     OSL_ENSURE( aSettings.isUnoBackend(), "ERROR - BackendFactory: Legacy backends are not supported any more");
 
-    UnoInitArgs aArguments = createInitArgs(aSettings);
+    uno::Sequence< uno::Any > aArguments = createInitArgs(aSettings);
 
     sal_Bool bOffline = aSettings.hasOfflineSetting() ? aSettings.getOfflineSetting() : !aSettings.hasUnoBackendService();
 
-    UnoBackend xResult;
+    uno::Reference< backenduno::XBackend > xResult;
 
     if (!bOffline)
         xResult = createOnlineBackend (aSettings,aArguments);
@@ -294,9 +287,9 @@ static UnoBackend createUnoBackend(CreationContext const& _xCtx)
 
 // -------------------------------------------------------------------------
 
-uno::Reference<uno::XInterface> SAL_CALL instantiateDefaultBackend( CreationContext const& xTargetContext )
+uno::Reference<uno::XInterface> SAL_CALL instantiateDefaultBackend( com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext > const& xTargetContext )
 {
-    CreationContext xContext = UnoContextTunnel::recoverContext(xTargetContext);
+    com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext > xContext = UnoContextTunnel::recoverContext(xTargetContext);
 
     try
     {
@@ -309,9 +302,9 @@ uno::Reference<uno::XInterface> SAL_CALL instantiateDefaultBackend( CreationCont
 }
 // -------------------------------------------------------------------------
 
-UnoBackend BackendFactory::getUnoBackend()
+uno::Reference< backenduno::XBackend > BackendFactory::getUnoBackend()
 {
-    return UnoBackend::query( getDefaultBackendSingleton(m_xCtx) );
+    return uno::Reference< backenduno::XBackend >::query( getDefaultBackendSingleton(m_xCtx) );
 }
 // -------------------------------------------------------------------------
 
@@ -319,7 +312,7 @@ rtl::Reference<IMergedDataProvider> BackendFactory::createBackend()
 {
     rtl::Reference< IMergedDataProvider > xBackend;
 
-    UnoBackend xBackendService = this->getUnoBackend();
+    uno::Reference< backenduno::XBackend > xBackendService = this->getUnoBackend();
 
     if (xBackendService.is())
         xBackend = new BackendAccess(xBackendService, m_xCtx);
@@ -328,7 +321,7 @@ rtl::Reference<IMergedDataProvider> BackendFactory::createBackend()
 }
 // -------------------------------------------------------------------------
 
-BackendFactory BackendFactory::instance(CreationContext const & _xCtx)
+BackendFactory BackendFactory::instance(com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext > const & _xCtx)
 {
     return BackendFactory(_xCtx);
 }

@@ -63,14 +63,12 @@ namespace configmgr
     struct ServiceRegistrationInfo;
     struct SingletonRegistrationInfo;
 
-    typedef uno::Reference< uno::XComponentContext >        CreationContext;
-
 // provider instantiation
     uno::Reference<uno::XInterface> SAL_CALL
-        getDefaultConfigProviderSingleton( CreationContext const& xContext );
+        getDefaultConfigProviderSingleton( uno::Reference< uno::XComponentContext > const& xContext );
 
     uno::Reference<uno::XInterface> SAL_CALL
-        instantiateDefaultProvider( CreationContext const& xContext );
+        instantiateDefaultProvider( uno::Reference< uno::XComponentContext > const& xContext );
 
 // provider service info
     const SingletonRegistrationInfo * getDefaultProviderSingletonInfo();
@@ -80,13 +78,13 @@ namespace configmgr
 
 // other services - instantiation and info
     uno::Reference< uno::XInterface > SAL_CALL
-        instantiateConfigRegistry( CreationContext const& xContext );
+        instantiateConfigRegistry( uno::Reference< uno::XComponentContext > const& xContext );
 
     const ServiceRegistrationInfo* getConfigurationRegistryServiceInfo();
 
 // bootstrap context support
     uno::Reference<uno::XInterface> SAL_CALL
-        instantiateBootstrapContext( CreationContext const& xContext );
+        instantiateBootstrapContext( uno::Reference< uno::XComponentContext > const& xContext );
 
     const SingletonRegistrationInfo * getBootstrapContextSingletonInfo();
     const ServiceRegistrationInfo   * getBootstrapContextServiceInfo();
@@ -94,11 +92,11 @@ namespace configmgr
     namespace xml
     {
         uno::Reference< uno::XInterface > SAL_CALL instantiateSchemaParser
-        ( CreationContext const& xContext );
+        ( uno::Reference< uno::XComponentContext > const& xContext );
         uno::Reference< uno::XInterface > SAL_CALL instantiateLayerParser
-        ( CreationContext const& xContext );
+        ( uno::Reference< uno::XComponentContext > const& xContext );
         uno::Reference< uno::XInterface > SAL_CALL instantiateLayerWriter
-        ( CreationContext const& xContext );
+        ( uno::Reference< uno::XComponentContext > const& xContext );
 
         const ServiceRegistrationInfo* getSchemaParserServiceInfo();
         const ServiceRegistrationInfo* getLayerParserServiceInfo();
@@ -107,25 +105,25 @@ namespace configmgr
     namespace backend
     {
         uno::Reference<uno::XInterface> SAL_CALL
-            getDefaultBackendSingleton( CreationContext const& xContext );
+            getDefaultBackendSingleton( uno::Reference< uno::XComponentContext > const& xContext );
 
         uno::Reference<uno::XInterface> SAL_CALL
-            instantiateDefaultBackend( CreationContext const& xContext );
+            instantiateDefaultBackend( uno::Reference< uno::XComponentContext > const& xContext );
 
         uno::Reference< uno::XInterface > SAL_CALL
-            instantiateUpdateMerger( CreationContext const& xContext );
+            instantiateUpdateMerger( uno::Reference< uno::XComponentContext > const& xContext );
 
         uno::Reference<uno::XInterface> SAL_CALL
-            instantiateSingleBackendAdapter( CreationContext const& xContext );
+            instantiateSingleBackendAdapter( uno::Reference< uno::XComponentContext > const& xContext );
 
         uno::Reference< uno::XInterface > SAL_CALL
-            instantiateMergeImporter( CreationContext const& xContext );
+            instantiateMergeImporter( uno::Reference< uno::XComponentContext > const& xContext );
 
         uno::Reference< uno::XInterface > SAL_CALL
-            instantiateCopyImporter( CreationContext const& xContext );
+            instantiateCopyImporter( uno::Reference< uno::XComponentContext > const& xContext );
 
         uno::Reference<uno::XInterface> SAL_CALL
-            instantiateMultiStratumBackend( CreationContext const& xContext );
+            instantiateMultiStratumBackend( uno::Reference< uno::XComponentContext > const& xContext );
 
         const SingletonRegistrationInfo * getDefaultBackendSingletonInfo();
         const ServiceRegistrationInfo   * getDefaultBackendServiceInfo();
@@ -139,31 +137,31 @@ namespace configmgr
     namespace localbe
     {
         uno::Reference<uno::XInterface> SAL_CALL
-            instantiateLocalBackend( CreationContext const& xContext );
+            instantiateLocalBackend( uno::Reference< uno::XComponentContext > const& xContext );
 
         uno::Reference<uno::XInterface> SAL_CALL
-            instantiateLocalDataImporter( CreationContext const& xContext );
+            instantiateLocalDataImporter( uno::Reference< uno::XComponentContext > const& xContext );
 
         uno::Reference<uno::XInterface> SAL_CALL
-            instantiateLocalHierarchyBrowser( CreationContext const& xContext );
+            instantiateLocalHierarchyBrowser( uno::Reference< uno::XComponentContext > const& xContext );
 
         uno::Reference<uno::XInterface> SAL_CALL
-            instantiateLocalSchemaSupplier( CreationContext const& xContext );
+            instantiateLocalSchemaSupplier( uno::Reference< uno::XComponentContext > const& xContext );
 
         uno::Reference<uno::XInterface> SAL_CALL
-            instantiateLocalLegacyStratum( CreationContext const& xContext );
+            instantiateLocalLegacyStratum( uno::Reference< uno::XComponentContext > const& xContext );
 
         uno::Reference<uno::XInterface> SAL_CALL
-            instantiateLocalDataStratum( CreationContext const& xContext );
+            instantiateLocalDataStratum( uno::Reference< uno::XComponentContext > const& xContext );
 
         uno::Reference<uno::XInterface> SAL_CALL
-            instantiateLocalReadonlyStratum( CreationContext const& xContext );
+            instantiateLocalReadonlyStratum( uno::Reference< uno::XComponentContext > const& xContext );
 
         uno::Reference<uno::XInterface> SAL_CALL
-            instantiateLocalResourceStratum( CreationContext const& xContext );
+            instantiateLocalResourceStratum( uno::Reference< uno::XComponentContext > const& xContext );
 
         uno::Reference<uno::XInterface> SAL_CALL
-            instantiateLocalMultiStratum( CreationContext const& xContext );
+            instantiateLocalMultiStratum( uno::Reference< uno::XComponentContext > const& xContext );
 
         const ServiceRegistrationInfo * getLocalBackendServiceInfo();
         const ServiceRegistrationInfo * getLocalDataImportServiceInfo();

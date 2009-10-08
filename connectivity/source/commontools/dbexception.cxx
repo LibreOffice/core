@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: dbexception.cxx,v $
- * $Revision: 1.23 $
+ * $Revision: 1.23.56.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -38,6 +38,8 @@
 #include <com/sun/star/sdbc/SQLWarning.hpp>
 #include <com/sun/star/sdb/SQLErrorEvent.hpp>
 #include "TConnection.hxx"
+#include "resource/common_res.hrc"
+#include "resource/sharedresources.hxx"
 
 //.........................................................................
 namespace dbtools
@@ -395,8 +397,9 @@ void SQLExceptionIteratorHelper::next( SQLExceptionInfo& _out_rInfo )
 //------------------------------------------------------------
 void throwFunctionSequenceException(const Reference< XInterface >& _Context, const Any& _Next)  throw ( ::com::sun::star::sdbc::SQLException )
 {
+    ::connectivity::SharedResources aResources;
     throw SQLException(
-        OMetaConnection::getPropMap().getNameByIndex( PROPERTY_ID_ERRORMSG_SEQUENCE ),
+        aResources.getResourceString(STR_ERRORMSG_SEQUENCE),
         _Context,
         getStandardSQLState( SQL_FUNCTION_SEQUENCE_ERROR ),
         0,
@@ -407,8 +410,9 @@ void throwFunctionSequenceException(const Reference< XInterface >& _Context, con
 void throwInvalidIndexException(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _Context,
         const ::com::sun::star::uno::Any& _Next)  throw ( ::com::sun::star::sdbc::SQLException )
 {
+    ::connectivity::SharedResources aResources;
     throw SQLException(
-        OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_INVALID_INDEX),
+        aResources.getResourceString(STR_INVALID_INDEX),
         _Context,
         getStandardSQLState( SQL_INVALID_DESCRIPTOR_INDEX ),
         0,
@@ -432,11 +436,13 @@ void throwFunctionNotSupportedException(const ::rtl::OUString& _rMsg,
 void throwFunctionNotSupportedException( const sal_Char* _pAsciiFunctionName, const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _rxContext,
         const ::com::sun::star::uno::Any* _pNextException ) throw ( ::com::sun::star::sdbc::SQLException )
 {
-    ::rtl::OUString sMessage = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "The driver does not support this function: " ) );
-    // TODO: resource
-    sMessage += ::rtl::OUString::createFromAscii( _pAsciiFunctionName );
+    ::connectivity::SharedResources aResources;
+    const ::rtl::OUString sError( aResources.getResourceStringWithSubstitution(
+            STR_UNSUPPORTED_FUNCTION,
+            "$functionname$", ::rtl::OUString::createFromAscii( _pAsciiFunctionName )
+         ) );
     throw SQLException(
-        sMessage,
+        sError,
         _rxContext,
         getStandardSQLState( SQL_FUNCTION_NOT_SUPPORTED ),
         0,
@@ -461,9 +467,14 @@ void throwGenericSQLException(const ::rtl::OUString& _rMsg, const Reference< XIn
 void throwFeatureNotImplementedException( const sal_Char* _pAsciiFeatureName, const Reference< XInterface >& _rxContext, const Any* _pNextException )
     throw (SQLException)
 {
-    ::rtl::OUString sMessage = ::rtl::OUString::createFromAscii( _pAsciiFeatureName ) + ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ": feature not implemented." ) );
+    ::connectivity::SharedResources aResources;
+    const ::rtl::OUString sError( aResources.getResourceStringWithSubstitution(
+            STR_UNSUPPORTED_FEATURE,
+            "$featurename$", ::rtl::OUString::createFromAscii( _pAsciiFeatureName )
+         ) );
+
     throw SQLException(
-        sMessage,
+        sError,
         _rxContext,
         getStandardSQLState( SQL_FEATURE_NOT_IMPLEMENTED ),
         0,

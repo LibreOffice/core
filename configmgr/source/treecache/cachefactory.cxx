@@ -40,18 +40,15 @@ namespace configmgr
 {
 // -------------------------------------------------------------------------
 
-    typedef rtl::Reference< backend::IMergedDataProvider > MergedBackendRef;
-// -------------------------------------------------------------------------
-
     static
-    rtl::Reference<TreeManager> buildCacheManager(MergedBackendRef const & _xBackend,
-                                                  CacheFactory::CreationContext const & _xContext)
+    rtl::Reference<TreeManager> buildCacheManager(rtl::Reference< backend::IMergedDataProvider > const & _xBackend,
+                                                  ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > const & _xContext)
     {
         rtl::Reference< TreeManager > xCache;
 
         if (_xBackend.is())
         {
-            rtl::Reference< backend::ICachedDataProvider > xLoader
+            rtl::Reference< backend::CacheController > xLoader
                 = new backend::CacheController(_xBackend.get(), _xContext);
 
             xCache.set( new TreeManager(xLoader.get()) );
@@ -62,9 +59,9 @@ namespace configmgr
 // -------------------------------------------------------------------------
 
     rtl::Reference<TreeManager>
-        CacheFactory::createCacheManager(CreationContext const & _xContext)
+        CacheFactory::createCacheManager(::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > const & _xContext)
     {
-        MergedBackendRef xBackend = backend::BackendFactory::instance(_xContext).createBackend();
+        rtl::Reference< backend::IMergedDataProvider > xBackend = backend::BackendFactory::instance(_xContext).createBackend();
 
         return buildCacheManager(xBackend, _xContext);
     }

@@ -420,6 +420,11 @@
                     <value xml:lang="en-US">SQL...</value>
                 </prop>
             </node>
+            <node oor:name=".uno:DBMigrateScripts" oor:op="replace">
+                <prop oor:name="Label" oor:type="xs:string">
+                    <value xml:lang="en-US">Migrate Macros ...</value>
+                </prop>
+            </node>
             <node oor:name=".uno:DSBEditDoc" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
                     <value xml:lang="en-US">Edit Data</value>

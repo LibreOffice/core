@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: svdoashp.cxx,v $
- * $Revision: 1.52 $
+ * $Revision: 1.51.52.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -36,11 +36,7 @@
 #include <ucbhelper/content.hxx>
 #include <ucbhelper/contentbroker.hxx>
 #include <unotools/datetime.hxx>
-#ifndef SVX_LIGHT
-#ifndef _LNKBASE_HXX //autogen
 #include <sfx2/lnkbase.hxx>
-#endif
-#endif
 #include <tools/urlobj.hxx>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/drawing/XShape.hpp>
@@ -82,18 +78,11 @@
 #include <com/sun/star/drawing/EnhancedCustomShapeSegment.hpp>
 #include <com/sun/star/drawing/EnhancedCustomShapeSegmentCommand.hpp>
 #include <svx/writingmodeitem.hxx>
-
-//      textitem.hxx        editdata.hxx
 #include <svx/xlnclit.hxx>
-
-
-
 #include <svx/svxids.hrc>
 #include <svtools/whiter.hxx>
 #include <svx/sdr/properties/customshapeproperties.hxx>
 #include <svx/sdr/contact/viewcontactofsdrobjcustomshape.hxx>
-
-// #i37011#
 #include <svx/xlnclit.hxx>
 #include <svx/xlntrit.hxx>
 #include <svx/xfltrit.hxx>
@@ -102,8 +91,6 @@
 #include <svx/xflhtit.hxx>
 #include <svx/xbtmpit.hxx>
 #include <vcl/bmpacc.hxx>
-
-// #i37448#
 #include <svx/svdview.hxx>
 #include <basegfx/polygon/b2dpolypolygontools.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
@@ -420,7 +407,7 @@ const SdrObject* SdrObjCustomShape::GetSdrObjectShadowFromCustomShape() const
     return mpLastShadowGeometry;
 }
 
-const sal_Bool SdrObjCustomShape::IsTextPath() const
+sal_Bool SdrObjCustomShape::IsTextPath() const
 {
     const rtl::OUString sTextPath( RTL_CONSTASCII_USTRINGPARAM ( "TextPath" ) );
     sal_Bool bTextPathOn = sal_False;
@@ -431,7 +418,7 @@ const sal_Bool SdrObjCustomShape::IsTextPath() const
     return bTextPathOn;
 }
 
-const sal_Bool SdrObjCustomShape::UseNoFillStyle() const
+sal_Bool SdrObjCustomShape::UseNoFillStyle() const
 {
     sal_Bool bRet = sal_False;
     rtl::OUString sShapeType;
@@ -445,7 +432,7 @@ const sal_Bool SdrObjCustomShape::UseNoFillStyle() const
     return bRet;
 }
 
-const sal_Bool SdrObjCustomShape::IsMirroredX() const
+sal_Bool SdrObjCustomShape::IsMirroredX() const
 {
     sal_Bool bMirroredX = sal_False;
     SdrCustomShapeGeometryItem aGeometryItem( (SdrCustomShapeGeometryItem&)GetMergedItem( SDRATTR_CUSTOMSHAPE_GEOMETRY ) );
@@ -455,7 +442,7 @@ const sal_Bool SdrObjCustomShape::IsMirroredX() const
         *pAny >>= bMirroredX;
     return bMirroredX;
 }
-const sal_Bool SdrObjCustomShape::IsMirroredY() const
+sal_Bool SdrObjCustomShape::IsMirroredY() const
 {
     sal_Bool bMirroredY = sal_False;
     SdrCustomShapeGeometryItem aGeometryItem( (SdrCustomShapeGeometryItem&)GetMergedItem( SDRATTR_CUSTOMSHAPE_GEOMETRY ) );
@@ -488,12 +475,12 @@ void SdrObjCustomShape::SetMirroredY( const sal_Bool bMirrorY )
     SetMergedItem( aGeometryItem );
 }
 
-const double SdrObjCustomShape::GetObjectRotation() const
+double SdrObjCustomShape::GetObjectRotation() const
 {
     return fObjectRotation;
 }
 
-const double SdrObjCustomShape::GetExtraTextRotation() const
+double SdrObjCustomShape::GetExtraTextRotation() const
 {
     const com::sun::star::uno::Any* pAny;
     SdrCustomShapeGeometryItem& rGeometryItem = (SdrCustomShapeGeometryItem&)GetMergedItem( SDRATTR_CUSTOMSHAPE_GEOMETRY );
@@ -504,7 +491,7 @@ const double SdrObjCustomShape::GetExtraTextRotation() const
         *pAny >>= fExtraTextRotateAngle;
     return fExtraTextRotateAngle;
 }
-const sal_Bool SdrObjCustomShape::GetTextBounds( Rectangle& rTextBound ) const
+sal_Bool SdrObjCustomShape::GetTextBounds( Rectangle& rTextBound ) const
 {
     sal_Bool bRet = sal_False;
     Reference< XCustomShapeEngine > xCustomShapeEngine( GetCustomShapeEngine( this ) ); // a candidate for being cached
@@ -3360,7 +3347,7 @@ void SdrObjCustomShape::TakeObjNamePlural(XubString& rName) const
     rName=ImpGetResStr(STR_ObjNamePluralCUSTOMSHAPE);
 }
 
-basegfx::B2DPolyPolygon SdrObjCustomShape::TakeXorPoly(sal_Bool /*bDetail*/) const
+basegfx::B2DPolyPolygon SdrObjCustomShape::TakeXorPoly() const
 {
     return GetLineGeometry( (SdrObjCustomShape*)this, sal_False );
 }

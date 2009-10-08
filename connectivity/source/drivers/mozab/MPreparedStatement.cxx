@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: MPreparedStatement.cxx,v $
- * $Revision: 1.14 $
+ * $Revision: 1.14.56.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -77,6 +77,11 @@ OPreparedStatement::OPreparedStatement( OConnection* _pConnection,const ::rtl::O
 // -----------------------------------------------------------------------------
 OPreparedStatement::~OPreparedStatement()
 {
+}
+// -----------------------------------------------------------------------------
+sal_Bool OPreparedStatement::lateInit()
+{
+    return parseSql( m_sSqlStatement );
 }
 // -------------------------------------------------------------------------
 void SAL_CALL OPreparedStatement::disposing()

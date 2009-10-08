@@ -73,12 +73,11 @@
 #define OU2A(rtlOUString)   (::rtl::OUStringToOString((rtlOUString), RTL_TEXTENCODING_ASCII_US).getStr())
 #define RTL_LOGFILE_OU2A(rtlOUString)   OU2A(rtlOUString)
 
-#define OUSTR(txt)  OUString( RTL_CONSTASCII_USTRINGPARAM(txt) )
+#define OUSTR(txt)  rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(txt) )
 
 namespace configmgr { namespace backend {
 //------------------------------------------------------------------------------
     namespace task = com::sun::star::task;
-    typedef uno::Reference< backenduno::XUpdatableLayer > LayerDataRemover;
 
 inline
 uno::Reference<lang::XMultiServiceFactory> BackendAccess::getServiceFactory() const
@@ -96,7 +95,7 @@ BackendAccess::BackendAccess(
  {
     OSL_ENSURE(mContext.is(), "BackendAccess: Context is missing");
     if (!mContext.is())
-        throw lang::NullPointerException(OUString::createFromAscii("BackendAccess: NULL Context passed"), NULL);
+        throw lang::NullPointerException(rtl::OUString::createFromAscii("BackendAccess: NULL Context passed"), NULL);
     if (!xBackend.is())
         throw lang::NullPointerException(OUSTR("Configuration: Trying to create backend access without backend"),NULL);
     if (!uno::Reference<backenduno::XSchemaSupplier>::query(xBackend).is())
@@ -119,15 +118,13 @@ BackendAccess::~BackendAccess() {}
 //------------------------------------------------------------------------------
 namespace
 {
-    using localehelper::Locale;
-    using localehelper::LocaleSequence;
 //------------------------------------------------------------------------------
 
     static inline
-    bool findLocale(LocaleSequence const & seq, Locale const & loc)
+    bool findLocale(std::vector< com::sun::star::lang::Locale > const & seq, com::sun::star::lang::Locale const & loc)
     {
-        LocaleSequence::const_iterator first = seq.begin();
-        LocaleSequence::const_iterator last  = seq.end();
+        std::vector< com::sun::star::lang::Locale >::const_iterator first = seq.begin();
+        std::vector< com::sun::star::lang::Locale >::const_iterator last  = seq.end();
         for ( ; first != last; ++first)
             if (localehelper::equalLocale(*first, loc))
                 return true;
@@ -136,14 +133,14 @@ namespace
 //------------------------------------------------------------------------------
 
     static inline
-    void addLocale( Locale const & aLocale, LocaleSequence & inoutLocales)
+    void addLocale( com::sun::star::lang::Locale const & aLocale, std::vector< com::sun::star::lang::Locale > & inoutLocales)
     {
         if (!findLocale(inoutLocales,aLocale))
             inoutLocales.push_back(aLocale);
     }
 //------------------------------------------------------------------------------
 
-    static OUString toString(uno::Sequence< OUString > const & seq, sal_Unicode separator = ',')
+    static rtl::OUString toString(uno::Sequence< rtl::OUString > const & seq, sal_Unicode separator = ',')
     {
         rtl::OUStringBuffer buf;
 
@@ -161,13 +158,13 @@ namespace
 //------------------------------------------------------------------------------
 
     static
-    uno::Sequence< OUString > intersect(uno::Sequence< OUString > const & seq1, uno::Sequence< OUString > const & seq2)
+    uno::Sequence< rtl::OUString > intersect(uno::Sequence< rtl::OUString > const & seq1, uno::Sequence< rtl::OUString > const & seq2)
     {
         sal_Int32 const len1 = seq1.getLength();
-        uno::Sequence< OUString > aResult(len1);
+        uno::Sequence< rtl::OUString > aResult(len1);
 
-        OUString const * const beg2 = seq2.getConstArray();
-        OUString const * const end2 = beg2 + seq2.getLength();
+        rtl::OUString const * const beg2 = seq2.getConstArray();
+        rtl::OUString const * const end2 = beg2 + seq2.getLength();
 
         sal_Int32 ix = 0;
         for (sal_Int32 i1 = 0; i1 < len1; ++i1)
@@ -212,17 +209,17 @@ uno::Sequence< rtl::OUString >
     return aResult;
 }
 //------------------------------------------------------------------------------
-static OUString getLayerURL(const uno::Reference<backenduno::XLayer> & aLayer);
+static rtl::OUString getLayerURL(const uno::Reference<backenduno::XLayer> & aLayer);
 
 void BackendAccess::merge(
         MergedComponentData& aData,
         const uno::Reference<backenduno::XLayer> * pLayers,
         sal_Int32 aNumLayers,
-        localehelper::Locale const & aRequestedLocale,
-        localehelper::LocaleSequence & inoutMergedLocales,
+        com::sun::star::lang::Locale const & aRequestedLocale,
+        std::vector< com::sun::star::lang::Locale > & inoutMergedLocales,
         ITemplateDataProvider *aTemplateProvider,
         sal_Int32 * pLayersMerged)
-    CFG_UNO_THROW_ALL()
+    SAL_THROW((com::sun::star::uno::Exception))
 {
     LayerMergeHandler * pMerger = new LayerMergeHandler(mContext, aData, aTemplateProvider );
     uno::Reference<backenduno::XLayerHandler> xLayerMerger(pMerger);
@@ -232,7 +229,7 @@ void BackendAccess::merge(
     RTL_LOGFILE_CONTEXT_AUTHOR(aLog, "configmgr::backend::BackendAccess", "jb99855", "configmgr: BackendAccess::merge()");
     RTL_LOGFILE_CONTEXT_TRACE1(aLog, "merging %d layers", int(aNumLayers) );
 
-    OUString const & aLanguage = aRequestedLocale.Language;
+    rtl::OUString const & aLanguage = aRequestedLocale.Language;
     bool const needAllLanguages = localehelper::isAnyLanguage(aLanguage);
 
     if (aLanguage.getLength() && !needAllLanguages)
@@ -280,8 +277,8 @@ void BackendAccess::merge(
 
                 for (sal_Int32 j = 0; j < aSubLayerIds.getLength(); ++j)
                 {
-                    OUString const & aLocaleIso = aSubLayerIds[j];
-                    Locale aLocale = localehelper::makeLocale(aLocaleIso);
+                    rtl::OUString const & aLocaleIso = aSubLayerIds[j];
+                    com::sun::star::lang::Locale aLocale = localehelper::makeLocale(aLocaleIso);
 
                     // requesting de-CH, we accept de-CH and de, but not de-DE
                     const localehelper::MatchQuality kMatchAccept = localehelper::MATCH_LANGUAGE_PLAIN;
@@ -306,22 +303,22 @@ void BackendAccess::merge(
 //------------------------------------------------------------------------------
 
 bool BackendAccess::readDefaultData( MergedComponentData & aComponentData,
-                                        OUString const & aComponent,
+                                        rtl::OUString const & aComponent,
                                         RequestOptions const & aOptions,
                                         bool bIncludeTemplates,
                                         const uno::Reference<backenduno::XLayer> * pLayers,
                                         sal_Int32 nNumLayers,
                                         ITemplateDataProvider *aTemplateProvider,
                                         sal_Int32 * pLayersMerged)
-    CFG_UNO_THROW_ALL()
+    SAL_THROW((com::sun::star::uno::Exception))
 {
     RTL_LOGFILE_CONTEXT_AUTHOR(aLog1, "configmgr::backend::BackendAccess", "jb99855", "configmgr: BackendAccess::readDefaultData()");
 
     Logger logger(mContext);
-    const Logger::Level detail = LogLevel::FINER;
+    const sal_Int32 detail = LogLevel::FINER;
     bool const bLogDetail = logger.isLogging(detail);
 
-    OUString const aSchemaVersion = this->getSchemaVersion(aComponent);
+    rtl::OUString const aSchemaVersion = this->getSchemaVersion(aComponent);
 
     if (logger.isLogging(LogLevel::FINE))
     {
@@ -332,8 +329,8 @@ bool BackendAccess::readDefaultData( MergedComponentData & aComponentData,
         logger.fine( aMsg.makeStringAndClear(), "readDefaultData()","configmgr::Backend");
     }
 
-    localehelper::Locale const aRequestedLocale = localehelper::makeLocale(aOptions.getLocale());
-    localehelper::LocaleSequence aKnownLocales;
+    com::sun::star::lang::Locale const aRequestedLocale = localehelper::makeLocale(aOptions.getLocale());
+    std::vector< com::sun::star::lang::Locale > aKnownLocales;
 
     if (bLogDetail) logger.log(detail, "... attempt to read from binary cache", "readDefaultData()","configmgr::Backend");
     bool bCacheHit = mBinaryCache.readComponentData(aComponentData, getServiceFactory(),
@@ -384,7 +381,7 @@ bool BackendAccess::readDefaultData( MergedComponentData & aComponentData,
 }
 //------------------------------------------------------------------------------
 
-static OUString getLayerURL(const uno::Reference<backenduno::XLayer> & aLayer)
+static rtl::OUString getLayerURL(const uno::Reference<backenduno::XLayer> & aLayer)
 {
     try
     {
@@ -393,7 +390,7 @@ static OUString getLayerURL(const uno::Reference<backenduno::XLayer> & aLayer)
         if (xLayerProps.is())
         {
             uno::Any aPropVal = xLayerProps->getPropertyValue( OUSTR("URL") );
-            OUString aResult;
+            rtl::OUString aResult;
             if (aPropVal >>= aResult)
                 return aResult;
         }
@@ -405,11 +402,11 @@ static OUString getLayerURL(const uno::Reference<backenduno::XLayer> & aLayer)
     }
     // TODO: use better fallback, e.g. ServiceName
     const char * const aFallback = aLayer.is() ? "<Unknown Layer Type>" : "<NULL Layer>";
-    return OUString::createFromAscii(aFallback);
+    return rtl::OUString::createFromAscii(aFallback);
 }
 //------------------------------------------------------------------------------
 static inline
-OUString getLayerIdentifier(const uno::Reference<backenduno::XLayer> & aLayer)
+rtl::OUString getLayerIdentifier(const uno::Reference<backenduno::XLayer> & aLayer)
 {
     return getLayerURL(aLayer);
 }
@@ -419,7 +416,7 @@ static void removeLayerData(uno::Reference< backenduno::XLayer > const & xLayer)
 {
     OSL_ASSERT(xLayer.is());
 
-    LayerDataRemover xLayerRemover(xLayer,uno::UNO_QUERY);
+    uno::Reference< backenduno::XUpdatableLayer > xLayerRemover(xLayer,uno::UNO_QUERY);
     if (xLayerRemover.is())
     try
     {
@@ -494,21 +491,19 @@ private:
 bool BackendAccess::approveRecovery(const uno::Any & aMergeException,
                                     const uno::Reference<backenduno::XLayer> & aBrokenLayer,
                                     bool bUserLayerData)
-    CFG_UNO_THROW_ALL()
+    SAL_THROW((com::sun::star::uno::Exception))
 {
-    using namespace apihelper;
-    typedef SimpleInteractionRequest::Continuation Choice;
-    Choice const k_supported_choices = CONTINUATION_APPROVE | CONTINUATION_DISAPPROVE;
+    sal_uInt32 const k_supported_choices = apihelper::CONTINUATION_APPROVE | apihelper::CONTINUATION_DISAPPROVE;
 
-    Choice chosen = CONTINUATION_UNKNOWN;
+    sal_uInt32 chosen = apihelper::CONTINUATION_UNKNOWN;
 
-    ConfigurationInteractionHandler handler;
+    apihelper::ConfigurationInteractionHandler handler;
     try {
         uno::Reference< task::XInteractionHandler > h(handler.get());
         if (h.is()) {
             handler.setRecursive(new RecursiveHandler(h));
-            rtl::Reference< SimpleInteractionRequest > req(
-                new SimpleInteractionRequest(
+            rtl::Reference< apihelper::SimpleInteractionRequest > req(
+                new apihelper::SimpleInteractionRequest(
                     uno::makeAny(
                         backenduno::MergeRecoveryRequest(
                             rtl::OUString(
@@ -518,7 +513,7 @@ bool BackendAccess::approveRecovery(const uno::Any & aMergeException,
                             aBrokenLayer, aMergeException,
                             getLayerIdentifier(aBrokenLayer),
                             (bUserLayerData
-                             && (LayerDataRemover::query(aBrokenLayer).is()
+                             && (uno::Reference< backenduno::XUpdatableLayer >::query(aBrokenLayer).is()
                                  || FileHelper::fileExists(
                                      getLayerURL(aBrokenLayer)))))),
                     k_supported_choices));
@@ -531,9 +526,9 @@ bool BackendAccess::approveRecovery(const uno::Any & aMergeException,
 
     switch (chosen)
     {
-    case CONTINUATION_APPROVE:      return true;
-    case CONTINUATION_DISAPPROVE:   return false;
-    case CONTINUATION_UNKNOWN:      break;
+    case apihelper::CONTINUATION_APPROVE:      return true;
+    case apihelper::CONTINUATION_DISAPPROVE:   return false;
+    case apihelper::CONTINUATION_UNKNOWN:      break;
 
     default: OSL_ENSURE(false,"Unsolicited continuation chosen"); break;
     }
@@ -542,12 +537,12 @@ bool BackendAccess::approveRecovery(const uno::Any & aMergeException,
 }
 //------------------------------------------------------------------------------
 
-ComponentResult BackendAccess::getNodeData(const ComponentRequest& aRequest,
+ResultHolder< ComponentInstance > BackendAccess::getNodeData(const ComponentRequest& aRequest,
                                            ITemplateDataProvider *_aTemplateProvider,
                                            INodeDataListener *aListener)
-    CFG_UNO_THROW_ALL()
+    SAL_THROW((com::sun::star::uno::Exception))
 {
-    rtl::OUString const component = aRequest.getComponentName().toString() ;
+    rtl::OUString const component = aRequest.getComponentName();
     ITemplateDataProvider * const aTemplateProvider = _aTemplateProvider ? _aTemplateProvider : this;
 
     RTL_LOGFILE_CONTEXT_AUTHOR(aLog, "configmgr::backend::BackendAccess", "jb99855", "configmgr: BackendAccess::getNodeData()");
@@ -587,7 +582,7 @@ ComponentResult BackendAccess::getNodeData(const ComponentRequest& aRequest,
             //Merge User layer (with all locales)
             logger.finer("... merging user layer", "getNodeData()","configmgr::Backend");
 
-            localehelper::LocaleSequence aLocales;
+            std::vector< com::sun::star::lang::Locale > aLocales;
             merge(aComponentData,
                     layers.getConstArray()+nNumDefaultLayers, nNumUserLayers,
                     localehelper::getAnyLocale(), aLocales, aTemplateProvider );
@@ -607,7 +602,7 @@ ComponentResult BackendAccess::getNodeData(const ComponentRequest& aRequest,
         {
             mNotifier->addListener(aListener, aRequest);
         }
-        return ComponentResult(retCode) ;
+        return ResultHolder< ComponentInstance >(retCode) ;
     }
     catch (com::sun::star::container::NoSuchElementException &) { throw; }
     catch (com::sun::star::uno::RuntimeException &) { throw; }
@@ -648,11 +643,11 @@ ComponentResult BackendAccess::getNodeData(const ComponentRequest& aRequest,
 //------------------------------------------------------------------------------
 
 void BackendAccess::updateNodeData(const UpdateRequest& aUpdate)
-    CFG_UNO_THROW_ALL()
+    SAL_THROW((com::sun::star::uno::Exception))
 {
     rtl::OUString entity = aUpdate.getOptions().getEntity() ;
     rtl::OUString component =
-                    aUpdate.getUpdateRoot().getModuleName().toString() ;
+                    aUpdate.getUpdateRoot().getModuleName();
     uno::Reference<backenduno::XUpdateHandler> handler ;
 
     RTL_LOGFILE_CONTEXT_AUTHOR(aLog, "configmgr::backend::BackendAccess", "jb99855", "configmgr: BackendAccess::updateNodeData()");
@@ -664,15 +659,15 @@ void BackendAccess::updateNodeData(const UpdateRequest& aUpdate)
     else { handler = mBackend->getUpdateHandler(component, entity) ; }
     UpdateDispatcher dispatcher(handler, aUpdate.getOptions().getLocale()) ;
 
-    dispatcher.dispatchUpdate(aUpdate.getUpdateRoot().location(),
+    dispatcher.dispatchUpdate(aUpdate.getUpdateRoot(),
                               *aUpdate.getUpdateData()) ;
 }
 //------------------------------------------------------------------------------
 
-NodeResult BackendAccess::getDefaultData(const NodeRequest& aRequest)
-    CFG_UNO_THROW_ALL()
+ResultHolder< NodeInstance > BackendAccess::getDefaultData(const NodeRequest& aRequest)
+    SAL_THROW((com::sun::star::uno::Exception))
 {
-    rtl::OUString const component = aRequest.getPath().getModuleName().toString() ;
+    rtl::OUString const component = aRequest.getPath().getModuleName();
 
     RTL_LOGFILE_CONTEXT_AUTHOR(aLog, "configmgr::backend::BackendAccess", "jb99855", "configmgr: BackendAccess::getDefaultData()");
     RTL_LOGFILE_CONTEXT_TRACE1(aLog, "request path: %s", RTL_LOGFILE_OU2A(aRequest.getPath().toString()) );
@@ -694,19 +689,19 @@ NodeResult BackendAccess::getDefaultData(const NodeRequest& aRequest)
         sMessage.append(component);
         sMessage.appendAscii("\" contains no default data. ");
 
-        OUString const sMsg = sMessage.makeStringAndClear();
+        rtl::OUString const sMsg = sMessage.makeStringAndClear();
         Logger(mContext).finer(sMsg,"getDefaultData()","configmgr::BackendAccess");
         throw com::sun::star::container::NoSuchElementException(sMsg,mBackend);
     }
 
     std::auto_ptr<ISubtree> aResultTree = aComponentData.extractSchemaTree();
 
-    AbsolutePath aPath = aRequest.getPath();
+    configuration::AbsolutePath aPath = aRequest.getPath();
     if( aPath.begin() != aPath.end())
     {
-        for(AbsolutePath::Iterator it=aPath.begin()+1,endIt=aPath.end();it!=endIt; ++it)
+        for(std::vector<configuration::Path::Component>::const_reverse_iterator it=aPath.begin()+1,endIt=aPath.end();it!=endIt; ++it)
         {
-            std::auto_ptr<INode> aChild=aResultTree->removeChild(it->getName().toString());
+            std::auto_ptr<INode> aChild=aResultTree->removeChild(it->getName());
             if(aChild.get()== NULL)
             {
                 rtl::OUStringBuffer sMessage;
@@ -714,7 +709,7 @@ NodeResult BackendAccess::getDefaultData(const NodeRequest& aRequest)
                 sMessage.append(aPath.toString());
                 sMessage.appendAscii("\" does not exist in the default data. ");
 
-                OUString const sMsg = sMessage.makeStringAndClear();
+                rtl::OUString const sMsg = sMessage.makeStringAndClear();
                 Logger(mContext).finest(sMsg,"getDefaultData()","configmgr::BackendAccess");
                 throw com::sun::star::container::NoSuchElementException(sMsg,mBackend);
             }
@@ -722,9 +717,9 @@ NodeResult BackendAccess::getDefaultData(const NodeRequest& aRequest)
             ISubtree *pChildAsSubtree = aChild->asISubtree();
             if(pChildAsSubtree == NULL)
             {
-                OUString sMsg = OUString::createFromAscii("BackendAccess::getDefaultData - Node Expected, Found Property: ").concat(it->getName().toString());
+                rtl::OUString sMsg = rtl::OUString::createFromAscii("BackendAccess::getDefaultData - Node Expected, Found Property: ").concat(it->getName());
                 Logger(mContext).finer(sMsg,"getDefaultData()","configmgr::BackendAccess");
-                throw MalformedDataException(sMsg, mBackend, uno::Any());
+                throw backenduno::MalformedDataException(sMsg, mBackend, uno::Any());
             }
             aResultTree.reset(pChildAsSubtree);
             aChild.release();
@@ -732,14 +727,14 @@ NodeResult BackendAccess::getDefaultData(const NodeRequest& aRequest)
     }
 
     NodeInstance retCode(aResultTree, aRequest.getPath()) ;
-    return NodeResult(retCode) ;
+    return ResultHolder< NodeInstance >(retCode) ;
 }
 //------------------------------------------------------------------------------
 
-TemplateResult BackendAccess::getTemplateData(const TemplateRequest& aRequest)
-    CFG_UNO_THROW_ALL()
+ResultHolder< TemplateInstance > BackendAccess::getTemplateData(const TemplateRequest& aRequest)
+    SAL_THROW((com::sun::star::uno::Exception))
 {
-    rtl::OUString component = aRequest.getComponentName().toString();
+    rtl::OUString component = aRequest.getComponentName();
 
     RTL_LOGFILE_CONTEXT_AUTHOR(aLog, "configmgr::backend::BackendAccess", "jb99855", "configmgr: BackendAccess::getTemplateData()");
     RTL_LOGFILE_CONTEXT_TRACE2(aLog, "requested template: %s/%s",
@@ -765,18 +760,18 @@ TemplateResult BackendAccess::getTemplateData(const TemplateRequest& aRequest)
     else
     {
         backenduno::TemplateIdentifier templateId ;
-        templateId.Name = aRequest.getTemplateName().toString() ;
-        templateId.Component = aRequest.getComponentName().toString() ;
+        templateId.Name = aRequest.getTemplateName();
+        templateId.Component = aRequest.getComponentName();
 
         aResultData = aComponentData.extractTemplateNode(templateId.Name);
     }
 
     TemplateInstance retCode(aResultData,aRequest.getTemplateName(), aRequest.getComponentName()) ;
-    return TemplateResult(retCode) ;
+    return ResultHolder< TemplateInstance >(retCode) ;
 }
 //------------------------------------------------------------------------------
 
-uno::Reference< backenduno::XSchema > BackendAccess::getSchema(const OUString& aComponent)
+uno::Reference< backenduno::XSchema > BackendAccess::getSchema(const rtl::OUString& aComponent)
 {
     uno::Reference< backenduno::XSchemaSupplier > xSchemaBackend(mBackend, uno::UNO_QUERY_THROW);
     OSL_ASSERT(xSchemaBackend.is());
@@ -789,7 +784,7 @@ uno::Reference< backenduno::XSchema > BackendAccess::getSchema(const OUString& a
         sMessage.append(aComponent);
         sMessage.appendAscii("\" is unknown. [No schema available]");
 
-        OUString const sMsg = sMessage.makeStringAndClear();
+        rtl::OUString const sMsg = sMessage.makeStringAndClear();
         Logger(mContext).warning(sMsg,"getSchema()","configmgr::BackendAccess");
         throw com::sun::star::container::NoSuchElementException(sMsg,xSchemaBackend);
     }
@@ -798,17 +793,17 @@ uno::Reference< backenduno::XSchema > BackendAccess::getSchema(const OUString& a
 }
 //------------------------------------------------------------------------------
 
-OUString BackendAccess::getSchemaVersion(const OUString& aComponent)
+rtl::OUString BackendAccess::getSchemaVersion(const rtl::OUString& aComponent)
 {
     uno::Reference< backenduno::XVersionedSchemaSupplier > xSchemaBackend(mBackend, uno::UNO_QUERY);
     if (xSchemaBackend.is())
         return xSchemaBackend->getSchemaVersion(aComponent);
     else
-        return OUString();
+        return rtl::OUString();
 }
 //------------------------------------------------------------------------------
 
-uno::Sequence< uno::Reference<backenduno::XLayer> > BackendAccess::getLayers(const OUString& aComponent,const RequestOptions& aOptions)
+uno::Sequence< uno::Reference<backenduno::XLayer> > BackendAccess::getLayers(const rtl::OUString& aComponent,const RequestOptions& aOptions)
 {
     rtl::OUString aEntity = aOptions.getEntity() ;
 
@@ -825,7 +820,7 @@ uno::Sequence< uno::Reference<backenduno::XLayer> > BackendAccess::getLayers(con
 //------------------------------------------------------------------------------
 void BackendAccess::removeRequestListener(INodeDataListener *aListener,
                                           const ComponentRequest& aRequest)
-   CFG_NOTHROW()
+   SAL_THROW(())
 {
 
     OSL_PRECOND(aListener, "ERROR: trying to remove a NULL listener");

@@ -8,7 +8,7 @@
  *
  * $RCSfile: titlehelper.cxx,v $
  *
- * $Revision: 1.4 $
+ * $Revision: 1.4.54.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -454,6 +454,8 @@ void TitleHelper::impl_updateTitleForController (const css::uno::Reference< css:
         nLeasedNumber = xNumbers->leaseNumber (xOwner);
 
     css::uno::Reference< css::frame::XTitle > xModelTitle(xController->getModel (), css::uno::UNO_QUERY);
+    if (!xModelTitle.is ())
+        xModelTitle.set(xController, css::uno::UNO_QUERY);
     if (xModelTitle.is ())
     {
         sTitle.append      (xModelTitle->getTitle ());

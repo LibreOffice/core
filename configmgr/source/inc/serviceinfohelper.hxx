@@ -38,19 +38,15 @@ namespace configmgr
 // -----------------------------------------------------------------------------
     namespace uno   = ::com::sun::star::uno;
     namespace lang  = ::com::sun::star::lang;
-    using ::rtl::OUString;
-// -----------------------------------------------------------------------------
-
-    typedef sal_Char const * AsciiServiceName;
 // -----------------------------------------------------------------------------
 
     /// POD struct describing the registration information of a service implementation
     struct ServiceRegistrationInfo
     {
         /// The implementation name of this service implementation
-        AsciiServiceName implementationName;
+        sal_Char const * implementationName;
         /// The services for which this service implementation is registered
-        AsciiServiceName const * registeredServiceNames;
+        sal_Char const * const * registeredServiceNames;
     };
 // -----------------------------------------------------------------------------
 
@@ -58,11 +54,11 @@ namespace configmgr
     struct ServiceImplementationInfo
     {
         /// The implementation name of this service implementation
-        AsciiServiceName implementationName;
+        sal_Char const * implementationName;
         /// The services for which this service implementation is registered
-        AsciiServiceName const * registeredServiceNames;
+        sal_Char const * const * registeredServiceNames;
         /// Additional services implemented by this service implementation, for which it is not registered
-        AsciiServiceName const * additionalServiceNames;
+        sal_Char const * const * additionalServiceNames;
     };
 // -----------------------------------------------------------------------------
 
@@ -80,11 +76,11 @@ namespace configmgr
     struct SingletonRegistrationInfo
     {
         /// The name of this singleton
-        AsciiServiceName singletonName;
+        sal_Char const * singletonName;
         /// The implementation, which owns this singleton
-        AsciiServiceName implementationName;
+        sal_Char const * implementationName;
         /// The service, which should be instatiated for this singleton
-        AsciiServiceName instantiatedServiceName;
+        sal_Char const * instantiatedServiceName;
         /// A name for a pseudo-implementation, which is mapped to this singleton
         ServiceRegistrationInfo const * mappedImplementation;
     };
@@ -105,10 +101,10 @@ namespace configmgr
 
         sal_Int32 countServices() const;
 
-        OUString getImplementationName( ) const
+        rtl::OUString getImplementationName( ) const
             throw(uno::RuntimeException);
 
-        uno::Sequence< OUString > getRegisteredServiceNames( ) const
+        uno::Sequence< rtl::OUString > getRegisteredServiceNames( ) const
             throw(uno::RuntimeException);
     };
 // -----------------------------------------------------------------------------
@@ -124,13 +120,13 @@ namespace configmgr
 
         sal_Int32 countServices() const;
 
-        OUString getImplementationName( ) const
+        rtl::OUString getImplementationName( ) const
             throw(uno::RuntimeException);
 
-        sal_Bool supportsService( OUString const & ServiceName ) const
+        sal_Bool supportsService( rtl::OUString const & ServiceName ) const
             throw(uno::RuntimeException);
 
-        uno::Sequence< OUString > getSupportedServiceNames( ) const
+        uno::Sequence< rtl::OUString > getSupportedServiceNames( ) const
             throw(uno::RuntimeException);
     };
 // -----------------------------------------------------------------------------

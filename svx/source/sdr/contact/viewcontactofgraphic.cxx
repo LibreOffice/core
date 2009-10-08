@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: viewcontactofgraphic.cxx,v $
- * $Revision: 1.14 $
+ * $Revision: 1.14.18.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -51,6 +51,7 @@
 #include <svx/sdr/primitive2d/sdrgrafprimitive2d.hxx>
 #include "svdstr.hrc"
 #include <svdglob.hxx>
+#include <vcl/svapp.hxx>
 
 //////////////////////////////////////////////////////////////////////////////
 
@@ -166,6 +167,9 @@ namespace sdr
                         aObjectMatrix.rotate(fRotate);
                         aObjectMatrix.translate(aObjectRange.getMinX(), aObjectRange.getMinY());
 
+                        // get the current, unchenged graphic obect from SdrGrafObj
+                        const GraphicObject& rGraphicObject = GetGrafObject().GetGraphicObject(false);
+
                         if(GetGrafObject().IsEmptyPresObj())
                         {
                             // it's an EmptyPresObj, create the SdrGrafPrimitive2D without content and another scaled one
@@ -182,20 +186,37 @@ namespace sdr
                             // SdrGrafPrimitive2D with content (which is the preview graphic) scaled to smaller size and
                             // without attributes
                             basegfx::B2DHomMatrix aSmallerMatrix;
-                            const Size& rGrafPrefSize = GetGrafObject().GetGrafPrefSize();
-                            const double fOffsetX((aObjectRange.getWidth() - rGrafPrefSize.getWidth()) / 2.0);
-                            const double fOffsetY((aObjectRange.getHeight() - rGrafPrefSize.getHeight()) / 2.0);
+
+                            // #i94431# for some reason, i forgot to take the PrefMapMode of the graphic
+                            // into account. Since EmptyPresObj's are only used in Draw/Impress, it is
+                            // safe to assume 100th mm as target.
+                            Size aPrefSize(GetGrafObject().GetGrafPrefSize());
+
+                            if(MAP_PIXEL == GetGrafObject().GetGrafPrefMapMode().GetMapUnit())
+                            {
+                                aPrefSize = Application::GetDefaultDevice()->PixelToLogic(aPrefSize, MAP_100TH_MM);
+                            }
+                            else
+                            {
+                                aPrefSize = Application::GetDefaultDevice()->LogicToLogic(aPrefSize, GetGrafObject().GetGrafPrefMapMode(), MAP_100TH_MM);
+                            }
+
+                            const double fOffsetX((aObjectRange.getWidth() - aPrefSize.getWidth()) / 2.0);
+                            const double fOffsetY((aObjectRange.getHeight() - aPrefSize.getHeight()) / 2.0);
 
                             if(basegfx::fTools::moreOrEqual(fOffsetX, 0.0) && basegfx::fTools::moreOrEqual(fOffsetY, 0.0))
                             {
-                                aSmallerMatrix.scale(rGrafPrefSize.getWidth(), rGrafPrefSize.getHeight());
+                                aSmallerMatrix.scale(aPrefSize.getWidth(), aPrefSize.getHeight());
                                 aSmallerMatrix.translate(fOffsetX, fOffsetY);
                                 aSmallerMatrix.shearX(fShearX);
                                 aSmallerMatrix.rotate(fRotate);
                                 aSmallerMatrix.translate(aObjectRange.getMinX(), aObjectRange.getMinY());
 
                                 const drawinglayer::primitive2d::Primitive2DReference xReferenceB(new drawinglayer::primitive2d::SdrGrafPrimitive2D(
-                                    aSmallerMatrix, aEmptyAttributes, GetGrafObject().GetGraphicObject(), aLocalGrafInfo));
+                                    aSmallerMatrix,
+                                    aEmptyAttributes,
+                                    rGraphicObject,
+                                    aLocalGrafInfo));
 
                                 drawinglayer::primitive2d::appendPrimitive2DReferenceToPrimitive2DSequence(xRetval, xReferenceB);
                             }
@@ -204,7 +225,11 @@ namespace sdr
                         {
                             // create primitive
                             const drawinglayer::primitive2d::Primitive2DReference xReference(new drawinglayer::primitive2d::SdrGrafPrimitive2D(
-                                aObjectMatrix, *pAttribute, GetGrafObject().GetGraphicObject(), aLocalGrafInfo));
+                                aObjectMatrix,
+                                *pAttribute,
+                                rGraphicObject,
+                                aLocalGrafInfo));
+
                             xRetval = drawinglayer::primitive2d::Primitive2DSequence(&xReference, 1);
                         }
                     }

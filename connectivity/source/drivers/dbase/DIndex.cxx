@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: DIndex.cxx,v $
- * $Revision: 1.43 $
+ * $Revision: 1.43.56.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -51,6 +51,7 @@
 #include "dbase/DResultSet.hxx"
 #include "diagnose_ex.h"
 #include <comphelper/types.hxx>
+#include "resource/dbase_res.hrc"
 
 using namespace ::comphelper;
 // -------------------------------------------------------------------------
@@ -168,9 +169,11 @@ sal_Bool ODbaseIndex::openIndexFile()
         }
         if(!m_pFileStream)
         {
-            ::rtl::OUString sErrMsg = ::rtl::OUString::createFromAscii("Could not open index: ");
-            sErrMsg += sFile;
-            ::dbtools::throwGenericSQLException( sErrMsg, *this );
+            const ::rtl::OUString sError( m_pTable->getConnection()->getResources().getResourceStringWithSubstitution(
+                STR_COULD_NOT_LOAD_FILE,
+                "$filename$", sFile
+             ) );
+            ::dbtools::throwGenericSQLException( sError, *this );
         }
     }
 
@@ -439,11 +442,7 @@ BOOL ODbaseIndex::DropImpl()
     if(UCBContentHelper::Exists(sPath))
     {
         if(!UCBContentHelper::Kill(sPath))
-            ::dbtools::throwGenericSQLException(
-                ::rtl::OUString::createFromAscii("The index could not be deleted. An unknown error while accessing the file system occured."),
-                // TODO: resource
-                *m_pTable
-            );
+            m_pTable->getConnection()->throwGenericSQLException(STR_COULD_NOT_DELETE_INDEX,*m_pTable);
     }
 
     // InfDatei abgleichen
@@ -487,23 +486,21 @@ BOOL ODbaseIndex::CreateImpl()
     // Anlegen des Index
     ::rtl::OUString sFile = getCompletePath();
     if(UCBContentHelper::Exists(sFile))
-        throw SQLException(
-            ::rtl::OUString::createFromAscii("The index name can't be used, as it is already used for another table."),
-            *this,
-            OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_ERRORMSG_SEQUENCE),
-            1000,
-            Any()
-        );
-
+    {
+        const ::rtl::OUString sError( m_pTable->getConnection()->getResources().getResourceStringWithSubstitution(
+            STR_COULD_NOT_CREATE_INDEX_NAME,
+            "$filename$", sFile
+         ) );
+        ::dbtools::throwGenericSQLException( sError, *this );
+    }
     // Index ist nur einstufig
     if (m_pColumns->getCount() > 1)
-        throw SQLException(::rtl::OUString::createFromAscii("Not capable! Only one column per index."),*this,OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_ERRORMSG_SEQUENCE),1000,Any());
+        m_pTable->getConnection()->throwGenericSQLException(STR_ONL_ONE_COLUMN_PER_INDEX,*this);
 
-    Reference<XFastPropertySet> xCol;
-    ::cppu::extractInterface(xCol,m_pColumns->getByIndex(0));
+    Reference<XFastPropertySet> xCol(m_pColumns->getByIndex(0),UNO_QUERY);
 
     // ist die Spalte schon indiziert ?
-    if (!xCol.is())
+    if ( !xCol.is() )
         ::dbtools::throwFunctionSequenceException(*this);
 //  else if (pColumn && pColumn->IsIndexed())
 //  {
@@ -519,7 +516,13 @@ BOOL ODbaseIndex::CreateImpl()
     // create the index file
     m_pFileStream = OFileTable::createStream_simpleError(sFile,STREAM_READWRITE | STREAM_SHARE_DENYWRITE | STREAM_TRUNC);
     if (!m_pFileStream)
-        throw SQLException(::rtl::OUString::createFromAscii("Could not access index file!"),*this,OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_ERRORMSG_SEQUENCE),1000,Any());
+    {
+        const ::rtl::OUString sError( m_pTable->getConnection()->getResources().getResourceStringWithSubstitution(
+            STR_COULD_NOT_LOAD_FILE,
+            "$filename$", sFile
+         ) );
+        ::dbtools::throwGenericSQLException( sError, *this );
+    }
 
     m_pFileStream->SetNumberFormatInt(NUMBERFORMAT_INT_LITTLEENDIAN);
     m_pFileStream->SetBufferSize(512);
@@ -560,13 +563,12 @@ BOOL ODbaseIndex::CreateImpl()
 
         xSet = xStmt->executeQuery(aStatement);
     }
-    catch(Exception& e)
+    catch(const Exception& )
     {
-
         closeImpl();
         if(UCBContentHelper::Exists(sFile))
             UCBContentHelper::Kill(sFile);
-        throw SQLException(::rtl::OUString::createFromAscii("Could not create index!"),*this,OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_ERRORMSG_SEQUENCE),1000,makeAny(e));
+        m_pTable->getConnection()->throwGenericSQLException(STR_COULD_NOT_CREATE_INDEX,*this);
     }
     if (!xSet.is())
     {
@@ -574,7 +576,7 @@ BOOL ODbaseIndex::CreateImpl()
         closeImpl();
         if(UCBContentHelper::Exists(sFile))
             UCBContentHelper::Kill(sFile);
-        throw SQLException(::rtl::OUString::createFromAscii("Could not create index!"),*this,OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_ERRORMSG_SEQUENCE),1000,Any());
+        m_pTable->getConnection()->throwGenericSQLException(STR_COULD_NOT_CREATE_INDEX,*this);
     }
 
     // Setzen der Headerinfo
@@ -643,10 +645,7 @@ BOOL ODbaseIndex::CreateImpl()
                     closeImpl();
                     if(UCBContentHelper::Exists(sFile))
                         UCBContentHelper::Kill(sFile);
-                    ::dbtools::throwGenericSQLException(
-                        ::rtl::OUString::createFromAscii("Can not create index. Values are not unique!"),
-                        *this
-                    );
+                    m_pTable->getConnection()->throwGenericSQLException(STR_COULD_NOT_CREATE_INDEX_NOT_UNIQUE,*this);
                 }
             }
             aInsertKey.setValue(aValue);
@@ -666,7 +665,7 @@ BOOL ODbaseIndex::CreateImpl()
         closeImpl();
         if(UCBContentHelper::Exists(sFile))
             UCBContentHelper::Kill(sFile);
-        throw SQLException(::rtl::OUString::createFromAscii("Could not create index!"),*this,OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_ERRORMSG_SEQUENCE),1000,Any());
+        m_pTable->getConnection()->throwGenericSQLException(STR_COULD_NOT_CREATE_INDEX,*this);
     }
     Release();
     createINFEntry();

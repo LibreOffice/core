@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: volume3d.hxx,v $
- * $Revision: 1.3 $
+ * $Revision: 1.3.226.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -32,56 +32,5 @@
 #define _VOLUME3D_HXX
 
 #include <basegfx/range/b3drange.hxx>
-#include "svx/svxdllapi.h"
-
-//************************************************************
-//   Vorausdeklarationen
-//************************************************************
-namespace basegfx
-{
-    class B3DPolygon;
-    class B3DPoint;
-    class B3DHomMatrix;
-}
-
-/*************************************************************************
-|*
-|* dreidimensionales Volumen, symmetrisch zu den Koordinatenachsen
-|*
-\************************************************************************/
-
-class SVX_DLLPUBLIC Volume3D : public basegfx::B3DRange
-{
-public:
-    Volume3D(const basegfx::B3DPoint& rPos, const basegfx::B3DPoint& r3DSize, bool bPosIsCenter = true);
-    explicit Volume3D(const basegfx::B3DRange& rVol);
-    Volume3D();
-
-    Volume3D GetTransformVolume(const basegfx::B3DHomMatrix& rTfMatrix) const;
-    void CreateWireframe(basegfx::B3DPolygon& rPoly3D, const basegfx::B3DHomMatrix* pTf = 0L) const;
-};
-
-/*************************************************************************
-|*
-|* Iterator, der die Eckpunkte eines Volumens berechnet; wenn eine Matrix
-|* uebergeben wird, werden die Punkte damit transformiert
-|*
-\************************************************************************/
-
-class Vol3DPointIterator
-{
-protected:
-    const basegfx::B3DRange&            rVolume;
-    const basegfx::B3DHomMatrix*        pTransform;
-    basegfx::B3DVector              a3DExtent;
-    sal_uInt16                          nIndex;
-
-public:
-    Vol3DPointIterator(const basegfx::B3DRange& rVol, const basegfx::B3DHomMatrix* pTf = NULL);
-
-    bool Next(basegfx::B3DPoint& rVec);
-    void Reset() { nIndex = 0; }
-};
-
 
 #endif          // _VOLUME3D_HXX

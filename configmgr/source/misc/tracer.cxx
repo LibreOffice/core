@@ -38,10 +38,6 @@
 #include <rtl/string.hxx>
 #include <map>
 
-namespace configmgr
-{
-    typedef ::std::map< ::rtl::OString, void*, ::std::less< ::rtl::OString > > VirtualDevices;
-}
 #include "tracer.hxx"
 
 #ifdef CFG_ENABLE_TRACING
@@ -83,7 +79,7 @@ struct OTracerSetup
     sal_Bool        m_bInitialized;
     oslThreadKey    m_nThreadKey;
 
-    VirtualDevices  m_aDevices;
+    ::std::map< ::rtl::OString, void*, ::std::less< ::rtl::OString > >  m_aDevices;
 
     OTracerSetup()
         :m_nTraceMask(WARNING | ERROR)

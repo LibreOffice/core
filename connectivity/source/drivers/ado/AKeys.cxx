@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: AKeys.cxx,v $
- * $Revision: 1.20 $
+ * $Revision: 1.20.56.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -43,6 +43,7 @@
 #include "ado/Awrapado.hxx"
 #include <comphelper/property.hxx>
 #include <connectivity/dbexception.hxx>
+#include "resource/ado_res.hrc"
 
 using namespace ::comphelper;
 using namespace connectivity;
@@ -74,10 +75,7 @@ sdbcx::ObjectType OKeys::appendObject( const ::rtl::OUString&, const Reference< 
 {
     OAdoKey* pKey = NULL;
     if ( !getImplementation( pKey, descriptor ) || pKey == NULL)
-        ::dbtools::throwGenericSQLException(
-            ::rtl::OUString::createFromAscii( "Could not create key: invalid object descriptor." ),
-            static_cast<XTypeProvider*>(this)
-        );
+        m_pConnection->throwGenericSQLException( STR_INVALID_KEY_DESCRIPTOR_ERROR,static_cast<XTypeProvider*>(this) );
 
     // To pass as column parameter to Key's Apppend method
     OLEVariant vOptional;
@@ -103,10 +101,7 @@ sdbcx::ObjectType OKeys::appendObject( const ::rtl::OUString&, const Reference< 
     {
         ADOS::ThrowException(*m_pConnection->getConnection(),static_cast<XTypeProvider*>(this));
         // just make sure that an SQLExceptionis thrown here
-        ::dbtools::throwGenericSQLException(
-            ::rtl::OUString::createFromAscii( "Could not append key." ),
-            static_cast<XTypeProvider*>(this)
-        );
+        m_pConnection->throwGenericSQLException( STR_INVALID_KEY_DESCRIPTOR_ERROR,static_cast<XTypeProvider*>(this) );
     }
 
     return new OAdoKey(isCaseSensitive(),m_pConnection,pKey->getImpl());

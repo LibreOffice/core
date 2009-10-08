@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: svdetc.cxx,v $
- * $Revision: 1.35 $
+ * $Revision: 1.35.18.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -70,7 +70,6 @@
 #include <svx/xflbckit.hxx>
 #include <svx/extrusionbar.hxx>
 #include <svx/fontworkbar.hxx>
-#include <goodies/b3dcolor.hxx>
 #include <vcl/svapp.hxx> //add CHINA001
 
 //#i80528#
@@ -468,7 +467,8 @@ FASTBOOL GetDraftFillColor(const SfxItemSet& rSet, Color& rCol)
                 aCol2 = ((const XFillColorItem&)(rSet.Get(XATTR_FILLCOLOR))).GetColorValue();
             }
 
-            ((B3dColor&)rCol).CalcMiddle(aCol1, aCol2);
+            const basegfx::BColor aAverageColor(basegfx::average(aCol1.getBColor(), aCol2.getBColor()));
+            rCol = Color(aAverageColor);
             bRetval = TRUE;
 
             break;
@@ -477,7 +477,8 @@ FASTBOOL GetDraftFillColor(const SfxItemSet& rSet, Color& rCol)
             const XGradient& rGrad=((XFillGradientItem&)rSet.Get(XATTR_FILLGRADIENT)).GetGradientValue();
             Color aCol1(rGrad.GetStartColor());
             Color aCol2(rGrad.GetEndColor());
-            ((B3dColor&)rCol).CalcMiddle(aCol1, aCol2);
+            const basegfx::BColor aAverageColor(basegfx::average(aCol1.getBColor(), aCol2.getBColor()));
+            rCol = Color(aAverageColor);
             bRetval = TRUE;
 
             break;

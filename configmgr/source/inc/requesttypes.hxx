@@ -31,6 +31,10 @@
 #ifndef CONFIGMGR_BACKEND_REQUESTTYPES_HXX_
 #define CONFIGMGR_BACKEND_REQUESTTYPES_HXX_
 
+#include "sal/config.h"
+
+#include "salhelper/simplereferenceobject.hxx"
+
 #include "valuenode.hxx"
 #include "treechangelist.hxx"
 #include "configpath.hxx"
@@ -50,32 +54,12 @@ namespace configmgr
     namespace backend
     {
 // ---------------------------------------------------------------------------
-        using configuration::AbsolutePath;
-        using configuration::Name;
-// ---------------------------------------------------------------------------
-      //typedef std::pair<std::auto_ptr<ISubtree>, Name> ComponentData;
         struct ComponentDataStruct
         {
             const std::auto_ptr<ISubtree>& data;
-            Name name;
-            ComponentDataStruct (const std::auto_ptr<ISubtree>& _data, Name _name)
+            rtl::OUString name;
+            ComponentDataStruct (const std::auto_ptr<ISubtree>& _data, rtl::OUString _name)
               : data(_data), name(_name) {}
-        };
-        typedef struct ComponentDataStruct ComponentData;
-
-        class NodePath
-        {
-            AbsolutePath m_path;
-        public:
-            NodePath(AbsolutePath const & _path) : m_path(_path) {};
-
-            AbsolutePath const & location() const { return m_path; }
-            AbsolutePath context()          const { return m_path.getParentPath(); }
-
-            bool isEmpty()              const { return m_path.isRoot(); }
-            bool isModuleRoot()         const { return m_path.getDepth() == 1; }
-            Name getModuleName()        const { return m_path.getModuleName(); }
-            rtl::OUString toString()    const { return m_path.toString(); }
         };
 // ---------------------------------------------------------------------------
         struct NodeInstance
@@ -83,20 +67,20 @@ namespace configmgr
             typedef std::auto_ptr<ISubtree> Data;
 
             explicit
-            NodeInstance(Data _node, AbsolutePath const & _rootpath)
+            NodeInstance(Data _node, configuration::AbsolutePath const & _rootpath)
             : m_node(_node)
             , m_root(_rootpath)
             {
             }
 
             Data        const & data() const { return m_node; }
-            NodePath    const & root() const { return m_root; }
+            configuration::AbsolutePath const & root() const { return m_root; }
 
             Data &  mutableData() { return m_node; }
             Data extractData() { return m_node; }
         private:
             Data        m_node;
-            NodePath    m_root;
+            configuration::AbsolutePath m_root;
         };
 // ---------------------------------------------------------------------------
         struct TemplateInstance
@@ -104,7 +88,7 @@ namespace configmgr
             typedef std::auto_ptr<INode> Data;
 
             explicit
-            TemplateInstance(Data _node, Name const & _name, Name const & _component)
+            TemplateInstance(Data _node, rtl::OUString const & _name, rtl::OUString const & _component)
             : m_node(_node)
             , m_name(_name)
             , m_component(_component)
@@ -112,14 +96,14 @@ namespace configmgr
             }
 
             Data        const & data() const { return m_node; }
-            Name        const & name() const { return m_name; }
-            Name        const & component() const { return m_component; }
+            rtl::OUString const & name() const { return m_name; }
+            rtl::OUString const & component() const { return m_component; }
 
             Data extractData() { return m_node; }
     private:
             Data m_node;
-            Name m_name; // if empty, this is a complete set of component templates
-            Name m_component;
+            rtl::OUString m_name; // if empty, this is a complete set of component templates
+            rtl::OUString m_component;
         };
 // ---------------------------------------------------------------------------
         struct ComponentInstance
@@ -127,7 +111,7 @@ namespace configmgr
             typedef std::auto_ptr<ISubtree> Data;
 
             explicit
-            ComponentInstance(Data _node, Data _template, Name const & _component)
+            ComponentInstance(Data _node, Data _template, rtl::OUString const & _component)
             : m_node(_node)
             , m_template(_template)
             , m_component(_component)
@@ -136,26 +120,25 @@ namespace configmgr
 
             Data        const & data() const { return m_node; }
             Data        const & templateData() const { return m_template; }
-            Name        const & component() const { return m_component; }
+            rtl::OUString const & component() const { return m_component; }
 
-            ComponentData  componentTemplateData () const { return ComponentData(m_template,m_component);}
-            ComponentData  componentNodeData () const { return ComponentData(m_node,m_component);}
+            ComponentDataStruct  componentTemplateData () const { return ComponentDataStruct(m_template,m_component);}
+            ComponentDataStruct  componentNodeData () const { return ComponentDataStruct(m_node,m_component);}
             Data &  mutableData() { return m_node; }
             Data extractData() { return m_node; }
             Data extractTemplateData() { return m_template; }
         private:
             Data        m_node;
             Data        m_template;
-            Name        m_component;
+            rtl::OUString m_component;
         };
 // ---------------------------------------------------------------------------
         struct UpdateInstance
         {
             typedef SubtreeChange *         Data;
-            typedef SubtreeChange const *   ConstData;
 
             explicit
-            UpdateInstance(Data _update, AbsolutePath const & _rootpath)
+            UpdateInstance(Data _update, configuration::AbsolutePath const & _rootpath)
             : m_update(_update)
             , m_root(_rootpath)
             {
@@ -168,19 +151,19 @@ namespace configmgr
             }
 
             Data                data()       { return m_update; }
-            ConstData           data() const { return m_update; }
-            NodePath    const & root() const { return m_root; }
+            SubtreeChange const *           data() const { return m_update; }
+            configuration::AbsolutePath const & root() const { return m_root; }
         private:
             Data        m_update;
-            NodePath    m_root;
+            configuration::AbsolutePath m_root;
         };
 // ---------------------------------------------------------------------------
         struct ConstUpdateInstance
         {
-            typedef UpdateInstance::ConstData   Data, ConstData;
+            typedef SubtreeChange const *   Data;
 
             explicit
-            ConstUpdateInstance(Data _update, AbsolutePath const & _rootpath)
+            ConstUpdateInstance(Data _update, configuration::AbsolutePath const & _rootpath)
             : m_update(_update)
             , m_root(_rootpath)
             {
@@ -194,10 +177,10 @@ namespace configmgr
             }
 
             Data                data() const { return m_update; }
-            NodePath    const & root() const { return m_root; }
+            configuration::AbsolutePath const & root() const { return m_root; }
         private:
             Data        m_update;
-            NodePath    m_root;
+            configuration::AbsolutePath m_root;
         };
 // ---------------------------------------------------------------------------
 // ---------------------------------------------------------------------------
@@ -207,20 +190,17 @@ namespace configmgr
         template <class Instance_>
         class ResultHolder
         {
-            struct RCInstance : public configmgr::SimpleReferenceObject
+            struct RCInstance : public salhelper::SimpleReferenceObject
             {
                 RCInstance(Instance_ & _instance)
                     : instance(_instance) {}
                 Instance_ instance;
             };
-            typedef rtl::Reference< RCInstance > InstanceRef;
 
-            InstanceRef m_xInstance;
+            rtl::Reference< RCInstance > m_xInstance;
         public:
-            typedef Instance_ Instance;
-
             explicit
-            ResultHolder(Instance & _rInstance)
+            ResultHolder(Instance_ & _rInstance)
             : m_xInstance( new RCInstance(_rInstance) )
             {}
 
@@ -228,32 +208,27 @@ namespace configmgr
 
             bool is() const { return m_xInstance.is() && m_xInstance->instance.data().get(); }
 
-            Instance const & instance() const { return  m_xInstance->instance; }
+            Instance_ const & instance() const { return  m_xInstance->instance; }
 
-            Instance const & operator *() const { return  instance(); }
-            Instance const * operator->() const { return &instance(); }
-            Instance & mutableInstance() { return m_xInstance->instance; }
+            Instance_ const & operator *() const { return  instance(); }
+            Instance_ const * operator->() const { return &instance(); }
+            Instance_ & mutableInstance() { return m_xInstance->instance; }
 
-            typename Instance::Data extractDataAndClear()
+            typename Instance_::Data extractDataAndClear()
             {
-                typename Instance::Data aData = m_xInstance->instance.extractData();
+                typename Instance_::Data aData = m_xInstance->instance.extractData();
                 this->clear();
                 return aData;
             }
 
             void releaseAndClear()
             {
-                typename Instance::Data aData = this->extractDataAndClear();
+                typename Instance_::Data aData = this->extractDataAndClear();
                 aData.release();
             }
 
             void clear() { m_xInstance.clear(); }
         };
-// ---------------------------------------------------------------------------
-        typedef ResultHolder< NodeInstance >        NodeResult;
-        typedef ResultHolder< TemplateInstance >    TemplateResult;
-        typedef ResultHolder< ComponentInstance >   ComponentResult;
-
 // ---------------------------------------------------------------------------
     }
 // ---------------------------------------------------------------------------

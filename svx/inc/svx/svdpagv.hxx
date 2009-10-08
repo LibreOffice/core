@@ -140,7 +140,7 @@ protected:
     sal_Bool IsLayer(const String& rName, const SetOfByte& rBS) const;
     void SetAllLayers(SetOfByte& rB, sal_Bool bJa);
 
-    virtual void SFX_NOTIFY(SfxBroadcaster& rBC, const TypeId& rBCType, const SfxHint& rHint, const TypeId& rHintType);
+    virtual void Notify(SfxBroadcaster& rBC, const SfxHint& rHint);
 
     // Nachsehen, ob AktGroup noch Inserted ist.
     void CheckAktGroup();

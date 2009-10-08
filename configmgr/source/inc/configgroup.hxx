@@ -46,11 +46,6 @@ namespace configmgr
     {
 //-----------------------------------------------------------------------------
 
-        typedef com::sun::star::uno::Type       UnoType;
-        typedef com::sun::star::uno::Any        UnoAny;
-        typedef com::sun::star::uno::Reference<com::sun::star::script::XTypeConverter>  UnoTypeConverter;
-//-----------------------------------------------------------------------------
-
         class NodeChange;
         class RelativePath;
 //-----------------------------------------------------------------------------
@@ -58,35 +53,35 @@ namespace configmgr
         /// helper for updating a <type>NodeRef</type> that refers to a Group
         class GroupUpdateHelper
         {
-            Tree    m_aTree;
+            rtl::Reference< Tree > m_aTree;
             NodeRef m_aNode;
         public:
-            GroupUpdateHelper(Tree const& aParentTree, NodeRef const& aGroupNode);
+            GroupUpdateHelper(rtl::Reference< Tree > const& aParentTree, NodeRef const& aGroupNode);
             ~GroupUpdateHelper() {}
 
             void validateNode(ValueRef const& aNode) const;
             void validateNode(NodeRef const& aNode) const;
 
-            Tree    const& tree() const { return m_aTree; }
+            rtl::Reference< Tree > const& tree() const { return m_aTree; }
             NodeRef const& node() const { return m_aNode; }
         private:
-            void implValidateTree(Tree const& aTree) const;
-            void implValidateNode(Tree const& aTree, NodeRef const& aNode) const;
-            void implValidateNode(Tree const& aTree, ValueRef const& aNode) const;
+            void implValidateTree(rtl::Reference< Tree > const& aTree) const;
+            void implValidateNode(rtl::Reference< Tree > const& aTree, NodeRef const& aNode) const;
+            void implValidateNode(rtl::Reference< Tree > const& aTree, ValueRef const& aNode) const;
         };
 //-----------------------------------------------------------------------------
         /// allows to update values of a simple type within a <type>NodeRef</type> that refers to a Group
         class GroupUpdater
         {
             GroupUpdateHelper   m_aHelper;
-            UnoTypeConverter    m_xTypeConverter;
+            com::sun::star::uno::Reference<com::sun::star::script::XTypeConverter>    m_xTypeConverter;
         public:
-            GroupUpdater(Tree const& aParentTree, NodeRef const& aGroupNode, UnoTypeConverter const& xConverter);
+            GroupUpdater(rtl::Reference< Tree > const& aParentTree, NodeRef const& aGroupNode, com::sun::star::uno::Reference<com::sun::star::script::XTypeConverter> const& xConverter);
 
-            NodeChange validateSetValue(ValueRef const& aValueNode, UnoAny const& newValue );
+            NodeChange validateSetValue(ValueRef const& aValueNode, com::sun::star::uno::Any const& newValue );
 
         private:
-            UnoAny implValidateValue(Tree const& aTree, ValueRef const& aNode, UnoAny const& aValue) const;
+            com::sun::star::uno::Any implValidateValue(rtl::Reference< Tree > const& aTree, ValueRef const& aNode, com::sun::star::uno::Any const& aValue) const;
         };
 //-----------------------------------------------------------------------------
 
@@ -97,7 +92,7 @@ namespace configmgr
             DefaultProvider     m_aDefaultProvider;
             bool                m_bHasDoneSet;
         public:
-            GroupDefaulter(Tree const& _aParentTree, NodeRef const& _aGroupNode, DefaultProvider const& _aProvider);
+            GroupDefaulter(rtl::Reference< Tree > const& _aParentTree, NodeRef const& _aGroupNode, DefaultProvider const& _aProvider);
 
             bool hasDoneSet() const { return m_bHasDoneSet; }
 
@@ -109,14 +104,14 @@ namespace configmgr
 
             NodeChanges validateSetAllToDefault();
 
-            static bool isDataAvailable(TreeRef const& _aParentTree, NodeRef const& _aGroupNode);
-            static bool ensureDataAvailable(TreeRef const& _aParentTree, NodeRef const& _aGroupNode, DefaultProvider const& _aSource);
+            static bool isDataAvailable(rtl::Reference< Tree > const& _aParentTree, NodeRef const& _aGroupNode);
+            static bool ensureDataAvailable(rtl::Reference< Tree > const& _aParentTree, NodeRef const& _aGroupNode, DefaultProvider const& _aSource);
         };
 //-----------------------------------------------------------------------------
-        bool isPossibleValueType(UnoType const& aValueType);
+        bool isPossibleValueType(com::sun::star::uno::Type const& aValueType);
 //-----------------------------------------------------------------------------
-        bool convertCompatibleValue(UnoTypeConverter const& xConverter, uno::Any& rConverted,
-                                    UnoAny const& rNewValue, UnoType const& rTargetType);
+        bool convertCompatibleValue(com::sun::star::uno::Reference<com::sun::star::script::XTypeConverter> const& xConverter, uno::Any& rConverted,
+                                    com::sun::star::uno::Any const& rNewValue, com::sun::star::uno::Type const& rTargetType);
 //-----------------------------------------------------------------------------
     }
 }

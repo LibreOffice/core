@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: escherex.cxx,v $
- * $Revision: 1.77 $
+ * $Revision: 1.77.64.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -46,22 +46,19 @@
 #include <tools/stream.hxx>
 #include <tools/zcodec.hxx>
 #include <svx/svdopath.hxx>
-#ifndef _INC_STDLIB
 #include <stdlib.h>
-#endif
 #include <svtools/filter.hxx>
 #include "../customshapes/EnhancedCustomShapeTypeNames.hxx"
 #include "../customshapes/EnhancedCustomShapeGeometry.hxx"
 #include <EnhancedCustomShapeFunctionParser.hxx>
 #include "../customshapes/EnhancedCustomShape2d.hxx"
 #include <com/sun/star/beans/PropertyValues.hpp>
+#include <com/sun/star/beans/XPropertyState.hpp>
 #include <com/sun/star/awt/GradientStyle.hpp>
 #include <com/sun/star/awt/RasterOperation.hpp>
 #include <com/sun/star/awt/Gradient.hpp>
 #include <com/sun/star/drawing/LineStyle.hpp>
-#ifndef _COM_SUN_STAR_DRAWING_LINEJOINT_Hpp_
 #include <com/sun/star/drawing/LineJoint.hpp>
-#endif
 #include <com/sun/star/drawing/FillStyle.hpp>
 #include <com/sun/star/drawing/LineDash.hpp>
 #include <com/sun/star/drawing/BezierPoint.hpp>
@@ -72,30 +69,21 @@
 #include <com/sun/star/drawing/PointSequence.hpp>
 #include <com/sun/star/drawing/FlagSequence.hpp>
 #include <com/sun/star/drawing/PolygonFlags.hpp>
-#ifndef _COM_SUN_STAR_TEXT_WRITINGMODE_HDL_
 #include <com/sun/star/text/WritingMode.hpp>
-#endif
 #include <com/sun/star/drawing/TextVerticalAdjust.hpp>
 #include <com/sun/star/drawing/TextHorizontalAdjust.hpp>
-#ifndef _COM_SUN_STAR_DRAWING_ENHANCEDCUSTOMSHAPEPARAMETERPARIR_HPP_
 #include <com/sun/star/drawing/EnhancedCustomShapeParameterPair.hpp>
-#endif
 #include <com/sun/star/drawing/EnhancedCustomShapeSegment.hpp>
 #include <com/sun/star/drawing/EnhancedCustomShapeParameterType.hpp>
 #include <com/sun/star/drawing/EnhancedCustomShapeGluePointType.hpp>
-#ifndef _COM_SUN_STAR_DRAWING_ENHANCEDCUSTOMSHAPESEGMENTCOMMAND_hpp_
 #include <com/sun/star/drawing/EnhancedCustomShapeSegmentCommand.hpp>
-#endif
 #include <com/sun/star/drawing/EnhancedCustomShapeTextFrame.hpp>
 #include <com/sun/star/drawing/EnhancedCustomShapeAdjustmentValue.hpp>
 #include <com/sun/star/drawing/EnhancedCustomShapeTextPathMode.hpp>
 #include <com/sun/star/drawing/ProjectionMode.hpp>
 #include <com/sun/star/text/XSimpleText.hpp>
 #include <com/sun/star/drawing/ShadeMode.hpp>
-#ifndef _SV_HATCH_HXX_
 #include <vcl/hatch.hxx>
-#endif
-#include <com/sun/star/drawing/Hatch.hpp>
 #include <com/sun/star/awt/XGraphics.hpp>
 #include <com/sun/star/awt/FontSlant.hpp>
 #include <com/sun/star/awt/FontWeight.hpp>
@@ -103,14 +91,10 @@
 #include <com/sun/star/drawing/Position3D.hpp>
 #include <com/sun/star/drawing/Direction3D.hpp>
 #include <com/sun/star/text/GraphicCrop.hpp>
-#ifndef _UNOTOOLS_UCBSTREAMHELPER_HXX
 #include <unotools/ucbstreamhelper.hxx>
-#endif
 #include <unotools/localfilehelper.hxx>
 #include <comphelper/extract.hxx>
-#ifndef _TOOLKIT_UNOHLP_HXX
 #include <toolkit/unohlp.hxx>
-#endif
 #include <vcl/virdev.hxx>
 #include <rtl/crc.h>
 #include <vos/xception.hxx>
@@ -1157,6 +1141,27 @@ sal_Bool EscherPropertyContainer::CreateOLEGraphicProperties(
 }
 
 
+sal_Bool EscherPropertyContainer::ImplCreateEmbeddedBmp( const ByteString& rUniqueId )
+{
+    if( rUniqueId.Len() > 0 )
+    {
+        EscherGraphicProvider aProvider;
+        SvMemoryStream aMemStrm;
+        Rectangle aRect;
+        if ( aProvider.GetBlibID( aMemStrm, rUniqueId, aRect ) )
+        {
+            // grab BLIP from stream and insert directly as complex property
+            // ownership of stream memory goes to complex property
+            aMemStrm.ObjectOwnsMemory( FALSE );
+            sal_uInt8* pBuf = (sal_uInt8*) aMemStrm.GetData();
+            sal_uInt32 nSize = aMemStrm.Seek( STREAM_SEEK_TO_END );
+            AddOpt( ESCHER_Prop_fillBlip, sal_True, nSize, pBuf, nSize );
+            return sal_True;
+        }
+    }
+    return sal_False;
+}
+
 sal_Bool EscherPropertyContainer::CreateEmbeddedBitmapProperties(
     const ::rtl::OUString& rBitmapUrl, ::com::sun::star::drawing::BitmapMode eBitmapMode )
 {
@@ -1171,27 +1176,53 @@ sal_Bool EscherPropertyContainer::CreateEmbeddedBitmapProperties(
         if( aBmpUrl.Len() > nIndex )
         {
             ByteString aUniqueId( aBmpUrl, nIndex, aBmpUrl.Len() - nIndex, RTL_TEXTENCODING_UTF8 );
-            if( aUniqueId.Len() > 0 )
+            bRetValue = ImplCreateEmbeddedBmp( aUniqueId );
+            if( bRetValue )
             {
-                EscherGraphicProvider aProvider;
-                SvMemoryStream aMemStrm;
-                Rectangle aRect;
-                if ( aProvider.GetBlibID( aMemStrm, aUniqueId, aRect ) )
-                {
-                    // grab BLIP from stream and insert directly as complex property
-                    // ownership of stream memory goes to complex property
-                    aMemStrm.ObjectOwnsMemory( FALSE );
-                    sal_uInt8* pBuf = (sal_uInt8*) aMemStrm.GetData();
-                    sal_uInt32 nSize = aMemStrm.Seek( STREAM_SEEK_TO_END );
-                    AddOpt( ESCHER_Prop_fillBlip, sal_True, nSize, pBuf, nSize );
-                    bRetValue = sal_True;
-                }
                 // bitmap mode property
                 bool bRepeat = eBitmapMode == ::com::sun::star::drawing::BitmapMode_REPEAT;
                 AddOpt( ESCHER_Prop_fillType, bRepeat ? ESCHER_FillTexture : ESCHER_FillPicture );
             }
         }
     }
+    return bRetValue;
+}
+
+
+namespace {
+
+GraphicObject lclDrawHatch( const ::com::sun::star::drawing::Hatch& rHatch, const Color& rBackColor, bool bFillBackground )
+{
+    const MapMode aMap100( MAP_100TH_MM );
+    VirtualDevice aVDev( *Application::GetDefaultDevice(), 0, 1 );
+    aVDev.SetMapMode( aMap100 );
+
+    const Size aOutSize = aVDev.PixelToLogic( Size( 28, 28 ) );
+    aVDev.SetOutputSize( aOutSize );
+
+    Rectangle aRectangle( Point( 0, 0 ), aOutSize );
+    const PolyPolygon aPolyPoly( aRectangle );
+
+    aVDev.SetLineColor();
+    aVDev.SetFillColor( bFillBackground ? rBackColor : Color( COL_TRANSPARENT ) );
+    aVDev.DrawRect( Rectangle( Point(), aOutSize ) );
+
+    Hatch aVclHatch( (HatchStyle) rHatch.Style, Color( rHatch.Color ), rHatch.Distance, (sal_uInt16)rHatch.Angle );
+    aVDev.DrawHatch( aPolyPoly, aVclHatch );
+
+    return GraphicObject( Graphic( aVDev.GetBitmapEx( Point(), aOutSize ) ) );
+}
+
+} // namespace
+
+
+sal_Bool EscherPropertyContainer::CreateEmbeddedHatchProperties( const ::com::sun::star::drawing::Hatch& rHatch, const Color& rBackColor, bool bFillBackground )
+{
+    GraphicObject aGraphicObject = lclDrawHatch( rHatch, rBackColor, bFillBackground );
+    ByteString aUniqueId = aGraphicObject.GetUniqueID();
+    sal_Bool bRetValue = ImplCreateEmbeddedBmp( aUniqueId );
+    if ( bRetValue )
+        AddOpt( ESCHER_Prop_fillType, ESCHER_FillTexture );
     return bRetValue;
 }
 
@@ -1270,58 +1301,22 @@ sal_Bool EscherPropertyContainer::CreateGraphicProperties(
             ::com::sun::star::drawing::Hatch aHatch;
             if ( aAny >>= aHatch )
             {
-                sal_Bool        bBackground = sal_False;
+                Color aBackColor;
+                if ( EscherPropertyValueHelper::GetPropertyValue( aAny, rXPropSet,
+                    String( RTL_CONSTASCII_USTRINGPARAM( "FillColor" ) ), sal_False ) )
+                {
+                    aBackColor = ImplGetColor( *((sal_uInt32*)aAny.getValue()), sal_False );
+                }
+                bool bFillBackground = false;
                 if ( EscherPropertyValueHelper::GetPropertyValue( aAny, rXPropSet,
                         String( RTL_CONSTASCII_USTRINGPARAM( "FillBackground" ) ), sal_True ) )
                 {
-                    aAny >>= bBackground;
+                    aAny >>= bFillBackground;
                 }
-
-                const MapMode   aMap100( MAP_100TH_MM );
-                VirtualDevice   aVDev;
-                const Size      aOutSize( aVDev.PixelToLogic( Size( 28, 28 ), aMap100 ) );
-
-                if( aVDev.SetOutputSize( aOutSize ) )
-                {
-                    Rectangle aRectangle = Rectangle( Point(), aOutSize );
-                    const PolyPolygon   aPolyPoly( aRectangle );
-                    Hatch               aVclHatch( (HatchStyle) aHatch.Style, Color( aHatch.Color ), aHatch.Distance, (sal_uInt16)aHatch.Angle );
-
-                    if ( bBackground )
-                    {
-                        if ( EscherPropertyValueHelper::GetPropertyValue( aAny, rXPropSet,
-                            String( RTL_CONSTASCII_USTRINGPARAM( "FillColor" ) ), sal_False ) )
-                        {
-                            aVDev.SetLineColor();
-                            aVDev.SetFillColor( ImplGetColor( *((sal_uInt32*)aAny.getValue()), sal_False ) );
-                            aVDev.DrawRect( Rectangle( Point(), aOutSize ) );
-                        }
-                    }
-                    aVDev.SetMapMode( aMap100 );
-                    aVDev.DrawHatch( aPolyPoly, aVclHatch );
-                    Bitmap  aBitmap( aVDev.GetBitmap( Point(), aOutSize ) );
-
-                    if ( bBackground )
-                        aGraphicObject = Graphic( aBitmap );
-                    else
-                    {
-                        VirtualDevice   aMaskVDev( 1 );
-                        aMaskVDev.SetMapMode( aMap100 );
-                        if( aMaskVDev.SetOutputSize( aOutSize ) )
-                        {
-                            aVclHatch.SetColor( Color( COL_BLACK ) );
-                            aMaskVDev.DrawHatch( aPolyPoly, aVclHatch );
-                            Graphic   aGraphic( BitmapEx( aBitmap, aMaskVDev.GetBitmap( Point(), aOutSize ) ) );
-                            aGraphicObject = aGraphic;
-                        }
-                        else
-                            aGraphicObject = Graphic( aBitmap );
-
-                    }
-                    eBitmapMode = ::com::sun::star::drawing::BitmapMode_REPEAT;
-                    aUniqueId = aGraphicObject.GetUniqueID();
-                    bIsGraphicMtf = aGraphicObject.GetType() == GRAPHIC_GDIMETAFILE;
-                }
+                aGraphicObject = lclDrawHatch( aHatch, aBackColor, bFillBackground );
+                aUniqueId = aGraphicObject.GetUniqueID();
+                eBitmapMode = ::com::sun::star::drawing::BitmapMode_REPEAT;
+                bIsGraphicMtf = aGraphicObject.GetType() == GRAPHIC_GDIMETAFILE;
             }
         }
 
@@ -3573,7 +3568,7 @@ EscherGraphicProvider::EscherGraphicProvider( sal_uInt32 nFlags ) :
 
 EscherGraphicProvider::~EscherGraphicProvider()
 {
-    for ( UINT32 i = 0; i < mnBlibEntrys; delete mpBlibEntrys[ i++ ] );
+    for ( UINT32 i = 0; i < mnBlibEntrys; delete mpBlibEntrys[ i++ ] ) ;
     delete[] mpBlibEntrys;
 }
 

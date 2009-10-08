@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: NResultSetMetaData.cxx,v $
- * $Revision: 1.8 $
+ * $Revision: 1.7.56.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -35,6 +35,7 @@
 #include "connectivity/dbexception.hxx"
 #include <com/sun/star/sdbc/DataType.hpp>
 #include "NDebug.hxx"
+#include "resource/evoab2_res.hrc"
 
 using namespace connectivity::evoab;
 using namespace com::sun::star::uno;
@@ -64,9 +65,14 @@ void OEvoabResultSetMetaData::setEvoabFields(const ::vos::ORef<connectivity::OSQ
                 (*aIter)->getPropertyValue(aName) >>= aFieldName;
                 guint nFieldNumber = findEvoabField(aFieldName);
                 if (nFieldNumber == (guint)-1)
-                    ::dbtools::throwGenericSQLException(
-                        ::rtl::OUString::createFromAscii("Invalid column name: ") + aFieldName,
-                        NULL);
+                {
+                    :.connectivity::SharedResource aResource;
+                    const ::rtl::OUString sError( aResource.getResourceStringWithSubstitution(
+                            STR_INVALID_COLUMNNAME,
+                            "$columnname$", aFieldName
+                         ) );
+                    ::dbtools::throwGenericSQLException( sError, *this );
+                }
                 m_aEvoabFields.push_back(nFieldNumber);
         }
 }

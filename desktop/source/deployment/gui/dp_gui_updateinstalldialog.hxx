@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: dp_gui_updateinstalldialog.hxx,v $
- * $Revision: 1.4 $
+ * $Revision: 1.4.126.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -55,7 +55,9 @@ namespace com { namespace sun { namespace star { namespace xml { namespace xpath
 }}}}}
 
 class Window;
-class ::osl::Condition;
+namespace osl {
+    class Condition;
+}
 
 namespace dp_gui {
 

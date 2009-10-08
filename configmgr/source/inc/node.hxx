@@ -31,34 +31,27 @@
 #ifndef INCLUDED_SHARABLE_NODE_HXX
 #define INCLUDED_SHARABLE_NODE_HXX
 
-#include "types.hxx"
+#include "rtl/ustring.hxx"
+
 #include "flags.hxx"
 #include "anydata.hxx"
 
 namespace configmgr
 {
 //-----------------------------------------------------------------------------
-    namespace uno = ::com::sun::star::uno;
-//-----------------------------------------------------------------------------
     namespace node { struct Attributes; }
 //-----------------------------------------------------------------------------
     namespace sharable
     {
-    //-----------------------------------------------------------------------------
-
-        namespace Type  = data::Type;
-        namespace Flags = data::Flags;
-
-    //-----------------------------------------------------------------------------
         struct  TreeFragment;
         union   Node;
     //-----------------------------------------------------------------------------
         struct NodeInfo
         {
-            Name            name;
-            Offset          parent; // always counts backwards
-            Flags::Field    flags;
-            Type ::Field    type;   // contains discriminator for union
+            rtl_uString *            name;
+            sal_uInt16          parent; // always counts backwards
+            sal_uInt8    flags;
+            sal_uInt8    type;   // contains discriminator for union
 
             rtl::OUString       getName() const;
             node::Attributes    getNodeInfoAttributes() const;
@@ -68,49 +61,47 @@ namespace configmgr
             void markAsDefault(bool bDefault = true);
         };
     //-----------------------------------------------------------------------------
-        struct BasicNode    // common initial sequence of union Node members
-        {
-            NodeInfo info;
-        };
-    //-----------------------------------------------------------------------------
         struct GroupNode
         {
             NodeInfo info;
-            Offset   numDescendants;   // = number of descendants
+            sal_uInt16   numDescendants;   // = number of descendants
 
             bool hasDefaultsAvailable()   const;
 
-            Node * getFirstChild();
-            Node * getNextChild(Node * _pChild);
-            Node const * getFirstChild()  const;
-            Node const * getNextChild(Node const * _pChild) const;
+            Node * getFirstChild()  const;
+            Node * getNextChild(Node * child) const;
+            Node * getChild(rtl::OUString const & name) const;
 
+            static inline GroupNode * from(Node * node);
         };
     //-----------------------------------------------------------------------------
-        typedef sal_uInt8 * SetElementAddress;
         struct SetNode
         {
 
             NodeInfo info;
-            SetElementAddress  elementType; // points to template [MM:SetNode *?]
-            List     elements;    // points to first element (TreeFragmentHeader)
-
-            bool isLocalizedValue() const;
+            sal_uInt8 *  elementType; // points to template [MM:SetNode *?]
+            TreeFragment *     elements;    // points to first element (TreeFragmentHeader)
 
             rtl::OUString getElementTemplateName() const;
             rtl::OUString getElementTemplateModule() const;
 
-            TreeFragment const  * getFirstElement() const;
-            TreeFragment const  * getNextElement(TreeFragment const * _pElement) const;
+            TreeFragment * getFirstElement() const;
+            TreeFragment * getNextElement(TreeFragment * _pElement) const;
+            TreeFragment * getElement(rtl::OUString const & name) const;
+
+            void addElement(TreeFragment * newElement);
+            TreeFragment * removeElement(rtl::OUString const & name);
+
+            static inline SetNode * from(Node * node);
 
             // low-level helper for template data abstraction
             static
-            SetElementAddress allocTemplateData(const rtl::OUString &rName,
+            sal_uInt8 * allocTemplateData(const rtl::OUString &rName,
                                       const rtl::OUString &rModule);
             static
-            SetElementAddress copyTemplateData(SetElementAddress _aTemplateData);
+            sal_uInt8 * copyTemplateData(sal_uInt8 * _aTemplateData);
             static
-            void releaseTemplateData(SetElementAddress _aTemplateData);
+            void releaseTemplateData(sal_uInt8 * _aTemplateData);
         };
     //-----------------------------------------------------------------------------
         struct ValueNode
@@ -122,10 +113,20 @@ namespace configmgr
             bool isNull()       const;
             bool hasUsableDefault()   const;
 
-            uno::Any    getValue() const;
-            uno::Type   getValueType() const;
-            uno::Any    getUserValue() const;
-            uno::Any    getDefaultValue() const;
+            com::sun::star::uno::Any    getValue() const;
+            com::sun::star::uno::Type   getValueType() const;
+            com::sun::star::uno::Any    getUserValue() const;
+            com::sun::star::uno::Any    getDefaultValue() const;
+
+            void setValue(com::sun::star::uno::Any const & newValue);
+            void setToDefault();
+            void changeDefault(com::sun::star::uno::Any const & newDefault);
+
+            static inline ValueNode * from(Node * node);
+
+        private:
+            void releaseValue();
+            sal_uInt8 adaptType(com::sun::star::uno::Any const & newValue);
         };
     //-----------------------------------------------------------------------------
         // TODO: optimized representation of localized values (now as set; mapping locale->element-name)
@@ -133,7 +134,7 @@ namespace configmgr
     //-----------------------------------------------------------------------------
         union Node
         {
-            BasicNode node;
+            NodeInfo info;
             GroupNode group;
             SetNode   set;
             ValueNode value;
@@ -145,9 +146,9 @@ namespace configmgr
             bool isDefault() const;
 
             // type checks
-            bool isGroup()  const  { return typeIs (Type::nodetype_group); }
-            bool isSet()    const  { return typeIs (Type::nodetype_set); }
-            bool isValue()  const  { return typeIs (Type::nodetype_value); }
+            bool isGroup()  const  { return typeIs (data::Type::nodetype_group); }
+            bool isSet()    const  { return typeIs (data::Type::nodetype_set); }
+            bool isValue()  const  { return typeIs (data::Type::nodetype_value); }
 
             // checked access
             inline GroupNode       * groupData();
@@ -165,12 +166,24 @@ namespace configmgr
 #endif
             TreeFragment        * getTreeFragment();
             TreeFragment const  * getTreeFragment() const;
-            private:
-            bool typeIs(Type::Type eType) const
-                { return (node.info.type & Type::mask_nodetype) == eType; }
+
+            Node * getSubnode(rtl::OUString const & name);
+
+        private:
+            bool typeIs(data::Type::Type eType) const
+                { return (info.type & data::Type::mask_nodetype) == eType; }
         };
 
     //-----------------------------------------------------------------------------
+        inline GroupNode * GroupNode::from(Node * node)
+        { return node == 0 ? 0 : node->groupData(); }
+
+        inline SetNode * SetNode::from(Node * node)
+        { return node == 0 ? 0 : node->setData(); }
+
+        inline ValueNode * ValueNode::from(Node * node)
+        { return node == 0 ? 0 : node->valueData(); }
+
         inline GroupNode       * Node::groupData()
             { return isGroup() ? &this->group : NULL; }
         inline GroupNode const * Node::groupData() const
@@ -212,13 +225,6 @@ namespace configmgr
         inline Node const & node(SetNode const& pNode)
         { return reinterpret_cast<Node const&>(pNode); }
     //-----------------------------------------------------------------------------
-    }
-
-    namespace data {
-        typedef sharable::Node      * NodeAddress;
-        typedef sharable::ValueNode * ValueNodeAddress;
-        typedef sharable::GroupNode * GroupNodeAddress;
-        typedef sharable::SetNode   * SetNodeAddress;
     }
 //-----------------------------------------------------------------------------
 }

@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: viewobjectcontactofsdrmediaobj.hxx,v $
- * $Revision: 1.9 $
+ * $Revision: 1.9.18.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -66,13 +66,6 @@ namespace sdr
 
             ::sdr::contact::SdrMediaWindow* mpMediaWindow;
 
-            //////////////////////////////////////////////////////////////////////////////
-            // primitive stuff
-        public:
-            // process this primitive: ask for isPrimitiveVisible() and take necessary actions
-            // to give useful data to the processor in DisplayInfo. Eventually also
-            // recursively travel a existing hierarchy, e.g. for group objects
-            virtual drawinglayer::primitive2d::Primitive2DSequence getPrimitive2DSequenceHierarchy(DisplayInfo& rDisplayInfo) const;
         };
     } // end of namespace contact
 } // end of namespace sdr

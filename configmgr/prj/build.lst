@@ -1,7 +1,6 @@
-cg	configmgr	:	offapi comphelper cppuhelper tools vos NULL
+cg	configmgr	: BOOST:boost offapi comphelper cppuhelper salhelper tools vos NULL
 cg	configmgr								usr1	-	all	cg_mkout NULL
 cg	configmgr\inc							nmake	-	all	cg_inc NULL
-cg	configmgr\source\cmdtools				nmake	-	all	cg_cmdtools cg_inc NULL
 cg	configmgr\source\misc					nmake	-	all	cg_misc cg_inc NULL
 cg	configmgr\source\data					nmake	-	all	cg_data cg_inc NULL
 cg	configmgr\source\tree					nmake	-	all	cg_tree cg_inc NULL
@@ -14,6 +13,6 @@ cg	configmgr\source\api2					nmake	-	all	cg_api2 cg_inc NULL
 cg	configmgr\source\treemgr				nmake	-	all	cg_treemgr cg_inc NULL
 cg	configmgr\source\registry				nmake	-	all	cg_reg cg_inc NULL
 cg	configmgr\source\platformbe				nmake	-	all	cg_platformbe cg_inc NULL
-cg	configmgr\util							nmake	-	all	cg_util cg_platformbe cg_api cg_api2 cg_cmdtools cg_misc cg_reg cg_trcache cg_data cg_tree cg_treemgr cg_xml cg_backend cg_localbe NULL
+cg	configmgr\util							nmake	-	all	cg_util cg_platformbe cg_api cg_api2 cg_misc cg_reg cg_trcache cg_data cg_tree cg_treemgr cg_xml cg_backend cg_localbe NULL
 cg	configmgr\source\localbe				nmake	-	all	cg_localbe cg_inc NULL
 

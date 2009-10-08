@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: HsqlDatabase.java,v $
- * $Revision: 1.5 $
+ * $Revision: 1.4.50.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -34,6 +34,7 @@ import com.sun.star.beans.PropertyValue;
 import com.sun.star.beans.XPropertySet;
 import com.sun.star.container.ElementExistException;
 import com.sun.star.frame.XStorable;
+import com.sun.star.frame.XModel;
 import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.sdb.XOfficeDatabaseDocument;
 import com.sun.star.sdbc.SQLException;
@@ -183,6 +184,20 @@ public class HsqlDatabase
             }
             m_databaseDocumentFile = null;
         }
+    }
+
+    /** returns the underlying database document
+    */
+    XOfficeDatabaseDocument getDatabaseDocument()
+    {
+        return m_databaseDocument;
+    }
+
+    /** returns the model interface of the underlying database document
+    */
+    XModel getModel()
+    {
+        return (XModel)UnoRuntime.queryInterface( XModel.class, m_databaseDocument );
     }
 
     /** drops the table with a given name

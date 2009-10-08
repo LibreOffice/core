@@ -6,8 +6,5 @@ mkdir: %_DEST%\inc%_EXT%\configmgr
 ..\%__SRC%\bin\behelper*.dll %_DEST%\bin%_EXT%\behelper*.dll
 ..\%__SRC%\bin\configmg*.dll %_DEST%\bin%_EXT%\configmg*.dll
 ..\%__SRC%\bin\sysmgr*.dll %_DEST%\bin%_EXT%\sysmgr*.dll
-..\%__SRC%\bin\setofficelang.exe %_DEST%\bin%_EXT%\setofficelang.exe
-..\%__SRC%\bin\setofficelang %_DEST%\bin%_EXT%\setofficelang.bin
-..\%__SRC%\misc\setofficelang.sh %_DEST%\bin%_EXT%\setofficelang
 
 ..\%__SRC%\misc\configmgr2.uno.xml %_DEST%\xml%_EXT%\configmgr2.uno.xml

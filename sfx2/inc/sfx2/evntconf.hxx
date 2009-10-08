@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: evntconf.hxx,v $
- * $Revision: 1.3 $
+ * $Revision: 1.3.28.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -85,10 +85,8 @@ SV_DECL_PTRARR(SfxEventArr_Impl, SfxEvent_Impl*, 5, 5)
 #define PROP_EVENT_TYPE     "EventType"
 #define PROP_LIBRARY        "Library"
 #define PROP_SCRIPT         "Script"
-#define PROP_SCRIPT_URL     "URL"
 #define PROP_MACRO_NAME     "MacroName"
 #define STAR_BASIC          "StarBasic"
-#define JAVA_SCRIPT         "JavaScript"
 
 // -----------------------------------------------------------------------
 //#else

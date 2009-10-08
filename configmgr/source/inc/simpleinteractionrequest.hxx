@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: simpleinteractionrequest.hxx,v $
- * $Revision: 1.4 $
+ * $Revision: 1.4.18.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -56,9 +56,6 @@ namespace apihelper {
     class SimpleInteractionRequest : public InteractionRequest
     {
     public:
-        // type used to identify continuations
-        typedef sal_uInt32 Continuation;
-
         /**
         * Constructor.
         *
@@ -68,7 +65,7 @@ namespace apihelper {
         *        listed above.
         */
         SimpleInteractionRequest( const uno::Any & rRequest,
-                                const Continuation nContinuations );
+                                const sal_uInt32 nContinuations );
 
         /**
         * After passing this request to XInteractionHandler::handle, this method
@@ -77,7 +74,7 @@ namespace apihelper {
         * @return the continuation choosen by an interaction handler or
         *         CONTINUATION_UNKNOWN, if the request was not (yet) handled.
         */
-        const Continuation getResponse() const;
+        const sal_uInt32 getResponse() const;
     };
 
 /** These are the constants that can be passed to the constructor of class
@@ -86,19 +83,19 @@ namespace apihelper {
   */
 
     /** The request was not (yet) handled by the interaction handler. */
-    const SimpleInteractionRequest::Continuation CONTINUATION_UNKNOWN    = 0;
+    const sal_uInt32 CONTINUATION_UNKNOWN    = 0;
 
     /** The interaction handler selected XInteractionAbort. */
-    const SimpleInteractionRequest::Continuation CONTINUATION_ABORT      = 1;
+    const sal_uInt32 CONTINUATION_ABORT      = 1;
 
     /** The interaction handler selected XInteractionRetry. */
-    const SimpleInteractionRequest::Continuation CONTINUATION_RETRY      = 2;
+    const sal_uInt32 CONTINUATION_RETRY      = 2;
 
     /** The interaction handler selected XInteractionApprove. */
-    const SimpleInteractionRequest::Continuation CONTINUATION_APPROVE    = 4;
+    const sal_uInt32 CONTINUATION_APPROVE    = 4;
 
     /** The interaction handler selected XInteractionDisapprove. */
-    const SimpleInteractionRequest::Continuation CONTINUATION_DISAPPROVE = 8;
+    const sal_uInt32 CONTINUATION_DISAPPROVE = 8;
 
 
 } // namespace apihelper

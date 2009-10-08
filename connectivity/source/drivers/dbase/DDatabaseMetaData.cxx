@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: DDatabaseMetaData.cxx,v $
- * $Revision: 1.35 $
+ * $Revision: 1.35.56.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -365,6 +365,16 @@ sal_Bool SAL_CALL ODbaseDatabaseMetaData::isReadOnly(  ) throw(SQLException, Run
     aFile.getPropertyValue(sReadOnly) >>= bReadOnly;
 
     return bReadOnly;
+}
+// -----------------------------------------------------------------------------
+sal_Bool ODbaseDatabaseMetaData::impl_storesMixedCaseQuotedIdentifiers_throw(  )
+{
+    return sal_True;
+}
+// -----------------------------------------------------------------------------
+sal_Bool ODbaseDatabaseMetaData::impl_supportsMixedCaseQuotedIdentifiers_throw(  )
+{
+    return sal_True;
 }
 // -----------------------------------------------------------------------------
 

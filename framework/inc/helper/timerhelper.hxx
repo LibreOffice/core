@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: timerhelper.hxx,v $
- * $Revision: 1.5 $
+ * $Revision: 1.5.82.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -48,29 +48,6 @@ namespace framework
     public:
         virtual void    timerExpired() = 0;
     };
-
-    //====================================================================
-    //= OTimerHelper
-    //====================================================================
-    /** implements a timer
-    */
-    class OTimerHelper : private ThreadHelpBase
-                       , public ::vos::OTimer
-    {
-    protected:
-        ITimerListener* m_pListener;
-
-    public:
-        OTimerHelper( const ::vos::TTimeValue& _rExpireTime );
-
-        // the link set here will be called with m_rMutex acquired
-        void            setListener( ITimerListener* _pListener )       { m_pListener = _pListener; }
-        ITimerListener* getListener(                            ) const { return m_pListener;       }
-
-    protected:
-        virtual void SAL_CALL onShot();
-    };
-
 //........................................................................
 }   // namespace framework
 //........................................................................

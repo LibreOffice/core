@@ -2279,7 +2279,7 @@ void SvXMLExport::DisposingModel()
 }
 
 // --> OD 2006-09-27 #i69627#
-const sal_Bool SvXMLExport::writeOutlineStyleAsNormalListStyle() const
+sal_Bool SvXMLExport::writeOutlineStyleAsNormalListStyle() const
 {
     return mpImpl->mbOutlineStyleAsNormalListStyle;
 }

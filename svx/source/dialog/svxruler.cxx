@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: svxruler.cxx,v $
- * $Revision: 1.39 $
+ * $Revision: 1.39.76.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -2719,7 +2719,7 @@ void SvxRuler::PrepareProportional_Impl(RulerType eType)
             const USHORT nIdx = GetDragAryPos()+TAB_GAP;
             pRuler_Imp->nTotalDist -= pTabs[nIdx].nPos;
             pRuler_Imp->SetPercSize(nTabCount);
-            for(USHORT n=0;n<=nIdx;pRuler_Imp->pPercBuf[n++]=0);
+            for(USHORT n=0;n<=nIdx;pRuler_Imp->pPercBuf[n++]=0) ;
             for(USHORT i = nIdx+1; i < nTabCount; ++i)
             {
                 const long nDelta = pTabs[i].nPos - pTabs[nIdx].nPos;
@@ -3621,8 +3621,7 @@ void __EXPORT SvxRuler::ExtraDown()
 }
 
 
-void __EXPORT SvxRuler::SFX_NOTIFY(SfxBroadcaster& , const TypeId& rBCType,
-                               const SfxHint& rHint, const TypeId& rHintType)
+void __EXPORT SvxRuler::Notify(SfxBroadcaster&, const SfxHint& rHint)
 /*
 
    [Beschreibung]

@@ -8,7 +8,7 @@
  *
  * $RCSfile: viewobjectcontactofpageobj.cxx,v $
  *
- * $Revision: 1.2 $
+ * $Revision: 1.2.18.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -51,149 +51,151 @@ using namespace com::sun::star;
 
 //////////////////////////////////////////////////////////////////////////////
 
-namespace
+namespace sdr
 {
-    class PagePrimitiveExtractor : public sdr::contact::ObjectContactOfPagePainter, public Timer
+    namespace contact
     {
-    private:
-        // the ViewObjectContactOfPageObj using this painter
-        sdr::contact::ViewObjectContactOfPageObj&           mrViewObjectContactOfPageObj;
+        class PagePrimitiveExtractor : public ObjectContactOfPagePainter, public Timer
+        {
+        private:
+            // the ViewObjectContactOfPageObj using this painter
+            ViewObjectContactOfPageObj&         mrViewObjectContactOfPageObj;
 
-    public:
-        // basic constructor/destructor
-        PagePrimitiveExtractor(
-            sdr::contact::ViewObjectContactOfPageObj& rVOC);
-        virtual ~PagePrimitiveExtractor();
+        public:
+            // basic constructor/destructor
+            PagePrimitiveExtractor(ViewObjectContactOfPageObj& rVOC);
+            virtual ~PagePrimitiveExtractor();
 
-        // LazyInvalidate request. Supported here to not automatically
-        // invalidate the second interaction state all the time at the
-        // original OC
-        virtual void setLazyInvalidate(sdr::contact::ViewObjectContact& rVOC);
+            // LazyInvalidate request. Supported here to not automatically
+            // invalidate the second interaction state all the time at the
+            // original OC
+            virtual void setLazyInvalidate(ViewObjectContact& rVOC);
+
+            // From baseclass Timer, the timeout call triggered by te LazyInvalidate mechanism
+            virtual void Timeout();
+
+            // get primitive visualization
+            drawinglayer::primitive2d::Primitive2DSequence createPrimitive2DSequenceForPage(const DisplayInfo& rDisplayInfo);
+
+            // Own reaction on changes which will be forwarded to the OC of the owner-VOC
+            virtual void InvalidatePartOfView(const basegfx::B2DRange& rRange) const;
+
+            // forward access to SdrPageView of ViewObjectContactOfPageObj
+            virtual bool isOutputToPrinter() const;
+            virtual bool isOutputToWindow() const;
+            virtual bool isOutputToVirtualDevice() const;
+            virtual bool isOutputToRecordingMetaFile() const;
+            virtual bool isDrawModeGray() const;
+            virtual bool isDrawModeBlackWhite() const;
+            virtual bool isDrawModeHighContrast() const;
+            virtual SdrPageView* TryToGetSdrPageView() const;
+            virtual OutputDevice* TryToGetOutputDevice() const;
+        };
+
+        PagePrimitiveExtractor::PagePrimitiveExtractor(
+            ViewObjectContactOfPageObj& rVOC)
+        :   ObjectContactOfPagePainter(0, rVOC.GetObjectContact()),
+            mrViewObjectContactOfPageObj(rVOC)
+        {
+            // make this renderer a preview renderer
+            setPreviewRenderer(true);
+
+            // init timer
+            SetTimeout(1);
+            Stop();
+        }
+
+        PagePrimitiveExtractor::~PagePrimitiveExtractor()
+        {
+            // execute missing LazyInvalidates and stop timer
+            Timeout();
+        }
+
+        void PagePrimitiveExtractor::setLazyInvalidate(ViewObjectContact& /*rVOC*/)
+        {
+            // do NOT call parent, but remember that something is to do by
+            // starting the LazyInvalidateTimer
+            Start();
+        }
 
         // From baseclass Timer, the timeout call triggered by te LazyInvalidate mechanism
-        virtual void Timeout();
-
-        // get primitive visualization
-        drawinglayer::primitive2d::Primitive2DSequence createPrimitive2DSequenceForPage(const sdr::contact::DisplayInfo& rDisplayInfo);
-
-        // Own reaction on changes which will be forwarded to the OC of the owner-VOC
-        virtual void InvalidatePartOfView(const basegfx::B2DRange& rRange) const;
-
-        // forward access to SdrPageView of ViewObjectContactOfPageObj
-        virtual bool isOutputToPrinter() const;
-        virtual bool isOutputToWindow() const;
-        virtual bool isOutputToVirtualDevice() const;
-        virtual bool isOutputToRecordingMetaFile() const;
-        virtual bool isDrawModeGray() const;
-        virtual bool isDrawModeBlackWhite() const;
-        virtual bool isDrawModeHighContrast() const;
-        virtual SdrPageView* TryToGetSdrPageView() const;
-        virtual OutputDevice* TryToGetOutputDevice() const;
-    };
-
-    PagePrimitiveExtractor::PagePrimitiveExtractor(
-        sdr::contact::ViewObjectContactOfPageObj& rVOC)
-    :   sdr::contact::ObjectContactOfPagePainter(0, rVOC.GetObjectContact()),
-        mrViewObjectContactOfPageObj(rVOC)
-    {
-        // make this renderer a preview renderer
-        setPreviewRenderer(true);
-
-        // init timer
-        SetTimeout(1);
-        Stop();
-    }
-
-    PagePrimitiveExtractor::~PagePrimitiveExtractor()
-    {
-        // execute missing LazyInvalidates and stop timer
-        Timeout();
-    }
-
-    void PagePrimitiveExtractor::setLazyInvalidate(sdr::contact::ViewObjectContact& /*rVOC*/)
-    {
-        // do NOT call parent, but remember that something is to do by
-        // starting the LazyInvalidateTimer
-        Start();
-    }
-
-    // From baseclass Timer, the timeout call triggered by te LazyInvalidate mechanism
-    void PagePrimitiveExtractor::Timeout()
-    {
-        // stop the timer
-        Stop();
-
-        // invalidate all LazyInvalidate VOCs new situations
-        const sal_uInt32 nVOCCount(getViewObjectContactCount());
-
-        for(sal_uInt32 a(0); a < nVOCCount; a++)
+        void PagePrimitiveExtractor::Timeout()
         {
-            sdr::contact::ViewObjectContact* pCandidate = getViewObjectContact(a);
-            pCandidate->triggerLazyInvalidate();
-        }
-    }
+            // stop the timer
+            Stop();
 
-    drawinglayer::primitive2d::Primitive2DSequence PagePrimitiveExtractor::createPrimitive2DSequenceForPage(const sdr::contact::DisplayInfo& /*rDisplayInfo*/)
-    {
-        drawinglayer::primitive2d::Primitive2DSequence xRetval;
-        const SdrPage* pStartPage = GetStartPage();
+            // invalidate all LazyInvalidate VOCs new situations
+            const sal_uInt32 nVOCCount(getViewObjectContactCount());
 
-        if(pStartPage)
-        {
-            // update own ViewInformation2D for visualized page
-            const drawinglayer::geometry::ViewInformation2D& rOriginalViewInformation = mrViewObjectContactOfPageObj.GetObjectContact().getViewInformation2D();
-            const drawinglayer::geometry::ViewInformation2D aNewViewInformation2D(
-                rOriginalViewInformation.getObjectTransformation(),
-                rOriginalViewInformation.getViewTransformation(),
-                rOriginalViewInformation.getViewport(),
-                GetXDrawPageForSdrPage(const_cast< SdrPage* >(pStartPage)),
-                0.0, // no time; page previews are not animated
-                rOriginalViewInformation.getExtendedInformationSequence());
-            updateViewInformation2D(aNewViewInformation2D);
-
-            // create copy of DisplayInfo to set PagePainting
-            sdr::contact::DisplayInfo aDisplayInfo;
-
-            // get page's VOC
-            sdr::contact::ViewObjectContact& rDrawPageVOContact = pStartPage->GetViewContact().GetViewObjectContact(*this);
-
-            // get whole Primitive2DSequence
-            xRetval = rDrawPageVOContact.getPrimitive2DSequenceHierarchy(aDisplayInfo);
-        }
-
-        return xRetval;
-    }
-
-    void PagePrimitiveExtractor::InvalidatePartOfView(const basegfx::B2DRange& rRange) const
-    {
-        // an invalidate is called at this view, this needs to be translated to an invalidate
-        // for the using VOC. Coordinates are in page coordinate system.
-        const SdrPage* pStartPage = GetStartPage();
-
-        if(pStartPage && !rRange.isEmpty())
-        {
-            const basegfx::B2DRange aPageRange(0.0, 0.0, (double)pStartPage->GetWdt(), (double)pStartPage->GetHgt());
-
-            if(rRange.overlaps(aPageRange))
+            for(sal_uInt32 a(0); a < nVOCCount; a++)
             {
-                // if object on the page is inside or overlapping with page, create ActionChanged() for
-                // involved VOC
-                mrViewObjectContactOfPageObj.ActionChanged();
+                ViewObjectContact* pCandidate = getViewObjectContact(a);
+                pCandidate->triggerLazyInvalidate();
             }
         }
-    }
 
-    // forward access to SdrPageView to VOCOfPageObj
-    bool PagePrimitiveExtractor::isOutputToPrinter() const { return mrViewObjectContactOfPageObj.GetObjectContact().isOutputToPrinter(); }
-    bool PagePrimitiveExtractor::isOutputToWindow() const { return mrViewObjectContactOfPageObj.GetObjectContact().isOutputToWindow(); }
-    bool PagePrimitiveExtractor::isOutputToVirtualDevice() const { return mrViewObjectContactOfPageObj.GetObjectContact().isOutputToVirtualDevice(); }
-    bool PagePrimitiveExtractor::isOutputToRecordingMetaFile() const { return mrViewObjectContactOfPageObj.GetObjectContact().isOutputToRecordingMetaFile(); }
-    bool PagePrimitiveExtractor::isDrawModeGray() const { return mrViewObjectContactOfPageObj.GetObjectContact().isDrawModeGray(); }
-    bool PagePrimitiveExtractor::isDrawModeBlackWhite() const { return mrViewObjectContactOfPageObj.GetObjectContact().isDrawModeBlackWhite(); }
-    bool PagePrimitiveExtractor::isDrawModeHighContrast() const { return mrViewObjectContactOfPageObj.GetObjectContact().isDrawModeHighContrast(); }
-    SdrPageView* PagePrimitiveExtractor::TryToGetSdrPageView() const { return mrViewObjectContactOfPageObj.GetObjectContact().TryToGetSdrPageView(); }
-    OutputDevice* PagePrimitiveExtractor::TryToGetOutputDevice() const { return mrViewObjectContactOfPageObj.GetObjectContact().TryToGetOutputDevice(); }
-} // end of anonymous namespace
+        drawinglayer::primitive2d::Primitive2DSequence PagePrimitiveExtractor::createPrimitive2DSequenceForPage(const DisplayInfo& /*rDisplayInfo*/)
+        {
+            drawinglayer::primitive2d::Primitive2DSequence xRetval;
+            const SdrPage* pStartPage = GetStartPage();
+
+            if(pStartPage)
+            {
+                // update own ViewInformation2D for visualized page
+                const drawinglayer::geometry::ViewInformation2D& rOriginalViewInformation = mrViewObjectContactOfPageObj.GetObjectContact().getViewInformation2D();
+                const drawinglayer::geometry::ViewInformation2D aNewViewInformation2D(
+                    rOriginalViewInformation.getObjectTransformation(),
+                    rOriginalViewInformation.getViewTransformation(),
+                    rOriginalViewInformation.getViewport(),
+                    GetXDrawPageForSdrPage(const_cast< SdrPage* >(pStartPage)),
+                    0.0, // no time; page previews are not animated
+                    rOriginalViewInformation.getExtendedInformationSequence());
+                updateViewInformation2D(aNewViewInformation2D);
+
+                // create copy of DisplayInfo to set PagePainting
+                DisplayInfo aDisplayInfo;
+
+                // get page's VOC
+                ViewObjectContact& rDrawPageVOContact = pStartPage->GetViewContact().GetViewObjectContact(*this);
+
+                // get whole Primitive2DSequence
+                xRetval = rDrawPageVOContact.getPrimitive2DSequenceHierarchy(aDisplayInfo);
+            }
+
+            return xRetval;
+        }
+
+        void PagePrimitiveExtractor::InvalidatePartOfView(const basegfx::B2DRange& rRange) const
+        {
+            // an invalidate is called at this view, this needs to be translated to an invalidate
+            // for the using VOC. Coordinates are in page coordinate system.
+            const SdrPage* pStartPage = GetStartPage();
+
+            if(pStartPage && !rRange.isEmpty())
+            {
+                const basegfx::B2DRange aPageRange(0.0, 0.0, (double)pStartPage->GetWdt(), (double)pStartPage->GetHgt());
+
+                if(rRange.overlaps(aPageRange))
+                {
+                    // if object on the page is inside or overlapping with page, create ActionChanged() for
+                    // involved VOC
+                    mrViewObjectContactOfPageObj.ActionChanged();
+                }
+            }
+        }
+
+        // forward access to SdrPageView to VOCOfPageObj
+        bool PagePrimitiveExtractor::isOutputToPrinter() const { return mrViewObjectContactOfPageObj.GetObjectContact().isOutputToPrinter(); }
+        bool PagePrimitiveExtractor::isOutputToWindow() const { return mrViewObjectContactOfPageObj.GetObjectContact().isOutputToWindow(); }
+        bool PagePrimitiveExtractor::isOutputToVirtualDevice() const { return mrViewObjectContactOfPageObj.GetObjectContact().isOutputToVirtualDevice(); }
+        bool PagePrimitiveExtractor::isOutputToRecordingMetaFile() const { return mrViewObjectContactOfPageObj.GetObjectContact().isOutputToRecordingMetaFile(); }
+        bool PagePrimitiveExtractor::isDrawModeGray() const { return mrViewObjectContactOfPageObj.GetObjectContact().isDrawModeGray(); }
+        bool PagePrimitiveExtractor::isDrawModeBlackWhite() const { return mrViewObjectContactOfPageObj.GetObjectContact().isDrawModeBlackWhite(); }
+        bool PagePrimitiveExtractor::isDrawModeHighContrast() const { return mrViewObjectContactOfPageObj.GetObjectContact().isDrawModeHighContrast(); }
+        SdrPageView* PagePrimitiveExtractor::TryToGetSdrPageView() const { return mrViewObjectContactOfPageObj.GetObjectContact().TryToGetSdrPageView(); }
+        OutputDevice* PagePrimitiveExtractor::TryToGetOutputDevice() const { return mrViewObjectContactOfPageObj.GetObjectContact().TryToGetOutputDevice(); }
+    } // end of namespace contact
+} // end of namespace sdr
 
 //////////////////////////////////////////////////////////////////////////////
 

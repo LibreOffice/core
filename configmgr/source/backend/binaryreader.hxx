@@ -47,8 +47,6 @@ namespace configmgr
         namespace io   = css::io;
         namespace uno  = css::uno;
         namespace lang = css::lang;
-
-        typedef uno::Reference<lang::XMultiServiceFactory> MultiServiceFactory;
         // -----------------------------------------------------------------------------
         class BinaryReader
         {
@@ -66,9 +64,6 @@ namespace configmgr
         public:
             bool open()     SAL_THROW( (io::IOException, uno::RuntimeException) );
 
-            typedef uno::Sequence< sal_Int8 >       Binary;
-            typedef uno::Sequence< rtl::OUString >  StringList;
-
             void read(sal_Bool &_nValue)    SAL_THROW( (io::IOException, uno::RuntimeException) );
             void read(sal_Int8 &_nValue)    SAL_THROW( (io::IOException, uno::RuntimeException) );
             void read(sal_Int16 &_nValue)   SAL_THROW( (io::IOException, uno::RuntimeException) );
@@ -76,8 +71,8 @@ namespace configmgr
             void read(sal_Int64 &_nValue)   SAL_THROW( (io::IOException, uno::RuntimeException) );
             void read(double &_nValue)      SAL_THROW( (io::IOException, uno::RuntimeException) );
             void read(rtl::OUString& _aStr) SAL_THROW( (io::IOException, uno::RuntimeException) );
-            void read(Binary &_aValue)      SAL_THROW( (io::IOException, uno::RuntimeException) );
-            void read(StringList &_aValue)  SAL_THROW( (io::IOException, uno::RuntimeException) );
+            void read(uno::Sequence< sal_Int8 > &_aValue)      SAL_THROW( (io::IOException, uno::RuntimeException) );
+            void read(uno::Sequence< rtl::OUString > &_aValue)  SAL_THROW( (io::IOException, uno::RuntimeException) );
 
         private:
             inline uno::Reference<io::XDataInputStream> getDataInputStream();

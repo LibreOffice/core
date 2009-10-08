@@ -45,7 +45,6 @@ namespace configmgr
 {
     namespace css = ::com::sun::star;
     namespace uno = ::com::sun::star::uno;
-    using rtl::OUString;
 
     /* implementations of the interfaces supported by a (parent) node
         within the configuration tree.
@@ -58,13 +57,13 @@ namespace configmgr
         class NodeGroupInfoAccess;
 
         // XHierarchicalName
-        OUString implGetHierarchicalName(NodeAccess& rNode)
+        rtl::OUString implGetHierarchicalName(NodeAccess& rNode)
             throw(uno::RuntimeException);
 
-        OUString implComposeHierarchicalName(NodeGroupInfoAccess& rNode, const OUString& aRelativeName )
+        rtl::OUString implComposeHierarchicalName(NodeGroupInfoAccess& rNode, const rtl::OUString& aRelativeName )
             throw(css::lang::IllegalArgumentException, css::lang::NoSupportException, uno::RuntimeException);
 
-        OUString implComposeHierarchicalName(NodeSetInfoAccess& rNode, const OUString& aRelativeName )
+        rtl::OUString implComposeHierarchicalName(NodeSetInfoAccess& rNode, const rtl::OUString& aRelativeName )
             throw(css::lang::IllegalArgumentException, css::lang::NoSupportException, uno::RuntimeException);
 
         // XElementAccess, base class of XNameAccess
@@ -81,27 +80,27 @@ namespace configmgr
             throw(uno::RuntimeException);
 
         // XNameAccess
-        uno::Any implGetByName(NodeAccess& rNode, const OUString& aName )
+        uno::Any implGetByName(NodeAccess& rNode, const rtl::OUString& aName )
             throw(css::container::NoSuchElementException, css::lang::WrappedTargetException, uno::RuntimeException);
 
-        uno::Sequence< OUString > implGetElementNames(NodeAccess& rNode)
+        uno::Sequence< rtl::OUString > implGetElementNames(NodeAccess& rNode)
             throw( uno::RuntimeException);
 
-        sal_Bool implHasByName(NodeAccess& rNode, const OUString& aName )
+        sal_Bool implHasByName(NodeAccess& rNode, const rtl::OUString& aName )
             throw(uno::RuntimeException);
 
         // XHierarchicalNameAccess
-        uno::Any implGetByHierarchicalName(NodeAccess& rNode, const OUString& aName )
+        uno::Any implGetByHierarchicalName(NodeAccess& rNode, const rtl::OUString& aName )
             throw(css::container::NoSuchElementException, uno::RuntimeException);
 
-        sal_Bool implHasByHierarchicalName(NodeAccess& rNode, const OUString& aName )
+        sal_Bool implHasByHierarchicalName(NodeAccess& rNode, const rtl::OUString& aName )
             throw(uno::RuntimeException);
 
         // XExactName
-        OUString implGetExactName(NodeGroupInfoAccess& rNode, const OUString& aApproximateName )
+        rtl::OUString implGetExactName(NodeGroupInfoAccess& rNode, const rtl::OUString& aApproximateName )
             throw(uno::RuntimeException);
 
-        OUString implGetExactName(NodeSetInfoAccess& rNode, const OUString& aApproximateName )
+        rtl::OUString implGetExactName(NodeSetInfoAccess& rNode, const rtl::OUString& aApproximateName )
             throw(uno::RuntimeException);
 
         // XProperty
@@ -112,10 +111,10 @@ namespace configmgr
         uno::Sequence< css::beans::Property > implGetProperties( NodeAccess& rNode )
             throw (uno::RuntimeException);
 
-        css::beans::Property implGetPropertyByName( NodeAccess& rNode, const OUString& aName )
+        css::beans::Property implGetPropertyByName( NodeAccess& rNode, const rtl::OUString& aName )
             throw (css::beans::UnknownPropertyException, uno::RuntimeException);
 
-        sal_Bool implHasPropertyByName( NodeAccess& rNode, const OUString& Name )
+        sal_Bool implHasPropertyByName( NodeAccess& rNode, const rtl::OUString& name )
             throw (uno::RuntimeException);
 
 
@@ -129,7 +128,7 @@ namespace configmgr
         // set-specific interfaces
 
         // XTemplateContainer
-        OUString SAL_CALL implGetElementTemplateName(NodeSetInfoAccess& rNode)
+        rtl::OUString SAL_CALL implGetElementTemplateName(NodeSetInfoAccess& rNode)
             throw(uno::RuntimeException);
 
     }

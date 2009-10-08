@@ -42,13 +42,6 @@
 namespace configmgr
 {
 //////////////////////////////////////////////////////////////////////////////////
-
-    using uno::Reference;
-    using uno::Sequence;
-    using uno::Any;
-    using uno::RuntimeException;
-
-//////////////////////////////////////////////////////////////////////////////////
 // classes BasicSet / BasicValueSet
 //////////////////////////////////////////////////////////////////////////////////
 
@@ -56,7 +49,7 @@ namespace configmgr
 //////////////////////////////////////////////////////////////////////////////////
 uno::Any SAL_CALL BasicSet::queryInterface( uno::Type const& rType ) throw (uno::RuntimeException )
 {
-    Any aRet = BasicSetAccess::queryInterface( rType );
+    uno::Any aRet = BasicSetAccess::queryInterface( rType );
     if (!aRet.hasValue())
     {
         aRet = cppu::queryInterface(rType
@@ -72,7 +65,7 @@ uno::Any SAL_CALL BasicSet::queryInterface( uno::Type const& rType ) throw (uno:
 
 uno::Any SAL_CALL BasicValueSet::queryInterface( uno::Type const& rType ) throw (uno::RuntimeException )
 {
-    Any aRet = BasicSetAccess::queryInterface( rType );
+    uno::Any aRet = BasicSetAccess::queryInterface( rType );
     if (!aRet.hasValue())
     {
         aRet = cppu::queryInterface(rType
@@ -125,7 +118,7 @@ configapi::NodeTreeSetAccess& BasicSet::getSetNode()
     if (!pAccess)
     {
         throw uno::RuntimeException(
-                OUString(RTL_CONSTASCII_USTRINGPARAM("Configuration: Invalid Object - internal update-interface missing.")),
+                rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Configuration: Invalid Object - internal update-interface missing.")),
                 static_cast< css::container::XNameReplace * >(this)
             );
     }
@@ -140,7 +133,7 @@ configapi::NodeValueSetAccess& BasicValueSet::getSetNode()
     if (!pAccess)
     {
         throw uno::RuntimeException(
-                OUString(RTL_CONSTASCII_USTRINGPARAM("Configuration: Invalid Object - internal update-interface missing.")),
+                rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Configuration: Invalid Object - internal update-interface missing.")),
                 static_cast< css::container::XNameReplace* >(this)
             );
     }
@@ -150,14 +143,14 @@ configapi::NodeValueSetAccess& BasicValueSet::getSetNode()
 // New Interface methods
 // XNameReplace
 //////////////////////////////////////////////////////////////////////////////////
-void SAL_CALL BasicSet::replaceByName( const OUString& rName, const uno::Any& rElement )
+void SAL_CALL BasicSet::replaceByName( const rtl::OUString& rName, const uno::Any& rElement )
         throw(css::lang::IllegalArgumentException, css::container::NoSuchElementException, css::lang::WrappedTargetException, uno::RuntimeException)
 {
     configapi::implReplaceByName( getSetNode(), rName, rElement );
 }
 //..............................................................................
 
-void SAL_CALL BasicValueSet::replaceByName( const OUString& rName, const uno::Any& rElement )
+void SAL_CALL BasicValueSet::replaceByName( const rtl::OUString& rName, const uno::Any& rElement )
         throw(css::lang::IllegalArgumentException, css::container::NoSuchElementException, css::lang::WrappedTargetException, uno::RuntimeException)
 {
     configapi::implReplaceByName( getSetNode(), rName, rElement );
@@ -165,28 +158,28 @@ void SAL_CALL BasicValueSet::replaceByName( const OUString& rName, const uno::An
 
 // XNameContainer
 //////////////////////////////////////////////////////////////////////////////////
-void SAL_CALL BasicSet::insertByName( const OUString& rName, const uno::Any& rElement)
+void SAL_CALL BasicSet::insertByName( const rtl::OUString& rName, const uno::Any& rElement)
         throw(css::lang::IllegalArgumentException, css::container::ElementExistException, css::lang::WrappedTargetException, uno::RuntimeException)
 {
     configapi::implInsertByName( getSetNode(), rName, rElement );
 }
 //..............................................................................
 
-void SAL_CALL BasicValueSet::insertByName( const OUString& rName, const uno::Any& rElement)
+void SAL_CALL BasicValueSet::insertByName( const rtl::OUString& rName, const uno::Any& rElement)
         throw(css::lang::IllegalArgumentException, css::container::ElementExistException, css::lang::WrappedTargetException, uno::RuntimeException)
 {
     configapi::implInsertByName( getSetNode(), rName, rElement );
 }
 
 //----------------------------------------------------------------------------------
-void SAL_CALL BasicSet::removeByName( const OUString& rName )
+void SAL_CALL BasicSet::removeByName( const rtl::OUString& rName )
         throw(css::container::NoSuchElementException, css::lang::WrappedTargetException, uno::RuntimeException)
 {
     configapi::implRemoveByName( getSetNode(), rName );
 }
 //..............................................................................
 
-void SAL_CALL BasicValueSet::removeByName( const OUString& rName )
+void SAL_CALL BasicValueSet::removeByName( const rtl::OUString& rName )
         throw(css::container::NoSuchElementException, css::lang::WrappedTargetException, uno::RuntimeException)
 {
     configapi::implRemoveByName( getSetNode(), rName );

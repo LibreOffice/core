@@ -31,32 +31,30 @@
 #ifndef CONFIGMGR_AUTOOBJECT_HXX
 #define CONFIGMGR_AUTOOBJECT_HXX
 
+#include "sal/config.h"
+
+#include "boost/utility.hpp"
+
 #include "utility.hxx"
 
 namespace configmgr
 {
-////////////////////////////////////////////////////////////////////////////////
-    using ::rtl::OUString;
-
 //-----------------------------------------------------------------------------
     template < class Object >
-    class AutoObject : Noncopyable
+    class AutoObject: private boost::noncopyable
     {
-    public:
-        typedef Object      object_type;
-        typedef Object *    Ptr;
     public:
         AutoObject() : m_pObject(NULL) {}
         AutoObject(Object * _obj) : m_pObject(_obj) {}
         ~AutoObject() { delete m_pObject; }
 
         bool is()   const;
-        Ptr get()   const;
-        Ptr getOrCreate();
+        Object * get()   const;
+        Object * getOrCreate();
     private:
-        Ptr internalCreate();
+        Object * internalCreate();
     private:
-        Ptr  m_pObject;
+        Object *  m_pObject;
     };
 //-----------------------------------------------------------------------------
 

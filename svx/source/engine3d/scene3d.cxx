@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: scene3d.cxx,v $
- * $Revision: 1.34 $
+ * $Revision: 1.34.18.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -31,7 +31,6 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_svx.hxx"
 
-
 #include "svdstr.hrc"
 #include "svdglob.hxx"
 #include "svditer.hxx"
@@ -44,9 +43,7 @@
 #include <svtools/style.hxx>
 #include <svx/scene3d.hxx>
 #include <svx/e3dundo.hxx>
-#include <goodies/base3d.hxx>
 #include <svx/svdtrans.hxx>
-
 #include <svx/svxids.hrc>
 #include <svx/colritem.hxx>
 #include <svx/e3ditem.hxx>
@@ -56,13 +53,13 @@
 #include <svtools/whiter.hxx>
 #include <svx/xflftrit.hxx>
 #include <svx/sdr/properties/e3dsceneproperties.hxx>
-
-// #110094#
 #include <svx/sdr/contact/viewcontactofe3dscene.hxx>
 #include <svx/svddrag.hxx>
-
-// for ::std::sort
+#include <helperminimaldepth3d.hxx>
 #include <algorithm>
+#include <drawinglayer/geometry/viewinformation3d.hxx>
+#include <basegfx/polygon/b2dpolypolygontools.hxx>
+#include <svx/e3dsceneupdater.hxx>
 
 #define ITEMVALUE(ItemSet,Id,Cast)  ((const Cast&)(ItemSet).Get(Id)).GetValue()
 
@@ -157,7 +154,7 @@ Imp3DDepthRemapper::Imp3DDepthRemapper(E3dScene& rScene)
             if(pCandidate->ISA(E3dCompoundObject))
             {
                 // single 3d object, calc depth
-                const double fMinimalDepth(((E3dCompoundObject*)pCandidate)->GetMinimalDepthInViewCoor(rScene));
+                const double fMinimalDepth(getMinimalDepthInViewCoordinates(static_cast< const E3dCompoundObject& >(*pCandidate)));
                 ImpRemap3DDepth aEntry(a, fMinimalDepth);
                 maVector.push_back(aEntry);
             }
@@ -218,16 +215,8 @@ TYPEINIT1(E3dScene, E3dObject);
 E3dScene::E3dScene()
 :   E3dObject(),
     aCamera(basegfx::B3DPoint(0.0, 0.0, 4.0), basegfx::B3DPoint()),
-    aPaintTime(),
-    nDisplayQuality(255),
     mp3DDepthRemapper(0L),
-    bDoubleBuffered(FALSE),
-    bClipping(FALSE),
-    bFitInSnapRect(TRUE),
-    bDither(false),
-    bWasSelectedWhenCopy(false),
-    bDrawOnlySelected(false),
-    mfPolygonOffset(0.005) // #i71618#
+    bDrawOnlySelected(false)
 {
     // Defaults setzen
     E3dDefaultAttributes aDefault;
@@ -237,22 +226,14 @@ E3dScene::E3dScene()
 E3dScene::E3dScene(E3dDefaultAttributes& rDefault)
 :   E3dObject(),
     aCamera(basegfx::B3DPoint(0.0, 0.0, 4.0), basegfx::B3DPoint()),
-    aPaintTime(),
-    nDisplayQuality(255),
     mp3DDepthRemapper(0L),
-    bDoubleBuffered(FALSE),
-    bClipping(FALSE),
-    bFitInSnapRect(TRUE),
-    bDither(false),
-    bWasSelectedWhenCopy(false),
-    bDrawOnlySelected(false),
-    mfPolygonOffset(0.005) // #i71618#
+    bDrawOnlySelected(false)
 {
     // Defaults setzen
     SetDefaultAttributes(rDefault);
 }
 
-void E3dScene::SetDefaultAttributes(E3dDefaultAttributes& rDefault)
+void E3dScene::SetDefaultAttributes(E3dDefaultAttributes& /*rDefault*/)
 {
     // Fuer OS/2 die FP-Exceptions abschalten
 #if defined(OS2)
@@ -269,38 +250,6 @@ void E3dScene::SetDefaultAttributes(E3dDefaultAttributes& rDefault)
 #endif
 
     // Defaults setzen
-
-    // set defaults for LightGroup from ItemPool
-    aLightGroup.SetModelTwoSide(GetTwoSidedLighting());
-    aLightGroup.SetIntensity( GetLightColor1(), Base3DMaterialDiffuse, Base3DLight0);
-    aLightGroup.SetIntensity( GetLightColor2(), Base3DMaterialDiffuse, Base3DLight1);
-    aLightGroup.SetIntensity( GetLightColor3(), Base3DMaterialDiffuse, Base3DLight2);
-    aLightGroup.SetIntensity( GetLightColor4(), Base3DMaterialDiffuse, Base3DLight3);
-    aLightGroup.SetIntensity( GetLightColor5(), Base3DMaterialDiffuse, Base3DLight4);
-    aLightGroup.SetIntensity( GetLightColor6(), Base3DMaterialDiffuse, Base3DLight5);
-    aLightGroup.SetIntensity( GetLightColor7(), Base3DMaterialDiffuse, Base3DLight6);
-    aLightGroup.SetIntensity( GetLightColor8(), Base3DMaterialDiffuse, Base3DLight7);
-    aLightGroup.SetGlobalAmbientLight(GetGlobalAmbientColor());
-    aLightGroup.Enable( GetLightOnOff1(), Base3DLight0);
-    aLightGroup.Enable( GetLightOnOff2(), Base3DLight1);
-    aLightGroup.Enable( GetLightOnOff3(), Base3DLight2);
-    aLightGroup.Enable( GetLightOnOff4(), Base3DLight3);
-    aLightGroup.Enable( GetLightOnOff5(), Base3DLight4);
-    aLightGroup.Enable( GetLightOnOff6(), Base3DLight5);
-    aLightGroup.Enable( GetLightOnOff7(), Base3DLight6);
-    aLightGroup.Enable( GetLightOnOff8(), Base3DLight7);
-    aLightGroup.SetDirection( GetLightDirection1(), Base3DLight0);
-    aLightGroup.SetDirection( GetLightDirection2(), Base3DLight1);
-    aLightGroup.SetDirection( GetLightDirection3(), Base3DLight2);
-    aLightGroup.SetDirection( GetLightDirection4(), Base3DLight3);
-    aLightGroup.SetDirection( GetLightDirection5(), Base3DLight4);
-    aLightGroup.SetDirection( GetLightDirection6(), Base3DLight5);
-    aLightGroup.SetDirection( GetLightDirection7(), Base3DLight6);
-    aLightGroup.SetDirection( GetLightDirection8(), Base3DLight7);
-
-    bDither = rDefault.GetDefaultDither();
-
-    // Alte Werte initialisieren
     aCamera.SetViewWindow(-2, -2, 4, 4);
     aCameraSet.SetDeviceRectangle(-2, 2, -2, 2);
     aCamera.SetDeviceWindow(Rectangle(0, 0, 10, 10));
@@ -331,6 +280,19 @@ E3dScene::~E3dScene()
 {
     // #110988#
     ImpCleanup3DDepthMapper();
+}
+
+basegfx::B2DPolyPolygon E3dScene::TakeXorPoly() const
+{
+    const sdr::contact::ViewContactOfE3dScene& rVCScene = static_cast< sdr::contact::ViewContactOfE3dScene& >(GetViewContact());
+    const drawinglayer::geometry::ViewInformation3D aViewInfo3D(rVCScene.getViewInformation3D());
+    const basegfx::B3DPolyPolygon aCubePolyPolygon(CreateWireframe());
+
+    basegfx::B2DPolyPolygon aRetval(basegfx::tools::createB2DPolyPolygonFromB3DPolyPolygon(aCubePolyPolygon,
+        aViewInfo3D.getObjectToView()));
+    aRetval.transform(rVCScene.getObjectTransformation());
+
+    return aRetval;
 }
 
 // #110988#
@@ -373,39 +335,6 @@ sal_uInt32 E3dScene::RemapOrdNum(sal_uInt32 nNewOrdNum) const
 UINT16 E3dScene::GetObjIdentifier() const
 {
     return E3D_SCENE_ID;
-}
-
-/*************************************************************************
-|*
-|* Anzahl der Handles zurueckgeben
-|*
-\************************************************************************/
-
-sal_uInt32 E3dScene::GetHdlCount() const
-{
-    // Ueberladung aus E3dObject rueckgaengig machen
-    return SdrAttrObj::GetHdlCount();
-}
-
-/*************************************************************************
-|*
-|* Handle-Liste fuellen
-|*
-\************************************************************************/
-
-void E3dScene::AddToHdlList(SdrHdlList& rHdlList) const
-{
-    // Ueberladung aus E3dObject rueckgaengig machen
-    SdrAttrObj::AddToHdlList(rHdlList);
-}
-
-/*************************************************************************
-|*
-\************************************************************************/
-
-FASTBOOL E3dScene::HasSpecialDrag() const
-{
-    return FALSE;
 }
 
 /*************************************************************************
@@ -514,127 +443,13 @@ void E3dScene::NewObjectInserted(const E3dObject* p3DObj)
 |*
 \************************************************************************/
 
-void E3dScene::StructureChanged(const E3dObject* p3DObj)
+void E3dScene::StructureChanged()
 {
-    E3dObject::StructureChanged(p3DObj);
+    E3dObject::StructureChanged();
     SetRectsDirty();
 
     // #110988#
     ImpCleanup3DDepthMapper();
-}
-
-/*************************************************************************
-|*
-|* Double Buffering aus-/einschalten
-|*
-\************************************************************************/
-
-void E3dScene::SetDoubleBuffered(FASTBOOL bBuff)
-{
-    if ( bDoubleBuffered != (BOOL)bBuff )
-    {
-        bDoubleBuffered = bBuff;
-        SetRectsDirty();
-    }
-}
-
-/*************************************************************************
-|*
-|* Clipping auf umschliessendes Rechteck der Szene aus-/einschalten
-|*
-\************************************************************************/
-
-void E3dScene::SetClipping(FASTBOOL bClip)
-{
-    if ( bClipping != (BOOL)bClip )
-    {
-        bClipping = bClip;
-        SetRectsDirty();
-    }
-}
-
-/*************************************************************************
-|*
-|* Einpassen der Objekte in umschliessendes Rechteck aus-/einschalten
-|*
-\************************************************************************/
-
-void E3dScene::SetFitInSnapRect(FASTBOOL bFit)
-{
-    if ( bFitInSnapRect != (BOOL)bFit )
-    {
-        bFitInSnapRect = bFit;
-        SetRectsDirty();
-    }
-}
-
-/*************************************************************************
-|*
-|* Einpassen der Projektion aller Szenenobjekte in das
-|* umschliessende Rechteck
-|*
-\************************************************************************/
-
-basegfx::B3DRange E3dScene::FitInSnapRect()
-{
-    basegfx::B3DRange aNewVol;
-    const sal_uInt32 nObjCount(GetSubList() ? GetSubList()->GetObjCount() : 0L);
-
-    if(nObjCount)
-    {
-        // Alter Kram
-        basegfx::B3DHomMatrix aFullTrans(GetFullTransform());
-        aCamera.FitViewToVolume(GetBoundVolume(), aFullTrans);
-
-        // Neuer Kram
-        // Maximas holen in Augkoordinaten zwecks Z-Werten
-        basegfx::B3DPoint aTfVec;
-        Vol3DPointIterator aIter(GetBoundVolume());
-
-        GetCameraSet().SetObjectTrans(aFullTrans);
-
-        while ( aIter.Next(aTfVec) )
-        {
-            aTfVec = GetCameraSet().ObjectToEyeCoor(aTfVec);
-            aNewVol.expand(aTfVec);
-        }
-
-        // ... und merken
-        double fZMin(-aNewVol.getMaxZ());
-        double fZMax(-aNewVol.getMinZ());
-
-        // Jetzt XY-Werte projizieren auf Projektionsflaeche
-        // in Device-Koordinaten
-        basegfx::B3DHomMatrix aWorldToDevice(GetCameraSet().GetOrientation());
-
-        if(aCamera.GetProjection() == PR_PERSPECTIVE)
-        {
-            aWorldToDevice.frustum(-1.0, 1.0, -1.0, 1.0, fZMin, fZMax);
-        }
-        else
-        {
-            aWorldToDevice.ortho(-1.0, 1.0, -1.0, 1.0, fZMin, fZMax);
-        }
-
-        aNewVol.reset();
-        aIter.Reset();
-
-        while ( aIter.Next(aTfVec) )
-        {
-            aTfVec = GetCameraSet().ObjectToWorldCoor(aTfVec);
-            aTfVec *= aWorldToDevice;
-            aNewVol.expand(aTfVec);
-        }
-
-        // Z-Werte eintragen
-        aNewVol = basegfx::B3DRange(aNewVol.getMinX(), aNewVol.getMinY(), fZMin, aNewVol.getMaxX(), aNewVol.getMaxY(), fZMax);
-    }
-
-    // #110988#
-    ImpCleanup3DDepthMapper();
-
-    // Rueckgabewert setzen
-    return aNewVol;
 }
 
 /*************************************************************************
@@ -651,118 +466,52 @@ E3dScene* E3dScene::GetScene() const
         return (E3dScene*)this;
 }
 
-/*************************************************************************
-|*
-|* TransformationSet vorbereiten
-|*
-\************************************************************************/
-
-void E3dScene::InitTransformationSet()
+void E3dScene::removeAllNonSelectedObjects()
 {
-    Rectangle aBound(GetSnapRect());
+    E3DModifySceneSnapRectUpdater aUpdater(this);
 
-    // GeometricSet reset und mit pBase3D assoziieren
-    B3dCamera& rSet = GetCameraSet();
-
-    // Transformation auf Weltkoordinaten holen
-    basegfx::B3DHomMatrix mTransform = GetFullTransform();
-    rSet.SetObjectTrans(mTransform);
-
-    // 3D Ausgabe vorbereiten, Maximas holen in DeviceKoordinaten
-    basegfx::B3DRange aVolume(FitInSnapRect());
-
-    // #i85887#
-    static basegfx::B3DRange aLastVolume;
-    if(aVolume != aLastVolume)
+    for(sal_uInt32 a(0); a < maSubList.GetObjCount(); a++)
     {
-        // The BoundRects for the contained 3D SdrObjects depend on the
-        // calculated BoundVolume. If the BoundVolume changes, those rects
-        // need to be invalidated. Since the first inits when importing a ODF
-        // work with wrong 3D Volumes, the initially calculated BoundRects
-        // tend to be wrong and need to be invalidated on 3D Volume change.
-        SetRectsDirty();
-        aLastVolume = aVolume;
+        SdrObject* pObj = maSubList.GetObj(a);
+
+        if(pObj)
+        {
+            bool bRemoveObject(false);
+
+            if(pObj->ISA(E3dScene))
+            {
+                E3dScene* pScene = (E3dScene*)pObj;
+
+                // iterate over this sub-scene
+                pScene->removeAllNonSelectedObjects();
+
+                // check object count. Empty scenes can be deleted
+                const sal_uInt32 nObjCount(pScene->GetSubList() ? pScene->GetSubList()->GetObjCount() : 0);
+
+                if(!nObjCount)
+                {
+                    // all objects removed, scene can be removed, too
+                    bRemoveObject = true;
+                }
+            }
+            else if(pObj->ISA(E3dCompoundObject))
+            {
+                E3dCompoundObject* pCompound = (E3dCompoundObject*)pObj;
+
+                if(!pCompound->GetSelected())
+                {
+                    bRemoveObject = true;
+                }
+            }
+
+            if(bRemoveObject)
+            {
+                maSubList.NbcRemoveObject(pObj->GetOrdNum());
+                a--;
+                SdrObject::Free(pObj);
+            }
+        }
     }
-
-    // Maximas fuer Abbildung verwenden
-    rSet.SetDeviceVolume(aVolume, FALSE);
-    rSet.SetViewportRectangle(aBound);
-
-    // #110988#
-    ImpCleanup3DDepthMapper();
-}
-
-/*************************************************************************
-|*
-|* Einpassen der Objekte in umschliessendes Rechteck aus-/einschalten
-|*
-\************************************************************************/
-
-void E3dScene::FitSnapRectToBoundVol()
-{
-    basegfx::B3DPoint aTfVec;
-    Volume3D aFitVol;
-
-    SetBoundVolInvalid();
-    basegfx::B3DHomMatrix aTransform = aCamera.GetViewTransform() * GetFullTransform(); // #112587#
-    Vol3DPointIterator aIter(GetBoundVolume(), &aTransform);
-    Rectangle aRect;
-
-    while ( aIter.Next(aTfVec) )
-    {
-        aTfVec = aCamera.DoProjection(aTfVec);
-        aFitVol.expand(aTfVec);
-        basegfx::B3DPoint aZwi(aCamera.MapToDevice(aTfVec));
-        Point aP((long)aZwi.getX(), (long)aZwi.getY());
-        aRect.Union(Rectangle(aP, aP));
-    }
-    aCamera.SetViewWindow(aFitVol.getMinX(), aFitVol.getMinY(), aFitVol.getWidth(), aFitVol.getHeight());
-    SetSnapRect(aRect);
-
-    // Die SnapRects aller beteiligten Objekte muessen auf dieser
-    // veraenderten Basis aufgebaut werden, invalidiere diese. Das
-    // eigene kann auch invalidiert werden, da ein RecalcSnapRect
-    // an einer Szene nur aus der Kamera liest
-    SetRectsDirty();
-
-    // #110988#
-    ImpCleanup3DDepthMapper();
-}
-
-/*************************************************************************
-|*
-|* Falls die Geometrie einer Szene sich ausgedehnt/vermindert hat,
-|* muss das Volume und das SnapRect angepasst werden
-|*
-\************************************************************************/
-
-void E3dScene::CorrectSceneDimensions()
-{
-    const sal_uInt32 nObjCount(GetSubList() ? GetSubList()->GetObjCount() : 0L);
-
-    if(nObjCount)
-    {
-        // SnapRects der Objekte ungueltig
-        SetRectsDirty();
-
-        // SnapRect anpassen, invalidiert auch die SnapRects
-        // der enthaltenen Objekte
-        FitSnapRectToBoundVol();
-
-        // Neues BoundVolume der Kamera holen
-        basegfx::B3DRange aVolume(FitInSnapRect());
-
-        // Neues BoundVolume an der Kamera setzen
-        GetCameraSet().SetDeviceVolume(aVolume, FALSE);
-
-        // Danach noch die SnapRects der enthaltenen Objekte
-        // invalidieren, um diese auf der neuen Grundlage berechnen
-        // zu lassen (falls diese von FitInSnapRect() berechnet wurden)
-        SetRectsDirty();
-    }
-
-    // #110988#
-    ImpCleanup3DDepthMapper();
 }
 
 /*************************************************************************
@@ -777,23 +526,14 @@ void E3dScene::operator=(const SdrObject& rObj)
 
     const E3dScene& r3DObj = (const E3dScene&) rObj;
     aCamera          = r3DObj.aCamera;
-    bDoubleBuffered  = r3DObj.bDoubleBuffered;
-    bClipping        = r3DObj.bClipping;
-    bFitInSnapRect   = r3DObj.bFitInSnapRect;
 
     // neu ab 377:
     aCameraSet = r3DObj.aCameraSet;
     ((sdr::properties::E3dSceneProperties&)GetProperties()).SetSceneItemsFromCamera();
 
-    // neu ab 383:
-    aLightGroup = r3DObj.aLightGroup;
-    ((sdr::properties::E3dSceneProperties&)GetProperties()).SetLightItemsFromLightGroup(aLightGroup);
-
-    bDither = r3DObj.bDither;
-
-    bBoundVolValid = FALSE;
+    // SetSnapRect(r3DObj.GetSnapRect());
+    InvalidateBoundVolume();
     RebuildLists();
-
     SetRectsDirty();
 
     // #110988#
@@ -811,7 +551,7 @@ void E3dScene::RebuildLists()
     // zuerst loeschen
     SdrLayerID nCurrLayerID = GetLayer();
 
-    SdrObjListIter a3DIterator(*pSub, IM_FLAT);
+    SdrObjListIter a3DIterator(maSubList, IM_FLAT);
 
     // dann alle Objekte in der Szene pruefen
     while ( a3DIterator.IsMore() )
@@ -843,7 +583,7 @@ void E3dScene::SaveGeoData(SdrObjGeoData& rGeo) const
 {
     E3dObject::SaveGeoData (rGeo);
 
-    ((E3DSceneGeoData &) rGeo).aCamera                = aCamera;
+    ((E3DSceneGeoData &) rGeo).aCamera = aCamera;
 }
 
 /*************************************************************************
@@ -854,10 +594,9 @@ void E3dScene::SaveGeoData(SdrObjGeoData& rGeo) const
 
 void E3dScene::RestGeoData(const SdrObjGeoData& rGeo)
 {
+    E3DModifySceneSnapRectUpdater aUpdater(this);
     E3dObject::RestGeoData (rGeo);
-
     SetCamera (((E3DSceneGeoData &) rGeo).aCamera);
-    FitSnapRectToBoundVol();
 }
 
 /*************************************************************************
@@ -866,13 +605,10 @@ void E3dScene::RestGeoData(const SdrObjGeoData& rGeo)
 |*
 \************************************************************************/
 
-void E3dScene::SFX_NOTIFY(SfxBroadcaster &rBC,
-                          const TypeId   &rBCType,
-                          const SfxHint  &rHint,
-                          const TypeId   &rHintType)
+void E3dScene::Notify(SfxBroadcaster &rBC, const SfxHint  &rHint)
 {
     SetRectsDirty();
-    E3dObject::SFX_NOTIFY(rBC, rBCType, rHint, rHintType);
+    E3dObject::Notify(rBC, rHint);
 }
 
 /*************************************************************************
@@ -965,24 +701,45 @@ void E3dScene::TakeObjNamePlural(XubString& rName) const
 |*
 \************************************************************************/
 
+void E3dScene::NbcSetTransform(const basegfx::B3DHomMatrix& rMatrix)
+{
+    if(maTransformation != rMatrix)
+    {
+        // call parent
+        E3dObject::NbcSetTransform(rMatrix);
+    }
+}
+
+void E3dScene::SetTransform(const basegfx::B3DHomMatrix& rMatrix)
+{
+    if(rMatrix != maTransformation)
+    {
+        // call parent
+        E3dObject::SetTransform(rMatrix);
+    }
+}
+
 void E3dScene::NbcRotate(const Point& rRef, long nWink, double sn, double cs)
 {
-        // Also derzeit sind die Klebepunkte relativ zum aOutRect der Szene definiert. Vor dem Drehen
-        // werden die Klebepunkte relativ zur Seite definiert. Sie nehmen an der Drehung der Szene noch nicht Teil
-        // dafuer gibt es den
+    // Also derzeit sind die Klebepunkte relativ zum aOutRect der Szene definiert. Vor dem Drehen
+    // werden die Klebepunkte relativ zur Seite definiert. Sie nehmen an der Drehung der Szene noch nicht Teil
+    // dafuer gibt es den
     SetGlueReallyAbsolute(TRUE);
 
-        // So dass war die Szene, ab jetzt kommen die Objekte in der Szene
-        // 3D-Objekte gibt es nur ein einziges das kann zwar mehrere Flaechen haben aber die Flaechen
-        // muessen ja nicht zusammenhaengend sein
-        // es ermoeglicht den Zugriff auf Kindobjekte
-        // Ich gehe also die gesamte Liste durch und rotiere um die Z-Achse die durch den
-        // Mittelpunkt von aOutRect geht (Satz von Steiner), also RotateZ
+    // So dass war die Szene, ab jetzt kommen die Objekte in der Szene
+    // 3D-Objekte gibt es nur ein einziges das kann zwar mehrere Flaechen haben aber die Flaechen
+    // muessen ja nicht zusammenhaengend sein
+    // es ermoeglicht den Zugriff auf Kindobjekte
+    // Ich gehe also die gesamte Liste durch und rotiere um die Z-Achse die durch den
+    // Mittelpunkt von aOutRect geht (Satz von Steiner), also RotateZ
 
     RotateScene (rRef, nWink, sn, cs);  // Rotiert die Szene
     double fWinkelInRad = nWink/100 * F_PI180;
-    NbcRotateZ(fWinkelInRad);
-    FitSnapRectToBoundVol();
+
+    basegfx::B3DHomMatrix aRotation;
+    aRotation.rotate(0.0, 0.0, fWinkelInRad);
+    NbcSetTransform(aRotation * GetTransform());
+
     SetRectsDirty();    // Veranlasst eine Neuberechnung aller BoundRects
     NbcRotateGluePoints(rRef,nWink,sn,cs);  // Rotiert die Klebepunkte (die haben noch Koordinaten relativ
                                             // zum Urpsung des Blattes
@@ -999,6 +756,7 @@ void E3dScene::NbcRotate(const Point& rRef, long nWink, double sn, double cs)
 void E3dScene::RecalcSnapRect()
 {
     E3dScene* pScene = GetScene();
+
     if(pScene == this)
     {
         // Szene wird als 2D-Objekt benutzt, nimm SnapRect aus der
@@ -1023,18 +781,16 @@ void E3dScene::RecalcSnapRect()
 BOOL E3dScene::IsBreakObjPossible()
 {
     // Szene ist aufzubrechen, wenn alle Mitglieder aufzubrechen sind
-    SdrObjList* pSubList = GetSubList();
-    if(pSubList)
+    SdrObjListIter a3DIterator(maSubList, IM_DEEPWITHGROUPS);
+
+    while ( a3DIterator.IsMore() )
     {
-        SdrObjListIter a3DIterator(*pSubList, IM_DEEPWITHGROUPS);
-        while ( a3DIterator.IsMore() )
-        {
-            E3dObject* pObj = (E3dObject*) a3DIterator.Next();
-            DBG_ASSERT(pObj->ISA(E3dObject), "AW: In Szenen sind nur 3D-Objekte erlaubt!");
-            if(!pObj->IsBreakObjPossible())
-                return FALSE;
-        }
+        E3dObject* pObj = (E3dObject*) a3DIterator.Next();
+        DBG_ASSERT(pObj->ISA(E3dObject), "AW: In Szenen sind nur 3D-Objekte erlaubt!");
+        if(!pObj->IsBreakObjPossible())
+            return FALSE;
     }
+
     return TRUE;
 }
 
@@ -1052,163 +808,9 @@ void E3dScene::SetShadowPlaneDirection(const basegfx::B3DVector& rVec)
     GetProperties().SetObjectItemDirect(Svx3DShadowSlantItem(nSceneShadowSlant));
 }
 
-
-// #115662#
-// helper class for in-between results from E3dScene::HitTest
-class ImplPairDephAndObject
-{
-public:
-    SdrObject* pObject;
-    double fDepth;
-
-    // for ::std::sort
-    bool operator<(const ImplPairDephAndObject& rComp) const;
-};
-
-bool ImplPairDephAndObject::operator<(const ImplPairDephAndObject& rComp) const
-{
-    if(fDepth < rComp.fDepth)
-        return true;
-    return false;
-}
-
-// #115662#
-// For new chart, calculate the number of hit contained 3D objects at given point,
-// give back the count and a depth-sorted list of SdrObjects (a Vector). The vector will be
-// changed, at least cleared.
-sal_uInt32 E3dScene::HitTest(const Point& rHitTestPosition, ::std::vector< SdrObject* >& o_rResult)
-{
-    // prepare output variables
-    sal_uInt32 nRetval(0L);
-    o_rResult.clear();
-    SdrObjList* pList = GetSubList();
-
-    if(pList && pList->GetObjCount())
-    {
-        SdrObjListIter aIterator(*pList, IM_DEEPNOGROUPS);
-        ::std::vector< ImplPairDephAndObject > aDepthAndObjectResults;
-
-        while(aIterator.IsMore())
-        {
-            SdrObject* pObj = aIterator.Next();
-
-            if(pObj->ISA(E3dCompoundObject))
-            {
-                E3dCompoundObject* pCompoundObj = (E3dCompoundObject*)pObj;
-
-                // get HitLine in local 3D ObjectKoordinates
-                basegfx::B3DHomMatrix mTransform = pCompoundObj->GetFullTransform();
-                GetCameraSet().SetObjectTrans(mTransform);
-
-                // create HitPoint Front und Back, transform to local object coordinates
-                basegfx::B3DPoint aFront(rHitTestPosition.X(), rHitTestPosition.Y(), 0.0);
-                basegfx::B3DPoint aBack(rHitTestPosition.X(), rHitTestPosition.Y(), ZBUFFER_DEPTH_RANGE);
-                aFront = GetCameraSet().ViewToObjectCoor(aFront);
-                aBack = GetCameraSet().ViewToObjectCoor(aBack);
-
-                // make BoundVolume HitTest for speedup first
-                const Volume3D& rBoundVol = pCompoundObj->GetBoundVolume();
-
-                if(!rBoundVol.isEmpty())
-                {
-                    double fXMax(aFront.getX());
-                    double fXMin(aBack.getX());
-
-                    if(fXMax < fXMin)
-                    {
-                        fXMax = aBack.getX();
-                        fXMin = aFront.getX();
-                    }
-
-                    if(rBoundVol.getMinX() <= fXMax && rBoundVol.getMaxX() >= fXMin)
-                    {
-                        double fYMax(aFront.getY());
-                        double fYMin(aBack.getY());
-
-                        if(fYMax < fYMin)
-                        {
-                            fYMax = aBack.getY();
-                            fYMin = aFront.getY();
-                        }
-
-                        if(rBoundVol.getMinY() <= fYMax && rBoundVol.getMaxY() >= fYMin)
-                        {
-                            double fZMax(aFront.getZ());
-                            double fZMin(aBack.getZ());
-
-                            if(fZMax < fZMin)
-                            {
-                                fZMax = aBack.getZ();
-                                fZMin = aFront.getZ();
-                            }
-
-                            if(rBoundVol.getMinZ() <= fZMax && rBoundVol.getMaxZ() >= fZMin)
-                            {
-                                // BoundVol is hit, get geometry cuts now
-                                ::std::vector< basegfx::B3DPoint > aParameter;
-                                const B3dGeometry& rGeometry = pCompoundObj->GetDisplayGeometry();
-                                rGeometry.GetAllCuts(aParameter, aFront, aBack);
-
-                                if(aParameter.size())
-                                {
-                                    // take first cut as base, use Z-Coor in ViewCoor (0 ..ZBUFFER_DEPTH_RANGE)
-                                    ImplPairDephAndObject aTempResult;
-                                    basegfx::B3DPoint aTempVector(aParameter[0]);
-                                    aTempVector = GetCameraSet().ObjectToViewCoor(aTempVector);
-
-                                    aTempResult.pObject = pCompoundObj;
-                                    aTempResult.fDepth = aTempVector.getZ();
-
-                                    // look for cut points in front of the first one
-                                    ::std::vector< basegfx::B3DPoint >::iterator aIterator2(aParameter.begin());
-                                    aIterator2++;
-
-                                    for(;aIterator2 != aParameter.end(); aIterator2++)
-                                    {
-                                        basegfx::B3DPoint aTempVector2(*aIterator2);
-                                        aTempVector2 = GetCameraSet().ObjectToViewCoor(aTempVector2);
-
-                                        // use the smallest one
-                                        if(aTempVector2.getZ() < aTempResult.fDepth)
-                                        {
-                                            aTempResult.fDepth = aTempVector2.getZ();
-                                        }
-                                    }
-
-                                    // remember smallest cut with this object
-                                    aDepthAndObjectResults.push_back(aTempResult);
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        }
-
-        // fill nRetval
-        nRetval = aDepthAndObjectResults.size();
-
-        if(nRetval)
-        {
-            // sort aDepthAndObjectResults by depth
-            ::std::sort(aDepthAndObjectResults.begin(), aDepthAndObjectResults.end());
-
-            // copy SdrObject pointers to return result set
-            ::std::vector< ImplPairDephAndObject >::iterator aIterator2(aDepthAndObjectResults.begin());
-
-            for(;aIterator2 != aDepthAndObjectResults.end(); aIterator2++)
-            {
-                o_rResult.push_back(aIterator2->pObject);
-            }
-        }
-    }
-
-    return nRetval;
-}
-
 basegfx::B2DPolyPolygon E3dScene::TakeCreatePoly(const SdrDragStat& /*rDrag*/) const
 {
-    return TakeXorPoly(sal_True);
+    return TakeXorPoly();
 }
 
 FASTBOOL E3dScene::BegCreate(SdrDragStat& rStat)

@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: doctemplates.cxx,v $
- * $Revision: 1.43 $
+ * $Revision: 1.42.84.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -158,6 +158,26 @@ class DocTemplates_EntryData_Impl;
 class GroupData_Impl;
 
 //=============================================================================
+#include <com/sun/star/task/XInteractionHandler.hpp>
+#include <com/sun/star/ucb/XProgressHandler.hpp>
+#include <com/sun/star/ucb/XCommandEnvironment.hpp>
+
+class TplTaskEnvironment : public ::cppu::WeakImplHelper1< ucb::XCommandEnvironment >
+{
+    uno::Reference< task::XInteractionHandler >               m_xInteractionHandler;
+    uno::Reference< ucb::XProgressHandler >                   m_xProgressHandler;
+
+public:
+    TplTaskEnvironment( const uno::Reference< task::XInteractionHandler>& rxInteractionHandler )
+                                : m_xInteractionHandler( rxInteractionHandler )
+                            {}
+
+    virtual uno::Reference<task::XInteractionHandler> SAL_CALL getInteractionHandler() throw (uno::RuntimeException)
+    { return m_xInteractionHandler; }
+
+    virtual uno::Reference<ucb::XProgressHandler> SAL_CALL    getProgressHandler() throw (uno::RuntimeException)
+    { return m_xProgressHandler; }
+};
 
 class SfxDocTplService_Impl
 {
@@ -383,6 +403,13 @@ DECLARE_LIST( GroupList_Impl, GroupData_Impl* )
 //-----------------------------------------------------------------------------
 void SfxDocTplService_Impl::init_Impl()
 {
+    uno::Reference< lang::XMultiServiceFactory > xFactory = ::comphelper::getProcessServiceFactory();
+    if ( xFactory.is() )
+    {
+        uno::Reference < task::XInteractionHandler > xInteractionHandler( xFactory->createInstance( DEFINE_CONST_UNICODE("com.sun.star.task.InteractionHandler") ), uno::UNO_QUERY );
+        maCmdEnv = new TplTaskEnvironment( xInteractionHandler );
+    }
+
     ::osl::ClearableMutexGuard aGuard( maMutex );
     sal_Bool bIsInitialized = sal_False;
     sal_Bool bNeedsUpdate   = sal_False;
@@ -1263,7 +1290,7 @@ uno::Sequence< beans::StringPair > SfxDocTplService_Impl::ReadUINamesForTemplate
 
     // TODO/LATER: Use hashmap in future
     uno::Sequence< beans::StringPair > aUINames;
-    if ( Content::create( aLocObj.GetMainURL( INetURLObject::NO_DECODE ), maCmdEnv, aLocContent ) )
+    if ( Content::create( aLocObj.GetMainURL( INetURLObject::NO_DECODE ), uno::Reference < ucb::XCommandEnvironment >(), aLocContent ) )
     {
         try
         {

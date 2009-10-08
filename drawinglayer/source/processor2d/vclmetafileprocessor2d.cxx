@@ -72,6 +72,7 @@
 #include <drawinglayer/primitive2d/graphicprimitive2d.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>
 #include <drawinglayer/primitive2d/pagepreviewprimitive2d.hxx>
+#include <helperchartrenderer.hxx>
 
 //////////////////////////////////////////////////////////////////////////////
 // for PDFExtOutDevData Graphic support
@@ -1606,8 +1607,14 @@ namespace drawinglayer
                 }
                 case PRIMITIVE2D_ID_CHARTPRIMITIVE2D :
                 {
-                    // point array
-                    RenderChartPrimitive2D(static_cast< const primitive2d::ChartPrimitive2D& >(rCandidate));
+                    // ChartPrimitive2D
+                    const primitive2d::ChartPrimitive2D& rChartPrimitive = static_cast< const primitive2d::ChartPrimitive2D& >(rCandidate);
+
+                    if(!renderChartPrimitive2D(rChartPrimitive, *mpOutputDevice))
+                    {
+                        // fallback to decomposition (MetaFile)
+                        process(rChartPrimitive.get2DDecomposition(getViewInformation2D()));
+                    }
                     break;
                 }
                 case PRIMITIVE2D_ID_STRUCTURETAGRIMITIVE2D :

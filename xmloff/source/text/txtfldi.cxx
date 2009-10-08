@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: txtfldi.cxx,v $
- * $Revision: 1.71 $
+ * $Revision: 1.71.66.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -71,9 +71,7 @@
 #include <com/sun/star/util/XUpdatable.hpp>
 #include <com/sun/star/sdb/CommandType.hpp>
 
-#ifndef _RTL_USTRING
 #include <rtl/ustring.hxx>
-#endif
 #include <rtl/ustrbuf.hxx>
 #include <rtl/math.hxx>
 #include <tools/debug.hxx>
@@ -289,8 +287,9 @@ static __FAR_DATA SvXMLTokenMapEntry aTextFieldAttrTokenMap[] =
 
 const SvXMLTokenMap& XMLTextImportHelper::GetTextFieldAttrTokenMap()
 {
-    if (NULL == pTextFieldAttrTokenMap) {
-        pTextFieldAttrTokenMap = new SvXMLTokenMap(aTextFieldAttrTokenMap);
+    if ( !pTextFieldAttrTokenMap.get() ) {
+        pTextFieldAttrTokenMap.reset(
+            new SvXMLTokenMap(aTextFieldAttrTokenMap) );
     }
 
     return *pTextFieldAttrTokenMap;
@@ -3700,6 +3699,11 @@ XMLAnnotationImportContext::XMLAnnotationImportContext(
         sPropertyTextRange(RTL_CONSTASCII_USTRINGPARAM(sAPI_TextRange))
 {
     bValid = sal_True;
+
+    // remember old list item and block (#91964#) and reset them
+    // for the text frame
+    // do this in the constructor, not in CreateChildContext (#i93392#)
+    GetImport().GetTextImport()->PushListContext();
 }
 
 void XMLAnnotationImportContext::ProcessAttribute(
@@ -3748,13 +3752,6 @@ SvXMLImportContext* XMLAnnotationImportContext::CreateChildContext(
                     xTxtImport->SetCursor( mxCursor );
                     pContext = xTxtImport->CreateTextChildContext( GetImport(), nPrefix, rLocalName, xAttrList );
                 }
-
-                // remember old list item and block (#91964#) and reset them
-                // for the text frame
-                mxOldListBlock = xTxtImport->_GetListBlock();
-                mxOldListItem = xTxtImport->_GetListItem();
-                xTxtImport->_SetListBlock( NULL );
-                xTxtImport->_SetListItem( NULL );
             }
         }
         catch ( Exception& )
@@ -3785,12 +3782,8 @@ void XMLAnnotationImportContext::EndElement()
     if( mxOldCursor.is() )
         GetImport().GetTextImport()->SetCursor( mxOldCursor );
 
-    // reinstall old list item (if necessary) #91964#
-    if ( mxOldListBlock.Is() )
-    {
-        GetImport().GetTextImport()->_SetListBlock( mxOldListBlock );
-        GetImport().GetTextImport()->_SetListItem( mxOldListItem );
-    }
+    // reinstall old list item #91964#
+    GetImport().GetTextImport()->PopListContext();
 
     if ( bValid )
     {

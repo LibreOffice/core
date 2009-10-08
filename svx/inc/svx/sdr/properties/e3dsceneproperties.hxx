@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: e3dsceneproperties.hxx,v $
- * $Revision: 1.6 $
+ * $Revision: 1.6.226.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -32,9 +32,6 @@
 #define _SDR_PROPERTIES_E3DSCENEPROPERTIES_HXX
 
 #include <svx/sdr/properties/e3dproperties.hxx>
-
-// predeclarations
-class B3dLightGroup;
 
 //////////////////////////////////////////////////////////////////////////////
 
@@ -90,7 +87,6 @@ namespace sdr
             virtual void MoveToItemPool(SfxItemPool* pSrcPool, SfxItemPool* pDestPool, SdrModel* pNewModel = 0L);
 
             // Special for scene:
-            void SetLightItemsFromLightGroup(B3dLightGroup& rLightGroup);
             void SetSceneItemsFromCamera();
         };
     } // end of namespace properties

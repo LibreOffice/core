@@ -18,5 +18,5 @@ CFG_BackendService=com.sun.star.comp.configuration.backend.MultiStratumBackend
 CFG_SchemaSupplier=com.sun.star.comp.configuration.backend.LocalSchemaSupplier
 CFG_LocalDataSvc=com.sun.star.comp.configuration.backend.LocalStratum
 CFG_LocalModuleDataSvc=com.sun.star.comp.configuration.backend.LocalMultiStratum
-# CFG_Strata=${CFG_LocalDataSvc}:$CFG_DefaultLayerUrl;?com.sun.star.comp.configuration.backend.SystemIntegration:;?com.sun.star.comp.configuration.backend.PolicyLayerBackend:;${CFG_LocalDataSvc}:$CFG_UserLayerUrl
+# CFG_Strata=${CFG_LocalDataSvc}:$CFG_DefaultLayerUrl;?com.sun.star.comp.configuration.backend.SystemIntegration:;${CFG_LocalDataSvc}:$CFG_UserLayerUrl
 CFG_Strata=${CFG_LocalDataSvc}:$CFG_DefaultLayerUrl;${CFG_LocalDataSvc}:$CFG_UserLayerUrl

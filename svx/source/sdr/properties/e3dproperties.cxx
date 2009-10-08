@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: e3dproperties.cxx,v $
- * $Revision: 1.7 $
+ * $Revision: 1.7.226.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -85,7 +85,7 @@ namespace sdr
             AttributeProperties::ItemSetChanged(rSet);
 
             // local changes
-            rObj.StructureChanged(&rObj);
+            rObj.StructureChanged();
         }
 
         void E3dProperties::SetStyleSheet(SfxStyleSheet* pNewStyleSheet, sal_Bool bDontRemoveHardAttr)

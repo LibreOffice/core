@@ -8,7 +8,7 @@
  *
  * $RCSfile: sdrrectangleprimitive2d.cxx,v $
  *
- * $Revision: 1.2 $
+ * $Revision: 1.2.18.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -67,7 +67,7 @@ namespace drawinglayer
             // add text
             if(maSdrLFSTAttribute.getText())
             {
-                appendPrimitive2DReferenceToPrimitive2DSequence(aRetval, createTextPrimitive(::basegfx::B2DPolyPolygon(aUnitOutline), maTransform, *maSdrLFSTAttribute.getText(), maSdrLFSTAttribute.getLine(), false));
+                appendPrimitive2DReferenceToPrimitive2DSequence(aRetval, createTextPrimitive(::basegfx::B2DPolyPolygon(aUnitOutline), maTransform, *maSdrLFSTAttribute.getText(), maSdrLFSTAttribute.getLine(), false, false));
             }
 
             // add shadow

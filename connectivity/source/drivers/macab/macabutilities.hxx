@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: macabutilities.hxx,v $
- * $Revision: 1.3 $
+ * $Revision: 1.3.56.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -145,6 +145,7 @@ namespace connectivity
             return dataType;
         }
 
+        void impl_throwError(sal_uInt16 _nErrorId);
     }
 }
 

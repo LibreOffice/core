@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: scripthandler.cxx,v $
- * $Revision: 1.29 $
+ * $Revision: 1.29.6.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -46,6 +46,7 @@
 
 #include <com/sun/star/script/provider/XScriptProviderSupplier.hpp>
 #include <com/sun/star/script/provider/XScriptProviderFactory.hpp>
+#include <com/sun/star/script/provider/ScriptFrameworkErrorType.hpp>
 
 #include <sfx2/objsh.hxx>
 #include <sfx2/frame.hxx>
@@ -53,6 +54,7 @@
 #include <vcl/abstdlg.hxx>
 
 #include <cppuhelper/factory.hxx>
+#include <cppuhelper/exc_hlp.hxx>
 #include <util/util.hxx>
 
 #include "com/sun/star/uno/XComponentContext.hpp"
@@ -207,58 +209,46 @@ void SAL_CALL ScriptProtocolHandler::dispatchWithNotification(
                    }
                }
             }
-            invokeResult = xFunc->invoke( inArgs, outIndex, outArgs );
-            bSuccess = sal_True;
+
+            bSuccess = sal_False;
+            while ( !bSuccess )
+            {
+                Any aFirstCaughtException;
+                try
+                {
+                    invokeResult = xFunc->invoke( inArgs, outIndex, outArgs );
+                    bSuccess = sal_True;
+                }
+                catch( const provider::ScriptFrameworkErrorException& se )
+                {
+                    if  ( !aFirstCaughtException.hasValue() )
+                        aFirstCaughtException = ::cppu::getCaughtException();
+
+                    if ( se.errorType != provider::ScriptFrameworkErrorType::NO_SUCH_SCRIPT )
+                        // the only condition which allows us to retry is if there is no method with the
+                        // given name/signature
+                        ::cppu::throwException( aFirstCaughtException );
+
+                    if ( inArgs.getLength() == 0 )
+                        // no chance to retry if we can't strip more in-args
+                        ::cppu::throwException( aFirstCaughtException );
+
+                    // strip one argument, then retry
+                    inArgs.realloc( inArgs.getLength() - 1 );
+                }
+            }
         }
         // Office doesn't handle exceptions rethrown here very well, it cores,
         // all we can is log them and then set fail for the dispatch event!
         // (if there is a listener of course)
-        catch ( reflection::InvocationTargetException & ite )
+        catch ( const Exception & e )
         {
-            ::rtl::OUString reason = ::rtl::OUString::createFromAscii(
-        "ScriptProtocolHandler::dispatch: caught InvocationTargetException: " );
+            aException = ::cppu::getCaughtException();
 
-            reason = reason.concat( ite.Message );
+            ::rtl::OUString reason = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ScriptProtocolHandler::dispatch: caught " ) );
 
-            invokeResult <<= reason;
+            invokeResult <<= reason.concat( aException.getValueTypeName() ).concat( e.Message );
 
-            aException = makeAny( ite );
-            bCaughtException = TRUE;
-           }
-           catch ( provider::ScriptFrameworkErrorException& se )
-           {
-            ::rtl::OUString reason = ::rtl::OUString::createFromAscii(
-    "ScriptProtocolHandler::dispatch: caught ScriptFrameworkErrorException: " );
-
-            reason = reason.concat( se.Message );
-
-            invokeResult <<= reason;
-
-            aException = makeAny( se );
-            bCaughtException = TRUE;
-           }
-           catch ( ::com::sun::star::uno::RuntimeException& rte )
-           {
-            ::rtl::OUString reason = ::rtl::OUString::createFromAscii(
-                "ScriptProtocolHandler::dispatch: caught RuntimeException: " );
-
-            reason = reason.concat( rte.Message );
-
-            invokeResult <<= reason;
-
-            aException = makeAny( rte );
-            bCaughtException = TRUE;
-        }
-        catch ( Exception & e )
-        {
-            ::rtl::OUString reason = ::rtl::OUString::createFromAscii(
-                "ScriptProtocolHandler::dispatch: caught Exception: " );
-
-            reason = reason.concat( e.Message );
-
-            invokeResult <<= reason;
-
-            aException = makeAny( e );
             bCaughtException = TRUE;
         }
 #ifdef _DEBUG

@@ -47,14 +47,10 @@ namespace uno = css::uno ;
 namespace lang = css::lang ;
 namespace backend = css::configuration::backend ;
 
-typedef cppu::WeakComponentImplHelper3<backend::XVersionedSchemaSupplier,
-                                       lang::XInitialization,
-                                       lang::XServiceInfo> SingleBackendBase ;
-
 /**
   Implements the SchemaSupplier service for local schema file access.
   */
-class LocalSchemaSupplier : public SingleBackendBase {
+class LocalSchemaSupplier : public cppu::WeakComponentImplHelper3<backend::XVersionedSchemaSupplier, lang::XInitialization, lang::XServiceInfo> {
     public :
         /**
           Service constructor from a service factory.

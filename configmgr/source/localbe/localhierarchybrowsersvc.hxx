@@ -46,7 +46,6 @@ namespace configmgr
     namespace localbe
     {
 // -----------------------------------------------------------------------------
-        using rtl::OUString;
         namespace uno   = ::com::sun::star::uno;
         namespace lang  = ::com::sun::star::lang;
         namespace task  = ::com::sun::star::task;
@@ -59,22 +58,20 @@ namespace configmgr
                                         >
         {
         public:
-            typedef uno::Reference< uno::XComponentContext > const & CreationArg;
-
             explicit
-            LocalHierarchyBrowserService(CreationArg _xContext);
+            LocalHierarchyBrowserService(uno::Reference< uno::XComponentContext > const & _xContext);
             ~LocalHierarchyBrowserService();
 
             // XServiceInfo
-            virtual OUString SAL_CALL
+            virtual rtl::OUString SAL_CALL
                 getImplementationName(  )
                     throw (uno::RuntimeException);
 
             virtual sal_Bool SAL_CALL
-                supportsService( const OUString& ServiceName )
+                supportsService( const rtl::OUString& ServiceName )
                     throw (uno::RuntimeException);
 
-            virtual uno::Sequence< OUString > SAL_CALL
+            virtual uno::Sequence< rtl::OUString > SAL_CALL
                 getSupportedServiceNames(  )
                     throw (uno::RuntimeException);
 
@@ -84,15 +81,13 @@ namespace configmgr
                     throw (lang::IllegalArgumentException, uno::Exception, uno::RuntimeException);
 
         private:
-            typedef uno::Reference< lang::XMultiServiceFactory >    ServiceFactory;
-
-            ServiceFactory getServiceFactory() const
+            uno::Reference< lang::XMultiServiceFactory > getServiceFactory() const
             { return m_xServiceFactory; }
 
-            uno::Sequence< OUString > findLocalComponentNames( OUString const & _aBaseDirectory, OUString const & _aComponentFileExtension, uno::Sequence< OUString > const & aExcludeList);
-            uno::Sequence< OUString > findLocalComponentUrls( OUString const & _aBaseDirectory, OUString const & _aComponentFileExtension, uno::Sequence< OUString > const & aExcludeList);
+            uno::Sequence< rtl::OUString > findLocalComponentNames( rtl::OUString const & _aBaseDirectory, rtl::OUString const & _aComponentFileExtension, uno::Sequence< rtl::OUString > const & aExcludeList);
+            uno::Sequence< rtl::OUString > findLocalComponentUrls( rtl::OUString const & _aBaseDirectory, rtl::OUString const & _aComponentFileExtension, uno::Sequence< rtl::OUString > const & aExcludeList);
         private:
-            ServiceFactory  m_xServiceFactory;
+            uno::Reference< lang::XMultiServiceFactory >  m_xServiceFactory;
 
             static ServiceInfoHelper getServiceInfo();
         };

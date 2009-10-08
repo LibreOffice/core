@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: simpleinteractionrequest.cxx,v $
- * $Revision: 1.5 $
+ * $Revision: 1.5.18.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -40,7 +40,7 @@ namespace task = com::sun::star::task;
 //=========================================================================
 SimpleInteractionRequest::SimpleInteractionRequest(
                                     const uno::Any & rRequest,
-                                    const Continuation nContinuations )
+                                    const sal_uInt32 nContinuations )
 : InteractionRequest( rRequest )
 {
     // Set continuations.
@@ -53,16 +53,16 @@ SimpleInteractionRequest::SimpleInteractionRequest(
     uno::Reference< task::XInteractionContinuation > xContinuations[ k_NumContinuationTypes ];
 
     if ( nContinuations & CONTINUATION_ABORT )
-        xContinuations[nLength++] = new InteractionAbort( this );
+        xContinuations[nLength++] = new InteractionContinuation< task::XInteractionAbort >( this );
 
     if ( nContinuations & CONTINUATION_RETRY )
-        xContinuations[nLength++] = new InteractionRetry( this );
+        xContinuations[nLength++] = new InteractionContinuation< task::XInteractionRetry >( this );
 
     if ( nContinuations & CONTINUATION_APPROVE )
-        xContinuations[nLength++] = new InteractionApprove( this );
+        xContinuations[nLength++] = new InteractionContinuation< task::XInteractionApprove >( this );
 
     if (  nContinuations & CONTINUATION_DISAPPROVE )
-        xContinuations[nLength++] = new InteractionDisapprove( this );
+        xContinuations[nLength++] = new InteractionContinuation< task::XInteractionDisapprove >( this );
 
     OSL_ENSURE( nLength > 0,
                 "SimpleInteractionRequest - No continuation!" );
@@ -74,7 +74,7 @@ SimpleInteractionRequest::SimpleInteractionRequest(
 }
 
 //=========================================================================
-const SimpleInteractionRequest::Continuation SimpleInteractionRequest::getResponse() const
+const sal_uInt32 SimpleInteractionRequest::getResponse() const
 {
     uno::Reference< task::XInteractionContinuation > xSelection = this->getSelection();
     if ( xSelection.is() )

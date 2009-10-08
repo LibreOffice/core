@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: txtfldi.hxx,v $
- * $Revision: 1.38 $
+ * $Revision: 1.38.66.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -1359,10 +1359,6 @@ class XMLAnnotationImportContext : public XMLTextFieldImportContext
     com::sun::star::uno::Reference < com::sun::star::beans::XPropertySet > mxField;
     com::sun::star::uno::Reference < com::sun::star::text::XTextCursor >  mxCursor;
     com::sun::star::uno::Reference < com::sun::star::text::XTextCursor >  mxOldCursor;
-
-    /// old list item and block (#91964#)
-    SvXMLImportContextRef       mxOldListBlock;
-    SvXMLImportContextRef       mxOldListItem;
 
 public:
 

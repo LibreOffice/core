@@ -52,37 +52,30 @@ namespace configmgr
 // -----------------------------------------------------------------------------
         namespace uno        = ::com::sun::star::uno;
         namespace backenduno = ::com::sun::star::configuration::backend;
-
-        using rtl::OUString;
 // -----------------------------------------------------------------------------
         class NodeUpdate;
-        typedef rtl::Reference<NodeUpdate> NodeUpdateRef;
 
         class LayerUpdate
         {
         public:
-            typedef uno::Reference< backenduno::XLayerHandler > LayerWriter;
-
             LayerUpdate();
             LayerUpdate(LayerUpdate const & _aOther);
             ~LayerUpdate();
             LayerUpdate & operator =(LayerUpdate const & _aOther);
         public:
-            typedef std::vector<OUString> ContextPath;
-
             bool isEmpty() const { return ! m_xContextNode.is(); }
 
-            NodeUpdateRef       getContextNode() const;
-            ContextPath const & getContextPath() const;
+            rtl::Reference<NodeUpdate>       getContextNode() const;
+            std::vector<rtl::OUString> const & getContextPath() const;
 
-            void setContextNode(NodeUpdateRef const & _xContextNode);
-
-        private:
-            void makeContextPath(OUString const & _aContextPath);
+            void setContextNode(rtl::Reference<NodeUpdate> const & _xContextNode);
 
         private:
-            NodeUpdateRef   m_xContextNode;
-            ContextPath     m_aContextPath;
+            void makeContextPath(rtl::OUString const & _aContextPath);
+
+        private:
+            rtl::Reference<NodeUpdate>   m_xContextNode;
+            std::vector<rtl::OUString>     m_aContextPath;
         };
 // -----------------------------------------------------------------------------
 

@@ -31,13 +31,10 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_configmgr.hxx"
 
+#include "treefragment.hxx"
 #include "updatedispatch.hxx"
 #include "configpath.hxx"
 #include "node.hxx"
-#include "treeaccessor.hxx"
-#include "valuenodeaccess.hxx"
-#include "groupnodeaccess.hxx"
-#include "setnodeaccess.hxx"
 #include "matchlocale.hxx"
 
 #include <com/sun/star/configuration/backend/XUpdateHandler.hpp>
@@ -50,7 +47,7 @@ namespace configmgr
     {
 // -----------------------------------------------------------------------------
 
-UpdateDispatcher::UpdateDispatcher(UpdateHandler const & _xUpdateHandler, OUString const & _aLocale)
+UpdateDispatcher::UpdateDispatcher(uno::Reference< backenduno::XUpdateHandler > const & _xUpdateHandler, rtl::OUString const & _aLocale)
 : m_pContextPath(NULL)
 , m_xUpdateHandler(_xUpdateHandler)
 , m_aLocale(_aLocale)
@@ -70,7 +67,7 @@ void UpdateDispatcher::dispatchUpdate(configuration::AbsolutePath const & _aRoot
 {
     if (!m_xUpdateHandler.is())
     {
-        OUString sMsg( RTL_CONSTASCII_USTRINGPARAM("ERROR: Cannot dispatch update - no handler found") );
+        rtl::OUString sMsg( RTL_CONSTASCII_USTRINGPARAM("ERROR: Cannot dispatch update - no handler found") );
         throw uno::RuntimeException(sMsg,NULL);
     }
 
@@ -96,19 +93,19 @@ void UpdateDispatcher::startUpdate()
     m_xUpdateHandler->startUpdate();
     m_bInValueSet = false;
     m_bInLocalizedValues = false;
-    m_aElementName = OUString();
+    m_aElementName = rtl::OUString();
 
     if (m_pContextPath)
     {
-        configuration::AbsolutePath::Iterator   it = m_pContextPath->begin();
-        configuration::AbsolutePath::Iterator   stop = m_pContextPath->end();
+        std::vector<configuration::Path::Component>::const_reverse_iterator   it = m_pContextPath->begin();
+        std::vector<configuration::Path::Component>::const_reverse_iterator   stop = m_pContextPath->end();
 
         OSL_ASSERT(it != stop);
         --stop;
 
         for ( ; it != stop; ++it)
         {
-            m_xUpdateHandler->modifyNode(it->getName().toString(),0,0,false);
+            m_xUpdateHandler->modifyNode(it->getName(),0,0,false);
         }
     }
 }
@@ -118,8 +115,8 @@ void UpdateDispatcher::endUpdate()
 {
     if (m_pContextPath)
     {
-        configuration::AbsolutePath::Iterator   it = m_pContextPath->begin();
-        configuration::AbsolutePath::Iterator   stop = m_pContextPath->end();
+        std::vector<configuration::Path::Component>::const_reverse_iterator   it = m_pContextPath->begin();
+        std::vector<configuration::Path::Component>::const_reverse_iterator   stop = m_pContextPath->end();
 
         OSL_ASSERT(it != stop);
         --stop;
@@ -138,7 +135,7 @@ void UpdateDispatcher::handle(ValueChange const& aValueNode)
     // special case: doing members of a localized property (as set)
     if (m_bInLocalizedValues)
     {
-        OUString aLocale = aValueNode.getNodeName();
+        rtl::OUString aLocale = aValueNode.getNodeName();
 
         if (aLocale.getLength())
         {
@@ -225,15 +222,14 @@ void UpdateDispatcher::handle(ValueChange const& aValueNode)
 
 void UpdateDispatcher::handle(AddNode const& aAddNode)
 {
-    data::TreeSegment aAddedTree = aAddNode.getNewTree();
+    rtl::Reference< data::TreeSegment > aAddedTree = aAddNode.getNewTree();
 
     OSL_ENSURE(aAddedTree.is(), "AddNode has no new data -> cannot add anything");
 
-    OSL_ENSURE( !aAddedTree.is() ||
-                ((m_bInValueSet||m_bInLocalizedValues) == aAddedTree.getSegmentRootNode()->isValue()),
+    OSL_ENSURE( ((m_bInValueSet||m_bInLocalizedValues) == aAddedTree->fragment->nodes[0].isValue()),
                 "Found added subtree in value set (extensible group)\n" );
 
-    this->visitTree( aAddedTree.getTreeAccess() );
+    this->visitTree(aAddedTree->fragment);
 }
 // -----------------------------------------------------------------------------
 
@@ -241,10 +237,10 @@ void UpdateDispatcher::handle(RemoveNode const& aRemoveNode)
 {
     OSL_ENSURE( !m_bInLocalizedValues, "UpdateDispatcher: Removing values for a specific locale is currently not supported");
 
-    data::TreeSegment aRemovedTree = aRemoveNode.getRemovedTree();
+    rtl::Reference< data::TreeSegment > aRemovedTree = aRemoveNode.getRemovedTree();
 
     OSL_ENSURE( !aRemovedTree.is() ||
-                ((m_bInValueSet||m_bInLocalizedValues) == aRemovedTree.getSegmentRootNode()->isValue()),
+                ((m_bInValueSet||m_bInLocalizedValues) == aRemovedTree->fragment->nodes[0].isValue()),
                 "Found removed subtree in value set (extensible group)\n" );
 
     if (m_bInLocalizedValues)
@@ -294,128 +290,128 @@ void UpdateDispatcher::handle(SubtreeChange const& aSubtree)
 }
 // -----------------------------------------------------------------------------
 
-data::SetVisitor::Result UpdateDispatcher::handle(data::ValueNodeAccess const& _aNode)
+bool UpdateDispatcher::handle(sharable::ValueNode * node)
 {
-    OUString aName;
+    rtl::OUString aName;
 
     // special case: doing members of a localized property (as set)
     if (m_bInLocalizedValues)
     {
         // the node name is the locale
-        OUString aLocale;
-        OSL_VERIFY(testReplacedAndGetName(_aNode,aLocale)); // "Adding a localized subvalue but not as root of element tree"
+        rtl::OUString aLocale;
+        OSL_VERIFY(testReplacedAndGetName(sharable::node(node), aLocale)); // "Adding a localized subvalue but not as root of element tree"
 
         if (aLocale.getLength() && ! localehelper::isDefaultLanguage(aLocale))
         {
-            m_xUpdateHandler->setPropertyValueForLocale( _aNode.getValue(), aLocale );
+            m_xUpdateHandler->setPropertyValueForLocale(node->getValue(), aLocale);
         }
         else
         {
-            m_xUpdateHandler->setPropertyValue( _aNode.getValue() );
+            m_xUpdateHandler->setPropertyValue(node->getValue());
         }
     }
-    else if (testReplacedAndGetName(_aNode,aName)&& (_aNode.getAttributes().isRemovable()) ) // we must be inside a set of values
+    else if (testReplacedAndGetName(sharable::node(node), aName) && sharable::node(node)->getAttributes().isRemovable()) // we must be inside a set of values
     {
 
-        OSL_ENSURE(!_aNode.isLocalized(), "UpdateDispatcher: Cannot add a localized value in a layer .");
+        OSL_ENSURE(!node->info.isLocalized(), "UpdateDispatcher: Cannot add a localized value in a layer .");
 
-        sal_Int16 nAttr = getUpdateAttributes(_aNode.getAttributes(),true);
+        sal_Int16 nAttr = getUpdateAttributes(sharable::node(node)->getAttributes(),true);
 
-        if (!_aNode.isNull())
+        if (!node->isNull())
         {
             m_xUpdateHandler->addOrReplacePropertyWithValue( aName,
                                                              nAttr,
-                                                             _aNode.getValue());
+                                                             node->getValue());
         }
         else
         {
             m_xUpdateHandler->addOrReplaceProperty( aName,
                                                     nAttr,
-                                                    _aNode.getValueType());
+                                                    node->getValueType());
         }
     }
     else // normal case: updating a single property //Inserting set
     {
-         sal_Int16 nAttr     = getUpdateAttributes(_aNode.getAttributes(),false);
-        sal_Int16 nAttrMask = getUpdateAttributeMask(_aNode.getAttributes());
+         sal_Int16 nAttr     = getUpdateAttributes(sharable::node(node)->getAttributes(),false);
+        sal_Int16 nAttrMask = getUpdateAttributeMask(sharable::node(node)->getAttributes());
 
-        m_xUpdateHandler->modifyProperty( aName, nAttr, nAttrMask, _aNode.getValueType() );
+        m_xUpdateHandler->modifyProperty( aName, nAttr, nAttrMask, node->getValueType() );
 
-        if (_aNode.isLocalized() && m_aLocale.getLength())
+        if (node->info.isLocalized() && m_aLocale.getLength())
         {
-            m_xUpdateHandler->setPropertyValueForLocale( _aNode.getValue(), m_aLocale );
+            m_xUpdateHandler->setPropertyValueForLocale(node->getValue(), m_aLocale);
         }
         else
         {
-            m_xUpdateHandler->setPropertyValue( _aNode.getValue() );
+            m_xUpdateHandler->setPropertyValue(node->getValue());
         }
 
         m_xUpdateHandler->endProperty();
     }
-    return CONTINUE;
+    return false;
 }
 // -----------------------------------------------------------------------------
 
-data::SetVisitor::Result UpdateDispatcher::handle(data::GroupNodeAccess const& _aNode)
+bool UpdateDispatcher::handle(sharable::GroupNode * node)
 {
     OSL_ENSURE( !m_bInLocalizedValues, "UpdateDispatcher: A localized value cannot be a complete group");
 
-    OUString aName;
+    rtl::OUString aName;
 
-    if ( testReplacedAndGetName(_aNode,aName) )
+    if ( testReplacedAndGetName(sharable::node(node), aName) )
     {
-        sal_Int16 nAttr = getUpdateAttributes(_aNode.getAttributes(),true);
+        sal_Int16 nAttr = getUpdateAttributes(sharable::node(node)->getAttributes(),true);
 
         m_xUpdateHandler->addOrReplaceNode( aName, nAttr );
 
-        this->visitChildren(_aNode);
+        this->visitChildren(node);
 
         m_xUpdateHandler->endNode();
     }
     else
     {
-        sal_Int16 nAttr     = getUpdateAttributes(_aNode.getAttributes(),false);
-        sal_Int16 nAttrMask = getUpdateAttributeMask(_aNode.getAttributes());
+        sal_Int16 nAttr     = getUpdateAttributes(sharable::node(node)->getAttributes(),false);
+        sal_Int16 nAttrMask = getUpdateAttributeMask(sharable::node(node)->getAttributes());
 
         m_xUpdateHandler->modifyNode( aName, nAttr, nAttrMask, false );
 
-        this->visitChildren(_aNode);
+        this->visitChildren(node);
 
         m_xUpdateHandler->endNode();
     }
-    return CONTINUE;
+    return false;
 }
 // -----------------------------------------------------------------------------
 
-data::SetVisitor::Result UpdateDispatcher::handle(data::SetNodeAccess const& _aNode)
+bool UpdateDispatcher::handle(sharable::SetNode * node)
 {
     OSL_ENSURE( !m_bInLocalizedValues, "UpdateDispatcher: A localized value cannot be a complete set");
 
-    OUString aName;
+    rtl::OUString aName;
 
-    if ( testReplacedAndGetName(_aNode,aName) )
+    if ( testReplacedAndGetName(sharable::node(node), aName) )
     {
-        OSL_ENSURE( !_aNode.isLocalizedValueSetNode(), "UpdateDispatcher: Cannot add a localized value in a layer." );
+        OSL_ENSURE( !node->info.isLocalized(), "UpdateDispatcher: Cannot add a localized value in a layer." );
 
-        sal_Int16 nAttr     = getUpdateAttributes(_aNode.getAttributes(),true);
+        sal_Int16 nAttr     = getUpdateAttributes(sharable::node(node)->getAttributes(),true);
 
         m_xUpdateHandler->addOrReplaceNode( aName, nAttr );
 
-        this->visitElements(_aNode);
+        this->visitElements(node);
 
         m_xUpdateHandler->endNode();
     }
     else
     {
-        sal_Int16 nAttr     = getUpdateAttributes(_aNode.getAttributes(),false);
-        sal_Int16 nAttrMask = getUpdateAttributeMask(_aNode.getAttributes());
+        sal_Int16 nAttr     = getUpdateAttributes(sharable::node(node)->getAttributes(),false);
+        sal_Int16 nAttrMask = getUpdateAttributeMask(sharable::node(node)->getAttributes());
 
-        if (_aNode.isLocalizedValueSetNode())
+        if (node->info.isLocalized())
         {
             m_xUpdateHandler->modifyProperty( aName, nAttr, nAttrMask, uno::Type() );
 
             m_bInLocalizedValues = true;
-            this->visitElements(_aNode);
+            this->visitElements(node);
             m_bInLocalizedValues = false;
 
             m_xUpdateHandler->endProperty();
@@ -425,39 +421,39 @@ data::SetVisitor::Result UpdateDispatcher::handle(data::SetNodeAccess const& _aN
         {
             m_xUpdateHandler->modifyNode( aName, nAttr, nAttrMask, false );
 
-            this->visitElements(_aNode);
+            this->visitElements(node);
 
             m_xUpdateHandler->endNode();
         }
     }
-    return CONTINUE;
+    return false;
 }
 // -----------------------------------------------------------------------------
 
-bool UpdateDispatcher::testReplacedAndGetName(data::NodeAccess const & _aNode, OUString & _aName)
+bool UpdateDispatcher::testReplacedAndGetName(sharable::Node * node, rtl::OUString & _aName)
 {
     if (m_aElementName.getLength())
     {
-        OSL_ENSURE( _aNode->isFragmentRoot(), "ERROR - UpdateDispatcher: Found orphaned 'element' name for inner node");
+        OSL_ENSURE( node->isFragmentRoot(), "ERROR - UpdateDispatcher: Found orphaned 'element' name for inner node");
         _aName = m_aElementName;
-        m_aElementName = OUString();
+        m_aElementName = rtl::OUString();
         return true;
     }
     else
     {
-        OSL_ENSURE(!_aNode->isFragmentRoot(), "ERROR - UpdateDispatcher: Found no 'element' name for fragment root node");
-        _aName = _aNode.getName().toString();
+        OSL_ENSURE(!node->isFragmentRoot(), "ERROR - UpdateDispatcher: Found no 'element' name for fragment root node");
+        _aName = node->getName();
         return false;
     }
 }
 // -----------------------------------------------------------------------------
 
-data::SetVisitor::Result UpdateDispatcher::handle(data::TreeAccessor const& _aElement)
+bool UpdateDispatcher::handle(sharable::TreeFragment * tree)
 {
-    m_aElementName = _aElement.getName().toString();
-    Result aRes = SetVisitor::handle(_aElement); // dispatch to root node
-    m_aElementName = OUString(); // clear - just to be safe
-    return aRes;
+    m_aElementName = tree->getName();
+    bool done = SetVisitor::handle(tree); // dispatch to root node
+    m_aElementName = rtl::OUString(); // clear - just to be safe
+    return done;
 }
 // -----------------------------------------------------------------------------
 

@@ -31,8 +31,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_configmgr.hxx"
 
-#include <stdio.h>
-
+#include "builddata.hxx"
 #include "nodeconverter.hxx"
 #include "treenodefactory.hxx"
 #include <osl/diagnose.h>
@@ -153,7 +152,8 @@ void ONodeConverter::handle(ValueChange& aValueNode)
 //--------------------------------------------------------------------------
 void ONodeConverter::handle(AddNode& aAddNode)
 {
-    m_pNode = aAddNode.getNewTree().cloneData(true);
+    rtl::Reference< data::TreeSegment > seg(aAddNode.getNewTree());
+    m_pNode = data::convertTree(seg.is() ? seg->fragment : 0, true);
 }
 
 //--------------------------------------------------------------------------
@@ -199,8 +199,8 @@ void OCreateSubtreeAction::handle(RemoveNode& _rChange)
 void OCreateSubtreeAction::handle(AddNode& _rChange)
 {
     // free the node and add it to the subtree
-    data::TreeSegment aNewNode = _rChange.getNewTree();
-    m_rTree.addChild(aNewNode.cloneData(true));
+    rtl::Reference< data::TreeSegment > aNewNode = _rChange.getNewTree();
+    m_rTree.addChild(data::convertTree(aNewNode.is() ? aNewNode->fragment : 0, true));
 }
 
 

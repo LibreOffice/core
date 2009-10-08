@@ -50,19 +50,17 @@ namespace configmgr
     namespace data
     {
 //-----------------------------------------------------------------------------
-        class TreeAccessor;
+        sharable::TreeFragment * buildTree(sharable::TreeFragment * tree);
 //-----------------------------------------------------------------------------
-        TreeAddress buildTree(TreeAccessor const& _aTree);
+        sharable::TreeFragment * buildTree(rtl::OUString const & _aTreeName, INode const& _aNode, bool _bWithDefaults);
 //-----------------------------------------------------------------------------
-        TreeAddress buildTree(rtl::OUString const & _aTreeName, INode const& _aNode, bool _bWithDefaults);
+        sharable::TreeFragment * buildElementTree(INode const& _aNode, rtl::OUString const & _aTypeName, bool _bWithDefaults);
 //-----------------------------------------------------------------------------
-        TreeAddress buildElementTree(INode const& _aNode, rtl::OUString const & _aTypeName, bool _bWithDefaults);
+        void mergeDefaults(sharable::TreeFragment * _aBaseAddress, INode const& _aDefaultNode);
 //-----------------------------------------------------------------------------
-        void mergeDefaults(TreeAddress _aBaseAddress, INode const& _aDefaultNode);
+        void destroyTree(sharable::TreeFragment * _aBaseAddress);
 //-----------------------------------------------------------------------------
-        void destroyTree(TreeAddress _aBaseAddress);
-//-----------------------------------------------------------------------------
-        std::auto_ptr<INode> convertTree(TreeAccessor const & _aTree, bool _bUseTreeName);
+        std::auto_ptr<INode> convertTree(sharable::TreeFragment * tree, bool _bUseTreeName);
 //-----------------------------------------------------------------------------
     }
 //-----------------------------------------------------------------------------

@@ -42,136 +42,60 @@ namespace configmgr
 {
     namespace configuration
     {
-    //------------------------------------------------------------------------
-        using rtl::OUString;
-    //------------------------------------------------------------------------
-        /// A tag struct for disabling validity checking on arguments
-        namespace argument { struct NoValidate {}; }
-
-        class Name;
-        class AbsolutePath;
-        class RelativePath;
-    //------------------------------------------------------------------------
-        namespace Path { struct PackageOnly; }
-
-        /// represents a name for a node in the configuration
-        class Name
-        {
-        public:
-            /// A dummy parameter for disabling validity checking on arguments
-            typedef argument::NoValidate NoValidate;
-
-            /// construct a Name from a String (internal use only - use creation wrapper functions)
-            explicit Name(OUString const& aString, Path::PackageOnly) SAL_THROW(());
-
-        public:
-            /// construct an empty Name
-            Name() SAL_THROW(()) : m_sRep() {}
-
-            /// check whether this is an empty Name
-            bool isEmpty() const SAL_THROW(()) { return m_sRep.getLength() == 0; }
-
-            /// get a string representation of this Name
-            const OUString& toString() const SAL_THROW(()) { return m_sRep; }
-
-        public:
-        // comparison operators
-            // equality (== is primary)
-            friend bool operator==(Name const& lhs, Name const& rhs) SAL_THROW(())
-            { return !!(lhs.m_sRep == rhs.m_sRep); }
-
-        // comparison operators
-            // ordering (< is primary)
-            friend bool operator< (Name const& lhs, Name const& rhs) SAL_THROW(())
-            { return !!(lhs.m_sRep < rhs.m_sRep); }
-
-        // hashing support
-            size_t hashCode() const SAL_THROW(()) { return m_sRep.hashCode(); }
-        private:
-            OUString m_sRep;
-        };
         //--------------------------------------------------------------------
 
         /** check if this is a well-formed name for a
             config Node (excluding set elements)
         */
-        bool isSimpleName(OUString const& sName) SAL_THROW(());
+        bool isSimpleName(rtl::OUString const& sName) SAL_THROW(());
 
-        /** check if this is a well-formed name for a
-            config Node (excluding set elements)
-        */
-        inline
-        bool isSimpleName(Name const& sName) SAL_THROW(())
-        { return isSimpleName(sName.toString()); }
-
-        /** make a <type>Name</type> out of <var>sName</var>
-            without full Validation.
-        */
-        Name makeName(OUString const& sName, argument::NoValidate) SAL_THROW(());
-
-        /** make a <type>Name</type> out of <var>sName</var>,
-            which should be used for a config Node (excluding set elements)
-        */
-        Name makeNodeName(OUString const& sName, argument::NoValidate) SAL_THROW(());
-
-        /** make a <type>Name</type> out of <var>sName</var>,
-            which should be used for a config set elements
-        */
-        Name makeElementName(OUString const& sName, argument::NoValidate) SAL_THROW(());
-
-        /** make a <type>Name</type> out of <var>sName</var>,
+        /** make a name out of <var>sName</var>,
             validating that it can be used for a config Node (excluding set elements)
             or template name.
             @throws InvalidName
                 if the name is not valid for that purpose
         */
-        Name validateNodeName(OUString const& sName);
+        rtl::OUString validateNodeName(rtl::OUString const& sName);
 
-        /** make a <type>Name</type> out of <var>sName</var>
+        /** make a name out of <var>sName</var>
             validating that it can be used for a config set element
             @throws InvalidName
                 if the name is not valid for that purpose
         */
-        Name validateElementName(OUString const& sName);
+        rtl::OUString validateElementName(rtl::OUString const& sName);
     //------------------------------------------------------------------------
 
     //------------------------------------------------------------------------
         namespace Path
         {
         //------------------------------------------------------------------------
-            /// tag for disabling validity checking on arguments
-            using argument::NoValidate;
-
-        //------------------------------------------------------------------------
 
             class Component
             {
                 /// holds the contents of this path component
-                Name m_aName;
+                rtl::OUString m_aName;
             public:
                 /// construct a path component from a string, without any validation
-                Component(OUString const& _sName, PackageOnly) SAL_THROW(());
-                /// construct a path component from a Name, without any validation
-                Component(Name const& _aName, PackageOnly) SAL_THROW(());
+                Component(rtl::OUString const& _sName) SAL_THROW(());
 
                 /// is this component an empty name ?
-                bool isEmpty()    const SAL_THROW(()) { return m_aName.isEmpty(); }
+                bool isEmpty()    const SAL_THROW(()) { return m_aName.getLength() == 0; }
                 /// is this component a simple name ?
                 bool isSimpleName()    const SAL_THROW(());
                 /// get the inner name for this component
-                Name getName()         const SAL_THROW(());
+                rtl::OUString getName()         const SAL_THROW(());
                 /// get the embedded type name for this component (if any)
-                Name getTypeName()     const SAL_THROW(());
+                rtl::OUString getTypeName()     const SAL_THROW(());
 
                 /// get the contents of this as string (unparsed).
-                OUString toPathString() const SAL_THROW(()) { return m_aName.toString(); }
+                rtl::OUString toPathString() const SAL_THROW(()) { return m_aName; }
 
                 // hashing - for hash maps. compatible to equiv or matches
                 size_t hashCode() const SAL_THROW(())
                 { return this->getName().hashCode(); }
 
-                /// get the contents of this as a Name (unparsed). Use with care !
-                Name const& getInternalName() const SAL_THROW(()) { return m_aName; }
+                /// get the contents of this as a name (unparsed). Use with care !
+                rtl::OUString const& getInternalName() const SAL_THROW(()) { return m_aName; }
 
             };
 
@@ -192,17 +116,10 @@ namespace configmgr
 
         //-------------------------------------------------------------------------
             /// construct a path component from a name, validating it as simple name
-            Component wrapSimpleName(Name const& _aName);
+            Component wrapSimpleName(rtl::OUString const& _aName);
 
             /// construct a path component from a type and element name, using a wildcard if no type is available
-            Component makeCompositeName(Name const& _aElementName, Name const& _aTypeName);
-
-        //-------------------------------------------------------------------------
-            /// construct a path component from a string, validating it as simple name
-            Component wrapSimpleName(OUString const& _sName);
-
-            /// construct a path component from a type and element name as strings, using a wildcard if no type is available
-            Component makeCompositeName(OUString const& _sElementName, OUString const& _sTypeName);
+            Component makeCompositeName(rtl::OUString const& _aElementName, rtl::OUString const& _aTypeName);
 
     //-----------------------------------------------------------------------------
             /// construct a composite path component from a element name or string, using a wildcard type
@@ -227,16 +144,6 @@ namespace configmgr
             class Rep
             {
             public:
-                /// a sequence of element names which make up a path
-                typedef std::vector<Component> Components;
-                /// a (read-only) iterator to the element names which make up a path
-                typedef Components::const_reverse_iterator Iterator;
-                /// a (mutating) iterator to the element names which make up a path
-                typedef Components::reverse_iterator MutatingIterator;
-                /// type used to specify a component count
-                typedef Components::size_type size_type;
-
-            public:
                 /// construct an empty path
                 Rep() SAL_THROW(()) : m_aComponents() {}
 
@@ -244,7 +151,7 @@ namespace configmgr
                 explicit Rep(Component const& _aName) SAL_THROW(()) : m_aComponents(1,_aName) {}
 
                 /// construct a path consisting of a path subrange
-                explicit Rep(Iterator const& _first, Iterator const& _last)
+                explicit Rep(std::vector<Component>::const_reverse_iterator const& _first, std::vector<Component>::const_reverse_iterator const& _last)
                 : m_aComponents(_last.base(), _first.base()) {}
 
                 /// swap contents with another instance
@@ -266,34 +173,34 @@ namespace configmgr
                 void dropFirstName() { check_not_empty(); m_aComponents.pop_back(); }
 
                 /// get a /-separated string representation of this
-                OUString toString(bool _bAbsolute) const SAL_THROW(());
+                rtl::OUString toString(bool _bAbsolute) const SAL_THROW(());
 
             public:
                 /// check if this is an empty path
                 bool isEmpty() const SAL_THROW(()) { return m_aComponents.empty(); }
 
                 /// Count the components of this
-                size_type countComponents() const SAL_THROW(()) { return m_aComponents.size(); }
+                std::vector<Component>::size_type countComponents() const SAL_THROW(()) { return m_aComponents.size(); }
 
                 /// Insert a component into this path
-                void insertComponent(MutatingIterator _it, Component _aName)
+                void insertComponent(std::vector<Component>::reverse_iterator _it, Component _aName)
                 { m_aComponents.insert(_it.base(),_aName); }
 
                 /// Remove a component from this path
-                void removeComponent(MutatingIterator _it) { m_aComponents.erase(_it.base()); }
+                void removeComponent(std::vector<Component>::reverse_iterator _it) { m_aComponents.erase(_it.base()); }
 
                 /// Remove all components from this path
                 void clearComponents() SAL_THROW(()) { m_aComponents.clear(); }
 
                 /// get a STL style iterator to the first component
-                Iterator begin() const SAL_THROW(()) { return m_aComponents.rbegin(); }
+                std::vector<Component>::const_reverse_iterator begin() const SAL_THROW(()) { return m_aComponents.rbegin(); }
                 /// get a STL style iterator to after the last component
-                Iterator end()   const SAL_THROW(()) { return m_aComponents.rend(); }
+                std::vector<Component>::const_reverse_iterator end()   const SAL_THROW(()) { return m_aComponents.rend(); }
 
                 /// get a STL style iterator to the first component
-                MutatingIterator begin_mutate() SAL_THROW(()) { return m_aComponents.rbegin(); }
+                std::vector<Component>::reverse_iterator begin_mutate() SAL_THROW(()) { return m_aComponents.rbegin(); }
                 /// get a STL style iterator to after the last component
-                MutatingIterator end_mutate() SAL_THROW(())   { return m_aComponents.rend(); }
+                std::vector<Component>::reverse_iterator end_mutate() SAL_THROW(())   { return m_aComponents.rend(); }
 
                 // hashing - for hash maps
                 size_t hashCode() const SAL_THROW(());
@@ -302,7 +209,7 @@ namespace configmgr
                 void check_not_empty() const;
 
             private:
-                Components m_aComponents;
+                std::vector<Component> m_aComponents;
             };
         //------------------------------------------------------------------------
 
@@ -323,16 +230,8 @@ namespace configmgr
             Rep stripMatchingPrefix(Rep const& _aPath,Rep const& _aPrefix);
         //------------------------------------------------------------------------
 
-            /// a (read-only) iterator to the element names which make up a path
-            typedef Rep::Iterator Iterator;
-            /// a (mutating) iterator to the element names which make up a path
-            typedef Rep::MutatingIterator MutatingIterator;
-            /// a (mutating) iterator to the element names which make up a path
-            typedef Rep::size_type size_type;
-        //------------------------------------------------------------------------
-
             /// distinguishes which kind of path is present in a string
-            bool isAbsolutePath(OUString const& _sPath);
+            bool isAbsolutePath(rtl::OUString const& _sPath);
         //------------------------------------------------------------------------
         }
     //------------------------------------------------------------------------
@@ -341,14 +240,9 @@ namespace configmgr
         {
             Path::Rep m_aRep;
         public:
-            /// a (read-only) iterator to the element names which make up a path
-            typedef Path::Iterator  Iterator;
-            /// a (mutating) iterator to the element names which make up a path
-            typedef Path::MutatingIterator MutatingIterator;
-        public:
         // Construction
             /// construct a relative path from <var>aString</var> throwing InvalidName for parse errors
-            static  RelativePath parse(OUString const& _aString);
+            static  RelativePath parse(rtl::OUString const& _aString);
 
             /// construct an empty relative path
             RelativePath() SAL_THROW(()) : m_aRep() { init(); }
@@ -367,7 +261,7 @@ namespace configmgr
             bool isEmpty() const SAL_THROW(()) { return m_aRep.isEmpty(); }
 
             /// Count the components of this
-            Path::size_type getDepth() const SAL_THROW(()) { return m_aRep.countComponents(); }
+            std::vector<Path::Component>::size_type getDepth() const SAL_THROW(()) { return m_aRep.countComponents(); }
 
             /// get the local name (the last component of this path)
             Path::Component const& getLocalName() const { return m_aRep.getLocalName(); }
@@ -379,18 +273,18 @@ namespace configmgr
             void dropFirstName() { m_aRep.dropFirstName(); }
 
             /// get a /-separated string representation of this
-            OUString toString() const SAL_THROW(());
+            rtl::OUString toString() const SAL_THROW(());
         public:
         // Iteration support
             /// get a STL style iterator to the first component
-            Iterator begin() const SAL_THROW(()) { return m_aRep.begin(); }
+            std::vector<Path::Component>::const_reverse_iterator begin() const SAL_THROW(()) { return m_aRep.begin(); }
             /// get a STL style iterator to after the last component
-            Iterator end()   const SAL_THROW(()) { return m_aRep.end(); }
+            std::vector<Path::Component>::const_reverse_iterator end()   const SAL_THROW(()) { return m_aRep.end(); }
 
             /// get a STL style iterator to the first component
-            MutatingIterator begin_mutate() SAL_THROW(()) { return m_aRep.begin_mutate(); }
+            std::vector<Path::Component>::reverse_iterator begin_mutate() SAL_THROW(()) { return m_aRep.begin_mutate(); }
             /// get a STL style iterator to after the last component
-            MutatingIterator end_mutate() SAL_THROW(())   { return m_aRep.end_mutate(); }
+            std::vector<Path::Component>::reverse_iterator end_mutate() SAL_THROW(())   { return m_aRep.end_mutate(); }
 
         // Direct access - 'package' visible
             /// Get a reference to (or copy of) the internal PathRep of this
@@ -410,27 +304,12 @@ namespace configmgr
         {
             Path::Rep m_aRep;
         public:
-            /// A dummy parameter for disabling validity checking on arguments
-            typedef argument::NoValidate NoValidate;
-
-            /// a (read-only) iterator to the element names which make up a path
-            typedef Path::Iterator  Iterator;
-            /// a (mutating) iterator to the element names which make up a path
-            typedef Path::MutatingIterator MutatingIterator;
-        public:
         // Construction
             /// construct a absolute path from <var>aString</var> throwing InvalidName for parse errors
-            static AbsolutePath parse(OUString const& _aString);
-
-            /// construct a absolute path to a whole module (toplevel)
-            static AbsolutePath makeModulePath(Name const& _aModuleName)
-            { return AbsolutePath( Path::Rep( Path::wrapSimpleName(_aModuleName) ) ); }
-
-            /// construct a absolute path to a whole module (toplevel)
-            static AbsolutePath makeModulePath(Name const& _aModuleName, NoValidate) SAL_THROW(());
+            static AbsolutePath parse(rtl::OUString const& _aString);
 
             /// construct a absolute path to a whole module (toplevel) without error checking
-            static AbsolutePath makeModulePath(OUString const& _aString, NoValidate) SAL_THROW(());
+            static AbsolutePath makeModulePath(rtl::OUString const& _aString) SAL_THROW(());
 
             /// construct an absolute path to the (virtual) hierarchy root
             static  AbsolutePath root() SAL_THROW(());
@@ -457,24 +336,24 @@ namespace configmgr
             /// get the local name (the last component of this path)
             Path::Component const& getLocalName() const { return m_aRep.getLocalName(); }
 
-            Name const & getModuleName() const { return m_aRep.getFirstName().getInternalName(); }
+            rtl::OUString const & getModuleName() const { return m_aRep.getFirstName().getInternalName(); }
 
             /// get a /-separated string representation of this
-            OUString toString() const SAL_THROW(());
+            rtl::OUString toString() const SAL_THROW(());
 
             /// Count the components of this
-            Path::size_type getDepth() const SAL_THROW(()) { return m_aRep.countComponents(); }
+            std::vector<Path::Component>::size_type getDepth() const SAL_THROW(()) { return m_aRep.countComponents(); }
         public:
         // Iteration support
             /// get a STL style iterator to the first component
-            Iterator begin() const SAL_THROW(()) { return m_aRep.begin(); }
+            std::vector<Path::Component>::const_reverse_iterator begin() const SAL_THROW(()) { return m_aRep.begin(); }
             /// get a STL style iterator to after the last component
-            Iterator end()   const SAL_THROW(()) { return m_aRep.end(); }
+            std::vector<Path::Component>::const_reverse_iterator end()   const SAL_THROW(()) { return m_aRep.end(); }
 
             /// get a STL style iterator to the first component
-            MutatingIterator begin_mutate() SAL_THROW(()) { return m_aRep.begin_mutate(); }
+            std::vector<Path::Component>::reverse_iterator begin_mutate() SAL_THROW(()) { return m_aRep.begin_mutate(); }
             /// get a STL style iterator to after the last component
-            MutatingIterator end_mutate() SAL_THROW(())   { return m_aRep.end_mutate(); }
+            std::vector<Path::Component>::reverse_iterator end_mutate() SAL_THROW(())   { return m_aRep.end_mutate(); }
 
         // Direct access - 'package' visible
             /// Get a reference to (or copy of) the internal PathRep of this
@@ -486,20 +365,6 @@ namespace configmgr
         /// compare taking type wildcards into account
         inline bool matches(AbsolutePath const& lhs,AbsolutePath const& rhs) SAL_THROW(())
         { return Path::matches(lhs.rep(),rhs.rep()); }
-
-    //------------------------------------------------------------------------
-    // Derived comparison operator implementations
-    //------------------------------------------------------------------------
-        inline bool operator!=(Name const& lhs, Name const& rhs) SAL_THROW(())
-        { return !(lhs == rhs); }
-        //--------------------------------------------------------------------
-        inline bool operator<=(Name const& lhs, Name const& rhs) SAL_THROW(())
-        { return !(rhs < lhs); }
-        inline bool operator> (Name const& lhs, Name const& rhs) SAL_THROW(())
-        { return   rhs < lhs;  }
-        inline bool operator>=(Name const& lhs, Name const& rhs) SAL_THROW(())
-        { return !(lhs < rhs); }
-    //------------------------------------------------------------------------
 
         namespace Path
         {

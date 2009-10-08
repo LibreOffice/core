@@ -1,0 +1,52 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2008 by Sun Microsystems, Inc.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * $RCSfile: ado_res.hrc,v $
+ * $Revision: 1.1.2.2 $
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+
+#ifndef CONNECTIVITY_RESOURCE_ADO_HRC
+#define CONNECTIVITY_RESOURCE_ADO_HRC
+
+#include "resource/conn_shared_res.hrc"
+#include "resource/common_res.hrc"
+
+// ============================================================================
+// = the ado driver's resource strings
+// ============================================================================
+#define STR_INVALID_COLUMN_DESCRIPTOR_ERROR     ( STR_ADO_BASE +  1 )
+#define STR_INVALID_GROUP_DESCRIPTOR_ERROR      ( STR_ADO_BASE +  2 )
+#define STR_INVALID_INDEX_DESCRIPTOR_ERROR      ( STR_ADO_BASE +  3 )
+#define STR_INVALID_KEY_DESCRIPTOR_ERROR        ( STR_ADO_BASE +  4 )
+#define STR_INVALID_TABLE_DESCRIPTOR_ERROR      ( STR_ADO_BASE +  5 )
+#define STR_INVALID_USER_DESCRIPTOR_ERROR       ( STR_ADO_BASE +  6 )
+#define STR_INVALID_VIEW_DESCRIPTOR_ERROR       ( STR_ADO_BASE +  7 )
+#define STR_VIEW_NO_COMMAND_ERROR               ( STR_ADO_BASE +  8 )
+#define STR_TYPE_NOT_CONVERT                    ( STR_ADO_BASE +  9 )
+
+
+#endif // CONNECTIVITY_RESOURCE_ADO_HRC
+

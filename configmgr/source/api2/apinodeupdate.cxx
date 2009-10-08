@@ -68,9 +68,8 @@ configuration::GroupDefaulter NodeGroupAccess::getNodeDefaulter()
 
 configuration::SetElementFactory NodeTreeSetAccess::getElementFactory()
 {
-    using namespace configuration;
-    TemplateProvider aProvider = SetElementFactory::findTemplateProvider(getTree(),getNodeRef());
-    return SetElementFactory(aProvider);
+    configuration::TemplateProvider aProvider = configuration::SetElementFactory::findTemplateProvider(getTree(),getNodeRef());
+    return configuration::SetElementFactory(aProvider);
 }
 //-----------------------------------------------------------------------------
 
@@ -95,29 +94,25 @@ configuration::ValueSetUpdater NodeValueSetAccess::getNodeUpdater()
 
 void attachSetElement(NodeTreeSetAccess& aSet, SetElement& aElement)
 {
-    using configuration::NodeID;
-    OSL_ENSURE( NodeID(aSet.getTreeRef(),aSet.getNodeRef()) ==
-                NodeID(aElement.getTreeRef().getContextTree(),aElement.getTreeRef().getContextNode()),
+    OSL_ENSURE( configuration::NodeID(aSet.getTreeRef(),aSet.getNodeRef()) ==
+                configuration::NodeID(rtl::Reference< configuration::Tree >(aElement.getTreeRef()->getContextTree()),aElement.getTreeRef()->getContextNodeRef()),
                 "ERROR: Attaching an unrelated SetElement to a SetInfoAccess");
 
     aElement.haveNewParent(&aSet);
 }
 //-----------------------------------------------------------------------------
 
-bool attachSetElement(NodeTreeSetAccess& aSet, configuration::ElementTree const& aElementTree)
+bool attachSetElement(NodeTreeSetAccess& aSet, rtl::Reference< configuration::ElementTree > const& aElementTree)
 {
-    using configuration::NodeID;
-    OSL_ENSURE( NodeID(aSet.getTreeRef(),aSet.getNodeRef()) ==
-                NodeID(aElementTree.getTree().getContextTree(),aElementTree.getTree().getContextNode()),
+    OSL_ENSURE( configuration::NodeID(aSet.getTreeRef(),aSet.getNodeRef()) ==
+                configuration::NodeID(rtl::Reference< configuration::Tree >(aElementTree->getContextTree()), aElementTree->getContextNodeRef()),
                 "ERROR: Attaching an unrelated ElementTree to a SetInfoAccess");
 
     Factory& rFactory = aSet.getFactory();
-
-    configuration::ElementRef aElementRef( aElementTree.getImpl() ); // no other conversion available
-    if (SetElement* pSetElement = rFactory.findSetElement(aElementRef))
+    if (SetElement* pSetElement = rFactory.findSetElement(aElementTree))
     {
         // the factory always does an extra acquire
-        UnoInterfaceRef xReleaseSetElement(pSetElement->getUnoInstance(), uno::UNO_REF_NO_ACQUIRE);
+        uno::Reference<uno::XInterface> xReleaseSetElement(pSetElement->getUnoInstance(), uno::UNO_REF_NO_ACQUIRE);
 
         attachSetElement(aSet, *pSetElement);
         return true;
@@ -130,22 +125,22 @@ bool attachSetElement(NodeTreeSetAccess& aSet, configuration::ElementTree const&
 
 void detachSetElement(SetElement& aElement)
 {
-    OSL_ENSURE( aElement.getTreeRef().getContextTree().isEmpty(),
+    OSL_ENSURE( configuration::isEmpty(aElement.getTreeRef()->getContextTree()),
                 "ERROR: Detaching a SetElement that has a parent");
 
     aElement.haveNewParent(0);
 }
 //-----------------------------------------------------------------------------
 
-bool detachSetElement(Factory& rFactory, configuration::ElementRef const& aElementTree)
+bool detachSetElement(Factory& rFactory, rtl::Reference< configuration::ElementTree > const& aElementTree)
 {
-    OSL_ENSURE( aElementTree.getTreeRef().getContextTree().isEmpty(),
+    OSL_ENSURE( configuration::isEmpty(aElementTree->getContextTree()),
                 "ERROR: Detaching an ElementTree that has a parent");
 
     if (SetElement* pSetElement = rFactory.findSetElement(aElementTree))
     {
         // the factory always does an extra acquire
-        UnoInterfaceRef xReleaseSetElement(pSetElement->getUnoInstance(), uno::UNO_REF_NO_ACQUIRE);
+        uno::Reference<uno::XInterface> xReleaseSetElement(pSetElement->getUnoInstance(), uno::UNO_REF_NO_ACQUIRE);
 
         detachSetElement(*pSetElement);
         return true;

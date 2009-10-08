@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: polysc3d.cxx,v $
- * $Revision: 1.18 $
+ * $Revision: 1.18.18.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -43,8 +43,6 @@
 #include <svtools/style.hxx>
 #include "globl3d.hxx"
 #include <svx/polysc3d.hxx>
-#include <goodies/base3d.hxx>
-#include <goodies/b3dtex.hxx>
 #include <svx/xlnclit.hxx>
 #include <svtools/metitem.hxx>
 #include <svx/xtable.hxx>

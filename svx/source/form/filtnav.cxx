@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: filtnav.cxx,v $
- * $Revision: 1.48 $
+ * $Revision: 1.48.216.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -1535,7 +1535,7 @@ void FmFilterNavigator::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint )
 }
 
 //------------------------------------------------------------------------
-SvLBoxEntry* FmFilterNavigator::FindEntry(FmFilterData* pItem)
+SvLBoxEntry* FmFilterNavigator::FindEntry(const FmFilterData* pItem) const
 {
     SvLBoxEntry* pEntry = NULL;
     if (pItem)
@@ -1553,7 +1553,7 @@ SvLBoxEntry* FmFilterNavigator::FindEntry(FmFilterData* pItem)
 //------------------------------------------------------------------------
 void FmFilterNavigator::Insert(FmFilterData* pItem, sal_Int32 nPos)
 {
-    FmParentData* pParent = pItem->GetParent() ? pItem->GetParent() : GetFilterModel();
+    const FmParentData* pParent = pItem->GetParent() ? pItem->GetParent() : GetFilterModel();
 
     // insert the item
     SvLBoxEntry* pParentEntry = FindEntry(pParent);

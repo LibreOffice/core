@@ -38,16 +38,13 @@
 #include "apitreeimplobj.hxx"
 #include "apitreeaccess.hxx"
 #include "roottree.hxx"
+#include "node.hxx"
 #include "noderef.hxx"
 #include "objectregistry.hxx"
 #include "bootstrap.hxx"
 #include "cachefactory.hxx"
 #include "provider.hxx"
-#include "treeprovider.hxx"
 #include "treemanager.hxx"
-#include "treeaccessor.hxx"
-#include "groupnodeaccess.hxx"
-#include "valuenodeaccess.hxx"
 #include "tracer.hxx"
 #include <osl/interlck.h>
 #include <com/sun/star/beans/PropertyValue.hpp>
@@ -63,17 +60,13 @@ namespace configmgr
     namespace css   = ::com::sun::star;
     namespace uno   = css::uno;
     namespace beans = css::beans;
-    using ::rtl::OUString;
-
-    using configapi::NodeElement;
-    using configuration::RootTree;
 
     namespace configapi
     {
 
         class ApiProviderInstances
         {
-            ObjectRegistryHolder    m_aObjectRegistry;
+            rtl::Reference<ObjectRegistry>  m_aObjectRegistry;
             ReadOnlyObjectFactory   m_aReaderFactory;
             UpdateObjectFactory     m_aWriterFactory;
             ApiProvider             m_aReaderProvider;
@@ -104,7 +97,7 @@ namespace configmgr
     //= OProviderImpl
     //=============================================================================
     //-----------------------------------------------------------------------------
-    OProviderImpl::OProviderImpl(OProvider* _pProvider, CreationContext const & _xContext)
+    OProviderImpl::OProviderImpl(OProvider* _pProvider, uno::Reference< uno::XComponentContext > const & _xContext)
                   :m_pProvider(_pProvider)
                   ,m_xTypeConverter()
                   ,m_aDefaultOptions()
@@ -118,32 +111,32 @@ namespace configmgr
         OSL_ENSURE(xFactory.is(), "OProviderImpl : missing service factory !");
 
         m_xTypeConverter = m_xTypeConverter.query(
-            xFactory->createInstanceWithContext( OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.script.Converter" )),
+            xFactory->createInstanceWithContext( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.script.Converter" )),
                                                  _xContext));
 
         OSL_ENSURE(m_xTypeConverter.is(), "Module::Module : could not create an instance of the type converter !");
     }
     //-----------------------------------------------------------------------------
-    rtl::Reference< TreeManager > OProviderImpl::maybeGetTreeManager() const CFG_NOTHROW()
+    rtl::Reference< TreeManager > OProviderImpl::maybeGetTreeManager() const SAL_THROW(())
     {
         osl::MutexGuard aGuard(m_aTreeManagerMutex);
         rtl::Reference< TreeManager > xResult(m_pTreeManager);
         return xResult;
     }
     //-----------------------------------------------------------------------------
-    rtl::Reference< TreeManager > OProviderImpl::getTreeManager() const CFG_UNO_THROW_RTE()
+    rtl::Reference< TreeManager > OProviderImpl::getTreeManager() const SAL_THROW((com::sun::star::uno::RuntimeException))
     {
         osl::MutexGuard aGuard(m_aTreeManagerMutex);
         if (m_pTreeManager == NULL)
         {
-            OUString sMsg = OUString::createFromAscii("OProviderImpl: No cache available - provider was already disposed.");
+            rtl::OUString sMsg = rtl::OUString::createFromAscii("OProviderImpl: No cache available - provider was already disposed.");
             throw com::sun::star::lang::DisposedException(sMsg,static_cast<lang::XMultiServiceFactory*>(m_pProvider));
         }
         rtl::Reference< TreeManager > xResult(m_pTreeManager);
         return xResult;
     }
     //-----------------------------------------------------------------------------
-    void OProviderImpl::setTreeManager(TreeManager * pTreeManager) CFG_UNO_THROW_RTE()
+    void OProviderImpl::setTreeManager(TreeManager * pTreeManager) SAL_THROW((com::sun::star::uno::RuntimeException))
     {
         osl::MutexGuard aGuard(m_aTreeManagerMutex);
 
@@ -152,14 +145,14 @@ namespace configmgr
 
         if (pTreeManager == NULL)
         {
-            OUString sMsg = OUString::createFromAscii("OProviderImpl: No cache available - cache creation failed.");
+            rtl::OUString sMsg = rtl::OUString::createFromAscii("OProviderImpl: No cache available - cache creation failed.");
             throw com::sun::star::uno::RuntimeException(sMsg,NULL);
         }
 
         (m_pTreeManager = pTreeManager) -> acquire();
     }
     //-----------------------------------------------------------------------------
-    void OProviderImpl::clearTreeManager() CFG_NOTHROW()
+    void OProviderImpl::clearTreeManager() SAL_THROW(())
     {
         osl::ClearableMutexGuard aGuard(m_aTreeManagerMutex);
         if (TreeManager * pTM = m_pTreeManager)
@@ -181,7 +174,7 @@ namespace configmgr
         }
         else
         {
-            throw com::sun::star::uno::RuntimeException(OUString::createFromAscii("OProviderImpl: Only UNO Backends Supported"),NULL);
+            throw com::sun::star::uno::RuntimeException(rtl::OUString::createFromAscii("OProviderImpl: Only UNO Backends Supported"),NULL);
         }
 
         setTreeManager( xNewTreeManager.get() );
@@ -195,12 +188,12 @@ namespace configmgr
         try
         {
             static ::rtl::OUString ssUserProfile(RTL_CONSTASCII_USTRINGPARAM("org.openoffice.Setup"));
-            AbsolutePath aProfileModule = AbsolutePath::makeModulePath(ssUserProfile, AbsolutePath::NoValidate());
+            configuration::AbsolutePath aProfileModule = configuration::AbsolutePath::makeModulePath(ssUserProfile);
 
-            data::NodeAccess aProfileTree = xNewTreeManager->requestSubtree(aProfileModule, m_aDefaultOptions);
-            if (aProfileTree.isValid())
+            sharable::Node * profileTree = xNewTreeManager->requestSubtree(aProfileModule, m_aDefaultOptions);
+            if (profileTree != 0)
             {
-                implInitFromProfile(aProfileTree);
+                implInitFromProfile(profileTree);
 
                 // should we clean this up ?
                 // xNewTreeManager->releaseSubtree(aProfileModule, xTempOptions);
@@ -222,7 +215,7 @@ namespace configmgr
     {
     }
     //-----------------------------------------------------------------------------
-    void OProviderImpl::initFromProfile(data::NodeAccess const& )
+    void OProviderImpl::initFromProfile(sharable::Node *)
     {
     }
     //-----------------------------------------------------------------------------
@@ -258,31 +251,29 @@ namespace configmgr
             rNeedProfile = true; // to get locale
     }
     //-----------------------------------------------------------------------------
-    void OProviderImpl::implInitFromProfile(data::NodeAccess const& aProfile)
+    void OProviderImpl::implInitFromProfile(sharable::Node * profile)
     {
-        OSL_ASSERT(aProfile.isValid());
+        OSL_ASSERT(profile != 0);
 
-        data::GroupNodeAccess aProfileNode( aProfile );
+        sharable::GroupNode * profileNode = sharable::GroupNode::from(profile);
 
-        OSL_ASSERT(aProfileNode.isValid());
+        OSL_ASSERT(profileNode != 0);
 
         // read the default locale for the user
         if (!m_aDefaultOptions.hasLocale())
         {
-            using configuration::Name;
-            using configuration::makeNodeName;
-            static Name ssSubGroup = makeNodeName(OUString(RTL_CONSTASCII_USTRINGPARAM("L10N")), Name::NoValidate());
-            static Name ssLocale   = makeNodeName(OUString(RTL_CONSTASCII_USTRINGPARAM("ooLocale")), Name::NoValidate());
+            static rtl::OUString ssSubGroup(RTL_CONSTASCII_USTRINGPARAM("L10N"));
+            static rtl::OUString ssLocale(RTL_CONSTASCII_USTRINGPARAM("ooLocale"));
 
-            data::GroupNodeAccess aL10NNode( aProfileNode.getChildNode(ssSubGroup) );
-            if (aL10NNode.isValid())
+            sharable::GroupNode * l10nNode = sharable::GroupNode::from(profileNode->getChild(ssSubGroup));
+            if (l10nNode != 0)
             {
-                data::ValueNodeAccess aValue( aL10NNode.getChildNode(ssLocale) );
+                sharable::ValueNode * value = sharable::ValueNode::from(l10nNode->getChild(ssLocale));
 
-                if (aValue.isValid())
+                if (value != 0)
                 {
                     rtl::OUString sDefaultLocale;
-                    if (aValue.getValue() >>= sDefaultLocale)
+                    if (value->getValue() >>= sDefaultLocale)
                     {
                         m_aDefaultOptions.setIsoLocale(sDefaultLocale);
                     }
@@ -293,14 +284,14 @@ namespace configmgr
         }
 
     // call the template method
-        this->initFromProfile(aProfile);
+        this->initFromProfile(profile);
 
         // last fallback, if there is no locale - even in ooLocale
         m_aDefaultOptions.ensureLocaleSet();
     }
 
     //-----------------------------------------------------------------------------
-    void OProviderImpl::setDefaultLocale( RequestOptions::Locale const & aLocale )
+    void OProviderImpl::setDefaultLocale( com::sun::star::lang::Locale const & aLocale )
     {
         m_aDefaultOptions.setLocale( aLocale );
         // ensure that the locale is never cleared to 'empty'
@@ -338,38 +329,30 @@ namespace configmgr
 
     //-----------------------------------------------------------------------------
     // access to the raw notifications
-    IConfigBroadcaster* OProviderImpl::getNotifier() CFG_NOTHROW()
+    TreeManager * OProviderImpl::getNotifier() SAL_THROW(())
     {
         rtl::Reference< TreeManager > xTM = maybeGetTreeManager();
-        return xTM.is() ? xTM->getBroadcaster() : NULL;
+        return xTM.get();
     }
 
     // DefaultProvider access
     //-----------------------------------------------------------------------------
-    rtl::Reference< IConfigDefaultProvider > OProviderImpl::getDefaultProvider() const CFG_UNO_THROW_RTE(  )
+    rtl::Reference< TreeManager > OProviderImpl::getDefaultProvider() const SAL_THROW((com::sun::star::uno::RuntimeException))
     {
         return getTreeManager().get();
     }
 
-    // TemplateManager access
     //-----------------------------------------------------------------------------
-    rtl::Reference< IConfigTemplateManager >  OProviderImpl::getTemplateProvider() const CFG_UNO_THROW_RTE(  )
-    {
-        return getTreeManager().get();
-    }
-
-    // ITreeProvider /ITreeManager
-    //-----------------------------------------------------------------------------
-    data::NodeAccess OProviderImpl::requestSubtree( AbsolutePath const& aSubtreePath,
+    sharable::Node * OProviderImpl::requestSubtree( configuration::AbsolutePath const& aSubtreePath,
                                                     RequestOptions const & _aOptions
-                                                  ) CFG_UNO_THROW_ALL(  )
+                                                  ) SAL_THROW((com::sun::star::uno::Exception))
     {
         rtl::Reference< TreeManager > xTreeManager = getTreeManager();
 
-        data::NodeAccess aTree( NULL );
+        sharable::Node * tree = 0;
         try
         {
-            aTree = xTreeManager->requestSubtree(aSubtreePath, _aOptions);
+            tree = xTreeManager->requestSubtree(aSubtreePath, _aOptions);
         }
         catch(uno::Exception&e)
         {
@@ -381,7 +364,7 @@ namespace configmgr
             throw lang::WrappedTargetException(sMessage, getProviderInstance(), uno::makeAny(e));
         }
 
-        if (!aTree.isValid())
+        if (tree == 0)
         {
             ::rtl::OUString sMessage = getErrorMessage(aSubtreePath, _aOptions);
 
@@ -390,17 +373,17 @@ namespace configmgr
             throw uno::Exception(sMessage, getProviderInstance());
         }
 
-        return aTree;
+        return tree;
     }
 
     //-----------------------------------------------------------------------------
-    void OProviderImpl::updateTree(TreeChangeList& aChanges) CFG_UNO_THROW_ALL(  )
+    void OProviderImpl::updateTree(TreeChangeList& aChanges) SAL_THROW((com::sun::star::uno::Exception))
     {
         getTreeManager()->updateTree(aChanges);
     }
 
     //-----------------------------------------------------------------------------
-    void OProviderImpl::releaseSubtree( AbsolutePath const& aSubtreePath, RequestOptions const& _aOptions ) CFG_NOTHROW()
+    void OProviderImpl::releaseSubtree( configuration::AbsolutePath const& aSubtreePath, RequestOptions const& _aOptions ) SAL_THROW(())
     {
         rtl::Reference< TreeManager > xTM = maybeGetTreeManager();
         if (xTM.is())
@@ -408,21 +391,13 @@ namespace configmgr
     }
 
     //-----------------------------------------------------------------------------
-    void OProviderImpl::disposeData(RequestOptions const& _aOptions) CFG_NOTHROW()
-    {
-        rtl::Reference< TreeManager > xTM = maybeGetTreeManager();
-        if (xTM.is())
-            xTM->disposeData(_aOptions);
-    }
-
-    //-----------------------------------------------------------------------------
-    void OProviderImpl::saveAndNotifyUpdate(TreeChangeList const& aChanges) CFG_UNO_THROW_ALL(  )
+    void OProviderImpl::saveAndNotifyUpdate(TreeChangeList const& aChanges) SAL_THROW((com::sun::star::uno::Exception))
     {
         getTreeManager()->saveAndNotifyUpdate(aChanges);
     }
 
     //-----------------------------------------------------------------------------
-    void OProviderImpl::fetchSubtree(AbsolutePath const& aSubtreePath, RequestOptions const& _aOptions) CFG_NOTHROW()
+    void OProviderImpl::fetchSubtree(configuration::AbsolutePath const& aSubtreePath, RequestOptions const& _aOptions) SAL_THROW(())
     {
         rtl::Reference< TreeManager > xTM = maybeGetTreeManager();
         if (xTM.is())
@@ -430,26 +405,25 @@ namespace configmgr
     }
 
     //-----------------------------------------------------------------------------
-    sal_Bool OProviderImpl::fetchDefaultData(AbsolutePath const& aSubtreePath, RequestOptions const& _aOptions) CFG_UNO_THROW_ALL(  )
+    sal_Bool OProviderImpl::fetchDefaultData(configuration::AbsolutePath const& aSubtreePath, RequestOptions const& _aOptions) SAL_THROW((com::sun::star::uno::Exception))
     {
         return getTreeManager()->fetchDefaultData(aSubtreePath, _aOptions);
     }
     //-----------------------------------------------------------------------------------
-    void OProviderImpl::refreshAll()CFG_UNO_THROW_ALL(  )
+    void OProviderImpl::refreshAll()SAL_THROW((com::sun::star::uno::Exception))
     {
         m_pTreeManager->refreshAll();
     }
     //-----------------------------------------------------------------------------------
-    void OProviderImpl::flushAll()CFG_NOTHROW()
+    void OProviderImpl::flushAll()SAL_THROW(())
     {
         m_pTreeManager->flushAll();
     }
     //-----------------------------------------------------------------------------------
-    void OProviderImpl::enableAsync(const sal_Bool& bEnableAsync) CFG_NOTHROW()
+    void OProviderImpl::enableAsync(const sal_Bool& bEnableAsync) SAL_THROW(())
     {
          m_pTreeManager->enableAsync(bEnableAsync);
     }
-    // IInterface
     //-----------------------------------------------------------------------------
     void SAL_CALL OProviderImpl::acquire(  ) throw ()
     {
@@ -469,9 +443,9 @@ namespace configmgr
     }
 
     //-----------------------------------------------------------------------------------
-    OUString OProviderImpl::getErrorMessage(AbsolutePath const& _rAccessor, RequestOptions const& _aOptions)
+    rtl::OUString OProviderImpl::getErrorMessage(configuration::AbsolutePath const& _rAccessor, RequestOptions const& _aOptions)
     {
-        OUString const sAccessor = _rAccessor.toString();
+        rtl::OUString const sAccessor = _rAccessor.toString();
 
         CFG_TRACE_ERROR("config provider: the cache manager could not provide the tree (neither from the cache nor from the session)");
         ::rtl::OUString sMessage;
@@ -500,7 +474,7 @@ namespace configmgr
 
     // actual factory methods
     //-----------------------------------------------------------------------------------
-    NodeElement* OProviderImpl::buildReadAccess(OUString const& _rAccessor, RequestOptions const& _aOptions, sal_Int32 nMinLevels)  CFG_UNO_THROW_ALL(  )
+    configapi::NodeElement* OProviderImpl::buildReadAccess(rtl::OUString const& _rAccessor, RequestOptions const& _aOptions, sal_Int32 nMinLevels)  SAL_THROW((com::sun::star::uno::Exception))
     {
         CFG_TRACE_INFO("config provider: requesting the tree from the cache manager");
 
@@ -511,21 +485,19 @@ namespace configmgr
 
         try
         {
-            using namespace configuration;
+            configuration::AbsolutePath aAccessorPath = configuration::AbsolutePath::parse(_rAccessor);
 
-            AbsolutePath aAccessorPath = AbsolutePath::parse(_rAccessor);
-
-            data::NodeAccess aTree = this->requestSubtree(aAccessorPath,_aOptions);
+            sharable::Node * tree = requestSubtree(aAccessorPath,_aOptions);
 
             RTL_LOGFILE_CONTEXT_TRACE(aLog, "data loaded" );
 
-            TreeDepth nDepth = (nMinLevels == treeop::ALL_LEVELS) ? C_TreeDepthAll : TreeDepth(nMinLevels);
+            unsigned int nDepth = (nMinLevels == treeop::ALL_LEVELS) ? configuration::C_TreeDepthAll : (unsigned int)(nMinLevels);
 
             RTL_LOGFILE_CONTEXT_AUTHOR(aLog2, "configmgr::OProviderImpl", "jb99855", "configmgr: createReadOnlyTree()");
 
-            RootTree aRootTree( createReadOnlyTree(
-                    aAccessorPath, aTree, nDepth,
-                    TemplateProvider( this->getTemplateProvider(), _aOptions )
+            rtl::Reference< configuration::Tree > aRootTree( configuration::createReadOnlyTree(
+                    aAccessorPath, tree, nDepth,
+                    configuration::TemplateProvider( getTreeManager(), _aOptions )
                 ));
 
             return m_pNewProviders->getReaderFactory().makeAccessRoot(aRootTree, _aOptions);
@@ -541,8 +513,8 @@ namespace configmgr
 
 
     //-----------------------------------------------------------------------------------
-    NodeElement* OProviderImpl::buildUpdateAccess(OUString const& _rAccessor, RequestOptions const& _aOptions,
-                                                  sal_Int32 nMinLevels) CFG_UNO_THROW_ALL(  )
+    configapi::NodeElement* OProviderImpl::buildUpdateAccess(rtl::OUString const& _rAccessor, RequestOptions const& _aOptions,
+                                                  sal_Int32 nMinLevels) SAL_THROW((com::sun::star::uno::Exception))
     {
         CFG_TRACE_INFO("config provider: requesting the tree from the cache manager");
         OSL_ASSERT(sal_Int16(nMinLevels) == nMinLevels);
@@ -552,21 +524,19 @@ namespace configmgr
 
         try
         {
-            using namespace configuration;
+            configuration::AbsolutePath aAccessorPath = configuration::AbsolutePath::parse(_rAccessor);
 
-            AbsolutePath aAccessorPath = AbsolutePath::parse(_rAccessor);
-
-            data::NodeAccess    aTree = requestSubtree(aAccessorPath, _aOptions);
+            sharable::Node * tree = requestSubtree(aAccessorPath, _aOptions);
 
             RTL_LOGFILE_CONTEXT_TRACE(aLog, "data loaded" );
 
-            TreeDepth nDepth = (nMinLevels == treeop::ALL_LEVELS) ? C_TreeDepthAll : TreeDepth(nMinLevels);
+            unsigned int nDepth = (nMinLevels == treeop::ALL_LEVELS) ? configuration::C_TreeDepthAll : (unsigned int)(nMinLevels);
 
             RTL_LOGFILE_CONTEXT_AUTHOR(aLog2, "configmgr::OProviderImpl", "jb99855", "createUpdatableTree()");
 
-            RootTree aRootTree( createUpdatableTree(
-                                    aAccessorPath, aTree, nDepth,
-                                    TemplateProvider( this->getTemplateProvider(), _aOptions )
+            rtl::Reference< configuration::Tree > aRootTree( configuration::createUpdatableTree(
+                                    aAccessorPath, tree, nDepth,
+                                    configuration::TemplateProvider( getTreeManager(), _aOptions )
                                 ));
 
 
@@ -601,16 +571,14 @@ namespace configmgr
 
     OProviderImpl::FactoryArguments::Argument
         OProviderImpl::FactoryArguments::lookupArgument(const rtl::OUString& rName)
-            CFG_NOTHROW()
+            SAL_THROW(())
     {
-        OUString sCheck( rName.toAsciiLowerCase() );
+        rtl::OUString sCheck( rName.toAsciiLowerCase() );
 
-        typedef sal_Char const * const * ArgNameIter;
+        sal_Char const * const * const pFirst = asciiArgumentNames;
+        sal_Char const * const * const pLast  = pFirst + _arg_count;
 
-        ArgNameIter const pFirst = asciiArgumentNames;
-        ArgNameIter const pLast  = pFirst + _arg_count;
-
-        ArgNameIter it = pFirst;
+        sal_Char const * const * it = pFirst;
 
         for(; it != pLast; ++it)
         {
@@ -626,17 +594,17 @@ namespace configmgr
 
     //-----------------------------------------------------------------------------------
     bool OProviderImpl::FactoryArguments::extractOneArgument(
-                            OUString const& aName, uno::Any const& aValue,
-                            OUString&   /* [out] */ _rNodeAccessor,
+                            rtl::OUString const& aName, uno::Any const& aValue,
+                            rtl::OUString&  /* [out] */ _rNodeAccessor,
                             sal_Int32&  /* [out] */ _nLevels,
                             RequestOptions& /* [in/out] */ _rOptions )
-        CFG_NOTHROW()
+        SAL_THROW(())
     {
         switch ( lookupArgument(aName) )
         {
         case ARG_NODEPATH:
             {
-                OUString sStringVal;
+                rtl::OUString sStringVal;
                 if (aValue >>= sStringVal)
                     _rNodeAccessor = sStringVal;
                 else
@@ -657,7 +625,7 @@ namespace configmgr
         case ARG_ENTITY:
         case ARG_USER_DEPRECATED:
             {
-                OUString sStringVal;
+                rtl::OUString sStringVal;
                 if (aValue >>= sStringVal)
                     _rOptions.setEntity(sStringVal);
                 else
@@ -667,7 +635,7 @@ namespace configmgr
 
         case ARG_LOCALE:
             {
-                OUString    sStringVal;
+                rtl::OUString    sStringVal;
                 if (aValue >>= sStringVal)
                 {
                     _rOptions.setIsoLocale(sStringVal);
@@ -737,7 +705,7 @@ namespace configmgr
      //-----------------------------------------------------------------------------------
     static
     void failInvalidArg(uno::Any const & aArg, sal_Int32 _nArg = -1)
-        CFG_THROW1 (lang::IllegalArgumentException)
+        SAL_THROW((lang::IllegalArgumentException))
     {
         OSL_ENSURE( sal_Int16(_nArg) == _nArg, "Argument number out of range. Raising imprecise exception.");
 
@@ -754,8 +722,8 @@ namespace configmgr
 
      //-----------------------------------------------------------------------------------
     static
-    void failInvalidArgValue(OUString const & aName, uno::Any const & aValue, sal_Int32 _nArg = -1)
-        CFG_THROW1 (lang::IllegalArgumentException)
+    void failInvalidArgValue(rtl::OUString const & aName, uno::Any const & aValue, sal_Int32 _nArg = -1)
+        SAL_THROW((lang::IllegalArgumentException))
     {
         OSL_ENSURE( sal_Int16(_nArg) == _nArg, "Argument number out of range. Raising imprecise exception.");
 
@@ -772,9 +740,9 @@ namespace configmgr
      //-----------------------------------------------------------------------------------
     static
     bool extractLegacyArguments(    const uno::Sequence<uno::Any>& _rArgs,
-                                    OUString&   /* [out] */ _rNodeAccessor,
+                                    rtl::OUString&  /* [out] */ _rNodeAccessor,
                                     sal_Int32&  /* [out] */ _nLevels )
-    CFG_THROW1 (lang::IllegalArgumentException)
+        SAL_THROW((lang::IllegalArgumentException))
     {
         OSL_ASSERT( _rArgs.getLength() != 0 );
 
@@ -801,7 +769,7 @@ namespace configmgr
             {
                 // valid second argument, but too many arguments altogether
                  throw lang::IllegalArgumentException(
-                            OUString(RTL_CONSTASCII_USTRINGPARAM(
+                            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
                                 "Configuration Provider: Too many arguments. "
                                 "Additional arguments are not supported when passing the node path as string (deprecated convention).")),
                             uno::Reference<uno::XInterface>(),
@@ -817,7 +785,7 @@ namespace configmgr
         if (_rArgs[1].getValueTypeClass() != uno::TypeClass_STRUCT)
         {
             // completely invalid second argument
-            failInvalidArgValue(OUString::createFromAscii("<depth>"),_rArgs[1],1);
+            failInvalidArgValue(rtl::OUString::createFromAscii("<depth>"),_rArgs[1],1);
         }
 
         // Assume PropertyValue or NamedValue,
@@ -827,10 +795,10 @@ namespace configmgr
 
     //-----------------------------------------------------------------------------------
     void OProviderImpl::FactoryArguments::extractArgs(  const uno::Sequence<uno::Any>& _rArgs,
-                                                        OUString&   /* [out] */ _rNodeAccessor,
+                                                        rtl::OUString&  /* [out] */ _rNodeAccessor,
                                                         sal_Int32&  /* [out] */ _nLevels,
                                                         RequestOptions & /* [in/out] */ _aOptions )
-        CFG_THROW1 (lang::IllegalArgumentException)
+        SAL_THROW((lang::IllegalArgumentException))
     {
         UnoApiLock aLock;
 
@@ -864,9 +832,73 @@ namespace configmgr
 
         if (_rNodeAccessor.getLength() == 0)
         {
-            OUString sMessage(RTL_CONSTASCII_USTRINGPARAM("Configuration Provider: Missing argument: no nodepath was provided"));
+            rtl::OUString sMessage(RTL_CONSTASCII_USTRINGPARAM("Configuration Provider: Missing argument: no nodepath was provided"));
             throw   lang::IllegalArgumentException(sMessage,uno::Reference<uno::XInterface>(),0);
         }
+    }
+
+    //--------------------------------------------------------------------------
+    uno::Reference<uno::XInterface>  OProviderImpl::createReadAccess( uno::Sequence<uno::Any> const& aArgs)
+        SAL_THROW((com::sun::star::uno::Exception))
+    {
+        CFG_TRACE_INFO("config provider: going to create a read access instance");
+
+        // extract the args
+        rtl::OUString sPath;
+        sal_Int32 nLevels;
+
+        RequestOptions aOptions = getDefaultOptions();
+
+        OProviderImpl::FactoryArguments::extractArgs(aArgs, sPath, nLevels, aOptions);
+
+        CFG_TRACE_INFO_NI("config provider: node accessor extracted from the args is %s", OUSTRING2ASCII(sPath));
+        CFG_TRACE_INFO_NI("config provider: level depth extracted from the args is %i", nLevels);
+
+        // create the access object
+        uno::Reference< uno::XInterface > xReturn;
+
+        configapi::NodeElement* pElement = buildReadAccess(sPath, aOptions, nLevels);
+        if (pElement != 0)
+        {
+            xReturn = pElement->getUnoInstance();
+            if (xReturn.is())
+                // acquired once by buildReadAccess
+                xReturn->release();
+        }
+
+        return xReturn;
+    }
+
+    //-----------------------------------------------------------------------------------
+    uno::Reference<uno::XInterface> OProviderImpl::createUpdateAccess( uno::Sequence<uno::Any> const& aArgs)
+        SAL_THROW((com::sun::star::uno::Exception))
+    {
+        CFG_TRACE_INFO("config provider: going to create an update access instance");
+
+        // extract the args
+        rtl::OUString sPath;
+        sal_Int32 nLevels;
+
+        RequestOptions aOptions = getDefaultOptions();
+
+        OProviderImpl::FactoryArguments::extractArgs(aArgs, sPath, nLevels, aOptions);
+
+        CFG_TRACE_INFO_NI("config provider: node accessor extracted from the args is %s", OUSTRING2ASCII(sPath));
+        CFG_TRACE_INFO_NI("config provider: level depth extracted from the args is %i", nLevels);
+
+        // create the access object
+        uno::Reference< uno::XInterface > xReturn;
+
+        configapi::NodeElement* pElement = buildUpdateAccess(sPath, aOptions, nLevels);
+        if (pElement != 0)
+        {
+            xReturn = pElement->getUnoInstance();
+            if (xReturn.is())
+                // acquired once by buildReadAccess
+                xReturn->release();
+        }
+
+        return xReturn;
     }
 //-----------------------------------------------------------------------------------
 

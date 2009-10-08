@@ -37,19 +37,6 @@
 #include <cppuhelper/factory.hxx>
 #include <rtl/ustrbuf.hxx>
 
-using ::rtl::OUString;
-using ::rtl::OUStringBuffer;
-using ::com::sun::star::uno::Reference;
-using ::com::sun::star::uno::Exception;
-using ::com::sun::star::uno::XInterface;
-using ::com::sun::star::uno::Sequence;
-using ::com::sun::star::registry::XRegistryKey;
-using ::com::sun::star::lang::XSingleComponentFactory;
-using ::com::sun::star::lang::XMultiServiceFactory;
-using ::configmgr::ServiceRegistrationInfo;
-using ::configmgr::SingletonRegistrationInfo;
-using ::configmgr::AsciiServiceName;
-
 // ***************************************************************************************
 //
 // Die vorgeschriebene C-Api muss erfuellt werden!
@@ -58,47 +45,47 @@ using ::configmgr::AsciiServiceName;
 
 //---------------------------------------------------------------------------------------
 void RegisterService(
-        const ServiceRegistrationInfo* pInfo,
-        const Reference< XRegistryKey > & xKey)
+        const configmgr::ServiceRegistrationInfo* pInfo,
+        const com::sun::star::uno::Reference< com::sun::star::registry::XRegistryKey > & xKey)
 {
     if (pInfo == 0 || pInfo->registeredServiceNames==0 || pInfo->implementationName==0)
         return;
 
-    OUStringBuffer aMainKeyName;
+    rtl::OUStringBuffer aMainKeyName;
     aMainKeyName.appendAscii("/");
     aMainKeyName.appendAscii(pInfo->implementationName);
     aMainKeyName.appendAscii("/UNO/SERVICES");
 
-    Reference< XRegistryKey >  xNewKey( xKey->createKey(aMainKeyName.makeStringAndClear()) );
+    com::sun::star::uno::Reference< com::sun::star::registry::XRegistryKey >  xNewKey( xKey->createKey(aMainKeyName.makeStringAndClear()) );
     OSL_ENSURE(xNewKey.is(), "CONFMGR::component_writeInfo : could not create a registry key !");
 
-    for(AsciiServiceName const* p = pInfo->registeredServiceNames ; *p; ++p)
+    for(sal_Char const * const* p = pInfo->registeredServiceNames ; *p; ++p)
     {
-        xNewKey->createKey(OUString::createFromAscii(*p));
+        xNewKey->createKey(rtl::OUString::createFromAscii(*p));
     }
 }
 
 //---------------------------------------------------------------------------------------
 
 void RegisterSingleton(
-        const SingletonRegistrationInfo* pInfo,
-        const Reference< XRegistryKey > & xKey)
+        const configmgr::SingletonRegistrationInfo* pInfo,
+        const com::sun::star::uno::Reference< com::sun::star::registry::XRegistryKey > & xKey)
 {
     if (pInfo == 0 ||   pInfo->singletonName            ==0 ||
                         pInfo->implementationName       ==0 ||
                         pInfo->instantiatedServiceName  ==0 )
         return;
 
-    OUStringBuffer aSingletonKeyName;
+    rtl::OUStringBuffer aSingletonKeyName;
     aSingletonKeyName.appendAscii("/");
     aSingletonKeyName.appendAscii(pInfo->implementationName);
     aSingletonKeyName.appendAscii("/UNO/SINGLETONS/");
     aSingletonKeyName.appendAscii(pInfo->singletonName);
 
-    Reference< XRegistryKey >  xNewKey( xKey->createKey(aSingletonKeyName.makeStringAndClear()) );
+    com::sun::star::uno::Reference< com::sun::star::registry::XRegistryKey >  xNewKey( xKey->createKey(aSingletonKeyName.makeStringAndClear()) );
     OSL_ENSURE(xNewKey.is(), "CONFMGR::component_writeInfo : could not create a registry key !");
 
-    xNewKey->setStringValue(OUString::createFromAscii(pInfo->instantiatedServiceName));
+    xNewKey->setStringValue(rtl::OUString::createFromAscii(pInfo->instantiatedServiceName));
 
     if (pInfo->mappedImplementation != 0)
         RegisterService(pInfo->mappedImplementation,xKey);
@@ -108,22 +95,22 @@ void RegisterSingleton(
 //-----------------------------------------------------------------------------
 struct ServiceImplementationRequest
 {
-    Reference< XInterface > xRet;
-    Reference< XMultiServiceFactory > const m_xServiceManager;
-    OUString const sImplementationName;
+    com::sun::star::uno::Reference< com::sun::star::uno::XInterface > xRet;
+    com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory > const m_xServiceManager;
+    rtl::OUString const sImplementationName;
 
     //-------------------------------------------------------------------------
     ServiceImplementationRequest(
         void* pServiceManager,
         sal_Char const* pImplementationName
     )
-    : m_xServiceManager(reinterpret_cast<XMultiServiceFactory*>(pServiceManager))
-    , sImplementationName(OUString::createFromAscii(pImplementationName))
+    : m_xServiceManager(reinterpret_cast<com::sun::star::lang::XMultiServiceFactory*>(pServiceManager))
+    , sImplementationName(rtl::OUString::createFromAscii(pImplementationName))
     {
     }
     //-------------------------------------------------------------------------
     inline
-    sal_Bool shouldCreate(const ServiceRegistrationInfo* pInfo) const
+    sal_Bool shouldCreate(const configmgr::ServiceRegistrationInfo* pInfo) const
     {
         OSL_ENSURE(!xRet.is(), "CreateProvider : invalid creation request: we already have a return value !");
         return !xRet.is()   &&
@@ -134,7 +121,7 @@ struct ServiceImplementationRequest
     //-------------------------------------------------------------------------
 
     sal_Bool CreateProviderFactory(
-                const ServiceRegistrationInfo* pInfo,
+                const configmgr::ServiceRegistrationInfo* pInfo,
                 bool bAdmin
             )
     {
@@ -143,13 +130,13 @@ struct ServiceImplementationRequest
         {
             configmgr::ServiceRegistrationHelper aInfo(pInfo);
 
-            const Sequence< OUString > Services=  aInfo.getRegisteredServiceNames();
+            const com::sun::star::uno::Sequence< rtl::OUString > Services=  aInfo.getRegisteredServiceNames();
 
             xRet = configmgr::createProviderFactory( aInfo.getImplementationName(), bAdmin);
 
             OSL_ENSURE(xRet.is(), "CreateProvider : WHERE IS THE return value !");
         }
-        catch(Exception&)
+        catch(com::sun::star::uno::Exception&)
         {
         }
         return xRet.is();
@@ -158,7 +145,7 @@ struct ServiceImplementationRequest
     //-------------------------------------------------------------------------
 
     sal_Bool CreateServiceFactory(
-                const ServiceRegistrationInfo* pInfo,
+                const configmgr::ServiceRegistrationInfo* pInfo,
                 ::cppu::ComponentFactoryFunc Factory
             )
     {
@@ -167,13 +154,13 @@ struct ServiceImplementationRequest
         {
             configmgr::ServiceRegistrationHelper aInfo(pInfo);
 
-            const Sequence< OUString > Services=  aInfo.getRegisteredServiceNames();
+            const com::sun::star::uno::Sequence< rtl::OUString > Services=  aInfo.getRegisteredServiceNames();
 
             xRet = cppu::createSingleComponentFactory( Factory, aInfo.getImplementationName(), Services, 0);
 
             OSL_ENSURE(xRet.is(), "CreateProvider : WHERE IS THE return value !");
         }
-        catch(Exception&)
+        catch(com::sun::star::uno::Exception&)
         {
         }
         return xRet.is();
@@ -182,7 +169,7 @@ struct ServiceImplementationRequest
     //-------------------------------------------------------------------------
 
     sal_Bool CreateSingletonMapperFactory(
-                const SingletonRegistrationInfo* pInfo,
+                const configmgr::SingletonRegistrationInfo* pInfo,
                 ::cppu::ComponentFactoryFunc Mapper
             )
     {
@@ -222,7 +209,7 @@ extern "C" sal_Bool SAL_CALL component_writeInfo(
     if (pRegistryKey)
     try
     {
-        Reference< XRegistryKey > xKey(reinterpret_cast<XRegistryKey*>(pRegistryKey));
+        com::sun::star::uno::Reference< com::sun::star::registry::XRegistryKey > xKey(reinterpret_cast<com::sun::star::registry::XRegistryKey*>(pRegistryKey));
 
         // configuration access entry points: configuration provider
         RegisterSingleton(configmgr::getDefaultProviderSingletonInfo(), xKey) ;

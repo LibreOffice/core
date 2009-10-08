@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: dbmetadata.cxx,v $
- * $Revision: 1.10 $
+ * $Revision: 1.10.22.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -33,6 +33,8 @@
 
 #include <connectivity/dbmetadata.hxx>
 #include <connectivity/dbexception.hxx>
+#include "resource/common_res.hrc"
+#include "resource/sharedresources.hxx"
 
 /** === begin UNO includes === **/
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
@@ -104,7 +106,11 @@ namespace dbtools
         static void lcl_checkConnected( const DatabaseMetaData_Impl& _metaDataImpl )
         {
             if ( !_metaDataImpl.xConnection.is() || !_metaDataImpl.xConnectionMetaData.is() )
-                throwSQLException( "not connected", SQL_CONNECTION_DOES_NOT_EXIST, NULL );
+            {
+                ::connectivity::SharedResources aResources;
+                const ::rtl::OUString sError( aResources.getResourceString(STR_NO_CONNECTION_GIVEN));
+                throwSQLException( sError, SQL_CONNECTION_DOES_NOT_EXIST, NULL );
+            }
         }
 
         //................................................................

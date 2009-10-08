@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: kfields.cxx,v $
- * $Revision: 1.5 $
+ * $Revision: 1.5.56.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -32,6 +32,8 @@
 #include "precompiled_connectivity.hxx"
 
 #include "kfields.hxx"
+#include "resource/common_res.hrc"
+#include "resource/sharedresources.hxx"
 
 using namespace ::connectivity::kab;
 using namespace ::com::sun::star::sdbc;
@@ -80,9 +82,12 @@ sal_uInt32 findKabField(const ::rtl::OUString& columnName) throw(SQLException)
             return nResult;
     }
 
-    ::dbtools::throwGenericSQLException(
-        ::rtl::OUString::createFromAscii("Invalid column name: ") + columnName,
-        NULL);
+    ::connectivity::SharedResources aResources;
+    const ::rtl::OUString sError( aResources.getResourceStringWithSubstitution(
+            STR_INVALID_COLUMNNAME,
+            "$columnname$",columnName
+         ) );
+    ::dbtools::throwGenericSQLException(sError,NULL);
     // Unreachable:
     OSL_ASSERT(false);
     return 0;

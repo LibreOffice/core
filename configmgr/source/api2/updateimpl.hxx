@@ -39,7 +39,6 @@ namespace configmgr
 {
     namespace css = ::com::sun::star;
     namespace uno = ::com::sun::star::uno;
-    using rtl::OUString;
 
     /* implementations of the interfaces supported by a (parent) node
         within the configuration tree.
@@ -54,27 +53,27 @@ namespace configmgr
 
         // XNameReplace
         //---------------------------------------------------------------------
-        void implReplaceByName(NodeGroupAccess& rNode, const OUString& rName, const uno::Any& rElement )
+        void implReplaceByName(NodeGroupAccess& rNode, const rtl::OUString& rName, const uno::Any& rElement )
             throw(css::lang::IllegalArgumentException, css::container::NoSuchElementException, css::lang::WrappedTargetException, uno::RuntimeException);
 
-        void implReplaceByName(NodeTreeSetAccess& rNode, const OUString& rName, const uno::Any& rElement )
+        void implReplaceByName(NodeTreeSetAccess& rNode, const rtl::OUString& rName, const uno::Any& rElement )
             throw(css::lang::IllegalArgumentException, css::container::NoSuchElementException, css::lang::WrappedTargetException, uno::RuntimeException);
 
-        void implReplaceByName(NodeValueSetAccess& rNode, const OUString& rName, const uno::Any& rElement )
+        void implReplaceByName(NodeValueSetAccess& rNode, const rtl::OUString& rName, const uno::Any& rElement )
             throw(css::lang::IllegalArgumentException, css::container::NoSuchElementException, css::lang::WrappedTargetException, uno::RuntimeException);
 
         // XNameContainer
         //---------------------------------------------------------------------
-        void implInsertByName(NodeTreeSetAccess& rNode, const OUString& rName, const uno::Any& rElement)
+        void implInsertByName(NodeTreeSetAccess& rNode, const rtl::OUString& rName, const uno::Any& rElement)
             throw(css::lang::IllegalArgumentException, css::container::ElementExistException, css::lang::WrappedTargetException, uno::RuntimeException);
 
-        void implInsertByName(NodeValueSetAccess& rNode, const OUString& rName, const uno::Any& rElement)
+        void implInsertByName(NodeValueSetAccess& rNode, const rtl::OUString& rName, const uno::Any& rElement)
             throw(css::lang::IllegalArgumentException, css::container::ElementExistException, css::lang::WrappedTargetException, uno::RuntimeException);
 
-        void implRemoveByName(NodeTreeSetAccess& rNode, const OUString& rName )
+        void implRemoveByName(NodeTreeSetAccess& rNode, const rtl::OUString& rName )
             throw(css::container::NoSuchElementException, css::lang::WrappedTargetException, uno::RuntimeException);
 
-        void implRemoveByName(NodeValueSetAccess& rNode, const OUString& rName )
+        void implRemoveByName(NodeValueSetAccess& rNode, const rtl::OUString& rName )
             throw(css::container::NoSuchElementException, css::lang::WrappedTargetException, uno::RuntimeException);
 
         // XPropertyWithState - updating operation only

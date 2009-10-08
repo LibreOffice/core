@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: gradtrns.cxx,v $
- * $Revision: 1.7 $
+ * $Revision: 1.7.226.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -33,7 +33,6 @@
 
 #include "gradtrns.hxx"
 #include <svx/svdobj.hxx>
-#include <goodies/b3dcolor.hxx>
 #include <basegfx/range/b2drange.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <vcl/salbtype.hxx>     // FRound
@@ -47,7 +46,7 @@ void GradTransformer::GradToVec(GradTransGradient& rG, GradTransVector& rV, cons
     if(100 != rG.aGradient.GetStartIntens())
     {
         const double fFact((double)rG.aGradient.GetStartIntens() / 100.0);
-        rV.aCol1 = (B3dColor)rV.aCol1 * fFact;
+        rV.aCol1 = Color(rV.aCol1.getBColor() * fFact);
     }
 
     // handle end color
@@ -55,7 +54,7 @@ void GradTransformer::GradToVec(GradTransGradient& rG, GradTransVector& rV, cons
     if(100 != rG.aGradient.GetEndIntens())
     {
         const double fFact((double)rG.aGradient.GetEndIntens() / 100.0);
-        rV.aCol2 = (B3dColor)rV.aCol2 * fFact;
+        rV.aCol2 = Color(rV.aCol2.getBColor() * fFact);
     }
 
     // calc the basic positions

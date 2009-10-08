@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: ScriptProviderForJava.java,v $
- * $Revision: 1.10 $
+ * $Revision: 1.10.6.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -253,7 +253,7 @@ class ScriptImpl implements XScript
                 throw new ScriptFrameworkErrorException(
                     mfe.getMessage(), null,
                     metaData.getLanguageName(), metaData.getLanguage(),
-                    ScriptFrameworkErrorType.UNKNOWN );
+                    ScriptFrameworkErrorType.MALFORMED_URL );
             }
             catch (NoSuitableClassLoaderException ncl )
             {
@@ -323,7 +323,7 @@ class ScriptImpl implements XScript
                     throw new ScriptFrameworkErrorException(
                         e.getMessage(), null,
                         metaData.getLanguageName(), metaData.getLanguage(),
-                        ScriptFrameworkErrorType.UNKNOWN );
+                        ScriptFrameworkErrorType.NO_SUCH_SCRIPT );
                 }
             }
             catch ( ClassNotFoundException e )
@@ -332,7 +332,7 @@ class ScriptImpl implements XScript
                 throw new ScriptFrameworkErrorException(
                     e.getMessage(), null,
                     metaData.getLanguageName(), metaData.getLanguage(),
-                    ScriptFrameworkErrorType.UNKNOWN );
+                    ScriptFrameworkErrorType.NO_SUCH_SCRIPT );
             }
 
             LogUtils.DEBUG( "Starting Invoke on Proxy ..." );

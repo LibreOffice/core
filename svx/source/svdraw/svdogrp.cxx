@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: svdogrp.cxx,v $
- * $Revision: 1.38 $
+ * $Revision: 1.38.18.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -38,11 +38,7 @@
 
 #include <svx/svdogrp.hxx>
 
-#ifndef SVX_LIGHT
-#ifndef _LNKBASE_HXX //autogen
 #include <sfx2/lnkbase.hxx>
-#endif
-#endif
 #include <tools/urlobj.hxx>
 
 #include <svtools/urihelper.hxx>
@@ -386,7 +382,7 @@ void SdrObjGroup::RecalcSnapRect()
     // nicht erforderlich, da die Rects von der SubList verwendet werden.
 }
 
-basegfx::B2DPolyPolygon SdrObjGroup::TakeXorPoly(sal_Bool bDetail) const
+basegfx::B2DPolyPolygon SdrObjGroup::TakeXorPoly() const
 {
     basegfx::B2DPolyPolygon aRetval;
     const sal_uInt32 nObjCount(pSub->GetObjCount());
@@ -394,7 +390,7 @@ basegfx::B2DPolyPolygon SdrObjGroup::TakeXorPoly(sal_Bool bDetail) const
     for(sal_uInt32 a(0L); a < nObjCount; a++)
     {
         SdrObject* pObj = pSub->GetObj(a);
-        aRetval.append(pObj->TakeXorPoly(bDetail));
+        aRetval.append(pObj->TakeXorPoly());
     }
 
     if(!aRetval.count())

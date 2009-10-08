@@ -43,7 +43,7 @@ namespace configmgr
             return 0;
 
         sal_Int32 nCount = 0;
-        if (AsciiServiceName const* p= m_info->registeredServiceNames)
+        if (sal_Char const * const* p= m_info->registeredServiceNames)
         {
             while (*p != 0)
             {
@@ -51,7 +51,7 @@ namespace configmgr
                 ++p;
             }
         }
-        if (AsciiServiceName const* p= m_info->additionalServiceNames)
+        if (sal_Char const * const* p= m_info->additionalServiceNames)
         {
             while (*p != 0)
             {
@@ -64,22 +64,22 @@ namespace configmgr
     }
 // ---------------------------------------------------------------------------
 
-    OUString ServiceInfoHelper::getImplementationName( ) const
+    rtl::OUString ServiceInfoHelper::getImplementationName( ) const
         throw(uno::RuntimeException)
     {
-        AsciiServiceName p= m_info ? m_info->implementationName : 0;
+        sal_Char const * p= m_info ? m_info->implementationName : 0;
 
-        return p ? OUString::createFromAscii(p) : OUString();
+        return p ? rtl::OUString::createFromAscii(p) : rtl::OUString();
     }
 // ---------------------------------------------------------------------------
 
-    sal_Bool ServiceInfoHelper::supportsService( OUString const & ServiceName ) const
+    sal_Bool ServiceInfoHelper::supportsService( rtl::OUString const & ServiceName ) const
         throw(uno::RuntimeException)
     {
         if (m_info == 0)
             return false;
 
-        if (AsciiServiceName const* p= m_info->registeredServiceNames)
+        if (sal_Char const * const* p= m_info->registeredServiceNames)
         {
             while (*p != 0)
             {
@@ -88,7 +88,7 @@ namespace configmgr
                 ++p;
             }
         }
-        if (AsciiServiceName const* p= m_info->additionalServiceNames)
+        if (sal_Char const * const* p= m_info->additionalServiceNames)
         {
             while (*p != 0)
             {
@@ -102,29 +102,29 @@ namespace configmgr
     }
 // ---------------------------------------------------------------------------
 
-    uno::Sequence< OUString > ServiceInfoHelper::getSupportedServiceNames( ) const
+    uno::Sequence< rtl::OUString > ServiceInfoHelper::getSupportedServiceNames( ) const
         throw(uno::RuntimeException)
     {
         sal_Int32 const nCount = countServices();
 
-        uno::Sequence< OUString > aServices( nCount );
+        uno::Sequence< rtl::OUString > aServices( nCount );
 
         if (nCount)
         {
             OSL_ASSERT(m_info);
             sal_Int32 i = 0;
-            if (AsciiServiceName const* p= m_info->registeredServiceNames)
+            if (sal_Char const * const* p= m_info->registeredServiceNames)
             {
                 while (*p != 0)
                 {
-                    aServices[i++] = OUString::createFromAscii(*p++);
+                    aServices[i++] = rtl::OUString::createFromAscii(*p++);
                 }
             }
-            if (AsciiServiceName const* p= m_info->additionalServiceNames)
+            if (sal_Char const * const* p= m_info->additionalServiceNames)
             {
                 while (*p != 0)
                 {
-                    aServices[i++] = OUString::createFromAscii(*p++);
+                    aServices[i++] = rtl::OUString::createFromAscii(*p++);
                 }
             }
             OSL_ASSERT( i == nCount );
@@ -141,7 +141,7 @@ namespace configmgr
             return 0;
 
         sal_Int32 nCount = 0;
-        if (AsciiServiceName const* p= m_info->registeredServiceNames)
+        if (sal_Char const * const* p= m_info->registeredServiceNames)
         {
             while (*p != 0)
             {
@@ -154,31 +154,31 @@ namespace configmgr
     }
 // ---------------------------------------------------------------------------
 
-    OUString ServiceRegistrationHelper::getImplementationName( ) const
+    rtl::OUString ServiceRegistrationHelper::getImplementationName( ) const
         throw(uno::RuntimeException)
     {
-        AsciiServiceName p= m_info ? m_info->implementationName : 0;
+        sal_Char const * p= m_info ? m_info->implementationName : 0;
 
-        return p ? OUString::createFromAscii(p) : OUString();
+        return p ? rtl::OUString::createFromAscii(p) : rtl::OUString();
     }
 // ---------------------------------------------------------------------------
 
-    uno::Sequence< OUString > ServiceRegistrationHelper::getRegisteredServiceNames( ) const
+    uno::Sequence< rtl::OUString > ServiceRegistrationHelper::getRegisteredServiceNames( ) const
         throw(uno::RuntimeException)
     {
         sal_Int32 const nCount = countServices();
 
-        uno::Sequence< OUString > aServices( nCount );
+        uno::Sequence< rtl::OUString > aServices( nCount );
 
         if (nCount)
         {
             OSL_ASSERT(m_info);
             sal_Int32 i = 0;
-            if (AsciiServiceName const* p= m_info->registeredServiceNames)
+            if (sal_Char const * const* p= m_info->registeredServiceNames)
             {
                 while (*p != 0)
                 {
-                    aServices[i++] = OUString::createFromAscii(*p++);
+                    aServices[i++] = rtl::OUString::createFromAscii(*p++);
                 }
             }
             OSL_ASSERT( i == nCount );

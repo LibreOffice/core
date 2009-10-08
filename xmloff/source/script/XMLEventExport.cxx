@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: XMLEventExport.cxx,v $
- * $Revision: 1.21 $
+ * $Revision: 1.21.86.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -336,6 +336,9 @@ const XMLEventNameTranslation aStandardEventTable[] =
     { "OnCopyToFailed",     XML_NAMESPACE_OFFICE, "copy-to-failed" },
     { "OnTitleChanged",     XML_NAMESPACE_OFFICE, "title-changed" },
     { "OnModeChanged",      XML_NAMESPACE_OFFICE, "mode-changed" },
+    { "OnSaveTo",           XML_NAMESPACE_OFFICE, "save-to" },
+    { "OnSaveToDone",       XML_NAMESPACE_OFFICE, "save-to-done" },
+    { "OnSaveToFailed",     XML_NAMESPACE_OFFICE, "save-to-failed" },
 
     { NULL, 0, 0 }
 };

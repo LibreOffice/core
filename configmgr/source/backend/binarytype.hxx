@@ -37,7 +37,6 @@ namespace configmgr
                 valuetype_mask     = 0x1F,
                 pairstate_mask     = first_value_NULL | second_value_NULL
             };
-            typedef sal_uInt8 Field;
         }
 
         namespace NodeType
@@ -56,7 +55,6 @@ namespace configmgr
 
                 nodetype_mask = 0xE0
             };
-            typedef sal_uInt8 Field;
         }
     }
 }

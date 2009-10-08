@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: DTables.cxx,v $
- * $Revision: 1.27 $
+ * $Revision: 1.27.56.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -38,12 +38,12 @@
 #include <com/sun/star/sdbc/KeyRule.hpp>
 #include <com/sun/star/sdbcx/KeyType.hpp>
 #include "file/FCatalog.hxx"
-#ifndef _CONNECTIVITY_FILE_BCONNECTION_HXX_
 #include "file/FConnection.hxx"
-#endif
 #include <com/sun/star/lang/XUnoTunnel.hpp>
 #include "dbase/DCatalog.hxx"
 #include <comphelper/types.hxx>
+#include "resource/dbase_res.hrc"
+#include "connectivity/dbexception.hxx"
 
 using namespace ::comphelper;
 using namespace connectivity;
@@ -128,8 +128,13 @@ void ODbaseTables::dropObject(sal_Int32 _nPos,const ::rtl::OUString _sElementNam
             pTable->DropImpl();
     }
     else
-        throw SQLException(::rtl::OUString::createFromAscii("Can't drop table ") + _sElementName,static_cast<XTypeProvider*>(this),OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_ERRORMSG_SEQUENCE),1000,Any());
-
+    {
+        const ::rtl::OUString sError( static_cast<OFileCatalog&>(m_rParent).getConnection()->getResources().getResourceStringWithSubstitution(
+                    STR_TABLE_NOT_DROP,
+                    "$tablename$", _sElementName
+                 ) );
+        ::dbtools::throwGenericSQLException( sError, NULL );
+    }
 }
 // -------------------------------------------------------------------------
 Any SAL_CALL ODbaseTables::queryInterface( const Type & rType ) throw(RuntimeException)

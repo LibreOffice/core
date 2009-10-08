@@ -42,8 +42,6 @@ namespace configmgr
         namespace uno   = ::com::sun::star::uno;
         namespace lang  = ::com::sun::star::lang;
         namespace script= ::com::sun::star::script;
-
-        using rtl::OUString;
 // -----------------------------------------------------------------------------
         class ElementFormatter;
 // -----------------------------------------------------------------------------
@@ -51,9 +49,6 @@ namespace configmgr
         // Value to XML (String) conversions
         class ValueFormatter
         {
-        public:
-            typedef uno::Reference< script::XTypeConverter >  TypeConverter;
-
         public:
             explicit
             ValueFormatter(uno::Any const & _aValue)
@@ -69,14 +64,14 @@ namespace configmgr
 
             bool hasContent() const;
 
-            OUString getContent(TypeConverter const & _xTCV) const;
+            rtl::OUString getContent(uno::Reference< script::XTypeConverter > const & _xTCV) const;
 
         private:
             bool isList() const { return m_sSeparator.getLength() != 0; }
             void makeSeparator();
 
             uno::Any m_aValue;
-            OUString m_sSeparator;
+            rtl::OUString m_sSeparator;
             bool     m_bUseSeparator;
         };
 // -----------------------------------------------------------------------------

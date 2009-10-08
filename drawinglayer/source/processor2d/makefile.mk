@@ -51,7 +51,8 @@ SLOFILES= \
         $(SLO)$/vclhelperbitmaprender.obj		\
         $(SLO)$/vclhelperbufferdevice.obj		\
         $(SLO)$/vclprocessor2d.obj				\
-        $(SLO)$/vclchartprocessor2d.obj			\
+        $(SLO)$/helperchartrenderer.obj			\
+        $(SLO)$/helperwrongspellrenderer.obj	\
         $(SLO)$/vclpixelprocessor2d.obj			\
         $(SLO)$/vclmetafileprocessor2d.obj		\
         $(SLO)$/contourextractor2d.obj			\

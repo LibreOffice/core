@@ -1592,7 +1592,7 @@ IMPL_LINK(AutoRecovery, implts_timerExpired, void*, EMPTYARG)
         // The called method returns an info, if and how this
         // timer must be restarted.
         sal_Bool bAllowUserIdleLoop = sal_True;
-        AutoRecovery::ETimerType eSuggestedTimer = implts_saveDocs(bAllowUserIdleLoop);
+        AutoRecovery::ETimerType eSuggestedTimer = implts_saveDocs(bAllowUserIdleLoop, sal_False);
 
         // If timer isnt used for "short callbacks" (means polling
         // for special states) ... reset the handle state of all
@@ -2100,6 +2100,7 @@ sal_Bool lc_checkIfSaveForbiddenByArguments(AutoRecovery::TDocumentInfo& rInfo)
 
 //-----------------------------------------------
 AutoRecovery::ETimerType AutoRecovery::implts_saveDocs(      sal_Bool        bAllowUserIdleLoop,
+                                                             sal_Bool        bRemoveLockFiles,
                                                        const DispatchParams* pParams           )
 {
     // SAFE -> ----------------------------------
@@ -2153,7 +2154,8 @@ AutoRecovery::ETimerType AutoRecovery::implts_saveDocs(      sal_Bool        bAl
         AutoRecovery::TDocumentInfo aInfo = *pIt;
 
         // WORKAROUND... Since the documents are not closed the lock file must be removed explicitly
-        lc_removeLockFile( aInfo );
+        if ( bRemoveLockFiles )
+            lc_removeLockFile( aInfo );
 
         // WORKAROUND ... see comment of this method
         if (lc_checkIfSaveForbiddenByArguments(aInfo))
@@ -2914,7 +2916,7 @@ void AutoRecovery::implts_doEmergencySave(const DispatchParams& aParams)
     AutoRecovery::ETimerType eSuggestedTimer    = AutoRecovery::E_DONT_START_TIMER;
     do
     {
-        eSuggestedTimer = implts_saveDocs(bAllowUserIdleLoop, &aParams);
+        eSuggestedTimer = implts_saveDocs(bAllowUserIdleLoop, sal_True, &aParams);
     }
     while(eSuggestedTimer == AutoRecovery::E_CALL_ME_BACK);
 
@@ -2981,7 +2983,7 @@ void AutoRecovery::implts_doSessionSave(const DispatchParams& aParams)
     AutoRecovery::ETimerType eSuggestedTimer    = AutoRecovery::E_DONT_START_TIMER;
     do
     {
-        eSuggestedTimer = implts_saveDocs(bAllowUserIdleLoop, &aParams);
+        eSuggestedTimer = implts_saveDocs(bAllowUserIdleLoop, sal_True, &aParams);
     }
     while(eSuggestedTimer == AutoRecovery::E_CALL_ME_BACK);
 

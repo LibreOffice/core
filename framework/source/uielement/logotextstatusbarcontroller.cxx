@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: logotextstatusbarcontroller.cxx,v $
- * $Revision: 1.6 $
+ * $Revision: 1.6.82.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -61,11 +61,6 @@ DEFINE_XSERVICEINFO_MULTISERVICE        (   LogoTextStatusbarController         
                                         )
 
 DEFINE_INIT_SERVICE                     (   LogoTextStatusbarController, {} )
-
-LogoTextStatusbarController::LogoTextStatusbarController()
-{
-    m_aLogoText = String( FwkResId( STR_STATUSBAR_LOGOTEXT ));
-}
 
 LogoTextStatusbarController::LogoTextStatusbarController( const uno::Reference< lang::XMultiServiceFactory >& xServiceManager ) :
     svt::StatusbarController( xServiceManager, uno::Reference< frame::XFrame >(), rtl::OUString(), 0 )

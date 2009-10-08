@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: ScriptProvider.java,v $
- * $Revision: 1.13 $
+ * $Revision: 1.13.6.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -365,9 +365,8 @@ public abstract class ScriptProvider
             ScriptMetaData scriptData = m_container.findScript( details );
             if ( scriptData == null )
             {
-                // TODO specify the correct error Type
                 throw new ScriptFrameworkErrorException( details.function + " does not exist",
-                    null, details.function, language, ScriptFrameworkErrorType.UNKNOWN );
+                    null, details.function, language, ScriptFrameworkErrorType.NO_SUCH_SCRIPT );
             }
             return scriptData;
         }
@@ -379,9 +378,8 @@ public abstract class ScriptProvider
         }
         catch ( com.sun.star.container.NoSuchElementException nse )
         {
-            // TODO specify the correct error Type
             throw new ScriptFrameworkErrorException( nse.getMessage(),
-                null, details.function, language, ScriptFrameworkErrorType.UNKNOWN );
+                null, details.function, language, ScriptFrameworkErrorType.NO_SUCH_SCRIPT );
         }
         catch ( com.sun.star.lang.WrappedTargetException wta )
         {

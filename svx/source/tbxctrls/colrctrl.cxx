@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: colrctrl.cxx,v $
- * $Revision: 1.20 $
+ * $Revision: 1.20.76.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -357,10 +357,7 @@ SvxColorDockingWindow::~SvxColorDockingWindow()
 |*
 \************************************************************************/
 
-void SvxColorDockingWindow::SFX_NOTIFY( SfxBroadcaster& ,
-                                         const TypeId& rBCType,
-                                         const SfxHint& rHint,
-                                         const TypeId& rHintType )
+void SvxColorDockingWindow::Notify( SfxBroadcaster& , const SfxHint& rHint )
 {
     const SfxPoolItemHint *pPoolItemHint = PTR_CAST(SfxPoolItemHint, &rHint);
     if ( pPoolItemHint

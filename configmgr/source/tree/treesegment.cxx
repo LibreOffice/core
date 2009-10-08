@@ -28,215 +28,64 @@
  *
  ************************************************************************/
 
-// MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_configmgr.hxx"
+#include "sal/config.h"
 
-#include "treesegment.hxx"
+#include <memory>
+
+#include "osl/diagnose.h"
+#include "rtl/ref.hxx"
+#include "salhelper/simplereferenceobject.hxx"
+
 #include "builddata.hxx"
-#include "treeaccessor.hxx"
-#include "utility.hxx"
-#include <osl/diagnose.h>
+#include "treesegment.hxx"
 
-// -----------------------------------------------------------------------------
+namespace configmgr { namespace data {
 
-namespace configmgr
+rtl::Reference< TreeSegment > TreeSegment::create(
+    std::auto_ptr< INode > tree, rtl::OUString const & type)
 {
-// -----------------------------------------------------------------------------
-    namespace data
-    {
-// -----------------------------------------------------------------------------
-struct TreeSegment::Impl : configmgr::SimpleReferenceObject
-{
-    Impl() : base() {}
-    ~Impl();
-
-    data::TreeAddress   base;
-};
-
-// -----------------------------------------------------------------------------
-TreeSegment::TreeSegment()
-: m_pImpl()
-{
-}
-
-// -----------------------------------------------------------------------------
-TreeSegment::TreeSegment(Impl * _pImpl)
-: m_pImpl(_pImpl)
-{
-}
-
-// -----------------------------------------------------------------------------
-TreeSegment::TreeSegment(TreeSegment const & _aOther)
-: m_pImpl( _aOther.m_pImpl )
-{
-}
-
-// -----------------------------------------------------------------------------
-TreeSegment& TreeSegment::operator=(TreeSegment const & _aOther)
-{
-    m_pImpl = _aOther.m_pImpl;
-    return *this;
-}
-
-// -----------------------------------------------------------------------------
-TreeSegment::~TreeSegment()
-{
-}
-
-// -----------------------------------------------------------------------------
-void TreeSegment::clear()
-{
-    m_pImpl.clear();
-}
-
-// -----------------------------------------------------------------------------
-TreeAccessor TreeSegment::getTreeAccess() const
-{
-    return TreeAccessor(getTreeData());
-}
-
-// -----------------------------------------------------------------------------
-// -----------------------------------------------------------------------------
-TreeSegment::Impl::~Impl()
-{
-    if (base != NULL)
-        destroyTree(base);
-}
-
-// -----------------------------------------------------------------------------
-TreeSegment::Impl* TreeSegment::createNewSegment(RawTreeData& _aTree, RawName const & _aTypeName)
-{
-    if (_aTree.get() == NULL) return NULL;
-
-    std::auto_ptr<Impl> aNewImpl( new Impl );
-
-    aNewImpl->base = buildElementTree(*_aTree,_aTypeName,false); // no defaults for set element trees
-
-    if (aNewImpl->base == NULL) aNewImpl.reset();
-
-    return aNewImpl.release();
-}
-
-// -----------------------------------------------------------------------------
-TreeSegment::Impl* TreeSegment::createNewSegment(RawName const & _aTreeName, RawTreeData& _aTree)
-{
-    if (_aTree.get() == NULL) return NULL;
-
-    std::auto_ptr<Impl> aNewImpl( new Impl );
-
-    aNewImpl->base = buildTree(_aTreeName,*_aTree,false); // no defaults for set element trees
-
-    if (aNewImpl->base == NULL) aNewImpl.reset();
-
-    return aNewImpl.release();
-}
-
-
-// -----------------------------------------------------------------------------
-TreeSegment::Impl* TreeSegment::createNewSegment(TreeAccessor const & _aTree)
-{
-    if (_aTree == NULL) return NULL;
-
-    std::auto_ptr<Impl> aNewImpl( new Impl );
-
-    aNewImpl->base = _aTree.copyTree();
-
-    if (aNewImpl->base == NULL) aNewImpl.reset();
-
-    return aNewImpl.release();
-}
-
-// -----------------------------------------------------------------------------
-TreeSegment::RawTreeData TreeSegment::cloneData(bool _bUseTreeName) const
-{
-    return convertTree(this->getTreeAccess(),_bUseTreeName);
-}
-
-// -----------------------------------------------------------------------------
-TreeSegment TreeSegment::cloneSegment() const
-{
-    if (!is()) return TreeSegment();
-
-    return createNew( this->getTreeAccess() );
-}
-
-// -----------------------------------------------------------------------------
-bool TreeSegment::is() const
-{
-    return hasData() && m_pImpl->base != NULL;
-}
-
-// -----------------------------------------------------------------------------
-TreeSegment::Name TreeSegment::getName() const
-{
-    OSL_ENSURE(is(), "Operation requires a valid tree");
-
-    if (!is()) return Name();
-
-    return configuration::makeElementName( getTreeData()->getName(), Name::NoValidate() );
-}
-
-// -----------------------------------------------------------------------------
-void TreeSegment::setName(Name const & _aNewName)
-{
-    OSL_ENSURE(is(), "Operation requires a valid tree");
-
-    if (is())
-    {
-        sharable::String aOldName = getTreeDataForUpdate()->header.name;
-
-        sharable::String aNewName = sharable::allocString(_aNewName.toString());
-
-        getTreeDataForUpdate()->header.name = aNewName;
-
-        sharable::freeString(aOldName);
+    rtl::Reference< TreeSegment > r;
+    if (tree.get() != 0) {
+        std::auto_ptr< sharable::TreeFragment > p(
+            buildElementTree(*tree, type, false));
+        r = new TreeSegment(p.get());
+        p.release();
     }
+    return r;
 }
-// -----------------------------------------------------------------------------
-void TreeSegment::markRemovable()
+
+rtl::Reference< TreeSegment > TreeSegment::create(
+    rtl::OUString const & name, std::auto_ptr< INode > tree)
 {
-    OSL_ENSURE(is(), "Operation requires a valid tree");
-
-    if (is())
-        getTreeDataForUpdate()->header.state |= State::flag_removable;
-}
-// -----------------------------------------------------------------------------
-TreeAddress TreeSegment::getBaseAddress() const
-{
-    return hasData() ? m_pImpl->base : NULL;
-}
-
-// -----------------------------------------------------------------------------
-TreeSegment::TreeDataPtr TreeSegment::getTreeData() const
-{
-    if (!is()) return NULL;
-
-    return m_pImpl->base;
-}
-
-// -----------------------------------------------------------------------------
-TreeSegment::TreeDataUpdatePtr TreeSegment::getTreeDataForUpdate() const
-{
-    OSL_ASSERT(this->is());
-
-    if (!is()) return NULL;
-
-    return m_pImpl->base;
-}
-
-// -----------------------------------------------------------------------------
-TreeSegment::NodeDataPtr TreeSegment::getSegmentRootNode() const
-{
-    if (sharable::TreeFragment const * pTree = getTreeData())
-        return & pTree->nodes[0];
-
-    else
-        return NULL;
-}
-// -----------------------------------------------------------------------------
-// -----------------------------------------------------------------------------
+    rtl::Reference< TreeSegment > r;
+    if (tree.get() != 0) {
+        std::auto_ptr< sharable::TreeFragment > p(
+            buildTree(name, *tree, false));
+        r = new TreeSegment(p.get());
+        p.release();
     }
-// -----------------------------------------------------------------------------
-} // namespace configmgr
+    return r;
+}
 
+rtl::Reference< TreeSegment > TreeSegment::create(
+    sharable::TreeFragment * tree)
+{
+    rtl::Reference< TreeSegment > r;
+    if (tree != 0) {
+        std::auto_ptr< sharable::TreeFragment > p(data::buildTree(tree));
+        r = new TreeSegment(p.get());
+        p.release();
+    }
+    return r;
+}
 
+TreeSegment::TreeSegment(sharable::TreeFragment * tree): fragment(tree) {
+    OSL_ASSERT(tree != 0);
+}
+
+TreeSegment::~TreeSegment() {
+    destroyTree(fragment);
+}
+
+} }

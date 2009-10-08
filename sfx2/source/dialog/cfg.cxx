@@ -830,19 +830,19 @@ void SfxConfigGroupListBox_Impl::Init(const css::uno::Reference< css::lang::XMul
     SetUpdateMode(FALSE);
     ClearAll(); // Remove all old entries from treelist box
 
+    m_xFrame = xFrame;
     if ( xSMGR.is())
     {
-    m_xSMGR           = xSMGR;
-    m_xFrame          = xFrame;
-    m_sModuleLongName = sModuleLongName;
+        m_xSMGR           = xSMGR;
+        m_sModuleLongName = sModuleLongName;
 
-    m_xGlobalCategoryInfo = css::uno::Reference< css::container::XNameAccess >(m_xSMGR->createInstance(SERVICE_UICATEGORYDESCRIPTION), css::uno::UNO_QUERY_THROW);
-    m_xModuleCategoryInfo = css::uno::Reference< css::container::XNameAccess >(m_xGlobalCategoryInfo->getByName(m_sModuleLongName)   , css::uno::UNO_QUERY_THROW);
-    m_xUICmdDescription   = css::uno::Reference< css::container::XNameAccess >(m_xSMGR->createInstance(SERVICE_UICMDDESCRIPTION)     , css::uno::UNO_QUERY_THROW);
+        m_xGlobalCategoryInfo = css::uno::Reference< css::container::XNameAccess >(m_xSMGR->createInstance(SERVICE_UICATEGORYDESCRIPTION), css::uno::UNO_QUERY_THROW);
+        m_xModuleCategoryInfo = css::uno::Reference< css::container::XNameAccess >(m_xGlobalCategoryInfo->getByName(m_sModuleLongName)   , css::uno::UNO_QUERY_THROW);
+        m_xUICmdDescription   = css::uno::Reference< css::container::XNameAccess >(m_xSMGR->createInstance(SERVICE_UICMDDESCRIPTION)     , css::uno::UNO_QUERY_THROW);
 
-    InitModule();
-    InitBasic();
-    InitStyles();
+        InitModule();
+        InitBasic();
+        InitStyles();
     }
 
     /*
@@ -1031,7 +1031,7 @@ void SfxConfigGroupListBox_Impl::Init(const css::uno::Reference< css::lang::XMul
                             ::rtl::OUString uiName = theChild->getName();
                             if ( bIsRootNode )
                             {
-                                if (  ! ((theChild->getName().equals( user )  ||                                    theChild->getName().equals( share ) ||
+                                if (  ! ((theChild->getName().equals( user )  || theChild->getName().equals( share ) ||
                                     theChild->getName().equals( currentDocTitle ) ) ) )
                                 {
                                     bDisplay=FALSE;

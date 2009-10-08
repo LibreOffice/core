@@ -45,14 +45,10 @@ namespace uno = css::uno ;
 namespace lang = css::lang ;
 namespace backend = css::configuration::backend ;
 
-typedef cppu::ImplInheritanceHelper1< LocalStratumBase,
-                                       backend::XMultiLayerStratum
-                                     > MultiStratumImplBase ;
-
 /**
   Implements the MultiLayerStratum service for local file access.
   */
-class LocalMultiStratum : public MultiStratumImplBase
+class LocalMultiStratum : public cppu::ImplInheritanceHelper1< LocalStratumBase, backend::XMultiLayerStratum >
 {
 public :
     /**

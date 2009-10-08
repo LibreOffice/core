@@ -169,9 +169,7 @@ void Test::threadTests()
     } CATCH_FAIL ("checking keys exist")
 }
 
-typedef ::cppu::WeakImplHelper1< css::beans::XPropertyChangeListener > ListenerBase;
-
-class RecursiveListener : public ListenerBase
+class RecursiveListener : public cppu::WeakImplHelper1< css::beans::XPropertyChangeListener >
 {
 public:
     sal_Int32 m_nRecurse;
@@ -183,8 +181,7 @@ public:
   public:
     RecursiveListener (Test *pTest, int nCount,
                        const char *pPath, const char *pKey)
-        : ListenerBase()
-        , m_nRecurse (nCount)
+        : m_nRecurse (nCount)
         , m_pTest (pTest)
         , m_pPath (pPath)
         , m_pKey (pKey)
@@ -201,8 +198,8 @@ public:
         disposeComponent (mxPropSet);
     }
 
-    virtual void SAL_CALL acquire() throw() { ListenerBase::acquire(); }
-    virtual void SAL_CALL release() throw() { ListenerBase::acquire(); }
+    virtual void SAL_CALL acquire() throw() { cppu::WeakImplHelper1< css::beans::XPropertyChangeListener >::acquire(); }
+    virtual void SAL_CALL release() throw() { cppu::WeakImplHelper1< css::beans::XPropertyChangeListener >::acquire(); }
     // XPropertyChangeListener
     virtual void SAL_CALL propertyChange( const ::css::beans::PropertyChangeEvent& ) throw (::css::uno::RuntimeException)
     {

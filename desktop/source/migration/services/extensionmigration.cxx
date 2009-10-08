@@ -43,8 +43,17 @@
 #include "com/sun/star/ucb/XCommandEnvironment.hpp"
 #include "com/sun/star/xml/sax/XParser.hpp"
 #include "rtl/instance.hxx"
+#include "osl/file.hxx"
+#include "osl/thread.h"
+
 #include "xmlscript/xmllib_imexp.hxx"
 #include "../../deployment/inc/dp_ucb.h"
+
+#ifdef SYSTEM_DB
+#include <db.h>
+#else
+#include <berkeleydb/db.h>
+#endif
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -310,9 +319,60 @@ namespace migration
         return true;
 
     }
+
+bool ExtensionMigration::isCompatibleBerkleyDb(const ::rtl::OUString& sSourceDir)
+{
+    try
+    {
+    ::rtl::OUString sDb(sSourceDir + ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+        "/uno_packages.db")));
+    //check if the db exist at all. If not then the call to db_create would create
+    //the file.
+    ::osl::File f(sDb);
+    if (::osl::File::E_None != f.open(OpenFlag_Read))
+    {
+        f.close();
+        return false;
+    }
+    f.close();
+
+    //create a system path
+    ::rtl::OUString sSysPath;
+    if (::osl::File::getSystemPathFromFileURL(sDb, sSysPath ) != ::osl::File::E_None)
+        return false;
+
+    ::rtl::OString cstr_sysPath(
+        ::rtl::OUStringToOString( sSysPath, osl_getThreadTextEncoding() ) );
+    char const * pcstr_sysPath = cstr_sysPath.getStr();
+
+    //Open the db. If it works then we assume that the file was written with a
+    //compatible version of Berkeley Db
+    DB* pDB = NULL;
+    //using  DB_RDONLY will return an "Invalid argument" error.
+    //DB_CREATE: only creates the file if it does not exist.
+    //An existing db is not modified.
+    if (0 != db_create(& pDB, 0, DB_CREATE))
+        return false;
+
+    if (0 != pDB->open(pDB, 0, pcstr_sysPath , 0, DB_HASH, DB_RDONLY, 0664 /* fs mode */))
+        return false;
+
+    pDB->close(pDB, 0);
+    }
+    catch (uno::Exception& )
+    {
+        return false;
+    }
+
+    return true;
+}
+
 bool ExtensionMigration::copy( const ::rtl::OUString& sSourceDir, const ::rtl::OUString& sTargetDir )
 {
     bool bRet = false;
+    if (! isCompatibleBerkleyDb(sSourceDir))
+        return false;
+
     INetURLObject aSourceObj( sSourceDir );
     INetURLObject aDestObj( sTargetDir );
     String aName = aDestObj.getName();

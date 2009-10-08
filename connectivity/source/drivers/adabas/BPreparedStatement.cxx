@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: BPreparedStatement.cxx,v $
- * $Revision: 1.9 $
+ * $Revision: 1.9.56.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -67,12 +67,12 @@ void OAdabasPreparedStatement::setUsingBookmarks(sal_Bool /*_bUseBookmark*/)
 // -----------------------------------------------------------------------------
 void OAdabasPreparedStatement::setResultSetConcurrency(sal_Int32 /*_par0*/)
 {
-    ::dbtools::throwFeatureNotImplementedException( "non-standard result set concurrencies: ", *this );
+    ::dbtools::throwFeatureNotImplementedException( "PreparedStatement:ResultSetConcurrency", *this );
 }
 // -----------------------------------------------------------------------------
 void OAdabasPreparedStatement::setResultSetType(sal_Int32 /*_par0*/)
 {
-    ::dbtools::throwFeatureNotImplementedException( "non-standard result set types: ", *this );
+    ::dbtools::throwFeatureNotImplementedException( "PreparedStatement:ResultSetType", *this );
 }
 // -----------------------------------------------------------------------------
 

@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: MDriver.cxx,v $
- * $Revision: 1.20 $
+ * $Revision: 1.19.56.3 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -33,6 +33,9 @@
 #include "MDriver.hxx"
 #include "MConnection.hxx"
 #include "connectivity/dbexception.hxx"
+#include "resource/mozab_res.hrc"
+#include "resource/common_res.hrc"
+
 #include <tools/solar.h>
 using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;
@@ -154,9 +157,13 @@ Reference< XConnection > SAL_CALL MozabDriver::connect( const ::rtl::OUString& u
     }
     else
     {
-        ::rtl::OUString sMsg = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("Could not load the library "));
-        sMsg += ::rtl::OUString::createFromAscii(SVLIBRARY( "mozabdrv" ));
-        ::dbtools::throwGenericSQLException(sMsg,*this);
+        ::connectivity::SharedResources aResources;
+        const ::rtl::OUString sError( aResources.getResourceStringWithSubstitution(
+                STR_COULD_NOT_LOAD_LIB,
+                "$libname$", ::rtl::OUString::createFromAscii( SVLIBRARY( "mozabdrv" ) )
+             ) );
+
+        ::dbtools::throwGenericSQLException(sError,*this);
     }
 
     return xCon;
@@ -199,7 +206,9 @@ Sequence< DriverPropertyInfo > SAL_CALL MozabDriver::getPropertyInfo( const ::rt
                 );
         return Sequence< DriverPropertyInfo >(&aDriverInfo[0],aDriverInfo.size());
     }
-    ::dbtools::throwGenericSQLException(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Invalid URL!")) ,*this);
+    ::connectivity::SharedResources aResources;
+    const ::rtl::OUString sMessage = aResources.getResourceString(STR_URI_SYNTAX_ERROR);
+    ::dbtools::throwGenericSQLException(sMessage ,*this);
     // if you have somthing special to say return it here :-)
     return Sequence< DriverPropertyInfo >();
 }

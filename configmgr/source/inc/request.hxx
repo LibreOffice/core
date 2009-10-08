@@ -41,40 +41,37 @@ namespace configmgr
     namespace backend
     {
 // ---------------------------------------------------------------------------
-        using configuration::AbsolutePath;
-        using configuration::Name;
-// ---------------------------------------------------------------------------
 
         class NodeRequest
         {
-            AbsolutePath    m_aNodePath;
+            configuration::AbsolutePath    m_aNodePath;
             RequestOptions  m_aOptions;
         public:
-            NodeRequest(AbsolutePath const& _aNodePath, RequestOptions const & _aOptions)
+            NodeRequest(configuration::AbsolutePath const& _aNodePath, RequestOptions const & _aOptions)
             : m_aNodePath(_aNodePath)
             , m_aOptions(_aOptions)
             {
             }
 
-            AbsolutePath    const & getPath()       const { return m_aNodePath; }
+            configuration::AbsolutePath    const & getPath()       const { return m_aNodePath; }
             RequestOptions  const & getOptions()    const { return m_aOptions; }
         };
 // ---------------------------------------------------------------------------
 
         class ComponentRequest
         {
-            Name    m_aComponentName;
+            rtl::OUString m_aComponentName;
             RequestOptions  m_aOptions;
             bool            m_bForcedReload;
         public:
-            ComponentRequest(Name const& _aComponentName, RequestOptions const & _aOptions)
+            ComponentRequest(rtl::OUString const& _aComponentName, RequestOptions const & _aOptions)
             : m_aComponentName(_aComponentName)
             , m_aOptions(_aOptions)
             , m_bForcedReload(false)
             {
             }
 
-            Name            const & getComponentName()  const { return m_aComponentName; }
+            rtl::OUString const & getComponentName()  const { return m_aComponentName; }
             RequestOptions  const & getOptions()        const { return m_aOptions; }
 
             bool isForcingReload() const { return m_bForcedReload; }
@@ -84,25 +81,25 @@ namespace configmgr
 
         class TemplateRequest
         {
-            Name    m_aComponentName;
-            Name    m_aTemplateName;
+            rtl::OUString m_aComponentName;
+            rtl::OUString m_aTemplateName;
 
         public:
             static
-            TemplateRequest forComponent(Name const & _aComponentName)
+            TemplateRequest forComponent(rtl::OUString const & _aComponentName)
             {
-                return TemplateRequest( Name(), _aComponentName);
+                return TemplateRequest( rtl::OUString(), _aComponentName);
             }
 
             explicit
-            TemplateRequest(Name const & _aTemplateName, Name const & _aComponentName)
+            TemplateRequest(rtl::OUString const & _aTemplateName, rtl::OUString const & _aComponentName)
             : m_aComponentName(_aComponentName)
             , m_aTemplateName(_aTemplateName)
             {}
 
-            bool isComponentRequest() const { return m_aTemplateName.isEmpty(); }
-            Name getTemplateName()      const { return m_aTemplateName; }
-            Name getComponentName()     const { return m_aComponentName; }
+            bool isComponentRequest() const { return m_aTemplateName.getLength() == 0; }
+            rtl::OUString getTemplateName()      const { return m_aTemplateName; }
+            rtl::OUString getComponentName()     const { return m_aComponentName; }
 
         };
 
@@ -110,11 +107,9 @@ namespace configmgr
 
         class UpdateRequest
         {
-            typedef rtl::OUString RequestId;
-
             ConstUpdateInstance  m_aUpdate;
             RequestOptions  m_aOptions;
-            RequestId       m_aRQID;
+            rtl::OUString       m_aRQID;
         public:
             explicit
             UpdateRequest(  UpdateInstance const & _aUpdate,
@@ -132,7 +127,7 @@ namespace configmgr
 
             explicit
             UpdateRequest(  ConstUpdateInstance::Data _aUpdateData,
-                            AbsolutePath const & _aRootpath,
+                            configuration::AbsolutePath const & _aRootpath,
                             RequestOptions const & _aOptions)
             : m_aUpdate(_aUpdateData, _aRootpath)
             , m_aOptions(_aOptions)
@@ -141,13 +136,13 @@ namespace configmgr
             bool isSyncRequired() const { return !m_aOptions.isAsyncEnabled(); }
 
             RequestOptions const & getOptions()  const { return m_aOptions; }
-            NodePath const & getUpdateRoot()     const { return m_aUpdate.root(); }
+            configuration::AbsolutePath const & getUpdateRoot()     const { return m_aUpdate.root(); }
 
             ConstUpdateInstance const & getUpdate()   const { return m_aUpdate; }
             ConstUpdateInstance::Data getUpdateData() const { return m_aUpdate.data(); }
 
-            void setRequestId(RequestId const & _aRQID) { m_aRQID = _aRQID; }
-            RequestId getRequestId() const { return m_aRQID; }
+            void setRequestId(rtl::OUString const & _aRQID) { m_aRQID = _aRQID; }
+            rtl::OUString getRequestId() const { return m_aRQID; }
         };
 
         inline ComponentRequest getComponentRequest(UpdateRequest const & _aUR)

@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: outliner.cxx,v $
- * $Revision: 1.76 $
+ * $Revision: 1.74.6.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -385,7 +385,7 @@ OutlinerParaObject* Outliner::CreateParaObject( USHORT nStartPara, USHORT nCount
 
     USHORT nLastPara = nStartPara + nCount - 1;
     for ( USHORT nPara = nStartPara; nPara <= nLastPara; nPara++ )
-        pPObj->pDepthArr[ nPara-nStartPara] = GetDepth( nPara );
+        pPObj->pParagraphDataArr[ nPara-nStartPara] = *GetParagraph( nPara );
 
     return pPObj;
 }
@@ -584,9 +584,9 @@ void Outliner::SetText( const OutlinerParaObject& rPObj )
     pParaList->Clear( TRUE );
     for( USHORT nCurPara = 0; nCurPara < rPObj.nCount; nCurPara++ )
     {
-        sal_Int16 nDepth = rPObj.pDepthArr[ nCurPara ];
-        ImplCheckDepth( nDepth );
-        Paragraph* pPara = new Paragraph( nDepth );
+        Paragraph* pPara = new Paragraph( rPObj.pParagraphDataArr[ nCurPara ] );
+        ImplCheckDepth( pPara->nDepth );
+
         pParaList->Insert( pPara, LIST_APPEND );
         ImplCheckNumBulletItem( nCurPara );
     }
@@ -626,7 +626,7 @@ void Outliner::AddText( const OutlinerParaObject& rPObj )
 
     for( USHORT n = 0; n < rPObj.nCount; n++ )
     {
-        pPara = new Paragraph( rPObj.pDepthArr[ n ] );
+        pPara = new Paragraph( rPObj.pParagraphDataArr[ n ] );
         pParaList->Insert( pPara, LIST_APPEND );
         USHORT nP = sal::static_int_cast< USHORT >(nPara+n);
         DBG_ASSERT(pParaList->GetAbsPos(pPara)==nP,"AddText:Out of sync")

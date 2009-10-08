@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: app.cxx,v $
- * $Revision: 1.224 $
+ * $Revision: 1.224.14.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -36,7 +36,6 @@
 #include "app.hxx"
 #include "desktop.hrc"
 #include "appinit.hxx"
-#include "intro.hxx"
 #include "officeipcthread.hxx"
 #include "cmdlineargs.hxx"
 #include "desktopresid.hxx"
@@ -1339,32 +1338,37 @@ void Desktop::Main()
         tools::InitTestToolLib();
         RTL_LOGFILE_CONTEXT_TRACE( aLog, "} tools::InitTestToolLib" );
 
-        // First Start Wizard
-        if ( IsFirstStartWizardNeeded() && !pCmdLineArgs->IsNoFirstStartWizard() )
+        // First Start Wizard allowed ?
+        if ( ! pCmdLineArgs->IsNoFirstStartWizard())
         {
-            ::svt::RegOptions().removeReminder(); // remove patch registration reminder
-            Reference< XJob > xFirstStartJob( xSMgr->createInstance(
-                DEFINE_CONST_UNICODE( "com.sun.star.comp.desktop.FirstStart" ) ), UNO_QUERY );
-            if (xFirstStartJob.is())
-            {
-                sal_Bool bDone = sal_False;
-                Sequence< NamedValue > lArgs(2);
-                lArgs[0].Name    = ::rtl::OUString::createFromAscii("LicenseNeedsAcceptance");
-                lArgs[0].Value <<= LicenseNeedsAcceptance();
-                lArgs[1].Name    = ::rtl::OUString::createFromAscii("LicensePath");
-                lArgs[1].Value <<= GetLicensePath();
+            RTL_LOGFILE_CONTEXT_TRACE( aLog, "{ FirstStartWizard" );
 
-                xFirstStartJob->execute(lArgs) >>= bDone;
-                if ( !bDone )
+            if (IsFirstStartWizardNeeded())
+            {
+                ::svt::RegOptions().removeReminder(); // remove patch registration reminder
+                Reference< XJob > xFirstStartJob( xSMgr->createInstance(
+                    DEFINE_CONST_UNICODE( "com.sun.star.comp.desktop.FirstStart" ) ), UNO_QUERY );
+                if (xFirstStartJob.is())
                 {
-                    return;
+                    sal_Bool bDone = sal_False;
+                    Sequence< NamedValue > lArgs(2);
+                    lArgs[0].Name    = ::rtl::OUString::createFromAscii("LicenseNeedsAcceptance");
+                    lArgs[0].Value <<= LicenseNeedsAcceptance();
+                    lArgs[1].Name    = ::rtl::OUString::createFromAscii("LicensePath");
+                    lArgs[1].Value <<= GetLicensePath();
+
+                    xFirstStartJob->execute(lArgs) >>= bDone;
+                    if ( !bDone )
+                    {
+                        return;
+                    }
                 }
             }
-        }
-        else if ( RegistrationPage::hasReminderDateCome() )
-            RegistrationPage::executeSingleMode();
+            else if ( RegistrationPage::hasReminderDateCome() )
+                RegistrationPage::executeSingleMode();
 
-        RTL_LOGFILE_CONTEXT_TRACE( aLog, "} FirstStartWizard" );
+            RTL_LOGFILE_CONTEXT_TRACE( aLog, "} FirstStartWizard" );
+        }
 
         // keep a language options instance...
         pLanguageOptions.reset( new SvtLanguageOptions(sal_True));

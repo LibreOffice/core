@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: dlgctl3d.hxx,v $
- * $Revision: 1.4 $
+ * $Revision: 1.4.226.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -31,320 +31,169 @@
 #ifndef _SVX_DLGCTL3D_HXX
 #define _SVX_DLGCTL3D_HXX
 
-// includes --------------------------------------------------------------
-
-#include <tools/poly.hxx>
 #include <vcl/ctrl.hxx>
-#include <goodies/b3dgeom.hxx>
-#include <goodies/b3dtrans.hxx>
-#include <goodies/matril3d.hxx>
-#include <goodies/b3dlight.hxx>
 #include <vcl/scrbar.hxx>
-
-#ifndef _SV_BUTTON_HXX
 #include <vcl/button.hxx>
-#endif
 #include <svtools/itemset.hxx>
+#include "svx/svxdllapi.h"
+#include <basegfx/vector/b3dvector.hxx>
+
+//////////////////////////////////////////////////////////////////////////////
 
 class FmFormModel;
 class FmFormPage;
 class E3dView;
 class E3dPolyScene;
 class E3dObject;
-class Base3D;
 
-/*************************************************************************
-|*
-|*  Control zur Darstellung einer 3D-Scene
-|*
-\************************************************************************/
+//////////////////////////////////////////////////////////////////////////////
 
 #define PREVIEW_OBJECTTYPE_SPHERE           0x0000
 #define PREVIEW_OBJECTTYPE_CUBE             0x0001
 
-class Svx3DPreviewControl : public Control
+//////////////////////////////////////////////////////////////////////////////
+
+class SVX_DLLPUBLIC Svx3DPreviewControl : public Control
 {
 protected:
-    FmFormModel*        pModel;
-    FmFormPage*         pFmPage;
-    E3dView*            p3DView;
-    E3dPolyScene*       pScene;
-    E3dObject*          p3DObj;
-    UINT16              nObjectType;
+    FmFormModel*            mpModel;
+    FmFormPage*             mpFmPage;
+    E3dView*                mp3DView;
+    E3dPolyScene*           mpScene;
+    E3dObject*              mp3DObj;
+    sal_uInt16              mnObjectType;
 
-    void                Construct();
-
-public:
-                    Svx3DPreviewControl( Window* pParent, const ResId& rResId );
-                    Svx3DPreviewControl( Window* pParent, WinBits nStyle = 0 );
-                    ~Svx3DPreviewControl();
-
-    virtual void    Paint( const Rectangle& rRect );
-    virtual void    MouseButtonDown( const MouseEvent& rMEvt );
-    virtual void    Resize();
-
-    void            Reset();
-
-    void            SetObjectType( UINT16 nType );
-    UINT16          GetObjectType() const { return( nObjectType ); }
-
-    SfxItemSet      Get3DAttributes() const;
-    void            Set3DAttributes( const SfxItemSet& rAttr );
-
-    void            Set3DObject( const E3dObject* pObj );
-};
-
-/*************************************************************************
-|*
-|*  3D Preview Control
-|*
-\************************************************************************/
-
-// Defines fuer NormalMode
-#define PREVIEW_NORMAL_MODE_OBJECT          0x0000
-#define PREVIEW_NORMAL_MODE_FLAT            0x0001
-#define PREVIEW_NORMAL_MODE_SPHERE          0x0002
-
-// Defines fuer ShadeMode
-#define PREVIEW_SHADEMODE_FLAT              0x0000
-#define PREVIEW_SHADEMODE_PHONG             0x0001
-#define PREVIEW_SHADEMODE_GOURAUD           0x0002
-#define PREVIEW_SHADEMODE_DRAFT             0x0003
-
-class SvxPreviewCtl3D : public Control
-{
-protected:
-    // Geometrie des Objektes
-    B3dGeometry             aGeometry;
-
-    // Kameraset
-    B3dCamera               aCameraSet;
-    double                  fDistance;
-    double                  fDeviceSize;
-
-    // Rotation der Geometrie (bei Cube)
-    double                  fRotateX;
-    double                  fRotateY;
-    double                  fRotateZ;
-
-    // Farben des Objektes
-    B3dMaterial             aObjectMaterial;
-
-    // Lichtquellen
-    B3dLightGroup           aLights;
-
-    // Segmentierung, wird bei Kugel verwendet
-    UINT16                  nHorSegs;
-    UINT16                  nVerSegs;
-
-    // Modus fuer Normalen
-    UINT16                  nNormalMode;
-
-    // Zeichenmodus
-    UINT16                  nShadeMode;
-
-    // Art der Geometrie, Cube oder Sphere
-    BOOL                    bGeometryCube;
+    void Construct();
 
 public:
-    SvxPreviewCtl3D( Window* pParent, const ResId& rResId);
-    SvxPreviewCtl3D( Window* pParent, WinBits nStyle = 0);
-    ~SvxPreviewCtl3D();
+    Svx3DPreviewControl(Window* pParent, const ResId& rResId);
+    Svx3DPreviewControl(Window* pParent, WinBits nStyle = 0);
+    ~Svx3DPreviewControl();
 
-    // Zeichenmethode
     virtual void Paint( const Rectangle& rRect );
-    void DrawGeometryClip(Base3D* pBase3D);
-    virtual void DrawGeometry(Base3D* pBase3D);
+    virtual void MouseButtonDown( const MouseEvent& rMEvt );
+    virtual void Resize();
 
-    // Art der Geometrie setzen
-    void SetGeometry(BOOL bGeomCube);
-
-    // Rotation setzen
-    void SetRotation(double fRotX, double fRotY, double fRotZ);
-    void GetRotation(double& rRotX, double& rRotY, double& rRotZ);
-
-    // Zugriffsfunktionen Materialien
-    void SetMaterial(Color rNew,
-        Base3DMaterialValue=Base3DMaterialAmbient);
-    Color GetMaterial(Base3DMaterialValue=Base3DMaterialAmbient);
-    void SetShininess(UINT16 nNew);
-    UINT16 GetShininess();
-
-    // Lichtquellen setzen
-    void SetLightGroup(B3dLightGroup* pNew=0L);
-    B3dLightGroup* GetLightGroup() { return &aLights; }
-
-    // View-Einstellungen
-    void SetUserDistance(double fNew);
-    double GetUserDistance() { return fDistance; }
-    void SetDeviceSize(double fNew);
-    double GetDeviceSize() { return fDeviceSize; }
-
-    // Zugriffsfunktionen Segmentierung
-    UINT16 GetHorizontalSegments() { return nHorSegs; }
-    UINT16 GetVerticalSegments() { return nVerSegs; }
-    void SetHorizontalSegments(UINT16 nNew);
-    void SetVerticalSegments(UINT16 nNew);
-    void SetSegments(UINT16 nNewHor, UINT16 nNewVer);
-
-    // Zugriff Normalenmodus
-    UINT16 GetNormalMode() { return nNormalMode; }
-    void SetNormalMode(UINT16 nNew);
-
-    // Zugriff auf ShadeMode
-    UINT16 GetShadeMode() { return nShadeMode; }
-    void SetShadeMode(UINT16 nNew);
-
-protected:
-
-    // Geometrieerzeugung
-    void CreateGeometry();
-
-    // Lokale Parameter Initialisieren
-    void Init();
+    void Reset();
+    virtual void SetObjectType(sal_uInt16 nType);
+    sal_uInt16 GetObjectType() const { return( mnObjectType ); }
+    SfxItemSet Get3DAttributes() const;
+    virtual void Set3DAttributes(const SfxItemSet& rAttr);
 };
 
-/*************************************************************************
-|*
-|*  3D Light Preview Control
-|*
-\************************************************************************/
+//////////////////////////////////////////////////////////////////////////////
 
-class SVX_DLLPUBLIC SvxLightPrevievCtl3D : public SvxPreviewCtl3D
+class SVX_DLLPUBLIC Svx3DLightControl : public Svx3DPreviewControl
 {
-private:
-    // Geometrie eines Lichtobjektes
-    B3dGeometry         aLightGeometry;
+    // Callback for interactive changes
+    Link                        maUserInteractiveChangeCallback;
+    Link                        maUserSelectionChangeCallback;
+    Link                        maChangeCallback;
+    Link                        maSelectionChangeCallback;
 
-    Base3DLightNumber   eSelectedLight;
+    // lights
+    sal_uInt32                  maSelectedLight;
 
-    // Werte fuer Rendering
-    double              fObjectRadius;
-    double              fDistanceToObject;
-    double              fScaleSizeSelected;
-    double              fLampSize;
+    // extra objects for light control
+    E3dObject*                  mpExpansionObject;
+    E3dObject*                  mpLampBottomObject;
+    E3dObject*                  mpLampShaftObject;
+    std::vector< E3dObject* >   maLightObjects;
 
-    // Callback bei interaktiven Aenderungen
-    Link                aChangeCallback;
-    Link                aSelectionChangeCallback;
+    // 3d rotations of object
+    double                      mfRotateX;
+    double                      mfRotateY;
+    double                      mfRotateZ;
 
-    // Sichern der Interaktion
-    double              fSaveActionStartHor;
-    double              fSaveActionStartVer;
-    double              fSaveActionStartRotZ;
-    Point               aActionStartPoint;
+    // interaction parameters
+    Point                       maActionStartPoint;
+    sal_Int32                   mnInteractionStartDistance;
+    double                      mfSaveActionStartHor;
+    double                      mfSaveActionStartVer;
+    double                      mfSaveActionStartRotZ;
 
-    // Mindestentfernung fuer Interaktionsstart
-    INT32               nInteractionStartDistance;
+    // bitfield
+    unsigned                    mbMouseMoved : 1;
+    unsigned                    mbGeometrySelected : 1;
 
-    // Maus-Status
-    unsigned            bMouseMoved                     : 1;
-    unsigned            bGeometrySelected               : 1;
+    void Construct2();
+    void ConstructLightObjects();
+    void AdaptToSelectedLight();
+    void TrySelection(Point aPosPixel);
 
 public:
-    SvxLightPrevievCtl3D( Window* pParent, const ResId& rResId);
-    SvxLightPrevievCtl3D( Window* pParent, WinBits nStyle = 0);
-    ~SvxLightPrevievCtl3D();
+    Svx3DLightControl(Window* pParent, const ResId& rResId);
+    Svx3DLightControl(Window* pParent, WinBits nStyle = 0);
+    ~Svx3DLightControl();
 
-    void SelectLight(Base3DLightNumber=Base3DLightNone);
-    Base3DLightNumber GetSelectedLight() { return eSelectedLight; }
+    virtual void Paint(const Rectangle& rRect);
+    virtual void MouseButtonDown(const MouseEvent& rMEvt);
+    virtual void Tracking( const TrackingEvent& rTEvt );
+    virtual void Resize();
 
-    void SelectGeometry();
-    BOOL IsGeometrySelected() { return bGeometrySelected; }
+    virtual void SetObjectType(sal_uInt16 nType);
 
-    void SetObjectRadius(double fNew);
-    double GetObjectRadius() { return fObjectRadius; }
+    // User Callback eintragen
+    void SetUserInteractiveChangeCallback(Link aNew) { maUserInteractiveChangeCallback = aNew; }
+    void SetUserSelectionChangeCallback(Link aNew) { maUserSelectionChangeCallback = aNew; }
+    void SetChangeCallback(Link aNew) { maChangeCallback = aNew; }
+    void SetSelectionChangeCallback(Link aNew) { maSelectionChangeCallback = aNew; }
 
-    void SetDistanceToObject(double fNew);
-    double GetDistanceToObject() { return fDistanceToObject; }
+    // selection checks
+    bool IsSelectionValid();
+    bool IsGeometrySelected() { return mbGeometrySelected; }
 
-    void SetScaleSizeSelected(double fNew);
-    double GetScaleSizeSelected() { return fScaleSizeSelected; }
-
-    void SetLampSize(double fNew);
-    double GetLampSize() { return fLampSize; }
-
-    // Zeichenmethode
-    virtual void DrawGeometry(Base3D* pBase3D);
-    void DrawLightGeometry(Base3DLightNumber eLightNum, Base3D* pBase3D);
-
-    // Selektion gueltig
-    BOOL IsSelectionValid();
-
-    // Selektierte Lampe Position in Polarkoordinaten holen/setzen
-    // dabei geht Hor:[0..360.0[ und Ver:[-90..90] Grad
+    // get/set position of selected lamp in polar coordinates, Hor:[0..360.0[ and Ver:[-90..90] degrees
     void GetPosition(double& rHor, double& rVer);
     void SetPosition(double fHor, double fVer);
 
-    // Callback eintragen
-    void SetChangeCallback(Link aNew) { aChangeCallback = aNew; }
-    void SetSelectionChangeCallback(Link aNew) { aSelectionChangeCallback = aNew; }
+    // get/set rotation of 3D object
+    void SetRotation(double fRotX, double fRotY, double fRotZ);
+    void GetRotation(double& rRotX, double& rRotY, double& rRotZ);
 
-    // Interaktion
-    virtual void        MouseButtonDown( const MouseEvent& rMEvt );
-    virtual void        Tracking( const TrackingEvent& rTEvt );
+    void SelectLight(sal_uInt32 nLightNumber);
+    virtual void Set3DAttributes(const SfxItemSet& rAttr);
+    sal_uInt32 GetSelectedLight() { return maSelectedLight; }
 
-protected:
-
-    // Geometrieerzeugung Lampe
-    void CreateLightGeometry();
-
-    // Selektion einer Lampe
-    void TrySelection(Point aPosPixel);
-
-    // Lokale Parameter Initialisieren
-    void Init();
+    // light data access
+    bool GetLightOnOff(sal_uInt32 nNum) const;
+    Color GetLightColor(sal_uInt32 nNum) const;
+    basegfx::B3DVector GetLightDirection(sal_uInt32 nNum) const;
 };
 
-/*************************************************************************
-|*
-|*  3D Light Control
-|*
-\************************************************************************/
+//////////////////////////////////////////////////////////////////////////////
 
 class SVX_DLLPUBLIC SvxLightCtl3D : public Control
 {
 private:
-    // Lokale Controls
-    SvxLightPrevievCtl3D    aLightControl;
-    ScrollBar               aHorScroller;
-    ScrollBar               aVerScroller;
-    PushButton              aSwitcher;
-    basegfx::B3DVector  aVector;
+    // local controls
+    Svx3DLightControl       maLightControl;
+    ScrollBar               maHorScroller;
+    ScrollBar               maVerScroller;
+    PushButton              maSwitcher;
 
-// Callback bei interaktiven Aenderungen
-    Link                    aUserInteractiveChangeCallback;
-    Link                    aUserSelectionChangeCallback;
-
-    // Flags
-    unsigned                bVectorValid                    : 1;
-    unsigned                bSphereUsed                     : 1;
+    // Callback bei interaktiven Aenderungen
+    Link                    maUserInteractiveChangeCallback;
+    Link                    maUserSelectionChangeCallback;
 
 public:
     SvxLightCtl3D( Window* pParent, const ResId& rResId);
     SvxLightCtl3D( Window* pParent, WinBits nStyle = 0);
     ~SvxLightCtl3D();
 
-    // Altes Interface
-    void SetVector(const basegfx::B3DVector& rNew);
-    const basegfx::B3DVector& GetVector();
-    BOOL GetVectorValid() { return bVectorValid; }
-
     // Reagiere auf Groessenaenderungen
-    virtual void        Resize();
+    virtual void Resize();
     void NewLayout();
 
     // Selektion auf Gueltigkeit pruefen
     void CheckSelection();
 
     // Um weitere Einstellungen nach Aussen zu bringen...
-    SvxLightPrevievCtl3D& GetPreviewControl() { return aLightControl; }
+    Svx3DLightControl& GetSvx3DLightControl() { return maLightControl; }
 
     // User Callback eintragen
-    void SetUserInteractiveChangeCallback(Link aNew)
-        { aUserInteractiveChangeCallback = aNew; }
-    void SetUserSelectionChangeCallback(Link aNew)
-        { aUserSelectionChangeCallback = aNew; }
+    void SetUserInteractiveChangeCallback(Link aNew) { maUserInteractiveChangeCallback = aNew; }
+    void SetUserSelectionChangeCallback(Link aNew) { maUserSelectionChangeCallback = aNew; }
 
     virtual void KeyInput( const KeyEvent& rKEvt );
     virtual void GetFocus();
@@ -363,6 +212,7 @@ protected:
     void move( double fDeltaHor, double fDeltaVer );
 };
 
-
 #endif // _SCH_DLGCTL3D_HXX
 
+//////////////////////////////////////////////////////////////////////////////
+// eof

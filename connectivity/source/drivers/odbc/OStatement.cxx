@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: OStatement.cxx,v $
- * $Revision: 1.40 $
+ * $Revision: 1.40.56.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -50,6 +50,8 @@
 #include <comphelper/types.hxx>
 #include "diagnose_ex.h"
 #include <algorithm>
+#include "resource/common_res.hrc"
+#include "connectivity/dbexception.hxx"
 
 using namespace ::comphelper;
 
@@ -403,8 +405,7 @@ Reference< XResultSet > OStatement_Base::getResultSet (sal_Bool checkCount) thro
     if (m_xResultSet.get().is())  // if resultset already retrieved,
     {
         // throw exception to avoid sequence error
-        throw SQLException(::rtl::OUString::createFromAscii("Invalid state for getResultSet"),*this,
-            ::rtl::OUString(),0,Any());
+        ::dbtools::throwFunctionSequenceException(*this,Any());
     }
 
     OResultSet* pRs = NULL;
@@ -467,8 +468,7 @@ Reference< XResultSet > SAL_CALL OStatement_Base::executeQuery( const ::rtl::OUS
     else
     {
         // No ResultSet was produced.  Raise an exception
-        throw SQLException(::rtl::OUString::createFromAscii("No ResultSet was produced"),*this,
-            ::rtl::OUString(),0,Any());
+        m_pConnection->throwGenericSQLException(STR_NO_RESULTSET,*this);
     }
     return xRS;
 }
@@ -550,8 +550,9 @@ sal_Int32 SAL_CALL OStatement_Base::executeUpdate( const ::rtl::OUString& sql ) 
         // No update count was produced (a ResultSet was).  Raise
         // an exception
 
-        throw new SQLException (::rtl::OUString::createFromAscii("No row count was produced"),*this,
-            ::rtl::OUString(),0,Any());
+        ::connectivity::SharedResources aResources;
+        const ::rtl::OUString sError( aResources.getResourceString(STR_NO_ROWCOUNT));
+        throw SQLException (sError, *this,::rtl::OUString(),0,Any());
     }
     return numRows;
 

@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: OPreparedStatement.cxx,v $
- * $Revision: 1.49 $
+ * $Revision: 1.49.56.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -47,6 +47,7 @@
 #include "connectivity/dbtools.hxx"
 #include <comphelper/types.hxx>
 #include "connectivity/FValue.hxx"
+#include "resource/common_res.hrc"
 #include "connectivity/sqlparse.hxx"
 
 using namespace ::comphelper;
@@ -263,14 +264,11 @@ sal_Int32 SAL_CALL OPreparedStatement::executeUpdate(  ) throw(SQLException, Run
 
     if (!execute())
         numRows = getUpdateCount ();
-    else {
-
+    else
+    {
         // No update count was produced (a ResultSet was).  Raise
         // an exception
-
-        throw SQLException(::rtl::OUString::createFromAscii("No row count was produced"),
-            *this,
-            ::rtl::OUString(),0,Any());
+        m_pConnection->throwGenericSQLException(STR_NO_ROWCOUNT,*this);
     }
     return numRows;
 }
@@ -303,14 +301,10 @@ Reference< XResultSet > SAL_CALL OPreparedStatement::executeQuery(  ) throw(SQLE
 
     if (execute())
         rs = getResultSet(sal_False);
-
-    else {
-
+    else
+    {
         // No ResultSet was produced.  Raise an exception
-
-        throw SQLException(::rtl::OUString::createFromAscii("No ResultSet was produced"),
-            *this,
-            ::rtl::OUString(),0,Any());
+        m_pConnection->throwGenericSQLException(STR_NO_RESULTSET,*this);
     }
     return rs;
 }
@@ -778,9 +772,9 @@ void OPreparedStatement::putParamData (sal_Int32 index) throw(SQLException)
     Reference< XInputStream> inputStream =  boundParams[index - 1].getInputStream ();
     if ( !inputStream.is() )
     {
-        throw SQLException (::rtl::OUString::createFromAscii("InputStream was not set."),
-        *this,
-            ::rtl::OUString(),0,Any());
+        ::connectivity::SharedResources aResources;
+        const ::rtl::OUString sError( aResources.getResourceString(STR_NO_INPUTSTREAM));
+        throw SQLException (sError, *this,::rtl::OUString(),0,Any());
     }
     sal_Int32 inputStreamLen = boundParams[index - 1].getInputStreamLen ();
     sal_Int32 inputStreamType = boundParams[index - 1].getStreamType ();
@@ -806,9 +800,9 @@ void OPreparedStatement::putParamData (sal_Int32 index) throw(SQLException)
 
                 if (inputStreamLen != 0)
                 {
-                    throw SQLException (::rtl::OUString::createFromAscii("End of InputStream reached before satisfying length specified when InputStream was set"),
-                    *this,
-                        ::rtl::OUString(),0,Any());
+                    ::connectivity::SharedResources aResources;
+                    const ::rtl::OUString sError( aResources.getResourceString(STR_INPUTSTREAM_WRONG_LEN));
+                    throw SQLException (sError, *this,::rtl::OUString(),0,Any());
                 }
                 endOfStream = sal_True;
                 break;
@@ -1008,14 +1002,13 @@ void OPreparedStatement::checkParameterIndex(sal_Int32 _parameterIndex)
 {
     if( !_parameterIndex || _parameterIndex > numParams)
     {
-        ::rtl::OUString s_sParameterError = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("You tried to set a parameter at position "));
-        s_sParameterError += ::rtl::OUString::valueOf(_parameterIndex);
-        s_sParameterError += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" but there is/are only "));
-        s_sParameterError += ::rtl::OUString::valueOf((sal_Int32)numParams);
-        s_sParameterError += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" parameter(s) allowed."));
-        s_sParameterError += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" One reason may be that the property \"ParameterNameSubstitution\" is not set to TRUE in the data source."));
-        static ::rtl::OUString sStatus = ::rtl::OUString::createFromAscii("07009");
-        SQLException aNext(s_sParameterError,*this,sStatus,0,Any());
+        ::connectivity::SharedResources aResources;
+        const ::rtl::OUString sError( aResources.getResourceStringWithSubstitution(STR_WRONG_PARAM_INDEX,
+            "$pos$", ::rtl::OUString::valueOf(_parameterIndex),
+            "$count$", ::rtl::OUString::valueOf((sal_Int32)numParams)
+            ));
+        SQLException aNext(sError,*this, ::rtl::OUString(),0,Any());
+
         ::dbtools::throwInvalidIndexException(*this,makeAny(aNext));
     }
 }

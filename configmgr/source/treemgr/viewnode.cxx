@@ -32,13 +32,10 @@
 #include "precompiled_configmgr.hxx"
 
 #include "viewnode.hxx"
-#include "valuenodeaccess.hxx"
-#include "groupnodeaccess.hxx"
-#include "setnodeaccess.hxx"
 #include "setnodeimpl.hxx"
 #include "groupnodeimpl.hxx"
 #include "valuenodeimpl.hxx"
-#include "treeimpl.hxx"
+#include "tree.hxx"
 #include "viewstrategy.hxx"
 
 //-----------------------------------------------------------------------------
@@ -48,61 +45,59 @@ namespace configmgr
     namespace view
     {
 //-----------------------------------------------------------------------------
-        rtl::Reference< view::ViewStrategy > getViewBehavior(Tree const & _aTree)
+        rtl::Reference< view::ViewStrategy > getViewBehavior(configuration::Tree * _aTree)
         {
-            Tree::TreeData* pTreeData = _aTree.get_impl();
-            return pTreeData->getViewBehavior();
+            return _aTree->getViewBehavior();
         }
 
 //-----------------------------------------------------------------------------
-        static inline Node makeNode_(Tree const & _aTree, configuration::NodeOffset nOffset)
+        static inline Node makeNode_(configuration::Tree * _aTree, unsigned int nOffset)
         {
-            Tree::TreeData * pTreeData = _aTree.get_impl();
-            return Node(_aTree, pTreeData->nodeData(nOffset));
+            return Node(_aTree, _aTree->nodeData(nOffset));
         }
 //-----------------------------------------------------------------------------
         Node Node::getParent() const
         {
-            Tree::TreeData * pTreeData = this->tree().get_impl();
+            configuration::Tree * pTreeData = this->tree();
             return makeNode_(tree(), pTreeData->parent_(this->get_offset()));
         }
 
 //-----------------------------------------------------------------------------
-        Node GroupNode::findChild(configuration::Name const& _aName) const
+        Node GroupNode::findChild(rtl::OUString const& _aName) const
         {
-            Tree::TreeData * pTreeData = this->tree().get_impl();
+            configuration::Tree * pTreeData = this->tree();
             return makeNode_(tree(), pTreeData->findChild_(node().get_offset(), _aName));
         }
 
 //-----------------------------------------------------------------------------
         Node GroupNode::getFirstChild() const
         {
-            Tree::TreeData * pTreeData = this->tree().get_impl();
+            configuration::Tree * pTreeData = this->tree();
             return makeNode_(tree(), pTreeData->firstChild_(node().get_offset()));
         }
 
 //-----------------------------------------------------------------------------
         Node GroupNode::getNextChild(Node const& _aAfterNode) const
         {
-            Tree::TreeData * pTreeData = this->tree().get_impl();
+            configuration::Tree * pTreeData = this->tree();
             OSL_ASSERT(pTreeData->parent_(_aAfterNode.get_offset()) == this->node().get_offset());
             return makeNode_(tree(), pTreeData->findNextChild_(node().get_offset(),_aAfterNode.get_offset()));
         }
 
 //-----------------------------------------------------------------------------
-        data::NodeAccess Node::getAccessRef() const
+        sharable::Node * Node::getAccessRef() const
         {
             return get_impl()->getOriginalNodeAccess();
         }
 
 //-----------------------------------------------------------------------------
-        data::GroupNodeAccess GroupNode::getAccess() const
+        sharable::GroupNode * GroupNode::getAccess() const
         {
             return get_impl()->getDataAccess();
         }
 
 //-----------------------------------------------------------------------------
-        data::SetNodeAccess SetNode::getAccess() const
+        sharable::SetNode * SetNode::getAccess() const
         {
             return get_impl()->getDataAccess();
         }

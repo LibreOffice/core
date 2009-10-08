@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: sbintern.hxx,v $
- * $Revision: 1.16 $
+ * $Revision: 1.16.56.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -35,7 +35,10 @@
 #include <unotools/transliterationwrapper.hxx>
 #include "sb.hxx"
 
-class ::utl::TransliterationWrapper;
+namespace utl
+{
+    class TransliterationWrapper;
+}
 class SbUnoFactory;
 class SbTypeFactory;
 class SbOLEFactory;

@@ -33,26 +33,17 @@
 
 #include "change.hxx"
 
-#include "nodeaccess.hxx"
-
-//..........................................................................
-namespace configmgr
-{
-//..........................................................................
+namespace configmgr {
+    namespace sharable { union Node; }
 
 // apply a already matching set of changes to the target tree
-    void applyUpdateToTree(SubtreeChange& _anUpdateTree, data::NodeAddress _aRootNode);
+    void applyUpdateToTree(SubtreeChange& _anUpdateTree, sharable::Node * _aRootNode);
 
 // apply a set of changes to the target tree
-    void applyUpdateWithAdjustmentToTree(SubtreeChange& _anUpdateTree, data::NodeAddress _aRootNode);
+    void applyUpdateWithAdjustmentToTree(SubtreeChange& _anUpdateTree, sharable::Node * _aRootNode);
 
 // apply a set of changes to the target tree, return true, if there are changes found
-    bool createUpdateFromDifference(SubtreeChange& _rResultingUpdateTree, data::NodeAccess const & _aExistingData, ISubtree const & _aNewData);
+    bool createUpdateFromDifference(SubtreeChange& _rResultingUpdateTree, sharable::Node * existingData, ISubtree const & _aNewData);
+}
 
-//..........................................................................
-}   // namespace configmgr
-//..........................................................................
-
-#endif // CONFIGMGR_MERGEHELPER_HXX
-
-
+#endif

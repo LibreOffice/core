@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: viewcontactofe3dscene.hxx,v $
- * $Revision: 1.5 $
+ * $Revision: 1.5.18.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -59,7 +59,7 @@ namespace sdr
 {
     namespace contact
     {
-        class ViewContactOfE3dScene : public ViewContactOfSdrObj
+        class SVX_DLLPUBLIC ViewContactOfE3dScene : public ViewContactOfSdrObj
         {
         protected:
             // Create a Object-Specific ViewObjectContact, set ViewContact and

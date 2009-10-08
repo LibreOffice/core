@@ -54,9 +54,7 @@ namespace configmgr
 
         namespace backenduno = ::com::sun::star::configuration::backend;
         // --------------------------------------------------------------------------
-        typedef ::cppu::WeakImplHelper1<backenduno::XBackendChangesListener> BackendStrataListener_Base;
-
-        class BackendStrataListener: public BackendStrataListener_Base
+        class BackendStrataListener: public cppu::WeakImplHelper1<backenduno::XBackendChangesListener>
         {
         public:
             BackendStrataListener(const MultiStratumBackend& aBackend);

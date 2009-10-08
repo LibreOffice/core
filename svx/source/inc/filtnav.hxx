@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: filtnav.hxx,v $
- * $Revision: 1.19 $
+ * $Revision: 1.19.216.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -273,7 +273,7 @@ public:
     virtual ~FmFilterNavigator();
 
     void UpdateContent(const ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess > & xControllers, const ::com::sun::star::uno::Reference< ::com::sun::star::form::XFormController > & xCurrent);
-    FmFilterModel* const GetFilterModel() const {return m_pModel;}
+    const FmFilterModel* GetFilterModel() const {return m_pModel;}
 
 protected:
     using Control::Notify;
@@ -292,7 +292,7 @@ protected:
 
     void DeleteSelection();
     void Clear();
-    SvLBoxEntry* FindEntry(FmFilterData* pItem);
+    SvLBoxEntry* FindEntry(const FmFilterData* pItem) const;
     void Insert(FmFilterData* pItem, sal_Int32 nPos);
     void Remove(FmFilterData* pItem);
 

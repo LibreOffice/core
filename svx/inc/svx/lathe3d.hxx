@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: lathe3d.hxx,v $
- * $Revision: 1.4 $
+ * $Revision: 1.4.18.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -32,10 +32,6 @@
 #define _E3D_LATHE3D_HXX
 
 #include <svx/obj3d.hxx>
-
-//#ifndef _E3D_POLY3D_HXX
-//#include <svx/poly3d.hxx>
-//#endif
 #include "svx/svxdllapi.h"
 
 /*************************************************************************
@@ -60,14 +56,8 @@ private:
     enum { LATHE_PART_STD = 1, LATHE_PART_COVER = 2 };
     basegfx::B2DPolyPolygon maPolyPoly2D;
 
-    // #78972#
-    basegfx::B3DPolyPolygon maLinePolyPolygon;
-
  protected:
     void SetDefaultAttributes(E3dDefaultAttributes& rDefault);
-
-    basegfx::B2DPolyPolygon CreateLathePolyPoly(const basegfx::B2DPolyPolygon& rPolyPoly2D, sal_uInt32 nVSegs);
-    basegfx::B2DPolygon CreateLathePoly(const basegfx::B2DPolygon& rPoly2D, sal_uInt32 nVSegs);
 
  public:
     TYPEINFO();
@@ -120,12 +110,6 @@ private:
     virtual void operator=(const SdrObject&);
 
     virtual SdrObject* DoConvertToPolyObj(BOOL bBezier) const;
-
-    // Geometrieerzeugung
-    virtual void CreateGeometry();
-
-    // Give out simple line geometry
-    virtual basegfx::B3DPolyPolygon Get3DLineGeometry() const;
 
     // TakeObjName...() ist fuer die Anzeige in der UI, z.B. "3 Rahmen selektiert".
     virtual void TakeObjNameSingul(String& rName) const;

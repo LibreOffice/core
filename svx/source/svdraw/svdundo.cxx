@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: svdundo.cxx,v $
- * $Revision: 1.31 $
+ * $Revision: 1.31.226.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -43,17 +43,12 @@
 #include "svdglob.hxx"  // StringCache
 #include <svx/scene3d.hxx>
 #include <svx/outlobj.hxx>
-
-// #i11426#
 #include <svx/svdogrp.hxx>
 #include <svx/sdr/properties/itemsettools.hxx>
 #include <svx/sdr/properties/properties.hxx>
-
-// #109587#
 #include <svx/svdocapt.hxx>
-
-// #109587#
 #include <svtools/whiter.hxx>
+#include <svx/e3dsceneupdater.hxx>
 
 #include "svdviter.hxx"
 
@@ -386,6 +381,7 @@ void SdrUndoAttrObj::SetRepeatAttr(const SfxItemSet& rSet)
 
 void SdrUndoAttrObj::Undo()
 {
+    E3DModifySceneSnapRectUpdater aUpdater(pObj);
     BOOL bIs3DScene(pObj && pObj->ISA(E3dScene));
 
     // #94278# Trigger PageChangeCall
@@ -486,6 +482,7 @@ void SdrUndoAttrObj::Undo()
 
 void SdrUndoAttrObj::Redo()
 {
+    E3DModifySceneSnapRectUpdater aUpdater(pObj);
     BOOL bIs3DScene(pObj && pObj->ISA(E3dScene));
 
     if(!pUndoGroup || bIs3DScene)
@@ -777,6 +774,7 @@ void SdrUndoRemoveObj::Undo()
             aOwnerAnchorPos = pObjList->GetOwnerObj()->GetAnchorPos();
         }
 
+        E3DModifySceneSnapRectUpdater aUpdater(pObjList->GetOwnerObj());
         SdrInsertReason aReason(SDRREASON_UNDO);
         pObjList->InsertObject(pObj,nOrdNum,&aReason);
 
@@ -784,13 +782,6 @@ void SdrUndoRemoveObj::Undo()
         if(aOwnerAnchorPos.X() || aOwnerAnchorPos.Y())
         {
             pObj->NbcSetAnchorPos(aOwnerAnchorPos);
-        }
-
-        if(pObjList->GetOwnerObj() && pObjList->GetOwnerObj()->ISA(E3dObject) && pObj->ISA(E3dObject))
-        {
-            E3dScene* pScene = ((E3dObject*)pObjList->GetOwnerObj())->GetScene();
-            if(pScene)
-                pScene->CorrectSceneDimensions();
         }
     }
 }
@@ -801,18 +792,8 @@ void SdrUndoRemoveObj::Redo()
     if (pObj->IsInserted())
     {
         ImplUnmarkObject( pObj );
-
-#ifdef DBG_UTIL
-        SdrObject* pChkObj=
-#endif
+        E3DModifySceneSnapRectUpdater aUpdater(pObj);
         pObjList->RemoveObject(nOrdNum);
-        DBG_ASSERT(pChkObj==pObj,"RedoRemoveObj: RemoveObjNum!=pObj");
-        if(pObjList->GetOwnerObj() && pObjList->GetOwnerObj()->ISA(E3dObject) && pObj->ISA(E3dObject))
-        {
-            E3dScene* pScene = ((E3dObject*)pObjList->GetOwnerObj())->GetScene();
-            if(pScene)
-                pScene->CorrectSceneDimensions();
-        }
     }
 
     // #94278# Trigger PageChangeCall
@@ -836,12 +817,6 @@ void SdrUndoInsertObj::Undo()
 #endif
         pObjList->RemoveObject(nOrdNum);
         DBG_ASSERT(pChkObj==pObj,"UndoInsertObj: RemoveObjNum!=pObj");
-        if(pObjList->GetOwnerObj() && pObjList->GetOwnerObj()->ISA(E3dObject) && pObj->ISA(E3dObject))
-        {
-            E3dScene* pScene = ((E3dObject*)pObjList->GetOwnerObj())->GetScene();
-            if(pScene)
-                pScene->CorrectSceneDimensions();
-        }
     }
 }
 
@@ -871,13 +846,6 @@ void SdrUndoInsertObj::Redo()
             pObj->NbcSetAnchorPos( aAnchorPos );
         }
         // <--
-
-        if(pObjList->GetOwnerObj() && pObjList->GetOwnerObj()->ISA(E3dObject) && pObj->ISA(E3dObject))
-        {
-            E3dScene* pScene = ((E3dObject*)pObjList->GetOwnerObj())->GetScene();
-            if(pScene)
-                pScene->CorrectSceneDimensions();
-        }
     }
 
     // #94278# Trigger PageChangeCall

@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: unopkg_app.cxx,v $
- * $Revision: 1.14 $
+ * $Revision: 1.14.58.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -252,7 +252,7 @@ extern "C" int unopkg_main()
             return 0;
         }
         //consume all bootstrap variables which may occur before the subcommannd
-        while(isBootstrapVariable(&nPos));
+        while(isBootstrapVariable(&nPos)) ;
 
         if(nPos >= nCount)
             return 0;

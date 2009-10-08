@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: svdfppt.hxx,v $
- * $Revision: 1.7 $
+ * $Revision: 1.7.6.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -53,6 +53,7 @@
 #include "svx/svxdllapi.h"
 #include <vcl/font.hxx>
 #include <vector>
+#include <boost/optional.hpp>
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
 class SdrModel;
@@ -789,7 +790,8 @@ class PPTNumberFormatCreator
 
         void    ImplGetNumberFormat( SdrPowerPointImport& rMan, SvxNumberFormat& rNumberFormat, UINT32 nLevel );
         BOOL    ImplGetExtNumberFormat( SdrPowerPointImport& rMan, SvxNumberFormat& rNumberFormat, UINT32 nLevel,
-                            UINT32 nInstance, UINT32 nInstanceInSheet, UINT32 nFontHeight, PPTParagraphObj* pPara );
+                            UINT32 nInstance, UINT32 nInstanceInSheet, boost::optional< sal_Int16 >& rStartNumbering,
+                                UINT32 nFontHeight, PPTParagraphObj* pPara );
 
     protected :
 
@@ -804,7 +806,7 @@ class PPTNumberFormatCreator
                     const PPTParaLevel& rParaLevel, const PPTCharLevel& rCharLevel, UINT32 nInstance );
 
         BOOL    GetNumberFormat(  SdrPowerPointImport& rMan, SvxNumberFormat& rNumberFormat,
-                    PPTParagraphObj* pPara, UINT32 nInstanceInSheet );
+                    PPTParagraphObj* pPara, UINT32 nInstanceInSheet, boost::optional< sal_Int16 >& rStartNumbering );
 };
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1052,7 +1054,7 @@ class SVX_DLLPUBLIC PPTParagraphObj : public PPTParaPropSet, public PPTNumberFor
         PPTPortionObj*          Next();
 
         void                    AppendPortion( PPTPortionObj& rPortion );
-        void                    ApplyTo( SfxItemSet& rSet, SdrPowerPointImport& rManager, UINT32 nInstanceInSheet, const PPTParagraphObj* pPrev );
+        void                    ApplyTo( SfxItemSet& rSet, boost::optional< sal_Int16 >& rStartNumbering, SdrPowerPointImport& rManager, UINT32 nInstanceInSheet, const PPTParagraphObj* pPrev );
 };
 
 #define PPT_TEXTOBJ_FLAGS_PARA_ALIGNMENT_USED_LEFT      1

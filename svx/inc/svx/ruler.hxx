@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: ruler.hxx,v $
- * $Revision: 1.4 $
+ * $Revision: 1.4.76.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -216,8 +216,7 @@ protected:
     virtual void    ExtraDown();
     virtual void    MouseMove( const MouseEvent& rMEvt );
 
-    virtual void SFX_NOTIFY( SfxBroadcaster& rBC, const TypeId& rBCType,
-                         const SfxHint& rHint, const TypeId& rHintType );
+    virtual void    Notify( SfxBroadcaster& rBC, const SfxHint& rHint );
 
     // Berechnung der Grenzwerte fuer Objectgrenzen
     // Werte sind bezogen auf die Seite

@@ -192,6 +192,10 @@ void VistaFilePickerImpl::doRequest(const RequestRef& rRequest)
                     impl_sta_SetTitle(rRequest);
                     break;
 
+            case E_SET_FILENAME:
+                impl_sta_SetFileName(rRequest);
+                break;
+
             case E_SET_DIRECTORY :
                     impl_sta_SetDirectory(rRequest);
                     break;
@@ -510,6 +514,20 @@ void VistaFilePickerImpl::impl_sta_SetTitle(const RequestRef& rRequest)
 }
 
 //-------------------------------------------------------------------------------
+void VistaFilePickerImpl::impl_sta_SetFileName(const RequestRef& rRequest)
+{
+    ::rtl::OUString sFileName = rRequest->getArgumentOrDefault(PROP_FILENAME, ::rtl::OUString());
+
+    // SYNCHRONIZED->
+    ::osl::ResettableMutexGuard aLock(m_aMutex);
+    TFileDialog iDialog = impl_getBaseDialogInterface();
+    aLock.clear();
+    // <- SYNCHRONIZED
+
+    iDialog->SetFileName(reinterpret_cast<LPCTSTR>(sFileName.getStr()));
+}
+
+//-------------------------------------------------------------------------------
 void VistaFilePickerImpl::impl_sta_SetDirectory(const RequestRef& rRequest)
 {
     ::rtl::OUString sDirectory = rRequest->getArgumentOrDefault(PROP_DIRECTORY, ::rtl::OUString());
@@ -547,7 +565,11 @@ void VistaFilePickerImpl::impl_sta_setFiltersOnDialog()
     aLock.clear();
     // <- SYNCHRONIZED
 
+#ifdef __MINGW32__
+    iDialog->QueryInterface(IID_IFileDialog, (void **)(&iCustomize));
+#else
     iDialog.query(&iCustomize);
+#endif
 
     COMDLG_FILTERSPEC   *pFilt = &lFilters[0];
     iDialog->SetFileTypes(lFilters.size(), pFilt/*&lFilters[0]*/);

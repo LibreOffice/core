@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: hangulhanja.cxx,v $
- * $Revision: 1.20 $
+ * $Revision: 1.20.102.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -317,7 +317,9 @@ namespace svx
                  m_nSourceLang == LANGUAGE_CHINESE_SIMPLIFIED  && m_nTargetLang == LANGUAGE_CHINESE_TRADITIONAL)
             m_eConvType = HHC::eConvSimplifiedTraditional;
         else
+        {
             DBG_ERROR( "failed to determine conversion type from languages" );
+        }
 
         // set remaining conversion parameters to their default values
         m_nConvOptions      = _nOptions;

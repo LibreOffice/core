@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: mnumgr.hxx,v $
- * $Revision: 1.4 $
+ * $Revision: 1.4.84.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -104,6 +104,11 @@ class SAL_DLLPUBLIC_EXPORT SfxPopupMenuManager : public SfxMenuManager
 private:
     DECL_LINK( SelectHdl, void * );
     Menu*               pSVMenu;
+
+private:
+                        // only declared, but not defined: don't allow copying
+                        SfxPopupMenuManager( const SfxPopupMenuManager& );
+                        SfxPopupMenuManager& operator=( const SfxPopupMenuManager& );
 
 public:
                         SfxPopupMenuManager( const ResId&, SfxBindings& );

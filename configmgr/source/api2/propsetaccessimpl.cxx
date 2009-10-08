@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: propsetaccessimpl.cxx,v $
- * $Revision: 1.24 $
+ * $Revision: 1.24.10.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -63,40 +63,13 @@ namespace configmgr
         namespace lang = css::lang;
         namespace beans = css::beans;
 
-        using uno::RuntimeException;
-        using uno::Reference;
-        using uno::Any;
-        using uno::Sequence;
-
-        using lang::IllegalArgumentException;
-        using lang::WrappedTargetException;
-        using beans::UnknownPropertyException;
-        using beans::PropertyVetoException;
-
-        using configuration::AnyNodeRef;
-        using configuration::NodeRef;
-        using configuration::ValueRef;
-
-        using configuration::Tree;
-        using configuration::NodeChange;
-        using configuration::NodeChanges;
-
-        using configuration::Name;
-        using configuration::AbsolutePath;
-        using configuration::RelativePath;
-        using configuration::validateChildName;
-        using configuration::validateChildOrElementName;
-
-        using namespace beans;
-        using namespace uno;
-
 //-----------------------------------------------------------------------------------
 // a helper class
 //-----------------------------------------------------------------------------------
 
 class CollectProperties : configuration::NodeVisitor
 {
-    std::vector< Property >     m_aProperties;
+    std::vector< beans::Property >      m_aProperties;
     sal_Bool                    m_bReadonly;
 public:
     CollectProperties(sal_Bool _bReadonly)
@@ -106,27 +79,25 @@ public:
     : m_bReadonly(_bReadonly)
     { m_aProperties.reserve(_nCount); }
 
-    Sequence<Property> forChildren(Tree const& _aPropertyTree, NodeRef const& _rNode)
+    uno::Sequence<beans::Property> forChildren(rtl::Reference< configuration::Tree > const& _aPropertyTree, configuration::NodeRef const& _rNode)
     {
-        OSL_ENSURE( _aPropertyTree.isValidNode(_rNode), "Node to retrieve properties from does not match tree");
+        OSL_ENSURE( _rNode.isValid() && _aPropertyTree->isValidNode(_rNode.getOffset()), "Node to retrieve properties from does not match tree");
         reset();
-        _aPropertyTree.dispatchToChildren(_rNode, *this);
+        _aPropertyTree->dispatchToChildren(_rNode, *this);
         return makeSequence(m_aProperties);
     }
 
 private:
-    typedef node::Attributes NodeAttributes;
-
     void    reset() { m_aProperties.clear(); }
 
-    NodeAttributes  adjustAttributes(NodeAttributes nNodeAttr);
+    node::Attributes    adjustAttributes(node::Attributes nNodeAttr);
 
-    Result  handle(Tree const& _aTree, NodeRef const& _rValue);
-    Result  handle(Tree const& _aTree, ValueRef const& _rValue);
+    Result  handle(rtl::Reference< configuration::Tree > const& _aTree, configuration::NodeRef const& _rValue);
+    Result  handle(rtl::Reference< configuration::Tree > const& _aTree, configuration::ValueRef const& _rValue);
 };
 
 //-----------------------------------------------------------------------------------
-CollectProperties::NodeAttributes CollectProperties::adjustAttributes(NodeAttributes nNodeAttr)
+node::Attributes CollectProperties::adjustAttributes(node::Attributes nNodeAttr)
 {
     if (m_bReadonly) nNodeAttr.markReadonly();
 
@@ -134,14 +105,14 @@ CollectProperties::NodeAttributes CollectProperties::adjustAttributes(NodeAttrib
 }
 
 //-----------------------------------------------------------------------------------
-CollectProperties::Result CollectProperties::handle(Tree const& _aTree, ValueRef const& _rValue)
+CollectProperties::Result CollectProperties::handle(rtl::Reference< configuration::Tree > const& _aTree, configuration::ValueRef const& _rValue)
 {
     // can be default ?
     m_aProperties.push_back(
-                helperMakeProperty( _aTree.getName(_rValue),
-                                    adjustAttributes(_aTree.getAttributes(_rValue)),
-                                    _aTree.getUnoType(_rValue),
-                                    _aTree.hasNodeDefault(_rValue)
+                helperMakeProperty( _rValue.m_sNodeName,
+                                    adjustAttributes(_aTree->getAttributes(_rValue)),
+                                    _aTree->getUnoType(_rValue),
+                                    _aTree->hasNodeDefault(_rValue)
                                 )
             );
 
@@ -149,17 +120,17 @@ CollectProperties::Result CollectProperties::handle(Tree const& _aTree, ValueRef
 }
 
 //-----------------------------------------------------------------------------------
-CollectProperties::Result CollectProperties::handle(Tree const& _aTree, NodeRef const& _rNode)
+CollectProperties::Result CollectProperties::handle(rtl::Reference< configuration::Tree > const& _aTree, configuration::NodeRef const& _rNode)
 {
     // can be default ?
     OSL_ENSURE( configuration::isStructuralNode(_aTree,_rNode),
                 "Unexpected value element node. Cannot get proper type for this node as property" );
 
     m_aProperties.push_back(
-                helperMakeProperty( _aTree.getName(_rNode),
-                                    adjustAttributes(_aTree.getAttributes(_rNode)),
+        helperMakeProperty( _aTree->getSimpleNodeName(_rNode.getOffset()),
+                                    adjustAttributes(_aTree->getAttributes(_rNode)),
                                     getUnoInterfaceType(),
-                                    _aTree.hasNodeDefault(_rNode)
+                                    _aTree->hasNodeDefault(_rNode)
                                 )
             );
 
@@ -173,100 +144,100 @@ CollectProperties::Result CollectProperties::handle(Tree const& _aTree, NodeRef 
 class NodePropertySetInfo
     :public ::cppu::WeakImplHelper1< beans::XPropertySetInfo >
 {
-    Sequence< Property > const m_aProperties;
+    uno::Sequence< beans::Property > const m_aProperties;
 
 public:
-    NodePropertySetInfo(Sequence< Property > const& _aProperties) throw(RuntimeException)
+    NodePropertySetInfo(uno::Sequence< beans::Property > const& _aProperties) throw(uno::RuntimeException)
     : m_aProperties(_aProperties)
     {
     }
 
-    static NodePropertySetInfo* create(NodeGroupInfoAccess& _rNode, sal_Bool _bReadonly ) throw(RuntimeException);
-    Property const* begin() const throw() { return m_aProperties.getConstArray(); }
-    Property const* end()   const throw() { return m_aProperties.getConstArray() + m_aProperties.getLength(); }
+    static NodePropertySetInfo* create(NodeGroupInfoAccess& _rNode, sal_Bool _bReadonly ) throw(uno::RuntimeException);
+    beans::Property const* begin() const throw() { return m_aProperties.getConstArray(); }
+    beans::Property const* end()   const throw() { return m_aProperties.getConstArray() + m_aProperties.getLength(); }
 
-    Property const* find(const OUString& _rPropertyName) const throw(RuntimeException);
+    beans::Property const* find(const rtl::OUString& _rPropertyName) const throw(uno::RuntimeException);
 
     // XPropertySetInfo
-    virtual Sequence< Property > SAL_CALL getProperties() throw(RuntimeException);
-    virtual Property SAL_CALL   getPropertyByName(const OUString& _rPropertyName) throw(UnknownPropertyException, RuntimeException);
-    virtual sal_Bool SAL_CALL   hasPropertyByName(const OUString& _rPropertyName) throw(RuntimeException);
+    virtual uno::Sequence< beans::Property > SAL_CALL getProperties() throw(uno::RuntimeException);
+    virtual beans::Property SAL_CALL    getPropertyByName(const rtl::OUString& _rPropertyName) throw(beans::UnknownPropertyException, uno::RuntimeException);
+    virtual sal_Bool SAL_CALL   hasPropertyByName(const rtl::OUString& _rPropertyName) throw(uno::RuntimeException);
 };
 
 //-----------------------------------------------------------------------------------
 //-----------------------------------------------------------------------------------
-NodePropertySetInfo* NodePropertySetInfo::create(NodeGroupInfoAccess& _rNode, sal_Bool _bReadonly ) throw(RuntimeException)
+NodePropertySetInfo* NodePropertySetInfo::create(NodeGroupInfoAccess& _rNode, sal_Bool _bReadonly ) throw(uno::RuntimeException)
 {
     UnoApiLock aLock;
 
-    configuration::Tree aTree( _rNode.getTree() );
-    OSL_ENSURE( !aTree.isEmpty(), "WARNING: Getting Tree information requires a valid tree");
-    if (aTree.isEmpty()) return NULL;
+    rtl::Reference< configuration::Tree > aTree( _rNode.getTree() );
+    OSL_ENSURE( !configuration::isEmpty(aTree.get()), "WARNING: Getting Tree information requires a valid tree");
+    if (configuration::isEmpty(aTree.get())) return NULL;
 
     configuration::NodeRef aNode( _rNode.getNodeRef() );
-    OSL_ENSURE( aTree.isValidNode(aNode), "ERROR: Tree does not match node");
+    OSL_ENSURE( aNode.isValid() && aTree->isValidNode(aNode.getOffset()), "ERROR: Tree does not match node");
 
-    Sequence< Property > aProperties = CollectProperties(_bReadonly).forChildren(aTree,aNode);
+    uno::Sequence< beans::Property > aProperties = CollectProperties(_bReadonly).forChildren(aTree,aNode);
     OSL_ENSURE( aProperties.getLength() > 0, "ERROR: PropertySet (Configuration group) has no Properties");
 
     return new NodePropertySetInfo( aProperties );
 }
 
 //-----------------------------------------------------------------------------------
-struct MatchName // : std::unary_function< Property, bool >
+struct MatchName // : std::unary_function< beans::Property, bool >
 {
-    OUString sName;
-    MatchName(OUString const& _sName)  throw(RuntimeException)
+    rtl::OUString sName;
+    MatchName(rtl::OUString const& _sName)  throw(uno::RuntimeException)
     : sName(_sName)
     {
     }
 
-    bool operator()(Property const& _aProperty) const
+    bool operator()(beans::Property const& _aProperty) const
     {
         return !!(_aProperty.Name == this->sName);
     }
 };
 
-Property const* NodePropertySetInfo::find(const OUString& _rPropertyName)  const throw(RuntimeException)
+beans::Property const* NodePropertySetInfo::find(const rtl::OUString& _rPropertyName)  const throw(uno::RuntimeException)
 {
-    Property const* const first = this->begin();
-    Property const* const last  = this->end();
+    beans::Property const* const first = this->begin();
+    beans::Property const* const last  = this->end();
 
     return std::find_if(first,last,MatchName(_rPropertyName));
 }
 
 //-----------------------------------------------------------------------------------
-uno::Sequence< beans::Property > SAL_CALL NodePropertySetInfo::getProperties() throw(RuntimeException)
+uno::Sequence< beans::Property > SAL_CALL NodePropertySetInfo::getProperties() throw(uno::RuntimeException)
 {
     return m_aProperties;
 }
 //-----------------------------------------------------------------------------------
-Property SAL_CALL NodePropertySetInfo::getPropertyByName(const OUString& _rPropertyName)
-    throw(UnknownPropertyException, RuntimeException)
+beans::Property SAL_CALL NodePropertySetInfo::getPropertyByName(const rtl::OUString& _rPropertyName)
+    throw(beans::UnknownPropertyException, uno::RuntimeException)
 {
     UnoApiLock aLock;
 
-    Property const* pFound = find(_rPropertyName);
+    beans::Property const* pFound = find(_rPropertyName);
 
     if (pFound == this->end())
     {
-        OUString sMessage = OUString::createFromAscii("Configuration - ");
-        sMessage += OUString::createFromAscii("No Property named '");
+        rtl::OUString sMessage = rtl::OUString::createFromAscii("Configuration - ");
+        sMessage += rtl::OUString::createFromAscii("No Property named '");
         sMessage += _rPropertyName;
-        sMessage += OUString::createFromAscii("' in this PropertySetInfo");
-        throw UnknownPropertyException(sMessage, static_cast<XPropertySetInfo*>(this));
+        sMessage += rtl::OUString::createFromAscii("' in this PropertySetInfo");
+        throw beans::UnknownPropertyException(sMessage, static_cast<XPropertySetInfo*>(this));
     }
 
     return *pFound;
 }
 
 //-----------------------------------------------------------------------------------
-sal_Bool SAL_CALL NodePropertySetInfo::hasPropertyByName(const OUString& _rPropertyName)
-    throw(RuntimeException)
+sal_Bool SAL_CALL NodePropertySetInfo::hasPropertyByName(const rtl::OUString& _rPropertyName)
+    throw(uno::RuntimeException)
 {
     UnoApiLock aLock;
 
-    Property const* pFound = find(_rPropertyName);
+    beans::Property const* pFound = find(_rPropertyName);
 
     return (pFound != this->end());
 }
@@ -280,17 +251,17 @@ sal_Bool SAL_CALL NodePropertySetInfo::hasPropertyByName(const OUString& _rPrope
 
 // XPropertySet & XMultiPropertySet
 //-----------------------------------------------------------------------------------
-Reference< beans::XPropertySetInfo > implGetPropertySetInfo( NodeGroupInfoAccess& rNode, sal_Bool _bWriteable )
-    throw(RuntimeException)
+uno::Reference< beans::XPropertySetInfo > implGetPropertySetInfo( NodeGroupInfoAccess& rNode, sal_Bool _bWriteable )
+    throw(uno::RuntimeException)
 {
-    GuardedNodeDataAccess lock( rNode );
+    GuardedNodeData<NodeAccess> lock( rNode );
     return NodePropertySetInfo::create(rNode, !_bWriteable);
 }
 
 // XHierarchicalPropertySet & XHierarchicalMultiPropertySet
 //-----------------------------------------------------------------------------------
-Reference< beans::XHierarchicalPropertySetInfo > implGetHierarchicalPropertySetInfo( NodeGroupInfoAccess& /*rNode*/ )
-    throw(RuntimeException)
+uno::Reference< beans::XHierarchicalPropertySetInfo > implGetHierarchicalPropertySetInfo( NodeGroupInfoAccess& /*rNode*/ )
+    throw(uno::RuntimeException)
 {
     // TODO: Implement
     return 0;
@@ -302,56 +273,56 @@ Reference< beans::XHierarchicalPropertySetInfo > implGetHierarchicalPropertySetI
 
 // XPropertySet
 //-----------------------------------------------------------------------------------
-void implSetPropertyValue( NodeGroupAccess& rNode, const OUString& sPropertyName, const Any& aValue )
+void implSetPropertyValue( NodeGroupAccess& rNode, const rtl::OUString& sPropertyName, const uno::Any& aValue )
     throw(beans::UnknownPropertyException, beans::PropertyVetoException, lang::IllegalArgumentException,
-              lang::WrappedTargetException, RuntimeException)
+              lang::WrappedTargetException, uno::RuntimeException)
 {
     try
     {
-        GuardedGroupUpdateAccess lock( rNode );
+        GuardedNodeUpdate<NodeGroupAccess> lock( rNode );
 
-        Tree const aTree( lock.getTree() );
-        NodeRef const aNode( lock.getNode() );
+        rtl::Reference< configuration::Tree > const aTree( lock.getTree() );
+        configuration::NodeRef const aNode( lock.getNode() );
 
-        Name aChildName = validateChildName(sPropertyName,aTree,aNode);
+        rtl::OUString aChildName = configuration::validateChildName(sPropertyName,aTree,aNode);
 
-        ValueRef aChild( aTree.getChildValue(aNode, aChildName) );
+        configuration::ValueRef aChild( aTree->getChildValue(aNode, aChildName) );
 
         if (!aChild.isValid())
         {
             if ( configuration::hasChildOrElement(aTree, aNode, aChildName) )
             {
-                OSL_ENSURE(aTree.hasChildNode(aNode, aChildName),"ERROR: Configuration: Existing Property not found by implementation");
+                OSL_ENSURE(aTree->hasChildNode(aNode, aChildName),"ERROR: Configuration: Existing Property not found by implementation");
 
-                OUString sMessage( RTL_CONSTASCII_USTRINGPARAM("Configuration - Cannot set Property Value.") );
-                sMessage += OUString( RTL_CONSTASCII_USTRINGPARAM(" Property '") );
+                rtl::OUString sMessage( RTL_CONSTASCII_USTRINGPARAM("Configuration - Cannot set Property Value.") );
+                sMessage += rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(" Property '") );
                 sMessage += sPropertyName;
-                sMessage += OUString( RTL_CONSTASCII_USTRINGPARAM("' is not a simple value.") );
+                sMessage += rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("' is not a simple value.") );
 
-                Reference<uno::XInterface> xContext( rNode.getUnoInstance() );
-                throw PropertyVetoException( sMessage, xContext );
+                uno::Reference<uno::XInterface> xContext( rNode.getUnoInstance() );
+                throw beans::PropertyVetoException( sMessage, xContext );
             }
             else
             {
-                OUString sMessage( RTL_CONSTASCII_USTRINGPARAM("Configuration - Cannot set Property Value.") );
-                sMessage += OUString( RTL_CONSTASCII_USTRINGPARAM(" Property '") );
+                rtl::OUString sMessage( RTL_CONSTASCII_USTRINGPARAM("Configuration - Cannot set Property Value.") );
+                sMessage += rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(" Property '") );
                 sMessage += sPropertyName;
-                sMessage += OUString( RTL_CONSTASCII_USTRINGPARAM("' not found in ") );
-                sMessage += aTree.getAbsolutePath(aNode).toString();
+                sMessage += rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("' not found in ") );
+                sMessage += aTree->getAbsolutePath(aNode).toString();
 
-                Reference<uno::XInterface> xContext( rNode.getUnoInstance() );
-                throw UnknownPropertyException( sMessage, xContext );
+                uno::Reference<uno::XInterface> xContext( rNode.getUnoInstance() );
+                throw beans::UnknownPropertyException( sMessage, xContext );
             }
         }
 
-        NodeChange aChange = lock.getNodeUpdater().validateSetValue( aChild, aValue );
+        configuration::NodeChange aChange = lock.getNodeUpdater().validateSetValue( aChild, aValue );
         if (aChange.test().isChange())
         {
             Broadcaster aSender(rNode.getNotifier().makeBroadcaster(aChange,true));
 
             aSender.queryConstraints(aChange);
 
-            aTree.integrate(aChange, aNode, true);
+            aTree->integrate(aChange, aNode, true);
 
             lock.clearForBroadcast();
             aSender.notifyListeners(aChange);
@@ -360,9 +331,9 @@ void implSetPropertyValue( NodeGroupAccess& rNode, const OUString& sPropertyName
     catch (configuration::InvalidName& ex)
     {
         ExceptionMapper e(ex);
-        OUString sMessage( RTL_CONSTASCII_USTRINGPARAM("Configuration - Cannot set Property Value: ") );
-        Reference<uno::XInterface> xContext( rNode.getUnoInstance() );
-        throw UnknownPropertyException( sMessage += e.message(), xContext );
+        rtl::OUString sMessage( RTL_CONSTASCII_USTRINGPARAM("Configuration - Cannot set Property Value: ") );
+        uno::Reference<uno::XInterface> xContext( rNode.getUnoInstance() );
+        throw beans::UnknownPropertyException( sMessage += e.message(), xContext );
     }
     catch (configuration::TypeMismatch& ex)
     {
@@ -373,15 +344,9 @@ void implSetPropertyValue( NodeGroupAccess& rNode, const OUString& sPropertyName
     catch (configuration::ConstraintViolation& ex)
     {
         ExceptionMapper e(ex);
-        OUString sMessage( RTL_CONSTASCII_USTRINGPARAM("Configuration - Cannot set Property Value: ") );
-        Reference<uno::XInterface> xContext( rNode.getUnoInstance() );
-        throw PropertyVetoException( sMessage += e.message(), xContext );
-    }
-    catch (configuration::WrappedUnoException& ex)
-    {
-        Reference<uno::XInterface> xContext( rNode.getUnoInstance() );
-        OUString sMessage( RTL_CONSTASCII_USTRINGPARAM("Configuration - Cannot set Property Value: ") );
-        throw WrappedTargetException( sMessage += ex.extractMessage(), xContext, ex.getAnyUnoException() );
+        rtl::OUString sMessage( RTL_CONSTASCII_USTRINGPARAM("Configuration - Cannot set Property Value: ") );
+        uno::Reference<uno::XInterface> xContext( rNode.getUnoInstance() );
+        throw beans::PropertyVetoException( sMessage += e.message(), xContext );
     }
     catch (configuration::Exception& ex)
     {
@@ -393,44 +358,44 @@ void implSetPropertyValue( NodeGroupAccess& rNode, const OUString& sPropertyName
 
 // XMultiPropertySet
 //-----------------------------------------------------------------------------------
-void implSetPropertyValues( NodeGroupAccess& rNode, const Sequence< OUString >& aPropertyNames, const Sequence< Any >& aValues )
+void implSetPropertyValues( NodeGroupAccess& rNode, const uno::Sequence< rtl::OUString >& aPropertyNames, const uno::Sequence< uno::Any >& aValues )
     throw(beans::PropertyVetoException, lang::IllegalArgumentException,
-              lang::WrappedTargetException, RuntimeException)
+              lang::WrappedTargetException, uno::RuntimeException)
 {
     try
     {
-        GuardedGroupUpdateAccess lock( rNode );
+        GuardedNodeUpdate<NodeGroupAccess> lock( rNode );
 
-        Tree const aTree( lock.getTree() );
-        NodeRef const aNode( lock.getNode() );
+        rtl::Reference< configuration::Tree > const aTree( lock.getTree() );
+        configuration::NodeRef const aNode( lock.getNode() );
 
-        NodeChanges aChanges;
+        configuration::NodeChanges aChanges;
         for(sal_Int32 i = 0, count= aValues.getLength(); i < count; ++i)
         {
-            Name aChildName = configuration::makeNodeName( aPropertyNames[i], Name::NoValidate() ); // not validated
+            rtl::OUString aChildName( aPropertyNames[i] ); // not validated
 
-            ValueRef aChild( aTree.getChildValue(aNode, aChildName) );
+            configuration::ValueRef aChild( aTree->getChildValue(aNode, aChildName) );
 
             if (!aChild.isValid())
             {
                 if ( configuration::hasChildOrElement(aTree, aNode, aChildName) )
                 {
-                    OSL_ENSURE(aTree.hasChildNode(aNode, aChildName),"ERROR: Configuration: Existing Property not found by implementation");
+                    OSL_ENSURE(aTree->hasChildNode(aNode, aChildName),"ERROR: Configuration: Existing Property not found by implementation");
 
-                    OUString sMessage( RTL_CONSTASCII_USTRINGPARAM("Configuration - Cannot set Property Values.") );
-                    sMessage += OUString( RTL_CONSTASCII_USTRINGPARAM(" Property '") );
-                    sMessage += aChildName.toString();
-                    sMessage += OUString( RTL_CONSTASCII_USTRINGPARAM("' is not a simple value.") );
+                    rtl::OUString sMessage( RTL_CONSTASCII_USTRINGPARAM("Configuration - Cannot set Property Values.") );
+                    sMessage += rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(" Property '") );
+                    sMessage += aChildName;
+                    sMessage += rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("' is not a simple value.") );
 
-                    Reference<uno::XInterface> xContext( rNode.getUnoInstance() );
-                    throw PropertyVetoException( sMessage, xContext );
+                    uno::Reference<uno::XInterface> xContext( rNode.getUnoInstance() );
+                    throw beans::PropertyVetoException( sMessage, xContext );
                 }
 
                 OSL_TRACE("Configuration: MultiPropertySet: trying to set unknown property - ignored");
                 continue;
             }
 
-            NodeChange aChange = lock.getNodeUpdater().validateSetValue( aChild, aValues[i] );
+            configuration::NodeChange aChange = lock.getNodeUpdater().validateSetValue( aChild, aValues[i] );
             if (aChange.maybeChange())
             {
                 aChanges.add(aChange);
@@ -443,7 +408,7 @@ void implSetPropertyValues( NodeGroupAccess& rNode, const Sequence< OUString >& 
 
             aSender.queryConstraints(aChanges);
 
-            aTree.integrate(aChanges, aNode, true);
+            aTree->integrate(aChanges, aNode, true);
 
             lock.clearForBroadcast();
             aSender.notifyListeners(aChanges, true);
@@ -458,15 +423,9 @@ void implSetPropertyValues( NodeGroupAccess& rNode, const Sequence< OUString >& 
     catch (configuration::ConstraintViolation& ex)
     {
         ExceptionMapper e(ex);
-        OUString sMessage( RTL_CONSTASCII_USTRINGPARAM("Configuration - Cannot set Property Value: ") );
-        Reference<uno::XInterface> xContext( rNode.getUnoInstance() );
-        throw PropertyVetoException( sMessage += e.message(), xContext );
-    }
-    catch (configuration::WrappedUnoException& ex)
-    {
-        Reference<uno::XInterface> xContext( rNode.getUnoInstance() );
-        OUString sMessage( RTL_CONSTASCII_USTRINGPARAM("Configuration - Cannot set Property Value: ") );
-        throw WrappedTargetException( sMessage += ex.extractMessage(), xContext, ex.getAnyUnoException() );
+        rtl::OUString sMessage( RTL_CONSTASCII_USTRINGPARAM("Configuration - Cannot set Property Value: ") );
+        uno::Reference<uno::XInterface> xContext( rNode.getUnoInstance() );
+        throw beans::PropertyVetoException( sMessage += e.message(), xContext );
     }
     catch (configuration::Exception& ex)
     {
@@ -478,53 +437,50 @@ void implSetPropertyValues( NodeGroupAccess& rNode, const Sequence< OUString >& 
 
 // XHierarchicalPropertySet
 //-----------------------------------------------------------------------------------
-void implSetHierarchicalPropertyValue( NodeGroupAccess& rNode, const OUString& aPropertyName, const Any& aValue )
+void implSetHierarchicalPropertyValue( NodeGroupAccess& rNode, const rtl::OUString& aPropertyName, const uno::Any& aValue )
     throw(beans::UnknownPropertyException, beans::PropertyVetoException, lang::IllegalArgumentException,
-          lang::WrappedTargetException, RuntimeException)
+          lang::WrappedTargetException, uno::RuntimeException)
 {
-    using configuration::validateRelativePath; // should actually be found by "Koenig" lookup, but MSVC6 fails
-    using configuration::getLocalDescendant; // should actually be found by "Koenig" lookup, but MSVC6 fails
-
     try
     {
-        GuardedGroupUpdateAccess lock( rNode );
+        GuardedNodeUpdate<NodeGroupAccess> lock( rNode );
 
-        Tree const aTree( lock.getTree() );
-        NodeRef const aNode( lock.getNode() );
+        rtl::Reference< configuration::Tree > const aTree( lock.getTree() );
+        configuration::NodeRef const aNode( lock.getNode() );
 
-        RelativePath const aRelPath = validateRelativePath( aPropertyName, aTree, aNode );
+        configuration::RelativePath const aRelPath = configuration::validateRelativePath( aPropertyName, aTree, aNode );
 
-        AnyNodeRef aNestedValue = getLocalDescendant( aTree, aNode, aRelPath );
+        configuration::AnyNodeRef aNestedValue = configuration::getLocalDescendant( aTree, aNode, aRelPath );
 
         if (!aNestedValue.isValid())
         {
-            OUString sMessage( RTL_CONSTASCII_USTRINGPARAM("Configuration - Cannot set Property Value. Property '") );
+            rtl::OUString sMessage( RTL_CONSTASCII_USTRINGPARAM("Configuration - Cannot set Property Value. Property '") );
             sMessage += aRelPath.toString();
-            sMessage += OUString( RTL_CONSTASCII_USTRINGPARAM("' was not found in ")  );
-            sMessage += aTree.getAbsolutePath(aNode).toString();
+            sMessage += rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("' was not found in ")  );
+            sMessage += aTree->getAbsolutePath(aNode).toString();
 
-            Reference<uno::XInterface> xContext( rNode.getUnoInstance() );
-            throw UnknownPropertyException( sMessage, xContext );
+            uno::Reference<uno::XInterface> xContext( rNode.getUnoInstance() );
+            throw beans::UnknownPropertyException( sMessage, xContext );
         }
         if (aNestedValue.isNode())
         {
-            OUString sMessage( RTL_CONSTASCII_USTRINGPARAM("Configuration - Cannot set Property Value. Property '") );
+            rtl::OUString sMessage( RTL_CONSTASCII_USTRINGPARAM("Configuration - Cannot set Property Value. Property '") );
             sMessage += aRelPath.toString();
-            sMessage += OUString( RTL_CONSTASCII_USTRINGPARAM("' is not a simple value property.")  );
+            sMessage += rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("' is not a simple value property.")  );
 
-            Reference<uno::XInterface> xContext( rNode.getUnoInstance() );
-            throw PropertyVetoException( sMessage, xContext );
+            uno::Reference<uno::XInterface> xContext( rNode.getUnoInstance() );
+            throw beans::PropertyVetoException( sMessage, xContext );
         }
         OSL_ASSERT(aNode.isValid());
 
-        NodeChange aChange = lock.getNodeUpdater().validateSetValue( aNestedValue.toValue(), aValue );
+        configuration::NodeChange aChange = lock.getNodeUpdater().validateSetValue( aNestedValue.toValue(), aValue );
         if (aChange.test().isChange())
         {
             Broadcaster aSender(rNode.getNotifier().makeBroadcaster(aChange,false));
 
             aSender.queryConstraints(aChange);
 
-            aTree.integrate(aChange, aNode, false);
+            aTree->integrate(aChange, aNode, false);
 
             lock.clearForBroadcast();
             aSender.notifyListeners(aChange);
@@ -533,9 +489,9 @@ void implSetHierarchicalPropertyValue( NodeGroupAccess& rNode, const OUString& a
     catch (configuration::InvalidName& ex)
     {
         ExceptionMapper e(ex);
-        OUString sMessage( RTL_CONSTASCII_USTRINGPARAM("Configuration - Cannot set Property Value: ") );
-        Reference<uno::XInterface> xContext( rNode.getUnoInstance() );
-        throw UnknownPropertyException( e.message(), xContext );
+        rtl::OUString sMessage( RTL_CONSTASCII_USTRINGPARAM("Configuration - Cannot set Property Value: ") );
+        uno::Reference<uno::XInterface> xContext( rNode.getUnoInstance() );
+        throw beans::UnknownPropertyException( e.message(), xContext );
     }
     catch (configuration::TypeMismatch& ex)
     {
@@ -546,15 +502,9 @@ void implSetHierarchicalPropertyValue( NodeGroupAccess& rNode, const OUString& a
     catch (configuration::ConstraintViolation& ex)
     {
         ExceptionMapper e(ex);
-        OUString sMessage( RTL_CONSTASCII_USTRINGPARAM("Configuration - Cannot set Property Value: ") );
-        Reference<uno::XInterface> xContext( rNode.getUnoInstance() );
-        throw PropertyVetoException( sMessage += e.message(), xContext );
-    }
-    catch (configuration::WrappedUnoException& ex)
-    {
-        Reference<uno::XInterface> xContext( rNode.getUnoInstance() );
-        OUString sMessage( RTL_CONSTASCII_USTRINGPARAM("Configuration - Cannot set Property Value: ") );
-        throw WrappedTargetException( sMessage += ex.extractMessage(), xContext, ex.getAnyUnoException() );
+        rtl::OUString sMessage( RTL_CONSTASCII_USTRINGPARAM("Configuration - Cannot set Property Value: ") );
+        uno::Reference<uno::XInterface> xContext( rNode.getUnoInstance() );
+        throw beans::PropertyVetoException( sMessage += e.message(), xContext );
     }
     catch (configuration::Exception& ex)
     {
@@ -566,27 +516,24 @@ void implSetHierarchicalPropertyValue( NodeGroupAccess& rNode, const OUString& a
 
 // XMultiHierarchicalPropertySet
 //-----------------------------------------------------------------------------------
-void implSetHierarchicalPropertyValues( NodeGroupAccess& rNode, const Sequence< OUString >& aPropertyNames, const Sequence< Any >& aValues )
+void implSetHierarchicalPropertyValues( NodeGroupAccess& rNode, const uno::Sequence< rtl::OUString >& aPropertyNames, const uno::Sequence< uno::Any >& aValues )
     throw(beans::PropertyVetoException, lang::IllegalArgumentException,
-          lang::WrappedTargetException, RuntimeException)
+          lang::WrappedTargetException, uno::RuntimeException)
 {
-    using configuration::validateRelativePath; // should actually be found by "Koenig" lookup, but MSVC6 fails
-    using configuration::getLocalDescendant; // should actually be found by "Koenig" lookup, but MSVC6 fails
-
     try
     {
-        GuardedGroupUpdateAccess lock( rNode );
+        GuardedNodeUpdate<NodeGroupAccess> lock( rNode );
 
-        Tree const aTree( lock.getTree() );
-        NodeRef const aNode( lock.getNode() );
+        rtl::Reference< configuration::Tree > const aTree( lock.getTree() );
+        configuration::NodeRef const aNode( lock.getNode() );
 
-        NodeChanges aChanges;
+        configuration::NodeChanges aChanges;
         for(sal_Int32 i = 0, count= aValues.getLength(); i < count; ++i)
         try
         {
-            RelativePath aRelPath = validateRelativePath( aPropertyNames[i], aTree, aNode );
+            configuration::RelativePath aRelPath = configuration::validateRelativePath( aPropertyNames[i], aTree, aNode );
 
-            AnyNodeRef aNestedValue = getLocalDescendant( aTree, aNode, aRelPath );
+            configuration::AnyNodeRef aNestedValue = configuration::getLocalDescendant( aTree, aNode, aRelPath );
 
             if (!aNestedValue.isValid())
             {
@@ -595,17 +542,17 @@ void implSetHierarchicalPropertyValues( NodeGroupAccess& rNode, const Sequence< 
             }
             if ( aNestedValue.isNode() )
             {
-                OUString sMessage( RTL_CONSTASCII_USTRINGPARAM("Configuration - Cannot set Property Values.") );
-                sMessage += OUString( RTL_CONSTASCII_USTRINGPARAM(" Property '") );
+                rtl::OUString sMessage( RTL_CONSTASCII_USTRINGPARAM("Configuration - Cannot set Property Values.") );
+                sMessage += rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(" Property '") );
                 sMessage += aRelPath.toString();
-                sMessage += OUString( RTL_CONSTASCII_USTRINGPARAM("' is not a simple value property.") );
+                sMessage += rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("' is not a simple value property.") );
 
-                Reference<uno::XInterface> xContext( rNode.getUnoInstance() );
-                throw PropertyVetoException( sMessage, xContext );
+                uno::Reference<uno::XInterface> xContext( rNode.getUnoInstance() );
+                throw beans::PropertyVetoException( sMessage, xContext );
             }
             OSL_ASSERT(aNode.isValid());
 
-            NodeChange aChange = lock.getNodeUpdater().validateSetValue( aNestedValue.toValue(), aValues[i] );
+            configuration::NodeChange aChange = lock.getNodeUpdater().validateSetValue( aNestedValue.toValue(), aValues[i] );
             if (aChange.maybeChange())
             {
                 aChanges.add(aChange);
@@ -623,7 +570,7 @@ void implSetHierarchicalPropertyValues( NodeGroupAccess& rNode, const Sequence< 
 
             aSender.queryConstraints(aChanges);
 
-            aTree.integrate(aChanges, aNode, false);
+            aTree->integrate(aChanges, aNode, false);
 
             lock.clearForBroadcast();
             aSender.notifyListeners(aChanges, true); // if we use 'false' we don't need 'Deep' change objects
@@ -638,15 +585,9 @@ void implSetHierarchicalPropertyValues( NodeGroupAccess& rNode, const Sequence< 
     catch (configuration::ConstraintViolation& ex)
     {
         ExceptionMapper e(ex);
-        OUString sMessage( RTL_CONSTASCII_USTRINGPARAM("Configuration - Cannot set Property Value: ") );
-        Reference<uno::XInterface> xContext( rNode.getUnoInstance() );
-        throw PropertyVetoException( sMessage += e.message(), xContext );
-    }
-    catch (configuration::WrappedUnoException& ex)
-    {
-        Reference<uno::XInterface> xContext( rNode.getUnoInstance() );
-        OUString sMessage( RTL_CONSTASCII_USTRINGPARAM("Configuration - Cannot set Property Value: ") );
-        throw WrappedTargetException( sMessage += ex.extractMessage(), xContext, ex.getAnyUnoException() );
+        rtl::OUString sMessage( RTL_CONSTASCII_USTRINGPARAM("Configuration - Cannot set Property Value: ") );
+        uno::Reference<uno::XInterface> xContext( rNode.getUnoInstance() );
+        throw beans::PropertyVetoException( sMessage += e.message(), xContext );
     }
     catch (configuration::Exception& ex)
     {
@@ -662,31 +603,31 @@ void implSetHierarchicalPropertyValues( NodeGroupAccess& rNode, const Sequence< 
 
 // XPropertySet
 //-----------------------------------------------------------------------------------
-Any implGetPropertyValue( NodeGroupInfoAccess& rNode,const OUString& aPropertyName )
-    throw(beans::UnknownPropertyException, lang::WrappedTargetException, RuntimeException)
+uno::Any implGetPropertyValue( NodeGroupInfoAccess& rNode,const rtl::OUString& aPropertyName )
+    throw(beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
 {
     try
     {
-        GuardedNodeDataAccess lock( rNode );
+        GuardedNodeData<NodeAccess> lock( rNode );
 
-        Tree const aTree( lock.getTree() );
-        NodeRef const aNode( lock.getNode() );
+        rtl::Reference< configuration::Tree > const aTree( lock.getTree() );
+        configuration::NodeRef const aNode( lock.getNode() );
 
-        Name aChildName = validateChildName(aPropertyName,aTree,aNode);
+        rtl::OUString aChildName = configuration::validateChildName(aPropertyName,aTree,aNode);
 
-        AnyNodeRef aChild( aTree.getAnyChild(aNode, aChildName) );
+        configuration::AnyNodeRef aChild( aTree->getAnyChild(aNode, aChildName) );
 
         if (!aChild.isValid())
         {
             OSL_ENSURE(!configuration::hasChildOrElement(aTree,aNode,aChildName),"ERROR: Configuration: Existing Property not found by implementation");
 
-            OUString sMessage( RTL_CONSTASCII_USTRINGPARAM("Configuration - Cannot get Property Value. Property '") );
+            rtl::OUString sMessage( RTL_CONSTASCII_USTRINGPARAM("Configuration - Cannot get Property Value. Property '") );
             sMessage += aPropertyName;
-            sMessage += OUString( RTL_CONSTASCII_USTRINGPARAM("' could not be found in ")  );
-            sMessage += aTree.getAbsolutePath(aNode).toString();
+            sMessage += rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("' could not be found in ")  );
+            sMessage += aTree->getAbsolutePath(aNode).toString();
 
-            Reference<uno::XInterface> xContext( rNode.getUnoInstance() );
-            throw UnknownPropertyException( sMessage, xContext );
+            uno::Reference<uno::XInterface> xContext( rNode.getUnoInstance() );
+            throw beans::UnknownPropertyException( sMessage, xContext );
         }
 
         return configapi::makeElement( rNode.getFactory(), aTree, aChild );
@@ -694,14 +635,8 @@ Any implGetPropertyValue( NodeGroupInfoAccess& rNode,const OUString& aPropertyNa
     catch (configuration::InvalidName& ex)
     {
         ExceptionMapper e(ex);
-        Reference<uno::XInterface> xContext( rNode.getUnoInstance() );
-        throw UnknownPropertyException( e.message(), xContext );
-    }
-    catch (configuration::WrappedUnoException& ex)
-    {
-        Reference<uno::XInterface> xContext( rNode.getUnoInstance() );
-        OUString sMessage( RTL_CONSTASCII_USTRINGPARAM("Configuration - Cannot get Property Value: ") );
-        throw WrappedTargetException( sMessage += ex.extractMessage(), xContext, ex.getAnyUnoException() );
+        uno::Reference<uno::XInterface> xContext( rNode.getUnoInstance() );
+        throw beans::UnknownPropertyException( e.message(), xContext );
     }
     catch (configuration::Exception& ex)
     {
@@ -712,29 +647,29 @@ Any implGetPropertyValue( NodeGroupInfoAccess& rNode,const OUString& aPropertyNa
 
     // unreachable, but still there to make some compilers happy
     OSL_ASSERT(!"Unreachable code");
-    return Any();
+    return uno::Any();
 }
 
 // XMultiPropertySet
 //-----------------------------------------------------------------------------------
-Sequence< Any > implGetPropertyValues( NodeGroupInfoAccess& rNode, const Sequence< OUString >& aPropertyNames )
-    throw(RuntimeException)
+uno::Sequence< uno::Any > implGetPropertyValues( NodeGroupInfoAccess& rNode, const uno::Sequence< rtl::OUString >& aPropertyNames )
+    throw(uno::RuntimeException)
 {
     sal_Int32 const count = aPropertyNames.getLength();
-    Sequence<Any> aRet(count);
+    uno::Sequence<uno::Any> aRet(count);
 
     try
     {
-        GuardedNodeDataAccess lock( rNode );
+        GuardedNodeData<NodeAccess> lock( rNode );
 
-        Tree const aTree( lock.getTree() );
-        NodeRef const aNode( lock.getNode() );
+        rtl::Reference< configuration::Tree > const aTree( lock.getTree() );
+        configuration::NodeRef const aNode( lock.getNode() );
 
         for(sal_Int32 i = 0; i < count; ++i)
         {
-            Name aChildName = configuration::makeNodeName( aPropertyNames[i], Name::NoValidate() ); // not validated
+            rtl::OUString aChildName( aPropertyNames[i] ); // not validated
 
-            AnyNodeRef aChild( aTree.getAnyChild(aNode, aChildName) );
+            configuration::AnyNodeRef aChild( aTree->getAnyChild(aNode, aChildName) );
 
             if (aChild.isValid())
             {
@@ -759,31 +694,29 @@ Sequence< Any > implGetPropertyValues( NodeGroupInfoAccess& rNode, const Sequenc
 
 // XHierarchicalPropertySet
 //-----------------------------------------------------------------------------------
-Any implGetHierarchicalPropertyValue( NodeGroupInfoAccess& rNode, const OUString& aPropertyName )
-    throw(beans::UnknownPropertyException, lang::WrappedTargetException, RuntimeException)
+uno::Any implGetHierarchicalPropertyValue( NodeGroupInfoAccess& rNode, const rtl::OUString& aPropertyName )
+    throw(beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
 {
-    using configuration::validateRelativePath; // should actually be found by "Koenig" lookup, but MSVC6 fails
-    using configuration::getLocalDescendant; // should actually be found by "Koenig" lookup, but MSVC6 fails
     try
     {
-        GuardedNodeDataAccess lock( rNode );
+        GuardedNodeData<NodeAccess> lock( rNode );
 
-        Tree const aTree( lock.getTree() );
-        NodeRef const aNode( lock.getNode() );
+        rtl::Reference< configuration::Tree > const aTree( lock.getTree() );
+        configuration::NodeRef const aNode( lock.getNode() );
 
-        RelativePath aRelPath = validateRelativePath( aPropertyName, aTree, aNode );
+        configuration::RelativePath aRelPath = configuration::validateRelativePath( aPropertyName, aTree, aNode );
 
-        AnyNodeRef aNestedNode = getLocalDescendant( aTree, aNode, aRelPath );
+        configuration::AnyNodeRef aNestedNode = configuration::getLocalDescendant( aTree, aNode, aRelPath );
 
         if (!aNestedNode.isValid())
         {
-            OUString sMessage( RTL_CONSTASCII_USTRINGPARAM("Configuration - Cannot get Property Value. Property '") );
+            rtl::OUString sMessage( RTL_CONSTASCII_USTRINGPARAM("Configuration - Cannot get Property Value. Property '") );
             sMessage += aRelPath.toString();
-            sMessage += OUString( RTL_CONSTASCII_USTRINGPARAM("' could not be found in ")  );
-            sMessage += aTree.getAbsolutePath(aNode).toString();
+            sMessage += rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("' could not be found in ")  );
+            sMessage += aTree->getAbsolutePath(aNode).toString();
 
-            Reference<uno::XInterface> xContext( rNode.getUnoInstance() );
-            throw UnknownPropertyException( sMessage, xContext );
+            uno::Reference<uno::XInterface> xContext( rNode.getUnoInstance() );
+            throw beans::UnknownPropertyException( sMessage, xContext );
         }
         OSL_ASSERT(aNode.isValid());
 
@@ -792,8 +725,8 @@ Any implGetHierarchicalPropertyValue( NodeGroupInfoAccess& rNode, const OUString
     catch (configuration::InvalidName& ex)
     {
         ExceptionMapper e(ex);
-        Reference<uno::XInterface> xContext( rNode.getUnoInstance() );
-        throw UnknownPropertyException( e.message(), xContext );
+        uno::Reference<uno::XInterface> xContext( rNode.getUnoInstance() );
+        throw beans::UnknownPropertyException( e.message(), xContext );
     }
     catch (configuration::Exception& ex)
     {
@@ -804,33 +737,30 @@ Any implGetHierarchicalPropertyValue( NodeGroupInfoAccess& rNode, const OUString
 
     // unreachable, but still there to make some compilers happy
     OSL_ASSERT(!"Unreachable code");
-    return Any();
+    return uno::Any();
 }
 
 // XMultiHierarchicalPropertySet
 //-----------------------------------------------------------------------------------
-Sequence< Any > implGetHierarchicalPropertyValues( NodeGroupInfoAccess& rNode, const Sequence< OUString >& aPropertyNames )
-    throw(RuntimeException)
+uno::Sequence< uno::Any > implGetHierarchicalPropertyValues( NodeGroupInfoAccess& rNode, const uno::Sequence< rtl::OUString >& aPropertyNames )
+    throw(uno::RuntimeException)
 {
-    using configuration::validateRelativePath; // should actually be found by "Koenig" lookup, but MSVC6 fails
-    using configuration::getLocalDescendant; // should actually be found by "Koenig" lookup, but MSVC6 fails
-
     sal_Int32 const count = aPropertyNames.getLength();
-    Sequence<Any> aRet(count);
+    uno::Sequence<uno::Any> aRet(count);
 
     try
     {
-        GuardedNodeDataAccess lock( rNode );
+        GuardedNodeData<NodeAccess> lock( rNode );
 
-        Tree const aTree( lock.getTree() );
-        NodeRef const aNode( lock.getNode() );
+        rtl::Reference< configuration::Tree > const aTree( lock.getTree() );
+        configuration::NodeRef const aNode( lock.getNode() );
 
         for(sal_Int32 i = 0; i < count; ++i)
         try
         {
-            RelativePath aRelPath = validateRelativePath( aPropertyNames[i], aTree, aNode );
+            configuration::RelativePath aRelPath = configuration::validateRelativePath( aPropertyNames[i], aTree, aNode );
 
-            AnyNodeRef aNestedValue = getLocalDescendant( aTree, aNode, aRelPath );
+            configuration::AnyNodeRef aNestedValue = configuration::getLocalDescendant( aTree, aNode, aRelPath );
 
             if (aNestedValue.isValid())
             {
@@ -861,8 +791,8 @@ Sequence< Any > implGetHierarchicalPropertyValues( NodeGroupInfoAccess& rNode, c
 // SPECIAL: XMultiPropertySet::firePropertiesChangeEvent
 //------------------------------------------------------------------------------------------------------------------
 
-void implFirePropertiesChangeEvent( NodeGroupInfoAccess& rNode, const Sequence< OUString >& aPropertyNames, const Reference< beans::XPropertiesChangeListener >& xListener )
-    throw(RuntimeException)
+void implFirePropertiesChangeEvent( NodeGroupInfoAccess& rNode, const uno::Sequence< rtl::OUString >& aPropertyNames, const uno::Reference< beans::XPropertiesChangeListener >& xListener )
+    throw(uno::RuntimeException)
 {
     OSL_ENSURE(xListener.is(), "ERROR: requesting to fire Events to a NULL listener.");
     if (!xListener.is())
@@ -871,28 +801,28 @@ void implFirePropertiesChangeEvent( NodeGroupInfoAccess& rNode, const Sequence< 
     }
 
     sal_Int32 const count = aPropertyNames.getLength();
-    Sequence<beans::PropertyChangeEvent> aEvents(count);
+    uno::Sequence<beans::PropertyChangeEvent> aEvents(count);
 
     try
     {
-        GuardedNodeDataAccess lock( rNode );
+        GuardedNodeData<NodeAccess> lock( rNode );
 
-        Tree const aTree( lock.getTree() );
-        NodeRef const aNode( lock.getNode() );
+        rtl::Reference< configuration::Tree > const aTree( lock.getTree() );
+        configuration::NodeRef const aNode( lock.getNode() );
         configapi::Factory& rFactory = rNode.getFactory();
 
         sal_Int32 nFire = 0;
 
         for(sal_Int32 i = 0; i < count; ++i)
         {
-            Name aChildName = configuration::makeNodeName( aPropertyNames[i], Name::NoValidate() ); // not validated
+            rtl::OUString aChildName( aPropertyNames[i] ); // not validated
 
-            AnyNodeRef aChild( aTree.getAnyChild(aNode, aChildName) );
+            configuration::AnyNodeRef aChild( aTree->getAnyChild(aNode, aChildName) );
 
             if (aChild.isValid())
             {
                 aEvents[nFire].Source = rNode.getUnoInstance();
-                aEvents[nFire].PropertyName = aChildName.toString();
+                aEvents[nFire].PropertyName = aChildName;
                 aEvents[nFire].PropertyHandle = -1;
 
                 aEvents[nFire].NewValue = aEvents[nFire].OldValue = configapi::makeElement( rFactory, aTree, aChild );
@@ -921,48 +851,40 @@ void implFirePropertiesChangeEvent( NodeGroupInfoAccess& rNode, const Sequence< 
 // XPropertyState
 //------------------------------------------------------------------------------------------------------------------
 
-beans::PropertyState implGetPropertyState( NodeAccess& rNode, const OUString& sPropertyName )
-    throw(beans::UnknownPropertyException, RuntimeException)
+beans::PropertyState implGetPropertyState( NodeAccess& rNode, const rtl::OUString& sPropertyName )
+    throw(beans::UnknownPropertyException, uno::RuntimeException)
 {
     try
     {
-        using configuration::getChildOrElement;
+        GuardedNodeData<NodeAccess> lock( rNode );
 
-        GuardedNodeDataAccess lock( rNode );
+        rtl::Reference< configuration::Tree > aTree( lock.getTree() );
+        configuration::NodeRef const aNode( lock.getNode() );
 
-        Tree aTree( lock.getTree() );
-        NodeRef const aNode( lock.getNode() );
+        rtl::OUString aChildName = configuration::validateChildOrElementName(sPropertyName,aTree,aNode);
 
-        Name aChildName = validateChildOrElementName(sPropertyName,aTree,aNode);
-
-        AnyNodeRef aChild = getChildOrElement(aTree,aNode,aChildName);
+        configuration::AnyNodeRef aChild = configuration::getChildOrElement(aTree,aNode,aChildName);
         if (!aChild.isValid())
         {
-            OUString sMessage( RTL_CONSTASCII_USTRINGPARAM("Configuration - Cannot get PropertyState. Property '") );
+            rtl::OUString sMessage( RTL_CONSTASCII_USTRINGPARAM("Configuration - Cannot get PropertyState. Property '") );
             sMessage += sPropertyName;
-            sMessage += OUString( RTL_CONSTASCII_USTRINGPARAM("' not found in ")  );
-            sMessage += aTree.getAbsolutePath(aNode).toString();
+            sMessage += rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("' not found in ")  );
+            sMessage += aTree->getAbsolutePath(aNode).toString();
 
-            Reference<uno::XInterface> xContext( rNode.getUnoInstance() );
-            throw UnknownPropertyException( sMessage, xContext );
+            uno::Reference<uno::XInterface> xContext( rNode.getUnoInstance() );
+            throw beans::UnknownPropertyException( sMessage, xContext );
         }
         OSL_ASSERT(aNode.isValid());
 
-        return aTree.isNodeDefault(aChild)  ? beans::PropertyState_DEFAULT_VALUE :
+        return aTree->isNodeDefault(aChild)  ? beans::PropertyState_DEFAULT_VALUE :
                aChild.isNode()              ? beans::PropertyState_AMBIGUOUS_VALUE :
                                               beans::PropertyState_DIRECT_VALUE;
     }
     catch (configuration::InvalidName& ex)
     {
         ExceptionMapper e(ex);
-        Reference<uno::XInterface> xContext( rNode.getUnoInstance() );
-        throw UnknownPropertyException( e.message(), xContext );
-    }
-    catch (configuration::WrappedUnoException& ex)
-    {
-        Reference<uno::XInterface> xContext( rNode.getUnoInstance() );
-        OUString sMessage( RTL_CONSTASCII_USTRINGPARAM("Configuration - Cannot get PropertyState: ") );
-        throw WrappedTargetException( sMessage += ex.extractMessage(), xContext, ex.getAnyUnoException() );
+        uno::Reference<uno::XInterface> xContext( rNode.getUnoInstance() );
+        throw beans::UnknownPropertyException( e.message(), xContext );
     }
     catch (configuration::Exception& ex)
     {
@@ -977,41 +899,39 @@ beans::PropertyState implGetPropertyState( NodeAccess& rNode, const OUString& sP
 }
 
 //-----------------------------------------------------------------------------------
-Sequence< beans::PropertyState > implGetPropertyStates( NodeAccess& rNode, const Sequence< OUString >& aPropertyNames )
-    throw(beans::UnknownPropertyException, RuntimeException)
+uno::Sequence< beans::PropertyState > implGetPropertyStates( NodeAccess& rNode, const uno::Sequence< rtl::OUString >& aPropertyNames )
+    throw(beans::UnknownPropertyException, uno::RuntimeException)
 {
     sal_Int32 const count = aPropertyNames.getLength();
-    Sequence<beans::PropertyState> aRet(count);
+    uno::Sequence<beans::PropertyState> aRet(count);
 
     try
     {
-        GuardedNodeDataAccess lock( rNode );
+        GuardedNodeData<NodeAccess> lock( rNode );
 
-        Tree const aTree( lock.getTree() );
-        NodeRef const aNode( lock.getNode() );
+        rtl::Reference< configuration::Tree > const aTree( lock.getTree() );
+        configuration::NodeRef const aNode( lock.getNode() );
 
         for(sal_Int32 i = 0; i < count; ++i)
         {
-            using configuration::getChildOrElement;
+            rtl::OUString aChildName = configuration::validateChildOrElementName(aPropertyNames[i],aTree,aNode);
 
-            Name aChildName = validateChildOrElementName(aPropertyNames[i],aTree,aNode);
+            rtl::Reference< configuration::Tree > aChildTree( aTree);
 
-            Tree aChildTree( aTree);
-
-            AnyNodeRef aChildNode = getChildOrElement(aChildTree,aNode,aChildName);
+            configuration::AnyNodeRef aChildNode = configuration::getChildOrElement(aChildTree,aNode,aChildName);
             if (!aChildNode.isValid())
             {
-                OUString sMessage( RTL_CONSTASCII_USTRINGPARAM("Configuration - Cannot get PropertyStates. Property '") );
+                rtl::OUString sMessage( RTL_CONSTASCII_USTRINGPARAM("Configuration - Cannot get PropertyStates. Property '") );
                 sMessage += aPropertyNames[i];
-                sMessage += OUString( RTL_CONSTASCII_USTRINGPARAM("' could not be found in ")  );
-                sMessage += aTree.getAbsolutePath(aNode).toString();
+                sMessage += rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("' could not be found in ")  );
+                sMessage += aTree->getAbsolutePath(aNode).toString();
 
-                Reference<uno::XInterface> xContext( rNode.getUnoInstance() );
-                throw UnknownPropertyException( sMessage, xContext );
+                uno::Reference<uno::XInterface> xContext( rNode.getUnoInstance() );
+                throw beans::UnknownPropertyException( sMessage, xContext );
             }
             OSL_ASSERT(aChildNode.isValid());
 
-            aRet[i] = aChildTree.isNodeDefault(aChildNode)  ? beans::PropertyState_DEFAULT_VALUE :
+            aRet[i] = aChildTree->isNodeDefault(aChildNode)  ? beans::PropertyState_DEFAULT_VALUE :
                       aChildNode.isNode()                   ? beans::PropertyState_AMBIGUOUS_VALUE :
                                                               beans::PropertyState_DIRECT_VALUE;
         }
@@ -1020,8 +940,8 @@ Sequence< beans::PropertyState > implGetPropertyStates( NodeAccess& rNode, const
     catch (configuration::InvalidName& ex)
     {
         ExceptionMapper e(ex);
-        Reference<uno::XInterface> xContext( rNode.getUnoInstance() );
-        throw UnknownPropertyException( e.message(), xContext );
+        uno::Reference<uno::XInterface> xContext( rNode.getUnoInstance() );
+        throw beans::UnknownPropertyException( e.message(), xContext );
     }
     catch (configuration::Exception& ex)
     {
@@ -1034,7 +954,7 @@ Sequence< beans::PropertyState > implGetPropertyStates( NodeAccess& rNode, const
 }
 
 //-----------------------------------------------------------------------------------
-static inline NodeChange validateSetToDefaultHelper(configuration::GroupDefaulter& _rDefaulter, AnyNodeRef _aNode)
+static inline configuration::NodeChange validateSetToDefaultHelper(configuration::GroupDefaulter& _rDefaulter, configuration::AnyNodeRef _aNode)
 {
     if (!_aNode.isNode())
         return _rDefaulter.validateSetToDefaultValue( _aNode.toValue() );
@@ -1043,24 +963,24 @@ static inline NodeChange validateSetToDefaultHelper(configuration::GroupDefaulte
         return _rDefaulter.validateSetToDefaultState( _aNode.toNode() );
 }
 //-----------------------------------------------------------------------------------
-void implSetPropertyToDefault( NodeGroupAccess& rNode, const OUString& sPropertyName )
-    throw(beans::UnknownPropertyException, RuntimeException)
+void implSetPropertyToDefault( NodeGroupAccess& rNode, const rtl::OUString& sPropertyName )
+    throw(beans::UnknownPropertyException, uno::RuntimeException)
 {
     try
     {
         UnoApiLock aWithDefaultLock;
-        GuardedGroupUpdateAccess lock( withDefaultData( rNode ) );
+        GuardedNodeUpdate<NodeGroupAccess> lock( withDefaultData( rNode ) );
 
-        Tree const aTree( lock.getTree() );
-        NodeRef const aNode( lock.getNode() );
+        rtl::Reference< configuration::Tree > const aTree( lock.getTree() );
+        configuration::NodeRef const aNode( lock.getNode() );
 
         configuration::GroupDefaulter aDefaulter = lock.getNodeDefaulter();
 
-        Name aChildName = validateChildName(sPropertyName,aTree,aNode);
+        rtl::OUString aChildName = configuration::validateChildName(sPropertyName,aTree,aNode);
 
-        AnyNodeRef aChild( aTree.getAnyChild(aNode, aChildName) );
+        configuration::AnyNodeRef aChild( aTree->getAnyChild(aNode, aChildName) );
 
-        NodeChange aChange = validateSetToDefaultHelper( aDefaulter, aChild );
+        configuration::NodeChange aChange = validateSetToDefaultHelper( aDefaulter, aChild );
 
         const bool bLocal = !aDefaulter.hasDoneSet();
 
@@ -1070,7 +990,7 @@ void implSetPropertyToDefault( NodeGroupAccess& rNode, const OUString& sProperty
 
             aSender.queryConstraints(aChange);
 
-            aTree.integrate(aChange, aNode, bLocal);
+            aTree->integrate(aChange, aNode, bLocal);
 
             lock.clearForBroadcast();
             aSender.notifyListeners(aChange);
@@ -1079,16 +999,16 @@ void implSetPropertyToDefault( NodeGroupAccess& rNode, const OUString& sProperty
     catch (configuration::InvalidName& ex)
     {
         ExceptionMapper e(ex);
-        OUString sMessage( RTL_CONSTASCII_USTRINGPARAM("Configuration - Cannot restore Default: ") );
-        Reference<uno::XInterface> xContext( rNode.getUnoInstance() );
-        throw UnknownPropertyException( sMessage += e.message(), xContext );
+        rtl::OUString sMessage( RTL_CONSTASCII_USTRINGPARAM("Configuration - Cannot restore Default: ") );
+        uno::Reference<uno::XInterface> xContext( rNode.getUnoInstance() );
+        throw beans::UnknownPropertyException( sMessage += e.message(), xContext );
     }
     catch (configuration::ConstraintViolation & ex)
     {
         ExceptionMapper e(ex);
-        OUString sMessage( RTL_CONSTASCII_USTRINGPARAM("Configuration - Cannot restore Default: ") );
-        Reference<uno::XInterface> xContext( rNode.getUnoInstance() );
-        throw UnknownPropertyException( sMessage += e.message(), xContext );
+        rtl::OUString sMessage( RTL_CONSTASCII_USTRINGPARAM("Configuration - Cannot restore Default: ") );
+        uno::Reference<uno::XInterface> xContext( rNode.getUnoInstance() );
+        throw beans::UnknownPropertyException( sMessage += e.message(), xContext );
     }
     catch (configuration::Exception& ex)
     {
@@ -1098,58 +1018,58 @@ void implSetPropertyToDefault( NodeGroupAccess& rNode, const OUString& sProperty
     }
 }
 //-----------------------------------------------------------------------------------
-void implSetPropertiesToDefault( NodeGroupAccess& rNode, const Sequence< OUString >& aPropertyNames )
-    throw(beans::UnknownPropertyException, RuntimeException)
+void implSetPropertiesToDefault( NodeGroupAccess& rNode, const uno::Sequence< rtl::OUString >& aPropertyNames )
+    throw(beans::UnknownPropertyException, uno::RuntimeException)
 {
     try
     {
         UnoApiLock aWithDefaultLock;
-        GuardedGroupUpdateAccess lock( withDefaultData( rNode ) );
+        GuardedNodeUpdate<NodeGroupAccess> lock( withDefaultData( rNode ) );
 
-        Tree const aTree( lock.getTree() );
-        NodeRef const aNode( lock.getNode() );
+        rtl::Reference< configuration::Tree > const aTree( lock.getTree() );
+        configuration::NodeRef const aNode( lock.getNode() );
 
         configuration::GroupDefaulter aDefaulter = lock.getNodeDefaulter();
 
-        NodeChanges aChanges;
+        configuration::NodeChanges aChanges;
         for(sal_Int32 i = 0, count= aPropertyNames.getLength(); i < count; ++i)
         {
-            Name aChildName = validateChildName( aPropertyNames[i], aTree, aNode ); // validated
+            rtl::OUString aChildName = configuration::validateChildName( aPropertyNames[i], aTree, aNode ); // validated
 
-            AnyNodeRef aChild( aTree.getAnyChild(aNode, aChildName) );
+            configuration::AnyNodeRef aChild( aTree->getAnyChild(aNode, aChildName) );
 
             if (!aChild.isValid())
             {
                 OSL_ENSURE(!configuration::hasChildOrElement(aTree, aNode, aChildName),"ERROR: Configuration: Existing Property not found by implementation");
 
-                OUString sMessage( RTL_CONSTASCII_USTRINGPARAM("Configuration - Cannot restore Default.") );
-                sMessage += OUString( RTL_CONSTASCII_USTRINGPARAM(" Property '") );
-                sMessage += aChildName.toString();
-                sMessage += OUString( RTL_CONSTASCII_USTRINGPARAM("' not found in ") );
-                sMessage += aTree.getAbsolutePath(aNode).toString();
+                rtl::OUString sMessage( RTL_CONSTASCII_USTRINGPARAM("Configuration - Cannot restore Default.") );
+                sMessage += rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(" Property '") );
+                sMessage += aChildName;
+                sMessage += rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("' not found in ") );
+                sMessage += aTree->getAbsolutePath(aNode).toString();
 
-                Reference<uno::XInterface> xContext( rNode.getUnoInstance() );
-                throw UnknownPropertyException( sMessage, xContext );
+                uno::Reference<uno::XInterface> xContext( rNode.getUnoInstance() );
+                throw beans::UnknownPropertyException( sMessage, xContext );
             }
             OSL_ASSERT(aNode.isValid());
 
-            if (!aTree.hasNodeDefault(aChild))
+            if (!aTree->hasNodeDefault(aChild))
             {
-                OUString sMessage( RTL_CONSTASCII_USTRINGPARAM("Configuration - Cannot restore Default.") );
-                sMessage += OUString( RTL_CONSTASCII_USTRINGPARAM(" Property '") );
-                sMessage += aChildName.toString();
+                rtl::OUString sMessage( RTL_CONSTASCII_USTRINGPARAM("Configuration - Cannot restore Default.") );
+                sMessage += rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(" Property '") );
+                sMessage += aChildName;
 
                 if (aChild.isNode())
-                    sMessage += OUString( RTL_CONSTASCII_USTRINGPARAM("' is not a simple value.") );
+                    sMessage += rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("' is not a simple value.") );
 
                 else
-                    sMessage += OUString( RTL_CONSTASCII_USTRINGPARAM("' does not have a default value.") );
+                    sMessage += rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("' does not have a default value.") );
 
-                Reference<uno::XInterface> xContext( rNode.getUnoInstance() );
-                throw UnknownPropertyException( sMessage, xContext );
+                uno::Reference<uno::XInterface> xContext( rNode.getUnoInstance() );
+                throw beans::UnknownPropertyException( sMessage, xContext );
             }
 
-            NodeChange aChildChange = validateSetToDefaultHelper(aDefaulter, aChild );
+            configuration::NodeChange aChildChange = validateSetToDefaultHelper(aDefaulter, aChild );
             if (aChildChange.maybeChange())
                 aChanges.add(aChildChange);
         }
@@ -1162,7 +1082,7 @@ void implSetPropertiesToDefault( NodeGroupAccess& rNode, const Sequence< OUStrin
 
             aSender.queryConstraints(aChanges);
 
-            aTree.integrate(aChanges, aNode, bLocal);
+            aTree->integrate(aChanges, aNode, bLocal);
 
             lock.clearForBroadcast();
             aSender.notifyListeners(aChanges, bLocal);
@@ -1172,16 +1092,16 @@ void implSetPropertiesToDefault( NodeGroupAccess& rNode, const Sequence< OUStrin
     catch (configuration::InvalidName& ex)
     {
         ExceptionMapper e(ex);
-        OUString sMessage( RTL_CONSTASCII_USTRINGPARAM("Configuration - Cannot restore Defaults: ") );
-        Reference<uno::XInterface> xContext( rNode.getUnoInstance() );
-        throw UnknownPropertyException( sMessage += e.message(), xContext );
+        rtl::OUString sMessage( RTL_CONSTASCII_USTRINGPARAM("Configuration - Cannot restore Defaults: ") );
+        uno::Reference<uno::XInterface> xContext( rNode.getUnoInstance() );
+        throw beans::UnknownPropertyException( sMessage += e.message(), xContext );
     }
     catch (configuration::ConstraintViolation & ex)
     {
         ExceptionMapper e(ex);
-        OUString sMessage( RTL_CONSTASCII_USTRINGPARAM("Configuration - Cannot restore Defaults: ") );
-        Reference<uno::XInterface> xContext( rNode.getUnoInstance() );
-        throw UnknownPropertyException( sMessage += e.message(), xContext );
+        rtl::OUString sMessage( RTL_CONSTASCII_USTRINGPARAM("Configuration - Cannot restore Defaults: ") );
+        uno::Reference<uno::XInterface> xContext( rNode.getUnoInstance() );
+        throw beans::UnknownPropertyException( sMessage += e.message(), xContext );
     }
     catch (configuration::Exception& ex)
     {
@@ -1193,19 +1113,19 @@ void implSetPropertiesToDefault( NodeGroupAccess& rNode, const Sequence< OUStrin
 
 //-----------------------------------------------------------------------------------
 void implSetAllPropertiesToDefault( NodeGroupAccess& rNode )
-    throw(RuntimeException)
+    throw(uno::RuntimeException)
 {
     try
     {
         UnoApiLock aWithDefaultLock;
-        GuardedGroupUpdateAccess lock( withDefaultData( rNode ) );
+        GuardedNodeUpdate<NodeGroupAccess> lock( withDefaultData( rNode ) );
 
-        Tree const aTree( lock.getTree() );
-        NodeRef const aNode( lock.getNode() );
+        rtl::Reference< configuration::Tree > const aTree( lock.getTree() );
+        configuration::NodeRef const aNode( lock.getNode() );
 
         configuration::GroupDefaulter aDefaulter = lock.getNodeDefaulter();
 
-        NodeChanges aChanges = aDefaulter.validateSetAllToDefault( );
+        configuration::NodeChanges aChanges = aDefaulter.validateSetAllToDefault( );
 
         const bool bLocal = !aDefaulter.hasDoneSet();
 
@@ -1215,7 +1135,7 @@ void implSetAllPropertiesToDefault( NodeGroupAccess& rNode )
 
             aSender.queryConstraints(aChanges);
 
-            aTree.integrate(aChanges, aNode, bLocal);
+            aTree->integrate(aChanges, aNode, bLocal);
 
             lock.clearForBroadcast();
             aSender.notifyListeners(aChanges, bLocal);
@@ -1225,16 +1145,16 @@ void implSetAllPropertiesToDefault( NodeGroupAccess& rNode )
     catch (configuration::InvalidName& ex)
     {
         ExceptionMapper e(ex);
-        OUString sMessage( RTL_CONSTASCII_USTRINGPARAM("Configuration - Cannot restore Defaults: ") );
-        Reference<uno::XInterface> xContext( rNode.getUnoInstance() );
-        throw UnknownPropertyException( sMessage += e.message(), xContext );
+        rtl::OUString sMessage( RTL_CONSTASCII_USTRINGPARAM("Configuration - Cannot restore Defaults: ") );
+        uno::Reference<uno::XInterface> xContext( rNode.getUnoInstance() );
+        throw beans::UnknownPropertyException( sMessage += e.message(), xContext );
     }
     catch (configuration::ConstraintViolation & ex)
     {
         ExceptionMapper e(ex);
-        OUString sMessage( RTL_CONSTASCII_USTRINGPARAM("Configuration - Cannot restore Defaults: ") );
-        Reference<uno::XInterface> xContext( rNode.getUnoInstance() );
-        throw UnknownPropertyException( sMessage += e.message(), xContext );
+        rtl::OUString sMessage( RTL_CONSTASCII_USTRINGPARAM("Configuration - Cannot restore Defaults: ") );
+        uno::Reference<uno::XInterface> xContext( rNode.getUnoInstance() );
+        throw beans::UnknownPropertyException( sMessage += e.message(), xContext );
     }
     catch (configuration::Exception& ex)
     {
@@ -1245,55 +1165,49 @@ void implSetAllPropertiesToDefault( NodeGroupAccess& rNode )
 }
 
 //-----------------------------------------------------------------------------------
-Any implGetPropertyDefault( NodeGroupInfoAccess& rNode, const OUString& sPropertyName )
-    throw(beans::UnknownPropertyException, lang::WrappedTargetException, RuntimeException)
+uno::Any implGetPropertyDefault( NodeGroupInfoAccess& rNode, const rtl::OUString& sPropertyName )
+    throw(beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
 {
-    Any aDefault;
+    uno::Any aDefault;
     try
     {
-        GuardedNodeDataAccess lock( rNode );
+        GuardedNodeData<NodeAccess> lock( rNode );
 
-        Tree const aTree( lock.getTree() );
-        NodeRef const aNode( lock.getNode() );
+        rtl::Reference< configuration::Tree > const aTree( lock.getTree() );
+        configuration::NodeRef const aNode( lock.getNode() );
 
-        Name aChildName = validateChildName(sPropertyName,aTree,aNode);
+        rtl::OUString aChildName = configuration::validateChildName(sPropertyName,aTree,aNode);
 
-        AnyNodeRef aChildNode = aTree.getAnyChild(aNode, aChildName);
+        configuration::AnyNodeRef aChildNode = aTree->getAnyChild(aNode, aChildName);
         if (!aChildNode.isValid())
         {
-            OUString sMessage( RTL_CONSTASCII_USTRINGPARAM("Configuration - Cannot get Default. Property '") );
+            rtl::OUString sMessage( RTL_CONSTASCII_USTRINGPARAM("Configuration - Cannot get Default. Property '") );
             sMessage += sPropertyName;
-            sMessage += OUString( RTL_CONSTASCII_USTRINGPARAM("' not found in ")  );
-            sMessage += aTree.getAbsolutePath(aNode).toString();
+            sMessage += rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("' not found in ")  );
+            sMessage += aTree->getAbsolutePath(aNode).toString();
 
-            Reference<uno::XInterface> xContext( rNode.getUnoInstance() );
-            throw UnknownPropertyException( sMessage, xContext );
+            uno::Reference<uno::XInterface> xContext( rNode.getUnoInstance() );
+            throw beans::UnknownPropertyException( sMessage, xContext );
         }
         OSL_ASSERT(aNode.isValid());
 
         if (!aChildNode.isNode())
         {
-            aDefault = aTree.getNodeDefaultValue(aChildNode.toValue());
+            aDefault = aTree->getNodeDefaultValue(aChildNode.toValue());
         }
     }
     catch (configuration::InvalidName& ex)
     {
         ExceptionMapper e(ex);
-        Reference<uno::XInterface> xContext( rNode.getUnoInstance() );
-        throw UnknownPropertyException( e.message(), xContext );
+        uno::Reference<uno::XInterface> xContext( rNode.getUnoInstance() );
+        throw beans::UnknownPropertyException( e.message(), xContext );
     }
     catch (configuration::ConstraintViolation & ex)
     {
         ExceptionMapper e(ex);
-        OUString sMessage( RTL_CONSTASCII_USTRINGPARAM("Configuration - Cannot get Default: ") );
-        Reference<uno::XInterface> xContext( rNode.getUnoInstance() );
-        throw UnknownPropertyException( sMessage += e.message(), xContext );
-    }
-    catch (configuration::WrappedUnoException& ex)
-    {
-        Reference<uno::XInterface> xContext( rNode.getUnoInstance() );
-        OUString sMessage( RTL_CONSTASCII_USTRINGPARAM("Configuration - Cannot get Default: ") );
-        throw WrappedTargetException( sMessage += ex.extractMessage(), xContext, ex.getAnyUnoException() );
+        rtl::OUString sMessage( RTL_CONSTASCII_USTRINGPARAM("Configuration - Cannot get Default: ") );
+        uno::Reference<uno::XInterface> xContext( rNode.getUnoInstance() );
+        throw beans::UnknownPropertyException( sMessage += e.message(), xContext );
     }
     catch (configuration::Exception& ex)
     {
@@ -1306,62 +1220,54 @@ Any implGetPropertyDefault( NodeGroupInfoAccess& rNode, const OUString& sPropert
 }
 
 //-----------------------------------------------------------------------------------
-Sequence< Any > implGetPropertyDefaults( NodeGroupInfoAccess& rNode, const Sequence< OUString >& aPropertyNames )
-    throw(beans::UnknownPropertyException, lang::WrappedTargetException, RuntimeException)
+uno::Sequence< uno::Any > implGetPropertyDefaults( NodeGroupInfoAccess& rNode, const uno::Sequence< rtl::OUString >& aPropertyNames )
+    throw(beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
 {
     sal_Int32 const count = aPropertyNames.getLength();
-    Sequence<Any> aDefaults(count);
+    uno::Sequence<uno::Any> aDefaults(count);
 
     try
     {
-        using configuration::getChildOrElement;
+        GuardedNodeData<NodeAccess> lock( rNode );
 
-        GuardedNodeDataAccess lock( rNode );
-
-        Tree const aTree( lock.getTree() );
-        NodeRef const aNode( lock.getNode() );
+        rtl::Reference< configuration::Tree > const aTree( lock.getTree() );
+        configuration::NodeRef const aNode( lock.getNode() );
 
         for(sal_Int32 i = 0; i < count; ++i)
         {
-            Name aChildName = validateChildName(aPropertyNames[i],aTree,aNode);
+            rtl::OUString aChildName = configuration::validateChildName(aPropertyNames[i],aTree,aNode);
 
-            AnyNodeRef aChildNode = aTree.getAnyChild(aNode, aChildName);
+            configuration::AnyNodeRef aChildNode = aTree->getAnyChild(aNode, aChildName);
             if (!aChildNode.isValid())
             {
-                OUString sMessage( RTL_CONSTASCII_USTRINGPARAM("Configuration - Cannot get Default. Property '") );
+                rtl::OUString sMessage( RTL_CONSTASCII_USTRINGPARAM("Configuration - Cannot get Default. Property '") );
                 sMessage += aPropertyNames[i];
-                sMessage += OUString( RTL_CONSTASCII_USTRINGPARAM("' not found in ")  );
-                sMessage += aTree.getAbsolutePath(aNode).toString();
+                sMessage += rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("' not found in ")  );
+                sMessage += aTree->getAbsolutePath(aNode).toString();
 
-                Reference<uno::XInterface> xContext( rNode.getUnoInstance() );
-                throw UnknownPropertyException( sMessage, xContext );
+                uno::Reference<uno::XInterface> xContext( rNode.getUnoInstance() );
+                throw beans::UnknownPropertyException( sMessage, xContext );
             }
             OSL_ASSERT(aNode.isValid());
 
             if (!aChildNode.isNode())
             {
-                aDefaults[i] = aTree.getNodeDefaultValue(aChildNode.toValue());
+                aDefaults[i] = aTree->getNodeDefaultValue(aChildNode.toValue());
             }
         }
     }
     catch (configuration::InvalidName& ex)
     {
         ExceptionMapper e(ex);
-        Reference<uno::XInterface> xContext( rNode.getUnoInstance() );
-        throw UnknownPropertyException( e.message(), xContext );
+        uno::Reference<uno::XInterface> xContext( rNode.getUnoInstance() );
+        throw beans::UnknownPropertyException( e.message(), xContext );
     }
     catch (configuration::ConstraintViolation & ex)
     {
         ExceptionMapper e(ex);
-        OUString sMessage( RTL_CONSTASCII_USTRINGPARAM("Configuration - Cannot get Default: ") );
-        Reference<uno::XInterface> xContext( rNode.getUnoInstance() );
-        throw UnknownPropertyException( sMessage += e.message(), xContext );
-    }
-    catch (configuration::WrappedUnoException& ex)
-    {
-        Reference<uno::XInterface> xContext( rNode.getUnoInstance() );
-        OUString sMessage( RTL_CONSTASCII_USTRINGPARAM("Configuration - Cannot get Default: ") );
-        throw WrappedTargetException( sMessage += ex.extractMessage(), xContext, ex.getAnyUnoException() );
+        rtl::OUString sMessage( RTL_CONSTASCII_USTRINGPARAM("Configuration - Cannot get Default: ") );
+        uno::Reference<uno::XInterface> xContext( rNode.getUnoInstance() );
+        throw beans::UnknownPropertyException( sMessage += e.message(), xContext );
     }
     catch (configuration::Exception& ex)
     {

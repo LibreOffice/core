@@ -8,7 +8,7 @@
  *
  * $RCSfile: frame.hxx,v $
  *
- * $Revision: 1.41 $
+ * $Revision: 1.41.82.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -355,8 +355,6 @@ class Frame :   // interfaces
         // threadsafe
         void                                                    implts_sendFrameActionEvent     ( const css::frame::FrameAction&                        aAction          );
         void                                                    implts_resizeComponentWindow    (                                                                        );
-        void                                                    implts_setTitleOnWindow         ( const ::rtl::OUString&                                sTitle           );
-        const ::rtl::OUString                                   implts_getTitleFromWindow       (                                                                        ) const;
         void                                                    implts_setIconOnWindow          (                                                                        );
         void                                                    implts_startWindowListening     (                                                                        );
         void                                                    implts_stopWindowListening      (                                                                        );

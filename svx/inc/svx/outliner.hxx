@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: outliner.hxx,v $
- * $Revision: 1.8 $
+ * $Revision: 1.6.16.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -125,7 +125,23 @@ namespace basegfx { class B2DPolyPolygon; }
 // MT 07/00: Only for internal use, oder some kind like hPara for the few
 // functions where you need it outside ( eg. moving paragraphs... )
 
-class Paragraph
+class ParagraphData
+{
+    friend class Paragraph;
+    friend class OutlinerParaObject;
+protected:
+    sal_Int16           nDepth;
+    sal_Int16           mnNumberingStartValue;
+    sal_Bool            mbParaIsNumberingRestart;
+
+public:
+    ParagraphData( const ParagraphData& );
+    ParagraphData();
+
+    ParagraphData& operator=( const ParagraphData& );
+};
+
+class Paragraph : protected ParagraphData
 {
 private:
     friend class Outliner;
@@ -140,12 +156,9 @@ private:
     Paragraph& operator=(const Paragraph& rPara );
 
     USHORT              nFlags;
-    sal_Int16           nDepth;
     XubString           aBulText;
     Size                aBulSize;
     BOOL                bVisible;
-    sal_Int16           mnNumberingStartValue;
-    sal_Bool            mbParaIsNumberingRestart;
 
     BOOL                IsVisible() const { return bVisible; }
     void                SetText( const XubString& rText ) { aBulText = rText; aBulSize.Width() = -1; }
@@ -155,6 +168,7 @@ private:
 
                         Paragraph( sal_Int16 nDepth );
                         Paragraph( const Paragraph& );
+                        Paragraph( const ParagraphData& );
                         ~Paragraph();
 
     sal_Int16           GetDepth() const { return nDepth; }

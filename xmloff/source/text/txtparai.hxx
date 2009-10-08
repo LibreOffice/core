@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: txtparai.hxx,v $
- * $Revision: 1.14 $
+ * $Revision: 1.14.2.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -87,22 +87,43 @@ public:
 
 class XMLNumberedParaContext : public SvXMLImportContext
 {
+    /// text:list-level MINUS 1
+    sal_Int16 m_Level;
+    /// text:start-value
+    sal_Int16 m_StartValue;
+    /// xml:id
+    ::rtl::OUString m_XmlId;
+    /// text:list-id
+    ::rtl::OUString m_ListId;
+    /// text:style-name
+    ::com::sun::star::uno::Reference <
+        ::com::sun::star::container::XIndexReplace > m_xNumRules;
+
 public:
 
     TYPEINFO();
 
-    XMLNumberedParaContext( SvXMLImport& rImport,
-            sal_uInt16 nPrfx,
-            const ::rtl::OUString& rLName );
+    XMLNumberedParaContext( SvXMLImport& i_rImport,
+            sal_uInt16 i_nPrefix,
+            const ::rtl::OUString& i_rLocalName,
+            const ::com::sun::star::uno::Reference<
+                ::com::sun::star::xml::sax::XAttributeList > & i_xAttrList );
 
     virtual ~XMLNumberedParaContext();
 
-    virtual SvXMLImportContext *CreateChildContext( sal_uInt16 nPrefix,
-            const ::rtl::OUString& rLocalName,
-            const ::com::sun::star::uno::Reference<
-                ::com::sun::star::xml::sax::XAttributeList > & xAttrList );
+    virtual void EndElement();
 
-    virtual void Characters( const ::rtl::OUString& rChars );
+    virtual SvXMLImportContext *CreateChildContext( sal_uInt16 i_nPrefix,
+            const ::rtl::OUString& i_rLocalName,
+            const ::com::sun::star::uno::Reference<
+                ::com::sun::star::xml::sax::XAttributeList > & i_xAttrList );
+
+    sal_Int16 GetLevel() const { return m_Level; }
+    const ::com::sun::star::uno::Reference <
+        ::com::sun::star::container::XIndexReplace >& GetNumRules() const
+        { return m_xNumRules; }
+    const ::rtl::OUString& GetListId() const { return m_ListId; }
+    sal_Int16 GetStartValue() const { return m_StartValue; }
 
 };
 

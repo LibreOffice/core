@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: sfxbasemodel.cxx,v $
- * $Revision: 1.145 $
+ * $Revision: 1.139.2.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -2899,7 +2899,7 @@ void SfxBaseModel::ListenForStorage_Impl( const uno::Reference< embed::XStorage 
     {
         if ( !m_pData->m_pStorageModifyListen.is() )
         {
-            m_pData->m_pStorageModifyListen = new ::sfx2::DocumentStorageModifyListener( *m_pData );
+            m_pData->m_pStorageModifyListen = new ::sfx2::DocumentStorageModifyListener( *m_pData, Application::GetSolarMutex() );
         }
 
         // no need to deregister the listening for old storage since it should be disposed automatically

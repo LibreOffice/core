@@ -41,11 +41,8 @@ namespace configmgr
 //-----------------------------------------------------------------------------
     struct CacheFactory
     {
-        typedef ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >
-            CreationContext;
-
         rtl::Reference<TreeManager>
-            createCacheManager(CreationContext const & _xContext);
+            createCacheManager(::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > const & _xContext);
 
         static CacheFactory & instance();
     };

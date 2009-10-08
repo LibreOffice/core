@@ -46,40 +46,29 @@ namespace configmgr
     namespace configapi
     {
 //-----------------------------------------------------------------------------
-        using configuration::Tree;
-        using configuration::NodeRef;
-
-//-----------------------------------------------------------------------------
 // Inner Elements
 //-----------------------------------------------------------------------------
 
         template <class NodeClass>
         class OInnerElement : public InnerElement, public NodeClass
         {
-            static ServiceInfo const*const s_pServiceInfo;
+            static ServiceImplementationInfo const*const s_pServiceInfo;
 
-            UnoInterface*   m_pUnoThis;
+            uno::XInterface*    m_pUnoThis;
             ApiTreeImpl&    m_rTree;
-            NodeRef         m_aNode;
+            configuration::NodeRef          m_aNode;
         public:
-            inline OInnerElement(UnoInterface*  pUnoThis,ApiTreeImpl& rTree, NodeRef const& aNode);
+            inline OInnerElement(uno::XInterface*   pUnoThis,ApiTreeImpl& rTree, configuration::NodeRef const& aNode);
             inline ~OInnerElement();
 
-            virtual inline NodeRef          doGetNode() const;
+            virtual inline configuration::NodeRef           doGetNode() const;
             virtual inline ApiTreeImpl&     getApiTree() const;
 
-            virtual inline UnoInterface*        doGetUnoInstance() const;
-            virtual inline ServiceInfo const*   doGetServiceInfo() const;
+            virtual inline uno::XInterface*     doGetUnoInstance() const;
+            virtual inline ServiceImplementationInfo const* doGetServiceInfo() const;
 
-            static inline ServiceInfo const* getStaticServiceInfo();
+            static inline ServiceImplementationInfo const* getStaticServiceInfo();
         };
-    //-------------------------------------------------------------------------
-
-        typedef OInnerElement<NodeGroupInfoAccess>  OInnerGroupInfoAccess;
-        typedef OInnerElement<NodeGroupAccess>      OInnerGroupUpdateAccess;
-        typedef OInnerElement<NodeSetInfoAccess>    OInnerSetInfoAccess;
-        typedef OInnerElement<NodeTreeSetAccess>    OInnerTreeSetUpdateAccess;
-        typedef OInnerElement<NodeValueSetAccess>   OInnerValueSetUpdateAccess;
 
 //-----------------------------------------------------------------------------
 // Set Elements
@@ -88,34 +77,25 @@ namespace configmgr
         template <class NodeClass>
         class OSetElement : public SetElement, public NodeClass
         {
-            static ServiceInfo const*const s_pServiceInfo;
+            static ServiceImplementationInfo const*const s_pServiceInfo;
 
             mutable ApiTreeImpl     m_aTree;
         public:
-            OSetElement(UnoInterface* pUnoThis, configuration::TreeRef const& aTree, ApiTreeImpl& rParentTree)
+            OSetElement(uno::XInterface* pUnoThis, rtl::Reference< configuration::Tree > const& aTree, ApiTreeImpl& rParentTree)
             : m_aTree(pUnoThis, aTree,rParentTree)
             {}
-            OSetElement(UnoInterface* pUnoThis, configuration::TreeRef const& aTree, ApiProvider& rProvider, ApiTreeImpl* pParentTree = 0)
+            OSetElement(uno::XInterface* pUnoThis, rtl::Reference< configuration::Tree > const& aTree, ApiProvider& rProvider, ApiTreeImpl* pParentTree = 0)
             : m_aTree(pUnoThis, rProvider,aTree,pParentTree)
             {}
 
-            virtual inline NodeRef          doGetNode() const;
+            virtual inline configuration::NodeRef           doGetNode() const;
             virtual inline ApiTreeImpl&     getApiTree() const;
 
-            virtual inline UnoInterface*        doGetUnoInstance() const;
-            virtual inline ServiceInfo const*   doGetServiceInfo() const;
+            virtual inline uno::XInterface*     doGetUnoInstance() const;
+            virtual inline ServiceImplementationInfo const* doGetServiceInfo() const;
 
-            static inline ServiceInfo const* getStaticServiceInfo();
+            static inline ServiceImplementationInfo const* getStaticServiceInfo();
         };
-
-    // Set Elements
-    //-------------------------------------------------------------------------
-
-        typedef OSetElement<NodeGroupInfoAccess>    OSetElementGroupInfoAccess;
-        typedef OSetElement<NodeGroupAccess>        OSetElementGroupUpdateAccess;
-        typedef OSetElement<NodeSetInfoAccess>      OSetElementSetInfoAccess;
-        typedef OSetElement<NodeTreeSetAccess>      OSetElementTreeSetUpdateAccess;
-        typedef OSetElement<NodeValueSetAccess>     OSetElementValueSetUpdateAccess;
 
 //-----------------------------------------------------------------------------
 // Root Elements
@@ -124,55 +104,44 @@ namespace configmgr
         template <class NodeClass>
         class OReadRootElement : public RootElement, public NodeClass
         {
-            static ServiceInfo const*const s_pServiceInfo;
+            static ServiceImplementationInfo const*const s_pServiceInfo;
             mutable ApiRootTreeImpl     m_aRootTree;
         public:
-            OReadRootElement(UnoInterface* pUnoThis, ApiProvider& rProvider, configuration::Tree const& aTree, vos::ORef< OOptions >const& _xOptions)
+            OReadRootElement(uno::XInterface* pUnoThis, ApiProvider& rProvider, rtl::Reference< configuration::Tree > const& aTree, vos::ORef< OOptions >const& _xOptions)
                 : m_aRootTree(pUnoThis, rProvider,aTree, _xOptions)
             {}
 
-            virtual inline NodeRef          doGetNode() const;
+            virtual inline configuration::NodeRef           doGetNode() const;
             virtual inline ApiTreeImpl&     getApiTree() const;
             virtual inline ApiRootTreeImpl& getRootTree();
 
-            virtual inline UnoInterface*        doGetUnoInstance() const;
-            virtual inline ServiceInfo const*   doGetServiceInfo() const;
+            virtual inline uno::XInterface*     doGetUnoInstance() const;
+            virtual inline ServiceImplementationInfo const* doGetServiceInfo() const;
 
-            static inline ServiceInfo const* getStaticServiceInfo();
+            static inline ServiceImplementationInfo const* getStaticServiceInfo();
         };
     //-------------------------------------------------------------------------
 
         template <class NodeClass>
         class OUpdateRootElement : public UpdateRootElement, public NodeClass
         {
-            static ServiceInfo const*const s_pServiceInfo;
+            static ServiceImplementationInfo const*const s_pServiceInfo;
 
             mutable ApiRootTreeImpl     m_aRootTree;
         public:
-            OUpdateRootElement(UnoInterface* pUnoThis, ApiProvider& rProvider, configuration::Tree const& aTree, vos::ORef< OOptions >const& _xOptions)
+            OUpdateRootElement(uno::XInterface* pUnoThis, ApiProvider& rProvider, rtl::Reference< configuration::Tree > const& aTree, vos::ORef< OOptions >const& _xOptions)
             : m_aRootTree(pUnoThis, rProvider,aTree,_xOptions)
             {}
 
-            virtual inline NodeRef          doGetNode() const;
+            virtual inline configuration::NodeRef           doGetNode() const;
             virtual inline ApiTreeImpl&     getApiTree() const;
             virtual inline ApiRootTreeImpl& getRootTree();
 
-            virtual inline UnoInterface*        doGetUnoInstance() const;
-            virtual inline ServiceInfo const*   doGetServiceInfo() const;
+            virtual inline uno::XInterface*     doGetUnoInstance() const;
+            virtual inline ServiceImplementationInfo const* doGetServiceInfo() const;
 
-            static inline ServiceInfo const* getStaticServiceInfo();
+            static inline ServiceImplementationInfo const* getStaticServiceInfo();
         };
-
-    // Root Elements
-    //-------------------------------------------------------------------------
-
-        typedef OReadRootElement<NodeGroupInfoAccess>   ORootElementGroupInfoAccess;
-        typedef OUpdateRootElement<NodeGroupAccess>     ORootElementGroupUpdateAccess;
-        typedef OReadRootElement<NodeSetInfoAccess>     ORootElementSetInfoAccess;
-        typedef OUpdateRootElement<NodeTreeSetAccess>   ORootElementTreeSetUpdateAccess;
-        typedef OUpdateRootElement<NodeValueSetAccess>  ORootElementValueSetUpdateAccess;
-
-//-----------------------------------------------------------------------------
     }
 }
 //-----------------------------------------------------------------------------

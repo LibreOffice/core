@@ -54,7 +54,7 @@ namespace configmgr
 // -----------------------------------------------------------------------------
 // -----------------------------------------------------------------------------
 
-AsciiServiceName const aMergeImporterServices[] =
+sal_Char const * const aMergeImporterServices[] =
 {
     "com.sun.star.configuration.backend.MergeImporter",
     0,
@@ -72,35 +72,35 @@ const ServiceRegistrationInfo* getMergeImportServiceInfo()
 { return getRegistrationInfo(& aMergeImporterSI); }
 // -----------------------------------------------------------------------------
 
-MergeImportService::MergeImportService(CreationArg _xContext)
+MergeImportService::MergeImportService(uno::Reference< uno::XComponentContext > const & _xContext)
 : ImportService(_xContext, &aMergeImporterSI)
 {
 }
 // -----------------------------------------------------------------------------
 
 uno::Reference< uno::XInterface > SAL_CALL instantiateMergeImporter
-( CreationContext const& xContext )
+( uno::Reference< uno::XComponentContext > const& xContext )
 {
     return * new MergeImportService( xContext );
 }
 // -----------------------------------------------------------------------------
 
-MergeImportService::InputHandler MergeImportService::createImportHandler(Backend const & xBackend, OUString const & aEntity)
+uno::Reference< backenduno::XLayerHandler > MergeImportService::createImportHandler(uno::Reference< backenduno::XBackend > const & xBackend, rtl::OUString const & aEntity)
 {
     if (!xBackend.is())
     {
-        OUString sMessage( RTL_CONSTASCII_USTRINGPARAM("configmgr::backend::ImportService: Trying to import without a backend. No default backend could be created") );
+        rtl::OUString sMessage( RTL_CONSTASCII_USTRINGPARAM("configmgr::backend::ImportService: Trying to import without a backend. No default backend could be created") );
         throw lang::NullPointerException(sMessage,*this);
     }
 
-    InputHandler aHandler( new ImportMergeHandler(xBackend, ImportMergeHandler::merge, aEntity, m_bSendNotification) );
+    uno::Reference< backenduno::XLayerHandler > aHandler( new ImportMergeHandler(xBackend, ImportMergeHandler::merge, aEntity, m_bSendNotification) );
 
     return aHandler;
 }
 // -----------------------------------------------------------------------------
 // -----------------------------------------------------------------------------
 
-AsciiServiceName const aCopyImporterServices[] =
+sal_Char const * const aCopyImporterServices[] =
 {
     "com.sun.star.configuration.backend.CopyImporter",
     0,
@@ -118,35 +118,35 @@ const ServiceRegistrationInfo* getCopyImportServiceInfo()
 { return getRegistrationInfo(& aCopyImporterSI); }
 // -----------------------------------------------------------------------------
 
-CopyImportService::CopyImportService(CreationArg _xContext)
+CopyImportService::CopyImportService(uno::Reference< uno::XComponentContext > const & _xContext)
 : ImportService(_xContext, &aCopyImporterSI)
 {
 }
 // -----------------------------------------------------------------------------
 
 uno::Reference< uno::XInterface > SAL_CALL instantiateCopyImporter
-( CreationContext const& xContext )
+( uno::Reference< uno::XComponentContext > const& xContext )
 {
     return * new CopyImportService( xContext );
 }
 // -----------------------------------------------------------------------------
 
-CopyImportService::InputHandler CopyImportService::createImportHandler(Backend const & xBackend, OUString const & aEntity)
+uno::Reference< backenduno::XLayerHandler > CopyImportService::createImportHandler(uno::Reference< backenduno::XBackend > const & xBackend, rtl::OUString const & aEntity)
 {
     if (!xBackend.is())
     {
-        OUString sMessage( RTL_CONSTASCII_USTRINGPARAM("configmgr::backend::ImportService: Trying to import without a backend. No default backend could be created") );
+        rtl::OUString sMessage( RTL_CONSTASCII_USTRINGPARAM("configmgr::backend::ImportService: Trying to import without a backend. No default backend could be created") );
         throw lang::NullPointerException(sMessage,*this);
     }
 
     ImportMergeHandler::Mode aMode = m_bOverwrite ? ImportMergeHandler::copy : ImportMergeHandler::no_overwrite;
-    InputHandler aHandler( new ImportMergeHandler(xBackend,aMode,aEntity) );
+    uno::Reference< backenduno::XLayerHandler > aHandler( new ImportMergeHandler(xBackend,aMode,aEntity) );
 
     return aHandler;
 }
 // -----------------------------------------------------------------------------
 
-sal_Bool CopyImportService::setImplementationProperty(OUString const & aName, uno::Any const & aValue)
+sal_Bool CopyImportService::setImplementationProperty(rtl::OUString const & aName, uno::Any const & aValue)
 {
     if (aName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("Overwrite")))
     {
@@ -159,7 +159,7 @@ sal_Bool CopyImportService::setImplementationProperty(OUString const & aName, un
 // -----------------------------------------------------------------------------
 // -----------------------------------------------------------------------------
 
-ImportService::ImportService(CreationArg _xContext, ServiceInfoHelper const & aSvcInfo )
+ImportService::ImportService(uno::Reference< uno::XComponentContext > const & _xContext, ServiceInfoHelper const & aSvcInfo )
 : m_bSendNotification(false)
 , m_aMutex()
 , m_xContext(_xContext)
@@ -168,7 +168,7 @@ ImportService::ImportService(CreationArg _xContext, ServiceInfoHelper const & aS
 {
     if (!m_xContext.is())
     {
-        OUString sMessage( RTL_CONSTASCII_USTRINGPARAM("Configuration Importer: Unexpected NULL context"));
+        rtl::OUString sMessage( RTL_CONSTASCII_USTRINGPARAM("Configuration Importer: Unexpected NULL context"));
         throw lang::NullPointerException(sMessage,NULL);
     }
 }
@@ -178,13 +178,13 @@ ImportService::~ImportService()
 {}
 // -----------------------------------------------------------------------------
 
-ImportService::Backend ImportService::createDefaultBackend() const
+uno::Reference< backenduno::XBackend > ImportService::createDefaultBackend() const
 {
     return BackendFactory::instance( m_xContext ).getUnoBackend();
 }
 // -----------------------------------------------------------------------------
 
-sal_Bool ImportService::setImplementationProperty(OUString const & aName, uno::Any const & aValue)
+sal_Bool ImportService::setImplementationProperty(rtl::OUString const & aName, uno::Any const & aValue)
 {
     if (aName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("Notify")))
     {
@@ -205,7 +205,7 @@ void SAL_CALL
 
     if (sal_Int32(nCount) != aArguments.getLength())
     {
-        OUString sMessage( RTL_CONSTASCII_USTRINGPARAM("Too many arguments to initialize a Configuration Importer"));
+        rtl::OUString sMessage( RTL_CONSTASCII_USTRINGPARAM("Too many arguments to initialize a Configuration Importer"));
         throw lang::IllegalArgumentException(sMessage,*this,0);
     }
 
@@ -219,7 +219,7 @@ void SAL_CALL
             continue;
         }
 
-        OUString sMessage( RTL_CONSTASCII_USTRINGPARAM("Cannot use argument to initialize a Configuration Importer"
+        rtl::OUString sMessage( RTL_CONSTASCII_USTRINGPARAM("Cannot use argument to initialize a Configuration Importer"
                                                         "- NamedValue expected"));
         throw lang::IllegalArgumentException(sMessage,*this,i+1);
     }
@@ -257,7 +257,7 @@ void SAL_CALL
 {
     if (!aBackend.is())
     {
-        OUString sMessage( RTL_CONSTASCII_USTRINGPARAM("configmgr::backend::ImportService: Trying to set a NULL backend") );
+        rtl::OUString sMessage( RTL_CONSTASCII_USTRINGPARAM("configmgr::backend::ImportService: Trying to set a NULL backend") );
         throw lang::NullPointerException(sMessage,*this);
     }
 
@@ -268,42 +268,42 @@ void SAL_CALL
 
 void SAL_CALL
     ImportService::importLayer( const uno::Reference< backenduno::XLayer >& aLayer )
-        throw ( MalformedDataException,
+        throw ( backenduno::MalformedDataException,
                 lang::WrappedTargetException, lang::IllegalArgumentException,
                 lang::NullPointerException, uno::RuntimeException)
 {
     if (!aLayer.is())
     {
-        OUString sMessage( RTL_CONSTASCII_USTRINGPARAM("configmgr::backend::ImportService: Trying to import a NULL layer") );
+        rtl::OUString sMessage( RTL_CONSTASCII_USTRINGPARAM("configmgr::backend::ImportService: Trying to import a NULL layer") );
         throw lang::NullPointerException(sMessage,*this);
     }
 
-    InputHandler aInputHandler = createImportHandler( getTargetBackend() );
+    uno::Reference< backenduno::XLayerHandler > aInputHandler = createImportHandler( getTargetBackend() );
     aLayer->readData( aInputHandler );
 
 }
 // -----------------------------------------------------------------------------
 
 void SAL_CALL
-    ImportService::importLayerForEntity( const uno::Reference< backenduno::XLayer >& aLayer, const OUString& aEntity )
-        throw ( MalformedDataException,
+    ImportService::importLayerForEntity( const uno::Reference< backenduno::XLayer >& aLayer, const rtl::OUString& aEntity )
+        throw ( backenduno::MalformedDataException,
                 lang::WrappedTargetException, lang::IllegalArgumentException,
                 lang::NullPointerException, uno::RuntimeException)
 {
     if (!aLayer.is())
     {
-        OUString sMessage( RTL_CONSTASCII_USTRINGPARAM("configmgr::backend::ImportService: Trying to import a NULL layer") );
+        rtl::OUString sMessage( RTL_CONSTASCII_USTRINGPARAM("configmgr::backend::ImportService: Trying to import a NULL layer") );
         throw lang::NullPointerException(sMessage,*this);
     }
 
-    InputHandler aInputHandler = createImportHandler( getTargetBackend(), aEntity );
+    uno::Reference< backenduno::XLayerHandler > aInputHandler = createImportHandler( getTargetBackend(), aEntity );
     aLayer->readData( aInputHandler );
 }
 // -----------------------------------------------------------------------------
 
 // XServiceInfo
 
-OUString SAL_CALL
+rtl::OUString SAL_CALL
     ImportService::getImplementationName(  )
         throw (uno::RuntimeException)
 {
@@ -313,7 +313,7 @@ OUString SAL_CALL
 
 
 sal_Bool SAL_CALL
-    ImportService::supportsService( const OUString& ServiceName )
+    ImportService::supportsService( const rtl::OUString& ServiceName )
         throw (uno::RuntimeException)
 {
     return getServiceInfo().supportsService( ServiceName );

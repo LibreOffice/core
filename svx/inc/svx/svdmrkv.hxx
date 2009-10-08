@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: svdmrkv.hxx,v $
- * $Revision: 1.6 $
+ * $Revision: 1.6.76.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -166,7 +166,7 @@ private:
     void UndirtyMrkPnt() const;
 
 protected:
-    virtual void SFX_NOTIFY(SfxBroadcaster& rBC, const TypeId& rBCType, const SfxHint& rHint, const TypeId& rHintType);
+    virtual void Notify(SfxBroadcaster& rBC, const SfxHint& rHint);
     virtual void ModelHasChanged(); // Wird von der PaintView gerufen
     virtual void SetMarkHandles();                                           // aHdl (Liste der Handles) fuellen
     virtual void SetMarkRects();                                             // Rects an den PageViews

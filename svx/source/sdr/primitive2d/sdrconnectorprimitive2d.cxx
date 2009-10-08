@@ -8,7 +8,7 @@
  *
  * $RCSfile: sdrconnectorprimitive2d.cxx,v $
  *
- * $Revision: 1.2 $
+ * $Revision: 1.2.18.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -61,7 +61,7 @@ namespace drawinglayer
             // add text
             if(getSdrLSTAttribute().getText())
             {
-                appendPrimitive2DReferenceToPrimitive2DSequence(aRetval, createTextPrimitive(::basegfx::B2DPolyPolygon(getUnitPolygon()), aEmptyMatrix, *getSdrLSTAttribute().getText(), getSdrLSTAttribute().getLine(), false));
+                appendPrimitive2DReferenceToPrimitive2DSequence(aRetval, createTextPrimitive(::basegfx::B2DPolyPolygon(getUnitPolygon()), aEmptyMatrix, *getSdrLSTAttribute().getText(), getSdrLSTAttribute().getLine(), false, false));
             }
 
             // add shadow

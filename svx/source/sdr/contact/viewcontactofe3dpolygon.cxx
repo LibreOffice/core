@@ -8,7 +8,7 @@
  *
  * $RCSfile: viewcontactofe3dpolygon.cxx,v $
  *
- * $Revision: 1.2 $
+ * $Revision: 1.2.18.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -112,9 +112,6 @@ namespace sdr
                 }
             }
 
-            // add object to world transformation
-            basegfx::B3DHomMatrix aWorldTransform(GetE3dPolygonObj().GetTransform());
-
             // get 3D Object Attributes
             drawinglayer::attribute::Sdr3DObjectAttribute* pSdr3DObjectAttribute = drawinglayer::primitive2d::createNewSdr3DObjectAttribute(rItemSet);
 
@@ -129,6 +126,7 @@ namespace sdr
             }
 
             // create primitive and add
+            const basegfx::B3DHomMatrix aWorldTransform;
             const drawinglayer::primitive3d::Primitive3DReference xReference(new drawinglayer::primitive3d::SdrPolyPolygonPrimitive3D(
                 aPolyPolygon3D, aWorldTransform, aTextureSize, *pAttribute, *pSdr3DObjectAttribute));
             xRetval = drawinglayer::primitive3d::Primitive3DSequence(&xReference, 1);

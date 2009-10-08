@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: FDriver.cxx,v $
- * $Revision: 1.14 $
+ * $Revision: 1.14.56.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -36,6 +36,9 @@
 #include <com/sun/star/lang/DisposedException.hpp>
 #include <comphelper/types.hxx>
 #include "connectivity/dbexception.hxx"
+#include "resource/common_res.hrc"
+#include "resource/sharedresources.hxx"
+
 
 using namespace connectivity::file;
 using namespace com::sun::star::uno;
@@ -164,9 +167,27 @@ Sequence< DriverPropertyInfo > SAL_CALL OFileDriver::getPropertyInfo( const ::rt
                 ,::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("0"))
                 ,aBoolean)
                 );
+        aDriverInfo.push_back(DriverPropertyInfo(
+                ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("UseRelativePath"))
+                ,::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Handle the connection url as relative path."))
+                ,sal_False
+                ,::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("0"))
+                ,aBoolean)
+                );
+        aDriverInfo.push_back(DriverPropertyInfo(
+                ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("URL"))
+                ,::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("The URL of the database document which is used to create an absolute path."))
+                ,sal_False
+                ,::rtl::OUString()
+                ,Sequence< ::rtl::OUString >())
+                );
         return Sequence< DriverPropertyInfo >(&(aDriverInfo[0]),aDriverInfo.size());
-    }
-    ::dbtools::throwGenericSQLException(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Invalid URL!")) ,*this);
+    } // if ( acceptsURL(url) )
+    {
+        ::connectivity::SharedResources aResources;
+        const ::rtl::OUString sMessage = aResources.getResourceString(STR_URI_SYNTAX_ERROR);
+        ::dbtools::throwGenericSQLException(sMessage ,*this);
+    } // if ( ! acceptsURL(url) )
     return Sequence< DriverPropertyInfo >();
 }
 // --------------------------------------------------------------------------------
@@ -212,7 +233,11 @@ Reference< XTablesSupplier > SAL_CALL OFileDriver::getDataDefinitionByConnection
 Reference< XTablesSupplier > SAL_CALL OFileDriver::getDataDefinitionByURL( const ::rtl::OUString& url, const Sequence< PropertyValue >& info ) throw(::com::sun::star::sdbc::SQLException, RuntimeException)
 {
     if ( ! acceptsURL(url) )
-        ::dbtools::throwGenericSQLException(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Invalid URL!")) ,*this);
+    {
+        ::connectivity::SharedResources aResources;
+        const ::rtl::OUString sMessage = aResources.getResourceString(STR_URI_SYNTAX_ERROR);
+        ::dbtools::throwGenericSQLException(sMessage ,*this);
+    }
     return getDataDefinitionByConnection(connect(url,info));
 }
 // -----------------------------------------------------------------------------

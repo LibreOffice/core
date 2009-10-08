@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: e3dundo.cxx,v $
- * $Revision: 1.9 $
+ * $Revision: 1.9.226.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -35,6 +35,7 @@
 #include <svx/outlobj.hxx>
 #include <svx/view3d.hxx>
 #include <svx/scene3d.hxx>
+#include <svx/e3dsceneupdater.hxx>
 
 /************************************************************************/
 
@@ -85,8 +86,8 @@ E3dRotateUndoAction::~E3dRotateUndoAction ()
 \************************************************************************/
 void E3dRotateUndoAction::Undo ()
 {
+    E3DModifySceneSnapRectUpdater aUpdater(pMy3DObj);
     pMy3DObj->SetTransform(aMyOldRotation);
-    pMy3DObj->GetScene()->CorrectSceneDimensions();
 }
 
 /************************************************************************\
@@ -96,8 +97,8 @@ void E3dRotateUndoAction::Undo ()
 \************************************************************************/
 void E3dRotateUndoAction::Redo ()
 {
+    E3DModifySceneSnapRectUpdater aUpdater(pMy3DObj);
     pMy3DObj->SetTransform(aMyNewRotation);
-    pMy3DObj->GetScene()->CorrectSceneDimensions();
 }
 
 /*************************************************************************
@@ -146,15 +147,8 @@ E3dAttributesUndoAction::~E3dAttributesUndoAction()
 \************************************************************************/
 void E3dAttributesUndoAction::Undo()
 {
-    //pObject->SetItemSetAndBroadcast(aOldSet);
+    E3DModifySceneSnapRectUpdater aUpdater(pObject);
     pObject->SetMergedItemSetAndBroadcast(aOldSet);
-
-    if(pObject->ISA(E3dObject))
-    {
-        E3dScene* pScene = ((E3dObject*)pObject)->GetScene();
-        if(pScene)
-            pScene->CorrectSceneDimensions();
-    }
 }
 
 /*************************************************************************
@@ -164,15 +158,8 @@ void E3dAttributesUndoAction::Undo()
 \************************************************************************/
 void E3dAttributesUndoAction::Redo()
 {
-    //pObject->SetItemSetAndBroadcast(aNewSet);
+    E3DModifySceneSnapRectUpdater aUpdater(pObject);
     pObject->SetMergedItemSetAndBroadcast(aNewSet);
-
-    if(pObject->ISA(E3dObject))
-    {
-        E3dScene* pScene = ((E3dObject*)pObject)->GetScene();
-        if(pScene)
-            pScene->CorrectSceneDimensions();
-    }
 }
 
 /*************************************************************************

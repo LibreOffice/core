@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: TIndexes.cxx,v $
- * $Revision: 1.12 $
+ * $Revision: 1.12.56.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -64,6 +64,10 @@ OIndexesHelper::OIndexesHelper(OTableHelper* _pTable,
 
 sdbcx::ObjectType OIndexesHelper::createObject(const ::rtl::OUString& _rName)
 {
+    Reference< XConnection> xConnection = m_pTable->getConnection();
+    if ( !xConnection.is() )
+        return NULL;
+
     sdbcx::ObjectType xRet;
     ::rtl::OUString aName,aQualifier;
     sal_Int32 nLen = _rName.indexOf('.');
@@ -133,6 +137,9 @@ Reference< XPropertySet > OIndexesHelper::createDescriptor()
 // XAppend
 sdbcx::ObjectType OIndexesHelper::appendObject( const ::rtl::OUString& _rForName, const Reference< XPropertySet >& descriptor )
 {
+    Reference< XConnection> xConnection = m_pTable->getConnection();
+    if ( !xConnection.is() )
+        return NULL;
     if ( m_pTable->isNew() )
         return cloneDescriptor( descriptor );
 
@@ -211,7 +218,8 @@ sdbcx::ObjectType OIndexesHelper::appendObject( const ::rtl::OUString& _rForName
 // XDrop
 void OIndexesHelper::dropObject(sal_Int32 /*_nPos*/,const ::rtl::OUString _sElementName)
 {
-    if(!m_pTable->isNew())
+    Reference< XConnection> xConnection = m_pTable->getConnection();
+    if( xConnection.is() && !m_pTable->isNew())
     {
         ::rtl::OUString aName,aSchema;
         sal_Int32 nLen = _sElementName.indexOf('.');

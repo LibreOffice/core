@@ -46,16 +46,11 @@ namespace uno = css::uno ;
 namespace lang = css::lang ;
 namespace backenduno = css::configuration::backend ;
 
-typedef cppu::WeakComponentImplHelper5< backenduno::XBackend,
-                                        backenduno::XBackendEntities,
-                                        backenduno::XSchemaSupplier,
-                                        lang::XInitialization,
-                                        lang::XServiceInfo> BackendBase ;
 /**
   Class implementing the Backend service for remote access.
   It just transfers calls to a SingleBackend implementation.
   */
-class SingleBackendAdapter : public BackendBase {
+class SingleBackendAdapter : public cppu::WeakComponentImplHelper5< backenduno::XBackend, backenduno::XBackendEntities, backenduno::XSchemaSupplier, lang::XInitialization, lang::XServiceInfo > {
     public :
         /**
           Service constructor from a service factory.

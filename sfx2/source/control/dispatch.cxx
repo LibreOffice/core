@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: dispatch.cxx,v $
- * $Revision: 1.56 $
+ * $Revision: 1.56.126.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -2340,7 +2340,7 @@ sal_Bool SfxDispatcher::_FindServer
     // Makro-Slot?
     if ( SfxMacroConfig::IsMacroSlot( nSlot ) )
     {
-        SfxMacroInfo* pInfo = pSfxApp->GetMacroConfig()->GetMacroInfo(nSlot);
+        const SfxMacroInfo* pInfo = pSfxApp->GetMacroConfig()->GetMacroInfo(nSlot);
         if ( pInfo )
         {
             const SfxSlot* pSlot = pInfo->GetSlot();

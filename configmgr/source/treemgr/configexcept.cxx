@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: configexcept.cxx,v $
- * $Revision: 1.7 $
+ * $Revision: 1.7.10.3 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -52,7 +52,7 @@ namespace configmgr
         }
         //---------------------------------------------------------------------
 
-        OUString Exception::message() const
+        rtl::OUString Exception::message() const
         {
 
             return rtl::OStringToOUString( m_sAsciiMessage, RTL_TEXTENCODING_ASCII_US );
@@ -64,20 +64,20 @@ namespace configmgr
         }
         //---------------------------------------------------------------------
 
-        static const char c_sInvalidNamePre[] = "CONFIGURATION: Invalid Path or Name: ";
-        static const char c_sInvalidName[] = "CONFIGURATION: <Invalid Path or Name>";
+        static const char c_sInvalidNamePre[] = "CONFIGURATION: Invalid path or name: ";
+        static const char c_sInvalidName[] = "CONFIGURATION: <Invalid path or name>";
 //-----------------------------------------------------------------------------
 
         //---------------------------------------------------------------------
 
-        InvalidName::InvalidName(OUString const& sName, char const* sAsciiDescription)
+        InvalidName::InvalidName(rtl::OUString const& sName, char const* sAsciiDescription)
         : Exception( rtl::OString(RTL_CONSTASCII_STRINGPARAM(c_sInvalidName)) += sAsciiDescription )
-        , m_sName( sName.concat(OUString::createFromAscii(sAsciiDescription)) )
+        , m_sName( sName.concat(rtl::OUString::createFromAscii(sAsciiDescription)) )
         {
         }
         //---------------------------------------------------------------------
 
-        OUString InvalidName::message() const
+        rtl::OUString InvalidName::message() const
         {
             return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(c_sInvalidNamePre)).concat( m_sName );
         }
@@ -95,19 +95,19 @@ namespace configmgr
 
         static const char c_sTypeMismatch[] = "CONFIGURATION: Data Types do not match: ";
     //---------------------------------------------------------------------
-        OUString TypeMismatch::describe(OUString const& sFoundType, OUString const& sExpectedType)
+        rtl::OUString TypeMismatch::describe(rtl::OUString const& sFoundType, rtl::OUString const& sExpectedType)
         {
-            OUString sRet = OUString(RTL_CONSTASCII_USTRINGPARAM("Found Type: '"));
+            rtl::OUString sRet = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Found Type: '"));
             sRet += sFoundType;
             if (sExpectedType.getLength() != 0)
             {
-                sRet += OUString(RTL_CONSTASCII_USTRINGPARAM("' - Expected Type: '"));
+                sRet += rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("' - Expected Type: '"));
                 sRet += sExpectedType;
-                sRet += OUString(RTL_CONSTASCII_USTRINGPARAM("'"));
+                sRet += rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("'"));
             }
             else
             {
-                sRet += OUString(RTL_CONSTASCII_USTRINGPARAM("' is not valid in this context"));
+                sRet += rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("' is not valid in this context"));
             }
             return sRet;
         }
@@ -115,61 +115,22 @@ namespace configmgr
 
     //---------------------------------------------------------------------
 
-        TypeMismatch::TypeMismatch(OUString const& sType1, OUString const& sType2)
+        TypeMismatch::TypeMismatch(rtl::OUString const& sType1, rtl::OUString const& sType2)
         : Exception( rtl::OString(RTL_CONSTASCII_STRINGPARAM(c_sTypeMismatch)) )
         , m_sTypes( describe(sType1,sType2) )
         {
         }
     //---------------------------------------------------------------------
-        TypeMismatch::TypeMismatch(OUString const& sType1, OUString const& sType2, char const* sAsciiDescription)
+        TypeMismatch::TypeMismatch(rtl::OUString const& sType1, rtl::OUString const& sType2, char const* sAsciiDescription)
         : Exception( rtl::OString(RTL_CONSTASCII_STRINGPARAM(c_sTypeMismatch)) += sAsciiDescription)
-        , m_sTypes( describe(sType1,sType2).concat(OUString::createFromAscii(sAsciiDescription)) )
+        , m_sTypes( describe(sType1,sType2).concat(rtl::OUString::createFromAscii(sAsciiDescription)) )
         {
         }
      //---------------------------------------------------------------------
 
-        OUString TypeMismatch::message() const
+        rtl::OUString TypeMismatch::message() const
         {
             return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(c_sTypeMismatch)).concat( m_sTypes );
-        }
-//-----------------------------------------------------------------------------
-
-        WrappedUnoException::WrappedUnoException(uno::Any const& aUnoException)
-        : Exception("UNO Service failed")
-        , m_aUnoException(aUnoException)
-        {
-            OSL_ENSURE( m_aUnoException.getValueTypeClass() == uno::TypeClass_EXCEPTION,
-                        "ERROR: Wrapping a non-exception into a WrappedUnoException !");
-
-        }
-        //---------------------------------------------------------------------
-
-        OUString WrappedUnoException::extractMessage() const
-        {
-            return extractUnoException().Message;
-        }
-        //---------------------------------------------------------------------
-
-        uno::Exception WrappedUnoException::extractUnoException() const
-        {
-            uno::Exception e;
-            OSL_VERIFY( m_aUnoException >>= e );
-            return e;
-        }
-        //---------------------------------------------------------------------
-
-        uno::Any const& WrappedUnoException::getAnyUnoException() const
-        {
-            return m_aUnoException;
-        }
-        //---------------------------------------------------------------------
-
-        OUString WrappedUnoException::message() const
-        {
-            return OUString(RTL_CONSTASCII_USTRINGPARAM("CONFIGMGR: Used Service failed with a"))
-                    += m_aUnoException.getValueType().getTypeName()
-                    += OUString(RTL_CONSTASCII_USTRINGPARAM(": "))
-                    += extractMessage();
         }
 //-----------------------------------------------------------------------------
     }
@@ -196,9 +157,9 @@ namespace configmgr
         }
         //---------------------------------------------------------------------
 
-        OUString ExceptionMapper::message() const
+        rtl::OUString ExceptionMapper::message() const
         {
-            return OUString(RTL_CONSTASCII_USTRINGPARAM("FAILURE in CONFIGMGR: ")).concat( m_sMessage );
+            return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("FAILURE in CONFIGMGR: ")).concat( m_sMessage );
         }
         //---------------------------------------------------------------------
 

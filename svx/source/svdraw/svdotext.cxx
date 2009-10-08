@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: svdotext.cxx,v $
- * $Revision: 1.90 $
+ * $Revision: 1.90.18.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -736,7 +736,7 @@ FASTBOOL SdrTextObj::NbcSetFitToSize(SdrFitToSizeType eFit)
 
 void SdrTextObj::ImpSetContourPolygon( SdrOutliner& rOutliner, Rectangle& rAnchorRect, BOOL bLineWidth ) const
 {
-    basegfx::B2DPolyPolygon aXorPolyPolygon(TakeXorPoly(FALSE));
+    basegfx::B2DPolyPolygon aXorPolyPolygon(TakeXorPoly());
     basegfx::B2DPolyPolygon* pContourPolyPolygon = 0L;
     basegfx::B2DHomMatrix aMatrix;
 
@@ -1347,7 +1347,7 @@ void SdrTextObj::operator=(const SdrObject& rObj)
     }
 }
 
-basegfx::B2DPolyPolygon SdrTextObj::TakeXorPoly(sal_Bool /*bDetail*/) const
+basegfx::B2DPolyPolygon SdrTextObj::TakeXorPoly() const
 {
     Polygon aPol(aRect);
     if (aGeo.nShearWink!=0) ShearPoly(aPol,aRect.TopLeft(),aGeo.nTan);

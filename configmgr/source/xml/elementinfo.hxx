@@ -42,8 +42,6 @@ namespace configmgr
     namespace xml
     {
 // -----------------------------------------------------------------------------
-        typedef rtl::OUString ElementName;
-// -----------------------------------------------------------------------------
         namespace ElementType
         {
             enum Enum
@@ -90,8 +88,6 @@ namespace configmgr
 // -----------------------------------------------------------------------------
         struct ElementInfo
         {
-            typedef sal_Int16 FlagsType;
-
             explicit
             ElementInfo(ElementType::Enum _type = ElementType::unknown)
             : name()
@@ -101,7 +97,7 @@ namespace configmgr
             {}
 
             explicit
-            ElementInfo(ElementName const & _name, ElementType::Enum _type = ElementType::unknown)
+            ElementInfo(rtl::OUString const & _name, ElementType::Enum _type = ElementType::unknown)
             : name(_name)
             , type(_type)
             , op(Operation::none)
@@ -109,10 +105,10 @@ namespace configmgr
             {}
 
 
-            ElementName         name;
+            rtl::OUString         name;
             ElementType::Enum   type;
             Operation::Enum     op;
-            FlagsType           flags;
+            sal_Int16           flags;
         };
 // -----------------------------------------------------------------------------
     } // namespace xml

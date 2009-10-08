@@ -43,7 +43,7 @@
 
 namespace drawinglayer
 {
-    namespace
+    namespace attribute
     {
         class ImpMaterialAttribute3D
         {

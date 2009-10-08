@@ -47,8 +47,6 @@ SLOFILES=	\
         $(SLO)$/listenercontainer.obj		\
         $(SLO)$/provider.obj		\
         $(SLO)$/providerimpl.obj	\
-        $(SLO)$/confprovider2.obj	\
-        $(SLO)$/confproviderimpl2.obj \
         $(SLO)$/accessimpl.obj		\
         $(SLO)$/apiaccessobj.obj	\
         $(SLO)$/apiserviceinfo.obj	\

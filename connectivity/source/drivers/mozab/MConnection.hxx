@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: MConnection.hxx,v $
- * $Revision: 1.18 $
+ * $Revision: 1.18.56.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -198,8 +198,6 @@ namespace connectivity
                     return ::com::sun::star::mozilla::MozillaProductType_Thunderbird;
                 return ::com::sun::star::mozilla::MozillaProductType_Mozilla;
             }
-
-            void throwGenericSQLException( sal_Int32 _nErrorResourceId );
 
             // Get Ldap BindDN (user name)
             rtl::OUString getBindDN() const { return m_sBindDN; }

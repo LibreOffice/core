@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: MConnection.cxx,v $
- * $Revision: 1.28 $
+ * $Revision: 1.28.56.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -45,9 +45,8 @@
 #include "diagnose_ex.h"
 
 #include "resource/mozab_res.hrc"
+#include "resource/common_res.hrc"
 #include <comphelper/officeresourcebundle.hxx>
-
-#include <boost/shared_ptr.hpp>
 
 #if OSL_DEBUG_LEVEL > 0
 # define OUtoCStr( x ) ( ::rtl::OUStringToOString ( (x), RTL_TEXTENCODING_ASCII_US).getStr())
@@ -129,19 +128,6 @@ OConnection::OConnection(MozabDriver*   _pDriver)
 {
     m_pDriver->acquire();
 
-    try
-    {
-        Reference< XPropertySet > xFactoryProps( m_pDriver->getMSFactory(), UNO_QUERY_THROW );
-        Reference< XComponentContext > xContext(
-            xFactoryProps->getPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "DefaultContext" ) ) ),
-            UNO_QUERY_THROW
-        );
-        m_pImplData->pResourceBundle.reset( new ::comphelper::OfficeResourceBundle( xContext, "cnr" ) );
-    }
-    catch( const Exception& )
-    {
-        OSL_ENSURE( false, "OConnection::OConnection: could not obtain the component context!" );
-    }
 }
 //-----------------------------------------------------------------------------
 OConnection::~OConnection()
@@ -186,7 +172,7 @@ void OConnection::construct(const ::rtl::OUString& url,const Sequence< PropertyV
         else
         {
             OSL_TRACE( "No subschema given!!!\n");
-            throwGenericSQLException( STR_URI_SYNTAX_ERROR );
+            throwGenericSQLException( STR_URI_SYNTAX_ERROR,*this );
         }
     }
     else
@@ -297,7 +283,7 @@ void OConnection::construct(const ::rtl::OUString& url,const Sequence< PropertyV
             m_sMozillaURI += m_sHostName;
         }
         else
-            throwGenericSQLException( STR_NO_HOSTNAME );
+            throwGenericSQLException( STR_NO_HOSTNAME ,*this);
 
         if ( nPortNumber > 0 ) {
             m_sMozillaURI += rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(":") );
@@ -309,7 +295,7 @@ void OConnection::construct(const ::rtl::OUString& url,const Sequence< PropertyV
             m_sMozillaURI += sBaseDN;
         }
         else
-            throwGenericSQLException( STR_NO_BASEDN );
+            throwGenericSQLException( STR_NO_BASEDN ,*this);
 
         // Addition of a fake query to enable the Mozilla LDAP directory to work correctly.
         m_sMozillaURI += ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("?(or(DisplayName,=,DontDoThisAtHome)))"));
@@ -326,7 +312,7 @@ void OConnection::construct(const ::rtl::OUString& url,const Sequence< PropertyV
     else
     {
         OSL_TRACE("Invalid subschema given!!!\n");
-        throwGenericSQLException( STR_URI_SYNTAX_ERROR );
+        throwGenericSQLException( STR_URI_SYNTAX_ERROR ,*this);
     }
 
     OSL_TRACE("Moz URI = %s, %s\n", ((OUtoCStr(m_sMozillaURI)) ? (OUtoCStr(m_sMozillaURI)):("NULL")), usesFactory() ? "uses factory" : "no factory");
@@ -340,7 +326,7 @@ void OConnection::construct(const ::rtl::OUString& url,const Sequence< PropertyV
     if ( isLDAP() ) {
         if ( !_aDbHelper.testLDAPConnection( this ) ) {
             OSL_TRACE("testLDAPConnection : FAILED\n" );
-            throwGenericSQLException( _aDbHelper.getErrorResourceId() );
+            throwGenericSQLException( _aDbHelper.getErrorResourceId() ,*this);
         }
         else {
             OSL_TRACE("testLDAPConnection : SUCCESS\n" );
@@ -351,7 +337,7 @@ void OConnection::construct(const ::rtl::OUString& url,const Sequence< PropertyV
     ::std::vector< ::rtl::OUString > tables;
     ::std::vector< ::rtl::OUString > types;
     if ( !_aDbHelper.getTableStrings( this, tables, types ) ) {
-        throwGenericSQLException( _aDbHelper.getErrorResourceId() );
+        throwGenericSQLException( _aDbHelper.getErrorResourceId() ,*this);
     }
 
 }
@@ -381,7 +367,11 @@ Reference< XPreparedStatement > SAL_CALL OConnection::prepareStatement( const ::
     // the pre
     // create a statement
     // the statement can only be executed more than once
-    Reference< XPreparedStatement > xReturn = new OPreparedStatement(this,_sSql);
+    OPreparedStatement* pPrepared = new OPreparedStatement(this,_sSql);
+    Reference< XPreparedStatement > xReturn = pPrepared;
+    if ( !pPrepared->lateInit() )
+        throw SQLException();
+
     m_aStatements.push_back(WeakReferenceHelper(xReturn));
     return xReturn;
 }
@@ -560,22 +550,5 @@ MNameMapper* OConnection::getNameMapper ()
     return m_aNameMapper;
 }
 // -----------------------------------------------------------------------------
-
-void OConnection::throwGenericSQLException( sal_Int32 _nErrorResourceId )
-{
-    ::boost::shared_ptr< ::comphelper::OfficeResourceBundle > pResourceBundle;
-    {
-        ::osl::MutexGuard aGuard( m_aMutex );
-        pResourceBundle = m_pImplData->pResourceBundle;
-    }
-
-    OSL_ENSURE( pResourceBundle.get(), "OConnection::throwGenericSQLException: no resource bundle?" );
-        // this means that we're disposed, and how could anybody request us to throw an exception then?
-
-    ::rtl::OUString sErrorMessage;
-    if ( pResourceBundle.get() && _nErrorResourceId )
-        sErrorMessage = pResourceBundle->loadString( _nErrorResourceId );
-    ::dbtools::throwGenericSQLException( sErrorMessage, *this );
-}
 
 } } // namespace connectivity::mozab

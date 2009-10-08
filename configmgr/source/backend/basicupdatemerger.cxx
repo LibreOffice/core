@@ -52,7 +52,7 @@ namespace configmgr
     {
 // -----------------------------------------------------------------------------
 
-BasicUpdateMerger::BasicUpdateMerger( LayerSource const & _xSourceLayer )
+BasicUpdateMerger::BasicUpdateMerger( uno::Reference< backenduno::XLayer > const & _xSourceLayer )
 : m_xSourceLayer(_xSourceLayer)
 , m_xResultHandler()
 , m_nNesting(0)
@@ -66,18 +66,18 @@ BasicUpdateMerger::~BasicUpdateMerger()
 }
 // -----------------------------------------------------------------------------
 
-void SAL_CALL BasicUpdateMerger::readData( ResultHandler const & _xResultHandler )
-    throw ( MalformedDataException, lang::NullPointerException,
+void SAL_CALL BasicUpdateMerger::readData( uno::Reference< backenduno::XLayerHandler > const & _xResultHandler )
+    throw ( backenduno::MalformedDataException, lang::NullPointerException,
             lang::WrappedTargetException, uno::RuntimeException)
 {
     if (!_xResultHandler.is())
     {
-        OUString sMsg( RTL_CONSTASCII_USTRINGPARAM("UpdateMerger: Error - NULL output handler unexpected") );
+        rtl::OUString sMsg( RTL_CONSTASCII_USTRINGPARAM("UpdateMerger: Error - NULL output handler unexpected") );
         throw lang::NullPointerException(sMsg,*this);
     }
     if (!m_xSourceLayer.is())
     {
-        OUString sMsg( RTL_CONSTASCII_USTRINGPARAM("UpdateMerger: Error - No source layer set") );
+        rtl::OUString sMsg( RTL_CONSTASCII_USTRINGPARAM("UpdateMerger: Error - No source layer set") );
         throw lang::NullPointerException(sMsg,*this);
     }
 
@@ -97,7 +97,7 @@ void SAL_CALL BasicUpdateMerger::readData( ResultHandler const & _xResultHandler
 // -----------------------------------------------------------------------------
 
 void SAL_CALL BasicUpdateMerger::startLayer(  )
-    throw (MalformedDataException, lang::WrappedTargetException, uno::RuntimeException)
+    throw (backenduno::MalformedDataException, lang::WrappedTargetException, uno::RuntimeException)
 {
     if (m_nNesting)
         raiseMalformedDataException("UpdateMerger: Cannot start layer - layer already in progress");
@@ -109,7 +109,7 @@ void SAL_CALL BasicUpdateMerger::startLayer(  )
 // -----------------------------------------------------------------------------
 
 void SAL_CALL BasicUpdateMerger::endLayer(  )
-    throw (MalformedDataException, lang::WrappedTargetException, uno::RuntimeException)
+    throw (backenduno::MalformedDataException, lang::WrappedTargetException, uno::RuntimeException)
 {
     if (m_nNesting > 0)
         raiseMalformedDataException("UpdateMerger: Cannot end layer - data handling still in progress");
@@ -120,8 +120,8 @@ void SAL_CALL BasicUpdateMerger::endLayer(  )
 }
 // -----------------------------------------------------------------------------
 
-void SAL_CALL BasicUpdateMerger::overrideNode( const OUString& aName, sal_Int16 aAttributes, sal_Bool bClear )
-    throw (MalformedDataException, lang::WrappedTargetException, uno::RuntimeException)
+void SAL_CALL BasicUpdateMerger::overrideNode( const rtl::OUString& aName, sal_Int16 aAttributes, sal_Bool bClear )
+    throw (backenduno::MalformedDataException, lang::WrappedTargetException, uno::RuntimeException)
 {
     if (!isSkipping())
         m_xResultHandler->overrideNode(aName, aAttributes, bClear);
@@ -130,8 +130,8 @@ void SAL_CALL BasicUpdateMerger::overrideNode( const OUString& aName, sal_Int16 
 }
 // -----------------------------------------------------------------------------
 
-void SAL_CALL BasicUpdateMerger::addOrReplaceNode( const OUString& aName, sal_Int16 aAttributes )
-    throw (MalformedDataException, lang::WrappedTargetException, uno::RuntimeException)
+void SAL_CALL BasicUpdateMerger::addOrReplaceNode( const rtl::OUString& aName, sal_Int16 aAttributes )
+    throw (backenduno::MalformedDataException, lang::WrappedTargetException, uno::RuntimeException)
 {
     if (!isSkipping())
         m_xResultHandler->addOrReplaceNode(aName, aAttributes);
@@ -140,8 +140,8 @@ void SAL_CALL BasicUpdateMerger::addOrReplaceNode( const OUString& aName, sal_In
 }
 // -----------------------------------------------------------------------------
 
-void SAL_CALL BasicUpdateMerger::addOrReplaceNodeFromTemplate( const OUString& aName, const TemplateIdentifier& aTemplate, sal_Int16 aAttributes )
-    throw (MalformedDataException, lang::WrappedTargetException, uno::RuntimeException)
+void SAL_CALL BasicUpdateMerger::addOrReplaceNodeFromTemplate( const rtl::OUString& aName, const backenduno::TemplateIdentifier& aTemplate, sal_Int16 aAttributes )
+    throw (backenduno::MalformedDataException, lang::WrappedTargetException, uno::RuntimeException)
 {
     if (!isSkipping())
         m_xResultHandler->addOrReplaceNodeFromTemplate(aName, aTemplate, aAttributes);
@@ -151,7 +151,7 @@ void SAL_CALL BasicUpdateMerger::addOrReplaceNodeFromTemplate( const OUString& a
 // -----------------------------------------------------------------------------
 
 void SAL_CALL BasicUpdateMerger::endNode(  )
-    throw (MalformedDataException, lang::WrappedTargetException, uno::RuntimeException)
+    throw (backenduno::MalformedDataException, lang::WrappedTargetException, uno::RuntimeException)
 {
     if (!isSkipping())
         m_xResultHandler->endNode();
@@ -160,26 +160,26 @@ void SAL_CALL BasicUpdateMerger::endNode(  )
 }
 // -----------------------------------------------------------------------------
 
-void SAL_CALL BasicUpdateMerger::dropNode( const OUString& aName )
-    throw (MalformedDataException, lang::WrappedTargetException, uno::RuntimeException)
+void SAL_CALL BasicUpdateMerger::dropNode( const rtl::OUString& aName )
+    throw (backenduno::MalformedDataException, lang::WrappedTargetException, uno::RuntimeException)
 {
     if (!isSkipping())
         m_xResultHandler->dropNode(aName);
 }
 // -----------------------------------------------------------------------------
 
-void SAL_CALL BasicUpdateMerger::overrideProperty( const OUString& aName, sal_Int16 aAttributes, const uno::Type& aType, sal_Bool bClear )
-    throw (MalformedDataException, lang::WrappedTargetException, uno::RuntimeException)
+void SAL_CALL BasicUpdateMerger::overrideProperty( const rtl::OUString& aName, sal_Int16 aAttributes, const uno::Type& aType, sal_Bool bClear )
+    throw (backenduno::MalformedDataException, lang::WrappedTargetException, uno::RuntimeException)
 {
     if (!isSkipping())
         m_xResultHandler->overrideProperty(aName, aAttributes, aType, bClear);
 
-    pushLevel( OUString() ); // do not match context path to property names
+    pushLevel( rtl::OUString() ); // do not match context path to property names
 }
 // -----------------------------------------------------------------------------
 
 void SAL_CALL BasicUpdateMerger::endProperty(  )
-    throw (MalformedDataException, lang::WrappedTargetException, uno::RuntimeException)
+    throw (backenduno::MalformedDataException, lang::WrappedTargetException, uno::RuntimeException)
 {
     if (!isSkipping())
         m_xResultHandler->endProperty();
@@ -189,31 +189,31 @@ void SAL_CALL BasicUpdateMerger::endProperty(  )
 // -----------------------------------------------------------------------------
 
 void SAL_CALL BasicUpdateMerger::setPropertyValue( const uno::Any& aValue )
-    throw (MalformedDataException, lang::WrappedTargetException, uno::RuntimeException)
+    throw (backenduno::MalformedDataException, lang::WrappedTargetException, uno::RuntimeException)
 {
     if (!isSkipping())
         m_xResultHandler->setPropertyValue(aValue);
 }
 // -----------------------------------------------------------------------------
 
-void SAL_CALL BasicUpdateMerger::setPropertyValueForLocale( const uno::Any& aValue, const OUString & aLocale )
-    throw (MalformedDataException, lang::WrappedTargetException, uno::RuntimeException)
+void SAL_CALL BasicUpdateMerger::setPropertyValueForLocale( const uno::Any& aValue, const rtl::OUString & aLocale )
+    throw (backenduno::MalformedDataException, lang::WrappedTargetException, uno::RuntimeException)
 {
     if (!isSkipping())
         m_xResultHandler->setPropertyValueForLocale(aValue,aLocale);
 }
 // -----------------------------------------------------------------------------
 
-void SAL_CALL BasicUpdateMerger::addProperty( const OUString& aName, sal_Int16 aAttributes, const uno::Type& aType )
-    throw (MalformedDataException, lang::WrappedTargetException, uno::RuntimeException)
+void SAL_CALL BasicUpdateMerger::addProperty( const rtl::OUString& aName, sal_Int16 aAttributes, const uno::Type& aType )
+    throw (backenduno::MalformedDataException, lang::WrappedTargetException, uno::RuntimeException)
 {
     if (!isSkipping())
         m_xResultHandler->addProperty(aName, aAttributes, aType);
 }
 // -----------------------------------------------------------------------------
 
-void SAL_CALL BasicUpdateMerger::addPropertyWithValue( const OUString& aName, sal_Int16 aAttributes, const uno::Any& aValue )
-    throw (MalformedDataException, lang::WrappedTargetException, uno::RuntimeException)
+void SAL_CALL BasicUpdateMerger::addPropertyWithValue( const rtl::OUString& aName, sal_Int16 aAttributes, const uno::Any& aValue )
+    throw (backenduno::MalformedDataException, lang::WrappedTargetException, uno::RuntimeException)
 {
     if (!isSkipping())
         m_xResultHandler->addPropertyWithValue(aName, aAttributes, aValue);
@@ -222,9 +222,9 @@ void SAL_CALL BasicUpdateMerger::addPropertyWithValue( const OUString& aName, sa
 
 void BasicUpdateMerger::raiseMalformedDataException(sal_Char const * pMsg)
 {
-    OUString sMsg = OUString::createFromAscii(pMsg);
+    rtl::OUString sMsg = rtl::OUString::createFromAscii(pMsg);
 
-    throw MalformedDataException(sMsg, *this, uno::Any());
+    throw backenduno::MalformedDataException(sMsg, *this, uno::Any());
 }
 // -----------------------------------------------------------------------------
 
@@ -239,7 +239,7 @@ void BasicUpdateMerger::startSkipping()
 // -----------------------------------------------------------------------------
 
 
-void BasicUpdateMerger::pushLevel(OUString const & _aContext)
+void BasicUpdateMerger::pushLevel(rtl::OUString const & _aContext)
 {
     if (m_nNesting > 0)
     {
@@ -291,7 +291,7 @@ void BasicUpdateMerger::popLevel()
 }
 // -----------------------------------------------------------------------------
 
-void BasicUpdateMerger::findContext(ContextPath const & _aContext)
+void BasicUpdateMerger::findContext(std::vector<rtl::OUString> const & _aContext)
 {
     // make the context a *reverse* copy of the context path
     OSL_PRECOND( ! isHandling(), "BasicUpdateMerger: starting context search while still handling data");
@@ -315,7 +315,7 @@ void BasicUpdateMerger::leaveContext()
 
 void BasicUpdateMerger::flushContext()
 {
-    ContextPath::size_type nNesting = m_aSearchPath.size();
+    std::vector<rtl::OUString>::size_type nNesting = m_aSearchPath.size();
 
     while (!m_aSearchPath.empty())
     {

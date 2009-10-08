@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: docfile.cxx,v $
- * $Revision: 1.204 $
+ * $Revision: 1.203.50.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -3261,8 +3261,9 @@ void SfxMedium::SetStorage_Impl( const uno::Reference < embed::XStorage >& rStor
 
 SfxItemSet* SfxMedium::GetItemSet() const
 {
-    if( !pSet ) ((SfxMedium*)this)->pSet =
-                    new SfxAllItemSet( SFX_APP()->GetPool() );
+    // this method *must* return an ItemSet, returning NULL can cause crashes
+    if( !pSet )
+        ((SfxMedium*)this)->pSet = new SfxAllItemSet( SFX_APP()->GetPool() );
     return pSet;
 }
 //----------------------------------------------------------------

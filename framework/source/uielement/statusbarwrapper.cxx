@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: statusbarwrapper.cxx,v $
- * $Revision: 1.8 $
+ * $Revision: 1.8.34.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -87,15 +87,6 @@ StatusBarWrapper::StatusBarWrapper(
 
 StatusBarWrapper::~StatusBarWrapper()
 {
-}
-
-const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& StatusBarWrapper::getServiceFactory()
-{
-    ResetableGuard aLock( m_aLock );
-    if ( m_bDisposed )
-        throw DisposedException();
-
-    return m_xServiceFactory;
 }
 
 void SAL_CALL StatusBarWrapper::dispose() throw (::com::sun::star::uno::RuntimeException)

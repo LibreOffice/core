@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: xmlprmap.hxx,v $
- * $Revision: 1.4 $
+ * $Revision: 1.4.74.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -99,17 +99,17 @@ public:
     void AddMapperEntry( const UniReference < XMLPropertySetMapper >& rMapper );
 
     /** Return number of entries in input-array */
-    const sal_Int32 GetEntryCount() const { return aMapEntries.size(); }
+    sal_Int32   GetEntryCount() const { return aMapEntries.size(); }
 
     /** Returns the flags of an entry */
-    const sal_uInt32 GetEntryFlags( sal_Int32 nIndex ) const
+    sal_uInt32 GetEntryFlags( sal_Int32 nIndex ) const
     {
         DBG_ASSERT( (nIndex >= 0) && (nIndex < (sal_Int32)aMapEntries.size() ), "illegal access to invalid entry!" );
         return aMapEntries[nIndex].nType & ~MID_FLAG_MASK;
     }
 
     /** Returns the type of an entry */
-    const sal_uInt32 GetEntryType( sal_Int32 nIndex,
+    sal_uInt32 GetEntryType( sal_Int32 nIndex,
                                    sal_Bool bWithFlags = sal_True ) const
     {
         DBG_ASSERT( (nIndex >= 0) && (nIndex < (sal_Int32)aMapEntries.size() ), "illegal access to invalid entry!" );
@@ -120,7 +120,7 @@ public:
     }
 
     /** Returns the namespace-key of an entry */
-    const sal_uInt16 GetEntryNameSpace( sal_Int32 nIndex ) const
+    sal_uInt16 GetEntryNameSpace( sal_Int32 nIndex ) const
     {
         DBG_ASSERT( (nIndex >= 0) && (nIndex < (sal_Int32)aMapEntries.size() ), "illegal access to invalid entry!" );
         return aMapEntries[nIndex].nXMLNameSpace;
@@ -141,14 +141,14 @@ public:
     }
 
     /** returns the entry context id. -1 is a valid index here. */
-    const sal_Int16 GetEntryContextId( sal_Int32 nIndex ) const
+    sal_Int16 GetEntryContextId( sal_Int32 nIndex ) const
     {
         DBG_ASSERT( (nIndex >= -1) && (nIndex < (sal_Int32)aMapEntries.size() ), "illegal access to invalid entry!" );
         return nIndex == -1 ? 0 : aMapEntries[nIndex].nContextId;
     }
 
     /** returns the earliest odf version for which this property should be exported. */
-    const SvtSaveOptions::ODFDefaultVersion GetEarliestODFVersionForExport( sal_Int32 nIndex ) const
+    SvtSaveOptions::ODFDefaultVersion GetEarliestODFVersionForExport( sal_Int32 nIndex ) const
     {
         DBG_ASSERT( (nIndex >= -1) && (nIndex < (sal_Int32)aMapEntries.size() ), "illegal access to invalid entry!" );
         return nIndex == -1 ? SvtSaveOptions::ODFVER_UNKNOWN : aMapEntries[nIndex].nEarliestODFVersionForExport;
@@ -156,7 +156,7 @@ public:
 
     /** Returns the index of an entry with the given XML-name and namespace
         If there is no matching entry the method returns -1 */
-    const sal_Int32 GetEntryIndex( sal_uInt16 nNamespace,
+    sal_Int32 GetEntryIndex( sal_uInt16 nNamespace,
                                    const ::rtl::OUString& rStrName,
                                    sal_uInt32 nPropType,
                                    sal_Int32 nStartAt = -1 ) const;

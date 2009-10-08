@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: presethandler.cxx,v $
- * $Revision: 1.17 $
+ * $Revision: 1.17.82.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -286,7 +286,6 @@ css::uno::Reference< css::embed::XStorage > PresetHandler::getOrCreateRootStorag
     // Attention: This is temp. workaround ... We create a temp. storage file
     // based of a sytem directory. This must be used so, till the storage implementation
     // can work on directories too.
-    css::uno::Reference< css::embed::XStorage > xStorage = StorageHolder::createTempStorageBasedOnFolder(sShareLayer, xSMGR, sal_False); // false => writeable
     */
     css::uno::Sequence< css::uno::Any > lArgs(2);
     lArgs[0] <<= sShareLayer;
@@ -614,33 +613,6 @@ void PresetHandler::connectToResource(      PresetHandler::EConfigType          
 }
 
 //-----------------------------------------------
-css::uno::Sequence< ::rtl::OUString > PresetHandler::getAllPresetNames() const
-{
-    // SAFE -> ----------------------------------
-    ReadGuard aReadLock(m_aLock);
-    return m_lPresets.getAsConstList();
-    // <- SAFE ----------------------------------
-}
-
-//-----------------------------------------------
-css::uno::Sequence< ::rtl::OUString > PresetHandler::getAllTargetNames() const
-{
-    // SAFE -> ----------------------------------
-    ReadGuard aReadLock(m_aLock);
-    return m_lTargets.getAsConstList();
-    // <- SAFE ----------------------------------
-}
-
-//-----------------------------------------------
-sal_Bool PresetHandler::existsPreset(const ::rtl::OUString& sPreset) const
-{
-    // SAFE -> ----------------------------------
-    ReadGuard aReadLock(m_aLock);
-    return (m_lPresets.findConst(sPreset) != m_lPresets.end());
-    // <- SAFE ----------------------------------
-}
-
-//-----------------------------------------------
 sal_Bool PresetHandler::existsTarget(const ::rtl::OUString& sTarget) const
 {
     // SAFE -> ----------------------------------
@@ -753,26 +725,6 @@ css::uno::Reference< css::io::XStream > PresetHandler::openTarget(const ::rtl::O
     xStream    = xFolder->openStreamElement(sFile, nOpenMode);
 
     return xStream;
-}
-
-//-----------------------------------------------
-void PresetHandler::removeTarget(const ::rtl::OUString& sTarget)
-{
-    // SAFE -> ----------------------------------
-    ReadGuard aReadLock(m_aLock);
-    css::uno::Reference< css::embed::XStorage > xFolder = m_xWorkingStorageUser;
-    aReadLock.unlock();
-    // <- SAFE ----------------------------------
-
-    // e.g. module without any config data ?!
-    if (!xFolder.is())
-       return;
-
-    ::rtl::OUString sFile(sTarget);
-    sFile += FILE_EXTENSION;
-
-    xFolder->removeElement(sFile);
-    commitUserChanges();
 }
 
 //-----------------------------------------------

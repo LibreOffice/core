@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: svdocapt.hxx,v $
- * $Revision: 1.4 $
+ * $Revision: 1.4.18.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -40,13 +40,9 @@
 
 class ImpCaptParams;
 
-namespace sdr
-{
-    namespace properties
-    {
-        class CaptionProperties;
-    } // end of namespace properties
-} // end of namespace sdr
+namespace sdr { namespace properties {
+    class CaptionProperties;
+}}
 
 #define SDRSETITEM_CAPTION_ATTR     SDRSETITEM_ATTR_COUNT
 
@@ -83,7 +79,7 @@ private:
     Polygon                     aTailPoly;  // das ganze Polygon des Schwanzes
     sal_Bool                    mbSpecialTextBoxShadow; // for calc special shadow, default FALSE
     sal_Bool                    mbFixedTail; // for calc note box fixed tail, default FALSE
-    Point                           maFixedTailPos; // for calc note box fixed tail position.
+    Point                       maFixedTailPos; // for calc note box fixed tail position.
 
 private:
     SVX_DLLPRIVATE void ImpGetCaptParams(ImpCaptParams& rPara) const;
@@ -116,9 +112,9 @@ public:
     virtual void TakeObjNameSingul(String& rName) const;
     virtual void TakeObjNamePlural(String& rName) const;
 
-    virtual basegfx::B2DPolyPolygon TakeXorPoly(sal_Bool bDetail) const;
+    virtual basegfx::B2DPolyPolygon TakeXorPoly() const;
     virtual void SetModel(SdrModel* pNewModel);
-    virtual void SFX_NOTIFY(SfxBroadcaster& rBC, const TypeId& rBCType, const SfxHint& rHint, const TypeId& rHintType);
+    virtual void Notify(SfxBroadcaster& rBC, const SfxHint& rHint);
 
     virtual sal_uInt32 GetHdlCount() const;
     virtual SdrHdl* GetHdl(sal_uInt32 nHdlNum) const;

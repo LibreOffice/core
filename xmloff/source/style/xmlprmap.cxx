@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: xmlprmap.cxx,v $
- * $Revision: 1.13 $
+ * $Revision: 1.13.74.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -170,7 +170,7 @@ sal_Bool XMLPropertySetMapper::importXML(
 // the index of the entry
 // If there is no matching entry the method returns -1
 //
-const sal_Int32 XMLPropertySetMapper::GetEntryIndex(
+sal_Int32 XMLPropertySetMapper::GetEntryIndex(
         sal_uInt16 nNamespace,
         const OUString& rStrName,
         sal_uInt32 nPropType,

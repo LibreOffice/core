@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: propertyids.cxx,v $
- * $Revision: 1.7 $
+ * $Revision: 1.7.56.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -72,8 +72,6 @@ namespace dbtools
         const sal_Char* getPROPERTY_PASSWORD()              { return    "Password"; }
         const sal_Char* getPROPERTY_RELATEDCOLUMN()         { return    "RelatedColumn"; }
 
-        const sal_Char* getSTAT_INVALID_INDEX()             { return    "Invalid descriptor index"; }
-
         const sal_Char* getPROPERTY_FUNCTION()              { return    "Function"; }
         const sal_Char* getPROPERTY_AGGREGATEFUNCTION()     { return    "AggregateFunction"; }
         const sal_Char* getPROPERTY_TABLENAME()             { return    "TableName"; }
@@ -102,7 +100,6 @@ namespace dbtools
     //============================================================
     //= error messages
     //============================================================
-        const sal_Char* getERRORMSG_SEQUENCE()              { return    "Function sequence error"; }
         const sal_Char* getSQLSTATE_SEQUENCE()              { return    "HY010"; }
         const sal_Char* getSTR_DELIMITER()                  { return    "/"; }
 
@@ -177,8 +174,6 @@ namespace dbtools
                 case PROPERTY_ID_DBASEPRECISIONCHANGED:     { rtl_uString_newFromAscii(&pStr,getPROPERTY_DBASEPRECISIONCHANGED()); break; }
                 case PROPERTY_ID_ISCURRENCY:                { rtl_uString_newFromAscii(&pStr,getPROPERTY_ISCURRENCY()           ); break; }
                 case PROPERTY_ID_ISBOOKMARKABLE:            { rtl_uString_newFromAscii(&pStr,getPROPERTY_ISBOOKMARKABLE()       ); break; }
-                case PROPERTY_ID_INVALID_INDEX:             { rtl_uString_newFromAscii(&pStr,getSTAT_INVALID_INDEX()            ); break; }
-                case PROPERTY_ID_ERRORMSG_SEQUENCE:         { rtl_uString_newFromAscii(&pStr,getERRORMSG_SEQUENCE()             ); break; }
                 case PROPERTY_ID_HY010:                     { rtl_uString_newFromAscii(&pStr,getSQLSTATE_SEQUENCE()             ); break; }
                 case PROPERTY_ID_DELIMITER:                 { rtl_uString_newFromAscii(&pStr,getSTR_DELIMITER()                 ); break; }
                 case PROPERTY_ID_FORMATKEY:                 { rtl_uString_newFromAscii(&pStr,getPROPERTY_FORMATKEY()            ); break; }

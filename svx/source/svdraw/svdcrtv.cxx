@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: svdcrtv.cxx,v $
- * $Revision: 1.29 $
+ * $Revision: 1.29.18.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -84,7 +84,7 @@ public:
 ImplConnectMarkerOverlay::ImplConnectMarkerOverlay(const SdrCreateView& rView, SdrObject& rObject)
 :   mrObject(rObject)
 {
-    basegfx::B2DPolyPolygon aB2DPolyPolygon(rObject.TakeXorPoly(true));
+    basegfx::B2DPolyPolygon aB2DPolyPolygon(rObject.TakeXorPoly());
 
     for(sal_uInt32 a(0L); a < rView.PaintWindowCount(); a++)
     {
@@ -291,12 +291,16 @@ void SdrCreateView::BrkAction()
 
 void SdrCreateView::TakeActionRect(Rectangle& rRect) const
 {
-    if (pAktCreate!=NULL) {
+    if (pAktCreate!=NULL)
+    {
         rRect=aDragStat.GetActionRect();
-        if (rRect.IsEmpty()) {
+        if (rRect.IsEmpty())
+        {
             rRect=Rectangle(aDragStat.GetPrev(),aDragStat.GetNow());
         }
-    } else {
+    }
+    else
+    {
         SdrDragView::TakeActionRect(rRect);
     }
 }
@@ -305,7 +309,8 @@ BOOL SdrCreateView::CheckEdgeMode()
 {
     UINT32 nInv=nAktInvent;
     UINT16 nIdn=nAktIdent;
-    if (pAktCreate!=NULL) {
+    if (pAktCreate!=NULL)
+    {
         nInv=pAktCreate->GetObjInventor();
         nIdn=pAktCreate->GetObjIdentifier();
         // wird vom EdgeObj gemanaged
@@ -388,7 +393,8 @@ BOOL SdrCreateView::IsMeasureTool() const
 
 void SdrCreateView::SetCurrentObj(UINT16 nIdent, UINT32 nInvent)
 {
-    if (nAktInvent!=nInvent || nAktIdent!=nIdent) {
+    if (nAktInvent!=nInvent || nAktIdent!=nIdent)
+    {
         nAktInvent=nInvent;
         nAktIdent=nIdent;
         SdrObject* pObj = SdrObjFactory::MakeNewObject(nInvent,nIdent,NULL,NULL);
@@ -473,7 +479,8 @@ BOOL SdrCreateView::ImpBegCreateObj(UINT32 nInvent, UINT16 nIdent, const Point& 
                                             nAktIdent!=USHORT(OBJ_FREEFILL) )) { // Kein Fang fuer Edge und Freihand!
                 aPnt=GetSnapPos(aPnt,pCreatePV);
             }
-            if (pAktCreate!=NULL) {
+            if (pAktCreate!=NULL)
+            {
                 BOOL bStartEdit=FALSE; // nach Ende von Create automatisch TextEdit starten
                 if (pDefaultStyleSheet!=NULL) pAktCreate->NbcSetStyleSheet(pDefaultStyleSheet, sal_False);
 
@@ -543,10 +550,13 @@ BOOL SdrCreateView::ImpBegCreateObj(UINT32 nInvent, UINT16 nIdent, const Point& 
                 aDragStat.SetPageView(pCreatePV);
                 aDragStat.SetMinMove(ImpGetMinMovLogic(nMinMov,pOut));
                 pDragWin=pOut;
-                if (pAktCreate->BegCreate(aDragStat)) {
+                if (pAktCreate->BegCreate(aDragStat))
+                {
                     ShowCreateObj(/*pOut,TRUE*/);
                     bRet=TRUE;
-                } else {
+                }
+                else
+                {
                     SdrObject::Free( pAktCreate );
                     pAktCreate=NULL;
                     pCreatePV=NULL;
@@ -587,10 +597,12 @@ void SdrCreateView::MovCreateObj(const Point& rPnt)
 {
     if (pAktCreate!=NULL) {
         Point aPnt(rPnt);
-        if (!aDragStat.IsNoSnap()) {
+        if (!aDragStat.IsNoSnap())
+        {
             aPnt=GetSnapPos(aPnt,pCreatePV);
         }
-        if (IsOrtho()) {
+        if (IsOrtho())
+        {
             if (aDragStat.IsOrtho8Possible()) OrthoDistance8(aDragStat.GetPrev(),aPnt,IsBigOrtho());
             else if (aDragStat.IsOrtho4Possible()) OrthoDistance4(aDragStat.GetPrev(),aPnt,IsBigOrtho());
         }
@@ -608,7 +620,8 @@ void SdrCreateView::MovCreateObj(const Point& rPnt)
 
         if (aPnt==aDragStat.GetNow()) return;
         bool bMerk(aDragStat.IsMinMoved());
-        if (aDragStat.CheckMinMoved(aPnt)) {
+        if (aDragStat.CheckMinMoved(aPnt))
+        {
             Rectangle aBound;
             if (!bMerk) aDragStat.NextPoint();
             aDragStat.NextMove(aPnt);
@@ -718,7 +731,9 @@ BOOL SdrCreateView::EndCreateObj(SdrCreateCmd eCmd)
                 nAnz==0 ||                             // keine Punkte da (kann eigentlich nicht vorkommen)
                 (nAnz<=1 && !aDragStat.IsMinMoved())) { // MinMove nicht erfuellt
                 BrkCreateObj();
-            } else {
+            }
+            else
+            {
                 // replace for DrawCreateObjDiff
                 HideCreateObj();
                 ShowCreateObj();
@@ -726,7 +741,8 @@ BOOL SdrCreateView::EndCreateObj(SdrCreateCmd eCmd)
                 bRet=TRUE;
             }
         }
-        if (bRet && pObjMerk!=NULL && IsTextEditAfterCreate()) {
+        if (bRet && pObjMerk!=NULL && IsTextEditAfterCreate())
+        {
             SdrTextObj* pText=PTR_CAST(SdrTextObj,pObjMerk);
             if (pText!=NULL && pText->IsTextFrame())
             {
@@ -739,15 +755,22 @@ BOOL SdrCreateView::EndCreateObj(SdrCreateCmd eCmd)
 
 void SdrCreateView::BckCreateObj()
 {
-    if (pAktCreate!=NULL) {
-        if (aDragStat.GetPointAnz()<=2 ) {
+    if (pAktCreate!=NULL)
+    {
+        if (aDragStat.GetPointAnz()<=2 )
+        {
             BrkCreateObj();
-        } else {
+        }
+        else
+        {
             HideCreateObj();
             aDragStat.PrevPoint();
-            if (pAktCreate->BckCreate(aDragStat)) {
+            if (pAktCreate->BckCreate(aDragStat))
+            {
                 ShowCreateObj();
-            } else {
+            }
+            else
+            {
                 BrkCreateObj();
             }
         }
@@ -897,20 +920,26 @@ BOOL SdrCreateView::SetAttributes(const SfxItemSet& rSet, BOOL bReplaceAll)
 
 SfxStyleSheet* SdrCreateView::GetStyleSheet() const // SfxStyleSheet* SdrCreateView::GetStyleSheet(BOOL& rOk) const
 {
-    if (pAktCreate!=NULL) {
+    if (pAktCreate!=NULL)
+    {
         //rOk=TRUE;
         return pAktCreate->GetStyleSheet();
-    } else {
+    }
+    else
+    {
         return SdrDragView::GetStyleSheet(); // SdrDragView::GetStyleSheet(rOk);
     }
 }
 
 BOOL SdrCreateView::SetStyleSheet(SfxStyleSheet* pStyleSheet, BOOL bDontRemoveHardAttr)
 {
-    if (pAktCreate!=NULL) {
+    if (pAktCreate!=NULL)
+    {
         pAktCreate->SetStyleSheet(pStyleSheet,bDontRemoveHardAttr);
         return TRUE;
-    } else {
+    }
+    else
+    {
         return SdrDragView::SetStyleSheet(pStyleSheet,bDontRemoveHardAttr);
     }
 }

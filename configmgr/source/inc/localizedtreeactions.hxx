@@ -42,9 +42,9 @@ class SubtreeChange;
 // Helper function to invoke the previous ones properly
 
 // convert to the given locale format, assuming the original representation was expanded
-data::TreeSegment cloneExpandedForLocale(data::TreeAccessor const & _aTree, OUString const& _sLocale);
+rtl::Reference< data::TreeSegment > cloneExpandedForLocale(sharable::TreeFragment * tree, rtl::OUString const& _sLocale);
 // convert to the given locale format, assuming the original representation was expanded
-std::auto_ptr<INode> reduceExpandedForLocale(std::auto_ptr<ISubtree> _pNode, OUString const& _sLocale);
+std::auto_ptr<INode> reduceExpandedForLocale(std::auto_ptr<ISubtree> _pNode, rtl::OUString const& _sLocale);
 
 //..........................................................................
 }   // namespace configmgr

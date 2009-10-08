@@ -62,7 +62,6 @@ namespace configmgr
     class OTreeDisposeScheduler
     {
         typedef std::multimap< TimeStamp, RequestOptions, ltTimeStamp > Agenda;
-        typedef backend::CacheController CacheManager;
 
         class Timer : public vos::OTimer
         {
@@ -82,14 +81,14 @@ namespace configmgr
     private:
         Agenda              m_aAgenda;
         vos::ORef<Timer>    m_xTimer;
-        CacheManager&       m_rTreeManager;
+        backend::CacheController&       m_rTreeManager;
 
         TimeInterval m_aCleanupDelay;
         TimeInterval m_aCleanupInterval;
     public:
     //-------- Construction and destruction -----------------------------------
         explicit
-        OTreeDisposeScheduler(CacheManager& _rTreeManager, TimeInterval const& _aCleanupDelay)
+        OTreeDisposeScheduler(backend::CacheController& _rTreeManager, TimeInterval const& _aCleanupDelay)
             : m_rTreeManager(_rTreeManager)
             , m_aCleanupDelay(_aCleanupDelay)
             , m_aCleanupInterval(_aCleanupDelay)
@@ -98,7 +97,7 @@ namespace configmgr
         }
 
         explicit
-        OTreeDisposeScheduler(CacheManager& _rTreeManager, TimeInterval const& _aCleanupDelay, TimeInterval const& _aCleanupInterval)
+        OTreeDisposeScheduler(backend::CacheController& _rTreeManager, TimeInterval const& _aCleanupDelay, TimeInterval const& _aCleanupInterval)
             : m_rTreeManager(_rTreeManager)
             , m_aCleanupDelay(_aCleanupDelay)
             , m_aCleanupInterval(_aCleanupInterval)
@@ -154,8 +153,7 @@ namespace configmgr
         // vos::OTimer
         void onTimerShot();
 
-        typedef std::pair<bool,RequestOptions> Task;
-        Task getTask(TimeStamp const& _aActualTime, TimeStamp& _aNextTime);
+        std::pair<bool,RequestOptions> getTask(TimeStamp const& _aActualTime, TimeStamp& _aNextTime);
 
         /// ensure this will execute cleanup duties for _xOptions (no later than after getCleanupDelay() has elapsed)
       //  TimeStamp fillDisposeList(CacheLoadingAccess & _aCache, DisposeList& _rList, TimeStamp const& aLimitTime)

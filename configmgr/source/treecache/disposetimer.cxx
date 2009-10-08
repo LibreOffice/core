@@ -31,8 +31,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_configmgr.hxx"
 
-#include <stdio.h>
-
+#include "datalock.hxx"
 #include "disposetimer.hxx"
 #include "cachecontroller.hxx"
 #include "configexcept.hxx"
@@ -109,11 +108,11 @@ void OTreeDisposeScheduler::stopAndClearTasks()
 }
 // -------------------------------------------------------------------------
 
-OTreeDisposeScheduler::Task OTreeDisposeScheduler::getTask(TimeStamp const& _aActualTime, TimeStamp& _rNextTime)
+std::pair<bool,RequestOptions> OTreeDisposeScheduler::getTask(TimeStamp const& _aActualTime, TimeStamp& _rNextTime)
 {
     OSL_ASSERT( _rNextTime.isNever() ); // internal contract, we set this only in the positive case
 
-    Task aTask( false, RequestOptions() );
+    std::pair<bool,RequestOptions> aTask( false, RequestOptions() );
 
     if (!m_aAgenda.empty())
     {
@@ -186,7 +185,7 @@ TimeStamp OTreeDisposeScheduler::runDisposer(TimeStamp const& _aActualTime)
 
     OSL_ASSERT(UnoApiLock::isHeld());
 
-    Task aTask = this->getTask( _aActualTime, aNextTime );
+    std::pair<bool,RequestOptions> aTask = this->getTask( _aActualTime, aNextTime );
     if (aTask.first)
     {
         RequestOptions & rTaskOptions = aTask.second;
@@ -195,12 +194,12 @@ TimeStamp OTreeDisposeScheduler::runDisposer(TimeStamp const& _aActualTime)
                         OUSTRING2ASCII(rTaskOptions.getEntity()),
                         OUSTRING2ASCII(rTaskOptions.getLocale()));
 
-        CacheManager::CacheRef aCache = m_rTreeManager.m_aCacheMap.get(rTaskOptions);
+        rtl::Reference<CacheLoadingAccess> aCache = m_rTreeManager.m_aCacheMap.get(rTaskOptions);
         if (aCache.is())
         {
             CFG_TRACE_INFO_NI("- Found matching data container (TreeInfo) - collecting data");
 
-            CacheLoadingAccess::DisposeList aDisposeList;
+            std::vector< rtl::Reference<CacheLine> > aDisposeList;
 
             TimeStamp aNextTaskTime = aCache->collectDisposeList(aDisposeList, _aActualTime, m_aCleanupDelay);
 
@@ -223,26 +222,6 @@ TimeStamp OTreeDisposeScheduler::runDisposer(TimeStamp const& _aActualTime)
                 // currently it is not possible to release options which are
                 // because it is not save to delete the info if another thread is running in
                 // a read request
-
-                /*
-
-                CFG_TRACE_INFO_NI("- Disposing last data for this options set => Removing TreeInfo" );
-
-                // get rid of it - see TreeManager::disposeOne
-                std::auto_ptr<TreeInfo> pDisposeInfo(pInfo);
-
-                m_rTreeManager.m_aTreeList.erase(xTaskOption);
-                // got it out of reachability - now dispose/notify without lock
-
-                aGuard.clear();
-                m_rTreeManager.ConfigChangeBroadcaster::disposeBroadcastHelper(pInfo->pBroadcastHelper);
-
-                OSL_ENSURE(pInfo->m_aNotificationList.empty(),
-                            "WARNING: Empty TreeInfo still has notifications registered - will be leaked");
-
-                pInfo = NULL;
-
-                */
             }
             else
                 CFG_TRACE_INFO_NI("- Currently no more cleanup tasks for this options set" );

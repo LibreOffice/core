@@ -43,26 +43,26 @@ namespace configmgr
         {
             ApiProvider& m_rProvider;
         public:
-            ReadOnlyObjectFactory(ApiProvider& rProvider,ObjectRegistryHolder pRegistry);
+            ReadOnlyObjectFactory(ApiProvider& rProvider,rtl::Reference<ObjectRegistry> pRegistry);
             ~ReadOnlyObjectFactory();
 
-            virtual NodeElement*    doCreateGroupMember(configuration::Tree const& aTree, configuration::NodeRef const& aNode, configuration::Template* pSetElementTemplate);
-            virtual TreeElement*    doCreateAccessRoot(configuration::Tree const& aTree, configuration::Template* pSetElementTemplate, vos::ORef< OOptions >const& _xOptions);
-            virtual SetElement* doCreateSetElement(configuration::ElementTree const& aTree, configuration::Template* pSetElementTemplate);
+            virtual NodeElement*    doCreateGroupMember(rtl::Reference< configuration::Tree > const& aTree, configuration::NodeRef const& aNode, configuration::Template* pSetElementTemplate);
+            virtual TreeElement*    doCreateAccessRoot(rtl::Reference< configuration::Tree > const& aTree, configuration::Template* pSetElementTemplate, vos::ORef< OOptions >const& _xOptions);
+            virtual SetElement* doCreateSetElement(rtl::Reference< configuration::ElementTree > const& aTree, configuration::Template* pSetElementTemplate);
         };
         // used to create UNO objects
         class UpdateObjectFactory : public Factory
         {
             ApiProvider& m_rProvider;
         public:
-            UpdateObjectFactory(ApiProvider& rProvider,ObjectRegistryHolder pRegistry);
+            UpdateObjectFactory(ApiProvider& rProvider,rtl::Reference<ObjectRegistry> pRegistry);
             ~UpdateObjectFactory();
 
-            virtual NodeElement*    doCreateGroupMember(configuration::Tree const& aTree, configuration::NodeRef const& aNode, configuration::Template* pSetElementTemplate);
-            virtual TreeElement*    doCreateAccessRoot(configuration::Tree const& aTree, configuration::Template* pSetElementTemplate, vos::ORef< OOptions >const& _xOptions);
-            virtual SetElement* doCreateSetElement(configuration::ElementTree const& aTree, configuration::Template* pSetElementTemplate);
+            virtual NodeElement*    doCreateGroupMember(rtl::Reference< configuration::Tree > const& aTree, configuration::NodeRef const& aNode, configuration::Template* pSetElementTemplate);
+            virtual TreeElement*    doCreateAccessRoot(rtl::Reference< configuration::Tree > const& aTree, configuration::Template* pSetElementTemplate, vos::ORef< OOptions >const& _xOptions);
+            virtual SetElement* doCreateSetElement(rtl::Reference< configuration::ElementTree > const& aTree, configuration::Template* pSetElementTemplate);
         private:
-            bool implIsReadOnly(configuration::Tree const& aTree, configuration::NodeRef const& aNode);
+            bool implIsReadOnly(rtl::Reference< configuration::Tree > const& aTree, configuration::NodeRef const& aNode);
         };
 
     }

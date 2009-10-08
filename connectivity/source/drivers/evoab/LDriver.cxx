@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: LDriver.cxx,v $
- * $Revision: 1.10 $
+ * $Revision: 1.10.42.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -41,9 +41,9 @@
 #include <com/sun/star/ucb/XCommandEnvironment.hpp>
 #include <ucbhelper/content.hxx>
 #include <tools/debug.hxx>
-#ifndef CONNECTIVITY_EVOAB_DEBUG_HELPER_HXX
+#include "resource/common_res.hrc"
+#include "resource/sharedresources.hxx"
 #include "LDebug.hxx"
-#endif
 
 using namespace osl;
 using namespace connectivity::evoab;
@@ -230,7 +230,6 @@ sal_Bool SAL_CALL OEvoabDriver::acceptsURL( const ::rtl::OUString& url )
             OSL_ASSERT( hStdout );
             sal_Char  pBuffer[256];
             sal_uInt64  nBytesRead;
-            OSL_ASSERT( pBuffer );
             oslFileError nFileErr = osl_File_E_None;
             nFileErr = osl_readFile( hStdout, pBuffer, 256, &nBytesRead);
             if ( nFileErr != osl_File_E_None )
@@ -500,6 +499,10 @@ rtl::OUString OEvoabDriver::translateFileErrorMessage( oslFileError nFileErr)
 Sequence< DriverPropertyInfo > SAL_CALL OEvoabDriver::getPropertyInfo( const ::rtl::OUString& url, const Sequence< PropertyValue >& /*info*/ ) throw(SQLException, RuntimeException)
 {
     if ( !acceptsURL(url) )
-        ::dbtools::throwGenericSQLException(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Invalid URL!")) ,*this);
+    {
+        ::connectivity::SharedResources aResources;
+        const ::rtl::OUString sMessage = aResources.getResourceString(STR_URI_SYNTAX_ERROR);
+        ::dbtools::throwGenericSQLException(sMessage ,*this);
+    } // if ( !acceptsURL(url) )
     return Sequence< DriverPropertyInfo >();
 }

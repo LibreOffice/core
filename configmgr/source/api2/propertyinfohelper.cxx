@@ -48,7 +48,7 @@ namespace configmgr
     namespace configapi
     {
 //-----------------------------------------------------------------------------
-beans::Property helperMakeProperty(configuration::Name const& aName,
+beans::Property helperMakeProperty(rtl::OUString const& aName,
                                    node::Attributes const aAttributes,
                                    uno::Type const& aType,
                                    bool bDefaultable )
@@ -65,7 +65,7 @@ beans::Property helperMakeProperty(configuration::Name const& aName,
     if ( aAttributes.isRemovable())     nPropAttributes |= PropertyAttribute::REMOVABLE;
     if ( bDefaultable)  nPropAttributes |= PropertyAttribute::MAYBEDEFAULT;
 
-    return beans::Property(aName.toString(), -1, aType, nPropAttributes);
+    return beans::Property(aName, -1, aType, nPropAttributes);
 }
 //-----------------------------------------------------------------------------
     }

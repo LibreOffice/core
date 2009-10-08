@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: def3d.hxx,v $
- * $Revision: 1.3 $
+ * $Revision: 1.3.226.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -31,8 +31,6 @@
 #ifndef _SVX_DEF3D_HXX
 #define _SVX_DEF3D_HXX
 
-class Vector3D;
-
 #ifndef _INC_MATH
 #include <math.h>
 #endif
@@ -46,9 +44,6 @@ const double EPSILON = 1e-06;
 //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 //+++ 3D-Hilfsfunktionen +++++++++++++++++++++++++++++++++++++++++++++++++
 //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-FASTBOOL Do3DEdgesIntersect(const Vector3D& rV1a, const Vector3D& rV1b,
-                            const Vector3D& rV2a, const Vector3D& rV2b);
 
 enum E3dDragConstraint { E3DDRAG_CONSTR_X   = 0x0001,
                          E3DDRAG_CONSTR_Y   = 0x0002,

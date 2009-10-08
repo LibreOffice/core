@@ -111,7 +111,7 @@ SubtreeChange::~SubtreeChange()
 }
 
 // -----------------------------------------------------------------------------
-SubtreeChange::SubtreeChange(const SubtreeChange& _aObj, DeepChildCopy)
+SubtreeChange::SubtreeChange(const SubtreeChange& _aObj, treeop::DeepChildCopy)
         :Change(_aObj),
          m_sTemplateName(_aObj.m_sTemplateName),
          m_sTemplateModule(_aObj.m_sTemplateModule),
@@ -130,12 +130,12 @@ SubtreeChange::SubtreeChange(const SubtreeChange& _aObj, DeepChildCopy)
 // -----------------------------------------------------------------------------
 std::auto_ptr<Change> SubtreeChange::clone() const
 {
-    return std::auto_ptr<Change>(new SubtreeChange(*this, DeepChildCopy()));
+    return std::auto_ptr<Change>(new SubtreeChange(*this, treeop::DeepChildCopy()));
 }
 //--------------------------------------------------------------------------
 void SubtreeChange::addChange(std::auto_ptr<Change> aChange)
 {
-    OUString aNodeName(aChange->getNodeName());
+    rtl::OUString aNodeName(aChange->getNodeName());
     m_aChanges.find(aNodeName);
     OSL_ENSURE(m_aChanges.end() == m_aChanges.find(aNodeName),
         "SubtreeChange::addChange : overwriting an existent change !");
@@ -144,7 +144,7 @@ void SubtreeChange::addChange(std::auto_ptr<Change> aChange)
 }
 
 //--------------------------------------------------------------------------
-::std::auto_ptr<Change> SubtreeChange::removeChange(OUString const& _rName)
+::std::auto_ptr<Change> SubtreeChange::removeChange(rtl::OUString const& _rName)
 {
     Children::iterator aIter = m_aChanges.find(_rName);
 
@@ -158,13 +158,13 @@ void SubtreeChange::addChange(std::auto_ptr<Change> aChange)
 }
 
 //--------------------------------------------------------------------------
-Change* SubtreeChange::getChange(OUString const& _rName)
+Change* SubtreeChange::getChange(rtl::OUString const& _rName)
 {
     return doGetChild(_rName);
 }
 
 //--------------------------------------------------------------------------
-Change const* SubtreeChange::getChange(OUString const& _rName) const
+Change const* SubtreeChange::getChange(rtl::OUString const& _rName) const
 {
     return doGetChild(_rName);
 }
@@ -202,17 +202,17 @@ void SubtreeChange::forEachChange(ChangeTreeModification& _anAction)
 }
 
 //--------------------------------------------------------------------------
-Change* SubtreeChange::doGetChild(OUString const& _rName) const
+Change* SubtreeChange::doGetChild(rtl::OUString const& _rName) const
 {
     Children::const_iterator aIter = m_aChanges.find(_rName);
     return (aIter != m_aChanges.end()) ? aIter->second : NULL;
 }
 
 //--------------------------------------------------------------------------
-uno::Sequence< OUString > SubtreeChange::elementNames() const
+uno::Sequence< rtl::OUString > SubtreeChange::elementNames() const
 {
-    uno::Sequence< OUString > aReturn(size());
-    OUString* pReturn = aReturn.getArray();
+    uno::Sequence< rtl::OUString > aReturn(size());
+    rtl::OUString* pReturn = aReturn.getArray();
 
     for (   Children::const_iterator aCollector = m_aChanges.begin();
             aCollector != m_aChanges.end();
@@ -314,21 +314,19 @@ bool operator==(SubtreeChange::ChildIterator const& lhs, SubtreeChange::ChildIte
 //==========================================================================
 //--------------------------------------------------------------------------
 SubtreeChangeReferrer::SubtreeChangeReferrer(const SubtreeChange& _rSource)
-    :SubtreeChange(_rSource, SubtreeChange::NoChildCopy())
+    :SubtreeChange(_rSource, treeop::NoChildCopy())
 {
     ChildIterator aSourceChildren = _rSource.begin();
     while (aSourceChildren != _rSource.end())
     {
         const Change* pChange = &*aSourceChildren;
         OSL_ENSURE(pChange, "SubtreeChangeReferrer::SubtreeChangeReferrer : invalid change !");
-        if  (   pChange->isA(ValueChange::getStaticType())
-            ||  pChange->isA(RemoveNode::getStaticType())
-            ||  pChange->isA(AddNode::getStaticType())
-            )
+        if  (dynamic_cast< ValueChange const * >(pChange) != 0 ||
+             dynamic_cast< RemoveNode const * >(pChange) != 0 ||
+             dynamic_cast< AddNode const * >(pChange) != 0)
             SubtreeChange::addChange(::std::auto_ptr<Change>(const_cast<Change*>(pChange)));
-        else if (   pChange->isA(SubtreeChange::getStaticType())
-                ||  pChange->isA(SubtreeChangeReferrer::getStaticType())
-                )
+        else if (dynamic_cast< SubtreeChange const * >(pChange) != 0 ||
+                 dynamic_cast< SubtreeChangeReferrer const * >(pChange) != 0)
         {
             SubtreeChange::addChange(::std::auto_ptr<Change>(new SubtreeChangeReferrer(*static_cast<const SubtreeChange*>(pChange))));
         }
@@ -350,17 +348,15 @@ SubtreeChangeReferrer::~SubtreeChangeReferrer()
         const Change* pChange = aChildren->second;
         Children::iterator aCurrent = aChildren++;
 
-        if  (   pChange->isA(ValueChange::getStaticType())
-            ||  pChange->isA(RemoveNode::getStaticType())
-            ||  pChange->isA(AddNode::getStaticType())
-            )
+        if  (dynamic_cast< ValueChange const * >(pChange) != 0 ||
+             dynamic_cast< RemoveNode const * >(pChange) != 0 ||
+             dynamic_cast< AddNode const * >(pChange) != 0)
         {
             // we just hold references to the non-SubtreeChange-objects, so don't delete them
             m_aChanges.erase(aCurrent);
         }
-        else if (   pChange->isA(SubtreeChange::getStaticType())
-                ||  pChange->isA(SubtreeChangeReferrer::getStaticType())
-                )
+        else if (dynamic_cast< SubtreeChange const * >(pChange) != 0 ||
+                 dynamic_cast< SubtreeChangeReferrer const * >(pChange) != 0)
         {
             // nothing to do
         }

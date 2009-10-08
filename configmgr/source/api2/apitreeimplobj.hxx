@@ -37,6 +37,7 @@
 #include "confevents.hxx"
 #include "options.hxx"
 #include "utility.hxx"
+#include <boost/utility.hpp>
 #include <vos/ref.hxx>
 #include <rtl/ref.hxx>
 #include <osl/mutex.hxx>
@@ -63,20 +64,12 @@ namespace configmgr
         class Factory;
         class Notifier;
         class NotifierImpl;
-        typedef vos::ORef<NotifierImpl> NotifierImplHolder;
 //-----------------------------------------------------------------------------
         class ObjectRegistry;
-        typedef rtl::Reference<ObjectRegistry> ObjectRegistryHolder;
-
-        typedef uno::XInterface UnoInterface;
-        typedef uno::Reference<UnoInterface> UnoInterfaceRef;
-        typedef uno::Reference<com::sun::star::script::XTypeConverter>  UnoTypeConverter;
-
-        typedef vos::ORef< OOptions > TreeOptions;
 //-----------------------------------------------------------------------------
 // API object implementation wrappers
 //-------------------------------------------------------------------------
-        class ApiProvider : Noncopyable
+        class ApiProvider: private boost::noncopyable
         {
             Factory&                    m_rFactory;
             OProviderImpl&              m_rProviderImpl;
@@ -86,7 +79,7 @@ namespace configmgr
             ~ApiProvider()
             {}
 
-            UnoTypeConverter            getTypeConverter() const;
+            uno::Reference<com::sun::star::script::XTypeConverter>          getTypeConverter() const;
             Factory&                    getFactory()        { return m_rFactory; }
             OProviderImpl&              getProviderImpl()   { return m_rProviderImpl; }
         };
@@ -94,53 +87,48 @@ namespace configmgr
     //-----------------------------------------------------------------------------
 
     //-------------------------------------------------------------------------
-        class ApiTreeImpl : Noncopyable
+        class ApiTreeImpl: private boost::noncopyable
         {
             class ComponentAdapter;
-            typedef uno::Reference<ComponentAdapter> ComponentRef;
-            typedef uno::Reference<com::sun::star::lang::XComponent> UnoComponent;
 
-            typedef configuration::TreeRef TreeRef;
-            typedef configuration::DefaultProvider DefaultProvider;
-
-            TreeRef             m_aTree;
-            NotifierImplHolder  m_aNotifier;
-            DefaultProvider     m_aDefaultProvider;
-            ComponentRef        m_xProvider;
+            rtl::Reference< configuration::Tree > m_aTree;
+            vos::ORef<NotifierImpl> m_aNotifier;
+            configuration::DefaultProvider     m_aDefaultProvider;
+            uno::Reference<ComponentAdapter>        m_xProvider;
             ApiProvider&        m_rProvider;
             ApiTreeImpl*        m_pParentTree;
-            UnoInterface*       m_pInstance;
+            uno::XInterface*        m_pInstance;
 
         public:
-            explicit ApiTreeImpl(UnoInterface* pInstance, configuration::TreeRef const& aTree, ApiTreeImpl& rParentTree);
-            explicit ApiTreeImpl(UnoInterface* pInstance, ApiProvider& rProvider, configuration::TreeRef const& aTree, ApiTreeImpl* pParentTree);
-            explicit ApiTreeImpl(UnoInterface* _pInstance, ApiProvider& _rProvider, configuration::TreeRef const& _aTree, DefaultProvider const & _aDefaultProvider);
+            explicit ApiTreeImpl(uno::XInterface* pInstance, rtl::Reference< configuration::Tree > const& aTree, ApiTreeImpl& rParentTree);
+            explicit ApiTreeImpl(uno::XInterface* pInstance, ApiProvider& rProvider, rtl::Reference< configuration::Tree > const& aTree, ApiTreeImpl* pParentTree);
+            explicit ApiTreeImpl(uno::XInterface* _pInstance, ApiProvider& _rProvider, rtl::Reference< configuration::Tree > const& _aTree, configuration::DefaultProvider const & _aDefaultProvider);
             ~ApiTreeImpl();
 
         // initialization
-            void setNodeInstance(configuration::NodeRef const& aNode, UnoInterface* pInstance);
+            void setNodeInstance(configuration::NodeRef const& aNode, uno::XInterface* pInstance);
 
         // model access
-            TreeRef getTree() const { return m_aTree; }
+            rtl::Reference< configuration::Tree > getTree() const { return m_aTree; }
 
         // self-locked methods for dispose handling
             bool isAlive()  const;
             void checkAlive()   const;
             bool disposeTree(bool bForce);
             bool disposeTreeNow();
-            void disposeNode(configuration::NodeRef const& aNode, UnoInterface* pInstance);
+            void disposeNode(configuration::NodeRef const& aNode, uno::XInterface* pInstance);
 
         // api object handling
             Factory&                    getFactory()    const   { return m_rProvider.getFactory(); }
             Notifier                    getNotifier()   const;
-            DefaultProvider             getDefaultProvider()    const { return m_aDefaultProvider; }
+            configuration::DefaultProvider              getDefaultProvider()    const { return m_aDefaultProvider; }
 
         // needs external locking
             ApiTreeImpl const*          getRootTreeImpl() const;
 
             uno::XInterface*            getUnoInstance() const  { return m_pInstance; }
             ApiProvider&                getProvider()           { return m_rProvider; }
-            UnoInterfaceRef             getUnoProviderInstance() const; //  { return m_xProvider; }
+            uno::Reference<uno::XInterface>             getUnoProviderInstance() const; //  { return m_xProvider; }
 
             /// wire this to a new parent tree
             void                        haveNewParent(ApiTreeImpl* pNewParent);
@@ -150,30 +138,27 @@ namespace configmgr
             void deinit();
 
             bool implDisposeTree();
-            void implDisposeNode(configuration::NodeRef const& aNode, UnoInterface* pInstance);
+            void implDisposeNode(configuration::NodeRef const& aNode, uno::XInterface* pInstance);
 
             friend class ComponentAdapter;
             void disposing(com::sun::star::lang::EventObject const& rEvt) throw();
-            UnoComponent getProviderComponent();
-            UnoComponent getParentComponent();
+            uno::Reference<com::sun::star::lang::XComponent> getProviderComponent();
+            uno::Reference<com::sun::star::lang::XComponent> getParentComponent();
 
         };
 
     //-----------------------------------------------------------------------------
         class ApiRootTreeImpl
         {
-            typedef configuration::AbsolutePath AbsolutePath;
-            typedef configuration::DefaultProvider DefaultProvider;
-
         public:
-            explicit ApiRootTreeImpl(UnoInterface* pInstance, ApiProvider& rProvider, configuration::Tree const& aTree, TreeOptions const& _xOptions);
+            explicit ApiRootTreeImpl(uno::XInterface* pInstance, ApiProvider& rProvider, rtl::Reference< configuration::Tree > const& aTree, vos::ORef< OOptions > const& _xOptions);
             ~ApiRootTreeImpl();
 
             ApiTreeImpl& getApiTree() { return m_aTreeImpl; }
             ApiTreeImpl const& getApiTree() const { return m_aTreeImpl; }
 
-            AbsolutePath const & getLocation() const { return m_aLocationPath; }
-            TreeOptions getOptions() const { return m_xOptions; }
+            configuration::AbsolutePath const & getLocation() const { return m_aLocationPath; }
+            vos::ORef< OOptions > getOptions() const { return m_xOptions; }
 
         // self-locked methods for dispose handling
             bool disposeTree();
@@ -181,26 +166,25 @@ namespace configmgr
             /// toggle whether this object relays notifications from the base provider
             bool enableNotification(bool bEnable);
         private:
-            IConfigBroadcaster* implSetNotificationSource(IConfigBroadcaster* pNew);
-            void implSetLocation(configuration::Tree const& _aTree);
+            TreeManager * implSetNotificationSource(TreeManager * pNew);
+            void implSetLocation(rtl::Reference< configuration::Tree > const& _aTree);
             void releaseData();
 
         private:
             class NodeListener;
             friend class NodeListener;
-            //IConfigBroadcaster*   m_pNotificationSource;
 
         // IConfigListener
-            void disposing(IConfigBroadcaster* pSource) ;
+            void disposing(TreeManager * pSource) ;
         //INodeListener : IConfigListener
-            void nodeChanged(Change const& aChange, AbsolutePath const& aPath, IConfigBroadcaster* pSource);
-            void nodeDeleted(AbsolutePath const& aPath, IConfigBroadcaster* pSource);
+            void nodeChanged(Change const& aChange, configuration::AbsolutePath const& aPath, TreeManager * pSource);
+            void nodeDeleted(configuration::AbsolutePath const& aPath, TreeManager * pSource);
 
         private:
             ApiTreeImpl                 m_aTreeImpl;
-            AbsolutePath                m_aLocationPath;
+            configuration::AbsolutePath             m_aLocationPath;
             rtl::Reference<NodeListener> m_pNotificationListener;
-            TreeOptions m_xOptions;
+            vos::ORef< OOptions > m_xOptions;
         };
 //-----------------------------------------------------------------------------
     }

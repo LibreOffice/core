@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: prnmon.cxx,v $
- * $Revision: 1.25 $
+ * $Revision: 1.25.46.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -113,17 +113,10 @@ public:
     SfxViewShell*           GetViewShell() const { return pViewShell; }
     BOOL                    SetPage( USHORT nPage, const String &rPage );
     void                    CreateMonitor();
-    virtual void            SFX_NOTIFY( SfxBroadcaster& rBC,
-                                        const TypeId& rBCType,
-                                        const SfxHint& rHint,
-                                        const TypeId& rHintType );
+    virtual void            Notify( SfxBroadcaster& rBC, const SfxHint& rHint );
 };
 
-void SfxPrintProgress_Impl::SFX_NOTIFY(
-    SfxBroadcaster& /*rBC*/,
-    const TypeId& rBCType,
-    const SfxHint& rHint,
-    const TypeId& rHintType )
+void SfxPrintProgress_Impl::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint )
 {
     SfxPrintingHint* pPrintHint = PTR_CAST( SfxPrintingHint, &rHint );
     if ( pPrintHint )
@@ -247,7 +240,7 @@ BOOL SfxPrintProgress_Impl::SetPage( USHORT nPage, const String &rPage )
 
 IMPL_LINK( SfxPrintProgress_Impl, CancelHdl, Button *, EMPTYARG )
 {
-    if ( !pViewShell->GetPrinter()->IsJobActive() )
+    if ( !pViewShell->GetPrinter()->IsJobActive() && pViewShell->GetPrinter()->IsPrinting() )
         // we are still in StartJob, cancelling now might lead to a crash
         return 0;
 

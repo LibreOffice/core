@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: MacabDriver.cxx,v $
- * $Revision: 1.4 $
+ * $Revision: 1.4.56.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -41,6 +41,7 @@
 /** === end UNO includes === **/
 #include <rtl/ustrbuf.hxx>
 #include <tools/diagnose_ex.h>
+#include "resource/macab_res.hrc"
 
 using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;
@@ -144,7 +145,11 @@ void MacabImplModule::init()
 // --------------------------------------------------------------------------------
 void MacabImplModule::impl_throwNoMacOSException()
 {
-    impl_throwGenericSQLException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "No suitable Mac OS installation was found." ) ) );
+    ::connectivity::SharedResources aResources;
+    const ::rtl::OUString sError( aResources.getResourceString(
+            STR_NO_MAC_OS_FOUND
+         ) );
+    impl_throwGenericSQLException( sError );
 }
 
 // --------------------------------------------------------------------------------

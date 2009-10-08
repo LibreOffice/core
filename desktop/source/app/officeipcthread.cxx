@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: officeipcthread.cxx,v $
- * $Revision: 1.62 $
+ * $Revision: 1.62.44.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -885,7 +885,7 @@ void SAL_CALL OfficeIPCThread::run()
             nBytes = 0;
             while (
                    (nResult = maStreamPipe.send(sc_aConfirmationSequence+nBytes, sc_nCSeqLength-nBytes))>0 &&
-                   ((nBytes += nResult) < sc_nCSeqLength) );
+                   ((nBytes += nResult) < sc_nCSeqLength) ) ;
             // now we can close, don't we?
             // maStreamPipe.close();
 

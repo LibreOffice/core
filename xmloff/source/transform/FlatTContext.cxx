@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: FlatTContext.cxx,v $
- * $Revision: 1.6 $
+ * $Revision: 1.6.56.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -52,27 +52,9 @@ XMLPersTextContentTContext::XMLPersTextContentTContext(
 XMLPersTextContentTContext::XMLPersTextContentTContext(
         XMLTransformerBase& rImp,
         const OUString& rQName,
-       sal_uInt16 nActionMap ) :
-    XMLPersAttrListTContext( rImp, rQName, nActionMap )
-{
-}
-
-XMLPersTextContentTContext::XMLPersTextContentTContext(
-        XMLTransformerBase& rImp,
-        const OUString& rQName,
         sal_uInt16 nPrefix,
         ::xmloff::token::XMLTokenEnum eToken ) :
     XMLPersAttrListTContext( rImp, rQName, nPrefix, eToken )
-{
-}
-
-XMLPersTextContentTContext::XMLPersTextContentTContext(
-        XMLTransformerBase& rImp,
-        const OUString& rQName,
-        sal_uInt16 nPrefix,
-        ::xmloff::token::XMLTokenEnum eToken,
-       sal_uInt16 nActionMap ) :
-    XMLPersAttrListTContext( rImp, rQName, nPrefix, eToken, nActionMap )
 {
 }
 

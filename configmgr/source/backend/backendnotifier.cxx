@@ -65,7 +65,7 @@ void SAL_CALL BackendChangeNotifier::componentDataChanged(const backenduno::Comp
    throw (::com::sun::star::uno::RuntimeException)
 {
     rtl::OUString aComponentName = _aEvent.Component;
-    ListenerList::iterator aIter =  m_aListeners.find(aComponentName);
+    std::map<rtl::OUString, ComponentNotifier>::iterator aIter =    m_aListeners.find(aComponentName);
     if(aIter != m_aListeners.end())
     {
         aIter->second.notifyListeners(aComponentName);
@@ -83,17 +83,17 @@ throw (uno::RuntimeException)
     m_aListeners.clear();
 }
 // -----------------------------------------------------------------------------
-void BackendChangeNotifier::addListener(INodeDataListener * _xListener,  const ComponentRequest& _aRequest) CFG_NOTHROW()
+void BackendChangeNotifier::addListener(INodeDataListener * _xListener,  const ComponentRequest& _aRequest) SAL_THROW(())
 {
     osl::MutexGuard aListGuard(m_aMutex);
 
     OSL_PRECOND(_xListener, "ERROR: trying to register a NULL listener");
     ComponentListener aComponentListener(_xListener, _aRequest.getOptions());
 
-    const rtl::OUString aComponentName = _aRequest.getComponentName().toString() ;
+    const rtl::OUString aComponentName = _aRequest.getComponentName();
 
     //Check if we have a Listener registered for that Component
-    ListenerList::iterator aIter;
+    std::map<rtl::OUString, ComponentNotifier>::iterator aIter;
     aIter = m_aListeners.find(aComponentName);
     if (aIter == m_aListeners.end())
     {
@@ -117,15 +117,15 @@ void BackendChangeNotifier::addListener(INodeDataListener * _xListener,  const C
 }
 // ---------------------------------------------------------------------------
 
-void BackendChangeNotifier::removeListener(INodeDataListener * _xListener, const ComponentRequest& _aRequest) CFG_NOTHROW()
+void BackendChangeNotifier::removeListener(INodeDataListener * _xListener, const ComponentRequest& _aRequest) SAL_THROW(())
 {
     osl::MutexGuard aListGuard(m_aMutex);
     OSL_PRECOND(!m_aListeners.empty(),
         "BackendChangeNotifier:Cannot Remove Listener, no Listeners Registered");
     OSL_PRECOND(_xListener, "ERROR: trying to remove a NULL listener");
 
-    ListenerList::iterator aIter;
-    rtl::OUString aComponentName = _aRequest.getComponentName().toString() ;
+    std::map<rtl::OUString, ComponentNotifier>::iterator aIter;
+    rtl::OUString aComponentName = _aRequest.getComponentName();
 
     aIter = m_aListeners.find(aComponentName);
     if (aIter == m_aListeners.end())
@@ -185,9 +185,7 @@ void ComponentNotifier::notifyListeners(const rtl::OUString& _aComponent)
     for( std::list<ComponentListener>::iterator aIter = m_aListenerList.begin();
         aIter != m_aListenerList.end(); aIter++)
     {
-        ComponentRequest aRequest( configuration::makeName
-                                 (_aComponent,configuration::Name::NoValidate()),
-                                 (*aIter).m_aOptions );
+        ComponentRequest aRequest(_aComponent, (*aIter).m_aOptions);
 
         (*aIter).m_aListener->dataChanged(aRequest);
     }

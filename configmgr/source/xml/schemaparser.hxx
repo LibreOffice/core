@@ -53,7 +53,6 @@ namespace configmgr
         class SchemaParser :    public BasicParser
         {
         public:
-            typedef uno::Reference< backenduno::XSchemaHandler > HandlerRef;
             enum Select {
                 selectNone = 0,
                 selectComponent = 0x01,
@@ -62,7 +61,7 @@ namespace configmgr
             };
 
         public:
-            SchemaParser(Context const & _xContext, HandlerRef const & _xHandler, Select _selector);
+            SchemaParser(uno::Reference< uno::XComponentContext > const & _xContext, uno::Reference< backenduno::XSchemaHandler > const & _xHandler, Select _selector);
             virtual ~SchemaParser();
 
         // XDocumentHandler
@@ -75,11 +74,11 @@ namespace configmgr
                 endDocument(  ) throw (sax::SAXException, uno::RuntimeException);
 
             virtual void SAL_CALL
-                startElement( const OUString& aName, const uno::Reference< sax::XAttributeList >& xAttribs )
+                startElement( const rtl::OUString& aName, const uno::Reference< sax::XAttributeList >& xAttribs )
                     throw (sax::SAXException, uno::RuntimeException);
 
             virtual void SAL_CALL
-                endElement( const OUString& aName )
+                endElement( const rtl::OUString& aName )
                     throw (sax::SAXException, uno::RuntimeException);
 
         private:
@@ -119,8 +118,8 @@ namespace configmgr
             bool isSelected()   const { return m_selected != selectNone; }
             bool select(Select _select);
         private:
-            HandlerRef  m_xHandler;
-            OUString    m_sComponent;
+            uno::Reference< backenduno::XSchemaHandler >  m_xHandler;
+            rtl::OUString    m_sComponent;
             Select      m_selector;
             Select      m_selected;
         };

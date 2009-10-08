@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: storageholder.hxx,v $
- * $Revision: 1.5 $
+ * $Revision: 1.5.82.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -207,13 +207,6 @@ class StorageHolder : private ThreadHelpBase // attention! Must be the first bas
         /** @short  TODO
          */
         virtual void operator=(const StorageHolder& rCopy);
-
-        //---------------------------------------
-        /** @short  TODO
-         */
-        static css::uno::Reference< css::embed::XStorage > createTempStorageBasedOnFolder(const ::rtl::OUString&                                        sFolder  ,
-                                                                                          const css::uno::Reference< css::lang::XMultiServiceFactory >& xSMGR    ,
-                                                                                                sal_Bool                                                bReadOnly);
 
         //---------------------------------------
         /** @short  opens a sub element of the specified base storage.

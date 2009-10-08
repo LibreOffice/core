@@ -47,25 +47,19 @@ namespace configmgr
         class BackendFactory
         {
         public:
-            typedef com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext >
-                CreationContext;
-
-            typedef com::sun::star::uno::Reference< com::sun::star::configuration::backend::XBackend >
-                UnoBackend;
-
             rtl::Reference<IMergedDataProvider> createBackend();
 
-            UnoBackend getUnoBackend();
+            com::sun::star::uno::Reference< com::sun::star::configuration::backend::XBackend > getUnoBackend();
 
-            static BackendFactory instance(CreationContext const & _xCtx);
+            static BackendFactory instance(com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext > const & _xCtx);
 
         private:
             explicit
-            BackendFactory(CreationContext const & _xCtx)
+            BackendFactory(com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext > const & _xCtx)
             : m_xCtx(_xCtx)
             {}
 
-            CreationContext m_xCtx;
+            com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext > m_xCtx;
         };
 //-----------------------------------------------------------------------------
     }

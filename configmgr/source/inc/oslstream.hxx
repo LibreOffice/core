@@ -48,13 +48,9 @@ namespace configmgr
     namespace stario    = ::com::sun::star::io;
     namespace staruno   = ::com::sun::star::uno;
 
-    using rtl::OUString;
-
 // -----------------------------------------------------------------------------
-    typedef ::cppu::WeakImplHelper1<stario::XInputStream> InputStreamWrapper_Base;
-
     /// OSLInputStreamWrapper - implementation of XInputStream on an (unbuffered) osl::File
-    class OSLInputStreamWrapper : public InputStreamWrapper_Base
+    class OSLInputStreamWrapper : public ::cppu::WeakImplHelper1<stario::XInputStream>
     {
         ::osl::Mutex      m_aMutex;
         ::osl::File*    m_pFile;
@@ -85,10 +81,8 @@ namespace configmgr
     };
 
 // -----------------------------------------------------------------------------
-    typedef ::cppu::WeakImplHelper1<stario::XOutputStream> OutputStreamWrapper_Base;
-
     /// OSLOutputStreamWrapper - implementation of XOutputStream on an (unbuffered) osl::File
-    class OSLOutputStreamWrapper : public OutputStreamWrapper_Base
+    class OSLOutputStreamWrapper : public ::cppu::WeakImplHelper1<stario::XOutputStream>
     {
         ::osl::Mutex      m_aMutex;
         ::osl::File&        rFile;
@@ -109,7 +103,7 @@ namespace configmgr
     };
 // -----------------------------------------------------------------------------
     /// BufferedFileOutputStream - buffered implementation of XOutputStream on an osl::File
-    class BufferedFileOutputStream: public OutputStreamWrapper_Base
+    class BufferedFileOutputStream: public ::cppu::WeakImplHelper1<stario::XOutputStream>
     {
         BufferedOutputFile  m_aFile;
 

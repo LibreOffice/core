@@ -31,7 +31,6 @@
 #ifndef INCLUDED_SHARABLE_TREEFRAGMENT_HXX
 #define INCLUDED_SHARABLE_TREEFRAGMENT_HXX
 
-#include "types.hxx"
 #include "flags.hxx"
 #include "node.hxx"
 
@@ -41,26 +40,24 @@ namespace configmgr
     namespace sharable
     {
     //-----------------------------------------------------------------------------
-        namespace State = data::State;
-    //-----------------------------------------------------------------------------
     /* a TreeFragment header is interpreted differently, depending on the kind of TreeFragment
 
          - for a set element
-             name points to the element name (the Name in the root node is the template name)
+             name points to the element name (the name in the root node is the template name)
              parent  points to the SetNode that is the parent. The containing treefragment can
                      be recovered from this with some care
              next points to the next element of the same set. It is null for the last element.
              state is fully used here
 
          - for a template tree
-             name points to the template name (same as the Name in the root node)
+             name points to the template name (same as the name in the root node)
              component points to the home component name of the template
                         (often the same as 'component' in the component tree)
              next points to another template TreeFragment. It is null for the last template.
              state must be 'replaced' here (rarely it might be marked as mandatory)
 
          - for a component tree
-             name points to the component name (same as the Name in the root node)
+             name points to the component name (same as the name in the root node)
              component is equal to name (or NULL ?)
              next points to another template TreeFragment. It is null if there is no template.
              state must be either 'defaulted' or 'merged'
@@ -69,14 +66,14 @@ namespace configmgr
         struct TreeFragmentHeader
         {
             struct TreeFragment *next;       // next sibling set element or template
-            String               name;       // element-name/template name
+            rtl_uString *               name;       // element-name/template name
             union // context
             {
                 union Node *parent;          // parent node
-                String      component;       // component name
+                rtl_uString *      component;       // component name
             };
-            Offset               count;      // number of contained nodes
-            State::Field         state;
+            sal_uInt16               count;      // number of contained nodes
+            sal_uInt8         state;
             sal_uInt8            reserved;
        };
     //-----------------------------------------------------------------------------
@@ -125,7 +122,12 @@ namespace configmgr
             bool isNamed(rtl::OUString const & _aName) const;
 
             rtl::OUString               getName() const;
+
+            void setName(rtl::OUString const & name);
+
             configmgr::node::Attributes getAttributes()const;
+
+            Node * getRootNode() { return nodes; }
 
             static TreeFragment *allocate(sal_uInt32 nFragments);
             static void free_shallow( TreeFragment *pFragment );
@@ -133,9 +135,6 @@ namespace configmgr
     //-----------------------------------------------------------------------------
 
     }
-  namespace data {
-    typedef sharable::TreeFragment * TreeAddress;
-  }
 //-----------------------------------------------------------------------------
 }
 

@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: conn_shared_res.hrc,v $
- * $Revision: 1.5 $
+ * $Revision: 1.5.56.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -43,6 +43,29 @@
 // Spreadsheet driver resource ids
 #define STR_CALC_BASE                   1300
 
+// DBase driver resource ids
+#define STR_DBASE_BASE                  1400
+
+// ADO driver resource ids
+#define STR_ADO_BASE                    1450
+
+// EVOAB2 driver resource ids
+#define STR_EVOAB2_BASE                 1500
+
+// FILE driver resource ids
+#define STR_FILE_BASE                   1550
+
+// KAB driver resource ids
+#define STR_KAB_BASE                    1600
+
+// MACAB driver resource ids
+#define STR_MACAB_BASE                  1650
+
+// Adabas D driver resource ids
+#define STR_ADABAS_BASE                 1700
+
+// hsqldb driver resource ids
+#define STR_HSQLDB_BASE                 1750
 // ============================================================================
 // = resource ids for log messages
 #define STR_LOG_MESSAGE_BASE            10000

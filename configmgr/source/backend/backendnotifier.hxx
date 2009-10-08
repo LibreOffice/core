@@ -56,7 +56,7 @@ namespace configmgr
     namespace lang      = ::com::sun::star::lang;
     namespace backenduno = ::com::sun::star::configuration::backend;
 // ---------------------------------------------------------------------------
-    typedef struct ComponentListener
+    struct ComponentListener
     {
         explicit
         ComponentListener(INodeDataListener * _xListener, RequestOptions _aOptions):
@@ -72,7 +72,7 @@ namespace configmgr
         }
         INodeDataListener * m_aListener;
         RequestOptions m_aOptions;
-    } aComponentListener;
+    };
 
     /** Class used to store ComponentListener(listener and options)
     */
@@ -88,10 +88,9 @@ namespace configmgr
         std::list<ComponentListener> m_aListenerList;
     };
     // ---------------------------------------------------------------------------
-    typedef ::cppu::WeakImplHelper1<backenduno::XBackendChangesListener> BackendListener_Base;
     /** Interface providing a multicasting service for changes in the backend
      */
-    class BackendChangeNotifier :public BackendListener_Base
+    class BackendChangeNotifier :public cppu::WeakImplHelper1<backenduno::XBackendChangesListener>
     {
     public:
         BackendChangeNotifier(const uno::Reference<backenduno::XBackend>& _xBackend);
@@ -104,13 +103,12 @@ namespace configmgr
             throw (uno::RuntimeException);
       // notification support.
         /// register a listener for observing changes to the cached data
-        void addListener(INodeDataListener * _xListener, const ComponentRequest& _aRequest) CFG_NOTHROW();
+        void addListener(INodeDataListener * _xListener, const ComponentRequest& _aRequest) SAL_THROW(());
         /// unregister a listener previously registered
-        void removeListener(INodeDataListener * _xListener, const ComponentRequest& _aRequest) CFG_NOTHROW();
+        void removeListener(INodeDataListener * _xListener, const ComponentRequest& _aRequest) SAL_THROW(());
     private:
-        typedef std::map<rtl::OUString, ComponentNotifier> ListenerList;
         osl::Mutex   m_aMutex;
-        ListenerList m_aListeners;
+        std::map<rtl::OUString, ComponentNotifier> m_aListeners;
 
         /** Backend being accessed */
         uno::Reference<backenduno::XBackendChangesNotifier> m_aBackend ;

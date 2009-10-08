@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: MacabPreparedStatement.cxx,v $
- * $Revision: 1.3 $
+ * $Revision: 1.3.56.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -35,6 +35,8 @@
 #include "MacabAddressBook.hxx"
 #include "propertyids.hxx"
 #include <connectivity/dbexception.hxx>
+#include "resource/macab_res.hrc"
+#include "resource/sharedresources.hxx"
 
 using namespace connectivity::macab;
 using namespace com::sun::star::uno;
@@ -50,10 +52,7 @@ void MacabPreparedStatement::checkAndResizeParameters(sal_Int32 nParams) throw(S
         m_aParameterRow = new OValueVector();
 
     if (nParams < 1)
-        ::dbtools::throwSQLException(
-            "SQL statement parameters are numbered starting at 1.",
-            ::dbtools::SQL_INVALID_DESCRIPTOR_INDEX,
-            *(MacabPreparedStatement *) this);
+        ::dbtools::throwInvalidIndexException(*(MacabPreparedStatement *) this,Any());
 
     if (nParams >= (sal_Int32) (*m_aParameterRow).size())
         (*m_aParameterRow).resize(nParams);
@@ -66,9 +65,11 @@ void MacabPreparedStatement::setMacabFields() const throw(SQLException)
     xColumns = m_aSQLIterator.getSelectColumns();
     if (!xColumns.isValid())
     {
-        ::dbtools::throwGenericSQLException(
-            ::rtl::OUString::createFromAscii("Invalid selection of columns"),
-            NULL);
+        ::connectivity::SharedResources aResources;
+        const ::rtl::OUString sError( aResources.getResourceString(
+                STR_INVALID_COLUMN_SELECTION
+             ) );
+        ::dbtools::throwGenericSQLException(sError,NULL);
     }
     m_xMetaData->setMacabFields(xColumns);
 }
@@ -81,10 +82,13 @@ void MacabPreparedStatement::resetParameters() const throw(SQLException)
 void MacabPreparedStatement::getNextParameter(::rtl::OUString &rParameter) const throw(SQLException)
 {
     if (m_nParameterIndex >= (sal_Int32) (*m_aParameterRow).size())
-        ::dbtools::throwSQLException(
-            "More parameters in SQL statement than set.",
-            ::dbtools::SQL_INVALID_DESCRIPTOR_INDEX,
-            *(MacabPreparedStatement *) this);
+    {
+        ::connectivity::SharedResources aResources;
+        const ::rtl::OUString sError( aResources.getResourceString(
+                STR_INVALID_PARA_COUNT
+             ) );
+        ::dbtools::throwGenericSQLException(sError,*(MacabPreparedStatement *) this);
+    }
 
     rParameter = (*m_aParameterRow)[m_nParameterIndex];
 
@@ -210,66 +214,66 @@ void SAL_CALL MacabPreparedStatement::setNull(sal_Int32 parameterIndex, sal_Int3
 // -------------------------------------------------------------------------
 void SAL_CALL MacabPreparedStatement::setObjectNull(sal_Int32, sal_Int32, const ::rtl::OUString&) throw(SQLException, RuntimeException)
 {
-    ::osl::MutexGuard aGuard( m_aMutex );
-    checkDisposed(MacabCommonStatement_BASE::rBHelper.bDisposed);
 
-::dbtools::throwFunctionNotSupportedException(::rtl::OUString::createFromAscii("Not Implemented"), NULL);
+
+
+::dbtools::throwFunctionNotSupportedException("setObjectNull", NULL);
 }
 // -------------------------------------------------------------------------
 void SAL_CALL MacabPreparedStatement::setBoolean(sal_Int32, sal_Bool) throw(SQLException, RuntimeException)
 {
-    ::osl::MutexGuard aGuard( m_aMutex );
-    checkDisposed(MacabCommonStatement_BASE::rBHelper.bDisposed);
 
-::dbtools::throwFunctionNotSupportedException(::rtl::OUString::createFromAscii("Not Implemented"), NULL);
+
+
+::dbtools::throwFunctionNotSupportedException("setBoolean", NULL);
 }
 // -------------------------------------------------------------------------
 void SAL_CALL MacabPreparedStatement::setByte(sal_Int32, sal_Int8) throw(SQLException, RuntimeException)
 {
-    ::osl::MutexGuard aGuard( m_aMutex );
-    checkDisposed(MacabCommonStatement_BASE::rBHelper.bDisposed);
 
-::dbtools::throwFunctionNotSupportedException(::rtl::OUString::createFromAscii("Not Implemented"), NULL);
+
+
+::dbtools::throwFunctionNotSupportedException("setByte", NULL);
 }
 // -------------------------------------------------------------------------
 void SAL_CALL MacabPreparedStatement::setShort(sal_Int32, sal_Int16) throw(SQLException, RuntimeException)
 {
-    ::osl::MutexGuard aGuard( m_aMutex );
-    checkDisposed(MacabCommonStatement_BASE::rBHelper.bDisposed);
 
-::dbtools::throwFunctionNotSupportedException(::rtl::OUString::createFromAscii("Not Implemented"), NULL);
+
+
+::dbtools::throwFunctionNotSupportedException("setShort", NULL);
 }
 // -------------------------------------------------------------------------
 void SAL_CALL MacabPreparedStatement::setInt(sal_Int32, sal_Int32) throw(SQLException, RuntimeException)
 {
-    ::osl::MutexGuard aGuard( m_aMutex );
-    checkDisposed(MacabCommonStatement_BASE::rBHelper.bDisposed);
 
-::dbtools::throwFunctionNotSupportedException(::rtl::OUString::createFromAscii("Not Implemented"), NULL);
+
+
+::dbtools::throwFunctionNotSupportedException("setInt", NULL);
 }
 // -------------------------------------------------------------------------
 void SAL_CALL MacabPreparedStatement::setLong(sal_Int32, sal_Int64) throw(SQLException, RuntimeException)
 {
-    ::osl::MutexGuard aGuard( m_aMutex );
-    checkDisposed(MacabCommonStatement_BASE::rBHelper.bDisposed);
 
-::dbtools::throwFunctionNotSupportedException(::rtl::OUString::createFromAscii("Not Implemented"), NULL);
+
+
+::dbtools::throwFunctionNotSupportedException("setLong", NULL);
 }
 // -------------------------------------------------------------------------
 void SAL_CALL MacabPreparedStatement::setFloat(sal_Int32, float) throw(SQLException, RuntimeException)
 {
-    ::osl::MutexGuard aGuard( m_aMutex );
-    checkDisposed(MacabCommonStatement_BASE::rBHelper.bDisposed);
 
-::dbtools::throwFunctionNotSupportedException(::rtl::OUString::createFromAscii("Not Implemented"), NULL);
+
+
+::dbtools::throwFunctionNotSupportedException("setFloat", NULL);
 }
 // -------------------------------------------------------------------------
 void SAL_CALL MacabPreparedStatement::setDouble(sal_Int32, double) throw(SQLException, RuntimeException)
 {
-    ::osl::MutexGuard aGuard( m_aMutex );
-    checkDisposed(MacabCommonStatement_BASE::rBHelper.bDisposed);
 
-::dbtools::throwFunctionNotSupportedException(::rtl::OUString::createFromAscii("Not Implemented"), NULL);
+
+
+::dbtools::throwFunctionNotSupportedException("setDouble", NULL);
 }
 // -------------------------------------------------------------------------
 void SAL_CALL MacabPreparedStatement::setString(sal_Int32 parameterIndex, const ::rtl::OUString &x) throw(SQLException, RuntimeException)
@@ -284,103 +288,103 @@ void SAL_CALL MacabPreparedStatement::setString(sal_Int32 parameterIndex, const 
 // -------------------------------------------------------------------------
 void SAL_CALL MacabPreparedStatement::setBytes(sal_Int32, const Sequence< sal_Int8 >&) throw(SQLException, RuntimeException)
 {
-    ::osl::MutexGuard aGuard( m_aMutex );
-    checkDisposed(MacabCommonStatement_BASE::rBHelper.bDisposed);
 
-::dbtools::throwFunctionNotSupportedException(::rtl::OUString::createFromAscii("Not Implemented"), NULL);
+
+
+::dbtools::throwFunctionNotSupportedException("setBytes", NULL);
 }
 // -------------------------------------------------------------------------
 void SAL_CALL MacabPreparedStatement::setDate(sal_Int32, const Date&) throw(SQLException, RuntimeException)
 {
-    ::osl::MutexGuard aGuard( m_aMutex );
-    checkDisposed(MacabCommonStatement_BASE::rBHelper.bDisposed);
 
-::dbtools::throwFunctionNotSupportedException(::rtl::OUString::createFromAscii("Not Implemented"), NULL);
+
+
+::dbtools::throwFunctionNotSupportedException("setDate", NULL);
 }
 // -------------------------------------------------------------------------
 void SAL_CALL MacabPreparedStatement::setTime(sal_Int32, const Time&) throw(SQLException, RuntimeException)
 {
-    ::osl::MutexGuard aGuard( m_aMutex );
-    checkDisposed(MacabCommonStatement_BASE::rBHelper.bDisposed);
 
-::dbtools::throwFunctionNotSupportedException(::rtl::OUString::createFromAscii("Not Implemented"), NULL);
+
+
+::dbtools::throwFunctionNotSupportedException("setTime", NULL);
 }
 // -------------------------------------------------------------------------
 void SAL_CALL MacabPreparedStatement::setTimestamp(sal_Int32, const DateTime&) throw(SQLException, RuntimeException)
 {
-    ::osl::MutexGuard aGuard( m_aMutex );
-    checkDisposed(MacabCommonStatement_BASE::rBHelper.bDisposed);
 
-::dbtools::throwFunctionNotSupportedException(::rtl::OUString::createFromAscii("Not Implemented"), NULL);
+
+
+::dbtools::throwFunctionNotSupportedException("setTimestamp", NULL);
 }
 // -------------------------------------------------------------------------
 void SAL_CALL MacabPreparedStatement::setBinaryStream(sal_Int32, const Reference< ::com::sun::star::io::XInputStream >&, sal_Int32) throw(SQLException, RuntimeException)
 {
-    ::osl::MutexGuard aGuard( m_aMutex );
-    checkDisposed(MacabCommonStatement_BASE::rBHelper.bDisposed);
 
-::dbtools::throwFunctionNotSupportedException(::rtl::OUString::createFromAscii("Not Implemented"), NULL);
+
+
+::dbtools::throwFunctionNotSupportedException("setBinaryStream", NULL);
 }
 // -------------------------------------------------------------------------
 void SAL_CALL MacabPreparedStatement::setCharacterStream(sal_Int32, const Reference< ::com::sun::star::io::XInputStream >&, sal_Int32) throw(SQLException, RuntimeException)
 {
-    ::osl::MutexGuard aGuard( m_aMutex );
-    checkDisposed(MacabCommonStatement_BASE::rBHelper.bDisposed);
 
-::dbtools::throwFunctionNotSupportedException(::rtl::OUString::createFromAscii("Not Implemented"), NULL);
+
+
+::dbtools::throwFunctionNotSupportedException("setCharacterStream", NULL);
 }
 // -------------------------------------------------------------------------
 void SAL_CALL MacabPreparedStatement::setObject(sal_Int32, const Any&) throw(SQLException, RuntimeException)
 {
-    ::osl::MutexGuard aGuard( m_aMutex );
-    checkDisposed(MacabCommonStatement_BASE::rBHelper.bDisposed);
 
-::dbtools::throwFunctionNotSupportedException(::rtl::OUString::createFromAscii("Not Implemented"), NULL);
+
+
+::dbtools::throwFunctionNotSupportedException("setObject", NULL);
 }
 // -------------------------------------------------------------------------
 void SAL_CALL MacabPreparedStatement::setObjectWithInfo(sal_Int32, const Any&, sal_Int32, sal_Int32) throw(SQLException, RuntimeException)
 {
-    checkDisposed(MacabCommonStatement_BASE::rBHelper.bDisposed);
-    ::osl::MutexGuard aGuard( m_aMutex );
 
-::dbtools::throwFunctionNotSupportedException(::rtl::OUString::createFromAscii("Not Implemented"), NULL);
+
+
+::dbtools::throwFunctionNotSupportedException("setObjectWithInfo", NULL);
 }
 // -------------------------------------------------------------------------
 void SAL_CALL MacabPreparedStatement::setRef(sal_Int32, const Reference< XRef >&) throw(SQLException, RuntimeException)
 {
-    ::osl::MutexGuard aGuard( m_aMutex );
-    checkDisposed(MacabCommonStatement_BASE::rBHelper.bDisposed);
 
-::dbtools::throwFunctionNotSupportedException(::rtl::OUString::createFromAscii("Not Implemented"), NULL);
+
+
+::dbtools::throwFunctionNotSupportedException("setRef", NULL);
 }
 // -------------------------------------------------------------------------
 void SAL_CALL MacabPreparedStatement::setBlob(sal_Int32, const Reference< XBlob >&) throw(SQLException, RuntimeException)
 {
-    ::osl::MutexGuard aGuard( m_aMutex );
-    checkDisposed(MacabCommonStatement_BASE::rBHelper.bDisposed);
 
-::dbtools::throwFunctionNotSupportedException(::rtl::OUString::createFromAscii("Not Implemented"), NULL);
+
+
+::dbtools::throwFunctionNotSupportedException("setBlob", NULL);
 }
 // -------------------------------------------------------------------------
 void SAL_CALL MacabPreparedStatement::setClob(sal_Int32, const Reference< XClob >&) throw(SQLException, RuntimeException)
 {
-    ::osl::MutexGuard aGuard( m_aMutex );
-    checkDisposed(MacabCommonStatement_BASE::rBHelper.bDisposed);
 
-::dbtools::throwFunctionNotSupportedException(::rtl::OUString::createFromAscii("Not Implemented"), NULL);
+
+
+::dbtools::throwFunctionNotSupportedException("setClob", NULL);
 }
 // -------------------------------------------------------------------------
 void SAL_CALL MacabPreparedStatement::setArray(sal_Int32, const Reference< XArray >&) throw(SQLException, RuntimeException)
 {
-    ::osl::MutexGuard aGuard( m_aMutex );
-    checkDisposed(MacabCommonStatement_BASE::rBHelper.bDisposed);
 
-::dbtools::throwFunctionNotSupportedException(::rtl::OUString::createFromAscii("Not Implemented"), NULL);
+
+
+::dbtools::throwFunctionNotSupportedException("setArray", NULL);
 }
 // -------------------------------------------------------------------------
 void SAL_CALL MacabPreparedStatement::clearParameters() throw(SQLException, RuntimeException)
 {
-::dbtools::throwFunctionNotSupportedException(::rtl::OUString::createFromAscii("Not Implemented"), NULL);
+::dbtools::throwFunctionNotSupportedException("clearParameters", NULL);
 }
 // -------------------------------------------------------------------------
 void MacabPreparedStatement::setFastPropertyValue_NoBroadcast(sal_Int32 nHandle,const Any& rValue) throw (Exception)

@@ -959,6 +959,8 @@ void IconChoiceDialog::ActivatePageImpl ()
                 pData->pPage->Reset( (SfxItemSet &)pData->pPage->GetItemSet() );
             else
                 pData->pPage->Reset( *pSet );
+
+            PageCreated( mnCurrentPageId, *pData->pPage );
         }
         else if ( pData->bRefresh )
         {
@@ -1182,6 +1184,13 @@ int IconChoiceDialog::FillOutputItemSet()
     else
         nRet = IconChoicePage::KEEP_PAGE;
     return nRet;
+}
+
+// -----------------------------------------------------------------------
+
+void IconChoiceDialog::PageCreated( USHORT /*nId*/, IconChoicePage& /*rPage*/ )
+{
+    // not interested in
 }
 
 // -----------------------------------------------------------------------

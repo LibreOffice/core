@@ -33,7 +33,7 @@
 
 namespace configmgr
 {
-    class ITreeManager;
+    class OProviderImpl;
 //-----------------------------------------------------------------------------
     namespace configapi
     {
@@ -51,7 +51,7 @@ namespace configmgr
 
             void commit();
         private:
-            ITreeManager* getUpdateProvider();
+            OProviderImpl * getUpdateProvider();
         };
 //-----------------------------------------------------------------------------
     }

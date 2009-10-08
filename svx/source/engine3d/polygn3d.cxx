@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: polygn3d.cxx,v $
- * $Revision: 1.17 $
+ * $Revision: 1.17.18.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -69,9 +69,6 @@ E3dPolygonObj::E3dPolygonObj(
 
     // Default-Texturkoordinaten erzeugen
     CreateDefaultTexture();
-
-    // Geometrie erzeugen
-    CreateGeometry();
 }
 
 /*************************************************************************
@@ -94,9 +91,6 @@ E3dPolygonObj::E3dPolygonObj(
 
     // Default-Texturkoordinaten erzeugen
     CreateDefaultTexture();
-
-    // Geometrie erzeugen
-    CreateGeometry();
 }
 
 /*************************************************************************
@@ -117,9 +111,6 @@ E3dPolygonObj::E3dPolygonObj(
     SetPolyPolygon3D(rPolyPoly3D);
     SetPolyNormals3D(rPolyNormals3D);
     SetPolyTexture2D(rPolyTexture2D);
-
-    // Geometrie erzeugen
-    CreateGeometry();
 }
 
 /*************************************************************************
@@ -190,7 +181,7 @@ void E3dPolygonObj::CreateDefaultTexture()
         const basegfx::B3DPolygon& aPolygon(aPolyPoly3D.getB3DPolygon(a));
 
         // Gesamtgroesse des Objektes feststellen
-        Volume3D aVolume(basegfx::tools::getRange(aPolygon));
+        basegfx::B3DRange aVolume(basegfx::tools::getRange(aPolygon));
 
         // Normale holen
         basegfx::B3DVector aNormal(basegfx::tools::getNormal(aPolygon));
@@ -296,7 +287,7 @@ void E3dPolygonObj::SetPolyPolygon3D(const basegfx::B3DPolyPolygon& rNewPolyPoly
         aPolyPoly3D = rNewPolyPoly3D;
 
         // Geometrie neu erzeugen
-        bGeometryValid = FALSE;
+        ActionChanged();
     }
 }
 
@@ -308,7 +299,7 @@ void E3dPolygonObj::SetPolyNormals3D(const basegfx::B3DPolyPolygon& rNewPolyNorm
         aPolyNormals3D = rNewPolyNormals3D;
 
         // Geometrie neu erzeugen
-        bGeometryValid = FALSE;
+        ActionChanged();
     }
 }
 
@@ -320,7 +311,7 @@ void E3dPolygonObj::SetPolyTexture2D(const basegfx::B2DPolyPolygon& rNewPolyText
         aPolyTexture2D = rNewPolyTexture2D;
 
         // Geometrie neu erzeugen
-        bGeometryValid = FALSE;
+        ActionChanged();
     }
 }
 
@@ -333,63 +324,6 @@ void E3dPolygonObj::SetPolyTexture2D(const basegfx::B2DPolyPolygon& rNewPolyText
 SdrObject *E3dPolygonObj::DoConvertToPolyObj(BOOL /*bBezier*/) const
 {
     return NULL;
-}
-
-/*************************************************************************
-|*
-|* Give out simple line geometry
-|*
-\************************************************************************/
-
-basegfx::B3DPolyPolygon E3dPolygonObj::Get3DLineGeometry() const
-{
-    basegfx::B3DPolyPolygon aRetval;
-
-    for(sal_uInt32 a(0L); a < aPolyPoly3D.count(); a++)
-    {
-        basegfx::B3DPolygon aNew(aPolyPoly3D.getB3DPolygon(a));
-
-        if(aNew.count() && aNew.isClosed())
-        {
-            aNew.append(aNew.getB3DPoint(0L));
-            aNew.setClosed(false);
-        }
-
-        aRetval.append(aNew);
-    }
-
-    return aRetval;
-}
-
-/*************************************************************************
-|*
-|* Geometrieerzeugung
-|*
-\************************************************************************/
-
-void E3dPolygonObj::CreateGeometry()
-{
-    // Start der Geometrieerzeugung ankuendigen
-    StartCreateGeometry();
-
-    if(aPolyNormals3D.count())
-    {
-        if(aPolyTexture2D.count())
-        {
-            AddGeometry(aPolyPoly3D, aPolyNormals3D, aPolyTexture2D, TRUE, bLineOnly);
-        }
-        else
-        {
-            AddGeometry(aPolyPoly3D, aPolyNormals3D, TRUE, bLineOnly);
-        }
-    }
-    else
-    {
-        AddGeometry(aPolyPoly3D, TRUE, bLineOnly);
-    }
-
-    // call parent
-    E3dCompoundObject::CreateGeometry();
 }
 
 /*************************************************************************
@@ -423,7 +357,7 @@ void E3dPolygonObj::SetLineOnly(BOOL bNew)
     if(bNew != bLineOnly)
     {
         bLineOnly = bNew;
-        bGeometryValid = FALSE;
+        ActionChanged();
     }
 }
 

@@ -51,7 +51,7 @@ using namespace com::sun::star;
 
 namespace drawinglayer
 {
-    namespace
+    namespace geometry
     {
         /** Implementation class for ViewInformation3D
         */

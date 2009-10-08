@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: propertyids.hxx,v $
- * $Revision: 1.20 $
+ * $Revision: 1.20.56.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -134,7 +134,6 @@ pProperties[nPos++] = ::com::sun::star::beans::Property(::connectivity::OMetaCon
 #define PROPERTY_ID_ISBOOKMARKABLE                  40
 
 #define PROPERTY_ID_INVALID_INDEX                   41
-#define PROPERTY_ID_ERRORMSG_SEQUENCE               42
 #define PROPERTY_ID_HY010                           43
     // FREE
 #define PROPERTY_ID_DELIMITER                       45

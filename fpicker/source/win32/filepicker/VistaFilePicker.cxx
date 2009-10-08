@@ -278,9 +278,14 @@ void SAL_CALL VistaFilePicker::appendFilterGroup(const ::rtl::OUString&         
 }
 
 //-----------------------------------------------------------------------------------------
-void SAL_CALL VistaFilePicker::setDefaultName(const ::rtl::OUString& /*sName*/)
+void SAL_CALL VistaFilePicker::setDefaultName(const ::rtl::OUString& sName )
     throw(css::uno::RuntimeException)
 {
+    RequestRef rRequest(new Request());
+    rRequest->setRequest (VistaFilePickerImpl::E_SET_FILENAME);
+    rRequest->setArgument(PROP_FILENAME, sName);
+
+    m_aAsyncExecute.triggerRequestThreadAware(rRequest, AsyncRequests::NON_BLOCKED);
 }
 
 //-----------------------------------------------------------------------------------------

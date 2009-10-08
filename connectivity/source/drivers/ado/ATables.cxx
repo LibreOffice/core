@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: ATables.cxx,v $
- * $Revision: 1.21 $
+ * $Revision: 1.21.56.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -38,14 +38,13 @@
 #include <com/sun/star/sdbc/KeyRule.hpp>
 #include <com/sun/star/sdbcx/KeyType.hpp>
 #include "ado/ACatalog.hxx"
-#ifndef _CONNECTIVITY_ADO_BCONNECTION_HXX_
 #include "ado/AConnection.hxx"
-#endif
 #include "ado/Awrapado.hxx"
 #include "TConnection.hxx"
 #include <comphelper/types.hxx>
 #include <cppuhelper/interfacecontainer.h>
 #include <connectivity/dbexception.hxx>
+#include "resource/ado_res.hrc"
 
 using namespace ::cppu;
 using namespace connectivity;
@@ -83,10 +82,7 @@ sdbcx::ObjectType OTables::appendObject( const ::rtl::OUString&, const Reference
 {
     OAdoTable* pTable = NULL;
     if ( !getImplementation( pTable, descriptor ) || pTable == NULL )
-        ::dbtools::throwGenericSQLException(
-            ::rtl::OUString::createFromAscii( "Could not create table: invalid object descriptor." ),
-            static_cast<XTypeProvider*>(this)
-        );
+        m_pCatalog->getConnection()->throwGenericSQLException( STR_INVALID_TABLE_DESCRIPTOR_ERROR,static_cast<XTypeProvider*>(this) );
 
     OSL_ENSURE(m_aCollection.IsValid(),"Collection isn't valid");
     if(!m_aCollection.Append(pTable->getImpl()))

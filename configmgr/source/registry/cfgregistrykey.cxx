@@ -31,11 +31,10 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_configmgr.hxx"
 #include "cfgregistrykey.hxx"
+#include "datalock.hxx"
 #include "typeconverter.hxx"
 #include <osl/diagnose.h>
-#ifndef _CPPUHELPER_EXTRACT_HXX_
 #include <cppuhelper/extract.hxx>
-#endif
 #include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/container/XNamed.hpp>
 #include <com/sun/star/container/XChild.hpp>
@@ -50,11 +49,7 @@
 #include <com/sun/star/uno/Sequence.hxx>
 #include <typelib/typedescription.hxx>
 
-#ifndef INCLUDED_LIMITS
 #include <limits>
-#define INCLUDED_LIMITS
-#endif
-
 
 #define THISREF()       static_cast< ::cppu::OWeakObject* >(this)
 #define UNISTRING(c)    ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(c) )
@@ -64,22 +59,12 @@ namespace configmgr
 {
 //..........................................................................
 
-using namespace ::com::sun::star::uno;
-using namespace ::com::sun::star::lang;
-using namespace ::com::sun::star::util;
-using namespace ::com::sun::star::beans;
-using namespace ::com::sun::star::registry;
-using namespace ::com::sun::star::container;
-using namespace ::osl;
-using namespace ::cppu;
-using ::rtl::OUString;
-
 //--------------------------------------------------------------------------
 namespace {
     inline
-    Type getBinaryDataType()
+    com::sun::star::uno::Type getBinaryDataType()
     {
-        Sequence<sal_Int8> const * const p= 0;
+        com::sun::star::uno::Sequence<sal_Int8> const * const p= 0;
         return ::getCppuType(p);
     }
     inline
@@ -96,12 +81,12 @@ namespace {
         return true;
     }
     inline
-    bool isAscii(OUString const& str)
+    bool isAscii(rtl::OUString const& str)
     {
         return isAscii(str.getStr(),str.getLength());
     }
     inline
-    bool isAscii(Sequence< OUString > const& strList)
+    bool isAscii(com::sun::star::uno::Sequence< rtl::OUString > const& strList)
     {
         for (int i= 0; i< strList.getLength(); ++i)
             if ( !isAscii( strList[i] ) )
@@ -117,22 +102,22 @@ inline static void checkNullable() {}
 //==========================================================================
 
 static
-OUString getNodeName(const Reference< XNameAccess >& _xNode)
+rtl::OUString getNodeName(const com::sun::star::uno::Reference< com::sun::star::container::XNameAccess >& _xNode)
 {
-    Reference< XNamed > xName( _xNode, UNO_QUERY );
+    com::sun::star::uno::Reference< com::sun::star::container::XNamed > xName( _xNode, com::sun::star::uno::UNO_QUERY );
     if (xName.is())
         return xName->getName();
 
     OSL_ENSURE( !_xNode.is(), "Cannot get name of node");
-    return OUString();
+    return rtl::OUString();
 }
 //--------------------------------------------------------------------------
 
-static bool splitPath(const OUString& _sPath, OUString& _rsParentPath, OUString& _rsLocalName);
+static bool splitPath(const rtl::OUString& _sPath, rtl::OUString& _rsParentPath, rtl::OUString& _rsLocalName);
 //--------------------------------------------------------------------------
 
 OConfigurationRegistryKey::OConfigurationRegistryKey
-            (const Reference< XNameAccess >& _rxRootNode
+            (const com::sun::star::uno::Reference< com::sun::star::container::XNameAccess >& _rxRootNode
             ,sal_Bool _bWriteable
             ,SubtreeRoot
             )
@@ -146,7 +131,7 @@ OConfigurationRegistryKey::OConfigurationRegistryKey
 
 //--------------------------------------------------------------------------
 OConfigurationRegistryKey::OConfigurationRegistryKey
-            (const Reference< XNameAccess >& _rxNode
+            (const com::sun::star::uno::Reference< com::sun::star::container::XNameAccess >& _rxNode
             ,sal_Bool _bWriteable
             )
     :m_bReadOnly(!_bWriteable)
@@ -159,8 +144,8 @@ OConfigurationRegistryKey::OConfigurationRegistryKey
 
 //--------------------------------------------------------------------------
 OConfigurationRegistryKey::OConfigurationRegistryKey(
-                Any _rCurrentValue,
-                const Reference< XNameAccess >& _rxParentNode,
+                com::sun::star::uno::Any _rCurrentValue,
+                const com::sun::star::uno::Reference< com::sun::star::container::XNameAccess >& _rxParentNode,
                 const ::rtl::OUString& _rLocalName,
                 sal_Bool _bWriteable)
     :m_bReadOnly(!_bWriteable)
@@ -177,18 +162,18 @@ OConfigurationRegistryKey::OConfigurationRegistryKey(
 }
 //--------------------------------------------------------------------------
 
-Reference<XPropertySetInfo> OConfigurationRegistryKey::implGetParentPropertyInfo() throw(RuntimeException)
+com::sun::star::uno::Reference<com::sun::star::beans::XPropertySetInfo> OConfigurationRegistryKey::implGetParentPropertyInfo() throw(com::sun::star::uno::RuntimeException)
 {
     if (!m_xParentNode.is())
     {
-        Reference< XChild > xChild(m_xNode, UNO_QUERY);
+        com::sun::star::uno::Reference< com::sun::star::container::XChild > xChild(m_xNode, com::sun::star::uno::UNO_QUERY);
         if (xChild.is())
             m_xParentNode = m_xParentNode.query(xChild->getParent());
     }
 
-    Reference< XPropertySetInfo > xParentInfo; // the result
+    com::sun::star::uno::Reference< com::sun::star::beans::XPropertySetInfo > xParentInfo; // the result
 
-    Reference< XPropertySet > xParentProperties(m_xParentNode, UNO_QUERY);
+    com::sun::star::uno::Reference< com::sun::star::beans::XPropertySet > xParentProperties(m_xParentNode, com::sun::star::uno::UNO_QUERY);
     if (xParentProperties.is())
     {
         xParentInfo = xParentProperties->getPropertySetInfo();
@@ -204,19 +189,19 @@ Reference<XPropertySetInfo> OConfigurationRegistryKey::implGetParentPropertyInfo
 //--------------------------------------------------------------------------
 
 static
-sal_Bool isNodeReadOnly(Reference< XInterface > const& _xNode) throw(RuntimeException)
+sal_Bool isNodeReadOnly(com::sun::star::uno::Reference< com::sun::star::uno::XInterface > const& _xNode) throw(com::sun::star::uno::RuntimeException)
 {
     OSL_ASSERT( _xNode.is() );
 
-    Reference< XProperty > xProperty(_xNode, UNO_QUERY);
+    com::sun::star::uno::Reference< com::sun::star::beans::XProperty > xProperty(_xNode, com::sun::star::uno::UNO_QUERY);
     if (xProperty.is())
     {
-        Property aProperty = xProperty->getAsProperty();
+        com::sun::star::beans::Property aProperty = xProperty->getAsProperty();
 
-        return (aProperty.Attributes & PropertyAttribute::READONLY) != 0;
+        return (aProperty.Attributes & com::sun::star::beans::PropertyAttribute::READONLY) != 0;
     }
 
-    Reference< XServiceInfo > xServiceInfo( _xNode, UNO_QUERY );
+    com::sun::star::uno::Reference< com::sun::star::lang::XServiceInfo > xServiceInfo( _xNode, com::sun::star::uno::UNO_QUERY );
     if (xServiceInfo.is())
     {
         // does it announce update capability ?
@@ -234,7 +219,7 @@ sal_Bool isNodeReadOnly(Reference< XInterface > const& _xNode) throw(RuntimeExce
 
 //--------------------------------------------------------------------------
 
-sal_Bool OConfigurationRegistryKey::implIsReadOnly() throw (RuntimeException)
+sal_Bool OConfigurationRegistryKey::implIsReadOnly() throw (com::sun::star::uno::RuntimeException)
 {
     sal_Bool bResult = m_bReadOnly;;
 
@@ -253,13 +238,13 @@ sal_Bool OConfigurationRegistryKey::implIsReadOnly() throw (RuntimeException)
     // else use the parent
     else  if (m_xParentNode.is())
     {
-        Reference< XPropertySetInfo > xParentInfo = implGetParentPropertyInfo();
+        com::sun::star::uno::Reference< com::sun::star::beans::XPropertySetInfo > xParentInfo = implGetParentPropertyInfo();
 
         if (xParentInfo.is())
         {
-            Property aProperty = xParentInfo->getPropertyByName(m_sLocalName);
+            com::sun::star::beans::Property aProperty = xParentInfo->getPropertyByName(m_sLocalName);
 
-            bResult = m_bReadOnly = ((aProperty.Attributes & PropertyAttribute::READONLY) != 0);
+            bResult = m_bReadOnly = ((aProperty.Attributes & com::sun::star::beans::PropertyAttribute::READONLY) != 0);
         }
         else
         {
@@ -280,7 +265,7 @@ sal_Bool OConfigurationRegistryKey::implIsReadOnly() throw (RuntimeException)
 }
 //--------------------------------------------------------------------------
 
-sal_Bool OConfigurationRegistryKey::implEnsureNode() throw (InvalidRegistryException,RuntimeException)
+sal_Bool OConfigurationRegistryKey::implEnsureNode() throw (com::sun::star::registry::InvalidRegistryException,com::sun::star::uno::RuntimeException)
 {
     if (!m_xNode.is())
     {
@@ -289,22 +274,22 @@ sal_Bool OConfigurationRegistryKey::implEnsureNode() throw (InvalidRegistryExcep
         {
             try
             {
-                Any aNode = m_xParentNode->getByName( m_sLocalName );
+                com::sun::star::uno::Any aNode = m_xParentNode->getByName( m_sLocalName );
 
                 if ( !(aNode >>= m_xNode) )
-                    OSL_ENSURE( ! (aNode.hasValue() && aNode.getValueTypeClass() == TypeClass_INTERFACE),
+                    OSL_ENSURE( ! (aNode.hasValue() && aNode.getValueTypeClass() == com::sun::star::uno::TypeClass_INTERFACE),
                                 "OConfigurationRegistryKey: Node object does not implement expected interface");
             }
-            catch (NoSuchElementException& e)
+            catch (com::sun::star::container::NoSuchElementException& e)
             {
                 m_xParentNode.clear();
 
-                OUString sMessage = UNISTRING("Invalid OConfigurationRegistryKey. The node \"");
+                rtl::OUString sMessage = UNISTRING("Invalid OConfigurationRegistryKey. The node \"");
                 sMessage += m_sLocalName;
                 sMessage += UNISTRING("\" was not found in the parent. Parent error message: \n");
                 sMessage += e.Message;
 
-                throw InvalidRegistryException(sMessage, THISREF());
+                throw com::sun::star::registry::InvalidRegistryException(sMessage, THISREF());
             }
         }
     }
@@ -312,9 +297,9 @@ sal_Bool OConfigurationRegistryKey::implEnsureNode() throw (InvalidRegistryExcep
 }
 //--------------------------------------------------------------------------
 
-Type OConfigurationRegistryKey::implGetUnoType() throw (RuntimeException)
+com::sun::star::uno::Type OConfigurationRegistryKey::implGetUnoType() throw (com::sun::star::uno::RuntimeException)
 {
-    Type aType;
+    com::sun::star::uno::Type aType;
     if (m_xNode.is())
     {
         aType = getCppuType(&m_xNode); // Its just an interface type
@@ -322,7 +307,7 @@ Type OConfigurationRegistryKey::implGetUnoType() throw (RuntimeException)
     else if (m_xParentNode.is())
     {
 
-        Reference< XPropertySetInfo > xParentInfo = implGetParentPropertyInfo();
+        com::sun::star::uno::Reference< com::sun::star::beans::XPropertySetInfo > xParentInfo = implGetParentPropertyInfo();
         if (xParentInfo.is())
         {
             aType = xParentInfo->getPropertyByName( m_sLocalName ).Type;
@@ -334,14 +319,14 @@ Type OConfigurationRegistryKey::implGetUnoType() throw (RuntimeException)
     }
     else
     {
-        OSL_ASSERT( aType.getTypeClass() == TypeClass_VOID );
+        OSL_ASSERT( aType.getTypeClass() == com::sun::star::uno::TypeClass_VOID );
         OSL_ENSURE( false, "implGetUnoType called for invalid registry key");
     }
     return aType;
 }
 //--------------------------------------------------------------------------
 
-sal_Bool OConfigurationRegistryKey::implEnsureValue() throw (RuntimeException)
+sal_Bool OConfigurationRegistryKey::implEnsureValue() throw (com::sun::star::uno::RuntimeException)
 {
     if (m_xNode.is())
         return false;
@@ -352,29 +337,29 @@ sal_Bool OConfigurationRegistryKey::implEnsureValue() throw (RuntimeException)
 
     switch (implGetUnoType().getTypeClass())
     {
-    case TypeClass_INTERFACE:
+    case com::sun::star::uno::TypeClass_INTERFACE:
         return false;
 
-    case TypeClass_BYTE:
-    case TypeClass_UNSIGNED_SHORT:
-    case TypeClass_UNSIGNED_LONG:
-    case TypeClass_UNSIGNED_HYPER:
-    case TypeClass_FLOAT:
+    case com::sun::star::uno::TypeClass_BYTE:
+    case com::sun::star::uno::TypeClass_UNSIGNED_SHORT:
+    case com::sun::star::uno::TypeClass_UNSIGNED_LONG:
+    case com::sun::star::uno::TypeClass_UNSIGNED_HYPER:
+    case com::sun::star::uno::TypeClass_FLOAT:
         OSL_ENSURE(false, "Unexpected (UNSIGNED INTERGRAL or FLOAT) type found for configuration node");
 
-    case TypeClass_STRING:
-    case TypeClass_BOOLEAN:
-    case TypeClass_SHORT:
-    case TypeClass_LONG:
-    case TypeClass_HYPER:
-    case TypeClass_DOUBLE:
-    case TypeClass_SEQUENCE:
+    case com::sun::star::uno::TypeClass_STRING:
+    case com::sun::star::uno::TypeClass_BOOLEAN:
+    case com::sun::star::uno::TypeClass_SHORT:
+    case com::sun::star::uno::TypeClass_LONG:
+    case com::sun::star::uno::TypeClass_HYPER:
+    case com::sun::star::uno::TypeClass_DOUBLE:
+    case com::sun::star::uno::TypeClass_SEQUENCE:
         return true;
 
-    case TypeClass_ANY:
+    case com::sun::star::uno::TypeClass_ANY:
         return true;
 
-    case TypeClass_VOID:
+    case com::sun::star::uno::TypeClass_VOID:
         OSL_ENSURE(false, "OConfigurationRegistryKey: Key does not exist or has VOID type");
         return false;
 
@@ -391,33 +376,33 @@ sal_Bool OConfigurationRegistryKey::implIsValid() throw ()
 }
 //--------------------------------------------------------------------------
 
-void OConfigurationRegistryKey::checkValid(KEY_ACCESS_TYPE _eIntentedAccess) throw (InvalidRegistryException,RuntimeException)
+void OConfigurationRegistryKey::checkValid(KEY_ACCESS_TYPE _eIntentedAccess) throw (com::sun::star::registry::InvalidRegistryException,com::sun::star::uno::RuntimeException)
 {
     if (!implIsValid())
-        throw InvalidRegistryException(UNISTRING("The registry is not bound to a configuration node anymore."), THISREF());
+        throw com::sun::star::registry::InvalidRegistryException(UNISTRING("The registry is not bound to a configuration node anymore."), THISREF());
         // "anymore", because at the moment the ctor was called it probably was bound ....
 
     switch (_eIntentedAccess)
     {
         case KAT_VALUE_WRITE:
             if (implIsReadOnly())
-                throw InvalidRegistryException(UNISTRING("This configuration node is not writeable."), THISREF());
+                throw com::sun::star::registry::InvalidRegistryException(UNISTRING("This configuration node is not writeable."), THISREF());
 
             // !!! NO !!! BREAK !!!
         case KAT_VALUE:
             if (m_xNode.is())
-                throw InvalidRegistryException(UNISTRING("This configuration node is not a value, but an internal container."), THISREF());
+                throw com::sun::star::registry::InvalidRegistryException(UNISTRING("This configuration node is not a value, but an internal container."), THISREF());
 
             if (!m_xParentNode.is())
-                throw InvalidRegistryException(UNISTRING("This configuration node is invalid. It has no parent."), THISREF());
+                throw com::sun::star::registry::InvalidRegistryException(UNISTRING("This configuration node is invalid. It has no parent."), THISREF());
 
             if (!implEnsureValue())
-                throw InvalidRegistryException(UNISTRING("This configuration does not have a legal value type."), THISREF());
+                throw com::sun::star::registry::InvalidRegistryException(UNISTRING("This configuration does not have a legal value type."), THISREF());
             break;
 
         case KAT_CHILD:
             if (!implEnsureNode())
-                throw InvalidRegistryException(UNISTRING("This configuration node does not have children, it is a value node."), THISREF());
+                throw com::sun::star::registry::InvalidRegistryException(UNISTRING("This configuration node does not have children, it is a value node."), THISREF());
             break;
 
         case KAT_META:
@@ -426,96 +411,96 @@ void OConfigurationRegistryKey::checkValid(KEY_ACCESS_TYPE _eIntentedAccess) thr
 }
 
 //--------------------------------------------------------------------------
-Any OConfigurationRegistryKey::implCreateDefaultElement(Type const& _aValueType) throw (RuntimeException)
+com::sun::star::uno::Any    OConfigurationRegistryKey::implCreateDefaultElement(com::sun::star::uno::Type const& _aValueType) throw (com::sun::star::uno::RuntimeException)
 {
-    Any aReturn;
+    com::sun::star::uno::Any aReturn;
 
     switch (_aValueType.getTypeClass())
     {
-    case TypeClass_STRING:
-        aReturn <<= OUString();
+    case com::sun::star::uno::TypeClass_STRING:
+        aReturn <<= rtl::OUString();
         break;
 
     // we don't distinguish between the different integer types or boolean
     // (the RegistryKeyType is not granular enough),
     // but we can't handle them all the same way here
-    case TypeClass_BYTE:
-    case TypeClass_UNSIGNED_SHORT:
-    case TypeClass_SHORT:
+    case com::sun::star::uno::TypeClass_BYTE:
+    case com::sun::star::uno::TypeClass_UNSIGNED_SHORT:
+    case com::sun::star::uno::TypeClass_SHORT:
         aReturn <<= (sal_Int16)0;
         break;
 
-    case TypeClass_UNSIGNED_LONG:
-    case TypeClass_LONG:
+    case com::sun::star::uno::TypeClass_UNSIGNED_LONG:
+    case com::sun::star::uno::TypeClass_LONG:
         aReturn <<= (sal_Int32)0;
         break;
 
-    case TypeClass_BOOLEAN:
+    case com::sun::star::uno::TypeClass_BOOLEAN:
         aReturn <<= sal_Bool(false);
         break;
 
     // we cannot really handle 64-bit ints in the registry (but here we can)
-    case TypeClass_UNSIGNED_HYPER:
-    case TypeClass_HYPER:
+    case com::sun::star::uno::TypeClass_UNSIGNED_HYPER:
+    case com::sun::star::uno::TypeClass_HYPER:
         OSL_ENSURE(false, "Warning: cannot handle 64-bit values correctly in registry");
         aReturn <<= (sal_Int64)0;
         break;
 
     // we cannot really handle doubles in the registry (but here we can)
-    case TypeClass_FLOAT:
-    case TypeClass_DOUBLE:
+    case com::sun::star::uno::TypeClass_FLOAT:
+    case com::sun::star::uno::TypeClass_DOUBLE:
         OSL_ENSURE(false, "Warning: cannot handle DOUBLE correctly in registry");
         aReturn <<= (double)0;
         break;
 
     // we really want to leave an Any as NULL - hopefully this is acceptable to the set
-    case TypeClass_ANY:
+    case com::sun::star::uno::TypeClass_ANY:
         break;
 
-    case TypeClass_SEQUENCE:
+    case com::sun::star::uno::TypeClass_SEQUENCE:
         if (_aValueType == getBinaryDataType())
-            aReturn <<= Sequence< sal_Int8 >();
+            aReturn <<= com::sun::star::uno::Sequence< sal_Int8 >();
 
         else
         {
-            Type aElementType = getSequenceElementType(_aValueType);
+            com::sun::star::uno::Type aElementType = getSequenceElementType(_aValueType);
             switch (aElementType.getTypeClass())
             {
-            case TypeClass_STRING:
-                aReturn <<= Sequence< OUString >();
+            case com::sun::star::uno::TypeClass_STRING:
+                aReturn <<= com::sun::star::uno::Sequence< rtl::OUString >();
                 break;
 
-            case TypeClass_BYTE:
-            case TypeClass_UNSIGNED_SHORT:
-            case TypeClass_SHORT:
-                aReturn <<= Sequence< sal_Int16 >();
+            case com::sun::star::uno::TypeClass_BYTE:
+            case com::sun::star::uno::TypeClass_UNSIGNED_SHORT:
+            case com::sun::star::uno::TypeClass_SHORT:
+                aReturn <<= com::sun::star::uno::Sequence< sal_Int16 >();
                 break;
 
-            case TypeClass_UNSIGNED_LONG:
-            case TypeClass_LONG:
-                aReturn <<= Sequence< sal_Int32 >();
+            case com::sun::star::uno::TypeClass_UNSIGNED_LONG:
+            case com::sun::star::uno::TypeClass_LONG:
+                aReturn <<= com::sun::star::uno::Sequence< sal_Int32 >();
                 break;
 
-            case TypeClass_BOOLEAN:
-                aReturn <<= Sequence< sal_Bool >();
+            case com::sun::star::uno::TypeClass_BOOLEAN:
+                aReturn <<= com::sun::star::uno::Sequence< sal_Bool >();
                 break;
 
-            case TypeClass_UNSIGNED_HYPER:
-            case TypeClass_HYPER:
-                aReturn <<= Sequence< sal_Int64 >();
+            case com::sun::star::uno::TypeClass_UNSIGNED_HYPER:
+            case com::sun::star::uno::TypeClass_HYPER:
+                aReturn <<= com::sun::star::uno::Sequence< sal_Int64 >();
                 break;
 
-            case TypeClass_FLOAT:
-            case TypeClass_DOUBLE:
-                aReturn <<= Sequence< double >();
+            case com::sun::star::uno::TypeClass_FLOAT:
+            case com::sun::star::uno::TypeClass_DOUBLE:
+                aReturn <<= com::sun::star::uno::Sequence< double >();
                 break;
 
-            case TypeClass_SEQUENCE:
+            case com::sun::star::uno::TypeClass_SEQUENCE:
                 OSL_ENSURE(false, "Warning: cannot handle Sequence< BINARY > correctly in registry");
                 if (aElementType == getBinaryDataType())
                 {
                     OSL_ENSURE(false, "Warning: cannot handle Sequence< BINARY > correctly in registry");
-                    aReturn <<= Sequence< Sequence< sal_Int8 > >();
+                    aReturn <<= com::sun::star::uno::Sequence< com::sun::star::uno::Sequence< sal_Int8 > >();
                     break;
                 }
 
@@ -528,7 +513,7 @@ Any OConfigurationRegistryKey::implCreateDefaultElement(Type const& _aValueType)
         }
         break;
 
-    case TypeClass_INTERFACE:
+    case com::sun::star::uno::TypeClass_INTERFACE:
         OSL_ENSURE(false, "Invalid call to OConfigurationRegistryKey::implCreateDefaultElement. Inner nodes must be created by a factory");
         break;
 
@@ -538,15 +523,15 @@ Any OConfigurationRegistryKey::implCreateDefaultElement(Type const& _aValueType)
         break;
     }
 
-    OSL_ENSURE( aReturn.getValueType() == _aValueType || (_aValueType.getTypeClass() == TypeClass_ANY && !aReturn.hasValue()),
+    OSL_ENSURE( aReturn.getValueType() == _aValueType || (_aValueType.getTypeClass() == com::sun::star::uno::TypeClass_ANY && !aReturn.hasValue()),
                 "Warning: Unexpected data type found in Registry - returning similar value or NULL");
     return aReturn;
 }
 
 //--------------------------------------------------------------------------
-Any OConfigurationRegistryKey::implGetDescendant(const OUString& _rDescendantName) throw(InvalidRegistryException, RuntimeException)
+com::sun::star::uno::Any OConfigurationRegistryKey::implGetDescendant(const rtl::OUString& _rDescendantName) throw(com::sun::star::registry::InvalidRegistryException, com::sun::star::uno::RuntimeException)
 {
-    Any aElementReturn;
+    com::sun::star::uno::Any aElementReturn;
 
     try
     {
@@ -556,7 +541,7 @@ Any OConfigurationRegistryKey::implGetDescendant(const OUString& _rDescendantNam
             OSL_ENSURE(sal_False, "OConfigurationRegistryKey::getDescendant : invalid call !");
 
             // this method should not be called if the object does not represent a container node ...
-            throw InvalidRegistryException(UNISTRING("invalid object."), THISREF());
+            throw com::sun::star::registry::InvalidRegistryException(UNISTRING("invalid object."), THISREF());
         }
 
         try
@@ -564,129 +549,129 @@ Any OConfigurationRegistryKey::implGetDescendant(const OUString& _rDescendantNam
             // look for a local member first
             aElementReturn = m_xNode->getByName(_rDescendantName);
         }
-        catch(NoSuchElementException&)
+        catch(com::sun::star::container::NoSuchElementException&)
         {
             // is it a (possibly) hierarchical name ?
             if ( _rDescendantName.indexOf('/') <0 ) throw;
 
             // Yes, so try deep access
-            Reference< XHierarchicalNameAccess > xDeepAccess( m_xNode, UNO_QUERY );
+            com::sun::star::uno::Reference< com::sun::star::container::XHierarchicalNameAccess > xDeepAccess( m_xNode, com::sun::star::uno::UNO_QUERY );
             if (!xDeepAccess.is())
-                throw InvalidRegistryException(UNISTRING("Nested element access not supported by this node."), THISREF());
+                throw com::sun::star::registry::InvalidRegistryException(UNISTRING("Nested element access not supported by this node."), THISREF());
 
             aElementReturn = xDeepAccess->getByHierarchicalName(_rDescendantName);
         }
     }
-    catch(NoSuchElementException&)
+    catch(com::sun::star::container::NoSuchElementException&)
     {   // not allowed to leave the method, wrap it
-        OUString sMessage(UNISTRING("There is no element named "));
+        rtl::OUString sMessage(UNISTRING("There is no element named "));
         sMessage += _rDescendantName;
         sMessage += UNISTRING(".");
-        throw InvalidRegistryException(sMessage, THISREF());
+        throw com::sun::star::registry::InvalidRegistryException(sMessage, THISREF());
     }
-    catch(WrappedTargetException& wte)
+    catch(com::sun::star::lang::WrappedTargetException& wte)
     {   // allowed to be thrown by XNameAccess::getByName, but not allowed to leave this method
-        OUString sMessage(UNISTRING("The configuration node could not provide an element for "));
+        rtl::OUString sMessage(UNISTRING("The configuration node could not provide an element for "));
         sMessage += _rDescendantName;
         sMessage += UNISTRING(". Original Error: ");
         sMessage += wte.Message;
-        throw InvalidRegistryException(sMessage, THISREF());
+        throw com::sun::star::registry::InvalidRegistryException(sMessage, THISREF());
     }
 
     return aElementReturn;
 }
 
 //--------------------------------------------------------------------------
-void OConfigurationRegistryKey::implSetValue(const Any& _rValue) throw(InvalidRegistryException, RuntimeException)
+void OConfigurationRegistryKey::implSetValue(const com::sun::star::uno::Any& _rValue) throw(com::sun::star::registry::InvalidRegistryException, com::sun::star::uno::RuntimeException)
 {
     checkValid(KAT_VALUE_WRITE);
 
     // one possible interface
-    Reference< XNameReplace > xParentValueAccess(m_xParentNode, UNO_QUERY);
+    com::sun::star::uno::Reference< com::sun::star::container::XNameReplace > xParentValueAccess(m_xParentNode, com::sun::star::uno::UNO_QUERY);
     if (xParentValueAccess.is())
     {
         try
         {
             xParentValueAccess->replaceByName(m_sLocalName, _rValue);
         }
-        catch(IllegalArgumentException& iae)
+        catch(com::sun::star::lang::IllegalArgumentException& iae)
         {
-            OUString sMessage = UNISTRING("Unable to replace the old value. The configuration node threw an ");
+            rtl::OUString sMessage = UNISTRING("Unable to replace the old value. The configuration node threw an ");
             sMessage += UNISTRING("IllegalArgumentException: ");
             sMessage += iae.Message;
-            throw InvalidRegistryException(sMessage, THISREF());
+            throw com::sun::star::registry::InvalidRegistryException(sMessage, THISREF());
         }
-        catch(NoSuchElementException& nse)
+        catch(com::sun::star::container::NoSuchElementException& nse)
         {
             OSL_ENSURE(false, "OConfigurationRegistryKey::writeValueNode : a NoSuchElementException should be impossible !");
 
-            OUString sMessage = UNISTRING("Unable to replace the old value. The configuration node threw an ");
+            rtl::OUString sMessage = UNISTRING("Unable to replace the old value. The configuration node threw an ");
             sMessage += UNISTRING("NoSuchElementException: ");
             sMessage += nse.Message;
-            throw InvalidRegistryException(sMessage, THISREF());
+            throw com::sun::star::registry::InvalidRegistryException(sMessage, THISREF());
         }
-        catch(WrappedTargetException& wte)
+        catch(com::sun::star::lang::WrappedTargetException& wte)
         {
-            OUString sMessage = UNISTRING("Unable to replace the old value. The configuration node threw an ");
+            rtl::OUString sMessage = UNISTRING("Unable to replace the old value. The configuration node threw an ");
             sMessage += UNISTRING("WrappedTargetException: ");
             sMessage += wte.Message;
-            throw InvalidRegistryException(sMessage, THISREF());
+            throw com::sun::star::registry::InvalidRegistryException(sMessage, THISREF());
         }
         return;
     }
 
     // not found - try other interface
-    Reference< XPropertySet > xParentPropertySet(m_xParentNode, UNO_QUERY);
+    com::sun::star::uno::Reference< com::sun::star::beans::XPropertySet > xParentPropertySet(m_xParentNode, com::sun::star::uno::UNO_QUERY);
     if (xParentPropertySet.is())
     {
         try
         {
             xParentPropertySet->setPropertyValue(m_sLocalName, _rValue);
         }
-        catch(IllegalArgumentException& iae)
+        catch(com::sun::star::lang::IllegalArgumentException& iae)
         {
-            OUString sMessage = UNISTRING("Unable to set a new value. The configuration node threw an ");
+            rtl::OUString sMessage = UNISTRING("Unable to set a new value. The configuration node threw an ");
             sMessage += UNISTRING("IllegalArgumentException: ");
             sMessage += iae.Message;
-            throw InvalidRegistryException(sMessage, THISREF());
+            throw com::sun::star::registry::InvalidRegistryException(sMessage, THISREF());
         }
-        catch(UnknownPropertyException& upe)
+        catch(com::sun::star::beans::UnknownPropertyException& upe)
         {
             OSL_ENSURE(false, "OConfigurationRegistryKey::writeValueNode : a UnknownPropertyException should be impossible !");
 
-            OUString sMessage = UNISTRING("Unable to set a new value. The configuration node threw an ");
+            rtl::OUString sMessage = UNISTRING("Unable to set a new value. The configuration node threw an ");
             sMessage += UNISTRING("UnknownPropertyException: ");
             sMessage += upe.Message;
-            throw InvalidRegistryException(sMessage, THISREF());
+            throw com::sun::star::registry::InvalidRegistryException(sMessage, THISREF());
         }
-        catch(PropertyVetoException& pve)
+        catch(com::sun::star::beans::PropertyVetoException& pve)
         {
-            OUString sMessage = UNISTRING("Unable to set a new value. The configuration node threw an ");
+            rtl::OUString sMessage = UNISTRING("Unable to set a new value. The configuration node threw an ");
             sMessage += UNISTRING("PropertyVetoException: ");
             sMessage += pve.Message;
-            throw InvalidRegistryException(sMessage, THISREF());
+            throw com::sun::star::registry::InvalidRegistryException(sMessage, THISREF());
         }
-        catch(WrappedTargetException& wte)
+        catch(com::sun::star::lang::WrappedTargetException& wte)
         {
-            OUString sMessage = UNISTRING("Unable to set a new value. The configuration node threw an ");
+            rtl::OUString sMessage = UNISTRING("Unable to set a new value. The configuration node threw an ");
             sMessage += UNISTRING("WrappedTargetException: ");
             sMessage += wte.Message;
-            throw InvalidRegistryException(sMessage, THISREF());
+            throw com::sun::star::registry::InvalidRegistryException(sMessage, THISREF());
         }
         return;
     }
 
-    throw InvalidRegistryException(UNISTRING("No interface found on parent node for writing to configuration value node."), THISREF());
+    throw com::sun::star::registry::InvalidRegistryException(UNISTRING("No interface found on parent node for writing to configuration value node."), THISREF());
 }
 
 //--------------------------------------------------------------------------
-::rtl::OUString SAL_CALL OConfigurationRegistryKey::getKeyName() throw(RuntimeException)
+::rtl::OUString SAL_CALL OConfigurationRegistryKey::getKeyName() throw(com::sun::star::uno::RuntimeException)
 {
     return m_sLocalName;
 }
 
 //--------------------------------------------------------------------------
-sal_Bool SAL_CALL OConfigurationRegistryKey::isReadOnly() throw(InvalidRegistryException, RuntimeException)
+sal_Bool SAL_CALL OConfigurationRegistryKey::isReadOnly() throw(com::sun::star::registry::InvalidRegistryException, com::sun::star::uno::RuntimeException)
 {
     OSL_ASSERT(UnoApiLock::isHeld());
     checkValid(KAT_META);
@@ -694,7 +679,7 @@ sal_Bool SAL_CALL OConfigurationRegistryKey::isReadOnly() throw(InvalidRegistryE
 }
 
 //--------------------------------------------------------------------------
-sal_Bool SAL_CALL OConfigurationRegistryKey::isValid() throw(RuntimeException)
+sal_Bool SAL_CALL OConfigurationRegistryKey::isValid() throw(com::sun::star::uno::RuntimeException)
 {
     OSL_ASSERT(UnoApiLock::isHeld());
     // TODO : perhaps if the registry we're a part of is closed ....
@@ -702,7 +687,7 @@ sal_Bool SAL_CALL OConfigurationRegistryKey::isValid() throw(RuntimeException)
 }
 
 //--------------------------------------------------------------------------
-RegistryKeyType SAL_CALL OConfigurationRegistryKey::getKeyType( const ::rtl::OUString& /*_rKeyName*/ ) throw(InvalidRegistryException, RuntimeException)
+com::sun::star::registry::RegistryKeyType SAL_CALL OConfigurationRegistryKey::getKeyType( const ::rtl::OUString& /*_rKeyName*/ ) throw(com::sun::star::registry::InvalidRegistryException, com::sun::star::uno::RuntimeException)
 {
     OSL_ASSERT(UnoApiLock::isHeld());
 
@@ -710,87 +695,87 @@ RegistryKeyType SAL_CALL OConfigurationRegistryKey::getKeyType( const ::rtl::OUS
     // Maybe we should check only KAT_META for consistency ?
     checkValid(KAT_CHILD);
 
-    return RegistryKeyType_KEY;
+    return com::sun::star::registry::RegistryKeyType_KEY;
 }
 
 //--------------------------------------------------------------------------
-RegistryValueType SAL_CALL OConfigurationRegistryKey::getValueType() throw(InvalidRegistryException, RuntimeException)
+com::sun::star::registry::RegistryValueType SAL_CALL OConfigurationRegistryKey::getValueType() throw(com::sun::star::registry::InvalidRegistryException, com::sun::star::uno::RuntimeException)
 {
     checkValid(KAT_META);
 
-    const Type aUnoType = implGetUnoType();
+    const com::sun::star::uno::Type aUnoType = implGetUnoType();
 
     switch (aUnoType.getTypeClass())
     {
-    case TypeClass_INTERFACE:   // this is really a case of 'no value type'
-        return RegistryValueType_NOT_DEFINED;
+    case com::sun::star::uno::TypeClass_INTERFACE:  // this is really a case of 'no value type'
+        return com::sun::star::registry::RegistryValueType_NOT_DEFINED;
 
-    case TypeClass_ANY: // this is really a case of 'all value types allowed'
-        return RegistryValueType_NOT_DEFINED;
+    case com::sun::star::uno::TypeClass_ANY:    // this is really a case of 'all value types allowed'
+        return com::sun::star::registry::RegistryValueType_NOT_DEFINED;
 
-    case TypeClass_STRING:
-        return RegistryValueType_STRING;
+    case com::sun::star::uno::TypeClass_STRING:
+        return com::sun::star::registry::RegistryValueType_STRING;
 
-    case TypeClass_BYTE:
-    case TypeClass_UNSIGNED_SHORT:
-    case TypeClass_UNSIGNED_LONG:
+    case com::sun::star::uno::TypeClass_BYTE:
+    case com::sun::star::uno::TypeClass_UNSIGNED_SHORT:
+    case com::sun::star::uno::TypeClass_UNSIGNED_LONG:
         OSL_ENSURE(false, "Unexpected UNSIGNED type found for configuration node");
         // FALL THRU
 
-    case TypeClass_BOOLEAN:
-    case TypeClass_SHORT:
-    case TypeClass_LONG:
-        return RegistryValueType_LONG;
+    case com::sun::star::uno::TypeClass_BOOLEAN:
+    case com::sun::star::uno::TypeClass_SHORT:
+    case com::sun::star::uno::TypeClass_LONG:
+        return com::sun::star::registry::RegistryValueType_LONG;
 
-    case TypeClass_FLOAT:
-    case TypeClass_DOUBLE:
+    case com::sun::star::uno::TypeClass_FLOAT:
+    case com::sun::star::uno::TypeClass_DOUBLE:
         OSL_ENSURE(sal_False, "OConfigurationRegistryKey::getValueType : registry does not support floating point numbers !");
-        return RegistryValueType_LONG;
+        return com::sun::star::registry::RegistryValueType_LONG;
 
-    case TypeClass_UNSIGNED_HYPER:
-    case TypeClass_HYPER:
+    case com::sun::star::uno::TypeClass_UNSIGNED_HYPER:
+    case com::sun::star::uno::TypeClass_HYPER:
         OSL_ENSURE(sal_False, "OConfigurationRegistryKey::getValueType : registry does not support 64-bit integer numbers !");
-        return RegistryValueType_LONG;
+        return com::sun::star::registry::RegistryValueType_LONG;
 
-    case TypeClass_SEQUENCE:
+    case com::sun::star::uno::TypeClass_SEQUENCE:
         if ( aUnoType.equals( getBinaryDataType() ) )
-            return RegistryValueType_BINARY;
+            return com::sun::star::registry::RegistryValueType_BINARY;
 
         else
         {
-            Type aElementType = getSequenceElementType(aUnoType);
+            com::sun::star::uno::Type aElementType = getSequenceElementType(aUnoType);
 
             switch (aElementType.getTypeClass())
             {
-            case TypeClass_STRING:
-                return RegistryValueType_STRINGLIST;
+            case com::sun::star::uno::TypeClass_STRING:
+                return com::sun::star::registry::RegistryValueType_STRINGLIST;
 
-            case TypeClass_BYTE:
+            case com::sun::star::uno::TypeClass_BYTE:
                 OSL_ASSERT(false); // this is caught by the 'binary' case
 
-            case TypeClass_UNSIGNED_SHORT:
-            case TypeClass_UNSIGNED_LONG:
+            case com::sun::star::uno::TypeClass_UNSIGNED_SHORT:
+            case com::sun::star::uno::TypeClass_UNSIGNED_LONG:
                 OSL_ENSURE(false, "Unexpected UNSIGNED-List type found for configuration node");
                 // FALL THRU
 
-            case TypeClass_BOOLEAN:
-            case TypeClass_SHORT:
-            case TypeClass_LONG:
-                return RegistryValueType_LONGLIST;
+            case com::sun::star::uno::TypeClass_BOOLEAN:
+            case com::sun::star::uno::TypeClass_SHORT:
+            case com::sun::star::uno::TypeClass_LONG:
+                return com::sun::star::registry::RegistryValueType_LONGLIST;
 
-            case TypeClass_FLOAT:
-            case TypeClass_DOUBLE:
+            case com::sun::star::uno::TypeClass_FLOAT:
+            case com::sun::star::uno::TypeClass_DOUBLE:
                 OSL_ENSURE(sal_False, "OConfigurationRegistryKey::getValueType : registry does not support floating point number lists !");
-                return RegistryValueType_LONGLIST;
+                return com::sun::star::registry::RegistryValueType_LONGLIST;
 
-            case TypeClass_UNSIGNED_HYPER:
-            case TypeClass_HYPER:
+            case com::sun::star::uno::TypeClass_UNSIGNED_HYPER:
+            case com::sun::star::uno::TypeClass_HYPER:
                 OSL_ENSURE(sal_False, "OConfigurationRegistryKey::getValueType : registry does not support 64-bit integer number lists !");
-                return RegistryValueType_LONGLIST;
+                return com::sun::star::registry::RegistryValueType_LONGLIST;
 
-            case TypeClass_ANY:
+            case com::sun::star::uno::TypeClass_ANY:
                 OSL_ENSURE(sal_False, "OConfigurationRegistryKey::getValueType : Unexpected: Any as sequence element type !");
-                return RegistryValueType_NOT_DEFINED;
+                return com::sun::star::registry::RegistryValueType_NOT_DEFINED;
 
             default:
                 if (aElementType.equals(getBinaryDataType()))
@@ -798,19 +783,19 @@ RegistryValueType SAL_CALL OConfigurationRegistryKey::getValueType() throw(Inval
                 else
                     OSL_ENSURE(sal_False, "OConfigurationRegistryKey::getValueType : unknown sequence element type !");
 
-                return RegistryValueType_NOT_DEFINED;
+                return com::sun::star::registry::RegistryValueType_NOT_DEFINED;
             }
         }
 
     default:
         OSL_ENSURE(sal_False, "OConfigurationRegistryKey::getValueType : unknown entry type !");
-        return RegistryValueType_NOT_DEFINED;
+        return com::sun::star::registry::RegistryValueType_NOT_DEFINED;
     }
 }
 
 //--------------------------------------------------------------------------
 
-Any OConfigurationRegistryKey::implGetValue() throw(InvalidRegistryException, RuntimeException)
+com::sun::star::uno::Any OConfigurationRegistryKey::implGetValue() throw(com::sun::star::registry::InvalidRegistryException, com::sun::star::uno::RuntimeException)
 {
     checkValid(KAT_VALUE);
 
@@ -818,22 +803,22 @@ Any OConfigurationRegistryKey::implGetValue() throw(InvalidRegistryException, Ru
 }
 
 //--------------------------------------------------------------------------
-sal_Int32 SAL_CALL OConfigurationRegistryKey::getLongValue() throw(InvalidRegistryException, InvalidValueException, RuntimeException)
+sal_Int32 SAL_CALL OConfigurationRegistryKey::getLongValue() throw(com::sun::star::registry::InvalidRegistryException, com::sun::star::registry::InvalidValueException, com::sun::star::uno::RuntimeException)
 {
-    Any aValue = implGetValue();
+    com::sun::star::uno::Any aValue = implGetValue();
 
     sal_Int32 nLongValue(0);
     switch (aValue.getValueTypeClass())
     {
     // integral types that are small enough are straightforward
-    case TypeClass_BYTE             : { sal_Int8   nNativeValue = 0; aValue >>= nNativeValue; nLongValue = nNativeValue; } break;
-    case TypeClass_BOOLEAN          : { sal_Bool   nNativeValue = false; aValue >>= nNativeValue; nLongValue = nNativeValue; } break;
-    case TypeClass_SHORT            : { sal_Int16  nNativeValue; aValue >>= nNativeValue; nLongValue = nNativeValue; } break;
-    case TypeClass_UNSIGNED_SHORT   : { sal_uInt16 nNativeValue; aValue >>= nNativeValue; nLongValue = nNativeValue; } break;
-    case TypeClass_LONG             : { sal_Int32  nNativeValue; aValue >>= nNativeValue; nLongValue = nNativeValue; } break;
+    case com::sun::star::uno::TypeClass_BYTE                : { sal_Int8   nNativeValue = 0; aValue >>= nNativeValue; nLongValue = nNativeValue; } break;
+    case com::sun::star::uno::TypeClass_BOOLEAN         : { sal_Bool   nNativeValue = false; aValue >>= nNativeValue; nLongValue = nNativeValue; } break;
+    case com::sun::star::uno::TypeClass_SHORT           : { sal_Int16  nNativeValue; aValue >>= nNativeValue; nLongValue = nNativeValue; } break;
+    case com::sun::star::uno::TypeClass_UNSIGNED_SHORT  : { sal_uInt16 nNativeValue; aValue >>= nNativeValue; nLongValue = nNativeValue; } break;
+    case com::sun::star::uno::TypeClass_LONG                : { sal_Int32  nNativeValue; aValue >>= nNativeValue; nLongValue = nNativeValue; } break;
 
     // this is lossless, but not value-preserving - use cast to avoid warnings
-    case TypeClass_UNSIGNED_LONG:
+    case com::sun::star::uno::TypeClass_UNSIGNED_LONG:
         {
             sal_uInt32 nNativeValue;
             aValue >>= nNativeValue;
@@ -842,7 +827,7 @@ sal_Int32 SAL_CALL OConfigurationRegistryKey::getLongValue() throw(InvalidRegist
         break;
 
     // the following are larger than Long - check for loss and throw if applicable
-    case TypeClass_HYPER:
+    case com::sun::star::uno::TypeClass_HYPER:
         {
             sal_Int64 nNativeValue;
             aValue >>= nNativeValue;
@@ -850,11 +835,11 @@ sal_Int32 SAL_CALL OConfigurationRegistryKey::getLongValue() throw(InvalidRegist
 
             // check for data loss
             if (sal_Int64(nLongValue) != nNativeValue)
-                throw InvalidValueException(UNISTRING("Unsigned Hyper value too large for long; Value cannot be retrieved using registry."), THISREF());
+                throw com::sun::star::registry::InvalidValueException(UNISTRING("Unsigned Hyper value too large for long; Value cannot be retrieved using registry."), THISREF());
         }
         break;
 
-    case TypeClass_UNSIGNED_HYPER:
+    case com::sun::star::uno::TypeClass_UNSIGNED_HYPER:
         {
             sal_uInt64 nNativeValue;
             aValue >>= nNativeValue;
@@ -862,12 +847,12 @@ sal_Int32 SAL_CALL OConfigurationRegistryKey::getLongValue() throw(InvalidRegist
 
             // check for data loss
             if (sal_uInt64(sal_uInt32(nLongValue)) != nNativeValue)
-                throw InvalidValueException(UNISTRING("Unsigned Hyper value too large for long; Value cannot be retrieved using registry."), THISREF());
+                throw com::sun::star::registry::InvalidValueException(UNISTRING("Unsigned Hyper value too large for long; Value cannot be retrieved using registry."), THISREF());
         }
         break;
 
     // for floating point types we need a limit for loss checking
-    case TypeClass_FLOAT:
+    case com::sun::star::uno::TypeClass_FLOAT:
         OSL_ENSURE(false, "Unexpected type FLOAT in configuration node");
         {
             // treat as double
@@ -877,7 +862,7 @@ sal_Int32 SAL_CALL OConfigurationRegistryKey::getLongValue() throw(InvalidRegist
         }
         // fall thru
 
-    case TypeClass_DOUBLE:
+    case com::sun::star::uno::TypeClass_DOUBLE:
         {
             double fNativeValue = 0;
             aValue >>= fNativeValue;
@@ -916,35 +901,35 @@ sal_Int32 SAL_CALL OConfigurationRegistryKey::getLongValue() throw(InvalidRegist
             if (bRecheck)
             {
                 if (diff > fEps || diff < -fEps)
-                    throw InvalidValueException(UNISTRING("Double value cannot fit in Long; Value cannot be retrieved using registry."), THISREF());
+                    throw com::sun::star::registry::InvalidValueException(UNISTRING("Double value cannot fit in Long; Value cannot be retrieved using registry."), THISREF());
             }
         }
         break;
 
-    case TypeClass_VOID:
+    case com::sun::star::uno::TypeClass_VOID:
         // allow NULL values, if we maybe advertise this node as long
-        if (this->getValueType() == RegistryValueType_LONG)
+        if (this->getValueType() == com::sun::star::registry::RegistryValueType_LONG)
             break;
         // else FALL THRU to exception
 
     default:
-        throw InvalidValueException(UNISTRING("This node does not contain a long (or a compatible) value."), THISREF());
+        throw com::sun::star::registry::InvalidValueException(UNISTRING("This node does not contain a long (or a compatible) value."), THISREF());
     }
     return nLongValue;
 }
 
 //--------------------------------------------------------------------------
-void SAL_CALL OConfigurationRegistryKey::setLongValue( sal_Int32 _nValue ) throw(InvalidRegistryException, RuntimeException)
+void SAL_CALL OConfigurationRegistryKey::setLongValue( sal_Int32 _nValue ) throw(com::sun::star::registry::InvalidRegistryException, com::sun::star::uno::RuntimeException)
 {
-    implSetValue(makeAny(_nValue));
+    implSetValue(com::sun::star::uno::makeAny(_nValue));
 }
 
 //--------------------------------------------------------------------------
-Sequence< sal_Int32 > SAL_CALL OConfigurationRegistryKey::getLongListValue() throw(InvalidRegistryException, InvalidValueException, RuntimeException)
+com::sun::star::uno::Sequence< sal_Int32 > SAL_CALL OConfigurationRegistryKey::getLongListValue() throw(com::sun::star::registry::InvalidRegistryException, com::sun::star::registry::InvalidValueException, com::sun::star::uno::RuntimeException)
 {
-    Any aValue = implGetValue();
+    com::sun::star::uno::Any aValue = implGetValue();
 
-    Sequence< sal_Int32 > aReturn;
+    com::sun::star::uno::Sequence< sal_Int32 > aReturn;
     if (!aValue.hasValue())
         checkNullable();// let NULL values pass
 
@@ -952,31 +937,31 @@ Sequence< sal_Int32 > SAL_CALL OConfigurationRegistryKey::getLongListValue() thr
     {
         // TODO : maybe it's a sequence of sal_Int8 or anything like that which we're able to convert ....
 
-        throw InvalidValueException(UNISTRING("This configuration node does not contain a list of longs !"), THISREF());
+        throw com::sun::star::registry::InvalidValueException(UNISTRING("This configuration node does not contain a list of longs !"), THISREF());
     }
 
     return aReturn;
 }
 
 //--------------------------------------------------------------------------
-void SAL_CALL OConfigurationRegistryKey::setLongListValue( const Sequence< sal_Int32 >& _seqValue ) throw(InvalidRegistryException, RuntimeException)
+void SAL_CALL OConfigurationRegistryKey::setLongListValue( const com::sun::star::uno::Sequence< sal_Int32 >& _seqValue ) throw(com::sun::star::registry::InvalidRegistryException, com::sun::star::uno::RuntimeException)
 {
-    implSetValue(makeAny(_seqValue));
+    implSetValue(com::sun::star::uno::makeAny(_seqValue));
 }
 
 //--------------------------------------------------------------------------
-OUString SAL_CALL OConfigurationRegistryKey::getAsciiValue() throw(InvalidRegistryException, InvalidValueException, RuntimeException)
+rtl::OUString SAL_CALL OConfigurationRegistryKey::getAsciiValue() throw(com::sun::star::registry::InvalidRegistryException, com::sun::star::registry::InvalidValueException, com::sun::star::uno::RuntimeException)
 {
-    OUString sReturn = getStringValue();
+    rtl::OUString sReturn = getStringValue();
 
     if (!isAscii(sReturn))
-        throw InvalidValueException(UNISTRING("This configuration node value (a string) is not pure ASCII !"), THISREF());
+        throw com::sun::star::registry::InvalidValueException(UNISTRING("This configuration node value (a string) is not pure ASCII !"), THISREF());
 
     return sReturn;
 }
 
 //--------------------------------------------------------------------------
-void SAL_CALL OConfigurationRegistryKey::setAsciiValue( const ::rtl::OUString& _rValue ) throw(InvalidRegistryException, RuntimeException)
+void SAL_CALL OConfigurationRegistryKey::setAsciiValue( const ::rtl::OUString& _rValue ) throw(com::sun::star::registry::InvalidRegistryException, com::sun::star::uno::RuntimeException)
 {
     OSL_ENSURE( isAscii(_rValue), "The string passesd to OConfigurationRegistryKey::setAsciiValue is not pure ASCII");
 
@@ -984,18 +969,18 @@ void SAL_CALL OConfigurationRegistryKey::setAsciiValue( const ::rtl::OUString& _
 }
 
 //--------------------------------------------------------------------------
-Sequence< OUString > SAL_CALL OConfigurationRegistryKey::getAsciiListValue() throw(InvalidRegistryException, InvalidValueException, RuntimeException)
+com::sun::star::uno::Sequence< rtl::OUString > SAL_CALL OConfigurationRegistryKey::getAsciiListValue() throw(com::sun::star::registry::InvalidRegistryException, com::sun::star::registry::InvalidValueException, com::sun::star::uno::RuntimeException)
 {
-    Sequence<OUString> aReturn = getStringListValue();
+    com::sun::star::uno::Sequence<rtl::OUString> aReturn = getStringListValue();
 
     if (!isAscii(aReturn))
-        throw InvalidValueException(UNISTRING("This configuration node value (a string list) is not pure ASCII !"), THISREF());
+        throw com::sun::star::registry::InvalidValueException(UNISTRING("This configuration node value (a string list) is not pure ASCII !"), THISREF());
 
     return aReturn;
 }
 
 //--------------------------------------------------------------------------
-void SAL_CALL OConfigurationRegistryKey::setAsciiListValue( const Sequence< ::rtl::OUString >& _seqValue ) throw(InvalidRegistryException, RuntimeException)
+void SAL_CALL OConfigurationRegistryKey::setAsciiListValue( const com::sun::star::uno::Sequence< ::rtl::OUString >& _seqValue ) throw(com::sun::star::registry::InvalidRegistryException, com::sun::star::uno::RuntimeException)
 {
     OSL_ENSURE( isAscii(_seqValue), "The string passesd to OConfigurationRegistryKey::setAsciiValue is not pure ASCII");
 
@@ -1003,79 +988,79 @@ void SAL_CALL OConfigurationRegistryKey::setAsciiListValue( const Sequence< ::rt
 }
 
 //--------------------------------------------------------------------------
-::rtl::OUString SAL_CALL OConfigurationRegistryKey::getStringValue() throw(InvalidRegistryException, InvalidValueException, RuntimeException)
+::rtl::OUString SAL_CALL OConfigurationRegistryKey::getStringValue() throw(com::sun::star::registry::InvalidRegistryException, com::sun::star::registry::InvalidValueException, com::sun::star::uno::RuntimeException)
 {
-    Any aValue = implGetValue();
+    com::sun::star::uno::Any aValue = implGetValue();
 
-    OUString sReturn;
+    rtl::OUString sReturn;
     if (!aValue.hasValue())
         checkNullable();// let NULL values pass
 
     else if (!(aValue >>= sReturn))
-        throw InvalidValueException(UNISTRING("This node does not contain a string value."), THISREF());
+        throw com::sun::star::registry::InvalidValueException(UNISTRING("This node does not contain a string value."), THISREF());
 
     return sReturn;
 }
 
 //--------------------------------------------------------------------------
-void SAL_CALL OConfigurationRegistryKey::setStringValue( const ::rtl::OUString& _rValue ) throw(InvalidRegistryException, RuntimeException)
+void SAL_CALL OConfigurationRegistryKey::setStringValue( const ::rtl::OUString& _rValue ) throw(com::sun::star::registry::InvalidRegistryException, com::sun::star::uno::RuntimeException)
 {
-    implSetValue(makeAny(_rValue));
+    implSetValue(com::sun::star::uno::makeAny(_rValue));
 }
 
 //--------------------------------------------------------------------------
-Sequence< ::rtl::OUString > SAL_CALL OConfigurationRegistryKey::getStringListValue() throw(InvalidRegistryException, InvalidValueException, RuntimeException)
+com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL OConfigurationRegistryKey::getStringListValue() throw(com::sun::star::registry::InvalidRegistryException, com::sun::star::registry::InvalidValueException, com::sun::star::uno::RuntimeException)
 {
-    Any aValue = implGetValue();
+    com::sun::star::uno::Any aValue = implGetValue();
 
-    Sequence< OUString > aReturn;
+    com::sun::star::uno::Sequence< rtl::OUString > aReturn;
     if (!aValue.hasValue())
         checkNullable();// let NULL values pass
 
     else if (!(aValue >>= aReturn))
-        throw InvalidValueException(UNISTRING("This configuration node does not contain a list of strings !"), THISREF());
+        throw com::sun::star::registry::InvalidValueException(UNISTRING("This configuration node does not contain a list of strings !"), THISREF());
 
     return aReturn;
 }
 
 //--------------------------------------------------------------------------
-void SAL_CALL OConfigurationRegistryKey::setStringListValue( const Sequence< ::rtl::OUString >& _seqValue ) throw(InvalidRegistryException, RuntimeException)
+void SAL_CALL OConfigurationRegistryKey::setStringListValue( const com::sun::star::uno::Sequence< ::rtl::OUString >& _seqValue ) throw(com::sun::star::registry::InvalidRegistryException, com::sun::star::uno::RuntimeException)
 {
-    implSetValue(makeAny(_seqValue));
+    implSetValue(com::sun::star::uno::makeAny(_seqValue));
 }
 
 //--------------------------------------------------------------------------
-Sequence< sal_Int8 > SAL_CALL OConfigurationRegistryKey::getBinaryValue() throw(InvalidRegistryException, InvalidValueException, RuntimeException)
+com::sun::star::uno::Sequence< sal_Int8 > SAL_CALL OConfigurationRegistryKey::getBinaryValue() throw(com::sun::star::registry::InvalidRegistryException, com::sun::star::registry::InvalidValueException, com::sun::star::uno::RuntimeException)
 {
-    Any aValue = implGetValue();
+    com::sun::star::uno::Any aValue = implGetValue();
 
-    Sequence< sal_Int8 > aReturn;
+    com::sun::star::uno::Sequence< sal_Int8 > aReturn;
     if (!aValue.hasValue())
         checkNullable();// let NULL values pass
 
     else if (!(aValue >>= aReturn))
         return aReturn;
 
-    throw InvalidValueException(UNISTRING("This configuration node does not contain a list of strings !"), THISREF());
+    throw com::sun::star::registry::InvalidValueException(UNISTRING("This configuration node does not contain a list of strings !"), THISREF());
 }
 
 //--------------------------------------------------------------------------
-void SAL_CALL OConfigurationRegistryKey::setBinaryValue( const Sequence< sal_Int8 >& _rValue ) throw(InvalidRegistryException, RuntimeException)
+void SAL_CALL OConfigurationRegistryKey::setBinaryValue( const com::sun::star::uno::Sequence< sal_Int8 >& _rValue ) throw(com::sun::star::registry::InvalidRegistryException, com::sun::star::uno::RuntimeException)
 {
-    implSetValue(makeAny(_rValue));
+    implSetValue(com::sun::star::uno::makeAny(_rValue));
 }
 
 //--------------------------------------------------------------------------
-Reference< XRegistryKey > OConfigurationRegistryKey::implGetKey( const ::rtl::OUString& _rKeyName )
-    throw(InvalidRegistryException, RuntimeException)
+com::sun::star::uno::Reference< com::sun::star::registry::XRegistryKey > OConfigurationRegistryKey::implGetKey( const ::rtl::OUString& _rKeyName )
+    throw(com::sun::star::registry::InvalidRegistryException, com::sun::star::uno::RuntimeException)
 {
-    Any aDescendant = implGetDescendant(_rKeyName);
-    if (aDescendant.getValueType().getTypeClass() == TypeClass_INTERFACE)
+    com::sun::star::uno::Any aDescendant = implGetDescendant(_rKeyName);
+    if (aDescendant.getValueType().getTypeClass() == com::sun::star::uno::TypeClass_INTERFACE)
     {
-        Reference< XNameAccess > xNode;
+        com::sun::star::uno::Reference< com::sun::star::container::XNameAccess > xNode;
         ::cppu::extractInterface(xNode, aDescendant);
         if (!xNode.is())
-            throw InvalidRegistryException(UNISTRING("invalid descendant node. No XNameAccess found."), THISREF());
+            throw com::sun::star::registry::InvalidRegistryException(UNISTRING("invalid descendant node. No XNameAccess found."), THISREF());
         return new OConfigurationRegistryKey(xNode, !m_bReadOnly);
     }
     else
@@ -1083,16 +1068,16 @@ Reference< XRegistryKey > OConfigurationRegistryKey::implGetKey( const ::rtl::OU
 #if OSL_DEBUG_LEVEL > 1
         switch (aDescendant.getValueType().getTypeClass())
         {
-            case TypeClass_STRING:
-            case TypeClass_SHORT:
-            case TypeClass_UNSIGNED_SHORT:
-            case TypeClass_BYTE:
-            case TypeClass_LONG:
-            case TypeClass_UNSIGNED_LONG:
-            case TypeClass_BOOLEAN:
-            case TypeClass_SEQUENCE:
+            case com::sun::star::uno::TypeClass_STRING:
+            case com::sun::star::uno::TypeClass_SHORT:
+            case com::sun::star::uno::TypeClass_UNSIGNED_SHORT:
+            case com::sun::star::uno::TypeClass_BYTE:
+            case com::sun::star::uno::TypeClass_LONG:
+            case com::sun::star::uno::TypeClass_UNSIGNED_LONG:
+            case com::sun::star::uno::TypeClass_BOOLEAN:
+            case com::sun::star::uno::TypeClass_SEQUENCE:
                 break;
-            case TypeClass_VOID: // NULL value found
+            case com::sun::star::uno::TypeClass_VOID: // NULL value found
                 break;
             default:
                 OSL_ENSURE(sal_False, "OConfigurationRegistryKey::openKey : unknown, invalid or unhandled descendant value type !");
@@ -1101,24 +1086,24 @@ Reference< XRegistryKey > OConfigurationRegistryKey::implGetKey( const ::rtl::OU
 
         OSL_ASSERT(m_xNode.is());
 
-        Reference< XNameAccess > xDescParent(m_xNode);  // the parent config node of the descandent
-        OUString sDescRelativeName( _rKeyName );        // local name of the descendant within xDescParent
+        com::sun::star::uno::Reference< com::sun::star::container::XNameAccess > xDescParent(m_xNode);  // the parent config node of the descandent
+        rtl::OUString sDescRelativeName( _rKeyName );        // local name of the descendant within xDescParent
 
         if (!m_xNode->hasByName(_rKeyName)) // it is a hierarchical Path -> more work
         {
-            OUString sParentLocation;
+            rtl::OUString sParentLocation;
 
             if ( !splitPath(_rKeyName, sParentLocation, sDescRelativeName) )
             {
-                throw InvalidRegistryException(UNISTRING("Cannot split path for value. The internal registry structure seems to be corrupt."), THISREF());
+                throw com::sun::star::registry::InvalidRegistryException(UNISTRING("Cannot split path for value. The internal registry structure seems to be corrupt."), THISREF());
             }
 
             if (sParentLocation.getLength())
             {
-                Any aDescParent = implGetDescendant(sParentLocation);
+                com::sun::star::uno::Any aDescParent = implGetDescendant(sParentLocation);
                 ::cppu::extractInterface(xDescParent, aDescParent);
                 if (!xDescParent.is())
-                    throw InvalidRegistryException(UNISTRING("The internal registry structure seems to be corrupt."), THISREF());
+                    throw com::sun::star::registry::InvalidRegistryException(UNISTRING("The internal registry structure seems to be corrupt."), THISREF());
             }
         }
 
@@ -1130,18 +1115,18 @@ Reference< XRegistryKey > OConfigurationRegistryKey::implGetKey( const ::rtl::OU
 }
 
 //--------------------------------------------------------------------------
-Reference< XRegistryKey > SAL_CALL OConfigurationRegistryKey::openKey( const ::rtl::OUString& _rKeyName ) throw(InvalidRegistryException, RuntimeException)
+com::sun::star::uno::Reference< com::sun::star::registry::XRegistryKey > SAL_CALL OConfigurationRegistryKey::openKey( const ::rtl::OUString& _rKeyName ) throw(com::sun::star::registry::InvalidRegistryException, com::sun::star::uno::RuntimeException)
 {
     checkValid(KAT_CHILD);
 
     return implGetKey(_rKeyName);
 }
 //--------------------------------------------------------------------------
-bool OConfigurationRegistryKey::checkRelativeKeyName(OUString& _rKeyName) throw(InvalidRegistryException, RuntimeException)
+bool OConfigurationRegistryKey::checkRelativeKeyName(rtl::OUString& _rKeyName) throw(com::sun::star::registry::InvalidRegistryException, com::sun::star::uno::RuntimeException)
 {
     // no empty names allowed
     if (!_rKeyName.getLength())
-        throw InvalidRegistryException(UNISTRING("The key name is invalid."), THISREF());
+        throw com::sun::star::registry::InvalidRegistryException(UNISTRING("The key name is invalid."), THISREF());
 
     bool bCleanPath = true;
 
@@ -1159,21 +1144,21 @@ bool OConfigurationRegistryKey::checkRelativeKeyName(OUString& _rKeyName) throw(
 
         else
         {
-            Reference< XStringEscape > xSE(m_xNode, UNO_QUERY);
+            com::sun::star::uno::Reference< com::sun::star::util::XStringEscape > xSE(m_xNode, com::sun::star::uno::UNO_QUERY);
 
             sal_Bool bPreferLocal = xSE.is();
 
             if (!bPreferLocal)
             {
-                Reference< XServiceInfo > xSI(m_xNode, UNO_QUERY);
-                if (xSI.is() && xSI->supportsService(OUString::createFromAscii("com.sun.star.configuration.SetAccess")))
+                com::sun::star::uno::Reference< com::sun::star::lang::XServiceInfo > xSI(m_xNode, com::sun::star::uno::UNO_QUERY);
+                if (xSI.is() && xSI->supportsService(rtl::OUString::createFromAscii("com.sun.star.configuration.SetAccess")))
                     bPreferLocal = true;
             }
 
             if (bPreferLocal)
             {
-                Reference< XHierarchicalNameAccess > xHA(m_xNode, UNO_QUERY);
-                OUString sCleanName = _rKeyName.copy(0, nCleanEnd);
+                com::sun::star::uno::Reference< com::sun::star::container::XHierarchicalNameAccess > xHA(m_xNode, com::sun::star::uno::UNO_QUERY);
+                rtl::OUString sCleanName = _rKeyName.copy(0, nCleanEnd);
 
                 if (xHA.is() && xHA->hasByHierarchicalName(sCleanName))
                     bPreferLocal = false;
@@ -1191,11 +1176,11 @@ bool OConfigurationRegistryKey::checkRelativeKeyName(OUString& _rKeyName) throw(
     {
         // no absolute names ("/...") allowed
         if (_rKeyName.getStr()[0] == '/')
-            throw InvalidRegistryException(UNISTRING("The key name is invalid. It must be a relative, not an absolute name."), THISREF());
+            throw com::sun::star::registry::InvalidRegistryException(UNISTRING("The key name is invalid. It must be a relative, not an absolute name."), THISREF());
 
         if (nCleanEnd <= 0)
             // the original name consists of slashes only
-            throw InvalidRegistryException(UNISTRING("The key name is invalid."), THISREF());
+            throw com::sun::star::registry::InvalidRegistryException(UNISTRING("The key name is invalid."), THISREF());
 
 
         _rKeyName = _rKeyName.copy(0, nCleanEnd);
@@ -1204,27 +1189,27 @@ bool OConfigurationRegistryKey::checkRelativeKeyName(OUString& _rKeyName) throw(
 }
 
 //--------------------------------------------------------------------------
-Reference< XRegistryKey > SAL_CALL OConfigurationRegistryKey::createKey( const ::rtl::OUString& _rKeyName ) throw(InvalidRegistryException, RuntimeException)
+com::sun::star::uno::Reference< com::sun::star::registry::XRegistryKey > SAL_CALL OConfigurationRegistryKey::createKey( const ::rtl::OUString& _rKeyName ) throw(com::sun::star::registry::InvalidRegistryException, com::sun::star::uno::RuntimeException)
 {
     checkValid(KAT_CHILD);
 
     if (m_bReadOnly)
-        throw InvalidRegistryException(UNISTRING("The key is read only."), THISREF());
+        throw com::sun::star::registry::InvalidRegistryException(UNISTRING("The key is read only."), THISREF());
 
     OSL_ENSURE(m_xNode.is(), "OConfigurationRegistryKey::createKey : somebody changed the checkValid(KAT_CHILD) behaviour !");
 
-    OUString sKeyName(_rKeyName);
+    rtl::OUString sKeyName(_rKeyName);
     if (checkRelativeKeyName(sKeyName))
     {
-        OUString sParentName, sLocalName;
+        rtl::OUString sParentName, sLocalName;
 
         if (!splitPath(sKeyName,sParentName, sLocalName))
-            throw InvalidRegistryException(UNISTRING("The key name is invalid."), THISREF());
+            throw com::sun::star::registry::InvalidRegistryException(UNISTRING("The key name is invalid."), THISREF());
 
         if (sParentName.getLength()) // it's a nested key name
         {
             // check if we have the key already
-            Reference< XHierarchicalNameAccess > xDeepAccess(m_xNode, UNO_QUERY);
+            com::sun::star::uno::Reference< com::sun::star::container::XHierarchicalNameAccess > xDeepAccess(m_xNode, com::sun::star::uno::UNO_QUERY);
             if (xDeepAccess.is() && xDeepAccess->hasByHierarchicalName(sKeyName))
             {
                 // already there - just open it
@@ -1232,11 +1217,11 @@ Reference< XRegistryKey > SAL_CALL OConfigurationRegistryKey::createKey( const :
             }
 
             // deep access, but not found. delegate it to a registry key which is one level above the to-be-created one
-            Reference< XRegistryKey > xSetNode = implGetKey(sParentName);
+            com::sun::star::uno::Reference< com::sun::star::registry::XRegistryKey > xSetNode = implGetKey(sParentName);
             if (!xSetNode.is())
             {
                 OSL_ENSURE(sal_False, "OConfigurationRegistryKey::createKey : somebody changed the implGetKey behaviour !");
-                throw InvalidRegistryException(UNISTRING("An internal error occured."), THISREF());
+                throw com::sun::star::registry::InvalidRegistryException(UNISTRING("An internal error occured."), THISREF());
             }
             return xSetNode->createKey(sLocalName); // problem: request for a/['b/c'] might find a/b/c
         }
@@ -1251,13 +1236,13 @@ Reference< XRegistryKey > SAL_CALL OConfigurationRegistryKey::createKey( const :
         return implGetKey(sKeyName);
     }
 
-    Reference< XNameContainer > xContainer(m_xNode, UNO_QUERY);
+    com::sun::star::uno::Reference< com::sun::star::container::XNameContainer > xContainer(m_xNode, com::sun::star::uno::UNO_QUERY);
     if (!xContainer.is())
-        throw InvalidRegistryException(UNISTRING("The configuration node represented by this key is not a set node, you can't insert keys."), THISREF());
+        throw com::sun::star::registry::InvalidRegistryException(UNISTRING("The configuration node represented by this key is not a set node, you can't insert keys."), THISREF());
 
-    Any aValueToInsert;
+    com::sun::star::uno::Any aValueToInsert;
 
-    Reference< XSingleServiceFactory > xChildFactory(xContainer, UNO_QUERY);
+    com::sun::star::uno::Reference< com::sun::star::lang::XSingleServiceFactory > xChildFactory(xContainer, com::sun::star::uno::UNO_QUERY);
     if (xChildFactory.is())
     {
         // In the configuration API, the creation of a new child is two-stage process : first you create a child which
@@ -1268,24 +1253,24 @@ Reference< XRegistryKey > SAL_CALL OConfigurationRegistryKey::createKey( const :
         // create a new floating child for the container node
         try
         {
-            Reference< XInterface > xFloatingChild = xChildFactory->createInstance();
+            com::sun::star::uno::Reference< com::sun::star::uno::XInterface > xFloatingChild = xChildFactory->createInstance();
             OSL_ENSURE( xFloatingChild.is(), "The newly created element is NULL !");
 
-            Reference< XNameAccess > xInsertedChild(xFloatingChild, UNO_QUERY);
+            com::sun::star::uno::Reference< com::sun::star::container::XNameAccess > xInsertedChild(xFloatingChild, com::sun::star::uno::UNO_QUERY);
             OSL_ENSURE( xInsertedChild.is(), "The newly created element does not provide the required interface");
 
             if (!xInsertedChild.is())
-                throw InvalidRegistryException(UNISTRING("An internal error occured. The objects provided by the configuration API are invalid."), THISREF());
+                throw com::sun::star::registry::InvalidRegistryException(UNISTRING("An internal error occured. The objects provided by the configuration API are invalid."), THISREF());
 
             aValueToInsert <<= xInsertedChild; // xFloatingChild;
         }
-        catch (RuntimeException&)
+        catch (com::sun::star::uno::RuntimeException&)
         {   // allowed to leave this method
             throw;
         }
-        catch (Exception& e)
+        catch (com::sun::star::uno::Exception& e)
         {   // not allowed to leave this method
-            throw InvalidRegistryException(UNISTRING("Unable to create a new child for the configuration node. Original error message as provided by the configuration API : ") += e.Message,
+            throw com::sun::star::registry::InvalidRegistryException(UNISTRING("Unable to create a new child for the configuration node. Original error message as provided by the configuration API : ") += e.Message,
                 THISREF());
         }
         OSL_ENSURE(aValueToInsert.hasValue(), "New Child node did not get into the Any ?");
@@ -1293,10 +1278,10 @@ Reference< XRegistryKey > SAL_CALL OConfigurationRegistryKey::createKey( const :
     else
     {
         // If the elements of the set are simple values, we need to create a matching value
-        Type aElementType = xContainer->getElementType();
+        com::sun::star::uno::Type aElementType = xContainer->getElementType();
         aValueToInsert = implCreateDefaultElement(aElementType);
 
-        OSL_ENSURE(aValueToInsert.hasValue() || aElementType.getTypeClass() == TypeClass_ANY, "Internal error: NULL value created for new value element ?");
+        OSL_ENSURE(aValueToInsert.hasValue() || aElementType.getTypeClass() == com::sun::star::uno::TypeClass_ANY, "Internal error: NULL value created for new value element ?");
     }
 
     // and immediately insert it into the container
@@ -1304,31 +1289,31 @@ Reference< XRegistryKey > SAL_CALL OConfigurationRegistryKey::createKey( const :
     {
         xContainer->insertByName(sKeyName, aValueToInsert);
     }
-    catch (IllegalArgumentException& e)
+    catch (com::sun::star::lang::IllegalArgumentException& e)
     {
-        throw InvalidRegistryException(UNISTRING("illegal argument to InsertByName: ") += e.Message, THISREF());
+        throw com::sun::star::registry::InvalidRegistryException(UNISTRING("illegal argument to InsertByName: ") += e.Message, THISREF());
     }
-    catch (ElementExistException& e)
+    catch (com::sun::star::container::ElementExistException& e)
     {
         OSL_ENSURE(false, "There was an element of the same name inserted just now");
 
         // try to return that one
         try { return implGetKey(sKeyName); }
-        catch (Exception&) { OSL_ENSURE(false, "But the other element cannot be retrieved"); }
+        catch (com::sun::star::uno::Exception&) { OSL_ENSURE(false, "But the other element cannot be retrieved"); }
 
 
-        throw InvalidRegistryException(UNISTRING("Inserting raised a NoSuchElementException for an unavailable element ! Original error message : ") += e.Message, THISREF());
+        throw com::sun::star::registry::InvalidRegistryException(UNISTRING("Inserting raised a NoSuchElementException for an unavailable element ! Original error message : ") += e.Message, THISREF());
     }
-    catch (WrappedTargetException& e)
+    catch (com::sun::star::lang::WrappedTargetException& e)
     {
-        throw InvalidRegistryException(UNISTRING("Inserting raised a WrappedTargetException. Original error message : ") += e.Message, THISREF());
+        throw com::sun::star::registry::InvalidRegistryException(UNISTRING("Inserting raised a WrappedTargetException. Original error message : ") += e.Message, THISREF());
     }
 
     return new OConfigurationRegistryKey(aValueToInsert, m_xNode, sKeyName, !m_bReadOnly);
 }
 
 //--------------------------------------------------------------------------
-void SAL_CALL OConfigurationRegistryKey::closeKey() throw(InvalidRegistryException, RuntimeException)
+void SAL_CALL OConfigurationRegistryKey::closeKey() throw(com::sun::star::registry::InvalidRegistryException, com::sun::star::uno::RuntimeException)
 {
     OSL_ASSERT(UnoApiLock::isHeld());
     checkValid(KAT_META);
@@ -1339,32 +1324,32 @@ void SAL_CALL OConfigurationRegistryKey::closeKey() throw(InvalidRegistryExcepti
     {
         m_xNode.clear();
         m_xParentNode.clear();
-//      m_sLocalName = OUString(); - local name is const ...
+//      m_sLocalName = rtl::OUString(); - local name is const ...
     }
 }
 
 //--------------------------------------------------------------------------
-void SAL_CALL OConfigurationRegistryKey::deleteKey( const OUString& _rKeyName ) throw(InvalidRegistryException, RuntimeException)
+void SAL_CALL OConfigurationRegistryKey::deleteKey( const rtl::OUString& _rKeyName ) throw(com::sun::star::registry::InvalidRegistryException, com::sun::star::uno::RuntimeException)
 {
     checkValid(KAT_CHILD);
     if (m_bReadOnly)
-        throw InvalidRegistryException(UNISTRING("The key is read only."), THISREF());
+        throw com::sun::star::registry::InvalidRegistryException(UNISTRING("The key is read only."), THISREF());
 
-    OUString sKeyName(_rKeyName);
+    rtl::OUString sKeyName(_rKeyName);
     if (checkRelativeKeyName(sKeyName))
     {
-        OUString sParentName, sLocalName;
+        rtl::OUString sParentName, sLocalName;
 
         if (!splitPath(sKeyName,sParentName, sLocalName))
-            throw InvalidRegistryException(UNISTRING("The key name is invalid."), THISREF());
+            throw com::sun::star::registry::InvalidRegistryException(UNISTRING("The key name is invalid."), THISREF());
 
         if (sParentName.getLength()) // it's a nested key name
         {
-            Reference< XRegistryKey > xSetNode = implGetKey(sParentName);
+            com::sun::star::uno::Reference< com::sun::star::registry::XRegistryKey > xSetNode = implGetKey(sParentName);
             if (!xSetNode.is())
             {
                 OSL_ENSURE(sal_False, "OConfigurationRegistryKey::createKey : somebody changed the implGetKey behaviour !");
-                throw InvalidRegistryException(UNISTRING("An internal error occured."), THISREF());
+                throw com::sun::star::registry::InvalidRegistryException(UNISTRING("An internal error occured."), THISREF());
             }
             xSetNode->deleteKey(sLocalName);
             return;
@@ -1374,38 +1359,38 @@ void SAL_CALL OConfigurationRegistryKey::deleteKey( const OUString& _rKeyName ) 
     }
 
     // The requested new key is one level below ourself. Can't delegate the creation.
-    Reference< XNameContainer > xContainer(m_xNode, UNO_QUERY);
+    com::sun::star::uno::Reference< com::sun::star::container::XNameContainer > xContainer(m_xNode, com::sun::star::uno::UNO_QUERY);
     if (!xContainer.is())
-        throw InvalidRegistryException(UNISTRING("The configuration node represented by this key is not a set node, you can't remove keys."), THISREF());
+        throw com::sun::star::registry::InvalidRegistryException(UNISTRING("The configuration node represented by this key is not a set node, you can't remove keys."), THISREF());
 
     // and immediately remove it from the container
     try
     {
         xContainer->removeByName(sKeyName);
     }
-    catch (NoSuchElementException& e)
+    catch (com::sun::star::container::NoSuchElementException& e)
     {
         if (e.Message.getLength())
-            throw InvalidRegistryException(e.Message, THISREF());
+            throw com::sun::star::registry::InvalidRegistryException(e.Message, THISREF());
         else
-            throw InvalidRegistryException((UNISTRING("There is no element named ") += sKeyName) += UNISTRING(" to remove."), THISREF());
+            throw com::sun::star::registry::InvalidRegistryException((UNISTRING("There is no element named ") += sKeyName) += UNISTRING(" to remove."), THISREF());
     }
-    catch (WrappedTargetException& e)
+    catch (com::sun::star::lang::WrappedTargetException& e)
     {
-        throw InvalidRegistryException(UNISTRING("Removing a node caused a WrappedTargetException. Original error message : ") += e.Message, THISREF());
+        throw com::sun::star::registry::InvalidRegistryException(UNISTRING("Removing a node caused a WrappedTargetException. Original error message : ") += e.Message, THISREF());
     }
 }
 
 //--------------------------------------------------------------------------
-Sequence< Reference< XRegistryKey > > SAL_CALL OConfigurationRegistryKey::openKeys() throw(InvalidRegistryException, RuntimeException)
+com::sun::star::uno::Sequence< com::sun::star::uno::Reference< com::sun::star::registry::XRegistryKey > > SAL_CALL OConfigurationRegistryKey::openKeys() throw(com::sun::star::registry::InvalidRegistryException, com::sun::star::uno::RuntimeException)
 {
     checkValid(KAT_CHILD);
 
-    Sequence< ::rtl::OUString > aNames(m_xNode->getElementNames());
+    com::sun::star::uno::Sequence< ::rtl::OUString > aNames(m_xNode->getElementNames());
 
     sal_Int32 const nCount = aNames.getLength();
 
-    Sequence< Reference< XRegistryKey > > aReturn(nCount);
+    com::sun::star::uno::Sequence< com::sun::star::uno::Reference< com::sun::star::registry::XRegistryKey > > aReturn(nCount);
 
     for (sal_Int32 i=0; i<nCount; ++i)
         aReturn[i] = implGetKey(aNames[i]);
@@ -1414,34 +1399,34 @@ Sequence< Reference< XRegistryKey > > SAL_CALL OConfigurationRegistryKey::openKe
 }
 
 //--------------------------------------------------------------------------
-Sequence< ::rtl::OUString > SAL_CALL OConfigurationRegistryKey::getKeyNames() throw(InvalidRegistryException, RuntimeException)
+com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL OConfigurationRegistryKey::getKeyNames() throw(com::sun::star::registry::InvalidRegistryException, com::sun::star::uno::RuntimeException)
 {
     checkValid(KAT_CHILD);
     return m_xNode->getElementNames();
 }
 
 //--------------------------------------------------------------------------
-sal_Bool SAL_CALL OConfigurationRegistryKey::createLink( const ::rtl::OUString& /*aLinkName*/, const ::rtl::OUString& /*aLinkTarget*/ ) throw(InvalidRegistryException, RuntimeException)
+sal_Bool SAL_CALL OConfigurationRegistryKey::createLink( const ::rtl::OUString& /*aLinkName*/, const ::rtl::OUString& /*aLinkTarget*/ ) throw(com::sun::star::registry::InvalidRegistryException, com::sun::star::uno::RuntimeException)
 {
-    throw InvalidRegistryException(UNISTRING("This registry, which is base on a configuration tree, does not support links."), THISREF());
+    throw com::sun::star::registry::InvalidRegistryException(UNISTRING("This registry, which is base on a configuration tree, does not support links."), THISREF());
 }
 
 //--------------------------------------------------------------------------
-void SAL_CALL OConfigurationRegistryKey::deleteLink( const ::rtl::OUString& /*rLinkName*/ ) throw(InvalidRegistryException, RuntimeException)
+void SAL_CALL OConfigurationRegistryKey::deleteLink( const ::rtl::OUString& /*rLinkName*/ ) throw(com::sun::star::registry::InvalidRegistryException, com::sun::star::uno::RuntimeException)
 {
-    throw InvalidRegistryException(UNISTRING("This registry, which is base on a configuration tree, does not support links."), THISREF());
+    throw com::sun::star::registry::InvalidRegistryException(UNISTRING("This registry, which is base on a configuration tree, does not support links."), THISREF());
 }
 
 //--------------------------------------------------------------------------
-::rtl::OUString SAL_CALL OConfigurationRegistryKey::getLinkTarget( const ::rtl::OUString& /*rLinkName*/ ) throw(InvalidRegistryException, RuntimeException)
+::rtl::OUString SAL_CALL OConfigurationRegistryKey::getLinkTarget( const ::rtl::OUString& /*rLinkName*/ ) throw(com::sun::star::registry::InvalidRegistryException, com::sun::star::uno::RuntimeException)
 {
-    throw InvalidRegistryException(UNISTRING("This registry, which is base on a configuration tree, does not support links."), THISREF());
+    throw com::sun::star::registry::InvalidRegistryException(UNISTRING("This registry, which is base on a configuration tree, does not support links."), THISREF());
 }
 
 //--------------------------------------------------------------------------
-::rtl::OUString SAL_CALL OConfigurationRegistryKey::getResolvedName( const ::rtl::OUString& /*aKeyName*/ ) throw(InvalidRegistryException, RuntimeException)
+::rtl::OUString SAL_CALL OConfigurationRegistryKey::getResolvedName( const ::rtl::OUString& /*aKeyName*/ ) throw(com::sun::star::registry::InvalidRegistryException, com::sun::star::uno::RuntimeException)
 {
-    throw InvalidRegistryException(UNISTRING("This registry, which is base on a configuration tree, does not support links."), THISREF());
+    throw com::sun::star::registry::InvalidRegistryException(UNISTRING("This registry, which is base on a configuration tree, does not support links."), THISREF());
 }
 //--------------------------------------------------------------------------
 //..........................................................................
@@ -1451,39 +1436,37 @@ void SAL_CALL OConfigurationRegistryKey::deleteLink( const ::rtl::OUString& /*rL
 #include "configpath.hxx"
 #include "configexcept.hxx"
 
-bool configmgr::splitPath(const OUString& _sPath, OUString& _rsParentPath, OUString& _rsLocalName)
+bool configmgr::splitPath(const rtl::OUString& _sPath, rtl::OUString& _rsParentPath, rtl::OUString& _rsLocalName)
 {
-    using namespace ::configmgr::configuration;
-
     bool bResult = false;
     try
     {
-        bool bAbsolute = Path::isAbsolutePath(_sPath);
-        Path::Rep aPath ;
+        bool bAbsolute = configmgr::configuration::Path::isAbsolutePath(_sPath);
+        configmgr::configuration::Path::Rep aPath ;
 
         if (bAbsolute)
         {
-            AbsolutePath parsedPath = AbsolutePath::parse(_sPath) ;
+            configmgr::configuration::AbsolutePath parsedPath = configmgr::configuration::AbsolutePath::parse(_sPath) ;
 
             aPath = parsedPath.rep() ;
         }
         else
         {
-            RelativePath parsedPath = RelativePath::parse(_sPath) ;
+            configmgr::configuration::RelativePath parsedPath = configmgr::configuration::RelativePath::parse(_sPath) ;
 
             aPath = parsedPath.rep() ;
         }
-        //Path::Rep aPath = bAbsolute ? AbsolutePath::parse(_sPath).rep() : RelativePath::parse(_sPath).rep();
+        //configmgr::configuration::Path::Rep aPath = bAbsolute ? configmgr::configuration::AbsolutePath::parse(_sPath).rep() : configmgr::configuration::RelativePath::parse(_sPath).rep();
 
         OSL_ENSURE(!aPath.isEmpty(), "Trying to split an empty or root path");
-        Path::Iterator aFirst = aPath.begin(), aLast = aPath.end();
+        std::vector<configuration::Path::Component>::const_reverse_iterator aFirst = aPath.begin(), aLast = aPath.end();
 
         if (aFirst != aLast)
         {
             --aLast;
 
-            _rsLocalName = aLast->getName().toString();
-            _rsParentPath = Path::Rep(aFirst,aLast).toString(bAbsolute);
+            _rsLocalName = aLast->getName();
+            _rsParentPath = configmgr::configuration::Path::Rep(aFirst,aLast).toString(bAbsolute);
 
             bResult = true;
         }

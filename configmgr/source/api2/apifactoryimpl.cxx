@@ -47,13 +47,11 @@ namespace configmgr
 {
     namespace configapi
     {
-        using configuration::Template;
-        using configuration::NodeID;
 //-----------------------------------------------------------------------------
 // class ReadOnlyObjectFactory
 //-----------------------------------------------------------------------------
 
-ReadOnlyObjectFactory::ReadOnlyObjectFactory(ApiProvider& rProvider,ObjectRegistryHolder pRegistry)
+ReadOnlyObjectFactory::ReadOnlyObjectFactory(ApiProvider& rProvider,rtl::Reference<ObjectRegistry> pRegistry)
 : Factory(pRegistry)
 , m_rProvider(rProvider)
 {
@@ -65,21 +63,21 @@ ReadOnlyObjectFactory::~ReadOnlyObjectFactory()
 }
 //-----------------------------------------------------------------------------
 
-NodeElement* ReadOnlyObjectFactory::doCreateGroupMember(configuration::Tree const& aTree, configuration::NodeRef const& aNode, Template* pSetElementTemplate)
+NodeElement* ReadOnlyObjectFactory::doCreateGroupMember(rtl::Reference< configuration::Tree > const& aTree, configuration::NodeRef const& aNode, configuration::Template* pSetElementTemplate)
 {
-    OSL_ENSURE(!aTree.isEmpty(), "ERROR: trying to create a group member without a tree");
+    OSL_ENSURE(!configuration::isEmpty(aTree.get()), "ERROR: trying to create a group member without a tree");
     OSL_ENSURE(aNode.isValid(), "ERROR: trying to create a group member without a node");
-    OSL_ENSURE(aTree.isValidNode(aNode), "ERROR: node does not match tree , while trying to create a group member");
-    OSL_ENSURE(!aTree.isRootNode(aNode), "ERROR: trying to create a group member on a root node");
-    if (aTree.isRootNode(aNode))
+    OSL_ENSURE(aTree->isValidNode(aNode.getOffset()), "ERROR: node does not match tree , while trying to create a group member");
+    OSL_ENSURE(!aTree->isRootNode(aNode), "ERROR: trying to create a group member on a root node");
+    if (aTree->isRootNode(aNode))
         return 0;
 
-    NodeElement* pRootElement = makeElement(aTree,aTree.getRootNode());
+    NodeElement* pRootElement = makeElement(aTree,aTree->getRootNode());
     OSL_ENSURE(pRootElement, "Could not create root element of tree - cannot create group member object");
     if (!pRootElement)
         return 0;
 
-    UnoInterfaceRef aRootRelease(pRootElement->getUnoInstance(), uno::UNO_REF_NO_ACQUIRE);
+    uno::Reference<uno::XInterface> aRootRelease(pRootElement->getUnoInstance(), uno::UNO_REF_NO_ACQUIRE);
     ApiTreeImpl& rRootContext = getImplementation(*pRootElement);
 
     NodeElement * pResult = 0;
@@ -100,9 +98,9 @@ NodeElement* ReadOnlyObjectFactory::doCreateGroupMember(configuration::Tree cons
 }
 //-----------------------------------------------------------------------------
 
-TreeElement* ReadOnlyObjectFactory::doCreateAccessRoot(configuration::Tree const& aTree, Template* pSetElementTemplate, vos::ORef< OOptions >const& _xOptions)
+TreeElement* ReadOnlyObjectFactory::doCreateAccessRoot(rtl::Reference< configuration::Tree > const& aTree, configuration::Template* pSetElementTemplate, vos::ORef< OOptions >const& _xOptions)
 {
-    OSL_ENSURE(!aTree.isEmpty(), "ERROR: trying to create a root object without a tree");
+    OSL_ENSURE(!configuration::isEmpty(aTree.get()), "ERROR: trying to create a root object without a tree");
 
     TreeElement * pResult = 0;
     if (!pSetElementTemplate)
@@ -121,24 +119,24 @@ TreeElement* ReadOnlyObjectFactory::doCreateAccessRoot(configuration::Tree const
 }
 
 //-----------------------------------------------------------------------------
-SetElement* ReadOnlyObjectFactory::doCreateSetElement(configuration::ElementTree const& aElementTree, Template* pSetElementTemplate)
+SetElement* ReadOnlyObjectFactory::doCreateSetElement(rtl::Reference< configuration::ElementTree > const& aElementTree, configuration::Template* pSetElementTemplate)
 {
-    OSL_ENSURE(aElementTree.isValid(), "ERROR: trying to create a set element object without a tree");
+    OSL_ENSURE(aElementTree.is(), "ERROR: trying to create a set element object without a tree");
 
-    Tree aTree( aElementTree.getTree() );
-    OSL_ENSURE(!aTree.isEmpty(), "ERROR: trying to create a set element object without a tree");
+    rtl::Reference< configuration::Tree > aTree( aElementTree.get() );
+    OSL_ENSURE(!configuration::isEmpty(aTree.get()), "ERROR: trying to create a set element object without a tree");
 
     ApiTreeImpl * pParentContext = 0;
-    UnoInterfaceRef aParentRelease;
+    uno::Reference<uno::XInterface> aParentRelease;
 
-    configuration::Tree aParentTree = aTree.getContextTree();
-    if (!aParentTree.isEmpty())
+    rtl::Reference< configuration::Tree > aParentTree = aTree->getContextTree();
+    if (!configuration::isEmpty(aParentTree.get()))
     {
-        //NodeRef aParentNode = aTree.getContextNode();
-        NodeRef aParentRoot = aParentTree.getRootNode();
+        //configuration::NodeRef aParentNode = aTree.getContextNode();
+        configuration::NodeRef aParentRoot = aParentTree->getRootNode();
         if (NodeElement* pParentRootElement = makeElement(aParentTree,aParentRoot) )
         {
-            aParentRelease = UnoInterfaceRef(pParentRootElement->getUnoInstance(), uno::UNO_REF_NO_ACQUIRE);
+            aParentRelease = uno::Reference<uno::XInterface>(pParentRootElement->getUnoInstance(), uno::UNO_REF_NO_ACQUIRE);
             pParentContext = &getImplementation(*pParentRootElement);
         }
     }
@@ -146,13 +144,13 @@ SetElement* ReadOnlyObjectFactory::doCreateSetElement(configuration::ElementTree
     SetElement * pResult = 0;
     if (!pSetElementTemplate)
     {
-         OSetElementGroupInfo * pNewObject = new OSetElementGroupInfo(aTree.getRef(),m_rProvider,pParentContext);
+         OSetElementGroupInfo * pNewObject = new OSetElementGroupInfo(aTree,m_rProvider,pParentContext);
          pNewObject->acquire();
          pResult = &pNewObject->getElementClass();
     }
     else
     {
-         OSetElementSetInfo * pNewObject = new OSetElementSetInfo(aTree.getRef(),m_rProvider,pParentContext);
+         OSetElementSetInfo * pNewObject = new OSetElementSetInfo(aTree,m_rProvider,pParentContext);
          pNewObject->acquire();
          pResult = &pNewObject->getElementClass();
     }
@@ -164,7 +162,7 @@ SetElement* ReadOnlyObjectFactory::doCreateSetElement(configuration::ElementTree
 // class UpdateObjectFactory
 //-----------------------------------------------------------------------------
 
-UpdateObjectFactory::UpdateObjectFactory(ApiProvider& rProvider,ObjectRegistryHolder pRegistry)
+UpdateObjectFactory::UpdateObjectFactory(ApiProvider& rProvider,rtl::Reference<ObjectRegistry> pRegistry)
 : Factory(pRegistry)
 , m_rProvider(rProvider)
 {
@@ -176,28 +174,28 @@ UpdateObjectFactory::~UpdateObjectFactory()
 }
 //-----------------------------------------------------------------------------
 
-bool UpdateObjectFactory::implIsReadOnly(configuration::Tree const& aTree, configuration::NodeRef const& aNode)
+bool UpdateObjectFactory::implIsReadOnly(rtl::Reference< configuration::Tree > const& aTree, configuration::NodeRef const& aNode)
 {
-    OSL_ENSURE(!aTree.isEmpty(), "ERROR: trying to create an object without a tree");
+    OSL_ENSURE(!configuration::isEmpty(aTree.get()), "ERROR: trying to create an object without a tree");
     OSL_ENSURE(aNode.isValid(), "ERROR: trying to create an object without a node");
-    OSL_ENSURE(aTree.isValidNode(aNode), "ERROR: node does not match tree , while trying to create an object");
+    OSL_ENSURE(aTree->isValidNode(aNode.getOffset()), "ERROR: node does not match tree , while trying to create an object");
 
-    return aTree.getAttributes(aNode).isReadonly();
+    return aTree->getAttributes(aNode).isReadonly();
 }
 //-----------------------------------------------------------------------------
 
-NodeElement* UpdateObjectFactory::doCreateGroupMember(configuration::Tree const& aTree, configuration::NodeRef const& aNode, Template* pSetElementTemplate)
+NodeElement* UpdateObjectFactory::doCreateGroupMember(rtl::Reference< configuration::Tree > const& aTree, configuration::NodeRef const& aNode, configuration::Template* pSetElementTemplate)
 {
-    OSL_ENSURE(!aTree.isEmpty(), "ERROR: trying to create a group member without a tree");
+    OSL_ENSURE(!configuration::isEmpty(aTree.get()), "ERROR: trying to create a group member without a tree");
     OSL_ENSURE(aNode.isValid(), "ERROR: trying to create a group member without a node");
-    OSL_ENSURE(aTree.isValidNode(aNode), "ERROR: node does not match tree , while trying to create a group");
+    OSL_ENSURE(aTree->isValidNode(aNode.getOffset()), "ERROR: node does not match tree , while trying to create a group");
 
-    NodeElement* pRootElement = makeElement(aTree,aTree.getRootNode());
+    NodeElement* pRootElement = makeElement(aTree,aTree->getRootNode());
     OSL_ENSURE(pRootElement, "Could not create root element of tree - cannot create group member object");
     if (!pRootElement)
         return 0;
 
-    UnoInterfaceRef aRootRelease(pRootElement->getUnoInstance(), uno::UNO_REF_NO_ACQUIRE);
+    uno::Reference<uno::XInterface> aRootRelease(pRootElement->getUnoInstance(), uno::UNO_REF_NO_ACQUIRE);
     ApiTreeImpl& rRootContext = getImplementation(*pRootElement);
 
     NodeElement * pResult = 0;
@@ -243,12 +241,12 @@ NodeElement* UpdateObjectFactory::doCreateGroupMember(configuration::Tree const&
 }
 //-----------------------------------------------------------------------------
 
-TreeElement* UpdateObjectFactory::doCreateAccessRoot(configuration::Tree const& aTree, Template* pSetElementTemplate, vos::ORef< OOptions >const& _xOptions)
+TreeElement* UpdateObjectFactory::doCreateAccessRoot(rtl::Reference< configuration::Tree > const& aTree, configuration::Template* pSetElementTemplate, vos::ORef< OOptions >const& _xOptions)
 {
-    OSL_ENSURE(!aTree.isEmpty(), "ERROR: trying to create a root object without a tree");
+    OSL_ENSURE(!configuration::isEmpty(aTree.get()), "ERROR: trying to create a root object without a tree");
 
     TreeElement * pResult = 0;
-    if (implIsReadOnly(aTree,aTree.getRootNode()))
+    if (implIsReadOnly(aTree,aTree->getRootNode()))
     {
         OSL_ENSURE(false, "WARNING: Trying to create an 'Update Access' on a read-only tree/node");
         if (!pSetElementTemplate)
@@ -290,40 +288,40 @@ TreeElement* UpdateObjectFactory::doCreateAccessRoot(configuration::Tree const& 
 }
 
 //-----------------------------------------------------------------------------
-SetElement* UpdateObjectFactory::doCreateSetElement(configuration::ElementTree const& aElementTree, Template* pSetElementTemplate)
+SetElement* UpdateObjectFactory::doCreateSetElement(rtl::Reference< configuration::ElementTree > const& aElementTree, configuration::Template* pSetElementTemplate)
 {
-    OSL_ENSURE(aElementTree.isValid(), "ERROR: trying to create a set element object without a tree");
+    OSL_ENSURE(aElementTree.is(), "ERROR: trying to create a set element object without a tree");
 
-    Tree aTree( aElementTree.getTree() );
-    OSL_ENSURE(!aTree.isEmpty(), "ERROR: trying to create a set element object without a tree");
+    rtl::Reference< configuration::Tree > aTree( aElementTree.get() );
+    OSL_ENSURE(!configuration::isEmpty(aTree.get()), "ERROR: trying to create a set element object without a tree");
 
     ApiTreeImpl * pParentContext = 0;
-    UnoInterfaceRef aParentRelease;
+    uno::Reference<uno::XInterface> aParentRelease;
 
-    configuration::Tree aParentTree = aTree.getContextTree();
-    if (!aParentTree.isEmpty())
+    rtl::Reference< configuration::Tree > aParentTree = aTree->getContextTree();
+    if (!configuration::isEmpty(aParentTree.get()))
     {
-        //NodeRef aParentNode = aTree.getContextNode();
-        NodeRef aParentRoot = aParentTree.getRootNode();
+        //configuration::NodeRef aParentNode = aTree.getContextNode();
+        configuration::NodeRef aParentRoot = aParentTree->getRootNode();
         if (NodeElement* pParentRootElement = makeElement(aParentTree,aParentRoot) )
         {
-            aParentRelease = UnoInterfaceRef(pParentRootElement->getUnoInstance(), uno::UNO_REF_NO_ACQUIRE);
+            aParentRelease = uno::Reference<uno::XInterface>(pParentRootElement->getUnoInstance(), uno::UNO_REF_NO_ACQUIRE);
             pParentContext = &getImplementation(*pParentRootElement);
         }
     }
 
     SetElement * pResult = 0;
-    if (implIsReadOnly(aTree,aTree.getRootNode()))
+    if (implIsReadOnly(aTree,aTree->getRootNode()))
     {
         if (!pSetElementTemplate)
         {
-             OSetElementGroupInfo * pNewObject = new OSetElementGroupInfo(aTree.getRef(),m_rProvider,pParentContext);
+             OSetElementGroupInfo * pNewObject = new OSetElementGroupInfo(aTree,m_rProvider,pParentContext);
              pNewObject->acquire();
              pResult = &pNewObject->getElementClass();
         }
         else
         {
-             OSetElementSetInfo * pNewObject = new OSetElementSetInfo(aTree.getRef(),m_rProvider,pParentContext);
+             OSetElementSetInfo * pNewObject = new OSetElementSetInfo(aTree,m_rProvider,pParentContext);
              pNewObject->acquire();
              pResult = &pNewObject->getElementClass();
         }
@@ -332,19 +330,19 @@ SetElement* UpdateObjectFactory::doCreateSetElement(configuration::ElementTree c
     {
         if (!pSetElementTemplate)
         {
-             OSetElementGroupUpdate * pNewObject = new OSetElementGroupUpdate(aTree.getRef(),m_rProvider,pParentContext);
+             OSetElementGroupUpdate * pNewObject = new OSetElementGroupUpdate(aTree,m_rProvider,pParentContext);
              pNewObject->acquire();
              pResult = &pNewObject->getElementClass();
         }
         else if (pSetElementTemplate->isInstanceValue())
         {
-             OSetElementValueSetUpdate * pNewObject = new OSetElementValueSetUpdate(aTree.getRef(),m_rProvider,pParentContext);
+             OSetElementValueSetUpdate * pNewObject = new OSetElementValueSetUpdate(aTree,m_rProvider,pParentContext);
              pNewObject->acquire();
              pResult = &pNewObject->getElementClass();
         }
         else
         {
-             OSetElementTreeSetUpdate * pNewObject = new OSetElementTreeSetUpdate(aTree.getRef(),m_rProvider,pParentContext);
+             OSetElementTreeSetUpdate * pNewObject = new OSetElementTreeSetUpdate(aTree,m_rProvider,pParentContext);
              pNewObject->acquire();
              pResult = &pNewObject->getElementClass();
         }

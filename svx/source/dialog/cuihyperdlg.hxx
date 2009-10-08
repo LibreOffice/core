@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: cuihyperdlg.hxx,v $
- * $Revision: 1.4 $
+ * $Revision: 1.4.216.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -102,10 +102,12 @@ public:
     SvxHpLinkDlg (Window* pParent, SfxBindings* pBindings );
     ~SvxHpLinkDlg ();
 
+    virtual void            PageCreated( USHORT nId, IconChoicePage& rPage );
+
     USHORT                  SetPage( SvxHyperlinkItem* pItem );
     void                    EnableInetBrowse( sal_Bool bEnable = sal_True );
     void                    SetReadOnlyMode( sal_Bool bReadOnly = sal_False );
-    inline const BOOL       IsHTMLDoc() const { return mbIsHTMLDoc; }
+    inline BOOL     IsHTMLDoc() const { return mbIsHTMLDoc; }
 
     inline SfxBindings*     GetBindings() const { return mpBindings; };
     inline SfxDispatcher*   GetDispatcher() const { return mpBindings->GetDispatcher(); }

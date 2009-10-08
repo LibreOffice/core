@@ -25,12 +25,6 @@ namespace uno = css::uno ;
 namespace lang = css::lang ;
 namespace backenduno = css::configuration::backend ;
 
-
-
-typedef uno::Reference<lang::XSingleComponentFactory>   BackendFactory;
-typedef uno::Reference<backenduno::XSingleLayerStratum> PlatformBackend;
-
-
 /* Class containing a reference to a service factory(XSingleComponentFactory)
    object and a platform backend (XSingleLayerStratum).
    The reference to the platform backend will be NULL until the platform backend
@@ -38,30 +32,24 @@ typedef uno::Reference<backenduno::XSingleLayerStratum> PlatformBackend;
  */
 class BackendRef
 {
-    BackendFactory  mFactory;
-    PlatformBackend mBackend;
+    uno::Reference<lang::XSingleComponentFactory>  mFactory;
+    uno::Reference<backenduno::XSingleLayerStratum> mBackend;
 public:
     explicit
-    BackendRef(const BackendFactory& aFactory)
+    BackendRef(const uno::Reference<lang::XSingleComponentFactory>& aFactory)
     :mFactory(aFactory)
     ,mBackend()
     {}
 
-    PlatformBackend getBackend(uno::Reference<uno::XComponentContext> const & xContext);
+    uno::Reference<backenduno::XSingleLayerStratum> getBackend(uno::Reference<uno::XComponentContext> const & xContext);
     void disposeBackend();
 };
-
-typedef cppu::WeakComponentImplHelper4< backenduno::XBackend,
-                                        backenduno::XBackendChangesNotifier,
-                                        lang::XInitialization,
-                                        lang::XServiceInfo> BackendBase ;
-
 
 /**
   Class implementing the Backend service for system integration backend access.
   It creates the required backends and coordinates access to them.
   */
-class SystemIntegrationManager : public BackendBase
+class SystemIntegrationManager : public cppu::WeakComponentImplHelper4< backenduno::XBackend, backenduno::XBackendChangesNotifier, lang::XInitialization, lang::XServiceInfo>
 {
 public:
    /**
@@ -146,21 +134,18 @@ protected:
 // ComponentHelper
     virtual void SAL_CALL disposing();
 private :
-    typedef std::multimap<rtl::OUString, BackendRef> BackendFactoryList;
-    typedef std::vector<PlatformBackend> PlatformBackendList;
-
     /** build lookup up table
     */
     void buildLookupTable();
 
     /** get list of supported components
     */
-    uno::Sequence<rtl::OUString> getSupportedComponents(const BackendFactory& xFactory);
+    uno::Sequence<rtl::OUString> getSupportedComponents(const uno::Reference<lang::XSingleComponentFactory>& xFactory);
 
     /**
         get supporting backends from lookup table
     */
-    PlatformBackendList getSupportingBackends(const rtl::OUString& aComponent);
+    std::vector< uno::Reference<backenduno::XSingleLayerStratum> > getSupportingBackends(const rtl::OUString& aComponent);
 
 private :
     /** Mutex for resource protection */
@@ -168,7 +153,7 @@ private :
     /** Component Context */
     uno::Reference<uno::XComponentContext> mContext ;
 
-    BackendFactoryList mPlatformBackends;
+    std::multimap<rtl::OUString, BackendRef> mPlatformBackends;
 } ;
 
 } }  // configmgr.backend

@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: TConnection.hxx,v $
- * $Revision: 1.13 $
+ * $Revision: 1.13.56.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -39,7 +39,7 @@
 #include <cppuhelper/compbase4.hxx>
 #include "propertyids.hxx"
 #include "connectivity/CommonTools.hxx"
-
+#include "resource/sharedresources.hxx"
 
 namespace connectivity
 {
@@ -64,15 +64,18 @@ namespace connectivity
         rtl_TextEncoding                m_nTextEncoding; // the encoding which is used for all text conversions
         ::com::sun::star::uno::WeakReference< ::com::sun::star::sdbc::XDatabaseMetaData >
                                         m_xMetaData;
+        SharedResources                 m_aResources;
     public:
 
         static ::dbtools::OPropertyMap& getPropMap();
 
-        OMetaConnection() : OMetaConnection_BASE(m_aMutex) ,m_nTextEncoding(RTL_TEXTENCODING_MS_1252){}
+        OMetaConnection();
 
         inline rtl_TextEncoding getTextEncoding() const { return m_nTextEncoding; }
         inline ::rtl::OUString  getURL() const  { return m_sURL; }
         inline void             setURL(const ::rtl::OUString& _rsUrl) { m_sURL = _rsUrl; }
+        void                    throwGenericSQLException( sal_uInt16 _nErrorResourceId,const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface>& _xContext  );
+        const SharedResources& getResources() const { return m_aResources;}
 
         inline void setConnectionInfo(const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& _aInfo) { m_aConnectionInfo = _aInfo; }
         inline const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >&

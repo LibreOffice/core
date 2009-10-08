@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: sphere3d.hxx,v $
- * $Revision: 1.4 $
+ * $Revision: 1.4.18.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -49,7 +49,7 @@ private:
 
     virtual sdr::properties::BaseProperties* CreateObjectSpecificProperties();
 
-    basegfx::B3DPoint                   aCenter;
+    basegfx::B3DPoint               aCenter;
     basegfx::B3DVector              aSize;
 
 protected:
@@ -81,12 +81,6 @@ public:
     void ReSegment(sal_uInt32 nHorzSegments, sal_uInt32 nVertSegments);
     const basegfx::B3DPoint& Center() const { return aCenter; }
     const basegfx::B3DVector& Size() const { return aSize; }
-
-    // Geometrieerzeugung
-    virtual void CreateGeometry();
-
-    // Give out simple line geometry
-    virtual basegfx::B3DPolyPolygon Get3DLineGeometry() const;
 
     // Lokale Parameter setzen mit Geometrieneuerzeugung
     void SetCenter(const basegfx::B3DPoint& rNew);

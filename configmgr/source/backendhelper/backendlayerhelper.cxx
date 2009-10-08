@@ -279,7 +279,7 @@ void buildNodeTree(
 //------------------------------------------------------------------------------
 BackendLayerHelper::BackendLayerHelper(
     const uno::Reference<uno::XComponentContext>& /*xContext*/)
-    :BackendBase(mMutex)
+    :cppu::WeakComponentImplHelper2<backend::XLayerContentDescriber, lang::XServiceInfo>(mMutex)
 {
 }
 //------------------------------------------------------------------------------

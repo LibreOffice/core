@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: DDatabaseMetaData.hxx,v $
- * $Revision: 1.10 $
+ * $Revision: 1.10.56.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -57,6 +57,9 @@ namespace connectivity
 
             virtual sal_Bool SAL_CALL supportsAlterTableWithAddColumn(  ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
             virtual sal_Bool SAL_CALL supportsAlterTableWithDropColumn(  ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
+
+            virtual sal_Bool        impl_storesMixedCaseQuotedIdentifiers_throw(  );
+            virtual sal_Bool        impl_supportsMixedCaseQuotedIdentifiers_throw(  );
         protected:
             virtual ~ODbaseDatabaseMetaData();
         public:

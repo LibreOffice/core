@@ -8,7 +8,7 @@
  *
  * $RCSfile: sdrmeasureprimitive2d.cxx,v $
  *
- * $Revision: 1.2 $
+ * $Revision: 1.2.18.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -124,7 +124,7 @@ namespace drawinglayer
                 }
 
                 // create primitive and get text range
-                pBlockText = new SdrBlockTextPrimitive2D(pTextAttribute->getSdrText(), aTextMatrix, pTextAttribute->isScroll(), false);
+                pBlockText = new SdrBlockTextPrimitive2D(pTextAttribute->getSdrText(), aTextMatrix, pTextAttribute->isScroll(), false, false);
                 aTextRange = pBlockText->getB2DRange(aViewInformation);
             }
 

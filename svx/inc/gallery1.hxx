@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: gallery1.hxx,v $
- * $Revision: 1.8 $
+ * $Revision: 1.8.216.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -158,7 +158,7 @@ public:
 
     SVX_DLLPUBLIC static Gallery* GetGalleryInstance();
 
-    const ULONG                 GetThemeCount() const { return aThemeList.Count(); }
+    ULONG                   GetThemeCount() const { return aThemeList.Count(); }
     const GalleryThemeEntry*    GetThemeInfo( ULONG nPos ) { return aThemeList.GetObject( nPos ); }
     const GalleryThemeEntry*    GetThemeInfo( const String& rThemeName ) { return ImplGetThemeEntry( rThemeName ); }
 

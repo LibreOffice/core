@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: PreparedStatement.cxx,v $
- * $Revision: 1.24 $
+ * $Revision: 1.24.56.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -42,6 +42,8 @@
 #include "connectivity/dbtools.hxx"
 #include "connectivity/dbexception.hxx"
 #include "resource/jdbc_log.hrc"
+#include "resource/common_res.hrc"
+#include "resource/sharedresources.hxx"
 
 #include <string.h>
 
@@ -572,10 +574,11 @@ void SAL_CALL java_sql_PreparedStatement::setObject( sal_Int32 parameterIndex, c
 {
     if(!::dbtools::implSetObject(this,parameterIndex,x))
     {
-        ::rtl::OUString sMsg = ::rtl::OUString::createFromAscii("Unknown type for parameter: ");
-        sMsg += ::rtl::OUString::valueOf(parameterIndex);
-        sMsg += ::rtl::OUString::createFromAscii(" !") ;
-        ::dbtools::throwGenericSQLException(sMsg,*this);
+        const ::rtl::OUString sError( m_pConnection->getResources().getResourceStringWithSubstitution(
+                STR_UNKNOWN_PARA_TYPE,
+                "$position$", ::rtl::OUString::valueOf(parameterIndex)
+             ) );
+        ::dbtools::throwGenericSQLException(sError,*this);
     }
 }
 // -------------------------------------------------------------------------

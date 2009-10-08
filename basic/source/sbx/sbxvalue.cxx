@@ -1147,7 +1147,13 @@ BOOL SbxValue::Compute( SbxOperator eOp, const SbxValue& rOp )
     {
         SbxValues aL, aR;
         bool bDecimal = false;
-        if( eThisType == SbxSTRING || eOp == SbxCAT || ( bVBAInterop && ( eOpType == SbxSTRING ) && (  eOp == SbxPLUS ) ) )
+        if( bVBAInterop && ( ( eThisType == SbxSTRING && eOpType != SbxSTRING ) ||
+             ( eThisType != SbxSTRING && eOpType == SbxSTRING ) ) &&
+             ( eOp == SbxMUL || eOp == SbxDIV || eOp == SbxPLUS || eOp == SbxMINUS ) )
+        {
+            goto Lbl_OpIsDouble;
+        }
+        else if( eThisType == SbxSTRING || eOp == SbxCAT || ( bVBAInterop && ( eOpType == SbxSTRING ) && (  eOp == SbxPLUS ) ) )
         {
             if( eOp == SbxCAT || eOp == SbxPLUS )
             {
@@ -1392,6 +1398,7 @@ BOOL SbxValue::Compute( SbxOperator eOp, const SbxValue& rOp )
             }
         }
         else
+Lbl_OpIsDouble:
         {   // Andere Operatoren
             aL.eType = aR.eType = SbxDOUBLE;
             if( rOp.Get( aR ) )

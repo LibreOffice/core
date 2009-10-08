@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: deflt3d.cxx,v $
- * $Revision: 1.11 $
+ * $Revision: 1.11.18.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -54,7 +54,6 @@ void E3dDefaultAttributes::Reset()
     // Compound-Objekt
     bDefaultCreateNormals = TRUE;
     bDefaultCreateTexture = TRUE;
-    bDefaultUseDifferentBackMaterial = FALSE;
 
     // Cube-Objekt
     aDefaultCubePos = basegfx::B3DPoint(-500.0, -500.0, -500.0);
@@ -80,9 +79,6 @@ void E3dDefaultAttributes::Reset()
     bDefaultExtrudeCharacterMode = FALSE;
     bDefaultExtrudeCloseFront = TRUE;
     bDefaultExtrudeCloseBack = TRUE;
-
-    // Scene-Objekt
-    bDefaultDither = TRUE;
 }
 
 // eof

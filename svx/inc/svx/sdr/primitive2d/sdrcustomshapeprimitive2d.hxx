@@ -8,7 +8,7 @@
  *
  * $RCSfile: sdrcustomshapeprimitive2d.hxx,v $
  *
- * $Revision: 1.2 $
+ * $Revision: 1.2.18.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -50,7 +50,12 @@ namespace drawinglayer
         private:
             attribute::SdrShadowTextAttribute           maSdrSTAttribute;
             Primitive2DSequence                         maSubPrimitives;
-            ::basegfx::B2DHomMatrix                     maTextBox;
+            basegfx::B2DHomMatrix                       maTextBox;
+
+            // bitfield
+            // defines if SdrTextWordWrapItem was set at SdrObjCustomShape which means
+            // that the text needs to be block formatted
+            unsigned                                    mbWordWrap : 1;
 
         protected:
             // local decomposition.
@@ -60,12 +65,14 @@ namespace drawinglayer
             SdrCustomShapePrimitive2D(
                 const attribute::SdrShadowTextAttribute& rSdrSTAttribute,
                 const Primitive2DSequence& rSubPrimitives,
-                const ::basegfx::B2DHomMatrix& rTextBox);
+                const basegfx::B2DHomMatrix& rTextBox,
+                bool bWordWrap);
 
             // data access
             const attribute::SdrShadowTextAttribute& getSdrSTAttribute() const { return maSdrSTAttribute; }
             const Primitive2DSequence& getSubPrimitives() const { return maSubPrimitives; }
-            const ::basegfx::B2DHomMatrix& getTextBox() const { return maTextBox; }
+            const basegfx::B2DHomMatrix& getTextBox() const { return maTextBox; }
+            bool getWordWrap() const { return mbWordWrap; }
 
             // compare operator
             virtual bool operator==(const BasePrimitive2D& rPrimitive) const;

@@ -46,7 +46,6 @@ namespace configmgr
     namespace uno       = css::uno;
     namespace lang      = css::lang;
     namespace beans     = css::beans;
-    using rtl::OUString;
 
     namespace configapi
     {
@@ -89,64 +88,64 @@ public:
 // setting values - may all throw (PropertyVeto)Exceptions on read-only property sets
     // XPropertySet
     virtual void SAL_CALL
-        setPropertyValue( const OUString& aPropertyName, const uno::Any& aValue )
+        setPropertyValue( const rtl::OUString& aPropertyName, const uno::Any& aValue )
             throw(beans::UnknownPropertyException, beans::PropertyVetoException, lang::IllegalArgumentException,
                   lang::WrappedTargetException, uno::RuntimeException);
 
      // XMultiPropertySet
    virtual void SAL_CALL
-        setPropertyValues( const uno::Sequence< OUString >& PropertyNames, const uno::Sequence< uno::Any >& Values )
+        setPropertyValues( const uno::Sequence< rtl::OUString >& PropertyNames, const uno::Sequence< uno::Any >& Values )
             throw(beans::PropertyVetoException, lang::IllegalArgumentException,
                   lang::WrappedTargetException, uno::RuntimeException);
 
     // XHierarchicalPropertySet
     virtual void SAL_CALL
-        setHierarchicalPropertyValue( const OUString& aPropertyName, const uno::Any& aValue )
+        setHierarchicalPropertyValue( const rtl::OUString& aPropertyName, const uno::Any& aValue )
             throw(beans::UnknownPropertyException, beans::PropertyVetoException, lang::IllegalArgumentException,
                   lang::WrappedTargetException, uno::RuntimeException);
 
      // XMultiHierarchicalPropertySet
    virtual void SAL_CALL
-        setHierarchicalPropertyValues( const uno::Sequence< OUString >& PropertyNames, const uno::Sequence< uno::Any >& Values )
+        setHierarchicalPropertyValues( const uno::Sequence< rtl::OUString >& PropertyNames, const uno::Sequence< uno::Any >& Values )
             throw(beans::PropertyVetoException, lang::IllegalArgumentException,
                   lang::WrappedTargetException, uno::RuntimeException);
 
 // getting values
     // XPropertySet
     virtual uno::Any SAL_CALL
-        getPropertyValue( const OUString& PropertyName )
+        getPropertyValue( const rtl::OUString& PropertyName )
             throw(beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException);
 
      // XMultiPropertySet
     virtual uno::Sequence< uno::Any > SAL_CALL
-        getPropertyValues( const uno::Sequence< OUString >& aPropertyNames )
+        getPropertyValues( const uno::Sequence< rtl::OUString >& aPropertyNames )
             throw(uno::RuntimeException);
 
     // XHierarchicalPropertySet
     virtual uno::Any SAL_CALL
-        getHierarchicalPropertyValue( const OUString& PropertyName )
+        getHierarchicalPropertyValue( const rtl::OUString& PropertyName )
             throw(beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException);
 
      // XMultiHierarchicalPropertySet
     virtual uno::Sequence< uno::Any > SAL_CALL
-        getHierarchicalPropertyValues( const uno::Sequence< OUString >& aPropertyNames )
+        getHierarchicalPropertyValues( const uno::Sequence< rtl::OUString >& aPropertyNames )
             throw(uno::RuntimeException);
 
 // adding listeners
     // XPropertySet
     virtual void SAL_CALL
-        addPropertyChangeListener( const OUString& aPropertyName, const uno::Reference< beans::XPropertyChangeListener >& xListener )
+        addPropertyChangeListener( const rtl::OUString& aPropertyName, const uno::Reference< beans::XPropertyChangeListener >& xListener )
             throw(beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException);
 
      // XMultiPropertySet
     virtual void SAL_CALL
-        addPropertiesChangeListener( const uno::Sequence< OUString >& aPropertyNames, const uno::Reference< beans::XPropertiesChangeListener >& xListener )
+        addPropertiesChangeListener( const uno::Sequence< rtl::OUString >& aPropertyNames, const uno::Reference< beans::XPropertiesChangeListener >& xListener )
             throw(uno::RuntimeException);
 
 // removing listeners
     // XPropertySet
     virtual void SAL_CALL
-        removePropertyChangeListener( const OUString& aPropertyName, const uno::Reference< beans::XPropertyChangeListener >& aListener )
+        removePropertyChangeListener( const rtl::OUString& aPropertyName, const uno::Reference< beans::XPropertyChangeListener >& aListener )
             throw(beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException);
 
      // XMultiPropertySet
@@ -157,40 +156,40 @@ public:
 // SPECIAL: support for VetoableChangeListeners
     // XPropertySet
     virtual void SAL_CALL
-        addVetoableChangeListener( const OUString& PropertyName, const uno::Reference< beans::XVetoableChangeListener >& aListener )
+        addVetoableChangeListener( const rtl::OUString& PropertyName, const uno::Reference< beans::XVetoableChangeListener >& aListener )
             throw(beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException);
 
     virtual void SAL_CALL
-        removeVetoableChangeListener( const OUString& PropertyName, const uno::Reference< beans::XVetoableChangeListener >& aListener )
+        removeVetoableChangeListener( const rtl::OUString& PropertyName, const uno::Reference< beans::XVetoableChangeListener >& aListener )
             throw(beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException);
 
 // SPECIAL: firePropertiesChangeEvent
      // XMultiPropertySet
     virtual void SAL_CALL
-        firePropertiesChangeEvent( const uno::Sequence< OUString >& aPropertyNames, const uno::Reference< beans::XPropertiesChangeListener >& xListener )
+        firePropertiesChangeEvent( const uno::Sequence< rtl::OUString >& aPropertyNames, const uno::Reference< beans::XPropertiesChangeListener >& xListener )
             throw(uno::RuntimeException);
 
 // XPropertyState
     virtual beans::PropertyState SAL_CALL
-        getPropertyState( const OUString& PropertyName )
+        getPropertyState( const rtl::OUString& PropertyName )
             throw(beans::UnknownPropertyException, uno::RuntimeException);
 
     // see below:
     // virtual uno::Sequence< beans::PropertyState > SAL_CALL
-    //    getPropertyStates( const uno::Sequence< OUString >& aPropertyName )
+    //    getPropertyStates( const uno::Sequence< rtl::OUString >& aPropertyName )
     //      throw(beans::UnknownPropertyException, uno::RuntimeException);
 
     virtual void SAL_CALL
-        setPropertyToDefault( const OUString& PropertyName )
+        setPropertyToDefault( const rtl::OUString& PropertyName )
             throw(beans::UnknownPropertyException, uno::RuntimeException);
 
     virtual uno::Any SAL_CALL
-        getPropertyDefault( const OUString& aPropertyName )
+        getPropertyDefault( const rtl::OUString& aPropertyName )
             throw(beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException);
 
 // XMultiPropertyStates
     virtual uno::Sequence< beans::PropertyState > SAL_CALL
-        getPropertyStates( const uno::Sequence< OUString >& aPropertyName )
+        getPropertyStates( const uno::Sequence< rtl::OUString >& aPropertyName )
             throw (beans::UnknownPropertyException, uno::RuntimeException);
 
     virtual void SAL_CALL
@@ -198,11 +197,11 @@ public:
             throw (uno::RuntimeException);
 
     virtual void SAL_CALL
-        setPropertiesToDefault( const uno::Sequence< OUString >& aPropertyNames )
+        setPropertiesToDefault( const uno::Sequence< rtl::OUString >& aPropertyNames )
             throw (beans::UnknownPropertyException, uno::RuntimeException);
 
     virtual uno::Sequence< uno::Any > SAL_CALL
-        getPropertyDefaults( const uno::Sequence< OUString >& aPropertyNames )
+        getPropertyDefaults( const uno::Sequence< rtl::OUString >& aPropertyNames )
             throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException);
 
 protected:

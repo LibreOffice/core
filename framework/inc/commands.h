@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: commands.h,v $
- * $Revision: 1.5 $
+ * $Revision: 1.5.82.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -54,34 +54,6 @@ namespace framework{
 #define COMMAND_HEADLESS  DECLARE_ASCII("-headless"   ) /// office runs in headless mode for scripting
 #define COMMAND_INVISIBLE DECLARE_ASCII("-invisible"  ) /// office runs in invisible mode which supress splash screen and first empry document
 #define COMMAND_SERVER    DECLARE_ASCII("-server"     ) /// office runs as server
-
-/*-************************************************************************************************************//**
-    @short          This method parse command line of office and search for any argument.
-                    We return true/false for existing/non existing values.
-*//*-*************************************************************************************************************/
-
-sal_Bool c_existCommand( const ::rtl::OUString& sSearchCommand )
-{
-    // Set default return value if search failed or unknown commands are searched.
-    sal_Bool            bState          = sal_False                         ;
-    ::vos::OStartupInfo aCommandLine                                        ;
-    sal_uInt32          nCount          = aCommandLine.getCommandArgCount() ;
-    ::rtl::OUString     sCommand                                            ;
-    for( sal_uInt32 nCommand=0; nCommand<nCount; ++nCommand )
-    {
-        if( aCommandLine.getCommandArg( nCommand, sCommand ) == ::vos::OStartupInfo::E_None )
-        {
-            if( sCommand == sSearchCommand )
-            {
-                bState = sal_True;
-                break;
-            }
-        }
-    }
-
-    return bState;
-}
-
 }       //  namespace framework
 
 #endif  //  #ifndef __FRAMEWORK_TARGETS_H_

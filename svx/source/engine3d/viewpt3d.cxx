@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: viewpt3d.cxx,v $
- * $Revision: 1.10 $
+ * $Revision: 1.10.226.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -31,29 +31,5 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_svx.hxx"
 #include <svx/viewpt3d.hxx>
-#include <svx/volume3d.hxx>
-
-/*************************************************************************
-|*
-|* View-Window genau um das mit rTransform transformierte Volumen legen
-|*
-\************************************************************************/
-
-void Viewport3D::FitViewToVolume(const basegfx::B3DRange& rVolume, const basegfx::B3DHomMatrix& rTransform)
-{
-    basegfx::B3DHomMatrix aTransform(rTransform);
-    basegfx::B3DPoint aTfVec;
-    Volume3D aFitVol;
-
-    aTransform *= GetViewTransform();
-    Vol3DPointIterator aIter(rVolume, &aTransform);
-
-    while ( aIter.Next(aTfVec) )
-    {
-        aTfVec = DoProjection(aTfVec);
-        aFitVol.expand(aTfVec);
-    }
-    SetViewWindow(aFitVol.getMinX(), aFitVol.getMinY(), aFitVol.getWidth(), aFitVol.getHeight());
-}
 
 // eof

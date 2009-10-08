@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: viewobjectcontact.cxx,v $
- * $Revision: 1.17 $
+ * $Revision: 1.17.18.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -335,8 +335,8 @@ namespace sdr
                 // handle ghosted
                 if(isPrimitiveGhosted(rDisplayInfo))
                 {
-                    const ::basegfx::BColor aRGBWhite(1.0, 1.0, 1.0);
-                    const ::basegfx::BColorModifier aBColorModifier(aRGBWhite, 0.5, ::basegfx::BCOLORMODIFYMODE_INTERPOLATE);
+                    const basegfx::BColor aRGBWhite(1.0, 1.0, 1.0);
+                    const basegfx::BColorModifier aBColorModifier(aRGBWhite, 0.5, basegfx::BCOLORMODIFYMODE_INTERPOLATE);
                     const drawinglayer::primitive2d::Primitive2DReference xReference(new drawinglayer::primitive2d::ModifiedColorPrimitive2D(xRetval, aBColorModifier));
                     xRetval = drawinglayer::primitive2d::Primitive2DSequence(&xReference, 1);
                 }
@@ -405,7 +405,7 @@ namespace sdr
                 {
                     // get ranges
                     const drawinglayer::geometry::ViewInformation2D& rViewInformation2D(GetObjectContact().getViewInformation2D());
-                    const ::basegfx::B2DRange aObjectRange(drawinglayer::primitive2d::getB2DRangeFromPrimitive2DSequence(xRetval, rViewInformation2D));
+                    const basegfx::B2DRange aObjectRange(drawinglayer::primitive2d::getB2DRangeFromPrimitive2DSequence(xRetval, rViewInformation2D));
                     const basegfx::B2DRange aViewRange(rViewInformation2D.getViewport());
 
                     // check geometrical visibility

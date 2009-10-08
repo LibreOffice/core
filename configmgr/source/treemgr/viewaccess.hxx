@@ -48,97 +48,95 @@ namespace configmgr
     class ViewTreeAccess
     {
             rtl::Reference< ViewStrategy >  m_xStrategy;
-            Tree                            m_aTree;
+            configuration::Tree * m_tree;
 
         public:
-            explicit ViewTreeAccess(Tree const & _aTree);
-            explicit ViewTreeAccess(configuration::TreeImpl& _rTree);
+            explicit ViewTreeAccess(configuration::Tree * tree):
+                m_xStrategy(tree->getViewBehavior()), m_tree(tree) {}
 
             rtl::Reference< view::ViewStrategy > getViewBehavior() { return m_xStrategy; }
         public:
-            typedef configuration::NodeRef const& NodeArg;
-            typedef configuration::NodeOffset NodeOffset;
-            configuration::NodeData* nodeData(NodeArg    _aNodeArg) const;
-            configuration::NodeData* nodeData(NodeOffset _aNodePos) const;
+            configuration::NodeData* nodeData(configuration::NodeRef const&    _aNodeArg) const;
+            configuration::NodeData* nodeData(unsigned int _aNodePos) const;
 
-            Node makeNode(NodeArg    _aNodeArg) const { return Node(m_aTree,nodeData(_aNodeArg)); }
-            Node makeNode(NodeOffset _aNodePos) const { return Node(m_aTree,nodeData(_aNodePos)); }
+            Node makeNode(configuration::NodeRef const&    _aNodeArg) const { return Node(m_tree,nodeData(_aNodeArg)); }
+            Node makeNode(unsigned int _aNodePos) const { return Node(m_tree,nodeData(_aNodePos)); }
 
-            bool isSetNode  (NodeArg _aNodeArg) const { return makeNode(_aNodeArg).isSetNode(); }
-            bool isGroupNode(NodeArg _aNodeArg) const { return makeNode(_aNodeArg).isGroupNode(); }
-            bool isValueNode(NodeArg _aNodeArg) const { return makeNode(_aNodeArg).isValueNode(); }
+            bool isSetNode  (configuration::NodeRef const& _aNodeArg) const { return makeNode(_aNodeArg).isSetNode(); }
+            bool isGroupNode(configuration::NodeRef const& _aNodeArg) const { return makeNode(_aNodeArg).isGroupNode(); }
+            bool isValueNode(configuration::NodeRef const& _aNodeArg) const { return makeNode(_aNodeArg).isValueNode(); }
 
-            bool isSetNodeAt  (NodeOffset _aNodeArg) const { return makeNode(_aNodeArg).isSetNode(); }
-            bool isGroupNodeAt(NodeOffset _aNodeArg) const { return makeNode(_aNodeArg).isGroupNode(); }
-            bool isValueNodeAt(NodeOffset _aNodeArg) const { return makeNode(_aNodeArg).isValueNode(); }
+            bool isSetNodeAt  (unsigned int _aNodeArg) const { return makeNode(_aNodeArg).isSetNode(); }
+            bool isGroupNodeAt(unsigned int _aNodeArg) const { return makeNode(_aNodeArg).isGroupNode(); }
+            bool isValueNodeAt(unsigned int _aNodeArg) const { return makeNode(_aNodeArg).isValueNode(); }
 
-            SetNode   toSetNode  (NodeArg _aNodeArg) const
+            SetNode   toSetNode  (configuration::NodeRef const& _aNodeArg) const
             { return SetNode  (makeNode(_aNodeArg)); }
 
-            GroupNode toGroupNode(NodeArg _aNodeArg) const
+            GroupNode toGroupNode(configuration::NodeRef const& _aNodeArg) const
             { return GroupNode(makeNode(_aNodeArg)); }
 
-            ValueNode toValueNode(NodeArg _aNodeArg) const
+            ValueNode toValueNode(configuration::NodeRef const& _aNodeArg) const
             { return ValueNode(makeNode(_aNodeArg)); }
 
-            SetNode   getSetNodeAt  (NodeOffset _aNodeArg) const
+            SetNode   getSetNodeAt  (unsigned int _aNodeArg) const
             { return SetNode  (makeNode(_aNodeArg)); }
 
-            GroupNode getGroupNodeAt(NodeOffset _aNodeArg) const
+            GroupNode getGroupNodeAt(unsigned int _aNodeArg) const
             { return GroupNode(makeNode(_aNodeArg)); }
 
-            ValueNode getValueNodeAt(NodeOffset _aNodeArg) const
+            ValueNode getValueNodeAt(unsigned int _aNodeArg) const
             { return ValueNode(makeNode(_aNodeArg)); }
         // node attributes
         public:
             /// retrieve the name of the node
-            Name getName(NodeArg _aNode)    const
+            rtl::OUString getName(configuration::NodeRef const& _aNode) const
             { return m_xStrategy->getName(makeNode(_aNode)); }
 
             /// retrieve the attributes of the node
-            node::Attributes getAttributes(NodeArg _aNode)  const
+            node::Attributes getAttributes(configuration::NodeRef const& _aNode)    const
             { return m_xStrategy->getAttributes(makeNode(_aNode)); }
 
             /// retrieve the name of the tree root
-            Name getRootName()  const
-            { return m_xStrategy->getName( getRootNode(m_aTree) ); }
+            rtl::OUString getRootName() const
+            { return m_xStrategy->getName( getRootNode(m_tree) ); }
 
             /// retrieve the attributes of the tree root
             node::Attributes getRootAttributes()    const
-            { return m_xStrategy->getAttributes( getRootNode(m_aTree) ); }
+            { return m_xStrategy->getAttributes( getRootNode(m_tree) ); }
 
         // tracking pending changes
         public:
             void collectChanges(configuration::NodeChanges& rChanges)   const
-            { m_xStrategy->collectChanges(m_aTree,rChanges); }
+            { m_xStrategy->collectChanges(m_tree,rChanges); }
 
             bool hasChanges() const
-            { return m_xStrategy->hasChanges(m_aTree); }
+            { return m_xStrategy->hasChanges(m_tree); }
 
-            bool hasChanges(NodeArg _aNode) const
+            bool hasChanges(configuration::NodeRef const& _aNode) const
             { return m_xStrategy->hasChanges(makeNode(_aNode)); }
 
-            void markChanged(NodeArg _aNode)
+            void markChanged(configuration::NodeRef const& _aNode)
             { m_xStrategy->markChanged(makeNode(_aNode)); }
 
         // commit protocol
         public:
-            std::auto_ptr<SubtreeChange> preCommitChanges(configuration::ElementList& _rRemovedElements)
-            { return m_xStrategy->preCommitChanges(m_aTree,_rRemovedElements); }
+            std::auto_ptr<SubtreeChange> preCommitChanges(std::vector< rtl::Reference<configuration::ElementTree> >& _rRemovedElements)
+            { return m_xStrategy->preCommitChanges(m_tree,_rRemovedElements); }
 
             void finishCommit(SubtreeChange& rRootChange)
-            { m_xStrategy->finishCommit(m_aTree,rRootChange); }
+            { m_xStrategy->finishCommit(m_tree,rRootChange); }
 
             void revertCommit(SubtreeChange& rRootChange)
-            { m_xStrategy->revertCommit(m_aTree,rRootChange); }
+            { m_xStrategy->revertCommit(m_tree,rRootChange); }
 
             void recoverFailedCommit(SubtreeChange& rRootChange)
-            { m_xStrategy->recoverFailedCommit(m_aTree,rRootChange); }
+            { m_xStrategy->recoverFailedCommit(m_tree,rRootChange); }
 
         // notification protocol
         public:
             /// Adjust the internal representation after external changes to the original data - build NodeChangeInformation objects for notification
-            void    adjustToChanges(configuration::NodeChangesInformation& rLocalChanges, NodeArg _aNode, SubtreeChange const& aExternalChange)
+            void    adjustToChanges(configuration::NodeChangesInformation& rLocalChanges, configuration::NodeRef const& _aNode, SubtreeChange const& aExternalChange)
             { m_xStrategy->adjustToChanges(rLocalChanges,makeNode(_aNode), aExternalChange); }
 
         // visitor dispatch
@@ -154,18 +152,18 @@ namespace configmgr
         public:
         /// Does this node assume its default value
         /// retrieve the current value of this node
-        UnoAny getValue(ValueNode const& _aNode) const
+        com::sun::star::uno::Any getValue(ValueNode const& _aNode) const
             { return m_xStrategy->getValue(_aNode); }
 #if OSL_DEBUG_LEVEL > 0
         /// get the type of this value
-        UnoType getValueType(ValueNode const& _aNode)   const
+        com::sun::star::uno::Type getValueType(ValueNode const& _aNode) const
             { return m_xStrategy->getValueType(_aNode); }
 #endif
 
         // group node specific operations
         public:
             /// does this hold a child value of the given name
-            bool hasValue(GroupNode const& _aNode, Name const& _aName) const
+            bool hasValue(GroupNode const& _aNode, rtl::OUString const& _aName) const
             { return m_xStrategy->hasValue(_aNode,_aName); }
 
             /// does this hold a child value
@@ -177,11 +175,11 @@ namespace configmgr
             { return m_xStrategy->areValueDefaultsAvailable(_aNode); }
 
             /// retrieve data for the child value of the given name
-            configuration::ValueMemberNode getValue(GroupNode const& _aNode, Name const& _aName) const
+            configuration::ValueMemberNode getValue(GroupNode const& _aNode, rtl::OUString const& _aName) const
             { return m_xStrategy->getValue(_aNode,_aName); }
 
             /// retrieve data for updating the child value of the given name
-            configuration::ValueMemberUpdate getValueForUpdate(GroupNode const & _aNode, Name const& _aName) const
+            configuration::ValueMemberUpdate getValueForUpdate(GroupNode const & _aNode, rtl::OUString const& _aName) const
             { return m_xStrategy->getValueForUpdate(_aNode,_aName); }
 
         // set node specific operations
@@ -191,19 +189,19 @@ namespace configmgr
             { return m_xStrategy->isEmpty(_aNode); }
 
             /// does this set contain an element named <var>aName</var> (loads elements if needed)
-            configuration::SetEntry findElement(SetNode const& _aNode, Name const& aName) const
+            configuration::SetEntry findElement(SetNode const& _aNode, rtl::OUString const& aName) const
             { return m_xStrategy->findElement(_aNode,aName); }
 
             /// does this set contain an element named <var>aName</var> (and is that element loaded ?)
-            configuration::SetEntry findAvailableElement(SetNode const& _aNode, Name const& aName) const
+            configuration::SetEntry findAvailableElement(SetNode const& _aNode, rtl::OUString const& aName) const
             { return m_xStrategy->findAvailableElement(_aNode,aName); }
 
             /// insert a new entry into this set
-            void        insertElement(SetNode const& _aNode, Name const& aName, configuration::SetEntry const& aNewEntry)
+            void        insertElement(SetNode const& _aNode, rtl::OUString const& aName, configuration::SetEntry const& aNewEntry)
             { m_xStrategy->insertElement(_aNode,aName,aNewEntry); }
 
             /// remove an existing entry into this set
-            void        removeElement(SetNode const& _aNode, Name const& aName)
+            void        removeElement(SetNode const& _aNode, rtl::OUString const& aName)
             { m_xStrategy->removeElement(_aNode,aName); }
 
             /** Create a Subtree change as 'diff' which allows transforming the set to its default state
@@ -214,7 +212,7 @@ namespace configmgr
             { return m_xStrategy->differenceToDefaultState(_aNode,_rDefaultTree); }
 
             /// Get the template that describes elements of this set
-            configuration::TemplateHolder getElementTemplate(SetNode const& _aNode) const
+            rtl::Reference<configuration::Template> getElementTemplate(SetNode const& _aNode) const
             { return m_xStrategy->getElementTemplate(_aNode); }
 
             /// Get a template provider that can create new elements for this set
@@ -227,25 +225,6 @@ namespace configmgr
          //   void makeDirect  ();
 
         };
-
-//-----------------------------------------------------------------------------
-        inline
-        ViewTreeAccess::ViewTreeAccess(Tree const & _aTree)
-        : m_xStrategy()
-        , m_aTree(_aTree)
-        {
-            m_xStrategy = _aTree.get_impl()->getViewBehavior();
-        }
-
-//-----------------------------------------------------------------------------
-        inline
-        ViewTreeAccess::ViewTreeAccess(configuration::TreeImpl& _rTree)
-            : m_xStrategy(_rTree.getViewBehavior())
-            , m_aTree(_rTree)
-        {
-        }
-
-//-----------------------------------------------------------------------------
     }
 }
 

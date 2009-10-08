@@ -31,6 +31,11 @@
 #ifndef CONFIGMGR_API_NODEACCESS_HXX_
 #define CONFIGMGR_API_NODEACCESS_HXX_
 
+#include "sal/config.h"
+
+#include "boost/utility.hpp"
+
+#include "datalock.hxx"
 #include "utility.hxx"
 #include "noderef.hxx"
 
@@ -40,16 +45,9 @@ namespace configmgr
 {
     namespace configuration
     {
-        class Name;
         class AnyNodeRef;
         class NodeRef;
-        class TreeRef;
         class Tree;
-
-        class SetElementInfo;
-        class TemplateInfo;
-        class ElementRef;
-        class ElementTree;
     }
     namespace configapi
     {
@@ -60,36 +58,34 @@ namespace configmgr
         class ApiTreeImpl;
 
         namespace uno = com::sun::star::uno;
-        typedef uno::XInterface UnoInterface;
-        typedef uno::Any UnoAny;
 
         // API object implementation wrappers
         // these objects just provide the pieces needed to navigate and manipulate trees and nodes
 
         // The common part of all nodes, provides all you need to read and listen
-        class NodeAccess : Noncopyable
+        class NodeAccess : private boost::noncopyable
         {
         public:
             virtual ~NodeAccess();
 
         // model access
             configuration::NodeRef  getNodeRef() const;
-            configuration::TreeRef  getTreeRef() const;
-            configuration::Tree     getTree() const;
+            rtl::Reference< configuration::Tree > getTreeRef() const;
+            rtl::Reference< configuration::Tree > getTree() const;
 
         // self-locked methods for dispose handling
             void checkAlive() const;
             void disposeNode();
 
         // api object handling
-            UnoInterface*           getUnoInstance() const
+            uno::XInterface*            getUnoInstance() const
             { return doGetUnoInstance(); }
             Factory&                getFactory() const;
             Notifier                getNotifier() const;
 
         protected:
             virtual configuration::NodeRef  doGetNode() const = 0;
-            virtual UnoInterface*   doGetUnoInstance() const = 0;
+            virtual uno::XInterface*    doGetUnoInstance() const = 0;
             virtual ApiTreeImpl&    getApiTree() const = 0;
         };
 
@@ -98,21 +94,21 @@ namespace configmgr
                 to create service implementations wrapping inner nodes</p>
             <p> returns VOID if <var>aNode</var> is empty.</p>
         */
-        UnoAny  makeElement(configapi::Factory& rFactory, configuration::Tree const& aTree, configuration::AnyNodeRef const& aNode);
+        uno::Any    makeElement(configapi::Factory& rFactory, rtl::Reference< configuration::Tree > const& aTree, configuration::AnyNodeRef const& aNode);
 
         /** builds a Uno <type scope='com::sun::star::uno'>Any</type> representing inner node <var>aNode</var>.
             <p> Uses the <type scope='configmgr::configapi'>Factory</type> provided
                 to create service implementations wrapping inner nodes</p>
             <p> returns VOID if <var>aNode</var> is empty.</p>
         */
-        UnoAny  makeInnerElement(configapi::Factory& rFactory, configuration::Tree const& aTree, configuration::NodeRef const& aNode);
+        uno::Any    makeInnerElement(configapi::Factory& rFactory, rtl::Reference< configuration::Tree > const& aTree, configuration::NodeRef const& aNode);
 
         /** builds a Uno <type scope='com::sun::star::uno'>Any</type> representing set element <var>aElement</var>.
             <p> Uses the <type scope='configmgr::configapi'>Factory</type> provided
                 to create service implementations wrapping inner nodes</p>
             <p> returns VOID if <var>aNode</var> is empty.</p>
         */
-        UnoAny  makeElement(configapi::Factory& rFactory, configuration::ElementTree const& aTree);
+        uno::Any    makeElement(configapi::Factory& rFactory, rtl::Reference< configuration::ElementTree > const& aTree);
 
 
         // Info interfaces for Group Nodes
@@ -127,54 +123,17 @@ namespace configmgr
         {
             friend class SetElement;
         public:
-            configuration::SetElementInfo getElementInfo() const;
+            rtl::Reference< configuration::Template > getElementInfo() const;
         };
 
         /** extracts a <type scope='configmgr::configuration'>ElementTree</type> from a <type scope='com::sun::star::uno'>Any</type>
-            which must contain an object which wraps an instance of the template available in <var>aElementInfo</var>.
+            which must contain an object which wraps an instance of the template available in <var>aTemplate</var>.
             <p> Uses the <type scope='configmgr::configapi'>Factory</type> provided
                 to resolve inner nodes (which may suppose that the object was created using the same factory)</p>
-            <p> returns an empty <type scope='configmgr::configuration'>Tree</type> if <var>aElement</var> is empty.</p>
+            <p> returns an empty tree if <var>aElement</var> is empty.</p>
             <p> May throw exceptions if the type doesn't match the template.</p>
         */
-        configuration::ElementRef  extractElementRef (Factory& rFactory, UnoAny const& aElement, configuration::TemplateInfo   const& aElementInfo );
-        configuration::ElementTree extractElementTree(Factory& rFactory, UnoAny const& aElement, configuration::SetElementInfo const& aElementInfo );
-
-        // Guarding and locking implementations
-        /// guards a NodeAccess; provides an object (read) lock,
-        /// ensures object was not disposed
-
-// FIXME: can evaporate this class [ I think ]
-        class NodeReadGuardImpl : Noncopyable
-        {
-            NodeAccess &m_rNode;
-        public:
-            NodeReadGuardImpl(NodeAccess& rNode)
-                : m_rNode(rNode)
-                { rNode.checkAlive(); }
-            ~NodeReadGuardImpl()
-                {}
-        public:
-            NodeAccess& get() const { return m_rNode; }
-
-            configuration::Tree     getTree() const
-                { return m_rNode.getTree(); }
-            configuration::NodeRef  getNode() const
-                { return m_rNode.getNodeRef(); }
-        };
-
-    // Thin Wrappers around NodeAccesses: Provide guarding and convenient access
-        /// wraps a NodeAccess; provides an object (read) lock, ensures object was not disposed
-        template <class Access>
-        class GuardedNode
-        {
-            NodeReadGuardImpl   m_aViewLock;
-        public:
-            GuardedNode(Access& rNode) : m_aViewLock(rNode) {}
-        public:
-            Access& get()        const { return static_cast<Access&>(m_aViewLock.get()); }
-        };
-        typedef GuardedNode<NodeAccess> GuardedNodeAccess;
+        rtl::Reference< configuration::ElementTree > extractElementTree(Factory& rFactory, uno::Any const& aElement, rtl::Reference< configuration::Template > const& aTemplate );
 
         /// wraps a NodeAccess; provides both object and provider (read) locks,
         // ensures object was not disposed
@@ -182,33 +141,33 @@ namespace configmgr
         class GuardedNodeData
         {
             UnoApiLock              m_aLock;
-            NodeReadGuardImpl       m_aViewLock;
+            Access & m_rNode;
         public:
             GuardedNodeData(Access& rNode);
         public:
-            Access& get()        const { return static_cast<Access&>(m_aViewLock.get()); }
+            Access& get()        const { return m_rNode; }
 
-            configuration::Tree     getTree() const;
+            rtl::Reference< configuration::Tree > getTree() const;
             configuration::NodeRef  getNode() const;
         };
-        typedef GuardedNodeData<NodeAccess> GuardedNodeDataAccess;
 
         template <class Access>
         GuardedNodeData<Access>::GuardedNodeData(Access& rNode)
-        : m_aViewLock(rNode)
+        : m_rNode(rNode)
         {
+            rNode.checkAlive();
         }
 
         template <class Access>
-        configuration::Tree GuardedNodeData<Access>::getTree() const
+        rtl::Reference< configuration::Tree > GuardedNodeData<Access>::getTree() const
         {
-            return (configuration::Tree) m_aViewLock.getTree();
+            return m_rNode.getTree();
         }
 
         template <class Access>
         configuration::NodeRef GuardedNodeData<Access>::getNode() const
         {
-            return m_aViewLock.getNode();
+            return m_rNode.getNodeRef();
         }
     }
 }

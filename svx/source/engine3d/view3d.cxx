@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: view3d.cxx,v $
- * $Revision: 1.32 $
+ * $Revision: 1.32.18.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -73,6 +73,8 @@
 #include <svx/sdr/overlay/overlaypolypolygon.hxx>
 #include <svx/sdr/overlay/overlaymanager.hxx>
 #include <sdrpaintwindow.hxx>
+#include <svx/sdr/contact/viewcontactofe3dscene.hxx>
+#include <drawinglayer/geometry/viewinformation3d.hxx>
 
 #define ITEMVALUE(ItemSet,Id,Cast)  ((const Cast&)(ItemSet).Get(Id)).GetValue()
 
@@ -111,7 +113,7 @@ Impl3DMirrorConstructOverlay::Impl3DMirrorConstructOverlay(const E3dView& rView)
     {
         SdrMark *pMark = rMarkList.GetMark(a);
         SdrObject *pObj = pMark->GetMarkedSdrObj();
-        mpPolygons[mnCount - (a + 1L)] = pObj->TakeXorPoly(sal_False);
+        mpPolygons[mnCount - (a + 1L)] = pObj->TakeXorPoly();
     }
 }
 
@@ -279,138 +281,117 @@ void E3dView::DrawMarkedObj(OutputDevice& rOut) const
 SdrModel* E3dView::GetMarkedObjModel() const
 {
     // Existieren 3D-Objekte, deren Szenen nicht selektiert sind?
-    BOOL bSpecialHandling = FALSE;
-    E3dScene *pScene = NULL;
+    bool bSpecialHandling(false);
+    const sal_uInt32 nCount(GetMarkedObjectCount());
+    sal_uInt32 nObjs(0);
+    E3dScene *pScene = 0;
 
-    long nCnt = GetMarkedObjectCount();
-    for(long nObjs = 0;nObjs < nCnt;nObjs++)
+    for(nObjs = 0; nObjs < nCount; nObjs++)
+    {
+        const SdrObject* pObj = GetMarkedObjectByIndex(nObjs);
+
+        if(!bSpecialHandling && pObj && pObj->ISA(E3dCompoundObject))
+        {
+            // if the object is selected, but it's scene not,
+            // we need special handling
+            pScene = ((E3dCompoundObject*)pObj)->GetScene();
+
+            if(pScene && !IsObjMarked(pScene))
+            {
+                bSpecialHandling = true;
+            }
+        }
+
+        if(pObj && pObj->ISA(E3dObject))
+        {
+            // reset all selection flags at 3D objects
+            pScene = ((E3dObject*)pObj)->GetScene();
+
+            if(pScene)
+            {
+                pScene->SetSelected(false);
+            }
+        }
+    }
+
+    if(!bSpecialHandling)
+    {
+        // call parent
+        return SdrView::GetMarkedObjModel();
+    }
+
+    SdrModel* pNewModel = 0;
+    Rectangle aSelectedSnapRect;
+
+    // set 3d selection flags at all directly selected objects
+    // and collect SnapRect of selected objects
+    for(nObjs = 0; nObjs < nCount; nObjs++)
     {
         SdrObject *pObj = GetMarkedObjectByIndex(nObjs);
+
         if(pObj && pObj->ISA(E3dCompoundObject))
         {
-            // zugehoerige Szene
-            pScene = ((E3dCompoundObject*)pObj)->GetScene();
-            if(pScene && !IsObjMarked(pScene))
-                bSpecialHandling = TRUE;
+            // mark object, but not scenes
+            E3dCompoundObject* p3DObj = (E3dCompoundObject*)pObj;
+            p3DObj->SetSelected(true);
+            aSelectedSnapRect.Union(p3DObj->GetSnapRect());
         }
-        // Alle SelectionFlags zuruecksetzen
+    }
+
+    // create new mark list which contains all indirectly selected3d
+    // scenes as selected objects
+    SdrMarkList aOldML(GetMarkedObjectList());
+    SdrMarkList aNewML;
+    SdrMarkList& rCurrentMarkList = ((E3dView*)this)->GetMarkedObjectListWriteAccess();
+    rCurrentMarkList = aNewML;
+
+    for(nObjs = 0; nObjs < nCount; nObjs++)
+    {
+        SdrObject *pObj = aOldML.GetMark(nObjs)->GetMarkedSdrObj();
+
         if(pObj && pObj->ISA(E3dObject))
         {
             pScene = ((E3dObject*)pObj)->GetScene();
-            if(pScene)
-                pScene->SetSelected(FALSE);
+
+            if(pScene && !IsObjMarked(pScene) && GetSdrPageView())
+            {
+                ((E3dView*)this)->MarkObj(pScene, GetSdrPageView(), FALSE, TRUE);
+            }
         }
     }
 
-    SdrModel* pNewModel = 0L;
-    if(bSpecialHandling)
+    // call parent. This will copy all scenes and the selection flags at the 3d objectss. So
+    // it will be possible to delete all non-selected 3d objects from the cloned 3d scenes
+    pNewModel = SdrView::GetMarkedObjModel();
+
+    if(pNewModel)
     {
-        // SelectionFlag bei allen zu 3D Objekten gehoerigen
-        // Szenen und deren Objekten auf nicht selektiert setzen
-        long nObjs;
-        for(nObjs = 0;nObjs < nCnt;nObjs++)
+        for(sal_uInt16 nPg(0); nPg < pNewModel->GetPageCount(); nPg++)
         {
-            SdrObject *pObj = GetMarkedObjectByIndex(nObjs);
-            if(pObj && pObj->ISA(E3dCompoundObject))
-            {
-                // zugehoerige Szene
-                pScene = ((E3dCompoundObject*)pObj)->GetScene();
-                if(pScene)
-                    pScene->SetSelected(FALSE);
-            }
-        }
-        // bei allen direkt selektierten Objekten auf selektiert setzen
-        for(nObjs = 0;nObjs < nCnt;nObjs++)
-        {
-            SdrObject *pObj = GetMarkedObjectByIndex(nObjs);
-            if(pObj && pObj->ISA(E3dObject))
-            {
-                // Objekt markieren
-                E3dObject* p3DObj = (E3dObject*)pObj;
-                p3DObj->SetSelected(TRUE);
-            }
-        }
+            const SdrPage* pSrcPg=pNewModel->GetPage(nPg);
+            const sal_uInt32 nObAnz(pSrcPg->GetObjCount());
 
-        // Neue MarkList generieren, die die betroffenen
-        // Szenen als markierte Objekte enthaelt
-        SdrMarkList aOldML(GetMarkedObjectList()); // alte Marklist merken
-        SdrMarkList aNewML; // neue leere Marklist
-        SdrMarkList& rCurrentMarkList = ((E3dView*)this)->GetMarkedObjectListWriteAccess();
-        rCurrentMarkList = aNewML; // ((E3dView*)this)->maMarkedObjectList = aNewML;
-
-        for(nObjs = 0;nObjs < nCnt;nObjs++)
-        {
-            SdrObject *pObj = aOldML.GetMark(nObjs)->GetMarkedSdrObj();
-            if(pObj)
+            for(sal_uInt32 nOb(0); nOb < nObAnz; nOb++)
             {
-                if(pObj->ISA(E3dCompoundObject))
+                const SdrObject* pSrcOb=pSrcPg->GetObj(nOb);
+
+                if(pSrcOb->ISA(E3dScene))
                 {
-                    // zugehoerige Szene holen
-                    pScene = ((E3dCompoundObject*)pObj)->GetScene();
-                    if(pScene)
-                        pObj = pScene;
+                    pScene = (E3dScene*)pSrcOb;
+
+                    // delete all not intentionally cloned 3d objects
+                    pScene->removeAllNonSelectedObjects();
+
+                    // reset select flags and set SnapRect of all selected objects
+                    pScene->SetSelected(false);
+                    pScene->SetSnapRect(aSelectedSnapRect);
                 }
-
-                // Keine Objekte doppelt markieren
-                // (dies koennten nur Szenen sein)
-                if(!IsObjMarked(pObj))
-                {
-                    if(GetSdrPageView())
-                    {
-                        ((E3dView*)this)->MarkObj(pObj, GetSdrPageView(), FALSE, TRUE);
-                    }
-                }
-            }
-        }
-
-        // call parent
-        pNewModel = SdrView::GetMarkedObjModel();
-
-        // Alle Szenen im kopierten Model in Ihren Ausdehnungen Korrigieren
-        // und IsSelected zuruecksetzen
-        if(pNewModel)
-        {
-            for(UINT16 nPg=0; nPg < pNewModel->GetPageCount(); nPg++)
-            {
-                const SdrPage* pSrcPg=pNewModel->GetPage(nPg);
-                UINT32 nObAnz=pSrcPg->GetObjCount();
-
-                // Unterobjekte von Szenen einfuegen
-                for(UINT32 nOb=0; nOb<nObAnz; nOb++)
-                {
-                    const SdrObject* pSrcOb=pSrcPg->GetObj(nOb);
-                    if(pSrcOb->ISA(E3dScene))
-                    {
-                        pScene = (E3dScene*)pSrcOb;
-                        pScene->CorrectSceneDimensions();
-                        pScene->SetSelected(FALSE);
-                    }
-                }
-            }
-        }
-
-        // Alte Liste wieder setzen
-        // ((E3dView*)this)->maMarkedObjectList= aOldML;
-        rCurrentMarkList = aOldML;
-
-        // SelectionFlag zuruecksetzen
-        for(nObjs = 0;nObjs < nCnt;nObjs++)
-        {
-            SdrObject *pObj = GetMarkedObjectByIndex(nObjs);
-            if(pObj && pObj->ISA(E3dCompoundObject))
-            {
-                // zugehoerige Szene
-                pScene = ((E3dCompoundObject*)pObj)->GetScene();
-                if(pScene)
-                    pScene->SetSelected(FALSE);
             }
         }
     }
-    else
-    {
-        // call parent
-        pNewModel = SdrView::GetMarkedObjModel();
-    }
+
+    // restore old selection
+    rCurrentMarkList = aOldML;
 
     // model zurueckgeben
     return pNewModel;
@@ -440,7 +421,6 @@ BOOL E3dView::Paste(const SdrModel& rMod, const Point& rPos, SdrObjList* pLst, U
     if(pOwner && pOwner->ISA(E3dScene))
     {
         E3dScene* pDstScene = (E3dScene*)pOwner;
-        BOOL bDstInserted(FALSE);
         BegUndo(SVX_RESSTR(RID_SVX_3D_UNDO_EXCHANGE_PASTE));
 
         // Alle Objekte aus E3dScenes kopieren und direkt einfuegen
@@ -460,19 +440,11 @@ BOOL E3dView::Paste(const SdrModel& rMod, const Point& rPos, SdrObjList* pLst, U
                 if(pSrcOb->ISA(E3dScene))
                 {
                     E3dScene* pSrcScene = (E3dScene*)pSrcOb;
-                    bDstInserted = ImpCloneAll3DObjectsToDestScene(pSrcScene, pDstScene, aDist);
+                    ImpCloneAll3DObjectsToDestScene(pSrcScene, pDstScene, aDist);
                 }
             }
         }
         EndUndo();
-
-        // DestScene anpassen
-        if(bDstInserted)
-        {
-            pDstScene->SetRectsDirty();
-            pDstScene->CorrectSceneDimensions();
-            bRetval = TRUE;
-        }
     }
     else
     {
@@ -485,177 +457,107 @@ BOOL E3dView::Paste(const SdrModel& rMod, const Point& rPos, SdrObjList* pLst, U
 }
 
 // #83403# Service routine used from local Clone() and from SdrCreateView::EndCreateObj(...)
-BOOL E3dView::ImpCloneAll3DObjectsToDestScene(E3dScene* pSrcScene, E3dScene* pDstScene, Point aOffset)
+BOOL E3dView::ImpCloneAll3DObjectsToDestScene(E3dScene* pSrcScene, E3dScene* pDstScene, Point /*aOffset*/)
 {
     BOOL bRetval(FALSE);
 
     if(pSrcScene && pDstScene)
     {
-        B3dCamera& rCameraSetDst = pDstScene->GetCameraSet();
-        B3dCamera& rCameraSetSrc = pSrcScene->GetCameraSet();
+        const sdr::contact::ViewContactOfE3dScene& rVCSceneDst = static_cast< sdr::contact::ViewContactOfE3dScene& >(pDstScene->GetViewContact());
+        const drawinglayer::geometry::ViewInformation3D aViewInfo3DDst(rVCSceneDst.getViewInformation3D());
+        const sdr::contact::ViewContactOfE3dScene& rVCSceneSrc = static_cast< sdr::contact::ViewContactOfE3dScene& >(pSrcScene->GetViewContact());
+        const drawinglayer::geometry::ViewInformation3D aViewInfo3DSrc(rVCSceneSrc.getViewInformation3D());
 
         for(sal_uInt32 i(0); i < pSrcScene->GetSubList()->GetObjCount(); i++)
         {
-            SdrObject* pObj = pSrcScene->GetSubList()->GetObj(i);
-            if(pObj && pObj->ISA(E3dCompoundObject))
+            E3dCompoundObject* pCompoundObj = dynamic_cast< E3dCompoundObject* >(pSrcScene->GetSubList()->GetObj(i));
+
+            if(pCompoundObj)
             {
-                // Kopieren
-                // E3dObject* pNew = (E3dObject*)pObj->Clone(pDstScene->GetPage(), pDstScene->GetModel());
-
                 // #116235#
-                E3dObject* pNew = (E3dObject*)pObj->Clone();
+                E3dCompoundObject* pNewCompoundObj = dynamic_cast< E3dCompoundObject* >(pCompoundObj->Clone());
 
-                if(pNew)
+                if(pNewCompoundObj)
                 {
-                    // #116235#
-                    pNew->SetModel(pDstScene->GetModel());
-                    pNew->SetPage(pDstScene->GetPage());
+                    // get dest scene's current range in 3D world coordinates
+                    const basegfx::B3DHomMatrix aSceneToWorldTrans(pDstScene->GetFullTransform());
+                    basegfx::B3DRange aSceneRange(pDstScene->GetBoundVolume());
+                    aSceneRange.transform(aSceneToWorldTrans);
 
-                    // Neues Objekt in Szene einfuegen
-                    pNew->NbcSetLayer(pObj->GetLayer());
-                    pNew->NbcSetStyleSheet(pObj->GetStyleSheet(), sal_True);
-                    pDstScene->Insert3DObj(pNew);
-                    bRetval = TRUE;
+                    // get new object's implied object transformation
+                    const basegfx::B3DHomMatrix aNewObjectTrans(pNewCompoundObj->GetTransform());
 
-                    // Transformation ObjectToEye Src
-                    basegfx::B3DHomMatrix aMatSrc;
-                    aMatSrc = ((E3dCompoundObject*)pObj)->GetFullTransform();
-                    aMatSrc *= rCameraSetSrc.GetOrientation();
+                    // get new object's range in 3D world coordinates in dest scene
+                    // as if it were already added
+                    const basegfx::B3DHomMatrix aObjectToWorldTrans(aSceneToWorldTrans * aNewObjectTrans);
+                    basegfx::B3DRange aObjectRange(pNewCompoundObj->GetBoundVolume());
+                    aObjectRange.transform(aObjectToWorldTrans);
 
-                    // Tanslation und scale von source
-                    basegfx::B3DRange aDevVolSrc(rCameraSetSrc.GetDeviceVolume());
+                    // get scale adaption
+                    const basegfx::B3DVector aSceneScale(aSceneRange.getRange());
+                    const basegfx::B3DVector aObjectScale(aObjectRange.getRange());
+                    double fScale(1.0);
 
-                    // auf Augkoordinaten umstellen
-                    aDevVolSrc = basegfx::B3DRange(
-                        aDevVolSrc.getMinX(), aDevVolSrc.getMinY(), -aDevVolSrc.getMaxZ(),
-                        aDevVolSrc.getMaxX(), aDevVolSrc.getMaxY(), -aDevVolSrc.getMinZ());
+                    // if new object's size in X,Y or Z is bigger that 80% of dest scene, adapt scale
+                    // to not change the scene by the inserted object
+                    const double fSizeFactor(0.5);
 
-                    basegfx::B3DPoint aProjScaleSrc(
-                        2.0 / aDevVolSrc.getWidth(),
-                        2.0 / aDevVolSrc.getHeight(),
-                        2.0 / aDevVolSrc.getDepth());
-                    basegfx::B3DPoint aProjTransSrc(
-                        -1.0 * ((aDevVolSrc.getMaxX() + aDevVolSrc.getMinX()) / aDevVolSrc.getWidth()),
-                        -1.0 * ((aDevVolSrc.getMaxY() + aDevVolSrc.getMinY()) / aDevVolSrc.getHeight()),
-                        -1.0 * ((aDevVolSrc.getMaxZ() + aDevVolSrc.getMinZ()) / aDevVolSrc.getDepth()));
-                    basegfx::B3DPoint aViewScaleSrc(rCameraSetSrc.GetScale());
-                    aViewScaleSrc.setZ(1.0);
-
-                    // Tanslation und scale von dest
-                    basegfx::B3DRange aDevVolDst(rCameraSetDst.GetDeviceVolume());
-
-                    // auf Augkoordinaten umstellen
-                    aDevVolDst = basegfx::B3DRange(
-                        aDevVolDst.getMinX(), aDevVolDst.getMinY(), -aDevVolDst.getMaxZ(),
-                        aDevVolDst.getMaxX(), aDevVolDst.getMaxY(), -aDevVolDst.getMinZ());
-
-                    basegfx::B3DPoint aProjScaleDst(
-                        2.0 / aDevVolDst.getWidth(),
-                        2.0 / aDevVolDst.getHeight(),
-                        2.0 / aDevVolDst.getDepth());
-                    basegfx::B3DPoint aProjTransDst(
-                        -1.0 * ((aDevVolDst.getMaxX() + aDevVolDst.getMinX()) / aDevVolDst.getWidth()),
-                        -1.0 * ((aDevVolDst.getMaxY() + aDevVolDst.getMinY()) / aDevVolDst.getHeight()),
-                        -1.0 * ((aDevVolDst.getMaxZ() + aDevVolDst.getMinZ()) / aDevVolDst.getDepth()));
-                    basegfx::B3DPoint aViewScaleDst(rCameraSetDst.GetScale());
-                    aViewScaleDst.setZ(1.0);
-
-                    // Groesse des Objektes in Augkoordinaten Src
-                    basegfx::B3DRange aObjVolSrc(((E3dCompoundObject*)pObj)->GetBoundVolume().GetTransformVolume(aMatSrc));
-
-                    // Vorlaeufige Groesse in Augkoordinaten Dst
-                    basegfx::B3DHomMatrix aMatZwi = aMatSrc;
-                    aMatZwi.scale(aProjScaleSrc.getX(), aProjScaleSrc.getY(), aProjScaleSrc.getZ());
-                    aMatZwi.translate(aProjTransSrc.getX(), aProjTransSrc.getY(), aProjTransSrc.getZ());
-                    aMatZwi.scale(aViewScaleSrc.getX(), aViewScaleSrc.getY(), aViewScaleSrc.getZ());
-
-                    basegfx::B3DHomMatrix aMatDst;
-                    aMatDst.scale(aProjScaleDst.getX(), aProjScaleDst.getY(), aProjScaleDst.getZ());
-                    aMatDst.translate(aProjTransDst.getX(), aProjTransDst.getY(), aProjTransDst.getZ());
-                    aMatDst.scale(aViewScaleDst.getX(), aViewScaleDst.getY(), aViewScaleDst.getZ());
-                    aMatDst.invert();
-
-                    aMatZwi *= aMatDst;
-
-                    basegfx::B3DRange aObjVolDst(((E3dCompoundObject*)pObj)->GetBoundVolume().GetTransformVolume(aMatZwi));
-
-                    // Beide verhaeltnistiefen berechnen und mitteln
-                    double fDepthOne = (aObjVolSrc.getDepth() * aObjVolDst.getWidth()) / aObjVolSrc.getWidth();
-                    double fDepthTwo = (aObjVolSrc.getDepth() * aObjVolDst.getHeight()) / aObjVolSrc.getHeight();
-                    double fWantedDepth = (fDepthOne + fDepthTwo) / 2.0;
-
-                    // Faktor zum Tiefe anpassen bilden
-                    double fFactor = fWantedDepth / aObjVolDst.getDepth();
-                    basegfx::B3DPoint aDepthScale(1.0, 1.0, fFactor);
-
-                    // Endgueltige Transformation bilden
-                    aMatSrc.scale(aProjScaleSrc.getX(), aProjScaleSrc.getY(), aProjScaleSrc.getZ());
-                    aMatSrc.translate(aProjTransSrc.getX(), aProjTransSrc.getY(), aProjTransSrc.getZ());
-                    aMatSrc.scale(aViewScaleSrc.getX(), aViewScaleSrc.getY(), aViewScaleSrc.getZ());
-                    aMatSrc.scale(aDepthScale.getX(), aDepthScale.getY(), aDepthScale.getZ());
-
-                    aMatDst = pDstScene->GetFullTransform();
-                    aMatDst *= rCameraSetDst.GetOrientation();
-                    aMatDst.scale(aProjScaleDst.getX(), aProjScaleDst.getY(), aProjScaleDst.getZ());
-                    aMatDst.translate(aProjTransDst.getX(), aProjTransDst.getY(), aProjTransDst.getZ());
-                    aMatDst.scale(aViewScaleDst.getX(), aViewScaleDst.getY(), aViewScaleDst.getZ());
-                    aMatDst.invert();
-
-                    aMatSrc *= aMatDst;
-
-                    // Neue Objekttransformation setzen
-                    pNew->SetTransform(aMatSrc);
-
-                    // force new camera and SnapRect on scene, geometry may have really
-                    // changed
-                    pDstScene->CorrectSceneDimensions();
-
-                    // #83403# translate in view coor
+                    if(aObjectScale.getX() * fScale > aSceneScale.getX() * fSizeFactor)
                     {
-                        // screen position of center of old object
-                        basegfx::B3DHomMatrix aSrcFullTrans = ((E3dCompoundObject*)pObj)->GetFullTransform();
-                        rCameraSetSrc.SetObjectTrans(aSrcFullTrans);
-                        basegfx::B3DPoint aSrcCenter(((E3dCompoundObject*)pObj)->GetCenter());
-                        aSrcCenter = rCameraSetSrc.ObjectToViewCoor(aSrcCenter);
-
-                        if(aOffset.X() != 0 || aOffset.Y() != 0)
-                        {
-                            aSrcCenter += basegfx::B3DPoint((double)aOffset.X(), (double)aOffset.Y(), 0.0);
-                        }
-
-                        // to have a valid Z-Coor in dst system, calc current center of dst object
-                        basegfx::B3DHomMatrix aDstFullTrans = pNew->GetFullTransform();
-                        rCameraSetDst.SetObjectTrans(aDstFullTrans);
-                        basegfx::B3DPoint aDstCenter(pNew->GetCenter());
-                        aDstCenter = rCameraSetDst.ObjectToEyeCoor(aDstCenter);
-
-                        // convert aSrcCenter to a eye position of dst scene
-                        basegfx::B3DPoint aNewDstCenter(rCameraSetDst.ViewToEyeCoor(aSrcCenter));
-                        aNewDstCenter.setZ(aDstCenter.getZ());
-
-                        // transform back to object coor
-                        aNewDstCenter = rCameraSetDst.EyeToObjectCoor(aNewDstCenter);
-
-                        // get transform vector
-                        basegfx::B3DPoint aTransformCorrection(aNewDstCenter - pNew->GetCenter());
-                        basegfx::B3DHomMatrix aTransCorrMat;
-                        aTransCorrMat.translate(aTransformCorrection.getX(), aTransformCorrection.getY(), aTransformCorrection.getZ());
-
-                        // treanslate new object, add translate in front of obj transform
-                        pNew->SetTransform(pNew->GetTransform() * aTransCorrMat); // #112587#
-
-                        // force new camera and SnapRect on scene, geometry may have really
-                        // changed
-                        pDstScene->CorrectSceneDimensions();
-
-                        //Rectangle aOldPosSize = pObj->GetSnapRect();
-                        //if(aOffset.X() != 0 || aOffset.Y() != 0)
-                        //  aOldPosSize.Move(aOffset.X(), aOffset.Y());
-                        //Rectangle aNewPosSize = pNew->GetSnapRect();
+                        const double fObjSize(aObjectScale.getX() * fScale);
+                        const double fFactor((aSceneScale.getX() * fSizeFactor) / (basegfx::fTools::equalZero(fObjSize) ? 1.0 : fObjSize));
+                        fScale *= fFactor;
                     }
 
+                    if(aObjectScale.getY() * fScale > aSceneScale.getY() * fSizeFactor)
+                    {
+                        const double fObjSize(aObjectScale.getY() * fScale);
+                        const double fFactor((aSceneScale.getY() * fSizeFactor) / (basegfx::fTools::equalZero(fObjSize) ? 1.0 : fObjSize));
+                        fScale *= fFactor;
+                    }
+
+                    if(aObjectScale.getZ() * fScale > aSceneScale.getZ() * fSizeFactor)
+                    {
+                        const double fObjSize(aObjectScale.getZ() * fScale);
+                        const double fFactor((aSceneScale.getZ() * fSizeFactor) / (basegfx::fTools::equalZero(fObjSize) ? 1.0 : fObjSize));
+                        fScale *= fFactor;
+                    }
+
+                    // get translation adaption
+                    const basegfx::B3DPoint aSceneCenter(aSceneRange.getCenter());
+                    const basegfx::B3DPoint aObjectCenter(aObjectRange.getCenter());
+
+                    // build full modification transform. The object's transformation
+                    // shall be modified, so start at object coordinates; transform to 3d world coor
+                    basegfx::B3DHomMatrix aModifyingTransform(aObjectToWorldTrans);
+
+                    // translate to absolute center in 3d world coor
+                    aModifyingTransform.translate(-aObjectCenter.getX(), -aObjectCenter.getY(), -aObjectCenter.getZ());
+
+                    // scale to dest size in 3d world coor
+                    aModifyingTransform.scale(fScale, fScale, fScale);
+
+                    // translate to dest scene center in 3d world coor
+                    aModifyingTransform.translate(aSceneCenter.getX(), aSceneCenter.getY(), aSceneCenter.getZ());
+
+                    // transform from 3d world to dest object coordinates
+                    basegfx::B3DHomMatrix aWorldToObject(aObjectToWorldTrans);
+                    aWorldToObject.invert();
+                    aModifyingTransform = aWorldToObject * aModifyingTransform;
+
+                    // correct implied object transform by applying changing one in object coor
+                    pNewCompoundObj->SetTransform(aModifyingTransform * aNewObjectTrans);
+
+                    // fill and insert new object
+                    pNewCompoundObj->SetModel(pDstScene->GetModel());
+                    pNewCompoundObj->SetPage(pDstScene->GetPage());
+                    pNewCompoundObj->NbcSetLayer(pCompoundObj->GetLayer());
+                    pNewCompoundObj->NbcSetStyleSheet(pCompoundObj->GetStyleSheet(), sal_True);
+                    pDstScene->Insert3DObj(pNewCompoundObj);
+                    bRetval = TRUE;
+
                     // Undo anlegen
-                    AddUndo(GetModel()->GetSdrUndoFactory().CreateUndoNewObject(*pNew));
+                    AddUndo(GetModel()->GetSdrUndoFactory().CreateUndoNewObject(*pNewCompoundObj));
                 }
             }
         }
@@ -952,7 +854,7 @@ void E3dView::ConvertMarkedObjTo3D(BOOL bExtrude, basegfx::B2DPoint aPnt1, baseg
                 basegfx::B2DPoint aDiff(aPnt1 - aPnt2);
                 fRot3D = atan2(aDiff.getY(), aDiff.getX()) - F_PI2;
 
-                if(fabs(fRot3D) < SMALL_DVALUE)
+                if(basegfx::fTools::equalZero(fabs(fRot3D)))
                     fRot3D = 0.0;
 
                 if(fRot3D != 0.0)
@@ -1034,7 +936,7 @@ void E3dView::ConvertMarkedObjTo3D(BOOL bExtrude, basegfx::B2DPoint aPnt1, baseg
                 DoDepthArrange(pScene, fDepth);
 
             // 3D-Objekte auf die Mitte des Gesamtrechtecks zentrieren
-            basegfx::B3DPoint aCenter(pScene->GetCenter());
+            basegfx::B3DPoint aCenter(pScene->GetBoundVolume().getCenter());
             basegfx::B3DHomMatrix aMatrix;
 
             aMatrix.translate(-aCenter.getX(), -aCenter.getY(), -aCenter.getZ());
@@ -1042,12 +944,8 @@ void E3dView::ConvertMarkedObjTo3D(BOOL bExtrude, basegfx::B2DPoint aPnt1, baseg
 
             // Szene initialisieren
             pScene->NbcSetSnapRect(aRect);
-            Volume3D aBoundVol = pScene->GetBoundVolume();
+            basegfx::B3DRange aBoundVol = pScene->GetBoundVolume();
             InitScene(pScene, (double)aRect.GetWidth(), (double)aRect.GetHeight(), aBoundVol.getDepth());
-
-            // Transformationen initialisieren, damit bei RecalcSnapRect()
-            // richtig gerechnet wird
-            pScene->InitTransformationSet();
 
             // Szene anstelle des ersten selektierten Objektes einfuegen
             // und alle alten Objekte weghauen
@@ -1059,17 +957,25 @@ void E3dView::ConvertMarkedObjTo3D(BOOL bExtrude, basegfx::B2DPoint aPnt1, baseg
             MarkObj(pScene, pPV);
 
             // Rotationskoerper um Rotationsachse drehen
+            basegfx::B3DHomMatrix aRotate;
+
             if(!bExtrude && fRot3D != 0.0)
             {
-                pScene->RotateZ(fRot3D);
+                aRotate.rotate(0.0, 0.0, fRot3D);
             }
 
             // Default-Rotation setzen
-            double XRotateDefault = 20;
-            pScene->RotateX(DEG2RAD(XRotateDefault));
+            {
+                double XRotateDefault = 20;
+                aRotate.rotate(DEG2RAD(XRotateDefault), 0.0, 0.0);
+            }
+
+            if(!aRotate.isIdentity())
+            {
+                pScene->SetTransform(aRotate * pScene->GetTransform());
+            }
 
             // SnapRects der Objekte ungueltig
-            pScene->CorrectSceneDimensions();
             pScene->SetSnapRect(aRect);
         }
         else
@@ -1454,11 +1360,8 @@ E3dScene* E3dView::SetCurrent3DObj(E3dObject* p3DObj)
     E3dScene* pScene = NULL;
 
     // get transformed BoundVolume of the object
-    Volume3D aVolume;
-    const Volume3D& rObjVol = p3DObj->GetBoundVolume();
-    const basegfx::B3DHomMatrix& rObjTrans = p3DObj->GetTransform();
-    aVolume.expand(rObjVol.GetTransformVolume(rObjTrans));
-
+    basegfx::B3DRange aVolume(p3DObj->GetBoundVolume());
+    aVolume.transform(p3DObj->GetTransform());
     double fW(aVolume.getWidth());
     double fH(aVolume.getHeight());
 
@@ -1554,17 +1457,17 @@ void E3dView::Start3DCreation()
         for(sal_uInt32 nMark(0L); nMark < GetMarkedObjectCount(); nMark++)
         {
             SdrObject* pMark = GetMarkedObjectByIndex(nMark);
-            basegfx::B2DPolyPolygon aXPP(pMark->TakeXorPoly(FALSE));
+            basegfx::B2DPolyPolygon aXPP(pMark->TakeXorPoly());
             aR.expand(basegfx::tools::getRange(aXPP));
         }
 
         basegfx::B2DPoint aCenter(aR.getCenter());
-        long      nMarkHgt = FRound(aR.getHeight()) - 1;
+        long      nMarkHgt = basegfx::fround(aR.getHeight()) - 1;
         long      nHgt     = nMarkHgt + nObjDst * 2;
 
         if (nHgt < nMinLen) nHgt = nMinLen;
 
-        long nY1 = FRound(aCenter.getY()) - (nHgt + 1) / 2;
+        long nY1 = basegfx::fround(aCenter.getY()) - (nHgt + 1) / 2;
         long nY2 = nY1 + nHgt;
 
         if (pOut && (nMinLen > nOutHgt)) nMinLen = nOutHgt;
@@ -1582,7 +1485,7 @@ void E3dView::Start3DCreation()
             }
         }
 
-        aRef1.X() = FRound(aR.getMinX());    // Initial Achse um 2/100mm nach links
+        aRef1.X() = basegfx::fround(aR.getMinX());    // Initial Achse um 2/100mm nach links
         aRef1.Y() = nY1;
         aRef2.X() = aRef1.X();
         aRef2.Y() = nY2;
@@ -1844,7 +1747,7 @@ void E3dView::MergeScenes ()
         ULONG     nObj    = 0;
         SdrObject *pObj   = GetMarkedObjectByIndex(nObj);
         E3dScene  *pScene = new E3dPolyScene(Get3DDefaultAttributes());
-        Volume3D  aBoundVol;
+        basegfx::B3DRange aBoundVol;
         Rectangle aAllBoundRect (GetMarkedObjBoundRect ());
         Point     aCenter (aAllBoundRect.Center());
 
@@ -1924,8 +1827,6 @@ void E3dView::MergeScenes ()
         Rectangle aRect(0,0, (long) fW, (long) fH);
 
         InitScene(pScene, fW, fH, aBoundVol.getMaxZ() +  + ((fW + fH) / 4.0));
-
-        pScene->FitSnapRectToBoundVol();
         pScene->NbcSetSnapRect(aRect);
 
         Camera3D &aCamera  = (Camera3D&) pScene->GetCamera ();
@@ -1941,10 +1842,6 @@ void E3dView::MergeScenes ()
 
         // SnapRects der Objekte ungueltig
         pScene->SetRectsDirty();
-
-        // Transformationen initialisieren, damit bei RecalcSnapRect()
-        // richtig gerechnet wird
-        pScene->InitTransformationSet();
 
         InsertObjectAtView(pScene, *(GetSdrPageViewOfMarkedByIndex(0)));
 

@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: polygn3d.hxx,v $
- * $Revision: 1.4 $
+ * $Revision: 1.4.18.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -83,12 +83,6 @@ public:
     virtual SdrObject* DoConvertToPolyObj(BOOL bBezier) const;
 
     virtual void operator=(const SdrObject&);
-
-    // Geometrieerzeugung
-    virtual void CreateGeometry();
-
-    // Give out simple line geometry
-    virtual basegfx::B3DPolyPolygon Get3DLineGeometry() const;
 
     // LineOnly?
     BOOL GetLineOnly() { return bLineOnly; }

@@ -57,6 +57,11 @@
 #include <drawinglayer/primitive2d/unifiedalphaprimitive2d.hxx>
 #include <drawinglayer/primitive2d/pagepreviewprimitive2d.hxx>
 #include <drawinglayer/primitive2d/chartprimitive2d.hxx>
+#include <helperchartrenderer.hxx>
+#include <helperwrongspellrenderer.hxx>
+#include <drawinglayer/primitive2d/fillhatchprimitive2d.hxx>
+#include <basegfx/polygon/b2dpolygontools.hxx>
+#include <vcl/hatch.hxx>
 #include <cstdio>
 
 //////////////////////////////////////////////////////////////////////////////
@@ -107,7 +112,17 @@ namespace drawinglayer
 
                     if(bHandleWrongSpellDirectly)
                     {
-                        RenderWrongSpellPrimitive2D(static_cast< const primitive2d::WrongSpellPrimitive2D& >(rCandidate));
+                        const primitive2d::WrongSpellPrimitive2D& rWrongSpellPrimitive = static_cast< const primitive2d::WrongSpellPrimitive2D& >(rCandidate);
+
+                        if(!renderWrongSpellPrimitive2D(
+                            rWrongSpellPrimitive,
+                            *mpOutputDevice,
+                            maCurrentTransformation,
+                            maBColorModifierStack))
+                        {
+                            // fallback to decomposition (MetaFile)
+                            process(rWrongSpellPrimitive.get2DDecomposition(getViewInformation2D()));
+                        }
                     }
                     else
                     {
@@ -372,10 +387,78 @@ namespace drawinglayer
                 {
                     // chart primitive in pixel renderer; restore original DrawMode during call
                     // since the evtl. used ChartPrettyPainter will use the MapMode
+                    const primitive2d::ChartPrimitive2D& rChartPrimitive = static_cast< const primitive2d::ChartPrimitive2D& >(rCandidate);
                        mpOutputDevice->Push(PUSH_MAPMODE);
                     mpOutputDevice->SetMapMode(maOriginalMapMode);
-                    RenderChartPrimitive2D(static_cast< const primitive2d::ChartPrimitive2D& >(rCandidate));
-                       mpOutputDevice->Pop();
+
+                    if(!renderChartPrimitive2D(rChartPrimitive, *mpOutputDevice))
+                    {
+                        // fallback to decomposition (MetaFile)
+                        process(rChartPrimitive.get2DDecomposition(getViewInformation2D()));
+                    }
+
+                    mpOutputDevice->Pop();
+                    break;
+                }
+                case PRIMITIVE2D_ID_FILLHATCHPRIMITIVE2D :
+                {
+                    static bool bForceIgnoreHatchSmoothing(false);
+
+                    if(bForceIgnoreHatchSmoothing || getOptionsDrawinglayer().IsAntiAliasing())
+                    {
+                        // if AA is used (or ignore smoothing is on), there is no need to smooth
+                        // hatch painting, use decomposition
+                        process(rCandidate.get2DDecomposition(getViewInformation2D()));
+                    }
+                    else
+                    {
+                        // without AA, use VCL to draw the hatch. It snaps hatch distances to the next pixel
+                        // and forces hatch distance to be >= 3 pixels to make the hatch display look smoother.
+                        // This is wrong in principle, but looks nicer. This could also be done here directly
+                        // without VCL usage if needed
+                        const primitive2d::FillHatchPrimitive2D& rFillHatchPrimitive = static_cast< const primitive2d::FillHatchPrimitive2D& >(rCandidate);
+
+                        // create hatch polygon in range size and discrete coordinates
+                        basegfx::B2DRange aHatchRange(rFillHatchPrimitive.getObjectRange());
+                        aHatchRange.transform(maCurrentTransformation);
+                        const basegfx::B2DPolygon aHatchPolygon(basegfx::tools::createPolygonFromRect(aHatchRange));
+
+                        // set hatch line color
+                        const basegfx::BColor aHatchColor(maBColorModifierStack.getModifiedColor(rFillHatchPrimitive.getBColor()));
+                        mpOutputDevice->SetFillColor();
+                        mpOutputDevice->SetLineColor(Color(aHatchColor));
+
+                        // get hatch style
+                        const attribute::FillHatchAttribute& rFillHatchAttributes = rFillHatchPrimitive.getFillHatch();
+                        HatchStyle eHatchStyle(HATCH_SINGLE);
+
+                        switch(rFillHatchAttributes.getStyle())
+                        {
+                            default : // HATCHSTYLE_SINGLE
+                            {
+                                break;
+                            }
+                            case attribute::HATCHSTYLE_DOUBLE :
+                            {
+                                eHatchStyle = HATCH_DOUBLE;
+                                break;
+                            }
+                            case attribute::HATCHSTYLE_TRIPLE :
+                            {
+                                eHatchStyle = HATCH_TRIPLE;
+                                break;
+                            }
+                        }
+
+                        // create hatch
+                        const basegfx::B2DVector aDiscreteDistance(maCurrentTransformation * basegfx::B2DVector(rFillHatchAttributes.getDistance(), 0.0));
+                        const sal_uInt32 nDistance(basegfx::fround(aDiscreteDistance.getX()));
+                        const sal_uInt16 nAngle10((sal_uInt16)basegfx::fround(rFillHatchAttributes.getAngle() / F_PI1800));
+                        ::Hatch aVCLHatch(eHatchStyle, Color(rFillHatchAttributes.getColor()), nDistance, nAngle10);
+
+                        // draw hatch using VCL
+                        mpOutputDevice->DrawHatch(PolyPolygon(Polygon(aHatchPolygon)), aVCLHatch);
+                    }
                     break;
                 }
                 default :

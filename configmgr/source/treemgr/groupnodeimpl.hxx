@@ -44,22 +44,10 @@ namespace configmgr
 //-----------------------------------------------------------------------------
     class SubtreeChange;
     class ValueChange;
-//-----------------------------------------------------------------------------
-
-    namespace data
-    {
-        class GroupNodeAccess;
-        class ValueNodeAccess;
-    }
-//-----------------------------------------------------------------------------
 
     namespace configuration
     {
 //-----------------------------------------------------------------------------
-        typedef com::sun::star::uno::Any UnoAny;
-        typedef com::sun::star::uno::Type UnoType;
-
-        class Name;
         class ValueChangeImpl;
 //-----------------------------------------------------------------------------
 // a visitor
@@ -80,15 +68,15 @@ namespace configmgr
         {
             mutable sharable::Node *m_pCache;
         public:
-            explicit GroupNodeImpl(data::GroupNodeAddress _pNodeRef);
+            explicit GroupNodeImpl(sharable::GroupNode * _pNodeRef);
 
-            data::GroupNodeAccess getDataAccess() const;
+            sharable::GroupNode * getDataAccess() const;
 
             bool areValueDefaultsAvailable() const;
 
-            data::ValueNodeAccess getOriginalValueNode(Name const& aName) const;
+            sharable::ValueNode * getOriginalValueNode(rtl::OUString const& aName) const;
 
-            ValueMemberNode makeValueMember(data::ValueNodeAccess const& _aValueNode);
+            ValueMemberNode makeValueMember(sharable::ValueNode * node);
         };
 
 //-----------------------------------------------------------------------------

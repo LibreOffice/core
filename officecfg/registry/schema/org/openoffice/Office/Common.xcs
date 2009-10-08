@@ -4135,28 +4135,28 @@ Dymamic border coloring means that when the mouse is hovered over a control, and
 						</info>
 						<value>false</value>
 					</prop>
-          <prop oor:name="EnablePowerPointPreview" oor:type="xs:boolean">
-            <info>
-              <author>SJ</author>
-              <desc>Specifies if previews are created when saving Ole objects</desc>
-            </info>
-            <value>true</value>
-          </prop>
-          <prop oor:name="EnableCalcPreview" oor:type="xs:boolean">
-            <info>
-              <author>SJ</author>
-              <desc>Specifies if embedded Impress objects are converted into PowerPoint objects.</desc>
-            </info>
-            <value>false</value>
-          </prop>
-          <prop oor:name="EnableWordPreview" oor:type="xs:boolean">
-            <info>
-              <author>SJ</author>
-              <desc>Specifies if embedded Word objects are converted into PowerPoint objects.</desc>
-            </info>
-            <value>false</value>
-          </prop>
-        </group>
+                    <prop oor:name="EnablePowerPointPreview" oor:type="xs:boolean">
+                        <info>
+                            <author>SJ</author>
+                            <desc>Specifies if previews are created when saving PowerPoint documents.</desc>
+                        </info>
+                        <value>true</value>
+                    </prop>
+                    <prop oor:name="EnableExcelPreview" oor:type="xs:boolean">
+                        <info>
+                          <author>SJ</author>
+                          <desc>Specifies if previews are created when saving Excel documents.</desc>
+                        </info>
+                        <value>false</value>
+                    </prop>
+                    <prop oor:name="EnableWordPreview" oor:type="xs:boolean">
+                        <info>
+                            <author>SJ</author>
+                            <desc>Specifies if previews are created when saving Word documents.</desc>
+                        </info>
+                        <value>false</value>
+                    </prop>
+                </group>
 			</group>
 			<group oor:name="Graphic">
 				<info>

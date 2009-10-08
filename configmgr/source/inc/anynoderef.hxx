@@ -41,26 +41,11 @@ namespace configmgr
     namespace configuration
     {
     //-------------------------------------------------------------------------
-        class Name;
-    //-------------------------------------------------------------------------
-
-        namespace argument { struct NoValidate; }
-
-        typedef com::sun::star::uno::Type       UnoType;
-        typedef com::sun::star::uno::Any        UnoAny;
-    //-------------------------------------------------------------------------
-
         class NodeRef;
         class ValueRef;
         class AnyNodeRef;
         class NodeID;
-
         class Tree;
-
-        class TreeImpl;
-
-        typedef unsigned int NodeOffset;
-        typedef unsigned int TreeDepth;
     //-------------------------------------------------------------------------
 
         /// represents any node in some tree
@@ -69,6 +54,9 @@ namespace configmgr
         public:
             /// constructs an empty (invalid) node
             AnyNodeRef();
+
+            AnyNodeRef(unsigned int nParentPos, unsigned int m_nDepth);
+            AnyNodeRef(rtl::OUString const& aName, unsigned int nParentPos);
 
             /// converts an inner node
             explicit AnyNodeRef(NodeRef const& aInnerNode);
@@ -96,18 +84,13 @@ namespace configmgr
             /// converts this, if it is a inner node
             NodeRef toNode() const;
 
-        private:
-            friend class Tree;
-            friend class TreeImplHelper;
-            AnyNodeRef(NodeOffset nParentPos, TreeDepth m_nDepth);
-            AnyNodeRef(Name const& aName, NodeOffset nParentPos);
 #if OSL_DEBUG_LEVEL > 0
             bool checkValidState() const;
 #endif
-        private:
-            Name        m_sNodeName;
-            NodeOffset  m_nUsedPos;
-            TreeDepth   m_nDepth;
+
+            rtl::OUString m_sNodeName;
+            unsigned int    m_nUsedPos;
+            unsigned int    m_nDepth;
         };
     //-------------------------------------------------------------------------
 
@@ -119,7 +102,7 @@ namespace configmgr
                 <FALSE/> otherwise
         */
         inline
-        bool hasChildOrElement(Tree const& aTree, AnyNodeRef const& aNode, Name const& aName)
+        bool hasChildOrElement(rtl::Reference< Tree > const& aTree, AnyNodeRef const& aNode, rtl::OUString const& aName)
         { return aNode.isNode() && hasChildOrElement(aTree,aNode.toNode(),aName); }
 
         /** tries to find the immediate child of <var>aNode</var> (which is in <var>aTree</var>)
@@ -131,7 +114,7 @@ namespace configmgr
             @return The requested child node, if it exists
                 (then <var>aTree</var> refers to the tree containing the desired node),
         */
-        AnyNodeRef getChildOrElement(Tree& aTree, NodeRef const& aParentNode, Name const& aName);
+        AnyNodeRef getChildOrElement(rtl::Reference< Tree > & aTree, NodeRef const& aParentNode, rtl::OUString const& aName);
 
         /** tries to find the descendant of <var>aNode</var> specified by <var>aPath</var> within <var>aTree</var>
             <p> This function follows the given path stepwise, until a requested node is missing in the tree.</p>
@@ -146,7 +129,7 @@ namespace configmgr
                 and <var>aPath</var> is empty)<BR/>
                 an invalid node otherwise
         */
-        AnyNodeRef getLocalDescendant(Tree const& aTree, NodeRef const& aNode, RelativePath const& aPath);
+        AnyNodeRef getLocalDescendant(rtl::Reference< Tree > const& aTree, NodeRef const& aNode, RelativePath const& aPath);
 
         /** tries to find the descendant of <var>aNode</var> (which is in <var>aTree</var>) specified by <var>aPath</var>
             <p> This function follows the given path stepwise, until a requested node is missing in the tree.</p>
@@ -161,7 +144,7 @@ namespace configmgr
                 and <var>aPath</var> is empty)<BR/>
                 an invalid node otherwise
         */
-        AnyNodeRef getDeepDescendant(Tree& aTree, NodeRef& aNode, RelativePath& aPath);
+        AnyNodeRef getDeepDescendant(rtl::Reference< Tree > & aTree, NodeRef& aNode, RelativePath& aPath);
 
     //-------------------------------------------------------------------------
         inline bool AnyNodeRef::isValid() const

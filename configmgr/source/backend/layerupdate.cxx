@@ -67,7 +67,7 @@ LayerUpdate & LayerUpdate::operator =(LayerUpdate const & _aOther)
 }
 // -----------------------------------------------------------------------------
 
-void LayerUpdate::setContextNode(NodeUpdateRef const & _xContextNode)
+void LayerUpdate::setContextNode(rtl::Reference<NodeUpdate> const & _xContextNode)
 {
     m_xContextNode = _xContextNode;
     if (_xContextNode.is())
@@ -78,27 +78,26 @@ void LayerUpdate::setContextNode(NodeUpdateRef const & _xContextNode)
 }
 // -----------------------------------------------------------------------------
 
-void LayerUpdate::makeContextPath(OUString const & _aPath)
+void LayerUpdate::makeContextPath(rtl::OUString const & _aPath)
 {
-    using configuration::AbsolutePath;
-    AbsolutePath const aParsedPath = configuration::AbsolutePath::parse(_aPath);
+    configuration::AbsolutePath const aParsedPath = configuration::AbsolutePath::parse(_aPath);
 
     m_aContextPath.clear();
     m_aContextPath.reserve( aParsedPath.getDepth() );
-    for (AbsolutePath::Iterator it = aParsedPath.begin(); it != aParsedPath.end(); ++it)
+    for (std::vector<configuration::Path::Component>::const_reverse_iterator it = aParsedPath.begin(); it != aParsedPath.end(); ++it)
     {
-        m_aContextPath.push_back( it->getName().toString() );
+        m_aContextPath.push_back( it->getName() );
     }
 }
 // -----------------------------------------------------------------------------
 
-NodeUpdateRef   LayerUpdate::getContextNode() const
+rtl::Reference<NodeUpdate>   LayerUpdate::getContextNode() const
 {
     return m_xContextNode;
 }
 // -----------------------------------------------------------------------------
 
-LayerUpdate::ContextPath const & LayerUpdate::getContextPath() const
+std::vector<rtl::OUString> const & LayerUpdate::getContextPath() const
 {
     OSL_PRECOND( m_xContextNode.is(), "Cannot get context path without context node" );
 

@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: TransformerBase.hxx,v $
- * $Revision: 1.9 $
+ * $Revision: 1.9.56.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -204,9 +204,6 @@ public:
     inline void SetClass( const ::rtl::OUString& r ) { m_aClass = r; }
     inline const ::rtl::OUString& GetClass() const { return m_aClass; }
 
-    bool isDraw() const;
-    bool isImpress() const;
-    bool isCalc() const;
     bool isWriter() const;
 
 };

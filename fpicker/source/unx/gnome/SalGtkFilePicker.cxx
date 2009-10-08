@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: SalGtkFilePicker.cxx,v $
- * $Revision: 1.28 $
+ * $Revision: 1.28.42.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -996,12 +996,16 @@ sal_Int16 SAL_CALL SalGtkFilePicker::execute() throw( uno::RuntimeException )
 
     int btn = GTK_RESPONSE_NO;
 
+    uno::Reference< awt::XExtendedToolkit > xToolkit(
+        m_xServiceMgr->createInstance( ::rtl::OUString::createFromAscii("com.sun.star.awt.Toolkit") ), uno::UNO_QUERY);
+
+    RunDialog* pRunInMain = new RunDialog(m_pDialog, xToolkit);
+    uno::Reference < awt::XTopWindowListener > xLifeCycle(pRunInMain);
     while( GTK_RESPONSE_NO == btn )
     {
         btn = GTK_RESPONSE_YES; // we dont want to repeat unless user clicks NO for file save.
 
-        RunDialog aRunInMain(m_pDialog);
-        gint nStatus = aRunInMain.runandwaitforresult();
+        gint nStatus = pRunInMain->runandwaitforresult();
         switch( nStatus )
         {
             case GTK_RESPONSE_ACCEPT:
@@ -1028,8 +1032,9 @@ sal_Int16 SAL_CALL SalGtkFilePicker::execute() throw( uno::RuntimeException )
                                 OUStringToOString(aResProvider.getResString(FILE_PICKER_TITLE_SAVE ),
                                 RTL_TEXTENCODING_UTF8 ).getStr() );
 
-                            RunDialog aAnotherRunInMain(dlg);
-                            btn = aAnotherRunInMain.runandwaitforresult();
+                            RunDialog* pAnotherRunInMain = new RunDialog(dlg, xToolkit);
+                            uno::Reference < awt::XTopWindowListener > xAnotherLifeCycle(pAnotherRunInMain);
+                            btn = pAnotherRunInMain->runandwaitforresult();
 
                             gtk_widget_destroy( dlg );
                         }

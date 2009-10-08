@@ -8,7 +8,7 @@
  *
  * $RCSfile: sdrtextprimitive2d.hxx,v $
  *
- * $Revision: 1.2 $
+ * $Revision: 1.2.18.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -182,6 +182,7 @@ namespace drawinglayer
             // bitfield
             unsigned                                mbUnlimitedPage : 1;    // force layout with no text break
             unsigned                                mbCellText : 1;         // this is a cell text as block text
+            unsigned                                mbWordWrap : 1;         // for CustomShapes text layout
 
         protected:
             // local decomposition.
@@ -192,12 +193,14 @@ namespace drawinglayer
                 const SdrText& rSdrText,
                 const ::basegfx::B2DHomMatrix& rTextRangeTransform,
                 bool bUnlimitedPage,
-                bool bCellText);
+                bool bCellText,
+                bool bWordWrap);
 
             // get data
             const basegfx::B2DHomMatrix& getTextRangeTransform() const { return maTextRangeTransform; }
             bool getUnlimitedPage() const { return mbUnlimitedPage; }
             bool getCellText() const { return mbCellText; }
+            bool getWordWrap() const { return mbWordWrap; }
 
             // compare operator
             virtual bool operator==(const BasePrimitive2D& rPrimitive) const;

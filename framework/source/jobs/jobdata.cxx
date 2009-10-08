@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: jobdata.cxx,v $
- * $Revision: 1.10 $
+ * $Revision: 1.10.82.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -443,16 +443,6 @@ JobData::EEnvironment JobData::getEnvironment() const
 
 //________________________________
 
-::rtl::OUString JobData::getAlias() const
-{
-    /* SAFE { */
-    ReadGuard aReadLock(m_aLock);
-    return m_sAlias;
-    /* } SAFE */
-}
-
-//________________________________
-
 ::rtl::OUString JobData::getService() const
 {
     /* SAFE { */
@@ -504,16 +494,6 @@ css::uno::Sequence< css::beans::NamedValue > JobData::getConfig() const
     aReadLock.unlock();
     /* } SAFE */
     return lConfig;
-}
-
-//________________________________
-
-JobResult JobData::getResult() const
-{
-    /* SAFE { */
-    ReadGuard aReadLock(m_aLock);
-    return m_aLastExecutionResult;
-    /* } SAFE */
 }
 
 //________________________________

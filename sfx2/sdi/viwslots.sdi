@@ -67,6 +67,10 @@ interface View
         ExecMethod = ExecMisc_Impl ;
         StateMethod = GetState_Impl ;
     ]
+    SID_ACTIVATE_STYLE_APPLY
+    [
+        ExecMethod = ExecMisc_Impl ;
+    ]
     SID_PLUGINS_ACTIVE // ole(no) api(play/rec)
     [
         ExecMethod = ExecMisc_Impl ;

@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: EnhancedCustomShape2d.cxx,v $
- * $Revision: 1.32 $
+ * $Revision: 1.31.146.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -1792,6 +1792,97 @@ void EnhancedCustomShape2d::CreateSubPath( sal_uInt16& rSrcPt, sal_uInt16& rSegm
     }
 }
 
+void CorrectCalloutArrows( MSO_SPT eSpType, sal_uInt32 nLineObjectCount, std::vector< SdrPathObj* >& vObjectList )
+{
+    sal_Bool bAccent = sal_False;
+    switch( eSpType )
+    {
+        case mso_sptCallout1 :
+        case mso_sptBorderCallout1 :
+        case mso_sptCallout90 :
+        case mso_sptBorderCallout90 :
+        default:
+        break;
+
+        case mso_sptAccentCallout1 :
+        case mso_sptAccentBorderCallout1 :
+        case mso_sptAccentCallout90 :
+        case mso_sptAccentBorderCallout90 :
+        {
+            sal_uInt32 i, nLine = 0;
+            for ( i = 0; i < vObjectList.size(); i++ )
+            {
+                SdrPathObj* pObj( vObjectList[ i ] );
+                if(pObj->IsLine())
+                {
+                    nLine++;
+                    if ( nLine == nLineObjectCount )
+                    {
+                        pObj->ClearMergedItem( XATTR_LINESTART );
+                        pObj->ClearMergedItem( XATTR_LINEEND );
+                    }
+                }
+            }
+        }
+        break;
+
+        // switch start & end
+        case mso_sptAccentCallout2 :
+        case mso_sptAccentBorderCallout2 :
+            bAccent = sal_True;
+        case mso_sptCallout2 :
+        case mso_sptBorderCallout2 :
+        {
+            sal_uInt32 i, nLine = 0;
+            for ( i = 0; i < vObjectList.size(); i++ )
+            {
+                SdrPathObj* pObj( vObjectList[ i ] );
+                if(pObj->IsLine())
+                {
+                    nLine++;
+                    if ( nLine == 1 )
+                        pObj->ClearMergedItem( XATTR_LINEEND );
+                    else if ( ( bAccent && ( nLine == nLineObjectCount - 1 ) ) || ( !bAccent && ( nLine == nLineObjectCount ) ) )
+                        pObj->ClearMergedItem( XATTR_LINESTART );
+                    else
+                    {
+                        pObj->ClearMergedItem( XATTR_LINESTART );
+                        pObj->ClearMergedItem( XATTR_LINEEND );
+                    }
+                }
+            }
+        }
+        break;
+
+        case mso_sptAccentCallout3 :
+        case mso_sptAccentBorderCallout3 :
+            bAccent = sal_False;
+        case mso_sptCallout3 :
+        case mso_sptBorderCallout3 :
+        {
+            sal_uInt32 i, nLine = 0;
+            for ( i = 0; i < vObjectList.size(); i++ )
+            {
+                SdrPathObj* pObj( vObjectList[ i ] );
+                if(pObj->IsLine())
+                {
+                    if ( nLine )
+                    {
+                        pObj->ClearMergedItem( XATTR_LINESTART );
+                        pObj->ClearMergedItem( XATTR_LINEEND );
+                    }
+                    else
+                        EnhancedCustomShape2d::SwapStartAndEndArrow( pObj );
+
+                    nLine++;
+                }
+            }
+        }
+        break;
+    }
+}
+
+
 SdrObject* EnhancedCustomShape2d::CreatePathObj( sal_Bool bLineGeometryNeededOnly )
 {
     sal_Int32 nCoordSize = seqCoordinates.getLength();
@@ -1874,8 +1965,8 @@ SdrObject* EnhancedCustomShape2d::CreatePathObj( sal_Bool bLineGeometryNeededOnl
         }
         else
         {
-            sal_Bool bContainsLines(sal_False);
-            sal_Bool bContainsAreas(sal_False);
+            sal_Int32 nLineObjectCount = 0;
+            sal_Int32 nAreaObjectCount = 0;
 
             // correct some values and collect content data
             for ( i = 0; i < vObjectList.size(); i++ )
@@ -1884,11 +1975,11 @@ SdrObject* EnhancedCustomShape2d::CreatePathObj( sal_Bool bLineGeometryNeededOnl
 
                 if(pObj->IsLine())
                 {
-                    bContainsLines = sal_True;
+                    nLineObjectCount++;
                 }
                 else
                 {
-                    bContainsAreas = sal_True;
+                    nAreaObjectCount++;
 
                     if ( nColorIndex < nColorCount )
                     {
@@ -1901,6 +1992,10 @@ SdrObject* EnhancedCustomShape2d::CreatePathObj( sal_Bool bLineGeometryNeededOnl
                     }
                 }
             }
+
+            // #i88870# correct line arrows for callouts
+            if ( nLineObjectCount )
+                CorrectCalloutArrows( eSpType, nLineObjectCount, vObjectList );
 
             // sort objects so that filled ones are in front. Necessary
             // for some strange objects

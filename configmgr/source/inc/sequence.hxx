@@ -31,7 +31,6 @@
 #ifndef INCLUDED_SHARABLE_SEQUENCE_HXX
 #define INCLUDED_SHARABLE_SEQUENCE_HXX
 
-#include "types.hxx"
 #include "anydata.hxx"
 #include <com/sun/star/uno/Sequence.hxx>
 
@@ -41,42 +40,40 @@ namespace configmgr
     namespace sharable
     {
     //-----------------------------------------------------------------------------
-        typedef Vector Sequence; // alternative name
+
+        sal_uInt8 * allocSequence(sal_uInt8 _aElementType, ::sal_Sequence const * _pSeqData);
+        void     freeSequence(sal_uInt8 _aElementType, sal_uInt8 * _aSeq);
+
+        ::sal_Sequence * readSequence(sal_uInt8 _aElementType, sal_uInt8 * _aSeq);
+        ::com::sun::star::uno::Any readAnySequence(sal_uInt8 _aElementType, sal_uInt8 * _aSeq);
     //-----------------------------------------------------------------------------
 
-        Sequence allocSequence(AnyData::TypeCode _aElementType, ::sal_Sequence const * _pSeqData);
-        void     freeSequence(AnyData::TypeCode _aElementType, Sequence _aSeq);
+        sal_uInt8 * allocBinary(::com::sun::star::uno::Sequence<sal_Int8> const & _aBinaryValue);
+        void freeBinary(sal_uInt8 * _aSeq);
 
-        ::sal_Sequence * readSequence(AnyData::TypeCode _aElementType, Sequence _aSeq);
-        ::com::sun::star::uno::Any readAnySequence(AnyData::TypeCode _aElementType, Sequence _aSeq);
-    //-----------------------------------------------------------------------------
-
-        Sequence allocBinary(::com::sun::star::uno::Sequence<sal_Int8> const & _aBinaryValue);
-        void freeBinary(Sequence _aSeq);
-
-        ::com::sun::star::uno::Sequence<sal_Int8> readBinary(Sequence _aSeq);
+        ::com::sun::star::uno::Sequence<sal_Int8> readBinary(sal_uInt8 * _aSeq);
     //-----------------------------------------------------------------------------
 
         template <class ET>
         inline
-        AnyData::TypeCode getElementTypeCode(::com::sun::star::uno::Sequence<ET> const & )
+        sal_uInt8 getElementTypeCode(::com::sun::star::uno::Sequence<ET> const & )
         {
             ::com::sun::star::uno::Type aElementType = ::getCppuType( static_cast<ET const *>(NULL) );
             return getTypeCode(aElementType);
         }
 
         template <class ET>
-        Sequence allocSequence(::com::sun::star::uno::Sequence<ET> const & _aSeq)
+        sal_uInt8 * allocSequence(::com::sun::star::uno::Sequence<ET> const & _aSeq)
         {
-            AnyData::TypeCode aTC = getElementTypeCode(_aSeq);
+            sal_uInt8 aTC = getElementTypeCode(_aSeq);
             ::sal_Sequence const * pSeqData = _aSeq.get();
             return allocSequence(aTC, pSeqData);
         }
 
         template <class ET>
-        void readSequence(::com::sun::star::uno::Sequence<ET> & _rSeq, Sequence _aSeq)
+        void readSequence(::com::sun::star::uno::Sequence<ET> & _rSeq, sal_uInt8 * _aSeq)
         {
-            AnyData::TypeCode aElementType = getElementTypeCode(_rSeq);
+            sal_uInt8 aElementType = getElementTypeCode(_rSeq);
 
             ::sal_Sequence * pNewSequence = readSequence(aElementType, _aSeq);
 
@@ -88,7 +85,7 @@ namespace configmgr
         }
 
         template <class ET>
-        bool readSequence(::com::sun::star::uno::Sequence<ET> & _rSeq, AnyData::TypeCode _aElementType, Sequence _aSeq)
+        bool readSequence(::com::sun::star::uno::Sequence<ET> & _rSeq, sal_uInt8 _aElementType, sal_uInt8 * _aSeq)
         {
             if (getElementTypeCode(_rSeq) != _aElementType) return false;
 

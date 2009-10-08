@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: ProcAddAttrTContext.cxx,v $
- * $Revision: 1.7 $
+ * $Revision: 1.7.56.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -44,20 +44,6 @@ using namespace ::com::sun::star::xml::sax;
 using namespace ::xmloff::token;
 
 TYPEINIT1( XMLProcAddAttrTransformerContext, XMLProcAttrTransformerContext);
-
-XMLProcAddAttrTransformerContext::XMLProcAddAttrTransformerContext(
-        XMLTransformerBase& rImp,
-        const OUString& rQName,
-        sal_uInt16 nActionMap,
-        sal_uInt16 nAPrefix,
-           ::xmloff::token::XMLTokenEnum eAToken,
-           ::xmloff::token::XMLTokenEnum eVToken ) :
-    XMLProcAttrTransformerContext( rImp, rQName, nActionMap ),
-    m_aAttrQName( rImp.GetNamespaceMap().GetQNameByKey( nAPrefix,
-                                    ::xmloff::token::GetXMLToken( eAToken ) ) ),
-    m_aAttrValue( ::xmloff::token::GetXMLToken( eVToken ) )
-{
-}
 
 XMLProcAddAttrTransformerContext::XMLProcAddAttrTransformerContext(
         XMLTransformerBase& rImp,

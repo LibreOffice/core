@@ -44,12 +44,11 @@ namespace configmgr
         (read-only operation)
     */
     namespace node  { struct Attributes; }
-    namespace configuration { class Name; }
 
     namespace configapi
     {
         // translation helper
-        beans::Property helperMakeProperty( configuration::Name const& aName, node::Attributes const aAttributes, uno::Type const& aType, bool bDefaultable )
+        beans::Property helperMakeProperty( rtl::OUString const& aName, node::Attributes const aAttributes, uno::Type const& aType, bool bDefaultable )
             throw(uno::RuntimeException);
 
     }

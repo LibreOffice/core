@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: hltpbase.hxx,v $
- * $Revision: 1.8 $
+ * $Revision: 1.8.216.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -56,6 +56,8 @@
 #include <svx/dialmgr.hxx>
 #include <sfx2/docfile.hxx>
 #include <svx/dialogs.hrc>
+
+#include <com/sun/star/frame/XFrame.hpp>
 
 #ifndef _SVX_HELPID_HRC
 #include "helpid.hrc"
@@ -130,6 +132,9 @@ private:
 
     sal_Bool            mbIsCloseDisabled;
 
+    ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >
+                        mxDocumentFrame;
+
 protected:
     Window*             mpDialog;
 
@@ -163,8 +168,18 @@ protected:
     inline void     DisableClose( sal_Bool _bDisable ) { mbIsCloseDisabled = _bDisable; }
 
 public:
-    SvxHyperlinkTabPageBase ( Window *pParent, const ResId &rResId, const SfxItemSet& rItemSet);
+    SvxHyperlinkTabPageBase (
+        Window *pParent,
+        const ResId &rResId,
+        const SfxItemSet& rItemSet
+    );
     virtual ~SvxHyperlinkTabPageBase ();
+
+    void    SetDocumentFrame(
+        const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rxDocumentFrame )
+    {
+        mxDocumentFrame = rxDocumentFrame;
+    }
 
     virtual BOOL AskApply ();
     virtual void DoApply ();
@@ -197,7 +212,7 @@ protected:
     USHORT             GetMacroEvents();
     SvxMacroTableDtor* GetMacroTable();
 
-    const BOOL IsHTMLDoc() const;
+    BOOL IsHTMLDoc() const;
 };
 
 #endif // _SVX_TABBASE_HYPERLINK_HXX

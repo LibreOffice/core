@@ -33,6 +33,7 @@
 #include <tools/errcode.hxx>
 #include <basic/sbx.hxx>
 #include "sbxconv.hxx"
+#include "runtime.hxx"
 
 double ImpGetDouble( const SbxValues* p )
 {
@@ -79,13 +80,21 @@ double ImpGetDouble( const SbxValues* p )
         case SbxSTRING:
         case SbxLPSTR:
             if( !p->pString )
+            {
                 nRes = 0;
+                if ( SbiRuntime::isVBAEnabled() )// VBA only behaviour
+                    SbxBase::SetError( SbxERR_CONVERSION );
+            }
             else
             {
                 double d;
                 SbxDataType t;
                 if( ImpScan( *p->pString, d, t, NULL ) != SbxERR_OK )
+                {
                     nRes = 0;
+                    if ( SbiRuntime::isVBAEnabled() )// VBA only behaviour
+                        SbxBase::SetError( SbxERR_CONVERSION );
+                }
                 else
                     nRes = d;
             }

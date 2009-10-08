@@ -31,17 +31,15 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_configmgr.hxx"
 
+#include "sal/types.h"
+
 #include "builddata.hxx"
-#include "treeaccessor.hxx"
-#include "nodeaccess.hxx"
-#include "setnodeaccess.hxx"
-#include "valuenodeaccess.hxx"
-#include "groupnodeaccess.hxx"
 #include "nodevisitor.hxx"
 #include "node.hxx"
 #include "treefragment.hxx"
 #include "valuenode.hxx"
 #include "treenodefactory.hxx"
+#include "utility.hxx"
 
 #ifndef INCLUDED_CSTDDEF
 #include <cstddef>
@@ -51,30 +49,27 @@
 #include <algorithm>
 #define INCLUDED_ALGORITHM
 #endif
+#include <vector>
 
 namespace configmgr
 {
 //-----------------------------------------------------------------------------
-    typedef ValueNode OValueNode; // to avoid ambiguity with sharable::ValueNode
-//-----------------------------------------------------------------------------
     namespace data
     {
-    //-------------------------------------------------------------------------
-        using namespace sharable;
 //-----------------------------------------------------------------------------
 
     static
     inline
-    NodeAddress offsetNodeBy(NodeAddress _aNode, Offset _nOffset)
+    sharable::Node * offsetNodeBy(sharable::Node * _aNode, sal_uInt16 _nOffset)
     {
         sharable::Node *pNode = _aNode;
         pNode += _nOffset;
-        return NodeAddress(pNode);
+        return (sharable::Node *)(pNode);
     }
 
     static
     inline
-    NodeAddress addressOfNodeAt(TreeAddress _aTree, Offset _nOffset)
+    sharable::Node * addressOfNodeAt(sharable::TreeFragment * _aTree, sal_uInt16 _nOffset)
     {
         sharable::TreeFragment *pRaw = _aTree;
         return &pRaw->nodes[_nOffset];
@@ -84,75 +79,72 @@ namespace configmgr
 
     class TreeNodeBuilder
     {
-        TreeFragmentHeader  m_header;
-        std::vector< Node > m_nodes;
-        Offset              m_parent;
+        sharable::TreeFragmentHeader  m_header;
+        std::vector< sharable::Node > m_nodes;
+        sal_uInt16              m_parent;
     public:
         TreeNodeBuilder() : m_header(), m_nodes(), m_parent() {}
 
-        TreeFragmentHeader & header() { return m_header; }
+        sharable::TreeFragmentHeader & header() { return m_header; }
 
-        Node &      nodeAt(Offset _pos)     { checkOffset(_pos); return m_nodes[_pos]; }
-        NodeInfo &  nodeInfoAt(Offset _pos) { checkOffset(_pos); return m_nodes[_pos].node.info; }
+        sharable::Node &      nodeAt(sal_uInt16 _pos)     { checkOffset(_pos); return m_nodes[_pos]; }
+        sharable::NodeInfo &  nodeInfoAt(sal_uInt16 _pos) { checkOffset(_pos); return m_nodes[_pos].info; }
 
-        Node &      lastNode()     { checkOffset(0); return m_nodes.back(); }
-        NodeInfo &  lastNodeInfo() { checkOffset(0); return m_nodes.back().node.info; }
+        sharable::Node &      lastNode()     { checkOffset(0); return m_nodes.back(); }
+        sharable::NodeInfo &  lastNodeInfo() { checkOffset(0); return m_nodes.back().info; }
 
-        void resetTreeFragment(sharable::String _treeName, State::Field _state);
+        void resetTreeFragment(rtl_uString * _treeName, sal_uInt8 _state);
 
-        TreeAddress createTreeFragment();
+        sharable::TreeFragment * createTreeFragment();
 
-        Offset  startGroup( Name _aName, Flags::Field _aFlags );
-        void    endGroup( Offset _nPos );
+        sal_uInt16  startGroup( rtl_uString * _aName, sal_uInt8 _aFlags );
+        void    endGroup( sal_uInt16 _nPos );
 
-        void    addSet( Name _aName, Flags::Field _aFlags, SetElementAddress _aElementType );
+        void    addSet( rtl_uString * _aName, sal_uInt8 _aFlags, sal_uInt8 * _aElementType );
 
-        void    addValue( Name _aName, Flags::Field _aFlags,
-                            AnyData::TypeCode _aValueType,
-                            AnyData _aUserValue,
-                            AnyData _aDefaultName );
+        void    addValue( rtl_uString * _aName, sal_uInt8 _aFlags,
+                            sal_uInt8 _aValueType,
+                            sharable::AnyData _aUserValue,
+                            sharable::AnyData _aDefaultName );
     public:
         class CollectSetElements;
         class LinkSetNodes;
 
     private:
-    TreeAddress allocTreeFragment();
-        void linkTreeFragment(TreeAddress _aTreeAddr);
+    sharable::TreeFragment * allocTreeFragment();
+        void linkTreeFragment(sharable::TreeFragment * _aTreeAddr);
 
-        Offset addNode(Name _aName, Flags::Field _aFlags, Type::Field _aType);
-        void checkOffset(Offset _pos);
+        sal_uInt16 addNode(rtl_uString * _aName, sal_uInt8 _aFlags, sal_uInt8 _aType);
+        void checkOffset(sal_uInt16 _pos);
     };
 //-----------------------------------------------------------------------------
 
     class TreeNodeBuilder::CollectSetElements
     {
-        TreeAddress         m_head;
+        sharable::TreeFragment *         m_head;
     public:
         explicit
         CollectSetElements() : m_head(NULL) {}
 
         void resetElementList();
-        void addElement(TreeAddress _aNewElement);
-        List getElementListAndClear();
+        void addElement(sharable::TreeFragment * _aNewElement);
+        sharable::TreeFragment * getElementListAndClear();
     };
 //-----------------------------------------------------------------------------
 
-    class TreeNodeBuilder::LinkSetNodes : private SetVisitor
-    {
-        NodeAddress         m_aParentAddr;
+    class TreeNodeBuilder::LinkSetNodes: private SetVisitor {
+        sharable::Node * m_parent;
     public:
-        explicit
-        LinkSetNodes() : m_aParentAddr(NULL) {}
+        LinkSetNodes(): m_parent(0) {}
 
-        Result  linkTree(TreeAddress const & _aFragment);
-        Result  linkSet(SetNodeAccess const & _aSet);
-
-    protected:
-        using NodeVisitor::handle;
+        void linkTree(sharable::TreeFragment * tree);
 
     private:
-        Result  handle(TreeAccessor const & _aElement);
-        Result  handle(SetNodeAccess const & _aSet);
+        using SetVisitor::handle;
+
+        virtual bool handle(sharable::SetNode * node);
+
+        virtual bool handle(sharable::TreeFragment * tree);
     };
 //-----------------------------------------------------------------------------
 
@@ -162,7 +154,7 @@ namespace configmgr
         explicit
         BasicDataTreeBuilder() {}
 
-        TreeAddress createTree() { return m_builder.createTreeFragment(); }
+        sharable::TreeFragment * createTree() { return m_builder.createTreeFragment(); }
 
     protected:
         TreeNodeBuilder&    builder()         { return m_builder; }
@@ -179,19 +171,19 @@ namespace configmgr
         explicit
         ConvertingDataTreeBuilder() : BasicDataTreeBuilder() {}
 
-        TreeAddress buildTree(OUString const & _aTreeName, INode const& _aNode, bool _bWithDefault);
-        TreeAddress buildElement(INode const& _aNode, OUString const & _aTypeName, bool _bWithDefault);
+        sharable::TreeFragment * buildTree(rtl::OUString const & _aTreeName, INode const& _aNode, bool _bWithDefault);
+        sharable::TreeFragment * buildElement(INode const& _aNode, rtl::OUString const & _aTypeName, bool _bWithDefault);
     private:
         class ElementListBuilder;
 
         virtual void handle(ISubtree  const & _aNode);
-        virtual void handle(OValueNode const & _aNode);
+        virtual void handle(ValueNode const & _aNode);
 
-        SetElementAddress makeTemplateData(rtl::OUString const & _aTemplateName, rtl::OUString const & _aTemplateModule);
+        sal_uInt8 * makeTemplateData(rtl::OUString const & _aTemplateName, rtl::OUString const & _aTemplateModule);
 
-        Name allocName(INode const & _aNode);
-        State::Field makeState(node::Attributes const & _aAttributes);
-        Flags::Field makeFlags(node::Attributes const & _aAttributes);
+        rtl_uString * allocName(INode const & _aNode);
+        sal_uInt8 makeState(node::Attributes const & _aAttributes);
+        sal_uInt8 makeFlags(node::Attributes const & _aAttributes);
     };
 //-----------------------------------------------------------------------------
 
@@ -209,11 +201,11 @@ namespace configmgr
         , m_bWithDefaults()
         {}
 
-        TreeFragment *buildElementList(ISubtree const & _aSet, bool _bWithDefaults);
+        sharable::TreeFragment *buildElementList(ISubtree const & _aSet, bool _bWithDefaults);
     private:
         void handleNode(INode const & _aSourceNode);
 
-        void handle(OValueNode const & _aSourceNode);
+        void handle(ValueNode const & _aSourceNode);
         void handle(ISubtree  const & _aSourceNode);
     };
 //-----------------------------------------------------------------------------
@@ -224,19 +216,17 @@ namespace configmgr
         explicit
         CopyingDataTreeBuilder() : BasicDataTreeBuilder() {}
 
-        TreeAddress buildTree(TreeAccessor const & _aSourceTree);
-
-    protected:
-        using NodeVisitor::handle;
+        sharable::TreeFragment * buildTree(sharable::TreeFragment * sourceTree);
 
     private:
         class ElementListBuilder;
 
-        Result handle(ValueNodeAccess const & _aNode);
-        Result handle(GroupNodeAccess const & _aNode);
-        Result handle(SetNodeAccess const & _aNode);
+        using NodeVisitor::handle;
+        virtual bool handle(sharable::ValueNode * node);
+        virtual bool handle(sharable::GroupNode * node);
+        virtual bool handle(sharable::SetNode * node);
 
-        SetElementAddress makeTemplateData(SetElementAddress _aSourceTemplate);
+        sal_uInt8 * makeTemplateData(sal_uInt8 * _aSourceTemplate);
     };
 //-----------------------------------------------------------------------------
 
@@ -247,12 +237,11 @@ namespace configmgr
         explicit
         ElementListBuilder() : m_aCollector() {}
 
-        List buildElementList(SetNodeAccess const & _aSet);
-    protected:
-        using NodeVisitor::handle;
+        sharable::TreeFragment * buildElementList(sharable::SetNode * set);
 
     private:
-        Result handle(TreeAccessor const & _aSourceTree);
+        using SetVisitor::handle;
+        virtual bool handle(sharable::TreeFragment * tree);
     };
 //-----------------------------------------------------------------------------
 
@@ -268,27 +257,26 @@ namespace configmgr
         {
         }
 
-        std::auto_ptr<INode>        buildNode(TreeAccessor  const& _aTree, bool _bUseTreeName);
-        std::auto_ptr<INode>        buildNode(NodeAccess  const& _aTree);
+        std::auto_ptr<INode>        buildNode(sharable::TreeFragment * tree, bool _bUseTreeName);
+        std::auto_ptr<INode>        buildNode(sharable::Node * tree);
 
-        std::auto_ptr<ISubtree>     buildNodeTree(GroupNodeAccess const& _aGroupNode) const;
-        std::auto_ptr<ISubtree>     buildNodeTree(SetNodeAccess const& _aSetNode) const;
-        std::auto_ptr<OValueNode>   buildNodeTree(ValueNodeAccess const& _aValueNode) const
-        { return this->convertNode(_aValueNode); }
+        std::auto_ptr<ISubtree>     buildNodeTree(sharable::GroupNode * groupNode) const;
+        std::auto_ptr<ISubtree>     buildNodeTree(sharable::SetNode * setNode) const;
+        std::auto_ptr<ValueNode>   buildNodeTree(sharable::ValueNode * valueNode) const
+        { return convertNode(valueNode); }
 
-        static node::Attributes convertAttributes(NodeAccess const& _aNode)
-        { return _aNode->getAttributes(); }
-    protected:
-        using NodeVisitor::handle;
+        static node::Attributes convertAttributes(sharable::Node * node)
+        { return node->getAttributes(); }
 
     private:
-        std::auto_ptr<ISubtree>     convertNode(GroupNodeAccess const& _aGroupNode) const;
-        std::auto_ptr<ISubtree>     convertNode(SetNodeAccess const& _aSetNode) const;
-        std::auto_ptr<OValueNode>   convertNode(ValueNodeAccess const& _aValueNode) const;
+        std::auto_ptr<ISubtree>     convertNode(sharable::GroupNode * groupNode) const;
+        std::auto_ptr<ISubtree>     convertNode(sharable::SetNode * setNode) const;
+        std::auto_ptr<ValueNode>   convertNode(sharable::ValueNode * valueNode) const;
 
-        Result handle(ValueNodeAccess const & _aNode);
-        Result handle(GroupNodeAccess const & _aNode);
-        Result handle(SetNodeAccess const & _aNode);
+        using NodeVisitor::handle;
+        virtual bool handle(sharable::ValueNode * node);
+        virtual bool handle(sharable::GroupNode * node);
+        virtual bool handle(sharable::SetNode * node);
     };
 //-----------------------------------------------------------------------------
 
@@ -303,14 +291,13 @@ namespace configmgr
         {
         }
 
-        void addElements(SetNodeAccess const & _aSet)       { this->visitElements(_aSet); }
-        void addChildren(GroupNodeAccess const & _aGroup)   { this->visitChildren(_aGroup); }
-    protected:
-        using NodeVisitor::handle;
+        void addElements(sharable::SetNode * set) { visitElements(set); }
+        void addChildren(sharable::GroupNode * group) { visitChildren(group); }
 
     private:
-        Result handle(TreeAccessor const & _aElement);
-        Result handle(NodeAccess const & _aMember);
+        using SetVisitor::handle;
+        virtual bool handle(sharable::Node * node);
+        virtual bool handle(sharable::TreeFragment * tree);
     };
 //-----------------------------------------------------------------------------
 
@@ -320,9 +307,9 @@ namespace configmgr
         explicit
         DataTreeDefaultMerger() {}
 
-        void mergeDefaults(TreeAddress _aBaseAddress, INode const& _aDefaultNode);
+        void mergeDefaults(sharable::TreeFragment * _aBaseAddress, INode const& _aDefaultNode);
     private:
-        void handle(OValueNode const & _aNode);
+        void handle(ValueNode const & _aNode);
         void handle(ISubtree  const & _aNode);
     };
 
@@ -334,12 +321,12 @@ namespace configmgr
         explicit
         DataTreeCleanup() {}
 
-        TreeAddress destroyTree(TreeAddress _aBaseAddress);
+        sharable::TreeFragment * destroyTree(sharable::TreeFragment * _aBaseAddress);
     private:
-        void destroyNode(NodeAddress _aNodeAddress);
+        void destroyNode(sharable::Node * _aNodeAddress);
 
-        void destroyData(TreeFragmentHeader * _pHeader);
-        void destroyData(NodeInfo  * _pNodeInfo);
+        void destroyData(sharable::TreeFragmentHeader * _pHeader);
+        void destroyData(sharable::NodeInfo  * _pNodeInfo);
 
         void destroyData(sharable::GroupNode * _pNode);
         void destroyData(sharable::ValueNode * _pNode);
@@ -349,37 +336,33 @@ namespace configmgr
 //-----------------------------------------------------------------------------
 //-----------------------------------------------------------------------------
 
-TreeAddress buildTree(TreeAccessor const& _aTree)
+sharable::TreeFragment * buildTree(sharable::TreeFragment * tree)
 {
-    CopyingDataTreeBuilder aBuilder;
-
-    TreeAddress aResult = aBuilder.buildTree(_aTree);
-
-    return aResult;
+    return CopyingDataTreeBuilder().buildTree(tree);
 }
 //-----------------------------------------------------------------------------
 
-TreeAddress buildTree(rtl::OUString const & _aTreeName, INode const& _aNode, bool _bWithDefaults)
+sharable::TreeFragment * buildTree(rtl::OUString const & _aTreeName, INode const& _aNode, bool _bWithDefaults)
 {
     ConvertingDataTreeBuilder aBuilder;
 
-    TreeAddress aResult = aBuilder.buildTree(_aTreeName, _aNode,_bWithDefaults);
+    sharable::TreeFragment * aResult = aBuilder.buildTree(_aTreeName, _aNode,_bWithDefaults);
 
     return aResult;
 }
 //-----------------------------------------------------------------------------
 
-TreeAddress buildElementTree(INode const& _aNode, rtl::OUString const & _aTypeName, bool _bWithDefaults)
+sharable::TreeFragment * buildElementTree(INode const& _aNode, rtl::OUString const & _aTypeName, bool _bWithDefaults)
 {
     ConvertingDataTreeBuilder aBuilder;
 
-    TreeAddress aResult = aBuilder.buildElement(_aNode, _aTypeName, _bWithDefaults);
+    sharable::TreeFragment * aResult = aBuilder.buildElement(_aNode, _aTypeName, _bWithDefaults);
 
     return aResult;
 }
 //-----------------------------------------------------------------------------
 
-void mergeDefaults(TreeAddress _aBaseAddress, INode const& _aDefaultNode)
+void mergeDefaults(sharable::TreeFragment * _aBaseAddress, INode const& _aDefaultNode)
 {
     DataTreeDefaultMerger aMergeHelper;
 
@@ -387,7 +370,7 @@ void mergeDefaults(TreeAddress _aBaseAddress, INode const& _aDefaultNode)
 }
 //-----------------------------------------------------------------------------
 
-void destroyTree(TreeAddress _aBaseAddress)
+void destroyTree(sharable::TreeFragment * _aBaseAddress)
 {
     DataTreeCleanup aCleaner;
 
@@ -395,11 +378,11 @@ void destroyTree(TreeAddress _aBaseAddress)
 }
 //-----------------------------------------------------------------------------
 
-std::auto_ptr<INode> convertTree(TreeAccessor const & _aTree, bool _bUseTreeName)
+std::auto_ptr<INode> convertTree(sharable::TreeFragment * tree, bool _bUseTreeName)
 {
     ConvertingNodeBuilder aBuilder( configmgr::getDefaultTreeNodeFactory() );
 
-    return aBuilder.buildNode(_aTree,_bUseTreeName);
+    return aBuilder.buildNode(tree, _bUseTreeName);
 }
 //-----------------------------------------------------------------------------
 //-----------------------------------------------------------------------------
@@ -412,17 +395,17 @@ void TreeNodeBuilder::CollectSetElements::resetElementList()
 //-----------------------------------------------------------------------------
 
 inline
-List TreeNodeBuilder::CollectSetElements::getElementListAndClear()
+sharable::TreeFragment * TreeNodeBuilder::CollectSetElements::getElementListAndClear()
 {
-    List aResult = m_head;
+    sharable::TreeFragment * aResult = m_head;
     m_head = NULL;
     return aResult;
 }
 //-----------------------------------------------------------------------------
 
-void TreeNodeBuilder::CollectSetElements::addElement(TreeAddress _aNewElement)
+void TreeNodeBuilder::CollectSetElements::addElement(sharable::TreeFragment * _aNewElement)
 {
-    if (TreeFragment * pNewFragment = _aNewElement)
+    if (sharable::TreeFragment * pNewFragment = _aNewElement)
     {
         pNewFragment->header.parent = 0; // data not available here
         pNewFragment->header.next   = m_head;
@@ -435,85 +418,57 @@ void TreeNodeBuilder::CollectSetElements::addElement(TreeAddress _aNewElement)
 //-----------------------------------------------------------------------------
 //-----------------------------------------------------------------------------
 
-NodeVisitor::Result TreeNodeBuilder::LinkSetNodes::linkTree(TreeAddress const & _aTree)
-{
-    TreeAccessor aTreeAccess(_aTree);
-
-    TreeFragment const & rTreeData = *aTreeAccess;
-
-    NodeAddress aOldParent = m_aParentAddr;
-    m_aParentAddr = NULL;
-
-    Result eResult = CONTINUE;
-
-    Offset nCount = rTreeData.header.count;
-    for(Offset i=0; i < nCount; ++i)
-    {
-        NodeAccess aNode(&rTreeData.nodes[i]);
-        eResult =this->visitNode( aNode );
-
-        if (eResult == DONE) break;
+void TreeNodeBuilder::LinkSetNodes::linkTree(sharable::TreeFragment * tree) {
+    sharable::Node * old = m_parent;
+    m_parent = 0;
+    sal_uInt16 n = tree->header.count;
+    for (sal_uInt16 i = 0; i < n; ++i) {
+        if (visitNode(tree->nodes + i)) {
+            break;
+        }
     }
-
-    m_aParentAddr = aOldParent;
-
-    return eResult;
+    m_parent = old;
 }
-//-----------------------------------------------------------------------------
 
-NodeVisitor::Result TreeNodeBuilder::LinkSetNodes::linkSet(SetNodeAccess const & _aSet)
+bool TreeNodeBuilder::LinkSetNodes::handle(sharable::SetNode * node)
 {
-    OSL_ENSURE(m_aParentAddr == NULL,"Linking set data already in progress");
-    m_aParentAddr = _aSet;
-
-    Result aResult = this->visitElements(_aSet);
-
-    m_aParentAddr = NULL;
-
-    return aResult;
+    OSL_ASSERT(m_parent == 0);
+    m_parent = sharable::node(node);
+    bool done = visitElements(node);
+    m_parent = 0;
+    return done;
 }
-//-----------------------------------------------------------------------------
 
-NodeVisitor::Result TreeNodeBuilder::LinkSetNodes::handle(TreeAccessor const & _aSourceTree)
+bool TreeNodeBuilder::LinkSetNodes::handle(sharable::TreeFragment * tree)
 {
-    OSL_ENSURE(m_aParentAddr != NULL,"Cannot link set element without parent address");
-
-    _aSourceTree->header.parent = m_aParentAddr;
-
-    return CONTINUE;
+    OSL_ASSERT(m_parent != 0);
+    tree->header.parent = m_parent;
+    return false;
 }
-//-----------------------------------------------------------------------------
-
-NodeVisitor::Result TreeNodeBuilder::LinkSetNodes::handle(SetNodeAccess const & _aNode)
-{
-    return this->linkSet(_aNode);
-}
-//-----------------------------------------------------------------------------
 
 //-----------------------------------------------------------------------------
-//-----------------------------------------------------------------------------
 
-inline void TreeNodeBuilder::checkOffset(Offset _pos)
+inline void TreeNodeBuilder::checkOffset(sal_uInt16 _pos)
 {
     { (void)_pos; }
     OSL_ENSURE(_pos < m_nodes.size(), "TreeNodeBuilder: Node access past end.");
 }
 //-----------------------------------------------------------------------------
 
-Offset TreeNodeBuilder::addNode(Name _aName, Flags::Field _aFlags, Type::Field _aType)
+sal_uInt16 TreeNodeBuilder::addNode(rtl_uString * _aName, sal_uInt8 _aFlags, sal_uInt8 _aType)
 {
     OSL_PRECOND(_aName, "TreeNodeBuilder: Unexpected NULL name");
 
     // TODO: consistencý checks for flags
     OSL_ENSURE(m_nodes.size() == m_header.count, "TreeNodeBuilder: node count mismatch");
 
-    Offset nNewOffset = m_header.count++;
+    sal_uInt16 nNewOffset = m_header.count++;
 
-    m_nodes.push_back( Node() );
+    m_nodes.push_back( sharable::Node() );
 
     OSL_ASSERT( &lastNode() == &nodeAt(nNewOffset) );
 
-    NodeInfo & rInfo = lastNode().node.info;
+    sharable::NodeInfo & rInfo = lastNode().info;
 
     rInfo.name  = _aName;
     rInfo.flags = _aFlags;
@@ -528,7 +483,7 @@ Offset TreeNodeBuilder::addNode(Name _aName, Flags::Field _aFlags, Type::Field _
 }
 //-----------------------------------------------------------------------------
 
-void TreeNodeBuilder::resetTreeFragment(sharable::String _name, State::Field _state)
+void TreeNodeBuilder::resetTreeFragment(rtl_uString * _name, sal_uInt8 _state)
 {
     m_header.next = 0;
     m_header.name  = _name;
@@ -543,27 +498,27 @@ void TreeNodeBuilder::resetTreeFragment(sharable::String _name, State::Field _st
 }
 //-----------------------------------------------------------------------------
 
-TreeAddress TreeNodeBuilder::allocTreeFragment()
+sharable::TreeFragment * TreeNodeBuilder::allocTreeFragment()
 {
     OSL_ENSURE(m_nodes.size() == m_header.count, "TreeNodeBuilder: node count mismatch");
 
-    TreeFragment *pFragment = TreeFragment::allocate(m_header.count);
+    sharable::TreeFragment *pFragment = sharable::TreeFragment::allocate(m_header.count);
     pFragment->header = m_header;
     std::copy(m_nodes.begin(),m_nodes.end(),pFragment->nodes);
 
-    return TreeAddress( pFragment );
+    return (sharable::TreeFragment *)( pFragment );
 }
 //-----------------------------------------------------------------------------
 
-void TreeNodeBuilder::linkTreeFragment(TreeAddress _aTreeFragment)
+void TreeNodeBuilder::linkTreeFragment(sharable::TreeFragment * _aTreeFragment)
 {
     LinkSetNodes().linkTree(_aTreeFragment);
 }
 //-----------------------------------------------------------------------------
 
-TreeAddress TreeNodeBuilder::createTreeFragment()
+sharable::TreeFragment * TreeNodeBuilder::createTreeFragment()
 {
-    TreeAddress aResult = allocTreeFragment();
+    sharable::TreeFragment * aResult = allocTreeFragment();
 
     if (aResult != NULL)
     {
@@ -575,9 +530,9 @@ TreeAddress TreeNodeBuilder::createTreeFragment()
 }
 //-----------------------------------------------------------------------------
 
-Offset  TreeNodeBuilder::startGroup( Name _aName, Flags::Field _aFlags )
+sal_uInt16  TreeNodeBuilder::startGroup( rtl_uString * _aName, sal_uInt8 _aFlags )
 {
-    Offset nNewIndex = addNode(_aName,_aFlags,Type::nodetype_group);
+    sal_uInt16 nNewIndex = addNode(_aName,_aFlags,Type::nodetype_group);
 
     lastNode().group.numDescendants = 0;
 
@@ -587,7 +542,7 @@ Offset  TreeNodeBuilder::startGroup( Name _aName, Flags::Field _aFlags )
 }
 //-----------------------------------------------------------------------------
 
-void TreeNodeBuilder::endGroup( Offset _nPos )
+void TreeNodeBuilder::endGroup( sal_uInt16 _nPos )
 {
     // while (_nPos < m_parent) endGroup(m_parent);
     OSL_PRECOND(_nPos == m_parent, "TreeNodeBuilder: Group being closed is not the current parent");
@@ -596,14 +551,14 @@ void TreeNodeBuilder::endGroup( Offset _nPos )
 
     OSL_ENSURE(m_nodes.size() == m_header.count, "TreeNodeBuilder: node count mismatch");
 
-    GroupNode & rGroup = nodeAt(_nPos).group;
+    sharable::GroupNode & rGroup = nodeAt(_nPos).group;
 
-    rGroup.numDescendants = Offset( m_nodes.size() - static_cast< ::std::size_t >(_nPos) - 1 );
+    rGroup.numDescendants = sal_uInt16( m_nodes.size() - static_cast< ::std::size_t >(_nPos) - 1 );
     m_parent = m_parent - rGroup.info.parent;
 }
 //-----------------------------------------------------------------------------
 
-void TreeNodeBuilder::addSet( Name _aName, Flags::Field _aFlags, SetElementAddress _aElementType )
+void TreeNodeBuilder::addSet( rtl_uString * _aName, sal_uInt8 _aFlags, sal_uInt8 * _aElementType )
 {
     addNode(_aName,_aFlags,Type::nodetype_set);
 
@@ -613,14 +568,14 @@ void TreeNodeBuilder::addSet( Name _aName, Flags::Field _aFlags, SetElementAddre
 
 //-----------------------------------------------------------------------------
 
-void TreeNodeBuilder::addValue( Name _aName, Flags::Field _aFlags,
-                                AnyData::TypeCode _aValueType,
-                                AnyData _aUserValue,
-                                AnyData _aDefaultValue )
+void TreeNodeBuilder::addValue( rtl_uString * _aName, sal_uInt8 _aFlags,
+                                sal_uInt8 _aValueType,
+                                sharable::AnyData _aUserValue,
+                                sharable::AnyData _aDefaultValue )
 {
     OSL_PRECOND(_aValueType == (_aValueType & Type::mask_valuetype), "TreeNodeBuilder: invalid value type");
 
-    addNode(_aName,_aFlags,AnyData::TypeCode(Type::nodetype_value | _aValueType));
+    addNode(_aName,_aFlags,sal_uInt8(Type::nodetype_value | _aValueType));
 
     lastNode().value.value          = _aUserValue;
     lastNode().value.defaultValue   = _aDefaultValue;
@@ -631,112 +586,103 @@ void TreeNodeBuilder::addValue( Name _aName, Flags::Field _aFlags,
 //-----------------------------------------------------------------------------
 //-----------------------------------------------------------------------------
 
-TreeAddress CopyingDataTreeBuilder::buildTree(TreeAccessor const & _aSourceTree)
+sharable::TreeFragment * CopyingDataTreeBuilder::buildTree(sharable::TreeFragment * sourceTree)
 {
-    OSL_ENSURE(_aSourceTree != NULL, "Trying to build a tree from  NULL data");
-    if (_aSourceTree == NULL) return NULL;
+    OSL_ENSURE(sourceTree != 0, "Trying to build a tree from  NULL data");
 
-    TreeFragment const & aSrc = *_aSourceTree;
+    rtl_uString * aTreeName = acquireString( sourceTree->getName());
+    this->builder().resetTreeFragment(aTreeName, sourceTree->header.state);
 
-    sharable::String aTreeName = allocString( aSrc.getName());
-    this->builder().resetTreeFragment(aTreeName, aSrc.header.state);
-
-    this->visitNode(_aSourceTree.getRootNode());
+    this->visitNode(sourceTree->getRootNode());
 
     return this->createTree();
 }
 //-----------------------------------------------------------------------------
 
-NodeVisitor::Result CopyingDataTreeBuilder::handle(ValueNodeAccess const & _aNode)
+bool CopyingDataTreeBuilder::handle(sharable::ValueNode * node)
 {
-    sharable::ValueNode const & aSrc = _aNode.data();
+    rtl_uString * aNodeName = acquireString( node->info.getName());
+    sal_uInt8 aFlags = node->info.flags;
 
-    sharable::Name aNodeName = allocName( aSrc.info.getName());
-    Flags::Field aFlags = aSrc.info.flags;
+    sal_uInt8 aType = sal_uInt8( node->info.type & Type::mask_valuetype );
 
-    AnyData::TypeCode aType = AnyData::TypeCode( aSrc.info.type & Type::mask_valuetype );
-
-    AnyData aNewValue, aNewDefault;
+    sharable::AnyData aNewValue, aNewDefault;
     if (aFlags & Flags::valueAvailable)
-        aNewValue = allocData(aType, aSrc.getUserValue());
+        aNewValue = sharable::allocData(aType, node->getUserValue());
     else
         aNewValue.data = 0;
 
     if (aFlags & Flags::defaultAvailable)
-        aNewDefault = allocData(aType, aSrc.getDefaultValue());
+        aNewDefault = sharable::allocData(aType, node->getDefaultValue());
     else
         aNewDefault.data = 0;
 
     this->builder().addValue(aNodeName,aFlags,aType,aNewValue,aNewDefault);
 
-    return CONTINUE;
+    return false;
 }
 //-----------------------------------------------------------------------------
 
-NodeVisitor::Result CopyingDataTreeBuilder::handle(GroupNodeAccess const & _aNode)
+bool CopyingDataTreeBuilder::handle(sharable::GroupNode * node)
 {
-    sharable::GroupNode const & aSrc = _aNode.data();
+    rtl_uString * aNodeName = acquireString( node->info.getName());
+    sal_uInt8 aFlags = node->info.flags;
 
-    sharable::Name aNodeName = allocName( aSrc.info.getName());
-    Flags::Field aFlags = aSrc.info.flags;
-
-    Offset nGroupOffset = this->builder().startGroup(aNodeName,aFlags);
-    this->visitChildren(_aNode);
+    sal_uInt16 nGroupOffset = this->builder().startGroup(aNodeName,aFlags);
+    this->visitChildren(node);
     this->builder().endGroup(nGroupOffset);
 
-    return CONTINUE;
+    return false;
 }
 //-----------------------------------------------------------------------------
 
-NodeVisitor::Result CopyingDataTreeBuilder::handle(SetNodeAccess const & _aNode)
+bool CopyingDataTreeBuilder::handle(sharable::SetNode * node)
 {
-    sharable::SetNode const & aSrc = _aNode.data();
-
-    sharable::Name aNodeName = allocName( aSrc.info.getName());
-    Flags::Field aFlags = aSrc.info.flags;
-    SetElementAddress aTemplate = this->makeTemplateData(aSrc.elementType);
+    rtl_uString * aNodeName = acquireString( node->info.getName());
+    sal_uInt8 aFlags = node->info.flags;
+    sal_uInt8 * aTemplate = this->makeTemplateData(node->elementType);
 
     this->builder().addSet(aNodeName,aFlags,aTemplate);
 
     OSL_ASSERT( this->builder().lastNode().isSet() );
-    SetNode& _aNewSet = this->builder().lastNode().set;
+    sharable::SetNode& _aNewSet = this->builder().lastNode().set;
 
-    _aNewSet.elements = ElementListBuilder().buildElementList(_aNode);
+    _aNewSet.elements = ElementListBuilder().buildElementList(node);
 
-    return CONTINUE;
+    return false;
 }
 //-----------------------------------------------------------------------------
 
-SetElementAddress CopyingDataTreeBuilder::makeTemplateData(SetElementAddress _aSourceTemplate)
+sal_uInt8 * CopyingDataTreeBuilder::makeTemplateData(sal_uInt8 * _aSourceTemplate)
 {
-    return SetNode::copyTemplateData(_aSourceTemplate);
+    return sharable::SetNode::copyTemplateData(_aSourceTemplate);
 }
 //-----------------------------------------------------------------------------
 
-List CopyingDataTreeBuilder::ElementListBuilder::buildElementList(SetNodeAccess const & _aSet)
+sharable::TreeFragment * CopyingDataTreeBuilder::ElementListBuilder::buildElementList(sharable::SetNode * set)
 {
-    OSL_PRECOND(_aSet.isValid(), "Node must not be NULL");
+    OSL_ASSERT(set != 0);
 
     m_aCollector.resetElementList();
 
-    this->visitElements(_aSet);
+    this->visitElements(set);
 
     return m_aCollector.getElementListAndClear();
 }
 //-----------------------------------------------------------------------------
 
-NodeVisitor::Result CopyingDataTreeBuilder::ElementListBuilder::handle(TreeAccessor const & _aSourceTree)
+bool CopyingDataTreeBuilder::ElementListBuilder::handle(sharable::TreeFragment * tree)
 {
-    TreeAddress aNewElement = CopyingDataTreeBuilder().buildTree(_aSourceTree);
+    sharable::TreeFragment * aNewElement = CopyingDataTreeBuilder().buildTree(tree);
 
     m_aCollector.addElement(aNewElement);
 
-    return CONTINUE;
+    return false;
 }
 //-----------------------------------------------------------------------------
 //-----------------------------------------------------------------------------
 
-Name ConvertingDataTreeBuilder::allocName(INode const & _aNode)
+rtl_uString * ConvertingDataTreeBuilder::allocName(INode const & _aNode)
 {
     rtl::OUString sNextName = _aNode.getName();
 
@@ -746,16 +692,16 @@ Name ConvertingDataTreeBuilder::allocName(INode const & _aNode)
         m_sRootName = rtl::OUString();
     }
 
-    return sharable::allocName( sNextName);
+    return acquireString( sNextName);
 }
 //-----------------------------------------------------------------------------
 
-TreeAddress ConvertingDataTreeBuilder::buildElement(INode const& _aNode, OUString const & _aTypeName, bool _bWithDefaults)
+sharable::TreeFragment * ConvertingDataTreeBuilder::buildElement(INode const& _aNode, rtl::OUString const & _aTypeName, bool _bWithDefaults)
 {
     m_sRootName = _aTypeName;
     m_bWithDefaults = _bWithDefaults;
 
-    sharable::String aTreeName = allocString( _aNode.getName());
+    rtl_uString * aTreeName = acquireString( _aNode.getName());
     this->builder().resetTreeFragment(aTreeName, makeState(_aNode.getAttributes()));
 
 
@@ -765,12 +711,12 @@ TreeAddress ConvertingDataTreeBuilder::buildElement(INode const& _aNode, OUStrin
 }
 //-----------------------------------------------------------------------------
 
-TreeAddress ConvertingDataTreeBuilder::buildTree(OUString const & _aTreeName, INode const& _aNode, bool _bWithDefaults)
+sharable::TreeFragment * ConvertingDataTreeBuilder::buildTree(rtl::OUString const & _aTreeName, INode const& _aNode, bool _bWithDefaults)
 {
-    m_sRootName = OUString();
+    m_sRootName = rtl::OUString();
     m_bWithDefaults = _bWithDefaults;
 
-    sharable::String aTreeName = allocString( _aTreeName );
+    rtl_uString * aTreeName = acquireString( _aTreeName );
     this->builder().resetTreeFragment(aTreeName, makeState(_aNode.getAttributes()));
 
 
@@ -782,39 +728,39 @@ TreeAddress ConvertingDataTreeBuilder::buildTree(OUString const & _aTreeName, IN
 
 void ConvertingDataTreeBuilder::handle(ISubtree const & _aNode)
 {
-    sharable::Name aNodeName = allocName( _aNode );
-    Flags::Field aFlags = makeFlags(_aNode.getAttributes());
+    rtl_uString * aNodeName = allocName( _aNode );
+    sal_uInt8 aFlags = makeFlags(_aNode.getAttributes());
 
     if (_aNode.isSetNode())
     {
-        SetElementAddress aTemplate = this->makeTemplateData(_aNode.getElementTemplateName(),
+        sal_uInt8 * aTemplate = this->makeTemplateData(_aNode.getElementTemplateName(),
                                  _aNode.getElementTemplateModule());
 
         this->builder().addSet(aNodeName,aFlags,aTemplate);
 
         OSL_ASSERT( this->builder().lastNode().isSet() );
-        SetNode& _aNewSet = this->builder().lastNode().set;
+        sharable::SetNode& _aNewSet = this->builder().lastNode().set;
 
         _aNewSet.elements = ElementListBuilder().buildElementList(_aNode, m_bWithDefaults);
     }
     else
     {
-        Offset nGroupOffset = this->builder().startGroup(aNodeName,aFlags);
+        sal_uInt16 nGroupOffset = this->builder().startGroup(aNodeName,aFlags);
         this->applyToChildren(_aNode);
         this->builder().endGroup(nGroupOffset);
     }
 }
 //-----------------------------------------------------------------------------
 
-void ConvertingDataTreeBuilder::handle(OValueNode const & _aNode)
+void ConvertingDataTreeBuilder::handle(ValueNode const & _aNode)
 {
-    sharable::Name aNodeName = allocName( _aNode );
-    Flags::Field aFlags = makeFlags(_aNode.getAttributes());
+    rtl_uString * aNodeName = allocName( _aNode );
+    sal_uInt8 aFlags = makeFlags(_aNode.getAttributes());
 
-    AnyData::TypeCode aType = getTypeCode(_aNode.getValueType());
+    sal_uInt8 aType = sharable::getTypeCode(_aNode.getValueType());
 
-    AnyData aNewValue;   aNewValue.data = 0;
-    AnyData aNewDefault; aNewDefault.data = 0;
+    sharable::AnyData aNewValue;   aNewValue.data = 0;
+    sharable::AnyData aNewDefault; aNewDefault.data = 0;
 
     OSL_ASSERT( !(aFlags & (Flags::valueAvailable | Flags::defaultAvailable)) );
 
@@ -823,7 +769,7 @@ void ConvertingDataTreeBuilder::handle(OValueNode const & _aNode)
         uno::Any aValue = _aNode.getValue();
         if (aValue.hasValue())
         {
-            aNewValue = allocData(aType, aValue);
+            aNewValue = sharable::allocData(aType, aValue);
             aFlags |= Flags::valueAvailable;
         }
     }
@@ -833,7 +779,7 @@ void ConvertingDataTreeBuilder::handle(OValueNode const & _aNode)
         uno::Any aDefault = _aNode.getDefault();
         if (aDefault.hasValue())
         {
-            aNewDefault = allocData(aType, aDefault);
+            aNewDefault = sharable::allocData(aType, aDefault);
             aFlags |= Flags::defaultAvailable;
         }
     }
@@ -842,9 +788,9 @@ void ConvertingDataTreeBuilder::handle(OValueNode const & _aNode)
 }
 //-----------------------------------------------------------------------------
 
-State::Field ConvertingDataTreeBuilder::makeState(node::Attributes const & _aAttributes)
+sal_uInt8 ConvertingDataTreeBuilder::makeState(node::Attributes const & _aAttributes)
 {
-    State::Field state;
+    sal_uInt8 state;
 
     switch (_aAttributes.state())
     {
@@ -872,9 +818,9 @@ State::Field ConvertingDataTreeBuilder::makeState(node::Attributes const & _aAtt
 }
 //-----------------------------------------------------------------------------
 
-Flags::Field ConvertingDataTreeBuilder::makeFlags(node::Attributes const & _aAttributes)
+sal_uInt8 ConvertingDataTreeBuilder::makeFlags(node::Attributes const & _aAttributes)
 {
-    Flags::Field flags = 0;
+    sal_uInt8 flags = 0;
 
     if ( _aAttributes.isReadonly())
         flags |= Flags::readonly;
@@ -898,13 +844,13 @@ Flags::Field ConvertingDataTreeBuilder::makeFlags(node::Attributes const & _aAtt
 }
 //-----------------------------------------------------------------------------
 
-SetElementAddress ConvertingDataTreeBuilder::makeTemplateData(rtl::OUString const & _aTemplateName, rtl::OUString const & _aTemplateModule)
+sal_uInt8 * ConvertingDataTreeBuilder::makeTemplateData(rtl::OUString const & _aTemplateName, rtl::OUString const & _aTemplateModule)
 {
-    return SetNode::allocTemplateData(_aTemplateName, _aTemplateModule );
+    return sharable::SetNode::allocTemplateData(_aTemplateName, _aTemplateModule );
 }
 //-----------------------------------------------------------------------------
 
-List ConvertingDataTreeBuilder::ElementListBuilder::buildElementList(ISubtree const & _aSet, bool _bWithDefaults)
+sharable::TreeFragment * ConvertingDataTreeBuilder::ElementListBuilder::buildElementList(ISubtree const & _aSet, bool _bWithDefaults)
 {
     OSL_PRECOND(_aSet.isSetNode(), "Node must be a set");
 
@@ -921,14 +867,14 @@ List ConvertingDataTreeBuilder::ElementListBuilder::buildElementList(ISubtree co
 
 void ConvertingDataTreeBuilder::ElementListBuilder::handleNode(INode const & _aSourceNode)
 {
-    TreeAddress aNewElement = ConvertingDataTreeBuilder()
+    sharable::TreeFragment * aNewElement = ConvertingDataTreeBuilder()
                                  .buildElement(_aSourceNode,m_sTypeName,m_bWithDefaults);
 
     m_aCollector.addElement(aNewElement);
 }
 //-----------------------------------------------------------------------------
 
-void ConvertingDataTreeBuilder::ElementListBuilder::handle(OValueNode const & _aSourceNode)
+void ConvertingDataTreeBuilder::ElementListBuilder::handle(ValueNode const & _aSourceNode)
 {
     handleNode(_aSourceNode);
 }
@@ -941,13 +887,13 @@ void ConvertingDataTreeBuilder::ElementListBuilder::handle(ISubtree  const & _aS
 //-----------------------------------------------------------------------------
 //-----------------------------------------------------------------------------
 
-std::auto_ptr<INode> ConvertingNodeBuilder::buildNode(TreeAccessor const & _aSourceTree, bool _bUseTreeName)
+std::auto_ptr<INode> ConvertingNodeBuilder::buildNode(sharable::TreeFragment * sourceTree, bool _bUseTreeName)
 {
-    std::auto_ptr<INode> pResult = this->buildNode(_aSourceTree.getRootNode());
+    std::auto_ptr<INode> pResult = this->buildNode(sourceTree == 0 ? 0 : sourceTree->getRootNode());
     if (pResult.get() != NULL)
     {
         // use the element name !
-        if (_bUseTreeName) pResult->setName( _aSourceTree.getName().toString() );
+        if (_bUseTreeName) pResult->setName( sourceTree->getName() );
 
         // do something about attributes here ?
     }
@@ -955,118 +901,118 @@ std::auto_ptr<INode> ConvertingNodeBuilder::buildNode(TreeAccessor const & _aSou
 }
 //-----------------------------------------------------------------------------
 
-std::auto_ptr<INode> ConvertingNodeBuilder::buildNode(NodeAccess const & _aSourceNode)
+std::auto_ptr<INode> ConvertingNodeBuilder::buildNode(sharable::Node * sourceNode)
 {
     OSL_ENSURE( !m_pNode.get(), "Old node tree will be dropped");
-    this->visitNode(_aSourceNode);
+    visitNode(sourceNode);
     return m_pNode;
 }
 //-----------------------------------------------------------------------------
 
-std::auto_ptr<ISubtree> ConvertingNodeBuilder::buildNodeTree(GroupNodeAccess const& _aGroupNode) const
+std::auto_ptr<ISubtree> ConvertingNodeBuilder::buildNodeTree(sharable::GroupNode * groupNode) const
 {
-    std::auto_ptr<ISubtree> pResult = convertNode(_aGroupNode);
+    std::auto_ptr<ISubtree> pResult = convertNode(groupNode);
 
     if (pResult.get() != NULL)
     {
         ConvertingSubnodeBuilder aCollector(m_rNodeFactory, *pResult);
-        aCollector.addChildren(_aGroupNode);
+        aCollector.addChildren(groupNode);
     }
 
     return pResult;
 }
 //-----------------------------------------------------------------------------
 
-std::auto_ptr<ISubtree> ConvertingNodeBuilder::buildNodeTree(SetNodeAccess const& _aSetNode) const
+std::auto_ptr<ISubtree> ConvertingNodeBuilder::buildNodeTree(sharable::SetNode * setNode) const
 {
-    std::auto_ptr<ISubtree> pResult = convertNode(_aSetNode);
+    std::auto_ptr<ISubtree> pResult = convertNode(setNode);
 
     if (pResult.get() != NULL)
     {
         ConvertingSubnodeBuilder aCollector(m_rNodeFactory, *pResult);
-        aCollector.addElements(_aSetNode);
+        aCollector.addElements(setNode);
     }
 
     return pResult;
 }
 //-----------------------------------------------------------------------------
 
-std::auto_ptr<ISubtree> ConvertingNodeBuilder::convertNode(GroupNodeAccess const& _aGroupNode) const
+std::auto_ptr<ISubtree> ConvertingNodeBuilder::convertNode(sharable::GroupNode * groupNode) const
 {
-    return m_rNodeFactory.createGroupNode( _aGroupNode.getName().toString(),
-                                            convertAttributes(_aGroupNode));
+    return m_rNodeFactory.createGroupNode( groupNode->info.getName(),
+                                           convertAttributes(sharable::node(groupNode)));
 }
 //-----------------------------------------------------------------------------
 
-std::auto_ptr<ISubtree> ConvertingNodeBuilder::convertNode(SetNodeAccess const& _aSetNode) const
+std::auto_ptr<ISubtree> ConvertingNodeBuilder::convertNode(sharable::SetNode * setNode) const
 {
-    return m_rNodeFactory.createSetNode(_aSetNode.getName().toString(),
-                                        _aSetNode.getElementTemplateName().toString(),
-                                        _aSetNode.getElementTemplateModule().toString(),
-                                        convertAttributes(_aSetNode));
+    return m_rNodeFactory.createSetNode(setNode->info.getName(),
+                                        setNode->getElementTemplateName(),
+                                        setNode->getElementTemplateModule(),
+                                        convertAttributes(sharable::node(setNode)));
 }
 //-----------------------------------------------------------------------------
 
-std::auto_ptr<OValueNode> ConvertingNodeBuilder::convertNode(ValueNodeAccess const& _aValueNode) const
+std::auto_ptr<ValueNode> ConvertingNodeBuilder::convertNode(sharable::ValueNode * valueNode) const
 {
-    uno::Any aUserValue = _aValueNode.getUserValue();
-    uno::Any aDefValue  = _aValueNode.getDefaultValue();
+    uno::Any aUserValue = valueNode->getUserValue();
+    uno::Any aDefValue  = valueNode->getDefaultValue();
 
     if (aUserValue.hasValue() || aDefValue.hasValue())
     {
-        return m_rNodeFactory.createValueNode(_aValueNode.getName().toString(),
-                                                aUserValue, aDefValue,
-                                                convertAttributes(_aValueNode));
+        return m_rNodeFactory.createValueNode(valueNode->info.getName(),
+                                              aUserValue, aDefValue,
+                                              convertAttributes(sharable::node(valueNode)));
     }
     else
     {
-        return m_rNodeFactory.createNullValueNode(_aValueNode.getName().toString(),
-                                                    _aValueNode.getValueType(),
-                                                    convertAttributes(_aValueNode));
+        return m_rNodeFactory.createNullValueNode(valueNode->info.getName(),
+                                                  valueNode->getValueType(),
+                                                  convertAttributes(sharable::node(valueNode)));
     }
 }
 //-----------------------------------------------------------------------------
 
-NodeVisitor::Result ConvertingNodeBuilder::handle(ValueNodeAccess const & _aNode)
+bool ConvertingNodeBuilder::handle(sharable::ValueNode * node)
 {
-    m_pNode = base_ptr(buildNodeTree(_aNode));
-    return DONE;
+    m_pNode = base_ptr(buildNodeTree(node));
+    return true;
 }
 //-----------------------------------------------------------------------------
 
-NodeVisitor::Result ConvertingNodeBuilder::handle(GroupNodeAccess const & _aNode)
+bool ConvertingNodeBuilder::handle(sharable::GroupNode * node)
 {
-    m_pNode = base_ptr(buildNodeTree(_aNode));
-    return DONE;
+    m_pNode = base_ptr(buildNodeTree(node));
+    return true;
 }
 //-----------------------------------------------------------------------------
 
-NodeVisitor::Result ConvertingNodeBuilder::handle(SetNodeAccess const & _aNode)
+bool ConvertingNodeBuilder::handle(sharable::SetNode * node)
 {
-    m_pNode = base_ptr(buildNodeTree(_aNode));
-    return DONE;
+    m_pNode = base_ptr(buildNodeTree(node));
+    return true;
 }
 //-----------------------------------------------------------------------------
 //-----------------------------------------------------------------------------
 
-NodeVisitor::Result ConvertingSubnodeBuilder::handle(TreeAccessor const & _aElement)
+bool ConvertingSubnodeBuilder::handle(sharable::TreeFragment * tree)
 {
     OSL_ASSERT(m_rParentNode.isSetNode());
-    m_rParentNode.addChild( m_aSubnodeBuilder.buildNode(_aElement,true) );
-    return CONTINUE;
+    m_rParentNode.addChild(m_aSubnodeBuilder.buildNode(tree, true));
+    return false;
 }
 //-----------------------------------------------------------------------------
 
-NodeVisitor::Result ConvertingSubnodeBuilder::handle(NodeAccess const & _aMember)
+bool ConvertingSubnodeBuilder::handle(sharable::Node * node)
 {
     OSL_ASSERT(!m_rParentNode.isSetNode());
-    m_rParentNode.addChild( m_aSubnodeBuilder.buildNode(_aMember) );
-    return CONTINUE;
+    m_rParentNode.addChild(m_aSubnodeBuilder.buildNode(node));
+    return false;
 }
 //-----------------------------------------------------------------------------
 //-----------------------------------------------------------------------------
 
-void DataTreeDefaultMerger::mergeDefaults(TreeAddress /*_aBaseAddress*/, INode const& /*_aDefaultNode*/)
+void DataTreeDefaultMerger::mergeDefaults(sharable::TreeFragment * /*_aBaseAddress*/, INode const& /*_aDefaultNode*/)
 {
 }
 //-----------------------------------------------------------------------------
@@ -1076,38 +1022,38 @@ void DataTreeDefaultMerger::handle(ISubtree const & /*_aNode*/)
 }
 //-----------------------------------------------------------------------------
 
-void DataTreeDefaultMerger::handle(OValueNode const & /*_aNode*/)
+void DataTreeDefaultMerger::handle(ValueNode const & /*_aNode*/)
 {
 }
 //-----------------------------------------------------------------------------
 //-----------------------------------------------------------------------------
 
-TreeAddress DataTreeCleanup::destroyTree(TreeAddress _aBaseAddress)
+sharable::TreeFragment * DataTreeCleanup::destroyTree(sharable::TreeFragment * _aBaseAddress)
 {
-    TreeFragment *pData = _aBaseAddress;
+    sharable::TreeFragment *pData = _aBaseAddress;
 
-    TreeFragment *pNext = pData->header.next;
+    sharable::TreeFragment *pNext = pData->header.next;
 
-    Offset const nCount = pData->header.count;
+    sal_uInt16 const nCount = pData->header.count;
 
     destroyData( & pData->header );
 
-    for (Offset i = 0; i< nCount; ++i)
+    for (sal_uInt16 i = 0; i< nCount; ++i)
     {
         destroyNode( addressOfNodeAt(_aBaseAddress,i) );
     }
 
-    TreeFragment::free_shallow( pData );
+    sharable::TreeFragment::free_shallow( pData );
 
-    return TreeAddress( pNext );
+    return (sharable::TreeFragment *)( pNext );
 }
 //-----------------------------------------------------------------------------
 
-void DataTreeCleanup::destroyNode(NodeAddress _aNodeAddress)
+void DataTreeCleanup::destroyNode(sharable::Node * _aNodeAddress)
 {
-    Node * pNode = _aNodeAddress;
+    sharable::Node * pNode = _aNodeAddress;
 
-    Type::Field aTypeTag = pNode->node.info.type;
+    sal_uInt8 aTypeTag = pNode->info.type;
     switch ( aTypeTag & Type::mask_nodetype )
     {
     case Type::nodetype_group:
@@ -1126,36 +1072,36 @@ void DataTreeCleanup::destroyNode(NodeAddress _aNodeAddress)
 }
 //-----------------------------------------------------------------------------
 
-void DataTreeCleanup::destroyData(TreeFragmentHeader * _pHeader)
+void DataTreeCleanup::destroyData(sharable::TreeFragmentHeader * _pHeader)
 {
     // 'component' is owned elsewhere -> leave alone
 
-    sharable::String aName = _pHeader->name;
+    rtl_uString * aName = _pHeader->name;
 
-    freeString( aName );
+    rtl_uString_release( aName );
 }
 //-----------------------------------------------------------------------------
 
-void DataTreeCleanup::destroyData(NodeInfo * _pNodeInfo)
+void DataTreeCleanup::destroyData(sharable::NodeInfo * _pNodeInfo)
 {
-    Name aName = _pNodeInfo->name;
+    rtl_uString * aName = _pNodeInfo->name;
 
-    if (aName) freeName( aName );
+    if (aName) rtl_uString_release( aName );
 }
 //-----------------------------------------------------------------------------
 
 void DataTreeCleanup::destroyData(sharable::SetNode * _pNode)
 {
-    TreeAddress aElement( _pNode->elements );
+    sharable::TreeFragment * aElement( _pNode->elements );
 
-    SetElementAddress aTemplate = _pNode->elementType;;
+    sal_uInt8 * aTemplate = _pNode->elementType;;
 
     destroyData(&_pNode->info);
 
     while (aElement != NULL)
         aElement = destroyTree(aElement);
 
-    SetNode::releaseTemplateData( aTemplate );
+    sharable::SetNode::releaseTemplateData( aTemplate );
 }
 //-----------------------------------------------------------------------------
 
@@ -1168,8 +1114,8 @@ void DataTreeCleanup::destroyData(sharable::GroupNode * _pNode)
 
 void DataTreeCleanup::destroyData(sharable::ValueNode * _pNode)
 {
-    AnyData::TypeCode aValueType = AnyData::TypeCode( _pNode->info.type & Type::mask_valuetype );
-    Flags::Field aFlags          = _pNode->info.flags;
+    sal_uInt8 aValueType = sal_uInt8( _pNode->info.type & Type::mask_valuetype );
+    sal_uInt8 aFlags          = _pNode->info.flags;
 
     destroyData(&_pNode->info);
 

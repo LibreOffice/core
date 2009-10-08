@@ -8,7 +8,7 @@
  *
  * $RCSfile: viewcontactofe3dsphere.cxx,v $
  *
- * $Revision: 1.2 $
+ * $Revision: 1.2.18.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -77,9 +77,6 @@ namespace sdr
             aWorldTransform.translate(-0.5, -0.5, -0.5);
             aWorldTransform.scale(aSphereSize.getX(), aSphereSize.getY(), aSphereSize.getZ());
             aWorldTransform.translate(aSpherePosition.getX(), aSpherePosition.getY(), aSpherePosition.getZ());
-
-            // add object to world transformation
-            aWorldTransform *= GetE3dSphereObj().GetTransform();
 
             // get 3D Object Attributes
             drawinglayer::attribute::Sdr3DObjectAttribute* pSdr3DObjectAttribute = drawinglayer::primitive2d::createNewSdr3DObjectAttribute(rItemSet);

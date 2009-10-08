@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: lspcitem.hxx,v $
- * $Revision: 1.4 $
+ * $Revision: 1.4.216.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -107,7 +107,7 @@ public:
     }
 
     // Vergroessert oder verkleinert die Zeilenhoehe.
-    const BYTE GetPropLineSpace() const { return nPropLineSpace; }
+    BYTE GetPropLineSpace() const { return nPropLineSpace; }
     inline void SetPropLineSpace( const BYTE nProp )
     {
         nPropLineSpace = nProp;

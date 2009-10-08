@@ -52,8 +52,6 @@ SLOFILES=\
     $(SLO)$/treefragment.obj	\
     $(SLO)$/treesegment.obj		\
     $(SLO)$/nodevisitor.obj		\
-    $(SLO)$/nodeaccess.obj		\
-    $(SLO)$/valuenodeaccess.obj	\
     $(SLO)$/changes.obj			\
     $(SLO)$/treenodefactory.obj			\
     $(SLO)$/treechangefactory.obj		\

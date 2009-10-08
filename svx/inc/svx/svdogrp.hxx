@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: svdogrp.hxx,v $
- * $Revision: 1.3 $
+ * $Revision: 1.3.226.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -91,7 +91,7 @@ public:
     virtual void TakeObjNamePlural(String& rName) const;
 
     virtual void RecalcSnapRect();
-    virtual basegfx::B2DPolyPolygon TakeXorPoly(sal_Bool bDetail) const;
+    virtual basegfx::B2DPolyPolygon TakeXorPoly() const;
 
     virtual FASTBOOL BegDrag(SdrDragStat& rDrag)  const;
     virtual FASTBOOL BegCreate(SdrDragStat& rStat);

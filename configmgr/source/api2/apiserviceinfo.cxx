@@ -91,14 +91,14 @@ namespace configmgr
 
 //-----------------------------------------------------------------------------
 
-const AsciiServiceName c_aNoServices[] =
+sal_Char const * const c_aNoServices[] =
 {
     NULL
 };
 
 //-----------------------------------------------------------------------------
 
-const AsciiServiceName c_aCreateAccessServiceNames[] =
+sal_Char const * const c_aCreateAccessServiceNames[] =
 {
     "com.sun.star.configuration.ConfigurationAccess",
     "com.sun.star.configuration.HierarchyAccess",
@@ -106,7 +106,7 @@ const AsciiServiceName c_aCreateAccessServiceNames[] =
     NULL
 };
 
-const AsciiServiceName c_aCreateUpdateServiceNames[] =
+sal_Char const * const c_aCreateUpdateServiceNames[] =
 {
     "com.sun.star.configuration.ConfigurationUpdateAccess",
     "com.sun.star.configuration.ConfigurationAccess",
@@ -117,7 +117,7 @@ const AsciiServiceName c_aCreateUpdateServiceNames[] =
 
 //-----------------------------------------------------------------------------
 
-const AsciiServiceName c_aUserAdministrationServices[] =
+sal_Char const * const c_aUserAdministrationServices[] =
 {
     "com.sun.star.configuration.UserAdministration",
     "com.sun.star.configuration.SimpleSetUpdate",
@@ -126,7 +126,7 @@ const AsciiServiceName c_aUserAdministrationServices[] =
     NULL
 };
 
-const AsciiServiceName c_aGroupAdministrationServices[] =
+sal_Char const * const c_aGroupAdministrationServices[] =
 {
     "com.sun.star.configuration.GroupAdministration",
     "com.sun.star.configuration.SimpleSetUpdate",
@@ -139,28 +139,28 @@ const AsciiServiceName c_aGroupAdministrationServices[] =
 
 //-- GroupElements
 
-const AsciiServiceName c_aInnerGroupAccessServices[] =
+sal_Char const * const c_aInnerGroupAccessServices[] =
 {
     CFG_SVCLIST_GROUPACCESS,
     CFG_SVCLIST_GROUPELEMENT,
     NULL
 };
 
-const AsciiServiceName c_aInnerGroupUpdateServices[] =
+sal_Char const * const c_aInnerGroupUpdateServices[] =
 {
     CFG_SVCLIST_GROUPUPDATE,
     CFG_SVCLIST_GROUPELEMENT,
     NULL
 };
 
-const AsciiServiceName c_aInnerSetAccessServices[] =
+sal_Char const * const c_aInnerSetAccessServices[] =
 {
     CFG_SVCLIST_SETACCESS,
     CFG_SVCLIST_GROUPELEMENT,
     NULL
 };
 
-const AsciiServiceName c_aInnerSetUpdateServices[] =
+sal_Char const * const c_aInnerSetUpdateServices[] =
 {
     CFG_SVCLIST_SETUPDATE,
     CFG_SVCLIST_GROUPELEMENT,
@@ -169,28 +169,28 @@ const AsciiServiceName c_aInnerSetUpdateServices[] =
 
 //-- SetElements
 
-const AsciiServiceName c_aSetElementGroupAccessServices[] =
+sal_Char const * const c_aSetElementGroupAccessServices[] =
 {
     CFG_SVCLIST_GROUPACCESS,
     CFG_SVCLIST_SETELEMENT,
     NULL
 };
 
-const AsciiServiceName c_aSetElementGroupUpdateServices[] =
+sal_Char const * const c_aSetElementGroupUpdateServices[] =
 {
     CFG_SVCLIST_GROUPUPDATE,
     CFG_SVCLIST_SETELEMENT,
     NULL
 };
 
-const AsciiServiceName c_aSetElementSetAccessServices[] =
+sal_Char const * const c_aSetElementSetAccessServices[] =
 {
     CFG_SVCLIST_SETACCESS,
     CFG_SVCLIST_SETELEMENT,
     NULL
 };
 
-const AsciiServiceName c_aSetElementSetUpdateServices[] =
+sal_Char const * const c_aSetElementSetUpdateServices[] =
 {
     CFG_SVCLIST_SETUPDATE,
     CFG_SVCLIST_SETELEMENT,
@@ -199,28 +199,28 @@ const AsciiServiceName c_aSetElementSetUpdateServices[] =
 
 //-- RootElements
 
-const AsciiServiceName c_aRootGroupAccessServices[] =
+sal_Char const * const c_aRootGroupAccessServices[] =
 {
     CFG_SVCLIST_GROUPACCESS,
     CFG_SVCLIST_ACCESSROOTELEMENT,
     NULL
 };
 
-const AsciiServiceName c_aRootGroupUpdateServices[] =
+sal_Char const * const c_aRootGroupUpdateServices[] =
 {
     CFG_SVCLIST_GROUPUPDATE,
     CFG_SVCLIST_UPDATEROOTELEMENT,
     NULL
 };
 
-const AsciiServiceName c_aRootSetAccessServices[] =
+sal_Char const * const c_aRootSetAccessServices[] =
 {
     CFG_SVCLIST_SETACCESS,
     CFG_SVCLIST_ACCESSROOTELEMENT,
     NULL
 };
 
-const AsciiServiceName c_aRootSetUpdateServices[] =
+sal_Char const * const c_aRootSetUpdateServices[] =
 {
     CFG_SVCLIST_SETUPDATE,
     CFG_SVCLIST_UPDATEROOTELEMENT,

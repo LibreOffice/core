@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: appdde.cxx,v $
- * $Revision: 1.19 $
+ * $Revision: 1.19.142.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -122,8 +122,8 @@ public:
 };
 
 
-SV_DECL_PTRARR( SfxDdeDocTopics_Impl, SfxDdeDocTopic_Impl * const, 4, 4 )
-SV_IMPL_PTRARR( SfxDdeDocTopics_Impl, SfxDdeDocTopic_Impl * const )
+SV_DECL_PTRARR( SfxDdeDocTopics_Impl, SfxDdeDocTopic_Impl *, 4, 4 )
+SV_IMPL_PTRARR( SfxDdeDocTopics_Impl, SfxDdeDocTopic_Impl *)
 
 //========================================================================
 

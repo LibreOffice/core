@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: simpletextstatusbarcontroller.cxx,v $
- * $Revision: 1.5 $
+ * $Revision: 1.5.82.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -61,10 +61,6 @@ DEFINE_XSERVICEINFO_MULTISERVICE        (   SimpleTextStatusbarController       
                                         )
 
 DEFINE_INIT_SERVICE                     (   SimpleTextStatusbarController, {} )
-
-SimpleTextStatusbarController::SimpleTextStatusbarController()
-{
-}
 
 SimpleTextStatusbarController::SimpleTextStatusbarController( const uno::Reference< lang::XMultiServiceFactory >& xServiceManager ) :
     svt::StatusbarController( xServiceManager, uno::Reference< frame::XFrame >(), rtl::OUString(), 0 )
