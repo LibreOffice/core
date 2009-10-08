@@ -1,7 +1,7 @@
 'encoding UTF-8  Do not remove or change this line!
 '**************************************************************************
 '* DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-'* 
+'*
 '* Copyright 2008 by Sun Microsystems, Inc.
 '*
 '* OpenOffice.org - a multi-platform office productivity suite
@@ -33,12 +33,11 @@
 '*
 '* owner : fredrik.haegg@sun.com
 '*
-'* short description: Testcases for Toolbars. 
+'* short description: Testcases for Toolbars.
 '*
 '\******************************************************************
 
-sub w_020_
-    printLog Chr(13) + "--------- Toolbars (w_020_.inc) ----------"
+sub w_020printLog Chr(13) + "--------- Toolbars (w_020_.inc) ----------"
 
     'Toolbar
     Call t_TB_Insert
@@ -64,8 +63,8 @@ end sub
 '-----------------------------------------------------------
 
 testcase t_TB_Insert
-   qaErrorLog "#158646# - Inserting Indexes causes crash."
-   goto endsub
+    qaErrorLog "#158646# - Inserting Indexes causes crash."
+    goto endsub
 
     printlog "- Toolbox ( normal ) : All within Insert"
 
@@ -74,7 +73,7 @@ testcase t_TB_Insert
     printlog "- TearOff Insert-Toolbox"
     Kontext "Insertbar"
     if Not Insertbar.Exists then Call hToolbarSelect("Insert", true)
-    
+
     if gApplication <> "HTMLDOKUMENT" then
         Kontext "Insertbar"
         printlog "  - Frame"
@@ -89,7 +88,7 @@ testcase t_TB_Insert
     Kontext "Insertbar"
     if Not Insertbar.Exists then Call hToolbarSelect("Insert", true)
     wait 500
-	if gUSeSysDlg = False then
+    if gUSeSysDlg = False then
         printlog " Click 'Insert Graphics' in Toolbox"
         if Grafik.IsEnabled then
             Grafik.Click
@@ -232,10 +231,10 @@ testcase t_TB_InsertFields
     Dim i as Integer
     printlog "- Toolbox ( normal ) : Fields"
 
-	if gPlatgroup = "unx" then
-		QAErrorlog "Doesn't run on unix"
-		goto endsub
-	end if
+    if gPlatgroup = "unx" then
+        QAErrorlog "Doesn't run on unix"
+        goto endsub
+    end if
     printlog " Open new document"
     Call hNewDocument
     printlog "- TearOff Insert Toolbox"
@@ -367,7 +366,7 @@ testcase t_TB_Form
             Warnlog "Toolbar 'FormControls' is not opened!"
             Call hCloseDocument
             goto endsub
-        end sub
+        end if
         wait 500
         Pushbutton.Click
         printlog " Insert a pushbutton from toolbox"
@@ -387,7 +386,7 @@ testcase t_TB_Form
         printlog "+ Open Control Properties"
         printlog "   - Control Properties"
         Call sMenufunktionen("-Pushbutton-")
-        
+
         Kontext "FormControls"
         wait 500
         Radiobutton.Click
@@ -395,7 +394,7 @@ testcase t_TB_Form
         Call hMalZeichnenMitSelektion ( 32, 20, 42, 25 )
         printlog "+ Open Control Properties"
         Call sMenufunktionen("-Radiobutton-")
-        
+
         Kontext "FormControls"
         wait 500
         Checkbox.Click
@@ -432,7 +431,7 @@ testcase t_TB_Form
         Call sAutopilot_ListboxCombobox("Listbox")
         printlog "+ Open Control Properties"
         Call sMenufunktionen("-Listbox-")
-        
+
         Kontext "FormControls"
         if Ucase(gApplication) <> "HTMLDOKUMENT" then
             Combobox.Click
@@ -444,7 +443,7 @@ testcase t_TB_Form
             printlog "+ Open Control Properties"
             Call sMenufunktionen("-Combobox-")
         end if
-        
+
         printlog " Insert a Formatted Field from toolbox"
         Kontext "FormControls"
         if Ucase(gApplication) <> "HTMLDOKUMENT" then
@@ -648,8 +647,8 @@ endcase
 '-----------------------------------------------------------
 
 testcase tHtmlDoc_TB_Insert
-   qaErrorLog "#158646# - Inserting Indexes causes crash."
-   goto endsub
+    qaErrorLog "#158646# - Inserting Indexes causes crash."
+    goto endsub
 
     printlog "- Toolbox ( normal ) : All within Insert"
     gApplication = "HTMLDOKUMENT"
@@ -665,7 +664,7 @@ testcase tHtmlDoc_TB_Insert
     Kontext "Insertbar"
     if Not Insertbar.Exists then Call hToolbarSelect("Insert", true)
     wait 500
-	if gUSeSysDlg = False then
+    if gUSeSysDlg = False then
         if Grafik.IsEnabled then
             Grafik.Click
             Kontext "GrafikEinfuegenDlg"
@@ -770,10 +769,10 @@ testcase tHtmlDoc_TB_InsertFields
     printlog "- Toolbox ( normal ) : Fields"
     gApplication = "HTMLDOKUMENT"
 
-	if gPlatgroup = "unx" then
-		QAErrorlog "Doesn't run on unix"
-		goto endsub
-	end if
+    if gPlatgroup = "unx" then
+        QAErrorlog "Doesn't run on unix"
+        goto endsub
+    end if
 
     printlog " Open new document"
     Call hNewDocument
@@ -810,7 +809,7 @@ testcase tHtmlDoc_TB_Form
     Call hNewDocument
     Sleep 1
     Kontext "FormControls"
-    if Not FormControls.Exists then 
+    if Not FormControls.Exists then
         Call hToolbarSelect("Controls", true)
     end if
 

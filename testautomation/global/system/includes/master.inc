@@ -31,7 +31,7 @@
 '*
 '/************************************************************************
 '*
-'* owner : joerg.sievers@sun.com
+'* owner : helge.delfs@sun.com
 '*
 '* short description : very important routines to start a testscript
 '*
@@ -72,6 +72,7 @@ sub GetUseFiles
     Dim sPrivateEnvironmentLocation as string
     Dim sEnvironmentVersion as string
     Dim sEnvironmentDisplayVersion as string
+    Dim sEnvironmentVersionMinor as string
 
     gTestcaseStart = Now()   ' get start time of test preparation phase
 
@@ -145,15 +146,16 @@ sub GetUseFiles
     if fileExists(sPrivateEnvironmentLocation) then
 	sEnvironmentVersion = getIniValue(sPrivateEnvironmentLocation, "EnvironmentVersion", "Current")
 	sEnvironmentDisplayVersion = getIniValue(sPrivateEnvironmentLocation, "EnvironmentVersion", "DisplayName")
+	sEnvironmentVersionMinor =  getIniValue(sPrivateEnvironmentLocation, "EnvironmentVersion", "Minor")
     else
         sEnvironmentVersion = "HEAD"
         sEnvironmentDisplayVersion = "Developer"
     end if
     if sEnvironmentVersion <> "HEAD" then
         if (len(gMajor) > 5) then
-	    if lCase(left(gMajor,6)) <> lCase(left(sEnvironmentVersion,6)) then
-                warnlog "This environment '" + sEnvironmentVersion + "' is not suitable for this OOo version '" + left(gMajor,6) + "'! Please get the environment suitable for this OOo version! This Environment only works with OOo " + sEnvironmentDisplayVersion + "!"
-                if MsgBox ("This environment '" + sEnvironmentVersion + "' is not suitable for this OOo version '" + left(gMajor,6) + "'! Please get the environment suitable for this OOo version! This Environment only works with OOo " + sEnvironmentDisplayVersion + "!", 16, "Error at startup") = 1 then 
+	    if lCase(left(gMajor,6)) <> lCase(left(sEnvironmentVersion,6)) OR (lCase(gMinor) <> lCase(sEnvironmentVersionMinor)) then
+                warnlog "This environment '" + sEnvironmentVersion + sEnvironmentVersionMinor + "' is not suitable for this OOo version '" + left(gMajor,6) + gMinor + "'!"+chr(13)+"Please get the environment suitable for this OOo version!"+chr(13)+"This Environment only works with OOo " + sEnvironmentDisplayVersion + "!"
+                if MsgBox ("This environment '" + sEnvironmentVersion + sEnvironmentVersionMinor +"' is not suitable for this OOo version '" + left(gMajor,6) + gMinor + "'! Please get the environment suitable for this OOo version! This Environment only works with OOo " + sEnvironmentDisplayVersion + "!", 16, "Error at startup") = 1 then 
 		    end
 	        end if
 	    end if
@@ -700,7 +702,6 @@ sub mMakeGeneralOptionsAPI
     Dim bHelpTip as Boolean
     Dim sTempPath as string
     Dim sWorkPath as string    
-    Dim sFileFunction as string
     Dim oUnoOfficeConnection as object
     Dim oUnoConfigurationAccess as object
     Dim aPropertyValue(1) As new com.sun.star.beans.PropertyValue ' Array of pairs: Property with Value
@@ -708,9 +709,7 @@ sub mMakeGeneralOptionsAPI
     Dim sTempList
     Dim bError as boolean
 
-    Dim oOOoImprovementController as object  ' Check presence of the OOo Improvement Extension
-   
-    sFileFunction="global::system::inc::master.inc::hMakeGeneralOptionsAPI:: "
+    const sFileFunction = "global::system::inc::master.inc::hMakeGeneralOptionsAPI:: "
 
     ' Open OOo UNO-Port for communication
     oUnoOfficeConnection=hGetUnoService(TRUE)
@@ -809,37 +808,42 @@ sub mMakeGeneralOptionsAPI
         xViewRoot.dispose()
 
         '///+ <li>Disable automatic check for updates
-        aPropertyValue(0).Value="/org.openoffice.Office.Jobs/Jobs/Job['UpdateCheck']/Arguments"
-        xViewRoot=oUnoConfigurationAccess.createInstanceWithArguments("com.sun.star.configuration.ConfigurationUpdateAccess",aPropertyValue())
-        xViewRoot.replaceByName("AutoCheckEnabled", false)
-        xViewRoot.commitChanges()
-        ' Since we use lazywrite=false, the call to '.commitChanges()' returns if all data is written.
-        ' This call to ask for pending changes is just to convince me;
-        if xViewRoot.hasPendingChanges() then
-            qaErrorLog(sFileFunction+"Changes still pending...: AutoCheckEnabled")
-            ' At this point there is no needed to think about what to do, if it doesn't work.
-        end if
-        xViewRoot.dispose()
-
-        '///+ OOo Improvement Extension
-        ' Note: Logging is disabled the hard way. The UI will not notice the change so even if logging is disabled
-        '       the UI will claim that it is. You can verify the status manually though by performing some action
-        '       in the application and looking for the log file in user/temp/Feedback.
-        oOOoImprovementController = oUnoOfficeConnection.createInstance( "com.sun.star.oooimprovement.CoreController" )
-        if ( isNull( oOOoImprovementController ) ) then
-            gExtensionOOoImprovementIsInstalled = FALSE 
-        else
-            gExtensionOOoImprovementIsInstalled = TRUE
-            aPropertyValue(0).Value="/org.openoffice.Office.Logging/OOoImprovement"
+        ' Encapsulating this in a try...catch block because external (non-Sun) builds
+        ' do usually not support online update so the API is not available and we get an
+        ' exception. In case of failure we print a QAErrorLog.
+        try
+            aPropertyValue(0).Value="/org.openoffice.Office.Jobs/Jobs/Job['UpdateCheck']/Arguments"
             xViewRoot=oUnoConfigurationAccess.createInstanceWithArguments("com.sun.star.configuration.ConfigurationUpdateAccess",aPropertyValue())
-            xViewRoot.replaceByName("EnablingAllowed", false)
+            xViewRoot.replaceByName("AutoCheckEnabled", false)
             xViewRoot.commitChanges()
+            ' Since we use lazywrite=false, the call to '.commitChanges()' returns if all data is written.
+            ' This call to ask for pending changes is just to convince me;
             if xViewRoot.hasPendingChanges() then
-                qaErrorLog("Configuration not flushed: OOoImprovementProgram/InvitationAccepted: FALSE")
+                qaErrorLog(sFileFunction+"Changes still pending...: AutoCheckEnabled")
+                ' At this point there is no needed to think about what to do, if it doesn't work.
             end if
             xViewRoot.dispose()
-        endif
+        catch
+            qaErrorLog( sFileFunction & "This build does not support online update." )
+        endcatch
 
+        '///+ OOo Improvement
+	    try
+            aPropertyValue(0).Value="/org.openoffice.Office.OOoImprovement.Settings/Participation"
+            xViewRoot=oUnoConfigurationAccess.createInstanceWithArguments("com.sun.star.configuration.ConfigurationUpdateAccess",aPropertyValue())
+            xViewRoot.replaceByName( "ShowedInvitation", true )
+            xViewRoot.replaceByName( "InvitationAccepted", false )
+            xViewRoot.commitChanges()
+            if xViewRoot.hasPendingChanges() then
+	            qaErrorLog("Configuration not flushed: OOoImprovementProgram/InvitationAccepted: FALSE")
+            endif
+            xViewRoot.dispose()
+	        gOOoImprovementIsEnabled = TRUE
+	    catch
+	        QAErrorLog( "Failed to disable usage tracking feature. This might cause errors and warnings during test execution." )
+	        gOOoImprovementIsEnabled = FALSE
+	    endcatch
+	    
         '///+<li>Setting the <i>work</i> directory in Tools / Options,
         sTempPath = ConvertPath (gOfficePath + "user\work")
         '///+<li>If the temp-path does not exist it will be created. 
@@ -887,7 +891,7 @@ sub mMakeGeneralOptionsAPI
 
     catch
         ExceptLog
-        MsgBox (sFileFunction + "The test did not start correctly or the application has been crashed." & Chr(13) & _
+        MsgBox (sFileFunction + "The test did not start correctly or the application crashed." & Chr(13) & _
             "Please correct the problem to make the general settings otherwise the test won't start!", 16, "Error at startup")
             'The test stops here if mMakeGeneralOptionsAPI has been run into problems (GPF, failure, ..)
         end

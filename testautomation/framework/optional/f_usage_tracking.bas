@@ -6,11 +6,11 @@
 '*
 '* OpenOffice.org - a multi-platform office productivity suite
 '*
-'* $RCSfile: c_xml_print_scale.bas,v $
+'* $RCSfile: f_basic_dialog_i18n.bas,v $
 '*
-'* $Revision: 1.2 $
+'* $Revision: 1.3 $
 '*
-'* last change: $Author: rt $ $Date: 2008-07-11 07:26:16 $
+'* last change: $Author: jsk $ $Date: 2008-06-20 08:07:01 $
 '*
 '* This file is part of OpenOffice.org.
 '*
@@ -29,33 +29,39 @@
 '* <http://www.openoffice.org/license.html>
 '* for a copy of the LGPLv3 License.
 '*
-'/************************************************************************
+'/******************************************************************************
 '*
-'* owner : oliver.creamer@Sun.COM
+'*  owner : joerg.skottke@sun.com
 '*
-'* short description  :  Lookup for correct attributes for calc print scaling
+'*  short description : Usage tracking
 '*
-'\***********************************************************************
+'\******************************************************************************
 
-sub main    
-    Printlog "--------------------------------------------------"
-    Printlog "---          Print scaling attributes          ---"
-    Printlog "--------------------------------------------------"
+sub main
 
-    use "xml/optional/includes/c_xml_print_scale.inc"
-    use "xml/tools/includes/xmltool1.inc"
+    use "framework\optional\includes\f_usage_tracking.inc"
     
-    Call hStatusIn("XML", "c_xml_print_scale.bas")
-        call hEnablePrettyPrinting(1)     
-        call subPrintScaling
-    Call hStatusOut
+    call hStatusIn( "framework" , "f_usage_tracking.bas" )
+    call tUsageTracking1()
+    call tUsageTracking2()
+    call tUsageTracking3()
+    call tUsageTracking4()
+    call hStatusOut()
+
 end sub
-'
-'-------------------------------------------------------------------------------
-'
+
+'-------------------------------------------------------------------------
+
 sub LoadIncludeFiles
-    use "global/system/includes/master.inc"
-    use "global/system/includes/gvariabl.inc"    
-    gApplication   = "CALC"
-    call GetUseFiles        
+
+    use "global\system\includes\master.inc"
+    use "global\system\includes\gvariabl.inc"
+    
+    use "global\tools\includes\optional\t_filetools.inc"
+    use "global\tools\includes\optional\t_docfuncs.inc"
+    
+    gApplication = "WRITER"
+    call GetUseFiles()
+
 end sub
+

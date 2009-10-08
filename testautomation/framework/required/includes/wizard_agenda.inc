@@ -58,28 +58,28 @@ testcase tUpdtWizardAgenda
     
         printlog( " * Page 1 : Page Design" )
         Kontext "AutopilotAgenda"
-        call dialogtest2( AutopilotAgenda, 1 )
+        call DialogTest( AutopilotAgenda, 1 )
         PageDesignList.select( 3 )
         hClickNextButton()
         
         Kontext "AutopilotAgenda"
-        call dialogtest2( AutopilotAgenda, 2 )
+        call DialogTest( AutopilotAgenda, 2 )
         hClickNextButton()
         
         Kontext "AutopilotAgenda"
-        call dialogtest2( AutopilotAgenda, 3 )
+        call DialogTest( AutopilotAgenda, 3 )
         hClickNextButton()
 
         Kontext "AutopilotAgenda"
-        call dialogtest2( AutopilotAgenda, 4 )
+        call DialogTest( AutopilotAgenda, 4 )
         hClickNextButton()
 
         Kontext "AutopilotAgenda"
-        call dialogtest2( AutopilotAgenda, 5 )
+        call DialogTest( AutopilotAgenda, 5 )
         hClickNextButton()
 
         Kontext "AutopilotAgenda"
-        call dialogtest2( AutopilotAgenda, 6 )
+        call DialogTest( AutopilotAgenda, 6 )
         
         printlog( "   * name the template for further usage" )
         hWaitForObject( TemplateName, 3000 )

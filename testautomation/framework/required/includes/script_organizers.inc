@@ -43,9 +43,9 @@ testcase tUpdtScriptCount
     dim aScriptCount( SCRIPTING_DIALOGS )
         aScriptCount( 1 ) = 10
         aScriptCount( 2 ) = 14
-        aScriptCount( 3 ) = 10  : if ( gtSysName = "Mac OS X" ) then aScriptCount( 3 ) = 3
+        aScriptCount( 3 ) = 10 
         aScriptCount( 4 ) = 585
-        aScriptCount( 5 ) = 601 : if ( gtSysName = "Mac OS X" ) then aScriptCount( 5 ) = 598
+        aScriptCount( 5 ) = 601 
                 
     dim iCurrentDialog as integer
     dim iCurrentScriptCount as integer

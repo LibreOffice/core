@@ -35,13 +35,6 @@
 '*
 '* short description : update and resouce test for all option pages (at tools/options)
 '*
-'************************************************************************
-'*
-' #1  tToolsOptionsStarOffice
-' #1  tToolsOptionsLoadSave
-' #1  tToolsOptionsLanguageSettings
-' #1  tToolsOptionsInternet
-'*
 '\***********************************************************************
 global sErrMes as String
 global iSectionNumber as Integer
@@ -75,6 +68,7 @@ sub tToolsOptionsTest
     Call tToolsOptionsDataSources
     Call tToolsOptionsChart
     Call tToolsOptionsInternet
+    Call tToolsOptionsImprovementProgram
 
     ' these tabpages only exist in the respective application
     gApplication = "WRITER"
@@ -119,16 +113,8 @@ testcase tToolsOptionsStarOffice
     ToPosInOptionlist ( 1 )
     Kontext "ExtrasOptionenDlg"
     EchteAnzahl = Optionsliste.GetItemCount - iSectionNumber
-    iMenuShould = 13
-
+    iMenuShould = 14
     
-    if ( gExtensionOOoImprovementIsInstalled ) then
-        iMenuShould = iMenuShould + 1
-        printlog( "The OOoImprovementExtension is installed" )
-    else
-        qaerrorlog( "The OOoImprovementExtension is not installed" )
-    endif 
-
     if EchteAnzahl <> iMenuShould then
         if ((gtplatform = "sol") OR (gtplatform = "x86") OR gOOO) AND EchteAnzahl = 12 then
             printLog "One Tabpage is missing. This is ok for a patched Solaris (sparc and x86) or OOo installation." 
@@ -312,16 +298,14 @@ testcase tToolsOptionsStarOffice
                 endif
                 'CheckNow.click
         case 14: Kontext "TabOOoImprovement"
-                 if ( gExtensionOOoImprovementIsInstalled ) then
-                     printlog( "  - OpenOffice.org Improvement Program" )
-                     if ( TabOOoImprovement.isVisible() ) then
-                         gefunden = TRUE
-                         Call DialogTest( TabOOoImprovement )
-                     endif
-                 endif 
+                 printlog( "  - OpenOffice.org Improvement Program" )
+                 if ( TabOOoImprovement.isVisible() ) then
+                     gefunden = TRUE
+                     Call DialogTest( TabOOoImprovement )
+                 endif
         end select
-        if gefunden=FALSE then
-            Warnlog "Error with the " + i + ".page, perhaps this page is deleted or change the place!"
+        if ( NOT gefunden ) then
+            Warnlog "Error with the " & i & ".page, perhaps this page has been deleted or changed its position"
             EchteAnzahl = EchteAnzahl - 1
             if EchteAnzahl < 13 then
                 i=10
@@ -688,4 +672,62 @@ testcase tToolsOptionsInternet
 endcase
 
 '-------------------------------------------------------------------------
+
+testcase tToolsOptionsImprovementProgram
+
+    printlog( "Update test for the tools/options dialog of the OOo Improvement Program" )
+    
+    dim cLogFile as string
+        cLogFile = gOfficePath & "user\temp\feedback\Current.csv"
+        cLogFile = convertpath( cLogFile )
+
+    if ( hDeleteFile( cLogFile ) ) then
+        printlog( "Test environment is clean, no logfile present (anymore)" )
+    endif
+
+    ToolsOptions
+    hToolsOptions( "StarOffice", "Improvement" )
+    printlog( "Improvement Program tabpage" )
+
+    call DialogTest( TabOOoImprovement )
+
+    ParticipateNo.check()
+    ParticipateYes.check()
+  
+    if ( ShowData.isEnabled() ) then 
+
+        ShowData.click()
+
+        Kontext "TextImport"
+        if ( TextImport.exists( 1 ) ) then
+            printlog( "Text import dialog" )
+                
+            call DialogTest( TextImport )
+            TextImport.cancel()
+        else
+            qaerrorlog( "#i97340# Show Data button enabled but no logged data found" )
+        endif
+
+        Kontext "Active"
+        if ( Active.exists( 1 ) ) then
+            printlog( "Messagebox: " & Active.getText() )
+            Active.ok()
+        else
+            warnlog( "No warning for missing file: " & cLogFile )
+        endif
+
+        Kontext "Active"
+        if ( Active.exists( 1 ) ) then
+            warnlog( "#97342# Second message for missing " & cLogFile )
+            Active.ok()
+        endif
+    else
+        printlog( "Show data is disabled" )
+    endif
+
+    Kontext "OptionenDlg"
+    OptionenDlg.cancel()
+
+endcase
+
 

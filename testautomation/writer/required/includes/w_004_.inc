@@ -1,6 +1,6 @@
 '**************************************************************************
 '* DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-'* 
+'*
 '* Copyright 2008 by Sun Microsystems, Inc.
 '*
 '* OpenOffice.org - a multi-platform office productivity suite
@@ -32,12 +32,11 @@
 '*
 '* owner : fredrik.haegg@sun.com
 '*
-'* short description :  Testcases with connection to the Insert-menu. 
+'* short description :  Testcases with connection to the Insert-menu.
 '*
 '\***********************************************************************
 
-sub w_004_
-    printLog Chr(13) + "---------  Insert Menu ( w_004_ ) ----------"
+sub w_004printLog Chr(13) + "---------  Insert Menu ( w_004_ ) ----------"
     gApplication = "WRITER"
 
     Call tInsertManualBreak
@@ -118,7 +117,7 @@ testcase tInsertFields
         printlog "Insert / Fields / Date"
         InsertFieldsDate
     catch
-       Warnlog "Unable to execute: Insert / Fields / Date "
+        Warnlog "Unable to execute: Insert / Fields / Date "
     endcatch
     printlog " Insert / Fields / Date"
     Call wTypeKeys (" <Return>")
@@ -126,7 +125,7 @@ testcase tInsertFields
         printlog "Insert / Fields / Time"
         InsertFieldsTime
     catch
-       Warnlog "Unable to execute: Insert / Fields / Time"
+        Warnlog "Unable to execute: Insert / Fields / Time"
     endcatch
     printlog " Insert / Fields / Time"
     Call wTypeKeys (" <Return>")
@@ -134,7 +133,7 @@ testcase tInsertFields
         printlog "Insert / Fields / Page Number"
         InsertFieldsPageNumbers
     catch
-       Warnlog "Unable to execute: Insert / Fields / Page numbers"
+        Warnlog "Unable to execute: Insert / Fields / Page numbers"
     endcatch
     printlog " Insert / Fields / Page numbers"
     Call wTypeKeys (" <Return>")
@@ -142,7 +141,7 @@ testcase tInsertFields
         printlog "Insert / Fields / Page Count"
         InsertFieldsPageCount
     catch
-       Warnlog "Unable to execute: Insert / Fields / Page Count"
+        Warnlog "Unable to execute: Insert / Fields / Page Count"
     endcatch
     printlog " Insert / Fields / Page count"
     Call wTypeKeys (" <Return>")
@@ -150,7 +149,7 @@ testcase tInsertFields
         printlog "Insert / Fields / Title"
         InsertFieldsTitle
     catch
-       Warnlog "Unable to execute: Insert / Fields / Title"
+        Warnlog "Unable to execute: Insert / Fields / Title"
     endcatch
     printlog " Insert / Fields / Title"
     Call wTypeKeys (" <Return>")
@@ -158,7 +157,7 @@ testcase tInsertFields
         printlog "Insert / Fields / Author"
         InsertFieldsAuthor
     catch
-       Warnlog "Unable to execute: Insert / Fields / Author"
+        Warnlog "Unable to execute: Insert / Fields / Author"
     endcatch
     printlog " Insert / Fields / Author"
     if gApplication <> "HTMLDOKUMENT" then
@@ -217,8 +216,8 @@ testcase tInsertFieldsOther
         Kontext "TabFunktionen"
         Call Dialogtest ( TabFunktionen )
         for i=1 to Feldtyp.GetItemCount
-            Feldtyp.Select i            
-			if MakroButton.IsEnabled then
+            Feldtyp.Select i
+            if MakroButton.IsEnabled then
                 MakroButton.Click
                 ' if no JRE is installed a messagebox appears
                 Do
@@ -591,9 +590,9 @@ endcase
 '-----------------------------------------------------------
 
 testcase tInsertIndexesEntry
-   qaErrorLog "#158646# - Insert Indexes Entry causes crash."
-   goto endsub
-   
+    qaErrorLog "#158646# - Insert Indexes Entry causes crash."
+    goto endsub
+
     PrintLog "- Insert / Indexes / Entry"
     if gApplication = "HTMLDOKUMENT" then
         printlog "Not in WriterWeb!"
@@ -651,12 +650,12 @@ testcase tInsertIndexesIndex
     For i= 1 to VerzeichnisTyp.GetItemCount
         Sleep 1
         if i = 2 then printlog "Alphabetical index see bug #i33671 (ok in m54)"
-		VerzeichnisTyp.Select i
+        VerzeichnisTyp.Select i
         printlog "- " + VerzeichnisTyp.GetSelText
         Call DialogTest (TabVerzeichnisseVerzeichnis)
         printlog "-  Entry's to " + VerzeichnisTyp.GetSelText
 
-        if i = 1 then    ' Inhaltsverzeichnis
+        if i = 1 then
             ErzeugenAusGliederung.Check
         end if
 
@@ -694,7 +693,7 @@ testcase tInsertIndexesIndex
                     Warnlog "- Concordance-File couldn't be selected, though checkbox is checked!"
                 end if
                 Sleep 1
-          end if
+            end if
         end if
 
         Kontext
@@ -770,7 +769,7 @@ testcase tInsertIndexesBibliographyEntry
     InsertIndexesBibliographyEntry
     Kontext "Active"
     if Active.Exists then
-        Do 
+        Do
             try
                 if Active.GetRT = 304 then
                     Warnlog Active.Gettext
@@ -781,7 +780,7 @@ testcase tInsertIndexesBibliographyEntry
             endcatch
         Loop
     end if
-            
+
     Kontext "LiteratureintragEinfuegen"
     Call DialogTest ( LiteratureintragEinfuegen )
     printlog " In dialog 'Insert Bibliography Entry' click 'Edit'"
@@ -931,15 +930,15 @@ testcase tInsertFrame
     Kontext
     active.SetPage TabHintergrund
     Kontext "TabHintergrund"
-    Call DialogTest2 (TabHintergrund, 1)
+    Call DialogTest (TabHintergrund, 1)
     Sleep 1
-	try
-		Als.Select (2)
-		Call DialogTest2 (TabHintergrund, 2)
-		Sleep 1
-	catch
-		Warnlog "Maybe missing combobox! (#i29517)"
-	endcatch
+    try
+        Als.Select (2)
+        Call DialogTest (TabHintergrund, 2)
+        Sleep 1
+    catch
+        Warnlog "Maybe missing combobox! (#i29517)"
+    endcatch
 
     if gApplication <> "HTMLDOKUMENT" then
         Kontext
@@ -1110,7 +1109,7 @@ testcase tInsertGraphicsFromFile
             Kontext "Active"
             if Active.Exists then
                 if Active.GetRT = 304 then
-                    if j = 1 then Warnlog Active.Gettext    
+                    if j = 1 then Warnlog Active.Gettext
                     Active.Ok
                 else
                     exit do
@@ -1190,9 +1189,9 @@ testcase tInsertObjectOLEObject
     Kontext "OLEObjektEinfuegen"
     printlog " Check both radiobuttons 'Create now' and 'Create from file'"
     NeuErstellen.Check
-    Call DialogTest2 (OLEObjektEinfuegen, 1)
+    Call DialogTest (OLEObjektEinfuegen, 1)
     AusDateiErstellen.Check
-    Call DialogTest2 (OLEObjektEinfuegen, 2)
+    Call DialogTest (OLEObjektEinfuegen, 2)
     OLEObjektEinfuegen.Cancel
 
     printlog " Close active document"
@@ -1385,7 +1384,7 @@ testcase tHtmlDocInsertFields
         printlog "Insert / Fields / Date"
         InsertFieldsDate
     catch
-       Warnlog "Unable to execute: Insert / Fields / Date "
+        Warnlog "Unable to execute: Insert / Fields / Date "
     endcatch
     printlog " Insert / Fields / Date"
     Call wTypeKeys (" <Return>")
@@ -1393,7 +1392,7 @@ testcase tHtmlDocInsertFields
         printlog "Insert / Fields / Time"
         InsertFieldsTime
     catch
-       Warnlog "Unable to execute: Insert / Fields / Time"
+        Warnlog "Unable to execute: Insert / Fields / Time"
     endcatch
     printlog " Insert / Fields / Time"
     Call wTypeKeys (" <Return>")
@@ -1401,7 +1400,7 @@ testcase tHtmlDocInsertFields
         printlog "Insert / Fields / Page Number"
         InsertFieldsPageNumbers
     catch
-       Warnlog "Unable to execute: Insert / Fields / Page numbers"
+        Warnlog "Unable to execute: Insert / Fields / Page numbers"
     endcatch
     printlog " Insert / Fields / Page numbers"
     Call wTypeKeys (" <Return>")
@@ -1409,7 +1408,7 @@ testcase tHtmlDocInsertFields
         printlog "Insert / Fields / Page Count"
         InsertFieldsPageCount
     catch
-       Warnlog "Unable to execute: Insert / Fields / Page Count"
+        Warnlog "Unable to execute: Insert / Fields / Page Count"
     endcatch
     printlog " Insert / Fields / Page count"
     Call wTypeKeys (" <Return>")
@@ -1417,7 +1416,7 @@ testcase tHtmlDocInsertFields
         printlog "Insert / Fields / Title"
         InsertFieldsTitle
     catch
-       Warnlog "Unable to execute: Insert / Fields / Title"
+        Warnlog "Unable to execute: Insert / Fields / Title"
     endcatch
     printlog " Insert / Fields / Title"
     Call wTypeKeys (" <Return>")
@@ -1425,7 +1424,7 @@ testcase tHtmlDocInsertFields
         printlog "Insert / Fields / Author"
         InsertFieldsAuthor
     catch
-       Warnlog "Unable to execute: Insert / Fields / Author"
+        Warnlog "Unable to execute: Insert / Fields / Author"
     endcatch
     printlog " Insert / Fields / Author"
     if gApplication <> "HTMLDOKUMENT" then
@@ -1451,7 +1450,7 @@ testcase tHtmlDocInsertFieldsOther
     Dim i as integer
     Dim j as integer
     printlog "- Insert / Fields / Other"
-    
+
     gApplication = "HTMLDOKUMENT"
     printlog " Open new document"
     Call hNewDocument
@@ -1487,7 +1486,7 @@ testcase tHtmlDocInsertFieldsOther
         Call Dialogtest ( TabFunktionen )
         for i=1 to Feldtyp.GetItemCount
             Feldtyp.Select i
-			if MakroButton.IsEnabled then
+            if MakroButton.IsEnabled then
                 MakroButton.Click
                 ' if no JRE is installed a messagebox appears
                 Do
@@ -1628,15 +1627,15 @@ testcase tHtmlDocInsertFrame
     Kontext
     active.SetPage TabHintergrund
     Kontext "TabHintergrund"
-    Call DialogTest2 (TabHintergrund, 1)
+    Call DialogTest (TabHintergrund, 1)
     Sleep 1
-	try
-		Als.Select (2)
-		Call DialogTest2 (TabHintergrund, 2)
-		Sleep 1
-	catch
-		Warnlog "Maybe missing combobox! (#i29517)"
-	endcatch
+    try
+        Als.Select (2)
+        Call DialogTest (TabHintergrund, 2)
+        Sleep 1
+    catch
+        Warnlog "Maybe missing combobox! (#i29517)"
+    endcatch
 
     if gApplication <> "HTMLDOKUMENT" then
         Kontext
@@ -1743,7 +1742,7 @@ testcase tHtmlDocInsertGraphicsFromFile
             Kontext "Active"
             if Active.Exists then
                 if Active.GetRT = 304 then
-                    if j = 1 then Warnlog Active.Gettext    
+                    if j = 1 then Warnlog Active.Gettext
                     Active.Ok
                 else
                     exit do

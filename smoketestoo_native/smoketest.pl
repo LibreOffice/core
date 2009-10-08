@@ -71,17 +71,31 @@ if (!defined($gui)) {
     exit(1);
 }
 
-if (!defined($temp_path)) {
-    print "Your temp value is missing. Please set your temp-variable\n";
+if (($gui eq "WNT") and ($ENV{USE_SHELL} ne "4nt")) {
+    $gui = $cygwin;
+}
+
+if (!defined($temp_path) and (($gui eq "UNX") or ($gui eq $cygwin))) {
+    $temp_path = $ENV{TMPDIR};
+    if (!defined($temp_path) and (-d "/tmp")) {
+        $temp_path = "/tmp";
+    }
+}
+
+if (defined($ENV{INSTALLPATH_SMOKETEST})) {
+    $installpath_without = $ENV{INSTALLPATH_SMOKETEST};
+}
+else {
+    $installpath_without = $temp_path;
+}
+
+if (!defined($installpath_without)) {
+    print "Your temp value is missing. Please set your temp-variable or define INSTALLPATH_SMOKETEST\n\n";
     exit(1);
 }
 
 if (!((defined($ENV{UPDATER})) and ($ENV{UPDATER} eq "YES") and !defined($ENV{CWS_WORK_STAMP})) ) {
     $is_protocol_test = 0;
-}
-
-if (($gui eq "WNT") and ($ENV{USE_SHELL} ne "4nt")) {
-    $gui = $cygwin;
 }
 
 if ($gui eq "WNT") {
@@ -122,12 +136,11 @@ elsif ($gui eq "UNX") {
     $bootstrapini = "bootstraprc";
     $bootstrapiniTemp = $bootstrapini . "_";
     $packpackage = $ENV{PKGFORMAT};
+    $SOFFICEBIN = "soffice";
     if ($ENV{OS} eq "MACOSX") {
-        $SOFFICEBIN = "soffice.bin";
         $COPY_DIR = "cp -RPfp";
     }
     else {
-        $SOFFICEBIN = "soffice";
         $COPY_DIR = "cp -rf";
     }
 }
@@ -496,12 +509,6 @@ sub doTest {
 
     print "starting office ($INSTSETNAME)\n";
 
-    if ($gui eq "UNX") {
-        delete $ENV{LD_LIBRARY_PATH};
-    }
-    if ($ENV{OS} eq "MACOSX") {
-        delete $ENV{DYLD_LIBRARY_PATH};
-    }
     $Command = "\"$programpath" . "$SOFFICEBIN\" -norestore -nocrashreport macro:///Standard.Global.StartTestWithDefaultOptions";
     if ( (defined($ENV{OS})) && ($ENV{OS} eq "MACOSX") ) {
         $Command = "cd \"$programpath\"; " . $Command;
@@ -607,12 +614,17 @@ sub doInstall {
         if (defined ($ENV{EPM}) && ($ENV{EPM} eq 'NO')) { # do the install ourselves ...
 # FIXME - this tool should work nicely without such hacks
 # cut/paste from ooo-build/bin/ooinstall
-            my $instoo_dir = "$ENV{SOLARROOT}/instsetoo_native";
+            my $instoo_dir = "$ENV{SRC_ROOT}/instsetoo_native";
 
             if ( $ENV{'SYSTEM_MOZILLA'} eq 'YES' ) {
-            $ENV{'LD_LIBRARY_PATH'} = "$ENV{'MOZ_LIB'}:$ENV{'LD_LIBRARY_PATH'}";
+                if (defined $ENV{'LD_LIBRARY_PATH'}) {
+                    $ENV{'LD_LIBRARY_PATH'} =
+                        "$ENV{'LD_LIBRARY_PATH'}:$ENV{'MOZ_LIB'}";
+                } else {
+                    $ENV{'LD_LIBRARY_PATH'} = $ENV{'MOZ_LIB'};
+                }
             }
-            $ENV{'PYTHONPATH'} = "$ENV{SOLARROOT}/instsetoo_native/$ENV{INPATH}/bin:$ENV{SOLARVERSION}/$ENV{INPATH}/lib";
+            $ENV{'PYTHONPATH'} = "$ENV{SRC_ROOT}/instsetoo_native/$ENV{INPATH}/bin:$ENV{SOLARVERSION}/$ENV{INPATH}/lib";
             $ENV{OUT} = "../$ENV{INPATH}";
             $ENV{LOCAL_OUT} = "../$ENV{INPATH}";
             $ENV{LOCAL_COMMON_OUT} = "../$ENV{INPATH}";
@@ -621,8 +633,6 @@ sub doInstall {
             createPath ($sane_destdir, $error_setup);
             $Command = "cd $instoo_dir/util ; perl -w $ENV{SOLARENV}/bin/make_installer.pl " .
             "-f openoffice.lst -l en-US -p OpenOffice " .
-            "-packagelist ../inc_openoffice/unix/packagelist.txt " .
-            "-addpackagelist ../inc_openoffice/unix/packagelist_language.txt " .
             "-buildid \"smoketestoo\" -simple $sane_destdir";
 # FIXME - this tool should work nicely without such evil
             execute_Command ($Command, $error_setup, $show_Message, $command_normal);

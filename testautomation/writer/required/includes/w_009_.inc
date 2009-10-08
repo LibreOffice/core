@@ -1,6 +1,6 @@
 '**************************************************************************
 '* DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-'* 
+'*
 '* Copyright 2008 by Sun Microsystems, Inc.
 '*
 '* OpenOffice.org - a multi-platform office productivity suite
@@ -33,11 +33,10 @@
 '* owner : fredrik.haegg@sun.com                                    **
 '*                                                                **
 '* short description :   Testcases for the Help-Menu
-'* 
+'*
 '\******************************************************************
 
-sub w_009_
-    printLog Chr(13) + "--------- Menu Help (w_009_.inc) ----------"
+sub w_009printLog Chr(13) + "--------- Menu Help (w_009_.inc) ----------"
     gApplication = "WRITER"
 
     Call tHelpTip

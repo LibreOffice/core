@@ -62,18 +62,18 @@ sub main
 
     Call hStatusIn ( "writer", "w_updt.bas","Writer Update-Test" )
     Call w_001_              ' Menu File
-    Call w_001a_            ' Menu File
+    Call w_001a_             ' Menu File
     Call w_002_              ' Menu Edit
     Call w_003_              ' Menu View
     Call w_004_              ' Menu Insert
     Call w_005_              ' Menu Format
-    Call w_005b_            ' Menu Format (2)
+    Call w_005b_             ' Menu Format (2)
     Call w_006_              ' Menu Table
     Call w_007_              ' Menu Tools
     Call w_008_              ' Menu Window
     Call w_009_              ' Menu Help
     Call w_010_              ' Objectbar
-    Call w_010_1            ' Objectbar. Part 2
+    Call w_010_1             ' Objectbar. Part 2
     Call w_011_              ' Rest of Objectbar
     Call w_020_              ' Toolbar
     Call hStatusOut

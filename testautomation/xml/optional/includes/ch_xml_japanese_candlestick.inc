@@ -31,7 +31,7 @@
 '*
 '/************************************************************************
 '*
-'* owner : joerg.sievers@sun.com
+'* owner : oliver.craemer@sun.com
 '*
 '* short description : testing japanese candle strick feature in chart 
 '*

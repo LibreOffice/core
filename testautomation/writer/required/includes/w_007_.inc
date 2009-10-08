@@ -1,7 +1,7 @@
 'encoding UTF-8  Do not remove or change this line!
 '**************************************************************************
 '* DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-'* 
+'*
 '* Copyright 2008 by Sun Microsystems, Inc.
 '*
 '* OpenOffice.org - a multi-platform office productivity suite
@@ -37,8 +37,7 @@
 '*
 '\***********************************************************************
 
-sub w_007_
-    printLog Chr(13) + "--------- Tools Menu (w_007_.inc) ----------"
+sub w_007printLog Chr(13) + "--------- Tools Menu (w_007_.inc) ----------"
     gApplication = "WRITER"
 
     Call tToolsSpellcheck
@@ -62,12 +61,10 @@ sub w_007_
     'Writer Web
     gApplication = "HTMLDOKUMENT"
     Call tHtmlDocToolsHangulHanjaConversion
-    Call tHtmlDocToolsOptionsTest
 
     'Writer Master Document
     gApplication = "MASTERDOC"
     Call tMasterDocToolsHyphenation
-    Call tMasterDocToolsOptionsTest
     gApplication = "WRITER"
 
 end sub
@@ -80,47 +77,47 @@ testcase tToolsSpellcheck
     Dim TheFile as string
     Dim IsWriteable as boolean
 
-	' As long as OOo has no modules for that, disabled
-	if gOOO = True then
-		printlog "No spellchecking in OOo"
-		goto endsub
-	end if
+    ' As long as OOo has no modules for that, disabled
+    if gOOO = True then
+        printlog "No spellchecking in OOo"
+        goto endsub
+    end if
 
     printlog " Open document where the formatting is set to the language we wish to test."
     TheFile = Convertpath (gTesttoolpath + "writer\optional\input\spellcheck\spellcheck_" + iSprache + ".odt")
     if hFileExists ( TheFile ) <> TRUE then
-       Warnlog "Found no Document for the language you're testing in, Please inform the Test-Developer."
-       goto endsub
+        Warnlog "Found no Document for the language you're testing in, Please inform the Test-Developer."
+        goto endsub
     end if
     call hFileOpen (TheFile,false)
     Call sMakeReadOnlyDocumentEditable
 
     printlog " Insert some faulty text"
     select case iSprache
-        case 01 : Call wTypeKeys ("This is a spellchecktestttttt<Home>")
-        case 33 : Call wTypeKeys ("Je Suiss la Penneeee<Home>")
-        case 34 : Call wTypeKeys ("Habla Espanollll<Home>")
-        case 39 : Call wTypeKeys ("Don Cara Mio, capitoliooo?<Home>")
-        case 49 : Call wTypeKeys ("Dies ist ein Rechtschreibtexxxxt<Home>")
-        case 46 : Call wTypeKeys ("Det här är en rättstavningstexxxxt<Home>")
-        case 07 : Printlog "- No Spellcheck in Russian!"
-                     goto endsub
-        case 48 : Printlog "- No Spellcheck in Polish!"
-                     goto endsub
-        case 55 : Printlog "- No Spellcheck in Brazilian!"
-                     goto endsub                     
-        case 81 : Printlog "- No Spellcheck in Japanese!"
-                     goto endsub
-        case 82 : Printlog "- No Spellcheck in Korean!"
-                     goto endsub
-        case 86 : Printlog "- No Spellcheck in Chinese (simplified)!"
-                     goto endsub
-        case 88 : Printlog "- No Spellcheck in Chinese (traditional)!"
-                     goto endsub
-        case 03, 30, 35, 36, 37, 42, 47, 51, 90
-                  Printlog "- No Spellcheck available !"
-                  goto endsub
-        case else
+    case 01 : Call wTypeKeys ("This is a spellchecktestttttt<Home>")
+    case 33 : Call wTypeKeys ("Je Suiss la Penneeee<Home>")
+    case 34 : Call wTypeKeys ("Habla Espanollll<Home>")
+    case 39 : Call wTypeKeys ("Don Cara Mio, capitoliooo?<Home>")
+    case 49 : Call wTypeKeys ("Dies ist ein Rechtschreibtexxxxt<Home>")
+    case 46 : Call wTypeKeys ("Det här är en rättstavningstexxxxt<Home>")
+    case 07 : Printlog "- No Spellcheck in Russian!"
+        goto endsub
+    case 48 : Printlog "- No Spellcheck in Polish!"
+        goto endsub
+    case 55 : Printlog "- No Spellcheck in Brazilian!"
+        goto endsub
+    case 81 : Printlog "- No Spellcheck in Japanese!"
+        goto endsub
+    case 82 : Printlog "- No Spellcheck in Korean!"
+        goto endsub
+    case 86 : Printlog "- No Spellcheck in Chinese (simplified)!"
+        goto endsub
+    case 88 : Printlog "- No Spellcheck in Chinese (traditional)!"
+        goto endsub
+    case 03, 30, 35, 36, 37, 42, 47, 51, 90
+        Printlog "- No Spellcheck available !"
+        goto endsub
+    case else
     end select
 
     ToolsSpellcheckWriter
@@ -172,11 +169,11 @@ testcase tToolsSpellcheck
     Kontext "BenutzerwoerterbuchAnlegen"
     Call DialogTest ( BenutzerwoerterbuchAnlegen )
     BenutzerwoerterbuchAnlegen.Close
-    
+
     printlog " Check if there s a writeable dictionary and select it"
     Kontext "TabLinguistik"
     for i = 1 to Benutzerwoerterbuch.GetItemCount
-        Benutzerwoerterbuch.Select i 
+        Benutzerwoerterbuch.Select i
         if Bearbeiten.IsEnabled = true then
             IsWriteable = true
             exit for
@@ -216,67 +213,67 @@ testcase tToolsThesaurus
     PrintLog "- Tools / Thesaurus"
     Dim TheFile as string
 
-	' As long as OOo has no modules for that, disabled
-	if gOOO = True then
-		printlog "No spellchecking in OOo"
-		goto endsub
-	end if
+    ' As long as OOo has no modules for that, disabled
+    if gOOO = True then
+        printlog "No spellchecking in OOo"
+        goto endsub
+    end if
 
     select case iSprache
-        case 07 : Printlog "- No Thesaurus in Russian!"
-                     goto endsub
-        case 48 : Printlog "- No Thesaurus in Polish!"
-                     goto endsub
-        case 55 : Printlog "- No Thesaurus in Brazilian!"
-                     goto endsub
-        case 81 : Printlog "- No Thesaurus in Japanese!"
-                     goto endsub
-        case 82 : Printlog "- No Thesaurus in Korean!"
-                     goto endsub
-        case 86 : Printlog "- No Thesaurus in Chinese (simplified)!"
-                     goto endsub
-        case 88 : Printlog "- No Thesaurus in Chinese (traditional)!"
-                     goto endsub
-        case 03, 30, 35, 36, 37, 42, 47, 51, 90
-                  Printlog "- No Thesaurus available !"
-                  goto endsub
+    case 07 : Printlog "- No Thesaurus in Russian!"
+        goto endsub
+    case 48 : Printlog "- No Thesaurus in Polish!"
+        goto endsub
+    case 55 : Printlog "- No Thesaurus in Brazilian!"
+        goto endsub
+    case 81 : Printlog "- No Thesaurus in Japanese!"
+        goto endsub
+    case 82 : Printlog "- No Thesaurus in Korean!"
+        goto endsub
+    case 86 : Printlog "- No Thesaurus in Chinese (simplified)!"
+        goto endsub
+    case 88 : Printlog "- No Thesaurus in Chinese (traditional)!"
+        goto endsub
+    case 03, 30, 35, 36, 37, 42, 47, 51, 90
+        Printlog "- No Thesaurus available !"
+        goto endsub
     end select
 
     printlog " Open document where the formatting is set to the language we wish to test."
     TheFile = Convertpath (gTesttoolpath + "writer\optional\input\spellcheck\spellcheck_" + iSprache + ".odt")
     if hFileExists ( TheFile ) <> TRUE then
-       Warnlog "Found no Document for the language you're testing in, Please inform the Test-Developer."
-       goto endsub
+        Warnlog "Found no Document for the language you're testing in, Please inform the Test-Developer."
+        goto endsub
     end if
     call hFileOpen (TheFile,false)
     Call sMakeReadOnlyDocumentEditable
 
     printlog " Insert some faulty text"
     select case iSprache
-        case 01 : Call wTypeKeys ("This is a spellchecktestttttt<Home>")
-        case 33 : Call wTypeKeys ("Je Suiss la Penneeee<Home>")
-        case 34 : Call wTypeKeys ("Habla Espanollll<Home>")
-        case 39 : Call wTypeKeys ("Don Cara Mio, capitoliooo?<Home>")
-        case 49 : Call wTypeKeys ("Dies ist ein Rechtschreibtexxxxt<Home>")
-        case 46 : Call wTypeKeys ("Det här är en rättstavningstexxxxt<Home>")
-        case 07 : Printlog "- No Thesaurus in Russian!"
-                     goto endsub
-        case 48 : Printlog "- No Thesaurus in Polish!"
-                     goto endsub
-        case 55 : Printlog "- No Thesaurus in Brazilian!"
-                     goto endsub                     
-        case 81 : Printlog "- No Thesaurus in Japanese!"
-                     goto endsub
-        case 82 : Printlog "- No Thesaurus in Korean!"
-                     goto endsub
-        case 86 : Printlog "- No Thesaurus in Chinese (simplified)!"
-                     goto endsub
-        case 88 : Printlog "- No Thesaurus in Chinese (traditional)!"
-                     goto endsub
-        case 03, 30, 35, 36, 37, 42, 47, 51, 90
-                  Printlog "- No Thesaurus available !"
-                  goto endsub
-        case else
+    case 01 : Call wTypeKeys ("This is a spellchecktestttttt<Home>")
+    case 33 : Call wTypeKeys ("Je Suiss la Penneeee<Home>")
+    case 34 : Call wTypeKeys ("Habla Espanollll<Home>")
+    case 39 : Call wTypeKeys ("Don Cara Mio, capitoliooo?<Home>")
+    case 49 : Call wTypeKeys ("Dies ist ein Rechtschreibtexxxxt<Home>")
+    case 46 : Call wTypeKeys ("Det här är en rättstavningstexxxxt<Home>")
+    case 07 : Printlog "- No Thesaurus in Russian!"
+        goto endsub
+    case 48 : Printlog "- No Thesaurus in Polish!"
+        goto endsub
+    case 55 : Printlog "- No Thesaurus in Brazilian!"
+        goto endsub
+    case 81 : Printlog "- No Thesaurus in Japanese!"
+        goto endsub
+    case 82 : Printlog "- No Thesaurus in Korean!"
+        goto endsub
+    case 86 : Printlog "- No Thesaurus in Chinese (simplified)!"
+        goto endsub
+    case 88 : Printlog "- No Thesaurus in Chinese (traditional)!"
+        goto endsub
+    case 03, 30, 35, 36, 37, 42, 47, 51, 90
+        Printlog "- No Thesaurus available !"
+        goto endsub
+    case else
     end select
 
     ToolsLanguageThesaurus
@@ -311,32 +308,32 @@ testcase tToolsHyphenation
     Dim LingFile as string
 
     PrintLog "- Tools / Hyphenation"
-	' As long as OOo has no modules for that, disabled
-	if gOOO = True then
-		printlog "No hyphenation in OOo"
-		goto endsub
-	end if
-    
+    ' As long as OOo has no modules for that, disabled
+    if gOOO = True then
+        printlog "No hyphenation in OOo"
+        goto endsub
+    end if
+
     if gBuild < 9239 then
         QAErrorlog "Hyphenation dialog freezes office!"
         goto endsub
     end if
 
     select case iSprache
-        case 1,01 : LingFile = "01-44-hyph.dat"
-                     DieDatei = ConvertPath( gTesttoolpath + "writer\required\input\linguistik\001.odt" )
-        case 7,07 :  DieDatei = ConvertPath( gTesttoolpath + "writer\required\input\linguistik\007.odt" )
-        case 3,03 :  DieDatei = ConvertPath( gTesttoolpath + "writer\required\input\linguistik\003.odt" )
-        case 81 : Printlog "- No Hyphenation in Japanese!"
-                     goto endsub
-        case 82 : Printlog "- No Hyphenation in Korean!"
-                     goto endsub
-        case 86 : Printlog "- No Hyphenation in Chinese (simplified)!"
-                     goto endsub
-        case 88 : Printlog "- No Hyphenation in Chinese (traditional)!"
-                     goto endsub
-        case else : DieDatei = ConvertPath( gTesttoolpath + "writer\required\input\linguistik\0" + trim$(str$(iSprache)) + ".odt" )
-                        LingFile = str$(iSprache) + "-hyph.dat"
+    case 1,01 : LingFile = "01-44-hyph.dat"
+        DieDatei = ConvertPath( gTesttoolpath + "writer\required\input\linguistik\001.odt" )
+    case 7,07 :  DieDatei = ConvertPath( gTesttoolpath + "writer\required\input\linguistik\007.odt" )
+    case 3,03 :  DieDatei = ConvertPath( gTesttoolpath + "writer\required\input\linguistik\003.odt" )
+    case 81 : Printlog "- No Hyphenation in Japanese!"
+        goto endsub
+    case 82 : Printlog "- No Hyphenation in Korean!"
+        goto endsub
+    case 86 : Printlog "- No Hyphenation in Chinese (simplified)!"
+        goto endsub
+    case 88 : Printlog "- No Hyphenation in Chinese (traditional)!"
+        goto endsub
+    case else : DieDatei = ConvertPath( gTesttoolpath + "writer\required\input\linguistik\0" + trim$(str$(iSprache)) + ".odt" )
+        LingFile = str$(iSprache) + "-hyph.dat"
     end select
 
     if hFileExists(DieDatei) = False then
@@ -345,22 +342,22 @@ testcase tToolsHyphenation
     end if
 
     Select Case gApplication
-        Case "WRITER"
-            Call hFileOpen ( DieDatei )
+    Case "WRITER"
+        Call hFileOpen ( DieDatei )
 
-        Case "MASTERDOC"
-            if wInsertDocumentinMasterDoc(DieDatei) = False then
-                Warnlog "Loading document did not work!"
-                goto endsub
-            else
-                Call hNewDocument
-                printlog " Open new document"
-                EditPaste
-            end if
-
-        Case "HTMLDOKUMENT"
-            printlog "- No Hyphenation in WriterWeb!"
+    Case "MASTERDOC"
+        if wInsertDocumentinMasterDoc(DieDatei) = False then
+            Warnlog "Loading document did not work!"
             goto endsub
+        else
+            Call hNewDocument
+            printlog " Open new document"
+            EditPaste
+        end if
+
+    Case "HTMLDOKUMENT"
+        printlog "- No Hyphenation in WriterWeb!"
+        goto endsub
     end select
 
     Call sMakeReadOnlyDocumentEditable
@@ -414,22 +411,22 @@ endcase
 ' -------------------------------------------
 
 testcase tToolsWordCount
-	Printlog "- Tools / Word Count"
-	printlog " New Text document"
-	Call hNewDocument
-	printlog "  Tools / Word Count"
-	ToolsWordCount
-	printlog " If if dialog has been opened"
-	Kontext "WordCount"
-	if WordCount.Exists then
-		Call DialogTest ( WordCount )
-		printlog " Close dialog 'WordCount'" 	
-		WordCount.Close
-	else
-		Warnlog "Dialog 'WordCount' has not been opened!"
-	end if
-	printlog " Close Text document"
-	Call hCloseDocument
+    Printlog "- Tools / Word Count"
+    printlog " New Text document"
+    Call hNewDocument
+    printlog "  Tools / Word Count"
+    ToolsWordCount
+    printlog " If if dialog has been opened"
+    Kontext "WordCount"
+    if WordCount.Exists then
+        Call DialogTest ( WordCount )
+        printlog " Close dialog 'WordCount'"
+        WordCount.Close
+    else
+        Warnlog "Dialog 'WordCount' has not been opened!"
+    end if
+    printlog " Close Text document"
+    Call hCloseDocument
 endcase
 
 ' -------------------------------------------
@@ -437,7 +434,7 @@ endcase
 testcase tToolsAutocorrectAutoformat
     PrintLog "- Tools / Autocorrect / Autoformat"
     Dim i as integer
-   
+
     Call hNewDocument
     printlog " Open new document"
     ToolsAutoCorrect
@@ -525,13 +522,13 @@ testcase tToolsAutocorrectAutoformat
     Kontext "TabTypografisch"
     EinfachWortAnfang.Click
     Kontext "Sonderzeichen"
-    Call Dialogtest2 ( Sonderzeichen, 1 )
+    Call DialogTest ( Sonderzeichen, 1 )
     Sonderzeichen.Cancel
 
     Kontext "TabTypografisch"
     EinfachWortEnde.Click
     Kontext "Sonderzeichen"
-    Call Dialogtest2 ( Sonderzeichen, 2 )
+    Call DialogTest ( Sonderzeichen, 2 )
     Sonderzeichen.Cancel
 
     Kontext "TabTypografisch"
@@ -540,13 +537,13 @@ testcase tToolsAutocorrectAutoformat
     Kontext "TabTypografisch"
     DoppeltWortAnfang.Click
     Kontext "Sonderzeichen"
-    Call Dialogtest2 ( Sonderzeichen, 3 )
+    Call DialogTest ( Sonderzeichen, 3 )
     Sonderzeichen.Cancel
 
     Kontext "TabTypografisch"
     DoppeltWortEnde.Click
     Kontext "Sonderzeichen"
-    Call Dialogtest2 ( Sonderzeichen, 4 )
+    Call DialogTest ( Sonderzeichen, 4 )
     Sonderzeichen.Cancel
 
     Kontext "TabTypografisch"
@@ -639,8 +636,8 @@ testcase tToolsGallery
     printlog "- Tools / Gallery"
     Call hNewDocument
     printlog " Open new document"
-	Kontext "Gallery"
-	if Not Gallery.Exists then ToolsGallery
+    Kontext "Gallery"
+    if Not Gallery.Exists then ToolsGallery
     printlog " Tools / Gallery"
     WaitSlot (3000)
     Kontext "Gallery"
@@ -688,7 +685,7 @@ testcase tToolsMailMergeWizard
         Call hCloseDocument
         goto endsub
     end if
-    
+
     Call DialogTest ( MailMergeWizard )
     Kontext "TabMailMergeSourceDocument"
     Call DialogTest ( TabMailMergeSourceDocument )
@@ -702,7 +699,7 @@ testcase tToolsMailMergeWizard
     else
         OeffnenDlg.Cancel
     end if
-    
+
     Kontext "TabMailMergeSourceDocument"
     printlog " Click template 'Browse' button"
     BrowseTemplate.Click
@@ -710,22 +707,22 @@ testcase tToolsMailMergeWizard
     Kontext "Neu"
     Call DialogTest ( Neu )
     Neu.Cancel
-    
+
     Kontext "TabMailMergeSourceDocument"
     printlog " Check 'Use the current document' radio button"
     UseTheCurrentDocument.Check
-    
+
     printlog " Click 'Next' button"
     Kontext "MailMergeWizard"
     NextButton.Click
-    Sleep 1    
+    Sleep 1
     Kontext "TabMailMergeDocumentType"
     Call DialogTest ( TabMailMergeDocumentType )
     wait 500
     printlog " Click 'Next' button"
     Kontext "MailMergeWizard"
     NextButton.Click
-    Sleep 1    
+    Sleep 1
     Kontext "TabMailMergeAddressBlock"
     Call DialogTest ( TabMailMergeAddressBlock )
     wait 500
@@ -735,13 +732,13 @@ testcase tToolsMailMergeWizard
     Kontext "Active"
     if Active.Exists then
         if Active.GetRT = 304 then
-            Warnlog Active.Gettext    
+            Warnlog Active.Gettext
             Active.Ok
         end if
     end if
     Sleep 1
-    Kontext "SelectAddressList"    
-    Call DialogTest ( SelectAddressList ) 
+    Kontext "SelectAddressList"
+    Call DialogTest ( SelectAddressList )
     if Not SelectAddressList.Exists then
         Warnlog "Problems selecting addresses"
         Kontext "MailMergeWizard"
@@ -749,7 +746,7 @@ testcase tToolsMailMergeWizard
         Call hCloseDocument
         goto endsub
     end if
-    
+
     printlog " In 'Select address list' dialog click 'Add'"
     Add.Click
     wait 500
@@ -764,13 +761,13 @@ testcase tToolsMailMergeWizard
     printlog " In 'Select address list' dialog click 'Create'"
     Create.Click
     wait 500
-    
+
     Kontext "NewAddressList"
-    Call DialogTest ( NewAddressList )    
+    Call DialogTest ( NewAddressList )
     printlog " In 'New address' dialog click 'Find' button"
     Find.Click
     wait 500
-    
+
     Kontext "FindEntry"
     if FindEntry.Exists then
         Call DialogTest ( FindEntry )
@@ -778,12 +775,12 @@ testcase tToolsMailMergeWizard
     else
         Warnlog "Dialog 'Find entry' not up"
     end if
-        
+
     printlog " In 'New address' dialog click 'Customize' button"
     Kontext "NewAddressList"
     Customize.Click
     wait 500
-    
+
     Kontext "CustomizeAddressList"
     if CustomizeAddressList.Exists then
         Call DialogTest ( CustomizeAddressList )
@@ -794,7 +791,7 @@ testcase tToolsMailMergeWizard
         Kontext "RenameElement"
         Call DialogTest ( RenameElement )
         printlog " Close 'Add Element' dialog"
-        RenameElement.Cancel        
+        RenameElement.Cancel
         Kontext "CustomizeAddressList"
         printlog " Click 'Rename' button"
         Rename.Click
@@ -814,7 +811,7 @@ testcase tToolsMailMergeWizard
     wait 500
     Kontext "SelectAddressList"
     SelectAddressList.Cancel
-    
+
     Kontext "MailMergeWizard"
     MailMergeWizard.Cancel
 
@@ -956,16 +953,16 @@ endcase
 ' -------------------------------------------
 
 testcase tToolsHangulHanjaConversion
-   
-   WarnLog "#i96838# - tToolsHangulHanjaConversion outcommented due to unreability."
-   goto endsub
+
+    WarnLog "#i96838# - tToolsHangulHanjaConversion outcommented due to unreability."
+    goto endsub
 
     Dim bAsianLanguage as Boolean
     Dim sTestFile as String
 
     if gApplication = "HTMLDOKUMENT" then
         sTestFile = Convertpath (gTesttoolpath + "writer\required\input\hangul.html")
-    else 
+    else
         if Ucase(gApplication) = "MASTERDOC" then
             goto endsub
         else
@@ -992,7 +989,7 @@ testcase tToolsHangulHanjaConversion
         Call hCloseDocument
         goto endsub
     endcatch
-    
+
     Kontext "HangulHanjaConversion"
     if HangulHanjaConversion.Exists then
         Call DialogTest ( HangulHanjaConversion )
@@ -1013,7 +1010,7 @@ testcase tToolsHangulHanjaConversion
         Call hCloseDocument
         goto endsub
     endcatch
-    
+
     NewDictionary.Click
     Kontext "HangulHanjaNewDictionary"
     Call DialogTest ( HangulHanjaNewDictionary )
@@ -1021,14 +1018,14 @@ testcase tToolsHangulHanjaConversion
 
     Kontext "HangulHanjaOptions"
     HangulHanjaOptions.Cancel
-    
+
     Kontext "HangulHanjaConversion"
     printlog " Close HangulHanja dialog"
     HangulHanjaConversion.Close
 
     printlog " Set the 'Asian Language support' to default"
     if bAsianLanguage = FALSE then
-       Call ActiveDeactivateAsianSupport(FALSE)
+        Call ActiveDeactivateAsianSupport(FALSE)
     end if
 
     printlog " Close all active documents"
@@ -1089,26 +1086,26 @@ testcase tToolsChineseTranslation
         ChineseTranslation.Cancel
         Call hCloseDocument
         goto endsub
-    end if 
+    end if
     ChineseDictionary.Cancel
 
-   Kontext "ChineseTranslation"
-   ChineseTranslation.Cancel
+    Kontext "ChineseTranslation"
+    ChineseTranslation.Cancel
 
-   printlog " Set the 'Asian Language support' to default"
-   if bAsianLanguage = FALSE then
-       Call ActiveDeactivateAsianSupport(FALSE)
-   end if
+    printlog " Set the 'Asian Language support' to default"
+    if bAsianLanguage = FALSE then
+        Call ActiveDeactivateAsianSupport(FALSE)
+    end if
 
-   printlog " Close active document"
-   Call hCloseDocument
+    printlog " Close active document"
+    Call hCloseDocument
 endcase
 
 ' -------------------------------------------
 
 testcase tHtmlDocToolsHangulHanjaConversion
-   WarnLog "#96838# - tToolsHangulHanjaConversion outcommented due to unreability."
-   goto endsub
+    WarnLog "#96838# - tToolsHangulHanjaConversion outcommented due to unreability."
+    goto endsub
 
     Dim bAsianLanguage as Boolean
     Dim sTestFile as String
@@ -1134,7 +1131,7 @@ testcase tHtmlDocToolsHangulHanjaConversion
         Call hCloseDocument
         goto endsub
     endcatch
-    
+
     Kontext "HangulHanjaConversion"
     if HangulHanjaConversion.Exists then
         Call DialogTest ( HangulHanjaConversion )
@@ -1170,7 +1167,7 @@ testcase tHtmlDocToolsHangulHanjaConversion
 
     printlog " Set the 'Asian Language support' to default"
     if bAsianLanguage = FALSE then
-       Call ActiveDeactivateAsianSupport(FALSE)
+        Call ActiveDeactivateAsianSupport(FALSE)
     end if
 
     printlog " Close active document"
@@ -1186,11 +1183,11 @@ testcase tMasterDocToolsHyphenation
 
     gApplication = "MASTERDOC"
     PrintLog "- Tools / Hyphenation"
-	' As long as OOo has no modules for that, disabled
-	if gOOO = True then
-		printlog "No hyphenation in OOo"
-		goto endsub
-	end if
+    ' As long as OOo has no modules for that, disabled
+    if gOOO = True then
+        printlog "No hyphenation in OOo"
+        goto endsub
+    end if
 
     if gBuild < 9239 then
         QAErrorlog "Hyphenation dialog freezes office!"
@@ -1198,20 +1195,20 @@ testcase tMasterDocToolsHyphenation
     end if
 
     select case iSprache
-        case 1,01 : LingFile = "01-44-hyph.dat"
-                     DieDatei = ConvertPath( gTesttoolpath + "writer\required\input\linguistik\001.odt" )
-        case 7,07 :  DieDatei = ConvertPath( gTesttoolpath + "writer\required\input\linguistik\007.odt" )
-        case 3,03 :  DieDatei = ConvertPath( gTesttoolpath + "writer\required\input\linguistik\003.odt" )
-        case 81 : Printlog "- No Hyphenation in Japanese!"
-                     goto endsub
-        case 82 : Printlog "- No Hyphenation in Korean!"
-                     goto endsub
-        case 86 : Printlog "- No Hyphenation in Chinese (simplified)!"
-                     goto endsub
-        case 88 : Printlog "- No Hyphenation in Chinese (traditional)!"
-                     goto endsub
-        case else : DieDatei = ConvertPath( gTesttoolpath + "writer\required\input\linguistik\0" + trim$(str$(iSprache)) + ".odt" )
-                        LingFile = str$(iSprache) + "-hyph.dat"
+    case 1,01 : LingFile = "01-44-hyph.dat"
+        DieDatei = ConvertPath( gTesttoolpath + "writer\required\input\linguistik\001.odt" )
+    case 7,07 :  DieDatei = ConvertPath( gTesttoolpath + "writer\required\input\linguistik\007.odt" )
+    case 3,03 :  DieDatei = ConvertPath( gTesttoolpath + "writer\required\input\linguistik\003.odt" )
+    case 81 : Printlog "- No Hyphenation in Japanese!"
+        goto endsub
+    case 82 : Printlog "- No Hyphenation in Korean!"
+        goto endsub
+    case 86 : Printlog "- No Hyphenation in Chinese (simplified)!"
+        goto endsub
+    case 88 : Printlog "- No Hyphenation in Chinese (traditional)!"
+        goto endsub
+    case else : DieDatei = ConvertPath( gTesttoolpath + "writer\required\input\linguistik\0" + trim$(str$(iSprache)) + ".odt" )
+        LingFile = str$(iSprache) + "-hyph.dat"
     end select
 
     if hFileExists(DieDatei) = False then
@@ -1276,18 +1273,4 @@ testcase tMasterDocToolsHyphenation
         Call hCloseDocument
     Loop
     gApplication = "WRITER"
-endcase
-
-' -------------------------------------------
-
-testcase tHtmlDocToolsOptionsTest
-    gApplication = "HTMLDOKUMENT"
-    Call tToolsOptionsTest
-endcase
-
-' -------------------------------------------
-
-testcase tMasterDocToolsOptionsTest
-    gApplication = "MASTERDOC"
-    Call tToolsOptionsTest
 endcase

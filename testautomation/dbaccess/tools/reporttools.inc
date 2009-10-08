@@ -270,8 +270,8 @@ function fCloseReportNavigator
     Kontext "ReportDesign"     
         ReportDesign.UseMenu
         hMenuSelectNr(3)
-        if (hMenuItemIsChecked(6) = true) then
-            hMenuSelectNr(6)
+        if (hMenuItemIsChecked(5) = true) then
+            hMenuSelectNr(5)
         else
             'nothing
         endif

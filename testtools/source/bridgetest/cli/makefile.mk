@@ -170,11 +170,11 @@ $(BIN)$/cli_vb_testobj.uno.dll : \
         cli_vb_testobj.vb
 
 $(MISC)$/copyassemblies.done .ERRREMOVE: 
-    $(GNUCOPY) -p $(CLI_CPPUHELPER) $(BIN)$/$(CLI_CPPUHELPER:f)
-    $(GNUCOPY) -p $(CLI_BASETYPES) $(BIN)$/$(CLI_BASETYPES:f)
-    $(GNUCOPY) -p $(CLI_URETYPES) $(BIN)$/$(CLI_URETYPES:f)
-    $(GNUCOPY) -p $(CLI_URE) $(BIN)$/$(CLI_URE:f)
-    $(GNUCOPY) -p $(CLI_OOOTYPES) $(BIN)$/$(CLI_OOOTYPES:f)
+    $(GNUCOPY) $(CLI_CPPUHELPER) $(BIN)$/$(CLI_CPPUHELPER:f)
+    $(GNUCOPY) $(CLI_BASETYPES) $(BIN)$/$(CLI_BASETYPES:f)
+    $(GNUCOPY) $(CLI_URETYPES) $(BIN)$/$(CLI_URETYPES:f)
+    $(GNUCOPY) $(CLI_URE) $(BIN)$/$(CLI_URE:f)
+    $(GNUCOPY) $(CLI_OOOTYPES) $(BIN)$/$(CLI_OOOTYPES:f)
     $(TOUCH) $@
 
 $(BIN)$/cli_bridgetest_inprocess.exe : \
@@ -201,7 +201,7 @@ $(BIN)$/cli_bridgetest_inprocess.exe : \
         -reference:$(BIN)$/cli_vb_testobj.uno.dll \
         -reference:$(BIN)$/cli_cpp_bridgetest.uno.dll \
         cli_bridgetest_inprocess.cs
-    $(GNUCOPY) -p cli_bridgetest_inprocess.ini $(BIN)
+    $(GNUCOPY) cli_bridgetest_inprocess.ini $(BIN)
 
 .ENDIF
 

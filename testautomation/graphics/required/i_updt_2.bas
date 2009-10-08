@@ -73,12 +73,9 @@ end sub
 sub LoadIncludeFiles
    use "global\system\includes\master.inc"
    use "global\system\includes\gvariabl.inc"
-   use "global\required\includes\g_option.inc"
-   use "global\required\includes\g_option2.inc"
-   use "global\required\includes\g_customize.inc"
    use "global\required\includes\g_001.inc"
    use "global\required\includes\g_009.inc"
-    gApplication   = "IMPRESS"
+   gApplication   = "IMPRESS"
     Call GetUseFiles()
 end sub
 

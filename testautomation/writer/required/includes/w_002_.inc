@@ -1,7 +1,7 @@
 'encoding UTF-8  Do not remove or change this line!
 '**************************************************************************
 '* DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-'* 
+'*
 '* Copyright 2008 by Sun Microsystems, Inc.
 '*
 '* OpenOffice.org - a multi-platform office productivity suite
@@ -37,8 +37,7 @@
 '*                                                                **
 '\******************************************************************
 
-sub w_002_
-    printLog Chr(13) + "--------- Edit Menu ( w_002_.inc ) ----------"
+sub w_002printLog Chr(13) + "--------- Edit Menu ( w_002_.inc ) ----------"
     gApplication = "WRITER"
 
     Call tEditUndoRedo
@@ -200,24 +199,24 @@ testcase tEditPasteSpecial
                     Call hCloseDocument
                     goto endsub
                 endcatch
-                    InhaltEinfuegen.OK
-                    Wait(200)
-                    Kontext "Active"
-                    if Active.Exists then
-                        if Active.GetRT = 304 then
-                            Warnlog "Maybe Bug#109331"
-                            Warnlog Active.Gettext
-                            try
-                                Active.Ok
-                            catch
-                                Active.No
-                            endcatch
-                        end if
-                    else
-                        Call wTypeKeys("<Home><Shift End>")
-                        EditCopy
-                        if GetClipboardText <> "2nd Text from external clipboard!" then Warnlog "Wrong Text inserted! Is: " & GetClipboardText
+                InhaltEinfuegen.OK
+                Wait(200)
+                Kontext "Active"
+                if Active.Exists then
+                    if Active.GetRT = 304 then
+                        Warnlog "Maybe Bug#109331"
+                        Warnlog Active.Gettext
+                        try
+                            Active.Ok
+                        catch
+                            Active.No
+                        endcatch
                     end if
+                else
+                    Call wTypeKeys("<Home><Shift End>")
+                    EditCopy
+                    if GetClipboardText <> "2nd Text from external clipboard!" then Warnlog "Wrong Text inserted! Is: " & GetClipboardText
+                end if
             else
                 Warnlog "Dialog 'Paste Special' is not up!"
             end if
@@ -370,17 +369,17 @@ endcase
 testcase tEditCompareDocument
     PrintLog "- Edit/Compare Document"
     Select Case gApplication
-        Case "WRITER"
-            Call hNewDocument
-            PrintLog "Open new document"
-            EditCompareDocumentCalc
-            PrintLog "Edit / Compare document"
-        Case "MASTERDOC"
-            printlog "Comparing documents not in Masterdocument!"
-            goto endsub
-        Case "HTMLDOKUMENT"
-            printlog "Comparing documents not in WriterWeb!"
-            goto endsub
+    Case "WRITER"
+        Call hNewDocument
+        PrintLog "Open new document"
+        EditCompareDocumentCalc
+        PrintLog "Edit / Compare document"
+    Case "MASTERDOC"
+        printlog "Comparing documents not in Masterdocument!"
+        goto endsub
+    Case "HTMLDOKUMENT"
+        printlog "Comparing documents not in WriterWeb!"
+        goto endsub
     end select
 
     if gUseSysDlg = False then
@@ -420,7 +419,7 @@ endcase
 
 testcase tEditFindAndReplace
     PrintLog "- Edit/Find & Replace"
-   
+
     PrintLog "Open new document"
     Call  hNewDocument
     EditSearchAndReplace
@@ -429,7 +428,7 @@ testcase tEditFindAndReplace
     if Attributes.IsVisible = False then
         More.Click
     end if
-    
+
     Attributes.Click
     PrintLog "in 'Find&Replace' dialog click 'Attributess'"
     Kontext "Attribute"
@@ -720,19 +719,19 @@ testcase tEditAutotext
     Kontext "PfadeAuswaehlen"
     DialogTest ( PfadeAuswaehlen )
     Kontext "PfadeAuswaehlen"
-	PrintLog "On 'Select Paths' dialog click 'add'"
-	Hinzufuegen.Click
-	wait 200
-	Kontext "OeffnenDlg"
-	if OeffnenDlg.Exists then
-		PrintLog "Cancel File-Open dialog"
-		OeffnenDlg.Cancel
-	else
-		Warnlog "Dialog ' Select Paths' not up!"
-	end if
-	wait 200
-	Kontext "PfadeAuswaehlen"
-	PrintLog "Cancel dialog 'Select Paths'"
+    PrintLog "On 'Select Paths' dialog click 'add'"
+    Hinzufuegen.Click
+    wait 200
+    Kontext "OeffnenDlg"
+    if OeffnenDlg.Exists then
+        PrintLog "Cancel File-Open dialog"
+        OeffnenDlg.Cancel
+    else
+        Warnlog "Dialog ' Select Paths' not up!"
+    end if
+    wait 200
+    Kontext "PfadeAuswaehlen"
+    PrintLog "Cancel dialog 'Select Paths'"
     PfadeAuswaehlen.Cancel
 
     Wait (300)
@@ -740,92 +739,92 @@ testcase tEditAutotext
     PrintLog "We have to create an autotext first"
     PrintLog "to assure the 'Autotext'-Button enabled"
     printlog "First close all categories"
-	Liste.TypeKeys "<Home>"
+    Liste.TypeKeys "<Home>"
     for i = 1 to Liste.GetItemCount
-	    Liste.TypeKeys "-"
+        Liste.TypeKeys "-"
         Liste.TypeKeys "<Down>"
-	next i
+    next i
 
-	unxAutotextCategorie = 1
+    unxAutotextCategorie = 1
     printlog "choose category and remember entry number"
-	Liste.TypeKeys "<Home>"
-	for i = 1 to Liste.GetItemCount
-		if Not Menue.IsEnabled then
-			Liste.TypeKeys "<Down>"
-			unxAutotextCategorie = unxAutotextCategorie + 1
-		end if
-	next i
-	Autotext.Close
-	Call wTypeKeys ( "Create a dummy autotext" )
-	Call wTypeKeys ( "<Shift Home>" )
-	EditAutotext
-	Kontext "AutoText"
+    Liste.TypeKeys "<Home>"
+    for i = 1 to Liste.GetItemCount
+        if Not Menue.IsEnabled then
+            Liste.TypeKeys "<Down>"
+            unxAutotextCategorie = unxAutotextCategorie + 1
+        end if
+    next i
+    Autotext.Close
+    Call wTypeKeys ( "Create a dummy autotext" )
+    Call wTypeKeys ( "<Shift Home>" )
+    EditAutotext
+    Kontext "AutoText"
     WaitSlot(3000)
-	Liste.Select unxAutotextCategorie
-	NameText.Settext "DummyAutotext"
-	Kuerzel.Settext "dAt"
-	if Menue.IsEnabled(1) then
-		Menue.Click
-		wait 500
-		try
-			Call hMenuSelectNr ( 1 )  'New
-		catch
-			' This is a workaround as sometimes menu isn't opened for some reason
-			Menue.Click
-			wait 500
-			try
-				Call hMenuSelectNr ( 1 )
-			catch
-				Warnlog "Unable to create autotext"
-				Autotext.Close
-				Call hCloseDocument
-				goto endsub
-			endcatch
-		endcatch
-		Autotext.Close
-		Call wTypeKeys "<Home>"
-	else
-		Warnlog "Unable to create autotext"
-		Autotext.Close
-		Call hCloseDocument
-		goto endsub
-	end if
+    Liste.Select unxAutotextCategorie
+    NameText.Settext "DummyAutotext"
+    Kuerzel.Settext "dAt"
+    if Menue.IsEnabled(1) then
+        Menue.Click
+        wait 500
+        try
+            Call hMenuSelectNr ( 1 )  'New
+        catch
+            ' This is a workaround as sometimes menu isn't opened for some reason
+            Menue.Click
+            wait 500
+            try
+                Call hMenuSelectNr ( 1 )
+            catch
+                Warnlog "Unable to create autotext"
+                Autotext.Close
+                Call hCloseDocument
+                goto endsub
+            endcatch
+        endcatch
+        Autotext.Close
+        Call wTypeKeys "<Home>"
+    else
+        Warnlog "Unable to create autotext"
+        Autotext.Close
+        Call hCloseDocument
+        goto endsub
+    end if
     printlog "Select created autotext"
-	EditAutotext
+    EditAutotext
     WaitSlot (2000)
-	Kontext "Autotext"
-	Liste.Select unxAutotextCategorie
-	Liste.TypeKeys "+"
-	Liste.TypeKeys "<Down>"
+    Kontext "Autotext"
+    Liste.Select unxAutotextCategorie
+    Liste.TypeKeys "+"
+    Liste.TypeKeys "<Down>"
     wait (500)
 
     if Menue.IsEnabled(1) then
         Menue.Click
         wait 300
-		try
+        try
             PrintLog "Select Autotext / Rename"
             Call hMenuSelectNr ( 2 )  'Rename
             wait 500
-		catch
-			' This is a workaround as sometimes menu isn't opened for some reason
-			Menue.Click
-			wait 500
-			try
-				Call hMenuSelectNr ( 2 )
+        catch
+            ' This is a workaround as sometimes menu isn't opened for some reason
+            Menue.Click
+            wait 500
+            try
+                Call hMenuSelectNr ( 2 )
                 wait 300
-			catch
-				Warnlog "Unable to rename autotext"
-				Autotext.Close
-				Call hCloseDocument
-				goto endsub
-			endcatch
-		endcatch
-	else
-		Warnlog "Unable to rename autotext"
-		Autotext.Close
-		Call hCloseDocument
-		goto endsub
-	end if
+            catch
+                Warnlog "Unable to rename autotext"
+                Autotext.Close
+                Call hCloseDocument
+                goto endsub
+            endcatch
+        endcatch
+    else
+        Warnlog "Unable to rename autotext"
+        Autotext.Close
+        Call hCloseDocument
+        goto endsub
+    end if
 
     Kontext "TextbausteineUmbenennen"
     if TextbausteineUmbenennen.Exists(5) then
@@ -849,7 +848,7 @@ testcase tEditAutotext
             Kontext "Active"
             if Active.Exists then
                 if Active.GetRT = 304 then
-                    if j = 1 then Warnlog Active.Gettext    
+                    if j = 1 then Warnlog Active.Gettext
                     Active.Ok
                 else
                     exit do
@@ -860,7 +859,7 @@ testcase tEditAutotext
         Loop
         ' Dialog needs some time to be opened
         Kontext "MakroZuweisen"
-        if NOT MakroZuweisen.Exists(5) then 'IsVisible
+        if NOT MakroZuweisen.Exists(5) then
             warnlog "AutoText-Macro - Assign Macro took longer than 5 seconds to load. Check why."
         else
             PrintLog "Cancel 'Macro' dialog"
@@ -918,7 +917,7 @@ testcase tEditAutotext
             Warnlog "Unable to delete created autotext"
         end if
         Kontext "Autotext"
-        if Autotext.Exists then Autotext.Close            
+        if Autotext.Exists then Autotext.Close
     endcatch
 
     PrintLog "Close active document"
@@ -994,127 +993,127 @@ testcase tEditFields
     Sleep 1
     PrintLog "Insert Field 'Sender -> Company'"
     Select Case gApplication
-        Case "HTMLDOKUMENT"
-            Select case iSprache
-                case 01 : Feldtyp.Select 5  'Sender
-                          Auswahl.Select 1  'Company
-                case 03 : Feldtyp.Select 8
-                          Auswahl.Select 1
-                case 07 : Feldtyp.Select 5
-                          Auswahl.Select 1
-                case 31 : Feldtyp.Select 1
-                          Auswahl.Select 1
-                case 33 : Feldtyp.Select 2
-                          Auswahl.Select 1
-                case 34 : Feldtyp.Select 6
-                          Auswahl.Select 1
-                case 36 : Feldtyp.Select 3
-                          Auswahl.Select 1
-                case 39 : Feldtyp.Select 3
-                          Auswahl.Select 1
-                case 45 : Feldtyp.Select 1
-                          Auswahl.Select 1
-                case 46 : Feldtyp.Select 2
-                          Auswahl.Select 1
-                case 48 : Feldtyp.Select 3
-                          Auswahl.Select 1
-                case 49 : Feldtyp.Select 1
-                          Auswahl.Select 1
-                case 55 : Feldtyp.Select 7
-                          Auswahl.Select 1
-                case 81 : Feldtyp.Select 4
-                          Auswahl.Select 1
-                case 82 : Feldtyp.Select 2
-                          Auswahl.Select 1
-                case 84 : Feldtyp.Select 3
-                          Auswahl.Select 1                          
-                case 86 : Feldtyp.Select 1
-                          Auswahl.Select 1
-                case 88 : Feldtyp.Select 2
-                          Auswahl.Select 1
+    Case "HTMLDOKUMENT"
+        Select case iSprache
+        case 01 : Feldtyp.Select 5  'Sender
+            Auswahl.Select 1  'Company
+        case 03 : Feldtyp.Select 8
+            Auswahl.Select 1
+        case 07 : Feldtyp.Select 5
+            Auswahl.Select 1
+        case 31 : Feldtyp.Select 1
+            Auswahl.Select 1
+        case 33 : Feldtyp.Select 2
+            Auswahl.Select 1
+        case 34 : Feldtyp.Select 6
+            Auswahl.Select 1
+        case 36 : Feldtyp.Select 3
+            Auswahl.Select 1
+        case 39 : Feldtyp.Select 3
+            Auswahl.Select 1
+        case 45 : Feldtyp.Select 1
+            Auswahl.Select 1
+        case 46 : Feldtyp.Select 2
+            Auswahl.Select 1
+        case 48 : Feldtyp.Select 3
+            Auswahl.Select 1
+        case 49 : Feldtyp.Select 1
+            Auswahl.Select 1
+        case 55 : Feldtyp.Select 7
+            Auswahl.Select 1
+        case 81 : Feldtyp.Select 4
+            Auswahl.Select 1
+        case 82 : Feldtyp.Select 2
+            Auswahl.Select 1
+        case 84 : Feldtyp.Select 3
+            Auswahl.Select 1
+        case 86 : Feldtyp.Select 1
+            Auswahl.Select 1
+        case 88 : Feldtyp.Select 2
+            Auswahl.Select 1
 
-                case else :  Warnlog "Missing language support!"
-                             TabDokumentFeldbefehle.Cancel
-                             PrintLog "Close active document"
-                             Call hCloseDocument
-                             goto endsub
-            end select
-        Case else
-            Select case iSprache
-                case 01 : Feldtyp.Select 6  'Sender
-                          Auswahl.Select 1  'Company
-                case 03 : Feldtyp.Select 9
-                          Auswahl.Select 1
-                case 07 : Feldtyp.Select 6
-                          Auswahl.Select 1
-                case 31 : Feldtyp.Select 1
-                          Auswahl.Select 1
-                case 33 : Feldtyp.Select 3
-                          Auswahl.Select 1
-                case 34 : Feldtyp.Select 8
-                          Auswahl.Select 1
-                case 36 : Feldtyp.Select 4
-                          Auswahl.Select 1
-                case 39 : Feldtyp.Select 4
-                          Auswahl.Select 1
-                case 45 : Feldtyp.Select 1
-                          Auswahl.Select 1
-                case 46 : Feldtyp.Select 2
-                          Auswahl.Select 1
-                case 48 : Feldtyp.Select 3
-                          Auswahl.Select 1
-                case 49 : Feldtyp.Select 1
-                          Auswahl.Select 1
-                case 55 : Feldtyp.Select 9
-                          Auswahl.Select 1
-                case 81 : Feldtyp.Select 5
-                          Auswahl.Select 1
-                case 82 : Feldtyp.Select 2
-                          Auswahl.Select 2
-                case 84 : Feldtyp.Select 5
-                          Auswahl.Select 1
-                case 86 : Feldtyp.Select 1
-                          Auswahl.Select 1
-                case 88 : Feldtyp.Select 2
-                          Auswahl.Select 1
-
-                case else : Warnlog "Missing language support!"
-                            TabDokumentFeldbefehle.Cancel
-                            PrintLog "Close active document"
-                            Call hCloseDocument
-                            goto endsub
-            end select
+        case else :  Warnlog "Missing language support!"
+            TabDokumentFeldbefehle.Cancel
+            PrintLog "Close active document"
+            Call hCloseDocument
+            goto endsub
         end select
+    Case else
+        Select case iSprache
+        case 01 : Feldtyp.Select 6  'Sender
+            Auswahl.Select 1  'Company
+        case 03 : Feldtyp.Select 9
+            Auswahl.Select 1
+        case 07 : Feldtyp.Select 6
+            Auswahl.Select 1
+        case 31 : Feldtyp.Select 1
+            Auswahl.Select 1
+        case 33 : Feldtyp.Select 3
+            Auswahl.Select 1
+        case 34 : Feldtyp.Select 8
+            Auswahl.Select 1
+        case 36 : Feldtyp.Select 4
+            Auswahl.Select 1
+        case 39 : Feldtyp.Select 4
+            Auswahl.Select 1
+        case 45 : Feldtyp.Select 1
+            Auswahl.Select 1
+        case 46 : Feldtyp.Select 2
+            Auswahl.Select 1
+        case 48 : Feldtyp.Select 3
+            Auswahl.Select 1
+        case 49 : Feldtyp.Select 1
+            Auswahl.Select 1
+        case 55 : Feldtyp.Select 9
+            Auswahl.Select 1
+        case 81 : Feldtyp.Select 5
+            Auswahl.Select 1
+        case 82 : Feldtyp.Select 2
+            Auswahl.Select 2
+        case 84 : Feldtyp.Select 5
+            Auswahl.Select 1
+        case 86 : Feldtyp.Select 1
+            Auswahl.Select 1
+        case 88 : Feldtyp.Select 2
+            Auswahl.Select 1
 
-        Einfuegen.Click
-        Wait (400)
-        PrintLog "Close Fields dialog"
-        Schliessen.Click
+        case else : Warnlog "Missing language support!"
+            TabDokumentFeldbefehle.Cancel
+            PrintLog "Close active document"
+            Call hCloseDocument
+            goto endsub
+        end select
+    end select
 
-        PrintLog "Put cursor in front of field"
-        Call wTypeKeys("<Home>")
+    Einfuegen.Click
+    Wait (400)
+    PrintLog "Close Fields dialog"
+    Schliessen.Click
 
-        PrintLog "Edit / Fields"
-        EditFields
-        WaitSlot (2000)
+    PrintLog "Put cursor in front of field"
+    Call wTypeKeys("<Home>")
 
+    PrintLog "Edit / Fields"
+    EditFields
+    WaitSlot (2000)
+
+    Kontext "FeldbefehlBearbeitenDokument"
+    Call DialogTest ( FeldbefehlBearbeitenDokument )
+
+    PrintLog "In 'Edit Fields' dialog select 'Edit'"
+    if Bearbeiten.IsVisible and Bearbeiten.IsEnabled then
+        Bearbeiten.Click
+        Kontext "TabBenutzerdaten"
+        TabBenutzerdaten.Cancel
         Kontext "FeldbefehlBearbeitenDokument"
-        Call DialogTest ( FeldbefehlBearbeitenDokument )
+    else
+        Warnlog "Button 'Edit' in Dialog disabled!"
+    end if
 
-        PrintLog "In 'Edit Fields' dialog select 'Edit'"
-        if Bearbeiten.IsVisible and Bearbeiten.IsEnabled then
-            Bearbeiten.Click
-            Kontext "TabBenutzerdaten"
-            TabBenutzerdaten.Cancel
-            Kontext "FeldbefehlBearbeitenDokument"
-        else
-            Warnlog "Button 'Edit' in Dialog disabled!"
-        end if
-
-        PrintLog "Close dialog"
-        FeldbefehlBearbeitenDokument.Cancel
-        PrintLog "Close active document"
-        Call hCloseDocument
+    PrintLog "Close dialog"
+    FeldbefehlBearbeitenDokument.Cancel
+    PrintLog "Close active document"
+    Call hCloseDocument
 endcase
 
 '----------------------------------------------------------------
@@ -1202,8 +1201,8 @@ endcase
 '----------------------------------------------------------------
 
 testcase tEditIndexEntry
-   qaErrorLog "#158646# - Insert Indexes Entry causes crash."
-   goto endsub
+    qaErrorLog "#158646# - Insert Indexes Entry causes crash."
+    goto endsub
 
     PrintLog "- Edit/Index Entry"
     if gApplication = "HTMLDOKUMENT" then
@@ -1252,7 +1251,7 @@ testcase tEditLinks
         printlog "Not in WriterWeb!"
         goto endsub
     end if
-    
+
     Call hNewDocument
     Call hGrafikVerknuepftEinfuegen ( gTesttoolPath & "writer\required\input\graphics\jolink.jpg" )
     Wait 200
@@ -1326,17 +1325,17 @@ testcase tEditImageMap
     Call hNewDocument
 
     if hGrafikEinfuegen ( gTesttoolPath & "writer\required\input\graphics\jolink.jpg" )=true then
-		Kontext "ImageMapEditor"
-		if ImageMapEditor.Exists then ImageMapEditor.Close
-		try
-			EditImageMap
-			Kontext "ImageMapEditor"
-			Call DialogTest (ImageMapEditor)
-			Sleep 1
-			ImageMapEditor.Close
-		catch
-			Warnlog "Edit/ImageMap disabled!"
-		endcatch
+        Kontext "ImageMapEditor"
+        if ImageMapEditor.Exists then ImageMapEditor.Close
+        try
+            EditImageMap
+            Kontext "ImageMapEditor"
+            Call DialogTest (ImageMapEditor)
+            Sleep 1
+            ImageMapEditor.Close
+        catch
+            Warnlog "Edit/ImageMap disabled!"
+        endcatch
     end if
 
     PrintLog "Close active document"
@@ -1384,94 +1383,94 @@ testcase tHtmlDocEditFields
     Sleep 1
     PrintLog "Insert Field 'Sender -> Company'"
     Select case iSprache
-        case 01 : Feldtyp.Select 5  'Sender
-                        Auswahl.Select 1  'Company
-        case 03 : Feldtyp.Select 8
-                        Auswahl.Select 1
-        case 07 : Feldtyp.Select 5
-                        Auswahl.Select 1
-        case 31 : Feldtyp.Select 1
-                        Auswahl.Select 1
-        case 33 : Feldtyp.Select 2
-                        Auswahl.Select 1
-        case 34 : Feldtyp.Select 6
-                        Auswahl.Select 1
-        case 36 : Feldtyp.Select 3
-                        Auswahl.Select 1
-        case 39 : Feldtyp.Select 3
-                        Auswahl.Select 1
-        case 45 : Feldtyp.Select 1
-                        Auswahl.Select 1
-        case 46 : Feldtyp.Select 2
-                        Auswahl.Select 1
-        case 48 : Feldtyp.Select 3
-                        Auswahl.Select 1
-        case 49 : Feldtyp.Select 1
-                        Auswahl.Select 1
-        case 55 : Feldtyp.Select 7
-                        Auswahl.Select 1
-        case 81 : Feldtyp.Select 4
-                        Auswahl.Select 1
-        case 82 : Feldtyp.Select 2
-                        Auswahl.Select 1
-        case 84 : Feldtyp.Select 3
-                        Auswahl.Select 1
-        case 86 : Feldtyp.Select 1
-                        Auswahl.Select 1
-        case 88 : Feldtyp.Select 2
-                        Auswahl.Select 1
+    case 01 : Feldtyp.Select 5  'Sender
+        Auswahl.Select 1  'Company
+    case 03 : Feldtyp.Select 8
+        Auswahl.Select 1
+    case 07 : Feldtyp.Select 5
+        Auswahl.Select 1
+    case 31 : Feldtyp.Select 1
+        Auswahl.Select 1
+    case 33 : Feldtyp.Select 2
+        Auswahl.Select 1
+    case 34 : Feldtyp.Select 6
+        Auswahl.Select 1
+    case 36 : Feldtyp.Select 3
+        Auswahl.Select 1
+    case 39 : Feldtyp.Select 3
+        Auswahl.Select 1
+    case 45 : Feldtyp.Select 1
+        Auswahl.Select 1
+    case 46 : Feldtyp.Select 2
+        Auswahl.Select 1
+    case 48 : Feldtyp.Select 3
+        Auswahl.Select 1
+    case 49 : Feldtyp.Select 1
+        Auswahl.Select 1
+    case 55 : Feldtyp.Select 7
+        Auswahl.Select 1
+    case 81 : Feldtyp.Select 4
+        Auswahl.Select 1
+    case 82 : Feldtyp.Select 2
+        Auswahl.Select 1
+    case 84 : Feldtyp.Select 3
+        Auswahl.Select 1
+    case 86 : Feldtyp.Select 1
+        Auswahl.Select 1
+    case 88 : Feldtyp.Select 2
+        Auswahl.Select 1
 
-        case else :  Warnlog "Missing language support!"
-                        TabDokumentFeldbefehle.Cancel
-                        PrintLog "Close active document"
-                        Call hCloseDocument
-                        goto endsub
-        end select
-
-        Einfuegen.Click
-        Wait (400)
-        PrintLog "Close Fields dialog"
-        Schliessen.Click
-
-        PrintLog "Put cursor in front of field"
-        Call wTypeKeys("<Home>")
-
-        PrintLog "Edit / Fields"
-        EditFields
-        WaitSlot (2000)
-
-        Kontext "FeldbefehlBearbeitenDokument"
-        Call DialogTest ( FeldbefehlBearbeitenDokument )
-
-        PrintLog "In 'Edit Fields' dialog select 'Edit'"
-        if Bearbeiten.IsVisible and Bearbeiten.IsEnabled then
-            Bearbeiten.Click
-            Kontext "TabBenutzerdaten"
-            TabBenutzerdaten.Cancel
-            Kontext "FeldbefehlBearbeitenDokument"
-        else
-            Warnlog "Button 'Edit' in Dialog disabled!"
-        end if
-
-        PrintLog "Close dialog"
-        FeldbefehlBearbeitenDokument.Cancel
+    case else :  Warnlog "Missing language support!"
+        TabDokumentFeldbefehle.Cancel
         PrintLog "Close active document"
         Call hCloseDocument
-        gApplication = "WRITER"
+        goto endsub
+    end select
+
+    Einfuegen.Click
+    Wait (400)
+    PrintLog "Close Fields dialog"
+    Schliessen.Click
+
+    PrintLog "Put cursor in front of field"
+    Call wTypeKeys("<Home>")
+
+    PrintLog "Edit / Fields"
+    EditFields
+    WaitSlot (2000)
+
+    Kontext "FeldbefehlBearbeitenDokument"
+    Call DialogTest ( FeldbefehlBearbeitenDokument )
+
+    PrintLog "In 'Edit Fields' dialog select 'Edit'"
+    if Bearbeiten.IsVisible and Bearbeiten.IsEnabled then
+        Bearbeiten.Click
+        Kontext "TabBenutzerdaten"
+        TabBenutzerdaten.Cancel
+        Kontext "FeldbefehlBearbeitenDokument"
+    else
+        Warnlog "Button 'Edit' in Dialog disabled!"
+    end if
+
+    PrintLog "Close dialog"
+    FeldbefehlBearbeitenDokument.Cancel
+    PrintLog "Close active document"
+    Call hCloseDocument
+    gApplication = "WRITER"
 endcase
 
 '----------------------------------------------------------------
 
 testcase tMasterDocEditNavigator
-    printlog "- Edit/Navigator"
+    printlog "- View/Navigator"
     Dim ToolboxOk as boolean
-    
+
     gApplication = "MASTERDOC"
     Call hNewDocument
     PrintLog "Open new document"
 
     Kontext "NavigatorGlobalDoc"
-    if Not NavigatorGlobalDoc.Exists then EditNavigator
+    if Not NavigatorGlobalDoc.Exists then ViewNavigator
     Kontext "NavigatorGlobalDoc"
     Call DialogTest ( NavigatorGlobalDoc )
 

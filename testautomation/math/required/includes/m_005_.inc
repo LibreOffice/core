@@ -174,10 +174,6 @@ testcase tToolsExtensionManager
     dim sTemp2 as string
     dim x as integer
 
-    if gPlatform = lcase("osx") then
-        warnlog "#i96107# MacOS X 10.4 deadlock on installing extension, again."
-	goto endsub
-    endif
     sPath = convertPath(gTestToolPath+"math/required/input/")
     '/// open application ///'
     Call hNewDocument

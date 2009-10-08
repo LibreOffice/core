@@ -1,6 +1,6 @@
 '**************************************************************************
 '* DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-'* 
+'*
 '* Copyright 2008 by Sun Microsystems, Inc.
 '*
 '* OpenOffice.org - a multi-platform office productivity suite
@@ -36,8 +36,7 @@
 '*
 '\******************************************************************
 
-sub w_005_
-    printLog Chr(13) + "--------- Menu Format (w_005_.inc) ----------"
+sub w_005printLog Chr(13) + "--------- Menu Format (w_005_.inc) ----------"
     gApplication = "WRITER"
 
     Call tFormatDefault
@@ -113,9 +112,9 @@ testcase tFormatSections
     Kontext
     Active.SetPage TabHintergrund
     Kontext "TabHintergrund"
-    Call DialogTest2(TabHintergrund, 1)
+    Call DialogTest(TabHintergrund, 1)
     Als.Select(2)
-    Call DialogTest2 (TabHintergrund,2)
+    Call DialogTest (TabHintergrund,2)
     Durchsuchen.Click
     sleep(2)
     Kontext
@@ -381,10 +380,10 @@ testcase tFormatParagraph
         Kontext
         active.SetPage TabHintergrund
         Kontext "TabHintergrund"
-        Call DialogTest2 ( TabHintergrund, 1 )
+        Call DialogTest ( TabHintergrund, 1 )
         Als.Select 2
         Kontext "TabHintergrund"
-        Call DialogTest2 ( TabHintergrund, 2 )
+        Call DialogTest ( TabHintergrund, 2 )
         Durchsuchen.Click
         Kontext "GrafikEinfuegenDlg"
         GrafikEinfuegenDlg.Cancel
@@ -431,9 +430,9 @@ testcase tFormatPage
     Kontext
     active.SetPage TabHintergrund
     kontext "TabHintergrund"
-    Call DialogTest2 ( TabHintergrund, 1 )
+    Call DialogTest ( TabHintergrund, 1 )
     Als.Select 2
-    Call DialogTest2 ( TabHintergrund, 2 )
+    Call DialogTest ( TabHintergrund, 2 )
     Durchsuchen.Click
     Sleep 1
     Kontext "GrafikEinfuegenDlg"
@@ -474,9 +473,9 @@ testcase tFormatPage
         Kontext
         active.SetPage TabHintergrund
         kontext "TabHintergrund"
-        Call DialogTest2 ( TabHintergrund, 1 )
+        Call DialogTest ( TabHintergrund, 1 )
         Als.Select 2
-        Call DialogTest2 ( TabHintergrund, 2 )
+        Call DialogTest ( TabHintergrund, 2 )
         TabHintergrund.Close
 
         Kontext
@@ -583,12 +582,12 @@ testcase tFormatNumberingBullets
             wait (100)
         loop
         Call hMenuSelectNr(2)
+        referencecounter = hMenuItemGetCount
+        wait (100)
+        do while (hMenuItemGetCount <> referencecounter)
             referencecounter = hMenuItemGetCount
-            wait (100)
-            do while (hMenuItemGetCount <> referencecounter)
-                referencecounter = hMenuItemGetCount
-                wait (150)
-            loop
+            wait (150)
+        loop
         Call hMenuClose
     catch
         Exceptlog
@@ -606,11 +605,11 @@ endcase
 
 testcase tFormatStylist
     PrintLog "- Format / Stylist"
-	
-	if gPlatgroup = "unx" then
-		QAErrorlog "Doesn't run on unix"
-		goto endsub
-	end if
+
+    if gPlatgroup = "unx" then
+        QAErrorlog "Doesn't run on unix"
+        goto endsub
+    end if
     printlog " Open new document"
     Call hNewDocument
     Kontext "Gestalter"
@@ -643,7 +642,7 @@ testcase tFormatStylist
     DialogTest ( VorlageErzeugen )
     VorlageErzeugen.Cancel
     Sleep 1
-    
+
     Kontext "Gestalter"
     AusSelektion.OpenMenu
     Sleep 1
@@ -766,7 +765,7 @@ testcase tFormatAnchor
         FormatAnchorToCharacter
         printlog " Format / Anchor / to character"
     catch
-      Warnlog "'To Character' couldn't be executed!"
+        Warnlog "'To Character' couldn't be executed!"
     endcatch
     WaitSlot (1000)
 
@@ -1072,9 +1071,9 @@ testcase tHtmlDocFormatPage
     Kontext
     active.SetPage TabHintergrund
     kontext "TabHintergrund"
-    Call DialogTest2 ( TabHintergrund, 1 )
+    Call DialogTest ( TabHintergrund, 1 )
     Als.Select 2
-    Call DialogTest2 ( TabHintergrund, 2 )
+    Call DialogTest ( TabHintergrund, 2 )
     Durchsuchen.Click
     Sleep 1
     Kontext "GrafikEinfuegenDlg"
@@ -1101,10 +1100,10 @@ endcase
 testcase tHtmlDocFormatStylist
     PrintLog "- Format / Stylist"
     gApplication = "HTMLDOKUMENT"
-	if gPlatgroup = "unx" then
-		QAErrorlog "Doesn't run on unix"
-		goto endsub
-	end if
+    if gPlatgroup = "unx" then
+        QAErrorlog "Doesn't run on unix"
+        goto endsub
+    end if
     printlog " Open new document"
     Call hNewDocument
     Kontext "Gestalter"

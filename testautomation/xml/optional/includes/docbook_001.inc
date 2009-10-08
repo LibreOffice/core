@@ -31,7 +31,7 @@
 '*
 '/************************************************************************
 '*
-'* owner : joerg.sievers@sun.com
+'* owner : fredrik.haegg@sun.com
 '*
 '* short description : Library for DocBook XML Im-/Export Test
 '*

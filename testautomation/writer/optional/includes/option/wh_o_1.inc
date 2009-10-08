@@ -267,12 +267,8 @@ testcase tToolsOptionsHTMLLayout
     ExtrasOptionenDlg.OK
     
     ViewTextBoundaries
-    try
-        ViewRuler
-        QaErrorLog "#i94732# - View / Ruler should be disabled!"
-    catch
-    endcatch
-    
+    ViewRuler
+   
     printlog ("'/// - check if all UnChecked ///")
     ToolsOptions
     Call hToolsOptions ( "HTMLDocument" , "VIEW" ) '*TabLayoutHTML/ (1)

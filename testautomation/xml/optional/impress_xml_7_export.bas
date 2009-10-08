@@ -31,7 +31,7 @@
 '*
 '/************************************************************************
 '*
-'* owner : joerg.sievers@sun.com
+'* owner : wolfram.garten@sun.com
 '*
 '* short description : Export test for the Impress XML 6.0/7/OOo 1.x format
 '*

@@ -210,10 +210,10 @@ testcase tdFormatArea
         Farbe.select 1
         '/// select the 1st 'color model' in the listbox ///'
         Farbmodell.Select 1
-        Call DialogTest2 ( TabFarben,1 )
+        Call DialogTest ( TabFarben,1 )
         '/// select the 2nd 'color model' in the listbox ///'
         Farbmodell.Select 2
-        Call DialogTest2 ( TabFarben,2 )
+        Call DialogTest ( TabFarben,2 )
 
         '/// click button 'Add' ///'
         Hinzufuegen.click
@@ -586,22 +586,22 @@ testcase tiFormat3D_Effects
 '/// Format->3D_Effects ///'
     Format3D_Effects
      Kontext "Drei_D_Effekte"
-     Call DialogTest2 ( Drei_D_Effekte,1 )
+     Call DialogTest ( Drei_D_Effekte,1 )
 '/// click button 'Geometry' ///'
      Geometrie.Click
-     Call DialogTest2 ( Drei_D_Effekte,2 )
+     Call DialogTest ( Drei_D_Effekte,2 )
      '/// click button 'Shading' ///'
      Darstellung.Click
-     Call DialogTest2 ( Drei_D_Effekte,3 )
+     Call DialogTest ( Drei_D_Effekte,3 )
      '/// click button 'Illumination' ///'
      Beleuchtung.Click
-     Call DialogTest2 ( Drei_D_Effekte,4 )
+     Call DialogTest ( Drei_D_Effekte,4 )
      '/// click button 'Textures' ///'
      Texturen.Click
-     Call DialogTest2 ( Drei_D_Effekte,5 )
+     Call DialogTest ( Drei_D_Effekte,5 )
      '/// click button 'Material' ///'
      Material.Click
-     Call DialogTest2 ( Drei_D_Effekte,6 )
+     Call DialogTest ( Drei_D_Effekte,6 )
      Kontext "Drei_D_Effekte"
      '/// close dialog '3D Effects' ///'
      Drei_D_Effekte.Close
@@ -838,7 +838,13 @@ testcase tiFormatStylesAndFormatting
 
     hTextrahmenErstellen ("I love Wednesdays...",20,20,80,40)
     sleep 1
-    '/// Open Stylist with: Format -> Stylist ///'
+    printlog "Checking if TextObjectBar is up"
+    Kontext "TextObjectbar"
+    if TextObjectbar.Exists Then
+    	printlog "TextObjectbar.Exists = " + TextObjectbar.Exists
+    else
+        ViewToolbarsTextFormatting
+    endif
     FormatStylist
     WaitSlot (1000)
     Kontext "Stylist"

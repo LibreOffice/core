@@ -57,7 +57,7 @@ function hExtensionAddGUI( _path as string, _flags as string ) as integer
     '///+<li>Path to extension (String)</li>
     '///<ul>
     '///+<li>The path has to be fully qualified</li>
-    '///+<li>The path may be platform specifix</li>
+    '///+<li>The path may be platform specific</li>
     '///</ul>
     
     '///+<li>Flags (String), defaults underlined</li>
@@ -256,7 +256,7 @@ function hExtensionAddGUI( _path as string, _flags as string ) as integer
     if ( instr( flags, "license" ) <> 0 ) then
         if ( bLogs ) then printlog( CFN & "Testing software license dialog" )
         kontext "ExtensionSoftwareLicenseAgreement"
-        if ( ExtensionSoftwareLicenseAgreement.exists( 1 ) ) then
+        if ( ExtensionSoftwareLicenseAgreement.exists( 5 ) ) then
             if ( bLogs ) then printlog( CFN & "Software license dialog found" )
             if ( instr( flags , "denylicense" ) <> 0 ) then
                 printlog( CFN & "Cancelling software license dialog" )
@@ -273,7 +273,7 @@ function hExtensionAddGUI( _path as string, _flags as string ) as integer
             if ( instr( flags , "nolicense" ) <> 0 ) then
                 printlog( CFN & "No license dialog displayed. Good." )
             else
-                printlog( CFN & "Expected license dialog is missing" )
+                warnlog( CFN & "Expected license dialog is missing" )
             endif
         endif
     else

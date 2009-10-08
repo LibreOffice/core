@@ -39,7 +39,8 @@
 
 testcase tBasicLibraryExport
 
-    '///<h1>Export a BASIC library (flat)</h1>
+    printlog( "Export a basic script as library (flat format)" )
+
     ' Assumption: All actions take place in the user/work directory
     ' macro taken from framework/tools/input/macros.txt::tBasicLibraryExport
     
@@ -47,43 +48,38 @@ testcase tBasicLibraryExport
     
     dim cDocumentName as string
     dim cLibraryName as string
-    
     dim iNodeCount as integer
     
-    dim cFile as string
-        cFile = hGetWorkPath() & LIBRARY_NAME
+    dim cFile as string : cFile = hGetWorkPath() & LIBRARY_NAME
         
     dim cMsg as string
     
     dim iCurrentLib as integer
+
+    if ( dir( cFile ) <> "" ) then
+        QAErrorLog( "Files from prior test run exist: " & cFile )
+        hDeleteFile( hGetWorkPath() & LIBRARY_NAME & gPathSigne & "dialog.xlb"  )
+        hDeleteFile( hGetWorkPath() & LIBRARY_NAME & gPathSigne & "Module1.xba" )
+        hDeleteFile( hGetWorkPath() & LIBRARY_NAME & gPathSigne & "script.xlb"  )
+        rmdir( hGetWorkPath() & LIBRARY_NAME ) : printlog( "Remove directory" )
+    endif
     
-    ' cleanup
-    hDeleteFile( cFile )
-    
-    '///<ul>
-    '///+<li>Make sure we have exactly one open document (changed) to start with</li>
     hInitSingleDoc()
     hChangeDoc()
     
-    '///+<li>Create a new writer document</li>
     gApplication = "WRITER"
     hCreateDocument()
     
-    '///+<li>Go to Tools/Macros/Organize Macros/OpenOffice.org Basic</li>
     ToolsMacro_uno
     
-    '///+<li>Select the last node (number 4, document untitled2)</li>
     kontext "Makro"
     iNodeCount = hGetNodeCount( MakroAus )
     cDocumentName = hSelectNode( MakroAus, iNodeCount )
     
-    '///+<li>Click to open the organizer</li>
     Verwalten.click()
     
-    '///+<li>Switch to the libraries-tab</li>
     hSelectBasicObjectOrganizerTab( 3 )
     
-    '///+<li>Select the document (untitled2 at pos. 4)</li>
     printlog( "Select document Untitled2" )
     kontext "TabBibliotheken"
     Bibliothek.select( DOCUMENT_POSITION )
@@ -94,42 +90,31 @@ testcase tBasicLibraryExport
         goto endsub
     endif
     
-    '///+<li>Click to create a new library</li>
     Neu.click()
     
-    '///+<li>Name the library &quot;tBasicLibraryExport&quot;, confirm with ok</li>
     kontext "NeueBibliothek"
     BibliotheksName.setText( LIBRARY_NAME )
     NeueBibliothek.ok()
     
-    '///+<li>Verify that the correct library is selected</li>
     kontext "TabBibliotheken"
     cLibraryName = BibliotheksListe.getSelText()
     
-    '///+<li>Click to edit the library</li>
     Bearbeiten.click()
 
-    '///+<li>Insert a macro (e.g. to print a messagebox)</li>
     hInsertMacroFromFile( LIBRARY_NAME )
     
-    '///+<li>Close the Basic IDE</li>
     hCloseBasicIDE()
     
-    '///+<li>Go to Tools/Macros/Organize Macros/OpenOffice.org Basic</li>
     ToolsMacro_uno
     
-    '///+<li>Select the last node (untitled2)</li>
     kontext "Makro"
     iNodeCount = hGetNodeCount( MakroAus )
     hSelectNode( MakroAus, iNodeCount )    
     
-    '///+<li>Click to open the organizer</li>
     Verwalten.click()
     
-    '///+<li>Switch to the libraries-tab</li>
     hSelectBasicObjectOrganizerTab( 3 )
     
-    '///+<li>Select the document (untitled2 at pos. 4)</li>
     kontext "TabBibliotheken"
     Bibliothek.select( DOCUMENT_POSITION )
     
@@ -139,7 +124,6 @@ testcase tBasicLibraryExport
         goto endsub
     endif
     
-    '///+<li>Find the new library, select it</li>
     printlog( "Select the new library" )
     kontext "TabBibliotheken"
     for iCurrentLib = 1 to Bibliotheksliste.getItemCount()
@@ -149,11 +133,9 @@ testcase tBasicLibraryExport
         endif
     next iCurrentLib
     
-    '///+<li>Click Export</li>
     printlog( "Click export" )
     Export.click()
     
-    '///+<li>Select to export as Library, click ok</li>
     printlog( "Export as library" )
     kontext "ExportBasicLibraryDlg"
     if ( ExportBasicLibraryDlg.exists( 2 ) ) then
@@ -161,7 +143,6 @@ testcase tBasicLibraryExport
         ExportAsLibrary.check()
         ExportBasicLibraryDlg.ok()
 
-        '///+<li>Name the package &quot;tBasicLibraryExportAsPackage&quot;, save it</li>
         printlog( "Use default path (=workdir)" )
         Kontext "OeffnenDlg"
         if ( Oeffnendlg.exists( 2 ) ) then
@@ -180,21 +161,17 @@ testcase tBasicLibraryExport
         warnlog( "The ""Export Library"" dialog was not displayed" )
     endif
         
-      
-    '///+<li>Close the macro organizer</li>
     printlog( "Close the macro/libraries organizer" )
     kontext "TabBibliotheken"
     TabBibliotheken.cancel()
     
-    '///+<li>Close OpenOffice.org Basic Macros dialog</li>
     printlog( "Cancel macro organizer" )
     kontext "Makro"
     Makro.cancel()
     
-    '///+<li>Close the document</li>
-    hDestroyDocument()
-    
-    '///</ul>
+    while( getDocumentCount > 0 ) 
+        hDestroyDocument()
+    wend
     
 endcase
 

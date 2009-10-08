@@ -70,7 +70,7 @@ testcase tAllUnaerBinaer
    UnaereBinaere.Click
    Sleep 1
   Kontext "AuswahlMath"
-  Call DialogTest2 ( AuswahlMath, 1 )
+  Call DialogTest ( AuswahlMath, 1 )
 
 try
    Plus.Click
@@ -119,7 +119,7 @@ testcase tAllRelations
   If AuswahlMath.notexists(2) then AuswahlMath
    Relationen.Click
    Sleep 1
-  Call DialogTest2 ( AuswahlMath, 2 )
+  Call DialogTest ( AuswahlMath, 2 )
 
 try
    IstGleich.Click
@@ -179,7 +179,7 @@ testcase tAllMixOperators
   If AuswahlMath.notexists(2) then AuswahlMath
    MengenOperatoren.Click
    Sleep 1
-  Call DialogTest2 ( AuswahlMath, 3 )
+  Call DialogTest ( AuswahlMath, 3 )
 
 try
    IstEnthaltenIn.Click
@@ -241,7 +241,7 @@ testcase tAllFunctions
   If AuswahlMath.notexists(2) then AuswahlMath
    Funktionen.Click
    Sleep 1
-  Call DialogTest2 ( AuswahlMath, 4 )
+  Call DialogTest ( AuswahlMath, 4 )
 
 try
    Absolutwert.Click
@@ -309,7 +309,7 @@ testcase tAllOperators
   If AuswahlMath.notexists(2) then AuswahlMath
    Operatoren.Click
    Sleep 1
-  Call DialogTest2 ( AuswahlMath, 5 )
+  Call DialogTest ( AuswahlMath, 5 )
 
 try
    Limes.Click
@@ -358,7 +358,7 @@ testcase tAllAttributes
   If AuswahlMath.notexists(2) then AuswahlMath
    Attribute.Click
    Sleep 1
-  Call DialogTest2 ( AuswahlMath, 6 )
+  Call DialogTest ( AuswahlMath, 6 )
 
 try
    AccentNachRechts.Click
@@ -423,7 +423,7 @@ testcase tAllBrackets
   If AuswahlMath.notexists(2) then AuswahlMath
    Klammerungen.Click
    Sleep 1
-  Call DialogTest2 ( AuswahlMath, 7 )
+  Call DialogTest ( AuswahlMath, 7 )
 
 try
    RundeKlammern.Click
@@ -482,7 +482,7 @@ testcase tAllFormats
   If AuswahlMath.notexists(2) then AuswahlMath
    Formatierungen.Click
    Sleep 1
-  Call DialogTest2 ( AuswahlMath, 8 )
+  Call DialogTest ( AuswahlMath, 8 )
 
    i = 0
 try
@@ -573,7 +573,7 @@ testcase tOthers
    Others.Click
    Sleep 1
   Kontext "AuswahlMath"
-  Call DialogTest2 ( AuswahlMath, 9 )
+  Call DialogTest ( AuswahlMath, 9 )
   Kontext "SelectionMath"
 
    i = 0

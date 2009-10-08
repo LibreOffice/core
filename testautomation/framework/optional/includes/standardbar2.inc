@@ -39,45 +39,20 @@
 
 testcase tStandardBar_2
 
+    printlog( "Extended toolbar test for the standardbar" )
+
     if ( gtSysName = "Solaris x86" ) then
         qaerrorlog( "#i62423# - New Database crashes office (Evolution)" )
         goto endsub
     endif
  
-
-    '///<h1>Update test: Create all documenttypes from all applications via 
-    '///+ &quot;New-Button&quot; on Standard Bar</h1>
-
     dim iCurrentApplication as Integer
     dim iNewButtonItem as Integer
     dim iPresentItemCount as integer
     
-    '///<u>Note</u>: The &quot;New-Button&quot; has 12 items in a FULL office
-    '///+ installation. The test will not handle partial installations!
-    '///<ol>
-    '///+<li>Writer Document</li>
-    '///+<li>Calc Document</li>
-    '///+<li>Impress Document</li>
-    '///+<li>Draw Document</li>
-    '///+<li>Database Wizard</li>
-    '///+<li>HTML Document</li>
-    '///+<li>XML Form</li>
-    '///+<li>Master Document</li>
-    '///+<li>Math Document</li>
-    '///+<li>Labels</li>
-    '///+<li>Cards</li>
-    '///+<li>Templates and documents</li>
-    '///</ol>    
+    hUseImpressAutopilot( false )
+    hCreateDocument()
     
-    '///<i>Do this for all 12 applications</i>
-    '///<ul>
-    
-    '///+<li>Create exactly one single unmodified document<li>
-    hInitSingleDoc()
-    
-    '///+<li>Verify that this is a full installations (12 items on &quot;New-Button&quot;)</li>
-    kontext "standardbar"
-
     kontext "standardbar"
     try
         Neu.openMenu()
@@ -95,23 +70,19 @@ testcase tStandardBar_2
                  
     for iCurrentApplication = 1 to 7
     
-        '///+<li>Create a new document</li>
         printlog( "" )
         printlog ( hNumericDoctype( iCurrentApplication ) )
-        hCreateDocument()
+        hNewDocument()
 
-        '///+<li>Click the &quot;New-Button&quot; - all 12 items</li>
         for iNewButtonItem = 1 to iPresentItemCount
         
-            ' If Unix platform and application is Impress, get the focus of 
-            ' the document in each loop.
-
-            if ( iCurrentApplication = 3 AND gPlatgroup = "unx" ) then
+            ' For some reason Impress needs an extra kick...
+            if ( iCurrentApplication = 3 ) then
                 kontext "documentimpress"
                 DocumentImpress.MouseDoubleClick ( 50, 50 )
             endif
 
-            printlog "   click on the " + iNewButtonItem + ". item on the new-button"
+            printlog( "Click on the " & iNewButtonItem & ". item on the new-button" )
 
             kontext "standardbar"
             try
@@ -123,74 +94,73 @@ testcase tStandardBar_2
                 goto endsub
             endcatch
             
-            sleep (1)
+            sleep( 1 )
             hMenuselectNr ( iNewButtonItem )
-            sleep (3)
+            sleep( 3 )
             
-            '///+<li>Check if all applications or dialogs are opened correctly</li>
-            '///+<li>Close the document or dialog</li>
-
+            hCloseNavigator()
+            
             select case iNewButtonItem
             case 1  :   Kontext "DocumentWriter"
                         DocumentWriter.TypeKeys( "Hallo" )
                         hDestroyDocument()
+                        printlog( "- Writer document" )
             case 2  :   Kontext "DocumentCalc"
                         DocumentCalc.TypeKeys( "Hallo" )
                         hDestroyDocument()
+                        printlog( "- Spreadsheet document" )
             case 3  :   Kontext "AutoPilotPraesentation1"
-                        if ( AutoPilotPraesentation1.exists( 2 ) ) then
-                            Startwithwizard.unCheck()
-                            AutopilotPraesentation1.ok()
-                        endif
                         Kontext "DocumentImpress"
                         DocumentImpress.MouseDoubleClick ( 50, 50 )
                         hDestroyDocument()
+                        printlog( "- Presentation document" )
             case 4  :   Kontext "DocumentDraw"
                         DocumentDraw.MouseDoubleClick ( 50, 50 )
                         hDestroyDocument()
+                        printlog( "- Drawing document" )
             case 5  :   Kontext "DatabaseWizard"
                         CancelBtn.click()
+                        printlog( "- Database wizard" )
             case 6  :   Kontext "DocumentWriter"     ' HTML Document
                         DocumentWriter.TypeKeys( "Hallo" )
                         hDestroyDocument()
+                        printlog( "- HTML document" )
             case 7  :   Kontext "DocumentWriter"     ' XML Form
                         DocumentWriter.TypeKeys( "Hallo" )
                         hDestroyDocument()
+                        printlog( "- XML Form" )
             case 8  :   Kontext "DocumentWriter"     ' Master Document
                         DocumentWriter.TypeKeys( "Hallo" )
-
-                        kontext "navigator"
-                        if Navigator.Exists( 5 ) then
-                            Navigator.Close()
-                        endif
                         hDestroyDocument()
+                        printlog( "- Master document" )
             case 9  :   SchreibenInMathdok "a over b"
                         hDestroyDocument()
+                        printlog( "- Formula document" )
             case 10 :   Kontext
                         Active.SetPage( TabEtiketten )
-
                         kontext "tabetiketten"
                         TabEtiketten.Cancel()
+                        printlog( "- Labels (Labels dialog)" )
             case 11 :   Kontext
                         Active.SetPage()
-
                         kontext "tabetikettenmedium"
                         TabEtikettenMedium.Cancel()
+                        printlog( "- Business cards (Labels dialog)" )
             case 12 :   Kontext "TemplateAndDocuments"
                         TemplateAndDocuments.cancel()
+                        printlog( "- Template dialog" )
             end select
 
-            sleep(2)
+            sleep( 2 )
             
         next iNewButtonItem
 
-        '///+<li>Close the document</li>
-        hDestroyDocument()
+        hCloseDocument()
         
     next iCurrentApplication
-    '///</ul>
-    '///</ul>
-
+    
+    hDestroyDocument()
+    
 endcase
 
 

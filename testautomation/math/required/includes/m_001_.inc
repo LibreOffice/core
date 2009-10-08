@@ -646,7 +646,7 @@ testcase tmFileProperties
    '/// close application ///'
    Call hCloseDocument
 
-   warnlog "#i95523# Custom Properties is not controlable by VCL TestTool Application"
+   qaerrorlog "#i95523# Custom Properties is not controlable by VCL TestTool Application"
    goto endsub
 
    Kontext
