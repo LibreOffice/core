@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: genericcontroller.hxx,v $
- * $Revision: 1.13 $
+ * $Revision: 1.13.24.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -77,7 +77,7 @@ namespace dbaui
     // ====================================================================
     // = optional
     // ====================================================================
-    /** convenience wrapper around boost::optional, allowing type assignments
+    /** convenience wrapper around boost::optional, allowing typed assignments
     */
     template < typename T >
     class optional : public ::boost::optional< T >
@@ -134,21 +134,20 @@ namespace dbaui
     // = helper
     // ====================================================================
 
-    // --------------------------------------------------------------------
     // ....................................................................
     struct ControllerFeature : public ::com::sun::star::frame::DispatchInformation
     {
         sal_uInt16 nFeatureId;
     };
 
+    // ....................................................................
     typedef ::std::map  <   ::rtl::OUString
                         ,   ControllerFeature
                         ,   ::std::less< ::rtl::OUString >
                         >   SupportedFeatures;
 
-    /// binary_function Functor object for class SupportedFeatures::value_type returntype is bool
     // ....................................................................
-    struct SupportedFeaturesEqualId : ::std::binary_function< SupportedFeatures::value_type, sal_Int32, bool >
+    struct CompareFeatureById : ::std::binary_function< SupportedFeatures::value_type, sal_Int32, bool >
     {
         // ................................................................
         inline bool operator()( const SupportedFeatures::value_type& _aType, const sal_Int32& _nId ) const
@@ -157,30 +156,29 @@ namespace dbaui
         }
     };
 
-    // --------------------------------------------------------------------
     // ....................................................................
-    typedef struct FeatureStruct
+    struct FeatureListener
     {
         ::com::sun::star::uno::Reference< ::com::sun::star::frame::XStatusListener >
                     xListener;
         sal_Int32   nId;
         sal_Bool    bForceBroadcast;
-    } FeaturePair;
+    };
 
     // ....................................................................
-    typedef ::std::deque< FeaturePair > FeaturePairDeque;
+    typedef ::std::deque< FeatureListener > FeatureListeners;
 
-    /// binary_function Functor object for class FeaturePair returntype is bool
     // ....................................................................
-    struct FeaturePairFunctor : ::std::binary_function< FeaturePair, ::com::sun::star::uno::Reference< ::com::sun::star::frame::XStatusListener >, bool >
+    struct FindFeatureListener : ::std::binary_function< FeatureListener, ::com::sun::star::uno::Reference< ::com::sun::star::frame::XStatusListener >, bool >
     {
         // ................................................................
-        inline bool operator()( const FeaturePair& lhs, const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XStatusListener >& rhs ) const
+        inline bool operator()( const FeatureListener& lhs, const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XStatusListener >& rhs ) const
         {
             return !!( lhs.xListener == rhs );
         }
     };
 
+    // ....................................................................
     typedef ::comphelper::OBaseMutex    OGenericUnoController_MBASE;
 
     typedef ::cppu::WeakComponentImplHelper11   <   ::com::sun::star::frame::XDispatch
@@ -230,7 +228,7 @@ namespace dbaui
         DECLARE_STL_MAP( sal_uInt16, FeatureState, ::std::less< sal_uInt16 >, StateCache );
         DECLARE_STL_VECTOR( DispatchTarget, Dispatch);
 
-        FeaturePairDeque m_aFeaturesToInvalidate;
+        FeatureListeners        m_aFeaturesToInvalidate;
 
         ::osl::Mutex            m_aFeatureMutex;        // locked when features are append to or remove from deque
         StateCache              m_aStateCache;          // save the current status of feature state
@@ -339,7 +337,13 @@ namespace dbaui
 
             @see IController::registerCommandURL
         */
-        bool    isUserDefinedFeature( const sal_uInt16 nFeatureId );
+        bool    isUserDefinedFeature( const sal_uInt16 nFeatureId ) const;
+
+        /** determines whether the given feature URL denotes a user-defined feature
+
+            @see IController::registerCommandURL
+        */
+        bool    isUserDefinedFeature( const ::rtl::OUString& _rFeatureURL ) const;
 
         // connect to a datasource
         ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection > connect(
@@ -382,6 +386,8 @@ namespace dbaui
 
         virtual void    startFrameListening( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& _rxFrame );
         virtual void    stopFrameListening( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& _rxFrame );
+
+        void releaseNumberForComponent();
 
         virtual ~OGenericUnoController();
 

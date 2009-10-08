@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: UITools.cxx,v $
- * $Revision: 1.81 $
+ * $Revision: 1.81.24.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -1625,30 +1625,6 @@ TOTypeInfoSP queryTypeInfoByType(sal_Int32 _nDataType,const OTypeInfoMap& _rType
     } // if ( !pTypeInfo )
     OSL_ENSURE(pTypeInfo,"Wrong DataType supplied!");
     return pTypeInfo;
-}
-// -----------------------------------------------------------------------------
-::rtl::OUString getUserDefinedDriverNodeName()
-{
-    static ::rtl::OUString s_sNodeName(RTL_CONSTASCII_USTRINGPARAM("org.openoffice.Office.DataAccess/UserDefinedDriverSettings"));
-    return s_sNodeName;
-}
-// -----------------------------------------------------------------------------
-::rtl::OUString getDriverTypeDisplayNodeName()
-{
-    static ::rtl::OUString s_sNodeName(RTL_CONSTASCII_USTRINGPARAM("DriverTypeDisplayName"));
-    return s_sNodeName;
-}
-// -----------------------------------------------------------------------------
-::rtl::OUString getDriverDsnPrefixNodeName()
-{
-    static ::rtl::OUString s_sNodeName(RTL_CONSTASCII_USTRINGPARAM("DriverDsnPrefix"));
-    return s_sNodeName;
-}
-// -----------------------------------------------------------------------------
-::rtl::OUString getDriverExtensionNodeName()
-{
-    static ::rtl::OUString s_sNodeName(RTL_CONSTASCII_USTRINGPARAM("Extension"));
-    return s_sNodeName;
 }
 // -----------------------------------------------------------------------------
 sal_Int32 askForUserAction(Window* _pParent,USHORT _nTitle,USHORT _nText,sal_Bool _bAll,const ::rtl::OUString& _sName)

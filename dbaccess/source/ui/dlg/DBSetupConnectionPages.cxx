@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: DBSetupConnectionPages.cxx,v $
- * $Revision: 1.19 $
+ * $Revision: 1.19.18.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -60,6 +60,7 @@
 #ifndef _DBAUI_DATASOURCEITEMS_HXX_
 #include "dsitems.hxx"
 #endif
+#include "dsnItem.hxx"
 #ifndef _DBA_DBACCESS_HELPID_HRC_
 #include "dbaccess_helpid.hrc"
 #endif
@@ -282,12 +283,12 @@ DBG_NAME(OTextConnectionPageSetup)
         if ( m_aETHostServer.GetText() != m_aETHostServer.GetSavedValue() )
         {
             DbuTypeCollectionItem* pCollectionItem = PTR_CAST(DbuTypeCollectionItem, _rSet.GetItem(DSID_TYPECOLLECTION));
-            ODsnTypeCollection* pCollection = NULL;
+            ::dbaccess::ODsnTypeCollection* pCollection = NULL;
             if (pCollectionItem)
                 pCollection = pCollectionItem->getCollection();
             DBG_ASSERT(pCollection, "OLDAPConnectionPageSetup::FillItemSet : really need a DSN type collection !");
 
-            String sUrl = pCollection->getDatasourcePrefix(DST_LDAP);
+            String sUrl = pCollection->getDatasourcePrefix( ::dbaccess::DST_LDAP);
             sUrl += m_aETHostServer.GetText();
             _rSet.Put(SfxStringItem(DSID_CONNECTURL, sUrl));
             bChangedSomething = sal_True;
@@ -388,11 +389,11 @@ DBG_NAME(OMySQLIntroPageSetup)
     void OMySQLIntroPageSetup::implInitControls(const SfxItemSet& _rSet, sal_Bool /*_bSaveValue*/)
     {
         DbuTypeCollectionItem* pCollectionItem = PTR_CAST(DbuTypeCollectionItem, _rSet.GetItem(DSID_TYPECOLLECTION));
-        ODsnTypeCollection* pCollection = NULL;
+        ::dbaccess::ODsnTypeCollection* pCollection = NULL;
         if (pCollectionItem)
         {
             pCollection = pCollectionItem->getCollection();
-            String sUrl = pCollection->getDatasourcePrefix(DST_MYSQL_NATIVE);
+            String sUrl = pCollection->getDatasourcePrefix( ::dbaccess::DST_MYSQL_NATIVE);
             uno::Reference< sdbc::XDriverAccess > xDriverManager( m_xORB->createInstance( SERVICE_SDBC_DRIVERMANAGER ), uno::UNO_QUERY );
             if ( xDriverManager.is() && xDriverManager->getDriverByURL( sUrl ).is() )
             {

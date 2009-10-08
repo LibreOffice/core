@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: TableController.cxx,v $
- * $Revision: 1.122 $
+ * $Revision: 1.122.24.3 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -110,12 +110,14 @@
 #ifndef _COM_SUN_STAR_SDBCX_XINDEXESSUPPLIER_HPP_
 #include <com/sun/star/sdbcx/XIndexesSupplier.hpp>
 #endif
+#include <com/sun/star/frame/XTitleChangeListener.hpp>
 #ifndef _DBHELPER_DBEXCEPTION_HXX_
 #include <connectivity/dbexception.hxx>
 #endif
 #ifndef _COM_SUN_STAR_UI_XEXECUTABLEDIALOG_HPP_
 #include <com/sun/star/ui/dialogs/XExecutableDialog.hpp>
 #endif
+#include <com/sun/star/frame/XUntitledNumbers.hpp>
 #ifndef _COMPHELPER_STREAMSECTION_HXX_
 #include <comphelper/streamsection.hxx>
 #endif
@@ -163,13 +165,14 @@
 #ifndef _CPPUHELPER_EXC_HLP_HXX_
 #include <cppuhelper/exc_hlp.hxx>
 #endif
+#include "dsmeta.hxx"
 
 extern "C" void SAL_CALL createRegistryInfo_OTableControl()
 {
     static ::dbaui::OMultiInstanceAutoRegistration< ::dbaui::OTableController > aAutoRegistration;
 }
 
-
+using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::io;
 using namespace ::com::sun::star::beans;
@@ -252,6 +255,7 @@ OTableController::OTableController(const Reference< XMultiServiceFactory >& _rM)
     InvalidateAll();
     m_pTypeInfo = TOTypeInfoSP(new OTypeInfo());
     m_pTypeInfo->aUIName = m_sTypeNames.GetToken(TYPE_OTHER);
+    m_aTypeCollection.initUserDriverTypes(_rM);
 }
 // -----------------------------------------------------------------------------
 OTableController::~OTableController()
@@ -422,7 +426,12 @@ sal_Bool OTableController::doSaveDoc(sal_Bool _bSaveAs)
             if (_bSaveAs && !bNew)
                  aDefaultName = String(m_sName);
             else
-                aDefaultName = getPrivateTitle();
+            {
+                String aName = String(ModuleRes(STR_TBL_TITLE));
+                aDefaultName = aName.GetToken(0,' ');
+                //aDefaultName = getPrivateTitle();
+                aDefaultName = ::dbtools::createUniqueName(xTables,aDefaultName);
+            }
 
             DynamicTableOrQueryNameCheck aNameChecker( getConnection(), CommandType::TABLE );
             OSaveAsDlg aDlg( getView(), CommandType::TABLE, getORB(), getConnection(), aDefaultName, aNameChecker );
@@ -492,6 +501,13 @@ sal_Bool OTableController::doSaveDoc(sal_Bool _bSaveAs)
             }
             // now check if our datasource has set a tablefilter and if append the new table name to it
             ::dbaui::appendToFilter(getConnection(),m_sName,getORB(),getView()); // we are not interessted in the return value
+            Reference< frame::XTitleChangeListener> xEventListener(impl_getTitleHelper_throw(),UNO_QUERY);
+            if ( xEventListener.is() )
+            {
+                frame::TitleChangedEvent aEvent;
+                xEventListener->titleChanged(aEvent);
+            }
+            releaseNumberForComponent();
         }
         else if(m_xTable.is())
         {
@@ -1075,7 +1091,8 @@ sal_Bool OTableController::checkColumns(sal_Bool _bNew) throw(::com::sun::star::
 
     ::comphelper::UStringMixEqual bCase(xMetaData.is() ? xMetaData->supportsMixedCaseQuotedIdentifiers() : sal_True);
     ::std::vector< ::boost::shared_ptr<OTableRow> >::const_iterator aIter = m_vRowList.begin();
-    for(;aIter != m_vRowList.end();++aIter)
+    ::std::vector< ::boost::shared_ptr<OTableRow> >::const_iterator aEnd = m_vRowList.end();
+    for(;aIter != aEnd;++aIter)
     {
         OFieldDescription* pFieldDesc = (*aIter)->GetActFieldDescr();
         if (pFieldDesc && pFieldDesc->GetName().getLength())
@@ -1083,7 +1100,7 @@ sal_Bool OTableController::checkColumns(sal_Bool _bNew) throw(::com::sun::star::
             bFoundPKey |=  (*aIter)->IsPrimaryKey();
             // first check for duplicate names
             ::std::vector< ::boost::shared_ptr<OTableRow> >::const_iterator aIter2 = aIter+1;
-            for(;aIter2 != m_vRowList.end();++aIter2)
+            for(;aIter2 != aEnd;++aIter2)
             {
                 OFieldDescription* pCompareDesc = (*aIter2)->GetActFieldDescr();
                 if (pCompareDesc && bCase(pCompareDesc->GetName(),pFieldDesc->GetName()))
@@ -1121,15 +1138,13 @@ sal_Bool OTableController::checkColumns(sal_Bool _bNew) throw(::com::sun::star::
                     pActFieldDescr->SetAutoIncrement(sal_False); // #95927# pTypeInfo->bAutoIncrement
                     pActFieldDescr->SetIsNullable(ColumnValue::NO_NULLS);
 
-
                     pActFieldDescr->SetName( createUniqueName(::rtl::OUString::createFromAscii("ID") ));
                     pActFieldDescr->SetPrimaryKey( sal_True );
                     m_vRowList.insert(m_vRowList.begin(),pNewRow);
 
                     static_cast<OTableDesignView*>(getView())->GetEditorCtrl()->Invalidate();
-                    //  static_cast<OTableDesignView*>(getView())->GetEditorCtrl()->DisplayData(0);
                     static_cast<OTableDesignView*>(getView())->GetEditorCtrl()->RowInserted(0);
-                }
+                } // if ( pTypeInfo.get() )
             }
             else if (nReturn == RET_CANCEL)
                 bOk = sal_False;
@@ -1676,5 +1691,10 @@ sal_Int32 OTableController::getFirstEmptyRowPosition() const
     return nRet;
 }
 // -----------------------------------------------------------------------------
-
-
+bool OTableController::isAutoIncrementPrimaryKey() const
+{
+    ::dbaccess::DATASOURCE_TYPE eType = m_aTypeCollection.getType(::comphelper::getString(getDataSource()->getPropertyValue(PROPERTY_URL)));
+    DataSourceMetaData aMeta(eType);
+    return aMeta.getAdvancedSettingsSupport().bAutoIncrementIsPrimaryKey;
+}
+// -----------------------------------------------------------------------------

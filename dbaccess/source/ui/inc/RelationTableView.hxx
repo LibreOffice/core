@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: RelationTableView.hxx,v $
- * $Revision: 1.11 $
+ * $Revision: 1.11.26.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -30,18 +30,24 @@
 #ifndef DBAUI_RELATION_TABLEVIEW_HXX
 #define DBAUI_RELATION_TABLEVIEW_HXX
 
-#ifndef DBAUI_JOINTABLEVIEW_HXX
 #include "JoinTableView.hxx"
-#endif
+#include <comphelper/containermultiplexer.hxx>
+#include <cppuhelper/basemutex.hxx>
+#include <rtl/ref.hxx>
 
 namespace dbaui
 {
     class ORelationDesignView;
-    class ORelationTableView : public OJoinTableView
+    class ORelationTableView :  public ::cppu::BaseMutex
+                            ,   public OJoinTableView
+                            ,   public ::comphelper::OContainerListener
     {
         OTableConnection*                m_pExistingConnection; // is set when a connection was draged on an existing connection
         TTableConnectionData::value_type m_pCurrentlyTabConnData; // set when we creating a connection with more than one keycolumn
-    protected:
+        ::rtl::Reference< comphelper::OContainerListenerAdapter>
+                                         m_pContainerListener;
+        bool                             m_bInRemove;
+
         virtual void ConnDoubleClicked( OTableConnection* pConnection );
         virtual void AddTabWin(const ::rtl::OUString& _rComposedName, const ::rtl::OUString& rWinName, BOOL bNewTable = FALSE);
 
@@ -50,6 +56,11 @@ namespace dbaui
         /** determines whether the classes Init method should accept a query name, or only table names
         */
         virtual bool    allowQueries() const;
+
+        // OContainerListener
+        virtual void _elementInserted( const ::com::sun::star::container::ContainerEvent& _rEvent ) throw(::com::sun::star::uno::RuntimeException);
+        virtual void _elementRemoved( const  ::com::sun::star::container::ContainerEvent& _rEvent ) throw(::com::sun::star::uno::RuntimeException);
+        virtual void _elementReplaced( const ::com::sun::star::container::ContainerEvent& _rEvent ) throw(::com::sun::star::uno::RuntimeException);
 
     public:
         ORelationTableView( Window* pParent, ORelationDesignView* pView );

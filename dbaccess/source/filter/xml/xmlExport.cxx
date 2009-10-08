@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: xmlExport.cxx,v $
- * $Revision: 1.22 $
+ * $Revision: 1.22.18.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -244,10 +244,9 @@ namespace dbaxml
     };
 // -----------------------------------------------------------------------------
 ODBExport::ODBExport(const Reference< XMultiServiceFactory >& _rxMSF,sal_uInt16 nExportFlag)
-: SvXMLExport( _rxMSF,MAP_10TH_MM,XML_DATABASE, EXPORT_OASIS)
+: SvXMLExport( _rxMSF,MAP_10TH_MM,XML_DATABASE, EXPORT_OASIS | nExportFlag)
 ,m_bAllreadyFilled(sal_False)
 {
-    setExportFlags( EXPORT_OASIS | nExportFlag);
     GetMM100UnitConverter().setCoreMeasureUnit(MAP_10TH_MM);
     GetMM100UnitConverter().setXMLMeasureUnit(MAP_CM);
 
@@ -611,7 +610,7 @@ void ODBExport::exportConnectionData()
         ::rtl::OUString sValue;
         Reference<XPropertySet> xProp(getDataSource());
         xProp->getPropertyValue(PROPERTY_URL) >>= sValue;
-        const dbaui::DATASOURCE_TYPE eType = m_aTypeCollection.getType(sValue);
+        const ::dbaccess::DATASOURCE_TYPE eType = m_aTypeCollection.getType(sValue);
         if ( m_aTypeCollection.isFileSystemBased(eType) )
         {
             SvXMLElementExport aDatabaseDescription(*this,XML_NAMESPACE_DB, XML_DATABASE_DESCRIPTION, sal_True, sal_True);
@@ -621,7 +620,7 @@ void ODBExport::exportConnectionData()
                 try
                 {
                     ::rtl::OUString sExtension;
-                    if ( eType == dbaui::DST_MSACCESS )
+                    if ( eType == dbaccess::DST_MSACCESS )
                         sExtension = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("mdb"));
                     else
                     {

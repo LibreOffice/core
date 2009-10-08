@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: queryfilter.cxx,v $
- * $Revision: 1.36 $
+ * $Revision: 1.36.66.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -116,15 +116,15 @@ using namespace ::com::sun::star::beans;
 //------------------------------------------------------------------------------
 void Replace_OS_PlaceHolder(String& aString)
 {
-    while (aString.SearchAndReplace( '*', '%' ) != STRING_NOTFOUND);
-    while (aString.SearchAndReplace( '?', '_' ) != STRING_NOTFOUND);
+    while (aString.SearchAndReplace( '*', '%' ) != STRING_NOTFOUND) ;
+    while (aString.SearchAndReplace( '?', '_' ) != STRING_NOTFOUND) ;
 }
 
 //------------------------------------------------------------------------------
 void Replace_SQL_PlaceHolder(String& aString)
 {
-    while (aString.SearchAndReplace( '%', '*' ) != STRING_NOTFOUND);
-    while (aString.SearchAndReplace( '_', '?' ) != STRING_NOTFOUND);
+    while (aString.SearchAndReplace( '%', '*' ) != STRING_NOTFOUND) ;
+    while (aString.SearchAndReplace( '_', '?' ) != STRING_NOTFOUND) ;
 }
 
 DBG_NAME(DlgFilterCrit);

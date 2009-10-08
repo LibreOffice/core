@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: DriverSettings.hxx,v $
- * $Revision: 1.9 $
+ * $Revision: 1.9.68.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -33,6 +33,7 @@
 #ifndef _DBAUI_DSNTYPES_HXX_
 #include "dsntypes.hxx"
 #endif
+#include <svtools/poolitem.hxx>
 #include <vector>
 
 class SfxTabPage;
@@ -52,7 +53,7 @@ namespace dbaui
             @param  _out_rDetailsIds
                 Will be filled.
         */
-        static void getSupportedIndirectSettings( DATASOURCE_TYPE _eType,::std::vector< sal_Int32>& _out_rDetailsIds );
+        static void getSupportedIndirectSettings( ::dbaccess::DATASOURCE_TYPE _eType,::std::vector< sal_Int32>& _out_rDetailsIds );
 
         /** Creates the detail page for Dbase
         */

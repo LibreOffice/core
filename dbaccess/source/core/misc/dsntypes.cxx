@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: dsntypes.cxx,v $
- * $Revision: 1.41 $
+ * $Revision: 1.1.2.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -30,51 +30,30 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_dbaccess.hxx"
-#ifndef _DBAUI_DSNTYPES_HXX_
+
 #include "dsntypes.hxx"
-#endif
-#ifndef _DBU_MISC_HRC_
-#include "dbu_misc.hrc"
-#endif
-#ifndef _DBU_MISCRES_HRC_
-#include "dbumiscres.hrc"
-#endif
-#ifndef _UNOTOOLS_CONFIGNODE_HXX_
+#include "dbamiscres.hrc"
 #include <unotools/confignode.hxx>
-#endif
-#ifndef DBAUI_TOOLS_HXX
-#include "UITools.hxx"
-#endif
-#ifndef _TOOLS_RC_HXX
 #include <tools/rc.hxx>
-#endif
+#include <tools/debug.hxx>
 // --- needed because of the solar mutex
-#ifndef _VOS_MUTEX_HXX_
 #include <vos/mutex.hxx>
-#endif
-#ifndef _SV_SVAPP_HXX
 #include <vcl/svapp.hxx>
-#endif
-#ifndef _OSL_FILE_HXX_
 #include <osl/file.hxx>
-#endif
 // ---
-#ifndef DBACCESS_SHARED_DBUSTRINGS_HRC
-#include "dbustrings.hrc"
-#endif
-#ifndef _DBAUI_MODULE_DBU_HXX_
-#include "moduledbu.hxx"
-#endif
+#include "dbastrings.hrc"
+#include "core_resource.hxx"
+#include "core_resource.hrc"
 #include <comphelper/documentconstants.hxx>
 //.........................................................................
-namespace dbaui
+namespace dbaccess
 {
 //.........................................................................
 
     using namespace ::com::sun::star::uno;
     using namespace ::com::sun::star::beans;
     using namespace ::com::sun::star::lang;
-    using namespace ::com::sun::star::sdbc;
+    //using namespace ::com::sun::star::sdbc;
 
     namespace
     {
@@ -90,12 +69,12 @@ namespace dbaui
         {
             ::std::vector<String>   m_aStrings;
         public:
-            ODataSourceTypeStringListResource(USHORT _nResId ) : Resource(ModuleRes(_nResId))
+            ODataSourceTypeStringListResource(USHORT _nResId ) : Resource(ResId(_nResId,*ResourceManager::getResManager()))
             {
                 m_aStrings.reserve(STR_END);
                 for (int i = STR_MYSQL_ODBC; i < STR_END ; ++i)
                 {
-                    m_aStrings.push_back(String(ModuleRes(sal::static_int_cast<USHORT>(i))));
+                    m_aStrings.push_back(String(DBA_RES(sal::static_int_cast<USHORT>(i))));
                 }
 
             }
@@ -111,20 +90,32 @@ namespace dbaui
             {
                 _rToFill = m_aStrings;
             }
-
-
-            /** returns the String with a given resource id
-                @param  _nResId
-                    The resource id. It will not be checked if this id exists.
-
-                @return String
-                    The string.
-            */
-            String getString(USHORT _nResId)
-            {
-                return String(ModuleRes(_nResId));
-            }
         };
+
+        ::rtl::OUString lcl_getUserDefinedDriverNodeName()
+        {
+            static ::rtl::OUString s_sNodeName(RTL_CONSTASCII_USTRINGPARAM("org.openoffice.Office.DataAccess/UserDefinedDriverSettings"));
+            return s_sNodeName;
+        }
+        // -----------------------------------------------------------------------------
+        ::rtl::OUString lcl_getDriverTypeDisplayNodeName()
+        {
+            static ::rtl::OUString s_sNodeName(RTL_CONSTASCII_USTRINGPARAM("DriverTypeDisplayName"));
+            return s_sNodeName;
+        }
+        // -----------------------------------------------------------------------------
+        ::rtl::OUString lcl_getDriverDsnPrefixNodeName()
+        {
+            static ::rtl::OUString s_sNodeName(RTL_CONSTASCII_USTRINGPARAM("DriverDsnPrefix"));
+            return s_sNodeName;
+        }
+        // -----------------------------------------------------------------------------
+        ::rtl::OUString lcl_getDriverExtensionNodeName()
+        {
+            static ::rtl::OUString s_sNodeName(RTL_CONSTASCII_USTRINGPARAM("Extension"));
+            return s_sNodeName;
+        }
+
     }
 //=========================================================================
 //= ODsnTypeCollection
@@ -167,7 +158,7 @@ void ODsnTypeCollection::initUserDriverTypes(const Reference< XMultiServiceFacto
     // read the user driver out of the configuration
     // the config node where all pooling relevant info are stored under
     ::utl::OConfigurationTreeRoot aUserDefinedDriverRoot = ::utl::OConfigurationTreeRoot::createWithServiceFactory(
-        _rxORB, ::dbaui::getUserDefinedDriverNodeName(), -1, ::utl::OConfigurationTreeRoot::CM_READONLY);
+        _rxORB, lcl_getUserDefinedDriverNodeName(), -1, ::utl::OConfigurationTreeRoot::CM_READONLY);
 
     if ( aUserDefinedDriverRoot.isValid() )
     {
@@ -181,9 +172,9 @@ void ODsnTypeCollection::initUserDriverTypes(const Reference< XMultiServiceFacto
             {
                 // read the needed information
                 ::rtl::OUString sDsnPrefix,sDsnTypeDisplayName,sExtension;
-                aThisDriverSettings.getNodeValue(getDriverTypeDisplayNodeName()) >>= sDsnTypeDisplayName;
-                aThisDriverSettings.getNodeValue(getDriverDsnPrefixNodeName()) >>= sDsnPrefix;
-                aThisDriverSettings.getNodeValue(getDriverExtensionNodeName()) >>= sExtension;
+                aThisDriverSettings.getNodeValue(lcl_getDriverTypeDisplayNodeName()) >>= sDsnTypeDisplayName;
+                aThisDriverSettings.getNodeValue(lcl_getDriverDsnPrefixNodeName()) >>= sDsnPrefix;
+                aThisDriverSettings.getNodeValue(lcl_getDriverExtensionNodeName()) >>= sExtension;
 
                 m_aDsnTypesDisplayNames.push_back(sDsnTypeDisplayName);
                 m_aDsnPrefixes.push_back(sDsnPrefix);
@@ -615,6 +606,12 @@ String ODsnTypeCollection::getTypeExtension(DATASOURCE_TYPE _eType) const
     return nPos < m_aUserExtensions.size() ? m_aUserExtensions[nPos] : String();
 }
 //-------------------------------------------------------------------------
+bool ODsnTypeCollection::isEmbeddedDatabase( DATASOURCE_TYPE _eType ) const
+{
+ // the only known embedded type so far is DST_EMBEDDED_HSQLDB
+ return ( _eType == DST_EMBEDDED_HSQLDB );
+}
+//-------------------------------------------------------------------------
 ODsnTypeCollection::TypeIterator ODsnTypeCollection::begin() const
 {
     return TypeIterator(this, 0);
@@ -696,37 +693,7 @@ bool operator==(const ODsnTypeCollection::TypeIterator& lhs, const ODsnTypeColle
     return (lhs.m_pContainer == rhs.m_pContainer) && (lhs.m_nPosition == rhs.m_nPosition);
 }
 
-//=========================================================================
-//= DbuTypeCollectionItem
-//=========================================================================
-TYPEINIT1(DbuTypeCollectionItem, SfxPoolItem);
-//-------------------------------------------------------------------------
-DbuTypeCollectionItem::DbuTypeCollectionItem(sal_Int16 _nWhich, ODsnTypeCollection* _pCollection)
-    :SfxPoolItem(_nWhich)
-    ,m_pCollection(_pCollection)
-{
-}
-
-//-------------------------------------------------------------------------
-DbuTypeCollectionItem::DbuTypeCollectionItem(const DbuTypeCollectionItem& _rSource)
-    :SfxPoolItem(_rSource)
-    ,m_pCollection(_rSource.getCollection())
-{
-}
-
-//-------------------------------------------------------------------------
-int DbuTypeCollectionItem::operator==(const SfxPoolItem& _rItem) const
-{
-    DbuTypeCollectionItem* pCompare = PTR_CAST(DbuTypeCollectionItem, &_rItem);
-    return pCompare && (pCompare->getCollection() == getCollection());
-}
-
-//-------------------------------------------------------------------------
-SfxPoolItem* DbuTypeCollectionItem::Clone(SfxItemPool* /*_pPool*/) const
-{
-    return new DbuTypeCollectionItem(*this);
-}
 //.........................................................................
-}   // namespace dbaui
+}   // namespace dbaccess
 //.........................................................................
 

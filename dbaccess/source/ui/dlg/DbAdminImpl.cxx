@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: DbAdminImpl.cxx,v $
- * $Revision: 1.26 $
+ * $Revision: 1.26.18.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -119,7 +119,7 @@
 #ifndef _COM_SUN_STAR_FRAME_XSTORABLE_HPP_
 #include <com/sun/star/frame/XStorable.hpp>
 #endif
-
+#include "dsnItem.hxx"
 
 #include <algorithm>
 #include <functional>
@@ -471,19 +471,19 @@ Reference< XPropertySet > ODbDataSourceAdministrationHelper::getCurrentDataSourc
     return m_xDatasource;
 }
 //-------------------------------------------------------------------------
-DATASOURCE_TYPE ODbDataSourceAdministrationHelper::getDatasourceType( const SfxItemSet& _rSet )
+::dbaccess::DATASOURCE_TYPE ODbDataSourceAdministrationHelper::getDatasourceType( const SfxItemSet& _rSet )
 {
     SFX_ITEMSET_GET( _rSet, pConnectURL, SfxStringItem, DSID_CONNECTURL, sal_True );
     SFX_ITEMSET_GET( _rSet, pTypeCollection, DbuTypeCollectionItem, DSID_TYPECOLLECTION, sal_True );
     DBG_ASSERT( pConnectURL && pTypeCollection, "ODbDataSourceAdministrationHelper::getDatasourceType: invalid items in the source set!" );
     if ( !pConnectURL || !pTypeCollection )
-        return DST_UNKNOWN;
+        return  ::dbaccess::DST_UNKNOWN;
 
     String sConnectURL = pConnectURL->GetValue();
-    ODsnTypeCollection* pCollection = pTypeCollection->getCollection();
+    ::dbaccess::ODsnTypeCollection* pCollection = pTypeCollection->getCollection();
     DBG_ASSERT( pCollection, "ODbDataSourceAdministrationHelper::getDatasourceType: invalid type collection!" );
     if ( !pCollection )
-        return DST_UNKNOWN;
+        return  ::dbaccess::DST_UNKNOWN;
 
     return pCollection->getType( sConnectURL );
 }
@@ -498,25 +498,25 @@ String ODbDataSourceAdministrationHelper::getConnectionURL() const
 {
     String sNewUrl;
 
-    DATASOURCE_TYPE eType = getDatasourceType(*m_pItemSetHelper->getOutputSet());
+    ::dbaccess::DATASOURCE_TYPE eType = getDatasourceType(*m_pItemSetHelper->getOutputSet());
 
     SFX_ITEMSET_GET(*m_pItemSetHelper->getOutputSet(), pUrlItem, SfxStringItem, DSID_CONNECTURL, sal_True);
     SFX_ITEMSET_GET(*m_pItemSetHelper->getOutputSet(), pTypeCollection, DbuTypeCollectionItem, DSID_TYPECOLLECTION, sal_True);
 
     OSL_ENSURE(pUrlItem,"Connection URL is NULL. -> GPF!");
     DBG_ASSERT(pTypeCollection, "ODbDataSourceAdministrationHelper::getDatasourceType: invalid items in the source set!");
-    ODsnTypeCollection* pCollection = pTypeCollection->getCollection();
+    ::dbaccess::ODsnTypeCollection* pCollection = pTypeCollection->getCollection();
     DBG_ASSERT(pCollection, "ODbDataSourceAdministrationHelper::getDatasourceType: invalid type collection!");
 
 
 
     switch( eType )
     {
-        case DST_DBASE:
-        case DST_FLAT:
-        case DST_CALC:
+        case  ::dbaccess::DST_DBASE:
+        case  ::dbaccess::DST_FLAT:
+        case  ::dbaccess::DST_CALC:
             break;
-        case DST_ADABAS:
+        case  ::dbaccess::DST_ADABAS:
             {
                 SFX_ITEMSET_GET(*m_pItemSetHelper->getOutputSet(), pHostName, SfxStringItem, DSID_CONN_HOSTNAME, sal_True);
                 sNewUrl = lcl_createHostWithPort(pHostName,NULL);
@@ -527,8 +527,8 @@ String ODbDataSourceAdministrationHelper::getConnectionURL() const
                 sNewUrl += sUrl;
             }
             break;
-        case DST_MSACCESS:
-        case DST_MSACCESS_2007:
+        case  ::dbaccess::DST_MSACCESS:
+        case  ::dbaccess::DST_MSACCESS_2007:
             {
                 ::rtl::OUString sFileName = pCollection->cutPrefix(pUrlItem->GetValue());
                 ::rtl::OUString sNewFileName;
@@ -538,8 +538,8 @@ String ODbDataSourceAdministrationHelper::getConnectionURL() const
                 }
             }
             break;
-        case DST_MYSQL_NATIVE:
-        case DST_MYSQL_JDBC:
+        case  ::dbaccess::DST_MYSQL_NATIVE:
+        case  ::dbaccess::DST_MYSQL_JDBC:
             {
                 SFX_ITEMSET_GET(*m_pItemSetHelper->getOutputSet(), pHostName, SfxStringItem, DSID_CONN_HOSTNAME, sal_True);
                 SFX_ITEMSET_GET(*m_pItemSetHelper->getOutputSet(), pPortNumber, SfxInt32Item, DSID_MYSQL_PORTNUMBER, sal_True);
@@ -559,7 +559,7 @@ String ODbDataSourceAdministrationHelper::getConnectionURL() const
                 }
             }
             break;
-        case DST_ORACLE_JDBC:
+        case  ::dbaccess::DST_ORACLE_JDBC:
             {
                 SFX_ITEMSET_GET(*m_pItemSetHelper->getOutputSet(), pHostName, SfxStringItem, DSID_CONN_HOSTNAME, sal_True);
                 SFX_ITEMSET_GET(*m_pItemSetHelper->getOutputSet(), pPortNumber, SfxInt32Item, DSID_ORACLE_PORTNUMBER, sal_True);
@@ -583,7 +583,7 @@ String ODbDataSourceAdministrationHelper::getConnectionURL() const
                 }
             }
             break;
-        case DST_LDAP:
+        case  ::dbaccess::DST_LDAP:
             {
                 //  SFX_ITEMSET_GET(*m_pItemSetHelper->getOutputSet(), pHostName, SfxStringItem, DSID_CONN_HOSTNAME, sal_True);
                 SFX_ITEMSET_GET(*m_pItemSetHelper->getOutputSet(), pPortNumber, SfxInt32Item, DSID_CONN_LDAP_PORTNUMBER, sal_True);
@@ -591,7 +591,7 @@ String ODbDataSourceAdministrationHelper::getConnectionURL() const
                 sNewUrl += lcl_createHostWithPort(NULL,pPortNumber);
             }
             break;
-        case DST_JDBC:
+        case  ::dbaccess::DST_JDBC:
             // run through
         default:
             break;
@@ -769,7 +769,7 @@ void ODbDataSourceAdministrationHelper::fillDatasourceInfo(const SfxItemSet& _rS
     // us)
 
     // first determine which of all the items are relevant for the data source (depends on the connection url)
-    DATASOURCE_TYPE eType = getDatasourceType(_rSource);
+    ::dbaccess::DATASOURCE_TYPE eType = getDatasourceType(_rSource);
     ::std::vector< sal_Int32> aDetailIds;
     ODriversSettings::getSupportedIndirectSettings(eType,aDetailIds);
 
@@ -874,7 +874,7 @@ void ODbDataSourceAdministrationHelper::fillDatasourceInfo(const SfxItemSet& _rS
     }
 
     // here we have a special entry for types from oracle
-    if ( eType == DST_ORACLE_JDBC )
+    if ( eType ==  ::dbaccess::DST_ORACLE_JDBC )
     {
         Sequence< Any > aTypeSettings;
         static const ::rtl::OUString s_sCondition(RTL_CONSTASCII_USTRINGPARAM("Column(2) = "));
@@ -1077,14 +1077,14 @@ String ODbDataSourceAdministrationHelper::getDocumentUrl(SfxItemSet& _rDest)
 // -----------------------------------------------------------------------------
 void ODbDataSourceAdministrationHelper::convertUrl(SfxItemSet& _rDest)
 {
-    DATASOURCE_TYPE eType = getDatasourceType(_rDest);
+    ::dbaccess::DATASOURCE_TYPE eType = getDatasourceType(_rDest);
 
     SFX_ITEMSET_GET(_rDest, pUrlItem, SfxStringItem, DSID_CONNECTURL, sal_True);
     SFX_ITEMSET_GET(_rDest, pTypeCollection, DbuTypeCollectionItem, DSID_TYPECOLLECTION, sal_True);
 
     OSL_ENSURE(pUrlItem,"Connection URL is NULL. -> GPF!");
     DBG_ASSERT(pTypeCollection, "ODbAdminDialog::getDatasourceType: invalid items in the source set!");
-    ODsnTypeCollection* pCollection = pTypeCollection->getCollection();
+    ::dbaccess::ODsnTypeCollection* pCollection = pTypeCollection->getCollection();
     DBG_ASSERT(pCollection, "ODbAdminDialog::getDatasourceType: invalid type collection!");
 
     USHORT nPortNumberId    = 0;
@@ -1097,14 +1097,14 @@ void ODbDataSourceAdministrationHelper::convertUrl(SfxItemSet& _rDest)
 
     switch( eType )
     {
-        case DST_MYSQL_NATIVE:
-        case DST_MYSQL_JDBC:
+        case  ::dbaccess::DST_MYSQL_NATIVE:
+        case  ::dbaccess::DST_MYSQL_JDBC:
             nPortNumberId = DSID_MYSQL_PORTNUMBER;
             break;
-        case DST_ORACLE_JDBC:
+        case  ::dbaccess::DST_ORACLE_JDBC:
             nPortNumberId = DSID_ORACLE_PORTNUMBER;
             break;
-        case DST_LDAP:
+        case  ::dbaccess::DST_LDAP:
             nPortNumberId = DSID_CONN_LDAP_PORTNUMBER;
             break;
         default:
@@ -1144,6 +1144,37 @@ void ODbDataSourceAdministrationHelper::setDataSourceOrName( const Any& _rDataSo
         // hmm. We could reset m_xDatasource/m_xModel, probably, and continue working
     m_aDataSourceOrName = _rDataSourceOrName;
 }
+//=========================================================================
+//= DbuTypeCollectionItem
+//=========================================================================
+TYPEINIT1(DbuTypeCollectionItem, SfxPoolItem);
+//-------------------------------------------------------------------------
+DbuTypeCollectionItem::DbuTypeCollectionItem(sal_Int16 _nWhich, ::dbaccess::ODsnTypeCollection* _pCollection)
+    :SfxPoolItem(_nWhich)
+    ,m_pCollection(_pCollection)
+{
+}
+
+//-------------------------------------------------------------------------
+DbuTypeCollectionItem::DbuTypeCollectionItem(const DbuTypeCollectionItem& _rSource)
+    :SfxPoolItem(_rSource)
+    ,m_pCollection(_rSource.getCollection())
+{
+}
+
+//-------------------------------------------------------------------------
+int DbuTypeCollectionItem::operator==(const SfxPoolItem& _rItem) const
+{
+    DbuTypeCollectionItem* pCompare = PTR_CAST(DbuTypeCollectionItem, &_rItem);
+    return pCompare && (pCompare->getCollection() == getCollection());
+}
+
+//-------------------------------------------------------------------------
+SfxPoolItem* DbuTypeCollectionItem::Clone(SfxItemPool* /*_pPool*/) const
+{
+    return new DbuTypeCollectionItem(*this);
+}
+
 //.........................................................................
 }   // namespace dbaui
 //.........................................................................

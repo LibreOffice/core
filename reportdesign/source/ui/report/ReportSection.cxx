@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: ReportSection.cxx,v $
- * $Revision: 1.12 $
+ * $Revision: 1.11.18.3 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -156,7 +156,10 @@ void OReportSection::Paint( const Rectangle& rRect )
             OSL_ENSURE(pTargetPaintWindow, "BeginDrawLayers: Got no SdrPaintWindow (!)");
             // draw background self using wallpaper
             OutputDevice& rTargetOutDev = pTargetPaintWindow->GetTargetOutputDevice();
-            rTargetOutDev.DrawWallpaper(rRect, Wallpaper(Color(m_xSection->getBackColor())));
+            sal_Int32 nColor = m_xSection->getBackColor();
+            if ( nColor == (sal_Int32)COL_TRANSPARENT )
+                nColor = getStyleProperty<sal_Int32>(m_xSection->getReportDefinition(),PROPERTY_BACKCOLOR);
+            rTargetOutDev.DrawWallpaper(rRect, Wallpaper(Color(nColor)));
         }
 
         // do paint (unbuffered) and mark repaint end
@@ -217,7 +220,10 @@ void OReportSection::fill()
     m_pView->SetGridFront( FALSE );
     m_pView->SetDragStripes( TRUE );
     m_pView->SetPageVisible();
-    m_pView->SetApplicationDocumentColor(m_xSection->getBackColor());
+    sal_Int32 nColor = m_xSection->getBackColor();
+    if ( nColor == (sal_Int32)COL_TRANSPARENT )
+        nColor = getStyleProperty<sal_Int32>(m_xSection->getReportDefinition(),PROPERTY_BACKCOLOR);
+    m_pView->SetApplicationDocumentColor(nColor);
 
     const sal_Int32 nLeftMargin = getStyleProperty<sal_Int32>(m_xSection->getReportDefinition(),PROPERTY_LEFTMARGIN);
     const sal_Int32 nRightMargin = getStyleProperty<sal_Int32>(m_xSection->getReportDefinition(),PROPERTY_RIGHTMARGIN);
@@ -486,9 +492,12 @@ void OReportSection::_propertyChanged(const beans::PropertyChangeEvent& _rEvent)
 {
     if ( m_xSection.is() )
     {
-        if ( _rEvent.Source == m_xSection )
+        if ( _rEvent.Source == m_xSection || PROPERTY_BACKCOLOR == _rEvent.PropertyName )
         {
-            m_pView->SetApplicationDocumentColor(m_xSection->getBackColor());
+            sal_Int32 nColor = m_xSection->getBackColor();
+            if ( nColor == (sal_Int32)COL_TRANSPARENT )
+                nColor = getStyleProperty<sal_Int32>(m_xSection->getReportDefinition(),PROPERTY_BACKCOLOR);
+            m_pView->SetApplicationDocumentColor(nColor);
             Invalidate(INVALIDATE_NOCHILDREN|INVALIDATE_NOERASE);
         }
         else

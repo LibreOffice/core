@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: migrationprogress.hxx,v $
- * $Revision: 1.3 $
+ * $Revision: 1.3.2.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -40,7 +40,7 @@ namespace dbmm
 //........................................................................
 
     //====================================================================
-    //= MigrationProgress
+    //= IMigrationProgress
     //====================================================================
     class SAL_NO_VTABLE IMigrationProgress
     {

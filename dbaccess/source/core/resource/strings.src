@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: strings.src,v $
- * $Revision: 1.56 $
+ * $Revision: 1.55.68.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -29,6 +29,7 @@
  ************************************************************************/
 
 #include "core_resource.hrc"
+#include "dbamiscres.hrc"
 
 String RID_STR_TRIED_OPEN_TABLE
 {
@@ -239,3 +240,204 @@ String RID_STR_NAME_NOT_FOUND
     Text [ en-US ] = "Unable to find the document '$name$'.";
 };
 
+//-------------------------------------------------------------------------
+Resource RSC_DATASOURCE_TYPES
+{
+    String STR_MYSQL_ODBC
+    {
+        Text  ="sdbc:mysql:odbc:";
+    };
+    String STR_MYSQL_JDBC
+    {
+        Text  ="sdbc:mysql:jdbc:";
+    };
+    String STR_ADABAS
+    {
+        Text  ="sdbc:adabas:";
+    };
+    String STR_ORACLE_JDBC
+    {
+        Text  ="jdbc:oracle:thin:";
+    };
+    String STR_JDBC
+    {
+        Text  ="jdbc:";
+    };
+    String STR_ODBC
+    {
+        Text  ="sdbc:odbc:";
+    };
+    String STR_DBASE
+    {
+        Text  ="sdbc:dbase:";
+    };
+    String STR_MSACCESS
+    {
+        Text  ="sdbc:ado:access:PROVIDER=Microsoft.Jet.OLEDB.4.0;DATA SOURCE=";
+    };
+    String STR_MSACCESS2007
+    {
+        Text  ="sdbc:ado:access:Provider=Microsoft.ACE.OLEDB.12.0;DATA SOURCE=";
+    };
+    String STR_ADO
+    {
+        Text  ="sdbc:ado:";
+    };
+    String STR_FLAT
+    {
+        Text  ="sdbc:flat:";
+    };
+    String STR_CALC
+    {
+        Text  ="sdbc:calc:";
+    };
+    String STR_MOZILLA
+    {
+        Text  ="sdbc:address:mozilla:";
+    };
+    String STR_LDAP
+    {
+        Text  ="sdbc:address:ldap:";
+    };
+    String STR_OUTLOOK
+    {
+        Text  ="sdbc:address:outlook";
+    };
+    String STR_OUTLOOKEXP
+    {
+        Text  ="sdbc:address:outlookexp";
+    };
+    String STR_EVOLUTION
+    {
+        Text  ="sdbc:address:evolution:local";
+    };
+    String STR_EVOLUTION_GROUPWISE
+    {
+        Text  ="sdbc:address:evolution:groupwise";
+    };
+    String STR_EVOLUTION_LDAP
+    {
+        Text  ="sdbc:address:evolution:ldap";
+    };
+    String STR_KAB
+    {
+        Text  ="sdbc:address:kab";
+    };
+    String STR_EMBEDDED_HSQLDB
+    {
+        Text = "sdbc:embedded:hsqldb";
+    };
+    String STR_MACAB
+    {
+        Text  ="sdbc:address:macab";
+    };
+    String STR_THUNDERBIRD
+    {
+        Text  ="sdbc:address:thunderbird:";
+    };
+    String STR_MYSQL_NATIVE
+    {
+        Text  ="sdbc:mysqlc:";
+    };
+};
+
+Resource RSC_DATASOURCE_TYPE_UINAMES
+{
+    String STR_MYSQL_ODBC
+    {
+        Text[ en-US ] = "MySQL (ODBC)";
+    };
+    String STR_MYSQL_JDBC
+    {
+        Text[ en-US ] = "MySQL (JDBC)";
+    };
+    String STR_ADABAS
+    {
+        Text[ en-US ] = "Adabas D";
+    };
+    String STR_ORACLE_JDBC
+    {
+        Text[ en-US ] = "Oracle JDBC";
+    };
+
+    String STR_JDBC
+    {
+        Text[ en-US ] = "JDBC";
+    };
+    String STR_ODBC
+    {
+        Text[ en-US ] = "ODBC";
+    };
+    String STR_DBASE
+    {
+        Text[ en-US ] = "dBASE";
+    };
+    String STR_MSACCESS
+    {
+        Text[ en-US ] = "Microsoft Access";
+    };
+    String STR_MSACCESS2007
+    {
+        Text[ en-US ] = "Microsoft Access 2007";
+    };
+    String STR_ADO
+    {
+        Text[ en-US ] = "ADO";
+    };
+    String STR_FLAT
+    {
+        Text[ en-US ] = "Text";
+    };
+    String STR_CALC
+    {
+        Text[ en-US ] = "Spreadsheet";
+    };
+    String STR_MOZILLA
+    {
+        Text[ en-US ] = "Mozilla Address Book";
+    };
+    String STR_LDAP
+    {
+        Text[ en-US ] = "LDAP Address Book";
+    };
+    String STR_OUTLOOK
+    {
+        Text[ en-US ] = "Microsoft Outlook Address Book";
+    };
+    String STR_OUTLOOKEXP
+    {
+        Text[ en-US ] = "Microsoft Windows Address Book";
+    };
+    String STR_EVOLUTION
+    {
+        Text[ en-US ] = "Evolution Local";
+    };
+    String STR_EVOLUTION_GROUPWISE
+    {
+        Text[ en-US ] = "Groupwise";
+    };
+    String STR_EVOLUTION_LDAP
+    {
+        Text[ en-US ] = "Evolution LDAP";
+    };
+    String STR_KAB
+    {
+        Text[ en-US ] = "KDE Address Book";
+    };
+    String STR_MACAB
+    {
+        Text[ en-US ] = "Mac OS X Address Book";
+    };
+    String STR_EMBEDDED_HSQLDB
+    {
+        Text[ en-US ] = "HSQL database engine";
+     };
+     String STR_THUNDERBIRD
+     {
+         Text[ en-US ] = "Thunderbird Address Book";
+    };
+    String STR_MYSQL_NATIVE
+     {
+         Text[ en-US ] = "MySQL (Native)";
+    };
+};

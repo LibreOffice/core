@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: datasource.cxx,v $
- * $Revision: 1.80 $
+ * $Revision: 1.79.4.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -1349,6 +1349,7 @@ void SAL_CALL ODatabaseSource::flush(  ) throw (RuntimeException)
 {
     try
     {
+        // SYNCHRONIZED ->
         {
             ModelMethodGuard aGuard( *this );
 
@@ -1356,11 +1357,12 @@ void SAL_CALL ODatabaseSource::flush(  ) throw (RuntimeException)
             SharedModel xModel( m_pImpl->getModel_noCreate(), SharedModel::NoTakeOwnership );
 
             if ( !xModel.is() )
-                xModel.reset( m_pImpl->createNewModel_deliverOwnership(), SharedModel::TakeOwnership );
+                xModel.reset( m_pImpl->createNewModel_deliverOwnership( false ), SharedModel::TakeOwnership );
 
             Reference< css::frame::XStorable> xStorable( xModel, UNO_QUERY_THROW );
             xStorable->store();
         }
+        // <- SYNCHRONIZED
 
         css::lang::EventObject aFlushedEvent(*this);
         m_aFlushListeners.notifyEach( &XFlushListener::flushed, aFlushedEvent );
@@ -1381,7 +1383,7 @@ void SAL_CALL ODatabaseSource::flushed( const EventObject& /*rEvent*/ ) throw (R
     // In general, we have the problem that embedded databases write into their underlying storage, which
     // logically is one of our sub storage, and practically is a temporary file maintained by the
     // package implementation. As long as we did not commit this storage and our main storage,
-    // the changes made by the embedded database engine is not really reflected in the database document
+    // the changes made by the embedded database engine are not really reflected in the database document
     // file. This is Bad (TM) for a "real" database application - imagine somebody entering some
     // data, and then crashing: For a database application, you would expect that the data still is present
     // when you connect to the database next time.
@@ -1443,9 +1445,9 @@ Reference< XOfficeDatabaseDocument > SAL_CALL ODatabaseSource::getDatabaseDocume
 
     Reference< XModel > xModel( m_pImpl->getModel_noCreate() );
     if ( !xModel.is() )
-        xModel = m_pImpl->createNewModel_deliverOwnership();
+        xModel = m_pImpl->createNewModel_deliverOwnership( false );
 
-    return Reference< XOfficeDatabaseDocument >( xModel, UNO_QUERY );
+    return Reference< XOfficeDatabaseDocument >( xModel, UNO_QUERY_THROW );
 }
 // -----------------------------------------------------------------------------
 Reference< XInterface > ODatabaseSource::getThis() const

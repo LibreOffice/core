@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: ModelImpl.hxx,v $
- * $Revision: 1.24 $
+ * $Revision: 1.24.26.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -34,6 +34,7 @@
 #include "apitools.hxx"
 #include "bookmarkcontainer.hxx"
 #include "ContentHelper.hxx"
+#include "core_resource.hxx"
 
 /** === begin UNO includes === **/
 #include <com/sun/star/beans/PropertyAttribute.hpp>
@@ -48,6 +49,7 @@
 #include <com/sun/star/embed/XTransactionListener.hpp>
 #include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/frame/XStorable.hpp>
+#include <com/sun/star/lang/NotInitializedException.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
@@ -66,6 +68,7 @@
 #include <com/sun/star/util/XNumberFormatter.hpp>
 #include <com/sun/star/util/XRefreshable.hpp>
 #include <com/sun/star/sdb/XDocumentDataSource.hpp>
+#include <com/sun/star/frame/DoubleInitializationException.hpp>
 /** === end UNO includes === **/
 
 #include <comphelper/broadcasthelper.hxx>
@@ -77,9 +80,14 @@
 #include <sfx2/docstoragemodifylistener.hxx>
 #include <tools/string.hxx>
 #include <unotools/sharedunocomponent.hxx>
-#include <vos/ref.hxx>
+#include <vos/mutex.hxx>
 
 #include <memory>
+
+namespace comphelper
+{
+    class NamedValueCollection;
+}
 
 //........................................................................
 namespace dbaccess
@@ -110,6 +118,9 @@ class OSharedConnectionManager;
 //============================================================
 //= SharedMutex
 //============================================================
+/** a shared mutex, which deletes itself as soon as the last reference
+    to it dies.
+*/
 class SharedMutex
 {
 private:
@@ -129,6 +140,45 @@ private:
 };
 
 //============================================================
+//= SharedMutexHolder
+//============================================================
+/** a base class merely holding a SharedMutex instance. Useful if you
+    need to ensure the SharedMutex is to be initialized before other
+    of your members, in this case just derive from SharedMutexHolder.
+*/
+class SharedMutexHolder
+{
+protected:
+    SharedMutexHolder() : m_xMutex( new SharedMutex ) { }
+    ~SharedMutexHolder() { }
+
+protected:
+    ::rtl::Reference< SharedMutex > m_xMutex;
+};
+
+//============================================================
+//= VosMutexFacade
+//============================================================
+/** a class which provides an IMutex interface to an OSL-based mutex
+*/
+class VosMutexFacade : public ::vos::IMutex
+{
+public:
+    /** beware of life time: the mutex you pass here must live as least as long
+        as the VosMutexFacade instance lives.
+    */
+    VosMutexFacade( ::osl::Mutex& _rMutex );
+
+    // IMutex
+    virtual void SAL_CALL acquire();
+    virtual sal_Bool SAL_CALL tryToAcquire();
+    virtual void SAL_CALL release();
+
+private:
+    ::osl::Mutex&   m_rMutex;
+};
+
+//============================================================
 //= ODatabaseModelImpl
 //============================================================
 DECLARE_STL_USTRINGACCESS_MAP(::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >,TStorages);
@@ -138,7 +188,8 @@ typedef ::utl::SharedUNOComponent< ::com::sun::star::embed::XStorage >  SharedSt
 class ODatabaseContext;
 class DocumentStorageAccess;
 class OSharedConnectionManager;
-class ODatabaseModelImpl    :public ::rtl::IReference
+class ODatabaseModelImpl    :public SharedMutexHolder
+                            ,public ::rtl::IReference
                             ,public ::sfx2::IMacroDocumentAccess
                             ,public ::sfx2::IModifiableDocument
 {
@@ -152,11 +203,12 @@ public:
     };
 
 private:
+    OModuleClient                                                               m_aModuleClient;
     ::com::sun::star::uno::WeakReference< ::com::sun::star::frame::XModel >     m_xModel;
     ::com::sun::star::uno::WeakReference< ::com::sun::star::sdbc::XDataSource > m_xDataSource;
 
     DocumentStorageAccess*                                                      m_pStorageAccess;
-    ::rtl::Reference< SharedMutex >                                             m_xMutex;
+    VosMutexFacade                                                              m_aMutexFacade;
     ::std::vector< TContentPtr >                                                m_aContainer;   // one for each ObjectType
     TStorages                                                                   m_aStorages;
     ::sfx2::DocumentMacroMode                                                   m_aMacroMode;
@@ -169,8 +221,11 @@ private:
     ::rtl::Reference< ::sfx2::DocumentStorageModifyListener >                   m_pStorageModifyListener;
     ODatabaseContext*                                                           m_pDBContext;
 
+    ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >   m_aArgs;
     /// the URL the document was loaded from
-    ::rtl::OUString                                     m_sDocFileLocation;
+    ::rtl::OUString                                                             m_sDocFileLocation;
+
+    oslInterlockedCount                                 m_refCount;
 
     /// do we have any object (forms/reports) which contains macros?
     bool                                                m_bHasAnyObjectWithMacros;
@@ -179,6 +234,9 @@ private:
 
     /// true if setting the Modified flag of the document is currently locked
     bool                                                m_bModificationLock;
+
+    /// true if and only if a database document existed previously (though meanwhile disposed), and was already initialized
+    bool                                                m_bDocumentInitialized;
 
     /** the URL which the document should report as it's URL
 
@@ -218,12 +276,9 @@ public:
                                                         m_xSettings;
     ::com::sun::star::uno::Sequence< ::rtl::OUString >  m_aTableFilter;
     ::com::sun::star::uno::Sequence< ::rtl::OUString >  m_aTableTypeFilter;
-    ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >
-                                                        m_aArgs;
     OSharedConnectionManager*                           m_pSharedConnectionManager;
     ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener >
                                                         m_xSharedConnectionManager;
-    oslInterlockedCount                                 m_refCount;
     sal_uInt16                                          m_nControllerLockCount;
 
     void reset();
@@ -267,14 +322,23 @@ public:
 
     void dispose();
 
-    inline ::rtl::OUString getURL() const       { return m_sDocumentURL;     }
-    inline ::rtl::OUString getLocation() const  { return m_sDocFileLocation; }
+    inline ::rtl::OUString getURL() const               { return m_sDocumentURL;     }
+    inline ::rtl::OUString getDocFileLocation() const   { return m_sDocFileLocation; }
 
     ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage> getStorage(const ::rtl::OUString& _sStorageName,sal_Int32 nMode = ::com::sun::star::embed::ElementModes::READWRITE);
 // helper
     const ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatsSupplier >&
             getNumberFormatsSupplier();
 
+    const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >&
+            getResource() const { return m_aArgs; }
+
+    void    attachResource(
+                const ::rtl::OUString& _rURL,
+                const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& _rArgs );
+
+    static ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >
+            stripLoadArguments( const ::comphelper::NamedValueCollection& _rArguments );
 
 // other stuff
     void    flushTables();
@@ -313,7 +377,7 @@ public:
 
     /** returns the data source. If it doesn't exist it will be created
     */
-    ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDataSource> getDataSource( bool _bCreateIfNecessary = true );
+    ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDataSource> getOrCreateDataSource();
 
     /** returns the model, if there already exists one
     */
@@ -321,12 +385,16 @@ public:
 
     /** returns a new ->ODatabaseDocument
 
+        @param _bInitializeIfNecessary
+            calls XLoadable::initNew on the newly created model, if necessary
+
         @precond
             No ->ODatabaseDocument exists so far
+
         @seealso
             getModel_noCreate
     */
-    ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel > createNewModel_deliverOwnership();
+    ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel > createNewModel_deliverOwnership( bool _bInitialize );
 
     struct ResetModelAccess { friend class ODatabaseDocument; private: ResetModelAccess() { } };
 
@@ -334,7 +402,9 @@ public:
 
         Only to be called when the model is being disposed
     */
-    void    modelIsDisposing( ResetModelAccess );
+    void    modelIsDisposing( const bool _wasInitialized, ResetModelAccess );
+
+    bool    hadInitializedDocument() const { return m_bDocumentInitialized; }
 
     DocumentStorageAccess*
             getDocumentStorageAccess();
@@ -457,7 +527,7 @@ public:
                 const ::rtl::OUString& _rDocumentURL
             );
 
-    /** returns the macro mode imposed by an external instance, by passing it to attachResource
+    /** returns the macro mode imposed by an external instance, which passed it to attachResource
     */
     sal_Int16       getImposedMacroExecMode() const
     {
@@ -515,7 +585,7 @@ protected:
     }
 
 public:
-    struct GuardAccess { friend class ModelMethodGuard; friend class ModifyLock; private: GuardAccess() { } };
+    struct GuardAccess { friend class ModelMethodGuard; private: GuardAccess() { } };
 
     /** returns the mutex used for thread safety
 
@@ -532,18 +602,19 @@ public:
         return m_pImpl;
     }
 
+    /// checks whether the component is already disposed, throws a DisposedException if so
     inline void checkDisposed() const
     {
         if ( !m_pImpl.is() )
             throw ::com::sun::star::lang::DisposedException( ::rtl::OUString::createFromAscii( "Component is already disposed." ), getThis() );
     }
 
-    inline void lockModify( GuardAccess )
+    inline void lockModify()
     {
         m_pImpl->lockModify();
     }
 
-    inline void unlockModify( GuardAccess )
+    inline void unlockModify()
     {
         m_pImpl->unlockModify();
     }
@@ -555,12 +626,12 @@ public:
     ModifyLock( ModelDependentComponent& _component )
         :m_rComponent( _component )
     {
-        m_rComponent.lockModify( ModelDependentComponent::GuardAccess() );
+        m_rComponent.lockModify();
     }
 
     ~ModifyLock()
     {
-        m_rComponent.unlockModify( ModelDependentComponent::GuardAccess() );
+        m_rComponent.unlockModify();
     }
 
 private:
@@ -572,7 +643,7 @@ private:
     Just put this guard onto the stack at the beginning of your method. Don't bother yourself
     with a MutexGuard, checks for being disposed, and the like.
 */
-class ModelMethodGuard  :public ::osl::ResettableMutexGuard
+class ModelMethodGuard : public ::osl::ResettableMutexGuard
 {
 private:
     typedef ::osl::ResettableMutexGuard             BaseMutexGuard;
@@ -592,14 +663,8 @@ public:
         _component.checkDisposed();
     }
 
-    inline void clear()
+    ~ModelMethodGuard()
     {
-        BaseMutexGuard::clear();
-    }
-
-    inline void reset()
-    {
-        BaseMutexGuard::reset();
     }
 };
 

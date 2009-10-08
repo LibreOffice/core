@@ -8,7 +8,7 @@
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.8 $
+# $Revision: 1.7.58.2 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -39,7 +39,7 @@ nodep=true
 .INCLUDE: settings.mk
 
 #----- compile .java files -----------------------------------------
-JARFILES        = ridl.jar unoil.jar jurt.jar juh.jar jut.jar java_uno.jar
+JARFILES        = ridl.jar unoil.jar jurt.jar juh.jar java_uno.jar
 .IF "$(SYSTEM_JFREEREPORT)" == "YES"
 XCLASSPATH!:=$(XCLASSPATH)$(PATH_SEPERATOR)$(JCOMMON_JAR)$(PATH_SEPERATOR)$(LIBXML_JAR)$(PATH_SEPERATOR)$(JFREEREPORT_JAR)$(PATH_SEPERATOR)$(LIBLOADER_JAR)$(PATH_SEPERATOR)$(SAC_JAR)$(PATH_SEPERATOR)$(LIBLAYOUT_JAR)$(PATH_SEPERATOR)$(JCOMMON_SERIALIZER_JAR)$(PATH_SEPERATOR)$(LIBFONTS_JAR)$(PATH_SEPERATOR)$(LIBFORMULA_JAR)$(PATH_SEPERATOR)librepository-0.1.4.jar
 .ELSE

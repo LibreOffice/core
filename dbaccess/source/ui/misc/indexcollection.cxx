@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: indexcollection.cxx,v $
- * $Revision: 1.10 $
+ * $Revision: 1.8.254.2 $
  *
  * This file is part of OpenOffice.org.
  *

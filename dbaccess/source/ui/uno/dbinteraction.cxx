@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: dbinteraction.cxx,v $
- * $Revision: 1.19 $
+ * $Revision: 1.17.6.2 $
  *
  * This file is part of OpenOffice.org.
  *

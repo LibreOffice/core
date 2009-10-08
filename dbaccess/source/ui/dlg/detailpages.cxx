@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: detailpages.cxx,v $
- * $Revision: 1.53 $
+ * $Revision: 1.53.18.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -39,6 +39,7 @@
 #include "dsitems.hxx"
 #include "dbfindex.hxx"
 #include "localresaccess.hxx"
+#include "dsnItem.hxx"
 
 #include "dbaccess_helpid.hrc"
 #include "dbu_dlg.hrc"
@@ -311,7 +312,7 @@ namespace dbaui
         // get the DSN string (needed for the index dialog)
         SFX_ITEMSET_GET(_rSet, pUrlItem, SfxStringItem, DSID_CONNECTURL, sal_True);
         SFX_ITEMSET_GET(_rSet, pTypesItem, DbuTypeCollectionItem, DSID_TYPECOLLECTION, sal_True);
-        ODsnTypeCollection* pTypeCollection = pTypesItem ? pTypesItem->getCollection() : NULL;
+        ::dbaccess::ODsnTypeCollection* pTypeCollection = pTypesItem ? pTypesItem->getCollection() : NULL;
         if (pTypeCollection && pUrlItem && pUrlItem->GetValue().Len())
             m_sDsn = pTypeCollection->cutPrefix(pUrlItem->GetValue());
 
@@ -1058,7 +1059,7 @@ namespace dbaui
     //------------------------------------------------------------------------
     SfxTabPage* ODriversSettings::CreateSpecialSettingsPage( Window* _pParent, const SfxItemSet& _rAttrSet )
     {
-        DATASOURCE_TYPE eType = ODbDataSourceAdministrationHelper::getDatasourceType( _rAttrSet );
+        ::dbaccess::DATASOURCE_TYPE eType = ODbDataSourceAdministrationHelper::getDatasourceType( _rAttrSet );
         DataSourceMetaData aMetaData( eType );
         return new SpecialSettingsPage( _pParent, _rAttrSet, aMetaData );
     }

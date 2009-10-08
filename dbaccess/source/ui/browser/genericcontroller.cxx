@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: genericcontroller.cxx,v $
- * $Revision: 1.94 $
+ * $Revision: 1.94.24.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -170,14 +170,76 @@ namespace dbaui
 {
 
 //==========================================================================
+//= UserDefinedFeatures
+//==========================================================================
+class UserDefinedFeatures
+{
+public:
+    UserDefinedFeatures( const Reference< XController >& _rxController );
+
+    FeatureState    getState( const URL& _rFeatureURL );
+    void            execute( const URL& _rFeatureURL, const Sequence< PropertyValue>& _rArgs );
+
+private:
+    ::com::sun::star::uno::WeakReference< XController > m_aController;
+};
+
+//--------------------------------------------------------------------------
+UserDefinedFeatures::UserDefinedFeatures( const Reference< XController >& _rxController )
+    :m_aController( _rxController )
+{
+}
+
+//--------------------------------------------------------------------------
+FeatureState UserDefinedFeatures::getState( const URL& /*_rFeatureURL*/ )
+{
+    // for now, enable all the time
+    // TODO: we should ask the dispatcher. However, this is laborious, since you cannot ask a dispatcher
+    // directly, but need to add a status listener.
+    FeatureState aState;
+    aState.bEnabled = sal_True;
+    return aState;
+}
+
+//--------------------------------------------------------------------------
+void UserDefinedFeatures::execute( const URL& _rFeatureURL, const Sequence< PropertyValue>& _rArgs )
+{
+    try
+    {
+        Reference< XController > xController( (Reference< XController >)m_aController, UNO_SET_THROW );
+        Reference< XDispatchProvider > xDispatchProvider( xController->getFrame(), UNO_QUERY_THROW );
+        Reference< XDispatch > xDispatch( xDispatchProvider->queryDispatch(
+            _rFeatureURL,
+            ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "_self" ) ),
+            FrameSearchFlag::AUTO
+        ) );
+
+        if ( xDispatch == xController )
+        {
+            OSL_ENSURE( false, "UserDefinedFeatures::execute: the controller shouldn't be the dispatcher here!" );
+            xDispatch.clear();
+        }
+
+        if ( xDispatch.is() )
+            xDispatch->dispatch( _rFeatureURL, _rArgs );
+    }
+    catch( const Exception& )
+    {
+        DBG_UNHANDLED_EXCEPTION();
+    }
+}
+
+//==========================================================================
 //= OGenericUnoController_Data
 //==========================================================================
 struct OGenericUnoController_Data
 {
     ::sfx2::UserInputInterception   m_aUserInputInterception;
+    UserDefinedFeatures             m_aUserDefinedFeatures;
 
     OGenericUnoController_Data( OGenericUnoController& _rController, ::osl::Mutex& _rMutex )
         :m_aUserInputInterception( _rController, _rMutex )
+        ,m_aUserDefinedFeatures( _rController.getXController() )
     {
     }
 };
@@ -189,7 +251,6 @@ DBG_NAME(OGenericUnoController)
 // -------------------------------------------------------------------------
 OGenericUnoController::OGenericUnoController(const Reference< XMultiServiceFactory >& _rM)
     :OGenericUnoController_Base(m_aMutex)
-    ,m_pData( new OGenericUnoController_Data( *this, m_aMutex ) )
 #ifdef DBG_UTIL
     ,m_bDescribingSupportedFeatures( false )
 #endif
@@ -203,6 +264,12 @@ OGenericUnoController::OGenericUnoController(const Reference< XMultiServiceFacto
     ,m_bCurrentlyModified(sal_False)
     ,m_bExternalTitle(sal_False)
 {
+    osl_incrementInterlockedCount( &m_refCount );
+    {
+        m_pData.reset( new OGenericUnoController_Data( *this, m_aMutex ) );
+    }
+    osl_decrementInterlockedCount( &m_refCount );
+
     DBG_CTOR(OGenericUnoController,NULL);
 
     try
@@ -218,7 +285,6 @@ OGenericUnoController::OGenericUnoController(const Reference< XMultiServiceFacto
 // -----------------------------------------------------------------------------
 OGenericUnoController::OGenericUnoController()
     :OGenericUnoController_Base(m_aMutex)
-    ,m_pData( new OGenericUnoController_Data( *this, m_aMutex ) )
 #ifdef DBG_UTIL
     ,m_bDescribingSupportedFeatures( false )
 #endif
@@ -559,7 +625,7 @@ sal_Bool OGenericUnoController::isFeatureSupported( sal_Int32 _nId )
     SupportedFeatures::iterator aFeaturePos = ::std::find_if(
         m_aSupportedFeatures.begin(),
         m_aSupportedFeatures.end(),
-        ::std::bind2nd( SupportedFeaturesEqualId(), _nId )
+        ::std::bind2nd( CompareFeatureById(), _nId )
     );
 
     return ( m_aSupportedFeatures.end() != aFeaturePos && aFeaturePos->first.getLength());
@@ -580,7 +646,7 @@ void OGenericUnoController::InvalidateFeature_Impl()
 #endif
 
     sal_Bool bEmpty = sal_True;
-    FeaturePair aNextFeature;
+    FeatureListener aNextFeature;
     {
         ::osl::MutexGuard aGuard( m_aFeatureMutex);
         bEmpty = m_aFeaturesToInvalidate.empty();
@@ -599,7 +665,7 @@ void OGenericUnoController::InvalidateFeature_Impl()
             SupportedFeatures::iterator aFeaturePos = ::std::find_if(
                 m_aSupportedFeatures.begin(),
                 m_aSupportedFeatures.end(),
-                ::std::bind2nd( SupportedFeaturesEqualId(), aNextFeature.nId )
+                ::std::bind2nd( CompareFeatureById(), aNextFeature.nId )
             );
 
 #if OSL_DEBUG_LEVEL > 0
@@ -631,16 +697,16 @@ void OGenericUnoController::InvalidateFeature_Impl()
 // -----------------------------------------------------------------------
 void OGenericUnoController::ImplInvalidateFeature( sal_Int32 _nId, const Reference< XStatusListener >& _xListener, sal_Bool _bForceBroadcast )
 {
-    FeaturePair aPair;
-    aPair.nId               = _nId;
-    aPair.xListener         = _xListener;
-    aPair.bForceBroadcast   = _bForceBroadcast;
+    FeatureListener aListener;
+    aListener.nId               = _nId;
+    aListener.xListener         = _xListener;
+    aListener.bForceBroadcast   = _bForceBroadcast;
 
     sal_Bool bWasEmpty;
     {
-        ::osl::MutexGuard aGuard( m_aFeatureMutex);
+        ::osl::MutexGuard aGuard( m_aFeatureMutex );
         bWasEmpty = m_aFeaturesToInvalidate.empty();
-        m_aFeaturesToInvalidate.push_back(aPair);
+        m_aFeaturesToInvalidate.push_back( aListener );
     }
 
     if ( bWasEmpty )
@@ -691,7 +757,9 @@ Reference< XDispatch >  OGenericUnoController::queryDispatch(const URL& aURL, co
 
     // URL's we can handle ourself?
     if  (   aURL.Complete.equals( getConfirmDeletionURL() )
-        ||  ( m_aSupportedFeatures.find( aURL.Complete ) != m_aSupportedFeatures.end() )
+        ||  (   ( m_aSupportedFeatures.find( aURL.Complete ) != m_aSupportedFeatures.end() )
+            &&  !isUserDefinedFeature( aURL.Complete )
+            )
         )
     {
         xReturn = this;
@@ -825,15 +893,27 @@ void OGenericUnoController::removeStatusListener(const Reference< XStatusListene
     }
 
     // now remove the listener from the deque
-    ::osl::MutexGuard aGuard( m_aFeatureMutex);
+    ::osl::MutexGuard aGuard( m_aFeatureMutex );
     m_aFeaturesToInvalidate.erase(
         ::std::remove_if(   m_aFeaturesToInvalidate.begin(),
                             m_aFeaturesToInvalidate.end(),
-                            ::std::bind2nd(FeaturePairFunctor(),aListener))
+                            ::std::bind2nd(FindFeatureListener(),aListener))
         ,m_aFeaturesToInvalidate.end());
 }
-
-
+// -----------------------------------------------------------------------------
+void OGenericUnoController::releaseNumberForComponent()
+{
+    try
+    {
+        Reference< XUntitledNumbers > xUntitledProvider(getPrivateModel(), UNO_QUERY      );
+        if ( xUntitledProvider.is() )
+            xUntitledProvider->releaseNumberForComponent(static_cast<XWeak*>(this));
+    }
+    catch( const Exception& )
+    {
+        // NII
+    }
+}
 // -----------------------------------------------------------------------
 void OGenericUnoController::disposing()
 {
@@ -856,16 +936,7 @@ void OGenericUnoController::disposing()
         m_aFeaturesToInvalidate.clear();
     }
 
-    try
-    {
-        Reference< XUntitledNumbers > xUntitledProvider(getPrivateModel(), UNO_QUERY      );
-        if ( xUntitledProvider.is() )
-            xUntitledProvider->releaseNumberForComponent(static_cast<XWeak*>(this));
-    }
-    catch( const Exception& )
-    {
-        DBG_UNHANDLED_EXCEPTION();
-    }
+    releaseNumberForComponent();
 
     // check out from all the objects we are listening
     // the frame
@@ -932,24 +1003,20 @@ void OGenericUnoController::describeSupportedFeatures()
 }
 
 //------------------------------------------------------------------------------
-FeatureState OGenericUnoController::GetState(sal_uInt16 nId) const
+FeatureState OGenericUnoController::GetState( sal_uInt16 _nId ) const
 {
     FeatureState aReturn;
         // (disabled automatically)
 
-    try
+    switch ( _nId )
     {
-        switch (nId)
-        {
-            case ID_BROWSER_UNDO:
-            case ID_BROWSER_SAVEDOC:
-                aReturn.bEnabled = sal_True;
-                break;
-        }
-    }
-    catch( const Exception& )
-    {
-        DBG_UNHANDLED_EXCEPTION();
+        case ID_BROWSER_UNDO:
+        case ID_BROWSER_SAVEDOC:
+            aReturn.bEnabled = sal_True;
+            break;
+        default:
+            aReturn = m_pData->m_aUserDefinedFeatures.getState( getURLForId( _nId ) );
+            break;
     }
 
     return aReturn;
@@ -960,27 +1027,10 @@ void OGenericUnoController::Execute( sal_uInt16 _nId, const Sequence< PropertyVa
 {
     OSL_ENSURE( isUserDefinedFeature( _nId ),
         "OGenericUnoController::Execute: responsible for user defined features only!" );
-    URL aFeatureURL( getURLForId( _nId ) );
 
-    // user defined features can be handled by dispatch interceptors only. So, we need to do
-    // a queryDispatch, and dispatch the URL
-    try
-    {
-        Reference< XDispatch > xDispatch( queryDispatch(
-            aFeatureURL,
-            ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "_self" ) ),
-            FrameSearchFlag::AUTO
-        ) );
-        if ( xDispatch == *this )
-            xDispatch.clear();
-
-        if ( xDispatch.is() )
-            xDispatch->dispatch( aFeatureURL, _rArgs );
-    }
-    catch( const Exception& )
-    {
-        DBG_UNHANDLED_EXCEPTION();
-    }
+    // user defined features can be handled by dispatch interceptors resp. protocol handlers only.
+    // So, we need to do a queryDispatch, and dispatch the URL
+    m_pData->m_aUserDefinedFeatures.execute( getURLForId( _nId ), _rArgs );
 }
 
 //------------------------------------------------------------------------------
@@ -992,7 +1042,7 @@ URL OGenericUnoController::getURLForId(sal_Int32 _nId) const
         SupportedFeatures::const_iterator aIter = ::std::find_if(
             m_aSupportedFeatures.begin(),
             m_aSupportedFeatures.end(),
-            ::std::bind2nd( SupportedFeaturesEqualId(), _nId )
+            ::std::bind2nd( CompareFeatureById(), _nId )
         );
 
         if ( m_aSupportedFeatures.end() != aIter && aIter->first.getLength() )
@@ -1005,9 +1055,19 @@ URL OGenericUnoController::getURLForId(sal_Int32 _nId) const
 }
 
 //-------------------------------------------------------------------------
-bool OGenericUnoController::isUserDefinedFeature( const sal_uInt16 _nFeatureId )
+bool OGenericUnoController::isUserDefinedFeature( const sal_uInt16 _nFeatureId ) const
 {
     return ( _nFeatureId >= FIRST_USER_DEFINED_FEATURE ) && ( _nFeatureId < LAST_USER_DEFINED_FEATURE );
+}
+
+//-------------------------------------------------------------------------
+bool OGenericUnoController::isUserDefinedFeature( const ::rtl::OUString& _rFeatureURL ) const
+{
+    SupportedFeatures::const_iterator pos = m_aSupportedFeatures.find( _rFeatureURL );
+    OSL_PRECOND( pos != m_aSupportedFeatures.end(),
+        "OGenericUnoController::isUserDefinedFeature: this is no supported feature at all!" );
+
+    return ( pos != m_aSupportedFeatures.end() ) ? isUserDefinedFeature( pos->second.nFeatureId ) : false;
 }
 
 //-------------------------------------------------------------------------

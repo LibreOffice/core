@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: generalpage.hxx,v $
- * $Revision: 1.22 $
+ * $Revision: 1.22.68.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -104,9 +104,10 @@ namespace dbaui
                             m_aControlDependencies;
 
 
-        ODsnTypeCollection* m_pCollection;  /// the DSN type collection instance
-        DATASOURCE_TYPE     m_eCurrentSelection;    /// currently selected type
-        DATASOURCE_TYPE     m_eNotSupportedKnownType;   /// if a data source of an unsupported, but known type is encountered ....
+        ::dbaccess::ODsnTypeCollection*
+                            m_pCollection;  /// the DSN type collection instance
+        ::dbaccess::DATASOURCE_TYPE     m_eCurrentSelection;    /// currently selected type
+        ::dbaccess::DATASOURCE_TYPE     m_eNotSupportedKnownType;   /// if a data source of an unsupported, but known type is encountered ....
 
         enum SPECIAL_MESSAGE
         {
@@ -121,8 +122,8 @@ namespace dbaui
         Link                m_aChooseDocumentHandler;       /// to be called when a recent document has been definately chosen
         sal_Bool            m_bDisplayingInvalid : 1;   // the currently displayed data source is deleted
         sal_Bool            m_bUserGrabFocus : 1;
-        bool                approveDataSourceType( DATASOURCE_TYPE eType, String& _inout_rDisplayName );
-        void                insertDatasourceTypeEntryData(DATASOURCE_TYPE eType, String sDisplayName);
+        bool                approveDataSourceType( ::dbaccess::DATASOURCE_TYPE eType, String& _inout_rDisplayName );
+        void                insertDatasourceTypeEntryData(::dbaccess::DATASOURCE_TYPE eType, String sDisplayName);
 
     public:
         static SfxTabPage*  Create(Window* pParent, const SfxItemSet& _rAttrSet, sal_Bool _bDBWizardMode = sal_False);
@@ -137,7 +138,7 @@ namespace dbaui
         DocumentDescriptor  GetSelectedDocument() const;
 
         /// get the currently selected datasource type
-        DATASOURCE_TYPE GetSelectedType() const { return m_eCurrentSelection; }
+        ::dbaccess::DATASOURCE_TYPE GetSelectedType() const { return m_eCurrentSelection; }
 
     protected:
         // SfxTabPage overridables
@@ -155,15 +156,15 @@ namespace dbaui
 
     protected:
 
-        void onTypeSelected(const DATASOURCE_TYPE _eType);
+        void onTypeSelected(const ::dbaccess::DATASOURCE_TYPE _eType);
         void initializeTypeList();
 
-        void implSetCurrentType( const DATASOURCE_TYPE _eType );
+        void implSetCurrentType( const ::dbaccess::DATASOURCE_TYPE _eType );
 
-        void switchMessage(const DATASOURCE_TYPE _eType);
+        void switchMessage(const ::dbaccess::DATASOURCE_TYPE _eType);
 
         /// sets the the title of the parent dialog
-        void setParentTitle(DATASOURCE_TYPE _eSelectedType);
+        void setParentTitle(::dbaccess::DATASOURCE_TYPE _eSelectedType);
 
         DECL_LINK(OnDatasourceTypeSelected, ListBox*);
         DECL_LINK(OnSetupModeSelected, RadioButton*);

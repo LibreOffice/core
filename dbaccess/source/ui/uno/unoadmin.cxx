@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: unoadmin.cxx,v $
- * $Revision: 1.20 $
+ * $Revision: 1.20.34.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -94,7 +94,7 @@ ODatabaseAdministrationDialog::ODatabaseAdministrationDialog(const Reference< XM
 {
     DBG_CTOR(ODatabaseAdministrationDialog,NULL);
 
-    m_pCollection = new ODsnTypeCollection();
+    m_pCollection = new ::dbaccess::ODsnTypeCollection();
     m_pCollection->initUserDriverTypes(m_aContext.getLegacyServiceFactory());
     ODbAdminDialog::createItemSet(m_pDatasourceItems, m_pItemPool, m_pItemPoolDefaults, m_pCollection);
 }

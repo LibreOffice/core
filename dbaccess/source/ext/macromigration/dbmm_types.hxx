@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: dbmm_types.hxx,v $
- * $Revision: 1.3 $
+ * $Revision: 1.3.2.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -31,8 +31,7 @@
 #ifndef DBACCESS_DBMM_TYPES_HXX
 #define DBACCESS_DBMM_TYPES_HXX
 
-/** === begin UNO includes === **/
-/** === end UNO includes === **/
+#include <tools/string.hxx>
 
 //........................................................................
 namespace dbmm
@@ -60,6 +59,11 @@ namespace dbmm
         eForm,
         eReport
     };
+
+    //====================================================================
+    //= helper
+    //====================================================================
+    String getScriptTypeDisplayName( const ScriptType _eType );
 
 //........................................................................
 } // namespace dbmm

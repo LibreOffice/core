@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: cfgimport.cxx,v $
- * $Revision: 1.16 $
+ * $Revision: 1.16.82.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -588,7 +588,7 @@ void OCfgImport::createDataSource(const ::rtl::OUString& _sName)
     if ( pFilter )
     {
         String aRet = pFilter->GetDefaultExtension();
-        while( aRet.SearchAndReplaceAscii( "*.", String() ) != STRING_NOTFOUND );
+        while( aRet.SearchAndReplaceAscii( "*.", String() ) != STRING_NOTFOUND ) ;
         sExtension = aRet;
     }
     // then look for which of them settings are stored in the configuration
@@ -620,7 +620,14 @@ void OCfgImport::createDataSource(const ::rtl::OUString& _sName)
             aURL.setExtension(sExtension);
             sFileName = aURL.GetMainURL(INetURLObject::NO_DECODE);
         }
-        m_xModel->attachResource(sFileName,Sequence<PropertyValue>());
+
+        Sequence< PropertyValue > aArgs(1);
+        aArgs[0].Name = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "FileName" ) );
+        aArgs[0].Value <<= sFileName;
+
+        Reference< XLoadable > xLoad( m_xModel, UNO_QUERY_THROW );
+        xLoad->load( aArgs );
+        m_xModel->attachResource( sFileName, Sequence< PropertyValue >() );
     }
     catch(Exception&)
     {

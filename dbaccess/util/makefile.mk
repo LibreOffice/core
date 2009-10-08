@@ -8,7 +8,7 @@
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.38 $
+# $Revision: 1.38.68.2 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -46,7 +46,7 @@ LDUMP=ldump2.exe
 
 # --- database core (dba) -----------------------------------
 
-LIB1TARGET=$(SLB)$/dbaccess.lib
+LIB1TARGET=$(SLB)$/$(TARGET).lib
 LIB1FILES=\
         $(SLB)$/api.lib	\
         $(SLB)$/dataaccess.lib	\
@@ -75,10 +75,16 @@ SHL1STDLIBS= \
         $(FWELIB) \
         $(SALHELPERLIB)
 
+SHL1DEPN=
+SHL1IMPLIB=i$(TARGET)
 SHL1LIBS=$(LIB1TARGET)
 SHL1DEF=$(MISC)$/$(SHL1TARGET).def
 DEF1NAME=$(SHL1TARGET)
-SHL1VERSIONMAP=$(TARGET).map
+DEFLIB1NAME=$(TARGET)
+DEF1DEPN=	$(MISC)$/$(SHL1TARGET).flt \
+            $(SLB)$/$(TARGET).lib
+# SHL1VERSIONMAP=$(TARGET).map
+SHL1USE_EXPORTS=name
 
 # --- .res file ----------------------------------------------------------
 
@@ -127,8 +133,17 @@ SHL2STDLIBS= \
         $(SO2LIB)				\
         $(VOSLIB)				\
         $(SALLIB)
+        
+.IF "$(GUI)"!="WNT" || "$(COM)"=="GCC"
+SHL2STDLIBS+= \
+        -l$(TARGET)$(DLLPOSTFIX)
+SHL2DEPN=$(SHL1TARGETN)
+.ELSE
+SHL2STDLIBS+= \
+        $(LB)$/i$(TARGET).lib
+SHL2DEPN=$(LB)$/i$(TARGET).lib
+.ENDIF
 
-SHL2DEPN=
 SHL2IMPLIB=i$(TARGET2)
 SHL2LIBS=$(LIB2TARGET)
 SHL2DEF=$(MISC)$/$(SHL2TARGET).def
@@ -140,6 +155,7 @@ DEF2DEPN=	$(MISC)$/$(SHL2TARGET).flt \
 SHL2USE_EXPORTS=name
 
 ALL: \
+    $(LIB1TARGET)	\
     $(LIB2TARGET)	\
     ALLTAR
 
@@ -211,6 +227,11 @@ $(MISC)$/$(SHL2TARGET).flt: makefile.mk
     @echo CLEAR_THE_FILE	> $@
     @echo _TI				>>$@
     @echo _real				>>$@
-.ENDIF
 
+$(MISC)$/$(SHL1TARGET).flt: makefile.mk
+    @echo ------------------------------
+    @echo CLEAR_THE_FILE	> $@
+    @echo _TI				>>$@
+    @echo _real				>>$@
+.ENDIF
 

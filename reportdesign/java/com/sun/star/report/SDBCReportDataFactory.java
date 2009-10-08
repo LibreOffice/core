@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: SDBCReportDataFactory.java,v $
- * $Revision: 1.9 $
+ * $Revision: 1.9.18.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -72,15 +72,14 @@ public class SDBCReportDataFactory implements DataSourceFactory
 {
 
     public static final String COMMAND_TYPE = "command-type";
+    public static final String ESCAPE_PROCESSING = "escape-processing";
     public static final String GROUP_EXPRESSIONS = "group-expressions";
     public static final String MASTER_VALUES = "master-values";
     public static final String DETAIL_COLUMNS = "detail-columns";
     public static final String UNO_FILTER = "Filter";
-
     private static final String APPLY_FILTER = "ApplyFilter";
     private static final String UNO_COMMAND = "Command";
     private static final String UNO_ORDER = "Order";
-
     private static final String UNO_APPLY_FILTER = "ApplyFilter";
     private static final String UNO_COMMAND_TYPE = "CommandType";
     private final XConnection connection;
@@ -435,22 +434,26 @@ public class SDBCReportDataFactory implements DataSourceFactory
                         if (queries.hasByName(command))
                         {
                             final XPropertySet prop = (XPropertySet) UnoRuntime.queryInterface(XPropertySet.class, queries.getByName(command));
-                            final Boolean escape = (Boolean)prop.getPropertyValue("EscapeProcessing");
-                            if ( escape.booleanValue() )
+                            final Boolean escape = (Boolean) prop.getPropertyValue("EscapeProcessing");
+                            if (escape.booleanValue())
                             {
                                 statement = (String) prop.getPropertyValue(UNO_COMMAND);
-                                final XSingleSelectQueryComposer composer = getComposer(tools,statement,CommandType.COMMAND);
-                                if ( composer != null )
+                                final XSingleSelectQueryComposer composer = getComposer(tools, statement, CommandType.COMMAND);
+                                if (composer != null)
                                 {
-                                    final String order  = (String) prop.getPropertyValue(UNO_ORDER);
-                                    if ( order != null && order.length() != 0 )
-                                        composer.setOrder(order);
-                                    final Boolean applyFilter = (Boolean)prop.getPropertyValue(UNO_APPLY_FILTER);
-                                    if ( applyFilter.booleanValue() )
+                                    final String order = (String) prop.getPropertyValue(UNO_ORDER);
+                                    if (order != null && order.length() != 0)
                                     {
-                                        final String filter  = (String) prop.getPropertyValue(UNO_FILTER);
-                                        if ( filter != null && filter.length() != 0 )
+                                        composer.setOrder(order);
+                                    }
+                                    final Boolean applyFilter = (Boolean) prop.getPropertyValue(UNO_APPLY_FILTER);
+                                    if (applyFilter.booleanValue())
+                                    {
+                                        final String filter = (String) prop.getPropertyValue(UNO_FILTER);
+                                        if (filter != null && filter.length() != 0)
+                                        {
                                             composer.setFilter(filter);
+                                        }
                                     }
                                     statement = composer.getQuery();
                                 }
@@ -561,10 +564,10 @@ public class SDBCReportDataFactory implements DataSourceFactory
         final XRowSet rowSet = (XRowSet) UnoRuntime.queryInterface(XRowSet.class, m_cmpCtx.getServiceManager().createInstanceWithContext("com.sun.star.sdb.RowSet", m_cmpCtx));
         final XPropertySet rowSetProp = (XPropertySet) UnoRuntime.queryInterface(XPropertySet.class, rowSet);
 
-        rowSetProp.setPropertyValue(
-                "ActiveConnection", connection);
-        rowSetProp.setPropertyValue(UNO_COMMAND_TYPE,
-                new Integer(commandType));
+        rowSetProp.setPropertyValue("ActiveConnection", connection);
+        final Boolean escapeProcessing = (Boolean)parameters.get(ESCAPE_PROCESSING);
+        rowSetProp.setPropertyValue("EscapeProcessing", escapeProcessing);
+        rowSetProp.setPropertyValue(UNO_COMMAND_TYPE, new Integer(commandType));
         rowSetProp.setPropertyValue(UNO_COMMAND, command);
 
         final String filter = (String) parameters.get(UNO_FILTER);

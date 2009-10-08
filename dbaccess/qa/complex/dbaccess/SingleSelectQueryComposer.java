@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: SingleSelectQueryComposer.java,v $
- * $Revision: 1.9 $
+ * $Revision: 1.8.14.1 $
  *
  * This file is part of OpenOffice.org.
  *

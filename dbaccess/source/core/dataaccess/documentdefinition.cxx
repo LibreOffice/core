@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: documentdefinition.cxx,v $
- * $Revision: 1.65 $
+ * $Revision: 1.64.20.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -867,7 +867,7 @@ void ODocumentDefinition::onCommandOpenSomething( const Any& _rOpenArgument, con
 
     // for the document, default to the interaction handler as used for loading the DB doc
     // This might be overwritten below, when examining _rOpenArgument.
-    ::comphelper::NamedValueCollection aDBDocArgs( m_pImpl->m_pDataSource->m_aArgs );
+    ::comphelper::NamedValueCollection aDBDocArgs( m_pImpl->m_pDataSource->getResource() );
     aDocumentArgs.put( "InteractionHandler", aDBDocArgs.getOrDefault( "InteractionHandler", Reference< XInteractionHandler >() ) );
 
     ::boost::optional< sal_Int16 > aDocumentMacroMode;
@@ -1529,15 +1529,7 @@ namespace
 // -----------------------------------------------------------------------------
 sal_Bool ODocumentDefinition::objectSupportsEmbeddedScripts() const
 {
-//    bool bAllowDocumentMacros = !m_pImpl->m_pDataSource || m_pImpl->m_pDataSource->hasAnyObjectWithMacros();
-    // TODO: revert to the disabled code. The current version is just to be able
-    // to integrate an intermediate version of the CWS, which should behave as
-    // if no macros in DB docs are allowed
-    bool bAllowDocumentMacros = !m_pImpl->m_pDataSource->hasMacroStorages();
-        // even if the current version is not able to create documents which contain macros,
-        // later versions will be. Such documents contain macro/script storages in the
-        // document root storage, in which case we need to disable the per-form/report
-        // scripting.
+    bool bAllowDocumentMacros = !m_pImpl->m_pDataSource || m_pImpl->m_pDataSource->hasAnyObjectWithMacros();
 
     // if *any* of the objects of the database document already has macros, we continue to allow it
     // to have them, until the user did a migration.
@@ -1605,7 +1597,8 @@ Sequence< PropertyValue > ODocumentDefinition::fillLoadArgs( const Reference< XC
         aMediaDesc.put( "ComponentData", aComponentData.getPropertyValues() );
     }
 
-    aMediaDesc.put( "DocumentTitle", m_pImpl->m_aProps.aTitle );
+    if ( m_pImpl->m_aProps.aTitle.getLength() )
+        aMediaDesc.put( "DocumentTitle", m_pImpl->m_aProps.aTitle );
 
     // .........................................................................
     // put the common load arguments into the document's media descriptor

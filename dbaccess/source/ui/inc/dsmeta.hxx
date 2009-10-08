@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: dsmeta.hxx,v $
- * $Revision: 1.5 $
+ * $Revision: 1.5.68.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -70,7 +70,7 @@ namespace dbaui
     class DataSourceMetaData
     {
     public:
-        DataSourceMetaData( DATASOURCE_TYPE _eType );
+        DataSourceMetaData( ::dbaccess::DATASOURCE_TYPE _eType );
         ~DataSourceMetaData();
 
         /// returns a struct describing this data source type's support for our known advanced settings
@@ -79,7 +79,7 @@ namespace dbaui
         /// determines whether or not the data source requires authentication
         AuthenticationMode  getAuthentication() const;
 
-        static  AuthenticationMode  getAuthentication( DATASOURCE_TYPE _eType );
+        static  AuthenticationMode  getAuthentication( ::dbaccess::DATASOURCE_TYPE _eType );
 
     private:
         ::boost::shared_ptr< DataSourceMetaData_Impl >  m_pImpl;
@@ -108,6 +108,7 @@ namespace dbaui
         bool    bBooleanComparisonMode;
         bool    bFormsCheckRequiredFields;
         bool    bIgnoreCurrency;
+        bool    bAutoIncrementIsPrimaryKey;
         // Note: If you extend this list, you need to adjust the ctor (of course)
         // and (maybe) the implementation of supportsAnySpecialSetting
 
@@ -127,6 +128,7 @@ namespace dbaui
             ,bBooleanComparisonMode         ( true )
             ,bFormsCheckRequiredFields      ( true )
             ,bIgnoreCurrency                ( false )
+            ,bAutoIncrementIsPrimaryKey     ( false )
         {
         }
 
@@ -152,7 +154,9 @@ namespace dbaui
             ||  ( bUseDOSLineEnds               == true )
             ||  ( bBooleanComparisonMode        == true )
             ||  ( bFormsCheckRequiredFields     == true )
-            ||  ( bIgnoreCurrency               == true );
+            ||  ( bIgnoreCurrency               == true )
+            ||  ( bAutoIncrementIsPrimaryKey    == true )
+            ;
     }
 
 //........................................................................

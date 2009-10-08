@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: databaseobjectview.cxx,v $
- * $Revision: 1.11 $
+ * $Revision: 1.8.6.3 $
  *
  * This file is part of OpenOffice.org.
  *

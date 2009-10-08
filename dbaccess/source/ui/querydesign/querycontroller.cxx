@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: querycontroller.cxx,v $
- * $Revision: 1.119 $
+ * $Revision: 1.119.24.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -76,6 +76,7 @@
 #include <com/sun/star/ui/dialogs/XExecutableDialog.hpp>
 #include <com/sun/star/util/XCloseable.hpp>
 #include <com/sun/star/util/VetoException.hpp>
+#include <com/sun/star/frame/XUntitledNumbers.hpp>
 /** === end UNO includes === **/
 
 #include <comphelper/basicio.hxx>
@@ -1248,7 +1249,12 @@ sal_Bool OQueryController::askForNewName(const Reference<XNameAccess>& _xElement
         if ( ( _bSaveAs && !bNew ) || ( bNew && m_sName.getLength() ) )
             aDefaultName = String( m_sName );
         else
-            aDefaultName = getPrivateTitle( );
+        {
+            String sName = String( ModuleRes( editingView() ? STR_VIEW_TITLE : STR_QRY_TITLE ) );
+            aDefaultName = sName.GetToken(0,' ');
+            //aDefaultName = getPrivateTitle( );
+            aDefaultName = ::dbtools::createUniqueName(_xElements,aDefaultName);
+        }
 
         DynamicTableOrQueryNameCheck aNameChecker( getConnection(), CommandType::QUERY );
         OSaveAsDlg aDlg(
@@ -1419,11 +1425,19 @@ bool OQueryController::doSaveAsDoc(sal_Bool _bSaveAs)
 
                 // now check if our datasource has set a tablefilter and if so, append the new table name to it
                 ::dbaui::appendToFilter( getConnection(), m_sName, getORB(), getView() );
+            } // if ( editingView() )
+            Reference< XTitleChangeListener> xEventListener(impl_getTitleHelper_throw(),UNO_QUERY);
+            if ( xEventListener.is() )
+            {
+                TitleChangedEvent aEvent;
+                xEventListener->titleChanged(aEvent);
             }
+            releaseNumberForComponent();
         }
 
         setModified( sal_False );
         bSuccess = true;
+
     }
     catch( const SQLException& )
     {

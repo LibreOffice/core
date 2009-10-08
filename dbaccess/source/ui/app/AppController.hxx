@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: AppController.hxx,v $
- * $Revision: 1.32 $
+ * $Revision: 1.30.20.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -132,7 +132,8 @@ namespace dbaui
         TContainerVector        m_aCurrentContainers;       // the containers where we are listener on
         TDocuments              m_aDocuments;
         TFrames                 m_aSpecialSubFrames;        // contains the query, table and relation frame
-        ODsnTypeCollection      m_aTypeCollection;
+        ::dbaccess::ODsnTypeCollection
+                                m_aTypeCollection;
         OTableCopyHelper        m_aTableCopyHelper;
         TransferableClipboardListener*
                                 m_pClipbordNotifier;        // notifier for changes in the clipboard

@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: AdabasStatDlg.hxx,v $
- * $Revision: 1.8 $
+ * $Revision: 1.8.68.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -86,7 +86,7 @@ namespace dbaui
         virtual ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > getORB() const;
         virtual ::std::pair< ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >,sal_Bool> createConnection();
         virtual ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDriver > getDriver();
-        virtual DATASOURCE_TYPE getDatasourceType(const SfxItemSet& _rSet) const;
+        virtual ::dbaccess::DATASOURCE_TYPE getDatasourceType(const SfxItemSet& _rSet) const;
         virtual void clearPassword();
         virtual sal_Bool saveDatasource();
         virtual void setTitle(const ::rtl::OUString& _sTitle);

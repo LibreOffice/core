@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: dsbrowserDnD.cxx,v $
- * $Revision: 1.81 $
+ * $Revision: 1.78.140.3 $
  *
  * This file is part of OpenOffice.org.
  *

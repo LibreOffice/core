@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: charsets.cxx,v $
- * $Revision: 1.14 $
+ * $Revision: 1.14.68.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -36,9 +36,6 @@
 #endif
 #ifndef _TOOLS_DEBUG_HXX
 #include <tools/debug.hxx>
-#endif
-#ifndef _DBU_MISCRES_HRC_
-#include "dbumiscres.hrc"
 #endif
 #ifndef _DBU_MISC_HRC_
 #include "dbu_misc.hrc"

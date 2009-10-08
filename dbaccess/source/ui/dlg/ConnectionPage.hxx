@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: ConnectionPage.hxx,v $
- * $Revision: 1.7 $
+ * $Revision: 1.7.68.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -58,7 +58,8 @@ namespace dbaui
     */
     class OConnectionTabPage : public OConnectionHelper
     {
-        ODsnTypeCollection* m_pCollection;  /// the DSN type collection instance
+        ::dbaccess::ODsnTypeCollection*
+                            m_pCollection;  /// the DSN type collection instance
         sal_Bool            m_bUserGrabFocus : 1;
     protected:
         // connection

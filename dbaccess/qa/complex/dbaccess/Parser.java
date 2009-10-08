@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: Parser.java,v $
- * $Revision: 1.2 $
+ * $Revision: 1.1.6.2 $
  *
  * This file is part of OpenOffice.org.
  *

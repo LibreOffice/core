@@ -8,7 +8,7 @@
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.10 $
+# $Revision: 1.10.2.3 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -60,7 +60,10 @@ SLOFILES=	\
         $(SLO)$/myucp_resultset.obj		\
         $(SLO)$/databasedocument.obj	\
         $(SLO)$/dataaccessdescriptor.obj\
-        $(SLO)$/ModelImpl.obj
+        $(SLO)$/ModelImpl.obj           \
+        $(SLO)$/documentevents.obj      \
+        $(SLO)$/documenteventexecutor.obj \
+        $(SLO)$/documenteventnotifier.obj
 
 # --- Targets ----------------------------------
 

@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: TableCopyHelper.cxx,v $
- * $Revision: 1.13 $
+ * $Revision: 1.11.32.2 $
  *
  * This file is part of OpenOffice.org.
  *

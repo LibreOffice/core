@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: curledit.cxx,v $
- * $Revision: 1.14 $
+ * $Revision: 1.14.52.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -111,9 +111,9 @@ void OConnectionURLEdit::SetText(const String& _rStr, const Selection& /*_rNewSe
     if (!bIsEmpty)
     {
         // determine the type of the new URL described by the new text
-        DATASOURCE_TYPE eType = m_aTypeCollection.getType(_rStr);
+        ::dbaccess::DATASOURCE_TYPE eType = m_aTypeCollection.getType(_rStr);
         // and the prefix belonging to this type
-        if (DST_UNKNOWN != eType)
+        if ( ::dbaccess::DST_UNKNOWN != eType)
             sPrefix = m_aTypeCollection.getDatasourcePrefix(eType);
         else {
             DBG_ERROR("OConnectionURLEdit::SetText : the new text is no valid connection URL!");

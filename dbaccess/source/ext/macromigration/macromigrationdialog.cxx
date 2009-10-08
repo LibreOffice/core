@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: macromigrationdialog.cxx,v $
- * $Revision: 1.3 $
+ * $Revision: 1.3.2.9 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -33,23 +33,36 @@
 
 #include "dbmm_global.hrc"
 #include "dbmm_module.hxx"
-#include "docerrorhandling.hxx"
+#include "docinteraction.hxx"
 #include "macromigration.hrc"
 #include "macromigrationdialog.hxx"
 #include "macromigrationpages.hxx"
 #include "migrationengine.hxx"
+#include "migrationerror.hxx"
 #include "migrationlog.hxx"
 
 /** === begin UNO includes === **/
 #include <com/sun/star/sdb/application/XDatabaseDocumentUI.hpp>
 #include <com/sun/star/frame/XModel2.hpp>
 #include <com/sun/star/frame/XStorable.hpp>
-#include <com/sun/star/frame/XModel.hpp>
+#include <com/sun/star/util/XCloseable.hpp>
+#include <com/sun/star/frame/XComponentLoader.hpp>
+#include <com/sun/star/util/XModifiable.hpp>
+#include <com/sun/star/ucb/XContent.hpp>
+#include <com/sun/star/ucb/XContentProvider.hpp>
 /** === end UNO includes === **/
 
+#include <comphelper/namedvaluecollection.hxx>
 #include <cppuhelper/exc_hlp.hxx>
+#include <cppuhelper/implbase1.hxx>
+#include <rtl/ref.hxx>
 #include <svtools/filenotation.hxx>
 #include <tools/diagnose_ex.h>
+#include <ucbhelper/content.hxx>
+#include <ucbhelper/contentbroker.hxx>
+#include <vcl/msgbox.hxx>
+
+#include <list>
 
 //........................................................................
 namespace dbmm
@@ -61,7 +74,7 @@ namespace dbmm
 #define STATE_MIGRATE           2
 #define STATE_SUMMARY           3
 
-#define PATH_DEFAULT    1
+#define PATH_DEFAULT            1
 
     /** === begin UNO using === **/
     using ::com::sun::star::uno::Reference;
@@ -77,12 +90,37 @@ namespace dbmm
     using ::com::sun::star::sdb::XOfficeDatabaseDocument;
     using ::com::sun::star::frame::XModel2;
     using ::com::sun::star::frame::XController;
+    using ::com::sun::star::frame::XController2;
     using ::com::sun::star::container::XEnumeration;
     using ::com::sun::star::frame::XStorable;
     using ::com::sun::star::uno::Sequence;
     using ::com::sun::star::beans::PropertyValue;
-    using ::com::sun::star::frame::XModel;
+    using ::com::sun::star::frame::XFrame;
+    using ::com::sun::star::awt::XWindow;
+    using ::com::sun::star::util::XCloseable;
+    using ::com::sun::star::util::XCloseListener;
+    using ::com::sun::star::util::CloseVetoException;
+    using ::com::sun::star::lang::EventObject;
+    using ::com::sun::star::frame::XComponentLoader;
+    using ::com::sun::star::util::XModifiable;
+    using ::com::sun::star::ucb::XCommandEnvironment;
+    using ::com::sun::star::ucb::XContent;
+    using ::com::sun::star::ucb::XContentIdentifier;
+    using ::com::sun::star::ucb::XContentProvider;
     /** === end UNO using === **/
+
+    //====================================================================
+    //= helper
+    //====================================================================
+    //--------------------------------------------------------------------
+    static void lcl_getControllers_throw( const Reference< XModel2 >& _rxDocument,
+        ::std::list< Reference< XController2 > >& _out_rControllers )
+    {
+        _out_rControllers.clear();
+        Reference< XEnumeration > xControllerEnum( _rxDocument->getControllers(), UNO_SET_THROW );
+        while ( xControllerEnum->hasMoreElements() )
+            _out_rControllers.push_back( Reference< XController2 >( xControllerEnum->nextElement(), UNO_QUERY_THROW ) );
+    }
 
     //====================================================================
     //= MacroMigrationDialog_Data
@@ -92,7 +130,11 @@ namespace dbmm
         ::comphelper::ComponentContext          aContext;
         MigrationLog                            aLogger;
         Reference< XOfficeDatabaseDocument >    xDocument;
+        Reference< XModel2 >                    xDocumentModel;
+        ::rtl::OUString                         sSuccessfulBackupLocation;
         bool                                    bMigrationIsRunning;
+        bool                                    bMigrationFailure;
+        bool                                    bMigrationSuccess;
 
         MacroMigrationDialog_Data(
                 const ::comphelper::ComponentContext& _rContext,
@@ -100,11 +142,13 @@ namespace dbmm
             :aContext( _rContext )
             ,aLogger()
             ,xDocument( _rxDocument )
+            ,xDocumentModel( _rxDocument, UNO_QUERY )
             ,bMigrationIsRunning( false )
+            ,bMigrationFailure( false )
+            ,bMigrationSuccess( false )
         {
         }
     };
-
 
     //====================================================================
     //= MacroMigrationDialog
@@ -136,7 +180,7 @@ namespace dbmm
         enableButtons( WZB_FINISH, true );
         ActivatePage();
 
-        OSL_PRECOND( m_pData->xDocument.is(), "MacroMigrationDialog::MacroMigrationDialog: illegal document!" );
+        OSL_PRECOND( m_pData->xDocumentModel.is(), "MacroMigrationDialog::MacroMigrationDialog: illegal document!" );
     }
 
     //--------------------------------------------------------------------
@@ -154,6 +198,21 @@ namespace dbmm
     const Reference< XOfficeDatabaseDocument >& MacroMigrationDialog::getDocument() const
     {
         return m_pData->xDocument;
+    }
+
+    //--------------------------------------------------------------------
+    short MacroMigrationDialog::Execute()
+    {
+        short nResult = MacroMigrationDialog_Base::Execute();
+        if ( !m_pData->bMigrationFailure && !m_pData->bMigrationSuccess )
+            // migration did not even start
+            return nResult;
+
+        OSL_ENSURE( !m_pData->bMigrationFailure || !m_pData->bMigrationSuccess,
+            "MacroMigrationDialog::Execute: success *and* failure at the same time?!" );
+        impl_reloadDocument_nothrow( m_pData->bMigrationSuccess );
+
+        return nResult;
     }
 
     //--------------------------------------------------------------------
@@ -194,18 +253,23 @@ namespace dbmm
 
             enableButtons( WZB_FINISH | WZB_CANCEL | WZB_PREVIOUS | WZB_NEXT, false );
 
-            // prevent closing
-            m_pData->bMigrationIsRunning = true;
             // start the migration asynchronously
             PostUserEvent( LINK( this, MacroMigrationDialog, OnStartMigration ) );
         }
         break;
 
         case STATE_SUMMARY:
-            // enable the previous step - we can't return to the actual migration, it already happened (or failed)
+            // disable the previous step - we can't return to the actual migration, it already happened (or failed)
             enableState( STATE_MIGRATE, false );
             updateTravelUI();
-            dynamic_cast< ResultPage& >( *GetPage( STATE_SUMMARY ) ).displaySummary( m_pData->aLogger.getCompleteLog() );
+
+            // display the results
+            dynamic_cast< ResultPage& >( *GetPage( STATE_SUMMARY ) ).displayMigrationLog(
+                m_pData->bMigrationSuccess, m_pData->aLogger.getCompleteLog() );
+
+            enableButtons( WZB_FINISH, m_pData->bMigrationSuccess );
+            enableButtons( WZB_CANCEL, m_pData->bMigrationFailure );
+            defaultButton( m_pData->bMigrationSuccess ? WZB_FINISH : WZB_CANCEL );
             break;
 
         default:
@@ -261,20 +325,33 @@ namespace dbmm
     //--------------------------------------------------------------------
     IMPL_LINK( MacroMigrationDialog, OnStartMigration, void*, /*_pNotInterestedIn*/ )
     {
+        // prevent closing
+        m_pData->bMigrationIsRunning = true;
+
         // initialize migration engine and progress
         ProgressPage& rProgressPage( dynamic_cast< ProgressPage& >( *GetPage( STATE_MIGRATE ) ) );
         MigrationEngine aEngine( m_pData->aContext, m_pData->xDocument, rProgressPage, m_pData->aLogger );
         rProgressPage.setDocumentCounts( aEngine.getFormCount(), aEngine.getReportCount() );
 
         // do the migration
-        bool bSuccess = aEngine.migrateAll();
+        m_pData->bMigrationSuccess = aEngine.migrateAll();
+        m_pData->bMigrationFailure = !m_pData->bMigrationSuccess;
 
         // re-enable the UI
-        enableButtons( ( bSuccess ? WZB_FINISH | WZB_NEXT : 0 ), true );
-        enableState( STATE_SUMMARY, bSuccess );
+        enableButtons( WZB_FINISH | WZB_NEXT, true );
+        enableState( STATE_SUMMARY, true );
         updateTravelUI();
 
         m_pData->bMigrationIsRunning = false;
+
+        if ( m_pData->bMigrationSuccess )
+        {
+            rProgressPage.onFinishedSuccessfully();
+        }
+        else
+        {   // if there was an error, show the summary automatically
+            travelNext();
+        }
 
         // outta here
         return 0L;
@@ -301,16 +378,12 @@ namespace dbmm
         bool bSuccess = true;
         try
         {
-            ::std::vector< Reference< XController > > aControllers;
-
             // collect all controllers of our document
-            Reference< XModel2 > xDocument( m_pData->xDocument, UNO_QUERY_THROW );
-            Reference< XEnumeration > xControllerEnum( xDocument->getControllers(), UNO_SET_THROW );
-            while ( xControllerEnum->hasMoreElements() )
-                aControllers.push_back( Reference< XController >( xControllerEnum->nextElement(), UNO_QUERY_THROW ) );
+            ::std::list< Reference< XController2 > > aControllers;
+            lcl_getControllers_throw( m_pData->xDocumentModel, aControllers );
 
             // close all sub documents of all controllers
-            for (   ::std::vector< Reference< XController > >::const_iterator pos = aControllers.begin();
+            for (   ::std::list< Reference< XController2 > >::const_iterator pos = aControllers.begin();
                     pos != aControllers.end() && bSuccess;
                     ++pos
                 )
@@ -336,16 +409,64 @@ namespace dbmm
     }
 
     //--------------------------------------------------------------------
+    namespace
+    {
+        bool    lcl_equalURLs_nothrow( const ::rtl::OUString& _lhs, const ::rtl::OUString _rhs )
+        {
+            // the cheap situation: the URLs are equal
+            if ( _lhs == _rhs )
+                return true;
+
+            bool bEqual = true;
+            try
+            {
+                ::ucbhelper::Content aContentLHS = ::ucbhelper::Content( _lhs, Reference< XCommandEnvironment >() );
+                ::ucbhelper::Content aContentRHS = ::ucbhelper::Content( _rhs, Reference< XCommandEnvironment >() );
+                Reference< XContent > xContentLHS( aContentLHS.get(), UNO_SET_THROW );
+                Reference< XContent > xContentRHS( aContentRHS.get(), UNO_SET_THROW );
+                Reference< XContentIdentifier > xID1( xContentLHS->getIdentifier(), UNO_SET_THROW );
+                Reference< XContentIdentifier > xID2( xContentRHS->getIdentifier(), UNO_SET_THROW );
+
+                ::ucbhelper::ContentBroker* pBroker = ::ucbhelper::ContentBroker::get();
+                Reference< XContentProvider > xProvider(
+                    pBroker ? pBroker->getContentProviderInterface() : Reference< XContentProvider >(), UNO_SET_THROW );
+
+                bEqual = ( 0 == xProvider->compareContentIds( xID1, xID2 ) );
+            }
+            catch( const Exception& )
+            {
+                DBG_UNHANDLED_EXCEPTION();
+            }
+            return bEqual;
+        }
+    }
+
+    //--------------------------------------------------------------------
     bool MacroMigrationDialog::impl_backupDocument_nothrow() const
     {
-        const SaveDBDocPage& rBackupPage = dynamic_cast< const SaveDBDocPage& >( *GetPage( STATE_BACKUP_DBDOC ) );
+        if ( !m_pData->xDocumentModel.is() )
+            // should never happen, but has been reported as assertion before
+            return false;
+
+        SaveDBDocPage& rBackupPage = dynamic_cast< SaveDBDocPage& >( *GetPage( STATE_BACKUP_DBDOC ) );
         ::rtl::OUString sBackupLocation( rBackupPage.getBackupLocation() );
 
         Any aError;
         try
         {
+            // check that the backup location isn't the same as the document itself
+            if ( lcl_equalURLs_nothrow( sBackupLocation, m_pData->xDocumentModel->getURL() ) )
+            {
+                ErrorBox aErrorBox( const_cast< MacroMigrationDialog* >( this ), MacroMigrationResId( ERR_INVALID_BACKUP_LOCATION ) );
+                aErrorBox.Execute();
+                rBackupPage.grabLocationFocus();
+                return false;
+            }
+
+            // store to the backup location
             const Reference< XStorable > xDocument( getDocument(), UNO_QUERY_THROW );
             xDocument->storeToURL( sBackupLocation, Sequence< PropertyValue >() );
+            m_pData->sSuccessfulBackupLocation = sBackupLocation;
         }
         catch( const Exception& )
         {
@@ -359,11 +480,150 @@ namespace dbmm
         }
 
         // display the error to the user
-        DocumentErrorHandling::reportError( m_pData->aContext, m_pData->xDocument, aError );
+        InteractionHandler aHandler( m_pData->aContext, m_pData->xDocumentModel.get() );
+        aHandler.reportError( aError );
 
-        // TODO: log the error
+        m_pData->aLogger.logFailure( MigrationError(
+            ERR_DOCUMENT_BACKUP_FAILED,
+            sBackupLocation,
+            aError
+        ) );
 
         return false;
+    }
+
+    //--------------------------------------------------------------------
+    void MacroMigrationDialog::impl_reloadDocument_nothrow( bool _bMigrationSuccess )
+    {
+        typedef ::std::pair< Reference< XFrame >, ::rtl::OUString > ViewDescriptor;
+        ::std::list< ViewDescriptor > aViews;
+
+        try
+        {
+            // the information which is necessary to reload the document
+            ::rtl::OUString                     sDocumentURL ( m_pData->xDocumentModel->getURL()  );
+            ::comphelper::NamedValueCollection  aDocumentArgs( m_pData->xDocumentModel->getArgs() );
+            if ( !_bMigrationSuccess )
+            {
+                // if the migration was not successful, then reload from the backup
+                aDocumentArgs.put( "SalvagedFile", m_pData->sSuccessfulBackupLocation );
+                // reset the modified flag of the document, so the controller can be suspended later
+                Reference< XModifiable > xModify( m_pData->xDocument, UNO_QUERY_THROW );
+                xModify->setModified( sal_False );
+                // after this reload, don't show the migration warning, again
+                aDocumentArgs.put( "SuppressMigrationWarning", sal_Bool(sal_True) );
+            }
+
+            // remove anything from the args which might refer to the old document
+            aDocumentArgs.remove( "Model" );
+            aDocumentArgs.remove( "Stream" );
+            aDocumentArgs.remove( "InputStream" );
+            aDocumentArgs.remove( "FileName" );
+            aDocumentArgs.remove( "URL" );
+
+            // collect all controllers of our document
+            ::std::list< Reference< XController2 > > aControllers;
+            lcl_getControllers_throw( m_pData->xDocumentModel, aControllers );
+
+            // close all those controllers
+            while ( !aControllers.empty() )
+            {
+                Reference< XController2 > xController( aControllers.front(), UNO_SET_THROW );
+                aControllers.pop_front();
+
+                Reference< XFrame > xFrame( xController->getFrame(), UNO_SET_THROW );
+                ::rtl::OUString sViewName( xController->getViewControllerName() );
+
+                if ( !xController->suspend( sal_True ) )
+                {   // ouch. There shouldn't be any modal dialogs and such, so there
+                    // really is no reason why suspending shouldn't work.
+                    OSL_ENSURE( false, "MacroMigrationDialog::impl_reloadDocument_nothrow: could not suspend a controller!" );
+                    // ignoring this would be at the cost of a crash (potentially)
+                    // so, we cannot continue here.
+                    throw CloseVetoException();
+                }
+
+                aViews.push_back( ViewDescriptor( xFrame, sViewName ) );
+                xFrame->setComponent( NULL, NULL );
+                xController->dispose();
+            }
+
+            // Note the document is closed now - disconnecting the last controller
+            // closes it automatically.
+
+            Reference< XOfficeDatabaseDocument > xNewDocument;
+
+            // re-create the views
+            while ( !aViews.empty() )
+            {
+                ViewDescriptor aView( aViews.front() );
+                aViews.pop_front();
+
+                // load the document into this frame
+                Reference< XComponentLoader > xLoader( aView.first, UNO_QUERY_THROW );
+                aDocumentArgs.put( "ViewName", aView.second );
+                Reference< XInterface > xReloaded( xLoader->loadComponentFromURL(
+                    sDocumentURL,
+                    ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "_self" ) ),
+                    0,
+                    aDocumentArgs.getPropertyValues()
+                ) );
+
+                OSL_ENSURE( xReloaded != m_pData->xDocumentModel,
+                    "MacroMigrationDialog::impl_reloadDocument_nothrow: this should have been a new instance!" );
+                    // this would be unexpected, but recoverable: The loader should at least have done
+                    // this: really *load* the document, even if it loaded it into the old document instance
+                if ( !xNewDocument.is() )
+                {
+                    xNewDocument.set( xReloaded, UNO_QUERY_THROW );
+                    // for subsequent loads, into different frames, put the document into the load args
+                    aDocumentArgs.put( "Model", xNewDocument );
+                }
+                #if OSL_DEBUG_LEVEL > 0
+                else
+                {
+                    OSL_ENSURE( xNewDocument == xReloaded,
+                        "MacroMigrationDialog::impl_reloadDocument_nothrow: unexpected: subsequent load attempt returned a wrong document!" );
+                }
+                #endif
+            }
+
+            m_pData->xDocument = xNewDocument;
+            m_pData->xDocumentModel.set( xNewDocument, UNO_QUERY );
+
+            // finally, now that the document has been reloaded - if the migration was not successful,
+            // then it was reloaded from the backup, but the real document still is broken. So, save
+            // the document once, which will write the content loaded from the backup to the real docfile.
+            if ( !_bMigrationSuccess )
+            {
+                Reference< XModifiable > xModify( m_pData->xDocument, UNO_QUERY_THROW );
+                xModify->setModified( sal_True );
+                    // this is just parnoia - in case saving the doc fails, perhaps the user is tempted to do so
+                Reference< XStorable > xStor( m_pData->xDocument, UNO_QUERY_THROW );
+                xStor->store();
+            }
+        }
+        catch( const Exception& )
+        {
+            DBG_UNHANDLED_EXCEPTION();
+        }
+
+        // close all frames from aViews - the respective controllers have been closed, but
+        // reloading didn't work, so the frames are zombies now.
+        while ( !aViews.empty() )
+        {
+            ViewDescriptor aView( aViews.front() );
+            aViews.pop_front();
+            try
+            {
+                Reference< XCloseable > xFrameClose( aView.first, UNO_QUERY_THROW );
+                xFrameClose->close( sal_True );
+            }
+            catch( const Exception& )
+            {
+                DBG_UNHANDLED_EXCEPTION();
+            }
+        }
     }
 
 //........................................................................

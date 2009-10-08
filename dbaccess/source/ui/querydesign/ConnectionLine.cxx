@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: ConnectionLine.cxx,v $
- * $Revision: 1.14 $
+ * $Revision: 1.14.68.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -54,6 +54,7 @@
 #ifndef _TOOLS_DEBUG_HXX
 #include <tools/debug.hxx>
 #endif
+#include <vcl/lineinfo.hxx>
 
 
 using namespace dbaui;
@@ -219,15 +220,17 @@ Rectangle OConnectionLine::GetBoundingRect()
         aBottomRight.X() = m_aSourceDescrLinePos.X();
     }
 
+    const OTableWindow* pSourceWin = m_pTabConn->GetSourceWin();
+    const OTableWindow* pDestWin = m_pTabConn->GetDestWin();
     //////////////////////////////////////////////////////////////////////
     // Linie verlaeuft in z-Form
-    if( Abs(m_aSourceConnPos.X() - m_aDestConnPos.X()) > Abs(m_aSourceDescrLinePos.X() - m_aDestDescrLinePos.X()) )
+    if( pSourceWin == pDestWin || Abs(m_aSourceConnPos.X() - m_aDestConnPos.X()) > Abs(m_aSourceDescrLinePos.X() - m_aDestDescrLinePos.X()) )
     {
         aTopLeft.X() -= DESCRIPT_LINE_WIDTH;
         aBottomRight.X() += DESCRIPT_LINE_WIDTH;
     }
 
-    aBoundingRect = Rectangle( aTopLeft-Point(0,17), aBottomRight+Point(0,2) );
+    aBoundingRect = Rectangle( aTopLeft-Point(2,17), aBottomRight+Point(2,2) );
 
     return aBoundingRect;
 }
@@ -283,7 +286,10 @@ BOOL OConnectionLine::RecalcLine()
         pSecondDescrPos = &m_aDestDescrLinePos;
     }
 
-    calcPointX1(pFirstWin,*pFirstConPos,*pFirstDescrPos);
+    if ( pFirstWin == pSecondWin && pSourceEntry != pDestEntry )
+        calcPointX2(pFirstWin,*pFirstConPos,*pFirstDescrPos);
+    else
+        calcPointX1(pFirstWin,*pFirstConPos,*pFirstDescrPos);
     calcPointX2(pSecondWin,*pSecondConPos,*pSecondDescrPos);
 
     //////////////////////////////////////////////////////////////////////
@@ -315,31 +321,15 @@ void OConnectionLine::Draw( OutputDevice* pOutDev )
     else
         pOutDev->SetLineColor(Application::GetSettings().GetStyleSettings().GetWindowTextColor());
 
-    pOutDev->DrawLine( m_aSourceDescrLinePos, m_aSourceConnPos );
-    pOutDev->DrawLine( m_aDestDescrLinePos, m_aDestConnPos );
-    pOutDev->DrawLine( m_aSourceConnPos, m_aDestConnPos );
-    // wenn die  Linie selektiert ist, sollte sie dicker erscheinen
-    // da OutputDevice nach meinem Wissen (das ich nur aus dem Headerfile habe) kein
-    // SetLineWidth (o.ä.) hat, ein Fake
-    if (m_pTabConn->IsSelected())
-    {
-        UINT16 xOffset, yOffset;
-        if (abs(m_aSourceConnPos.Y() - m_aDestConnPos.Y()) > abs(m_aSourceConnPos.X()-m_aDestConnPos.X()))
-        {
-            xOffset = 1;
-            yOffset = 0;
-        } else
-        {
-            xOffset = 0;
-            yOffset = 1;
-        }
-
-        Point aPos1(-xOffset, -yOffset);
-        Point aPos2(xOffset, yOffset);
-        pOutDev->DrawLine(m_aSourceConnPos + aPos1, m_aDestConnPos + aPos1);
-        pOutDev->DrawLine(m_aSourceConnPos + aPos2, m_aDestConnPos + aPos2);
-    }
-
+    LineInfo aLineInfo;
+    if ( m_pTabConn->IsSelected() )
+        aLineInfo.SetWidth(3);
+    Polygon aPoly;
+    aPoly.Insert(0,m_aSourceDescrLinePos);
+    aPoly.Insert(1,m_aSourceConnPos);
+    aPoly.Insert(2,m_aDestConnPos);
+    aPoly.Insert(3,m_aDestDescrLinePos);
+    pOutDev->DrawPolyLine(aPoly,aLineInfo);
 
     //////////////////////////////////////////////////////////////////////
     // draw the connection rectangles

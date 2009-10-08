@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: tabletree.cxx,v $
- * $Revision: 1.38 $
+ * $Revision: 1.35.78.3 $
  *
  * This file is part of OpenOffice.org.
  *

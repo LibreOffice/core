@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: QueryDesignView.cxx,v $
- * $Revision: 1.96 $
+ * $Revision: 1.96.8.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -2182,12 +2182,11 @@ namespace
         SqlParseError eErrorCode = eOk;
         sal_Bool bFirstField = sal_True;
         ::rtl::OUString sAsterix(RTL_CONSTASCII_USTRINGPARAM("*"));
-        OTableFieldDescRef  aInfo = new OTableFieldDesc();
         OJoinTableView::OTableWindowMap::iterator aIter = _pTabList->begin();
         for(;aIter != _pTabList->end() && eOk == eErrorCode ;++aIter)
         {
             OQueryTableWindow* pTabWin = static_cast<OQueryTableWindow*>(aIter->second);
-
+            OTableFieldDescRef  aInfo = new OTableFieldDesc();
             if (pTabWin->ExistsField( sAsterix, aInfo ))
             {
                 eErrorCode = _pView->InsertField(aInfo, sal_True, bFirstField);

@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: CRMBasedTestCase.java,v $
- * $Revision: 1.2 $
+ * $Revision: 1.1.6.6 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -35,15 +35,9 @@ import com.sun.star.uno.UnoRuntime;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-public abstract class CRMBasedTestCase extends complexlib.ComplexTestCase
+public abstract class CRMBasedTestCase extends TestCase
 {
     protected   CRMDatabase m_database;
-
-    // --------------------------------------------------------------------------------------------------------
-    protected final XMultiServiceFactory getORB()
-    {
-        return (XMultiServiceFactory)param.getMSF();
-    }
 
     // --------------------------------------------------------------------------------------------------------
     protected void createTestCase()
@@ -79,6 +73,7 @@ public abstract class CRMBasedTestCase extends complexlib.ComplexTestCase
         }
     }
 
+    // --------------------------------------------------------------------------------------------------------
     /** creates a SingleSelectQueryComposer for our connection
      */
     protected final XSingleSelectQueryComposer createQueryComposer() throws com.sun.star.uno.Exception

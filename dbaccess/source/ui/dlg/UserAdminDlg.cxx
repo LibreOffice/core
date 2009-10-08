@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: UserAdminDlg.cxx,v $
- * $Revision: 1.14 $
+ * $Revision: 1.14.68.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -228,7 +228,7 @@ DBG_NAME(OUserAdminDlg)
         return m_pImpl->getDriver();
     }
     // -----------------------------------------------------------------------------
-    DATASOURCE_TYPE OUserAdminDlg::getDatasourceType(const SfxItemSet& _rSet) const
+    ::dbaccess::DATASOURCE_TYPE OUserAdminDlg::getDatasourceType(const SfxItemSet& _rSet) const
     {
         return m_pImpl->getDatasourceType(_rSet);
     }

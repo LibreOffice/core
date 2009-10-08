@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: AdabasStatDlg.cxx,v $
- * $Revision: 1.15 $
+ * $Revision: 1.15.68.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -103,11 +103,11 @@ DBG_NAME(OAdabasStatPageDlg)
         delete pExampleSet;
         pExampleSet = new SfxItemSet(*GetInputSetImpl());
 
-        DATASOURCE_TYPE eType = m_pImpl->getDatasourceType(*GetInputSetImpl());
+        ::dbaccess::DATASOURCE_TYPE eType = m_pImpl->getDatasourceType(*GetInputSetImpl());
 
         switch ( eType )
         {
-            case DST_ADABAS:
+            case  ::dbaccess::DST_ADABAS:
                 AddTabPage(TAB_PAG_ADABAS_SETTINGS, String(ModuleRes(STR_PAGETITLE_ADABAS_STATISTIC)), ODriversSettings::CreateAdabas,0, sal_False, 1);
                 break;
             default:
@@ -179,7 +179,7 @@ DBG_NAME(OAdabasStatPageDlg)
         return m_pImpl->getDriver();
     }
     // -----------------------------------------------------------------------------
-    DATASOURCE_TYPE OAdabasStatPageDlg::getDatasourceType(const SfxItemSet& _rSet) const
+    ::dbaccess::DATASOURCE_TYPE OAdabasStatPageDlg::getDatasourceType(const SfxItemSet& _rSet) const
     {
         return m_pImpl->getDatasourceType(_rSet);
     }

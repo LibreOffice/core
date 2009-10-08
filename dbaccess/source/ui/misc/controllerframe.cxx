@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: controllerframe.cxx,v $
- * $Revision: 1.3 $
+ * $Revision: 1.3.2.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -36,6 +36,8 @@
 #include <com/sun/star/awt/XTopWindow.hpp>
 #include <com/sun/star/awt/XWindow2.hpp>
 #include <com/sun/star/lang/DisposedException.hpp>
+#include <com/sun/star/document/XDocumentEventBroadcaster.hpp>
+#include <com/sun/star/frame/XController2.hpp>
 /** === end UNO includes === **/
 
 #include <cppuhelper/implbase1.hxx>
@@ -66,6 +68,7 @@ namespace dbaui
     using ::com::sun::star::frame::FrameAction_FRAME_UI_DEACTIVATING;
     using ::com::sun::star::frame::XModel;
     using ::com::sun::star::frame::XController;
+    using ::com::sun::star::frame::XController2;
     using ::com::sun::star::frame::XFramesSupplier;
     using ::com::sun::star::sdb::XOfficeDatabaseDocument;
     using ::com::sun::star::awt::XTopWindow;
@@ -73,6 +76,7 @@ namespace dbaui
     using ::com::sun::star::awt::XWindow2;
     using ::com::sun::star::lang::DisposedException;
     using ::com::sun::star::lang::EventObject;
+    using ::com::sun::star::document::XDocumentEventBroadcaster;
     /** === end UNO using === **/
 
     //====================================================================
@@ -118,6 +122,7 @@ namespace dbaui
         ControllerFrame_Data( IController& _rController )
             :m_rController( _rController )
             ,m_xFrame()
+            ,m_xDocEventBroadcaster()
             ,m_pListener()
             ,m_bActive( false )
         {
@@ -125,6 +130,7 @@ namespace dbaui
 
         IController&                                        m_rController;
         Reference< XFrame >                                 m_xFrame;
+        Reference< XDocumentEventBroadcaster >              m_xDocEventBroadcaster;
         ::rtl::Reference< FrameWindowActivationListener >   m_pListener;
         bool                                                m_bActive;
     };
@@ -141,11 +147,26 @@ namespace dbaui
             _rData.m_pListener->dispose();
             _rData.m_pListener = NULL;
         }
+
         // remember new frame
         _rData.m_xFrame = _rxFrame;
+
         // create new listener
         if ( _rData.m_xFrame.is() )
             _rData.m_pListener = new FrameWindowActivationListener( _rData );
+
+        // at this point in time, we can assume the controller also has a model set, if it supports models
+        try
+        {
+            Reference< XController > xController( _rData.m_rController.getXController(), UNO_SET_THROW );
+            Reference< XModel > xModel( xController->getModel() );
+            if ( xModel.is() )
+                _rData.m_xDocEventBroadcaster.set( xModel, UNO_QUERY );
+        }
+        catch( const Exception& )
+        {
+            DBG_UNHANDLED_EXCEPTION();
+        }
     }
 
     //--------------------------------------------------------------------
@@ -204,6 +225,26 @@ namespace dbaui
     }
 
     //--------------------------------------------------------------------
+    /** broadcasts the OnFocus resp. OnUnfocus event
+    */
+    static void lcl_notifyFocusChange_nothrow( ControllerFrame_Data& _rData, bool _bActive )
+    {
+        try
+        {
+            if ( _rData.m_xDocEventBroadcaster.is() )
+            {
+                ::rtl::OUString sEventName( ::rtl::OUString::createFromAscii( _bActive ? "OnFocus" : "OnUnfocus" ) );
+                Reference< XController2 > xController( _rData.m_rController.getXController(), UNO_QUERY_THROW );
+                _rData.m_xDocEventBroadcaster->notifyDocumentEvent( sEventName, xController, Any() );
+            }
+        }
+        catch( const Exception& )
+        {
+            DBG_UNHANDLED_EXCEPTION();
+        }
+    }
+
+    //--------------------------------------------------------------------
     static void lcl_updateActive_nothrow( ControllerFrame_Data& _rData, bool _bActive )
     {
         if ( _rData.m_bActive == _bActive )
@@ -211,6 +252,7 @@ namespace dbaui
         _rData.m_bActive = _bActive;
 
         lcl_updateActiveComponents_nothrow( _rData );
+        lcl_notifyFocusChange_nothrow( _rData, _bActive );
     }
 
     //--------------------------------------------------------------------
@@ -335,7 +377,10 @@ namespace dbaui
 
         // update active component
         if ( m_pData->m_bActive )
+        {
             lcl_updateActiveComponents_nothrow( *m_pData );
+            lcl_notifyFocusChange_nothrow( *m_pData, true );
+        }
 
         return m_pData->m_xFrame;
     }

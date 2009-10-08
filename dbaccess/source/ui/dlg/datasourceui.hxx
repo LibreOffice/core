@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: datasourceui.hxx,v $
- * $Revision: 1.3 $
+ * $Revision: 1.3.68.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -52,7 +52,7 @@ namespace dbaui
     class DataSourceUI
     {
     public:
-        DataSourceUI( DATASOURCE_TYPE _eType );
+        DataSourceUI( ::dbaccess::DATASOURCE_TYPE _eType );
         DataSourceUI( const DataSourceMetaData& _rDSMeta );
         ~DataSourceUI();
 

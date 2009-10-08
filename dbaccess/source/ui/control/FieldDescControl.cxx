@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: FieldDescControl.cxx,v $
- * $Revision: 1.49 $
+ * $Revision: 1.49.68.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -155,12 +155,12 @@ using namespace ::com::sun::star::util;
 
 // fuer die Controls auf der OFieldDescGenPage
 #define CONTROL_SPACING_X   18  // 6
-#define CONTROL_SPACING_Y   5
-#define CONTROL_HEIGHT      20
+#define CONTROL_SPACING_Y   4
+#define CONTROL_HEIGHT      10
 #define CONTROL_WIDTH_1     160 // 100
 #define CONTROL_WIDTH_2     100 // 60
 #define CONTROL_WIDTH_3     250
-#define CONTROL_WIDTH_4     (CONTROL_WIDTH_3 - CONTROL_HEIGHT - 5)
+#define CONTROL_WIDTH_4     (CONTROL_WIDTH_3 - 20 - 5)
 
 #define SBA_DEF_RANGEFORMAT         (100 + 143) // RangeItem
 #define SBA_DEF_FMTVALUE            (100 + 144) // SfxULONG, Format
@@ -451,10 +451,12 @@ void OFieldDescControl::CheckScrollBars()
     sal_uInt16 nActive = CountActiveAggregates();
     // welches ist das letzte, was ganz drauf passt ?
     sal_uInt16 nLastVisible;
+    const sal_Int32 nControlHeight = LogicToPixel(Size(0, CONTROL_HEIGHT),MAP_APPFONT).Height();
+    const sal_Int32 nControl_Spacing_y = LogicToPixel(Size(0, CONTROL_SPACING_Y),MAP_APPFONT).Height();
     if (bNeedHScrollBar)
-        nLastVisible = static_cast<sal_uInt16>((szOverallSize.Height() - CONTROL_SPACING_Y - nHScrollHeight) / (CONTROL_SPACING_Y + CONTROL_HEIGHT));
+        nLastVisible = static_cast<sal_uInt16>((szOverallSize.Height() - nControl_Spacing_y - nHScrollHeight) / (nControl_Spacing_y + nControlHeight));
     else
-        nLastVisible = static_cast<sal_uInt16>((szOverallSize.Height() - CONTROL_SPACING_Y) / (CONTROL_SPACING_Y + CONTROL_HEIGHT));
+        nLastVisible = static_cast<sal_uInt16>((szOverallSize.Height() - nControl_Spacing_y) / (nControl_Spacing_y + nControlHeight));
     bNeedVScrollBar = nActive>nLastVisible;
 
     if (bNeedVScrollBar)
@@ -467,7 +469,7 @@ void OFieldDescControl::CheckScrollBars()
             // durch die vertikale brauche ich jetzt ploetzlich doch eine horizontale
             bNeedHScrollBar = sal_True;
             // nLastVisible anpassen
-            nLastVisible = static_cast<sal_uInt16>((szOverallSize.Height() - CONTROL_SPACING_Y - nHScrollHeight) / (CONTROL_SPACING_Y + CONTROL_HEIGHT));
+            nLastVisible = static_cast<sal_uInt16>((szOverallSize.Height() - nControl_Spacing_y - nHScrollHeight) / (nControl_Spacing_y + nControlHeight));
                 // bNeedVScrollBar aendert sich nicht : es ist schon auf sal_True und nLastVisible wird hoechstens kleiner
         }
     }
@@ -534,7 +536,9 @@ void OFieldDescControl::ScrollAllAggregates()
 
     if (m_nOldVThumb != m_pVertScroll->GetThumbPos())
     {
-        nDeltaY = (m_nOldVThumb - m_pVertScroll->GetThumbPos()) * (CONTROL_SPACING_Y + CONTROL_HEIGHT);
+        const sal_Int32 nControlHeight = LogicToPixel(Size(0, CONTROL_HEIGHT),MAP_APPFONT).Height();
+        const sal_Int32 nControl_Spacing_y = LogicToPixel(Size(0, CONTROL_SPACING_Y),MAP_APPFONT).Height();
+        nDeltaY = (m_nOldVThumb - m_pVertScroll->GetThumbPos()) * (nControl_Spacing_y + nControlHeight);
         m_nOldVThumb = m_pVertScroll->GetThumbPos();
     }
 
@@ -994,9 +998,6 @@ void OFieldDescControl::ActivateAggregate( EControlType eType )
             pRequired->SelectEntryPos(1);
             pRequired->SetSelectHdl(LINK(this,OFieldDescControl,ChangeHdl));
 
-            //  SetPosSize( (Control**)&pRequiredText, m_nPos, 0 );
-            //  SetPosSize( (Control**)&pRequired, m_nPos, 2 );
-
             pRequired->SetGetFocusHdl(LINK(this, OFieldDescControl, OnControlFocusGot));
             pRequired->SetLoseFocusHdl(LINK(this, OFieldDescControl, OnControlFocusLost));
 
@@ -1020,9 +1021,6 @@ void OFieldDescControl::ActivateAggregate( EControlType eType )
         pAutoIncrement->SelectEntryPos(0);
         pAutoIncrement->SetSelectHdl(LINK(this,OFieldDescControl,ChangeHdl));
 
-        //  SetPosSize( (Control**)&pAutoIncrementText, m_nPos, 0 );
-        //  SetPosSize( (Control**)&pAutoIncrement, m_nPos, 2 );
-
         pAutoIncrement->SetGetFocusHdl(LINK(this, OFieldDescControl, OnControlFocusGot));
         pAutoIncrement->SetLoseFocusHdl(LINK(this, OFieldDescControl, OnControlFocusLost));
 
@@ -1044,8 +1042,6 @@ void OFieldDescControl::ActivateAggregate( EControlType eType )
         pTextLen->SetStrictFormat(TRUE);
 
         pTextLen->SetHelpId(HID_TAB_ENT_TEXT_LEN);
-        //  SetPosSize( (Control**)&pTextLenText, m_nPos, 0 );
-        //  SetPosSize( (Control**)&pTextLen, m_nPos, 1 );
 
         pTextLen->SetGetFocusHdl(LINK(this, OFieldDescControl, OnControlFocusGot));
         pTextLen->SetLoseFocusHdl(LINK(this, OFieldDescControl, OnControlFocusLost));
@@ -1071,9 +1067,6 @@ void OFieldDescControl::ActivateAggregate( EControlType eType )
         }
         m_pType->SelectEntryPos(0);
         m_pType->SetSelectHdl(LINK(this,OFieldDescControl,ChangeHdl));
-
-        //  SetPosSize( (Control**)&m_pTypeText, m_nPos, 0 );
-        //  SetPosSize( (Control**)&m_pType, m_nPos, 2 );
 
         m_pType->SetGetFocusHdl(LINK(this, OFieldDescControl, OnControlFocusGot));
         m_pType->SetLoseFocusHdl(LINK(this, OFieldDescControl, OnControlFocusLost));
@@ -1101,9 +1094,6 @@ void OFieldDescControl::ActivateAggregate( EControlType eType )
             m_pColumnName->setCheck( isSQL92CheckEnabled(getConnection()) );
         }
 
-        //  SetPosSize( (Control**)&m_pColumnNameText, m_nPos, 0 );
-        //  SetPosSize( (Control**)&m_pColumnName, m_nPos, 1 );
-
         m_pColumnName->SetGetFocusHdl(LINK(this, OFieldDescControl, OnControlFocusGot));
         m_pColumnName->SetLoseFocusHdl(LINK(this, OFieldDescControl, OnControlFocusLost));
 
@@ -1129,9 +1119,6 @@ void OFieldDescControl::ActivateAggregate( EControlType eType )
         pNumType->SelectEntryPos(2);
         pNumType->SetSelectHdl(LINK(this,OFieldDescControl,ChangeHdl));
 
-        //  SetPosSize( (Control**)&pNumTypeText, m_nPos, 0 );
-        //  SetPosSize( (Control**)&pNumType, m_nPos, 1 );
-
         pNumType->SetGetFocusHdl(LINK(this, OFieldDescControl, OnControlFocusGot));
         pNumType->SetLoseFocusHdl(LINK(this, OFieldDescControl, OnControlFocusLost));
 
@@ -1153,8 +1140,6 @@ void OFieldDescControl::ActivateAggregate( EControlType eType )
         pLength->SetStrictFormat(TRUE);
 
         pLength->SetHelpId(HID_TAB_ENT_LEN);
-        //  SetPosSize( (Control**)&pLengthText, m_nPos, 0 );
-        //  SetPosSize( (Control**)&pLength, m_nPos, 1 );
 
         pLength->SetGetFocusHdl(LINK(this, OFieldDescControl, OnControlFocusGot));
         pLength->SetLoseFocusHdl(LINK(this, OFieldDescControl, OnControlFocusLost));
@@ -1177,9 +1162,6 @@ void OFieldDescControl::ActivateAggregate( EControlType eType )
 
         pScale->SetHelpId(HID_TAB_ENT_SCALE);
 
-        //  SetPosSize( (Control**)&pScaleText, m_nPos, 0 );
-        //  SetPosSize( (Control**)&pScale, m_nPos, 1 );
-
         pScale->SetGetFocusHdl(LINK(this, OFieldDescControl, OnControlFocusGot));
         pScale->SetLoseFocusHdl(LINK(this, OFieldDescControl, OnControlFocusLost));
 
@@ -1201,7 +1183,8 @@ void OFieldDescControl::ActivateAggregate( EControlType eType )
 
             pFormat = new PushButton( this, ModuleRes(PB_FORMAT) );
             pFormat->SetHelpId(HID_TAB_ENT_FORMAT);
-            pFormat->SetSizePixel(Size(CONTROL_HEIGHT, CONTROL_HEIGHT));
+            const sal_Int32 nControlHeight = LogicToPixel(Size(0, CONTROL_HEIGHT),MAP_APPFONT).Height();
+            pFormat->SetSizePixel(Size(nControlHeight, nControlHeight));
             pFormat->SetClickHdl( LINK( this, OFieldDescControl, FormatClickHdl ) );
 
             pFormatSample->SetGetFocusHdl(LINK(this, OFieldDescControl, OnControlFocusGot));
@@ -1229,8 +1212,6 @@ void OFieldDescControl::ActivateAggregate( EControlType eType )
         pBoolDefault->InsertEntry(aYes);
         pBoolDefault->InsertEntry(aNo);
         pBoolDefault->SetHelpId(HID_TAB_ENT_BOOL_DEFAULT);
-        //  SetPosSize( (Control**)&pBoolDefaultText, m_nPos, 0 );
-        //  SetPosSize( (Control**)&pBoolDefault, m_nPos, 3 );
 
         pBoolDefault->SetGetFocusHdl(LINK(this, OFieldDescControl, OnControlFocusGot));
         pBoolDefault->SetLoseFocusHdl(LINK(this, OFieldDescControl, OnControlFocusLost));
@@ -1406,47 +1387,48 @@ void OFieldDescControl::SetPosSize( Control** ppControl, long nRow, sal_uInt16 n
 
     //////////////////////////////////////////////////////////////////////
     // Groesse ermitteln
+    const sal_Int32 nControlHeight = LogicToPixel(Size(0, CONTROL_HEIGHT),MAP_APPFONT).Height();
     Size aSize;
     switch( nCol )
     {
     case 0:
         aSize.Width()  = CONTROL_WIDTH_1;
-        aSize.Height() = CONTROL_HEIGHT;
+        aSize.Height() = nControlHeight;
         break;
     case 1:
         if ( isRightAligned() )
             aSize.Width() = LogicToPixel(Size(m_nWidth, 0),MAP_APPFONT).Width();
         else
             aSize.Width()  = CONTROL_WIDTH_2;
-        aSize.Height() = CONTROL_HEIGHT;
+        aSize.Height() = nControlHeight;
         break;
     case 2:
         if ( isRightAligned() )
             aSize.Width() = LogicToPixel(Size(m_nWidth, 0),MAP_APPFONT).Width();
         else
             aSize.Width()  = CONTROL_WIDTH_2;
-        aSize.Height() = long(1.5*CONTROL_HEIGHT);
+        aSize.Height() = long(1.5*nControlHeight);
         break;
     case 3:
         if ( isRightAligned() )
             aSize.Width() = LogicToPixel(Size(m_nWidth, 0),MAP_APPFONT).Width();
         else
             aSize.Width()  = CONTROL_WIDTH_3;
-        aSize.Height() = CONTROL_HEIGHT;
+        aSize.Height() = nControlHeight;
         break;
     case 4:
         if ( isRightAligned() )
             aSize.Width() = LogicToPixel(Size(m_nWidth, 0),MAP_APPFONT).Width();
         else
             aSize.Width()  = CONTROL_WIDTH_4;
-        aSize.Height() = CONTROL_HEIGHT;
+        aSize.Height() = nControlHeight;
         break;
     default:
         if ( isRightAligned() )
             aSize.Width() = LogicToPixel(Size(m_nWidth, 0),MAP_APPFONT).Width();
         else
             aSize.Width()  = CONTROL_WIDTH_1;
-        aSize.Height() = CONTROL_HEIGHT;
+        aSize.Height() = nControlHeight;
     }
 
 
@@ -1475,12 +1457,18 @@ void OFieldDescControl::SetPosSize( Control** ppControl, long nRow, sal_uInt16 n
         aPosition.X() = 0;
     }
 
-    aPosition.Y() += ((nRow+1)*CONTROL_SPACING_Y) +
-                    (nRow*CONTROL_HEIGHT);
+    (*ppControl)->SetSizePixel( aSize );
+    aSize = (*ppControl)->GetSizePixel( );
+
+    const sal_Int32 nControl_Spacing_y = LogicToPixel(Size(0, CONTROL_SPACING_Y),MAP_APPFONT).Height();
+    aPosition.Y() += ((nRow+1)*nControl_Spacing_y) +
+                    (nRow*nControlHeight);
 
     //////////////////////////////////////////////////////////////////////
     // Control anzeigen
     (*ppControl)->SetPosSizePixel( aPosition, aSize );
+    aSize = (*ppControl)->GetSizePixel();
+
     (*ppControl)->Show();
 }
 //------------------------------------------------------------------------------

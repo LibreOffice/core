@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: unoadmin.hxx,v $
- * $Revision: 1.13 $
+ * $Revision: 1.13.68.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -67,7 +67,8 @@ protected:
     SfxItemSet*             m_pDatasourceItems;     // item set for the dialog
     SfxItemPool*            m_pItemPool;            // item pool for the item set for the dialog
     SfxPoolItem**           m_pItemPoolDefaults;    // pool defaults
-    ODsnTypeCollection*     m_pCollection;          // datasource type collection
+    ::dbaccess::ODsnTypeCollection*
+                            m_pCollection;          // datasource type collection
 
     ::com::sun::star::uno::Any          m_aInitialSelection;
     ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection > m_xActiveConnection;

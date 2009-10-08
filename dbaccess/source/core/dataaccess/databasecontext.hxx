@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: databasecontext.hxx,v $
- * $Revision: 1.17 $
+ * $Revision: 1.17.2.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -137,6 +137,11 @@ private:
         @param  _xObject    The data source itself.
     */
     void setTransientProperties(const ::rtl::OUString& _sURL, ODatabaseModelImpl& _rDataSourceModel );
+
+    /** creates a new data source
+    */
+    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >
+            impl_createNewDataSource();
 
 protected:
     ::osl::Mutex                    m_aMutex;

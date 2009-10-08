@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: core_resource.hxx,v $
- * $Revision: 1.5 $
+ * $Revision: 1.5.68.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -34,8 +34,9 @@
 #ifndef _RTL_USTRING_HXX_
 #include <rtl/ustring.hxx>
 #endif
+#include <osl/mutex.hxx>
 
-class SimpleResMgr;
+class ResMgr;
 //.........................................................................
 namespace dbaccess
 {
@@ -52,25 +53,22 @@ namespace dbaccess
     //==================================================================
     class ResourceManager
     {
-        static SimpleResMgr*    m_pImpl;
+        friend class OModuleClient;
+        static ::osl::Mutex s_aMutex;       /// access safety
+        static sal_Int32    s_nClients;     /// number of registered clients
+        static ResMgr*  m_pImpl;
 
     private:
         // no instantiation allowed
         ResourceManager() { }
         ~ResourceManager() { }
 
-        // we'll instantiate one static member of the following class, which, in it's dtor,
-        // ensures that m_pImpl will be deleted
-        class EnsureDelete
-        {
-        public:
-            EnsureDelete() { }
-            ~EnsureDelete();
-        };
-        friend class EnsureDelete;
-
     protected:
         static void ensureImplExists();
+        /// register a client for the module
+        static void registerClient();
+        /// revoke a client for the module
+        static void revokeClient();
 
     public:
         /** loads the string with the specified resource id
@@ -91,7 +89,22 @@ namespace dbaccess
                 const sal_Char*         _pPlaceholderAscii,
                 const ::rtl::OUString&  _rReplace
         );
+
+        static ResMgr*  getResManager();
     };
+
+    //=========================================================================
+    //= OModuleClient
+    //=========================================================================
+    /** base class for objects which uses any global module-specific ressources
+    */
+    class OModuleClient
+    {
+    public:
+        OModuleClient()     { ResourceManager::registerClient(); }
+        ~OModuleClient()    { ResourceManager::revokeClient(); }
+    };
+
 
 //.........................................................................
 }

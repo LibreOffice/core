@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: SDBCReportData.java,v $
- * $Revision: 1.6 $
+ * $Revision: 1.6.32.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -85,11 +85,9 @@ public class SDBCReportData implements DataSource
             final XResultSetMetaData resultSetMetaData = sup.getMetaData();
 
             columnCount = resultSetMetaData.getColumnCount();
+            firstParameterIndex = columnCount + 1;
             if (parameters != null)
-            {
-                firstParameterIndex = columnCount + 1;
                 columnCount += parameters.getCount();
-            }
 
             columnTypes = new int[columnCount];
             columnNames = new String[columnCount];

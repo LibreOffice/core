@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: curledit.hxx,v $
- * $Revision: 1.8 $
+ * $Revision: 1.8.68.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -55,7 +55,8 @@ namespace dbaui
 */
 class OConnectionURLEdit : public Edit
 {
-    ODsnTypeCollection  m_aTypeCollection;
+    ::dbaccess::ODsnTypeCollection
+                        m_aTypeCollection;
     FixedText*          m_pForcedPrefix;
     String              m_sSaveValueNoPrefix;
     BOOL                m_bShowPrefix; // when <TRUE> the prefix will be visible, otherwise not

@@ -105,6 +105,7 @@
             <menu:menuitem menu:id=".uno:DBUserAdmin"/>
             <menu:menuitem menu:id=".uno:DBTableFilter"/>
             <menu:menuitem menu:id=".uno:DBDirectSQL"/>
+            <menu:menuitem menu:id=".uno:DBMigrateScripts"/>
             <menu:menuseparator/>
             <menu:menu menu:id=".uno:MacrosMenu">
                 <menu:menupopup>

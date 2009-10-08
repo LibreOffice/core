@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: TableWindowListBox.cxx,v $
- * $Revision: 1.35 $
+ * $Revision: 1.35.26.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -85,7 +85,6 @@ OTableWindowListBox::OTableWindowListBox( OTableWindow* pParent )
     ,m_nDropEvent(0)
     ,m_nUiEvent(0)
     ,m_bReallyScrolled( sal_False )
-    ,m_bDragSource( sal_False )
 {
     DBG_CTOR(OTableWindowListBox,NULL);
     m_aScrollTimer.SetTimeout( SCROLLING_TIMESPAN );
@@ -99,7 +98,6 @@ OTableWindowListBox::OTableWindowListBox( OTableWindow* pParent )
 //------------------------------------------------------------------------------
 void OTableWindowListBox::dragFinished( )
 {
-    m_bDragSource = sal_False;
     // first show the error msg when existing
     m_pTabWin->getDesignView()->getController().showError(m_pTabWin->getDesignView()->getController().clearOccuredError());
     // second look for ui activities which should happen after d&d
@@ -255,7 +253,6 @@ void OTableWindowListBox::StartDrag( sal_Int8 /*nAction*/, const Point& /*rPosPi
         EndSelection();
         // create a description of the source
         OJoinExchangeData jxdSource(this);
-        m_bDragSource = sal_True;
         // put it into a exchange object
         OJoinExchObj* pJoin = new OJoinExchObj(jxdSource,bFirstNotAllowed);
         Reference< XTransferable > xEnsureDelete(pJoin);
@@ -268,8 +265,7 @@ sal_Int8 OTableWindowListBox::AcceptDrop( const AcceptDropEvent& _rEvt )
 {
     sal_Int8 nDND_Action = DND_ACTION_NONE;
     // check the format
-    if ( !m_bDragSource
-        && !OJoinExchObj::isFormatAvailable(GetDataFlavorExVector(),SOT_FORMATSTR_ID_SBA_TABID) // this means that the first entry is to be draged
+    if ( !OJoinExchObj::isFormatAvailable(GetDataFlavorExVector(),SOT_FORMATSTR_ID_SBA_TABID) // this means that the first entry is to be draged
         && OJoinExchObj::isFormatAvailable(GetDataFlavorExVector(),SOT_FORMATSTR_ID_SBA_JOIN) )
     {   // don't drop into the window if it's the drag source itself
 
@@ -360,7 +356,7 @@ IMPL_LINK( OTableWindowListBox, DropHdl, void *, /*EMPTY_ARG*/)
 sal_Int8 OTableWindowListBox::ExecuteDrop( const ExecuteDropEvent& _rEvt )
 {
     TransferableDataHelper aDropped(_rEvt.maDropEvent.Transferable);
-    if (!m_bDragSource && OJoinExchObj::isFormatAvailable(aDropped.GetDataFlavorExVector()))
+    if ( OJoinExchObj::isFormatAvailable(aDropped.GetDataFlavorExVector()))
     {   // don't drop into the window if it's the drag source itself
         m_aDropInfo.aSource = OJoinExchangeData(this);
         m_aDropInfo.aDest   = OJoinExchObj::GetSourceDescription(_rEvt.maDropEvent.Transferable);
@@ -428,4 +424,3 @@ void OTableWindowListBox::Command(const CommandEvent& rEvt)
     }
 }
 // -----------------------------------------------------------------------------
-

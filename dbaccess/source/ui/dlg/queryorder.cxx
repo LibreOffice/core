@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: queryorder.cxx,v $
- * $Revision: 1.22 $
+ * $Revision: 1.20.172.2 $
  *
  * This file is part of OpenOffice.org.
  *

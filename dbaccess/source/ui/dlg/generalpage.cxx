@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: generalpage.cxx,v $
- * $Revision: 1.57 $
+ * $Revision: 1.56.68.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -31,6 +31,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_dbaccess.hxx"
 
+#include "dsnItem.hxx"
 #ifndef _DBAUI_GENERALPAGE_HXX_
 #include "generalpage.hxx"
 #endif
@@ -119,8 +120,8 @@ namespace dbaui
         ,m_sMySQLEntry                  (ModuleRes(STR_MYSQLENTRY))
         ,m_eOriginalCreationMode        (eCreateNew)
         ,m_pCollection                  (NULL)
-        ,m_eCurrentSelection            (DST_UNKNOWN)
-        ,m_eNotSupportedKnownType       (DST_UNKNOWN)
+        ,m_eCurrentSelection            ( ::dbaccess::DST_UNKNOWN)
+        ,m_eNotSupportedKnownType       ( ::dbaccess::DST_UNKNOWN)
         ,m_eLastMessage                 (smNone)
         ,m_bDisplayingInvalid           (sal_False)
         ,m_bUserGrabFocus               (sal_True)
@@ -158,10 +159,10 @@ namespace dbaui
     {
         struct DisplayedType
         {
-            DATASOURCE_TYPE eType;
+            ::dbaccess::DATASOURCE_TYPE eType;
             String          sDisplayName;
 
-            DisplayedType( DATASOURCE_TYPE _eType, const String& _rDisplayName ) : eType( _eType ), sDisplayName( _rDisplayName ) { }
+            DisplayedType( ::dbaccess::DATASOURCE_TYPE _eType, const String& _rDisplayName ) : eType( _eType ), sDisplayName( _rDisplayName ) { }
         };
         typedef ::std::vector< DisplayedType > DisplayedTypes;
 
@@ -201,12 +202,12 @@ namespace dbaui
         {
             DisplayedTypes aDisplayedTypes;
 
-            for (   ODsnTypeCollection::TypeIterator aTypeLoop =  m_pCollection->begin();
+            for (   ::dbaccess::ODsnTypeCollection::TypeIterator aTypeLoop =  m_pCollection->begin();
                     aTypeLoop != m_pCollection->end();
                     ++aTypeLoop
                 )
             {
-                DATASOURCE_TYPE eType = aTypeLoop.getType();
+                ::dbaccess::DATASOURCE_TYPE eType = aTypeLoop.getType();
 
                 if ( xDriverManager.is() )
                 {   // we have a driver manager to check
@@ -235,7 +236,7 @@ namespace dbaui
 
 
     //-------------------------------------------------------------------------
-    void OGeneralPage::setParentTitle(DATASOURCE_TYPE _eSelectedType)
+    void OGeneralPage::setParentTitle(::dbaccess::DATASOURCE_TYPE _eSelectedType)
     {
         if (!m_DBWizardMode)
         {
@@ -271,7 +272,7 @@ namespace dbaui
     }
 
     //-------------------------------------------------------------------------
-    void OGeneralPage::switchMessage(const DATASOURCE_TYPE _eType)
+    void OGeneralPage::switchMessage(const ::dbaccess::DATASOURCE_TYPE _eType)
     {
         SPECIAL_MESSAGE eMessage = smNone;
         if ( _eType == m_eNotSupportedKnownType )
@@ -298,7 +299,7 @@ namespace dbaui
     }
 
     //-------------------------------------------------------------------------
-    void OGeneralPage::onTypeSelected(const DATASOURCE_TYPE _eType)
+    void OGeneralPage::onTypeSelected(const ::dbaccess::DATASOURCE_TYPE _eType)
     {
         // the the new URL text as indicated by the selection history
         implSetCurrentType( _eType );
@@ -381,9 +382,9 @@ namespace dbaui
             sConnectURL = pUrlItem->GetValue();
         }
 
-        DATASOURCE_TYPE eOldSelection = m_eCurrentSelection;
-        m_eNotSupportedKnownType = DST_UNKNOWN;
-        implSetCurrentType( DST_UNKNOWN );
+        ::dbaccess::DATASOURCE_TYPE eOldSelection = m_eCurrentSelection;
+        m_eNotSupportedKnownType =  ::dbaccess::DST_UNKNOWN;
+        implSetCurrentType(  ::dbaccess::DST_UNKNOWN );
 
         // compare the DSN prefix with the registered ones
         String sDisplayName;
@@ -408,7 +409,7 @@ namespace dbaui
         }
 
         if (m_aRB_CreateDatabase.IsChecked() && m_DBWizardMode)
-            sDisplayName = m_pCollection->getTypeDisplayName(DST_JDBC);
+            sDisplayName = m_pCollection->getTypeDisplayName( ::dbaccess::DST_JDBC);
         m_pDatasourceType->SelectEntry(sDisplayName);
 
         // notify our listener that our type selection has changed (if so)
@@ -427,22 +428,22 @@ namespace dbaui
 
     // For the databaseWizard we only have one entry for the MySQL Database,
     // because we have a seperate tabpage to retrieve the respective datasource type
-    // (DST_MYSQL_ODBC || DST_MYSQL_JDBC). Therefore we use DST_MYSQL_JDBC as a temporary
+    // ( ::dbaccess::DST_MYSQL_ODBC ||  ::dbaccess::DST_MYSQL_JDBC). Therefore we use  ::dbaccess::DST_MYSQL_JDBC as a temporary
     // representative for all MySQl databases)
     // Also, embedded databases (embedded HSQL, at the moment), are not to appear in the list of
     // databases to connect to.
-    bool OGeneralPage::approveDataSourceType( DATASOURCE_TYPE eType, String& _inout_rDisplayName )
+    bool OGeneralPage::approveDataSourceType( ::dbaccess::DATASOURCE_TYPE eType, String& _inout_rDisplayName )
     {
-        if ( m_DBWizardMode && ( eType == DST_MYSQL_JDBC ) )
+        if ( m_DBWizardMode && ( eType ==  ::dbaccess::DST_MYSQL_JDBC ) )
             _inout_rDisplayName = m_sMySQLEntry;
 
-        else if ( m_DBWizardMode && ( eType == DST_MYSQL_ODBC ) )
+        else if ( m_DBWizardMode && ( eType ==  ::dbaccess::DST_MYSQL_ODBC ) )
             _inout_rDisplayName = String();
 
-        else if ( m_DBWizardMode && ( eType == DST_MYSQL_NATIVE ) )
+        else if ( m_DBWizardMode && ( eType ==  ::dbaccess::DST_MYSQL_NATIVE ) )
             _inout_rDisplayName = String();
 
-        else if ( eType == DST_EMBEDDED_HSQLDB )
+        else if ( eType ==  ::dbaccess::DST_EMBEDDED_HSQLDB )
             _inout_rDisplayName = String();
 
         return _inout_rDisplayName.Len() > 0;
@@ -450,7 +451,7 @@ namespace dbaui
 
 
     // -----------------------------------------------------------------------
-    void OGeneralPage::insertDatasourceTypeEntryData(DATASOURCE_TYPE _eType, String sDisplayName)
+    void OGeneralPage::insertDatasourceTypeEntryData(::dbaccess::DATASOURCE_TYPE _eType, String sDisplayName)
     {
         // insert a (temporary) entry
         sal_uInt16 nPos = m_pDatasourceType->InsertEntry(sDisplayName);
@@ -479,7 +480,7 @@ namespace dbaui
     }
 
     //-------------------------------------------------------------------------
-    void OGeneralPage::implSetCurrentType( const DATASOURCE_TYPE _eType )
+    void OGeneralPage::implSetCurrentType( const ::dbaccess::DATASOURCE_TYPE _eType )
     {
         if ( _eType == m_eCurrentSelection )
             return;
@@ -491,7 +492,7 @@ namespace dbaui
     void OGeneralPage::Reset(const SfxItemSet& _rCoreAttrs)
     {
         // reset all locale data
-        implSetCurrentType( DST_UNKNOWN );
+        implSetCurrentType(  ::dbaccess::DST_UNKNOWN );
             // this ensures that our type selection link will be called, even if the new is is the same as the
             // current one
         OGenericAdministrationPage::Reset(_rCoreAttrs);
@@ -507,7 +508,7 @@ namespace dbaui
         {
             if ( m_aRB_CreateDatabase.IsChecked() )
             {
-                _rCoreAttrs.Put(SfxStringItem(DSID_CONNECTURL, m_pCollection->getDatasourcePrefix(DST_DBASE)));
+                _rCoreAttrs.Put(SfxStringItem(DSID_CONNECTURL, m_pCollection->getDatasourcePrefix( ::dbaccess::DST_DBASE)));
                 bChangedSomething = sal_True;
                 bCommitTypeSelection = false;
             }
@@ -524,7 +525,7 @@ namespace dbaui
         if ( bCommitTypeSelection )
         {
             USHORT nEntry = m_pDatasourceType->GetSelectEntryPos();
-            DATASOURCE_TYPE eSelectedType = static_cast<DATASOURCE_TYPE>(reinterpret_cast<sal_IntPtr>(m_pDatasourceType->GetEntryData(nEntry)));
+            ::dbaccess::DATASOURCE_TYPE eSelectedType = static_cast< ::dbaccess::DATASOURCE_TYPE>(reinterpret_cast<sal_IntPtr>(m_pDatasourceType->GetEntryData(nEntry)));
             if (m_DBWizardMode)
             {
                 if  (  ( m_pDatasourceType->GetSavedValue() != nEntry )
@@ -554,7 +555,7 @@ namespace dbaui
     {
         // get the type from the entry data
         sal_Int16 nSelected = _pBox->GetSelectEntryPos();
-        DATASOURCE_TYPE eSelectedType = static_cast<DATASOURCE_TYPE>(reinterpret_cast<sal_IntPtr>(_pBox->GetEntryData(nSelected)));
+        ::dbaccess::DATASOURCE_TYPE eSelectedType = static_cast< ::dbaccess::DATASOURCE_TYPE>(reinterpret_cast<sal_IntPtr>(_pBox->GetEntryData(nSelected)));
 
         setParentTitle(eSelectedType);
         // let the impl method do all the stuff

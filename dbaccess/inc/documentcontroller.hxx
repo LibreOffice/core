@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: documentcontroller.hxx,v $
- * $Revision: 1.3 $
+ * $Revision: 1.3.2.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -84,6 +84,18 @@ namespace dbaui
             const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XController >& _rxController
         );
 
+        /** connects the controller to the model
+
+        @param _rxModel
+            the model to which the controller should be connected
+        @param _rxController
+            the controller which should be connected to the model
+        */
+        void connect(
+            const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >& _rxModel,
+            const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XController >& _rxController
+        );
+
         /** destroys the object, and disconnects the controller from the model
         */
         ~ModelControllerConnector();
@@ -92,10 +104,6 @@ namespace dbaui
         */
         inline  bool    empty() const { return !m_xController.is(); }
 
-        /** exchanges the content of <code>this</code> and the given ->ModelControllerConnector instance
-        */
-        void swap( ModelControllerConnector& _rSwapWith );
-
         /** clears the object
 
             The controller is disconnected from the model, and references to the model and the controller
@@ -103,8 +111,7 @@ namespace dbaui
         */
         inline void clear()
         {
-            ModelControllerConnector aEmpty;
-            swap( aEmpty );
+            connect( NULL, NULL );
         }
 
     public:

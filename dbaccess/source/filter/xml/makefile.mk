@@ -8,7 +8,7 @@
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.10 $
+# $Revision: 1.10.68.1 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -97,10 +97,10 @@ SHL1STDLIBS=\
 
 .IF "$(GUI)"!="WNT" || "$(COM)"=="GCC"
 SHL1STDLIBS+= \
-        -ldbu$(DLLPOSTFIX)
+        -ldba$(DLLPOSTFIX)
 .ELSE
 SHL1STDLIBS+= \
-        idbu.lib
+        idba.lib
 .ENDIF
 
 

@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: macromigration.src,v $
- * $Revision: 1.3 $
+ * $Revision: 1.3.2.8 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -88,16 +88,16 @@ TabPage TP_PREPARE
                             TAB_PAGE_HEIGHT - CONTENT_POS_X - TAB_PAGE_CONTENT_MARGIN - ( 2 * FIXED_TEXT_HEIGHT - SPACING_UNRELATED ) );
         WordBreak = TRUE;
 
-        Text [ en-US ] = "This wizard will guide you through the task of migrating your macros and scripts.\n\n"
+        Text [ en-US ] = "This wizard will guide you through the task of migrating your macros.\n\n"
 
-            "After you finished it, all macros and scripts which were formerly embedded into your "
-            "forms and reports will have been moved to the database document. In this course, libraries "
-            "will be renamed as needed.\n\n"
+            "After you finished it, all macros which were formerly embedded into the forms and reports of "
+            "the current database document will have been moved to the document itself. In this course, "
+            "libraries will be renamed as needed.\n\n"
 
-            "If your forms and reports contain references to those macros and scripts, they "
-            "will be adjusted, where possible.\n\n"
+            "If your forms and reports contain references to those macros, they will be adjusted, where "
+            "possible.\n\n"
 
-            "Before the migration can start, all forms, reports, queries and tables must be closed. "
+            "Before the migration can start, all forms, reports, queries and tables belonging to the document must be closed. "
             "Press 'Next' to do so.";
     };
 
@@ -231,8 +231,6 @@ TabPage TP_MIGRATE
         Pos = MAP_APPFONT(  TAB_PAGE_CONTENT_MARGIN + 60,
                             CONTENT_POS_X + 2 * FIXED_TEXT_HEIGHT + SPACING_UNRELATED );
         Size = MAP_APPFONT( TAB_PAGE_WIDTH - ( TAB_PAGE_CONTENT_MARGIN + 60 ), FIXED_TEXT_HEIGHT );
-
-        Text [ en-US ] = "Form 1";
     };
 
     FixedText FT_CURRENT_PROGRESS_LABEL
@@ -249,8 +247,6 @@ TabPage TP_MIGRATE
         Pos = MAP_APPFONT(  TAB_PAGE_CONTENT_MARGIN + 60,
                             CONTENT_POS_X + 2 * FIXED_TEXT_HEIGHT + SPACING_UNRELATED + FIXED_TEXT_HEIGHT + SPACING_UNRELATED );
         Size = MAP_APPFONT( TAB_PAGE_WIDTH - ( TAB_PAGE_CONTENT_MARGIN + 60 ), FIXED_TEXT_HEIGHT );
-
-        Text [ en-US ] = "loading ...";
     };
 
     Window WND_CURRENT_PROGRESS
@@ -299,8 +295,9 @@ TabPage TP_MIGRATE
         Size = MAP_APPFONT( TAB_PAGE_WIDTH - 2 * TAB_PAGE_CONTENT_MARGIN, 2 * FIXED_TEXT_HEIGHT );
 
         WordBreak = TRUE;
+        Hide = TRUE;
 
-        Text [ en-US ] = "All documents have been successfully processed. Press 'Next' to show a detailed summary.";
+        Text [ en-US ] = "All forms and reports have been successfully processed. Press 'Next' to show a detailed summary.";
     };
 };
 
@@ -328,7 +325,7 @@ TabPage TP_SUMMARY
         Pos = MAP_APPFONT( TAB_PAGE_CONTENT_MARGIN, CONTENT_POS_X );
         Size = MAP_APPFONT( TAB_PAGE_WIDTH - 2 * TAB_PAGE_CONTENT_MARGIN, FIXED_TEXT_HEIGHT );
 
-        Text [ en-US ] = "The following actions have been taken:";
+        WordBreak = TRUE;
     };
 
     MultiLineEdit ED_CHANGES
@@ -341,6 +338,15 @@ TabPage TP_SUMMARY
         AutoVScroll = TRUE;
         Border = TRUE;
         BorderStyle = WINDOW_BORDER_MONO;
+    };
+
+    String STR_SUCCESSFUL
+    {
+        Text [ en-US ] = "The migration was successful. Below is a log of the actions which have been taken to your document.";
+    };
+    String STR_UNSUCCESSFUL
+    {
+        Text [ en-US ] = "The migration was not successful. Examine the migration log below for details.";
     };
 };
 
@@ -373,12 +379,22 @@ String STR_SAVED_COPY_TO
 
 String STR_MOVED_LIBRARY
 {
-    Text[ en-US ] = "moved $type$ library $old$ to $new$";
+    Text[ en-US ] = "migrated $type$ library '$old$' to '$new$'";
+};
+
+String STR_LIBRARY_TYPE_AND_NAME
+{
+    Text [ en-US ] = "$type$ library '$library$'";
+};
+
+String STR_MIGRATING_LIBS
+{
+    Text [ en-US ] = "migrating libraries ...";
 };
 
 String STR_OOO_BASIC
 {
-    Text[ en-US ] = "%PRODUCTNAME% Basic";
+    Text[ en-US ] = "%PRODUCTNAME Basic";
 };
 
 String STR_JAVA_SCRIPT
@@ -406,3 +422,24 @@ String STR_DIALOG
     Text[ en-US ] = "dialog";
 };
 
+String STR_ERRORS
+{
+    Text [ en-US ] = "Error(s)";
+};
+
+String STR_WARNINGS
+{
+    Text [ en-US ] = "Warnings";
+};
+
+String STR_EXCEPTION
+{
+    Text [ en-US ] = "caught exception: ";
+};
+
+
+ErrorBox ERR_INVALID_BACKUP_LOCATION
+{
+    Buttons = WB_OK;
+    Message [ en-US ] = "You need to choose a backup location other than the document location itself.";
+};

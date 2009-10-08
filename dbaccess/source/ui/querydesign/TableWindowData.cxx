@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: TableWindowData.cxx,v $
- * $Revision: 1.15 $
+ * $Revision: 1.15.42.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -85,10 +85,6 @@ OTableWindowData::~OTableWindowData()
     Reference<XComponent> xComponent( m_xTable, UNO_QUERY );
     if ( xComponent.is() )
         stopComponentListening( xComponent );
-    // obtain the columns
-    xComponent.set( m_xColumns, UNO_QUERY );
-    if ( xComponent.is() )
-        stopComponentListening( xComponent );
 }
 
 //------------------------------------------------------------------------------
@@ -107,8 +103,9 @@ void OTableWindowData::_disposing( const ::com::sun::star::lang::EventObject& /*
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     // it doesn't matter which one was disposed
+    m_xColumns.clear();
+    m_xKeys.clear();
     m_xTable.clear();
-    m_xColumns.clear();;
 }
 // -----------------------------------------------------------------------------
 bool OTableWindowData::init(const Reference< XConnection  >& _xConnection,bool _bAllowQueries)
@@ -126,9 +123,9 @@ bool OTableWindowData::init(const Reference< XConnection  >& _xConnection,bool _
     bool bIsKnownTable = xTables->hasByName( m_sComposedName );
 
     if ( bIsKnownQuery )
-        m_xTable.set( xQueries->getByName( m_sComposedName ), UNO_QUERY_THROW );
+        m_xTable.set( xQueries->getByName( m_sComposedName ), UNO_QUERY );
     else if ( bIsKnownTable )
-        m_xTable.set( xTables->getByName( m_sComposedName ), UNO_QUERY_THROW );
+        m_xTable.set( xTables->getByName( m_sComposedName ), UNO_QUERY );
     else
         m_bIsValid = false;
 
@@ -136,7 +133,6 @@ bool OTableWindowData::init(const Reference< XConnection  >& _xConnection,bool _
     m_bIsQuery = bIsKnownQuery;
 
     listen();
-
 
     Reference< XIndexAccess > xColumnsAsIndex( m_xColumns,UNO_QUERY );
     return xColumnsAsIndex.is() && ( xColumnsAsIndex->getCount() > 0 );
@@ -152,11 +148,9 @@ void OTableWindowData::listen()
             startComponentListening( xComponent );
 
         // obtain the columns
-        Reference< XColumnsSupplier > xColumnsSups( m_xTable, UNO_QUERY_THROW );
-        m_xColumns = xColumnsSups->getColumns();
-        xComponent.set( m_xColumns, UNO_QUERY );
-        if ( xComponent.is() )
-            startComponentListening( xComponent );
+        Reference< XColumnsSupplier > xColumnsSups( m_xTable, UNO_QUERY);
+        if ( xColumnsSups.is() )
+            m_xColumns = xColumnsSups->getColumns();
 
         Reference<XKeysSupplier> xKeySup(m_xTable,UNO_QUERY);
         if ( xKeySup.is() )

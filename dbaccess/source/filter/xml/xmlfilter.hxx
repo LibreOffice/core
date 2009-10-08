@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: xmlfilter.hxx,v $
- * $Revision: 1.8 $
+ * $Revision: 1.8.2.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -146,6 +146,8 @@ private:
 
     SvXMLImportContext* CreateStylesContext(sal_uInt16 nPrefix,const ::rtl::OUString& rLocalName,
                                      const Reference< XAttributeList>& xAttrList, sal_Bool bIsAutoStyle );
+    SvXMLImportContext* CreateScriptContext( const ::rtl::OUString& rLocalName );
+
 protected:
     // SvXMLImport
     virtual SvXMLImportContext *CreateContext( sal_uInt16 nPrefix,

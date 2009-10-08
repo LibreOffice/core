@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: brwctrlr.cxx,v $
- * $Revision: 1.108 $
+ * $Revision: 1.105.6.3 $
  *
  * This file is part of OpenOffice.org.
  *

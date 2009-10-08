@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: advancedsettings.cxx,v $
- * $Revision: 1.4 $
+ * $Revision: 1.4.68.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -408,7 +408,7 @@ namespace dbaui
         delete pExampleSet;
         pExampleSet = new SfxItemSet(*GetInputSetImpl());
 
-        DATASOURCE_TYPE eType = m_pImpl->getDatasourceType(*_pItems);
+        ::dbaccess::DATASOURCE_TYPE eType = m_pImpl->getDatasourceType(*_pItems);
 
         DataSourceMetaData aMeta( eType );
         const AdvancedSettingsSupport& rAdvancedSupport( aMeta.getAdvancedSettingsSupport() );
@@ -434,7 +434,7 @@ namespace dbaui
     }
 
     // -----------------------------------------------------------------------
-    bool AdvancedSettingsDialog::doesHaveAnyAdvancedSettings( DATASOURCE_TYPE _eType )
+    bool AdvancedSettingsDialog::doesHaveAnyAdvancedSettings( ::dbaccess::DATASOURCE_TYPE _eType )
     {
         DataSourceMetaData aMeta( _eType );
         const AdvancedSettingsSupport& rSupport( aMeta.getAdvancedSettingsSupport() );
@@ -501,7 +501,7 @@ namespace dbaui
     }
 
     // -----------------------------------------------------------------------------
-    DATASOURCE_TYPE AdvancedSettingsDialog::getDatasourceType(const SfxItemSet& _rSet) const
+    ::dbaccess::DATASOURCE_TYPE AdvancedSettingsDialog::getDatasourceType(const SfxItemSet& _rSet) const
     {
         return m_pImpl->getDatasourceType(_rSet);
     }

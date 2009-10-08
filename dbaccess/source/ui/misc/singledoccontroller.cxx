@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: singledoccontroller.cxx,v $
- * $Revision: 1.30 $
+ * $Revision: 1.30.24.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -155,25 +155,23 @@ namespace dbaui
         sal_Bool                        m_bSuspended;   // is true when the controller was already suspended
         sal_Bool                        m_bEditable;    // is the control readonly or not
         sal_Bool                        m_bModified;    // is the data modified
+        bool                            m_bNotAttached;
 
         OSingleDocumentControllerImpl()
             :m_aDocScriptSupport()
-            ,m_nDocStartNumber(1)
+            ,m_nDocStartNumber(0)
             ,m_bSuspended( sal_False )
             ,m_bEditable(sal_True)
             ,m_bModified(sal_False)
+            ,m_bNotAttached(true)
         {
         }
 
         bool    documentHasScriptSupport() const
         {
-            // TODO: revert to the disabled code. The current version is just to be able
-            // to integrate an intermediate version of the CWS, which should behave as
-            // if no macros in DB docs are allowed
-            return false;
-//            OSL_PRECOND( !!m_aDocScriptSupport,
-//                "OSingleDocumentControllerImpl::documentHasScriptSupport: not completely initialized, yet - don't know!?" );
-//            return !!m_aDocScriptSupport && *m_aDocScriptSupport;
+            OSL_PRECOND( !!m_aDocScriptSupport,
+                "OSingleDocumentControllerImpl::documentHasScriptSupport: not completely initialized, yet - don't know!?" );
+            return !!m_aDocScriptSupport && *m_aDocScriptSupport;
         }
 
         void    setDocumentScriptSupport( const bool _bSupport )
@@ -287,6 +285,14 @@ namespace dbaui
                 m_pImpl->m_aDataSource = xDS;
             }
             OSL_POSTCOND( m_pImpl->m_aDataSource.is(), "OSingleDocumentController::initializeConnection: unable to obtain the data source object!" );
+
+            if ( m_pImpl->m_bNotAttached )
+            {
+                Reference< XUntitledNumbers > xUntitledProvider( getDatabaseDocument(), UNO_QUERY );
+                m_pImpl->m_nDocStartNumber = 1;
+                if ( xUntitledProvider.is() )
+                    m_pImpl->m_nDocStartNumber = xUntitledProvider->leaseNumber( static_cast< XWeak* >( this ) );
+            }
 
             // determine the availability of script support in our document. Our own XScriptInvocationContext
             // interface depends on this
@@ -471,8 +477,14 @@ namespace dbaui
     // -----------------------------------------------------------------------------
     sal_Bool SAL_CALL OSingleDocumentController::attachModel( const Reference< XModel > & _rxModel) throw( RuntimeException )
     {
+        if ( !_rxModel.is() )
+            return sal_False;
         if ( !OSingleDocumentController_Base::attachModel( _rxModel ) )
             return sal_False;
+
+        m_pImpl->m_bNotAttached = false;
+        if ( m_pImpl->m_nDocStartNumber == 1 )
+            releaseNumberForComponent();
 
         Reference< XUntitledNumbers > xUntitledProvider( _rxModel, UNO_QUERY );
         m_pImpl->m_nDocStartNumber = 1;

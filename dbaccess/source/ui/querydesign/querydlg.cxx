@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: querydlg.cxx,v $
- * $Revision: 1.19 $
+ * $Revision: 1.19.24.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -216,8 +216,8 @@ IMPL_LINK( DlgQryJoin, LBChangeHdl, ListBox*, /*pListBox*/ )
 
     m_pTableControl->enableRelation(true);
 
-    const String sFirstWinName  = m_pConnData->getReferencingTable()->GetWinName();
-    const String sSecondWinName = m_pConnData->getReferencedTable()->GetWinName();
+    String sFirstWinName    = m_pConnData->getReferencingTable()->GetWinName();
+    String sSecondWinName   = m_pConnData->getReferencedTable()->GetWinName();
     const EJoinType eOldJoinType = eJoinType;
     USHORT nResId = 0;
     const USHORT nPos = m_pJoinControl->aLB_JoinType.GetSelectEntryPos();
@@ -236,8 +236,13 @@ IMPL_LINK( DlgQryJoin, LBChangeHdl, ListBox*, /*pListBox*/ )
             eJoinType = LEFT_JOIN;
             break;
         case ID_RIGHT_JOIN:
-            nResId = STR_QUERY_LEFTRIGHT_JOIN;
-            eJoinType = RIGHT_JOIN;
+            {
+                nResId = STR_QUERY_LEFTRIGHT_JOIN;
+                eJoinType = RIGHT_JOIN;
+                String sTemp = sFirstWinName;
+                sFirstWinName = sSecondWinName;
+                sSecondWinName = sTemp;
+            }
             break;
         case ID_FULL_JOIN:
             nResId = STR_QUERY_FULL_JOIN;

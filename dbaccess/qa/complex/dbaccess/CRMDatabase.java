@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: CRMDatabase.java,v $
- * $Revision: 1.7 $
+ * $Revision: 1.6.2.1 $
  *
  * This file is part of OpenOffice.org.
  *

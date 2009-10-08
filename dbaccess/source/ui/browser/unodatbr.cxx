@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: unodatbr.cxx,v $
- * $Revision: 1.203 $
+ * $Revision: 1.203.8.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -846,6 +846,8 @@ sal_Bool SbaTableQueryBrowser::suspend(sal_Bool bSuspend) throw( RuntimeExceptio
             throw DisposedException( ::rtl::OUString(), *this );
 
         bRet = SbaXDataBrowserController::suspend(bSuspend);
+        if ( bRet && getView() )
+            getView()->Hide();
 
         m_bInSuspend = sal_False;
     }
@@ -2291,6 +2293,9 @@ sal_Bool SbaTableQueryBrowser::implSelect(const ::rtl::OUString& _rDataSourceNam
                 }
                 else
                     m_pTreeView->getListBox().Select(pCommand);
+
+                m_pTreeView->getListBox().MakeVisible(pCommand);
+                m_pTreeView->getListBox().SetCursor(pCommand);
             }
             else if (!pCommandType)
             {
@@ -3088,11 +3093,6 @@ void SbaTableQueryBrowser::impl_initialize()
             lcl_getDataSource( m_xDatabaseContext, sInitialDataSourceName, xConnection ) ), UNO_QUERY );
         m_aDocScriptSupport = ::boost::optional< bool >( Reference< XEmbeddedScripts >( xDocument, UNO_QUERY ).is() );
     }
-
-    // TODO: remove the following line. The current version is just to be able
-    // to integrate an intermediate version of the CWS, which should behave as
-    // if no macros in DB docs are allowed
-    m_aDocScriptSupport = ::boost::optional< bool> ( false );
 
     if ( implSelect( sInitialDataSourceName, sInitialCommand, nInitialDisplayCommandType, bEsacpeProcessing, xConnection, sal_True ) )
     {

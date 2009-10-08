@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: xmlfilter.cxx,v $
- * $Revision: 1.10 $
+ * $Revision: 1.10.12.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -64,15 +64,13 @@
 #include <svtools/sfxecode.hxx>
 #include "xmlEnums.hxx"
 #include "xmlStyleImport.hxx"
-#ifndef REPORTDESIGN_SHARED_XMLSTRINGS_HRC
 #include "xmlstrings.hrc"
-#endif
 #include "xmlPropertyHandler.hxx"
 #include <xmloff/txtprmap.hxx>
 #include "ReportDefinition.hxx"
 
 
-
+#define MAP_LEN(x) x, sizeof(x) - 1
 //--------------------------------------------------------------------------
 namespace rptxml
 {
@@ -565,11 +563,15 @@ sal_Bool ORptFilter::implImport( const Sequence< PropertyValue >& rDescriptor )
         static comphelper::PropertyMapEntry pMap[] =
         {
             {"OldFormat",           9,          1,          &::getCppuType((const sal_Bool*)0)          ,PropertyAttribute::BOUND,0},
+            { MAP_LEN( "StreamName"), 0,&::getCppuType( (::rtl::OUString *)0 ),beans::PropertyAttribute::MAYBEVOID, 0 },
             { NULL, 0, 0, NULL, 0, 0 }
         };
         uno::Reference<beans::XPropertySet> xProp = comphelper::GenericPropertySet_CreateInstance(new comphelper::PropertySetInfo(pMap));
 
         uno::Reference<XComponent> xModel(GetModel(),UNO_QUERY);
+        static const ::rtl::OUString s_sMeta(RTL_CONSTASCII_USTRINGPARAM("meta.xml"));
+        static const rtl::OUString s_sStreamName(RTL_CONSTASCII_USTRINGPARAM("StreamName"));
+        xProp->setPropertyValue(s_sStreamName, uno::makeAny(s_sMeta));
         sal_Int32 nRet = ReadThroughComponent( xStorage
                                     ,xModel
                                     ,"meta.xml"
@@ -581,7 +583,7 @@ sal_Bool ORptFilter::implImport( const Sequence< PropertyValue >& rDescriptor )
                                     ,xProp
                                     );
 
-        static const ::rtl::OUString s_sMeta(RTL_CONSTASCII_USTRINGPARAM("meta.xml"));
+
         try
         {
             xProp->setPropertyValue(s_sOld,uno::makeAny(!(xStorage->hasByName(s_sMeta) || xStorage->isStreamElement( s_sMeta ))));
@@ -593,6 +595,7 @@ sal_Bool ORptFilter::implImport( const Sequence< PropertyValue >& rDescriptor )
 
         if ( nRet == 0 )
         {
+            xProp->setPropertyValue(s_sStreamName, uno::makeAny(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("settings.xml"))));
             nRet = ReadThroughComponent( xStorage
                                     ,xModel
                                     ,"settings.xml"
@@ -605,6 +608,8 @@ sal_Bool ORptFilter::implImport( const Sequence< PropertyValue >& rDescriptor )
                                     );
         }
         if ( nRet == 0 )
+        {
+            xProp->setPropertyValue(s_sStreamName, uno::makeAny(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("styles.xml"))));
             nRet = ReadThroughComponent(xStorage
                                     ,xModel
                                     ,"styles.xml"
@@ -614,8 +619,11 @@ sal_Bool ORptFilter::implImport( const Sequence< PropertyValue >& rDescriptor )
                                     ,xEmbeddedObjectResolver
                                     ,SERVICE_STYLESIMPORTER
                                     ,xProp);
+        }
 
         if ( nRet == 0 )
+        {
+            xProp->setPropertyValue(s_sStreamName, uno::makeAny(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("content.xml"))));
             nRet = ReadThroughComponent( xStorage
                                     ,xModel
                                     ,"content.xml"
@@ -626,6 +634,7 @@ sal_Bool ORptFilter::implImport( const Sequence< PropertyValue >& rDescriptor )
                                     ,SERVICE_CONTENTIMPORTER
                                     ,xProp
                                     );
+        }
 
 
         bRet = nRet == 0;

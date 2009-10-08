@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: adminpages.cxx,v $
- * $Revision: 1.52 $
+ * $Revision: 1.52.40.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -183,7 +183,7 @@ namespace dbaui
         return 0L;
     }
     // -----------------------------------------------------------------------
-    sal_Bool OGenericAdministrationPage::getSelectedDataSource(DATASOURCE_TYPE _eType,::rtl::OUString& _sReturn,::rtl::OUString& _sCurr)
+    sal_Bool OGenericAdministrationPage::getSelectedDataSource(::dbaccess::DATASOURCE_TYPE _eType,::rtl::OUString& _sReturn,::rtl::OUString& _sCurr)
     {
         // collect all ODBC data source names
         StringBag aOdbcDatasources;
@@ -320,7 +320,7 @@ namespace dbaui
                     eImage = OSQLMessageBox::Error;
                     aMessage = String(ModuleRes(STR_CONNECTION_NO_SUCCESS));
                 }
-                OSQLMessageBox aMsg(this,sTitle,aMessage,eImage);
+                OSQLMessageBox aMsg( this, sTitle, aMessage, WB_OK, eImage );
                 aMsg.Execute();
             }
             if ( !bSuccess )

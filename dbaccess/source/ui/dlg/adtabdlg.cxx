@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: adtabdlg.cxx,v $
- * $Revision: 1.30 $
+ * $Revision: 1.30.68.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -30,74 +30,36 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_dbaccess.hxx"
-#ifndef DBAUI_QYDLGTAB_HXX
-#include "adtabdlg.hxx"
-#endif
-#ifndef DBAUI_ADTABDLG_HRC
-#include "adtabdlg.hrc"
-#endif
-#ifndef _DBAUI_SQLMESSAGE_HXX_
-#include "sqlmessage.hxx"
-#endif
-#ifndef _TOOLS_DEBUG_HXX
-#include <tools/debug.hxx>
-#endif
-#ifndef TOOLS_DIAGNOSE_EX_H
-#include <tools/diagnose_ex.h>
-#endif
-#ifndef _SVTOOLS_LOCALRESACCESS_HXX_
-#include <svtools/localresaccess.hxx>
-#endif
-#ifndef _DBA_DBACCESS_HELPID_HRC_
-#include "dbaccess_helpid.hrc"
-#endif
-#ifndef _DBU_RESOURCE_HRC_
-#include "dbu_resource.hrc"
-#endif
-#ifndef _DBU_DLG_HRC_
-#include "dbu_dlg.hrc"
-#endif
-#ifndef _SFXSIDS_HRC
-#include <sfx2/sfxsids.hrc>
-#endif
-#ifndef DBAUI_QUERYTABLEVIEW_HXX
-#include "QueryTableView.hxx"
-#endif
-#ifndef DBAUI_QUERYDESIGNVIEW_HXX
-#include "QueryDesignView.hxx"
-#endif
-#ifndef DBAUI_QUERYCONTROLLER_HXX
-#include "querycontroller.hxx"
-#endif
-#ifndef _CONNECTIVITY_DBTOOLS_HXX_
-#include <connectivity/dbtools.hxx>
-#endif
-#ifndef DBACCESS_UI_BROWSER_ID_HXX
-#include "browserids.hxx"
-#endif
-#ifndef _COM_SUN_STAR_SDB_XQUERIESSUPPLIER_HPP_
-#include <com/sun/star/sdb/XQueriesSupplier.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDBCX_XVIEWSSUPPLIER_HPP_
-#include <com/sun/star/sdbcx/XViewsSupplier.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDBCX_XTABLESSUPPLIER_HPP_
-#include <com/sun/star/sdbcx/XTablesSupplier.hpp>
-#endif
-#ifndef _COM_SUN_STAR_CONTAINER_XNAMEACCESS_HPP_
-#include <com/sun/star/container/XNameAccess.hpp>
-#endif
-#ifndef DBAUI_TOOLS_HXX
-#include "UITools.hxx"
-#endif
-#ifndef DBACCESS_IMAGEPROVIDER_HXX
-#include "imageprovider.hxx"
-#endif
 
+#include "adtabdlg.hxx"
+#include "adtabdlg.hrc"
+#include "sqlmessage.hxx"
+#include <tools/debug.hxx>
+#include <tools/diagnose_ex.h>
+#include <svtools/localresaccess.hxx>
+#include "dbaccess_helpid.hrc"
+#include "dbu_resource.hrc"
+#include "dbu_dlg.hrc"
+#include <sfx2/sfxsids.hrc>
+#include "QueryTableView.hxx"
+#include "QueryDesignView.hxx"
+#include "querycontroller.hxx"
+#include <connectivity/dbtools.hxx>
+#include "browserids.hxx"
+#include <com/sun/star/sdb/XQueriesSupplier.hpp>
+#include <com/sun/star/sdbcx/XViewsSupplier.hpp>
+#include <com/sun/star/sdbcx/XTablesSupplier.hpp>
+#include <com/sun/star/container/XNameAccess.hpp>
+#include "UITools.hxx"
+#include "imageprovider.hxx"
+
+#include <comphelper/containermultiplexer.hxx>
+#include "cppuhelper/basemutex.hxx"
 #include <algorithm>
 
 // slot ids
 using namespace dbaui;
+using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::sdb;
@@ -115,23 +77,42 @@ TableObjectListFacade::~TableObjectListFacade()
 //==============================================================================
 //= TableListFacade
 //==============================================================================
-class TableListFacade : public TableObjectListFacade
+class TableListFacade : public ::cppu::BaseMutex
+                    ,   public TableObjectListFacade
+                    ,   public ::comphelper::OContainerListener
 {
     OTableTreeListBox&          m_rTableList;
     Reference< XConnection >    m_xConnection;
+    ::rtl::Reference< comphelper::OContainerListenerAdapter>
+                                m_pContainerListener;
+    bool                        m_bAllowViews;
 
 public:
     TableListFacade( OTableTreeListBox& _rTableList, const Reference< XConnection >& _rxConnection )
-        :m_rTableList( _rTableList )
+        : ::comphelper::OContainerListener(m_aMutex)
+        ,m_rTableList( _rTableList )
         ,m_xConnection( _rxConnection )
+        ,m_bAllowViews(true)
     {
     }
+    virtual ~TableListFacade();
 
+
+private:
     virtual void    updateTableObjectList( bool _bAllowViews );
     virtual String  getSelectedName( String& _out_rAliasName ) const;
     virtual bool    isLeafSelected() const;
+    // OContainerListener
+    virtual void _elementInserted( const ::com::sun::star::container::ContainerEvent& _rEvent ) throw(::com::sun::star::uno::RuntimeException);
+    virtual void _elementRemoved( const  ::com::sun::star::container::ContainerEvent& _rEvent ) throw(::com::sun::star::uno::RuntimeException);
+    virtual void _elementReplaced( const ::com::sun::star::container::ContainerEvent& _rEvent ) throw(::com::sun::star::uno::RuntimeException);
 };
 
+TableListFacade::~TableListFacade()
+{
+    if ( m_pContainerListener.is() )
+        m_pContainerListener->dispose();
+}
 //------------------------------------------------------------------------------
 String TableListFacade::getSelectedName( String& _out_rAliasName ) const
 {
@@ -174,21 +155,44 @@ String TableListFacade::getSelectedName( String& _out_rAliasName ) const
     _out_rAliasName = aTableName;
     return aComposedName;
 }
-
+// -----------------------------------------------------------------------------
+void TableListFacade::_elementInserted( const container::ContainerEvent& /*_rEvent*/ )  throw(::com::sun::star::uno::RuntimeException)
+{
+    updateTableObjectList(m_bAllowViews);
+}
+// -----------------------------------------------------------------------------
+void TableListFacade::_elementRemoved( const container::ContainerEvent& /*_rEvent*/ ) throw(::com::sun::star::uno::RuntimeException)
+{
+    updateTableObjectList(m_bAllowViews);
+}
+// -----------------------------------------------------------------------------
+void TableListFacade::_elementReplaced( const container::ContainerEvent& /*_rEvent*/ ) throw(::com::sun::star::uno::RuntimeException)
+{
+}
 //------------------------------------------------------------------------------
 void TableListFacade::updateTableObjectList( bool _bAllowViews )
 {
+    m_bAllowViews = _bAllowViews;
     m_rTableList.Clear();
     try
     {
         Reference< XTablesSupplier > xTableSupp( m_xConnection, UNO_QUERY_THROW );
+
         Reference< XViewsSupplier > xViewSupp;
         Reference< XNameAccess > xTables, xViews;
         Sequence< ::rtl::OUString > sTables, sViews;
 
         xTables = xTableSupp->getTables();
         if ( xTables.is() )
+        {
+            if ( !m_pContainerListener.is() )
+            {
+                Reference< XContainer> xContainer(xTables,uno::UNO_QUERY);
+                if ( xContainer.is() )
+                    m_pContainerListener = new ::comphelper::OContainerListenerAdapter(this,xContainer);
+            }
             sTables = xTables->getElementNames();
+        } // if ( xTables.is() )
 
         xViewSupp.set( xTableSupp, UNO_QUERY );
         if ( xViewSupp.is() )
@@ -241,22 +245,53 @@ bool TableListFacade::isLeafSelected() const
 //==============================================================================
 //= QueryListFacade
 //==============================================================================
-class QueryListFacade : public TableObjectListFacade
+class QueryListFacade : public ::cppu::BaseMutex
+                    ,   public TableObjectListFacade
+                    ,   public ::comphelper::OContainerListener
 {
     SvTreeListBox&              m_rQueryList;
     Reference< XConnection >    m_xConnection;
+    ::rtl::Reference< comphelper::OContainerListenerAdapter>
+                                m_pContainerListener;
 
 public:
     QueryListFacade( SvTreeListBox& _rQueryList, const Reference< XConnection >& _rxConnection )
-        :m_rQueryList( _rQueryList )
+        : ::comphelper::OContainerListener(m_aMutex)
+        ,m_rQueryList( _rQueryList )
         ,m_xConnection( _rxConnection )
     {
     }
-
+    virtual ~QueryListFacade();
+private:
     virtual void    updateTableObjectList( bool _bAllowViews );
     virtual String  getSelectedName( String& _out_rAliasName ) const;
     virtual bool    isLeafSelected() const;
+    // OContainerListener
+    virtual void _elementInserted( const ::com::sun::star::container::ContainerEvent& _rEvent ) throw(::com::sun::star::uno::RuntimeException);
+    virtual void _elementRemoved( const  ::com::sun::star::container::ContainerEvent& _rEvent ) throw(::com::sun::star::uno::RuntimeException);
+    virtual void _elementReplaced( const ::com::sun::star::container::ContainerEvent& _rEvent ) throw(::com::sun::star::uno::RuntimeException);
 };
+QueryListFacade::~QueryListFacade()
+{
+    if ( m_pContainerListener.is() )
+        m_pContainerListener->dispose();
+}
+// -----------------------------------------------------------------------------
+void QueryListFacade::_elementInserted( const container::ContainerEvent& _rEvent )  throw(::com::sun::star::uno::RuntimeException)
+{
+    ::rtl::OUString sName;
+    if ( _rEvent.Accessor >>= sName )
+        m_rQueryList.InsertEntry( sName );
+}
+// -----------------------------------------------------------------------------
+void QueryListFacade::_elementRemoved( const container::ContainerEvent& /*_rEvent*/ ) throw(::com::sun::star::uno::RuntimeException)
+{
+    updateTableObjectList(true);
+}
+// -----------------------------------------------------------------------------
+void QueryListFacade::_elementReplaced( const container::ContainerEvent& /*_rEvent*/ ) throw(::com::sun::star::uno::RuntimeException)
+{
+}
 
 //------------------------------------------------------------------------------
 void QueryListFacade::updateTableObjectList( bool /*_bAllowViews*/ )
@@ -275,6 +310,11 @@ void QueryListFacade::updateTableObjectList( bool /*_bAllowViews*/ )
 
         Reference< XQueriesSupplier > xSuppQueries( m_xConnection, UNO_QUERY_THROW );
         Reference< XNameAccess > xQueries( xSuppQueries->getQueries(), UNO_QUERY_THROW );
+        if ( !m_pContainerListener.is() )
+        {
+            Reference< XContainer> xContainer(xQueries,UNO_QUERY_THROW);
+            m_pContainerListener = new ::comphelper::OContainerListenerAdapter(this,xContainer);
+        }
         Sequence< ::rtl::OUString > aQueryNames = xQueries->getElementNames();
 
         const ::rtl::OUString* pQuery = aQueryNames.getConstArray();

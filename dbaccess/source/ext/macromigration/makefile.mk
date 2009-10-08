@@ -8,7 +8,7 @@
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.3 $
+# $Revision: 1.3.2.4 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -56,9 +56,11 @@ SLOFILES=   $(SLO)$/macromigrationwizard.obj \
             $(SLO)$/dbmm_module.obj \
             $(SLO)$/dbmm_services.obj \
             $(SLO)$/migrationengine.obj \
-            $(SLO)$/docerrorhandling.obj \
+            $(SLO)$/docinteraction.obj \
             $(SLO)$/progresscapture.obj \
+            $(SLO)$/progressmixer.obj \
             $(SLO)$/migrationlog.obj \
+            $(SLO)$/dbmm_types.obj \
 
 # --- library -----------------------------------
 
@@ -75,7 +77,8 @@ SHL1STDLIBS= \
         $(SVTOOLLIB)        \
         $(SVLLIB)           \
         $(VCLLIB)           \
-        $(SVXLIB)
+        $(SVXLIB)           \
+        $(UCBHELPERLIB)
 
 SHL1LIBS=       $(SLB)$/$(TARGET).lib
 SHL1IMPLIB=     i$(TARGET)

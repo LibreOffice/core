@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: macromigrationpages.cxx,v $
- * $Revision: 1.3 $
+ * $Revision: 1.3.2.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -43,6 +43,7 @@
 
 #include <tools/urlobj.hxx>
 #include <tools/diagnose_ex.h>
+#include <vcl/metric.hxx>
 
 //........................................................................
 namespace dbmm
@@ -216,8 +217,8 @@ namespace dbmm
         ,m_aObjectCount             ( this, MacroMigrationResId( FT_OBJECT_COUNT            ) )
         ,m_aCurrentObjectLabel      ( this, MacroMigrationResId( FT_CURRENT_OBJECT_LABEL    ) )
         ,m_aCurrentObject           ( this, MacroMigrationResId( FT_CURRENT_OBJECT          ) )
-        ,m_aCurrentActionLabel      ( this, MacroMigrationResId( FT_CURRENT_PROGRESS_LABEL    ) )
-        ,m_aCurrentAction           ( this, MacroMigrationResId( FT_CURRENT_PROGRESS          ) )
+        ,m_aCurrentActionLabel      ( this, MacroMigrationResId( FT_CURRENT_PROGRESS_LABEL  ) )
+        ,m_aCurrentAction           ( this, MacroMigrationResId( FT_CURRENT_PROGRESS        ) )
         ,m_aCurrentProgress         ( this, MacroMigrationResId( WND_CURRENT_PROGRESS       ) )
         ,m_aAllProgressLabel        ( this, MacroMigrationResId( FT_ALL_PROGRESS_LABEL      ) )
         ,m_aAllProgressText         ( this, MacroMigrationResId( FT_OBJECT_COUNT_PROGRESS   ) )
@@ -243,6 +244,12 @@ namespace dbmm
     }
 
     //--------------------------------------------------------------------
+    void ProgressPage::onFinishedSuccessfully()
+    {
+        m_aMigrationDone.Show();
+    }
+
+    //--------------------------------------------------------------------
     void ProgressPage::startObject( const ::rtl::OUString& _rObjectName, const ::rtl::OUString& _rCurrentAction, const sal_uInt32 _nRange )
     {
         m_aCurrentObject.SetText( _rObjectName );
@@ -252,6 +259,8 @@ namespace dbmm
 
         // since this is currently called from the main thread, which does not have the chance
         // to re-schedule, we need to explicitly update the display
+        m_aCurrentObject.Update();
+        m_aCurrentAction.Update();
         Update();
     }
 
@@ -259,6 +268,7 @@ namespace dbmm
     void ProgressPage::setObjectProgressText( const ::rtl::OUString& _rText )
     {
         m_aCurrentAction.SetText( _rText );
+        m_aCurrentAction.Update();
         Update();
     }
 
@@ -272,9 +282,9 @@ namespace dbmm
     //--------------------------------------------------------------------
     void ProgressPage::endObject()
     {
-        m_aCurrentObject.SetText( String() );
         m_aCurrentAction.SetText( String() );
-        m_aCurrentProgress.SetValue( (sal_uInt32)0 );
+        m_aCurrentProgress.SetValue( m_aCurrentProgress.GetRange() );
+        m_aCurrentAction.Update();
         Update();
     }
 
@@ -307,6 +317,8 @@ namespace dbmm
         :MacroMigrationPage( _rParentDialog, MacroMigrationResId( TP_SUMMARY ) )
         ,m_aChangesLabel( this, MacroMigrationResId( FT_CHANGES_LABEL ) )
         ,m_aChanges     ( this, MacroMigrationResId( ED_CHANGES       ) )
+        ,m_aSuccessful  (       MacroMigrationResId( STR_SUCCESSFUL   ) )
+        ,m_aUnsuccessful(       MacroMigrationResId( STR_UNSUCCESSFUL ) )
     {
         FreeResource();
     }
@@ -318,9 +330,30 @@ namespace dbmm
     }
 
     //--------------------------------------------------------------------
-    void ResultPage::displaySummary( const String& _rSummary )
+    void ResultPage::displayMigrationLog( const bool _bSuccessful, const String& _rSummary )
     {
+        m_aChangesLabel.SetText( _bSuccessful ? m_aSuccessful : m_aUnsuccessful );
         m_aChanges.SetText( _rSummary );
+
+        // resize m_aChangesLabel and m_aChances as needed for the label text to fit
+        Rectangle aOriginalLabelSize( m_aChangesLabel.GetPosPixel(), m_aChangesLabel.GetSizePixel() );
+        // assume 3 lines, at most
+        Rectangle aNewLabelSize( aOriginalLabelSize );
+        aNewLabelSize.Bottom() = aNewLabelSize.Top() + m_aChangesLabel.LogicToPixel( Size( 0, 3*8 ), MAP_APPFONT ).Height();
+        TextRectInfo aInfo;
+        aNewLabelSize = m_aChangesLabel.GetTextRect( aNewLabelSize, m_aChangesLabel.GetText(), TEXT_DRAW_MULTILINE | TEXT_DRAW_WORDBREAK, &aInfo );
+        aNewLabelSize.Bottom() = aNewLabelSize.Top() + m_aChangesLabel.LogicToPixel( Size( 0, aInfo.GetLineCount() * 8 ), MAP_APPFONT ).Height();
+
+        m_aChangesLabel.SetSizePixel( aNewLabelSize.GetSize() );
+
+        long nChangesDiff = aNewLabelSize.GetHeight() - aOriginalLabelSize.GetHeight();
+        Size aChangesSize( m_aChanges.GetSizePixel() );
+        aChangesSize.Height() -= nChangesDiff;
+        m_aChanges.SetSizePixel( aChangesSize );
+
+        Point aChangesPos( m_aChanges.GetPosPixel() );
+        aChangesPos.Y() += nChangesDiff;
+        m_aChanges.SetPosPixel( aChangesPos );
     }
 
 //........................................................................

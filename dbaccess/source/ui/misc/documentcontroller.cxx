@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: documentcontroller.cxx,v $
- * $Revision: 1.7 $
+ * $Revision: 1.5.178.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -83,11 +83,14 @@ namespace dbaui
     }
 
     //--------------------------------------------------------------------
-    void ModelControllerConnector::swap( ModelControllerConnector& _rSource )
+    void ModelControllerConnector::connect( const Reference< XModel >& _rxModel, const Reference< XController >& _rxController )
     {
-        ModelControllerConnector aTemp( _rSource );
-        _rSource.impl_copyFrom( *this );
-        impl_copyFrom( aTemp );
+        impl_disconnect();
+
+        m_xModel = _rxModel;
+        m_xController = _rxController;
+
+        impl_connect();
     }
 
     //--------------------------------------------------------------------

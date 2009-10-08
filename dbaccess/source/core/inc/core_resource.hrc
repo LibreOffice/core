@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: core_resource.hrc,v $
- * $Revision: 1.17 $
+ * $Revision: 1.16.68.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -37,6 +37,7 @@
 
 //------------------------------------------------------------------------------
 #define RID_CORE_STRINGS_START                  RID_DBACCESS_START
+#define RID_CORE_OTHER_START                    RID_DBACCESS_START
 
 //------------------------------------------------------------------------------
 //- String-IDs
@@ -87,6 +88,9 @@
 #define RID_STR_OBJECT_ALREADY_CONTAINED        ( RID_CORE_STRINGS_START + 44 )
 #define RID_STR_NAME_NOT_FOUND                  ( RID_CORE_STRINGS_START + 45 )
 #define RID_STR_QUERY_DOES_NOT_EXIST            ( RID_CORE_STRINGS_START + 46 )
+
+#define RSC_DATASOURCE_TYPES                    ( RID_CORE_OTHER_START + 1 )
+#define RSC_DATASOURCE_TYPE_UINAMES             ( RID_CORE_OTHER_START + 2 )
 
 #endif // _DBA_CORE_RESOURCE_HRC_
 

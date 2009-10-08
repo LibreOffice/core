@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: dbwizsetup.cxx,v $
- * $Revision: 1.35 $
+ * $Revision: 1.35.8.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -37,6 +37,7 @@
 #include "dbadminsetup.hrc"
 #include "dbu_dlg.hrc"
 #include "dsitems.hxx"
+#include "dsnItem.hxx"
 
 #ifndef INCLUDED_SVTOOLS_PATHOPTIONS_HXX
 #include <svtools/pathoptions.hxx>
@@ -282,8 +283,8 @@ ODbTypeWizDialogSetup::ODbTypeWizDialogSetup(Window* _pParent
                         WZB_NEXT | WZB_PREVIOUS | WZB_FINISH | WZB_CANCEL | WZB_HELP )
 
     , m_pOutSet(NULL)
-    , m_eType( DST_UNKNOWN )
-    , m_eOldType( DST_UNKNOWN )
+    , m_eType(  ::dbaccess::DST_UNKNOWN )
+    , m_eOldType(  ::dbaccess::DST_UNKNOWN )
     , m_bResetting(sal_False)
     , m_bApplied(sal_False)
     , m_bUIEnabled( sal_True )
@@ -333,31 +334,31 @@ ODbTypeWizDialogSetup::ODbTypeWizDialogSetup(Window* _pParent
     enableButtons(WZB_FINISH, sal_True);
     enableAutomaticNextButtonState();
 
-    declareAuthDepPath( DST_ADO,                ADO_PATH,               PAGE_DBSETUPWIZARD_INTRO, PAGE_DBSETUPWIZARD_ADO, PAGE_DBSETUPWIZARD_AUTHENTIFICATION, PAGE_DBSETUPWIZARD_FINAL, -1 );
-    declareAuthDepPath( DST_DBASE,              DBASE_PATH,             PAGE_DBSETUPWIZARD_INTRO, PAGE_DBSETUPWIZARD_DBASE, PAGE_DBSETUPWIZARD_AUTHENTIFICATION, PAGE_DBSETUPWIZARD_FINAL, -1 );
-    declareAuthDepPath( DST_FLAT,               TEXT_PATH,              PAGE_DBSETUPWIZARD_INTRO, PAGE_DBSETUPWIZARD_TEXT, PAGE_DBSETUPWIZARD_AUTHENTIFICATION, PAGE_DBSETUPWIZARD_FINAL, -1 );
+    declareAuthDepPath(  ::dbaccess::DST_ADO,                ADO_PATH,               PAGE_DBSETUPWIZARD_INTRO, PAGE_DBSETUPWIZARD_ADO, PAGE_DBSETUPWIZARD_AUTHENTIFICATION, PAGE_DBSETUPWIZARD_FINAL, -1 );
+    declareAuthDepPath(  ::dbaccess::DST_DBASE,              DBASE_PATH,             PAGE_DBSETUPWIZARD_INTRO, PAGE_DBSETUPWIZARD_DBASE, PAGE_DBSETUPWIZARD_AUTHENTIFICATION, PAGE_DBSETUPWIZARD_FINAL, -1 );
+    declareAuthDepPath(  ::dbaccess::DST_FLAT,               TEXT_PATH,              PAGE_DBSETUPWIZARD_INTRO, PAGE_DBSETUPWIZARD_TEXT, PAGE_DBSETUPWIZARD_AUTHENTIFICATION, PAGE_DBSETUPWIZARD_FINAL, -1 );
     declarePath       (                         SPREADSHEET_PATH,       PAGE_DBSETUPWIZARD_INTRO, PAGE_DBSETUPWIZARD_SPREADSHEET, PAGE_DBSETUPWIZARD_FINAL, -1 );
-    declareAuthDepPath( DST_ODBC,               ODBC_PATH,              PAGE_DBSETUPWIZARD_INTRO, PAGE_DBSETUPWIZARD_ODBC, PAGE_DBSETUPWIZARD_AUTHENTIFICATION, PAGE_DBSETUPWIZARD_FINAL, -1 );
-    declareAuthDepPath( DST_JDBC,               JDBC_PATH,              PAGE_DBSETUPWIZARD_INTRO, PAGE_DBSETUPWIZARD_JDBC, PAGE_DBSETUPWIZARD_AUTHENTIFICATION, PAGE_DBSETUPWIZARD_FINAL, -1 );
-    declareAuthDepPath( DST_MYSQL_ODBC,         MYSQL_ODBC_PATH,        PAGE_DBSETUPWIZARD_INTRO, PAGE_DBSETUPWIZARD_MYSQL_INTRO, PAGE_DBSETUPWIZARD_MYSQL_ODBC, PAGE_DBSETUPWIZARD_AUTHENTIFICATION, PAGE_DBSETUPWIZARD_FINAL, -1 );
-    declareAuthDepPath( DST_MYSQL_JDBC,         MYSQL_JDBC_PATH,        PAGE_DBSETUPWIZARD_INTRO, PAGE_DBSETUPWIZARD_MYSQL_INTRO, PAGE_DBSETUPWIZARD_MYSQL_JDBC, PAGE_DBSETUPWIZARD_AUTHENTIFICATION, PAGE_DBSETUPWIZARD_FINAL, -1 );
-    declareAuthDepPath( DST_MYSQL_NATIVE,       MYSQL_NATIVE_PATH,      PAGE_DBSETUPWIZARD_INTRO, PAGE_DBSETUPWIZARD_MYSQL_INTRO, PAGE_DBSETUPWIZARD_MYSQL_NATIVE, PAGE_DBSETUPWIZARD_AUTHENTIFICATION, PAGE_DBSETUPWIZARD_FINAL, -1 );
-    declareAuthDepPath( DST_ORACLE_JDBC,        ORACLE_PATH,            PAGE_DBSETUPWIZARD_INTRO, PAGE_DBSETUPWIZARD_ORACLE, PAGE_DBSETUPWIZARD_AUTHENTIFICATION, PAGE_DBSETUPWIZARD_FINAL, -1 );
-    declareAuthDepPath( DST_ADABAS,             ADABAS_PATH,            PAGE_DBSETUPWIZARD_INTRO, PAGE_DBSETUPWIZARD_ADABAS, PAGE_DBSETUPWIZARD_AUTHENTIFICATION, PAGE_DBSETUPWIZARD_FINAL, -1 );
-    declareAuthDepPath( DST_LDAP,               LDAP_PATH,              PAGE_DBSETUPWIZARD_INTRO, PAGE_DBSETUPWIZARD_LDAP, PAGE_DBSETUPWIZARD_AUTHENTIFICATION, PAGE_DBSETUPWIZARD_FINAL, -1 );
-    declareAuthDepPath( DST_MSACCESS,           MSACCESS_PATH,          PAGE_DBSETUPWIZARD_INTRO, PAGE_DBSETUPWIZARD_MSACCESS, PAGE_DBSETUPWIZARD_AUTHENTIFICATION, PAGE_DBSETUPWIZARD_FINAL, -1 );
-    declareAuthDepPath( DST_MSACCESS_2007,      MSACCESS2007_PATH,      PAGE_DBSETUPWIZARD_INTRO, PAGE_DBSETUPWIZARD_MSACCESS, PAGE_DBSETUPWIZARD_AUTHENTIFICATION, PAGE_DBSETUPWIZARD_FINAL, -1 );
-    declareAuthDepPath( DST_OUTLOOKEXP,         OUTLOOKEXP_PATH,        PAGE_DBSETUPWIZARD_INTRO, PAGE_DBSETUPWIZARD_AUTHENTIFICATION, PAGE_DBSETUPWIZARD_FINAL, -1 );
-    declareAuthDepPath( DST_OUTLOOK,            OUTLOOK_PATH,           PAGE_DBSETUPWIZARD_INTRO, PAGE_DBSETUPWIZARD_AUTHENTIFICATION, PAGE_DBSETUPWIZARD_FINAL, -1 );
-    declareAuthDepPath( DST_MOZILLA,            MOZILLA_PATH,           PAGE_DBSETUPWIZARD_INTRO, PAGE_DBSETUPWIZARD_AUTHENTIFICATION, PAGE_DBSETUPWIZARD_FINAL, -1 );
-    declareAuthDepPath( DST_THUNDERBIRD,        THUNDERBIRD_PATH,       PAGE_DBSETUPWIZARD_INTRO, PAGE_DBSETUPWIZARD_AUTHENTIFICATION, PAGE_DBSETUPWIZARD_FINAL, -1 );
-    declareAuthDepPath( DST_EVOLUTION,          EVOLUTION_PATH,         PAGE_DBSETUPWIZARD_INTRO, PAGE_DBSETUPWIZARD_AUTHENTIFICATION, PAGE_DBSETUPWIZARD_FINAL, -1 );
-    declareAuthDepPath( DST_EVOLUTION_GROUPWISE,EVOLUTION_PATH_GROUPWISE, PAGE_DBSETUPWIZARD_INTRO, PAGE_DBSETUPWIZARD_AUTHENTIFICATION, PAGE_DBSETUPWIZARD_FINAL, -1 );
-    declareAuthDepPath( DST_EVOLUTION_LDAP,     EVOLUTION_PATH_LDAP,    PAGE_DBSETUPWIZARD_INTRO, PAGE_DBSETUPWIZARD_AUTHENTIFICATION, PAGE_DBSETUPWIZARD_FINAL, -1 );
-    declareAuthDepPath( DST_KAB,                KAB_PATH,               PAGE_DBSETUPWIZARD_INTRO, PAGE_DBSETUPWIZARD_AUTHENTIFICATION, PAGE_DBSETUPWIZARD_FINAL, -1 );
-    declareAuthDepPath( DST_MACAB,              MACAB_PATH,             PAGE_DBSETUPWIZARD_INTRO, PAGE_DBSETUPWIZARD_AUTHENTIFICATION, PAGE_DBSETUPWIZARD_FINAL, -1);
+    declareAuthDepPath(  ::dbaccess::DST_ODBC,               ODBC_PATH,              PAGE_DBSETUPWIZARD_INTRO, PAGE_DBSETUPWIZARD_ODBC, PAGE_DBSETUPWIZARD_AUTHENTIFICATION, PAGE_DBSETUPWIZARD_FINAL, -1 );
+    declareAuthDepPath(  ::dbaccess::DST_JDBC,               JDBC_PATH,              PAGE_DBSETUPWIZARD_INTRO, PAGE_DBSETUPWIZARD_JDBC, PAGE_DBSETUPWIZARD_AUTHENTIFICATION, PAGE_DBSETUPWIZARD_FINAL, -1 );
+    declareAuthDepPath(  ::dbaccess::DST_MYSQL_ODBC,         MYSQL_ODBC_PATH,        PAGE_DBSETUPWIZARD_INTRO, PAGE_DBSETUPWIZARD_MYSQL_INTRO, PAGE_DBSETUPWIZARD_MYSQL_ODBC, PAGE_DBSETUPWIZARD_AUTHENTIFICATION, PAGE_DBSETUPWIZARD_FINAL, -1 );
+    declareAuthDepPath(  ::dbaccess::DST_MYSQL_JDBC,         MYSQL_JDBC_PATH,        PAGE_DBSETUPWIZARD_INTRO, PAGE_DBSETUPWIZARD_MYSQL_INTRO, PAGE_DBSETUPWIZARD_MYSQL_JDBC, PAGE_DBSETUPWIZARD_AUTHENTIFICATION, PAGE_DBSETUPWIZARD_FINAL, -1 );
+    declareAuthDepPath(  ::dbaccess::DST_MYSQL_NATIVE,       MYSQL_NATIVE_PATH,      PAGE_DBSETUPWIZARD_INTRO, PAGE_DBSETUPWIZARD_MYSQL_INTRO, PAGE_DBSETUPWIZARD_MYSQL_NATIVE, PAGE_DBSETUPWIZARD_AUTHENTIFICATION, PAGE_DBSETUPWIZARD_FINAL, -1 );
+    declareAuthDepPath(  ::dbaccess::DST_ORACLE_JDBC,        ORACLE_PATH,            PAGE_DBSETUPWIZARD_INTRO, PAGE_DBSETUPWIZARD_ORACLE, PAGE_DBSETUPWIZARD_AUTHENTIFICATION, PAGE_DBSETUPWIZARD_FINAL, -1 );
+    declareAuthDepPath(  ::dbaccess::DST_ADABAS,             ADABAS_PATH,            PAGE_DBSETUPWIZARD_INTRO, PAGE_DBSETUPWIZARD_ADABAS, PAGE_DBSETUPWIZARD_AUTHENTIFICATION, PAGE_DBSETUPWIZARD_FINAL, -1 );
+    declareAuthDepPath(  ::dbaccess::DST_LDAP,               LDAP_PATH,              PAGE_DBSETUPWIZARD_INTRO, PAGE_DBSETUPWIZARD_LDAP, PAGE_DBSETUPWIZARD_AUTHENTIFICATION, PAGE_DBSETUPWIZARD_FINAL, -1 );
+    declareAuthDepPath(  ::dbaccess::DST_MSACCESS,           MSACCESS_PATH,          PAGE_DBSETUPWIZARD_INTRO, PAGE_DBSETUPWIZARD_MSACCESS, PAGE_DBSETUPWIZARD_AUTHENTIFICATION, PAGE_DBSETUPWIZARD_FINAL, -1 );
+    declareAuthDepPath(  ::dbaccess::DST_MSACCESS_2007,      MSACCESS2007_PATH,      PAGE_DBSETUPWIZARD_INTRO, PAGE_DBSETUPWIZARD_MSACCESS, PAGE_DBSETUPWIZARD_AUTHENTIFICATION, PAGE_DBSETUPWIZARD_FINAL, -1 );
+    declareAuthDepPath(  ::dbaccess::DST_OUTLOOKEXP,         OUTLOOKEXP_PATH,        PAGE_DBSETUPWIZARD_INTRO, PAGE_DBSETUPWIZARD_AUTHENTIFICATION, PAGE_DBSETUPWIZARD_FINAL, -1 );
+    declareAuthDepPath(  ::dbaccess::DST_OUTLOOK,            OUTLOOK_PATH,           PAGE_DBSETUPWIZARD_INTRO, PAGE_DBSETUPWIZARD_AUTHENTIFICATION, PAGE_DBSETUPWIZARD_FINAL, -1 );
+    declareAuthDepPath(  ::dbaccess::DST_MOZILLA,            MOZILLA_PATH,           PAGE_DBSETUPWIZARD_INTRO, PAGE_DBSETUPWIZARD_AUTHENTIFICATION, PAGE_DBSETUPWIZARD_FINAL, -1 );
+    declareAuthDepPath(  ::dbaccess::DST_THUNDERBIRD,        THUNDERBIRD_PATH,       PAGE_DBSETUPWIZARD_INTRO, PAGE_DBSETUPWIZARD_AUTHENTIFICATION, PAGE_DBSETUPWIZARD_FINAL, -1 );
+    declareAuthDepPath(  ::dbaccess::DST_EVOLUTION,          EVOLUTION_PATH,         PAGE_DBSETUPWIZARD_INTRO, PAGE_DBSETUPWIZARD_AUTHENTIFICATION, PAGE_DBSETUPWIZARD_FINAL, -1 );
+    declareAuthDepPath(  ::dbaccess::DST_EVOLUTION_GROUPWISE,EVOLUTION_PATH_GROUPWISE, PAGE_DBSETUPWIZARD_INTRO, PAGE_DBSETUPWIZARD_AUTHENTIFICATION, PAGE_DBSETUPWIZARD_FINAL, -1 );
+    declareAuthDepPath(  ::dbaccess::DST_EVOLUTION_LDAP,     EVOLUTION_PATH_LDAP,    PAGE_DBSETUPWIZARD_INTRO, PAGE_DBSETUPWIZARD_AUTHENTIFICATION, PAGE_DBSETUPWIZARD_FINAL, -1 );
+    declareAuthDepPath(  ::dbaccess::DST_KAB,                KAB_PATH,               PAGE_DBSETUPWIZARD_INTRO, PAGE_DBSETUPWIZARD_AUTHENTIFICATION, PAGE_DBSETUPWIZARD_FINAL, -1 );
+    declareAuthDepPath(  ::dbaccess::DST_MACAB,                 MACAB_PATH,             PAGE_DBSETUPWIZARD_INTRO, PAGE_DBSETUPWIZARD_AUTHENTIFICATION, PAGE_DBSETUPWIZARD_FINAL, -1);
     declareAuthDepPath( getDefaultDatabaseType(),CREATENEW_PATH,        PAGE_DBSETUPWIZARD_INTRO, PAGE_DBSETUPWIZARD_AUTHENTIFICATION, PAGE_DBSETUPWIZARD_FINAL, -1 );
-    declareAuthDepPath( DST_USERDEFINE1,        USERDEFINED_PATH,       PAGE_DBSETUPWIZARD_INTRO, PAGE_DBSETUPWIZARD_USERDEFINED,PAGE_DBSETUPWIZARD_AUTHENTIFICATION, PAGE_DBSETUPWIZARD_FINAL, -1 );
+    declareAuthDepPath(  ::dbaccess::DST_USERDEFINE1,        USERDEFINED_PATH,       PAGE_DBSETUPWIZARD_INTRO, PAGE_DBSETUPWIZARD_USERDEFINED,PAGE_DBSETUPWIZARD_AUTHENTIFICATION, PAGE_DBSETUPWIZARD_FINAL, -1 );
     declarePath       (                         OPEN_DOC_PATH,          PAGE_DBSETUPWIZARD_INTRO, -1 );
 
     m_pPrevPage->SetHelpId(HID_DBWIZ_PREVIOUS);
@@ -369,7 +370,7 @@ ODbTypeWizDialogSetup::ODbTypeWizDialogSetup(Window* _pParent
     ActivatePage();
 }
 
-void ODbTypeWizDialogSetup::declareAuthDepPath( DATASOURCE_TYPE _eType, PathId _nPathId, WizardState _nFirstState, ... )
+void ODbTypeWizDialogSetup::declareAuthDepPath( ::dbaccess::DATASOURCE_TYPE _eType, PathId _nPathId, WizardState _nFirstState, ... )
 {
     bool bHasAuthentication = DataSourceMetaData::getAuthentication( _eType ) != AuthNone;
 
@@ -491,47 +492,47 @@ void ODbTypeWizDialogSetup::activateDatabasePath()
     case OGeneralPage::eConnectExternal:
     {
         m_eType = VerifyDataSourceType(m_pGeneralPage->GetSelectedType());
-        if (m_eType == DST_UNKNOWN)
+        if (m_eType ==  ::dbaccess::DST_UNKNOWN)
             m_eType = m_eOldType;
 
         struct _map_type_to_path
         {
-            DATASOURCE_TYPE             eType;
+            ::dbaccess::DATASOURCE_TYPE             eType;
             RoadmapWizardTypes::PathId  nPathId;
         } aKnownTypesAndPaths[] = {
-            { DST_DBASE,        DBASE_PATH          },
-            { DST_ADO,          ADO_PATH            },
-            { DST_FLAT,         TEXT_PATH           },
-            { DST_CALC,         SPREADSHEET_PATH    },
-            { DST_ODBC,         ODBC_PATH           },
-            { DST_JDBC,         JDBC_PATH           },
-            { DST_MYSQL_JDBC,   MYSQL_JDBC_PATH     },
-            { DST_MYSQL_NATIVE, MYSQL_NATIVE_PATH   },
-            { DST_MYSQL_ODBC,   MYSQL_ODBC_PATH     },
-            { DST_ORACLE_JDBC,  ORACLE_PATH         },
-            { DST_ADABAS,       ADABAS_PATH         },
-            { DST_LDAP,         LDAP_PATH           },
-            { DST_MSACCESS,     MSACCESS_PATH       },
-            { DST_MSACCESS_2007,MSACCESS2007_PATH   },
-            { DST_OUTLOOKEXP,   OUTLOOKEXP_PATH     },
-            { DST_OUTLOOK,      OUTLOOK_PATH        },
-            { DST_MOZILLA,      MOZILLA_PATH        },
-            { DST_THUNDERBIRD,  THUNDERBIRD_PATH    },
-            { DST_EVOLUTION,    EVOLUTION_PATH      },
-            { DST_EVOLUTION_GROUPWISE, EVOLUTION_PATH_GROUPWISE },
-            { DST_EVOLUTION_LDAP, EVOLUTION_PATH_LDAP },
-            { DST_KAB,          KAB_PATH            },
-            { DST_MACAB,        MACAB_PATH          },
-            { DST_USERDEFINE1,  USERDEFINED_PATH    },
-            { DST_USERDEFINE2,  USERDEFINED_PATH    },
-            { DST_USERDEFINE3,  USERDEFINED_PATH    },
-            { DST_USERDEFINE4,  USERDEFINED_PATH    },
-            { DST_USERDEFINE5,  USERDEFINED_PATH    },
-            { DST_USERDEFINE6,  USERDEFINED_PATH    },
-            { DST_USERDEFINE7,  USERDEFINED_PATH    },
-            { DST_USERDEFINE8,  USERDEFINED_PATH    },
-            { DST_USERDEFINE9,  USERDEFINED_PATH    },
-            { DST_USERDEFINE10, USERDEFINED_PATH    }
+            {  ::dbaccess::DST_DBASE,        DBASE_PATH          },
+            {  ::dbaccess::DST_ADO,          ADO_PATH            },
+            {  ::dbaccess::DST_FLAT,         TEXT_PATH           },
+            {  ::dbaccess::DST_CALC,         SPREADSHEET_PATH    },
+            {  ::dbaccess::DST_ODBC,         ODBC_PATH           },
+            {  ::dbaccess::DST_JDBC,         JDBC_PATH           },
+            {  ::dbaccess::DST_MYSQL_JDBC,   MYSQL_JDBC_PATH     },
+            {  ::dbaccess::DST_MYSQL_NATIVE, MYSQL_NATIVE_PATH   },
+            {  ::dbaccess::DST_MYSQL_ODBC,   MYSQL_ODBC_PATH     },
+            {  ::dbaccess::DST_ORACLE_JDBC,  ORACLE_PATH         },
+            {  ::dbaccess::DST_ADABAS,       ADABAS_PATH         },
+            {  ::dbaccess::DST_LDAP,         LDAP_PATH           },
+            {  ::dbaccess::DST_MSACCESS,     MSACCESS_PATH       },
+            {  ::dbaccess::DST_MSACCESS_2007,MSACCESS2007_PATH   },
+            {  ::dbaccess::DST_OUTLOOKEXP,   OUTLOOKEXP_PATH     },
+            {  ::dbaccess::DST_OUTLOOK,      OUTLOOK_PATH        },
+            {  ::dbaccess::DST_MOZILLA,      MOZILLA_PATH        },
+            {  ::dbaccess::DST_THUNDERBIRD,  THUNDERBIRD_PATH    },
+            {  ::dbaccess::DST_EVOLUTION,    EVOLUTION_PATH      },
+            {  ::dbaccess::DST_EVOLUTION_GROUPWISE, EVOLUTION_PATH_GROUPWISE },
+            {  ::dbaccess::DST_EVOLUTION_LDAP, EVOLUTION_PATH_LDAP },
+            {  ::dbaccess::DST_KAB,          KAB_PATH            },
+            {  ::dbaccess::DST_MACAB,        MACAB_PATH          },
+            {  ::dbaccess::DST_USERDEFINE1,  USERDEFINED_PATH    },
+            {  ::dbaccess::DST_USERDEFINE2,  USERDEFINED_PATH    },
+            {  ::dbaccess::DST_USERDEFINE3,  USERDEFINED_PATH    },
+            {  ::dbaccess::DST_USERDEFINE4,  USERDEFINED_PATH    },
+            {  ::dbaccess::DST_USERDEFINE5,  USERDEFINED_PATH    },
+            {  ::dbaccess::DST_USERDEFINE6,  USERDEFINED_PATH    },
+            {  ::dbaccess::DST_USERDEFINE7,  USERDEFINED_PATH    },
+            {  ::dbaccess::DST_USERDEFINE8,  USERDEFINED_PATH    },
+            {  ::dbaccess::DST_USERDEFINE9,  USERDEFINED_PATH    },
+            {  ::dbaccess::DST_USERDEFINE10, USERDEFINED_PATH    }
         };
 
         size_t i = 0;
@@ -591,15 +592,15 @@ sal_Bool ODbTypeWizDialogSetup::IsConnectionUrlRequired()
 {
     switch ( m_eType )
     {
-        case DST_KAB:
-        case DST_MACAB:
-        case DST_EVOLUTION:
-        case DST_EVOLUTION_GROUPWISE:
-        case DST_EVOLUTION_LDAP:
-        case DST_OUTLOOK:
-        case DST_OUTLOOKEXP:
-        case DST_MOZILLA:
-        case DST_THUNDERBIRD:
+        case  ::dbaccess::DST_KAB:
+        case  ::dbaccess::DST_MACAB:
+        case  ::dbaccess::DST_EVOLUTION:
+        case  ::dbaccess::DST_EVOLUTION_GROUPWISE:
+        case  ::dbaccess::DST_EVOLUTION_LDAP:
+        case  ::dbaccess::DST_OUTLOOK:
+        case  ::dbaccess::DST_OUTLOOKEXP:
+        case  ::dbaccess::DST_MOZILLA:
+        case  ::dbaccess::DST_THUNDERBIRD:
             return sal_False;
         default:
             return sal_True;
@@ -650,21 +651,21 @@ Reference< XDriver > ODbTypeWizDialogSetup::getDriver()
 }
 
 
-DATASOURCE_TYPE ODbTypeWizDialogSetup::VerifyDataSourceType(const DATASOURCE_TYPE _DatabaseType) const
+::dbaccess::DATASOURCE_TYPE ODbTypeWizDialogSetup::VerifyDataSourceType(const ::dbaccess::DATASOURCE_TYPE _DatabaseType) const
 {
-    DATASOURCE_TYPE LocDatabaseType = _DatabaseType;
-    if ((LocDatabaseType == DST_MYSQL_JDBC) || (LocDatabaseType == DST_MYSQL_ODBC) || (LocDatabaseType == DST_MYSQL_NATIVE))
+    ::dbaccess::DATASOURCE_TYPE LocDatabaseType = _DatabaseType;
+    if ((LocDatabaseType ==  ::dbaccess::DST_MYSQL_JDBC) || (LocDatabaseType ==  ::dbaccess::DST_MYSQL_ODBC) || (LocDatabaseType ==  ::dbaccess::DST_MYSQL_NATIVE))
     {
         if (m_pMySQLIntroPage != NULL)
         {
             switch( m_pMySQLIntroPage->getMySQLMode() )
             {
                 case OMySQLIntroPageSetup::VIA_JDBC:
-                    return DST_MYSQL_JDBC;
+                    return  ::dbaccess::DST_MYSQL_JDBC;
                 case OMySQLIntroPageSetup::VIA_NATIVE:
-                    return DST_MYSQL_NATIVE;
+                    return  ::dbaccess::DST_MYSQL_NATIVE;
                 case OMySQLIntroPageSetup::VIA_ODBC:
-                    return DST_MYSQL_ODBC;
+                    return  ::dbaccess::DST_MYSQL_ODBC;
             }
         }
     }
@@ -674,9 +675,9 @@ DATASOURCE_TYPE ODbTypeWizDialogSetup::VerifyDataSourceType(const DATASOURCE_TYP
 
 
 // -----------------------------------------------------------------------------
-DATASOURCE_TYPE ODbTypeWizDialogSetup::getDatasourceType(const SfxItemSet& _rSet) const
+::dbaccess::DATASOURCE_TYPE ODbTypeWizDialogSetup::getDatasourceType(const SfxItemSet& _rSet) const
 {
-    DATASOURCE_TYPE LocDatabaseType = m_pImpl->getDatasourceType(_rSet);
+    ::dbaccess::DATASOURCE_TYPE LocDatabaseType = m_pImpl->getDatasourceType(_rSet);
     return VerifyDataSourceType(LocDatabaseType);
 }
 
@@ -724,16 +725,16 @@ TabPage* ODbTypeWizDialogSetup::createPage(WizardState _nState)
             break;
 
         case PAGE_DBSETUPWIZARD_MYSQL_ODBC:
-            m_pOutSet->Put(SfxStringItem(DSID_CONNECTURL, m_pCollection->getDatasourcePrefix(DST_MYSQL_ODBC)));
+            m_pOutSet->Put(SfxStringItem(DSID_CONNECTURL, m_pCollection->getDatasourcePrefix( ::dbaccess::DST_MYSQL_ODBC)));
             pPage = OConnectionTabPageSetup::CreateODBCTabPage( this, *m_pOutSet);
             break;
 
         case PAGE_DBSETUPWIZARD_MYSQL_JDBC:
-            m_pOutSet->Put(SfxStringItem(DSID_CONNECTURL, m_pCollection->getDatasourcePrefix(DST_MYSQL_JDBC)));
+            m_pOutSet->Put(SfxStringItem(DSID_CONNECTURL, m_pCollection->getDatasourcePrefix( ::dbaccess::DST_MYSQL_JDBC)));
             pPage = OGeneralSpecialJDBCConnectionPageSetup::CreateMySQLJDBCTabPage( this, *m_pOutSet);
             break;
         case PAGE_DBSETUPWIZARD_MYSQL_NATIVE:
-            m_pOutSet->Put(SfxStringItem(DSID_CONNECTURL, m_pCollection->getDatasourcePrefix(DST_MYSQL_NATIVE)));
+            m_pOutSet->Put(SfxStringItem(DSID_CONNECTURL, m_pCollection->getDatasourcePrefix( ::dbaccess::DST_MYSQL_NATIVE)));
             pPage = OGeneralSpecialJDBCConnectionPageSetup::CreateMySQLNATIVETabPage( this, *m_pOutSet);
             break;
 
@@ -812,16 +813,16 @@ IMPL_LINK(ODbTypeWizDialogSetup, ImplModifiedHdl, OGenericAdministrationPage*, _
 // -----------------------------------------------------------------------------
 IMPL_LINK(ODbTypeWizDialogSetup, ImplClickHdl, OMySQLIntroPageSetup*, /*_pMySQLIntroPageSetup*/)
 {
-    const DATASOURCE_TYPE eType = getDatasourceType(*m_pOutSet);
+    const ::dbaccess::DATASOURCE_TYPE eType = getDatasourceType(*m_pOutSet);
     switch( eType )
     {
-        case DST_MYSQL_ODBC:
+        case  ::dbaccess::DST_MYSQL_ODBC:
             activatePath( MYSQL_ODBC_PATH, sal_True);
             break;
-        case DST_MYSQL_JDBC:
+        case  ::dbaccess::DST_MYSQL_JDBC:
             activatePath( MYSQL_JDBC_PATH, sal_True);
             break;
-        case DST_MYSQL_NATIVE:
+        case  ::dbaccess::DST_MYSQL_NATIVE:
             activatePath( MYSQL_NATIVE_PATH, sal_True);
             break;
         default:
@@ -887,7 +888,7 @@ sal_Bool ODbTypeWizDialogSetup::leaveState(WizardState _nState)
         return sal_True;
     if ( _nState == PAGE_DBSETUPWIZARD_INTRO )
     {
-        OSL_ENSURE(m_eType != DST_UNKNOWN && m_eOldType != DST_UNKNOWN,"Type unknown");
+        OSL_ENSURE(m_eType !=  ::dbaccess::DST_UNKNOWN && m_eOldType !=  ::dbaccess::DST_UNKNOWN,"Type unknown");
         if ( m_eType != m_eOldType )
             resetPages(m_pImpl->getCurrentDataSource());
     }
@@ -914,74 +915,30 @@ void ODbTypeWizDialogSetup::enableConfirmSettings( bool _bEnable )
 //-------------------------------------------------------------------------
 sal_Bool ODbTypeWizDialogSetup::SaveDatabaseDocument()
 {
-    Reference< XInteractionHandler > xHandler(getORB()->createInstance(SERVICE_TASK_INTERACTION_HANDLER), UNO_QUERY);
+    Reference< XInteractionHandler > xHandler( getORB()->createInstance( SERVICE_TASK_INTERACTION_HANDLER ), UNO_QUERY );
     try
     {
         if (callSaveAsDialog() == sal_True)
         {
             m_pImpl->saveChanges(*m_pOutSet);
             Reference< XPropertySet > xDatasource = m_pImpl->getCurrentDataSource();
-#if OSL_DEBUG_LEVEL > 0
-            SFX_ITEMSET_GET(*m_pOutSet, pDocUrl, SfxStringItem, DSID_DOCUMENT_URL, sal_True);
-            (void)pDocUrl;
-#endif
-            Reference<XStorable> xStore(getDataSourceOrModel(xDatasource),UNO_QUERY);
-            Reference<XComponent> xComponent(xStore,UNO_QUERY);
-            ::rtl::OUString sPath = m_pImpl->getDocumentUrl(*m_pOutSet);
-            if ( xStore.is() )
-            {
-                if ( m_pGeneralPage->GetDatabaseCreationMode() == OGeneralPage::eCreateNew )
-                    CreateDatabase();
-                Reference< XModel > xModel(xStore, UNO_QUERY);
+            Reference< XModel > xModel( getDataSourceOrModel( xDatasource ), UNO_QUERY_THROW );
+            Reference< XStorable > xStore( xModel, UNO_QUERY_THROW );
 
-                Sequence<PropertyValue> aArgs = xModel->getArgs();
+            if ( m_pGeneralPage->GetDatabaseCreationMode() == OGeneralPage::eCreateNew )
+                CreateDatabase();
 
-                sal_Bool bOverwrite = sal_True;
-                sal_Bool bAddOverwrite = sal_True;
-                sal_Bool bAddInteractionHandler = sal_True;
-                PropertyValue* pIter = aArgs.getArray();
-                PropertyValue* pEnd  = pIter + aArgs.getLength();
-                for(;pIter != pEnd;++pIter)
-                {
-                    if ( pIter->Name.equalsAscii("Overwrite") )
-                    {
-                        pIter->Value <<= bOverwrite;
-                        bAddOverwrite = sal_False;
-                    }
-                    if ( pIter->Name.equalsAscii("InteractionHandler") )
-                    {
-                        pIter->Value <<= xHandler;
-                        bAddInteractionHandler = sal_False;
-                    }
+            ::comphelper::NamedValueCollection aArgs( xModel->getArgs() );
+            aArgs.put( "Overwrite", sal_Bool( sal_True ) );
+            aArgs.put( "InteractionHandler", xHandler );
 
-                }
-                if ( bAddOverwrite )
-                {
-                    sal_Int32 nLen = aArgs.getLength();
-                    aArgs.realloc(nLen+1);
-                    aArgs[nLen].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Overwrite"));
-                    aArgs[nLen].Value <<= bOverwrite;
-                }
-                if ( bAddInteractionHandler )
-                {
-                    sal_Int32 nLen = aArgs.getLength();
-                    aArgs.realloc(nLen+1);
-                    aArgs[nLen].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("InteractionHandler"));
-                    aArgs[nLen].Value <<= xHandler;
-                }
-                xStore->storeAsURL(sPath,aArgs);
+            ::rtl::OUString sPath = m_pImpl->getDocumentUrl( *m_pOutSet );
+            xStore->storeAsURL( sPath, aArgs.getPropertyValues() );
 
-                if (pFinalPage != NULL)
-                {
-                    if (pFinalPage->IsDatabaseDocumentToBeRegistered())
-                        RegisterDataSourceByLocation(sPath);
-                }
-                else
-                {
-                    RegisterDataSourceByLocation(sPath);
-                }
-                return sal_True;
-            }
+            if ( !pFinalPage || pFinalPage->IsDatabaseDocumentToBeRegistered() )
+                RegisterDataSourceByLocation( sPath );
+
+            return sal_True;
         }
     }
     catch (Exception& e)
@@ -1023,14 +980,14 @@ sal_Bool ODbTypeWizDialogSetup::SaveDatabaseDocument()
     }
 
     //-------------------------------------------------------------------------
-    DATASOURCE_TYPE ODbTypeWizDialogSetup::getDefaultDatabaseType() const
+    ::dbaccess::DATASOURCE_TYPE ODbTypeWizDialogSetup::getDefaultDatabaseType() const
     {
-        DATASOURCE_TYPE eRet = DST_DBASE;
+        ::dbaccess::DATASOURCE_TYPE eRet =  ::dbaccess::DST_DBASE;
 
-        ::rtl::OUString sURL = m_pCollection->getDatasourcePrefix( DST_EMBEDDED_HSQLDB );
+        ::rtl::OUString sURL = m_pCollection->getDatasourcePrefix(  ::dbaccess::DST_EMBEDDED_HSQLDB );
         Reference< XDriverAccess > xDriverManager( getORB()->createInstance( SERVICE_SDBC_DRIVERMANAGER ), UNO_QUERY );
         if ( xDriverManager.is() && xDriverManager->getDriverByURL( sURL ).is() )
-            eRet = DST_EMBEDDED_HSQLDB;
+            eRet =  ::dbaccess::DST_EMBEDDED_HSQLDB;
 
         return eRet;
     }
@@ -1039,23 +996,23 @@ sal_Bool ODbTypeWizDialogSetup::SaveDatabaseDocument()
     void ODbTypeWizDialogSetup::CreateDatabase()
     {
         ::rtl::OUString sUrl;
-        DATASOURCE_TYPE eType = getDefaultDatabaseType();
-        if ( eType == DST_EMBEDDED_HSQLDB )
+        ::dbaccess::DATASOURCE_TYPE eType = getDefaultDatabaseType();
+        if ( eType ==  ::dbaccess::DST_EMBEDDED_HSQLDB )
         {
-            sUrl = m_pCollection->getDatasourcePrefix( DST_EMBEDDED_HSQLDB );
+            sUrl = m_pCollection->getDatasourcePrefix(  ::dbaccess::DST_EMBEDDED_HSQLDB );
             Reference< XPropertySet > xDatasource = m_pImpl->getCurrentDataSource();
             OSL_ENSURE(xDatasource.is(),"DataSource is null!");
             if ( xDatasource.is() )
-                xDatasource->setPropertyValue( PROPERTY_INFO, makeAny( m_pCollection->getDefaultDBSettings( DST_EMBEDDED_HSQLDB ) ) );
+                xDatasource->setPropertyValue( PROPERTY_INFO, makeAny( m_pCollection->getDefaultDBSettings(  ::dbaccess::DST_EMBEDDED_HSQLDB ) ) );
             m_pImpl->translateProperties(xDatasource,*m_pOutSet);
         }
-        if ( eType == DST_DBASE )
+        if ( eType ==  ::dbaccess::DST_DBASE )
         {
             Reference< XSimpleFileAccess > xSimpleFileAccess(getORB()->createInstance(::rtl::OUString::createFromAscii( "com.sun.star.ucb.SimpleFileAccess" )), UNO_QUERY);
             INetURLObject aDBPathURL(m_sWorkPath);
             aDBPathURL.Append(m_aDocURL.getBase());
             createUniqueFolderName(&aDBPathURL);
-            ::rtl::OUString sPrefix = m_pCollection->getDatasourcePrefix(DST_DBASE);
+            ::rtl::OUString sPrefix = m_pCollection->getDatasourcePrefix( ::dbaccess::DST_DBASE);
             sUrl = aDBPathURL.GetMainURL( INetURLObject::NO_DECODE);
             xSimpleFileAccess->createFolder(sUrl);
             //OFileNotation aFileNotation(sUrl);
@@ -1317,10 +1274,10 @@ sal_Bool ODbTypeWizDialogSetup::SaveDatabaseDocument()
             skipUntil(PAGE_DBSETUPWIZARD_FINAL);
         }
         if (getCurrentState() == PAGE_DBSETUPWIZARD_FINAL)
-            return SaveDatabaseDocument() ? OWizardMachine::onFinish(_nResult) : sal_False;
+            return SaveDatabaseDocument() ? OWizardMachine::onFinish( _nResult ) : sal_False;
         else
         {
-               enableButtons( WZB_FINISH, sal_False);
+               enableButtons( WZB_FINISH, sal_False );
             return sal_False;
         }
     }

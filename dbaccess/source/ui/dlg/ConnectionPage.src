@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: ConnectionPage.src,v $
- * $Revision: 1.8 $
+ * $Revision: 1.8.2.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -165,7 +165,7 @@ String STR_CONNECTION_SUCCESS
 
 String STR_CONNECTION_NO_SUCCESS
 {
-    Text [ en-US ] = "The connection could not be established successfully.";
+    Text [ en-US ] = "The connection could not be established.";
 };
 
 String STR_JDBCDRIVER_SUCCESS

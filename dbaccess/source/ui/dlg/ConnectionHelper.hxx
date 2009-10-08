@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: ConnectionHelper.hxx,v $
- * $Revision: 1.7 $
+ * $Revision: 1.7.66.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -77,13 +77,14 @@ namespace dbaui
         FixedText           m_aFT_Connection;
         OConnectionURLEdit  m_aET_Connection;
         PushButton          m_aPB_Connection;
-        DATASOURCE_TYPE     m_eType;          // the type can't be changed in this class, so we hold it as member.
+        ::dbaccess::DATASOURCE_TYPE
+                            m_eType;          // the type can't be changed in this class, so we hold it as member.
 
     public:
 
         // setting/retrieving the current connection URL
         // necessary because for some types, the URL must be decoded for display purposes
-        ODsnTypeCollection* m_pCollection;  /// the DSN type collection instance
+        ::dbaccess::ODsnTypeCollection* m_pCollection;  /// the DSN type collection instance
         virtual long    PreNotify( NotifyEvent& _rNEvt );
 
         // <method>OGenericAdministrationPage::fillControls</method>

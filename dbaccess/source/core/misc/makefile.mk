@@ -8,7 +8,7 @@
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.19 $
+# $Revision: 1.19.68.1 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -39,6 +39,7 @@ ENABLE_EXCEPTIONS=TRUE
 # --- Settings ----------------------------------
 
 .INCLUDE : settings.mk
+.INCLUDE : $(PRJ)$/util$/makefile.pmk
 
 # --- Files -------------------------------------
 
@@ -53,6 +54,7 @@ SLOFILES=	\
         $(SLO)$/warnings.obj            \
         $(SLO)$/DatabaseDataProvider.obj \
         $(SLO)$/module_dba.obj          \
+        $(SLO)$/dsntypes.obj            \
         $(SLO)$/veto.obj
 
 # --- Targets ----------------------------------

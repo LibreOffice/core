@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: dbadmin.hxx,v $
- * $Revision: 1.36 $
+ * $Revision: 1.36.68.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -43,7 +43,6 @@
 #ifndef _COMPHELPER_UNO3_HXX_
 #include <comphelper/uno3.hxx>
 #endif
-
 #include <memory>
 
 FORWARD_DECLARE_INTERFACE(beans,XPropertySet)
@@ -54,8 +53,6 @@ FORWARD_DECLARE_INTERFACE(lang,XMultiServiceFactory)
 namespace dbaui
 {
 //.........................................................................
-
-class ODsnTypeCollection;
 
 //=========================================================================
 //= ODbAdminDialog
@@ -90,7 +87,7 @@ public:
         @param      _pTypeCollection        pointer to an <type>ODatasourceMap</type>. May be NULL, in this case
                                             the pool will not contain a typecollection default.
     */
-    static SfxItemSet*  createItemSet(SfxItemSet*& _rpSet, SfxItemPool*& _rpPool, SfxPoolItem**& _rppDefaults, ODsnTypeCollection* _pTypeCollection);
+    static SfxItemSet*  createItemSet(SfxItemSet*& _rpSet, SfxItemPool*& _rpPool, SfxPoolItem**& _rppDefaults, ::dbaccess::ODsnTypeCollection* _pTypeCollection);
     /** destroy and item set / item pool / pool defaults previously created by <method>createItemSet</method>
     */
     static void         destroyItemSet(SfxItemSet*& _rpSet, SfxItemPool*& _rpPool, SfxPoolItem**& _rppDefaults);
@@ -108,7 +105,7 @@ public:
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > getORB() const;
     virtual ::std::pair< ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >,sal_Bool> createConnection();
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDriver > getDriver();
-    virtual DATASOURCE_TYPE getDatasourceType(const SfxItemSet& _rSet) const;
+    virtual ::dbaccess::DATASOURCE_TYPE getDatasourceType(const SfxItemSet& _rSet) const;
     virtual void clearPassword();
     virtual sal_Bool saveDatasource();
     virtual void setTitle(const ::rtl::OUString& _sTitle);

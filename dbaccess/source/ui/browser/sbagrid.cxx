@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: sbagrid.cxx,v $
- * $Revision: 1.86 $
+ * $Revision: 1.83.6.3 $
  *
  * This file is part of OpenOffice.org.
  *

@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: dbwiz.cxx,v $
- * $Revision: 1.21 $
+ * $Revision: 1.21.68.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -169,12 +169,12 @@ IMPL_LINK(ODbTypeWizDialog, OnTypeSelected, OGeneralPage*, _pTabPage)
     m_eType = _pTabPage->GetSelectedType();
     switch(m_eType)
     {
-        case DST_MOZILLA:
-        case DST_OUTLOOK:
-        case DST_OUTLOOKEXP:
-        case DST_EVOLUTION:
-        case DST_KAB:
-        case DST_MACAB:
+        case  ::dbaccess::DST_MOZILLA:
+        case  ::dbaccess::DST_OUTLOOK:
+        case  ::dbaccess::DST_OUTLOOKEXP:
+        case  ::dbaccess::DST_EVOLUTION:
+        case  ::dbaccess::DST_KAB:
+        case  ::dbaccess::DST_MACAB:
             enableButtons(WZB_NEXT,sal_False);
             enableButtons(WZB_FINISH,sal_True);
             break;
@@ -194,12 +194,12 @@ WizardTypes::WizardState ODbTypeWizDialog::determineNextState( WizardState _nCur
         case START_PAGE:
             switch(m_eType)
             {
-                case DST_MOZILLA:
-                case DST_OUTLOOK:
-                case DST_OUTLOOKEXP:
-                case DST_EVOLUTION:
-                case DST_KAB:
-                case DST_MACAB:
+                case  ::dbaccess::DST_MOZILLA:
+                case  ::dbaccess::DST_OUTLOOK:
+                case  ::dbaccess::DST_OUTLOOKEXP:
+                case  ::dbaccess::DST_EVOLUTION:
+                case  ::dbaccess::DST_KAB:
+                case  ::dbaccess::DST_MACAB:
                     nNextState = WZS_INVALID_STATE;
                     break;
                 default:
@@ -210,47 +210,47 @@ WizardTypes::WizardState ODbTypeWizDialog::determineNextState( WizardState _nCur
         case CONNECTION_PAGE:
             switch(m_eType)
             {
-                case DST_MOZILLA:
-                case DST_THUNDERBIRD:
-                case DST_OUTLOOK:
-                case DST_OUTLOOKEXP:
-                case DST_EVOLUTION:
-                case DST_KAB:
-                case DST_MACAB:
-                case DST_MSACCESS:
-                case DST_MSACCESS_2007:
-                case DST_JDBC:
-                case DST_CALC:
+                case  ::dbaccess::DST_MOZILLA:
+                case  ::dbaccess::DST_THUNDERBIRD:
+                case  ::dbaccess::DST_OUTLOOK:
+                case  ::dbaccess::DST_OUTLOOKEXP:
+                case  ::dbaccess::DST_EVOLUTION:
+                case  ::dbaccess::DST_KAB:
+                case  ::dbaccess::DST_MACAB:
+                case  ::dbaccess::DST_MSACCESS:
+                case  ::dbaccess::DST_MSACCESS_2007:
+                case  ::dbaccess::DST_JDBC:
+                case  ::dbaccess::DST_CALC:
                     nNextState = WZS_INVALID_STATE;
                     break;
-                case DST_DBASE:
+                case  ::dbaccess::DST_DBASE:
                     nNextState = ADDITIONAL_PAGE_DBASE;
                     break;
-                case DST_FLAT:
+                case  ::dbaccess::DST_FLAT:
                     nNextState = ADDITIONAL_PAGE_FLAT;
                     break;
-                case DST_LDAP:
+                case  ::dbaccess::DST_LDAP:
                     nNextState = ADDITIONAL_PAGE_LDAP;
                     break;
-                case DST_ADABAS:
+                case  ::dbaccess::DST_ADABAS:
                     nNextState = ADDITIONAL_PAGE_ADABAS;
                     break;
-                case DST_MYSQL_NATIVE:
+                case  ::dbaccess::DST_MYSQL_NATIVE:
                     nNextState = ADDITIONAL_PAGE_MYSQL_NATIVE;
                     break;
-                case DST_MYSQL_JDBC:
+                case  ::dbaccess::DST_MYSQL_JDBC:
                     nNextState = ADDITIONAL_PAGE_MYSQL_JDBC;
                     break;
-                case DST_MYSQL_ODBC:
+                case  ::dbaccess::DST_MYSQL_ODBC:
                     nNextState = ADDITIONAL_PAGE_MYSQL_ODBC;
                     break;
-                case DST_ORACLE_JDBC:
+                case  ::dbaccess::DST_ORACLE_JDBC:
                     nNextState = ADDITIONAL_PAGE_ORACLE_JDBC;
                     break;
-                case DST_ADO:
+                case  ::dbaccess::DST_ADO:
                     nNextState = ADDITIONAL_PAGE_ADO;
                     break;
-                case DST_ODBC:
+                case  ::dbaccess::DST_ODBC:
                     nNextState = ADDITIONAL_PAGE_ODBC;
                     break;
                 default:
@@ -289,7 +289,7 @@ Reference< XDriver > ODbTypeWizDialog::getDriver()
     return m_pImpl->getDriver();
 }
 // -----------------------------------------------------------------------------
-DATASOURCE_TYPE ODbTypeWizDialog::getDatasourceType(const SfxItemSet& _rSet) const
+::dbaccess::DATASOURCE_TYPE ODbTypeWizDialog::getDatasourceType(const SfxItemSet& _rSet) const
 {
     return m_pImpl->getDatasourceType(_rSet);
 }

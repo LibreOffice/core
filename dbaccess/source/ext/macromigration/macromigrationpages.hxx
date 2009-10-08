@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: macromigrationpages.hxx,v $
- * $Revision: 1.3 $
+ * $Revision: 1.3.2.3 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -100,6 +100,7 @@ namespace dbmm
 
     public:
         ::rtl::OUString getBackupLocation() const { return m_aLocationController.getURL(); }
+        void            grabLocationFocus() { m_aSaveAsLocation.GrabFocus(); }
 
     protected:
         FixedText               m_aExplanation;
@@ -133,6 +134,7 @@ namespace dbmm
         static TabPage* Create( ::svt::RoadmapWizard& _rParentDialog );
 
         void    setDocumentCounts( const sal_Int32 _nForms, const sal_Int32 _nReports );
+        void    onFinishedSuccessfully();
 
     protected:
         // IMigrationProgress
@@ -167,11 +169,13 @@ namespace dbmm
 
         static TabPage* Create( ::svt::RoadmapWizard& _rParentDialog );
 
-        void            displaySummary( const String& _rSummary );
+        void            displayMigrationLog( const bool _bSuccessful, const String& _rLog );
 
     private:
         FixedText       m_aChangesLabel;
         MultiLineEdit   m_aChanges;
+        String          m_aSuccessful;
+        String          m_aUnsuccessful;
     };
 
 //........................................................................
