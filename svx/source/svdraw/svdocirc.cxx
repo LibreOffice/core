@@ -226,19 +226,13 @@ basegfx::B2DPolygon SdrCircObj::ImpCalcXPolyCirc(const SdrObjKind eCicrleKind, c
 
     if(OBJ_CIRC == eCicrleKind)
     {
-        // create full circle. Do not use createPolygonFromEllipse, but the single
-        // calls to appendUnitCircleQuadrant() to get the start point to the bottom of the
-        // circle to keep compatible to old geometry creation
-        basegfx::tools::appendUnitCircleQuadrant(aCircPolygon, 1);
-        basegfx::tools::appendUnitCircleQuadrant(aCircPolygon, 2);
-        basegfx::tools::appendUnitCircleQuadrant(aCircPolygon, 3);
-        basegfx::tools::appendUnitCircleQuadrant(aCircPolygon, 0);
-        aCircPolygon.setClosed(true);
+        // create full circle. Do not use createPolygonFromEllipse; it's necessary
+        // to get the start point to the bottom of the circle to keep compatible to
+        // old geometry creation
+        aCircPolygon = basegfx::tools::createPolygonFromUnitCircle(1);
 
-        // remove double points between segments created by segmented creation
-        aCircPolygon.removeDoublePoints();
-
-        // needs own scaling and translation from unit circle to target size
+        // needs own scaling and translation from unit circle to target size (same as
+        // would be in createPolygonFromEllipse)
         const basegfx::B2DPoint aCenter(aRange.getCenter());
         const basegfx::B2DHomMatrix aMatrix(basegfx::tools::createScaleTranslateB2DHomMatrix(
             aRange.getWidth() / 2.0, aRange.getHeight() / 2.0,
@@ -252,7 +246,9 @@ basegfx::B2DPolygon SdrCircObj::ImpCalcXPolyCirc(const SdrObjKind eCicrleKind, c
         const double fEnd(((36000 - nStart) % 36000) * F_PI18000);
 
         // create circle segment. This is not closed by default
-        aCircPolygon = basegfx::tools::createPolygonFromEllipseSegment(aRange.getCenter(), aRange.getWidth() / 2.0, aRange.getHeight() / 2.0, fStart, fEnd);
+        aCircPolygon = basegfx::tools::createPolygonFromEllipseSegment(
+            aRange.getCenter(), aRange.getWidth() / 2.0, aRange.getHeight() / 2.0,
+            fStart, fEnd);
 
         // check closing states
         const bool bCloseSegment(OBJ_CARC != eCicrleKind);
