@@ -183,6 +183,7 @@ BEGIN
     $englishlicenseset = 0;
     $englishlicense = "";
     $englishsolarislicensename = "LICENSE_en-US";
+    $solarisdontcompress = 0;
     $patharray = "";
 
     $is_special_epm = 0;

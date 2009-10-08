@@ -47,6 +47,13 @@ LDFLAGS!:=$(EXTRA_LINKFLAGS) $(LDFLAGS)
 .EXPORT : LDFLAGS
 .ENDIF
 
+.IF "$(GUI)"=="WNT" && "$(USE_SHELL)"!="4nt"
+PATH!:=.:$(SOLARBINDIR:^"/cygdrive/":s/://):$(PATH)
+.ELSE           # "$(GUI)"=="WNT" && "$(USE_SHELL)"!="4nt"
+PATH!:=.$(PATH_SEPERATOR)$(SOLARBINDIR)$(PATH_SEPERATOR)$(PATH)
+.ENDIF          # "$(GUI)"=="WNT" && "$(USE_SHELL)"!="4nt"
+.EXPORT : PATH
+
 #override
 PACKAGE_DIR=$(MISC)$/build
 ABS_PACKAGE_DIR:=$(MAKEDIR)$/$(MISC)$/build

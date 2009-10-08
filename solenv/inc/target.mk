@@ -1388,6 +1388,26 @@ $(UNIXTEXT) : $(UNIXTEXT:f)
 
 .ENDIF			# "$(UNIXTEXT)"!=""
 
+.IF "$(WITH_LANG)"!=""
+.IF "$(LOCALIZATION_FOUND)"==""
+.IF "$(LOCALIZESDF)"!=""
+"$(LOCALIZESDF)" : $(SOLARCOMMONSDFDIR)$/$(PRJNAME).zip
+    @@-$(MKDIRHIER) $(@:d)
+    @@-$(MKDIRHIER) $(COMMONMISC)$/$(PRJNAME)_$(TARGET)
+    @@$(IFNOTEXIST) $(LOCALIZESDF) $(THEN) unzip -o -d $(COMMONMISC)$/$(PRJNAME)_$(TARGET) $(SOLARCOMMONSDFDIR)$/$(PRJNAME).zip 
+    @@-cp -r $(COMMONMISC)/$(PRJNAME)_$(TARGET)$/* $(COMMONMISC)$/$(PRJNAME)
+    @@-$(RM) -rf $(COMMONMISC)$/$(PRJNAME)_$(TARGET)
+.ENDIF			# "$(LOCALIZESDF)"!=""
+.ENDIF			# "$(LOCALIZATION_FOUND)"==""
+.ENDIF			# "$(WITH_LANG)"!=""
+
+.IF "$(LOCALIZESDF)"!=""
+"$(LOCALIZESDF)%" :
+    echo $(LOCALIZESDF)
+    @@-$(MKDIRHIER) $(@:d)
+    @$(TOUCH) $(LOCALIZESDF)
+.ENDIF			# "$(LOCALIZESDF)"!=""
+
 .IF "$(EXTUPDATEINFO_NAME)"!=""
 $(EXTUPDATEINFO_DEST) : $(EXTUPDATEINFO_SOURCE)
     $(PERL) $(SOLARENV)$/bin/make_ext_update_info.pl --out $(EXTUPDATEINFO_DEST) $(foreach,i,$(EXTUPDATEINFO_URLS) --update-url "$i") $(EXTUPDATEINFO_SOURCE)
@@ -1501,14 +1521,14 @@ $(LOCALIZE_ME_DEST) : $(LOCALIZE_ME)
 #  LASTRUN_MERGED
 .INCLUDE .IGNORE : $(INCCOM)$/$(TARGET)_lastrun.mk
 .IF "$(LASTRUN_MERGED)"=="TRUE"
-$(LOCALIZE_ME_DEST) : $(LOCALIZE_ME) localize.sdf 
+$(LOCALIZE_ME_DEST) : $(LOCALIZE_ME) $(LOCALIZESDF) 
 .ELSE			# "$(LASTRUN_MERGED)"=="TRUE"
-$(LOCALIZE_ME_DEST) .PHONY : $(LOCALIZE_ME) localize.sdf 
+$(LOCALIZE_ME_DEST) .PHONY : $(LOCALIZE_ME) $(LOCALIZESDF) 
     echo LASTRUN_MERGED:=TRUE > $(INCCOM)$/$(TARGET)_lastrun.mk
 .ENDIF			# "$(LASTRUN_MERGED)"=="TRUE"
     -$(MKDIR) $(@:d)
     -$(RM) $@
-    $(TRANSEX) -p $(PRJNAME) -i $(@:b:+"_tmpl")$(@:e) -o $(@:d)$/$(@:b:+"_tmpl")$(@:e).$(INPATH) -m localize.sdf -l all
+    $(TRANSEX) -p $(PRJNAME) -i $(@:b:+"_tmpl")$(@:e) -o $(@:d)$/$(@:b:+"_tmpl")$(@:e).$(INPATH) -m $(LOCALIZESDF) -l all
     $(RENAME) $(@:d)$(@:b:+"_tmpl")$(@:e).$(INPATH) $@
 
 .ENDIF			# "$(WITH_LANG)"==""

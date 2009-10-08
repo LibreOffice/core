@@ -30,7 +30,7 @@
 #*************************************************************************
 
 # find 'makedepend' in own output tree
-MAKEDEPEND=$(AUGMENT_LIBRARY_PATH) $(WRAPCMD) $(BIN)$/makedepend
+MAKEDEPEND=$(AUGMENT_LIBRARY_PATH) $(BIN)$/makedepend
 
 # find 'adjustvisibility' in own output tree
-ADJUSTVISIBILITY=$(AUGMENT_LIBRARY_PATH) $(WRAPCMD) $(BIN)$/adjustvisibility
+ADJUSTVISIBILITY=$(AUGMENT_LIBRARY_PATH) $(BIN)$/adjustvisibility

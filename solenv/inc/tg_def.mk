@@ -41,9 +41,7 @@ DEFLIB$(TNR)NAME*=$(DEF$(TNR)LIBNAME)
 .ENDIF			# "$(DEF$(TNR)LIBNAME)"!=""
 
 .IF "$(DEFLIB$(TNR)NAME)"!=""
-.IF "$(UPDATER)"!=""
 DEF$(TNR)DEPN+=$(foreach,i,$(DEFLIB$(TNR)NAME) $(SLB)$/$(i).lib)
-.ENDIF			# "$(UPDATER)"!=""
 .ENDIF
 
 .IF "$(SHL$(TNR)VERSIONMAP)"!=""

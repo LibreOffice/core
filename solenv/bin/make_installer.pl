@@ -949,10 +949,13 @@ for ( my $n = 0; $n <= $#installer::globals::languageproducts; $n++ )
     installer::scriptitems::get_Source_Directory_For_Files_From_Includepathlist($scpactionsinproductlanguageresolvedarrayref, $includepatharrayref_lang, $dirsinproductlanguageresolvedarrayref, "ScpActions");
     if ( $installer::globals::globallogging ) { installer::files::save_array_of_hashes($loggingdir . "productscpactions5.log", $scpactionsinproductlanguageresolvedarrayref); }
 
-    # Editing scpactions with flag SCPZIP_REPLACE.
+    # Editing scpactions with flag SCPZIP_REPLACE and PATCH_SO_NAME.
 
     installer::scpzipfiles::resolving_scpzip_replace_flag($scpactionsinproductlanguageresolvedarrayref, $allvariableshashref, "ScpAction", $languagestringref);
     if ( $installer::globals::globallogging ) { installer::files::save_array_of_hashes($loggingdir . "productscpactions6.log", $scpactionsinproductlanguageresolvedarrayref); }
+
+    installer::scppatchsoname::resolving_patchsoname_flag($scpactionsinproductlanguageresolvedarrayref, $allvariableshashref, "ScpAction", $languagestringref);
+    if ( $installer::globals::globallogging ) { installer::files::save_array_of_hashes($loggingdir . "productscpactions6a.log", $scpactionsinproductlanguageresolvedarrayref); }
 
     #########################################################
     # language dependent links part
@@ -1687,7 +1690,8 @@ for ( my $n = 0; $n <= $#installer::globals::languageproducts; $n++ )
                             installer::epmfile::create_new_directory_structure($newepmdir);
                             $installer::globals::postprocess_specialepm = 1;
 
-                            if (( $installer::globals::patch ) && ( $installer::globals::issolarisx86build )) { installer::worker::fix2_solaris_x86_patch($packagename, $installer::globals::epmoutpath); }
+                            # solaris patch not needed anymore
+                            # if (( $installer::globals::patch ) && ( $installer::globals::issolarisx86build )) { installer::worker::fix2_solaris_x86_patch($packagename, $installer::globals::epmoutpath); }
                         }
                     }
                     else    # this is the standard epm (not relocatable) or ( nonlinux and nonsolaris )
@@ -2307,7 +2311,7 @@ for ( my $n = 0; $n <= $#installer::globals::languageproducts; $n++ )
             # Temp path for administrative installations: $installer::globals::temppath
             # Path of new installation set: $finalinstalldir
             # Path of old installation set: $installer::globals::updatedatabasepath
-            my $mspdir = installer::windows::msp::create_msp_patch($finalinstalldir, $includepatharrayref, $allvariableshashref, $languagestringref, $filesinproductlanguageresolvedarrayref);
+            my $mspdir = installer::windows::msp::create_msp_patch($finalinstalldir, $includepatharrayref, $allvariableshashref, $languagestringref, $languagesarrayref, $filesinproductlanguageresolvedarrayref);
             ($is_success, $finalinstalldir) = installer::worker::analyze_and_save_logfile($loggingdir, $mspdir, $installlogdir, $allsettingsarrayref, $languagestringref, $current_install_number);
             installer::worker::clean_output_tree(); # removing directories created in the output tree
         }

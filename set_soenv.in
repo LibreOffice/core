@@ -186,7 +186,6 @@ $CALL_CDECL           = "TRUE";
 $COMMON_OUTDIR        = "";
 $common_build         = "";
 $NO_REC_RES           = "TRUE";
-$NO_HIDS              = "TRUE";
 $SO3                  = "TRUE";
 $SOLAR_JAVA           = "@SOLAR_JAVA@";
 $SOLAR_PLUGIN         = "TRUE";
@@ -1122,7 +1121,7 @@ if ($platform =~ m/cygwin|os2/)
 # The general environment path.
 if ($platform =~ m/linux|netbsd|odf1|irix|freebsd|aix|solaris/)
 {  $PATH              = $cur_dir.
-                        $ps.'$SOLARVER'.$ds.'$INPATH'.$BIN.
+#                        $ps.'$SOLARVER'.$ds.'$INPATH'.$BIN.
                         $ps.'$SOLARENV'.$ds.'$OUTPATH'.$BIN.
                         $ps.'$SOLARENV'.$BIN;
 
@@ -1153,7 +1152,7 @@ elsif ($platform =~ m/cygwin/)
    my ( $tmppath );
 
    $PATH              = $cur_dir.
-                        $ps.CygFormat($SOLARVER).$ds.$INPATH.$BIN.
+#                        $ps.CygFormat($SOLARVER).$ds.$INPATH.$BIN.
                         $ps.CygFormat($SOLARENV).$ds."bin".
                         $ps.CygFormat($SOLARENV).$ds.$OUTPATH.$BIN;
 
@@ -1291,7 +1290,7 @@ elsif ($platform =~ m/os2/)
    # needed is appended to the end.
 
    $PATH              = $cur_dir.
-                        $ps.'$SOLARVER'.$ds.'$INPATH'.$BIN.
+#                        $ps.'$SOLARVER'.$ds.'$INPATH'.$BIN.
                         $ps.'$SOLARENV'.$ds."bin".
                         $ps.'$SOLARENV'.$ds.'$OUTPATH'.$BIN;
 
@@ -1319,7 +1318,7 @@ elsif ($platform =~ m/os2/)
 
 elsif ($platform =~ m/darwin/)
 {  $PATH              = $cur_dir.
-                        $ps.'$SOLARVER'.$ds.'$INPATH'.$BIN.
+#                        $ps.'$SOLARVER'.$ds.'$INPATH'.$BIN.
                         $ps.'$SOLARENV'.$ds.'$OUTPATH'.$BIN.
                         $ps.'$SOLARENV'.$BIN;
 
@@ -1622,7 +1621,6 @@ ToFile( "common_build",      $common_build,      "e" );
 ToFile( "BMP_WRITES_FLAG",   $BMP_WRITES_FLAG,   "e" );
 ToFile( "BUILD_SOSL_RELEASE", $BUILD_SOSL_RELEASE, "e" );
 ToFile( "NO_REC_RES",        $NO_REC_RES,        "e" );
-ToFile( "NO_HIDS",           $NO_HIDS,           "e" );
 ToFile( "SO3",               $SO3,               "e" );
 ToFile( "SOLAR_PLUGIN",      $SOLAR_PLUGIN,      "e" );
 ToFile( "UPDATER",           $UPDATER,           "e" );
@@ -1816,6 +1814,7 @@ ToFile( "ENABLE_FONTCONFIG", "@ENABLE_FONTCONFIG@", "e" );
 ToFile( "ENABLE_DIRECTX",    "@ENABLE_DIRECTX@",    "e" );
 ToFile( "ENABLE_LAYOUT",     "@ENABLE_LAYOUT@",     "e" );
 ToFile( "ENABLE_PCH",        "@ENABLE_PCH@",       "e" );
+ToFile( "NO_HIDS",           "@NO_HIDS@",       "e" );
 ToFile( "VC_STANDARD",       "@VC_STANDARD@",      "e" );
 ToFile( "WITH_GPC",          "@WITH_GPC@",         "e" );
 ToFile( "WITH_MYSPELL_DICTS","@WITH_MYSPELL_DICTS@","e");
