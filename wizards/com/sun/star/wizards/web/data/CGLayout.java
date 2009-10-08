@@ -26,7 +26,8 @@
  * <http://www.openoffice.org/license.html>
  * for a copy of the LGPLv3 License.
  *
- ************************************************************************/package com.sun.star.wizards.web.data;
+ ************************************************************************/
+package com.sun.star.wizards.web.data;
 
 import com.sun.star.wizards.ui.UIConsts;
 import java.util.Hashtable;
@@ -38,13 +39,15 @@ import javax.xml.transform.stream.StreamSource;
 import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.wizards.common.FileAccess;
 
-public class CGLayout extends ConfigSetItem {
+public class CGLayout extends ConfigSetItem
+{
+
     public String cp_Name;
     public String cp_FSName;
-
     private Map templates;
 
-    private void createTemplates(XMultiServiceFactory xmsf) throws Exception {
+    private void createTemplates(XMultiServiceFactory xmsf) throws Exception
+    {
 
         templates = new Hashtable(3);
 
@@ -52,29 +55,36 @@ public class CGLayout extends ConfigSetItem {
 
         String workPath = getSettings().workPath;
         FileAccess fa = new FileAccess(xmsf);
-        String stylesheetPath = fa.getURL(getSettings().workPath,"layouts/"+ cp_FSName);
+        String stylesheetPath = fa.getURL(getSettings().workPath, "layouts/" + cp_FSName);
 
-        String[] files  = fa.listFiles(stylesheetPath,false);
+        String[] files = fa.listFiles(stylesheetPath, false);
 
-        for (int i = 0; i<files.length; i++)
+        for (int i = 0; i < files.length; i++)
+        {
             if (FileAccess.getExtension(files[i]).equals("xsl"))
-                templates.put(FileAccess.getFilename(files[i]), tf.newTemplates( new StreamSource(files[i]) ));
-
+            {
+                templates.put(FileAccess.getFilename(files[i]), tf.newTemplates(new StreamSource(files[i])));
+            }
+        }
     }
 
-    public Object[] getImageUrls() {
+    public Object[] getImageUrls()
+    {
         Object[] sRetUrls = new Object[1];
-        int ResId = UIConsts.RID_IMG_WEB + (cp_Index *2);
-        return new Integer[]{new Integer(ResId), new Integer(ResId + 1)};
+        int ResId = UIConsts.RID_IMG_WEB + (cp_Index * 2);
+        return new Integer[]
+                {
+                    new Integer(ResId), new Integer(ResId + 1)
+                };
     }
 
-    public Map getTemplates(XMultiServiceFactory xmsf) throws Exception {
+    public Map getTemplates(XMultiServiceFactory xmsf) throws Exception
+    {
 
         // TODO uncomment...
         // if (templates==null)
-          createTemplates(xmsf);
+        createTemplates(xmsf);
 
         return templates;
     }
-
 }

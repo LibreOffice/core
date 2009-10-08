@@ -1,5 +1,5 @@
 /*************************************************************************
-*
+ *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
  * Copyright 2008 by Sun Microsystems, Inc.
@@ -26,7 +26,8 @@
  * <http://www.openoffice.org/license.html>
  * for a copy of the LGPLv3 License.
  *
- ************************************************************************/package com.sun.star.wizards.common;
+ ************************************************************************/
+package com.sun.star.wizards.common;
 
 import com.sun.star.uno.XComponentContext;
 import com.sun.star.util.XMacroExpander;
@@ -46,13 +47,16 @@ import com.sun.star.util.DateTime;
 import com.sun.star.util.XNumberFormatsSupplier;
 import com.sun.star.util.XNumberFormatter;
 
-public class Helper {
+public class Helper
+{
 
     /** Creates a new instance of Helper */
-    public Helper() {
+    public Helper()
+    {
     }
 
-    public static long convertUnoDatetoInteger(com.sun.star.util.Date DateValue) {
+    public static long convertUnoDatetoInteger(com.sun.star.util.Date DateValue)
+    {
         java.util.Calendar oCal = java.util.Calendar.getInstance();
         oCal.set(DateValue.Year, DateValue.Month, DateValue.Day);
         java.util.Date dTime = oCal.getTime();
@@ -61,38 +65,57 @@ public class Helper {
         return lDate;
     }
 
-    public static void setUnoPropertyValue(Object oUnoObject, String PropertyName, Object PropertyValue) {
-        try {
+    public static void setUnoPropertyValue(Object oUnoObject, String PropertyName, Object PropertyValue)
+    {
+        try
+        {
             XPropertySet xPSet = (XPropertySet) UnoRuntime.queryInterface(XPropertySet.class, oUnoObject);
             if (xPSet.getPropertySetInfo().hasPropertyByName(PropertyName))
+            {
                 xPSet.setPropertyValue(PropertyName, PropertyValue);
-            else{
-                Property[] selementnames = xPSet.getPropertySetInfo().getProperties();
-                throw new java.lang.IllegalArgumentException("No Such Property: '" + PropertyName+ "'");
             }
-        } catch (Exception exception) {
+            else
+            {
+                Property[] selementnames = xPSet.getPropertySetInfo().getProperties();
+                throw new java.lang.IllegalArgumentException("No Such Property: '" + PropertyName + "'");
+            }
+        }
+        catch (Exception exception)
+        {
             exception.printStackTrace(System.out);
         }
     }
 
-    public static Object getUnoObjectbyName(Object oUnoObject, String ElementName) {
-        try {
+    public static Object getUnoObjectbyName(Object oUnoObject, String ElementName)
+    {
+        try
+        {
             com.sun.star.container.XNameAccess xName = (com.sun.star.container.XNameAccess) UnoRuntime.queryInterface(com.sun.star.container.XNameAccess.class, oUnoObject);
             if (xName.hasByName(ElementName) == true)
+            {
                 return xName.getByName(ElementName);
+            }
             else
+            {
                 throw new RuntimeException();
-        } catch (Exception exception) {
+            }
+        }
+        catch (Exception exception)
+        {
             exception.printStackTrace(System.out);
             return null;
         }
     }
 
-    public static Object getPropertyValue(PropertyValue[] CurPropertyValue, String PropertyName) {
+    public static Object getPropertyValue(PropertyValue[] CurPropertyValue, String PropertyName)
+    {
         int MaxCount = CurPropertyValue.length;
-        for (int i = 0; i < MaxCount; i++) {
-            if (CurPropertyValue[i] != null) {
-                if (CurPropertyValue[i].Name.equals(PropertyName)) {
+        for (int i = 0; i < MaxCount; i++)
+        {
+            if (CurPropertyValue[i] != null)
+            {
+                if (CurPropertyValue[i].Name.equals(PropertyName))
+                {
                     return CurPropertyValue[i].Value;
                 }
             }
@@ -100,31 +123,46 @@ public class Helper {
         throw new RuntimeException();
     }
 
-    public static Object getUnoPropertyValue(Object oUnoObject, String PropertyName, java.lang.Class xClass) {
-        try {
-            if (oUnoObject != null) {
+    public static Object getUnoPropertyValue(Object oUnoObject, String PropertyName, java.lang.Class xClass)
+    {
+        try
+        {
+            if (oUnoObject != null)
+            {
                 XPropertySet xPSet = (XPropertySet) UnoRuntime.queryInterface(XPropertySet.class, oUnoObject);
                 Object oObject = xPSet.getPropertyValue(PropertyName);
-                if ( AnyConverter.isVoid(oObject) )
+                if (AnyConverter.isVoid(oObject))
+                {
                     return null;
+                }
                 else
+                {
                     return com.sun.star.uno.AnyConverter.toObject(new com.sun.star.uno.Type(xClass), oObject);
+                }
             }
             return null;
-        } catch (Exception exception) {
+        }
+        catch (Exception exception)
+        {
             exception.printStackTrace(System.out);
             return null;
         }
     }
 
-    public static Object getPropertyValuefromAny(Object[] CurPropertyValue, String PropertyName) {
-        if (CurPropertyValue != null) {
+    public static Object getPropertyValuefromAny(Object[] CurPropertyValue, String PropertyName)
+    {
+        if (CurPropertyValue != null)
+        {
             int MaxCount = CurPropertyValue.length;
-            for (int i = 0; i < MaxCount; i++) {
-                if (CurPropertyValue[i] != null) {
+            for (int i = 0; i < MaxCount; i++)
+            {
+                if (CurPropertyValue[i] != null)
+                {
                     PropertyValue aValue = (PropertyValue) CurPropertyValue[i];
                     if (aValue != null && aValue.Name.equals(PropertyName))
+                    {
                         return aValue.Value;
+                    }
                 }
             }
         }
@@ -132,82 +170,117 @@ public class Helper {
         return null;
     }
 
-    public static Object getPropertyValuefromAny(Object[] CurPropertyValue, String PropertyName, java.lang.Class xClass) {
-        try {
-            if (CurPropertyValue != null) {
+    public static Object getPropertyValuefromAny(Object[] CurPropertyValue, String PropertyName, java.lang.Class xClass)
+    {
+        try
+        {
+            if (CurPropertyValue != null)
+            {
                 int MaxCount = CurPropertyValue.length;
-                for (int i = 0; i < MaxCount; i++) {
-                    if (CurPropertyValue[i] != null) {
+                for (int i = 0; i < MaxCount; i++)
+                {
+                    if (CurPropertyValue[i] != null)
+                    {
                         PropertyValue aValue = (PropertyValue) CurPropertyValue[i];
                         if (aValue != null && aValue.Name.equals(PropertyName))
+                        {
                             return com.sun.star.uno.AnyConverter.toObject(new com.sun.star.uno.Type(xClass), aValue.Value);
+                        }
                     }
                 }
             }
             //  System.out.println("Property not found: " + PropertyName);
             return null;
-        } catch (Exception exception) {
+        }
+        catch (Exception exception)
+        {
             exception.printStackTrace(System.out);
             return null;
         }
     }
 
-    public static Object getUnoPropertyValue(Object oUnoObject, String PropertyName) {
-        try {
-            if (oUnoObject != null) {
+    public static Object getUnoPropertyValue(Object oUnoObject, String PropertyName)
+    {
+        try
+        {
+            if (oUnoObject != null)
+            {
                 XPropertySet xPSet = (XPropertySet) UnoRuntime.queryInterface(XPropertySet.class, oUnoObject);
                 Property[] aProps = xPSet.getPropertySetInfo().getProperties();
                 Object oObject = xPSet.getPropertyValue(PropertyName);
                 return oObject;
             }
-        } catch (Exception exception) {
+        }
+        catch (Exception exception)
+        {
             exception.printStackTrace(System.out);
         }
         return null;
     }
 
-    public static Object getUnoArrayPropertyValue(Object oUnoObject, String PropertyName) {
-        try {
-            if (oUnoObject != null) {
+    public static Object getUnoArrayPropertyValue(Object oUnoObject, String PropertyName)
+    {
+        try
+        {
+            if (oUnoObject != null)
+            {
                 XPropertySet xPSet = (XPropertySet) UnoRuntime.queryInterface(XPropertySet.class, oUnoObject);
                 Object oObject = xPSet.getPropertyValue(PropertyName);
                 if (AnyConverter.isArray(oObject))
+                {
                     return getArrayValue(oObject);
+                }
             }
-        } catch (Exception exception) {
+        }
+        catch (Exception exception)
+        {
             exception.printStackTrace(System.out);
         }
         return null;
     }
 
-    public static Object getUnoStructValue(Object oUnoObject, String PropertyName) {
-        try {
-            if (oUnoObject != null) {
+    public static Object getUnoStructValue(Object oUnoObject, String PropertyName)
+    {
+        try
+        {
+            if (oUnoObject != null)
+            {
                 XPropertySet xPSet = (XPropertySet) UnoRuntime.queryInterface(XPropertySet.class, oUnoObject);
-                if (xPSet.getPropertySetInfo().hasPropertyByName(PropertyName) == true) {
+                if (xPSet.getPropertySetInfo().hasPropertyByName(PropertyName) == true)
+                {
                     Object oObject = xPSet.getPropertyValue(PropertyName);
                     return oObject;
                 }
             }
             return null;
-        } catch (Exception exception) {
+        }
+        catch (Exception exception)
+        {
             exception.printStackTrace(System.out);
             return null;
         }
     }
 
-    public static void setUnoPropertyValues(Object oUnoObject, String[] PropertyNames, Object[] PropertyValues) {
-        try {
+    public static void setUnoPropertyValues(Object oUnoObject, String[] PropertyNames, Object[] PropertyValues)
+    {
+        try
+        {
             com.sun.star.beans.XMultiPropertySet xMultiPSetLst = (com.sun.star.beans.XMultiPropertySet) UnoRuntime.queryInterface(com.sun.star.beans.XMultiPropertySet.class, oUnoObject);
             if (xMultiPSetLst != null)
+            {
                 xMultiPSetLst.setPropertyValues(PropertyNames, PropertyValues);
+            }
             else
-                for (int i = 0; i < PropertyNames.length; i++) {
+            {
+                for (int i = 0; i < PropertyNames.length; i++)
+                {
                     //System.out.println(PropertyNames[i] + "=" + PropertyValues[i]);
                     setUnoPropertyValue(oUnoObject, PropertyNames[i], PropertyValues[i]);
                 }
-
-        } catch (Exception exception) {
+            }
+        }
+        catch (Exception exception)
+        {
             exception.printStackTrace(System.out);
         }
     }
@@ -219,94 +292,110 @@ public class Helper {
      * @param oValue the paramter that has to represent an object
      * @return a null reference if the array is empty
      */
-    public static Object getArrayValue(Object oValue) {
-        try {
+    public static Object getArrayValue(Object oValue)
+    {
+        try
+        {
             Object oPropList = com.sun.star.uno.AnyConverter.toArray(oValue);
             int nlen = java.lang.reflect.Array.getLength(oPropList);
             if (nlen == 0)
+            {
                 return null;
+            }
             else
+            {
                 return oPropList;
-        } catch (Exception exception) {
+            }
+        }
+        catch (Exception exception)
+        {
             exception.printStackTrace(System.out);
             return null;
         }
     }
+    private static long DAY_IN_MILLIS = (24 * 60 * 60 * 1000);
 
-    private static long DAY_IN_MILLIS = ( 24 * 60 * 60 * 1000 );
-
-    public static class DateUtils {
+    public static class DateUtils
+    {
 
         private long docNullTime;
         private XNumberFormatter formatter;
         private XNumberFormatsSupplier formatSupplier;
         private Calendar calendar;
 
-        public DateUtils(XMultiServiceFactory xmsf, Object document) throws Exception {
-            XMultiServiceFactory docMSF = (XMultiServiceFactory)UnoRuntime.queryInterface(XMultiServiceFactory.class,document);
+        public DateUtils(XMultiServiceFactory xmsf, Object document) throws Exception
+        {
+            XMultiServiceFactory docMSF = (XMultiServiceFactory) UnoRuntime.queryInterface(XMultiServiceFactory.class, document);
 
             Object defaults = docMSF.createInstance("com.sun.star.text.Defaults");
-            Locale  l = (Locale) Helper.getUnoStructValue(defaults, "CharLocale");
+            Locale l = (Locale) Helper.getUnoStructValue(defaults, "CharLocale");
 
             java.util.Locale jl = new java.util.Locale(
-                    l.Language , l.Country, l.Variant );
+                    l.Language, l.Country, l.Variant);
 
             calendar = Calendar.getInstance(jl);
 
-            formatSupplier = (XNumberFormatsSupplier)UnoRuntime.queryInterface(XNumberFormatsSupplier.class,document);
+            formatSupplier = (XNumberFormatsSupplier) UnoRuntime.queryInterface(XNumberFormatsSupplier.class, document);
 
             Object formatSettings = formatSupplier.getNumberFormatSettings();
-            com.sun.star.util.Date date = (com.sun.star.util.Date)Helper.getUnoPropertyValue( formatSettings, "NullDate");
+            com.sun.star.util.Date date = (com.sun.star.util.Date) Helper.getUnoPropertyValue(formatSettings, "NullDate");
 
-            calendar.set(date.Year, date.Month - 1 , date.Day);
+            calendar.set(date.Year, date.Month - 1, date.Day);
             docNullTime = getTimeInMillis();
 
-            formatter  = NumberFormatter.createNumberFormatter(xmsf, formatSupplier );
+            formatter = NumberFormatter.createNumberFormatter(xmsf, formatSupplier);
         }
 
         /**
          * @param format a constant of the enumeration NumberFormatIndex
          * @return
          */
-        public int getFormat( short format ) {
-            return NumberFormatter.getNumberFormatterKey( formatSupplier , format);
+        public int getFormat(short format)
+        {
+            return NumberFormatter.getNumberFormatterKey(formatSupplier, format);
         }
 
-        public XNumberFormatter getFormatter() {
+        public XNumberFormatter getFormatter()
+        {
             return formatter;
         }
 
-        private long getTimeInMillis(){
+        private long getTimeInMillis()
+        {
             java.util.Date dDate = calendar.getTime();
             return dDate.getTime();
         }
+
         /**
          * @param date a VCL date in form of 20041231
          * @return a document relative date
          */
-        public synchronized double getDocumentDateAsDouble(int date) {
+        public synchronized double getDocumentDateAsDouble(int date)
+        {
             calendar.clear();
-            calendar.set( date / 10000 ,
-                        ( date % 10000 ) / 100 - 1 ,
-                          date % 100 ) ;
+            calendar.set(date / 10000,
+                    (date % 10000) / 100 - 1,
+                    date % 100);
 
             long date1 = getTimeInMillis();
             /*
              * docNullTime and date1 are in millis, but
              * I need a day...
              */
-            double daysDiff = ( date1 - docNullTime ) / DAY_IN_MILLIS + 1;
+            double daysDiff = (date1 - docNullTime) / DAY_IN_MILLIS + 1;
 
             return daysDiff;
         }
 
-        public double getDocumentDateAsDouble(DateTime date) {
-            return getDocumentDateAsDouble (date.Year * 10000 + date.Month * 100 + date.Day );
+        public double getDocumentDateAsDouble(DateTime date)
+        {
+            return getDocumentDateAsDouble(date.Year * 10000 + date.Month * 100 + date.Day);
         }
 
-        public synchronized double getDocumentDateAsDouble(long javaTimeInMillis) {
+        public synchronized double getDocumentDateAsDouble(long javaTimeInMillis)
+        {
             calendar.clear();
-            JavaTools.setTimeInMillis(calendar, javaTimeInMillis ) ;
+            JavaTools.setTimeInMillis(calendar, javaTimeInMillis);
 
             long date1 = getTimeInMillis();
 
@@ -314,45 +403,45 @@ public class Helper {
              * docNullTime and date1 are in millis, but
              * I need a day...
              */
-            double daysDiff = ( date1 - docNullTime ) / DAY_IN_MILLIS + 1;
+            double daysDiff = (date1 - docNullTime) / DAY_IN_MILLIS + 1;
 
             return daysDiff;
 
         }
 
-        public String format(int formatIndex, int date) {
-            return formatter.convertNumberToString( formatIndex, getDocumentDateAsDouble(date));
+        public String format(int formatIndex, int date)
+        {
+            return formatter.convertNumberToString(formatIndex, getDocumentDateAsDouble(date));
         }
 
-        public String format(int formatIndex, DateTime date) {
-            return formatter.convertNumberToString( formatIndex, getDocumentDateAsDouble(date));
+        public String format(int formatIndex, DateTime date)
+        {
+            return formatter.convertNumberToString(formatIndex, getDocumentDateAsDouble(date));
         }
 
-        public String format(int formatIndex, long javaTimeInMillis) {
-            return formatter.convertNumberToString( formatIndex, getDocumentDateAsDouble(javaTimeInMillis));
+        public String format(int formatIndex, long javaTimeInMillis)
+        {
+            return formatter.convertNumberToString(formatIndex, getDocumentDateAsDouble(javaTimeInMillis));
         }
-
     }
 
-public static XComponentContext getComponentContext(XMultiServiceFactory _xMSF)
-{
-    // Get the path to the extension and try to add the path to the class loader
-    final XPropertySet xProps = (XPropertySet)UnoRuntime.queryInterface(XPropertySet.class, _xMSF);
-    final PropertySetHelper aHelper = new PropertySetHelper(xProps);
-    final Object aDefaultContext = aHelper.getPropertyValueAsObject("DefaultContext");
-    final XComponentContext xComponentContext = (XComponentContext)UnoRuntime.queryInterface(XComponentContext.class, aDefaultContext);
-    return xComponentContext;
-}
+    public static XComponentContext getComponentContext(XMultiServiceFactory _xMSF)
+    {
+        // Get the path to the extension and try to add the path to the class loader
+        final XPropertySet xProps = (XPropertySet) UnoRuntime.queryInterface(XPropertySet.class, _xMSF);
+        final PropertySetHelper aHelper = new PropertySetHelper(xProps);
+        final Object aDefaultContext = aHelper.getPropertyValueAsObject("DefaultContext");
+        final XComponentContext xComponentContext = (XComponentContext) UnoRuntime.queryInterface(XComponentContext.class, aDefaultContext);
+        return xComponentContext;
+    }
 
-public static XMacroExpander getMacroExpander(XMultiServiceFactory _xMSF)
-{
-    final XComponentContext xComponentContext = getComponentContext(_xMSF);
-    final Object aSingleton = xComponentContext.getValueByName("/singletons/com.sun.star.util.theMacroExpander");
-    XMacroExpander xExpander = (XMacroExpander)UnoRuntime.queryInterface(XMacroExpander.class, aSingleton);
-    // String[][] aStrListList = xProvider.getExtensionList();
+    public static XMacroExpander getMacroExpander(XMultiServiceFactory _xMSF)
+    {
+        final XComponentContext xComponentContext = getComponentContext(_xMSF);
+        final Object aSingleton = xComponentContext.getValueByName("/singletons/com.sun.star.util.theMacroExpander");
+        XMacroExpander xExpander = (XMacroExpander) UnoRuntime.queryInterface(XMacroExpander.class, aSingleton);
+        // String[][] aStrListList = xProvider.getExtensionList();
 //     final String sLocation = xProvider.getPackageLocation("com.sun.reportdesigner");
-    return xExpander;
-}
-
-
+        return xExpander;
+    }
 }

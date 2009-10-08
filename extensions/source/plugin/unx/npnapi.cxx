@@ -20,6 +20,7 @@ extern XtAppContext app_context;
 extern int wakeup_fd[];
 extern Widget topLevel, topBox;
 extern Display* pAppDisplay;
+extern Display* pXtAppDisplay;
 extern int nAppArguments;
 extern char** pAppArguments;
 
@@ -50,19 +51,28 @@ static NPError l_NPN_DestroyStream( NPP instance, NPStream* stream, NPError reas
     if( nInstance == PluginConnector::UnknownNPPID )
         return NPERR_GENERIC_ERROR;
 
+    UINT32 nFileID = pConnector->GetStreamID( stream );
     MediatorMessage* pMes=
         pConnector->
         Transact( eNPN_DestroyStream,
                   &nInstance, sizeof( nInstance ),
-                  pConnector->GetStreamID( stream ), sizeof( int ),
+                  &nFileID, sizeof( nFileID ),
                   POST_STRING( stream->url ),
-                  reason, sizeof( reason ),
+                  &reason, sizeof( reason ),
                   NULL );
 
     if( ! pMes )
         return NPERR_GENERIC_ERROR;
 
-    pConnector->getStreamList().Remove( stream );
+    for( std::vector< NPStream* >::iterator it = pConnector->getStreamList().begin();
+         it != pConnector->getStreamList().end(); ++it )
+    {
+        if( *it == stream )
+        {
+            pConnector->getStreamList().erase( it );
+            break;
+        }
+    }
     delete [] stream->url;
     delete stream;
     // returns NPError
@@ -164,7 +174,7 @@ static NPError l_NPN_NewStream( NPP instance, NPMIMEType type, const char* targe
         pStream->lastmodified = pMes->GetUINT32();
         pStream->ndata = pStream->pdata = pStream->notifyData = NULL;
 
-        pConnector->getStreamList().Insert( pStream, LIST_APPEND );
+        pConnector->getStreamList().push_back( pStream );
         *stream = pStream;
     }
 
@@ -353,12 +363,12 @@ static void l_NPN_ReloadPlugins( NPBool /*reloadPages*/ )
     medDebug( 1, "NPN_ReloadPlugins: SNI\n" );
 }
 
-static NPError l_NPN_GetValue( NPP /*instance*/, NPNVariable variable, void* value )
+static NPError l_NPN_GetValue( NPP, NPNVariable variable, void* value )
 {
     switch( variable )
     {
         case NPNVxDisplay:
-            *((Display**)value) = pAppDisplay;
+            *((Display**)value) = pXtAppDisplay;
             medDebug( 1, "Display requested\n" );
             break;
         case NPNVxtAppContext:
@@ -380,8 +390,21 @@ static NPError l_NPN_GetValue( NPP /*instance*/, NPNVariable variable, void* val
             *(NPBool*)value = false;
             medDebug( 1, "offline browsing requested\n" );
             break;
+        case NPNVSupportsXEmbedBool:
+            // asking xembed
+            *(int*)value = true;
+            medDebug( 1, "xembed requested\n" );
+            break;
+        case NPNVToolkit:
+            #ifdef ENABLE_GTK
+            *(int*)value = NPNVGtk2;
+            #else
+            *(int*)value = 0;
+            #endif
+            medDebug( 1, "toolkit requested\n" );
+            break;
          default:
-            medDebug( 1, "unknown NPNVariable %d requested\n", variable );
+            medDebug( 1, "unknown NPNVariable %x requested\n", variable );
             return NPERR_INVALID_PARAM;
     }
     return NPERR_NO_ERROR;
@@ -468,7 +491,7 @@ char*(*pNPP_GetMIMEDescription)()                               = NULL;
 NPError (*pNP_Initialize)(NPNetscapeFuncs*,NPPluginFuncs*)      = NULL;
 NPError (*pNP_Shutdown)()                                       = NULL;
 
-PluginConnectorList PluginConnector::allConnectors;
+std::vector< PluginConnector* > PluginConnector::allConnectors;
 
 PluginConnector::PluginConnector( int nSocket ) :
         Mediator( nSocket )
@@ -493,11 +516,11 @@ IMPL_LINK( PluginConnector, WorkOnNewMessageHdl, Mediator*, /*pMediator*/ )
             case eNPP_DestroyStream:
             {
                 UINT32 nInstance    = pMessage->GetUINT32();
-                NPP instance        = m_aInstances.GetObject( nInstance )->instance;
+                NPP instance        = m_aInstances[ nInstance ]->instance;
                 UINT32 nFileID      = pMessage->GetUINT32();
-                NPStream* pStream   = m_aNPWrapStreams.GetObject( nFileID );
+                NPStream* pStream   = m_aNPWrapStreams[ nFileID ];
                 NPError aReason     = GetNPError( pMessage );
-                m_aNPWrapStreams.Remove( pStream );
+                m_aNPWrapStreams.erase( m_aNPWrapStreams.begin() + nFileID );
 
                 aReason = aPluginFuncs.destroystream( instance, pStream, aReason );
                 Respond( pMessage->m_nID,
@@ -511,12 +534,13 @@ IMPL_LINK( PluginConnector, WorkOnNewMessageHdl, Mediator*, /*pMediator*/ )
             case eNPP_Destroy:
             {
                 UINT32 nInstance    = pMessage->GetUINT32();
-                ConnectorInstance* pInst= m_aInstances.GetObject( nInstance );
+                ConnectorInstance* pInst= m_aInstances[ nInstance ];
 
                 // some plugin rely on old netscapes behaviour
                 // to first destroy the widget and then destroy
                 // the instance, so mimic that behaviour here
-                XtDestroyWidget( (Widget)pInst->pShell );
+                if( pInst->pShell )
+                    XtDestroyWidget( (Widget)pInst->pShell );
 
                 pInst->pWidget = pInst->pShell = NULL;
 
@@ -529,7 +553,7 @@ IMPL_LINK( PluginConnector, WorkOnNewMessageHdl, Mediator*, /*pMediator*/ )
             {
                 // now really destroy the instance
                 UINT32 nInstance    = pMessage->GetUINT32();
-                ConnectorInstance* pInst= m_aInstances.GetObject( nInstance );
+                ConnectorInstance* pInst= m_aInstances[ nInstance ];
                 NPP instance        = pInst->instance;
                 NPSavedData* pSave = NULL;
 
@@ -548,7 +572,15 @@ IMPL_LINK( PluginConnector, WorkOnNewMessageHdl, Mediator*, /*pMediator*/ )
                              "0000", 4,
                              NULL );
 
-                delete m_aInstances.Remove( nInstance );
+                #ifdef ENABLE_GTK
+                if( pInst->pGtkWindow )
+                    g_object_unref( G_OBJECT(pInst->pGtkWindow) );
+                if( pInst->pGtkWidget )
+                    g_object_unref( G_OBJECT(pInst->pGtkWidget) );
+                #endif
+
+                m_aInstances.erase( m_aInstances.begin() + nInstance );
+                delete pInst;
                 delete instance;
                 medDebug( 1, "destroyed instance (returning %d)\n", aRet );
             }
@@ -556,7 +588,7 @@ IMPL_LINK( PluginConnector, WorkOnNewMessageHdl, Mediator*, /*pMediator*/ )
             case eNPP_NewStream:
             {
                 UINT32 nInstance        = pMessage->GetUINT32();
-                NPP instance            = m_aInstances.GetObject( nInstance )->instance;
+                NPP instance            = m_aInstances[ nInstance ]->instance;
                 char* pType             = pMessage->GetString();
                 NPStream* pStream       = new NPStream;
                 pStream->url            = pMessage->GetString();
@@ -564,7 +596,7 @@ IMPL_LINK( PluginConnector, WorkOnNewMessageHdl, Mediator*, /*pMediator*/ )
                 pStream->lastmodified   = pMessage->GetUINT32();
                 pStream->pdata = pStream->ndata = pStream->notifyData = NULL;
                 NPBool* pSeekable       = (NPBool*)pMessage->GetBytes();
-                m_aNPWrapStreams.Insert( pStream, LIST_APPEND );
+                m_aNPWrapStreams.push_back( pStream );
                 uint16 nStype = NP_ASFILE;
                 NPError aRet = aPluginFuncs.newstream( instance, pType, pStream,
                                                        *pSeekable, &nStype );
@@ -598,7 +630,7 @@ IMPL_LINK( PluginConnector, WorkOnNewMessageHdl, Mediator*, /*pMediator*/ )
                                            pArgn, nArgnBytes,
                                            pArgv, nArgvBytes,
                                            pSavedData, nSaveBytes );
-                m_aInstances.Insert( pInst, LIST_APPEND );
+                m_aInstances.push_back( pInst );
                 NPError aRet;
                 aRet = aPluginFuncs.newp( pInst->pMimeType, instance, *pMode, *pArgc,
                                           pInst->nArg ? pInst->argn : NULL,
@@ -613,6 +645,22 @@ IMPL_LINK( PluginConnector, WorkOnNewMessageHdl, Mediator*, /*pMediator*/ )
                 for( int i = 0; i < pInst->nArg; i++ )
                     medDebug( 1, "   \"%s\"=\"%s\"\n", pInst->argn[i], pInst->argv[i] );
 #endif
+
+                #ifdef ENABLE_GTK
+                // check if XEMBED is to be used
+                // ask for Bool. there seems to be no clear definition whether the
+                // return value should be an int or unsigned char
+                // int can hold both and will be nonzero in case of "true"
+                if( aPluginFuncs.getvalue )
+                {
+                    int bNeedsXEmbed = 0;
+                    NPError error = aPluginFuncs.getvalue( instance, NPPVpluginNeedsXEmbed, (void *)&bNeedsXEmbed );
+                    if( error == NPERR_NO_ERROR )
+                        pInst->bShouldUseXEmbed = (bNeedsXEmbed != 0);
+                    medDebug( 1, "should use xembed = %s\n", pInst->bShouldUseXEmbed ? "true" : "false" );
+                }
+                #endif
+
                 Respond( pMessage->m_nID,
                          (char*)&aRet, sizeof( aRet ),
                          NULL );
@@ -624,51 +672,94 @@ IMPL_LINK( PluginConnector, WorkOnNewMessageHdl, Mediator*, /*pMediator*/ )
             case eNPP_SetWindow:
             {
                 UINT32 nInstance        = pMessage->GetUINT32();
-                ConnectorInstance* pInst= m_aInstances.GetObject( nInstance );
+                ConnectorInstance* pInst= m_aInstances[ nInstance ];
                 NPWindow* pWindow       = (NPWindow*)pMessage->GetBytes();
-                if( ! pInst->pWidget )
-                {
-                    static bool bFirstWindow = true;
 
-                    if( bFirstWindow )
+                if( pWindow->width < 1 )
+                    pWindow->width = 1;
+                if( pWindow->height < 1 )
+                    pWindow->height = 1;
+
+                #ifdef ENABLE_GTK
+                if( pInst->bShouldUseXEmbed )
+                {
+                    if( ! pInst->pGtkWidget )
                     {
-                        bFirstWindow = false;
-                        pInst->pShell   = topLevel;
-                        pInst->pWidget  = topBox;
-                        medDebug( 1, "reusing app window\n" );
+                        medDebug( 1, "creating gtk plug and socket\n" );
+
+                        pInst->pGtkWindow = gtk_plug_new((GdkNativeWindow)reinterpret_cast<sal_uIntPtr>(pWindow->window));
+                        gtk_widget_show( pInst->pGtkWindow );
+                        pInst->pGtkWidget = gtk_socket_new();
+                        gtk_widget_show( pInst->pGtkWidget );
+                        gtk_container_add( GTK_CONTAINER(pInst->pGtkWindow), pInst->pGtkWidget );
+                        gtk_widget_show_all( pInst->pGtkWindow );
+                        pInst->window.window = (void *)gtk_socket_get_id( GTK_SOCKET(pInst->pGtkWidget ) );
+
+                        XSync( pAppDisplay, False );
+
+                        XMapWindow( pAppDisplay, GDK_WINDOW_XWINDOW(pInst->pGtkWindow->window) );
+
+                        XSync( pAppDisplay, False );
                     }
-                    else
+
+                    // update widget size; alas out parent is not yet really XEMBED conformant
+                    gtk_widget_set_size_request( pInst->pGtkWidget, pWindow->width, pWindow->height );
+                    gtk_window_resize( GTK_WINDOW(pInst->pGtkWindow), pWindow->width, pWindow->height );
+
+                    GdkScreen* pGdkScreen = gtk_widget_get_screen( pInst->pGtkWidget );
+                    Screen* pScreen = ScreenOfDisplay( pAppDisplay, gdk_screen_get_number( pGdkScreen ) );
+
+                    pInst->window.x                 = 0;
+                    pInst->window.y                 = 0;
+                    pInst->window.width             = pWindow->width;
+                    pInst->window.height            = pWindow->height;
+                    pInst->window.clipRect.left     = 0;
+                    pInst->window.clipRect.top      = 0;
+                    pInst->window.clipRect.right    = pWindow->width;
+                    pInst->window.clipRect.bottom   = pWindow->height;
+                    pInst->window.ws_info           = &pInst->ws_info;
+                    pInst->window.type              = NPWindowTypeWindow;
+                    pInst->ws_info.type             = NP_SETWINDOW;
+                    pInst->ws_info.display          = pAppDisplay;
+                    pInst->ws_info.visual           = DefaultVisualOfScreen( pScreen );
+                    pInst->ws_info.colormap         = DefaultColormapOfScreen( pScreen );
+                    pInst->ws_info.depth            = DefaultDepthOfScreen( pScreen );
+                }
+                else
+                #endif
+                {
+                    if( ! pInst->pWidget )
                     {
                         pInst->pWidget = CreateNewShell( &(pInst->pShell), (XLIB_Window)pWindow->window );
                     }
+
+                    // fill in NPWindow and NPCallbackStruct
+                    pInst->window.window            = (void*)XtWindow( (Widget)pInst->pWidget );
+                    pInst->window.x                 = 0;
+                    pInst->window.y                 = 0;
+                    pInst->window.width             = pWindow->width;
+                    pInst->window.height            = pWindow->height;
+                    pInst->window.clipRect.left     = 0;
+                    pInst->window.clipRect.top      = 0;
+                    pInst->window.clipRect.right    = pWindow->width;
+                    pInst->window.clipRect.bottom   = pWindow->height;
+                    pInst->window.ws_info           = &pInst->ws_info;
+                    pInst->window.type              = NPWindowTypeWindow;
+                    pInst->ws_info.type             = NP_SETWINDOW;
+                    pInst->ws_info.display          = XtDisplay( (Widget)pInst->pWidget );
+                    pInst->ws_info.visual           = DefaultVisualOfScreen( XtScreen( (Widget)pInst->pWidget ) );
+                    pInst->ws_info.colormap         = DefaultColormapOfScreen( XtScreen( (Widget)pInst->pWidget ) );
+                    pInst->ws_info.depth            = DefaultDepthOfScreen( XtScreen( (Widget)pInst->pWidget ) );
+
+                    XtResizeWidget( (Widget)pInst->pShell,
+                                    pInst->window.width,
+                                    pInst->window.height,
+                                    0 );
+                    XtResizeWidget( (Widget)pInst->pWidget,
+                                    pInst->window.width,
+                                    pInst->window.height,
+                                    0 );
                 }
-
-                // fill in NPWindow and NPCallbackStruct
-                pInst->window.window            = (void*)XtWindow( (Widget)pInst->pWidget );
-                pInst->window.x                 = 0;
-                pInst->window.y                 = 0;
-                pInst->window.width             = pWindow->width;
-                pInst->window.height            = pWindow->height;
-                pInst->window.clipRect.left     = 0;
-                pInst->window.clipRect.top      = 0;
-                pInst->window.clipRect.right    = pWindow->width;
-                pInst->window.clipRect.bottom   = pWindow->height;
-                pInst->window.ws_info           = &pInst->ws_info;
-                pInst->window.type              = NPWindowTypeWindow;
-                pInst->ws_info.type             = NP_SETWINDOW;
-                pInst->ws_info.display          = XtDisplay( (Widget)pInst->pWidget );
-                pInst->ws_info.visual           = DefaultVisualOfScreen( XtScreen( (Widget)pInst->pWidget ) );
-                pInst->ws_info.colormap         = DefaultColormapOfScreen( XtScreen( (Widget)pInst->pWidget ) );
-                pInst->ws_info.depth            = DefaultDepthOfScreen( XtScreen( (Widget)pInst->pWidget ) );
-
-                XtResizeWidget( (Widget)pInst->pShell,
-                                pInst->window.width,
-                                pInst->window.height,
-                                0 );
-                XtResizeWidget( (Widget)pInst->pWidget,
-                                pInst->window.width,
-                                pInst->window.height,
-                                0 );
 
                 NPError aRet = aPluginFuncs.setwindow( pInst->instance, &pInst->window );
                 medDebug( 1, "pluginapp: NPP_SetWindow returns %d\n", (int) aRet );
@@ -681,9 +772,9 @@ IMPL_LINK( PluginConnector, WorkOnNewMessageHdl, Mediator*, /*pMediator*/ )
             case eNPP_StreamAsFile:
             {
                 UINT32 nInstance        = pMessage->GetUINT32();
-                NPP instance            = m_aInstances.GetObject( nInstance )->instance;
+                NPP instance            = m_aInstances[ nInstance ]->instance;
                 UINT32 nFileID          = pMessage->GetUINT32();
-                NPStream* pStream       = m_aNPWrapStreams.GetObject( nFileID );
+                NPStream* pStream       = m_aNPWrapStreams[ nFileID ];
                 char* fname             = pMessage->GetString();
                 medDebug( 1, "pluginapp: NPP_StreamAsFile %s\n", fname );
                 aPluginFuncs.asfile( instance, pStream, fname );
@@ -693,7 +784,7 @@ IMPL_LINK( PluginConnector, WorkOnNewMessageHdl, Mediator*, /*pMediator*/ )
             case eNPP_URLNotify:
             {
                 UINT32 nInstance        = pMessage->GetUINT32();
-                NPP instance            = m_aInstances.GetObject( nInstance )->instance;
+                NPP instance            = m_aInstances[ nInstance ]->instance;
                 char* url               = pMessage->GetString();
                 NPReason* pReason       = (NPReason*)pMessage->GetBytes();
                 void** notifyData       = (void**)pMessage->GetBytes();
@@ -706,9 +797,9 @@ IMPL_LINK( PluginConnector, WorkOnNewMessageHdl, Mediator*, /*pMediator*/ )
             case eNPP_WriteReady:
             {
                 UINT32 nInstance        = pMessage->GetUINT32();
-                NPP instance            = m_aInstances.GetObject( nInstance )->instance;
+                NPP instance            = m_aInstances[ nInstance ]->instance;
                 UINT32 nFileID          = pMessage->GetUINT32();
-                NPStream* pStream       = m_aNPWrapStreams.GetObject( nFileID );
+                NPStream* pStream       = m_aNPWrapStreams[ nFileID ];
                 int32 nRet = aPluginFuncs.writeready( instance, pStream );
 
                 medDebug( 1, "pluginapp: NPP_WriteReady( %p, %p ) (stream id = %d) returns %d\n",
@@ -722,9 +813,9 @@ IMPL_LINK( PluginConnector, WorkOnNewMessageHdl, Mediator*, /*pMediator*/ )
             case eNPP_Write:
             {
                 UINT32 nInstance        = pMessage->GetUINT32();
-                NPP instance            = m_aInstances.GetObject( nInstance )->instance;
+                NPP instance            = m_aInstances[ nInstance ]->instance;
                 UINT32 nFileID          = pMessage->GetUINT32();
-                NPStream* pStream       = m_aNPWrapStreams.GetObject( nFileID );
+                NPStream* pStream       = m_aNPWrapStreams[ nFileID ];
                 int32 offset            = pMessage->GetUINT32();
                 ULONG len;
                 char* buffer            = (char*)pMessage->GetBytes( len );

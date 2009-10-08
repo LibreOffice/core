@@ -559,8 +559,14 @@ STDAPI DllRegisterServer( void )
     if( aCurModule && GetModuleFileNameA( aCurModule, pActiveXPath, 1019 ) )
     {
         aResult = DllRegisterServerNative( 31, TRUE, pActiveXPath );
-        if( FAILED( aResult ) )
+        if( SUCCEEDED( aResult ) )
+            aResult = DllRegisterServerDoc( 31, TRUE );
+        else
+        {
             aResult = DllRegisterServerNative( 31, FALSE, pActiveXPath );
+            if( SUCCEEDED( aResult ) )
+                aResult = DllRegisterServerDoc( 31, FALSE );
+        }
     }
 
     return aResult;
@@ -568,7 +574,9 @@ STDAPI DllRegisterServer( void )
 
 STDAPI DllUnregisterServer( void )
 {
+    DllUnregisterServerDoc( 63, FALSE );
     DllUnregisterServerNative( 63, FALSE );
+    DllUnregisterServerDoc( 63, TRUE );
     return DllUnregisterServerNative( 63, TRUE );
 }
 

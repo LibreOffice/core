@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: ed_ipersiststr.cxx,v $
- * $Revision: 1.27 $
+ * $Revision: 1.27.10.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -272,6 +272,7 @@ HRESULT EmbedDocument_Impl::SaveTo_Impl( IStorage* pStg )
     CComPtr< IStream > pOrigOwn = m_pOwnStream;
     CComPtr< IStream > pOrigExt = m_pExtStream;
     HRESULT hr = Save( pStg, sal_False );
+    pStg->Commit( STGC_ONLYIFCURRENT );
     m_pOwnStream = pOrigOwn;
     m_pExtStream = pOrigExt;
 
@@ -293,6 +294,12 @@ STDMETHODIMP EmbedDocument_Impl::QueryInterface( REFIID riid, void FAR* FAR* ppv
     {
         AddRef();
         *ppv = (IPersist*) (IPersistStorage*) this;
+        return S_OK;
+    }
+    else if (IsEqualIID(riid, IID_IExternalConnection))
+    {
+        AddRef();
+        *ppv = (IExternalConnection*) this;
         return S_OK;
     }
     else if (IsEqualIID(riid, IID_IPersistStorage))
@@ -715,12 +722,19 @@ STDMETHODIMP EmbedDocument_Impl::SaveCompleted( IStorage *pStgNew )
                                         &m_pExtStream );
     if ( FAILED( hr ) || !m_pExtStream ) return E_OUTOFMEMORY;
 
+    sal_Bool bModified = sal_False;
+    uno::Reference< util::XModifiable > xMod( m_pDocHolder->GetDocument(), uno::UNO_QUERY );
+    if ( xMod.is() )
+        bModified = xMod->isModified();
 
     for ( AdviseSinkHashMapIterator iAdvise = m_aAdviseHashMap.begin(); iAdvise != m_aAdviseHashMap.end(); iAdvise++ )
     {
         if ( iAdvise->second )
             iAdvise->second->OnSave();
     }
+
+    if ( xMod.is() )
+        bModified = xMod->isModified();
 
     return S_OK;
 }
@@ -922,13 +936,8 @@ STDMETHODIMP EmbedDocument_Impl::GetCurFile( LPOLESTR *ppszFileName )
 
 LockedEmbedDocument_Impl EmbeddedDocumentInstanceAccess_Impl::GetEmbedDocument()
 {
-    LockedEmbedDocument_Impl aResult;
     ::osl::MutexGuard aGuard( m_aMutex );
-
-    aResult.m_pLocker = static_cast< IPersistStorage* >( m_pEmbedDocument );
-    aResult.m_pEmbedDocument = m_pEmbedDocument;
-
-    return aResult;
+    return LockedEmbedDocument_Impl( m_pEmbedDocument );
 }
 
 void EmbeddedDocumentInstanceAccess_Impl::ClearEmbedDocument()
@@ -937,9 +946,67 @@ void EmbeddedDocumentInstanceAccess_Impl::ClearEmbedDocument()
     m_pEmbedDocument = NULL;
 }
 
+// ===============================================
+
+LockedEmbedDocument_Impl::LockedEmbedDocument_Impl()
+: m_pEmbedDocument( NULL )
+{}
+
+LockedEmbedDocument_Impl::LockedEmbedDocument_Impl( EmbedDocument_Impl* pEmbedDocument )
+: m_pEmbedDocument( pEmbedDocument )
+{
+    if ( m_pEmbedDocument )
+        m_pEmbedDocument->AddRef();
+}
+
+LockedEmbedDocument_Impl::LockedEmbedDocument_Impl( const LockedEmbedDocument_Impl& aDocLock )
+: m_pEmbedDocument( aDocLock.m_pEmbedDocument )
+{
+    if ( m_pEmbedDocument )
+        m_pEmbedDocument->AddRef();
+}
+
+LockedEmbedDocument_Impl& LockedEmbedDocument_Impl::operator=( const LockedEmbedDocument_Impl& aDocLock )
+{
+    if ( m_pEmbedDocument )
+        m_pEmbedDocument->Release();
+
+    m_pEmbedDocument = aDocLock.m_pEmbedDocument;
+    if ( m_pEmbedDocument )
+        m_pEmbedDocument->AddRef();
+
+    return *this;
+}
+
+LockedEmbedDocument_Impl::~LockedEmbedDocument_Impl()
+{
+    if ( m_pEmbedDocument )
+        m_pEmbedDocument->Release();
+}
+
+void LockedEmbedDocument_Impl::ExecuteMethod( sal_Int16 nId )
+{
+    if ( m_pEmbedDocument )
+    {
+        if ( nId == OLESERV_SAVEOBJECT )
+            m_pEmbedDocument->SaveObject();
+        else if ( nId == OLESERV_CLOSE )
+            m_pEmbedDocument->Close( 0 );
+        else if ( nId == OLESERV_NOTIFY )
+            m_pEmbedDocument->notify();
+        else if ( nId == OLESERV_NOTIFYCLOSING )
+            m_pEmbedDocument->OLENotifyClosing();
+        else if ( nId == OLESERV_SHOWOBJECT )
+            m_pEmbedDocument->ShowObject();
+        else if ( nId == OLESERV_DEACTIVATE )
+            m_pEmbedDocument->Deactivate();
+    }
+}
+
 // Fix strange warnings about some
 // ATL::CAxHostWindow::QueryInterface|AddRef|Releae functions.
 // warning C4505: 'xxx' : unreferenced local function has been removed
 #if defined(_MSC_VER)
 #pragma warning(disable: 4505)
 #endif
+

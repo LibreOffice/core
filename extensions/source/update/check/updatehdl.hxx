@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: updatehdl.hxx,v $
- * $Revision: 1.5 $
+ * $Revision: 1.5.94.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -104,8 +104,6 @@ private:
 
     osl::Mutex              maMutex;
 
-    rtl::OUString           msProductName;
-    rtl::OUString           msProductVersion;
     rtl::OUString           msNextVersion;
     rtl::OUString           msDownloadPath;
     rtl::OUString           msDownloadFile;
@@ -166,7 +164,7 @@ private:
                                                 com::sun::star::awt::Rectangle const & rPosSize,
                                                 com::sun::star::uno::Sequence< com::sun::star::beans::NamedValue > const & rProps );
 
-    void                    getProductName();
+    void                    setFullVersion( rtl::OUString& rString );
     void                    searchAndReplaceAll( rtl::OUString &rText, const rtl::OUString &rWhat, const rtl::OUString &rWith ) const;
 
 public:

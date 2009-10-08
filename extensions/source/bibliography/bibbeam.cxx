@@ -171,7 +171,7 @@ namespace bib
                     aAny >>= aControlName;
 
                     m_xControl = Reference< awt::XControl > (xMgr->createInstance( aControlName ), UNO_QUERY );
-                    DBG_ASSERT( m_xControl.is(), "no GridControl created" )
+                    DBG_ASSERT( m_xControl.is(), "no GridControl created" );
                     if ( m_xControl.is() )
                         m_xControl->setModel( m_xGridModel );
                 }

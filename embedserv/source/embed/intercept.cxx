@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: intercept.cxx,v $
- * $Revision: 1.14 $
+ * $Revision: 1.14.10.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -199,15 +199,15 @@ Interceptor::dispatch(
     if ( xOleAccess.is() )
     {
         LockedEmbedDocument_Impl aDocLock = xOleAccess->GetEmbedDocument();
-        if ( aDocLock.m_pEmbedDocument )
+        if ( aDocLock.GetEmbedDocument() )
         {
             if( !m_bLink && URL.Complete == m_aInterceptedURL[0])
-                aDocLock.m_pEmbedDocument->SaveObject();
+                aDocLock.GetEmbedDocument()->SaveObject();
             else if(!m_bLink
-                    && ( URL.Complete == m_aInterceptedURL[2] ||
-                         URL.Complete == m_aInterceptedURL[3] ||
-                         URL.Complete == m_aInterceptedURL[4] ) )
-                aDocLock.m_pEmbedDocument->Close( 0 );
+                 && ( URL.Complete == m_aInterceptedURL[2] ||
+                      URL.Complete == m_aInterceptedURL[3] ||
+                      URL.Complete == m_aInterceptedURL[4] ) )
+                aDocLock.GetEmbedDocument()->Close( 0 );
             else if ( URL.Complete == m_aInterceptedURL[5] )
             {
                 uno::Sequence< beans::PropertyValue > aNewArgs = Arguments;

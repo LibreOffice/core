@@ -108,3 +108,11 @@ forms.OHiddenModel::com::sun::star::form::component::HiddenControl
 
 ### i90352 ###
 forms.OListBoxControl::com::sun::star::lang::XComponent
+
+### i94950 ###
+forms.OTimeModel::com::sun::star::form::XUpdateBroadcaster
+forms.OPatternModel::com::sun::star::form::XUpdateBroadcaster
+forms.OListBoxModel::com::sun::star::form::XUpdateBroadcaster
+forms.OFormattedFieldWrapper::com::sun::star::form::XUpdateBroadcaster
+forms.ODateModel::com::sun::star::form::XUpdateBroadcaster
+forms.OComboBoxModel::com::sun::star::form::XUpdateBroadcaster

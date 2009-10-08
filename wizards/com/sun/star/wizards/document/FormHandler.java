@@ -1,5 +1,5 @@
 /*************************************************************************
-*
+ *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
  * Copyright 2008 by Sun Microsystems, Inc.
@@ -67,7 +67,8 @@ import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.lang.XServiceInfo;
 import com.sun.star.container.XNamed;
 
-public class FormHandler {
+public class FormHandler
+{
 
     public XFormsSupplier xFormsSupplier;
     public XMultiServiceFactory xMSFDoc;
@@ -86,7 +87,6 @@ public class FormHandler {
     public final static int SOGRIDCONTROL = 6;
     public final static int SOIMAGECONTROL = 7;
     public final static int SODATETIMECONTROL = 8;
-
     int iImageControlHeight = 2000;
     public static String SOSIZETEXT = "The quick brown fox jumps over the lazy dog. The quick brown fox jumps over the lazy dog.";
     int iXPixelFactor = -1;
@@ -95,13 +95,15 @@ public class FormHandler {
     int iYNirwanaPos = 50000;
     public int nLabelHeight = -1;
     public int nDBRefHeight = -1;
-    public int BasicLabelDiffHeight= -1;
+    public int BasicLabelDiffHeight = -1;
     XNameAccess xNamedForms;
     XControlAccess xControlAccess;
     XShapeGrouper xShapeGrouper;
     XNameContainer xNamedFormContainer;
 
-    public class ControlData{
+    public class ControlData
+    {
+
         int DataType;
         int ControlType;
         String ControlService;
@@ -109,9 +111,9 @@ public class FormHandler {
         boolean bIsText;
     }
 
-
     /** Creates a new instance of FormHandler */
-    public FormHandler(XMultiServiceFactory _xMSF, XTextDocument xTextDocument) {
+    public FormHandler(XMultiServiceFactory _xMSF, XTextDocument xTextDocument)
+    {
         this.xMSF = _xMSF;
         xDrawPageSupplier = (XDrawPageSupplier) UnoRuntime.queryInterface(XDrawPageSupplier.class, xTextDocument);
         xDrawPage = xDrawPageSupplier.getDrawPage();
@@ -152,45 +154,52 @@ public class FormHandler {
         oImageControlData[3] = createControlData(DataType.BLOB, SOIMAGECONTROL, "ImageControl", "TextField", false);
     }
 
-
-    public int getControlType(int _fieldtype){
-        for (int i = 0; i < oControlData.length; i++){
-            if (oControlData[i].DataType == _fieldtype){
+    public int getControlType(int _fieldtype)
+    {
+        for (int i = 0; i < oControlData.length; i++)
+        {
+            if (oControlData[i].DataType == _fieldtype)
+            {
                 return oControlData[i].ControlType;
             }
         }
         return -1;
     }
 
-    public void setglobalMultiServiceFactory(XMultiServiceFactory _xMSF){
+    public void setglobalMultiServiceFactory(XMultiServiceFactory _xMSF)
+    {
         xMSF = _xMSF;
     }
 
-
-    public String getModelServiceName(int _fieldtype){
+    public String getModelServiceName(int _fieldtype)
+    {
         int icontroltype = getControlType(_fieldtype);
         if (icontroltype > -1)
+        {
             return sModelServices[icontroltype];
+        }
         else
+        {
             return null;
+        }
     }
 
-
-    public void initializeBasicControlValues(){
+    public void initializeBasicControlValues()
+    {
         Control oLabelControl = new Control(this, SOLABEL, new Point(), new Size());
         XDevice xDevice = (XDevice) UnoRuntime.queryInterface(XDevice.class, oLabelControl.xWindowPeer);
-        iXPixelFactor = (int) (100000/xDevice.getInfo().PixelPerMeterX);
-        iYPixelFactor = (int) (100000/xDevice.getInfo().PixelPerMeterY);
+        iXPixelFactor = (int) (100000 / xDevice.getInfo().PixelPerMeterX);
+        iYPixelFactor = (int) (100000 / xDevice.getInfo().PixelPerMeterY);
         nLabelHeight = (oLabelControl.getPreferredHeight("The quick brown fox...") + 1);
         Control oTextControl = new Control(this, SOTEXTBOX, new Point(), new Size());
         nDBRefHeight = (oTextControl.getPreferredHeight("The quick brown fox...") + 1);
-        BasicLabelDiffHeight = (nDBRefHeight - nLabelHeight)/2;
+        BasicLabelDiffHeight = (nDBRefHeight - nLabelHeight) / 2;
         xDrawPage.remove(oLabelControl.xShape);
         xDrawPage.remove(oTextControl.xShape);
     }
 
-
-    public ControlData createControlData(int _datatype, int _controltype, String _scontrolservicename, String _gridcolumnname, boolean _bIsTextControl){
+    public ControlData createControlData(int _datatype, int _controltype, String _scontrolservicename, String _gridcolumnname, boolean _bIsTextControl)
+    {
         ControlData curControlData = new ControlData();
         curControlData.DataType = _datatype;
         curControlData.ControlType = _controltype;
@@ -200,42 +209,59 @@ public class FormHandler {
         return curControlData;
     }
 
-
-    public XNameContainer getDocumentForms() {
+    public XNameContainer getDocumentForms()
+    {
         XNameContainer xNamedForms = xFormsSupplier.getForms();
         return xNamedForms;
     }
 
-
-    public String getValueofHiddenControl(XNameAccess xNamedForm, String ControlName, String sMsg) throws com.sun.star.wizards.document.FormHandler.UnknownHiddenControlException {
-        try {
-            if (xNamedForm.hasByName(ControlName)) {
+    public String getValueofHiddenControl(XNameAccess xNamedForm, String ControlName, String sMsg) throws com.sun.star.wizards.document.FormHandler.UnknownHiddenControlException
+    {
+        try
+        {
+            if (xNamedForm.hasByName(ControlName))
+            {
                 String ControlValue = AnyConverter.toString(com.sun.star.wizards.common.Helper.getUnoPropertyValue(xNamedForm.getByName(ControlName), "HiddenValue"));
                 return ControlValue;
-            } else
+            }
+            else
+            {
                 throw new UnknownHiddenControlException(xNamedForm, ControlName, sMsg);
-        } catch (Exception exception) {
+            }
+        }
+        catch (Exception exception)
+        {
             throw new UnknownHiddenControlException(xNamedForm, ControlName, sMsg);
         }
     }
 
-    public void insertHiddenControl(XNameAccess xNameAccess, XNameContainer xNamedForm, String ControlName, String ControlValue) {
-    try {
-        XInterface xHiddenControl;
-        if (xNameAccess.hasByName(ControlName) == true)
-            xHiddenControl = (XInterface) AnyConverter.toObject(new Type(XInterface.class), xNameAccess.getByName(ControlName));
-        else {
-            xHiddenControl = (XInterface) xMSFDoc.createInstance("com.sun.star.form.component.HiddenControl");
-            xNamedForm.insertByName(ControlName, xHiddenControl);
+    public void insertHiddenControl(XNameAccess xNameAccess, XNameContainer xNamedForm, String ControlName, String ControlValue)
+    {
+        try
+        {
+            XInterface xHiddenControl;
+            if (xNameAccess.hasByName(ControlName) == true)
+            {
+                xHiddenControl = (XInterface) AnyConverter.toObject(new Type(XInterface.class), xNameAccess.getByName(ControlName));
+            }
+            else
+            {
+                xHiddenControl = (XInterface) xMSFDoc.createInstance("com.sun.star.form.component.HiddenControl");
+                xNamedForm.insertByName(ControlName, xHiddenControl);
+            }
+            Helper.setUnoPropertyValue(xHiddenControl, "HiddenValue", ControlValue);
         }
-        Helper.setUnoPropertyValue(xHiddenControl, "HiddenValue", ControlValue);
-    } catch (Exception exception) {
-        exception.printStackTrace(System.out);
-    }}
+        catch (Exception exception)
+        {
+            exception.printStackTrace(System.out);
+        }
+    }
 
+    public class UnknownHiddenControlException extends java.lang.Throwable
+    {
 
-    public class UnknownHiddenControlException extends java.lang.Throwable {
-        public UnknownHiddenControlException(XNameAccess xNamedForm, String ControlName, String sMsgHiddenControlisMissing) {
+        public UnknownHiddenControlException(XNameAccess xNamedForm, String ControlName, String sMsgHiddenControlisMissing)
+        {
             XNamed xNamed = (XNamed) UnoRuntime.queryInterface(XNamed.class, xNamedForm);
             String FormName = xNamed.getName();
             sMsgHiddenControlisMissing = JavaTools.replaceSubString(sMsgHiddenControlisMissing, FormName, "<REPORTFORM>");
@@ -244,46 +270,58 @@ public class FormHandler {
         }
     }
 
-
-    public boolean hasFormByName(String _FormName){
+    public boolean hasFormByName(String _FormName)
+    {
         xNamedFormContainer = getDocumentForms();
         xNamedForms = (XNameAccess) UnoRuntime.queryInterface(XNameAccess.class, xNamedFormContainer);
         return xNamedForms.hasByName(_FormName);
     }
 
-
-    public void removeFormByName(String _FormName){
-    try {
-        if (hasFormByName(_FormName)){
-            removeControlsofForm(_FormName);
-            xNamedFormContainer.removeByName(_FormName);
-        }
-    } catch (com.sun.star.uno.Exception exception) {
-        exception.printStackTrace(System.out);
-    }}
-
-
-    public void removeControlsofForm(String _FormName){
-    try {
-        for (int i = xDrawPage.getCount() - 1; i >= 0; i--){
-            if (hasControlByName(_FormName, xDrawPage.getByIndex(i))){
-                XShape xShape = (XShape) UnoRuntime.queryInterface(XShape.class, xDrawPage.getByIndex(i));
-                xDrawPage.remove(xShape);
+    public void removeFormByName(String _FormName)
+    {
+        try
+        {
+            if (hasFormByName(_FormName))
+            {
+                removeControlsofForm(_FormName);
+                xNamedFormContainer.removeByName(_FormName);
             }
         }
-    } catch (Exception e) {
-        e.printStackTrace(System.out);
-    }}
+        catch (com.sun.star.uno.Exception exception)
+        {
+            exception.printStackTrace(System.out);
+        }
+    }
 
+    public void removeControlsofForm(String _FormName)
+    {
+        try
+        {
+            for (int i = xDrawPage.getCount() - 1; i >= 0; i--)
+            {
+                if (hasControlByName(_FormName, xDrawPage.getByIndex(i)))
+                {
+                    XShape xShape = (XShape) UnoRuntime.queryInterface(XShape.class, xDrawPage.getByIndex(i));
+                    xDrawPage.remove(xShape);
+                }
+            }
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace(System.out);
+        }
+    }
 
-
-    public boolean hasControlByName(String _FormName, Object _oDrawPageElement){
+    public boolean hasControlByName(String _FormName, Object _oDrawPageElement)
+    {
         XServiceInfo xServiceInfo = (XServiceInfo) UnoRuntime.queryInterface(XServiceInfo.class, _oDrawPageElement);
-        if (xServiceInfo.supportsService("com.sun.star.drawing.ControlShape")){
+        if (xServiceInfo.supportsService("com.sun.star.drawing.ControlShape"))
+        {
             XControlShape xControlShape = (XControlShape) UnoRuntime.queryInterface(XControlShape.class, _oDrawPageElement);
             XControlModel xControlModel = xControlShape.getControl();
             xServiceInfo = (XServiceInfo) UnoRuntime.queryInterface(XServiceInfo.class, xControlShape.getControl());
-            if (xServiceInfo.supportsService("com.sun.star.form.FormComponent")){
+            if (xServiceInfo.supportsService("com.sun.star.form.FormComponent"))
+            {
                 XChild xChild = (XChild) UnoRuntime.queryInterface(XChild.class, xControlModel);
                 XNamed xNamed = (XNamed) UnoRuntime.queryInterface(XNamed.class, xChild.getParent());
                 String sName = xNamed.getName();
@@ -293,104 +331,125 @@ public class FormHandler {
         return false;
     }
 
+    public XNameContainer insertFormbyName(String _FormName, XNameContainer _xNamedFormContainer)
+    {
+        try
+        {
+            Object oDBForm;
+            if (!hasFormByName(_FormName))
+            {
+                oDBForm = xMSFDoc.createInstance("com.sun.star.form.component.Form");
+                _xNamedFormContainer.insertByName(_FormName, oDBForm);
+                xNamedForm = (XNameContainer) UnoRuntime.queryInterface(XNameContainer.class, oDBForm);
+                return xNamedForm;
+            }
+            else
+            {
+                return getFormByName(_FormName);
+            }
+        }
+        catch (com.sun.star.uno.Exception exception)
+        {
+            exception.printStackTrace(System.out);
+            return null;
+        }
+    }
 
-    public XNameContainer insertFormbyName(String _FormName, XNameContainer _xNamedFormContainer){
-    try {
-        Object oDBForm;
-        if (!hasFormByName(_FormName)){
-            oDBForm = xMSFDoc.createInstance("com.sun.star.form.component.Form");
-            _xNamedFormContainer.insertByName(_FormName, oDBForm);
-            xNamedForm = (XNameContainer) UnoRuntime.queryInterface(XNameContainer.class, oDBForm);
-            return xNamedForm;
-        } else
-            return getFormByName(_FormName);
-    } catch (com.sun.star.uno.Exception exception) {
-        exception.printStackTrace(System.out);
-        return null;
-    }}
-
-
-    public XNameContainer insertSubFormbyName(String _FormName, XNameContainer _xNamedFormContainer){
+    public XNameContainer insertSubFormbyName(String _FormName, XNameContainer _xNamedFormContainer)
+    {
         return insertFormbyName(_FormName, _xNamedFormContainer);
     }
 
-
-    public XNameContainer insertFormbyName(String _FormName) {
+    public XNameContainer insertFormbyName(String _FormName)
+    {
         return insertFormbyName(_FormName, getDocumentForms());
     }
 
-
-    public XNameContainer getFormByName(String _sname){
-    XNameContainer xNamedForm = null;
-    try {
-        if (xNamedForms.hasByName(_sname)) {
-            Object oDBForm = AnyConverter.toObject(new Type(XInterface.class), Helper.getUnoObjectbyName(xNamedForms, _sname));
-            xNamedForm = (XNameContainer) UnoRuntime.queryInterface(XNameContainer.class, oDBForm);
+    public XNameContainer getFormByName(String _sname)
+    {
+        XNameContainer xNamedForm = null;
+        try
+        {
+            if (xNamedForms.hasByName(_sname))
+            {
+                Object oDBForm = AnyConverter.toObject(new Type(XInterface.class), Helper.getUnoObjectbyName(xNamedForms, _sname));
+                xNamedForm = (XNameContainer) UnoRuntime.queryInterface(XNameContainer.class, oDBForm);
+            }
         }
-    } catch (IllegalArgumentException e) {
-        e.printStackTrace(System.out);
+        catch (IllegalArgumentException e)
+        {
+            e.printStackTrace(System.out);
+        }
+        return xNamedForm;
     }
-    return xNamedForm;
-    }
-
 
     /**
      * @return
      */
-    public int getXPixelFactor() {
+    public int getXPixelFactor()
+    {
         if (iXPixelFactor == -1)
+        {
             initializeBasicControlValues();
+        }
         return iXPixelFactor;
     }
 
     /**
      * @return
      */
-    public int getYPixelFactor() {
+    public int getYPixelFactor()
+    {
         if (iYPixelFactor == -1)
+        {
             initializeBasicControlValues();
+        }
         return iYPixelFactor;
     }
 
     /**
      * @param i
      */
-    public void setXPixelFactor(int i) {
+    public void setXPixelFactor(int i)
+    {
         iXPixelFactor = i;
     }
 
     /**
      * @param i
      */
-    public void setYPixelFactor(int i) {
+    public void setYPixelFactor(int i)
+    {
         iYPixelFactor = i;
     }
-
 
     /**
      * @return
      */
-    public int getImageControlHeight() {
+    public int getImageControlHeight()
+    {
         return iImageControlHeight;
     }
 
     /**
      * @param i
      */
-    public void setImageControlHeight(int i) {
+    public void setImageControlHeight(int i)
+    {
         iImageControlHeight = i;
     }
-
-
-
     // Note: as Shapes cannot be removed from the DrawPage without destroying
     // the object we have to park them somewhere beyond the visible area of the page
-    public void moveShapesToNirwana(Control[] ControlList){
-    if (ControlList != null){
-        for (int i = 0; i < ControlList.length; i++){
-            if (ControlList[i] != null)
+    public void moveShapesToNirwana(Control[] ControlList)
+    {
+        if (ControlList != null)
+        {
+            for (int i = 0; i < ControlList.length; i++)
+            {
+                if (ControlList[i] != null)
 //              try {
 //                  this.xDrawPage.remove(ControlList[i].xShape);
+                {
                     ControlList[i].setPosition(new Point(this.iXNirwanaPos, this.iYNirwanaPos));
 //                  String sControlName = (String) ControlList[i].xPropertySet.getPropertyValue("Name");
 //
@@ -399,97 +458,121 @@ public class FormHandler {
 //              } catch (Exception e) {
 //                  e.printStackTrace(System.out);
 //              }
+                }
             }
-    }}
-
-
-
-    public void moveShapesToNirwana(){
-    try {
-        for (int i = 0; i < this.xDrawPage.getCount(); i++){
-            XShape xShape = (XShape) UnoRuntime.queryInterface(XShape.class, xDrawPage.getByIndex(i));
-            xShape.setPosition(new Point(this.iXNirwanaPos, this.iYNirwanaPos));
         }
-    } catch (Exception e) {
-        e.printStackTrace(System.out);
-    }}
+    }
 
+    public void moveShapesToNirwana()
+    {
+        try
+        {
+            for (int i = 0; i < this.xDrawPage.getCount(); i++)
+            {
+                XShape xShape = (XShape) UnoRuntime.queryInterface(XShape.class, xDrawPage.getByIndex(i));
+                xShape.setPosition(new Point(this.iXNirwanaPos, this.iYNirwanaPos));
+            }
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace(System.out);
+        }
+    }
 
-
-    public void removeAllShapes() throws Exception{
-        for (int i = this.xDrawPage.getCount(); i >-1; i--){
+    public void removeAllShapes() throws Exception
+    {
+        for (int i = this.xDrawPage.getCount(); i > -1; i--)
+        {
             XShape xShape = (XShape) UnoRuntime.queryInterface(XShape.class, xDrawPage.getByIndex(i));
             removeShape(xShape);
         }
     }
 
-
     /**
      * By removing the shape the whole control is disposed too
      *
      */
-    public void removeShape(XShape _xShape){
+    public void removeShape(XShape _xShape)
+    {
         xDrawPage.remove(_xShape);
         XComponent xComponent = (XComponent) UnoRuntime.queryInterface(XComponent.class, _xShape);
         xComponent.dispose();
     }
-
-
     // Destroy all Shapes in Nirwana
-    public void removeNirwanaShapes() throws Exception{
-        for (int i = this.xDrawPage.getCount(); i >-1; i--){
+    public void removeNirwanaShapes() throws Exception
+    {
+        for (int i = this.xDrawPage.getCount(); i > -1; i--)
+        {
             XShape xShape = (XShape) UnoRuntime.queryInterface(XShape.class, xDrawPage.getByIndex(i));
             if (xShape.getPosition().Y < this.iYNirwanaPos)
+            {
                 xDrawPage.remove(xShape);
+            }
         }
     }
 
-    public XShape groupShapesTogether(XMultiServiceFactory _xMSF, XShape _xLabelShape, XShape _xControlShape){
-       try {
-           Object oGroupShape = _xMSF.createInstance("com.sun.star.drawing.ShapeCollection");
-           XShapes xShapes = (XShapes) UnoRuntime.queryInterface(XShapes.class, oGroupShape);
-           xShapes.add(_xLabelShape);
-           xShapes.add(_xControlShape);
-           return this.xShapeGrouper.group(xShapes);
-       } catch (Exception e) {
-           e.printStackTrace(System.out);
-           return null;
-       }}
+    public XShape groupShapesTogether(XMultiServiceFactory _xMSF, XShape _xLabelShape, XShape _xControlShape)
+    {
+        try
+        {
+            Object oGroupShape = _xMSF.createInstance("com.sun.star.drawing.ShapeCollection");
+            XShapes xShapes = (XShapes) UnoRuntime.queryInterface(XShapes.class, oGroupShape);
+            xShapes.add(_xLabelShape);
+            xShapes.add(_xControlShape);
+            return this.xShapeGrouper.group(xShapes);
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace(System.out);
+            return null;
+        }
+    }
 
     /**
      * @return
      */
-    public int getBasicLabelDiffHeight() {
+    public int getBasicLabelDiffHeight()
+    {
         if (this.BasicLabelDiffHeight == -1)
+        {
             initializeBasicControlValues();
+        }
         return BasicLabelDiffHeight;
     }
 
-
     /**
      * @return
      */
-    public int getDBRefHeight() {
+    public int getDBRefHeight()
+    {
         if (this.nDBRefHeight == -1)
+        {
             initializeBasicControlValues();
+        }
         return nDBRefHeight;
     }
 
     /**
      * @return
      */
-    public int getLabelHeight() {
+    public int getLabelHeight()
+    {
         if (this.nLabelHeight == -1)
+        {
             initializeBasicControlValues();
+        }
         return nLabelHeight;
     }
 
-
-    public void setDrawObjectsCaptureMode(boolean _bCaptureObjects){
-        try {
+    public void setDrawObjectsCaptureMode(boolean _bCaptureObjects)
+    {
+        try
+        {
             XPropertySet xPropertySet = (XPropertySet) UnoRuntime.queryInterface(XPropertySet.class, this.xMSFDoc.createInstance("com.sun.star.text.DocumentSettings"));
             xPropertySet.setPropertyValue("DoNotCaptureDrawObjsOnPage", new Boolean(!_bCaptureObjects));
-        } catch (Exception ex) {
+        }
+        catch (Exception ex)
+        {
             ex.printStackTrace(System.out);
         }
     }

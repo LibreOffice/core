@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: updatefeed.cxx,v $
- * $Revision: 1.11 $
+ * $Revision: 1.11.52.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -504,82 +504,89 @@ UpdateInformationProvider::UpdateInformationProvider(
     m_xContentProvider(xContentProvider), m_xDocumentBuilder(xDocumentBuilder),
     m_xXPathAPI(xXPathAPI), m_aRequestHeaderList(2)
 {
-    rtl::OUString aPath;
-    if( rtl::Bootstrap::get( UNISTRING("BRAND_BASE_DIR"), aPath ) )
-    {
-        uno::Reference< lang::XMultiComponentFactory > xServiceManager(xContext->getServiceManager());
-        if( !xServiceManager.is() )
-            throw uno::RuntimeException(
-                UNISTRING("unable to obtain service manager from component context"),
-                uno::Reference< uno::XInterface >());
+    uno::Reference< lang::XMultiComponentFactory > xServiceManager(xContext->getServiceManager());
+    if( !xServiceManager.is() )
+        throw uno::RuntimeException(
+            UNISTRING("unable to obtain service manager from component context"),
+            uno::Reference< uno::XInterface >());
 
-        uno::Reference< lang::XMultiServiceFactory > xConfigurationProvider(
-            xServiceManager->createInstanceWithContext(
-                UNISTRING("com.sun.star.configuration.ConfigurationProvider"),
-                xContext ),
-            uno::UNO_QUERY_THROW);
+    uno::Reference< lang::XMultiServiceFactory > xConfigurationProvider(
+        xServiceManager->createInstanceWithContext(
+            UNISTRING("com.sun.star.configuration.ConfigurationProvider"),
+            xContext ),
+        uno::UNO_QUERY_THROW);
 
-        aPath += UNISTRING( "/program/" SAL_CONFIGFILE( "version" ) );
-
-        rtl::Bootstrap aVersionFile(aPath);
-
-        rtl::OUStringBuffer buf;
-        rtl::OUString name;
-        getConfigurationItem(
-            xConfigurationProvider,
-            UNISTRING("org.openoffice.Setup/Product"),
-            UNISTRING("ooName")) >>= name;
-        buf.append(name);
+    rtl::OUStringBuffer buf;
+    rtl::OUString name;
+    getConfigurationItem(
+        xConfigurationProvider,
+        UNISTRING("org.openoffice.Setup/Product"),
+        UNISTRING("ooName")) >>= name;
+    buf.append(name);
+    buf.append(sal_Unicode(' '));
+    rtl::OUString version;
+    getConfigurationItem(
+        xConfigurationProvider,
+        UNISTRING("org.openoffice.Setup/Product"),
+        UNISTRING("ooSetupVersion")) >>= version;
+    buf.append(version);
+    rtl::OUString edition(
+        UNISTRING(
+            "${${BRAND_BASE_DIR}/program/edition/edition.ini:"
+            "EDITIONNAME}"));
+    rtl::Bootstrap::expandMacros(edition);
+    if (edition.getLength() != 0) {
         buf.append(sal_Unicode(' '));
-        rtl::OUString version;
-        getConfigurationItem(
-            xConfigurationProvider,
-            UNISTRING("org.openoffice.Setup/Product"),
-            UNISTRING("ooSetupVersion")) >>= version;
-        buf.append(version);
-        rtl::OUString edition(
-            UNISTRING(
-                "${${BRAND_BASE_DIR}/program/edition/edition.ini:"
-                "EDITIONNAME}"));
-        rtl::Bootstrap::expandMacros(edition);
-        if (edition.getLength() != 0) {
-            buf.append(sal_Unicode(' '));
-            buf.append(edition);
-        }
-        rtl::OUString extension;
-        getConfigurationItem(
-            xConfigurationProvider,
-            UNISTRING("org.openoffice.Setup/Product"),
-            UNISTRING("ooSetupExtension")) >>= extension;
-        if (extension.getLength() != 0) {
-            buf.append(sal_Unicode(' '));
-            buf.append(extension);
-        }
-        rtl::OUString product(buf.makeStringAndClear());
-        rtl::OUString aUserAgent;
-        aVersionFile.getFrom(UNISTRING("UpdateUserAgent"), aUserAgent, rtl::OUString());
-        for (sal_Int32 i = 0;;) {
-            i = aUserAgent.indexOfAsciiL(
-                RTL_CONSTASCII_STRINGPARAM("<PRODUCT>"), i);
-            if (i == -1) {
-                break;
-            }
-            aUserAgent = aUserAgent.replaceAt(
-                i, RTL_CONSTASCII_LENGTH("<PRODUCT>"), product);
-            i += product.getLength();
-        }
+        buf.append(edition);
+    }
+    rtl::OUString extension;
+    getConfigurationItem(
+        xConfigurationProvider,
+        UNISTRING("org.openoffice.Setup/Product"),
+        UNISTRING("ooSetupExtension")) >>= extension;
+    if (extension.getLength() != 0) {
+        buf.append(sal_Unicode(' '));
+        buf.append(extension);
+    }
+    rtl::OUString product(buf.makeStringAndClear());
 
-        m_aRequestHeaderList[0].Name = UNISTRING("Accept-Language");
-        m_aRequestHeaderList[0].Value = getConfigurationItem( xConfigurationProvider, UNISTRING("org.openoffice.Setup/L10N"), UNISTRING("ooLocale") );
-        m_aRequestHeaderList[1].Name = UNISTRING("Accept-Encoding");
-        m_aRequestHeaderList[1].Value = uno::makeAny( UNISTRING("gzip,deflate") );
+    rtl::OUString aBaseBuildId( UNISTRING( "${$OOO_BASE_DIR/program/" SAL_CONFIGFILE("version") ":buildid}" ) );
+    rtl::Bootstrap::expandMacros( aBaseBuildId );
 
-        if( aUserAgent.getLength() > 0 )
-        {
-            m_aRequestHeaderList.realloc(3);
-            m_aRequestHeaderList[2].Name = UNISTRING("User-Agent");
-            m_aRequestHeaderList[2].Value = uno::makeAny(aUserAgent);
+    rtl::OUString aBrandBuildId( UNISTRING( "${$BRAND_BASE_DIR/program/" SAL_CONFIGFILE("version") ":buildid}" ) );
+    rtl::Bootstrap::expandMacros( aBrandBuildId );
+
+    rtl::OUString aUserAgent( UNISTRING( "${$BRAND_BASE_DIR/program/" SAL_CONFIGFILE("version") ":UpdateUserAgent}" ) );
+    rtl::Bootstrap::expandMacros( aUserAgent );
+
+    if ( ! aBaseBuildId.equals( aBrandBuildId ) )
+    {
+        sal_Int32 nIndex = aUserAgent.indexOf( aBrandBuildId, 0 );
+        if ( nIndex != -1 )
+            aUserAgent = aUserAgent.replaceAt( nIndex, aBrandBuildId.getLength(), aBaseBuildId );
+    }
+
+    for (sal_Int32 i = 0;;) {
+        i = aUserAgent.indexOfAsciiL(
+            RTL_CONSTASCII_STRINGPARAM("<PRODUCT>"), i);
+        if (i == -1) {
+            break;
         }
+        aUserAgent = aUserAgent.replaceAt(
+            i, RTL_CONSTASCII_LENGTH("<PRODUCT>"), product);
+        i += product.getLength();
+    }
+
+    m_aRequestHeaderList[0].Name = UNISTRING("Accept-Language");
+    m_aRequestHeaderList[0].Value = getConfigurationItem( xConfigurationProvider, UNISTRING("org.openoffice.Setup/L10N"), UNISTRING("ooLocale") );
+    m_aRequestHeaderList[1].Name = UNISTRING("Accept-Encoding");
+    m_aRequestHeaderList[1].Value = uno::makeAny( UNISTRING("gzip,deflate") );
+
+    if( aUserAgent.getLength() > 0 )
+    {
+        m_aRequestHeaderList.realloc(3);
+        m_aRequestHeaderList[2].Name = UNISTRING("User-Agent");
+        m_aRequestHeaderList[2].Value = uno::makeAny(aUserAgent);
     }
 }
 
@@ -1062,6 +1069,7 @@ void SAL_CALL UpdateInformationProvider::handle( uno::Reference< task::XInteract
                             xSupplyAuthentication->setPassword( aRec.UserList[0].Passwords[0].getStr() );
                         }
                         if ( aRec.UserList[0].Passwords.getLength() > 1 )
+                        {
                             if ( aAuthenticationRequest.HasRealm )
                             {
                                 if ( xSupplyAuthentication->canSetRealm() )
@@ -1069,6 +1077,7 @@ void SAL_CALL UpdateInformationProvider::handle( uno::Reference< task::XInteract
                             }
                             else if ( xSupplyAuthentication->canSetAccount() )
                                 xSupplyAuthentication->setAccount( aRec.UserList[0].Passwords[1].getStr() );
+                        }
                         xSupplyAuthentication->select();
                         return;
                     }
@@ -1089,6 +1098,7 @@ void SAL_CALL UpdateInformationProvider::handle( uno::Reference< task::XInteract
                             if ( xSupplyAuthentication->canSetPassword() )
                                 xSupplyAuthentication->setPassword(aRec.UserList[0].Passwords[0].getStr());
                             if ( aRec.UserList[0].Passwords.getLength() > 1 )
+                            {
                                 if ( aAuthenticationRequest.HasRealm )
                                 {
                                     if ( xSupplyAuthentication->canSetRealm() )
@@ -1096,6 +1106,7 @@ void SAL_CALL UpdateInformationProvider::handle( uno::Reference< task::XInteract
                                 }
                                 else if ( xSupplyAuthentication->canSetAccount() )
                                     xSupplyAuthentication->setAccount(aRec.UserList[0].Passwords[1].getStr());
+                            }
                             xSupplyAuthentication->select();
                             return;
                         }

@@ -52,7 +52,6 @@ import com.sun.star.wizards.ui.UnoDialog2;
 import com.sun.star.wizards.ui.event.EventNames;
 import com.sun.star.wizards.ui.event.MethodInvocation;
 
-
 /**
  * @author rpiterman
  * This class implements the UI functionality of the topics scroller control.
@@ -110,6 +109,7 @@ import com.sun.star.wizards.ui.event.MethodInvocation;
  */
 public class TopicsControl extends ControlScroller implements XFocusListener
 {
+
     /**
      * The name prefix of the number (label) controls
      */
@@ -126,11 +126,8 @@ public class TopicsControl extends ControlScroller implements XFocusListener
      * The name prefix of the time (text) controls
      */
     public static final String TIME = "txtTopicTime_";
-
-
     Object lastFocusControl;
     int lastFocusRow;
-
     /**
      * the last
      * topic text box.
@@ -142,7 +139,6 @@ public class TopicsControl extends ControlScroller implements XFocusListener
      * When pressing shift-tab on this control, a scroll up *may* be performed.
      */
     private Object lastTime;
-
     /**
      * is used when constructing to track the tab index
      * of the created control rows.
@@ -156,32 +152,35 @@ public class TopicsControl extends ControlScroller implements XFocusListener
      * @param xmsf service factory
      * @param agenda the Agenda configuration data (contains the current topics data).
      */
-    public TopicsControl(AgendaWizardDialog dialog, XMultiServiceFactory xmsf, CGAgenda agenda) {
-        super(dialog,xmsf,5, 92 , 38, 212 ,5,18, AgendaWizardDialogConst.LAST_HID );
+    public TopicsControl(AgendaWizardDialog dialog, XMultiServiceFactory xmsf, CGAgenda agenda)
+    {
+        super(dialog, xmsf, 5, 92, 38, 212, 5, 18, AgendaWizardDialogConst.LAST_HID);
         initializeScrollFields(agenda);
-        initialize( agenda.cp_Topics.getSize() + 1 );
+        initialize(agenda.cp_Topics.getSize() + 1);
 
         // set some focus listeners for TAB scroll down and up...
-        try {
+        try
+        {
 
             // prepare scroll down on tab press...
-            Object lastTime = ((ControlRow)ControlGroupVector.get(nblockincrement -1 )).timebox;
+            Object lastTime = ((ControlRow) ControlGroupVector.get(nblockincrement - 1)).timebox;
 
             MethodInvocation mi = new MethodInvocation("lastControlKeyPressed", this, KeyEvent.class);
-            dialog.getGuiEventListener().add( TIME + ( nblockincrement - 1), EventNames.EVENT_KEY_PRESSED, mi);
+            dialog.getGuiEventListener().add(TIME + (nblockincrement - 1), EventNames.EVENT_KEY_PRESSED, mi);
 
             addKeyListener(lastTime, (XKeyListener) dialog.getGuiEventListener());
 
             //prepare scroll up on tab press...
-            firstTopic = ((ControlRow)ControlGroupVector.get(0)).textbox;
+            firstTopic = ((ControlRow) ControlGroupVector.get(0)).textbox;
 
             mi = new MethodInvocation("firstControlKeyPressed", this, KeyEvent.class);
-            dialog.getGuiEventListener().add( TOPIC + 0 , EventNames.EVENT_KEY_PRESSED, mi);
+            dialog.getGuiEventListener().add(TOPIC + 0, EventNames.EVENT_KEY_PRESSED, mi);
 
             addKeyListener(firstTopic, (XKeyListener) dialog.getGuiEventListener());
 
         }
-        catch (NoSuchMethodException ex) {
+        catch (NoSuchMethodException ex)
+        {
             ex.printStackTrace();
         }
 
@@ -190,27 +189,29 @@ public class TopicsControl extends ControlScroller implements XFocusListener
     /**
      * Is used to add a keylistener to different controls...
      */
-    static void addKeyListener(Object control,XKeyListener listener) {
-        XWindow xlastControl = (XWindow)UnoRuntime.queryInterface(XWindow.class,
-                control );
+    static void addKeyListener(Object control, XKeyListener listener)
+    {
+        XWindow xlastControl = (XWindow) UnoRuntime.queryInterface(XWindow.class,
+                control);
         xlastControl.addKeyListener(listener);
     }
-
 
     /**
      * Is used to add a focuslistener to different controls...
      */
-    static void addFocusListener(Object control,XFocusListener listener) {
-        XWindow xlastControl = (XWindow)UnoRuntime.queryInterface(XWindow.class,
-                control );
+    static void addFocusListener(Object control, XFocusListener listener)
+    {
+        XWindow xlastControl = (XWindow) UnoRuntime.queryInterface(XWindow.class,
+                control);
         xlastControl.addFocusListener(listener);
     }
 
     /**
      * Implementation of the parent class...
      */
-    protected void initializeScrollFields() {}
-
+    protected void initializeScrollFields()
+    {
+    }
 
     /**
      * initializes the data of the control.
@@ -219,11 +220,12 @@ public class TopicsControl extends ControlScroller implements XFocusListener
     protected void initializeScrollFields(CGAgenda agenda)
     {
         // create a row for each topic with the given values....
-        for (int i = 0; i < agenda.cp_Topics.getSize(); i++) {
+        for (int i = 0; i < agenda.cp_Topics.getSize(); i++)
+        {
             PropertyValue[] row = newRow(i);
-            ((CGTopic)agenda.cp_Topics.getElementAt(i)).setDataToRow(row);
+            ((CGTopic) agenda.cp_Topics.getElementAt(i)).setDataToRow(row);
             // a parent class method
-            registerControlGroup( row , i );
+            registerControlGroup(row, i);
             this.updateDocumentRow(i);
         }
         // inserts a blank row at the end...
@@ -236,16 +238,18 @@ public class TopicsControl extends ControlScroller implements XFocusListener
      * The control has always a blank row at the
      * end, which enables the user to enter data...
      */
-    protected void insertRowAtEnd() {
+    protected void insertRowAtEnd()
+    {
         int l = scrollfields.size();
-        registerControlGroup( newRow(l), l );
-        setTotalFieldCount(l+1);
+        registerControlGroup(newRow(l), l);
+        setTotalFieldCount(l + 1);
 
         // if the new row is visible, it must have been disabled
         // so it should be now enabled...
-        if ( l- nscrollvalue < nblockincrement )
-            ((ControlRow) ControlGroupVector.get( l - nscrollvalue )).setEnabled(true);
-
+        if (l - nscrollvalue < nblockincrement)
+        {
+            ((ControlRow) ControlGroupVector.get(l - nscrollvalue)).setEnabled(true);
+        }
     }
 
     /**
@@ -253,41 +257,50 @@ public class TopicsControl extends ControlScroller implements XFocusListener
      * the current content of the topics.
      * @param agenda
      */
-    void saveTopics(CGAgenda agenda) {
+    void saveTopics(CGAgenda agenda)
+    {
         agenda.cp_Topics.clear();
-        for (int i = 0; i < scrollfields.size() - 1; i++ )
+        for (int i = 0; i < scrollfields.size() - 1; i++)
+        {
             agenda.cp_Topics.add(i,
-                    new CGTopic( scrollfields.get(i)) );
+                    new CGTopic(scrollfields.get(i)));
+        }
     }
 
     /**
      * overrides the parent class method to also enable the
      * row whenever data is written to it.
+     * @param guiRow
      */
-    protected void fillupControls(int guiRow) {
+    protected void fillupControls(int guiRow)
+    {
         super.fillupControls(guiRow);
-        ((ControlRow) ControlGroupVector.get( guiRow )).setEnabled(true);
+        ((ControlRow) ControlGroupVector.get(guiRow)).setEnabled(true);
     }
-
 
     /**
      * remove the last row
      */
-    protected void removeLastRow() {
+    protected void removeLastRow()
+    {
         int l = scrollfields.size();
 
         // if we should scroll up...
-        if ( ( l - nscrollvalue >= 1) && ( l - nscrollvalue <= nblockincrement ) && nscrollvalue > 0 ) {
-            while ( ( l - nscrollvalue >= 1) && ( l - nscrollvalue <= nblockincrement ) && nscrollvalue > 0 )
+        if ((l - nscrollvalue >= 1) && (l - nscrollvalue <= nblockincrement) && nscrollvalue > 0)
+        {
+            while ((l - nscrollvalue >= 1) && (l - nscrollvalue <= nblockincrement) && nscrollvalue > 0)
+            {
                 setScrollValue(nscrollvalue - 1);
+            }
         }
         // if we should disable a row...
-        else if ( nscrollvalue == 0 && l - 1 < nblockincrement ) {
-            ControlRow cr = (ControlRow)ControlGroupVector.get( l - 1 );
+        else if (nscrollvalue == 0 && l - 1 < nblockincrement)
+        {
+            ControlRow cr = (ControlRow) ControlGroupVector.get(l - 1);
             cr.setEnabled(false);
         }
 
-        unregisterControlGroup( l - 1 );
+        unregisterControlGroup(l - 1);
         setTotalFieldCount(l - 1);
     }
 
@@ -295,9 +308,11 @@ public class TopicsControl extends ControlScroller implements XFocusListener
      * in order to use the "move up", "down" "insert" and "remove" buttons,
      * we track the last control the gained focus, in order to know which
      * row should be handled.
+     * @param fe
      */
-    public void focusGained(FocusEvent fe) {
-        XControl xc = (XControl)UnoRuntime.queryInterface(XControl.class,fe.Source);
+    public void focusGained(FocusEvent fe)
+    {
+        XControl xc = (XControl) UnoRuntime.queryInterface(XControl.class, fe.Source);
         focusGained(xc);
     }
 
@@ -310,18 +325,21 @@ public class TopicsControl extends ControlScroller implements XFocusListener
      * This is done by this method.
      * @param control
      */
-    private void focusGained(XControl control) {
-        try {
+    private void focusGained(XControl control)
+    {
+        try
+        {
             //calculate in which row we are...
-            String name = (String)Helper.getUnoPropertyValue(UnoDialog2.getModel(control),"Name");
+            String name = (String) Helper.getUnoPropertyValue(UnoDialog2.getModel(control), "Name");
             int i = name.indexOf("_");
-            String num = name.substring(i+1);
+            String num = name.substring(i + 1);
             lastFocusRow = Integer.valueOf(num).intValue() + nscrollvalue;
             lastFocusControl = control;
             // enable/disable the buttons...
             enableButtons();
         }
-        catch (Exception ex) {
+        catch (Exception ex)
+        {
             ex.printStackTrace();
         }
     }
@@ -330,51 +348,63 @@ public class TopicsControl extends ControlScroller implements XFocusListener
      * enable or disable the buttons according to the
      * current row we are in.
      */
-    private void enableButtons() {
-        UnoDialog2.setEnabled( getAD().btnInsert , (lastFocusRow < scrollfields.size() - 1  ? Boolean.TRUE : Boolean.FALSE ) );
-        UnoDialog2.setEnabled( getAD().btnRemove , (lastFocusRow < scrollfields.size() - 1  ? Boolean.TRUE : Boolean.FALSE ) );
-        UnoDialog2.setEnabled( getAD().btnUp , (lastFocusRow > 0  ? Boolean.TRUE : Boolean.FALSE ) );
-        UnoDialog2.setEnabled( getAD().btnDown , (lastFocusRow < scrollfields.size() - 1  ? Boolean.TRUE : Boolean.FALSE ) );
+    private void enableButtons()
+    {
+        UnoDialog2.setEnabled(getAD().btnInsert, (lastFocusRow < scrollfields.size() - 1 ? Boolean.TRUE : Boolean.FALSE));
+        UnoDialog2.setEnabled(getAD().btnRemove, (lastFocusRow < scrollfields.size() - 1 ? Boolean.TRUE : Boolean.FALSE));
+        UnoDialog2.setEnabled(getAD().btnUp, (lastFocusRow > 0 ? Boolean.TRUE : Boolean.FALSE));
+        UnoDialog2.setEnabled(getAD().btnDown, (lastFocusRow < scrollfields.size() - 1 ? Boolean.TRUE : Boolean.FALSE));
     }
 
     /**
      * compolsary implementation of FocusListener.
+     * @param fe
      */
-    public void focusLost(FocusEvent fe) {}
+    public void focusLost(FocusEvent fe)
+    {
+    }
+
     /**
      * compolsary implementation of FocusListener.
+     * @param o
      */
-    public void disposing(EventObject o) {}
-
+    public void disposing(EventObject o)
+    {
+    }
 
     /**
      * Convenience method. Is used to get a reference of
      * the template controller (live preview in background).
      * @return the parent dialog, casted to AgendaWizardDialog.
      */
-    private AgendaWizardDialog getAD() {
-        return (AgendaWizardDialog)this.CurUnoDialog;
+    private AgendaWizardDialog getAD()
+    {
+        return (AgendaWizardDialog) this.CurUnoDialog;
     }
 
     /**
      * move the current row up
      */
-    public void rowUp() {
+    public void rowUp()
+    {
         rowUp(lastFocusRow - nscrollvalue, lastFocusControl);
     }
 
     /**
      * move the current row down.
      */
-    public void rowDown() {
+    public void rowDown()
+    {
         rowDown(lastFocusRow - nscrollvalue, lastFocusControl);
     }
 
-    private void lockDoc() {
+    private void lockDoc()
+    {
         //((AgendaWizardDialogImpl)CurUnoDialog).agendaTemplate.xTextDocument.lockControllers();
     }
 
-    private void unlockDoc() {
+    private void unlockDoc()
+    {
         //((AgendaWizardDialogImpl)CurUnoDialog).agendaTemplate.xTextDocument.unlockControllers();
     }
 
@@ -383,17 +413,21 @@ public class TopicsControl extends ControlScroller implements XFocusListener
      * See general class documentation explanation about the
      * data model used and the limitations which explain the implementation here.
      */
-    public void removeRow() {
+    public void removeRow()
+    {
         lockDoc();
-        for (int i = lastFocusRow; i < scrollfields.size() - 1;  i++) {
-            PropertyValue[] pv1 = (PropertyValue[])scrollfields.get(i);
-            PropertyValue[] pv2 = (PropertyValue[])scrollfields.get(i + 1);
+        for (int i = lastFocusRow; i < scrollfields.size() - 1; i++)
+        {
+            PropertyValue[] pv1 = (PropertyValue[]) scrollfields.get(i);
+            PropertyValue[] pv2 = (PropertyValue[]) scrollfields.get(i + 1);
             pv1[1].Value = pv2[1].Value;
             pv1[2].Value = pv2[2].Value;
             pv1[3].Value = pv2[3].Value;
             updateDocumentRow(i);
             if (i - nscrollvalue < nblockincrement)
-                fillupControls(i-nscrollvalue);
+            {
+                fillupControls(i - nscrollvalue);
+            }
         }
         removeLastRow();
         // update the live preview background document
@@ -404,30 +438,32 @@ public class TopicsControl extends ControlScroller implements XFocusListener
         unlockDoc();
     }
 
-
     /**
      * Inserts a row before the current row.
      * See general class documentation explanation about the
      * data model used and the limitations which explain the implementation here.
      */
-    public void insertRow() {
+    public void insertRow()
+    {
         lockDoc();
         insertRowAtEnd();
-        for (int i = scrollfields.size() - 2; i > lastFocusRow; i--) {
-            PropertyValue[] pv1 = (PropertyValue[])scrollfields.get(i);
-            PropertyValue[] pv2 = (PropertyValue[])scrollfields.get(i - 1);
+        for (int i = scrollfields.size() - 2; i > lastFocusRow; i--)
+        {
+            PropertyValue[] pv1 = (PropertyValue[]) scrollfields.get(i);
+            PropertyValue[] pv2 = (PropertyValue[]) scrollfields.get(i - 1);
             pv1[1].Value = pv2[1].Value;
             pv1[2].Value = pv2[2].Value;
             pv1[3].Value = pv2[3].Value;
             updateDocumentRow(i);
-            if (i - nscrollvalue < nblockincrement) {
-                fillupControls(i-nscrollvalue);
+            if (i - nscrollvalue < nblockincrement)
+            {
+                fillupControls(i - nscrollvalue);
             }
         }
 
         // after rotating all the properties from this row on,
         // we clear the row, so it is practically a new one...
-        PropertyValue[] pv1 = (PropertyValue[])scrollfields.get(lastFocusRow);
+        PropertyValue[] pv1 = (PropertyValue[]) scrollfields.get(lastFocusRow);
         pv1[1].Value = "";
         pv1[2].Value = "";
         pv1[3].Value = "";
@@ -435,7 +471,7 @@ public class TopicsControl extends ControlScroller implements XFocusListener
         // update the preview document.
         updateDocumentRow(lastFocusRow);
 
-        fillupControls(lastFocusRow-nscrollvalue);
+        fillupControls(lastFocusRow - nscrollvalue);
 
         focus(lastFocusControl);
         unlockDoc();
@@ -449,10 +485,11 @@ public class TopicsControl extends ControlScroller implements XFocusListener
      * @param i the index of the new row
      * @return
      */
-    private PropertyValue[] newRow(int i) {
+    private PropertyValue[] newRow(int i)
+    {
         PropertyValue[] pv = new PropertyValue[4];
         pv[0] = Properties.createProperty(LABEL + i, "" + (i + 1) + ".");
-        pv[1] = Properties.createProperty(TOPIC + i, "" );
+        pv[1] = Properties.createProperty(TOPIC + i, "");
         pv[2] = Properties.createProperty(RESP + i, "");
         pv[3] = Properties.createProperty(TIME + i, "");
         return pv;
@@ -462,11 +499,13 @@ public class TopicsControl extends ControlScroller implements XFocusListener
      * Implementation of ControlScroller
      * This is a UI method which inserts a new row to the control.
      * It uses the child-class ControlRow. (see below).
+     * @param _index
+     * @param npos
      * @see ControlRow
      */
     protected void insertControlGroup(int _index, int npos)
     {
-        ControlRow oControlRow = new ControlRow((AgendaWizardDialog)CurUnoDialog, iCompPosX, npos, _index, tabIndex);
+        ControlRow oControlRow = new ControlRow((AgendaWizardDialog) CurUnoDialog, iCompPosX, npos, _index, tabIndex);
         ControlGroupVector.addElement(oControlRow);
         tabIndex += 4;
     }
@@ -475,11 +514,13 @@ public class TopicsControl extends ControlScroller implements XFocusListener
      * Implementation of ControlScroller
      * This is a UI method which makes a row visibele.
      * As far as I know it is never called.
+     * @param _index
+     * @param _bIsVisible
      * @see ControlRow
      */
     protected void setControlGroupVisible(int _index, boolean _bIsVisible)
     {
-        ((ControlRow)ControlGroupVector.get(_index)).setVisible(_bIsVisible);
+        ((ControlRow) ControlGroupVector.get(_index)).setVisible(_bIsVisible);
 
     }
 
@@ -491,17 +532,16 @@ public class TopicsControl extends ControlScroller implements XFocusListener
      * @param row the index number of the row to check.
      * @return true if empty. false if not.
      */
-    protected boolean isRowEmpty(int row) {
-        PropertyValue[] data = getTopicData(row );
+    protected boolean isRowEmpty(int row)
+    {
+        PropertyValue[] data = getTopicData(row);
 
         // now - is this row empty?
-        return
-            data[1].Value.equals("") &&
-            data[2].Value.equals("") &&
-            data[3].Value.equals("");
+        return data[1].Value.equals("") &&
+                data[2].Value.equals("") &&
+                data[3].Value.equals("");
 
     }
-
     /**
      * is used for data tracking.
      */
@@ -513,69 +553,86 @@ public class TopicsControl extends ControlScroller implements XFocusListener
      * @param guiRow
      * @param column
      */
-    synchronized void fieldChanged(int guiRow, int column) {
-        synchronized (this) {
+    synchronized void fieldChanged(int guiRow, int column)
+    {
+        synchronized(this)
+        {
 
-        try {
-            // First, I update the document
-            PropertyValue[] data = getTopicData(guiRow + nscrollvalue);
+            try
+            {
+                // First, I update the document
+                PropertyValue[] data = getTopicData(guiRow + nscrollvalue);
 
-            if (data == null)
-                return;
-
-            boolean equal = true;
-
-            if (oldData != null) {
-                for (int i=0; i<data.length && equal; i++)
-                    equal = ( equal & data[i].Value.equals(oldData[i]) );
-
-                if (equal)
+                if (data == null)
+                {
                     return;
-            }
-            else
-                 oldData = new Object[4];
+                }
+                boolean equal = true;
 
-            for (int i=0; i<data.length; i++)
-                oldData[i] = data[i].Value;
+                if (oldData != null)
+                {
+                    for (int i = 0; i < data.length && equal; i++)
+                    {
+                        equal = (equal & data[i].Value.equals(oldData[i]));
+                    }
+                    if (equal)
+                    {
+                        return;
+                    }
+                }
+                else
+                {
+                    oldData = new Object[4];
+                }
+                for (int i = 0; i < data.length; i++)
+                {
+                    oldData[i] = data[i].Value;
+                }
+                updateDocumentCell(guiRow + nscrollvalue, column, data);
 
-            updateDocumentCell(guiRow + nscrollvalue, column, data);
-
-            if (isRowEmpty(guiRow + nscrollvalue)) {
-                /* if this is the row before the last one
-                 * (the last row is always empty)
-                 * delete the last row...
-                 */
-                if ( guiRow + nscrollvalue == scrollfields.size() - 2) {
-                    removeLastRow();
-
-                    /*
-                     * now consequentially check the last two rows,
-                     * and remove the last one if they are both empty.
-                     * (actually I check always the "before last" row,
-                     * because the last one is always empty...
+                if (isRowEmpty(guiRow + nscrollvalue))
+                {
+                    /* if this is the row before the last one
+                     * (the last row is always empty)
+                     * delete the last row...
                      */
-                    while (scrollfields.size() > 1 && isRowEmpty(scrollfields.size() -2))
+                    if (guiRow + nscrollvalue == scrollfields.size() - 2)
+                    {
                         removeLastRow();
 
-                    ControlRow cr = (ControlRow)ControlGroupVector.get( scrollfields.size() - nscrollvalue - 1);
+                        /*
+                         * now consequentially check the last two rows,
+                         * and remove the last one if they are both empty.
+                         * (actually I check always the "before last" row,
+                         * because the last one is always empty...
+                         */
+                        while (scrollfields.size() > 1 && isRowEmpty(scrollfields.size() - 2))
+                        {
+                            removeLastRow();
+                        }
+                        ControlRow cr = (ControlRow) ControlGroupVector.get(scrollfields.size() - nscrollvalue - 1);
 
-                    // if a remove was performed, set focus to the last row with some data in it...
-                    focus(getControl( cr , column ));
+                        // if a remove was performed, set focus to the last row with some data in it...
+                        focus(getControl(cr, column));
 
-                    // update the preview document.
-                    reduceDocumentToTopics();
+                        // update the preview document.
+                        reduceDocumentToTopics();
+                    }
+
                 }
-
+                else
+                { // row contains data
+                    // is this the last row?
+                    if ((guiRow + nscrollvalue + 1) == scrollfields.size())
+                    {
+                        insertRowAtEnd();
+                    }
+                }
             }
-
-            else { // row contains data
-                // is this the last row?
-                if ( ( guiRow + nscrollvalue + 1 ) == scrollfields.size() )
-                    insertRowAtEnd();
+            catch (Exception e)
+            {
+                e.printStackTrace();
             }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
 
         }
     }
@@ -585,10 +642,16 @@ public class TopicsControl extends ControlScroller implements XFocusListener
      * @param topic index of the topic to get.
      * @return a PropertyValue array with the data for the given topic.
      */
-    public PropertyValue[] getTopicData(int topic) {
+    public PropertyValue[] getTopicData(int topic)
+    {
         if (topic < scrollfields.size())
-            return ( PropertyValue[]) scrollfields.get ( topic ) ;
-        else return null;
+        {
+            return (PropertyValue[]) scrollfields.get(topic);
+        }
+        else
+        {
+            return null;
+        }
     }
 
     /**
@@ -596,16 +659,20 @@ public class TopicsControl extends ControlScroller implements XFocusListener
      * there *are* more rows in the model, scroll down.
      * @param event
      */
-    public void lastControlKeyPressed(KeyEvent event) {
+    public void lastControlKeyPressed(KeyEvent event)
+    {
         // if tab without shift was pressed...
-        if ( ( event.KeyCode == Key.TAB ) && ( event.Modifiers==0 ) )
-            // if there is another row...
-            if ( (nblockincrement + nscrollvalue) < scrollfields.size() ) {
+        if ((event.KeyCode == Key.TAB) && (event.Modifiers == 0))
+        // if there is another row...
+        {
+            if ((nblockincrement + nscrollvalue) < scrollfields.size())
+            {
                 setScrollValue(nscrollvalue + 1);
                 //focus(firstTopic);
-                focus(getControl((ControlRow) ControlGroupVector.get( 4 ), 1));
+                focus(getControl((ControlRow) ControlGroupVector.get(4), 1));
 
             }
+        }
     }
 
     /**
@@ -613,26 +680,30 @@ public class TopicsControl extends ControlScroller implements XFocusListener
      * there *are* more rows in the model, scroll up.
      * @param event
      */
-    public void firstControlKeyPressed(KeyEvent event) {
+    public void firstControlKeyPressed(KeyEvent event)
+    {
         // if tab with shift was pressed...
-        if ( ( event.KeyCode == Key.TAB ) && ( event.Modifiers== KeyModifier.SHIFT ) )
-
-            if ( nscrollvalue > 0 ) {
+        if ((event.KeyCode == Key.TAB) && (event.Modifiers == KeyModifier.SHIFT))
+        {
+            if (nscrollvalue > 0)
+            {
                 setScrollValue(nscrollvalue - 1);
                 focus(lastTime);
             }
+        }
     }
 
     /**
      * sets focus to the given control.
      * @param textControl
      */
-    private void focus(Object textControl) {
-        ((XWindow)UnoRuntime.queryInterface(XWindow.class,textControl)).setFocus();
-        XTextComponent xTextComponent = (XTextComponent)UnoRuntime.queryInterface(XTextComponent.class,textControl);
+    private void focus(Object textControl)
+    {
+        ((XWindow) UnoRuntime.queryInterface(XWindow.class, textControl)).setFocus();
+        XTextComponent xTextComponent = (XTextComponent) UnoRuntime.queryInterface(XTextComponent.class, textControl);
         String text = xTextComponent.getText();
-        xTextComponent.setSelection( new Selection(0, text.length()) );
-        XControl xc = (XControl)UnoRuntime.queryInterface(XControl.class,textControl);
+        xTextComponent.setSelection(new Selection(0, text.length()));
+        XControl xc = (XControl) UnoRuntime.queryInterface(XControl.class, textControl);
         focusGained(xc);
     }
 
@@ -641,43 +712,51 @@ public class TopicsControl extends ControlScroller implements XFocusListener
      * @param guiRow the gui index of the row to move.
      * @param control the control to gain focus after moving.
      */
-    synchronized void rowDown(int guiRow, Object control ) {
+    synchronized void rowDown(int guiRow, Object control)
+    {
         // only perform if this is not the last row.
         int actuallRow = guiRow + nscrollvalue;
-        if ( actuallRow + 1 < scrollfields.size() ) {
+        if (actuallRow + 1 < scrollfields.size())
+        {
             // get the current selection
-            Selection selection = getSelection(control );
+            Selection selection = getSelection(control);
 
             // the last row should scroll...
-            boolean scroll = guiRow == ( nblockincrement - 1 );
+            boolean scroll = guiRow == (nblockincrement - 1);
             if (scroll)
-                setScrollValue( nscrollvalue + 1 );
+            {
+                setScrollValue(nscrollvalue + 1);
+            }
             int scroll1 = nscrollvalue;
 
-            switchRows( guiRow , guiRow + (scroll ? -1 : 1));
+            switchRows(guiRow, guiRow + (scroll ? -1 : 1));
 
             if (nscrollvalue != scroll1)
+            {
                 guiRow += (nscrollvalue - scroll1);
-
-            setSelection(guiRow + (scroll ? 0 : 1 ) , control , selection);
+            }
+            setSelection(guiRow + (scroll ? 0 : 1), control, selection);
         }
     }
 
-    synchronized void rowUp(int guiRow, Object control ) {
+    synchronized void rowUp(int guiRow, Object control)
+    {
         // only perform if this is not the first row
         int actuallRow = guiRow + nscrollvalue;
-        if ( actuallRow > 0 ) {
+        if (actuallRow > 0)
+        {
             // get the current selection
-            Selection selection = getSelection( control );
+            Selection selection = getSelection(control);
 
             // the last row should scroll...
             boolean scroll = (guiRow == 0);
             if (scroll)
-                setScrollValue( nscrollvalue - 1 );
+            {
+                setScrollValue(nscrollvalue - 1);
+            }
+            switchRows(guiRow, guiRow + (scroll ? 1 : -1));
 
-            switchRows( guiRow , guiRow + (scroll ? 1 : -1));
-
-            setSelection(guiRow - (scroll ? 0 : 1 ) ,control , selection);
+            setSelection(guiRow - (scroll ? 0 : 1), control, selection);
         }
     }
 
@@ -686,21 +765,26 @@ public class TopicsControl extends ControlScroller implements XFocusListener
      * @param guiRow
      * @param control
      */
-    synchronized void cursorUp(int guiRow, Object control ) {
+    synchronized void cursorUp(int guiRow, Object control)
+    {
         // is this the last full row ?
         int actuallRow = guiRow + nscrollvalue;
         //if this is the first row
-        if ( actuallRow == 0 )
+        if (actuallRow == 0)
+        {
             return;
         // the first row should scroll...
+        }
         boolean scroll = (guiRow == 0);
         ControlRow upperRow;
-        if (scroll) {
-            setScrollValue( nscrollvalue - 1 );
-            upperRow = (ControlRow) ControlGroupVector.get( guiRow );
+        if (scroll)
+        {
+            setScrollValue(nscrollvalue - 1);
+            upperRow = (ControlRow) ControlGroupVector.get(guiRow);
         }
-        else {
-            upperRow =  (ControlRow) ControlGroupVector.get( guiRow - 1 );
+        else
+        {
+            upperRow = (ControlRow) ControlGroupVector.get(guiRow - 1);
         }
         focus(getControl(upperRow, control));
 
@@ -711,40 +795,45 @@ public class TopicsControl extends ControlScroller implements XFocusListener
      * @param guiRow
      * @param control
      */
-    synchronized void cursorDown(int guiRow, Object control ) {
+    synchronized void cursorDown(int guiRow, Object control)
+    {
         // is this the last full row ?
         int actuallRow = guiRow + nscrollvalue;
         //if this is the last row, exit
         if (actuallRow == scrollfields.size() - 1)
+        {
             return;
         // the first row should scroll...
+        }
         boolean scroll = (guiRow == nblockincrement - 1);
         ControlRow lowerRow;
-        if (scroll) {
-            setScrollValue( nscrollvalue + 1 );
-            lowerRow = (ControlRow) ControlGroupVector.get( guiRow );
+        if (scroll)
+        {
+            setScrollValue(nscrollvalue + 1);
+            lowerRow = (ControlRow) ControlGroupVector.get(guiRow);
         }
         // if we scrolled we are done...
         //otherwise...
-        else {
-            lowerRow = (ControlRow) ControlGroupVector.get( guiRow + 1 );
+        else
+        {
+            lowerRow = (ControlRow) ControlGroupVector.get(guiRow + 1);
         }
         focus(getControl(lowerRow, control));
     }
-
-
 
     /**
      * changes the values of the given rows with eachother
      * @param row1 one can figure out what this parameter is...
      * @param row2 one can figure out what this parameter is...
      */
-    private void switchRows( int row1, int row2) {
+    private void switchRows(int row1, int row2)
+    {
         PropertyValue[] o1 = (PropertyValue[]) scrollfields.get(row1 + nscrollvalue);
         PropertyValue[] o2 = (PropertyValue[]) scrollfields.get(row2 + nscrollvalue);
 
         Object temp = null;
-        for (int i = 1; i < o1.length; i++) {
+        for (int i = 1; i < o1.length; i++)
+        {
             temp = o1[i].Value;
             o1[i].Value = o2[i].Value;
             o2[i].Value = temp;
@@ -753,15 +842,15 @@ public class TopicsControl extends ControlScroller implements XFocusListener
         fillupControls(row1);
         fillupControls(row2);
 
-        updateDocumentRow( row1 + nscrollvalue, o1 );
-        updateDocumentRow( row2 + nscrollvalue, o2 );
+        updateDocumentRow(row1 + nscrollvalue, o1);
+        updateDocumentRow(row2 + nscrollvalue, o2);
 
         /*
          * if we changed the last row, add another one...
          */
-        if ( ( row1 + nscrollvalue + 1 == scrollfields.size() ) ||
-             ( row2 + nscrollvalue + 1 == scrollfields.size() )
-        )
+        if ((row1 + nscrollvalue + 1 == scrollfields.size()) ||
+                (row2 + nscrollvalue + 1 == scrollfields.size()))
+        {
             insertRowAtEnd();
         /*
          * if we did not change the last row but
@@ -769,12 +858,15 @@ public class TopicsControl extends ControlScroller implements XFocusListener
          * have two empty rows at the end.
          * If so, delete the last one...
          */
-        else if ( (row1 + nscrollvalue) + (row2 + nscrollvalue)  == ( scrollfields.size() * 2 - 5 ) )
-            if ( isRowEmpty( scrollfields.size() -2) && isRowEmpty( scrollfields.size() -1) ) {
+        }
+        else if ((row1 + nscrollvalue) + (row2 + nscrollvalue) == (scrollfields.size() * 2 - 5))
+        {
+            if (isRowEmpty(scrollfields.size() - 2) && isRowEmpty(scrollfields.size() - 1))
+            {
                 removeLastRow();
                 reduceDocumentToTopics();
             }
-
+        }
     }
 
     /**
@@ -783,8 +875,9 @@ public class TopicsControl extends ControlScroller implements XFocusListener
      * should be gotten.
      * @return the selection object.
      */
-    private Selection getSelection(Object control) {
-        return ((XTextComponent)UnoRuntime.queryInterface(XTextComponent.class,control)).getSelection();
+    private Selection getSelection(Object control)
+    {
+        return ((XTextComponent) UnoRuntime.queryInterface(XTextComponent.class, control)).getSelection();
     }
 
     /**
@@ -801,14 +894,13 @@ public class TopicsControl extends ControlScroller implements XFocusListener
      * @param eventSource helps to detect the control's column to set the selection to.
      * @param s the selection object to set.
      */
-    private void setSelection(int guiRow, Object eventSource, Selection s) {
-        ControlRow cr = (ControlRow)ControlGroupVector.get(guiRow);
+    private void setSelection(int guiRow, Object eventSource, Selection s)
+    {
+        ControlRow cr = (ControlRow) ControlGroupVector.get(guiRow);
         Object control = getControl(cr, eventSource);
-        ((XWindow)UnoRuntime.queryInterface(XWindow.class,control)).setFocus();
-        ((XTextComponent)UnoRuntime.queryInterface(XTextComponent.class,control)).setSelection(s);
+        ((XWindow) UnoRuntime.queryInterface(XWindow.class, control)).setFocus();
+        ((XTextComponent) UnoRuntime.queryInterface(XTextComponent.class, control)).setSelection(s);
     }
-
-
 
     /**
      * returns a control out of the given row, according to a column number.
@@ -816,16 +908,22 @@ public class TopicsControl extends ControlScroller implements XFocusListener
      * @param column the column number.
      * @return the control...
      */
-    private Object getControl( ControlRow cr, int column) {
-        switch ( column ) {
-            case 0 : return cr.label;
-            case 1 : return cr.textbox;
-            case 2 : return cr.combobox;
-            case 3 : return cr.timebox;
-            default: throw new IllegalArgumentException("No such column");
+    private Object getControl(ControlRow cr, int column)
+    {
+        switch (column)
+        {
+            case 0:
+                return cr.label;
+            case 1:
+                return cr.textbox;
+            case 2:
+                return cr.combobox;
+            case 3:
+                return cr.timebox;
+            default:
+                throw new IllegalArgumentException("No such column");
         }
     }
-
 
     /**
      * returns a control out of the given row, which is
@@ -834,9 +932,10 @@ public class TopicsControl extends ControlScroller implements XFocusListener
      * @param control a control indicating a column.
      * @return
      */
-    private Object getControl(ControlRow cr, Object control) {
+    private Object getControl(ControlRow cr, Object control)
+    {
         int column = getColumn(control);
-        return getControl(cr,column);
+        return getControl(cr, column);
     }
 
     /**
@@ -844,26 +943,35 @@ public class TopicsControl extends ControlScroller implements XFocusListener
      * @param control
      * @return
      */
-    private int getColumn(Object control) {
-        String name = (String)Helper.getUnoPropertyValue(UnoDialog2.getModel(control),"Name");
-        if (name.startsWith( TOPIC ))
+    private int getColumn(Object control)
+    {
+        String name = (String) Helper.getUnoPropertyValue(UnoDialog2.getModel(control), "Name");
+        if (name.startsWith(TOPIC))
+        {
             return 1;
-        if (name.startsWith( RESP ))
+        }
+        if (name.startsWith(RESP))
+        {
             return 2;
-        if (name.startsWith( TIME ))
+        }
+        if (name.startsWith(TIME))
+        {
             return 3;
-        if (name.startsWith( LABEL ))
+        }
+        if (name.startsWith(LABEL))
+        {
             return 0;
+        }
         return -1;
     }
-
 
     /**
      * updates the given row in the preview document.
      * @param row
      */
-    private void updateDocumentRow( int row ) {
-        updateDocumentRow( row , (PropertyValue[])scrollfields.get(row));
+    private void updateDocumentRow(int row)
+    {
+        updateDocumentRow(row, (PropertyValue[]) scrollfields.get(row));
     }
 
     /**
@@ -871,11 +979,14 @@ public class TopicsControl extends ControlScroller implements XFocusListener
      * @param row
      * @param data
      */
-    private void updateDocumentRow( int row , PropertyValue[] data) {
-        try {
-            ((AgendaWizardDialogImpl)CurUnoDialog).agendaTemplate.topics.write(row, data);
+    private void updateDocumentRow(int row, PropertyValue[] data)
+    {
+        try
+        {
+            ((AgendaWizardDialogImpl) CurUnoDialog).agendaTemplate.topics.write(row, data);
         }
-        catch (Exception ex) {
+        catch (Exception ex)
+        {
             ex.printStackTrace();
         }
     }
@@ -888,11 +999,14 @@ public class TopicsControl extends ControlScroller implements XFocusListener
      * @param column the column to update (a gui column, not a document column).
      * @param data the data of the entire row.
      */
-    private void updateDocumentCell( int row , int column, PropertyValue[] data) {
-        try {
-            ((AgendaWizardDialogImpl)CurUnoDialog).agendaTemplate.topics.writeCell(row, column, data);
+    private void updateDocumentCell(int row, int column, PropertyValue[] data)
+    {
+        try
+        {
+            ((AgendaWizardDialogImpl) CurUnoDialog).agendaTemplate.topics.writeCell(row, column, data);
         }
-        catch (Exception ex) {
+        catch (Exception ex)
+        {
             ex.printStackTrace();
         }
     }
@@ -902,11 +1016,14 @@ public class TopicsControl extends ControlScroller implements XFocusListener
      * the preview document to show the number of rows
      * according to the data model.
      */
-    private void reduceDocumentToTopics() {
-        try {
-            ((AgendaWizardDialogImpl)CurUnoDialog).agendaTemplate.topics.reduceDocumentTo(scrollfields.size()-1);
+    private void reduceDocumentToTopics()
+    {
+        try
+        {
+            ((AgendaWizardDialogImpl) CurUnoDialog).agendaTemplate.topics.reduceDocumentTo(scrollfields.size() - 1);
         }
-        catch (Exception ex) {
+        catch (Exception ex)
+        {
             ex.printStackTrace();
         }
     }
@@ -915,10 +1032,10 @@ public class TopicsControl extends ControlScroller implements XFocusListener
      * needed to make this data poblic.
      * @return the List containing the topics data.
      */
-    public List getTopicsData() {
+    public List getTopicsData()
+    {
         return scrollfields;
     }
-
     /**
      * A static member used for the child-class ControlRow (GUI Constant)
      */
@@ -930,11 +1047,17 @@ public class TopicsControl extends ControlScroller implements XFocusListener
     /**
      * A static member used for the child-class ControlRow (GUI Constant)
      */
-    private static final String[] LABEL_PROPS = new String[] {"Height",  "Label", "PositionX", "PositionY", "Step", "TabIndex", "Width"};
+    private static final String[] LABEL_PROPS = new String[]
+    {
+        "Height", "Label", "PositionX", "PositionY", "Step", "TabIndex", "Width"
+    };
     /**
      * A static member used for the child-class ControlRow (GUI Constant)
      */
-    private static final String[] TEXT_PROPS = new String[] {"Height",  "HelpURL", "PositionX", "PositionY", "Step", "TabIndex", "Width"};
+    private static final String[] TEXT_PROPS = new String[]
+    {
+        "Height", "HelpURL", "PositionX", "PositionY", "Step", "TabIndex", "Width"
+    };
 
     /**
      *
@@ -944,7 +1067,9 @@ public class TopicsControl extends ControlScroller implements XFocusListener
      * are being called and handle controls of
      * a single row.
      */
-    public class ControlRow implements XKeyListener {
+    public class ControlRow implements XKeyListener
+    {
+
         /**
          * the number (label) control
          */
@@ -961,7 +1086,6 @@ public class TopicsControl extends ControlScroller implements XFocusListener
          * the time (text, yes, text) control
          */
         Object timebox;
-
         /**
          * the row offset of this instance (0 = first gui row)
          */
@@ -972,50 +1096,57 @@ public class TopicsControl extends ControlScroller implements XFocusListener
          * topic text is changed by the user.
          * updates the data model and the preview document.
          */
-        public void topicTextChanged() {
-            try {
+        public void topicTextChanged()
+        {
+            try
+            {
                 // update the data model
-                fieldInfo(offset,1);
+                fieldInfo(offset, 1);
                 // update the preview document
-                fieldChanged(offset,1);
+                fieldChanged(offset, 1);
             }
-            catch (Exception ex) {
+            catch (Exception ex)
+            {
                 ex.printStackTrace();
             }
         }
-
 
         /**
          * called through an event listener when the
          * responsible text is changed by the user.
          * updates the data model and the preview document.
          */
-        public void responsibleTextChanged() {
-            try {
+        public void responsibleTextChanged()
+        {
+            try
+            {
                 // update the data model
-                fieldInfo(offset,2);
+                fieldInfo(offset, 2);
                 // update the preview document
-                fieldChanged(offset,2);
+                fieldChanged(offset, 2);
             }
-            catch (Exception ex) {
+            catch (Exception ex)
+            {
                 ex.printStackTrace();
             }
         }
-
 
         /**
          * called through an event listener when the
          * time text is changed by the user.
          * updates the data model and the preview document.
          */
-        public void timeTextChanged() {
-            try {
+        public void timeTextChanged()
+        {
+            try
+            {
                 // update the data model
-                fieldInfo(offset,3);
+                fieldInfo(offset, 3);
                 // update the preview document
-                fieldChanged(offset,3);
+                fieldChanged(offset, 3);
             }
-            catch (Exception ex) {
+            catch (Exception ex)
+            {
                 ex.printStackTrace();
             }
         }
@@ -1032,31 +1163,40 @@ public class TopicsControl extends ControlScroller implements XFocusListener
          * @param i the gui row index
          * @param tabindex first tab index for this row.
          */
-        public ControlRow(AgendaWizardDialog dialog, int x, int y, int i, int tabindex) {
+        public ControlRow(AgendaWizardDialog dialog, int x, int y, int i, int tabindex)
+        {
 
             offset = i;
 
             Integer y_ = new Integer(y);
 
-            label = dialog.insertLabel( LABEL + i,
+            label = dialog.insertLabel(LABEL + i,
                     LABEL_PROPS,
-                    new Object[] {I_8, "" + (i + 1) + "." , new Integer(x+4), new Integer(y+2), IStep, new Short((short)tabindex), new Integer(10)}
-            );
+                    new Object[]
+                    {
+                        I_8, "" + (i + 1) + ".", new Integer(x + 4), new Integer(y + 2), IStep, new Short((short) tabindex), new Integer(10)
+                    });
 
-            textbox = dialog.insertTextField( TOPIC  + i, "topicTextChanged" , this,
+            textbox = dialog.insertTextField(TOPIC + i, "topicTextChanged", this,
                     TEXT_PROPS,
-                    new Object[] { I_12, "HID:" + (curHelpIndex + i * 3 + 1) , new Integer(x+15),y_,IStep ,new Short((short)(tabindex + 1)), new Integer(84)}
-            );
+                    new Object[]
+                    {
+                        I_12, "HID:" + (curHelpIndex + i * 3 + 1), new Integer(x + 15), y_, IStep, new Short((short) (tabindex + 1)), new Integer(84)
+                    });
 
-            combobox = dialog.insertTextField( RESP + i, "responsibleTextChanged",this,
-                  TEXT_PROPS,
-                  new Object[] { I_12, "HID:" + (curHelpIndex + i * 3 + 2) , new Integer(x + 103),y_,IStep, new Short((short)(tabindex+ 2)), new Integer(68)}
-            );
-
-            timebox = dialog.insertTextField( TIME + i , "timeTextChanged", this,
+            combobox = dialog.insertTextField(RESP + i, "responsibleTextChanged", this,
                     TEXT_PROPS,
-                    new Object[] { I_12,  "HID:" + (curHelpIndex + i * 3 + 3), new Integer(x + 175),y_, IStep , new Short((short)(tabindex + 3)), new Integer(20)}
-            );
+                    new Object[]
+                    {
+                        I_12, "HID:" + (curHelpIndex + i * 3 + 2), new Integer(x + 103), y_, IStep, new Short((short) (tabindex + 2)), new Integer(68)
+                    });
+
+            timebox = dialog.insertTextField(TIME + i, "timeTextChanged", this,
+                    TEXT_PROPS,
+                    new Object[]
+                    {
+                        I_12, "HID:" + (curHelpIndex + i * 3 + 3), new Integer(x + 175), y_, IStep, new Short((short) (tabindex + 3)), new Integer(20)
+                    });
 
             setEnabled(false);
             addKeyListener(textbox, this);
@@ -1073,40 +1213,47 @@ public class TopicsControl extends ControlScroller implements XFocusListener
          * not implemented.
          * @param visible
          */
-        public void setVisible(boolean visible) {
-        //  Helper.setUnoPropertyValue(UnoDialog2.getModel(button),"Visible", visible ? Boolean.TRUE : Boolean.FASLE);
+        public void setVisible(boolean visible)
+        {
+            //  Helper.setUnoPropertyValue(UnoDialog2.getModel(button),"Visible", visible ? Boolean.TRUE : Boolean.FASLE);
         }
 
         /**
          * enables/disables the row.
          * @param enabled true for enable, false for disable.
          */
-        public void setEnabled(boolean enabled) {
+        public void setEnabled(boolean enabled)
+        {
             Boolean b = enabled ? Boolean.TRUE : Boolean.FALSE;
-            UnoDialog2.setEnabled(label,b);
-            UnoDialog2.setEnabled(textbox,b);
-            UnoDialog2.setEnabled(combobox,b);
-            UnoDialog2.setEnabled(timebox,b);
+            UnoDialog2.setEnabled(label, b);
+            UnoDialog2.setEnabled(textbox, b);
+            UnoDialog2.setEnabled(combobox, b);
+            UnoDialog2.setEnabled(timebox, b);
         }
-
 
         /**
          * Impelementation of XKeyListener.
          * Optionally performs the one of the following:
          * cursor up, or down, row up or down
          */
-        public void keyPressed(KeyEvent event) {
-            if (isMoveDown(event)) {
-                rowDown(offset , event.Source);
+        public void keyPressed(KeyEvent event)
+        {
+            if (isMoveDown(event))
+            {
+                rowDown(offset, event.Source);
             }
-            else if (isMoveUp(event)) {
+            else if (isMoveUp(event))
+            {
                 rowUp(offset, event.Source);
             }
             else if (isDown(event))
+            {
                 cursorDown(offset, event.Source);
+            }
             else if (isUp(event))
+            {
                 cursorUp(offset, event.Source);
-
+            }
             enableButtons();
         }
 
@@ -1117,42 +1264,60 @@ public class TopicsControl extends ControlScroller implements XFocusListener
          * @param control
          * @return an int columnd number of the given control (0 to 3).
          */
-        private int getColumn(Object control) {
-            if ( control == textbox )
+        private int getColumn(Object control)
+        {
+            if (control == textbox)
+            {
                 return 1;
-            else if ( control == combobox )
+            }
+            else if (control == combobox)
+            {
                 return 2;
-            else if ( control == timebox )
+            }
+            else if (control == timebox)
+            {
                 return 3;
-            else if ( control == label )
+            }
+            else if (control == label)
+            {
                 return 0;
+            }
             else
+            {
                 throw new IllegalArgumentException("Control is not part of this ControlRow");
+            }
         }
 
-        private boolean isMoveDown(KeyEvent e) {
-            return ( e.KeyCode == Key.DOWN ) && ( e.Modifiers == KeyModifier.MOD1 );
-        }
-        private boolean isMoveUp(KeyEvent e) {
-            return ( e.KeyCode == Key.UP ) && ( e.Modifiers == KeyModifier.MOD1 );
-        }
-        private boolean isDown(KeyEvent e) {
-            return ( e.KeyCode == Key.DOWN ) && ( e.Modifiers == 0 );
-        }
-        private boolean isUp(KeyEvent e) {
-            return ( e.KeyCode == Key.UP ) && ( e.Modifiers == 0 );
+        private boolean isMoveDown(KeyEvent e)
+        {
+            return (e.KeyCode == Key.DOWN) && (e.Modifiers == KeyModifier.MOD1);
         }
 
-        public void keyReleased(KeyEvent arg0) {
+        private boolean isMoveUp(KeyEvent e)
+        {
+            return (e.KeyCode == Key.UP) && (e.Modifiers == KeyModifier.MOD1);
+        }
+
+        private boolean isDown(KeyEvent e)
+        {
+            return (e.KeyCode == Key.DOWN) && (e.Modifiers == 0);
+        }
+
+        private boolean isUp(KeyEvent e)
+        {
+            return (e.KeyCode == Key.UP) && (e.Modifiers == 0);
+        }
+
+        public void keyReleased(KeyEvent arg0)
+        {
         }
 
 
         /* (non-Javadoc)
          * @see com.sun.star.lang.XEventListener#disposing(com.sun.star.lang.EventObject)
          */
-        public void disposing(EventObject arg0) {
+        public void disposing(EventObject arg0)
+        {
         }
-
     }
-
 }

@@ -226,7 +226,7 @@ void StatementFlow::SendViaSocket()
     else
     {
         // Macht nix. Wenn das Basic nicht mehr da ist, ist sowiso alles egal
-        DBG_ERROR("Cannot send results to TestTool")
+        DBG_ERROR("Cannot send results to TestTool");
     }
 
     pRet->Reset();
@@ -546,11 +546,11 @@ SlotStatusListener::SlotStatusListener()
 // XStatusListener
 void SAL_CALL SlotStatusListener::statusChanged( const ::com::sun::star::frame::FeatureStateEvent& Event ) throw (::com::sun::star::uno::RuntimeException)
 {
-//    DBG_ERROR1("FeatureURL: %s", ByteString( String( Event.FeatureURL.Complete ), RTL_TEXTENCODING_UTF8 ).GetBuffer() )
-//    DBG_ERROR1("FeatureDescriptor: %s", ByteString( String( Event.FeatureDescriptor ), RTL_TEXTENCODING_UTF8 ).GetBuffer() )
+//    DBG_ERROR1("FeatureURL: %s", ByteString( String( Event.FeatureURL.Complete ), RTL_TEXTENCODING_UTF8 ).GetBuffer() );
+//    DBG_ERROR1("FeatureDescriptor: %s", ByteString( String( Event.FeatureDescriptor ), RTL_TEXTENCODING_UTF8 ).GetBuffer() );
     bEnabled = Event.IsEnabled;
-//    DBG_ASSERT( Event.IsEnabled, "Not enabled" )
-//    DBG_ASSERT( !Event.Requery, "Requery" )
+//    DBG_ASSERT( Event.IsEnabled, "Not enabled" );
+//    DBG_ASSERT( !Event.Requery, "Requery" );
 }
 
 // XEventListener
@@ -2628,8 +2628,8 @@ BOOL StatementCommand::Execute()
             {
                 ByteString aAssertion( "Diese Assertion wurde vom Testtool per Befehl ausgelöst" );
                 aAssertion = ByteString( String( aAssertion, RTL_TEXTENCODING_MS_1252 ), RTL_TEXTENCODING_UTF8 );
-                DBG_ASSERT( !aString1.Len(), ByteString( aString1, RTL_TEXTENCODING_UTF8 ).GetBuffer() )
-                DBG_ASSERT(  aString1.Len(), aAssertion.GetBuffer() )
+                DBG_ASSERT( !aString1.Len(), ByteString( aString1, RTL_TEXTENCODING_UTF8 ).GetBuffer() );
+                DBG_ASSERT(  aString1.Len(), aAssertion.GetBuffer() );
                 OSL_ENSURE( !aString1.Len(), ByteString( aString1, RTL_TEXTENCODING_UTF8 ).GetBuffer() );
                 OSL_ENSURE(  aString1.Len(), aAssertion.GetBuffer() );
             }
@@ -2638,12 +2638,12 @@ BOOL StatementCommand::Execute()
 #ifdef DBG_UTIL
             if( !(nParams & PARAM_BOOL_1) || bBool1 )
             {
-                DBG_INSTOUTERROR( DBG_OUT_TESTTOOL )
+                DBG_INSTOUTERROR( DBG_OUT_TESTTOOL );
                 osl_setDebugMessageFunc( osl_TestToolDebugPrint );
             }
             else
             {
-                DBG_INSTOUTERROR( DBG_OUT_MSGBOX )
+                DBG_INSTOUTERROR( DBG_OUT_MSGBOX );
                 osl_setDebugMessageFunc( pOriginal_osl_DebugMessageFunc );
             }
 #endif
@@ -2869,7 +2869,7 @@ BOOL StatementCommand::Execute()
                                     else
                                         nPhysicalIndex++;
                                 }
-                                DBG_ASSERT( nVisibleCount == nNr1, "Adaption of Index failed: nVisibleCount != nNr1" )
+                                DBG_ASSERT( nVisibleCount == nNr1, "Adaption of Index failed: nVisibleCount != nNr1" );
                             }
                         }
                         break;
@@ -6203,7 +6203,7 @@ protected:
                                         pFloat = pControl->GET_REAL_PARENT();
                                     else
                                     {
-                                        DBG_ERROR("FloatingMode set but Parent is no FloatingWindow")
+                                        DBG_ERROR("FloatingMode set but Parent is no FloatingWindow");
                                     }
                                 }
                                 if ( pFloat && pFloat->GetType() == WINDOW_FLOATINGWINDOW )

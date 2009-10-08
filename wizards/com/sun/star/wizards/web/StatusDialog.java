@@ -50,23 +50,20 @@ import com.sun.star.wizards.ui.event.TaskListener;
  * status display of more complex tasks.
  *
  */
-public class StatusDialog extends UnoDialog2 implements TaskListener {
+public class StatusDialog extends UnoDialog2 implements TaskListener
+{
 
     public static final int STANDARD_WIDTH = 240;
-
     private XProgressBar progressBar;
     private XFixedText lblTaskName;
     private XFixedText lblCounter;
     private XButton btnCancel;
-
     private String[] res;
     private Renderer renderer;
     private boolean enableBreak = false;
     private boolean closeOnFinish = true;
     private MethodInvocation finishedMethod;
-
     private UnoDialog parent;
-
     private boolean finished;
 
     /**
@@ -75,39 +72,70 @@ public class StatusDialog extends UnoDialog2 implements TaskListener {
      * following order:
      * dialog title, cancel, close, counter prefix, counter midfix, counter postfix
      */
-    public StatusDialog(XMultiServiceFactory xmsf, int width, String taskName, boolean displayCount,String[] resources, String hid) {
+    public StatusDialog(XMultiServiceFactory xmsf, int width, String taskName, boolean displayCount, String[] resources, String hid)
+    {
         super(xmsf);
 
         res = resources;
         if (res.length != 6)
-          throw new IllegalArgumentException("The resources argument should contain 6 Strings, see Javadoc on constructor.");
-
-        //display a close button?
+        {
+            throw new IllegalArgumentException("The resources argument should contain 6 Strings, see Javadoc on constructor.");        //display a close button?
         // if enableBreak == false and closeOnFinsih == false;
+        }
         boolean b = !enableBreak && !closeOnFinish;
 
         Helper.setUnoPropertyValues(xDialogModel,
-             new String[] { "Closeable","Height","HelpURL","Moveable","Name","PositionX","PositionY","Step","Title","Width"},
-             new Object[] { Boolean.FALSE, new Integer(6 + 25 + (b ? 27 : 7)), hid, Boolean.TRUE,"StatusDialog",new Integer(102),new Integer(52), new Integer(0),res[0],new Integer(width)}
-        );
+                new String[]
+                {
+                    "Closeable", "Height", "HelpURL", "Moveable", "Name", "PositionX", "PositionY", "Step", "Title", "Width"
+                },
+                new Object[]
+                {
+                    Boolean.FALSE, new Integer(6 + 25 + (b ? 27 : 7)), hid, Boolean.TRUE, "StatusDialog", new Integer(102), new Integer(52), new Integer(0), res[0], new Integer(width)
+                });
 
         short tabstop = 1;
 
-        lblTaskName = insertLabel("lblTask" ,
-                new String[] {"Height","Label","PositionX","PositionY","TabIndex","Width"},
-                new Object[] { new Integer(8),taskName,new Integer(6),new Integer(6),new Short(tabstop++), new Integer(width * 2 / 3)});
+        lblTaskName = insertLabel("lblTask",
+                new String[]
+                {
+                    "Height", "Label", "PositionX", "PositionY", "TabIndex", "Width"
+                },
+                new Object[]
+                {
+                    new Integer(8), taskName, new Integer(6), new Integer(6), new Short(tabstop++), new Integer(width * 2 / 3)
+                });
         lblCounter = insertLabel("lblCounter",
-                new String[] {"Height","Label","PositionX","PositionY","TabIndex","Width"},
-                new Object[] { new Integer(8),"",new Integer(width * 2 / 3),new Integer(6),new Short(tabstop++), new Integer(width / 3 - 4)});
+                new String[]
+                {
+                    "Height", "Label", "PositionX", "PositionY", "TabIndex", "Width"
+                },
+                new Object[]
+                {
+                    new Integer(8), "", new Integer(width * 2 / 3), new Integer(6), new Short(tabstop++), new Integer(width / 3 - 4)
+                });
         progressBar = insertProgressBar("progress",
-                new String[] {"Height","PositionX","PositionY","TabIndex","Width"},
-                new Object[] { new Integer(10),new Integer(6),new Integer(16),new Short(tabstop++), new Integer(width -12)});
+                new String[]
+                {
+                    "Height", "PositionX", "PositionY", "TabIndex", "Width"
+                },
+                new Object[]
+                {
+                    new Integer(10), new Integer(6), new Integer(16), new Short(tabstop++), new Integer(width - 12)
+                });
 
 
-        if (b) {
-            btnCancel = insertButton("btnCancel","performCancel",this,
-            new String[] {"Height","Label","PositionX","PositionY","TabIndex","Width"},
-            new Object[] { new Integer(14),res[1] ,new Integer(width / 2 - 20 ),new Integer(6+25+ 7 ),new Short(tabstop++), new Integer(40)});
+        if (b)
+        {
+            btnCancel = insertButton("btnCancel", "performCancel", this,
+                    new String[]
+                    {
+                        "Height", "Label", "PositionX", "PositionY", "TabIndex", "Width"
+                    },
+                    new Object[]
+                    {
+                        new Integer(14), res[1], new Integer(width / 2 - 20), new Integer(6 + 25 + 7), new Short(tabstop++), new Integer(40)
+                    });
         }
 
 //      xWindow.addWindowListener((XWindowListener)guiEventListener);
@@ -115,20 +143,26 @@ public class StatusDialog extends UnoDialog2 implements TaskListener {
 
     }
 
-    private void initProgressBar(Task t) {
-        progressBar.setRange(0,t.getMax());
+    private void initProgressBar(Task t)
+    {
+        progressBar.setRange(0, t.getMax());
         progressBar.setValue(0);
     }
 
-    private void setStatus(int status) {
-        if (finished) return;
+    private void setStatus(int status)
+    {
+        if (finished)
+        {
+            return;
+        }
         progressBar.setValue(status);
         xReschedule.reschedule();
     }
 
-    public void setLabel(String s) {
+    public void setLabel(String s)
+    {
 //      lblTaskName.setText(s);
-        Helper.setUnoPropertyValue( UnoDialog.getModel(lblTaskName), "Label", s);
+        Helper.setUnoPropertyValue(UnoDialog.getModel(lblTaskName), "Label", s);
         xReschedule.reschedule();
     }
 
@@ -136,16 +170,21 @@ public class StatusDialog extends UnoDialog2 implements TaskListener {
      * change the max property of the status bar
      * @param max
      */
-    private void setMax(int max) {
-        if (finished) return;
-        Helper.setUnoPropertyValue(getModel(progressBar),"ProgressValueMax", new Integer(max));
+    private void setMax(int max)
+    {
+        if (finished)
+        {
+            return;
+        }
+        Helper.setUnoPropertyValue(getModel(progressBar), "ProgressValueMax", new Integer(max));
     }
 
     /**
      * initialize the status bar according
      * to the given event.
      */
-    public void taskStarted(TaskEvent te) {
+    public void taskStarted(TaskEvent te)
+    {
         finished = false;
         initProgressBar(te.getTask());
     }
@@ -153,27 +192,35 @@ public class StatusDialog extends UnoDialog2 implements TaskListener {
     /**
      * closes the dialog.
      */
-    public void taskFinished(TaskEvent te) {
+    public void taskFinished(TaskEvent te)
+    {
         finished = true;
-        if (closeOnFinish) {
+        if (closeOnFinish)
+        {
 //          xDialog.endExecute();
             parent.xWindow.setEnable(true);
-            try {
+            try
+            {
                 xWindow.setVisible(false);
                 xComponent.dispose();
-               //System.out.println("disposed");
+            //System.out.println("disposed");
             }
-            catch (Exception ex) {ex.printStackTrace();}
-         }
-         else
-             Helper.setUnoPropertyValue(getModel(btnCancel),"Label",res[2]);
-
+            catch (Exception ex)
+            {
+                ex.printStackTrace();
+            }
+        }
+        else
+        {
+            Helper.setUnoPropertyValue(getModel(btnCancel), "Label", res[2]);
+        }
     }
 
     /**
      * changes the status display
      */
-    public void taskStatusChanged(TaskEvent te) {
+    public void taskStatusChanged(TaskEvent te)
+    {
         setMax(te.getTask().getMax());
         setStatus(te.getTask().getStatus());
     }
@@ -183,9 +230,12 @@ public class StatusDialog extends UnoDialog2 implements TaskListener {
      * A renderer is used to render
      * the task's subtask name to a resource string.
      */
-    public void subtaskNameChanged(TaskEvent te) {
+    public void subtaskNameChanged(TaskEvent te)
+    {
         if (renderer != null)
+        {
             setLabel(renderer.render(te.getTask().getSubtaskName()));
+        }
     }
 
     /**
@@ -193,11 +243,14 @@ public class StatusDialog extends UnoDialog2 implements TaskListener {
      * @param parent the parent dialog
      * @param r what to do
      */
-    public void execute(final UnoDialog parent_, final Task task,  String title) {
-        try {
+    public void execute(final UnoDialog parent_, final Task task, String title)
+    {
+        try
+        {
             this.parent = parent_;
-            Helper.setUnoPropertyValue( this.xDialogModel, "Title", title );
-            try {
+            Helper.setUnoPropertyValue(this.xDialogModel, "Title", title);
+            try
+            {
                 //TODO change this to another execute dialog method.
                 task.addTaskListener(StatusDialog.this);
                 setMax(10);
@@ -206,12 +259,17 @@ public class StatusDialog extends UnoDialog2 implements TaskListener {
                 parent.xWindow.setEnable(false);
                 setVisible(parent);
                 if (finishedMethod != null)
+                {
                     finishedMethod.invoke();
-            } catch (Exception e) {
+                }
+            }
+            catch (Exception e)
+            {
                 e.printStackTrace();
             }
         }
-        catch (Exception ex) {
+        catch (Exception ex)
+        {
             ex.printStackTrace();
         }
     }
@@ -219,22 +277,24 @@ public class StatusDialog extends UnoDialog2 implements TaskListener {
     /**
      * not supported !
      */
-    public void performCancel() {//TODO - implement a thread thing here...
+    public void performCancel()
+    {//TODO - implement a thread thing here...
         xWindow.setVisible(false);
     }
-
 
     /**
      * @return the subTask renderer object
      */
-    public Renderer getRenderer() {
+    public Renderer getRenderer()
+    {
         return renderer;
     }
 
     /**
      * @param renderer
      */
-    public void setRenderer(Renderer renderer) {
+    public void setRenderer(Renderer renderer)
+    {
         this.renderer = renderer;
     }
 
@@ -242,9 +302,8 @@ public class StatusDialog extends UnoDialog2 implements TaskListener {
      * sets a method to be invoced when the
      *
      */
-    public void setFinishedMethod(MethodInvocation mi) {
+    public void setFinishedMethod(MethodInvocation mi)
+    {
         finishedMethod = mi;
     }
-
-
 }

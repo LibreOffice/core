@@ -458,7 +458,6 @@ Sequence< Type > OFormattedModel::_getTypes()
 ::rtl::OUString SAL_CALL OFormattedModel::getServiceName() throw ( ::com::sun::star::uno::RuntimeException)
 {
     return ::rtl::OUString(FRM_COMPONENT_EDIT);
-//  return ::rtl::OUString(FRM_COMPONENT_FORMATTEDFIELD);   // old (non-sun) name for compatibility !
 }
 
 // XPropertySet
@@ -1032,14 +1031,13 @@ sal_uInt16 OFormattedModel::getPersistenceFlags() const
 sal_Bool OFormattedModel::commitControlValueToDbColumn( bool /*_bPostReset*/ )
 {
     Any aControlValue( m_xAggregateFastSet->getFastPropertyValue( getValuePropertyAggHandle() ) );
-    if ( !compare( aControlValue, m_aSaveValue ) )
+    if ( aControlValue != m_aSaveValue )
     {
         // Leerstring + EmptyIsNull = void
         if  (   !aControlValue.hasValue()
             ||  (   ( aControlValue.getValueType().getTypeClass() == TypeClass_STRING )
                 &&  ( getString( aControlValue ).getLength() == 0 )
                 &&  m_bEmptyIsNull
-                &&  !isRequired()
                 )
             )
             m_xColumnUpdate->updateNull();

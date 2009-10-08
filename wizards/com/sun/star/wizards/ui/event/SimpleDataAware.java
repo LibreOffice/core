@@ -29,14 +29,15 @@
  ************************************************************************/
 package com.sun.star.wizards.ui.event;
 
-
-public class SimpleDataAware extends DataAware {
+public class SimpleDataAware extends DataAware
+{
 
     protected Object control;
     protected Object[] disableObjects = new Object[0];
     protected Value controlValue;
 
-    public SimpleDataAware(Object dataObject, Value value, Object control_, Value controlValue_ ) {
+    public SimpleDataAware(Object dataObject, Value value, Object control_, Value controlValue_)
+    {
         super(dataObject, value);
         control = control_;
         controlValue = controlValue_;
@@ -44,14 +45,14 @@ public class SimpleDataAware extends DataAware {
 
     /*
     protected void enableControls(Object value) {
-        Boolean b = getBoolean(value);
-        for (int i = 0; i<disableObjects.length; i++)
-            UIHelper.setEnabled(disableObjects[i],b);
+    Boolean b = getBoolean(value);
+    for (int i = 0; i<disableObjects.length; i++)
+    UIHelper.setEnabled(disableObjects[i],b);
     }
-    */
-
-    protected void setToUI(Object value) {
-        controlValue.set(value,control);
+     */
+    protected void setToUI(Object value)
+    {
+        controlValue.set(value, control);
     }
 
     /**
@@ -65,23 +66,22 @@ public class SimpleDataAware extends DataAware {
      * @return
      */
     /*protected Boolean getBoolean(Object value) {
-        if (value==null)
-            return Boolean.FALSE;
-        if (value instanceof Boolean)
-          return (Boolean)value;
-        else if (value.getClass().isArray())
-          return ((short[])value).length != 0 ? Boolean.TRUE : Boolean.FALSE;
-        else if (value.equals("")) return Boolean.FALSE;
-        else return Boolean.TRUE;
+    if (value==null)
+    return Boolean.FALSE;
+    if (value instanceof Boolean)
+    return (Boolean)value;
+    else if (value.getClass().isArray())
+    return ((short[])value).length != 0 ? Boolean.TRUE : Boolean.FALSE;
+    else if (value.equals("")) return Boolean.FALSE;
+    else return Boolean.TRUE;
     }
 
     public void disableControls(Object[] controls) {
-        disableObjects = controls;
+    disableObjects = controls;
     }
-    */
-
-    protected Object getFromUI() {
+     */
+    protected Object getFromUI()
+    {
         return controlValue.get(control);
     }
-
 }

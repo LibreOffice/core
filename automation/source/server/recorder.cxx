@@ -698,7 +698,7 @@ IMPL_LINK( MacroRecorder, EventListener, VclSimpleEvent*, pEvent )
                                        ( aKeyCode.GetCode() == KEY_EQUAL) ||
                                        ( aKeyCode.GetCode() == 0) ) )
                                 {
-                                    DBG_ASSERT( pKeyEvent->GetCharCode(), "no charcode found" )
+                                    DBG_ASSERT( pKeyEvent->GetCharCode(), "no charcode found" );
                                     aKeyString += pKeyEvent->GetCharCode();
                                 }
                                 else

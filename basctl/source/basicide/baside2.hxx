@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: baside2.hxx,v $
- * $Revision: 1.26 $
+ * $Revision: 1.26.22.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -37,8 +37,6 @@
 #include <bastype3.hxx>
 #include <basidesh.hxx>
 
-#include <basic/hilight.hxx>
-
 class ExtTextEngine;
 class ExtTextView;
 class SvxSearchItem;
@@ -54,7 +52,7 @@ class SvxSearchItem;
 #include <svtools/colorcfg.hxx>
 
 #include <sfx2/progress.hxx>
-
+#include <svtools/syntaxhighlight.hxx>
 
 DBG_NAMEEX( ModulWindow )
 
@@ -458,7 +456,7 @@ private:
 
     ModulWindow * m_pModulWindow;
 
-    Color m_aSyntaxColors[TT_KEYWORD + 1];
+    Color m_aSyntaxColors[TT_KEYWORDS + 1];
     svtools::ColorConfig m_aColorConfig;
 
     ImageList m_aImagesNormal;

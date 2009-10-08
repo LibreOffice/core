@@ -1213,9 +1213,16 @@ String RID_STR_TEXTTYPE
     Text [ en-US ] = "Text type";
 };
 
-String RID_STR_SHOW_HIDE
+Resource RID_RSC_ENUM_SHOWHIDE
 {
-    Text [ en-US ] = "Hide;Show" ;
+    String 1
+    {
+        Text [ en-US ] = "Hide" ;
+    };
+    String 2
+    {
+        Text [ en-US ] = "Show" ;
+    };
 };
 String RID_STR_XML_DATA_MODEL
 {
@@ -1381,4 +1388,45 @@ String RID_STR_DECORATION
 String RID_STR_NOLABEL
 {
     Text [ en-US ] = "No Label" ;
+};
+
+Resource RID_RSC_ENUM_SCALE_MODE
+{
+    String 1
+    {
+        Text [ en-US ] = "No";
+    };
+    String 2
+    {
+        Text [ en-US ] = "Keep Ratio";
+    };
+    String 3
+    {
+        Text [ en-US ] = "Fit to Size";
+    };
+};
+String RID_STR_INPUT_REQUIRED
+{
+    Text [ en-US ] = "Input required";
+};
+
+String RID_STR_WRITING_MODE
+{
+    Text [ en-US ] = "Text direction";
+};
+
+Resource RID_RSC_ENUM_WRITING_MODE
+{
+    String 1
+    {
+        Text [ en-US ] = "Left-to-right";
+    };
+    String 2
+    {
+        Text [ en-US ] = "Right-to-left";
+    };
+    String 3
+    {
+        Text [ en-US ] = "Use superordinate object settings";
+    };
 };

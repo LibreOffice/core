@@ -4717,9 +4717,9 @@ void SAL_CALL OStorage::insertRelationshipByID(  const ::rtl::OUString& sID, con
 
         aSeq[nIDInd][0].First = aIDTag;
         aSeq[nIDInd][0].Second = sID;
-        sal_Int32 nIndTarget = 0;
+        sal_Int32 nIndTarget = 1;
         for ( sal_Int32 nIndOrig = 0;
-              nIndOrig <= aEntry.getLength();
+              nIndOrig < aEntry.getLength();
               nIndOrig++ )
         {
             if ( !aEntry[nIndOrig].First.equals( aIDTag ) )

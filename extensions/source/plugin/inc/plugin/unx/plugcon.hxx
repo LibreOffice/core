@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: plugcon.hxx,v $
- * $Revision: 1.13 $
+ * $Revision: 1.13.90.3 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -34,7 +34,7 @@
 #include <string.h>
 
 #include <list>
-#include <tools/list.hxx>
+#include <vector>
 #include <plugin/unx/mediator.hxx>
 
 #if defined SOLARIS
@@ -77,11 +77,51 @@ extern "C" {
 #define MOZ_X11
 #endif
 
+//http://qa.openoffice.org/issues/show_bug.cgi?id=82545
+//https://bugzilla.mozilla.org/show_bug.cgi?id=241262
+#ifdef UNIX
+#  ifndef _UINT32
+#    if defined(__alpha) || defined(__LP64__)
+       typedef unsigned int uint32;
+#    else  /* __alpha */
+       typedef unsigned long uint32;
+#    endif
+#    define _UINT32
+#  endif
+#  ifndef _INT32
+#    if defined(__alpha) || defined(__LP64__)
+       typedef int int32;
+#    else  /* __alpha */
+       typedef long int32;
+#    endif
+#    define _INT32
+#  endif
+#endif
+
 #ifndef _NPAPI_H_
 extern "C" {
 #include <npsdk/npupp.h>
 }
 #include <npapi.h>
+
+#if NP_VERSION_MINOR < 17
+// compatibility hack: compile with older NPN api header, but define
+// some later introduced constants
+// for gcc 3
+#define NP_ABI_MASK 0x10000000
+#define NPNVSupportsXEmbedBool ((NPNVariable)14)
+#define NPPVpluginNeedsXEmbed  ((NPPVariable)14)
+#define NPNVToolkit            ((int)(13 | NP_ABI_MASK))
+#define NPNVGtk12 1
+#define NPNVGtk2  2
+#endif
+#endif
+
+#ifdef ENABLE_GTK
+#include <gtk/gtk.h>
+#include <gdk/gdkx.h>
+#else
+#define GtkWidget void
 #endif
 
 #undef Window
@@ -105,6 +145,11 @@ public:
     void*                       pWidget;
     void*                       pForm;
 
+    GtkWidget*                  pGtkWindow;
+    GtkWidget*                  pGtkWidget;
+
+    bool                        bShouldUseXEmbed;
+
     int nArg;
     char** argn;
     char** argv;
@@ -119,24 +164,18 @@ public:
     ~ConnectorInstance();
 };
 
-class PluginConnector;
-
-DECLARE_LIST( NPStreamList, NPStream* )
-DECLARE_LIST( InstanceList, ConnectorInstance* )
-DECLARE_LIST( PluginConnectorList, PluginConnector* )
-
 class PluginConnector : public Mediator
 {
 protected:
     NAMESPACE_VOS(OMutex)               m_aUserEventMutex;
 
-    static PluginConnectorList          allConnectors;
+    static std::vector<PluginConnector*>  allConnectors;
 
     DECL_LINK( NewMessageHdl, Mediator* );
     DECL_LINK( WorkOnNewMessageHdl, Mediator* );
 
-    NPStreamList    m_aNPWrapStreams;
-    InstanceList    m_aInstances;
+    std::vector<NPStream*>              m_aNPWrapStreams;
+    std::vector<ConnectorInstance*>     m_aInstances;
 
     ULONG   FillBuffer( char*&, const char*, ULONG, va_list );
 public:
@@ -155,7 +194,7 @@ public:
     UINT32  GetStreamID( NPStream* pStream );
     UINT32  GetNPPID( NPP );
 
-    NPStreamList& getStreamList() { return m_aNPWrapStreams; }
+    std::vector<NPStream*>& getStreamList() { return m_aNPWrapStreams; }
 
     NPError GetNPError( MediatorMessage* pMes )
     {
@@ -170,6 +209,9 @@ public:
         LINK( this, PluginConnector, WorkOnNewMessageHdl ).
             Call( (Mediator*)this );
     }
+
+    ConnectorInstance* getInstance( NPP );
+    ConnectorInstance* getInstanceById( UINT32 );
 };
 
 enum CommandAtoms

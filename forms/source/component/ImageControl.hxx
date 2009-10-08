@@ -60,6 +60,7 @@ class OImageControlModel
     ::com::sun::star::uno::Reference< ::com::sun::star::awt::XImageProducer>    m_xImageProducer;
     ImageProducer*                                  m_pImageProducer;
     sal_Bool                                        m_bReadOnly;
+    ::rtl::OUString                                 m_sDocumentURL;
 
 protected:
     // UNO Anbindung
@@ -114,6 +115,8 @@ public:
 
 protected:
     // OBoundControlModel overridables
+    virtual void            onConnectedDbColumn( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _rxForm );
+    virtual void            onDisconnectedDbColumn();
     virtual ::com::sun::star::uno::Any
                             translateDbColumnToControlValue( );
     virtual sal_Bool        commitControlValueToDbColumn( bool _bPostReset );
@@ -129,21 +132,16 @@ protected:
 
     void implConstruct();
 
-    /** updates the database column we're bound to with the given stream
-
-        <p>If the stream is <NULL/>, then XColumnUpdate::updateNull will be called for the
-        column.</p>
-
-        @precond
-            m_xColumnUpdate is not <NULL/>
-    */
-    void        updateColumnWithStream( const ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream >& _rxStream );
-
     /** displays the image described by the given URL
         @precond
             our own mutex is locked
     */
-    sal_Bool    handleNewImageURL( const ::rtl::OUString& _rURL, ValueChangeInstigator _eInstigator );
+    sal_Bool    impl_handleNewImageURL_lck( const ::rtl::OUString& _rURL, ValueChangeInstigator _eInstigator );
+
+    /** updates the binary stream, created from loading the file which the given URL points to, into our
+        bound field, or the control itself if there is no bound field
+    */
+    sal_Bool    impl_updateStreamForURL_lck( const ::rtl::OUString& _rURL, ValueChangeInstigator _eInstigator );
 };
 
 //==================================================================

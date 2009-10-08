@@ -902,10 +902,10 @@ Any  IUnknownWrapper_Impl::invokeWithDispIdUnoTlb(const OUString& sFunctionName,
         }
         else // it is an JScriptObject
         {
-            int i;
+            int i = 0;
             try
             {
-                for(i = 0; i< parameterCount; i++)
+                for( ; i< parameterCount; i++)
                 {
                     // In parameter
                     if( pMethod->pParams[i].bIn == sal_True && ! pMethod->pParams[i].bOut)
@@ -1002,10 +1002,10 @@ Any  IUnknownWrapper_Impl::invokeWithDispIdUnoTlb(const OUString& sFunctionName,
             OutParamIndex.realloc( outParameterCount);
             OutParam.realloc( outParameterCount);
             sal_Int32 outIndex=0;
-            int i;
+            int i = 0;
             try
             {
-                for( i = 0; i < parameterCount; i++)
+                for( ; i < parameterCount; i++)
                 {
                     if( pMethod->pParams[i].bOut )
                     {
@@ -1301,7 +1301,7 @@ Any  IUnknownWrapper_Impl::invokeWithDispIdComTlb(const OUString& sFuncName,
     CComVariant     varResult;
     ExcepInfo       excepinfo;
     unsigned int    uArgErr;
-    sal_Int32           i;
+    sal_Int32       i = 0;
     sal_Int32 nUnoArgs = Params.getLength();
     DISPID idPropertyPut = DISPID_PROPERTYPUT;
     scoped_array<DISPID> arDispidNamedArgs;

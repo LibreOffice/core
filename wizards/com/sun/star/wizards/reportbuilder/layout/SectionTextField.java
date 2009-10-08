@@ -9,7 +9,7 @@
  *
  * $RCSfile: SectionTextField.java,v $
  *
- * $Revision: 1.2 $
+ * $Revision: 1.2.36.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -30,7 +30,6 @@
  *
  * **********************************************************************
  */
-
 package com.sun.star.wizards.reportbuilder.layout;
 
 import com.sun.star.awt.FontDescriptor;
@@ -40,12 +39,13 @@ import com.sun.star.report.XFormattedField;
  *
  * @author ll93751
  */
-public class SectionTextField  extends SectionObject
+public class SectionTextField extends SectionObject
 {
+
     protected SectionTextField(XFormattedField _aFormattedField)
     {
         m_aParentObject = _aFormattedField;
-        // We would like to know, what properties are in this object.
+    // We would like to know, what properties are in this object.
     }
 
     public static SectionObject create(XFormattedField _aFormattedField)
@@ -59,7 +59,7 @@ public class SectionTextField  extends SectionObject
         FontDescriptor a = null;
         try
         {
-            XFormattedField aField = (XFormattedField)getParent();
+            XFormattedField aField = (XFormattedField) getParent();
             a = aField.getFontDescriptor();
         }
         catch (com.sun.star.beans.UnknownPropertyException e)

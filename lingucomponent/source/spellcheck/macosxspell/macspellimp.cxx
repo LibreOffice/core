@@ -45,7 +45,7 @@
 #include <macspellimp.hxx>
 
 //#include <linguistic/lngprops.hxx>
-#include "spelldta.hxx"
+#include <linguistic/spelldta.hxx>
 #include <svtools/pathoptions.hxx>
 #include <svtools/useroptions.hxx>
 #include <osl/file.hxx>

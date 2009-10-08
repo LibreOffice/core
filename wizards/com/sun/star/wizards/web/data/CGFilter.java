@@ -26,10 +26,13 @@
  * <http://www.openoffice.org/license.html>
  * for a copy of the LGPLv3 License.
  *
- ************************************************************************/package com.sun.star.wizards.web.data;
+ ************************************************************************/
+package com.sun.star.wizards.web.data;
 
-public class CGFilter       extends ConfigSetItem {
-    public String          cp_Name;
+public class CGFilter extends ConfigSetItem
+{
+
+    public String cp_Name;
     //public boolean         cp_Readonly;
-    public String          cp_Filter;
+    public String cp_Filter;
 }

@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: fontdialog.cxx,v $
- * $Revision: 1.19 $
+ * $Revision: 1.19.80.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -296,7 +296,7 @@ namespace pcr
         }
         catch (Exception&)
         {
-            DBG_ERROR("ControlCharacterDialog::translatePropertiesToItems: caught an exception!")
+            DBG_ERROR("ControlCharacterDialog::translatePropertiesToItems: caught an exception!");
         }
 
         _pSet->DisableItem(SID_ATTR_CHAR_CJK_FONT);
@@ -392,7 +392,7 @@ namespace pcr
                 const SvxUnderlineItem& rUnderlineItem =
                     static_cast<const SvxUnderlineItem&>(_rSet.Get(CFID_UNDERLINE));
 
-                sal_Int16 nUnderline = (sal_Int16)rUnderlineItem.GetUnderline();
+                sal_Int16 nUnderline = (sal_Int16)rUnderlineItem.GetLineStyle();
                 lcl_pushBackPropertyValue( _out_properties, PROPERTY_FONT_UNDERLINE,makeAny(nUnderline));
 
                 // the text line color is transported in this item, too

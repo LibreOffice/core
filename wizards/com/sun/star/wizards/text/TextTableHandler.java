@@ -1,5 +1,5 @@
 /*************************************************************************
-*
+ *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
  * Copyright 2008 by Sun Microsystems, Inc.
@@ -26,7 +26,9 @@
  * <http://www.openoffice.org/license.html>
  * for a copy of the LGPLv3 License.
  *
- ************************************************************************/package com.sun.star.wizards.text;
+ ************************************************************************/
+package com.sun.star.wizards.text;
+
 import com.sun.star.container.XIndexAccess;
 import com.sun.star.container.XNameAccess;
 import com.sun.star.container.XNamed;
@@ -52,8 +54,9 @@ import com.sun.star.wizards.common.Desktop;
 import com.sun.star.wizards.common.Helper;
 import com.sun.star.wizards.common.NumberFormatter;
 
+public class TextTableHandler
+{
 
-public class TextTableHandler {
     public XTextTablesSupplier xTextTablesSupplier;
     public XMultiServiceFactory xMSFDoc;
     public XTextDocument xTextDocument;
@@ -62,128 +65,166 @@ public class TextTableHandler {
     private NumberFormatter oNumberFormatter;
     private Locale aCharLocale;
 
-
-
     /** Creates a new instance of TextTableHandler */
-    public TextTableHandler(XMultiServiceFactory xMSF, XTextDocument xTextDocument) {
-    try {
-        this.xMSFDoc = xMSF;
-        this.xTextDocument = xTextDocument;
-        xText = xTextDocument.getText();
-        xTextTablesSupplier = (XTextTablesSupplier) UnoRuntime.queryInterface(XTextTablesSupplier.class, xTextDocument);
-        xSimpleText = (XSimpleText) UnoRuntime.queryInterface(XSimpleText.class, xTextDocument.getText());
-        XNumberFormatsSupplier xNumberFormatsSupplier = (XNumberFormatsSupplier) UnoRuntime.queryInterface(XNumberFormatsSupplier.class, xTextDocument);
-        aCharLocale = (Locale) Helper.getUnoStructValue((Object) xTextDocument, "CharLocale");
-        oNumberFormatter = new NumberFormatter(xNumberFormatsSupplier, aCharLocale );
-    } catch (java.lang.Exception e) {
-        e.printStackTrace(System.out);
+    public TextTableHandler(XMultiServiceFactory xMSF, XTextDocument xTextDocument)
+    {
+        try
+        {
+            this.xMSFDoc = xMSF;
+            this.xTextDocument = xTextDocument;
+            xText = xTextDocument.getText();
+            xTextTablesSupplier = (XTextTablesSupplier) UnoRuntime.queryInterface(XTextTablesSupplier.class, xTextDocument);
+            xSimpleText = (XSimpleText) UnoRuntime.queryInterface(XSimpleText.class, xTextDocument.getText());
+            XNumberFormatsSupplier xNumberFormatsSupplier = (XNumberFormatsSupplier) UnoRuntime.queryInterface(XNumberFormatsSupplier.class, xTextDocument);
+            aCharLocale = (Locale) Helper.getUnoStructValue((Object) xTextDocument, "CharLocale");
+            oNumberFormatter = new NumberFormatter(xNumberFormatsSupplier, aCharLocale);
+        }
+        catch (java.lang.Exception e)
+        {
+            e.printStackTrace(System.out);
+        }
     }
-}
 
-    public NumberFormatter getNumberFormatter(){
+    public NumberFormatter getNumberFormatter()
+    {
         return oNumberFormatter;
     }
 
-
-    public XTextTable getByName(String _sTableName){
+    public XTextTable getByName(String _sTableName)
+    {
         XTextTable xTextTable = null;
-    try{
-        XNameAccess xAllTextTables = xTextTablesSupplier.getTextTables();
-        if (xAllTextTables.hasByName(_sTableName)){
-            Object oTable = xAllTextTables.getByName(_sTableName);
-            xTextTable = (XTextTable) UnoRuntime.queryInterface(XTextTable.class, oTable);
+        try
+        {
+            XNameAccess xAllTextTables = xTextTablesSupplier.getTextTables();
+            if (xAllTextTables.hasByName(_sTableName))
+            {
+                Object oTable = xAllTextTables.getByName(_sTableName);
+                xTextTable = (XTextTable) UnoRuntime.queryInterface(XTextTable.class, oTable);
+            }
         }
-    } catch (Exception exception) {
-        exception.printStackTrace(System.out);
-    }
+        catch (Exception exception)
+        {
+            exception.printStackTrace(System.out);
+        }
         return xTextTable;
     }
 
-
-    public com.sun.star.text.XTextTable getlastTextTable() {
-        try {
+    public com.sun.star.text.XTextTable getlastTextTable()
+    {
+        try
+        {
             XIndexAccess xAllTextTables = (XIndexAccess) UnoRuntime.queryInterface(XIndexAccess.class, xTextTablesSupplier.getTextTables());
             int MaxIndex = xAllTextTables.getCount() - 1;
             Object oTable = xAllTextTables.getByIndex(MaxIndex);
             XTextTable xTextTable = (XTextTable) UnoRuntime.queryInterface(XTextTable.class, oTable);
             return xTextTable;
-        } catch (Exception exception) {
+        }
+        catch (Exception exception)
+        {
             exception.printStackTrace(System.out);
             return null;
         }
     }
 
-    public void insertTextTable(com.sun.star.text.XTextCursor xTextCursor) {
-        try {
+    public void insertTextTable(com.sun.star.text.XTextCursor xTextCursor)
+    {
+        try
+        {
             com.sun.star.uno.XInterface xTextTable = (XInterface) xMSFDoc.createInstance("com.sun.star.text.TextTable");
             XTextContent xTextContentTable = (XTextContent) UnoRuntime.queryInterface(XTextContent.class, xTextTable);
-            if (xTextCursor == null) {
+            if (xTextCursor == null)
+            {
                 xTextCursor = xTextDocument.getText().createTextCursor();
                 xTextCursor.gotoEnd(false);
             }
             xTextCursor.getText().insertTextContent(xTextCursor, xTextContentTable, false);
-        } catch (Exception exception) {
+        }
+        catch (Exception exception)
+        {
             exception.printStackTrace(System.out);
         }
     }
 
-    public void removeAllTextTables() {
-        try {
+    public void removeAllTextTables()
+    {
+        try
+        {
             XIndexAccess xAllTextTables = (XIndexAccess) UnoRuntime.queryInterface(XIndexAccess.class, xTextTablesSupplier.getTextTables());
             int TextTableCount = xAllTextTables.getCount();
-            for (int i = TextTableCount - 1; i >= 0; i--) {
+            for (int i = TextTableCount - 1; i >= 0; i--)
+            {
                 removeTextTable(xAllTextTables.getByIndex(i));
             }
-        } catch (Exception exception) {
+        }
+        catch (Exception exception)
+        {
             exception.printStackTrace(System.out);
         }
     }
 
-    public void removeLastTextTable() {
-        try {
+    public void removeLastTextTable()
+    {
+        try
+        {
             XIndexAccess xAllTextTables = (XIndexAccess) UnoRuntime.queryInterface(XIndexAccess.class, xTextTablesSupplier.getTextTables());
             Object oTextTable = xAllTextTables.getByIndex(xAllTextTables.getCount() - 1);
             removeTextTable(oTextTable);
-        } catch (Exception exception) {
+        }
+        catch (Exception exception)
+        {
             exception.printStackTrace(System.out);
         }
     }
 
+    public void removeTextTable(Object oTextTable)
+    {
+        try
+        {
+            XTextContent xTextContentTable = (XTextContent) UnoRuntime.queryInterface(XTextContent.class, oTextTable);
+            xTextDocument.getText().removeTextContent(xTextContentTable);
+        }
+        catch (Exception exception)
+        {
+            exception.printStackTrace(System.out);
+        }
+    }
 
-    public void removeTextTable(Object oTextTable){
-    try {
-        XTextContent xTextContentTable = (XTextContent) UnoRuntime.queryInterface(XTextContent.class, oTextTable);
-        xTextDocument.getText().removeTextContent(xTextContentTable);
-    } catch (Exception exception) {
-        exception.printStackTrace(System.out);
-    }}
-
-
-    public void removeTextTablebyName(String TableName) {
-        try {
+    public void removeTextTablebyName(String TableName)
+    {
+        try
+        {
             XNameAccess xAllTextTables = xTextTablesSupplier.getTextTables();
-            if (xAllTextTables.hasByName(TableName) == true) {
+            if (xAllTextTables.hasByName(TableName) == true)
+            {
                 removeTextTable(xAllTextTables.getByName(TableName));
             }
-        } catch (Exception exception) {
+        }
+        catch (Exception exception)
+        {
             exception.printStackTrace(System.out);
         }
     }
 
-    public void renameTextTable(String OldTableName, String NewTableName) {
-        try {
+    public void renameTextTable(String OldTableName, String NewTableName)
+    {
+        try
+        {
             XNameAccess xTextTableNames = xTextTablesSupplier.getTextTables();
-            if (xTextTableNames.hasByName(OldTableName)) {
+            if (xTextTableNames.hasByName(OldTableName))
+            {
                 Object oTextTable = xTextTableNames.getByName(OldTableName);
                 XNamed xTextTableName = (XNamed) UnoRuntime.queryInterface(XNamed.class, oTextTable);
                 xTextTableName.setName(NewTableName);
             }
-        } catch (Exception exception) {
+        }
+        catch (Exception exception)
+        {
             exception.printStackTrace(System.out);
         }
     }
 
-    public static BreakType resetBreakTypeofTextTable(Object oTextTable) {
+    public static BreakType resetBreakTypeofTextTable(Object oTextTable)
+    {
         BreakType CorrBreakValue = null;
         BreakType BreakValue = (BreakType) com.sun.star.wizards.common.Helper.getUnoStructValue(oTextTable, "BreakType");
         //  if (BreakValue.equals(BreakType.NONE) == false){
@@ -193,21 +234,24 @@ public class TextTableHandler {
         return BreakType.NONE;
     }
 
-
-    public void adjustOptimalTableWidths(XMultiServiceFactory _xMSF, XTextTable xTextTable){        // setTableColumnSeparators(){
-    try{
-        XFrame xFrame = this.xTextDocument.getCurrentController().getFrame();
-        int ColCount = xTextTable.getColumns().getCount();
-        XCellRange xCellRange = (XCellRange) UnoRuntime.queryInterface(XCellRange.class, xTextTable);
-        XCellRange xLocCellRange = xCellRange.getCellRangeByPosition(0, 0, ColCount-1, 1);
-        short iHoriOrient =  AnyConverter.toShort(Helper.getUnoPropertyValue(xTextTable, "HoriOrient"));
-        XSelectionSupplier xSelection = (XSelectionSupplier) UnoRuntime.queryInterface(XSelectionSupplier.class, xTextDocument.getCurrentController());
-        xSelection.select(xLocCellRange);
-        Desktop.dispatchURL(_xMSF, ".Uno:DistributeColumns", xFrame);
-        Desktop.dispatchURL(_xMSF, ".Uno:SetOptimalColumnWidth", xFrame);
-        Helper.setUnoPropertyValue(xTextTable, "HoriOrient", new Short(iHoriOrient));
+    public void adjustOptimalTableWidths(XMultiServiceFactory _xMSF, XTextTable xTextTable)
+    {        // setTableColumnSeparators(){
+        try
+        {
+            XFrame xFrame = this.xTextDocument.getCurrentController().getFrame();
+            int ColCount = xTextTable.getColumns().getCount();
+            XCellRange xCellRange = (XCellRange) UnoRuntime.queryInterface(XCellRange.class, xTextTable);
+            XCellRange xLocCellRange = xCellRange.getCellRangeByPosition(0, 0, ColCount - 1, 1);
+            short iHoriOrient = AnyConverter.toShort(Helper.getUnoPropertyValue(xTextTable, "HoriOrient"));
+            XSelectionSupplier xSelection = (XSelectionSupplier) UnoRuntime.queryInterface(XSelectionSupplier.class, xTextDocument.getCurrentController());
+            xSelection.select(xLocCellRange);
+            Desktop.dispatchURL(_xMSF, ".Uno:DistributeColumns", xFrame);
+            Desktop.dispatchURL(_xMSF, ".Uno:SetOptimalColumnWidth", xFrame);
+            Helper.setUnoPropertyValue(xTextTable, "HoriOrient", new Short(iHoriOrient));
+        }
+        catch (Exception exception)
+        {
+            exception.printStackTrace(System.out);
+        }
     }
-    catch( Exception exception ){
-        exception.printStackTrace(System.out);
-    }}
 }

@@ -44,7 +44,11 @@ MINGW_NODLL=YES
 
 .INCLUDE : settings.mk
 
-CDEFS+=-DUNICODE -D_STLP_USE_STATIC_LIB
+CDEFS+=-DUNICODE
+.IF "$(USE_SYSTEM_STL)" != "YES"
+CDEFS+=-D_STLP_USE_STATIC_LIB
+.ENDIF
+
 UWINAPILIB=
 
 # --- Files --------------------------------------------------------
@@ -56,8 +60,11 @@ SLOFILES =	$(SLO)$/relnotes.obj
 STDSHL+=	\
     $(ADVAPI32LIB)\
     $(SHELL32LIB)\
-    $(MSILIB)\
-    $(LIBSTLPORTST)								
+    $(MSILIB)
+
+.IF "$(USE_SYSTEM_STL)" != "YES"
+STDSHL+=$(LIBSTLPORTST)								
+.ENDIF
 
 SHL1LIBS = $(SLB)$/$(TARGET).lib 
 

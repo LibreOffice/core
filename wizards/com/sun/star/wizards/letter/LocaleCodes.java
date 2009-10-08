@@ -1,24 +1,60 @@
+/*
+ ************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2008 by Sun Microsystems, Inc.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * $RCSfile: LocaleCodes.java,v $
+ *
+ * $Revision: 1.7.52.1 $
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
 package com.sun.star.wizards.letter;
 
 import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.wizards.common.Resource;
 import com.sun.star.beans.PropertyValue;
 
-public class LocaleCodes extends Resource {
+public class LocaleCodes extends Resource
+{
 
     final static String UNIT_NAME = "svtres";
     final static String MODULE_NAME = "svt";
-    PropertyValue [] allLanguageStrings;
+    PropertyValue[] allLanguageStrings;
 
-    public LocaleCodes (XMultiServiceFactory xmsf) {
+    public LocaleCodes(XMultiServiceFactory xmsf)
+    {
         super(xmsf, UNIT_NAME, MODULE_NAME);
         allLanguageStrings = getStringList(16300);  // STR_ARR_SVT_LANGUAGE_TABLE from svtools/source/misc/langtab.src
     }
 
-    public String getLanguageString(String MSID) {
+    public String getLanguageString(String MSID)
+    {
         String LS = "unknown Language";
-        for (int i=0; i < allLanguageStrings.length; i++) {
-            if (allLanguageStrings[i].Value.toString().equalsIgnoreCase(MSID)) {
+        for (int i = 0; i < allLanguageStrings.length; i++)
+        {
+            if (allLanguageStrings[i].Value.toString().equalsIgnoreCase(MSID))
+            {
                 LS = allLanguageStrings[i].Name;
             }
         }
@@ -26,7 +62,7 @@ public class LocaleCodes extends Resource {
     }
 
     public String[] getIDs() {
-        String []Ids = new String [134];
+        String []Ids = new String [135];
 
         Ids[0] = "Afrikaans;af;1078";
         Ids[1] = "Albanian;sq;1052";
@@ -162,8 +198,8 @@ public class LocaleCodes extends Resource {
         Ids[131] = "Yiddish;yi;1085";
         Ids[132] = "Zulu;zu;1077";
         Ids[133] = "Khmer;km-kh;1107";
+        Ids[134] = "Burmese;my-mm;1109";
 
         return Ids;
     }
-
 }

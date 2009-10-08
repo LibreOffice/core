@@ -1,5 +1,5 @@
 /*************************************************************************
-*
+ *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
  * Copyright 2008 by Sun Microsystems, Inc.
@@ -26,8 +26,8 @@
  * <http://www.openoffice.org/license.html>
  * for a copy of the LGPLv3 License.
  *
- ************************************************************************/package com.sun.star.wizards.table;
-
+ ************************************************************************/
+package com.sun.star.wizards.table;
 
 import com.sun.star.awt.XListBox;
 import com.sun.star.container.NoSuchElementException;
@@ -40,8 +40,9 @@ import com.sun.star.wizards.common.Configuration;
 import com.sun.star.wizards.common.Desktop;
 import com.sun.star.wizards.common.Helper;
 
+public class CGTable
+{
 
-public class CGTable{
     XMultiServiceFactory xMSF;
     XNameAccess xNameAccessFieldsNode;
     XNameAccess xNameAccessTableNode;
@@ -50,39 +51,54 @@ public class CGTable{
     private Object oconfigView;
     private final String CGROOTPATH = "/org.openoffice.Office.TableWizard/TableWizard/";
 
-
-    public CGTable(XMultiServiceFactory _xMSF){
+    public CGTable(XMultiServiceFactory _xMSF)
+    {
         xMSF = _xMSF;
     }
 
-    public void initialize(XNameAccess _xNameAccessParentNode, int _index){
-    try {
-        xNameAccessTableNode = Configuration.getChildNodebyIndex( _xNameAccessParentNode, _index);
-        xNameAccessFieldsNode = Configuration.getChildNodebyName(xNameAccessTableNode, "Fields");
-    } catch (Exception e) {
-        e.printStackTrace(System.out);
-    }}
+    public void initialize(XNameAccess _xNameAccessParentNode, int _index)
+    {
+        try
+        {
+            xNameAccessTableNode = Configuration.getChildNodebyIndex(_xNameAccessParentNode, _index);
+            xNameAccessFieldsNode = Configuration.getChildNodebyName(xNameAccessTableNode, "Fields");
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace(System.out);
+        }
+    }
 
-
-    public String[] getFieldNames(boolean _bgetbyShortName, int _imaxcolumnchars){
-    try {
-        String[] fieldnames = null;
-        if (_bgetbyShortName){
-            fieldnames = Configuration.getNodeChildNames(xNameAccessFieldsNode, "ShortName");
-            for (int i = 0; i < fieldnames.length; i++){
-                if (fieldnames[i].length() > _imaxcolumnchars)
-                    fieldnames[i]= fieldnames[i].substring(0, _imaxcolumnchars);
+    public String[] getFieldNames(boolean _bgetbyShortName, int _imaxcolumnchars)
+    {
+        try
+        {
+            String[] fieldnames = null;
+            if (_bgetbyShortName)
+            {
+                fieldnames = Configuration.getNodeChildNames(xNameAccessFieldsNode, "ShortName");
+                for (int i = 0; i < fieldnames.length; i++)
+                {
+                    if (fieldnames[i].length() > _imaxcolumnchars)
+                    {
+                        fieldnames[i] = fieldnames[i].substring(0, _imaxcolumnchars);
+                    }
+                }
             }
+            else
+            {
+                fieldnames = Configuration.getNodeChildNames(xNameAccessFieldsNode, "Name");
+            }
+            for (int i = 0; i < fieldnames.length; i++)
+            {
+                fieldnames[i] = Desktop.removeSpecialCharacters(xMSF, Configuration.getOfficeLocale(xMSF), fieldnames[i]);
+            }
+            return fieldnames;
         }
-        else
-            fieldnames = Configuration.getNodeChildNames(xNameAccessFieldsNode, "Name");
-
-        for (int i = 0;i < fieldnames.length; i++){
-            fieldnames[i] = Desktop.removeSpecialCharacters(xMSF, Configuration.getOfficeLocale(xMSF), fieldnames[i]);
+        catch (Exception e)
+        {
+            e.printStackTrace(System.out);
+            return null;
         }
-        return fieldnames;
-    } catch (Exception e) {
-        e.printStackTrace(System.out);
-        return null;
-    }}
+    }
 }

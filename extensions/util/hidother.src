@@ -306,3 +306,5 @@ hidspecial HID_CHECK_FOR_UPD_STATUS             { HelpId = HID_CHECK_FOR_UPD_STA
 hidspecial HID_CHECK_FOR_UPD_DESCRIPTION        { HelpId = HID_CHECK_FOR_UPD_DESCRIPTION; }
 hidspecial HID_CHECK_FOR_UPD_CANCEL             { HelpId = HID_CHECK_FOR_UPD_CANCEL; }
 hidspecial HID_PROP_NOLABEL                     { HelpId = HID_PROP_NOLABEL; }
+hidspecial HID_PROP_INPUT_REQUIRED              { HelpId = HID_PROP_INPUT_REQUIRED; }
+hidspecial HID_PROP_WRITING_MODE                { HelpId = HID_PROP_WRITING_MODE; }

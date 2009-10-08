@@ -1,5 +1,5 @@
 /*************************************************************************
-*
+ *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
  * Copyright 2008 by Sun Microsystems, Inc.
@@ -26,31 +26,34 @@
  * <http://www.openoffice.org/license.html>
  * for a copy of the LGPLv3 License.
  *
- ************************************************************************/package com.sun.star.wizards.query;
+ ************************************************************************/
+package com.sun.star.wizards.query;
 
 import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.wizards.common.*;
-import com.sun.star.wizards.ui.FilterComponent;
+//import com.sun.star.wizards.ui.FilterComponent;
 import com.sun.star.wizards.ui.*;
 import com.sun.star.wizards.db.*;
 import com.sun.star.beans.*;
 
-public class QuerySummary extends QueryMetaData {
+public class QuerySummary extends QueryMetaData
+{
+
     final protected int RID_QUERY = 2300;
     final protected int RID_REPORT = 2400;
     String sSummary;
     Resource oResource;
-    XMultiServiceFactory xMSF;
+    // XMultiServiceFactory xMSF;
     private String sSeparator;
     private String sReturnChar;
     private String sAnd;
     private String sOr;
 
-
-    public QuerySummary(XMultiServiceFactory _xMSF, Resource _oResource) {
+    public QuerySummary(XMultiServiceFactory _xMSF, Resource _oResource)
+    {
         super(_xMSF);
         this.oResource = _oResource;
-        this.xMSF = _xMSF;
+        // this.xMSF = _xMSF;
         sAnd = oResource.getResText(RID_QUERY + 33);
         sOr = oResource.getResText(RID_QUERY + 34);
         sSeparator = oResource.getResText(RID_QUERY + 91);
@@ -58,17 +61,18 @@ public class QuerySummary extends QueryMetaData {
     }
 
     /*  boolean bAssignAliases =        xDBMetaData.supportsColumnAliasing();
-        boolean bSupportsGroupByUnrelated = xDBMetaData.supportsGroupByUnrelated();
-        boolean bSupportsOrderByUnrelated = xDBMetaData.supportsOrderByUnrelated();
-        boolean bSupportsNumericFunctions = xDBMetaData.getNumericFunctions() != "";
-                            xDBMetaData.getMaxColumnsInGroupBy();
-                            xDBMetaData.getMaxColumnsInOrderBy();
-                            xDBMetaData.getMaxColumnsInSelect();
-                            xDBMetaData.getMaxCharLiteralLength();  // gef?hrlich, da h?chstwahrscheinlich nicht sauber in jedem Treiber implementiert!!!!!
-      *   */
-
-    public void setSummaryString() {
-        try {
+    boolean bSupportsGroupByUnrelated = xDBMetaData.supportsGroupByUnrelated();
+    boolean bSupportsOrderByUnrelated = xDBMetaData.supportsOrderByUnrelated();
+    boolean bSupportsNumericFunctions = xDBMetaData.getNumericFunctions() != "";
+    xDBMetaData.getMaxColumnsInGroupBy();
+    xDBMetaData.getMaxColumnsInOrderBy();
+    xDBMetaData.getMaxColumnsInSelect();
+    xDBMetaData.getMaxCharLiteralLength();  // gef?hrlich, da h?chstwahrscheinlich nicht sauber in jedem Treiber implementiert!!!!!
+     *   */
+    public void setSummaryString()
+    {
+        try
+        {
             String sFieldNamesFraction = "";
             String sSortingFraction = "";
             String sFilterFraction = "";
@@ -76,44 +80,57 @@ public class QuerySummary extends QueryMetaData {
             String sGroupByFraction = "";
             String sHavingFraction = "";
             sFieldNamesFraction = combineFieldNameFraction() + sReturnChar;
-            sSortingFraction = combinePartString(RID_QUERY + 51, getSortFieldNames(), RID_QUERY + 52, RID_QUERY + 93, new String[] { "<FIELDNAME>", "<SORTMODE>" }) + sReturnChar;
+            sSortingFraction = combinePartString(RID_QUERY + 51, getSortFieldNames(), RID_QUERY + 52, RID_QUERY + 93, new String[]
+                    {
+                        "<FIELDNAME>", "<SORTMODE>"
+                    }) + sReturnChar;
             sFilterFraction = combineFilterNameFraction(this.getFilterConditions(), RID_QUERY + 53, RID_QUERY + 54) + sReturnChar;
             //      if (xDBMetaData.getNumericFunctions().length() > 0)
             //          sAggregateFraction = combinePartString(RID_QUERY + 55, AggregateFieldNames, RID_QUERY + 56, RID_QUERY + 95, new String[]{ "<CALCULATEDFUNCTION>", "<FIELDNAME>"}) + sReturnChar;
-            if (xDBMetaData.supportsGroupBy()) {
+            if (xDBMetaData.supportsGroupBy())
+            {
                 sGroupByFraction = combinePartString(RID_QUERY + 57, GroupFieldNames, RID_QUERY + 58) + sReturnChar;
                 sHavingFraction = combineFilterNameFraction(getGroupByFilterConditions(), RID_QUERY + 59, RID_QUERY + 60);
             }
             // TODO: remove the last return from the string
             sSummary = sFieldNamesFraction + sSortingFraction + sFilterFraction + sAggregateFraction + sGroupByFraction + sHavingFraction;
             sSummary = JavaTools.replaceSubString(sSummary, "", "~");
-        } catch (com.sun.star.uno.Exception exception) {
+        }
+        catch (com.sun.star.uno.Exception exception)
+        {
             exception.printStackTrace(System.out);
         }
     }
 
-
-    public String getSummaryString() {
+    public String getSummaryString()
+    {
         return sSummary;
     }
 
-
-    private String combineFilterNameFraction(PropertyValue[][] _filterconditions, int _InitResID, int _AlternativeResID) {
-        if (_filterconditions != null) {
-            if (_filterconditions.length > 0) {
+    private String combineFilterNameFraction(PropertyValue[][] _filterconditions, int _InitResID, int _AlternativeResID)
+    {
+        if (_filterconditions != null)
+        {
+            if (_filterconditions.length > 0)
+            {
                 String sconditions = "";
                 String sStart = oResource.getResText(_InitResID);
                 String BaseString = oResource.getResText(RID_QUERY + 96);
-                if (_filterconditions.length == 1) {
+                if (_filterconditions.length == 1)
+                {
                     PropertyValue[] curfilterconditions = _filterconditions[0];
-                    for (int i = 0; i < curfilterconditions.length; i++) {
+                    for (int i = 0; i < curfilterconditions.length; i++)
+                    {
                         sconditions += FilterComponent.getDisplayCondition(BaseString, _filterconditions[0][i], this);
                         sconditions = appendClauseSeparator(sconditions, " " + sAnd + " ", i, curfilterconditions.length);
                     }
-                } else {
+                }
+                else
+                {
 
-                    for (int i = 0; i < _filterconditions.length; i++) {
-                        sconditions += FilterComponent.getDisplayCondition(BaseString, _filterconditions[i][0],this);
+                    for (int i = 0; i < _filterconditions.length; i++)
+                    {
+                        sconditions += FilterComponent.getDisplayCondition(BaseString, _filterconditions[i][0], this);
                         sconditions = appendClauseSeparator(sconditions, " " + sOr + " ", i, _filterconditions.length);
                     }
                 }
@@ -124,87 +141,115 @@ public class QuerySummary extends QueryMetaData {
         return oResource.getResText(_AlternativeResID);
     }
 
-    private String combineFieldNameFraction() {
+    private String combineFieldNameFraction()
+    {
         String CurString = "";
         String sReturn = oResource.getResText(RID_QUERY + 50);
         String BaseString = oResource.getResText(RID_QUERY + 92);
-        for (int i = 0; i < FieldColumns.length; i++) {
+        for (int i = 0; i < FieldColumns.length; i++)
+        {
             CurString = BaseString;
-            FieldColumn CurDBFieldColumn = super.getFieldColumnByDisplayName(FieldColumns[i].DisplayFieldName);
-            int iAggregate = getAggregateIndex(FieldColumns[i].FieldName);
-            if (iAggregate > -1) {
+            FieldColumn CurDBFieldColumn = super.getFieldColumnByDisplayName(FieldColumns[i].getDisplayFieldName());
+            int iAggregate = getAggregateIndex(FieldColumns[i].m_sFieldName);
+            if (iAggregate > -1)
+            {
                 String sAggregateDisplay = AggregateFieldNames[iAggregate][1] + "(" + AggregateFieldNames[iAggregate][0] + ")";
                 CurString = JavaTools.replaceSubString(CurString, sAggregateDisplay, "<FIELDNAME>");
             }
             else
-                CurString = JavaTools.replaceSubString(CurString, CurDBFieldColumn.DisplayFieldName, "<FIELDNAME>");
-            sReturn += JavaTools.replaceSubString(CurString, CurDBFieldColumn.FieldTitle, "<FIELDTITLE>");
+            {
+                CurString = JavaTools.replaceSubString(CurString, CurDBFieldColumn.getDisplayFieldName(), "<FIELDNAME>");
+            }
+            sReturn += JavaTools.replaceSubString(CurString, CurDBFieldColumn.getFieldTitle(), "<FIELDTITLE>");
             sReturn = appendClauseSeparator(sReturn, sSeparator, i, FieldColumns.length);
         }
         return sReturn;
     }
 
-
-    private String appendClauseSeparator(String _basestring, String _suffix, int _i, int _fieldcount) {
+    private String appendClauseSeparator(String _basestring, String _suffix, int _i, int _fieldcount)
+    {
         if (_i < _fieldcount - 1)
+        {
             _basestring += _suffix;
+        }
         return _basestring;
     }
-
-
     // TODO: How can you merge the following two methods to a single one in a smarter way??
-    public String combinePartString(int _InitResID, String[] _FieldNames, int _AlternativeResID) {
-        if (_FieldNames != null) {
-            if (_FieldNames.length > 0) {
+    public String combinePartString(int _InitResID, String[] _FieldNames, int _AlternativeResID)
+    {
+        if (_FieldNames != null)
+        {
+            if (_FieldNames.length > 0)
+            {
                 return ArrayFieldsToString(_InitResID, _FieldNames);
             }
         }
         return oResource.getResText(_AlternativeResID);
     }
 
-    protected String ArrayFieldsToString(int _InitResID, String[] _FieldNames) {
+    protected String ArrayFieldsToString(int _InitResID, String[] _FieldNames)
+    {
         String sReturn = oResource.getResText(_InitResID);
         int FieldCount = _FieldNames.length;
-        for (int i = 0; i < FieldCount; i++) {
-            sReturn += this.getFieldColumnByDisplayName(_FieldNames[i]).FieldTitle;
+        for (int i = 0; i < FieldCount; i++)
+        {
+            sReturn += this.getFieldColumnByDisplayName(_FieldNames[i]).getFieldTitle();
             if (i < FieldCount - 1)
+            {
                 sReturn += sSeparator;
+            }
         }
         return (sReturn);
     }
 
-    public String combinePartString(int _InitResID, String[][] _FieldNames, int _AlternativeResID, int _BaseStringID, String[] _ReplaceTags) {
-        if (_FieldNames != null) {
+    public String combinePartString(int _InitResID, String[][] _FieldNames, int _AlternativeResID, int _BaseStringID, String[] _ReplaceTags)
+    {
+        if (_FieldNames != null)
+        {
             if (_FieldNames.length > 0)
+            {
                 return ArrayFieldsToString(_InitResID, _FieldNames, _BaseStringID, _ReplaceTags);
+            }
         }
         return oResource.getResText(_AlternativeResID);
     }
 
-    public String ArrayFieldsToString(int _InitResID, String[][] _FieldNames, int _BaseStringID, String[] _ReplaceTags) {
+    public String ArrayFieldsToString(int _InitResID, String[][] _FieldNames, int _BaseStringID, String[] _ReplaceTags)
+    {
         String CurString = "";
         String sReturn = oResource.getResText(_InitResID);
         int FieldCount = _FieldNames.length;
-        if (FieldCount > 0) {
+        if (FieldCount > 0)
+        {
             int DimCount = _FieldNames[0].length;
             String BaseString = oResource.getResText(_BaseStringID);
-            for (int i = 0; i < FieldCount; i++) {
-                for (int a = 0; a < DimCount; a++) {
-                    if (a == 0){
-                        int iAggregate = getAggregateIndex(this.getFieldColumnByDisplayName(_FieldNames[i][a]).DisplayFieldName);
-                        if (iAggregate > -1){
+            for (int i = 0; i < FieldCount; i++)
+            {
+                for (int a = 0; a < DimCount; a++)
+                {
+                    if (a == 0)
+                    {
+                        int iAggregate = getAggregateIndex(this.getFieldColumnByDisplayName(_FieldNames[i][a]).getDisplayFieldName());
+                        if (iAggregate > -1)
+                        {
                             String sAggregateDisplay = AggregateFieldNames[iAggregate][1] + "(" + AggregateFieldNames[iAggregate][0] + ")";
                             CurString = JavaTools.replaceSubString(BaseString, sAggregateDisplay, _ReplaceTags[a]);
                         }
                         else
-                            CurString = JavaTools.replaceSubString(BaseString, this.getFieldColumnByDisplayName(_FieldNames[i][a]).FieldTitle, _ReplaceTags[a]);
+                        {
+                            CurString = JavaTools.replaceSubString(BaseString, this.getFieldColumnByDisplayName(_FieldNames[i][a]).getFieldTitle(), _ReplaceTags[a]);
+                        }
                     }
                     else
+                    {
                         CurString = JavaTools.replaceSubString(CurString, _FieldNames[i][a], _ReplaceTags[a]);
+                    }
                 }
                 sReturn += CurString;
                 if (i < FieldCount - 1)
+                {
                     sReturn += sSeparator;
+                }
             }
         }
         return sReturn;

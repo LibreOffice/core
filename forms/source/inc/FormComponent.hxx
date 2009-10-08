@@ -160,9 +160,14 @@ public:
         const sal_Bool _bSetDelegator = sal_True
     );
 
-    virtual ~OControl();
+    /** initializes the given peer with various settings necessary for form controls
+    */
+    static  void    initFormControlPeer(
+        const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindowPeer >& _rxPeer );
 
 protected:
+    virtual ~OControl();
+
     /** sets the control as delegator at the aggregate
 
         This has to be called from within your derived class' constructor, if and only
@@ -560,11 +565,9 @@ protected:
     };
 
 private:
-    ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >
-                                        m_xField;
-
     ::rtl::OUString                     m_sValuePropertyName;
     sal_Int32                           m_nValuePropertyAggregateHandle;
+    sal_Int32                           m_nFieldType;
     ::com::sun::star::uno::Type         m_aValuePropertyType;
     bool                                m_bValuePropertyMayBeVoid;
 
@@ -582,6 +585,9 @@ private:
     ::rtl::OUString                     m_aControlSource;           // Datenquelle, Name des Feldes
     ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >
                                         m_xLabelControl;            // reference to a sibling control (model) which is our label
+    ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >
+                                        m_xField;
+    sal_Bool                            m_bInputRequired;
 // </properties>
 
     ::comphelper::OPropertyChangeMultiplexer*
@@ -904,7 +910,6 @@ protected:
 
     virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type>   _getTypes();
 
-    void setField( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet>& _rxField,sal_Bool _bFire=sal_True);
     inline const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet>& getField() const
     {
         return m_xField;
@@ -912,6 +917,10 @@ protected:
     inline bool hasField() const
     {
         return m_xField.is();
+    }
+    inline sal_Int32 getFieldType() const
+    {
+        return m_nFieldType;
     }
 
     // OControlModel's property handling

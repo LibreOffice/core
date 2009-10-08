@@ -1,5 +1,5 @@
 /*************************************************************************
-*
+ *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
  * Copyright 2008 by Sun Microsystems, Inc.
@@ -40,12 +40,11 @@ import com.sun.star.wizards.document.*;
 import com.sun.star.wizards.text.*;
 import com.sun.star.uno.Exception;
 
-public class Dataimport extends UnoDialog2 implements com.sun.star.awt.XActionListener{ // extends ReportWizard
+public class Dataimport extends UnoDialog2 implements com.sun.star.awt.XActionListener
+{ // extends ReportWizard
 
     // ReportTextDocument CurReportDocument;
-    IReportDocument CurReportDocument;
-
-//    PropertyValue[] CurProperties;
+    IReportDocument CurReportDocument;//    PropertyValue[] CurProperties;
     static boolean bStopProcess;
     static String sProgressDBConnection;
     static String sProgressDataImport;
@@ -62,25 +61,24 @@ public class Dataimport extends UnoDialog2 implements com.sun.star.awt.XActionLi
 //    public static final String COPYOFTBLGROUPSECTION = ReportTextDocument.COPYOFTBLGROUPSECTION;
 //    public static final String COPYOFRECORDSECTION = ReportTextDocument.COPYOFRECORDSECTION;
 //    public static final String COPYOFGROUPSECTION = ReportTextDocument.COPYOFGROUPSECTION;
-
-
     public Dataimport(XMultiServiceFactory _xMSF)
-        {
-            super(_xMSF);
-            super.addResourceHandler("ReportWizard", "dbw");
-            sProgressDBConnection = m_oResource.getResText(UIConsts.RID_DB_COMMON + 34);
-            sProgressDataImport = m_oResource.getResText(UIConsts.RID_REPORT + 67);
-            sProgressTitle = m_oResource.getResText(UIConsts.RID_REPORT + 62);
-            sProgressBaseCurRecord = m_oResource.getResText(UIConsts.RID_REPORT + 63);
-            sStop = m_oResource.getResText(UIConsts.RID_DB_COMMON + 21);
+    {
+        super(_xMSF);
+        super.addResourceHandler("ReportWizard", "dbw");
+        sProgressDBConnection = m_oResource.getResText(UIConsts.RID_DB_COMMON + 34);
+        sProgressDataImport = m_oResource.getResText(UIConsts.RID_REPORT + 67);
+        sProgressTitle = m_oResource.getResText(UIConsts.RID_REPORT + 62);
+        sProgressBaseCurRecord = m_oResource.getResText(UIConsts.RID_REPORT + 63);
+        sStop = m_oResource.getResText(UIConsts.RID_DB_COMMON + 21);
 
-        }
-
-    public void disposing(com.sun.star.lang.EventObject eventObject){
     }
 
+    public void disposing(com.sun.star.lang.EventObject eventObject)
+    {
+    }
 
-    public void actionPerformed(com.sun.star.awt.ActionEvent actionEvent) {
+    public void actionPerformed(com.sun.star.awt.ActionEvent actionEvent)
+    {
         // bStopProcess = true;
         CurReportDocument.StopProcess();
     }
@@ -117,84 +115,112 @@ public class Dataimport extends UnoDialog2 implements com.sun.star.awt.XActionLi
 //                javaexception.printStackTrace(System.out);
 //            }
 //        }
-
     public void showProgressDisplay(XMultiServiceFactory xMSF, boolean bgetConnection)
+    {
+        try
         {
-            try
+            Helper.setUnoPropertyValues(xDialogModel,
+                    new String[]
+                    {
+                        "Height", "Step", "Title", "Width"
+                    },
+                    new Object[]
+                    {
+                        new Integer(84), new Integer(0), sProgressTitle, new Integer(180)
+                    });
+            com.sun.star.awt.FontDescriptor oFontDesc = new com.sun.star.awt.FontDescriptor();
+            oFontDesc.Weight = com.sun.star.awt.FontWeight.BOLD;
+            if (bgetConnection)
             {
-                Helper.setUnoPropertyValues(xDialogModel,
-                                            new String[] { "Height", "Step", "Title", "Width" },
-                                            new Object[] { new Integer(84), new Integer(0), sProgressTitle, new Integer(180)});
-                com.sun.star.awt.FontDescriptor oFontDesc = new com.sun.star.awt.FontDescriptor();
-                oFontDesc.Weight = com.sun.star.awt.FontWeight.BOLD;
-                if (bgetConnection)
-                {
-                    insertControlModel("com.sun.star.awt.UnoControlFixedTextModel", "lblProgressDBConnection",
-                                       new String[] { "FontDescriptor", "Height", "Label", "PositionX", "PositionY", "Step", "Width" },
-                                       new Object[] { oFontDesc, new Integer(10), sProgressDBConnection, new Integer(6), new Integer(6), new Integer(0), new Integer(150)});
+                insertControlModel("com.sun.star.awt.UnoControlFixedTextModel", "lblProgressDBConnection",
+                        new String[]
+                        {
+                            "FontDescriptor", "Height", "Label", "PositionX", "PositionY", "Step", "Width"
+                        },
+                        new Object[]
+                        {
+                            oFontDesc, new Integer(10), sProgressDBConnection, new Integer(6), new Integer(6), new Integer(0), new Integer(150)
+                        });
 
-                    insertControlModel("com.sun.star.awt.UnoControlFixedTextModel", "lblProgressDataImport",
-                                       new String[] { "Height", "Label", "PositionX", "PositionY", "Step", "Width" },
-                                       new Object[] { new Integer(10), sProgressDataImport, new Integer(6), new Integer(24), new Integer(0), new Integer(120)});
-                }
-                else
-                {
-                    insertControlModel("com.sun.star.awt.UnoControlFixedTextModel", "lblProgressDataImport",
-                                       new String[] { "FontDescriptor", "Height", "Label", "PositionX", "PositionY", "Step", "Width" },
-                                       new Object[] { oFontDesc, new Integer(10), sProgressDataImport, new Integer(6), new Integer(24), new Integer(0), new Integer(120)});
-                }
-                insertControlModel("com.sun.star.awt.UnoControlFixedTextModel", "lblCurProgress",
-                                   new String[] { "Height", "Label", "PositionX", "PositionY", "Step", "Width" },
-                                   new Object[] { new Integer(10), "", new Integer(12), new Integer(42), new Integer(0), new Integer(120)});
-
-                insertButton("cmdCancel", 10000, this,
-                             new String[] { "Height", "HelpURL", "PositionX", "PositionY", "Step", "TabIndex", "Width", "Label" },
-                             new Object[] { new Integer(14), "HID:34321", new Integer(74), new Integer(58), new Integer(0), new Short((short) 1), new Integer(40), sStop });
-                createWindowPeer(CurReportDocument.getWizardParent());
-                calculateDialogPosition(CurReportDocument.getFrame().getComponentWindow().getPosSize());
-                xWindow.setVisible(true);
-                super.xReschedule.reschedule();
-                return;
+                insertControlModel("com.sun.star.awt.UnoControlFixedTextModel", "lblProgressDataImport",
+                        new String[]
+                        {
+                            "Height", "Label", "PositionX", "PositionY", "Step", "Width"
+                        },
+                        new Object[]
+                        {
+                            new Integer(10), sProgressDataImport, new Integer(6), new Integer(24), new Integer(0), new Integer(120)
+                        });
             }
-            catch (Exception exception)
+            else
             {
-                exception.printStackTrace(System.out);
-                // return;
+                insertControlModel("com.sun.star.awt.UnoControlFixedTextModel", "lblProgressDataImport",
+                        new String[]
+                        {
+                            "FontDescriptor", "Height", "Label", "PositionX", "PositionY", "Step", "Width"
+                        },
+                        new Object[]
+                        {
+                            oFontDesc, new Integer(10), sProgressDataImport, new Integer(6), new Integer(24), new Integer(0), new Integer(120)
+                        });
             }
-            catch (java.lang.Exception jexception)
-            {
-                jexception.printStackTrace(System.out);
-                // return;
-    }
+            insertControlModel("com.sun.star.awt.UnoControlFixedTextModel", "lblCurProgress",
+                    new String[]
+                    {
+                        "Height", "Label", "PositionX", "PositionY", "Step", "Width"
+                    },
+                    new Object[]
+                    {
+                        new Integer(10), "", new Integer(12), new Integer(42), new Integer(0), new Integer(120)
+                    });
+
+            insertButton("cmdCancel", 10000, this,
+                    new String[]
+                    {
+                        "Height", "HelpURL", "PositionX", "PositionY", "Step", "TabIndex", "Width", "Label"
+                    },
+                    new Object[]
+                    {
+                        new Integer(14), "HID:34321", new Integer(74), new Integer(58), new Integer(0), new Short((short) 1), new Integer(40), sStop
+                    });
+            createWindowPeer(CurReportDocument.getWizardParent());
+            calculateDialogPosition(CurReportDocument.getFrame().getComponentWindow().getPosSize());
+            xWindow.setVisible(true);
+            super.xReschedule.reschedule();
+            return;
+        }
+        catch (Exception exception)
+        {
+            exception.printStackTrace(System.out);
+        // return;
+        }
+        catch (java.lang.Exception jexception)
+        {
+            jexception.printStackTrace(System.out);
+        // return;
+        }
     }
 
-  // public void importReportData(final XMultiServiceFactory xMSF, final Dataimport CurDataimport, final ReportTextDocument CurReportDocument.getDoc()) {
+    // public void importReportData(final XMultiServiceFactory xMSF, final Dataimport CurDataimport, final ReportTextDocument CurReportDocument.getDoc()) {
     public void importReportData(final XMultiServiceFactory _xMSF, final Dataimport _CurDataimport, IReportDocument _CurReportDocument, PropertyValue[] _properties)
+    {
+        if (CurReportDocument.reconnectToDatabase(_xMSF, _properties))
         {
-            if (CurReportDocument.reconnectToDatabase(_xMSF, _properties))
-            {
-                // The following calls to remove the Sections must occur after the connection to the database
-                modifyFontWeight("lblProgressDBConnection", com.sun.star.awt.FontWeight.NORMAL);
-                modifyFontWeight("lblProgressDataImport", com.sun.star.awt.FontWeight.BOLD);
-                CurReportDocument.insertDatabaseDatatoReportDocument(_xMSF);
-            }
-            xComponent.dispose();
-            CurReportDocument.getRecordParser().dispose();
+            // The following calls to remove the Sections must occur after the connection to the database
+            modifyFontWeight("lblProgressDBConnection", com.sun.star.awt.FontWeight.NORMAL);
+            modifyFontWeight("lblProgressDataImport", com.sun.star.awt.FontWeight.BOLD);
+            CurReportDocument.insertDatabaseDatatoReportDocument(_xMSF);
         }
+        xComponent.dispose();
+        CurReportDocument.getRecordParser().dispose();
+    }
 
-
-    public void createReport(final XMultiServiceFactory xMSF,XTextDocument _textDocument, PropertyValue[] properties)
-        {
-            // CurReportDocument = new ReportTextDocument(xMSF, _textDocument,m_oResource);
-            CurReportDocument = ReportTextImplementation.create(xMSF, _textDocument,m_oResource);
+    public void createReport(final XMultiServiceFactory xMSF, XTextDocument _textDocument, PropertyValue[] properties)
+    {
+        // CurReportDocument = new ReportTextDocument(xMSF, _textDocument,m_oResource);
+        CurReportDocument = ReportTextImplementation.create(xMSF, _textDocument, m_oResource);
 //            CurProperties = properties;
-            showProgressDisplay(xMSF, true);
-            importReportData(xMSF, this, CurReportDocument, properties);
-        }
-
-
-
-
-
-
+        showProgressDisplay(xMSF, true);
+        importReportData(xMSF, this, CurReportDocument, properties);
+    }
 }

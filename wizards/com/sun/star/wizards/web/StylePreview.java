@@ -43,7 +43,9 @@ import com.sun.star.wizards.web.data.CGStyle;
  * on request, according to the current style/background selection
  * of the user.
  */
-public class StylePreview {
+public class StylePreview
+{
+
     private FileAccess fileAccess;
     /**
      * the destination html url.
@@ -66,25 +68,25 @@ public class StylePreview {
      */
     private String wwRoot;
 
-
     /**
      * copies the html file to the temp directory, and calculates the
      * destination names of the background and css files.
      * @param wwRoot is the root directory of the web wizard files (
      * usually [oo]/share/template/[lang]/wizard/web
      */
-    public StylePreview(XMultiServiceFactory xmsf, String wwRoot_) throws Exception {
+    public StylePreview(XMultiServiceFactory xmsf, String wwRoot_) throws Exception
+    {
         fileAccess = new FileAccess(xmsf);
 
         tempDir = createTempDir(xmsf);
 
-        htmlFilename = FileAccess.connectURLs(tempDir , "wwpreview.html");
-        cssFilename = FileAccess.connectURLs(tempDir ,"style.css");
-        backgroundFilename = FileAccess.connectURLs(tempDir , "images/background.gif");
+        htmlFilename = FileAccess.connectURLs(tempDir, "wwpreview.html");
+        cssFilename = FileAccess.connectURLs(tempDir, "style.css");
+        backgroundFilename = FileAccess.connectURLs(tempDir, "images/background.gif");
 
         wwRoot = wwRoot_;
 
-        fileAccess.copy(FileAccess.connectURLs(wwRoot,"preview.html"), htmlFilename);
+        fileAccess.copy(FileAccess.connectURLs(wwRoot, "preview.html"), htmlFilename);
     }
 
     /**
@@ -94,30 +96,38 @@ public class StylePreview {
      * @param background
      * @throws Exception
      */
-    public void refresh(CGStyle style, String background) throws Exception {
+    public void refresh(CGStyle style, String background) throws Exception
+    {
 
-        String css = FileAccess.connectURLs(wwRoot , "styles/" + style.cp_CssHref);
+        String css = FileAccess.connectURLs(wwRoot, "styles/" + style.cp_CssHref);
 
-        if (background == null || background.equals("")) {
+        if (background == null || background.equals(""))
+        {
             //delete the background image
-            if (fileAccess.exists(backgroundFilename,false))
-                    fileAccess.delete(backgroundFilename);
+            if (fileAccess.exists(backgroundFilename, false))
+            {
+                fileAccess.delete(backgroundFilename);
+            }
         }
-        else {
+        else
+        {
             // a solaris bug workaround
             // TODO
             //copy the background image to the temp directory.
-            fileAccess.copy(background,backgroundFilename);
+            fileAccess.copy(background, backgroundFilename);
         }
         //copy the actual css to the temp directory
-        fileAccess.copy(css,cssFilename);
+        fileAccess.copy(css, cssFilename);
     }
 
-    public void cleanup() {
-        try {
+    public void cleanup()
+    {
+        try
+        {
             removeTempDir();
         }
-        catch (Exception ex) {
+        catch (Exception ex)
+        {
             ex.printStackTrace();
         }
     }
@@ -128,10 +138,11 @@ public class StylePreview {
      * @return the url of the new directory.
      * @throws Exception
      */
-    private String createTempDir(XMultiServiceFactory xmsf) throws Exception {
-        String tempPath = FileAccess.getOfficePath(xmsf,"Temp","", "") ;
+    private String createTempDir(XMultiServiceFactory xmsf) throws Exception
+    {
+        String tempPath = FileAccess.getOfficePath(xmsf, "Temp", "", "");
         String s = fileAccess.createNewDir(tempPath, "wwiz");
-        fileAccess.createNewDir(s,"images");
+        fileAccess.createNewDir(s, "images");
         return s;
     }
 
@@ -139,8 +150,8 @@ public class StylePreview {
      * deletes/removes the temporary directroy.
      * @throws Exception
      */
-    private void removeTempDir() throws Exception {
+    private void removeTempDir() throws Exception
+    {
         fileAccess.delete(tempDir);
     }
-
 }

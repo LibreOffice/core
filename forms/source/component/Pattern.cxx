@@ -167,13 +167,21 @@ void OPatternModel::describeFixedProperties( Sequence< Property >& _rProps ) con
 //------------------------------------------------------------------------------
 sal_Bool OPatternModel::commitControlValueToDbColumn( bool /*_bPostReset*/ )
 {
-    ::rtl::OUString sNewValue;
-    m_xAggregateFastSet->getFastPropertyValue( getValuePropertyAggHandle() ) >>= sNewValue;
+    Any aNewValue( m_xAggregateFastSet->getFastPropertyValue( getValuePropertyAggHandle() ) );
 
-    if ( sNewValue != m_aSaveValue )
+    if ( aNewValue != m_aLastKnownValue )
     {
-        if ( !sNewValue.getLength() && !isRequired() && m_bEmptyIsNull )
+        ::rtl::OUString sNewValue;
+        aNewValue >>= sNewValue;
+
+        if  (   !aNewValue.hasValue()
+            ||  (   !sNewValue.getLength()      // an empty string
+                &&  m_bEmptyIsNull              // which should be interpreted as NULL
+                )
+            )
+        {
             m_xColumnUpdate->updateNull();
+        }
         else
         {
             OSL_ENSURE( m_pFormattedValue.get(), "OPatternModel::commitControlValueToDbColumn: no value helper!" );
@@ -183,8 +191,10 @@ sal_Bool OPatternModel::commitControlValueToDbColumn( bool /*_bPostReset*/ )
             if ( !m_pFormattedValue->setFormattedValue( sNewValue ) )
                 return sal_False;
         }
-        m_aSaveValue = sNewValue;
+
+        m_aLastKnownValue = aNewValue;
     }
+
     return sal_True;
 }
 
@@ -212,11 +222,27 @@ void OPatternModel::onDisconnectedDbColumn()
 Any OPatternModel::translateDbColumnToControlValue()
 {
     OSL_PRECOND( m_pFormattedValue.get(), "OPatternModel::translateDbColumnToControlValue: no value helper!" );
+
     if ( m_pFormattedValue.get() )
-        m_aSaveValue = m_pFormattedValue->getFormattedValue();
+    {
+        ::rtl::OUString sValue( m_pFormattedValue->getFormattedValue() );
+        if  (   !sValue.getLength()
+            &&  m_pFormattedValue->getColumn().is()
+            &&  m_pFormattedValue->getColumn()->wasNull()
+            )
+        {
+            m_aLastKnownValue.clear();
+        }
+        else
+        {
+            m_aLastKnownValue <<= sValue;
+        }
+    }
     else
-        m_aSaveValue = ::rtl::OUString();
-    return makeAny( m_aSaveValue );
+        m_aLastKnownValue.clear();
+
+    return m_aLastKnownValue.hasValue() ? m_aLastKnownValue : makeAny( ::rtl::OUString() );
+        // (m_aLastKnownValue is alllowed to be VOID, the control value isn't)
 }
 
 // XReset

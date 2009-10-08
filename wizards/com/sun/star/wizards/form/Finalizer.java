@@ -43,7 +43,9 @@ import com.sun.star.wizards.ui.*;
  * To change the template for this generated type comment go to
  * Window&gt;Preferences&gt;Java&gt;Code Generation&gt;Code and Comments
  */
-public class Finalizer {
+public class Finalizer
+{
+
     WizardDialog CurUnoDialog;
     Desktop.OfficePathRetriever curofficepath;
     short curtabindex;
@@ -52,7 +54,8 @@ public class Finalizer {
     XTextComponent txtFormName;
     FormDocument oFormDocument;
 
-    public Finalizer(WizardDialog _CurUnoDialog) {
+    public Finalizer(WizardDialog _CurUnoDialog)
+    {
         this.CurUnoDialog = _CurUnoDialog;
         curtabindex = (short) (FormWizard.SOSTOREPAGE * 100);
 
@@ -61,51 +64,84 @@ public class Finalizer {
         String sWorkWithForm = CurUnoDialog.m_oResource.getResText(UIConsts.RID_FORM + 52);
         String sModifyForm = CurUnoDialog.m_oResource.getResText(UIConsts.RID_FORM + 53);
         CurUnoDialog.insertLabel("lblFormName",
-          new String[] {"Height", "Label", "PositionX", "PositionY", "Step", "TabIndex", "Width"},
-          new Object[] { UIConsts.INTEGERS[8], slblFormName, new Integer(97), new Integer(25), UIConsts.INTEGERS[8], new Short(curtabindex++), new Integer(111)}
-        );
+                new String[]
+                {
+                    "Height", "Label", "PositionX", "PositionY", "Step", "TabIndex", "Width"
+                },
+                new Object[]
+                {
+                    UIConsts.INTEGERS[8], slblFormName, new Integer(97), new Integer(25), UIConsts.INTEGERS[8], new Short(curtabindex++), new Integer(111)
+                });
         txtFormName = CurUnoDialog.insertTextField("txtFormName", "toggleFinishButton", this,
-          new String[] {"Height", "HelpURL", "PositionX", "PositionY", "Step", "TabIndex", "Text", "Width"},
-          new Object[] { UIConsts.INTEGER_12, "HID:34481", new Integer(97), new Integer(35),UIConsts.INTEGERS[8], new Short((short)82),"", new Integer(185)}
-        );
+                new String[]
+                {
+                    "Height", "HelpURL", "PositionX", "PositionY", "Step", "TabIndex", "Text", "Width"
+                },
+                new Object[]
+                {
+                    UIConsts.INTEGER_12, "HID:34481", new Integer(97), new Integer(35), UIConsts.INTEGERS[8], new Short((short) 82), "", new Integer(185)
+                });
         CurUnoDialog.insertLabel("lblProceed",
-          new String[] {"Height", "Label", "PositionX", "PositionY", "Step", "TabIndex", "Width"},
-          new Object[] { UIConsts.INTEGERS[8], slblProceed, new Integer(97), new Integer(62),UIConsts.INTEGERS[8], new Short(curtabindex++), new Integer(185)}
-        );
+                new String[]
+                {
+                    "Height", "Label", "PositionX", "PositionY", "Step", "TabIndex", "Width"
+                },
+                new Object[]
+                {
+                    UIConsts.INTEGERS[8], slblProceed, new Integer(97), new Integer(62), UIConsts.INTEGERS[8], new Short(curtabindex++), new Integer(185)
+                });
         XRadioButton optWorkWithForm = CurUnoDialog.insertRadioButton("optWorkWithForm", null,
-          new String[] {"Height", "HelpURL", "Label", "PositionX", "PositionY", "State", "Step", "TabIndex", "Width"},
-          new Object[] { UIConsts.INTEGERS[8], "HID:34482", sWorkWithForm, new Integer(101), new Integer(77), new Short((short)1),UIConsts.INTEGERS[8], new Short(curtabindex++), new Integer(107)}
-        );
+                new String[]
+                {
+                    "Height", "HelpURL", "Label", "PositionX", "PositionY", "State", "Step", "TabIndex", "Width"
+                },
+                new Object[]
+                {
+                    UIConsts.INTEGERS[8], "HID:34482", sWorkWithForm, new Integer(101), new Integer(77), new Short((short) 1), UIConsts.INTEGERS[8], new Short(curtabindex++), new Integer(107)
+                });
         optModifyForm = CurUnoDialog.insertRadioButton("optModifyForm", null,
-          new String[] {"Height", "HelpURL", "Label", "PositionX", "PositionY", "Step", "TabIndex", "Width"},
-          new Object[] { UIConsts.INTEGERS[8], "HID:34483", sModifyForm, new Integer(101), new Integer(89),UIConsts.INTEGERS[8], new Short(curtabindex++), new Integer(107)}
-        );
+                new String[]
+                {
+                    "Height", "HelpURL", "Label", "PositionX", "PositionY", "Step", "TabIndex", "Width"
+                },
+                new Object[]
+                {
+                    UIConsts.INTEGERS[8], "HID:34483", sModifyForm, new Integer(101), new Integer(89), UIConsts.INTEGERS[8], new Short(curtabindex++), new Integer(107)
+                });
     }
 
-    public void initialize(String _formname, FormDocument _oFormDocument){
+    public void initialize(String _formname, FormDocument _oFormDocument)
+    {
         if (oFormDocument == null)
+        {
             oFormDocument = _oFormDocument;
+        }
         if (txtFormName.getText().length() == 0)
-            txtFormName.setText(Desktop.getUniqueName(_oFormDocument.oMainFormDBMetaData.getFormDocuments(),_formname));
+        {
+            txtFormName.setText(Desktop.getUniqueName(_oFormDocument.oMainFormDBMetaData.getFormDocuments(), _formname));
+        }
     }
 
-    public void toggleFinishButton(){
+    public void toggleFinishButton()
+    {
         CurUnoDialog.enableFinishButton(txtFormName.getText().length() > 0);
     }
 
-
-    public String getName(){
+    public String getName()
+    {
         return txtFormName.getText();
     }
 
-    public boolean getOpenMode(){
+    public boolean getOpenMode()
+    {
         boolean bOpenMode = optModifyForm.getState() ? true : false;
         return bOpenMode;
     }
 
-    public boolean finish(){
+    public boolean finish()
+    {
 //        if (!oFormDocument.oMainFormDBMetaData.hasFormDocumentByName(sFormName)){
-            return oFormDocument.oMainFormDBMetaData.storeDatabaseDocumentToTempPath(this.oFormDocument.xComponent, getName());
+        return oFormDocument.oMainFormDBMetaData.storeDatabaseDocumentToTempPath(this.oFormDocument.xComponent, getName());
 //        }
     }
 }

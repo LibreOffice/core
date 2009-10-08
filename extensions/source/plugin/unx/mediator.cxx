@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: mediator.cxx,v $
- * $Revision: 1.11 $
+ * $Revision: 1.11.90.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -70,8 +70,11 @@ Mediator::~Mediator()
     }
     else
         close( m_nSocket );
-    while( m_aMessageQueue.Count() )
-        delete m_aMessageQueue.Remove( (ULONG)0 );
+    for( std::vector< MediatorMessage* >::iterator it = m_aMessageQueue.begin();
+         it != m_aMessageQueue.end(); ++it )
+    {
+        delete *it;
+    }
 }
 
 
@@ -107,7 +110,7 @@ BOOL Mediator::WaitForMessage( ULONG nTimeOut )
     if( ! m_pListener )
         return FALSE;
 
-    ULONG nItems = m_aMessageQueue.Count();
+    size_t nItems = m_aMessageQueue.size();
 
     if( ! nTimeOut && nItems > 0 )
         return TRUE;
@@ -116,11 +119,11 @@ BOOL Mediator::WaitForMessage( ULONG nTimeOut )
     aValue.Seconds = nTimeOut/1000;
     aValue.Nanosec = ( nTimeOut % 1000 ) * 1000;
 
-    while( m_aMessageQueue.Count() == nItems )
+    while( m_aMessageQueue.size() == nItems )
     {
         m_aNewMessageCdtn.wait( & aValue );
         m_aNewMessageCdtn.reset();
-        if( nTimeOut && m_aMessageQueue.Count() == nItems )
+        if( nTimeOut && m_aMessageQueue.size() == nItems )
             return FALSE;
     }
     return TRUE;
@@ -133,12 +136,16 @@ MediatorMessage* Mediator::WaitForAnswer( ULONG nMessageID )
     {
         {
             NAMESPACE_VOS(OGuard) aGuard( m_aQueueMutex );
-            for( ULONG i = 0; i < m_aMessageQueue.Count(); i++ )
+            for( size_t i = 0; i < m_aMessageQueue.size(); i++ )
             {
-                ULONG nID = m_aMessageQueue.GetObject( i )->m_nID;
+                MediatorMessage* pMessage = m_aMessageQueue[ i ];
+                ULONG nID = pMessage->m_nID;
                 if(  ( nID & 0xff000000 ) &&
                      ( ( nID & 0x00ffffff ) == nMessageID ) )
-                    return m_aMessageQueue.Remove( i );
+                {
+                    m_aMessageQueue.erase( m_aMessageQueue.begin() + i );
+                    return pMessage;
+                }
             }
         }
         WaitForMessage( 10 );
@@ -154,9 +161,15 @@ MediatorMessage* Mediator::GetNextMessage( BOOL bWait )
             // guard must be after WaitForMessage, else the listener
             // cannot insert a new one -> deadlock
             NAMESPACE_VOS(OGuard) aGuard( m_aQueueMutex );
-            for( ULONG i = 0; i < m_aMessageQueue.Count(); i++ )
-                if( ! ( m_aMessageQueue.GetObject( i )->m_nID & 0xff000000 ) )
-                    return m_aMessageQueue.Remove( i );
+            for( size_t i = 0; i < m_aMessageQueue.size(); i++ )
+            {
+                MediatorMessage* pMessage = m_aMessageQueue[ i ];
+                if( ! ( pMessage->m_nID & 0xff000000 ) )
+                {
+                    m_aMessageQueue.erase( m_aMessageQueue.begin() + i );
+                    return pMessage;
+                }
+            }
             if( ! bWait )
                 return NULL;
         }
@@ -201,7 +214,7 @@ void MediatorListener::run()
                         aGuard( m_pMediator->m_aQueueMutex );
                     MediatorMessage* pMessage =
                         new MediatorMessage( nHeader[ 0 ], nHeader[ 1 ], pBuffer );
-                    m_pMediator->m_aMessageQueue.Insert( pMessage, LIST_APPEND );
+                    m_pMediator->m_aMessageQueue.push_back( pMessage );
                 }
                 m_pMediator->m_aNewMessageCdtn.set();
                 m_pMediator->m_aNewMessageHdl.Call( m_pMediator );

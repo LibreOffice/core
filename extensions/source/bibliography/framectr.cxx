@@ -611,7 +611,7 @@ void BibFrameController_Impl::dispatch(const util::URL& _rURL, const uno::Sequen
                 }
                 catch(Exception&)
                 {
-                    DBG_ERROR("Exception in last() or moveToInsertRow()")
+                    DBG_ERROR("Exception in last() or moveToInsertRow()");
                 }
             }
         }

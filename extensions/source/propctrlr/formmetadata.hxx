@@ -323,20 +323,24 @@ namespace pcr
     #define PROPERTY_ID_XSD_MAX_EXCLUSIVE_DATE_TIME  179
     #define PROPERTY_ID_XSD_MIN_INCLUSIVE_DATE_TIME  180
     #define PROPERTY_ID_XSD_MIN_EXCLUSIVE_DATE_TIME  181
-    #define PROPERTY_ID_UNCHECKEDREFVALUE    182
-    #define PROPERTY_ID_SUBMISSION_ID        183
-    #define PROPERTY_ID_XFORMS_BUTTONTYPE    184
-    #define PROPERTY_ID_LIST_BINDING         185
-    #define PROPERTY_ID_VERTICAL_ALIGN       186
-    #define PROPERTY_ID_BINDING_NAME         187
-    #define PROPERTY_ID_DECORATION           188
-    #define PROPERTY_ID_SELECTION_TYPE               189
-    #define PROPERTY_ID_ROOT_DISPLAYED               190
-    #define PROPERTY_ID_SHOWS_HANDLES                191
-    #define PROPERTY_ID_SHOWS_ROOT_HANDLES           192
-    #define PROPERTY_ID_EDITABLE                     193
-    #define PROPERTY_ID_INVOKES_STOP_NOT_EDITING     194
-    #define PROPERTY_ID_NOLABEL                  195
+    #define PROPERTY_ID_UNCHECKEDREFVALUE           182
+    #define PROPERTY_ID_SUBMISSION_ID               183
+    #define PROPERTY_ID_XFORMS_BUTTONTYPE           184
+    #define PROPERTY_ID_LIST_BINDING                185
+    #define PROPERTY_ID_VERTICAL_ALIGN              186
+    #define PROPERTY_ID_BINDING_NAME                187
+    #define PROPERTY_ID_DECORATION                  188
+    #define PROPERTY_ID_SELECTION_TYPE              189
+    #define PROPERTY_ID_ROOT_DISPLAYED              190
+    #define PROPERTY_ID_SHOWS_HANDLES               191
+    #define PROPERTY_ID_SHOWS_ROOT_HANDLES          192
+    #define PROPERTY_ID_EDITABLE                    193
+    #define PROPERTY_ID_INVOKES_STOP_NOT_EDITING    194
+    #define PROPERTY_ID_NOLABEL                     195
+    #define PROPERTY_ID_SCALE_MODE                  196
+    #define PROPERTY_ID_INPUT_REQUIRED              197
+    #define PROPERTY_ID_WRITING_MODE                198
+
 //............................................................................
 } // namespace pcr
 //............................................................................

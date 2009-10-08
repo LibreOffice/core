@@ -31,6 +31,7 @@
 #ifndef EXTENSIONS_PROPRESID_HRC
 #include "propresid.hrc"
 #endif
+#include "formresid.hrc"
 
 String RID_STR_STANDARD
 {
@@ -44,11 +45,22 @@ String RID_STR_PROPPAGE_DATA
 {
     Text [ en-US ] = "Data" ;
 };
-String RID_STR_BOOL
+Resource RID_RSC_ENUM_YESNO
 {
-    Text [ en-US ] = "No;Yes" ;
+    String 1
+    {
+        Text [ en-US ] = "No" ;
+    };
+    String 2
+    {
+        Text [ en-US ] = "Yes" ;
+    };
 };
 String RID_STR_HELP_SECTION_LABEL
 {
     Text [ en-US ] = "Help";
+};
+String RID_EMBED_IMAGE_PLACEHOLDER
+{
+    Text [ en-US ] = "<Embedded-Image>";
 };

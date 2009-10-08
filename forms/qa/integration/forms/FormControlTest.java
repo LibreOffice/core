@@ -29,41 +29,33 @@
  ************************************************************************/
 package integration.forms;
 
-import com.sun.star.uno.UnoRuntime;
-import com.sun.star.uno.XNamingService;
-
+import com.sun.star.awt.XImageProducer;
+import com.sun.star.beans.PropertyValue;
+import com.sun.star.beans.XPropertySet;
 import com.sun.star.container.XNameAccess;
-
+import com.sun.star.form.XFormController;
+import com.sun.star.form.XImageProducerSupplier;
+import com.sun.star.frame.XDispatch;
+import com.sun.star.lang.EventObject;
 import com.sun.star.lang.XMultiServiceFactory;
-
-import com.sun.star.util.XCloseable;
-import com.sun.star.util.XURLTransformer;
-import com.sun.star.util.URL;
-
 import com.sun.star.sdb.CommandType;
-import com.sun.star.sdbc.XDataSource;
+import com.sun.star.sdb.SQLErrorEvent;
+import com.sun.star.sdb.XSQLErrorBroadcaster;
+import com.sun.star.sdb.XSQLErrorListener;
 import com.sun.star.sdbc.XConnection;
+import com.sun.star.sdbc.XDataSource;
 import com.sun.star.sdbc.XResultSet;
 import com.sun.star.sdbc.XResultSetUpdate;
-
-import com.sun.star.form.XImageProducerSupplier;
-
-import com.sun.star.beans.XPropertySet;
-import com.sun.star.beans.PropertyValue;
-
-import com.sun.star.frame.XDispatch;
-
-import com.sun.star.awt.XImageProducer;
-
-import com.sun.star.accessibility.XAccessible;
-import com.sun.star.accessibility.XAccessibleEditableText;
-
+import com.sun.star.uno.UnoRuntime;
+import com.sun.star.uno.XNamingService;
+import com.sun.star.util.URL;
+import com.sun.star.util.XCloseable;
+import com.sun.star.util.XURLTransformer;
 import connectivity.tools.HsqlDatabase;
+import java.io.FileOutputStream;
 
-import java.util.*;
-import java.io.*;
 
-public class FormControlTest extends complexlib.ComplexTestCase
+public class FormControlTest extends complexlib.ComplexTestCase implements XSQLErrorListener
 {
     private static String s_tableName        = "CTC_form_controls";
 
@@ -74,7 +66,9 @@ public class FormControlTest extends complexlib.ComplexTestCase
     private DocumentHelper          m_document;
     private FormLayer               m_formLayer;
     private XPropertySet            m_masterForm;
+    private XFormController         m_masterFormController;
     private String                  m_sImageURL;
+    private SQLErrorEvent           m_mostRecentErrorEvent;
 
     private final String            m_dataSourceName = "integration.forms.FormControlTest";
 
@@ -87,7 +81,8 @@ public class FormControlTest extends complexlib.ComplexTestCase
             "checkImageControl",
             "checkCrossUpdates_checkBox",
             "checkCrossUpdates_radioButton",
-            "checkRowUpdates"
+            "checkRowUpdates",
+            "checkEmptyIsNull"
         };
     }
 
@@ -370,11 +365,7 @@ public class FormControlTest extends complexlib.ComplexTestCase
     {
         // start with inserting a new record
         moveToInsertRow();
-        if ( !verifyCleanInsertRow() )
-        {
-            failed( "insert row not in expected clean state" );
-            return;
-        }
+        assure( "insert row not in expected clean state", verifyCleanInsertRow() );
 
         userTextInput( "ID", "3", true );
         userTextInput( "f_integer", "729", true );
@@ -404,6 +395,7 @@ public class FormControlTest extends complexlib.ComplexTestCase
         userTextInput( "ID", "4", true );
         userTextInput( "f_integer", "618", true );
         userTextInput( "f_text", "yet another stupid, meaningless text", true );
+        userTextInput( "f_required_text", "this must not be NULL", true );
         userTextInput( "f_decimal", "4562", true );
         userTextInput( "f_date", "26.03.2004", true );
         userTextInput( "f_time", "17:05:00", true );
@@ -426,6 +418,31 @@ public class FormControlTest extends complexlib.ComplexTestCase
         }
 
         m_document.getCurrentView().grabControlFocus( getControlModel( "ID" ) );
+    }
+
+    /* ------------------------------------------------------------------ */
+    /** checks the "ConvertEmptyToNull" property behavior of an edit control
+     *
+     */
+    public void checkEmptyIsNull() throws com.sun.star.uno.Exception, java.lang.Exception
+    {
+        // start with inserting a new record
+        moveToInsertRow();
+        assure( "insert row not in expected clean state", verifyCleanInsertRow() );
+
+        // make an input in any field, but leave the edit control which is bound to a required field
+        // empty
+        userTextInput( "ID", "5", true );
+        userTextInput( "f_text", "more text", true );
+
+        // this should *not* fail. Even if we did not input anything into the control bound to the
+        // f_required_text column, this control's reset (done when moving to the insertion row) is
+        // expected to write an empty string into its bound column, since its EmptyIsNULL property
+        // is set to FALSE
+        // (#i92471#)
+        m_mostRecentErrorEvent = null;
+        nextRecordByUI();
+        assure( "updating an incomplete record did not work as expected", m_mostRecentErrorEvent == null );
     }
 
     /* ------------------------------------------------------------------ */
@@ -477,6 +494,11 @@ public class FormControlTest extends complexlib.ComplexTestCase
         m_dataSource = (XDataSource)UnoRuntime.queryInterface( XDataSource.class,
             databaseContext.getByName( m_dataSourceName ) );
         m_dataSourceProps = dbfTools.queryPropertySet( m_dataSource );
+
+        XPropertySet dataSourceSettings = (XPropertySet)UnoRuntime.queryInterface( XPropertySet.class,
+            m_dataSourceProps.getPropertyValue( "Settings" ) );
+        dataSourceSettings.setPropertyValue( "FormsCheckRequiredFields", new Boolean( false ) );
+
         return m_dataSource != null;
     }
 
@@ -499,27 +521,29 @@ public class FormControlTest extends complexlib.ComplexTestCase
         m_formLayer = new FormLayer( m_document );
 
         // insert some controls
-        XPropertySet xIDField =     m_formLayer.insertControlLine( "DatabaseNumericField",  "ID",           "",       3 );
-                                    m_formLayer.insertControlLine( "DatabaseFormattedField","f_integer",    "",       11 );
-                                    m_formLayer.insertControlLine( "DatabaseTextField",     "f_text",       "",       19 );
-        XPropertySet xDecField =    m_formLayer.insertControlLine( "DatabaseNumericField",  "f_decimal",    "",       27 );
-                                    m_formLayer.insertControlLine( "DatabaseDateField",     "f_date",       "",       35 );
-        XPropertySet xTimeField =   m_formLayer.insertControlLine( "DatabaseTimeField",     "f_time",       "",       43 );
-                                    m_formLayer.insertControlLine( "DatabaseDateField",     "f_timestamp",  "_date",  51 );
-                                    m_formLayer.insertControlLine( "DatabaseTimeField",     "f_timestamp",  "_time",  59 );
-        XPropertySet xImageField =  m_formLayer.insertControlLine( "DatabaseImageControl",  "f_blob",       "",       2, 67, 40 );
-                                    m_formLayer.insertControlLine( "DatabaseTextField",     "f_text_enum",  "_text",  80, 25, 6 );
-        XPropertySet xCheckBox =    m_formLayer.insertControlLine( "DatabaseCheckBox",      "f_tinyint",    "",       80, 33, 6 );
-                                    m_formLayer.insertControlLine( "DatabaseFormattedField","f_tinyint",    "_format",80, 41, 6 );
-                                    m_formLayer.insertControlLine( "DatabaseTextField",     "dummy",        "", 150 );
+        XPropertySet xIDField =     m_formLayer.insertControlLine( "DatabaseNumericField",  "ID",               "",       3 );
+                                    m_formLayer.insertControlLine( "DatabaseFormattedField","f_integer",        "",       11 );
+                                    m_formLayer.insertControlLine( "DatabaseTextField",     "f_text",           "",       19 );
+        XPropertySet xReqField =    m_formLayer.insertControlLine( "DatabaseTextField",     "f_required_text",  "",       27 );
+                                    m_formLayer.insertControlLine( "DatabaseNumericField",  "f_decimal",        "",       35 );
+                                    m_formLayer.insertControlLine( "DatabaseDateField",     "f_date",           "",       43 );
+        XPropertySet xTimeField =   m_formLayer.insertControlLine( "DatabaseTimeField",     "f_time",           "",       51 );
+                                    m_formLayer.insertControlLine( "DatabaseDateField",     "f_timestamp",      "_date",  59 );
+                                    m_formLayer.insertControlLine( "DatabaseTimeField",     "f_timestamp",      "_time",  67 );
+        XPropertySet xImageField =  m_formLayer.insertControlLine( "DatabaseImageControl",  "f_blob",           "",       2, 75, 40 );
+                                    m_formLayer.insertControlLine( "DatabaseTextField",     "f_text_enum",      "_text",  80, 25, 6 );
+        XPropertySet xCheckBox =    m_formLayer.insertControlLine( "DatabaseCheckBox",      "f_tinyint",        "",       80, 33, 6 );
+                                    m_formLayer.insertControlLine( "DatabaseFormattedField","f_tinyint",        "_format",80, 41, 6 );
+                                    m_formLayer.insertControlLine( "DatabaseTextField",     "dummy",            "", 150 );
 
         xIDField.setPropertyValue( "DecimalAccuracy", new Short( (short)0 ) );
         xImageField.setPropertyValue( "ScaleImage", new Boolean( true) );
-        xImageField.setPropertyValue( "Tabstop", new Boolean( true) );
+        xImageField.setPropertyValue( "Tabstop", new Boolean( true ) );
         xCheckBox.setPropertyValue( "TriState", new Boolean( true ) );
         xCheckBox.setPropertyValue( "DefaultState", new Short( (short)2 ) );
         xTimeField.setPropertyValue( "TimeFormat", new Short( (short)1 ) );
         xTimeField.setPropertyValue( "TimeMax", new Integer( 23595999 ) );
+        xReqField.setPropertyValue( "ConvertEmptyToNull", new Boolean( false ) );
 
         // the logical form
         m_masterForm = (XPropertySet)dbfTools.getParent( xIDField, XPropertySet.class );
@@ -533,6 +557,11 @@ public class FormControlTest extends complexlib.ComplexTestCase
 
         // switch the forms into data entry mode
         m_document.getCurrentView( ).toggleFormDesignMode( );
+
+        m_masterFormController = m_document.getCurrentView().getFormController( m_masterForm );
+        XSQLErrorBroadcaster errorBroadcaster = (XSQLErrorBroadcaster)UnoRuntime.queryInterface( XSQLErrorBroadcaster.class,
+            m_masterFormController );
+        errorBroadcaster.addSQLErrorListener( this );
 
         // set the focus to the ID control
         m_document.getCurrentView().grabControlFocus( xIDField );
@@ -555,6 +584,7 @@ public class FormControlTest extends complexlib.ComplexTestCase
         sCreateTableStatement += "\"ID\" INTEGER NOT NULL PRIMARY KEY,";
         sCreateTableStatement += "\"f_integer\" INTEGER default NULL,";
         sCreateTableStatement += "\"f_text\" VARCHAR(50) default NULL,";
+        sCreateTableStatement += "\"f_required_text\" VARCHAR(50) NOT NULL,";
         sCreateTableStatement += "\"f_decimal\" DECIMAL(10,2) default NULL,";
         sCreateTableStatement += "\"f_date\" DATE default NULL,";
         sCreateTableStatement += "\"f_time\" TIME default NULL,";
@@ -570,8 +600,8 @@ public class FormControlTest extends complexlib.ComplexTestCase
     private String[] getSampleDataValueString( ) throws java.lang.Exception
     {
         String[] aValues =  new String[] {
-            "1,42,'the answer',0.12,'2003-09-22','15:00:00','2003-09-23 17:15:23',NULL,'none',1",
-            "2,13,'the question',12.43,'2003-09-24','16:18:00','2003-09-24 08:45:12',NULL,'none',0"
+            "1,42,'the answer','foo',0.12,'2003-09-22','15:00:00','2003-09-23 17:15:23',NULL,'none',1",
+            "2,13,'the question','bar',12.43,'2003-09-24','16:18:00','2003-09-24 08:45:12',NULL,'none',0"
         };
         return aValues;
     }
@@ -583,8 +613,8 @@ public class FormControlTest extends complexlib.ComplexTestCase
         assure( "could not connect to the data source", xConn != null );
 
         // drop the table, if it already exists
-        if  (  !implExecuteStatement( xConn, "DROP TABLE \"" + s_tableName + "\" IF EXISTS" )
-            || !implExecuteStatement( xConn, getCreateTableStatement() )
+        if  (  !implExecuteStatement( "DROP TABLE \"" + s_tableName + "\" IF EXISTS" )
+            || !implExecuteStatement( getCreateTableStatement() )
             )
         {
             failed( "could not create the required sample table!" );
@@ -594,7 +624,7 @@ public class FormControlTest extends complexlib.ComplexTestCase
         String sInsertionPrefix = "INSERT INTO \"" + s_tableName + "\" VALUES (";
         String[] aValues = getSampleDataValueString();
         for ( int i=0; i<aValues.length; ++i )
-            if ( !implExecuteStatement( xConn, sInsertionPrefix + aValues[ i ] + ")" ) )
+            if ( !implExecuteStatement( sInsertionPrefix + aValues[ i ] + ")" ) )
             {
                 failed( "could not create the required sample data" );
                 return false;
@@ -739,7 +769,7 @@ public class FormControlTest extends complexlib.ComplexTestCase
     /* ------------------------------------------------------------------ */
     /** executes the given statement on the given connection
     */
-    protected boolean implExecuteStatement( XConnection xConn, String sStatement ) throws java.lang.Exception
+    protected boolean implExecuteStatement( String sStatement ) throws java.lang.Exception
     {
         try
         {
@@ -872,6 +902,7 @@ public class FormControlTest extends complexlib.ComplexTestCase
         return aBytes;
     }
 
+    /* ------------------------------------------------------------------ */
     private byte[] getSamplePictureBytes()
     {
         byte[] aBytes = new byte[] {
@@ -908,4 +939,16 @@ public class FormControlTest extends complexlib.ComplexTestCase
         return compareImages.imagesEqual( );
     }
 
+    /* ------------------------------------------------------------------ */
+    public void errorOccured( SQLErrorEvent _event )
+    {
+        // just remember for the moment
+        m_mostRecentErrorEvent = _event;
+    }
+
+    /* ------------------------------------------------------------------ */
+    public void disposing( EventObject _event )
+    {
+        // not interested in
+    }
 }

@@ -9,7 +9,7 @@
  *
  * $RCSfile: Tabular.java,v $
  *
- * $Revision: 1.2 $
+ * $Revision: 1.2.36.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -29,7 +29,6 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-
 package com.sun.star.wizards.reportbuilder.layout;
 
 import com.sun.star.awt.Rectangle;
@@ -47,6 +46,7 @@ import com.sun.star.wizards.ui.UIConsts;
  */
 public class Tabular extends ReportBuilderLayouter
 {
+
     public Tabular(IReportDefinitionReadAccess _xDefinitionAccess, Resource _aResource)
     {
         super(_xDefinitionAccess, _aResource);
@@ -86,7 +86,7 @@ public class Tabular extends ReportBuilderLayouter
         final int nWidth = calculateFieldWidth(getLeftGroupIndent(getCountOfGroups()), aFieldNames.length);
         final SectionObject aSO = getDesignTemplate().getDetailTextField();
 
-        for (int i=0;i<aFieldNames.length;i++)
+        for (int i = 0; i < aFieldNames.length; i++)
         {
             final String sFieldName = convertToFieldName(aFieldNames[i]);
             aRect = insertFormattedField(xSection, sFieldName, aRect, nWidth, aSO);
@@ -94,7 +94,6 @@ public class Tabular extends ReportBuilderLayouter
         int nHeight = aSO.getHeight(500);
         xSection.setHeight(nHeight);
     }
-
 
     protected void insertDetailFieldTitles()
     {
@@ -130,7 +129,7 @@ public class Tabular extends ReportBuilderLayouter
                 final XGroups xGroups = getReportDefinition().getGroups();
                 // we insert the titles in the last group
                 final Object aGroup = xGroups.getByIndex(nGroups - 1);
-                final XGroup xGroup = (XGroup)UnoRuntime.queryInterface(XGroup.class, aGroup);
+                final XGroup xGroup = (XGroup) UnoRuntime.queryInterface(XGroup.class, aGroup);
                 xSection = xGroup.getHeader();
 
                 // We don't need to copy the GroupProperties, because this is done in the insertGroup() member function
@@ -145,7 +144,7 @@ public class Tabular extends ReportBuilderLayouter
             aRect.Y = aSO.getHeight(500) + 250;  // group height + a little empty line
             final int nWidth = calculateFieldWidth(getLeftGroupIndent(getCountOfGroups()), aFieldTitleNames.length);
 
-            for (int i=0;i<aFieldTitleNames.length;i++)
+            for (int i = 0; i < aFieldTitleNames.length; i++)
             {
                 aRect = insertLabel(xSection, aFieldTitleNames[i], aRect, nWidth, aSO);
             }
@@ -155,6 +154,4 @@ public class Tabular extends ReportBuilderLayouter
         {
         }
     }
-
-
 }

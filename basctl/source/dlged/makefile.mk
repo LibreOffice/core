@@ -34,6 +34,7 @@ PRJ=..$/..
 PRJNAME=basctl
 TARGET=dlged
 AUTOSEG=true
+VISIBILITY_HIDDEN=TRUE
 
 # --- Settings -----------------------------------------------------
 

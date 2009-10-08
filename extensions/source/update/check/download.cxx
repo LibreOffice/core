@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: download.cxx,v $
- * $Revision: 1.7 $
+ * $Revision: 1.7.88.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -365,8 +365,10 @@ Download::start(const rtl::OUString& rURL, const rtl::OUString& rFile, const rtl
         osl_syncFile(out.FileHandle);
         osl_closeFile(out.FileHandle);
 
-        if( ! ret )
-            osl_removeFile(out.File.pData);
+// #i90930# Don't remove already downloaded bits, when curl_run reports an error
+// because later calls might be successful
+//        if( ! ret )
+//            osl_removeFile(out.File.pData);
     }
 
     m_aCondition.reset();

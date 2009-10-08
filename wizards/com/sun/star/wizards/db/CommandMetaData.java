@@ -51,7 +51,8 @@ import com.sun.star.container.XNameAccess;
 import com.sun.star.embed.EntryInitModes;
 import com.sun.star.frame.*;
 
-public class CommandMetaData extends DBMetaData {
+public class CommandMetaData extends DBMetaData
+{
     public Map FieldTitleSet = new HashMap();
     public String[] AllFieldNames = new String[]{};
     public FieldColumn[] FieldColumns = new FieldColumn[]{};
@@ -120,10 +121,10 @@ public class CommandMetaData extends DBMetaData {
                 {
                     if (FieldTitleSet.containsKey(_FieldNames[i]))
                     {
-                        FieldColumns[i].FieldTitle = (String) FieldTitleSet.get(_FieldNames[i]);
-                        if (FieldColumns[i].FieldTitle == null)
+                        FieldColumns[i].setFieldTitle( (String) FieldTitleSet.get(_FieldNames[i]) );
+                        if (FieldColumns[i].getFieldTitle() == null)
                         {
-                            FieldColumns[i].FieldTitle = _FieldNames[i];
+                            FieldColumns[i].setFieldTitle( _FieldNames[i] );
                             FieldTitleSet.put(_FieldNames[i], _FieldNames[i]);
                         }
                     }
@@ -152,7 +153,7 @@ public class CommandMetaData extends DBMetaData {
                 }
                 String CurCommandName = CurFieldColumn.getCommandName();
                 CommandObject oCommand = getTableByName(CurCommandName);
-                Object oColumn = oCommand.xColumns.getByName(CurFieldColumn.FieldName);
+                Object oColumn = oCommand.xColumns.getByName(CurFieldColumn.m_sFieldName);
                 XPropertySet xColumn = (XPropertySet) UnoRuntime.queryInterface(XPropertySet.class, oColumn);
                 return xColumn;
             }
@@ -211,10 +212,10 @@ public class CommandMetaData extends DBMetaData {
             {
                 for (int i = 0; i < FieldColumns.length; i++)
                 {
-                    if (FieldColumns[i].FieldName.equals(_FieldName))
+                    if (FieldColumns[i].m_sFieldName.equals(_FieldName))
 
                     {
-                        if (FieldColumns[i].CommandName.equals(_CommandName))
+                        if (FieldColumns[i].getCommandName().equals(_CommandName))
                         {
                             return FieldColumns[i];
                         }
@@ -230,7 +231,7 @@ public class CommandMetaData extends DBMetaData {
         {
             for (int i = 0; i < FieldColumns.length; i++)
             {
-                String sFieldName = FieldColumns[i].FieldName;
+                String sFieldName = FieldColumns[i].m_sFieldName;
                 if (sFieldName.equals(_FieldName))
                 {
                     return FieldColumns[i];
@@ -252,7 +253,7 @@ public class CommandMetaData extends DBMetaData {
         {
             for (int i = 0; i < FieldColumns.length; i++)
             {
-                String sDisplayName = FieldColumns[i].DisplayFieldName;
+                String sDisplayName = FieldColumns[i].getDisplayFieldName();
                 if (sDisplayName.equals(_DisplayName))
                 {
                     return FieldColumns[i];
@@ -274,7 +275,7 @@ public class CommandMetaData extends DBMetaData {
         {
             for (int i = 0; i < FieldColumns.length; i++)
             {
-                if (FieldColumns[i].FieldTitle.equals(_FieldTitle))
+                if (FieldColumns[i].getFieldTitle().equals(_FieldTitle))
                 {
                     return FieldColumns[i];
                 }
@@ -283,7 +284,7 @@ public class CommandMetaData extends DBMetaData {
             // LLA: Group works with fields direct
             for (int i = 0; i < FieldColumns.length; i++)
             {
-                if (FieldColumns[i].FieldName.equals(_FieldTitle))
+                if (FieldColumns[i].m_sFieldName.equals(_FieldTitle))
                 {
                     return FieldColumns[i];
                 }
@@ -423,7 +424,7 @@ public class CommandMetaData extends DBMetaData {
                 {
                     if (isnumeric(FieldColumns[i]))
                     {
-                        numericfieldsvector.addElement(FieldColumns[i].DisplayFieldName);
+                        numericfieldsvector.addElement(FieldColumns[i].getDisplayFieldName());
                     }
                 }
                 NumericFieldNames = new String[numericfieldsvector.size()];
@@ -442,11 +443,11 @@ public class CommandMetaData extends DBMetaData {
             Vector sFieldNamesVector = new java.util.Vector();
             for (int i = 0; i < FieldColumns.length; i++)
             {
-                if (_sCommandName.equals(FieldColumns[i].CommandName))
+                if (_sCommandName.equals(FieldColumns[i].getCommandName()))
                 {
-                    if (JavaTools.FieldInList(_sDisplayFieldNames, FieldColumns[i].DisplayFieldName) > -1)
+                    if (JavaTools.FieldInList(_sDisplayFieldNames, FieldColumns[i].getDisplayFieldName()) > -1)
                     {
-                        sFieldNamesVector.addElement(FieldColumns[i].FieldName);
+                        sFieldNamesVector.addElement(FieldColumns[i].m_sFieldName);
                     }
                 }
             }
@@ -462,7 +463,7 @@ public class CommandMetaData extends DBMetaData {
             String[] sFieldNames = new String[FieldColumns.length];
             for (int i = 0; i < FieldColumns.length; i++)
             {
-                sFieldNames[i] = FieldColumns[i].FieldName;
+                sFieldNames[i] = FieldColumns[i].m_sFieldName;
             }
             return sFieldNames;
         }
@@ -472,7 +473,7 @@ public class CommandMetaData extends DBMetaData {
             String[] sDisplayFieldNames = new String[FieldColumns.length];
             for (int i = 0; i < FieldColumns.length; i++)
             {
-                sDisplayFieldNames[i] = FieldColumns[i].DisplayFieldName;
+                sDisplayFieldNames[i] = FieldColumns[i].getDisplayFieldName();
             }
             return sDisplayFieldNames;
         }
@@ -485,9 +486,9 @@ public class CommandMetaData extends DBMetaData {
                 Vector nonaggregatefieldsvector = new java.util.Vector();
                 for (int i = 0; i < FieldColumns.length; i++)
                 {
-                    if (JavaTools.FieldInTable(AggregateFieldNames, FieldColumns[i].DisplayFieldName) == -1)
+                    if (JavaTools.FieldInTable(AggregateFieldNames, FieldColumns[i].getDisplayFieldName()) == -1)
                     {
-                        nonaggregatefieldsvector.addElement(FieldColumns[i].DisplayFieldName);
+                        nonaggregatefieldsvector.addElement(FieldColumns[i].getDisplayFieldName());
                     }
                 }
                 NonAggregateFieldNames = new String[nonaggregatefieldsvector.size()];
@@ -547,7 +548,7 @@ public class CommandMetaData extends DBMetaData {
             {
                 if (i < nFieldColLength)
                 {
-                    FieldColumns[i].FieldTitle = sFieldTitles[i];
+                    FieldColumns[i].setFieldTitle(sFieldTitles[i]);
                 }
 
             }
@@ -559,7 +560,7 @@ public class CommandMetaData extends DBMetaData {
             String[] sFieldTitles = new String[FieldColumns.length];
             for (int i = 0; i < FieldColumns.length; i++)
             {
-                sFieldTitles[i] = FieldColumns[i].FieldTitle;
+                sFieldTitles[i] = FieldColumns[i].getFieldTitle();
             }
             return sFieldTitles;
         }
@@ -588,7 +589,7 @@ public class CommandMetaData extends DBMetaData {
             int a = 0;
             for (int i = 0; i < TotFieldCount; i++)
             {
-                CurFieldName = FieldColumns[i].FieldName;
+                CurFieldName = FieldColumns[i].m_sFieldName;
                 if (JavaTools.FieldInList(GroupFieldNames, CurFieldName) < 0)
                 {
                     RecordFieldNames[a] = CurFieldName;

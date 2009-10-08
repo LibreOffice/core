@@ -9,7 +9,7 @@
  *
  * $RCSfile: ColumnarTwoColumns.java,v $
  *
- * $Revision: 1.2 $
+ * $Revision: 1.2.36.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -29,7 +29,6 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-
 package com.sun.star.wizards.reportbuilder.layout;
 
 import com.sun.star.awt.Rectangle;
@@ -44,6 +43,7 @@ import com.sun.star.wizards.ui.UIConsts;
  */
 public class ColumnarTwoColumns extends ReportBuilderLayouter
 {
+
     public ColumnarTwoColumns(IReportDefinitionReadAccess _xDefinitionAccess, Resource _aResource)
     {
         super(_xDefinitionAccess, _aResource);
@@ -92,7 +92,7 @@ public class ColumnarTwoColumns extends ReportBuilderLayouter
         final int nLabelWidth = getMaxLabelWidth(); // 3000;
 
         final int nUsablePageWidth = getPageWidth() - getLeftPageIndent() - getRightPageIndent() - getLeftGroupIndent(getCountOfGroups());
-        int i=0;
+        int i = 0;
         int nRows = aFieldNames.length / _nColumns;
         if ((aFieldNames.length % _nColumns) != 0)
         {
@@ -108,10 +108,10 @@ public class ColumnarTwoColumns extends ReportBuilderLayouter
         final SectionObject aSOLabel = getDesignTemplate().getDetailLabel();
         aSOLabel.setFontToBold();
         final SectionObject aSOTextField = getDesignTemplate().getDetailTextField();
-        for (int x=0;x<_nColumns;x++)
+        for (int x = 0; x < _nColumns; x++)
         {
             aRect.Y = 0;
-            for (int y=0;y<nRows;y++)
+            for (int y = 0; y < nRows; y++)
             {
                 aRect.X = getLeftPageIndent() + getLeftGroupIndent(getCountOfGroups()) + x * (nWidth + nLabelWidth);
                 if (i < aFieldNames.length)
@@ -130,9 +130,9 @@ public class ColumnarTwoColumns extends ReportBuilderLayouter
         xSection.setHeight(aRect.Y);
         doNotBreakInTable(xSection);
     }
+
     protected void insertDetailFieldTitles()
     {
         // we won't extra field titles
     }
-
 }

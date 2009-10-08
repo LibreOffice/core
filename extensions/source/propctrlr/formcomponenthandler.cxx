@@ -30,24 +30,21 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_extensions.hxx"
-#include "formcomponenthandler.hxx"
-#include "formmetadata.hxx"
-#include "usercontrol.hxx"
-#ifndef EXTENSIONS_INC_EXTENSIO_HRC
-#include "extensio.hrc"
-#endif
-#include "formstrings.hxx"
-#ifndef _EXTENSIONS_FORMCTRLR_PROPRESID_HRC_
-#include "formresid.hrc"
-#endif
+
 #include "controltype.hxx"
-#include "listselectiondlg.hxx"
-#include "formlinkdialog.hxx"
+#include "extensio.hrc"
 #include "fontdialog.hxx"
+#include "formcomponenthandler.hxx"
+#include "formlinkdialog.hxx"
+#include "formmetadata.hxx"
+#include "formresid.hrc"
+#include "formstrings.hxx"
+#include "handlerhelper.hxx"
+#include "listselectiondlg.hxx"
+#include "pcrcommon.hxx"
 #include "selectlabeldialog.hxx"
 #include "taborder.hxx"
-#include "pcrcommon.hxx"
-#include "handlerhelper.hxx"
+#include "usercontrol.hxx"
 
 /** === begin UNO includes === **/
 #include <com/sun/star/lang/NullPointerException.hpp>
@@ -80,42 +77,41 @@
 #include <com/sun/star/inspection/PropertyLineElement.hpp>
 #include <com/sun/star/resource/XStringResourceManager.hpp>
 #include <com/sun/star/resource/MissingResourceException.hpp>
+#include <com/sun/star/graphic/GraphicObject.hpp>
+#include <com/sun/star/text/WritingMode2.hpp>
 /** === end UNO includes === **/
-#include <connectivity/dbexception.hxx>
-#include <vcl/wrkwin.hxx>
-#include <svtools/numuno.hxx>
-#include <unotools/confignode.hxx>
+
 #include <comphelper/extract.hxx>
-#ifndef SVTOOLS_FILENOTATION_HXX_
-#include <svtools/filenotation.hxx>
-#endif
-#include <toolkit/helper/vclunohelper.hxx>
-#include <vcl/stdtext.hxx>
-#include <svtools/itemset.hxx>
-#include <svtools/numuno.hxx>
+#include <connectivity/dbconversion.hxx>
+#include <connectivity/dbexception.hxx>
+#include <cppuhelper/exc_hlp.hxx>
 #include <sfx2/app.hxx>
-#ifndef _SVX_SVXIDS_HRC
-#include <svx/svxids.hrc>
-#endif
-#include <svtools/intitem.hxx>
-#include <svx/numinf.hxx>
-#include <svx/svxdlg.hxx>
-#ifndef _SVX_DIALOGS_HRC
-#include <svx/dialogs.hrc>
-#endif
-#include <vcl/msgbox.hxx>
-#include <sfx2/filedlghelper.hxx>
 #include <sfx2/basedlgs.hxx>
 #include <sfx2/docfilt.hxx>
+#include <sfx2/filedlghelper.hxx>
+#include <svtools/ctloptions.hxx>
 #include <svtools/colrdlg.hxx>
-#include <svtools/urihelper.hxx>
+#include <svtools/filenotation.hxx>
+#include <svtools/intitem.hxx>
+#include <svtools/itemset.hxx>
 #include <svtools/moduleoptions.hxx>
+#include <svtools/numuno.hxx>
+#include <svtools/urihelper.hxx>
+#include <svx/dialogs.hrc>
+#include <svx/numinf.hxx>
+#include <svx/svxdlg.hxx>
+#include <svx/svxids.hrc>
+#include <toolkit/helper/vclunohelper.hxx>
 #include <tools/diagnose_ex.h>
-#include <cppuhelper/exc_hlp.hxx>
-#include <connectivity/dbconversion.hxx>
+#include <unotools/confignode.hxx>
+#include <vcl/msgbox.hxx>
+#include <vcl/stdtext.hxx>
+#include <vcl/wrkwin.hxx>
+#include <tools/StringListResource.hxx>
 
 #include <limits>
 
+#define GRAPHOBJ_URLPREFIX "vnd.sun.star.GraphicObject:"
 //------------------------------------------------------------------------
 extern "C" void SAL_CALL createRegistryInfo_FormComponentPropertyHandler()
 {
@@ -144,6 +140,8 @@ namespace pcr
     using namespace ui::dialogs;
     using namespace inspection;
     using namespace ::dbtools;
+
+    namespace WritingMode2 = ::com::sun::star::text::WritingMode2;
 
     //====================================================================
     //= FormComponentPropertyHandler
@@ -320,7 +318,8 @@ namespace pcr
     Any SAL_CALL FormComponentPropertyHandler::getPropertyValue( const ::rtl::OUString& _rPropertyName ) throw (UnknownPropertyException, RuntimeException)
     {
         if( _rPropertyName == PROPERTY_ROWSET )
-            return ::comphelper::OPropertyContainer::getPropertyValue( _rPropertyName);
+            return ::comphelper::OPropertyContainer::getPropertyValue( _rPropertyName );
+
         ::osl::MutexGuard aGuard( m_aMutex );
         return impl_getPropertyValue_throw( _rPropertyName );
     }
@@ -333,10 +332,19 @@ namespace pcr
             ::comphelper::OPropertyContainer::setPropertyValue( _rPropertyName, _rValue );
             return;
         }
+
         ::osl::MutexGuard aGuard( m_aMutex );
         PropertyId nPropId( impl_getPropertyId_throw( _rPropertyName ) ); // check if property is known by the handler
 
-        if ( PROPERTY_ID_FONT_NAME == nPropId )
+        Reference< graphic::XGraphicObject > xGrfObj;
+        if ( PROPERTY_ID_IMAGE_URL == nPropId && ( _rValue >>= xGrfObj ) )
+        {
+            DBG_ASSERT( xGrfObj.is(), "FormComponentPropertyHandler::setPropertyValue() xGrfObj is invalid");
+            rtl::OUString sObjectID( RTL_CONSTASCII_USTRINGPARAM( GRAPHOBJ_URLPREFIX ) );
+            sObjectID = sObjectID + xGrfObj->getUniqueID();
+            m_xComponent->setPropertyValue( _rPropertyName, uno::makeAny( sObjectID ) );
+        }
+        else if ( PROPERTY_ID_FONT_NAME == nPropId )
         {
             // special handling, the value is a faked value we generated ourself in impl_executeFontDialog_nothrow
             Sequence< NamedValue > aFontPropertyValues;
@@ -561,9 +569,14 @@ namespace pcr
         {
             ::rtl::OUString sControlValue;
             OSL_VERIFY( _rControlValue >>= sControlValue );
-
-            INetURLObject aDocURL( impl_getDocumentURL_nothrow() );
-            aPropertyValue <<= (::rtl::OUString)URIHelper::SmartRel2Abs( aDocURL, sControlValue, Link(), false, true, INetURLObject::WAS_ENCODED, INetURLObject::DECODE_TO_IURI );
+            // Don't convert a placeholder
+            if ( nPropId == PROPERTY_ID_IMAGE_URL && sControlValue.equals( String( PcrRes( RID_EMBED_IMAGE_PLACEHOLDER ) ) ) )
+                aPropertyValue <<= sControlValue;
+            else
+            {
+                INetURLObject aDocURL( impl_getDocumentURL_nothrow() );
+                aPropertyValue <<= (::rtl::OUString)URIHelper::SmartRel2Abs( aDocURL, sControlValue, Link(), false, true, INetURLObject::WAS_ENCODED, INetURLObject::DECODE_TO_IURI );
+            }
         }
         break;
 
@@ -586,6 +599,28 @@ namespace pcr
             util::Time aTime;
             OSL_VERIFY( _rControlValue >>= aTime );
             aPropertyValue <<= (sal_Int32)DBTypeConversion::toINT32( aTime );
+        }
+        break;
+
+        case PROPERTY_ID_WRITING_MODE:
+        {
+            aPropertyValue = FormComponentPropertyHandler_Base::convertToPropertyValue( _rPropertyName, _rControlValue );
+
+            sal_Int16 nNormalizedValue( 2 );
+            OSL_VERIFY( aPropertyValue >>= nNormalizedValue );
+            sal_Int16 nWritingMode = WritingMode2::CONTEXT;
+            switch ( nNormalizedValue )
+            {
+            case 0: nWritingMode = WritingMode2::LR_TB;      break;
+            case 1: nWritingMode = WritingMode2::RL_TB;      break;
+            case 2: nWritingMode = WritingMode2::CONTEXT;    break;
+            default:
+                OSL_ENSURE( false, "FormComponentPropertyHandler::convertToControlValue: unexpected 'normalized value' for WritingMode!" );
+                nWritingMode = WritingMode2::CONTEXT;
+                break;
+            }
+
+            aPropertyValue <<= nWritingMode;
         }
         break;
 
@@ -695,6 +730,26 @@ namespace pcr
             sal_Int32 nTime = 0;
             OSL_VERIFY( _rPropertyValue >>= nTime );
             aControlValue <<= DBTypeConversion::toTime( nTime );
+        }
+        break;
+
+        case PROPERTY_ID_WRITING_MODE:
+        {
+            sal_Int16 nWritingMode( WritingMode2::CONTEXT );
+            OSL_VERIFY( _rPropertyValue >>= nWritingMode );
+            sal_Int16 nNormalized = 2;
+            switch ( nWritingMode )
+            {
+            case WritingMode2::LR_TB:   nNormalized = 0;    break;
+            case WritingMode2::RL_TB:   nNormalized = 1;    break;
+            case WritingMode2::CONTEXT: nNormalized = 2;    break;
+            default:
+                OSL_ENSURE( false, "FormComponentPropertyHandler::convertToControlValue: unsupported API value for WritingMode!" );
+                nNormalized = 2;
+                break;
+            }
+
+            aControlValue = FormComponentPropertyHandler_Base::convertToControlValue( _rPropertyName, makeAny( nNormalized ), _rControlValueType );
         }
         break;
 
@@ -816,7 +871,6 @@ namespace pcr
                 if ( SvtModuleOptions().IsModuleInstalled( SvtModuleOptions::E_SDATABASE ) )
                     const_cast< FormComponentPropertyHandler* >( this )->m_bHaveCommand = true;
                 break;
-
             }   // switch ( nPropId )
 
             aProperties.push_back( *pProperty );
@@ -858,6 +912,7 @@ namespace pcr
         aInterestingProperties.push_back( PROPERTY_DECIMAL_ACCURACY );
         aInterestingProperties.push_back( PROPERTY_SHOWTHOUSANDSEP );
         aInterestingProperties.push_back( PROPERTY_FORMATKEY );
+        aInterestingProperties.push_back( PROPERTY_EMPTY_IS_NULL );
         return Sequence< ::rtl::OUString >( &(*aInterestingProperties.begin()), aInterestingProperties.size() );
     }
 
@@ -1147,19 +1202,16 @@ namespace pcr
         // boolean values
         if ( eType == TypeClass_BOOLEAN )
         {
-            String aEntries;
+            USHORT nResId = RID_RSC_ENUM_YESNO;
             if  (   ( nPropId == PROPERTY_ID_SHOW_POSITION )
                 ||  ( nPropId == PROPERTY_ID_SHOW_NAVIGATION )
                 ||  ( nPropId == PROPERTY_ID_SHOW_RECORDACTIONS )
                 ||  ( nPropId == PROPERTY_ID_SHOW_FILTERSORT )
                 )
-                aEntries = String( PcrRes( RID_STR_SHOW_HIDE ) );
-            else
-                aEntries = String( PcrRes( RID_STR_BOOL ) );
+                nResId = RID_RSC_ENUM_SHOWHIDE;
 
             ::std::vector< ::rtl::OUString > aListEntries;
-            for ( xub_StrLen i=0; i<2; ++i )
-                aListEntries.push_back( aEntries.GetToken(i) );
+            tools::StringListResource aRes(PcrRes(nResId),aListEntries);
             aDescriptor.Control = PropertyHandlerHelper::createListBoxControl( _rxControlFactory, aListEntries, sal_False, sal_False );
             bNeedDefaultStringIfVoidAllowed = true;
         }
@@ -1178,6 +1230,7 @@ namespace pcr
             if  (   ( PROPERTY_ID_DEFAULTCHECKED == nPropId )
                 ||  ( PROPERTY_ID_STATE == nPropId )
                 )
+            {
                 if ( impl_componentHasProperty_throw( PROPERTY_TRISTATE ) )
                 {
                     if ( !::comphelper::getBOOL( m_xComponent->getPropertyValue( PROPERTY_TRISTATE ) ) )
@@ -1188,6 +1241,7 @@ namespace pcr
                 }
                 else
                     --pEnd;
+            }
 
             if ( PROPERTY_ID_LISTSOURCETYPE == nPropId )
                 if ( FormComponentType::COMBOBOX == m_nClassId )
@@ -1505,8 +1559,14 @@ namespace pcr
 
             aDependentProperties.push_back( PROPERTY_ID_BOUNDCOLUMN );
             aDependentProperties.push_back( PROPERTY_ID_SCALEIMAGE );
+            aDependentProperties.push_back( PROPERTY_ID_SCALE_MODE );
+            aDependentProperties.push_back( PROPERTY_ID_INPUT_REQUIRED );
         }
         break;
+
+        case PROPERTY_ID_EMPTY_IS_NULL:
+            aDependentProperties.push_back( PROPERTY_ID_INPUT_REQUIRED );
+            break;
 
         // ----- SubmitEncoding -----
         case PROPERTY_ID_SUBMIT_ENCODING:
@@ -1569,6 +1629,7 @@ namespace pcr
             }
 
             aDependentProperties.push_back( PROPERTY_ID_SCALEIMAGE );
+            aDependentProperties.push_back( PROPERTY_ID_SCALE_MODE );
         }
         break;
 
@@ -1621,10 +1682,12 @@ namespace pcr
                     OFormattedNumericControl* pControl = dynamic_cast< OFormattedNumericControl* >( xControl.get() );
                     DBG_ASSERT( pControl, "FormComponentPropertyHandler::actuatingPropertyChanged: invalid control!" );
                     if ( pControl )
+                    {
                         if ( bAccuracy )
                             pControl->SetDecimalDigits( nNewDigits );
                         else
                             pControl->SetThousandsSep( bUseSep );
+                    }
                 }
             }
         }
@@ -1739,8 +1802,9 @@ namespace pcr
             }
             break;  // case PROPERTY_ID_BOUNDCOLUMN
 
-            // ----- ScaleImage -----
+            // ----- ScaleImage, ScaleMode -----
             case PROPERTY_ID_SCALEIMAGE:
+            case PROPERTY_ID_SCALE_MODE:
             {
                 ::rtl::OUString sControlSource;
                 if ( impl_isSupportedProperty_nothrow( PROPERTY_ID_CONTROLSOURCE ) )
@@ -1749,15 +1813,36 @@ namespace pcr
                 ::rtl::OUString sImageURL;
                 impl_getPropertyValue_throw( PROPERTY_IMAGE_URL ) >>= sImageURL;
 
-                _rxInspectorUI->enablePropertyUI( PROPERTY_SCALEIMAGE,
+                _rxInspectorUI->enablePropertyUI( impl_getPropertyNameFromId_nothrow( _nPropId ),
                     ( sControlSource.getLength() != 0 ) || ( sImageURL.getLength() != 0 )
                 );
             }
-            break;  // case PROPERTY_ID_SCALEIMAGE
+            break;  // case PROPERTY_ID_SCALEIMAGE, PROPERTY_ID_SCALE_MODE
 
-            // ----- SelectedItems -----
+            // ----- InputRequired -----
+            case PROPERTY_ID_INPUT_REQUIRED:
+            {
+                ::rtl::OUString sControlSource;
+                OSL_VERIFY( impl_getPropertyValue_throw( PROPERTY_CONTROLSOURCE ) >>= sControlSource );
+
+                sal_Bool bEmptyIsNULL = sal_False;
+                sal_Bool bHasEmptyIsNULL = impl_componentHasProperty_throw( PROPERTY_EMPTY_IS_NULL );
+                if ( bHasEmptyIsNULL )
+                    OSL_VERIFY( impl_getPropertyValue_throw( PROPERTY_EMPTY_IS_NULL ) >>= bEmptyIsNULL );
+
+                // if the control is not bound to a DB field, there is no sense in having the "Input required"
+                // property
+                // Also, if an empty input of this control are *not* written as NULL, but as empty strings,
+                // then "Input required" does not make sense, too (since there's always an input, even if the control
+                // is empty).
+                _rxInspectorUI->enablePropertyUI( PROPERTY_INPUT_REQUIRED,
+                    ( sControlSource.getLength() != 0 ) && ( !bHasEmptyIsNULL || bEmptyIsNULL )
+                );
+            }
+            break;
+
+            // ----- SelectedItems, DefaultSelection -----
             case PROPERTY_ID_SELECTEDITEMS:
-            // ----- DefaultSelection -----
             case PROPERTY_ID_DEFAULT_SELECT_SEQ:
             {
                 Sequence< ::rtl::OUString > aEntries;
@@ -2131,6 +2216,17 @@ namespace pcr
                 )
                 return true;
             break;
+
+        case PROPERTY_ID_SCALEIMAGE:
+            if ( impl_componentHasProperty_throw( PROPERTY_SCALE_MODE ) )
+                // ScaleImage is superseded by ScaleMode
+                return true;
+            break;
+
+        case PROPERTY_ID_WRITING_MODE:
+            if ( !SvtCTLOptions().IsCTLFontEnabled() )
+                return true;
+            break;
         }
 
         sal_uInt32 nPropertyUIFlags = m_pInfoService->getPropertyUIFlags( _rProperty.Handle );
@@ -2290,7 +2386,7 @@ namespace pcr
         }
         catch (Exception&)
         {
-            DBG_ERROR( "FormComponentPropertyHandler::impl_initFieldList_nothrow: caught an exception!" )
+            DBG_ERROR( "FormComponentPropertyHandler::impl_initFieldList_nothrow: caught an exception!" );
         }
     }
 
@@ -2404,7 +2500,7 @@ namespace pcr
         }
         catch (Exception&)
         {
-            DBG_ERROR("FormComponentPropertyHandler::impl_describeCursorSource_nothrow: caught an exception !")
+            DBG_ERROR("FormComponentPropertyHandler::impl_describeCursorSource_nothrow: caught an exception !");
         }
     }
 
@@ -2658,11 +2754,15 @@ namespace pcr
     //------------------------------------------------------------------------
     bool FormComponentPropertyHandler::impl_browseForImage_nothrow( Any& _out_rNewValue, ::osl::ClearableMutexGuard& _rClearBeforeDialog ) const
     {
+        bool bIsLink = true;// reflect the legacy behavior
         ::rtl::OUString aStrTrans = m_pInfoService->getPropertyTranslation( PROPERTY_ID_IMAGE_URL );
 
         ::sfx2::FileDialogHelper aFileDlg(SFXWB_GRAPHIC);
 
         aFileDlg.SetTitle(aStrTrans);
+        // non-linked images ( e.g. those located in the document
+        // stream ) cannot *currently* be handled by openoffice basic dialogs.
+        bool bHandleNonLink = ( m_eComponentClass == eFormControl );
 
         Reference< XFilePickerControlAccess > xController(aFileDlg.GetFilePicker(), UNO_QUERY);
         DBG_ASSERT(xController.is(), "FormComponentPropertyHandler::impl_browseForImage_nothrow: missing the controller interface on the file picker!");
@@ -2671,14 +2771,14 @@ namespace pcr
             // do a preview by default
             xController->setValue(ExtendedFilePickerElementIds::CHECKBOX_PREVIEW, 0, ::cppu::bool2any(sal_True));
 
-            // "as link" is checked, but disabled
-            xController->setValue(ExtendedFilePickerElementIds::CHECKBOX_LINK, 0, ::cppu::bool2any(sal_True));
-            xController->enableControl(ExtendedFilePickerElementIds::CHECKBOX_LINK, sal_False);
+            xController->setValue(ExtendedFilePickerElementIds::CHECKBOX_LINK, 0, ::cppu::bool2any(bIsLink));
+            xController->enableControl(ExtendedFilePickerElementIds::CHECKBOX_LINK, bHandleNonLink );
+
         }
 
         ::rtl::OUString sCurValue;
         OSL_VERIFY( impl_getPropertyValue_throw( PROPERTY_IMAGE_URL ) >>= sCurValue );
-        if ( sCurValue.getLength() != 0 )
+        if ( sCurValue.getLength() != 0 && sCurValue.compareToAscii(GRAPHOBJ_URLPREFIX, RTL_CONSTASCII_LENGTH(GRAPHOBJ_URLPREFIX) ) != 0 )
         {
             aFileDlg.SetDisplayDirectory( sCurValue );
             // TODO: need to set the display directory _and_ the default name
@@ -2687,7 +2787,26 @@ namespace pcr
         _rClearBeforeDialog.clear();
         bool bSuccess = ( 0 == aFileDlg.Execute() );
         if ( bSuccess )
-            _out_rNewValue <<= (::rtl::OUString)aFileDlg.GetPath();
+        {
+            if ( bHandleNonLink && xController.is() )
+            {
+                xController->getValue(ExtendedFilePickerElementIds::CHECKBOX_LINK, 0) >>= bIsLink;
+            }
+            if ( !bIsLink )
+            {
+                Graphic aGraphic;
+                aFileDlg.GetGraphic( aGraphic );
+
+                Reference< graphic::XGraphicObject > xGrfObj = graphic::GraphicObject::create( m_aContext.getUNOContext() );
+                xGrfObj->setGraphic( aGraphic.GetXGraphic() );
+
+
+                _out_rNewValue <<= xGrfObj;
+
+            }
+            else
+                _out_rNewValue <<= (::rtl::OUString)aFileDlg.GetPath();
+        }
         return bSuccess;
     }
 
@@ -2748,7 +2867,7 @@ namespace pcr
     //------------------------------------------------------------------------
     bool FormComponentPropertyHandler::impl_browseForDatabaseDocument_throw( Any& _out_rNewValue, ::osl::ClearableMutexGuard& _rClearBeforeDialog ) const
     {
-        ::sfx2::FileDialogHelper aFileDlg(WB_3DLOOK);
+        ::sfx2::FileDialogHelper aFileDlg(WB_3DLOOK|WB_OPEN,::String::CreateFromAscii("sdatabase"));
 
         ::rtl::OUString sDataSource;
         OSL_VERIFY( impl_getPropertyValue_throw( PROPERTY_DATASOURCE ) >>= sDataSource );
@@ -2764,7 +2883,8 @@ namespace pcr
         OSL_ENSURE(pFilter,"Filter: StarOffice XML (Base) could not be found!");
         if ( pFilter )
         {
-            aFileDlg.AddFilter(pFilter->GetFilterName(),pFilter->GetDefaultExtension());
+            aFileDlg.SetCurrentFilter(pFilter->GetUIName());
+            //aFileDlg.AddFilter(pFilter->GetFilterName(),pFilter->GetDefaultExtension());
         }
 
         _rClearBeforeDialog.clear();

@@ -73,14 +73,15 @@ import com.sun.star.wizards.web.data.CGSettings;
  * the members ip, username, and password (via the methods setXXX(...))
  * for details see the ui.events.DataAware classes. <br/>
  */
-public class FTPDialog extends UnoDialog2 implements UIConsts, WWHID {
+public class FTPDialog extends UnoDialog2 implements UIConsts, WWHID
+{
 
     /**
      * A Constant used for the setLabel(int) method to change the
      * status-display. "unknown" is the status when the user first
      * opens the dialog, or changes the servername/username/password.
      */
-    private final static int STATUS_UNKONWN= 0;
+    private final static int STATUS_UNKONWN = 0;
     /**
      * A Constant used for the setLabel(int) method to change the
      * status-display. (connection established)
@@ -111,7 +112,6 @@ public class FTPDialog extends UnoDialog2 implements UIConsts, WWHID {
      * status-display.
      */
     private final static int STATUS_CONNECTING = 6;
-
     /**
      * The icon url for error
      */
@@ -124,14 +124,11 @@ public class FTPDialog extends UnoDialog2 implements UIConsts, WWHID {
      * The icon url for unknown - this is the status when
      * the user first opens the dialog
      */
-    private final static String ICON_UNKNOWN= "ftpunknown.gif";
+    private final static String ICON_UNKNOWN = "ftpunknown.gif";
     /**
      * The icon url for an icon representing the "connecting" state.
      */
-    private final static String ICON_CONNECTING = "ftpconnecting.gif";
-
-
-    //GUI Components as Class members.
+    private final static String ICON_CONNECTING = "ftpconnecting.gif";    //GUI Components as Class members.
     //Fixed Line
     private XControl ln1;
     private XFixedText lblFTPAddress;
@@ -156,9 +153,7 @@ public class FTPDialog extends UnoDialog2 implements UIConsts, WWHID {
 
     //Resources Object
     private FTPDialogResources resources;
-
     private List dataAware = new Vector();
-
     public String username = "";
     public String password = "";
     /**
@@ -169,7 +164,6 @@ public class FTPDialog extends UnoDialog2 implements UIConsts, WWHID {
      * The ftp directory.
      */
     private String dir = "";
-
     /**
      * the ftp publish object which contains the
      * data for this dialog.
@@ -189,13 +183,13 @@ public class FTPDialog extends UnoDialog2 implements UIConsts, WWHID {
      * for this dialog
      * @throws Exception
      */
-
-    public FTPDialog(XMultiServiceFactory xmsf, CGPublish p) throws Exception {
+    public FTPDialog(XMultiServiceFactory xmsf, CGPublish p) throws Exception
+    {
         super(xmsf);
         publish = p;
 
 
-        imagesDirectory = FileAccess.connectURLs(((CGSettings)(publish.root)).soTemplateDir, "wizard/bitmap/");
+        imagesDirectory = FileAccess.connectURLs(((CGSettings) (publish.root)).soTemplateDir, "wizard/bitmap/");
 
         //Load Resources
         resources = new FTPDialogResources(xmsf);
@@ -203,8 +197,14 @@ public class FTPDialog extends UnoDialog2 implements UIConsts, WWHID {
 
         //set dialog properties...
         Helper.setUnoPropertyValues(xDialogModel,
-            new String[] { "Closeable", "Height", "HelpURL", "Moveable", "Name", "PositionX", "PositionY", "Title", "Width" },
-            new Object[] { Boolean.TRUE, new Integer(160), "HID:" + HID_FTP , Boolean.TRUE, "FTPDialog", new Integer(167), new Integer(82), resources.resFTPDialog_title, new Integer(222)});
+                new String[]
+                {
+                    "Closeable", "Height", "HelpURL", "Moveable", "Name", "PositionX", "PositionY", "Title", "Width"
+                },
+                new Object[]
+                {
+                    Boolean.TRUE, new Integer(160), "HID:" + HID_FTP, Boolean.TRUE, "FTPDialog", new Integer(167), new Integer(82), resources.resFTPDialog_title, new Integer(222)
+                });
 
         //add controls to dialog
         build();
@@ -217,77 +217,154 @@ public class FTPDialog extends UnoDialog2 implements UIConsts, WWHID {
     /**
      * Add controls to dialog.
      */
-    public void build() {
-        final String[] PROPNAMES_LABEL = new String[] { "Height", "Label", "Name", "PositionX", "PositionY", "TabIndex", "Width" };
-        final String[] PROPNAMES_BUTTON = new String[] { "Height", "HelpURL", "Label", "Name", "PositionX", "PositionY", "TabIndex", "Width"};
-        final String[] PROPNAMES_BUTTON2 = new String[] { "Height", "HelpURL", "Label", "Name", "PositionX", "PositionY", "PushButtonType", "TabIndex", "Width"};
+    public void build()
+    {
+        final String[] PROPNAMES_LABEL = new String[]
+        {
+            "Height", "Label", "Name", "PositionX", "PositionY", "TabIndex", "Width"
+        };
+        final String[] PROPNAMES_BUTTON = new String[]
+        {
+            "Height", "HelpURL", "Label", "Name", "PositionX", "PositionY", "TabIndex", "Width"
+        };
+        final String[] PROPNAMES_BUTTON2 = new String[]
+        {
+            "Height", "HelpURL", "Label", "Name", "PositionX", "PositionY", "PushButtonType", "TabIndex", "Width"
+        };
 
         ln1 = insertFixedLine("ln1",
-            PROPNAMES_LABEL,
-            new Object[] { INTEGERS[8], resources.resln1_value, "ln1", INTEGERS[6], INTEGERS[6], new Short((short) 0), new Integer(210)});
+                PROPNAMES_LABEL,
+                new Object[]
+                {
+                    INTEGERS[8], resources.resln1_value, "ln1", INTEGERS[6], INTEGERS[6], new Short((short) 0), new Integer(210)
+                });
         lblFTPAddress = insertLabel("lblFTPAddress",
-            PROPNAMES_LABEL,
-            new Object[] { INTEGERS[8], resources.reslblFTPAddress_value, "lblFTPAddress", INTEGER_12, new Integer(20), new Short((short) 1), new Integer(95)});
+                PROPNAMES_LABEL,
+                new Object[]
+                {
+                    INTEGERS[8], resources.reslblFTPAddress_value, "lblFTPAddress", INTEGER_12, new Integer(20), new Short((short) 1), new Integer(95)
+                });
         txtHost = insertTextField("txtHost", "disconnect",
-            new String[] { "Height", "HelpURL", "Name", "PositionX", "PositionY", "TabIndex", "Width" },
-            new Object[] { INTEGER_12, "HID:" + HID_FTP_SERVER, "txtIP", new Integer(110), new Integer(18), new Short((short) 2), new Integer(106)});
+                new String[]
+                {
+                    "Height", "HelpURL", "Name", "PositionX", "PositionY", "TabIndex", "Width"
+                },
+                new Object[]
+                {
+                    INTEGER_12, "HID:" + HID_FTP_SERVER, "txtIP", new Integer(110), new Integer(18), new Short((short) 2), new Integer(106)
+                });
         lblUsername = insertLabel("lblUsername",
-            PROPNAMES_LABEL,
-            new Object[] { INTEGERS[8], resources.reslblUsername_value, "lblUsername", INTEGER_12, new Integer(36), new Short((short) 3), new Integer(85)});
+                PROPNAMES_LABEL,
+                new Object[]
+                {
+                    INTEGERS[8], resources.reslblUsername_value, "lblUsername", INTEGER_12, new Integer(36), new Short((short) 3), new Integer(85)
+                });
         txtUsername = insertTextField("txtUsername", "disconnect",
-            new String[] { "Height", "HelpURL", "Name", "PositionX", "PositionY", "TabIndex", "Width" },
-            new Object[] { INTEGER_12, "HID:" + HID_FTP_USERNAME , "txtUsername", new Integer(110), new Integer(34), new Short((short) 4), new Integer(106)});
+                new String[]
+                {
+                    "Height", "HelpURL", "Name", "PositionX", "PositionY", "TabIndex", "Width"
+                },
+                new Object[]
+                {
+                    INTEGER_12, "HID:" + HID_FTP_USERNAME, "txtUsername", new Integer(110), new Integer(34), new Short((short) 4), new Integer(106)
+                });
         lblPassword = insertLabel("lblPassword",
-            PROPNAMES_LABEL,
-            new Object[] { INTEGERS[8], resources.reslblPassword_value, "lblPassword", INTEGER_12, new Integer(52), new Short((short) 5), new Integer(85)});
+                PROPNAMES_LABEL,
+                new Object[]
+                {
+                    INTEGERS[8], resources.reslblPassword_value, "lblPassword", INTEGER_12, new Integer(52), new Short((short) 5), new Integer(85)
+                });
         txtPassword = insertTextField("txtPassword", "disconnect",
-            new String[] { "EchoChar",  "Height", "HelpURL","Name", "PositionX", "PositionY", "TabIndex", "Width" },
-            new Object[] { new Short((short) 42), INTEGER_12, "HID:" + HID_FTP_PASS, "txtPassword", new Integer(110), new Integer(50), new Short((short) 6), new Integer(106)});
+                new String[]
+                {
+                    "EchoChar", "Height", "HelpURL", "Name", "PositionX", "PositionY", "TabIndex", "Width"
+                },
+                new Object[]
+                {
+                    new Short((short) 42), INTEGER_12, "HID:" + HID_FTP_PASS, "txtPassword", new Integer(110), new Integer(50), new Short((short) 6), new Integer(106)
+                });
         ln2 = insertFixedLine("ln2",
-            PROPNAMES_LABEL,
-            new Object[] { INTEGERS[8], resources.resln2_value, "ln2", INTEGERS[6], new Integer(68), new Short((short) 7), new Integer(210)});
+                PROPNAMES_LABEL,
+                new Object[]
+                {
+                    INTEGERS[8], resources.resln2_value, "ln2", INTEGERS[6], new Integer(68), new Short((short) 7), new Integer(210)
+                });
         btnTestConnection = insertButton("btnConnect", "connect",
-            PROPNAMES_BUTTON,
-            new Object[] { INTEGER_14, "HID:" + HID_FTP_TEST, resources.resbtnConnect_value, "btnConnect", INTEGER_12, new Integer(80), new Short((short) 8), INTEGER_50 });
+                PROPNAMES_BUTTON,
+                new Object[]
+                {
+                    INTEGER_14, "HID:" + HID_FTP_TEST, resources.resbtnConnect_value, "btnConnect", INTEGER_12, new Integer(80), new Short((short) 8), INTEGER_50
+                });
 
         imgStatus = insertImage("imgStatus",
-            new String[] { "Border", "Height", "PositionX", "PositionY", "ScaleImage", "Tabstop", "Width" },
-            new Object[] { new Short((short) 0), INTEGER_14, new Integer(68), new Integer(80), Boolean.FALSE, Boolean.FALSE, INTEGER_14 });
+                new String[]
+                {
+                    "Border", "Height", "PositionX", "PositionY", "ScaleImage", "Tabstop", "Width"
+                },
+                new Object[]
+                {
+                    new Short((short) 0), INTEGER_14, new Integer(68), new Integer(80), Boolean.FALSE, Boolean.FALSE, INTEGER_14
+                });
 
         lblStatus = insertLabel("lblStatus",
-            PROPNAMES_LABEL,
-            new Object[] { INTEGERS[8], resources.resFTPDisconnected, "lblStatus", new Integer(86), new Integer(82), new Short((short) 9), new Integer(99)});
+                PROPNAMES_LABEL,
+                new Object[]
+                {
+                    INTEGERS[8], resources.resFTPDisconnected, "lblStatus", new Integer(86), new Integer(82), new Short((short) 9), new Integer(99)
+                });
 
         ln3 = insertFixedLine("ln3",
-            PROPNAMES_LABEL,
-            new Object[] { INTEGERS[8], resources.resln3_value, "ln3", INTEGERS[6], new Integer(100), new Short((short) 10), new Integer(210)});
+                PROPNAMES_LABEL,
+                new Object[]
+                {
+                    INTEGERS[8], resources.resln3_value, "ln3", INTEGERS[6], new Integer(100), new Short((short) 10), new Integer(210)
+                });
 
         txtDir = insertTextField("txtDir",
-            null, new String[] { "Enabled", "Height", "HelpURL", "Name", "PositionX", "PositionY", "TabIndex", "Text", "Width" },
-            new Object[] { new Boolean(false), INTEGER_12, "HID:" + HID_FTP_TXT_PATH, "txtDir", INTEGER_12, new Integer(113), new Short((short) 11), resources.restxtDir_value, new Integer(184)});
+                null, new String[]
+                {
+                    "Enabled", "Height", "HelpURL", "Name", "PositionX", "PositionY", "TabIndex", "Text", "Width"
+                },
+                new Object[]
+                {
+                    new Boolean(false), INTEGER_12, "HID:" + HID_FTP_TXT_PATH, "txtDir", INTEGER_12, new Integer(113), new Short((short) 11), resources.restxtDir_value, new Integer(184)
+                });
         btnDir = insertButton("btnDir", "chooseDirectory",
-            PROPNAMES_BUTTON,
-            new Object[] { INTEGER_14, "HID:" + HID_FTP_BTN_PATH, resources.resbtnDir_value, "btnDir", new Integer(199), new Integer(112), new Short((short) 12), INTEGER_16 });
+                PROPNAMES_BUTTON,
+                new Object[]
+                {
+                    INTEGER_14, "HID:" + HID_FTP_BTN_PATH, resources.resbtnDir_value, "btnDir", new Integer(199), new Integer(112), new Short((short) 12), INTEGER_16
+                });
 
         btnOK = insertButton("btnOK", null,
-            PROPNAMES_BUTTON2,
-            new Object[] { INTEGER_14, "HID:" + HID_FTP_OK, resources.resbtnOK_value, "btnOK", new Integer(165), new Integer(142), new Short((short) PushButtonType.OK_value), new Short((short) 13), INTEGER_50 });
+                PROPNAMES_BUTTON2,
+                new Object[]
+                {
+                    INTEGER_14, "HID:" + HID_FTP_OK, resources.resbtnOK_value, "btnOK", new Integer(165), new Integer(142), new Short((short) PushButtonType.OK_value), new Short((short) 13), INTEGER_50
+                });
 
         btnCancel = insertButton("btnCancel",
-            null, PROPNAMES_BUTTON2,
-            new Object[] { INTEGER_14, "HID:" + HID_FTP_CANCEL, resources.resbtnCancel_value, "btnCancel", new Integer(113), new Integer(142), new Short((short) PushButtonType.CANCEL_value), new Short((short) 14), INTEGER_50 });
+                null, PROPNAMES_BUTTON2,
+                new Object[]
+                {
+                    INTEGER_14, "HID:" + HID_FTP_CANCEL, resources.resbtnCancel_value, "btnCancel", new Integer(113), new Integer(142), new Short((short) PushButtonType.CANCEL_value), new Short((short) 14), INTEGER_50
+                });
 
         btnHelp = insertButton("btnHelp", null,
-            PROPNAMES_BUTTON2 ,
-            new Object[] { INTEGER_14,"",  resources.resbtnHelp_value, "btnHelp", new Integer(57), new Integer(142), new Short((short) PushButtonType.HELP_value), new Short((short) 15), INTEGER_50 });
+                PROPNAMES_BUTTON2,
+                new Object[]
+                {
+                    INTEGER_14, "", resources.resbtnHelp_value, "btnHelp", new Integer(57), new Integer(142), new Short((short) PushButtonType.HELP_value), new Short((short) 15), INTEGER_50
+                });
 
     }
 
     /**
      * Make hostname, username and password text fields data aware.
      */
-    private void configure() {
-        dataAware.add(UnoDataAware.attachEditControl(this, "host", txtHost, null,true));
+    private void configure()
+    {
+        dataAware.add(UnoDataAware.attachEditControl(this, "host", txtHost, null, true));
         dataAware.add(UnoDataAware.attachEditControl(this, "username", txtUsername, null, true));
         dataAware.add(UnoDataAware.attachEditControl(this, "password", txtPassword, null, true));
     }
@@ -300,7 +377,8 @@ public class FTPDialog extends UnoDialog2 implements UIConsts, WWHID {
      * @return 0 for cancel, 1 for ok.
      * @throws Exception - well, if something goes wrong...
      */
-    public short execute(UnoDialog parent) throws Exception {
+    public short execute(UnoDialog parent) throws Exception
+    {
         host = extractHost(publish.cp_URL);
         username = publish.cp_Username == null ? "" : publish.cp_Username;
         password = publish.password == null ? "" : publish.password;
@@ -311,7 +389,8 @@ public class FTPDialog extends UnoDialog2 implements UIConsts, WWHID {
         updateUI();
         short result = executeDialog(parent);
         //change the CGPublish properties
-        if (result == 1) {
+        if (result == 1)
+        {
             publish.cp_URL = "ftp://" + host() + getDir();
             publish.cp_Username = username;
             publish.password = password;
@@ -325,7 +404,8 @@ public class FTPDialog extends UnoDialog2 implements UIConsts, WWHID {
      * directory text fields.
      * is called uppon initialization.
      */
-    private void updateUI() {
+    private void updateUI()
+    {
         DataAware.updateUI(dataAware);
         setDir(dir);
     }
@@ -336,16 +416,22 @@ public class FTPDialog extends UnoDialog2 implements UIConsts, WWHID {
      * @param ftpUrl
      * @return
      */
-    private String extractHost(String ftpUrl) {
+    private String extractHost(String ftpUrl)
+    {
         if (ftpUrl == null || ftpUrl.length() < 6)
+        {
             return "";
-
+        }
         String url = ftpUrl.substring(6);
         int i = url.indexOf("/");
         if (i == -1)
+        {
             return url;
+        }
         else
+        {
             return url.substring(0, i);
+        }
     }
 
     /**
@@ -353,16 +439,22 @@ public class FTPDialog extends UnoDialog2 implements UIConsts, WWHID {
      * @param ftpUrl
      * @return the directory portion of the ftp-url
      */
-    private String extractDir(String ftpUrl) {
+    private String extractDir(String ftpUrl)
+    {
         if (ftpUrl == null || ftpUrl.length() < 6)
+        {
             return "/";
-
+        }
         String url = ftpUrl.substring(6);
         int i = url.indexOf("/");
         if (i == -1)
+        {
             return "/";
+        }
         else
+        {
             return url.substring(i);
+        }
     }
 
     /**
@@ -370,23 +462,27 @@ public class FTPDialog extends UnoDialog2 implements UIConsts, WWHID {
      * according to the status of the hostname, username, password text fields.
      * If one of these fields is empty, the button is disabled.
      */
-    private void enableTestButton() {
+    private void enableTestButton()
+    {
         setEnabled(btnTestConnection, !(isEmpty(host) || isEmpty(username) || isEmpty(password)));
 
     }
+
     /**
      * @param s
      * @return true if the string is null or "".
      */
-    private final boolean isEmpty(String s) {
-        return (s==null) || (s.equals(""));
+    private final boolean isEmpty(String s)
+    {
+        return (s == null) || (s.equals(""));
     }
 
     /**
      * @return the ftp url with username and password,
      * but without the directory portion.
      */
-    public String getAcountUrl() {
+    public String getAcountUrl()
+    {
         return "ftp://" + username + ":" + password + "@" + host();
     }
 
@@ -394,21 +490,23 @@ public class FTPDialog extends UnoDialog2 implements UIConsts, WWHID {
      * return the host name without the "ftp://"
      * @return
      */
-    private String host() {
+    private String host()
+    {
         return host(host);
     }
 
-    private static String host(String s) {
+    private static String host(String s)
+    {
         return (s.startsWith("ftp://") ? s.substring(6) : s);
     }
 
     /**
      * @return the full ftp url including username, password and directory portion.
      */
-    private String getFullUrl() {
+    private String getFullUrl()
+    {
         return getAcountUrl() + dir;
     }
-
 
     /**
      * First I try to connect to the full url, including directory.
@@ -417,34 +515,50 @@ public class FTPDialog extends UnoDialog2 implements UIConsts, WWHID {
      * to "/", if not I say to the user its his problem...
      *
      */
-    public void connect() {
+    public void connect()
+    {
         setEnabled(btnTestConnection, false);
         setLabel(STATUS_CONNECTING);
         boolean success = false;
-        try {
+        try
+        {
             connect(getFullUrl());
             success = true;
-        } catch (InteractiveAugmentedIOException iaioex) {
-            try {
+        }
+        catch (InteractiveAugmentedIOException iaioex)
+        {
+            try
+            {
                 connect(getAcountUrl());
                 setDir("/");
                 success = true;
-            } catch (Exception ex) {
+            }
+            catch (Exception ex)
+            {
                 setLabel(STATUS_NO_RIGHTS);
             }
-        } catch (InteractiveNetworkResolveNameException inrne) {
+        }
+        catch (InteractiveNetworkResolveNameException inrne)
+        {
             setLabel(STATUS_SERVER_NOT_FOUND);
-        } catch (AuthenticationRequest ar) {
+        }
+        catch (AuthenticationRequest ar)
+        {
             setLabel(STATUS_USER_PWD_WRONG);
-        } catch (InteractiveNetworkConnectException incx) {
+        }
+        catch (InteractiveNetworkConnectException incx)
+        {
             setLabel(STATUS_HOST_UNREACHABLE);
-        } catch (Exception ex) {
+        }
+        catch (Exception ex)
+        {
             setLabel(-1);
             ex.printStackTrace();
         }
 
 
-        if (success) {
+        if (success)
+        {
             setLabel(STATUS_OK);
             setEnabled(btnDir, true);
             setEnabled(btnOK, true);
@@ -464,7 +578,8 @@ public class FTPDialog extends UnoDialog2 implements UIConsts, WWHID {
      * @param acountUrl
      * @throws Exception
      */
-    private void connect(String acountUrl) throws Exception {
+    private void connect(String acountUrl) throws Exception
+    {
         Object content = ucb.getContent(acountUrl);
 
         //list files in the content.
@@ -487,7 +602,8 @@ public class FTPDialog extends UnoDialog2 implements UIConsts, WWHID {
      * the UI and the data.
      * @param s the directory.
      */
-    public void setDir(String s) {
+    public void setDir(String s)
+    {
         dir = s;
         Helper.setUnoPropertyValue(getModel(txtDir), "Text", dir);
     }
@@ -495,7 +611,8 @@ public class FTPDialog extends UnoDialog2 implements UIConsts, WWHID {
     /**
      * @return the ftp subdirecrtory.
      */
-    public String getDir() {
+    public String getDir()
+    {
         return dir;
     }
 
@@ -505,7 +622,8 @@ public class FTPDialog extends UnoDialog2 implements UIConsts, WWHID {
      * This method is called also when the hostname, username
      * and passwordtext fields change.
      */
-    public void disconnect() {
+    public void disconnect()
+    {
         enableTestButton();
         setEnabled(btnOK, false);
         setEnabled(btnDir, false);
@@ -516,9 +634,11 @@ public class FTPDialog extends UnoDialog2 implements UIConsts, WWHID {
      * used for debuging.
      * @param args
      */
-    public static void main(String args[]) {
+    public static void main(String args[])
+    {
         String ConnectStr = "uno:socket,host=localhost,port=8100;urp,negotiate=0,forcesynchronous=1;StarOffice.NamingService"; //localhost  ;Lo-1.Germany.sun.com; 10.16.65.155
-        try {
+        try
+        {
             XMultiServiceFactory xLocMSF = Desktop.connect(ConnectStr);
             CGPublish p = new CGPublish();
             p.cp_URL = "ftp://tv-1/Folder";
@@ -527,7 +647,9 @@ public class FTPDialog extends UnoDialog2 implements UIConsts, WWHID {
 
             FTPDialog dialog = new FTPDialog(xLocMSF, p);
             dialog.execute(null);
-        } catch (Exception exception) {
+        }
+        catch (Exception exception)
+        {
             exception.printStackTrace();
         }
     }
@@ -538,35 +660,37 @@ public class FTPDialog extends UnoDialog2 implements UIConsts, WWHID {
      * @param status one opf the private status-constants.
      * if this param is not one of them, an "unknown error" status is displayed.
      */
-    private void setLabel(int status) {
-        switch (status) {
+    private void setLabel(int status)
+    {
+        switch (status)
+        {
             //not connected yet
             case STATUS_UNKONWN:
                 setLabel(resources.resFTPDisconnected, ICON_UNKNOWN);
                 break;
-                //connected!
-            case STATUS_OK :
+            //connected!
+            case STATUS_OK:
                 setLabel(resources.resFTPConnected, ICON_OK);
                 break;
-            case STATUS_USER_PWD_WRONG :
+            case STATUS_USER_PWD_WRONG:
                 setLabel(resources.resFTPUserPwdWrong, ICON_ERROR);
                 break;
-                //problem resolving server name
-            case STATUS_SERVER_NOT_FOUND :
+            //problem resolving server name
+            case STATUS_SERVER_NOT_FOUND:
                 setLabel(resources.resFTPServerNotFound, ICON_ERROR);
                 break;
-                //rights problem
-            case STATUS_NO_RIGHTS :
+            //rights problem
+            case STATUS_NO_RIGHTS:
                 setLabel(resources.resFTPRights, ICON_ERROR);
                 break;
-                //host unreachable (firewall?)
-            case STATUS_HOST_UNREACHABLE :
+            //host unreachable (firewall?)
+            case STATUS_HOST_UNREACHABLE:
                 setLabel(resources.resFTPHostUnreachable, ICON_ERROR);
                 break;
             case STATUS_CONNECTING:
                 setLabel(resources.resConnecting, ICON_CONNECTING);
                 break;
-            default :
+            default:
                 setLabel(resources.resFTPUnknownError, ICON_ERROR);
         }
     }
@@ -577,13 +701,14 @@ public class FTPDialog extends UnoDialog2 implements UIConsts, WWHID {
      * @param label
      * @param color
      */
-    private void setLabel(String label, String image) {
+    private void setLabel(String label, String image)
+    {
         Helper.setUnoPropertyValue(getModel(lblStatus), "Label", label);
         Helper.setUnoPropertyValue(getModel(imgStatus), "ImageURL", imageUrl(image));
     }
 
-
-    private String imageUrl(String s) {
+    private String imageUrl(String s)
+    {
         String t = imagesDirectory + s;
         //System.out.println(t);
         return t;
@@ -597,25 +722,33 @@ public class FTPDialog extends UnoDialog2 implements UIConsts, WWHID {
      * checks if the returned folder is an ftp folder.
      * sets the textbox and the data to the new selected dir.
      */
-    public void chooseDirectory() {
+    public void chooseDirectory()
+    {
         SystemDialog sd = SystemDialog.createOfficeFolderDialog(xMSF);
         String newUrl = sd.callFolderDialog(resources.resFTPDirectory, "", getFullUrl());
-        if (newUrl != null) {
+        if (newUrl != null)
+        {
             /*  if the user chose a local directory,
              *  sI do not accept it.
              */
             if (newUrl.startsWith("ftp://"))
+            {
                 setDir(extractDir(newUrl));
+            }
             else
-                AbstractErrorHandler.showMessage(xMSF, xControl.getPeer(),resources.resIllegalFolder, ErrorHandler.ERROR_PROCESS_FATAL);
+            {
+                AbstractErrorHandler.showMessage(xMSF, xControl.getPeer(), resources.resIllegalFolder, ErrorHandler.ERROR_PROCESS_FATAL);
+            }
         }
     }
+
     /**
      * practical to have such a method...
      * @param p the publisher obejct that contains the ftp connection info.
      * @return the full ftp url with username password and everything one needs.
      */
-    public static final String getFullURL(CGPublish p) {
+    public static final String getFullURL(CGPublish p)
+    {
         return "ftp://" + p.cp_Username + ":" + p.password + "@" + host(p.cp_URL);
     }
 }

@@ -1,5 +1,5 @@
 /*************************************************************************
-*
+ *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
  * Copyright 2008 by Sun Microsystems, Inc.
@@ -44,59 +44,76 @@ import com.sun.star.uno.AnyConverter;
 import com.sun.star.uno.Exception;
 import com.sun.star.uno.UnoRuntime;
 
-public class TextStyleHandler {
+public class TextStyleHandler
+{
+
     public XStyleFamiliesSupplier xStyleFamiliesSupplier;
     private XMultiServiceFactory xMSFDoc;
     private XTextDocument xTextDocument;
 
     /** Creates a new instance of TextStyleHandler */
-    public TextStyleHandler(com.sun.star.lang.XMultiServiceFactory xMSF, XTextDocument xTextDocument) {
+    public TextStyleHandler(com.sun.star.lang.XMultiServiceFactory xMSF, XTextDocument xTextDocument)
+    {
         this.xMSFDoc = xMSF;
         this.xTextDocument = xTextDocument;
         xStyleFamiliesSupplier = (XStyleFamiliesSupplier) UnoRuntime.queryInterface(XStyleFamiliesSupplier.class, xTextDocument);
     }
 
-    public void loadStyleTemplates(String sTemplateUrl, String OptionString) {
-        try {
+    public void loadStyleTemplates(String sTemplateUrl, String OptionString)
+    {
+        try
+        {
             XStyleLoader xStyleLoader = (XStyleLoader) UnoRuntime.queryInterface(XStyleLoader.class, xStyleFamiliesSupplier.getStyleFamilies());
             com.sun.star.beans.PropertyValue[] StyleOptions = xStyleLoader.getStyleLoaderOptions();
             String CurOptionName = "";
             int PropCount = StyleOptions.length;
-            for (int i = 0; i < PropCount; i++) {
+            for (int i = 0; i < PropCount; i++)
+            {
                 CurOptionName = StyleOptions[i].Name;
                 StyleOptions[i].Value = new Boolean((CurOptionName.compareTo(OptionString) == 0) || (CurOptionName.compareTo("OverwriteStyles") == 0));
             }
             xStyleLoader.loadStylesFromURL(sTemplateUrl, StyleOptions);
-        } catch (Exception exception) {
+        }
+        catch (Exception exception)
+        {
             exception.printStackTrace(System.out);
         }
     }
 
-    public XPropertySet getStyleByName(String sStyleFamily, String sStyleName){
-    try {
-        XPropertySet xPropertySet = null;
-        Object oStyleFamily = xStyleFamiliesSupplier.getStyleFamilies().getByName(sStyleFamily);
-        XNameAccess xNameAccess = (XNameAccess) UnoRuntime.queryInterface(XNameAccess.class, oStyleFamily);
-        if (xNameAccess.hasByName(sStyleName))
-            xPropertySet = (XPropertySet) UnoRuntime.queryInterface(XPropertySet.class, xNameAccess.getByName(sStyleName));
-        return xPropertySet;
-    } catch (Exception e) {
-        e.printStackTrace(System.out);
-    }
-    return null;
+    public XPropertySet getStyleByName(String sStyleFamily, String sStyleName)
+    {
+        try
+        {
+            XPropertySet xPropertySet = null;
+            Object oStyleFamily = xStyleFamiliesSupplier.getStyleFamilies().getByName(sStyleFamily);
+            XNameAccess xNameAccess = (XNameAccess) UnoRuntime.queryInterface(XNameAccess.class, oStyleFamily);
+            if (xNameAccess.hasByName(sStyleName))
+            {
+                xPropertySet = (XPropertySet) UnoRuntime.queryInterface(XPropertySet.class, xNameAccess.getByName(sStyleName));
+            }
+            return xPropertySet;
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace(System.out);
+        }
+        return null;
     }
 
-
-    public Size changePageAlignment(XPropertySet _xPropPageStyle, boolean _bIsLandscape){
-        try {
+    public Size changePageAlignment(XPropertySet _xPropPageStyle, boolean _bIsLandscape)
+    {
+        try
+        {
             _xPropPageStyle.setPropertyValue("IsLandscape", new Boolean(_bIsLandscape));
             Size aPageSize = (Size) AnyConverter.toObject(Size.class, _xPropPageStyle.getPropertyValue("Size"));
             int nPageWidth = aPageSize.Width;
             int nPageHeight = aPageSize.Height;
             Size aSize = new Size(nPageHeight, nPageWidth);
             _xPropPageStyle.setPropertyValue("Size", aSize);
-            return (Size) AnyConverter.toObject(Size.class,_xPropPageStyle.getPropertyValue("Size"));
-        } catch (Exception e) {
+            return (Size) AnyConverter.toObject(Size.class, _xPropPageStyle.getPropertyValue("Size"));
+        }
+        catch (Exception e)
+        {
             e.printStackTrace(System.out);
             return null;
         }

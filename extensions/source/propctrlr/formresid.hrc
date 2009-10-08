@@ -147,7 +147,7 @@
 #define RID_STR_TAG                         ( RID_FORMBROWSER_START + 116 )
 #define RID_STR_HELPTEXT                    ( RID_FORMBROWSER_START + 117 )
 #define RID_STR_HELPURL                     ( RID_FORMBROWSER_START + 118 )
-    // FREE
+#define RID_STR_INPUT_REQUIRED              ( RID_FORMBROWSER_START + 119 )
 #define RID_STR_UNCHECKEDREFVALUE           ( RID_FORMBROWSER_START + 120 )
 #define RID_STR_CURSOR_TYPE                 ( RID_FORMBROWSER_START + 121 )
     // FREE
@@ -236,7 +236,7 @@
 #define RID_STR_SHOW_SCROLLBARS             ( RID_FORMBROWSER_START + 205 )
 #define RID_STR_QUERYDESIGN_TITLE           ( RID_FORMBROWSER_START + 206 )
 #define RID_STR_ICONSIZE                    ( RID_FORMBROWSER_START + 207 )
-    // FREE
+#define RID_STR_WRITING_MODE                ( RID_FORMBROWSER_START + 208 )
 #define RID_STR_SHOW_POSITION               ( RID_FORMBROWSER_START + 209 )
 #define RID_STR_SHOW_NAVIGATION             ( RID_FORMBROWSER_START + 210 )
 #define RID_STR_SHOW_RECORDACTIONS          ( RID_FORMBROWSER_START + 211 )
@@ -336,6 +336,10 @@
 #define RID_RSC_ENUM_CELL_EXCHANGE_TYPE     ( RID_PROPCONTROLLER_START + 23 )
 #define RID_RSC_ENUM_SUBMIT_TARGET          ( RID_PROPCONTROLLER_START + 24 )
 #define RID_RSC_ENUM_SELECTION_TYPE         ( RID_PROPCONTROLLER_START + 25 )
+#define RID_RSC_ENUM_SCALE_MODE             ( RID_PROPCONTROLLER_START + 26 )
+#define RID_RSC_ENUM_YESNO                  ( RID_PROPCONTROLLER_START + 27 )
+#define RID_RSC_ENUM_SHOWHIDE               ( RID_PROPCONTROLLER_START + 28 )
+#define RID_RSC_ENUM_WRITING_MODE           ( RID_PROPCONTROLLER_START + 29 )
 
 // -----------------------------------------------------------------------
 // - ImageList - local ids

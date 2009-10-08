@@ -68,7 +68,7 @@ class OComboBoxModel
     ::com::sun::star::uno::Any              m_aBoundColumn;         // obsolet
     ::rtl::OUString                         m_aListSource;          //
     ::rtl::OUString                         m_aDefaultText;         // DefaultText
-    ::rtl::OUString                         m_aSaveValue;
+    ::com::sun::star::uno::Any              m_aLastKnownValue;
 
     StringSequence                          m_aDesignModeStringItems;
         // upon loading, in some cases we reset fill our string item list ourself. We don't want

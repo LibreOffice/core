@@ -26,9 +26,11 @@
  * <http://www.openoffice.org/license.html>
  * for a copy of the LGPLv3 License.
  *
- ************************************************************************/package com.sun.star.wizards.ui;
+ ************************************************************************/
+package com.sun.star.wizards.ui;
 
-public interface XCompletion {
+public interface XCompletion
+{
 
     public void setcompleted(int _ndialogpage, boolean _biscompleted);
 

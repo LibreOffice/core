@@ -267,9 +267,9 @@ void ImageProducer::SetImage( const ::rtl::OUString& rPath )
     mbAsync = sal_False;
     delete mpStm;
 
-    if ( ::svt::ImageResourceAccess::isImageResourceURL( maURL ) )
+    if ( ::svt::GraphicAccess::isSupportedURL( maURL ) )
     {
-        mpStm = ::svt::ImageResourceAccess::getImageStream( ::comphelper::getProcessServiceFactory(), maURL );
+        mpStm = ::svt::GraphicAccess::getImageStream( ::comphelper::getProcessServiceFactory(), maURL );
     }
     else if( maURL.getLength() )
     {

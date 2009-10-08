@@ -47,7 +47,7 @@ using namespace ::com::sun::star::lang;
 
 extern "C" {
 
-void SAL_CALL component_getImplementationEnvironment(
+SAL_DLLPUBLIC_EXPORT void SAL_CALL component_getImplementationEnvironment(
         const  sal_Char**   ppEnvironmentTypeName,
         uno_Environment**   ppEnvironment           )
 {
@@ -55,6 +55,7 @@ void SAL_CALL component_getImplementationEnvironment(
     *ppEnvironmentTypeName = CPPU_CURRENT_LANGUAGE_BINDING_NAME ;
 }
 
+SAL_DLLPUBLIC_EXPORT
 sal_Bool SAL_CALL component_writeInfo(  void*   pServiceManager ,
                                         void*   pRegistryKey    )
 {
@@ -76,6 +77,7 @@ sal_Bool SAL_CALL component_writeInfo(  void*   pServiceManager ,
     return sal_True;
 }
 
+SAL_DLLPUBLIC_EXPORT
 void* SAL_CALL component_getFactory( const sal_Char* pImplementationName,
                                      void* pServiceManager,
                                      void* pRegistryKey )

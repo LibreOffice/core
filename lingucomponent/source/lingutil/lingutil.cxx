@@ -166,80 +166,9 @@ std::vector< SvtLinguConfigDictionaryEntry > GetOldStyleDics( const char *pDicTy
     if (aFormatName.getLength() == 0 || aDicExtension.Len() == 0)
         return aRes;
 
-    dictentry * pDict = NULL;  // shared dict entry pointer
-
     // set of languages to remember the language where it is already
     // decided to make use of the dictionary.
     std::set< LanguageType > aDicLangInUse;
-
-    const sal_Int16 USER_LAYER = 0;
-    for (int k = 0;  k < 2;  ++k)
-    {
-        // Search for 'dictionary.lst' file still in use.
-        // First look in the user paths for downloaded dictionaries then
-        // look in paths for shared installed dictionaries.
-        // In each path sequence there should be at most one 'dictionary.lst' be found...
-        const sal_Int16 nFlags = k == USER_LAYER ? PATH_FLAG_USER : PATH_FLAG_INTERNAL;
-        const uno::Sequence< ::rtl::OUString > aPaths( linguistic::GetLinguisticPaths( nFlags ) );
-
-        // invoke a dictionary manager to get the dictionary list
-        String aLstFile( String::CreateFromAscii("dictionary.lst") );
-        aLstFile = linguistic::SearchFileInPaths( aLstFile, aPaths );
-        rtl::OUString aLstFileURL;
-        osl::FileBase::getSystemPathFromFileURL( aLstFile, aLstFileURL );
-        rtl::OString aSysPathToFile( OU2ENC( aLstFileURL, osl_getThreadTextEncoding() ) );
-        DictMgr aDictMgr( aSysPathToFile.getStr(), pDicType );
-        int nDicts = aDictMgr.get_list( &pDict );
-
-        // Test for existence of the actual dictionary files
-        // and remember the ones we like to use...
-        for (int i = 0;  i < nDicts;  ++i)
-        {
-            // Note: the 'dictionary.lst' file and the actual dictionary files
-            // need to reside in the very same directory!!
-            String aDicFileName( String::CreateFromAscii( pDict[i].filename ) );
-            aDicFileName += aDicExtension;
-            aDicFileName = linguistic::SearchFileInPaths( aDicFileName, aPaths );
-
-            // file not found?
-            if (aDicFileName.Len() == 0)
-                continue;
-
-
-            //
-            // Now, since the dictionary does exist add it to the resulting vector.
-            // But don't make use of shared layer dictionaries if for the
-            // same language user layer dictionaries do exist.
-            // The user dictionaries must get precedence over shared layer
-            // (system installed dictionaries) in order to let the user have
-            // the choice. E.g. when he wants touse a newer version of a
-            // shared layer installed dictionary...
-            //
-
-            // Thus we first get the language of the dictionary
-            LanguageType nLang = MsLangId::convertIsoNamesToLanguage(
-                    A2OU( pDict[i].lang ),
-                    A2OU( pDict[i].region ) );
-
-            // Don't add shared layer dictionary if there is already
-            // a user layer dictionary...
-            if (k == USER_LAYER || aDicLangInUse.count( nLang ) == 0)
-            {
-                // remember the new language in use
-                aDicLangInUse.insert( nLang );
-
-                // add the dictionary to the resulting vector
-                SvtLinguConfigDictionaryEntry aDicEntry;
-                aDicEntry.aLocations.realloc(1);
-                aDicEntry.aLocaleNames.realloc(1);
-                rtl::OUString aLocaleName( MsLangId::convertLanguageToIsoString( nLang ) );
-                aDicEntry.aLocations[0]   = aDicFileName;
-                aDicEntry.aFormatName     = aFormatName;
-                aDicEntry.aLocaleNames[0] = aLocaleName;
-                aRes.push_back( aDicEntry );
-            }
-        }
-    }
 
 #ifdef SYSTEM_DICTS
    osl::Directory aSystemDicts(aSystemDir);
@@ -254,36 +183,39 @@ std::vector< SvtLinguConfigDictionaryEntry > GetOldStyleDics( const char *pDicTy
            if (sPath.lastIndexOf(aSystemSuffix) == sPath.getLength()-aSystemSuffix.getLength())
            {
                sal_Int32 nStartIndex = sPath.lastIndexOf(sal_Unicode('/')) + 1;
-                              if (!sPath.match(aSystemPrefix, nStartIndex))
-                                      continue;
+               if (!sPath.match(aSystemPrefix, nStartIndex))
+                   continue;
+               rtl::OUString sChunk = sPath.copy(0, sPath.getLength() - aSystemSuffix.getLength());
                sal_Int32 nIndex = nStartIndex + aSystemPrefix.getLength();
-               rtl::OUString sLang = sPath.getToken( 0, '_', nIndex );
-               rtl::OUString sRegion = sPath.copy( nIndex, sPath.getLength() - nIndex - aSystemSuffix.getLength());
-                              if (!sLang.getLength() || !sRegion.getLength())
-                                      continue;
+               rtl::OUString sLang = sChunk.getToken( 0, '_', nIndex );
+               if (!sLang.getLength())
+                   continue;
+               rtl::OUString sRegion;
+               if (nIndex != -1);
+                   sRegion = sChunk.copy( nIndex, sChunk.getLength() - nIndex );
 
-                              // Thus we first get the language of the dictionary
-                              LanguageType nLang = MsLangId::convertIsoNamesToLanguage(
+               // Thus we first get the language of the dictionary
+               LanguageType nLang = MsLangId::convertIsoNamesToLanguage(
                   sLang, sRegion );
 
-                              if (aDicLangInUse.count( nLang ) == 0)
-                              {
-                                      // remember the new language in use
-                                      aDicLangInUse.insert( nLang );
+               if (aDicLangInUse.count( nLang ) == 0)
+               {
+                   // remember the new language in use
+                   aDicLangInUse.insert( nLang );
 
-                                      // add the dictionary to the resulting vector
-                                      SvtLinguConfigDictionaryEntry aDicEntry;
-                                      aDicEntry.aLocations.realloc(1);
-                                      aDicEntry.aLocaleNames.realloc(1);
-                                      rtl::OUString aLocaleName( MsLangId::convertLanguageToIsoString( nLang ) );
-                      aDicEntry.aLocations[0]   = sPath;
-                                      aDicEntry.aFormatName     = aFormatName;
-                                      aDicEntry.aLocaleNames[0] = aLocaleName;
-                                      aRes.push_back( aDicEntry );
-                              }
+                   // add the dictionary to the resulting vector
+                   SvtLinguConfigDictionaryEntry aDicEntry;
+                   aDicEntry.aLocations.realloc(1);
+                   aDicEntry.aLocaleNames.realloc(1);
+                   rtl::OUString aLocaleName( MsLangId::convertLanguageToIsoString( nLang ) );
+                   aDicEntry.aLocations[0] = sPath;
+                   aDicEntry.aFormatName = aFormatName;
+                   aDicEntry.aLocaleNames[0] = aLocaleName;
+                   aRes.push_back( aDicEntry );
+               }
            }
        }
-      }
+    }
 
 #endif
 
@@ -317,16 +249,20 @@ void MergeNewStyleDicsAndOldStyleDics(
         sal_Int32 nOldStyleDics = aIt2->aLocaleNames.getLength();
 
         // old style dics should only have one language listed...
-        DBG_ASSERT( nOldStyleDics, "old style dictionary with more then one language found!")
+        DBG_ASSERT( nOldStyleDics, "old style dictionary with more then one language found!");
         if (nOldStyleDics > 0)
         {
             LanguageType nLang = MsLangId::convertIsoStringToLanguage( aIt2->aLocaleNames[0] );
 
+            if (nLang == LANGUAGE_DONTKNOW || nLang == LANGUAGE_NONE)
+            {
+                DBG_ERROR( "old style dictionary with invalid language found!" );
+                continue;
+            }
+
             // language not yet added?
             if (aNewStyleLanguages.count( nLang ) == 0)
-            {
                 rNewStyleDics.push_back( *aIt2 );
-            }
         }
         else
         {

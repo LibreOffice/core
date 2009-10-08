@@ -9,7 +9,7 @@
  *
  * $RCSfile: SectionEmptyObject.java,v $
  *
- * $Revision: 1.2 $
+ * $Revision: 1.2.36.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -30,7 +30,6 @@
  *
  * **********************************************************************
  */
-
 package com.sun.star.wizards.reportbuilder.layout;
 
 import com.sun.star.awt.FontDescriptor;
@@ -41,6 +40,7 @@ import com.sun.star.awt.FontDescriptor;
  */
 public class SectionEmptyObject extends SectionObject
 {
+
     protected SectionEmptyObject()
     {
         m_aParentObject = null;

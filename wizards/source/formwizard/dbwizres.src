@@ -1465,6 +1465,10 @@ String RID_DB_REPORT_WIZARD_START + 91
 {
     Text [ en-US ] = "Page count:";
 };
+String RID_DB_REPORT_WIZARD_START + 92
+{
+    Text [ en-US ] = "No valid report template was found.";
+};
 
 // ============================================================================
 

@@ -45,14 +45,15 @@ ENABLE_EXCEPTIONS = TRUE
 CFLAGS+=-DSYSTEM_LIBXML $(LIBXML_CFLAGS)
 .ENDIF
 
-.IF "$(CRYPTO_ENGINE)" == "mscrypto"
-CDEFS += -DXMLSEC_CRYPTO_MSCRYPTO -DXMLSEC_NO_XSLT
-.ELSE
-CDEFS += -DXMLSEC_CRYPTO_NSS -DXMLSEC_NO_XSLT
 .IF "$(WITH_MOZILLA)" == "NO"
 @all:
     @echo "No mozilla -> no nss -> no libxmlsec -> no xmlsecurity.."
 .ENDIF
+
+.IF "$(CRYPTO_ENGINE)" == "mscrypto"
+CDEFS += -DXMLSEC_CRYPTO_MSCRYPTO -DXMLSEC_NO_XSLT
+.ELSE
+CDEFS += -DXMLSEC_CRYPTO_NSS -DXMLSEC_NO_XSLT
 .ENDIF
 
 # --- Files --------------------------------------------------------

@@ -9,7 +9,7 @@
  *
  * $RCSfile: PropertySetHelper.java,v $
  *
- * $Revision: 1.2 $
+ * $Revision: 1.2.36.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -29,7 +29,6 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-
 package com.sun.star.wizards.common;
 
 import com.sun.star.beans.Property;
@@ -44,17 +43,19 @@ import java.util.HashMap;
 
 public class PropertySetHelper
 {
+
     protected XPropertySet m_xPropertySet;
     private HashMap m_aHashMap;
 
     public PropertySetHelper(Object _aObj)
+    {
+        if (_aObj == null)
         {
-            if (_aObj == null)
-            {
-                return;
-            }
-            m_xPropertySet = (XPropertySet)UnoRuntime.queryInterface(XPropertySet.class, _aObj);
+            return;
         }
+        m_xPropertySet = (XPropertySet) UnoRuntime.queryInterface(XPropertySet.class, _aObj);
+    }
+
     private HashMap getHashMap()
     {
         if (m_aHashMap == null)
@@ -63,337 +64,337 @@ public class PropertySetHelper
         }
         return m_aHashMap;
     }
-    /**
-       set a property, don't throw any exceptions, they will only write down as a hint in the helper debug output
-       @param _sName name of the property to set
-       @param _aValue property value as object
-     */
-    public void setPropertyValueDontThrow(String _sName, Object _aValue)
-        {
-            try
-            {
-                setPropertyValue(_sName, _aValue);
-            }
-            catch(Exception e)
-            {
-                DebugHelper.writeInfo("Don't throw the exception with property name(" + _sName + " ) : " + e.getMessage());
-            }
-        }
 
     /**
-       set a property,
-       @param _sName name of the property to set
-       @param _aValue property value as object
+    set a property, don't throw any exceptions, they will only write down as a hint in the helper debug output
+    @param _sName name of the property to set
+    @param _aValue property value as object
+     */
+    public void setPropertyValueDontThrow(String _sName, Object _aValue)
+    {
+        try
+        {
+            setPropertyValue(_sName, _aValue);
+        }
+        catch (Exception e)
+        {
+            DebugHelper.writeInfo("Don't throw the exception with property name(" + _sName + " ) : " + e.getMessage());
+        }
+    }
+
+    /**
+    set a property,
+    @param _sName name of the property to set
+    @param _aValue property value as object
      * @throws java.lang.Exception
      */
     public void setPropertyValue(String _sName, Object _aValue) throws java.lang.Exception
+    {
+        if (m_xPropertySet != null)
         {
-            if (m_xPropertySet != null)
+            try
             {
-                try
-                {
-                    m_xPropertySet.setPropertyValue(_sName, _aValue);
-                }
-                // Exceptions are not from interest
-                catch (com.sun.star.beans.UnknownPropertyException e)
-                {
-                    DebugHelper.writeInfo(e.getMessage());
-                    DebugHelper.exception(e);
-                }
-                catch (com.sun.star.beans.PropertyVetoException e)
-                {
-                    DebugHelper.writeInfo(e.getMessage());
-                    DebugHelper.exception(e);
-                }
-                catch (com.sun.star.lang.IllegalArgumentException e)
-                {
-                    DebugHelper.writeInfo(e.getMessage());
-                    DebugHelper.exception(e);
-                }
-                catch (com.sun.star.lang.WrappedTargetException e)
-                {
-                    DebugHelper.writeInfo(e.getMessage());
-                    DebugHelper.exception(e);
-                }
+                m_xPropertySet.setPropertyValue(_sName, _aValue);
             }
-            else
+            // Exceptions are not from interest
+            catch (com.sun.star.beans.UnknownPropertyException e)
             {
-                // DebugHelper.writeInfo("PropertySetHelper.setProperty() can't get XPropertySet");
-                getHashMap().put(_sName, _aValue);
+                DebugHelper.writeInfo(e.getMessage());
+                DebugHelper.exception(e);
+            }
+            catch (com.sun.star.beans.PropertyVetoException e)
+            {
+                DebugHelper.writeInfo(e.getMessage());
+                DebugHelper.exception(e);
+            }
+            catch (com.sun.star.lang.IllegalArgumentException e)
+            {
+                DebugHelper.writeInfo(e.getMessage());
+                DebugHelper.exception(e);
+            }
+            catch (com.sun.star.lang.WrappedTargetException e)
+            {
+                DebugHelper.writeInfo(e.getMessage());
+                DebugHelper.exception(e);
             }
         }
+        else
+        {
+            // DebugHelper.writeInfo("PropertySetHelper.setProperty() can't get XPropertySet");
+            getHashMap().put(_sName, _aValue);
+        }
+    }
 
     /**
-       get a property and convert it to a int value
-       @param _sName the string name of the property
-       @param _nDefault if an error occur, return this value
-       @return the int value of the property
+    get a property and convert it to a int value
+    @param _sName the string name of the property
+    @param _nDefault if an error occur, return this value
+    @return the int value of the property
      */
     public int getPropertyValueAsInteger(String _sName, int _nDefault)
-        {
-            Object aObject = null;
-            int nValue = _nDefault;
+    {
+        Object aObject = null;
+        int nValue = _nDefault;
 
-            if (m_xPropertySet != null)
+        if (m_xPropertySet != null)
+        {
+            try
             {
-                try
-                {
-                    aObject = m_xPropertySet.getPropertyValue(_sName);
-                }
-                catch (com.sun.star.beans.UnknownPropertyException e)
-                {
-                    DebugHelper.writeInfo(e.getMessage());
-                }
-                catch (com.sun.star.lang.WrappedTargetException e)
-                {
-                    DebugHelper.writeInfo(e.getMessage());
-                }
+                aObject = m_xPropertySet.getPropertyValue(_sName);
             }
-            if (aObject != null)
+            catch (com.sun.star.beans.UnknownPropertyException e)
             {
-                try
-                {
-                    nValue = NumericalHelper.toInt(aObject);
-                }
-                catch (com.sun.star.lang.IllegalArgumentException e)
-                {
-                    DebugHelper.writeInfo("can't convert a object to integer.");
-                }
+                DebugHelper.writeInfo(e.getMessage());
             }
-            return nValue;
+            catch (com.sun.star.lang.WrappedTargetException e)
+            {
+                DebugHelper.writeInfo(e.getMessage());
+            }
         }
+        if (aObject != null)
+        {
+            try
+            {
+                nValue = NumericalHelper.toInt(aObject);
+            }
+            catch (com.sun.star.lang.IllegalArgumentException e)
+            {
+                DebugHelper.writeInfo("can't convert a object to integer.");
+            }
+        }
+        return nValue;
+    }
 
     /**
-       get a property and convert it to a short value
-       @param _sName the string name of the property
-       @param _nDefault if an error occur, return this value
-       @return the int value of the property
+    get a property and convert it to a short value
+    @param _sName the string name of the property
+    @param _nDefault if an error occur, return this value
+    @return the int value of the property
      */
     public short getPropertyValueAsShort(String _sName, short _nDefault)
-        {
-            Object aObject = null;
-            short nValue = _nDefault;
+    {
+        Object aObject = null;
+        short nValue = _nDefault;
 
-            if (m_xPropertySet != null)
+        if (m_xPropertySet != null)
+        {
+            try
             {
-                try
-                {
-                    aObject = m_xPropertySet.getPropertyValue(_sName);
-                }
-                catch (com.sun.star.beans.UnknownPropertyException e)
-                {
-                    DebugHelper.writeInfo(e.getMessage());
-                }
-                catch (com.sun.star.lang.WrappedTargetException e)
-                {
-                    DebugHelper.writeInfo(e.getMessage());
-                }
+                aObject = m_xPropertySet.getPropertyValue(_sName);
             }
-            if (aObject != null)
+            catch (com.sun.star.beans.UnknownPropertyException e)
             {
-                try
-                {
-                    nValue = NumericalHelper.toShort(aObject);
-                }
-                catch (com.sun.star.lang.IllegalArgumentException e)
-                {
-                    DebugHelper.writeInfo("can't convert a object to short.");
-                }
+                DebugHelper.writeInfo(e.getMessage());
             }
-            return nValue;
+            catch (com.sun.star.lang.WrappedTargetException e)
+            {
+                DebugHelper.writeInfo(e.getMessage());
+            }
         }
+        if (aObject != null)
+        {
+            try
+            {
+                nValue = NumericalHelper.toShort(aObject);
+            }
+            catch (com.sun.star.lang.IllegalArgumentException e)
+            {
+                DebugHelper.writeInfo("can't convert a object to short.");
+            }
+        }
+        return nValue;
+    }
 
     /**
-       get a property and convert it to a double value
-       @param _sName the string name of the property
-       @param _nDefault if an error occur, return this value
-       @return the int value of the property
+    get a property and convert it to a double value
+    @param _sName the string name of the property
+    @param _nDefault if an error occur, return this value
+    @return the int value of the property
      */
     public double getPropertyValueAsDouble(String _sName, double _nDefault)
-        {
-            Object aObject = null;
-            double nValue = _nDefault;
+    {
+        Object aObject = null;
+        double nValue = _nDefault;
 
-            if (m_xPropertySet != null)
+        if (m_xPropertySet != null)
+        {
+            try
             {
-                try
-                {
-                    aObject = m_xPropertySet.getPropertyValue(_sName);
-                }
-                catch (com.sun.star.beans.UnknownPropertyException e)
-                {
-                    DebugHelper.writeInfo(e.getMessage());
-                }
-                catch (com.sun.star.lang.WrappedTargetException e)
-                {
-                    DebugHelper.writeInfo(e.getMessage());
-                }
+                aObject = m_xPropertySet.getPropertyValue(_sName);
             }
-            if (aObject == null)
+            catch (com.sun.star.beans.UnknownPropertyException e)
             {
-                if (getHashMap().containsKey(_sName))
-                {
-                    aObject = getHashMap().get(_sName);
-                }
+                DebugHelper.writeInfo(e.getMessage());
             }
-            if (aObject != null)
+            catch (com.sun.star.lang.WrappedTargetException e)
             {
-                try
-                {
-                    nValue = NumericalHelper.toDouble(aObject);
-                }
-                catch (com.sun.star.lang.IllegalArgumentException e)
-                {
-                    DebugHelper.writeInfo("can't convert a object to integer.");
-                }
+                DebugHelper.writeInfo(e.getMessage());
             }
-            return nValue;
         }
+        if (aObject == null)
+        {
+            if (getHashMap().containsKey(_sName))
+            {
+                aObject = getHashMap().get(_sName);
+            }
+        }
+        if (aObject != null)
+        {
+            try
+            {
+                nValue = NumericalHelper.toDouble(aObject);
+            }
+            catch (com.sun.star.lang.IllegalArgumentException e)
+            {
+                DebugHelper.writeInfo("can't convert a object to integer.");
+            }
+        }
+        return nValue;
+    }
 
     /**
-       get a property and convert it to a boolean value
-       @param _sName the string name of the property
-       @param _bDefault if an error occur, return this value
-       @return the boolean value of the property
+    get a property and convert it to a boolean value
+    @param _sName the string name of the property
+    @param _bDefault if an error occur, return this value
+    @return the boolean value of the property
      */
     public boolean getPropertyValueAsBoolean(String _sName, boolean _bDefault)
-        {
-            Object aObject = null;
-            boolean bValue = _bDefault;
+    {
+        Object aObject = null;
+        boolean bValue = _bDefault;
 
-            if (m_xPropertySet != null)
+        if (m_xPropertySet != null)
+        {
+            try
             {
-                try
-                {
-                    aObject = m_xPropertySet.getPropertyValue(_sName);
-                }
-                catch (com.sun.star.beans.UnknownPropertyException e)
-                {
-                    DebugHelper.writeInfo(e.getMessage());
-                    DebugHelper.writeInfo("UnknownPropertyException caught: Name:=" + _sName);
-                }
-                catch (com.sun.star.lang.WrappedTargetException e)
-                {
-                    DebugHelper.writeInfo(e.getMessage());
-                }
+                aObject = m_xPropertySet.getPropertyValue(_sName);
             }
-            if (aObject != null)
+            catch (com.sun.star.beans.UnknownPropertyException e)
             {
-                try
-                {
-                    bValue = NumericalHelper.toBoolean(aObject);
-                }
-                catch (com.sun.star.lang.IllegalArgumentException e)
-                {
-                    DebugHelper.writeInfo("can't convert a object to boolean.");
-                }
+                DebugHelper.writeInfo(e.getMessage());
+                DebugHelper.writeInfo("UnknownPropertyException caught: Name:=" + _sName);
             }
-            return bValue;
+            catch (com.sun.star.lang.WrappedTargetException e)
+            {
+                DebugHelper.writeInfo(e.getMessage());
+            }
         }
+        if (aObject != null)
+        {
+            try
+            {
+                bValue = NumericalHelper.toBoolean(aObject);
+            }
+            catch (com.sun.star.lang.IllegalArgumentException e)
+            {
+                DebugHelper.writeInfo("can't convert a object to boolean.");
+            }
+        }
+        return bValue;
+    }
 
     /**
-       get a property and convert it to a string value
-       @param _sName the string name of the property
-       @param _sDefault if an error occur, return this value
-       @return the string value of the property
+    get a property and convert it to a string value
+    @param _sName the string name of the property
+    @param _sDefault if an error occur, return this value
+    @return the string value of the property
      */
     public String getPropertyValueAsString(String _sName, String _sDefault)
-        {
-            Object aObject = null;
-            String sValue = _sDefault;
+    {
+        Object aObject = null;
+        String sValue = _sDefault;
 
-            if (m_xPropertySet != null)
+        if (m_xPropertySet != null)
+        {
+            try
             {
-                try
-                {
-                    aObject = m_xPropertySet.getPropertyValue(_sName);
-                }
-                catch (com.sun.star.beans.UnknownPropertyException e)
-                {
-                    DebugHelper.writeInfo(e.getMessage());
-                }
-                catch (com.sun.star.lang.WrappedTargetException e)
-                {
-                    DebugHelper.writeInfo(e.getMessage());
-                }
+                aObject = m_xPropertySet.getPropertyValue(_sName);
             }
-            if (aObject != null)
+            catch (com.sun.star.beans.UnknownPropertyException e)
             {
-                try
-                {
-                    sValue = AnyConverter.toString(aObject);
-                }
-                catch (com.sun.star.lang.IllegalArgumentException e)
-                {
-                    DebugHelper.writeInfo("can't convert a object to string.");
-                }
+                DebugHelper.writeInfo(e.getMessage());
             }
-            return sValue;
+            catch (com.sun.star.lang.WrappedTargetException e)
+            {
+                DebugHelper.writeInfo(e.getMessage());
+            }
         }
+        if (aObject != null)
+        {
+            try
+            {
+                sValue = AnyConverter.toString(aObject);
+            }
+            catch (com.sun.star.lang.IllegalArgumentException e)
+            {
+                DebugHelper.writeInfo("can't convert a object to string.");
+            }
+        }
+        return sValue;
+    }
 
     /**
-       get a property and don't convert it
-       @param _sName the string name of the property
-       @return the object value of the property without any conversion
+    get a property and don't convert it
+    @param _sName the string name of the property
+    @return the object value of the property without any conversion
      */
     public Object getPropertyValueAsObject(String _sName)
-        {
-            Object aObject = null;
+    {
+        Object aObject = null;
 
-            if (m_xPropertySet != null)
+        if (m_xPropertySet != null)
+        {
+            try
             {
-                try
-                {
-                    aObject = m_xPropertySet.getPropertyValue(_sName);
-                }
-                catch (com.sun.star.beans.UnknownPropertyException e)
-                {
-                    DebugHelper.writeInfo(e.getMessage());
-                }
-                catch (com.sun.star.lang.WrappedTargetException e)
-                {
-                    DebugHelper.writeInfo(e.getMessage());
-                }
+                aObject = m_xPropertySet.getPropertyValue(_sName);
             }
-            return aObject;
+            catch (com.sun.star.beans.UnknownPropertyException e)
+            {
+                DebugHelper.writeInfo(e.getMessage());
+            }
+            catch (com.sun.star.lang.WrappedTargetException e)
+            {
+                DebugHelper.writeInfo(e.getMessage());
+            }
         }
+        return aObject;
+    }
 
     /**
      * Debug helper, to show all properties which are available in the given object.
      * @param _xObj the object of which the properties should shown
      */
     public static void showProperties(Object _xObj)
-        {
-            PropertySetHelper aHelper = new PropertySetHelper(_xObj);
-            aHelper.showProperties();
-        }
+    {
+        PropertySetHelper aHelper = new PropertySetHelper(_xObj);
+        aHelper.showProperties();
+    }
 
     /**
-       Debug helper, to show all properties which are available in the current object.
-    */
+    Debug helper, to show all properties which are available in the current object.
+     */
     public void showProperties()
-        {
-            String sName = "";
+    {
+        String sName = "";
 
-            if (m_xPropertySet != null)
-            {
-                XServiceInfo xServiceInfo = (XServiceInfo)UnoRuntime.queryInterface(XServiceInfo.class, m_xPropertySet);
+        if (m_xPropertySet != null)
+        {
+            XServiceInfo xServiceInfo = (XServiceInfo) UnoRuntime.queryInterface(XServiceInfo.class, m_xPropertySet);
             if (xServiceInfo != null)
             {
                 sName = xServiceInfo.getImplementationName();
             }
-                XPropertySetInfo xInfo = m_xPropertySet.getPropertySetInfo();
-                Property[] aAllProperties = xInfo.getProperties();
-                DebugHelper.writeInfo("Show all properties of Implementation of :'" + sName + "'");
-                for (int i = 0; i<aAllProperties.length; i++)
-                {
-                    DebugHelper.writeInfo(" - " + aAllProperties[i].Name);
-                }
-            }
-            else
+            XPropertySetInfo xInfo = m_xPropertySet.getPropertySetInfo();
+            Property[] aAllProperties = xInfo.getProperties();
+            DebugHelper.writeInfo("Show all properties of Implementation of :'" + sName + "'");
+            for (int i = 0; i < aAllProperties.length; i++)
             {
-                DebugHelper.writeInfo("The given object don't support XPropertySet interface.");
+                DebugHelper.writeInfo(" - " + aAllProperties[i].Name);
             }
         }
-
+        else
+        {
+            DebugHelper.writeInfo("The given object don't support XPropertySet interface.");
+        }
+    }
 }

@@ -26,7 +26,9 @@
  * <http://www.openoffice.org/license.html>
  * for a copy of the LGPLv3 License.
  *
- ************************************************************************/package com.sun.star.wizards.agenda;
+ ************************************************************************/
+
+package com.sun.star.wizards.agenda;
 
 import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.wizards.common.Resource;

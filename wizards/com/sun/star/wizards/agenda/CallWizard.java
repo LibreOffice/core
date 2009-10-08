@@ -26,7 +26,8 @@
  * <http://www.openoffice.org/license.html>
  * for a copy of the LGPLv3 License.
  *
- ************************************************************************/package com.sun.star.wizards.agenda;
+ ************************************************************************/
+package com.sun.star.wizards.agenda;
 
 import com.sun.star.beans.XPropertyAccess;
 import com.sun.star.comp.loader.FactoryHelper;
@@ -46,7 +47,7 @@ import com.sun.star.uno.Type;
  * information into the given registry key (<CODE>__writeRegistryServiceInfo</CODE>).
  *
  * @author $author$
- * @version $Revision: 1.5 $
+ * @version $Revision: 1.5.52.1 $
  */
 public class CallWizard {
 

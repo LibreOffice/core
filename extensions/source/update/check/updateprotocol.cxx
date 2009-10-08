@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: updateprotocol.cxx,v $
- * $Revision: 1.11 $
+ * $Revision: 1.11.70.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -68,18 +68,19 @@ getBootstrapData(
     ::rtl::OUString & rBuildID,
     ::rtl::OUString & rInstallSetID)
 {
-    rtl::OUString aPath, aPath2;
-    if( !rtl::Bootstrap::get(UNISTRING("BRAND_BASE_DIR"), aPath) )
+    rBuildID = UNISTRING( "${$OOO_BASE_DIR/program/" SAL_CONFIGFILE("version") ":ProductBuildid}" );
+    rtl::Bootstrap::expandMacros( rBuildID );
+    if ( ! rBuildID.getLength() )
         return false;
 
-    aPath += UNISTRING( "/program/" SAL_CONFIGFILE( "version" ) );
+    rInstallSetID = UNISTRING( "${$BRAND_BASE_DIR/program/" SAL_CONFIGFILE("version") ":UpdateID}" );
+    rtl::Bootstrap::expandMacros( rInstallSetID );
+    if ( ! rInstallSetID.getLength() )
+        return false;
 
-    rtl::Bootstrap aVersionFile(aPath);
-    aVersionFile.getFrom(UNISTRING("ProductBuildid"), rBuildID, rtl::OUString());
-    aVersionFile.getFrom(UNISTRING("UpdateID"), rInstallSetID, rtl::OUString());
+    rtl::OUString aValue( UNISTRING( "${$BRAND_BASE_DIR/program/" SAL_CONFIGFILE("version") ":UpdateURL}" ) );
+    rtl::Bootstrap::expandMacros( aValue );
 
-    rtl::OUString aValue;
-    aVersionFile.getFrom(UNISTRING("UpdateURL"), aValue, rtl::OUString());
     if( aValue.getLength() > 0 )
     {
         rRepositoryList.realloc(1);

@@ -30,15 +30,25 @@
 package integration.forms;
 
 /**************************************************************************/
-import com.sun.star.uno.*;
-import com.sun.star.frame.*;
-import com.sun.star.lang.*;
-import com.sun.star.util.*;
-import com.sun.star.awt.*;
-import com.sun.star.view.*;
-import com.sun.star.beans.*;
-import com.sun.star.container.*;
-import com.sun.star.form.*;
+
+import com.sun.star.awt.XControl;
+import com.sun.star.awt.XControlModel;
+import com.sun.star.awt.XWindow;
+import com.sun.star.beans.PropertyValue;
+import com.sun.star.beans.XPropertySet;
+import com.sun.star.container.XIndexContainer;
+import com.sun.star.form.FormComponentType;
+import com.sun.star.form.XForm;
+import com.sun.star.form.XFormController;
+import com.sun.star.frame.XController;
+import com.sun.star.frame.XDispatch;
+import com.sun.star.frame.XDispatchProvider;
+import com.sun.star.lang.XMultiServiceFactory;
+import com.sun.star.uno.UnoRuntime;
+import com.sun.star.util.URL;
+import com.sun.star.util.XURLTransformer;
+import com.sun.star.view.XControlAccess;
+import com.sun.star.view.XFormLayerAccess;
 import org.openoffice.xforms.XMLDocument;
 
 /**************************************************************************/
@@ -166,6 +176,24 @@ public class DocumentViewHelper
     {
         XControlModel xModel = (XControlModel)UnoRuntime.queryInterface( XControlModel.class, aModel );
         return UnoRuntime.queryInterface( aInterfaceClass, getControl( xModel ) );
+    }
+
+    /* ------------------------------------------------------------------ */
+    /** retrieves the form controller for a given logical form
+     */
+    public XFormController getFormController( XForm _form )
+    {
+        XFormLayerAccess formLayerAccess = (XFormLayerAccess)query( XFormLayerAccess.class );
+        return formLayerAccess.getFormController( _form );
+    }
+
+    /* ------------------------------------------------------------------ */
+    /** retrieves the form controller for a given logical form
+     */
+    public XFormController getFormController( XPropertySet _form )
+    {
+        XFormLayerAccess formLayerAccess = (XFormLayerAccess)query( XFormLayerAccess.class );
+        return formLayerAccess.getFormController( (XForm)UnoRuntime.queryInterface( XForm.class, _form ) );
     }
 
     /* ------------------------------------------------------------------ */

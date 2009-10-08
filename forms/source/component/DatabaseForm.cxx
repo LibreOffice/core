@@ -44,6 +44,7 @@
 #include "property.hxx"
 #include "services.hxx"
 #include "frm_module.hxx"
+#include "componenttools.hxx"
 #include <com/sun/star/sdb/XColumnUpdate.hpp>
 #include <com/sun/star/util/XCancellable.hpp>
 #include <com/sun/star/sdbc/ResultSetType.hpp>
@@ -143,20 +144,6 @@ extern "C" void SAL_CALL createRegistryInfo_ODatabaseForm()
 namespace frm
 {
 //.........................................................................
-
-//---------------------------------------------------------------------
-Reference< XModel> getXModel(const Reference< XInterface>& xIface)
-{
-    Reference< XInterface > xParent = xIface;
-    Reference< XModel > xModel(xParent,UNO_QUERY);;
-    while( xParent.is() && !xModel.is() )
-    {
-        Reference<XChild> xChild(xParent,UNO_QUERY);
-        xParent.set(xChild.is() ? xChild->getParent() : Reference< XInterface >(),UNO_QUERY);
-        xModel.set(xParent,UNO_QUERY);
-    }
-    return xModel;
-}
 
 //==================================================================
 //= OFormSubmitResetThread
@@ -332,7 +319,7 @@ ODatabaseForm::ODatabaseForm(const Reference<XMultiServiceFactory>& _rxFactory)
     }
 
     {
-        m_aFilterManager.initialize( this, m_xAggregateSet );
+        m_aFilterManager.initialize( m_xAggregateSet );
         m_aParameterManager.initialize( this, m_xAggregate );
 
         declareForwardedProperty( PROPERTY_ID_ACTIVE_CONNECTION );
@@ -1936,6 +1923,7 @@ void ODatabaseForm::reset_impl(bool _bAproveByListeners)
                         }
                         catch(Exception&)
                         {
+                            DBG_UNHANDLED_EXCEPTION();
                         }
                     }
                 }

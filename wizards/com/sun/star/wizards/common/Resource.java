@@ -1,5 +1,5 @@
 /*************************************************************************
-*
+ *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
  * Copyright 2008 by Sun Microsystems, Inc.
@@ -26,92 +26,117 @@
  * <http://www.openoffice.org/license.html>
  * for a copy of the LGPLv3 License.
  *
- ************************************************************************/package com.sun.star.wizards.common;
+ ************************************************************************/
+
+package com.sun.star.wizards.common;
 
 import com.sun.star.lang.IllegalArgumentException;
 import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.script.XInvocation;
 import com.sun.star.beans.PropertyValue;
 
-public class Resource {
+public class Resource
+{
+
     XInvocation xInvocation;
     XMultiServiceFactory xMSF;
     String Unit;
     String Module;
 
     /** Creates a new instance of Resource */
-    public Resource(XMultiServiceFactory _xMSF, String _Unit, String _Module) {
+    public Resource(XMultiServiceFactory _xMSF, String _Unit, String _Module)
+    {
         this.xMSF = _xMSF;
         this.Unit = _Unit;
         this.Module = _Module;
         this.xInvocation = initResources();
     }
 
-    public String getResText(int nID) {
-        try {
+    public String getResText(int nID)
+    {
+        try
+        {
             short[][] PointerArray = new short[1][];
             Object[][] DummyArray = new Object[1][];
             Object[] nIDArray = new Object[1];
             nIDArray[0] = new Integer(nID);
             String IDString = (String) xInvocation.invoke("getString", nIDArray, PointerArray, DummyArray);
             return IDString;
-        } catch (Exception exception) {
+        }
+        catch (Exception exception)
+        {
             exception.printStackTrace();
             throw new java.lang.IllegalArgumentException("Resource with ID not" + String.valueOf(nID) + "not found");
         }
     }
 
-    public PropertyValue[] getStringList(int nID) {
-        try {
+    public PropertyValue[] getStringList(int nID)
+    {
+        try
+        {
             short[][] PointerArray = new short[1][];
             Object[][] DummyArray = new Object[1][];
             Object[] nIDArray = new Object[1];
             nIDArray[0] = new Integer(nID);
             //Object bla = xInvocation.invoke("getStringList", nIDArray, PointerArray, DummyArray);
-            PropertyValue [] ResProp = (PropertyValue []) xInvocation.invoke("getStringList", nIDArray, PointerArray, DummyArray);
+            PropertyValue[] ResProp = (PropertyValue[]) xInvocation.invoke("getStringList", nIDArray, PointerArray, DummyArray);
             return ResProp;
-        } catch (Exception exception) {
+        }
+        catch (Exception exception)
+        {
             exception.printStackTrace();
             throw new java.lang.IllegalArgumentException("Resource with ID not" + String.valueOf(nID) + "not found");
         }
     }
 
-    public String[] getResArray(int nID, int iCount) {
-        try {
+    public String[] getResArray(int nID, int iCount)
+    {
+        try
+        {
             String[] ResArray = new String[iCount];
-            for (int i = 0; i < iCount; i++) {
+            for (int i = 0; i < iCount; i++)
+            {
                 ResArray[i] = getResText(nID + i);
             }
             return ResArray;
-        } catch (Exception exception) {
+        }
+        catch (Exception exception)
+        {
             exception.printStackTrace(System.out);
             throw new java.lang.IllegalArgumentException("Resource with ID not" + String.valueOf(nID) + "not found");
         }
     }
 
-    public XInvocation initResources() {
-        try {
+    public XInvocation initResources()
+    {
+        try
+        {
             com.sun.star.uno.XInterface xResource = (com.sun.star.uno.XInterface) xMSF.createInstance("com.sun.star.resource.VclStringResourceLoader");
-            if (xResource == null) {
+            if (xResource == null)
+            {
                 showCommonResourceError(xMSF);
                 throw new IllegalArgumentException();
-            } else {
+            }
+            else
+            {
                 XInvocation xResInvoke = (XInvocation) com.sun.star.uno.UnoRuntime.queryInterface(XInvocation.class, xResource);
                 xResInvoke.setValue("FileName", Module);
                 return xResInvoke;
             }
-        } catch (Exception exception) {
+        }
+        catch (Exception exception)
+        {
             exception.printStackTrace(System.out);
             showCommonResourceError(xMSF);
             return null;
         }
     }
 
-    public static void showCommonResourceError(XMultiServiceFactory xMSF) {
+    public static void showCommonResourceError(XMultiServiceFactory xMSF)
+    {
         String ProductName = Configuration.getProductName(xMSF);
         String sError = "The files required could not be found.\nPlease start the %PRODUCTNAME Setup and choose 'Repair'.";
         sError = JavaTools.replaceSubString(sError, ProductName, "%PRODUCTNAME");
         SystemDialog.showMessageBox(xMSF, "ErrorBox", com.sun.star.awt.VclWindowPeerAttribute.OK, sError);
     }
-
 }

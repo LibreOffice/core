@@ -34,6 +34,7 @@ PRJINC=..$/inc
 PRJNAME=extensions
 TARGET=dbp
 ENABLE_EXCEPTIONS=TRUE
+VISIBILITY_HIDDEN=TRUE
 
 # --- Settings -----------------------------------------------------
 

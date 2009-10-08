@@ -9,7 +9,7 @@
  *
  * $RCSfile: DebugHelper.java,v $
  *
- * $Revision: 1.2 $
+ * $Revision: 1.2.36.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -29,7 +29,6 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-
 package com.sun.star.wizards.common;
 
 import com.sun.star.uno.Exception;
@@ -60,5 +59,4 @@ public class DebugHelper
     {
 //        throw new UnsupportedOperationException("Not supported yet.");
     }
-
 }

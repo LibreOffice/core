@@ -45,49 +45,50 @@ import com.sun.star.wizards.web.data.CGPublish;
  * that accured.
  */
 public class ProcessErrorHandler extends AbstractErrorHandler
-    implements  WebWizardConst,
-                ProcessErrors
+        implements WebWizardConst,
+        ProcessErrors
 {
 
-    private static final String FILENAME= "%FILENAME";
+    private static final String FILENAME = "%FILENAME";
     private static final String URL = "%URL";
     private static final String ERROR = "%ERROR";
-
-
     WebWizardDialogResources resources;
 
-    public ProcessErrorHandler(XMultiServiceFactory xmsf, XWindowPeer peer, WebWizardDialogResources res) {
+    public ProcessErrorHandler(XMultiServiceFactory xmsf, XWindowPeer peer, WebWizardDialogResources res)
+    {
         super(xmsf, peer);
         resources = res;
     }
 
-    protected String getMessageFor(Exception ex, Object obj, int ix, int errType) {
+    protected String getMessageFor(Exception ex, Object obj, int ix, int errType)
+    {
 
-        switch (ix) {
+        switch (ix)
+        {
 
-            case ERROR_MKDIR :
+            case ERROR_MKDIR:
                 return JavaTools.replaceSubString(resources.resErrDocExport, ((CGDocument) obj).localFilename, FILENAME);
-            case ERROR_EXPORT_MKDIR :
+            case ERROR_EXPORT_MKDIR:
                 return JavaTools.replaceSubString(resources.resErrMkDir, ((CGDocument) obj).localFilename, FILENAME);
-            case ERROR_DOC_VALIDATE :
+            case ERROR_DOC_VALIDATE:
                 return JavaTools.replaceSubString(resources.resErrDocInfo, ((CGDocument) obj).localFilename, FILENAME);
-            case ERROR_EXPORT_IO :
+            case ERROR_EXPORT_IO:
                 return JavaTools.replaceSubString(resources.resErrExportIO, ((CGDocument) obj).localFilename, FILENAME);
-            case ERROR_EXPORT_SECURITY :
+            case ERROR_EXPORT_SECURITY:
                 return JavaTools.replaceSubString(resources.resErrSecurity, ((CGDocument) obj).localFilename, FILENAME);
-            case ERROR_GENERATE_XSLT :
+            case ERROR_GENERATE_XSLT:
                 return resources.resErrTOC;
-            case ERROR_GENERATE_COPY :
+            case ERROR_GENERATE_COPY:
                 return resources.resErrTOCMedia;
-            case ERROR_PUBLISH :
+            case ERROR_PUBLISH:
                 return JavaTools.replaceSubString(resources.resErrPublish, ((CGPublish) obj).cp_URL, URL);
-            case ERROR_EXPORT :
-            case ERROR_PUBLISH_MEDIA :
+            case ERROR_EXPORT:
+            case ERROR_PUBLISH_MEDIA:
                 return resources.resErrPublishMedia;
-            case ERROR_CLEANUP :
+            case ERROR_CLEANUP:
                 return resources.resErrUnexpected;
 
-            default :
+            default:
                 return JavaTools.replaceSubString(resources.resErrUnknown, ex.getClass().getName() + "/" + obj.getClass().getName() + "/" + ix, ERROR);
         }
     }

@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: baside2.cxx,v $
- * $Revision: 1.46 $
+ * $Revision: 1.46.2.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -1429,7 +1429,7 @@ ModulWindowLayout::ModulWindowLayout( Window* pParent ) :
         = Color(m_aColorConfig.GetColorValue(svtools::BASICERROR).nColor);
     m_aSyntaxColors[TT_OPERATOR]
         = Color(m_aColorConfig.GetColorValue(svtools::BASICOPERATOR).nColor);
-    m_aSyntaxColors[TT_KEYWORD]
+    m_aSyntaxColors[TT_KEYWORDS]
         = Color(m_aColorConfig.GetColorValue(svtools::BASICKEYWORD).nColor);
 
     Font aFont( GetFont() );
@@ -1674,9 +1674,9 @@ void ModulWindowLayout::Notify(SfxBroadcaster & rBc, SfxHint const & rHint)
         m_aSyntaxColors[TT_OPERATOR] = aColor;
         aColor = Color(m_aColorConfig.GetColorValue(svtools::BASICKEYWORD).
                        nColor);
-        if (bChanged || aColor != m_aSyntaxColors[TT_KEYWORD])
+        if (bChanged || aColor != m_aSyntaxColors[TT_KEYWORDS])
             bChanged = true;
-        m_aSyntaxColors[TT_KEYWORD] = aColor;
+        m_aSyntaxColors[TT_KEYWORDS] = aColor;
         if (bChanged)
             updateSyntaxHighlighting();
     }

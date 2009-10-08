@@ -36,6 +36,7 @@ TARGET=basctl
 #svx.hid generieren
 GEN_HID=TRUE
 GEN_HID_OTHER=TRUE
+VISIBILITY_HIDDEN=TRUE
 
 # --- Settings -----------------------------------------------------
 

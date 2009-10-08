@@ -182,7 +182,7 @@ ElementNode::ElementNode( const String& aName, Reference < XAttributeList > xAtt
             xAttributeList = Reference < XAttributeList > ( xAttributeCloner->createClone() , UNO_QUERY );
         else
         {
-            DBG_ERROR("Unable to clone AttributeList")
+            DBG_ERROR("Unable to clone AttributeList");
         }
     }
 };
@@ -674,7 +674,7 @@ void StatementCommand::HandleSAXParser()
             break;
         case RC_SAXGetElementPath:
             {
-                DBG_ASSERT( sizeof( ULONG ) == sizeof ( void* ), "Pointertype has different size than ULONG")
+                DBG_ASSERT( sizeof( ULONG ) == sizeof ( void* ), "Pointertype has different size than ULONG");
                 String aPath;
                 aPath.AppendAscii( "*:" );
                 aPath.Append( String::CreateFromInt64( pSAXParser->GetTimestamp() ) );

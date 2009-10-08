@@ -48,7 +48,7 @@
 #endif
 
 #include <linguistic/lngprops.hxx>
-#include "spelldta.hxx"
+#include <linguistic/spelldta.hxx>
 #include <i18npool/mslangid.hxx>
 #include <svtools/pathoptions.hxx>
 #include <svtools/lingucfg.hxx>

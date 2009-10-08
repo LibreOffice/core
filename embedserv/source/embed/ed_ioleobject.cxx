@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: ed_ioleobject.cxx,v $
- * $Revision: 1.20 $
+ * $Revision: 1.20.10.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -73,26 +73,31 @@ STDMETHODIMP EmbedDocument_Impl::SetHostNames( LPCOLESTR szContainerApp, LPCOLES
 
 STDMETHODIMP EmbedDocument_Impl::Close( DWORD dwSaveOption )
 {
-    if ( dwSaveOption == 2 && m_aFileName.getLength() )
-    {
-        // ask the user about saving
-        if ( m_pDocHolder->ExecuteSuspendCloseFrame() )
-        {
-            m_pDocHolder->CloseDocument();
-            return S_OK;
-        }
-        else
-            return OLE_E_PROMPTSAVECANCELLED;
-    }
-
     HRESULT hr = S_OK;
 
-    if ( dwSaveOption != 1 )
-        hr = SaveObject(); // ADVF_DATAONSTOP);
+    if ( m_pDocHolder->HasFrame() )
+    {
+        if ( dwSaveOption == 2 && m_aFileName.getLength() )
+        {
+            // ask the user about saving
+            if ( m_pDocHolder->ExecuteSuspendCloseFrame() )
+            {
+                m_pDocHolder->CloseDocument();
+                return S_OK;
+            }
+            else
+                return OLE_E_PROMPTSAVECANCELLED;
+        }
+
+        if ( dwSaveOption != 1 )
+            hr = SaveObject(); // ADVF_DATAONSTOP);
+
+        m_pDocHolder->CloseFrame();
+        OLENotifyDeactivation();
+    }
 
     m_pDocHolder->FreeOffice();
     m_pDocHolder->CloseDocument();
-    m_pDocHolder->CloseFrame();
 
     OLENotifyClosing();
 
@@ -103,9 +108,6 @@ STDMETHODIMP EmbedDocument_Impl::Close( DWORD dwSaveOption )
 HRESULT EmbedDocument_Impl::OLENotifyClosing()
 {
     HRESULT hr = S_OK;
-
-    if ( m_pClientSite )
-        m_pClientSite->OnShowWindow( FALSE );
 
     AdviseSinkHashMap aAHM(m_aAdviseHashMap);
 
@@ -258,7 +260,8 @@ STDMETHODIMP EmbedDocument_Impl::EnumVerbs( IEnumOLEVERB ** /*ppEnumOleVerb*/ )
 
 STDMETHODIMP EmbedDocument_Impl::Update()
 {
-    return S_OK;
+    HRESULT hr = CACHE_E_NOCACHE_UPDATED;
+    return hr;
 }
 
 STDMETHODIMP EmbedDocument_Impl::IsUpToDate()
@@ -398,6 +401,18 @@ STDMETHODIMP EmbedDocument_Impl::Invoke( DISPID dispIdMember,
     return DISP_E_MEMBERNOTFOUND;
 }
 
+//-------------------------------------------------------------------------------
+// IExternalConnection
+
+DWORD STDMETHODCALLTYPE EmbedDocument_Impl::AddConnection( DWORD , DWORD )
+{
+    return AddRef();
+}
+
+DWORD STDMETHODCALLTYPE EmbedDocument_Impl::ReleaseConnection( DWORD , DWORD , BOOL )
+{
+    return Release();
+}
 
 // C++ - methods
 
@@ -454,9 +469,33 @@ void EmbedDocument_Impl::notify( bool bDataChanged )
         m_pDAdviseHolder->SendOnDataChange( (IDataObject*)this, 0, 0 );
 }
 
+void EmbedDocument_Impl::Deactivate()
+{
+    HRESULT hr = S_OK;
+
+    if ( m_pDocHolder->HasFrame() )
+    {
+        hr = SaveObject();
+        m_pDocHolder->CloseFrame();
+        OLENotifyDeactivation();
+    }
+}
+
+HRESULT EmbedDocument_Impl::OLENotifyDeactivation()
+{
+    HRESULT hr = S_OK;
+
+    if ( m_pClientSite )
+        hr = m_pClientSite->OnShowWindow( FALSE );
+
+    return hr;
+
+}
+
 // Fix strange warnings about some
 // ATL::CAxHostWindow::QueryInterface|AddRef|Releae functions.
 // warning C4505: 'xxx' : unreferenced local function has been removed
 #if defined(_MSC_VER)
 #pragma warning(disable: 4505)
 #endif
+

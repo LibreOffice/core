@@ -42,7 +42,8 @@
 #include <svtools/zformat.hxx>
 #include <connectivity/dbconversion.hxx>
 #include <com/sun/star/util/Time.hpp>
-
+#include "modulepcr.hxx"
+#include "propresid.hrc"
 //............................................................................
 namespace pcr
 {
@@ -271,6 +272,7 @@ namespace pcr
         :OFileUrlControl_Base( PropertyControlType::Unknown, pParent, nWinStyle | WB_DROPDOWN )
     {
         getTypedControlWindow()->SetDropDownLineCount( 10 );
+        getTypedControlWindow()->SetPlaceHolder( String( PcrRes( RID_EMBED_IMAGE_PLACEHOLDER ) ) ) ;
     }
 
     //------------------------------------------------------------------
@@ -282,8 +284,13 @@ namespace pcr
     void SAL_CALL OFileUrlControl::setValue( const Any& _rValue ) throw (IllegalTypeException, RuntimeException)
     {
         ::rtl::OUString sURL;
-        if ( _rValue >>= sURL )
-            getTypedControlWindow()->DisplayURL( sURL );
+        if ( ( _rValue >>= sURL ) )
+        {
+            if ( sURL.indexOf( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "vnd.sun.star.GraphicObject:"  ) ) ) == 0  )
+                getTypedControlWindow()->DisplayURL( getTypedControlWindow()->GetPlaceHolder() );
+            else
+                getTypedControlWindow()->DisplayURL( sURL );
+        }
         else
             getTypedControlWindow()->SetText( String() );
     }
@@ -293,7 +300,7 @@ namespace pcr
     {
         Any aPropValue;
         if ( getTypedControlWindow()->GetText().Len() )
-            aPropValue <<= (::rtl::OUString)getTypedControlWindow()->GetURL();
+                aPropValue <<= (::rtl::OUString)getTypedControlWindow()->GetURL();
         return aPropValue;
     }
 

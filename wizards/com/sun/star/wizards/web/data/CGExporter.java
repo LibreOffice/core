@@ -26,34 +26,35 @@
  * <http://www.openoffice.org/license.html>
  * for a copy of the LGPLv3 License.
  *
- ************************************************************************/package com.sun.star.wizards.web.data;
+ ************************************************************************/
+package com.sun.star.wizards.web.data;
 
 import com.sun.star.wizards.common.ConfigSet;
 
-public class CGExporter extends ConfigSetItem {
-    public String          cp_Name;
-    public String          cp_ExporterClass;
-    public boolean         cp_OwnDirectory;
-    public boolean         cp_SupportsFilename;
-    public String          cp_DefaultFilename;
-    public String          cp_Extension;
-    public String          cp_SupportedMimeTypes;
-    public String          cp_Icon;
-    public String          cp_TargetType;
-    public boolean         cp_Binary;
-    public int             cp_PageType;
+public class CGExporter extends ConfigSetItem
+{
 
-    public String          targetTypeName = "";
+    public String cp_Name;
+    public String cp_ExporterClass;
+    public boolean cp_OwnDirectory;
+    public boolean cp_SupportsFilename;
+    public String cp_DefaultFilename;
+    public String cp_Extension;
+    public String cp_SupportedMimeTypes;
+    public String cp_Icon;
+    public String cp_TargetType;
+    public boolean cp_Binary;
+    public int cp_PageType;
+    public String targetTypeName = "";
+    public ConfigSet cp_Arguments = new ConfigSet(CGArgument.class);
 
-    public ConfigSet       cp_Arguments = new ConfigSet(CGArgument.class);
-
-
-    public String toString() {
+    public String toString()
+    {
         return cp_Name;
     }
 
-    public boolean supports(String mime) {
-        return (cp_SupportedMimeTypes.equals("") || cp_SupportedMimeTypes.indexOf(mime)>-1);
+    public boolean supports(String mime)
+    {
+        return (cp_SupportedMimeTypes.equals("") || cp_SupportedMimeTypes.indexOf(mime) > -1);
     }
-
 }

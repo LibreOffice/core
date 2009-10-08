@@ -41,13 +41,15 @@ import com.sun.star.wizards.web.data.CGSession;
  * To change the template for this generated type comment go to
  * Window>Preferences>Java>Code Generation>Code and Comments
  */
-public class ImpressHTMLExporter extends ConfiguredExporter {
+public class ImpressHTMLExporter extends ConfiguredExporter
+{
 
     private static final Integer SMALL_IMAGE = new Integer(512);
     private static final Integer MEDIUM_IMAGE = new Integer(640);
     private static final Integer LARGE_IMAGE = new Integer(800);
 
-    public boolean export(CGDocument source, String targetDirectory ,XMultiServiceFactory xmsf, Task task)  throws IOException {
+    public boolean export(CGDocument source, String targetDirectory, XMultiServiceFactory xmsf, Task task) throws IOException
+    {
 
         /* here set some filter specific properties.
          * other properties, which are not dependant on
@@ -57,12 +59,12 @@ public class ImpressHTMLExporter extends ConfiguredExporter {
 
         CGSession session = getSession(source);
 
-        props.put("Author",source.cp_Author);
-        props.put("Email",session.cp_GeneralInfo.cp_Email);
-        props.put("HomepageURL",getHomepageURL(session));
-        props.put("UserText",source.cp_Title);
+        props.put("Author", source.cp_Author);
+        props.put("Email", session.cp_GeneralInfo.cp_Email);
+        props.put("HomepageURL", getHomepageURL(session));
+        props.put("UserText", source.cp_Title);
 
-        props.put("Width",getImageWidth(session));
+        props.put("Width", getImageWidth(session));
 
         /*
          * props.put("BackColor",...);
@@ -71,7 +73,7 @@ public class ImpressHTMLExporter extends ConfiguredExporter {
          * props.put("VLinkColor",...);
          * props.put("ALinkColor",...);
          */
-        props.put("UseButtonSet",new Integer(session.cp_Design.cp_IconSet));
+        props.put("UseButtonSet", new Integer(session.cp_Design.cp_IconSet));
 
 
         //now export
@@ -79,22 +81,28 @@ public class ImpressHTMLExporter extends ConfiguredExporter {
 
     }
 
-    private String getHomepageURL(CGSession session) {
+    private String getHomepageURL(CGSession session)
+    {
         return "../" +
-             ( exporter.cp_OwnDirectory ? "../index.html" : "index.html" ) ;
+                (exporter.cp_OwnDirectory ? "../index.html" : "index.html");
     }
 
-    private Integer getImageWidth(CGSession session) {
-        switch (session.cp_Design.cp_OptimizeDisplaySize) {
-            case 0 : return SMALL_IMAGE;
-            case 1 : return MEDIUM_IMAGE;
-            case 2 : return LARGE_IMAGE;
+    private Integer getImageWidth(CGSession session)
+    {
+        switch (session.cp_Design.cp_OptimizeDisplaySize)
+        {
+            case 0:
+                return SMALL_IMAGE;
+            case 1:
+                return MEDIUM_IMAGE;
+            case 2:
+                return LARGE_IMAGE;
         }
         return MEDIUM_IMAGE;
     }
 
-    private CGSession getSession(CGDocument doc) {
+    private CGSession getSession(CGDocument doc)
+    {
         return doc.getSettings().cp_DefaultSession;
     }
-
 }

@@ -458,10 +458,12 @@ DoPropertyListening::DoPropertyListening(
 void DoPropertyListening::handleListening( const ::rtl::OUString& _rPropertyName )
 {
     if ( m_xProps.is() )
+    {
         if ( m_bStartListening )
             m_xProps->addPropertyChangeListener( _rPropertyName, m_xListener );
         else
             m_xProps->removePropertyChangeListener( _rPropertyName, m_xListener );
+    }
 }
 
 //------------------------------------------------------------------------------

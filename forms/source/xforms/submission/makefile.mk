@@ -39,6 +39,7 @@ ENABLE_EXCEPTIONS=TRUE
 # --- Settings -----------------------------------------------------
 
 .INCLUDE :  settings.mk
+.INCLUDE: $(PRJ)$/makefile.pmk
 
 .IF "$(SYSTEM_LIBXML)" == "YES"
 CFLAGS+=-DSYSTEM_LIBXML $(LIBXML_CFLAGS)

@@ -334,6 +334,9 @@ namespace frm
         // the image of the item
         ::std::auto_ptr< SfxImageManager > pImageManager( new SfxImageManager( NULL ) );
         pImageManager->SetImagesForceSize( *m_pToolbar, FALSE, m_eImageSize == eLarge );
+
+        // parts of our layout is dependent on the size of our icons
+        Resize();
     }
 
     //---------------------------------------------------------------------
@@ -443,6 +446,15 @@ namespace frm
             case STATE_CHANGE_CONTROLFOREGROUND:
                 forEachItemWindow( &NavigationToolBar::setItemControlForeground, NULL );
                 break;
+
+            case STATE_CHANGE_MIRRORING:
+            {
+                BOOL bIsRTLEnabled( IsRTLEnabled() );
+                m_pToolbar->EnableRTL( bIsRTLEnabled );
+                forEachItemWindow( &NavigationToolBar::enableItemRTL, &bIsRTLEnabled );
+                Resize();
+            }
+            break;
         }
     }
 
@@ -453,8 +465,8 @@ namespace frm
         sal_Int32 nToolbarHeight = m_pToolbar->CalcWindowSizePixel().Height();
 
         sal_Int32 nMyHeight = GetOutputSizePixel().Height();
-        m_pToolbar->SetPosPixel( Point( 0, ( nMyHeight - nToolbarHeight ) / 2 ) );
-        m_pToolbar->SetSizePixel( Size( GetSizePixel().Width(), nToolbarHeight ) );
+        m_pToolbar->SetPosSizePixel( Point( 0, ( nMyHeight - nToolbarHeight ) / 2 ),
+                                     Size( GetSizePixel().Width(), nToolbarHeight ) );
 
         Window::Resize();
     }
@@ -585,6 +597,12 @@ namespace frm
         _pItemWindow->SetSizePixel( aSize );
 
         m_pToolbar->SetItemWindow( _nItemId, _pItemWindow );
+    }
+
+    //---------------------------------------------------------------------
+    void NavigationToolBar::enableItemRTL( USHORT /*_nItemId*/, Window* _pItemWindow, const void* _pIsRTLEnabled ) const
+    {
+        _pItemWindow->EnableRTL( *static_cast< const BOOL* >( _pIsRTLEnabled ) );
     }
 
     //=====================================================================

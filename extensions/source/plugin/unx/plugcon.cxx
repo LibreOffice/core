@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: plugcon.cxx,v $
- * $Revision: 1.8 $
+ * $Revision: 1.8.90.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -31,42 +31,65 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_extensions.hxx"
 #include <plugin/unx/plugcon.hxx>
+
 #include <cstdarg>
+#include <vector>
 
 UINT32 PluginConnector::GetStreamID( NPStream* pStream )
 {
-    for( ULONG i = 0; i < m_aNPWrapStreams.Count(); i++ )
-        if( m_aNPWrapStreams.GetObject( i ) == pStream )
-            return i;
+    size_t nLen = m_aNPWrapStreams.size();
+    for( size_t i = 0; i < nLen; i++ )
+        if( m_aNPWrapStreams[ i ] == pStream )
+            return static_cast<UINT32>(i);
     medDebug( 1, "Error: NPStream has no ID\n" );
     return UnknownStreamID;
 }
 
 UINT32 PluginConnector::GetNPPID( NPP instance )
 {
-    for( ULONG i=0; i < m_aInstances.Count(); i++ )
-        if( m_aInstances.GetObject( i )->instance == instance )
-            return i;
+    size_t nLen = m_aInstances.size();
+    for( size_t i=0; i <nLen; i++ )
+        if( m_aInstances[ i ]->instance == instance )
+            return static_cast<UINT32>(i);
     medDebug( 1, "Error: NPP has no ID\n" );
 
     return UnknownNPPID;
+}
+
+ConnectorInstance* PluginConnector::getInstance( NPP instance )
+{
+    size_t nLen = m_aInstances.size();
+    for( size_t i=0; i <nLen; i++ )
+    {
+        ConnectorInstance* pInst = m_aInstances[i];
+        if( pInst->instance == instance )
+            return pInst;
+    }
+    return NULL;
+}
+
+ConnectorInstance* PluginConnector::getInstanceById( UINT32 nInstanceID )
+{
+    return nInstanceID < static_cast<UINT32>(m_aInstances.size()) ? m_aInstances[ nInstanceID ] : NULL;
 }
 
 struct PtrStruct
 {
     char* pData;
     ULONG nBytes;
-};
 
-DECLARE_LIST( PtrStructList, PtrStruct* )
+    PtrStruct( char* i_pData, ULONG i_nBytes )
+    : pData( i_pData ), nBytes( i_nBytes ) {}
+};
 
 ULONG PluginConnector::FillBuffer( char*& rpBuffer,
                                    const char* pFunction,
                                    ULONG nFunctionLen,
                                    va_list ap )
 {
-    PtrStructList aList;
-    PtrStruct* pPtrStruct;
+    std::vector< PtrStruct > aList;
+    aList.reserve( 5 );
+
     ULONG nDataSize = nFunctionLen + sizeof( ULONG );
     char* pNext;
 
@@ -74,11 +97,8 @@ ULONG PluginConnector::FillBuffer( char*& rpBuffer,
         pNext = va_arg( ap, char* );
         if( pNext )
         {
-            pPtrStruct = new PtrStruct;
-            pPtrStruct->pData = pNext;
-            pPtrStruct->nBytes = va_arg( ap, ULONG );
-            nDataSize += pPtrStruct->nBytes + sizeof(ULONG);
-            aList.Insert( pPtrStruct, LIST_APPEND );
+            aList.push_back( PtrStruct( pNext, va_arg( ap, ULONG ) ) );
+            nDataSize += aList.back().nBytes + sizeof(ULONG);
         }
     } while( pNext );
 
@@ -89,13 +109,12 @@ ULONG PluginConnector::FillBuffer( char*& rpBuffer,
     memcpy( pRun, pFunction, nFunctionLen );
     pRun += nFunctionLen;
 
-    while( (pPtrStruct = aList.Remove( (ULONG) 0 )) )
+    for( std::vector<PtrStruct>::const_iterator it = aList.begin(); it != aList.end(); ++it )
     {
-        memcpy( pRun, &pPtrStruct->nBytes, sizeof( ULONG ) );
+        memcpy( pRun, &it->nBytes, sizeof( ULONG ) );
         pRun += sizeof( ULONG );
-        memcpy( pRun, pPtrStruct->pData, pPtrStruct->nBytes );
-        pRun += pPtrStruct->nBytes;
-        delete pPtrStruct;
+        memcpy( pRun, it->pData, it->nBytes );
+        pRun += it->nBytes;
     }
     return nDataSize;
 }
@@ -157,15 +176,19 @@ MediatorMessage* PluginConnector::WaitForAnswer( ULONG nMessageID )
     {
         {
             NAMESPACE_VOS(OGuard) aGuard( m_aQueueMutex );
-            for( ULONG i = 0; i < m_aMessageQueue.Count(); i++ )
+            for( size_t i = 0; i < m_aMessageQueue.size(); i++ )
             {
-                ULONG nID = m_aMessageQueue.GetObject( i )->m_nID;
+                MediatorMessage* pMessage = m_aMessageQueue[ i ];
+                ULONG nID = pMessage->m_nID;
                 if(  ( nID & 0xff000000 ) &&
                      ( ( nID & 0x00ffffff ) == nMessageID ) )
-                    return m_aMessageQueue.Remove( i );
+                {
+                    m_aMessageQueue.erase( m_aMessageQueue.begin() + i );
+                    return pMessage;
+                }
             }
         }
-        if( m_aMessageQueue.Count() )
+        if( ! m_aMessageQueue.empty() )
             CallWorkHandler();
         WaitForMessage( 2000 );
     }
@@ -180,6 +203,9 @@ ConnectorInstance::ConnectorInstance( NPP inst, char* type,
         pShell( NULL ),
         pWidget( NULL ),
         pForm( NULL ),
+        pGtkWindow( NULL ),
+        pGtkWidget( NULL ),
+        bShouldUseXEmbed( false ),
         nArg( args ),
         pArgnBuf( pargnbuf ),
         pArgvBuf( pargvbuf )

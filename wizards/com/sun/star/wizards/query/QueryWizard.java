@@ -1,5 +1,5 @@
 /*************************************************************************
-*
+ *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
  * Copyright 2008 by Sun Microsystems, Inc.
@@ -43,16 +43,16 @@ import com.sun.star.wizards.ui.*;
 import com.sun.star.wizards.ui.UIConsts;
 import com.sun.star.uno.UnoRuntime;
 
-public class QueryWizard extends WizardDialog {
+public class QueryWizard extends WizardDialog
+{
 
     private XFrame CurFrame;
 
-    public XFrame getCurFrame() {
+    public XFrame getCurFrame()
+    {
         return CurFrame;
     }
-
     public static final String SFILLUPFIELDSLISTBOX = "fillUpFieldsListbox";
-
     public static final int SOFIELDSELECTIONPAGE = 1;
     public static final int SOSORTINGPAGE = 2;
     public static final int SOFILTERPAGE = 3;
@@ -61,7 +61,6 @@ public class QueryWizard extends WizardDialog {
     public static final int SOGROUPFILTERPAGE = 6;
     public static final int SOTITLESPAGE = 7;
     public static final int SOSUMMARYPAGE = 8;
-
     CommandFieldSelection CurDBCommandFieldSelection;
     SortingComponent CurSortingComponent;
     FieldSelection CurGroupFieldSelection;
@@ -82,23 +81,24 @@ public class QueryWizard extends WizardDialog {
     String resQueryWizard;
     String reslblGroupBy;
     String resmsgNonNumericAsGroupBy;
-
-    XComponent[] components = null;
-
-    //Resources Object
+    XComponent[] components = null;    //Resources Object
     short CurTabIndex = 0;
 
-    public QueryWizard(XMultiServiceFactory xMSF) {
+    public QueryWizard(XMultiServiceFactory xMSF)
+    {
         super(xMSF, 40970);
         addResourceHandler("QueryWizard", "dbw");
         CurDBMetaData = new QuerySummary(xMSF, m_oResource);
     }
 
-    public static void main(String args[]) {
+    public static void main(String args[])
+    {
         String ConnectStr = "uno:socket,host=localhost,port=8100;urp,negotiate=0,forcesynchronous=1;StarOffice.NamingService"; //  //localhost  ;Lo-1.Germany.sun.com; 10.16.65.155
-        try {
+        try
+        {
             XMultiServiceFactory xLocMSF = Desktop.connect(ConnectStr);
-            if (xLocMSF != null) {
+            if (xLocMSF != null)
+            {
                 PropertyValue[] curproperties = new PropertyValue[1];
                 curproperties[0] = Properties.createProperty("DatabaseLocation", "file:///C:/Documents and Settings/bc93774.EHAM02-DEV/My Documents/Mydbwizard2DocAssign.odb"); //Mydbwizard2DocAssign.odb; MyDBase.odb, Mydbwizard2DocAssign.odb MyDBase.odb; Mydbwizard2DocAssign.odb; NewAccessDatabase, MyDocAssign baseLocation ); "DataSourceName", "db1");
                 curproperties[0] = Properties.createProperty("DatabaseLocation", "file:///x:/bc/nyt1.odb"); //Mydbwizard2DocAssign.odb; MyDBase.odb, Mydbwizard2DocAssign.odb MyDBase.odb; Mydbwizard2DocAssign.odb; NewAccessDatabase, MyDocAssign baseLocation ); "DataSourceName", "db1");
@@ -108,12 +108,12 @@ public class QueryWizard extends WizardDialog {
                 QueryWizard CurQueryWizard = new QueryWizard(xLocMSF);
                 CurQueryWizard.startQueryWizard(xLocMSF, curproperties);
             }
-        } catch (java.lang.Exception jexception) {
+        }
+        catch (java.lang.Exception jexception)
+        {
             jexception.printStackTrace(System.out);
         }
     }
-
-
 //!<<<<<<< QueryWizard.java
 //!    public void startQueryWizard(XMultiServiceFactory xMSF, PropertyValue[] CurPropertyValues) {
 //!    try {
@@ -144,30 +144,43 @@ public class QueryWizard extends WizardDialog {
 //!            insertQueryRelatedSteps();
 //!            short RetValue = executeDialog(CurFrame.getContainerWindow().getPosSize());
 //!=======
-    public XComponent[] startQueryWizard(XMultiServiceFactory xMSF, PropertyValue[] CurPropertyValues) {
-        try {
-            if (CurDBMetaData.getConnection(CurPropertyValues)){
+    public XComponent[] startQueryWizard(XMultiServiceFactory xMSF, PropertyValue[] CurPropertyValues)
+    {
+        try
+        {
+            if (CurDBMetaData.getConnection(CurPropertyValues))
+            {
                 reslblFields = m_oResource.getResText(UIConsts.RID_QUERY + 4);
                 reslblFieldHeader = m_oResource.getResText(UIConsts.RID_QUERY + 19); //Fielnames in  AliasComponent
                 reslblAliasHeader = m_oResource.getResText(UIConsts.RID_QUERY + 20); //Fieldtitles header in  AliasComponent
                 reslblSelFields = m_oResource.getResText(UIConsts.RID_QUERY + 50);
                 reslblTables = m_oResource.getResText(UIConsts.RID_QUERY + 3);
-                reslblGroupBy =  m_oResource.getResText(UIConsts.RID_QUERY + 18);
+                reslblGroupBy = m_oResource.getResText(UIConsts.RID_QUERY + 18);
                 resQueryWizard = m_oResource.getResText(UIConsts.RID_QUERY + 2);
                 resmsgNonNumericAsGroupBy = m_oResource.getResText(UIConsts.RID_QUERY + 88);
-                Helper.setUnoPropertyValues(xDialogModel, new String[] { "Height", "Moveable", "Name", "PositionX", "PositionY", "Step", "TabIndex", "Title", "Width" },
-                                                        new Object[] { new Integer(210), Boolean.TRUE, "DialogQuery", new Integer(102), new Integer(41), new Integer(1), new Short((short) 0), resQueryWizard, new Integer(310)});
+                Helper.setUnoPropertyValues(xDialogModel, new String[]
+                        {
+                            "Height", "Moveable", "Name", "PositionX", "PositionY", "Step", "TabIndex", "Title", "Width"
+                        },
+                        new Object[]
+                        {
+                            new Integer(210), Boolean.TRUE, "DialogQuery", new Integer(102), new Integer(41), new Integer(1), new Short((short) 0), resQueryWizard, new Integer(310)
+                        });
                 drawNaviBar();
                 setRightPaneHeaders(m_oResource, UIConsts.RID_QUERY + 70, 8);
                 this.setMaxStep(8);
                 buildSteps();
                 this.CurDBCommandFieldSelection.preselectCommand(CurPropertyValues, false);
                 if (Properties.hasPropertyValue(CurPropertyValues, "ParentFrame"))
-                    CurFrame = (XFrame) UnoRuntime.queryInterface(XFrame.class,Properties.getPropertyValue(CurPropertyValues, "ParentFrame"));
+                {
+                    CurFrame = (XFrame) UnoRuntime.queryInterface(XFrame.class, Properties.getPropertyValue(CurPropertyValues, "ParentFrame"));
+                }
                 else
+                {
                     CurFrame = Desktop.getActiveFrame(xMSF);
-    //          CurFrame = OfficeDocument.createNewFrame(xMSF, this);
-    //          desktopFrame = Desktop.findAFrame(xMSF, CurFrame, desktopFrame);
+                }
+                //          CurFrame = OfficeDocument.createNewFrame(xMSF, this);
+                //          desktopFrame = Desktop.findAFrame(xMSF, CurFrame, desktopFrame);
 
                 XWindowPeer windowPeer = (XWindowPeer) UnoRuntime.queryInterface(XWindowPeer.class, CurFrame.getContainerWindow());
                 this.xMSF = xMSF;
@@ -176,7 +189,9 @@ public class QueryWizard extends WizardDialog {
                 insertQueryRelatedSteps();
                 executeDialog(CurFrame.getContainerWindow().getPosSize());
             }
-        } catch (java.lang.Exception jexception) {
+        }
+        catch (java.lang.Exception jexception)
+        {
             jexception.printStackTrace(System.out);
 //!>>>>>>> 1.14
         }
@@ -195,46 +210,61 @@ public class QueryWizard extends WizardDialog {
         return ret;
     }
 
-
-    public void enableRoadmapItems(String[] _FieldNames, boolean _bEnabled) {
-        try {
+    public void enableRoadmapItems(String[] _FieldNames, boolean _bEnabled)
+    {
+        try
+        {
             Object oRoadmapItem;
             int CurStep = AnyConverter.toInt(Helper.getUnoPropertyValue(xDialogModel, "Step"));
             boolean bEnabled = false;
             int CurItemID;
-            for (int i = 0; i < getRMItemCount(); i++) {
+            for (int i = 0; i < getRMItemCount(); i++)
+            {
                 oRoadmapItem = this.xIndexContRoadmap.getByIndex(i);
                 CurItemID = AnyConverter.toInt(Helper.getUnoPropertyValue(oRoadmapItem, "ID"));
-                switch (CurItemID) {
-                    case SOAGGREGATEPAGE :
+                switch (CurItemID)
+                {
+                    case SOAGGREGATEPAGE:
                         if (_bEnabled == true)
+                        {
                             bEnabled = ((CurDBMetaData.hasNumericalFields()) && (CurDBMetaData.xDBMetaData.supportsCoreSQLGrammar()));
+                        }
                         break;
-                    case SOGROUPSELECTIONPAGE :
+                    case SOGROUPSELECTIONPAGE:
                         bEnabled = CurDBMetaData.Type == QueryMetaData.QueryType.SOSUMMARYQUERY;
                         break;
-                    case SOGROUPFILTERPAGE :
+                    case SOGROUPFILTERPAGE:
                         bEnabled = false;
                         if (_bEnabled == true)
+                        {
                             bEnabled = (CurDBMetaData.GroupByFilterConditions.length > 0);
+                        }
 
                         break;
-                    default :
+                    default:
                         if (CurItemID > CurStep)
+                        {
                             bEnabled = _bEnabled;
+                        }
                         else
+                        {
                             bEnabled = true;
+                        }
                         break;
                 }
                 super.setStepEnabled(CurItemID, bEnabled);
             }
-        } catch (com.sun.star.uno.Exception exception) {
+        }
+        catch (com.sun.star.uno.Exception exception)
+        {
             exception.printStackTrace(System.out);
         }
     }
 
-    public void insertQueryRelatedSteps() {
-        try {
+    public void insertQueryRelatedSteps()
+    {
+        try
+        {
 //            String[] sRMItemLabels = getRMItemLabels();
             setRMItemLabels(m_oResource, UIConsts.RID_QUERY + 80);
             addRoadmap();
@@ -243,8 +273,11 @@ public class QueryWizard extends WizardDialog {
             i = insertRoadmapItem(i, false, SOSORTINGPAGE - 1, SOSORTINGPAGE); // Orderby is always supported
             i = insertRoadmapItem(i, false, SOFILTERPAGE - 1, SOFILTERPAGE);
             if (CurDBMetaData.xDBMetaData.supportsCoreSQLGrammar())
+            {
                 i = insertRoadmapItem(i, CurDBMetaData.hasNumericalFields(), SOAGGREGATEPAGE - 1, SOAGGREGATEPAGE);
-            if (CurDBMetaData.xDBMetaData.supportsGroupBy()) {
+            }
+            if (CurDBMetaData.xDBMetaData.supportsGroupBy())
+            {
                 i = insertRoadmapItem(i, false, SOGROUPSELECTIONPAGE - 1, SOGROUPSELECTIONPAGE);
                 i = insertRoadmapItem(i, false, SOGROUPFILTERPAGE - 1, SOGROUPFILTERPAGE);
             }
@@ -254,13 +287,17 @@ public class QueryWizard extends WizardDialog {
             setRoadmapInteractive(true);
             setRoadmapComplete(true);
             setCurrentRoadmapItemID((short) 1);
-        } catch (com.sun.star.uno.Exception exception) {
+        }
+        catch (com.sun.star.uno.Exception exception)
+        {
             Resource.showCommonResourceError(xMSF);
         }
     }
 
-    public void buildSteps() {
-        try {
+    public void buildSteps()
+    {
+        try
+        {
 //            curDBCommandFieldSelection = new CommandFieldSelection(this, curFormDocument.oMainFormDBMetaData, 92, slblFields, slblSelFields,  slblTables, true, 34411);
 //            curDBCommandFieldSelection.addFieldSelectionListener(new FieldSelectionListener());
 
@@ -272,8 +309,11 @@ public class QueryWizard extends WizardDialog {
             CurFilterComponent.addNumberFormats();
 
             if (CurDBMetaData.xDBMetaData.supportsCoreSQLGrammar())
+            {
                 CurAggregateComponent = new AggregateComponent(this, CurDBMetaData, SOAGGREGATEPAGE, 97, 69, 209, 5, 40895);
-            if (CurDBMetaData.xDBMetaData.supportsGroupBy()) {
+            }
+            if (CurDBMetaData.xDBMetaData.supportsGroupBy())
+            {
                 CurGroupFieldSelection = new FieldSelection(this, SOGROUPSELECTIONPAGE, 95, 27, 210, 150, reslblFields, this.reslblGroupBy, 40915, false);
                 CurGroupFieldSelection.addFieldSelectionListener(new FieldSelectionListener());
                 CurGroupFilterComponent = new FilterComponent(this, xMSF, SOGROUPFILTERPAGE, 97, 27, 209, 3, CurDBMetaData, 40923);
@@ -281,93 +321,109 @@ public class QueryWizard extends WizardDialog {
             CurTitlesComponent = new TitlesComponent(this, SOTITLESPAGE, 97, 37, 207, 7, reslblFieldHeader, reslblAliasHeader, 40940);
             CurFinalizer = new Finalizer(this, CurDBMetaData);
             enableNavigationButtons(false, false, false);
-        } catch (com.sun.star.uno.Exception exception){
+        }
+        catch (com.sun.star.uno.Exception exception)
+        {
             Resource.showCommonResourceError(xMSF);
         }
     }
 
-
-    public void finishWizard() {
+    public void finishWizard()
+    {
         int ncurStep = getCurrentStep();
         if ((switchToStep(ncurStep, SOSUMMARYPAGE)) || (ncurStep == SOSUMMARYPAGE))
+        {
             components = CurFinalizer.finish();
+        }
     }
 
-
-    protected void enterStep(int nOldStep, int nNewStep) {
-    try {
-        if (nOldStep <= SOGROUPSELECTIONPAGE && nNewStep > SOGROUPSELECTIONPAGE) {
-            if (CurDBMetaData.xDBMetaData.supportsGroupBy()) {
-                CurDBMetaData.setGroupFieldNames(CurGroupFieldSelection.getSelectedFieldNames());
-                CurDBMetaData.GroupFieldNames = JavaTools.removeOutdatedFields(CurDBMetaData.GroupFieldNames, CurDBMetaData.NonAggregateFieldNames);
-                CurDBMetaData.GroupByFilterConditions = JavaTools.removeOutdatedFields(CurDBMetaData.GroupByFilterConditions, CurDBMetaData.GroupFieldNames);
+    protected void enterStep(int nOldStep, int nNewStep)
+    {
+        try
+        {
+            if (nOldStep <= SOGROUPSELECTIONPAGE && nNewStep > SOGROUPSELECTIONPAGE)
+            {
+                if (CurDBMetaData.xDBMetaData.supportsGroupBy())
+                {
+                    CurDBMetaData.setGroupFieldNames(CurGroupFieldSelection.getSelectedFieldNames());
+                    CurDBMetaData.GroupFieldNames = JavaTools.removeOutdatedFields(CurDBMetaData.GroupFieldNames, CurDBMetaData.NonAggregateFieldNames);
+                    CurDBMetaData.GroupByFilterConditions = JavaTools.removeOutdatedFields(CurDBMetaData.GroupByFilterConditions, CurDBMetaData.GroupFieldNames);
+                }
+            }
+            switch (nNewStep)
+            {
+                case SOFIELDSELECTIONPAGE:
+                    break;
+                case SOSORTINGPAGE:
+                    CurSortingComponent.initialize(CurDBMetaData.getDisplayFieldNames(), CurDBMetaData.getSortFieldNames());
+                    break;
+                case SOFILTERPAGE:
+                    CurFilterComponent.initialize(CurDBMetaData.getFilterConditions(), CurDBMetaData.getDisplayFieldNames());
+                    break;
+                case SOAGGREGATEPAGE:
+                    CurAggregateComponent.initialize();
+                    break;
+                case SOGROUPSELECTIONPAGE:
+                    break;
+                case SOGROUPFILTERPAGE:
+                    CurGroupFilterComponent.initialize(CurDBMetaData.GroupByFilterConditions, CurDBMetaData.getGroupFieldNames());
+                    break;
+                case SOTITLESPAGE:
+                    CurTitlesComponent.initialize(CurDBMetaData.getDisplayFieldNames(), CurDBMetaData.FieldTitleSet);
+                    break;
+                case SOSUMMARYPAGE:
+                    CurFinalizer.initialize();
+                    break;
+                default:
+                    break;
             }
         }
-        switch (nNewStep) {
-            case SOFIELDSELECTIONPAGE :
-                break;
-            case SOSORTINGPAGE :
-                CurSortingComponent.initialize(CurDBMetaData.getDisplayFieldNames(), CurDBMetaData.getSortFieldNames());
-                break;
-            case SOFILTERPAGE :
-                CurFilterComponent.initialize(CurDBMetaData.FilterConditions, CurDBMetaData.getDisplayFieldNames());
-                break;
-            case SOAGGREGATEPAGE :
-                CurAggregateComponent.initialize();
-                break;
-            case SOGROUPSELECTIONPAGE :
-                break;
-            case SOGROUPFILTERPAGE :
-                CurGroupFilterComponent.initialize(CurDBMetaData.GroupByFilterConditions, CurDBMetaData.getGroupFieldNames());
-                break;
-            case SOTITLESPAGE :
-        CurTitlesComponent.initialize(CurDBMetaData.getDisplayFieldNames(), CurDBMetaData.FieldTitleSet);
-                break;
-            case SOSUMMARYPAGE :
-                CurFinalizer.initialize();
-                break;
-            default :
-                break;
+        catch (SQLException e)
+        {
+            e.printStackTrace(System.out);
         }
-    } catch (SQLException e) {
-        e.printStackTrace(System.out);
-    }}
+    }
 
-
-    protected void leaveStep(int nOldStep, int nNewStep) {
-        switch (nOldStep) {
-            case SOFIELDSELECTIONPAGE :
-        CurDBMetaData.reorderFieldColumns(CurDBCommandFieldSelection.getSelectedFieldNames());
-        CurDBMetaData.initializeFieldTitleSet(true);
+    protected void leaveStep(int nOldStep, int nNewStep)
+    {
+        switch (nOldStep)
+        {
+            case SOFIELDSELECTIONPAGE:
+                CurDBMetaData.reorderFieldColumns(CurDBCommandFieldSelection.getSelectedFieldNames());
+                CurDBMetaData.initializeFieldTitleSet(true);
                 CurDBMetaData.setNumericFields();
                 searchForOutdatedFields();
                 break;
-            case SOSORTINGPAGE :
+            case SOSORTINGPAGE:
                 CurDBMetaData.setSortFieldNames(CurSortingComponent.getSortFieldNames());
                 break;
-            case SOFILTERPAGE :
+            case SOFILTERPAGE:
                 CurDBMetaData.setFilterConditions(CurFilterComponent.getFilterConditions());
                 break;
-            case SOAGGREGATEPAGE :
+            case SOAGGREGATEPAGE:
                 CurDBMetaData.AggregateFieldNames = CurAggregateComponent.getAggregateFieldNames();
                 break;
-            case SOGROUPSELECTIONPAGE :
+            case SOGROUPSELECTIONPAGE:
                 break;
-            case SOGROUPFILTERPAGE :
+            case SOGROUPFILTERPAGE:
                 CurDBMetaData.setGroupByFilterConditions(this.CurGroupFilterComponent.getFilterConditions());
                 break;
-            case SOTITLESPAGE :
+            case SOTITLESPAGE:
                 CurDBMetaData.setFieldTitles(CurTitlesComponent.getFieldTitles());
                 break;
-            case SOSUMMARYPAGE :
+            case SOSUMMARYPAGE:
                 break;
-            default :
+            default:
                 break;
         }
-        if (nOldStep < SOGROUPSELECTIONPAGE && nNewStep >= SOGROUPSELECTIONPAGE){
-            try {
-                if (CurDBMetaData.Type == QueryMetaData.QueryType.SOSUMMARYQUERY){
-                    if (CurDBMetaData.xDBMetaData.supportsGroupBy()) {
+        if (nOldStep < SOGROUPSELECTIONPAGE && nNewStep >= SOGROUPSELECTIONPAGE)
+        {
+            try
+            {
+                if (CurDBMetaData.Type == QueryMetaData.QueryType.SOSUMMARYQUERY)
+                {
+                    if (CurDBMetaData.xDBMetaData.supportsGroupBy())
+                    {
                         CurDBMetaData.setNonAggregateFieldNames();
                         CurGroupFieldSelection.initialize(CurDBMetaData.getUniqueAggregateFieldNames(), false, CurDBMetaData.xDBMetaData.getMaxColumnsInGroupBy());
                         CurGroupFieldSelection.intializeSelectedFields(CurDBMetaData.NonAggregateFieldNames);
@@ -375,7 +431,9 @@ public class QueryWizard extends WizardDialog {
                         setStepEnabled(SOGROUPFILTERPAGE, CurAggregateComponent.isGroupingpossible() && CurDBMetaData.NonAggregateFieldNames.length > 0);
                     }
                 }
-            } catch (SQLException e) {
+            }
+            catch (SQLException e)
+            {
                 e.printStackTrace();
             }
         }
@@ -385,30 +443,36 @@ public class QueryWizard extends WizardDialog {
     {
         String[] sFieldNames = CurDBMetaData.getFieldNames();
         String[][] sRemovedFields = JavaTools.removeOutdatedFields(CurDBMetaData.getSortFieldNames(), sFieldNames);
-        CurDBMetaData.setSortFieldNames( sRemovedFields );
-        CurDBMetaData.FilterConditions = JavaTools.removeOutdatedFields(CurDBMetaData.FilterConditions, sFieldNames);
+        CurDBMetaData.setSortFieldNames(sRemovedFields);
+        CurDBMetaData.setFilterConditions(JavaTools.removeOutdatedFields(CurDBMetaData.getFilterConditions(), sFieldNames));
         CurDBMetaData.AggregateFieldNames = JavaTools.removeOutdatedFields(CurDBMetaData.AggregateFieldNames, sFieldNames);
     }
 
-    private void enableWizardSteps(String[] NewItems) {
+    private void enableWizardSteps(String[] NewItems)
+    {
         boolean bEnabled = NewItems.length > 0;
         setControlProperty("btnWizardNext", "Enabled", new Boolean(bEnabled));
         setControlProperty("btnWizardFinish", "Enabled", new Boolean(bEnabled));
         enableRoadmapItems(NewItems, bEnabled); // Note: Performancewise this could be improved
     }
 
+    public class FieldSelectionListener implements com.sun.star.wizards.ui.XFieldSelectionListener
+    {
 
-    public class FieldSelectionListener implements com.sun.star.wizards.ui.XFieldSelectionListener {
         protected int ID;
 
-        public int getID() {
+        public int getID()
+        {
             return ID;
         }
 
-        public void setID(String sIncSuffix) {
+        public void setID(String sIncSuffix)
+        {
             ID = 1;
-            if (sIncSuffix != null) {
-                if ((!sIncSuffix.equals("")) && (!sIncSuffix.equals("_"))) {
+            if (sIncSuffix != null)
+            {
+                if ((!sIncSuffix.equals("")) && (!sIncSuffix.equals("_")))
+                {
                     String sID = JavaTools.ArrayoutofString(sIncSuffix, "_")[1];
                     ID = Integer.parseInt(sID);
                     int a = 0;
@@ -416,21 +480,27 @@ public class QueryWizard extends WizardDialog {
             }
         }
 
-        public void shiftFromLeftToRight(String[] SelItems, String[] NewItems) {
-            if (ID == 1) {
-        CurDBMetaData.addSeveralFieldColumns(SelItems, CurDBCommandFieldSelection.getSelectedCommandName());
+        public void shiftFromLeftToRight(String[] SelItems, String[] NewItems)
+        {
+            if (ID == 1)
+            {
+                CurDBMetaData.addSeveralFieldColumns(SelItems, CurDBCommandFieldSelection.getSelectedCommandName());
                 enableWizardSteps(NewItems);
-        CurDBCommandFieldSelection.changeSelectedFieldNames(CurDBMetaData.getDisplayFieldNames());
+                CurDBCommandFieldSelection.changeSelectedFieldNames(CurDBMetaData.getDisplayFieldNames());
                 CurDBCommandFieldSelection.toggleCommandListBox(NewItems);
-            } else {
+            }
+            else
+            {
                 boolean bEnabled = (CurGroupFieldSelection.getSelectedFieldNames().length > 0);
                 Helper.setUnoPropertyValue(getRoadmapItemByID(SOGROUPFILTERPAGE), "Enabled", new Boolean(bEnabled));
             }
         }
 
-        public void shiftFromRightToLeft(String[] SelItems, String[] NewItems) {
+        public void shiftFromRightToLeft(String[] SelItems, String[] NewItems)
+        {
             // TODO When the ListFieldbox is refilled only fields of the current Command may be merged into the Listbox
-            if (ID == 1) {
+            if (ID == 1)
+            {
                 enableWizardSteps(NewItems);
 //! <<<<<<< QueryWizard.java
 //!                 String[] sSelfieldNames = CurDBMetaData.getFieldNames(SelItems, CurDBCommandFieldSelection.getSelectedCommandName());
@@ -441,28 +511,39 @@ public class QueryWizard extends WizardDialog {
 //! =======
                 String[] sSelfieldNames = CurDBMetaData.getFieldNames(SelItems, CurDBCommandFieldSelection.getSelectedCommandName());
                 CurDBCommandFieldSelection.addItemsToFieldsListbox(sSelfieldNames);
-        CurDBMetaData.removeSeveralFieldColumnsByDisplayFieldName(SelItems);
+                CurDBMetaData.removeSeveralFieldColumnsByDisplayFieldName(SelItems);
 //! >>>>>>> 1.14
                 CurDBCommandFieldSelection.toggleCommandListBox(NewItems);
 
-            } else {
+            }
+            else
+            {
                 boolean bEnabled = (CurGroupFieldSelection.getSelectedFieldNames().length > 0);
                 String CurDisplayFieldName = SelItems[0];
-                if (JavaTools.FieldInList(CurDBMetaData.NonAggregateFieldNames, CurDisplayFieldName) > -1) {
-                    showMessageBox( "ErrorBox", VclWindowPeerAttribute.OK, resmsgNonNumericAsGroupBy);
+                if (JavaTools.FieldInList(CurDBMetaData.NonAggregateFieldNames, CurDisplayFieldName) > -1)
+                {
+                    showMessageBox("ErrorBox", VclWindowPeerAttribute.OK, resmsgNonNumericAsGroupBy);
                     CurGroupFieldSelection.xSelFieldsListBox.addItems(SelItems, CurGroupFieldSelection.xSelFieldsListBox.getItemCount());
                     String FieldList[] = CurGroupFieldSelection.xFieldsListBox.getItems();
                     int index = JavaTools.FieldInList(FieldList, CurDisplayFieldName);
                     if (index > -1)
+                    {
                         CurGroupFieldSelection.xFieldsListBox.removeItems((short) index, (short) 1);
-                } else
+                    }
+                }
+                else
+                {
                     Helper.setUnoPropertyValue(getRoadmapItemByID(SOGROUPFILTERPAGE), "Enabled", new Boolean(bEnabled));
+                }
             }
         }
-        public void moveItemDown(String item) {
+
+        public void moveItemDown(String item)
+        {
         }
 
-        public void moveItemUp(String item) {
+        public void moveItemUp(String item)
+        {
         }
     }
 }

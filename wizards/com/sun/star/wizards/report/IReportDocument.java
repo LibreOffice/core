@@ -9,7 +9,7 @@
  *
  * $RCSfile: IReportDocument.java,v $
  *
- * $Revision: 1.3 $
+ * $Revision: 1.3.6.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -29,7 +29,6 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-
 package com.sun.star.wizards.report;
 
 import com.sun.star.beans.PropertyValue;
@@ -47,8 +46,6 @@ import java.util.Vector;
 public interface IReportDocument
 {
     // public ReportTextDocument getDoc();
-
-
     // -------------------------------------------------------------------------
     // initialisation
     // -------------------------------------------------------------------------
@@ -56,16 +53,15 @@ public interface IReportDocument
     // -------------------------------------------------------------------------
     // opening the dialog
     // -------------------------------------------------------------------------
-
     // -------------------------------------------------------------------------
     // Access Helper
     // -------------------------------------------------------------------------
-
     /**
      * Gives access to the DB Values
      * @return
      */
     public com.sun.star.wizards.db.RecordParser getRecordParser();
+
     /**
      * Give access to the parent document
      * It is a document in the old Wizard
@@ -73,17 +69,18 @@ public interface IReportDocument
      * @return
      */
     public com.sun.star.awt.XWindowPeer getWizardParent();
+
     /**
      *
      * @return the Frame of the document Window or Report Builder Window
      */
     public com.sun.star.frame.XFrame getFrame();
+
     public XComponent getComponent();
 
     // -------------------------------------------------------------------------
     // First step: After entering the table name, select fields
     // -------------------------------------------------------------------------
-
     /**
      * Is called after first step, set Tablename and the fields, which should occur in the Report.
      * @param _aType
@@ -120,14 +117,11 @@ public interface IReportDocument
      * @param TitleName
      */
     public void liveupdate_changeUserFieldContent(final String FieldName, final String TitleName);
-
     // -------------------------------------------------------------------------
     // Third step: Grouping
     // -------------------------------------------------------------------------
-
     /* Grouping Page */
     // Document should not hold the grouping information!
-
     /**
      * Called by press ('greater then') add a group to the group list
      * @param GroupNames
@@ -141,7 +135,6 @@ public interface IReportDocument
 
     public void refreshGroupFields(String[] _sNewNames);
     // public boolean isGroupField(String _FieldName);
-
     /**
      * Called by press ('less then') Removes an already set Groupname out of the list
      * @param NewSelGroupNames
@@ -162,17 +155,19 @@ public interface IReportDocument
      * Set the list how to sort
      * @param aSort
      */
-    public void setSorting(String [][] aSort);
-
+    public void setSorting(String[][] aSort);
     // -------------------------------------------------------------------------
     // Fivth step: Templates / Layout
     // -------------------------------------------------------------------------
     /* Template Page */
     public void setPageOrientation(int nOrientation) throws com.sun.star.lang.IllegalArgumentException;
-    public int  getDefaultPageOrientation();
+
+    public int getDefaultPageOrientation();
 
     public ArrayList getReportPath();
+
     public String getLayoutPath();
+
     public String getContentPath();
 
     /**
@@ -180,6 +175,7 @@ public interface IReportDocument
      * @param LayoutTemplatePath
      */
     public void liveupdate_changeLayoutTemplate(String LayoutTemplatePath/*, String BitmapPath*/);
+
     /**
      * Called if a new Template is selected
      * @param ContentTemplatePath
@@ -189,15 +185,13 @@ public interface IReportDocument
     //    public String[] getLayoutTemplates();
     //    public String[] getContentTemplates();
     public void layout_selectFirstPage();
+
     public void layout_setupRecordSection(String TemplateName);
-
-
     // -------------------------------------------------------------------------
     // finishing
     // -------------------------------------------------------------------------
     // preview (update titlenames)
     // addTextListener
-
     /**
      * Set the Title into the document from the 'Create Report Page'
      * BUG: The Title is empty after create Report.
@@ -229,14 +223,11 @@ public interface IReportDocument
      * @return
      */
     public XComponent[] createFinalReportDocument(String Name, boolean _bAsTemplate, boolean _bOpenInDesign);
+
     public void dispose();
-
-
-
     // -------------------------------------------------------------------------
     // Garbage dump
     // -------------------------------------------------------------------------
-
     /* DataImport */
     // ???
     // public void addTextSectionCopies();
@@ -246,7 +237,6 @@ public interface IReportDocument
     public void insertDatabaseDatatoReportDocument(XMultiServiceFactory xMSF);
     // ???
     // public com.sun.star.lang.XMultiServiceFactory getDocumentServiceFactory();
-
     /**
      * set a internal variable to stop a maybe longer DB access.
      */
@@ -265,5 +255,6 @@ public interface IReportDocument
     public String[][] getHeaderLayout();
 
     public void setCommandType(int CommandType);
+
     public void setCommand(String Command);
 }

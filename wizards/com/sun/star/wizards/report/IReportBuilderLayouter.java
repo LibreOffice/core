@@ -9,7 +9,7 @@
  *
  * $RCSfile: IReportBuilderLayouter.java,v $
  *
- * $Revision: 1.2 $
+ * $Revision: 1.2.36.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -30,7 +30,6 @@
  *
  * **********************************************************************
  */
-
 package com.sun.star.wizards.report;
 
 /**
@@ -38,7 +37,8 @@ package com.sun.star.wizards.report;
  * Only these less methods are allowed to access from the ReportBuilderImplementation.
  * @author ll93751
  */
-public interface IReportBuilderLayouter {
+public interface IReportBuilderLayouter
+{
 
     /**
      * Get the internal name of the current layout.
@@ -46,6 +46,7 @@ public interface IReportBuilderLayouter {
      * @return the internal layout name.
      */
     public String getName();
+
     /**
      * Get the localized name of the layout, which is shown in the layout page of the report wizard.
      * This name comes out of the resource and will be translate in different languages.
@@ -95,7 +96,7 @@ public interface IReportBuilderLayouter {
      * Insert the titles of the field names. This names are free formed
      * @param _aFieldTitles
      */
-    public void insertFieldTitles(String[]_aFieldTitles);
+    public void insertFieldTitles(String[] _aFieldTitles);
 
     /**
      * Insert the names of the groups, the group names are names out of the field names.

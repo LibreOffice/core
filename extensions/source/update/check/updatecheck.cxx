@@ -7,7 +7,6 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: updatecheck.cxx,v $
- * $Revision: 1.21 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -117,32 +116,19 @@ rtl::OUString getReleaseNote(const UpdateInfo& rInfo, sal_uInt8 pos, bool autoDo
 namespace
 {
 
-static rtl::OUString getBootstrapValue(const rtl::OUString& aFile, const rtl::OUString& aValue)
-{
-    rtl::OUString aPath, aRet;
-    if( rtl::Bootstrap::get(UNISTRING("BRAND_BASE_DIR"), aPath) )
-    {
-        aPath  += UNISTRING("/program/");
-        aPath  += aFile;
-
-        rtl::Bootstrap aVersionFile(aPath);
-        aVersionFile.getFrom(aValue, aRet, rtl::OUString());
-    }
-    return aRet;
-}
-
-//------------------------------------------------------------------------------
-
 static inline rtl::OUString getBuildId()
 {
-    return getBootstrapValue(UNISTRING( SAL_CONFIGFILE( "version" ) ), UNISTRING("buildid") );
+    rtl::OUString aPathVal(UNISTRING("${$OOO_BASE_DIR/program/" SAL_CONFIGFILE("version") ":buildid}"));
+    rtl::Bootstrap::expandMacros(aPathVal);
+    return aPathVal;
 }
 
 //------------------------------------------------------------------------------
-
 static inline rtl::OUString getBaseInstallation()
 {
-    return getBootstrapValue(UNISTRING( SAL_CONFIGFILE( "bootstrap" ) ), UNISTRING("BaseInstallation") );
+    rtl::OUString aPathVal(UNISTRING("${$BRAND_BASE_DIR/program/" SAL_CONFIGFILE("bootstrap") ":BaseInstallation}"));
+    rtl::Bootstrap::expandMacros(aPathVal);
+    return aPathVal;
 }
 
 //------------------------------------------------------------------------------
@@ -677,10 +663,9 @@ DownloadThread::run()
         // release config class for now
         rModel.clear();
 
+        static sal_uInt8 n = 0;
         if( ! m_aDownload.start(m_aURL, aLocalFile, aDownloadDest ) )
         {
-            static sal_uInt8 n = 0;
-
             // retry every 15s unless the dialog is not visible
             TimeValue tv;
             tv.Seconds = 15;
@@ -696,6 +681,11 @@ DownloadThread::run()
                 tv.Seconds = nRetryInterval[n-1];
             }
             m_aCondition.wait(&tv);
+        }
+        else
+        {
+            // reset wait period after successful download
+            n=0;
         }
     }
 }
@@ -1394,6 +1384,12 @@ void UpdateCheck::setUIState(UpdateState eState, bool suppressBubble)
     {
         m_xMenuBarUI = createMenuBarUI(m_xContext, new MenuBarButtonJob(this));
     }
+
+    // Show bubble only when the status has changed
+    if ( eState == m_eUpdateState )
+        suppressBubble = true;
+    else
+        m_eUpdateState = eState;
 
     rtl::Reference<UpdateHandler> aUpdateHandler(getUpdateHandler());
     OSL_ASSERT( aUpdateHandler.is() );

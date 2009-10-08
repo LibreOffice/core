@@ -1,5 +1,5 @@
 /*************************************************************************
-*
+ *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
  * Copyright 2008 by Sun Microsystems, Inc.
@@ -41,7 +41,8 @@ import com.sun.star.wizards.common.Properties;
  * (<CODE>__writeRegistryServiceInfo</CODE>).
  * @author Bertram Nolte
  */
-public class CallFormWizard {
+public class CallFormWizard
+{
 
     /** Gives a factory for creating the service.
      * This method is called by the <code>JavaLoader</code>
@@ -56,10 +57,13 @@ public class CallFormWizard {
      * structures) of a single
      * registry key accessible.
      */
-    public static com.sun.star.lang.XSingleServiceFactory __getServiceFactory(String stringImplementationName, com.sun.star.lang.XMultiServiceFactory xMSF, com.sun.star.registry.XRegistryKey xregistrykey) {
+    public static com.sun.star.lang.XSingleServiceFactory __getServiceFactory(String stringImplementationName, com.sun.star.lang.XMultiServiceFactory xMSF, com.sun.star.registry.XRegistryKey xregistrykey)
+    {
         com.sun.star.lang.XSingleServiceFactory xsingleservicefactory = null;
         if (stringImplementationName.equals(FormWizardImplementation.class.getName()))
+        {
             xsingleservicefactory = com.sun.star.comp.loader.FactoryHelper.getServiceFactory(FormWizardImplementation.class, FormWizardImplementation.__serviceName, xMSF, xregistrykey);
+        }
         return xsingleservicefactory;
     }
 
@@ -71,14 +75,16 @@ public class CallFormWizard {
      * structures) of a single
      * registry key accessible.
      */
-    public static boolean __writeRegistryServiceInfo(com.sun.star.registry.XRegistryKey xregistrykey) {
+    public static boolean __writeRegistryServiceInfo(com.sun.star.registry.XRegistryKey xregistrykey)
+    {
         return com.sun.star.comp.loader.FactoryHelper.writeRegistryServiceInfo(FormWizardImplementation.class.getName(), FormWizardImplementation.__serviceName, xregistrykey);
     }
 
     /** This class implements the component. At least the interfaces XServiceInfo,
      * XTypeProvider, and XInitialization should be provided by the service.
      */
-    public static class FormWizardImplementation extends com.sun.star.lib.uno.helper.PropertySet implements com.sun.star.lang.XInitialization, com.sun.star.lang.XServiceInfo, com.sun.star.lang.XTypeProvider, com.sun.star.task.XJobExecutor {
+    public static class FormWizardImplementation extends com.sun.star.lib.uno.helper.PropertySet implements com.sun.star.lang.XInitialization, com.sun.star.lang.XServiceInfo, com.sun.star.lang.XTypeProvider, com.sun.star.task.XJobExecutor
+    {
 
         PropertyValue[] databaseproperties;
         public XComponent Document = null;
@@ -88,38 +94,44 @@ public class CallFormWizard {
          * @param xmultiservicefactoryInitialization A special service factory
          * could be introduced while initializing.
          */
-        public FormWizardImplementation(com.sun.star.lang.XMultiServiceFactory xmultiservicefactoryInitialization) {
+        public FormWizardImplementation(com.sun.star.lang.XMultiServiceFactory xmultiservicefactoryInitialization)
+        {
             super();
             xmultiservicefactory = xmultiservicefactoryInitialization;
-            registerProperty("Document", (short)(PropertyAttribute.READONLY|PropertyAttribute.MAYBEVOID));
-            registerProperty("DocumentDefinition", (short)(PropertyAttribute.READONLY|PropertyAttribute.MAYBEVOID));
+            registerProperty("Document", (short) (PropertyAttribute.READONLY | PropertyAttribute.MAYBEVOID));
+            registerProperty("DocumentDefinition", (short) (PropertyAttribute.READONLY | PropertyAttribute.MAYBEVOID));
         }
 
-        public void trigger(String sEvent) {
-            try {
-                if (sEvent.compareTo("start") == 0) {
+        public void trigger(String sEvent)
+        {
+            try
+            {
+                if (sEvent.compareTo("start") == 0)
+                {
                     FormWizard CurFormWizard = new FormWizard(xmultiservicefactory);
                     XComponent[] obj = CurFormWizard.startFormWizard(xmultiservicefactory, databaseproperties);
-                    if ( obj != null ){
+                    if (obj != null)
+                    {
                         DocumentDefinition = obj[0];
                         Document = obj[1];
                     }
                 }
-                else if (sEvent.compareTo("end") == 0) {
+                else if (sEvent.compareTo("end") == 0)
+                {
                     DocumentDefinition = null;
                     Document = null;
                     databaseproperties = null;
                 }
-            } catch (Exception exception) {
+            }
+            catch (Exception exception)
+            {
                 System.err.println(exception);
             }
             System.gc();
         }
-
         /** The service name, that must be used to get an instance of this service.
          */
         private static final String __serviceName = "com.sun.star.wizards.form.CallFormWizard";
-
         /** The service manager, that gives access to all registered services.
          */
         private com.sun.star.lang.XMultiServiceFactory xmultiservicefactory;
@@ -131,14 +143,16 @@ public class CallFormWizard {
          * @throws Exception Every exception will not be handled, but will be
          * passed to the caller.
          */
-        public void initialize(Object[] object) throws com.sun.star.uno.Exception {
+        public void initialize(Object[] object) throws com.sun.star.uno.Exception
+        {
             databaseproperties = Properties.convertToPropertyValueArray(object);
         }
 
         /** This method returns an array of all supported service names.
          * @return Array of supported service names.
          */
-        public java.lang.String[] getSupportedServiceNames() {
+        public java.lang.String[] getSupportedServiceNames()
+        {
             String[] stringSupportedServiceNames = new String[1];
 
             stringSupportedServiceNames[0] = __serviceName;
@@ -151,10 +165,12 @@ public class CallFormWizard {
          * @param stringService Service name.
          * @return True, if the given service name will be supported.
          */
-        public boolean supportsService(String stringService) {
+        public boolean supportsService(String stringService)
+        {
             boolean booleanSupportsService = false;
 
-            if (stringService.equals(__serviceName)) {
+            if (stringService.equals(__serviceName))
+            {
                 booleanSupportsService = true;
             }
             return (booleanSupportsService);
@@ -171,13 +187,18 @@ public class CallFormWizard {
          * whole combination of objects.
          * @return Array of bytes, in order to distinguish between two sets.
          */
-        public byte[] getImplementationId() {
-            byte[] byteReturn = {
+        public byte[] getImplementationId()
+        {
+            byte[] byteReturn =
+            {
             };
 
-            try {
+            try
+            {
                 byteReturn = new String("" + this.hashCode()).getBytes();
-            } catch (Exception exception) {
+            }
+            catch (Exception exception)
+            {
                 System.err.println(exception);
             }
 
@@ -187,7 +208,8 @@ public class CallFormWizard {
         /** Return the class name of the component.
          * @return Class name of the component.
          */
-        public java.lang.String getImplementationName() {
+        public java.lang.String getImplementationName()
+        {
             return (FormWizardImplementation.class.getName());
         }
 
@@ -196,19 +218,21 @@ public class CallFormWizard {
          * @return Sequence of all types (usually interface types) provided by the
          * service.
          */
-        public Type[] getTypes() {
-            Type[] typeReturn = {
+        public Type[] getTypes()
+        {
+            Type[] typeReturn =
+            {
             };
 
-            try {
-                typeReturn = new Type[] { new Type(com.sun.star.task.XJobExecutor.class)
-                                        , new Type(com.sun.star.lang.XTypeProvider.class)
-                                        , new Type(com.sun.star.lang.XServiceInfo.class)
-                                        , new Type(com.sun.star.beans.XPropertySet.class)
-                                        , new Type(com.sun.star.beans.XFastPropertySet.class)
-                                        , new Type(com.sun.star.beans.XMultiPropertySet.class)
-                                        , new Type(com.sun.star.lang.XInitialization.class)};
-            } catch (Exception exception) {
+            try
+            {
+                typeReturn = new Type[]
+                        {
+                            new Type(com.sun.star.task.XJobExecutor.class), new Type(com.sun.star.lang.XTypeProvider.class), new Type(com.sun.star.lang.XServiceInfo.class), new Type(com.sun.star.beans.XPropertySet.class), new Type(com.sun.star.beans.XFastPropertySet.class), new Type(com.sun.star.beans.XMultiPropertySet.class), new Type(com.sun.star.lang.XInitialization.class)
+                        };
+            }
+            catch (Exception exception)
+            {
                 System.err.println(exception);
             }
 

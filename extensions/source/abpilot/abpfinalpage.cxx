@@ -149,7 +149,9 @@ namespace abp
         if (!AddressBookSourcePage::commitPage(_eReason))
             return sal_False;
 
-        if ( !m_aLocationController.prepareCommit() )
+        if  (   ( eTravelBackward != _eReason )
+            &&  ( !m_aLocationController.prepareCommit() )
+            )
             return sal_False;
 
         AddressSettings& rSettings = getSettings();

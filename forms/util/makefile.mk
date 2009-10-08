@@ -37,6 +37,7 @@ USE_DEFFILE=TRUE
 # --- Settings ----------------------------------
 
 .INCLUDE :	settings.mk
+.INCLUDE: $(PRJ)$/makefile.pmk
 
 # --- Library -----------------------------------
 # --- frm ---------------------------------------

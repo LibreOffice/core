@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: docholder.hxx,v $
- * $Revision: 1.21 $
+ * $Revision: 1.21.10.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -184,6 +184,7 @@ public:
     void OnPosRectChanged(LPRECT lpRect) const;
     void show();
 
+    sal_Bool HasFrame() { return m_xFrame.is(); }
 
     /** hides the document window, even in case of an external container
      *  side managed window.

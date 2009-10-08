@@ -33,6 +33,7 @@
 #include "componenttools.hxx"
 
 /** === begin UNO includes === **/
+#include <com/sun/star/container/XChild.hpp>
 /** === end UNO includes === **/
 
 #include <algorithm>
@@ -42,6 +43,14 @@
 namespace frm
 {
 //........................................................................
+
+    /** === begin UNO using === **/
+    using ::com::sun::star::frame::XModel;
+    using ::com::sun::star::uno::XInterface;
+    using ::com::sun::star::uno::Reference;
+    using ::com::sun::star::uno::UNO_QUERY;
+    using ::com::sun::star::container::XChild;
+    /** === end UNO using === **/
 
     //====================================================================
     //= TypeBag
@@ -83,6 +92,20 @@ namespace frm
         TypeSequence aTypes( m_aTypes.size() );
         ::std::copy( m_aTypes.begin(), m_aTypes.end(), aTypes.getArray() );
         return aTypes;
+    }
+
+    //====================================================================
+    Reference< XModel >  getXModel( const Reference< XInterface >& _rxComponent )
+    {
+        Reference< XInterface > xParent = _rxComponent;
+        Reference< XModel > xModel( xParent, UNO_QUERY );;
+        while ( xParent.is() && !xModel.is() )
+        {
+            Reference< XChild > xChild( xParent, UNO_QUERY );
+            xParent.set( xChild.is() ? xChild->getParent() : Reference< XInterface >(), UNO_QUERY );
+            xModel.set( xParent, UNO_QUERY );
+        }
+        return xModel;
     }
 
 //........................................................................

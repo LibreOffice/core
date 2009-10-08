@@ -26,7 +26,8 @@
  * <http://www.openoffice.org/license.html>
  * for a copy of the LGPLv3 License.
  *
- ************************************************************************/package com.sun.star.wizards.ui.event;
+ ************************************************************************/
+package com.sun.star.wizards.ui.event;
 
 import java.util.EventListener;
 
@@ -36,7 +37,8 @@ import java.util.EventListener;
  * To change the template for this generated type comment go to
  * Window>Preferences>Java>Code Generation>Code and Comments
  */
-public interface TaskListener extends EventListener {
+public interface TaskListener extends EventListener
+{
 
     public void taskStarted(TaskEvent te);
 
@@ -49,5 +51,4 @@ public interface TaskListener extends EventListener {
     public void taskStatusChanged(TaskEvent te);
 
     public void subtaskNameChanged(TaskEvent te);
-
 }

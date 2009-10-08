@@ -33,41 +33,47 @@
 #include <com/sun/star/oooimprovement/XCore.hpp>
 
 #include "oooimprovecore_module.hxx"
-#include <com/sun/star/lang/XServiceInfo.hpp>
+#include <com/sun/star/frame/XTerminateListener.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#include <com/sun/star/uno/XComponentContext.hpp>
+#include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/oooimprovement/XCoreController.hpp>
+#include <com/sun/star/uno/XComponentContext.hpp>
 #include <comphelper/componentmodule.hxx>
-#include <comphelper/uieventslogger.hxx>
 #include <comphelper/configurationhelper.hxx>
-#include <cppuhelper/implbase2.hxx>
+#include <comphelper/processfactory.hxx>
+#include <comphelper/uieventslogger.hxx>
+#include <cppuhelper/implbase3.hxx>
 #include <svx/optimprove.hxx>
-#include <vos/mutex.hxx>
 #include <vcl/svapp.hxx>
+#include <vos/mutex.hxx>
 
+using namespace ::com::sun::star::oooimprovement;
+using ::com::sun::star::frame::XTerminateListener;
+using ::com::sun::star::lang::EventObject;
+using ::com::sun::star::lang::XMultiServiceFactory;
+using ::com::sun::star::lang::XServiceInfo;
+using ::com::sun::star::uno::Reference;
+using ::com::sun::star::uno::RuntimeException;
+using ::com::sun::star::uno::Sequence;
+using ::com::sun::star::uno::UNO_QUERY;
+using ::com::sun::star::uno::XComponentContext;
+using ::com::sun::star::uno::XInterface;
+using ::comphelper::UiEventsLogger;
+using ::rtl::OUString;
 
 // declaration
 namespace oooimprovecore
 {
-    using namespace ::com::sun::star::oooimprovement;
-    using ::com::sun::star::lang::XServiceInfo;
-    using ::com::sun::star::uno::Reference;
-    using ::com::sun::star::uno::RuntimeException;
-    using ::com::sun::star::uno::Sequence;
-    using ::com::sun::star::uno::XComponentContext;
-    using ::com::sun::star::lang::XMultiServiceFactory;
-    using ::com::sun::star::uno::XInterface;
-
-    class Core : public ::cppu::WeakImplHelper2<XCore,XServiceInfo>
+    class Core : public ::cppu::WeakImplHelper3<XCore,XServiceInfo,XTerminateListener>
     {
         public:
             // XServiceInfo - static version
-            static ::rtl::OUString SAL_CALL getImplementationName_static();
-            static Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames_static();
+            static OUString SAL_CALL getImplementationName_static();
+            static Sequence<OUString> SAL_CALL getSupportedServiceNames_static();
             static Reference<XInterface> Create(const Reference<XComponentContext>& context );
 
         protected:
-            Core(const Reference<XComponentContext>& context);
+            Core(const Reference<XComponentContext>&);
             virtual ~Core();
 
             // XCore
@@ -76,49 +82,50 @@ namespace oooimprovecore
             virtual void SAL_CALL inviteUser() throw(RuntimeException);
 
             // XServiceInfo
-            virtual ::rtl::OUString SAL_CALL getImplementationName() throw(RuntimeException);
-            virtual ::sal_Bool SAL_CALL supportsService(const ::rtl::OUString& service_name) throw(RuntimeException);
-            virtual Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames() throw(RuntimeException);
+            virtual OUString SAL_CALL getImplementationName() throw(RuntimeException);
+            virtual sal_Bool SAL_CALL supportsService(const OUString& service_name) throw(RuntimeException);
+            virtual Sequence<OUString> SAL_CALL getSupportedServiceNames() throw(RuntimeException);
 
-        private:
-            Reference<XMultiServiceFactory> m_ServiceFactory;
+            // XTerminateListener
+            virtual void SAL_CALL queryTermination(const EventObject&) throw(RuntimeException);
+            virtual void SAL_CALL notifyTermination(const EventObject&) throw(RuntimeException);
+
+            // XEventListener
+            virtual void SAL_CALL disposing(const EventObject&) throw(RuntimeException);
     };
 }
 
 
 // implementation
-namespace oooimprovecore {
-    using namespace ::rtl;
-    using namespace ::com::sun::star::uno;
+namespace oooimprovecore
+{
 
-    Core::Core(const Reference<XComponentContext>& context)
-        : m_ServiceFactory(Reference<XMultiServiceFactory>(
-            context->getServiceManager()->createInstanceWithContext(
-                OUString::createFromAscii("com.sun.star.lang.MultiServiceFactory"), context),
-            UNO_QUERY))
+    Core::Core(const Reference<XComponentContext>&)
     { }
 
     Core::~Core()
     { }
 
     sal_Int32 SAL_CALL Core::getSessionLogEventCount() throw(RuntimeException)
-    { return ::comphelper::UiEventsLogger::getSessionLogEventCount(); }
+    { return UiEventsLogger::getSessionLogEventCount(); }
 
     sal_Bool SAL_CALL Core::getUiEventsLoggerEnabled() throw(RuntimeException)
-    { return ::comphelper::UiEventsLogger::isEnabled(); }
+    { return UiEventsLogger::isEnabled(); }
 
     void SAL_CALL Core::inviteUser() throw(RuntimeException)
     {
+        Reference<XMultiServiceFactory> xServiceFactory = ::comphelper::getProcessServiceFactory();
+
         OUString help_url;
         Reference<XCoreController> core_c(
-            m_ServiceFactory->createInstance(OUString::createFromAscii("com.sun.star.oooimprovement.CoreController")),
+            xServiceFactory->createInstance(OUString::createFromAscii("com.sun.star.oooimprovement.CoreController")),
             UNO_QUERY);
         if(core_c.is())
             ::comphelper::ConfigurationHelper::readDirectKey(
-                m_ServiceFactory,
-                ::rtl::OUString::createFromAscii("/org.openoffice.Office.OOoImprovement.Settings"),
-                ::rtl::OUString::createFromAscii("Participation"),
-                ::rtl::OUString::createFromAscii("HelpUrl"),
+                xServiceFactory,
+                OUString::createFromAscii("/org.openoffice.Office.OOoImprovement.Settings"),
+                OUString::createFromAscii("Participation"),
+                OUString::createFromAscii("HelpUrl"),
                 ::comphelper::ConfigurationHelper::E_READONLY) >>= help_url;
         else
             help_url = OUString::createFromAscii("http://www.openoffice.org");
@@ -153,6 +160,17 @@ namespace oooimprovecore {
         aServiceNames[0] = OUString::createFromAscii("com.sun.star.oooimprovement.Core");
         return aServiceNames;
     }
+
+    void Core::queryTermination(const EventObject&) throw(RuntimeException)
+    { }
+
+    void Core::notifyTermination(const EventObject&) throw(RuntimeException)
+    {
+        UiEventsLogger::disposing();
+    }
+
+    void Core::disposing(const EventObject&) throw(RuntimeException)
+    { }
 
     Reference<XInterface> Core::Create(const Reference<XComponentContext>& context)
     { return *(new Core(context)); }

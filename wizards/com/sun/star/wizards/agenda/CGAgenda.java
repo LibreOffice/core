@@ -26,8 +26,8 @@
  * <http://www.openoffice.org/license.html>
  * for a copy of the LGPLv3 License.
  *
- ************************************************************************/package com.sun.star.wizards.agenda;
-
+ ************************************************************************/
+package com.sun.star.wizards.agenda;
 
 import com.sun.star.wizards.common.ConfigGroup;
 import com.sun.star.wizards.common.ConfigSet;
@@ -38,13 +38,13 @@ import com.sun.star.wizards.common.ConfigSet;
  * to save the state of the agenda wizard for reloading uppon
  * next start.
  */
-public class CGAgenda extends ConfigGroup {
+public class CGAgenda extends ConfigGroup
+{
 
     /** step 1 - design*/
     public int cp_AgendaType;
     /** step 1 - include minutes*/
     public boolean cp_IncludeMinutes;
-
     /** step 2  - title */
     public String cp_Title = "";
     /** step 2  - date */
@@ -53,7 +53,6 @@ public class CGAgenda extends ConfigGroup {
     public String cp_Time;
     /** step 2  - location */
     public String cp_Location = "";
-
     /** step 3  - show meeting type */
     public boolean cp_ShowMeetingType;
     /** step 3  - show read */
@@ -62,7 +61,6 @@ public class CGAgenda extends ConfigGroup {
     public boolean cp_ShowBring;
     /** step 3  - show notes */
     public boolean cp_ShowNotes;
-
     /** step 4 - show called by */
     public boolean cp_ShowCalledBy;
     /** step 4 - show facilitator */
@@ -77,16 +75,12 @@ public class CGAgenda extends ConfigGroup {
     public boolean cp_ShowObservers;
     /** step 4 - show resource persons */
     public boolean cp_ShowResourcePersons;
-
     /** page 6 - template title   */
     public String cp_TemplateName;
     /** page 6 - template url    */
     public String cp_TemplatePath;
-
     /** page 6 - how to proceed  */
     public int cp_ProceedMethod;
-
     /** page 5 - topics ( a set )*/
     public ConfigSet cp_Topics = new ConfigSet(CGTopic.class);
-
 }

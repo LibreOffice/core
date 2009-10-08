@@ -26,12 +26,15 @@
  * <http://www.openoffice.org/license.html>
  * for a copy of the LGPLv3 License.
  *
- ************************************************************************/package com.sun.star.wizards.form;
+ ************************************************************************/
+package com.sun.star.wizards.form;
 
-public interface XCallFormWizard extends com.sun.star.uno.XInterface {
+public interface XCallFormWizard extends com.sun.star.uno.XInterface
+{
     // Methods
-    public void CallFormDialog();
-
-    // static Member
-    public static final com.sun.star.lib.uno.typeinfo.TypeInfo UNOTYPEINFO[] = { new com.sun.star.lib.uno.typeinfo.MethodTypeInfo("CallFormDialog", 0, 0)};
+    public void CallFormDialog();    // static Member
+    public static final com.sun.star.lib.uno.typeinfo.TypeInfo UNOTYPEINFO[] =
+    {
+        new com.sun.star.lib.uno.typeinfo.MethodTypeInfo("CallFormDialog", 0, 0)
+    };
 }

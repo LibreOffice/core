@@ -9,7 +9,7 @@
  *
  * $RCSfile: InBlocksLabelsLeft.java,v $
  *
- * $Revision: 1.2 $
+ * $Revision: 1.2.36.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -30,7 +30,6 @@
  *
  * **********************************************************************
  */
-
 package com.sun.star.wizards.reportbuilder.layout;
 
 import com.sun.star.awt.Rectangle;
@@ -45,6 +44,7 @@ import com.sun.star.wizards.ui.*;
  */
 public class InBlocksLabelsLeft extends ColumnarTwoColumns
 {
+
     public InBlocksLabelsLeft(IReportDefinitionReadAccess _xDefinitionAccess, Resource _aResource)
     {
         super(_xDefinitionAccess, _aResource);
@@ -95,7 +95,7 @@ public class InBlocksLabelsLeft extends ColumnarTwoColumns
             nDelta = nDeltaTotal / nFactor;
         }
 
-        int i=0;
+        int i = 0;
         int nCount = aFieldTitleNames.length;
         // int x = 0;
         aRectLabelFields.Y = 0;
@@ -114,7 +114,7 @@ public class InBlocksLabelsLeft extends ColumnarTwoColumns
             aRectLabelFields = insertFormattedField(xSection, sFieldName, aRectLabelFields, nFieldWidth, aSOTextField);
 
             final int nNextX = aRectLabelFields.X + nLabelWidth + nFieldWidth;
-            if (nNextX > (getPageWidth() - getRightPageIndent()) )
+            if (nNextX > (getPageWidth() - getRightPageIndent()))
             {
                 // TODO: label height is fix
                 aRectLabelFields.Y += aSOTextField.getHeight(500);
@@ -127,6 +127,7 @@ public class InBlocksLabelsLeft extends ColumnarTwoColumns
         xSection.setHeight(aRectLabelFields.Y);
         doNotBreakInTable(xSection);
     }
+
     protected void insertDetailFieldTitles()
     {
         // we won't extra field titles

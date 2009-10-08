@@ -42,27 +42,30 @@ import com.sun.star.wizards.common.Renderer;
  * display the current task status.
  * (renders the state to resource strings)
  */
-public class ProcessStatusRenderer implements Renderer, WebWizardConst {
+public class ProcessStatusRenderer implements Renderer, WebWizardConst
+{
+
     Map strings = new Hashtable(12);
 
-    public ProcessStatusRenderer(WebWizardDialogResources res) {
-        strings.put(TASK_EXPORT_DOCUMENTS , res.resTaskExportDocs );
-        strings.put(TASK_EXPORT_PREPARE , res.resTaskExportPrepare );
-        strings.put(TASK_GENERATE_COPY , res.resTaskGenerateCopy );
-        strings.put(TASK_GENERATE_PREPARE , res.resTaskGeneratePrepare );
-        strings.put(TASK_GENERATE_XSL , res.resTaskGenerateXsl );
-        strings.put(TASK_PREPARE , res.resTaskPrepare );
+    public ProcessStatusRenderer(WebWizardDialogResources res)
+    {
+        strings.put(TASK_EXPORT_DOCUMENTS, res.resTaskExportDocs);
+        strings.put(TASK_EXPORT_PREPARE, res.resTaskExportPrepare);
+        strings.put(TASK_GENERATE_COPY, res.resTaskGenerateCopy);
+        strings.put(TASK_GENERATE_PREPARE, res.resTaskGeneratePrepare);
+        strings.put(TASK_GENERATE_XSL, res.resTaskGenerateXsl);
+        strings.put(TASK_PREPARE, res.resTaskPrepare);
         //strings.put(TASK_PUBLISH , res.resTaskPublish );
-        strings.put(LOCAL_PUBLISHER, res.resTaskPublishLocal );
-        strings.put(ZIP_PUBLISHER, res.resTaskPublishZip );
-        strings.put(FTP_PUBLISHER, res.resTaskPublishFTP );
+        strings.put(LOCAL_PUBLISHER, res.resTaskPublishLocal);
+        strings.put(ZIP_PUBLISHER, res.resTaskPublishZip);
+        strings.put(FTP_PUBLISHER, res.resTaskPublishFTP);
 
-        strings.put(TASK_PUBLISH_PREPARE , res.resTaskPublishPrepare );
-        strings.put(TASK_FINISH , res.resTaskFinish );
+        strings.put(TASK_PUBLISH_PREPARE, res.resTaskPublishPrepare);
+        strings.put(TASK_FINISH, res.resTaskFinish);
     }
 
-    public String render(Object object) {
-        return (String)strings.get(object);
+    public String render(Object object)
+    {
+        return (String) strings.get(object);
     }
-
 }

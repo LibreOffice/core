@@ -14,4 +14,8 @@ SetAdminInstallProperty
 CreateLayerLinks
 RemoveLayerLinks
 DotNetCheck
+ShowProperties
 copyEditionData
+IsOfficeRunning
+CheckPatchList
+copyExtensionData

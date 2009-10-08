@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: embeddocaccess.hxx,v $
- * $Revision: 1.5 $
+ * $Revision: 1.5.10.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -31,9 +31,14 @@
 #ifndef _EMBEDDOCACCESS_HXX_
 #define _EMBEDDOCACCESS_HXX_
 
-#if defined(_MSC_VER) && (_MSC_VER >= 1300)
-#undef _DEBUG
-#endif
+#include <cppuhelper/weak.hxx>
+
+#define OLESERV_SAVEOBJECT      1
+#define OLESERV_CLOSE           2
+#define OLESERV_NOTIFY          3
+#define OLESERV_NOTIFYCLOSING   4
+#define OLESERV_SHOWOBJECT      5
+#define OLESERV_DEACTIVATE      6
 
 #include <oleidl.h>
 #ifndef __MINGW32__
@@ -49,8 +54,21 @@
 class EmbedDocument_Impl;
 struct LockedEmbedDocument_Impl
 {
+private:
     EmbedDocument_Impl* m_pEmbedDocument;
-    CComPtr< IPersistStorage > m_pLocker;
+
+public:
+    LockedEmbedDocument_Impl();
+    LockedEmbedDocument_Impl( EmbedDocument_Impl* pEmbedDocument );
+    LockedEmbedDocument_Impl( const LockedEmbedDocument_Impl& aDocLock );
+
+    ~LockedEmbedDocument_Impl();
+
+    LockedEmbedDocument_Impl& operator=( const LockedEmbedDocument_Impl& aDocLock );
+
+    EmbedDocument_Impl* GetEmbedDocument() { return m_pEmbedDocument; }
+
+    void ExecuteMethod( sal_Int16 nId );
 };
 
 class EmbeddedDocumentInstanceAccess_Impl : public ::cppu::OWeakObject

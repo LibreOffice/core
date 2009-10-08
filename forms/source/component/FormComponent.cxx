@@ -182,6 +182,25 @@ Sequence<Type> OControl::_getTypes()
     return TypeBag( OComponentHelper::getTypes(), OControl_BASE::getTypes() ).getTypes();
 }
 
+//------------------------------------------------------------------------------
+void OControl::initFormControlPeer( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindowPeer >& _rxPeer )
+{
+    try
+    {
+        Reference< XVclWindowPeer > xVclWindowPeer( _rxPeer, UNO_QUERY_THROW );
+
+        // #i63103# - form controls should only react on the mouse wheel when they're focused
+        xVclWindowPeer->setProperty(
+            ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "WheelWithoutFocus" ) ),
+            makeAny( sal_Bool( sal_False ) )
+        );
+    }
+    catch( const Exception& )
+    {
+        DBG_UNHANDLED_EXCEPTION();
+    }
+}
+
 // OComponentHelper
 //------------------------------------------------------------------------------
 void OControl::disposing()
@@ -287,13 +306,7 @@ void SAL_CALL OControl::createPeer(const Reference<XToolkit>& _rxToolkit, const 
     {
         m_xControl->createPeer( _rxToolkit, _rxParent );
 
-        // #i63103# - form controls should only react on the mouse wheel when they're focused
-        Reference< XVclWindowPeer > xVclWindowPeer( getPeer(), UNO_QUERY );
-        if ( xVclWindowPeer.is() )
-            xVclWindowPeer->setProperty(
-                ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "WheelWithoutFocus" ) ),
-                makeAny( (sal_Bool)sal_False )
-            );
+        initFormControlPeer( getPeer() );
 
         impl_resetStateGuard_nothrow();
     }
@@ -1151,10 +1164,12 @@ OBoundControlModel::OBoundControlModel(
     :OControlModel( _rxFactory, _rUnoControlModelTypeName, _rDefault, sal_False )
     ,OPropertyChangeListener( m_aMutex )
     ,m_nValuePropertyAggregateHandle( -1 )
+    ,m_nFieldType( DataType::OTHER )
     ,m_bValuePropertyMayBeVoid( false )
     ,m_aUpdateListeners(m_aMutex)
     ,m_aResetListeners(m_aMutex)
     ,m_aFormComponentListeners( m_aMutex )
+    ,m_bInputRequired( sal_True )
     ,m_pAggPropMultiplexer( NULL )
     ,m_bLoadListening( sal_False )
     ,m_bLoaded(sal_False)
@@ -1182,11 +1197,13 @@ OBoundControlModel::OBoundControlModel(
     :OControlModel( _pOriginal, _rxFactory, sal_True, sal_False )
     ,OPropertyChangeListener( m_aMutex )
     ,m_nValuePropertyAggregateHandle( _pOriginal->m_nValuePropertyAggregateHandle )
+    ,m_nFieldType( DataType::OTHER )
     ,m_bValuePropertyMayBeVoid( _pOriginal->m_bValuePropertyMayBeVoid )
     ,m_aUpdateListeners( m_aMutex )
     ,m_aResetListeners( m_aMutex )
     ,m_aFormComponentListeners( m_aMutex )
     ,m_xValidator( _pOriginal->m_xValidator )
+    ,m_bInputRequired( sal_True )
     ,m_pAggPropMultiplexer( NULL )
     ,m_bLoadListening( sal_False )
     ,m_bLoaded( sal_False )
@@ -1212,6 +1229,7 @@ OBoundControlModel::OBoundControlModel(
     m_bValuePropertyMayBeVoid = _pOriginal->m_bValuePropertyMayBeVoid;
     m_aValuePropertyType = _pOriginal->m_aValuePropertyType;
     m_aControlSource = _pOriginal->m_aControlSource;
+    m_bInputRequired = _pOriginal->m_bInputRequired;
     // m_xLabelControl, though being a property, is not to be cloned, not even the reference will be transfered.
     // (the former should be clear - a clone of the object we're only referencing does not make sense)
     // (the second would violate the restriction for label controls that they're part of the
@@ -1380,9 +1398,9 @@ void OBoundControlModel::disposing()
     // TODO: could we replace the following 5 lines with a call to disconnectDatabaseColumn?
     // The only more thing which it does is calling onDisconnectedDbColumn - could this
     // cause trouble? At least when we continue to call OControlModel::disposing before, it *may*.
-    if ( m_xField.is() )
+    if ( hasField() )
     {
-        m_xField->removePropertyChangeListener( PROPERTY_VALUE, this );
+        getField()->removePropertyChangeListener( PROPERTY_VALUE, this );
         resetField();
     }
     m_xCursor = NULL;
@@ -1497,7 +1515,7 @@ void SAL_CALL OBoundControlModel::setParent(const Reference<XInterface>& _rxPare
 void SAL_CALL OBoundControlModel::disposing(const com::sun::star::lang::EventObject& _rEvent) throw (RuntimeException)
 {
     ::osl::ClearableMutexGuard aGuard( m_aMutex );
-    if ( _rEvent.Source == m_xField )
+    if ( _rEvent.Source == getField() )
     {
         resetField();
     }
@@ -1653,6 +1671,9 @@ void OBoundControlModel::getFastPropertyValue(Any& rValue, sal_Int32 nHandle) co
 {
     switch (nHandle)
     {
+        case PROPERTY_ID_INPUT_REQUIRED:
+            rValue <<= m_bInputRequired;
+            break;
         case PROPERTY_ID_CONTROLSOURCEPROPERTY:
             rValue <<= m_sValuePropertyName;
             break;
@@ -1660,7 +1681,7 @@ void OBoundControlModel::getFastPropertyValue(Any& rValue, sal_Int32 nHandle) co
             rValue <<= m_aControlSource;
             break;
         case PROPERTY_ID_BOUNDFIELD:
-            rValue <<= m_xField;
+            rValue <<= getField();
             break;
         case PROPERTY_ID_CONTROLLABEL:
             if (!m_xLabelControl.is())
@@ -1683,12 +1704,15 @@ sal_Bool OBoundControlModel::convertFastPropertyValue(
     sal_Bool bModified(sal_False);
     switch (_nHandle)
     {
+        case PROPERTY_ID_INPUT_REQUIRED:
+            bModified = tryPropertyValue( _rConvertedValue, _rOldValue, _rValue, m_bInputRequired );
+            break;
         case PROPERTY_ID_CONTROLSOURCE:
             bModified = tryPropertyValue(_rConvertedValue, _rOldValue, _rValue, m_aControlSource);
             break;
         case PROPERTY_ID_BOUNDFIELD:
-            bModified = tryPropertyValue(_rConvertedValue, _rOldValue, _rValue, m_xField);
-            break;
+            DBG_ERROR( "OBoundControlModel::convertFastPropertyValue: BoundField should be a read-only property !" );
+            throw com::sun::star::lang::IllegalArgumentException();
         case PROPERTY_ID_CONTROLLABEL:
             if (!_rValue.hasValue())
             {   // property set to void
@@ -1716,6 +1740,10 @@ Any OBoundControlModel::getPropertyDefaultByHandle( sal_Int32 _nHandle ) const
     Any aDefault;
     switch ( _nHandle )
     {
+        case PROPERTY_ID_INPUT_REQUIRED:
+            aDefault <<= sal_Bool( sal_True );
+            break;
+
         case PROPERTY_ID_CONTROLSOURCE:
             aDefault <<= ::rtl::OUString();
             break;
@@ -1732,9 +1760,11 @@ void OBoundControlModel::setFastPropertyValue_NoBroadcast( sal_Int32 nHandle, co
 {
     switch (nHandle)
     {
+        case PROPERTY_ID_INPUT_REQUIRED:
+            OSL_VERIFY( rValue >>= m_bInputRequired );
+            break;
         case PROPERTY_ID_CONTROLSOURCE:
-            DBG_ASSERT(rValue.getValueType().getTypeClass() == TypeClass_STRING, "invalid type" );
-            rValue >>= m_aControlSource;
+            OSL_VERIFY( rValue >>= m_aControlSource );
             break;
         case PROPERTY_ID_BOUNDFIELD:
             DBG_ERROR("OBoundControlModel::setFastPropertyValue_NoBroadcast : BoundField should be a read-only property !");
@@ -1817,7 +1847,7 @@ void SAL_CALL OBoundControlModel::propertyChange( const PropertyChangeEvent& evt
     // if the DBColumn value changed, transfer it to the control
     if ( evt.PropertyName.equals( PROPERTY_VALUE ) )
     {
-        OSL_ENSURE( evt.Source == m_xField, "OBoundControlModel::propertyChange: value changes from components other than our database colum?" );
+        OSL_ENSURE( evt.Source == getField(), "OBoundControlModel::propertyChange: value changes from components other than our database colum?" );
         osl::MutexGuard aGuard(m_aMutex);
         if ( m_bForwardValueChanges && m_xColumn.is() )
             transferDbValueToControl();
@@ -1888,7 +1918,7 @@ sal_Bool SAL_CALL OBoundControlModel::commit() throw(RuntimeException)
     OSL_ENSURE( !hasExternalValueBinding(), "OBoundControlModel::commit: control flow broken!" );
         // we reach this only if we're not working with an external binding
 
-    if ( !m_xField.is() )
+    if ( !hasField() )
         return sal_True;
 
     ::cppu::OInterfaceIteratorHelper aIter( m_aUpdateListeners );
@@ -1931,6 +1961,7 @@ void OBoundControlModel::resetField()
     m_xColumnUpdate.clear();
     m_xColumn.clear();
     m_xField.clear();
+    m_nFieldType = DataType::OTHER;
 }
 
 //------------------------------------------------------------------------------
@@ -1959,46 +1990,46 @@ sal_Bool OBoundControlModel::connectToField(const Reference<XRowSet>& rForm)
             }
         }
 
-        // darf ich mich ueberhaupt an dieses Feld binden (Typ-Check)
-        if (xFieldCandidate.is())
+        try
         {
-            sal_Int32 nFieldType = 0;
-            xFieldCandidate->getPropertyValue(PROPERTY_FIELDTYPE) >>= nFieldType;
-            if (approveDbColumnType(nFieldType))
-                setField(xFieldCandidate,sal_False);
-        }
-        else
-            setField(NULL,sal_False);
-
-        if (m_xField.is())
-        {
-            if(m_xField->getPropertySetInfo()->hasPropertyByName(PROPERTY_VALUE))
+            if ( xFieldCandidate.is() )
             {
-                // an wertaenderungen horchen
-                m_xField->addPropertyChangeListener( PROPERTY_VALUE, this );
-                m_xColumnUpdate = Reference< XColumnUpdate >( m_xField, UNO_QUERY );
-                m_xColumn = Reference< XColumn >( m_xField, UNO_QUERY );
+                sal_Int32 nFieldType = 0;
+                xFieldCandidate->getPropertyValue( PROPERTY_FIELDTYPE ) >>= nFieldType;
+                if ( approveDbColumnType( nFieldType ) )
+                {
+                    m_xField = xFieldCandidate;
+                    m_xField->addPropertyChangeListener( PROPERTY_VALUE, this );
+                    m_nFieldType = nFieldType;
 
-                INT32 nNullableFlag = ColumnValue::NO_NULLS;
-                m_xField->getPropertyValue(PROPERTY_ISNULLABLE) >>= nNullableFlag;
-                m_bRequired = (ColumnValue::NO_NULLS == nNullableFlag);
-                    // we're optimistic : in case of ColumnValue_NULLABLE_UNKNOWN we assume nullability ....
+                    // listen to value changes
+                    m_xColumnUpdate = Reference< XColumnUpdate >( m_xField, UNO_QUERY );
+                    m_xColumn = Reference< XColumn >( m_xField, UNO_QUERY );
+
+                    INT32 nNullableFlag = ColumnValue::NO_NULLS;
+                    m_xField->getPropertyValue( PROPERTY_ISNULLABLE ) >>= nNullableFlag;
+                    m_bRequired = ( ColumnValue::NO_NULLS == nNullableFlag );
+                        // we're optimistic : in case of ColumnValue_NULLABLE_UNKNOWN we assume nullability ....
+                }
             }
             else
-            {
-                OSL_ENSURE(sal_False, "OBoundControlModel::connectToField: property NAME not supported!");
-                setField(NULL,sal_False);
-            }
+                resetField();
+
+        }
+        catch( const Exception& )
+        {
+            DBG_UNHANDLED_EXCEPTION();
+            resetField();
         }
     }
-    return m_xField.is();
+    return hasField();
 }
 
 //------------------------------------------------------------------------------
 void OBoundControlModel::initFromField( const Reference< XRowSet >& _rxRowSet )
 {
     // but only if the rowset if posisitioned on a valid record
-    if ( m_xField.is() && _rxRowSet.is() )
+    if ( hasField() && _rxRowSet.is() )
     {
         if ( !_rxRowSet->isBeforeFirst() && !_rxRowSet->isAfterLast() )
             transferDbValueToControl();
@@ -2035,12 +2066,12 @@ void OBoundControlModel::connectDatabaseColumn( const Reference< XRowSet >& _rxR
     ::osl::MutexGuard aGuard( m_aMutex );
 
     // consistency checks
-    DBG_ASSERT( !( m_xField.is() && !_bFromReload ),
+    DBG_ASSERT( !( hasField() && !_bFromReload ),
         "OBoundControlModel::connectDatabaseColumn: the form is just *loaded*, but we already have a field!" );
     (void)_bFromReload;
 
-    Reference< XPropertySet >   xOldField = m_xField;
-    if ( !m_xField.is() )
+    Reference< XPropertySet > xOldField = getField();
+    if ( !hasField() )
     {
         // connect to the column
         connectToField( _rxRowSet );
@@ -2055,12 +2086,12 @@ void OBoundControlModel::connectDatabaseColumn( const Reference< XRowSet >& _rxR
     onConnectedDbColumn( _rxRowSet );
 
     // initially transfer the db column value to the control, if we successfully connected to a database column
-    if ( m_xField.is() )
+    if ( hasField() )
         initFromField( _rxRowSet );
 
-    if ( xOldField != m_xField )
+    if ( xOldField != getField() )
     {
-        Any aNewValue; aNewValue <<= m_xField;
+        Any aNewValue; aNewValue <<= getField();
         Any aOldValue; aOldValue <<= xOldField;
         sal_Int32 nHandle = PROPERTY_ID_BOUNDFIELD;
         OPropertySetHelper::fire(&nHandle, &aNewValue, &aOldValue, 1, sal_False);
@@ -2076,9 +2107,9 @@ void OBoundControlModel::disconnectDatabaseColumn( )
     // let derived classes react on this
     onDisconnectedDbColumn();
 
-    if ( m_xField.is() )
+    if ( hasField() )
     {
-        m_xField->removePropertyChangeListener( PROPERTY_VALUE, this );
+        getField()->removePropertyChangeListener( PROPERTY_VALUE, this );
         resetField();
     }
 
@@ -2393,24 +2424,6 @@ void OBoundControlModel::reset() throw (RuntimeException)
     aGuard.clear();
 
     m_aResetListeners.notifyEach( &XResetListener::resetted, aResetEvent );
-}
-// -----------------------------------------------------------------------------
-void OBoundControlModel::setField( const Reference< XPropertySet>& _rxField,sal_Bool _bFire )
-{
-    DBG_ASSERT( !hasExternalValueBinding(), "OBoundControlModel::setField: We have an external value binding!" );
-
-    // fire a property change event
-    if ( m_xField != _rxField )
-    {
-        Any aOldValue; aOldValue <<= m_xField;
-        m_xField = _rxField;
-        if ( _bFire )
-        {
-            Any aNewValue; aNewValue <<= _rxField;
-            sal_Int32 nHandle = PROPERTY_ID_BOUNDFIELD;
-            OPropertySetHelper::fire(&nHandle, &aNewValue, &aOldValue, 1, sal_False);
-        }
-    }
 }
 //--------------------------------------------------------------------
 sal_Bool OBoundControlModel::impl_approveValueBinding_nolock( const Reference< XValueBinding >& _rxBinding )
@@ -2893,11 +2906,12 @@ void OBoundControlModel::recheckValidity( bool _bForceNotification )
 //------------------------------------------------------------------------------
 void OBoundControlModel::describeFixedProperties( Sequence< Property >& _rProps ) const
 {
-    BEGIN_DESCRIBE_PROPERTIES( 4, OControlModel )
+    BEGIN_DESCRIBE_PROPERTIES( 5, OControlModel )
         DECL_PROP1      ( CONTROLSOURCE,           ::rtl::OUString,     BOUND );
         DECL_IFACE_PROP3( BOUNDFIELD,               XPropertySet,       BOUND, READONLY, TRANSIENT );
         DECL_IFACE_PROP2( CONTROLLABEL,             XPropertySet,       BOUND, MAYBEVOID );
         DECL_PROP2      ( CONTROLSOURCEPROPERTY,    ::rtl::OUString,    READONLY, TRANSIENT );
+        DECL_BOOL_PROP1 ( INPUT_REQUIRED,                               BOUND );
     END_DESCRIBE_PROPERTIES()
 }
 

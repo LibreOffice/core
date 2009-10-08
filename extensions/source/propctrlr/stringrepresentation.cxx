@@ -54,6 +54,7 @@
 #endif
 #include <tools/debug.hxx>
 #include <tools/string.hxx>
+#include <tools/StringListResource.hxx>
 #include <comphelper/types.hxx>
 #ifndef _EXTENSIONS_PROPCTRLR_MODULEPCR_HXX_
 #include "modulepcr.hxx"
@@ -375,10 +376,11 @@ bool StringRepresentation::convertGenericValueToString( const uno::Any& _rValue,
 
     case uno::TypeClass_BOOLEAN:
     {
-        String aEntries( PcrRes( RID_STR_BOOL ) );
+        ::std::vector< ::rtl::OUString > aListEntries;
+        tools::StringListResource aRes(PcrRes(RID_RSC_ENUM_YESNO),aListEntries);
         sal_Bool bValue = sal_False;
         _rValue >>= bValue;
-        _rStringRep = bValue ? aEntries.GetToken( 1 ) : aEntries.GetToken( 0 );
+        _rStringRep = bValue ? aListEntries[1] : aListEntries[0];
     }
     break;
 
@@ -513,8 +515,9 @@ bool StringRepresentation::convertStringToGenericValue( const ::rtl::OUString& _
 
     case uno::TypeClass_BOOLEAN:
     {
-        String sBooleanValues( PcrRes( RID_STR_BOOL ) );
-        if ( sBooleanValues.GetToken(0) == String( _rStringRep ) )
+        ::std::vector< ::rtl::OUString > aListEntries;
+        tools::StringListResource aRes(PcrRes(RID_RSC_ENUM_YESNO),aListEntries);
+        if ( aListEntries[0] == _rStringRep )
             _rValue <<= (sal_Bool)sal_False;
         else
             _rValue <<= (sal_Bool)sal_True;

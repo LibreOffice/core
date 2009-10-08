@@ -285,10 +285,10 @@ BOOL SimpleCommunicationLinkViaSocket::DoReceiveDataStream()
     if ( !bWasError )
     {
         pReceiveStream = GetBestCommunicationStream();
-        DBG_ASSERT( pReceiveStream->IsA() == ID_MEMORYSTREAM, "CommunicationStream is not an SvMemoryStream. Communication has to be reimplemented here!")
+        DBG_ASSERT( pReceiveStream->IsA() == ID_MEMORYSTREAM, "CommunicationStream is not an SvMemoryStream. Communication has to be reimplemented here!");
         if ( pReceiveStream->IsA() == ID_MEMORYSTREAM )
             ((SvMemoryStream*)pReceiveStream)->SetBuffer( pBuffer, nLen, TRUE, nLen );
-        DBG_ASSERT( pReceiveStream, "Datastream is NULL")
+        DBG_ASSERT( pReceiveStream, "Datastream is NULL");
     }
 
     return !bWasError;
@@ -487,7 +487,7 @@ void CommunicationManager::CallDataReceived( CommunicationLink* pCL )
     // should be impossible but happens for mysterious reasons
     if ( !pCL->pServiceData )
     {
-        DBG_ERROR( "Datastream is NULL" )
+        DBG_ERROR( "Datastream is NULL" );
         pCL->FinishCallback();
         return;
     }

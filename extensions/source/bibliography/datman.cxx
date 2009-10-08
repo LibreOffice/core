@@ -136,7 +136,7 @@ Reference< XConnection > getConnection(const ::rtl::OUString& _rURL)
         catch(Exception eEx)
         {
             (void) eEx; // make compiler happy
-            DBG_ERROR("Exception caught in ODatabaseContext::getRegisteredObject()")
+            DBG_ERROR("Exception caught in ODatabaseContext::getRegisteredObject()");
         }
     }
     // build the connection from the data source
@@ -189,7 +189,7 @@ Reference< XConnection >    getConnection(const Reference< XInterface > & xRowSe
         xConn = Reference< XConnection > (*(Reference< XInterface > *)xFormProps->getPropertyValue(C2U("ActiveConnection")).getValue(), UNO_QUERY);
         if (!xConn.is())
         {
-            DBG_WARNING("no active connection")
+            DBG_WARNING("no active connection");
         }
     }
     catch(Exception& e )
@@ -673,7 +673,7 @@ DBChangeDialog_Impl::DBChangeDialog_Impl(Window* pParent, BibDataManager* pMan )
     catch(Exception& e )
     {
         (void) e;   // make compiler happy
-        DBG_ERROR("Exception in BibDataManager::DBChangeDialog_Impl::DBChangeDialog_Impl")
+        DBG_ERROR("Exception in BibDataManager::DBChangeDialog_Impl::DBChangeDialog_Impl");
     }
 
 
@@ -925,7 +925,7 @@ void BibDataManager::InsertFields(const Reference< XFormComponent > & _rxGrid)
     catch(Exception& e )
     {
         (void) e;   // make compiler happy
-        DBG_ERROR("Exception in BibDataManager::InsertFields")
+        DBG_ERROR("Exception in BibDataManager::InsertFields");
     }
 }
 /* --------------------------------------------------
@@ -1669,7 +1669,7 @@ try
 catch(Exception& e )
 {
     (void) e;   // make compiler happy
-    DBG_ERROR("Exception in BibDataManager::SetMeAsUidListener")
+    DBG_ERROR("Exception in BibDataManager::SetMeAsUidListener");
 }
 
 
@@ -1715,7 +1715,7 @@ try
 catch(Exception& e )
 {
     (void) e;   // make compiler happy
-    DBG_ERROR("Exception in BibDataManager::RemoveMeAsUidListener")
+    DBG_ERROR("Exception in BibDataManager::RemoveMeAsUidListener");
 }
 
 

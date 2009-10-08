@@ -56,8 +56,6 @@ import com.sun.star.wizards.web.data.CGPublish;
 import com.sun.star.wizards.web.data.CGSettings;
 import com.sun.star.wizards.web.export.Exporter;
 
-
-
 /**
  * @author rpiterman
  * This class is used to process a CGSession object
@@ -91,44 +89,36 @@ import com.sun.star.wizards.web.export.Exporter;
  * the user is given the option to "OK" or to "Cancel" and depending
  * on that interaction I cary on.
  */
-public class Process implements WebWizardConst, ProcessErrors {
+public class Process implements WebWizardConst, ProcessErrors
+{
 
     private static final int TASKS_PER_DOC = 5;
     private static final int TASKS_PER_XSL = 2;
     private static final int TASKS_PER_PUBLISH = 2;
-
     private static final int TASKS_IN_PREPARE = 1;
     private static final int TASKS_IN_EXPORT = 2;
     private static final int TASKS_IN_GENERATE = 2;
     private static final int TASKS_IN_PUBLISH = 2;
     private static final int TASKS_IN_FINISHUP = 1;
-
     private CGSettings settings;
     private XMultiServiceFactory xmsf;
-
     private ErrorHandler errorHandler;
-
-
     private String tempDir;
     private FileAccess fileAccess;
     private UCB ucb;
-
     public Task myTask;
-
     /**
      * This is a cache for exporters, so I do not need to
      * instanciate the same exporter more than once.
      */
     private Map exporters = new Hashtable(3);
-
     private boolean result;
 
     public Process(
-        CGSettings settings,
-        XMultiServiceFactory xmsf,
-        ErrorHandler er
-        )
-    throws Exception
+            CGSettings settings,
+            XMultiServiceFactory xmsf,
+            ErrorHandler er)
+            throws Exception
     {
         this.xmsf = xmsf;
         this.settings = settings;
@@ -138,21 +128,25 @@ public class Process implements WebWizardConst, ProcessErrors {
         ucb = new UCB(xmsf);
 
         int taskSteps = getTaskSteps();
-        myTask = new Task(TASK,TASK_PREPARE, taskSteps);
+        myTask = new Task(TASK, TASK_PREPARE, taskSteps);
 
     }
-
 
     /**
      * @return to how many destinations should the
      * generated site be published.
      */
-    private int countPublish() {
+    private int countPublish()
+    {
         int count = 0;
         ConfigSet publishers = settings.cp_DefaultSession.cp_Publishing;
-        for (int i = 0; i<publishers.getSize(); i++)
-            if (((CGPublish)publishers.getElementAt(i)).cp_Publish)
+        for (int i = 0; i < publishers.getSize(); i++)
+        {
+            if (((CGPublish) publishers.getElementAt(i)).cp_Publish)
+            {
                 count++;
+            }
+        }
         return count;
     }
 
@@ -160,20 +154,23 @@ public class Process implements WebWizardConst, ProcessErrors {
      * @return the number of task steps that this
      * session should have
      */
-    private int getTaskSteps() {
+    private int getTaskSteps()
+    {
         int docs = settings.cp_DefaultSession.cp_Content.cp_Documents.getSize();
         int xsl = 0;
-        try {
+        try
+        {
             xsl = settings.cp_DefaultSession.getLayout().getTemplates(xmsf).size();
         }
-        catch (Exception ex) {
+        catch (Exception ex)
+        {
         }
         int publish = countPublish();
         int taskSteps =
-                TASKS_IN_PREPARE    +
-                TASKS_IN_EXPORT     +       docs    *   TASKS_PER_DOC       +
-                TASKS_IN_GENERATE   +       xsl     *   TASKS_PER_XSL       +
-                TASKS_IN_PUBLISH    +       publish *   TASKS_PER_PUBLISH   +
+                TASKS_IN_PREPARE +
+                TASKS_IN_EXPORT + docs * TASKS_PER_DOC +
+                TASKS_IN_GENERATE + xsl * TASKS_PER_XSL +
+                TASKS_IN_PUBLISH + publish * TASKS_PER_PUBLISH +
                 TASKS_IN_FINISHUP;
         return taskSteps;
     }
@@ -181,37 +178,40 @@ public class Process implements WebWizardConst, ProcessErrors {
     /**
      * does the job
      */
-    public void runProcess() {
+    public void runProcess()
+    {
         myTask.start();
-        try {
-            try {
+        try
+        {
+            try
+            {
                 /*
                  * I use here '&&' so if one of the
                  * methods returns false, the next
                  * will not be called.
                  */
-                result = createTempDir(myTask)
-                  && export(myTask)
-                  && generate(tempDir,myTask)
-                  && publish(tempDir,myTask);
+                result = createTempDir(myTask) && export(myTask) && generate(tempDir, myTask) && publish(tempDir, myTask);
 
             }
-            finally {
+            finally
+            {
                 //cleanup must be called.
                 result = result & cleanup(myTask);
             }
         }
-        catch (Exception ex) {
+        catch (Exception ex)
+        {
             result = false;
         }
 
         if (!result)
-            myTask.fail();
-
-        //this is a bug protection.
+        {
+            myTask.fail();        //this is a bug protection.
+        }
         while (myTask.getStatus() < myTask.getMax())
+        {
             myTask.advance(true);
-
+        }
     }
 
     /**
@@ -219,14 +219,17 @@ public class Process implements WebWizardConst, ProcessErrors {
      * @param task
      * @return true should continue
      */
-    private boolean createTempDir(Task task) {
+    private boolean createTempDir(Task task)
+    {
 
         tempDir = fileAccess.createNewDir(getSOTempDir(xmsf), "wwiztemp");
-        if (tempDir == null) {
-            error(null,null,ERROR_MKDIR,ErrorHandler.ERROR_PROCESS_FATAL);
+        if (tempDir == null)
+        {
+            error(null, null, ERROR_MKDIR, ErrorHandler.ERROR_PROCESS_FATAL);
             return false;
         }
-        else {
+        else
+        {
             task.advance(true);
             return true;
         }
@@ -236,27 +239,33 @@ public class Process implements WebWizardConst, ProcessErrors {
      * @param xmsf
      * @return the staroffice /openoffice temporary directory
      */
-    static String getSOTempDir(XMultiServiceFactory xmsf) {
-        try {
-            String s = FileAccess.getOfficePath(xmsf,"Temp","", "");
+    static String getSOTempDir(XMultiServiceFactory xmsf)
+    {
+        try
+        {
+            String s = FileAccess.getOfficePath(xmsf, "Temp", "", "");
             return s;
         }
-        catch (Exception e) {}
+        catch (Exception e)
+        {
+        }
         return null;
     }
 
     // CLEANUP
-
     /**
      * delete the temporary directory
      * @return true should continue
      */
-    private boolean cleanup(Task task) {
+    private boolean cleanup(Task task)
+    {
 
         task.setSubtaskName(TASK_FINISH);
         boolean b = fileAccess.delete(tempDir);
         if (!b)
-            error(null,null,ERROR_CLEANUP,ErrorHandler.ERROR_WARNING);
+        {
+            error(null, null, ERROR_CLEANUP, ErrorHandler.ERROR_WARNING);
+        }
         task.advance(b);
         return b;
     }
@@ -284,29 +293,29 @@ public class Process implements WebWizardConst, ProcessErrors {
 //      }
 //      return success && fileAccess.delete(dir);
 //  }
-
-
     /**
      * This method is used to copy style files to a target
      * Directory: css and background.
      * Note that this method is static since it is
      * also used when displaying a "preview"
      */
-    public static void copyMedia(UCB copy, CGSettings settings, String targetDir, Task task ) throws Exception {
+    public static void copyMedia(UCB copy, CGSettings settings, String targetDir, Task task) throws Exception
+    {
 
         //1. .css
-        String sourceDir = FileAccess.connectURLs(settings.workPath , "styles");
+        String sourceDir = FileAccess.connectURLs(settings.workPath, "styles");
         String filename = settings.cp_DefaultSession.getStyle().cp_CssHref;
-        copy.copy(sourceDir,filename,targetDir,"style.css");
+        copy.copy(sourceDir, filename, targetDir, "style.css");
 
         task.advance(true);
 
         //2. background image
         String background = settings.cp_DefaultSession.cp_Design.cp_BackgroundImage;
-        if (background != null && !background.equals("")) {
+        if (background != null && !background.equals(""))
+        {
             sourceDir = FileAccess.getParentDir(background);
             filename = background.substring(sourceDir.length());
-            copy.copy(sourceDir,filename,targetDir + "/images","background.gif");
+            copy.copy(sourceDir, filename, targetDir + "/images", "background.gif");
         }
 
         task.advance(true);
@@ -323,11 +332,10 @@ public class Process implements WebWizardConst, ProcessErrors {
      * @throws Exception
      */
     public static void copyStaticImages(UCB copy, CGSettings settings, String targetDir)
-        throws Exception
+            throws Exception
     {
-        copy.copy(FileAccess.connectURLs(settings.workPath , "images") ,targetDir+"/images");
+        copy.copy(FileAccess.connectURLs(settings.workPath, "images"), targetDir + "/images");
     }
-
 
     /**
      * publish the given directory.
@@ -335,16 +343,19 @@ public class Process implements WebWizardConst, ProcessErrors {
      * @param task task tracking.
      * @return true if should continue
      */
-    private boolean publish(String dir, Task task ) {
+    private boolean publish(String dir, Task task)
+    {
         task.setSubtaskName(TASK_PUBLISH_PREPARE);
         ConfigSet set = settings.cp_DefaultSession.cp_Publishing;
-        try {
+        try
+        {
 
-            copyMedia(ucb, settings, dir,task);
-            copyStaticImages(ucb,settings,dir);
+            copyMedia(ucb, settings, dir, task);
+            copyStaticImages(ucb, settings, dir);
             task.advance(true);
         }
-        catch (Exception ex) {
+        catch (Exception ex)
+        {
             //error in copying media
             error(ex, "", ERROR_PUBLISH_MEDIA, ErrorHandler.ERROR_PROCESS_FATAL);
             return false;
@@ -352,19 +363,23 @@ public class Process implements WebWizardConst, ProcessErrors {
 
         boolean result = true;
 
-        for (int i = 0; i < set.getSize(); i++) {
+        for (int i = 0; i < set.getSize(); i++)
+        {
 
-            CGPublish p = (CGPublish)set.getElementAt(i);
+            CGPublish p = (CGPublish) set.getElementAt(i);
 
-            if (p.cp_Publish) {
+            if (p.cp_Publish)
+            {
 
-                String key = (String)set.getKey(p);
+                String key = (String) set.getKey(p);
                 task.setSubtaskName(key);
 
                 if (key.equals(ZIP_PUBLISHER))
+                {
                     fileAccess.delete(p.cp_URL);
-
-                if (!publish(dir, p, ucb, task)) {
+                }
+                if (!publish(dir, p, ucb, task))
+                {
                     return false;
                 }
 
@@ -383,63 +398,69 @@ public class Process implements WebWizardConst, ProcessErrors {
      * @param task task tracking
      * @return true if should continue
      */
-    private boolean publish(String dir,CGPublish publish,UCB copy,Task task) {
-        try {
+    private boolean publish(String dir, CGPublish publish, UCB copy, Task task)
+    {
+        try
+        {
             //copy.deleteDirContent(publish.url);
             task.advance(true);
-            copy.copy(dir,publish.url);
+            copy.copy(dir, publish.url);
             task.advance(true);
             return true;
-        } catch (Exception e) {
+        }
+        catch (Exception e)
+        {
             task.advance(false);
-            return error(e,publish, ERROR_PUBLISH,ErrorHandler.ERROR_NORMAL_IGNORE);
+            return error(e, publish, ERROR_PUBLISH, ErrorHandler.ERROR_NORMAL_IGNORE);
         }
     }
-
-
     //GENERATING METHODS
-
     /**
      * Generates the TOC pages for the current session.
      * @param targetDir generating to this directory.
      */
-    public boolean generate(String targetDir, Task task) {
+    public boolean generate(String targetDir, Task task)
+    {
         boolean result = false;
         task.setSubtaskName(TASK_GENERATE_PREPARE);
 
 
-            CGLayout layout = settings.cp_DefaultSession.getLayout();
+        CGLayout layout = settings.cp_DefaultSession.getLayout();
 
-            try {
-                /*
-                 * here I create the DOM of the TOC to pass to the XSL
-                 */
-                Document doc = (Document)settings.cp_DefaultSession.createDOM();
-                generate(xmsf,layout,doc ,fileAccess,targetDir,task);
-
-            }
-            catch (Exception ex) {
-                error(ex, "" , ERROR_GENERATE_XSLT ,ErrorHandler.ERROR_PROCESS_FATAL);
-                return false;
-            }
-
-            /* copy files which are not xsl from layout directory to
-             * website root.
+        try
+        {
+            /*
+             * here I create the DOM of the TOC to pass to the XSL
              */
-            try {
+            Document doc = (Document) settings.cp_DefaultSession.createDOM();
+            generate(xmsf, layout, doc, fileAccess, targetDir, task);
 
-                task.setSubtaskName(TASK_GENERATE_COPY);
+        }
+        catch (Exception ex)
+        {
+            error(ex, "", ERROR_GENERATE_XSLT, ErrorHandler.ERROR_PROCESS_FATAL);
+            return false;
+        }
 
-                copyLayoutFiles(ucb,fileAccess,settings,layout,targetDir);
+        /* copy files which are not xsl from layout directory to
+         * website root.
+         */
+        try
+        {
 
-                task.advance(true);
+            task.setSubtaskName(TASK_GENERATE_COPY);
 
-                result = true;
-            }
-            catch (Exception ex) {
-                task.advance(false);
-                return error(ex,null,ERROR_GENERATE_COPY,ErrorHandler.ERROR_NORMAL_ABORT);
-            }
+            copyLayoutFiles(ucb, fileAccess, settings, layout, targetDir);
+
+            task.advance(true);
+
+            result = true;
+        }
+        catch (Exception ex)
+        {
+            task.advance(false);
+            return error(ex, null, ERROR_GENERATE_COPY, ErrorHandler.ERROR_NORMAL_ABORT);
+        }
 
 
 
@@ -458,11 +479,11 @@ public class Process implements WebWizardConst, ProcessErrors {
      * @throws Exception
      */
     public static void copyLayoutFiles(UCB ucb, FileAccess fileAccess, CGSettings settings, CGLayout layout, String targetDir)
-        throws Exception
+            throws Exception
     {
         String filesPath = fileAccess.getURL(
-            FileAccess.connectURLs(settings.workPath ,  "layouts/"), layout.cp_FSName );
-        ucb.copy(filesPath,targetDir,new ExtensionVerifier("xsl"));
+                FileAccess.connectURLs(settings.workPath, "layouts/"), layout.cp_FSName);
+        ucb.copy(filesPath, targetDir, new ExtensionVerifier("xsl"));
 
     }
 
@@ -480,31 +501,32 @@ public class Process implements WebWizardConst, ProcessErrors {
      * @throws Exception
      */
     public static void generate(
-        XMultiServiceFactory xmsf,
-        CGLayout layout,
-        Document doc,
-        FileAccess fileAccess,
-        String targetPath,
-        Task task)
-        throws Exception
+            XMultiServiceFactory xmsf,
+            CGLayout layout,
+            Document doc,
+            FileAccess fileAccess,
+            String targetPath,
+            Task task)
+            throws Exception
     {
         /*
          * a map that contains xsl templates. the keys are the xsl file names.
          */
         Map templates = layout.getTemplates(xmsf);
 
-        task.advance(true,TASK_GENERATE_XSL);
+        task.advance(true, TASK_GENERATE_XSL);
 
         /*
          * each template generates a page.
          */
-        for (Iterator i = templates.keySet().iterator() ; i.hasNext(); ) {
+        for (Iterator i = templates.keySet().iterator(); i.hasNext();)
+        {
 
             String key = "";
 
-            key = (String)i.next();
+            key = (String) i.next();
 
-            Transformer transformer = ((Templates)templates.get(key)).newTransformer();
+            Transformer transformer = ((Templates) templates.get(key)).newTransformer();
 
             doc.normalize();
             task.advance(true);
@@ -513,7 +535,7 @@ public class Process implements WebWizardConst, ProcessErrors {
              * The target file name is like the xsl template filename
              * without the .xsl extension.
              */
-            String fn = fileAccess.getPath( targetPath, key.substring(0,key.length()-4));
+            String fn = fileAccess.getPath(targetPath, key.substring(0, key.length() - 4));
             File f = new File(fn);
             FileOutputStream oStream = new FileOutputStream(f);
             // Due to a problem occuring when using Xalan-Java 2.6.0 and
@@ -521,12 +543,11 @@ public class Process implements WebWizardConst, ProcessErrors {
             // StreamResult's getSystemId would return a "file:/..." URL while
             // the Xalan code expects a "file:///..." URL):
             transformer.transform(
-                new DOMSource(doc), new StreamResult(oStream) );
+                    new DOMSource(doc), new StreamResult(oStream));
             oStream.close();
             task.advance(true);
         }
     }
-
 
     /**
      * I broke the export method to two methods
@@ -535,7 +556,8 @@ public class Process implements WebWizardConst, ProcessErrors {
      * @param task
      * @return
      */
-    private boolean export(Task task) {
+    private boolean export(Task task)
+    {
 
         return export(settings.cp_DefaultSession.cp_Content, tempDir, task);
 
@@ -551,11 +573,13 @@ public class Process implements WebWizardConst, ProcessErrors {
      * @param task
      * @return true if should continue
      */
-    private boolean export(CGContent content, String dir, Task task) {
+    private boolean export(CGContent content, String dir, Task task)
+    {
         int toPerform = 1;
         String contentDir = dir;
 
-        try {
+        try
+        {
 
             task.setSubtaskName(TASK_EXPORT_PREPARE);
 
@@ -564,56 +588,68 @@ public class Process implements WebWizardConst, ProcessErrors {
              * is created in its own directory.
              * faileure here is fatal.
              */
-            contentDir = fileAccess.createNewDir(dir,content.cp_Name);
-            if (contentDir == null || contentDir.equals("") )
+            contentDir = fileAccess.createNewDir(dir, content.cp_Name);
+            if (contentDir == null || contentDir.equals(""))
+            {
                 throw new IOException("Directory " + dir + " could not be created.");
+            }
             content.dirName = FileAccess.getFilename(contentDir);
 
-            task.advance(true,TASK_EXPORT_DOCUMENTS);
+            task.advance(true, TASK_EXPORT_DOCUMENTS);
             toPerform--;
 
             /*2. export all documents and sub contents.
              * (at the moment, only documents, no subcontents)
              */
             Object item = null;
-            for (int i = 0; i < content.cp_Documents.getSize(); i++) {
-                try {
+            for (int i = 0; i < content.cp_Documents.getSize(); i++)
+            {
+                try
+                {
                     item = content.cp_Documents.getElementAt(i);
                     /*
                      * In present this is always the case.
                      * may be in the future, when
                      * a tree is used, it will be abit different.
                      */
-                    if (item instanceof CGDocument) {
-                        if (!export((CGDocument) item, contentDir,task))
-                          return false;
-                    }
-                    else
-                        /*
-                         * we never get here since we
-                         * did not implement sub-contents.
-                         */
-                        if (!export((CGContent) item, contentDir,task))
+                    if (item instanceof CGDocument)
+                    {
+                        if (!export((CGDocument) item, contentDir, task))
+                        {
                             return false;
+                        }
+                    }
+                    else /*
+                     * we never get here since we
+                     * did not implement sub-contents.
+                     */ if (!export((CGContent) item, contentDir, task))
+                    {
+                        return false;
+                    }
                 }
-                catch (SecurityException sx) {
+                catch (SecurityException sx)
+                {
                     // nonfatal
-                    if (!error(sx,item, ERROR_EXPORT_SECURITY,ErrorHandler.ERROR_NORMAL_IGNORE))
-                       return false;
+                    if (!error(sx, item, ERROR_EXPORT_SECURITY, ErrorHandler.ERROR_NORMAL_IGNORE))
+                    {
+                        return false;
+                    }
                     result = false;
                 }
             }
         }
-        catch (IOException iox) {
+        catch (IOException iox)
+        {
             //nonfatal
-            return error(iox,content,ERROR_EXPORT_IO,ErrorHandler.ERROR_NORMAL_IGNORE);
+            return error(iox, content, ERROR_EXPORT_IO, ErrorHandler.ERROR_NORMAL_IGNORE);
 
         }
-        catch (SecurityException se) {
+        catch (SecurityException se)
+        {
             //nonfatal
-            return error(se,content,ERROR_EXPORT_SECURITY,ErrorHandler.ERROR_NORMAL_IGNORE);
+            return error(se, content, ERROR_EXPORT_SECURITY, ErrorHandler.ERROR_NORMAL_IGNORE);
         }
-        failTask(task,toPerform);
+        failTask(task, toPerform);
         return true;
 
     }
@@ -625,23 +661,29 @@ public class Process implements WebWizardConst, ProcessErrors {
      * @param task task tracking
      * @return true if should continue
      */
-    private boolean export(CGDocument doc, String dir,Task task) {
+    private boolean export(CGDocument doc, String dir, Task task)
+    {
 
         //first I check if the document was already validated...
         if (!doc.valid)
-          try {
-            doc.validate(xmsf,null);
-          }
-          catch (Exception ex){
-            //fatal
-            error(ex,doc,ERROR_DOC_VALIDATE,ErrorHandler.ERROR_PROCESS_FATAL);
-            return false;
-          }
+        {
+            try
+            {
+                doc.validate(xmsf, null);
+            }
+            catch (Exception ex)
+            {
+                //fatal
+                error(ex, doc, ERROR_DOC_VALIDATE, ErrorHandler.ERROR_PROCESS_FATAL);
+                return false;
+            }
         //get the exporter specified for this document
-        CGExporter exporter = (CGExporter)settings.cp_Exporters.getElement(doc.cp_Exporter);
+        }
+        CGExporter exporter = (CGExporter) settings.cp_Exporters.getElement(doc.cp_Exporter);
 
 
-        try {
+        try
+        {
 
             /*
              * here I calculate the destination filename.
@@ -652,24 +694,23 @@ public class Process implements WebWizardConst, ProcessErrors {
             String docFilename = FileAccess.getFilename(doc.cp_URL);
 
             String docExt = FileAccess.getExtension(docFilename);
-            String fn = doc.localFilename.substring(0,doc.localFilename.length()-docExt.length()-1); //filename without extension
+            String fn = doc.localFilename.substring(0, doc.localFilename.length() - docExt.length() - 1); //filename without extension
 
             /*
              * the copyExporter does not change
              * the extension of the target...
              */
-            String destExt = (
-                exporter.cp_Extension.equals("")
-                ? FileAccess.getExtension(docFilename)
-                : exporter.cp_Extension
-            );
+            String destExt = (exporter.cp_Extension.equals("")
+                    ? FileAccess.getExtension(docFilename)
+                    : exporter.cp_Extension);
 
             /* if this filter needs to export to its own directory...
              * this is the case in, for example, impress html export
              */
-            if (exporter.cp_OwnDirectory) { //+++
-                  dir = fileAccess.createNewDir(dir, fn );
-                  doc.dirName = FileAccess.getFilename(dir);
+            if (exporter.cp_OwnDirectory)
+            { //+++
+                dir = fileAccess.createNewDir(dir, fn);
+                doc.dirName = FileAccess.getFilename(dir);
             }
 
             /*
@@ -678,7 +719,7 @@ public class Process implements WebWizardConst, ProcessErrors {
              * i get a new filename, so I do not
              * overwrite files...
              */
-            String file = fileAccess.getNewFile(dir,fn,destExt);
+            String file = fileAccess.getNewFile(dir, fn, destExt);
 
 
             /* set filename with extension.
@@ -689,7 +730,8 @@ public class Process implements WebWizardConst, ProcessErrors {
 
             task.advance(true);
 
-            try {
+            try
+            {
                 //export
                 getExporter(exporter).export(doc, file, xmsf, task);
                 task.advance(true);
@@ -699,16 +741,22 @@ public class Process implements WebWizardConst, ProcessErrors {
              * IllegalAccessException, InstantiationException, ClassNotFoundException
              * export() throws Exception
              */
-            catch (Exception ex) {
+            catch (Exception ex)
+            {
                 //nonfatal
                 if (!error(ex, doc, ERROR_EXPORT, ErrorHandler.ERROR_NORMAL_IGNORE))
-                  return false;
+                {
+                    return false;
+                }
             }
         }
-        catch (Exception ex) {
+        catch (Exception ex)
+        {
             //nonfatal
-            if (!error(ex,doc,ERROR_EXPORT_MKDIR,ErrorHandler.ERROR_NORMAL_ABORT))
-              return false;
+            if (!error(ex, doc, ERROR_EXPORT_MKDIR, ErrorHandler.ERROR_NORMAL_ABORT))
+            {
+                return false;
+            }
         }
 
         return true;
@@ -723,11 +771,11 @@ public class Process implements WebWizardConst, ProcessErrors {
      * @param errType error type
      * @return the interaction result
      */
-    private boolean error(Exception ex, Object arg1, int arg2, int errType) {
+    private boolean error(Exception ex, Object arg1, int arg2, int errType)
+    {
         result = false;
-        return errorHandler.error(ex,arg1,arg2,errType);
+        return errorHandler.error(ex, arg1, arg2, errType);
     }
-
 
     /**
      * advances the given task in the given count of steps,
@@ -735,9 +783,12 @@ public class Process implements WebWizardConst, ProcessErrors {
      * @param task the task to advance
      * @param count the number of steps to advance
      */
-    private void failTask(Task task, int count) {
+    private void failTask(Task task, int count)
+    {
         while (count-- > 0)
-          task.advance(false);
+        {
+            task.advance(false);
+        }
     }
 
     /**
@@ -751,9 +802,9 @@ public class Process implements WebWizardConst, ProcessErrors {
      * @throws InstantiationException
      */
     private Exporter createExporter(CGExporter export)
-        throws  ClassNotFoundException,
-                IllegalAccessException,
-                InstantiationException
+            throws ClassNotFoundException,
+            IllegalAccessException,
+            InstantiationException
     {
         Exporter e = (Exporter) Class.forName(export.cp_ExporterClass).newInstance();
         e.init(export);
@@ -772,14 +823,15 @@ public class Process implements WebWizardConst, ProcessErrors {
      * @throws InstantiationException thrown when using Class.forName(string)
      */
     private Exporter getExporter(CGExporter export)
-        throws  ClassNotFoundException,
-                IllegalAccessException,
-                InstantiationException
+            throws ClassNotFoundException,
+            IllegalAccessException,
+            InstantiationException
     {
-        Exporter exp = (Exporter)exporters.get(export);
-        if (exp == null) {
+        Exporter exp = (Exporter) exporters.get(export);
+        if (exp == null)
+        {
             exp = createExporter(export);
-            exporters.put(export,exp);
+            exporters.put(export, exp);
         }
         return exp;
     }
@@ -788,8 +840,8 @@ public class Process implements WebWizardConst, ProcessErrors {
      * @return tru if everything went smooth, false
      * if error(s) accured.
      */
-    public boolean getResult() {
+    public boolean getResult()
+    {
         return (myTask.getFailed() == 0) && result;
     }
-
 }

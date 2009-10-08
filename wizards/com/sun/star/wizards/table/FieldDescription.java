@@ -1,5 +1,5 @@
 /*************************************************************************
-*
+ *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
  * Copyright 2008 by Sun Microsystems, Inc.
@@ -45,8 +45,9 @@ import com.sun.star.wizards.common.Configuration;
 import com.sun.star.wizards.common.Desktop;
 import com.sun.star.wizards.common.Properties;
 
+public class FieldDescription
+{
 
-public class FieldDescription{
     int category;
     private String tablename = "";
 //  String fieldname;
@@ -63,7 +64,8 @@ public class FieldDescription{
     private XMultiServiceFactory xMSF;
     private Locale aLocale;
 
-    public FieldDescription(XMultiServiceFactory _xMSF, Locale _aLocale, ScenarioSelector _curscenarioselector, String _fieldname, String _keyname, int _nmaxcharCount){
+    public FieldDescription(XMultiServiceFactory _xMSF, Locale _aLocale, ScenarioSelector _curscenarioselector, String _fieldname, String _keyname, int _nmaxcharCount)
+    {
         xMSF = _xMSF;
         aLocale = _aLocale;
         category = _curscenarioselector.getCategory();
@@ -74,25 +76,32 @@ public class FieldDescription{
         xNameAccessTableNode = _curscenarioselector.oCGTable.xNameAccessFieldsNode;
         XNameAccess xNameAccessFieldNode;
         if (_curscenarioselector.bcolumnnameislimited)
-            xNameAccessFieldNode = Configuration.getChildNodebyDisplayName(xMSF, aLocale, xNameAccessTableNode,keyname, "ShortName", _nmaxcharCount);
+        {
+            xNameAccessFieldNode = Configuration.getChildNodebyDisplayName(xMSF, aLocale, xNameAccessTableNode, keyname, "ShortName", _nmaxcharCount);
+        }
         else
-            xNameAccessFieldNode = Configuration.getChildNodebyDisplayName(xMSF, aLocale, xNameAccessTableNode,keyname, "Name", _nmaxcharCount);
+        {
+            xNameAccessFieldNode = Configuration.getChildNodebyDisplayName(xMSF, aLocale, xNameAccessTableNode, keyname, "Name", _nmaxcharCount);
+        }
         setFieldProperties(xNameAccessFieldNode);
     }
 
-    public FieldDescription(String _fieldname){
+    public FieldDescription(String _fieldname)
+    {
         Name = _fieldname;
         aPropertyValues = new Vector();
         Type = new Integer(com.sun.star.sdbc.DataType.VARCHAR);
-        aPropertyValues.addElement(Properties.createProperty("Name", _fieldname) );
-        aPropertyValues.addElement(Properties.createProperty("Type", Type) );
+        aPropertyValues.addElement(Properties.createProperty("Name", _fieldname));
+        aPropertyValues.addElement(Properties.createProperty("Type", Type));
     }
 
-
-    public void setName(String _newfieldname){
-        for (int i = 0; i < aPropertyValues.size(); i++){
+    public void setName(String _newfieldname)
+    {
+        for (int i = 0; i < aPropertyValues.size(); i++)
+        {
             PropertyValue aPropertyValue = (PropertyValue) aPropertyValues.get(i);
-            if (aPropertyValue.Name.equals("Name")){
+            if (aPropertyValue.Name.equals("Name"))
+            {
                 aPropertyValue.Value = _newfieldname;
                 aPropertyValues.set(i, aPropertyValue);
                 Name = _newfieldname;
@@ -101,55 +110,74 @@ public class FieldDescription{
         }
     }
 
-    public String getName(){
+    public String getName()
+    {
         return Name;
     }
 
-    public String gettablename(){
+    public String gettablename()
+    {
         return tablename;
     }
 
-
-    private boolean propertyexists(String _propertyname){
-    boolean bexists = false;
-    try {
-        if (xPropertySet.getPropertySetInfo().hasPropertyByName(_propertyname)){
-            Object oValue = xPropertySet.getPropertyValue(_propertyname);
-            bexists = (!com.sun.star.uno.AnyConverter.isVoid(oValue));
+    private boolean propertyexists(String _propertyname)
+    {
+        boolean bexists = false;
+        try
+        {
+            if (xPropertySet.getPropertySetInfo().hasPropertyByName(_propertyname))
+            {
+                Object oValue = xPropertySet.getPropertyValue(_propertyname);
+                bexists = (!com.sun.star.uno.AnyConverter.isVoid(oValue));
+            }
         }
-    } catch (Exception e) {
-        e.printStackTrace(System.out);
-    }
-    return bexists;
+        catch (Exception e)
+        {
+            e.printStackTrace(System.out);
+        }
+        return bexists;
     }
 
-
-    public void setFieldProperties(XNameAccess _xNameAccessFieldNode){
-    try {
-        xPropertySet = (XPropertySet) UnoRuntime.queryInterface(XPropertySet.class, _xNameAccessFieldNode);
+    public void setFieldProperties(XNameAccess _xNameAccessFieldNode)
+    {
+        try
+        {
+            xPropertySet = (XPropertySet) UnoRuntime.queryInterface(XPropertySet.class, _xNameAccessFieldNode);
 //      Integer Index = (Integer) xPropertySet.getPropertyValue("Index");
-        if (propertyexists("Name"))
-            aPropertyValues.addElement(Properties.createProperty("Name", Name));
-
-        if (propertyexists("Type"))
-            aPropertyValues.addElement(Properties.createProperty("Type", (Integer) xPropertySet.getPropertyValue("Type")));
-        if (propertyexists("Scale"))
-            aPropertyValues.addElement(Properties.createProperty("Scale", (Integer) xPropertySet.getPropertyValue("Scale")));
+            if (propertyexists("Name"))
+            {
+                aPropertyValues.addElement(Properties.createProperty("Name", Name));
+            }
+            if (propertyexists("Type"))
+            {
+                aPropertyValues.addElement(Properties.createProperty("Type", (Integer) xPropertySet.getPropertyValue("Type")));
+            }
+            if (propertyexists("Scale"))
+            {
+                aPropertyValues.addElement(Properties.createProperty("Scale", (Integer) xPropertySet.getPropertyValue("Scale")));
 //          Scale =
-        if (propertyexists("Precision"))
-            aPropertyValues.addElement(Properties.createProperty("Precision", (Integer) xPropertySet.getPropertyValue("Precision")));
+            }
+            if (propertyexists("Precision"))
+            {
+                aPropertyValues.addElement(Properties.createProperty("Precision", (Integer) xPropertySet.getPropertyValue("Precision")));
 //          Precision = (Integer) xPropertySet.getPropertyValue("Precision");
-        if (propertyexists("DefaultValue"))
-            aPropertyValues.addElement(Properties.createProperty("DefaultValue",(Boolean) xPropertySet.getPropertyValue("DefaultValue")));
-//          DefaultValue = (Boolean) xPropertySet.getPropertyValue("DefaultValue");
-        //Type =  new Integer(4); // TODO wo ist der Fehler?(Integer) xPropertySet.getPropertyValue("Type");
-    } catch (Exception e) {
-        e.printStackTrace(System.out);
-    }}
+            }
+            if (propertyexists("DefaultValue"))
+            {
+                aPropertyValues.addElement(Properties.createProperty("DefaultValue", (Boolean) xPropertySet.getPropertyValue("DefaultValue")));//          DefaultValue = (Boolean) xPropertySet.getPropertyValue("DefaultValue");
+            //Type =  new Integer(4); // TODO wo ist der Fehler?(Integer) xPropertySet.getPropertyValue("Type");
+            }
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace(System.out);
+        }
+    }
 
-
-    public PropertyValue[] getPropertyValues(){
-        if (aPropertyValues != null){
+    public PropertyValue[] getPropertyValues()
+    {
+        if (aPropertyValues != null)
+        {
             PropertyValue[] aProperties = new PropertyValue[aPropertyValues.size()];
             aPropertyValues.toArray(aProperties);
             return aProperties;

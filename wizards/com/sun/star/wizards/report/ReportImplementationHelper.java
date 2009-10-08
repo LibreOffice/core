@@ -9,7 +9,7 @@
  *
  * $RCSfile: ReportImplementationHelper.java,v $
  *
- * $Revision: 1.2 $
+ * $Revision: 1.2.36.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -29,7 +29,6 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-
 package com.sun.star.wizards.report;
 
 import com.sun.star.lang.XMultiServiceFactory;
@@ -41,6 +40,7 @@ import com.sun.star.wizards.db.RecordParser;
  */
 public class ReportImplementationHelper
 {
+
     private RecordParser m_aCurDBMetaData;
     private XMultiServiceFactory m_xMSF;
     protected int m_nDefaultPageOrientation;
@@ -64,9 +64,9 @@ public class ReportImplementationHelper
         }
         return m_aCurDBMetaData;
     }
+
     public XMultiServiceFactory getMSF()
     {
         return m_xMSF;
     }
-
 }

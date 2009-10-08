@@ -60,8 +60,9 @@ namespace frm
 #define PROPERTY_ID_ALLOWEDITS          (PROPERTY_ID_START + 16)
 #define PROPERTY_ID_ALLOWDELETIONS      (PROPERTY_ID_START + 17)
 #define PROPERTY_ID_NATIVE_LOOK         (PROPERTY_ID_START + 18)
-    // free
-    // free
+#define PROPERTY_ID_INPUT_REQUIRED      (PROPERTY_ID_START + 19)
+#define PROPERTY_ID_WRITING_MODE        (PROPERTY_ID_START + 20)
+#define PROPERTY_ID_CONTEXT_WRITING_MODE    (PROPERTY_ID_START + 21)
     // free
     // free
     // free

@@ -9,7 +9,7 @@
  *
  * $RCSfile: ReportBuilderImplementation.java,v $
  *
- * $Revision: 1.2 $
+ * $Revision: 1.2.36.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -29,7 +29,6 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-
 package com.sun.star.wizards.reportbuilder;
 
 // import com.sun.star.deployment.XPackageInformationProvider;
@@ -70,30 +69,28 @@ import java.util.Vector;
 // import com.sun.star.wizards.ui.UIConsts;
 import com.sun.star.wizards.common.FileAccess;
 // import com.sun.star.wizards.common.Configuration;
-
-
 /**
  * This class use the IReportDocument Interface to communicate between the UI
  * and the ReportBuilderLayouter which communicates to the new Sun Report Builder.
  *
  * @author ll93751
  */
-public class ReportBuilderImplementation  extends ReportImplementationHelper
+public class ReportBuilderImplementation extends ReportImplementationHelper
         implements IReportDocument, IReportDefinitionReadAccess
 {
+
     private static final int MAXIMUM_GROUPCOUNT = 4;
 //    public ReportTextDocument getDoc()
 //    {
 //        throw new UnsupportedOperationException("Not supported yet.");
 //    }
-
     public void clearDocument()
     {
         // throw new UnsupportedOperationException("Not supported yet.");
     }
-
     private Resource m_aResource;
-    public  ReportBuilderImplementation()
+
+    public ReportBuilderImplementation()
     {
         // super(null, ReportLayouter.SOOPTPORTRAIT);
         super(null, ReportLayouter.SOOPTLANDSCAPE);
@@ -126,20 +123,18 @@ public class ReportBuilderImplementation  extends ReportImplementationHelper
 //    {
 //        throw new UnsupportedOperationException("Not supported yet.");
 //    }
-
     public XWindowPeer getWizardParent()
     {
         // throw new UnsupportedOperationException("Not supported yet.");
         // com.sun.star.frame.XFrame xFrame = thisComponent;
-            // openReportBuilderView();
-            // XInterface xInterface = (XInterface) getMSF().createInstance("com.sun.star.frame.Desktop");
-            // XDesktop xDesktop = (XDesktop) UnoRuntime.queryInterface(XDesktop.class, xInterface);
-            // XFrame xFrame = xDesktop.getCurrentFrame();
+        // openReportBuilderView();
+        // XInterface xInterface = (XInterface) getMSF().createInstance("com.sun.star.frame.Desktop");
+        // XDesktop xDesktop = (XDesktop) UnoRuntime.queryInterface(XDesktop.class, xInterface);
+        // XFrame xFrame = xDesktop.getCurrentFrame();
 
         final XWindowPeer aWindowPeer = (XWindowPeer) UnoRuntime.queryInterface(XWindowPeer.class, getFrame().getComponentWindow());
         return aWindowPeer;
     }
-
     private XFrame m_xFrame = null;
     // private ReportBuilderLayouter m_aReportBuilderLayouter = null;
     private String m_sReportBuilderLayoutName = "";
@@ -153,17 +148,15 @@ public class ReportBuilderImplementation  extends ReportImplementationHelper
     {
         // if (m_aReportBuilderLayouter == null)
         // {
-            // m_aReportBuilderLayouter = ReportBuilderLayouter.create(getRecordParser().getReportDocuments(), getConnection());
-            // m_aReportBuilderLayouter = ReportBuilderLayouter.create(m_xReportDefinition /* , getConnection() */ );
-        final IReportBuilderLayouter aReportBuilderLayouter = (IReportBuilderLayouter)getLayoutMap().get(m_sReportBuilderLayoutName);
+        // m_aReportBuilderLayouter = ReportBuilderLayouter.create(getRecordParser().getReportDocuments(), getConnection());
+        // m_aReportBuilderLayouter = ReportBuilderLayouter.create(m_xReportDefinition /* , getConnection() */ );
+        final IReportBuilderLayouter aReportBuilderLayouter = (IReportBuilderLayouter) getLayoutMap().get(m_sReportBuilderLayoutName);
         return aReportBuilderLayouter;
-        // }
+    // }
     }
-
     private Object m_aReportDocument;
     private XPropertySet m_aDocumentDefinition;
     private XReportDefinition m_xReportDefinition;
-
 
     /**
      * initialize the Report Builder and open it representation
@@ -189,14 +182,14 @@ public class ReportBuilderImplementation  extends ReportImplementationHelper
         args[1] = aConnection;
 
         XReportDefinition xReportDefinition = null;
-        final XMultiServiceFactory xMSF = (XMultiServiceFactory)UnoRuntime.queryInterface(XMultiServiceFactory.class, /* getRecordParser().getReportDocuments() */ _aDoc );
+        final XMultiServiceFactory xMSF = (XMultiServiceFactory) UnoRuntime.queryInterface(XMultiServiceFactory.class, /* getRecordParser().getReportDocuments() */ _aDoc);
         try
         {
             final Object aObj = xMSF.createInstanceWithArguments("com.sun.star.sdb.DocumentDefinition", args);
-            final XPropertySet aDocumentDefinition = (XPropertySet)UnoRuntime.queryInterface(XPropertySet.class, aObj);
+            final XPropertySet aDocumentDefinition = (XPropertySet) UnoRuntime.queryInterface(XPropertySet.class, aObj);
             m_aDocumentDefinition = aDocumentDefinition;
 
-            final XCommandProcessor xProcessor = (XCommandProcessor)UnoRuntime.queryInterface(XCommandProcessor.class, aObj);
+            final XCommandProcessor xProcessor = (XCommandProcessor) UnoRuntime.queryInterface(XCommandProcessor.class, aObj);
             final com.sun.star.ucb.Command aCommand = new com.sun.star.ucb.Command();
             aCommand.Name = "openDesign";
             final com.sun.star.ucb.OpenCommandArgument2 aOpenCommand = new com.sun.star.ucb.OpenCommandArgument2();
@@ -204,7 +197,7 @@ public class ReportBuilderImplementation  extends ReportImplementationHelper
             aCommand.Argument = aOpenCommand;
             // com.sun.star.usb.XCommandEnvironment xEnv = new com.sun.star.ucb.XCommandEnvironment();
             final Object aObj2 = xProcessor.execute(aCommand, xProcessor.createCommandIdentifier(), null);
-            xReportDefinition = (XReportDefinition)UnoRuntime.queryInterface(XReportDefinition.class, aObj2 );
+            xReportDefinition = (XReportDefinition) UnoRuntime.queryInterface(XReportDefinition.class, aObj2);
         }
         catch (com.sun.star.uno.Exception e)
         {
@@ -214,23 +207,24 @@ public class ReportBuilderImplementation  extends ReportImplementationHelper
         switchOffPropertyBrowser();
         switchOffAddFieldWindow();
 
-        setPageOrientation(m_nDefaultPageOrientation, false /* NO_LAYOUT*/ );
-        // try
-        // {
-        //     Thread.sleep(1000);
-        // }
-        // catch (java.lang.InterruptedException e)
-        // {
-        // }
+        setPageOrientation(m_nDefaultPageOrientation, false /* NO_LAYOUT*/);
+    // try
+    // {
+    //     Thread.sleep(1000);
+    // }
+    // catch (java.lang.InterruptedException e)
+    // {
+    // }
 
     }
 
     private XModeSelector getModeSelector()
     {
         final XController xController = getReportDefinition().getCurrentController();
-        final XModeSelector xModeSelector = (XModeSelector)UnoRuntime.queryInterface(XModeSelector.class, xController);
+        final XModeSelector xModeSelector = (XModeSelector) UnoRuntime.queryInterface(XModeSelector.class, xController);
         return xModeSelector;
     }
+
     private void switchOffAddFieldWindow()
     {
         try
@@ -242,6 +236,7 @@ public class ReportBuilderImplementation  extends ReportImplementationHelper
             int dummy = 0;
         }
     }
+
     private void switchOnAddFieldWindow()
     {
         try
@@ -256,25 +251,26 @@ public class ReportBuilderImplementation  extends ReportImplementationHelper
 
     private void sleep(int _nSeconds)
     {
-         try
-         {
-             Thread.sleep(_nSeconds * 1000);
-         }
-         catch (java.lang.InterruptedException e)
-         {
-         }
+        try
+        {
+            Thread.sleep(_nSeconds * 1000);
+        }
+        catch (java.lang.InterruptedException e)
+        {
+        }
 
     }
+
     private void switchOffPropertyBrowser()
     {
         try
         {
             final XController xController = getReportDefinition().getCurrentController();
-            final XDispatchProvider xDP = (XDispatchProvider)UnoRuntime.queryInterface(XDispatchProvider.class, xController);
+            final XDispatchProvider xDP = (XDispatchProvider) UnoRuntime.queryInterface(XDispatchProvider.class, xController);
 
             // Create special service for parsing of given URL.
             final Object aURLTransformer = getMSF().createInstance("com.sun.star.util.URLTransformer");
-            final XURLTransformer xURLTransformer = (XURLTransformer)UnoRuntime.queryInterface(com.sun.star.util.XURLTransformer.class, aURLTransformer );
+            final XURLTransformer xURLTransformer = (XURLTransformer) UnoRuntime.queryInterface(com.sun.star.util.XURLTransformer.class, aURLTransformer);
 
             com.sun.star.util.URL[] aURL = new com.sun.star.util.URL[1];
             aURL[0] = new com.sun.star.util.URL();
@@ -291,16 +287,16 @@ public class ReportBuilderImplementation  extends ReportImplementationHelper
         }
     }
 
-private void switchOnPropertyBrowser()
-{
-    // This is implemented with a toggle algorithm.
-    switchOffPropertyBrowser();
-}
+    private void switchOnPropertyBrowser()
+    {
+        // This is implemented with a toggle algorithm.
+        switchOffPropertyBrowser();
+    }
 
-/**
- * Returns the Frame of the underlieing Document
- * @return Returns the Frame of the parent (underlieing) Document
- */
+    /**
+     * Returns the Frame of the underlieing Document
+     * @return Returns the Frame of the parent (underlieing) Document
+     */
     public XFrame getFrame()
     {
         if (m_xFrame == null)
@@ -308,7 +304,7 @@ private void switchOnPropertyBrowser()
             initialize(getRecordParser().getReportDocuments(), getConnection());
             // m_xFrame = getFrame();
             m_xFrame = getReportDefinition().getCurrentController().getFrame();
-            setPageOrientation(m_nDefaultPageOrientation, true /* NO_LAYOUT*/ );
+            setPageOrientation(m_nDefaultPageOrientation, true /* NO_LAYOUT*/);
         }
         return m_xFrame;
     }
@@ -322,7 +318,6 @@ private void switchOnPropertyBrowser()
 //    {
 //        throw new UnsupportedOperationException("Not supported yet.");
 //    }
-
     public boolean reconnectToDatabase(XMultiServiceFactory xMSF, PropertyValue[] Properties)
     {
         throw new UnsupportedOperationException("Not supported yet.");
@@ -343,7 +338,7 @@ private void switchOnPropertyBrowser()
         // throw new UnsupportedOperationException("Not supported yet.");
         // getReportBuilderLayouter().store(Name);
         // store into the ZIP Storage
-        if (OpenMode == 1 /* static Report */ )
+        if (OpenMode == 1 /* static Report */)
         {
             // we will store later
             return;
@@ -351,18 +346,18 @@ private void switchOnPropertyBrowser()
 
         try
         {
-            final XNameAccess aNameAccess = (XNameAccess)UnoRuntime.queryInterface(XNameAccess.class, m_aReportDocument);
+            final XNameAccess aNameAccess = (XNameAccess) UnoRuntime.queryInterface(XNameAccess.class, m_aReportDocument);
             final String[] aNames = aNameAccess.getElementNames();
 
 //            m_xReportDefinition.storeToStorage(m_xReportDefinition.getDocumentStorage(), m_xReportDefinition.getArgs());
 
-            final XCommandProcessor xProcessor = (XCommandProcessor)UnoRuntime.queryInterface(XCommandProcessor.class, m_aDocumentDefinition);
+            final XCommandProcessor xProcessor = (XCommandProcessor) UnoRuntime.queryInterface(XCommandProcessor.class, m_aDocumentDefinition);
             com.sun.star.ucb.Command aCommand = new com.sun.star.ucb.Command();
             aCommand.Name = "storeOwn";
 
             final Object aObj2 = xProcessor.execute(aCommand, xProcessor.createCommandIdentifier(), null);
 
-            final XNameContainer aNameContainer = (XNameContainer)UnoRuntime.queryInterface(XNameContainer.class, m_aReportDocument);
+            final XNameContainer aNameContainer = (XNameContainer) UnoRuntime.queryInterface(XNameContainer.class, m_aReportDocument);
 //             aNameContainer.insertByName(Name, m_xReportDefinition);
             aNameContainer.insertByName(Name, m_aDocumentDefinition);
         }
@@ -380,7 +375,7 @@ private void switchOnPropertyBrowser()
         {
             // removeGroupNamesofRecordTable(iSelCount);
             final FieldColumn CurFieldColumn = getRecordParser().getFieldColumnByTitle(CurGroupTitle);
-            GroupFieldVector.addElement(CurFieldColumn.FieldName);
+            GroupFieldVector.addElement(CurFieldColumn.m_sFieldName);
         }
         return true;
     }
@@ -394,12 +389,11 @@ private void switchOnPropertyBrowser()
 //    {
 //        throw new UnsupportedOperationException("Not supported yet.");
 //    }
-
     public void liveupdate_removeGroupName(String[] NewSelGroupNames, String CurGroupTitle, Vector GroupFieldVector)
     {
         // throw new UnsupportedOperationException("Not supported yet.");
         final FieldColumn CurFieldColumn = getRecordParser().getFieldColumnByTitle(CurGroupTitle);
-        GroupFieldVector.removeElement(CurFieldColumn.FieldName);
+        GroupFieldVector.removeElement(CurFieldColumn.m_sFieldName);
     }
 
     private void setPageOrientation(int nOrientation, boolean bDoLayout)
@@ -410,6 +404,7 @@ private void switchOnPropertyBrowser()
             getReportBuilderLayouter().layout();
         }
     }
+
     public void setPageOrientation(int nOrientation)
     {
         // throw new UnsupportedOperationException("Not supported yet.");
@@ -435,7 +430,7 @@ private void switchOnPropertyBrowser()
     public void setReportBuilderLayouterName(String _sName)
     {
         final IReportBuilderLayouter aCurrentLayouter = getReportBuilderLayouter();
-        final IReportBuilderLayouter aNewLayouter = (IReportBuilderLayouter)m_aLayoutMap.get(_sName);
+        final IReportBuilderLayouter aNewLayouter = (IReportBuilderLayouter) m_aLayoutMap.get(_sName);
         if (aNewLayouter != null)
         {
             m_sReportBuilderLayoutName = _sName;
@@ -443,12 +438,14 @@ private void switchOnPropertyBrowser()
             aNewLayouter.layout();
         }
     }
+
     public void liveupdate_changeContentTemplate(String ContentTemplatePath)
     {
         // throw new UnsupportedOperationException("Not supported yet.");
         /* Left Listbox */
         setReportBuilderLayouterName(ContentTemplatePath);
     }
+
     public void layout_setupRecordSection(String TemplateName)
     {
         // throw new UnsupportedOperationException("Not supported yet.");
@@ -480,12 +477,12 @@ private void switchOnPropertyBrowser()
             // XDispatchProvider xDispatcher = (XDispatchProvider)UnoRuntime.queryInterface(XDispatchProvider.class, xController);
             // xDispatcher.queryDispatch();
 
-            final XComponent xDocumentComponent = (XComponent)UnoRuntime.queryInterface(XComponent.class, m_aDocumentDefinition);
+            final XComponent xDocumentComponent = (XComponent) UnoRuntime.queryInterface(XComponent.class, m_aDocumentDefinition);
             xDocumentComponent.dispose();
             m_xReportDefinition = null;
 
-            // TODO: dispose() office will be killed.
-            // m_xReportDefinition.dispose();
+        // TODO: dispose() office will be killed.
+        // m_xReportDefinition.dispose();
         }
         catch (Exception e)
         {
@@ -514,7 +511,6 @@ private void switchOnPropertyBrowser()
 //    {
 //        throw new UnsupportedOperationException("Not supported yet.");
 //    }
-
     public void addReportToDBView()
     {
         // throw new UnsupportedOperationException("Not supported yet.");
@@ -540,13 +536,17 @@ private void switchOnPropertyBrowser()
 //            // aProperties[1].Value = Integer.valueOf(com.sun.star.ucb.OpenMode.DOCUMENT);
             aProperties[1].Value = aOpenCommand;
 
-            final XCommandProcessor xProcessor = (XCommandProcessor)UnoRuntime.queryInterface(XCommandProcessor.class, m_aDocumentDefinition);
+//            aProperties[2] = new PropertyValue();
+//            aProperties[2].Name = "Title"; // This name is 'Schall und Rauch'
+//            aProperties[2].Value = Name;
+
+            final XCommandProcessor xProcessor = (XCommandProcessor) UnoRuntime.queryInterface(XCommandProcessor.class, m_aDocumentDefinition);
             com.sun.star.ucb.Command aCommand = new com.sun.star.ucb.Command();
             aCommand.Name = "open";
             aCommand.Argument = aProperties;
 
             final Object aObj2 = xProcessor.execute(aCommand, xProcessor.createCommandIdentifier(), null);
-            xComponents[0] = (XComponent)UnoRuntime.queryInterface(XComponent.class, aObj2);
+            xComponents[0] = (XComponent) UnoRuntime.queryInterface(XComponent.class, aObj2);
         }
         catch (com.sun.star.uno.Exception e)
         {
@@ -560,13 +560,13 @@ private void switchOnPropertyBrowser()
         // XComponent[] xComponents = getReportBuilderLayouter().createFinalReportDocument(Name, getRecordParser().DBConnection ,_bAsTemplate, _bOpenInDesign);
         if (_bAsTemplate == true && _bOpenInDesign == false)
         {
-            final XComponent[] xComponents = createFinalReportDocument(Name, getRecordParser().DBConnection ,_bAsTemplate, _bOpenInDesign);
+            final XComponent[] xComponents = createFinalReportDocument(Name, getRecordParser().DBConnection, _bAsTemplate, _bOpenInDesign);
             dispose();
             return xComponents;
         }
         else if (_bAsTemplate == false)
         {
-            final XComponent[] xComponents = createFinalReportDocument(Name, getRecordParser().DBConnection ,_bAsTemplate, _bOpenInDesign);
+            final XComponent[] xComponents = createFinalReportDocument(Name, getRecordParser().DBConnection, _bAsTemplate, _bOpenInDesign);
             boolean bDocisStored = getRecordParser().storeDatabaseDocumentToTempPath(xComponents[0], Name);
             if (bDocisStored)
             {
@@ -597,7 +597,7 @@ private void switchOnPropertyBrowser()
         final com.sun.star.wizards.db.RecordParser a = getRecordParser();
         int[] FieldTypes = new int[FieldNames.length];
         int[] FieldWidths = new int[FieldNames.length];
-        for (int i=0;i<FieldNames.length;i++)
+        for (int i = 0; i < FieldNames.length; i++)
         {
             FieldTypes[i] = a.FieldColumns[i].FieldType;
             FieldWidths[i] = a.FieldColumns[i].FieldWidth;
@@ -622,9 +622,10 @@ private void switchOnPropertyBrowser()
 
     public void setSorting(String[][] _aSortFieldNames)
     {
-        getRecordParser().setSortFieldNames( _aSortFieldNames );
+        getRecordParser().setSortFieldNames(_aSortFieldNames);
 //        getRecordParser().createRecordFieldNames();
     }
+
     public void setGrouping(String[] _aGroupFieldNames)
     {
         getRecordParser().prependSortFieldNames(_aGroupFieldNames);
@@ -643,11 +644,12 @@ private void switchOnPropertyBrowser()
         return "default";
     }
     private ArrayList m_aReportPath;
+
     public ArrayList getReportPath()
     {
         if (m_aReportPath == null)
         {
-        // Check general availability of office paths
+            // Check general availability of office paths
             try
             {
                 m_aReportPath = FileAccess.getOfficePaths(getMSF(), "Template", "share", "/wizard");
@@ -658,12 +660,14 @@ private void switchOnPropertyBrowser()
             }
         }
         return m_aReportPath;
-        // return "";
+    // return "";
     }
+
     public String getContentPath()
     {
         return "";
     }
+
     public int getDefaultPageOrientation()
     {
         return m_nDefaultPageOrientation;
@@ -682,11 +686,14 @@ private void switchOnPropertyBrowser()
             // TODO: Use Package.getPackages(...)
             final Class a = Class.forName(_sClassName);
 
-            final Constructor cTor = a.getConstructor(new Class[]{IReportDefinitionReadAccess.class, Resource.class});
+            final Constructor cTor = a.getConstructor(new Class[]
+                    {
+                        IReportDefinitionReadAccess.class, Resource.class
+                    });
             Object[] aParams = new Object[2];
             aParams[0] = this;
             aParams[1] = m_aResource;
-            final IReportBuilderLayouter aReportBuilderLayouter = (IReportBuilderLayouter)cTor.newInstance(aParams);
+            final IReportBuilderLayouter aReportBuilderLayouter = (IReportBuilderLayouter) cTor.newInstance(aParams);
             return aReportBuilderLayouter;
         }
         catch (Exception e)
@@ -723,7 +730,6 @@ private void switchOnPropertyBrowser()
 //            }
         return null;
     }
-
     private LinkedHashMap m_aLayoutMap = null;
 
     private void insertIntoLayoutMap(IReportBuilderLayouter _aLayout)
@@ -743,6 +749,7 @@ private void switchOnPropertyBrowser()
             m_aLayoutMap.put(sName, _aLayout);
         }
     }
+
     /**
      * Initialize all well known com.sun.star.wizards.report.layout.ReportBuilderLayouter Objects and create exact one instance.
      */
@@ -771,17 +778,17 @@ private void switchOnPropertyBrowser()
         return m_aLayoutMap;
     }
 
-/**
- * Return a string array array with all found layouts
- * At the moment these layout are hard coded
- * @return
- */
+    /**
+     * Return a string array array with all found layouts
+     * At the moment these layout are hard coded
+     * @return
+     */
     public String[][] getDataLayout()
     {
         String[][] ContentFiles;
         ContentFiles = new String[2][];
-        String[] a = new String[ getLayoutMap().size() ];
-        String[] b = new String[ getLayoutMap().size() ];
+        String[] a = new String[getLayoutMap().size()];
+        String[] b = new String[getLayoutMap().size()];
 
         // run through the whole layoutmap and
         final Set aKeys = getLayoutMap().keySet();
@@ -789,9 +796,9 @@ private void switchOnPropertyBrowser()
         int i = 0;
         while (aKeyIterator.hasNext())
         {
-            final String sKey = (String)aKeyIterator.next();
+            final String sKey = (String) aKeyIterator.next();
             a[i] = sKey;
-            final IReportBuilderLayouter aLayouter = (IReportBuilderLayouter)m_aLayoutMap.get(sKey);
+            final IReportBuilderLayouter aLayouter = (IReportBuilderLayouter) m_aLayoutMap.get(sKey);
             b[i++] = aLayouter.getLocalizedName();
         }
 
@@ -799,16 +806,15 @@ private void switchOnPropertyBrowser()
         ContentFiles[0] = b;
         return ContentFiles;
     }
-
-
     private String m_sDefaultHeaderLayoutPath;
+
     public String[][] getHeaderLayout()
     {
         String[][] LayoutFiles;
         try
         {
             // TODO: check different languages in header layouts
-            ArrayList aReportPath = FileAccess.getOfficePaths(getMSF(), "Template","share", "/wizard");
+            ArrayList aReportPath = FileAccess.getOfficePaths(getMSF(), "Template", "share", "/wizard");
             FileAccess.combinePaths(getMSF(), aReportPath, "/wizard/report");
 
             LayoutFiles = FileAccess.getFolderTitles(getMSF(), null, aReportPath, ".otr");
@@ -824,7 +830,7 @@ private void switchOnPropertyBrowser()
             LayoutFiles[1] = a;
             LayoutFiles[0] = b;
         }
-        for (int i=0;i<LayoutFiles[0].length;i++)
+        for (int i = 0; i < LayoutFiles[0].length; i++)
         {
             if (LayoutFiles[0][i].equals("default"))
             {
@@ -863,13 +869,13 @@ private void switchOnPropertyBrowser()
     {
         getRecordParser().Command = _sCommand;
         getReportDefinition().setCommand(_sCommand);
-        // throw new UnsupportedOperationException("Not supported yet.");
+    // throw new UnsupportedOperationException("Not supported yet.");
     }
+
     public void setCommandType(int _nCommand)
     {
         getReportDefinition().setCommandType(_nCommand);
     }
-
 }
 
 

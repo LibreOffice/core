@@ -37,25 +37,30 @@ import com.sun.star.wizards.common.*;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 
+public class CGSession extends ConfigSetItem implements XMLProvider
+{
 
-public class CGSession   extends ConfigSetItem implements XMLProvider {
-    public String        cp_InDirectory;
-    public String        cp_OutDirectory;
-    public String        cp_Name;
-
-    public CGContent     cp_Content = new CGContent();
-    public CGDesign      cp_Design = new CGDesign();
+    public String cp_InDirectory;
+    public String cp_OutDirectory;
+    public String cp_Name;
+    public CGContent cp_Content = new CGContent();
+    public CGDesign cp_Design = new CGDesign();
     public CGGeneralInfo cp_GeneralInfo = new CGGeneralInfo();
-    public ConfigSet     cp_Publishing = new ConfigSet(CGPublish.class);
+    public ConfigSet cp_Publishing = new ConfigSet(CGPublish.class);
+    public CGStyle style; // !!!
+    public boolean valid = false;
 
-
-    public CGStyle       style; // !!!
-    public boolean       valid = false;
-
-    public Node createDOM(Node parent) {
+    public Node createDOM(Node parent)
+    {
         Node root = XMLHelper.addElement(parent, "session",
-            new String[] { "name" , "screen-size" },
-            new String[] { cp_Name , getScreenSize() } );
+                new String[]
+                {
+                    "name", "screen-size"
+                },
+                new String[]
+                {
+                    cp_Name, getScreenSize()
+                });
 
         //cp_Design.createDOM(root);
         cp_GeneralInfo.createDOM(root);
@@ -65,33 +70,42 @@ public class CGSession   extends ConfigSetItem implements XMLProvider {
         return root;
     }
 
-    private String getScreenSize() {
-        switch (cp_Design.cp_OptimizeDisplaySize) {
-            case 0 : return "640";
-            case 1 : return "800";
-            case 2 : return "1024";
-            default : return "800";
+    private String getScreenSize()
+    {
+        switch (cp_Design.cp_OptimizeDisplaySize)
+        {
+            case 0:
+                return "640";
+            case 1:
+                return "800";
+            case 2:
+                return "1024";
+            default:
+                return "800";
         }
     }
 
-    public CGLayout getLayout() {
-        return (CGLayout)((CGSettings)root).cp_Layouts.getElement(cp_Design.cp_Layout);
+    public CGLayout getLayout()
+    {
+        return (CGLayout) ((CGSettings) root).cp_Layouts.getElement(cp_Design.cp_Layout);
     }
 
-    public CGStyle getStyle() {
-       return (CGStyle)((CGSettings)root).cp_Styles.getElement(cp_Design.cp_Style);
+    public CGStyle getStyle()
+    {
+        return (CGStyle) ((CGSettings) root).cp_Styles.getElement(cp_Design.cp_Style);
     }
 
-    public void setLayout(short[] layout) {
+    public void setLayout(short[] layout)
+    {
         //dummy
     }
 
     public Node createDOM()
-        throws ParserConfigurationException
+            throws ParserConfigurationException
     {
 
         DocumentBuilderFactory factory =
-            DocumentBuilderFactory.newInstance();
+                DocumentBuilderFactory.newInstance();
         Document doc = factory.newDocumentBuilder().newDocument();
         createDOM(doc);
         return doc;

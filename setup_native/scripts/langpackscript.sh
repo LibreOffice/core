@@ -46,28 +46,30 @@ done
 
 case $platform in
 SunOS)
-  SEARCHPACKAGENAME="openofficeorg-core01"
+  SEARCHPACKAGENAME="BASISPACKAGEPREFIXPLACEHOLDEROOOBASEVERSIONPLACEHOLDER-core01"
   echo
-  echo "Searching for the $SEARCHPACKAGENAME installation ..."
+  echo "Searching for the FULLPRODUCTNAMELONGPLACEHOLDER installation ..."
   PACKAGENAME=`pkginfo -x | grep $SEARCHPACKAGENAME | sed "s/ .*//"`
   if [ "x$PACKAGENAME" != "x" ]
   then
     PRODUCTINSTALLLOCATION="`pkginfo -r $PACKAGENAME`"
   else
-    PRODUCTINSTALLLOCATION=""
+    echo "FULLPRODUCTNAMELONGPLACEHOLDER not installed (no package $SEARCHPACKAGENAME installed)"
+    exit 1
   fi
   ;;
 Linux)
-  SEARCHPACKAGENAME="openoffice.org-core01"
+  SEARCHPACKAGENAME="BASISPACKAGEPREFIXPLACEHOLDEROOOBASEVERSIONPLACEHOLDER-core01"
   FIXPATH="/openoffice.org"
   echo
-  echo "Searching for the $SEARCHPACKAGENAME installation ..."
+  echo "Searching for the FULLPRODUCTNAMELONGPLACEHOLDER installation ..."
   RPMNAME=`rpm -qa | grep $SEARCHPACKAGENAME`
   if [ "x$RPMNAME" != "x" ]
   then
     PRODUCTINSTALLLOCATION="`rpm -ql $RPMNAME | head -n 1`"
   else
-    PRODUCTINSTALLLOCATION=""
+    echo "FULLPRODUCTNAMELONGPLACEHOLDER not installed (no package $SEARCHPACKAGENAME installed)"
+    exit 1
   fi
   PRODUCTINSTALLLOCATION=`echo $PRODUCTINSTALLLOCATION | sed "s#${FIXPATH}##"`
   ;;
@@ -79,13 +81,13 @@ esac
 
 # Asking for the installation directory
 
-echo
-echo "Where do you want to install the language pack ? [$PRODUCTINSTALLLOCATION] "
-read reply leftover
-if [ "x$reply" != "x" ]
-then
-  PRODUCTINSTALLLOCATION="$reply"
-fi
+# echo
+# echo "Where do you want to install the language pack ? [$PRODUCTINSTALLLOCATION] "
+# read reply leftover
+# if [ "x$reply" != "x" ]
+# then
+#   PRODUCTINSTALLLOCATION="$reply"
+# fi
 
 # Unpacking
 

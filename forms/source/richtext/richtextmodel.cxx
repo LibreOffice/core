@@ -39,6 +39,7 @@
 
 /** === begin UNO includes === **/
 #include <com/sun/star/awt/LineEndFormat.hpp>
+#include <com/sun/star/text/WritingMode2.hpp>
 /** === end UNO includes === **/
 #include <cppuhelper/typeprovider.hxx>
 #include <comphelper/guarding.hxx>
@@ -66,6 +67,8 @@ namespace frm
     using namespace ::com::sun::star::beans;
     using namespace ::com::sun::star::form;
     using namespace ::com::sun::star::util;
+
+    namespace WritingMode2 = ::com::sun::star::text::WritingMode2;
 
     //====================================================================
     //= ORichTextModel
@@ -97,6 +100,8 @@ namespace frm
         getPropertyDefaultByHandle( PROPERTY_ID_RICH_TEXT               ) >>= m_bReallyActAsRichText;
         getPropertyDefaultByHandle( PROPERTY_ID_HIDEINACTIVESELECTION   ) >>= m_bHideInactiveSelection;
         getPropertyDefaultByHandle( PROPERTY_ID_LINEEND_FORMAT          ) >>= m_nLineEndFormat;
+        getPropertyDefaultByHandle( PROPERTY_ID_WRITING_MODE            ) >>= m_nTextWritingMode;
+        getPropertyDefaultByHandle( PROPERTY_ID_CONTEXT_WRITING_MODE    ) >>= m_nContextWritingMode;
 
         implInit();
     }
@@ -127,6 +132,8 @@ namespace frm
         m_bReallyActAsRichText   = _pOriginal->m_bReallyActAsRichText;
         m_bHideInactiveSelection = _pOriginal->m_bHideInactiveSelection;
         m_nLineEndFormat         = _pOriginal->m_nLineEndFormat;
+        m_nTextWritingMode       = _pOriginal->m_nTextWritingMode;
+        m_nContextWritingMode    = _pOriginal->m_nContextWritingMode;
 
         m_aAlign               = _pOriginal->m_aAlign;
         m_nEchoChar            = _pOriginal->m_nEchoChar;
@@ -196,12 +203,14 @@ namespace frm
         REGISTER_VOID_PROP_2( BORDERCOLOR,      m_aBorderColor,     sal_Int32, BOUND, MAYBEDEFAULT );
 
         // properties which exist only for compatibility with the css.swt.UnoControlEditModel,
-        // since we intend to replace the default implementation for this service
-        REGISTER_PROP_2( ECHO_CHAR,         m_nEchoChar,            BOUND, MAYBEDEFAULT );
-        REGISTER_PROP_2( MAXTEXTLEN,        m_nMaxTextLength,       BOUND, MAYBEDEFAULT );
-        REGISTER_PROP_2( MULTILINE,         m_bMultiLine,           BOUND, MAYBEDEFAULT );
-        REGISTER_PROP_2( TEXT,              m_sLastKnownEngineText, BOUND, MAYBEDEFAULT );
-        REGISTER_PROP_2( LINEEND_FORMAT,    m_nLineEndFormat,       BOUND, MAYBEDEFAULT );
+        // since we replace the default implementation for this service
+        REGISTER_PROP_2( ECHO_CHAR,             m_nEchoChar,            BOUND, MAYBEDEFAULT );
+        REGISTER_PROP_2( MAXTEXTLEN,            m_nMaxTextLength,       BOUND, MAYBEDEFAULT );
+        REGISTER_PROP_2( MULTILINE,             m_bMultiLine,           BOUND, MAYBEDEFAULT );
+        REGISTER_PROP_2( TEXT,                  m_sLastKnownEngineText, BOUND, MAYBEDEFAULT );
+        REGISTER_PROP_2( LINEEND_FORMAT,        m_nLineEndFormat,       BOUND, MAYBEDEFAULT );
+        REGISTER_PROP_2( WRITING_MODE,          m_nTextWritingMode,     BOUND, MAYBEDEFAULT );
+        REGISTER_PROP_3( CONTEXT_WRITING_MODE,  m_nContextWritingMode,  BOUND, MAYBEDEFAULT, TRANSIENT );
 
         REGISTER_VOID_PROP_2( ALIGN,        m_aAlign,           sal_Int16, BOUND, MAYBEDEFAULT );
     }
@@ -239,14 +248,15 @@ namespace frm
     IMPLEMENT_FORWARD_XTYPEPROVIDER2( ORichTextModel, OControlModel, ORichTextModel_BASE )
 
     //--------------------------------------------------------------------
-    IMPLEMENT_SERVICE_REGISTRATION_7( ORichTextModel, OControlModel,
+    IMPLEMENT_SERVICE_REGISTRATION_8( ORichTextModel, OControlModel,
         FRM_SUN_COMPONENT_RICHTEXTCONTROL,
         ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.text.TextRange" ) ),
         ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.style.CharacterProperties" ) ),
         ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.style.ParagraphProperties" ) ),
         ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.style.CharacterPropertiesAsian" ) ),
         ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.style.CharacterPropertiesComplex" ) ),
-        ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.style.ParagraphPropertiesAsian" ) )
+        ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.style.ParagraphPropertiesAsian" ) ),
+        ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.style.ParagraphPropertiesComplex" ) )
     )
 
     //------------------------------------------------------------------------------
@@ -305,6 +315,10 @@ namespace frm
         // our FormControlFont base class. We remove it from the base class' sequence
         // here, and later on care for both instances being in sync
         lcl_removeProperty( _rAggregateProps, PROPERTY_FONT );
+
+        // similar, the WritingMode property is declared in our aggregate, too, but we override
+        // it, since the aggregate does no proper PropertyState handling.
+        lcl_removeProperty( _rAggregateProps, PROPERTY_WRITING_MODE );
     }
 
     //--------------------------------------------------------------------
@@ -352,30 +366,36 @@ namespace frm
         {
             OPropertyContainerHelper::setFastPropertyValue( _nHandle, _rValue );
 
-            if ( PROPERTY_ID_REFERENCE_DEVICE == _nHandle )
+            switch ( _nHandle )
             {
-#if OSL_DEBUG_LEVEL > 0
+            case PROPERTY_ID_REFERENCE_DEVICE:
+            {
+            #if OSL_DEBUG_LEVEL > 0
                 MapMode aOldMapMode = m_pEngine->GetRefDevice()->GetMapMode();
-#endif
+            #endif
 
                 OutputDevice* pRefDevice = VCLUnoHelper::GetOutputDevice( m_xReferenceDevice );
                 OSL_ENSURE( pRefDevice, "ORichTextModel::setFastPropertyValue_NoBroadcast: empty reference device?" );
                 m_pEngine->SetRefDevice( pRefDevice );
 
-#if OSL_DEBUG_LEVEL > 0
+            #if OSL_DEBUG_LEVEL > 0
                 MapMode aNewMapMode = m_pEngine->GetRefDevice()->GetMapMode();
                 OSL_ENSURE( aNewMapMode.GetMapUnit() == aOldMapMode.GetMapUnit(),
                     "ORichTextModel::setFastPropertyValue_NoBroadcast: You should not tamper with the MapUnit of the ref device!" );
                 // if this assertion here is triggered, then we would need to adjust all
                 // items in all text portions in all paragraphs in the attributes of the EditEngine,
                 // as long as they are MapUnit-dependent. This holds at least for the FontSize.
-#endif
+            #endif
             }
-            else if ( PROPERTY_ID_TEXT == _nHandle )
+            break;
+
+            case PROPERTY_ID_TEXT:
             {
                 MutexRelease aReleaseMutex( m_aMutex );
                 impl_smlock_setEngineText( m_sLastKnownEngineText );
             }
+            break;
+            }   // switch ( _nHandle )
         }
         else if ( isFontRelatedProperty( _nHandle ) )
         {
@@ -388,7 +408,21 @@ namespace frm
         }
         else
         {
-            OControlModel::setFastPropertyValue_NoBroadcast( _nHandle, _rValue );
+            switch ( _nHandle )
+            {
+            case PROPERTY_ID_WRITING_MODE:
+            {
+                // forward to our aggregate, so the EditEngine knows about it
+                if ( m_xAggregateSet.is() )
+                    m_xAggregateSet->setPropertyValue(
+                        ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "WritingMode" ) ), _rValue );
+            }
+            break;
+
+            default:
+                OControlModel::setFastPropertyValue_NoBroadcast( _nHandle, _rValue );
+                break;
+            }
         }
     }
 
@@ -399,6 +433,11 @@ namespace frm
 
         switch ( _nHandle )
         {
+        case PROPERTY_ID_WRITING_MODE:
+        case PROPERTY_ID_CONTEXT_WRITING_MODE:
+            aDefault <<= WritingMode2::CONTEXT;
+            break;
+
         case PROPERTY_ID_LINEEND_FORMAT:
             aDefault <<= (sal_Int16)LineEndFormat::LINE_FEED;
             break;

@@ -34,6 +34,7 @@
 /** === begin UNO includes === **/
 #include <com/sun/star/uno/Type.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
+#include <com/sun/star/frame/XModel.hpp>
 /** === end UNO includes === **/
 
 #include <set>
@@ -93,6 +94,9 @@ namespace frm
         */
         TypeSequence    getTypes() const;
     };
+
+    ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >  getXModel(
+        const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _rxComponent );
 
 //........................................................................
 } // namespace frm

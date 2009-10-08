@@ -26,14 +26,16 @@
  * <http://www.openoffice.org/license.html>
  * for a copy of the LGPLv3 License.
  *
- ************************************************************************/package com.sun.star.wizards.web.data;
+ ************************************************************************/
+package com.sun.star.wizards.web.data;
 
+public class CGSessionName extends ConfigSetItem
+{
 
-public class CGSessionName extends ConfigSetItem {
-    public String        cp_Name;
+    public String cp_Name;
 
-    public String toString() {
+    public String toString()
+    {
         return cp_Name;
     }
-
 }

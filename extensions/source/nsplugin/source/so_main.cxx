@@ -69,6 +69,33 @@
 
 #include "sal/main.h"
 
+#include "rtl/process.h"
+#include "rtl/bootstrap.hxx"
+#include "rtl/string.hxx"
+#include "rtl/ustrbuf.hxx"
+
+#include "osl/security.hxx"
+#include "osl/thread.hxx"
+
+#include "cppuhelper/bootstrap.hxx"
+
+
+
+#include "com/sun/star/uno/XComponentContext.hpp"
+#include "com/sun/star/lang/XMultiServiceFactory.hpp"
+#include "com/sun/star/bridge/UnoUrlResolver.hpp"
+#include "com/sun/star/bridge/XUnoUrlResolver.hpp"
+
+#define OUSTR(x) ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(x) )
+#define ARLEN(x) sizeof (x) / sizeof *(x)
+
+using namespace ::rtl;
+using namespace ::osl;
+using namespace ::cppu;
+using namespace ::com::sun::star;
+using namespace ::com::sun::star::uno;
+
+
 #define MAX_NODE_NUM 1024
 
 SoPluginInstance* lpInstance[MAX_NODE_NUM];
@@ -159,13 +186,13 @@ int Set_URL(PLUGIN_MSG* pMsg)
         return -1;
 }
 
-int New_Instance(PLUGIN_MSG* pMsg)
+int New_Instance(PLUGIN_MSG* pMsg, Reference< lang::XMultiServiceFactory > xMSF)
 {
     dump_plugin_message(pMsg);
     int free_no;
     if( -1 == (free_no = find_free_node()))
         return -1;
-    lpInstance[free_no] = new SoPluginInstance(pMsg->instance_id);
+    lpInstance[free_no] = new SoPluginInstance(pMsg->instance_id, xMSF);
     return 0;
 }
 
@@ -212,14 +239,15 @@ int Shutdown()
     return -1;
 }
 
-int dispatchMsg(PLUGIN_MSG* pMsg)
+int dispatchMsg(PLUGIN_MSG* pMsg, Reference< lang::XMultiServiceFactory > xMSF)
 {
     switch(pMsg->msg_id)
     {
         case SO_SET_WINDOW:
             return Set_Window(pMsg);
         case SO_NEW_INSTANCE:
-            return New_Instance(pMsg);
+            if(xMSF.is())
+                return New_Instance(pMsg, xMSF);
         case SO_SET_URL:
             return Set_URL(pMsg);
         case SO_DESTROY:
@@ -235,117 +263,198 @@ int dispatchMsg(PLUGIN_MSG* pMsg)
     }
 }
 
-sal_Bool start_office(NSP_PIPE_FD read_fd)
+Reference< lang::XMultiServiceFactory > SAL_CALL start_office(NSP_PIPE_FD read_fd)
 {
-    int my_sock;
-    struct sockaddr_in dst_addr;
-    char sCommand[NPP_PATH_MAX];
-    sCommand[0] = 0;
-#ifdef WNT
+    Reference< XComponentContext > xRemoteContext;
+
+    try
     {
-        WSADATA wsaData;
-        WORD wVersionRequested;
+        OUString aOfficePath;
 
-        wVersionRequested = MAKEWORD(2,0);
-        if(WSAStartup(wVersionRequested, &wsaData))
-        {
-           NSP_Close_Pipe(read_fd);
-           debug_fprintf(NSP_LOG_APPEND, "Can not init socket in Windows.\n");
-           return sal_False;
-        }
-    }
-#endif //end of WNT
-    memset(&dst_addr, 0, sizeof(dst_addr));
-    dst_addr.sin_family = AF_INET;
-    dst_addr.sin_port   = htons(SO_SERVER_PORT);
-    dst_addr.sin_addr.s_addr = inet_addr("127.0.0.1");
-
-    int count = 0;
-    int ret = 0;
-
-    my_sock=socket(PF_INET, SOCK_STREAM, 0);
-
-    // if Star Office has been stared, we need not to start it again
-    ret = connect(my_sock, (struct sockaddr *)&dst_addr, sizeof(dst_addr));
-    if(ret == 0)
-    {
-        NSP_CloseSocket(my_sock);
-        debug_fprintf(NSP_LOG_APPEND, "Staroffice already start\n");
-        return sal_True;
-    }
-    {
-        debug_fprintf(NSP_LOG_APPEND, "try to star Staroffice\n");
-        char para[128] = {0};
-        sprintf(para, "-accept=socket,host=0,port=%d;urp", SO_SERVER_PORT);
 #ifdef UNIX
-
         boost::scoped_array< char > exepath(
             new char[( progdir ? strlen( progdir ) : 0 ) + RTL_CONSTASCII_LENGTH( "/soffice" ) + 1] );
         if ( progdir )
             sprintf( exepath.get(), "%s/soffice", progdir );
         else
             sprintf( exepath.get(), "soffice" );
-
-        int nChildPID = fork();
-        if( ! nChildPID )  // child process
-       {
-            NSP_CloseSocket(my_sock);
-            NSP_Close_Pipe(read_fd);
-            sprintf(sCommand, "/bin/sh %s -nologo -nodefault %s", exepath.get(), para);
-            debug_fprintf(NSP_LOG_APPEND,"StarOffice will be started by command: %s\n",sCommand);
-            execl("/bin/sh", "/bin/sh", exepath.get(), "-nologo", "-nodefault", para, NULL);
-            _exit(255);
+        if (!rtl_convertStringToUString(
+            &aOfficePath.pData, exepath.get(), strlen(exepath.get()), osl_getThreadTextEncoding(),
+            (RTL_TEXTTOUNICODE_FLAGS_UNDEFINED_ERROR |
+            RTL_TEXTTOUNICODE_FLAGS_MBUNDEFINED_ERROR |
+            RTL_TEXTTOUNICODE_FLAGS_INVALID_ERROR)))
+        {
+            debug_fprintf(NSP_LOG_APPEND,"bad characters in soffice installation path!\n");
+            return Reference< lang::XMultiServiceFactory >(NULL);
         }
 #endif //end of UNIX
 #ifdef WNT
-            STARTUPINFO NSP_StarInfo;
-            memset((void*) &NSP_StarInfo, 0, sizeof(STARTUPINFO));
-            NSP_StarInfo.cb = sizeof(STARTUPINFO);
-            PROCESS_INFORMATION NSP_ProcessInfo;
-            memset((void*)&NSP_ProcessInfo, 0, sizeof(PROCESS_INFORMATION));
-            sprintf(para, " -nologo -nodefault -accept=socket,host=0,port=%d;urp", SO_SERVER_PORT);
-            //sprintf(para, " -accept=socket,host=0,port=%d;urp\n", SO_SERVER_PORT);
-            SECURITY_ATTRIBUTES  NSP_access = { sizeof(SECURITY_ATTRIBUTES), NULL, FALSE}; (void)NSP_access;
-            sprintf(sCommand, "\"%s\" %s", findSofficeExecutable(), para);
-            debug_fprintf(NSP_LOG_APPEND,"StarOffice will be started by command: %s",sCommand);
-            BOOL ret = false;
-            ret = CreateProcess(findSofficeExecutable(), sCommand, NULL, NULL, FALSE,
-                        0 , NULL, NULL, &NSP_StarInfo, &NSP_ProcessInfo);
-            if(ret==false){
-                debug_fprintf(NSP_LOG_APPEND,"run staroffice error: %u \n",
-                    GetLastError());
-            }
-            else   debug_fprintf(NSP_LOG_APPEND,"run staroffice success\n");
-#endif //end of WNT
-    }
+        char sPath[NPP_PATH_MAX];
+        sPath[0] = 0;
 
-    NSP_Sleep(5);
-    // try to connect to background SO, thus judge if it is ready
-    while(0 > connect(my_sock, (struct sockaddr *)&dst_addr, sizeof(dst_addr)))
-    {
-        NSP_Sleep(1);
-        if (count++ >= 120)
+        // The quotes will be added in osl_executeProcess
+        sprintf(sPath, "%s", findSofficeExecutable() );
+        if (!rtl_convertStringToUString(
+            &aOfficePath.pData, sPath, strlen(sPath), osl_getThreadTextEncoding(),
+            (RTL_TEXTTOUNICODE_FLAGS_UNDEFINED_ERROR |
+            RTL_TEXTTOUNICODE_FLAGS_MBUNDEFINED_ERROR |
+            RTL_TEXTTOUNICODE_FLAGS_INVALID_ERROR)))
         {
-            NSP_CloseSocket(my_sock);
-            debug_fprintf(NSP_LOG_APPEND, "print by nsplugin, con star remote StarOffice\n");
-            return sal_False;
+            debug_fprintf(NSP_LOG_APPEND,"bad characters in soffice installation path!\n");
+            return Reference< lang::XMultiServiceFactory >(NULL);
         }
-        debug_fprintf(NSP_LOG_APPEND, "print by nsplugin,  Current count: %d\n", count);
+#endif //end of WNT
+
+        // create default local component context
+        Reference< XComponentContext > xLocalContext(
+            defaultBootstrap_InitialComponentContext() );
+        if ( !xLocalContext.is() )
+        {
+            debug_fprintf(NSP_LOG_APPEND,"no local component context!\n");
+            return Reference< lang::XMultiServiceFactory >(NULL);
+        }
+
+        // env string
+        ::rtl::OUStringBuffer buf;
+        OUString aIniPath, aPluginPipeName;
+
+        if(!Bootstrap::get(OUSTR("BRAND_BASE_DIR"), aIniPath))
+        {
+            debug_fprintf(NSP_LOG_APPEND,"failed to get BRAND_BASE_DIR!\n");
+            return Reference< lang::XMultiServiceFactory >(NULL);
+        }
+        aIniPath += OUSTR("/program/");
+        aIniPath += OUSTR(SAL_CONFIGFILE("bootstrap"));
+        Bootstrap aVersionFile(aIniPath);
+        aVersionFile.getFrom(OUSTR("BaseInstallation"), aPluginPipeName,  OUString());
+
+        aPluginPipeName = ::rtl::OUString::valueOf( aPluginPipeName.hashCode() );
+
+        // accept string
+        OSL_ASSERT( buf.getLength() == 0 );
+        buf.appendAscii( RTL_CONSTASCII_STRINGPARAM( "-accept=pipe,name=" ) );
+        buf.append( aPluginPipeName );    //user installation path as pipe name
+        buf.appendAscii( RTL_CONSTASCII_STRINGPARAM( ";urp;" ) );
+        OUString sConnectStartString( buf.makeStringAndClear() );
+
+        // arguments
+        OUString args [] = {
+                OUSTR( "-nologo" ),
+                OUSTR( "-nodefault" ),
+                OUSTR( "-nolockcheck" ),
+                sConnectStartString,
+        };
+
+        // create a URL resolver
+        Reference< bridge::XUnoUrlResolver > xUrlResolver(
+            bridge::UnoUrlResolver::create( xLocalContext ) );
+
+        // connection string
+        OSL_ASSERT( buf.getLength() == 0 );
+        buf.appendAscii( RTL_CONSTASCII_STRINGPARAM( "uno:pipe,name=" ) );
+        buf.append( aPluginPipeName );
+        buf.appendAscii( RTL_CONSTASCII_STRINGPARAM(
+            ";urp;StarOffice.ComponentContext" ) );
+        OUString sConnectString( buf.makeStringAndClear() );
+
+        try
+        {
+            // try to connect to office, no need to start instance again if office already started
+            xRemoteContext.set(
+                xUrlResolver->resolve( sConnectString ), UNO_QUERY_THROW );
+            debug_fprintf(NSP_LOG_APPEND, "Staroffice already start\n");
+            return Reference< lang::XMultiServiceFactory >(xRemoteContext->getServiceManager(), UNO_QUERY);
+        }
+        catch ( connection::NoConnectException & )
+        {
+        }
+
+        // start office process
+#ifdef UNIX
+        // a temporary solution
+        // in future the process should be started using the osl_executeProcess call
+        int nChildPID = fork();
+        if( ! nChildPID )  // child process
+        {
+            NSP_Close_Pipe(read_fd);
+            execl( "/bin/sh",
+                   "/bin/sh",
+                   ::rtl::OUStringToOString( aOfficePath, osl_getThreadTextEncoding() ).getStr(),
+                   ::rtl::OUStringToOString( args[0], osl_getThreadTextEncoding() ).getStr(),
+                   ::rtl::OUStringToOString( args[1], osl_getThreadTextEncoding() ).getStr(),
+                   ::rtl::OUStringToOString( args[2], osl_getThreadTextEncoding() ).getStr(),
+                   ::rtl::OUStringToOString( args[3], osl_getThreadTextEncoding() ).getStr(),
+                   NULL);
+            _exit(255);
+        }
+#else
+        (void) read_fd; /* avoid warning about unused parameter */
+        Security sec;
+        oslProcess hProcess = 0;
+        rtl_uString * ar_args [] = {
+                args[ 0 ].pData,
+                args[ 1 ].pData,
+                args[ 2 ].pData,
+                args[ 3 ].pData,
+        };
+
+        oslProcessError rc = osl_executeProcess(
+            aOfficePath.pData,
+            ar_args,
+            ARLEN( ar_args ),
+            osl_Process_DETACHED,
+            sec.getHandle(),
+            0, // => current working dir
+            0,
+            0, // => no env vars
+            &hProcess );
+        switch ( rc )
+        {
+            case osl_Process_E_None:
+                osl_freeProcessHandle( hProcess );
+                break;
+            default:
+                debug_fprintf(NSP_LOG_APPEND, "unmapped error!\n");
+        }
+#endif
+
+        // wait until office is started
+        for ( int i = 0; i < 240 /* stop the connection after 240 * 500ms */; ++i )
+        {
+            try
+            {
+                // try to connect to office
+                xRemoteContext.set(
+                    xUrlResolver->resolve( sConnectString ), UNO_QUERY_THROW );
+                return Reference< lang::XMultiServiceFactory >(xRemoteContext->getServiceManager(), UNO_QUERY);
+            }
+            catch ( connection::NoConnectException & )
+            {
+                // wait 500 ms, then try to connect again
+                TimeValue tv = { 0 /* secs */, 500000000 /* nanosecs */ };
+                ::osl::Thread::wait( tv );
+            }
+        }
+        debug_fprintf(NSP_LOG_APPEND, "Failed to connect to Staroffice in 2 minutes\n");
+        return Reference< lang::XMultiServiceFactory >(NULL);
     }
-    NSP_CloseSocket(my_sock);
-    NSP_Sleep(5);
+    catch ( Exception & e)
+    {
+        debug_fprintf(NSP_LOG_APPEND, "unexpected UNO exception caught: ");
+        debug_fprintf(NSP_LOG_APPEND, (sal_Char *)e.Message.getStr());
+        return Reference< lang::XMultiServiceFactory >(NULL);
+    }
 
-    prepareEnviron();
-
-    return sal_True;
 }
 
 
 SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
 {
-   // Sleep(20*1000);
+    // Sleep(20*1000);
     debug_fprintf(NSP_LOG_APPEND, "start of main\n");
     memset(lpInstance, 0, sizeof(lpInstance));
+
+    // MessageBox( NULL, "nsplugin has been started", "Info", MB_OK );
 
     NSP_PIPE_FD fd_pipe[2];
     int iPipe[2];
@@ -372,12 +481,13 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
     // the program path is provided only on unix, on windows the registry entry is used
     if ( argc > 4 )
         progdir = argv[4];
-    if(!start_office(la_read_fd))
+
+    Reference< lang::XMultiServiceFactory > xFactory = start_office(la_read_fd);
+    if(!xFactory.is())
     {
         NSP_Close_Pipe(la_read_fd);
         return -1;
     }
-
     PLUGIN_MSG nMsg;
     int len;
     while(1)
@@ -387,7 +497,7 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
         if(len != sizeof(PLUGIN_MSG))
             break;
         debug_fprintf(NSP_LOG_APPEND, "Read message from pipe type %d \n", nMsg.msg_id);
-        if(-1 == dispatchMsg(&nMsg))
+        if(-1 == dispatchMsg(&nMsg, xFactory))
         {
             debug_fprintf(NSP_LOG_APPEND, "plugin will shutdown\n");
             break;
@@ -396,10 +506,4 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
     NSP_Close_Pipe(la_read_fd);
     _exit(0);
     return EXIT_SUCCESS; // avoid warnings
-}
-
-extern "C"{
-    sal_Bool restart_office(void){
-        return start_office(la_read_fd);
-    }
 }

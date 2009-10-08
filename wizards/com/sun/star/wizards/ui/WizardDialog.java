@@ -51,7 +51,9 @@ import com.sun.star.frame.TerminationVetoException;
 import com.sun.star.lang.IllegalArgumentException;
 import com.sun.star.beans.*;
 
-public abstract class WizardDialog extends UnoDialog2 implements VetoableChangeListener, XTerminateListener, XCompletion{
+public abstract class WizardDialog extends UnoDialog2 implements VetoableChangeListener, XTerminateListener, XCompletion
+{
+
     private static final String NEXT_ACTION_PERFORMED = "gotoNextAvailableStep";
     private static final String BACK_ACTION_PERFORMED = "gotoPreviousAvailableStep";
     private static final String FINISH_ACTION_PERFORMED = "finishWizard_1";
@@ -75,7 +77,6 @@ public abstract class WizardDialog extends UnoDialog2 implements VetoableChangeL
     private int hid;
     private boolean bTerminateListenermustberemoved = true;
 
-
     /** Creates a new instance of WizardDialog
      * the hid is used as following :
      * "HID:(hid)"   - the dialog
@@ -85,115 +86,155 @@ public abstract class WizardDialog extends UnoDialog2 implements VetoableChangeL
      * "HID:(hid+4)" - the create button
      * "HID:(hid+5)" - the cancel button
      */
-    public WizardDialog(XMultiServiceFactory xMSF, int hid_) {
+    public WizardDialog(XMultiServiceFactory xMSF, int hid_)
+    {
         super(xMSF);
         hid = hid_;
         oWizardResource = new Resource(xMSF, "Common", "dbw");
         sMsgEndAutopilot = oWizardResource.getResText(UIConsts.RID_DB_COMMON + 33);
 
-        //new Resource(xMSF,"Common","com");
+    //new Resource(xMSF,"Common","com");
     }
 
-
-    public Resource getResource(){
+    public Resource getResource()
+    {
         return oWizardResource;
     }
 
-
-        public void activate() {
-        try {
-            XTopWindow top = (XTopWindow)UnoRuntime.queryInterface(XTopWindow.class,  xWindow );
+    public void activate()
+    {
+        try
+        {
+            XTopWindow top = (XTopWindow) UnoRuntime.queryInterface(XTopWindow.class, xWindow);
             if (top != null)
-                   top.toFront();
+            {
+                top.toFront();
+            }
         }
-        catch (Exception ex) {
+        catch (Exception ex)
+        {
             // do nothing;
         }
     }
 
-    public void setMaxStep(int i) {
+    public void setMaxStep(int i)
+    {
         nMaxStep = i;
     }
 
-    public int getMaxStep() {
+    public int getMaxStep()
+    {
         return nMaxStep;
     }
 
-    public void setOldStep(int i) {
+    public void setOldStep(int i)
+    {
         nOldStep = i;
     }
 
-    public int getOldStep() {
+    public int getOldStep()
+    {
         return nOldStep;
     }
 
-    public void setNewStep(int i) {
+    public void setNewStep(int i)
+    {
         nNewStep = i;
     }
 
-    public int getNewStep() {
+    public int getNewStep()
+    {
         return nNewStep;
     }
 
     /**
      * @see java.beans.VetoableChangeListener#vetoableChange(java.beans.PropertyChangeEvent)
      */
-    public void vetoableChange(java.beans.PropertyChangeEvent arg0) {
+    public void vetoableChange(java.beans.PropertyChangeEvent arg0)
+    {
         nNewStep = nOldStep;
     }
 
-    public void itemStateChanged(com.sun.star.awt.ItemEvent itemEvent) {
-        try {
+    public void itemStateChanged(com.sun.star.awt.ItemEvent itemEvent)
+    {
+        try
+        {
             nNewStep = itemEvent.ItemId;
             nOldStep = AnyConverter.toInt(Helper.getUnoPropertyValue(xDialogModel, "Step"));
             if (nNewStep != nOldStep)
+            {
                 switchToStep();
-        } catch (com.sun.star.lang.IllegalArgumentException exception) {
+            }
+        }
+        catch (com.sun.star.lang.IllegalArgumentException exception)
+        {
             exception.printStackTrace(System.out);
         }
     }
 
-    public void setRoadmapInteractive(boolean _bInteractive) {
+    public void setRoadmapInteractive(boolean _bInteractive)
+    {
         Helper.setUnoPropertyValue(oRoadmap, "Activated", new Boolean(_bInteractive));
     }
 
-    public void setRoadmapComplete(boolean bComplete) {
+    public void setRoadmapComplete(boolean bComplete)
+    {
         Helper.setUnoPropertyValue(oRoadmap, "Complete", new Boolean(bComplete));
     }
 
-    public boolean isRoadmapComplete() {
-        try {
+    public boolean isRoadmapComplete()
+    {
+        try
+        {
             return AnyConverter.toBoolean(Helper.getUnoPropertyValue(oRoadmap, "Complete"));
-        } catch (IllegalArgumentException exception) {
+        }
+        catch (IllegalArgumentException exception)
+        {
             exception.printStackTrace(System.out);
             return false;
         }
     }
 
-    public void setCurrentRoadmapItemID(short ID) {
-        if (oRoadmap != null) {
+    public void setCurrentRoadmapItemID(short ID)
+    {
+        if (oRoadmap != null)
+        {
             int nCurItemID = getCurrentRoadmapItemID();
             if (nCurItemID != ID)
+            {
                 Helper.setUnoPropertyValue(oRoadmap, "CurrentItemID", new Short(ID));
+            }
         }
     }
 
-    public int getCurrentRoadmapItemID() {
-        try {
+    public int getCurrentRoadmapItemID()
+    {
+        try
+        {
             return AnyConverter.toInt(Helper.getUnoPropertyValue(oRoadmap, "CurrentItemID"));
-        } catch (com.sun.star.uno.Exception exception) {
+        }
+        catch (com.sun.star.uno.Exception exception)
+        {
             exception.printStackTrace(System.out);
             return -1;
         }
     }
 
-    public void addRoadmap() {
-        try {
+    public void addRoadmap()
+    {
+        try
+        {
             int iDialogHeight = ((Integer) Helper.getUnoPropertyValue(this.xDialogModel, "Height")).intValue();
 
             oRoadmap = insertControlModel("com.sun.star.awt.UnoControlRoadmapModel", "rdmNavi",
-                                        new String[] { "Height", "PositionX", "PositionY", "Step", "TabIndex", "Width" },
-                                        new Object[] { new Integer(iDialogHeight-26), new Integer(0), new Integer(0), new Integer(0), new Short((short) 0), new Integer(85)});
+                    new String[]
+                    {
+                        "Height", "PositionX", "PositionY", "Step", "TabIndex", "Width"
+                    },
+                    new Object[]
+                    {
+                        new Integer(iDialogHeight - 26), new Integer(0), new Integer(0), new Integer(0), new Short((short) 0), new Integer(85)
+                    });
             XPropertySet xPSet = (XPropertySet) UnoRuntime.queryInterface(XPropertySet.class, oRoadmap);
             xPSet.setPropertyValue("Name", "rdmNavi");
 
@@ -211,35 +252,43 @@ public abstract class WizardDialog extends UnoDialog2 implements VetoableChangeL
             //     xRoadmapControl = this.xDlgContainer.getControl("rdmNavi");
             //     xRoadmapBroadcaster.addItemListener(new RoadmapItemListener());
             Helper.setUnoPropertyValue(oRoadmap, "Text", oWizardResource.getResText(UIConsts.RID_COMMON + 16));
-        } catch (NoSuchMethodException ex) {
+        }
+        catch (NoSuchMethodException ex)
+        {
             Resource.showCommonResourceError(xMSF);
-        } catch (java.lang.Exception jexception) {
+        }
+        catch (java.lang.Exception jexception)
+        {
             jexception.printStackTrace(System.out);
         }
     }
 
-    public void setRMItemLabels(Resource _oResource, int StartResID) {
+    public void setRMItemLabels(Resource _oResource, int StartResID)
+    {
         sRMItemLabels = _oResource.getResArray(StartResID, nMaxStep);
     }
 
-    public String[] getRMItemLabels() {
+    public String[] getRMItemLabels()
+    {
         return sRMItemLabels;
     }
 
     /*    public void insertRoadmapItems(int StartIndex, int RMCount)
-       {
-           Object oRoadmapItem;
-           boolean bEnabled;
-           for (int i = StartIndex; i < (StartIndex + RMCount); i++)
-               insertSingleRoadmapItem(i, true, sRMItemLabels[i], i);
-       }*/
-
-    public int insertRoadmapItem(int _Index, boolean _bEnabled, int _LabelID, int _CurItemID) {
+    {
+    Object oRoadmapItem;
+    boolean bEnabled;
+    for (int i = StartIndex; i < (StartIndex + RMCount); i++)
+    insertSingleRoadmapItem(i, true, sRMItemLabels[i], i);
+    }*/
+    public int insertRoadmapItem(int _Index, boolean _bEnabled, int _LabelID, int _CurItemID)
+    {
         return insertRoadmapItem(_Index, _bEnabled, sRMItemLabels[_LabelID], _CurItemID);
     }
 
-    public int insertRoadmapItem(int Index, boolean _bEnabled, String _sLabel, int _CurItemID) {
-        try {
+    public int insertRoadmapItem(int Index, boolean _bEnabled, String _sLabel, int _CurItemID)
+    {
+        try
+        {
             Object oRoadmapItem = xSSFRoadmap.createInstance();
             Helper.setUnoPropertyValue(oRoadmapItem, "Label", _sLabel);
             Helper.setUnoPropertyValue(oRoadmapItem, "Enabled", new Boolean(_bEnabled));
@@ -247,46 +296,62 @@ public abstract class WizardDialog extends UnoDialog2 implements VetoableChangeL
             xIndexContRoadmap.insertByIndex(Index, oRoadmapItem);
             int NextIndex = Index + 1;
             return NextIndex;
-        } catch (com.sun.star.uno.Exception exception) {
+        }
+        catch (com.sun.star.uno.Exception exception)
+        {
             exception.printStackTrace(System.out);
             return -1;
         }
     }
 
-    public int getRMItemCount() {
+    public int getRMItemCount()
+    {
         return xIndexContRoadmap.getCount();
     }
 
-    public XInterface getRoadmapItemByID(int _ID) {
-        try {
+    public XInterface getRoadmapItemByID(int _ID)
+    {
+        try
+        {
             int CurID;
             XInterface CurRoadmapItem;
-            for (int i = 0; i < xIndexContRoadmap.getCount(); i++) {
+            for (int i = 0; i < xIndexContRoadmap.getCount(); i++)
+            {
                 CurRoadmapItem = (XInterface) xIndexContRoadmap.getByIndex(i);
                 CurID = AnyConverter.toInt(Helper.getUnoPropertyValue(CurRoadmapItem, "ID"));
                 if (CurID == _ID)
+                {
                     return CurRoadmapItem;
+                }
             }
             return null;
-        } catch (com.sun.star.uno.Exception exception) {
+        }
+        catch (com.sun.star.uno.Exception exception)
+        {
             exception.printStackTrace(System.out);
             return null;
         }
     }
 
-    public boolean switchToStep(int _nOldStep, int _nNewStep) {
+    public boolean switchToStep(int _nOldStep, int _nNewStep)
+    {
         nOldStep = _nOldStep;
         nNewStep = _nNewStep;
         return switchToStep();
     }
 
-    private boolean switchToStep() {
+    private boolean switchToStep()
+    {
         leaveStep(nOldStep, nNewStep);
-        if (nNewStep != nOldStep) {
-            if (nNewStep == nMaxStep) {
+        if (nNewStep != nOldStep)
+        {
+            if (nNewStep == nMaxStep)
+            {
                 setControlProperty("btnWizardNext", "DefaultButton", Boolean.FALSE);
                 setControlProperty("btnWizardFinish", "DefaultButton", Boolean.TRUE);
-            } else {
+            }
+            else
+            {
                 setControlProperty("btnWizardNext", "DefaultButton", Boolean.TRUE);
                 setControlProperty("btnWizardFinish", "DefaultButton", Boolean.FALSE);
             }
@@ -301,7 +366,8 @@ public abstract class WizardDialog extends UnoDialog2 implements VetoableChangeL
 
     abstract protected void enterStep(int nOldStep, int nNewStep);
 
-    protected void changeToStep(int nNewStep) {
+    protected void changeToStep(int nNewStep)
+    {
         Helper.setUnoPropertyValue(xDialogModel, "Step", new Integer(nNewStep));
         setCurrentRoadmapItemID((short) (nNewStep));
         enableNextButton(getNextAvailableStep() > 0);
@@ -312,31 +378,38 @@ public abstract class WizardDialog extends UnoDialog2 implements VetoableChangeL
     /* (non-Javadoc)
      * @see com.sun.star.wizards.ui.XCompletion#iscompleted(int)
      */
-    public boolean iscompleted(int _ndialogpage) {
+    public boolean iscompleted(int _ndialogpage)
+    {
         return false;
     }
     /* (non-Javadoc)
      * @see com.sun.star.wizards.ui.XCompletion#ismodified(int)
      */
-    public boolean ismodified(int _ndialogpage) {
+
+    public boolean ismodified(int _ndialogpage)
+    {
         return false;
     }
     /* (non-Javadoc)
      * @see com.sun.star.wizards.ui.XCompletion#setcompleted(int, boolean)
      */
-    public void setcompleted(int _ndialogpage, boolean _biscompleted) {
 
+    public void setcompleted(int _ndialogpage, boolean _biscompleted)
+    {
     }
     /* (non-Javadoc)
      * @see com.sun.star.wizards.ui.XCompletion#setmodified(int, java.lang.Object, java.lang.Object)
      */
-    public void setmodified(int _ndialogpage, Object ooldValue, Object onewValue) {
 
+    public void setmodified(int _ndialogpage, Object ooldValue, Object onewValue)
+    {
     }
 
-    public void drawNaviBar() {
+    public void drawNaviBar()
+    {
 
-        try {
+        try
+        {
             short curtabindex = UIConsts.SOFIRSTWIZARDNAVITABINDEX;
             Integer IButtonWidth = new Integer(iButtonWidth);
             int iButtonHeight = 14;
@@ -352,201 +425,298 @@ public abstract class WizardDialog extends UnoDialog2 implements VetoableChangeL
             int iBackPosX = iNextPosX - 3 - iButtonWidth;
 
             insertControlModel("com.sun.star.awt.UnoControlFixedLineModel", "lnNaviSep",
-                                new String[] { "Height", "Orientation", "PositionX", "PositionY", "Step", "Width" },
-                                new Object[] { new Integer(1), new Integer(0), new Integer(0), new Integer(iDialogHeight - 26), ICurStep, new Integer(iDialogWidth)});
+                    new String[]
+                    {
+                        "Height", "Orientation", "PositionX", "PositionY", "Step", "Width"
+                    },
+                    new Object[]
+                    {
+                        new Integer(1), new Integer(0), new Integer(0), new Integer(iDialogHeight - 26), ICurStep, new Integer(iDialogWidth)
+                    });
 
             insertControlModel("com.sun.star.awt.UnoControlFixedLineModel", "lnRoadSep",
-                                new String[] { "Height", "Orientation", "PositionX", "PositionY", "Step", "Width" },
-                                new Object[] { new Integer(iBtnPosY - 6), new Integer(1), new Integer(85), new Integer(0), ICurStep, new Integer(1)});
+                    new String[]
+                    {
+                        "Height", "Orientation", "PositionX", "PositionY", "Step", "Width"
+                    },
+                    new Object[]
+                    {
+                        new Integer(iBtnPosY - 6), new Integer(1), new Integer(85), new Integer(0), ICurStep, new Integer(1)
+                    });
 
-            String[] propNames = new String[] { "Enabled", "Height", "HelpURL", "Label", "PositionX", "PositionY", "PushButtonType", "Step", "TabIndex", "Width" };
+            String[] propNames = new String[]
+            {
+                "Enabled", "Height", "HelpURL", "Label", "PositionX", "PositionY", "PushButtonType", "Step", "TabIndex", "Width"
+            };
 
             Helper.setUnoPropertyValue(super.xDialogModel, "HelpURL", "HID:" + hid);
-            insertButton("btnWizardHelp", HELP_ACTION_PERFORMED, new String[] { "Enabled", "Height", "Label", "PositionX", "PositionY", "PushButtonType", "Step", "TabIndex", "Width" } ,
-                                new Object[] { new Boolean(true), IButtonHeight, oWizardResource.getResText(UIConsts.RID_COMMON + 15), new Integer(iHelpPosX), new Integer(iBtnPosY), new Short((short)PushButtonType.HELP_value), ICurStep, new Short(curtabindex++), IButtonWidth });
-            insertButton("btnWizardBack", BACK_ACTION_PERFORMED, propNames ,
-                                new Object[] { new Boolean(false), IButtonHeight, "HID:" + (hid + 2) ,oWizardResource.getResText(UIConsts.RID_COMMON + 13), new Integer(iBackPosX), new Integer(iBtnPosY), new Short((short)PushButtonType.STANDARD_value), ICurStep, new Short(curtabindex++), IButtonWidth });
+            insertButton("btnWizardHelp", HELP_ACTION_PERFORMED, new String[]
+                    {
+                        "Enabled", "Height", "Label", "PositionX", "PositionY", "PushButtonType", "Step", "TabIndex", "Width"
+                    },
+                    new Object[]
+                    {
+                        new Boolean(true), IButtonHeight, oWizardResource.getResText(UIConsts.RID_COMMON + 15), new Integer(iHelpPosX), new Integer(iBtnPosY), new Short((short) PushButtonType.HELP_value), ICurStep, new Short(curtabindex++), IButtonWidth
+                    });
+            insertButton("btnWizardBack", BACK_ACTION_PERFORMED, propNames,
+                    new Object[]
+                    {
+                        new Boolean(false), IButtonHeight, "HID:" + (hid + 2), oWizardResource.getResText(UIConsts.RID_COMMON + 13), new Integer(iBackPosX), new Integer(iBtnPosY), new Short((short) PushButtonType.STANDARD_value), ICurStep, new Short(curtabindex++), IButtonWidth
+                    });
 
-            insertButton("btnWizardNext", NEXT_ACTION_PERFORMED, propNames ,
-                                new Object[] { new Boolean(true), IButtonHeight, "HID:" + (hid + 3) ,oWizardResource.getResText(UIConsts.RID_COMMON + 14), new Integer(iNextPosX), new Integer(iBtnPosY), new Short((short)PushButtonType.STANDARD_value), ICurStep, new Short(curtabindex++), IButtonWidth });
+            insertButton("btnWizardNext", NEXT_ACTION_PERFORMED, propNames,
+                    new Object[]
+                    {
+                        new Boolean(true), IButtonHeight, "HID:" + (hid + 3), oWizardResource.getResText(UIConsts.RID_COMMON + 14), new Integer(iNextPosX), new Integer(iBtnPosY), new Short((short) PushButtonType.STANDARD_value), ICurStep, new Short(curtabindex++), IButtonWidth
+                    });
 
             insertButton("btnWizardFinish", FINISH_ACTION_PERFORMED, propNames,
-                                new Object[] { new Boolean(true), IButtonHeight, "HID:" + (hid + 4), oWizardResource.getResText(UIConsts.RID_COMMON + 12), new Integer(iFinishPosX), new Integer(iBtnPosY), new Short((short)PushButtonType.STANDARD_value), ICurStep, new Short(curtabindex++), IButtonWidth });
+                    new Object[]
+                    {
+                        new Boolean(true), IButtonHeight, "HID:" + (hid + 4), oWizardResource.getResText(UIConsts.RID_COMMON + 12), new Integer(iFinishPosX), new Integer(iBtnPosY), new Short((short) PushButtonType.STANDARD_value), ICurStep, new Short(curtabindex++), IButtonWidth
+                    });
 
             insertButton("btnWizardCancel", CANCEL_ACTION_PERFORMED, propNames,
-                                new Object[] { new Boolean(true), IButtonHeight, "HID:" + (hid + 5), oWizardResource.getResText(UIConsts.RID_COMMON + 11), new Integer(iCancelPosX), new Integer(iBtnPosY), new Short((short)PushButtonType.STANDARD_value), ICurStep, new Short(curtabindex++), IButtonWidth });
+                    new Object[]
+                    {
+                        new Boolean(true), IButtonHeight, "HID:" + (hid + 5), oWizardResource.getResText(UIConsts.RID_COMMON + 11), new Integer(iCancelPosX), new Integer(iBtnPosY), new Short((short) PushButtonType.STANDARD_value), ICurStep, new Short(curtabindex++), IButtonWidth
+                    });
 
-            setControlProperty("btnWizardNext", "DefaultButton", Boolean.TRUE );
+            setControlProperty("btnWizardNext", "DefaultButton", Boolean.TRUE);
             // add a window listener, to know
             // if the user used "escape" key to
             // close the dialog.
             MethodInvocation windowHidden = new MethodInvocation("windowHidden", this);
-            xWindow.addWindowListener((CommonListener)getGuiEventListener());
-            String dialogName = (String)Helper.getUnoPropertyValue( xDialogModel, "Name" );
-            getGuiEventListener().add( dialogName, EVENT_ACTION_PERFORMED , windowHidden);
+            xWindow.addWindowListener((CommonListener) getGuiEventListener());
+            String dialogName = (String) Helper.getUnoPropertyValue(xDialogModel, "Name");
+            getGuiEventListener().add(dialogName, EVENT_ACTION_PERFORMED, windowHidden);
 
-        } catch (java.lang.Exception jexception) {
+        }
+        catch (java.lang.Exception jexception)
+        {
             jexception.printStackTrace(System.out);
         }
     }
 
-    protected void insertRoadMapItems(String[] items, int[] steps, boolean[] enabled) {
+    protected void insertRoadMapItems(String[] items, int[] steps, boolean[] enabled)
+    {
         for (int i = 0; i < items.length; i++)
+        {
             insertRoadmapItem(i, enabled[i], items[i], steps[i]);
+        }
     }
 
     /** This method also enables and disables the "next" button,
-    * if the step currently dis/enabled is the one of the next steps.
-    * @param _nStep
-    * @param bEnabled
-    * @param enableNextButton
-    */
-    public void setStepEnabled(int _nStep, boolean bEnabled, boolean enableNextButton) {
+     * if the step currently dis/enabled is the one of the next steps.
+     * @param _nStep
+     * @param bEnabled
+     * @param enableNextButton
+     */
+    public void setStepEnabled(int _nStep, boolean bEnabled, boolean enableNextButton)
+    {
         setStepEnabled(_nStep, bEnabled);
         if (getNextAvailableStep() > 0)
+        {
             enableNextButton(bEnabled);
+        }
     }
 
-    public void enableNavigationButtons(boolean _bEnableBack, boolean _bEnableNext, boolean _bEnableFinish) {
+    public void enableNavigationButtons(boolean _bEnableBack, boolean _bEnableNext, boolean _bEnableFinish)
+    {
         enableBackButton(_bEnableBack);
         enableNextButton(_bEnableNext);
         enableFinishButton(_bEnableFinish);
     }
 
-    public void enableBackButton(boolean enabled) {
+    public void enableBackButton(boolean enabled)
+    {
         setControlProperty("btnWizardBack", "Enabled", enabled ? Boolean.TRUE : Boolean.FALSE);
     }
 
-    public void enableNextButton(boolean enabled) {
+    public void enableNextButton(boolean enabled)
+    {
         setControlProperty("btnWizardNext", "Enabled", enabled ? Boolean.TRUE : Boolean.FALSE);
     }
 
-    public void enableFinishButton(boolean enabled) {
+    public void enableFinishButton(boolean enabled)
+    {
         setControlProperty("btnWizardFinish", "Enabled", enabled ? Boolean.TRUE : Boolean.FALSE);
     }
 
-    public void setStepEnabled(int _nStep, boolean bEnabled) {
+    public void setStepEnabled(int _nStep, boolean bEnabled)
+    {
         XInterface xRoadmapItem = getRoadmapItemByID(_nStep);
         if (xRoadmapItem != null)
+        {
             Helper.setUnoPropertyValue(xRoadmapItem, "Enabled", new Boolean(bEnabled));
-    }
-
-    public void enablefromStep(int _iStep, boolean _bDoEnable) {
-        if (_iStep <= this.nMaxStep) {
-            for (int i = _iStep; i <= nMaxStep; i++)
-                setStepEnabled(i, _bDoEnable);
-            enableFinishButton(_bDoEnable);
-            if (!_bDoEnable)
-                enableNextButton(_iStep > getCurrentStep()+1);
-            else
-                enableNextButton(!(getCurrentStep() == nMaxStep));
-
         }
     }
 
-    public boolean isStepEnabled(int _nStep) {
-        try {
+    public void enablefromStep(int _iStep, boolean _bDoEnable)
+    {
+        if (_iStep <= this.nMaxStep)
+        {
+            for (int i = _iStep; i <= nMaxStep; i++)
+            {
+                setStepEnabled(i, _bDoEnable);
+            }
+            enableFinishButton(_bDoEnable);
+            if (!_bDoEnable)
+            {
+                enableNextButton(_iStep > getCurrentStep() + 1);
+            }
+            else
+            {
+                enableNextButton(!(getCurrentStep() == nMaxStep));
+            }
+        }
+    }
+
+    public boolean isStepEnabled(int _nStep)
+    {
+        try
+        {
             boolean bIsEnabled;
             XInterface xRoadmapItem = getRoadmapItemByID(_nStep);
             if (xRoadmapItem == null)
-                // Todo: In this case an exception should be thrown
+            // Todo: In this case an exception should be thrown
+            {
                 return false;
+            }
             bIsEnabled = AnyConverter.toBoolean(Helper.getUnoPropertyValue(xRoadmapItem, "Enabled"));
             return bIsEnabled;
-        } catch (com.sun.star.uno.Exception exception) {
+        }
+        catch (com.sun.star.uno.Exception exception)
+        {
             exception.printStackTrace(System.out);
             return false;
         }
     }
 
-    public synchronized void gotoPreviousAvailableStep() {
+    public synchronized void gotoPreviousAvailableStep()
+    {
         boolean bIsEnabled;
-        if (nNewStep > 1) {
+        if (nNewStep > 1)
+        {
             nOldStep = nNewStep;
             nNewStep--;
-            while (nNewStep > 0) {
+            while (nNewStep > 0)
+            {
                 bIsEnabled = isStepEnabled(nNewStep);
                 if (bIsEnabled)
+                {
                     break;
+                }
                 nNewStep--;
             }
             if (nNewStep == 0) // Exception???
+            {
                 nNewStep = nOldStep;
+            }
             switchToStep();
         }
     }
 
     //TODO discuss with rp
-    protected int getNextAvailableStep() {
+    protected int getNextAvailableStep()
+    {
         if (isRoadmapComplete())
+        {
             for (int i = nNewStep + 1; i <= nMaxStep; i++)
+            {
                 if (isStepEnabled(i))
+                {
                     return i;
+                }
+            }
+        }
         return -1;
     }
 
-    public synchronized void gotoNextAvailableStep() {
+    public synchronized void gotoNextAvailableStep()
+    {
         nOldStep = nNewStep;
         nNewStep = getNextAvailableStep();
         if (nNewStep > -1)
+        {
             switchToStep();
+        }
     }
 
     public abstract void finishWizard();
 
-    public void finishWizard_1() {
+    public void finishWizard_1()
+    {
         finishWizard();
         removeTerminateListener();
     }
 
-    public int getMaximalStep() {
+    public int getMaximalStep()
+    {
         return this.nMaxStep;
     }
 
-    public int getCurrentStep() {
-        try {
+    public int getCurrentStep()
+    {
+        try
+        {
             return AnyConverter.toInt(Helper.getUnoPropertyValue(this.MSFDialogModel, "Step"));
-        } catch (com.sun.star.uno.Exception exception) {
+        }
+        catch (com.sun.star.uno.Exception exception)
+        {
             exception.printStackTrace(System.out);
             return -1;
         }
     }
 
-    public void setCurrentStep(int _nNewstep){
+    public void setCurrentStep(int _nNewstep)
+    {
         nNewStep = _nNewstep;
         changeToStep(nNewStep);
     }
 
-    public void setRightPaneHeaders(Resource _oResource, int StartResID, int _nMaxStep) {
+    public void setRightPaneHeaders(Resource _oResource, int StartResID, int _nMaxStep)
+    {
         String[] sRightPaneHeaders = _oResource.getResArray(StartResID, _nMaxStep);
         setRightPaneHeaders(sRightPaneHeaders);
     }
 
-    public void setRightPaneHeaders(String[] _sRightPaneHeaders) {
+    public void setRightPaneHeaders(String[] _sRightPaneHeaders)
+    {
         this.nMaxStep = _sRightPaneHeaders.length;
         this.sRightPaneHeaders = _sRightPaneHeaders;
         FontDescriptor oFontDesc = new FontDescriptor();
         oFontDesc.Weight = com.sun.star.awt.FontWeight.BOLD;
 
-        for (int i = 0; i < sRightPaneHeaders.length; i++) {
+        for (int i = 0; i < sRightPaneHeaders.length; i++)
+        {
             insertLabel("lblQueryTitle" + String.valueOf(i),
-                        new String[] { "FontDescriptor", "Height", "Label", "MultiLine", "PositionX", "PositionY", "Step", "TabIndex", "Width" },
-                        new Object[] { oFontDesc, new Integer(16), sRightPaneHeaders[i], Boolean.TRUE, new Integer(91), new Integer(8), new Integer(i + 1), new Short((short) 12), new Integer(212)});
+                    new String[]
+                    {
+                        "FontDescriptor", "Height", "Label", "MultiLine", "PositionX", "PositionY", "Step", "TabIndex", "Width"
+                    },
+                    new Object[]
+                    {
+                        oFontDesc, new Integer(16), sRightPaneHeaders[i], Boolean.TRUE, new Integer(91), new Integer(8), new Integer(i + 1), new Short((short) 12), new Integer(212)
+                    });
         }
     }
 
-    public void cancelWizard() {
+    public void cancelWizard()
+    {
         //can be overwritten by extending class
         xDialog.endExecute();
     }
 
-    public void callHelp() {
+    public void callHelp()
+    {
         //should be overwritten by extending class
     }
 
-
-    public void removeTerminateListener( ){
-        if (bTerminateListenermustberemoved){
+    public void removeTerminateListener()
+    {
+        if (bTerminateListenermustberemoved)
+        {
             Desktop.getDesktop(xMSF).removeTerminateListener(this);
             bTerminateListenermustberemoved = false;
         }
@@ -558,26 +728,31 @@ public abstract class WizardDialog extends UnoDialog2 implements VetoableChangeL
      * if this method was not called before,
      * perform a cancel.
      */
-    public void cancelWizard_1() {
+    public void cancelWizard_1()
+    {
         cancelWizard();
         removeTerminateListener();
     }
 
-    public void windowHidden() {
+    public void windowHidden()
+    {
         cancelWizard_1();
     }
 
-    public void notifyTermination(EventObject arg0) {
+    public void notifyTermination(EventObject arg0)
+    {
         cancelWizard_1();
     }
 
     public void queryTermination(EventObject arg0)
-            throws TerminationVetoException {
-            activate();
-            throw new TerminationVetoException();
+            throws TerminationVetoException
+    {
+        activate();
+        throw new TerminationVetoException();
     }
 
-    public void disposing(EventObject arg0) {
+    public void disposing(EventObject arg0)
+    {
         cancelWizard_1();
     }
 }

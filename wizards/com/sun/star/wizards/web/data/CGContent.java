@@ -26,42 +26,46 @@
  * <http://www.openoffice.org/license.html>
  * for a copy of the LGPLv3 License.
  *
- ************************************************************************/package com.sun.star.wizards.web.data;
+ ************************************************************************/
+package com.sun.star.wizards.web.data;
 
 import com.sun.star.wizards.common.*;
 
 import org.w3c.dom.*;
 
-public class CGContent         extends ConfigSetItem implements XMLProvider {
-  public String dirName;
+public class CGContent extends ConfigSetItem implements XMLProvider
+{
 
-  public String      cp_Name;
-  public String      cp_Description;
+    public String dirName;
+    public String cp_Name;
+    public String cp_Description;
+    public ConfigSet cp_Contents = new ConfigSet(CGContent.class);
+    public ConfigSet cp_Documents = new ConfigSet(CGDocument.class);
 
-  public ConfigSet   cp_Contents = new ConfigSet(CGContent.class);
-
-
-  public ConfigSet   cp_Documents = new ConfigSet(CGDocument.class);
-
-  public CGContent() {
-      /*cp_Documents = new ConfigSet(CGDocument.class) {
+    public CGContent()
+    {
+        /*cp_Documents = new ConfigSet(CGDocument.class) {
         protected DefaultListModel createChildrenList() {
-            return cp_Contents.getChildrenList();
+        return cp_Contents.getChildrenList();
         }
-      };*/
+        };*/
+    }
 
-  }
+    public Node createDOM(Node parent)
+    {
 
-  public Node createDOM(Node parent) {
+        Node myElement = XMLHelper.addElement(parent, "content",
+                new String[]
+                {
+                    "name", "directory-name", "description", "directory"
+                },
+                new String[]
+                {
+                    cp_Name, dirName, cp_Description, dirName
+                });
 
-      Node myElement = XMLHelper.addElement(parent,"content",
-        new String[] {"name","directory-name","description","directory"},
-        new String[] {cp_Name,dirName, cp_Description,dirName}
-      );
+        cp_Documents.createDOM(myElement);
 
-      cp_Documents.createDOM(myElement);
-
-      return myElement;
-  }
-
+        return myElement;
+    }
 }

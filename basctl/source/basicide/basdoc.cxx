@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: basdoc.cxx,v $
- * $Revision: 1.22 $
+ * $Revision: 1.21.22.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -126,8 +126,11 @@ void BasicDocShell::FillStatusBar( StatusBar& rStatusBar )
 
 }
 
-void BasicDocShell::FillClass( SvGlobalName*, sal_uInt32*, String*, String*, String*, sal_Int32) const
-{}
+void BasicDocShell::FillClass( SvGlobalName*, sal_uInt32*, String*, String*, String*, sal_Int32, sal_Bool bTemplate) const
+{
+    (void)bTemplate;
+    DBG_ASSERT( bTemplate == sal_False, "No template for Basic" );
+}
 
 void BasicDocShell::Draw( OutputDevice *, const JobSetup &, USHORT )
 {}

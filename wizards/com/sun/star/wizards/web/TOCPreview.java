@@ -64,8 +64,9 @@ import com.sun.star.wizards.web.data.CGSettings;
  * instanciation.
  * The TOC is generated in refresh(...);
  */
+public class TOCPreview
+{
 
-public class TOCPreview {
     private String tempDir = null;
     private XMultiServiceFactory xmsf;
     private FileAccess fileAccess;
@@ -84,19 +85,19 @@ public class TOCPreview {
      * @throws Exception
      */
     public TOCPreview(XMultiServiceFactory xmsf_, CGSettings settings, WebWizardDialogResources res, String tempDir_, XFrame _xFrame)
-        throws Exception
+            throws Exception
     {
         xFrame = _xFrame;
         xmsf = xmsf_;
         resources = res;
         fileAccess = new FileAccess(xmsf);
         tempDir = tempDir_;
-        loadArgs = loadArgs( FileAccess.connectURLs(tempDir,"/index.html") );
+        loadArgs = loadArgs(FileAccess.connectURLs(tempDir, "/index.html"));
         openHyperlink = Desktop.getDispatchURL(xmsf, ".uno:OpenHyperlink");
         xDispatch = Desktop.getDispatcher(xmsf, xFrame, "_top", openHyperlink);
         ucb = new UCB(xmsf);
 
-        Process.copyStaticImages(ucb ,settings,tempDir);
+        Process.copyStaticImages(ucb, settings, tempDir);
     }
 
     /**
@@ -106,21 +107,24 @@ public class TOCPreview {
      * @throws Exception
      */
     public void refresh(CGSettings settings)
-        throws Exception
+            throws Exception
     {
-        Document doc = (Document)settings.cp_DefaultSession.createDOM();
+        Document doc = (Document) settings.cp_DefaultSession.createDOM();
         CGLayout layout = settings.cp_DefaultSession.getLayout();
-        Task task = new Task("","",10000);
-        Process.generate(xmsf, layout, doc, fileAccess, tempDir,  task);
-        Process.copyLayoutFiles(ucb,fileAccess,settings,layout,tempDir);
+        Task task = new Task("", "", 10000);
+        Process.generate(xmsf, layout, doc, fileAccess, tempDir, task);
+        Process.copyLayoutFiles(ucb, fileAccess, settings, layout, tempDir);
         xDispatch.dispatch(openHyperlink, loadArgs); //Dispatch.dispatch(openHyperlink, loadArgs);
     }
 
-
-    private PropertyValue[] loadArgs(String url) {
+    private PropertyValue[] loadArgs(String url)
+    {
         PropertyValue pv = new PropertyValue();
         pv.Name = "URL";
         pv.Value = url;
-        return new PropertyValue[] {pv};
+        return new PropertyValue[]
+                {
+                    pv
+                };
     }
 }

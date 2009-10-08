@@ -9,7 +9,7 @@
  *
  * $RCSfile: DesignTemplate.java,v $
  *
- * $Revision: 1.2 $
+ * $Revision: 1.2.36.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -30,7 +30,6 @@
  *
  * **********************************************************************
  */
-
 package com.sun.star.wizards.reportbuilder.layout;
 
 import com.sun.star.beans.PropertyValue;
@@ -53,13 +52,14 @@ import com.sun.star.wizards.common.Properties;
  */
 public class DesignTemplate
 {
+
     private XReportDefinition m_xReportDefinition;
     XMultiServiceFactory m_xGlobalMSF;
     String m_sFilename;
 
     private DesignTemplate()
-    {}
-
+    {
+    }
     // -------------------------------------------------------------------------
     // All functions from XReportDefinition, we use
     // -------------------------------------------------------------------------
@@ -67,44 +67,51 @@ public class DesignTemplate
     {
         return m_xReportDefinition.getGroups();
     }
+
     XSection getDetail()
     {
         return m_xReportDefinition.getDetail();
     }
+
     boolean getReportHeaderOn()
     {
         return m_xReportDefinition.getReportHeaderOn();
     }
+
     XSection getReportHeader() throws com.sun.star.container.NoSuchElementException
     {
         return m_xReportDefinition.getReportHeader();
     }
+
     boolean getReportFooterOn()
     {
         return m_xReportDefinition.getReportFooterOn();
     }
+
     XSection getReportFooter() throws com.sun.star.container.NoSuchElementException
     {
         return m_xReportDefinition.getReportFooter();
     }
+
     boolean getPageHeaderOn()
     {
         return m_xReportDefinition.getPageHeaderOn();
     }
+
     XSection getPageHeader() throws com.sun.star.container.NoSuchElementException
     {
         return m_xReportDefinition.getPageHeader();
     }
+
     boolean getPageFooterOn()
     {
         return m_xReportDefinition.getPageFooterOn();
     }
+
     XSection getPageFooter() throws com.sun.star.container.NoSuchElementException
     {
         return m_xReportDefinition.getPageFooter();
-    }
-
-    // -------------------------------------------------------------------------
+    }    // -------------------------------------------------------------------------
     private SectionObject m_aDetailLabel;
     private SectionObject m_aDetailTextField;
     private SectionObject[] m_aGroupLabel;
@@ -118,6 +125,7 @@ public class DesignTemplate
         }
         return m_aDetailLabel;
     }
+
     SectionObject getDetailTextField()
     {
         if (m_aDetailTextField == null)
@@ -167,7 +175,7 @@ public class DesignTemplate
     {
         final XSection xDetailSection = m_xReportDefinition.getDetail();
         final int nDetailCount = xDetailSection.getCount();
-        for (int i=0;i<nDetailCount;i++)
+        for (int i = 0; i < nDetailCount; i++)
         {
             try
             {
@@ -176,17 +184,17 @@ public class DesignTemplate
                 // is aObj a textfield
                 // m_aDetailLabel_FD
                 // m_aDetailTextField_FD
-                XFixedText aFixedText = (XFixedText)UnoRuntime.queryInterface(XFixedText.class, aObj);
+                XFixedText aFixedText = (XFixedText) UnoRuntime.queryInterface(XFixedText.class, aObj);
                 if (aFixedText != null &&
-                    m_aDetailLabel == null )
+                        m_aDetailLabel == null)
                 {
                     m_aDetailLabel = SectionLabel.create(aFixedText);
                 }
                 else
                 {
-                    XFormattedField aFormattedField = (XFormattedField)UnoRuntime.queryInterface(XFormattedField.class, aObj);
+                    XFormattedField aFormattedField = (XFormattedField) UnoRuntime.queryInterface(XFormattedField.class, aObj);
                     if (aFormattedField != null &&
-                        m_aDetailTextField == null )
+                            m_aDetailTextField == null)
                     {
                         m_aDetailTextField = SectionTextField.create(aFormattedField);
                     }
@@ -208,33 +216,33 @@ public class DesignTemplate
         m_aGroupLabel = new SectionObject[nGroupCount];
         m_aGroupTextField = new SectionObject[nGroupCount];
 
-        for (int nGroup=0; nGroup<nGroupCount; nGroup++)
+        for (int nGroup = 0; nGroup < nGroupCount; nGroup++)
         {
             try
             {
                 Object aGroup = xGroups.getByIndex(nGroup);
-                XGroup xGroup = (XGroup)UnoRuntime.queryInterface(XGroup.class, aGroup);
+                XGroup xGroup = (XGroup) UnoRuntime.queryInterface(XGroup.class, aGroup);
                 XSection xGroupSection = xGroup.getHeader();
 
                 final int nCount = xGroupSection.getCount();
-                for (int i=0;i<nCount;i++)
+                for (int i = 0; i < nCount; i++)
                 {
                     try
                     {
                         Object aObj = xGroupSection.getByIndex(i);
-                        XFixedText aFixedText = (XFixedText)UnoRuntime.queryInterface(XFixedText.class, aObj);
+                        XFixedText aFixedText = (XFixedText) UnoRuntime.queryInterface(XFixedText.class, aObj);
                         // is aObj a label
                         // is aObj a textfield
                         if (aFixedText != null &&
-                            m_aGroupLabel[nGroup] == null )
+                                m_aGroupLabel[nGroup] == null)
                         {
                             m_aGroupLabel[nGroup] = SectionLabel.create(aFixedText);
                         }
                         else
                         {
-                            XFormattedField aFormattedField = (XFormattedField)UnoRuntime.queryInterface(XFormattedField.class, aObj);
+                            XFormattedField aFormattedField = (XFormattedField) UnoRuntime.queryInterface(XFormattedField.class, aObj);
                             if (aFormattedField != null &&
-                                m_aGroupTextField[nGroup] == null )
+                                    m_aGroupTextField[nGroup] == null)
                             {
                                 m_aGroupTextField[nGroup] = SectionTextField.create(aFormattedField);
                             }
@@ -274,6 +282,7 @@ public class DesignTemplate
         {
         }
     }
+
     /**
      * create a new DesignTemplate by try to load a otr file from the given path.
      * Internally we store the loaded ReportDefinition.
@@ -311,7 +320,7 @@ public class DesignTemplate
         m_xGlobalMSF = _xMSF;
         m_sFilename = _sPath;
         final Object aObj = _xMSF.createInstance("com.sun.star.report.ReportDefinition");
-        m_xReportDefinition = (XReportDefinition) UnoRuntime.queryInterface(XReportDefinition.class, aObj );
+        m_xReportDefinition = (XReportDefinition) UnoRuntime.queryInterface(XReportDefinition.class, aObj);
 
         PropertyValue[] aLoadProps = new PropertyValue[2];
         aLoadProps[0] = Properties.createProperty("URL", _sPath);

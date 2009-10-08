@@ -1913,6 +1913,7 @@ void Document::handleParagraphNotifications()
                     if (sal::static_int_cast<sal_Int32>(n) < m_nSelectionFirstPara)
                         --m_nSelectionFirstPara;
                     else if (sal::static_int_cast<sal_Int32>(n) == m_nSelectionFirstPara)
+                    {
                         if (m_nSelectionFirstPara == m_nSelectionLastPara)
                         {
                             m_nSelectionFirstPara = -1;
@@ -1925,6 +1926,7 @@ void Document::handleParagraphNotifications()
                             ++m_nSelectionFirstPara;
                             m_nSelectionFirstPos = 0;
                         }
+                    }
                     if (sal::static_int_cast<sal_Int32>(n) < m_nSelectionLastPara)
                         --m_nSelectionLastPara;
                     else if (sal::static_int_cast<sal_Int32>(n) == m_nSelectionLastPara)
