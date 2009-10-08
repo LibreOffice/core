@@ -134,6 +134,7 @@ function hResetStandardBar() as boolean
         '///+<li>Toggle to 'Toolbars' tab page.</li>
         kontext "TabCustomizeToolbars"
         if TabCustomizeToolbars.Exists( 2 ) then
+            sleep( 1 )
 
             '///+<li>Press in first section '... Toolbars' the 'toolbar'-button</li>
             MenuBtn.Click
@@ -470,19 +471,24 @@ function hStandardbarSaveAs()
         '///+<li>Click the button</li>
         Kontext "Standardbar"
         hWaitForObject( SpeichernAls , 5000 )
-        try
-            SpeichernAls.click()    
-        catch
-            warnlog( CFN & "Failed to add SaveAs button" )
-        endcatch
+        SpeichernAls.click()    
     
         '///+<li>Close the save-as dialog</li>
         printlog( CFN & "Close Save As (cancel)" )
         Kontext "SpeichernDlg"
-        if ( SpeichernDlg.Exists( 5 ) ) then
+        if ( SpeichernDlg.Exists( 2 ) ) then
             SpeichernDlg.cancel()
         else
-            warnlog( CFN & "The 'Save As'-dialog was not activated" )
+            qaerrorlog( "Retrying" )
+            Kontext "Standardbar"
+            SpeichernAls.click()
+            Kontext "SpeichernDlg"
+            if ( SpeichernDlg.exists( 1 ) ) then
+                printlog( "FileSaveAs dialog is open" )
+                SpeichernDlg.cancel()
+            else
+                warnlog( CFN & "The 'Save As'-dialog was not activated" )
+            endif
         endif
        
         '///+<li>Remove the button from the toolbar</li>

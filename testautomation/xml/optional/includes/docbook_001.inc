@@ -35,11 +35,6 @@
 '*
 '* short description : Library for DocBook XML Im-/Export Test
 '*
-'************************************************************************
-'*
-' #1 tDocBookXMLtestdocs        'Main start routine for DocBook XML test 
-' #1 fLoadDocBookXMLAndSaveIt   'Testcase <function> for loading and saving 
-'*
 '\***********************************************************************
 
 sub tDocBookXMLtestdocs
@@ -104,7 +99,7 @@ sExpFileName = sDestinationPath & sFileName
         printlog "Save the test document as " & sExpFileName                       
         if hFileSaveAsWithFilterKill(sExpFileName, "DocBook File") = TRUE then            
             printlog "Close the document also if there is a verification dialog."
-            call hCloseAndLooseDocument
+            call hCloseDocument
             printlog "Check the well formness of the saved document."
             if XMLWellformed (sExpFileName) = FALSE then                                
                 warnlog "XML-file " & sExpFileName & " not well formed or does not exist!"

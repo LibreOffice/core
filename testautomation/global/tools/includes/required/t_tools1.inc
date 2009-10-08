@@ -1232,6 +1232,7 @@ function hUseAsyncSlot( cSlot as string ) as integer
             case "editchangescomment"             : EditChangesComment
 
             case "editpaste"                      : EditPaste
+            case "editcopy"                       : EditCopy
             case "editcut"                        : EditCut
             case "editselectall"                  : EditSelectAll
             case "editselectallmath"              : EditSelectAllMath
@@ -1251,6 +1252,7 @@ function hUseAsyncSlot( cSlot as string ) as integer
             case "editobjectedit"                 : EditObjectEdit
             case "editobjectsavecopyas"           : EditObjectSaveCopyAs
             
+            case "formatcharttype"                : FormatChartType
             case "formatcontrol"                  : FormatControl
             case "formateditpoints"               : FormatEditPoints
             case "formatsections"                 : FormatSections

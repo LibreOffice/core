@@ -40,7 +40,7 @@
 ' #1 tiInsertTableUsingMenu
 ' #1 tiInsertTableUsingButton
 ' #1 tiTableObjectBar
-' #1 tiInsertTableUsingToolbarbutton
+' #1 tiInsertTableUsingToolbarbuttonView
 '*
 '\******************************************************************
 
@@ -317,6 +317,7 @@ testcase tiTableObjectBar
         DocumentDraw.TypeKeys "<SHIFT RIGHT>"
     endif
     Kontext "TableObjectBar"
+    if TableObjectBar.NotExists(2) then ViewToolbarsTable
     ZellenVerbinden.Click
     printlog "Cells merged."
 

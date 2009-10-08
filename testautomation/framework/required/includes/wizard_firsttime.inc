@@ -243,11 +243,13 @@ testcase tUpdtWizardFirsttime
         OptionenDlg.cancel()
     endif
     
+    ' due to issue i105248 the Quickstart disabler needs to get called again, because the First Start Wizard resets the veto
+    call hDisableQuickstarterAPI()
+
     do while( getDocumentCount() > 0 )
         call hCloseDocument()
     loop
    
     '///</ul>
 endcase
-
 

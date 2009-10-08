@@ -151,14 +151,14 @@ testcase tToolsMacro
     printlog " Close ' BeanShell Macros' dialog by 'Close'"
     ScriptOrganizer.Close
     Call hCloseDocument
-	printlog " Open testdocument 'gTesttoolPath + spreadsheet\required\input\DocwithMacro.ods'"
+    printlog " Open testdocument 'gTesttoolPath + spreadsheet\required\input\DocwithMacro.ods'"
     Call hFileOpen (Convertpath (gTesttoolPath + "spreadsheet\required\input\DocwithMacro.ods" ))
-	Kontext
+    Kontext
     if Active.exists then 
         Active.ok
     end if
-    Call sMakeReadOnlyDocumentEditable
-    '/// Use 'Tools – Macro – Signature'
+    Printlog " Save document as 'user/work/DocwithMacro.ods'"
+    Call hFileSaveAsKill convertpath(gOfficePath & "user/work/DocwithMacro.ods")
     printlog " Use 'Tools – Macro – Signature'"
     ToolsMacrosSignature
     Kontext "DigitalSignature"
