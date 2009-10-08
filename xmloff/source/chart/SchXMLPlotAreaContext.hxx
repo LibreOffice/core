@@ -107,10 +107,10 @@ private:
     rtl::OUString& mrCategoriesAddress;
     SeriesDefaultsAndStyles& mrSeriesDefaultsAndStyles;
     sal_Int32 mnNumOfLinesProp;
-    sal_Int32 mnNumOfLinesReadBySeries;
     sal_Bool  mbStockHasVolume;
     sal_Int32 mnSeries;
-    sal_Int32 mnMaxSeriesLength;
+    GlobalSeriesImportInfo m_aGlobalSeriesImportInfo;
+
     SchXML3DSceneAttributesHelper maSceneImportHelper;
     ::com::sun::star::awt::Size maSize;
     ::com::sun::star::awt::Point maPosition;
@@ -121,17 +121,13 @@ private:
     ::rtl::OUString msAutoStyleName;
     ::rtl::OUString& mrChartAddress;
     sal_Bool & mrHasOwnTable;
-    sal_Bool & mrAllRangeAddressesAvailable;
     sal_Bool & mrColHasLabels;
     sal_Bool & mrRowHasLabels;
     ::com::sun::star::chart::ChartDataRowSource & mrDataRowSource;
-    ::rtl::OUString maFirstFirstDomainAddress;
-    sal_Int32 mnFirstFirstDomainIndex;
-
     ::rtl::OUString maChartTypeServiceName;
 
     tSchXMLLSequencesPerIndex & mrLSequencesPerIndex;
-    sal_Int32 mnCurrentDataIndex;
+
     bool mbGlobalChartTypeUsedBySeries;
     ::com::sun::star::awt::Size maChartSize;
 };
@@ -203,19 +199,19 @@ public:
 
 // ----------------------------------------
 
-class SchXMLCategoriesDomainContext : public SvXMLImportContext
+class SchXMLCategoriesContext : public SvXMLImportContext
 {
 private:
     SchXMLImportHelper& mrImportHelper;
     rtl::OUString& mrAddress;
 
 public:
-    SchXMLCategoriesDomainContext( SchXMLImportHelper& rImpHelper,
+    SchXMLCategoriesContext( SchXMLImportHelper& rImpHelper,
                                    SvXMLImport& rImport,
                                    sal_uInt16 nPrefix,
                                    const rtl::OUString& rLocalName,
                                    rtl::OUString& rAddress );
-    virtual ~SchXMLCategoriesDomainContext();
+    virtual ~SchXMLCategoriesContext();
     virtual void StartElement( const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& xAttrList );
 };
 

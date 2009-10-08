@@ -50,7 +50,12 @@ class XMLParaContext : public SvXMLImportContext
         ::com::sun::star::text::XTextRange > xStart;    // xub_StrLen nStart;
     ::rtl::OUString             sStyleName;
     ::rtl::OUString             sId;
-    ::rtl::OUString             sXmlId;
+    ::rtl::OUString             m_sXmlId;
+    ::rtl::OUString             m_sAbout;
+    ::rtl::OUString             m_sProperty;
+    ::rtl::OUString             m_sContent;
+    ::rtl::OUString             m_sDatatype;
+    bool                        m_bHaveAbout;
     sal_Int8                nOutlineLevel;
     XMLHints_Impl           *pHints;
     // --> OD 2007-07-25 #i73509#

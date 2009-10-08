@@ -116,7 +116,7 @@ namespace drawinglayer
             const basegfx::B2DVector aDashVector(rViewInformation.getInverseObjectToViewTransformation() * basegfx::B2DVector(getDiscreteDashLength(), 0.0));
             const double fLogicDashLength(aDashVector.getX());
 
-            if(fLogicDashLength > 0.0)
+            if(fLogicDashLength > 0.0 && !getRGBColorA().equal(getRGBColorB()))
             {
                 // apply dashing; get line and gap snippets
                 ::std::vector< double > aDash;

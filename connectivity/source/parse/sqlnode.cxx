@@ -304,9 +304,10 @@ void OSQLParseNode::parseNodeToStr(::rtl::OUString& rString,
 
     if ( _rxConnection.is() )
     {
+        ::rtl::OUStringBuffer sBuffer = rString;
         try
         {
-            OSQLParseNode::impl_parseNodeToString_throw( rString,
+            OSQLParseNode::impl_parseNodeToString_throw( sBuffer,
                 SQLParseNodeParameter(
                     _rxConnection, xFormatter, _xField, rIntl, pContext,
                     _bIntl, _bQuote, _cDecSep, _bPredicate, _bSubstitute
@@ -320,6 +321,7 @@ void OSQLParseNode::parseNodeToStr(::rtl::OUString& rString,
             // in the sub queries, but this cannot be the case here, as we do not parse to
             // SDBC level.
         }
+        rString = sBuffer.makeStringAndClear();
     }
 }
 //-----------------------------------------------------------------------------
@@ -342,10 +344,11 @@ bool OSQLParseNode::parseNodeToExecutableStatement( ::rtl::OUString& _out_rStrin
     aParseParam.pParser = &_rParser;
 
     _out_rString = ::rtl::OUString();
+    ::rtl::OUStringBuffer sBuffer;
     bool bSuccess = false;
     try
     {
-        impl_parseNodeToString_throw( _out_rString, aParseParam );
+        impl_parseNodeToString_throw( sBuffer, aParseParam );
         bSuccess = true;
     }
     catch( const SQLException& e )
@@ -353,6 +356,7 @@ bool OSQLParseNode::parseNodeToExecutableStatement( ::rtl::OUString& _out_rStrin
         if ( _pErrorHolder )
             *_pErrorHolder = e;
     }
+    _out_rString = sBuffer.makeStringAndClear();
     return bSuccess;
 }
 
@@ -366,7 +370,7 @@ namespace
 }
 
 //-----------------------------------------------------------------------------
-void OSQLParseNode::impl_parseNodeToString_throw(::rtl::OUString& rString, const SQLParseNodeParameter& rParam) const
+void OSQLParseNode::impl_parseNodeToString_throw(::rtl::OUStringBuffer& rString, const SQLParseNodeParameter& rParam) const
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "parse", "Ocke.Janssen@sun.com", "OSQLParseNode::getTableRange" );
     if ( isToken() )
@@ -385,19 +389,19 @@ void OSQLParseNode::impl_parseNodeToString_throw(::rtl::OUString& rString, const
     case parameter:
     {
         if(rString.getLength())
-            rString += ::rtl::OUString::createFromAscii(" ");
+            rString.appendAscii(" ");
         if (nCount == 1)    // ?
             m_aChildren[0]->impl_parseNodeToString_throw( rString, rParam );
         else if (nCount == 2)   // :Name
         {
             m_aChildren[0]->impl_parseNodeToString_throw( rString, rParam );
-            rString += m_aChildren[1]->m_aNodeValue;
+            rString.append(m_aChildren[1]->m_aNodeValue);
         }                   // [Name]
         else
         {
             m_aChildren[0]->impl_parseNodeToString_throw( rString, rParam );
-            rString += m_aChildren[1]->m_aNodeValue;
-            rString += m_aChildren[2]->m_aNodeValue;
+            rString.append(m_aChildren[1]->m_aNodeValue);
+            rString.append(m_aChildren[2]->m_aNodeValue);
         }
         bHandled = true;
     }
@@ -419,7 +423,7 @@ void OSQLParseNode::impl_parseNodeToString_throw(::rtl::OUString& rString, const
 
     case as:
         if ( rParam.aMetaData.generateASBeforeCorrelationName() )
-            rString += ::rtl::OUString::createFromAscii( " AS" );
+            rString.append(::rtl::OUString::createFromAscii( " AS" ));
         bHandled = true;
         break;
 
@@ -447,7 +451,7 @@ void OSQLParseNode::impl_parseNodeToString_throw(::rtl::OUString& rString, const
             m_aChildren[0]->impl_parseNodeToString_throw( rString, aNewParam );
             aNewParam.bQuote = rParam.bQuote;
             //aNewParam.bPredicate = sal_False; // disable [ ] around names // look at i73215
-            ::rtl::OUString aStringPara;
+            ::rtl::OUStringBuffer aStringPara;
             for (sal_uInt32 i=1; i<nCount; i++)
             {
                 const OSQLParseNode * pSubTree = m_aChildren[i];
@@ -457,13 +461,12 @@ void OSQLParseNode::impl_parseNodeToString_throw(::rtl::OUString& rString, const
 
                     // bei den CommaListen zwischen alle Subtrees Commas setzen
                     if ((m_eNodeType == SQL_NODE_COMMALISTRULE)     && (i < (nCount - 1)))
-                        aStringPara += ::rtl::OUString::createFromAscii(",");
+                        aStringPara.appendAscii(",");
                 }
                 else
                     i++;
             }
-            aStringPara.trim();
-            rString += aStringPara;
+            rString.append(aStringPara.makeStringAndClear());
         }
         bHandled = true;
     }
@@ -542,7 +545,7 @@ void OSQLParseNode::impl_parseNodeToString_throw(::rtl::OUString& rString, const
 
                     // bei den CommaListen zwischen alle Subtrees Commas setzen
                     if ((m_eNodeType == SQL_NODE_COMMALISTRULE)     && (i != m_aChildren.end()))
-                        rString += ::rtl::OUString::createFromAscii(",");
+                        rString.appendAscii(",");
                 }
             }
             else
@@ -554,9 +557,9 @@ void OSQLParseNode::impl_parseNodeToString_throw(::rtl::OUString& rString, const
                 if ((m_eNodeType == SQL_NODE_COMMALISTRULE)     && (i != m_aChildren.end()))
                 {
                     if (SQL_ISRULE(this,value_exp_commalist) && rParam.bPredicate)
-                        rString += ::rtl::OUString::createFromAscii(";");
+                        rString.appendAscii(";");
                     else
-                        rString += ::rtl::OUString::createFromAscii(",");
+                        rString.appendAscii(",");
                 }
             }
         }
@@ -564,7 +567,7 @@ void OSQLParseNode::impl_parseNodeToString_throw(::rtl::OUString& rString, const
 }
 
 //-----------------------------------------------------------------------------
-bool OSQLParseNode::impl_parseTableNameNodeToString_throw( ::rtl::OUString& rString, const SQLParseNodeParameter& rParam ) const
+bool OSQLParseNode::impl_parseTableNameNodeToString_throw( ::rtl::OUStringBuffer& rString, const SQLParseNodeParameter& rParam ) const
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "parse", "Ocke.Janssen@sun.com", "OSQLParseNode::impl_parseTableNameNodeToString_throw" );
     // is the table_name part of a table_ref?
@@ -623,25 +626,25 @@ bool OSQLParseNode::impl_parseTableNameNodeToString_throw( ::rtl::OUString& rStr
             if ( pSubQueryNode.get() )
             {
                 // parse the sub-select to SDBC level, too
-                ::rtl::OUString sSubSelect;
+                ::rtl::OUStringBuffer sSubSelect;
                 pSubQueryNode->impl_parseNodeToString_throw( sSubSelect, rParam );
                 if ( sSubSelect.getLength() )
-                    sCommand = sSubSelect;
+                    sCommand = sSubSelect.makeStringAndClear();
             }
         }
 
-        rString += ::rtl::OUString::createFromAscii( " ( " );
-        rString += sCommand;
-        rString += ::rtl::OUString::createFromAscii( " )" );
+        rString.appendAscii( " ( " );
+        rString.append(sCommand);
+        rString.appendAscii( " )" );
 
         // append the query name as table alias, since it might be referenced in other
         // parts of the statement - but only if there's no other alias name present
         if ( !lcl_isAliasNamePresent( *this ) )
         {
-            rString += ::rtl::OUString::createFromAscii( " AS " );
+            rString.appendAscii( " AS " );
             if ( rParam.bQuote )
-                rString += SetQuotation( sTableOrQueryName,
-                    rParam.aMetaData.getIdentifierQuoteString(), rParam.aMetaData.getIdentifierQuoteString() );
+                rString.append(SetQuotation( sTableOrQueryName,
+                    rParam.aMetaData.getIdentifierQuoteString(), rParam.aMetaData.getIdentifierQuoteString() ));
         }
 
         // don't forget to remove the query name from the history, else multiple inclusions
@@ -663,7 +666,7 @@ bool OSQLParseNode::impl_parseTableNameNodeToString_throw( ::rtl::OUString& rStr
 }
 
 //-----------------------------------------------------------------------------
-void OSQLParseNode::impl_parseTableRangeNodeToString_throw(::rtl::OUString& rString, const SQLParseNodeParameter& rParam) const
+void OSQLParseNode::impl_parseTableRangeNodeToString_throw(::rtl::OUStringBuffer& rString, const SQLParseNodeParameter& rParam) const
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "parse", "Ocke.Janssen@sun.com", "OSQLParseNode::impl_parseTableRangeNodeToString_throw" );
     OSL_PRECOND(  ( count() == 2 ) || ( count() == 3 ) || ( count() == 5 ) ,"Illegal count");
@@ -674,7 +677,7 @@ void OSQLParseNode::impl_parseTableRangeNodeToString_throw(::rtl::OUString& rStr
 }
 
 //-----------------------------------------------------------------------------
-void OSQLParseNode::impl_parseLikeNodeToString_throw( ::rtl::OUString& rString, const SQLParseNodeParameter& rParam ) const
+void OSQLParseNode::impl_parseLikeNodeToString_throw( ::rtl::OUStringBuffer& rString, const SQLParseNodeParameter& rParam ) const
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "parse", "Ocke.Janssen@sun.com", "OSQLParseNode::impl_parseLikeNodeToString_throw" );
     OSL_ENSURE(count() >= 4,"count != 5: Prepare for GPF");
@@ -725,8 +728,8 @@ void OSQLParseNode::impl_parseLikeNodeToString_throw( ::rtl::OUString& rString, 
     if (pParaNode->isToken())
     {
         ::rtl::OUString aStr = ConvertLikeToken(pParaNode, pEscNode, rParam.bInternational);
-        rString += ::rtl::OUString::createFromAscii(" ");
-        rString += SetQuotation(aStr,::rtl::OUString::createFromAscii("\'"),::rtl::OUString::createFromAscii("\'\'"));
+        rString.appendAscii(" ");
+        rString.append(SetQuotation(aStr,::rtl::OUString::createFromAscii("\'"),::rtl::OUString::createFromAscii("\'\'")));
     }
     else
         pParaNode->impl_parseNodeToString_throw( rString, aNewParam );
@@ -1687,7 +1690,7 @@ void OSQLParseNode::append(OSQLParseNode* pNewNode)
     m_aChildren.push_back(pNewNode);
 }
 // -----------------------------------------------------------------------------
-sal_Bool OSQLParseNode::addDateValue(::rtl::OUString& rString, const SQLParseNodeParameter& rParam) const
+sal_Bool OSQLParseNode::addDateValue(::rtl::OUStringBuffer& rString, const SQLParseNodeParameter& rParam) const
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "parse", "Ocke.Janssen@sun.com", "OSQLParseNode::addDateValue" );
     // special display for date/time values
@@ -1708,10 +1711,6 @@ sal_Bool OSQLParseNode::addDateValue(::rtl::OUString& rString, const SQLParseNod
                  {
                      suQuote = ::rtl::OUString::createFromAscii("#");
                  }
-                 else
-                 {
-                     suQuote = ::rtl::OUString::createFromAscii("'");
-                 }
             }
             else
             {
@@ -1720,29 +1719,25 @@ sal_Bool OSQLParseNode::addDateValue(::rtl::OUString& rString, const SQLParseNod
                      // suQuote = ::rtl::OUString::createFromAscii("'");
                      return sal_False;
                  }
-                 else
-                 {
-                     suQuote = ::rtl::OUString::createFromAscii("'");
-                 }
             }
 
             if (rString.getLength())
-                rString += ::rtl::OUString::createFromAscii(" ");
-            rString += suQuote;
+                rString.appendAscii(" ");
+            rString.append(suQuote);
             const ::rtl::OUString sTokenValue = pODBCNode->m_aChildren[1]->getTokenValue();
             if (SQL_ISTOKEN(pODBCNodeChild, D))
             {
-                rString += rParam.bPredicate ? convertDateString(rParam, sTokenValue) : sTokenValue;
+                rString.append(rParam.bPredicate ? convertDateString(rParam, sTokenValue) : sTokenValue);
             }
             else if (SQL_ISTOKEN(pODBCNodeChild, T))
             {
-                rString += rParam.bPredicate ? convertTimeString(rParam, sTokenValue) : sTokenValue;
+                rString.append(rParam.bPredicate ? convertTimeString(rParam, sTokenValue) : sTokenValue);
             }
             else
             {
-                rString += rParam.bPredicate ? convertDateTimeString(rParam, sTokenValue) : sTokenValue;
+                rString.append(rParam.bPredicate ? convertDateTimeString(rParam, sTokenValue) : sTokenValue);
             }
-            rString += suQuote;
+            rString.append(suQuote);
             return sal_True;
         }
     }
@@ -2443,7 +2438,7 @@ OSQLParseNode* OSQLParseNode::replace (OSQLParseNode* pOldSubNode, OSQLParseNode
     return pOldSubNode;
 }
 // -----------------------------------------------------------------------------
-void OSQLParseNode::parseLeaf(::rtl::OUString & rString, const SQLParseNodeParameter& rParam) const
+void OSQLParseNode::parseLeaf(::rtl::OUStringBuffer& rString, const SQLParseNodeParameter& rParam) const
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "parse", "Ocke.Janssen@sun.com", "OSQLParseNode::parseLeaf" );
     // ein Blatt ist gefunden
@@ -2453,51 +2448,51 @@ void OSQLParseNode::parseLeaf(::rtl::OUString & rString, const SQLParseNodeParam
         case SQL_NODE_KEYWORD:
         {
             if (rString.getLength())
-                rString += ::rtl::OUString::createFromAscii(" ");
+                rString.appendAscii(" ");
 
-            ::rtl::OString sT = OSQLParser::TokenIDToStr(m_nNodeID, &rParam.m_rContext);
-            rString += ::rtl::OUString(sT,sT.getLength(),RTL_TEXTENCODING_UTF8);
+            const ::rtl::OString sT = OSQLParser::TokenIDToStr(m_nNodeID, &rParam.m_rContext);
+            rString.append(::rtl::OUString(sT,sT.getLength(),RTL_TEXTENCODING_UTF8));
         }   break;
         case SQL_NODE_STRING:
             if (rString.getLength())
-                rString += ::rtl::OUString::createFromAscii(" ");
-            rString += SetQuotation(m_aNodeValue,::rtl::OUString::createFromAscii("\'"),::rtl::OUString::createFromAscii("\'\'"));
+                rString.appendAscii(" ");
+            rString.append(SetQuotation(m_aNodeValue,::rtl::OUString::createFromAscii("\'"),::rtl::OUString::createFromAscii("\'\'")));
             break;
         case SQL_NODE_NAME:
             if (rString.getLength())
             {
-                switch(rString.getStr()[rString.getLength()-1] )
+                switch(rString.charAt(rString.getLength()-1) )
                 {
                     case ' ' :
                     case '.' : break;
                     default  :
                         if  (   !rParam.aMetaData.getCatalogSeparator().getLength()
-                            ||  rString.getStr()[ rString.getLength()-1 ] != rParam.aMetaData.getCatalogSeparator().toChar()
+                            ||  rString.charAt( rString.getLength()-1 ) != rParam.aMetaData.getCatalogSeparator().toChar()
                             )
-                            rString += ::rtl::OUString::createFromAscii(" "); break;
+                            rString.appendAscii(" "); break;
                 }
             }
             if (rParam.bQuote)
             {
                 if (rParam.bPredicate)
                 {
-                    rString+= ::rtl::OUString::createFromAscii("[");
-                    rString += m_aNodeValue;
-                    rString+= ::rtl::OUString::createFromAscii("]");
+                    rString.appendAscii("[");
+                    rString.append(m_aNodeValue);
+                    rString.appendAscii("]");
                 }
                 else
-                    rString += SetQuotation(m_aNodeValue,
-                        rParam.aMetaData.getIdentifierQuoteString(), rParam.aMetaData.getIdentifierQuoteString() );
+                    rString.append(SetQuotation(m_aNodeValue,
+                        rParam.aMetaData.getIdentifierQuoteString(), rParam.aMetaData.getIdentifierQuoteString() ));
             }
             else
-                rString += m_aNodeValue;
+                rString.append(m_aNodeValue);
             break;
         case SQL_NODE_ACCESS_DATE:
             if (rString.getLength())
-                rString += ::rtl::OUString::createFromAscii(" ");
-            rString += ::rtl::OUString::createFromAscii("#");
-            rString += m_aNodeValue;
-            rString += ::rtl::OUString::createFromAscii("#");
+                rString.appendAscii(" ");
+            rString.appendAscii("#");
+            rString.append(m_aNodeValue);
+            rString.appendAscii("#");
             break;
         case SQL_NODE_INTNUM:
         case SQL_NODE_APPROXNUM:
@@ -2507,26 +2502,26 @@ void OSQLParseNode::parseLeaf(::rtl::OUString & rString, const SQLParseNodeParam
                     aTmp = aTmp.replace('.', rParam.cDecSep);
 
                 if (rString.getLength())
-                    rString += ::rtl::OUString::createFromAscii(" ");
-                rString += aTmp;
+                    rString.appendAscii(" ");
+                rString.append(aTmp);
 
             }   break;
             // fall through
         default:
             if (rString.getLength() && m_aNodeValue.toChar() != '.' && m_aNodeValue.toChar() != ':' )
             {
-                switch( rString.getStr()[rString.getLength()-1] )
+                switch( rString.charAt(rString.getLength()-1) )
                 {
                     case ' ' :
                     case '.' : break;
                     default  :
                         if  (   !rParam.aMetaData.getCatalogSeparator().getLength()
-                            ||  rString.getStr()[ rString.getLength()-1 ] != rParam.aMetaData.getCatalogSeparator().toChar()
+                            ||  rString.charAt( rString.getLength()-1 ) != rParam.aMetaData.getCatalogSeparator().toChar()
                             )
-                            rString += ::rtl::OUString::createFromAscii(" "); break;
+                            rString.appendAscii(" "); break;
                 }
             }
-            rString += m_aNodeValue;
+            rString.append(m_aNodeValue);
     }
 }
 
@@ -2618,6 +2613,113 @@ sal_Int32 OSQLParser::getFunctionReturnType(const ::rtl::OUString& _sFunctionNam
     else if(sFunctionName.equalsIgnoreAsciiCase(TokenIDToStr(SQL_TOKEN_SUM,pContext)))                  nType = DataType::DOUBLE;
     else if(sFunctionName.equalsIgnoreAsciiCase(TokenIDToStr(SQL_TOKEN_LOWER,pContext)))                nType = DataType::VARCHAR;
     else if(sFunctionName.equalsIgnoreAsciiCase(TokenIDToStr(SQL_TOKEN_UPPER,pContext)))                nType = DataType::VARCHAR;
+
+    return nType;
+}
+// -----------------------------------------------------------------------------
+sal_Int32 OSQLParser::getFunctionParameterType(sal_uInt32 _nTokenId, sal_uInt32 _nPos)
+{
+    sal_Int32 nType = DataType::VARCHAR;
+
+    if(_nTokenId == SQL_TOKEN_CHAR)                 nType = DataType::INTEGER;
+    else if(_nTokenId == SQL_TOKEN_INSERT)
+    {
+        if ( _nPos == 2 || _nPos == 3 )
+            nType = DataType::INTEGER;
+    }
+    else if(_nTokenId == SQL_TOKEN_LEFT)
+    {
+        if ( _nPos == 2 )
+            nType = DataType::INTEGER;
+    }
+    else if(_nTokenId == SQL_TOKEN_LOCATE)
+    {
+        if ( _nPos == 3 )
+            nType = DataType::INTEGER;
+    }
+    else if(_nTokenId == SQL_TOKEN_LOCATE_2)
+    {
+        if ( _nPos == 3 )
+            nType = DataType::INTEGER;
+    }
+    else if( _nTokenId == SQL_TOKEN_REPEAT || _nTokenId == SQL_TOKEN_RIGHT )
+    {
+        if ( _nPos == 2 )
+            nType = DataType::INTEGER;
+    }
+    else if(_nTokenId == SQL_TOKEN_SPACE )
+    {
+        nType = DataType::INTEGER;
+    }
+    else if(_nTokenId == SQL_TOKEN_SUBSTRING)
+    {
+        if ( _nPos != 1 )
+            nType = DataType::INTEGER;
+    }
+    else if(_nTokenId == SQL_TOKEN_DATEDIFF)
+    {
+        if ( _nPos != 1 )
+            nType = DataType::TIMESTAMP;
+    }
+    else if(_nTokenId == SQL_TOKEN_DATEVALUE)
+        nType = DataType::DATE;
+    else if(_nTokenId == SQL_TOKEN_DAYNAME)
+        nType = DataType::DATE;
+    else if(_nTokenId == SQL_TOKEN_DAYOFMONTH)
+        nType = DataType::DATE;
+    else if(_nTokenId == SQL_TOKEN_DAYOFWEEK)
+        nType = DataType::DATE;
+    else if(_nTokenId == SQL_TOKEN_DAYOFYEAR)
+        nType = DataType::DATE;
+    else if(_nTokenId == SQL_TOKEN_EXTRACT)              nType = DataType::VARCHAR;
+    else if(_nTokenId == SQL_TOKEN_HOUR)                 nType = DataType::TIME;
+    else if(_nTokenId == SQL_TOKEN_MINUTE)               nType = DataType::TIME;
+    else if(_nTokenId == SQL_TOKEN_MONTH)                nType = DataType::DATE;
+    else if(_nTokenId == SQL_TOKEN_MONTHNAME)            nType = DataType::DATE;
+    else if(_nTokenId == SQL_TOKEN_NOW)                  nType = DataType::TIMESTAMP;
+    else if(_nTokenId == SQL_TOKEN_QUARTER)              nType = DataType::DATE;
+    else if(_nTokenId == SQL_TOKEN_SECOND)               nType = DataType::TIME;
+    else if(_nTokenId == SQL_TOKEN_TIMESTAMPADD)         nType = DataType::TIMESTAMP;
+    else if(_nTokenId == SQL_TOKEN_TIMESTAMPDIFF)        nType = DataType::TIMESTAMP;
+    else if(_nTokenId == SQL_TOKEN_TIMEVALUE)            nType = DataType::TIMESTAMP;
+    else if(_nTokenId == SQL_TOKEN_WEEK)                 nType = DataType::DATE;
+    else if(_nTokenId == SQL_TOKEN_YEAR)                 nType = DataType::DATE;
+
+    else if(_nTokenId == SQL_TOKEN_ABS)                  nType = DataType::DOUBLE;
+    else if(_nTokenId == SQL_TOKEN_ACOS)                 nType = DataType::DOUBLE;
+    else if(_nTokenId == SQL_TOKEN_ASIN)                 nType = DataType::DOUBLE;
+    else if(_nTokenId == SQL_TOKEN_ATAN)                 nType = DataType::DOUBLE;
+    else if(_nTokenId == SQL_TOKEN_ATAN2)                nType = DataType::DOUBLE;
+    else if(_nTokenId == SQL_TOKEN_CEILING)              nType = DataType::DOUBLE;
+    else if(_nTokenId == SQL_TOKEN_COS)                  nType = DataType::DOUBLE;
+    else if(_nTokenId == SQL_TOKEN_COT)                  nType = DataType::DOUBLE;
+    else if(_nTokenId == SQL_TOKEN_DEGREES)              nType = DataType::DOUBLE;
+    else if(_nTokenId == SQL_TOKEN_EXP)                  nType = DataType::DOUBLE;
+    else if(_nTokenId == SQL_TOKEN_FLOOR)                nType = DataType::DOUBLE;
+    else if(_nTokenId == SQL_TOKEN_LOGF)                 nType = DataType::DOUBLE;
+    else if(_nTokenId == SQL_TOKEN_LOG)                  nType = DataType::DOUBLE;
+    else if(_nTokenId == SQL_TOKEN_LOG10)                nType = DataType::DOUBLE;
+    else if(_nTokenId == SQL_TOKEN_LN)                   nType = DataType::DOUBLE;
+    else if(_nTokenId == SQL_TOKEN_MOD)                  nType = DataType::DOUBLE;
+    else if(_nTokenId == SQL_TOKEN_PI)                   nType = DataType::DOUBLE;
+    else if(_nTokenId == SQL_TOKEN_POWER)                nType = DataType::DOUBLE;
+    else if(_nTokenId == SQL_TOKEN_RADIANS)              nType = DataType::DOUBLE;
+    else if(_nTokenId == SQL_TOKEN_RAND)                 nType = DataType::DOUBLE;
+    else if(_nTokenId == SQL_TOKEN_ROUND)                nType = DataType::DOUBLE;
+    else if(_nTokenId == SQL_TOKEN_ROUNDMAGIC)           nType = DataType::DOUBLE;
+    else if(_nTokenId == SQL_TOKEN_SIGN)                 nType = DataType::DOUBLE;
+    else if(_nTokenId == SQL_TOKEN_SIN)                  nType = DataType::DOUBLE;
+    else if(_nTokenId == SQL_TOKEN_SQRT)                 nType = DataType::DOUBLE;
+    else if(_nTokenId == SQL_TOKEN_TAN)                  nType = DataType::DOUBLE;
+    else if(_nTokenId == SQL_TOKEN_TRUNCATE)             nType = DataType::DOUBLE;
+    else if(_nTokenId == SQL_TOKEN_COUNT)                nType = DataType::INTEGER;
+    else if(_nTokenId == SQL_TOKEN_MAX)                  nType = DataType::DOUBLE;
+    else if(_nTokenId == SQL_TOKEN_MIN)                  nType = DataType::DOUBLE;
+    else if(_nTokenId == SQL_TOKEN_AVG)                  nType = DataType::DOUBLE;
+    else if(_nTokenId == SQL_TOKEN_SUM)                  nType = DataType::DOUBLE;
+
+    else if(_nTokenId == SQL_TOKEN_LOWER)                nType = DataType::VARCHAR;
+    else if(_nTokenId == SQL_TOKEN_UPPER)                nType = DataType::VARCHAR;
 
     return nType;
 }

@@ -731,7 +731,9 @@ bool SdrTextObj::impDecomposeBlockTextPrimitive(
 
     // prepare outliner
     const bool bIsCell(rSdrBlockTextPrimitive.getCellText());
-    const SfxItemSet& rTextItemSet = rSdrBlockTextPrimitive.getSdrText().GetItemSet();
+    const SfxItemSet& rTextItemSet = rSdrBlockTextPrimitive.getSdrText()
+        ? rSdrBlockTextPrimitive.getSdrText()->GetItemSet()
+        : GetObjectItemSet();
     SdrOutliner& rOutliner = ImpGetDrawOutliner();
     SdrTextVertAdjust eVAdj = GetTextVerticalAdjust(rTextItemSet);
     SdrTextHorzAdjust eHAdj = GetTextHorizontalAdjust(rTextItemSet);
@@ -903,7 +905,9 @@ bool SdrTextObj::impDecomposeStretchTextPrimitive(
     // prepare outliner
     SdrOutliner& rOutliner = ImpGetDrawOutliner();
     const sal_uInt32 nOriginalControlWord(rOutliner.GetControlWord());
-    const SfxItemSet& rTextItemSet = rSdrStretchTextPrimitive.getSdrText().GetItemSet();
+    const SfxItemSet& rTextItemSet = rSdrStretchTextPrimitive.getSdrText()
+        ? rSdrStretchTextPrimitive.getSdrText()->GetItemSet()
+        : GetObjectItemSet();
     const Size aNullSize;
 
     rOutliner.SetControlWord(nOriginalControlWord|EE_CNTRL_STRETCHING|EE_CNTRL_AUTOPAGESIZE);
@@ -1196,4 +1200,5 @@ void SdrTextObj::impGetScrollTextTiming(drawinglayer::animation::AnimationEntryL
     }
 }
 
+//////////////////////////////////////////////////////////////////////////////
 // eof

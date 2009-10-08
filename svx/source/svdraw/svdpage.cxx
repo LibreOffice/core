@@ -678,33 +678,6 @@ const Rectangle& SdrObjList::GetAllObjBoundRect() const
     return aOutRect;
 }
 
-SdrObject* SdrObjList::CheckHit(const Point& rPnt, USHORT nTol, const SetOfByte* pVisiLayer, FASTBOOL bBackward) const
-{
-    SdrObject* pHit=NULL;
-    Rectangle R(rPnt.X()-nTol,rPnt.Y()-nTol,rPnt.X()+nTol,rPnt.Y()+nTol);
-    if (R.IsOver(GetAllObjBoundRect())) {
-        ULONG nObjAnz=GetObjCount();
-        ULONG nObjNum=bBackward ? 0 : nObjAnz;
-        while (pHit==NULL && (bBackward ? nObjNum<nObjAnz : nObjNum>0)) {
-            if (!bBackward) nObjNum--;
-            SdrObject* pObj=GetObj(nObjNum);
-            if (R.IsOver(pObj->GetCurrentBoundRect())) {
-                SdrObjList* pSubList=pObj->GetSubList();
-                if (pSubList!=NULL || pVisiLayer==NULL) { // Gruppenobjekte beruecksichtigen sichtbare Layer selbst
-                    pHit=pObj->CheckHit(rPnt,nTol,pVisiLayer/*,bBackward*/);
-                } else {             // Ansonsten nur wenn Layer sichtbar
-                    SdrLayerID nLayer=pObj->GetLayer();
-                    if (pVisiLayer->IsSet(nLayer)) {
-                        pHit=pObj->CheckHit(rPnt,nTol,pVisiLayer/*,bBackward*/);
-                    }
-                }
-            }
-            if (bBackward) nObjNum++;
-        }
-    }
-    return pHit;
-}
-
 void SdrObjList::NbcReformatAllTextObjects()
 {
     ULONG nAnz=GetObjCount();
@@ -772,42 +745,6 @@ void SdrObjList::BurnInStyleSheetAttributes()
         GetObj(a)->BurnInStyleSheetAttributes();
     }
 }
-
-FASTBOOL SdrObjList::ImpGetFillColor(SdrObject* pObj, Color& rCol) const
-{
-    return GetDraftFillColor(pObj->GetMergedItemSet(), rCol);
-}
-
-FASTBOOL SdrObjList::GetFillColor(const Point& rPnt, const SetOfByte& rVisLayers,
-    /*FASTBOOL bLayerSorted,*/ Color& rCol) const
-{
-    if (pModel==NULL) return FALSE;
-    FASTBOOL bRet=FALSE;
-    FASTBOOL bMaster=pPage!=NULL ? pPage->IsMasterPage() : FALSE;
-    for (ULONG no=GetObjCount(); !bRet && no>0; ) {
-        no--;
-        SdrObject* pObj=GetObj(no);
-        SdrObjList* pOL=pObj->GetSubList();
-        if (pOL!=NULL) { // Aha, Gruppenobjekt
-            bRet=pOL->GetFillColor(rPnt,rVisLayers,/*bLayerSorted,*/rCol);
-        } else {
-            SdrTextObj* pTextObj=PTR_CAST(SdrTextObj,pObj);
-            // #108867# Exclude zero master page object (i.e. background
-            // shape) from color query
-            if (pTextObj!=NULL &&
-                pObj->IsClosedObj() && rVisLayers.IsSet(pObj->GetLayer()) &&
-                (!bMaster || (!pObj->IsNotVisibleAsMaster() && no!=0)) &&
-                pObj->GetCurrentBoundRect().IsInside(rPnt) &&
-                !pTextObj->IsHideContour() && pObj->IsHit(rPnt,0,NULL))
-            {   // Nachfolgend extra Funktion um Stack zu sparen,
-                // da diese Methode hier rekursiv ist.
-                bRet=ImpGetFillColor(pObj,rCol);
-            }
-        }
-    }
-    return bRet;
-}
-
 
 ULONG SdrObjList::GetObjCount() const
 {
@@ -1705,56 +1642,6 @@ void SdrPage::TRG_ImpMasterPageRemoved(const SdrPage& rRemovedPage)
         }
     }
 }
-
-// MasterPage interface
-////////////////////////////////////////////////////////////////////////////////////////////////////
-
-FASTBOOL SdrPage::ImplGetFillColor(const Point& rPnt, const SetOfByte& rVisLayers,
-    /* FASTBOOL bLayerSorted,*/ Color& rCol, FASTBOOL bSkipBackgroundShape) const
-{
-    if (pModel==NULL) return FALSE;
-    FASTBOOL bRet=SdrObjList::GetFillColor(rPnt,rVisLayers,/*bLayerSorted,*/rCol);
-    if (!bRet && !mbMaster)
-    {
-        // nun zu den Masterpages
-        if(TRG_HasMasterPage())
-        {
-            SetOfByte aSet(rVisLayers);
-            aSet &= TRG_GetMasterPageVisibleLayers();
-            SdrPage& rMasterPage = TRG_GetMasterPage();
-
-            // #108867# Don't fall back to background shape on
-            // master pages. This is later handled by
-            // GetBackgroundColor, and is necessary to cater for
-            // the silly ordering: 1. shapes, 2. master page
-            // shapes, 3. page background, 4. master page
-            // background.
-            bRet = rMasterPage.ImplGetFillColor(rPnt, aSet, rCol, TRUE);
-        }
-    }
-
-    // #108867# Only now determine background color from background shapes
-    if( !bRet && !bSkipBackgroundShape )
-    {
-        rCol = GetPageBackgroundColor();
-        return TRUE;
-    }
-
-    return bRet;
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////
-
-FASTBOOL SdrPage::GetFillColor(const Point& rPnt, const SetOfByte& rVisLayers,
-    /*FASTBOOL bLayerSorted,*/ Color& rCol) const
-{
-    // #108867# Wrapper for ImplGetFillColor. Used to properly set the
-    // bSkipBackgroundShape parameter. Never skip background shape on
-    // first level of recursion
-    return ImplGetFillColor(rPnt,rVisLayers,/*bLayerSorted,*/rCol,FALSE);
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////
 
 const SdrPageGridFrameList* SdrPage::GetGridFrameList(const SdrPageView* /*pPV*/, const Rectangle* /*pRect*/) const
 {

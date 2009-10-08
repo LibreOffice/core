@@ -36,7 +36,6 @@
 #include <svx/svdpagv.hxx>  // fuer Abfrage im Paint, ob das
 #include <svx/svdview.hxx>  // Objekt gerade editiert wird
 #include <svx/svdpage.hxx>  // und fuer AnimationHandler (Laufschrift)
-#include "svdtouch.hxx"
 #include <svx/svdetc.hxx>
 #include <svx/svdoutl.hxx>
 #include "svdscrol.hxx"  // fuer Laufschrift
@@ -1127,101 +1126,6 @@ void SdrTextObj::StopTextAnimation(OutputDevice* /*pOutDev*/, long /*nExtraData*
     // #111096#
     // use new text animation
     SetTextAnimationAllowed(sal_False);
-}
-
-SdrObject* SdrTextObj::CheckHit(const Point& rPnt, USHORT nTol, const SetOfByte* pVisiLayer) const
-{
-    if(!bTextFrame && !GetOutlinerParaObject() )
-    {
-        return NULL;
-    }
-
-    if(pVisiLayer && !pVisiLayer->IsSet(sal::static_int_cast< sal_uInt8 >(GetLayer())))
-    {
-        return NULL;
-    }
-
-    INT32 nMyTol=nTol;
-    FASTBOOL bFontwork=IsFontwork();
-    SdrFitToSizeType eFit=GetFitToSize();
-    FASTBOOL bFitToSize=(eFit==SDRTEXTFIT_PROPORTIONAL || eFit==SDRTEXTFIT_ALLLINES);
-    Rectangle aR(aRect);
-    Rectangle aAnchor2(aR);
-    Rectangle aTextRect(aR);
-    SdrOutliner* pOutliner = NULL;
-    pOutliner = &pModel->GetHitTestOutliner();
-
-    if (bFontwork) {
-        if (pFormTextBoundRect!=NULL) aR=*pFormTextBoundRect;
-        else aR=GetCurrentBoundRect();
-    }
-    else
-    {
-        TakeTextRect( *pOutliner, aTextRect, FALSE, &aAnchor2, FALSE ); // EditText nicht mehr ignorieren! TRUE); // EditText ignorieren!
-
-        if (bFitToSize)
-            aR=aAnchor2;
-        else
-            aR=aTextRect;
-    }
-    if (aR.GetWidth()-1>short(nTol) && aR.GetHeight()-1>short(nTol)) nMyTol=0; // Keine Toleranz noetig hier
-    if (nMyTol!=0) {
-        aR.Left  ()-=nMyTol;
-        aR.Top   ()-=nMyTol;
-        aR.Right ()+=nMyTol;
-        aR.Bottom()+=nMyTol;
-    }
-    FASTBOOL bRet=FALSE;
-
-    if(bFontwork)
-    {
-        bRet = aR.IsInside(rPnt);
-
-        // #105130# Include aRect here in measurements to be able to hit a
-        // fontwork object on its border
-        if(!bRet)
-        {
-            const Rectangle aSnapRect = GetSnapRect();
-
-            if( (rPnt.X() >= aSnapRect.Left() - nTol && rPnt.X() <= aSnapRect.Left() + nTol)
-             || (rPnt.X() >= aSnapRect.Right() - nTol && rPnt.X() <= aSnapRect.Right() + nTol)
-             || (rPnt.Y() >= aSnapRect.Top() - nTol && rPnt.Y() <= aSnapRect.Top() + nTol)
-             || (rPnt.Y() >= aSnapRect.Bottom() - nTol && rPnt.Y() <= aSnapRect.Bottom() + nTol))
-            {
-                bRet = TRUE;
-            }
-        }
-    }
-    else
-    {
-        if (aGeo.nDrehWink!=0) {
-            Polygon aPol(aR);
-            RotatePoly(aPol,aR.TopLeft(),aGeo.nSin,aGeo.nCos);
-            bRet=IsPointInsidePoly(aPol,rPnt);
-        } else {
-            bRet=aR.IsInside(rPnt);
-        }
-        if (bRet) { // und nun noch checken, ob wirklich Buchstaben getroffen sind
-            // Featurewunsch zur 4.0
-            // Zunaechst meine Dok-Koordinaten in EE-Dok-Koordinaten umwandeln.
-            Point aPt(rPnt); aPt-=aR.TopLeft();
-            if (bFitToSize) { // #38214#: FitToSize berueksichtigen
-                Fraction aX(aTextRect.GetWidth()-1,aAnchor2.GetWidth()-1);
-                Fraction aY(aTextRect.GetHeight()-1,aAnchor2.GetHeight()-1);
-                ResizePoint(aPt,Point(),aX,aY);
-            }
-            if (aGeo.nDrehWink!=0) RotatePoint(aPt,Point(),-aGeo.nSin,aGeo.nCos); // -sin fuer Unrotate
-            // Und nun im EE-Dok auf Buchstabensuche gehen
-            long nHitTol = 2000;
-            OutputDevice* pRef = pOutliner->GetRefDevice();
-            if( pRef )
-                nHitTol = pRef->LogicToLogic( nHitTol, MAP_100TH_MM, pRef->GetMapMode().GetMapUnit() );
-
-            bRet = pOutliner->IsTextPos( aPt, (sal_uInt16)nHitTol );
-        }
-    }
-
-    return bRet ? (SdrObject*)this : NULL;
 }
 
 void SdrTextObj::TakeObjNameSingul(XubString& rName) const

@@ -6,8 +6,8 @@
  *
  * OpenOffice.org - a multi-platform office productivity suite
  *
- * $RCSfile: svdtouch.hxx,v $
- * $Revision: 1.6 $
+ * $RCSfile: LTables.hxx,v $
+ * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -28,26 +28,28 @@
  *
  ************************************************************************/
 
-#ifndef _SVDTOUCH_HXX
-#define _SVDTOUCH_HXX
+#ifndef _CONNECTIVITY_EVOAB_LTABLES_HXX_
+#define _CONNECTIVITY_EVOAB_LTABLES_HXX_
 
-#include <tools/solar.h>
+#include "file/FTables.hxx"
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
+namespace connectivity
+{
+    namespace evoab
+    {
+                //      namespace ::com::sun::star::sdbcx             = ::com::sun::star::sdbcx;
+        typedef file::OTables OEvoabTables_BASE;
 
-class Point;
-class Polygon;
-class PolyPolygon;
-class Rectangle;
-
-bool IsPointInsidePoly(const Polygon& rPoly, const Point& rHit);
-bool IsPointInsidePoly(const PolyPolygon& rPoly, const Point& rHit);
-
-bool IsRectTouchesLine(const Point& rPt1, const Point& rPt2, const Rectangle& rHit);
-bool IsRectTouchesLine(const Polygon& rLine, const Rectangle& rHit);
-bool IsRectTouchesLine(const PolyPolygon& rLine, const Rectangle& rHit);
-
-////////////////////////////////////////////////////////////////////////////////////////////////////
-
-#endif //_SVDTOUCH_HXX
+        class OEvoabTables : public OEvoabTables_BASE
+        {
+        protected:
+            virtual sdbcx::ObjectType createObject(const ::rtl::OUString& _rName);
+        public:
+            OEvoabTables(const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDatabaseMetaData >& _rMetaData,::cppu::OWeakObject& _rParent, ::osl::Mutex& _rMutex,
+                const TStringVector &_rVector) : OEvoabTables_BASE(_rMetaData,_rParent,_rMutex,_rVector)
+            {}
+        };
+    }
+}
+#endif // _CONNECTIVITY_EVOAB_LTABLES_HXX_
 

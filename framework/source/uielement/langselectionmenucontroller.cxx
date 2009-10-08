@@ -79,6 +79,8 @@
 #endif
 #include <dispatch/uieventloghelper.hxx>
 
+#include "helper/mischelper.hxx"
+
 //_________________________________________________________________________________________________________________
 //  Defines
 //_________________________________________________________________________________________________________________
@@ -106,17 +108,6 @@ LanguageSelectionMenuController::LanguageSelectionMenuController( const ::com::s
     PopupMenuControllerBase( xServiceManager ),
     m_bShowMenu( sal_True )
 {
-    if (!m_xLanguageGuesser.is())
-    {
-        uno::Reference< lang::XMultiServiceFactory > xMgr ( comphelper::getProcessServiceFactory() );
-        if (xMgr.is())
-        {
-            m_xLanguageGuesser = uno::Reference< linguistic2::XLanguageGuessing >(
-                    xMgr->createInstance(
-                        rtl::OUString::createFromAscii( "com.sun.star.linguistic2.LanguageGuessing" ) ),
-                        uno::UNO_QUERY );
-        }
-    }
 }
 
 LanguageSelectionMenuController::~LanguageSelectionMenuController()
@@ -301,12 +292,6 @@ void SAL_CALL LanguageSelectionMenuController::setPopupMenu( const Reference< cs
     }
 }
 
-//match ScriptType
-bool lcl_checkScriptType(sal_Int16 nScriptType,LanguageType nLang)
-{
-    return 0 != (nScriptType & SvtLanguageOptions::GetScriptTypeOfLanguage( nLang ));
-}
-
 void LanguageSelectionMenuController::fillPopupMenu( Reference< css::awt::XPopupMenu >& rPopupMenu , const Mode eMode )
 {
     VCLXPopupMenu* pVCLPopupMenu = (VCLXPopupMenu *)VCLXMenu::GetImplementation( rPopupMenu );
@@ -358,7 +343,7 @@ void LanguageSelectionMenuController::fillPopupMenu( Reference< css::awt::XPopup
     LanguageType rSystemLanguage = rAllSettings.GetLanguage();
     if(rSystemLanguage!=LANGUAGE_DONTKNOW)
     {
-        if (lcl_checkScriptType(m_nScriptType,rSystemLanguage ))
+        if (IsScriptTypeMatchingToLanguage(m_nScriptType,rSystemLanguage ))
             LangItems[::rtl::OUString(aLangTable.GetString(rSystemLanguage))]=::rtl::OUString(aLangTable.GetString(rSystemLanguage));
     }
 
@@ -366,24 +351,25 @@ void LanguageSelectionMenuController::fillPopupMenu( Reference< css::awt::XPopup
     LanguageType rUILanguage = rAllSettings.GetUILanguage();
     if(rUILanguage!=LANGUAGE_DONTKNOW)
     {
-        if (lcl_checkScriptType(m_nScriptType, rUILanguage ))
+        if (IsScriptTypeMatchingToLanguage(m_nScriptType, rUILanguage ))
             LangItems[::rtl::OUString(aLangTable.GetString(rUILanguage))]=::rtl::OUString(aLangTable.GetString(rUILanguage));
     }
 
     //4--guessed language
-    if (m_xLanguageGuesser.is() && m_aGuessedText.getLength() > 0)
+    uno::Reference< linguistic2::XLanguageGuessing > xLangGuesser( m_aLangGuessHelper.GetGuesser() );
+    if (xLangGuesser.is() && m_aGuessedText.getLength() > 0)
     {
-        ::com::sun::star::lang::Locale aLocale(m_xLanguageGuesser->guessPrimaryLanguage( m_aGuessedText, 0, m_aGuessedText.getLength()) );
+        ::com::sun::star::lang::Locale aLocale(xLangGuesser->guessPrimaryLanguage( m_aGuessedText, 0, m_aGuessedText.getLength()) );
         LanguageType nLang = MsLangId::convertLocaleToLanguageWithFallback( aLocale );
-        if ((nLang != LANGUAGE_DONTKNOW) && (nLang != LANGUAGE_NONE) && (nLang != LANGUAGE_SYSTEM)
-            && (lcl_checkScriptType( m_nScriptType, nLang )))
+        if (nLang != LANGUAGE_DONTKNOW && nLang != LANGUAGE_NONE && nLang != LANGUAGE_SYSTEM
+            && IsScriptTypeMatchingToLanguage( m_nScriptType, nLang ))
             LangItems[aLangTable.GetString(nLang)]=aLangTable.GetString(nLang);
     }
 
     //5--keyboard language
     if(m_aKeyboardLang!=::rtl::OUString::createFromAscii(""))
     {
-        if (lcl_checkScriptType(m_nScriptType, aLanguageTable.GetType(m_aKeyboardLang)))
+        if (IsScriptTypeMatchingToLanguage(m_nScriptType, aLanguageTable.GetType(m_aKeyboardLang)))
             LangItems[m_aKeyboardLang] = m_aKeyboardLang;
     }
 
@@ -417,7 +403,7 @@ void LanguageSelectionMenuController::fillPopupMenu( Reference< css::awt::XPopup
                 if (LangItems.size()==7)
                     break;
                 const Locale& rLocale=rLocales[i];
-                if(lcl_checkScriptType(m_nScriptType, aLanguageTable.GetType(rLocale.Language)))
+                if(IsScriptTypeMatchingToLanguage(m_nScriptType, aLanguageTable.GetType(rLocale.Language)))
                     LangItems[::rtl::OUString(rLocale.Language)]=::rtl::OUString(rLocale.Language);
             }
         }

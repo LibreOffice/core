@@ -180,6 +180,85 @@ SfxPrintHelper::~SfxPrintHelper()
     delete m_pData;
 }
 
+namespace
+{
+    view::PaperFormat convertToPaperFormat(Paper eFormat)
+    {
+        view::PaperFormat eRet;
+        switch (eFormat)
+        {
+            case PAPER_A3:
+                eRet = view::PaperFormat_A3;
+                break;
+            case PAPER_A4:
+                eRet = view::PaperFormat_A4;
+                break;
+            case PAPER_A5:
+                eRet = view::PaperFormat_A5;
+                break;
+            case PAPER_B4_ISO:
+                eRet = view::PaperFormat_B4;
+                break;
+            case PAPER_B5_ISO:
+                eRet = view::PaperFormat_B5;
+                break;
+            case PAPER_LETTER:
+                eRet = view::PaperFormat_LETTER;
+                break;
+            case PAPER_LEGAL:
+                eRet = view::PaperFormat_LEGAL;
+                break;
+            case PAPER_TABLOID:
+                eRet = view::PaperFormat_TABLOID;
+                break;
+            case PAPER_USER:
+            default:
+                eRet = view::PaperFormat_USER;
+                break;
+        }
+        return eRet;
+    }
+
+    Paper convertToPaper(view::PaperFormat eFormat)
+    {
+        Paper eRet(PAPER_USER);
+        switch (eFormat)
+        {
+            case view::PaperFormat_A3:
+                eRet = PAPER_A3;
+                break;
+            case view::PaperFormat_A4:
+                eRet = PAPER_A4;
+                break;
+            case view::PaperFormat_A5:
+                eRet = PAPER_A5;
+                break;
+            case view::PaperFormat_B4:
+                eRet = PAPER_B4_ISO;
+                break;
+            case view::PaperFormat_B5:
+                eRet = PAPER_B5_ISO;
+                break;
+            case view::PaperFormat_LETTER:
+                eRet = PAPER_LETTER;
+                break;
+            case view::PaperFormat_LEGAL:
+                eRet = PAPER_LEGAL;
+                break;
+            case view::PaperFormat_TABLOID:
+                eRet = PAPER_TABLOID;
+                break;
+            case view::PaperFormat_USER:
+                eRet = PAPER_USER;
+                break;
+            case view::PaperFormat_MAKE_FIXED_SIZE:
+                break;
+            //deliberate no default to force warn on a new papersize
+        }
+        return eRet;
+    }
+}
+
 //________________________________________________________________________________________________________
 //  XPrintable
 //________________________________________________________________________________________________________
@@ -219,7 +298,7 @@ uno::Sequence< beans::PropertyValue > SAL_CALL SfxPrintHelper::getPrinter() thro
     aPrinter.getArray()[3].Value <<= aSize;
 
     aPrinter.getArray()[2].Name = DEFINE_CONST_UNICODE( "PaperFormat" );
-    view::PaperFormat eFormat = (view::PaperFormat)pPrinter->GetPaper();
+    view::PaperFormat eFormat = convertToPaperFormat(pPrinter->GetPaper());
     aPrinter.getArray()[2].Value <<= eFormat;
 
     aPrinter.getArray()[1].Name = DEFINE_CONST_UNICODE( "PaperOrientation" );
@@ -277,7 +356,7 @@ void SfxPrintHelper::impl_setPrinter(const uno::Sequence< beans::PropertyValue >
     }
 
     Size aSetPaperSize( 0, 0);
-    view::PaperFormat nPaperFormat = (view::PaperFormat) PAPER_USER;
+    view::PaperFormat nPaperFormat = view::PaperFormat_USER;
 
     // other properties
     for ( int i = 0; i < rPrinter.getLength(); ++i )
@@ -313,9 +392,9 @@ void SfxPrintHelper::impl_setPrinter(const uno::Sequence< beans::PropertyValue >
                 nPaperFormat = ( view::PaperFormat ) lDummy;
             }
 
-            if ( (Paper) nPaperFormat != pPrinter->GetPaper() )
+            if ( convertToPaper(nPaperFormat) != pPrinter->GetPaper() )
             {
-                pPrinter->SetPaper( (Paper) nPaperFormat );
+                pPrinter->SetPaper( convertToPaper(nPaperFormat) );
                 nChangeFlags |= SFX_PRINTER_CHG_SIZE;
             }
         }
@@ -355,7 +434,7 @@ void SfxPrintHelper::impl_setPrinter(const uno::Sequence< beans::PropertyValue >
 
     //os 12.11.98: die PaperSize darf nur gesetzt werden, wenn tatsaechlich
     //PAPER_USER gilt, sonst koennte vom Treiber ein falsches Format gewaehlt werden
-    if(nPaperFormat == PAPER_USER && aSetPaperSize.Width())
+    if(nPaperFormat == view::PaperFormat_USER && aSetPaperSize.Width())
     {
         //JP 23.09.98 - Bug 56929 - MapMode von 100mm in die am
         //          Device gesetzten umrechnen. Zusaetzlich nur dann

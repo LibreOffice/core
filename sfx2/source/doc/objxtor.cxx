@@ -722,11 +722,11 @@ namespace
 {
     static BasicManager* lcl_getBasicManagerForDocument( const SfxObjectShell& _rDocument )
     {
-        if ( !_rDocument.pImp->m_bNoBasicCapabilities )
+        if ( !_rDocument.Get_Impl()->m_bNoBasicCapabilities )
         {
-            if ( !_rDocument.pImp->bBasicInitialized )
+            if ( !_rDocument.Get_Impl()->bBasicInitialized )
                 const_cast< SfxObjectShell& >( _rDocument ).InitBasicManager_Impl();
-            return _rDocument.pImp->pBasicManager->get();
+            return _rDocument.Get_Impl()->pBasicManager->get();
         }
 
         // assume we do not have Basic ourself, but we can refer to another
@@ -794,9 +794,13 @@ namespace
             try
             {
                 Reference< XStorageBasedDocument > xStorageDoc( _rxDocument, UNO_QUERY );
+                const Reference< XComponentContext > xContext(
+                    ::comphelper::getProcessComponentContext() );
                 _rxContainer.set (   _bScript
-                                ?   DocumentScriptLibraryContainer::create( comphelper_getProcessComponentContext(), xStorageDoc )
-                                :   DocumentDialogLibraryContainer::create( comphelper_getProcessComponentContext(), xStorageDoc )
+                                ?   DocumentScriptLibraryContainer::create(
+                                        xContext, xStorageDoc )
+                                :   DocumentDialogLibraryContainer::create(
+                                        xContext, xStorageDoc )
                                 ,   UNO_QUERY_THROW );
             }
             catch( const Exception& )
@@ -1064,6 +1068,12 @@ void SfxObjectShell::SetAutoStyleFilterIndex(sal_uInt16 nSet)
 {
     pImp->nStyleFilter = nSet;
 }
+
+sal_uInt16 SfxObjectShell::GetAutoStyleFilterIndex()
+{
+    return pImp->nStyleFilter;
+}
+
 
 void SfxObjectShell::SetCurrentComponent( const Reference< XInterface >& _rxComponent )
 {

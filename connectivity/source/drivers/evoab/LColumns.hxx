@@ -6,8 +6,8 @@
  *
  * OpenOffice.org - a multi-platform office productivity suite
  *
- * $RCSfile: overlaylinestriped.hxx,v $
- * $Revision: 1.3 $
+ * $RCSfile: LColumns.hxx,v $
+ * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -28,22 +28,28 @@
  *
  ************************************************************************/
 
-#ifndef _SDR_OVERLAY_OVERLAYLINESTRIPED_HXX
-#define _SDR_OVERLAY_OVERLAYLINESTRIPED_HXX
+#ifndef _CONNECTIVITY_EVOAB_LCOLUMNS_HXX_
+#define _CONNECTIVITY_EVOAB_LCOLUMNS_HXX_
 
-#include <svx/sdr/overlay/overlayline.hxx>
+#include "file/FColumns.hxx"
 
-//////////////////////////////////////////////////////////////////////////////
-
-namespace sdr
+namespace connectivity
 {
-    namespace overlay
+    namespace evoab
     {
-    } // end of namespace overlay
-} // end of namespace sdr
+        class OEvoabColumns : public file::OColumns
+        {
+        protected:
+            virtual sdbcx::ObjectType createObject(const ::rtl::OUString& _rName);
+        public:
+            OEvoabColumns(file::OFileTable* _pTable,
+                            ::osl::Mutex& _rMutex,
+                            const TStringVector &_rVector
+                         ) : file::OColumns(_pTable,_rMutex,_rVector)
+            {}
 
-//////////////////////////////////////////////////////////////////////////////
+        };
+    }
+}
+#endif // _CONNECTIVITY_EVOAB_LCOLUMNS_HXX_
 
-#endif //_SDR_OVERLAY_OVERLAYLINESTRIPED_HXX
-
-// eof

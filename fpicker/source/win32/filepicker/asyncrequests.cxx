@@ -53,7 +53,7 @@ void lcl_sleep(::osl::Condition& aCondition   ,
     {
         TimeValue aTime;
         aTime.Seconds = (nMilliSeconds / 1000);
-        aTime.Nanosec = (nMilliSeconds % 1000);
+        aTime.Nanosec = (nMilliSeconds % 1000) * 1000000;
         aCondition.wait(&aTime);
     }
 

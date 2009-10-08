@@ -129,7 +129,8 @@ namespace connectivity
                 nsAutoString path;
                 nsresult rv = profilePath->GetPath(path);
                 NS_ENSURE_SUCCESS(rv, ::rtl::OUString());
-                return ::rtl::OUString(path.get());
+                // PRUnichar != sal_Unicode in mingw
+                return ::rtl::OUString(reinterpret_cast_mingw_only<const sal_Unicode *>(path.get()));
             }
             else
                 return ::rtl::OUString();
@@ -170,7 +171,8 @@ namespace connectivity
             //step 1 : get mozilla registry file
             nsCOMPtr<nsILocalFile>  localFile;
             ::rtl::OUString regDir( getRegistryFileName( MozillaProductType_Mozilla ) );
-            nsAutoString registryDir(regDir.getStr());
+            // PRUnichar != sal_Unicode in mingw
+            nsAutoString registryDir(reinterpret_cast_mingw_only<const PRUnichar *>(regDir.getStr()));
             rv = NS_NewLocalFile(registryDir, PR_TRUE,
                                 getter_AddRefs(localFile));
             NS_ENSURE_SUCCESS(rv,rv);
@@ -190,7 +192,8 @@ namespace connectivity
 
             //step 3:Enumerator it
             rv = registry->GetKey(nsIRegistry::Common,
-                        szProfileSubtreeString.getStr(),
+                        // PRUnichar != sal_Unicode in mingw
+                        reinterpret_cast_mingw_only<const PRUnichar *>(szProfileSubtreeString.getStr()),
                         &profilesTreeKey);
             if (NS_FAILED(rv)) return rv;
 
@@ -198,12 +201,14 @@ namespace connectivity
 
             // Get the current profile
             rv = registry->GetString(profilesTreeKey,
-                            szCurrentProfileString.getStr(),
+                            // PRUnichar != sal_Unicode in mingw
+                            reinterpret_cast_mingw_only<const PRUnichar *>(szCurrentProfileString.getStr()),
                             getter_Copies(tmpCurrentProfile));
 
             if (tmpCurrentProfile)
             {
-                m_Product.setCurrentProfile ( NS_STATIC_CAST(const PRUnichar*, tmpCurrentProfile));
+                // PRUnichar != sal_Unicode in mingw
+                m_Product.setCurrentProfile ( reinterpret_cast_mingw_only<const sal_Unicode *>(NS_STATIC_CAST(const PRUnichar*, tmpCurrentProfile)));
             }
 
 
@@ -243,7 +248,8 @@ namespace connectivity
 
                 nsXPIDLString regData;
                 rv = registry->GetString(profKey,
-                        szDirectoryString.getStr(),
+                        // PRUnichar != sal_Unicode in mingw
+                        reinterpret_cast_mingw_only<const PRUnichar *>(szDirectoryString.getStr()),
                         getter_Copies(regData));
                 if (NS_FAILED(rv)) continue;
 
@@ -257,7 +263,8 @@ namespace connectivity
                 //Add found profile to profile lists
                 if (NS_SUCCEEDED(rv) && tempLocal)
                 {
-                    ProfileStruct*  profileItem     = new ProfileStruct(MozillaProductType_Mozilla,NS_STATIC_CAST(const PRUnichar*, profile),tempLocal);
+                    // PRUnichar != sal_Unicode in mingw
+                    ProfileStruct*  profileItem     = new ProfileStruct(MozillaProductType_Mozilla,reinterpret_cast_mingw_only<const sal_Unicode *>(NS_STATIC_CAST(const PRUnichar*, profile)),tempLocal);
                     m_Product.mProfileList[profileItem->getProfileName()] = profileItem;
                 }
 
@@ -330,7 +337,8 @@ namespace connectivity
                     nsCAutoString filePath(sPath.getStr());
 
                     if (isRelative) {
-                        nsAutoString registryDir( regDir.getStr() );
+                        // PRUnichar != sal_Unicode in mingw
+                        nsAutoString registryDir( reinterpret_cast_mingw_only<const PRUnichar *>(regDir.getStr()) );
                         nsCOMPtr<nsILocalFile>     mAppData;
                         rv = NS_NewLocalFile(registryDir, PR_TRUE,
                                         getter_AddRefs(mAppData));
@@ -490,7 +498,8 @@ namespace connectivity
             if (!path.getLength())
                 return sal_True;
 
-            nsAutoString filePath(path.getStr());
+            // PRUnichar != sal_Unicode in mingw
+            nsAutoString filePath(reinterpret_cast_mingw_only<const PRUnichar *>(path.getStr()));
 
             nsresult rv;
             nsCOMPtr<nsILocalFile>  localFile;

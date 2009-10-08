@@ -55,6 +55,7 @@
 #include <com/sun/star/util/XNumberFormatsSupplier.hpp>
 #include <com/sun/star/container/XNamed.hpp>
 #include <com/sun/star/awt/LineEndFormat.hpp>
+#include <com/sun/star/awt/MouseWheelBehavior.hpp>
 #ifndef _COM_SUN_STAR_SCRTIP_XEVENTATTACHERMANAGER_HPP_
 #include <com/sun/star/script/XEventAttacherManager.hpp>
 #endif
@@ -90,9 +91,9 @@ using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star::sdb;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::form;
-using ::com::sun::star::util::XNumberFormatter;
 
 using ::com::sun::star::util::XNumberFormatter;
+namespace MouseWheelBehavior = ::com::sun::star::awt::MouseWheelBehavior;
 
 String INVALIDTEXT     = String::CreateFromAscii("###");
 String OBJECTTEXT      = String::CreateFromAscii("<OBJECT>");
@@ -836,21 +837,39 @@ void DbCellControl::Init( Window& rParent, const Reference< XRowSet >& _rxCursor
         try
         {
             // some other common properties
-            Reference< XPropertySet > xModel( m_rColumn.getModel() );
-            Reference< XPropertySetInfo > xModelPSI;
-            if ( xModel.is() )
-                xModelPSI = xModel->getPropertySetInfo();
+            Reference< XPropertySet > xModel( m_rColumn.getModel(), UNO_SET_THROW );
+            Reference< XPropertySetInfo > xModelPSI( xModel->getPropertySetInfo(), UNO_SET_THROW );
 
-            // the "readonly" state
-            if ( xModelPSI.is() && xModelPSI->hasPropertyByName( FM_PROP_READONLY ) )
+            if ( xModelPSI->hasPropertyByName( FM_PROP_READONLY ) )
             {
                 implAdjustReadOnly( xModel );
             }
 
-            // the "enabled" flag
-            if ( xModelPSI.is() && xModelPSI->hasPropertyByName( FM_PROP_ENABLED ) )
+            if ( xModelPSI->hasPropertyByName( FM_PROP_ENABLED ) )
             {
                 implAdjustEnabled( xModel );
+            }
+
+            if ( xModelPSI->hasPropertyByName( FM_PROP_MOUSE_WHEEL_BEHAVIOR ) )
+            {
+                sal_Int16 nWheelBehavior = MouseWheelBehavior::SCROLL_FOCUS_ONLY;
+                OSL_VERIFY( xModel->getPropertyValue( FM_PROP_MOUSE_WHEEL_BEHAVIOR ) >>= nWheelBehavior );
+                USHORT nVclSetting = MOUSE_WHEEL_FOCUS_ONLY;
+                switch ( nWheelBehavior )
+                {
+                case MouseWheelBehavior::SCROLL_DISABLED:   nVclSetting = MOUSE_WHEEL_DISABLE; break;
+                case MouseWheelBehavior::SCROLL_FOCUS_ONLY: nVclSetting = MOUSE_WHEEL_FOCUS_ONLY; break;
+                case MouseWheelBehavior::SCROLL_ALWAYS:     nVclSetting = MOUSE_WHEEL_ALWAYS; break;
+                default:
+                    OSL_ENSURE( false, "DbCellControl::Init: invalid MouseWheelBehavior!" );
+                    break;
+                }
+
+                AllSettings aSettings = m_pWindow->GetSettings();
+                MouseSettings aMouseSettings = aSettings.GetMouseSettings();
+                aMouseSettings.SetWheelBehavior( nVclSetting );
+                aSettings.SetMouseSettings( aMouseSettings );
+                m_pWindow->SetSettings( aSettings, TRUE );
             }
         }
         catch( const Exception& )

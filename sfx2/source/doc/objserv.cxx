@@ -415,7 +415,7 @@ void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
             if ( pDocInfItem )
             {
                 // parameter, e.g. from replayed macro
-                pDocInfItem->updateDocumentInfo(getDocProperties());
+                pDocInfItem->UpdateDocumentInfo(getDocProperties(), true);
                 SetUseUserData( pDocInfItem->IsUseUserData() );
             }
             else
@@ -478,7 +478,7 @@ void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
                     if ( pDocInfoItem )
                     {
                         // user has done some changes to DocumentInfo
-                        pDocInfoItem->updateDocumentInfo(getDocProperties());
+                        pDocInfoItem->UpdateDocumentInfo(getDocProperties());
                         SetUseUserData( ((const SfxDocumentInfoItem *)pDocInfoItem)->IsUseUserData() );
 
                         // add data from dialog for possible recording purposes
@@ -639,11 +639,20 @@ void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
                 SfxStoringHelper aHelper( xEmptyFactory );
 
                 if ( QueryHiddenInformation( bIsPDFExport ? WhenCreatingPDF : WhenSaving, NULL ) == RET_YES )
+                {
                     bDialogUsed = aHelper.GUIStoreModel( GetModel(),
-                                                    ::rtl::OUString::createFromAscii( pSlot->GetUnoName() ),
-                                                    aDispatchArgs,
-                                                    bPreselectPassword,
-                                                    GetSharedFileURL() );
+                                                         ::rtl::OUString::createFromAscii( pSlot->GetUnoName() ),
+                                                         aDispatchArgs,
+                                                         bPreselectPassword,
+                                                         GetSharedFileURL() );
+                }
+                else
+                {
+                    // the user has decided not to store the document
+                    throw task::ErrorCodeIOException( ::rtl::OUString(),
+                                                      uno::Reference< uno::XInterface >(),
+                                                      ERRCODE_IO_ABORT );
+                }
 
                 // the scripting signature might be preserved
                 // pImp->nScriptingSignatureState = SIGNATURESTATE_NOSIGNATURES;

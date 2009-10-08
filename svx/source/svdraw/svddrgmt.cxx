@@ -2551,7 +2551,7 @@ bool SdrDragGradient::BeginSdrDrag()
         {
             basegfx::B2DPoint aPosition(DragStat().GetStart().X(), DragStat().GetStart().Y());
 
-            if(pColHdl->getOverlayObjectList().isHit(aPosition))
+            if(pColHdl->getOverlayObjectList().isHitLogic(aPosition))
             {
                 bHit = true;
                 pIAOHandle->SetMoveSingleHandle(true);
@@ -2566,7 +2566,7 @@ bool SdrDragGradient::BeginSdrDrag()
         {
             basegfx::B2DPoint aPosition(DragStat().GetStart().X(), DragStat().GetStart().Y());
 
-            if(pColHdl->getOverlayObjectList().isHit(aPosition))
+            if(pColHdl->getOverlayObjectList().isHitLogic(aPosition))
             {
                 bHit = true;
                 pIAOHandle->SetMoveSingleHandle(true);
@@ -2578,7 +2578,7 @@ bool SdrDragGradient::BeginSdrDrag()
         {
             basegfx::B2DPoint aPosition(DragStat().GetStart().X(), DragStat().GetStart().Y());
 
-            if(pIAOHandle->getOverlayObjectList().isHit(aPosition))
+            if(pIAOHandle->getOverlayObjectList().isHitLogic(aPosition))
             {
                 bHit = true;
             }

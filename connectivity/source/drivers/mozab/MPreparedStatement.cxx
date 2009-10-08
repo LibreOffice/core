@@ -67,11 +67,11 @@ IMPLEMENT_SERVICE_INFO(OPreparedStatement,"com.sun.star.sdbcx.mozab.PreparedStat
 
 
 OPreparedStatement::OPreparedStatement( OConnection* _pConnection,const ::rtl::OUString& sql)
-    :OStatement_BASE2(_pConnection)
+    :OCommonStatement(_pConnection)
     ,m_nNumParams(0)
     ,m_sSqlStatement(sql)
     ,m_bPrepared(sal_False)
-    ,m_pResultSet( NULL )
+    ,m_pResultSet()
 {
 }
 // -----------------------------------------------------------------------------
@@ -79,21 +79,17 @@ OPreparedStatement::~OPreparedStatement()
 {
 }
 // -----------------------------------------------------------------------------
-sal_Bool OPreparedStatement::lateInit()
+void OPreparedStatement::lateInit()
 {
-    return parseSql( m_sSqlStatement );
+    if ( eSelect != parseSql( m_sSqlStatement ) )
+        throw SQLException();
 }
 // -------------------------------------------------------------------------
 void SAL_CALL OPreparedStatement::disposing()
 {
     ::osl::MutexGuard aGuard(m_aMutex);
 
-    if(m_pResultSet)
-        m_pResultSet->release();
-
-    clearMyResultSet();
-
-    OStatement_BASE2::disposing();
+    OCommonStatement::disposing();
 
     m_xMetaData = NULL;
     if(m_aParameterRow.isValid())
@@ -105,63 +101,61 @@ void SAL_CALL OPreparedStatement::disposing()
 }
 // -----------------------------------------------------------------------------
 
-sal_Bool OPreparedStatement::parseSql( const ::rtl::OUString& sql , sal_Bool bAdjusted ) throw (
-     ::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException )
+OCommonStatement::StatementType OPreparedStatement::parseSql( const ::rtl::OUString& sql , sal_Bool bAdjusted )
+    throw ( ::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException )
 {
-    OSL_TRACE("in :: OPreparedStatement::parseSql()");
-    if (!OStatement_Base::parseSql( sql, bAdjusted ))
-        return sal_False;
+    StatementType eStatementType = OCommonStatement::parseSql( sql, bAdjusted );
+    if ( eStatementType != eSelect )
+        return eStatementType;
 
     m_xParamColumns = new OSQLColumns();
-
-    Reference<XIndexAccess> xNames(m_xColNames,UNO_QUERY);
 
     // describe all parameters need for the resultset
     describeParameter();
 
-    OResultSet::setBoundedColumns(m_aRow,m_xParamColumns,xNames,sal_False,m_xDBMetaData,m_aColMapping);
+    Reference<XIndexAccess> xNames(m_xColNames,UNO_QUERY);
+    OResultSet::setBoundedColumns( m_aRow, m_xParamColumns, xNames, sal_False, m_xDBMetaData, m_aColMapping );
 
-    m_pResultSet = createResultSet();
-    m_pResultSet->acquire();
-    m_xResultSet = Reference<XResultSet>(m_pResultSet);
-    initializeResultSet(m_pResultSet);
-    OSL_TRACE("Out :: OPreparedStatement::parseSql()");
-    return sal_True;
-}
-
-// -----------------------------------------------------------------------------
-
-OResultSet* OPreparedStatement::createResultSet( )
-{
-    OSL_TRACE("In/Out : OPreparedStatement::createResultSet( )");
-    return new OResultSet( this, m_pSQLIterator );
+    return eStatementType;
 }
 
 // -----------------------------------------------------------------------------
 void OPreparedStatement::initializeResultSet( OResultSet* _pResult )
 {
-    OSL_TRACE("In : OPreparedStatement::initializeResultSet( )");
-    OStatement_Base::initializeResultSet( _pResult );
+    OCommonStatement::initializeResultSet( _pResult );
+    _pResult->setParameterColumns( m_xParamColumns );
+    _pResult->setParameterRow( m_aParameterRow );
+}
 
-    _pResult->setParameterColumns(m_xParamColumns);
-    _pResult->setParameterRow(m_aParameterRow);
-    OSL_TRACE("Out : OPreparedStatement::initializeResultSet( )");
+// -----------------------------------------------------------------------------
+void OPreparedStatement::clearCachedResultSet()
+{
+    OCommonStatement::clearCachedResultSet();
+    m_pResultSet.clear();
+    m_xMetaData.clear();
+}
+// -----------------------------------------------------------------------------
+void OPreparedStatement::cacheResultSet( const ::rtl::Reference< OResultSet >& _pResult )
+{
+    OCommonStatement::cacheResultSet( _pResult );
+    OSL_PRECOND( m_pResultSet == NULL, "OPreparedStatement::parseSql: you should call clearCachedResultSet before!" );
+    m_pResultSet = _pResult;
 }
 
 // -----------------------------------------------------------------------------
 void SAL_CALL OPreparedStatement::acquire() throw()
 {
-    OStatement_BASE2::acquire();
+    OCommonStatement::acquire();
 }
 // -----------------------------------------------------------------------------
 void SAL_CALL OPreparedStatement::release() throw()
 {
-    OStatement_BASE2::release();
+    OCommonStatement::release();
 }
 // -----------------------------------------------------------------------------
 Any SAL_CALL OPreparedStatement::queryInterface( const Type & rType ) throw(RuntimeException)
 {
-    Any aRet = OStatement_BASE2::queryInterface(rType);
+    Any aRet = OCommonStatement::queryInterface(rType);
     if(!aRet.hasValue())
         aRet = OPreparedStatement_BASE::queryInterface(rType);
     return aRet;
@@ -169,61 +163,41 @@ Any SAL_CALL OPreparedStatement::queryInterface( const Type & rType ) throw(Runt
 // -------------------------------------------------------------------------
 ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > SAL_CALL OPreparedStatement::getTypes(  ) throw(::com::sun::star::uno::RuntimeException)
 {
-    return ::comphelper::concatSequences(OPreparedStatement_BASE::getTypes(),OStatement_BASE2::getTypes());
+    return ::comphelper::concatSequences(OPreparedStatement_BASE::getTypes(),OCommonStatement::getTypes());
 }
 // -------------------------------------------------------------------------
 
 Reference< XResultSetMetaData > SAL_CALL OPreparedStatement::getMetaData(  ) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
-    checkDisposed(OStatement_BASE::rBHelper.bDisposed);
-    sal_Bool bReadOnly= sal_True;
-    if (m_pResultSet)
+    checkDisposed(OCommonStatement_IBASE::rBHelper.bDisposed);
+
+    sal_Bool bReadOnly = sal_True;
+    if ( m_pResultSet.is() )
         bReadOnly = m_pResultSet->determineReadOnly();
-    if(!m_xMetaData.is())
+    // if we do not have a result set, then we have not been executed, yet. In this case, assuming readonly=true is
+    // okay, /me thinks.
+
+    if ( !m_xMetaData.is() )
         m_xMetaData = new OResultSetMetaData( m_pSQLIterator->getSelectColumns(), m_pSQLIterator->getTables().begin()->first ,m_pTable,bReadOnly );
+
     return m_xMetaData;
 }
+
 // -------------------------------------------------------------------------
-
-void SAL_CALL OPreparedStatement::close(  ) throw(SQLException, RuntimeException)
-{
-    ::osl::MutexGuard aGuard( m_aMutex );
-    checkDisposed(OStatement_BASE::rBHelper.bDisposed);
-
-
-    // Reset last warning message
-
-    try {
-        clearWarnings ();
-        clearMyResultSet();
-        // OStatement_BASE2::close();
-    }
-    catch (SQLException &) {
-        // If we get an error, ignore
-    }
-
-    // Remove this Statement object from the Connection object's
-    // list
-}
-// -------------------------------------------------------------------------
-
 sal_Bool SAL_CALL OPreparedStatement::execute(  ) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
-    checkDisposed(OStatement_BASE::rBHelper.bDisposed);
+    checkDisposed(OCommonStatement_IBASE::rBHelper.bDisposed);
 
-
-    Reference< XResultSet> xRS = OStatement_Base::executeQuery( m_sSqlStatement );
-    // same as in statement with the difference that this statement also can contain parameter
-
-    OSL_TRACE("In/Out: OPreparedStatement::execute" );
-    return xRS.is();
+    Reference< XResultSet> xResult = executeQuery();
+    return xResult.is();
 }
 // -------------------------------------------------------------------------
 
 sal_Int32 SAL_CALL OPreparedStatement::executeUpdate(  ) throw(SQLException, RuntimeException)
 {
+    ::dbtools::throwFeatureNotImplementedException( "XStatement::executeUpdate", *this );
     return 0;
 }
 // -------------------------------------------------------------------------
@@ -231,7 +205,7 @@ sal_Int32 SAL_CALL OPreparedStatement::executeUpdate(  ) throw(SQLException, Run
 void SAL_CALL OPreparedStatement::setString( sal_Int32 parameterIndex, const ::rtl::OUString& x ) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
-    checkDisposed(OStatement_BASE::rBHelper.bDisposed);
+    checkDisposed(OCommonStatement_IBASE::rBHelper.bDisposed);
 
     OSL_TRACE("prepStmt::setString( %s )", OUtoCStr( x ) );
     setParameter( parameterIndex, x );
@@ -241,7 +215,7 @@ void SAL_CALL OPreparedStatement::setString( sal_Int32 parameterIndex, const ::r
 Reference< XConnection > SAL_CALL OPreparedStatement::getConnection(  ) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
-    checkDisposed(OStatement_BASE::rBHelper.bDisposed);
+    checkDisposed(OCommonStatement_IBASE::rBHelper.bDisposed);
 
     return (Reference< XConnection >)m_pConnection;
 }
@@ -251,12 +225,11 @@ Reference< XResultSet > SAL_CALL OPreparedStatement::executeQuery(  ) throw(SQLE
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     OSL_TRACE("In: OPreparedStatement::executeQuery" );
-    checkDisposed(OStatement_BASE::rBHelper.bDisposed);
+    checkDisposed(OCommonStatement_IBASE::rBHelper.bDisposed);
 
-    Reference< XResultSet > rs = OStatement_Base::executeQuery( m_sSqlStatement );
-
-    OSL_TRACE("Out: OPreparedStatement::executeQuery" );
-    return rs;
+    // our statement has already been parsed in lateInit, no need to do all this (potentially expensive)
+    // stuff again. Just execute.
+    return impl_executeCurrentQuery();
 }
 // -------------------------------------------------------------------------
 
@@ -318,7 +291,7 @@ void SAL_CALL OPreparedStatement::setLong( sal_Int32 /*parameterIndex*/, sal_Int
 void SAL_CALL OPreparedStatement::setNull( sal_Int32 parameterIndex, sal_Int32 /*sqlType*/ ) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
-    checkDisposed(OStatement_BASE::rBHelper.bDisposed);
+    checkDisposed(OCommonStatement_IBASE::rBHelper.bDisposed);
 
     checkAndResizeParameters(parameterIndex);
 
@@ -410,7 +383,7 @@ void OPreparedStatement::setFastPropertyValue_NoBroadcast(sal_Int32 nHandle,cons
         case PROPERTY_ID_USEBOOKMARKS:
             break;
         default:
-            OStatement_Base::setFastPropertyValue_NoBroadcast(nHandle,rValue);
+            OCommonStatement::setFastPropertyValue_NoBroadcast(nHandle,rValue);
     }
 }
 // -----------------------------------------------------------------------------
@@ -422,7 +395,7 @@ void OPreparedStatement::checkParameterIndex(sal_Int32 _parameterIndex)
 // -----------------------------------------------------------------------------
 void OPreparedStatement::checkAndResizeParameters(sal_Int32 parameterIndex)
 {
-    ::connectivity::checkDisposed(OStatement_BASE::rBHelper.bDisposed);
+    ::connectivity::checkDisposed(OCommonStatement_IBASE::rBHelper.bDisposed);
 
     if ( !m_aParameterRow.isValid() ) {
         m_aParameterRow = new OValueVector();

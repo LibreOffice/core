@@ -143,6 +143,7 @@
 #define SID_CURRENTTIME                     (SID_SFX_START + 311)
 #define SID_CURRENTDATE                     (SID_SFX_START + 312)
 #define SID_VERSION_VISIBLE                 (SID_SFX_START + 313)
+#define SID_PASTE_UNFORMATTED               (SID_SFX_START + 314)
 #define SID_PRINTER_NOTFOUND_WARN           (SID_SFX_START + 320)
 #define SID_PRINTER_USETHREAD               (SID_SFX_START + 321)
 #define SID_PRINTER_NAME                    (SID_SFX_START + 322)

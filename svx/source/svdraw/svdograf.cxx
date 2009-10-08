@@ -581,13 +581,6 @@ sal_Bool SdrGrafObj::ImpUpdateGraphicLink() const
 
 // -----------------------------------------------------------------------------
 
-SdrObject* SdrGrafObj::CheckHit(const Point& rPnt, USHORT nTol, const SetOfByte* pVisiLayer) const
-{
-    return ImpCheckHit( rPnt, nTol, pVisiLayer, TRUE );
-}
-
-// -----------------------------------------------------------------------------
-
 void SdrGrafObj::TakeObjNameSingul(XubString& rName) const
 {
     switch( pGraphic->GetType() )

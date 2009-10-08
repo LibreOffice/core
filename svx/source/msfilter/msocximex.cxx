@@ -623,7 +623,11 @@ class ContainerRecReader
                 pS->SeekRel( 4 );
             // option flags
             if( nContentFlags & 0x00000010 )
-                pS->SeekRel( 4 );
+            {
+                sal_uInt32 nBitFlags = 0;
+                *pS >> nBitFlags;
+                rec.bVisible = ( ( nBitFlags & 0x02 ) == 0x02 );
+            }
             // substream size
             if( nContentFlags & 0x00000020 )
                 *pS >> rec.nSubStreamLen;
@@ -1212,6 +1216,13 @@ sal_Bool OCX_Control::Import(uno::Reference<container::XNameContainer> &rDialog
         xPropSet->setPropertyValue(WW8_ASCII2STR("Step"), aTmp);
     }
 
+    try
+    {
+        xPropSet->setPropertyValue(WW8_ASCII2STR("EnableVisible"), uno::makeAny( mbVisible ) );
+    }
+    catch( uno::Exception& )
+    {
+    }
     return sal_True;
 }
 
@@ -3612,6 +3623,7 @@ void OCX_ContainerControl::ProcessControl(OCX_Control* pControl,SvStorageStream*
         // reflect the ms tabbing from orig MS UserForm, see below
         pControl->mnTabPos = rec.nTabPos;
         pControl->SetInDialog(true);
+        pControl->mbVisible = rec.bVisible;
         if ( mnStep )
         {
             // If the container has a step then it should be

@@ -1546,3 +1546,54 @@ bool EditView::ChangeFontSize( bool bGrow, SfxItemSet& rSet, const FontList* pFo
     }
     return bRet;
 }
+
+String EditView::GetSurroundingText() const
+{
+    DBG_CHKTHIS( EditView, 0 );
+    DBG_CHKOBJ( pImpEditView->pEditEngine, EditEngine, 0 );
+
+    EditSelection aSel( pImpEditView->GetEditSelection() );
+    aSel.Adjust( PIMPEE->GetEditDoc() );
+
+    if( HasSelection() )
+    {
+        XubString aStr = PIMPEE->GetSelected( aSel );
+
+        // Stop reconversion if the selected text includes a line break.
+        if ( aStr.Search( 0x0A ) == STRING_NOTFOUND )
+        return aStr;
+        else
+        return String();
+    }
+    else
+    {
+        aSel.Min().SetIndex( 0 );
+        aSel.Max().SetIndex( aSel.Max().GetNode()->Len() );
+        return PIMPEE->GetSelected( aSel );
+    }
+}
+
+Selection EditView::GetSurroundingTextSelection() const
+{
+    DBG_CHKTHIS( EditView, 0 );
+
+    ESelection aSelection( GetSelection() );
+    aSelection.Adjust();
+
+    if( HasSelection() )
+    {
+        EditSelection aSel( pImpEditView->GetEditSelection() );
+        aSel.Adjust( PIMPEE->GetEditDoc() );
+        XubString aStr = PIMPEE->GetSelected( aSel );
+
+        // Stop reconversion if the selected text includes a line break.
+        if ( aStr.Search( 0x0A ) == STRING_NOTFOUND )
+        return Selection( 0, aSelection.nEndPos - aSelection.nStartPos );
+        else
+        return Selection( 0, 0 );
+    }
+    else
+    {
+        return Selection( aSelection.nStartPos, aSelection.nEndPos );
+    }
+}

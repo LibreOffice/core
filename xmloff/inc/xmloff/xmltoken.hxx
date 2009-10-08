@@ -138,9 +138,11 @@ namespace xmloff { namespace token {
         XML_NP_OF,
         XML_N_OF,
 
-        // ODF 1.2 metadata: RDFa
-        XML_NP_RDFA,
-        XML_N_RDFA,
+        // ODF 1.2 metadata: RDFa and GRDDL
+        XML_NP_XHTML,
+        XML_N_XHTML,
+        XML_NP_GRDDL,
+        XML_N_GRDDL,
 
         // units
         XML_UNIT_MM,
@@ -3041,6 +3043,7 @@ namespace xmloff { namespace token {
         XML_META_FIELD,
         XML_ABOUT,
         XML_DATATYPE,
+        XML_TRANSFORMATION,
 
         // ODF 1.2 numbered-paragraph
         XML_LIST_ID,

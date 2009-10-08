@@ -102,6 +102,9 @@ basegfx::B2ITuple TableLayouter::getCellSize( const CellPos& rPos  ) const
             sal_Int32 nRowSpan = std::max( xCell->getRowSpan(), (sal_Int32)1 );
             while( nRowSpan && (aPos.mnRow < nRowCount) )
             {
+                if( ((sal_Int32)maRows.size()) <= aPos.mnRow )
+                    break;
+
                 height += maRows[aPos.mnRow++].mnSize;
                 nRowSpan--;
             }
@@ -110,6 +113,9 @@ basegfx::B2ITuple TableLayouter::getCellSize( const CellPos& rPos  ) const
             sal_Int32 nColSpan = std::max( xCell->getColumnSpan(), (sal_Int32)1 );
             while( nColSpan && (aPos.mnCol < nColCount ) )
             {
+                if( ((sal_Int32)maColumns.size()) <= aPos.mnCol )
+                    break;
+
                 width += maColumns[aPos.mnCol++].mnSize;
                 nColSpan--;
             }
@@ -133,11 +139,14 @@ bool TableLayouter::getCellArea( const CellPos& rPos, basegfx::B2IRectangle& rAr
         {
             const basegfx::B2ITuple aCellSize( getCellSize( rPos ) );
 
-            const sal_Int32 x = maColumns[rPos.mnCol].mnPos;
-            const sal_Int32 y = maRows[rPos.mnRow].mnPos;
+            if( (rPos.mnCol < ((sal_Int32)maColumns.size()) && (rPos.mnRow < ((sal_Int32)maRows.size()) ) ) )
+            {
+                const sal_Int32 x = maColumns[rPos.mnCol].mnPos;
+                const sal_Int32 y = maRows[rPos.mnRow].mnPos;
 
-            rArea = basegfx::B2IRectangle( x, y, x + aCellSize.getX(), y + aCellSize.getY()  );
-            return true;
+                rArea = basegfx::B2IRectangle( x, y, x + aCellSize.getX(), y + aCellSize.getY()  );
+                return true;
+            }
         }
     }
     catch( Exception& )
@@ -321,6 +330,21 @@ sal_Int32 TableLayouter::getVerticalEdge( int nEdgeX, sal_Int32* pnMin /*= 0*/, 
 
 // -----------------------------------------------------------------------------
 
+static bool checkMergeOrigin( const TableModelRef& xTable, sal_Int32 nMergedX, sal_Int32 nMergedY, sal_Int32 nCellX, sal_Int32 nCellY, bool& bRunning )
+{
+    Reference< XMergeableCell > xCell( xTable->getCellByPosition( nCellX, nCellY ), UNO_QUERY );
+    if( xCell.is() && !xCell->isMerged() )
+    {
+        const sal_Int32 nRight = xCell->getColumnSpan() + nCellX;
+        const sal_Int32 nBottom = xCell->getRowSpan() + nCellY;
+        if( (nMergedX < nRight) && (nMergedY < nBottom) )
+            return true;
+
+        bRunning = false;
+    }
+    return false;
+}
+
 /** returns true if the cell(nMergedX,nMergedY) is merged with other cells.
     the returned cell( rOriginX, rOriginY ) is the origin( top left cell ) of the merge.
 */
@@ -336,49 +360,87 @@ bool findMergeOrigin( const TableModelRef& xTable, sal_Int32 nMergedX, sal_Int32
         if( !xCell.is() || !xCell->isMerged() )
             return true;
 
-        // check horizontal
-        sal_Int32 nCol = nMergedX-1;
-        while( nCol >= 0 )
-        {
-            xCell = xCell.query( xTable->getCellByPosition( nCol, nMergedY ) );
-            if( xCell.is() && !xCell->isMerged() )
-            {
-                if( xCell->getColumnSpan() > 1 )
-                {
-                    // hit!
-                    rOriginX = nCol;
-                    rOriginY = nMergedY;
-                    return true;
-                }
-                break;
-            }
-            nCol--;
-        }
+        bool bCheckVert = true;
+        bool bCheckHorz = true;
 
-        // check vertical
-        sal_Int32 nRow = nMergedY-1;
-        while( nRow >= 0 )
-        {
-            xCell = xCell.query( xTable->getCellByPosition( nMergedX, nRow ) );
-            if( xCell.is() && !xCell->isMerged() )
-            {
-                if( xCell->getRowSpan() > 1 )
-                {
-                    // hit!
-                    rOriginX = nMergedX;
-                    rOriginY = nRow;
-                    return true;
-                }
-                break;
-            }
-            nRow--;
-        }
+        sal_Int32 nMinCol = 0;
+        sal_Int32 nMinRow = 0;
 
-        // if origin is not at the edges, it must be the top left cell of the merged edges
-        rOriginX = nCol+1;
-        rOriginY = nRow+1;
-        xCell = xCell.query( xTable->getCellByPosition( rOriginX, rOriginY ) );
-        return xCell.is() && (xCell->getRowSpan() > 1) && (xCell->getColumnSpan() > 1);
+        sal_Int32 nStep = 1, i;
+
+        sal_Int32 nRow, nCol;
+        do
+        {
+            if( bCheckVert )
+            {
+                nRow = nMergedY - nStep;
+                if( nRow >= nMinRow )
+                {
+                    nCol = nMergedX;
+                    for( i = 0; (i <= nStep) && (nCol >= nMinCol); i++, nCol-- )
+                    {
+                        if( checkMergeOrigin( xTable, nMergedX, nMergedY, nCol, nRow, bCheckVert ) )
+                        {
+                            rOriginX = nCol; rOriginY = nRow;
+                            return true;
+                        }
+
+                        if( !bCheckVert )
+                        {
+                            if( nCol == nMergedX )
+                            {
+                                nMinRow = nRow+1;
+                            }
+                            else
+                            {
+                                bCheckVert = true;
+                            }
+                            break;
+                        }
+                    }
+                }
+                else
+                {
+                    bCheckVert = false;
+                }
+            }
+
+            if( bCheckHorz )
+            {
+                nCol = nMergedX - nStep;
+                if( nCol >= nMinCol )
+                {
+                    nRow = nMergedY;
+                    for( i = 0; (i < nStep) && (nRow >= nMinRow); i++, nRow-- )
+                    {
+                        if( checkMergeOrigin( xTable, nMergedX, nMergedY, nCol, nRow, bCheckHorz ) )
+                        {
+                            rOriginX = nCol; rOriginY = nRow;
+                            return true;
+                        }
+
+                        if( !bCheckHorz )
+                        {
+                            if( nRow == nMergedY )
+                            {
+                                nMinCol = nCol+1;
+                            }
+                            else
+                            {
+                                bCheckHorz = true;
+                            }
+                            break;
+                        }
+                    }
+                }
+                else
+                {
+                    bCheckHorz = false;
+                }
+            }
+            nStep++;
+        }
+        while( bCheckVert || bCheckHorz );
     }
     catch( Exception& )
     {

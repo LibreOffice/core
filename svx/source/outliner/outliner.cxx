@@ -1519,7 +1519,7 @@ void Outliner::ImplCheckParagraphs( USHORT nStart, USHORT nEnd )
 
     // --> OD 2009-03-10 #i100014#
     // assure that the following for-loop does not loop forever
-    for ( ULONG n = nStart; n < nEnd; n++ )
+    for ( USHORT n = nStart; n < nEnd; n++ )
     // <--
     {
         Paragraph* pPara = pParaList->GetParagraph( n );

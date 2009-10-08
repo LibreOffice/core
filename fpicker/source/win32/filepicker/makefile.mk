@@ -48,9 +48,6 @@ CDEFS+=-DUNICODE
 #CDEFS+=-DWIN32_LEAN_AND_MEAN
 #CDEFS+=-DWIN32
 
-.IF "$(COM)"=="GCC"
-CDEFS+=-UWINVER -DWINVER=0x500
-.ENDIF
 
 # --- Resources ----------------------------------------------------
 

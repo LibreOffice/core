@@ -139,14 +139,11 @@ private:
             a locked controller.  This includes setting the draw page size and setting
             the chart type.
         @param  aChartSize  The size the draw page will be set to.
-        @param  bDomainForDefaultDataNeeded This flag indicates wether the chart's data set
-            has to contain a domain value.
         @param  aServiceName The name of the service the diagram is initialized with.
         @param  bSetWitchData   Indicates wether the data set takes it's data series from
             rows or from columns.
     */
     void    InitChart   (com::sun::star::awt::Size aChartSize,
-                        sal_Bool bDomainForDefaultDataNeeded,
                         const ::rtl::OUString & rChartTypeServiceName,
                         sal_Bool bSetSwitchData);
 

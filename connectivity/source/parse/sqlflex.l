@@ -192,7 +192,6 @@ COLLECT                                         {SQL_NEW_KEYWORD(SQL_TOKEN_COLLE
 [Dd][Ee][Ss][Cc]								{SQL_NEW_KEYWORD(SQL_TOKEN_DESC); return SQL_TOKEN_DESC; }
 [Dd][Ii][Ff][Ff][Ee][Rr][Ee][Nn][Cc][Ee]		{SQL_NEW_KEYWORD(SQL_TOKEN_DIFFERENCE); return SQL_TOKEN_DIFFERENCE; }
 [Dd][Ii][Ss][Tt][Ii][Nn][Cc][Tt]				{SQL_NEW_KEYWORD(SQL_TOKEN_DISTINCT); return SQL_TOKEN_DISTINCT; }
-[Dd][Ii][Vv]									{SQL_NEW_KEYWORD(SQL_TOKEN_DIV); return SQL_TOKEN_DIV; }
 [Dd][Oo][Uu][Bb][Ll][Ee]						{SQL_NEW_KEYWORD(SQL_TOKEN_DOUBLE); return SQL_TOKEN_DOUBLE; }
 [Dd][Rr][Oo][Pp]								{SQL_NEW_KEYWORD(SQL_TOKEN_DROP); return SQL_TOKEN_DROP; }
 

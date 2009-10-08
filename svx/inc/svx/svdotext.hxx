@@ -272,14 +272,14 @@ private:
                                        Rectangle&       rAnchorRect,
                                        Rectangle&       rPaintRect,
                                        Fraction&        aFitXKorreg ) const;
-    SVX_DLLPRIVATE SdrObject* ImpConvertObj(FASTBOOL bToPoly) const;
+    SVX_DLLPRIVATE SdrObject* ImpConvertContainedTextToSdrPathObjs(bool bToPoly) const;
     SVX_DLLPRIVATE void ImpLinkAnmeldung();
     SVX_DLLPRIVATE void ImpLinkAbmeldung();
     SVX_DLLPRIVATE ImpSdrObjTextLinkUserData* GetLinkUserData() const;
 //  void ImpCheckItemSetChanges(const SfxItemSet& rAttr);
 
 protected:
-    FASTBOOL ImpCanConvTextToCurve() const { return GetOutlinerParaObject()!=NULL && pModel!=NULL && !IsOutlText() && !IsFontwork(); }
+    bool ImpCanConvTextToCurve() const;
     SdrObject* ImpConvertMakeObj(const basegfx::B2DPolyPolygon& rPolyPolygon, sal_Bool bClosed, sal_Bool bBezier, sal_Bool bNoSetAttr = sal_False) const;
     SdrObject* ImpConvertAddText(SdrObject* pObj, FASTBOOL bBezier) const;
     void ImpSetTextStyleSheetListeners();
@@ -430,7 +430,6 @@ public:
 
     // Wird zur Bestimmung des Textankerbereichs benoetigt
     virtual void TakeUnrotatedSnapRect(Rectangle& rRect) const;
-    virtual SdrObject* CheckHit(const Point& rPnt, USHORT nTol, const SetOfByte* pVisiLayer) const;
     virtual void TakeObjNameSingul(String& rName) const;
     virtual void TakeObjNamePlural(String& rName) const;
     virtual void operator=(const SdrObject& rObj);
@@ -472,7 +471,6 @@ public:
     virtual sal_Bool BegTextEdit(SdrOutliner& rOutl);
     virtual void TakeTextEditArea(Size* pPaperMin, Size* pPaperMax, Rectangle* pViewInit, Rectangle* pViewMin) const;
     virtual void EndTextEdit(SdrOutliner& rOutl);
-    virtual SdrObject* CheckTextEditHit(const Point& rPnt, USHORT nTol, const SetOfByte* pVisiLayer) const;
     virtual USHORT GetOutlinerViewAnchorMode() const;
 
     void StartTextAnimation(OutputDevice* pOutDev, const Point& rOffset, long nExtraData=0L);

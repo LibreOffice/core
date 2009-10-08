@@ -582,7 +582,10 @@ void SvxTableController::onInsert( sal_uInt16 nSId )
             }
 
             if( bUndo )
+            {
                 mpModel->EndUndo();
+                mpModel->SetChanged();
+            }
 
             if( mpModel )
                 mpModel->SetChanged();
@@ -987,6 +990,9 @@ void SvxTableController::MergeMarkedCells()
     SdrTableObj* pTableObj = dynamic_cast< ::sdr::table::SdrTableObj* >( mxTableObj.get() );
     if( pTableObj )
     {
+        if( pTableObj->IsTextEditActive() )
+            mpView->SdrEndTextEdit(sal_True);
+
         TableModelNotifyGuard aGuard( mxTable.get() );
         MergeRange( aStart.mnCol, aStart.mnRow, aEnd.mnCol, aEnd.mnRow );
     }
@@ -1018,6 +1024,9 @@ void SvxTableController::SplitMarkedCells()
             SdrTableObj* pTableObj = dynamic_cast< SdrTableObj* >( mxTableObj.get() );
             if( pTableObj )
             {
+                if( pTableObj->IsTextEditActive() )
+                    mpView->SdrEndTextEdit(sal_True);
+
                 TableModelNotifyGuard aGuard( mxTable.get() );
 
                 const bool bUndo = mpModel && mpModel->IsUndoEnabled();
@@ -1476,7 +1485,16 @@ bool SvxTableController::executeAction( sal_uInt16 nAction, bool bSelect, Window
         if( bSelect )
             gotoCell( pTableObj->getPreviousCell( getSelectionEnd(), true ), false, pWindow, nAction );
         else
-            gotoCell( pTableObj->getNextCell( getSelectionEnd(), true ), false, pWindow, nAction );
+        {
+            CellPos aSelectionEnd( getSelectionEnd() );
+            CellPos aNextCell( pTableObj->getNextCell( aSelectionEnd, true ) );
+            if( aSelectionEnd == aNextCell )
+            {
+                onInsert( SID_TABLE_INSERT_ROW );
+                aNextCell = pTableObj->getNextCell( aSelectionEnd, true );
+            }
+            gotoCell( aNextCell, false, pWindow, nAction );
+        }
         break;
     }
     }
@@ -1934,7 +1952,6 @@ void SvxTableController::updateSelectionOverlay()
                     if( pOverlayManager )
                     {
                         // sdr::overlay::CellOverlayType eType = sdr::overlay::CELL_OVERLAY_INVERT;
-                        // sdr::overlay::CellOverlayType eType = sdr::overlay::CELL_OVERLAY_HATCH;
                         sdr::overlay::CellOverlayType eType = sdr::overlay::CELL_OVERLAY_TRANSPARENT;
 
                         sdr::overlay::OverlayObjectCell* pOverlay = new sdr::overlay::OverlayObjectCell( eType, aHighlight, aRanges );
@@ -1974,7 +1991,7 @@ void SvxTableController::MergeAttrFromSelectedCells(SfxItemSet& rAttr, bool bOnl
             for( sal_Int32 nCol = aStart.mnCol; nCol <= aEnd.mnCol; nCol++ )
             {
                 CellRef xCell( dynamic_cast< Cell* >( mxTable->getCellByPosition( nCol, nRow ).get() ) );
-                if( xCell.is() )
+                if( xCell.is() && !xCell->isMerged() )
                 {
                     const SfxItemSet& rSet = xCell->GetItemSet();
                     SfxWhichIter aIter(rSet);

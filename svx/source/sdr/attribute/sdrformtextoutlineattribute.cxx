@@ -6,8 +6,9 @@
  *
  * OpenOffice.org - a multi-platform office productivity suite
  *
- * $RCSfile: overlaysdrobject.hxx,v $
- * $Revision: 1.4 $
+ * $RCSfile: sdrtextattribute.cxx,v $
+ *
+ * $Revision: 1.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -28,47 +29,38 @@
  *
  ************************************************************************/
 
-#ifndef _SDR_OVERLAY_OVERLAYSDROBJECT_HXX
-#define _SDR_OVERLAY_OVERLAYSDROBJECT_HXX
+#include "precompiled_svx.hxx"
 
-#include <svx/sdr/overlay/overlayobject.hxx>
-
-//////////////////////////////////////////////////////////////////////////////
-// predeclarations
-class SdrObject;
+#include <svx/sdr/attribute/sdrformtextoutlineattribute.hxx>
 
 //////////////////////////////////////////////////////////////////////////////
+// pointer compare define
+#define pointerOrContentEqual(p, q) ((p == q) || (p && q && *p == *q))
 
-namespace sdr
+//////////////////////////////////////////////////////////////////////////////
+
+namespace drawinglayer
 {
-    namespace overlay
+    namespace attribute
     {
-        class SVX_DLLPUBLIC OverlaySdrObject : public OverlayObjectWithBasePosition
+        SdrFormTextOutlineAttribute::SdrFormTextOutlineAttribute(
+            const LineAttribute& rLineAttribute,
+            const StrokeAttribute& rStrokeAttribute,
+            sal_uInt8 nTransparence)
+        :   maLineAttribute(rLineAttribute),
+            maStrokeAttribute(rStrokeAttribute),
+            mnTransparence(nTransparence)
         {
-        protected:
-            // the SdrObject to show
-            const SdrObject&                        mrSdrObject;
+        }
 
-            // Draw geometry
-            virtual void drawGeometry(OutputDevice& rOutputDevice);
-
-            // Create the BaseRange. This method needs to calculate maBaseRange.
-            virtual void createBaseRange(OutputDevice& rOutputDevice);
-
-            // Hittest with logical coordinates. Default tests against maBaseRange.
-            virtual sal_Bool isHit(const basegfx::B2DPoint& rPos, double fTol = 0.0) const;
-
-        public:
-            OverlaySdrObject(
-                const basegfx::B2DPoint& rBasePos,
-                const SdrObject& rObject);
-            virtual ~OverlaySdrObject();
-        };
-    } // end of namespace overlay
-} // end of namespace sdr
+        bool SdrFormTextOutlineAttribute::operator==(const SdrFormTextOutlineAttribute& rCandidate) const
+        {
+            return (getLineAttribute() == rCandidate.getLineAttribute()
+                && getStrokeAttribute() == rCandidate.getStrokeAttribute()
+                && getTransparence() == rCandidate.getTransparence());
+        }
+    } // end of namespace attribute
+} // end of namespace drawinglayer
 
 //////////////////////////////////////////////////////////////////////////////
-
-#endif //_SDR_OVERLAY_OVERLAYSDROBJECT_HXX
-
 // eof

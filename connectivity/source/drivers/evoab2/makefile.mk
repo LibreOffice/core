@@ -39,7 +39,7 @@ dummy:
 
 # --- Settings ----------------------------------
 
-.INCLUDE : settings.mk
+.INCLUDE : $(PRJ)$/makefile.pmk
 .INCLUDE :  $(PRJ)$/version.mk
 
 PKGCONFIG_MODULES=gtk+-2.0
@@ -111,4 +111,4 @@ DEF1NAME=	$(SHL1TARGET)
 .ENDIF
 # --- Targets ----------------------------------
 
-.INCLUDE : target.mk
+.INCLUDE : $(PRJ)$/target.pmk

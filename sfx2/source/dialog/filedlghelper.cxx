@@ -560,9 +560,20 @@ struct CheckPasswordCapability
 {
     sal_Bool operator() ( const SfxFilter* _pFilter )
     {
-        return  _pFilter && _pFilter->IsOwnFormat()
-            &&  _pFilter->UsesStorage()
-            &&  ( SOFFICE_FILEFORMAT_60 <= _pFilter->GetVersion() );
+        if (!_pFilter)
+            return false;
+
+#if 0 // to be enabled in the future
+        if (_pFilter->GetFilterName().EqualsAscii("MS Excel 97"))
+            // For now, we eanble password protection for Excel 97 as a
+            // special case.  If we start having more filters supporting
+            // export encryption with password, we should probably switch to
+            // using a filter flag instead.
+            return true;
+#endif
+
+        return _pFilter->IsOwnFormat() && _pFilter->UsesStorage()
+            && ( SOFFICE_FILEFORMAT_60 <= _pFilter->GetVersion() );
     }
 };
 
@@ -1633,11 +1644,12 @@ ErrCode FileDialogHelper_Impl::execute( SvStringsDtor*& rpURLList,
                 sal_Bool bPassWord = sal_False;
                 if ( ( aValue >>= bPassWord ) && bPassWord )
                 {
-                    // ask for the password
+                    // ask for a password
                     uno::Reference < ::com::sun::star::task::XInteractionHandler > xInteractionHandler( ::comphelper::getProcessServiceFactory()->createInstance(::rtl::OUString::createFromAscii("com.sun.star.comp.uui.UUIInteractionHandler")), UNO_QUERY );
 
                     if( xInteractionHandler.is() )
                     {
+                        // TODO: find out a way to set the 1-15 char limits on MS Excel 97 filter.
                         RequestDocumentPassword* pPasswordRequest = new RequestDocumentPassword(
                             ::com::sun::star::task::PasswordRequestMode_PASSWORD_CREATE, *(rpURLList->GetObject(0)) );
 

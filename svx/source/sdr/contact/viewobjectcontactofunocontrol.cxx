@@ -1247,18 +1247,16 @@ namespace sdr { namespace contact {
     //--------------------------------------------------------------------
     bool ViewObjectContactOfUnoControl_Impl::isPrintableControl() const
     {
-        if ( !m_aControl.is() )
+        SdrUnoObj* pUnoObject( NULL );
+        if ( !getUnoObject( pUnoObject ) )
             return false;
 
         bool bIsPrintable = false;
         try
         {
-            Reference< XPropertySet > xModelProperties( m_aControl.getModel(), UNO_QUERY );
-            Reference< XPropertySetInfo > xPropertyInfo( xModelProperties.is() ? xModelProperties->getPropertySetInfo() : Reference< XPropertySetInfo >() );
-            const ::rtl::OUString sPrintablePropertyName( RTL_CONSTASCII_USTRINGPARAM( "Printable" ) );
-
-            if ( xPropertyInfo.is() && xPropertyInfo->hasPropertyByName( sPrintablePropertyName ) )
-                OSL_VERIFY( xModelProperties->getPropertyValue( sPrintablePropertyName ) >>= bIsPrintable );
+            Reference< XPropertySet > xModelProperties( pUnoObject->GetUnoControlModel(), UNO_QUERY_THROW );
+            static const ::rtl::OUString s_sPrintablePropertyName( RTL_CONSTASCII_USTRINGPARAM( "Printable" ) );
+            OSL_VERIFY( xModelProperties->getPropertyValue( s_sPrintablePropertyName ) >>= bIsPrintable );
         }
         catch( const Exception& )
         {
@@ -1728,6 +1726,14 @@ namespace sdr { namespace contact {
     UnoControlPrintOrPreviewContact::~UnoControlPrintOrPreviewContact()
     {
         DBG_DTOR( UnoControlPrintOrPreviewContact, NULL );
+    }
+
+    //--------------------------------------------------------------------
+    drawinglayer::primitive2d::Primitive2DSequence UnoControlPrintOrPreviewContact::createPrimitive2DSequence(const DisplayInfo& rDisplayInfo ) const
+    {
+        if ( !m_pImpl->isPrintableControl() )
+            return drawinglayer::primitive2d::Primitive2DSequence();
+        return ViewObjectContactOfUnoControl::createPrimitive2DSequence( rDisplayInfo );
     }
 
     //====================================================================

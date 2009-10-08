@@ -65,7 +65,7 @@ namespace sdr
 
             // bitfield
             // Flag to decide if PreRendering shall be used for overlay refreshes.
-            // Default is sal_False.
+            // Default is false.
             unsigned                                mbRefreshWithPreRendering : 1;
 
             // link for timer
@@ -78,7 +78,13 @@ namespace sdr
             void ImpSaveBackground(const Region& rRegion, OutputDevice* pPreRenderDevice = 0L);
 
         public:
-            OverlayManagerBuffered(OutputDevice& rOutputDevice, sal_Bool bRefreshWithPreRendering = sal_False);
+            // when handing over another OverlayManager at construction, the OverlayObjects
+            // will be taken over from it. The new one will have added all OverlayObjects
+            // while the handed over one will have none
+            OverlayManagerBuffered(
+                OutputDevice& rOutputDevice,
+                OverlayManager* pOldOverlayManager = 0,
+                bool bRefreshWithPreRendering = false);
             virtual ~OverlayManagerBuffered();
 
             // complete redraw
@@ -97,8 +103,8 @@ namespace sdr
             virtual void invalidateRange(const basegfx::B2DRange& rRange);
 
             // access to RefreshWithPreRendering Flag
-            sal_Bool DoRefreshWithPreRendering() const { return mbRefreshWithPreRendering; }
-            void SetRefreshWithPreRendering(sal_Bool bNew);
+            bool DoRefreshWithPreRendering() const { return mbRefreshWithPreRendering; }
+            void SetRefreshWithPreRendering(bool bNew);
         };
     } // end of namespace overlay
 } // end of namespace sdr

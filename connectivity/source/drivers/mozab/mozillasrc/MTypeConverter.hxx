@@ -54,6 +54,11 @@ namespace connectivity
             static ::std::string ouStringToStlString(const ::rtl::OUString&);
             static ::std::string nsStringToStlString(const nsString&);
 
+            static ::rtl::OUString nsACStringToOUString( const nsACString& _source );
+            static ::rtl::OString nsACStringToOString( const nsACString& _source );
+            static void asciiOUStringToNsACString( const ::rtl::OUString& _asciiString, nsACString& _dest );
+            static void asciiToNsACString( const sal_Char* _asciiString, nsACString& _dest );
+
         private:
             MTypeConverter() {};
         };

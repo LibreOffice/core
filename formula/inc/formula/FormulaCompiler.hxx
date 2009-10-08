@@ -219,6 +219,9 @@ public:
      */
     OpCode GetEnglishOpCode( const String& rName ) const;
 
+    void            SetCompileForFAP( BOOL bVal )
+                        { bCompileForFAP = bVal; bIgnoreErrors = bVal; }
+
     static BOOL DeQuote( String& rStr );
 
     static const String&    GetNativeSymbol( OpCode eOp );

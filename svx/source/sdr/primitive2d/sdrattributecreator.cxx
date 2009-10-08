@@ -591,10 +591,18 @@ namespace drawinglayer
 
             if(aBitmap.GetPrefMapMode() != aDestinationMapUnit)
             {
-                // #i96237# need to use LogicToLogic, source is not always pixels
-                aBitmap.SetPrefSize(Application::GetDefaultDevice()->LogicToLogic(
-                    aBitmap.GetPrefSize(), aBitmap.GetPrefMapMode(), aDestinationMapUnit));
-                aBitmap.SetPrefMapMode(aDestinationMapUnit);
+                // #i100360# for MAP_PIXEL, LogicToLogic will not work properly,
+                // so fallback to Application::GetDefaultDevice()
+                if(MAP_PIXEL == aBitmap.GetPrefMapMode().GetMapUnit())
+                {
+                    aBitmap.SetPrefSize(Application::GetDefaultDevice()->PixelToLogic(
+                        aBitmap.GetPrefSize(), aDestinationMapUnit));
+                }
+                else
+                {
+                    aBitmap.SetPrefSize(OutputDevice::LogicToLogic(
+                        aBitmap.GetPrefSize(), aBitmap.GetPrefMapMode(), aDestinationMapUnit));
+                }
             }
 
             // get size
@@ -665,7 +673,7 @@ namespace drawinglayer
 
             // when object has text and text is fontwork and hide contour is set for fontwork, force
             // line and fill style to empty
-            if(pText && pText->isFontwork() && pText->isHideContour())
+            if(pText && pText->getSdrFormTextAttribute() && pText->isHideContour())
             {
                 bFontworkHideContour = true;
             }
@@ -730,7 +738,7 @@ namespace drawinglayer
 
             // when object has text and text is fontwork and hide contour is set for fontwork, force
             // line and fill style to empty
-            if(pText && pText->isFontwork() && pText->isHideContour())
+            if(pText && pText->getSdrFormTextAttribute() && pText->isHideContour())
             {
                 bFontworkHideContour = true;
             }
@@ -1039,7 +1047,7 @@ namespace drawinglayer
 
             // when object has text and text is fontwork and hide contour is set for fontwork, force
             // fill style to empty
-            if(pText && pText->isFontwork() && pText->isHideContour())
+            if(pText && pText->getSdrFormTextAttribute() && pText->isHideContour())
             {
                 bFontworkHideContour = true;
             }

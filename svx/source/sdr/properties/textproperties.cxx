@@ -237,7 +237,7 @@ namespace sdr
             // call parent
             AttributeProperties::SetStyleSheet(pNewStyleSheet, bDontRemoveHardAttr);
 
-            if( rObj.GetModel() && !rObj.IsTextEditActive() && !rObj.IsLinkedText() )
+            if( rObj.GetModel() /*&& !rObj.IsTextEditActive()*/ && !rObj.IsLinkedText() )
             {
                 SdrOutliner& rOutliner = rObj.ImpGetDrawOutliner();
 
