@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: poolfmt.hxx,v $
- * $Revision: 1.7 $
+ * $Revision: 1.7.224.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -196,6 +196,7 @@ RES_POOLPAGE_REGISTER,                              // Verzeichnis
 RES_POOLPAGE_HTML,                                  // HTML
 RES_POOLPAGE_FOOTNOTE,                              // Fussnote bei Dokumentende
 RES_POOLPAGE_ENDNOTE,                               // Endnotensseite
+RES_POOLPAGE_LANDSCAPE,                             // Landscape Page Style
 
 RES_POOLPAGE_END
 };

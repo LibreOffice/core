@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: objectformatter.hxx,v $
- * $Revision: 1.8 $
+ * $Revision: 1.8.214.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -110,7 +110,7 @@ class SwObjectFormatter
             return mrPageFrm;
         }
 
-        inline const bool ConsiderWrapOnObjPos() const
+        inline bool ConsiderWrapOnObjPos() const
         {
             return mbConsiderWrapOnObjPos;
         }
@@ -130,7 +130,7 @@ class SwObjectFormatter
             mbFormatOnlyAsCharAnchored = true;
         }
 
-        inline const bool FormatOnlyAsCharAnchored() const
+        inline bool FormatOnlyAsCharAnchored() const
         {
             return mbFormatOnlyAsCharAnchored;
         }

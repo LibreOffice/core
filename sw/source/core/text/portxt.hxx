@@ -82,7 +82,7 @@ class SwHolePortion : public SwLinePortion
     KSHORT nBlankWidth;
 public:
             SwHolePortion( const SwTxtPortion &rPor );
-    inline const KSHORT GetBlankWidth( ) const { return nBlankWidth; }
+    inline KSHORT GetBlankWidth( ) const { return nBlankWidth; }
     inline void SetBlankWidth( const KSHORT nNew ) { nBlankWidth = nNew; }
     virtual SwLinePortion *Compress();
     virtual sal_Bool Format( SwTxtFormatInfo &rInf );

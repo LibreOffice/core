@@ -2078,7 +2078,7 @@ public:
     // <-- #i31958# access methods for XForms model(s)
 
     // --> OD 2006-03-21 #b6375613#
-    inline const bool ApplyWorkaroundForB6375613() const
+    inline bool ApplyWorkaroundForB6375613() const
     {
         return mbApplyWorkaroundForB6375613;
     }

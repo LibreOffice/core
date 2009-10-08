@@ -43,6 +43,7 @@
 #include <svtools/svstdarr.hxx>
 #endif
 #include <vcl/msgbox.hxx>
+#include <sfx2/viewfrm.hxx>
 #include <svx/hdft2.hxx>
 #include <svx/flstitem.hxx>
 #include <svx/htmlmode.hxx>
@@ -558,6 +559,9 @@ void SwTemplateDlg::PageCreated( USHORT nId, SfxTabPage &rPage )
 
         case TP_MACRO_ASSIGN:
             SwMacroAssignDlg::AddEvents( (SfxMacroTabPage&)rPage, MACASSGN_ALLFRM);
+            if ( pWrtShell && pWrtShell->GetView().GetDocShell()
+                && pWrtShell->GetView().GetDocShell()->GetFrame() && pWrtShell->GetView().GetDocShell()->GetFrame()->GetFrame() )
+                rPage.SetFrame( pWrtShell->GetView().GetDocShell()->GetFrame()->GetFrame()->GetFrameInterface() );
             break;
 
         case RID_SVXPAGE_PICK_NUM:

@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: fontcfg.cxx,v $
- * $Revision: 1.24 $
+ * $Revision: 1.24.224.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -329,7 +329,15 @@ void SwStdFontConfig::ChangeInt( USHORT nFontType, sal_Int32 nHeight )
         sal_Int16   eWestern = aLinguOpt.nDefaultLanguage,
                     eCJK = aLinguOpt.nDefaultLanguage_CJK,
                     eCTL = aLinguOpt.nDefaultLanguage_CTL;
-        if( nHeight != GetDefaultHeightFor(nFontType, lcl_LanguageOfType(nFontType, eWestern, eCJK, eCTL)))
+        // #i92090# default height value sets back to -1
+        const sal_Int32 nDefaultHeight = GetDefaultHeightFor(nFontType, lcl_LanguageOfType(nFontType, eWestern, eCJK, eCTL));
+        const bool bIsDefaultHeight = nHeight == nDefaultHeight;
+        if( bIsDefaultHeight && nDefaultFontHeight[nFontType] > 0 )
+        {
+            SetModified();
+            nDefaultFontHeight[nFontType] = -1;
+        }
+        else if( !bIsDefaultHeight && nHeight != nDefaultFontHeight[nFontType] )
         {
             SetModified();
             nDefaultFontHeight[nFontType] = nHeight;

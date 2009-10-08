@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: dbui.hrc,v $
- * $Revision: 1.8 $
+ * $Revision: 1.8.66.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -83,6 +83,7 @@
 #define STR_FILTER_CSV          (RC_DBUI_BEGIN + 9)
 #define STR_FILTER_ALL_DATA     (RC_DBUI_BEGIN + 10)
 #define STR_FILTER_MDB          (RC_DBUI_BEGIN + 11)
+#define STR_FILTER_ACCDB        (RC_DBUI_BEGIN + 12)
 
 // Bitmaps ------------------------------------------------------------------
 
@@ -105,6 +106,8 @@
 #define FT_CREATEDOCUMENTS  13
 #define FT_PROGRESS         14
 #define FT_COUNTING         15
+#define STR_SAVEMON         16
+#define FT_SAVING           17
 
 #define MM_PART_TITLE                   0
 #define MM_PART_FIRSTNAME               1

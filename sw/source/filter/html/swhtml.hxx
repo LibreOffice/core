@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: swhtml.hxx,v $
- * $Revision: 1.18 $
+ * $Revision: 1.18.100.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -566,7 +566,7 @@ class SwHTMLParser : public SfxHTMLParser, public SwClient
 
     const SwFmtColl *GetCurrFmtColl() const;
 
-    const SwTwips GetCurrentBrowseWidth() /* const */;
+    SwTwips GetCurrentBrowseWidth();
 
     SwHTMLNumRuleInfo& GetNumInfo() { return *pNumRuleInfo; }
     // --> OD 2008-04-02 #refactorlists#

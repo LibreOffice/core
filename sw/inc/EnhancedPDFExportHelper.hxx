@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: EnhancedPDFExportHelper.hxx,v $
- * $Revision: 1.10 $
+ * $Revision: 1.10.174.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -40,13 +40,19 @@
 #include <vector>
 #include <set>
 
-class vcl::PDFExtOutDevData;
+namespace vcl
+{
+    class PDFExtOutDevData;
+}
 class OutputDevice;
 class SwFrm;
 class SwLinePortion;
 class SwTxtPainter;
 class SwEditShell;
-class rtl::OUString;
+namespace rtl
+{
+    class OUString;
+}
 class MultiSelection;
 class SwTxtNode;
 class SwNumRule;
@@ -247,7 +253,7 @@ class SwEnhancedPDFExportHelper
     static NumListBodyIdMap& GetNumListBodyIdMap() {return aNumListBodyIdMap; }
     static FrmTagIdMap& GetFrmTagIdMap() { return aFrmTagIdMap; }
 
-    static const LanguageType GetDefaultLanguage() {return eLanguageDefault; }
+    static LanguageType GetDefaultLanguage() {return eLanguageDefault; }
 };
 
 #endif

@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: anchoredobject.cxx,v $
- * $Revision: 1.27 $
+ * $Revision: 1.27.212.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -276,7 +276,7 @@ void SwAnchoredObject::SetVertPosOrientFrm( const SwLayoutFrm& _rVertPosOrientFr
 // =============================================================================
 // accessors for member <mnLastTopOfLine>
 // =============================================================================
-const SwTwips SwAnchoredObject::GetLastTopOfLine() const
+SwTwips SwAnchoredObject::GetLastTopOfLine() const
 {
     return mnLastTopOfLine;
 }

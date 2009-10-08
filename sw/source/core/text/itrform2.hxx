@@ -183,19 +183,19 @@ public:
 
     inline SwMultiPortion *GetMulti() const { return pMulti; }
 
-    inline const sal_Bool IsOnceMore() const { return bOnceMore; }
+    inline sal_Bool IsOnceMore() const { return bOnceMore; }
     inline void       SetOnceMore( sal_Bool bNew ) { bOnceMore = bNew; }
 
-    inline const sal_Bool HasChanges() const { return bChanges; }
+    inline sal_Bool HasChanges() const { return bChanges; }
     inline void       SetChanges()       { bChanges = sal_True; }
 
-    inline const sal_Bool HasTruncLines() const { return bTruncLines; }
+    inline sal_Bool HasTruncLines() const { return bTruncLines; }
     inline void       SetTruncLines( sal_Bool bNew ) { bTruncLines = bNew; }
 
-    inline const sal_Bool IsUnclipped() const { return bUnclipped; }
+    inline sal_Bool IsUnclipped() const { return bUnclipped; }
     inline void       SetUnclipped( sal_Bool bNew ) { bUnclipped = bNew; }
 
-    inline const sal_Bool IsFlyInCntBase() const { return bFlyInCntBase; }
+    inline sal_Bool IsFlyInCntBase() const { return bFlyInCntBase; }
     inline void  SetFlyInCntBase( sal_Bool bNew = sal_True ){ bFlyInCntBase = bNew; }
 
     inline SwTxtFormatInfo &GetInfo()

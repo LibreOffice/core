@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: poolfmt.cxx,v $
- * $Revision: 1.54 $
+ * $Revision: 1.54.108.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -1605,6 +1605,24 @@ SwPageDesc* SwDoc::GetPageDescFromPool( sal_uInt16 nId, bool bRegardLanguage )
             pNewPgDsc->SetFtnInfo( aInf );
         }
         break;
+        case RES_POOLPAGE_LANDSCAPE:
+        {
+            SwPageDesc* pStdPgDsc = this->GetPageDescFromPool( RES_POOLPAGE_STANDARD );
+            SwFmtFrmSize aFrmSz( pStdPgDsc->GetMaster().GetFrmSize() );
+            SwTwips nTmp = aFrmSz.GetHeight();
+            aFrmSz.SetHeight( aFrmSz.GetWidth() );
+            aFrmSz.SetWidth( nTmp );
+            aSet.Put( aFrmSz );
+            aSet.Put( aLR );
+            aSet.Put( aUL );
+            if( pNewPgDsc )
+            {
+                pNewPgDsc->SetUseOn( nsUseOnPage::PD_ALL );
+                pNewPgDsc->SetLandscape( TRUE );
+            }
+       }
+       break;
+
     }
 
     if( aSet.Count() )

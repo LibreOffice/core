@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: widorp.cxx,v $
- * $Revision: 1.22 $
+ * $Revision: 1.22.214.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -127,7 +127,7 @@ SwTxtFrmBreak::SwTxtFrmBreak( SwTxtFrm *pNewFrm, const SwTwips nRst )
  * naechste Seite rutscht.
  */
 
-const sal_Bool SwTxtFrmBreak::IsInside( SwTxtMargin &rLine ) const
+sal_Bool SwTxtFrmBreak::IsInside( SwTxtMargin &rLine ) const
 {
     sal_Bool bFit = sal_False;
 

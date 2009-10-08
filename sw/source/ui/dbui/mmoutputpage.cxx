@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: mmoutputpage.cxx,v $
- * $Revision: 1.23 $
+ * $Revision: 1.23.136.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -92,10 +92,11 @@
 #include <sfx2/event.hxx>
 #include <swevent.hxx>
 #include <mmoutputpage.hrc>
+#include <dbui.hxx>
 #include <dbui.hrc>
 #include <helpid.h>
 #include <sfx2/app.hxx>
-
+#include <statstr.hrc>
 #include <unomid.h>
 
 using namespace svt;
@@ -377,6 +378,7 @@ SwMailMergeOutputPage::SwMailMergeOutputPage( SwMailMergeWizard* _pParent) :
 #ifdef MSC
 #pragma warning (default : 4355)
 #endif
+    m_bCancelSaving( false ),
     m_pWizard(_pParent),
     m_pTempPrinter( 0 ),
     m_pDocumentPrinterCopy(0)
@@ -719,6 +721,14 @@ IMPL_LINK(SwMailMergeOutputPage, SaveStartHdl_Impl, PushButton*, pButton)
     }
     return 0;
 }
+/*-- 17.07.2008 08:09:06---------------------------------------------------
+
+  -----------------------------------------------------------------------*/
+IMPL_LINK(SwMailMergeOutputPage, SaveCancelHdl_Impl, Button*, EMPTYARG )
+{
+    m_bCancelSaving = true;
+    return 0;
+}
 /*-- 17.05.2004 13:51:02---------------------------------------------------
 
   -----------------------------------------------------------------------*/
@@ -779,7 +789,18 @@ IMPL_LINK(SwMailMergeOutputPage, SaveOutputHdl_Impl, PushButton*, pButton)
         uno::Reference< frame::XStorable > xStore( pTargetView->GetDocShell()->GetModel(), uno::UNO_QUERY);
         xStore->storeToURL( sTargetTempURL, aValues   );
 
-        for(sal_uInt32 nDoc = nBegin; nDoc < nEnd; ++nDoc)
+        SwView* pSourceView = rConfigItem.GetSourceView();
+        PrintMonitor aSaveMonitor(this, PrintMonitor::MONITOR_TYPE_SAVE);
+        aSaveMonitor.aDocName.SetText(pSourceView->GetDocShell()->GetTitle(22));
+        aSaveMonitor.aCancel.SetClickHdl(LINK(this, SwMailMergeOutputPage, SaveCancelHdl_Impl));
+        aSaveMonitor.aPrinter.SetText( INetURLObject( sPath ).getFSysPath( INetURLObject::FSYS_DETECT ) );
+        aSaveMonitor.ResizeControls();
+
+        m_bCancelSaving = false;
+        aSaveMonitor.Show();
+        m_pWizard->enableButtons(WZB_CANCEL, sal_False);
+
+        for(sal_uInt32 nDoc = nBegin; nDoc < nEnd && !m_bCancelSaving; ++nDoc)
         {
             SwDocMergeInfo& rInfo = rConfigItem.GetDocumentMergeInfo(nDoc);
             INetURLObject aURL(sPath);
@@ -791,6 +812,10 @@ IMPL_LINK(SwMailMergeOutputPage, SaveOutputHdl_Impl, PushButton*, pButton)
                 sPath += '.';
                 sPath += sExtension;
             }
+            String sStat(SW_RES(STR_STATSTR_LETTER));
+            sStat += ' ';
+            sStat += String::CreateFromInt32( nDoc );
+            aSaveMonitor.aPrintInfo.SetText(sStat);
 
             //now extract a document from the target document
             SfxObjectShellRef xTempDocShell( new SwDocShell( SFX_CREATE_MODE_STANDARD ) );
@@ -856,6 +881,7 @@ IMPL_LINK(SwMailMergeOutputPage, SaveOutputHdl_Impl, PushButton*, pButton)
         }
         ::osl::File::remove( sTargetTempURL );
     }
+    m_pWizard->enableButtons(WZB_CANCEL, sal_True);
     m_pWizard->enableButtons(WZB_FINISH, sal_True);
     return 0;
 }
@@ -926,7 +952,6 @@ IMPL_LINK(SwMailMergeOutputPage, PrintHdl_Impl, PushButton*, EMPTYARG)
         if(nEnd > rConfigItem.GetMergedDocumentCount())
             nEnd = rConfigItem.GetMergedDocumentCount();
     }
-    SfxBoolItem aSilent( SID_SILENT, sal_True);
     rConfigItem.SetPrintRange( (USHORT)nBegin, (USHORT)nEnd );
     SwWrtShell& rSh = pTargetView->GetWrtShell();
     pTargetView->SetMailMergeConfigItem(&rConfigItem, 0, sal_False);
@@ -940,12 +965,14 @@ IMPL_LINK(SwMailMergeOutputPage, PrintHdl_Impl, PushButton*, EMPTYARG)
     SFX_APP()->NotifyEvent(SfxEventHint(SW_EVENT_MAIL_MERGE, pObjSh));
     rSh.GetNewDBMgr()->SetMergeType( DBMGR_MERGE_DOCUMENTS );
     SfxDispatcher *pDis = pTargetView->GetViewFrame()->GetDispatcher();
-    SfxBoolItem aMergeSilent(SID_SILENT, TRUE);
+    SfxBoolItem aMergeSilent(SID_SILENT, sal_False);
+    m_pWizard->enableButtons(WZB_CANCEL, sal_False);
     pDis->Execute(SID_PRINTDOCDIRECT,
             SFX_CALLMODE_SYNCHRON|SFX_CALLMODE_RECORD, &aMergeSilent, 0L);
     SFX_APP()->NotifyEvent(SfxEventHint(SW_EVENT_MAIL_MERGE_END, pObjSh));
 
     pTargetView->SetMailMergeConfigItem(0, 0, sal_False);
+    m_pWizard->enableButtons(WZB_CANCEL, sal_True);
     m_pWizard->enableButtons(WZB_FINISH, sal_True);
     return 0;
 }

@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: txtfly.cxx,v $
- * $Revision: 1.65 $
+ * $Revision: 1.65.22.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -1797,7 +1797,7 @@ const SwRect SwContourCache::ContourRect( const SwFmt* pFmt,
         {
             if( !pObj->ISA( E3dObject ) )
             {
-                aPolyPolygon = pObj->TakeXorPoly( sal_True );
+                aPolyPolygon = pObj->TakeXorPoly();
             }
 
             ::basegfx::B2DPolyPolygon aContourPoly(pObj->TakeContour());

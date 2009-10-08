@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: dflyobj.hxx,v $
- * $Revision: 1.11 $
+ * $Revision: 1.11.24.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -101,7 +101,7 @@ public:
     virtual const Rectangle& GetLogicRect() const;
     virtual       void       SetLogicRect(const Rectangle& rRect);
     virtual       void       NbcSetLogicRect(const Rectangle& rRect);
-    virtual ::basegfx::B2DPolyPolygon TakeXorPoly(sal_Bool bDetail) const;
+    virtual ::basegfx::B2DPolyPolygon TakeXorPoly() const;
     virtual       void       NbcMove  (const Size& rSiz);
     virtual       void       NbcResize(const Point& rRef, const Fraction& xFact,
                                        const Fraction& yFact);

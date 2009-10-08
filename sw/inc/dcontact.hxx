@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: dcontact.hxx,v $
- * $Revision: 1.27 $
+ * $Revision: 1.26.210.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -149,7 +149,7 @@ public:
         { return (const SwFrmFmt*)GetRegisteredIn(); }
 
     // OD 05.09.2003 #112039# - accessor for member <mbInDTOR>
-    const bool IsInDTOR() const;
+    bool IsInDTOR() const;
 
     /** method to move drawing object to corresponding visible layer
 
@@ -345,7 +345,7 @@ class SwDrawVirtObj : public SdrVirtObj
         // All overloaded methods which need to use the offset
         virtual void RecalcBoundRect();
         virtual SdrObject* CheckHit(const Point& rPnt, USHORT nTol, const SetOfByte* pVisiLayer) const;
-        virtual ::basegfx::B2DPolyPolygon TakeXorPoly(sal_Bool bDetail) const;
+        virtual ::basegfx::B2DPolyPolygon TakeXorPoly() const;
         virtual ::basegfx::B2DPolyPolygon TakeContour() const;
         virtual SdrHdl* GetHdl(sal_uInt32 nHdlNum) const;
         virtual SdrHdl* GetPlusHdl(const SdrHdl& rHdl, USHORT nPlNum) const;

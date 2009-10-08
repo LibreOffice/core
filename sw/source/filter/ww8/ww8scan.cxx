@@ -3271,7 +3271,7 @@ void WW8PLCFx_Cp_FKP::GetSprms(WW8PLCFxDesc* p)
                 character is at the FKP FC minus 1.
                 */
                 WW8_CP nCpStart, nCpEnd;
-                void* pData=0;
+                void* pData=NULL;
                 pPieceIter->Get(nCpStart, nCpEnd, pData);
 
                 WW8_FC nLimitFC = SVBT32ToUInt32( ((WW8_PCD*)pData)->fc );

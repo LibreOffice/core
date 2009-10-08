@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: docredln.cxx,v $
- * $Revision: 1.51 $
+ * $Revision: 1.51.122.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -203,6 +203,7 @@ void SwDoc::SetRedlineMode( RedlineMode_t eMode )
             SetInXMLImport( bSaveInXMLImportFlag );
         }
         eRedlineMode = eMode;
+        SetModified();
     }
 }
 

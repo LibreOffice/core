@@ -341,6 +341,7 @@ typedef BOOL (SwWrtShell:: *FNSimpleMove)();
     BOOL    InsertOleObject( const svt::EmbeddedObjectRef& xObj, SwFlyFrmFmt **pFlyFrmFmt = 0 );
     void    LaunchOLEObj( long nVerb = 0 );             // Server starten
     BOOL    IsOLEObj() const { return GetCntType() == CNT_OLE;}
+    virtual void MoveObjectIfActive( svt::EmbeddedObjectRef& xObj, const Point& rOffset );
     virtual void CalcAndSetScale( svt::EmbeddedObjectRef& xObj,
                                   const SwRect *pFlyPrtRect = 0,
                                   const SwRect *pFlyFrmRect = 0 );

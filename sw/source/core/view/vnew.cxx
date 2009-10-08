@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: vnew.cxx,v $
- * $Revision: 1.32 $
+ * $Revision: 1.31.210.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -390,7 +390,7 @@ ViewShell::~ViewShell()
     delete pAccOptions;
 }
 
-const BOOL ViewShell::HasDrawView() const
+BOOL ViewShell::HasDrawView() const
 {
     return Imp()->HasDrawView();
 }

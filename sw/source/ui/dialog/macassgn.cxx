@@ -55,13 +55,17 @@
 #include "docsh.hxx"
 #include "globals.hrc"
 
+#include <doc.hxx>
+
+using ::com::sun::star::uno::Reference;
+using ::com::sun::star::frame::XFrame;
 
 SvStringsDtor* __EXPORT _GetRangeHdl( _SfxMacroTabPage*, const String& );
 
 
-SwMacroAssignDlg::SwMacroAssignDlg( Window* pParent, SfxItemSet& rSet,
+SwMacroAssignDlg::SwMacroAssignDlg( Window* pParent, SfxItemSet& rSet, const SwWrtShell& rSh,
                                         DlgEventType eType )
-    : SfxMacroAssignDlg( pParent, rSet )
+    : SfxMacroAssignDlg( pParent, rSh.GetDoc() ? rSh.GetDoc()->GetDocShell() : NULL, rSet )
 {
      // TabPage holen
     SwMacroAssignDlg::AddEvents( *(SfxMacroTabPage*) GetTabPage(), eType );
@@ -153,7 +157,7 @@ BOOL SwMacroAssignDlg::INetFmtDlg( Window* pParent, SwWrtShell& rSh,
 
     aSet.Put( aItem );
 
-    SwMacroAssignDlg aMacDlg( pParent, aSet, MACASSGN_INETFMT );
+    SwMacroAssignDlg aMacDlg( pParent, aSet, rSh, MACASSGN_INETFMT );
     if( aMacDlg.Execute() == RET_OK )
     {
         const SfxItemSet* pOutSet = aMacDlg.GetOutputItemSet();

@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: svxcss1.cxx,v $
- * $Revision: 1.20 $
+ * $Revision: 1.20.214.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -3068,7 +3068,7 @@ static void ParseCSS1_page_break_inside( const CSS1Expression *pExpr,
                                          SvxCSS1PropertyInfo& /*rPropInfo*/,
                                          const SvxCSS1Parser& /*rParser*/ )
 {
-    SvxCSS1PageBreak eBreak;
+    SvxCSS1PageBreak eBreak(SVX_CSS1_PBREAK_NONE);
     ParseCSS1_page_break_xxx( pExpr, eBreak );
 
     BOOL bSetSplit = FALSE, bSplit = TRUE;

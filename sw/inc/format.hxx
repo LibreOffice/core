@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: format.hxx,v $
- * $Revision: 1.32 $
+ * $Revision: 1.32.144.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -318,7 +318,7 @@ public:
 
         @return false, default implementation
     */
-    virtual const sal_Bool IsBackgroundTransparent() const;
+    virtual sal_Bool IsBackgroundTransparent() const;
 
     /** SwFmt::IsShadowTransparent - for feature #99657#
 
@@ -331,7 +331,7 @@ public:
 
         @return false, default implementation
     */
-    virtual const sal_Bool IsShadowTransparent() const;
+    virtual sal_Bool IsShadowTransparent() const;
 };
 
 // --------------- inline Implementierungen ------------------------

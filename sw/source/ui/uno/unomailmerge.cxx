@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: unomailmerge.cxx,v $
- * $Revision: 1.26 $
+ * $Revision: 1.26.206.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -674,6 +674,8 @@ uno::Any SAL_CALL SwXMailMerge::execute(
                 Reference< sdbc::XRowSet > xRowSet( xInstance, UNO_QUERY );
                 if (xRowSet.is())
                     xRowSet->execute(); // build ResultSet from properties
+                if( !xCurConnection.is() )
+                    xCurConnection.set( xRowSetPropSet->getPropertyValue( C2U( "ActiveConnection" )), UNO_QUERY );
                 xCurResultSet = Reference< sdbc::XResultSet >( xRowSet, UNO_QUERY );
                 DBG_ASSERT( xCurResultSet.is(), "failed to build ResultSet" );
             }

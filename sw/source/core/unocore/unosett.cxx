@@ -2052,9 +2052,15 @@ void SwXNumberingRules::SetNumberingRuleByIndex(
                      awt::FontDescriptor* pDesc =  (awt::FontDescriptor*)pData->aVal.getValue();
                     if(pDesc)
                     {
-                        Font aFont;
-                        SvxUnoFontDescriptor::ConvertToFont( *pDesc, aFont );
-                        aFmt.SetBulletFont(&aFont);
+                        // --> OD 2008-09-11 #i93725#
+                        // do not accept "empty" font
+                        if ( pDesc->Name.getLength() > 0 )
+                        {
+                            Font aFont;
+                            SvxUnoFontDescriptor::ConvertToFont( *pDesc, aFont );
+                            aFmt.SetBulletFont(&aFont);
+                        }
+                        // <--
                     }
                     else
                         bWrongArg = sal_True;

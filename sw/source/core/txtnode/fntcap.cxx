@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: fntcap.cxx,v $
- * $Revision: 1.27 $
+ * $Revision: 1.27.214.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -215,7 +215,7 @@ public:
         { }
     virtual void Init( SwFntObj *pUpperFont, SwFntObj *pLowerFont );
     virtual void Do();
-    const xub_StrLen GetBreak() const { return nBreak; }
+    xub_StrLen GetBreak() const { return nBreak; }
 };
 
 void SwDoGetCapitalBreak::Init( SwFntObj *, SwFntObj * )

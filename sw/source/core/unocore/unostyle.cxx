@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: unostyle.cxx,v $
- * $Revision: 1.83 $
+ * $Revision: 1.83.24.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -1732,7 +1732,7 @@ const SwPageDesc& SwStyleBase_Impl::GetOldPageDesc()
         }
         if(!pOldPageDesc)
         {
-            for(i = RC_POOLPAGEDESC_BEGIN; i <= STR_POOLPAGE_ENDNOTE; ++i)
+            for(i = RC_POOLPAGEDESC_BEGIN; i <= STR_POOLPAGE_LANDSCAPE; ++i)
             {
                 const String aFmtName(SW_RES(i));
                 if(aFmtName == rStyleName)

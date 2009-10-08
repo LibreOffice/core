@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: fmtfordr.hxx,v $
- * $Revision: 1.8 $
+ * $Revision: 1.8.214.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -56,7 +56,7 @@ public:
     virtual SfxPoolItem*    Clone( SfxItemPool *pPool = 0 ) const;
     virtual USHORT          GetValueCount() const;
 
-    const SwFillOrder GetFillOrder() const { return SwFillOrder(GetValue()); }
+    SwFillOrder GetFillOrder() const { return SwFillOrder(GetValue()); }
 };
 
 inline SwFmtFillOrder &SwFmtFillOrder::operator=( const SwFmtFillOrder &rCpy )

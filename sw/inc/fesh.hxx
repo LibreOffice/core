@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: fesh.hxx,v $
- * $Revision: 1.63 $
+ * $Revision: 1.63.212.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -397,6 +397,9 @@ public:
     // The return value is the applied size.
     Size RequestObjectResize( const SwRect &rRect, const ::com::sun::star::uno::Reference < ::com::sun::star::embed::XEmbeddedObject >& );
 
+    //The layout has been changed, so the active object has to be moved after that
+    virtual void MoveObjectIfActive( svt::EmbeddedObjectRef& xObj, const Point& rOffset );
+
     //Der Client fuer das OleObject muss bezueglich der Scalierung auf dem
     //neuesten Stand gehalten werden. Impl in der WrtShell.
     //Wird ein Pointer auf eine Size uebergeben, so ist diese die aktuelle
@@ -755,7 +758,7 @@ public:
         @returns boolean, indicating, if the horizontal text direction of the
         page, the selected drawing object is on, is right-to-left.
     */
-    const bool IsShapeDefaultHoriTextDirR2L() const;
+    bool IsShapeDefaultHoriTextDirR2L() const;
 
     void ParkCursorInTab();
 

@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: swhtml.cxx,v $
- * $Revision: 1.51 $
+ * $Revision: 1.51.98.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -4964,7 +4964,7 @@ USHORT SwHTMLParser::ToTwips( USHORT nPixel ) const
         return nPixel;
 }
 
-const SwTwips SwHTMLParser::GetCurrentBrowseWidth()
+SwTwips SwHTMLParser::GetCurrentBrowseWidth()
 {
     SwTwips nWidth = SwHTMLTableLayout::GetBrowseWidth( *pDoc );
     if( nWidth )

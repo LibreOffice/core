@@ -219,7 +219,7 @@ private:
 
         @author OD
     */
-    const void _PaintSelectMarkAtPage( const PrevwPage* _aSelectedPrevwPage ) const;
+    void _PaintSelectMarkAtPage( const PrevwPage* _aSelectedPrevwPage ) const;
 
 public:
     /** constructor of <SwPagePreviewLayout>

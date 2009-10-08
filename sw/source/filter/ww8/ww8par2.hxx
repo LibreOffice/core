@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: ww8par2.hxx,v $
- * $Revision: 1.48 $
+ * $Revision: 1.47.214.1 $
  *
  * This file is part of OpenOffice.org.
  *

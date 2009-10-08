@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: porfly.hxx,v $
- * $Revision: 1.14 $
+ * $Revision: 1.14.214.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -49,7 +49,7 @@ class SwFlyPortion : public SwFixPortion
 public:
     inline  SwFlyPortion( const SwRect &rFlyRect )
         : SwFixPortion(rFlyRect), nBlankWidth( 0 ) { SetWhichPor( POR_FLY ); }
-    inline const KSHORT GetBlankWidth( ) const { return nBlankWidth; }
+    inline KSHORT GetBlankWidth( ) const { return nBlankWidth; }
     inline void SetBlankWidth( const KSHORT nNew ) { nBlankWidth = nNew; }
     virtual void Paint( const SwTxtPaintInfo &rInf ) const;
     virtual sal_Bool Format( SwTxtFormatInfo &rInf );
@@ -87,9 +87,9 @@ public:
     inline SwDrawContact *GetDrawContact() { return (SwDrawContact*)pContact; }
     inline const SwDrawContact* GetDrawContact() const
         { return (SwDrawContact*)pContact; }
-    inline const sal_Bool IsDraw() const { return bDraw; }
-    inline const sal_Bool IsMax() const { return bMax; }
-    inline const sal_uInt8 GetAlign() const { return nAlign; }
+    inline sal_Bool IsDraw() const { return bDraw; }
+    inline sal_Bool IsMax() const { return bMax; }
+    inline sal_uInt8 GetAlign() const { return nAlign; }
     inline void SetAlign( sal_uInt8 nNew ) { nAlign = nNew; }
     inline void SetMax( sal_Bool bNew ) { bMax = bNew; }
     // OD 29.07.2003 #110978# - use new datatype for parameter <nFlags>

@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: pagefrm.hxx,v $
- * $Revision: 1.25 $
+ * $Revision: 1.25.144.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -275,7 +275,7 @@ public:
     void SetFtnPage( BOOL b )                               { bFtnPage = b; }
     void SetEndNotePage( BOOL b )                           { bEndNotePage = b; }
 
-    inline  const USHORT GetPhyPageNum() const  { return nPhyPageNum;}
+    inline  USHORT GetPhyPageNum() const    { return nPhyPageNum;}
     inline  void SetPhyPageNum( USHORT nNum )   { nPhyPageNum = nNum;}
     inline  void DecrPhyPageNum()               { --nPhyPageNum;     }
     inline  void IncrPhyPageNum()               { ++nPhyPageNum;     }

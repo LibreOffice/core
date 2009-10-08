@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: txtinet.hxx,v $
- * $Revision: 1.7 $
+ * $Revision: 1.7.214.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -65,10 +65,10 @@ public:
     const SwCharFmt* GetCharFmt() const
             { return ((SwTxtINetFmt*)this)->GetCharFmt(); }
 
-    const BOOL IsVisited() const { return bVisited; }
+    BOOL IsVisited() const { return bVisited; }
     void SetVisited( BOOL bNew ) { bVisited = bNew; }
 
-    const BOOL IsValidVis() const { return bValidVis; }
+    BOOL IsValidVis() const { return bValidVis; }
     void SetValidVis( BOOL bNew ) { bValidVis = bNew; }
 
     BOOL IsProtect() const;

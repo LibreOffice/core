@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: dbui.hxx,v $
- * $Revision: 1.5 $
+ * $Revision: 1.5.136.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -38,16 +38,24 @@
 #include <vcl/fixed.hxx>
 
 
-class PrintMonitor: public ModelessDialog
+class SW_DLLPUBLIC PrintMonitor: public ModelessDialog
 {
 public:
+    enum PrintMonitorType
+    {
+        MONITOR_TYPE_PRINT,
+        MONITOR_TYPE_MAIL,
+        MONITOR_TYPE_SAVE
+    };
     FixedText       aDocName;
     FixedText       aPrinting;
     FixedText       aPrinter;
     FixedText       aPrintInfo;
     CancelButton    aCancel;
 
-    PrintMonitor( Window *pParent, BOOL bEMail = FALSE );
+    PrintMonitor( Window *pParent, PrintMonitorType eType );
+
+    void ResizeControls();
 };
 
 class CreateMonitor : public ModelessDialog

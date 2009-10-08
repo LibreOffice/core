@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: flyfrm.hxx,v $
- * $Revision: 1.24 $
+ * $Revision: 1.24.212.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -146,8 +146,8 @@ protected:
     virtual void RegisterAtCorrectPage();
 
     // --> OD 2006-08-10 #i68520#
-    virtual const bool _SetObjTop( const SwTwips _nTop );
-    virtual const bool _SetObjLeft( const SwTwips _nLeft );
+    virtual bool _SetObjTop( const SwTwips _nTop );
+    virtual bool _SetObjLeft( const SwTwips _nLeft );
     // <--
 
     // --> OD 2006-10-05 #i70122#
@@ -245,7 +245,7 @@ public:
         @return true, if background color is transparent or a existing background
         graphic is transparent.
     */
-    const sal_Bool IsBackgroundTransparent() const;
+    sal_Bool IsBackgroundTransparent() const;
 
     /** SwFlyFrm::IsShadowTransparent - for feature #99657#
 
@@ -257,7 +257,7 @@ public:
 
         @return true, if shadow color is transparent.
     */
-    const sal_Bool IsShadowTransparent() const;
+    sal_Bool IsShadowTransparent() const;
 
     // OD 2004-01-19 #110582#
     void Chain( SwFrm* _pAnchor );

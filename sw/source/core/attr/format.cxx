@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: format.cxx,v $
- * $Revision: 1.17 $
+ * $Revision: 1.17.146.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -662,7 +662,7 @@ void SwFmt::DelDiffs( const SfxItemSet& rSet )
 
     @return false, default implementation
 */
-const sal_Bool SwFmt::IsBackgroundTransparent() const
+sal_Bool SwFmt::IsBackgroundTransparent() const
 {
     return sal_False;
 }
@@ -678,7 +678,7 @@ const sal_Bool SwFmt::IsBackgroundTransparent() const
 
     @return false, default implementation
 */
-const sal_Bool SwFmt::IsShadowTransparent() const
+sal_Bool SwFmt::IsShadowTransparent() const
 {
     return sal_False;
 }

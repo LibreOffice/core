@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: applab.cxx,v $
- * $Revision: 1.34 $
+ * $Revision: 1.34.46.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -242,12 +242,19 @@ static sal_uInt16 nBCTitleNo = 0;
         const SfxPoolItem* pFrameItem = 0;
         if(pArgs)
             pArgs->GetItemState(SID_DOCFRAME, FALSE, &pFrameItem);
-        if(!pFrameItem)
-            return ;
-        SfxFrame* pFr = ((const SfxFrameItem*)pFrameItem)->GetFrame();
-        xDocSh->PutItem(SfxBoolItem(SID_HIDDEN, TRUE));
-        pFr->InsertDocument(xDocSh);
-        SfxViewFrame *pFrame = pFr->GetCurrentViewFrame();
+
+        SfxViewFrame* pFrame = 0;
+        if( pFrameItem )
+        {
+            SfxFrame* pFr = ((const SfxFrameItem*)pFrameItem)->GetFrame();
+            xDocSh->PutItem(SfxBoolItem(SID_HIDDEN, TRUE));
+            pFr->InsertDocument(xDocSh);
+            pFrame = pFr->GetCurrentViewFrame();
+        }
+        else
+        {
+            pFrame = SfxViewFrame::CreateViewFrame( *xDocSh, 0, TRUE );
+        }
         SwView      *pNewView = (SwView*) pFrame->GetViewShell();
         pNewView->AttrChangedNotify( &pNewView->GetWrtShell() );//Damit SelectShell gerufen wird.
 

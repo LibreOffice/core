@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: precompiled_sw.hxx,v $
- * $Revision: 1.5 $
+ * $Revision: 1.5.222.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -839,7 +839,6 @@
 #include "svx/xmlexchg.hxx"
 #include "svx/xmlgrhlp.hxx"
 #include "svx/xoutbmp.hxx"
-#include "svx/xoutx.hxx"
 #include "svx/xpoly.hxx"
 #include "svx/xtable.hxx"
 #include "svx/xtextit0.hxx"

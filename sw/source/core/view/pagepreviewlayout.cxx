@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: pagepreviewlayout.cxx,v $
- * $Revision: 1.15 $
+ * $Revision: 1.15.214.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -1274,7 +1274,7 @@ void SwPagePreviewLayout::Repaint( const Rectangle _aInvalidCoreRect ) const
 
     @author OD
 */
-const void SwPagePreviewLayout::_PaintSelectMarkAtPage(
+void SwPagePreviewLayout::_PaintSelectMarkAtPage(
                                     const PrevwPage* _aSelectedPrevwPage ) const
 {
     OutputDevice* pOutputDev = mrParentViewShell.GetOut();

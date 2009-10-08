@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: dbui.src,v $
- * $Revision: 1.34 $
+ * $Revision: 1.34.66.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -72,95 +72,61 @@ ModelessDialog DLG_PRINTMONITOR
     SVLOOK = TRUE ;
     HIDE = TRUE ;
     OUTPUTSIZE = TRUE ;
-    _WHMAPMODE = MAP_APPFONT ;
-    _WIDTH = 118 ;
-    _HEIGHT = 72 ;
+    Size = MAP_APPFONT ( 118, 72 ) ;
     MOVEABLE = TRUE ;
     APP = FALSE ;
     FixedText FT_DOCNAME
     {
-        HIDE = FALSE ;
-        _XYMAPMODE = MAP_APPFONT ;
-        _X = 6 ;
-        _Y = 6 ;
-        _WHMAPMODE = MAP_APPFONT ;
-        _WIDTH = 100 ;
-        _HEIGHT = 8 ;
-        TEXT = "" ;
-        LEFT = FALSE ;
+        Pos = MAP_APPFONT ( 6,6 ) ;
+        Size = MAP_APPFONT ( 100, 8 ) ;
         CENTER = TRUE ;
-        RIGHT = FALSE ;
     };
     FixedText FT_PRINTING
     {
-        HIDE = FALSE ;
-        _XYMAPMODE = MAP_APPFONT ;
-        _X = 6 ;
-        _Y = 17 ;
-        _WHMAPMODE = MAP_APPFONT ;
-        _WIDTH = 100 ;
-        _HEIGHT = 8 ;
-        LEFT = FALSE ;
+        Pos = MAP_APPFONT ( 6, 17 ) ;
+        Size = MAP_APPFONT (  100, 8 ) ;
         CENTER = TRUE ;
-        RIGHT = FALSE ;
         Text [ en-US ] = "is being printed on" ;
     };
     FixedText FT_SENDING
     {
-        HIDE = FALSE ;
-        _XYMAPMODE = MAP_APPFONT ;
-        _X = 6 ;
-        _Y = 17 ;
-        _WHMAPMODE = MAP_APPFONT ;
-        _WIDTH = 100 ;
-        _HEIGHT = 8 ;
-        LEFT = FALSE ;
+        Pos = MAP_APPFONT ( 6, 17 ) ;
+        Size = MAP_APPFONT (  100, 8 ) ;
         CENTER = TRUE ;
-        RIGHT = FALSE ;
         Text [ en-US ] = "is being sent to";
+    };
+    FixedText FT_SAVING
+    {
+        Pos = MAP_APPFONT ( 6, 17 ) ;
+        Size = MAP_APPFONT (  100, 8 ) ;
+        CENTER = TRUE ;
+        Text [ en-US ] = "is being saved to" ;
     };
     FixedText FT_PRINTER
     {
-        HIDE = FALSE ;
-        _XYMAPMODE = MAP_APPFONT ;
-        _X = 6 ;
-        _Y = 28 ;
-        _WHMAPMODE = MAP_APPFONT ;
-        _WIDTH = 100 ;
-        _HEIGHT = 8 ;
-        TEXT = "" ;
-        LEFT = FALSE ;
+        Pos = MAP_APPFONT ( 6, 28 ) ;
+        Size = MAP_APPFONT (  100, 8 ) ;
         CENTER = TRUE ;
-        RIGHT = FALSE ;
     };
     FixedText FT_PRINTINFO
     {
-        HIDE = FALSE ;
-        _XYMAPMODE = MAP_APPFONT ;
-        _X = 6 ;
-        _Y = 39 ;
-        _WHMAPMODE = MAP_APPFONT ;
-        _WIDTH = 100 ;
-        _HEIGHT = 8 ;
-        TEXT = "" ;
-        LEFT = FALSE ;
+        Pos = MAP_APPFONT ( 6, 39 ) ;
+        Size = MAP_APPFONT (  100, 8 ) ;
         CENTER = TRUE ;
-        RIGHT = FALSE ;
     };
     CancelButton PB_CANCELPRNMON
     {
-        HIDE = FALSE ;
-        _XYMAPMODE = MAP_APPFONT ;
-        _X = 31 ;
-        _Y = 52 ;
-        _WHMAPMODE = MAP_APPFONT ;
-        _WIDTH = 50 ;
-        _HEIGHT = 14 ;
+        Pos = MAP_APPFONT ( 31, 52 ) ;
+        Size = MAP_APPFONT (  50, 14 ) ;
         TABSTOP = TRUE ;
     };
     String STR_EMAILMON
     {
         Text [ en-US ] = "Send-Monitor";
+    };
+    String STR_SAVEMON
+    {
+        Text [ en-US ] = "Save-Monitor";
     };
     Text [ en-US ] = "Print monitor" ;
 };
@@ -228,7 +194,11 @@ String STR_FILTER_CSV
 };
 String STR_FILTER_MDB
 {
-    Text = "Microsoft Access (*.mdb)" ;
+    Text [ en-US ] = "Microsoft Access (*.mdb)" ;
+};
+String STR_FILTER_ACCDB
+{
+    Text [ en-US ] = "Microsoft Access 2007 (*.accdb)" ;
 };
 
  // DLG_MM_CREATIONMONITOR ------------------------------------------------------

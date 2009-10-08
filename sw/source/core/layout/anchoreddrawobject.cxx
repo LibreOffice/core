@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: anchoreddrawobject.cxx,v $
- * $Revision: 1.26 $
+ * $Revision: 1.26.144.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -273,7 +273,7 @@ void SwAnchoredDrawObject::UpdateLayoutDir()
 // <--
 
 // --> OD 2006-03-17 #i62875#
-const bool SwAnchoredDrawObject::IsOutsidePage() const
+bool SwAnchoredDrawObject::IsOutsidePage() const
 {
     bool bOutsidePage( false );
 
@@ -712,14 +712,14 @@ const SwRect SwAnchoredDrawObject::GetObjBoundRect() const
 // <--
 
 // --> OD 2006-08-10 #i68520#
-const bool SwAnchoredDrawObject::_SetObjTop( const SwTwips _nTop )
+bool SwAnchoredDrawObject::_SetObjTop( const SwTwips _nTop )
 {
     SwTwips nDiff = _nTop - GetObjRect().Top();
     DrawObj()->Move( Size( 0, nDiff ) );
 
     return nDiff != 0;
 }
-const bool SwAnchoredDrawObject::_SetObjLeft( const SwTwips _nLeft )
+bool SwAnchoredDrawObject::_SetObjLeft( const SwTwips _nLeft )
 {
     SwTwips nDiff = _nLeft - GetObjRect().Left();
     DrawObj()->Move( Size( nDiff, 0 ) );

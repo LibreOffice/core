@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: anchoredobject.hxx,v $
- * $Revision: 1.22 $
+ * $Revision: 1.22.214.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -237,8 +237,8 @@ class SwAnchoredObject
         void SetTmpConsiderWrapInfluenceOfOtherObjs( const bool bTmpConsiderWrapInfluence );
 
         // --> OD 2006-08-10 #i68520#
-        virtual const bool _SetObjTop( const SwTwips _nTop) = 0;
-        virtual const bool _SetObjLeft( const SwTwips _nLeft) = 0;
+        virtual bool _SetObjTop( const SwTwips _nTop) = 0;
+        virtual bool _SetObjLeft( const SwTwips _nLeft) = 0;
         // <--
 
         // --> OD 2006-10-05 #i70122#
@@ -349,7 +349,7 @@ class SwAnchoredObject
         void ResetLastCharRectHeight();
 
         // accessor to member <nmLastTopOfLine>
-        const SwTwips GetLastTopOfLine() const;
+        SwTwips GetLastTopOfLine() const;
         // OD 2004-05-18 #i28701# - follow-up of #i22341#
         void AddLastTopOfLineY( SwTwips _nDiff );
 

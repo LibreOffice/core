@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: fldref.hxx,v $
- * $Revision: 1.4 $
+ * $Revision: 1.4.214.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -93,7 +93,7 @@ class SwFldRefPage : public SwFldPage
     // --> OD 2007-12-05 #i83479#
     void SaveSelectedTxtNode();
     const SwTxtNode* GetSavedSelectedTxtNode() const;
-    const sal_uInt16 GetSavedSelectedPos() const;
+    sal_uInt16 GetSavedSelectedPos() const;
     // <--
 
 protected:

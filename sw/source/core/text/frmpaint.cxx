@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: frmpaint.cxx,v $
- * $Revision: 1.60 $
+ * $Revision: 1.60.68.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -78,7 +78,7 @@
 namespace numfunc
 {
     extern const String& GetDefBulletFontname();
-    extern const bool IsDefBulletFontUserDefined();
+    extern bool IsDefBulletFontUserDefined();
 }
 // <--
 
