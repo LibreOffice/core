@@ -37,7 +37,7 @@
 namespace oox {
 namespace xls {
 
-struct OoxFontData;
+struct FontModel;
 
 // ============================================================================
 
@@ -53,11 +53,11 @@ public:
     sal_Int32           getColorByIndex( sal_Int32 nIndex ) const;
 
     /** Returns the default font data for the current file type. */
-    inline const OoxFontData& getDefaultFontData() const { return *mxDefFontData; }
+    inline const FontModel& getDefaultFontModel() const { return *mxDefFontModel; }
 
 private:
-    typedef ::std::auto_ptr< OoxFontData > OoxFontDataPtr;
-    OoxFontDataPtr      mxDefFontData;
+    typedef ::std::auto_ptr< FontModel > FontModelPtr;
+    FontModelPtr        mxDefFontModel;
 };
 
 // ============================================================================

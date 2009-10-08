@@ -29,28 +29,46 @@
  ************************************************************************/
 
 #include "oox/xls/pagesettings.hxx"
+#include <set>
 #include <algorithm>
+#include <rtl/strbuf.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <com/sun/star/awt/Size.hpp>
 #include <com/sun/star/container/XNamed.hpp>
 #include <com/sun/star/sheet/XHeaderFooterContent.hpp>
 #include <com/sun/star/style/GraphicLocation.hpp>
+#include <com/sun/star/text/FilenameDisplayFormat.hpp>
+#include <com/sun/star/text/XText.hpp>
+#include <com/sun/star/text/XTextContent.hpp>
+#include <com/sun/star/text/XTextCursor.hpp>
+#include "properties.hxx"
 #include "oox/helper/attributelist.hxx"
+#include "oox/helper/propertymap.hxx"
 #include "oox/helper/propertyset.hxx"
 #include "oox/helper/recordinputstream.hxx"
 #include "oox/core/xmlfilterbase.hxx"
 #include "oox/xls/biffinputstream.hxx"
 #include "oox/xls/excelhandlers.hxx"
+#include "oox/xls/stylesbuffer.hxx"
 #include "oox/xls/unitconverter.hxx"
 
+using ::rtl::OString;
+using ::rtl::OStringBuffer;
 using ::rtl::OUString;
 using ::rtl::OUStringBuffer;
+using ::com::sun::star::uno::Exception;
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::UNO_QUERY;
+using ::com::sun::star::uno::UNO_QUERY_THROW;
 using ::com::sun::star::container::XNamed;
+using ::com::sun::star::lang::XMultiServiceFactory;
 using ::com::sun::star::awt::Size;
 using ::com::sun::star::sheet::XHeaderFooterContent;
 using ::com::sun::star::style::XStyle;
+using ::com::sun::star::text::XText;
+using ::com::sun::star::text::XTextCursor;
+using ::com::sun::star::text::XTextContent;
+using ::com::sun::star::text::XTextRange;
 using ::oox::core::Relations;
 
 namespace oox {
@@ -105,7 +123,7 @@ const sal_uInt16 BIFF_PAGESETUP_NOTES_END           = 0x0200;
 
 // ============================================================================
 
-OoxPageData::OoxPageData() :
+PageSettingsModel::PageSettingsModel() :
     mfLeftMargin( OOX_MARGIN_DEFAULT_LR ),
     mfRightMargin( OOX_MARGIN_DEFAULT_LR ),
     mfTopMargin( OOX_MARGIN_DEFAULT_TB ),
@@ -138,7 +156,7 @@ OoxPageData::OoxPageData() :
 {
 }
 
-void OoxPageData::setBinPrintErrors( sal_uInt8 nPrintErrors )
+void PageSettingsModel::setBinPrintErrors( sal_uInt8 nPrintErrors )
 {
     static const sal_Int32 spnErrorIds[] = { XML_displayed, XML_none, XML_dash, XML_NA };
     mnPrintErrors = STATIC_ARRAY_SELECT( spnErrorIds, nPrintErrors, XML_none );
@@ -153,168 +171,168 @@ PageSettings::PageSettings( const WorksheetHelper& rHelper ) :
 
 void PageSettings::importPrintOptions( const AttributeList& rAttribs )
 {
-    maOoxData.mbHorCenter     = rAttribs.getBool( XML_horizontalCentered, false );
-    maOoxData.mbVerCenter     = rAttribs.getBool( XML_verticalCentered, false );
-    maOoxData.mbPrintGrid     = rAttribs.getBool( XML_gridLines, false );
-    maOoxData.mbPrintHeadings = rAttribs.getBool( XML_headings, false );
+    maModel.mbHorCenter     = rAttribs.getBool( XML_horizontalCentered, false );
+    maModel.mbVerCenter     = rAttribs.getBool( XML_verticalCentered, false );
+    maModel.mbPrintGrid     = rAttribs.getBool( XML_gridLines, false );
+    maModel.mbPrintHeadings = rAttribs.getBool( XML_headings, false );
 }
 
 void PageSettings::importPageMargins( const AttributeList& rAttribs )
 {
-    maOoxData.mfLeftMargin   = rAttribs.getDouble( XML_left,   OOX_MARGIN_DEFAULT_LR );
-    maOoxData.mfRightMargin  = rAttribs.getDouble( XML_right,  OOX_MARGIN_DEFAULT_LR );
-    maOoxData.mfTopMargin    = rAttribs.getDouble( XML_top,    OOX_MARGIN_DEFAULT_TB );
-    maOoxData.mfBottomMargin = rAttribs.getDouble( XML_bottom, OOX_MARGIN_DEFAULT_TB );
-    maOoxData.mfHeaderMargin = rAttribs.getDouble( XML_header, OOX_MARGIN_DEFAULT_HF );
-    maOoxData.mfFooterMargin = rAttribs.getDouble( XML_footer, OOX_MARGIN_DEFAULT_HF );
+    maModel.mfLeftMargin   = rAttribs.getDouble( XML_left,   OOX_MARGIN_DEFAULT_LR );
+    maModel.mfRightMargin  = rAttribs.getDouble( XML_right,  OOX_MARGIN_DEFAULT_LR );
+    maModel.mfTopMargin    = rAttribs.getDouble( XML_top,    OOX_MARGIN_DEFAULT_TB );
+    maModel.mfBottomMargin = rAttribs.getDouble( XML_bottom, OOX_MARGIN_DEFAULT_TB );
+    maModel.mfHeaderMargin = rAttribs.getDouble( XML_header, OOX_MARGIN_DEFAULT_HF );
+    maModel.mfFooterMargin = rAttribs.getDouble( XML_footer, OOX_MARGIN_DEFAULT_HF );
 }
 
 void PageSettings::importPageSetup( const Relations& rRelations, const AttributeList& rAttribs )
 {
-    maOoxData.maBinSettPath   = rRelations.getFragmentPathFromRelId( rAttribs.getString( R_TOKEN( id ), OUString() ) );
-    maOoxData.mnPaperSize     = rAttribs.getInteger( XML_paperSize, 1 );
-    maOoxData.mnCopies        = rAttribs.getInteger( XML_copies, 1 );
-    maOoxData.mnScale         = rAttribs.getInteger( XML_scale, 100 );
-    maOoxData.mnFirstPage     = rAttribs.getInteger( XML_firstPageNumber, 1 );
-    maOoxData.mnFitToWidth    = rAttribs.getInteger( XML_fitToWidth, 1 );
-    maOoxData.mnFitToHeight   = rAttribs.getInteger( XML_fitToHeight, 1 );
-    maOoxData.mnHorPrintRes   = rAttribs.getInteger( XML_horizontalDpi, 600 );
-    maOoxData.mnVerPrintRes   = rAttribs.getInteger( XML_verticalDpi, 600 );
-    maOoxData.mnOrientation   = rAttribs.getToken( XML_orientation, XML_default );
-    maOoxData.mnPageOrder     = rAttribs.getToken( XML_pageOrder, XML_downThenOver );
-    maOoxData.mnCellComments  = rAttribs.getToken( XML_cellComments, XML_none );
-    maOoxData.mnPrintErrors   = rAttribs.getToken( XML_errors, XML_displayed );
-    maOoxData.mbValidSettings = rAttribs.getBool( XML_usePrinterDefaults, true );
-    maOoxData.mbUseFirstPage  = rAttribs.getBool( XML_useFirstPageNumber, false );
-    maOoxData.mbBlackWhite    = rAttribs.getBool( XML_blackAndWhite, false );
-    maOoxData.mbDraftQuality  = rAttribs.getBool( XML_draft, false );
+    maModel.maBinSettPath   = rRelations.getFragmentPathFromRelId( rAttribs.getString( R_TOKEN( id ), OUString() ) );
+    maModel.mnPaperSize     = rAttribs.getInteger( XML_paperSize, 1 );
+    maModel.mnCopies        = rAttribs.getInteger( XML_copies, 1 );
+    maModel.mnScale         = rAttribs.getInteger( XML_scale, 100 );
+    maModel.mnFirstPage     = rAttribs.getInteger( XML_firstPageNumber, 1 );
+    maModel.mnFitToWidth    = rAttribs.getInteger( XML_fitToWidth, 1 );
+    maModel.mnFitToHeight   = rAttribs.getInteger( XML_fitToHeight, 1 );
+    maModel.mnHorPrintRes   = rAttribs.getInteger( XML_horizontalDpi, 600 );
+    maModel.mnVerPrintRes   = rAttribs.getInteger( XML_verticalDpi, 600 );
+    maModel.mnOrientation   = rAttribs.getToken( XML_orientation, XML_default );
+    maModel.mnPageOrder     = rAttribs.getToken( XML_pageOrder, XML_downThenOver );
+    maModel.mnCellComments  = rAttribs.getToken( XML_cellComments, XML_none );
+    maModel.mnPrintErrors   = rAttribs.getToken( XML_errors, XML_displayed );
+    maModel.mbValidSettings = rAttribs.getBool( XML_usePrinterDefaults, true );
+    maModel.mbUseFirstPage  = rAttribs.getBool( XML_useFirstPageNumber, false );
+    maModel.mbBlackWhite    = rAttribs.getBool( XML_blackAndWhite, false );
+    maModel.mbDraftQuality  = rAttribs.getBool( XML_draft, false );
 }
 
 void PageSettings::importChartPageSetup( const Relations& rRelations, const AttributeList& rAttribs )
 {
-    maOoxData.maBinSettPath   = rRelations.getFragmentPathFromRelId( rAttribs.getString( R_TOKEN( id ), OUString() ) );
-    maOoxData.mnPaperSize     = rAttribs.getInteger( XML_paperSize, 1 );
-    maOoxData.mnCopies        = rAttribs.getInteger( XML_copies, 1 );
-    maOoxData.mnFirstPage     = rAttribs.getInteger( XML_firstPageNumber, 1 );
-    maOoxData.mnHorPrintRes   = rAttribs.getInteger( XML_horizontalDpi, 600 );
-    maOoxData.mnVerPrintRes   = rAttribs.getInteger( XML_verticalDpi, 600 );
-    maOoxData.mnOrientation   = rAttribs.getToken( XML_orientation, XML_default );
-    maOoxData.mbValidSettings = rAttribs.getBool( XML_usePrinterDefaults, true );
-    maOoxData.mbUseFirstPage  = rAttribs.getBool( XML_useFirstPageNumber, false );
-    maOoxData.mbBlackWhite    = rAttribs.getBool( XML_blackAndWhite, false );
-    maOoxData.mbDraftQuality  = rAttribs.getBool( XML_draft, false );
+    maModel.maBinSettPath   = rRelations.getFragmentPathFromRelId( rAttribs.getString( R_TOKEN( id ), OUString() ) );
+    maModel.mnPaperSize     = rAttribs.getInteger( XML_paperSize, 1 );
+    maModel.mnCopies        = rAttribs.getInteger( XML_copies, 1 );
+    maModel.mnFirstPage     = rAttribs.getInteger( XML_firstPageNumber, 1 );
+    maModel.mnHorPrintRes   = rAttribs.getInteger( XML_horizontalDpi, 600 );
+    maModel.mnVerPrintRes   = rAttribs.getInteger( XML_verticalDpi, 600 );
+    maModel.mnOrientation   = rAttribs.getToken( XML_orientation, XML_default );
+    maModel.mbValidSettings = rAttribs.getBool( XML_usePrinterDefaults, true );
+    maModel.mbUseFirstPage  = rAttribs.getBool( XML_useFirstPageNumber, false );
+    maModel.mbBlackWhite    = rAttribs.getBool( XML_blackAndWhite, false );
+    maModel.mbDraftQuality  = rAttribs.getBool( XML_draft, false );
 }
 
 void PageSettings::importHeaderFooter( const AttributeList& rAttribs )
 {
-    maOoxData.mbUseEvenHF  = rAttribs.getBool( XML_differentOddEven, false );
-    maOoxData.mbUseFirstHF = rAttribs.getBool( XML_differentFirst, false );
+    maModel.mbUseEvenHF  = rAttribs.getBool( XML_differentOddEven, false );
+    maModel.mbUseFirstHF = rAttribs.getBool( XML_differentFirst, false );
 }
 
 void PageSettings::importHeaderFooterCharacters( const OUString& rChars, sal_Int32 nElement )
 {
     switch( nElement )
     {
-        case XLS_TOKEN( oddHeader ):    maOoxData.maOddHeader += rChars;    break;
-        case XLS_TOKEN( oddFooter ):    maOoxData.maOddFooter += rChars;    break;
-        case XLS_TOKEN( evenHeader ):   maOoxData.maEvenHeader += rChars;   break;
-        case XLS_TOKEN( evenFooter ):   maOoxData.maEvenFooter += rChars;   break;
-        case XLS_TOKEN( firstHeader ):  maOoxData.maFirstHeader += rChars;  break;
-        case XLS_TOKEN( firstFooter ):  maOoxData.maFirstFooter += rChars;  break;
+        case XLS_TOKEN( oddHeader ):    maModel.maOddHeader += rChars;      break;
+        case XLS_TOKEN( oddFooter ):    maModel.maOddFooter += rChars;      break;
+        case XLS_TOKEN( evenHeader ):   maModel.maEvenHeader += rChars;     break;
+        case XLS_TOKEN( evenFooter ):   maModel.maEvenFooter += rChars;     break;
+        case XLS_TOKEN( firstHeader ):  maModel.maFirstHeader += rChars;    break;
+        case XLS_TOKEN( firstFooter ):  maModel.maFirstFooter += rChars;    break;
     }
 }
 
 void PageSettings::importPicture( const Relations& rRelations, const AttributeList& rAttribs )
 {
-    maOoxData.maPicturePath = rRelations.getFragmentPathFromRelId( rAttribs.getString( R_TOKEN( id ), OUString() ) );
+    maModel.maPicturePath = rRelations.getFragmentPathFromRelId( rAttribs.getString( R_TOKEN( id ), OUString() ) );
 }
 
 void PageSettings::importPageMargins( RecordInputStream& rStrm )
 {
-    rStrm   >> maOoxData.mfLeftMargin   >> maOoxData.mfRightMargin
-            >> maOoxData.mfTopMargin    >> maOoxData.mfBottomMargin
-            >> maOoxData.mfHeaderMargin >> maOoxData.mfFooterMargin;
+    rStrm   >> maModel.mfLeftMargin   >> maModel.mfRightMargin
+            >> maModel.mfTopMargin    >> maModel.mfBottomMargin
+            >> maModel.mfHeaderMargin >> maModel.mfFooterMargin;
 }
 
 void PageSettings::importPrintOptions( RecordInputStream& rStrm )
 {
     sal_uInt16 nFlags;
     rStrm >> nFlags;
-    maOoxData.mbHorCenter     = getFlag( nFlags, OOBIN_PRINTOPT_HORCENTER );
-    maOoxData.mbVerCenter     = getFlag( nFlags, OOBIN_PRINTOPT_VERCENTER );
-    maOoxData.mbPrintGrid     = getFlag( nFlags, OOBIN_PRINTOPT_PRINTGRID );
-    maOoxData.mbPrintHeadings = getFlag( nFlags, OOBIN_PRINTOPT_PRINTHEADING );
+    maModel.mbHorCenter     = getFlag( nFlags, OOBIN_PRINTOPT_HORCENTER );
+    maModel.mbVerCenter     = getFlag( nFlags, OOBIN_PRINTOPT_VERCENTER );
+    maModel.mbPrintGrid     = getFlag( nFlags, OOBIN_PRINTOPT_PRINTGRID );
+    maModel.mbPrintHeadings = getFlag( nFlags, OOBIN_PRINTOPT_PRINTHEADING );
 }
 
 void PageSettings::importPageSetup( const Relations& rRelations, RecordInputStream& rStrm )
 {
     OUString aRelId;
     sal_uInt16 nFlags;
-    rStrm   >> maOoxData.mnPaperSize >> maOoxData.mnScale
-            >> maOoxData.mnHorPrintRes >> maOoxData.mnVerPrintRes
-            >> maOoxData.mnCopies >> maOoxData.mnFirstPage
-            >> maOoxData.mnFitToWidth >> maOoxData.mnFitToHeight
+    rStrm   >> maModel.mnPaperSize >> maModel.mnScale
+            >> maModel.mnHorPrintRes >> maModel.mnVerPrintRes
+            >> maModel.mnCopies >> maModel.mnFirstPage
+            >> maModel.mnFitToWidth >> maModel.mnFitToHeight
             >> nFlags >> aRelId;
-    maOoxData.setBinPrintErrors( extractValue< sal_uInt8 >( nFlags, 9, 2 ) );
-    maOoxData.maBinSettPath   = rRelations.getFragmentPathFromRelId( aRelId );
-    maOoxData.mnOrientation   = getFlagValue( nFlags, OOBIN_PAGESETUP_DEFAULTORIENT, XML_default, getFlagValue( nFlags, OOBIN_PAGESETUP_LANDSCAPE, XML_landscape, XML_portrait ) );
-    maOoxData.mnPageOrder     = getFlagValue( nFlags, OOBIN_PAGESETUP_INROWS, XML_overThenDown, XML_downThenOver );
-    maOoxData.mnCellComments  = getFlagValue( nFlags, OOBIN_PAGESETUP_PRINTNOTES, getFlagValue( nFlags, OOBIN_PAGESETUP_NOTES_END, XML_atEnd, XML_asDisplayed ), XML_none );
-    maOoxData.mbValidSettings = !getFlag( nFlags, OOBIN_PAGESETUP_INVALID );
-    maOoxData.mbUseFirstPage  = getFlag( nFlags, OOBIN_PAGESETUP_USEFIRSTPAGE );
-    maOoxData.mbBlackWhite    = getFlag( nFlags, OOBIN_PAGESETUP_BLACKWHITE );
-    maOoxData.mbDraftQuality  = getFlag( nFlags, OOBIN_PAGESETUP_DRAFTQUALITY );
+    maModel.setBinPrintErrors( extractValue< sal_uInt8 >( nFlags, 9, 2 ) );
+    maModel.maBinSettPath   = rRelations.getFragmentPathFromRelId( aRelId );
+    maModel.mnOrientation   = getFlagValue( nFlags, OOBIN_PAGESETUP_DEFAULTORIENT, XML_default, getFlagValue( nFlags, OOBIN_PAGESETUP_LANDSCAPE, XML_landscape, XML_portrait ) );
+    maModel.mnPageOrder     = getFlagValue( nFlags, OOBIN_PAGESETUP_INROWS, XML_overThenDown, XML_downThenOver );
+    maModel.mnCellComments  = getFlagValue( nFlags, OOBIN_PAGESETUP_PRINTNOTES, getFlagValue( nFlags, OOBIN_PAGESETUP_NOTES_END, XML_atEnd, XML_asDisplayed ), XML_none );
+    maModel.mbValidSettings = !getFlag( nFlags, OOBIN_PAGESETUP_INVALID );
+    maModel.mbUseFirstPage  = getFlag( nFlags, OOBIN_PAGESETUP_USEFIRSTPAGE );
+    maModel.mbBlackWhite    = getFlag( nFlags, OOBIN_PAGESETUP_BLACKWHITE );
+    maModel.mbDraftQuality  = getFlag( nFlags, OOBIN_PAGESETUP_DRAFTQUALITY );
 }
 
 void PageSettings::importChartPageSetup( const Relations& rRelations, RecordInputStream& rStrm )
 {
     OUString aRelId;
     sal_uInt16 nFirstPage, nFlags;
-    rStrm   >> maOoxData.mnPaperSize >> maOoxData.mnHorPrintRes >> maOoxData.mnVerPrintRes
-            >> maOoxData.mnCopies >> nFirstPage >> nFlags >> aRelId;
-    maOoxData.maBinSettPath   = rRelations.getFragmentPathFromRelId( aRelId );
-    maOoxData.mnFirstPage     = nFirstPage; // 16-bit in CHARTPAGESETUP
-    maOoxData.mnOrientation   = getFlagValue( nFlags, OOBIN_CHARTPAGESETUP_DEFAULTORIENT, XML_default, getFlagValue( nFlags, OOBIN_CHARTPAGESETUP_LANDSCAPE, XML_landscape, XML_portrait ) );
-    maOoxData.mbValidSettings = !getFlag( nFlags, OOBIN_CHARTPAGESETUP_INVALID );
-    maOoxData.mbUseFirstPage  = getFlag( nFlags, OOBIN_CHARTPAGESETUP_USEFIRSTPAGE );
-    maOoxData.mbBlackWhite    = getFlag( nFlags, OOBIN_CHARTPAGESETUP_BLACKWHITE );
-    maOoxData.mbDraftQuality  = getFlag( nFlags, OOBIN_CHARTPAGESETUP_DRAFTQUALITY );
+    rStrm   >> maModel.mnPaperSize >> maModel.mnHorPrintRes >> maModel.mnVerPrintRes
+            >> maModel.mnCopies >> nFirstPage >> nFlags >> aRelId;
+    maModel.maBinSettPath   = rRelations.getFragmentPathFromRelId( aRelId );
+    maModel.mnFirstPage     = nFirstPage; // 16-bit in CHARTPAGESETUP
+    maModel.mnOrientation   = getFlagValue( nFlags, OOBIN_CHARTPAGESETUP_DEFAULTORIENT, XML_default, getFlagValue( nFlags, OOBIN_CHARTPAGESETUP_LANDSCAPE, XML_landscape, XML_portrait ) );
+    maModel.mbValidSettings = !getFlag( nFlags, OOBIN_CHARTPAGESETUP_INVALID );
+    maModel.mbUseFirstPage  = getFlag( nFlags, OOBIN_CHARTPAGESETUP_USEFIRSTPAGE );
+    maModel.mbBlackWhite    = getFlag( nFlags, OOBIN_CHARTPAGESETUP_BLACKWHITE );
+    maModel.mbDraftQuality  = getFlag( nFlags, OOBIN_CHARTPAGESETUP_DRAFTQUALITY );
 }
 
 void PageSettings::importHeaderFooter( RecordInputStream& rStrm )
 {
     sal_uInt16 nFlags;
     rStrm   >> nFlags
-            >> maOoxData.maOddHeader   >> maOoxData.maOddFooter
-            >> maOoxData.maEvenHeader  >> maOoxData.maEvenFooter
-            >> maOoxData.maFirstHeader >> maOoxData.maFirstFooter;
-    maOoxData.mbUseEvenHF  = getFlag( nFlags, OOBIN_HEADERFOOTER_DIFFEVEN );
-    maOoxData.mbUseFirstHF = getFlag( nFlags, OOBIN_HEADERFOOTER_DIFFFIRST );
+            >> maModel.maOddHeader   >> maModel.maOddFooter
+            >> maModel.maEvenHeader  >> maModel.maEvenFooter
+            >> maModel.maFirstHeader >> maModel.maFirstFooter;
+    maModel.mbUseEvenHF  = getFlag( nFlags, OOBIN_HEADERFOOTER_DIFFEVEN );
+    maModel.mbUseFirstHF = getFlag( nFlags, OOBIN_HEADERFOOTER_DIFFFIRST );
 }
 
 void PageSettings::importPicture( const Relations& rRelations, RecordInputStream& rStrm )
 {
-    maOoxData.maPicturePath = rRelations.getFragmentPathFromRelId( rStrm.readString() );
+    maModel.maPicturePath = rRelations.getFragmentPathFromRelId( rStrm.readString() );
 }
 
 void PageSettings::importLeftMargin( BiffInputStream& rStrm )
 {
-    rStrm >> maOoxData.mfLeftMargin;
+    rStrm >> maModel.mfLeftMargin;
 }
 
 void PageSettings::importRightMargin( BiffInputStream& rStrm )
 {
-    rStrm >> maOoxData.mfRightMargin;
+    rStrm >> maModel.mfRightMargin;
 }
 
 void PageSettings::importTopMargin( BiffInputStream& rStrm )
 {
-    rStrm >> maOoxData.mfTopMargin;
+    rStrm >> maModel.mfTopMargin;
 }
 
 void PageSettings::importBottomMargin( BiffInputStream& rStrm )
 {
-    rStrm >> maOoxData.mfBottomMargin;
+    rStrm >> maModel.mfBottomMargin;
 }
 
 void PageSettings::importPageSetup( BiffInputStream& rStrm )
@@ -322,72 +340,72 @@ void PageSettings::importPageSetup( BiffInputStream& rStrm )
     sal_uInt16 nPaperSize, nScale, nFirstPage, nFitToWidth, nFitToHeight, nFlags;
     rStrm >> nPaperSize >> nScale >> nFirstPage >> nFitToWidth >> nFitToHeight >> nFlags;
 
-    maOoxData.mnPaperSize      = nPaperSize;   // equal in BIFF and OOX
-    maOoxData.mnScale          = nScale;
-    maOoxData.mnFirstPage      = nFirstPage;
-    maOoxData.mnFitToWidth     = nFitToWidth;
-    maOoxData.mnFitToHeight    = nFitToHeight;
-    maOoxData.mnOrientation    = getFlagValue( nFlags, BIFF_PAGESETUP_PORTRAIT, XML_portrait, XML_landscape );
-    maOoxData.mnPageOrder      = getFlagValue( nFlags, BIFF_PAGESETUP_INROWS, XML_overThenDown, XML_downThenOver );
-    maOoxData.mbValidSettings  = !getFlag( nFlags, BIFF_PAGESETUP_INVALID );
-    maOoxData.mbUseFirstPage   = true;
-    maOoxData.mbBlackWhite     = getFlag( nFlags, BIFF_PAGESETUP_BLACKWHITE );
+    maModel.mnPaperSize      = nPaperSize;   // equal in BIFF and OOX
+    maModel.mnScale          = nScale;
+    maModel.mnFirstPage      = nFirstPage;
+    maModel.mnFitToWidth     = nFitToWidth;
+    maModel.mnFitToHeight    = nFitToHeight;
+    maModel.mnOrientation    = getFlagValue( nFlags, BIFF_PAGESETUP_PORTRAIT, XML_portrait, XML_landscape );
+    maModel.mnPageOrder      = getFlagValue( nFlags, BIFF_PAGESETUP_INROWS, XML_overThenDown, XML_downThenOver );
+    maModel.mbValidSettings  = !getFlag( nFlags, BIFF_PAGESETUP_INVALID );
+    maModel.mbUseFirstPage   = true;
+    maModel.mbBlackWhite     = getFlag( nFlags, BIFF_PAGESETUP_BLACKWHITE );
 
     if( getBiff() >= BIFF5 )
     {
         sal_uInt16 nHorPrintRes, nVerPrintRes, nCopies;
-        rStrm >> nHorPrintRes >> nVerPrintRes >> maOoxData.mfHeaderMargin >> maOoxData.mfFooterMargin >> nCopies;
+        rStrm >> nHorPrintRes >> nVerPrintRes >> maModel.mfHeaderMargin >> maModel.mfFooterMargin >> nCopies;
 
-        maOoxData.mnCopies       = nCopies;
-        maOoxData.mnOrientation  = getFlagValue( nFlags, BIFF_PAGESETUP_DEFAULTORIENT, XML_default, maOoxData.mnOrientation );
-        maOoxData.mnHorPrintRes  = nHorPrintRes;
-        maOoxData.mnVerPrintRes  = nVerPrintRes;
-        maOoxData.mnCellComments = getFlagValue( nFlags, BIFF_PAGESETUP_PRINTNOTES, XML_asDisplayed, XML_none );
-        maOoxData.mbUseFirstPage = getFlag( nFlags, BIFF_PAGESETUP_USEFIRSTPAGE );
-        maOoxData.mbDraftQuality = getFlag( nFlags, BIFF_PAGESETUP_DRAFTQUALITY );
+        maModel.mnCopies       = nCopies;
+        maModel.mnOrientation  = getFlagValue( nFlags, BIFF_PAGESETUP_DEFAULTORIENT, XML_default, maModel.mnOrientation );
+        maModel.mnHorPrintRes  = nHorPrintRes;
+        maModel.mnVerPrintRes  = nVerPrintRes;
+        maModel.mnCellComments = getFlagValue( nFlags, BIFF_PAGESETUP_PRINTNOTES, XML_asDisplayed, XML_none );
+        maModel.mbUseFirstPage = getFlag( nFlags, BIFF_PAGESETUP_USEFIRSTPAGE );
+        maModel.mbDraftQuality = getFlag( nFlags, BIFF_PAGESETUP_DRAFTQUALITY );
 
         if( getBiff() == BIFF8 )
         {
-            maOoxData.setBinPrintErrors( extractValue< sal_uInt8 >( nFlags, 10, 2 ) );
-            maOoxData.mnCellComments = getFlagValue( nFlags, BIFF_PAGESETUP_PRINTNOTES, getFlagValue( nFlags, BIFF_PAGESETUP_NOTES_END, XML_atEnd, XML_asDisplayed ), XML_none );
+            maModel.setBinPrintErrors( extractValue< sal_uInt8 >( nFlags, 10, 2 ) );
+            maModel.mnCellComments = getFlagValue( nFlags, BIFF_PAGESETUP_PRINTNOTES, getFlagValue( nFlags, BIFF_PAGESETUP_NOTES_END, XML_atEnd, XML_asDisplayed ), XML_none );
         }
     }
 }
 
 void PageSettings::importHorCenter( BiffInputStream& rStrm )
 {
-    maOoxData.mbHorCenter = rStrm.readuInt16() != 0;
+    maModel.mbHorCenter = rStrm.readuInt16() != 0;
 }
 
 void PageSettings::importVerCenter( BiffInputStream& rStrm )
 {
-    maOoxData.mbVerCenter = rStrm.readuInt16() != 0;
+    maModel.mbVerCenter = rStrm.readuInt16() != 0;
 }
 
 void PageSettings::importPrintHeaders( BiffInputStream& rStrm )
 {
-    maOoxData.mbPrintHeadings = rStrm.readuInt16() != 0;
+    maModel.mbPrintHeadings = rStrm.readuInt16() != 0;
 }
 
 void PageSettings::importPrintGridLines( BiffInputStream& rStrm )
 {
-    maOoxData.mbPrintGrid = rStrm.readuInt16() != 0;
+    maModel.mbPrintGrid = rStrm.readuInt16() != 0;
 }
 
 void PageSettings::importHeader( BiffInputStream& rStrm )
 {
     if( rStrm.getRemaining() > 0 )
-        maOoxData.maOddHeader = (getBiff() == BIFF8) ? rStrm.readUniString() : rStrm.readByteString( false, getTextEncoding() );
+        maModel.maOddHeader = (getBiff() == BIFF8) ? rStrm.readUniString() : rStrm.readByteString( false, getTextEncoding() );
     else
-        maOoxData.maOddHeader = OUString();
+        maModel.maOddHeader = OUString();
 }
 
 void PageSettings::importFooter( BiffInputStream& rStrm )
 {
     if( rStrm.getRemaining() > 0 )
-        maOoxData.maOddFooter = (getBiff() == BIFF8) ? rStrm.readUniString() : rStrm.readByteString( false, getTextEncoding() );
+        maModel.maOddFooter = (getBiff() == BIFF8) ? rStrm.readUniString() : rStrm.readByteString( false, getTextEncoding() );
     else
-        maOoxData.maOddFooter = OUString();
+        maModel.maOddFooter = OUString();
 }
 
 void PageSettings::importPicture( BiffInputStream& /*rStrm*/ )
@@ -396,13 +414,13 @@ void PageSettings::importPicture( BiffInputStream& /*rStrm*/ )
 
 void PageSettings::setFitToPagesMode( bool bFitToPages )
 {
-    maOoxData.mbFitToPages = bFitToPages;
+    maModel.mbFitToPages = bFitToPages;
 }
 
 void PageSettings::finalizeImport()
 {
     OUStringBuffer aStyleNameBuffer( CREATE_OUSTRING( "PageStyle_" ) );
-    Reference< XNamed > xSheetName( getXSpreadsheet(), UNO_QUERY );
+    Reference< XNamed > xSheetName( getSheet(), UNO_QUERY );
     if( xSheetName.is() )
         aStyleNameBuffer.append( xSheetName->getName() );
     else
@@ -411,51 +429,565 @@ void PageSettings::finalizeImport()
 
     Reference< XStyle > xStyle = createStyleObject( aStyleName, true );
     PropertySet aStyleProps( xStyle );
-    getPageSettingsPropertyHelper().writePageSettingsProperties( aStyleProps, maOoxData, getSheetType() );
+    getPageSettingsConverter().writePageSettingsProperties( aStyleProps, maModel, getSheetType() );
 
-    PropertySet aSheetProps( getXSpreadsheet() );
-    aSheetProps.setProperty( CREATE_OUSTRING( "PageStyle" ), aStyleName );
+    PropertySet aSheetProps( getSheet() );
+    aSheetProps.setProperty( PROP_PageStyle, aStyleName );
+}
+
+// ============================================================================
+// ============================================================================
+
+enum HFPortionId
+{
+    HF_LEFT,
+    HF_CENTER,
+    HF_RIGHT,
+    HF_COUNT
+};
+
+// ----------------------------------------------------------------------------
+
+struct HFPortionInfo
+{
+    Reference< XText >  mxText;                 /// XText interface of this portion.
+    Reference< XTextCursor > mxStart;           /// Start position of current text range for formatting.
+    Reference< XTextCursor > mxEnd;             /// End position of current text range for formatting.
+    double              mfTotalHeight;          /// Sum of heights of previous lines in points.
+    double              mfCurrHeight;           /// Height of the current text line in points.
+
+    bool                initialize( const Reference< XText >& rxText );
+};
+
+bool HFPortionInfo::initialize( const Reference< XText >& rxText )
+{
+    mfTotalHeight = mfCurrHeight = 0.0;
+    mxText = rxText;
+    if( mxText.is() )
+    {
+        mxStart = mxText->createTextCursor();
+        mxEnd = mxText->createTextCursor();
+    }
+    bool bRet = mxText.is() && mxStart.is() && mxEnd.is();
+    OSL_ENSURE( bRet, "HFPortionInfo::initialize - missing interfaces" );
+    return bRet;
+}
+
+// ============================================================================
+
+class HeaderFooterParser : public WorkbookHelper
+{
+public:
+    explicit            HeaderFooterParser( const WorkbookHelper& rHelper );
+
+    /** Parses the passed string and creates the header/footer contents.
+        @returns  The total height of the converted header or footer in points. */
+    double              parse(
+                            const Reference< XHeaderFooterContent >& rxContext,
+                            const OUString& rData );
+
+private:
+    /** Returns the current edit engine text object. */
+    inline HFPortionInfo& getPortion() { return maPortions[ meCurrPortion ]; }
+    /** Returns the start cursor of the current text range. */
+    inline const Reference< XTextCursor >& getStartPos() { return getPortion().mxStart; }
+    /** Returns the end cursor of the current text range. */
+    inline const Reference< XTextCursor >& getEndPos() { return getPortion().mxEnd; }
+
+    /** Returns the current line height of the specified portion. */
+    double              getCurrHeight( HFPortionId ePortion ) const;
+    /** Returns the current line height. */
+    double              getCurrHeight() const;
+
+    /** Updates the current line height of the specified portion, using the current font size. */
+    void                updateCurrHeight( HFPortionId ePortion );
+    /** Updates the current line height, using the current font size. */
+    void                updateCurrHeight();
+
+    /** Sets the font attributes at the current selection. */
+    void                setAttributes();
+    /** Appends and clears internal string buffer. */
+    void                appendText();
+    /** Appends a line break and adjusts internal text height data. */
+    void                appendLineBreak();
+
+    /** Creates a text field from the passed service name. */
+    Reference< XTextContent > createField( const OUString& rServiceName ) const;
+    /** Appends the passed text field. */
+    void                appendField( const Reference< XTextContent >& rxContent );
+
+    /** Sets the passed font name if it is valid. */
+    void                convertFontName( const OUString& rStyle );
+    /** Converts a font style given as string. */
+    void                convertFontStyle( const OUString& rStyle );
+    /** Converts a font color given as string. */
+    void                convertFontColor( const OUString& rColor );
+
+    /** Finalizes current portion: sets font attributes and updates text height data. */
+    void                finalizePortion();
+    /** Changes current header/footer portion. */
+    void                setNewPortion( HFPortionId ePortion );
+
+private:
+    typedef ::std::vector< HFPortionInfo >  HFPortionInfoVec;
+    typedef ::std::set< OString >           OStringSet;
+
+    const OUString      maPageNumberService;
+    const OUString      maPageCountService;
+    const OUString      maSheetNameService;
+    const OUString      maFileNameService;
+    const OUString      maDateTimeService;
+    const OStringSet    maBoldNames;            /// All names for bold font style in lowercase UTF-8.
+    const OStringSet    maItalicNames;          /// All names for italic font style in lowercase UTF-8.
+    HFPortionInfoVec    maPortions;
+    HFPortionId         meCurrPortion;          /// Identifier of current H/F portion.
+    OUStringBuffer      maBuffer;               /// Text data to append to current text range.
+    FontModel           maFontModel;            /// Font attributes of current text range.
+};
+
+// ----------------------------------------------------------------------------
+
+namespace {
+
+// different names for bold font style (lowercase)
+static const sal_Char* const sppcBoldNames[] =
+{
+    "bold",
+    "fett",             // German 'bold'
+    "demibold",
+    "halbfett",         // German 'demibold'
+    "black",
+    "heavy"
+};
+
+// different names for italic font style (lowercase)
+static const sal_Char* const sppcItalicNames[] =
+{
+    "italic",
+    "kursiv",           // German 'italic'
+    "oblique",
+    "schr\303\204g",    // German 'oblique' with uppercase A umlaut
+    "schr\303\244g"     // German 'oblique' with lowercase A umlaut
+};
+
+} // namespace
+
+// ----------------------------------------------------------------------------
+
+HeaderFooterParser::HeaderFooterParser( const WorkbookHelper& rHelper ) :
+    WorkbookHelper( rHelper ),
+    maPageNumberService( CREATE_OUSTRING( "com.sun.star.text.TextField.PageNumber" ) ),
+    maPageCountService( CREATE_OUSTRING( "com.sun.star.text.TextField.PageCount" ) ),
+    maSheetNameService( CREATE_OUSTRING( "com.sun.star.text.TextField.SheetName" ) ),
+    maFileNameService( CREATE_OUSTRING( "com.sun.star.text.TextField.FileName" ) ),
+    maDateTimeService( CREATE_OUSTRING( "com.sun.star.text.TextField.DateTime" ) ),
+    maBoldNames( sppcBoldNames, STATIC_ARRAY_END( sppcBoldNames ) ),
+    maItalicNames( sppcItalicNames, STATIC_ARRAY_END( sppcItalicNames ) ),
+    maPortions( static_cast< size_t >( HF_COUNT ) ),
+    meCurrPortion( HF_CENTER )
+{
+}
+
+double HeaderFooterParser::parse( const Reference< XHeaderFooterContent >& rxContext, const OUString& rData )
+{
+    if( !rxContext.is() || (rData.getLength() == 0) ||
+            !maPortions[ HF_LEFT ].initialize( rxContext->getLeftText() ) ||
+            !maPortions[ HF_CENTER ].initialize( rxContext->getCenterText() ) ||
+            !maPortions[ HF_RIGHT ].initialize( rxContext->getRightText() ) )
+        return 0.0;
+
+    meCurrPortion = HF_CENTER;
+    maBuffer.setLength( 0 );
+    maFontModel = getStyles().getDefaultFontModel();
+    OUStringBuffer aFontName;           // current font name
+    OUStringBuffer aFontStyle;          // current font style
+    sal_Int32 nFontHeight = 0;          // current font height
+
+    /** State of the parser. */
+    enum
+    {
+        STATE_TEXT,         /// Literal text data.
+        STATE_TOKEN,        /// Control token following a '&' character.
+        STATE_FONTNAME,     /// Font name ('&' is followed by '"', reads until next '"' or ',').
+        STATE_FONTSTYLE,    /// Font style name (font part after ',', reads until next '"').
+        STATE_FONTHEIGHT    /// Font height ('&' is followed by num. digits, reads until non-digit).
+    }
+    eState = STATE_TEXT;
+
+    const sal_Unicode* pcChar = rData.getStr();
+    const sal_Unicode* pcEnd = pcChar + rData.getLength();
+    for( ; (pcChar != pcEnd) && (*pcChar != 0); ++pcChar )
+    {
+        sal_Unicode cChar = *pcChar;
+        switch( eState )
+        {
+            case STATE_TEXT:
+            {
+                switch( cChar )
+                {
+                    case '&':           // new token
+                        appendText();
+                        eState = STATE_TOKEN;
+                    break;
+                    case '\n':          // line break
+                        appendText();
+                        appendLineBreak();
+                    break;
+                    default:
+                        maBuffer.append( cChar );
+                }
+            }
+            break;
+
+            case STATE_TOKEN:
+            {
+                // default: back to text mode, may be changed in specific cases
+                eState = STATE_TEXT;
+                // ignore case of token codes
+                if( ('a' <= cChar) && (cChar <= 'z') )
+                    (cChar -= 'a') += 'A';
+                switch( cChar )
+                {
+                    case '&':   maBuffer.append( cChar );   break;  // the '&' character
+
+                    case 'L':   setNewPortion( HF_LEFT );   break;  // left portion
+                    case 'C':   setNewPortion( HF_CENTER ); break;  // center portion
+                    case 'R':   setNewPortion( HF_RIGHT );  break;  // right portion
+
+                    case 'P':   // page number
+                        appendField( createField( maPageNumberService ) );
+                    break;
+                    case 'N':   // total page count
+                        appendField( createField( maPageCountService ) );
+                    break;
+                    case 'A':   // current sheet name
+                        appendField( createField( maSheetNameService ) );
+                    break;
+
+                    case 'F':   // file name
+                    {
+                        Reference< XTextContent > xContent = createField( maFileNameService );
+                        PropertySet aPropSet( xContent );
+                        aPropSet.setProperty( PROP_FileFormat, ::com::sun::star::text::FilenameDisplayFormat::NAME_AND_EXT );
+                        appendField( xContent );
+                    }
+                    break;
+                    case 'Z':   // file path (without file name), BIFF8 and OOX only
+                        if( (getFilterType() == FILTER_OOX) || ((getFilterType() == FILTER_BIFF) && (getBiff() == BIFF8)) )
+                        {
+                            Reference< XTextContent > xContent = createField( maFileNameService );
+                            PropertySet aPropSet( xContent );
+                            // FilenameDisplayFormat::PATH not supported by Calc
+                            aPropSet.setProperty( PROP_FileFormat, ::com::sun::star::text::FilenameDisplayFormat::FULL );
+                            appendField( xContent );
+                            /*  path only is not supported -- if we find a '&Z&F'
+                                combination for path/name, skip the '&F' part */
+                            if( (pcChar + 2 < pcEnd) && (pcChar[ 1 ] == '&') && ((pcChar[ 2 ] == 'f') || (pcChar[ 2 ] == 'F')) )
+                                pcChar += 2;
+                        }
+                    break;
+                    case 'D':   // date
+                    {
+                        Reference< XTextContent > xContent = createField( maDateTimeService );
+                        PropertySet aPropSet( xContent );
+                        aPropSet.setProperty( PROP_IsDate, true );
+                        appendField( xContent );
+                    }
+                    break;
+                    case 'T':   // time
+                    {
+                        Reference< XTextContent > xContent = createField( maDateTimeService );
+                        PropertySet aPropSet( xContent );
+                        aPropSet.setProperty( PROP_IsDate, false );
+                        appendField( xContent );
+                    }
+                    break;
+
+                    case 'B':   // bold
+                        setAttributes();
+                        maFontModel.mbBold = !maFontModel.mbBold;
+                    break;
+                    case 'I':   // italic
+                        setAttributes();
+                        maFontModel.mbItalic = !maFontModel.mbItalic;
+                    break;
+                    case 'U':   // underline
+                        setAttributes();
+                        maFontModel.mnUnderline = (maFontModel.mnUnderline == XML_single) ? XML_none : XML_single;
+                    break;
+                    case 'E':   // double underline
+                        setAttributes();
+                        maFontModel.mnUnderline = (maFontModel.mnUnderline == XML_double) ? XML_none : XML_double;
+                    break;
+                    case 'S':   // strikeout
+                        setAttributes();
+                        maFontModel.mbStrikeout = !maFontModel.mbStrikeout;
+                    break;
+                    case 'X':   // superscript
+                        setAttributes();
+                        maFontModel.mnEscapement = (maFontModel.mnEscapement == XML_superscript) ? XML_baseline : XML_superscript;
+                    break;
+                    case 'Y':   // subsrcipt
+                        setAttributes();
+                        maFontModel.mnEscapement = (maFontModel.mnEscapement == XML_subscript) ? XML_baseline : XML_subscript;
+                    break;
+                    case 'O':   // outlined
+                        setAttributes();
+                        maFontModel.mbOutline = !maFontModel.mbOutline;
+                    break;
+                    case 'H':   // shadow
+                        setAttributes();
+                        maFontModel.mbShadow = !maFontModel.mbShadow;
+                    break;
+
+                    case 'K':   // text color (not in BIFF)
+                        if( (getFilterType() == FILTER_OOX) && (pcChar + 6 < pcEnd) )
+                        {
+                            setAttributes();
+                            // eat the following 6 characters
+                            convertFontColor( OUString( pcChar + 1, 6 ) );
+                            pcChar += 6;
+                        }
+                    break;
+
+                    case '\"':  // font name
+                        aFontName.setLength( 0 );
+                        aFontStyle.setLength( 0 );
+                        eState = STATE_FONTNAME;
+                    break;
+                    default:
+                        if( ('0' <= cChar) && (cChar <= '9') )    // font size
+                        {
+                            nFontHeight = cChar - '0';
+                            eState = STATE_FONTHEIGHT;
+                        }
+                }
+            }
+            break;
+
+            case STATE_FONTNAME:
+            {
+                switch( cChar )
+                {
+                    case '\"':
+                        setAttributes();
+                        convertFontName( aFontName.makeStringAndClear() );
+                        eState = STATE_TEXT;
+                    break;
+                    case ',':
+                        eState = STATE_FONTSTYLE;
+                    break;
+                    default:
+                        aFontName.append( cChar );
+                }
+            }
+            break;
+
+            case STATE_FONTSTYLE:
+            {
+                switch( cChar )
+                {
+                    case '\"':
+                        setAttributes();
+                        convertFontName( aFontName.makeStringAndClear() );
+                        convertFontStyle( aFontStyle.makeStringAndClear() );
+                        eState = STATE_TEXT;
+                    break;
+                    default:
+                        aFontStyle.append( cChar );
+                }
+            }
+            break;
+
+            case STATE_FONTHEIGHT:
+            {
+                if( ('0' <= cChar) && (cChar <= '9') )
+                {
+                    if( nFontHeight >= 0 )
+                    {
+                        nFontHeight *= 10;
+                        nFontHeight += (cChar - '0');
+                        if( nFontHeight > 1000 )
+                            nFontHeight = -1;
+                    }
+                }
+                else
+                {
+                    if( nFontHeight > 0 )
+                    {
+                        setAttributes();
+                        maFontModel.mfHeight = nFontHeight;
+                    }
+                    --pcChar;
+                    eState = STATE_TEXT;
+                }
+            }
+            break;
+        }
+    }
+
+    // finalize
+    finalizePortion();
+    maPortions[ HF_LEFT   ].mfTotalHeight += getCurrHeight( HF_LEFT );
+    maPortions[ HF_CENTER ].mfTotalHeight += getCurrHeight( HF_CENTER );
+    maPortions[ HF_RIGHT  ].mfTotalHeight += getCurrHeight( HF_RIGHT );
+
+    return ::std::max( maPortions[ HF_LEFT ].mfTotalHeight,
+        ::std::max( maPortions[ HF_CENTER ].mfTotalHeight, maPortions[ HF_RIGHT ].mfTotalHeight ) );
+}
+
+// private --------------------------------------------------------------------
+
+double HeaderFooterParser::getCurrHeight( HFPortionId ePortion ) const
+{
+    double fMaxHt = maPortions[ ePortion ].mfCurrHeight;
+    return (fMaxHt == 0.0) ? maFontModel.mfHeight : fMaxHt;
+}
+
+double HeaderFooterParser::getCurrHeight() const
+{
+    return getCurrHeight( meCurrPortion );
+}
+
+void HeaderFooterParser::updateCurrHeight( HFPortionId ePortion )
+{
+    double& rfMaxHt = maPortions[ ePortion ].mfCurrHeight;
+    rfMaxHt = ::std::max( rfMaxHt, maFontModel.mfHeight );
+}
+
+void HeaderFooterParser::updateCurrHeight()
+{
+    updateCurrHeight( meCurrPortion );
+}
+
+void HeaderFooterParser::setAttributes()
+{
+    Reference< XTextRange > xRange( getStartPos(), UNO_QUERY );
+    getEndPos()->gotoRange( xRange, sal_False );
+    getEndPos()->gotoEnd( sal_True );
+    if( !getEndPos()->isCollapsed() )
+    {
+        Font aFont( *this, maFontModel );
+        aFont.finalizeImport();
+        PropertySet aPropSet( getEndPos() );
+        aFont.writeToPropertySet( aPropSet, FONT_PROPTYPE_TEXT );
+        getStartPos()->gotoEnd( sal_False );
+        getEndPos()->gotoEnd( sal_False );
+    }
+}
+
+void HeaderFooterParser::appendText()
+{
+    if( maBuffer.getLength() > 0 )
+    {
+        getEndPos()->gotoEnd( sal_False );
+        getEndPos()->setString( maBuffer.makeStringAndClear() );
+        updateCurrHeight();
+    }
+}
+
+void HeaderFooterParser::appendLineBreak()
+{
+    getEndPos()->gotoEnd( sal_False );
+    getEndPos()->setString( OUString( sal_Unicode( '\n' ) ) );
+    getPortion().mfTotalHeight += getCurrHeight();
+    getPortion().mfCurrHeight = 0;
+}
+
+Reference< XTextContent > HeaderFooterParser::createField( const OUString& rServiceName ) const
+{
+    Reference< XTextContent > xContent;
+    try
+    {
+        Reference< XMultiServiceFactory > xFactory( getDocument(), UNO_QUERY_THROW );
+        xContent.set( xFactory->createInstance( rServiceName ), UNO_QUERY_THROW );
+    }
+    catch( Exception& )
+    {
+        OSL_ENSURE( false,
+            OStringBuffer( "HeaderFooterParser::createField - error while creating text field \"" ).
+            append( OUStringToOString( rServiceName, RTL_TEXTENCODING_ASCII_US ) ).
+            append( '"' ).getStr() );
+    }
+    return xContent;
+}
+
+void HeaderFooterParser::appendField( const Reference< XTextContent >& rxContent )
+{
+    getEndPos()->gotoEnd( sal_False );
+    try
+    {
+        Reference< XTextRange > xRange( getEndPos(), UNO_QUERY_THROW );
+        getPortion().mxText->insertTextContent( xRange, rxContent, sal_False );
+        updateCurrHeight();
+    }
+    catch( Exception& )
+    {
+    }
+}
+
+void HeaderFooterParser::convertFontName( const OUString& rName )
+{
+    if( rName.getLength() > 0 )
+    {
+        // single dash is document default font
+        if( (rName.getLength() == 1) && (rName[ 0 ] == '-') )
+            maFontModel.maName = getStyles().getDefaultFontModel().maName;
+        else
+            maFontModel.maName = rName;
+    }
+}
+
+void HeaderFooterParser::convertFontStyle( const OUString& rStyle )
+{
+    maFontModel.mbBold = maFontModel.mbItalic = false;
+    sal_Int32 nPos = 0;
+    sal_Int32 nLen = rStyle.getLength();
+    while( (0 <= nPos) && (nPos < nLen) )
+    {
+        OString aToken = OUStringToOString( rStyle.getToken( 0, ' ', nPos ), RTL_TEXTENCODING_UTF8 ).toAsciiLowerCase();
+        if( aToken.getLength() > 0 )
+        {
+            if( maBoldNames.count( aToken ) > 0 )
+                maFontModel.mbBold = true;
+            else if( maItalicNames.count( aToken ) > 0 )
+                maFontModel.mbItalic = true;
+        }
+    }
+}
+
+void HeaderFooterParser::convertFontColor( const OUString& rColor )
+{
+    OSL_ENSURE( rColor.getLength() == 6, "HeaderFooterParser::convertFontColor - invalid font color code" );
+    if( (rColor[ 2 ] == '+') || (rColor[ 2 ] == '-') )
+        // theme color: TTSNNN (TT = decimal theme index, S = +/-, NNN = decimal tint/shade in percent)
+        maFontModel.maColor.setTheme(
+            rColor.copy( 0, 2 ).toInt32(),
+            static_cast< double >( rColor.copy( 2 ).toInt32() ) / 100.0 );
+    else
+        // RGB color: RRGGBB
+        maFontModel.maColor.setRgb( rColor.toInt32( 16 ) );
+}
+
+void HeaderFooterParser::finalizePortion()
+{
+    appendText();
+    setAttributes();
+}
+
+void HeaderFooterParser::setNewPortion( HFPortionId ePortion )
+{
+    if( ePortion != meCurrPortion )
+    {
+        finalizePortion();
+        meCurrPortion = ePortion;
+        maFontModel = getStyles().getDefaultFontModel();
+    }
 }
 
 // ============================================================================
 
 namespace {
-
-/** Property names for page style settings. */
-const sal_Char* const sppcPageNames[] =
-{
-    "IsLandscape",
-    "FirstPageNumber",
-    "PrintDownFirst",
-    "PrintAnnotations",
-    "CenterHorizontally",
-    "CenterVertically",
-    "PrintGrid",
-    "PrintHeaders",
-    "LeftMargin",
-    "RightMargin",
-    "TopMargin",
-    "BottomMargin",
-    "HeaderIsOn",
-    "HeaderIsShared",
-    "HeaderIsDynamicHeight",
-    "HeaderHeight",
-    "HeaderBodyDistance",
-    "FooterIsOn",
-    "FooterIsShared",
-    "FooterIsDynamicHeight",
-    "FooterHeight",
-    "FooterBodyDistance",
-    0
-};
-
-/** Property names for page background graphic. */
-const sal_Char* const sppcGraphicNames[] =
-{
-    "BackGraphicURL",
-    "BackGraphicLocation",
-    0
-};
 
 /** Paper size in 1/100 millimeters. */
 struct ApiPaperSize
@@ -544,9 +1076,9 @@ static const ApiPaperSize spPaperSizeTable[] =
 
 // ----------------------------------------------------------------------------
 
-PageSettingsPropertyHelper::HFHelperData::HFHelperData( const OUString& rLeftProp, const OUString& rRightProp ) :
-    maLeftProp( rLeftProp ),
-    maRightProp( rRightProp ),
+PageSettingsConverter::HFHelperData::HFHelperData( sal_Int32 nLeftPropId, sal_Int32 nRightPropId ) :
+    mnLeftPropId( nLeftPropId ),
+    mnRightPropId( nRightPropId ),
     mnHeight( 0 ),
     mnBodyDist( 0 ),
     mbHasContent( false ),
@@ -557,18 +1089,20 @@ PageSettingsPropertyHelper::HFHelperData::HFHelperData( const OUString& rLeftPro
 
 // ----------------------------------------------------------------------------
 
-PageSettingsPropertyHelper::PageSettingsPropertyHelper( const WorkbookHelper& rHelper ) :
+PageSettingsConverter::PageSettingsConverter( const WorkbookHelper& rHelper ) :
     WorkbookHelper( rHelper ),
-    maHFParser( rHelper ),
-    maPageProps( sppcPageNames ),
-    maGraphicProps( sppcGraphicNames ),
-    maHeaderData( CREATE_OUSTRING( "LeftPageHeaderContent" ), CREATE_OUSTRING( "RightPageHeaderContent" ) ),
-    maFooterData( CREATE_OUSTRING( "LeftPageFooterContent" ), CREATE_OUSTRING( "RightPageFooterContent" ) )
+    mxHFParser( new HeaderFooterParser( rHelper ) ),
+    maHeaderData( PROP_LeftPageHeaderContent, PROP_RightPageHeaderContent ),
+    maFooterData( PROP_LeftPageFooterContent, PROP_RightPageFooterContent )
 {
 }
 
-void PageSettingsPropertyHelper::writePageSettingsProperties(
-        PropertySet& rPropSet, const OoxPageData& rData, WorksheetType eSheetType )
+PageSettingsConverter::~PageSettingsConverter()
+{
+}
+
+void PageSettingsConverter::writePageSettingsProperties(
+        PropertySet& rPropSet, const PageSettingsModel& rModel, WorksheetType eSheetType )
 {
     // special handling for chart sheets
     bool bChartSheet = eSheetType == SHEETTYPE_CHARTSHEET;
@@ -577,133 +1111,136 @@ void PageSettingsPropertyHelper::writePageSettingsProperties(
     if( bChartSheet )
     {
         // always fit chart sheet to 1 page
-        rPropSet.setProperty< sal_Int16 >( CREATE_OUSTRING( "ScaleToPages" ), 1 );
+        rPropSet.setProperty< sal_Int16 >( PROP_ScaleToPages, 1 );
     }
-    else if( rData.mbFitToPages )
+    else if( rModel.mbFitToPages )
     {
         // fit to number of pages
-        rPropSet.setProperty( CREATE_OUSTRING( "ScaleToPagesX" ), getLimitedValue< sal_Int16, sal_Int32 >( rData.mnFitToWidth, 0, 1000 ) );
-        rPropSet.setProperty( CREATE_OUSTRING( "ScaleToPagesY" ), getLimitedValue< sal_Int16, sal_Int32 >( rData.mnFitToHeight, 0, 1000 ) );
+        rPropSet.setProperty( PROP_ScaleToPagesX, getLimitedValue< sal_Int16, sal_Int32 >( rModel.mnFitToWidth, 0, 1000 ) );
+        rPropSet.setProperty( PROP_ScaleToPagesY, getLimitedValue< sal_Int16, sal_Int32 >( rModel.mnFitToHeight, 0, 1000 ) );
     }
     else
     {
         // scale may be 0 which indicates uninitialized
-        sal_Int16 nScale = (rData.mbValidSettings && (rData.mnScale > 0)) ? getLimitedValue< sal_Int16, sal_Int32 >( rData.mnScale, 10, 400 ) : 100;
-        rPropSet.setProperty( CREATE_OUSTRING( "PageScale" ), nScale );
+        sal_Int16 nScale = (rModel.mbValidSettings && (rModel.mnScale > 0)) ? getLimitedValue< sal_Int16, sal_Int32 >( rModel.mnScale, 10, 400 ) : 100;
+        rPropSet.setProperty( PROP_PageScale, nScale );
     }
 
     // paper orientation
-    bool bLandscape = rData.mnOrientation == XML_landscape;
+    bool bLandscape = rModel.mnOrientation == XML_landscape;
     // default orientation for current sheet type (chart sheets default to landscape)
-    if( !rData.mbValidSettings || (rData.mnOrientation == XML_default) )
+    if( !rModel.mbValidSettings || (rModel.mnOrientation == XML_default) )
         bLandscape = bChartSheet;
 
     // paper size
-    if( rData.mbValidSettings && (0 < rData.mnPaperSize) && (rData.mnPaperSize < static_cast< sal_Int32 >( STATIC_ARRAY_SIZE( spPaperSizeTable ) )) )
+    if( rModel.mbValidSettings && (0 < rModel.mnPaperSize) && (rModel.mnPaperSize < static_cast< sal_Int32 >( STATIC_ARRAY_SIZE( spPaperSizeTable ) )) )
     {
-        const ApiPaperSize& rPaperSize = spPaperSizeTable[ rData.mnPaperSize ];
+        const ApiPaperSize& rPaperSize = spPaperSizeTable[ rModel.mnPaperSize ];
         Size aSize( rPaperSize.mnWidth, rPaperSize.mnHeight );
         if( bLandscape )
             ::std::swap( aSize.Width, aSize.Height );
-        rPropSet.setProperty( CREATE_OUSTRING( "Size" ), aSize );
+        rPropSet.setProperty( PROP_Size, aSize );
     }
 
     // header/footer
-    convertHeaderFooterData( rPropSet, maHeaderData, rData.maOddHeader, rData.maEvenHeader, rData.mbUseEvenHF, rData.mfTopMargin,    rData.mfHeaderMargin );
-    convertHeaderFooterData( rPropSet, maFooterData, rData.maOddFooter, rData.maEvenFooter, rData.mbUseEvenHF, rData.mfBottomMargin, rData.mfFooterMargin );
+    convertHeaderFooterData( rPropSet, maHeaderData, rModel.maOddHeader, rModel.maEvenHeader, rModel.mbUseEvenHF, rModel.mfTopMargin,    rModel.mfHeaderMargin );
+    convertHeaderFooterData( rPropSet, maFooterData, rModel.maOddFooter, rModel.maEvenFooter, rModel.mbUseEvenHF, rModel.mfBottomMargin, rModel.mfFooterMargin );
 
     // write all properties to property set
     const UnitConverter& rUnitConv = getUnitConverter();
-    maPageProps
-        << bLandscape
-        << getLimitedValue< sal_Int16, sal_Int32 >( rData.mbUseFirstPage ? rData.mnFirstPage : 0, 0, 9999 )
-        << (rData.mnPageOrder == XML_downThenOver)
-        << (rData.mnCellComments == XML_asDisplayed)
-        << rData.mbHorCenter
-        << rData.mbVerCenter
-        << (!bChartSheet && rData.mbPrintGrid)      // no gridlines in chart sheets
-        << (!bChartSheet && rData.mbPrintHeadings)  // no column/row headings in chart sheets
-        << rUnitConv.scaleToMm100( rData.mfLeftMargin, UNIT_INCH )
-        << rUnitConv.scaleToMm100( rData.mfRightMargin, UNIT_INCH )
-        // #i23296# In Calc, "TopMargin" property is distance to top of header if enabled
-        << rUnitConv.scaleToMm100( maHeaderData.mbHasContent ? rData.mfHeaderMargin : rData.mfTopMargin, UNIT_INCH )
-        // #i23296# In Calc, "BottomMargin" property is distance to bottom of footer if enabled
-        << rUnitConv.scaleToMm100( maFooterData.mbHasContent ? rData.mfFooterMargin : rData.mfBottomMargin, UNIT_INCH )
-        << maHeaderData.mbHasContent
-        << maHeaderData.mbShareOddEven
-        << maHeaderData.mbDynamicHeight
-        << maHeaderData.mnHeight
-        << maHeaderData.mnBodyDist
-        << maFooterData.mbHasContent
-        << maFooterData.mbShareOddEven
-        << maFooterData.mbDynamicHeight
-        << maFooterData.mnHeight
-        << maFooterData.mnBodyDist
-        >> rPropSet;
+    PropertyMap aPropMap;
+    aPropMap[ PROP_IsLandscape ]           <<= bLandscape;
+    aPropMap[ PROP_FirstPageNumber ]       <<= getLimitedValue< sal_Int16, sal_Int32 >( rModel.mbUseFirstPage ? rModel.mnFirstPage : 0, 0, 9999 );
+    aPropMap[ PROP_PrintDownFirst ]        <<= (rModel.mnPageOrder == XML_downThenOver);
+    aPropMap[ PROP_PrintAnnotations ]      <<= (rModel.mnCellComments == XML_asDisplayed);
+    aPropMap[ PROP_CenterHorizontally ]    <<= rModel.mbHorCenter;
+    aPropMap[ PROP_CenterVertically ]      <<= rModel.mbVerCenter;
+    aPropMap[ PROP_PrintGrid ]             <<= (!bChartSheet && rModel.mbPrintGrid);     // no gridlines in chart sheets
+    aPropMap[ PROP_PrintHeaders ]          <<= (!bChartSheet && rModel.mbPrintHeadings); // no column/row headings in chart sheets
+    aPropMap[ PROP_LeftMargin ]            <<= rUnitConv.scaleToMm100( rModel.mfLeftMargin, UNIT_INCH );
+    aPropMap[ PROP_RightMargin ]           <<= rUnitConv.scaleToMm100( rModel.mfRightMargin, UNIT_INCH );
+    // #i23296# In Calc, "TopMargin" property is distance to top of header if enabled
+    aPropMap[ PROP_TopMargin ]             <<= rUnitConv.scaleToMm100( maHeaderData.mbHasContent ? rModel.mfHeaderMargin : rModel.mfTopMargin, UNIT_INCH );
+    // #i23296# In Calc, "BottomMargin" property is distance to bottom of footer if enabled
+    aPropMap[ PROP_BottomMargin ]          <<= rUnitConv.scaleToMm100( maFooterData.mbHasContent ? rModel.mfFooterMargin : rModel.mfBottomMargin, UNIT_INCH );
+    aPropMap[ PROP_HeaderIsOn ]            <<= maHeaderData.mbHasContent;
+    aPropMap[ PROP_HeaderIsShared ]        <<= maHeaderData.mbShareOddEven;
+    aPropMap[ PROP_HeaderIsDynamicHeight ] <<= maHeaderData.mbDynamicHeight;
+    aPropMap[ PROP_HeaderHeight ]          <<= maHeaderData.mnHeight;
+    aPropMap[ PROP_HeaderBodyDistance ]    <<= maHeaderData.mnBodyDist;
+    aPropMap[ PROP_FooterIsOn ]            <<= maFooterData.mbHasContent;
+    aPropMap[ PROP_FooterIsShared ]        <<= maFooterData.mbShareOddEven;
+    aPropMap[ PROP_FooterIsDynamicHeight ] <<= maFooterData.mbDynamicHeight;
+    aPropMap[ PROP_FooterHeight ]          <<= maFooterData.mnHeight;
+    aPropMap[ PROP_FooterBodyDistance ]    <<= maFooterData.mnBodyDist;
+    rPropSet.setProperties( aPropMap );
 
     // background image
-    OSL_ENSURE( (getFilterType() == FILTER_OOX) || (rData.maPicturePath.getLength() == 0),
-        "PageSettingsPropertyHelper::writePageSettingsProperties - unexpected background picture" );
-    if( (getFilterType() == FILTER_OOX) && (rData.maPicturePath.getLength() > 0) )
+    OSL_ENSURE( (getFilterType() == FILTER_OOX) || (rModel.maPicturePath.getLength() == 0),
+        "PageSettingsConverter::writePageSettingsProperties - unexpected background picture" );
+    if( (getFilterType() == FILTER_OOX) && (rModel.maPicturePath.getLength() > 0) )
     {
-        OUString aPictureUrl = getOoxFilter().copyPictureStream( rData.maPicturePath );
+        OUString aPictureUrl = getOoxFilter().copyPictureStream( rModel.maPicturePath );
         if( aPictureUrl.getLength() > 0 )
-            maGraphicProps << aPictureUrl << ::com::sun::star::style::GraphicLocation_TILED >> rPropSet;
+        {
+            rPropSet.setProperty( PROP_BackGraphicURL, aPictureUrl );
+            rPropSet.setProperty( PROP_BackGraphicLocation, ::com::sun::star::style::GraphicLocation_TILED );
+        }
     }
 }
 
-void PageSettingsPropertyHelper::convertHeaderFooterData(
-        PropertySet& rPropSet, HFHelperData& rHFData,
+void PageSettingsConverter::convertHeaderFooterData(
+        PropertySet& rPropSet, HFHelperData& orHFData,
         const OUString rOddContent, const OUString rEvenContent, bool bUseEvenContent,
         double fPageMargin, double fContentMargin )
 {
     bool bHasOddContent  = rOddContent.getLength() > 0;
     bool bHasEvenContent = bUseEvenContent && (rEvenContent.getLength() > 0);
 
-    sal_Int32 nOddHeight  = bHasOddContent  ? writeHeaderFooter( rPropSet, rHFData.maRightProp, rOddContent  ) : 0;
-    sal_Int32 nEvenHeight = bHasEvenContent ? writeHeaderFooter( rPropSet, rHFData.maLeftProp,  rEvenContent ) : 0;
+    sal_Int32 nOddHeight  = bHasOddContent  ? writeHeaderFooter( rPropSet, orHFData.mnRightPropId, rOddContent  ) : 0;
+    sal_Int32 nEvenHeight = bHasEvenContent ? writeHeaderFooter( rPropSet, orHFData.mnLeftPropId,  rEvenContent ) : 0;
 
-    rHFData.mnHeight = 750;
-    rHFData.mnBodyDist = 250;
-    rHFData.mbHasContent = bHasOddContent || bHasEvenContent;
-    rHFData.mbShareOddEven = !bUseEvenContent;
-    rHFData.mbDynamicHeight = true;
+    orHFData.mnHeight = 750;
+    orHFData.mnBodyDist = 250;
+    orHFData.mbHasContent = bHasOddContent || bHasEvenContent;
+    orHFData.mbShareOddEven = !bUseEvenContent;
+    orHFData.mbDynamicHeight = true;
 
-    if( rHFData.mbHasContent )
+    if( orHFData.mbHasContent )
     {
         // use maximum height of odd/even header/footer
-        rHFData.mnHeight = ::std::max( nOddHeight, nEvenHeight );
+        orHFData.mnHeight = ::std::max( nOddHeight, nEvenHeight );
         /*  Calc contains distance between bottom of header and top of page
             body in "HeaderBodyDistance" property, and distance between bottom
             of page body and top of footer in "FooterBodyDistance" property */
-        rHFData.mnBodyDist = getUnitConverter().scaleToMm100( fPageMargin - fContentMargin, UNIT_INCH ) - rHFData.mnHeight;
+        orHFData.mnBodyDist = getUnitConverter().scaleToMm100( fPageMargin - fContentMargin, UNIT_INCH ) - orHFData.mnHeight;
         /*  #i23296# Distance less than 0 means, header or footer overlays page
             body. As this is not possible in Calc, set fixed header or footer
             height (crop header/footer) to get correct top position of page body. */
-        rHFData.mbDynamicHeight = rHFData.mnBodyDist >= 0;
+        orHFData.mbDynamicHeight = orHFData.mnBodyDist >= 0;
         /*  "HeaderHeight" property is in fact distance from top of header to
             top of page body (including "HeaderBodyDistance").
             "FooterHeight" property is in fact distance from bottom of page
             body to bottom of footer (including "FooterBodyDistance"). */
-        rHFData.mnHeight += rHFData.mnBodyDist;
+        orHFData.mnHeight += orHFData.mnBodyDist;
         // negative body distance not allowed
-        rHFData.mnBodyDist = ::std::max< sal_Int32 >( rHFData.mnBodyDist, 0 );
+        orHFData.mnBodyDist = ::std::max< sal_Int32 >( orHFData.mnBodyDist, 0 );
     }
 }
 
-sal_Int32 PageSettingsPropertyHelper::writeHeaderFooter(
-        PropertySet& rPropSet, const OUString& rPropName, const OUString& rContent )
+sal_Int32 PageSettingsConverter::writeHeaderFooter(
+        PropertySet& rPropSet, sal_Int32 nPropId, const OUString& rContent )
 {
-    OSL_ENSURE( rContent.getLength() > 0, "PageSettingsPropertyHelper::writeHeaderFooter - empty h/f string found" );
+    OSL_ENSURE( rContent.getLength() > 0, "PageSettingsConverter::writeHeaderFooter - empty h/f string found" );
     sal_Int32 nHeight = 0;
     if( rContent.getLength() > 0 )
     {
         Reference< XHeaderFooterContent > xHFContent;
-        if( rPropSet.getProperty( xHFContent, rPropName ) && xHFContent.is() )
+        if( rPropSet.getProperty( xHFContent, nPropId ) && xHFContent.is() )
         {
-            maHFParser.parse( xHFContent, rContent );
-            rPropSet.setProperty( rPropName, xHFContent );
-            nHeight = getUnitConverter().scaleToMm100( maHFParser.getTotalHeight(), UNIT_POINT );
+            double fTotalHeight = mxHFParser->parse( xHFContent, rContent );
+            rPropSet.setProperty( nPropId, xHFContent );
+            nHeight = getUnitConverter().scaleToMm100( fTotalHeight, UNIT_POINT );
         }
     }
     return nHeight;

@@ -58,7 +58,6 @@ SHL1STDLIBS=\
     $(I18NISOLANGLIB) \
     $(SOTLIB) \
     $(TOOLSLIB) \
-    $(UCBHELPERLIB) \
     $(UNOTOOLSLIB) \
     $(CPPUHELPERLIB)    \
     $(COMPHELPERLIB)    \

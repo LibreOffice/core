@@ -51,7 +51,7 @@ namespace xls {
 
 // ============================================================================
 
-struct OoxExternalNameData
+struct ExternalNameModel
 {
     bool                mbBuiltIn;          /// Name is a built-in name.
     bool                mbNotify;           /// Notify application on data change.
@@ -60,7 +60,7 @@ struct OoxExternalNameData
     bool                mbOleObj;           /// Name is an OLE object.
     bool                mbIconified;        /// Iconified object link.
 
-    explicit            OoxExternalNameData();
+    explicit            ExternalNameModel();
 };
 
 // ============================================================================
@@ -107,7 +107,7 @@ public:
     void                importExternalName( BiffInputStream& rStrm );
 
     /** Returns true, if the name refers to an OLE object. */
-    inline bool         isOleObject() const { return maOoxExtNameData.mbOleObj; }
+    inline bool         isOleObject() const { return maExtNameModel.mbOleObj; }
 
     /** Returns the sheet cache index if this is a sheet-local external name. */
     sal_Int32           getSheetCacheIndex() const;
@@ -130,7 +130,7 @@ private:
     typedef Matrix< ::com::sun::star::uno::Any > ResultMatrix;
 
     const ExternalLink& mrParentLink;       /// External link this name belongs to.
-    OoxExternalNameData maOoxExtNameData;   /// Additional name data.
+    ExternalNameModel   maExtNameModel;     /// Additional name data.
     ResultMatrix        maResults;          /// DDE/OLE link results.
     ResultMatrix::iterator maCurrIt;        /// Current position in result matrix.
     sal_uInt32          mnStorageId;        /// OLE storage identifier (BIFF).
@@ -314,13 +314,13 @@ typedef ::boost::shared_ptr< ExternalLink > ExternalLinkRef;
     EXTERNALREF records, BIFF8: EXTERNALBOOK records), and provides sheet
     indexes into the sheet list of the external document.
  */
-struct OoxRefSheets
+struct RefSheetsModel
 {
     sal_Int32           mnExtRefId;         /// Zero-based index into list of external documents.
     sal_Int32           mnTabId1;           /// Zero-based index to first sheet in external document.
     sal_Int32           mnTabId2;           /// Zero-based index to last sheet in external document.
 
-    explicit            OoxRefSheets();
+    explicit            RefSheetsModel();
 
     void                readOobData( RecordInputStream& rStrm );
     void                readBiff8Data( BiffInputStream& rStrm );
@@ -373,15 +373,15 @@ private:
     ExternalLinkRef     createExternalLink();
 
     /** Returns the specified sheet indexes for a reference identifier. */
-    const OoxRefSheets* getRefSheets( sal_Int32 nRefId ) const;
+    const RefSheetsModel* getRefSheets( sal_Int32 nRefId ) const;
 
 private:
     typedef RefVector< ExternalLink >       ExternalLinkVec;
-    typedef ::std::vector< OoxRefSheets >   OoxRefSheetsVec;
+    typedef ::std::vector< RefSheetsModel > RefSheetsModelVec;
 
     ExternalLinkVec     maLinks;            /// List of link structures for all kinds of links.
     ExternalLinkVec     maExtLinks;         /// Real external links needed for formula parser.
-    OoxRefSheetsVec     maRefSheets;        /// Sheet indexes for reference ids.
+    RefSheetsModelVec   maRefSheets;        /// Sheet indexes for reference ids.
     bool                mbUseRefSheets;     /// True = use maRefSheets list (OOBIN only).
 };
 

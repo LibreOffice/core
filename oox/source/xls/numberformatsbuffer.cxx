@@ -39,7 +39,9 @@
 #include <rtl/string.hxx>
 #include <rtl/strbuf.hxx>
 #include <rtl/ustrbuf.hxx>
+#include "properties.hxx"
 #include "oox/helper/attributelist.hxx"
+#include "oox/helper/propertymap.hxx"
 #include "oox/helper/recordinputstream.hxx"
 #include "oox/core/filterbase.hxx"
 #include "oox/xls/biffinputstream.hxx"
@@ -1811,8 +1813,15 @@ static const BuiltinFormatTable spBuiltinFormatTables[] =
 
 // ============================================================================
 
-OoxNumFmtData::OoxNumFmtData() :
+NumFmtModel::NumFmtModel() :
     mnPredefId( -1 )
+{
+}
+
+// ----------------------------------------------------------------------------
+
+ApiNumFmtData::ApiNumFmtData() :
+    mnIndex( 0 )
 {
 }
 
@@ -1910,35 +1919,35 @@ NumberFormat::NumberFormat( const WorkbookHelper& rHelper ) :
 
 void NumberFormat::setFormatCode( const OUString& rFmtCode )
 {
-    maOoxData.maFmtCode = rFmtCode;
+    maModel.maFmtCode = rFmtCode;
 }
 
 void NumberFormat::setFormatCode( const Locale& rLocale, const sal_Char* pcFmtCode )
 {
-    maOoxData.maLocale = rLocale;
-    maOoxData.maFmtCode = OStringToOUString( OString( pcFmtCode ), RTL_TEXTENCODING_UTF8 );
-    maOoxData.mnPredefId = -1;
+    maModel.maLocale = rLocale;
+    maModel.maFmtCode = OStringToOUString( OString( pcFmtCode ), RTL_TEXTENCODING_UTF8 );
+    maModel.mnPredefId = -1;
 }
 
 void NumberFormat::setPredefinedId( const Locale& rLocale, sal_Int16 nPredefId )
 {
-    maOoxData.maLocale = rLocale;
-    maOoxData.maFmtCode = OUString();
-    maOoxData.mnPredefId = nPredefId;
+    maModel.maLocale = rLocale;
+    maModel.maFmtCode = OUString();
+    maModel.mnPredefId = nPredefId;
 }
 
 sal_Int32 NumberFormat::finalizeImport( const Reference< XNumberFormats >& rxNumFmts, const Locale& rFromLocale )
 {
-    if( rxNumFmts.is() && (maOoxData.maFmtCode.getLength() > 0) )
-        maApiData.mnIndex = lclCreateFormat( rxNumFmts, maOoxData.maFmtCode, maOoxData.maLocale, rFromLocale );
+    if( rxNumFmts.is() && (maModel.maFmtCode.getLength() > 0) )
+        maApiData.mnIndex = lclCreateFormat( rxNumFmts, maModel.maFmtCode, maModel.maLocale, rFromLocale );
     else
-        maApiData.mnIndex = lclCreatePredefinedFormat( rxNumFmts, maOoxData.mnPredefId, maOoxData.maLocale );
+        maApiData.mnIndex = lclCreatePredefinedFormat( rxNumFmts, maModel.mnPredefId, maModel.maLocale );
     return maApiData.mnIndex;
 }
 
-void NumberFormat::writeToPropertySet( PropertySet& rPropSet ) const
+void NumberFormat::writeToPropertyMap( PropertyMap& rPropMap ) const
 {
-    getStylesPropertyHelper().writeNumFmtProperties( rPropSet, maApiData );
+    rPropMap[ PROP_NumberFormat ] <<= maApiData.mnIndex;
 }
 
 // ============================================================================
@@ -2037,10 +2046,10 @@ void NumberFormatsBuffer::finalizeImport()
     maNumFmts.forEach( NumberFormatFinalizer( *this ) );
 }
 
-void NumberFormatsBuffer::writeToPropertySet( PropertySet& rPropSet, sal_Int32 nNumFmtId ) const
+void NumberFormatsBuffer::writeToPropertyMap( PropertyMap& rPropMap, sal_Int32 nNumFmtId ) const
 {
     if( const NumberFormat* pNumFmt = maNumFmts.get( nNumFmtId ).get() )
-        pNumFmt->writeToPropertySet( rPropSet );
+        pNumFmt->writeToPropertyMap( rPropMap );
 }
 
 void NumberFormatsBuffer::insertBuiltinFormats()

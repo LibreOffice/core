@@ -30,8 +30,10 @@
 
 #include "oox/drawingml/customshapeproperties.hxx"
 #include "oox/helper/helper.hxx"
+#include "oox/helper/propertymap.hxx"
 #include "oox/helper/propertyset.hxx"
 #include "oox/core/namespaces.hxx"
+#include "properties.hxx"
 #include "tokens.hxx"
 #include <com/sun/star/beans/XMultiPropertySet.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
@@ -64,7 +66,6 @@ void CustomShapeProperties::apply( const CustomShapePropertiesPtr& /* rSourceCus
 void CustomShapeProperties::pushToPropSet( const ::oox::core::XmlFilterBase& /* rFilterBase */,
     const Reference < XPropertySet >& xPropSet, const Reference < XShape > & xShape ) const
 {
-    const OUString sType = CREATE_OUSTRING( "Type" );
     if ( maShapePresetType.getLength() )
     {
         //const uno::Reference < drawing::XShape > xShape( xPropSet, UNO_QUERY );
@@ -72,7 +73,8 @@ void CustomShapeProperties::pushToPropSet( const ::oox::core::XmlFilterBase& /* 
         if( xDefaulter.is() )
             xDefaulter->createCustomShapeDefaults( maShapePresetType );
 
-        const rtl::OUString sCustomShapeGeometry( RTL_CONSTASCII_USTRINGPARAM( "CustomShapeGeometry" ) );
+        const OUString sType = CREATE_OUSTRING( "Type" );
+        const OUString sCustomShapeGeometry( RTL_CONSTASCII_USTRINGPARAM( "CustomShapeGeometry" ) );
         uno::Any aGeoPropSet = xPropSet->getPropertyValue( sCustomShapeGeometry );
         uno::Sequence< beans::PropertyValue > aGeoPropSeq;
         if ( aGeoPropSet >>= aGeoPropSeq )
@@ -102,12 +104,15 @@ void CustomShapeProperties::pushToPropSet( const ::oox::core::XmlFilterBase& /* 
 
                         for ( j = 0; j < maAdjustmentValues.size(); j++ )
                         {
-                            sal_uInt32 nVal = maAdjustmentValues[ j ].maName.copy( 3 ).toInt32();
-                            if ( nVal-- )
+                            if( maAdjustmentValues[ j ].maName.getLength() > 3 )
                             {
-                                double fNewAdj = getValue( maAdjustmentValues, nVal );
-                                aAdjustmentSeq[ nVal ].State = beans::PropertyState_DIRECT_VALUE;
-                                aAdjustmentSeq[ nVal ].Value <<= fNewAdj;
+                                sal_uInt32 nVal = maAdjustmentValues[ j ].maName.copy( 3 ).toInt32();
+                                if ( nVal-- )
+                                {
+                                    double fNewAdj = getValue( maAdjustmentValues, nVal );
+                                    aAdjustmentSeq[ nVal ].State = beans::PropertyState_DIRECT_VALUE;
+                                    aAdjustmentSeq[ nVal ].Value <<= fNewAdj;
+                                }
                             }
                         }
                         aGeoPropSeq[ i ].Value <<= aAdjustmentSeq;
@@ -124,15 +129,12 @@ void CustomShapeProperties::pushToPropSet( const ::oox::core::XmlFilterBase& /* 
     else
     {
         PropertyMap aPropertyMap;
-        OUString sShapeType( CREATE_OUSTRING( "non-primitive" ) );
-        aPropertyMap[ sType ] <<= sShapeType;
-
+        aPropertyMap[ PROP_Type ] <<= CREATE_OUSTRING( "non-primitive" );
 
         // converting the vector to a sequence
-        Sequence< PropertyValue > aSeq;
-        aPropertyMap.makeSequence( aSeq );
-        static const rtl::OUString sCustomShapeGeometry( RTL_CONSTASCII_USTRINGPARAM( "CustomShapeGeometry" ) );
-        xPropSet->setPropertyValue( sCustomShapeGeometry, Any( aSeq ) );
+        Sequence< PropertyValue > aSeq = aPropertyMap.makePropertyValueSequence();
+        PropertySet aPropSet( xPropSet );
+        aPropSet.setProperty( PROP_CustomShapeGeometry, aSeq );
     }
 }
 

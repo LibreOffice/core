@@ -29,10 +29,12 @@
  ************************************************************************/
 
 #include "oox/xls/excelhandlers.hxx"
+#include "oox/core/filterbase.hxx"
 #include "oox/xls/biffinputstream.hxx"
 
 using ::rtl::OUString;
-using ::oox::core::XmlFilterBase;
+using ::oox::core::FilterBase;
+using ::oox::core::FragmentHandler2;
 
 namespace oox {
 namespace xls {
@@ -42,7 +44,7 @@ namespace xls {
 
 OoxWorkbookFragmentBase::OoxWorkbookFragmentBase(
         const WorkbookHelper& rHelper, const OUString& rFragmentPath ) :
-    OoxFragmentHandler( rHelper.getOoxFilter(), rFragmentPath ),
+    FragmentHandler2( rHelper.getOoxFilter(), rFragmentPath ),
     WorkbookHelper( rHelper )
 {
 }
@@ -51,14 +53,14 @@ OoxWorkbookFragmentBase::OoxWorkbookFragmentBase(
 
 OoxWorksheetFragmentBase::OoxWorksheetFragmentBase( const WorkbookHelper& rHelper,
         const OUString& rFragmentPath, ISegmentProgressBarRef xProgressBar, WorksheetType eSheetType, sal_Int32 nSheet ) :
-    OoxFragmentHandler( rHelper.getOoxFilter(), rFragmentPath ),
+    FragmentHandler2( rHelper.getOoxFilter(), rFragmentPath ),
     WorksheetHelperRoot( rHelper, xProgressBar, eSheetType, nSheet )
 {
 }
 
 OoxWorksheetFragmentBase::OoxWorksheetFragmentBase(
         const WorksheetHelper& rHelper, const OUString& rFragmentPath ) :
-    OoxFragmentHandler( rHelper.getOoxFilter(), rFragmentPath ),
+    FragmentHandler2( rHelper.getOoxFilter(), rFragmentPath ),
     WorksheetHelperRoot( rHelper )
 {
 }
@@ -110,8 +112,32 @@ BiffContextHandler::BiffContextHandler( const BiffHandlerBase& rParent ) :
 
 // ============================================================================
 
-BiffFragmentHandler::BiffFragmentHandler( BiffInputStream& rStrm ) :
-    BiffHandlerBase( rStrm )
+namespace prv {
+
+BiffFragmentStreamOwner::BiffFragmentStreamOwner( const FilterBase& rFilter, const OUString& rStrmName )
+{
+    // do not automatically close the root stream (indicated by empty stream name)
+    mxXInStrm.reset( new BinaryXInputStream( rFilter.openInputStream( rStrmName ), rStrmName.getLength() > 0 ) );
+    mxBiffStrm.reset( new BiffInputStream( *mxXInStrm ) );
+}
+
+BiffFragmentStreamOwner::~BiffFragmentStreamOwner()
+{
+}
+
+} // namespace prv
+
+// ----------------------------------------------------------------------------
+
+BiffFragmentHandler::BiffFragmentHandler( const FilterBase& rFilter, const OUString& rStrmName ) :
+    prv::BiffFragmentStreamOwner( rFilter, rStrmName ),
+    BiffHandlerBase( *mxBiffStrm )
+{
+}
+
+BiffFragmentHandler::BiffFragmentHandler( const BiffFragmentHandler& rHandler ) :
+    prv::BiffFragmentStreamOwner( rHandler ),
+    BiffHandlerBase( rHandler )
 {
 }
 
@@ -191,10 +217,12 @@ bool BiffFragmentHandler::skipFragment()
 
 // ============================================================================
 
-BiffWorkbookFragmentBase::BiffWorkbookFragmentBase( const WorkbookHelper& rHelper, BiffInputStream& rStrm ) :
-    BiffFragmentHandler( rStrm ),
+BiffWorkbookFragmentBase::BiffWorkbookFragmentBase( const WorkbookHelper& rHelper, const OUString& rStrmName, bool bCloneDecoder ) :
+    BiffFragmentHandler( rHelper.getBaseFilter(), rStrmName ),
     WorkbookHelper( rHelper )
 {
+    if( bCloneDecoder )
+        getCodecHelper().cloneDecoder( mrStrm );
 }
 
 // ============================================================================
@@ -203,12 +231,6 @@ BiffWorksheetFragmentBase::BiffWorksheetFragmentBase( const BiffWorkbookFragment
         ISegmentProgressBarRef xProgressBar, WorksheetType eSheetType, sal_Int32 nSheet ) :
     BiffFragmentHandler( rParent ),
     WorksheetHelperRoot( rParent, xProgressBar, eSheetType, nSheet )
-{
-}
-
-BiffWorksheetFragmentBase::BiffWorksheetFragmentBase( const WorksheetHelper& rHelper, BiffInputStream& rStrm ) :
-    BiffFragmentHandler( rStrm ),
-    WorksheetHelperRoot( rHelper )
 {
 }
 

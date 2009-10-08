@@ -28,8 +28,7 @@ T4_WRITER = \
     writer8 \
     writer_MS_Word_2003_XML \
     writer_MS_Word_2007_XML \
-    writer_MS_Word_2007_XML_Template \
-    MediaWiki_File
+    writer_MS_Word_2007_XML_Template
 
 # -----------------------------------------------
 # count = 39
@@ -57,8 +56,6 @@ F4_WRITER = \
     writer_pdf_Export\
     writer8\
     writer8_template \
-    writer_MediaWiki_File \
-    writer_web_MediaWiki_File \
     MS_Word_2003_XML \
     MS_Word_2007_XML \
     MS_Word_2007_XML_Template

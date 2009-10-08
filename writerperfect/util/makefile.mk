@@ -25,13 +25,10 @@ LIB1FILES= \
     $(SLB)$/wpdimp.lib
 SHL1LIBS=$(LIB1TARGET)
 SHL1STDLIBS+= \
-    $(SVLLIB)	\
     $(SOTLIB) \
     $(SO2LIB) \
-    $(SVTOOLLIB) \
     $(UNOTOOLSLIB) \
     $(TOOLSLIB) \
-    $(COMPHELPERLIB) \
     $(UCBHELPERLIB) \
     $(CPPUHELPERLIB) \
     $(CPPULIB) \

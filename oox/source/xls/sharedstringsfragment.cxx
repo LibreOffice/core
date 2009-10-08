@@ -33,7 +33,7 @@
 #include "oox/xls/richstringcontext.hxx"
 
 using ::rtl::OUString;
-using ::com::sun::star::uno::Reference;
+using ::oox::core::ContextHandlerRef;
 using ::oox::core::RecordInfo;
 
 namespace oox {
@@ -49,38 +49,38 @@ OoxSharedStringsFragment::OoxSharedStringsFragment(
 
 // oox.core.ContextHandler2Helper interface -----------------------------------
 
-ContextWrapper OoxSharedStringsFragment::onCreateContext( sal_Int32 nElement, const AttributeList& )
+ContextHandlerRef OoxSharedStringsFragment::onCreateContext( sal_Int32 nElement, const AttributeList& )
 {
     switch( getCurrentElement() )
     {
         case XML_ROOT_CONTEXT:
-            return  (nElement == XLS_TOKEN( sst ));
+            if( nElement == XLS_TOKEN( sst ) )
+                return this;
+        break;
+
         case XLS_TOKEN( sst ):
             if( nElement == XLS_TOKEN( si ) )
                 return new OoxRichStringContext( *this, getSharedStrings().createRichString() );
         break;
     }
-    return false;
+    return 0;
 }
 
-ContextWrapper OoxSharedStringsFragment::onCreateRecordContext( sal_Int32 nRecId, RecordInputStream& )
+ContextHandlerRef OoxSharedStringsFragment::onCreateRecordContext( sal_Int32 nRecId, RecordInputStream& rStrm )
 {
     switch( getCurrentElement() )
     {
         case XML_ROOT_CONTEXT:
-            return  (nRecId == OOBIN_ID_SST);
-        case OOBIN_ID_SST:
-            return  (nRecId == OOBIN_ID_SI);
-    }
-    return false;
-}
+            if( nRecId == OOBIN_ID_SST )
+                return this;
+        break;
 
-void OoxSharedStringsFragment::onStartRecord( RecordInputStream& rStrm )
-{
-    switch( getCurrentElement() )
-    {
-        case OOBIN_ID_SI:   getSharedStrings().createRichString()->importString( rStrm, true ); break;
+        case OOBIN_ID_SST:
+            if( nRecId == OOBIN_ID_SI )
+                getSharedStrings().createRichString()->importString( rStrm, true );
+        break;
     }
+    return 0;
 }
 
 // oox.core.FragmentHandler2 interface ----------------------------------------

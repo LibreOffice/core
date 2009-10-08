@@ -33,6 +33,7 @@
 #include <com/sun/star/chart2/XChartDocument.hpp>
 #include "oox/drawingml/chart/chartconverter.hxx"
 #include "oox/drawingml/chart/datasourcemodel.hxx"
+#include "properties.hxx"
 
 using ::rtl::OUString;
 using ::com::sun::star::uno::Reference;
@@ -60,7 +61,7 @@ Reference< XDataSequence > DataSequenceConverter::createDataSequence( const OUSt
 
     // set sequence role
     PropertySet aSeqProp( xDataSeq );
-    aSeqProp.setProperty( CREATE_OUSTRING( "Role" ), rRole );
+    aSeqProp.setProperty( PROP_Role, rRole );
 
     return xDataSeq;
 }

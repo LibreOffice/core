@@ -46,32 +46,40 @@ namespace drawingml {
 
 // ============================================================================
 
-struct FillPropertyNames
+enum FillPropertyId
 {
-    ::rtl::OUString     maFillStyle;
-    ::rtl::OUString     maFillColor;
-    ::rtl::OUString     maFillTransparence;
-    ::rtl::OUString     maFillGradient;
-    ::rtl::OUString     maFillBitmap;
-    ::rtl::OUString     maFillBitmapMode;
-    ::rtl::OUString     maFillBitmapTile;
-    ::rtl::OUString     maFillBitmapStretch;
-    ::rtl::OUString     maFillBitmapLogicalSize;
-    ::rtl::OUString     maFillBitmapSizeX;
-    ::rtl::OUString     maFillBitmapSizeY;
-    ::rtl::OUString     maFillBitmapOffsetX;
-    ::rtl::OUString     maFillBitmapOffsetY;
-    ::rtl::OUString     maFillBitmapRectanglePoint;
+    FillStyleId,
+    FillColorId,
+    FillTransparenceId,
+    FillGradientId,
+    FillBitmapId,
+    FillBitmapModeId,
+    FillBitmapTileId,
+    FillBitmapStretchId,
+    FillBitmapLogicalSizeId,
+    FillBitmapSizeXId,
+    FillBitmapSizeYId,
+    FillBitmapOffsetXId,
+    FillBitmapOffsetYId,
+    FillBitmapRectanglePointId,
+    FillId_END
+};
+
+struct FillPropertyIds
+{
+    const sal_Int32*    mpnPropertyIds;
     bool                mbNamedFillGradient;
     bool                mbNamedFillBitmap;
     bool                mbTransformGraphic;
 
-    explicit            FillPropertyNames();
-    explicit            FillPropertyNames(
-                            const sal_Char* const* ppcPropertyNames,
+    explicit            FillPropertyIds(
+                            const sal_Int32* pnPropertyIds,
                             bool bNamedFillGradient,
                             bool bNamedFillBitmap,
                             bool bTransformGraphic );
+
+    inline bool         has( FillPropertyId ePropId ) const { return mpnPropertyIds[ ePropId ] >= 0; }
+    inline sal_Int32    operator[]( FillPropertyId ePropId ) const { return mpnPropertyIds[ ePropId ]; }
 };
 
 // ============================================================================
@@ -103,8 +111,8 @@ struct FillProperties
     OptValue< sal_Int32 > moTileSY;
     OptValue< sal_Int32 > moTileAlign;          /// Anchor point inside bitmap.
 
-    static FillPropertyNames DEFAULTNAMES;      /// Default fill property names for shape fill.
-    static FillPropertyNames DEFAULTPICNAMES;   /// Default fill property names for pictures.
+    static FillPropertyIds DEFAULT_IDS;         /// Default fill property identifiers for shape fill.
+    static FillPropertyIds DEFAULT_PICIDS;      /// Default fill property identifiers for pictures.
 
     /** Overwrites all members that are explicitly set in rSourceProps. */
     void                assignUsed( const FillProperties& rSourceProps );
@@ -116,7 +124,7 @@ struct FillProperties
     /** Writes the properties to the passed property map. */
     void                pushToPropMap(
                             PropertyMap& rPropMap,
-                            const FillPropertyNames& rPropNames,
+                            const FillPropertyIds& rPropIds,
                             const ::oox::core::XmlFilterBase& rFilter,
                             ::oox::core::ModelObjectContainer& rObjContainer,
                             sal_Int32 nShapeRotation, sal_Int32 nPhClr ) const;
@@ -124,7 +132,7 @@ struct FillProperties
     /** Writes the properties to the passed property set. */
     void                pushToPropSet(
                             PropertySet& rPropSet,
-                            const FillPropertyNames& rPropNames,
+                            const FillPropertyIds& rPropIds,
                             const ::oox::core::XmlFilterBase& rFilter,
                             ::oox::core::ModelObjectContainer& rObjContainer,
                             sal_Int32 nShapeRotation, sal_Int32 nPhClr ) const;

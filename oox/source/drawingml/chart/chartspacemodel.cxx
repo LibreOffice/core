@@ -38,7 +38,7 @@ namespace chart {
 // ============================================================================
 
 ChartSpaceModel::ChartSpaceModel() :
-    mnDispBlanksAs( XML_zero ),
+    mnDispBlanksAs( XML_gap ),  // not zero as specified
     mnStyle( 2 ),
     mbAutoTitleDel( false ),
     mbPlotVisOnly( false ),

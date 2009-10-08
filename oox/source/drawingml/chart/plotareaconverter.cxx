@@ -38,6 +38,7 @@
 #include "oox/drawingml/chart/axisconverter.hxx"
 #include "oox/drawingml/chart/plotareamodel.hxx"
 #include "oox/drawingml/chart/typegroupconverter.hxx"
+#include "properties.hxx"
 
 using ::rtl::OUString;
 using ::com::sun::star::uno::Reference;
@@ -68,15 +69,6 @@ struct AxesSetModel
     inline explicit     AxesSetModel() {}
     inline              ~AxesSetModel() {}
 };
-
-void lclCopyOrCreate( AxesSetModel::AxisMap& orToAxes, const AxesSetModel::AxisMap& rFromAxes, sal_Int32 nAxisIdx, sal_Int32 nDefTypeId )
-{
-    AxesSetModel::AxisMap::mapped_type xAxis = rFromAxes.get( nAxisIdx );
-    if( xAxis.get() )
-        orToAxes[ nAxisIdx ] = xAxis;
-    else
-        orToAxes.create( nAxisIdx, nDefTypeId ).mbDeleted = true;   // missing axis is invisible
-}
 
 // ============================================================================
 
@@ -119,6 +111,14 @@ AxesSetConverter::AxesSetConverter( const ConverterRoot& rParent, AxesSetModel& 
 
 AxesSetConverter::~AxesSetConverter()
 {
+}
+
+ModelRef< AxisModel > lclGetOrCreateAxis( const AxesSetModel::AxisMap& rFromAxes, sal_Int32 nAxisIdx, sal_Int32 nDefTypeId )
+{
+    ModelRef< AxisModel > xAxis = rFromAxes.get( nAxisIdx );
+    if( !xAxis )
+        xAxis.create( nDefTypeId ).mbDeleted = true;  // missing axis is invisible
+    return xAxis;
 }
 
 void AxesSetConverter::convertFromModel( const Reference< XDiagram >& rxDiagram,
@@ -168,22 +168,24 @@ void AxesSetConverter::convertFromModel( const Reference< XDiagram >& rxDiagram,
             aView3DConv.convertFromModel( rxDiagram, rFirstTypeGroup );
         }
 
-        /*  Convert all chart type groups. Each type group will add its series to
-            the data provider attached to the chart document. */
+        /*  Convert all chart type groups. Each type group will add its series
+            to the data provider attached to the chart document. */
         if( xCoordSystem.is() )
         {
-            // create missing axis models
-            AxesSetModel::AxisMap aAxes;
-            lclCopyOrCreate( aAxes, mrModel.maAxes, API_X_AXIS, rFirstTypeGroup.getTypeInfo().mbCategoryAxis ? C_TOKEN( catAx ) : C_TOKEN( valAx ));
-            lclCopyOrCreate( aAxes, mrModel.maAxes, API_Y_AXIS, C_TOKEN( valAx ) );
-            if( rFirstTypeGroup.isDeep3dChart() )
-                lclCopyOrCreate( aAxes, mrModel.maAxes, API_Z_AXIS, C_TOKEN( serAx ) );
+            // convert all axes (create missing axis models)
+            ModelRef< AxisModel > xXAxis = lclGetOrCreateAxis( mrModel.maAxes, API_X_AXIS, rFirstTypeGroup.getTypeInfo().mbCategoryAxis ? C_TOKEN( catAx ) : C_TOKEN( valAx ) );
+            ModelRef< AxisModel > xYAxis = lclGetOrCreateAxis( mrModel.maAxes, API_Y_AXIS, C_TOKEN( valAx ) );
 
-            // convert all axes
-            for( AxesSetModel::AxisMap::iterator aAIt = aAxes.begin(), aAEnd = aAxes.end(); aAIt != aAEnd; ++aAIt )
+            AxisConverter aXAxisConv( *this, *xXAxis );
+            aXAxisConv.convertFromModel( xCoordSystem, rFirstTypeGroup, xYAxis.get(), nAxesSetIdx, API_X_AXIS );
+            AxisConverter aYAxisConv( *this, *xYAxis );
+            aYAxisConv.convertFromModel( xCoordSystem, rFirstTypeGroup, xXAxis.get(), nAxesSetIdx, API_Y_AXIS );
+
+            if( rFirstTypeGroup.isDeep3dChart() )
             {
-                AxisConverter aAxisConv( *this, *aAIt->second );
-                aAxisConv.convertFromModel( xCoordSystem, rFirstTypeGroup, nAxesSetIdx, aAIt->first );
+                ModelRef< AxisModel > xZAxis = lclGetOrCreateAxis( mrModel.maAxes, API_Z_AXIS, C_TOKEN( serAx ) );
+                AxisConverter aZAxisConv( *this, *xZAxis );
+                aZAxisConv.convertFromModel( xCoordSystem, rFirstTypeGroup, 0, nAxesSetIdx, API_Z_AXIS );
             }
 
             // convert all chart type groups, this converts all series data and formatting
@@ -254,23 +256,24 @@ void View3DConverter::convertFromModel( const Reference< XDiagram >& rxDiagram, 
         buggy here, the XML plugin of MSO 2003 writes the correct perspective in
         the range from 0 to 100. We will emulate the wrong behaviour of MSO 2007. */
     sal_Int32 nPerspective = getLimitedValue< sal_Int32, sal_Int32 >( mrModel.mnPerspective / 2, 0, 100 );
-    // projection mode (parallel axes, if right-angled)
-    cssd::ProjectionMode eProjMode = bRightAngled ? cssd::ProjectionMode_PARALLEL : cssd::ProjectionMode_PERSPECTIVE;
+    // projection mode (parallel axes, if right-angled, #i90360# or if perspective is at 0%)
+    bool bParallel = bRightAngled || (nPerspective == 0);
+    cssd::ProjectionMode eProjMode = bParallel ? cssd::ProjectionMode_PARALLEL : cssd::ProjectionMode_PERSPECTIVE;
 
     // set rotation properties
-    aPropSet.setProperty( CREATE_OUSTRING( "RotationVertical" ), nRotationY );
-    aPropSet.setProperty( CREATE_OUSTRING( "RotationHorizontal" ), nRotationX );
-    aPropSet.setProperty( CREATE_OUSTRING( "Perspective" ), nPerspective );
-    aPropSet.setProperty( CREATE_OUSTRING( "RightAngledAxes" ), bRightAngled );
-    aPropSet.setProperty( CREATE_OUSTRING( "D3DScenePerspective" ), eProjMode );
+    aPropSet.setProperty( PROP_RotationVertical, nRotationY );
+    aPropSet.setProperty( PROP_RotationHorizontal, nRotationX );
+    aPropSet.setProperty( PROP_Perspective, nPerspective );
+    aPropSet.setProperty( PROP_RightAngledAxes, bRightAngled );
+    aPropSet.setProperty( PROP_D3DScenePerspective, eProjMode );
 
     // set light settings
-    aPropSet.setProperty( CREATE_OUSTRING( "D3DSceneShadeMode" ), cssd::ShadeMode_FLAT );
-    aPropSet.setProperty( CREATE_OUSTRING( "D3DSceneAmbientColor" ), nAmbientColor );
-    aPropSet.setProperty( CREATE_OUSTRING( "D3DSceneLightOn1" ), false );
-    aPropSet.setProperty( CREATE_OUSTRING( "D3DSceneLightOn2" ), true );
-    aPropSet.setProperty( CREATE_OUSTRING( "D3DSceneLightColor2" ), nLightColor );
-    aPropSet.setProperty( CREATE_OUSTRING( "D3DSceneLightDirection2" ), cssd::Direction3D( 0.2, 0.4, 1.0 ) );
+    aPropSet.setProperty( PROP_D3DSceneShadeMode, cssd::ShadeMode_FLAT );
+    aPropSet.setProperty( PROP_D3DSceneAmbientColor, nAmbientColor );
+    aPropSet.setProperty( PROP_D3DSceneLightOn1, false );
+    aPropSet.setProperty( PROP_D3DSceneLightOn2, true );
+    aPropSet.setProperty( PROP_D3DSceneLightColor2, nLightColor );
+    aPropSet.setProperty( PROP_D3DSceneLightDirection2, cssd::Direction3D( 0.2, 0.4, 1.0 ) );
 }
 
 // ============================================================================

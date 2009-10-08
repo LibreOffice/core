@@ -37,6 +37,7 @@
 #include "oox/helper/propertymap.hxx"
 #include "oox/core/namespaces.hxx"
 #include "oox/drawingml/embeddedwavaudiofile.hxx"
+#include "properties.hxx"
 #include "tokens.hxx"
 
 using rtl::OUString;
@@ -89,8 +90,8 @@ namespace oox { namespace ppt {
 #endif
                 if ( url.getLength() != 0 )
                 {
-                    maSlideProperties[ CREATE_OUSTRING( "Sound" ) ] = Any( url );
-                    maSlideProperties[ CREATE_OUSTRING( "SoundOn" ) ] = Any( sal_True );
+                    maSlideProperties[ PROP_Sound ] <<= url;
+                    maSlideProperties[ PROP_SoundOn ] <<= sal_True;
                 }
             }
 //          else if( mbStopSound )

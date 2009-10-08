@@ -51,13 +51,18 @@ ThemeFragmentHandler::~ThemeFragmentHandler()
 {
 }
 
-ContextWrapper ThemeFragmentHandler::onCreateContext( sal_Int32 nElement, const AttributeList& )
+ContextHandlerRef ThemeFragmentHandler::onCreateContext( sal_Int32 nElement, const AttributeList& )
 {
     // CT_OfficeStyleSheet
     switch( getCurrentElement() )
     {
         case XML_ROOT_CONTEXT:
-            return nElement == (NMSP_DRAWINGML|XML_theme);
+            switch( nElement )
+            {
+                case NMSP_DRAWINGML|XML_theme:
+                    return this;
+            }
+        break;
 
         case NMSP_DRAWINGML|XML_theme:
             switch( nElement )
@@ -67,15 +72,15 @@ ContextWrapper ThemeFragmentHandler::onCreateContext( sal_Int32 nElement, const 
                 case NMSP_DRAWINGML|XML_objectDefaults:             // CT_ObjectStyleDefaults
                     return new objectDefaultContext( *this, mrTheme );
                 case NMSP_DRAWINGML|XML_extraClrSchemeLst:          // CT_ColorSchemeList
-                    return false;
+                    return 0;
                 case NMSP_DRAWINGML|XML_custClrLst:                 // CustomColorList
-                    return false;
+                    return 0;
                 case NMSP_DRAWINGML|XML_ext:                        // CT_OfficeArtExtension
-                    return false;
+                    return 0;
             }
         break;
     }
-    return false;
+    return 0;
 }
 
 // ============================================================================

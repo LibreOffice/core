@@ -40,6 +40,7 @@
 #include "oox/core/skipcontext.hxx"
 #include "oox/core/xmlfilterbase.hxx"
 #include "oox/drawingml/embeddedwavaudiofile.hxx"
+#include "properties.hxx"
 #include "tokens.hxx"
 
 using ::rtl::OUString;
@@ -61,18 +62,13 @@ HyperLinkContext::HyperLinkContext( ContextHandler& rParent,
     if( sHref.getLength() > 0 )
     {
         OSL_TRACE("OOX: URI href %s", ::rtl::OUStringToOString (sHref, RTL_TEXTENCODING_UTF8).pData->buffer);
-        const OUString sURL( CREATE_OUSTRING( "URL" ) );
-        maProperties[ sURL ] <<= getFilter().getAbsoluteUrl( sHref );
+        maProperties[ PROP_URL ] <<= getFilter().getAbsoluteUrl( sHref );
         OUString sTooltip = xAttributes->getOptionalValue( NMSP_RELATIONSHIPS|XML_tooltip );
-        const OUString sRepresentation( CREATE_OUSTRING( "Representation" ) );
-        maProperties[ sRepresentation ] <<= sTooltip;
+        maProperties[ PROP_Representation ] <<= sTooltip;
 
         OUString sFrame = xAttributes->getOptionalValue( NMSP_RELATIONSHIPS|XML_tgtFrame );
         if( sFrame.getLength() )
-        {
-            const OUString sTargetFrame( CREATE_OUSTRING( "TargetFrame" ) );
-            maProperties[ sTargetFrame ] <<= sFrame;
-        }
+            maProperties[ PROP_TargetFrame ] <<= sFrame;
 
 //              sValue = OUString( RTL_CONSTASCII_USTRINGPARAM( "" ) );
 //              const rtl::OUString sUnvisitedCharStyleName( CREATE_OUSTRING( "UnvisitedCharStyleName" ) );

@@ -69,6 +69,7 @@ public:
     void                convertFromModel(
                             const ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XCoordinateSystem >& rxCoordSystem,
                             TypeGroupConverter& rTypeGroup,
+                            const AxisModel* pCrossingAxis,
                             sal_Int32 nAxesSetIdx,
                             sal_Int32 nAxisIdx );
 };

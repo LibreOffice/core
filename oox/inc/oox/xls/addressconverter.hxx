@@ -284,12 +284,13 @@ public:
                             sal_Int32 nLength = SAL_MAX_INT32 );
 
     /** Tries to parse an encoded name of an external link target in BIFF
-        documents, e.g. from EXTERNSHEET, SUPBOOK, or DCONREF records.
+        documents, e.g. from EXTERNSHEET or SUPBOOK records.
 
         @param orClassName  (out-parameter) DDE server name or OLE class name.
         @param orTargetUrl  (out-parameter) Target URL, DDE topic or OLE object name.
         @param orSheetName  (out-parameter) Sheet name in target document.
         @param rBiffEncoded  Encoded name of the external link target.
+        @param bFromDConRec  True = path from DCONREF/DCONNAME/DCONBINAME records, false = other records.
 
         @return  Type of the decoded target.
       */
@@ -297,7 +298,8 @@ public:
                             ::rtl::OUString& orClassName,
                             ::rtl::OUString& orTargetUrl,
                             ::rtl::OUString& orSheetName,
-                            const ::rtl::OUString& rBiffTargetUrl );
+                            const ::rtl::OUString& rBiffTargetUrl,
+                            bool bFromDConRec = false );
 
     // ------------------------------------------------------------------------
 
@@ -450,34 +452,51 @@ public:
     /** Checks the passed cell range if it fits into the spreadsheet limits.
 
         @param rRange  The cell range address to be checked.
+        @param bAllowOverflow  true = Allow ranges that start inside the
+            supported sheet limits but may end outside of these limits.
+            false = Do not allow ranges that overflow the supported limits.
         @param bTrackOverflow  true = Update the internal overflow flags, if
             the passed range contains cells outside of the supported sheet
             limits.
         @return  true = Cell range is valid. This function returns also true,
-            if only parts of the range are outside the current sheet limits.
-            Returns false, if the entire range is outside the sheet limits.
+            if only parts of the range are outside the current sheet limits and
+            such an overflow is allowed via parameter bAllowOverflow. Returns
+            false, if the entire range is outside the sheet limits, or if
+            overflow is not allowed via parameter bAllowOverflow.
      */
     bool                checkCellRange(
                             const ::com::sun::star::table::CellRangeAddress& rRange,
-                            bool bTrackOverflow );
+                            bool bAllowOverflow, bool bTrackOverflow );
 
-    /** Tries to restrict the passed cell range to current sheet limits.
+    /** Checks the passed cell range, may try to fit it to current sheet limits.
+
+        First, this function reorders the column and row indexes so that the
+        starting indexes are less than or equal to the end indexes. Then,
+        depending on the parameter bAllowOverflow, the range is just checked or
+        cropped to the current sheet limits.
 
         @param orRange  (in-out-parameter) Converts the passed cell range
             into a valid cell range address. If the passed range contains cells
             outside the currently supported spreadsheet limits, it will be
             cropped to these limits.
+        @param bAllowOverflow  true = Allow ranges that start inside the
+            supported sheet limits but may end outside of these limits. The
+            cell range returned in orRange will be cropped to these limits.
+            false = Do not allow ranges that overflow the supported limits. The
+            function will return false when the range overflows the sheet limits.
         @param bTrackOverflow  true = Update the internal overflow flags, if
             the original range contains cells outside of the supported sheet
             limits.
         @return  true = Converted range address is valid. This function
-            returns also true, if the range has been cropped, but still
-            contains cells inside the current sheet limits. Returns false, if
-            the entire range is outside the sheet limits.
+            returns also true, if overflowing ranges are allowed via parameter
+            bAllowOverflow and the range has been cropped, but still contains
+            cells inside the current sheet limits. Returns false, if the entire
+            range is outside the sheet limits or overflowing ranges are not
+            allowed via parameter bAllowOverflow.
      */
     bool                validateCellRange(
                             ::com::sun::star::table::CellRangeAddress& orRange,
-                            bool bTrackOverflow );
+                            bool bAllowOverflow, bool bTrackOverflow );
 
     /** Converts the passed string to a cell range address, without checking
         any sheet limits.
@@ -496,24 +515,31 @@ public:
 
         @param orRange  (out-parameter) Returns the converted cell range
             address. If the original range in the passed string contains cells
-            outside the currently supported spreadsheet limits, it will be
-            cropped to these limits. Example: the range string "A1:ZZ100000"
-            may be converted to the range A1:IV65536.
+            outside the currently supported spreadsheet limits, and parameter
+            bAllowOverflow is set to true, the range will be cropped to these
+            limits. Example: the range string "A1:ZZ100000" may be converted to
+            the range A1:IV65536.
         @param rString  Cell range string in A1 notation.
         @param nSheet  Sheet index to be inserted into orRange (will be checked).
+        @param bAllowOverflow  true = Allow ranges that start inside the
+            supported sheet limits but may end outside of these limits. The
+            cell range returned in orRange will be cropped to these limits.
+            false = Do not allow ranges that overflow the supported limits.
         @param bTrackOverflow  true = Update the internal overflow flags, if
             the original range contains cells outside of the supported sheet
             limits.
         @return  true = Converted and returned range is valid. This function
-            returns also true, if the range has been cropped, but still
-            contains cells inside the current sheet limits. Returns false, if
-            the entire range is outside the sheet limits.
+            returns also true, if overflowing ranges are allowed via parameter
+            bAllowOverflow and the range has been cropped, but still contains
+            cells inside the current sheet limits. Returns false, if the entire
+            range is outside the sheet limits or overflowing ranges are not
+            allowed via parameter bAllowOverflow.
      */
     bool                convertToCellRange(
                             ::com::sun::star::table::CellRangeAddress& orRange,
                             const ::rtl::OUString& rString,
                             sal_Int16 nSheet,
-                            bool bTrackOverflow );
+                            bool bAllowOverflow, bool bTrackOverflow );
 
     /** Converts the passed range to a cell range address, without checking any
         sheet limits.
@@ -530,41 +556,52 @@ public:
     /** Tries to convert the passed range to a cell range address.
 
         @param orRange  (out-parameter) Returns the converted cell range
-            address. If the original range in the passed string contains cells
-            outside the currently supported spreadsheet limits, it will be
-            cropped to these limits.
+            address. If the passed original range contains cells outside the
+            currently supported spreadsheet limits, and parameter bAllowOverflow
+            is set to true, the range will be cropped to these limits.
         @param rBinRange  Binary cell range struct.
         @param nSheet  Sheet index to be inserted into orRange (will be checked).
+        @param bAllowOverflow  true = Allow ranges that start inside the
+            supported sheet limits but may end outside of these limits. The
+            cell range returned in orRange will be cropped to these limits.
+            false = Do not allow ranges that overflow the supported limits.
         @param bTrackOverflow  true = Update the internal overflow flags, if
             the original range contains cells outside of the supported sheet
             limits.
         @return  true = Converted and returned range is valid. This function
-            returns also true, if the range has been cropped, but still
-            contains cells inside the current sheet limits. Returns false, if
-            the entire range is outside the sheet limits.
+            returns also true, if overflowing ranges are allowed via parameter
+            bAllowOverflow and the range has been cropped, but still contains
+            cells inside the current sheet limits. Returns false, if the entire
+            range is outside the sheet limits or if overflowing ranges are not
+            allowed via parameter bAllowOverflow.
      */
     bool                convertToCellRange(
                             ::com::sun::star::table::CellRangeAddress& orRange,
                             const BinRange& rBinRange,
                             sal_Int16 nSheet,
-                            bool bTrackOverflow );
+                            bool bAllowOverflow, bool bTrackOverflow );
 
     // ------------------------------------------------------------------------
 
     /** Checks the passed cell range list if it fits into the spreadsheet limits.
 
         @param rRanges  The cell range list to be checked.
+        @param bAllowOverflow  true = Allow ranges that start inside the
+            supported sheet limits but may end outside of these limits.
+            false = Do not allow ranges that overflow the supported limits.
         @param bTrackOverflow  true = Update the internal overflow flags, if
             the passed range list contains cells outside of the supported sheet
             limits.
         @return  true = All cell ranges are valid. This function returns also
-            true, if only parts of the ranges are outside the current sheet
-            limits. Returns false, if one of the ranges is completely outside
-            the sheet limits.
+            true, if overflowing ranges are allowed via parameter bAllowOverflow
+            and only parts of the ranges are outside the current sheet limits.
+            Returns false, if one of the ranges is completely outside the sheet
+            limits or if overflowing ranges are not allowed via parameter
+            bAllowOverflow.
      */
     bool                checkCellRangeList(
                             const ApiCellRangeList& rRanges,
-                            bool bTrackOverflow );
+                            bool bAllowOverflow, bool bTrackOverflow );
 
     /** Tries to restrict the passed cell range list to current sheet limits.
 
@@ -624,20 +661,26 @@ private:
     void                initializeMaxPos(
                             sal_Int16 nMaxXlsTab, sal_Int32 nMaxXlsCol, sal_Int32 nMaxXlsRow );
 
-    void                initializeEncodedUrl(
-                            sal_Unicode cUrlThisWorkbook, sal_Unicode cUrlExternal,
-                            sal_Unicode cUrlThisSheet, sal_Unicode cUrlInternal,
-                            sal_Unicode cUrlSameSheet );
-
 private:
+    struct ControlCharacters
+    {
+        sal_Unicode         mcThisWorkbook;             /// Control character: Link to current workbook.
+        sal_Unicode         mcExternal;                 /// Control character: Link to external workbook/sheet.
+        sal_Unicode         mcThisSheet;                /// Control character: Link to current sheet.
+        sal_Unicode         mcInternal;                 /// Control character: Link to internal sheet.
+        sal_Unicode         mcSameSheet;                /// Control character: Link to same sheet (special '!A1' syntax).
+
+        void                set(
+                                sal_Unicode cThisWorkbook, sal_Unicode cExternal,
+                                sal_Unicode cThisSheet, sal_Unicode cInternal,
+                                sal_Unicode cSameSheet );
+    };
+
     ::com::sun::star::table::CellAddress maMaxApiPos;   /// Maximum valid cell address in Calc.
     ::com::sun::star::table::CellAddress maMaxXlsPos;   /// Maximum valid cell address in Excel.
     ::com::sun::star::table::CellAddress maMaxPos;      /// Maximum valid cell address in Calc/Excel.
-    sal_Unicode         mcUrlThisWorkbook;              /// Control character: Link to current workbook.
-    sal_Unicode         mcUrlExternal;                  /// Control character: Link to external workbook/sheet.
-    sal_Unicode         mcUrlThisSheet;                 /// Control character: Link to current sheet.
-    sal_Unicode         mcUrlInternal;                  /// Control character: Link to internal sheet.
-    sal_Unicode         mcUrlSameSheet;                 /// Control character: Link to same sheet (special '!A1' syntax).
+    ControlCharacters   maLinkChars;                    /// Control characters for external link import (BIFF).
+    ControlCharacters   maDConChars;                    /// Control characters for DCON* record import (BIFF).
     bool                mbColOverflow;                  /// Flag for "columns overflow".
     bool                mbRowOverflow;                  /// Flag for "rows overflow".
     bool                mbTabOverflow;                  /// Flag for "tables overflow".

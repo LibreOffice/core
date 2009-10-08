@@ -44,6 +44,7 @@
 #include "oox/drawingml/drawingmltypes.hxx"
 #include "oox/drawingml/customshapegeometry.hxx"
 #include "oox/drawingml/textbodycontext.hxx"
+#include "properties.hxx"
 #include "tokens.hxx"
 
 using rtl::OUString;
@@ -72,8 +73,7 @@ Reference< XFastContextHandler > PPTShapePropertiesContext::createFastChildConte
     {
         case NMSP_DRAWINGML | XML_xfrm:
         {
-            static const OUString sIsPlaceholderDependent( RTL_CONSTASCII_USTRINGPARAM( "IsPlaceholderDependent" ) );
-            mrShape.getShapeProperties()[ sIsPlaceholderDependent ] <<= Any( sal_False );
+            mrShape.getShapeProperties()[ PROP_IsPlaceholderDependent ] <<= sal_False;
 
             xRet = ShapePropertiesContext::createFastChildContext( aElementToken, xAttribs );
         }

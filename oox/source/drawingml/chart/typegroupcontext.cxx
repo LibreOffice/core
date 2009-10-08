@@ -33,7 +33,7 @@
 #include "oox/drawingml/chart/typegroupmodel.hxx"
 
 using ::oox::core::ContextHandler2Helper;
-using ::oox::core::ContextWrapper;
+using ::oox::core::ContextHandlerRef;
 
 namespace oox {
 namespace drawingml {
@@ -50,7 +50,7 @@ UpDownBarsContext::~UpDownBarsContext()
 {
 }
 
-ContextWrapper UpDownBarsContext::onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs )
+ContextHandlerRef UpDownBarsContext::onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs )
 {
     switch( getCurrentElement() )
     {
@@ -61,13 +61,13 @@ ContextWrapper UpDownBarsContext::onCreateContext( sal_Int32 nElement, const Att
                     return new ShapePrWrapperContext( *this, mrModel.mxDownBars.create() );
                 case C_TOKEN( gapWidth ):
                     mrModel.mnGapWidth = rAttribs.getInteger( XML_val, 150 );
-                    return false;
+                    return 0;
                 case C_TOKEN( upBars ):
                     return new ShapePrWrapperContext( *this, mrModel.mxUpBars.create() );
             }
         break;
     }
-    return false;
+    return 0;
 }
 
 // ============================================================================
@@ -81,31 +81,31 @@ AreaTypeGroupContext::~AreaTypeGroupContext()
 {
 }
 
-ContextWrapper AreaTypeGroupContext::onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs )
+ContextHandlerRef AreaTypeGroupContext::onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs )
 {
     if( isRootElement() ) switch( nElement )
     {
         case C_TOKEN( axId ):
             mrModel.maAxisIds.push_back( rAttribs.getInteger( XML_val, -1 ) );
-            return false;
+            return 0;
         case C_TOKEN( dLbls ):
             return new DataLabelsContext( *this, mrModel.mxLabels.create() );
         case C_TOKEN( dropLines ):
             return new ShapePrWrapperContext( *this, mrModel.mxDropLines.create() );
         case C_TOKEN( gapDepth ):
             mrModel.mnGapDepth = rAttribs.getInteger( XML_val, 150 );
-            return false;
+            return 0;
         case C_TOKEN( grouping ):
             mrModel.mnGrouping = rAttribs.getToken( XML_val, XML_standard );
-            return false;
+            return 0;
         case C_TOKEN( ser ):
             return new AreaSeriesContext( *this, mrModel.maSeries.create() );
         case C_TOKEN( varyColors ):
             // default is 'false', not 'true' as specified
             mrModel.mbVaryColors = rAttribs.getBool( XML_val, false );
-            return false;
+            return 0;
     }
-    return false;
+    return 0;
 }
 
 // ============================================================================
@@ -119,44 +119,44 @@ BarTypeGroupContext::~BarTypeGroupContext()
 {
 }
 
-ContextWrapper BarTypeGroupContext::onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs )
+ContextHandlerRef BarTypeGroupContext::onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs )
 {
     if( isRootElement() ) switch( nElement )
     {
         case C_TOKEN( axId ):
             mrModel.maAxisIds.push_back( rAttribs.getInteger( XML_val, -1 ) );
-            return false;
+            return 0;
         case C_TOKEN( barDir ):
             mrModel.mnBarDir = rAttribs.getToken( XML_val, XML_col );
-            return false;
+            return 0;
         case C_TOKEN( dLbls ):
             return new DataLabelsContext( *this, mrModel.mxLabels.create() );
         case C_TOKEN( gapDepth ):
             mrModel.mnGapDepth = rAttribs.getInteger( XML_val, 150 );
-            return false;
+            return 0;
         case C_TOKEN( gapWidth ):
             mrModel.mnGapWidth = rAttribs.getInteger( XML_val, 150 );
-            return false;
+            return 0;
         case C_TOKEN( grouping ):
             // default is 'standard', not 'clustered' as specified
             mrModel.mnGrouping = rAttribs.getToken( XML_val, XML_standard );
-            return false;
+            return 0;
         case C_TOKEN( overlap ):
             mrModel.mnOverlap = rAttribs.getInteger( XML_val, 0 );
-            return false;
+            return 0;
         case C_TOKEN( ser ):
             return new BarSeriesContext( *this, mrModel.maSeries.create() );
         case C_TOKEN( serLines ):
             return new ShapePrWrapperContext( *this, mrModel.mxSerLines.create() );
         case C_TOKEN( shape ):
             mrModel.mnShape = rAttribs.getToken( XML_val, XML_box );
-            return false;
+            return 0;
         case C_TOKEN( varyColors ):
             // default is 'false', not 'true' as specified
             mrModel.mbVaryColors = rAttribs.getBool( XML_val, false );
-            return false;
+            return 0;
     }
-    return false;
+    return 0;
 }
 
 // ============================================================================
@@ -170,20 +170,20 @@ BubbleTypeGroupContext::~BubbleTypeGroupContext()
 {
 }
 
-ContextWrapper BubbleTypeGroupContext::onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs )
+ContextHandlerRef BubbleTypeGroupContext::onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs )
 {
     if( isRootElement() ) switch( nElement )
     {
         case C_TOKEN( axId ):
             mrModel.maAxisIds.push_back( rAttribs.getInteger( XML_val, -1 ) );
-            return false;
+            return 0;
         case C_TOKEN( bubble3D ):
             // default is 'false', not 'true' as specified
             mrModel.mbBubble3d = rAttribs.getBool( XML_val, false );
-            return false;
+            return 0;
         case C_TOKEN( bubbleScale ):
             mrModel.mnBubbleScale = rAttribs.getInteger( XML_val, 100 );
-            return false;
+            return 0;
         case C_TOKEN( dLbls ):
             return new DataLabelsContext( *this, mrModel.mxLabels.create() );
         case C_TOKEN( ser ):
@@ -191,16 +191,16 @@ ContextWrapper BubbleTypeGroupContext::onCreateContext( sal_Int32 nElement, cons
         case C_TOKEN( showNegBubbles ):
             // default is 'false', not 'true' as specified
             mrModel.mbShowNegBubbles = rAttribs.getBool( XML_val, false );
-            return false;
+            return 0;
         case C_TOKEN( sizeRepresents ):
             mrModel.mnSizeRepresents = rAttribs.getToken( XML_val, XML_area );
-            return false;
+            return 0;
         case C_TOKEN( varyColors ):
             // default is 'false', not 'true' as specified
             mrModel.mbVaryColors = rAttribs.getBool( XML_val, false );
-            return false;
+            return 0;
     }
-    return false;
+    return 0;
 }
 
 // ============================================================================
@@ -214,43 +214,43 @@ LineTypeGroupContext::~LineTypeGroupContext()
 {
 }
 
-ContextWrapper LineTypeGroupContext::onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs )
+ContextHandlerRef LineTypeGroupContext::onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs )
 {
     if( isRootElement() ) switch( nElement )
     {
         case C_TOKEN( axId ):
             mrModel.maAxisIds.push_back( rAttribs.getInteger( XML_val, -1 ) );
-            return false;
+            return 0;
         case C_TOKEN( dLbls ):
             return new DataLabelsContext( *this, mrModel.mxLabels.create() );
         case C_TOKEN( dropLines ):
             return new ShapePrWrapperContext( *this, mrModel.mxDropLines.create() );
         case C_TOKEN( gapDepth ):
             mrModel.mnGapDepth = rAttribs.getInteger( XML_val, 150 );
-            return false;
+            return 0;
         case C_TOKEN( grouping ):
             mrModel.mnGrouping = rAttribs.getToken( XML_val, XML_standard );
-            return false;
+            return 0;
         case C_TOKEN( hiLowLines ):
             return new ShapePrWrapperContext( *this, mrModel.mxHiLowLines.create() );
         case C_TOKEN( marker ):
             // default is 'false', not 'true' as specified
             mrModel.mbShowMarker = rAttribs.getBool( XML_val, false );
-            return false;
+            return 0;
         case C_TOKEN( ser ):
             return new LineSeriesContext( *this, mrModel.maSeries.create() );
         case C_TOKEN( smooth ):
             // default is 'false', not 'true' as specified
             mrModel.mbSmooth = rAttribs.getBool( XML_val, false );
-            return false;
+            return 0;
         case C_TOKEN( upDownBars ):
             return new UpDownBarsContext( *this, mrModel.mxUpDownBars.create() );
         case C_TOKEN( varyColors ):
             // default is 'false', not 'true' as specified
             mrModel.mbVaryColors = rAttribs.getBool( XML_val, false );
-            return false;
+            return 0;
     }
-    return false;
+    return 0;
 }
 
 // ============================================================================
@@ -264,7 +264,7 @@ PieTypeGroupContext::~PieTypeGroupContext()
 {
 }
 
-ContextWrapper PieTypeGroupContext::onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs )
+ContextHandlerRef PieTypeGroupContext::onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs )
 {
     if( isRootElement() ) switch( nElement )
     {
@@ -272,35 +272,35 @@ ContextWrapper PieTypeGroupContext::onCreateContext( sal_Int32 nElement, const A
             return new DataLabelsContext( *this, mrModel.mxLabels.create() );
         case C_TOKEN( firstSliceAng ):
             mrModel.mnFirstAngle = rAttribs.getInteger( XML_val, 0 );
-            return false;
+            return 0;
         case C_TOKEN( gapWidth ):
             mrModel.mnGapWidth = rAttribs.getInteger( XML_val, 150 );
-            return false;
+            return 0;
         case C_TOKEN( holeSize ):
             mrModel.mnHoleSize = rAttribs.getInteger( XML_val, 10 );
-            return false;
+            return 0;
         case C_TOKEN( ofPieType ):
             mrModel.mnOfPieType = rAttribs.getToken( XML_val, XML_pie );
-            return false;
+            return 0;
         case C_TOKEN( secondPieSize ):
             mrModel.mnSecondPieSize = rAttribs.getInteger( XML_val, 75 );
-            return false;
+            return 0;
         case C_TOKEN( ser ):
             return new PieSeriesContext( *this, mrModel.maSeries.create() );
         case C_TOKEN( serLines ):
             return new ShapePrWrapperContext( *this, mrModel.mxSerLines.create() );
         case C_TOKEN( splitPos ):
             mrModel.mfSplitPos = rAttribs.getDouble( XML_val, 0.0 );
-            return false;
+            return 0;
         case C_TOKEN( splitType ):
             mrModel.mnSplitType = rAttribs.getToken( XML_val, XML_auto );
-            return false;
+            return 0;
         case C_TOKEN( varyColors ):
             // default is 'false', not 'true' as specified
             mrModel.mbVaryColors = rAttribs.getBool( XML_val, false );
-            return false;
+            return 0;
     }
-    return false;
+    return 0;
 }
 
 // ============================================================================
@@ -314,26 +314,26 @@ RadarTypeGroupContext::~RadarTypeGroupContext()
 {
 }
 
-ContextWrapper RadarTypeGroupContext::onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs )
+ContextHandlerRef RadarTypeGroupContext::onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs )
 {
     if( isRootElement() ) switch( nElement )
     {
         case C_TOKEN( axId ):
             mrModel.maAxisIds.push_back( rAttribs.getInteger( XML_val, -1 ) );
-            return false;
+            return 0;
         case C_TOKEN( dLbls ):
             return new DataLabelsContext( *this, mrModel.mxLabels.create() );
         case C_TOKEN( radarStyle ):
             mrModel.mnRadarStyle = rAttribs.getToken( XML_val, XML_standard );
-            return false;
+            return 0;
         case C_TOKEN( ser ):
             return new RadarSeriesContext( *this, mrModel.maSeries.create() );
         case C_TOKEN( varyColors ):
             // default is 'false', not 'true' as specified
             mrModel.mbVaryColors = rAttribs.getBool( XML_val, false );
-            return false;
+            return 0;
     }
-    return false;
+    return 0;
 }
 
 // ============================================================================
@@ -347,26 +347,26 @@ ScatterTypeGroupContext::~ScatterTypeGroupContext()
 {
 }
 
-ContextWrapper ScatterTypeGroupContext::onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs )
+ContextHandlerRef ScatterTypeGroupContext::onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs )
 {
     if( isRootElement() ) switch( nElement )
     {
         case C_TOKEN( axId ):
             mrModel.maAxisIds.push_back( rAttribs.getInteger( XML_val, -1 ) );
-            return false;
+            return 0;
         case C_TOKEN( dLbls ):
             return new DataLabelsContext( *this, mrModel.mxLabels.create() );
         case C_TOKEN( scatterStyle ):
             mrModel.mnScatterStyle = rAttribs.getInteger( XML_val, XML_marker );
-            return false;
+            return 0;
         case C_TOKEN( ser ):
             return new ScatterSeriesContext( *this, mrModel.maSeries.create() );
         case C_TOKEN( varyColors ):
             // default is 'false', not 'true' as specified
             mrModel.mbVaryColors = rAttribs.getBool( XML_val, false );
-            return false;
+            return 0;
     }
-    return false;
+    return 0;
 }
 
 // ============================================================================
@@ -380,21 +380,21 @@ SurfaceTypeGroupContext::~SurfaceTypeGroupContext()
 {
 }
 
-ContextWrapper SurfaceTypeGroupContext::onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs )
+ContextHandlerRef SurfaceTypeGroupContext::onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs )
 {
     if( isRootElement() ) switch( nElement )
     {
         case C_TOKEN( axId ):
             mrModel.maAxisIds.push_back( rAttribs.getInteger( XML_val, -1 ) );
-            return false;
+            return 0;
         case C_TOKEN( ser ):
             return new SurfaceSeriesContext( *this, mrModel.maSeries.create() );
         case C_TOKEN( wireframe ):
             // default is 'false', not 'true' as specified
             mrModel.mbWireframe = rAttribs.getBool( XML_val, false );
-            return false;
+            return 0;
     }
-    return false;
+    return 0;
 }
 
 // ============================================================================

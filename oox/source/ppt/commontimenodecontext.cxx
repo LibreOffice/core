@@ -389,7 +389,7 @@ static OUString getConvertedSubType( sal_Int16 nPresetClass, sal_Int32 nPresetId
         sal_Int32 nInt; // some temporary int value for float conversions
 
         NodePropertyMap & aProps = pNode->getNodeProperties();
-        PropertyMap & aUserData = pNode->getUserData();
+        TimeNode::UserDataMap & aUserData = pNode->getUserData();
 
         if( attribs.hasAttribute( XML_accel ) )
         {

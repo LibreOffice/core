@@ -33,7 +33,7 @@
 #include "oox/drawingml/shapepropertiescontext.hxx"
 
 using ::oox::core::ContextHandler2Helper;
-using ::oox::core::ContextWrapper;
+using ::oox::core::ContextHandlerRef;
 
 namespace oox {
 namespace drawingml {
@@ -50,11 +50,9 @@ ShapePrWrapperContext::~ShapePrWrapperContext()
 {
 }
 
-ContextWrapper ShapePrWrapperContext::onCreateContext( sal_Int32 nElement, const AttributeList& )
+ContextHandlerRef ShapePrWrapperContext::onCreateContext( sal_Int32 nElement, const AttributeList& )
 {
-    if( isRootElement() && (nElement == C_TOKEN( spPr )) )
-        return new ShapePropertiesContext( *this, mrModel );
-    return false;
+    return (isRootElement() && (nElement == C_TOKEN( spPr ))) ? new ShapePropertiesContext( *this, mrModel ) : 0;
 }
 
 // ============================================================================

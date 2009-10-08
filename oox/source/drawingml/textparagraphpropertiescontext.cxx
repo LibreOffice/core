@@ -38,6 +38,7 @@
 #include "oox/drawingml/fillproperties.hxx"
 #include "oox/helper/attributelist.hxx"
 #include "oox/core/namespaces.hxx"
+#include "properties.hxx"
 #include "textspacingcontext.hxx"
 #include "texttabstoplistcontext.hxx"
 #include "tokens.hxx"
@@ -71,8 +72,7 @@ TextParagraphPropertiesContext::TextParagraphPropertiesContext( ContextHandler& 
     if ( xAttribs->hasAttribute( XML_algn ) )
     {
         sal_Int32 nAlign = xAttribs->getOptionalValueToken( XML_algn, XML_l );
-        const OUString sParaAdjust( CREATE_OUSTRING( "ParaAdjust" ) );
-        rPropertyMap[ sParaAdjust ] <<= GetParaAdjust( nAlign );
+        rPropertyMap[ PROP_ParaAdjust ] <<= GetParaAdjust( nAlign );
     }
 //  OSL_TRACE( "OOX: para adjust %d", GetParaAdjust( nAlign ));
     // TODO see to do the same with RubyAdjust
@@ -87,8 +87,7 @@ TextParagraphPropertiesContext::TextParagraphPropertiesContext( ContextHandler& 
     if ( xAttribs->hasAttribute( XML_latinLnBrk ) )
     {
         bool bLatinLineBrk = attribs.getBool( XML_latinLnBrk, true );
-        const OUString sParaIsHyphenation( CREATE_OUSTRING( "ParaIsHyphenation" ) );
-        rPropertyMap[ sParaIsHyphenation ] <<= bLatinLineBrk;
+        rPropertyMap[ PROP_ParaIsHyphenation ] <<= bLatinLineBrk;
     }
     // TODO see what to do with Asian hyphenation
 
@@ -99,8 +98,7 @@ TextParagraphPropertiesContext::TextParagraphPropertiesContext( ContextHandler& 
     if ( xAttribs->hasAttribute( XML_hangingPunct ) )
     {
         bool bHangingPunct = attribs.getBool( XML_hangingPunct, false );
-        const OUString sParaIsHangingPunctuation( CREATE_OUSTRING( "ParaIsHangingPunctuation" ) );
-        rPropertyMap[ sParaIsHangingPunctuation ] <<= bHangingPunct;
+        rPropertyMap[ PROP_ParaIsHangingPunctuation ] <<= bHangingPunct;
     }
 
   // ST_Coordinate
@@ -138,15 +136,13 @@ TextParagraphPropertiesContext::TextParagraphPropertiesContext( ContextHandler& 
     {
         sValue = xAttribs->getOptionalValue( XML_marR );
         sal_Int32 nMarR  = ( sValue.getLength() == 0 ? 0 : GetCoordinate( sValue ) );
-        const OUString sParaRightMargin( CREATE_OUSTRING( "ParaRightMargin" ) );
-        rPropertyMap[ sParaRightMargin ] <<= nMarR;
+        rPropertyMap[ PROP_ParaRightMargin ] <<= nMarR;
     }
 
     if ( xAttribs->hasAttribute( XML_rtl ) )
     {
         bool bRtl = attribs.getBool( XML_rtl, false );
-        const OUString sTextWritingMode( CREATE_OUSTRING( "TextWritingMode" ) );
-        rPropertyMap[ sTextWritingMode ] <<= ( bRtl ? WritingMode_RL_TB : WritingMode_LR_TB );
+        rPropertyMap[ PROP_TextWritingMode ] <<= ( bRtl ? WritingMode_RL_TB : WritingMode_LR_TB );
     }
 }
 
@@ -156,11 +152,8 @@ TextParagraphPropertiesContext::~TextParagraphPropertiesContext()
 {
     PropertyMap& rPropertyMap( mrTextParagraphProperties.getTextParagraphPropertyMap() );
     if ( maLineSpacing.bHasValue )
-    {
-        const OUString sParaLineSpacing( CREATE_OUSTRING( "ParaLineSpacing" ) );
-        //OSL_TRACE( "OOX: ParaLineSpacing unit = %d, value = %d", maLineSpacing.nUnit, maLineSpacing.nValue );
-        rPropertyMap[ sParaLineSpacing ] <<= maLineSpacing.toLineSpacing();
-    }
+        rPropertyMap[ PROP_ParaLineSpacing ] <<= maLineSpacing.toLineSpacing();
+
     ::std::list< TabStop >::size_type nTabCount = maTabList.size();
     if( nTabCount != 0 )
     {
@@ -168,25 +161,17 @@ TextParagraphPropertiesContext::~TextParagraphPropertiesContext()
         TabStop * aArray = aSeq.getArray();
         OSL_ENSURE( aArray != NULL, "sequence array is NULL" );
         ::std::copy( maTabList.begin(), maTabList.end(), aArray );
-        const OUString sParaTabStops( CREATE_OUSTRING( "ParaTabStops" ) );
-        rPropertyMap[ sParaTabStops ] <<= aSeq;
+        rPropertyMap[ PROP_ParaTabStops ] <<= aSeq;
     }
 
     if ( mpFillPropertiesPtr && mpFillPropertiesPtr->mxGraphic.is() )
         mrBulletList.setGraphic( mpFillPropertiesPtr->mxGraphic );
 
     if( mrBulletList.is() )
-    {
-        const rtl::OUString sIsNumbering( CREATE_OUSTRING( "IsNumbering" ) );
-        rPropertyMap[ sIsNumbering ] <<= sal_True;
-    }
+        rPropertyMap[ PROP_IsNumbering ] <<= sal_True;
     sal_Int16 nLevel = mrTextParagraphProperties.getLevel();
-//  OSL_TRACE("OOX: numbering level = %d", nLevel );
-    const OUString sNumberingLevel( CREATE_OUSTRING( "NumberingLevel" ) );
-    rPropertyMap[ sNumberingLevel ] <<= (sal_Int16)nLevel;
-    sal_Bool bTmp = sal_True;
-    const OUString sNumberingIsNumber( CREATE_OUSTRING( "NumberingIsNumber" ) );
-    rPropertyMap[ sNumberingIsNumber ] <<= bTmp;
+    rPropertyMap[ PROP_NumberingLevel ] <<= nLevel;
+    rPropertyMap[ PROP_NumberingIsNumber ] <<= sal_True;
 }
 
 // --------------------------------------------------------------------

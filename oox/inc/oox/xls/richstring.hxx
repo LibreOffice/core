@@ -64,7 +64,7 @@ public:
     /** Sets text data for this portion. */
     void                setText( const ::rtl::OUString& rText );
     /** Creates and returns a new font formatting object. */
-    FontRef             importFont( const AttributeList& rAttribs );
+    FontRef             createFont();
     /** Links this portion to a font object from the global font list. */
     void                setFontId( sal_Int32 nFontId );
 
@@ -99,15 +99,15 @@ enum BiffFontPortionMode
 
     This object stores the position of a formatted character in a rich-string
     and the identifier of a font from the global font list used to format this
-    and the following characters.
+    and the following characters. Used in binary filters only.
  */
-struct BinFontPortionData
+struct FontPortionModel
 {
     sal_Int32           mnPos;          /// First character in the string.
     sal_Int32           mnFontId;       /// Font identifier for the next characters.
 
-    explicit inline     BinFontPortionData() : mnPos( 0 ), mnFontId( -1 ) {}
-    explicit inline     BinFontPortionData( sal_Int32 nPos, sal_Int32 nFontId ) :
+    explicit inline     FontPortionModel() : mnPos( 0 ), mnFontId( -1 ) {}
+    explicit inline     FontPortionModel( sal_Int32 nPos, sal_Int32 nFontId ) :
                             mnPos( nPos ), mnFontId( nFontId ) {}
 
     void                read( RecordInputStream& rStrm );
@@ -117,13 +117,13 @@ struct BinFontPortionData
 // ----------------------------------------------------------------------------
 
 /** A vector with all font portions in a rich-string. */
-class BinFontPortionList : public ::std::vector< BinFontPortionData >
+class FontPortionModelList : public ::std::vector< FontPortionModel >
 {
 public:
-    inline explicit     BinFontPortionList() {}
+    inline explicit     FontPortionModelList() {}
 
     /** Appends a rich-string font identifier. */
-    void                appendPortion( const BinFontPortionData& rPortion );
+    void                appendPortion( const FontPortionModel& rPortion );
     /** Reads count and font identifiers from the passed stream. */
     void                importPortions( RecordInputStream& rStrm );
     /** Reads nCount font identifiers from the passed stream. */
@@ -134,13 +134,13 @@ public:
 
 // ============================================================================
 
-struct OoxPhoneticData
+struct PhoneticDataModel
 {
     sal_Int32           mnFontId;       /// Font identifier for text formatting.
     sal_Int32           mnType;         /// Phonetic text type.
     sal_Int32           mnAlignment;    /// Phonetic portion alignment.
 
-    explicit            OoxPhoneticData();
+    explicit            PhoneticDataModel();
 
     /** Sets the passed data from binary import. */
     void                setBinData( sal_Int32 nType, sal_Int32 nAlignment );
@@ -166,7 +166,7 @@ public:
     void                importStringData( BiffInputStream& rStrm );
 
 private:
-    OoxPhoneticData     maOoxData;
+    PhoneticDataModel   maModel;
 };
 
 // ============================================================================
@@ -194,15 +194,16 @@ typedef ::boost::shared_ptr< RichStringPhonetic > RichStringPhoneticRef;
 
 // ----------------------------------------------------------------------------
 
-/** Represents a phonetic text portion in a rich-string with phonetic text. */
-struct BinPhoneticPortionData
+/** Represents a phonetic text portion in a rich-string with phonetic text.
+    Used in binary filters only. */
+struct PhoneticPortionModel
 {
     sal_Int32           mnPos;          /// First character in phonetic text.
     sal_Int32           mnBasePos;      /// First character in base text.
     sal_Int32           mnBaseLen;      /// Number of characters in base text.
 
-    explicit inline     BinPhoneticPortionData() : mnPos( -1 ), mnBasePos( -1 ), mnBaseLen( 0 ) {}
-    explicit inline     BinPhoneticPortionData( sal_Int32 nPos, sal_Int32 nBasePos, sal_Int32 nBaseLen ) :
+    explicit inline     PhoneticPortionModel() : mnPos( -1 ), mnBasePos( -1 ), mnBaseLen( 0 ) {}
+    explicit inline     PhoneticPortionModel( sal_Int32 nPos, sal_Int32 nBasePos, sal_Int32 nBaseLen ) :
                             mnPos( nPos ), mnBasePos( nBasePos ), mnBaseLen( nBaseLen ) {}
 
     void                read( RecordInputStream& rStrm );
@@ -212,13 +213,13 @@ struct BinPhoneticPortionData
 // ----------------------------------------------------------------------------
 
 /** A vector with all phonetic portions in a rich-string. */
-class BinPhoneticPortionList : public ::std::vector< BinPhoneticPortionData >
+class PhoneticPortionModelList : public ::std::vector< PhoneticPortionModel >
 {
 public:
-    inline explicit     BinPhoneticPortionList() {}
+    inline explicit     PhoneticPortionModelList() {}
 
     /** Appends a rich-string phonetic portion. */
-    void                appendPortion( const BinPhoneticPortionData& rPortion );
+    void                appendPortion( const PhoneticPortionModel& rPortion );
     /** Reads all phonetic portions from the passed stream. */
     void                importPortions( RecordInputStream& rStrm );
     /** Reads phonetic portion data from the passed stream. */
@@ -265,11 +266,11 @@ private:
     RichStringPhoneticRef createPhonetic();
 
     /** Create base text portions from the passed string and character formatting. */
-    void                createFontPortions( const ::rtl::OString& rText, rtl_TextEncoding eDefaultTextEnc, BinFontPortionList& rPortions );
+    void                createFontPortions( const ::rtl::OString& rText, rtl_TextEncoding eDefaultTextEnc, FontPortionModelList& rPortions );
     /** Create base text portions from the passed string and character formatting. */
-    void                createFontPortions( const ::rtl::OUString& rText, BinFontPortionList& rPortions );
+    void                createFontPortions( const ::rtl::OUString& rText, FontPortionModelList& rPortions );
     /** Create phonetic text portions from the passed string and portion data. */
-    void                createPhoneticPortions( const ::rtl::OUString& rText, BinPhoneticPortionList& rPortions, sal_Int32 nBaseLen );
+    void                createPhoneticPortions( const ::rtl::OUString& rText, PhoneticPortionModelList& rPortions, sal_Int32 nBaseLen );
 
 private:
     typedef RefVector< RichStringPortion >  PortionVec;

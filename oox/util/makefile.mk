@@ -66,7 +66,6 @@ SHL1IMPLIB= i$(TARGET)
 SHL1USE_EXPORTS=name
 
 SHL1STDLIBS= \
-        $(VOSLIB)		\
         $(CPPULIB)		\
         $(CPPUHELPERLIB)\
         $(COMPHELPERLIB)\

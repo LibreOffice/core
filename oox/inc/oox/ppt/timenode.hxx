@@ -56,11 +56,13 @@ namespace oox { namespace ppt {
     class TimeNode
     {
     public:
+        typedef ::std::map< ::rtl::OUString, ::com::sun::star::uno::Any > UserDataMap;
+
         TimeNode( sal_Int16 nNodeType );
         virtual ~TimeNode();
 
         NodePropertyMap & getNodeProperties() { return maNodeProperties; }
-        PropertyMap & getUserData() { return maUserData; }
+        UserDataMap & getUserData() { return maUserData; }
         void addChild( const TimeNodePtr & pChildPtr )
             { maChildren.push_back( pChildPtr ); }
 
@@ -120,7 +122,7 @@ namespace oox { namespace ppt {
 
         rtl::OUString   msId;
         NodePropertyMap            maNodeProperties;
-        PropertyMap                maUserData; // a sequence to be stored as "UserData" property
+        UserDataMap                maUserData; // a sequence to be stored as "UserData" property
         SlideTransition            maTransitionFilter;
         AnimTargetElementPtr       mpTarget;
         bool                       mbHasEndSyncValue; // set to true if we try to get the endSync.

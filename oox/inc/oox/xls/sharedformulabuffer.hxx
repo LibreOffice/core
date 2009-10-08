@@ -102,7 +102,6 @@ private:
     typedef ::std::map< BinAddress, sal_Int32 >         TokenIndexMap;
     typedef ::std::auto_ptr< ExtCellFormulaContext >    ContextPtr;
 
-    const ::rtl::OUString maIsSharedProp;   /// Property name for shared formula name flag.
     TokenIndexMap       maIndexMap;         /// Maps shared formula base address to defined name identifier.
     ContextPtr          mxLastContext;      /// Cached formula context for leading formula cell.
 };

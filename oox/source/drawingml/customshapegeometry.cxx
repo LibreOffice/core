@@ -40,7 +40,6 @@
 #include "tokens.hxx"
 
 using ::rtl::OUString;
-using ::com::sun::star::beans::NamedValue;
 using namespace ::oox::core;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::xml::sax;

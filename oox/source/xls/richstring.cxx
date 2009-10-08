@@ -66,7 +66,7 @@ void RichStringPortion::setText( const OUString& rText )
     maText = rText;
 }
 
-FontRef RichStringPortion::importFont( const AttributeList& )
+FontRef RichStringPortion::createFont()
 {
     mxFont.reset( new Font( *this, false ) );
     return mxFont;
@@ -92,27 +92,27 @@ void RichStringPortion::convert( const Reference< XText >& rxText, sal_Int32 nXf
     if( mxFont.get() )
     {
         PropertySet aPropSet( xRange );
-        mxFont->writeToPropertySet( aPropSet, FONT_PROPTYPE_RICHTEXT );
+        mxFont->writeToPropertySet( aPropSet, FONT_PROPTYPE_TEXT );
     }
     if( const Font* pFont = getStyles().getFontFromCellXf( nXfId ).get() )
     {
         if( pFont->needsRichTextFormat() )
         {
             PropertySet aPropSet( xRange );
-            pFont->writeToPropertySet( aPropSet, FONT_PROPTYPE_RICHTEXT );
+            pFont->writeToPropertySet( aPropSet, FONT_PROPTYPE_TEXT );
         }
     }
 }
 
 // ----------------------------------------------------------------------------
 
-void BinFontPortionData::read( RecordInputStream& rStrm )
+void FontPortionModel::read( RecordInputStream& rStrm )
 {
     mnPos = rStrm.readuInt16();
     mnFontId = rStrm.readuInt16();
 }
 
-void BinFontPortionData::read( BiffInputStream& rStrm, BiffFontPortionMode eMode )
+void FontPortionModel::read( BiffInputStream& rStrm, BiffFontPortionMode eMode )
 {
     switch( eMode )
     {
@@ -134,17 +134,17 @@ void BinFontPortionData::read( BiffInputStream& rStrm, BiffFontPortionMode eMode
 
 // ----------------------------------------------------------------------------
 
-void BinFontPortionList::appendPortion( const BinFontPortionData& rPortion )
+void FontPortionModelList::appendPortion( const FontPortionModel& rPortion )
 {
     // #i33341# real life -- same character index may occur several times
-    OSL_ENSURE( empty() || (back().mnPos <= rPortion.mnPos), "BinFontPortionList::appendPortion - wrong char order" );
+    OSL_ENSURE( empty() || (back().mnPos <= rPortion.mnPos), "FontPortionModelList::appendPortion - wrong char order" );
     if( empty() || (back().mnPos < rPortion.mnPos) )
         push_back( rPortion );
     else
         back().mnFontId = rPortion.mnFontId;
 }
 
-void BinFontPortionList::importPortions( RecordInputStream& rStrm )
+void FontPortionModelList::importPortions( RecordInputStream& rStrm )
 {
     sal_Int32 nCount = rStrm.readInt32();
     clear();
@@ -153,7 +153,7 @@ void BinFontPortionList::importPortions( RecordInputStream& rStrm )
         reserve( getLimitedValue< size_t, sal_Int64 >( nCount, 0, rStrm.getRemaining() / 4 ) );
         /*  #i33341# real life -- same character index may occur several times
             -> use appendPortion() to validate string position. */
-        BinFontPortionData aPortion;
+        FontPortionModel aPortion;
         for( sal_Int32 nIndex = 0; !rStrm.isEof() && (nIndex < nCount); ++nIndex )
         {
             aPortion.read( rStrm );
@@ -162,13 +162,13 @@ void BinFontPortionList::importPortions( RecordInputStream& rStrm )
     }
 }
 
-void BinFontPortionList::importPortions( BiffInputStream& rStrm, sal_uInt16 nCount, BiffFontPortionMode eMode )
+void FontPortionModelList::importPortions( BiffInputStream& rStrm, sal_uInt16 nCount, BiffFontPortionMode eMode )
 {
     clear();
     reserve( nCount );
     /*  #i33341# real life -- same character index may occur several times
         -> use appendPortion() to validate string position. */
-    BinFontPortionData aPortion;
+    FontPortionModel aPortion;
     for( sal_uInt16 nIndex = 0; !rStrm.isEof() && (nIndex < nCount); ++nIndex )
     {
         aPortion.read( rStrm, eMode );
@@ -176,7 +176,7 @@ void BinFontPortionList::importPortions( BiffInputStream& rStrm, sal_uInt16 nCou
     }
 }
 
-void BinFontPortionList::importPortions( BiffInputStream& rStrm, bool b16Bit )
+void FontPortionModelList::importPortions( BiffInputStream& rStrm, bool b16Bit )
 {
     sal_uInt16 nCount = b16Bit ? rStrm.readuInt16() : rStrm.readuInt8();
     importPortions( rStrm, nCount, b16Bit ? BIFF_FONTPORTION_16BIT : BIFF_FONTPORTION_8BIT );
@@ -184,14 +184,14 @@ void BinFontPortionList::importPortions( BiffInputStream& rStrm, bool b16Bit )
 
 // ============================================================================
 
-OoxPhoneticData::OoxPhoneticData() :
+PhoneticDataModel::PhoneticDataModel() :
     mnFontId( -1 ),
     mnType( XML_fullwidthKatakana ),
     mnAlignment( XML_left )
 {
 }
 
-void OoxPhoneticData::setBinData( sal_Int32 nType, sal_Int32 nAlignment )
+void PhoneticDataModel::setBinData( sal_Int32 nType, sal_Int32 nAlignment )
 {
     static const sal_Int32 spnTypeIds[] = { XML_halfwidthKatakana, XML_fullwidthKatakana, XML_hiragana, XML_noConversion };
     mnType = STATIC_ARRAY_SELECT( spnTypeIds, nType, XML_fullwidthKatakana );
@@ -209,9 +209,9 @@ PhoneticSettings::PhoneticSettings( const WorkbookHelper& rHelper ) :
 
 void PhoneticSettings::importPhoneticPr( const AttributeList& rAttribs )
 {
-    maOoxData.mnFontId    = rAttribs.getInteger( XML_fontId, -1 );
-    maOoxData.mnType      = rAttribs.getToken( XML_type, XML_fullwidthKatakana );
-    maOoxData.mnAlignment = rAttribs.getToken( XML_alignment, XML_left );
+    maModel.mnFontId    = rAttribs.getInteger( XML_fontId, -1 );
+    maModel.mnType      = rAttribs.getToken( XML_type, XML_fullwidthKatakana );
+    maModel.mnAlignment = rAttribs.getToken( XML_alignment, XML_left );
 }
 
 void PhoneticSettings::importPhoneticPr( RecordInputStream& rStrm )
@@ -219,16 +219,16 @@ void PhoneticSettings::importPhoneticPr( RecordInputStream& rStrm )
     sal_uInt16 nFontId;
     sal_Int32 nType, nAlignment;
     rStrm >> nFontId >> nType >> nAlignment;
-    maOoxData.mnFontId = nFontId;
-    maOoxData.setBinData( nType, nAlignment );
+    maModel.mnFontId = nFontId;
+    maModel.setBinData( nType, nAlignment );
 }
 
 void PhoneticSettings::importPhoneticPr( BiffInputStream& rStrm )
 {
     sal_uInt16 nFontId, nFlags;
     rStrm >> nFontId >> nFlags;
-    maOoxData.mnFontId = nFontId;
-    maOoxData.setBinData( extractValue< sal_Int32 >( nFlags, 0, 2 ), extractValue< sal_Int32 >( nFlags, 2, 2 ) );
+    maModel.mnFontId = nFontId;
+    maModel.setBinData( extractValue< sal_Int32 >( nFlags, 0, 2 ), extractValue< sal_Int32 >( nFlags, 2, 2 ) );
     // following: range list with cells showing phonetic text
 }
 
@@ -236,16 +236,16 @@ void PhoneticSettings::importStringData( RecordInputStream& rStrm )
 {
     sal_uInt16 nFontId, nFlags;
     rStrm >> nFontId >> nFlags;
-    maOoxData.mnFontId = nFontId;
-    maOoxData.setBinData( extractValue< sal_Int32 >( nFlags, 0, 2 ), extractValue< sal_Int32 >( nFlags, 2, 2 ) );
+    maModel.mnFontId = nFontId;
+    maModel.setBinData( extractValue< sal_Int32 >( nFlags, 0, 2 ), extractValue< sal_Int32 >( nFlags, 2, 2 ) );
 }
 
 void PhoneticSettings::importStringData( BiffInputStream& rStrm )
 {
     sal_uInt16 nFontId, nFlags;
     rStrm >> nFontId >> nFlags;
-    maOoxData.mnFontId = nFontId;
-    maOoxData.setBinData( extractValue< sal_Int32 >( nFlags, 0, 2 ), extractValue< sal_Int32 >( nFlags, 2, 2 ) );
+    maModel.mnFontId = nFontId;
+    maModel.setBinData( extractValue< sal_Int32 >( nFlags, 0, 2 ), extractValue< sal_Int32 >( nFlags, 2, 2 ) );
 }
 
 // ============================================================================
@@ -276,14 +276,14 @@ void RichStringPhonetic::setBaseRange( sal_Int32 nBasePos, sal_Int32 nBaseEnd )
 
 // ----------------------------------------------------------------------------
 
-void BinPhoneticPortionData::read( RecordInputStream& rStrm )
+void PhoneticPortionModel::read( RecordInputStream& rStrm )
 {
     mnPos = rStrm.readuInt16();
     mnBasePos = rStrm.readuInt16();
     mnBaseLen = rStrm.readuInt16();
 }
 
-void BinPhoneticPortionData::read( BiffInputStream& rStrm )
+void PhoneticPortionModel::read( BiffInputStream& rStrm )
 {
     mnPos = rStrm.readuInt16();
     mnBasePos = rStrm.readuInt16();
@@ -292,12 +292,12 @@ void BinPhoneticPortionData::read( BiffInputStream& rStrm )
 
 // ----------------------------------------------------------------------------
 
-void BinPhoneticPortionList::appendPortion( const BinPhoneticPortionData& rPortion )
+void PhoneticPortionModelList::appendPortion( const PhoneticPortionModel& rPortion )
 {
     // same character index may occur several times
     OSL_ENSURE( empty() || ((back().mnPos <= rPortion.mnPos) &&
         (back().mnBasePos + back().mnBaseLen <= rPortion.mnBasePos)),
-        "BinPhoneticPortionList::appendPortion - wrong char order" );
+        "PhoneticPortionModelList::appendPortion - wrong char order" );
     if( empty() || (back().mnPos < rPortion.mnPos) )
     {
         push_back( rPortion );
@@ -309,14 +309,14 @@ void BinPhoneticPortionList::appendPortion( const BinPhoneticPortionData& rPorti
     }
 }
 
-void BinPhoneticPortionList::importPortions( RecordInputStream& rStrm )
+void PhoneticPortionModelList::importPortions( RecordInputStream& rStrm )
 {
     sal_Int32 nCount = rStrm.readInt32();
     clear();
     if( nCount > 0 )
     {
         reserve( getLimitedValue< size_t, sal_Int64 >( nCount, 0, rStrm.getRemaining() / 6 ) );
-        BinPhoneticPortionData aPortion;
+        PhoneticPortionModel aPortion;
         for( sal_Int32 nIndex = 0; !rStrm.isEof() && (nIndex < nCount); ++nIndex )
         {
             aPortion.read( rStrm );
@@ -325,22 +325,22 @@ void BinPhoneticPortionList::importPortions( RecordInputStream& rStrm )
     }
 }
 
-OUString BinPhoneticPortionList::importPortions( BiffInputStream& rStrm, sal_Int32 nPhoneticSize )
+OUString PhoneticPortionModelList::importPortions( BiffInputStream& rStrm, sal_Int32 nPhoneticSize )
 {
     OUString aPhoneticText;
     sal_uInt16 nPortionCount, nTextLen1, nTextLen2;
     rStrm >> nPortionCount >> nTextLen1 >> nTextLen2;
-    OSL_ENSURE( nTextLen1 == nTextLen2, "BinPhoneticPortionList::importPortions - wrong phonetic text length" );
+    OSL_ENSURE( nTextLen1 == nTextLen2, "PhoneticPortionModelList::importPortions - wrong phonetic text length" );
     if( (nTextLen1 == nTextLen2) && (nTextLen1 > 0) )
     {
         sal_Int32 nMinSize = 2 * nTextLen1 + 6 * nPortionCount + 14;
-        OSL_ENSURE( nMinSize <= nPhoneticSize, "BinPhoneticPortionList::importPortions - wrong size of phonetic data" );
+        OSL_ENSURE( nMinSize <= nPhoneticSize, "PhoneticPortionModelList::importPortions - wrong size of phonetic data" );
         if( nMinSize <= nPhoneticSize )
         {
             aPhoneticText = rStrm.readUnicodeArray( nTextLen1 );
             clear();
             reserve( nPortionCount );
-            BinPhoneticPortionData aPortion;
+            PhoneticPortionModel aPortion;
             for( sal_uInt16 nPortion = 0; nPortion < nPortionCount; ++nPortion )
             {
                 aPortion.read( rStrm );
@@ -388,7 +388,7 @@ void RichString::importString( RecordInputStream& rStrm, bool bRich )
 
     if( !rStrm.isEof() && getFlag( nFlags, OOBIN_STRINGFLAG_FONTS ) )
     {
-        BinFontPortionList aPortions;
+        FontPortionModelList aPortions;
         aPortions.importPortions( rStrm );
         createFontPortions( aBaseText, aPortions );
     }
@@ -400,7 +400,7 @@ void RichString::importString( RecordInputStream& rStrm, bool bRich )
     if( !rStrm.isEof() && getFlag( nFlags, OOBIN_STRINGFLAG_PHONETICS ) )
     {
         OUString aPhoneticText = rStrm.readString();
-        BinPhoneticPortionList aPortions;
+        PhoneticPortionModelList aPortions;
         aPortions.importPortions( rStrm );
         maPhonSettings.importStringData( rStrm );
         createPhoneticPortions( aPhoneticText, aPortions, aBaseText.getLength() );
@@ -417,7 +417,7 @@ void RichString::importByteString( BiffInputStream& rStrm, rtl_TextEncoding eDef
 
     if( !rStrm.isEof() && getFlag( nFlags, BIFF_STR_EXTRAFONTS ) )
     {
-        BinFontPortionList aPortions;
+        FontPortionModelList aPortions;
         aPortions.importPortions( rStrm, false );
         createFontPortions( aBaseText, eDefaultTextEnc, aPortions );
     }
@@ -451,7 +451,7 @@ void RichString::importUniString( BiffInputStream& rStrm, BiffStringFlags nFlags
     // #122185# bRich flag may be set, but format runs may be missing
     if( !rStrm.isEof() && (nFontCount > 0) )
     {
-        BinFontPortionList aPortions;
+        FontPortionModelList aPortions;
         aPortions.importPortions( rStrm, nFontCount, BIFF_FONTPORTION_16BIT );
         createFontPortions( aBaseText, aPortions );
     }
@@ -476,7 +476,7 @@ void RichString::importUniString( BiffInputStream& rStrm, BiffStringFlags nFlags
             if( (nId == 1) && (nMinSize <= nPhoneticSize) )
             {
                 maPhonSettings.importStringData( rStrm );
-                BinPhoneticPortionList aPortions;
+                PhoneticPortionModelList aPortions;
                 OUString aPhoneticText = aPortions.importPortions( rStrm, nPhoneticSize );
                 createPhoneticPortions( aPhoneticText, aPortions, aBaseText.getLength() );
             }
@@ -515,7 +515,7 @@ RichStringPhoneticRef RichString::createPhonetic()
     return xPhonetic;
 }
 
-void RichString::createFontPortions( const OString& rText, rtl_TextEncoding eDefaultTextEnc, BinFontPortionList& rPortions )
+void RichString::createFontPortions( const OString& rText, rtl_TextEncoding eDefaultTextEnc, FontPortionModelList& rPortions )
 {
     maFontPortions.clear();
     sal_Int32 nStrLen = rText.getLength();
@@ -523,12 +523,12 @@ void RichString::createFontPortions( const OString& rText, rtl_TextEncoding eDef
     {
         // add leading and trailing string position to ease the following loop
         if( rPortions.empty() || (rPortions.front().mnPos > 0) )
-            rPortions.insert( rPortions.begin(), BinFontPortionData( 0, -1 ) );
+            rPortions.insert( rPortions.begin(), FontPortionModel( 0, -1 ) );
         if( rPortions.back().mnPos < nStrLen )
-            rPortions.push_back( BinFontPortionData( nStrLen, -1 ) );
+            rPortions.push_back( FontPortionModel( nStrLen, -1 ) );
 
         // create all string portions according to the font id vector
-        for( BinFontPortionList::const_iterator aIt = rPortions.begin(); aIt->mnPos < nStrLen; ++aIt )
+        for( FontPortionModelList::const_iterator aIt = rPortions.begin(); aIt->mnPos < nStrLen; ++aIt )
         {
             sal_Int32 nPortionLen = (aIt + 1)->mnPos - aIt->mnPos;
             if( (0 < nPortionLen) && (aIt->mnPos + nPortionLen <= nStrLen) )
@@ -546,7 +546,7 @@ void RichString::createFontPortions( const OString& rText, rtl_TextEncoding eDef
     }
 }
 
-void RichString::createFontPortions( const OUString& rText, BinFontPortionList& rPortions )
+void RichString::createFontPortions( const OUString& rText, FontPortionModelList& rPortions )
 {
     maFontPortions.clear();
     sal_Int32 nStrLen = rText.getLength();
@@ -554,12 +554,12 @@ void RichString::createFontPortions( const OUString& rText, BinFontPortionList& 
     {
         // add leading and trailing string position to ease the following loop
         if( rPortions.empty() || (rPortions.front().mnPos > 0) )
-            rPortions.insert( rPortions.begin(), BinFontPortionData( 0, -1 ) );
+            rPortions.insert( rPortions.begin(), FontPortionModel( 0, -1 ) );
         if( rPortions.back().mnPos < nStrLen )
-            rPortions.push_back( BinFontPortionData( nStrLen, -1 ) );
+            rPortions.push_back( FontPortionModel( nStrLen, -1 ) );
 
         // create all string portions according to the font id vector
-        for( BinFontPortionList::const_iterator aIt = rPortions.begin(); aIt->mnPos < nStrLen; ++aIt )
+        for( FontPortionModelList::const_iterator aIt = rPortions.begin(); aIt->mnPos < nStrLen; ++aIt )
         {
             sal_Int32 nPortionLen = (aIt + 1)->mnPos - aIt->mnPos;
             if( (0 < nPortionLen) && (aIt->mnPos + nPortionLen <= nStrLen) )
@@ -572,7 +572,7 @@ void RichString::createFontPortions( const OUString& rText, BinFontPortionList& 
     }
 }
 
-void RichString::createPhoneticPortions( const ::rtl::OUString& rText, BinPhoneticPortionList& rPortions, sal_Int32 nBaseLen )
+void RichString::createPhoneticPortions( const ::rtl::OUString& rText, PhoneticPortionModelList& rPortions, sal_Int32 nBaseLen )
 {
     maPhonPortions.clear();
     sal_Int32 nStrLen = rText.getLength();
@@ -580,13 +580,13 @@ void RichString::createPhoneticPortions( const ::rtl::OUString& rText, BinPhonet
     {
         // no portions - assign phonetic text to entire base text
         if( rPortions.empty() )
-            rPortions.push_back( BinPhoneticPortionData( 0, 0, nBaseLen ) );
+            rPortions.push_back( PhoneticPortionModel( 0, 0, nBaseLen ) );
         // add trailing string position to ease the following loop
         if( rPortions.back().mnPos < nStrLen )
-            rPortions.push_back( BinPhoneticPortionData( nStrLen, nBaseLen, 0 ) );
+            rPortions.push_back( PhoneticPortionModel( nStrLen, nBaseLen, 0 ) );
 
         // create all phonetic portions according to the portions vector
-        for( BinPhoneticPortionList::const_iterator aIt = rPortions.begin(); aIt->mnPos < nStrLen; ++aIt )
+        for( PhoneticPortionModelList::const_iterator aIt = rPortions.begin(); aIt->mnPos < nStrLen; ++aIt )
         {
             sal_Int32 nPortionLen = (aIt + 1)->mnPos - aIt->mnPos;
             if( (0 < nPortionLen) && (aIt->mnPos + nPortionLen <= nStrLen) )

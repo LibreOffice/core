@@ -31,21 +31,20 @@
 #ifndef OOX_XLS_PAGESETTINGS_HXX
 #define OOX_XLS_PAGESETTINGS_HXX
 
-#include "oox/helper/propertysequence.hxx"
 #include "oox/xls/worksheethelper.hxx"
-#include "oox/xls/headerfooterparser.hxx"
 
-namespace oox { namespace core {
-    class Relations;
-} }
+namespace oox { class PropertySet; }
+namespace oox { namespace core { class Relations; } }
 
 namespace oox {
 namespace xls {
 
+class HeaderFooterParser;
+
 // ============================================================================
 
 /** Holds page style data for a single sheet. */
-struct OoxPageData
+struct PageSettingsModel
 {
     ::rtl::OUString     maBinSettPath;          /// Relation identifier of binary printer settings.
     ::rtl::OUString     maPicturePath;          /// Relation identifier of background image.
@@ -85,7 +84,7 @@ struct OoxPageData
     bool                mbPrintGrid;            /// True = print grid lines.
     bool                mbPrintHeadings;        /// True = print column/row headings.
 
-    explicit            OoxPageData();
+    explicit            PageSettingsModel();
 
     /** Sets the OOBIN or BIFF print errors mode. */
     void                setBinPrintErrors( sal_uInt8 nPrintErrors );
@@ -158,40 +157,41 @@ public:
     void                finalizeImport();
 
 private:
-    OoxPageData         maOoxData;
+    PageSettingsModel   maModel;
 };
 
 // ============================================================================
 
-class PageSettingsPropertyHelper : public WorkbookHelper
+class PageSettingsConverter : public WorkbookHelper
 {
 public:
-    explicit            PageSettingsPropertyHelper( const WorkbookHelper& rHelper );
+    explicit            PageSettingsConverter( const WorkbookHelper& rHelper );
+    virtual             ~PageSettingsConverter();
 
     /** Writes all properties to the passed property set of a page style object. */
     void                writePageSettingsProperties(
                             PropertySet& rPropSet,
-                            const OoxPageData& rData,
+                            const PageSettingsModel& rModel,
                             WorksheetType eSheetType );
 
 private:
     struct HFHelperData
     {
-        ::rtl::OUString     maLeftProp;
-        ::rtl::OUString     maRightProp;
+        sal_Int32           mnLeftPropId;
+        sal_Int32           mnRightPropId;
         sal_Int32           mnHeight;
         sal_Int32           mnBodyDist;
         bool                mbHasContent;
         bool                mbShareOddEven;
         bool                mbDynamicHeight;
 
-        explicit            HFHelperData( const ::rtl::OUString& rLeftProp, const ::rtl::OUString& rRightProp );
+        explicit            HFHelperData( sal_Int32 nLeftPropId, sal_Int32 nRightPropId );
     };
 
 private:
     void                convertHeaderFooterData(
                             PropertySet& rPropSet,
-                            HFHelperData& rHFData,
+                            HFHelperData& orHFData,
                             const ::rtl::OUString rOddContent,
                             const ::rtl::OUString rEvenContent,
                             bool bUseEvenContent,
@@ -200,13 +200,12 @@ private:
 
     sal_Int32           writeHeaderFooter(
                             PropertySet& rPropSet,
-                            const ::rtl::OUString& rPropName,
+                            sal_Int32 nPropId,
                             const ::rtl::OUString& rContent );
 
 private:
-    HeaderFooterParser  maHFParser;
-    PropertySequence    maPageProps;
-    PropertySequence    maGraphicProps;
+    typedef ::std::auto_ptr< HeaderFooterParser > HeaderFooterParserPtr;
+    HeaderFooterParserPtr mxHFParser;
     HFHelperData        maHeaderData;
     HFHelperData        maFooterData;
 };

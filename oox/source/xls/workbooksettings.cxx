@@ -32,10 +32,12 @@
 #include <com/sun/star/util/Date.hpp>
 #include <com/sun/star/util/XNumberFormatsSupplier.hpp>
 #include <com/sun/star/sheet/XCalculatable.hpp>
+#include "properties.hxx"
 #include "oox/helper/attributelist.hxx"
 #include "oox/helper/propertyset.hxx"
 #include "oox/helper/recordinputstream.hxx"
 #include "oox/xls/biffinputstream.hxx"
+#include "oox/xls/unitconverter.hxx"
 
 using ::rtl::OUString;
 using ::com::sun::star::uno::Reference;
@@ -71,7 +73,7 @@ const sal_Int16 API_SHOWMODE_PLACEHOLDER        = 2;        /// Show placeholder
 
 // ============================================================================
 
-OoxWorkbookPrData::OoxWorkbookPrData() :
+WorkbookSettingsModel::WorkbookSettingsModel() :
     mnShowObjectMode( XML_all ),
     mnUpdateLinksMode( XML_userSet ),
     mnDefaultThemeVer( -1 ),
@@ -80,7 +82,7 @@ OoxWorkbookPrData::OoxWorkbookPrData() :
 {
 }
 
-void OoxWorkbookPrData::setBinObjectMode( sal_uInt16 nObjMode )
+void WorkbookSettingsModel::setBinObjectMode( sal_uInt16 nObjMode )
 {
     static const sal_Int32 spnObjModes[] = { XML_all, XML_placeholders, XML_none };
     mnShowObjectMode = STATIC_ARRAY_SELECT( spnObjModes, nObjMode, XML_all );
@@ -88,7 +90,7 @@ void OoxWorkbookPrData::setBinObjectMode( sal_uInt16 nObjMode )
 
 // ============================================================================
 
-OoxCalcPrData::OoxCalcPrData() :
+CalcSettingsModel::CalcSettingsModel() :
     mfIterateDelta( 0.001 ),
     mnCalcId( -1 ),
     mnRefMode( XML_A1 ),
@@ -113,128 +115,128 @@ WorkbookSettings::WorkbookSettings( const WorkbookHelper& rHelper ) :
 
 void WorkbookSettings::importWorkbookPr( const AttributeList& rAttribs )
 {
-    maOoxBookData.maCodeName          = rAttribs.getString( XML_codePage, OUString() );
-    maOoxBookData.mnShowObjectMode    = rAttribs.getToken( XML_showObjects, XML_all );
-    maOoxBookData.mnUpdateLinksMode   = rAttribs.getToken( XML_updateLinks, XML_userSet );
-    maOoxBookData.mnDefaultThemeVer   = rAttribs.getInteger( XML_defaultThemeVersion, -1 );
-    maOoxBookData.mbDateMode1904      = rAttribs.getBool( XML_date1904, false );
-    maOoxBookData.mbSaveExtLinkValues = rAttribs.getBool( XML_saveExternalLinkValues, true );
+    maBookSettings.maCodeName          = rAttribs.getString( XML_codePage, OUString() );
+    maBookSettings.mnShowObjectMode    = rAttribs.getToken( XML_showObjects, XML_all );
+    maBookSettings.mnUpdateLinksMode   = rAttribs.getToken( XML_updateLinks, XML_userSet );
+    maBookSettings.mnDefaultThemeVer   = rAttribs.getInteger( XML_defaultThemeVersion, -1 );
+    maBookSettings.mbSaveExtLinkValues = rAttribs.getBool( XML_saveExternalLinkValues, true );
+    setDateMode( rAttribs.getBool( XML_date1904, false ) );
 }
 
 void WorkbookSettings::importCalcPr( const AttributeList& rAttribs )
 {
-    maOoxCalcData.mfIterateDelta  = rAttribs.getDouble( XML_iterateDelta, 0.0001 );
-    maOoxCalcData.mnCalcId        = rAttribs.getInteger( XML_calcId, -1 );
-    maOoxCalcData.mnRefMode       = rAttribs.getToken( XML_refMode, XML_A1 );
-    maOoxCalcData.mnCalcMode      = rAttribs.getToken( XML_calcMode, XML_auto );
-    maOoxCalcData.mnIterateCount  = rAttribs.getInteger( XML_iterateCount, 100 );
-    maOoxCalcData.mnProcCount     = rAttribs.getInteger( XML_concurrentManualCount, -1 );
-    maOoxCalcData.mbCalcOnSave    = rAttribs.getBool( XML_calcOnSave, true );
-    maOoxCalcData.mbCalcCompleted = rAttribs.getBool( XML_calcCompleted, true );
-    maOoxCalcData.mbFullPrecision = rAttribs.getBool( XML_fullPrecision, true );
-    maOoxCalcData.mbIterate       = rAttribs.getBool( XML_iterate, false );
-    maOoxCalcData.mbConcurrent    = rAttribs.getBool( XML_concurrentCalc, true );
+    maCalcSettings.mfIterateDelta  = rAttribs.getDouble( XML_iterateDelta, 0.0001 );
+    maCalcSettings.mnCalcId        = rAttribs.getInteger( XML_calcId, -1 );
+    maCalcSettings.mnRefMode       = rAttribs.getToken( XML_refMode, XML_A1 );
+    maCalcSettings.mnCalcMode      = rAttribs.getToken( XML_calcMode, XML_auto );
+    maCalcSettings.mnIterateCount  = rAttribs.getInteger( XML_iterateCount, 100 );
+    maCalcSettings.mnProcCount     = rAttribs.getInteger( XML_concurrentManualCount, -1 );
+    maCalcSettings.mbCalcOnSave    = rAttribs.getBool( XML_calcOnSave, true );
+    maCalcSettings.mbCalcCompleted = rAttribs.getBool( XML_calcCompleted, true );
+    maCalcSettings.mbFullPrecision = rAttribs.getBool( XML_fullPrecision, true );
+    maCalcSettings.mbIterate       = rAttribs.getBool( XML_iterate, false );
+    maCalcSettings.mbConcurrent    = rAttribs.getBool( XML_concurrentCalc, true );
 }
 
 void WorkbookSettings::importWorkbookPr( RecordInputStream& rStrm )
 {
     sal_uInt32 nFlags;
-    rStrm >> nFlags >> maOoxBookData.mnDefaultThemeVer >> maOoxBookData.maCodeName;
-    maOoxBookData.setBinObjectMode( extractValue< sal_uInt16 >( nFlags, 13, 2 ) );
-    maOoxBookData.mbDateMode1904 = getFlag( nFlags, OOBIN_WORKBOOKPR_DATE1904 );
+    rStrm >> nFlags >> maBookSettings.mnDefaultThemeVer >> maBookSettings.maCodeName;
+    maBookSettings.setBinObjectMode( extractValue< sal_uInt16 >( nFlags, 13, 2 ) );
     // set flag means: strip external link values
-    maOoxBookData.mbSaveExtLinkValues = !getFlag( nFlags, OOBIN_WORKBOOKPR_STRIPEXT );
+    maBookSettings.mbSaveExtLinkValues = !getFlag( nFlags, OOBIN_WORKBOOKPR_STRIPEXT );
+    setDateMode( getFlag( nFlags, OOBIN_WORKBOOKPR_DATE1904 ) );
 }
 
 void WorkbookSettings::importCalcPr( RecordInputStream& rStrm )
 {
     sal_Int32 nCalcMode, nProcCount;
     sal_uInt16 nFlags;
-    rStrm >> maOoxCalcData.mnCalcId >> nCalcMode >> maOoxCalcData.mnIterateCount >> maOoxCalcData.mfIterateDelta >> nProcCount >> nFlags;
+    rStrm >> maCalcSettings.mnCalcId >> nCalcMode >> maCalcSettings.mnIterateCount >> maCalcSettings.mfIterateDelta >> nProcCount >> nFlags;
 
     static const sal_Int32 spnCalcModes[] = { XML_manual, XML_auto, XML_autoNoTable };
-    maOoxCalcData.mnRefMode       = getFlagValue( nFlags, OOBIN_CALCPR_A1, XML_A1, XML_R1C1 );
-    maOoxCalcData.mnCalcMode      = STATIC_ARRAY_SELECT( spnCalcModes, nCalcMode, XML_auto );
-    maOoxCalcData.mnProcCount     = getFlagValue< sal_Int32 >( nFlags, OOBIN_CALCPR_MANUALPROC, nProcCount, -1 );
-    maOoxCalcData.mbCalcOnSave    = getFlag( nFlags, OOBIN_CALCPR_CALCONSAVE );
-    maOoxCalcData.mbCalcCompleted = getFlag( nFlags, OOBIN_CALCPR_CALCCOMPLETED );
-    maOoxCalcData.mbFullPrecision = getFlag( nFlags, OOBIN_CALCPR_FULLPRECISION );
-    maOoxCalcData.mbIterate       = getFlag( nFlags, OOBIN_CALCPR_ITERATE );
-    maOoxCalcData.mbConcurrent    = getFlag( nFlags, OOBIN_CALCPR_CONCURRENT );
+    maCalcSettings.mnRefMode       = getFlagValue( nFlags, OOBIN_CALCPR_A1, XML_A1, XML_R1C1 );
+    maCalcSettings.mnCalcMode      = STATIC_ARRAY_SELECT( spnCalcModes, nCalcMode, XML_auto );
+    maCalcSettings.mnProcCount     = getFlagValue< sal_Int32 >( nFlags, OOBIN_CALCPR_MANUALPROC, nProcCount, -1 );
+    maCalcSettings.mbCalcOnSave    = getFlag( nFlags, OOBIN_CALCPR_CALCONSAVE );
+    maCalcSettings.mbCalcCompleted = getFlag( nFlags, OOBIN_CALCPR_CALCCOMPLETED );
+    maCalcSettings.mbFullPrecision = getFlag( nFlags, OOBIN_CALCPR_FULLPRECISION );
+    maCalcSettings.mbIterate       = getFlag( nFlags, OOBIN_CALCPR_ITERATE );
+    maCalcSettings.mbConcurrent    = getFlag( nFlags, OOBIN_CALCPR_CONCURRENT );
 }
 
 void WorkbookSettings::setSaveExtLinkValues( bool bSaveExtLinks )
 {
-    maOoxBookData.mbSaveExtLinkValues = bSaveExtLinks;
+    maBookSettings.mbSaveExtLinkValues = bSaveExtLinks;
 }
 
 void WorkbookSettings::importBookBool( BiffInputStream& rStrm )
 {
     // value of 0 means save external values, value of 1 means strip external values
-    maOoxBookData.mbSaveExtLinkValues = rStrm.readuInt16() == 0;
+    maBookSettings.mbSaveExtLinkValues = rStrm.readuInt16() == 0;
 }
 
 void WorkbookSettings::importCalcCount( BiffInputStream& rStrm )
 {
-    maOoxCalcData.mnIterateCount = rStrm.readuInt16();
+    maCalcSettings.mnIterateCount = rStrm.readuInt16();
 }
 
 void WorkbookSettings::importCalcMode( BiffInputStream& rStrm )
 {
     sal_Int16 nCalcMode = rStrm.readInt16() + 1;
     static const sal_Int32 spnCalcModes[] = { XML_autoNoTable, XML_manual, XML_auto };
-    maOoxCalcData.mnCalcMode = STATIC_ARRAY_SELECT( spnCalcModes, nCalcMode, XML_auto );
+    maCalcSettings.mnCalcMode = STATIC_ARRAY_SELECT( spnCalcModes, nCalcMode, XML_auto );
 }
 
 void WorkbookSettings::importCodeName( BiffInputStream& rStrm )
 {
-    maOoxBookData.maCodeName = rStrm.readUniString();
+    maBookSettings.maCodeName = rStrm.readUniString();
 }
 
 void WorkbookSettings::importDateMode( BiffInputStream& rStrm )
 {
-    maOoxBookData.mbDateMode1904 = rStrm.readuInt16() != 0;
+    setDateMode( rStrm.readuInt16() != 0 );
 }
 
 void WorkbookSettings::importDelta( BiffInputStream& rStrm )
 {
-    rStrm >> maOoxCalcData.mfIterateDelta;
+    rStrm >> maCalcSettings.mfIterateDelta;
 }
 
 void WorkbookSettings::importHideObj( BiffInputStream& rStrm )
 {
-    maOoxBookData.setBinObjectMode( rStrm.readuInt16() );
+    maBookSettings.setBinObjectMode( rStrm.readuInt16() );
 }
 
 void WorkbookSettings::importIteration( BiffInputStream& rStrm )
 {
-    maOoxCalcData.mbIterate = rStrm.readuInt16() != 0;
+    maCalcSettings.mbIterate = rStrm.readuInt16() != 0;
 }
 
 void WorkbookSettings::importPrecision( BiffInputStream& rStrm )
 {
-    maOoxCalcData.mbFullPrecision = rStrm.readuInt16() != 0;
+    maCalcSettings.mbFullPrecision = rStrm.readuInt16() != 0;
 }
 
 void WorkbookSettings::importRefMode( BiffInputStream& rStrm )
 {
-    maOoxCalcData.mnRefMode = (rStrm.readuInt16() == 0) ? XML_R1C1 : XML_A1;
+    maCalcSettings.mnRefMode = (rStrm.readuInt16() == 0) ? XML_R1C1 : XML_A1;
 }
 
 void WorkbookSettings::importSaveRecalc( BiffInputStream& rStrm )
 {
-    maOoxCalcData.mbCalcOnSave = rStrm.readuInt16() != 0;
+    maCalcSettings.mbCalcOnSave = rStrm.readuInt16() != 0;
 }
 
 void WorkbookSettings::importUncalced( BiffInputStream& )
 {
     // existence of this record indicates incomplete recalc
-    maOoxCalcData.mbCalcCompleted = false;
+    maCalcSettings.mbCalcCompleted = false;
 }
 
 void WorkbookSettings::importUsesElfs( BiffInputStream& rStrm )
 {
-    maOoxCalcData.mbUseNlr = rStrm.readuInt16() != 0;
+    maCalcSettings.mbUseNlr = rStrm.readuInt16() != 0;
 }
 
 void WorkbookSettings::finalizeImport()
@@ -245,38 +247,38 @@ void WorkbookSettings::finalizeImport()
     {
         case FILTER_OOX:
         case FILTER_BIFF:
-            aPropSet.setProperty( CREATE_OUSTRING( "IgnoreCase" ),          true );     // always in Excel
-            aPropSet.setProperty( CREATE_OUSTRING( "RegularExpressions" ),  false );    // not supported in Excel
+            aPropSet.setProperty( PROP_IgnoreCase,          true );     // always in Excel
+            aPropSet.setProperty( PROP_RegularExpressions,  false );    // not supported in Excel
         break;
         case FILTER_UNKNOWN:
         break;
     }
 
     // calculation settings
-    Date aNullDate = maOoxBookData.mbDateMode1904 ? Date( 1, 1, 1904 ) : Date( 30, 12, 1899 );
+    Date aNullDate = getNullDate();
 
-    aPropSet.setProperty( CREATE_OUSTRING( "NullDate" ),           aNullDate );
-    aPropSet.setProperty( CREATE_OUSTRING( "IsIterationEnabled" ), maOoxCalcData.mbIterate );
-    aPropSet.setProperty( CREATE_OUSTRING( "IterationCount" ),     maOoxCalcData.mnIterateCount );
-    aPropSet.setProperty( CREATE_OUSTRING( "IterationEpsilon" ),   maOoxCalcData.mfIterateDelta );
-    aPropSet.setProperty( CREATE_OUSTRING( "CalcAsShown" ),        !maOoxCalcData.mbFullPrecision );
-    aPropSet.setProperty( CREATE_OUSTRING( "LookUpLabels" ),       maOoxCalcData.mbUseNlr );
+    aPropSet.setProperty( PROP_NullDate,           aNullDate );
+    aPropSet.setProperty( PROP_IsIterationEnabled, maCalcSettings.mbIterate );
+    aPropSet.setProperty( PROP_IterationCount,     maCalcSettings.mnIterateCount );
+    aPropSet.setProperty( PROP_IterationEpsilon,   maCalcSettings.mfIterateDelta );
+    aPropSet.setProperty( PROP_CalcAsShown,        !maCalcSettings.mbFullPrecision );
+    aPropSet.setProperty( PROP_LookUpLabels,       maCalcSettings.mbUseNlr );
 
     Reference< XNumberFormatsSupplier > xNumFmtsSupp( getDocument(), UNO_QUERY );
     if( xNumFmtsSupp.is() )
     {
         PropertySet aNumFmtProp( xNumFmtsSupp->getNumberFormatSettings() );
-        aNumFmtProp.setProperty( CREATE_OUSTRING( "NullDate" ), aNullDate );
+        aNumFmtProp.setProperty( PROP_NullDate, aNullDate );
     }
 
     Reference< XCalculatable > xCalculatable( getDocument(), UNO_QUERY );
     if( xCalculatable.is() )
-        xCalculatable->enableAutomaticCalculation( (maOoxCalcData.mnCalcMode == XML_auto) || (maOoxCalcData.mnCalcMode == XML_autoNoTable) );
+        xCalculatable->enableAutomaticCalculation( (maCalcSettings.mnCalcMode == XML_auto) || (maCalcSettings.mnCalcMode == XML_autoNoTable) );
 }
 
 sal_Int16 WorkbookSettings::getApiShowObjectMode() const
 {
-    switch( maOoxBookData.mnShowObjectMode )
+    switch( maBookSettings.mnShowObjectMode )
     {
         case XML_all:           return API_SHOWMODE_SHOW;
         case XML_none:          return API_SHOWMODE_HIDE;
@@ -284,6 +286,18 @@ sal_Int16 WorkbookSettings::getApiShowObjectMode() const
         case XML_placeholders:  return API_SHOWMODE_PLACEHOLDER;
     }
     return API_SHOWMODE_SHOW;
+}
+
+Date WorkbookSettings::getNullDate() const
+{
+    static const Date saDate1900( 30, 12, 1899 ), saDate1904( 1, 1, 1904 );
+    return maBookSettings.mbDateMode1904 ? saDate1904 : saDate1900;
+}
+
+void WorkbookSettings::setDateMode( bool bDateMode1904 )
+{
+    maBookSettings.mbDateMode1904 = bDateMode1904;
+    getUnitConverter().finalizeNullDate( getNullDate() );
 }
 
 // ============================================================================

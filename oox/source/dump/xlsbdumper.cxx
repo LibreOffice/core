@@ -44,6 +44,7 @@
 using ::rtl::OUString;
 using ::rtl::OUStringBuffer;
 using ::com::sun::star::uno::Reference;
+using ::com::sun::star::util::DateTime;
 using ::com::sun::star::lang::XMultiServiceFactory;
 using ::com::sun::star::io::XInputStream;
 using ::oox::core::FilterBase;
@@ -145,14 +146,14 @@ void RecordObjectBase::writeErrorCodeItem( const String& rName, sal_uInt8 nErrCo
     writeHexItem( rName, nErrCode, mxErrCodes );
 }
 
-void RecordObjectBase::writeFontPortions( const BinFontPortionList& rPortions )
+void RecordObjectBase::writeFontPortions( const FontPortionModelList& rPortions )
 {
     if( !rPortions.empty() )
     {
         writeDecItem( "font-count", static_cast< sal_uInt32 >( rPortions.size() ) );
         IndentGuard aIndGuard( out() );
         TableGuard aTabGuard( out(), 14 );
-        for( BinFontPortionList::const_iterator aIt = rPortions.begin(), aEnd = rPortions.end(); aIt != aEnd; ++aIt )
+        for( FontPortionModelList::const_iterator aIt = rPortions.begin(), aEnd = rPortions.end(); aIt != aEnd; ++aIt )
         {
             MultiItemsGuard aMultiGuard( out() );
             writeDecItem( "char-pos", aIt->mnPos );
@@ -161,14 +162,14 @@ void RecordObjectBase::writeFontPortions( const BinFontPortionList& rPortions )
     }
 }
 
-void RecordObjectBase::writePhoneticPortions( const BinPhoneticPortionList& rPortions )
+void RecordObjectBase::writePhoneticPortions( const PhoneticPortionModelList& rPortions )
 {
     if( !rPortions.empty() )
     {
         writeDecItem( "portion-count", static_cast< sal_uInt32 >( rPortions.size() ) );
         IndentGuard aIndGuard( out() );
         TableGuard aTabGuard( out(), 14, 21 );
-        for( BinPhoneticPortionList::const_iterator aIt = rPortions.begin(), aEnd = rPortions.end(); aIt != aEnd; ++aIt )
+        for( PhoneticPortionModelList::const_iterator aIt = rPortions.begin(), aEnd = rPortions.end(); aIt != aEnd; ++aIt )
         {
             MultiItemsGuard aMultiGuard( out() );
             writeDecItem( "char-pos", aIt->mnPos );
@@ -207,7 +208,7 @@ OUString RecordObjectBase::dumpString( const String& rName, bool bRich, bool b32
     if( getFlag( nFlags, OOBIN_STRINGFLAG_FONTS ) )
     {
         IndentGuard aIndGuard( out() );
-        BinFontPortionList aPortions;
+        FontPortionModelList aPortions;
         aPortions.importPortions( *mxStrm );
         writeFontPortions( aPortions );
     }
@@ -217,7 +218,7 @@ OUString RecordObjectBase::dumpString( const String& rName, bool bRich, bool b32
     {
         IndentGuard aIndGuard( out() );
         dumpString( "phonetic-text" );
-        BinPhoneticPortionList aPortions;
+        PhoneticPortionModelList aPortions;
         aPortions.importPortions( *mxStrm );
         writePhoneticPortions( aPortions );
         dumpDec< sal_uInt16 >( "font-id", "FONTNAMES" );
@@ -241,6 +242,19 @@ void RecordObjectBase::dumpColor( const String& rName )
     }
     dumpDec< sal_Int16 >( "tint", "CONV-TINT" );
     dumpColorABGR();
+}
+
+DateTime RecordObjectBase::dumpPivotDateTime( const String& rName )
+{
+    DateTime aDateTime;
+    aDateTime.Year = in().readuInt16();
+    aDateTime.Month = in().readuInt16();
+    aDateTime.Day = in().readuInt8();
+    aDateTime.Hours = in().readuInt8();
+    aDateTime.Minutes = in().readuInt8();
+    aDateTime.Seconds = in().readuInt8();
+    writeDateTimeItem( rName, aDateTime );
+    return aDateTime;
 }
 
 sal_Int32 RecordObjectBase::dumpColIndex( const String& rName )
@@ -1191,6 +1205,20 @@ void RecordStreamObject::implDumpRecordBody()
             dumpColor();
         break;
 
+        case OOBIN_ID_COMMENT:
+            dumpDec< sal_Int32 >( "author-id" );
+            dumpRange( "ref" );
+            dumpGuid();
+        break;
+
+        case OOBIN_ID_COMMENTAUTHOR:
+            dumpString( "author" );
+        break;
+
+        case OOBIN_ID_COMMENTTEXT:
+            dumpString( "text", true );
+        break;
+
         case OOBIN_ID_CONDFORMATTING:
             dumpDec< sal_Int32 >( "cfrule-count" );
             dumpDec< sal_Int32 >( "pivot-table", "BOOLEAN" );
@@ -1651,6 +1679,159 @@ void RecordStreamObject::implDumpRecordBody()
             dumpHex< sal_uInt8 >( "flags", "PANE-FLAGS" );
         break;
 
+        case OOBIN_ID_PCDEFINITION:
+        {
+            dumpDec< sal_uInt8 >( "refreshed-version" );
+            dumpDec< sal_uInt8 >( "min-refresh-version" );
+            dumpDec< sal_uInt8 >( "created-version" );
+            dumpHex< sal_uInt8 >( "flags-1", "PCDEFINITION-FLAGS1" );
+            dumpDec< sal_Int32 >( "missing-items-limit", "PCDEFINITION-MISSINGITEMS" );
+            dumpDec< double >( "refreshed-date" );
+            sal_uInt8 nFlags2 = dumpHex< sal_uInt8 >( "flags-2", "PCDEFINITION-FLAGS2" );
+            dumpDec< sal_Int32 >( "record-count" );
+            if( nFlags2 & 0x01 ) dumpString( "refreshed-by" );
+            if( nFlags2 & 0x02 ) dumpString( "rel-id" );
+        }
+        break;
+
+        case OOBIN_ID_PCDFIELD:
+        {
+            sal_uInt16 nFlags = dumpHex< sal_uInt16 >( "flags", "PCDFIELD-FLAGS" );
+            dumpDec< sal_Int32 >( "numfmt-id" );
+            dumpDec< sal_Int16 >( "sql-datatype" );
+            dumpDec< sal_Int32 >( "hierarchy" );
+            dumpDec< sal_Int32 >( "hierarchy-level" );
+            sal_Int32 nMappingCount = dumpDec< sal_Int32 >( "property-mapping-count" );
+            dumpString( "name" );
+            if( nFlags & 0x0008 ) dumpString( "caption" );
+            if( nFlags & 0x0100 ) mxFmlaObj->dumpNameFormula( "formula" );
+            if( nMappingCount > 0 )
+            {
+                sal_Int32 nBytes = dumpDec< sal_Int32 >( "property-mapping-size" );
+                dumpArray( "property-mapping-indexes", nBytes );
+            }
+            if( nFlags & 0x0200 ) dumpString( "property-name" );
+        }
+        break;
+
+        case OOBIN_ID_PCDFIELDGROUP:
+            dumpDec< sal_Int32 >( "parent-field" );
+            dumpDec< sal_Int32 >( "base-field" );
+        break;
+
+        case OOBIN_ID_PCDFRANGEPR:
+            dumpDec< sal_uInt8 >( "group-by", "PCDFRANGEPR-GROUPBY" );
+            dumpHex< sal_uInt8 >( "flags", "PCDFRANGEPR-FLAGS" );
+            dumpDec< double >( "start-value" );
+            dumpDec< double >( "end-value" );
+            dumpDec< double >( "interval" );
+        break;
+
+        case OOBIN_ID_PCDFSHAREDITEMS:
+        {
+            sal_uInt16 nFlags = dumpHex< sal_uInt16 >( "flags", "PCDFSHAREDITEMS-FLAGS" );
+            dumpDec< sal_Int32 >( "count" );
+            if( nFlags & 0x0100 ) dumpDec< double >( "min-value" );
+            if( nFlags & 0x0100 ) dumpDec< double >( "max-value" );
+        }
+        break;
+
+        case OOBIN_ID_PCDSHEETSOURCE:
+        {
+            sal_uInt8 nIsDefName = dumpBoolean( "is-def-name" );
+            dumpBoolean( "is-builtin-def-name" );
+            sal_uInt8 nFlags = dumpHex< sal_uInt8 >( "flags", "PCDWORKSHEETSOURCE-FLAGS" );
+            if( nFlags & 0x02 ) dumpString( "sheet-name" );
+            if( nFlags & 0x01 ) dumpString( "rel-id" );
+            if( nIsDefName == 0 ) dumpRange(); else dumpString( "def-name" );
+        }
+        break;
+
+        case OOBIN_ID_PCDSOURCE:
+            dumpDec< sal_Int32 >( "source-type", "PCDSOURCE-TYPE" );
+            dumpDec< sal_Int32 >( "connection-id" );
+        break;
+
+        case OOBIN_ID_PCITEM_ARRAY:
+        {
+            sal_uInt16 nType = dumpDec< sal_uInt16 >( "type", "PCITEM_ARRAY-TYPE" );
+            sal_Int32 nCount = dumpDec< sal_Int32 >( "count" );
+            out().resetItemIndex();
+            for( sal_Int32 nIdx = 0; nIdx < nCount; ++nIdx )
+            {
+                switch( nType )
+                {
+                    case 1:     dumpDec< double >( "#value" );  break;
+                    case 2:     dumpString( "#value" );         break;
+                    case 16:    dumpErrorCode( "#value" );      break;
+                    case 32:    dumpPivotDateTime( "#value" );  break;
+                    default:    nIdx = nCount;
+                }
+            }
+        }
+        break;
+
+        case OOBIN_ID_PCITEM_BOOL:
+            dumpBoolean( "value" );
+        break;
+
+        case OOBIN_ID_PCITEM_DATE:
+            dumpPivotDateTime( "value" );
+        break;
+
+        case OOBIN_ID_PCITEM_DOUBLE:
+            dumpDec< double >( "value" );
+            // TODO: server formatting
+        break;
+
+        case OOBIN_ID_PCITEM_ERROR:
+            dumpErrorCode( "value" );
+            // TODO: server formatting
+        break;
+
+        case OOBIN_ID_PCITEM_INDEX:
+            dumpDec< sal_Int32 >( "index" );
+        break;
+
+        case OOBIN_ID_PCITEM_MISSING:
+            // TODO: server formatting
+        break;
+
+
+        case OOBIN_ID_PCITEM_STRING:
+            dumpString( "value" );
+            // TODO: server formatting
+        break;
+
+        case OOBIN_ID_PCITEMA_BOOL:
+            dumpBoolean( "value" );
+            // TODO: additional info
+        break;
+
+        case OOBIN_ID_PCITEMA_DATE:
+            dumpPivotDateTime( "value" );
+            // TODO: additional info
+        break;
+
+        case OOBIN_ID_PCITEMA_DOUBLE:
+            dumpDec< double >( "value" );
+            // TODO: additional info
+        break;
+
+        case OOBIN_ID_PCITEMA_ERROR:
+            dumpErrorCode( "value" );
+            // TODO: additional info
+        break;
+
+        case OOBIN_ID_PCITEMA_MISSING:
+            // TODO: additional info
+        break;
+
+        case OOBIN_ID_PCITEMA_STRING:
+            dumpString( "value" );
+            // TODO: additional info
+        break;
+
         case OOBIN_ID_PHONETICPR:
             dumpDec< sal_uInt16 >( "font-id", "FONTNAMES" );
             dumpDec< sal_Int32 >( "type", "PHONETICPR-TYPE" );
@@ -1659,6 +1840,134 @@ void RecordStreamObject::implDumpRecordBody()
 
         case OOBIN_ID_PICTURE:
             dumpString( "rel-id" );
+        break;
+
+        case OOBIN_ID_PIVOTAREA:
+            dumpDec< sal_Int32 >( "field" );
+            dumpDec< sal_uInt8 >( "type", "PIVOTAREA-TYPE" );
+            dumpHex< sal_uInt8 >( "flags-1", "PIVOTAREA-FLAGS1" );
+            dumpHex< sal_uInt16 >( "flags-2", "PIVOTAREA-FLAGS2" );
+        break;
+
+        case OOBIN_ID_PIVOTCACHE:
+            dumpDec< sal_Int32 >( "cache-id" );
+            dumpString( "rel-id" );
+        break;
+
+        case OOBIN_ID_PTCOLFIELDS:
+            dumpDec< sal_Int32 >( "count" );
+            out().resetItemIndex();
+            while( in().getRemaining() >= 4 )
+                dumpDec< sal_Int32 >( "#field", "PT-FIELDINDEX" );
+        break;
+
+        case OOBIN_ID_PTDATAFIELD:
+            dumpDec< sal_Int32 >( "field" );
+            dumpDec< sal_Int32 >( "subtotal", "PTDATAFIELD-SUBTOTAL" );
+            dumpDec< sal_Int32 >( "show-data-as", "PTDATAFIELD-SHOWDATAAS" );
+            dumpDec< sal_Int32 >( "base-field" );
+            dumpDec< sal_Int32 >( "base-item", "PTDATAFIELD-BASEITEM" );
+            dumpDec< sal_Int32 >( "number-format" );
+            if( dumpBool< sal_uInt8 >( "has-name" ) )
+                dumpString( "name" );
+        break;
+
+        case OOBIN_ID_PTDEFINITION:
+        {
+            dumpDec< sal_uInt8 >( "created-version" );
+            dumpHex< sal_uInt8 >( "flags-1", "PTDEFINITION-FLAGS1" );
+            dumpHex< sal_uInt16 >( "flags-2", "PTDEFINITION-FLAGS2" );
+            sal_uInt32 nFlags3 = dumpHex< sal_uInt32 >( "flags-3", "PTDEFINITION-FLAGS3" );
+            sal_uInt32 nFlags4 = dumpHex< sal_uInt32 >( "flags-4", "PTDEFINITION-FLAGS4" );
+            dumpDec< sal_uInt8 >( "datafield-axis", "PTDEFINITION-DATAFIELD-AXIS" );
+            dumpDec< sal_uInt8 >( "page-wrap" );
+            dumpDec< sal_uInt8 >( "refreshed-version" );
+            dumpDec< sal_uInt8 >( "min-refresh-version" );
+            dumpDec< sal_Int32 >( "datafield-position", "PTDEFINITION-DATAFIELD-POS" );
+            dumpDec< sal_Int16 >( "autoformat-id" );
+            dumpUnused( 2 );
+            dumpDec< sal_Int32 >( "next-chart-id" );
+            dumpDec< sal_Int32 >( "cache-id" );
+            dumpString( "name" );
+            if( nFlags3 & 0x00080000 ) dumpString( "data-caption" );
+            if( nFlags3 & 0x00100000 ) dumpString( "grand-total-caption" );
+            if( (nFlags4 & 0x00000040) == 0 ) dumpString( "error-caption" );
+            if( (nFlags4 & 0x00000080) == 0 ) dumpString( "missing-caption" );
+            if( nFlags3 & 0x00200000 ) dumpString( "page-field-style" );
+            if( nFlags3 & 0x00400000 ) dumpString( "pivot-table-style" );
+            if( nFlags3 & 0x00800000 ) dumpString( "vacated-style" );
+            if( nFlags3 & 0x40000000 ) dumpString( "tag" );
+            if( nFlags4 & 0x00000800 ) dumpString( "col-header-caption" );
+            if( nFlags4 & 0x00000400 ) dumpString( "row-header-caption" );
+        }
+        break;
+
+        case OOBIN_ID_PTFIELD:
+            dumpHex< sal_uInt32 >( "flags-1", "PTFIELD-FLAGS1" );
+            dumpDec< sal_Int32 >( "num-fmt" );
+            dumpHex< sal_uInt32 >( "flags-2", "PTFIELD-FLAGS2" );
+            dumpDec< sal_Int32 >( "autoshow-items" );
+            dumpDec< sal_Int32 >( "autoshow-datafield-idx" );
+        break;
+
+        case OOBIN_ID_PTFILTER:
+        {
+            dumpDec< sal_Int32 >( "field" );
+            dumpDec< sal_Int32 >( "member-prop-field" );
+            dumpDec< sal_Int32 >( "type", "PTFILTER-TYPE" );
+            dumpUnused( 4 );
+            dumpDec< sal_Int32 >( "unique-id" );
+            dumpDec< sal_Int32 >( "measure-data-field" );
+            dumpDec< sal_Int32 >( "measure-data-hierarchy" );
+            sal_uInt16 nFlags = dumpHex< sal_uInt16 >( "flags", "PTFILTER-FLAGS" );
+            if( nFlags & 0x0001 ) dumpString( "name" );
+            if( nFlags & 0x0002 ) dumpString( "description" );
+            if( nFlags & 0x0004 ) dumpString( "str-value1" );
+            if( nFlags & 0x0008 ) dumpString( "str-value2" );
+        }
+        break;
+
+        case OOBIN_ID_PTFITEM:
+        {
+            dumpDec< sal_uInt8 >( "type", "PTFITEM-TYPE" );
+            sal_uInt16 nFlags = dumpHex< sal_uInt16 >( "flags", "PTFITEM-FLAGS" );
+            dumpDec< sal_Int32 >( "cache-idx" );
+            if( nFlags & 0x0010 ) dumpString( "display-name" );
+        }
+        break;
+
+        case OOBIN_ID_PTLOCATION:
+            dumpRange( "location" );
+            dumpDec< sal_Int32 >( "first-header-row" );
+            dumpDec< sal_Int32 >( "first-data-row" );
+            dumpDec< sal_Int32 >( "first-data-col" );
+            dumpDec< sal_Int32 >( "page-row-count" );
+            dumpDec< sal_Int32 >( "page-col-count" );
+        break;
+
+        case OOBIN_ID_PTPAGEFIELD:
+        {
+            dumpDec< sal_Int32 >( "field" );
+            dumpDec< sal_Int32 >( "cache-item", "PTPAGEFIELD-ITEM" );
+            dumpDec< sal_Int32 >( "olap-hierarchy" );
+            sal_uInt8 nFlags = dumpHex< sal_uInt8 >( "flags", "PTPAGEFIELD-FLAGS" );
+            if( nFlags & 0x01 ) dumpString( "unique-name" );
+            if( nFlags & 0x02 ) dumpString( "olap-caption" );
+        }
+        break;
+
+        case OOBIN_ID_PTREFERENCE:
+            dumpDec< sal_Int32 >( "field", "PT-FIELDINDEX" );
+            dumpDec< sal_Int32 >( "item-count" );
+            dumpHex< sal_uInt16 >( "flags-1", "PTREFERENCE-FLAGS1" );
+            dumpHex< sal_uInt8 >( "flags-2", "PTREFERENCE-FLAGS2" );
+        break;
+
+        case OOBIN_ID_PTROWFIELDS:
+            dumpDec< sal_Int32 >( "count" );
+            out().resetItemIndex();
+            while( in().getRemaining() >= 4 )
+                dumpDec< sal_Int32 >( "#field", "PT-FIELDINDEX" );
         break;
 
         case OOBIN_ID_ROW:
@@ -1782,8 +2091,14 @@ void RecordStreamObject::implDumpRecordBody()
         break;
 
         case OOBIN_ID_TABLESTYLEINFO:
-            dumpHex< sal_uInt16 >( "flags" );
+            dumpHex< sal_uInt16 >( "flags", "TABLESTYLEINFO-FLAGS" );
             dumpString( "style-name" );
+        break;
+
+        case OOBIN_ID_TOP10FILTER:
+            dumpHex< sal_uInt8 >( "flags", "TOP10FILTER-FLAGS" );
+            dumpDec< double >( "value" );
+            dumpDec< double >( "cell-value" );
         break;
 
         case OOBIN_ID_VOLTYPEMAIN:
@@ -1889,6 +2204,8 @@ void RootStorageObject::implDumpStream( const BinaryInputStreamRef& rxStrm, cons
             rStrgPath.equalsAscii( "xl/dialogsheets" ) ||
             rStrgPath.equalsAscii( "xl/externalLinks" ) ||
             rStrgPath.equalsAscii( "xl/macrosheets" ) ||
+            rStrgPath.equalsAscii( "xl/pivotCache" ) ||
+            rStrgPath.equalsAscii( "xl/pivotTables" ) ||
             rStrgPath.equalsAscii( "xl/tables" ) ||
             rStrgPath.equalsAscii( "xl/worksheets" ) )
         {

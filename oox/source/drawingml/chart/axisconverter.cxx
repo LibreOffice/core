@@ -30,6 +30,9 @@
  ************************************************************************/
 
 #include "oox/drawingml/chart/axisconverter.hxx"
+#include <com/sun/star/chart/ChartAxisArrangeOrderType.hpp>
+#include <com/sun/star/chart/ChartAxisLabelPosition.hpp>
+#include <com/sun/star/chart/ChartAxisMarkPosition.hpp>
 #include <com/sun/star/chart/ChartAxisPosition.hpp>
 #include <com/sun/star/chart2/TickmarkStyle.hpp>
 #include <com/sun/star/chart2/AxisType.hpp>
@@ -40,6 +43,7 @@
 #include "oox/drawingml/chart/axismodel.hxx"
 #include "oox/drawingml/chart/titleconverter.hxx"
 #include "oox/drawingml/chart/typegroupconverter.hxx"
+#include "properties.hxx"
 
 using ::rtl::OUString;
 using ::com::sun::star::uno::Any;
@@ -79,6 +83,23 @@ void lclSetScaledValueOrClearAny( Any& orAny, const OptValue< double >& rofValue
         lclSetValueOrClearAny( orAny, rofValue );
 }
 
+bool lclIsLogarithmicScale( const AxisModel& rAxisModel )
+{
+    return rAxisModel.mofLogBase.has() && (2.0 <= rAxisModel.mofLogBase.get()) && (rAxisModel.mofLogBase.get() <= 1000.0);
+}
+
+::com::sun::star::chart::ChartAxisLabelPosition lclGetLabelPosition( sal_Int32 nToken )
+{
+    using namespace ::com::sun::star::chart;
+    switch( nToken )
+    {
+        case XML_high:      return ChartAxisLabelPosition_OUTSIDE_END;
+        case XML_low:       return ChartAxisLabelPosition_OUTSIDE_START;
+        case XML_nextTo:    return ChartAxisLabelPosition_NEAR_AXIS;
+    }
+    return ChartAxisLabelPosition_NEAR_AXIS;
+}
+
 sal_Int32 lclGetTickMark( sal_Int32 nToken )
 {
     using namespace ::com::sun::star::chart2::TickmarkStyle;
@@ -105,11 +126,14 @@ AxisConverter::~AxisConverter()
 }
 
 void AxisConverter::convertFromModel( const Reference< XCoordinateSystem >& rxCoordSystem,
-        TypeGroupConverter& rTypeGroup, sal_Int32 nAxesSetIdx, sal_Int32 nAxisIdx )
+        TypeGroupConverter& rTypeGroup, const AxisModel* pCrossingAxis, sal_Int32 nAxesSetIdx, sal_Int32 nAxisIdx )
 {
     Reference< XAxis > xAxis;
     try
     {
+        namespace cssc = ::com::sun::star::chart;
+        namespace cssc2 = ::com::sun::star::chart2;
+
         const TypeGroupInfo& rTypeInfo = rTypeGroup.getTypeInfo();
         ObjectFormatter& rFormatter = getFormatter();
 
@@ -117,27 +141,29 @@ void AxisConverter::convertFromModel( const Reference< XCoordinateSystem >& rxCo
         xAxis.set( createInstance( CREATE_OUSTRING( "com.sun.star.chart2.Axis" ) ), UNO_QUERY_THROW );
         PropertySet aAxisProp( xAxis );
         // #i58688# axis enabled
-        aAxisProp.setProperty( CREATE_OUSTRING( "Show" ), !mrModel.mbDeleted );
+        aAxisProp.setProperty( PROP_Show, !mrModel.mbDeleted );
 
         // axis line, tick, and gridline properties ---------------------------
 
         // show axis labels
-        aAxisProp.setProperty( CREATE_OUSTRING( "DisplayLabels" ), mrModel.mnTickLabelPos != XML_none );
+        aAxisProp.setProperty( PROP_DisplayLabels, mrModel.mnTickLabelPos != XML_none );
+        aAxisProp.setProperty( PROP_LabelPosition, lclGetLabelPosition( mrModel.mnTickLabelPos ) );
         // no X axis line in radar charts
         if( (nAxisIdx == API_X_AXIS) && (rTypeInfo.meTypeCategory == TYPECATEGORY_RADAR) )
             mrModel.mxShapeProp.getOrCreate().getLineProperties().maLineFill.moFillType = XML_noFill;
         // axis line and tick label formatting
         rFormatter.convertFormatting( aAxisProp, mrModel.mxShapeProp, mrModel.mxTextProp, OBJECTTYPE_AXIS );
         // tick label rotation
-        rFormatter.convertTextRotation( aAxisProp, mrModel.mxTextProp );
+        rFormatter.convertTextRotation( aAxisProp, mrModel.mxTextProp, true );
 
         // tick mark style
-        aAxisProp.setProperty( CREATE_OUSTRING( "MajorTickmarks" ), lclGetTickMark( mrModel.mnMajorTickMark ) );
-        aAxisProp.setProperty( CREATE_OUSTRING( "MinorTickmarks" ), lclGetTickMark( mrModel.mnMinorTickMark ) );
+        aAxisProp.setProperty( PROP_MajorTickmarks, lclGetTickMark( mrModel.mnMajorTickMark ) );
+        aAxisProp.setProperty( PROP_MinorTickmarks, lclGetTickMark( mrModel.mnMinorTickMark ) );
+        aAxisProp.setProperty( PROP_MarkPosition, cssc::ChartAxisMarkPosition_AT_AXIS );
 
         // main grid
         PropertySet aGridProp( xAxis->getGridProperties() );
-        aGridProp.setProperty( CREATE_OUSTRING( "Show" ), mrModel.mxMajorGridLines.is() );
+        aGridProp.setProperty( PROP_Show, mrModel.mxMajorGridLines.is() );
         if( mrModel.mxMajorGridLines.is() )
             rFormatter.convertFrameFormatting( aGridProp, mrModel.mxMajorGridLines, OBJECTTYPE_MAJORGRIDLINE );
 
@@ -146,7 +172,7 @@ void AxisConverter::convertFromModel( const Reference< XCoordinateSystem >& rxCo
         if( aSubGridPropSeq.hasElements() )
         {
             PropertySet aSubGridProp( aSubGridPropSeq[ 0 ] );
-            aSubGridProp.setProperty( CREATE_OUSTRING( "Show" ), mrModel.mxMinorGridLines.is() );
+            aSubGridProp.setProperty( PROP_Show, mrModel.mxMinorGridLines.is() );
             if( mrModel.mxMinorGridLines.is() )
                 rFormatter.convertFrameFormatting( aSubGridProp, mrModel.mxMinorGridLines, OBJECTTYPE_MINORGRIDLINE );
         }
@@ -155,7 +181,6 @@ void AxisConverter::convertFromModel( const Reference< XCoordinateSystem >& rxCo
 
         ScaleData aScaleData = xAxis->getScaleData();
         // set axis type
-        namespace ApiAxisType = ::com::sun::star::chart2::AxisType;
         switch( nAxisIdx )
         {
             case API_X_AXIS:
@@ -163,23 +188,23 @@ void AxisConverter::convertFromModel( const Reference< XCoordinateSystem >& rxCo
                 {
                     OSL_ENSURE( (mrModel.mnTypeId == C_TOKEN( catAx )) || (mrModel.mnTypeId == C_TOKEN( dateAx )),
                         "AxisConverter::convertFromModel - unexpected axis model type (must: c:catAx or c:dateEx)" );
-                    aScaleData.AxisType = ApiAxisType::CATEGORY;
+                    aScaleData.AxisType = cssc2::AxisType::CATEGORY;
                     aScaleData.Categories = rTypeGroup.createCategorySequence();
                 }
                 else
                 {
                     OSL_ENSURE( mrModel.mnTypeId == C_TOKEN( valAx ), "AxisConverter::convertFromModel - unexpected axis model type (must: c:valAx)" );
-                    aScaleData.AxisType = ApiAxisType::REALNUMBER;
+                    aScaleData.AxisType = cssc2::AxisType::REALNUMBER;
                 }
             break;
             case API_Y_AXIS:
                 OSL_ENSURE( mrModel.mnTypeId == C_TOKEN( valAx ), "AxisConverter::convertFromModel - unexpected axis model type (must: c:valAx)" );
-                aScaleData.AxisType = rTypeGroup.isPercent() ? ApiAxisType::PERCENT : ApiAxisType::REALNUMBER;
+                aScaleData.AxisType = rTypeGroup.isPercent() ? cssc2::AxisType::PERCENT : cssc2::AxisType::REALNUMBER;
             break;
             case API_Z_AXIS:
                 OSL_ENSURE( mrModel.mnTypeId == C_TOKEN( serAx ), "AxisConverter::convertFromModel - unexpected axis model type (must: c:serAx)" );
                 OSL_ENSURE( rTypeGroup.isDeep3dChart(), "AxisConverter::convertFromModel - series axis not supported by this chart type" );
-                aScaleData.AxisType = ApiAxisType::SERIES;
+                aScaleData.AxisType = cssc2::AxisType::SERIES;
             break;
         }
 
@@ -187,58 +212,61 @@ void AxisConverter::convertFromModel( const Reference< XCoordinateSystem >& rxCo
 
         switch( aScaleData.AxisType )
         {
-            case ApiAxisType::CATEGORY:
-            case ApiAxisType::SERIES:
+            case cssc2::AxisType::CATEGORY:
+            case cssc2::AxisType::SERIES:
             {
-                // do not overlap text
-                aAxisProp.setProperty( CREATE_OUSTRING( "TextOverlap" ), false );
+                // do not overlap text unless all labels are visible
+                aAxisProp.setProperty( PROP_TextOverlap, mrModel.mnTickLabelSkip == 1 );
                 // do not break text into several lines
-                aAxisProp.setProperty( CREATE_OUSTRING( "TextBreak" ), false );
-                // origin (min-cross or max-cross not supported, fall back to auto-cross)
-                lclSetValueOrClearAny( aScaleData.Origin, mrModel.mofCrossesAt );
+                aAxisProp.setProperty( PROP_TextBreak, false );
+                // do not stagger labels in two lines
+                aAxisProp.setProperty( PROP_ArrangeOrder, cssc::ChartAxisArrangeOrderType_SIDE_BY_SIDE );
                 //! TODO #i58731# show n-th category
             }
             break;
-            case ApiAxisType::REALNUMBER:
-            case ApiAxisType::PERCENT:
+            case cssc2::AxisType::REALNUMBER:
+            case cssc2::AxisType::PERCENT:
             {
                 // scaling algorithm
-                bool bLogScale = mrModel.mofLogBase.has() && (2.0 <= mrModel.mofLogBase.get()) && (mrModel.mofLogBase.get() <= 1000.0);
+                bool bLogScale = lclIsLogarithmicScale( mrModel );
                 OUString aScalingService = bLogScale ?
                     CREATE_OUSTRING( "com.sun.star.chart2.LogarithmicScaling" ) :
                     CREATE_OUSTRING( "com.sun.star.chart2.LinearScaling" );
-                Reference< XScaling > xScaling( createInstance( aScalingService ), UNO_QUERY );
-                Reference< XScaling > xLogScaling;
-                if( xScaling.is() )
-                {
-                    aScaleData.Scaling = xScaling;
-                    if( bLogScale )
-                        xLogScaling = xScaling->getInverseScaling();
-                }
+                aScaleData.Scaling.set( createInstance( aScalingService ), UNO_QUERY );
                 // min/max
-                lclSetScaledValueOrClearAny( aScaleData.Minimum, mrModel.mofMin, xLogScaling );
-                lclSetScaledValueOrClearAny( aScaleData.Maximum, mrModel.mofMax, xLogScaling );
-                // origin (min-cross or max-cross not supported, fall back to auto-cross)
-                lclSetScaledValueOrClearAny( aScaleData.Origin, mrModel.mofCrossesAt, xLogScaling );
+                lclSetValueOrClearAny( aScaleData.Minimum, mrModel.mofMin );
+                lclSetValueOrClearAny( aScaleData.Maximum, mrModel.mofMax );
                 // major increment
                 IncrementData& rIncrementData = aScaleData.IncrementData;
-                lclSetValueOrClearAny( rIncrementData.Distance, mrModel.mofMajorUnit );
+                lclSetScaledValueOrClearAny( rIncrementData.Distance, mrModel.mofMajorUnit, aScaleData.Scaling );
                 // minor increment
                 Sequence< SubIncrement >& rSubIncrementSeq = rIncrementData.SubIncrements;
                 rSubIncrementSeq.realloc( 1 );
-                OptValue< sal_Int32 > onCount;
-                if( mrModel.mofMajorUnit.has() && mrModel.mofMinorUnit.has() && (0.0 < mrModel.mofMinorUnit.get()) && (mrModel.mofMinorUnit.get() <= mrModel.mofMajorUnit.get()) )
+                Any& rIntervalCount = rSubIncrementSeq[ 0 ].IntervalCount;
+                if( bLogScale )
                 {
-                    double fCount = mrModel.mofMajorUnit.get() / mrModel.mofMinorUnit.get() + 0.5;
-                    if( (1.0 <= fCount) && (fCount < 1001.0) )
-                        onCount = static_cast< sal_Int32 >( fCount );
+                    rIntervalCount <<= sal_Int32( 10 );
                 }
-                lclSetValueOrClearAny( rSubIncrementSeq[ 0 ].IntervalCount, onCount );
+                else
+                {
+                    OptValue< sal_Int32 > onCount;
+                    if( mrModel.mofMajorUnit.has() && mrModel.mofMinorUnit.has() && (0.0 < mrModel.mofMinorUnit.get()) && (mrModel.mofMinorUnit.get() <= mrModel.mofMajorUnit.get()) )
+                    {
+                        double fCount = mrModel.mofMajorUnit.get() / mrModel.mofMinorUnit.get() + 0.5;
+                        if( (1.0 <= fCount) && (fCount < 1001.0) )
+                            onCount = static_cast< sal_Int32 >( fCount );
+                    }
+                    lclSetValueOrClearAny( rIntervalCount, onCount );
+                }
             }
             break;
             default:
                 OSL_ENSURE( false, "AxisConverter::convertFromModel - unknown axis type" );
         }
+
+        /*  Do not set a value to the Origin member anymore (already done via
+            new axis properties 'CrossoverPosition' and 'CrossoverValue'). */
+        aScaleData.Origin.clear();
 
         // axis orientation ---------------------------------------------------
 
@@ -248,20 +276,32 @@ void AxisConverter::convertFromModel( const Reference< XCoordinateSystem >& rxCo
             ((nAxisIdx == API_Y_AXIS) && (rTypeInfo.meTypeCategory == TYPECATEGORY_PIE)) ||
             ((nAxisIdx == API_X_AXIS) && (rTypeInfo.meTypeCategory == TYPECATEGORY_RADAR));
         bool bReverse = (mrModel.mnOrientation == XML_maxMin) != bMirrorDirection;
-        namespace cssc = ::com::sun::star::chart2;
-        aScaleData.Orientation = bReverse ? cssc::AxisOrientation_REVERSE : cssc::AxisOrientation_MATHEMATICAL;
+        aScaleData.Orientation = bReverse ? cssc2::AxisOrientation_REVERSE : cssc2::AxisOrientation_MATHEMATICAL;
 
         // write back scaling data
         xAxis->setScaleData( aScaleData );
 
         // number format ------------------------------------------------------
 
-        if( (aScaleData.AxisType == ApiAxisType::REALNUMBER) || (aScaleData.AxisType == ApiAxisType::PERCENT) )
+        if( (aScaleData.AxisType == cssc2::AxisType::REALNUMBER) || (aScaleData.AxisType == cssc2::AxisType::PERCENT) )
             getFormatter().convertNumberFormat( aAxisProp, mrModel.maNumberFormat );
 
-        // axis position ------------------------------------------------------
+        // position of crossing axis ------------------------------------------
 
-        aAxisProp.setProperty( CREATE_OUSTRING( "CrossoverPosition" ), (nAxesSetIdx == API_PRIM_AXESSET) ? ::com::sun::star::chart::ChartAxisPosition_START : ::com::sun::star::chart::ChartAxisPosition_END );
+        bool bManualCrossing = mrModel.mofCrossesAt.has();
+        cssc::ChartAxisPosition eAxisPos = cssc::ChartAxisPosition_VALUE;
+        if( !bManualCrossing ) switch( mrModel.mnCrossMode )
+        {
+            case XML_min:       eAxisPos = cssc::ChartAxisPosition_START;   break;
+            case XML_max:       eAxisPos = cssc::ChartAxisPosition_END;     break;
+            case XML_autoZero:  eAxisPos = cssc::ChartAxisPosition_VALUE;   break;
+        }
+        aAxisProp.setProperty( PROP_CrossoverPosition, eAxisPos );
+
+        // calculate automatic origin depending on scaling mode of crossing axis
+        bool bCrossingLogScale = pCrossingAxis && lclIsLogarithmicScale( *pCrossingAxis );
+        double fCrossingPos = bManualCrossing ? mrModel.mofCrossesAt.get() : (bCrossingLogScale ? 1.0 : 0.0);
+        aAxisProp.setProperty( PROP_CrossoverValue, fCrossingPos );
 
         // axis title ---------------------------------------------------------
 

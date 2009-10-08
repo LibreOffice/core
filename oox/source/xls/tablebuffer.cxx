@@ -31,6 +31,7 @@
 #include "oox/xls/tablebuffer.hxx"
 #include <com/sun/star/sheet/XDatabaseRanges.hpp>
 #include <com/sun/star/sheet/XDatabaseRange.hpp>
+#include "properties.hxx"
 #include "oox/helper/attributelist.hxx"
 #include "oox/helper/containerhelper.hxx"
 #include "oox/helper/propertyset.hxx"
@@ -50,7 +51,7 @@ namespace xls {
 
 // ============================================================================
 
-OoxTableData::OoxTableData() :
+TableModel::TableModel() :
     mnId( -1 ),
     mnType( XML_worksheet ),
     mnHeaderRows( 1 ),
@@ -68,45 +69,45 @@ Table::Table( const WorkbookHelper& rHelper ) :
 
 void Table::importTable( const AttributeList& rAttribs, sal_Int16 nSheet )
 {
-    if( getAddressConverter().convertToCellRange( maOoxData.maRange, rAttribs.getString( XML_ref, OUString() ), nSheet, true ) )
-    {
-        maOoxData.maProgName    = rAttribs.getString( XML_name, OUString() );
-        maOoxData.maDisplayName = rAttribs.getString( XML_displayName, OUString() );
-        maOoxData.mnId          = rAttribs.getInteger( XML_id, -1 );
-        maOoxData.mnType        = rAttribs.getToken( XML_tableType, XML_worksheet );
-        maOoxData.mnHeaderRows  = rAttribs.getInteger( XML_headerRowCount, 1 );
-        maOoxData.mnTotalsRows  = rAttribs.getInteger( XML_totalsRowCount, 0 );
-    }
+    getAddressConverter().convertToCellRangeUnchecked( maModel.maRange, rAttribs.getString( XML_ref, OUString() ), nSheet );
+    maModel.maProgName    = rAttribs.getString( XML_name, OUString() );
+    maModel.maDisplayName = rAttribs.getString( XML_displayName, OUString() );
+    maModel.mnId          = rAttribs.getInteger( XML_id, -1 );
+    maModel.mnType        = rAttribs.getToken( XML_tableType, XML_worksheet );
+    maModel.mnHeaderRows  = rAttribs.getInteger( XML_headerRowCount, 1 );
+    maModel.mnTotalsRows  = rAttribs.getInteger( XML_totalsRowCount, 0 );
 }
 
 void Table::importTable( RecordInputStream& rStrm, sal_Int16 nSheet )
 {
     BinRange aBinRange;
-    rStrm >> aBinRange;
-    if( getAddressConverter().convertToCellRange( maOoxData.maRange, aBinRange, nSheet, true ) )
-    {
-        sal_Int32 nType;
-        rStrm >> nType >> maOoxData.mnId >> maOoxData.mnHeaderRows >> maOoxData.mnTotalsRows;
-        rStrm.skip( 32 );
-        rStrm >> maOoxData.maProgName >> maOoxData.maDisplayName;
+    sal_Int32 nType;
+    rStrm >> aBinRange >> nType >> maModel.mnId >> maModel.mnHeaderRows >> maModel.mnTotalsRows;
+    rStrm.skip( 32 );
+    rStrm >> maModel.maProgName >> maModel.maDisplayName;
 
-        static const sal_Int32 spnTypes[] = { XML_worksheet, XML_TOKEN_INVALID, XML_TOKEN_INVALID, XML_queryTable };
-        maOoxData.mnType = STATIC_ARRAY_SELECT( spnTypes, nType, XML_TOKEN_INVALID );
-    }
+    getAddressConverter().convertToCellRangeUnchecked( maModel.maRange, aBinRange, nSheet );
+    static const sal_Int32 spnTypes[] = { XML_worksheet, XML_TOKEN_INVALID, XML_TOKEN_INVALID, XML_queryTable };
+    maModel.mnType = STATIC_ARRAY_SELECT( spnTypes, nType, XML_TOKEN_INVALID );
 }
 
 void Table::finalizeImport()
 {
-    if( maOoxData.maDisplayName.getLength() > 0 ) try
+    // validate cell range
+    maDestRange = maModel.maRange;
+    bool bValidRange = getAddressConverter().validateCellRange( maDestRange, true, true );
+
+    // create database range
+    if( bValidRange && (maModel.mnId > 0) && (maModel.maDisplayName.getLength() > 0) ) try
     {
         // find an unused name
         Reference< XDatabaseRanges > xDatabaseRanges = getDatabaseRanges();
         Reference< XNameAccess > xNameAccess( xDatabaseRanges, UNO_QUERY_THROW );
-        OUString aName = ContainerHelper::getUnusedName( xNameAccess, maOoxData.maDisplayName, '_' );
-        xDatabaseRanges->addNewByName( aName, maOoxData.maRange );
+        OUString aName = ContainerHelper::getUnusedName( xNameAccess, maModel.maDisplayName, '_' );
+        xDatabaseRanges->addNewByName( aName, maModel.maRange );
         Reference< XDatabaseRange > xDatabaseRange( xDatabaseRanges->getByName( aName ), UNO_QUERY_THROW );
         PropertySet aPropSet( xDatabaseRange );
-        if( !aPropSet.getProperty( mnTokenIndex, CREATE_OUSTRING( "TokenIndex" ) ) )
+        if( !aPropSet.getProperty( mnTokenIndex, PROP_TokenIndex ) )
             mnTokenIndex = -1;
     }
     catch( Exception& )
@@ -140,12 +141,17 @@ TableRef TableBuffer::importTable( RecordInputStream& rStrm, sal_Int16 nSheet )
 
 void TableBuffer::finalizeImport()
 {
-    maTables.forEachMem( &Table::finalizeImport );
+    maIdTables.forEachMem( &Table::finalizeImport );
 }
 
 TableRef TableBuffer::getTable( sal_Int32 nTableId ) const
 {
-    return maTables.get( nTableId );
+    return maIdTables.get( nTableId );
+}
+
+TableRef TableBuffer::getTable( const OUString& rDispName ) const
+{
+    return maNameTables.get( rDispName );
 }
 
 // private --------------------------------------------------------------------
@@ -153,10 +159,13 @@ TableRef TableBuffer::getTable( sal_Int32 nTableId ) const
 void TableBuffer::insertTable( TableRef xTable )
 {
     sal_Int32 nTableId = xTable->getTableId();
-    if( nTableId > 0 )
+    const OUString& rDispName = xTable->getDisplayName();
+    if( (nTableId > 0) && (rDispName.getLength() > 0) )
     {
-        OSL_ENSURE( maTables.find( nTableId ) == maTables.end(), "TableBuffer::insertTable - multiple table identifier" );
-        maTables[ nTableId ] = xTable;
+        OSL_ENSURE( maIdTables.find( nTableId ) == maIdTables.end(), "TableBuffer::insertTable - multiple table identifier" );
+        maIdTables[ nTableId ] = xTable;
+        OSL_ENSURE( maNameTables.find( rDispName ) == maNameTables.end(), "TableBuffer::insertTable - multiple table name" );
+        maNameTables[ rDispName ] = xTable;
     }
 }
 

@@ -41,6 +41,7 @@
 namespace rtl { class OUString; }
 
 namespace com { namespace sun { namespace star {
+    namespace container { class XIndexAccess; }
     namespace container { class XIndexContainer; }
     namespace container { class XNameAccess; }
     namespace container { class XNameContainer; }
@@ -105,6 +106,13 @@ public:
     inline void         forEachMem( FuncType pFunc, ParamType aParam ) const
                         {
                             forEach( ::boost::bind( pFunc, _1, aParam ) );
+                        }
+
+    /** Calls the passed member function of ObjType on every contained object. */
+    template< typename FuncType, typename ParamType1, typename ParamType2 >
+    inline void         forEachMem( FuncType pFunc, ParamType1 aParam1, ParamType2 aParam2 ) const
+                        {
+                            forEach( ::boost::bind( pFunc, _1, aParam1, aParam2 ) );
                         }
 
 private:
@@ -176,6 +184,13 @@ public:
     inline void         forEachMem( FuncType pFunc, ParamType aParam ) const
                         {
                             forEach( ::boost::bind( pFunc, _1, aParam ) );
+                        }
+
+    /** Calls the passed member function of ObjType on every contained object. */
+    template< typename FuncType, typename ParamType1, typename ParamType2 >
+    inline void         forEachMem( FuncType pFunc, ParamType1 aParam1, ParamType2 aParam2 ) const
+                        {
+                            forEach( ::boost::bind( pFunc, _1, aParam1, aParam2 ) );
                         }
 
 private:
@@ -363,7 +378,49 @@ public:
                             const ::com::sun::star::uno::Any& rObject,
                             bool bRenameOldExisting = false );
 
-    // vector and matrix ------------------------------------------------------
+    // std::vector and std::map element access --------------------------------
+
+    /** Returns the pointer to an existing element of the passed vector, or a
+        null pointer, if the passed index is out of bounds. */
+    template< typename Type >
+    static const Type*  getVectorElement( const ::std::vector< Type >& rVector, sal_Int32 nIndex );
+
+    /** Returns the pointer to an existing element of the passed vector, or a
+        null pointer, if the passed index is out of bounds. */
+    template< typename Type >
+    static Type*        getVectorElement( ::std::vector< Type >& rVector, sal_Int32 nIndex );
+
+    /** Returns the reference to an existing element of the passed vector, or
+        the passed default value, if the passed index is out of bounds. */
+    template< typename Type >
+    static const Type&  getVectorElement( const ::std::vector< Type >& rVector, sal_Int32 nIndex, const Type& rDefault );
+
+    /** Returns the reference to an existing element of the passed vector, or
+        the passed default value, if the passed index is out of bounds. */
+    template< typename Type >
+    static Type&        getVectorElement( const ::std::vector< Type >& rVector, sal_Int32 nIndex, Type& rDefault );
+
+    /** Returns the pointer to an existing element of the passed map, or a null
+        pointer, if an element with the passed key does not exist. */
+    template< typename Type, typename KeyType >
+    static const Type*  getMapElement( const ::std::map< KeyType, Type >& rMap, KeyType nKey );
+
+    /** Returns the pointer to an existing element of the passed map, or a null
+        pointer, if an element with the passed key does not exist. */
+    template< typename Type, typename KeyType >
+    static Type*        getMapElement( ::std::map< KeyType, Type >& rMap, KeyType nKey );
+
+    /** Returns the reference to an existing element of the passed map, or the
+        passed default value, if an element with the passed key does not exist. */
+    template< typename Type, typename KeyType >
+    static const Type&  getMapElement( const ::std::map< KeyType, Type >& rMap, KeyType nKey, const Type& rDefault );
+
+    /** Returns the reference to an existing element of the passed map, or the
+        passed default value, if an element with the passed key does not exist. */
+    template< typename Type, typename KeyType >
+    static Type&        getMapElement( ::std::map< KeyType, Type >& rMap, KeyType nKey, Type& rDefault );
+
+    // vector/matrix to Sequence ----------------------------------------------
 
     /** Creates a UNO sequence from a std::vector with copies of all elements.
 
@@ -390,6 +447,58 @@ public:
 };
 
 // ----------------------------------------------------------------------------
+
+template< typename Type >
+const Type* ContainerHelper::getVectorElement( const ::std::vector< Type >& rVector, sal_Int32 nIndex )
+{
+    return ((0 <= nIndex) && (static_cast< size_t >( nIndex ) < rVector.size())) ? &rVector[ static_cast< size_t >( nIndex ) ] : 0;
+}
+
+template< typename Type >
+Type* ContainerHelper::getVectorElement( ::std::vector< Type >& rVector, sal_Int32 nIndex )
+{
+    return ((0 <= nIndex) && (static_cast< size_t >( nIndex ) < rVector.size())) ? &rVector[ static_cast< size_t >( nIndex ) ] : 0;
+}
+
+template< typename Type >
+const Type& ContainerHelper::getVectorElement( const ::std::vector< Type >& rVector, sal_Int32 nIndex, const Type& rDefault )
+{
+    return ((0 <= nIndex) && (static_cast< size_t >( nIndex ) < rVector.size())) ? rVector[ static_cast< size_t >( nIndex ) ] : rDefault;
+}
+
+template< typename Type >
+Type& ContainerHelper::getVectorElement( const ::std::vector< Type >& rVector, sal_Int32 nIndex, Type& rDefault )
+{
+    return ((0 <= nIndex) && (static_cast< size_t >( nIndex ) < rVector.size())) ? rVector[ static_cast< size_t >( nIndex ) ] : rDefault;
+}
+
+template< typename Type, typename KeyType >
+const Type* ContainerHelper::getMapElement( const ::std::map< KeyType, Type >& rMap, KeyType nKey )
+{
+    typename ::std::map< KeyType, Type >::const_iterator aIt = rMap.find( nKey );
+    return (aIt == rMap.end()) ? 0 : &aIt->second;
+}
+
+template< typename Type, typename KeyType >
+Type* ContainerHelper::getMapElement( ::std::map< KeyType, Type >& rMap, KeyType nKey )
+{
+    typename ::std::map< KeyType, Type >::iterator aIt = rMap.find( nKey );
+    return (aIt == rMap.end()) ? 0 : &aIt->second;
+}
+
+template< typename Type, typename KeyType >
+const Type& ContainerHelper::getMapElement( const ::std::map< KeyType, Type >& rMap, KeyType nKey, const Type& rDefault )
+{
+    typename ::std::map< KeyType, Type >::const_iterator aIt = rMap.find( nKey );
+    return (aIt == rMap.end()) ? rDefault : aIt->second;
+}
+
+template< typename Type, typename KeyType >
+Type& ContainerHelper::getMapElement( ::std::map< KeyType, Type >& rMap, KeyType nKey, Type& rDefault )
+{
+    typename ::std::map< KeyType, Type >::iterator aIt = rMap.find( nKey );
+    return (aIt == rMap.end()) ? rDefault : aIt->second;
+}
 
 template< typename Type >
 ::com::sun::star::uno::Sequence< Type > ContainerHelper::vectorToSequence( const ::std::vector< Type >& rVector )

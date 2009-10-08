@@ -36,7 +36,7 @@
 #include "oox/drawingml/chart/typegroupcontext.hxx"
 
 using ::oox::core::ContextHandler2Helper;
-using ::oox::core::ContextWrapper;
+using ::oox::core::ContextHandlerRef;
 
 namespace oox {
 namespace drawingml {
@@ -53,7 +53,7 @@ View3DContext::~View3DContext()
 {
 }
 
-ContextWrapper View3DContext::onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs )
+ContextHandlerRef View3DContext::onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs )
 {
     switch( getCurrentElement() )
     {
@@ -62,29 +62,29 @@ ContextWrapper View3DContext::onCreateContext( sal_Int32 nElement, const Attribu
             {
                 case C_TOKEN( depthPercent ):
                     mrModel.mnDepthPercent = rAttribs.getInteger( XML_val, 100 );
-                    return false;
+                    return 0;
                 case C_TOKEN( hPercent ):
                     mrModel.monHeightPercent = rAttribs.getInteger( XML_val, 100 );
-                    return false;
+                    return 0;
                 case C_TOKEN( perspective ):
                     mrModel.mnPerspective = rAttribs.getInteger( XML_val, 30 );
-                    return false;
+                    return 0;
                 case C_TOKEN( rAngAx ):
                     // default is 'false', not 'true' as specified
                     mrModel.mbRightAngled = rAttribs.getBool( XML_val, false );
-                    return false;
+                    return 0;
                 case C_TOKEN( rotX ):
                     // default value dependent on chart type
                     mrModel.monRotationX = rAttribs.getInteger( XML_val );
-                    return false;
+                    return 0;
                 case C_TOKEN( rotY ):
                     // default value dependent on chart type
                     mrModel.monRotationY = rAttribs.getInteger( XML_val );
-                    return false;
+                    return 0;
             }
         break;
     }
-    return false;
+    return 0;
 }
 
 // ============================================================================
@@ -98,7 +98,7 @@ WallFloorContext::~WallFloorContext()
 {
 }
 
-ContextWrapper WallFloorContext::onCreateContext( sal_Int32 nElement, const AttributeList& )
+ContextHandlerRef WallFloorContext::onCreateContext( sal_Int32 nElement, const AttributeList& )
 {
     switch( getCurrentElement() )
     {
@@ -112,7 +112,7 @@ ContextWrapper WallFloorContext::onCreateContext( sal_Int32 nElement, const Attr
             }
         break;
     }
-    return false;
+    return 0;
 }
 
 // ============================================================================
@@ -126,7 +126,7 @@ PlotAreaContext::~PlotAreaContext()
 {
 }
 
-ContextWrapper PlotAreaContext::onCreateContext( sal_Int32 nElement, const AttributeList& )
+ContextHandlerRef PlotAreaContext::onCreateContext( sal_Int32 nElement, const AttributeList& )
 {
     switch( getCurrentElement() )
     {
@@ -174,7 +174,7 @@ ContextWrapper PlotAreaContext::onCreateContext( sal_Int32 nElement, const Attri
             }
         break;
     }
-    return false;
+    return 0;
 }
 
 // ============================================================================

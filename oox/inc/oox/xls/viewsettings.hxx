@@ -44,23 +44,23 @@ namespace xls {
 // ============================================================================
 
 /** Contains all settings for a selection in a single pane of a sheet. */
-struct OoxSheetSelectionData
+struct PaneSelectionModel
 {
     ::com::sun::star::table::CellAddress maActiveCell;  /// Position of active cell (cursor).
     ApiCellRangeList    maSelection;                    /// Selected cell ranges.
     sal_Int32           mnActiveCellId;                 /// Index of active cell in selection list.
 
-    explicit            OoxSheetSelectionData();
+    explicit            PaneSelectionModel();
 };
 
 // ----------------------------------------------------------------------------
 
 /** Contains all view settings for a single sheet. */
-struct OoxSheetViewData
+struct SheetViewModel
 {
-    typedef RefMap< sal_Int32, OoxSheetSelectionData > OoxSelectionDataMap;
+    typedef RefMap< sal_Int32, PaneSelectionModel > PaneSelectionModelMap;
 
-    OoxSelectionDataMap maSelMap;                       /// Selections of all panes.
+    PaneSelectionModelMap maPaneSelMap;                 /// Selections of all panes.
     Color               maGridColor;                    /// Grid color.
     ::com::sun::star::table::CellAddress maFirstPos;    /// First visible cell.
     ::com::sun::star::table::CellAddress maSecondPos;   /// First visible cell in additional panes.
@@ -84,7 +84,7 @@ struct OoxSheetViewData
     bool                mbShowOutline;                  /// True = show outlines.
     bool                mbZoomToFit;                    /// True = zoom chart sheet to fit window.
 
-    explicit            OoxSheetViewData();
+    explicit            SheetViewModel();
 
     /** Returns true, if page break preview is active. */
     bool                isPageBreakPreview() const;
@@ -94,14 +94,14 @@ struct OoxSheetViewData
     sal_Int32           getPageBreakZoom() const;
 
     /** Returns the selection data, if available, otherwise 0. */
-    const OoxSheetSelectionData* getSelectionData( sal_Int32 nPaneId ) const;
+    const PaneSelectionModel* getPaneSelection( sal_Int32 nPaneId ) const;
     /** Returns the selection data of the active pane. */
-    const OoxSheetSelectionData* getActiveSelectionData() const;
+    const PaneSelectionModel* getActiveSelection() const;
     /** Returns read/write access to the selection data of the specified pane. */
-    OoxSheetSelectionData& createSelectionData( sal_Int32 nPaneId );
+    PaneSelectionModel& createPaneSelection( sal_Int32 nPaneId );
 };
 
-typedef ::boost::shared_ptr< OoxSheetViewData > OoxSheetViewDataRef;
+typedef ::boost::shared_ptr< SheetViewModel > SheetViewModelRef;
 
 // ----------------------------------------------------------------------------
 
@@ -141,17 +141,17 @@ public:
     void                finalizeImport();
 
 private:
-    OoxSheetViewDataRef createSheetViewData();
+    SheetViewModelRef   createSheetView();
 
 private:
-    typedef RefVector< OoxSheetViewData > SheetViewDataVec;
-    SheetViewDataVec    maSheetDatas;
+    typedef RefVector< SheetViewModel > SheetViewModelVec;
+    SheetViewModelVec   maSheetViews;
 };
 
 // ============================================================================
 
 /** Contains all view settings for the entire document. */
-struct OoxWorkbookViewData
+struct WorkbookViewModel
 {
     sal_Int32           mnWinX;             /// X position of the workbook window (twips).
     sal_Int32           mnWinY;             /// Y position of the workbook window (twips).
@@ -166,10 +166,10 @@ struct OoxWorkbookViewData
     bool                mbShowVerScroll;    /// True = show vertical sheet scrollbars.
     bool                mbMinimized;        /// True = workbook window is minimized.
 
-    explicit            OoxWorkbookViewData();
+    explicit            WorkbookViewModel();
 };
 
-typedef ::boost::shared_ptr< OoxWorkbookViewData > OoxWorkbookViewDataRef;
+typedef ::boost::shared_ptr< WorkbookViewModel > WorkbookViewModelRef;
 
 // ----------------------------------------------------------------------------
 
@@ -187,7 +187,7 @@ public:
 
     /** Stores converted view settings for a specific worksheet. */
     void                setSheetViewSettings( sal_Int32 nSheet,
-                            const OoxSheetViewDataRef& rxViewData,
+                            const SheetViewModelRef& rxSheetView,
                             const ::com::sun::star::uno::Any& rProperties );
 
     /** Converts all imported document view settings. */
@@ -197,15 +197,15 @@ public:
     sal_Int32           getActiveSheetIndex() const;
 
 private:
-    OoxWorkbookViewData& createWorkbookViewData();
+    WorkbookViewModel&  createWorkbookView();
 
 private:
-    typedef RefVector< OoxWorkbookViewData >                    WorkbookViewDataVec;
-    typedef RefMap< sal_Int32, OoxSheetViewData >               SheetViewDataMap;
+    typedef RefVector< WorkbookViewModel >                      WorkbookViewModelVec;
+    typedef RefMap< sal_Int32, SheetViewModel >                 SheetViewModelMap;
     typedef ::std::map< sal_Int32, ::com::sun::star::uno::Any > SheetPropertiesMap;
 
-    WorkbookViewDataVec maBookDatas;        /// Workbook view datas.
-    SheetViewDataMap    maSheetDatas;       /// Active view data for each sheet.
+    WorkbookViewModelVec maBookViews;       /// Workbook view models.
+    SheetViewModelMap   maSheetViews;       /// Active view model for each sheet.
     SheetPropertiesMap  maSheetProps;       /// Converted property sequences for each sheet.
 };
 

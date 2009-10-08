@@ -32,6 +32,7 @@
 #define OOX_XLS_WORKBOOKHELPER_HXX
 
 #include <boost/shared_ptr.hpp>
+#include <osl/time.h>
 #include <rtl/ref.hxx>
 #include <com/sun/star/uno/Reference.hxx>
 #include "oox/xls/biffhelper.hxx"
@@ -40,6 +41,10 @@ namespace com { namespace sun { namespace star {
     namespace container { class XNameAccess; }
     namespace container { class XNameContainer; }
     namespace awt { class XDevice; }
+    namespace table { struct CellAddress; }
+    namespace table { struct CellRangeAddress; }
+    namespace table { class XCell; }
+    namespace table { class XCellRange; }
     namespace sheet { class XSpreadsheetDocument; }
     namespace sheet { class XSpreadsheet; }
     namespace sheet { class XNamedRanges; }
@@ -69,6 +74,88 @@ namespace oox { namespace drawingml {
 namespace oox {
 namespace xls {
 
+// DEBUG ======================================================================
+
+// Set this define to 1 to show the load/save time of a document in an assertion (nonpro only).
+#define OOX_SHOW_LOADSAVE_TIME 0
+
+// ----------------------------------------------------------------------------
+
+#define OOX_LOADSAVE_TIMER( eTimerType ) (void)0
+
+#if OSL_DEBUG_LEVEL > 0
+namespace dbg {
+
+// ----------------------------------------------------------------------------
+
+#if OOX_SHOW_LOADSAVE_TIME > 0
+
+enum TimerType
+{
+    TIMER_IMPORTFORMULA,
+    TIMER_IMPORTSHEETFRAGMENT,
+    TIMER_ONCREATESHEETCONTEXT,
+    TIMER_IMPORTROW,
+    TIMER_CONVERTROWFORMAT,
+    TIMER_CONVERTCOLUMNFORMAT,
+    TIMER_IMPORTCELL,
+    TIMER_ONENDSHEETELEMENT,
+    TIMER_SETCELL,
+    TIMER_SETCELLFORMAT,
+    TIMER_MERGECELLFORMAT,
+    TIMER_WRITECELLPROPERTIES,
+    TIMER_FINALIZESHEETDATA,
+    TIMER_FINALIZEDRAWING,
+    TIMER_FINALIZEBOOKDATA,
+
+    // TIMER_TOTAL must be the last entry!
+    TIMER_TOTAL
+};
+
+// ----------------------------------------------------------------------------
+
+struct TimeCount;
+
+class Timer
+{
+public:
+    explicit            Timer( TimeCount& rTimeCount );
+                        ~Timer();
+private:
+    TimeCount&          mrTimeCount;
+    TimeValue           maStartTime;
+};
+
+// ----------------------------------------------------------------------------
+
+#undef OOX_LOADSAVE_TIMER
+#define OOX_LOADSAVE_TIMER( TimerType ) ::oox::xls::dbg::Timer aDbgTimer##TimerType( getTimeCount( ::oox::xls::dbg::TIMER_##TimerType ) )
+
+#endif
+
+// ----------------------------------------------------------------------------
+
+struct WorkbookData;
+
+class WorkbookHelper
+{
+protected:
+    explicit            WorkbookHelper( WorkbookData& rBookData );
+    explicit            WorkbookHelper( const WorkbookHelper& rCopy );
+    virtual             ~WorkbookHelper();
+#if OOX_SHOW_LOADSAVE_TIME > 0
+public:
+    TimeCount&          getTimeCount( TimerType eType ) const;
+#endif
+private:
+    WorkbookData&       mrDbgBookData;
+};
+
+// ----------------------------------------------------------------------------
+
+} // namespace dbg
+#endif
+
 // ============================================================================
 
 /** An enumeration for all supported spreadsheet filter types. */
@@ -78,22 +165,6 @@ enum FilterType
     FILTER_BIFF,        /// MS Excel BIFF (Binary Interchange File Format).
     FILTER_UNKNOWN      /// Unknown filter type.
 };
-
-// ============================================================================
-
-#if OSL_DEBUG_LEVEL > 0
-
-class WorkbookHelperDebug
-{
-public:
-    inline explicit     WorkbookHelperDebug( sal_Int32& rnCount ) : mrnCount( rnCount ) { ++mrnCount; }
-    inline explicit     WorkbookHelperDebug( const WorkbookHelperDebug& rCopy ) : mrnCount( rCopy.mrnCount ) { ++mrnCount; }
-    virtual             ~WorkbookHelperDebug() { --mrnCount; }
-private:
-    sal_Int32&          mrnCount;
-};
-
-#endif
 
 // ============================================================================
 
@@ -108,13 +179,14 @@ class ExternalLinkBuffer;
 class DefinedNamesBuffer;
 class TableBuffer;
 class WebQueryBuffer;
+class PivotCacheBuffer;
 class PivotTableBuffer;
 class FormulaParser;
 class UnitConverter;
 class AddressConverter;
 class ExcelChartConverter;
-class StylesPropertyHelper;
-class PageSettingsPropertyHelper;
+class PageSettingsConverter;
+class BiffCodecHelper;
 
 /** Helper class to provice access to global workbook data.
 
@@ -125,7 +197,7 @@ class PageSettingsPropertyHelper;
  */
 class WorkbookHelper
 #if OSL_DEBUG_LEVEL > 0
-    : private WorkbookHelperDebug
+    : public dbg::WorkbookHelper
 #endif
 {
 public:
@@ -155,9 +227,6 @@ public:
     /** Returns a reference to the source/target spreadsheet document model. */
     ::com::sun::star::uno::Reference< ::com::sun::star::sheet::XSpreadsheetDocument >
                         getDocument() const;
-    /** Returns a reference to the specified spreadsheet in the document model. */
-    ::com::sun::star::uno::Reference< ::com::sun::star::sheet::XSpreadsheet >
-                        getSheet( sal_Int32 nSheet ) const;
     /** Returns the reference device of the document. */
     ::com::sun::star::uno::Reference< ::com::sun::star::awt::XDevice >
                         getReferenceDevice() const;
@@ -173,6 +242,18 @@ public:
     /** Returns the container for DDE links from the Calc document. */
     ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >
                         getDdeLinks() const;
+
+    /** Returns a reference to the specified spreadsheet in the document model. */
+    ::com::sun::star::uno::Reference< ::com::sun::star::sheet::XSpreadsheet >
+                        getSheetFromDoc( sal_Int32 nSheet ) const;
+    /** Returns the XCell interface for the passed cell address. */
+    ::com::sun::star::uno::Reference< ::com::sun::star::table::XCell >
+                        getCellFromDoc(
+                            const ::com::sun::star::table::CellAddress& rAddress ) const;
+    /** Returns the XCellRange interface for the passed cell range address. */
+    ::com::sun::star::uno::Reference< ::com::sun::star::table::XCellRange >
+                        getCellRangeFromDoc(
+                            const ::com::sun::star::table::CellRangeAddress& rRange ) const;
 
     /** Returns the cell or page styles container from the Calc document. */
     ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer >
@@ -219,7 +300,9 @@ public:
     TableBuffer&        getTables() const;
     /** Returns the web queries. */
     WebQueryBuffer&     getWebQueries() const;
-    /** Returns the pivot tables. */
+    /** Returns the collection of pivot caches. */
+    PivotCacheBuffer&   getPivotCaches() const;
+    /** Returns the collection of pivot tables. */
     PivotTableBuffer&   getPivotTables() const;
 
     // converters -------------------------------------------------------------
@@ -232,13 +315,8 @@ public:
     AddressConverter&   getAddressConverter() const;
     /** Returns the chart object converter. */
     ExcelChartConverter& getChartConverter() const;
-
-    // property helpers -------------------------------------------------------
-
-    /** Returns the converter for properties related to cell styles. */
-    StylesPropertyHelper& getStylesPropertyHelper() const;
-    /** Returns the converter for properties related to page and print settings. */
-    PageSettingsPropertyHelper& getPageSettingsPropertyHelper() const;
+    /** Returns the page and print settings converter. */
+    PageSettingsConverter& getPageSettingsConverter() const;
 
     // OOX specific -----------------------------------------------------------
 
@@ -271,8 +349,8 @@ public:
     /** Recreates global buffers that are used per sheet in specific BIFF versions. */
     void                createBuffersPerSheet();
 
-    /** Looks for a password provided via API, or queries it via GUI. */
-    ::rtl::OUString     queryPassword() const;
+    /** Returns the codec helper that stores the encoder/decoder object. */
+    BiffCodecHelper&    getCodecHelper() const;
 
 private:
     WorkbookData&       mrBookData;

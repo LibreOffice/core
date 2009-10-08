@@ -44,13 +44,6 @@ namespace core {
 
 // ============================================================================
 
-ContextHandler* ContextWrapper::getContextHandler( ContextHandler2Helper& rThis ) const
-{
-    return mbThis ? &rThis.queryContextHandler() : mxContext.get();
-}
-
-// ============================================================================
-
 /** Information about a processed context element. */
 struct ContextInfo
 {
@@ -110,8 +103,8 @@ bool ContextHandler2Helper::isRootElement() const
 Reference< XFastContextHandler > ContextHandler2Helper::implCreateChildContext( sal_Int32 nElement, const Reference< XFastAttributeList >& rxAttribs )
 {
     appendCollectedChars();
-    ContextWrapper aWrapper = onCreateContext( nElement, AttributeList( rxAttribs ) );
-    return aWrapper.getContextHandler( *this );
+    ContextHandlerRef xContext = onCreateContext( nElement, AttributeList( rxAttribs ) );
+    return Reference< XFastContextHandler >( xContext.get() );
 }
 
 void ContextHandler2Helper::implStartCurrentContext( sal_Int32 nElement, const Reference< XFastAttributeList >& rxAttribs )
@@ -144,8 +137,7 @@ void ContextHandler2Helper::implEndCurrentContext( sal_Int32 nElement )
 
 ContextHandlerRef ContextHandler2Helper::implCreateRecordContext( sal_Int32 nRecId, RecordInputStream& rStrm )
 {
-    ContextWrapper aWrapper = onCreateRecordContext( nRecId, rStrm );
-    return aWrapper.getContextHandler( *this );
+    return onCreateRecordContext( nRecId, rStrm );
 }
 
 void ContextHandler2Helper::implStartRecord( sal_Int32 nRecId, RecordInputStream& rStrm )
@@ -252,9 +244,9 @@ void ContextHandler2::endRecord( sal_Int32 nRecId )
 
 // oox.core.ContextHandler2Helper interface -----------------------------------
 
-ContextWrapper ContextHandler2::onCreateContext( sal_Int32, const AttributeList& )
+ContextHandlerRef ContextHandler2::onCreateContext( sal_Int32, const AttributeList& )
 {
-    return false;
+    return 0;
 }
 
 void ContextHandler2::onStartElement( const AttributeList& )
@@ -265,9 +257,9 @@ void ContextHandler2::onEndElement( const OUString& )
 {
 }
 
-ContextWrapper ContextHandler2::onCreateRecordContext( sal_Int32, RecordInputStream& )
+ContextHandlerRef ContextHandler2::onCreateRecordContext( sal_Int32, RecordInputStream& )
 {
-    return false;
+    return 0;
 }
 
 void ContextHandler2::onStartRecord( RecordInputStream& )

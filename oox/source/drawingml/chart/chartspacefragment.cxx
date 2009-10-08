@@ -37,7 +37,7 @@
 #include "oox/drawingml/chart/titlecontext.hxx"
 
 using ::rtl::OUString;
-using ::oox::core::ContextWrapper;
+using ::oox::core::ContextHandlerRef;
 using ::oox::core::XmlFilterBase;
 
 namespace oox {
@@ -55,23 +55,28 @@ ChartSpaceFragment::~ChartSpaceFragment()
 {
 }
 
-ContextWrapper ChartSpaceFragment::onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs )
+ContextHandlerRef ChartSpaceFragment::onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs )
 {
     switch( getCurrentElement() )
     {
         case XML_ROOT_CONTEXT:
-            return  (nElement == C_TOKEN( chartSpace ));
+            switch( nElement )
+            {
+                case C_TOKEN( chartSpace ):
+                    return this;
+            }
+        break;
 
         case C_TOKEN( chartSpace ):
             switch( nElement )
             {
                 case C_TOKEN( chart ):
-                    return true;
+                    return this;
                 case C_TOKEN( spPr ):
                     return new ShapePropertiesContext( *this, mrModel.mxShapeProp.create() );
                 case C_TOKEN( style ):
                     mrModel.mnStyle = rAttribs.getInteger( XML_val, 2 );
-                    return false;
+                    return 0;
                 case C_TOKEN( txPr ):
                     return new TextBodyContext( *this, mrModel.mxTextProp.create() );
             }
@@ -83,12 +88,12 @@ ContextWrapper ChartSpaceFragment::onCreateContext( sal_Int32 nElement, const At
                 case C_TOKEN( autoTitleDeleted ):
                     // default is 'false', not 'true' as specified
                     mrModel.mbAutoTitleDel = rAttribs.getBool( XML_val, false );
-                    return false;
+                    return 0;
                 case C_TOKEN( backWall ):
                     return new WallFloorContext( *this, mrModel.mxBackWall.create() );
                 case C_TOKEN( dispBlanksAs ):
                     mrModel.mnDispBlanksAs = rAttribs.getToken( XML_val, XML_zero );
-                    return false;
+                    return 0;
                 case C_TOKEN( floor ):
                     return new WallFloorContext( *this, mrModel.mxFloor.create() );
                 case C_TOKEN( legend ):
@@ -98,11 +103,11 @@ ContextWrapper ChartSpaceFragment::onCreateContext( sal_Int32 nElement, const At
                 case C_TOKEN( plotVisOnly ):
                     // default is 'false', not 'true' as specified
                     mrModel.mbPlotVisOnly = rAttribs.getBool( XML_val, false );
-                    return false;
+                    return 0;
                 case C_TOKEN( showDLblsOverMax ):
                     // default is 'false', not 'true' as specified
                     mrModel.mbShowLabelsOverMax = rAttribs.getBool( XML_val, false );
-                    return false;
+                    return 0;
                 case C_TOKEN( sideWall ):
                     return new WallFloorContext( *this, mrModel.mxSideWall.create() );
                 case C_TOKEN( title ):
@@ -112,7 +117,7 @@ ContextWrapper ChartSpaceFragment::onCreateContext( sal_Int32 nElement, const At
             }
         break;
     }
-    return false;
+    return 0;
 }
 
 // ============================================================================

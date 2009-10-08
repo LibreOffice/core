@@ -40,7 +40,7 @@
 
 namespace oox { namespace xls {
     class BiffInputStream;
-    class BinFontPortionList;
+    class FontPortionModelList;
     struct FunctionInfo;
     class FunctionProvider;
 } }
@@ -169,7 +169,7 @@ protected:
     void                writeBooleanItem( const String& rName, sal_uInt8 nBool );
     void                writeErrorCodeItem( const String& rName, sal_uInt8 nErrCode );
 
-    void                writeFontPortions( const ::oox::xls::BinFontPortionList& rPortions );
+    void                writeFontPortions( const ::oox::xls::FontPortionModelList& rPortions );
 
     template< typename Type >
     void                writeRectItem( const String& rName,
@@ -216,6 +216,7 @@ protected:
                             FormatType eFmtType = FORMATTYPE_DEC );
 
     sal_uInt16          dumpRepeatedRecId();
+    void                dumpFrHeader( bool bWithFlags, bool bWithRange );
 
     void                dumpDffClientRect();
     void                dumpEmbeddedDff();
@@ -414,6 +415,9 @@ private:
     sal_uInt16          dumpFormatIdx( const String& rName = EMPTY_STRING );
     sal_uInt16          dumpXfIdx( const String& rName = EMPTY_STRING, bool bBiff2Style = false );
 
+    ::rtl::OUString     dumpPivotString( const String& rName, sal_uInt16 nStrLen );
+    ::rtl::OUString     dumpPivotString( const String& rName );
+
     sal_uInt16          dumpCellHeader( bool bBiff2Style = false );
     void                dumpBoolErr();
 
@@ -455,7 +459,7 @@ private:
     sal_uInt16          mnFormatIdx;
     sal_uInt16          mnPTRowFields;
     sal_uInt16          mnPTColFields;
-    sal_uInt16          mnPTSxliIdx;
+    sal_uInt16          mnPTRowColItemsIdx;
     bool                mbHasCodePage;
     bool                mbHasDff;
 };
@@ -465,7 +469,11 @@ private:
 class PivotCacheStreamObject : public RecordStreamObject
 {
 public:
-    explicit            PivotCacheStreamObject( const ObjectBase& rParent, const BinaryInputStreamRef& rxStrm, const ::rtl::OUString& rSysFileName );
+    explicit            PivotCacheStreamObject(
+                            const ObjectBase& rParent,
+                            const BinaryInputStreamRef& rxStrm,
+                            ::oox::xls::BiffType eBiff,
+                            const ::rtl::OUString& rSysFileName );
 
 protected:
     virtual void        implDumpRecordBody();

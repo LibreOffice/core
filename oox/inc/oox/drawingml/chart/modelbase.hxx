@@ -48,6 +48,7 @@ class ModelRef : public ::boost::shared_ptr< ModelType >
 {
 public:
     inline explicit     ModelRef() {}
+    inline              ModelRef( const ::boost::shared_ptr< ModelType >& rxModel ) : ::boost::shared_ptr< ModelType >( rxModel ) {}
     inline              ~ModelRef() {}
 
     inline bool         is() const { return this->get() != 0; }

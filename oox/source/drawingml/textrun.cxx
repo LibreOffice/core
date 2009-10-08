@@ -38,6 +38,7 @@
 #include "oox/helper/helper.hxx"
 #include "oox/helper/propertyset.hxx"
 #include "oox/core/xmlfilterbase.hxx"
+#include "properties.hxx"
 
 using ::rtl::OUString;
 using namespace ::com::sun::star::uno;
@@ -92,7 +93,7 @@ void TextRun::insertAt(
             {
                 PropertySet aFieldProps( xField );
                 aFieldProps.setProperties( maTextCharacterProperties.maHyperlinkPropertyMap );
-                aFieldProps.setProperty( CREATE_OUSTRING( "Representation" ), getText() );
+                aFieldProps.setProperty( PROP_Representation, getText() );
 
                 Reference< XTextContent > xContent( xField, UNO_QUERY);
                 xText->insertTextContent( xStart, xContent, sal_False );

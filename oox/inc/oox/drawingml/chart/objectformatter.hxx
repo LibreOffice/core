@@ -128,7 +128,8 @@ public:
     /** Sets text rotation properties to the passed property set. */
     void                convertTextRotation(
                             PropertySet& rPropSet,
-                            const ModelRef< TextBody >& rxTextProp );
+                            const ModelRef< TextBody >& rxTextProp,
+                            bool bSupportsStacked );
 
     /** Sets number format properties to the passed property set. */
     void                convertNumberFormat(

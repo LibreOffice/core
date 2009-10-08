@@ -2,13 +2,13 @@
 <model xmlns:rng="http://relaxng.org/ns/structure/1.0">
   <namespace-alias name="http://www.w3.org/XML/1998/namespace" alias="xml" id="1"/>
   <namespace-alias name="http://schemas.openxmlformats.org/officeDocument/2006/relationships" alias="relationships" id="3"/>
-  <namespace-alias name="urn:schemas-microsoft-com:office:office" alias="office" id="11"/>
+  <namespace-alias name="urn:schemas-microsoft-com:office:office" alias="office" id="32"/>
   <namespace-alias name="http://schemas.openxmlformats.org/officeDocument/2006/relationships/theme" alias="theme" id="14"/>
-  <namespace-alias name="http://schemas.openxmlformats.org/drawingml/2006/wordprocessingDrawing" alias="wordprocessingDrawing" id="15"/>
+  <namespace-alias name="http://schemas.openxmlformats.org/drawingml/2006/wordprocessingDrawing" alias="wordprocessingDrawing" id="24"/>
   <namespace-alias name="http://schemas.openxmlformats.org/drawingml/2006/main" alias="drawingml" id="21"/>
-  <namespace-alias name="urn:schemas-microsoft-com:vml" alias="vml" id="24"/>
+  <namespace-alias name="urn:schemas-microsoft-com:vml" alias="vml" id="31"/>
   <namespace-alias name="http://schemas.openxmlformats.org/drawingml/2006/picture" alias="picture" id="25"/>
-  <namespace-alias name="urn:schemas-microsoft-com:office:word" alias="vml_wordprocessingDrawing" id="32"/>
+  <namespace-alias name="urn:schemas-microsoft-com:office:word" alias="vml_wordprocessingDrawing" id="33"/>
   <namespace-alias name="http://schemas.openxmlformats.org/wordprocessingml/2006/main" alias="wordprocessingml" id="60"/>
   <namespace-alias name="http://schemas.openxmlformats.org/officeDocument/2006/math" alias="math" id="61"/>
   <namespace-alias name="http://schemas.openxmlformats.org/schemaLibrary/2006/main" alias="schemaLibrary" id="62"/>

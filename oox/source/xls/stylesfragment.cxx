@@ -32,6 +32,7 @@
 #include "oox/helper/attributelist.hxx"
 
 using ::rtl::OUString;
+using ::oox::core::ContextHandlerRef;
 using ::oox::core::RecordInfo;
 
 namespace oox {
@@ -39,263 +40,262 @@ namespace xls {
 
 // ============================================================================
 
-OoxStylesFragment::OoxStylesFragment(
-        const WorkbookHelper& rHelper, const OUString& rFragmentPath ) :
-    OoxWorkbookFragmentBase( rHelper, rFragmentPath ),
-    mfGradPos( -1.0 )
+OoxIndexedColorsContext::OoxIndexedColorsContext( OoxWorkbookFragmentBase& rFragment ) :
+    OoxWorkbookContextBase( rFragment )
+{
+}
+
+ContextHandlerRef OoxIndexedColorsContext::onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs )
+{
+    switch( getCurrentElement() )
+    {
+        case XLS_TOKEN( indexedColors ):
+            if( nElement == XLS_TOKEN( rgbColor ) ) getStyles().importPaletteColor( rAttribs );
+        break;
+    }
+    return 0;
+}
+
+ContextHandlerRef OoxIndexedColorsContext::onCreateRecordContext( sal_Int32 nRecId, RecordInputStream& rStrm )
+{
+    switch( getCurrentElement() )
+    {
+        case OOBIN_ID_INDEXEDCOLORS:
+            if( nRecId == OOBIN_ID_RGBCOLOR ) getStyles().importPaletteColor( rStrm );
+        break;
+    }
+    return 0;
+}
+
+// ============================================================================
+
+ContextHandlerRef OoxFontContext::onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs )
+{
+    if( mxFont.get() )
+        mxFont->importAttribs( nElement, rAttribs );
+    return 0;
+}
+
+// ============================================================================
+
+void OoxBorderContext::onStartElement( const AttributeList& rAttribs )
+{
+    if( mxBorder.get() && (getCurrentElement() == XLS_TOKEN( border )) )
+        mxBorder->importBorder( rAttribs );
+}
+
+ContextHandlerRef OoxBorderContext::onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs )
+{
+    if( mxBorder.get() ) switch( getCurrentElement() )
+    {
+        case XLS_TOKEN( border ):
+            mxBorder->importStyle( nElement, rAttribs );
+            return this;
+
+        default:
+            if( nElement == XLS_TOKEN( color ) )
+                mxBorder->importColor( getCurrentElement(), rAttribs );
+    }
+    return 0;
+}
+
+// ============================================================================
+
+ContextHandlerRef OoxFillContext::onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs )
+{
+    if( mxFill.get() ) switch( getCurrentElement() )
+    {
+        case XLS_TOKEN( fill ):
+            switch( nElement )
+            {
+                case XLS_TOKEN( patternFill ):  mxFill->importPatternFill( rAttribs );  return this;
+                case XLS_TOKEN( gradientFill ): mxFill->importGradientFill( rAttribs ); return this;
+            }
+        break;
+        case XLS_TOKEN( patternFill ):
+            switch( nElement )
+            {
+                case XLS_TOKEN( fgColor ):      mxFill->importFgColor( rAttribs );      break;
+                case XLS_TOKEN( bgColor ):      mxFill->importBgColor( rAttribs );      break;
+            }
+        break;
+        case XLS_TOKEN( gradientFill ):
+            if( nElement == XLS_TOKEN( stop ) )
+            {
+                mfGradPos = rAttribs.getDouble( XML_position, -1.0 );
+                return this;
+            }
+        break;
+        case XLS_TOKEN( stop ):
+            if( nElement == XLS_TOKEN( color ) )
+                mxFill->importColor( rAttribs, mfGradPos );
+        break;
+    }
+    return 0;
+}
+
+// ============================================================================
+
+void OoxXfContext::onStartElement( const AttributeList& rAttribs )
+{
+    if( mxXf.get() && (getCurrentElement() == XLS_TOKEN( xf )) )
+        mxXf->importXf( rAttribs, mbCellXf );
+}
+
+ContextHandlerRef OoxXfContext::onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs )
+{
+    if( mxXf.get() ) switch( getCurrentElement() )
+    {
+        case XLS_TOKEN( xf ):
+            switch( nElement )
+            {
+                case XLS_TOKEN( alignment ):    mxXf->importAlignment( rAttribs );  break;
+                case XLS_TOKEN( protection ):   mxXf->importProtection( rAttribs ); break;
+            }
+        break;
+    }
+    return 0;
+}
+
+// ============================================================================
+
+ContextHandlerRef OoxDxfContext::onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs )
+{
+    if( mxDxf.get() ) switch( getCurrentElement() )
+    {
+        case XLS_TOKEN( dxf ):
+            switch( nElement )
+            {
+                case XLS_TOKEN( font ):         return new OoxFontContext( *this, mxDxf->createFont() );
+                case XLS_TOKEN( border ):       return new OoxBorderContext( *this, mxDxf->createBorder() );
+                case XLS_TOKEN( fill ):         return new OoxFillContext( *this, mxDxf->createFill() );
+
+                case XLS_TOKEN( numFmt ):       mxDxf->importNumFmt( rAttribs );        break;
+#if 0
+                case XLS_TOKEN( alignment ):    mxDxf->importAlignment( rAttribs );     break;
+                case XLS_TOKEN( protection ):   mxDxf->importProtection( rAttribs );    break;
+#endif
+            }
+        break;
+    }
+    return 0;
+}
+
+// ============================================================================
+
+OoxStylesFragment::OoxStylesFragment( const WorkbookHelper& rHelper, const OUString& rFragmentPath ) :
+    OoxWorkbookFragmentBase( rHelper, rFragmentPath )
 {
 }
 
 // oox.core.ContextHandler2Helper interface -----------------------------------
 
-ContextWrapper OoxStylesFragment::onCreateContext( sal_Int32 nElement, const AttributeList& )
+ContextHandlerRef OoxStylesFragment::onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs )
 {
-    sal_Int32 nCurrContext = getCurrentElement();
-    switch( nCurrContext )
+    switch( getCurrentElement() )
     {
         case XML_ROOT_CONTEXT:
-            return  (nElement == XLS_TOKEN( styleSheet ));
+            if( nElement == XLS_TOKEN( styleSheet ) ) return this;
+        break;
+
         case XLS_TOKEN( styleSheet ):
-            return  (nElement == XLS_TOKEN( colors )) ||
-                    (nElement == XLS_TOKEN( fonts )) ||
-                    (nElement == XLS_TOKEN( numFmts )) ||
-                    (nElement == XLS_TOKEN( borders )) ||
-                    (nElement == XLS_TOKEN( fills )) ||
-                    (nElement == XLS_TOKEN( cellXfs )) ||
-                    (nElement == XLS_TOKEN( cellStyleXfs )) ||
-                    (nElement == XLS_TOKEN( dxfs )) ||
-                    (nElement == XLS_TOKEN( cellStyles ));
-
-        case XLS_TOKEN( colors ):
-            return  (nElement == XLS_TOKEN( indexedColors ));
-        case XLS_TOKEN( indexedColors ):
-            return  (nElement == XLS_TOKEN( rgbColor ));
-
-        case XLS_TOKEN( fonts ):
-            return  (nElement == XLS_TOKEN( font ));
-        case XLS_TOKEN( font ):
-            return mxFont.get() && Font::isSupportedContext( nElement, nCurrContext );
-
-        case XLS_TOKEN( numFmts ):
-            return  (nElement == XLS_TOKEN( numFmt ));
-
-        case XLS_TOKEN( borders ):
-            return  (nElement == XLS_TOKEN( border ));
-        case XLS_TOKEN( border ):
-        case XLS_TOKEN( left ):
-        case XLS_TOKEN( right ):
-        case XLS_TOKEN( top ):
-        case XLS_TOKEN( bottom ):
-        case XLS_TOKEN( diagonal ):
-            return mxBorder.get() && Border::isSupportedContext( nElement, nCurrContext );
-
-        case XLS_TOKEN( fills ):
-            return  (nElement == XLS_TOKEN( fill ));
-        case XLS_TOKEN( fill ):
-        case XLS_TOKEN( patternFill ):
-        case XLS_TOKEN( gradientFill ):
-        case XLS_TOKEN( stop ):
-            return mxFill.get() && Fill::isSupportedContext( nElement, nCurrContext );
-
-        case XLS_TOKEN( cellStyleXfs ):
-        case XLS_TOKEN( cellXfs ):
-            return  (nElement == XLS_TOKEN( xf ));
-        case XLS_TOKEN( xf ):
-            return mxXf.get() &&
-                   ((nElement == XLS_TOKEN( alignment )) ||
-                    (nElement == XLS_TOKEN( protection )));
-
-        case XLS_TOKEN( dxfs ):
-            return  (nElement == XLS_TOKEN( dxf ));
-        case XLS_TOKEN( dxf ):
-            return mxDxf.get() &&
-                   ((nElement == XLS_TOKEN( font )) ||
-                    (nElement == XLS_TOKEN( numFmt )) ||
-                    (nElement == XLS_TOKEN( alignment )) ||
-                    (nElement == XLS_TOKEN( protection )) ||
-                    (nElement == XLS_TOKEN( border )) ||
-                    (nElement == XLS_TOKEN( fill )));
-
-        case XLS_TOKEN( cellStyles ):
-            return  (nElement == XLS_TOKEN( cellStyle ));
-    }
-    return false;
-}
-
-void OoxStylesFragment::onStartElement( const AttributeList& rAttribs )
-{
-    sal_Int32 nCurrContext = getCurrentElement();
-    sal_Int32 nPrevContext = getPreviousElement();
-
-    switch( nCurrContext )
-    {
-        case XLS_TOKEN( color ):
-            switch( nPrevContext )
+            switch( nElement )
             {
-                case XLS_TOKEN( font ):
-                    OSL_ENSURE( mxFont.get(), "OoxStylesFragment::onStartElement - missing font object" );
-                    mxFont->importAttribs( nCurrContext, rAttribs );
-                break;
-                case XLS_TOKEN( stop ):
-                    OSL_ENSURE( mxFill.get(), "OoxStylesFragment::onStartElement - missing fill object" );
-                    mxFill->importColor( rAttribs, mfGradPos );
-                break;
-                default:
-                    OSL_ENSURE( mxBorder.get(), "OoxStylesFragment::onStartElement - missing border object" );
-                    mxBorder->importColor( nPrevContext, rAttribs );
+                case XLS_TOKEN( colors ):
+                case XLS_TOKEN( numFmts ):
+                case XLS_TOKEN( fonts ):
+                case XLS_TOKEN( borders ):
+                case XLS_TOKEN( fills ):
+                case XLS_TOKEN( cellXfs ):
+                case XLS_TOKEN( cellStyleXfs ):
+                case XLS_TOKEN( dxfs ):
+                case XLS_TOKEN( cellStyles ):   return this;
             }
         break;
-        case XLS_TOKEN( rgbColor ):
-            getStyles().importPaletteColor( rAttribs );
-        break;
 
-        case XLS_TOKEN( font ):
-            mxFont = mxDxf.get() ? mxDxf->importFont( rAttribs ) : getStyles().importFont( rAttribs );
+        case XLS_TOKEN( colors ):
+            if( nElement == XLS_TOKEN( indexedColors ) ) return new OoxIndexedColorsContext( *this );
         break;
-
-        case XLS_TOKEN( numFmt ):
-            if( mxDxf.get() )
-                mxDxf->importNumFmt( rAttribs );
-            else
-                getStyles().importNumFmt( rAttribs );
+        case XLS_TOKEN( numFmts ):
+            if( nElement == XLS_TOKEN( numFmt ) ) getStyles().importNumFmt( rAttribs );
         break;
-
-        case XLS_TOKEN( alignment ):
-            OSL_ENSURE( mxXf.get() || mxDxf.get(), "OoxStylesFragment::onStartElement - missing formatting object" );
-            if( mxXf.get() )
-                mxXf->importAlignment( rAttribs );
-#if 0
-            else if( mxDxf.get() )
-                mxDxf->importAlignment( rAttribs );
-#endif
+        case XLS_TOKEN( fonts ):
+            if( nElement == XLS_TOKEN( font ) ) return new OoxFontContext( *this, getStyles().createFont() );
         break;
-
-        case XLS_TOKEN( protection ):
-            OSL_ENSURE( mxXf.get() || mxDxf.get(), "OoxStylesFragment::onStartElement - missing formatting object" );
-            if( mxXf.get() )
-                mxXf->importProtection( rAttribs );
-#if 0
-            else if( mxDxf.get() )
-                mxDxf->importProtection( rAttribs );
-#endif
+        case XLS_TOKEN( borders ):
+            if( nElement == XLS_TOKEN( border ) ) return new OoxBorderContext( *this, getStyles().createBorder() );
         break;
-
-        case XLS_TOKEN( border ):
-            mxBorder = mxDxf.get() ? mxDxf->importBorder( rAttribs ) : getStyles().importBorder( rAttribs );
+        case XLS_TOKEN( fills ):
+            if( nElement == XLS_TOKEN( fill ) ) return new OoxFillContext( *this, getStyles().createFill() );
         break;
-
-        case XLS_TOKEN( fill ):
-            mxFill = mxDxf.get() ? mxDxf->importFill( rAttribs ) : getStyles().importFill( rAttribs );
+        case XLS_TOKEN( cellXfs ):
+            if( nElement == XLS_TOKEN( xf ) ) return new OoxXfContext( *this, getStyles().createCellXf(), true );
         break;
-        case XLS_TOKEN( patternFill ):
-            OSL_ENSURE( mxFill.get(), "OoxStylesFragment::onStartElement - missing fill object" );
-            mxFill->importPatternFill( rAttribs );
+        case XLS_TOKEN( cellStyleXfs ):
+            if( nElement == XLS_TOKEN( xf ) ) return new OoxXfContext( *this, getStyles().createStyleXf(), false );
         break;
-        case XLS_TOKEN( fgColor ):
-            OSL_ENSURE( mxFill.get(), "OoxStylesFragment::onStartElement - missing fill object" );
-            mxFill->importFgColor( rAttribs );
+        case XLS_TOKEN( dxfs ):
+            if( nElement == XLS_TOKEN( dxf ) ) return new OoxDxfContext( *this, getStyles().createDxf() );
         break;
-        case XLS_TOKEN( bgColor ):
-            OSL_ENSURE( mxFill.get(), "OoxStylesFragment::onStartElement - missing fill object" );
-            mxFill->importBgColor( rAttribs );
+        case XLS_TOKEN( cellStyles ):
+            if( nElement == XLS_TOKEN( cellStyle ) ) getStyles().importCellStyle( rAttribs );
         break;
-        case XLS_TOKEN( gradientFill ):
-            OSL_ENSURE( mxFill.get(), "OoxStylesFragment::onStartElement - missing fill object" );
-            mxFill->importGradientFill( rAttribs );
-        break;
-        case XLS_TOKEN( stop ):
-            mfGradPos = rAttribs.getDouble( XML_position, -1.0 );
-        break;
-
-        case XLS_TOKEN( xf ):
-            mxXf = getStyles().importXf( nPrevContext, rAttribs );
-        break;
-        case XLS_TOKEN( dxf ):
-            mxDxf = getStyles().importDxf( rAttribs );
-        break;
-
-        case XLS_TOKEN( cellStyle ):
-            getStyles().importCellStyle( rAttribs );
-        break;
-
-        default: switch( nPrevContext )
-        {
-            case XLS_TOKEN( font ):
-                OSL_ENSURE( mxFont.get(), "OoxStylesFragment::onStartElement - missing font object" );
-                mxFont->importAttribs( nCurrContext, rAttribs );
-            break;
-            case XLS_TOKEN( border ):
-                OSL_ENSURE( mxBorder.get(), "OoxStylesFragment::onStartElement - missing border object" );
-                mxBorder->importStyle( nCurrContext, rAttribs );
-            break;
-        }
     }
+    return 0;
 }
 
-void OoxStylesFragment::onEndElement( const OUString& /*rChars*/ )
-{
-    switch( getCurrentElement() )
-    {
-        case XLS_TOKEN( font ):     mxFont.reset();     break;
-        case XLS_TOKEN( border ):   mxBorder.reset();   break;
-        case XLS_TOKEN( fill ):     mxFill.reset();     break;
-        case XLS_TOKEN( xf ):       mxXf.reset();       break;
-        case XLS_TOKEN( dxf ):      mxDxf.reset();      break;
-    }
-}
-
-ContextWrapper OoxStylesFragment::onCreateRecordContext( sal_Int32 nRecId, RecordInputStream& )
+ContextHandlerRef OoxStylesFragment::onCreateRecordContext( sal_Int32 nRecId, RecordInputStream& rStrm )
 {
     switch( getCurrentElement() )
     {
         case XML_ROOT_CONTEXT:
-            return  (nRecId == OOBIN_ID_STYLESHEET);
-        case OOBIN_ID_STYLESHEET:
-            return  (nRecId == OOBIN_ID_COLORS) ||
-                    (nRecId == OOBIN_ID_FONTS) ||
-                    (nRecId == OOBIN_ID_NUMFMTS) ||
-                    (nRecId == OOBIN_ID_BORDERS) ||
-                    (nRecId == OOBIN_ID_FILLS) ||
-                    (nRecId == OOBIN_ID_CELLSTYLEXFS) ||
-                    (nRecId == OOBIN_ID_CELLXFS) ||
-                    (nRecId == OOBIN_ID_DXFS) ||
-                    (nRecId == OOBIN_ID_CELLSTYLES);
-        case OOBIN_ID_COLORS:
-            return  (nRecId == OOBIN_ID_INDEXEDCOLORS);
-        case OOBIN_ID_INDEXEDCOLORS:
-            return  (nRecId == OOBIN_ID_RGBCOLOR);
-        case OOBIN_ID_FONTS:
-            return  (nRecId == OOBIN_ID_FONT);
-        case OOBIN_ID_NUMFMTS:
-            return  (nRecId == OOBIN_ID_NUMFMT);
-        case OOBIN_ID_BORDERS:
-            return  (nRecId == OOBIN_ID_BORDER);
-        case OOBIN_ID_FILLS:
-            return  (nRecId == OOBIN_ID_FILL);
-        case OOBIN_ID_CELLSTYLEXFS:
-        case OOBIN_ID_CELLXFS:
-            return  (nRecId == OOBIN_ID_XF);
-        case OOBIN_ID_DXFS:
-            return  (nRecId == OOBIN_ID_DXF);
-        case OOBIN_ID_CELLSTYLES:
-            return  (nRecId == OOBIN_ID_CELLSTYLE);
-    }
-    return false;
-}
+            if( nRecId == OOBIN_ID_STYLESHEET ) return this;
+        break;
 
-void OoxStylesFragment::onStartRecord( RecordInputStream& rStrm )
-{
-    switch( getCurrentElement() )
-    {
-        case OOBIN_ID_RGBCOLOR:     getStyles().importPaletteColor( rStrm );                break;
-        case OOBIN_ID_FONT:         getStyles().importFont( rStrm );                        break;
-        case OOBIN_ID_NUMFMT:       getStyles().importNumFmt( rStrm );                      break;
-        case OOBIN_ID_BORDER:       getStyles().importBorder( rStrm );                      break;
-        case OOBIN_ID_FILL:         getStyles().importFill( rStrm );                        break;
-        case OOBIN_ID_XF:           getStyles().importXf( getPreviousElement(), rStrm );    break;
-        case OOBIN_ID_DXF:          getStyles().importDxf( rStrm );                         break;
-        case OOBIN_ID_CELLSTYLE:    getStyles().importCellStyle( rStrm );                   break;
+        case OOBIN_ID_STYLESHEET:
+            switch( nRecId )
+            {
+                case OOBIN_ID_COLORS:
+                case OOBIN_ID_NUMFMTS:
+                case OOBIN_ID_FONTS:
+                case OOBIN_ID_BORDERS:
+                case OOBIN_ID_FILLS:
+                case OOBIN_ID_CELLXFS:
+                case OOBIN_ID_CELLSTYLEXFS:
+                case OOBIN_ID_DXFS:
+                case OOBIN_ID_CELLSTYLES:   return this;
+            }
+        break;
+
+        case OOBIN_ID_COLORS:
+            if( nRecId == OOBIN_ID_INDEXEDCOLORS ) return new OoxIndexedColorsContext( *this );
+        break;
+        case OOBIN_ID_NUMFMTS:
+            if( nRecId == OOBIN_ID_NUMFMT ) getStyles().importNumFmt( rStrm );
+        break;
+        case OOBIN_ID_FONTS:
+            if( nRecId == OOBIN_ID_FONT ) getStyles().createFont()->importFont( rStrm );
+        break;
+        case OOBIN_ID_BORDERS:
+            if( nRecId == OOBIN_ID_BORDER ) getStyles().createBorder()->importBorder( rStrm );
+        break;
+        case OOBIN_ID_FILLS:
+            if( nRecId == OOBIN_ID_FILL ) getStyles().createFill()->importFill( rStrm );
+        break;
+        case OOBIN_ID_CELLXFS:
+            if( nRecId == OOBIN_ID_XF ) getStyles().createCellXf()->importXf( rStrm, true );
+        break;
+        case OOBIN_ID_CELLSTYLEXFS:
+            if( nRecId == OOBIN_ID_XF ) getStyles().createStyleXf()->importXf( rStrm, false );
+        break;
+        case OOBIN_ID_DXFS:
+            if( nRecId == OOBIN_ID_DXF ) getStyles().createDxf()->importDxf( rStrm );
+        break;
+        case OOBIN_ID_CELLSTYLES:
+            if( nRecId == OOBIN_ID_CELLSTYLE ) getStyles().importCellStyle( rStrm );
+        break;
     }
+    return 0;
 }
 
 // oox.core.FragmentHandler2 interface ----------------------------------------

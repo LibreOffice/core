@@ -99,7 +99,7 @@ public:
      */
     void                startBlock();
 
-    /** Decodes a block of memory inplace.
+    /** Decodes a block of memory.
 
         @precond
             The codec must be initialized with the initKey() function before

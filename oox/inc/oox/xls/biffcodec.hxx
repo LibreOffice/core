@@ -31,6 +31,7 @@
 #ifndef OOX_XLS_BIFFCODEC_HXX
 #define OOX_XLS_BIFFCODEC_HXX
 
+#include <vector>
 #include "oox/core/binarycodec.hxx"
 #include "oox/xls/workbookhelper.hxx"
 
@@ -47,25 +48,15 @@ const sal_Int64 BIFF_RCF_BLOCKSIZE          = 1024;
 
 // ============================================================================
 
-/** Helper functions for BIFF stream codecs. */
-class BiffCodecHelper
-{
-public:
-    /** Returns the fixed password for workbook protection. */
-    static const ::rtl::OString& getBiff5WbProtPassword();
-
-    /** Returns the fixed password for workbook protection. */
-    static const ::rtl::OUString& getBiff8WbProtPassword();
-};
-
-// ============================================================================
-
 /** Base class for BIFF stream decoders. */
 class BiffDecoderBase : public WorkbookHelper
 {
 public:
     explicit            BiffDecoderBase( const WorkbookHelper& rHelper );
     virtual             ~BiffDecoderBase();
+
+    /** Derived classes return a clone of the decoder for usage in new streams. */
+    inline BiffDecoderBase* clone() { return implClone(); }
 
     /** Returns the current error code of the decoder. */
     inline sal_Int32    getErrorCode() const { return mnError; }
@@ -81,10 +72,16 @@ public:
                             sal_uInt16 nBytes );
 
 protected:
+    /** Copy constructor for cloning. */
+                        BiffDecoderBase( const BiffDecoderBase& rDecoder );
+
     /** Sets the decoder to a state showing whether the password was correct. */
     void                setHasValidPassword( bool bValid );
 
 private:
+    /** Derived classes return a clone of the decoder for usage in new streams. */
+    virtual BiffDecoderBase* implClone() = 0;
+
     /** Implementation of decryption of a memory block. */
     virtual void        implDecode(
                             sal_uInt8* pnDestData,
@@ -119,11 +116,15 @@ public:
                             sal_uInt16 nKey, sal_uInt16 nHash );
 
 private:
+    /** Copy constructor for cloning. */
+                        BiffDecoder_XOR( const BiffDecoder_XOR& rDecoder );
+
     /** Initializes the wrapped codec object. After that, internal status can
         be querried with isValid(). */
-    void                init(
-                            const ::rtl::OString& rPass,
-                            sal_uInt16 nKey, sal_uInt16 nHash );
+    void                init( const ::rtl::OString& rPass );
+
+    /** Returns a clone of the decoder for usage in new streams. */
+    virtual BiffDecoder_XOR* implClone();
 
     /** Implementation of decryption of a memory block. */
     virtual void        implDecode(
@@ -134,6 +135,9 @@ private:
 
 private:
     ::oox::core::BinaryCodec_XOR maCodec;   /// Cipher algorithm implementation.
+    ::rtl::OString      maPass;
+    sal_uInt16          mnKey;
+    sal_uInt16          mnHash;
 };
 
 // ============================================================================
@@ -161,13 +165,15 @@ public:
                             sal_uInt8 pnSaltHash[ 16 ] );
 
 private:
+    /** Copy constructor for cloning. */
+                        BiffDecoder_RCF( const BiffDecoder_RCF& rDecoder );
+
     /** Initializes the wrapped codec object. After that, internal status can
         be querried with isValid(). */
-    void                init(
-                            const ::rtl::OUString& rPass,
-                            sal_uInt8 pnDocId[ 16 ],
-                            sal_uInt8 pnSaltData[ 16 ],
-                            sal_uInt8 pnSaltHash[ 16 ] );
+    void                init( const ::rtl::OUString& rPass );
+
+    /** Returns a clone of the decoder for usage in new streams. */
+    virtual BiffDecoder_RCF* implClone();
 
     /** Implementation of decryption of a memory block. */
     virtual void        implDecode(
@@ -178,6 +184,44 @@ private:
 
 private:
     ::oox::core::BinaryCodec_RCF maCodec;   /// Cipher algorithm implementation.
+    ::rtl::OUString     maPass;
+    ::std::vector< sal_uInt8 > maDocId;
+    ::std::vector< sal_uInt8 > maSaltData;
+    ::std::vector< sal_uInt8 > maSaltHash;
+};
+
+// ============================================================================
+
+/** Helper for BIFF stream codecs. Holds the used codec object. */
+class BiffCodecHelper : public WorkbookHelper
+{
+public:
+    explicit            BiffCodecHelper( const WorkbookHelper& rHelper );
+
+    /** Returns the fixed password for workbook protection. */
+    static const ::rtl::OString& getBiff5WbProtPassword();
+    /** Returns the fixed password for workbook protection. */
+    static const ::rtl::OUString& getBiff8WbProtPassword();
+
+    /** Looks for a password provided via API, or queries it via GUI. */
+    ::rtl::OUString     queryPassword();
+
+    /** Imports the FILEPASS record and sets a decoder at the stream. */
+    bool                importFilePass( BiffInputStream& rStrm );
+    /** Clones the contained decoder object if existing and sets it at the passed stream. */
+    void                cloneDecoder( BiffInputStream& rStrm );
+
+private:
+    void                importFilePass_XOR( BiffInputStream& rStrm );
+    void                importFilePass_RCF( BiffInputStream& rStrm );
+    void                importFilePass_Strong( BiffInputStream& rStrm );
+    void                importFilePass2( BiffInputStream& rStrm );
+    void                importFilePass8( BiffInputStream& rStrm );
+
+private:
+    BiffDecoderRef      mxDecoder;          /// The decoder for import filter.
+    ::rtl::OUString     maPassword;         /// Password for stream encoder/decoder.
+    bool                mbHasPassword;      /// True = password already querried.
 };
 
 // ============================================================================
