@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: biffinputstream.hxx,v $
- * $Revision: 1.4 $
+ * $Revision: 1.4.20.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -32,19 +32,14 @@
 #define OOX_XLS_BIFFINPUTSTREAM_HXX
 
 #include <vector>
+#include "oox/helper/binaryinputstream.hxx"
 #include "oox/xls/biffhelper.hxx"
 #include "oox/xls/biffcodec.hxx"
 
 namespace rtl { class OUStringBuffer; }
-namespace oox { class BinaryInputStream; }
 
 namespace oox {
 namespace xls {
-
-// ============================================================================
-
-const sal_uInt32 BIFF_REC_SEEK_TO_BEGIN     = 0;
-const sal_uInt32 BIFF_REC_SEEK_TO_END       = SAL_MAX_UINT32;
 
 // ============================================================================
 
@@ -56,9 +51,8 @@ class BiffInputRecordBuffer
 public:
     explicit            BiffInputRecordBuffer( BinaryInputStream& rInStrm );
 
-    /** Returns the core stream object. */
-    inline const BinaryInputStream&
-                        getCoreStream() const { return mrInStrm; }
+    /** Returns the wrapped binary base stream. */
+    inline const BinaryInputStream& getBaseStream() const { return mrInStrm; }
 
     /** Sets a decoder object and decrypts buffered record data. */
     void                setDecoder( BiffDecoderRef xDecoder );
@@ -91,11 +85,8 @@ public:
 
     /** Reads nBytes bytes to the existing buffer opData. Must NOT overread the source buffer. */
     void                read( void* opData, sal_uInt16 nBytes );
-    /** Reads a value. Must NOT overread the buffer. */
-    template< typename Type >
-    inline void         readValue( Type& ornValue );
     /** Ignores nBytes bytes. Must NOT overread the buffer. */
-    inline void         skip( sal_uInt16 nBytes );
+    void                skip( sal_uInt16 nBytes );
 
 private:
     /** Updates data buffer from stream, if needed. */
@@ -120,15 +111,6 @@ private:
     sal_uInt16          mnRecPos;               /// Current position in record body.
     bool                mbValidHeader;          /// True = valid record header.
 };
-
-// ----------------------------------------------------------------------------
-
-template< typename Type >
-inline void BiffInputRecordBuffer::readValue( Type& ornValue )
-{
-    read( &ornValue, static_cast< sal_uInt16 >( sizeof( Type ) ) );
-    ByteOrderConverter::convertLittleEndian( ornValue );
-}
 
 } // namespace prv
 
@@ -170,13 +152,8 @@ inline void BiffInputRecordBuffer::readValue( Type& ornValue )
     records or the stream position in SHEET records). Decryption will be
     reenabled automatically, if a new record is started with the function
     startNextRecord().
-
-    Be careful with used data types:
-    sal_uInt16: Record identifiers, raw size of single records.
-    sal_uInt32: Record position and size (including CONTINUE records).
-    sal_Int64: Core stream position and size.
 */
-class BiffInputStream
+class BiffInputStream : public BinaryInputStream
 {
 public:
     /** Constructs the BIFF record stream using the passed binary stream.
@@ -190,8 +167,6 @@ public:
     explicit            BiffInputStream(
                             BinaryInputStream& rInStream,
                             bool bContLookup = true );
-
-                        ~BiffInputStream();
 
     // record control ---------------------------------------------------------
 
@@ -259,64 +234,45 @@ public:
 
     // stream/record state and info -------------------------------------------
 
-    /** Returns record reading state: false = record overread. */
-    inline bool         isValid() const { return mbValid; }
     /** Returns the current record identifier. */
     inline sal_uInt16   getRecId() const { return mnRecId; }
-    /** Returns the position inside of the whole record content. */
-    sal_uInt32          getRecPos() const;
-    /** Returns the data size of the whole record without record headers. */
-    sal_uInt32          getRecSize();
-    /** Returns remaining data size of the whole record without record headers. */
-    sal_uInt32          getRecLeft();
-    /** Returns a unique handle for the current record that can be used with
-        the function startRecordByHandle(). */
-    inline sal_Int64    getRecHandle() const { return mnRecHandle; }
     /** Returns the record identifier of the following record. */
     sal_uInt16          getNextRecId();
 
-    /** Returns the absolute core stream position. */
-    sal_Int64           getCoreStreamPos() const;
-    /** Returns the stream size. */
-    sal_Int64           getCoreStreamSize() const;
+    /** Returns a unique handle for the current record that can be used with
+        the function startRecordByHandle(). */
+    inline sal_Int64    getRecHandle() const { return mnRecHandle; }
 
-    // stream read access -----------------------------------------------------
+    // BinaryStreamBase interface (seeking) -----------------------------------
 
-    /** Reads nBytes bytes and copies them to the passed buffer opData.
+    /** Returns true, as the BIFF input stream is required to be seekable. */
+    virtual bool        isSeekable() const;
+    /** Returns the position inside of the whole record content. */
+    virtual sal_Int64   tell() const;
+    /** Returns the data size of the whole record without record headers. */
+    virtual sal_Int64   getLength() const;
+    /** Seeks in record content to the specified position. */
+    virtual void        seek( sal_Int64 nRecPos );
 
-        @return  Number of bytes really read.
-     */
-    sal_uInt32          read( void* opData, sal_uInt32 nBytes );
+    /** Returns the absolute position in the wrapped binary stream. */
+    sal_Int64           tellBase() const;
+    /** Returns the total size of the wrapped binary stream. */
+    sal_Int64           getBaseLength() const;
 
-    /** Reads a value from the stream and converts it to platform byte order. */
-    template< typename Type >
-    void                readValue( Type& ornValue );
-    /** Reads a value from the stream and converts it to platform byte order. */
-    template< typename Type >
-    inline Type         readValue() { Type nValue; readValue( nValue ); return nValue; }
+    // BinaryInputStream interface (stream read access) -----------------------
 
-    inline sal_Int8     readInt8() { return readValue< sal_Int8 >(); }
-    inline sal_uInt8    readuInt8() { return readValue< sal_uInt8 >(); }
-    inline sal_Int16    readInt16() { return readValue< sal_Int16 >(); }
-    inline sal_uInt16   readuInt16() { return readValue< sal_uInt16 >(); }
-    inline sal_Int32    readInt32() { return readValue< sal_Int32 >(); }
-    inline sal_uInt32   readuInt32() { return readValue< sal_uInt32 >(); }
-    inline sal_Int64    readInt64() { return readValue< sal_Int64 >(); }
-    inline sal_uInt64   readuInt64() { return readValue< sal_uInt64 >(); }
-    inline float        readFloat() { return readValue< float >(); }
-    inline double       readDouble() { return readValue< double >(); }
-
-    // seeking ----------------------------------------------------------------
-
-    /** Seeks absolute in record content to the specified position.
-
-        The value 0 means start of record, independent from physical stream
-        position.
-     */
-    BiffInputStream&    seek( sal_uInt32 nRecPos );
-
+    /** Reads nBytes bytes to the passed sequence.
+        @return  Number of bytes really read. */
+    virtual sal_Int32   readData( StreamDataSequence& orData, sal_Int32 nBytes );
+    /** Reads nBytes bytes and copies them to the passed buffer opMem.
+        @return  Number of bytes really read. */
+    virtual sal_Int32   readMemory( void* opMem, sal_Int32 nBytes );
     /** Seeks forward inside the current record. */
-    BiffInputStream&    skip( sal_uInt32 nBytes );
+    virtual void        skip( sal_Int32 nBytes );
+
+    /** Stream operator for integral and floating-point types. */
+    template< typename Type >
+    inline BiffInputStream& operator>>( Type& ornValue ) { readValue( ornValue ); return *this; }
 
     // strings ----------------------------------------------------------------
 
@@ -349,6 +305,8 @@ public:
 
     // Unicode strings --------------------------------------------------------
 
+    /** Reads a null-terminated Unicode characters and returns the string. */
+    ::rtl::OUString     readNulUnicodeArray();
     /** Reads nChars Unicode characters and returns the string. */
     ::rtl::OUString     readUnicodeArray( sal_uInt16 nChars );
 
@@ -372,6 +330,9 @@ public:
 
     // ------------------------------------------------------------------------
 private:
+    /** Forwards calls of readValue() template functions to the record buffer. */
+    virtual void        readAtom( void* opMem, sal_uInt8 nSize );
+
     /** Initializes all members after base stream has been seeked to new record. */
     void                setupRecord();
     /** Restarts the current record from the beginning. */
@@ -386,7 +347,7 @@ private:
     /** Goes to start of the next CONTINUE record.
         @descr  Stream must be located at the end of a raw record, and handling
         of CONTINUE records must be enabled.
-        @return  Copy of mbValid. */
+        @return  True if next CONTINUE record has been found and initialized. */
     bool                jumpToNextContinue();
     /** Goes to start of the next CONTINUE record while reading strings.
         @descr  Stream must be located at the end of a raw record. If reading
@@ -394,21 +355,24 @@ private:
         CONTINUE record, even if handling of CONTINUE records is disabled (this
         is a special handling for TXO string data). Reads additional Unicode
         flag byte at start of the new raw record and sets or resets rb16Bit.
-        @return  Copy of mbValid. */
+        @return  True if next CONTINUE record has been found and initialized. */
     bool                jumpToNextStringContinue( bool& rb16Bit );
+    /** Calculates the complete length of the current record including CONTINUE
+        records, stores the length in mnComplRecSize. */
+    void                calcRecordLength();
 
     /** Ensures that reading nBytes bytes is possible with next stream access.
         @descr  Stream must be located at the end of a raw record, and handling
         of CONTINUE records must be enabled.
-        @return  Copy of mbValid. */
+        @return  True if nBytes can be read from stream. */
     bool                ensureRawReadSize( sal_uInt16 nBytes );
     /** Returns the maximum size of raw data possible to read in one block. */
-    sal_uInt16          getMaxRawReadSize( sal_uInt32 nBytes ) const;
+    sal_uInt16          getMaxRawReadSize( sal_Int32 nBytes ) const;
 
     /** Reads an array of Unicode characters and appends them to the passed buffer. */
     void                appendUnicodeArray( ::rtl::OUStringBuffer& orBuffer, sal_uInt16 nChars, bool b16Bit );
     /** Reads the BIFF8 Unicode string header fields. */
-    void                readUniStringHeader( bool& orb16Bit, sal_uInt32& ornAddSize );
+    void                readUniStringHeader( bool& orb16Bit, sal_Int32& ornAddSize );
 
 private:
     prv::BiffInputRecordBuffer maRecBuffer; /// Raw record data buffer.
@@ -417,30 +381,13 @@ private:
     sal_uInt16          mnRecId;            /// Identifier of current record (not the CONTINUE ID).
     sal_uInt16          mnAltContId;        /// Alternative identifier for content continuation records.
 
-    sal_uInt32          mnCurrRecSize;      /// Helper for record size and position.
-    sal_uInt32          mnComplRecSize;     /// Size of complete record data (with CONTINUEs).
+    sal_Int64           mnCurrRecSize;      /// Helper for record size and position.
+    sal_Int64           mnComplRecSize;     /// Size of complete record data (with CONTINUEs).
     bool                mbHasComplRec;      /// True = mnComplRecSize is valid.
 
     bool                mbCont;             /// True = automatic CONTINUE lookup enabled.
     bool                mbNulChars;         /// True = import NUL characters.
-    bool                mbValid;            /// True = last stream operation successful (no overread).
 };
-
-// ----------------------------------------------------------------------------
-
-template< typename Type >
-inline void BiffInputStream::readValue( Type& ornValue )
-{
-    if( ensureRawReadSize( static_cast< sal_uInt16 >( sizeof( Type ) ) ) )
-        maRecBuffer.readValue( ornValue );
-}
-
-template< typename Type >
-inline BiffInputStream& operator>>( BiffInputStream& rStrm, Type& ornValue )
-{
-    rStrm.readValue( ornValue );
-    return rStrm;
-}
 
 // ============================================================================
 
@@ -456,16 +403,16 @@ public:
 private:
     BiffInputStream&    mrStrm;
     sal_Int64           mnRecHandle;
-    sal_uInt32          mnRecPos;
+    sal_Int64           mnRecPos;
 };
 
 // ============================================================================
 
-class BiffInputStreamGuard : private BiffInputStreamPos
+class BiffInputStreamPosGuard : private BiffInputStreamPos
 {
 public:
-    explicit            BiffInputStreamGuard( BiffInputStream& rStrm );
-                        ~BiffInputStreamGuard();
+    explicit            BiffInputStreamPosGuard( BiffInputStream& rStrm );
+                        ~BiffInputStreamPosGuard();
 };
 
 // ============================================================================

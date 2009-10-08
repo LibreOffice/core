@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: binaryinputstream.hxx,v $
- * $Revision: 1.3 $
+ * $Revision: 1.3.22.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -32,67 +32,58 @@
 #define OOX_HELPER_BINARYINPUTSTREAM_HXX
 
 #include <boost/shared_ptr.hpp>
+#include <com/sun/star/io/XInputStream.hpp>
 #include "oox/helper/binarystreambase.hxx"
-
-namespace com { namespace sun { namespace star {
-    namespace io { class XInputStream; }
-} } }
 
 namespace oox {
 
 // ============================================================================
 
-/** Wraps a binary input stream and provides convenient access functions.
+/** Interface for binary input stream classes.
 
     The binary data in the stream is assumed to be in little-endian format.
  */
-class BinaryInputStream : public BinaryStreamBase
+class BinaryInputStream : public virtual BinaryStreamBase
 {
 public:
-    /** Constructs the wrapper object for the passed input stream.
-
-        @param rxInStream  The com.sun.star.io.XInputStream interface of the
-            input stream to be wrapped.
-        @param bAutoClose  True = automatically close the wrapped input stream
-            on destruction of this wrapper.
-     */
-    explicit            BinaryInputStream(
-                            const ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream >& rxInStrm,
-                            bool bAutoClose );
-
-    virtual             ~BinaryInputStream();
-
-    /** Returns true, if the wrapped stream is valid. */
-    inline bool         is() const { return mxInStrm.is(); }
-    /** Returns the XInputStream interface of the wrapped input stream. */
-    inline ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream >
-                        getXInputStream() const { return mxInStrm; }
-
-    /** Seeks the stream forward by the passed number of bytes. This works for
-        non-seekable streams too. */
-    void                skip( sal_Int32 nBytes );
-
-    /** Reads nBytes bytes to the passed sequence.
+    /** Derived classes implement reading nBytes bytes to the passed sequence.
         @return  Number of bytes really read. */
-    sal_Int32           read( ::com::sun::star::uno::Sequence< sal_Int8 >& orBuffer, sal_Int32 nBytes );
-    /** Reads nBytes bytes to the (existing) buffer pBuffer.
+    virtual sal_Int32   readData( StreamDataSequence& orData, sal_Int32 nBytes ) = 0;
+    /** Derived classes implement reading nBytes bytes to the (existing) buffer opMem.
         @return  Number of bytes really read. */
-    sal_Int32           read( void* opBuffer, sal_Int32 nBytes );
+    virtual sal_Int32   readMemory( void* opMem, sal_Int32 nBytes ) = 0;
+    /** Derived classes implement seeking the stream forward by the passed
+        number of bytes. This should work for non-seekable streams too. */
+    virtual void        skip( sal_Int32 nBytes ) = 0;
 
-    /** Reads a value from the stream and converts it to platform byte order. */
+    /** Reads a value from the stream and converts it to platform byte order.
+        Supported types: SAL integers (8 to 64 bit), float, double. */
     template< typename Type >
     void                readValue( Type& ornValue );
-    /** Reads a value from the stream and converts it to platform byte order. */
+    /** Reads a value from the stream and converts it to platform byte order.
+        Supported types: SAL integers (8 to 64 bit), float, double. */
     template< typename Type >
     inline Type         readValue() { Type nValue; readValue( nValue ); return nValue; }
+    /** Stream operator for integral and floating-point types. */
+    template< typename Type >
+    inline BinaryInputStream& operator>>( Type& ornValue ) { readValue( ornValue ); return *this; }
 
-    /** Closes the wrapped XInputStream. */
-    void                close();
+    inline sal_Int8     readInt8() { return readValue< sal_Int8 >(); }
+    inline sal_uInt8    readuInt8() { return readValue< sal_uInt8 >(); }
+    inline sal_Int16    readInt16() { return readValue< sal_Int16 >(); }
+    inline sal_uInt16   readuInt16() { return readValue< sal_uInt16 >(); }
+    inline sal_Int32    readInt32() { return readValue< sal_Int32 >(); }
+    inline sal_uInt32   readuInt32() { return readValue< sal_uInt32 >(); }
+    inline sal_Int64    readInt64() { return readValue< sal_Int64 >(); }
+    inline sal_uInt64   readuInt64() { return readValue< sal_uInt64 >(); }
+    inline float        readFloat() { return readValue< float >(); }
+    inline double       readDouble() { return readValue< double >(); }
 
 private:
-    ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream >
-                        mxInStrm;       /// Reference to the input stream.
-    bool                mbAutoClose;    /// True = automatically close stream on destruction.
+    /** Used by the readValue() template functions to read built-in types.
+        @descr  Derived classes may overwrite this default implementation which
+            simply calls readMemory() with something own. */
+    virtual void        readAtom( void* opMem, sal_uInt8 nSize );
 };
 
 typedef ::boost::shared_ptr< BinaryInputStream > BinaryInputStreamRef;
@@ -103,16 +94,95 @@ template< typename Type >
 void BinaryInputStream::readValue( Type& ornValue )
 {
     // can be instanciated for all types supported in class ByteOrderConverter
-    read( &ornValue, static_cast< sal_Int32 >( sizeof( Type ) ) );
+    readAtom( &ornValue, static_cast< sal_Int32 >( sizeof( Type ) ) );
     ByteOrderConverter::convertLittleEndian( ornValue );
 }
 
-template< typename Type >
-inline BinaryInputStream& operator>>( BinaryInputStream& rInStrm, Type& ornValue )
+// ============================================================================
+
+/** Wraps a com.sun.star.io.XInputStream and provides convenient access functions.
+
+    The binary data in the stream is assumed to be in little-endian format.
+ */
+class BinaryXInputStream : public BinaryXSeekableStream, public BinaryInputStream
 {
-    rInStrm.readValue( ornValue );
-    return rInStrm;
-}
+public:
+    /** Constructs the wrapper object for the passed input stream.
+
+        @param rxInStream  The com.sun.star.io.XInputStream interface of the
+            input stream to be wrapped.
+        @param bAutoClose  True = automatically close the wrapped input stream
+            on destruction of this wrapper.
+     */
+    explicit            BinaryXInputStream(
+                            const ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream >& rxInStrm,
+                            bool bAutoClose );
+
+    virtual             ~BinaryXInputStream();
+
+    /** Reads nBytes bytes to the passed sequence.
+        @return  Number of bytes really read. */
+    virtual sal_Int32   readData( StreamDataSequence& orData, sal_Int32 nBytes );
+    /** Reads nBytes bytes to the (existing) buffer opMem.
+        @return  Number of bytes really read. */
+    virtual sal_Int32   readMemory( void* opMem, sal_Int32 nBytes );
+    /** Seeks the stream forward by the passed number of bytes. This works for
+        non-seekable streams too. */
+    virtual void        skip( sal_Int32 nBytes );
+
+    /** Stream operator for integral and floating-point types. */
+    template< typename Type >
+    inline BinaryXInputStream& operator>>( Type& ornValue ) { readValue( ornValue ); return *this; }
+
+    /** Returns the XInputStream interface of the wrapped input stream. */
+    inline ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream >
+                        getXInputStream() const { return mxInStrm; }
+    /** Closes the wrapped XInputStream. */
+    void                close();
+
+private:
+    StreamDataSequence  maBuffer;       /// Data buffer used in readMemory() function.
+    ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream >
+                        mxInStrm;       /// Reference to the input stream.
+    bool                mbAutoClose;    /// True = automatically close stream on destruction.
+};
+
+typedef ::boost::shared_ptr< BinaryXInputStream > BinaryXInputStreamRef;
+
+// ============================================================================
+
+/** Wraps a StreamDataSequence and provides convenient access functions.
+
+    The binary data in the stream is assumed to be in little-endian format.
+ */
+class SequenceInputStream : public SequenceSeekableStream, public BinaryInputStream
+{
+public:
+    /** Constructs the wrapper object for the passed data sequence.
+
+        @attention
+            The passed data sequence MUST live at least as long as this stream
+            wrapper. The data sequence MUST NOT be changed from outside as long
+            as this stream wrapper is used to read from it.
+     */
+    explicit            SequenceInputStream( StreamDataSequence& rData );
+
+    /** Reads nBytes bytes to the passed sequence.
+        @return  Number of bytes really read. */
+    virtual sal_Int32   readData( StreamDataSequence& orData, sal_Int32 nBytes );
+    /** Reads nBytes bytes to the (existing) buffer opMem.
+        @return  Number of bytes really read. */
+    virtual sal_Int32   readMemory( void* opMem, sal_Int32 nBytes );
+    /** Seeks the stream forward by the passed number of bytes. This works for
+        non-seekable streams too. */
+    virtual void        skip( sal_Int32 nBytes );
+
+    /** Stream operator for integral and floating-point types. */
+    template< typename Type >
+    inline SequenceInputStream& operator>>( Type& ornValue ) { readValue( ornValue ); return *this; }
+};
+
+typedef ::boost::shared_ptr< SequenceInputStream > SequenceInputStreamRef;
 
 // ============================================================================
 

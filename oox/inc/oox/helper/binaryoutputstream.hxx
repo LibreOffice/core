@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: binaryoutputstream.hxx,v $
- * $Revision: 1.3 $
+ * $Revision: 1.3.22.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -32,11 +32,8 @@
 #define OOX_HELPER_BINARYOUTPUTSTREAM_HXX
 
 #include <boost/shared_ptr.hpp>
+#include <com/sun/star/io/XOutputStream.hpp>
 #include "oox/helper/binarystreambase.hxx"
-
-namespace com { namespace sun { namespace star {
-    namespace io { class XOutputStream; }
-} } }
 
 namespace oox {
 
@@ -44,51 +41,34 @@ class BinaryInputStream;
 
 // ============================================================================
 
-/** Wraps a binary output stream and provides convenient access functions.
+/** Interface for binary output stream classes.
 
     The binary data in the stream is written in little-endian format.
  */
-class BinaryOutputStream : public BinaryStreamBase
+class BinaryOutputStream : public virtual BinaryStreamBase
 {
 public:
-    /** Constructs the wrapper object for the passed output stream.
-
-        @param rxOutStream  The com.sun.star.io.XOutputStream interface of the
-            output stream to be wrapped.
-        @param bAutoClose  True = automatically close the wrapped output stream
-            on destruction of this wrapper.
-     */
-    explicit            BinaryOutputStream(
-                            const ::com::sun::star::uno::Reference< ::com::sun::star::io::XOutputStream >& rxOutStrm,
-                            bool bAutoClose );
-
-    virtual             ~BinaryOutputStream();
-
-    /** Returns true, if the wrapped stream is valid. */
-    inline bool         is() const { return mxOutStrm.is(); }
-    /** Returns the XOutputStream interface of the wrapped output stream. */
-    inline ::com::sun::star::uno::Reference< ::com::sun::star::io::XOutputStream >
-                        getXOutputStream() const { return mxOutStrm; }
-
-    /** Writes the passed sequence. */
-    void                write( const ::com::sun::star::uno::Sequence< sal_Int8 >& rBuffer );
-    /** Writes nBytes bytes from the (existing) buffer pBuffer. */
-    void                write( const void* pBuffer, sal_Int32 nBytes );
-
-    /** Writes a value to the stream and converts it to platform byte order. */
-    template< typename Type >
-    void                writeValue( Type nValue );
+    /** Derived classes implement writing the passed data sequence. */
+    virtual void        writeData( const StreamDataSequence& rData ) = 0;
+    /** Derived classes implement writing from the (existing) buffer pMem. */
+    virtual void        writeMemory( const void* pMem, sal_Int32 nBytes ) = 0;
 
     /** Copies nBytes bytes from the current position of the passed input stream. */
-    void                copy( BinaryInputStream& rInStrm, sal_Int64 nBytes = SAL_MAX_INT32 );
+    void                copyStream( BinaryInputStream& rInStrm, sal_Int64 nBytes = SAL_MAX_INT64 );
 
-    /** Flushes and closes the wrapped XOutputStream. */
-    void                close();
+    /** Writes a value to the stream and converts it to platform byte order.
+        Supported types: SAL integers (8 to 64 bit), float, double. */
+    template< typename Type >
+    void                writeValue( Type nValue );
+    /** Stream operator for integral and floating-point types. */
+    template< typename Type >
+    inline BinaryOutputStream& operator<<( Type nValue ) { writeValue( nValue ); return *this; }
 
 private:
-    ::com::sun::star::uno::Reference< ::com::sun::star::io::XOutputStream >
-                        mxOutStrm;      /// Reference to the output stream.
-    bool                mbAutoClose;    /// True = automatically close stream on destruction.
+    /** Used by the writeValue() template function to write built-in types.
+        @descr  Derived classes may overwrite this default implementation which
+            simply calls writeMemory() with something own. */
+    virtual void        writeAtom( const void* pMem, sal_uInt8 nSize );
 };
 
 typedef ::boost::shared_ptr< BinaryOutputStream > BinaryOutputStreamRef;
@@ -100,15 +80,84 @@ void BinaryOutputStream::writeValue( Type nValue )
 {
     // can be instanciated for all types supported in class ByteOrderConverter
     ByteOrderConverter::convertLittleEndian( nValue );
-    write( &nValue, static_cast< sal_Int32 >( sizeof( Type ) ) );
+    writeMemory( &nValue, static_cast< sal_Int32 >( sizeof( Type ) ) );
 }
 
-template< typename Type >
-inline BinaryOutputStream& operator<<( BinaryOutputStream& rOutStrm, Type nValue )
+// ============================================================================
+
+/** Wraps a com.sun.star.io.XOutputStream and provides convenient access functions.
+
+    The binary data in the stream is written in little-endian format.
+ */
+class BinaryXOutputStream : public BinaryXSeekableStream, public BinaryOutputStream
 {
-    rOutStrm.writeValue( nValue );
-    return rOutStrm;
-}
+public:
+    /** Constructs the wrapper object for the passed output stream.
+
+        @param rxOutStream  The com.sun.star.io.XOutputStream interface of the
+            output stream to be wrapped.
+        @param bAutoClose  True = automatically close the wrapped output stream
+            on destruction of this wrapper.
+     */
+    explicit            BinaryXOutputStream(
+                            const ::com::sun::star::uno::Reference< ::com::sun::star::io::XOutputStream >& rxOutStrm,
+                            bool bAutoClose );
+
+    virtual             ~BinaryXOutputStream();
+
+    /** Writes the passed data sequence. */
+    virtual void        writeData( const StreamDataSequence& rData );
+    /** Write nBytes bytes from the (existing) buffer pMem. */
+    virtual void        writeMemory( const void* pMem, sal_Int32 nBytes );
+
+    /** Stream operator for integral and floating-point types. */
+    template< typename Type >
+    inline BinaryXOutputStream& operator<<( Type nValue ) { writeValue( nValue ); return *this; }
+
+    /** Returns the XOutputStream interface of the wrapped output stream. */
+    inline ::com::sun::star::uno::Reference< ::com::sun::star::io::XOutputStream >
+                        getXOutputStream() const { return mxOutStrm; }
+    /** Flushes and closes the wrapped XOutputStream. */
+    void                close();
+
+private:
+    StreamDataSequence  maBuffer;       /// Data buffer used in writeMemory() function.
+    ::com::sun::star::uno::Reference< ::com::sun::star::io::XOutputStream >
+                        mxOutStrm;      /// Reference to the output stream.
+    bool                mbAutoClose;    /// True = automatically close stream on destruction.
+};
+
+typedef ::boost::shared_ptr< BinaryXOutputStream > BinaryXOutputStreamRef;
+
+// ============================================================================
+
+/** Wraps a StreamDataSequence and provides convenient access functions.
+
+    The binary data in the stream is written in little-endian format.
+ */
+class SequenceOutputStream : public SequenceSeekableStream, public BinaryOutputStream
+{
+public:
+    /** Constructs the wrapper object for the passed data sequence.
+
+        @attention
+            The passed data sequence MUST live at least as long as this stream
+            wrapper. The data sequence MUST NOT be changed from outside as long
+            as this stream wrapper is used to write to it.
+     */
+    explicit            SequenceOutputStream( StreamDataSequence& rData );
+
+    /** Writes the passed data sequence. */
+    virtual void        writeData( const StreamDataSequence& rData );
+    /** Write nBytes bytes from the (existing) buffer pMem. */
+    virtual void        writeMemory( const void* pMem, sal_Int32 nBytes );
+
+    /** Stream operator for integral and floating-point types. */
+    template< typename Type >
+    inline SequenceOutputStream& operator<<( Type nValue ) { writeValue( nValue ); return *this; }
+};
+
+typedef ::boost::shared_ptr< SequenceOutputStream > SequenceOutputStreamRef;
 
 // ============================================================================
 

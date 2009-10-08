@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: binaryfilterbase.cxx,v $
- * $Revision: 1.3 $
+ * $Revision: 1.3.22.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -56,9 +56,9 @@ StorageRef BinaryFilterBase::implCreateStorage(
 {
     StorageRef xStorage;
     if( rxInStream.is() )
-        xStorage.reset( new OleStorage( getServiceFactory(), rxInStream, true ) );
+        xStorage.reset( new OleStorage( getGlobalFactory(), rxInStream, true ) );
     else if( rxOutStream.is() )
-        xStorage.reset( new OleStorage( getServiceFactory(), rxOutStream, true ) );
+        xStorage.reset( new OleStorage( getGlobalFactory(), rxOutStream, true ) );
     return xStorage;
 }
 

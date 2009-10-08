@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: binarystreambase.cxx,v $
- * $Revision: 1.3 $
+ * $Revision: 1.3.22.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -31,7 +31,9 @@
 #include "oox/helper/binarystreambase.hxx"
 #include <osl/diagnose.h>
 
+using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::Exception;
+using ::com::sun::star::io::XSeekable;
 
 namespace oox {
 
@@ -41,43 +43,102 @@ BinaryStreamBase::~BinaryStreamBase()
 {
 }
 
+bool BinaryStreamBase::isSeekable() const
+{
+    return false;
+}
+
 sal_Int64 BinaryStreamBase::getLength() const
 {
-    try
-    {
-        return mxSeekable.is() ? mxSeekable->getLength() : -1;
-    }
-    catch( Exception& )
-    {
-        OSL_ENSURE( false, "BinaryStreamBase::getLength - exception caught" );
-    }
     return -1;
 }
 
 sal_Int64 BinaryStreamBase::tell() const
 {
-    try
+    return -1;
+}
+
+void BinaryStreamBase::seek( sal_Int64 )
+{
+}
+
+sal_Int64 BinaryStreamBase::getRemaining() const
+{
+    return isSeekable() ? ::std::max< sal_Int64 >( getLength() - tell(), 0 ) : -1;
+}
+
+// ============================================================================
+
+BinaryXSeekableStream::BinaryXSeekableStream( const Reference< XSeekable >& rxSeekable ) :
+    mxSeekable( rxSeekable )
+{
+}
+
+bool BinaryXSeekableStream::isSeekable() const
+{
+    return mxSeekable.is();
+}
+
+sal_Int64 BinaryXSeekableStream::getLength() const
+{
+    if( mxSeekable.is() ) try
     {
-        return mxSeekable.is() ? mxSeekable->getPosition() : -1;
+        return mxSeekable->getLength();
     }
     catch( Exception& )
     {
-        OSL_ENSURE( false, "BinaryStreamBase::tell - exception caught" );
+        OSL_ENSURE( false, "BinaryXSeekableStream::getLength - exception caught" );
     }
     return -1;
 }
 
-void BinaryStreamBase::seek( sal_Int64 nPos )
+sal_Int64 BinaryXSeekableStream::tell() const
 {
-    try
+    if( mxSeekable.is() ) try
     {
-        if( mxSeekable.is() )
-            mxSeekable->seek( nPos );
+        return mxSeekable->getPosition();
     }
     catch( Exception& )
     {
-        OSL_ENSURE( false, "BinaryStreamBase::seek - exception caught" );
+        OSL_ENSURE( false, "BinaryXSeekableStream::tell - exception caught" );
     }
+    return -1;
+}
+
+void BinaryXSeekableStream::seek( sal_Int64 nPos )
+{
+    if( mxSeekable.is() ) try
+    {
+        mbEof = false;
+        mxSeekable->seek( nPos );
+    }
+    catch( Exception& )
+    {
+        mbEof = true;
+    }
+}
+
+// ============================================================================
+
+bool SequenceSeekableStream::isSeekable() const
+{
+    return true;
+}
+
+sal_Int64 SequenceSeekableStream::getLength() const
+{
+    return mrData.getLength();
+}
+
+sal_Int64 SequenceSeekableStream::tell() const
+{
+    return mnPos;
+}
+
+void SequenceSeekableStream::seek( sal_Int64 nPos )
+{
+    mnPos = getLimitedValue< sal_Int32, sal_Int64 >( nPos, 0, mrData.getLength() );
+    mbEof = mnPos < nPos;
 }
 
 // ============================================================================

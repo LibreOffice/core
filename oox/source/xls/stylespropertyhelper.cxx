@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: stylespropertyhelper.cxx,v $
- * $Revision: 1.3 $
+ * $Revision: 1.3.22.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -41,6 +41,7 @@
 #include "oox/xls/stylesbuffer.hxx"
 
 using ::rtl::OUString;
+using ::com::sun::star::awt::FontDescriptor;
 
 namespace oox {
 namespace xls {
@@ -59,6 +60,14 @@ ApiFontUsedFlags::ApiFontUsedFlags( bool bAllUsed ) :
     mbStrikeoutUsed( bAllUsed ),
     mbOutlineUsed( bAllUsed ),
     mbShadowUsed( bAllUsed )
+{
+}
+
+// ----------------------------------------------------------------------------
+
+ApiScriptFontName::ApiScriptFontName() :
+    mnFamily( ::com::sun::star::awt::FontFamily::DONTKNOW ),
+    mnCharSet( RTL_TEXTENCODING_DONTKNOW )
 {
 }
 
@@ -86,10 +95,9 @@ ApiFontData::ApiFontData() :
     mnEscapement( API_ESCAPE_NONE ),
     mnEscapeHeight( API_ESCAPEHEIGHT_NONE ),
     mbOutline( false ),
-    mbShadow( false ),
-    mbHasWstrn( true ),
-    mbHasAsian( false )
+    mbShadow( false )
 {
+    maLatinFont.maName = maDesc.Name;
 }
 
 // ============================================================================
@@ -164,7 +172,7 @@ ApiSolidFillData::ApiSolidFillData() :
 namespace {
 
 /** Property names for Western font name settings. */
-const sal_Char* const sppcWstrnFontNameNames[] =
+const sal_Char* const sppcLatinFontNameNames[] =
 {
     "CharFontName",
     "CharFontFamily",
@@ -256,13 +264,19 @@ const sal_Char* const sppcSolidFillNames[] =
     0
 };
 
+void lclWriteFontName( PropertySet& rPropSet, PropertySequence& rPropSeq, const ApiScriptFontName& rFontName )
+{
+    if( rFontName.maName.getLength() > 0 )
+        rPropSeq << rFontName.maName << rFontName.mnFamily << rFontName.mnCharSet >> rPropSet;
+}
+
 } // namespace
 
 // ----------------------------------------------------------------------------
 
 StylesPropertyHelper::StylesPropertyHelper( const WorkbookHelper& rHelper ) :
     WorkbookHelper( rHelper ),
-    maWstrnFontNameProps( sppcWstrnFontNameNames ),
+    maLatinFontNameProps( sppcLatinFontNameNames ),
     maAsianFontNameProps( sppcAsianFontNameNames ),
     maCmplxFontNameProps( sppcCmplxFontNameNames ),
     maFontHeightProps( sppcFontHeightNames ),
@@ -289,12 +303,9 @@ void StylesPropertyHelper::writeFontProperties( PropertySet& rPropSet,
     // font name properties
     if( rUsedFlags.mbNameUsed )
     {
-        if( rFontData.mbHasWstrn )
-            maWstrnFontNameProps << rFontData.maDesc.Name << rFontData.maDesc.Family << rFontData.maDesc.CharSet >> rPropSet;
-        if( rFontData.mbHasAsian )
-            maAsianFontNameProps << rFontData.maDesc.Name << rFontData.maDesc.Family << rFontData.maDesc.CharSet >> rPropSet;
-        if( rFontData.mbHasCmplx )
-            maCmplxFontNameProps << rFontData.maDesc.Name << rFontData.maDesc.Family << rFontData.maDesc.CharSet >> rPropSet;
+        lclWriteFontName( rPropSet, maLatinFontNameProps, rFontData.maLatinFont );
+        lclWriteFontName( rPropSet, maAsianFontNameProps, rFontData.maAsianFont );
+        lclWriteFontName( rPropSet, maCmplxFontNameProps, rFontData.maCmplxFont );
     }
     // font height
     if( rUsedFlags.mbHeightUsed )

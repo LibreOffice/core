@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: textbody.cxx,v $
- * $Revision: 1.7 $
+ * $Revision: 1.7.6.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -71,7 +71,6 @@ void TextBody::insertAt(
         while( aIter != rListStyle.end() )
         {
             (*aIter)->getTextParagraphPropertyMap().dump_debug("TextParagraph paragraph props");
-            (*aIter)->getTextCharacterProperties()->getTextCharacterPropertyMap().dump_debug("TextParagraph paragraph props");
             aIter++;
         }
     }

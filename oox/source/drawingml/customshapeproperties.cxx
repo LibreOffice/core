@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: customshapeproperties.cxx,v $
- * $Revision: 1.6 $
+ * $Revision: 1.6.4.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -28,7 +28,6 @@
  *
  ************************************************************************/
 
-#include <comphelper/processfactory.hxx>
 #include "oox/drawingml/customshapeproperties.hxx"
 #include "oox/helper/helper.hxx"
 #include "oox/helper/propertyset.hxx"

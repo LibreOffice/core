@@ -6,8 +6,8 @@
  *
  * OpenOffice.org - a multi-platform office productivity suite
  *
- * $RCSfile: validationpropertyhelper.hxx,v $
- * $Revision: 1.3 $
+ * $RCSfile: vbainputstream.hxx,v $
+ * $Revision: 1.1.2.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -28,43 +28,47 @@
  *
  ************************************************************************/
 
-#ifndef OOX_XLS_VALIDATIONPROPERTYHELPER_HXX
-#define OOX_XLS_VALIDATIONPROPERTYHELPER_HXX
+#ifndef OOX_HELPER_VBAINPUTSTREAM_HXX
+#define OOX_HELPER_VBAINPUTSTREAM_HXX
 
-#include <com/sun/star/sheet/ConditionOperator.hpp>
-#include "oox/helper/propertysequence.hxx"
-#include "oox/xls/workbookhelper.hxx"
+#include <vector>
+#include "oox/helper/binaryinputstream.hxx"
 
 namespace oox {
-namespace xls {
+namespace ole {
 
 // ============================================================================
 
-struct OoxValidationData;
-
-/** Helper for data validation related properties. */
-class ValidationPropertyHelper : public WorkbookHelper
+/** A non-seekable input stream that implements run-length decompression. */
+class VbaInputStream : public BinaryInputStream
 {
 public:
-    explicit            ValidationPropertyHelper( const WorkbookHelper& rHelper );
+    explicit            VbaInputStream( BinaryInputStream& rInStrm );
 
-    /** Writes data validation properties to the passed property set. */
-    void                writeValidationProperties(
-                            PropertySet& rPropSet,
-                            const OoxValidationData& rValData );
-
-    /** Converts an OOXML condition operator token to the API constant. */
-    static ::com::sun::star::sheet::ConditionOperator
-                        convertToApiOperator( sal_Int32 nToken );
+    /** Reads nBytes bytes to the passed sequence.
+        @return  Number of bytes really read. */
+    virtual sal_Int32   readData( StreamDataSequence& orData, sal_Int32 nBytes );
+    /** Reads nBytes bytes to the (existing) buffer opMem.
+        @return  Number of bytes really read. */
+    virtual sal_Int32   readMemory( void* opMem, sal_Int32 nBytes );
+    /** Seeks the stream forward by the passed number of bytes. */
+    virtual void        skip( sal_Int32 nBytes );
 
 private:
-    PropertySequence    maValProps;
-    const ::rtl::OUString maValidationProp;     /// Property name for data validation settings.
+    /** If no data left in chunk buffer, reads the next chunk from stream. */
+    bool                updateChunk();
+
+private:
+    typedef ::std::vector< sal_uInt8 > ChunkBuffer;
+
+    BinaryInputStream&  mrInStrm;
+    ChunkBuffer         maChunk;
+    size_t              mnChunkPos;
 };
 
 // ============================================================================
 
-} // namespace xls
+} // namespace ole
 } // namespace oox
 
 #endif

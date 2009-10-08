@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: biffdetector.cxx,v $
- * $Revision: 1.3 $
+ * $Revision: 1.3.22.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -85,7 +85,7 @@ BiffDetector::~BiffDetector()
 BiffType BiffDetector::detectStreamBiffVersion( BinaryInputStream& rInStream )
 {
     BiffType eBiff = BIFF_UNKNOWN;
-    if( rInStream.is() && rInStream.isSeekable() && (rInStream.getLength() > 4) )
+    if( !rInStream.isEof() && rInStream.isSeekable() && (rInStream.getLength() > 4) )
     {
         sal_Int64 nOldPos = rInStream.tell();
         rInStream.seek( 0 );
@@ -146,11 +146,11 @@ BiffType BiffDetector::detectStorageBiffVersion( OUString& orWorkbookStreamName,
         if( xStorage->isStorage() )
         {
             // try to open the "Book" stream
-            BinaryInputStream aBookStrm5( xStorage->openInputStream( saBookName ), true );
+            BinaryXInputStream aBookStrm5( xStorage->openInputStream( saBookName ), true );
             BiffType eBookStrm5Biff = detectStreamBiffVersion( aBookStrm5 );
 
             // try to open the "Workbook" stream
-            BinaryInputStream aBookStrm8( xStorage->openInputStream( saWorkbookName ), true );
+            BinaryXInputStream aBookStrm8( xStorage->openInputStream( saWorkbookName ), true );
             BiffType eBookStrm8Biff = detectStreamBiffVersion( aBookStrm8 );
 
             // decide which stream to use
@@ -172,7 +172,7 @@ BiffType BiffDetector::detectStorageBiffVersion( OUString& orWorkbookStreamName,
         else
         {
             // no storage, try plain input stream from medium (even for BIFF5+)
-            BinaryInputStream aStrm( xStorage->openInputStream( OUString() ), false );
+            BinaryXInputStream aStrm( xStorage->openInputStream( OUString() ), false );
             eBiff = detectStreamBiffVersion( aStrm );
             orWorkbookStreamName = OUString();
         }

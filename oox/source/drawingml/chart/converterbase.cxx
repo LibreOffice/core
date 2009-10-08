@@ -8,7 +8,7 @@
  *
  * $RCSfile: converterbase.cxx,v $
  *
- * $Revision: 1.4 $
+ * $Revision: 1.4.6.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -30,12 +30,12 @@
  ************************************************************************/
 
 #include "oox/drawingml/chart/converterbase.hxx"
-#include "oox/drawingml/theme.hxx"
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/drawing/FillStyle.hpp>
 #include <com/sun/star/drawing/LineStyle.hpp>
-#include <comphelper/processfactory.hxx>
+#include "oox/core/xmlfilterbase.hxx"
+#include "oox/drawingml/theme.hxx"
 
 using ::rtl::OUString;
 using ::com::sun::star::uno::Reference;
@@ -135,9 +135,9 @@ Reference< XInterface > ConverterRoot::createInstance(
     return xInt;
 }
 
-Reference< XInterface > ConverterRoot::createInstance( const OUString& rServiceName )
+Reference< XInterface > ConverterRoot::createInstance( const OUString& rServiceName ) const
 {
-    return createInstance( ::comphelper::getProcessServiceFactory(), rServiceName );
+    return createInstance( mxData->mrFilter.getGlobalFactory(), rServiceName );
 }
 
 XmlFilterBase& ConverterRoot::getFilter() const

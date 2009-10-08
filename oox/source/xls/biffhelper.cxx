@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: biffhelper.cxx,v $
- * $Revision: 1.3 $
+ * $Revision: 1.3.22.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -81,15 +81,13 @@ bool operator<( const BiffGuid& rGuid1, const BiffGuid& rGuid2 )
 
 BiffInputStream& operator>>( BiffInputStream& rStrm, BiffGuid& rGuid )
 {
-    rStrm.read( rGuid.mpnData, 16 );     // mpnData always in little endian
+    rStrm.readMemory( rGuid.mpnData, 16 );  // mpnData always in little endian
     return rStrm;
 }
 
 BiffOutputStream& operator<<( BiffOutputStream& rStrm, const BiffGuid& rGuid )
 {
-    rStrm.setPortionSize( 16 );
-    rStrm.write( rGuid.mpnData, 16 );    // mpnData already in little endian
-    rStrm.setPortionSize( 0 );
+    rStrm.writeBlock( rGuid.mpnData, 16 ); // mpnData already in little endian
     return rStrm;
 }
 

@@ -66,7 +66,7 @@ public:
     TableStyle(const WPXPropertyList &xPropList, const WPXPropertyListVector &columns, const char *psName);
     ~TableStyle();
     virtual void write(DocumentHandler *pHandler) const;
-    const int getNumColumns() const { return mColumns.count(); }
+    int getNumColumns() const { return mColumns.count(); }
     void addTableCellStyle(TableCellStyle *pTableCellStyle) { mTableCellStyles.push_back(pTableCellStyle); }
     int getNumTableCellStyles() { return mTableCellStyles.size(); }
     void addTableRowStyle(TableRowStyle *pTableRowStyle) { mTableRowStyles.push_back(pTableRowStyle); }

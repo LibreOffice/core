@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: pdfexport.cxx,v $
- * $Revision: 1.69 $
+ * $Revision: 1.69.24.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -64,9 +64,11 @@
 #include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/frame/XModuleManager.hpp>
 #include <com/sun/star/frame/XStorable.hpp>
+#include <com/sun/star/frame/XController.hpp>
 #include <com/sun/star/document/XDocumentProperties.hpp>
 #include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
+#include <com/sun/star/view/XViewSettingsSupplier.hpp>
 #include <unotools/configmgr.hxx>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/drawing/XShapes.hpp>
@@ -109,28 +111,29 @@ OUString GetProperty( const Reference< XPropertySet > & rXPropSet, const sal_Cha
 // -------------
 
 PDFExport::PDFExport( const Reference< XComponent >& rxSrcDoc, Reference< task::XStatusIndicator >& rxStatusIndicator, const Reference< lang::XMultiServiceFactory >& xFactory ) :
-    mxSrcDoc                ( rxSrcDoc ),
-    mxMSF                   ( xFactory ),
-    mxStatusIndicator       ( rxStatusIndicator ),
-    mbUseTaggedPDF          ( sal_False ),
-    mnPDFTypeSelection      ( 0 ),
-    mbExportNotes           ( sal_True ),
-    mbExportNotesPages      ( sal_False ),
-    mbEmbedStandardFonts    ( sal_False ),//in preparation for i54636 and i76458.
-                                          //already used for i59651 (PDF/A-1)
-    mbUseTransitionEffects  ( sal_True ),
-    mbExportBookmarks       ( sal_True ),
-    mnOpenBookmarkLevels    ( -1 ),
-    mbUseLosslessCompression( sal_False ),
-    mbReduceImageResolution ( sal_False ),
-    mbSkipEmptyPages        ( sal_True ),
-    mbAddStream             ( sal_False ),
-    mnMaxImageResolution    ( 300 ),
-    mnQuality               ( 90 ),
-    mnFormsFormat           ( 0 ),
-    mbExportFormFields      ( sal_True ),
-    mnProgressValue         ( 0 ),
-    mbWatermark             ( sal_False ),
+    mxSrcDoc                    ( rxSrcDoc ),
+    mxMSF                       ( xFactory ),
+    mxStatusIndicator           ( rxStatusIndicator ),
+    mbUseTaggedPDF              ( sal_False ),
+    mnPDFTypeSelection          ( 0 ),
+    mbExportNotes               ( sal_True ),
+    mbExportNotesPages          ( sal_False ),
+    mbEmbedStandardFonts        ( sal_False ),//in preparation for i54636 and i76458.
+                                              //already used for i59651 (PDF/A-1)
+    mbUseTransitionEffects      ( sal_True ),
+    mbExportBookmarks           ( sal_True ),
+    mnOpenBookmarkLevels        ( -1 ),
+    mbUseLosslessCompression    ( sal_False ),
+    mbReduceImageResolution     ( sal_False ),
+    mbSkipEmptyPages            ( sal_True ),
+    mbAddStream                 ( sal_False ),
+    mnMaxImageResolution        ( 300 ),
+    mnQuality                   ( 90 ),
+    mnFormsFormat               ( 0 ),
+    mbExportFormFields          ( sal_True ),
+    mnProgressValue             ( 0 ),
+    mbRemoveTransparencies      ( sal_False ),
+    mbWatermark                 ( sal_False ),
 
     mbHideViewerToolbar         ( sal_False ),
     mbHideViewerMenubar         ( sal_False ),
@@ -542,6 +545,8 @@ sal_Bool PDFExport::Export( const OUString& rFile, const Sequence< PropertyValue
                 mbEmbedStandardFonts = sal_True;
 //force disabling of form conversion
                 mbExportFormFields = sal_False;
+// PDF/A does not allow transparencies
+                mbRemoveTransparencies = sal_True;
                 break;
             }
 
@@ -703,11 +708,11 @@ sal_Bool PDFExport::Export( const OUString& rFile, const Sequence< PropertyValue
                     break;
             }
 
+            //get model
+            Reference< frame::XModel > xModel( mxSrcDoc, UNO_QUERY );
             {
 //---> i56629 Relative link stuff
 //set the base URL of the file:
-//get model
-                Reference< frame::XModel > xModel( mxSrcDoc, UNO_QUERY );
 //then base URL
                 aContext.BaseURL = xModel->getURL();
 //relative link option is private to PDF Export filter and limited to local filesystem only
@@ -828,6 +833,29 @@ sal_Bool PDFExport::Export( const OUString& rFile, const Sequence< PropertyValue
                     aSelection <<= mxSrcDoc;
                 }
                 sal_Bool        bSecondPassForImpressNotes = sal_False;
+                bool bReChangeToNormalView = false;
+                  ::rtl::OUString sShowOnlineLayout( RTL_CONSTASCII_USTRINGPARAM( "ShowOnlineLayout"));
+                  uno::Reference< beans::XPropertySet > xViewProperties;
+
+                if ( aCreator.EqualsAscii( "Writer" ) )
+                {
+                    //i92835 if Writer is in web layout mode this has to be switched to normal view and back to web view in the end
+                    try
+                    {
+                        Reference< view::XViewSettingsSupplier > xVSettingsSupplier( xModel->getCurrentController(), uno::UNO_QUERY_THROW );
+                        xViewProperties =  xVSettingsSupplier->getViewSettings();
+                        xViewProperties->getPropertyValue( sShowOnlineLayout ) >>= bReChangeToNormalView;
+                        if( bReChangeToNormalView )
+                        {
+                            xViewProperties->setPropertyValue( sShowOnlineLayout, uno::makeAny( false ) );
+                        }
+                    }
+                    catch( const uno::Exception& )
+                    {
+                    }
+
+                }
+
                 const sal_Int32 nPageCount = xRenderable->getRendererCount( aSelection, aRenderOptions );
                 const Range     aRange( 1, nPageCount );
                 MultiSelection  aMultiSelection;
@@ -885,7 +913,18 @@ sal_Bool PDFExport::Export( const OUString& rFile, const Sequence< PropertyValue
                     aErrors = pPDFWriter->GetErrors();
                 }
                 pOut->SetExtOutDevData( NULL );
+                if( bReChangeToNormalView )
+                {
+                    try
+                    {
+                        xViewProperties->setPropertyValue( sShowOnlineLayout, uno::makeAny( true ) );
+                    }
+                    catch( const uno::Exception& )
+                    {
+                    }
+                }
             }
+
             delete pPDFExtOutDevData;
             delete pPDFWriter;
         }
@@ -1014,15 +1053,31 @@ void PDFExport::ImplWriteWatermark( PDFWriter& rWriter, const Size& rPageSize )
 // -----------------------------------------------------------------------------
 
 sal_Bool PDFExport::ImplWriteActions( PDFWriter& rWriter, PDFExtOutDevData* pPDFExtOutDevData,
-                                        const GDIMetaFile& rMtf, VirtualDevice& rDummyVDev )
+                                        const GDIMetaFile& rInMtf, VirtualDevice& rDummyVDev )
 {
     bool bAssertionFired( false );
 
-    for( sal_uInt32 i = 0, nCount = rMtf.GetActionCount(); i < nCount; )
+    GDIMetaFile aMtf;
+    bool bTransparenciesRemoved = false;
+    #if 0
+    if( mbRemoveTransparencies )
+    {
+        bTransparenciesRemoved = rWriter.GetReferenceDevice()->
+            RemoveTransparenciesFromMetaFile( rInMtf, aMtf, mnMaxImageResolution, mnMaxImageResolution,
+                                              false, true, mbReduceImageResolution );
+    }
+    else
+    #endif
+    {
+        aMtf = rInMtf;
+    }
+
+
+    for( sal_uInt32 i = 0, nCount = aMtf.GetActionCount(); i < nCount; )
     {
         if ( !pPDFExtOutDevData || !pPDFExtOutDevData->PlaySyncPageAct( rWriter, i ) )
         {
-            const MetaAction*   pAction = rMtf.GetAction( i );
+            const MetaAction*   pAction = aMtf.GetAction( i );
             const USHORT        nType = pAction->GetType();
 
             switch( nType )
@@ -1248,6 +1303,7 @@ sal_Bool PDFExport::ImplWriteActions( PDFWriter& rWriter, PDFExtOutDevData* pPDF
                 break;
 
                 case( META_COMMENT_ACTION ):
+                if( ! bTransparenciesRemoved )
                 {
                     const MetaCommentAction*    pA = (const MetaCommentAction*) pAction;
                     String                      aSkipComment;
@@ -1259,7 +1315,7 @@ sal_Bool PDFExport::ImplWriteActions( PDFWriter& rWriter, PDFExtOutDevData* pPDF
 
                         while( !bDone && ( ++i < nCount ) )
                         {
-                            pAction = rMtf.GetAction( i );
+                            pAction = aMtf.GetAction( i );
 
                             if( pAction->GetType() == META_GRADIENTEX_ACTION )
                                 pGradAction = (const MetaGradientExAction*) pAction;
@@ -1307,7 +1363,7 @@ sal_Bool PDFExport::ImplWriteActions( PDFWriter& rWriter, PDFExtOutDevData* pPDF
                                     bSkipSequence = sal_False;
                                 if ( (sal_uInt32)eJT > 2 )
                                     bSkipSequence = sal_False;
-                                if ( aDashArray.size() && ( fStrokeWidth != 0.0 ) )
+                                if ( aDashArray.size() && ( fStrokeWidth != 0.0 ) && ( fTransparency == 0.0 ) )
                                     bSkipSequence = sal_False;
                                 if ( bSkipSequence )
                                 {
@@ -1444,7 +1500,7 @@ sal_Bool PDFExport::ImplWriteActions( PDFWriter& rWriter, PDFExtOutDevData* pPDF
                             {
                                 while( ++i < nCount )
                                 {
-                                    pAction = rMtf.GetAction( i );
+                                    pAction = aMtf.GetAction( i );
                                     if ( pAction->GetType() == META_COMMENT_ACTION )
                                     {
                                         ByteString sComment( ((MetaCommentAction*)pAction)->GetComment() );

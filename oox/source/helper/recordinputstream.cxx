@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: recordinputstream.cxx,v $
- * $Revision: 1.4 $
+ * $Revision: 1.4.22.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -38,60 +38,34 @@ namespace oox {
 
 // ============================================================================
 
-RecordInputStream::RecordInputStream( const RecordDataSequence& rData ) :
-    maData( rData ),
-    mnRecSize( rData.getLength() ),
-    mnRecPos( 0 ),
-    mbValid( true )
+RecordInputStream::RecordInputStream( StreamDataSequence& rData ) :
+    SequenceInputStream( rData )
 {
-}
-
-sal_Int32 RecordInputStream::read( void* opData, sal_Int32 nBytes )
-{
-    sal_Int32 nReadSize = ::std::min( nBytes, getRecLeft() );
-    OSL_ENSURE( !mbValid || (nReadSize == nBytes), "RecordInputStream::read - buffer overflow" );
-    mbValid = nReadSize == nBytes;
-    if( mbValid && opData && (nReadSize > 0) )
-        memcpy( opData, maData.getConstArray() + mnRecPos, nReadSize );
-    mnRecPos += nReadSize;
-    return nReadSize;
 }
 
 OUString RecordInputStream::readString( bool b32BitLen )
 {
     OUString aString;
-    sal_Int32 nCharCount = b32BitLen ? readValue< sal_Int32 >() : readValue< sal_Int16 >();
-    // string length -1 is often used to indicate a missing string
-    OSL_ENSURE( !mbValid || (nCharCount >= -1), "RecordInputStream::readString - invalid string length" );
-    if( mbValid && (nCharCount >= 0) )
+    if( !isEof() )
     {
-        ::std::vector< sal_Unicode > aBuffer;
-        aBuffer.reserve( getLimitedValue< size_t, sal_Int32 >( nCharCount + 1, 0, 0xFFFF ) );
-        for( sal_Int32 nCharIdx = 0; mbValid && (nCharIdx < nCharCount); ++nCharIdx )
+        sal_Int32 nCharCount = b32BitLen ? readValue< sal_Int32 >() : readValue< sal_Int16 >();
+        // string length -1 is often used to indicate a missing string
+        OSL_ENSURE( !isEof() && (nCharCount >= -1), "RecordInputStream::readString - invalid string length" );
+        if( !isEof() && (nCharCount > 0) )
         {
-            sal_uInt16 nChar;
-            readValue( nChar );
-            aBuffer.push_back( static_cast< sal_Unicode >( nChar ) );
+            ::std::vector< sal_Unicode > aBuffer;
+            aBuffer.reserve( getLimitedValue< size_t, sal_Int32 >( nCharCount + 1, 0, 0xFFFF ) );
+            for( sal_Int32 nCharIdx = 0; !isEof() && (nCharIdx < nCharCount); ++nCharIdx )
+            {
+                sal_uInt16 nChar;
+                readValue( nChar );
+                aBuffer.push_back( static_cast< sal_Unicode >( nChar ) );
+            }
+            aBuffer.push_back( 0 );
+            aString = OUString( &aBuffer.front() );
         }
-        aBuffer.push_back( 0 );
-        aString = OUString( &aBuffer.front() );
     }
     return aString;
-}
-
-void RecordInputStream::seek( sal_Int32 nRecPos )
-{
-    mnRecPos = getLimitedValue< sal_Int32, sal_Int32 >( nRecPos, 0, mnRecSize );
-    OSL_ENSURE( !mbValid || (nRecPos == mnRecPos), "RecordInputStream::seek - invalid position" );
-    mbValid = nRecPos == mnRecPos;
-}
-
-void RecordInputStream::skip( sal_Int32 nBytes )
-{
-    sal_Int32 nSkipSize = getLimitedValue< sal_Int32, sal_Int32 >( nBytes, 0, getRecLeft() );
-    OSL_ENSURE( !mbValid || (nSkipSize == nBytes), "RecordInputStream::skip - buffer overflow" );
-    mbValid = nSkipSize == nBytes;
-    mnRecPos += nSkipSize;
 }
 
 // ============================================================================

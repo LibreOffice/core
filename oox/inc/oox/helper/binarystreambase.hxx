@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: binarystreambase.hxx,v $
- * $Revision: 1.3 $
+ * $Revision: 1.3.22.3 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -37,53 +37,102 @@
 
 namespace oox {
 
+typedef ::com::sun::star::uno::Sequence< sal_Int8 > StreamDataSequence;
+
 // ============================================================================
 
-/** Base class for binary input and output streams. */
+/** Base interface for seekable binary stream classes. */
 class BinaryStreamBase
 {
 public:
-    template< typename Interface >
-    explicit            BinaryStreamBase(
-                            const ::com::sun::star::uno::Reference< Interface >& rxStrm );
-
     virtual             ~BinaryStreamBase();
 
-    /** Returns true, if the wrapped stream is seekable. */
-    inline bool         isSeekable() const { return mxSeekable.is(); }
-    /** Returns the XSeekable interface of the wrapped stream. */
-    inline ::com::sun::star::uno::Reference< ::com::sun::star::io::XSeekable >
-                        getXSeekable() const { return mxSeekable; }
+    /** Derived classes return whether the stream is seekable. default: false. */
+    virtual bool        isSeekable() const;
+    /** Derived classes returns the size of the stream, if seekable, otherwise/default: -1. */
+    virtual sal_Int64   getLength() const;
+    /** Derived classes return the current stream position, if seekable, otherwise/default: -1. */
+    virtual sal_Int64   tell() const;
+    /** Derived classes implment seeking the stream to the passed position, if seekable. */
+    virtual void        seek( sal_Int64 nPos );
 
-    /** Returns the size of the stream, if stream is seekable, otherwise -1. */
-    sal_Int64           getLength() const;
-    /** Returns the current stream position, if stream is seekable, otherwise -1. */
-    sal_Int64           tell() const;
+    /** Returns true, if the stream position is invalid (EOF). This flag turns
+        true *after* the first attempt to seek/read beyond the stream end. */
+    inline bool         isEof() const { return mbEof; }
 
-    /** Seeks the stream to the passed position, if stream is seekable. */
-    void                seek( sal_Int64 nPos );
+    /** Returns the size of the remaining data, if stream is seekable, otherwise -1. */
+    sal_Int64           getRemaining() const;
     /** Seeks the stream to the beginning, if stream is seekable. */
     inline void         seekToStart() { seek( 0 ); }
     /** Seeks the stream to the end, if stream is seekable. */
     inline void         seekToEnd() { seek( getLength() ); }
 
 protected:
-    ::com::sun::star::uno::Sequence< sal_Int8 >
-                        maBuffer;       /// Data buffer.
+    inline explicit     BinaryStreamBase() : mbEof( false ) {}
+
+private:
+                        BinaryStreamBase( const BinaryStreamBase& );
+    BinaryStreamBase&   operator=( const BinaryStreamBase& );
+
+protected:
+    bool                mbEof;
+};
+
+// ============================================================================
+
+/** Base class for binary input and output streams wrapping an API stream,
+    seekable via the com.sun.star.io.XSeekable interface.
+ */
+class BinaryXSeekableStream : public virtual BinaryStreamBase
+{
+public:
+    /** Returns true, if the wrapped stream is seekable. */
+    virtual bool        isSeekable() const;
+    /** Returns the size of the stream, if stream is seekable, otherwise -1. */
+    virtual sal_Int64   getLength() const;
+    /** Returns the current stream position, if stream is seekable, otherwise -1. */
+    virtual sal_Int64   tell() const;
+    /** Seeks the stream to the passed position, if stream is seekable. */
+    virtual void        seek( sal_Int64 nPos );
+
+protected:
+    explicit            BinaryXSeekableStream(
+                            const ::com::sun::star::uno::Reference< ::com::sun::star::io::XSeekable >& rxSeekable );
 
 private:
     ::com::sun::star::uno::Reference< ::com::sun::star::io::XSeekable >
                         mxSeekable;     /// Stream seeking interface.
 };
 
-// ----------------------------------------------------------------------------
+// ============================================================================
 
-template< typename Interface >
-BinaryStreamBase::BinaryStreamBase( const ::com::sun::star::uno::Reference< Interface >& rxStrm ) :
-    maBuffer( 0x8000 ),
-    mxSeekable( rxStrm, ::com::sun::star::uno::UNO_QUERY )
+/** Base class for binary input and output streams wrapping a StreamDataSequence. */
+class SequenceSeekableStream : public virtual BinaryStreamBase
 {
-}
+public:
+    /** Returns true, if the wrapped stream is seekable. */
+    virtual bool        isSeekable() const;
+    /** Returns the size of the stream, if stream is seekable, otherwise -1. */
+    virtual sal_Int64   getLength() const;
+    /** Returns the current stream position, if stream is seekable, otherwise -1. */
+    virtual sal_Int64   tell() const;
+    /** Seeks the stream to the passed position, if stream is seekable. */
+    virtual void        seek( sal_Int64 nPos );
+
+protected:
+    /** Constructs the wrapper object for the passed data sequence.
+
+        @attention
+            The passed data sequence MUST live at least as long as this stream
+            wrapper. The data sequence MUST NOT be changed from outside as long
+            as this stream wrapper is used to modify it.
+     */
+    inline explicit     SequenceSeekableStream( StreamDataSequence& rData ) : mrData( rData ), mnPos( 0 ) {}
+
+protected:
+    StreamDataSequence& mrData;         /// Wrapped data sequence.
+    sal_Int32           mnPos;          /// Current position in the sequence.
+};
 
 // ============================================================================
 

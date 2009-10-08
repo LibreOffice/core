@@ -8,7 +8,7 @@
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.7 $
+# $Revision: 1.7.102.1 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -48,7 +48,6 @@ JARFILES        =   \
                     unoil.jar       \
                     jurt.jar        \
                     juh.jar         \
-                    jut.jar         \
                     java_uno.jar
 
 CFGFILES        =   \

@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: excelfilter.cxx,v $
- * $Revision: 1.7 $
+ * $Revision: 1.6.6.7 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -39,6 +39,7 @@
 #include "oox/dump/xlsbdumper.hxx"
 
 using ::rtl::OUString;
+using ::com::sun::star::uno::Any;
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::Sequence;
 using ::com::sun::star::uno::Exception;
@@ -92,7 +93,7 @@ bool ExcelFilter::importDocument() throw()
 {
     /*  to activate the XLSX/XLSB dumper, define the environment variable
         OOO_XLSBDUMPER and insert the full path to the file
-        file:///<path-to-oox-module>/source/dump/xlsbdumperconfig.dat. */
+        file:///<path-to-oox-module>/source/dump/xlsbdumper.ini. */
     OOX_DUMP_FILE( ::oox::dump::xlsb::Dumper );
 
     bool bRet = false;
@@ -117,7 +118,7 @@ bool ExcelFilter::exportDocument() throw()
 
 const ::oox::drawingml::Theme* ExcelFilter::getCurrentTheme() const
 {
-    return mpHelper->getTheme().getCoreThemePtr().get();
+    return &mpHelper->getTheme();
 }
 
 sal_Int32 ExcelFilter::getSchemeClr( sal_Int32 nColorSchemeToken ) const
@@ -182,25 +183,33 @@ bool ExcelBiffFilter::importDocument() throw()
 {
     /*  to activate the BIFF dumper, define the environment variable
         OOO_BIFFDUMPER and insert the full path to the file
-        file:///<path-to-oox-module>/source/dump/biffdumperconfig.dat. */
+        file:///<path-to-oox-module>/source/dump/biffdumper.ini. */
     OOX_DUMP_FILE( ::oox::dump::biff::Dumper );
+
+    /*  A boolean argument passed through XInitialisation decides whether to
+        use the BIFF file dumper implemented in this filter only, or to really
+        import/export the document. */
+    const Sequence< Any >& rArgs = getArguments();
+    bool bDumperOnly = false;
+    if( (rArgs.getLength() >= 2) && (rArgs[ 1 ] >>= bDumperOnly) && bDumperOnly )
+        return true;
 
     bool bRet = false;
 
     // detect BIFF version and workbook stream name
     OUString aWorkbookName;
     BiffType eBiff = BiffDetector::detectStorageBiffVersion( aWorkbookName, getStorage() );
-    BinaryInputStream aInStrm( getStorage()->openInputStream( aWorkbookName ), aWorkbookName.getLength() > 0 );
-    OSL_ENSURE( (eBiff != BIFF_UNKNOWN) && aInStrm.is(), "ExcelBiffFilter::ExcelBiffFilter - invalid file format" );
+    BinaryXInputStream aInStrm( getStorage()->openInputStream( aWorkbookName ), aWorkbookName.getLength() > 0 );
+    OSL_ENSURE( (eBiff != BIFF_UNKNOWN) && !aInStrm.isEof(), "ExcelBiffFilter::ExcelBiffFilter - invalid file format" );
 
-    if( (eBiff != BIFF_UNKNOWN) && aInStrm.is() )
+    if( (eBiff != BIFF_UNKNOWN) && !aInStrm.isEof() )
     {
         WorkbookHelperRoot aHelper( *this, eBiff );
         if( aHelper.isValid() )
         {
-            BiffWorkbookFragment aFragment( aHelper );
             BiffInputStream aBiffStream( aInStrm );
-            bRet = aFragment.importFragment( aBiffStream );
+            BiffWorkbookFragment aFragment( aHelper, aBiffStream );
+            bRet = aFragment.importFragment();
         }
     }
     return bRet;

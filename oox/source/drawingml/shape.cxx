@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: shape.cxx,v $
- * $Revision: 1.8 $
+ * $Revision: 1.8.6.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -360,10 +360,10 @@ Reference< XShape > Shape::createAndInsert(
         rxShapes->add( mxShape );
 
         LineProperties aLineProperties;
-        aLineProperties.maLineFill.moFillType = XML_none;
+        aLineProperties.maLineFill.moFillType = XML_noFill;
         sal_Int32 nLinePhClr = -1;
         FillProperties aFillProperties;
-        aFillProperties.moFillType = XML_none;
+        aFillProperties.moFillType = XML_noFill;
         sal_Int32 nFillPhClr = -1;
 
         if( rxTheme.get() )

@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: drawingfragment.cxx,v $
- * $Revision: 1.4 $
+ * $Revision: 1.4.20.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -443,7 +443,7 @@ void OoxDrawingFragment::onEndElement( const OUString& rChars )
             {
                 Rectangle aLoc = mxAnchor->calcEmuLocation( maEmuSheetSize );
                 if( (aLoc.X >= 0) && (aLoc.Y >= 0) && (aLoc.Width >= 0) && (aLoc.Height >= 0) )
-                    mxShape->addShape( getOoxFilter(), getTheme().getCoreThemePtr(), mxDrawPage, &aLoc );
+                    mxShape->addShape( getOoxFilter(), getThemeRef(), mxDrawPage, &aLoc );
             }
             mxShape.reset();
             mxAnchor.reset();

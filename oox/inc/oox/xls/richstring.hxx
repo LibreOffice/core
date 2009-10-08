@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: richstring.hxx,v $
- * $Revision: 1.4 $
+ * $Revision: 1.4.20.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -86,6 +86,15 @@ typedef ::boost::shared_ptr< RichStringPortion > RichStringPortionRef;
 
 // ----------------------------------------------------------------------------
 
+enum BiffFontPortionMode
+{
+    BIFF_FONTPORTION_8BIT,              /// Font portion with 8-bit values.
+    BIFF_FONTPORTION_16BIT,             /// Font portion with 16-bit values.
+    BIFF_FONTPORTION_OBJ                /// Font portion in OBJ or TXO record.
+};
+
+// ----------------------------------------------------------------------------
+
 /** Represents a position in a rich-string containing current font identifier.
 
     This object stores the position of a formatted character in a rich-string
@@ -102,7 +111,7 @@ struct BinFontPortionData
                             mnPos( nPos ), mnFontId( nFontId ) {}
 
     void                read( RecordInputStream& rStrm );
-    void                read( BiffInputStream& rStrm, bool b16Bit );
+    void                read( BiffInputStream& rStrm, BiffFontPortionMode eMode );
 };
 
 // ----------------------------------------------------------------------------
@@ -118,7 +127,7 @@ public:
     /** Reads count and font identifiers from the passed stream. */
     void                importPortions( RecordInputStream& rStrm );
     /** Reads nCount font identifiers from the passed stream. */
-    void                importPortions( BiffInputStream& rStrm, sal_uInt16 nCount, bool b16Bit );
+    void                importPortions( BiffInputStream& rStrm, sal_uInt16 nCount, BiffFontPortionMode eMode );
     /** Reads count and font identifiers from the passed stream. */
     void                importPortions( BiffInputStream& rStrm, bool b16Bit );
 };
@@ -213,7 +222,7 @@ public:
     /** Reads all phonetic portions from the passed stream. */
     void                importPortions( RecordInputStream& rStrm );
     /** Reads phonetic portion data from the passed stream. */
-    ::rtl::OUString     importPortions( BiffInputStream& rStrm, sal_uInt32 nPhoneticSize );
+    ::rtl::OUString     importPortions( BiffInputStream& rStrm, sal_Int32 nPhoneticSize );
 };
 
 // ============================================================================

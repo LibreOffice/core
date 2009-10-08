@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: sharedstringsbuffer.cxx,v $
- * $Revision: 1.3 $
+ * $Revision: 1.3.22.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -53,12 +53,13 @@ RichStringRef SharedStringsBuffer::createRichString()
 
 void SharedStringsBuffer::importSst( BiffInputStream& rStrm )
 {
-    sal_Int32 nStringCount = rStrm.skip( 4 ).readInt32();
+    rStrm.skip( 4 );
+    sal_Int32 nStringCount = rStrm.readInt32();
     if( nStringCount > 0 )
     {
         maStrings.clear();
         maStrings.reserve( static_cast< size_t >( nStringCount ) );
-        for( ; rStrm.isValid() && (nStringCount > 0); --nStringCount )
+        for( ; !rStrm.isEof() && (nStringCount > 0); --nStringCount )
         {
             RichStringRef xString( new RichString( *this ) );
             maStrings.push_back( xString );

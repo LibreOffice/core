@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: richstring.cxx,v $
- * $Revision: 1.4 $
+ * $Revision: 1.4.20.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -112,17 +112,23 @@ void BinFontPortionData::read( RecordInputStream& rStrm )
     mnFontId = rStrm.readuInt16();
 }
 
-void BinFontPortionData::read( BiffInputStream& rStrm, bool b16Bit )
+void BinFontPortionData::read( BiffInputStream& rStrm, BiffFontPortionMode eMode )
 {
-    if( b16Bit )
+    switch( eMode )
     {
-        mnPos = rStrm.readuInt16();
-        mnFontId = rStrm.readuInt16();
-    }
-    else
-    {
-        mnPos = rStrm.readuInt8();
-        mnFontId = rStrm.readuInt8();
+        case BIFF_FONTPORTION_8BIT:
+            mnPos = rStrm.readuInt8();
+            mnFontId = rStrm.readuInt8();
+        break;
+        case BIFF_FONTPORTION_16BIT:
+            mnPos = rStrm.readuInt16();
+            mnFontId = rStrm.readuInt16();
+        break;
+        case BIFF_FONTPORTION_OBJ:
+            mnPos = rStrm.readuInt16();
+            mnFontId = rStrm.readuInt16();
+            rStrm.skip( 4 );
+        break;
     }
 }
 
@@ -144,11 +150,11 @@ void BinFontPortionList::importPortions( RecordInputStream& rStrm )
     clear();
     if( nCount > 0 )
     {
-        reserve( getLimitedValue< size_t, sal_Int32 >( nCount, 0, rStrm.getRecLeft() / 4 ) );
+        reserve( getLimitedValue< size_t, sal_Int64 >( nCount, 0, rStrm.getRemaining() / 4 ) );
         /*  #i33341# real life -- same character index may occur several times
             -> use appendPortion() to validate string position. */
         BinFontPortionData aPortion;
-        for( sal_Int32 nIndex = 0; rStrm.isValid() && (nIndex < nCount); ++nIndex )
+        for( sal_Int32 nIndex = 0; !rStrm.isEof() && (nIndex < nCount); ++nIndex )
         {
             aPortion.read( rStrm );
             appendPortion( aPortion );
@@ -156,16 +162,16 @@ void BinFontPortionList::importPortions( RecordInputStream& rStrm )
     }
 }
 
-void BinFontPortionList::importPortions( BiffInputStream& rStrm, sal_uInt16 nCount, bool b16Bit )
+void BinFontPortionList::importPortions( BiffInputStream& rStrm, sal_uInt16 nCount, BiffFontPortionMode eMode )
 {
     clear();
     reserve( nCount );
     /*  #i33341# real life -- same character index may occur several times
         -> use appendPortion() to validate string position. */
     BinFontPortionData aPortion;
-    for( sal_uInt16 nIndex = 0; rStrm.isValid() && (nIndex < nCount); ++nIndex )
+    for( sal_uInt16 nIndex = 0; !rStrm.isEof() && (nIndex < nCount); ++nIndex )
     {
-        aPortion.read( rStrm, b16Bit );
+        aPortion.read( rStrm, eMode );
         appendPortion( aPortion );
     }
 }
@@ -173,7 +179,7 @@ void BinFontPortionList::importPortions( BiffInputStream& rStrm, sal_uInt16 nCou
 void BinFontPortionList::importPortions( BiffInputStream& rStrm, bool b16Bit )
 {
     sal_uInt16 nCount = b16Bit ? rStrm.readuInt16() : rStrm.readuInt8();
-    importPortions( rStrm, nCount, b16Bit );
+    importPortions( rStrm, nCount, b16Bit ? BIFF_FONTPORTION_16BIT : BIFF_FONTPORTION_8BIT );
 }
 
 // ============================================================================
@@ -309,9 +315,9 @@ void BinPhoneticPortionList::importPortions( RecordInputStream& rStrm )
     clear();
     if( nCount > 0 )
     {
-        reserve( getLimitedValue< size_t, sal_Int32 >( nCount, 0, rStrm.getRecLeft() / 6 ) );
+        reserve( getLimitedValue< size_t, sal_Int64 >( nCount, 0, rStrm.getRemaining() / 6 ) );
         BinPhoneticPortionData aPortion;
-        for( sal_Int32 nIndex = 0; rStrm.isValid() && (nIndex < nCount); ++nIndex )
+        for( sal_Int32 nIndex = 0; !rStrm.isEof() && (nIndex < nCount); ++nIndex )
         {
             aPortion.read( rStrm );
             appendPortion( aPortion );
@@ -319,7 +325,7 @@ void BinPhoneticPortionList::importPortions( RecordInputStream& rStrm )
     }
 }
 
-OUString BinPhoneticPortionList::importPortions( BiffInputStream& rStrm, sal_uInt32 nPhoneticSize )
+OUString BinPhoneticPortionList::importPortions( BiffInputStream& rStrm, sal_Int32 nPhoneticSize )
 {
     OUString aPhoneticText;
     sal_uInt16 nPortionCount, nTextLen1, nTextLen2;
@@ -327,7 +333,7 @@ OUString BinPhoneticPortionList::importPortions( BiffInputStream& rStrm, sal_uIn
     OSL_ENSURE( nTextLen1 == nTextLen2, "BinPhoneticPortionList::importPortions - wrong phonetic text length" );
     if( (nTextLen1 == nTextLen2) && (nTextLen1 > 0) )
     {
-        sal_uInt32 nMinSize = static_cast< sal_uInt32 >( 2 * nTextLen1 + 6 * nPortionCount + 14 );
+        sal_Int32 nMinSize = 2 * nTextLen1 + 6 * nPortionCount + 14;
         OSL_ENSURE( nMinSize <= nPhoneticSize, "BinPhoneticPortionList::importPortions - wrong size of phonetic data" );
         if( nMinSize <= nPhoneticSize )
         {
@@ -380,7 +386,7 @@ void RichString::importString( RecordInputStream& rStrm, bool bRich )
     sal_uInt8 nFlags = bRich ? rStrm.readuInt8() : 0;
     OUString aBaseText = rStrm.readString();
 
-    if( rStrm.isValid() && getFlag( nFlags, OOBIN_STRINGFLAG_FONTS ) )
+    if( !rStrm.isEof() && getFlag( nFlags, OOBIN_STRINGFLAG_FONTS ) )
     {
         BinFontPortionList aPortions;
         aPortions.importPortions( rStrm );
@@ -391,7 +397,7 @@ void RichString::importString( RecordInputStream& rStrm, bool bRich )
         createPortion()->setText( aBaseText );
     }
 
-    if( rStrm.isValid() && getFlag( nFlags, OOBIN_STRINGFLAG_PHONETICS ) )
+    if( !rStrm.isEof() && getFlag( nFlags, OOBIN_STRINGFLAG_PHONETICS ) )
     {
         OUString aPhoneticText = rStrm.readString();
         BinPhoneticPortionList aPortions;
@@ -409,7 +415,7 @@ void RichString::importByteString( BiffInputStream& rStrm, rtl_TextEncoding eDef
 
     OString aBaseText = rStrm.readByteString( !b8BitLength );
 
-    if( rStrm.isValid() && getFlag( nFlags, BIFF_STR_EXTRAFONTS ) )
+    if( !rStrm.isEof() && getFlag( nFlags, BIFF_STR_EXTRAFONTS ) )
     {
         BinFontPortionList aPortions;
         aPortions.importPortions( rStrm, false );
@@ -436,17 +442,17 @@ void RichString::importUniString( BiffInputStream& rStrm, BiffStringFlags nFlags
     bool bFonts    = getFlag( nFlagField, BIFF_STRF_RICH );
     bool bPhonetic = getFlag( nFlagField, BIFF_STRF_PHONETIC );
     sal_uInt16 nFontCount = bFonts ? rStrm.readuInt16() : 0;
-    sal_uInt32 nPhoneticSize = bPhonetic ? rStrm.readuInt32() : 0;
+    sal_Int32 nPhoneticSize = bPhonetic ? rStrm.readInt32() : 0;
 
     // --- character array ---
     OUString aBaseText = rStrm.readUniStringChars( nChars, b16Bit );
 
     // --- formatting ---
     // #122185# bRich flag may be set, but format runs may be missing
-    if( rStrm.isValid() && (nFontCount > 0) )
+    if( !rStrm.isEof() && (nFontCount > 0) )
     {
         BinFontPortionList aPortions;
-        aPortions.importPortions( rStrm, nFontCount, true );
+        aPortions.importPortions( rStrm, nFontCount, BIFF_FONTPORTION_16BIT );
         createFontPortions( aBaseText, aPortions );
     }
     else
@@ -456,16 +462,16 @@ void RichString::importUniString( BiffInputStream& rStrm, BiffStringFlags nFlags
 
     // --- Asian phonetic information ---
     // #122185# bPhonetic flag may be set, but phonetic info may be missing
-    if( rStrm.isValid() && (nPhoneticSize > 0) )
+    if( !rStrm.isEof() && (nPhoneticSize > 0) )
     {
-        sal_uInt32 nPhoneticEnd = rStrm.getRecPos() + nPhoneticSize;
+        sal_Int64 nPhoneticEnd = rStrm.tell() + nPhoneticSize;
         OSL_ENSURE( nPhoneticSize > 14, "RichString::importUniString - wrong size of phonetic data" );
         if( nPhoneticSize > 14 )
         {
             sal_uInt16 nId, nSize;
             rStrm >> nId >> nSize;
             OSL_ENSURE( nId == 1, "RichString::importUniString - unknown phonetic data identifier" );
-            sal_uInt32 nMinSize = static_cast< sal_uInt32 >( nSize + 4 );
+            sal_Int32 nMinSize = nSize + 4;
             OSL_ENSURE( nMinSize <= nPhoneticSize, "RichString::importUniString - wrong size of phonetic data" );
             if( (nId == 1) && (nMinSize <= nPhoneticSize) )
             {

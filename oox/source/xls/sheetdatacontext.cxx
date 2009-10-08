@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: sheetdatacontext.cxx,v $
- * $Revision: 1.5 $
+ * $Revision: 1.5.4.3 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -109,7 +109,7 @@ const sal_uInt32 BIFF_ROW_THICKTOP          = 0x10000000;
 const sal_uInt32 BIFF_ROW_THICKBOTTOM       = 0x20000000;
 const sal_uInt32 BIFF_ROW_SHOWPHONETIC      = 0x40000000;
 
-const sal_Int32 BIFF_XF_EXTENDED_IDS        = 63;
+const sal_Int32 BIFF2_XF_EXTENDED_IDS       = 63;
 const sal_uInt8 BIFF2_XF_MASK               = 0x3F;
 
 // ----------------------------------------------------------------------------
@@ -622,9 +622,8 @@ void OoxSheetDataContext::importDataTable( RecordInputStream& rStrm )
 
 // ============================================================================
 
-OoxExternalSheetDataContext::OoxExternalSheetDataContext(
-        OoxWorkbookFragmentBase& rFragment, WorksheetType eSheetType, sal_Int32 nSheet ) :
-    OoxWorksheetContextBase( rFragment, ISegmentProgressBarRef(), eSheetType, nSheet )
+OoxExternalSheetDataContext::OoxExternalSheetDataContext( OoxWorkbookFragmentBase& rFragment, sal_Int32 nSheet ) :
+    OoxWorksheetContextBase( rFragment, ISegmentProgressBarRef(), SHEETTYPE_WORKSHEET, nSheet )
 {
 }
 
@@ -753,8 +752,8 @@ void OoxExternalSheetDataContext::importExtCellString( RecordInputStream& rStrm 
 // ============================================================================
 // ============================================================================
 
-BiffSheetDataContext::BiffSheetDataContext( const WorksheetHelper& rHelper ) :
-    WorksheetHelper( rHelper ),
+BiffSheetDataContext::BiffSheetDataContext( const BiffWorksheetFragmentBase& rParent ) :
+    BiffWorksheetContextBase( rParent ),
     mnBiff2XfId( 0 )
 {
     mnArrayIgnoreSize = (getBiff() == BIFF2) ? 1 : ((getBiff() <= BIFF4) ? 2 : 6);
@@ -778,80 +777,80 @@ BiffSheetDataContext::BiffSheetDataContext( const WorksheetHelper& rHelper ) :
     }
 }
 
-void BiffSheetDataContext::importRecord( BiffInputStream& rStrm )
+void BiffSheetDataContext::importRecord()
 {
-    sal_uInt16 nRecId = rStrm.getRecId();
+    sal_uInt16 nRecId = mrStrm.getRecId();
     switch( nRecId )
     {
         // records in all BIFF versions
         case BIFF2_ID_ARRAY:        // #i72713#
-        case BIFF3_ID_ARRAY:        importArray( rStrm );       break;
+        case BIFF3_ID_ARRAY:        importArray();          break;
         case BIFF2_ID_BLANK:
-        case BIFF3_ID_BLANK:        importBlank( rStrm );       break;
+        case BIFF3_ID_BLANK:        importBlank();          break;
         case BIFF2_ID_BOOLERR:
-        case BIFF3_ID_BOOLERR:      importBoolErr( rStrm );     break;
-        case BIFF2_ID_INTEGER:      importInteger( rStrm );     break;
-        case BIFF_ID_IXFE:          rStrm >> mnBiff2XfId;       break;
+        case BIFF3_ID_BOOLERR:      importBoolErr();        break;
+        case BIFF2_ID_INTEGER:      importInteger();        break;
+        case BIFF_ID_IXFE:          mrStrm >> mnBiff2XfId;  break;
         case BIFF2_ID_LABEL:
-        case BIFF3_ID_LABEL:        importLabel( rStrm );       break;
+        case BIFF3_ID_LABEL:        importLabel();          break;
         case BIFF2_ID_NUMBER:
-        case BIFF3_ID_NUMBER:       importNumber( rStrm );      break;
-        case BIFF_ID_RK:            importRk( rStrm );          break;
+        case BIFF3_ID_NUMBER:       importNumber();         break;
+        case BIFF_ID_RK:            importRk();             break;
 
         // BIFF specific records
         default: switch( getBiff() )
         {
             case BIFF2: switch( nRecId )
             {
-                case BIFF2_ID_DATATABLE:    importDataTable( rStrm );   break;
-                case BIFF2_ID_DATATABLE2:   importDataTable( rStrm );   break;
-                case BIFF2_ID_FORMULA:      importFormula( rStrm );     break;
-                case BIFF2_ID_ROW:          importRow( rStrm );         break;
+                case BIFF2_ID_DATATABLE:    importDataTable();  break;
+                case BIFF2_ID_DATATABLE2:   importDataTable();  break;
+                case BIFF2_ID_FORMULA:      importFormula();    break;
+                case BIFF2_ID_ROW:          importRow();        break;
             }
             break;
 
             case BIFF3: switch( nRecId )
             {
-                case BIFF3_ID_DATATABLE:    importDataTable( rStrm );   break;
-                case BIFF3_ID_FORMULA:      importFormula( rStrm );     break;
-                case BIFF3_ID_ROW:          importRow( rStrm );         break;
+                case BIFF3_ID_DATATABLE:    importDataTable();  break;
+                case BIFF3_ID_FORMULA:      importFormula();    break;
+                case BIFF3_ID_ROW:          importRow();        break;
             }
             break;
 
             case BIFF4: switch( nRecId )
             {
-                case BIFF3_ID_DATATABLE:    importDataTable( rStrm );   break;
-                case BIFF4_ID_FORMULA:      importFormula( rStrm );     break;
-                case BIFF3_ID_ROW:          importRow( rStrm );         break;
+                case BIFF3_ID_DATATABLE:    importDataTable();  break;
+                case BIFF4_ID_FORMULA:      importFormula();    break;
+                case BIFF3_ID_ROW:          importRow();        break;
             }
             break;
 
             case BIFF5: switch( nRecId )
             {
-                case BIFF3_ID_DATATABLE:    importDataTable( rStrm );   break;
+                case BIFF3_ID_DATATABLE:    importDataTable();  break;
                 case BIFF3_ID_FORMULA:
                 case BIFF4_ID_FORMULA:
-                case BIFF5_ID_FORMULA:      importFormula( rStrm );     break;
-                case BIFF_ID_MULTBLANK:     importMultBlank( rStrm );   break;
-                case BIFF_ID_MULTRK:        importMultRk( rStrm );      break;
-                case BIFF3_ID_ROW:          importRow( rStrm );         break;
-                case BIFF_ID_RSTRING:       importLabel( rStrm );       break;
-                case BIFF_ID_SHAREDFMLA:    importSharedFmla( rStrm );  break;
+                case BIFF5_ID_FORMULA:      importFormula();    break;
+                case BIFF_ID_MULTBLANK:     importMultBlank();  break;
+                case BIFF_ID_MULTRK:        importMultRk();     break;
+                case BIFF3_ID_ROW:          importRow();        break;
+                case BIFF_ID_RSTRING:       importLabel();      break;
+                case BIFF_ID_SHAREDFMLA:    importSharedFmla(); break;
             }
             break;
 
             case BIFF8: switch( nRecId )
             {
-                case BIFF3_ID_DATATABLE:    importDataTable( rStrm );   break;
+                case BIFF3_ID_DATATABLE:    importDataTable();  break;
                 case BIFF3_ID_FORMULA:
                 case BIFF4_ID_FORMULA:
-                case BIFF5_ID_FORMULA:      importFormula( rStrm );     break;
-                case BIFF_ID_LABELSST:      importLabelSst( rStrm );    break;
-                case BIFF_ID_MULTBLANK:     importMultBlank( rStrm );   break;
-                case BIFF_ID_MULTRK:        importMultRk( rStrm );      break;
-                case BIFF3_ID_ROW:          importRow( rStrm );         break;
-                case BIFF_ID_RSTRING:       importLabel( rStrm );       break;
-                case BIFF_ID_SHAREDFMLA:    importSharedFmla( rStrm );  break;
+                case BIFF5_ID_FORMULA:      importFormula();    break;
+                case BIFF_ID_LABELSST:      importLabelSst();   break;
+                case BIFF_ID_MULTBLANK:     importMultBlank();  break;
+                case BIFF_ID_MULTRK:        importMultRk();     break;
+                case BIFF3_ID_ROW:          importRow();        break;
+                case BIFF_ID_RSTRING:       importLabel();      break;
+                case BIFF_ID_SHAREDFMLA:    importSharedFmla(); break;
             }
             break;
 
@@ -868,44 +867,44 @@ void BiffSheetDataContext::setCurrCell( const BinAddress& rAddr )
     maCurrCell.mxCell = getCell( rAddr, &maCurrCell.maAddress );
 }
 
-void BiffSheetDataContext::importXfId( BiffInputStream& rStrm, bool bBiff2 )
+void BiffSheetDataContext::importXfId( bool bBiff2 )
 {
     if( bBiff2 )
     {
         sal_uInt8 nBiff2XfId;
-        rStrm >> nBiff2XfId;
-        rStrm.skip( 2 );
+        mrStrm >> nBiff2XfId;
+        mrStrm.skip( 2 );
         maCurrCell.mnXfId = nBiff2XfId & BIFF2_XF_MASK;
-        if( maCurrCell.mnXfId == BIFF_XF_EXTENDED_IDS )
+        if( maCurrCell.mnXfId == BIFF2_XF_EXTENDED_IDS )
             maCurrCell.mnXfId = mnBiff2XfId;
     }
     else
     {
-        maCurrCell.mnXfId = rStrm.readuInt16();
+        maCurrCell.mnXfId = mrStrm.readuInt16();
     }
 }
 
-void BiffSheetDataContext::importCellHeader( BiffInputStream& rStrm, bool bBiff2 )
+void BiffSheetDataContext::importCellHeader( bool bBiff2 )
 {
     BinAddress aAddr;
-    rStrm >> aAddr;
+    mrStrm >> aAddr;
     setCurrCell( aAddr );
-    importXfId( rStrm, bBiff2 );
+    importXfId( bBiff2 );
 }
 
-void BiffSheetDataContext::importBlank( BiffInputStream& rStrm )
+void BiffSheetDataContext::importBlank()
 {
-    importCellHeader( rStrm, rStrm.getRecId() == BIFF2_ID_BLANK );
+    importCellHeader( mrStrm.getRecId() == BIFF2_ID_BLANK );
     setCellFormat( maCurrCell );
 }
 
-void BiffSheetDataContext::importBoolErr( BiffInputStream& rStrm )
+void BiffSheetDataContext::importBoolErr()
 {
-    importCellHeader( rStrm, rStrm.getRecId() == BIFF2_ID_BOOLERR );
+    importCellHeader( mrStrm.getRecId() == BIFF2_ID_BOOLERR );
     if( maCurrCell.mxCell.is() )
     {
         sal_uInt8 nValue, nType;
-        rStrm >> nValue >> nType;
+        mrStrm >> nValue >> nType;
         switch( nType )
         {
             case BIFF_BOOLERR_BOOL:
@@ -925,33 +924,33 @@ void BiffSheetDataContext::importBoolErr( BiffInputStream& rStrm )
     setCellFormat( maCurrCell );
 }
 
-void BiffSheetDataContext::importFormula( BiffInputStream& rStrm )
+void BiffSheetDataContext::importFormula()
 {
-    importCellHeader( rStrm, getBiff() == BIFF2 );
+    importCellHeader( getBiff() == BIFF2 );
     maCurrCell.mnCellType = XML_n;
     Reference< XFormulaTokens > xTokens( maCurrCell.mxCell, UNO_QUERY );
     if( xTokens.is() )
     {
-        rStrm.skip( mnFormulaIgnoreSize );
+        mrStrm.skip( mnFormulaIgnoreSize );
         ExtCellFormulaContext aContext( *this, xTokens, maCurrCell.maAddress );
-        getFormulaParser().importFormula( aContext, rStrm );
+        getFormulaParser().importFormula( aContext, mrStrm );
     }
     setCellFormat( maCurrCell );
 }
 
-void BiffSheetDataContext::importInteger( BiffInputStream& rStrm )
+void BiffSheetDataContext::importInteger()
 {
-    importCellHeader( rStrm, true );
+    importCellHeader( true );
     maCurrCell.mnCellType = XML_n;
     if( maCurrCell.mxCell.is() )
-        maCurrCell.mxCell->setValue( rStrm.readuInt16() );
+        maCurrCell.mxCell->setValue( mrStrm.readuInt16() );
     setCellFormat( maCurrCell );
 }
 
-void BiffSheetDataContext::importLabel( BiffInputStream& rStrm )
+void BiffSheetDataContext::importLabel()
 {
-    bool bBiff2Xf = rStrm.getRecId() == BIFF2_ID_LABEL;
-    importCellHeader( rStrm, bBiff2Xf );
+    bool bBiff2Xf = mrStrm.getRecId() == BIFF2_ID_LABEL;
+    importCellHeader( bBiff2Xf );
     maCurrCell.mnCellType = XML_inlineStr;
     Reference< XText > xText( maCurrCell.mxCell, UNO_QUERY );
     if( xText.is() )
@@ -966,7 +965,7 @@ void BiffSheetDataContext::importLabel( BiffInputStream& rStrm )
         RichString aString( *this );
         if( getBiff() == BIFF8 )
         {
-            aString.importUniString( rStrm );
+            aString.importUniString( mrStrm );
         }
         else
         {
@@ -975,8 +974,8 @@ void BiffSheetDataContext::importLabel( BiffInputStream& rStrm )
             if( const Font* pFont = getStyles().getFontFromCellXf( maCurrCell.mnXfId ).get() )
                 eTextEnc = pFont->getFontEncoding();
             BiffStringFlags nFlags = bBiff2Xf ? BIFF_STR_8BITLENGTH : BIFF_STR_DEFAULT;
-            setFlag( nFlags, BIFF_STR_EXTRAFONTS, rStrm.getRecId() == BIFF_ID_RSTRING );
-            aString.importByteString( rStrm, eTextEnc, nFlags );
+            setFlag( nFlags, BIFF_STR_EXTRAFONTS, mrStrm.getRecId() == BIFF_ID_RSTRING );
+            aString.importByteString( mrStrm, eTextEnc, nFlags );
         }
         aString.finalizeImport();
         aString.convert( xText, maCurrCell.mnXfId );
@@ -984,76 +983,81 @@ void BiffSheetDataContext::importLabel( BiffInputStream& rStrm )
     setCellFormat( maCurrCell );
 }
 
-void BiffSheetDataContext::importLabelSst( BiffInputStream& rStrm )
+void BiffSheetDataContext::importLabelSst()
 {
-    importCellHeader( rStrm, false );
+    importCellHeader( false );
     maCurrCell.mnCellType = XML_s;
     if( maCurrCell.mxCell.is() )
-        setSharedStringCell( maCurrCell.mxCell, rStrm.readInt32(), maCurrCell.mnXfId );
+        setSharedStringCell( maCurrCell.mxCell, mrStrm.readInt32(), maCurrCell.mnXfId );
     setCellFormat( maCurrCell );
 }
 
-void BiffSheetDataContext::importMultBlank( BiffInputStream& rStrm )
+void BiffSheetDataContext::importMultBlank()
 {
     BinAddress aAddr;
-    for( rStrm >> aAddr; rStrm.getRecLeft() > 2; ++aAddr.mnCol )
+    for( mrStrm >> aAddr; mrStrm.getRemaining() > 2; ++aAddr.mnCol )
     {
         setCurrCell( aAddr );
-        importXfId( rStrm, false );
+        importXfId( false );
         setCellFormat( maCurrCell );
     }
 }
 
-void BiffSheetDataContext::importMultRk( BiffInputStream& rStrm )
+void BiffSheetDataContext::importMultRk()
 {
     BinAddress aAddr;
-    for( rStrm >> aAddr; rStrm.getRecLeft() > 2; ++aAddr.mnCol )
+    for( mrStrm >> aAddr; mrStrm.getRemaining() > 2; ++aAddr.mnCol )
     {
         setCurrCell( aAddr );
         maCurrCell.mnCellType = XML_n;
-        importXfId( rStrm, false );
-        sal_Int32 nRkValue = rStrm.readInt32();
+        importXfId( false );
+        sal_Int32 nRkValue = mrStrm.readInt32();
         if( maCurrCell.mxCell.is() )
             maCurrCell.mxCell->setValue( BiffHelper::calcDoubleFromRk( nRkValue ) );
         setCellFormat( maCurrCell );
     }
 }
 
-void BiffSheetDataContext::importNumber( BiffInputStream& rStrm )
+void BiffSheetDataContext::importNumber()
 {
-    importCellHeader( rStrm, rStrm.getRecId() == BIFF2_ID_NUMBER );
+    importCellHeader( mrStrm.getRecId() == BIFF2_ID_NUMBER );
     maCurrCell.mnCellType = XML_n;
     if( maCurrCell.mxCell.is() )
-        maCurrCell.mxCell->setValue( rStrm.readDouble() );
+        maCurrCell.mxCell->setValue( mrStrm.readDouble() );
     setCellFormat( maCurrCell );
 }
 
-void BiffSheetDataContext::importRk( BiffInputStream& rStrm )
+void BiffSheetDataContext::importRk()
 {
-    importCellHeader( rStrm, false );
+    importCellHeader( false );
     maCurrCell.mnCellType = XML_n;
     if( maCurrCell.mxCell.is() )
-        maCurrCell.mxCell->setValue( BiffHelper::calcDoubleFromRk( rStrm.readInt32() ) );
+        maCurrCell.mxCell->setValue( BiffHelper::calcDoubleFromRk( mrStrm.readInt32() ) );
     setCellFormat( maCurrCell );
 }
 
-void BiffSheetDataContext::importRow( BiffInputStream& rStrm )
+void BiffSheetDataContext::importRow()
 {
     OoxRowData aData;
 
     sal_uInt16 nRow, nHeight;
-    rStrm >> nRow;
-    rStrm.skip( 4 );
-    rStrm >> nHeight;
+    mrStrm >> nRow;
+    mrStrm.skip( 4 );
+    mrStrm >> nHeight;
     if( getBiff() == BIFF2 )
     {
-        aData.mbCustomFormat = rStrm.skip( 2 ).readuInt8() == BIFF2_ROW_CUSTOMFORMAT;
+        mrStrm.skip( 2 );
+        aData.mbCustomFormat = mrStrm.readuInt8() == BIFF2_ROW_CUSTOMFORMAT;
         if( aData.mbCustomFormat )
-            aData.mnXfId = rStrm.skip( 5 ).readuInt16();
+        {
+            mrStrm.skip( 5 );
+            aData.mnXfId = mrStrm.readuInt16();
+        }
     }
     else
     {
-        sal_uInt32 nFlags = rStrm.skip( 4 ).readuInt32();
+        mrStrm.skip( 4 );
+        sal_uInt32 nFlags = mrStrm.readuInt32();
         aData.mnXfId = extractValue< sal_Int32 >( nFlags, 16, 12 );
         aData.mnLevel = extractValue< sal_Int32 >( nFlags, 0, 3 );
         aData.mbCustomFormat = getFlag( nFlags, BIFF_ROW_CUSTOMFORMAT );
@@ -1073,52 +1077,52 @@ void BiffSheetDataContext::importRow( BiffInputStream& rStrm )
     setRowData( aData );
 }
 
-void BiffSheetDataContext::importArray( BiffInputStream& rStrm )
+void BiffSheetDataContext::importArray()
 {
     BinRange aRange;
-    aRange.read( rStrm, false );    // columns always 8-bit
+    aRange.read( mrStrm, false );    // columns always 8-bit
     CellRangeAddress aArrayRange;
     Reference< XCellRange > xRange = getCellRange( aRange, &aArrayRange );
     Reference< XArrayFormulaTokens > xTokens( xRange, UNO_QUERY );
     if( xRange.is() && xTokens.is() )
     {
-        rStrm.skip( mnArrayIgnoreSize );
+        mrStrm.skip( mnArrayIgnoreSize );
         ArrayFormulaContext aContext( xTokens, aArrayRange );
-        getFormulaParser().importFormula( aContext, rStrm );
+        getFormulaParser().importFormula( aContext, mrStrm );
     }
 }
 
-void BiffSheetDataContext::importSharedFmla( BiffInputStream& rStrm )
+void BiffSheetDataContext::importSharedFmla()
 {
-    getSharedFormulas().importSharedFmla( rStrm, maCurrCell.maAddress );
+    getSharedFormulas().importSharedFmla( mrStrm, maCurrCell.maAddress );
 }
 
-void BiffSheetDataContext::importDataTable( BiffInputStream& rStrm )
+void BiffSheetDataContext::importDataTable()
 {
     BinRange aRange;
-    aRange.read( rStrm, false );    // columns always 8-bit
+    aRange.read( mrStrm, false );    // columns always 8-bit
     CellRangeAddress aTableRange;
     if( getAddressConverter().convertToCellRange( aTableRange, aRange, getSheetIndex(), true ) )
     {
         OoxDataTableData aTableData;
         BinAddress aRef1, aRef2;
-        switch( rStrm.getRecId() )
+        switch( mrStrm.getRecId() )
         {
             case BIFF2_ID_DATATABLE:
-                rStrm.skip( 1 );
-                aTableData.mbRowTable = rStrm.readuInt8() != 0;
+                mrStrm.skip( 1 );
+                aTableData.mbRowTable = mrStrm.readuInt8() != 0;
                 aTableData.mb2dTable = false;
-                rStrm >> aRef1;
+                mrStrm >> aRef1;
             break;
             case BIFF2_ID_DATATABLE2:
-                rStrm.skip( 2 );
+                mrStrm.skip( 2 );
                 aTableData.mb2dTable = true;
-                rStrm >> aRef1 >> aRef2;
+                mrStrm >> aRef1 >> aRef2;
             break;
             case BIFF3_ID_DATATABLE:
             {
                 sal_uInt16 nFlags;
-                rStrm >> nFlags >> aRef1 >> aRef2;
+                mrStrm >> nFlags >> aRef1 >> aRef2;
                 aTableData.mbRowTable = getFlag( nFlags, BIFF_DATATABLE_ROW );
                 aTableData.mb2dTable = getFlag( nFlags, BIFF_DATATABLE_2D );
                 aTableData.mbRef1Deleted = getFlag( nFlags, BIFF_DATATABLE_REF1DEL );
@@ -1136,44 +1140,45 @@ void BiffSheetDataContext::importDataTable( BiffInputStream& rStrm )
 
 // ============================================================================
 
-BiffExternalSheetDataContext::BiffExternalSheetDataContext(
-        const WorkbookHelper& rHelper, WorksheetType eSheetType, sal_Int32 nSheet ) :
-    WorksheetHelperRoot( rHelper, ISegmentProgressBarRef(), eSheetType, nSheet )
+BiffExternalSheetDataContext::BiffExternalSheetDataContext( const BiffWorkbookFragmentBase& rParent, sal_Int32 nSheet ) :
+    BiffWorksheetContextBase( rParent, ISegmentProgressBarRef(), SHEETTYPE_WORKSHEET, nSheet )
 {
 }
 
-void BiffExternalSheetDataContext::importCrn( BiffInputStream& rStrm )
+void BiffExternalSheetDataContext::importRecord()
 {
+    OSL_ENSURE( mrStrm.getRecId() == BIFF_ID_CRN, "BiffExternalSheetDataContext::importRecord - no CRN record found" );
+
     sal_uInt8 nCol2, nCol1;
     sal_uInt16 nRow;
-    rStrm >> nCol2 >> nCol1 >> nRow;
+    mrStrm >> nCol2 >> nCol1 >> nRow;
     bool bLoop = true;
-    for( BinAddress aAddr( nCol1, nRow ); bLoop && rStrm.isValid() && (aAddr.mnCol <= nCol2); ++aAddr.mnCol )
+    for( BinAddress aAddr( nCol1, nRow ); bLoop && !mrStrm.isEof() && (aAddr.mnCol <= nCol2); ++aAddr.mnCol )
     {
         Reference< XCell > xCell = getCell( aAddr );
         bLoop = xCell.is();
-        if( bLoop ) switch( rStrm.readuInt8() )
+        if( bLoop ) switch( mrStrm.readuInt8() )
         {
             case BIFF_DATATYPE_EMPTY:
-                rStrm.skip( 8 );
+                mrStrm.skip( 8 );
                 setEmptyStringCell( xCell );
             break;
             case BIFF_DATATYPE_DOUBLE:
-                xCell->setValue( rStrm.readDouble() );
+                xCell->setValue( mrStrm.readDouble() );
             break;
             case BIFF_DATATYPE_STRING:
             {
-                OUString aText = (getBiff() == BIFF8) ? rStrm.readUniString() : rStrm.readByteString( false, getTextEncoding() );
+                OUString aText = (getBiff() == BIFF8) ? mrStrm.readUniString() : mrStrm.readByteString( false, getTextEncoding() );
                 setStringCell( xCell, aText, true );
             }
             break;
             case BIFF_DATATYPE_BOOL:
-                setBooleanCell( xCell, rStrm.readuInt8() != 0 );
-                rStrm.skip( 7 );
+                setBooleanCell( xCell, mrStrm.readuInt8() != 0 );
+                mrStrm.skip( 7 );
             break;
             case BIFF_DATATYPE_ERROR:
-                setErrorCell( xCell, rStrm.readuInt8() );
-                rStrm.skip( 7 );
+                setErrorCell( xCell, mrStrm.readuInt8() );
+                mrStrm.skip( 7 );
             break;
             default:
                 OSL_ENSURE( false, "BiffExternalSheetDataContext::importCrn - unknown data type" );

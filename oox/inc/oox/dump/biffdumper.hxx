@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: biffdumper.hxx,v $
- * $Revision: 1.4 $
+ * $Revision: 1.4.20.20 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -33,6 +33,7 @@
 
 #include "oox/dump/dumperbase.hxx"
 #include "oox/dump/dffdumper.hxx"
+#include "oox/dump/oledumper.hxx"
 #include "oox/xls/richstring.hxx"
 
 #if OOX_INCLUDE_DUMPER
@@ -47,6 +48,39 @@ namespace oox { namespace xls {
 namespace oox {
 namespace dump {
 namespace biff {
+
+typedef ::boost::shared_ptr< ::oox::xls::BiffInputStream > BiffInputStreamRef;
+
+// ============================================================================
+// ============================================================================
+
+class BiffDffStreamObject : public DffStreamObject
+{
+public:
+    explicit            BiffDffStreamObject(
+                            const OutputObjectBase& rParent,
+                            const BinaryInputStreamRef& rxStrm );
+
+protected:
+    virtual void        implDumpClientAnchor();
+};
+
+// ============================================================================
+
+class BiffCtlsStreamObject : public InputObjectBase
+{
+public:
+    explicit            BiffCtlsStreamObject( const OutputObjectBase& rParent, const BinaryInputStreamRef& rxStrm );
+
+    void                dumpControl( sal_uInt32 nStartPos, sal_uInt32 nLength );
+
+protected:
+    virtual void        implDump();
+
+private:
+    sal_uInt32          mnStartPos;
+    sal_uInt32          mnLength;
+};
 
 // ============================================================================
 // ============================================================================
@@ -64,15 +98,14 @@ private:
     ::oox::xls::BiffType meBiff;
 };
 
-typedef ::boost::shared_ptr< BiffConfig > BiffConfigRef;
-
 // ============================================================================
 
 class BiffSharedData : public Base
 {
 public:
     explicit            BiffSharedData( ::oox::xls::BiffType eBiff );
-    virtual             ~BiffSharedData();
+
+    void                initializePerSheet();
 
     inline ::oox::xls::BiffType getBiff() const { return meBiff; }
 
@@ -100,29 +133,27 @@ private:
     rtl_TextEncoding    meTextEnc;
 };
 
-typedef ::boost::shared_ptr< BiffSharedData > BiffSharedDataRef;
-
 // ============================================================================
 
-class BiffObjectBase : public InputStreamObject
+class BiffObjectBase : public RecordObjectBase
 {
 public:
     inline BiffSharedData& getBiffData() const { return *mxBiffData; }
-    inline ::oox::xls::BiffInputStream& getBiffStream() const { return *mxStrm; }
+    inline ::oox::xls::BiffInputStream& getBiffStream() const { return *mxBiffStrm; }
     inline ::oox::xls::BiffType getBiff() const { return mxBiffData->getBiff(); }
 
 protected:
-    explicit            BiffObjectBase();
+    inline explicit     BiffObjectBase() {}
     virtual             ~BiffObjectBase();
 
-    using               InputStreamObject::construct;
-    void                construct( const ObjectBase& rParent, const ::rtl::OUString& rOutFileName, BinaryInputStreamRef xStrm, ::oox::xls::BiffType eBiff );
+    using               InputObjectBase::construct;
+    void                construct( const ObjectBase& rParent, const BinaryInputStreamRef& rxStrm, ::oox::xls::BiffType eBiff, const ::rtl::OUString& rSysFileName );
     void                construct( const BiffObjectBase& rParent );
 
     virtual bool        implIsValid() const;
-    virtual ConfigRef   implReconstructConfig();
-    virtual InputRef    implReconstructInput();
+    virtual bool        implStartRecord( BinaryInputStream& rBaseStrm, sal_Int64& ornRecPos, sal_Int64& ornRecId, sal_Int64& ornRecSize );
 
+    inline sal_uInt16   getLastRecId() const { return mnLastRecId; }
     ::rtl::OUString     getErrorName( sal_uInt8 nErrCode ) const;
 
     // ------------------------------------------------------------------------
@@ -135,13 +166,13 @@ protected:
 
     // ------------------------------------------------------------------------
 
-    void                writeBooleanItem( const sal_Char* pcName, sal_uInt8 nBool );
-    void                writeErrorCodeItem( const sal_Char* pcName, sal_uInt8 nErrCode );
+    void                writeBooleanItem( const String& rName, sal_uInt8 nBool );
+    void                writeErrorCodeItem( const String& rName, sal_uInt8 nErrCode );
 
     void                writeFontPortions( const ::oox::xls::BinFontPortionList& rPortions );
 
     template< typename Type >
-    void                writeRectItem( const sal_Char* pcName,
+    void                writeRectItem( const String& rName,
                             Type nLeft, Type nTop, Type nWidth, Type nHeight,
                             const NameListWrapper& rListWrp = NO_LIST,
                             FormatType eFmtType = FORMATTYPE_DEC );
@@ -149,66 +180,72 @@ protected:
     // ------------------------------------------------------------------------
 
     ::rtl::OUString     dumpByteString(
-                            const sal_Char* pcName,
+                            const String& rName,
                             ::oox::xls::BiffStringFlags nFlags = ::oox::xls::BIFF_STR_DEFAULT,
                             rtl_TextEncoding eDefaultTextEnc = RTL_TEXTENCODING_DONTKNOW );
     ::rtl::OUString     dumpUniString(
-                            const sal_Char* pcName,
+                            const String& rName,
                             ::oox::xls::BiffStringFlags nFlags = ::oox::xls::BIFF_STR_DEFAULT );
     ::rtl::OUString     dumpString(
-                            const sal_Char* pcName,
+                            const String& rName,
                             ::oox::xls::BiffStringFlags nByteFlags = ::oox::xls::BIFF_STR_DEFAULT,
                             ::oox::xls::BiffStringFlags nUniFlags = ::oox::xls::BIFF_STR_DEFAULT,
                             rtl_TextEncoding eDefaultTextEnc = RTL_TEXTENCODING_DONTKNOW );
 
-    ::rtl::OUString     dumpOleString( const sal_Char* pcName, sal_Int32 nCharCount, bool bUnicode );
-    ::rtl::OUString     dumpOleString( const sal_Char* pcName, bool bUnicode );
-    ::rtl::OUString     dumpNullString( const sal_Char* pcName, bool bUnicode );
+    sal_uInt8           dumpBoolean( const String& rName = EMPTY_STRING );
+    sal_uInt8           dumpErrorCode( const String& rName = EMPTY_STRING );
 
-    sal_uInt8           dumpBoolean( const sal_Char* pcName = 0 );
-    sal_uInt8           dumpErrorCode( const sal_Char* pcName = 0 );
+    rtl_TextEncoding    dumpCodePage( const String& rName = EMPTY_STRING );
+    void                dumpFormulaResult( const String& rName = EMPTY_STRING );
 
-    sal_Int32           dumpRgbColor( const sal_Char* pcName = 0 );
-    rtl_TextEncoding    dumpCodePage( const sal_Char* pcName = 0 );
-    void                dumpFormulaResult( const sal_Char* pcName = 0 );
+    sal_Int32           dumpColIndex( const String& rName = EMPTY_STRING, bool bCol16Bit = true );
+    sal_Int32           dumpRowIndex( const String& rName = EMPTY_STRING, bool bRow32Bit = false );
+    sal_Int32           dumpColRange( const String& rName = EMPTY_STRING, bool bCol16Bit = true );
+    sal_Int32           dumpRowRange( const String& rName = EMPTY_STRING, bool bRow32Bit = false );
 
-    sal_Int32           dumpColIndex( const sal_Char* pcName = 0, bool bCol16Bit = true );
-    sal_Int32           dumpRowIndex( const sal_Char* pcName = 0, bool bRow32Bit = false );
-    sal_Int32           dumpColRange( const sal_Char* pcName = 0, bool bCol16Bit = true );
-    sal_Int32           dumpRowRange( const sal_Char* pcName = 0, bool bRow32Bit = false );
-
-    Address             dumpAddress( const sal_Char* pcName = 0, bool bCol16Bit = true, bool bRow32Bit = false );
-    Range               dumpRange( const sal_Char* pcName = 0, bool bCol16Bit = true, bool bRow32Bit = false );
-    void                dumpRangeList( const sal_Char* pcName = 0, bool bCol16Bit = true, bool bRow32Bit = false );
+    Address             dumpAddress( const String& rName = EMPTY_STRING, bool bCol16Bit = true, bool bRow32Bit = false );
+    Range               dumpRange( const String& rName = EMPTY_STRING, bool bCol16Bit = true, bool bRow32Bit = false );
+    void                dumpRangeList( const String& rName = EMPTY_STRING, bool bCol16Bit = true, bool bRow32Bit = false );
 
     void                dumpConstArrayHeader( sal_uInt32& rnCols, sal_uInt32& rnRows );
     ::rtl::OUString     dumpConstValue( sal_Unicode cStrQuote = OOX_DUMP_STRQUOTE );
 
     template< typename Type >
-    void                dumpRect( const sal_Char* pcName,
+    void                dumpRect( const String& rName,
                             const NameListWrapper& rListWrp = NO_LIST,
                             FormatType eFmtType = FORMATTYPE_DEC );
 
-private:
-    typedef ::boost::shared_ptr< ::oox::xls::BiffInputStream > BiffInputStreamRef;
+    sal_uInt16          dumpRepeatedRecId();
 
-    BiffConfigRef       mxBiffCfg;
+    void                dumpDffClientRect();
+    void                dumpEmbeddedDff();
+    void                dumpOcxControl();
+
+private:
+    typedef ::boost::shared_ptr< BiffSharedData >       BiffSharedDataRef;
+    typedef ::boost::shared_ptr< BiffDffStreamObject >  BiffDffStreamObjRef;
+    typedef ::boost::shared_ptr< BiffCtlsStreamObject > BiffCtlsStrmObjRef;
+
     BiffSharedDataRef   mxBiffData;
-    BiffInputStreamRef  mxStrm;
+    BiffInputStreamRef  mxBiffStrm;
+    BiffDffStreamObjRef mxDffObj;
+    BiffCtlsStrmObjRef  mxCtlsObj;
     NameListRef         mxErrCodes;
     NameListRef         mxConstType;
     NameListRef         mxResultType;
+    sal_uInt16          mnLastRecId;
+    bool                mbMergeContRec;
 };
 
 // ----------------------------------------------------------------------------
 
 template< typename Type >
-void BiffObjectBase::writeRectItem( const sal_Char* pcName,
+void BiffObjectBase::writeRectItem( const String& rName,
         Type nLeft, Type nTop, Type nWidth, Type nHeight,
         const NameListWrapper& rListWrp, FormatType eFmtType )
 {
     MultiItemsGuard aMultiGuard( out() );
-    writeEmptyItem( pcName );
+    writeEmptyItem( rName );
     writeValueItem( "x-pos", nLeft, eFmtType, rListWrp );
     writeValueItem( "y-pos", nTop, eFmtType, rListWrp );
     writeValueItem( "x-size", nWidth, eFmtType, rListWrp );
@@ -216,12 +253,12 @@ void BiffObjectBase::writeRectItem( const sal_Char* pcName,
 }
 
 template< typename Type >
-void BiffObjectBase::dumpRect( const sal_Char* pcName,
+void BiffObjectBase::dumpRect( const String& rName,
         const NameListWrapper& rListWrp, FormatType eFmtType )
 {
     Type nLeft, nTop, nWidth, nHeight;
-    *mxStrm >> nLeft >> nTop >> nWidth >> nHeight;
-    writeRectItem( pcName, nLeft, nTop, nWidth, nHeight, rListWrp, eFmtType );
+    *mxBiffStrm >> nLeft >> nTop >> nWidth >> nHeight;
+    writeRectItem( rName, nLeft, nTop, nWidth, nHeight, rListWrp, eFmtType );
 }
 
 // ============================================================================
@@ -234,12 +271,12 @@ public:
     virtual             ~FormulaObject();
 
     sal_uInt16          readFormulaSize();
-    sal_uInt16          dumpFormulaSize( const sal_Char* pcName = 0 );
+    sal_uInt16          dumpFormulaSize( const String& rName = EMPTY_STRING );
 
-    void                dumpCellFormula( const sal_Char* pcName, sal_uInt16 nSize );
-    void                dumpCellFormula( const sal_Char* pcName = 0 );
-    void                dumpNameFormula( const sal_Char* pcName, sal_uInt16 nSize );
-    void                dumpNameFormula( const sal_Char* pcName = 0 );
+    void                dumpCellFormula( const String& rName, sal_uInt16 nSize );
+    void                dumpCellFormula( const String& rName = EMPTY_STRING );
+    void                dumpNameFormula( const String& rName, sal_uInt16 nSize );
+    void                dumpNameFormula( const String& rName = EMPTY_STRING );
 
 protected:
     virtual void        implDump();
@@ -247,8 +284,8 @@ protected:
 private:
     void                constructFmlaObj();
 
-    void                dumpFormula( const sal_Char* pcName, sal_uInt16 nSize, bool bNameMode );
-    void                dumpFormula( const sal_Char* pcName, bool bNameMode );
+    void                dumpFormula( const String& rName, sal_uInt16 nSize, bool bNameMode );
+    void                dumpFormula( const String& rName, bool bNameMode );
 
     TokenAddress        createTokenAddress( sal_uInt16 nCol, sal_uInt16 nRow, bool bRelC, bool bRelR, bool bNameMode ) const;
     ::rtl::OUString     createRef( const ::rtl::OUString& rData ) const;
@@ -259,8 +296,8 @@ private:
     sal_uInt16          readFuncId();
     ::rtl::OUString     writeFuncIdItem( sal_uInt16 nFuncId, const ::oox::xls::FunctionInfo** oppFuncInfo = 0 );
 
-    sal_uInt16          dumpTokenCol( const sal_Char* pcName, bool& rbRelC, bool& rbRelR );
-    sal_uInt16          dumpTokenRow( const sal_Char* pcName, bool& rbRelC, bool& rbRelR );
+    sal_uInt16          dumpTokenCol( const String& rName, bool& rbRelC, bool& rbRelR );
+    sal_uInt16          dumpTokenRow( const String& rName, bool& rbRelC, bool& rbRelR );
     TokenAddress        dumpTokenAddress( bool bNameMode );
     TokenRange          dumpTokenRange( bool bNameMode );
 
@@ -287,9 +324,9 @@ private:
     void                dumpMemFuncToken( const ::rtl::OUString& rTokClass );
     void                dumpMemAreaToken( const ::rtl::OUString& rTokClass, bool bAddData );
 
-    void                dumpExpToken( const StringWrapper& rName );
-    void                dumpUnaryOpToken( const StringWrapper& rLOp, const StringWrapper& rROp );
-    void                dumpBinaryOpToken( const StringWrapper& rOp );
+    void                dumpExpToken( const String& rName );
+    void                dumpUnaryOpToken( const String& rLOp, const String& rROp );
+    void                dumpBinaryOpToken( const String& rOp );
     void                dumpFuncToken( const ::rtl::OUString& rTokClass );
     void                dumpFuncVarToken( const ::rtl::OUString& rTokClass );
     void                dumpCmdToken( const ::rtl::OUString& rTokClass );
@@ -329,33 +366,12 @@ private:
     FuncProvRef         mxFuncProv;
     AddDataTypeVec      maAddData;
     ::rtl::OUString     maRefPrefix;
-    const sal_Char*     mpcName;
+    ::rtl::OUString     maName;
     sal_uInt16          mnSize;
     bool                mbNameMode;
 };
 
-typedef ::boost::shared_ptr< FormulaObject > FormulaObjectRef;
-
 // ============================================================================
-// ============================================================================
-
-class RecordHeaderObject : public RecordHeaderBase< sal_uInt16, sal_uInt32 >
-{
-public:
-    explicit            RecordHeaderObject( const InputObjectBase& rParent, ::oox::xls::BiffInputStream& rStrm );
-
-    inline bool         isMergeContRec() const { return mbMergeContRec; }
-
-protected:
-    virtual bool        implReadHeader( sal_Int64& ornRecPos, sal_uInt16& ornRecId, sal_uInt32& ornRecSize );
-
-private:
-    ::oox::xls::BiffInputStream& mrStrm;
-    bool                mbMergeContRec;
-};
-
-typedef ::boost::shared_ptr< RecordHeaderObject > RecHeaderObjectRef;
-
 // ============================================================================
 
 class RecordStreamObject : public BiffObjectBase
@@ -365,27 +381,15 @@ protected:
     virtual             ~RecordStreamObject();
 
     using               BiffObjectBase::construct;
-    void                construct( const ObjectBase& rParent, const ::rtl::OUString& rOutFileName, BinaryInputStreamRef xStrm, ::oox::xls::BiffType eBiff );
+    void                construct( const ObjectBase& rParent, const BinaryInputStreamRef& rxStrm, ::oox::xls::BiffType eBiff, const ::rtl::OUString& rSysFileName );
 
     virtual bool        implIsValid() const;
-    virtual void        implDump();
-    virtual void        implDumpRecord();
 
-    inline RecordHeaderObject& getRecordHeader() const { return *mxHdrObj; }
     inline FormulaObject& getFormulaDumper() const { return *mxFmlaObj; }
-    inline DffDumpObject& getDffDumper() const { return *mxDffObj; }
-
-    sal_uInt16          dumpRepeatedRecId();
 
 private:
-    void                dumpRecordBody();
-    void                dumpSimpleRecord( const ::rtl::OUString& rRecData );
-
-private:
-    RecHeaderObjectRef  mxHdrObj;
+    typedef ::boost::shared_ptr< FormulaObject > FormulaObjectRef;
     FormulaObjectRef    mxFmlaObj;
-    DffDumpObjectRef    mxDffObj;
-    NameListRef         mxSimpleRecs;
 };
 
 // ============================================================================
@@ -393,23 +397,22 @@ private:
 class WorkbookStreamObject : public RecordStreamObject
 {
 public:
-    explicit            WorkbookStreamObject( const ObjectBase& rParent, const ::rtl::OUString& rOutFileName, BinaryInputStreamRef xStrm );
+    explicit            WorkbookStreamObject( const ObjectBase& rParent, const BinaryInputStreamRef& rxStrm, const ::rtl::OUString& rSysFileName );
     virtual             ~WorkbookStreamObject();
 
 protected:
-    using               RecordStreamObject::construct;
-    void                construct( const ObjectBase& rParent, const ::rtl::OUString& rOutFileName, BinaryInputStreamRef xStrm );
-
-    virtual void        implDumpRecord();
+    virtual void        implDumpRecordBody();
 
 private:
+    void                initializePerSheet();
+
     ::rtl::OUString     createFontName( const ::rtl::OUString& rName, sal_uInt16 nHeight, bool bBold, bool bItalic ) const;
 
-    sal_uInt16          dumpPatternIdx( const sal_Char* pcName = 0, bool b16Bit = true );
-    sal_uInt16          dumpColorIdx( const sal_Char* pcName = 0, bool b16Bit = true );
-    sal_uInt16          dumpFontIdx( const sal_Char* pcName = 0, bool b16Bit = true );
-    sal_uInt16          dumpFormatIdx( const sal_Char* pcName = 0 );
-    sal_uInt16          dumpXfIdx( const sal_Char* pcName = 0, bool bBiff2Style = false );
+    sal_uInt16          dumpPatternIdx( const String& rName = EMPTY_STRING, bool b16Bit = true );
+    sal_uInt16          dumpColorIdx( const String& rName = EMPTY_STRING, bool b16Bit = true );
+    sal_uInt16          dumpFontIdx( const String& rName = EMPTY_STRING, bool b16Bit = true );
+    sal_uInt16          dumpFormatIdx( const String& rName = EMPTY_STRING );
+    sal_uInt16          dumpXfIdx( const String& rName = EMPTY_STRING, bool bBiff2Style = false );
 
     sal_uInt16          dumpCellHeader( bool bBiff2Style = false );
     void                dumpBoolErr();
@@ -419,9 +422,29 @@ private:
     void                dumpXfRec();
 
     void                dumpObjRec();
+    void                dumpObjRecBiff3();
+    void                dumpObjRecBiff4();
     void                dumpObjRecBiff5();
     void                dumpObjRecBiff8();
-    void                dumpFormControl( sal_uInt32 nStrmPos, sal_uInt32 nStrmSize );
+
+    void                dumpObjRecLineData();
+    void                dumpObjRecFillData();
+    void                dumpObjRecRectData();
+    void                dumpObjRecTextDataBiff3( sal_uInt16& ornTextLen, sal_uInt16& ornFormatSize );
+    void                dumpObjRecTextDataBiff5( sal_uInt16& ornTextLen, sal_uInt16& ornFormatSize, sal_uInt16& ornLinkSize );
+    void                dumpObjRecSbsData();
+    void                dumpObjRecGboData();
+    void                dumpObjRecEdoData();
+    void                dumpObjRecRboData();
+    void                dumpObjRecCblsData();
+    void                dumpObjRecLbsData();
+
+    void                dumpObjRecPadding();
+    void                dumpObjRecString( const String& rName, sal_uInt16 nTextLen, bool bRepeatLen );
+    void                dumpObjRecTextFmt( sal_uInt16 nFormatSize );
+    void                dumpObjRecFmlaRaw();
+    void                dumpObjRecFmla( const String& rName, sal_uInt16 nFmlaSize );
+    void                dumpObjRecPictFmla( sal_uInt16 nFmlaSize );
 
 private:
     NameListRef         mxColors;
@@ -434,6 +457,7 @@ private:
     sal_uInt16          mnPTColFields;
     sal_uInt16          mnPTSxliIdx;
     bool                mbHasCodePage;
+    bool                mbHasDff;
 };
 
 // ============================================================================
@@ -441,26 +465,31 @@ private:
 class PivotCacheStreamObject : public RecordStreamObject
 {
 public:
-    explicit            PivotCacheStreamObject( const ObjectBase& rParent, const ::rtl::OUString& rOutFileName, BinaryInputStreamRef xStrm );
+    explicit            PivotCacheStreamObject( const ObjectBase& rParent, const BinaryInputStreamRef& rxStrm, const ::rtl::OUString& rSysFileName );
 
 protected:
-    virtual void        implDumpRecord();
+    virtual void        implDumpRecordBody();
 };
 
 // ============================================================================
 // ============================================================================
 
-class RootStorageObject : public RootStorageObjectBase
+class RootStorageObject : public OleStorageObject
 {
 public:
     explicit            RootStorageObject( const DumperBase& rParent );
 
 protected:
     virtual void        implDumpStream(
-                            BinaryInputStreamRef xStrm,
+                            const BinaryInputStreamRef& rxStrm,
                             const ::rtl::OUString& rStrgPath,
                             const ::rtl::OUString& rStrmName,
-                            const ::rtl::OUString& rSystemFileName );
+                            const ::rtl::OUString& rSysFileName );
+
+    virtual void        implDumpStorage(
+                            const StorageRef& rxStrg,
+                            const ::rtl::OUString& rStrgPath,
+                            const ::rtl::OUString& rSysPath );
 };
 
 // ============================================================================
@@ -470,6 +499,11 @@ class Dumper : public DumperBase
 {
 public:
     explicit            Dumper( const ::oox::core::FilterBase& rFilter );
+
+    explicit            Dumper(
+                            const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& rxFactory,
+                            const ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream >& rxInStrm,
+                            const ::rtl::OUString& rSysFileName );
 
 protected:
     virtual void        implDump();

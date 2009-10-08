@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: worksheetsettings.cxx,v $
- * $Revision: 1.5 $
+ * $Revision: 1.5.4.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -285,7 +285,8 @@ void WorksheetSettings::importPassword( BiffInputStream& rStrm )
 
 void WorksheetSettings::importSheetProtection( BiffInputStream& rStrm )
 {
-    sal_uInt16 nFlags = rStrm.skip( 19 ).readuInt16();
+    rStrm.skip( 19 );
+    sal_uInt16 nFlags = rStrm.readuInt16();
     // set flag means protection is disabled
     maOoxProtData.mbObjects          = !getFlag( nFlags, BIFF_SHEETPROT_OBJECTS );
     maOoxProtData.mbScenarios        = !getFlag( nFlags, BIFF_SHEETPROT_SCENARIOS );

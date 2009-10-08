@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: pptxdumper.cxx,v $
- * $Revision: 1.3 $
+ * $Revision: 1.3.20.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -29,10 +29,14 @@
  ************************************************************************/
 
 #include "oox/dump/pptxdumper.hxx"
+#include "oox/helper/zipstorage.hxx"
 
 #if OOX_INCLUDE_DUMPER
 
 using ::rtl::OUString;
+using ::com::sun::star::uno::Reference;
+using ::com::sun::star::lang::XMultiServiceFactory;
+using ::com::sun::star::io::XInputStream;
 using ::oox::core::FilterBase;
 
 namespace oox {
@@ -43,26 +47,38 @@ namespace pptx {
 
 RootStorageObject::RootStorageObject( const DumperBase& rParent )
 {
-    RootStorageObjectBase::construct( rParent );
+    StorageObjectBase::construct( rParent );
 }
 
-void RootStorageObject::implDumpStream( BinaryInputStreamRef xStrm, const OUString& /*rStrgPath*/, const OUString& rStrmName, const OUString& rSystemFileName )
+void RootStorageObject::implDumpStream( const BinaryInputStreamRef& rxStrm, const OUString& /*rStrgPath*/, const OUString& rStrmName, const OUString& rSysFileName )
 {
     OUString aExt = InputOutputHelper::getFileNameExtension( rStrmName );
     if( aExt.equalsIgnoreAsciiCaseAscii( "xml" ) ||
         aExt.equalsIgnoreAsciiCaseAscii( "vml" ) ||
         aExt.equalsIgnoreAsciiCaseAscii( "rels" ) )
     {
-        XmlStreamObject( *this, rSystemFileName, xStrm ).dump();
+        XmlStreamObject( *this, rxStrm, rSysFileName ).dump();
     }
 }
 
 // ============================================================================
 
+#define DUMP_PPTX_CONFIG_ENVVAR "OOO_PPTXDUMPER"
+
 Dumper::Dumper( const FilterBase& rFilter )
 {
-    ConfigRef xCfg( new Config( "OOO_PPTXDUMPER" ) );
-    DumperBase::construct( rFilter, xCfg );
+    ConfigRef xCfg( new Config( DUMP_PPTX_CONFIG_ENVVAR, rFilter ) );
+    DumperBase::construct( xCfg );
+}
+
+Dumper::Dumper( const Reference< XMultiServiceFactory >& rxFactory, const Reference< XInputStream >& rxInStrm, const OUString& rSysFileName )
+{
+    if( rxFactory.is() && rxInStrm.is() )
+    {
+        StorageRef xStrg( new ZipStorage( rxFactory, rxInStrm ) );
+        ConfigRef xCfg( new Config( DUMP_PPTX_CONFIG_ENVVAR, rxFactory, xStrg, rSysFileName ) );
+        DumperBase::construct( xCfg );
+    }
 }
 
 void Dumper::implDump()

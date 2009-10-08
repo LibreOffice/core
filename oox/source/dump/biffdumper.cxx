@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: biffdumper.cxx,v $
- * $Revision: 1.5 $
+ * $Revision: 1.5.20.26 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -32,10 +32,8 @@
 
 #include <osl/thread.h>
 #include <rtl/tencinfo.h>
-#include <rtl/strbuf.hxx>
-#include <com/sun/star/util/DateTime.hpp>
-#include <com/sun/star/sheet/XSpreadsheetDocument.hpp>
-#include "oox/dump/olestoragedumper.hxx"
+#include "oox/dump/oledumper.hxx"
+#include "oox/helper/olestorage.hxx"
 #include "oox/core/filterbase.hxx"
 #include "oox/xls/biffdetector.hxx"
 #include "oox/xls/biffinputstream.hxx"
@@ -49,9 +47,9 @@ using ::rtl::OString;
 using ::rtl::OStringBuffer;
 using ::rtl::OStringToOUString;
 using ::com::sun::star::uno::Reference;
-using ::com::sun::star::uno::UNO_QUERY;
 using ::com::sun::star::util::DateTime;
-using ::com::sun::star::sheet::XSpreadsheetDocument;
+using ::com::sun::star::lang::XMultiServiceFactory;
+using ::com::sun::star::io::XInputStream;
 using ::oox::core::FilterBase;
 
 using namespace ::oox::xls;
@@ -67,42 +65,31 @@ namespace  {
 const sal_uInt16 BIFF_FONTFLAG_BOLD         = 0x0001;
 const sal_uInt16 BIFF_FONTFLAG_ITALIC       = 0x0002;
 
-const sal_uInt32 BIFF_HYPERLINK_TARGET      = 0x00000001;   /// File name or URL.
-const sal_uInt32 BIFF_HYPERLINK_ABS         = 0x00000002;   /// Absolute path.
-const sal_uInt32 BIFF_HYPERLINK_DISPLAY     = 0x00000014;   /// Display string.
-const sal_uInt32 BIFF_HYPERLINK_LOC         = 0x00000008;   /// Target location.
-const sal_uInt32 BIFF_HYPERLINK_FRAME       = 0x00000080;   /// Target frame.
-const sal_uInt32 BIFF_HYPERLINK_UNC         = 0x00000100;   /// UNC path.
+const sal_uInt16 BIFF_OBJTYPE_GROUP         = 0;
+const sal_uInt16 BIFF_OBJTYPE_LINE          = 1;
+const sal_uInt16 BIFF_OBJTYPE_RECTANGLE     = 2;
+const sal_uInt16 BIFF_OBJTYPE_OVAL          = 3;
+const sal_uInt16 BIFF_OBJTYPE_ARC           = 4;
+const sal_uInt16 BIFF_OBJTYPE_CHART         = 5;
+const sal_uInt16 BIFF_OBJTYPE_TEXT          = 6;
+const sal_uInt16 BIFF_OBJTYPE_BUTTON        = 7;
+const sal_uInt16 BIFF_OBJTYPE_PICTURE       = 8;
+const sal_uInt16 BIFF_OBJTYPE_POLYGON       = 9;
+const sal_uInt16 BIFF_OBJTYPE_CHECKBOX      = 11;
+const sal_uInt16 BIFF_OBJTYPE_OPTIONBUTTON  = 12;
+const sal_uInt16 BIFF_OBJTYPE_EDIT          = 13;
+const sal_uInt16 BIFF_OBJTYPE_LABEL         = 14;
+const sal_uInt16 BIFF_OBJTYPE_DIALOG        = 15;
+const sal_uInt16 BIFF_OBJTYPE_SPIN          = 16;
+const sal_uInt16 BIFF_OBJTYPE_SCROLLBAR     = 17;
+const sal_uInt16 BIFF_OBJTYPE_LISTBOX       = 18;
+const sal_uInt16 BIFF_OBJTYPE_GROUPBOX      = 19;
+const sal_uInt16 BIFF_OBJTYPE_DROPDOWN      = 20;
+const sal_uInt16 BIFF_OBJTYPE_NOTE          = 25;
+const sal_uInt16 BIFF_OBJTYPE_DRAWING       = 30;
 
-const sal_uInt16 BIFF_OBJPIO_MANUALSIZE     = 0x0001;
-const sal_uInt16 BIFF_OBJPIO_LINKED         = 0x0002;
-const sal_uInt16 BIFF_OBJPIO_SYMBOL         = 0x0008;
-const sal_uInt16 BIFF_OBJPIO_CONTROL        = 0x0010;   /// Form control.
-const sal_uInt16 BIFF_OBJPIO_CTLSSTREAM     = 0x0020;   /// Data in Ctls stream.
-const sal_uInt16 BIFF_OBJPIO_AUTOLOAD       = 0x0200;
-
-const sal_uInt16 BIFF_OBJCMO_GROUP          = 0x0000;
-const sal_uInt16 BIFF_OBJCMO_LINE           = 0x0001;
-const sal_uInt16 BIFF_OBJCMO_RECTANGLE      = 0x0002;
-const sal_uInt16 BIFF_OBJCMO_ELLIPSE        = 0x0003;
-const sal_uInt16 BIFF_OBJCMO_ARC            = 0x0004;
-const sal_uInt16 BIFF_OBJCMO_CHART          = 0x0005;
-const sal_uInt16 BIFF_OBJCMO_TEXT           = 0x0006;
-const sal_uInt16 BIFF_OBJCMO_BUTTON         = 0x0007;
-const sal_uInt16 BIFF_OBJCMO_PICTURE        = 0x0008;
-const sal_uInt16 BIFF_OBJCMO_POLYGON        = 0x0009;
-const sal_uInt16 BIFF_OBJCMO_CHECKBOX       = 0x000B;
-const sal_uInt16 BIFF_OBJCMO_OPTIONBUTTON   = 0x000C;
-const sal_uInt16 BIFF_OBJCMO_EDIT           = 0x000D;
-const sal_uInt16 BIFF_OBJCMO_LABEL          = 0x000E;
-const sal_uInt16 BIFF_OBJCMO_DIALOG         = 0x000F;
-const sal_uInt16 BIFF_OBJCMO_SPIN           = 0x0010;
-const sal_uInt16 BIFF_OBJCMO_SCROLLBAR      = 0x0011;
-const sal_uInt16 BIFF_OBJCMO_LISTBOX        = 0x0012;
-const sal_uInt16 BIFF_OBJCMO_GROUPBOX       = 0x0013;
-const sal_uInt16 BIFF_OBJCMO_COMBOBOX       = 0x0014;
-const sal_uInt16 BIFF_OBJCMO_NOTE           = 0x0019;
-const sal_uInt16 BIFF_OBJCMO_DRAWING        = 0x001E;
+const sal_uInt16 BIFF_OBJFLAGS_CONTROL      = 0x0010;   /// Form control.
+const sal_uInt16 BIFF_OBJFLAGS_CTLSSTREAM   = 0x0020;   /// Data in Ctls stream.
 
 const sal_uInt16 BIFF_STYLE_BUILTIN         = 0x8000;
 
@@ -113,70 +100,80 @@ const sal_uInt16 BIFF_PT_NOSTRING           = 0xFFFF;
 // ============================================================================
 // ============================================================================
 
-class BiffStreamInput : public Input
+namespace {
+
+void lclDumpDffClientPos( Output& rOut, BinaryInputStream& rStrm, const String& rName, sal_uInt16 nSubScale )
 {
-public:
-    inline explicit     BiffStreamInput( BiffInputStream& rStrm ) : mrStrm( rStrm ) {}
-    virtual             ~BiffStreamInput();
+    MultiItemsGuard aMultiGuard( rOut );
+    TableGuard aTabGuard( rOut, 17 );
+    {
+        sal_uInt16 nPos = rStrm.readuInt16();
+        ItemGuard aItem( rOut, rName );
+        rOut.writeDec( nPos );
+    }
+    {
+        sal_uInt16 nSubUnits = rStrm.readuInt16();
+        ItemGuard aItem( rOut, "sub-units" );
+        rOut.writeDec( nSubUnits );
+        rOut.writeChar( '/' );
+        rOut.writeDec( nSubScale );
+    }
+}
 
-    virtual sal_Int64   getSize() const;
-    virtual sal_Int64   tell() const;
-    virtual void        seek( sal_Int64 nPos );
-    virtual void        skip( sal_Int32 nBytes );
-    virtual sal_Int32   read( void* pBuffer, sal_Int32 nBytes );
+void lclDumpDffClientRect( Output& rOut, BinaryInputStream& rStrm )
+{
+    lclDumpDffClientPos( rOut, rStrm, "start-col", 1024 );
+    lclDumpDffClientPos( rOut, rStrm, "start-row", 256 );
+    lclDumpDffClientPos( rOut, rStrm, "end-col", 1024 );
+    lclDumpDffClientPos( rOut, rStrm, "end-row", 256 );
+}
 
-    virtual BiffStreamInput& operator>>( sal_Int8& rnData );
-    virtual BiffStreamInput& operator>>( sal_uInt8& rnData );
-    virtual BiffStreamInput& operator>>( sal_Int16& rnData );
-    virtual BiffStreamInput& operator>>( sal_uInt16& rnData );
-    virtual BiffStreamInput& operator>>( sal_Int32& rnData );
-    virtual BiffStreamInput& operator>>( sal_uInt32& rnData );
-    virtual BiffStreamInput& operator>>( float& rfData );
-    virtual BiffStreamInput& operator>>( double& rfData );
-
-private:
-    BiffInputStream&    mrStrm;
-};
+} // namespace
 
 // ----------------------------------------------------------------------------
 
-BiffStreamInput::~BiffStreamInput()
+BiffDffStreamObject::BiffDffStreamObject( const OutputObjectBase& rParent, const BinaryInputStreamRef& rxStrm )
 {
+    DffStreamObject::construct( rParent, rxStrm );
 }
 
-sal_Int64 BiffStreamInput::getSize() const
+void BiffDffStreamObject::implDumpClientAnchor()
 {
-    return mrStrm.getRecSize();
+    dumpHex< sal_uInt16 >( "flags", "DFF-CLIENTANCHOR-FLAGS" );
+    lclDumpDffClientRect( out(), in() );
 }
 
-sal_Int64 BiffStreamInput::tell() const
+// ============================================================================
+
+BiffCtlsStreamObject::BiffCtlsStreamObject( const OutputObjectBase& rParent, const BinaryInputStreamRef& rxStrm )
 {
-    return mrStrm.getRecPos();
+    InputObjectBase::construct( rParent, rxStrm );
+    mnStartPos = mnLength = 0;
 }
 
-void BiffStreamInput::seek( sal_Int64 nPos )
+void BiffCtlsStreamObject::dumpControl( sal_uInt32 nStartPos, sal_uInt32 nLength )
 {
-    mrStrm.seek( static_cast< sal_uInt32 >( nPos ) );
+    mnStartPos = nStartPos;
+    mnLength = nLength;
+    dump();
+    mnStartPos = mnLength = 0;
 }
 
-void BiffStreamInput::skip( sal_Int32 nBytes )
+void BiffCtlsStreamObject::implDump()
 {
-    mrStrm.skip( static_cast< sal_uInt32 >( nBytes ) );
+    if( mnLength > 0 )
+    {
+        out().emptyLine();
+        writeEmptyItem( "CTLS-START" );
+        {
+            IndentGuard aIndGuard( out() );
+            in().seek( mnStartPos );
+            OcxGuidControlObject( *this, mnLength ).dump();
+        }
+        writeEmptyItem( "CTLS-END" );
+        out().emptyLine();
+    }
 }
-
-sal_Int32 BiffStreamInput::read( void* pBuffer, sal_Int32 nSize )
-{
-    return static_cast< sal_Int32 >( mrStrm.read( pBuffer, static_cast< sal_uInt32 >( nSize ) ) );
-}
-
-BiffStreamInput& BiffStreamInput::operator>>( sal_Int8& rnData )   { mrStrm >> rnData; return *this; }
-BiffStreamInput& BiffStreamInput::operator>>( sal_uInt8& rnData )  { mrStrm >> rnData; return *this; }
-BiffStreamInput& BiffStreamInput::operator>>( sal_Int16& rnData )  { mrStrm >> rnData; return *this; }
-BiffStreamInput& BiffStreamInput::operator>>( sal_uInt16& rnData ) { mrStrm >> rnData; return *this; }
-BiffStreamInput& BiffStreamInput::operator>>( sal_Int32& rnData )  { mrStrm >> rnData; return *this; }
-BiffStreamInput& BiffStreamInput::operator>>( sal_uInt32& rnData ) { mrStrm >> rnData; return *this; }
-BiffStreamInput& BiffStreamInput::operator>>( float& rfData )      { mrStrm >> rfData; return *this; }
-BiffStreamInput& BiffStreamInput::operator>>( double& rfData )     { mrStrm >> rfData; return *this; }
 
 // ============================================================================
 // ============================================================================
@@ -220,8 +217,11 @@ BiffSharedData::BiffSharedData( BiffType eBiff ) :
 {
 }
 
-BiffSharedData::~BiffSharedData()
+void BiffSharedData::initializePerSheet()
 {
+    maFontEncs.clear();
+    maXfFontIds.clear();
+    meTextEnc = osl_getThreadTextEncoding();
 }
 
 void BiffSharedData::setTextEncoding( rtl_TextEncoding eTextEnc )
@@ -270,32 +270,32 @@ bool BiffSharedData::implIsValid() const
 
 // ============================================================================
 
-BiffObjectBase::BiffObjectBase()
-{
-}
-
 BiffObjectBase::~BiffObjectBase()
 {
 }
 
-void BiffObjectBase::construct( const ObjectBase& rParent, const OUString& rOutFileName, BinaryInputStreamRef xStrm, BiffType eBiff )
+void BiffObjectBase::construct( const ObjectBase& rParent, const BinaryInputStreamRef& rxStrm, BiffType eBiff, const OUString& rSysFileName )
 {
-    if( eBiff != BIFF_UNKNOWN )
+    if( rParent.isValid() && rxStrm.get() && (eBiff != BIFF_UNKNOWN) )
     {
-        InputStreamObject::construct( rParent, rOutFileName, xStrm );
-        if( InputStreamObject::implIsValid() )
+        mxBiffData.reset( new BiffSharedData( eBiff ) );
+        mxBiffStrm.reset( new BiffInputStream( *rxStrm ) );
+        RecordObjectBase::construct( rParent, rxStrm, rSysFileName, mxBiffStrm, "RECORD-NAMES", "SIMPLE-RECORDS" );
+        if( RecordObjectBase::implIsValid() )
         {
-            mxBiffData.reset( new BiffSharedData( eBiff ) );
-            mxStrm.reset( new BiffInputStream( getStream() ) );
-            reconstructConfig();
-            reconstructInput();
-        }
-        if( BiffObjectBase::implIsValid() )
-        {
+            reconstructConfig( ConfigRef( new BiffConfig( cfg(), eBiff ) ) );
+            mxDffObj.reset( new BiffDffStreamObject( *this, mxBiffStrm ) );
+            if( StorageBase* pRootStrg = cfg().getRootStorage().get() )
+            {
+                BinaryInputStreamRef xCtlsStrm( new BinaryXInputStream( pRootStrg->openInputStream( CREATE_OUSTRING( "Ctls" ) ), true ) );
+                mxCtlsObj.reset( new BiffCtlsStreamObject( *this, xCtlsStrm ) );
+            }
             const Config& rCfg = cfg();
             mxErrCodes = rCfg.getNameList( "ERRORCODES" );
             mxConstType = rCfg.getNameList( "CONSTVALUE-TYPE" );
             mxResultType = rCfg.getNameList( "FORMULA-RESULTTYPE" );
+            mnLastRecId = BIFF_ID_UNKNOWN;
+            mbMergeContRec = rCfg.getBoolOption( "merge-continue-record", true );
         }
     }
 }
@@ -307,21 +307,52 @@ void BiffObjectBase::construct( const BiffObjectBase& rParent )
 
 bool BiffObjectBase::implIsValid() const
 {
-    return isValid( mxBiffCfg ) && isValid( mxBiffData ) && mxStrm.get() && InputStreamObject::implIsValid();
+    return isValid( mxBiffData ) && mxBiffStrm.get() && isValid( mxDffObj ) && InputObjectBase::implIsValid();
 }
 
-ConfigRef BiffObjectBase::implReconstructConfig()
+bool BiffObjectBase::implStartRecord( BinaryInputStream&, sal_Int64& ornRecPos, sal_Int64& ornRecId, sal_Int64& ornRecSize )
 {
-    mxBiffCfg.reset( new BiffConfig( cfg(), getBiff() ) );
-    return mxBiffCfg;
-}
+    // previous record
+    mnLastRecId = mxBiffStrm->getRecId();
+    switch( mnLastRecId )
+    {
+        case BIFF_ID_CHBEGIN:
+            out().incIndent();
+        break;
+    }
 
-InputRef BiffObjectBase::implReconstructInput()
-{
-    InputRef xIn;
-    if( mxStrm.get() )
-        xIn.reset( new BiffStreamInput( *mxStrm ) );
-    return xIn;
+    // start next record
+    bool bValid = mxBiffStrm->startNextRecord();
+    ornRecPos = mxBiffStrm->tellBase() - 4;
+    ornRecId = mxBiffStrm->getRecId();
+
+    // record specific settings
+    switch( mxBiffStrm->getRecId() )
+    {
+        case BIFF_ID_CHEND:
+            out().decIndent();
+        break;
+    }
+
+    // special CONTINUE handling
+    mxBiffStrm->resetRecord( mbMergeContRec );
+    if( mbMergeContRec ) switch( mxBiffStrm->getRecId() )
+    {
+        case BIFF_ID_OBJ:
+        case BIFF_ID_TXO:
+        case BIFF_ID_EOF:
+        case BIFF_ID_CONT:
+            mxBiffStrm->resetRecord( false );
+        break;
+        case BIFF_ID_MSODRAWINGGROUP:
+        case BIFF_ID_CHESCHERFORMAT:
+            mxBiffStrm->resetRecord( true, mxBiffStrm->getRecId() );
+        break;
+    }
+
+    ornRecSize = mxBiffStrm->getLength();
+    mxBiffStrm->enableNulChars( true );
+    return bValid;
 }
 
 OUString BiffObjectBase::getErrorName( sal_uInt8 nErrCode ) const
@@ -333,12 +364,12 @@ OUString BiffObjectBase::getErrorName( sal_uInt8 nErrCode ) const
 
 sal_Int32 BiffObjectBase::readCol( bool bCol16Bit )
 {
-    return bCol16Bit ? mxStrm->readuInt16() : mxStrm->readuInt8();
+    return bCol16Bit ? mxBiffStrm->readuInt16() : mxBiffStrm->readuInt8();
 }
 
 sal_Int32 BiffObjectBase::readRow( bool bRow32Bit )
 {
-    return bRow32Bit ? mxStrm->readInt32() : mxStrm->readuInt16();
+    return bRow32Bit ? mxBiffStrm->readInt32() : mxBiffStrm->readuInt16();
 }
 
 void BiffObjectBase::readAddress( Address& orAddress, bool bCol16Bit, bool bRow32Bit )
@@ -358,22 +389,22 @@ void BiffObjectBase::readRange( Range& orRange, bool bCol16Bit, bool bRow32Bit )
 void BiffObjectBase::readRangeList( RangeList& orRanges, bool bCol16Bit, bool bRow32Bit )
 {
     sal_uInt16 nCount;
-    *mxStrm >> nCount;
+    *mxBiffStrm >> nCount;
     orRanges.resize( nCount );
-    for( RangeList::iterator aIt = orRanges.begin(), aEnd = orRanges.end(); mxStrm->isValid() && (aIt != aEnd); ++aIt )
+    for( RangeList::iterator aIt = orRanges.begin(), aEnd = orRanges.end(); !mxBiffStrm->isEof() && (aIt != aEnd); ++aIt )
         readRange( *aIt, bCol16Bit, bRow32Bit );
 }
 
 // ----------------------------------------------------------------------------
 
-void BiffObjectBase::writeBooleanItem( const sal_Char* pcName, sal_uInt8 nBool )
+void BiffObjectBase::writeBooleanItem( const String& rName, sal_uInt8 nBool )
 {
-    writeDecItem( pcName, nBool, "BOOLEAN" );
+    writeDecItem( rName, nBool, "BOOLEAN" );
 }
 
-void BiffObjectBase::writeErrorCodeItem( const sal_Char* pcName, sal_uInt8 nErrCode )
+void BiffObjectBase::writeErrorCodeItem( const String& rName, sal_uInt8 nErrCode )
 {
-    writeHexItem( pcName, nErrCode, mxErrCodes );
+    writeHexItem( rName, nErrCode, mxErrCodes );
 }
 
 void BiffObjectBase::writeFontPortions( const BinFontPortionList& rPortions )
@@ -393,15 +424,15 @@ void BiffObjectBase::writeFontPortions( const BinFontPortionList& rPortions )
 
 // ----------------------------------------------------------------------------
 
-OUString BiffObjectBase::dumpByteString( const sal_Char* pcName, BiffStringFlags nFlags, rtl_TextEncoding eDefaultTextEnc )
+OUString BiffObjectBase::dumpByteString( const String& rName, BiffStringFlags nFlags, rtl_TextEncoding eDefaultTextEnc )
 {
     OSL_ENSURE( !getFlag( nFlags, static_cast< BiffStringFlags >( ~(BIFF_STR_8BITLENGTH | BIFF_STR_EXTRAFONTS) ) ), "BiffObjectBase::dumpByteString - unknown flag" );
     bool b8BitLength = getFlag( nFlags, BIFF_STR_8BITLENGTH );
 
-    OString aString = mxStrm->readByteString( !b8BitLength );
+    OString aString = mxBiffStrm->readByteString( !b8BitLength );
     BinFontPortionList aPortions;
     if( getFlag( nFlags, BIFF_STR_EXTRAFONTS ) )
-        aPortions.importPortions( *mxStrm, false );
+        aPortions.importPortions( *mxBiffStrm, false );
 
     // create string portions
     OUStringBuffer aBuffer;
@@ -434,29 +465,29 @@ OUString BiffObjectBase::dumpByteString( const sal_Char* pcName, BiffStringFlags
     }
 
     OUString aUniStr = aBuffer.makeStringAndClear();
-    writeStringItem( pcName ? pcName : "text", aUniStr );
+    writeStringItem( rName( "text" ), aUniStr );
     return aUniStr;
 }
 
-OUString BiffObjectBase::dumpUniString( const sal_Char* pcName, BiffStringFlags nFlags )
+OUString BiffObjectBase::dumpUniString( const String& rName, BiffStringFlags nFlags )
 {
     OSL_ENSURE( !getFlag( nFlags, static_cast< BiffStringFlags >( ~(BIFF_STR_8BITLENGTH | BIFF_STR_SMARTFLAGS) ) ), "BiffObjectBase::dumpUniString - unknown flag" );
     bool b8BitLength = getFlag( nFlags, BIFF_STR_8BITLENGTH );
 
     // --- string header ---
-    sal_uInt16 nChars = b8BitLength ? mxStrm->readuInt8() : mxStrm->readuInt16();
+    sal_uInt16 nChars = b8BitLength ? mxBiffStrm->readuInt8() : mxBiffStrm->readuInt16();
     sal_uInt8 nFlagField = 0;
     if( (nChars > 0) || !getFlag( nFlags, BIFF_STR_SMARTFLAGS ) )
-        *mxStrm >> nFlagField;
+        *mxBiffStrm >> nFlagField;
     bool b16Bit    = getFlag( nFlagField, BIFF_STRF_16BIT );
     bool bFonts    = getFlag( nFlagField, BIFF_STRF_RICH );
     bool bPhonetic = getFlag( nFlagField, BIFF_STRF_PHONETIC );
-    sal_uInt16 nFontCount = bFonts ? mxStrm->readuInt16() : 0;
-    sal_uInt32 nPhoneticSize = bPhonetic ? mxStrm->readuInt32() : 0;
+    sal_uInt16 nFontCount = bFonts ? mxBiffStrm->readuInt16() : 0;
+    sal_uInt32 nPhoneticSize = bPhonetic ? mxBiffStrm->readuInt32() : 0;
 
     // --- character array ---
-    OUString aString = mxStrm->readUniStringChars( nChars, b16Bit );
-    writeStringItem( pcName ? pcName : "text", aString );
+    OUString aString = mxBiffStrm->readUniStringChars( nChars, b16Bit );
+    writeStringItem( rName( "text" ), aString );
 
     // --- formatting ---
     // #122185# bRich flag may be set, but format runs may be missing
@@ -464,7 +495,7 @@ OUString BiffObjectBase::dumpUniString( const sal_Char* pcName, BiffStringFlags 
     {
         IndentGuard aIndGuard( out() );
         BinFontPortionList aPortions;
-        aPortions.importPortions( *mxStrm, nFontCount, true );
+        aPortions.importPortions( *mxBiffStrm, nFontCount, BIFF_FONTPORTION_16BIT );
         writeFontPortions( aPortions );
     }
 
@@ -479,101 +510,39 @@ OUString BiffObjectBase::dumpUniString( const sal_Char* pcName, BiffStringFlags 
     return aString;
 }
 
-OUString BiffObjectBase::dumpString( const sal_Char* pcName, BiffStringFlags nByteFlags, BiffStringFlags nUniFlags, rtl_TextEncoding eDefaultTextEnc )
+OUString BiffObjectBase::dumpString( const String& rName, BiffStringFlags nByteFlags, BiffStringFlags nUniFlags, rtl_TextEncoding eDefaultTextEnc )
 {
-    return (getBiff() == BIFF8) ? dumpUniString( pcName, nUniFlags ) : dumpByteString( pcName, nByteFlags, eDefaultTextEnc );
+    return (getBiff() == BIFF8) ? dumpUniString( rName, nUniFlags ) : dumpByteString( rName, nByteFlags, eDefaultTextEnc );
 }
 
-OUString BiffObjectBase::dumpOleString( const sal_Char* pcName, sal_Int32 nCharCount, bool bUnicode )
-{
-    OUString aString;
-    if( nCharCount > 0 )
-    {
-        sal_uInt16 nReadChars = getLimitedValue< sal_uInt16, sal_Int32 >( nCharCount, 0, SAL_MAX_UINT16 );
-        aString = bUnicode ?
-            mxStrm->readUnicodeArray( nReadChars ) :
-            mxStrm->readCharArray( nReadChars, getBiffData().getTextEncoding() );
-        // skip remaining chars
-        sal_uInt32 nSkip = static_cast< sal_uInt32 >( nCharCount - nReadChars );
-        mxStrm->skip( bUnicode ? (nSkip * 2) : nSkip );
-    }
-    writeStringItem( pcName ? pcName : "text", aString );
-    return aString;
-}
-
-OUString BiffObjectBase::dumpOleString( const sal_Char* pcName, bool bUnicode )
-{
-    return dumpOleString( pcName, mxStrm->readInt32(), bUnicode );
-}
-
-OUString BiffObjectBase::dumpNullString( const sal_Char* pcName, bool bUnicode )
-{
-    OUString aString;
-    if( bUnicode )
-    {
-        OUStringBuffer aBuffer;
-        sal_uInt16 nChar;
-        for( bool bLoop = true; bLoop && mxStrm->isValid(); )
-        {
-            *mxStrm >> nChar;
-            if( (bLoop = (nChar != 0)) == true )
-                aBuffer.append( static_cast< sal_Unicode >( nChar ) );
-        }
-        aString = aBuffer.makeStringAndClear();
-    }
-    else
-    {
-        OStringBuffer aBuffer;
-        sal_uInt8 nChar;
-        for( bool bLoop = true; bLoop && mxStrm->isValid(); )
-        {
-            *mxStrm >> nChar;
-            if( (bLoop = (nChar != 0)) == true )
-                aBuffer.append( static_cast< sal_Char >( nChar ) );
-        }
-        aString = OStringToOUString( aBuffer.makeStringAndClear(), getBiffData().getTextEncoding() );
-    }
-    writeStringItem( pcName ? pcName : "text", aString );
-    return aString;
-}
-
-sal_uInt8 BiffObjectBase::dumpBoolean( const sal_Char* pcName )
+sal_uInt8 BiffObjectBase::dumpBoolean( const String& rName )
 {
     sal_uInt8 nBool;
-    *mxStrm >> nBool;
-    writeBooleanItem( pcName ? pcName : "boolean", nBool );
+    *mxBiffStrm >> nBool;
+    writeBooleanItem( rName( "boolean" ), nBool );
     return nBool;
 }
 
-sal_uInt8 BiffObjectBase::dumpErrorCode( const sal_Char* pcName )
+sal_uInt8 BiffObjectBase::dumpErrorCode( const String& rName )
 {
     sal_uInt8 nErrCode;
-    *mxStrm >> nErrCode;
-    writeErrorCodeItem( pcName ? pcName : "errorcode", nErrCode );
+    *mxBiffStrm >> nErrCode;
+    writeErrorCodeItem( rName( "error-code" ), nErrCode );
     return nErrCode;
 }
 
-sal_Int32 BiffObjectBase::dumpRgbColor( const sal_Char* pcName )
+rtl_TextEncoding BiffObjectBase::dumpCodePage( const String& rName )
 {
-    sal_uInt8 nR, nG, nB, nA;
-    *mxStrm >> nR >> nG >> nB >> nA;
-    sal_Int32 nValue = (nA << 24) | (nR << 16) | (nG << 8) | nB;
-    writeColorItem( pcName ? pcName : "color-rgb", nValue );
-    return nValue;
-}
-
-rtl_TextEncoding BiffObjectBase::dumpCodePage( const sal_Char* pcName )
-{
-    sal_uInt16 nCodePage = dumpDec< sal_uInt16 >( pcName ? pcName : "codepage", "CODEPAGES" );
+    sal_uInt16 nCodePage = dumpDec< sal_uInt16 >( rName( "codepage" ), "CODEPAGES" );
     return BiffHelper::calcTextEncodingFromCodePage( nCodePage );
 }
 
-void BiffObjectBase::dumpFormulaResult( const sal_Char* pcName )
+void BiffObjectBase::dumpFormulaResult( const String& rName )
 {
     MultiItemsGuard aMultiGuard( out() );
     sal_uInt8 pnResult[ 8 ];
-    mxStrm->read( pnResult, 8 );
-    writeArrayItem( pcName ? pcName : "result", pnResult, 8 );
+    mxBiffStrm->readMemory( pnResult, 8 );
+    writeArrayItem( rName( "result" ), pnResult, 8 );
     if( (pnResult[ 6 ] == 0xFF) && (pnResult[ 7 ] == 0xFF) )
     {
         sal_uInt8 nType = pnResult[ 0 ];
@@ -593,57 +562,57 @@ void BiffObjectBase::dumpFormulaResult( const sal_Char* pcName )
     }
 }
 
-sal_Int32 BiffObjectBase::dumpColIndex( const sal_Char* pcName, bool bCol16Bit )
+sal_Int32 BiffObjectBase::dumpColIndex( const String& rName, bool bCol16Bit )
 {
     sal_Int32 nCol = readCol( bCol16Bit );
-    writeColIndexItem( pcName ? pcName : "col-idx", nCol );
+    writeColIndexItem( rName( "col-idx" ), nCol );
     return nCol;
 }
 
-sal_Int32 BiffObjectBase::dumpRowIndex( const sal_Char* pcName, bool bRow32Bit )
+sal_Int32 BiffObjectBase::dumpRowIndex( const String& rName, bool bRow32Bit )
 {
     sal_Int32 nRow = readRow( bRow32Bit );
-    writeRowIndexItem( pcName ? pcName : "row-idx", nRow );
+    writeRowIndexItem( rName( "row-idx" ), nRow );
     return nRow;
 }
 
-sal_Int32 BiffObjectBase::dumpColRange( const sal_Char* pcName, bool bCol16Bit )
+sal_Int32 BiffObjectBase::dumpColRange( const String& rName, bool bCol16Bit )
 {
     sal_Int32 nCol1 = readCol( bCol16Bit );
     sal_Int32 nCol2 = readCol( bCol16Bit );
-    writeColRangeItem( pcName ? pcName : "col-range", nCol1, nCol2 );
+    writeColRangeItem( rName( "col-range" ), nCol1, nCol2 );
     return nCol2 - nCol1 + 1;
 }
 
-sal_Int32 BiffObjectBase::dumpRowRange( const sal_Char* pcName, bool bRow32Bit )
+sal_Int32 BiffObjectBase::dumpRowRange( const String& rName, bool bRow32Bit )
 {
     sal_Int32 nRow1 = readRow( bRow32Bit );
     sal_Int32 nRow2 = readRow( bRow32Bit );
-    writeRowRangeItem( pcName ? pcName : "row-range", nRow1, nRow2 );
+    writeRowRangeItem( rName( "row-range" ), nRow1, nRow2 );
     return nRow2 - nRow1 + 1;
 }
 
-Address BiffObjectBase::dumpAddress( const sal_Char* pcName, bool bCol16Bit, bool bRow32Bit )
+Address BiffObjectBase::dumpAddress( const String& rName, bool bCol16Bit, bool bRow32Bit )
 {
     Address aPos;
     readAddress( aPos, bCol16Bit, bRow32Bit );
-    writeAddressItem( pcName ? pcName : "addr", aPos );
+    writeAddressItem( rName( "addr" ), aPos );
     return aPos;
 }
 
-Range BiffObjectBase::dumpRange( const sal_Char* pcName, bool bCol16Bit, bool bRow32Bit )
+Range BiffObjectBase::dumpRange( const String& rName, bool bCol16Bit, bool bRow32Bit )
 {
     Range aRange;
     readRange( aRange, bCol16Bit, bRow32Bit );
-    writeRangeItem( pcName ? pcName : "range", aRange );
+    writeRangeItem( rName( "range" ), aRange );
     return aRange;
 }
 
-void BiffObjectBase::dumpRangeList( const sal_Char* pcName, bool bCol16Bit, bool bRow32Bit )
+void BiffObjectBase::dumpRangeList( const String& rName, bool bCol16Bit, bool bRow32Bit )
 {
     RangeList aRanges;
     readRangeList( aRanges, bCol16Bit, bRow32Bit );
-    writeRangeListItem( pcName ? pcName : "range-list", aRanges );
+    writeRangeListItem( rName( "range-list" ), aRanges );
 }
 
 void BiffObjectBase::dumpConstArrayHeader( sal_uInt32& rnCols, sal_uInt32& rnRows )
@@ -702,11 +671,40 @@ OUString BiffObjectBase::dumpConstValue( sal_Unicode cStrQuote )
     return aValue.makeStringAndClear();
 }
 
+sal_uInt16 BiffObjectBase::dumpRepeatedRecId()
+{
+    return dumpHex< sal_uInt16 >( "repeated-rec-id", getRecNames() );
+}
+
+void BiffObjectBase::dumpDffClientRect()
+{
+    lclDumpDffClientRect( out(), in() );
+}
+
+void BiffObjectBase::dumpEmbeddedDff()
+{
+    out().decIndent();
+    writeEmptyItem( "EMBEDDED-DFF-START" );
+    out().incIndent();
+    mxDffObj->dump();
+    out().emptyLine();
+    out().decIndent();
+    writeEmptyItem( "EMBEDDED-DFF-END" );
+    out().incIndent();
+}
+
+void BiffObjectBase::dumpOcxControl()
+{
+    sal_uInt32 nStartPos = dumpHex< sal_uInt32 >( "ctls-stream-pos", "CONV-DEC" );
+    sal_uInt32 nLength = dumpHex< sal_uInt32 >( "ctls-stream-length", "CONV-DEC" );
+    if( isValid( mxCtlsObj ) )
+        mxCtlsObj->dumpControl( nStartPos, nLength );
+}
+
 // ============================================================================
 // ============================================================================
 
 FormulaObject::FormulaObject( const BiffObjectBase& rParent ) :
-    mpcName( 0 ),
     mnSize( 0 )
 {
     BiffObjectBase::construct( rParent );
@@ -722,46 +720,45 @@ sal_uInt16 FormulaObject::readFormulaSize()
     return (getBiff() == BIFF2) ? getBiffStream().readuInt8() : getBiffStream().readuInt16();
 }
 
-sal_uInt16 FormulaObject::dumpFormulaSize( const sal_Char* pcName )
+sal_uInt16 FormulaObject::dumpFormulaSize( const String& rName )
 {
-    if( !pcName ) pcName = "formula-size";
     sal_uInt16 nSize = readFormulaSize();
-    writeDecItem( pcName, nSize );
+    writeDecItem( rName( "formula-size" ), nSize );
     return nSize;
 }
 
-void FormulaObject::dumpCellFormula( const sal_Char* pcName, sal_uInt16 nSize )
+void FormulaObject::dumpCellFormula( const String& rName, sal_uInt16 nSize )
 {
-    dumpFormula( pcName, nSize, false );
+    dumpFormula( rName, nSize, false );
 }
 
-void FormulaObject::dumpCellFormula( const sal_Char* pcName )
+void FormulaObject::dumpCellFormula( const String& rName )
 {
-    dumpFormula( pcName, false );
+    dumpFormula( rName, false );
 }
 
-void FormulaObject::dumpNameFormula( const sal_Char* pcName, sal_uInt16 nSize )
+void FormulaObject::dumpNameFormula( const String& rName, sal_uInt16 nSize )
 {
-    dumpFormula( pcName, nSize, true );
+    dumpFormula( rName, nSize, true );
 }
 
-void FormulaObject::dumpNameFormula( const sal_Char* pcName )
+void FormulaObject::dumpNameFormula( const String& rName )
 {
-    dumpFormula( pcName, true );
+    dumpFormula( rName, true );
 }
 
 void FormulaObject::implDump()
 {
     {
         MultiItemsGuard aMultiGuard( out() );
-        writeEmptyItem( mpcName );
+        writeEmptyItem( maName );
         writeDecItem( "formula-size", mnSize );
     }
     if( mnSize == 0 ) return;
 
-    Input& rIn = in();
-    sal_Int64 nStartPos = rIn.tell();
-    sal_Int64 nEndPos = ::std::min< sal_Int64 >( nStartPos + mnSize, rIn.getSize() );
+    BinaryInputStream& rStrm = in();
+    sal_Int64 nStartPos = rStrm.tell();
+    sal_Int64 nEndPos = ::std::min< sal_Int64 >( nStartPos + mnSize, rStrm.getLength() );
 
     bool bValid = mxTokens.get();
     mxStack.reset( new FormulaStack );
@@ -769,11 +766,11 @@ void FormulaObject::implDump()
     IndentGuard aIndGuard( out() );
     {
         TableGuard aTabGuard( out(), 8, 18 );
-        while( bValid && (rIn.tell() < nEndPos) )
+        while( bValid && !rStrm.isEof() && (rStrm.tell() < nEndPos) )
         {
             MultiItemsGuard aMultiGuard( out() );
-            writeHexItem( 0, static_cast< sal_uInt16 >( rIn.tell() - nStartPos ) );
-            sal_uInt8 nTokenId = dumpHex< sal_uInt8 >( 0, mxTokens );
+            writeHexItem( EMPTY_STRING, static_cast< sal_uInt16 >( rStrm.tell() - nStartPos ) );
+            sal_uInt8 nTokenId = dumpHex< sal_uInt8 >( EMPTY_STRING, mxTokens );
             bValid = mxTokens->hasName( nTokenId );
             if( bValid )
             {
@@ -850,7 +847,7 @@ void FormulaObject::implDump()
             }
         }
     }
-    bValid = nEndPos == rIn.tell();
+    bValid = nEndPos == rStrm.tell();
     if( bValid )
     {
         dumpAddTokenData();
@@ -858,23 +855,23 @@ void FormulaObject::implDump()
         writeInfoItem( "classes", mxStack->getClassesString() );
     }
     else
-        dumpBinary( OOX_DUMP_ERRASCII( "formula-error" ), static_cast< sal_Int32 >( nEndPos - rIn.tell() ), false );
+        dumpBinary( OOX_DUMP_ERRASCII( "formula-error" ), nEndPos - rStrm.tell(), false );
 
-    mpcName = 0;
     mnSize = 0;
 }
 
-void FormulaObject::dumpFormula( const sal_Char* pcName, sal_uInt16 nSize, bool bNameMode )
+void FormulaObject::dumpFormula( const String& rName, sal_uInt16 nSize, bool bNameMode )
 {
-    mpcName = pcName ? pcName : "formula";
+    maName = rName( "formula" );
     mnSize = nSize;
     mbNameMode = bNameMode;
     dump();
+    mnSize = 0;
 }
 
-void FormulaObject::dumpFormula( const sal_Char* pcName, bool bNameMode )
+void FormulaObject::dumpFormula( const String& rName, bool bNameMode )
 {
-    dumpFormula( pcName, readFormulaSize(), bNameMode );
+    dumpFormula( rName, readFormulaSize(), bNameMode );
 }
 
 // private --------------------------------------------------------------------
@@ -883,8 +880,7 @@ void FormulaObject::constructFmlaObj()
 {
     if( BiffObjectBase::implIsValid() )
     {
-        Reference< XSpreadsheetDocument > xDocument( getFilter().getModel(), UNO_QUERY );
-        mxFuncProv.reset( new FunctionProvider( xDocument, getBiff(), true ) );
+        mxFuncProv.reset( new FunctionProvider( FILTER_BIFF, getBiff(), true ) );
 
         Config& rCfg = cfg();
         mxClasses   = rCfg.getNameList( "TOKENCLASSES" );
@@ -976,13 +972,13 @@ OUString FormulaObject::createPlaceHolder() const
 
 sal_uInt16 FormulaObject::readFuncId()
 {
-    return (getBiff() >= BIFF4) ? in().readValue< sal_uInt16 >() : in().readValue< sal_uInt8 >();
+    return (getBiff() >= BIFF4) ? in().readuInt16() : in().readuInt8();
 }
 
 OUString FormulaObject::writeFuncIdItem( sal_uInt16 nFuncId, const FunctionInfo** oppFuncInfo )
 {
     ItemGuard aItemGuard( out(), "func-id" );
-    writeHexItem( 0, nFuncId, "FUNCID" );
+    writeHexItem( EMPTY_STRING, nFuncId, "FUNCID" );
     OUStringBuffer aBuffer;
     const FunctionInfo* pFuncInfo = mxFuncProv->getFuncInfoFromBiffFuncId( nFuncId );
     if( pFuncInfo )
@@ -995,34 +991,36 @@ OUString FormulaObject::writeFuncIdItem( sal_uInt16 nFuncId, const FunctionInfo*
     }
     OUString aFuncName = aBuffer.makeStringAndClear();
     aItemGuard.cont();
+    out().writeChar( OOX_DUMP_STRQUOTE );
     out().writeString( aFuncName );
+    out().writeChar( OOX_DUMP_STRQUOTE );
     if( oppFuncInfo ) *oppFuncInfo = pFuncInfo;
     return aFuncName;
 }
 
-sal_uInt16 FormulaObject::dumpTokenCol( const sal_Char* pcName, bool& rbRelC, bool& rbRelR )
+sal_uInt16 FormulaObject::dumpTokenCol( const String& rName, bool& rbRelC, bool& rbRelR )
 {
     sal_uInt16 nCol = 0;
     if( getBiff() == BIFF8 )
     {
-        nCol = dumpHex< sal_uInt16 >( pcName, mxRelFlags );
+        nCol = dumpHex< sal_uInt16 >( rName, mxRelFlags );
         rbRelC = getFlag( nCol, BIFF_TOK_REF_COLREL );
         rbRelR = getFlag( nCol, BIFF_TOK_REF_ROWREL );
         nCol &= BIFF_TOK_REF_COLMASK;
     }
     else
-        nCol = dumpDec< sal_uInt8 >( pcName );
+        nCol = dumpDec< sal_uInt8 >( rName );
     return nCol;
 }
 
-sal_uInt16 FormulaObject::dumpTokenRow( const sal_Char* pcName, bool& rbRelC, bool& rbRelR )
+sal_uInt16 FormulaObject::dumpTokenRow( const String& rName, bool& rbRelC, bool& rbRelR )
 {
     sal_uInt16 nRow = 0;
     if( getBiff() == BIFF8 )
-        nRow = dumpDec< sal_uInt16 >( pcName );
+        nRow = dumpDec< sal_uInt16 >( rName );
     else
     {
-        nRow = dumpHex< sal_uInt16 >( pcName, mxRelFlags );
+        nRow = dumpHex< sal_uInt16 >( rName, mxRelFlags );
         rbRelC = getFlag( nRow, BIFF_TOK_REF_COLREL );
         rbRelR = getFlag( nRow, BIFF_TOK_REF_ROWREL );
         nRow &= BIFF_TOK_REF_ROWMASK;
@@ -1221,23 +1219,23 @@ void FormulaObject::dumpMemAreaToken( const OUString& rTokClass, bool bAddData )
         maAddData.push_back( ADDDATA_MEMAREA );
 }
 
-void FormulaObject::dumpExpToken( const StringWrapper& rName )
+void FormulaObject::dumpExpToken( const String& rName )
 {
     Address aPos;
     aPos.mnRow = dumpDec< sal_uInt16 >( "row" );
     aPos.mnCol = dumpDec< sal_uInt16, sal_uInt8 >( getBiff() != BIFF2, "col" );
     writeAddressItem( "base-addr", aPos );
-    OUStringBuffer aOp( rName.getString() );
+    OUStringBuffer aOp( rName );
     StringHelper::appendIndex( aOp, out().getLastItemValue() );
     mxStack->pushOperand( aOp.makeStringAndClear() );
 }
 
-void FormulaObject::dumpUnaryOpToken( const StringWrapper& rLOp, const StringWrapper& rROp )
+void FormulaObject::dumpUnaryOpToken( const String& rLOp, const String& rROp )
 {
     mxStack->pushUnaryOp( rLOp, rROp );
 }
 
-void FormulaObject::dumpBinaryOpToken( const StringWrapper& rOp )
+void FormulaObject::dumpBinaryOpToken( const String& rOp )
 {
     mxStack->pushBinaryOp( rOp );
 }
@@ -1494,151 +1492,49 @@ void FormulaObject::dumpAddDataArray( size_t nIdx )
 
 void FormulaObject::dumpAddDataMemArea( size_t /*nIdx*/ )
 {
-    dumpRangeList( 0, getBiff() == BIFF8 );
+    dumpRangeList( EMPTY_STRING, getBiff() == BIFF8 );
 }
 
 // ============================================================================
-// ============================================================================
-
-RecordHeaderObject::RecordHeaderObject( const InputObjectBase& rParent, BiffInputStream& rStrm ) :
-    mrStrm( rStrm )
-{
-    static const RecordHeaderConfigInfo saHeaderCfgInfo =
-    {
-        "REC",
-        "RECORD-NAMES",
-        "show-record-pos",
-        "show-record-size",
-        "show-record-id",
-        "show-record-name",
-        "show-record-body",
-    };
-    RecordHeaderBase< sal_uInt16, sal_uInt32 >::construct( rParent, saHeaderCfgInfo );
-    if( RecordHeaderBase< sal_uInt16, sal_uInt32 >::implIsValid() )
-        mbMergeContRec = cfg().getBoolOption( "merge-continue-record", true );
-}
-
-bool RecordHeaderObject::implReadHeader( sal_Int64& ornRecPos, sal_uInt16& ornRecId, sal_uInt32& ornRecSize )
-{
-    // previous record
-    switch( mrStrm.getRecId() )
-    {
-        case BIFF_ID_CHBEGIN:
-            out().incIndent();
-        break;
-    }
-
-    // start next record
-    bool bValidRec = mrStrm.startNextRecord();
-    ornRecPos = mrStrm.getCoreStreamPos() - 4;
-    ornRecId = mrStrm.getRecId();
-
-    // record specific settings
-    switch( ornRecId )
-    {
-        case BIFF_ID_CHEND:
-            out().decIndent();
-        break;
-    }
-
-    // special CONTINUE handling
-    mrStrm.resetRecord( mbMergeContRec );
-    if( mbMergeContRec ) switch( ornRecId )
-    {
-        case BIFF_ID_OBJ:
-        case BIFF_ID_TXO:
-        case BIFF_ID_EOF:
-        case BIFF_ID_CONT:
-            mrStrm.resetRecord( false );
-        break;
-        case BIFF_ID_MSODRAWINGGROUP:
-        case BIFF_ID_CHESCHERFORMAT:
-            mrStrm.resetRecord( true, ornRecId );
-        break;
-    }
-
-    ornRecSize = mrStrm.getRecSize();
-    return bValidRec;
-}
-
 // ============================================================================
 
 RecordStreamObject::~RecordStreamObject()
 {
 }
 
-void RecordStreamObject::construct( const ObjectBase& rParent, const OUString& rOutFileName, BinaryInputStreamRef xStrm, BiffType eBiff )
+void RecordStreamObject::construct( const ObjectBase& rParent, const BinaryInputStreamRef& rxStrm, BiffType eBiff, const OUString& rSysFileName )
 {
-    BiffObjectBase::construct( rParent, rOutFileName, xStrm, eBiff );
+    BiffObjectBase::construct( rParent, rxStrm, eBiff, rSysFileName );
     if( BiffObjectBase::implIsValid() )
-    {
-        mxHdrObj.reset( new RecordHeaderObject( *this, getBiffStream() ) );
         mxFmlaObj.reset( new FormulaObject( *this ) );
-        mxDffObj.reset( new DffDumpObject( *this ) );
-        mxSimpleRecs = cfg().getNameList( "SIMPLE-RECORDS" );
-    }
 }
 
 bool RecordStreamObject::implIsValid() const
 {
-    return isValid( mxHdrObj ) && isValid( mxFmlaObj ) && isValid( mxDffObj ) && BiffObjectBase::implIsValid();
-}
-
-void RecordStreamObject::implDump()
-{
-    while( mxHdrObj->startNextRecord() )
-    {
-        if( mxHdrObj->isShowRecBody() )
-        {
-            IndentGuard aIndGuard( out() );
-            if( mxHdrObj->hasRecName() )
-                dumpRecordBody();
-            else
-                dumpRawBinary( mxHdrObj->getRecSize(), false );
-            if( !getBiffStream().isValid() )
-                writeInfoItem( "stream-state", OOX_DUMP_ERR_STREAM );
-        }
-        out().emptyLine();
-    }
-}
-
-void RecordStreamObject::implDumpRecord()
-{
-}
-
-sal_uInt16 RecordStreamObject::dumpRepeatedRecId()
-{
-    return dumpHex< sal_uInt16 >( "repeated-rec-id", mxHdrObj->getRecNames() );
-}
-
-void RecordStreamObject::dumpRecordBody()
-{
-    BiffInputStream& rStrm = getBiffStream();
-    sal_uInt16 nRecId = rStrm.getRecId();
-    rStrm.enableNulChars( true );
-    if( cfg().hasName( mxSimpleRecs, nRecId ) )
-        dumpSimpleRecord( cfg().getName( mxSimpleRecs, nRecId ) );
-    else
-        implDumpRecord();
-    // remaining undumped data
-    if( rStrm.getRecPos() == 0 )
-        dumpRawBinary( rStrm.getRecSize(), false );
-    else
-        dumpRemaining( rStrm.getRecLeft() );
-}
-
-void RecordStreamObject::dumpSimpleRecord( const OUString& rRecData )
-{
-    ItemFormat aItemFmt;
-    aItemFmt.parse( rRecData );
-    dumpItem( aItemFmt );
+    return isValid( mxFmlaObj ) && BiffObjectBase::implIsValid();
 }
 
 // ============================================================================
 
-WorkbookStreamObject::WorkbookStreamObject( const ObjectBase& rParent, const OUString& rOutFileName, BinaryInputStreamRef xStrm )
+WorkbookStreamObject::WorkbookStreamObject( const ObjectBase& rParent, const BinaryInputStreamRef& rxStrm, const OUString& rSysFileName )
 {
-    construct( rParent, rOutFileName, xStrm );
+    if( rxStrm.get() )
+    {
+        BiffType eBiff = BiffDetector::detectStreamBiffVersion( *rxStrm );
+        RecordStreamObject::construct( rParent, rxStrm, eBiff, rSysFileName );
+        if( RecordStreamObject::implIsValid() )
+        {
+            Config& rCfg = cfg();
+            mxColors = rCfg.getNameList( "COLORS" );
+            mxBorderStyles = rCfg.getNameList( "BORDERSTYLES" );
+            mxFillPatterns = rCfg.getNameList( "FILLPATTERNS" );
+            mnPTRowFields = 0;
+            mnPTColFields = 0;
+            mnPTSxliIdx = 0;
+            mbHasDff = false;
+            initializePerSheet();
+        }
+    }
 }
 
 WorkbookStreamObject::~WorkbookStreamObject()
@@ -1651,36 +1547,11 @@ WorkbookStreamObject::~WorkbookStreamObject()
     }
 }
 
-void WorkbookStreamObject::construct( const ObjectBase& rParent, const OUString& rOutFileName, BinaryInputStreamRef xStrm )
-{
-    if( xStrm.get() )
-    {
-        BiffType eBiff = BiffDetector::detectStreamBiffVersion( *xStrm );
-        RecordStreamObject::construct( rParent, rOutFileName, xStrm, eBiff );
-        if( RecordStreamObject::implIsValid() )
-        {
-            Config& rCfg = cfg();
-            mxColors        = rCfg.getNameList( "COLORS" );
-            mxBorderStyles  = rCfg.getNameList( "BORDERSTYLES" );
-            mxFillPatterns  = rCfg.getNameList( "FILLPATTERNS" );
-            mxFontNames     = rCfg.createNameList< ConstList >( "FONTNAMES" );
-            mxFontNames->setName( 0, createFontName( CREATE_OUSTRING( "Arial" ), 200, false, false ) );
-            mxFormats       = rCfg.createNameList< ConstList >( "FORMATS" );
-            mxFormats->includeList( rCfg.getNameList( "BUILTIN-FORMATS" ) );
-            mnFormatIdx = 0;
-            mnPTRowFields = 0;
-            mnPTColFields = 0;
-            mnPTSxliIdx = 0;
-            mbHasCodePage = false;
-        }
-    }
-}
-
-void WorkbookStreamObject::implDumpRecord()
+void WorkbookStreamObject::implDumpRecordBody()
 {
     BiffInputStream& rStrm = getBiffStream();
     sal_uInt16 nRecId = rStrm.getRecId();
-    sal_Size nRecSize = rStrm.getRecSize();
+    sal_Int64 nRecSize = rStrm.getLength();
     BiffType eBiff = getBiff();
 
     switch( nRecId )
@@ -1708,6 +1579,8 @@ void WorkbookStreamObject::implDumpRecord()
             if( nRecSize >= 8 )  dumpDec< sal_uInt16 >( "build-year" );
             if( nRecSize >= 12 ) dumpHex< sal_uInt32 >( "history-flags", "BOF-HISTORY-FLAGS" );
             if( nRecSize >= 16 ) dumpDec< sal_uInt32 >( "lowest-ver" );
+            if( (eBiff == BIFF4) && (getLastRecId() != BIFF_ID_OBJ) )
+                initializePerSheet();
         break;
 
         case BIFF2_ID_BOOLERR:
@@ -1735,9 +1608,9 @@ void WorkbookStreamObject::implDumpRecord()
             {
                 writeEmptyItem( "font-block" );
                 IndentGuard aIndGuard( out() );
-                sal_uInt32 nRecPos = rStrm.getRecPos();
+                sal_Int64 nRecPos = rStrm.tell();
                 dumpUniString( "name", BIFF_STR_8BITLENGTH );
-                dumpUnused( nRecPos + 64 - rStrm.getRecPos() );
+                dumpUnused( static_cast< sal_Int32 >( nRecPos + 64 - rStrm.tell() ) );
                 dumpDec< sal_Int32 >( "height", "CONV-TWIP-TO-PT" );
                 dumpHex< sal_uInt32 >( "flags", "CFRULE-FONTFLAGS" );
                 dumpDec< sal_uInt16 >( "weight", "FONT-WEIGHT" );
@@ -1794,8 +1667,8 @@ void WorkbookStreamObject::implDumpRecord()
         break;
 
         case BIFF_ID_CHAREAFORMAT:
-            dumpRgbColor( "fg-color-rgb" );
-            dumpRgbColor( "bg-color-rgb" );
+            dumpColorABGR( "fg-color" );
+            dumpColorABGR( "bg-color" );
             dumpPatternIdx();
             dumpHex< sal_uInt16 >( "flags", "CHAREAFORMAT-FLAGS" );
             if( eBiff == BIFF8 ) dumpColorIdx( "fg-color-idx" );
@@ -1849,7 +1722,7 @@ void WorkbookStreamObject::implDumpRecord()
         break;
 
         case BIFF_ID_CHESCHERFORMAT:
-            getDffDumper().dump();
+            dumpEmbeddedDff();
         break;
 
         case BIFF_ID_CHFRAME:
@@ -1890,7 +1763,7 @@ void WorkbookStreamObject::implDumpRecord()
         break;
 
         case BIFF_ID_CHLINEFORMAT:
-            dumpRgbColor();
+            dumpColorABGR();
             dumpDec< sal_uInt16 >( "line-type", "CHLINEFORMAT-LINETYPE" );
             dumpDec< sal_Int16 >( "line-weight", "CHLINEFORMAT-LINEWEIGHT" );
             dumpHex< sal_uInt16 >( "flags", "CHLINEFORMAT-FLAGS" );
@@ -1898,8 +1771,8 @@ void WorkbookStreamObject::implDumpRecord()
         break;
 
         case BIFF_ID_CHMARKERFORMAT:
-            dumpRgbColor( "border-color-rgb" );
-            dumpRgbColor( "fill-color-rgb" );
+            dumpColorABGR( "border-color" );
+            dumpColorABGR( "fill-color" );
             dumpDec< sal_uInt16 >( "marker-type", "CHMARKERFORMAT-TYPE" );
             dumpHex< sal_uInt16 >( "flags", "CHMARKERFORMAT-FLAGS" );
             if( eBiff == BIFF8 ) dumpColorIdx( "border-color-idx" );
@@ -1991,7 +1864,7 @@ void WorkbookStreamObject::implDumpRecord()
             dumpDec< sal_uInt8 >( "horizontal-align", "CHTEXT-HORALIGN" );
             dumpDec< sal_uInt8 >( "vertical-align", "CHTEXT-VERALIGN" );
             dumpDec< sal_uInt16 >( "fill-mode", "CHTEXT-FILLMODE" );
-            dumpRgbColor();
+            dumpColorABGR();
             dumpRect< sal_Int32 >( "position", (eBiff <= BIFF4) ? "CONV-TWIP-TO-CM" : "" );
             dumpHex< sal_uInt16 >( "flags", "CHTEXT-FLAGS" );
             if( eBiff == BIFF8 ) dumpColorIdx();
@@ -2004,7 +1877,7 @@ void WorkbookStreamObject::implDumpRecord()
             dumpDec< sal_uInt8 >( "minor-ticks", "CHTICK-TYPE" );
             dumpDec< sal_uInt8 >( "label-position", "CHTICK-LABELPOS" );
             dumpDec< sal_uInt8 >( "fill-mode", "CHTEXT-FILLMODE" );
-            dumpRgbColor( "label-color-rgb" );
+            dumpColorABGR( "label-color" );
             dumpUnused( 16 );
             dumpHex< sal_uInt16 >( "flags", "CHTICK-FLAGS" );
             if( eBiff == BIFF8 ) dumpColorIdx( "label-color-idx" );
@@ -2058,8 +1931,27 @@ void WorkbookStreamObject::implDumpRecord()
         break;
 
         case BIFF_ID_COLWIDTH:
-            dumpColRange( 0, false );
+            dumpColRange( EMPTY_STRING, false );
             dumpDec< sal_uInt16 >( "col-width", "CONV-COLWIDTH" );
+        break;
+
+        case BIFF_ID_CONT:
+            if( (eBiff == BIFF8) && (getLastRecId() == BIFF_ID_OBJ) )
+                dumpEmbeddedDff();
+        break;
+
+        case BIFF_ID_COORDLIST:
+        {
+            out().resetItemIndex();
+            TableGuard aTabGuard( out(), 12, 10 );
+            while( rStrm.getRemaining() >= 4 )
+            {
+                MultiItemsGuard aMultiGuard( out() );
+                writeEmptyItem( "#point" );
+                dumpDec< sal_uInt16 >( "x" );
+                dumpDec< sal_uInt16 >( "y" );
+            }
+        }
         break;
 
         case BIFF_ID_CRN:
@@ -2068,7 +1960,7 @@ void WorkbookStreamObject::implDumpRecord()
             sal_Int32 nCol1 = dumpColIndex( "first-col-idx", false );
             sal_Int32 nRow = dumpRowIndex( "row-idx" );
             TableGuard aTabGuard( out(), 14, 17 );
-            for( Address aPos( nCol1, nRow ); rStrm.isValid() && (aPos.mnCol <= nCol2); ++aPos.mnCol )
+            for( Address aPos( nCol1, nRow ); !rStrm.isEof() && (aPos.mnCol <= nCol2); ++aPos.mnCol )
             {
                 MultiItemsGuard aMultiGuard( out() );
                 writeAddressItem( "pos", aPos );
@@ -2139,12 +2031,12 @@ void WorkbookStreamObject::implDumpRecord()
         case BIFF2_ID_DEFINEDNAME:
         case BIFF3_ID_DEFINEDNAME:
         {
+            rtl_TextEncoding eTextEnc = getBiffData().getTextEncoding();
             dumpHex< sal_uInt16, sal_uInt8 >( eBiff != BIFF2, "flags", "DEFINEDNAME-FLAGS" );
             if( eBiff == BIFF2 ) dumpDec< sal_uInt8 >( "macro-type", "DEFINEDNAME-MACROTYPE-BIFF2" );
-            dumpHex< sal_uInt8 >( "keyboard-shortcut" );
+            dumpChar( "accelerator", eTextEnc );
             sal_uInt8 nNameLen = dumpDec< sal_uInt8 >( "name-len" );
             sal_uInt16 nFmlaSize = getFormulaDumper().dumpFormulaSize();
-            rtl_TextEncoding eTextEnc = getBiffData().getTextEncoding();
             if( eBiff >= BIFF5 )
             {
                 bool bBiff8 = eBiff == BIFF8;
@@ -2155,7 +2047,7 @@ void WorkbookStreamObject::implDumpRecord()
                 sal_uInt8 nHelpLen = dumpDec< sal_uInt8 >( "help-text-len" );
                 sal_uInt8 nStatusLen = dumpDec< sal_uInt8 >( "statusbar-text-len" );
                 writeStringItem( "name", bBiff8 ? rStrm.readUniString( nNameLen ) : rStrm.readCharArray( nNameLen, eTextEnc ) );
-                getFormulaDumper().dumpNameFormula( 0, nFmlaSize );
+                getFormulaDumper().dumpNameFormula( EMPTY_STRING, nFmlaSize );
                 if( nMenuLen > 0 ) writeStringItem( "menu-text", bBiff8 ? rStrm.readUniString( nMenuLen ) : rStrm.readCharArray( nMenuLen, eTextEnc ) );
                 if( nDescrLen > 0 ) writeStringItem( "description-text", bBiff8 ? rStrm.readUniString( nDescrLen ) : rStrm.readCharArray( nDescrLen, eTextEnc ) );
                 if( nHelpLen > 0 ) writeStringItem( "help-text", bBiff8 ? rStrm.readUniString( nHelpLen ) : rStrm.readCharArray( nHelpLen, eTextEnc ) );
@@ -2164,7 +2056,7 @@ void WorkbookStreamObject::implDumpRecord()
             else
             {
                 writeStringItem( "name", rStrm.readCharArray( nNameLen, eTextEnc ) );
-                getFormulaDumper().dumpNameFormula( 0, nFmlaSize );
+                getFormulaDumper().dumpNameFormula( EMPTY_STRING, nFmlaSize );
                 if( eBiff == BIFF2 ) getFormulaDumper().dumpFormulaSize();
             }
         }
@@ -2184,13 +2076,13 @@ void WorkbookStreamObject::implDumpRecord()
         case BIFF_ID_EXTERNALBOOK:
         {
             sal_uInt16 nCount = dumpDec< sal_uInt16 >( "sheet-count" );
-            if( rStrm.getRecLeft() == 2 )
+            if( rStrm.getRemaining() == 2 )
                 dumpHex< sal_uInt16 >( "special-key", "EXTERNALBOOK-KEY" );
             else
             {
                 dumpString( "workbook-url" );
                 out().resetItemIndex();
-                for( sal_uInt16 nSheet = 0; rStrm.isValid() && (nSheet < nCount); ++nSheet )
+                for( sal_uInt16 nSheet = 0; !rStrm.isEof() && (nSheet < nCount); ++nSheet )
                     dumpString( "#sheet-name" );
             }
         }
@@ -2213,7 +2105,7 @@ void WorkbookStreamObject::implDumpRecord()
                 }
             }
             OUString aName = dumpString( "name", BIFF_STR_8BITLENGTH, BIFF_STR_8BITLENGTH );
-            if( (aName.getLength() > 0) && (aName[ 0 ] == 1) && (rStrm.getRecLeft() >= 2) )
+            if( (aName.getLength() > 0) && (aName[ 0 ] == 1) && (rStrm.getRemaining() >= 2) )
                 getFormulaDumper().dumpNameFormula();
         }
         break;
@@ -2224,7 +2116,7 @@ void WorkbookStreamObject::implDumpRecord()
                 sal_uInt16 nCount = dumpDec< sal_uInt16 >( "ref-count" );
                 TableGuard aTabGuard( out(), 10, 17, 24 );
                 out().resetItemIndex();
-                for( sal_uInt16 nRefId = 0; rStrm.isValid() && (nRefId < nCount); ++nRefId )
+                for( sal_uInt16 nRefId = 0; !rStrm.isEof() && (nRefId < nCount); ++nRefId )
                 {
                     MultiItemsGuard aMultiGuard( out() );
                     writeEmptyItem( "#ref" );
@@ -2263,56 +2155,40 @@ void WorkbookStreamObject::implDumpRecord()
         break;
 
         case BIFF_ID_FOOTER:
-            if( rStrm.getRecLeft() > 0 )
+            if( rStrm.getRemaining() > 0 )
                 dumpString( "footer", BIFF_STR_8BITLENGTH );
         break;
 
         case BIFF_ID_HEADER:
-            if( rStrm.getRecLeft() > 0 )
+            if( rStrm.getRemaining() > 0 )
                 dumpString( "header", BIFF_STR_8BITLENGTH );
         break;
 
         case BIFF_ID_HYPERLINK:
             dumpRange();
             if( cfg().getStringOption( dumpGuid( "guid" ), OUString() ).equalsAscii( "StdHlink" ) )
+                StdHlinkObject( *this ).dump();
+        break;
+
+        case BIFF3_ID_IMGDATA:
+        case BIFF8_ID_IMGDATA:
+        {
+            sal_uInt16 nFormat = dumpDec< sal_uInt16 >( "image-format", "IMGDATA-FORMAT" );
+            dumpDec< sal_uInt16 >( "environment", "IMGDATA-ENV" );
+            dumpDec< sal_uInt32 >( "data-size" );
+            if( nFormat == 9 )
             {
-                dumpUnknown( 4 );
-                sal_uInt32 nFlags = dumpHex< sal_uInt32 >( "flags", "HYPERLINK-FLAGS" );
-                if( getFlag( nFlags, BIFF_HYPERLINK_DISPLAY ) )
-                    dumpOleString( "display", true );
-                if( getFlag( nFlags, BIFF_HYPERLINK_FRAME ) )
-                    dumpOleString( "target-frame", true );
-                if( getFlag( nFlags, BIFF_HYPERLINK_TARGET ) )
+                writeEmptyItem( "bitmap-header" );
+                IndentGuard aIndGuard( out() );
+                if( dumpDec< sal_uInt32 >( "header-size" ) == 12 )
                 {
-                    if( getFlag( nFlags, BIFF_HYPERLINK_UNC ) )
-                    {
-                        dumpOleString( "unc-path", true );
-                    }
-                    else
-                    {
-                        OUString aGuid = cfg().getStringOption( dumpGuid( "content-type" ), OUString() );
-                        if( aGuid.equalsAscii( "FileMoniker" ) )
-                        {
-                            dumpDec< sal_Int16 >( "up-level" );
-                            dumpOleString( "dos-name", false );
-                            dumpUnknown( 24 );
-                            if( dumpDec< sal_Int32 >( "total-bytes" ) > 0 )
-                            {
-                                sal_Int32 nBytes = dumpDec< sal_Int32 >( "filename-bytes" );
-                                dumpUnknown( 2 );
-                                dumpOleString( "filename", nBytes / 2, true );
-                            }
-                        }
-                        else if( aGuid.equalsAscii( "URLMoniker" ) )
-                        {
-                            sal_Int32 nBytes = dumpDec< sal_Int32 >( "url-bytes" );
-                            dumpOleString( "url", nBytes / 2, true );
-                        }
-                    }
+                    dumpDec< sal_Int16 >( "width" );
+                    dumpDec< sal_Int16 >( "height" );
+                    dumpDec< sal_Int16 >( "planes" );
+                    dumpDec< sal_Int16 >( "bit-count" );
                 }
-                if( getFlag( nFlags, BIFF_HYPERLINK_LOC ) )
-                    dumpOleString( "location", true );
             }
+        }
         break;
 
         case BIFF2_ID_INTEGER:
@@ -2345,7 +2221,8 @@ void WorkbookStreamObject::implDumpRecord()
         case BIFF_ID_MSODRAWING:
         case BIFF_ID_MSODRAWINGGROUP:
         case BIFF_ID_MSODRAWINGSEL:
-            getDffDumper().dump();
+            dumpEmbeddedDff();
+            mbHasDff = true;
         break;
 
         case BIFF_ID_MULTBLANK:
@@ -2353,7 +2230,7 @@ void WorkbookStreamObject::implDumpRecord()
             Address aPos = dumpAddress();
             {
                 TableGuard aTabGuard( out(), 12 );
-                for( ; rStrm.getRecLeft() >= 4; ++aPos.mnCol )
+                for( ; rStrm.getRemaining() >= 4; ++aPos.mnCol )
                 {
                     MultiItemsGuard aMultiGuard( out() );
                     writeAddressItem( "pos", aPos );
@@ -2369,7 +2246,7 @@ void WorkbookStreamObject::implDumpRecord()
             Address aPos = dumpAddress();
             {
                 TableGuard aTabGuard( out(), 12, 12 );
-                for( ; rStrm.getRecLeft() >= 8; ++aPos.mnCol )
+                for( ; rStrm.getRemaining() >= 8; ++aPos.mnCol )
                 {
                     MultiItemsGuard aMultiGuard( out() );
                     writeAddressItem( "pos", aPos );
@@ -2379,6 +2256,20 @@ void WorkbookStreamObject::implDumpRecord()
             }
             dumpColIndex( "last-col-idx" );
         }
+        break;
+
+        case BIFF_ID_NOTE:
+            dumpAddress( "anchor-cell" );
+            if( eBiff == BIFF8 )
+            {
+                dumpHex< sal_uInt16 >( "flags", "NOTE-FLAGS" );
+                dumpDec< sal_uInt16 >( "obj-id" );
+            }
+            else
+            {
+                sal_uInt16 nTextLen = ::std::min( dumpDec< sal_uInt16 >( "text-len" ), static_cast< sal_uInt16 >( rStrm.getRemaining() ) );
+                writeStringItem( "note-text", rStrm.readCharArray( nTextLen, getBiffData().getTextEncoding() ) );
+            }
         break;
 
         case BIFF2_ID_NUMBER:
@@ -2480,7 +2371,7 @@ void WorkbookStreamObject::implDumpRecord()
         case BIFF_ID_SCREENTIP:
             dumpRepeatedRecId();
             dumpRange();
-            dumpNullString( "tooltip", true );
+            dumpNullUnicodeArray( "tooltip" );
         break;
 
         case BIFF_ID_SELECTION:
@@ -2520,7 +2411,7 @@ void WorkbookStreamObject::implDumpRecord()
             dumpDec< sal_uInt32 >( "string-cell-count" );
             dumpDec< sal_uInt32 >( "sst-size" );
             out().resetItemIndex();
-            while( rStrm.isValid() && (rStrm.getRecLeft() >= 3) )
+            while( !rStrm.isEof() && (rStrm.getRemaining() >= 3) )
                 dumpUniString( "#entry" );
         break;
 
@@ -2570,7 +2461,7 @@ void WorkbookStreamObject::implDumpRecord()
 
         case BIFF_ID_SXIVD:
             out().resetItemIndex();
-            for( sal_Size nIdx = 0, nCount = rStrm.getRecLeft() / 2; nIdx < nCount; ++nIdx )
+            for( sal_Int64 nIdx = 0, nCount = rStrm.getRemaining() / 2; nIdx < nCount; ++nIdx )
                 dumpDec< sal_uInt16 >( "#field-idx" );
         break;
 
@@ -2578,9 +2469,9 @@ void WorkbookStreamObject::implDumpRecord()
             if( mnPTSxliIdx < 2 )
             {
                 sal_uInt16 nCount = (mnPTSxliIdx == 0) ? mnPTRowFields : mnPTColFields;
-                sal_Size nLineSize = 8 + 2 * nCount;
+                sal_Int64 nLineSize = 8 + 2 * nCount;
                 out().resetItemIndex();
-                while( rStrm.getRecLeft() >= nLineSize )
+                while( rStrm.getRemaining() >= nLineSize )
                 {
                     writeEmptyItem( "#line-data" );
                     IndentGuard aIndGuard( out() );
@@ -2591,7 +2482,7 @@ void WorkbookStreamObject::implDumpRecord()
                     dumpHex< sal_uInt16 >( "flags", "SXLI-FLAGS" );
                     OUStringBuffer aItemList;
                     for( sal_uInt16 nIdx = 0; nIdx < nCount; ++nIdx )
-                        StringHelper::appendToken( aItemList, in().readValue< sal_uInt16 >() );
+                        StringHelper::appendToken( aItemList, in().readuInt16() );
                     writeInfoItem( "item-idxs", aItemList.makeStringAndClear() );
                 }
                 ++mnPTSxliIdx;
@@ -2658,6 +2549,17 @@ void WorkbookStreamObject::implDumpRecord()
         }
         break;
 
+        case BIFF_ID_TXO:
+            dumpHex< sal_uInt16 >( "flags", "TXO-FLAGS" );
+            dumpDec< sal_uInt16 >( "orientation", "TEXTORIENTATION" );
+            dumpHex< sal_uInt16 >( "button-flags", "OBJ-BUTTON-FLAGS" );
+            dumpUnicode( "accelerator" );
+            dumpUnicode( "fareast-accelerator" );
+            dumpDec< sal_uInt16 >( "text-len" );
+            dumpDec< sal_uInt16 >( "format-run-size" );
+            dumpUnused( 4 );
+        break;
+
         case BIFF_ID_WINDOW1:
             dumpDec< sal_uInt16 >( "window-x", "CONV-TWIP-TO-CM" );
             dumpDec< sal_uInt16 >( "window-y", "CONV-TWIP-TO-CM" );
@@ -2685,7 +2587,7 @@ void WorkbookStreamObject::implDumpRecord()
             dumpBool< sal_uInt8 >( "show-zeros" );
             dumpAddress( "first-visible-cell" );
             dumpBool< sal_uInt8 >( "auto-grid-color" );
-            dumpRgbColor( "grid-color-rgb" );
+            dumpColorABGR( "grid-color" );
         break;
 
         case BIFF3_ID_WINDOW2:
@@ -2695,7 +2597,7 @@ void WorkbookStreamObject::implDumpRecord()
             {
                 dumpColorIdx( "grid-color-idx" );
                 dumpUnused( 2 );
-                if( rStrm.getRecLeft() >= 8 )
+                if( rStrm.getRemaining() >= 8 )
                 {
                     dumpDec< sal_uInt16 >( "pagebreak-zoom", "CONV-PERCENT" );
                     dumpDec< sal_uInt16 >( "normal-zoom", "CONV-PERCENT" );
@@ -2703,7 +2605,7 @@ void WorkbookStreamObject::implDumpRecord()
                 }
             }
             else
-                dumpRgbColor( "grid-color-rgb" );
+                dumpColorABGR( "grid-color" );
         break;
 
         case BIFF_ID_XCT:
@@ -2720,6 +2622,17 @@ void WorkbookStreamObject::implDumpRecord()
     }
 }
 
+void WorkbookStreamObject::initializePerSheet()
+{
+    getBiffData().initializePerSheet();
+    mxFontNames = cfg().createNameList< ConstList >( "FONTNAMES" );
+    mxFontNames->setName( 0, createFontName( CREATE_OUSTRING( "Arial" ), 200, false, false ) );
+    mxFormats = cfg().createNameList< ConstList >( "FORMATS" );
+    mxFormats->includeList( cfg().getNameList( "BUILTIN-FORMATS" ) );
+    mnFormatIdx = 0;
+    mbHasCodePage = false;
+}
+
 OUString WorkbookStreamObject::createFontName( const OUString& rName, sal_uInt16 nHeight, bool bBold, bool bItalic ) const
 {
     OUStringBuffer aName( rName );
@@ -2732,45 +2645,45 @@ OUString WorkbookStreamObject::createFontName( const OUString& rName, sal_uInt16
     return aName.makeStringAndClear();
 }
 
-sal_uInt16 WorkbookStreamObject::dumpPatternIdx( const sal_Char* pcName, bool b16Bit )
+sal_uInt16 WorkbookStreamObject::dumpPatternIdx( const String& rName, bool b16Bit )
 {
-    return dumpDec< sal_uInt16, sal_uInt8 >( b16Bit, pcName ? pcName : "fill-pattern", mxFillPatterns );
+    return dumpDec< sal_uInt16, sal_uInt8 >( b16Bit, rName( "fill-pattern" ), mxFillPatterns );
 }
 
-sal_uInt16 WorkbookStreamObject::dumpColorIdx( const sal_Char* pcName, bool b16Bit )
+sal_uInt16 WorkbookStreamObject::dumpColorIdx( const String& rName, bool b16Bit )
 {
-    return dumpDec< sal_uInt16, sal_uInt8 >( b16Bit, pcName ? pcName : "color-idx", mxColors );
+    return dumpDec< sal_uInt16, sal_uInt8 >( b16Bit, rName( "color-idx" ), mxColors );
 }
 
-sal_uInt16 WorkbookStreamObject::dumpFontIdx( const sal_Char* pcName, bool b16Bit )
+sal_uInt16 WorkbookStreamObject::dumpFontIdx( const String& rName, bool b16Bit )
 {
-    return dumpDec< sal_uInt16, sal_uInt8 >( b16Bit, pcName ? pcName : "font-idx", "FONTNAMES" );
+    return dumpDec< sal_uInt16, sal_uInt8 >( b16Bit, rName( "font-idx" ), "FONTNAMES" );
 }
 
-sal_uInt16 WorkbookStreamObject::dumpFormatIdx( const sal_Char* pcName )
+sal_uInt16 WorkbookStreamObject::dumpFormatIdx( const String& rName )
 {
-    return dumpDec< sal_uInt16, sal_uInt8 >( getBiff() >= BIFF5, pcName ? pcName : "fmt-idx", "FORMATS" );
+    return dumpDec< sal_uInt16, sal_uInt8 >( getBiff() >= BIFF5, rName( "fmt-idx" ), "FORMATS" );
 }
 
-sal_uInt16 WorkbookStreamObject::dumpXfIdx( const sal_Char* pcName, bool bBiff2Style )
+sal_uInt16 WorkbookStreamObject::dumpXfIdx( const String& rName, bool bBiff2Style )
 {
-    if( !pcName ) pcName = "xf-idx";
+    String aName = rName( "xf-idx" );
     sal_uInt16 nXfIdx = 0;
     if( bBiff2Style )
     {
-        dumpHex< sal_uInt8 >( pcName, "CELL-XFINDEX" );
+        dumpHex< sal_uInt8 >( aName, "CELL-XFINDEX" );
         dumpHex< sal_uInt8 >( "fmt-font-idx", "CELL-XFFORMAT" );
         dumpHex< sal_uInt8 >( "style", "CELL-XFSTYLE" );
     }
     else
-        nXfIdx = dumpDec< sal_uInt16 >( pcName );
+        nXfIdx = dumpDec< sal_uInt16 >( aName );
     return nXfIdx;
 }
 
 sal_uInt16 WorkbookStreamObject::dumpCellHeader( bool bBiff2Style )
 {
     dumpAddress();
-    return dumpXfIdx( 0, bBiff2Style );
+    return dumpXfIdx( EMPTY_STRING, bBiff2Style );
 }
 
 void WorkbookStreamObject::dumpBoolErr()
@@ -2854,7 +2767,7 @@ void WorkbookStreamObject::dumpXfRec()
     sal_uInt16 nXfId = getBiffData().getXfCount();
     out().resetItemIndex( nXfId );
     writeEmptyItem( "#xf" );
-    sal_uInt16 nFontId = dumpFontIdx( 0, getBiff() >= BIFF5 );
+    sal_uInt16 nFontId = dumpFontIdx( EMPTY_STRING, getBiff() >= BIFF5 );
     switch( getBiff() )
     {
         case BIFF2:
@@ -2907,55 +2820,324 @@ void WorkbookStreamObject::dumpObjRec()
 {
     switch( getBiff() )
     {
-        case BIFF5: dumpObjRecBiff5();  break;
-        case BIFF8: dumpObjRecBiff8();  break;
+        case BIFF3:
+            dumpObjRecBiff3();
+        break;
+        case BIFF4:
+            dumpObjRecBiff4();
+        break;
+        case BIFF5:
+            dumpObjRecBiff5();
+        break;
+        case BIFF8:
+            // #i61786# OBJ records without DFF stream are in BIFF5 format
+            if( mbHasDff ) dumpObjRecBiff8(); else dumpObjRecBiff5();
+        break;
         default:;
     }
 }
 
-void WorkbookStreamObject::dumpObjRecBiff5()
+void WorkbookStreamObject::dumpObjRecBiff3()
 {
     dumpDec< sal_uInt32 >( "obj-count" );
     sal_uInt16 nObjType = dumpDec< sal_uInt16 >( "obj-type", "OBJ-TYPE" );
     dumpDec< sal_uInt16 >( "obj-id" );
     dumpHex< sal_uInt16 >( "flags", "OBJ-FLAGS" );
-    getDffDumper().dumpDffClientRect();
-    dumpDec< sal_uInt16 >( "macro-len" );
-    dumpUnused( 6 );
+    dumpDffClientRect();
+    sal_uInt16 nMacroSize = dumpDec< sal_uInt16 >( "macro-size" );
+    dumpUnused( 2 );
+    sal_uInt16 nTextLen = 0, nFormatSize = 0, nLinkSize = 0;
     switch( nObjType )
     {
-        case BIFF_OBJCMO_LINE:
-            dumpColorIdx( "line-color-idx", false );
-            dumpDec< sal_uInt8 >( "line-type", "OBJ-LINETYPE" );
-            dumpDec< sal_uInt8 >( "line-weight", "OBJ-LINEWEIGHT" );
-            dumpHex< sal_uInt8 >( "line-flags", "OBJ-FLAGS-AUTO" );
+        case BIFF_OBJTYPE_GROUP:
+            dumpUnused( 4 );
+            dumpDec< sal_uInt16 >( "next-ungrouped-id" );
+            dumpUnused( 16 );
+            dumpObjRecString( "macro", nMacroSize, true );
+        break;
+        case BIFF_OBJTYPE_LINE:
+            dumpObjRecLineData();
             dumpHex< sal_uInt16 >( "line-end", "OBJ-LINEENDS" );
             dumpDec< sal_uInt8 >( "line-direction", "OBJ-LINEDIR" );
             dumpUnused( 1 );
+            dumpObjRecString( "macro", nMacroSize, true );
         break;
-        case BIFF_OBJCMO_RECTANGLE:
-            dumpColorIdx( "back-color-idx", false );
-            dumpColorIdx( "patt-color-idx", false );
-            dumpPatternIdx( 0, false );
-            dumpHex< sal_uInt8 >( "area-flags", "OBJ-FLAGS-AUTO" );
-            dumpColorIdx( "line-color-idx", false );
-            dumpDec< sal_uInt8 >( "line-type", "OBJ-LINETYPE" );
-            dumpDec< sal_uInt8 >( "line-weight", "OBJ-LINEWEIGHT" );
-            dumpHex< sal_uInt8 >( "line-flags", "OBJ-FLAGS-AUTO" );
-            dumpHex< sal_uInt16 >( "frame-style", "OBJ-FRAMESTYLE-FLAGS" );
+        case BIFF_OBJTYPE_RECTANGLE:
+        case BIFF_OBJTYPE_OVAL:
+            dumpObjRecRectData();
+            dumpObjRecString( "macro", nMacroSize, true );
         break;
-        case BIFF_OBJCMO_CHART:
-            dumpColorIdx( "back-color-idx", false );
-            dumpColorIdx( "patt-color-idx", false );
-            dumpPatternIdx( 0, false );
-            dumpHex< sal_uInt8 >( "area-flags", "OBJ-FLAGS-AUTO" );
-            dumpColorIdx( "line-color-idx", false );
-            dumpDec< sal_uInt8 >( "line-type", "OBJ-LINETYPE" );
-            dumpDec< sal_uInt8 >( "line-weight", "OBJ-LINEWEIGHT" );
-            dumpHex< sal_uInt8 >( "line-flags", "OBJ-FLAGS-AUTO" );
-            dumpHex< sal_uInt16 >( "frame-style", "OBJ-FRAMESTYLE-FLAGS" );
+        case BIFF_OBJTYPE_ARC:
+            dumpObjRecFillData();
+            dumpObjRecLineData();
+            dumpDec< sal_uInt8 >( "quadrant", "OBJ-ARC-QUADRANT" );
+            dumpUnused( 1 );
+            dumpObjRecString( "macro", nMacroSize, true );
+        break;
+        case BIFF_OBJTYPE_CHART:
+            dumpObjRecRectData();
+            dumpUnused( 18 );
+            dumpObjRecString( "macro", nMacroSize, true );
+        break;
+        case BIFF_OBJTYPE_TEXT:
+        case BIFF_OBJTYPE_BUTTON:
+            dumpObjRecRectData();
+            dumpObjRecTextDataBiff3( nTextLen, nFormatSize );
+            dumpObjRecString( "macro", nMacroSize, true );
+            dumpObjRecString( "text", nTextLen, false );
+            dumpObjRecTextFmt( nFormatSize );
+        break;
+        case BIFF_OBJTYPE_PICTURE:
+            dumpObjRecRectData();
+            dumpDec< sal_Int16 >( "image-format", "IMGDATA-FORMAT" );
+            dumpUnused( 4 );
+            nLinkSize = dumpDec< sal_uInt16 >( "pic-link-size" );
+            dumpUnused( 2 );
+            dumpHex< sal_uInt16 >( "flags", "OBJ-PICTURE-FLAGS" );
+            dumpObjRecString( "macro", nMacroSize, true );
+            dumpObjRecPictFmla( nLinkSize );
+        break;
+    }
+}
+
+void WorkbookStreamObject::dumpObjRecBiff4()
+{
+    dumpDec< sal_uInt32 >( "obj-count" );
+    sal_uInt16 nObjType = dumpDec< sal_uInt16 >( "obj-type", "OBJ-TYPE" );
+    dumpDec< sal_uInt16 >( "obj-id" );
+    dumpHex< sal_uInt16 >( "flags", "OBJ-FLAGS" );
+    dumpDffClientRect();
+    sal_uInt16 nMacroSize = dumpDec< sal_uInt16 >( "macro-size" );
+    dumpUnused( 2 );
+    sal_uInt16 nTextLen = 0, nFormatSize = 0, nLinkSize = 0;
+    switch( nObjType )
+    {
+        case BIFF_OBJTYPE_GROUP:
+            dumpUnused( 4 );
+            dumpDec< sal_uInt16 >( "next-ungrouped-id" );
+            dumpUnused( 16 );
+            dumpObjRecFmla( "macro", nMacroSize );
+        break;
+        case BIFF_OBJTYPE_LINE:
+            dumpObjRecLineData();
+            dumpHex< sal_uInt16 >( "line-end", "OBJ-LINEENDS" );
+            dumpDec< sal_uInt8 >( "line-direction", "OBJ-LINEDIR" );
+            dumpUnused( 1 );
+            dumpObjRecFmla( "macro", nMacroSize );
+        break;
+        case BIFF_OBJTYPE_RECTANGLE:
+        case BIFF_OBJTYPE_OVAL:
+            dumpObjRecRectData();
+            dumpObjRecFmla( "macro", nMacroSize );
+        break;
+        case BIFF_OBJTYPE_ARC:
+            dumpObjRecFillData();
+            dumpObjRecLineData();
+            dumpDec< sal_uInt8 >( "quadrant", "OBJ-ARC-QUADRANT" );
+            dumpUnused( 1 );
+            dumpObjRecFmla( "macro", nMacroSize );
+        break;
+        case BIFF_OBJTYPE_CHART:
+            dumpObjRecRectData();
+            dumpUnused( 18 );
+            dumpObjRecFmla( "macro", nMacroSize );
+        break;
+        case BIFF_OBJTYPE_TEXT:
+        case BIFF_OBJTYPE_BUTTON:
+            dumpObjRecRectData();
+            dumpObjRecTextDataBiff3( nTextLen, nFormatSize );
+            dumpObjRecFmla( "macro", nMacroSize );
+            dumpObjRecString( "text", nTextLen, false );
+            dumpObjRecTextFmt( nFormatSize );
+        break;
+        case BIFF_OBJTYPE_PICTURE:
+            dumpObjRecRectData();
+            dumpDec< sal_Int16 >( "image-format", "IMGDATA-FORMAT" );
+            dumpUnused( 4 );
+            nLinkSize = dumpDec< sal_uInt16 >( "pic-link-size" );
+            dumpUnused( 2 );
+            dumpHex< sal_uInt16 >( "flags", "OBJ-PICTURE-FLAGS" );
+            dumpObjRecFmla( "macro", nMacroSize );
+            dumpObjRecPictFmla( nLinkSize );
+        break;
+        case BIFF_OBJTYPE_POLYGON:
+            dumpObjRecRectData();
+            dumpHex< sal_uInt16 >( "flags", "OBJ-POLYGON-FLAGS" );
+            dumpUnused( 10 );
+            dumpDec< sal_uInt16 >( "point-count" );
+            dumpUnused( 8 );
+            dumpObjRecFmla( "macro", nMacroSize );
+        break;
+    }
+}
+
+void WorkbookStreamObject::dumpObjRecBiff5()
+{
+    BiffInputStream& rStrm = getBiffStream();
+    dumpDec< sal_uInt32 >( "obj-count" );
+    sal_uInt16 nObjType = dumpDec< sal_uInt16 >( "obj-type", "OBJ-TYPE" );
+    dumpDec< sal_uInt16 >( "obj-id" );
+    dumpHex< sal_uInt16 >( "flags", "OBJ-FLAGS" );
+    dumpDffClientRect();
+    sal_uInt16 nMacroSize = dumpDec< sal_uInt16 >( "macro-size" );
+    dumpUnused( 2 );
+    sal_uInt16 nNameLen = dumpDec< sal_uInt16 >( "name-len" );
+    dumpUnused( 2 );
+    sal_uInt16 nTextLen = 0, nFormatSize = 0, nLinkSize = 0;
+    switch( nObjType )
+    {
+        case BIFF_OBJTYPE_GROUP:
+            dumpUnused( 4 );
+            dumpDec< sal_uInt16 >( "next-ungrouped-id" );
+            dumpUnused( 16 );
+            dumpObjRecString( "obj-name", nNameLen, true );
+            dumpObjRecFmla( "macro", nMacroSize );
+        break;
+        case BIFF_OBJTYPE_LINE:
+            dumpObjRecLineData();
+            dumpHex< sal_uInt16 >( "line-end", "OBJ-LINEENDS" );
+            dumpDec< sal_uInt8 >( "line-direction", "OBJ-LINEDIR" );
+            dumpUnused( 1 );
+            dumpObjRecString( "obj-name", nNameLen, true );
+            dumpObjRecFmla( "macro", nMacroSize );
+        break;
+        case BIFF_OBJTYPE_RECTANGLE:
+        case BIFF_OBJTYPE_OVAL:
+            dumpObjRecRectData();
+            dumpObjRecString( "obj-name", nNameLen, true );
+            dumpObjRecFmla( "macro", nMacroSize );
+        break;
+        case BIFF_OBJTYPE_ARC:
+            dumpObjRecFillData();
+            dumpObjRecLineData();
+            dumpDec< sal_uInt8 >( "quadrant", "OBJ-ARC-QUADRANT" );
+            dumpUnused( 1 );
+            dumpObjRecString( "obj-name", nNameLen, true );
+            dumpObjRecFmla( "macro", nMacroSize );
+        break;
+        case BIFF_OBJTYPE_CHART:
+            dumpObjRecRectData();
             dumpHex< sal_uInt16 >( "chart-flags", "OBJ-CHART-FLAGS" );
             dumpUnused( 16 );
+            dumpObjRecString( "obj-name", nNameLen, true );
+            dumpObjRecFmla( "macro", nMacroSize );
+        break;
+        case BIFF_OBJTYPE_TEXT:
+        case BIFF_OBJTYPE_BUTTON:
+        case BIFF_OBJTYPE_LABEL:
+        case BIFF_OBJTYPE_DIALOG:
+            dumpObjRecRectData();
+            dumpObjRecTextDataBiff5( nTextLen, nFormatSize, nLinkSize );
+            dumpObjRecString( "obj-name", nNameLen, true );
+            dumpObjRecFmla( "macro", nMacroSize );
+            dumpObjRecString( "text", nTextLen, false );
+            dumpObjRecFmla( "text-link", nLinkSize );
+            dumpObjRecTextFmt( nFormatSize );
+        break;
+        case BIFF_OBJTYPE_PICTURE:
+            dumpObjRecRectData();
+            dumpDec< sal_Int16 >( "image-format", "IMGDATA-FORMAT" );
+            dumpUnused( 4 );
+            nLinkSize = dumpDec< sal_uInt16 >( "pic-link-size" );
+            dumpUnused( 2 );
+            dumpHex< sal_uInt16 >( "flags", "OBJ-PICTURE-FLAGS" );
+            dumpUnused( 4 );
+            dumpObjRecString( "obj-name", nNameLen, true );
+            dumpObjRecFmla( "macro", nMacroSize );
+            dumpObjRecPictFmla( nLinkSize );
+            if( rStrm.getRemaining() >= 4 )
+                dumpHex< sal_uInt32 >( "ole-storage-id" );
+        break;
+        case BIFF_OBJTYPE_POLYGON:
+            dumpObjRecRectData();
+            dumpHex< sal_uInt16 >( "flags", "OBJ-POLYGON-FLAGS" );
+            dumpUnused( 10 );
+            dumpDec< sal_uInt16 >( "point-count" );
+            dumpUnused( 8 );
+            dumpObjRecString( "obj-name", nNameLen, true );
+            dumpObjRecFmla( "macro", nMacroSize );
+        break;
+        case BIFF_OBJTYPE_CHECKBOX:
+            dumpObjRecRectData();
+            dumpUnused( 10 );
+            dumpHex< sal_uInt16 >( "flags", "OBJ-TEXT-FLAGS" );
+            dumpUnused( 20 );
+            dumpObjRecString( "obj-name", nNameLen, true );
+            dumpObjRecFmla( "macro", dumpDec< sal_uInt16 >( "macro-size" ) );
+            dumpObjRecFmla( "cell-link", dumpDec< sal_uInt16 >( "cell-link-size" ) );
+            dumpObjRecString( "text", dumpDec< sal_uInt16 >( "text-len" ), false );
+            dumpObjRecCblsData();
+        break;
+        case BIFF_OBJTYPE_OPTIONBUTTON:
+            dumpObjRecRectData();
+            dumpUnused( 10 );
+            dumpHex< sal_uInt16 >( "flags", "OBJ-TEXT-FLAGS" );
+            dumpUnused( 32 );
+            dumpObjRecString( "obj-name", nNameLen, true );
+            dumpObjRecFmla( "macro", dumpDec< sal_uInt16 >( "macro-size" ) );
+            dumpObjRecFmla( "cell-link", dumpDec< sal_uInt16 >( "cell-link-size" ) );
+            dumpObjRecString( "text", dumpDec< sal_uInt16 >( "text-len" ), false );
+            dumpObjRecCblsData();
+            dumpObjRecRboData();
+        break;
+        case BIFF_OBJTYPE_EDIT:
+            dumpObjRecRectData();
+            dumpUnused( 10 );
+            dumpHex< sal_uInt16 >( "flags", "OBJ-TEXT-FLAGS" );
+            dumpUnused( 14 );
+            dumpObjRecString( "obj-name", nNameLen, true );
+            dumpObjRecFmla( "macro", dumpDec< sal_uInt16 >( "macro-size" ) );
+            dumpObjRecString( "text", dumpDec< sal_uInt16 >( "text-len" ), false );
+            dumpObjRecEdoData();
+        break;
+        case BIFF_OBJTYPE_SPIN:
+        case BIFF_OBJTYPE_SCROLLBAR:
+            dumpObjRecRectData();
+            dumpObjRecSbsData();
+            dumpObjRecString( "obj-name", nNameLen, true );
+            dumpObjRecFmla( "macro", dumpDec< sal_uInt16 >( "macro-size" ) );
+            dumpObjRecFmla( "cell-link", dumpDec< sal_uInt16 >( "cell-link-size" ) );
+        break;
+        case BIFF_OBJTYPE_LISTBOX:
+            dumpObjRecRectData();
+            dumpObjRecSbsData();
+            dumpUnused( 18 );
+            dumpFontIdx( "font-idx" );
+            dumpUnused( 4 );
+            dumpObjRecString( "obj-name", nNameLen, true );
+            dumpObjRecFmla( "macro", dumpDec< sal_uInt16 >( "macro-size" ) );
+            dumpObjRecFmla( "cell-link", dumpDec< sal_uInt16 >( "cell-link-size" ) );
+            dumpObjRecLbsData();
+        break;
+        case BIFF_OBJTYPE_GROUPBOX:
+            dumpObjRecRectData();
+            dumpUnused( 10 );
+            dumpHex< sal_uInt16 >( "flags", "OBJ-TEXT-FLAGS" );
+            dumpUnused( 26 );
+            dumpObjRecString( "obj-name", nNameLen, true );
+            dumpObjRecFmla( "macro", dumpDec< sal_uInt16 >( "macro-size" ) );
+            dumpObjRecString( "text", dumpDec< sal_uInt16 >( "text-len" ), false );
+            dumpObjRecGboData();
+        break;
+        case BIFF_OBJTYPE_DROPDOWN:
+            dumpObjRecRectData();
+            dumpObjRecSbsData();
+            dumpUnused( 18 );
+            dumpFontIdx( "font-idx" );
+            dumpUnused( 14 );
+            dumpDec< sal_uInt16 >( "bounding-left" );
+            dumpDec< sal_uInt16 >( "bounding-top" );
+            dumpDec< sal_uInt16 >( "bounding-right" );
+            dumpDec< sal_uInt16 >( "bounding-bottom" );
+            dumpUnused( 4 );
+            dumpObjRecString( "obj-name", nNameLen, true );
+            dumpObjRecFmla( "macro", dumpDec< sal_uInt16 >( "macro-size" ) );
+            dumpObjRecFmla( "cell-link", dumpDec< sal_uInt16 >( "cell-link-size" ) );
+            dumpObjRecLbsData();
+            dumpDec< sal_uInt16 >( "type", "OBJ-DROPDOWN-TYPE" );
+            dumpDec< sal_uInt16 >( "line-count" );
+            dumpDec< sal_uInt16 >( "min-list-width" );
+            dumpObjRecString( "text", dumpDec< sal_uInt16 >( "text-len" ), false );
         break;
     }
 }
@@ -2965,137 +3147,307 @@ void WorkbookStreamObject::dumpObjRecBiff8()
     Output& rOut = out();
     BiffInputStream& rStrm = getBiffStream();
     NameListRef xRecNames = cfg().getNameList( "OBJ-RECNAMES" );
-    bool bLinked = false;
+    sal_uInt16 nObjType = 0xFFFF;
     bool bControl = false;
     bool bCtlsStrm = false;
     bool bLoop = true;
-    while( bLoop && (rStrm.getRecLeft() >= 4) )
+    while( bLoop && (rStrm.getRemaining() >= 4) )
     {
         rOut.emptyLine();
         sal_uInt16 nSubRecId, nSubRecSize;
         {
             MultiItemsGuard aMultiGuard( rOut );
             writeEmptyItem( "OBJREC" );
-            writeHexItem( "pos", rStrm.getRecPos() );
+            writeHexItem( "pos", static_cast< sal_uInt32 >( rStrm.tell() ) );
             rStrm >> nSubRecId >> nSubRecSize;
             writeHexItem( "size", nSubRecSize );
             writeHexItem( "id", nSubRecId, xRecNames );
         }
 
-        sal_uInt32 nSubRecStart = rStrm.getRecPos();
+        sal_Int64 nSubRecStart = rStrm.tell();
         // sometimes the last subrecord has an invalid length
-        sal_uInt32 nRealRecSize = ::std::min< sal_uInt32 >( nSubRecSize, rStrm.getRecLeft() );
-        sal_uInt32 nSubRecEnd = nSubRecStart + nRealRecSize;
+        sal_Int64 nRealRecSize = ::std::min< sal_Int64 >( nSubRecSize, rStrm.getRemaining() );
+        sal_Int64 nSubRecEnd = nSubRecStart + nRealRecSize;
 
         IndentGuard aIndGuard( rOut );
         switch( nSubRecId )
         {
-            case BIFF_ID_OBJPIOGRBIT:
+            case BIFF_ID_OBJMACRO:
+                dumpObjRecFmlaRaw();
+            break;
+            case BIFF_ID_OBJCF:
+                dumpDec< sal_Int16 >( "clipboard-format", "IMGDATA-FORMAT" );
+            break;
+            case BIFF_ID_OBJFLAGS:
             {
-                sal_uInt16 nFlags = dumpHex< sal_uInt16 >( "flags", "OBJPIOGRBIT-FLAGS" );
-                bLinked = getFlag( nFlags, BIFF_OBJPIO_LINKED );
-                bControl = getFlag( nFlags, BIFF_OBJPIO_CONTROL );
-                bCtlsStrm = getFlag( nFlags, BIFF_OBJPIO_CTLSSTREAM );
+                sal_uInt16 nFlags = dumpHex< sal_uInt16 >( "flags", "OBJFLAGS-FLAGS" );
+                bControl = getFlag( nFlags, BIFF_OBJFLAGS_CONTROL );
+                bCtlsStrm = getFlag( nFlags, BIFF_OBJFLAGS_CTLSSTREAM );
             }
             break;
             case BIFF_ID_OBJPICTFMLA:
             {
-                sal_uInt16 nLinkDataSize = dumpDec< sal_uInt16 >( "link-data-size" );
-                sal_uInt32 nLinkDataEnd = rStrm.getRecPos() + nLinkDataSize;
-                {
-                    IndentGuard aIndGuard2( rOut );
-                    sal_uInt16 nFmlaSize = getFormulaDumper().dumpFormulaSize();
-                    dumpUnused( 4 );
-                    getFormulaDumper().dumpNameFormula( "link", nFmlaSize );
-                    if( dumpDec< sal_uInt8 >( "has-class-name", "OBJPICTFMLA-HASCLASSNAME" ) == 3 )
-                    {
-                        dumpUniString( "class-name", BIFF_STR_SMARTFLAGS );
-                        if( ((rStrm.getRecPos() - nSubRecStart) & 1) != 0 )
-                            dumpHex< sal_uInt8 >( "padding" );
-                    }
-                }
-                if( rStrm.getRecPos() != nLinkDataEnd )
-                    writeEmptyItem( OOX_DUMP_ERRASCII( "link-data-size" ) );
-                if( rStrm.getRecPos() < nLinkDataEnd )
-                    dumpRemaining( nLinkDataEnd - rStrm.getRecPos() );
-                rStrm.seek( nLinkDataEnd );
-                if( nLinkDataEnd + 4 <= nSubRecEnd )
+                dumpObjRecPictFmla( dumpDec< sal_uInt16 >( "pic-link-size" ) );
+                if( rStrm.tell() + 4 <= nSubRecEnd )
                 {
                     if( bControl && bCtlsStrm )
-                    {
-                        sal_uInt32 nPos = dumpHex< sal_uInt32 >( "ctls-stream-pos", "CONV-DEC" );
-                        sal_uInt32 nSize = dumpHex< sal_uInt32 >( "ctls-stream-size", "CONV-DEC" );
-                        IndentGuard aIndGuard2( rOut );
-                        rOut.emptyLine();
-                        dumpFormControl( nPos, nSize );
-                        rOut.emptyLine();
-                    }
+                        dumpOcxControl();
                     else
                         dumpHex< sal_uInt32 >( "ole-storage-id" );
                 }
-                if( bControl && (rStrm.getRecPos() + 8 <= nSubRecEnd) )
+                if( bControl && (rStrm.tell() + 8 <= nSubRecEnd) )
                 {
-                    sal_uInt32 nClassIdSize = dumpDec< sal_uInt32 >( "class-id-size" );
-                    if( nClassIdSize > 0 )
+                    sal_uInt32 nKeySize = dumpDec< sal_uInt32 >( "licence-key-size" );
+                    if( nKeySize > 0 )
                     {
                         IndentGuard aIndGuard2( rOut );
-                        sal_uInt32 nClassIdEnd = rStrm.getRecPos() + nClassIdSize;
-                        dumpUnicodeArray( "class-id", static_cast< sal_Int32 >( nClassIdSize / 2 ) );
-                        rStrm.seek( nClassIdEnd );
+                        sal_Int64 nKeyEnd = rStrm.tell() + nKeySize;
+                        dumpArray( "licence-key", static_cast< sal_Int32 >( nKeySize ) );
+                        rStrm.seek( nKeyEnd );
                     }
-                    sal_uInt16 nCellLinkSize = dumpDec< sal_uInt16 >( "cell-link-size" );
-                    if( nCellLinkSize > 0 )
-                    {
-                        IndentGuard aIndGuard2( rOut );
-                        sal_uInt32 nCellLinkEnd = rStrm.getRecPos() + nCellLinkSize;
-                        sal_uInt16 nFmlaSize = getFormulaDumper().dumpFormulaSize( "cell-link-fmla-size" );
-                        dumpUnused( 4 );
-                        getFormulaDumper().dumpNameFormula( "cell-link", nFmlaSize );
-                        rStrm.seek( nCellLinkEnd );
-                    }
-                    sal_uInt16 nSrcRangeSize = dumpDec< sal_uInt16 >( "source-range-size" );
-                    if( nSrcRangeSize > 0 )
-                    {
-                        IndentGuard aIndGuard2( rOut );
-                        sal_uInt32 nSrcRangeEnd = rStrm.getRecPos() + nSrcRangeSize;
-                        sal_uInt16 nFmlaSize = getFormulaDumper().dumpFormulaSize( "source-range-fmla-size" );
-                        dumpUnused( 4 );
-                        getFormulaDumper().dumpNameFormula( "source-range", nFmlaSize );
-                        rStrm.seek( nSrcRangeEnd );
-                    }
+                    dumpObjRecFmla( "cell-link", dumpDec< sal_uInt16 >( "cell-link-size" ) );
+                    dumpObjRecFmla( "source-range", dumpDec< sal_uInt16 >( "source-range-size" ) );
                 }
             }
             break;
+            case BIFF_ID_OBJCBLS:
+                dumpDec< sal_uInt16 >( "state", "OBJ-CHECKBOX-STATE" );
+                dumpUnused( 4 );
+                dumpUnicode( "accelerator" );
+                dumpUnicode( "fareast-accelerator" );
+                dumpHex< sal_uInt16 >( "checkbox-flags", "OBJ-CHECKBOX-FLAGS" );
+            break;
+            case BIFF_ID_OBJRBO:
+                dumpUnused( 4 );
+                dumpBool< sal_uInt16 >( "first-in-group" );
+            break;
+            case BIFF_ID_OBJSBS:
+                dumpObjRecSbsData();
+            break;
+            case BIFF_ID_OBJGBODATA:
+                dumpObjRecGboData();
+            break;
+            case BIFF_ID_OBJEDODATA:
+                dumpObjRecEdoData();
+            break;
+            case BIFF_ID_OBJRBODATA:
+                dumpObjRecRboData();
+            break;
+            case BIFF_ID_OBJCBLSDATA:
+                dumpObjRecCblsData();
+            break;
+            case BIFF_ID_OBJLBSDATA:
+                dumpObjRecLbsData();
+                if( nObjType == BIFF_OBJTYPE_DROPDOWN )
+                {
+                    dumpHex< sal_uInt16 >( "dropdown-flags", "OBJ-DROPDOWN-FLAGS" );
+                    dumpDec< sal_uInt16 >( "line-count" );
+                    dumpDec< sal_uInt16 >( "min-list-width" );
+                    dumpObjRecString( "text", dumpDec< sal_uInt16 >( "text-len" ), false );
+                }
+            break;
+            case BIFF_ID_OBJCBLSFMLA:
+            case BIFF_ID_OBJSBSFMLA:
+                dumpObjRecFmlaRaw();
+            break;
             case BIFF_ID_OBJCMO:
-                dumpDec< sal_uInt16 >( "type", "OBJCMO-TYPE" );
+                nObjType = dumpDec< sal_uInt16 >( "type", "OBJ-TYPE" );
                 dumpDec< sal_uInt16 >( "id" );
                 dumpHex< sal_uInt16 >( "flags", "OBJCMO-FLAGS" );
                 dumpUnused( 12 );
             break;
         }
         // remaining undumped data
-        if( rStrm.getRecPos() == nSubRecStart )
+        if( !rStrm.isEof() && (rStrm.tell() == nSubRecStart) )
             dumpRawBinary( nRealRecSize, false );
         else
-            dumpRemaining( nSubRecEnd - rStrm.getRecPos() );
-        rStrm.seek( nSubRecStart + nRealRecSize );
+            dumpRemainingTo( nSubRecEnd );
     }
 }
 
-void WorkbookStreamObject::dumpFormControl( sal_uInt32 nStrmPos, sal_uInt32 nStrmSize )
+void WorkbookStreamObject::dumpObjRecLineData()
 {
-    writeHexItem( "stream-pos", nStrmPos, "CONV-DEC" );
-    writeHexItem( "stream-size", nStrmSize, "CONV-DEC" );
+    dumpColorIdx( "line-color-idx", false );
+    dumpDec< sal_uInt8 >( "line-type", "OBJ-LINETYPE" );
+    dumpDec< sal_uInt8 >( "line-weight", "OBJ-LINEWEIGHT" );
+    dumpHex< sal_uInt8 >( "line-flags", "OBJ-AUTO-FLAGS" );
+}
+
+void WorkbookStreamObject::dumpObjRecFillData()
+{
+    dumpColorIdx( "back-color-idx", false );
+    dumpColorIdx( "patt-color-idx", false );
+    dumpPatternIdx( EMPTY_STRING, false );
+    dumpHex< sal_uInt8 >( "area-flags", "OBJ-AUTO-FLAGS" );
+}
+
+void WorkbookStreamObject::dumpObjRecRectData()
+{
+    dumpObjRecFillData();
+    dumpObjRecLineData();
+    dumpHex< sal_uInt16 >( "frame-style", "OBJ-FRAMESTYLE-FLAGS" );
+}
+
+void WorkbookStreamObject::dumpObjRecTextDataBiff3( sal_uInt16& ornTextLen, sal_uInt16& ornFormatSize )
+{
+    ornTextLen = dumpDec< sal_uInt16 >( "text-len" );
+    dumpUnused( 2 );
+    ornFormatSize = dumpDec< sal_uInt16 >( "format-run-size" );
+    dumpFontIdx( "default-font-idx" );
+    dumpUnused( 2 );
+    dumpHex< sal_uInt16 >( "flags", "OBJ-TEXT-FLAGS" );
+    dumpDec< sal_uInt16 >( "orientation", "TEXTORIENTATION" );
+    dumpUnused( 8 );
+}
+
+void WorkbookStreamObject::dumpObjRecTextDataBiff5( sal_uInt16& ornTextLen, sal_uInt16& ornFormatSize, sal_uInt16& ornLinkSize )
+{
+    ornTextLen = dumpDec< sal_uInt16 >( "text-len" );
+    dumpUnused( 2 );
+    ornFormatSize = dumpDec< sal_uInt16 >( "format-run-size" );
+    dumpFontIdx( "default-font-idx" );
+    dumpUnused( 2 );
+    dumpHex< sal_uInt16 >( "flags", "OBJ-TEXT-FLAGS" );
+    dumpDec< sal_uInt16 >( "orientation", "TEXTORIENTATION" );
+    dumpUnused( 2 );
+    ornLinkSize = dumpDec< sal_uInt16 >( "link-size" );
+    dumpUnused( 2 );
+    dumpHex< sal_uInt16 >( "button-flags", "OBJ-BUTTON-FLAGS" );
+    dumpUnicode( "accelerator" );
+    dumpUnicode( "fareast-accelerator" );
+}
+
+void WorkbookStreamObject::dumpObjRecSbsData()
+{
+    dumpUnused( 4 );
+    dumpDec< sal_uInt16 >( "value" );
+    dumpDec< sal_uInt16 >( "min" );
+    dumpDec< sal_uInt16 >( "max" );
+    dumpDec< sal_uInt16 >( "step" );
+    dumpDec< sal_uInt16 >( "page-step" );
+    dumpBool< sal_uInt16 >( "horizontal" );
+    dumpDec< sal_uInt16 >( "thumb-width" );
+    dumpHex< sal_uInt16 >( "scrollbar-flags", "OBJ-SCROLLBAR-FLAGS" );
+}
+
+void WorkbookStreamObject::dumpObjRecGboData()
+{
+    dumpUnicode( "accelerator" );
+    dumpUnicode( "fareast-accelerator" );
+    dumpHex< sal_uInt16 >( "groupbox-flags", "OBJ-GROUPBOX-FLAGS" );
+}
+
+void WorkbookStreamObject::dumpObjRecEdoData()
+{
+    dumpDec< sal_uInt16 >( "type", "OBJ-EDIT-TYPE" );
+    dumpBool< sal_uInt16 >( "multiline" );
+    dumpBool< sal_uInt16 >( "scrollbar" );
+    dumpDec< sal_uInt16 >( "listbox-obj-id" );
+}
+
+void WorkbookStreamObject::dumpObjRecRboData()
+{
+    dumpDec< sal_uInt16 >( "next-in-group" );
+    dumpBool< sal_uInt16 >( "first-in-group" );
+}
+
+void WorkbookStreamObject::dumpObjRecCblsData()
+{
+    dumpDec< sal_uInt16 >( "state", "OBJ-CHECKBOX-STATE" );
+    dumpUnicode( "accelerator" );
+    dumpUnicode( "fareast-accelerator" );
+    dumpHex< sal_uInt16 >( "checkbox-flags", "OBJ-CHECKBOX-FLAGS" );
+}
+
+void WorkbookStreamObject::dumpObjRecLbsData()
+{
+    dumpObjRecFmla( "source-range", dumpDec< sal_uInt16 >( "source-range-size" ) );
+    dumpDec< sal_uInt16 >( "entry-count" );
+    dumpDec< sal_uInt16 >( "selected-entry" );
+    dumpHex< sal_uInt16 >( "listbox-flags", "OBJ-LISTBOX-FLAGS" );
+    dumpDec< sal_uInt16 >( "edit-obj-id" );
+}
+
+void WorkbookStreamObject::dumpObjRecPadding()
+{
+    if( getBiffStream().tell() & 1 )
+    {
+        IndentGuard aIndGuard( out() );
+        dumpHex< sal_uInt8 >( "padding" );
+    }
+}
+
+void WorkbookStreamObject::dumpObjRecString( const String& rName, sal_uInt16 nTextLen, bool bRepeatLen )
+{
+    if( nTextLen > 0 )
+    {
+        if( bRepeatLen )
+            dumpByteString( rName, BIFF_STR_8BITLENGTH );
+        else
+            writeStringItem( rName, getBiffStream().readCharArray( nTextLen, getBiffData().getTextEncoding() ) );
+        dumpObjRecPadding();
+    }
+}
+
+void WorkbookStreamObject::dumpObjRecTextFmt( sal_uInt16 nFormatSize )
+{
+    BinFontPortionList aPortions;
+    aPortions.importPortions( getBiffStream(), nFormatSize / 8, BIFF_FONTPORTION_OBJ );
+    writeFontPortions( aPortions );
+}
+
+void WorkbookStreamObject::dumpObjRecFmlaRaw()
+{
+    sal_uInt16 nFmlaSize = dumpDec< sal_uInt16 >( "fmla-size" );
+    dumpUnused( 4 );
+    getFormulaDumper().dumpNameFormula( "fmla", nFmlaSize );
+    dumpObjRecPadding();
+}
+
+void WorkbookStreamObject::dumpObjRecFmla( const String& rName, sal_uInt16 nFmlaSize )
+{
+    BiffInputStream& rStrm = getBiffStream();
+    if( nFmlaSize > 0 )
+    {
+        writeEmptyItem( rName );
+        IndentGuard aIndGuard( out() );
+        sal_Int64 nStrmEnd = rStrm.tell() + nFmlaSize;
+        dumpObjRecFmlaRaw();
+        if( rStrm.isEof() || (rStrm.tell() != nStrmEnd) )
+            writeEmptyItem( OOX_DUMP_ERRASCII( "fmla-size" ) );
+        dumpRemainingTo( nStrmEnd );
+    }
+}
+
+void WorkbookStreamObject::dumpObjRecPictFmla( sal_uInt16 nFmlaSize )
+{
+    BiffInputStream& rStrm = getBiffStream();
+    if( nFmlaSize > 0 )
+    {
+        writeEmptyItem( "pic-link" );
+        IndentGuard aIndGuard( out() );
+        sal_Int64 nStrmEnd = rStrm.tell() + nFmlaSize;
+        if( (getBiff() == BIFF3) && (nStrmEnd & 1) ) ++nStrmEnd; // BIFF3 size without padding
+        dumpObjRecFmlaRaw();
+        if( rStrm.tell() + 2 <= nStrmEnd )
+        {
+            dumpString( "class-name", BIFF_STR_DEFAULT, BIFF_STR_SMARTFLAGS );
+            dumpObjRecPadding();
+        }
+        if( rStrm.isEof() || (rStrm.tell() != nStrmEnd) )
+            writeEmptyItem( OOX_DUMP_ERRASCII( "pic-link-size" ) );
+        dumpRemainingTo( nStrmEnd );
+    }
 }
 
 // ============================================================================
 
-PivotCacheStreamObject::PivotCacheStreamObject( const ObjectBase& rParent, const ::rtl::OUString& rOutFileName, BinaryInputStreamRef xStrm )
+PivotCacheStreamObject::PivotCacheStreamObject( const ObjectBase& rParent, const BinaryInputStreamRef& rxStrm, const ::rtl::OUString& rSysFileName )
 {
-    RecordStreamObject::construct( rParent, rOutFileName, xStrm, BIFF8 );
+    RecordStreamObject::construct( rParent, rxStrm, BIFF8, rSysFileName );
 }
 
-void PivotCacheStreamObject::implDumpRecord()
+void PivotCacheStreamObject::implDumpRecordBody()
 {
     BiffInputStream& rStrm = getBiffStream();
     sal_uInt16 nRecId = rStrm.getRecId();
@@ -3132,7 +3484,7 @@ void PivotCacheStreamObject::implDumpRecord()
             dumpDec< sal_uInt16 >( "group-items" );
             dumpDec< sal_uInt16 >( "base-items" );
             dumpDec< sal_uInt16 >( "original-items" );
-            if( rStrm.getRecLeft() >= 3 )
+            if( rStrm.getRemaining() >= 3 )
                 dumpUniString( "item-name" );
         break;
 
@@ -3147,39 +3499,63 @@ void PivotCacheStreamObject::implDumpRecord()
 
 RootStorageObject::RootStorageObject( const DumperBase& rParent )
 {
-    RootStorageObjectBase::construct( rParent );
+    OleStorageObject::construct( rParent );
+    addPreferredStream( "Book" );
+    addPreferredStream( "Workbook" );
 }
 
-void RootStorageObject::implDumpStream( BinaryInputStreamRef xStrm, const OUString& rStrgPath, const OUString& rStrmName, const OUString& rSystemFileName )
+void RootStorageObject::implDumpStream( const BinaryInputStreamRef& rxStrm, const OUString& rStrgPath, const OUString& rStrmName, const OUString& rSysFileName )
 {
-    if( rStrgPath.getLength() == 0 )
-    {
-        if( (rStrmName == CREATE_OUSTRING( "Book" )) || (rStrmName == CREATE_OUSTRING( "Workbook" )) )
-            WorkbookStreamObject( *this, rSystemFileName, xStrm ).dump();
-        else if( (rStrmName == CREATE_OUSTRING( "\005SummaryInformation" )) || (rStrmName == CREATE_OUSTRING( "\005DocumentSummaryInformation" )) )
-            OlePropertyStreamObject( *this, rSystemFileName, xStrm ).dump();
-        else
-            InputStreamObject( *this, rSystemFileName, xStrm ).dump();
-    }
-    else if( rStrgPath == CREATE_OUSTRING( "_SX_DB_CUR" ) )
-    {
-        PivotCacheStreamObject( *this, rSystemFileName, xStrm ).dump();
-    }
+    if( (rStrgPath.getLength() == 0) && (rStrmName.equalsAscii( "Book" ) || rStrmName.equalsAscii( "Workbook" )) )
+        WorkbookStreamObject( *this, rxStrm, rSysFileName ).dump();
+    else if( rStrgPath.equalsAscii( "_SX_DB_CUR" ) )
+        PivotCacheStreamObject( *this, rxStrm, rSysFileName ).dump();
+    else
+        OleStorageObject::implDumpStream( rxStrm, rStrgPath, rStrmName, rSysFileName );
+}
+
+void RootStorageObject::implDumpStorage( const StorageRef& rxStrg, const OUString& rStrgPath, const OUString& rSysPath )
+{
+    if( rStrgPath.equalsAscii( "_VBA_PROJECT_CUR" ) )
+        VbaProjectStorageObject( *this, rxStrg, rSysPath ).dump();
+    else
+        OleStorageObject::implDumpStorage( rxStrg, rStrgPath, rSysPath );
 }
 
 // ============================================================================
 // ============================================================================
+
+#define DUMP_BIFF_CONFIG_ENVVAR "OOO_BIFFDUMPER"
 
 Dumper::Dumper( const FilterBase& rFilter )
 {
-    ConfigRef xCfg( new Config( "OOO_BIFFDUMPER" ) );
-    DumperBase::construct( rFilter, xCfg );
+    ConfigRef xCfg( new Config( DUMP_BIFF_CONFIG_ENVVAR, rFilter ) );
+    DumperBase::construct( xCfg );
+}
+
+Dumper::Dumper( const Reference< XMultiServiceFactory >& rxFactory, const Reference< XInputStream >& rxInStrm, const OUString& rSysFileName )
+{
+    if( rxFactory.is() && rxInStrm.is() )
+    {
+        StorageRef xStrg( new OleStorage( rxFactory, rxInStrm, true ) );
+        ConfigRef xCfg( new Config( DUMP_BIFF_CONFIG_ENVVAR, rxFactory, xStrg, rSysFileName ) );
+        DumperBase::construct( xCfg );
+    }
 }
 
 void Dumper::implDump()
 {
-    WorkbookStreamObject( *this, getFilter().getFileUrl() + CREATE_OUSTRING( ".dump" ), getRootStream() ).dump();
-    RootStorageObject( *this ).dump();
+    RootStorageObject aRootStrg( *this );
+    if( aRootStrg.isValid() )
+    {
+        aRootStrg.dump();
+    }
+    else if( StorageBase* pRootStrg = cfg().getRootStorage().get() )
+    {
+        // try to dump plain BIFF stream
+        BinaryInputStreamRef xStrm( new BinaryXInputStream( pRootStrg->openInputStream( OUString() ), false ) );
+        WorkbookStreamObject( *this, xStrm, cfg().getSysFileName() ).dump();
+    }
 }
 
 // ============================================================================

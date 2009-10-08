@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: textparagraph.cxx,v $
- * $Revision: 1.7 $
+ * $Revision: 1.7.6.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -35,7 +35,6 @@
 #include <com/sun/star/text/XText.hpp>
 #include <com/sun/star/text/XTextCursor.hpp>
 #include <com/sun/star/text/ControlCharacter.hpp>
-#include <comphelper/processfactory.hxx>
 
 using ::rtl::OUString;
 using namespace ::com::sun::star::text;

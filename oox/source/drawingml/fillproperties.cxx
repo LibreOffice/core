@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: fillproperties.cxx,v $
- * $Revision: 1.7 $
+ * $Revision: 1.7.6.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -115,8 +115,7 @@ const awt::DeviceInfo& lclGetDeviceInfo( const XmlFilterBase& rFilter )
     {
         try
         {
-            Reference< lang::XMultiServiceFactory > xMSFT( rFilter.getServiceFactory(), UNO_QUERY_THROW );
-            Reference< frame::XFramesSupplier > xDesktop( xMSFT->createInstance(
+            Reference< frame::XFramesSupplier > xDesktop( rFilter.getGlobalFactory()->createInstance(
                     CREATE_OUSTRING( "com.sun.star.frame.Desktop" ) ), UNO_QUERY_THROW );
             Reference< frame::XFrame > xFrame( xDesktop->getActiveFrame() );
             Reference< awt::XWindow > xWindow( xFrame->getContainerWindow() );

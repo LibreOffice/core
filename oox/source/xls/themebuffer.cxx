@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: themebuffer.cxx,v $
- * $Revision: 1.6 $
+ * $Revision: 1.5.20.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -34,8 +34,6 @@
 
 using ::oox::drawingml::ClrScheme;
 using ::oox::drawingml::Color;
-using ::oox::drawingml::Theme;
-using ::oox::drawingml::ThemePtr;
 
 namespace oox {
 namespace xls {
@@ -115,20 +113,10 @@ ThemeBuffer::~ThemeBuffer()
 {
 }
 
-Theme& ThemeBuffer::getOrCreateCoreTheme()
-{
-    if( !mxTheme )
-        mxTheme.reset( new Theme );
-    return *mxTheme;
-}
-
 sal_Int32 ThemeBuffer::getColorByToken( sal_Int32 nToken ) const
 {
     sal_Int32 nColor = 0;
-    if( mxTheme.get() )
-        if( mxTheme->getClrScheme().getColor( nToken, nColor ) )
-            return nColor;
-    return API_RGB_TRANSPARENT;
+    return getClrScheme().getColor( nToken, nColor ) ? nColor : API_RGB_TRANSPARENT;
 }
 
 sal_Int32 ThemeBuffer::getColorByIndex( sal_Int32 nIndex ) const

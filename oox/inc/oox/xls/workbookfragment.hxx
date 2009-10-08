@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: workbookfragment.hxx,v $
- * $Revision: 1.4 $
+ * $Revision: 1.4.20.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -31,7 +31,6 @@
 #ifndef OOX_XLS_WORKBOOKFRAGMENT_HXX
 #define OOX_XLS_WORKBOOKFRAGMENT_HXX
 
-#include "oox/xls/bifffragmenthandler.hxx"
 #include "oox/xls/defnamesbuffer.hxx"
 #include "oox/xls/excelhandlers.hxx"
 
@@ -82,26 +81,23 @@ private:
 class BiffWorkbookFragment : public BiffWorkbookFragmentBase
 {
 public:
-    explicit            BiffWorkbookFragment( const WorkbookHelper& rHelper );
+    explicit            BiffWorkbookFragment( const WorkbookHelper& rHelper, BiffInputStream& rStrm );
 
     /** Imports the entire workbook stream, including all contained worksheets. */
-    virtual bool        importFragment( BiffInputStream& rStrm );
+    virtual bool        importFragment();
 
 private:
     /** Imports a complete BIFF4 workspace fragment (with embedded sheets). */
-    bool                importWorkspaceFragment( BiffInputStream& rStrm );
+    bool                importWorkspaceFragment();
     /** Imports the workbook globals fragment from current stream position. */
-    bool                importGlobalsFragment(
-                            BiffInputStream& rStrm,
-                            ISegmentProgressBar& rProgressBar );
+    bool                importGlobalsFragment( ISegmentProgressBar& rProgressBar );
     /** Imports a sheet fragment with passed type from current stream position. */
     bool                importSheetFragment(
-                            BiffInputStream& rStrm,
                             ISegmentProgressBar& rProgressBar,
                             BiffFragmentType eFragment, sal_Int32 nSheet );
 
     /** Imports the FILEPASS record and sets a decoder at the passed stream. */
-    bool                importFilePass( BiffInputStream& rStrm );
+    bool                importFilePass();
 };
 
 // ============================================================================

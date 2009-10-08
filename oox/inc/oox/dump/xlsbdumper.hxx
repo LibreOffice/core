@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: xlsbdumper.hxx,v $
- * $Revision: 1.4 $
+ * $Revision: 1.4.20.7 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -47,58 +47,19 @@ namespace oox {
 namespace dump {
 namespace xlsb {
 
-typedef ::boost::shared_ptr< RecordInputStream > RecordInputStreamRef;
-
 // ============================================================================
 
-class RecordStreamInput : public Input
-{
-public:
-    explicit            RecordStreamInput();
-    virtual             ~RecordStreamInput();
-
-    void                createStream( const RecordDataSequence& rData );
-    inline RecordInputStream& getStream() { return *mxStrm; }
-
-    virtual sal_Int64   getSize() const;
-    virtual sal_Int64   tell() const;
-    virtual void        seek( sal_Int64 nPos );
-    virtual void        skip( sal_Int32 nBytes );
-    virtual sal_Int32   read( void* pBuffer, sal_Int32 nBytes );
-
-    virtual RecordStreamInput& operator>>( sal_Int8& rnData );
-    virtual RecordStreamInput& operator>>( sal_uInt8& rnData );
-    virtual RecordStreamInput& operator>>( sal_Int16& rnData );
-    virtual RecordStreamInput& operator>>( sal_uInt16& rnData );
-    virtual RecordStreamInput& operator>>( sal_Int32& rnData );
-    virtual RecordStreamInput& operator>>( sal_uInt32& rnData );
-    virtual RecordStreamInput& operator>>( float& rfData );
-    virtual RecordStreamInput& operator>>( double& rfData );
-
-protected:
-    virtual bool        implIsValid() const;
-
-private:
-    RecordInputStreamRef mxStrm;
-};
-
-typedef ::boost::shared_ptr< RecordStreamInput > RecordStreamInputRef;
-
-// ============================================================================
-
-class RecordObjectBase : public InputObjectBase
+class RecordObjectBase : public SequenceRecordObjectBase
 {
 protected:
     explicit            RecordObjectBase();
     virtual             ~RecordObjectBase();
 
-    void                construct( const OutputObjectBase& rParent );
+    using               SequenceRecordObjectBase::construct;
+    void                construct( const ObjectBase& rParent, const BinaryInputStreamRef& rxStrm, const ::rtl::OUString& rSysFileName );
     void                construct( const RecordObjectBase& rParent );
 
-    virtual bool        implIsValid() const;
-
-    void                createRecordStream( const RecordDataSequence& rData );
-    inline RecordInputStream& getRecordStream() const { return mxStrmIn->getStream(); }
+    virtual bool        implReadRecordHeader( BinaryInputStream& rBaseStrm, sal_Int64& ornRecId, sal_Int64& ornRecSize );
 
     ::rtl::OUString     getErrorName( sal_uInt8 nErrCode ) const;
 
@@ -110,37 +71,36 @@ protected:
 
     // ------------------------------------------------------------------------
 
-    void                writeBooleanItem( const sal_Char* pcName, sal_uInt8 nBool );
-    void                writeErrorCodeItem( const sal_Char* pcName, sal_uInt8 nErrCode );
+    void                writeBooleanItem( const String& rName, sal_uInt8 nBool );
+    void                writeErrorCodeItem( const String& rName, sal_uInt8 nErrCode );
 
     void                writeFontPortions( const ::oox::xls::BinFontPortionList& rPortions );
     void                writePhoneticPortions( const ::oox::xls::BinPhoneticPortionList& rPhonetics );
 
     // ------------------------------------------------------------------------
 
-    sal_uInt8           dumpBoolean( const sal_Char* pcName = 0 );
-    sal_uInt8           dumpErrorCode( const sal_Char* pcName = 0 );
-    ::rtl::OUString     dumpString( const sal_Char* pcName = 0, bool bRich = false, bool b32BitLen = true );
-    void                dumpColor( const sal_Char* pcName = 0 );
+    sal_uInt8           dumpBoolean( const String& rName = EMPTY_STRING );
+    sal_uInt8           dumpErrorCode( const String& rName = EMPTY_STRING );
+    ::rtl::OUString     dumpString( const String& rName = EMPTY_STRING, bool bRich = false, bool b32BitLen = true );
+    void                dumpColor( const String& rName = EMPTY_STRING );
 
-    sal_Int32           dumpColIndex( const sal_Char* pcName = 0 );
-    sal_Int32           dumpRowIndex( const sal_Char* pcName = 0 );
-    sal_Int32           dumpColRange( const sal_Char* pcName = 0 );
-    sal_Int32           dumpRowRange( const sal_Char* pcName = 0 );
+    sal_Int32           dumpColIndex( const String& rName = EMPTY_STRING );
+    sal_Int32           dumpRowIndex( const String& rName = EMPTY_STRING );
+    sal_Int32           dumpColRange( const String& rName = EMPTY_STRING );
+    sal_Int32           dumpRowRange( const String& rName = EMPTY_STRING );
 
-    Address             dumpAddress( const sal_Char* pcName = 0 );
-    Range               dumpRange( const sal_Char* pcName = 0 );
-    void                dumpRangeList( const sal_Char* pcName = 0 );
+    Address             dumpAddress( const String& rName = EMPTY_STRING );
+    Range               dumpRange( const String& rName = EMPTY_STRING );
+    void                dumpRangeList( const String& rName = EMPTY_STRING );
 
     // ------------------------------------------------------------------------
-
-    using               InputObjectBase::construct;
+private:
+    bool                readCompressedInt( BinaryInputStream& rStrm, sal_Int32& ornValue );
 
 private:
-    void                constructRecObjBase();
+    typedef ::boost::shared_ptr< RecordInputStream > RecordInputStreamRef;
 
-private:
-    RecordStreamInputRef mxStrmIn;
+    RecordInputStreamRef mxStrm;
     NameListRef         mxErrCodes;
 };
 
@@ -152,8 +112,8 @@ public:
     explicit            FormulaObject( const RecordObjectBase& rParent );
     virtual             ~FormulaObject();
 
-    void                dumpCellFormula( const sal_Char* pcName = 0 );
-    void                dumpNameFormula( const sal_Char* pcName = 0 );
+    void                dumpCellFormula( const String& rName = EMPTY_STRING );
+    void                dumpNameFormula( const String& rName = EMPTY_STRING );
 
 protected:
     virtual void        implDump();
@@ -161,7 +121,7 @@ protected:
 private:
     void                constructFmlaObj();
 
-    void                dumpFormula( const sal_Char* pcName, bool bNameMode );
+    void                dumpFormula( const String& rName, bool bNameMode );
 
     TokenAddress        createTokenAddress( sal_Int32 nCol, sal_Int32 nRow, bool bRelC, bool bRelR, bool bNameMode ) const;
     ::rtl::OUString     createRef( const ::rtl::OUString& rData ) const;
@@ -171,8 +131,8 @@ private:
 
     ::rtl::OUString     writeFuncIdItem( sal_uInt16 nFuncId, const ::oox::xls::FunctionInfo** oppFuncInfo = 0 );
 
-    sal_Int32           dumpTokenCol( const sal_Char* pcName, bool& rbRelC, bool& rbRelR );
-    sal_Int32           dumpTokenRow( const sal_Char* pcName );
+    sal_Int32           dumpTokenCol( const String& rName, bool& rbRelC, bool& rbRelR );
+    sal_Int32           dumpTokenRow( const String& rName );
     TokenAddress        dumpTokenAddress( bool bNameMode );
     TokenRange          dumpTokenRange( bool bNameMode );
 
@@ -198,9 +158,9 @@ private:
     void                dumpMemFuncToken( const ::rtl::OUString& rTokClass );
     void                dumpMemAreaToken( const ::rtl::OUString& rTokClass, bool bAddData );
 
-    void                dumpExpToken( const StringWrapper& rName );
-    void                dumpUnaryOpToken( const StringWrapper& rLOp, const StringWrapper& rROp );
-    void                dumpBinaryOpToken( const StringWrapper& rOp );
+    void                dumpExpToken( const String& rName );
+    void                dumpUnaryOpToken( const String& rLOp, const String& rROp );
+    void                dumpBinaryOpToken( const String& rOp );
     void                dumpFuncToken( const ::rtl::OUString& rTokClass );
     void                dumpFuncVarToken( const ::rtl::OUString& rTokClass );
     bool                dumpTableToken();
@@ -233,92 +193,44 @@ private:
     FuncProvRef         mxFuncProv;
     AddDataTypeVec      maAddData;
     ::rtl::OUString     maRefPrefix;
-    const sal_Char*     mpcName;
+    ::rtl::OUString     maName;
     sal_Int32           mnSize;
     bool                mbNameMode;
 };
 
-typedef ::boost::shared_ptr< FormulaObject > FormulaObjectRef;
-
 // ============================================================================
 
-class RecordObject : public RecordObjectBase
+class RecordStreamObject : public RecordObjectBase
 {
 public:
-    explicit            RecordObject( OutputObjectBase& rParent );
-
-    void                dumpRecord( const RecordDataSequence& rData, sal_Int32 nRecId );
-
+    explicit            RecordStreamObject( ObjectBase& rParent, const BinaryInputStreamRef& rxStrm, const ::rtl::OUString& rSysFileName );
 
 protected:
     virtual bool        implIsValid() const;
-    virtual void        implDump();
+    virtual void        implDumpRecordBody();
 
 private:
     void                dumpCellHeader( bool bWithColumn );
-    void                dumpSimpleRecord( const ::rtl::OUString& rRecData );
-    void                dumpRecordBody();
 
 private:
+    typedef ::boost::shared_ptr< FormulaObject > FormulaObjectRef;
+
     FormulaObjectRef    mxFmlaObj;
-    NameListRef         mxSimpleRecs;
-    sal_Int32           mnRecId;
-};
-
-typedef ::boost::shared_ptr< RecordObject > RecordObjectRef;
-
-// ============================================================================
-
-class RecordHeaderObject : public RecordHeaderBase< sal_Int32, sal_Int32 >
-{
-public:
-    explicit            RecordHeaderObject( const InputObjectBase& rParent );
-    virtual             ~RecordHeaderObject();
-
-    inline const RecordDataSequence& getRecordData() const { return maData; }
-
-protected:
-    virtual bool        implReadHeader( sal_Int64& ornRecPos, sal_Int32& ornRecId, sal_Int32& ornRecSize );
-
-private:
-    bool                readByte( sal_Int64& ornRecPos, sal_uInt8& ornByte );
-    bool                readCompressedInt( sal_Int64& ornRecPos, sal_Int32& ornValue );
-
-private:
-    RecordDataSequence  maData;
-};
-
-typedef ::boost::shared_ptr< RecordHeaderObject > RecordHeaderObjectRef;
-
-// ============================================================================
-
-class RecordStreamObject : public InputStreamObject
-{
-public:
-    explicit            RecordStreamObject( const ObjectBase& rParent, const ::rtl::OUString& rOutFileName, BinaryInputStreamRef xStrm );
-
-protected:
-    virtual bool        implIsValid() const;
-    virtual void        implDump();
-
-private:
-    RecordHeaderObjectRef mxHdrObj;
-    RecordObjectRef     mxRecObj;
 };
 
 // ============================================================================
 
-class RootStorageObject : public RootStorageObjectBase
+class RootStorageObject : public StorageObjectBase
 {
 public:
     explicit            RootStorageObject( const DumperBase& rParent );
 
 protected:
     virtual void        implDumpStream(
-                            BinaryInputStreamRef xStrm,
+                            const BinaryInputStreamRef& rxStrm,
                             const ::rtl::OUString& rStrgPath,
                             const ::rtl::OUString& rStrmName,
-                            const ::rtl::OUString& rSystemFileName );
+                            const ::rtl::OUString& rSysFileName );
 };
 
 // ============================================================================
@@ -327,6 +239,11 @@ class Dumper : public DumperBase
 {
 public:
     explicit            Dumper( const ::oox::core::FilterBase& rFilter );
+
+    explicit            Dumper(
+                            const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& rxFactory,
+                            const ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream >& rxInStrm,
+                            const ::rtl::OUString& rSysFileName );
 
 protected:
     virtual void        implDump();

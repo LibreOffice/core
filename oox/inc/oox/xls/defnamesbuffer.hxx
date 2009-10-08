@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: defnamesbuffer.hxx,v $
- * $Revision: 1.4 $
+ * $Revision: 1.4.20.3 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -93,6 +93,8 @@ public:
 
     /** Returns the original name as imported from or exported to the file. */
     inline const ::rtl::OUString& getOoxName() const { return maOoxData.maName; }
+    /** Returns the name as used in the Calc document. */
+    inline const ::rtl::OUString& getDocName() const { return maFinalName; }
     /** Returns the 0-based sheet index for local names, or -1 for global names. */
     inline sal_Int32    getSheetIndex() const { return maOoxData.mnSheet; }
 
@@ -142,7 +144,7 @@ public:
     /** Returns true, if this defined name is a special builtin name. */
     inline bool         isBuiltinName() const { return mcBuiltinId != OOX_DEFNAME_UNKNOWN; }
     /** Returns true, if this defined name is a macro function call. */
-    inline bool         isMacroFunc( bool bVBName ) const { return maOoxData.mbMacro && maOoxData.mbFunction && (maOoxData.mbVBName == bVBName); }
+    inline bool         isMacroFunction() const { return maOoxData.mbMacro && maOoxData.mbFunction; }
 
     /** Returns the token index used in API token arrays (com.sun.star.sheet.FormulaToken). */
     inline sal_Int32    getTokenIndex() const { return mnTokenIndex; }
@@ -154,14 +156,14 @@ private:
     void                implImportBiffFormula( FormulaContext& rContext );
 
 private:
-    typedef ::com::sun::star::uno::Reference< ::com::sun::star::sheet::XNamedRange >    XNamedRangeRef;
-    typedef ::std::auto_ptr< RecordDataSequence >                                       RecordDataSeqPtr;
-    typedef ::std::auto_ptr< BiffInputStreamPos >                                       BiffStreamPosPtr;
+    typedef ::std::auto_ptr< StreamDataSequence >   StreamDataSeqPtr;
+    typedef ::std::auto_ptr< BiffInputStreamPos >   BiffStreamPosPtr;
 
-    XNamedRangeRef      mxNamedRange;       /// XNamedRange interface of the defined name.
+    ::com::sun::star::uno::Reference< ::com::sun::star::sheet::XNamedRange >
+                        mxNamedRange;       /// XNamedRange interface of the defined name.
     sal_Int32           mnTokenIndex;       /// Name index used in API token array.
     sal_Unicode         mcBuiltinId;        /// Identifier for built-in defined names.
-    RecordDataSeqPtr    mxFormula;          /// Formula data for OOBIN import.
+    StreamDataSeqPtr    mxFormula;          /// Formula data for OOBIN import.
     BiffStreamPosPtr    mxBiffStrm;         /// Cached BIFF stream for formula import.
     sal_uInt16          mnFmlaSize;         /// Cached BIFF formula size for formula import.
 };
@@ -174,15 +176,6 @@ class DefinedNamesBuffer : public WorkbookHelper
 {
 public:
     explicit            DefinedNamesBuffer( const WorkbookHelper& rHelper );
-
-    /** Creates and returns a defined name on-the-fly in the Calc document.
-        The name will not be buffered in this defined names buffer.
-        @param orName  (in/out-parameter) Returns the resulting used name. */
-    ::com::sun::star::uno::Reference< ::com::sun::star::sheet::XNamedRange >
-                        createDefinedName( ::rtl::OUString& orName, sal_Int32 nNameFlags = 0 ) const;
-
-    /** Returns the index of the passed defined name used in formula token arrays. */
-    sal_Int32           getTokenIndex( const ::com::sun::star::uno::Reference< ::com::sun::star::sheet::XNamedRange >& rxNamedRange ) const;
 
     /** Sets the current sheet index for files with local defined names, e.g.
         BIFF4 workspaces. All created names initially will contain this index. */
@@ -199,6 +192,8 @@ public:
 
     /** Returns a defined name by zero-based index (order of appearence). */
     DefinedNameRef      getByIndex( sal_Int32 nIndex ) const;
+    /** Returns a defined name by token index (index in XDefinedNames container). */
+    DefinedNameRef      getByTokenIndex( sal_Int32 nIndex ) const;
     /** Returns a defined name by its OOX name.
         @param nSheet  The sheet index for local names or -1 for global names.
             If no local name is found, tries to find a matching global name.
@@ -209,11 +204,12 @@ private:
     DefinedNameRef      createDefinedName();
 
 private:
-    typedef RefVector< DefinedName > DefNameVec;
+    typedef RefVector< DefinedName >            DefNameVector;
+    typedef RefMap< sal_Int32, DefinedName >    DefNameMap;
 
-    const ::rtl::OUString maTokenIndexProp;
-    DefNameVec          maDefNames;
-    sal_Int32           mnLocalSheet;
+    DefNameVector       maDefNames;         /// List of all defined names in insertion order.
+    DefNameMap          maDefNameMap;       /// Maps all defined names by API token index. */
+    sal_Int32           mnLocalSheet;       /// Current sheet index for import of BIFF sheet-local names.
 };
 
 // ============================================================================

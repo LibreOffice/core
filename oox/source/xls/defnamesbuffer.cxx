@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: defnamesbuffer.cxx,v $
- * $Revision: 1.5 $
+ * $Revision: 1.5.4.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -30,14 +30,12 @@
 
 #include "oox/xls/defnamesbuffer.hxx"
 #include <rtl/ustrbuf.hxx>
-#include <com/sun/star/sheet/XNamedRanges.hpp>
-#include <com/sun/star/sheet/XNamedRange.hpp>
-#include <com/sun/star/sheet/XFormulaTokens.hpp>
-#include <com/sun/star/sheet/XPrintAreas.hpp>
-#include <com/sun/star/sheet/ReferenceFlags.hpp>
-#include <com/sun/star/sheet/SingleReference.hpp>
 #include <com/sun/star/sheet/ComplexReference.hpp>
 #include <com/sun/star/sheet/NamedRangeFlag.hpp>
+#include <com/sun/star/sheet/ReferenceFlags.hpp>
+#include <com/sun/star/sheet/SingleReference.hpp>
+#include <com/sun/star/sheet/XFormulaTokens.hpp>
+#include <com/sun/star/sheet/XPrintAreas.hpp>
 #include "oox/helper/attributelist.hxx"
 #include "oox/helper/propertyset.hxx"
 #include "oox/xls/addressconverter.hxx"
@@ -49,17 +47,10 @@ using ::rtl::OUString;
 using ::rtl::OUStringBuffer;
 using ::com::sun::star::uno::Any;
 using ::com::sun::star::uno::Reference;
-using ::com::sun::star::uno::Sequence;
-using ::com::sun::star::uno::Exception;
 using ::com::sun::star::uno::UNO_QUERY;
-using ::com::sun::star::uno::UNO_QUERY_THROW;
-using ::com::sun::star::container::XNameAccess;
 using ::com::sun::star::table::CellAddress;
-using ::com::sun::star::table::CellRangeAddress;
-using ::com::sun::star::sheet::SingleReference;
 using ::com::sun::star::sheet::ComplexReference;
-using ::com::sun::star::sheet::XNamedRanges;
-using ::com::sun::star::sheet::XNamedRange;
+using ::com::sun::star::sheet::SingleReference;
 using ::com::sun::star::sheet::XFormulaTokens;
 using ::com::sun::star::sheet::XPrintAreas;
 using namespace ::com::sun::star::sheet::ReferenceFlags;
@@ -342,16 +333,16 @@ void DefinedName::importDefinedName( RecordInputStream& rStrm )
         maOoxData.mbHidden = false;
 
     // store token array data
-    sal_Int32 nRecPos = rStrm.getRecPos();
+    sal_Int64 nRecPos = rStrm.tell();
     sal_Int32 nFmlaSize = rStrm.readInt32();
     rStrm.skip( nFmlaSize );
     sal_Int32 nAddDataSize = rStrm.readInt32();
-    if( rStrm.isValid() && (nFmlaSize > 0) && (nAddDataSize >= 0) && (rStrm.getRecLeft() >= nAddDataSize) )
+    if( !rStrm.isEof() && (nFmlaSize > 0) && (nAddDataSize >= 0) && (rStrm.getRemaining() >= nAddDataSize) )
     {
         sal_Int32 nTotalSize = 8 + nFmlaSize + nAddDataSize;
-        mxFormula.reset( new RecordDataSequence( nTotalSize ) );
+        mxFormula.reset( new StreamDataSequence );
         rStrm.seek( nRecPos );
-        rStrm.read( mxFormula->getArray(), nTotalSize );
+        rStrm.readData( *mxFormula, nTotalSize );
     }
 }
 
@@ -384,11 +375,13 @@ void DefinedName::importDefinedName( BiffInputStream& rStrm )
         break;
         case BIFF5:
             rStrm >> nFlags >> nShortCut >> nNameLen >> mnFmlaSize >> nRefId >> nTabId;
-            maOoxData.maName = rStrm.skip( 4 ).readCharArray( nNameLen, getTextEncoding() );
+            rStrm.skip( 4 );
+            maOoxData.maName = rStrm.readCharArray( nNameLen, getTextEncoding() );
         break;
         case BIFF8:
             rStrm >> nFlags >> nShortCut >> nNameLen >> mnFmlaSize >> nRefId >> nTabId;
-            maOoxData.maName = rStrm.skip( 4 ).readUniString( nNameLen );
+            rStrm.skip( 4 );
+            maOoxData.maName = rStrm.readUniString( nNameLen );
         break;
         case BIFF_UNKNOWN: break;
     }
@@ -475,9 +468,10 @@ void DefinedName::createNameObject()
     }
 
     // create the name and insert it into the document, maFinalName will be changed to the resulting name
-    mxNamedRange = getDefinedNames().createDefinedName( maFinalName, nNameFlags );
+    mxNamedRange = createNamedRangeObject( maFinalName, nNameFlags );
     // index of this defined name used in formula token arrays
-    mnTokenIndex = getDefinedNames().getTokenIndex( mxNamedRange );
+    PropertySet aPropSet( mxNamedRange );
+    aPropSet.getProperty( mnTokenIndex, CREATE_OUSTRING( "TokenIndex" ) );
 }
 
 void DefinedName::convertFormula()
@@ -571,7 +565,7 @@ void DefinedName::implImportBiffFormula( FormulaContext& rContext )
 {
     OSL_ENSURE( mxBiffStrm.get(), "DefinedName::importBiffFormula - missing BIFF stream" );
     BiffInputStream& rStrm = mxBiffStrm->getStream();
-    BiffInputStreamGuard aStrmGuard( rStrm );
+    BiffInputStreamPosGuard aStrmGuard( rStrm );
     if( mxBiffStrm->restorePosition() )
         importBiffFormula( rContext, rStrm, &mnFmlaSize );
 }
@@ -580,38 +574,8 @@ void DefinedName::implImportBiffFormula( FormulaContext& rContext )
 
 DefinedNamesBuffer::DefinedNamesBuffer( const WorkbookHelper& rHelper ) :
     WorkbookHelper( rHelper ),
-    maTokenIndexProp( CREATE_OUSTRING( "TokenIndex" ) ),
     mnLocalSheet( -1 )
 {
-}
-
-Reference< XNamedRange > DefinedNamesBuffer::createDefinedName( OUString& orName, sal_Int32 nNameFlags ) const
-{
-    // find an unused name
-    Reference< XNamedRanges > xNamedRanges = getNamedRanges();
-    Reference< XNameAccess > xNameAccess( xNamedRanges, UNO_QUERY );
-    if( xNameAccess.is() )
-        orName = ContainerHelper::getUnusedName( xNameAccess, orName, '_' );
-
-    // create the name and insert it into the Calc document
-    Reference< XNamedRange > xNamedRange;
-    if( xNamedRanges.is() && (orName.getLength() > 0) ) try
-    {
-        xNamedRanges->addNewByName( orName, OUString(), CellAddress( 0, 0, 0 ), nNameFlags );
-        xNamedRange.set( xNamedRanges->getByName( orName ), UNO_QUERY );
-    }
-    catch( Exception& )
-    {
-        OSL_ENSURE( false, "DefinedNamesBuffer::createDefinedName - cannot create defined name" );
-    }
-    return xNamedRange;
-}
-
-sal_Int32 DefinedNamesBuffer::getTokenIndex( const Reference< XNamedRange >& rxNamedRange ) const
-{
-    PropertySet aPropSet( rxNamedRange );
-    sal_Int32 nIndex = -1;
-    return aPropSet.getProperty( nIndex, maTokenIndexProp ) ? nIndex : -1;
 }
 
 void DefinedNamesBuffer::setLocalSheetIndex( sal_Int32 nLocalSheet )
@@ -638,8 +602,16 @@ void DefinedNamesBuffer::importDefinedName( BiffInputStream& rStrm )
 
 void DefinedNamesBuffer::finalizeImport()
 {
-    /*  First insert all names without formula definition into the document. */
-    maDefNames.forEachMem( &DefinedName::createNameObject );
+    // first insert all names without formula definition into the document
+    for( DefNameVector::iterator aIt = maDefNames.begin(), aEnd = maDefNames.end(); aIt != aEnd; ++aIt )
+    {
+        DefinedNameRef xDefName = *aIt;
+        xDefName->createNameObject();
+        sal_Int32 nTokenIndex = xDefName->getTokenIndex();
+        if( nTokenIndex >= 0 )
+            maDefNameMap[ nTokenIndex ] = xDefName;
+    }
+
     /*  Now convert all name formulas, so that the formula parser can find all
         names in case of circular dependencies. */
     maDefNames.forEachMem( &DefinedName::convertFormula );
@@ -650,11 +622,16 @@ DefinedNameRef DefinedNamesBuffer::getByIndex( sal_Int32 nIndex ) const
     return maDefNames.get( nIndex );
 }
 
+DefinedNameRef DefinedNamesBuffer::getByTokenIndex( sal_Int32 nIndex ) const
+{
+    return maDefNameMap.get( nIndex );
+}
+
 DefinedNameRef DefinedNamesBuffer::getByOoxName( const OUString& rOoxName, sal_Int32 nSheet ) const
 {
     DefinedNameRef xGlobalName;   // a found global name
     DefinedNameRef xLocalName;    // a found local name
-    for( DefNameVec::const_iterator aIt = maDefNames.begin(), aEnd = maDefNames.end(); (aIt != aEnd) && !xLocalName; ++aIt )
+    for( DefNameVector::const_iterator aIt = maDefNames.begin(), aEnd = maDefNames.end(); (aIt != aEnd) && !xLocalName; ++aIt )
     {
         DefinedNameRef xCurrName = *aIt;
         if( xCurrName->getOoxName() == rOoxName )

@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: theme.hxx,v $
- * $Revision: 1.6 $
+ * $Revision: 1.6.6.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -66,28 +66,25 @@ public:
 
     inline FillStyleList&           getFillStyleList() { return maFillStyleList; }
     inline const FillStyleList&     getFillStyleList() const { return maFillStyleList; }
+    inline FillStyleList&           getBgFillStyleList() { return maBgFillStyleList; }
+    inline const FillStyleList&     getBgFillStyleList() const { return maBgFillStyleList; }
     /** Returns the fill properties of the passed one-based themed style index. */
-    inline const FillProperties*    getFillStyle( sal_Int32 nIndex ) const { return maFillStyleList.get( nIndex - 1 ).get(); }
+    const FillProperties*           getFillStyle( sal_Int32 nIndex ) const;
 
     inline LineStyleList&           getLineStyleList() { return maLineStyleList; }
     inline const LineStyleList&     getLineStyleList() const { return maLineStyleList; }
     /** Returns the line properties of the passed one-based themed style index. */
-    inline const LineProperties*    getLineStyle( sal_Int32 nIndex ) const { return maLineStyleList.get( nIndex - 1 ).get(); }
+    const LineProperties*           getLineStyle( sal_Int32 nIndex ) const;
 
     inline EffectStyleList&         getEffectStyleList() { return maEffectStyleList; }
     inline const EffectStyleList&   getEffectStyleList() const { return maEffectStyleList; }
     /** Returns the effect properties of the passed one-based themed style index. */
-    inline const PropertyMap*       getEffectStyle( sal_Int32 nIndex ) const { return maEffectStyleList.get( nIndex - 1 ).get(); }
-
-    inline FillStyleList&           getBgFillStyleList() { return maBgFillStyleList; }
-    inline const FillStyleList&     getBgFillStyleList() const { return maBgFillStyleList; }
-    /** Returns the bg-fill properties of the passed one-based themed style index. */
-    inline const FillProperties*    getBgFillStyle( sal_Int32 nIndex ) const { return maBgFillStyleList.get( nIndex - 1 ).get(); }
+    const PropertyMap*              getEffectStyle( sal_Int32 nIndex ) const;
 
     inline FontScheme&              getFontScheme() { return maFontScheme; }
     inline const FontScheme&        getFontScheme() const { return maFontScheme; }
     /** Returns theme font properties by scheme type (major/minor). */
-    const TextCharacterProperties*  getFontStyle( sal_Int32 nSchemeType ) const { return maFontScheme.get( nSchemeType ).get(); }
+    const TextCharacterProperties*  getFontStyle( sal_Int32 nSchemeType ) const;
     /** Returns theme font by placeholder name, e.g. the major latin theme font for the font name '+mj-lt'. */
     const TextFont*                 resolveFont( const ::rtl::OUString& rName ) const;
 
@@ -104,9 +101,9 @@ private:
     ::rtl::OUString     maStyleName;
     ClrScheme           maClrScheme;
     FillStyleList       maFillStyleList;
+    FillStyleList       maBgFillStyleList;
     LineStyleList       maLineStyleList;
     EffectStyleList     maEffectStyleList;
-    FillStyleList       maBgFillStyleList;
     FontScheme          maFontScheme;
     Shape               maSpDef;
     Shape               maLnDef;

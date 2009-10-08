@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: externallinkbuffer.cxx,v $
- * $Revision: 1.5 $
+ * $Revision: 1.5.4.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -209,7 +209,8 @@ void ExternalName::importExternalName( BiffInputStream& rStrm )
             else
             {
                 // get sheet index for sheet-local names
-                sal_Int16 nRefId = rStrm.skip( 2 ).readuInt16();
+                rStrm.skip( 2 );
+                sal_Int16 nRefId = rStrm.readuInt16();
                 switch( getBiff() )
                 {
                     case BIFF2:
@@ -245,7 +246,7 @@ void ExternalName::importExternalName( BiffInputStream& rStrm )
         case LINKTYPE_INTERNAL:
         case LINKTYPE_EXTERNAL:
             // cell references that are stored in hidden external names (seen in BIFF3-BIFF4)
-            if( (getBiff() <= BIFF4) && (maOoxData.maName.getLength() > 0) && (maOoxData.maName[ 0 ] == '\x01') && (rStrm.getRecLeft() > 2) )
+            if( (getBiff() <= BIFF4) && (maOoxData.maName.getLength() > 0) && (maOoxData.maName[ 0 ] == '\x01') && (rStrm.getRemaining() > 2) )
             {
                 TokensFormulaContext aContext( true, true );
                 importBiffFormula( aContext, rStrm );
@@ -257,7 +258,7 @@ void ExternalName::importExternalName( BiffInputStream& rStrm )
         case LINKTYPE_OLE:
         case LINKTYPE_MAYBE_DDE_OLE:
             // DDE/OLE link results
-            if( rStrm.getRecLeft() > 3 )
+            if( rStrm.getRemaining() > 3 )
             {
                 bool bBiff8 = getBiff() == BIFF8;
                 sal_Int32 nCols = rStrm.readuInt8();
@@ -266,7 +267,7 @@ void ExternalName::importExternalName( BiffInputStream& rStrm )
                 setResultSize( nCols, nRows );
 
                 bool bLoop = true;
-                while( bLoop && rStrm.isValid() && (maCurrIt != maResults.end()) )
+                while( bLoop && !rStrm.isEof() && (maCurrIt != maResults.end()) )
                 {
                     switch( rStrm.readuInt8() )
                     {
@@ -292,7 +293,7 @@ void ExternalName::importExternalName( BiffInputStream& rStrm )
                             bLoop = false;
                     }
                 }
-                OSL_ENSURE( bLoop && rStrm.isValid() && (maCurrIt == maResults.end()),
+                OSL_ENSURE( bLoop && !rStrm.isEof() && (maCurrIt == maResults.end()),
                     "ExternalName::importExternalName - stream error in result set" );
             }
         break;
@@ -462,7 +463,7 @@ void ExternalLink::importExtSheetNames( RecordInputStream& rStrm )
     if( meLinkType == LINKTYPE_EXTERNAL )
     {
         WorksheetBuffer& rWorksheets = getWorksheets();
-        for( sal_Int32 nSheet = 0, nCount = rStrm.readInt32(); rStrm.isValid() && (nSheet < nCount); ++nSheet )
+        for( sal_Int32 nSheet = 0, nCount = rStrm.readInt32(); !rStrm.isEof() && (nSheet < nCount); ++nSheet )
         {
             OUString aSheetName = rStrm.readString();
             OSL_ENSURE( aSheetName.getLength() > 0, "ExternalLink::importExtSheetNames - empty sheet name" );
@@ -506,7 +507,7 @@ void ExternalLink::importExternalBook( BiffInputStream& rStrm )
     OUString aTarget;
     sal_uInt16 nSheetCount;
     rStrm >> nSheetCount;
-    if( rStrm.getRecLeft() == 2 )
+    if( rStrm.getRemaining() == 2 )
     {
         if( rStrm.readuInt8() == 1 )
         {
@@ -515,7 +516,7 @@ void ExternalLink::importExternalBook( BiffInputStream& rStrm )
                 aTarget = OStringToOUString( OString( cChar ), getTextEncoding() );
         }
     }
-    else if( rStrm.getRecLeft() >= 3 )
+    else if( rStrm.getRemaining() >= 3 )
     {
         // NUL characters may occur
         rStrm.enableNulChars( true );
@@ -532,7 +533,7 @@ void ExternalLink::importExternalBook( BiffInputStream& rStrm )
     if( meLinkType == LINKTYPE_EXTERNAL )
     {
         WorksheetBuffer& rWorksheets = getWorksheets();
-        for( sal_uInt16 nSheet = 0; rStrm.isValid() && (nSheet < nSheetCount); ++nSheet )
+        for( sal_uInt16 nSheet = 0; !rStrm.isEof() && (nSheet < nSheetCount); ++nSheet )
         {
             OUString aSheetName = rStrm.readUniString();
             OSL_ENSURE( aSheetName.getLength() > 0, "ExternalLink::importExternalBook - empty sheet name" );
@@ -750,9 +751,9 @@ void ExternalLinkBuffer::importExternalSheets( RecordInputStream& rStrm )
     maRefSheets.clear();
     sal_Int32 nRefCount;
     rStrm >> nRefCount;
-    size_t nMaxCount = getLimitedValue< size_t, sal_Int32 >( nRefCount, 0, rStrm.getRecLeft() / 12 );
+    size_t nMaxCount = getLimitedValue< size_t, sal_Int64 >( nRefCount, 0, rStrm.getRemaining() / 12 );
     maRefSheets.reserve( nMaxCount );
-    for( size_t nRefId = 0; rStrm.isValid() && (nRefId < nMaxCount); ++nRefId )
+    for( size_t nRefId = 0; !rStrm.isEof() && (nRefId < nMaxCount); ++nRefId )
     {
         OoxRefSheets aRefSheets;
         aRefSheets.readOobData( rStrm );
@@ -789,7 +790,7 @@ void ExternalLinkBuffer::importExternSheet8( BiffInputStream& rStrm )
     sal_uInt16 nRefCount;
     rStrm >> nRefCount;
     maRefSheets.reserve( nRefCount );
-    for( sal_uInt16 nRefId = 0; rStrm.isValid() && (nRefId < nRefCount); ++nRefId )
+    for( sal_uInt16 nRefId = 0; !rStrm.isEof() && (nRefId < nRefCount); ++nRefId )
     {
         OoxRefSheets aRefSheets;
         aRefSheets.readBiff8Data( rStrm );

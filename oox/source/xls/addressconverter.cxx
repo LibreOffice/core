@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: addressconverter.cxx,v $
- * $Revision: 1.4 $
+ * $Revision: 1.4.20.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -201,7 +201,7 @@ BinRange BinRangeList::getEnclosingRange() const
 void BinRangeList::read( RecordInputStream& rStrm )
 {
     sal_Int32 nCount = rStrm.readInt32();
-    resize( getLimitedValue< size_t, sal_Int32 >( nCount, 0, rStrm.getRecLeft() / 16 ) );
+    resize( getLimitedValue< size_t, sal_Int64 >( nCount, 0, rStrm.getRemaining() / 16 ) );
     for( iterator aIt = begin(), aEnd = end(); aIt != aEnd; ++aIt )
         aIt->read( rStrm );
 }
@@ -209,7 +209,7 @@ void BinRangeList::read( RecordInputStream& rStrm )
 void BinRangeList::read( BiffInputStream& rStrm, bool bCol16Bit, bool bRow32Bit )
 {
     sal_uInt16 nCount = rStrm.readuInt16();
-    resize( getLimitedValue< size_t, sal_uInt32 >( nCount, 0, rStrm.getRecLeft() / lclGetBiffRangeSize( bCol16Bit, bRow32Bit ) ) );
+    resize( getLimitedValue< size_t, sal_Int64 >( nCount, 0, rStrm.getRemaining() / lclGetBiffRangeSize( bCol16Bit, bRow32Bit ) ) );
     for( iterator aIt = begin(), aEnd = end(); aIt != aEnd; ++aIt )
         aIt->read( rStrm, bCol16Bit, bRow32Bit );
 }

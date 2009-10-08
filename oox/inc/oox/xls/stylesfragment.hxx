@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: stylesfragment.hxx,v $
- * $Revision: 1.4 $
+ * $Revision: 1.4.20.1 $
  *
  * This file is part of OpenOffice.org.
  *

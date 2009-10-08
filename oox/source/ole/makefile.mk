@@ -1,13 +1,14 @@
 #*************************************************************************
+#
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-# 
+#
 # Copyright 2008 by Sun Microsystems, Inc.
 #
 # OpenOffice.org - a multi-platform office productivity suite
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.2.6.1 $
+# $Revision: 1.1.2.1 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -25,37 +26,28 @@
 # version 3 along with OpenOffice.org.  If not, see
 # <http://www.openoffice.org/license.html>
 # for a copy of the LGPLv3 License.
-#***********************************************************************/
+#
+#*************************************************************************
 
-PRJ = ..$/..
-TARGET  = unoxml_test
-PRJNAME = $(TARGET)
-PACKAGE = complex$/unoxml
+PRJ=..$/..
+
+PRJNAME=oox
+TARGET=ole
+AUTOSEG=true
+
+ENABLE_EXCEPTIONS=TRUE
 
 # --- Settings -----------------------------------------------------
-.INCLUDE: settings.mk
 
+.INCLUDE :  settings.mk
+.INCLUDE: $(PRJ)$/util$/makefile.pmk
 
-#----- compile .java files -----------------------------------------
+# --- Files --------------------------------------------------------
 
-JARFILES        = ridl.jar unoil.jar jurt.jar juh.jar java_uno.jar OOoRunner.jar
-JAVAFILES       = RDFRepositoryTest.java \
+SLOFILES =	\
+        $(SLO)$/vbainputstream.obj
 
-JAVACLASSFILES	= $(foreach,i,$(JAVAFILES) $(CLASSDIR)$/$(PACKAGE)$/$(i:b).class)
-
-#----- make a jar from compiled files ------------------------------
-
-MAXLINELENGTH = 100000
-
-JARCLASSDIRS    = $(PACKAGE)
-JARTARGET       = $(TARGET).jar
-JARCOMPRESS 	= TRUE
-
-# --- Targets ------------------------------------------------------
+# --- Targets -------------------------------------------------------
 
 .INCLUDE :  target.mk
-
-
-run:
-    +java -cp $(CLASSPATH) org.openoffice.Runner -TestBase java_complex -sce tests.sce -tdoc $(PWD)$/testdocuments
 

@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: dffdumper.cxx,v $
- * $Revision: 1.3 $
+ * $Revision: 1.3.22.10 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -32,143 +32,101 @@
 
 #if OOX_INCLUDE_DUMPER
 
+using ::rtl::OUString;
+
 namespace oox {
 namespace dump {
 
 // ============================================================================
 
-DffRecordHeaderObject::DffRecordHeaderObject( const InputObjectBase& rParent )
+void DffStreamObject::construct( const ObjectBase& rParent, const BinaryInputStreamRef& rxStrm, const OUString& rSysFileName )
 {
-    static const RecordHeaderConfigInfo saHeaderCfgInfo =
+    SequenceRecordObjectBase::construct( rParent, rxStrm, rSysFileName, "DFF-RECORD-NAMES" );
+    constructDffObj();
+}
+
+void DffStreamObject::construct( const OutputObjectBase& rParent, const BinaryInputStreamRef& rxStrm )
+{
+    SequenceRecordObjectBase::construct( rParent, rxStrm, "DFF-RECORD-NAMES" );
+    constructDffObj();
+}
+
+bool DffStreamObject::implReadRecordHeader( BinaryInputStream& rBaseStrm, sal_Int64& ornRecId, sal_Int64& ornRecSize )
+{
+    sal_uInt16 nRecId;
+    rBaseStrm >> mnInstVer >> nRecId >> mnRealSize;
+    ornRecId = nRecId;
+    ornRecSize = isContainer() ? 0 : mnRealSize;
+    return !rBaseStrm.isEof();
+}
+
+void DffStreamObject::implWriteExtHeader()
+{
+    const sal_Char* pcListName = "DFF-RECORD-INST";
+    switch( getRecId() )
     {
-        "DFFREC",
-        "DFF-RECORD-NAMES",
-        "show-dff-record-pos",
-        "show-dff-record-size",
-        "show-dff-record-id",
-        "show-dff-record-name",
-        "show-dff-record-body",
-    };
-    RecordHeaderBase< sal_uInt16, sal_uInt32 >::construct( rParent, saHeaderCfgInfo );
-    if( RecordHeaderBase< sal_uInt16, sal_uInt32 >::implIsValid() )
-    {
-        mxRecInst = cfg().getNameList( "DFF-RECORD-INST" );
-        mnBodyStart = mnBodyEnd = 0;
-        mnInstVer = 0;
+        case 0xF001:    pcListName = "DFFBSTORECONT-RECORD-INST";   break;  // DFFBSTORECONTAINER contains BLIP count
+        case 0xF007:    pcListName = "DFFBSE-RECORD-INST";          break;  // DFFBSE contains BLIP type
+        case 0xF00A:    pcListName = "DFFSP-RECORD-INST";           break;  // DFFSP contains shape type
+        case 0xF00B:    pcListName = "DFFOPT-RECORD-INST";          break;  // DFFOPT contains property count
     }
-}
-
-bool DffRecordHeaderObject::implIsValid() const
-{
-    return isValid( mxRecInst ) && RecordHeaderBase< sal_uInt16, sal_uInt32 >::implIsValid();
-}
-
-bool DffRecordHeaderObject::implReadHeader( sal_Int64& ornRecPos, sal_uInt16& ornRecId, sal_uInt32& ornRecSize )
-{
-    ornRecPos = in().tell();
-    if( ornRecPos >= in().getSize() ) return false;
-    in() >> mnInstVer >> ornRecId >> ornRecSize;
-    mnBodyStart = in().tell();
-    mnBodyEnd = ::std::min< sal_Int64 >( mnBodyStart + ornRecSize, in().getSize() );
-    return in().isValidPos();
-}
-
-void DffRecordHeaderObject::implWriteExtHeader()
-{
-    writeHexItem( "instance", mnInstVer, mxRecInst );
-}
-
-// ============================================================================
-
-DffDumpObject::DffDumpObject( const InputObjectBase& rParent )
-{
-    InputObjectBase::construct( rParent );
-    if( InputObjectBase::implIsValid() )
-        mxHdrObj.reset( new DffRecordHeaderObject( *this ) );
-}
-
-DffDumpObject::~DffDumpObject()
-{
-}
-
-void DffDumpObject::dumpDffClientPos( const sal_Char* pcName, sal_Int32 nSubScale )
-{
     MultiItemsGuard aMultiGuard( out() );
-    TableGuard aTabGuard( out(), 17 );
-    dumpDec< sal_uInt16 >( pcName );
-    ItemGuard aItem( out(), "sub-units" );
-    sal_uInt16 nSubUnits;
-    in() >> nSubUnits;
-    out().writeDec( nSubUnits );
-    out().writeChar( '/' );
-    out().writeDec( nSubScale );
+    writeHexItem( "instance", mnInstVer, pcListName );
+    if( isContainer() ) writeDecItem( "container-size", mnRealSize );
 }
 
-void DffDumpObject::dumpDffClientRect()
+void DffStreamObject::implDumpRecordBody()
 {
-    dumpDffClientPos( "start-col", 1024 );
-    dumpDffClientPos( "start-row", 256 );
-    dumpDffClientPos( "end-col", 1024 );
-    dumpDffClientPos( "end-row", 256 );
-}
-
-bool DffDumpObject::implIsValid() const
-{
-    return isValid( mxHdrObj ) && InputObjectBase::implIsValid();
-}
-
-void DffDumpObject::implDump()
-{
-    while( mxHdrObj->startNextRecord() )
+    switch( getRecId() )
     {
-        if( mxHdrObj->getVer() != 0x0F )
+        case 0xF007:    // DFFBSE
+            dumpDec< sal_uInt8 >( "win-type", "DFFBSE-TYPE" );
+            dumpDec< sal_uInt8 >( "mac-type", "DFFBSE-TYPE" );
+            dumpGuid( "guid" );
+            dumpDec< sal_uInt16 >( "tag" );
+            dumpDec< sal_uInt32 >( "blip-size" );
+            dumpDec< sal_uInt32 >( "blip-refcount" );
+            dumpDec< sal_uInt32 >( "blip-streampos" );
+            dumpDec< sal_uInt8 >( "blip-usage", "DFFBSE-USAGE" );
+            dumpDec< sal_uInt8 >( "blip-name-len" );
+            dumpUnused( 2 );
+        break;
+
+        case 0xF00A:    // DFFSP
+            dumpHex< sal_uInt32 >( "shape-id", "CONV-DEC" );
+            dumpHex< sal_uInt32 >( "shape-flags", "DFFSP-FLAGS" );
+        break;
+
+        case 0xF00B:    // DFFOPT
         {
-            if( mxHdrObj->isShowRecBody() )
-                dumpRecordBody();
-            in().seek( mxHdrObj->getBodyEnd() );
+            sal_uInt16 nPropCount = getInst();
+            out().resetItemIndex();
+            for( sal_uInt16 nPropIdx = 0; !in().isEof() && (nPropIdx < nPropCount); ++nPropIdx )
+            {
+                sal_uInt16 nPropId = dumpDffOptPropHeader();
+                IndentGuard aIndent( out() );
+                dumpDffOptPropValue( nPropId, in().readuInt32() );
+            }
         }
-        out().emptyLine();
-    }
-}
-
-void DffDumpObject::dumpRecordBody()
-{
-    IndentGuard aIndGuard( out() );
-
-    // record contents
-    if( mxHdrObj->hasRecName() ) switch( mxHdrObj->getRecId() )
-    {
-        case 0xF00B:
-            dumpDffOptRec();
         break;
-        case 0xF010:
-            dumpHex< sal_uInt16 >( "flags", "DFFCLIENTANCHOR-FLAGS" );
-            dumpDffClientRect();
+
+        case 0xF010:    // DFFCLIENTANCHOR
+            implDumpClientAnchor();
         break;
     }
-
-    // remaining undumped data
-    sal_Int64 nPos = in().tell();
-    if( nPos == mxHdrObj->getBodyStart() )
-        dumpRawBinary( mxHdrObj->getRecSize(), false );
-    else if( nPos < mxHdrObj->getBodyEnd() )
-        dumpRemaining( static_cast< sal_Int32 >( mxHdrObj->getBodyEnd() - nPos ) );
 }
 
-void DffDumpObject::dumpDffOptRec()
+void DffStreamObject::implDumpClientAnchor()
 {
-    sal_uInt16 nInst = mxHdrObj->getInst();
-    sal_Int64 nBodyEnd = mxHdrObj->getBodyEnd();
-    out().resetItemIndex();
-    for( sal_uInt16 nIdx = 0; (nIdx < nInst) && (in().tell() < nBodyEnd); ++nIdx )
-    {
-        sal_uInt16 nPropId = dumpDffOptPropHeader();
-        IndentGuard aIndent( out() );
-        dumpDffOptPropValue( nPropId, in().readValue< sal_uInt32 >() );
-    }
 }
 
-sal_uInt16 DffDumpObject::dumpDffOptPropHeader()
+void DffStreamObject::constructDffObj()
+{
+    mnInstVer = 0;
+    mnRealSize = 0;
+}
+
+sal_uInt16 DffStreamObject::dumpDffOptPropHeader()
 {
     MultiItemsGuard aMultiGuard( out() );
     TableGuard aTabGuard( out(), 11 );
@@ -176,7 +134,7 @@ sal_uInt16 DffDumpObject::dumpDffOptPropHeader()
     return dumpHex< sal_uInt16 >( "id", "DFFOPT-PROPERTY-ID" );
 }
 
-void DffDumpObject::dumpDffOptPropValue( sal_uInt16 nPropId, sal_uInt32 nValue )
+void DffStreamObject::dumpDffOptPropValue( sal_uInt16 nPropId, sal_uInt32 nValue )
 {
     switch( nPropId & 0x3FFF )
     {

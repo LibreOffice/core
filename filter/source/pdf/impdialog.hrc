@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: impdialog.hrc,v $
- * $Revision: 1.15 $
+ * $Revision: 1.15.80.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -40,12 +40,9 @@
 #define STR_PDF_EXPORT              (RID_PDF_DIALOG_START +   5)
 
 //strings for PDF security, user password management
-#define STR_PDF_EXPORT_USPWD         (RID_PDF_DIALOG_START +  6)
 #define STR_PDF_EXPORT_UDPWD         (RID_PDF_DIALOG_START +  7)
 
 //strings for PDF security, owner password management
-#define STR_PDF_EXPORT_CB_PERM       (RID_PDF_DIALOG_START + 8)
-#define STR_PDF_EXPORT_OSPWD         (RID_PDF_DIALOG_START + 9)
 #define STR_PDF_EXPORT_ODPWD         (RID_PDF_DIALOG_START + 10)
 
 #define RID_PDF_ERROR_DLG            (RID_PDF_DIALOG_START + 11)
@@ -58,6 +55,8 @@
 #define STR_WARN_TRANSP_VERSION_SHORT     7
 #define STR_WARN_FORMACTION_PDFA          8
 #define STR_WARN_FORMACTION_PDFA_SHORT    9
+#define STR_WARN_TRANSP_CONVERTED        10
+#define STR_WARN_TRANSP_CONVERTED_SHORT  11
 
 //ATTENTION: maximum allowed value is( RID_PDF_DIALOG_START +   19)
 
@@ -146,28 +145,33 @@
 #define NUM_BOOKMARKLEVELS       114
 
 //controls for security preferences tab page
-#define CB_SEC_ENCRYPT          120
-#define BTN_USER_PWD            122
-#define FT_USER_PWD_EMPTY       123
+#define BTN_USER_PWD            120
+#define FT_USER_PWD             121
+#define STR_USER_PWD_SET        122
+#define STR_USER_PWD_ENC        123
+#define STR_USER_PWD_UNSET      124
+#define STR_USER_PWD_UNENC      125
 
-#define FL_PERMISSIONS          124
-#define CB_SEL_PERMISSIONS      125
-#define BTN_OWNER_PWD           126
-#define FT_OWNER_PWD_EMPTY      127
+#define BTN_OWNER_PWD           127
+#define FT_OWNER_PWD            128
+#define STR_OWNER_PWD_SET       129
+#define STR_OWNER_PWD_REST      130
+#define STR_OWNER_PWD_UNSET     131
+#define STR_OWNER_PWD_UNREST    132
 
-#define FL_PRINT_PERMISSIONS    128
-#define RB_PRINT_NONE           129
-#define RB_PRINT_LOWRES         130
-#define RB_PRINT_HIGHRES        131
+#define FL_PRINT_PERMISSIONS    133
+#define RB_PRINT_NONE           134
+#define RB_PRINT_LOWRES         135
+#define RB_PRINT_HIGHRES        136
 
-#define FL_CHANGES_ALLOWED      132
-#define RB_CHANGES_NONE         133
-#define RB_CHANGES_INSDEL       134
-#define RB_CHANGES_FILLFORM     135
-#define RB_CHANGES_COMMENT      136
-#define RB_CHANGES_ANY_NOCOPY   137
-#define CB_ENDAB_COPY           138
-#define CB_ENAB_ACCESS          139
+#define FL_CHANGES_ALLOWED      137
+#define RB_CHANGES_NONE         138
+#define RB_CHANGES_INSDEL       139
+#define RB_CHANGES_FILLFORM     140
+#define RB_CHANGES_COMMENT      141
+#define RB_CHANGES_ANY_NOCOPY   142
+#define CB_ENDAB_COPY           143
+#define CB_ENAB_ACCESS          144
 
 //---> i56629 controls for link management
 #define CB_ENAB_RELLINKFSYS     150

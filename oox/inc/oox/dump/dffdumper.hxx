@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: dffdumper.hxx,v $
- * $Revision: 1.3 $
+ * $Revision: 1.3.22.9 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -40,56 +40,35 @@ namespace dump {
 
 // ============================================================================
 
-class DffRecordHeaderObject : public RecordHeaderBase< sal_uInt16, sal_uInt32 >
+class DffStreamObject : public SequenceRecordObjectBase
 {
 public:
-    explicit            DffRecordHeaderObject( const InputObjectBase& rParent );
-
-    inline sal_Int64    getBodyStart() const { return mnBodyStart; }
-    inline sal_Int64    getBodyEnd() const { return mnBodyEnd; }
     inline sal_uInt16   getVer() const { return mnInstVer & 0x000F; }
     inline sal_uInt16   getInst() const { return (mnInstVer & 0xFFF0) >> 4; }
+    inline bool         isContainer() const { return getVer() == 15; }
 
 protected:
-    virtual bool        implIsValid() const;
-    virtual bool        implReadHeader( sal_Int64& ornRecPos, sal_uInt16& ornRecId, sal_uInt32& ornRecSize );
+    inline explicit     DffStreamObject() {}
+
+    using               SequenceRecordObjectBase::construct;
+    void                construct( const ObjectBase& rParent, const BinaryInputStreamRef& rxStrm, const ::rtl::OUString& rSysFileName );
+    void                construct( const OutputObjectBase& rParent, const BinaryInputStreamRef& rxStrm );
+
+    virtual bool        implReadRecordHeader( BinaryInputStream& rBaseStrm, sal_Int64& ornRecId, sal_Int64& ornRecSize );
     virtual void        implWriteExtHeader();
+    virtual void        implDumpRecordBody();
+    virtual void        implDumpClientAnchor();
 
 private:
-    NameListRef         mxRecInst;
-    sal_Int64           mnBodyStart;
-    sal_Int64           mnBodyEnd;
-    sal_uInt16          mnInstVer;
-};
+    void                constructDffObj();
 
-// ============================================================================
-
-class DffDumpObject : public InputObjectBase
-{
-public:
-    explicit            DffDumpObject( const InputObjectBase& rParent );
-    virtual             ~DffDumpObject();
-
-    void                dumpDffClientPos( const sal_Char* pcName, sal_Int32 nSubScale );
-    void                dumpDffClientRect();
-
-protected:
-    virtual bool        implIsValid() const;
-    virtual void        implDump();
-
-private:
-    void                dumpRecordBody();
-
-    void                dumpDffOptRec();
     sal_uInt16          dumpDffOptPropHeader();
     void                dumpDffOptPropValue( sal_uInt16 nPropId, sal_uInt32 nValue );
 
 private:
-    typedef ::boost::shared_ptr< DffRecordHeaderObject > DffRecHeaderObjRef;
-    DffRecHeaderObjRef  mxHdrObj;
+    sal_uInt16          mnInstVer;
+    sal_Int32           mnRealSize;
 };
-
-typedef ::boost::shared_ptr< DffDumpObject > DffDumpObjectRef;
 
 // ============================================================================
 

@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: chartsheetfragment.cxx,v $
- * $Revision: 1.4 $
+ * $Revision: 1.4.4.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -190,12 +190,13 @@ void OoxChartsheetFragment::importDrawing( RecordInputStream& rStrm )
 
 // ============================================================================
 
-BiffChartsheetFragment::BiffChartsheetFragment( const WorkbookHelper& rHelper, ISegmentProgressBarRef xProgressBar, sal_Int32 nSheet ) :
-    BiffWorksheetFragmentBase( rHelper, xProgressBar, SHEETTYPE_CHARTSHEET, nSheet )
+BiffChartsheetFragment::BiffChartsheetFragment( const BiffWorkbookFragmentBase& rParent,
+        ISegmentProgressBarRef xProgressBar, sal_Int32 nSheet ) :
+    BiffWorksheetFragmentBase( rParent, xProgressBar, SHEETTYPE_CHARTSHEET, nSheet )
 {
 }
 
-bool BiffChartsheetFragment::importFragment( BiffInputStream& rStrm )
+bool BiffChartsheetFragment::importFragment()
 {
     // initial processing in base class WorksheetHelper
     initializeWorksheetImport();
@@ -205,87 +206,91 @@ bool BiffChartsheetFragment::importFragment( BiffInputStream& rStrm )
     PageSettings& rPageSett           = getPageSettings();
 
     // process all record in this sheet fragment
-    while( rStrm.startNextRecord() && (rStrm.getRecId() != BIFF_ID_EOF) )
+    while( mrStrm.startNextRecord() && (mrStrm.getRecId() != BIFF_ID_EOF) )
     {
-        sal_uInt16 nRecId = rStrm.getRecId();
-
-        if( isBofRecord( nRecId ) )
+        if( isBofRecord() )
         {
             // skip unknown embedded fragments (BOF/EOF blocks)
-            skipFragment( rStrm );
+            skipFragment();
         }
-        else switch( nRecId )
+        else
         {
-            // records in all BIFF versions
-            case BIFF_ID_BOTTOMMARGIN:  rPageSett.importBottomMargin( rStrm );  break;
-            case BIFF_ID_FOOTER:        rPageSett.importFooter( rStrm );        break;
-            case BIFF_ID_HEADER:        rPageSett.importHeader( rStrm );        break;
-            case BIFF_ID_LEFTMARGIN:    rPageSett.importLeftMargin( rStrm );    break;
-            case BIFF_ID_PASSWORD:      rWorksheetSett.importPassword( rStrm ); break;
-            case BIFF_ID_PROTECT:       rWorksheetSett.importProtect( rStrm );  break;
-            case BIFF_ID_RIGHTMARGIN:   rPageSett.importRightMargin( rStrm );   break;
-            case BIFF_ID_TOPMARGIN:     rPageSett.importTopMargin( rStrm );     break;
-
-            // BIFF specific records
-            default: switch( getBiff() )
+            sal_uInt16 nRecId = mrStrm.getRecId();
+            switch( nRecId )
             {
-                case BIFF2: switch( nRecId )
+                // records in all BIFF versions
+                case BIFF_ID_BOTTOMMARGIN:  rPageSett.importBottomMargin( mrStrm );     break;
+                case BIFF_ID_CHBEGIN:       skipRecordBlock( BIFF_ID_CHEND );           break;
+                case BIFF_ID_FOOTER:        rPageSett.importFooter( mrStrm );           break;
+                case BIFF_ID_HEADER:        rPageSett.importHeader( mrStrm );           break;
+                case BIFF_ID_LEFTMARGIN:    rPageSett.importLeftMargin( mrStrm );       break;
+                case BIFF_ID_PASSWORD:      rWorksheetSett.importPassword( mrStrm );    break;
+                case BIFF_ID_PROTECT:       rWorksheetSett.importProtect( mrStrm );     break;
+                case BIFF_ID_RIGHTMARGIN:   rPageSett.importRightMargin( mrStrm );      break;
+                case BIFF_ID_TOPMARGIN:     rPageSett.importTopMargin( mrStrm );        break;
+
+                // BIFF specific records
+                default: switch( getBiff() )
                 {
-                    case BIFF2_ID_WINDOW2:      rSheetViewSett.importWindow2( rStrm );  break;
+                    case BIFF2: switch( nRecId )
+                    {
+                        case BIFF2_ID_WINDOW2:      rSheetViewSett.importWindow2( mrStrm );  break;
+                    }
+                    break;
+
+                    case BIFF3: switch( nRecId )
+                    {
+                        case BIFF_ID_HCENTER:       rPageSett.importHorCenter( mrStrm );            break;
+                        case BIFF_ID_OBJECTPROTECT: rWorksheetSett.importObjectProtect( mrStrm );   break;
+                        case BIFF_ID_VCENTER:       rPageSett.importVerCenter( mrStrm );            break;
+                        case BIFF3_ID_WINDOW2:      rSheetViewSett.importWindow2( mrStrm );         break;
+
+                    }
+                    break;
+
+                    case BIFF4: switch( nRecId )
+                    {
+                        case BIFF_ID_HCENTER:       rPageSett.importHorCenter( mrStrm );            break;
+                        case BIFF_ID_OBJECTPROTECT: rWorksheetSett.importObjectProtect( mrStrm );   break;
+                        case BIFF_ID_PAGESETUP:     rPageSett.importPageSetup( mrStrm );            break;
+                        case BIFF_ID_VCENTER:       rPageSett.importVerCenter( mrStrm );            break;
+                        case BIFF3_ID_WINDOW2:      rSheetViewSett.importWindow2( mrStrm );         break;
+                    }
+                    break;
+
+                    case BIFF5: switch( nRecId )
+                    {
+                        case BIFF_ID_HCENTER:       rPageSett.importHorCenter( mrStrm );            break;
+                        case BIFF_ID_OBJECTPROTECT: rWorksheetSett.importObjectProtect( mrStrm );   break;
+                        case BIFF_ID_PAGESETUP:     rPageSett.importPageSetup( mrStrm );            break;
+                        case BIFF_ID_SCENPROTECT:   rWorksheetSett.importScenProtect( mrStrm );     break;
+                        case BIFF_ID_SCL:           rSheetViewSett.importScl( mrStrm );             break;
+                        case BIFF_ID_VCENTER:       rPageSett.importVerCenter( mrStrm );            break;
+                        case BIFF3_ID_WINDOW2:      rSheetViewSett.importWindow2( mrStrm );         break;
+                    }
+                    break;
+
+                    case BIFF8: switch( nRecId )
+                    {
+                        case BIFF_ID_HCENTER:       rPageSett.importHorCenter( mrStrm );            break;
+                        case BIFF_ID_OBJECTPROTECT: rWorksheetSett.importObjectProtect( mrStrm );   break;
+                        case BIFF_ID_PICTURE:       rPageSett.importPicture( mrStrm );              break;
+                        case BIFF_ID_PAGESETUP:     rPageSett.importPageSetup( mrStrm );            break;
+                        case BIFF_ID_SCL:           rSheetViewSett.importScl( mrStrm );             break;
+                        case BIFF_ID_VCENTER:       rPageSett.importVerCenter( mrStrm );            break;
+                        case BIFF3_ID_WINDOW2:      rSheetViewSett.importWindow2( mrStrm );         break;
+                    }
+                    break;
+
+                    case BIFF_UNKNOWN: break;
                 }
-                break;
-
-                case BIFF3: switch( nRecId )
-                {
-                    case BIFF_ID_HCENTER:       rPageSett.importHorCenter( rStrm );             break;
-                    case BIFF_ID_OBJECTPROTECT: rWorksheetSett.importObjectProtect( rStrm );    break;
-                    case BIFF_ID_VCENTER:       rPageSett.importVerCenter( rStrm );             break;
-                    case BIFF3_ID_WINDOW2:      rSheetViewSett.importWindow2( rStrm );          break;
-
-                }
-                break;
-
-                case BIFF4: switch( nRecId )
-                {
-                    case BIFF_ID_HCENTER:       rPageSett.importHorCenter( rStrm );             break;
-                    case BIFF_ID_OBJECTPROTECT: rWorksheetSett.importObjectProtect( rStrm );    break;
-                    case BIFF_ID_PAGESETUP:     rPageSett.importPageSetup( rStrm );             break;
-                    case BIFF_ID_VCENTER:       rPageSett.importVerCenter( rStrm );             break;
-                    case BIFF3_ID_WINDOW2:      rSheetViewSett.importWindow2( rStrm );          break;
-                }
-                break;
-
-                case BIFF5: switch( nRecId )
-                {
-                    case BIFF_ID_HCENTER:       rPageSett.importHorCenter( rStrm );             break;
-                    case BIFF_ID_OBJECTPROTECT: rWorksheetSett.importObjectProtect( rStrm );    break;
-                    case BIFF_ID_PAGESETUP:     rPageSett.importPageSetup( rStrm );             break;
-                    case BIFF_ID_SCENPROTECT:   rWorksheetSett.importScenProtect( rStrm );      break;
-                    case BIFF_ID_SCL:           rSheetViewSett.importScl( rStrm );              break;
-                    case BIFF_ID_VCENTER:       rPageSett.importVerCenter( rStrm );             break;
-                    case BIFF3_ID_WINDOW2:      rSheetViewSett.importWindow2( rStrm );          break;
-                }
-                break;
-
-                case BIFF8: switch( nRecId )
-                {
-                    case BIFF_ID_HCENTER:       rPageSett.importHorCenter( rStrm );             break;
-                    case BIFF_ID_OBJECTPROTECT: rWorksheetSett.importObjectProtect( rStrm );    break;
-                    case BIFF_ID_PICTURE:       rPageSett.importPicture( rStrm );               break;
-                    case BIFF_ID_PAGESETUP:     rPageSett.importPageSetup( rStrm );             break;
-                    case BIFF_ID_VCENTER:       rPageSett.importVerCenter( rStrm );             break;
-                    case BIFF3_ID_WINDOW2:      rSheetViewSett.importWindow2( rStrm );          break;
-                }
-                break;
-
-                case BIFF_UNKNOWN: break;
             }
         }
     }
 
     // final processing in base class WorksheetHelper
     finalizeWorksheetImport();
-    return rStrm.getRecId() == BIFF_ID_EOF;
+    return mrStrm.getRecId() == BIFF_ID_EOF;
 }
 
 // ============================================================================

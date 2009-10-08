@@ -8,7 +8,7 @@
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.9 $
+# $Revision: 1.9.102.1 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -39,8 +39,7 @@ PACKAGE = complex$/filter$/detection$/typeDetection
 
 #----- compile .java files -----------------------------------------
 
-JARFILES        = ridl.jar unoil.jar jurt.jar juh.jar jut.jar java_uno.jar \
-                  OOoRunner.jar
+JARFILES        = ridl.jar unoil.jar jurt.jar juh.jar java_uno.jar OOoRunner.jar
 JAVAFILES       = TypeDetection.java Helper.java
 JAVACLASSFILES	= $(foreach,i,$(JAVAFILES) $(CLASSDIR)$/$(PACKAGE)$/$(i:b).class)
 

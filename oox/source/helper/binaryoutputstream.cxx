@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: binaryoutputstream.cxx,v $
- * $Revision: 1.4 $
+ * $Revision: 1.4.22.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -30,66 +30,32 @@
 
 #include "oox/helper/binaryoutputstream.hxx"
 #include <osl/diagnose.h>
-#include <com/sun/star/io/XOutputStream.hpp>
 #include "oox/helper/binaryinputstream.hxx"
 #include <string.h>
 
+using ::com::sun::star::uno::UNO_QUERY;
 using ::com::sun::star::uno::Reference;
-using ::com::sun::star::uno::Sequence;
 using ::com::sun::star::uno::Exception;
 using ::com::sun::star::io::XOutputStream;
+using ::com::sun::star::io::XSeekable;
 
 namespace oox {
 
+const sal_Int32 OUTPUTSTREAM_BUFFERSIZE     = 0x8000;
+
 // ============================================================================
 
-BinaryOutputStream::BinaryOutputStream( const Reference< XOutputStream >& rxOutStrm, bool bAutoClose ) :
-    BinaryStreamBase( rxOutStrm ),
-    mxOutStrm( rxOutStrm ),
-    mbAutoClose( bAutoClose )
-{
-}
-
-BinaryOutputStream::~BinaryOutputStream()
-{
-    if( mbAutoClose )
-        close();
-}
-
-void BinaryOutputStream::write( const Sequence< sal_Int8 >& rBuffer )
-{
-    try
-    {
-        OSL_ENSURE( mxOutStrm.is(), "BinaryOutputStream::write - invalid call" );
-        mxOutStrm->writeBytes( rBuffer );
-    }
-    catch( Exception& )
-    {
-        OSL_ENSURE( false, "BinaryOutputStream::write - stream read error" );
-    }
-}
-
-void BinaryOutputStream::write( const void* pBuffer, sal_Int32 nBytes )
+void BinaryOutputStream::copyStream( BinaryInputStream& rInStrm, sal_Int64 nBytes )
 {
     if( nBytes > 0 )
     {
-        maBuffer.realloc( nBytes );
-        memcpy( maBuffer.getArray(), pBuffer, static_cast< size_t >( nBytes ) );
-        write( maBuffer );
-    }
-}
-
-void BinaryOutputStream::copy( BinaryInputStream& rInStrm, sal_Int64 nBytes )
-{
-    if( rInStrm.is() && (nBytes > 0) )
-    {
-        sal_Int32 nBufferSize = getLimitedValue< sal_Int32, sal_Int64 >( nBytes, 0, 0x8000 );
-        Sequence< sal_Int8 > aBuffer( nBufferSize );
+        sal_Int32 nBufferSize = getLimitedValue< sal_Int32, sal_Int64 >( nBytes, 0, OUTPUTSTREAM_BUFFERSIZE );
+        StreamDataSequence aBuffer( nBufferSize );
         while( nBytes > 0 )
         {
             sal_Int32 nReadSize = getLimitedValue< sal_Int32, sal_Int64 >( nBytes, 0, nBufferSize );
-            sal_Int32 nBytesRead = rInStrm.read( aBuffer, nReadSize );
-            write( aBuffer );
+            sal_Int32 nBytesRead = rInStrm.readData( aBuffer, nReadSize );
+            writeData( aBuffer );
             if( nReadSize == nBytesRead )
                 nBytes -= nReadSize;
             else
@@ -98,7 +64,60 @@ void BinaryOutputStream::copy( BinaryInputStream& rInStrm, sal_Int64 nBytes )
     }
 }
 
-void BinaryOutputStream::close()
+void BinaryOutputStream::writeAtom( const void* pMem, sal_uInt8 nSize )
+{
+    writeMemory( pMem, nSize );
+}
+
+// ============================================================================
+
+BinaryXOutputStream::BinaryXOutputStream( const Reference< XOutputStream >& rxOutStrm, bool bAutoClose ) :
+    BinaryXSeekableStream( Reference< XSeekable >( rxOutStrm, UNO_QUERY ) ),
+    maBuffer( OUTPUTSTREAM_BUFFERSIZE ),
+    mxOutStrm( rxOutStrm ),
+    mbAutoClose( bAutoClose )
+{
+    mbEof = !mxOutStrm.is();
+}
+
+BinaryXOutputStream::~BinaryXOutputStream()
+{
+    if( mbAutoClose )
+        close();
+}
+
+void BinaryXOutputStream::writeData( const StreamDataSequence& rData )
+{
+    try
+    {
+        OSL_ENSURE( mxOutStrm.is(), "BinaryXOutputStream::writeData - invalid call" );
+        mxOutStrm->writeBytes( rData );
+    }
+    catch( Exception& )
+    {
+        OSL_ENSURE( false, "BinaryXOutputStream::writeData - stream read error" );
+    }
+}
+
+void BinaryXOutputStream::writeMemory( const void* pMem, sal_Int32 nBytes )
+{
+    if( nBytes > 0 )
+    {
+        sal_Int32 nBufferSize = getLimitedValue< sal_Int32, sal_Int32 >( nBytes, 0, OUTPUTSTREAM_BUFFERSIZE );
+        const sal_uInt8* pnMem = reinterpret_cast< const sal_uInt8* >( pMem );
+        while( nBytes > 0 )
+        {
+            sal_Int32 nWriteSize = getLimitedValue< sal_Int32, sal_Int32 >( nBytes, 0, nBufferSize );
+            maBuffer.realloc( nWriteSize );
+            memcpy( maBuffer.getArray(), pnMem, static_cast< size_t >( nWriteSize ) );
+            writeData( maBuffer );
+            pnMem += nWriteSize;
+            nBytes -= nWriteSize;
+        }
+    }
+}
+
+void BinaryXOutputStream::close()
 {
     if( mxOutStrm.is() ) try
     {
@@ -107,7 +126,31 @@ void BinaryOutputStream::close()
     }
     catch( Exception& )
     {
-        OSL_ENSURE( false, "BinaryOutputStream::close - closing output stream failed" );
+        OSL_ENSURE( false, "BinaryXOutputStream::close - closing output stream failed" );
+    }
+}
+
+// ============================================================================
+
+SequenceOutputStream::SequenceOutputStream( StreamDataSequence& rData ) :
+    SequenceSeekableStream( rData )
+{
+}
+
+void SequenceOutputStream::writeData( const StreamDataSequence& rData )
+{
+    if( rData.hasElements() )
+        writeMemory( rData.getConstArray(), rData.getLength() );
+}
+
+void SequenceOutputStream::writeMemory( const void* pMem, sal_Int32 nBytes )
+{
+    if( nBytes > 0 )
+    {
+        if( mrData.getLength() - mnPos < nBytes )
+            mrData.realloc( mnPos + nBytes );
+        memcpy( mrData.getArray() + mnPos, pMem, static_cast< size_t >( nBytes ) );
+        mnPos += nBytes;
     }
 }
 

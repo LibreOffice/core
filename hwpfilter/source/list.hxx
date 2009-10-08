@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: list.hxx,v $
- * $Revision: 1.6 $
+ * $Revision: 1.6.10.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -60,17 +60,17 @@ public:
     T* first();         /// return first element in list
     T* last();          /// return last element in list
 
-    const int count() const;  /// return number of elements in list
-    const int empty() const;  /// determine whether list contains any elements
+    int count() const;  /// return number of elements in list
+    int empty() const;  /// determine whether list contains any elements
 
     /// insert pItem into list at position n; at end if n == -1; return count()
-    const int insert( T* pItem, int n = -1 );
+    int insert( T* pItem, int n = -1 );
 
     /// remove nth element from list
     T* remove( const int n );
 
     /// remove given element from list
-    const int remove( T* pItem );
+    int remove( T* pItem );
 };
 
 /** iterator class for LinkedList<T>. Iterator may travel outside of
@@ -149,19 +149,19 @@ T* LinkedList<T>::last()
 }
 
 template<class T>
-const int LinkedList<T>::count() const
+int LinkedList<T>::count() const
 {
     return static_cast<int>( maList.size() );
 }
 
 template<class T>
-const int LinkedList<T>::empty() const
+int LinkedList<T>::empty() const
 {
     return count() == 0;
 }
 
 template<class T>
-const int LinkedList<T>::insert( T* pItem, int n )
+int LinkedList<T>::insert( T* pItem, int n )
 {
     ASSERT( pItem != NULL );
     ASSERT( n >= -1  &&  n <= static_cast<int>( maList.size() ));
@@ -191,7 +191,7 @@ T* LinkedList<T>::remove( const int n )
 }
 
 template<class T>
-const int LinkedList<T>::remove( T* pItem )
+int LinkedList<T>::remove( T* pItem )
 {
     ASSERT( pItem != NULL );
 

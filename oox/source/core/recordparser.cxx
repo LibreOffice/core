@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: recordparser.cxx,v $
- * $Revision: 1.4 $
+ * $Revision: 1.4.20.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -182,7 +182,7 @@ namespace {
 /** Reads a byte from the passed stream, returns true on success. */
 inline bool lclReadByte( sal_uInt8& ornByte, BinaryInputStream& rStrm )
 {
-    return rStrm.read( &ornByte, 1 ) == 1;
+    return rStrm.readMemory( &ornByte, 1 ) == 1;
 }
 
 /** Reads a compressed signed 32-bit integer from the passed stream. */
@@ -211,14 +211,14 @@ bool lclReadRecordHeader( sal_Int32& ornRecId, sal_Int32& ornRecSize, BinaryInpu
         lclReadCompressedInt( ornRecSize, rStrm ) && (ornRecSize >= 0);
 }
 
-bool lclReadNextRecord( sal_Int32& ornRecId, RecordDataSequence& orData, BinaryInputStream& rStrm )
+bool lclReadNextRecord( sal_Int32& ornRecId, StreamDataSequence& orData, BinaryInputStream& rStrm )
 {
     sal_Int32 nRecSize = 0;
     bool bValid = lclReadRecordHeader( ornRecId, nRecSize, rStrm );
     if( bValid )
     {
         orData.realloc( nRecSize );
-        bValid = (nRecSize == 0) || (rStrm.read( orData, nRecSize ) == nRecSize);
+        bValid = (nRecSize == 0) || (rStrm.readData( orData, nRecSize ) == nRecSize);
     }
     return bValid;
 }
@@ -259,7 +259,7 @@ void RecordParser::parseStream( const RecordInputSource& rInputSource ) throw( S
 {
     maSource = rInputSource;
 
-    if( !maSource.mxInStream || !maSource.mxInStream->is() )
+    if( !maSource.mxInStream || maSource.mxInStream->isEof() )
         throw IOException();
     if( !mxHandler.is() )
         throw SAXException();
@@ -272,7 +272,7 @@ void RecordParser::parseStream( const RecordInputSource& rInputSource ) throw( S
     // parse the stream
     mxStack.reset( new prv::ContextStack( mxHandler ) );
     sal_Int32 nRecId = 0;
-    RecordDataSequence aRecData;
+    StreamDataSequence aRecData;
     while( lclReadNextRecord( nRecId, aRecData, *maSource.mxInStream ) )
     {
         // create record stream object from imported record data

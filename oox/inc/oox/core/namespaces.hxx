@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: namespaces.hxx,v $
- * $Revision: 1.5 $
+ * $Revision: 1.5.4.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -43,23 +43,24 @@ const sal_Int32 NMSP_PACKAGE_RELATIONSHIPS  = 2 << 16;
 const sal_Int32 NMSP_RELATIONSHIPS          = 3 << 16;
 const sal_Int32 NMSP_CONTENT_TYPES          = 4 << 16;
 // office global
-const sal_Int32 NMSP_OFFICE                 = 11 << 16;
 const sal_Int32 NMSP_ACTIVATION             = 12 << 16;
 // DrawingML
 const sal_Int32 NMSP_DRAWINGML              = 21 << 16;
 const sal_Int32 NMSP_DIAGRAM                = 22 << 16;
 const sal_Int32 NMSP_CHART                  = 23 << 16;
-const sal_Int32 NMSP_VML                    = 24 << 16;
-// WordML
-const sal_Int32 NMSP_WORD                   = 31 << 16; // Word VML
+// VML
+const sal_Int32 NMSP_VML                    = 31 << 16;
+const sal_Int32 NMSP_OFFICE                 = 32 << 16;
+const sal_Int32 NMSP_VML_DOC                = 33 << 16; // Word VML
+const sal_Int32 NMSP_VML_XLS                = 34 << 16; // Excel VML
+const sal_Int32 NMSP_VML_PPT                = 35 << 16; // PowerPoint VML
+const sal_Int32 NMSP_AX                     = 36 << 16; // ActiveX (for OCX form controls)
 // SpreadsheetML
 const sal_Int32 NMSP_XLS                    = 41 << 16;
 const sal_Int32 NMSP_XDR                    = 42 << 16; // SpreadsheetDrawingML
 const sal_Int32 NMSP_XM                     = 43 << 16; // Macro sheet
-const sal_Int32 NMSP_EXCEL                  = 44 << 16; // Excel VML
 // PresentationML
 const sal_Int32 NMSP_PPT                    = 51 << 16;
-const sal_Int32 NMSP_POWERPOINT             = 52 << 16; // PowerPoint VML
 // Document properties
 const sal_Int32 NMSP_COREPR                 = 61 << 16;
 const sal_Int32 NMSP_DC                     = 62 << 16;

@@ -8,7 +8,7 @@
  *
  * $RCSfile: converterbase.hxx,v $
  *
- * $Revision: 1.4 $
+ * $Revision: 1.4.6.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -72,8 +72,8 @@ public:
                             const ::rtl::OUString& rServiceName );
 
     /** Creates an instance for the passed service name, using the process service factory. */
-    static ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >
-                        createInstance( const ::rtl::OUString& rServiceName );
+    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >
+                        createInstance( const ::rtl::OUString& rServiceName ) const;
 
 protected:
     /** Returns the filter object of the imported/exported document. */

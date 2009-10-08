@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: biffhelper.hxx,v $
- * $Revision: 1.4 $
+ * $Revision: 1.4.20.6 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -75,6 +75,8 @@ const sal_Int32 OOBIN_ID_COLORS             = 0x01D9;
 const sal_Int32 OOBIN_ID_COLORSCALE         = 0x01D5;
 const sal_Int32 OOBIN_ID_COLS               = 0x0186;
 const sal_Int32 OOBIN_ID_CONDFORMATTING     = 0x01CD;
+const sal_Int32 OOBIN_ID_CONTROL            = 0x0284;
+const sal_Int32 OOBIN_ID_CONTROLS           = 0x0283;
 const sal_Int32 OOBIN_ID_CUSTOMCHARTVIEW    = 0x028F;
 const sal_Int32 OOBIN_ID_CUSTOMCHARTVIEWS   = 0x028D;
 const sal_Int32 OOBIN_ID_CUSTOMSHEETVIEW    = 0x01A7;
@@ -126,6 +128,7 @@ const sal_Int32 OOBIN_ID_HEADERFOOTER       = 0x01DF;
 const sal_Int32 OOBIN_ID_HYPERLINK          = 0x01EE;
 const sal_Int32 OOBIN_ID_ICONSET            = 0x01D1;
 const sal_Int32 OOBIN_ID_INDEXEDCOLORS      = 0x0235;
+const sal_Int32 OOBIN_ID_LEGACYDRAWING      = 0x0227;
 const sal_Int32 OOBIN_ID_MERGECELL          = 0x00B0;
 const sal_Int32 OOBIN_ID_MERGECELLS         = 0x00B1;
 const sal_Int32 OOBIN_ID_MRUCOLORS          = 0x0239;
@@ -139,6 +142,8 @@ const sal_Int32 OOBIN_ID_MULTCELL_SI        = 0x0012;
 const sal_Int32 OOBIN_ID_MULTCELL_STRING    = 0x0011;
 const sal_Int32 OOBIN_ID_NUMFMT             = 0x002C;
 const sal_Int32 OOBIN_ID_NUMFMTS            = 0x0267;
+const sal_Int32 OOBIN_ID_OLEOBJECT          = 0x027F;
+const sal_Int32 OOBIN_ID_OLEOBJECTS         = 0x027E;
 const sal_Int32 OOBIN_ID_PAGEMARGINS        = 0x01DC;
 const sal_Int32 OOBIN_ID_PAGESETUP          = 0x01DE;
 const sal_Int32 OOBIN_ID_PANE               = 0x0097;
@@ -273,6 +278,7 @@ const sal_uInt16 BIFF_ID_COLINFO            = 0x007D;
 const sal_uInt16 BIFF_ID_COLUMNDEFAULT      = 0x0020;
 const sal_uInt16 BIFF_ID_COLWIDTH           = 0x0024;
 const sal_uInt16 BIFF_ID_CONT               = 0x003C;
+const sal_uInt16 BIFF_ID_COORDLIST          = 0x00A9;
 const sal_uInt16 BIFF_ID_CRN                = 0x005A;
 const sal_uInt16 BIFF2_ID_DATATABLE         = 0x0036;
 const sal_uInt16 BIFF3_ID_DATATABLE         = 0x0236;
@@ -315,6 +321,8 @@ const sal_uInt16 BIFF_ID_HEADER             = 0x0014;
 const sal_uInt16 BIFF_ID_HIDEOBJ            = 0x008D;
 const sal_uInt16 BIFF_ID_HORPAGEBREAKS      = 0x001B;
 const sal_uInt16 BIFF_ID_HYPERLINK          = 0x01B8;
+const sal_uInt16 BIFF3_ID_IMGDATA           = 0x007F;
+const sal_uInt16 BIFF8_ID_IMGDATA           = 0x00E9;
 const sal_uInt16 BIFF2_ID_INTEGER           = 0x0002;
 const sal_uInt16 BIFF_ID_ITERATION          = 0x0011;
 const sal_uInt16 BIFF_ID_IXFE               = 0x0044;
@@ -397,14 +405,20 @@ const sal_uInt16 BIFF_ID_UNKNOWN            = SAL_MAX_UINT16;
 
 const sal_uInt16 BIFF_ID_OBJEND             = 0x0000;   /// End of OBJ.
 const sal_uInt16 BIFF_ID_OBJMACRO           = 0x0004;   /// Macro link.
+const sal_uInt16 BIFF_ID_OBJBUTTON          = 0x0005;   /// Button data.
 const sal_uInt16 BIFF_ID_OBJGMO             = 0x0006;   /// Group marker.
 const sal_uInt16 BIFF_ID_OBJCF              = 0x0007;   /// Clipboard format.
-const sal_uInt16 BIFF_ID_OBJPIOGRBIT        = 0x0008;   /// Option flags.
+const sal_uInt16 BIFF_ID_OBJFLAGS           = 0x0008;   /// Option flags.
 const sal_uInt16 BIFF_ID_OBJPICTFMLA        = 0x0009;   /// OLE link formula.
 const sal_uInt16 BIFF_ID_OBJCBLS            = 0x000A;   /// Check box/radio button data.
+const sal_uInt16 BIFF_ID_OBJRBO             = 0x000B;   /// Radio button group data.
 const sal_uInt16 BIFF_ID_OBJSBS             = 0x000C;   /// Scroll bar data.
+const sal_uInt16 BIFF_ID_OBJNTS             = 0x000C;   /// Note data.
 const sal_uInt16 BIFF_ID_OBJSBSFMLA         = 0x000E;   /// Scroll bar/list box/combo box cell link.
 const sal_uInt16 BIFF_ID_OBJGBODATA         = 0x000F;   /// Group box data.
+const sal_uInt16 BIFF_ID_OBJEDODATA         = 0x0010;   /// Edit box data.
+const sal_uInt16 BIFF_ID_OBJRBODATA         = 0x0011;   /// Radio button group data.
+const sal_uInt16 BIFF_ID_OBJCBLSDATA        = 0x0012;   /// Check box/radio button data.
 const sal_uInt16 BIFF_ID_OBJLBSDATA         = 0x0013;   /// List box/combo box data.
 const sal_uInt16 BIFF_ID_OBJCBLSFMLA        = 0x0014;   /// Check box/radio button cell link.
 const sal_uInt16 BIFF_ID_OBJCMO             = 0x0015;   /// Common object settings.
