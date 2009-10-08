@@ -643,6 +643,18 @@ testcase tmFileProperties
    Call DialogTest ( TabDokumentInfo )
 
    Kontext
+   '/// select tabpage 'Internet' ///'
+   active.SetPage TabInternet
+   Kontext "TabInternet"
+   Call DialogTest (TabInternet)
+   TabInternet.Cancel
+   '/// close application ///'
+   Call hCloseDocument
+
+   warnlog "#i95523# Custom Properties is not controlable by VCL TestTool Application"
+   goto endsub
+
+   Kontext
    '/// select tabpage 'User defined' ///'
    active.SetPage TabBenutzer
    Kontext "TabBenutzer"
@@ -653,15 +665,6 @@ testcase tmFileProperties
       Call DialogTest (InfonamenBearbeiten)
    '/// close dialog 'edit field names' ///'
    InfoNamenBearbeiten.Cancel
-
-   Kontext
-   '/// select tabpage 'Internet' ///'
-   active.SetPage TabInternet
-   Kontext "TabInternet"
-   Call DialogTest (TabInternet)
-   TabInternet.Cancel
-   '/// close application ///'
-   Call hCloseDocument
 endcase
 
 testcase tmFilePrinterSetting

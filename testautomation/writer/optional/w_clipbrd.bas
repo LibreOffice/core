@@ -69,13 +69,13 @@ sub main
     Call w_214_
     Call w_215_
     Call w_216_
-QaErrorLog "#i90053# - w_217_ outcommented due to bug when copying from one document to another."
-'    Call w_217_
+    Call w_217_
     Call w_218_
     Call w_219_
     Call w_220_
     Call w_221_
     Call w_222_
+
     Call hStatusOut
     Call wChangeHTMLCompatibility(CharsetSet)
 	Call wChangeHTMLCompatibilityExport(ExportSet)

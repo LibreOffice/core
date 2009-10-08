@@ -211,7 +211,8 @@ function hHandleActivesOnLoad( iTries as integer , iAdd as integer ) as boolean
                     printlog( CFN & "MSG (" & iActives & "): closed with Cancel" )
                     bSkip = true
                 catch
-                    printlog( CFN & "Missed - this dialog has no Cancel button (create new document)" )
+                    printlog( CFN & "Missed - this dialog has no OK button (create new document)" )
+                    active.ok()
                 endcatch
 
                 if ( not bSkip ) then                

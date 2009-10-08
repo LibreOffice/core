@@ -134,7 +134,7 @@ testcase sTableAlignment
     if ((Breite.IsWritable AND NachRechts.IsWritable) <> TRUE) then warnlog "edit field not active "
     if (LiberalMeasurement(PAGEWIDTH ,(StrToDouble (Breite.GetText) + StrToDouble (NachRechts.GetText))) <> TRUE) then
         if PAGEWIDTH < 0 then
-            QAErrorlog "#i78144#Cdbl returns wrong values"
+            warnlog "Cdbl returns wrong values"
         else
             warnlog "measurement value error "+ "is: "+(StrToDouble (Breite.GetText) + StrToDouble (NachRechts.GetText))+" should: " + PAGEWIDTH
         end if
@@ -152,7 +152,7 @@ testcase sTableAlignment
     if (temp(1) <> NachRechts.GetText) then warnlog "value changed"
     if (LiberalMeasurement(PAGEWIDTH ,(StrToDouble (Breite.GetText) + StrToDouble (NachRechts.GetText))) <> TRUE) then
         if PAGEWIDTH < 0 then
-            QAErrorlog "#i78144#Cdbl returns wrong values"
+            warnlog "Cdbl returns wrong values"
         else
             warnlog "measurement value error "+ "is: "+(StrToDouble (Breite.GetText) + StrToDouble (NachRechts.GetText))+" should: "+PAGEWIDTH
         end if
@@ -166,7 +166,7 @@ testcase sTableAlignment
     if ((Breite.IsWritable AND NachLinks.IsWritable) <> TRUE) then warnlog "edit field not active "
     if (LiberalMeasurement(PAGEWIDTH ,StrToDouble (Breite.GetText) + StrToDouble(NachLinks.GetText)) <> TRUE) then
         if PAGEWIDTH < 0 then
-            QAErrorlog "#i78144#Cdbl returns wrong values"
+            warnlog "Cdbl returns wrong values"
         else
             warnlog "measurement value error "+ "is: "+(StrToDouble (Breite.GetText) + StrToDouble (NachLinks.GetText))+" should: "+PAGEWIDTH
         end if
@@ -189,7 +189,7 @@ testcase sTableAlignment
     if (temp(1) <> NachLinks.GetText) then warnlog "value changed"+" should: "+temp(1)+" is:  "+ NachLinks.GetText
     if (LiberalMeasurement(PAGEWIDTH ,StrToDouble (Breite.GetText) + StrToDouble(NachLinks.GetText)) <> TRUE) then
         if PAGEWIDTH < 0 then
-            QAErrorlog "#i78144#Cdbl returns wrong values"
+            warnlog "Cdbl returns wrong values"
         else
                 warnlog "measurement value error  "+ "is: "+(StrToDouble (Breite.GetText) + StrToDouble (NachLinks.GetText))+" should: "+PAGEWIDTH
         end if
@@ -202,7 +202,7 @@ testcase sTableAlignment
     if ((Breite.IsWritable AND NachLinks.IsWritable) <> TRUE) then warnlog "edit field not active "
     if (LiberalMeasurement(PAGEWIDTH ,StrToDouble (Breite.GetText) + StrToDouble(NachLinks.GetText)) <> TRUE) then
         if PAGEWIDTH < 0 then
-            QAErrorlog "#i78144#Cdbl returns wrong values"
+            warnlog "Cdbl returns wrong values"
         else
              warnlog "measurement value error "+ "is: "+(StrToDouble (Breite.GetText) + StrToDouble (NachLinks.GetText))+" should: "+PAGEWIDTH
         end if
@@ -220,7 +220,7 @@ testcase sTableAlignment
     if (temp(1) <> NachLinks.GetText) then warnlog "value changed"
     if (LiberalMeasurement(PAGEWIDTH ,StrToDouble (Breite.GetText) + StrToDouble(NachLinks.GetText)) <> TRUE) then 
         if PAGEWIDTH < 0 then
-            QAErrorlog "#i78144#Cdbl returns wrong values"
+            warnlog "Cdbl returns wrong values"
         else
             warnlog "measurement value error "+ "is: "+(StrToDouble (Breite.GetText) + StrToDouble (NachLinks.GetText))+" should: "+PAGEWIDTH
         end if
@@ -233,7 +233,7 @@ testcase sTableAlignment
     if ((Breite.IsWritable AND NachLinks.IsWritable) <> TRUE) then warnlog "edit field not active "
     if (LiberalMeasurement(PAGEWIDTH ,StrToDouble (Breite.GetText) + (2 * StrToDouble (NachLinks.GetText))) <> TRUE) then
         if PAGEWIDTH < 0 then
-            QAErrorlog "#i78144#Cdbl returns wrong values"
+            warnlog "Cdbl returns wrong values"
         else
             warnlog "measurement value error "+ "is: "+(StrToDouble (Breite.GetText) + StrToDouble (NachLinks.GetText))+" should: "+PAGEWIDTH
         end if
@@ -251,7 +251,7 @@ testcase sTableAlignment
     if (temp(1) <> NachLinks.GetText) then warnlog "value changed"
     if (LiberalMeasurement(PAGEWIDTH ,StrToDouble (Breite.GetText) + (2 * StrToDouble (NachLinks.GetText))) <> TRUE) then 
         if PAGEWIDTH < 0 then
-            QAErrorlog "#i78144#Cdbl returns wrong values"
+            warnlog "Cdbl returns wrong values"
         else
             warnlog "measurement value error "+ "is: "+(StrToDouble (Breite.GetText) + StrToDouble (NachLinks.GetText))+" should: "+PAGEWIDTH
         end if
@@ -264,7 +264,7 @@ testcase sTableAlignment
     if ((Breite.IsWritable AND NachLinks.IsWritable AND NachRechts.IsWritable) <> TRUE) then warnlog "edit field not active "
     if (LiberalMeasurement(PAGEWIDTH ,StrToDouble (Breite.GetText) + StrToDouble (NachLinks.GetText) + StrToDouble (NachRechts.GetText)) <> TRUE) then
         if PAGEWIDTH < 0 then
-            QAErrorlog "#i78144#Cdbl returns wrong values"
+            warnlog "Cdbl returns wrong values"
         else
             warnlog "measurement value error "+ "is: "+(StrToDouble (Breite.GetText) + StrToDouble (NachLinks.GetText)+ StrToDouble (NachRechts.GetText))+" should: "+PAGEWIDTH
         end if
@@ -285,7 +285,7 @@ testcase sTableAlignment
     if (temp(2) <> NachRechts.GetText) then warnlog "value changed"
     if (LiberalMeasurement(PAGEWIDTH ,StrToDouble (Breite.GetText) + StrToDouble (NachLinks.GetText) + StrToDouble (NachRechts.GetText)) <> TRUE) then
         if PAGEWIDTH < 0 then
-            QAErrorlog "#i78144#Cdbl returns wrong values"
+            warnlog "Cdbl returns wrong values"
         else
              warnlog "measurement value error "+ "is: "+(StrToDouble (Breite.GetText) + StrToDouble (NachLinks.GetText)+ StrToDouble (NachRechts.GetText))+" should: "+PAGEWIDTH
         end if

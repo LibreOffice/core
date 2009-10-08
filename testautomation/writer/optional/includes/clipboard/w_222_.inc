@@ -50,12 +50,17 @@ end sub
 
 
 testcase DrawToWriterScrollingText
+  QaErrorLog "#i95309# - DrawToWriterScrollingText outcommented due to problem when opening certain sxd-files."
+  goto endsub
+
+
   gApplication = "DRAW"
   printlog "  Open File '..\\writer\\optional\\input\\clipboard\\draw.sxd' "
   printlog "  Jump to beginning of document "
   printlog "  Select Scrolling text "
   printlog "  Copy selected text "
   Call hFileOpen (gtesttoolpath & "writer\optional\input\clipboard\draw.sxd")
+  Call sMakeReadOnlyDocumentEditable
   Kontext "DocumentDraw"
   printlog "  Jump to beginning of document "
   DocumentDraw.TypeKeys "<Tab>"
@@ -94,19 +99,26 @@ testcase DrawToWriterScrollingText
     Call hCloseDocument
     goto endsub
   end if
-  Call hCloseDocument
   printlog "  Close active document "
+    Do Until GetDocumentCount = 0
+        Call hCloseDocument
+    Loop
 endcase
 
 ' ---------------------------------------------------------------------------------
 
 testcase DrawToWriterGroupedObject
+  QaErrorLog "#i95309# - DrawToWriterGroupedObject outcommented due to problem when opening certain sxd-files."
+  goto endsub
+
+
   gApplication = "DRAW"
   printlog "  Open File '..\\writer\\optional\\input\\clipboard\\draw.sxd' "
   printlog "  Jump to beginning of document "
   printlog "  Select Grouped Object "
   printlog "  Copy selected Object "
   Call hFileOpen (gtesttoolpath & "writer\optional\input\clipboard\draw.sxd")
+  Call sMakeReadOnlyDocumentEditable
   Kontext "DocumentDraw"
   printlog "  Jump to beginning of document "
   DocumentDraw.TypeKeys "<Tab>",2
@@ -145,19 +157,26 @@ testcase DrawToWriterGroupedObject
     Call hCloseDocument
     goto endsub
   end if
-  Call hCloseDocument
   printlog "  Close active document "
+    Do Until GetDocumentCount = 0
+        Call hCloseDocument
+    Loop
 endcase
 
 ' ---------------------------------------------------------------------------------
 
 testcase DrawToWriter3D
+  QaErrorLog "#i95309# - DrawToWriter3D outcommented due to problem when opening certain sxd-files."
+  goto endsub
+
+
   gApplication = "DRAW"
   printlog "  Open File '..\\writer\\optional\\input\\clipboard\\draw.sxd' "
   printlog "  Jump to beginning of document "
   printlog "  Select cell <A5:C5> "
   printlog "  Copy selected text "
   Call hFileOpen (gtesttoolpath & "writer\optional\input\clipboard\draw.sxd")
+  Call sMakeReadOnlyDocumentEditable
   Kontext "DocumentDraw"
   printlog "  Jump to beginning of document "
   DocumentDraw.TypeKeys "<Tab>",3
@@ -196,19 +215,26 @@ testcase DrawToWriter3D
     Call hCloseDocument
     goto endsub
   end if
-  Call hCloseDocument
   printlog "  Close active document "
+    Do Until GetDocumentCount = 0
+        Call hCloseDocument
+    Loop
 endcase
 
 ' ---------------------------------------------------------------------------------
 
 testcase DrawToWriterFontwork
+  QaErrorLog "#i95309# - DrawToWriterFontwork outcommented due to problem when opening certain sxd-files."
+  goto endsub
+
+
   gApplication = "DRAW"
   printlog "  Open File '..\\writer\\optional\\input\\clipboard\\draw.sxd' "
   printlog "  Jump to beginning of document "
   printlog "  Select Fontwork "
   printlog "  Copy selected Fontwork "
   Call hFileOpen (gtesttoolpath & "writer\optional\input\clipboard\draw.sxd")
+  Call sMakeReadOnlyDocumentEditable
   Kontext "DocumentDraw"
   printlog "  Jump to beginning of document "
   DocumentDraw.TypeKeys "<Tab>",4
@@ -247,19 +273,26 @@ testcase DrawToWriterFontwork
     Call hCloseDocument
     goto endsub
   end if
-  Call hCloseDocument
   printlog "  Close active document "
+    Do Until GetDocumentCount = 0
+        Call hCloseDocument
+    Loop
 endcase
 
 ' ---------------------------------------------------------------------------------
 
 testcase DrawToWriterBullets
+  QaErrorLog "#i95309# - DrawToWriterBullets outcommented due to problem when opening certain sxd-files."
+  goto endsub
+
+
   gApplication = "DRAW"
   printlog "  Open File '..\\writer\\optional\\input\\clipboard\\draw.sxd' "
   printlog "  Jump to beginning of document "
   printlog "  Select Bullets "
   printlog "  Copy selected Bullets "
   Call hFileOpen (gtesttoolpath & "writer\optional\input\clipboard\draw.sxd")
+  Call sMakeReadOnlyDocumentEditable
   Kontext "DocumentDraw"
   printlog "  Jump to beginning of document "
   DocumentDraw.TypeKeys "<Tab>",5
@@ -298,19 +331,26 @@ testcase DrawToWriterBullets
     Call hCloseDocument
     goto endsub
   end if
-  Call hCloseDocument
   printlog "  Close active document "
+    Do Until GetDocumentCount = 0
+        Call hCloseDocument
+    Loop
 endcase
 
 ' ---------------------------------------------------------------------------------
 
 testcase DrawToWriterDimensionLines
+  QaErrorLog "#i95309# - DrawToWriterDimensionLines outcommented due to problem when opening certain sxd-files."
+  goto endsub
+
+
   gApplication = "DRAW"
   printlog "  Open File '..\\writer\\optional\\input\\clipboard\\draw.sxd' "
   printlog "  Jump to beginning of document "
   printlog "  Select Dimension Lines "
   printlog "  Copy selected Dimension Lines "
   Call hFileOpen (gtesttoolpath & "writer\optional\input\clipboard\draw.sxd")
+  Call sMakeReadOnlyDocumentEditable
   Kontext "DocumentDraw"
   printlog "  Jump to beginning of document "
   DocumentDraw.TypeKeys "<PageDown>"
@@ -350,19 +390,26 @@ testcase DrawToWriterDimensionLines
     Call hCloseDocument
     goto endsub
   end if
-  Call hCloseDocument
   printlog "  Close active document "
+    Do Until GetDocumentCount = 0
+        Call hCloseDocument
+    Loop
 endcase
 
 ' ---------------------------------------------------------------------------------
 
 testcase DrawToWriterConnectors
+  QaErrorLog "#i95309# - DrawToWriterConnectors outcommented due to problem when opening certain sxd-files."
+  goto endsub
+
+
   gApplication = "DRAW"
   printlog "  Open File '..\\writer\\optional\\input\\clipboard\\draw.sxd' "
   printlog "  Jump to beginning of document "
   printlog "  Select Connectors "
   printlog "  Copy selected Connectors "
   Call hFileOpen (gtesttoolpath & "writer\optional\input\clipboard\draw.sxd")
+  Call sMakeReadOnlyDocumentEditable
   Kontext "DocumentDraw"
   printlog "  Jump to beginning of document "
   DocumentDraw.TypeKeys "<PageDown>"
@@ -402,7 +449,9 @@ testcase DrawToWriterConnectors
     Call hCloseDocument
     goto endsub
   end if
-  Call hCloseDocument
   printlog "  Close active document "
+    Do Until GetDocumentCount = 0
+        Call hCloseDocument
+    Loop
 endcase
 

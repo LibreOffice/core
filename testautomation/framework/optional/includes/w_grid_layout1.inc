@@ -98,7 +98,8 @@ testcase tTextGridDialog_2
 
   '/// open a test file , and check No Grid checkbox
    Call hFileOpen ( gTesttoolPath + SOURCE_PATH + testFile )
-
+   sMakeReadOnlyDocumentEditable
+   
     FormatPageWriter
     Kontext
     if active.exists(5) then
@@ -146,7 +147,7 @@ testcase tTextGridDialog_3
   '/// open a test file and check Grid(lines onle) checkbox ,
   '/// + set 10 line/page
    Call hFileOpen ( gTesttoolPath + SOURCE_PATH + testFile )
-
+   sMakeReadOnlyDocumentEditable
     FormatPageWriter
     Kontext
     if active.exists(5) then
@@ -196,7 +197,7 @@ testcase tTextGridDialog_4
   '/// open a test file and check Grid(lines and characters) checkbox
   '/// + set 10 line/page and 9 characters/line
    Call hFileOpen ( gTesttoolPath + SOURCE_PATH + testFile )
-
+   sMakeReadOnlyDocumentEditable
     FormatPageWriter
     Kontext
     if active.exists(5) then
@@ -373,7 +374,7 @@ testcase tFontSizeChanges_1
 
     '/// open a test file
     Call hFileOpen ( gTesttoolPath + SOURCE_PATH + testFile )
-
+    sMakeReadOnlyDocumentEditable
     Kontext "DocumentWriter"
     Call DocumentWriter.TypeKeys  "<Shift Right>"
 
@@ -443,7 +444,7 @@ testcase tRubyText_1
 
   '/// open a test file , and insert  long ruby test text
    Call hFileOpen ( gTesttoolPath + SOURCE_PATH + testFile )
-
+    sMakeReadOnlyDocumentEditable
    Kontext "DocumentWriter"
    Call DocumentWriter.TypeKeys  "<Shift Right>"
    Sleep 1
@@ -487,7 +488,7 @@ testcase tIndentsTest_1
 
   '/// open a test file , and press TAB in second line
    Call hFileOpen ( gTesttoolPath + SOURCE_PATH + testFile )
-
+    sMakeReadOnlyDocumentEditable
    Kontext "DocumentWriter"
    Call DocumentWriter.TypeKeys  "<Down>"
    Sleep 1

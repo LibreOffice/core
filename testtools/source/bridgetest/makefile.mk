@@ -8,7 +8,7 @@
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.37 $
+# $Revision: 1.37.18.1 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -129,17 +129,17 @@ JAVATARGETS=\
 .ENDIF
 
 # --- Targets ------------------------------------------------------
-ALL : \
+
+.INCLUDE :	target.mk
+
+ALLTAR: \
         test \
-        ALLTAR \
         $(DLLDEST)$/uno_types.rdb \
         $(DLLDEST)$/uno_services.rdb \
         $(DLLDEST)$/bridgetest_inprocess$(BATCH_SUFFIX) \
         $(DLLDEST)$/bridgetest_server$(BATCH_SUFFIX) \
         $(DLLDEST)$/bridgetest_client$(BATCH_SUFFIX) \
         $(JAVATARGETS)
-
-.INCLUDE :	target.mk
 
 #################################################################
 
@@ -160,12 +160,11 @@ $(DLLDEST)$/bridgetest_client$(BATCH_SUFFIX) : bridgetest_client
     $(GIVE_EXEC_RIGHTS) $@
 
 $(DLLDEST)$/bridgetest_server$(BATCH_SUFFIX) : bridgetest_server
-    $(GNUCOPY) -p $? $@
+    $(GNUCOPY) $? $@
     $(GIVE_EXEC_RIGHTS) $@
 
 
 .IF "$(SOLAR_JAVA)" != ""
-NULLSTR=
 # jar-files, which regcomp needs so that it can use java
 MY_JARS=java_uno.jar ridl.jar jurt.jar juh.jar
 
@@ -176,11 +175,11 @@ MY_CLASSPATH=$(strip $(subst,!,$(PATH_SEPERATOR) $(MY_CLASSPATH_TMP:s/ /!/)))$(P
 # Use "127.0.0.1" instead of "localhost", see #i32281#:
 $(DLLDEST)$/bridgetest_javaserver$(BATCH_SUFFIX) : makefile.mk
     -rm -f $@
-    $(WRAPCMD) echo "java -classpath $(MY_CLASSPATH)$(PATH_SEPERATOR)..$/class$/testComponent.jar" \
-        com.sun.star.comp.bridge.TestComponentMain \""uno:socket,host=127.0.0.1,port=2002;urp;test"\" > $@
+    echo java -classpath "$(MY_CLASSPATH)$(PATH_SEPERATOR)..$/class$/testComponent.jar" \
+        com.sun.star.comp.bridge.TestComponentMain \""uno:socket,host=127.0.0.1,port=2002;urp;test"\" singleaccept > $@
     $(GIVE_EXEC_RIGHTS) $@
 
-$(DLLDEST)$/bridgetest_inprocess_java$(BATCH_SUFFIX) : makefile.mk
+$(DLLDEST)$/bridgetest_inprocess_java$(BATCH_SUFFIX) : makefile.mk $(DLLDEST)$/uno_services.rdb
     -rm -f $@
     echo uno -ro uno_services.rdb -ro uno_types.rdb \
         -s com.sun.star.test.bridge.BridgeTest \

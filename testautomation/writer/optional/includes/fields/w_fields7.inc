@@ -45,13 +45,14 @@ sub w_fields7
 
 end sub
 
-
 testcase tL10N_1
 
-    Dim sTestFile             as String
-    Dim sAbove() , sBelow()   as String
-    Dim iCountry()            as Integer
-    Dim i , j                 as Integer
+    Dim sTestFile as String
+    Dim sAbove() as String
+    Dim sBelow() as String
+    Dim iCountry() as Integer
+    Dim i as Integer
+    Dim j as Integer
     
     Dim sUILanguage as integer, sLocale as integer
     Dim sCurrency as integer, sWestern as integer, sAsian as integer, sCTL as integer
@@ -118,6 +119,7 @@ testcase tL10N_1
     
     '/// Open test file AboveBelow.sxw
     Call hFileOpen(sTestFile)
+    Call sMakeReadOnlyDocumentEditable
     
     '/// Check if reference above/below is changed after language is changed
     
@@ -206,7 +208,6 @@ testcase tL10N_2
     ExtrasOptionenDlg.Cancel
     Call hCloseDocument
   
-  
     sTestFile = Convertpath (gTesttoolpath + "writer\optional\input\fields\Date.sxw")
     
     sDate  = Array( _
@@ -224,7 +225,7 @@ testcase tL10N_2
           )
     iCountry = Array ( 1 , 33 , 34 , 39 , 46 , 49 , _
              55, 81 , 82 , 86 , 88 )
-             
+
     printlog "L10N test - Date"
     '/// <b> L10N test - Date </b>
     
@@ -232,6 +233,7 @@ testcase tL10N_2
     
     '/// Open test file Date.sxw
     Call hFileOpen(sTestFile)
+    Call sMakeReadOnlyDocumentEditable
     
     '/// Check if Date is changed after language is changed
     j = UBound(iCountry)
@@ -282,10 +284,11 @@ endcase
 
 testcase tL10N_3
 
-    Dim sTestFile    as String
-    Dim sTime()      as String
-    Dim iCountry()   as Integer
-    Dim i , j        as Integer
+    Dim sTestFile as String
+    Dim sTime() as String
+    Dim iCountry() as Integer
+    Dim i as Integer
+    Dim j as Integer
 
     Dim sUILanguage as integer, sLocale as integer
     Dim sCurrency as integer, sWestern as integer, sAsian as integer, sCTL as integer
@@ -339,6 +342,7 @@ testcase tL10N_3
     
     '/// Open test file Time.sxw
     Call hFileOpen(sTestFile)
+    Call sMakeReadOnlyDocumentEditable
     
     '/// Check if time is changed after language is changed
     j = UBound(iCountry)

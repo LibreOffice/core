@@ -39,9 +39,6 @@
 
 testcase tHelpBookmarks
 
-    warnlog( "#i84486# crash when clicking on find-button in help browser" )
-    goto endsub
-
     '///<H1>Bookmarks in the help browser</H1>
     '///<h2>help_bookmarks.bas::tHelpBookmarks</h2>
     '///<ul>
@@ -208,9 +205,6 @@ testcase tHelpBookmarks
     '///+<li>Close help</li>
     brc = hCloseHelp()
     
-    Kontext "DocumentWriter"
-    DocumentWriter.restore()
-
     '///</ul>
 
 endcase

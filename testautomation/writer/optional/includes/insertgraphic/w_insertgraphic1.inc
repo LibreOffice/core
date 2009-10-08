@@ -59,13 +59,10 @@ testcase tInsertGraphic_1
     Dim sPathName as String
     Dim i as integer
     
-    QAErrorlog "#i68646#Listbox is invisible to TestTool: Options->Paths->MultiPath selection"
-    goto endsub
-    
     PrintLog "- Test default dirtory of inserting graphic -1"
     '/// Test default directory of inserting graphic -1
     select case iSprache
-        case 01: iJump =  9
+        case 01: iJump =  5
         case 31: iJump =  1  
         case 33: iJump = 14
         case 34: iJump = 12
@@ -94,25 +91,12 @@ testcase tInsertGraphic_1
     Sleep 1
     Bearbeiten.Click
     
-    Kontext "PfadeAuswaehlen"
-    Hinzufuegen.Click
-    
-    Kontext "OeffnenDlg"    
+    Kontext "OeffnenDlg"
     '/// Set a new path to Graphic
     Pfad.SetText (ConvertPath (gTesttoolpath + "writer\optional\input\insertgraphic\"))
     Sleep 1
     Oeffnen.Click
     Sleep 1
-    
-    Kontext "PfadeAuswaehlen"
-    for i = 1 to Pfade.GetItemCount
-        Pfade.Select i
-        if Pfade.GetSelText = ConvertPath (gTesttoolpath + "writer\optional\input\insertgraphic\") then
-            Pfade.TypeKeys "<Space>"
-            exit for
-        end if
-    next i    
-    PfadeAuswaehlen.Ok
     
     Kontext "ExtrasOptionenDlg"
     ExtrasOptionenDlg.OK
@@ -664,6 +648,7 @@ testcase tInsertGraphic_10
     '/// Reload the file
     Call hFileOpen(gOfficepath + "user\work\tInsertGraphic_5.odt")
     sleep(2)
+    Call sMakeReadOnlyDocumentEditable
 
     '/// Check if the inserted graphics are still there
     Kontext "DocumentWriter"
@@ -941,7 +926,6 @@ testcase tInsertGraphic_12
     end if
 
     Call hCloseDocument
-
 endcase
 
 '-------------------------------------------------------------------------------------------

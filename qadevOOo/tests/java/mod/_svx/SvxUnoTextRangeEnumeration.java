@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: SvxUnoTextRangeEnumeration.java,v $
- * $Revision: 1.7 $
+ * $Revision: 1.7.8.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -53,7 +53,7 @@ import com.sun.star.uno.XInterface;
 
 public class SvxUnoTextRangeEnumeration extends TestCase {
 
-    XComponent xDrawDoc;
+    static XComponent xDrawDoc;
 
     /**
      * in general this method creates a testdocument

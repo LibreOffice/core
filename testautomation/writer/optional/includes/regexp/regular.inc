@@ -906,6 +906,7 @@ sub Ausgangszustand_herstellen
    '///+ Uncheck 'Similarity Search' ///
    '///+ Check 'Regular Expressions' ///
    Call hFileOpen ( gtesttoolpath + "writer\optional\input\search\regu_aus.sxw")
+   Call sMakeReadOnlyDocumentEditable
    kontext
    if FindAndReplace.Exists then FindAndReplace.Close
    kontext "DocumentWriter"

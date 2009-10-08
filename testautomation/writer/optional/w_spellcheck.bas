@@ -44,7 +44,7 @@ sub main
 
     use "writer\tools\includes\w_tools.inc"
     use "writer\tools\includes\w_tool3.inc"
-    use "writer\tools\includes\w_tool4.inc"    
+    use "writer\tools\includes\w_tool4.inc"
     use "writer\optional\includes\spellcheck\w_spellcheck.inc"
     use "writer\tools\includes\w_locale_strings2.inc"
 
@@ -60,8 +60,6 @@ sub main
     Printlog "Date: " +  Date + "    Time: " + Time
 
 end sub
-
-
 
 sub LoadIncludeFiles
     use "global\system\includes\master.inc"

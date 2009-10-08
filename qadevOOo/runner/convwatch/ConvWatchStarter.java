@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: ConvWatchStarter.java,v $
- * $Revision: 1.11 $
+ * $Revision: 1.11.8.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -47,6 +47,7 @@ import convwatch.NameHelper;
 import convwatch.HTMLOutputter;
 import helper.OfficeProvider;
 import helper.OfficeWatcher;
+import helper.OSHelper;
 import convwatch.PerformanceContainer;
 
 /**
@@ -246,7 +247,7 @@ public class ConvWatchStarter extends EnhancedComplexTestCase
             {
                 // check a whole directory
                 // a whole directory
-                FileFilter aFileFilter = aGTA.getFileFilter();
+                FileFilter aFileFilter = FileHelper.getFileFilter();
 
                 Object[] aList = DirectoryHelper.traverse(m_sInputPath, aFileFilter, aGTA.includeSubDirectories());
                 if (aList.length == 0)

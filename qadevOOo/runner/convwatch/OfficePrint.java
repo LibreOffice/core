@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: OfficePrint.java,v $
- * $Revision: 1.10 $
+ * $Revision: 1.10.8.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -54,6 +54,7 @@ import com.sun.star.uno.AnyConverter;
 
 import helper.URLHelper;
 import helper.PropertyHelper;
+import helper.OSHelper;
 import convwatch.FileHelper;
 import convwatch.MSOfficePrint;
 import convwatch.GraphicalTestArguments;

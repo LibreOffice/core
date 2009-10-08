@@ -1,0 +1,16 @@
+Glossary of Internet Terms
+General Glossary
+JDBC Connection
+MySQL Connection
+Report Builder
+Accessibility in StarSuite
+Assistive Tools in StarSuite
+Mobile Device Filters for Pocket Device Appliances 
+Scripting StarSuite
+Java Platform Support
+StarSuite
+Accessibility
+Java
+Class Path
+Start Parameters
+Mail Merge Wizard - Document Type

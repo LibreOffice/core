@@ -37,11 +37,10 @@
 '*
 '\***********************************************************************
 
-
 sub w_fields1
 
-    'Call tFields_1           'Insert / Fields / Date
-    'Call tFields_2           'Insert / Fields / Time
+    Call tFields_1           'Insert / Fields / Date
+    Call tFields_2           'Insert / Fields / Time
     Call tFields_3           'Insert / Fields / Page Number
     Call tFields_4           'Insert / Fields / Page Count
     Call tFields_5           'Insert / Fields / Subject
@@ -50,9 +49,9 @@ sub w_fields1
 
 end sub
 
-
-
 testcase tFields_1
+qaerrorlog "#i93906# - Testcase outcommented due to bug. 'Copied field-content not pastable outside Office'"
+goto endsub
 
     Dim sDate , sDate1 , sDate2 as String
     
@@ -61,7 +60,6 @@ testcase tFields_1
     sDate2 = Right(sDate , 2)
     
     printlog "Insert / Fields / Date"
-    '/// <b> Insert / Fields / Date </b>
     '/// <b> Default should be mm/dd/yy </b>
     
     Call hNewDocument
@@ -89,14 +87,14 @@ testcase tFields_1
     Call wTypeKeys "<MOD1 Home>"
     Call wTypeKeys "<Shift Right>"
     EditCopy
-    if GetClipboardText <> sDate1 then
+    if GetClipboard <> sDate1 then
         Warnlog "Fixed date is wrong ! Hope you don't run this case in the midnight"
     end if
     
     Call wTypeKeys "<Down><Home>"
     Call wTypeKeys "<Shift Right>"
     EditCopy
-    if GetClipboardText <> sDate2 then
+    if GetClipboard <> sDate2 then
         Warnlog "Date is wrong ! Hope you don't run this case in the midnight"
     end if
     
@@ -107,12 +105,13 @@ endcase
 '-----------------------------------------------------------------
 
 testcase tFields_2
+qaerrorlog "#i93906# - Testcase outcommented due to bug. 'Copied field-content not pastable outside Office'"
+goto endsub
 
     Dim sTime() , sTime1 , sTime2 as String
     Dim sTemp                   as String
     
     printlog "Insert / Fields / Time"
-    '/// <b> Insert / Fields / Time </b>
     '/// <b> Default should be hh/mm/ss pm </b>
     
     Call hNewDocument
@@ -143,14 +142,14 @@ testcase tFields_2
     Call wTypeKeys "<MOD1 Home>"
     Call wTypeKeys "<Shift Right>"
     EditCopy
-    sTime1 = GetClipboardText
+    sTime1 = GetClipboard
     if Len(sTime1)       < 11    then Warnlog "Fixed time is wrong !"
     if Right(sTime1 , 2) <> sTemp then Warnlog "Fixed time is wrong ! , Hope you don't run this case in the midnight"
     
     Call wTypeKeys "<Down><Home>"
     Call wTypeKeys "<Shift Right>"
     EditCopy
-    sTime2 = GetClipboardText
+    sTime2 = GetClipboard
     if Len(sTime2)       <> 11    then Warnlog "Time is wrong !"
     if Right(sTime2 , 2) <> sTemp then Warnlog "Time is wrong ! , Hope you don't run this case in the midnight"
     
@@ -160,12 +159,12 @@ testcase tFields_2
     Call wTypeKeys "<MOD1 Home>"
     Call wTypeKeys "<Shift Right>"
     EditCopy
-    if GetClipboardText <> sTime1 then Warnlog "Fixed time is wrong !"
+    if GetClipboard <> sTime1 then Warnlog "Fixed time is wrong !"
     
     Call wTypeKeys "<Down><Home>"
     Call wTypeKeys "<Shift Right>"
     EditCopy
-    if GetClipboardText = sTime2  then Warnlog "Time is wrong !"
+    if GetClipboard = sTime2  then Warnlog "Time is wrong !"
     
     Call hCloseDocument
 
@@ -174,13 +173,14 @@ endcase
 '-----------------------------------------------------------------
 
 testcase tFields_3
+qaerrorlog "#i93906# - Testcase outcommented due to bug. 'Copied field-content not pastable outside Office'"
+goto endsub
 
   Dim sPage1 , sPage2 as String
 
   sPage1 = "1" : sPage2 = "2"
 
   printlog "Insert / Fields / Page Number"
- '/// <b> Insert / Fields / Page Number </b>
 
   Call hNewDocument
 
@@ -202,14 +202,15 @@ testcase tFields_3
   '/// Check if the page number is correct
    Call wTypeKeys "<Shift Right>"
    ToolsCalculate
+   EditCopy
    if GetClipboardText <> sPage1 then
-       QAErrorLog "#i31214# The 1st page number isn't correct !"
+       QAErrorLog "#i31214# The 1st page number isn't correct ! should be: '" + sPage1 + "', but was: '" + GetClipboard + "'."
    end if
 
    Call wTypeKeys "<MOD1 End>"
    Call wTypeKeys "<Shift Left>"
-   ToolsCalculate
-   if GetClipboardText <> sPage2 then
+   EditCopy
+   if GetClipboard <> sPage2 then
        Warnlog "The 2nd page number isn't correct !"
    end if
 
@@ -220,13 +221,14 @@ endcase
 '-----------------------------------------------------------------
 
 testcase tFields_4
+qaerrorlog "#i93906# - Testcase outcommented due to bug. 'Copied field-content not pastable outside Office'"
+goto endsub
 
   Dim sPage1 , sPage2  as  String
 
   sPage1 = "1" : sPage2 = "2"
 
   printlog "Insert / Fields / Page Count"
- '/// <b> Insert / Fields / Page Count </b>
 
   Call hNewDocument
 
@@ -276,13 +278,13 @@ endcase
 '-----------------------------------------------------------------
 
 testcase tFields_5
+qaerrorlog "#i93906# - Testcase outcommented due to bug. 'Copied field-content not pastable outside Office'"
+goto endsub
 
   Dim sSubject  as  String
-
   sSubject = "This is a Subject"
 
   printlog "Insert / Fields / Subject"
- '/// <b> Insert / Fields / Subject </b>
 
   Call hNewDocument
 
@@ -298,8 +300,8 @@ testcase tFields_5
   '/// Check if the subject is correct
    Call wTypeKeys "<Shift Left>"
    EditCopy
-   if GetClipboardText <> sSubject then
-       Warnlog "Subject isn't correct !"
+   if GetClipboard <> sSubject then
+       Warnlog "Subject isn't correct !  should be: '" + sSubject + "', but was: '" + GetClipboard + "'."
    end if
 
  Call hCloseDocument
@@ -309,13 +311,14 @@ endcase
 '-----------------------------------------------------------------
 
 testcase tFields_6
+qaerrorlog "#i93906# - Testcase outcommented due to bug. 'Copied field-content not pastable outside Office'"
+goto endsub
 
   Dim sTitle  as  String
 
   sTitle = "This is a Title"
 
   printlog "Insert / Fields / Title"
- '/// <b> Insert / Fields / Title </b>
 
   Call hNewDocument
 
@@ -331,8 +334,8 @@ testcase tFields_6
   '/// Check if the title is correct
    Call wTypeKeys "<Shift Left>"
    EditCopy
-   if GetClipboardText <> sTitle then
-       Warnlog "Title isn't correct !"
+   if GetClipboard <> sTitle then
+       Warnlog "Title isn't correct ! should be: '" + sTitle + "', but was: '" + GetClipboard + "'."
    end if
 
  Call hCloseDocument
@@ -342,6 +345,8 @@ endcase
 '-----------------------------------------------------------------
 
 testcase tFields_7
+qaerrorlog "#i93906# - Testcase outcommented due to bug. 'Copied field-content not pastable outside Office'"
+goto endsub
 
   Dim sFirstName  , sLastName  as String
   Dim sFirstName1 , sLastName1 as String
@@ -349,7 +354,6 @@ testcase tFields_7
   sFirstName1 = "Test1" : sLastName1 = "Test2"
 
   printlog "Insert / Fields / Author"
- '/// <b> Insert / Fields / Author </b>
 
   Call hNewDocument
 
@@ -378,8 +382,8 @@ testcase tFields_7
   '/// Check if the title is correct
    Call wTypeKeys "<Shift Left>"
    EditCopy
-   if GetClipboardText <> (sFirstName1 + " " + sLastName1) then
-       Warnlog "Author isn't correct !"
+   if GetClipboard <> (sFirstName1 + " " + sLastName1) then
+       Warnlog "Author isn't correct ! should be: '" + (sFirstName1 + " " + sLastName1) + "', but was: '" + GetClipboard + "'."
    end if
 
   'Recover author to default

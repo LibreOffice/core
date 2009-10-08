@@ -102,6 +102,7 @@ testcase tTextframes_50
     '/// Open a test file , which includes a frame and
     '/// + it is StarOffice 7 format
     Call hFileOpen(sTestFile,false)
+    Call sMakeReadOnlyDocumentEditable
     
     '/// Set focus to frame
     Call wTypeKeys ( "<Shift F4>" )
@@ -135,6 +136,7 @@ testcase tTextframes_51
     '/// Open a test file , which is a Word file and includes
     '/// + a frame that is in 'in front of text' mode
     Call hFileOpen(sTestFile,false)
+    Call sMakeReadOnlyDocumentEditable
     
     '/// Set focus to frame
     Call wTypeKeys ( "<Shift F4>" )
@@ -168,6 +170,7 @@ testcase tTextframes_52
     '/// Open a test file , which is a Word file and includes
     '/// + a frame that is in 'behind text' mode
     Call hFileOpen(sTestFile,false)
+    Call sMakeReadOnlyDocumentEditable
     
     '/// Set focus to the frame
     Call wTypeKeys ( "<Shift F4>" )
@@ -201,6 +204,7 @@ testcase tTextframes_53
     '/// Open a test file , which is a Word file and includes
     '/// + a frame that is in 'tight' mode
     Call hFileOpen(sTestFile,false)
+    Call sMakeReadOnlyDocumentEditable
     
     '/// Set focus to the frame
     Call wTypeKeys ( "<Shift F4>" )
@@ -234,6 +238,7 @@ testcase tTextframes_54
     '/// Open a test file , which is a Word file and includes
     '/// + a frame that is in 'square' mode
     Call hFileOpen(sTestFile,false)
+    Call sMakeReadOnlyDocumentEditable
     
     '/// Set focus to the frame
     Call wTypeKeys ( "<Shift F4>" )
@@ -344,6 +349,8 @@ endcase
 '-----------------------------------------------------------------
 
 testcase tTextframes_57
+QaErrorLog "#i94758# - Testcase outcommented"
+goto endsub
 
     Dim sTestFile      as String
     Dim iVertical       as Integer
@@ -363,6 +370,7 @@ testcase tTextframes_57
     '/// Open a test file , which includes a frame in header and
     '/// + a picture which is anchored to frame
     Call hFileOpen(sTestFile,false)
+    Call sMakeReadOnlyDocumentEditable
     
     'Set focus to the picture
     Call wTypeKeys ( "<Shift F4>" )
@@ -419,6 +427,8 @@ endcase
 '-----------------------------------------------------------------
 
 testcase tTextframes_58
+QaErrorLog "#i94758# - Testcase outcommented"
+goto endsub
 
     Dim sTestFile    as String
     Dim iVertical     as Integer
@@ -438,6 +448,7 @@ testcase tTextframes_58
     '/// Open a test file , which includes a frame in header and
     '/// + a picture which is anchored to frame
     Call hFileOpen(sTestFile,false)
+    Call sMakeReadOnlyDocumentEditable
     
     'Set focus to the picture
     Call wTypeKeys ( "<Shift F4>" )
@@ -493,6 +504,8 @@ endcase
 '-----------------------------------------------------------------
 
 testcase tTextframes_59
+QaErrorLog "#i94758# - Testcase outcommented"
+goto endsub
 
     Dim sTestFile as String
     Dim sPositionY1 as String
@@ -508,6 +521,7 @@ testcase tTextframes_59
     '/// Open a test file , which includes a frame in table and
     '/// + a picture which is anchored to frame
     Call hFileOpen(sTestFile,false)
+    Call sMakeReadOnlyDocumentEditable
     
     'Set focus to the picture
     Call wTypeKeys ( "<Shift F4>" )
@@ -575,6 +589,8 @@ endcase
 '-----------------------------------------------------------------
 
 testcase tTextframes_60
+QaErrorLog "#i94758# - Testcase outcommented"
+goto endsub
 
     Dim sTestFile as String
     Dim sPositionY1 as String
@@ -590,6 +606,7 @@ testcase tTextframes_60
     '/// Open a test file , which includes a frame in table and
     '/// + a picture which is anchored to frame
     Call hFileOpen(sTestFile,false)
+    Call sMakeReadOnlyDocumentEditable
     
     'Set focus to the picture
     Call wTypeKeys ( "<Shift F4>" )
@@ -657,6 +674,8 @@ endcase
 '-----------------------------------------------------------------
 
 testcase tTextframes_61
+QaErrorLog "#i94758# - Testcase outcommented"
+goto endsub
 
     Dim sTestFile                 as String
     Dim iVertical                 as Integer
@@ -676,6 +695,7 @@ testcase tTextframes_61
     '/// Open a test file , which includes a frame in footer and
     '/// + a picture which is anchored to frame
     Call hFileOpen(sTestFile,false)
+    Call sMakeReadOnlyDocumentEditable
     
     'Set focus to the picture
     Call wTypeKeys ( "<Shift F4>" )
@@ -731,6 +751,8 @@ endcase
 '-----------------------------------------------------------------
 
 testcase tTextframes_62
+QaErrorLog "#i94758# - Testcase outcommented"
+goto endsub
 
     Dim sTestFile                 as String
     Dim iVertical                 as Integer
@@ -750,6 +772,7 @@ testcase tTextframes_62
     '/// Open a test file , which includes a frame in footer and
     '/// + a picture which is anchored to frame
     Call hFileOpen(sTestFile,false)
+    Call sMakeReadOnlyDocumentEditable
     
     'Set focus to the picture
     Call wTypeKeys ( "<Shift F4>" )
@@ -805,6 +828,8 @@ endcase
 '-----------------------------------------------------------------
 
 testcase tTextframes_63
+QaErrorLog "#i94758# - Testcase outcommented"
+goto endsub
 
     Dim sTestFile                 as String
     Dim iHorizontal               as Integer
@@ -824,6 +849,7 @@ testcase tTextframes_63
     '/// Open a test file , which includes a frame in table and
     '/// + a picture which is anchored to frame
     Call hFileOpen(sTestFile,false)
+    Call sMakeReadOnlyDocumentEditable
     
     'Set focus to the picture
     Call wTypeKeys ( "<Shift F4>" )
@@ -891,6 +917,8 @@ endcase
 '-----------------------------------------------------------------
 
 testcase tTextframes_64
+QaErrorLog "#i94758# - Testcase outcommented"
+goto endsub
 
     Dim sTestFile                 as String
     Dim iHorizontal               as Integer
@@ -910,6 +938,7 @@ testcase tTextframes_64
     '/// Open a test file , which includes a frame in table and
     '/// + a picture which is anchored to frame
     Call hFileOpen(sTestFile,false)
+    Call sMakeReadOnlyDocumentEditable
     
     'Set focus to the picture
     Call wTypeKeys ( "<Shift F4>" )
@@ -977,6 +1006,8 @@ endcase
 '-----------------------------------------------------------------
 
 testcase tTextframes_65
+QaErrorLog "#i94758# - Testcase outcommented"
+goto endsub
 
     Dim sTestFile                 as String
     Dim iHorizontal               as Integer
@@ -997,6 +1028,7 @@ testcase tTextframes_65
     '/// Frame A is anchored Frame B
     '/// + a picture which is anchored to Frame A
     Call hFileOpen(sTestFile,false)
+    Call sMakeReadOnlyDocumentEditable
     
     'Set focus to the picture
     Call wTypeKeys ( "<Shift F4>" )
@@ -1052,6 +1084,8 @@ endcase
 '-----------------------------------------------------------------
 
 testcase tTextframes_66
+QaErrorLog "#i94758# - Testcase outcommented"
+goto endsub
 
     Dim sTestFile                 as String
     Dim iHorizontal               as Integer
@@ -1072,6 +1106,7 @@ testcase tTextframes_66
     '/// Frame A is anchored Frame B
     '/// + a picture which is anchored to Frame A
     Call hFileOpen(sTestFile,false)
+    Call sMakeReadOnlyDocumentEditable
     
     'Set focus to the picture
     Call wTypeKeys ( "<Shift F4>" )
@@ -1127,6 +1162,8 @@ endcase
 '-----------------------------------------------------------------
 
 testcase tTextframes_67
+QaErrorLog "#i94758# - Testcase outcommented"
+goto endsub
 
     Dim sTestFile                 as String
     Dim iHorizontal               as Integer
@@ -1146,6 +1183,7 @@ testcase tTextframes_67
     '/// Open a test file , which includes a frame in table and
     '/// + a picture which is anchored to frame
     Call hFileOpen(sTestFile,false)
+    Call sMakeReadOnlyDocumentEditable
     
     'Set focus to the picture
     Call wTypeKeys ( "<Shift F4>" )
@@ -1213,6 +1251,8 @@ endcase
 '-----------------------------------------------------------------
 
 testcase tTextframes_68
+QaErrorLog "#i94758# - Testcase outcommented"
+goto endsub
 
     Dim sTestFile                 as String
     Dim iHorizontal               as Integer
@@ -1232,6 +1272,7 @@ testcase tTextframes_68
     '/// Open a test file , which includes a frame in table and
     '/// + a picture which is anchored to frame
     Call hFileOpen(sTestFile,false)
+    Call sMakeReadOnlyDocumentEditable
     
     'Set focus to the picture
     Call wTypeKeys ( "<Shift F4>" )
@@ -1299,6 +1340,8 @@ endcase
 '-----------------------------------------------------------------
 
 testcase tTextframes_69
+QaErrorLog "#i94758# - Testcase outcommented"
+goto endsub
 
     Dim sTestFile                 as String
     Dim iHorizontal               as Integer
@@ -1319,6 +1362,7 @@ testcase tTextframes_69
     '/// Frame A is anchored Frame B
     '/// + a picture which is anchored to Frame A
     Call hFileOpen(sTestFile,false)
+    Call sMakeReadOnlyDocumentEditable
     
     'Set focus to the picture
     Call wTypeKeys ( "<Shift F4>" )
@@ -1374,6 +1418,8 @@ endcase
 '-----------------------------------------------------------------
 
 testcase tTextframes_70
+QaErrorLog "#i94758# - Testcase outcommented"
+goto endsub
 
     Dim sTestFile                 as String
     Dim iHorizontal               as Integer
@@ -1394,6 +1440,7 @@ testcase tTextframes_70
     '/// Frame A is anchored Frame B
     '/// + a picture which is anchored to Frame A
     Call hFileOpen(sTestFile,false)
+    Call sMakeReadOnlyDocumentEditable
     
     'Set focus to the picture
     Call wTypeKeys ( "<Shift F4>" )

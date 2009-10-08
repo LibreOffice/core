@@ -8,7 +8,7 @@
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.7 $
+# $Revision: 1.7.2.2 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -34,6 +34,13 @@ PRJNAME = OOoRunner
 TARGET=qadevOOo
 PRJ=.
 
+# ------------------------------------------------
+# NEVER REMOVE THIS!
+# The OOoRunner.jar and OOoRunnerLight.jar should build with debug information all the time, also in the .pro builds.
+# If you have any questions about this, ask the qadevOOo Maintainer.
+debug=true
+# ------------------------------------------------
+
 .INCLUDE : ant.mk
 
 TST:
@@ -41,11 +48,7 @@ TST:
 
 .IF "$(SOLAR_JAVA)"=="TRUE"	
 .IF "$(ANT_HOME)"!="NO_ANT_HOME"
-.IF "$(JDK)"=="gcj"
 ANT_FLAGS+=-Dbuild.source=1.5
-.ELSE
-ANT_FLAGS+=-Dbuild.source=1.4
-.ENDIF
 ALLTAR: ANTBUILD
 .ENDIF
 .ENDIF

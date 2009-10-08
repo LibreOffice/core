@@ -295,16 +295,10 @@ function tDoubleRelation( sFileName, sPWD, sRelTable1, sRelTable2, sRelTable3 )
         printlog "open relation design and choose proper fields from table/listbox"
         RelationProperties.TypeKeys "<TAB>",TRUE
         RelationProperties.TypeKeys "<TAB>",TRUE
-        RelationProperties.TypeKeys "<MOD2 DOWN>",TRUE
-        sleep(1)
-        RelationProperties.TypeKeys "<DOWN>",TRUE
-        RelationProperties.TypeKeys "<RETURN>",TRUE
-        sleep(1)
+        RelationProperties.TypeKeys "<MOD1 DOWN>",TRUE
+        sleep(1)        
         RelationProperties.TypeKeys "<TAB>",TRUE
-        RelationProperties.TypeKeys "<MOD2 DOWN>",TRUE
-        sleep(1)
-        RelationProperties.TypeKeys "<DOWN>",TRUE
-        RelationProperties.TypeKeys "<RETURN>",TRUE
+        RelationProperties.TypeKeys "<MOD1 DOWN>",TRUE        
         sleep(1)
         RelationProperties.OK
         printlog "1:1 relation between test tables created"
@@ -384,23 +378,15 @@ function tDoubleRelation( sFileName, sPWD, sRelTable1, sRelTable2, sRelTable3 )
     '/// open relation design and choose the proper fields from table/listbox
         printlog "open relation design and choose the proper fields from table/listbox"
         RelationProperties.TypeKeys "<TAB>",TRUE
-        RelationProperties.TypeKeys "<MOD2 DOWN>",TRUE
-        sleep(1)
-        RelationProperties.TypeKeys "<DOWN>",TRUE
-        RelationProperties.TypeKeys "<RETURN>",TRUE
+        RelationProperties.TypeKeys "<MOD1 DOWN>",TRUE
+        RelationProperties.TypeKeys "<MOD1 DOWN>",TRUE        
         sleep(1)
         RelationProperties.TypeKeys "<TAB>",TRUE
-        RelationProperties.TypeKeys "<MOD2 DOWN>",TRUE
-        sleep(1)
-        RelationProperties.TypeKeys "<DOWN>",TRUE
-        RelationProperties.TypeKeys "<DOWN>",TRUE
-        RelationProperties.TypeKeys "<RETURN>",TRUE
+        RelationProperties.TypeKeys "<MOD1 DOWN>",TRUE
+        RelationProperties.TypeKeys "<MOD1 DOWN>",TRUE        
         sleep(1)
         RelationProperties.TypeKeys "<TAB>",TRUE
-        RelationProperties.TypeKeys "<MOD2 DOWN>",TRUE
-        sleep(1)
-        RelationProperties.TypeKeys "<DOWN>",TRUE
-        RelationProperties.TypeKeys "<RETURN>",TRUE
+        RelationProperties.TypeKeys "<MOD1 DOWN>",TRUE        
         sleep(1)
         RelationProperties.OK
         

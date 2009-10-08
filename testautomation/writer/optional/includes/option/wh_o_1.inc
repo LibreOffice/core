@@ -40,7 +40,7 @@
 sub wh_o_1
 
     printLog Chr(13) + "---------    Options   - Tools HTML -    ----------"
-    
+
     Call tToolsOptionsHTMLContent
     Call tToolsOptionsHTMLLayout  'wrn:1
     Call tToolsOptionsHTMLGrid    'wrn:4
@@ -49,14 +49,14 @@ end sub
 
 '------------------------------------------------------------------------------
 testcase tToolsOptionsHTMLContent
-        
+
     Dim irgendwas(17) as boolean
-    
+
     printlog "tToolsOptionsHTMLContent datei erstellen zum laden"
     '/// uses "input\\writer\\optional\\options\\options1.sxw"  ///
     '///+ Created Dokument with everything on ///'
     Call hNewDocument
-    
+
     printlog "'///- Tools/Options/HTML: Content ///"
     
     printlog ("'/// - save states ///")
@@ -151,8 +151,9 @@ testcase tToolsOptionsHTMLContent
     Kontext "ExtrasOptionenDlg"
     ExtrasOptionenDlg.OK
     
-    Call hCloseDocument
-
+    Do Until GetDocumentCount = 0
+        Call hCloseDocument
+    Loop
 endcase
 
 '------------------------------------------------------------------------------
@@ -162,6 +163,7 @@ testcase tToolsOptionsHTMLLayout
     Dim iTemp(3) as integer
     '///Open "writer\\optional\\input\\options\\options1.sxw ///
     Call hFileOpen ( gTesttoolPath + "writer\optional\input\options\options1.sxw" )
+    Call sMakeReadOnlyDocumentEditable
     
     printlog "'///- Tools/Options/Writer: View ///"
     ToolsOptions
@@ -207,7 +209,7 @@ testcase tToolsOptionsHTMLLayout
             end if
         end if
     end if
-    if irgendwas(8) Then WeichesScrollen.UnCheck           Else WeichesScrollen.Check    
+    if irgendwas(8) Then WeichesScrollen.UnCheck           Else WeichesScrollen.Check
     
     Kontext "ExtrasOptionenDlg"
     ExtrasOptionenDlg.OK
@@ -267,7 +269,7 @@ testcase tToolsOptionsHTMLLayout
     ViewTextBoundaries
     try
         ViewRuler
-        Warnlog "View / Ruler should be disabled !"
+        QaErrorLog "#i94732# - View / Ruler should be disabled!"
     catch
     endcatch
     
@@ -400,7 +402,9 @@ testcase tToolsOptionsHTMLLayout
     Kontext "ExtrasOptionenDlg"
     ExtrasOptionenDlg.OK
     
-    Call hCloseDocument
+    Do Until GetDocumentCount = 0
+        Call hCloseDocument
+    Loop
 endcase
 
 '------------------------------------------------------------------------------
@@ -412,6 +416,7 @@ testcase tToolsOptionsHTMLGrid
         
     '/// uses: "writer\\optional\\input\\options\\options1.sxw" ///
     Call hFileOpen ( gTesttoolPath + "writer\optional\input\options\options1.sxw" )
+    Call sMakeReadOnlyDocumentEditable
    
     printlog "'///- Tools/Options/HTML: Grid ///"    
     printlog ("'/// - save states ///")
@@ -563,8 +568,8 @@ testcase tToolsOptionsHTMLGrid
     '///  ( gTesttoolPath + "writer\optional\input\options\gridtst.sxw" ) ///'
     '/// NOT Possible Without <ALT> + <cursor> stuff :-((((( BugID: 84741 ///'
     '/// uses"writer\optional\input\options\htmltag.html" ///
-    hFileOpen ( gTesttoolPath + "writer\optional\input\options\htmltag.html" )
     Call hFileOpen ( gTesttoolPath + "writer\optional\input\options\htmltag.html" )
+    Call sMakeReadOnlyDocumentEditable
     
     '/// check if writeable!///'
     try
@@ -646,9 +651,8 @@ testcase tToolsOptionsHTMLGrid
     Kontext "ExtrasOptionenDlg"
     ExtrasOptionenDlg.OK
     
-    Do Until GetDocumentCount = 1
+    Do Until GetDocumentCount = 0
         Call hCloseDocument
     Loop
-
 endcase
 

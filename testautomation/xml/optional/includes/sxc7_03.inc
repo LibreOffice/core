@@ -142,7 +142,7 @@ testcase tcontrols01
         goto endsub        
     endcatch
     
-    call hFileOpen (gTesttoolPath & ConvertPath("xml\optional\input\calc\so_binary\controls01.sdc") , 1)
+    call hFileOpen (gTesttoolPath & ConvertPath("xml\optional\input\calc\so_binary\controls01.sdc"))
    
     Kontext "SecurityWarning"
     if SecurityWarning.Exists(1) then
@@ -168,7 +168,7 @@ testcase tcontrols01
         if XMLWellformed (gOfficePath & ConvertPath("user\work\xml\calc\level1\controls01\content.xml")) = FALSE then
             warnlog "XML-file 'content.xml' not well formed!"
         else
-            call hFileOpen (gOfficePath & ConvertPath("user\work\xml\calc\level1\controls01.sxc") , 1)
+            call hFileOpen (gOfficePath & ConvertPath("user\work\xml\calc\level1\controls01.sxc"))
             '/// Accept the security warning and enable executing the macros.
             Kontext "SecurityWarning"
             if SecurityWarning.Exists(1) then

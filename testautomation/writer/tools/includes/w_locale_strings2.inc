@@ -39,8 +39,8 @@
 function wGetLanguageGuessString(sValue as string, iLanguageCount as integer) as string 'function for getting strings out of this file
 
     'Variables:
-    DIM WordPreSet          AS string 'string as it shoud be for words
-    DIM ParagraphPreSet     AS string 'string as it shoud be for paragraphs
+    DIM WordPreSet as string 'string as it shoud be for words
+    DIM ParagraphPreSet as string 'string as it shoud be for paragraphs
 
     '///already covered Office languages: ///'
     '///english     01 ///'
@@ -53,8 +53,8 @@ function wGetLanguageGuessString(sValue as string, iLanguageCount as integer) as
     '///swedish     46 ///'
     '///polish      48 ///'
     '///german      49 ///'
-    '///german      55 ///'    
-    
+    '///german      55 ///'
+
     '///already covered languages in the test document: ///'
     '///Case 1: english ///'
     '///Case 2: portugese///'
@@ -67,7 +67,7 @@ function wGetLanguageGuessString(sValue as string, iLanguageCount as integer) as
     '///Case 9: swedish///'
     '///Case 10: polish///'
     '///Case 11: german///'
-    
+
     Select Case iSprache        'Detecting Office language
         Case 01         'Case 01:  english
         '-----------------------------------------------------------------------
@@ -334,7 +334,7 @@ function wGetLanguageGuessString(sValue as string, iLanguageCount as integer) as
         Select Case iLanguageCount
             Case 1: WordPreSet      = "a palavra é Inglês (EUA)"
                     ParagraphPreSet = "O parágrafo é Inglês (EUA)"
-			Case 2: WordPreSet      = "a palavra é Português (Brasil)"			
+			Case 2: WordPreSet      = "a palavra é Português (Brasil)"
                     ParagraphPreSet = "O parágrafo é Português (Portugal)"
 			Case 3: WordPreSet  	= "a palavra é Russo"
                     ParagraphPreSet = "O parágrafo é Russo"
@@ -354,7 +354,7 @@ function wGetLanguageGuessString(sValue as string, iLanguageCount as integer) as
                     ParagraphPreSet = "O parágrafo é Polonês"
 			Case 11:WordPreSet      = "a palavra é Alemão (Alemanha)"
                     ParagraphPreSet = "O parágrafo é Alemão (Alemanha)"
-        end select                
+        end select
         '-----------------------------------------------------------------------
         case else
             'if Office language is not already covered: warning appears.
@@ -368,6 +368,6 @@ function wGetLanguageGuessString(sValue as string, iLanguageCount as integer) as
             wGetLanguageGuessString = WordPreSet
         elseif sValue = "ParagraphPreSet" then
             wGetLanguageGuessString = ParagraphPreSet
-        endif
+        end if
 
 end function

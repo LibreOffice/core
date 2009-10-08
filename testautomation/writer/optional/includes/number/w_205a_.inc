@@ -145,15 +145,15 @@ testcase tToolsOutlineNumbering1
     TabKapitelnumerierung.Ok
 
     printlog "- format document"
-    Call wDokSchreiben "<Up>", 25
+    call wTypeKeys "<Up>", 25
 
     for Zaehler = 1 to 10
-        Call wDokSchreiben "<Shift End>"
+        call wTypeKeys "<Shift End>"
         if wStyleSet ( VorlagenLst(Zaehler) ) = false then
             Warnlog "- Style '" & VorlagenLst(Zaehler) & "' could not be set!"
         end if
-        Call wDokSchreiben "<Down>", 8
-        Call wDokSchreiben "<Home>"
+        call wTypeKeys "<Down>", 8
+        call wTypeKeys "<Home>"
         wait 500
     next Zaehler
 
@@ -249,14 +249,14 @@ testcase tToolsOutlineNumbering1
                 printlog "- Load odt and check formattings"
                 Call hFileOpen ( gOfficePath + "user\work\tToolsOutlineNumbering1.odt" )
         end select
-        Call wDokSchreiben "<PageUp>", 8
-        Call wDokSchreiben "<Up>", 10
+        call wTypeKeys "<PageUp>", 8
+        call wTypeKeys "<Up>", 10
     
         for Zaehler = 1 to 10
-            Call wDokSchreiben "<Shift End>"
+            call wTypeKeys "<Shift End>"
             if wStyleGet(VorlagenLst(Zaehler)) = false then Warnlog "Wrong Style for Outline Numbering " + Zaehler
-            Call wDokSchreiben "<Down>", 8
-            Call wDokSchreiben "<Home>"
+            call wTypeKeys "<Down>", 8
+            call wTypeKeys "<Home>"
         next Zaehler
     
         printlog "   - check saved properties"
@@ -419,12 +419,12 @@ testcase tToolsOutlineNumbering2
 
     printlog "  - create Numbering"
     for i = 1 to 10
-        Call wDokSchreiben "<Shift End>"
+        call wTypeKeys "<Shift End>"
         if wStyleSet ( VorlagenLst(i) ) = false then
             Warnlog "- Style '" & VorlagenLst(i) & "' could not be set!"
         end if
-        Call wDokSchreiben "<Down>", 8
-        Call wDokSchreiben "<Home>"
+        call wTypeKeys "<Down>", 8
+        call wTypeKeys "<Home>"
     next i
 
     printlog "  - check Numbering-Position"
@@ -745,33 +745,33 @@ testcase tToolsFootnoteEndnote
     ZeichenvorlageEndnotenbereich.Select 5
     TabEndnoten.OK
 
-    Call wDokSchreiben "Footnote bound to this text"
+    call wTypeKeys "Footnote bound to this text"
     InsertFootnote
     Kontext "FussnoteEinfuegen"
     Fussnote.Check
     FussnoteEinfuegen.OK
 
-    Call wDokSchreiben "Wassup<PageUp><Return>Followed by an endnote."
+    call wTypeKeys "Wassup<PageUp><Return>Followed by an endnote."
     InsertFootnote
     Kontext "FussnoteEinfuegen"
     Endnote.Check
     FussnoteEinfuegen.OK
 
-    Call wDokSchreiben "Wassup<PageUp><Return>And again a footnote"
+    call wTypeKeys "Wassup<PageUp><Return>And again a footnote"
     InsertFootnote
     Kontext "FussnoteEinfuegen"
     Fussnote.Check
     FussnoteEinfuegen.OK
     InsertFieldsPageNumbers
-    Call wDokSchreiben "+0"
-    Call wDokschreiben "<Shift Home>"
+    call wTypeKeys "+0"
+    call wTypeKeys "<Shift Home>"
     Sleep 1
     try
         ToolsCalculate
     catch
         ' Workaround for bug.
-        Call wDokSchreiben "<End>"
-        Call wDokschreiben "<Shift Home>"
+        call wTypeKeys "<End>"
+        call wTypeKeys "<Shift Home>"
         try
             ToolsCalculate
             Warnlog "Selecting text in footnote with <Shift Home> works only at the second time (bug#101047)"
@@ -781,21 +781,21 @@ testcase tToolsFootnoteEndnote
     endcatch
     if GetClipboardText <> "1" then Warnlog "2. Footnote has not been inserted on 1. Page."
 
-    Call wDokSchreiben "<PageUp><Return>Again followed by an endnote"
+    call wTypeKeys "<PageUp><Return>Again followed by an endnote"
     InsertFootnote
     Kontext "FussnoteEinfuegen"
     Endnote.Check
     FussnoteEinfuegen.OK
     InsertFieldsPageNumbers
-    Call wDokSchreiben "+0"
-    Call wDokschreiben "<Shift Home>"
+    call wTypeKeys "+0"
+    call wTypeKeys "<Shift Home>"
     Sleep 1
     try
         ToolsCalculate
     catch
         ' Workaround for bug.
-        Call wDokSchreiben "<End>"
-        Call wDokschreiben "<Shift Home>"
+        call wTypeKeys "<End>"
+        call wTypeKeys "<Shift Home>"
         try
             ToolsCalculate
         catch
@@ -806,7 +806,7 @@ testcase tToolsFootnoteEndnote
     ToolsCalculate
     if GetClipboardText <> "2" then Warnlog "2. Footnote has not been inserted on 2. page"
 
-    Call wDokSchreiben "<PageUp><Return>That's it!"
+    call wTypeKeys "<PageUp><Return>That's it!"
 
     printlog "    - check properties"
     ToolsFootnote

@@ -14,6 +14,7 @@ Mobile Device Filters for Pocket Device Appliances
 Scripting StarOffice
 Java Platform Support
 StarOffice
+Accessibility
 Java
 Class Path
 Start Parameters

@@ -37,7 +37,6 @@
 '*
 '\***********************************************************************
 
-
 sub w_fields6
 
     Call tFunctions_1        'Conditional text
@@ -56,15 +55,17 @@ sub w_fields6
 
 end sub
 
-
 testcase tFunctions_1
 
-  Dim sName                      as String
-  Dim sValue()                   as String
-  Dim sCondition , sElse , sThen as String
-  Dim sResult()                  as String
-  Dim iType                      as Integer
-  Dim i , j                      as Integer
+  Dim sName as String
+  Dim sValue() as String
+  Dim sCondition as String
+  Dim sElse as String
+  Dim sThen as String
+  Dim sResult() as String
+  Dim iType as Integer
+  Dim i as Integer
+  Dim j as Integer
 
   sName      = "X"
   SCondition = "X==" + Chr(34) + "Sun" + Chr(34)
@@ -81,7 +82,6 @@ testcase tFunctions_1
                    "NOTSun" , _
                    "No"     , _
                   )
-
 
   printlog "Conditional text"
  '/// <b> Conditional text </b>
@@ -140,7 +140,8 @@ testcase tFunctions_2
   Dim sHiddenText     as String
   Dim sResult()       as String
   Dim bHiddenText     as Boolean
-  Dim i , j           as Integer
+  Dim i as Integer
+  Dim j as Integer
 
   sName       = "X"
   SCondition  = "X==" + Chr(34) + "ABC" + Chr(34)
@@ -794,8 +795,10 @@ testcase tFunctions_13
     
     '/// Open test file pageTest.sxw
     Call hFileOpen(sTestFile)
+    Call sMakeReadOnlyDocumentEditable
     Call wTypeKeys "<MOD1 Home>"
     Call wTypeKeys "<Right>"
+
     
     '/// Insert/Fields/Other/Functions / Select "Combine characters"
     Call fInsertFieldsOther("TabFunktionen")

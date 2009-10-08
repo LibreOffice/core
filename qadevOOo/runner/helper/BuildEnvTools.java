@@ -75,12 +75,19 @@ public class BuildEnvTools {
         if (mDebug) {
             log.println("### " + mPlatform);
         }
-        if ((mPlatform == null) || ((!mPlatform.equals(PropertyName.UNXSOLS)) &&
-            (!mPlatform.equalsIgnoreCase(PropertyName.UNXSOLI)) && (!mPlatform.equals(PropertyName.UNXLNGI)) &&
-            (!mPlatform.equals(PropertyName.WNTMSCI)))) {
-
+        if (mPlatform == null){
             msg += PropertyName.OPERATING_SYSTEM + "\nFill this parameter with an operating system like unxsols," +
-                " unxsoli, unxlngi or wntmsci.  \n\n";
+                " unxsoli, unxlngi, unxmacxi or wntmsci.  \n\n";
+        }
+        if(
+            (!mPlatform.equalsIgnoreCase(PropertyName.UNXSOLS)) &&
+            (!mPlatform.equalsIgnoreCase(PropertyName.UNXSOLI)) &&
+            (!mPlatform.equalsIgnoreCase(PropertyName.UNXLNGI)) &&
+            (!mPlatform.equalsIgnoreCase(PropertyName.UNXMACXI))&&
+            (!mPlatform.equalsIgnoreCase(PropertyName.WNTMSCI)) ){
+
+            msg += PropertyName.OPERATING_SYSTEM + ":" + mPlatform + "\nFill this parameter with an operating system like unxsols," +
+                " unxsoli, unxlngi, unxmacxi or wntmsci.  \n\n";
             error = true;
         }
 

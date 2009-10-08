@@ -386,7 +386,7 @@ testcase t114174
     printlog "Used extension string is: " & ExtensionString
     sFile = convertPath(gOfficePath + "user/work/" + getTestcaseName & "." & ExtensionString)
     printlog "Filepath is: " & sFile
-   if Dir <> "" then kill (sFile)
+   if Dir (sFile) <> "" then kill (sFile)
 
     sReference(1) = "Koelle"
     sReference(2) = "Alaaf!"

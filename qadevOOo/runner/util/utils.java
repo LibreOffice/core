@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: utils.java,v $
- * $Revision: 1.17 $
+ * $Revision: 1.17.2.3 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -68,6 +68,8 @@ public class utils {
      *
      * This method adds the DOCPTH to a given file
      *
+     * @param sDocName the file which should be completed to the test doc path
+     * @return $TESTDOCPATH/sDocName
      */
     public static String getFullTestDocName(String sDocName) {
         String docpth = System.getProperty("DOCPTH");
@@ -75,17 +77,46 @@ public class utils {
             docpth = docpth.substring(0, docpth.length() - 1);
         }
 
+        System.out.println("docpth:" + docpth);
+
+        String pthSep = System.getProperty("file.separator");
+
+        if (docpth.equals("unkown")) {
+            System.out.println("try to get tDoc from $SRC_ROOT/qadevOOo");
+            String srcRoot = System.getProperty(PropertyName.SRC_ROOT);
+            if (srcRoot != null) {
+                File srcR = new File(srcRoot);
+                String[] list = srcR.list(new FilenameFilter() {
+
+                    public boolean accept(File dir, String name) {
+                        return name.startsWith("qadevOOo");
+                    }
+                });
+
+                if (list[0] != null) {
+                    String tDoc = srcRoot.concat(pthSep).concat(list[0]).concat(pthSep).concat("testdocs");
+
+                    if (new File(tDoc).exists()) {
+                        docpth = tDoc;
+                    }
+                }
+            }
+        }
+
         if (docpth.startsWith("http:")) {
             return docpth + "/" + sDocName;
         }
         String testdocPth = "";
-        String pthSep = System.getProperty("file.separator");
-        if (docpth == null) {
+
+        if (docpth.equals("unkown")) {
+            System.out.println("try to get tDoc from OBJDSCS");
             String objdscPth = System.getProperty("OBJDSCS");
-            int i = objdscPth.indexOf("objdsc");
-            String arcPth = objdscPth.substring(0, i - 1);
-            testdocPth = arcPth + pthSep + "doc" + pthSep + "java" +
-                pthSep + "testdocs" + pthSep + sDocName;
+            if (objdscPth != null) {
+                int i = objdscPth.indexOf("objdsc");
+                String arcPth = objdscPth.substring(0, i - 1);
+                testdocPth = arcPth + pthSep + "doc" + pthSep + "java" +
+                    pthSep + "testdocs" + pthSep + sDocName;
+            }
         } else {
             testdocPth = docpth + pthSep + sDocName;
         }
@@ -924,7 +955,8 @@ public class utils {
 
             XDispatchProvider xDispProv = (XDispatchProvider) UnoRuntime.queryInterface(XDispatchProvider.class, xCont);
 
-            XURLTransformer xParser = (com.sun.star.util.XURLTransformer) UnoRuntime.queryInterface(XURLTransformer.class,
+            XURLTransformer xParser = (com.sun.star.util.XURLTransformer) UnoRuntime.queryInterface(
+                XURLTransformer.class,
                 xMSF.createInstance("com.sun.star.util.URLTransformer"));
 
             // Because it's an in/out parameter we must use an array of URL objects.

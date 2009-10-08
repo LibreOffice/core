@@ -190,11 +190,10 @@ testcase tTableCell
     printlog " Open Contextmenu"
     printlog " Select 'Cell->Unprotect"
     Kontext "DocumentWriter"
-    DocumentWriter.OpenContextMenu
-    Call hMenuSelectNr(7)
-    wait 500
+    Call wTypeKeys "<Shift F10>"
+    Call hMenuFindSelect (".uno:CellMenu", true, 9, false)   'Find "CellMenu" and call the slot.
     try
-        Call hMenuSelectNr(1)
+        Call hMenuFindSelect (20519, true, 1, false)   'Find "UnProtect" and call the slot.
     catch
         Warnlog "Unable to unprotect cell"
     endcatch

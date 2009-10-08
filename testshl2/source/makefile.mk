@@ -8,7 +8,7 @@
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.9 $
+# $Revision: 1.9.2.1 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -75,10 +75,17 @@ APP1STDLIBS=$(SALLIB)
 # 	$(SOLARLIBDIR)$/c5t_testresult.lib
 
 .IF "$(GUI)" == "WNT" || "$(GUI)" == "OS2"
+.IF "$(COM)" == "GCC"
+APP1STDLIBS+= \
+    $(SOLARLIBDIR)$/libc5t_testresult$(DLLPOSTFIX).a \
+    $(SOLARLIBDIR)$/libc5t_no_regallfkt$(DLLPOSTFIX).a \
+    $(SOLARLIBDIR)$/libc5t_winstuff$(DLLPOSTFIX).a
+.ELSE
 APP1LIBS= \
     $(SOLARLIBDIR)$/c5t_no_regallfkt.lib \
     $(SOLARLIBDIR)$/c5t_testresult.lib
 APP1LIBS += $(SOLARLIBDIR)$/c5t_winstuff.lib
+.ENDIF
 .ENDIF
 
 .IF "$(GUI)" == "UNX"
@@ -107,7 +114,12 @@ APP3DEPN=
 APP3LIBS= 
 
 .IF "$(GUI)"=="WNT" 
+.IF "$(COM)" == "GCC"
+APP3STDLIBS+= \
+    $(SOLARLIBDIR)$/libc5t_winstuff$(DLLPOSTFIX).a
+.ELSE
 APP3LIBS += $(SOLARLIBDIR)$/c5t_winstuff.lib
+.ENDIF
 .ENDIF
 
 

@@ -39,6 +39,9 @@
 
 testcase tBasicVBACompatImportEnabled()
 
+    warnlog( "#i92666# loading sample document crashes the office" )
+    goto endsub
+
     printlog( "Test VBA compatibility switch / executable Microsoft(R) Excel(R) Macros" )
     printlog( "Test case 3: Import macros and set them executable" )
     
@@ -97,7 +100,7 @@ testcase tBasicVBACompatImportEnabled()
     printlog( "Verify position of the document node" )
     MakroAus.select( cNodeCount + DOCUMENT_POSITION_OFFSET )
     if ( MakroAus.getSelText() <> "vba-test" ) then
-        warnlog( "The document node is not at the expected position" )
+        qaerrorlog( "The document node is not at the expected position" )
     endif
     
     for iCurrentModule = 2 to 3

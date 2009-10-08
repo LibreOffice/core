@@ -60,8 +60,11 @@ end sub
 
 testcase tToolsAutocorrectWordCompletion_1
 
-  Dim iAcceptWith    , iEntriesNumber               as Integer
-  Dim sMinWordLength , sMaxEntries , sMinMaxEntries as String
+  Dim iAcceptWith as String
+  Dim iEntriesNumber as Integer
+  Dim sMinWordLength as String
+  Dim sMaxEntries as String
+  Dim sMinMaxEntries as String
 
   iAcceptWith     = 2
   iEntriesNumber  = 0
@@ -119,9 +122,10 @@ endcase
 
 testcase tToolsAutocorrectWordCompletion_2
 
-  Dim iDefaultEntriesNumber , iEntriesNumber  as Integer
-  Dim i                                       as Integer
-  Dim sMinWordLength                          as String
+  Dim iDefaultEntriesNumber as Integer
+  Dim iEntriesNumber as Integer
+  Dim i as Integer
+  Dim sMinWordLength as String
 
   iDefaultEntriesNumber  = 0
   iEntriesNumber         = 3
@@ -185,8 +189,10 @@ endcase
 
 testcase tToolsAutocorrectWordCompletion_3
 
-  Dim aTestWord() , sPartOfTestWord as String
-  Dim i , j                         as Integer
+  Dim aTestWord() as String
+  Dim sPartOfTestWord as String
+  Dim i as Integer
+  Dim j as Integer
 
   aTestWord = Array( _
                    "accessibility" , _
@@ -285,9 +291,10 @@ endcase
 
 testcase tToolsAutocorrectWordCompletion_4
 
-  Dim sDefaultMaxEntries , sTestMaxEntries  as String
-  Dim sTestFile                             as String
-  Dim iTestMaxEntries                       as Integer
+  Dim sDefaultMaxEntries as String
+  Dim sTestMaxEntries as String
+  Dim sTestFile as String
+  Dim iTestMaxEntries as Integer
 
   sDefaultMaxEntries  =  "500"
   sTestMaxEntries     =  "50"
@@ -333,8 +340,11 @@ endcase
 
 testcase tToolsAutocorrectWordCompletion_5
 
-  Dim sTestWord1 , sTestWord2 , sTestWord3               as String
-  Dim iEntriesNumber_Checked , iEntriesNumber_UnChecked  as Integer
+  Dim sTestWord1 as String
+  Dim sTestWord2 as String
+  Dim sTestWord3 as String
+  Dim iEntriesNumber_Checked as Integer
+  Dim iEntriesNumber_UnChecked as Integer
 
   sTestWord1               = "kilometer "
   sTestWord2               = "entertainment "
@@ -449,7 +459,8 @@ endcase
 
 testcase tToolsAutocorrectWordCompletion_x
 
-  Dim sTestWord , sPartOfTestWord as String
+  Dim sTestWord as String
+  Dim sPartOfTestWord as String
 
   sTestWord       = "StarOffice"
   sPartOfTestWord = "Sta"

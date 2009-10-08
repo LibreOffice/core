@@ -194,6 +194,16 @@ testcase tUpdtWizardLetter
     
     '///+<li>click the 'finish' button</li>
     hFinishWizard( 1 )
+
+    if ( gOOo ) then
+        kontext "UseOfThisTemplate"
+        if ( UseOfThisTemplate.exists( 2 ) ) then
+            printlog( "cancelling UseOfThisTemplate-dialog for OOo" )
+            UseOfThisTemplate.cancel()
+        else
+            qaerrorlog( "UseOfThisTemplate-dialog not present" )
+        endif
+    endif
     
     '///+<li>Check for File-Save error</li>
     iErr = hHandleSaveError()

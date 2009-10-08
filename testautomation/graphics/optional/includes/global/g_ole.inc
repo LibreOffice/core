@@ -247,7 +247,7 @@ testcase tOLE_SaveLoad
     else
         ExtensionString = "odg"
     end if
-
+    setClipboard(" ")
     filename = ConvertPath (gOfficePath + "user\work\oletest." & ExtensionString)
     printlog "Create a new document."
     Call hNewDocument
@@ -277,6 +277,7 @@ testcase tOLE_SaveLoad
         printlog "Right number of context menu entries for OLE."
     end if
     printlog "Save the File."
+    MenuSelect (0)
     FileSaveAs
     sleep 1
     Kontext "SpeichernDlg"

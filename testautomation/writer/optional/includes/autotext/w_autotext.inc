@@ -131,7 +131,7 @@ testcase tEditAutotext_1
     EditAutotext
     Kontext "Active"
     if Active.Exists then
-        QAErrorlog Active.Gettext
+        warnlog Active.Gettext
         Active.Ok
     end if
     Kontext "Autotext"
@@ -230,7 +230,7 @@ testcase tEditAutotext_1
                 Active.Setpage TabHyperlinkZeichen
                 Kontext "TabHyperlinkZeichen"
                 if UrlName.Gettext <> "http://www.irgendwas.de/" then Warnlog "Wrong hyperlink has been added to text!"
-                if Vergleich4$ <> TargetFrame.GetSelText then QAerrorlog "#i74539#Wrong targetFrame has been added to text!"
+                if Vergleich4$ <> TargetFrame.GetSelText then warnlog "Wrong targetFrame has been added to text!"
                 TabHyperlinkZeichen.Cancel
             end if
         end if
@@ -331,7 +331,7 @@ testcase tEditAutotext_2
     EditAutotext
     Kontext "Active"
     if Active.Exists then
-        QAErrorlog Active.Gettext
+        warnlog Active.Gettext
         Active.Ok
     end if
     Kontext "Autotext"
@@ -455,7 +455,7 @@ testcase tEditAutotext_3
     EditAutotext
     Kontext "Active"
     if Active.Exists then
-        QAErrorlog Active.Gettext
+        warnlog Active.Gettext
         Active.Ok
     end if
 
@@ -535,7 +535,7 @@ testcase tEditAutotext_4
         Kontext "Active"
         if Active.Exists then
             if Active.GetRT = 304 then
-                QAErrorlog Active.Gettext
+                warnlog Active.Gettext
                 Active.Ok
             end if
         end if
@@ -568,7 +568,7 @@ testcase tEditAutotext_4
     Kontext "Active"
     if Active.Exists then
         if Active.GetRT = 304 then
-            QAErrorlog Active.Gettext
+            warnlog Active.Gettext
             Active.Ok
         end if
     end if
@@ -590,7 +590,7 @@ testcase tEditAutotext_4
         Kontext "Active"
         if Active.Exists then
             if Active.GetRT = 304 then
-                QAErrorlog Active.Gettext
+                warnlog Active.Gettext
                 Active.Ok
             end if
         end if
@@ -602,7 +602,7 @@ testcase tEditAutotext_4
             Kontext "Active"
             if Active.Exists then
                 if Active.GetRT = 304 then
-                    QAErrorlog Active.Gettext
+                    warnlog Active.Gettext
                     Active.Ok
                 end if
             end if
@@ -649,7 +649,7 @@ testcase tEditAutotext_5
 
     Kontext "Active"
     if Active.Exists then
-        QAErrorlog Active.GetText
+        warnlog Active.GetText
         Active.OK
     end if
     Sleep 1

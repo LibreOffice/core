@@ -31,7 +31,7 @@
 '*
 '/************************************************************************
 '*
-'* owner : helge.delfs@sun.com
+'* owner : fredrik.haegg@sun.com
 '*
 '* short description : Test the functionality of Paragraph Formatting - 3
 '*
@@ -80,6 +80,7 @@ testcase tParagraphTabs1
    '/// Open the test file
    '/// + There is 1 pic which is anchored as character in the file
     Call hFileOpen(sTestFile)
+    Call sMakeReadOnlyDocumentEditable
 
    '/// Format/Paragraph / Tabs ,
    '/// + check Left in the type area , and input 3cm in Position
@@ -125,6 +126,7 @@ testcase tParagraphTabs2
    '/// Open the test file
    '/// + There is 1 pic which is anchored as character in the file
     Call hFileOpen(sTestFile)
+    Call sMakeReadOnlyDocumentEditable
 
    '/// Format/Paragraph / Tabs ,
    '/// + check Right in the type area , and input 3cm in Position
@@ -170,6 +172,7 @@ testcase tParagraphTabs3
    '/// Open the test file
    '/// + There is 1 pic which is anchored as character in the file
     Call hFileOpen(sTestFile)
+    Call sMakeReadOnlyDocumentEditable
 
    '/// Format/Paragraph / Tabs ,
    '/// + check Centered in the type area , and input 3cm in Position
@@ -216,6 +219,7 @@ testcase tParagraphTabs4
    '/// + There is 1 pic which is anchored as character in the file ,
    '/// + and there are 1 "." seperator in front of the pic
     Call hFileOpen(sTestFile)
+    Call sMakeReadOnlyDocumentEditable
 
    '/// Format/Paragraph / Tabs ,
    '/// + check Decimal in the type area ,
@@ -354,6 +358,7 @@ testcase tParagraphDropCaps1
    '/// Open the test file
    '/// + There is 1 pic which is anchored as character in the file
     Call hFileOpen(sTestFile)
+    Call sMakeReadOnlyDocumentEditable
 
    '/// Format/Paragraph / Drop Caps ,
    '/// + Check 'Display Drop Caps' , close the dialog
@@ -405,6 +410,7 @@ testcase tParagraphDropCaps2
    '/// Open the test file
    '/// + There is 1 pic which is anchored as character in the file
     Call hFileOpen(sTestFile)
+    Call sMakeReadOnlyDocumentEditable
 
    '/// Format/Paragraph / Drop Caps ,
    '/// + Check 'Display Drop Caps' , then check 'whole word' , then close the dialog
@@ -458,6 +464,7 @@ testcase tParagraphDropCaps3
    '/// Open the test file
    '/// + There is 1 pic which is anchored as character in the file
     Call hFileOpen(sTestFile)
+    Call sMakeReadOnlyDocumentEditable
 
    '/// Format/Paragraph / Drop Caps ,
    '/// + Check 'Display Drop Caps' , then set '6' in 'number of characters' ,then close the dialog
@@ -511,6 +518,7 @@ testcase tParagraphDropCaps4
    '/// Open the test file
    '/// + There is 1 pic which is anchored as character in the file
     Call hFileOpen(sTestFile)
+    Call sMakeReadOnlyDocumentEditable
 
    '/// Format/Paragraph / Drop Caps ,
    '/// + Check 'Display Drop Caps' , then set '6' in 'Lines' ,then close the dialog
@@ -561,6 +569,7 @@ testcase tParagraphDropCaps5
    '/// Open the test file
    '/// + There is 1 pic which is anchored as character in the file
     Call hFileOpen(sTestFile)
+    Call sMakeReadOnlyDocumentEditable
 
    '/// Format/Paragraph / Drop Caps ,
    '/// +  Check 'Display Drop Caps' ,then set 'Space to text' to be 1cm , close the dialog
@@ -646,6 +655,7 @@ testcase tParagraphDropCaps7
    '/// Open the test file
    '/// + There is 1 pic which is anchored as character in the file
     Call hFileOpen(sTestFile)
+    Call sMakeReadOnlyDocumentEditable
 
    '/// Format/Paragraph / Drop Caps ,
    '/// + Check 'Display Drop Caps' ,then set Xyz in Contents 'Text' field , close the dialog
@@ -776,6 +786,7 @@ testcase tParagraphNumbering1
    '/// Open the test file ,
    '/// + there are 2 paragraphes in the file
     Call hFileOpen(sTestFile)
+    Call sMakeReadOnlyDocumentEditable
 
    '/// Find the test word , set the focus to 1st paragraph
     Call fFindWord( sTest1 )

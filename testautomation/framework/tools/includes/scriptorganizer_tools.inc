@@ -314,6 +314,7 @@ function hOpenScriptOrganizer( iDialog as integer ) as boolean
     '///<ul>
     '///+<li>1 = BeanShell organizer</li>
     '///+<li>2 = JavaScript organizer</li>
+    '///+<li>3 = Python script organizer</li>
     '///</ul>
     '///</ol>
     '///<u>Returns</u>:
@@ -333,6 +334,7 @@ function hOpenScriptOrganizer( iDialog as integer ) as boolean
     select case iDialog
     case 1 : ToolsMacrosOrganizeMacrosBeanShell
     case 2 : ToolsMacrosOrganizeMacrosJavaScript
+    case 3 : ToolsMacrosOrganizeMacrosPython
     end select
 
     '///<li>Verify that the dialog is open, return TRUE if yes</li>

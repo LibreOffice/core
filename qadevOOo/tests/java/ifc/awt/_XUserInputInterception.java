@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: _XUserInputInterception.java,v $
- * $Revision: 1.4 $
+ * $Revision: 1.4.8.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -473,7 +473,7 @@ public class _XUserInputInterception extends MultiMethodTest {
         private void clickIntoDoc(){
             try{
 
-                util.DesktopTools.bringWindowToFromt(xModel);
+                util.DesktopTools.bringWindowToFront(xModel);
 
                 XWindow xWindow = at.getCurrentWindow(
                                           (XMultiServiceFactory) tParam.getMSF(),

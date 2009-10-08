@@ -257,7 +257,9 @@ testcase tToolsOptionsWriterCursor
     Kontext "ExtrasOptionenDlg"
     ExtrasOptionenDlg.OK
     
-    Call hCloseDocument
+	Do Until GetDocumentCount = 0
+    	Call hCloseDocument
+	Loop
 endcase
 
 '------------------------------------------------------------------------------
@@ -555,11 +557,17 @@ testcase tToolsOptionsWriterChanges
     Kontext "ExtrasOptionenDlg"
     ExtrasOptionenDlg.OK
     
-    Call hCloseDocument
+	Do Until GetDocumentCount = 0
+    	Call hCloseDocument
+	Loop
 endcase
 
 '------------------------------------------------------------------------------
 testcase tToolsOptionsWriterInsert
+QaErrorLog "#i94753# - tToolsOptionsInsert shows machine-dependant results. Outcommented."
+goto endsub
+
+
     Dim irgendwas(8) as boolean    ' Checkbox states
 
     Call hNewDocument
@@ -619,7 +627,7 @@ testcase tToolsOptionsWriterInsert
     NichtTrennen.UnCheck
     Umrandung.UnCheck
     AutomatischeZahlenerkennung.UnCheck
-    
+
     Kontext "ExtrasOptionenDlg"
     ExtrasOptionenDlg.OK
 
@@ -720,12 +728,17 @@ testcase tToolsOptionsWriterInsert
     
     Call wOptionenUndo("Table")
     
-    Call hCloseDocument
+	Do Until GetDocumentCount = 0
+    	Call hCloseDocument
+	Loop
 endcase
 
 ' ********************************************************************
 
 testcase tToolsOptionsAutocaption
+QaErrorLog "#i94748# - tToolsOptionsAutocaption outcommented due to unreliable results."
+goto endsub
+
     Dim Auswahl(20) as String
     Dim i as Integer
     Dim SplitString as string
@@ -764,7 +777,7 @@ testcase tToolsOptionsAutocaption
     Call wTypeKeys ("<Home>")
     Select Case iSprache
         Case 31:
-            Call wTypeKeys ("<Mod1 Shift Right>", 3)
+            Call wTypeKeys ("<Mod1 Shift Right>") ', 3
         Case else
             Call wTypeKeys ("<Mod1 Shift Right>")
     end select
@@ -863,7 +876,9 @@ testcase tToolsOptionsAutocaption
     Kontext "ExtrasOptionenDlg"
     ExtrasOptionenDlg.OK
     sleep (1)
-    Call hCloseDocument
+	Do Until GetDocumentCount = 0
+    	Call hCloseDocument
+	Loop
 endcase
 
 '-------------------------------------------------------------------
@@ -881,7 +896,7 @@ testcase tToolsOptionsWriterCompatibility1
     Kontext "TabCompatibility"
     For i = 1 to Options.GetItemCount
         Options.Select i
-        Select case i         
+        Select case i
             Case 2,3,7,11
                 if Not Options.IsChecked then
                     Warnlog "Default for checkbox " & i & " is wrong (not checked)"
@@ -951,7 +966,7 @@ testcase tToolsOptionsWriterCompatibility1
                 Options.Check
             Case else
                 Options.UnCheck
-        end select        
+        end select
     next i
     Default.Click
     Kontext "Active"
@@ -963,8 +978,9 @@ testcase tToolsOptionsWriterCompatibility1
     Kontext "ExtrasOptionenDlg"
     ExtrasOptionenDlg.Ok
 
-    Call hCloseDocument
-    
+	Do Until GetDocumentCount = 0
+    	Call hCloseDocument
+	Loop
 endcase
 
 '-------------------------------------------------------------------
@@ -979,9 +995,12 @@ testcase tToolsOptionsWriterCompatibility2
     printlog "open document  ./writer/leve11/input/options/compatibility1.doc"
     printlog "check formatting of current opened document"
     Call hFileOpen ( gTesttoolpath & "writer\optional\input\options\compatibility1.doc" )
+    Call sMakeReadOnlyDocumentEditable
+
     Call wTypeKeys ("<Mod1 Home>")
     Call wTypeKeys ("<Down>")
     Call wTypeKeys ("<Shift Right>")
+
     try
         EditCopy
         if GetClipboardtext <> "A" then
@@ -1054,7 +1073,9 @@ testcase tToolsOptionsWriterCompatibility2
     end if
 
     printlog "Close document"
-    Call hCloseDocument
+	Do Until GetDocumentCount = 0
+    	Call hCloseDocument
+	Loop
 endcase
 
 '------------------------------------------------------------------------------------------------------------
@@ -1134,10 +1155,10 @@ DIM sFoundWord          AS string  'variable for word found one line below
     sleep (1)
     DocumentWriter.TypeKeys "<SHIFT LEFT>" 'deleting space
     EditCopy
-    if GetClipboardText <> "twenty" then
-        QAErrorlog "#i80554#wrong word found, formatting broken"
+    if (GetClipboardText = "twenty") OR (GetClipboardText = "nineteen") OR (GetClipboardText = "eighteen") then  'one word or the other, because the system-font might differ from system to system...
+        printlog "Correct word found."
     else
-        printlog "Correct word found, aligment ok"
+        warnlog "wrong word found, formatting broken. Found word was: '" + GetClipboardText + "'."
     end if
     sleep (1)
 
@@ -1175,10 +1196,10 @@ DIM sFoundWord          AS string  'variable for word found one line below
     sleep (1)
     DocumentWriter.TypeKeys "<SHIFT LEFT>" 'deleting space
     EditCopy
-    if GetClipboardText <> "fifteen" then
-        warnlog "Wrong word found, formatting broken"
-    else
+    if (GetClipboardText = "fifteen") OR (GetClipboardText = "fourteen") then
         printlog "Correct word found, alignment ok"
+    else
+        warnlog "Wrong word found, formatting broken"
     end if
     sleep (1)
 
@@ -1360,5 +1381,7 @@ DIM sFoundWord          AS string  'variable for word found one line below
     ExtrasOptionenDLG.Cancel 'leaving the options
     
     printlog " Close document"
-    Call hCloseDocument
+	Do Until GetDocumentCount = 0
+    	Call hCloseDocument
+	Loop
 endcase

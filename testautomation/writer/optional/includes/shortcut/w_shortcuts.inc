@@ -35,6 +35,8 @@
 '*
 '* short description : Shortcut-test in writer
 '*
+'************************************************************************
+'*
 '*    tShortcutGlobalNew
 '*    tShortcutGlobalOpen
 '*    tShortcutGlobalSave
@@ -682,8 +684,8 @@ testcase tShortcutSuperscript
     '/// Draw a Textobject ///
     Call gMouseMove ( 30, 30, 40, 40 )
     '/// write down word 'Superscript' and select it
-    Call wDokSchreiben ("Superscript")
-    Call wDokSchreiben ("<Shift Home>")
+    call wTypeKeys ("Superscript")
+    call wTypeKeys ("<Shift Home>")
 
     '/// execute shortcut and check if word is now formatted as 'Superscript'
     Call wTypeKeys ( vShortcut )
@@ -735,8 +737,8 @@ testcase tShortcutSubscript
     Call gMouseMove ( 30, 30, 40, 40 )
     '/// write down word 'Subscript' and select it
 
-    Call wDokSchreiben ("Subscript")
-    Call wDokSchreiben ("<Shift Home>")
+    call wTypeKeys ("Subscript")
+    call wTypeKeys ("<Shift Home>")
 
     '/// execute shortcut and check if word is now formatted as 'Superscript'
     Call wTypeKeys ( vShortcut )

@@ -42,23 +42,27 @@ testcase tOOoSecurity
     '///<ul>    
     dim _file as string
     
-    hNewDocument()
     '///<li>check defaults</li>
-    _file = gTesttoolPath & "framework\options\input\ooo_security_defaults.ref"
+    if ( getDocumentCount() < 1 ) then call hNewDocument()
+    _file = gTesttoolPath & "framework\optional\input\options\ooo_security_defaults.ref"
     checkSecurityPage( _file )
 
     '///<li>change the settings</li>    
-    _file = gTesttoolPath & "framework\options\input\ooo_security_changed.ref"
+    if ( getDocumentCount() < 1 ) then call hNewDocument()
+    _file = gTesttoolPath & "framework\optional\input\options\ooo_security_changed.ref"
     changeSecurityPage( _file )
     
     '///<li>check the changes</li>
+    if ( getDocumentCount() < 1 ) then call hNewDocument()
     checkSecurityPage( _file )
     
     '///<li>revert to default settings</li>
-    _file = gTesttoolPath & "framework\options\input\ooo_security_defaults.ref"
+    if ( getDocumentCount() < 1 ) then call hNewDocument()
+    _file = gTesttoolPath & "framework\optional\input\options\ooo_security_defaults.ref"
     changeSecurityPage( _file )
     
     '///<li>check the changes</li>
+    if ( getDocumentCount() < 1 ) then call hNewDocument()
     checkSecurityPage( _file )
     
     '///</ul>
@@ -68,6 +72,8 @@ testcase tOOoSecurity
     else
         warnlog( "options dialog not available" 
     endif
+    if ( getDocumentCount() > 0 ) then call hCloseDocument()
+
 endcase
 
 '*******************************************************************************

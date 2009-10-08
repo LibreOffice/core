@@ -67,7 +67,7 @@ sub main
     if fLocaleString("LocaleText") = "Abortion" then 
         warnlog "This test does not support language " & iSprache
         exit sub
-    endif
+    end if
     'First some settings to verify a stable run
     Call TableConfiguration
 
@@ -79,12 +79,12 @@ sub main
 
     'Restoring default settings after testrun
     Call RestoreSettings
-    
+
     Printlog "Duration: "& WieLange ( StartZeit )
     Printlog "Date: " &  Date & "    Time: " & Time
 end sub
 
-'----------------------------------------------------------------------------
+'---------------------------------------------------------------------------------------------------------------------
 
 sub LoadIncludeFiles
     use "global\system\includes\master.inc"
@@ -106,41 +106,43 @@ sub TableConfiguration
             Gebietsschema.Select(fLocaleString("LocaleLocaleSettings"))
             Kontext "ExtrasOptionenDlg"
             ExtrasOptionenDlg.OK
-    endif
+    end if
     'Verifiing if documentlanguage matches UI language
     ToolsOptions
     Call hToolsOptions ("LanguageSettings", "Languages")
     if fLocaleString("LocaleScriptType") = "Western" then 
         gDocumentLanguage = Westlich.GetSelText
         if gDocumentLanguage <> iSprache then Westlich.Select(fLocaleString("LocaleLocaleSettings"))
-    endif
+    end if
     if fLocaleString("LocaleScriptType") = "CJK" then 
         gDocumentLanguage = Asiatisch.GetSelText
         if gDocumentLanguage <> iSprache then Asiatisch.Select(fLocaleString("LocaleLocaleSettings"))
-    endif
+    end if
     if fLocaleString("LocaleScriptType") = "CTL" then 
         gDocumentLanguage = LanguageComplexScript.GetSelText
         if gDocumentLanguage <> iSprache then LanguageComplexScript.Select(fLocaleString("LocaleLocaleSettings"))
-   endif
+    end if
     Kontext "ExtrasOptionenDlg"
     ExtrasOptionenDlg.OK
-    
+
     mUnit = fSetMeasurementToCM()
     ToolsOptions
     Call hToolsOptions ("TextDocument","GENERAL")
     cDecSep = GetDecimalSeperator(Tabulatorenabstand.GetText)
     Kontext "ExtrasOptionenDlg"
     ExtrasOptionenDlg.Ok
-    
+
     ' Seperator to calculate with is not the same as used in UI
     ' so we can't use GetDecimalSeparator here
-    Call wDokSchreiben ("1/2")
-    Call wDokSchreiben ("<Shift Home>")
+    Call wTypeKeys ("1/2")
+    Call wTypeKeys ("<Shift Home>")
     ToolsCalculate
     if Instr(GetClipBoardtext, ",") > 0 then cSep = ","
     if Instr(GetClipBoardtext, ".") > 0 then cSep = "."
     Call hCloseDocument
 end sub
+
+'---------------------------------------------------------------------------------------------------------------------
 
 sub RestoreSettings
     If iSprache <> iSystemSprache then

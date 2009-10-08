@@ -50,8 +50,6 @@ sub sFontworkGalleryUpdate
         printlog "********** " + gApplication
         tFontworkGalleryUpdate
     next i
-    call hCloseDocument()
-    call hNewDocument()
 end sub
 
 testcase tFontworkGalleryUpdate
@@ -173,5 +171,6 @@ testcase tFontworkGalleryUpdate
     else
         warnlog "Draw toolbar is not visible"
     endif
+    hCloseDocument()
 endcase
 

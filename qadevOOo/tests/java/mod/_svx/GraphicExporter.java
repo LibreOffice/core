@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: GraphicExporter.java,v $
- * $Revision: 1.7 $
+ * $Revision: 1.7.8.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -79,7 +79,7 @@ import util.XMLTools;
  * @see ifc.document._XExporter
  */
 public class GraphicExporter extends TestCase {
-    XComponent xDrawDoc;
+    static XComponent xDrawDoc;
 
     /**
      * Creates a new draw document.

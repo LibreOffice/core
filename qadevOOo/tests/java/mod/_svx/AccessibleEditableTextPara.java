@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: AccessibleEditableTextPara.java,v $
- * $Revision: 1.6 $
+ * $Revision: 1.6.8.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -54,7 +54,7 @@ import com.sun.star.uno.XInterface;
 
 public class AccessibleEditableTextPara extends TestCase {
 
-    XComponent xSpreadsheetDoc = null;
+    static XComponent xSpreadsheetDoc = null;
 
     /**
     * Called to create an instance of <code>TestEnvironment</code>
@@ -81,7 +81,9 @@ public class AccessibleEditableTextPara extends TestCase {
         XWindow xWindow = at.getCurrentWindow( (XMultiServiceFactory) Param.getMSF(), aModel);
         XAccessible xRoot = at.getAccessibleObject(xWindow);
 
-        XAccessibleContext InputLine = at.getAccessibleObjectForRole(xRoot, AccessibleRole.PANEL,"Input line");
+        at.printAccessibleTree(log, xRoot, Param.getBool(util.PropertyName.DEBUG_IS_ACTIVE));
+
+        XAccessibleContext InputLine = at.getAccessibleObjectForRole(xRoot, AccessibleRole.TEXT_FRAME,"Input line");
         try {
             oObj = InputLine.getAccessibleChild(0);
             XAccessibleEditableText et = (XAccessibleEditableText) UnoRuntime.queryInterface(XAccessibleEditableText.class, oObj);
@@ -89,7 +91,6 @@ public class AccessibleEditableTextPara extends TestCase {
         } catch (com.sun.star.lang.IndexOutOfBoundsException e) {
 
         }
-        at.printAccessibleTree(log, xRoot, Param.getBool(util.PropertyName.DEBUG_IS_ACTIVE));
         log.println("ImplementationName " + utils.getImplName(oObj));
 
         TestEnvironment tEnv = new TestEnvironment(oObj);

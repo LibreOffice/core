@@ -53,13 +53,13 @@ sub main
     ' Seperator to calculate with is not the same as used in UI
     ' so we can't use GetDecimalSeparator here
     Call hNewDocument
-    Call wDokSchreiben ("1/2")
-    Call wDokSchreiben ("<Shift Home>")
+    Call wTypeKeys ("1/2")
+    Call wTypeKeys ("<Shift Home>")
     ToolsCalculate
     if Instr(GetClipBoardtext, ",") > 0 then DecimalSeparator = ","
     if Instr(GetClipBoardtext, ".") > 0 then DecimalSeparator = "."
     Call hCloseDocument
-    
+
     Call hStatusIn ( "writer", "w_calculate.bas","Writer Calculation-Test" )
     Call w_calculate
     Call hStatusOut

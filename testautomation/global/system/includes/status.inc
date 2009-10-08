@@ -109,7 +109,7 @@ sub hStatusOut ( optional NoKill as Boolean )
         printlog  "**  Start generating quaste database files."
         hStatusWriteOutputFirstFile() ' write again, to have correct duration written.
         hStatusWriteOutput()
-        printlog "**  Writing status to database    : " + wielange(gTestcaseStart)
+        printlog "**  Creating status duration    : " + wielange(gTestcaseStart)
     end if
     
     PrintLog Chr(13) + "* - End of the test - *"
@@ -433,7 +433,7 @@ gTestName="" '!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
                 if (gStatusFeatureLevel < 2) then
                     printlog " * - Status successfully written into database - * "
                 else
-                    printlog " * - Status successfully created - * "
+                    printlog " * - Status file successfully created - * "
                 endif
                 bError = False
             endif

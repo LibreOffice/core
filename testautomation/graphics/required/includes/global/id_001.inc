@@ -155,7 +155,9 @@ testcase tiFileSaveAs
     next i
 
 endcase 'tiFileSaveAs
+
 '-------------------------------------------------------------------------------
+
 testcase tiFileReload
 
   Dim DokumentPfad$
@@ -211,7 +213,9 @@ testcase tiFileReload
    if Dir (Datei$) <> "" AND gSamePC = TRUE then kill Datei$
    
 endcase 'tiFileReload
+
 '-------------------------------------------------------------------------------
+
 testcase tiFileVersion
 
   Dim DokumentPfad$
@@ -266,7 +270,9 @@ testcase tiFileVersion
 '   if Dir (Datei$) <> "" AND gSamePC = TRUE then kill Datei$
 
 endcase 'tiFileVersion
+
 '-------------------------------------------------------------------------------
+
 testcase tiFilePassword
 
     goto endsub
@@ -446,7 +452,9 @@ testcase tiFilePassword
          '/// close document ///'
          hCloseDocument
       end if
-endcase
+endcase 'tiFilePassword
+
+'-------------------------------------------------------------------------------
 
 testcase tiFileTemplates
    Call hNewDocument
@@ -517,7 +525,9 @@ end if
    endcatch
    WaitSlot (1000)
    Call hCloseDocument
-endcase
+endcase 'tiFileTemplates
+
+'-------------------------------------------------------------------------------
 
 testcase tiFilePrint
    Call hNewDocument
@@ -547,13 +557,9 @@ testcase tiFilePrint
        WaitSlot (2000)
 '/// close application ///'
    Call hCloseDocument
-endcase
+endcase 'tiFilePrint
 
-
-'-----------------------------------------------------------
-'*******************  M A T H dito *************************
-'-----------------------------------------------------------
-
+'-------------------------------------------------------------------------------
 
 testcase tmFileNewFromTemplate
    Call hNewDocument
@@ -574,7 +580,9 @@ testcase tmFileNewFromTemplate
    endcatch
    WaitSlot (5000)
    Call hCloseDocument
-endcase
+endcase 'tmFileNewFromTemplate
+
+'-------------------------------------------------------------------------------
 
 testcase tmFileOpen
    call hNewDocument
@@ -587,7 +595,9 @@ testcase tmFileOpen
    OeffnenDlg.Cancel
    WaitSlot (2000)
    Call hCloseDocument
-endcase
+endcase 'tmFileOpen
+
+'-------------------------------------------------------------------------------
 
 testcase tmFileClose
    printlog "- File Close"
@@ -618,8 +628,10 @@ testcase tmFileClose
    Kontext
    Active.No
    WaitSlot (2000)
-endcase
-'-----------------------------------------------------------
+endcase 'tmFileClose
+
+'-------------------------------------------------------------------------------
+
 testcase tmFileSave
    hNewDocument
    call hTBOtypeInDoc
@@ -635,7 +647,9 @@ testcase tmFileSave
    SpeichernDlg.Cancel
    WaitSlot (2000)
    Call hCloseDocument
-endcase
+endcase 'tmFileSave
+
+'-------------------------------------------------------------------------------
 
 testcase tmFileSaveAs
 
@@ -666,7 +680,9 @@ testcase tmFileSaveAs
    SpeichernDlg.Cancel
    WaitSlot (2000)
    Call hCloseDocument
-endcase
+endcase 'tmFileSaveAs
+
+'-------------------------------------------------------------------------------
 
 testcase tmFileSaveAll
    printlog "- File SaveAll"
@@ -707,7 +723,9 @@ testcase tmFileSaveAll
    WaitSlot (2000)
    Printlog "  second closed"
    WaitSlot (5000)
-endcase
+endcase 'tmFileSaveAll
+
+'-------------------------------------------------------------------------------
 
 testcase tmFileProperties
    printlog "- File Properties"
@@ -726,13 +744,17 @@ testcase tmFileProperties
    Call DialogTest ( TabDokumentInfo )
 
    Kontext
-   active.SetPage TabBenutzer
-   Kontext "TabBenutzer"
-   Call DialogTest ( TabBenutzer )
-   Infofelder.Click
-      Kontext "InfonamenBearbeiten"
-      Call DialogTest (InfonamenBearbeiten)
-   InfonamenBearbeiten.Cancel
+    try
+        active.SetPage TabBenutzer
+        Kontext "TabBenutzer"
+        Call DialogTest ( TabBenutzer )
+        Infofelder.Click
+        Kontext "InfonamenBearbeiten"
+        Call DialogTest (InfonamenBearbeiten)
+        InfonamenBearbeiten.Cancel
+   catch
+   qaerrorlog "#i95251#:File/Properties: TabPage Custom Properties has no entry in hid.lst"
+   endcatch
 
    Kontext
    active.SetPage TabInternet
@@ -741,7 +763,9 @@ testcase tmFileProperties
    TabInternet.Cancel
 
    Call hCloseDocument
-endcase
+endcase 'tmFileProperties
+
+'-------------------------------------------------------------------------------
 
 testcase tmFilePrinterSetting
    printlog "- File Printersettings"
@@ -760,7 +784,9 @@ testcase tmFilePrinterSetting
        DruckerEinrichten.Cancel
        WaitSlot (2000)
    Call hCloseDocument
-endcase
+endcase 'tmFilePrinterSetting
+
+'-------------------------------------------------------------------------------
 
 testcase tdFileExport
     goto endsub
@@ -782,7 +808,9 @@ testcase tdFileExport
    WaitSlot (2000)
    Call hCloseDocument
    WaitSlot (2000)
-endcase
+endcase 'tdFileExport
+
+'-------------------------------------------------------------------------------
 
 testcase tmFileExit
    goto endsub
@@ -826,4 +854,4 @@ testcase tmFileExit
    if SD_Praesentation.exists (2) then
       ViewToolbarsPresentation
    end if
-endcase
+endcase 'tmFileExit

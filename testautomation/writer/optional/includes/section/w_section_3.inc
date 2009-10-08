@@ -954,7 +954,7 @@ testcase tOperationSection_3
     Bereich.TypeKeys "<Up>",2
     Bereich.TypeKeys "<Down>"
     
-    if  BereichsName.GetText <> sectionName then QAErrorLog "We hope the section name is " & sectionName & " but get " & BereichsName.GetText
+    if  BereichsName.GetText <> sectionName then warnlog "We hope the section name is " & sectionName & " but get " & BereichsName.GetText
     BereicheBearbeiten.Cancel
     
     PrintLog " Close document"
@@ -1322,11 +1322,11 @@ testcase tWrappedSections_2
         Kontext "BereicheBearbeiten"
         Bereich.TypeKeys "<UP>"
         if BereichsName.GetText <> wrappingSection then
-            QAErrorLog "The wrapping section names is wrong. Bug #102552"
+            QAErrorLog "#102552# - The wrapping section names is wrong."
         end if
         Bereich.TypeKeys "<Down>"
         if BereichsName.GetText <> wrappedSection then
-            QAErrorLog "The wrapped section names is wrong. Bug #102552"
+            QAErrorLog "#102552# - The wrapped section names is wrong."
         end if
         BereicheBearbeiten.Cancel
      catch

@@ -31,7 +31,7 @@
 '*
 '/************************************************************************
 '*
-'* Owner : thorsten.bosbach@sun.com
+'* Owner : fredrik.haegg@sun.com
 '*
 '* short description :
 '*
@@ -241,6 +241,8 @@ testcase tSammleImportFilter
    end if
 endcase
 
+'------------------------------------------------------------------------------------------------------------------------------
+
 testcase tCollectSaveAsFilter
  Dim i as Integer
  Dim j as Integer
@@ -288,8 +290,8 @@ testcase tCollectSaveAsFilter
       hCloseDocument()
    next j
 
-   Printlog chr(13)+" This are "+ x + " - from 84 expected." + chr(13)
-   if x <> 84 then warnlog "Somewhere Over the rainbow... there are filters missing / too much :-("
+   Printlog chr(13)+" This are "+ x + " - from 85 expected." + chr(13)
+   if x <> 85 then warnlog "Somewhere Over the rainbow... there are filters missing / too much :-("
 
    if (app.dir(fActualFilterFile) = "") then
       Call ListWrite(lsListe(),fActualFilterFile, "utf8")
@@ -301,6 +303,8 @@ testcase tCollectSaveAsFilter
       Printlog "- Got Filters from Office; written to: " + fSortedFilterFile + chr(13)
    end if
 endcase
+
+'------------------------------------------------------------------------------------------------------------------------------
 
 testcase tCollectExportFilters
  Dim i as Integer
@@ -349,8 +353,8 @@ testcase tCollectExportFilters
       hCloseDocument()
    next j
 
-   Printlog chr(13)+" This are "+ x + " - from 66 expected." + chr(13)
-   if x <> 66 then warnlog "Somewhere Over the rainbow... there are filters missing / too much :-("
+   Printlog chr(13)+" This are "+ x + " - from 70 expected." + chr(13)
+   if x <> 70 then warnlog "Somewhere Over the rainbow... there are filters missing / too much :-("
 
    if (app.dir(fActualFilterFile) = "") then
       Call ListWrite(lsListe(),fActualFilterFile, "utf8")
@@ -535,7 +539,12 @@ function fReadComparePrintLists (fFilterList as string, gFilterList() as string,
    fReadComparePrintLists = x
 end function
 
+'------------------------------------------------------------------------------------------------------------------------------
+
 testcase tGroupNameCheck
+QaErrorLog "#i94734# - testcase tGroupNameCheck outcommented due to unpredictable results."
+goto endsub
+
 '///' inspired from #97305 : 86+88: missing import filters in fileopen dialog ///'
 '///+' -> 97723 97758 ///'
 '///' solution for sucha problem is, that the group name (Webseiten) is the same as a filtername (Webseite) in the translation. ///'
@@ -573,13 +582,14 @@ function TBOXMLGetListOfFilterGroups ( iLang as integer, sList() as string  ) as
    else
         sXMLFile = ConvertPath ( gOfficePath + "share\registry\res\" + gISOLang + "\org\openoffice\Office\UI.xcu" )
    end if
+
    if (dir(sXMLFile) = "") then
        qaErrorLog "File doesn't exist :-( '" + sXMLFile + "'"
        exit function
    end if
    SAXReadFile ( sXMLFile )
    bCloseLocal = TRUE
-   hXMLGotoElement ( sElementLine )
+   call hXMLGotoElement ( sElementLine )
 
    for i = 1 to SAXGetChildCount
       SAXSeekElement ( i )

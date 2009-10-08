@@ -56,6 +56,7 @@ testcase HTMLToCALCText
   printlog "  Select first paragraph " 
   printlog "  Copy selected text " 
   Call hFileOpen (gtesttoolpath & "writer\optional\input\clipboard\html.html",false)
+  Call sMakeReadOnlyDocumentEditable
   printlog "  Jump to beginning of document " 
   Call wTypeKeys "<Mod1 Home>"
   Call wTypeKeys "<Shift Down><Shift End>"
@@ -96,9 +97,10 @@ testcase HTMLToCALCText
    Call hCloseDocument
    goto endsub
   end if
-  Call hCloseDocument
   printlog "  Close active document " 
-
+    Do Until GetDocumentCount = 0
+        Call hCloseDocument
+    Loop
 endcase
 
 ' ----------------------------------------------------------------------------------------------
@@ -110,6 +112,7 @@ testcase HTMLToCALCField
   printlog "  Select paragraph with 'Date Field' " 
   printlog "  Copy selected text " 
   Call hFileOpen (gtesttoolpath & "writer\optional\input\clipboard\html.html",false)
+  Call sMakeReadOnlyDocumentEditable
   printlog "  Jump to beginning of document " 
   Call wTypeKeys "<Mod1 Home>"
   Call wTypeKeys "<Down>",2
@@ -152,7 +155,9 @@ testcase HTMLToCALCField
         goto endsub
     end if
     printlog "  Close active document "
-    Call hCloseDocument
+    Do Until GetDocumentCount = 0
+        Call hCloseDocument
+    Loop
 endcase
 
 ' ----------------------------------------------------------------------------------------------
@@ -164,6 +169,7 @@ testcase HTMLToCALCTable
     printlog "  Select 'Table' " 
     printlog "  Copy selected table " 
     Call hFileOpen (gtesttoolpath & "writer\optional\input\clipboard\html.html",false)
+    Call sMakeReadOnlyDocumentEditable
     printlog "  Jump to beginning of document " 
     Call wTypeKeys "<Mod1 Home>"
     Call wTypeKeys "<Down>",5
@@ -203,7 +209,9 @@ testcase HTMLToCALCTable
         goto endsub
     end if
     printlog "  Close active document " 
-    Call hCloseDocument
+    Do Until GetDocumentCount = 0
+        Call hCloseDocument
+    Loop
 endcase
 
 ' ----------------------------------------------------------------------------------------------
@@ -215,6 +223,7 @@ testcase HTMLToCALCGraphicLinked
     printlog "  Select 'Linked Graphic' " 
     printlog "  Copy selected Linked Graphic " 
     Call hFileOpen (gtesttoolpath & "writer\optional\input\clipboard\html.html",false)
+    Call sMakeReadOnlyDocumentEditable
     printlog "  Jump to beginning of document " 
     Call wTypeKeys "<Mod1 Home>"
     Call wTypeKeys ( "<Shift F4>" )
@@ -228,7 +237,7 @@ testcase HTMLToCALCGraphicLinked
     try
         EditPasteSpecialCalc
     catch
-        QAErrorlog "Unable to execute 'Edit / Paste Special'! Test failed! Manually not reproducable"
+        warnlog "Unable to execute 'Edit / Paste Special'! Test failed! Manually not reproducable"
         Call hCloseDocument
         Call hCloseDocument
         goto endsub
@@ -256,7 +265,9 @@ testcase HTMLToCALCGraphicLinked
         goto endsub
     end if
     printlog "  Close active document " 
-    Call hCloseDocument
+    Do Until GetDocumentCount = 0
+        Call hCloseDocument
+    Loop
 endcase
 
 ' ----------------------------------------------------------------------------------------------
@@ -268,6 +279,7 @@ testcase HTMLToCALCControl
     printlog "  Select 'Control' " 
     printlog "  Copy selected Control " 
     Call hFileOpen (gtesttoolpath & "writer\optional\input\clipboard\html.html",false)
+    Call sMakeReadOnlyDocumentEditable
     printlog "  Jump to beginning of document " 
     Call wTypeKeys "<Mod1 Home>"
     Call wTypeKeys ( "<Shift F4>" )
@@ -310,7 +322,9 @@ testcase HTMLToCALCControl
         goto endsub
     end if
     printlog "  Close active document " 
-    Call hCloseDocument
+    Do Until GetDocumentCount = 0
+        Call hCloseDocument
+    Loop
 endcase
 
 ' ----------------------------------------------------------------------------------------------
@@ -322,6 +336,7 @@ testcase HTMLToCALCFloatingFrame
     printlog "  Select 'Floating Frame' " 
     printlog "  Copy selected Floating Frame " 
     Call hFileOpen (gtesttoolpath & "writer\optional\input\clipboard\html.html",false)
+    Call sMakeReadOnlyDocumentEditable
     printlog "  Jump to beginning of document " 
     Call wTypeKeys "<Mod1 Home>"
     Call wTypeKeys ( "<Shift F4>" )
@@ -367,5 +382,7 @@ testcase HTMLToCALCFloatingFrame
         goto endsub
     end if
     printlog "  Close active document " 
-    Call hCloseDocument
+    Do Until GetDocumentCount = 0
+        Call hCloseDocument
+    Loop
 endcase

@@ -33,7 +33,7 @@
 '*
 '* owner : fredrik.haegg@sun.com
 '*
-'* short description :
+'* short description :  Required-Testcases for the File-menu.
 '*
 '\***********************************************************************
 
@@ -670,6 +670,7 @@ goto endsub
     Call hFileOpen(xExport)
 
     Sleep 1
+    Call sMakeReadOnlyDocumentEditable
 
     PrintLog "Select Save as .. and choose 'Microsoft Word 97/2000/XP' as export-filter"
     xExportFile = gOfficepath + "user\work\ecksport.doc"
@@ -681,7 +682,7 @@ goto endsub
         CountDocu = CountDocu + 1
     Loop
     if CountDocu > 1 then
-        QAErrorlog "#i42080#More than 1 document had to be closed!"
+        QAErrorlog "More than 1 document had to be closed!"
     end if
 
     PrintLog "Close document"
@@ -1070,9 +1071,9 @@ testcase tFileSendOutlineToPresentation
         Wait(500)
         try
             EditCopy
-            if GetClipboardText <> "Seite 1." then QAErrorlog "#i29453#Wrong Outline in Impress Outlinemode"
+            if GetClipboardText <> "Seite 1." then QAErrorlog "Wrong Outline in Impress Outlinemode"
         catch
-            QAErrorlog "#i47819#Send outline to presentation doesn't work correct."
+            QAErrorlog "Send outline to presentation doesn't work correct."
         endcatch
     else
         WarnLog "Outlinemode comes not up!"
@@ -1127,7 +1128,7 @@ testcase tFileSendOutlineToClipboard
     Call wTypeKeys("<Up>", 6)
     Call wTypeKeys("<Home><Shift End>")
     EditCopy
-    if GetClipboardText <> "Seite 1." then QAErrorlog "#i29453#Wrong Outline in Impress Outlinemode"
+    if GetClipboardText <> "Seite 1." then QAErrorlog "Wrong Outline in Impress Outlinemode"
     WaitSlot(1000)
     PrintLog "Close active document"
     Call hCloseDocument
@@ -1173,9 +1174,9 @@ testcase tFileSendCreateAutoabstract
     try
         EditCopy
         WaitSlot(1000)
-        if GetClipboardText <> "Seite 1." then QAErrorlog "#i29453#Wrong Outline in Impress Outlinemode"        
+        if GetClipboardText <> "Seite 1." then QAErrorlog "Wrong Outline in Impress Outlinemode"
     catch
-        QAErrorlog "#i47819#Empty autoabstract created"
+        QAErrorlog "Empty autoabstract created"
     endcatch
 
     Kontext "Navigator"
@@ -1235,9 +1236,9 @@ testcase tFileSendAutoabstractToPresentation
         try
             EditCopy
             WaitSlot(1000)
-            if GetClipboardText <> "Seite 1." then QAErrorlog "#i29453#Wrong Outline in Impress Outlinemode"
+            if GetClipboardText <> "Seite 1." then QAErrorlog "Wrong Outline in Impress Outlinemode"
         catch
-            QAErrorlog "#i42310#Edit / copy disabled. Maybe data could not be pasted correctly!"
+            QAErrorlog "Edit / copy disabled. Maybe data could not be pasted correctly!"
         endcatch
     else
         Warnlog "- Outline in Impress not created!"

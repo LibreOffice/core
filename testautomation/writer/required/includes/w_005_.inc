@@ -397,10 +397,6 @@ endcase
 '------------------------------------------------
 
 testcase tFormatPage
-
-    warnlog( "#i90650# Test excluded, server timout when switching tabpage" )
-    goto endsub
-    
     PrintLog "- Format / Page"
 
     printlog " Open new document"
@@ -556,7 +552,7 @@ testcase tFormatNumberingBullets
         try
             Auswahl.Click
         catch
-            QAErrorlog "#i67185#Numbering option 'Linked graphics' is missing"
+            QAErrorlog "Numbering option 'Linked graphics' is missing"
             TabOptionenNumerierung.Cancel
             Call hCloseDocument
             goto endsub
@@ -570,6 +566,7 @@ testcase tFormatNumberingBullets
     Kontext "TabOptionenNumerierung"
 
     Sleep 1
+
     try
         Auswahl.Click
         referencecounter = hMenuItemGetCount
@@ -604,7 +601,7 @@ testcase tFormatStylist
     PrintLog "- Format / Stylist"
 	
 	if gPlatgroup = "unx" then
-		QAErrorlog "HDE: Doesn't run on unix"
+		QAErrorlog "Doesn't run on unix"
 		goto endsub
 	end if
     printlog " Open new document"
@@ -986,7 +983,7 @@ testcase tFormatWrapArea
     catch
         Warnlog "Format / Wrap / First paragraph is disabled!"
     endcatch
-    WaitSlot (1000)
+    sleep (2)
     try
         printlog " Format / Wrap / Edit"
         FormatWrapEdit
@@ -1001,5 +998,4 @@ testcase tFormatWrapArea
     printlog " Close active document"
     Call hCloseDocument
 endcase
-
 

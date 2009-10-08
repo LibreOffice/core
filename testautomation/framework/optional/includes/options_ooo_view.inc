@@ -60,12 +60,11 @@ testcase tOOoView
    
    '///<li>Re-apply the defaults to all controls and restart the application</li>
    printlog "Re-apply the defaults to all controls and restart the application"
-   sFile = gTesttoolPath + "framework\options\input\ooo_view_defaults.ref" 
+   sFile = gTesttoolPath + "framework\optional\input\options\ooo_view_defaults.ref" 
    call changePage( sFile , false )
    
    '///<li>Verify that all settings have indeed been reset to defaults</li></ul>
    printlog "Verify that all settings have indeed been reset to defaults"
-   sFile = gTesttoolPath + "framework\optional\input\options\ooo_view_defaults.ref" 
    call checkPage( sFile , false )
    
 endcase

@@ -39,15 +39,15 @@
 
 sub main
 
-    use "framework\optional\includes\extras_file_open.inc"
+   use "framework\optional\includes\extras_file_open.inc"
 
-    hSetMacroSecurityAPI( GC_MACRO_SECURITY_LEVEL_LOW )
+   hSetMacroSecurityAPI( GC_MACRO_SECURITY_LEVEL_LOW )
    
-    call hStatusIn( "framework", "f_extras_templatefileopen.bas" )
-    call tOpenObjectsWithFileDialog( "TEMPLATES" )
-    call hStatusOut
+   call hStatusIn( "framework", "f_extras_templatefileopen.bas" )
+   call tOpenObjectsWithFileDialog( "TEMPLATES" )
+   call hStatusOut
    
-    hSetMacroSecurityAPI( GC_MACRO_SECURITY_LEVEL_DEFAULT )
+   hSetMacroSecurityAPI( GC_MACRO_SECURITY_LEVEL_DEFAULT )
 
 end sub
 
@@ -55,19 +55,19 @@ end sub
 
 sub LoadIncludeFiles
 
-    use "global\system\includes\master.inc"
-    use "global\system\includes\gvariabl.inc"
+   use "global\system\includes\master.inc"
+   use "global\system\includes\gvariabl.inc"
 
-    use "global\tools\includes\optional\t_docfuncs.inc"
-    use "global\tools\includes\optional\t_filetools.inc"
-    use "global\tools\includes\optional\t_security_tools.inc"
-    use "global\tools\includes\optional\t_listfuncs.inc"   
+   use "global\tools\includes\optional\t_docfuncs.inc"
+   use "global\tools\includes\optional\t_filetools.inc"
+   use "global\tools\includes\optional\t_security_tools.inc"
+   use "global\tools\includes\optional\t_listfuncs.inc"
 
-    use "framework\tools\includes\apicalls.inc"
-    use "framework\tools\includes\template_tools.inc"
+   use "framework\tools\includes\apicalls.inc"
+   use "framework\tools\includes\template_tools.inc"
 
-    gApplication = "WRITER"
-    GetUseFiles
+   gApplication = "WRITER"
+   GetUseFiles
    
 end sub
 

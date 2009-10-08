@@ -237,9 +237,9 @@ testcase tTextBox
     Kontext "DocumentCalc"
         Documentcalc.TypeKeys "<MOD1 F5>", true
         sleep(1)
-        Documentcalc.TypeKeys "<HOME>", true
+        Documentcalc.TypeKeys "<MOD1 HOME>", true
         sleep(1)
-        Documentcalc.TypeKeys "<SHIFT END>", true
+        Documentcalc.TypeKeys "<MOD1 SHIFT END>", true
         sleep(1)
         Documentcalc.TypeKeys "<MOD1 C>", true
         sleep(1)

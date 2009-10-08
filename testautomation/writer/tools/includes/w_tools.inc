@@ -64,8 +64,6 @@
 '*
 '\***********************************************************************
 
-
-
 sub wDokSchreiben ( OutputText , optional iLoop as Integer )
 Dim i as integer
 If lcase(OutputText) = "<mod1 a>" then
@@ -122,7 +120,6 @@ If IsMissing(iLoop) = True then iLoop = 1
         Call hTextrahmenErstellen (OutputText,35,35,50,20)
         case "IMPRESS"
         Call hTextrahmenErstellen (OutputText,35,35,50,20)
-
     end select
     wait 500
     next i
@@ -319,7 +316,6 @@ sub wFindSelectObjectBelow ( xStart%, yStart%, xEnde%, yEnde% )
         if (getMouseStyle <> 0) then i = 80
     wend
     
-    
     Case "MASTERDOC"
         Kontext "DocumentMasterDoc"
         DocumentMasterDoc.MouseDown xStart%, yStart%
@@ -328,10 +324,6 @@ sub wFindSelectObjectBelow ( xStart%, yStart%, xEnde%, yEnde% )
     end select
     wait 200
 end sub
-
-
-
-
 
 ' -----------------------------------------------------------------------
 
@@ -839,7 +831,7 @@ sub wRectangleToClipboard
     try
         EditSelectAll
     catch
-        QAErrorlog "Unable to select object. Maybe not drawn!"
+        warnlog "Unable to select object. Maybe not drawn!"
     endcatch
     ' copy the selected object
     try
@@ -847,7 +839,7 @@ sub wRectangleToClipboard
     catch
         Warnlog "Unable to copy object. Maybe not selected!"
     endcatch
-    
+
     Call hCloseDocument
     gApplication = tempApplication
     Select Case gApplication
@@ -913,7 +905,7 @@ sub wOptionenUndo ( sOption$ )
         sTempSeparator = "."
     end if
     sTempUnit = Masseinheit.GetSelIndex
-    
+
     if sOption$ = "Laden" OR sOption$ = "Alle" then
         ' Update
         AufNachfrage.Check
@@ -1182,7 +1174,7 @@ function wStyleCreate( sStyleName as string, sType as string, optional NotFromSe
 
 	Kontext "Stylist"
 	If Not Stylist.Exists then FormatStylist
-    
+
 	select case sType
         case "Paragraph":	Absatzvorlagen.Click
         case "Character":	Zeichenvorlagen.Click
@@ -1254,7 +1246,7 @@ function wStyleSelect( sStyleName as string, optional sType as string ) as boole
             case "Numbering":	Numerierungsvorlagen.Click
         end select
     end if
-    
+
 	Sleep 1
     Vorlagenliste.Select 1
     wait 500
@@ -1355,7 +1347,7 @@ function wStyleSet( sStyleName as string, optional sType as string ) as boolean
             case "Numbering":	Numerierungsvorlagen.Click
         end select
     end if
-    
+
 	Sleep 1
     Vorlagenliste.Select 1
     wait 500
@@ -1400,11 +1392,10 @@ function wStyleGet( sStyleName as string, optional sType as string ) as boolean
             case "Numbering":	Numerierungsvorlagen.Click
         end select
     end if
-    
+
     wait 500
 	if Vorlagenliste.GetSelText = sStyleName then
 		wStyleGet = true
 	end if
 
 end function
-

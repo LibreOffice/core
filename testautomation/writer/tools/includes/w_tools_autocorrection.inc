@@ -31,7 +31,7 @@
 '*
 '/************************************************************************
 '*
-'* owner : helge.delfs@sun.com
+'* owner : fredrik.haegg@sun.com
 '*
 '* short description : Test the AutoCorrect/AutoFormat/Word tools
 '*
@@ -40,7 +40,6 @@
 ' #0 fFormatCharacter
 '*
 '\***********************************************************************
-
 
 function fAutocorrectOptions(Options as String)
     '/// Open Tools/Autocorrect/Autoformat diglog with tab page Options

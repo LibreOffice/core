@@ -37,7 +37,6 @@
 '*
 '\***********************************************************************
 
-
 sub main
     Dim StartTime
     StartTime = Now()
@@ -55,13 +54,13 @@ sub main
     printlog Chr(13) + "******* Writer - Undo- Test *******"
 
     Call hStatusIn ( "writer", "w_undo.bas" )
-	
+
    	Call tEditUndoRedo
 	Call w_undo_history_1
 	Call w_undo_history_2
 	Call w_undo_history_3
 	Call w_undo_history_4
-    
+
 	Call hStatusOut
 
     Printlog Chr(13) + "End of Writer - Undo - Test :"
@@ -69,7 +68,6 @@ sub main
     Printlog "Date: " +  Date + "    Time: " + Time
 
 end sub
-
 
 sub LoadIncludeFiles
     use "global\system\includes\master.inc"

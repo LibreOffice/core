@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: NameHelper.java,v $
- * $Revision: 1.5 $
+ * $Revision: 1.5.8.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -34,7 +34,7 @@ package convwatch;
  * This container class should help to handle the name of the current document
  */
 
-class NameHelper
+public class NameHelper
 {
     /**
      *

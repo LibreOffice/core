@@ -85,16 +85,16 @@ testcase tInsertFormula
 		Warnlog "TableObjectbar is not visible!"
 		Call hCloseDocument
 		goto endsub
-	endif
+	end if
 
 	Sleep 1
     Kontext "OL_SW_Rechenleiste"
     if OL_SW_Rechenleiste.NotExists then
-        QAErrorlog "Formula border doesn't come up"
+        warnlog "Formula border doesn't come up"
     else
         printlog " Click 'Cancel' in object bar"
         Verwerfen.Click
-    endif
+    end if
 
     Call hCloseDocument
     printlog " Close active document"
@@ -108,7 +108,7 @@ testcase tMergeCells
     printlog " Open new document"
     Call hTabelleEinfuegen
     printlog " Insert a table"
-    Call wDokSchreiben ("<Shift Right>", 2)
+    Call wTypeKeys ("<Shift Right>", 2)
     printlog " Hit <Shift Right> 2 times"
     Sleep 2
 	Call hToolbarSelect ( "Table", true )
@@ -118,7 +118,7 @@ testcase tMergeCells
 		Warnlog "TableObjectbar is not visible!"
 		Call hCloseDocument
 		goto endsub
-	endif
+	end if
         
     printlog " Click 'Merge cells' in object bar"
     Call hCloseDocument
@@ -141,7 +141,7 @@ testcase tSplitCells
 		Warnlog "TableObjectbar is not visible!"
 		Call hCloseDocument
 		goto endsub
-	endif
+	end if
     printlog " Cancel upcoming dialog"
     Kontext "ZellenTeilen"
     ZellenTeilen.Cancel
@@ -157,7 +157,7 @@ testcase tOptimize
     printlog " Open new document"
     Call hTabelleEinfuegen
     printlog " Insert a table and select all in document"
-    Call wDokSchreiben ("<Mod1 A>")
+    Call wTypeKeys ("<Mod1 A>")
 	Call hToolbarSelect ( "Table", true )
     wait 500
     printlog " Tear Off toolbar 'Optimize'"
@@ -169,7 +169,7 @@ testcase tOptimize
         Call hCloseDocument
         goto endsub
     endcatch
-    Call wDokSchreiben ("<Mod1 a>")
+    Call wTypeKeys ("<Mod1 a>")
     Sleep 1
 
     Kontext "OptimizeTablebar"
@@ -181,7 +181,7 @@ testcase tOptimize
     printlog " Click 'Optimal Row Height'"
     OptimaleZeilenhoehe.Click
 
-    Call wDokSchreiben ("Optimize Table")
+    Call wTypeKeys ("Optimize Table")
     printlog " Enter some text"
     Sleep 1
     Kontext "OptimizeTablebar"
@@ -209,7 +209,7 @@ testcase tInsertCellRow
 		Warnlog "TableObjectbar is not visible!"
 		Call hCloseDocument
 		goto endsub
-	endif
+	end if
 
     printlog " Click 'Insert Column' in object bar"
     Sleep 1
@@ -236,7 +236,7 @@ testcase tDeleteRow
 		Warnlog "TableObjectbar is not visible!"
 		Call hCloseDocument
 		goto endsub
-	endif
+	end if
 
     Sleep 1
     ZeileLoeschen.Click
@@ -263,7 +263,7 @@ testcase tDeleteColumn
             Warnlog "TableObjectbar is not visible!"
             Call hCloseDocument
             goto endsub
-        endif        
+        end if        
         Sleep 1
     next i
     Call hCloseDocument
@@ -320,7 +320,7 @@ testcase tGraphicWrap
         catch
             Warnlog "'Wrap Right' in Objectbar couldn't be checked"
         endcatch
-    endif
+    end if
 
     Call hCloseDocument
     printlog " Close active document"
@@ -357,7 +357,7 @@ testcase tGraphicAlign
         Call hCloseDocument
         printlog " Close active document"
         goto endsub
-    endif
+    end if
 
     try
         printlog " Click 'Centered' in object bar (Not WriterWeb)"
@@ -402,7 +402,7 @@ testcase tGraphicFlip
     if gApplication = "HTMLDOKUMENT" then
         Printlog "Not in WriterWeb!"
         goto endsub
-    endif
+    end if
 
     Call hNewDocument
     printlog " Open new document"
@@ -504,7 +504,7 @@ testcase tGraphicBorders
         TB_Umrandungsstil.Close
         Sleep 1
     catch
-        QAErrorlog "#i78975#Error in Toolbox Borderstyle"
+        Warnlog "Error in Toolbox Borderstyle"
     endcatch
 
     try
@@ -518,7 +518,7 @@ testcase tGraphicBorders
         printlog " Close toolbox"
         Sleep 1
     catch
-		QAErrorlog "#i78975#Error in Toolbox Colour"
+		warnlog "Error in Toolbox Colour"
     endcatch
 
     Call hCloseDocument
@@ -590,10 +590,10 @@ testcase tGraphicProperties
                 Active.Ok
             else
                 exit do
-            endif                    
+            end if                    
         else
             exit do
-        endif
+        end if
     Loop
     Kontext "TabMakro"
     Call DialogTest ( TabMakro )
@@ -611,7 +611,7 @@ testcase tGraphicProperties
         TabZuschneiden.Cancel
     else
         TabMakro.Cancel
-    endif
+    end if
     printlog " Close 'Graphic' dialog"
     Call hCloseDocument
     printlog " Close active document"
@@ -667,7 +667,7 @@ testcase tFormulaCancel
     printlog "- Formula Writer: Cancel"
     Call hNewDocument
     printlog " Open new document"
-    Call wDokSchreiben ("<F2>")
+    Call wTypeKeys ("<F2>")
     printlog " Press <F2>"
 
     Kontext "OL_SW_Rechenleiste"
@@ -687,7 +687,7 @@ testcase tFormulaApply
     printlog " Open new document"
     Call hTabelleEinfuegen
     printlog " Insert a table"
-    Call wDokSchreiben ("12<Right>13<Down>")
+    Call wTypeKeys ("12<Right>13<Down>")
     printlog " Write in document 12<Cursor Right>13<Cursor Down>"
     Call hToolbarSelect ( "Table", true )
     printlog " Click 'Sum' in object bar"
@@ -697,7 +697,7 @@ testcase tFormulaApply
 		Warnlog "TableObjectbar is not visible!"
 		Call hCloseDocument
 		goto endsub
-	endif
+	end if
 
     Kontext "OL_SW_Rechenleiste"
     Eingabefeld.TypeKeys "(" + Chr(60)+ "A1:B1"
@@ -706,11 +706,11 @@ testcase tFormulaApply
     Uebernehmen.Click
     Sleep 2
     printlog " Check result of formula"
-    Call wDokSchreiben ("<Mod1 A>")
+    Call wTypeKeys ("<Mod1 A>")
     EditCopy
     if GetClipboardText <> "25" then 
-        QAErrorlog "#i80314#Not possible to calculate in tables anymore. Result isn't 25, is: " + GetClipboardText
-    endif
+        warnlog "Not possible to calculate in tables anymore. Result isn't 25, is: " + GetClipboardText
+    end if
     Call hCloseDocument
     printlog " Close active document"
 endcase

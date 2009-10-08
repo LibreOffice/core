@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: PixelCounter.java,v $
- * $Revision: 1.4 $
+ * $Revision: 1.4.8.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -190,7 +190,7 @@ public class PixelCounter {
 
     public static void main(String[] args) {
 
-        String a = StringHelper.createValueString(10, 4);
+        String a = helper.StringHelper.createValueString(10, 4);
         int dummy = 1;
 /*
  BorderRemover a = new BorderRemover();

@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: OfficeWatcher.java,v $
- * $Revision: 1.9 $
+ * $Revision: 1.9.2.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -92,7 +92,7 @@ public class OfficeWatcher extends Thread implements share.Watcher {
         if (ph != null) {
             dbg("the Office is idle for " + timeOut / 1000 +
                 " seconds, it probably hangs and is killed NOW.");
-            final String AppKillCommand = (String) params.get("AppKillCommand");
+            final String AppKillCommand = (String) params.get(util.PropertyName.APP_KILL_COMMAND);
             if (AppKillCommand != null) {
                 final StringTokenizer aKillCommandToken = new StringTokenizer(AppKillCommand, ";");
                 while (aKillCommandToken.hasMoreTokens()) {

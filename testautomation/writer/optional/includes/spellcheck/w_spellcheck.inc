@@ -33,7 +33,7 @@
 '*
 '* owner : fredrik.haegg@sun.com
 '*
-'* short description :
+'* short description : Spellcheck-Testing. Functional-Test.
 '*
 '\***********************************************************************
 
@@ -232,7 +232,7 @@ testcase tToolsSpellcheck1Mistake
 
     PrintLog "- Tools / Spellcheck with a defined mistake"
     Select Case iSprache
-        case 01   : sErrorSampleText = "Thatts not a trick, it's a Sony."
+        case 01   : sErrorSampleText = "Thatts not a trick, it"  ' 's a Sony."    (removing this last part because of different apostrophes in StarSuite)
                     sWordToBeChecked = "Thatts"
                     sLanguageName = "English (USA)"
         case 03   : sErrorSampleText = "Escrive os seus dados de utilizador correctamente e tome nota deles."
@@ -316,24 +316,26 @@ testcase tToolsSpellcheck1Mistake
     'if DictionaryLanguage.GetSelText <> gLanguage then Warnlog "Dictionary language " + DictionaryLanguage.GetSelText +" selected"
     printlog "   - replace wrong word with a suggestion"
     '/// replace wrong word with a suggestion ///
+    
     if trim$(NotInDictionary.GetText) <> trim(sErrorSampleText) then
-        QAErrorlog "#i79988#" & sErrorSampleText & " has not been detected as mistake. Detected mistake is:" & NotInDictionary.GetText
+        warnlog " " & sErrorSampleText & " has not been detected as mistake. Detected mistake is:" & NotInDictionary.GetText
     end if
+
     if Suggestions.GetItemCount > 0 then
         if Suggestions.IsEnabled then
-			try
-				sDummy = Suggestions.GetItemText (2)
-				Suggestions.Select 2
-			catch
-				sDummy = Suggestions.GetItemText (1)
-				Suggestions.Select 1
-			endcatch
+	    try
+		sDummy = Suggestions.GetItemText (2)
+		Suggestions.Select 2
+	    catch
+		sDummy = Suggestions.GetItemText (1)
+		Suggestions.Select 1
+	    endcatch
             ' Next check does not work because if word is selected it will only be highlited!!"
             ' if Not NotInDictionary.GetText <> sErrorSampleText then Warnlog "Text in preview has not been replaced with the suggestion"
             Change.Click
-		else
-			QAErrorLog "No suggestions made from spellchecker"
-		end if
+	else
+	    QAErrorLog "No suggestions made from spellchecker"
+	end if
     else
         QAErrorLog "Please choose another word to check suggestions, because no suggestion found!"
     end if
@@ -386,6 +388,7 @@ testcase tToolsSpellcheckForward
             EditPaste
     else
         Call hFileOpen(InsFile)
+        Call sMakeReadOnlyDocumentEditable
     end if
     '/// point cursor to beginning of document and execute spellcheck ///
     Call wTypeKeys "<Mod1 Home>"
@@ -413,20 +416,20 @@ testcase tToolsSpellcheckForward
     Printlog "   - Replace all (" + NotInDictionary.Gettext + ") ...."
     '/// Replace first found word with 1 suggestion in list ///
     if Suggestions.IsEnabled then
-		Suggestions.Select 1
-		Printlog "   - .... with (" + NotInDictionary.Gettext + ")"
-		wait 500
-		try
-			ChangeAll.Click
-		catch
-			Warnlog "Button 'change all' is not accessible!"
-		endcatch
-		'/// Select 'Always replace' ///
-		Sleep 1
-	else
-		QAErrorLog "No suggestions made from spellchecker!=>Choose 'Ignore All'"
+        Suggestions.Select 1
+	Printlog "   - .... with (" + NotInDictionary.Gettext + ")"
+	wait 500
+	try
+	    ChangeAll.Click
+	catch
+	    Warnlog "Button 'change all' is not accessible!"
+	endcatch
+	'/// Select 'Always replace' ///
+	Sleep 1
+    else
+	QAErrorLog "No suggestions made from spellchecker!=>Choose 'Ignore All'"
         if IgnoreAll.IsEnabled then IgnoreAll.Click
-	end if
+    end if
 
     Printlog "   - Ignore All (" + NotInDictionary.Gettext + ")"
     '/// For second wrong word select 'Ignore all' ///
@@ -441,42 +444,42 @@ testcase tToolsSpellcheckForward
     Printlog "   - Ignore (" + NotInDictionary.Gettext + ")"
     '/// For 3rd wrong word select 'Ignore' ///
     wait 500
-    try
-        IgnoreOnce.Click
-    catch
-        Warnlog "Button 'Ignore once' is not accessible"
-    endcatch
-    Sleep 1
+'    try
+'        IgnoreOnce.Click
+'    catch
+'        Warnlog "Button 'Ignore once' is not accessible"
+'    endcatch
+'    Sleep 1
 
     Kontext "Active"
-    if Active.Exists then
+    if Active.Exists(3) then
         if Active.GetRT = 304 then
             Warnlog "Spellcheck has ended! Not reproducable by hand !"
         end if
     else
         Kontext "Spellcheck"
         Add_Word = trim$(NotInDictionary.Gettext)
-        Printlog "   - Add (" + sWordToBeAdded + ")"
+        Printlog "   - Add (" + sDummy + ")"
         '/// Add 4th word to dictionary ///
         if AddToDictionary.IsEnabled then
             AddToDictionary.Click
-			wait 500
-			'/// remember selected dictionary
-			sDictionary = MenuGetitemText(1)
-			Call hMenuSelectNr(1)
-			Sleep 1
-		else
-			Warnlog "Unable to add word to dictionary->button is disabled!"
-		end if
+	    wait 500
+	    '/// remember selected dictionary
+	    sDictionary = MenuGetitemText(1)
+	    Call hMenuSelectNr(1)
+	    Sleep 1
+	else
+	    Warnlog "Unable to add word to dictionary->button is disabled!"
+	end if
     end if
 
 	Kontext "Active"
 	if Active.Exists then
-		If Active.GetRT = 304 then
-			Active.Ok
-		end if
+	    If Active.GetRT = 304 then
+		Active.Ok
+	    end if
 	end if
-	
+
     Kontext "Spellcheck"
     if Spellcheck.Exists then Spellcheck.Close
     Call wTypeKeys "<Home>"
@@ -526,7 +529,7 @@ testcase tToolsSpellcheckForward
 
     Printlog "   - Delete added word in dictionary"
     '/// Delete added word in dictionary ///
-    Call WortAusWoerterbuchLoeschen ( sWordToBeAdded )
+    Call WortAusWoerterbuchLoeschen ( sDummy )
 
     '/// Close document ///
     Call hCloseDocument
@@ -558,6 +561,7 @@ testcase tToolsSpellcheckOnlyOneWord
             EditPaste
     else
         Call hFileOpen(InsFile)
+        Call sMakeReadOnlyDocumentEditable
     end if
     Call wTypeKeys "<Mod1 Home>"
     
@@ -925,9 +929,10 @@ testcase tToolsSpellcheckChangeLanguageAttribute
     
     if gApplication = "MASTERDOC" then
         if wInsertDocumentinMasterDoc(InsFile) = False then goto endsub
-            EditPaste
+        EditPaste
     else
         Call hFileOpen(InsFile)
+        Call sMakeReadOnlyDocumentEditable
     end if
     Call wTypeKeys "<Mod1 Home>"
     
@@ -1121,9 +1126,10 @@ testcase tToolsSpellcheckButtonChange
     
     if gApplication = "MASTERDOC" then
         if wInsertDocumentinMasterDoc(InsFile) = False then goto endsub
-            EditPaste
+        EditPaste
     else
         Call hFileOpen(InsFile)
+        Call sMakeReadOnlyDocumentEditable
     end if
     Call wTypeKeys "<Mod1 Home>"
 
@@ -1187,9 +1193,10 @@ testcase tToolsSpellcheckButtonChangeAll
     
     if gApplication = "MASTERDOC" then
         if wInsertDocumentinMasterDoc(InsFile) = False then goto endsub
-            EditPaste
+        EditPaste
     else
         Call hFileOpen(InsFile)
+        Call sMakeReadOnlyDocumentEditable
     end if
     Call wTypeKeys "<Mod1 Home>"
 
@@ -1319,7 +1326,7 @@ testcase tToolsThesaurus
 
     Sprache.Click
     Kontext "SpracheAuswaehlen"
-    select case iSprache ' iSystemSprache    
+    select case iSprache ' iSystemSprache
         case 01 : sLanguageToBeSelected = "English (USA)"
         case 07 : sLanguageToBeSelected = "Русский"
         case 03 : sLanguageToBeSelected = "Português"

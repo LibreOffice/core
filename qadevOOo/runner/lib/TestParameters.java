@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: TestParameters.java,v $
- * $Revision: 1.14 $
+ * $Revision: 1.14.2.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -113,10 +113,9 @@ public class TestParameters extends Hashtable {
 
     /**
      * The Path to the test documents that are loaded during the test <br>
-     * default will be the tmp dir
      */
 
-    public String TestDocumentPath=util.utils.getUsersTempDir();
+    public String TestDocumentPath="unkown";
 
     /**
      * 'true' is a log should be written, 'false' elsewhere <br>
@@ -312,6 +311,8 @@ public class TestParameters extends Hashtable {
             } else {
                 operatingSystem = PropertyName.UNXSOLS;
             }
+        } else if (osname.indexOf ("mac")>-1) {
+            operatingSystem = PropertyName.UNXMACXI;
         } else {
             System.out.println("ERROR: not supported platform: " + osname);
             System.exit(1);

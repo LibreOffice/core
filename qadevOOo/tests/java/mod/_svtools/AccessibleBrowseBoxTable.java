@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: AccessibleBrowseBoxTable.java,v $
- * $Revision: 1.8 $
+ * $Revision: 1.8.8.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -76,8 +76,8 @@ import com.sun.star.util.URL;
  * @see ifc.accessibility._XAccessibleContext
  */
 public class AccessibleBrowseBoxTable extends TestCase {
-    XDesktop the_Desk;
-    XTextDocument xTextDoc;
+    static XDesktop the_Desk;
+    static XTextDocument xTextDoc;
 
     /**
      * Creates the Desktop service (<code>com.sun.star.frame.Desktop</code>).
@@ -248,7 +248,7 @@ public class AccessibleBrowseBoxTable extends TestCase {
      */
     private void shortWait() {
         try {
-            Thread.currentThread().sleep(500);
+            Thread.sleep(5000);
         } catch (InterruptedException e) {
             System.out.println("While waiting :" + e);
         }

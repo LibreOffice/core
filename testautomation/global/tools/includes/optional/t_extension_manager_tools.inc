@@ -653,19 +653,23 @@ function hIsExtensionAlreadyInstalled( cName as string ) as boolean
     
     printlog( "Checking if extension is already installed: " & cname )
 
+    dim iCountExtensions as integer
+    dim i as integer
+    
+    hIsExtensionAlreadyInstalled() = FALSE
+    
     ToolsPackageManager
     kontext "PackageManager"
-    if ( PackageManager.exists( 2 ) ) then
-        try
-            BrowsePackages.select( cName )
-            hIsExtensionAlreadyInstalled() = TRUE
-        catch
-            hIsExtensionAlreadyInstalled() = FALSE
-        endcatch
-        PackageManager.close()
-    else
-        hIsExtensionAlreadyInstalled() = FALSE
-    endif
+    
+    iCountExtensions = BrowsePackages.getItemCount()
+    
+    for i = 1 to iCountExtensions
+        if(Instr(BrowsePackages.getItemText(i,1),cname) <> 0) then
+            hIsExtensionAlreadyInstalled() = TRUE    
+        endif
+    next
+    
+    PackageManager.close()
         
 end function
 

@@ -69,7 +69,6 @@ sub LoadIncludeFiles
 
     use "framework\tools\includes\private_environment.inc"
     use "framework\tools\includes\webtools.inc"
-    use "framework\tools\includes\filter_tools.inc"
     use "framework\tools\includes\template_tools.inc"
     use "framework\tools\includes\init_tools.inc"
     use "framework\tools\includes\scriptorganizer_tools.inc"

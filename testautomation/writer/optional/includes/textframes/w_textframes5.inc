@@ -122,6 +122,7 @@ testcase tTextframes_72
     '/// Open a test file , which includes 2 frames ,
     '/// Frame A is anchored Frame B
     Call hFileOpen(( Convertpath (gTesttoolpath + "writer\optional\input\textframe\frameInFrame.sxw") ),false)
+    Call sMakeReadOnlyDocumentEditable
     
     'Set focus to Frame B
     Call wTypeKeys ( "<Shift F4>" )
@@ -155,6 +156,7 @@ testcase tTextframes_73
     
     '/// Open a test file , which includes 1 frame in the document body
     Call hFileOpen((Convertpath (gTesttoolpath + "writer\optional\input\textframe\frame.sxw")),false)
+    Call sMakeReadOnlyDocumentEditable
     
     '/// Set focus to Frame
     Call wTypeKeys ( "<Shift F4>" )
@@ -187,6 +189,7 @@ testcase tTextframes_74
     
     '/// Open a test file , which includes 1 frame in the document body
     Call hFileOpen((Convertpath (gTesttoolpath + "writer\optional\input\textframe\frameInTable.sxw")),false)
+    Call sMakeReadOnlyDocumentEditable
     
     '/// Set focus to Frame
     Call wTypeKeys ( "<Shift F4>" )
@@ -218,6 +221,7 @@ testcase tTextframes_75
     
     '/// Open a test file , which includes 1 frame in the header
     Call hFileOpen((Convertpath (gTesttoolpath + "writer\optional\input\textframe\Header.sxw")),false)
+    Call sMakeReadOnlyDocumentEditable
     
     '/// Set focus to Frame
     Call wTypeKeys ( "<Shift F4>" )
@@ -251,6 +255,7 @@ testcase tTextframes_76
     
     '/// Open a test file , which includes 1 frame in the footer
     Call hFileOpen((gTesttoolpath + "writer\optional\input\textframe\Footer.sxw"),false)
+    Call sMakeReadOnlyDocumentEditable
     
     '/// Set focus to Frame
     Call wTypeKeys ( "<Shift F4>" )
@@ -283,6 +288,7 @@ testcase tTextframes_77
     
     '/// Open a test file , which includes 1 frame in the footnote
     Call hFileOpen((Convertpath(gTesttoolpath + "writer\optional\input\textframe\frameInFootnote.sxw")),false)
+    Call sMakeReadOnlyDocumentEditable
     
     '/// Set focus to Frame
     Call wTypeKeys ( "<Shift F4>" )
@@ -315,6 +321,7 @@ testcase tTextframes_78
     
     '/// Open a test file , which includes 1 frame in the endnote
     Call hFileOpen((Convertpath(gTesttoolpath + "writer\optional\input\textframe\frameInEndnote.sxw")),false)
+    Call sMakeReadOnlyDocumentEditable
     
     '/// Set focus to Frame
     Call wTypeKeys ( "<Shift F4>" )
@@ -339,6 +346,8 @@ endcase
 '-----------------------------------------------------------------
 
 testcase tTextframes_80
+QaErrorLog "#i94758# - Testcase outcommented"
+goto endsub
 
     Dim sTestFile      as String
     Dim iVertical      as Integer
@@ -359,6 +368,7 @@ testcase tTextframes_80
     '/// + anchored 'To Character' and a picture which is anchored
     '/// + in the frame
     Call hFileOpen(sTestFile,false)
+    Call sMakeReadOnlyDocumentEditable
     
     '/// Set focus to Frame
     Call wTypeKeys ( "<Shift F4>" )
@@ -391,6 +401,8 @@ endcase
 '-----------------------------------------------------------------
 
 testcase tTextframes_81
+QaErrorLog "#i94758# - Testcase outcommented"
+goto endsub
 
     Dim sTestFile      as String
     Dim iVertical      as Integer
@@ -411,6 +423,7 @@ testcase tTextframes_81
     '/// + anchored 'To Character' and a picture which is anchored
     '/// + in the frame
     Call hFileOpen(sTestFile,false)
+    Call sMakeReadOnlyDocumentEditable
     
     '/// Set focus to Frame
     Call wTypeKeys ( "<Shift F4>" )
@@ -443,6 +456,8 @@ endcase
 '-----------------------------------------------------------------
 
 testcase tTextframes_82
+QaErrorLog "#i94758# - Testcase outcommented"
+goto endsub
 
     Dim sTestFile      as String
     Dim iVertical      as Integer
@@ -463,6 +478,7 @@ testcase tTextframes_82
     '/// + anchored 'To Character' and a picture which is anchored
     '/// + in the frame
     Call hFileOpen(sTestFile,false)
+    Call sMakeReadOnlyDocumentEditable
     
     '/// Set focus to Frame
     Call wTypeKeys ( "<Shift F4>" )
@@ -495,6 +511,8 @@ endcase
 '-----------------------------------------------------------------
 
 testcase tTextframes_83
+QaErrorLog "#i94758# - Testcase outcommented"
+goto endsub
 
     Dim sTestFile      as String
     Dim iVertical      as Integer
@@ -517,6 +535,7 @@ testcase tTextframes_83
     '/// + anchored 'To Character' and a picture which is anchored
     '/// + in the frame
     Call hFileOpen(sTestFile,false)
+    Call sMakeReadOnlyDocumentEditable
     
     '/// Set focus to Frame
     Call wTypeKeys ( "<Shift F4>" )
@@ -527,7 +546,7 @@ testcase tTextframes_83
     '/// + input a positive number in vertical by
     Call fFormatFrame("TabType")
     if Vertical.GetItemCount <> 6 then
-        QAErrorlog "#i74734#Russian: Missing string in frame options"
+        warnlog " Missing string in frame options"
         TabType.Cancel
         Call hCloseDocument
         goto endsub
@@ -557,6 +576,8 @@ endcase
 '-----------------------------------------------------------------
 
 testcase tTextframes_84
+QaErrorLog "#i94758# - Testcase outcommented"
+goto endsub
 
     Dim sTestFile      as String
     Dim iVertical      as Integer
@@ -579,6 +600,7 @@ testcase tTextframes_84
     '/// + anchored 'To Character' and a picture which is anchored
     '/// + in the frame
     Call hFileOpen(sTestFile,false)
+    Call sMakeReadOnlyDocumentEditable
     
     '/// Set focus to Frame
     Call wTypeKeys ( "<Shift F4>" )
@@ -589,7 +611,7 @@ testcase tTextframes_84
     '/// + input a negative number in vertical by
     Call fFormatFrame("TabType")
     if Vertical.GetItemCount <> 6 then
-        QAErrorlog "#i74734#Russian: Missing string in frame options"
+        warnlog " Missing string in frame options"
         TabType.Cancel
         Call hCloseDocument
         goto endsub
@@ -619,6 +641,8 @@ endcase
 '-----------------------------------------------------------------
 
 testcase tTextframes_85
+QaErrorLog "#i94758# - Testcase outcommented"
+goto endsub
 
     Dim sTestFile       as String
     Dim iVerticalTop    as Integer
@@ -643,6 +667,7 @@ testcase tTextframes_85
     '/// + another one is center to the line text ,
     '/// + the 3rd one is bottom to the line text
     Call hFileOpen(sTestFile,false)
+    Call sMakeReadOnlyDocumentEditable
     
     '/// Set focus to 1st Frame
     Call wTypeKeys ( "<Shift F4>" )

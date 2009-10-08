@@ -32,7 +32,7 @@
 '*
 '* owner : fredrik.haegg@sun.com
 '*
-'* short description :
+'* short description:  Testcases for the Writer Required-test.
 '*
 '\***********************************************************************
 
@@ -82,20 +82,22 @@ testcase tFileProperties
     Kontext "TabDokumentinfo"
     Call DialogTest (TabDokumentinfo)
 
-    printlog " Switch to Tabpage 'User defined'"
-    Kontext
-    active.SetPage TabBenutzer
-    Kontext "TabBenutzer"
-    Call DialogTest ( TabBenutzer )
 
-    Wait 500
+WarnLog "#i95523# - FileProperties - Tabpage 'User Defined' has changed. - Adaption of testcases needed."
+'    printlog " Switch to Tabpage 'User defined'"
+'    Kontext
+'    active.SetPage TabBenutzer
+'    Kontext "TabBenutzer"
+'    Call DialogTest ( TabBenutzer )
 
-    Infofelder.Click
-    printlog " Click 'Infofields'"
-    Kontext "InfonamenBearbeiten"
-    printlog " Close upcoming dialog with 'Cancel'"
-    Call DialogTest (InfonamenBearbeiten)
-    InfonamenBearbeiten.Cancel
+'    Wait 500
+
+'    Infofelder.Click
+'    printlog " Click 'Infofields'"
+'    Kontext "InfonamenBearbeiten"
+'    printlog " Close upcoming dialog with 'Cancel'"
+'    Call DialogTest (InfonamenBearbeiten)
+'    InfonamenBearbeiten.Cancel
 
     printlog " Switch to Tabpage 'Internet'"
     Kontext

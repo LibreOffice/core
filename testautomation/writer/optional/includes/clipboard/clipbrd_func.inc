@@ -56,9 +56,9 @@ function wPasteAvailableClipboardFormats(TheNumber as integer, CheckWhat as Stri
                 QAErrorlog "Number of clipboard formats seems to be changed!"
             end if
             exit for
-        endcatch            
+        endcatch
         ClipboardFormat = Auswahl.GetSeltext
-        printlog "- Paste as: " + ClipboardFormat        
+        printlog "- Paste as: " + ClipboardFormat
         Select Case CheckWhat
             Case "ctext", "draw"
                 if lcase(gPlatform) = "sol" and lcase(ClipboardFormat) = "bitmap" then
@@ -76,7 +76,7 @@ function wPasteAvailableClipboardFormats(TheNumber as integer, CheckWhat as Stri
         Select Case gApplication
             Case "CALC"
                 Kontext "TextImport"
-                if TextImport.Exists then TextImport.Ok           
+                if TextImport.Exists then TextImport.Ok
         end select
         
         Kontext "Active"
@@ -109,7 +109,7 @@ function wPasteAvailableClipboardFormats(TheNumber as integer, CheckWhat as Stri
                 end if
         end select
         EditPasteSpecialWriter
-    
+
         Case "IMPRESS","DRAW"
             Call gMouseClick(7,7)
             Call wRenameImpressSlide(ClipboardFormat)
@@ -117,7 +117,6 @@ function wPasteAvailableClipboardFormats(TheNumber as integer, CheckWhat as Stri
                 Call wInsertNewImpressSlide
                 EditPasteSpecial
             end if
-    
         Case "CALC"
             printlog " Rename first sheet"
             if wRenameCalcSheet(Clipboardformat) = False then
@@ -128,7 +127,8 @@ function wPasteAvailableClipboardFormats(TheNumber as integer, CheckWhat as Stri
                     Warnlog "Unable to set Sheetname : " + Clipboardformat
                 end if
                 EditPasteSpecialCalc
-            end if    
+
+            end if
         end select
         s_next_item:
         Kontext "InhaltEinfuegen"
@@ -148,16 +148,14 @@ end function
 function wSetClipboardtestDefaults(ForWhat as string) as boolean
     printlog " Points cursor to beginning of document "
     Call hFileOpen (gtesttoolpath & "writer\optional\input\clipboard\writer.sxw")
+    Call sMakeReadOnlyDocumentEditable
     Kontext "DocumentWriter"
     printlog " Jump to beginning of document "
     Call wTypeKeys "<Mod1 Home>"
     printlog " Check if beginning of document reached "
     Call wTypeKeys "<Mod1 Shift Right>"
     EditCopy
-    'if GetClipboardText <> "Text " then
-    ' warnlog "Error jump to beginning of document!"
-    ' wSetClipboardtestDefaults = False
-    'else
+
     Select Case ForWhat
         Case "text"
         '"+ Select first paragraph "
@@ -290,18 +288,12 @@ function wRenameCalcSheet(NewName as string) as boolean
     else
         wRenameCalcSheet = False
     end if
-    
 end function
 
 ' ---------------------------------------------------------------------------------
 
 sub wInsertNewImpressSlide()
     InsertSlide
-    'if gApplication = "IMPRESS" then
-    'Kontext "SeiteEinfuegen"
-    'SeitenName.Settext "Dummy"
-    'SeiteEinfuegen.Ok
-    'end if
 end sub
 
 ' ---------------------------------------------------------------------------------
@@ -369,6 +361,7 @@ function ReplaceCharacter(stringToChange$, charToReplace$, replaceWith$) As Stri
 
 end function
 
+' ---------------------------------------------------------------------------------
 
 Sub wDisableImpressAutopilot()
 
@@ -417,9 +410,10 @@ function wChangeHTMLCompatibility ( optional RecentCompatibility as integer ) as
     Kontext "ExtrasOptionenDlg"
     ExtrasOptionenDlg.OK
     wChangeHTMLCompatibility = RecentCharset
-    
+
 end function
 
+' ---------------------------------------------------------------------------------
 
 function wChangeHTMLCompatibilityExport ( optional wExport as integer ) as integer
     Dim i as integer

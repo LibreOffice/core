@@ -214,7 +214,7 @@ testcase tLanguageSettingsLanguages
    '///+wait until StarOffice is out of memory and restart it
    printlog "- exit/restart StarOffice"
    ExitRestartTheOffice
-
+   hNewDocument
    '///+open options 'Language settings' / 'languages'
    '///+check all changes
    printlog "- check changes"
@@ -375,6 +375,7 @@ testcase tLanguageSettingsLanguages
    Kontext "ExtrasOptionenDlg"
    ExtrasOptionenDlg.OK()
    Sleep (3)
+   hclosedocument
 endcase
 
 ' > * > * > * > * > * > * > * > * > * > * > * > * > * > * > * > *
@@ -831,6 +832,9 @@ testcase tLanguageSettingsAsianLayout
    iLan = Language.GetItemCount
    if iLan > 4 then
       Warnlog "There are more than 4 languages in the list. The test break here, because it can't work with more than 4 entries. Bug?!?"
+      Kontext "ExtrasOptionenDlg"
+      ExtrasOptionenDlg.OK
+      hclosedocument
       goto endsub
    end if
 

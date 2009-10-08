@@ -98,8 +98,10 @@ testcase WriterToCalcText
     else
         Warnlog "Writer To Calc -> 'Text' failed !"
     end if
-    Call hCloseDocument
     printlog "  Close active document "
+    Do Until GetDocumentCount = 0
+        Call hCloseDocument
+    Loop
 endcase
 
 ' ----------------------------------------------------------------------------------------------
@@ -151,7 +153,9 @@ testcase WriterToCalcField
         Warnlog "Writer To Calc -> 'Field' failed !"
     end if
     printlog "  Close active document "
-    Call hCloseDocument
+    Do Until GetDocumentCount = 0
+        Call hCloseDocument
+    Loop
 endcase
 
 ' ----------------------------------------------------------------------------------------------
@@ -174,7 +178,6 @@ testcase WriterToCalcTable
             Warnlog "Unable to execute 'Edit / Paste / Special' -> Disabled !"
             Call hCloseDocument
             wait 500
-            Call hCloseDocument
             goto endsub
         endcatch
         Wait 500
@@ -185,14 +188,16 @@ testcase WriterToCalcTable
             kontext "navigator"
             if navigator.exists then navigator.close
             printlog "  Write Clipboard format under pasted content "
+
             Call hFileSaveAsWithFilterKill (gOfficepath + "user\work\writer_to_calc_table.ods", "calc8")
             printlog "  Save document as ..\user\work\writer_to_calc_table.ods"
             Wait 500
-            Call hCloseDocument
             printlog "  Close saved document "
+            Call hCloseDocument
             wait 500
             kontext "navigator"
             if navigator.exists then navigator.close
+
             Call hFileOpen (gOfficepath + "user\work\writer_to_calc_table.ods",false)
             printlog "  Reopen saved document "
             Wait 500
@@ -209,7 +214,9 @@ testcase WriterToCalcTable
         Warnlog "Writer To Calc -> 'Table' failed !"
     end if
     printlog "  Close active document "
-    Call hCloseDocument
+    Do Until GetDocumentCount = 0
+        Call hCloseDocument
+    Loop
 endcase
 
 ' ----------------------------------------------------------------------------------------------
@@ -261,7 +268,9 @@ testcase WriterToCalcFrame
         Warnlog "Writer To Calc -> 'Frame' failed !"
     end if
     printlog "  Close active document "
-    Call hCloseDocument
+    Do Until GetDocumentCount = 0
+        Call hCloseDocument
+    Loop
 endcase
 
 ' ----------------------------------------------------------------------------------------------
@@ -313,7 +322,9 @@ testcase WriterToCalcDrawingObject
         Warnlog "Writer To Calc -> 'Drawing Object' failed !"
     end if
     printlog "  Close active document "
-    Call hCloseDocument
+    Do Until GetDocumentCount = 0
+        Call hCloseDocument
+    Loop
 endcase
 
 ' ----------------------------------------------------------------------------------------------
@@ -334,7 +345,7 @@ testcase WriterToCalcGraphicLinked
         try
             EditPasteSpecialCalc
         catch
-            QAErrorLog "Check why linked graphic fails !"
+            warnlog "Check why linked graphic fails !"
             Call hCloseDocument
             wait 500
             Call hCloseDocument
@@ -366,7 +377,9 @@ testcase WriterToCalcGraphicLinked
         Warnlog "Writer To Calc -> 'Linked Graphic' failed !"
     end if
     printlog "  Close active document "
-    Call hCloseDocument
+    Do Until GetDocumentCount = 0
+        Call hCloseDocument
+    Loop
     EnableQaErrors = false
 endcase
 
@@ -419,7 +432,9 @@ testcase WriterToCalcGraphicEmbedded
         Warnlog "Writer To Calc -> 'Embedded Graphic' failed !"
     end if
     printlog "  Close active document "
-    Call hCloseDocument
+    Do Until GetDocumentCount = 0
+        Call hCloseDocument
+    Loop
 endcase
 
 ' ----------------------------------------------------------------------------------------------
@@ -471,7 +486,9 @@ testcase WriterToCalcOLEObject
         Warnlog "Writer To Calc -> 'OLE object' failed !"
     end if
     printlog "  Close active document "
-    Call hCloseDocument
+    Do Until GetDocumentCount = 0
+        Call hCloseDocument
+    Loop
 endcase
 
 ' ----------------------------------------------------------------------------------------------
@@ -523,5 +540,7 @@ testcase WriterToCalcControl
         Warnlog "Writer To Calc -> 'Control' failed !"
     end if
     printlog "  Close active document "
-    Call hCloseDocument
+    Do Until GetDocumentCount = 0
+        Call hCloseDocument
+    Loop
 endcase

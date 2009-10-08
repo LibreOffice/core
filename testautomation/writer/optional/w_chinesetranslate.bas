@@ -42,7 +42,7 @@ sub main
    Dim StartZeit
    Dim bAsianLanguage   as Boolean
    Dim DefaultLanguage  as String
-   
+
    StartZeit = Now()
 
    use "writer\tools\includes\w_tools.inc"
@@ -51,14 +51,14 @@ sub main
    use "writer\optional\includes\tools\tools2.inc"
    use "writer\optional\includes\chinesetranslate\w_chinesetranslate1.inc"
    use "writer\optional\includes\chinesetranslate\w_chinesetranslate2.inc"
-   
+
    printlog Chr(13) + "Loading of Include - Files takes: " + Wielange ( StartZeit )
    printlog Chr(13) + "******* Writer - Level 1 - Test *******"
 
    Call hStatusIn ( "writer", "w_chinesetranslate.bas" , "Chinese Translation" )
- 
+
    printlog Chr(13) + "      - Test Chinese Translation"
-      
+
     'Enable 'Asian Language support' ON
      bAsianLanguage = ActiveDeactivateAsianSupport(TRUE)
    ' Set default language(asian) for document is "Simplified Chinese"
@@ -70,7 +70,7 @@ sub main
      'Call tDefaultSetting_1
      Call tDefaultSetting_2
      Call tDefaultSetting_3
-     
+
      printlog Chr(13) + " -- Standard Function -- "
      Call tChineseTranslate_1
      Call tChineseTranslate_2
@@ -89,7 +89,7 @@ sub main
 
      printlog Chr(13) + " -- Undo/Redo -- "
      Call tUndoRedo
-                                               
+
    'Set default language(asian) to default
      Call fSetAsian(DefaultLanguage)
 
@@ -97,7 +97,7 @@ sub main
      if bAsianLanguage = FALSE then
          Call ActiveDeactivateAsianSupport(FALSE)
      end if
-                          
+
    Call hStatusOut
 
    Printlog Chr(13) + "End of Level 1 Test - Chinese Conversion"

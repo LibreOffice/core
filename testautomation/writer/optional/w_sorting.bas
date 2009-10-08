@@ -36,6 +36,7 @@
 '*
 '\***********************************************************************
 
+    Public Trennzeichen as string
 
 sub main
     Dim StartTime

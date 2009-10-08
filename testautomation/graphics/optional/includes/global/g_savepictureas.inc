@@ -78,6 +78,7 @@ testcase tContextSaveAsPicture
 
    '/// Open a new Draw or Impress doc. ///'
     Call hNewDocument
+    setClipboard(" ")
     sleep 2
    '/// Insert->Graphic From File ///'
     InsertGraphicsFromFile
@@ -401,6 +402,7 @@ testcase tContextSavePictureLinkAsPicture
 
    '/// Open a new Draw or Impress doc. ///'
     Call hNewDocument
+    setClipboard(" ")
     sleep 2
    '/// Insert->Graphic From File ///'
     InsertGraphicsFromFile
@@ -632,7 +634,7 @@ testcase tContextSavePictureLinkAsPicture
                                        Testsize = true
                                        CounterShouldBe = 17
                                     else
-                                       warnlog "Wmf should not have been selected when we opened a '" + Filetype + "'-file."
+                                       qaerrorlog "Wmf should not have been selected when we opened a '" + Filetype + "'-file. #i95364#"
                                     endif
                        case "jpe" : if (Filetype = "jpg") OR Filetype = "jif" OR Filetype = "peg" then
                                        printlog "   " + Filetype + " will be saved as Jpg, correct."
@@ -764,7 +766,7 @@ testcase tContextSavePictureLinkAsPicture
              endif
 
              if (Testsize = true) AND (Filesize1 <> Filesize2) then
-                warnlog "Format '" + right(NewFile,3) + "' was NOT saved properly. Org-Size: '" + Filesize1 + "' Saved-Size: '" + Filesize2 + "'."
+                qaerrorlog "Format '" + right(NewFile,3) + "' was NOT saved properly. Org-Size: '" + Filesize1 + "' Saved-Size: '" + Filesize2 + "'.#i95364#"
              else
                 printlog "   The Format '" + right(NewFile,3) + "' was saved correctly."
              endif

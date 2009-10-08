@@ -194,7 +194,47 @@ endcase
 '-------------------------------------------------------------------------------
 '
 testcase tFormatArrangement
-    QAErrorLog "#i63017# - Should be only enabled to sort data curves; testcase has to be designed."    
+    dim sInputFile as string            
+    dim iLoop as integer
+    sInputFile = convertpath(gTestToolPath & "chart2/required/input/ch_flexrange01.ods")
+    printlog "Open test document gtesttoolpath/chart2/required/input/ch_flexrange01.ods"            
+    if fOpenTestDocumentAndInsertChart(sInputFile) then
+        Kontext "ChartType"    
+        printlog "Choose the Chart type 'bar' (should be the second in the top-down list)"
+        if fSetChartType( "bar" ) > 0 then
+            warnlog "Something went wrong setting chart type to BAR. Testcase aborted"            
+            Kontext "ChartWizard"            
+            ChartWizard.Cancel
+            call hCloseDocument
+            goto endsub
+        endif            
+        Kontext "ChartWizard"
+        printlog "Press OK button"
+        ChartWizard.OK                    
+        Kontext "DocumentChart"
+        printlog "Type twice <TAB> to select a data series to enable the menu entry."
+        DocumentChart.TypeKeys "<TAB>", 2, TRUE                        
+        Kontext "DocumentCalc"
+        DocumentCalc.UseMenu
+        printlog "Select 'Format' entry in main menu"
+        hMenuSelectNr(5) ' FORMAT
+        printlog "Select 'Arrangement' entry in 'Format'-menu"
+        hMenuSelectNr(3) ' ARRANGEMENT                                  
+        printlog "Select enabled 'Send Backward' entry."
+        hMenuSelectNr(2)
+        Kontext "DocumentCalc"
+        DocumentCalc.UseMenu
+        printlog "Select 'Format' entry in main menu again"
+        hMenuSelectNr(5) ' FORMAT
+        printlog "Select 'Arrangement' entry in 'Format'-menu"
+        hMenuSelectNr(3) ' ARRANGEMENT                                  
+        printlog "Select now enabled 'Bring Forward' entry."
+        hMenuSelectNr(1)                            
+        printlog "Close document"
+        Call hCloseDocument
+    else
+        warnlog "It was not possible to open the test document."
+    endif    
 endcase
 '
 '-------------------------------------------------------------------------------

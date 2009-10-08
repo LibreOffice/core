@@ -51,7 +51,7 @@ testcase tBasicVBACompatImportNothing()
     dim cNodeCount as integer
     
     ' Depending on the mode of macro import we have differtent basic libraries listed
-    const NODE_COUNT = 74 ' Do not import Microsoft(R) Excel(R) macros at all
+    const NODE_COUNT = 72 ' Do not import Microsoft(R) Excel(R) macros at all
     const MACRO_LIST = 0  ' The document library should have no scripts listed
     const DOCUMENT_POSITION_OFFSET = -1
     
@@ -81,8 +81,8 @@ testcase tBasicVBACompatImportNothing()
     
     printlog( "Verify position of the document node" )
     MakroAus.select( cNodeCount + DOCUMENT_POSITION_OFFSET )
-    if ( MakroAus.getSelText() <> "vba-test" ) then
-        warnlog( "The document node is not at the expected position" )
+    if ( MakroAus.getSelText() <> "vba-test.xls" ) then
+        qaerrorlog( "The document node is not at the expected position" )
     endif
     
     printlog( "Select the last node, this should be the standard Library for the document" )

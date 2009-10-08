@@ -90,6 +90,11 @@ testcase tQuickInsertGraphNotAsLink
         '             goto skipformat
         '         endif
         
+                 if (i = 5) then
+                     warnlog("#168829# crash on loading airshw.met going to next format")
+                     goto skipformat
+                 endif
+        
         Kontext "GrafikEinfuegenDlg"
         if GrafikEinfuegenDlg.NotExists then
             InsertGraphicsFromFile

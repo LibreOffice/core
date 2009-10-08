@@ -1,6 +1,5 @@
 Glossary of Internet Terms
 General Glossary
-Insert Applet
 JDBC Connection
 MySQL Connection
 Report Builder
@@ -10,6 +9,8 @@ Mobile Device Filters for Pocket Device Appliances
 Scripting OpenOffice.org
 Java Platform Support
 OpenOffice.org
+Accessibility
 Java
 Class Path
 Start Parameters
+Mail Merge Wizard - Document Type

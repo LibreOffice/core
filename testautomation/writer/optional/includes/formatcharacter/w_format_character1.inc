@@ -48,7 +48,7 @@ testcase tFormatCharacter1
     Kontext "TabFontPosition"
     '/// 'Pair Kerning' should be checked by default
     if Not PairKerning.IsChecked then
-        QAErrorlog "#i16874#Pair Kerning should be checked by default !"
+        warnlog "Pair Kerning should be checked by default !"
     end if
     TabFontPosition.Cancel
     '/// Close dialog and open Stylist
@@ -63,7 +63,7 @@ testcase tFormatCharacter1
     Kontext "TabFontPosition"
     '/// 'Pair Kerning' should be checked by default
     if Not PairKerning.IsChecked then
-        QAErrorlog "#i16874#Pair Kerning should be checked by default !"
+        warnlog "Pair Kerning should be checked by default !"
     end if
     TabFontPosition.Cancel
     '/// close Stylist

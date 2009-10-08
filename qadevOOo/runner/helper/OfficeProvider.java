@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: OfficeProvider.java,v $
- * $Revision: 1.22 $
+ * $Revision: 1.22.2.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -45,6 +45,8 @@ import java.io.File;
 import java.io.PrintWriter;
 import java.util.StringTokenizer;
 
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import lib.TestParameters;
 
 import share.DescEntry;
@@ -229,18 +231,31 @@ public class OfficeProvider implements AppProvider {
 
                 int k = 0;
 
-                while ((k < 21) && (msf == null)) {
-                    try {
-                        Thread.sleep(k * 1000);
+                // wait up to 21 seconds to get an office connection
+                while ((k < 42) && (msf == null))
+                {
+                    try
+                    {
                         msf = connect(cncstr);
-                    } catch (com.sun.star.uno.Exception ue) {
+                    }
+                    catch (com.sun.star.uno.Exception ue)
+                    {
                         exConnectFailed = ue;
                         exc = ue.getMessage();
-                    } catch (java.lang.Exception je) {
+                    }
+                    catch (java.lang.Exception je)
+                    {
                         exConnectFailed = je;
                         exc = je.getMessage();
                     }
-
+                    if (msf == null)
+                    {
+                        try
+                        {
+                            Thread.sleep(k * 500);
+                        }
+                        catch (InterruptedException ex){ }
+                     }
                     k++;
                 }
 
@@ -252,12 +267,17 @@ public class OfficeProvider implements AppProvider {
                     if (bAppExecutionHasWarning) {
                         System.out.println(errorMessage);
                     }
-                } else if (isExecutable) {
-                    backupUserLayer(param, msf);
+                } else if (isExecutable)
+                {
+                    if (! param.getBool(util.PropertyName.DONT_BACKUP_USERLAYER))
+                    {
+                        backupUserLayer(param, msf);
+                    }
                 }
             } else {
-                System.out.println("Could not connect an Office" +
-                    " and cannot start one.");
+                System.out.println("Could not connect an Office and cannot start one.\n".
+                        concat("please start an office with following parameter:\n").
+                        concat("\nsoffice -accept=").concat((String) param.get("ConnectionString")).concat(";urp;\n"));
                 if (bAppExecutionHasWarning) {
                     System.out.println(errorMessage);
                 }
@@ -336,7 +356,7 @@ public class OfficeProvider implements AppProvider {
                     dbg("OfficeWatcher will be finished");
                     ow.finish = true;
                 } else {
-                    dbg("OfficeWatcher seems to be finishedß");
+                    dbg("OfficeWatcher seems to be finished");
                 }
 
                 return true;
@@ -425,14 +445,17 @@ public class OfficeProvider implements AppProvider {
             }
         }
 
-        final String AppKillCommand = (String) param.get("AppKillCommand");
-        if (AppKillCommand != null) {
-            final StringTokenizer aKillCommandToken = new StringTokenizer(AppKillCommand, ";");
-            while (aKillCommandToken.hasMoreTokens()) {
+        final String AppKillCommand = (String) param.get(util.PropertyName.APP_KILL_COMMAND);
+        if (AppKillCommand != null)
+        {
+            String sAppKillCommand = StringHelper.removeSurroundQuoteIfExists(AppKillCommand);
+            final StringTokenizer aKillCommandToken = new StringTokenizer(sAppKillCommand, ";");
+            while (aKillCommandToken.hasMoreTokens())
+            {
                 final String sKillCommand = aKillCommandToken.nextToken();
                 dbg("User defined an application to destroy the started process. Trying to execute: " + sKillCommand);
 
-                final ProcessHandler pHdl = new ProcessHandler(sKillCommand, 3000);
+                final ProcessHandler pHdl = new ProcessHandler(sKillCommand, 1000); // 3000 seems to be too long
                 pHdl.runCommand();
 
                 pHdl.kill();
@@ -455,27 +478,34 @@ public class OfficeProvider implements AppProvider {
         param.remove("AppProvider");
         param.remove("ServiceFactory");
 
-        //copy user_backup into user layer
-        try {
-            final String userLayer = (String) param.get("userLayer");
-            final String copyLayer = (String) param.get("copyLayer");
-            if (userLayer != null && copyLayer != null) {
-                final File copyFile = new File(copyLayer);
-                dbg("copy '" + copyFile + "' -> '" + userLayer + "'");
-                FileTools.copyDirectory(copyFile, new File(userLayer), new String[]{"temp"});
-                dbg("copy '" + copyFile + "' -> '" + userLayer + "' finished");
+        if (! param.getBool(util.PropertyName.DONT_BACKUP_USERLAYER))
+        {
+            //copy user_backup into user layer
+            try {
+                final String userLayer = (String) param.get("userLayer");
+                final String copyLayer = (String) param.get("copyLayer");
+                if (userLayer != null && copyLayer != null)
+                {
+                    final File copyFile = new File(copyLayer);
+                    dbg("copy '" + copyFile + "' -> '" + userLayer + "'");
+                    FileTools.copyDirectory(copyFile, new File(userLayer), new String[]{"temp"});
+                    dbg("copy '" + copyFile + "' -> '" + userLayer + "' finished");
 
-            // remove all user_backup folder in temp dir
-            // this is for the case the runner was killed and some old backup folder still stay in temp dir
+                // remove all user_backup folder in temp dir
+                // this is for the case the runner was killed and some old backup folder still stay in temp dir
 
 
-            } else {
-                System.out.println("Cannot copy layer: '" + copyLayer + "' back to user layer: '" + userLayer + "'");
+                }
+                else
+                {
+                    System.out.println("Cannot copy layer: '" + copyLayer + "' back to user layer: '" + userLayer + "'");
+                }
             }
-        } catch (java.io.IOException e) {
-            dbg("Couldn't recover from backup\n" + e.getMessage());
+            catch (java.io.IOException e)
+            {
+                dbg("Couldn't recover from backup\n" + e.getMessage());
+            }
         }
-
         return result;
     }
 
@@ -624,7 +654,7 @@ public class OfficeProvider implements AppProvider {
                     ow.ping();
                 try {
                     System.out.println(utils.getDateTime() + "OfficeProvider:Owp: sleep ");
-                    OfficeWatcherPing.sleep(5000);
+                    OfficeWatcherPing.sleep(1000); // 5000
                 } catch (InterruptedException ex) {
                     ex.printStackTrace();
                 }

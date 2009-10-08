@@ -148,13 +148,11 @@ testcase tExtensionsFunction
     '/// - UnsatisfiedDependencies dialog exists ///'
     '///     (1/1): Unknown ///'
     '/// - will not install ///'
-    '/// (28/31): dependencies\version22.oxt ///'
-    '/// - installs and is enabled ///'
-    '/// (29/31): dependencies\version23.oxt ///'
-    '/// - installs and is enabled ///'
-    '/// (25/31): dependencies\version24.oxt ///'
-    '/// - installs and is enabled ///'
     '/// (25/31): dependencies\version25.oxt ///'
+    '/// - installs and is enabled ///'
+    '/// (25/31): dependencies\version30.oxt ///'
+    '/// - installs and is enabled ///'
+    '/// (25/31): dependencies\version31.oxt ///'
     '/// - UnsatisfiedDependencies dialog exists ///'
     '///     (1/1): Unknown ///'
     '/// - will not install ///'
@@ -234,7 +232,7 @@ testcase tExtensionsFunction
     ' 5th number: If active is expected the expected version information after selecting a file for installation the value is one, else zero and if an upgrade/downgrade is expected, the number is 2.
     
     ' Base path for test files
-    sPath = convertPath(gTestToolPath+"framework/basic/input/extensions/")
+    sPath = convertPath(gTestToolPath+"extensions/optional/input/")
     ' read filelist and expected features
     ListRead(aFileList(), sPath+"files.txt")
     a = listCount(aFileList())

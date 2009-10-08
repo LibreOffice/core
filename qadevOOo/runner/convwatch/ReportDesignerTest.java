@@ -1,4 +1,5 @@
-/*************************************************************************
+/*
+ ************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
@@ -7,7 +8,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: ReportDesignerTest.java,v $
- * $Revision: 1.4 $
+ * $Revision: 1.4.8.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -160,9 +161,13 @@ public class ReportDesignerTest extends ComplexTestCase {
 
     String mTestDocumentPath;
 
+    /**
+     * This method returns a list of Strings, each string must be a function name in this class.
+     * @return
+     */
     public String[] getTestMethodNames()
         {
-            return new String[] {"ReportDesignTest"};
+            return new String[] {"ReportDesignTest"}; // MAIN
         }
 
     private void checkIfOfficeExists(String _sOfficePathWithTrash)
@@ -181,6 +186,13 @@ public class ReportDesignerTest extends ComplexTestCase {
                     sOfficePath = _sOfficePathWithTrash.substring(0, nIndex + 7);
                 }
             }
+
+            // if (sOfficePath.startsWith("\"") ||
+            //     sOfficePath.startsWith("'"))
+            // {
+            //     sOfficePath = sOfficePath.substring(1);
+            // }
+            sOfficePath = helper.StringHelper.removeQuoteIfExists(sOfficePath);
 
             log.println(sOfficePath);
             File sOffice = new File(sOfficePath);
@@ -262,10 +274,15 @@ public class ReportDesignerTest extends ComplexTestCase {
 
     private static String m_sSourceVersion;
     private static String m_sDestinationVersion;
+    private static String m_sSourceName;
+    private static String m_sDestinationName;
 
     private static final int WRITER = 1;
     private static final int CALC = 2;
 
+    /**
+     * This is the main test Function of current ReportDesignerTest
+     */
     public void ReportDesignTest()
         {
             convwatch.GlobalLogWriter.set(log);
@@ -280,6 +297,7 @@ public class ReportDesignerTest extends ComplexTestCase {
                 // -------------------- preconditions, try to find an office --------------------
 
                 String sAppExecutionCommand = (String) param.get("AppExecutionCommand");
+                log.println("sAppExecutionCommand='" + sAppExecutionCommand + "'");
 
                 String sUser = System.getProperty("user.name");
                 log.println("user.name='" + sUser + "'");
@@ -293,7 +311,9 @@ public class ReportDesignerTest extends ComplexTestCase {
                 m_sParentDistinct = System.getProperty("ParentDistinct");
 
                 m_sSourceVersion = System.getProperty("SourceVersion");
+                m_sSourceName = System.getProperty("SourceName");
                 m_sDestinationVersion = System.getProperty("DestinationVersion");
+                m_sDestinationName = System.getProperty("DestinationName");
                 // createDBEntry();
                 // log.println("Current CWS: " + m_sCWS_WORK_STAMP);
                 // log.println("Current MWS: " + m_sUPDMinor);
@@ -324,6 +344,7 @@ public class ReportDesignerTest extends ComplexTestCase {
                 // String sCurrentDirectory = System.getProperty("user.dir");
                 // log.println("Current Dir: " + sCurrentDirectory);
                 String sDocument = (String) param.get(convwatch.PropertyName.DOC_COMPARATOR_INPUT_PATH);
+                sDocument = helper.StringHelper.removeQuoteIfExists( sDocument );
                 startTestForFile(sDocument);
                 // if (sDocument.toLowerCase().indexOf("writer") >= 0)
                 // {
@@ -352,7 +373,7 @@ public class ReportDesignerTest extends ComplexTestCase {
     private void startTestForFile(String _sDocument /*, int _nType*/)
         {
             File aFile = new File(_sDocument);
-            assure("Test File doesn't '" + _sDocument + "'exist.", aFile.exists());
+            assure("Test File '" + _sDocument + "' doesn't exist.", aFile.exists());
 
             String sFileURL = URLHelper.getFileURLFromSystemPath(_sDocument);
             log.println("File URL: " + sFileURL);
@@ -462,16 +483,17 @@ public class ReportDesignerTest extends ComplexTestCase {
             // String sFixRefSubDirectory = "ReportDesign_qa_complex_" + getFileFormat(_nType);
             String sFixRefSubDirectory = "ReportDesignFixRef";
 
-            // String sSourceVersion = m_sSourceVersion;
-            String sSourceVersion = sFixRefSubDirectory;
-            String sSourceName = "";
-            String sSourceCreatorType = "fixref";
+            String sSourceVersion = m_sSourceVersion;
+            // String sSourceVersion = sFixRefSubDirectory;
+            String sSourceName = m_sSourceName;
+            // String sSourceCreatorType = "fixref";
+            String sSourceCreatorType = "";
             String sDestinationVersion = m_sDestinationVersion;
             // if (sDestinationVersion.length() == 0)
             // {
             //     sDestinationVersion = m_sUPDMinor;
             // }
-            String sDestinationName = "";
+            String sDestinationName = m_sDestinationName;
             String sDestinationCreatorType = "";
             String sDocumentPoolDir = getOutputPath(/*_nType*/);
             String sDocumentPoolName = getDocumentPoolName(/*_nType*/);
@@ -560,6 +582,7 @@ public class ReportDesignerTest extends ComplexTestCase {
             if (m_sOutputPath == null)
             {
                 String sOutputPath = (String)param.get( convwatch.PropertyName.DOC_COMPARATOR_OUTPUT_PATH );
+                sOutputPath = helper.StringHelper.removeQuoteIfExists(sOutputPath);
 
                 if (!sOutputPath.endsWith("/") ||         // construct the output file name
                     !sOutputPath.endsWith("\\"))
@@ -639,6 +662,7 @@ public class ReportDesignerTest extends ComplexTestCase {
                 PropertyValue[] aLoadProperties = PropertyHelper.createPropertyValueArrayFormArrayList(_aPropertyList);
                 log.println("Load component: '" + _sName + "'");
                 xDocComponent = xComponentLoader.loadComponentFromURL(_sName, "_blank", 0, aLoadProperties);
+                log.println("Load component: '" + _sName + "' done");
             }
             catch (com.sun.star.io.IOException e)
             {

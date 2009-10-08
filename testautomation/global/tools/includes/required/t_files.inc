@@ -86,6 +86,7 @@ end function
 '
 '-------------------------------------------------------------------------------
 '
+
 function hGrafikEinfuegen  ( Grafik$ ) as Boolean
     '/// hGrafikEinfuegen hGraphicInsert
     '/// A graphic will be inserted (not linked).
@@ -259,7 +260,7 @@ function hIsNamedDocLoaded (ShouldFile as String, optional bSilent as boolean) a
         bSilent = False
     endif
     
-    hIsNamedDocLoaded  = False      ' Let's  start WorstCase :-(
+    hIsNamedDocLoaded  = FALSE      ' Let's  start WorstCase :-(
     FileSaveAs
     Kontext "SpeichernDlg"
     If DateiOhneExt(DateiExtract(Dateiname.GetSelText)) = DateiOhneExt(DateiExtract(ShouldFile)) Then
@@ -267,7 +268,7 @@ function hIsNamedDocLoaded (ShouldFile as String, optional bSilent as boolean) a
     Else
         sTemp = left(right(ShouldFile,2),1) ' get the 2nd last character ' vor;dot;sti;pot;std;xlt
         if (((sTemp="o") or (sTemp="t") or (sTemp="l")) and ((left(right(ShouldFile,4),1)=".") or (left(right(ShouldFile,5),1)="."))) then
-            hIsNamedDocLoaded = True ' exception! for linux! and MS-Office Templates
+            hIsNamedDocLoaded = TRUE ' exception! for linux! and MS-Office Templates
         else
             if ((Dateiname.GetSeltext = "") and not bSilent) then
                 Warnlog "Default filename is empty!"+left(right(ShouldFile,3),1)
@@ -680,35 +681,14 @@ end function
 '
 '-------------------------------------------------------------------------------
 '
-function hFileOpen( cFile as string, optional bLinks as boolean ) as boolean
+function hFileOpen( cFile as string ) as boolean
 
     dim sFile as string : sFile = convertToURL( convertpath( cFile ) )
-    const CFN = "global::tools::inc::t_fileopen.inc::hFileOpen():"
-
-    dim bHandleLinkDialog as boolean
-    
-    if ( IsMissing( bLinks ) ) then 
-        bHandleLinkDialog = FALSE
-    else
-        bHandleLinkDialog = bLinks
-    endif
-    
-    if ( C_INFO ) then printlog( "Load: " & sFile )
+    hFileOpen() = FALSE
+    const CFN = "global::tools::inc::t_files.inc::hFileOpen():"
+    if ( C_INFO ) then printlog( CFN & "Load: " & sFile )
     FileOpen( "URL", sFile, "FrameName", "_default" )
-    hFileWait()
-    
-    if ( bHandleLinkDialog ) then
-        kontext "Active"
-        if ( Active.exists( 2 ) ) then
-            Active.yes()
-            hFileOpen() = true
-        else
-            warnlog( CFN & "Expected link dialog is missing" )
-            hFileOpen() = false
-        endif
-    else
-        hFileOpen() = true
-    endif
+    if ( hFileWait( FALSE ) >= 0 ) then hFileOpen() = TRUE
     
 end function
 '
@@ -722,23 +702,23 @@ function hFileOpenSpecial( cFile as string, cFlag as string ) as boolean
     ' cFlag = <Any other string> treats string as password
     
     dim sFile as string : sFile = convertToURL( convertpath( cFile ) )
-    const CFN = "global::tools::inc::t_fileopen.inc::hFileOpenSpecial():"
+    const CFN = "global::tools::inc::t_files.inc::hFileOpenSpecial():"
+    hFileOpenSpecial() = FALSE
     if ( C_INFO ) then printlog( "Load (Flag): " & sFile & " (" & cFlag & ")" )
     
     select case( lcase( cFlag ) )
     case "readonly" 
-        printlog( "Load file read-only: " & sFile )
+        printlog( CFN & "Load file read-only: " & sFile )
         FileOpen( "URL", sFile, "FrameName", "_default", "ReadOnly", TRUE)
     case "astemplate"
-        printlog( "Load file as template: " & sFile )
+        printlog( CFN & "Load file as template: " & sFile )
         FileOpen( "URL", sFile, "FrameName", "_default", "AsTemplate" , TRUE )
     case else
-        printlog( "Load file with password: " & sFile )
+        printlog( CFN & "Load file with password: " & sFile )
         FileOpen( "URL", sFile, "FrameName", "_default", "Password" , cFlag )
     end select
     
-    hFileWait()
-    hFileOpenSpecial() = true
+    if ( hFileWait( FALSE ) >= 0 ) then hFileOpenSpecial() = TRUE
     
     '///</ul>
     
@@ -746,42 +726,14 @@ end function
 '
 '-------------------------------------------------------------------------------
 '
-function hFileOpenWithFilter( cFile as string, cFilter as string, optional bLinks as boolean )
+function hFileOpenWithFilter( cFile as string, cFilter as string )
 
     dim sFile as string : sFile = convertToURL( convertpath( cFile ) )
-    const CFN = "global::tools::inc::t_fileopen.inc::hFileOpenWithFilter():"
-
-    dim bHandleLinkDialog as boolean
-    
-    if ( IsMissing( bLinks ) ) then 
-        bHandleLinkDialog = FALSE
-    else
-        bHandleLinkDialog = bLinks
-    endif
-
-    if ( C_INFO ) then printlog( "Load (Filter): " & sFile & " (" & cFilter & ")" )
-    
+    const CFN = "global::tools::inc::t_files.inc::hFileOpenWithFilter():"
+    hFileOpenWithFilter() = FALSE
+    if ( C_INFO ) then printlog( CFN & "Load (Filter): " & sFile & " (" & cFilter & ")" )
     FileOpen( "URL", sFile, "FrameName", "_default", "FilterName", cFilter )
-    hFileWait()
-    
-    Kontext "AsciiFilterOptionen"
-    if ( AsciiFilterOptionen.exists() ) then
-        printlog( CFN & "ASCII filter dialog is open" )
-        AsciiFilterOptionen.ok()
-    endif
-        
-    if ( bHandleLinkDialog ) then
-        kontext "Active"
-        if ( Active.exists( 2 ) ) then
-            Active.yes()
-            hFileOpenWithFilter() = true
-        else
-            warnlog( CFN & "Expected link dialog is missing" )
-            hFileOpenWithFilter() = false
-        endif
-    else
-        hFileOpenWithFilter() = true
-    endif
+    if ( hFileWait( FALSE ) >= 0 ) then hFileOpenWithFilter() = TRUE
 
 end function
 '
@@ -789,11 +741,11 @@ end function
 '
 function hFileSave() as boolean
 
-    const CFN = "global::tools::inc::t_filesave.inc::hFileSave():"
+    const CFN = "global::tools::inc::t_files.inc::hFileSave():"
     hFileSave() = FALSE
-    if ( C_INFO ) then printlog( "Save file." )
+    if ( C_INFO ) then printlog( CFN & "Save file." )
     FileSave
-    if ( hFileWait() >= 0 ) then hFileSave() = TRUE
+    if ( hFileWait( TRUE ) >= 0 ) then hFileSave() = TRUE
     
 end function
 '
@@ -802,11 +754,11 @@ end function
 function hFileSaveAs( cFile as string ) as boolean
 
     dim sFile as string : sFile = convertToURL( convertpath( cFile ) )
-    const CFN = "global::tools::inc::t_filesave.inc::hFileSaveAs():"
+    const CFN = "global::tools::inc::t_files.inc::hFileSaveAs():"
     hFileSaveAs() = FALSE
-    if ( C_INFO ) then printlog( "Save: " & sFile )
+    if ( C_INFO ) then printlog( CFN & "Save: " & sFile )
     FileSaveAs( "URL", sFile, "Overwrite", FALSE )
-    if ( hFileWait() >= 0 ) then hFileSaveAs() = TRUE
+    if ( hFileWait( TRUE ) >= 0 ) then hFileSaveAs() = TRUE
     
 end function
 '
@@ -815,11 +767,11 @@ end function
 function hFileSaveAsKill( cFile as string ) as boolean
 
     dim sFile as string : sFile = convertToURL( convertpath( cFile ) )
-    const CFN = "global::tools::inc::t_filesave.inc::hFileSaveAsKill():"
+    const CFN = "global::tools::inc::t_files.inc::hFileSaveAsKill():"
     hFileSaveAsKill() = FALSE
-    if ( C_INFO ) then printlog( "Save, replacing: " & sFile )
+    if ( C_INFO ) then printlog( CFN & "Save, replacing: " & sFile )
     FileSaveAs( "URL", sFile, "Overwrite", TRUE )
-    if ( hFileWait() >= 0 ) then hFileSaveAsKill() = TRUE
+    if ( hFileWait( TRUE ) >= 0 ) then hFileSaveAsKill() = TRUE
     
 end function
 '
@@ -828,11 +780,11 @@ end function
 function hFileSaveAsKillWithPassword( cFile as string, cPassword as string ) as boolean
 
     dim sFile as string : sFile = convertToURL( convertpath( cFile ) )
-    const CFN = "global::tools::inc::t_filesave.inc::hFileSaveAsKillWithPassword():"
+    const CFN = "global::tools::inc::t_files.inc::hFileSaveAsKillWithPassword():"
     hFileSaveAsKillWithPassword() = FALSE
-    if ( C_INFO ) then printlog( "Save with password, replacing: " & sFile & "::" & cPassword )
+    if ( C_INFO ) then printlog( CFN & "Save with password, replacing: " & sFile & "::" & cPassword )
     FileSaveAs( "URL", sFile, "Overwrite", TRUE, "Password", cPassword )
-    if ( hFileWait() >= 0 ) then hFileSaveAsKillWithPassword() = TRUE
+    if ( hFileWait( TRUE ) >= 0 ) then hFileSaveAsKillWithPassword() = TRUE
     
 end function
 '
@@ -841,11 +793,11 @@ end function
 function hFileSaveAsWithFilter( cFile as string, cFilter as string ) as boolean
 
     dim sFile as string : sFile = convertToURL( convertpath( cFile ) )
-    const CFN = "global::tools::inc::t_filesave.inc::hFileSaveAsWithFilter():"
+    const CFN = "global::tools::inc::t_files.inc::hFileSaveAsWithFilter():"
     hFileSaveAsWithFilter() = FALSE
-    if ( C_INFO ) then printlog( "Save with filter: " & sFile & "::" & cFilter )
+    if ( C_INFO ) then printlog( CFN & "Save with filter: " & sFile & "::" & cFilter )
     FileSaveAs( "URL", sFile, "FilterName", cFilter, "Overwrite", FALSE )
-    if ( hFileWait() >= 0 ) then hFileSaveAsWithFilter() = TRUE
+    if ( hFileWait( TRUE ) >= 0 ) then hFileSaveAsWithFilter() = TRUE
     
 end function
 '
@@ -854,25 +806,32 @@ end function
 function hFileSaveAsWithFilterKill( cFile as string, cFilter as string ) as boolean
 
     dim sFile as string : sFile = convertToURL( convertpath( cFile ) )
-    const CFN = "global::tools::inc::t_filesave.inc::hFileSaveAsWithFilterKill():"
+    const CFN = "global::tools::inc::t_files.inc::hFileSaveAsWithFilterKill():"
     hFileSaveAsWithFilterKill() = FALSE
-    if ( C_INFO ) then printlog( "Save with filter, replacing: " & sFile & "::" & cFilter )
+    if ( C_INFO ) then printlog( CFN & "Save with filter, replacing: " & sFile & "::" & cFilter )
     FileSaveAs( "URL", sFile, "FilterName", cFilter, "Overwrite", TRUE )
-    if ( hFileWait() >= 0 ) then hFileSaveAsWithFilterKill() = TRUE
+    if ( hFileWait( TRUE ) >= 0 ) then hFileSaveAsWithFilterKill() = TRUE
     
 end function
 '
 '-------------------------------------------------------------------------------
 '
-function hFileWait() as integer
+function hFileWait( optional bWarn as boolean ) as integer
 
     ' Wait max 10 seconds for the FileOpen/FileSave slot to finish
     ' Returns the time it took the slot to finish
     ' Negaitve returnvalues are given on timeout or any blocking dialog
 
-    const CFN = "hFileWait()::"
+    const CFN = "global::tools::inc::t_files.inc::hFileWait():"
     const MAX_WAIT = 10
     dim iWait as integer : iWait = 0
+    dim bWarnlog as boolean
+    
+    if ( IsMissing( bWarn ) ) then
+        bWarnlog = TRUE
+    else
+        bWarnlog = bWarn
+    endif
     
     do while( WaitSlot() <> WSFinished )
     
@@ -894,37 +853,54 @@ function hFileWait() as integer
         ' LOAD: Password dialog
         kontext "PasswordFileOpen"
         if ( PasswordFileOpen.exists() ) then
-            iWait = -4
+            iWait = -3
             exit do
         endif
-        
-        ' LOAD: ASCII Filter Options dialog
-        kontext "ASCIIFilterOptionen"
-        if AsciiFilterOptionen.Exists() then
-            iWait = -7
-            exit do
-        end if
         
         ' SAVE: Password dialog
         kontext "PasswordDlg"
         if ( PasswordDlg.exists() ) then
-            iWait = -5
+            iWait = -4
             exit do
         endif
         
         ' LOAD: Filter selection dialog
         Kontext "Filterauswahl"
         if ( FilterAuswahl.exists() ) then
-            iWait = -6
+            iWait = -5
             exit do
         endif
+        
+        ' LOAD: ASCII Filter Options dialog
+        kontext "ASCIIFilterOptionen"
+        if AsciiFilterOptionen.Exists() then
+            iWait = -6
+            exit do
+        end if
         
         ' LOAD/SAVE: Some other dialogs that may interrupt file I/O
         kontext "Active"
         if ( Active.exists() ) then
             printlog( Active.getText() )
-            iWait = -3
-            exit do
+            
+            ' This is most likely a warning
+            if ( Active.getButtonCount() = 1 ) then
+                iWait = -7
+                exit do
+            endif
+            
+            ' This is probably the update links dialog
+            if ( Active.getButtonCount() = 2 ) then
+                iWait = -8
+                exit do
+            endif
+            
+            ' This is probably the styles not matching dialog
+            if ( Active.getButtonCount() = 3 ) then
+                iWait = -9
+                exit do
+            endif
+            
         endif
         
     loop
@@ -943,6 +919,11 @@ function hFileWait() as integer
         case else : printlog( CFN & "File I/O completed in " & iWait & " seconds" )
         end select
     endif
+    
+    if ( bWarnlog and ( iWait < 0 ) ) then
+        warnlog( CFN & "The messagebox was not expected at this point" )
+    endif
+    
     hFileWait() = iWait
     
 end function

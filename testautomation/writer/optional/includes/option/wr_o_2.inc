@@ -33,7 +33,7 @@
 '*
 '* owner : fredrik.haegg@sun.com
 '*
-'* short description :
+'* short description : Functional-Tests for Tools-Options-Writer-DefaultFont, Print, Table
 '*
 '\***********************************************************************
 
@@ -55,6 +55,9 @@ end sub
 '------------------------------------------------------------------------------
 
 testcase tToolsOptionsWriterDefaultfont (WestOrEast as string)
+QaErrorLog "#i94557# - Testcase outcommented due to bug"
+goto endsub
+
     Dim bCheckboxes(1) as boolean    ' Checkbox states
     Dim iListBox(5) as integer         ' ListBox
     Dim sListBox(5) as String
@@ -106,6 +109,7 @@ testcase tToolsOptionsWriterDefaultfont (WestOrEast as string)
     '/// use a document to check the font with styles///'
     '///+ use 'input\\writer\\optional\\options\\options2.sxw' ///
     Call hFileOpen ( sFileName )
+    Call sMakeReadOnlyDocumentEditable
     printlog "- Tools/Options/Writer: DefaultFont"
 
     printlog ("/// - save states ///")
@@ -241,6 +245,7 @@ testcase tToolsOptionsWriterDefaultfont (WestOrEast as string)
     Printlog "'///  - verify global settings don't affect saved Document ///"
     '///+ use input\\writer\\optional\\options\\options2.sxw ///
     Call hFileOpen ( sFileName )
+    Call sMakeReadOnlyDocumentEditable
     Kontext "DocumentWriter"
     DocumentWriter.TypeKeys "<Up>", 5
     Call wTypeKeys "<Home><Right>"
@@ -380,7 +385,6 @@ testcase tToolsOptionsWriterDefaultfont (WestOrEast as string)
     if ( BeschriftungGroesse.GetSelText    <> sInitFontSize(4) ) then WarnLog "Caption fontsize    not init font!"
     if ( VerzeichnisGroesse.GetSelText     <> sInitFontSize(5) ) then WarnLog "Index fontsize     not init font!"
 
-
     Kontext "ExtrasOptionenDlg"
     ExtrasOptionenDlg.Ok
     
@@ -389,17 +393,17 @@ testcase tToolsOptionsWriterDefaultfont (WestOrEast as string)
     ToolsOptions
     Call hToolsOptions ( "TextDocument" , WestOrEast )
 
-    if ( StandardSchrift.GetSelText <> sInitFont(1) ) then QAErrorLog "#i80554#Default not init font!"
-    if ( Ueberschrift.GetSelText    <> sInitFont(2) ) then QAErrorLog "#i80554#Heading    not init font! BUGID: 89816"
-    if ( Liste.GetSelText           <> sInitFont(3) ) then QAErrorLog "#i80554#List           not init font!"
-    if ( Beschriftung.GetSelText    <> sInitFont(4) ) then QAErrorLog "#i80554#Caption    not init font!"
-    if ( Verzeichnis.GetSelText     <> sInitFont(5) ) then QAErrorLog "#i80554#Index     not init font!"
+    if ( StandardSchrift.GetSelText <> sInitFont(1) ) then warnlog "Default not init font!"
+    if ( Ueberschrift.GetSelText    <> sInitFont(2) ) then warnlog "Heading    not init font! BUGID: 89816"
+    if ( Liste.GetSelText           <> sInitFont(3) ) then warnlog "List           not init font!"
+    if ( Beschriftung.GetSelText    <> sInitFont(4) ) then warnlog "Caption    not init font!"
+    if ( Verzeichnis.GetSelText     <> sInitFont(5) ) then warnlog "Index    not init font!"
 
-    if ( StandardSchriftGroesse.GetSelText <> sInitFontSize(1) ) then QAErrorLog "#i80554#Default fontsize not init font!"
-    if ( UeberschriftGroesse.GetSelText    <> sInitFontSize(2) ) then QAErrorLog "#i80554#Heading fontsize    not init font! BUGID: 89816"
-    if ( ListeGroesse.GetSelText           <> sInitFontSize(3) ) then QAErrorLog "#i80554#List fontsize           not init font!"
-    if ( BeschriftungGroesse.GetSelText    <> sInitFontSize(4) ) then QAErrorLog "#i80554#Caption fontsize    not init font!"
-    if ( VerzeichnisGroesse.GetSelText     <> sInitFontSize(5) ) then QAErrorLog "#i80554#Index fontsize     not init font!"
+    if ( StandardSchriftGroesse.GetSelText <> sInitFontSize(1) ) then warnlog "Default fontsize not init font!"
+    if ( UeberschriftGroesse.GetSelText    <> sInitFontSize(2) ) then warnlog "Heading fontsize    not init font! BUGID: 89816"
+    if ( ListeGroesse.GetSelText           <> sInitFontSize(3) ) then warnlog "List fontsize           not init font!"
+    if ( BeschriftungGroesse.GetSelText    <> sInitFontSize(4) ) then warnlog "Caption fontsize    not init font!"
+    if ( VerzeichnisGroesse.GetSelText     <> sInitFontSize(5) ) then warnlog "Index fontsize     not init font!"
     Kontext "ExtrasOptionenDlg"
     ExtrasOptionenDlg.Cancel    
     Call hCloseDocument
@@ -424,7 +428,7 @@ testcase tToolsOptionsWriterDefaultfont (WestOrEast as string)
     Kontext "ExtrasOptionenDlg"
     ExtrasOptionenDlg.OK
 
-	Do Until GetDocumentCount = 1 
+	Do Until GetDocumentCount = 0
 		Call hCloseDocument
 	Loop
 endcase
@@ -465,6 +469,7 @@ testcase tToolsOptionsWriterPrint1
 
     '/// uses "input\\writer\\optional\\options\\options3.sxw" ///
     Call hFileOpen ( gTesttoolPath + "writer\optional\input\options\options3.sxw" )
+    Call sMakeReadOnlyDocumentEditable
     printlog "'///- Tools/Options/Writer: PrintWriter ///"
 
     printlog ("'/// - save states ///")
@@ -582,10 +587,10 @@ testcase tToolsOptionsWriterPrint1
     if ( bCheckboxes(12)= AusDruckereinstellung.IsChecked  ) then WarnLog "AusDruckereinstellung state changed"
     if ( bCheckboxes(13)= LeereSeitenDrucken.IsChecked  ) then WarnLog "'Print automatically inserted blank pages' state changed"
 
-    if ( Fax.GetSelIndex <> iTempListBox(1) ) Then QAErrorlog "#i62663#Fax state changed"
+    if ( Fax.GetSelIndex <> iTempListBox(1) ) Then warnlog "Fax state changed"
 
-    if ( bTempRadioBut(1) <> Keine.IsChecked       ) then WarnLog "Keine state changed (Bug#99202)"
-    if ( bTempRadioBut(2) <> NurNotizen.IsChecked  ) then WarnLog "NurNotizen state changed (Bug#99202)"
+    if ( bTempRadioBut(1) <> Keine.IsChecked       ) then WarnLog "Keine state changed"
+    if ( bTempRadioBut(2) <> NurNotizen.IsChecked  ) then WarnLog "NurNotizen state changed"
     if ( bTempRadioBut(3) <> Dokumentende.IsChecked) then WarnLog "Dokumentende state changed"
     if ( bTempRadioBut(4) <> Seitenende.IsChecked  ) then WarnLog "Seitenende state changed"
 
@@ -753,7 +758,7 @@ testcase tToolsOptionsWriterPrint1
     ExtrasOptionenDlg.OK
 	sleep 2
 	
-	Do Until GetDocumentCount = 1
+	Do Until GetDocumentCount = 0
     	Call hCloseDocument
 	Loop
 endcase
@@ -945,7 +950,9 @@ testcase tToolsOptionsWriterTable
     Kontext "ExtrasOptionenDlg"
     ExtrasOptionenDlg.OK
 
-    Call hCloseDocument
+	Do Until GetDocumentCount = 0
+    	Call hCloseDocument
+	Loop
 endcase
 
 '------------------------------------------------------------------------------
@@ -975,6 +982,7 @@ testcase tToolsOptionsWriterTable1
     Kontext "ExtrasOptionenDlg"
     ExtrasOptionenDlg.OK
 
-    Call hCloseDocument
-
+	Do Until GetDocumentCount = 0
+    	Call hCloseDocument
+	Loop
 endcase

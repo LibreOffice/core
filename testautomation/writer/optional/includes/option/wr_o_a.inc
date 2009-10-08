@@ -52,6 +52,7 @@ testcase tToolsOptionsWriterPrint
     Dim i
     printlog "- Tools/Options/Writer: PrintWriter (real print)"
     Call hFileOpen ( gTesttoolPath + "writer\optional\input\options\options3.sxw" )
+    Call sMakeReadOnlyDocumentEditable
 
     Printlog "  - check all (real print)"
     ToolsOptions
@@ -128,7 +129,9 @@ testcase tToolsOptionsWriterPrint
     end if
 
     'If this testcase runs alone next line has to be integrated
-    Call hCloseDocument
+	Do Until GetDocumentCount = 0
+    	Call hCloseDocument
+	Loop
     Call wOptionenUndo ( "Drucken" )
 endcase
 
@@ -267,7 +270,8 @@ testcase tToolsOptionsWriterTableMove
     Call SeitenAbstaendeTesten ( 0, VerschubZeile )
 
     Printlog "- with <Shift Alt Left> upsize 2. column to the right"
-    Call wTypeKeys "<Mod2 Right>"
+    Call wTypeKeys "<Shift Mod2 Left>"
+
     Call SpaltenBreiteTesten ( Spalte2 )
     Call SeitenAbstaendeTesten ( 0, 0 )
 
@@ -306,7 +310,7 @@ testcase tToolsOptionsWriterTableMove
     Call SeitenAbstaendeTesten ( 0, 0 )
 
     Printlog "- with <Shift Alt Up> upsize 2. column down"
-    Call wTypeKeys "<Mod2 Down>"
+    Call wTypeKeys "<Shift Mod2 Down>"
     Call ZeilenHoeheTesten ( Zeile2+VerschubSpalte*2 )
     Call SeitenAbstaendeTesten ( 0, 0 )
 
@@ -320,7 +324,9 @@ testcase tToolsOptionsWriterTableMove
     Call ZeilenHoeheTesten ( Zeile2 )
     Call SeitenAbstaendeTesten ( 0, 0 )
 
-    Call hCloseDocument
+	Do Until GetDocumentCount = 0
+    	Call hCloseDocument
+	Loop
     Call wOptionenUndo "Tabelle"
 endcase
 
@@ -421,7 +427,9 @@ testcase tToolsOptionsWriterTableInsert
     Call SpaltenTesten ( 2 )
     Call SeitenAbstaendeTesten ( VerschubSpalte, Spalte2 -VerschubSpalte )
 
-    Call hCloseDocument
+	Do Until GetDocumentCount = 0
+    	Call hCloseDocument
+	Loop
     Call wOptionenUndo "Tabelle"
 endcase
 
@@ -581,7 +589,9 @@ testcase tToolsOptionsWriterTableEffects
     end if
     Call wOptionenUndo "Tabelle"
 
-    Call hCloseDocument
+	Do Until GetDocumentCount = 0
+    	Call hCloseDocument
+	Loop
 endcase
 
 '------------------------------------------------------------------------------
@@ -621,7 +631,7 @@ testcase tToolsOptionsWriterTableEffects2
 
     printlog "- resize cell with <Alt Left>"
     Call wTypeKeys "<Mod2 Left>"
-    SpaltenBreiteTesten ( ( Spalte1-VerschubZeile ) )
+    Call SpaltenBreiteTesten ( ( Spalte1-VerschubZeile ) )
 
     FormatTable
     Kontext
@@ -632,7 +642,9 @@ testcase tToolsOptionsWriterTableEffects2
     end if
     TabTabelle.Cancel
 
-    Call hCloseDocument
+	Do Until GetDocumentCount = 0
+    	Call hCloseDocument
+	Loop
     Call wOptionenUndo "Tabelle"
 endcase
 
@@ -676,7 +688,9 @@ testcase tToolsOptionsWriterDirectCursor2
     Vergroesserung100.Check
     Massstab.OK
 
-    Call hCloseDocument
+	Do Until GetDocumentCount = 0
+    	Call hCloseDocument
+	Loop
     Call wOptionenUndo "Cursor"
 endcase
 

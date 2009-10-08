@@ -45,7 +45,7 @@ sub main
     
 	dim dbok as boolean
     
-    call hStatusIn ("dbaccess" , "dba_db_DbaseFunctions.bas")
+    call hStatusIn ("dbaccess" , "dba_db_dBase_functions.bas")
     
     app.FileCopy gTesttoolPath + ConvertPath("dbaccess/optional/input/dbase_datasource/TT_Func1.dbf"),gOfficePath + ConvertPath("user/work/TT_Func1.dbf")       
     

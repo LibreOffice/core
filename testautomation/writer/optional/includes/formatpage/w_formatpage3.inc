@@ -78,6 +78,7 @@ testcase tFormatPage_29
     '/// + (The test file include 2 pages , and the
     '/// + content in header are different )
     Call hFileOpen(sTestFile)
+    Call sMakeReadOnlyDocumentEditable
 
     '/// formatPage , tabpage header , check 'same content left/right'
     fFormatPageWriter("TabKopfzeile")
@@ -163,6 +164,7 @@ testcase tFormatPage_30
     '/// + (The test file include 2 pages , and the
     '/// + content in header is same )
      Call hFileOpen(sTestFile)
+     Call sMakeReadOnlyDocumentEditable
 
     '/// formatPage , tabpage header , Uncheck 'same content left/right'
      fFormatPageWriter("TabKopfzeile")
@@ -227,6 +229,7 @@ testcase tFormatPage_31
     '/// + (The test file include 2 pages , and the content
     '/// + in footer are different )
      Call hFileOpen(sTestFile)
+     Call sMakeReadOnlyDocumentEditable
 
     '/// + formatPage , tabpage footer , check 'same content left/right'
      fFormatPageWriter("TabFusszeile")
@@ -312,6 +315,7 @@ testcase tFormatPage_32
     '/// + (The test file include 2 pages , and the
     '/// + content in footer is same )
      Call hFileOpen(sTestFile)
+     Call sMakeReadOnlyDocumentEditable
 
     '/// formatPage , tabpage footer , Uncheck 'same content left/right'
      fFormatPageWriter("TabFusszeile")
@@ -736,6 +740,7 @@ testcase tFormatPage_39
     '/// + (The test file includes 2 pages , some text
     '/// + is in 1st page and another is in 2nd page)
      Call hFileOpen(sTestFile)
+     Call sMakeReadOnlyDocumentEditable
 
     '/// formatPage , tabpage columns , change column to 3 via controls
      fFormatPageWriter("TabSpalten")
@@ -798,6 +803,7 @@ testcase tFormatPage_40
     '/// + (The test file includes 2 pages , some text is
     '/// + in 1st page and another is in 2nd page)
      Call hFileOpen(sTestFile)
+     Call sMakeReadOnlyDocumentEditable
 
     '/// formatPage , tabpage columns , change column to 3 via spinfield
      fFormatPageWriter("TabSpalten")
@@ -869,6 +875,7 @@ testcase tFormatPage_41
     '/// + (The test file includes 2 pages , some text is
     '/// + in 1st page and another is in 2nd page)
     Call hFileOpen(sTestFile)
+    Call sMakeReadOnlyDocumentEditable
     
     '/// Create 3 with different columns . formatPage ,
     '/// + tabpage columns , set 3 columns
@@ -957,6 +964,7 @@ testcase tFormatPage_42
     '/// + (The test file includes 2 pages , some text is
     '/// + in 1st page and another is in 2nd page)
      Call hFileOpen(sTestFile)
+     Call sMakeReadOnlyDocumentEditable
 
     '/// formatPage , tabpage columns , set 3 columns
      fFormatPageWriter("TabSpalten")
@@ -1117,6 +1125,7 @@ testcase tFormatPage_45
     '/// + (The test file includes 6 columns , some
     '/// + test text lllll... is in 2nd column
      Call hFileOpen(sTestFile)
+     Call sMakeReadOnlyDocumentEditable
 
      Kontext
      EditSearchAndReplace

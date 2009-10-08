@@ -607,25 +607,26 @@ FormatCropPicture .uno:GrafAttrCrop
 'FormatStandardChart SID_SET_DEFAULT
 FormatObjectProperties .uno:DiagramObjects
 FormatPositionAndSizeChart .uno:TransformDialog
-FormatChartWizard .uno:AutoFormat
-FormatChartType .uno:DiagramType
-FormatDataRanges .uno:DataRanges
-Format3DView .uno:View3D
-FormatChartArea .uno:DiagramArea
-FormatChartWall .uno:DiagramWall
-FormatChartFloor .uno:DiagramFloor
+FormatArrangement .uno:ArrangeRow
+FormatArrangementForward .uno:Forward
+FormatArrangementBackward .uno:Backward
+FormatTitle .uno:ChartTitleMenu
 FormatTitleMainTitle .uno:MainTitle
 FormatTitleSubTitle .uno:SubTitle
 FormatTitleX_Axis .uno:XTitle
 FormatTitleY_Axis .uno:YTitle
 FormatTitleZ_Axis .uno:ZTitle
+FormatTitleSecondaryX_Axis .uno:SecondaryXTitle
+FormatTitleSecondaryY_Axis .uno:SecondaryYTitle
 FormatTitleAllTitles .uno:AllTitles
+FormatAxis .uno:DiagramAxisMenu
 FormatAxisXAxis .uno:DiagramAxisX
 FormatAxisYAxis .uno:DiagramAxisY
 FormatAxisZAxis .uno:DiagramAxisZ
 FormatAxisSecondaryXAxis .uno:DiagramAxisA
 FormatAxisSecondaryYAxis .uno:DiagramAxisB
 FormatAxisAllAxes .uno:DiagramAxisAll
+FormatGrid .uno:DiagramGridMenu
 FormatGridXAxisMainGrid .uno:DiagramGridYMain
 FormatGridYAxisMainGrid .uno:DiagramGridXMain
 FormatGridZAxisMainGrid .uno:DiagramGridZMain
@@ -634,7 +635,12 @@ FormatGridYAxisMinorGrid .uno:DiagramGridXHelp
 FormatGridZAxisMinorGrid .uno:DiagramGridZHelp
 FormatGridAllAxisGrids .uno:DiagramGridAll
 FormatLegend .uno:Legend
-
+FormatChartWall .uno:DiagramWall
+FormatChartFloor .uno:DiagramFloor
+FormatChartArea .uno:DiagramArea
+FormatChartType .uno:DiagramType
+FormatDataRanges .uno:DataRanges
+Format3DView .uno:View3D
 ' **** Math
 FormatFonts SID_FONT
 FormatFontSize SID_FONTSIZE
@@ -687,7 +693,7 @@ TableProperties .uno:TableDialog
 ' *********** Tools Menu  ***********
 ' ****
 ' **** All applications
-ToolsSpellcheck .uno:SpellingAndGrammarDialog
+ToolsSpellcheck .uno:SpellDialog
 ToolsSpellcheckAutoSpellcheck SID_AUTOSPELL_CHECK
 ToolsLanguageHangulHanjaConversion .uno:HangulHanjaConversion
 ToolsLanguageChineseTranslation .uno:ChineseConversion
@@ -710,6 +716,7 @@ ToolsPackagemanager service:com.sun.star.deployment.ui.PackageManagerDialog
 ToolsMailMergeWizard .uno:MailMergeWizard
 
 ' **** Writer
+ToolsSpellcheckWriter .uno:SpellingAndGrammarDialog
 ToolsOutlineNumbering FN_NUMBERING_OUTLINE_DLG
 ToolsLineNumbering FN_LINE_NUMBERING_DLG
 ToolsPageNumber FN_CHANGE_PAGENUM
@@ -871,7 +878,7 @@ HelpHelpAgent SID_HELP_PI
 HelpTips SID_HELPTIPS
 HelpExtendedTips SID_HELPBALLOONS
 HelpEntendedHelp SID_HELPBALLOONS
-HelpCheckForUpdates .uno:OnlineUpdate
+HelpCheckForUpdates sym:vnd.sun.star.job:alias=UpdateCheck
 HelpAboutStarOffice SID_ABOUT
 HelpPurchaseStarOffice service:com.sun.star.tab.tabreg?purchase
 
@@ -939,7 +946,7 @@ OpenForm .uno:DBOpen
 EditTable .uno:DBEdit
 EditReport .uno:DBEdit
 Delete .uno:DBDelete
-
+MigrateMacros .uno:DBMigrateScripts
 ' ********************************
 ' *** UNO Slots for Basic IDE  ***
 ' ****

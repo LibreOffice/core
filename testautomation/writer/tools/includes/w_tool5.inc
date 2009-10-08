@@ -31,7 +31,7 @@
 '*
 '/************************************************************************
 '*                                                                **
-'* owner : helge.delfs@sun.com                                    **
+'* owner : fredrik.haegg@sun.com                                    **
 '*                                                                **
 '* short description : Description of file                        **
 '*                                                                **

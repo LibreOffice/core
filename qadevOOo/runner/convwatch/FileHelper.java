@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: FileHelper.java,v $
- * $Revision: 1.8 $
+ * $Revision: 1.8.8.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -34,6 +34,7 @@ import java.io.File;
 import java.io.FileFilter;
 import java.util.ArrayList;
 import java.util.StringTokenizer;
+import helper.OSHelper;
 
 import javax.swing.JOptionPane;
 
@@ -365,6 +366,44 @@ public class FileHelper
                 GlobalLogWriter.get().println("Exception caught. FileHelper.copy('" + _sSource + ", " + _sDestination + "')");
                 GlobalLogWriter.get().println("Message: " + e.getMessage());
             }
+        }
+
+    /**
+     * Within the directory run through, it's possible to say which file extension types should not
+     * consider like '*.prn' because it's not a document.
+     *
+     * @return a FileFilter function
+     */
+    public static FileFilter getFileFilter()
+        {
+            FileFilter aFileFilter = new FileFilter()
+                {
+                    public boolean accept( File pathname )
+                        {
+                            // leave out files which started by '~$' these are Microsoft Office temp files
+                            if (pathname.getName().startsWith("~$"))
+                            {
+                                return false;
+                            }
+
+                            if (pathname.getName().endsWith(".prn"))
+                            {
+                                return false;
+                            }
+                            // This type of document no one would like to load.
+                            if (pathname.getName().endsWith(".zip"))
+                            {
+                                return false;
+                            }
+                            // just a hack
+                            if (pathname.getName().endsWith("_"))
+                            {
+                                return false;
+                            }
+                            return true;
+                        }
+                };
+            return aFileFilter;
         }
 }
 

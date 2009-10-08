@@ -44,6 +44,10 @@
 '*
 '\*******************************************************************
 testcase tiToolsSpellcheckCorrect
+    if iSprache = 48 then
+        qaerrorlog "This test is not adapted for polish, 48."
+        got endsub
+    endif
 
     Dim DieDatei as String
     dim lFiles(100) as string
@@ -152,15 +156,19 @@ endcase 'tiToolsSpellcheckCorrect
 
 '------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 testcase tiToolsSpellcheckError
-
+    if iSprache = 48 then
+        qaerrorlog "This test is not adapted for polish, 48."
+        got endsub
+    endif
     Dim Fehler$
     Dim Sprachenname$
     Dim Dummy$
     Dim FehlerText$
     Dim i as integer
 
-    '/// New document ///'
+    printlog "New document"
     Call hNewDocument
+    printlog "Selecting language case: " & iSprache
     select case iSprache
         case 01 : FehlerText$ = "Thatt is a failure test."                      : Fehler$ = "Thatt" : Sprachenname$ = "English (US)"
         case 34 : FehlerText$ = "Ezte es un chico muy importante."              : Fehler$ = "Ezte"  : Sprachenname$ = "Niederlaendisch"
@@ -181,39 +189,40 @@ testcase tiToolsSpellcheckError
                 Warnlog "For the language  " + iSprache +" nothing is prepared yet: insert text here"
             end if
     end select
+    printlog "Error Text taken for testing is: " & FehlerText$
     sleep 2
 
-    '/// delete ignore word list ///'
+    printlog "Delete ignore word list"
     if (not wIgnorierenlisteLoeschen) then
         qaErrorLog "Can't get into Dictionary lists"
         goto endsub
     end if
 
-    '/// create 1 textbox with 1 spelling error (test replace always) ///'
+    printlog "Create 1 textbox with 1 spelling error (test replace always)"
     hTextrahmenErstellen (FehlerText$,30,30,90,40)
     
-    printlog "Setting Text to english"
-    sleep 1
-    EditSelectAll
-    FormatCharacter
-    sleep 1
-    Kontext
-    Messagebox.SetPage TabFont
-    Kontext "TabFont"
-    Language.Select 41
-    TabFont.OK
+    'printlog "Setting Text to english"
+    'sleep 1
+    'EditSelectAll
+    'FormatCharacter
+    'sleep 1
+    'Kontext
+    'Messagebox.SetPage TabFont
+    'Kontext "TabFont"
+    'Language.Select 41
+    'TabFont.OK
     
     hTypeKeys "<HOME>"
-    '/// call 'Tools->Spellcheck->Check' ///'
+    printlog "Call 'Tools->Spellcheck->Check'"
     ToolsSpellcheck
-    '/// Spellcheck dialog has to come up, wrong word is selected ///'
+    printlog "Spellcheck dialog has to come up, wrong word is selected."
     Kontext "Spellcheck"
     if Spellcheck.Exists then
-        '/// there has to be at least ONE suggestion ///'
+        printlog "There has to be at least ONE suggestion."
         if (Suggestions.GetItemCount < 1) then
-            '/// if no suggestion avilable: ///'
+            printlog "If no suggestion avilable:"
             warnlog "   - no suggestion for the language: "+DictionaryLanguage.GetSelIndex+" '"+DictionaryLanguage.GetSelText+"' , press check button..."
-            '///+ press button 'Check word'  ///'
+            printlog "+ press button 'Check word'"
             Pruefen.click
             if (Suggestions.GetItemCount < 1) then
                 warnlog " STILL no suggestions :-( errors will follow "
@@ -222,20 +231,20 @@ testcase tiToolsSpellcheckError
             end if
         end if
         Dummy$=Suggestions.GetItemText (1)
-        '/// select first spellcheck suggestion (click it!) ///'
+        printlog "Select first spellcheck suggestion (click it!)."
         Suggestions.Select (1)
-        '/// check if textfield 'word' has changed to selected word ///'
+        printlog "Check if textfield 'word' has changed to selected word."
         if (Suggestions.GetSelText <> Dummy$) Then
-            Warnlog "  - Suggestion not used"
+            Warnlog "Suggestion not used"
         else
-            Printlog "  Suggestion is used"
+            Printlog "Suggestion is used"
         end if
         sleep 1
         kontext "Spellcheck"
-        '/// click button 'Always replace' ///'
+        printlog "click button 'Always replace'"
         ChangeAll.Click
-        '/// spellcheck dialog has to disappear and ///'
-        '///+ There has to come up only one active: 'Spellcheck of entire document has been completed [OK]' ///'
+        printlog "spellcheck dialog has to disappear and"
+        printlog "There has to come up only one active: 'Spellcheck of entire document has been completed [OK]'"
         Kontext "Active"
         if Active.Exists(5) then
             Printlog "Message: Spellchecking has finished?: '" + active.gettext + "'"
@@ -246,10 +255,10 @@ testcase tiToolsSpellcheckError
             Spellcheck.Close
             Kontext "Active"
             if active.exists(5) then
-               Printlog " Spellcheck dialog closed'" + active.gettext + "'"
+               Printlog "Spellcheck dialog closed'" + active.gettext + "'"
                Active.OK
             else
-               Printlog " Spellcheck dialog closed'"
+               Printlog "Spellcheck dialog closed'"
             end if
         end if
     else
@@ -261,33 +270,33 @@ testcase tiToolsSpellcheckError
         end if
     end if
 
-    '/// delete textbox ///'
+    printlog "delete textbox"
     EditSelectAll
     hTypeKeys "<DELETE>"
     sleep 1
 
-    '/// create same textbox again (test IGNORE function) ///'
-    Printlog "  check function Ignore"
+    printlog "Create same textbox again (test IGNORE function)."
+    Printlog "Check function Ignore"
     hTextrahmenErstellen (FehlerText$,30,30,80,40)
-    '/// call 'Tools->Spellcheck->Check' ///'
+    printlog "All 'Tools->Spellcheck->Check'."
     
-    printlog "Setting Text to english"
-    sleep 1
-    EditSelectAll
-    FormatCharacter
-    sleep 1
-    Kontext
-    Messagebox.SetPage TabFont
-    Kontext "TabFont"
-    Language.Select 41
-    TabFont.OK
+    'printlog "Setting Text to english"
+    'sleep 1
+    'EditSelectAll
+    'FormatCharacter
+    'sleep 1
+    'Kontext
+    'Messagebox.SetPage TabFont
+    'Kontext "TabFont"
+    'Language.Select 41
+    'TabFont.OK
     
     ToolsSpellcheck
     Kontext "Spellcheck"
-    '/// press button 'Ignore' ///'
+    printlog "press button 'Ignore'"
     IgnoreOnce.Click
-    '/// spellcheck dialog has to disappear and ///'
-    '///+ There has to come up only one active: 'Spellcheck of entire document has been completed [OK]' ///'
+    printlog "spellcheck dialog has to disappear and "
+    printlog " There has to come up only one active: 'Spellcheck of entire document has been completed [OK]'."
     Kontext "Active"
     if Active.Exists(5) Then
         Printlog " Spellcheck ended because of only 1 defined error. And Ignore worked.'" + active.gettext + "'"
@@ -305,7 +314,7 @@ testcase tiToolsSpellcheckError
         end if
     end if
 
-    '/// call 'Tools->Spellcheck->Check' ///'
+    printlog "Call 'Tools->Spellcheck->Check."
     ToolsSpellcheck
     Kontext "Spellcheck"
     if Spellcheck.Exists Then
@@ -322,32 +331,32 @@ testcase tiToolsSpellcheckError
         Warnlog "  Spellcheck ended even we only ignored the error"
     end if
 
-    '/// delete textbox ///'
+    printlog "delete textbox."
     EditSelectAll
     hTypeKeys "<DELETE>"
     sleep 1
 
-    '/// create same textbox again (test ALWAYS IGNORE function) ///'
+    printlog "create same textbox again (test ALWAYS IGNORE function)."
     hTextrahmenErstellen (FehlerText$,30,30,60,40)
     
-    printlog "Setting Text to english"
-    sleep 1
-    EditSelectAll
-    FormatCharacter
-    sleep 1
-    Kontext
-    Messagebox.SetPage TabFont
-    Kontext "TabFont"
-    Language.Select 41
-    TabFont.OK
+    'printlog "Setting Text to english"
+    'sleep 1
+    'EditSelectAll
+    'FormatCharacter
+    'sleep 1
+    'Kontext
+    'Messagebox.SetPage TabFont
+    'Kontext "TabFont"
+    'Language.Select 41
+    'TabFont.OK
     
-    '/// call 'Tools->Spellcheck->Check' ///'
+    printlog "Call 'Tools->Spellcheck->Check'."
     ToolsSpellcheck
     Kontext "Spellcheck"
-    '/// click button 'Always Ignore' ///'
+    printlog "click button 'Always Ignore."
     IgnoreAll.Click
-    '/// spellcheck dialog has to disappear and ///'
-    '///+ There has to come up only one active: 'Spellcheck of entire document has been completed [OK]' ///'
+    printlog "spellcheck dialog has to disappear and"
+    printlog "There has to come up only one active: 'Spellcheck of entire document has been completed [OK]'."
     Kontext "Active"
     if active.exists(5) then
         Printlog " Spellcheck ended because of only 1 defined error. And Ignore worked.'" + active.gettext + "'"
@@ -367,7 +376,7 @@ testcase tiToolsSpellcheckError
 
     Printlog "- Delete ignore list"
     sleep 1
-    '/// delete ignore word list ///'
+    printlog "Delete ignore word list."
     if (not wIgnorierenlisteLoeschen) then
         qaErrorLog "Can't get into Dictionary lists"
         goto endsub
@@ -377,7 +386,10 @@ endcase 'tiToolsSpellcheckError
 
 '------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 testcase tiToolsSpellcheckCheck
-
+    if iSprache = 48 then
+        qaerrorlog "This test is not adapted for polish, 48."
+        got endsub
+    endif
     Dim Datei$
     Dim sWord(2) as string
     Dim i as integer

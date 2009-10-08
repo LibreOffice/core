@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: TestComponentMain.java,v $
- * $Revision: 1.4 $
+ * $Revision: 1.4.22.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -34,6 +34,9 @@ import com.sun.star.bridge.XBridgeFactory;
 import com.sun.star.bridge.XInstanceProvider;
 
 import com.sun.star.uno.XComponentContext;
+import com.sun.star.lang.EventObject;
+import com.sun.star.lang.XComponent;
+import com.sun.star.lang.XEventListener;
 import com.sun.star.lang.XMultiComponentFactory;
 import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.container.XSet;
@@ -74,8 +77,8 @@ public class TestComponentMain
     }
 
     static public void main(String args[]) throws Exception, com.sun.star.uno.Exception {
-        if(args.length != 1)    {
-            System.err.println("usage : com.sun.star.comp.bridge.TestComponentMain uno:connection;protocol;objectName");
+        if(args.length != 2)    {
+            System.err.println("usage : com.sun.star.comp.bridge.TestComponentMain uno:connection;protocol;objectName singleaccept");
             System.exit(-1);
         }
 
@@ -84,6 +87,7 @@ public class TestComponentMain
         String rootOid = null;
 
         String dcp = args[0];
+        boolean singleaccept = args[1].equals("singleaccept");
 
         int index = dcp.indexOf(':');
         String url = dcp.substring(0, index).trim();
@@ -112,10 +116,10 @@ public class TestComponentMain
 
         XAcceptor xAcceptor = Acceptor.create(ctx);
 
-        System.err.println("waiting for connect...");
-
         while( true )
         {
+            System.err.println("waiting for connect...");
+
             XConnection xConnection = xAcceptor.accept(conDcp);
 
             XBridgeFactory xBridgeFactory = (XBridgeFactory)UnoRuntime.queryInterface(
@@ -124,7 +128,35 @@ public class TestComponentMain
 
             XBridge xBridge = xBridgeFactory.createBridge(
                 "", protDcp, xConnection, new InstanceProvider(ctx));
+
+            if (singleaccept) {
+                Listener listener = new Listener();
+                ((XComponent) UnoRuntime.queryInterface(
+                    XComponent.class, xBridge)).addEventListener(listener);
+                listener.await();
+                break;
+            }
         }
 
+    }
+
+    private static final class Listener implements XEventListener {
+        public synchronized void disposing(EventObject source) {
+            done = true;
+            notifyAll();
+        }
+
+        public synchronized void await() {
+            while (!done) {
+                try {
+                    wait();
+                } catch (InterruptedException e) {
+                    Thread.currentThread().interrupt();
+                    throw new RuntimeException(e);
+                }
+            }
+        }
+
+        private boolean done = false;
     }
 }

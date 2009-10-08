@@ -62,35 +62,30 @@ sub main
 
     Call hStatusIn ( "writer", "w_updt.bas","Writer Update-Test" )
     Call w_001_              ' Menu File
-    Call w_001a_             ' Menu File
+    Call w_001a_            ' Menu File
     Call w_002_              ' Menu Edit
     Call w_003_              ' Menu View
     Call w_004_              ' Menu Insert
     Call w_005_              ' Menu Format
-    Call w_005b_             ' Menu Format (2)
+    Call w_005b_            ' Menu Format (2)
     Call w_006_              ' Menu Table
     Call w_007_              ' Menu Tools
     Call w_008_              ' Menu Window
     Call w_009_              ' Menu Help
     Call w_010_              ' Objectbar
-    Call w_010_1             ' Objectbar. Part 2
+    Call w_010_1            ' Objectbar. Part 2
     Call w_011_              ' Rest of Objectbar
-    Call w_020_              ' Toolbar 
+    Call w_020_              ' Toolbar
     Call hStatusOut
 
     end sub
 
-' ********************************************
-' ** - global start routines
-' ********************************************
 sub LoadIncludeFiles
     use "global\system\includes\master.inc"
     use "global\system\includes\gvariabl.inc"
     use "global\required\includes\g_001.inc"
-    use "global\required\includes\g_009.inc" 
     use "global\required\includes\g_option.inc"                	' global subroutines for Tools / Options
-    use "global\required\includes\g_customize.inc" 				' Global customize routines
-    use "global\tools\includes\optional\t_xml_filter1.inc"            		' global routines for XML-functionality    
+    use "global\tools\includes\optional\t_xml_filter1.inc"       ' global routines for XML-functionality
 
     gApplication   = "WRITER"
     GetUseFiles ()

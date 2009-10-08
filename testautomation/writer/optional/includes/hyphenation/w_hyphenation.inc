@@ -43,7 +43,6 @@
 '*
 '\***********************************************************************
 
-
 testcase tHyphenation_1
 
   Dim testFile as String
@@ -62,18 +61,23 @@ testcase tHyphenation_1
 
    printlog "open a test file"
     Call hFileOpen ( gTesttoolPath + "writer\optional\input\hyphenation\" + testFile )
+    Call sMakeReadOnlyDocumentEditable
 
     Call wTypeKeys "<End><Shift Mod1 Left>"
 
     EditCopy
 
-   printlog "add '-' between 'fol' and 'lowing' , then press 3 times 'space bar'"
+   printlog "add '-' between 'fol' and 'lowing' , then press 3 times 'space bar' (pc). (7 times on linux)"
    printlog "+ check if fol in the end of the line"
     if GetClipboardText = testWord then
          Call wTypeKeys "<Right>" , 3
          Call wTypeKeys "<Mod1 SUBTRACT>"
          Call wTypeKeys "<Home>"
-         Call wTypeKeys "<SPACE>" ,3
+         if gPlatGroup <> "unx" then
+             Call wTypeKeys "<SPACE>" ,3
+         else
+             Call wTypeKeys "<SPACE>" ,7
+         end if
 
          Call wTypeKeys "<End><Left><Shift Mod1 Left>"
          EditCopy
@@ -82,14 +86,18 @@ testcase tHyphenation_1
              Warnlog "The hyphenation does NOT work well in first part!"
          end if
 
-        printlog "add '-' between 'follow' and 'ing' , then press 3 times 'space bar'"
+        printlog "add '-' between 'follow' and 'ing' , then press 6 times 'space bar'"
         printlog "+ check if follow in the end of the line ."
          Call wTypeKeys "<Mod1 z>",2
          Call wTypeKeys "<End>"
          Call wTypeKeys "<Left>",3
          Call wTypeKeys "<Mod1 SUBTRACT>"
          Call wTypeKeys "<Home>"
-         Call wTypeKeys "<SPACE>",3
+         if gPlatGroup <> "unx" then
+             Call wTypeKeys "<SPACE>" ,3
+         else
+             Call wTypeKeys "<SPACE>" ,6
+         end if
          Call wTypeKeys "<End><Left><Shift Mod1 Left>"
          EditCopy
 
@@ -98,8 +106,11 @@ testcase tHyphenation_1
 
          printlog "press 5 times 'space bar'"
          printlog "check if fol in the end of the line ."
-             Call wTypeKeys "<SPACE>" , 5
-
+             if gPlatGroup <> "unx" then
+                 Call wTypeKeys "<SPACE>" ,3
+             else
+                 Call wTypeKeys "<SPACE>" ,5
+             end if
              Call wTypeKeys "<End><Shift Mod1 Left>"
              EditCopy
 
@@ -140,6 +151,7 @@ testcase tHyphenation_2
 
    printlog "open a test file"
     Call hFileOpen ( gTesttoolPath + "writer\optional\input\hyphenation\" + testFile )
+    Call sMakeReadOnlyDocumentEditable
 
     Call wTypeKeys "<End><Shift Mod1 Left>"
 
@@ -152,7 +164,11 @@ testcase tHyphenation_2
 
    printlog "Press 3 times 'space bar'"
     Call wTypeKeys "<Home>"
-    Call wTypeKeys "<SPACE>" ,3
+         if gPlatGroup <> "unx" then
+             Call wTypeKeys "<SPACE>" ,3
+         else
+             Call wTypeKeys "<SPACE>" ,6
+         end if
 
    printlog "Tools/Hyphenation"
     ToolsLanguageHyphenate
@@ -251,6 +267,7 @@ testcase tHyphenation_3
 
    printlog "open a test file"
     Call hFileOpen ( gTesttoolPath + "writer\optional\input\hyphenation\" + testFile )
+    Call sMakeReadOnlyDocumentEditable
 
     Call wTypeKeys "<End><Shift Mod1 Left>"
 
@@ -261,11 +278,15 @@ testcase tHyphenation_3
         goto endsub
     end if
 
-   printlog "Press 3 times 'space bar'"
+    printlog "Press 3 times 'space bar'"
     Call wTypeKeys "<Home>"
-    Call wTypeKeys "<SPACE>" ,3
+    if gPlatGroup <> "unx" then
+        Call wTypeKeys "<SPACE>" ,3
+    else
+        Call wTypeKeys "<SPACE>" ,6
+    end if
 
-   printlog "Tools/Hyphenation"
+    printlog "Tools/Hyphenation"
     ToolsLanguageHyphenate
     Kontext "Silbentrennung"
 

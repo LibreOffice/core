@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: CfgParser.java,v $
- * $Revision: 1.8 $
+ * $Revision: 1.8.8.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -78,6 +78,11 @@ public class CfgParser {
 
                     param.put("DOCPTH",(String)pValue);
                     System.setProperty("DOCPTH",(String)pValue);
+
+                }
+                if (pName.equals(PropertyName.SRC_ROOT)) {
+
+                    System.setProperty(pName,(String)pValue);
 
                 }
             }

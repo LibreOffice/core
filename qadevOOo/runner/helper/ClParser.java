@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: ClParser.java,v $
- * $Revision: 1.12 $
+ * $Revision: 1.12.2.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -32,8 +32,8 @@ package helper;
 import java.util.Properties;
 
 import lib.TestParameters;
+import util.PropertyName;
 import util.utils;
-
 
 /**
  * This class parses commandline Argument and stores <br>
@@ -44,6 +44,7 @@ public class ClParser {
      * Parses the commandline argument and puts them<br>
      * into the TestParameters
      */
+
     public void getCommandLineParameter(TestParameters param, String[] args) {
         Properties mapping = getMapping();
 
@@ -65,22 +66,25 @@ public class ClParser {
                     if (pValue.startsWith("-")) {
                         i++;
                         pValue = "yes";
-                    } else if (pValue.startsWith("'")){
+                    } else if (pValue.startsWith("'")) {
                         i++;
-                        while ( ! pValue.endsWith("'")){
+                        while (!pValue.endsWith("'")) {
                             i++;
                             pValue = pValue + " " + args[i].trim();
 
                         }
                         pValue = utils.replaceAll13(pValue, "'", "");
                         i++;
-                    }
-                    else {
+                    } else {
                         i += 2;
                     }
 
                     if (pName.equals("TestDocumentPath")) {
                         System.setProperty("DOCPTH", pValue);
+                    }
+                    if (pName.equals(PropertyName.SRC_ROOT)) {
+                        System.setProperty(pName,pValue);
+
                     }
                 } else {
                     pValue = "yes";

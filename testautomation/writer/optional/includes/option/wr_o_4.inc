@@ -299,8 +299,9 @@ testcase tToolsOptionsWriterOther
     Kontext "ExtrasOptionenDlg"
     ExtrasOptionenDlg.OK
 
-    Call hCloseDocument
-
+	Do Until GetDocumentCount = 0
+    	Call hCloseDocument
+	Loop
 endcase
 
 '------------------------------------------------------------------------------
@@ -494,23 +495,23 @@ testcase tToolsOptionsWriterAutoCaption
         if ( ObjectList.IsChecked = FALSE ) Then
             WarnLog ObjectList.GetText & " is unchecked though it had been checked before"
             ObjectList.Check
-        end if        
+        end if
     next i
    
     printlog ("'/// - change states ///")
     '/// look if properties get saved for each list item
     for i=1 to NumberOfObjects
-        ObjectList.Select (i)              
+        ObjectList.Select (i)
         if ObjectList.IsChecked Then
-            if i <= 7 then Numbering.Select i       
+            if i <= 7 then Numbering.Select i
             CaptionSeparator.Settext "Caption Separator " & cstr(i)
             ChapterSeparator.Settext cstr(i)
             Level.Select i
             CharacterStyle.Select i
             Select Case i
                 case 1:
-                    Category.Select 2                    
-                    Position.Select 1                                        
+                    Category.Select 2 
+                    Position.Select 1
                 case 2:
                     Category.Select 3
                     Position.Select 2
@@ -544,8 +545,8 @@ testcase tToolsOptionsWriterAutoCaption
                     else
                         Numbering.Select 5
                     end if
-                    Position.Select 1                          
-            
+                    Position.Select 1
+
                 end select
                 vCategoryTmp(i) = Category.GetSelText
         else
@@ -608,7 +609,8 @@ testcase tToolsOptionsWriterAutoCaption
                         Warnlog "-    'Position' changed after restart"
                     else
                         printlog "-    'Position' => ok"
-                    end if                    
+                    end if
+
                 case 2:
                     if Position.GetSelIndex <> 2 then
                         Warnlog "-    'Position' changed after restart"
@@ -749,8 +751,9 @@ testcase tToolsOptionsWriterAutoCaption
     Kontext "ExtrasOptionenDlg"
     ExtrasOptionenDlg.OK
 
-    Call hCloseDocument
-
+	Do Until GetDocumentCount = 0
+    	Call hCloseDocument
+	Loop
 endcase
 
 '------------------------------------------------------------------------------
@@ -858,7 +861,9 @@ testcase tToolsOptionsWriterGeneral
     AufNachfrage.Check
     Kontext "ExtrasOptionenDlg"
     ExtrasOptionenDlg.OK
-    Call hCloseDocument    
+	Do Until GetDocumentCount = 0
+    	Call hCloseDocument
+	Loop
 endcase
 
 '------------------------------------------------------------------------------
@@ -945,7 +950,6 @@ testcase tToolsOptionsWriterMailMerge
     
     ServerAuthentication.Ok
 
-    
     '/// Check 'Test Settings' button
     Kontext "TabMailMergeEmail"
     TestSettings.Click
@@ -969,7 +973,7 @@ testcase tToolsOptionsWriterMailMerge
     Server.Settext ""
     Port.Settext "110"
     User.Settext ""
-    Password.Settext ""    
+    Password.Settext ""
 
     SMTPOutgoing.Check
     OutgoingUsername.Settext ""
@@ -991,6 +995,7 @@ testcase tToolsOptionsWriterMailMerge
     Kontext "ExtrasOptionenDlg"
     ExtrasOptionenDlg.Ok
 
-    Call hCloseDocument    
-
+	Do Until GetDocumentCount = 0
+    	Call hCloseDocument
+	Loop
 endcase

@@ -41,6 +41,11 @@ testcase tExtensionPublisher
 
     '///<h1>Extension publisher and release notes</h1>
 
+    if ( gISOLang <> "en-US" ) then
+        qaerrorlog( "Test does not handle translated strings, aborting" )
+        goto endsub
+    endif
+
     '///<u><pre>Synopsis</pre></u>With CWS jl76 extensions can bring a link to the extension 
     '///+ publisher and the release notes which are displayed in the online update dialog
     '///+ for extensions - if provided. Otherwise these fields are not visible.<br>
@@ -64,6 +69,7 @@ testcase tExtensionPublisher
     dim iFileCount as integer
     dim iCurrentFile as integer
     dim iExitCounter as integer
+    dim iExtensionCount as integer
     
     ' This is the data we get from the configuration file
     dim cCurrentFileName as string
@@ -77,6 +83,8 @@ testcase tExtensionPublisher
     dim cConfigArray( 60 ) as string
     
     dim cTestString as string
+    
+    iExtensionCount = hGetExtensionCount()
     
     
     '///<ul>
@@ -95,147 +103,184 @@ testcase tExtensionPublisher
         cCurrentFileName = hGetValueForKeyAsString( cConfigArray() , "file" )
         cCurrentFileName = cBasePath & cCurrentFileName
         sExtensionCLI( "add" , cCurrentFileName )
+        WaitSlot( 5000 )
         
     next iCurrentFile
     printlog( "Finished installing extensions" )
        
     '///+<li>Open the extension manager GUI (if not open yet).</li>
-    try
+    kontext "PackageManager"
+    if ( not PackageManager.exists() ) then
         ToolsPackageManager
-    catch
-        warnlog( "#i84786# UNopkg processes block UI" )
-    endcatch
+        kontext "PackageManager"
+        if ( PackageManager.exists( 2 ) ) then
+            printlog( "Extension Manager UI has been opened" )
+        else
+            warnlog( "Failed to open Extension Manager UI" )
+            goto endsub
+        endif
+    else
+        warnlog( "#i84786# Unopkg processes block UI" )
+        goto endsub
+    endif
     
     '///+<li>Wait about 5 seconds - the &quot;Live-Deployment&quot; needs time to strike.</li>
-    printlog( "Waiting 5 seconds for Live-Deployment to strike" )
-    wait( 5000 )
+    iExitCounter = 0
+    kontext "PackageManager"
+    WaitSlot()
+    do while ( BrowsePackages.getItemCount() < ( iExtensionCount + iFileCount ) )
+        printlog( "Waiting for Extensions List to populate..." )
+        Wait( 1000 )
+        iExitCounter = iExitCounter + 1
+        if ( iExitCounter = 30 ) then
+            kontext "PackageManager"
+            PackageManager.cancel()
+            goto endsub
+        endif
+    loop
  
     '///+<li>Click on  &quot;update...&quot;<br>
     '///+The &quot;Update Extensions&quot; dialog should open.</li>
     kontext "PackageManager"
-    Updates.click()
+    if ( Updates.isEnabled() ) then
     
-    '///+<li>Wait max 20 seconds for the &quot;Update&quot; dialog listbox to get populated.</li>
-    kontext "ExtensionUpdate"
-    if ( ExtensionUpdate.exists( 2 ) ) then
-    
+        printlog( "Updates-button is enabled" )
+        Updates.click()
         
-        '///+<li>Verify that all extensions (currently 7) are present - and only those</li>
-        do while ( AvailableUpdatesList.getItemCount() < 7 ) 
-            wait( 1000 )
-            iExitCounter = iExitCounter + 1
-            if ( iExitCounter = 20 ) then exit do
-        loop
-        
-        '///+<li>&quot;Show all updates&quot; checkbox must be disabled.<br> 
-        '///+There are no additional extensions installed at this time</li>
-        if ( ShowAllUpdates.exists() ) then
-            if ( ShowAllUpdates.isEnabled() ) then
-                warnlog( """Show all updates"" should be disabled" )
-            else
-                printlog( """Show all updates"" is disabled, good" )
-            endif
-        else
-            qaerrorlog( """Show all updates"" checkbox could not be accessed" )
-        endif
-        
-        if ( AvailableUpdatesList.isEnabled() ) then
-        
-            printlog( "Available updates list populated in " & iExitCounter & " seconds" )
-            
-            if ( iExitCounter < 20 ) then
-                '///+<li>Select each listed extension and verify its attributes.</li>
-                '///<ul>
-                for iCurrentFile = 1 to iFileCount
-                
-                    '///+<li>Retrieve the name of the extension from the config file.</li>
-                    hGetDataFileSection( cInfoFile, cConfigArray(), iCurrentFile, "", "" )
-                    cCurrentFileName = hGetValueForKeyAsString( cConfigArray() , "display_name" )
-                    
-                    '///+<li>Retrieve configuration of the extension from config file: Release Notes.</li>
-                    cHasReleaseNotes = hGetValueForKeyAsString( cConfigArray() , "has_release_notes" )
-                    cReleaseNotes    = hGetValueForKeyAsString( cConfigArray() , "release_notes" )
-                    
-                    '///+<li>Retrieve configuration of the extension from config file: Publisher.</li>
-                    cHasPublisher = hGetValueForKeyAsString( cConfigArray() , "has_publisher" )
-                    cPublisher    = hGetValueForKeyAsString( cConfigArray() , "publisher" )
-                    
-                    '///+<li>Select the current extension by index.</li>
-                    AvailableUpdatesList.select( iCurrentFile )
-                    
-                    '///+<li>Verify that the extension is the one we expect.</li>
-                    if ( AvailableUpdatesList.getText() = cCurrentFileName ) then
-                        printlog( "Testing extension: " & cCurrentFileName )
-                        
-                        '///+<li>Verify the configuration for the Release Notes.</li>
-                        if ( lcase( cHasReleaseNotes ) = "yes" ) then
-                            if ( ReleaseNotesText.isVisible() ) then
-                                printlog( " - Release notes text is visible. Good." )
-                                qaerrorlog( "#i84700# cannot read static text" )
-                                'cTestString = ReleaseNotesText.getSelText()
-                                'if ( cTestString = cReleaseNotes ) then
-                                '    printlog( " - Release notes text is ok." )
-                                'else
-                                '    warnlog( "Incorrect release notes text" )
-                                '    printlog( "Expected: " & cReleaseNotes )
-                                '    printlog( "Found...: " & ctestString   )
-                                'endif
-                            else
-                                warnlog( "Release notes text is not visible" )
-                            endif
-                        else
-                            if ( ReleaseNotesText.isVisible() ) then
-                                warnlog( "Release notes should not be visible" )
-                            else
-                                printlog( " - No release notes for this extension." )
-                            endif
-                        endif
-                        
-                        '///+<li>Verify the configuration for the Publisher.</li>
-                        if ( lcase( cHasPublisher ) = "yes" ) then
-                            if ( UpdatePublisherText.isVisible() ) then
-                                printlog( " - Publisher text is visible. Good." )
-                                qaerrorlog( "#i84700# cannot read static text" )
-                                'cTestString = UpdatePublisherText.getText()
-                                'if ( cTestString = cPublisher ) then
-                                '    printlog( " - Release notes text is ok." )
-                                'else
-                                '    warnlog( "Incorrect release notes text" )
-                                '    printlog( "Expected: " & cPublisher )
-                                '    printlog( "Found...: " & ctestString   )
-                                'endif
-                            else
-                                warnlog( "Publisher text is not visible." )
-                            endif
-                        else
-                            if ( UpdatePublisherText.isVisible() ) then
-                                warnlog( "Publisher should not be visible." )
-                            else
-                                printlog( " - No Publisher for this extension." )
-                            endif
-                        endif
-                        
-                    else
-                        warnlog( "The extension is not at the expected position" )
-                        printlog( "Expected: " & cCurrentFileName )
-                        printlog( "Found...: " & AvailableUpdatesList.getText() )
-                        exit for
-                    endif
-                    
-                next iCurrentFile
-            else
-                warnlog( "Updates list not fully populated in 15 seconds -> fail" )
-            endif
-        else
-            warnlog( "No extensions available for update. Installation failed?" )
-        endif
-        '///</ul>
-        
-        '///+<li>Close the extension update dialog.</li>
+        '///+<li>Wait max 200 seconds for the &quot;Update&quot; dialog listbox to get populated.</li>
         kontext "ExtensionUpdate"
-        ExtensionUpdate.cancel()
+        if ( ExtensionUpdate.exists( 2 ) ) then
+        
+            
+            '///+<li>Verify that all extensions (currently 7) are present - and only those</li>
+            iExitCounter = 0
+            do while ( AvailableUpdatesList.getItemCount() < iFileCount ) 
+                printlog( "Waiting for Updates List to populate..." )
+                wait( 1000 )
+                iExitCounter = iExitCounter + 1
+                if ( iExitCounter = 200 ) then 
+                    warnlog( "Update list for extensions is stalled (expected: 7), found: " & AvailableUpdatesList.getItemCount() )
+                    kontext "ExtensionUpdate"
+                    ExtensionUpdate.cancel()
+                    kontext "PackageManager"
+                    PackageManager.cancel()
+                    goto endsub
+                endif
+            loop
+            
+            '///+<li>&quot;Show all updates&quot; checkbox must be disabled.<br> 
+            '///+There are no additional extensions installed at this time</li>
+            if ( ShowAllUpdates.exists() ) then
+                if ( ShowAllUpdates.isEnabled() ) then
+                    warnlog( """Show all updates"" should be disabled" )
+                else
+                    printlog( """Show all updates"" is disabled, good" )
+                endif
+            else
+                qaerrorlog( """Show all updates"" checkbox could not be accessed" )
+            endif
+            
+            if ( AvailableUpdatesList.isEnabled() ) then
+            
+                printlog( "Available updates list populated in " & iExitCounter & " seconds" )
+                
+                if ( iExitCounter < 20 ) then
+                    '///+<li>Select each listed extension and verify its attributes.</li>
+                    '///<ul>
+                    for iCurrentFile = 1 to iFileCount
+                    
+                        '///+<li>Retrieve the name of the extension from the config file.</li>
+                        hGetDataFileSection( cInfoFile, cConfigArray(), iCurrentFile, "", "" )
+                        cCurrentFileName = hGetValueForKeyAsString( cConfigArray() , "display_name" )
+                        
+                        '///+<li>Retrieve configuration of the extension from config file: Release Notes.</li>
+                        cHasReleaseNotes = hGetValueForKeyAsString( cConfigArray() , "has_release_notes" )
+                        cReleaseNotes    = hGetValueForKeyAsString( cConfigArray() , "release_notes" )
+                        
+                        '///+<li>Retrieve configuration of the extension from config file: Publisher.</li>
+                        cHasPublisher = hGetValueForKeyAsString( cConfigArray() , "has_publisher" )
+                        cPublisher    = hGetValueForKeyAsString( cConfigArray() , "publisher" )
+                        
+                        '///+<li>Select the current extension by index.</li>
+                        AvailableUpdatesList.select( iCurrentFile )
+                        
+                        '///+<li>Verify that the extension is the one we expect.</li>
+                        if ( AvailableUpdatesList.getText() = cCurrentFileName ) then
+                            printlog( "Testing extension: " & cCurrentFileName )
+                            
+                            '///+<li>Verify the configuration for the Release Notes.</li>
+                            if ( lcase( cHasReleaseNotes ) = "yes" ) then
+                                if ( ReleaseNotesText.isVisible() ) then
+                                    printlog( " - Release notes text is visible. Good." )
+                                    qaerrorlog( "#i84700# cannot read static text on extension update dialog" )
+                                    'cTestString = ReleaseNotesText.getSelText()
+                                    'if ( cTestString = cReleaseNotes ) then
+                                    '    printlog( " - Release notes text is ok." )
+                                    'else
+                                    '    warnlog( "Incorrect release notes text" )
+                                    '    printlog( "Expected: " & cReleaseNotes )
+                                    '    printlog( "Found...: " & ctestString   )
+                                    'endif
+                                else
+                                    warnlog( "Release notes text is not visible" )
+                                endif
+                            else
+                                if ( ReleaseNotesText.isVisible() ) then
+                                    warnlog( "Release notes should not be visible" )
+                                else
+                                    printlog( " - No release notes for this extension." )
+                                endif
+                            endif
+                            
+                            '///+<li>Verify the configuration for the Publisher.</li>
+                            if ( lcase( cHasPublisher ) = "yes" ) then
+                                if ( UpdatePublisherText.isVisible() ) then
+                                    printlog( " - Publisher text is visible. Good." )
+                                    qaerrorlog( "#i84700# cannot read static text" )
+                                    'cTestString = UpdatePublisherText.getText()
+                                    'if ( cTestString = cPublisher ) then
+                                    '    printlog( " - Release notes text is ok." )
+                                    'else
+                                    '    warnlog( "Incorrect release notes text" )
+                                    '    printlog( "Expected: " & cPublisher )
+                                    '    printlog( "Found...: " & ctestString   )
+                                    'endif
+                                else
+                                    warnlog( "Publisher text is not visible." )
+                                endif
+                            else
+                                if ( UpdatePublisherText.isVisible() ) then
+                                    warnlog( "Publisher should not be visible." )
+                                else
+                                    printlog( " - No Publisher for this extension." )
+                                endif
+                            endif
+                            
+                        else
+                            warnlog( "The extension is not at the expected position" )
+                            printlog( "Expected: " & cCurrentFileName )
+                            printlog( "Found...: " & AvailableUpdatesList.getText() )
+                            exit for
+                        endif
+                        
+                    next iCurrentFile
+                else
+                    warnlog( "Updates list not fully populated in 15 seconds -> fail" )
+                endif
+            else
+                warnlog( "No extensions available for update. Installation failed?" )
+            endif
+            '///</ul>
+            
+            '///+<li>Close the extension update dialog.</li>
+            kontext "ExtensionUpdate"
+            ExtensionUpdate.cancel()
+        else
+            warnlog( "Extension Update dialog is not open" )
+        endif
+        
     else
-        warnlog( "Extension Update dialog is not open" )
+        warnlog( "Update-button on extension manager ui is disabled" )
     endif
     
     '///+<li>Close extension manager GUI</li>

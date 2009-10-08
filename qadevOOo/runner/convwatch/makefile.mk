@@ -8,7 +8,7 @@
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.13 $
+# $Revision: 1.13.8.1 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -40,7 +40,7 @@ TARGET = runner_convwatch
 
 # --- Files --------------------------------------------------------
 
-JARFILES = ridl.jar unoil.jar jurt.jar juh.jar jut.jar java_uno.jar
+JARFILES = ridl.jar unoil.jar jurt.jar juh.jar java_uno.jar
 JAVAFILES = \
  TriState.java \
  IniFile.java \
@@ -69,7 +69,6 @@ JAVAFILES = \
  EnhancedComplexTestCase.java \
  MSOfficePrint.java \
  GraphicalTestArguments.java \
- StringHelper.java \
  GraphicalDifferenceCheck.java \
  DocumentConverter.java\
  DBHelper.java\

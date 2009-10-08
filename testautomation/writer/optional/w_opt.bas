@@ -40,10 +40,6 @@
 global NO_REAL_PRINT as boolean  ' Don't print on real printer
 Global mUnit as string
 
-'-----------------------------------------------------------------------------------------
-' purpose of test: are options correct written and managed?
-'-----------------------------------------------------------------------------------------
-
 sub main
     Dim StartTime
     StartTime = Now()
@@ -80,7 +76,7 @@ sub main
     Call wSetMacroSecurityLevel(3)   ' Set security to default -- medium
     Call wOptionenUndo("Alle")
     Call hStatusOut
-    
+
     Printlog Chr(13) + "End of Options - Test :"
     Printlog "Duration: "+ WieLange ( StartTime )
     Printlog "Date: " +  Date + "    Time: " + Time

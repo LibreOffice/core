@@ -31,7 +31,7 @@
 '*
 '/************************************************************************
 '*
-'* owner : helge.delfs@sun.com
+'* owner : fredrik.haegg@sun.com
 '*
 '* short description : Test the functionality of Paragraph Formatting - 1
 '*
@@ -362,6 +362,7 @@ testcase tParagraphIndent5
    '/// Open the test file
    '/// This file includes 2 paragraphs , and the end of 2nd paragraph is in 1st page
     Call hFileOpen(sTestFile)
+    Call sMakeReadOnlyDocumentEditable
 
    'Set the focus to 2nd paragraph
     Kontext
@@ -420,6 +421,7 @@ testcase tParagraphIndent6
    '/// Open the test file
    '/// This file includes 2 paragraphs , and the end of 2nd paragraph is in 1st page
     Call hFileOpen(sTestFile)
+    Call sMakeReadOnlyDocumentEditable
 
    'Set the focus to 1st paragraph
     Kontext
@@ -486,6 +488,7 @@ testcase tParagraphIndent7
    '/// if the spacing is adopted 2cm ,2nd paragrahp part will be in 1st page , part will be in 2nd page
    '/// if the spacing is adopted 3cm ,2nd paragrahp will be in 2nd page
     Call hFileOpen(sTestFile)
+    Call sMakeReadOnlyDocumentEditable
 
    'Set the focus to the end of the 1st paragraph
     Kontext
@@ -573,6 +576,7 @@ testcase tParagraphIndent8
    '/// if the spacing is adopted 2cm ,2nd paragrahp part will be in 1st page , part will be in 2nd page
    '/// if the spacing is adopted 3cm ,2nd paragrahp will be in 2nd page
     Call hFileOpen(sTestFile)
+    Call sMakeReadOnlyDocumentEditable
 
    'Set the focus to the end of the 1st paragraph
     Kontext
@@ -632,6 +636,7 @@ testcase tParagraphIndent9
    '/// This file includes 8 lines ,
    '/// + when the spacing is single line , the 8 lines should be in 1 page as design.
     Call hFileOpen(sTestFile)
+    Call sMakeReadOnlyDocumentEditable
 
    '/// Format/Paragraph / Indents & Spacing , select single line in Line spacing
     Call fFormatParagraph("TabEinzuegeUndAbstaende")
@@ -672,6 +677,7 @@ testcase tParagraphIndent10
    '/// when the spacing is 1.5 lines ,
    '/// + the last 2(or 3) lines should be in 2nd page.
     Call hFileOpen(sTestFile)
+    Call sMakeReadOnlyDocumentEditable
 
    '/// Format/Paragraph / Indents & Spacing , select 1.5 lines in Line spacing
     Call fFormatParagraph("TabEinzuegeUndAbstaende")
@@ -741,6 +747,7 @@ testcase tParagraphIndent11
     '/// when the spacing is Double lines , the first 4 lines should be in 1st page
     '/// + the last 4 lines should be in 2nd page.
     Call hFileOpen(sTestFile)
+    Call sMakeReadOnlyDocumentEditable
     
     '/// Format/Paragraph / Indents & Spacing , select Double lines in Line spacing
     Call fFormatParagraph("TabEinzuegeUndAbstaende")
@@ -820,6 +827,7 @@ testcase tParagraphIndent12
    '/// when the spacing Proportional is more than 200% ,
    '/// + then it will change to be Double line automatically
     Call hFileOpen(sTestFile)
+    Call sMakeReadOnlyDocumentEditable
 
    '/// Format/Paragraph / Indents & Spacing ,
    '/// + select Proportional in Line spacing , and input 300%
@@ -893,6 +901,7 @@ testcase tParagraphIndent13
    '/// when the spacing is At least to 4cm, there should be 1 line/page
    '/// + and the pic should move down
     Call hFileOpen(sTestFile)
+    Call sMakeReadOnlyDocumentEditable
 
    'Get the original coordinate-Y
    Call wTypeKeys ( "<Shift F4>" )
@@ -961,6 +970,7 @@ testcase tParagraphIndent14
    '/// when the spacing is leading to 4cm, there should be 1 line/page
    '/// + and the pic should NOT move
     Call hFileOpen(sTestFile)
+    Call sMakeReadOnlyDocumentEditable
 
    'Get the original coordinate-Y
     Call wTypeKeys ( "<Shift F4>" )
@@ -1026,6 +1036,7 @@ testcase tParagraphIndent15
    '/// Open the test file
    '/// + This file includes 8 lines , and font size is 12
     Call hFileOpen(sTestFile)
+    Call sMakeReadOnlyDocumentEditable
 
    '/// Format/Paragraph / Indents & Spacing ,
    '/// + select Fixed lines in Line spacing
@@ -1094,6 +1105,7 @@ testcase tParagraphIndent16
    '/// + isn't at the same line with the context left it .
    '/// + There is a pic anchored "He2" .
     Call hFileOpen(sTestFile)
+    Call sMakeReadOnlyDocumentEditable
 
    'Get the original location for the pic
     Call wTypeKeys ( "<Shift F4>" )
@@ -1151,6 +1163,7 @@ testcase tParagraphIndent17
    '/// + the 'Add spacing between paragarph and talbes'
    '/// + should be checked
     Call hFileOpen(sTestFile1)
+    Call sMakeReadOnlyDocumentEditable
 
     ToolsOptions
     Call hToolsOptions("TEXTDOCUMENT","COMPATIBILITY")
@@ -1172,6 +1185,7 @@ testcase tParagraphIndent17
    '/// + the 'Add spacing between paragarph and talbes'
    '/// + should NOT be checked
     Call hFileOpen(sTestFile2)
+    Call sMakeReadOnlyDocumentEditable
 
     ToolsOptions
     Call hToolsOptions("TEXTDOCUMENT","COMPATIBILITY")

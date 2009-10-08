@@ -85,7 +85,7 @@ testcase tExecute
     Kontext "ReportDesign"
         ReportAlignLeft
         ReportAlignUp
-        
+    sleep(1) ' need a sleep before using the propety browser    
     Kontext "ReportPropertiesTabControl"
         ReportPropertiesTabControl.setPage ReportDataProperties
     

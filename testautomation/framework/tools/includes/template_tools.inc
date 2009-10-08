@@ -100,7 +100,7 @@ function hFindTemplate( sTemplateName as string ) as integer
         
             '///+<li>If this is the item we are searching for, exit</li>
             if ( cCurrentItem = sTemplateName ) then
-                irc = iCurrentItem
+                irc = iCurrentItem : if ( irc = 0 ) then irc = 1 ' strange hack
                 brc = true
                 exit for
             endif

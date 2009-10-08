@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: SvxUnoTextContentEnum.java,v $
- * $Revision: 1.6 $
+ * $Revision: 1.6.8.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -51,7 +51,7 @@ import com.sun.star.uno.XInterface;
 
 public class SvxUnoTextContentEnum extends TestCase {
 
-    XComponent xDrawDoc;
+    static XComponent xDrawDoc;
 
     /**
      * in general this method creates a testdocument

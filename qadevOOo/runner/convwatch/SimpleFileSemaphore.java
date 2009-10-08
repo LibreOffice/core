@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: SimpleFileSemaphore.java,v $
- * $Revision: 1.3 $
+ * $Revision: 1.3.8.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -32,6 +32,7 @@ package convwatch;
 
 import java.io.File;
 import java.io.RandomAccessFile;
+import helper.OSHelper;
 
 public class SimpleFileSemaphore /* extends *//* implements */
 {

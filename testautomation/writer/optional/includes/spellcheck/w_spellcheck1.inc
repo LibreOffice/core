@@ -33,7 +33,7 @@
 '*
 '* owner : fredrik.haegg@sun.com
 '*
-'* short description :
+'* short description : Spellcheck-Testing. Functional-Test.
 '*
 '\***********************************************************************
 
@@ -55,7 +55,8 @@ DIM ParagraphPreSet     AS string 'given string for comparison of paragraphs fro
 DIM WordLanguageTemp    AS string 'variable for checking if Office language is already covered in w_locale_strings2.inc
 
     '///Load test document///
-    call hFileOpen (ConvertPath ( gTesttoolPath + "writer\optional\input\spellcheck\Language_Guessing_Sample_Texts.odt"))      'loading Test-Doc    
+    call hFileOpen (ConvertPath ( gTesttoolPath + "writer\optional\input\spellcheck\Language_Guessing_Sample_Texts.odt"))      'loading Test-Doc
+    Call sMakeReadOnlyDocumentEditable
     sleep(5)
     '----------------------------------------------------------------
     '///Enable auto spellcheck///

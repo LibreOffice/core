@@ -56,6 +56,7 @@ testcase HTMLToIMPRESSText
   printlog "  Select first paragraph "
   printlog "  Copy selected text "
   Call hFileOpen (gtesttoolpath & "writer\optional\input\clipboard\html.html")
+  Call sMakeReadOnlyDocumentEditable
   printlog "  Jump to beginning of document "
   Call wTypeKeys "<Mod1 Home>"
   Call wTypeKeys "<Shift Down><Shift End>"
@@ -96,9 +97,10 @@ testcase HTMLToIMPRESSText
    Call hCloseDocument
    goto endsub
   end if
-  Call hCloseDocument
   printlog "  Close active document "
-
+    Do Until GetDocumentCount = 0
+        Call hCloseDocument
+    Loop
 endcase
 
 ' ----------------------------------------------------------------------------------------------
@@ -110,6 +112,7 @@ testcase HTMLToIMPRESSField
   printlog "  Select paragraph with 'Date Field' "
   printlog "  Copy selected text "
   Call hFileOpen (gtesttoolpath & "writer\optional\input\clipboard\html.html")
+  Call sMakeReadOnlyDocumentEditable
   printlog "  Jump to beginning of document "
   Call wTypeKeys "<Mod1 Home>"
   Call wTypeKeys "<Down>",2
@@ -152,8 +155,9 @@ testcase HTMLToIMPRESSField
      goto endsub
     end if
   printlog "  Close active document "
-  Call hCloseDocument
-
+    Do Until GetDocumentCount = 0
+        Call hCloseDocument
+    Loop
 endcase
 
 ' ----------------------------------------------------------------------------------------------
@@ -165,6 +169,7 @@ testcase HTMLToIMPRESSTable
   printlog "  Select 'Table' "
   printlog "  Copy selected table "
   Call hFileOpen (gtesttoolpath & "writer\optional\input\clipboard\html.html")
+  Call sMakeReadOnlyDocumentEditable
   printlog "  Jump to beginning of document "
   Call wTypeKeys "<Mod1 Home>"
   Call wTypeKeys "<Down>",5
@@ -207,7 +212,9 @@ testcase HTMLToIMPRESSTable
      goto endsub
    end if
   printlog "  Close active document "
-  Call hCloseDocument
+    Do Until GetDocumentCount = 0
+        Call hCloseDocument
+    Loop
 endcase
 
 ' ----------------------------------------------------------------------------------------------
@@ -219,6 +226,7 @@ testcase HTMLToIMPRESSGraphicLinked
     printlog "  Select 'Linked Graphic' "
     printlog "  Copy selected Linked Graphic "
     Call hFileOpen (gtesttoolpath & "writer\optional\input\clipboard\html.html")
+    Call sMakeReadOnlyDocumentEditable
     printlog "  Jump to beginning of document "
     Call wTypeKeys "<Mod1 Home>"
     Call wTypeKeys ( "<Shift F4>" )
@@ -260,7 +268,9 @@ testcase HTMLToIMPRESSGraphicLinked
         goto endsub
     end if
     printlog "  Close active document "
-    Call hCloseDocument
+    Do Until GetDocumentCount = 0
+        Call hCloseDocument
+    Loop
 endcase
 
 ' ----------------------------------------------------------------------------------------------
@@ -272,6 +282,7 @@ testcase HTMLToIMPRESSControl
     printlog "  Select 'Control' "
     printlog "  Copy selected Control "
     Call hFileOpen (gtesttoolpath & "writer\optional\input\clipboard\html.html")
+    Call sMakeReadOnlyDocumentEditable
     printlog "  Jump to beginning of document "
     Call wTypeKeys "<Mod1 Home>"
     Call wTypeKeys ( "<Shift F4>" )
@@ -314,7 +325,9 @@ testcase HTMLToIMPRESSControl
         goto endsub
     end if
     printlog "  Close active document "
-    Call hCloseDocument
+    Do Until GetDocumentCount = 0
+        Call hCloseDocument
+    Loop
 endcase
 
 ' ----------------------------------------------------------------------------------------------
@@ -326,6 +339,7 @@ testcase HTMLToIMPRESSFloatingFrame
     printlog "  Select 'Floating Frame' "
     printlog "  Copy selected Floating Frame "
     Call hFileOpen (gtesttoolpath & "writer\optional\input\clipboard\html.html")
+    Call sMakeReadOnlyDocumentEditable
     printlog "  Jump to beginning of document "
     Call wTypeKeys "<Mod1 Home>"
     Call wTypeKeys ( "<Shift F4>" )
@@ -373,5 +387,7 @@ testcase HTMLToIMPRESSFloatingFrame
         goto endsub
     end if
     printlog "  Close active document "
-    Call hCloseDocument
+    Do Until GetDocumentCount = 0
+        Call hCloseDocument
+    Loop
 endcase

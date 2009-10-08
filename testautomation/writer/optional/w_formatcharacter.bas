@@ -67,7 +67,7 @@ end sub
 sub LoadIncludeFiles
     use "global\system\includes\master.inc"
     use "global\system\includes\gvariabl.inc"
-    use "global\tools\includes\t_extension_manager_tools.inc"
+    use "global\tools\includes\optional\t_extension_manager_tools.inc"
     Call GetUseFiles
     gApplication = "Writer"
 end sub

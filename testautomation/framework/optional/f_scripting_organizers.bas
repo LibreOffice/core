@@ -54,7 +54,7 @@ sub main
         printlog( "" )
         printlog( cApp )
         
-        for iDialog = 1 to 3
+        for iDialog = 1 to 2 ' Python currently not tested, needs more adjustments
             call tScriptingOrganizers( iDialog )
         next iDialog
         

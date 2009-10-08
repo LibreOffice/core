@@ -866,11 +866,11 @@ testcase tDisplaySection_5
    Sleep 1
 
    'start up Navigator
-   Call wNavigatorAuswahl(7,6, true)
+   Call wNavigatorAuswahl(7,1, true)
 
    printlog "  -- check if the section name in navigator is right "
    for i= 0 to j
-      if Auswahlliste.GetitemText(i+2) <> correctSequence(i) then QAErrorLog "The Section Name may be wrong, should be " + sectionName(i) +" but get " & Auswahlliste.GetitemText(i+2)
+      if Auswahlliste.GetitemText(8+i) <> correctSequence(i) then QAErrorLog "The Section Name may be wrong, should be " + sectionName(i) +" but get " & Auswahlliste.GetitemText(i+2)
    next i
 
    'Close Navigator before close the document
@@ -910,17 +910,18 @@ testcase tDisplaySection_6
    fInsertSection("section2")
 
    'start up Navigator
-   Call wNavigatorAuswahl(7,2, true)
+   Call wNavigatorAuswahl(7,1, true)
 
    'Jump to a section by double-clicking it
    printlog "  -- check Jump to a section by double-clicking it "
    for j=1 to 2
-      Auswahlliste.TypeKeys "<down><return>"
+      Auswahlliste.TypeKeys "<return>"
       Sleep 2
       Call wTypeKeys "<home><Shift End>"
       EditCopy
-      if GetClipboardText <> sectionContent(j-1) then  QAErrorLog "The focus is NOT in the correct location"
+      if GetClipboardText <> sectionContent(j-1) then  warnlog "The focus is NOT in the correct location"
       Kontext "NavigatorWriter"
+      Auswahlliste.TypeKeys "<down>"
    next j
 
    'Close Navigator before close the document
@@ -947,12 +948,14 @@ testcase tDisplaySection_7
 
    fInsertSection("sectionNormal")
    Sleep 1
-
+   
+   Call wNavigatorAuswahl(7,1)
+   
    Kontext "NavigatorWriter"
-   Auswahlliste.TypeKeys "<down><return>"
+   Auswahlliste.TypeKeys "<return>"
 
    printlog "  -- check if the section name in navigator is right "
-   if Auswahlliste.GetitemText(2) <> "sectionNormal" then QAErrorLog "The section can't be displayed immediately in the Navigator."
+   if Auswahlliste.GetitemText(8) <> "sectionNormal" then warnlog "The section can't be displayed immediately in the Navigator. Found this: '" + Auswahlliste.GetitemText(8) + "' instead."
 
    'Close Navigator before close the document
    fCloseNavigator
@@ -1035,13 +1038,13 @@ testcase tDisplaySection_9
             Call wTypeKeys "<Shift Down>"
             EditCopy
             if gPlatGroup = "unx" then
-                shouldbe = "Add a paragraph before and after a section!" + chr(10)
+                shouldbe = "Add a paragraph before and after a section!" + CHR$(10)
             else
-                shouldbe = "Add a paragraph before and after a section!" + chr(13) + chr(10)
+                shouldbe = "Add a paragraph before and after a section!" + CHR$(13) & CHR$(10)
             end if
 
             if GetClipBoardtext <> shouldbe then
-               warnlog "Problem with section"
+               qaerrorlog "#i85766# - Copied text not correctly exported through the clipboard"   '   "Problem with section"
             end if
          Case 3
             Call wTypeKeys "<Shift End>"

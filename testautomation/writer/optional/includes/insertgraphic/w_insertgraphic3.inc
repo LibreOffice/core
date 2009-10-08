@@ -49,6 +49,7 @@
 ' #1 tInsertGraphic_30     'Test Wrap via ContextMenuTest : none, Page Wrap, Optimal Page Wrap, Contour Wrap ,Wrap through, in Background , first paragraph
 '*
 '\***********************************************************************
+
 testcase tInsertGraphic_21
 
   Dim iLeft , iRight  , iCenterHorizontal as Integer
@@ -908,7 +909,7 @@ testcase tInsertGraphic_29
 
    fFormatGraphic("TabUmlauf")
     Sleep 1
-    if Parallel.IsChecked      <> TRUE then QAErrorlog "#138144#Graphic wrapping situation is wrong !"
+    if Parallel.IsChecked      <> TRUE then QaErrorLog "#i94558# - Graphic wrapping situation is wrong !"
     if ErsterAbsatz.IsChecked  <> TRUE then Warnlog "first paragraph configuration is wrong !"
    TabUmlauf.Cancel
 
@@ -965,7 +966,7 @@ testcase tInsertGraphic_30
 
    fFormatGraphic("TabUmlauf")
     Sleep 1
-    if Parallel.IsChecked <> TRUE then Warnlog "Graphic wrapping situation is wrong !"
+    if Parallel.IsChecked <> TRUE then QaErrorLog "#i94558# - Graphic wrapping situation is wrong !"
    TabUmlauf.Cancel
 
    PrintLog "  3. Optimal Page Wrap:"
@@ -1018,7 +1019,7 @@ testcase tInsertGraphic_30
 
    fFormatGraphic("TabUmlauf")
     Sleep 1
-    if Parallel.IsChecked      <> TRUE then QAErrorlog "#138144#Graphic wrapping situation is wrong !"
+    if Parallel.IsChecked      <> TRUE then QaErrorLog "#i94558# - Graphic wrapping situation is wrong !"
     if ErsterAbsatz.IsChecked  <> TRUE then Warnlog "first paragraph configuration is wrong !"
    TabUmlauf.Cancel
 
@@ -1038,7 +1039,7 @@ testcase tInsertGraphic_30
 
    fFormatGraphic("TabUmlauf")
     Sleep 1
-    if Kontur.IsChecked  <> TRUE then Warnlog "i35239 - Contour configuration is wrong !"
+    if Kontur.IsChecked  <> TRUE then Warnlog "Contour configuration is wrong !"
    TabUmlauf.Cancel
 
    Call hCloseDocument

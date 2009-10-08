@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: SvxGraphicObject.java,v $
- * $Revision: 1.8 $
+ * $Revision: 1.8.8.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -109,7 +109,7 @@ import com.sun.star.uno.XInterface;
  */
 public class SvxGraphicObject extends TestCase {
 
-    XComponent xDrawDoc;
+    static XComponent xDrawDoc;
 
     /**
      * Creates a new Draw document.

@@ -65,7 +65,7 @@ testcase tBasicVBACompatImportDisabled()
     dim bFound as boolean  
     
     ' Depending on the mode of macro import we have differtent basic libraries listed
-    const NODE_COUNT = 80 
+    const NODE_COUNT = 78 
  
     const DOCUMENT_POSITION_OFFSET = -7
     
@@ -95,8 +95,8 @@ testcase tBasicVBACompatImportDisabled()
     
     printlog( "Verify position of the document node" )
     MakroAus.select( cNodeCount + DOCUMENT_POSITION_OFFSET )
-    if ( MakroAus.getSelText() <> "vba-test" ) then
-        warnlog( "The document node is not at the expected position" )
+    if ( MakroAus.getSelText() <> "vba-test.xls" ) then
+        qaerrorlog( "The document node is not at the expected position" )
     endif
     
     for iCurrentModule = 2 to 7

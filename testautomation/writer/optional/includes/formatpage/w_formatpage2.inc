@@ -67,6 +67,7 @@ testcase tFormatPage_16
 
     '/// Open test file testForAutoFit.sxw
     Call hFileOpen(sTestFile)
+    Call sMakeReadOnlyDocumentEditable
 
     '/// Open Navigator and enter as page number 2
     Kontext "Navigator"
@@ -154,6 +155,7 @@ testcase tFormatPage_17
 
     '/// Open test file testForAutoFit.sxw
      Call hFileOpen(sTestFile)
+     Call sMakeReadOnlyDocumentEditable
 
     '/// Open Navigator and enter as page number 2
     Kontext "Navigator"
@@ -255,6 +257,7 @@ testcase tFormatPage_18
 
     '/// Open test file testForAutoFit.sxw
      Call hFileOpen(sTestFile)
+     Call sMakeReadOnlyDocumentEditable
 
     '/// Open Navigator and enter as page number 2
     Kontext "Navigator"
@@ -337,6 +340,7 @@ testcase tFormatPage_19
 
     '/// Open test file testForAutoFit.sxw
      Call hFileOpen(sTestFile)
+     Call sMakeReadOnlyDocumentEditable
 
     '/// Open Navigator and enter as page number 2
     Kontext "Navigator"
@@ -411,6 +415,7 @@ testcase tFormatPage_20
 
     '/// Open test file testForAutoFit.sxw
     Call hFileOpen(sTestFile)
+    Call sMakeReadOnlyDocumentEditable
 
     '/// Open Navigator and enter as page number 2
     Kontext "Navigator"
@@ -498,6 +503,7 @@ testcase tFormatPage_21
 
     '/// Open test file testForAutoFit.sxw
      Call hFileOpen(sTestFile)
+     Call sMakeReadOnlyDocumentEditable
 
     '/// Open Navigator and enter as page number 2
     Kontext "Navigator"
@@ -601,6 +607,7 @@ testcase tFormatPage_22
 
     '/// Open test file testForAutoFit.sxw
     Call hFileOpen(sTestFile)
+    Call sMakeReadOnlyDocumentEditable
 
     '/// Open Navigator and enter as page number 2
     Kontext "Navigator"
@@ -683,6 +690,7 @@ testcase tFormatPage_23
 
     '/// Open test file testForAutoFit.sxw
     Call hFileOpen(sTestFile)
+    Call sMakeReadOnlyDocumentEditable
 
     '/// Open Navigator and enter as page number 2
     Kontext "Navigator"

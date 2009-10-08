@@ -128,15 +128,15 @@ sub GetIniInformation
    gtHidLstPath =  GetIniValue ( gTesttoolIni, gTTProfileName, "HIDDir" ) + hGetPathSigne(gtPlatform)
    gPort = GetIniValue ( gTesttoolIni, "Communication", "TTPort" )
    '--------
-   gPCName = environ ( "hostname" )
-   if gPCName = "" then 
+   gPCName = GetIniValue ( gTesttoolIni, "Others", "PCname" )
+   if (gPCName = "NOT_SET!" OR gPCName = "") then 
        gPCName = environ ( "HOSTNAME" )
        if (gPCName = "") then 
            gPCName = environ ( "COMPUTERNAME" )
            if (gPCName = "") then
-               gPCName = GetIniValue ( gTesttoolIni, "Others", "PCname" )
+               gPCName = environ ( "hostname" )
                ' If testtool.ini/rc is unmodified, the default value is NOT_SET!
-               if (gPCName = "NOT_SET!" OR gPCName = "") then 
+               if gPCName = "" then 
                    qaErrorLog "Please insert the computername in section [Others] on the line 'PCname=' in the TestTool confguration file at: '" + gTesttoolIni + "'"
                end if
            end if

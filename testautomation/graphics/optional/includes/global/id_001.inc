@@ -744,14 +744,15 @@ testcase tmFileProperties
    Kontext "TabDokumentInfo"
    Call DialogTest ( TabDokumentInfo )
 
-   Kontext
-   active.SetPage TabBenutzer
-   Kontext "TabBenutzer"
-   Call DialogTest ( TabBenutzer )
-   Infofelder.Click
-      Kontext "InfonamenBearbeiten"
-      Call DialogTest (InfonamenBearbeiten)
-   InfonamenBearbeiten.Cancel
+   'Deactivating this part because of #i95523#:
+   'Kontext
+   'active.SetPage TabBenutzer
+   'Kontext "TabBenutzer"
+   'Call DialogTest ( TabBenutzer )
+   'Infofelder.Click
+   '   Kontext "InfonamenBearbeiten"
+   '   Call DialogTest (InfonamenBearbeiten)
+   'InfonamenBearbeiten.Cancel
 
    Kontext
    active.SetPage TabInternet

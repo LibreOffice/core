@@ -39,6 +39,10 @@ public interface PropertyName {
      */
     final public static String APP_EXECUTION_COMMAND = "AppExecutionCommand";
     /**
+     * parameter name: "AppKillCommand"
+     */
+    final public static String APP_KILL_COMMAND = "AppKillCommand";
+    /**
      * parameter name: "ConnectionString"
      */
     final public static String CONNECTION_STRING = "ConnectionString";
@@ -147,4 +151,13 @@ public interface PropertyName {
      * internal only, no parameter
      */
     final public static String UNXSOLI = "unxsoli";
+    /**
+     * internal only, no parameter
+     */
+    final public static String UNXMACXI = "unxmacxi";
+
+    /**
+     * can be used to dont backup the user layer, faster office start/stop but less secure default is to backup the user layer
+     */
+    final public static String DONT_BACKUP_USERLAYER = "DontBackupUserLayer";
 }

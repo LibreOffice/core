@@ -98,9 +98,10 @@ testcase WriterToDrawText
   else
       Warnlog "Writer To Draw -> 'Text' failed !"
   end if
-  Call hCloseDocument
-  printlog "  Close active document "
-
+    printlog "  Close active document "
+    Do Until GetDocumentCount = 0
+        Call hCloseDocument
+    Loop
 endcase
 
 ' ----------------------------------------------------------------------------------------------
@@ -130,186 +131,193 @@ testcase WriterToDrawField
     printlog "  Paste 'Field' in all available clipboard formats "
     Kontext "InhaltEinfuegen"
     if InhaltEinfuegen.Exists then
-     Call wPasteAvailableClipboardFormats(Auswahl.GetItemCount,"field")
-    printlog " + Write Clipboard format under pasted content "
-     Call hFileSaveAsWithFilterKill (gOfficepath + "user\work\writer_to_draw_field.odg", "draw8")
-     printlog " + Save document as ..\user\work\writer_to_draw_field.odg"
-     Wait 500
-     Call hCloseDocument
-     printlog " + Close saved document "
-     wait 500
-     Call hFileOpen (gOfficepath + "user\work\writer_to_draw_field.odg",false)
-     printlog " + Reopen saved document "
-     Wait 500
-     Call hCloseDocument
-     printlog " + Close saved document "
+            Call wPasteAvailableClipboardFormats(Auswahl.GetItemCount,"field")
+            printlog " + Write Clipboard format under pasted content "
+            Call hFileSaveAsWithFilterKill (gOfficepath + "user\work\writer_to_draw_field.odg", "draw8")
+            printlog " + Save document as ..\user\work\writer_to_draw_field.odg"
+            Wait 500
+            Call hCloseDocument
+            printlog " + Close saved document "
+            wait 500
+            Call hFileOpen (gOfficepath + "user\work\writer_to_draw_field.odg",false)
+            printlog " + Reopen saved document "
+            Wait 500
+            Call hCloseDocument
+            printlog " + Close saved document "
+        else
+            Warnlog "Dialog 'Paste Special' is not up!"
+            Call hCloseDocument
+            goto endsub
+        end if
     else
-     Warnlog "Dialog 'Paste Special' is not up!"
-     Call hCloseDocument
-     goto endsub
+        Warnlog "Writer To Draw -> 'Field' failed !"
     end if
-  else
-   Warnlog "Writer To Draw -> 'Field' failed !"
-  end if
-  printlog "  Close active document "
-  Call hCloseDocument
-
+    printlog "  Close active document "
+    Do Until GetDocumentCount = 0
+        Call hCloseDocument
+    Loop
 endcase
 
 ' ----------------------------------------------------------------------------------------------
 
 testcase WriterToDrawTable
-  gApplication = "WRITER"
-  printlog "  Open File '..\\writer\\optional\\input\\clipboard\\writer.sxw' "
-  printlog " + Jump to beginning of document "
-  printlog " + Select 'Table' "
-  printlog " + Copy selected table "
-  if wSetClipboardtestDefaults("table") = True then
-    gApplication = "DRAW"
-    printlog " + Open new document "
-    Call hNewDocument
-    printlog " + Edit / Paste Special "
-    Sleep 2
-    try
-        EditPasteSpecial
-    catch
-        Warnlog "Unable to execute 'Edit / Paste / Special' -> Disabled !"
-        Call hCloseDocument
-        wait 500
-        Call hCloseDocument
-        goto endsub
-    endcatch
-    Wait 500
-    printlog "  Paste 'Table' in all available clipboard formats "
-    Kontext "InhaltEinfuegen"
-    if InhaltEinfuegen.Exists then
-     Call wPasteAvailableClipboardFormats(Auswahl.GetItemCount,"table")
-     printlog " + Write Clipboard format under pasted content "
-     Call hFileSaveAsWithFilterKill (gOfficepath + "user\work\writer_to_draw_table.odg", "draw8")
-     printlog " + Save document as ..\user\work\writer_to_draw_table.odg"
-     Wait 500
-     Call hCloseDocument
-     printlog " + Close saved document "
-     wait 500
-     Call hFileOpen (gOfficepath + "user\work\writer_to_draw_table.odg",false)
-     printlog " + Reopen saved document "
-     Wait 500
-     Call hCloseDocument
-     printlog " + Close saved document "
+    gApplication = "WRITER"
+    printlog "  Open File '..\\writer\\optional\\input\\clipboard\\writer.sxw' "
+    printlog " + Jump to beginning of document "
+    printlog " + Select 'Table' "
+    printlog " + Copy selected table "
+    if wSetClipboardtestDefaults("table") = True then
+        gApplication = "DRAW"
+        printlog " + Open new document "
+        Call hNewDocument
+        printlog " + Edit / Paste Special "
+        Sleep 2
+        try
+            EditPasteSpecial
+        catch
+            Warnlog "Unable to execute 'Edit / Paste / Special' -> Disabled !"
+            Call hCloseDocument
+            wait 500
+            Call hCloseDocument
+            goto endsub
+        endcatch
+        Wait 500
+        printlog "  Paste 'Table' in all available clipboard formats "
+        Kontext "InhaltEinfuegen"
+        if InhaltEinfuegen.Exists then
+            Call wPasteAvailableClipboardFormats(Auswahl.GetItemCount,"table")
+            printlog " + Write Clipboard format under pasted content "
+            Call hFileSaveAsWithFilterKill (gOfficepath + "user\work\writer_to_draw_table.odg", "draw8")
+            printlog " + Save document as ..\user\work\writer_to_draw_table.odg"
+            Wait 500
+            Call hCloseDocument
+            printlog " + Close saved document "
+            wait 500
+            Call hFileOpen (gOfficepath + "user\work\writer_to_draw_table.odg",false)
+            printlog " + Reopen saved document "
+            Wait 500
+            Call hCloseDocument
+            printlog " + Close saved document "
+        else
+            Warnlog "Dialog 'Paste Special' is not up!"
+            Call hCloseDocument
+            goto endsub
+        end if
     else
-     Warnlog "Dialog 'Paste Special' is not up!"
-     Call hCloseDocument
-     goto endsub
+        Warnlog "Writer To Draw -> 'Table' failed !"
     end if
-  else
-   Warnlog "Writer To Draw -> 'Table' failed !"
-  end if
-  printlog "  Close active document "
-  Call hCloseDocument
+    printlog "  Close active document "
+    Do Until GetDocumentCount = 0
+        Call hCloseDocument
+    Loop
 endcase
 
 ' ----------------------------------------------------------------------------------------------
 
 testcase WriterToDrawFrame
-  gApplication = "WRITER"
-  printlog "  Open File '..\\writer\\optional\\input\\clipboard\\writer.sxw' "
-  printlog " + Jump to beginning of document "
-  printlog " + Select 'Frame' "
-  printlog " + Copy selected frame "
-  if wSetClipboardtestDefaults("frame") = True then
-    gApplication = "DRAW"
-    printlog " + Open new document "
-    Call hNewDocument
-    printlog " + Edit / Paste Special "
-    Sleep 2
-    try
-        EditPasteSpecial
-    catch
-        Warnlog "Unable to execute 'Edit / Paste / Special' -> Disabled !"
-        Call hCloseDocument
-        wait 500
-        Call hCloseDocument
-        goto endsub
-    endcatch
-    Wait 500
-    printlog "  Paste 'Table' in all available clipboard formats "
-    Kontext "InhaltEinfuegen"
-    if InhaltEinfuegen.Exists then
-     Call wPasteAvailableClipboardFormats(Auswahl.GetItemCount,"frame")
-     printlog " + Write Clipboard format under pasted content "
-     Call hFileSaveAsWithFilterKill (gOfficepath + "user\work\writer_to_draw_frame.odg", "draw8")
-     printlog " + Save document as ..\user\work\writer_to_draw_frame.odg"
-     Wait 500
-     Call hCloseDocument
-     printlog " + Close saved document "
-     wait 500
-     Call hFileOpen (gOfficepath + "user\work\writer_to_draw_frame.odg",false)
-     printlog " + Reopen saved document "
-     Wait 500
-     Call hCloseDocument
-     printlog " + Close saved document "
+    gApplication = "WRITER"
+    printlog "  Open File '..\\writer\\optional\\input\\clipboard\\writer.sxw' "
+    printlog " + Jump to beginning of document "
+    printlog " + Select 'Frame' "
+    printlog " + Copy selected frame "
+    if wSetClipboardtestDefaults("frame") = True then
+        gApplication = "DRAW"
+        printlog " + Open new document "
+        Call hNewDocument
+        printlog " + Edit / Paste Special "
+        Sleep 2
+        try
+            EditPasteSpecial
+        catch
+            Warnlog "Unable to execute 'Edit / Paste / Special' -> Disabled !"
+            Call hCloseDocument
+            wait 500
+            Call hCloseDocument
+            goto endsub
+        endcatch
+        Wait 500
+        printlog "  Paste 'Table' in all available clipboard formats "
+        Kontext "InhaltEinfuegen"
+        if InhaltEinfuegen.Exists then
+            Call wPasteAvailableClipboardFormats(Auswahl.GetItemCount,"frame")
+            printlog " + Write Clipboard format under pasted content "
+            Call hFileSaveAsWithFilterKill (gOfficepath + "user\work\writer_to_draw_frame.odg", "draw8")
+            printlog " + Save document as ..\user\work\writer_to_draw_frame.odg"
+            Wait 500
+            Call hCloseDocument
+            printlog " + Close saved document "
+            wait 500
+            Call hFileOpen (gOfficepath + "user\work\writer_to_draw_frame.odg",false)
+            printlog " + Reopen saved document "
+            Wait 500
+            Call hCloseDocument
+            printlog " + Close saved document "
+        else
+            Warnlog "Dialog 'Paste Special' is not up!"
+            Call hCloseDocument
+            goto endsub
+        end if
     else
-     Warnlog "Dialog 'Paste Special' is not up!"
-     Call hCloseDocument
-     goto endsub
+        Warnlog "Writer To Draw -> 'Frame' failed !"
     end if
-  else
-   Warnlog "Writer To Draw -> 'Frame' failed !"
-  end if
-  printlog "  Close active document "
-  Call hCloseDocument
+    printlog "  Close active document "
+    Do Until GetDocumentCount = 0
+        Call hCloseDocument
+    Loop
 endcase
 
 ' ----------------------------------------------------------------------------------------------
 
 testcase WriterToDrawDrawingObject
-  gApplication = "WRITER"
-  printlog "  Open File '..\\writer\\optional\\input\\clipboard\\writer.sxw' "
-  printlog " + Jump to beginning of document "
-  printlog " + Select 'Drawing Object' "
-  printlog " + Copy selected Drawing Object "
-  if wSetClipboardtestDefaults("draw") = True then
-    gApplication = "DRAW"
-    printlog " + Open new document "
-    Call hNewDocument
-    printlog " + Edit / Paste Special "
-    Sleep 2
-    try
-        EditPasteSpecial
-    catch
-        Warnlog "Unable to execute 'Edit / Paste / Special' -> Disabled !"
-        Call hCloseDocument
-        wait 500
-        Call hCloseDocument
-        goto endsub
-    endcatch
-    Wait 500
-    printlog "  Paste 'Table' in all available clipboard formats "
-    Kontext "InhaltEinfuegen"
-    if InhaltEinfuegen.Exists then
-     Call wPasteAvailableClipboardFormats(Auswahl.GetItemCount,"draw")
-     printlog " + Write Clipboard format under pasted content "
-     Call hFileSaveAsWithFilterKill (gOfficepath + "user\work\writer_to_draw_draw.odg", "draw8")
-     printlog " + Save document as ..\user\work\writer_to_draw_draw.odg"
-     Wait 500
-     Call hCloseDocument
-     printlog " + Close saved document "
-     wait 500
-     Call hFileOpen (gOfficepath + "user\work\writer_to_draw_draw.odg",false)
-     printlog " + Reopen saved document "
-     Wait 500
-     Call hCloseDocument
-     printlog " + Close saved document "
+    gApplication = "WRITER"
+    printlog "  Open File '..\\writer\\optional\\input\\clipboard\\writer.sxw' "
+    printlog " + Jump to beginning of document "
+    printlog " + Select 'Drawing Object' "
+    printlog " + Copy selected Drawing Object "
+    if wSetClipboardtestDefaults("draw") = True then
+        gApplication = "DRAW"
+        printlog " + Open new document "
+        Call hNewDocument
+        printlog " + Edit / Paste Special "
+        Sleep 2
+        try
+            EditPasteSpecial
+        catch
+            Warnlog "Unable to execute 'Edit / Paste / Special' -> Disabled !"
+            Call hCloseDocument
+            wait 500
+            Call hCloseDocument
+            goto endsub
+        endcatch
+        Wait 500
+        printlog "  Paste 'Table' in all available clipboard formats "
+        Kontext "InhaltEinfuegen"
+        if InhaltEinfuegen.Exists then
+            Call wPasteAvailableClipboardFormats(Auswahl.GetItemCount,"draw")
+            printlog " + Write Clipboard format under pasted content "
+            Call hFileSaveAsWithFilterKill (gOfficepath + "user\work\writer_to_draw_draw.odg", "draw8")
+            printlog " + Save document as ..\user\work\writer_to_draw_draw.odg"
+            Wait 500
+            Call hCloseDocument
+            printlog " + Close saved document "
+            wait 500
+            Call hFileOpen (gOfficepath + "user\work\writer_to_draw_draw.odg",false)
+            printlog " + Reopen saved document "
+            Wait 500
+            Call hCloseDocument
+            printlog " + Close saved document "
+        else
+            Warnlog "Dialog 'Paste Special' is not up!"
+            Call hCloseDocument
+            goto endsub
+        end if
     else
-     Warnlog "Dialog 'Paste Special' is not up!"
-     Call hCloseDocument
-     goto endsub
+        Warnlog "Writer To Draw -> 'Drawing Object' failed !"
     end if
-  else
-   Warnlog "Writer To Draw -> 'Drawing Object' failed !"
-  end if
-  printlog "  Close active document "
-  Call hCloseDocument
+    printlog "  Close active document "
+    Do Until GetDocumentCount = 0
+        Call hCloseDocument
+    Loop
 endcase
 
 ' ----------------------------------------------------------------------------------------------
@@ -330,7 +338,7 @@ testcase WriterToDrawGraphicLinked
       try
          EditPasteSpecial
       catch
-         QAErrorLog "Check why linked graphic fails !"
+         warnlog "Check why linked graphic fails !"
          Call hCloseDocument
          wait 500
          Call hCloseDocument
@@ -362,8 +370,10 @@ testcase WriterToDrawGraphicLinked
       Warnlog "Writer To Draw -> 'Linked Graphic' failed !"
    end if
    printlog "  Close active document "
-   Call hCloseDocument
-   EnableQaErrors = false
+    Do Until GetDocumentCount = 0
+        Call hCloseDocument
+    Loop
+    EnableQaErrors = false
 endcase
 
 ' ----------------------------------------------------------------------------------------------
@@ -415,7 +425,9 @@ testcase WriterToDrawGraphicEmbedded
    Warnlog "Writer To Draw -> 'Embedded Graphic' failed !"
   end if
   printlog "  Close active document "
-  Call hCloseDocument
+    Do Until GetDocumentCount = 0
+        Call hCloseDocument
+    Loop
 endcase
 
 ' ----------------------------------------------------------------------------------------------
@@ -466,8 +478,10 @@ testcase WriterToDrawOLEObject
   else
    Warnlog "Writer To Draw -> 'OLE object' failed !"
   end if
-  printlog "  Close active document "
-  Call hCloseDocument
+    printlog "  Close active document "
+    Do Until GetDocumentCount = 0
+        Call hCloseDocument
+    Loop
 endcase
 
 ' ----------------------------------------------------------------------------------------------
@@ -516,8 +530,10 @@ testcase WriterToDrawControl
      goto endsub
     end if
   else
-   Warnlog "Writer To Draw -> 'Control' failed !"
+    Warnlog "Writer To Draw -> 'Control' failed !"
   end if
-  printlog "  Close active document "
-  Call hCloseDocument
+    printlog "  Close active document "
+    Do Until GetDocumentCount = 0
+        Call hCloseDocument
+    Loop
 endcase

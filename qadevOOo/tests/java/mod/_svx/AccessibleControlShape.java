@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: AccessibleControlShape.java,v $
- * $Revision: 1.9 $
+ * $Revision: 1.9.8.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -54,8 +54,8 @@ import com.sun.star.uno.XInterface;
 
 public class AccessibleControlShape extends TestCase {
 
-    XComponent xDrawDoc;
-    XModel aModel;
+    static XComponent xDrawDoc;
+    static XModel aModel;
 
     protected void initialize( TestParameters tParam, PrintWriter log ) {
 
@@ -93,7 +93,7 @@ public class AccessibleControlShape extends TestCase {
             (xDrawDoc,3000,4500,15000,1000,"CommandButton");
 
         AccessibilityTools at = new AccessibilityTools();
-
+        utils.shortWait(5000);
         XWindow xWindow = at.getCurrentWindow ((XMultiServiceFactory)tParam.getMSF(),aModel);
         XAccessible xRoot = at.getAccessibleObject(xWindow);
 
@@ -101,8 +101,9 @@ public class AccessibleControlShape extends TestCase {
 
         at.printAccessibleTree(log, xRoot, tParam.getBool(util.PropertyName.DEBUG_IS_ACTIVE));
 
-        oObj = at.getAccessibleObjectForRole(xRoot, AccessibleRole.SHAPE,
-            "Button");
+//        oObj = at.getAccessibleObjectForRole(xRoot, AccessibleRole.SHAPE,
+//            "Button");
+        oObj = at.getAccessibleObjectForRole(xRoot, AccessibleRole.UNKNOWN, "Button");
 
         // create test environment here
         TestEnvironment tEnv = new TestEnvironment( oObj );

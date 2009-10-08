@@ -37,7 +37,6 @@
 '*
 '\***********************************************************************
 
-
 sub w_fields2
 
     Call tFieldsOther_0      'NON modal
@@ -54,7 +53,6 @@ sub w_fields2
     Call tFieldsOther_9      'Insert/Fields/Other/Document / Time
 
 end sub
-
 
 testcase tFieldsOther_0
 
@@ -80,7 +78,7 @@ testcase tFieldsOther_0
 
    Call wTypeKeys "<Shift Home>"
    EditCopy
-   if GetClipboardText <> sTest then
+   if GetClipboard <> sTest then
        Warnlog "The text in document isn't corrrect!"
    end if
 
@@ -135,16 +133,16 @@ testcase tFieldsOther_1_1
   '/// Check if the name is inserted correctly
    Call wTypeKeys "<MOD1 Home><Shift End>"
    EditCopy
-   if GetClipboardText <> (sFirstName1 + " " + sLastName1) then
-       Warnlog "Should get " & sFirstName1 & " " & sLastName1 & " but get " & GetClipboardText
+   if GetClipboard <> (sFirstName1 + " " + sLastName1) then
+       Warnlog "Should get " & sFirstName1 & " " & sLastName1 & " but get " & GetClipboard
    end if
 
   '/// Check if the Initial is inserted correctly
    Call wTypeKeys "<Down>"
    Call wTypeKeys "<End><Shift Home>"
    EditCopy
-   if GetClipboardText <> sInitial1 then
-       Warnlog "Should get " & sInitial1 & " but get " & GetClipboardText
+   if GetClipboard <> sInitial1 then
+       Warnlog "Should get " & sInitial1 & " but get " & GetClipboard
    end if
 
   '/// Change author to author1 :XYZ OPQ
@@ -163,15 +161,15 @@ testcase tFieldsOther_1_1
   '/// Check if the name is changed
    Call wTypeKeys "<MOD1 Home><Shift End>"
    EditCopy
-   if GetClipboardText <> (sFirstName2 + " " + sLastName2) then
-       Warnlog "Should get " & sFirstName2 & " " & sLastName2 & " but get " & GetClipboardText
+   if GetClipboard <> (sFirstName2 + " " + sLastName2) then
+       Warnlog "Should get " & sFirstName2 & " " & sLastName2 & " but get " & GetClipboard
    end if
 
   '/// Check if the Initial is changed
    Call wTypeKeys "<Down><End><Shift Home>"
    EditCopy
-   if GetClipboardText <> sInitial2 then
-       Warnlog "Should get " & sInitial2 & " but get " & GetClipboardText
+   if GetClipboard <> sInitial2 then
+       Warnlog "Should get " & sInitial2 & " but get " & GetClipboard
    end if
 
   'Change author to default
@@ -236,16 +234,16 @@ testcase tFieldsOther_1_2
   '/// Check if the name is inserted correctly
    Call wTypeKeys "<MOD1 Home><Shift End>"
    EditCopy
-   if GetClipboardText <> (sFirstName1 + " " + sLastName1) then
-       Warnlog "Should get " & sFirstName1 & " " & sLastName1 & " but get " & GetClipboardText
+   if GetClipboard <> (sFirstName1 + " " + sLastName1) then
+       Warnlog "Should get " & sFirstName1 & " " & sLastName1 & " but get " & GetClipboard
    end if
 
   '/// Check if the Initial is inserted correctly
    Call wTypeKeys "<Down>"
    Call wTypeKeys "<End><Shift Home>"
    EditCopy
-   if GetClipboardText <> sInitial1 then
-       Warnlog "Should get " & sInitial1 & " but get " & GetClipboardText
+   if GetClipboard <> sInitial1 then
+       Warnlog "Should get " & sInitial1 & " but get " & GetClipboard
    end if
 
   '/// Change author to author1 :XYZ OPQ
@@ -264,15 +262,15 @@ testcase tFieldsOther_1_2
   '/// Check if the name is changed
    Call wTypeKeys "<MOD1 Home><Shift End>"
    EditCopy
-   if GetClipboardText <> (sFirstName1 + " " + sLastName1) then
-       Warnlog "Still should get " & sFirstName1 & " " & sLastName1 & " but get " & GetClipboardText
+   if GetClipboard <> (sFirstName1 + " " + sLastName1) then
+       Warnlog "Still should get " & sFirstName1 & " " & sLastName1 & " but get " & GetClipboard
    end if
 
   '/// Check if the Initial is changed
    Call wTypeKeys "<Down><End><Shift Home>"
    EditCopy
-   if GetClipboardText <> sInitial1 then
-       Warnlog "Still should get " & sInitial1 & " but get " & GetClipboardText
+   if GetClipboard <> sInitial1 then
+       Warnlog "Still should get " & sInitial1 & " but get " & GetClipboard
    end if
 
   'Change author to default
@@ -311,6 +309,7 @@ testcase tFieldsOther_2
 
   '/// Open test file chapterTest.sxw
    Call hFileOpen(sTestFile)
+   Call sMakeReadOnlyDocumentEditable
 
    Call wTypeKeys "<MOD1 End><Return>"
 
@@ -365,7 +364,7 @@ testcase tFieldsOther_3
     Call wTypeKeys "<Shift Left>"
     EditCopy
     Sleep 1
-    if GetClipboardText = "" then
+    if GetClipboard = "" then
         Warnlog "Field returns an empty string"
     end if
     
@@ -395,6 +394,7 @@ testcase tFieldsOther_4
 
   '/// Open test file pageTest.sxw
    Call hFileOpen(sTestFile)
+   Call sMakeReadOnlyDocumentEditable
 
    Call wTypeKeys "<MOD1 Home>"
    Call wTypeKeys "<End><Return>"
@@ -413,7 +413,7 @@ testcase tFieldsOther_4
          sleep 1
          Call wTypeKeys "<F9>"
          Sleep 2
-         Call wTypeKeys "<Shift Home>"
+         Call wTypeKeys "<Shift LEFT>"  'HOME
          Sleep 1
          if fGetFieldContent() <> sFilename(i) then
              Warnlog i &" - Should get " & sFilename(i) & " but get " & fGetFieldContent()
@@ -430,6 +430,8 @@ endcase
 '-----------------------------------------------------------------
 
 testcase tFieldsOther_5
+qaerrorlog "#i93906# - Testcase outcommented due to bug. 'Copied field-content not pastable outside Office'"
+goto endsub
 
   Dim  sTestFile     as String
   Dim  sPage()       as String
@@ -450,6 +452,7 @@ testcase tFieldsOther_5
 
   '/// Open test file pageTest.sxw which includes 3 pages
    Call hFileOpen(sTestFile)
+   Call sMakeReadOnlyDocumentEditable
 
   '/// Go to the 2nd page
    Call wTypeKeys "<MOD1 Home>"
@@ -470,9 +473,9 @@ testcase tFieldsOther_5
          Sleep 2
          Call wTypeKeys "<Shift Home>"
          Sleep 1
-         ToolsCalculate
-         if GetClipboardText <> sPage(i) then
-             Warnlog i &" - Should get " & sPage(i) & " but get " & GetClipboardText
+         EditCopy
+         if GetClipboard <> sPage(i) then
+             Warnlog i &" - Should get " & sPage(i) & " but get " & GetClipboard
          end if
          Call wTypeKeys "<Delete>"
      next i
@@ -525,7 +528,6 @@ testcase tFieldsOther_6_1
                       "XO@b.b"     , _
                       "State2"     , _
                      )
-
 
   printlog "Insert/Fields/Other/Document / Sender"
  '/// <b> Insert/Fields/Other/Document / Sender </b>
@@ -659,7 +661,9 @@ endcase
 
 testcase tFieldsOther_6_2
 
-  Dim aUserData(16) , aUserData1() , aUserData2() as String
+  Dim aUserData(16) as String
+  Dim aUserData1() as String
+  Dim aUserData2() as String
 
   Dim i as Integer
 
@@ -832,6 +836,8 @@ endcase
 '-----------------------------------------------------------------
 
 testcase tFieldsOther_7
+qaerrorlog "#i93906# - Testcase outcommented due to bug. 'Copied field-content not pastable outside Office'"
+goto endsub
 
   Dim  sTestFile     as String
   Dim  sStatistics() as String
@@ -858,6 +864,7 @@ testcase tFieldsOther_7
   '/// 2 tables , 2 pictures , 22 paragraph , 1 object ,
   '/// 2 words , 12 characters and 2 pages
    Call hFileOpen(sTestFile)
+   Call sMakeReadOnlyDocumentEditable
 
    Call wTypeKeys "<MOD1 Home><Down>"
 
@@ -876,9 +883,9 @@ testcase tFieldsOther_7
          Sleep 2
          Call wTypeKeys "<Shift Home>"
          Sleep 1
-         ToolsCalculate
-         if GetClipboardText <> sStatistics(i) then
-             Warnlog i &" - Should get " & sStatistics(i) & " but get " & GetClipboardText
+         EditCopy
+         if GetClipboard <> sStatistics(i) then
+             Warnlog i &" - Should get " & sStatistics(i) & " but get " & GetClipboard
          end if
          Call wTypeKeys "<Delete>"
      next i
@@ -892,6 +899,8 @@ endcase
 '-----------------------------------------------------------------
 
 testcase tFieldsOther_8
+qaerrorlog "#i93906# - Testcase outcommented due to bug. 'Copied field-content not pastable outside Office'"
+goto endsub
 
     Dim  sTestFile     as String
     Dim  sDirectory    as String
@@ -901,7 +910,7 @@ testcase tFieldsOther_8
     Dim  i             as Integer
     
     sLanguage    = fGetDirLanguage()
-    sDirectory   = "share\template\" & sLanguage & "\educate"
+    sDirectory   = "..\..\OpenOffice.org\Basis 3.0\share\template\" & sLanguage & "\educate"
     sTestFile    = Convertpath ( gNetzOfficePath + sDirectory + "\diploma.ott")
     
     sResult(0)   = fGetCateGory()
@@ -918,6 +927,7 @@ testcase tFieldsOther_8
     
     '/// Open test file diploma.ott
     Call hFileOpen(sTestFile)
+    Call sMakeReadOnlyDocumentEditable
     
     Call wTypeKeys "<MOD1 Home>"
     
@@ -937,13 +947,13 @@ testcase tFieldsOther_8
         Sleep 2
         Call wTypeKeys "<Shift Left>"
         Sleep 1
-    
-        if fGetFieldContent() <> sResult(i-1) then
+        EditCopy
+        if GetClipboard <> sResult(i-1) then
             select case i-1
                 case 0
                     QAErrorlog "#i70342#Field 'Templates->Category' is empty"
                 case else
-                    Warnlog " - Should get " & sResult(i-1) & " but get " & fGetFieldContent()                    
+                    Warnlog " - Should get " & sResult(i-1) & " but get " & GetClipboard
             end select
         end if
         Call wTypeKeys "<Delete>"
@@ -960,7 +970,7 @@ endcase
 
 testcase tFieldsOther_9
 
-  Dim sTime1 , sTime2  as  String
+    Dim sTime1 , sTime2  as  String
 
   printlog "Insert/Fields/Other/Document / Time"
  '/// <b> Insert/Fields/Other/Document / Time </b>
@@ -989,12 +999,12 @@ testcase tFieldsOther_9
    Call wTypeKeys "<MOD1 Home>"
    Call wTypeKeys "<Shift End>"
    EditCopy
-   sTime1 = GetClipboardText
+   sTime1 = GetClipboard
 
    Call wTypeKeys "<Down><Home>"
    Call wTypeKeys "<Shift End>"
    EditCopy
-   sTime2 = GetClipboardText
+   sTime2 = GetClipboard
 
    Sleep 5
    Call wTypeKeys "<F9>"
@@ -1003,7 +1013,7 @@ testcase tFieldsOther_9
    Call wTypeKeys "<MOD1 Home>"
    Call wTypeKeys "<Shift End>"
    EditCopy
-   if sTime1 <> GetClipboardText then
+   if sTime1 <> GetClipboard then
        Warnlog "Time should NOT change !"
    end if
 
@@ -1011,7 +1021,7 @@ testcase tFieldsOther_9
    Call wTypeKeys "<Down><Home>"
    Call wTypeKeys "<Shift End>"
    EditCopy
-   if sTime2 <> GetClipboardText then
+   if sTime2 <> GetClipboard then
        Warnlog "Time should change !"
    end if
 
@@ -1020,5 +1030,4 @@ testcase tFieldsOther_9
 endcase
 
 '-----------------------------------------------------------------
-
 

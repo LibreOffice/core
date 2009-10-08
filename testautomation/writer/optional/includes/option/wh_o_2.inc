@@ -33,7 +33,7 @@
 '*
 '* owner : fredrik.haegg@sun.com
 '*
-'* short description :
+'* short description : Functional-Tests for Tools - Options - Html - Print & Table
 '*
 '\***********************************************************************
 
@@ -45,15 +45,8 @@ sub wh_o_2
 
 end sub
 
-
 '------------------------------------------------------------------------------
 testcase tToolsOptionsHTMLPrint
-    '/ Print                     ///'
-    '/ -----                     ///'
-    '/ tToolsOptionsHTMLPrint    ///'
-    '/ normal                         ///'
-    '/ Function:  ///'
-    '/                                ///'
 
     dim irgendwas(12) as boolean    ' Checkbox states
     dim iListBox(1) as integer         ' ListBox
@@ -84,6 +77,7 @@ testcase tToolsOptionsHTMLPrint
     '(4) = Seitenende
 
     Call hFileOpen ( gTesttoolPath + "writer\optional\input\options\test.html" )
+    Call sMakeReadOnlyDocumentEditable
     printlog "'///- Tools/Options/HTML: PrintHTML ///"
 
     printlog ("'/// - save states ///")
@@ -164,7 +158,7 @@ testcase tToolsOptionsHTMLPrint
     if ( bTempRadioBut(3) <> Dokumentende.IsChecked) Then WarnLog "'End of document' state changed"
     if ( bTempRadioBut(4) <> Seitenende.IsChecked  ) Then WarnLog "'End of page' state changed"
 
-    if ( Fax.GetSelIndex <> iTempListBox(1) ) Then QAErrorlog "#i62663#Fax state changed"
+    if ( Fax.GetSelIndex <> iTempListBox(1) ) Then warnlog "Fax state changed"
 
     printlog ("'/// - all UnCheck -> o ///")
 
@@ -305,7 +299,7 @@ testcase tToolsOptionsHTMLPrint
     Kontext "ExtrasOptionenDlg"
     ExtrasOptionenDlg.OK
 
-	Do Until GetDocumentCount = 1
+	Do Until GetDocumentCount = 0
     	Call hCloseDocument
 	Loop
 endcase
@@ -502,7 +496,9 @@ testcase tToolsOptionsHTMLTable
     Kontext "ExtrasOptionenDlg"
     ExtrasOptionenDlg.OK
 
-    Call hCloseDocument
+	Do Until GetDocumentCount = 0
+    	Call hCloseDocument
+	Loop
 endcase
 
 '------------------------------------------------------------------------------
@@ -522,6 +518,7 @@ testcase tToolsOptionsHTMLTable1
     Kontext "ExtrasOptionenDlg"
     ExtrasOptionenDlg.OK
 
-    Call hCloseDocument
-
+    Do Until GetDocumentCount = 0
+        Call hCloseDocument
+    Loop
 endcase

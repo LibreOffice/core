@@ -190,6 +190,12 @@ LinkDetail4 UID_FIELDLINK_DETAIL4
 LinkMaster4 UID_FIELDLINK_MASTER4
 SuggestBtn extensions:PushButton:RID_DLG_FORMLINKS:PB_SUGGEST
 
+*MacroMigration     dbaccess:ModalDialog:DLG_MACRO_MIGRATION
+DatabaseFile        SID_OPENURL
+Browse              dbaccess:PushButton:TP_SAVE_DBDOC_AS:PB_BROWSE_SAVE_AS_LOCATION
+BackButton          HID_WIZARD_PREVIOUS
+NextButton          HID_WIZARD_NEXT
+
 *MailMerge HID_MAIL_MERGE_CREATE_FROM
 ThisDocument sw:RadioButton:DLG_MERGE_CREATE:RB_THISDOC
 UseTemplate sw:RadioButton:DLG_MERGE_CREATE:RB_TEMPLATE

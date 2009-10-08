@@ -38,6 +38,10 @@
 '\******************************************************************************
 
 testcase func_LoadSaveGeneral_1
+
+    warnlog( "#i95523# - cannot access custom tabpage on document info dialog" )
+    goto endsub
+    
   Dim bSave as boolean, bPromptSave as boolean
   Dim sSaveTime as String
   Dim sFilename, sFilebak as String
@@ -87,6 +91,11 @@ testcase func_LoadSaveGeneral_1
    Sleep (1)
    Speichern.Click
    Sleep (1)
+   kontext
+   'overwrite warning on rerun
+   if active.exists(3) then
+   active.yes
+   endif
 
  printlog "      activate all tabpages on properties dialog and cancel it"
 '///+=> now the properties dialog must be actived
@@ -145,11 +154,9 @@ testcase func_LoadSaveGeneral_1
    bSave = AutomatischSpeichern.IsChecked
 '///+check 'auto save' and set the time to 1 minute
   AutomatischSpeichern.Check
-   bPromptSave = MitRueckfrage.IsChecked
    sSaveTime = 15 'debug
 
    Minuten.SetText "2"
-   MitRueckfrage.Check
 
    '///+close options dialog with OK
    Kontext "ExtrasOptionenDlg"
@@ -178,8 +185,12 @@ testcase func_LoadSaveGeneral_1
    printlog "    - close the document and check the saved data"
    hCloseDocument ' closes the document with 'discard'
    '///+reopen the file and check if all paragraphs are inserted, t
-   hOpenFile ( sFilename )
-
+   hFileOpen ( sFilename )
+kontext
+if active.exists(5) then
+warnlog active.gettext
+goto endsub
+endif
    ' This part compares the content of the file after reload with text entered
    ' during the entire test. It should contain three lines of text.
    printlog( "   - Compare the content of the file with the text entered during the test." )
@@ -241,7 +252,6 @@ testcase func_LoadSaveGeneral_1
    ToolsOptions
    hToolsOptions ( "LoadSave", "General" )
    AutomatischSpeichern.Check
-   if bPromptSave = TRUE then MitRueckfrage.Check else MitRueckfrage.UnCheck
    Minuten.SetText sSaveTime
    if bSave = TRUE then AutomatischSpeichern.Check else AutomatischSpeichern.UnCheck
 '///+close options dialog with OK
@@ -325,7 +335,7 @@ testcase func_LoadSaveGeneral_2
 
 '///+save the HTML-doc at ../user/work/.. with another name
  printlog "      save the HTML file"
-   hSpeichernUnter ( sFilename2 )
+   hFileSaveAs ( sFilename2 )
 
 '///+check if the path for the graphic is 'not relativ' in the source code
  printlog "      check the hard coded path in source code of HTML file"

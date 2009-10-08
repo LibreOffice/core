@@ -39,7 +39,7 @@
 
 testcase tBasicSpecTemplate
 
-    warnlog( "#i89554# Macro dialog not displayed / document not loaded" )
+    qaerrorlog( "#i89554# Macro dialog not displayed / document not loaded" )
     goto endsub
 
     '///<h1>Load the spec template via http and enable macros</h1>

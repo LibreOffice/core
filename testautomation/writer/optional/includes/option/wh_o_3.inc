@@ -33,7 +33,7 @@
 '*
 '* owner : fredrik.haegg@sun.com
 '*
-'* short description :
+'* short description : Funcitonal-Test for Tools -Options - HTML - Cursor.
 '*
 '\***********************************************************************
 
@@ -68,41 +68,41 @@ testcase tToolsOptionsHTMLInsert
 '(7) = Zahlenformaterkennung             depends on AutomatischeZahlenerkennung
 '(8) = AutomatischeAusrichtung           depends on AutomatischeZahlenerkennung
 
-   hNewDocument
-  printlog "'///- Tools/Options/HTML: Insert ///"
+   call hNewDocument
+    printlog "'///- Tools/Options/HTML: Insert ///"
 
-  printlog ("'/// - save states ///")
+    printlog ("'/// - save states ///")
     ToolsOptions
     hToolsOptions ("HtmlDocument","Table")
 
-      irgendwas(2) = Ueberschrift.IsChecked
-      irgendwas(3) = Wiederholen.IsChecked
-      irgendwas(5) = Umrandung.IsChecked
+    irgendwas(2) = Ueberschrift.IsChecked
+    irgendwas(3) = Wiederholen.IsChecked
+    irgendwas(5) = Umrandung.IsChecked
 
-      irgendwas(6) = AutomatischeZahlenerkennung.IsChecked
-      irgendwas(7) = Zahlenformaterkennung.IsChecked
-      irgendwas(8) = AutomatischeAusrichtung.IsChecked
+    irgendwas(6) = AutomatischeZahlenerkennung.IsChecked
+    irgendwas(7) = Zahlenformaterkennung.IsChecked
+    irgendwas(8) = AutomatischeAusrichtung.IsChecked
 
-      printlog ("'/// - all states inverting ///")
+    printlog ("'/// - all states inverting ///")
 
 '      if irgendwas(2) Then Ueberschrift.UnCheck                Else Ueberschrift.Check
-      Ueberschrift.Check
-      if irgendwas(3) Then Wiederholen.UnCheck                 Else Wiederholen.Check
-      if irgendwas(5) Then Umrandung.UnCheck                   Else Umrandung.Check
+    Ueberschrift.Check
+    if irgendwas(3) Then Wiederholen.UnCheck                 Else Wiederholen.Check
+    if irgendwas(5) Then Umrandung.UnCheck                   Else Umrandung.Check
 
 '      if irgendwas(6) Then AutomatischeZahlenerkennung.UnCheck Else AutomatischeZahlenerkennung.Check
-      AutomatischeZahlenerkennung.Check
-      if irgendwas(7) Then Zahlenformaterkennung.UnCheck       Else Zahlenformaterkennung.Check
-      if irgendwas(8) Then AutomatischeAusrichtung.UnCheck     Else AutomatischeAusrichtung.Check
+    AutomatischeZahlenerkennung.Check
+    if irgendwas(7) Then Zahlenformaterkennung.UnCheck       Else Zahlenformaterkennung.Check
+    if irgendwas(8) Then AutomatischeAusrichtung.UnCheck     Else AutomatischeAusrichtung.Check
 
     Kontext "ExtrasOptionenDlg"
     ExtrasOptionenDlg.OK
 
-  printlog ("'/// - SO quit - start ///")
+    printlog ("'/// - SO quit - start ///")
 
- wOfficeRestart
+    call wOfficeRestart
 
-  printlog ("'/// - checking states ///")
+    printlog ("'/// - checking states ///")
     ToolsOptions
     hToolsOptions ( "HtmlDocument" , "Table" )
 
@@ -119,15 +119,15 @@ testcase tToolsOptionsHTMLInsert
     Kontext "ExtrasOptionenDlg"
     ExtrasOptionenDlg.OK
 
-  printlog ("'/// - all UnCheck -> o ///")
+    printlog ("'/// - all UnCheck -> o ///")
     ToolsOptions
     hToolsOptions ( "HtmlDocument" , "Table" )
 
-      Ueberschrift.UnCheck
+    Ueberschrift.UnCheck
 '      Wiederholen.UnCheck
-      Umrandung.UnCheck
+    Umrandung.UnCheck
 
-      AutomatischeZahlenerkennung.UnCheck
+    AutomatischeZahlenerkennung.UnCheck
 '      Zahlenformaterkennung.UnCheck
 '      AutomatischeAusrichtung.UnCheck
 
@@ -139,44 +139,41 @@ testcase tToolsOptionsHTMLInsert
 '/// 2.Location of Options: InsertTableWriter get's checked too ///'
 
   Printlog "'///    - check in InsertTableHTML ///"
-   hNewDocument
- 'printlog "a"
+   Call hNewDocument
    InsertTableWriter
    Kontext "TabelleEinfuegenWriter"
-' printlog "b"
 
       If ( Ueberschrift.IsChecked          ) Then WarnLog "Ueberschrift x"
 '      If ( UeberschriftWiederholen.IsChecked ) Then WarnLog "Wiederholen x"
       If ( Umrandung.IsChecked           ) Then WarnLog "Umrandung x"
 
    TabelleEinfuegenWriter.OK
- 'printlog "c"
 
 '/// Function: Input in tables ///'
 
    Kontext "DocumentWriter"
-'printlog "d"
+
     DocumentWriter.TypeKeys "<Down>1<Tab><Left>"
-'printlog "e"
+
     FormatParagraph
-'printlog "f"
+
     Kontext
    Active.SetPage TabAusrichtungAbsatz
    Kontext "TabAusrichtungAbsatz"
    if NOT Links.IsChecked then Warnlog "Die automatische Ausrichtung der Zahl wurde trotzdem durchgeführt!"
-'printlog "g"
+
     TabAusrichtungAbsatz.Cancel
 
 
    FormatNumberFormat
-'printlog "h"
+
     Kontext "Zahlenformat"
    If Kategorie.GetSelIndex <> 11 then Warnlog "Das Zahlenformat ist nicht Text geblieben!"
-'printlog "i"
-    Zahlenformat.Cancel
-'printlog "j"
 
-   hCloseDocument
+    Zahlenformat.Cancel
+
+
+   Call hCloseDocument
 
 '.................
 
@@ -237,7 +234,7 @@ testcase tToolsOptionsHTMLInsert
    If Kategorie.GetSelIndex <> 3 then Warnlog "numberformat didn't get changed!"
    Zahlenformat.Cancel
 
-   hCloseDocument
+   Call hCloseDocument
 
 '.......................
 
@@ -275,8 +272,12 @@ testcase tToolsOptionsHTMLInsert
     Kontext "ExtrasOptionenDlg"
     ExtrasOptionenDlg.OK
 
-   hCloseDocument
+	Do Until GetDocumentCount = 0
+    	Call hCloseDocument
+	Loop
 endcase
+
+'------------------------------------------------------------------------------------------------------------------------
 
 testcase tToolsOptionsHTMLCursor
 
@@ -315,11 +316,11 @@ testcase tToolsOptionsHTMLCursor
     Kontext "ExtrasOptionenDlg"
     ExtrasOptionenDlg.OK
 
-  printlog ("'/// - SO quit - start ///")
+    printlog ("'/// - SO quit - start ///")
 
- wOfficeRestart
+    call wOfficeRestart
 
-  printlog ("'/// - checking states ///")
+    printlog ("'/// - checking states ///")
     ToolsOptions
     hToolsOptions ( "HtmlDocument" , "FORMATTINGAIDS" )
 
@@ -332,7 +333,7 @@ testcase tToolsOptionsHTMLCursor
     Kontext "ExtrasOptionenDlg"
     ExtrasOptionenDlg.OK
 
-  printlog ("'/// - all UnCheck -> o ///")
+    printlog ("'/// - all UnCheck -> o ///")
     ToolsOptions
     hToolsOptions ( "HtmlDocument" , "FORMATTINGAIDS" )
 
@@ -387,6 +388,8 @@ testcase tToolsOptionsHTMLCursor
     Kontext "ExtrasOptionenDlg"
     ExtrasOptionenDlg.OK
 
-   hCloseDocument
+	Do Until GetDocumentCount = 0
+    	Call hCloseDocument
+	Loop
 endcase
 

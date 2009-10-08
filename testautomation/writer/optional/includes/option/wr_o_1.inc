@@ -33,7 +33,7 @@
 '*
 '* owner : fredrik.haegg@sun.com
 '*
-'* short description :
+'* short description : Functional-Tests for Tools-Options-Writer -View & Grid
 '*
 '\***********************************************************************
 
@@ -46,7 +46,7 @@ sub wr_o_1
     Call tToolsOptionsWriterView4
     Call tToolsOptionsWriterView5
     Call tToolsOptionsWriterView6
-    Call tToolsOptionsWriterView7    
+    Call tToolsOptionsWriterView7
     Call tToolsOptionsWriterGrid1
     Call tToolsOptionsWriterGrid2
     Call tToolsOptionsWriterGrid3
@@ -124,8 +124,8 @@ testcase tToolsOptionsWriterView1
 
     '/// - SO quit - restart
     Call wOfficeRestart
-    '///- Tools/Options/Writer: View    
-    '/// - checking states    
+    '///- Tools/Options/Writer: View
+    '/// - checking states
     ToolsOptions
     Call hToolsOptions ( "TextDocument" , "VIEW" )
     if ( option_value(1) = Hilfslinien.IsChecked               ) then WarnLog "Hilfslinien state changed"
@@ -151,11 +151,13 @@ testcase tToolsOptionsWriterView1
     end if
 
     Kontext "ExtrasOptionenDlg"
-    ExtrasOptionenDlg.OK        
-    '/// restore default values    
+    ExtrasOptionenDlg.OK
+    '/// restore default values
     Call wOptionenUndo( "View" )
     '/// close document
-    Call hCloseDocument
+    Do Until GetDocumentCount = 0
+        Call hCloseDocument
+    Loop
 endcase
 
 '------------------------------------------------------------------------------
@@ -247,7 +249,9 @@ testcase tToolsOptionsWriterView2
     '/// restore default values 
     Call wOptionenUndo( "View" )
     '/// close writer document
-    Call hCloseDocument
+    Do Until GetDocumentCount = 0
+        Call hCloseDocument
+    Loop
 endcase
 
 '------------------------------------------------------------------------------
@@ -325,7 +329,9 @@ testcase tToolsOptionsWriterView3
     '/// restore default values 
     Call wOptionenUndo( "View" )
     '/// close document
-    Call hCloseDocument
+    Do Until GetDocumentCount = 0
+        Call hCloseDocument
+    Loop
 endcase
 
 '------------------------------------------------------------------------------
@@ -409,7 +415,9 @@ testcase tToolsOptionsWriterView4
     printlog "- set defaultsvalues in options"
     Call wOptionenUndo( "View" )
     '/// close document
-    Call hCloseDocument
+    Do Until GetDocumentCount = 0
+        Call hCloseDocument
+    Loop
 endcase
 
 '------------------------------------------------------------------------------
@@ -420,6 +428,7 @@ testcase tToolsOptionsWriterView5
     Call hNewDocument
     '/// open document: writer\\optional\\input\\options\\options1.sxw
     Call hFileOpen ( gTesttoolPath + "writer\optional\input\options\options1.sxw" )
+    Call sMakeReadOnlyDocumentEditable
     '///- Tools/Options/Writer: View
 
     printlog ("'/// - save states ///")
@@ -463,8 +472,9 @@ testcase tToolsOptionsWriterView5
     printlog "- set defaultsvalues in options"
     Call wOptionenUndo( "View" )
     '/// close document
-    Call hCloseDocument
-
+    Do Until GetDocumentCount = 0
+        Call hCloseDocument
+    Loop
 endcase
 
 '------------------------------------------------------------------------------
@@ -475,6 +485,7 @@ testcase tToolsOptionsWriterView6
     Call hNewDocument
     '/// open document: writer\\optional\\input\\options\\options1.sxw
     Call hFileOpen ( gTesttoolPath + "writer\optional\input\options\options1.sxw" )
+    Call sMakeReadOnlyDocumentEditable
     '///- Tools/Options/Writer: View
 
     printlog ("'/// - save states ///")
@@ -518,8 +529,9 @@ testcase tToolsOptionsWriterView6
     printlog "- set defaultsvalues in options"
     Call wOptionenUndo( "View" )
     '/// close document
-    Call hCloseDocument
-    
+    Do Until GetDocumentCount = 0
+        Call hCloseDocument
+    Loop
 endcase
 
 '------------------------------------------------------------------------------
@@ -530,6 +542,7 @@ testcase tToolsOptionsWriterView7
     Call hNewDocument
     '/// open document: writer\\optional\\input\\options\\options1.sxw
     Call hFileOpen ( gTesttoolPath + "writer\optional\input\options\options1.sxw" )
+    Call sMakeReadOnlyDocumentEditable
     '///- Tools/Options/Writer: View
 
     printlog ("'/// - save states ///")
@@ -573,8 +586,9 @@ testcase tToolsOptionsWriterView7
     printlog "- set defaultsvalues in options"
     Call wOptionenUndo( "View" )
     '/// close document
-    Call hCloseDocument
-    
+    Do Until GetDocumentCount = 0
+        Call hCloseDocument
+    Loop
 endcase
 
 '------------------------------------------------------------------------------
@@ -656,8 +670,9 @@ testcase tToolsOptionsWriterGrid1
     printlog "- set defaultsvalues in options"
     Call wOptionenUndo( "Grid" )
     '/// close document
-    Call hCloseDocument
-
+    Do Until GetDocumentCount = 0
+        Call hCloseDocument
+    Loop
 endcase
 
 '------------------------------------------------------------------------------
@@ -738,8 +753,9 @@ testcase tToolsOptionsWriterGrid2
     printlog "- set defaultsvalues in options"
     Call wOptionenUndo( "Grid" )
     '/// close document
-    Call hCloseDocument
-
+    Do Until GetDocumentCount = 0
+        Call hCloseDocument
+    Loop
 endcase
 
 '------------------------------------------------------------------------------
@@ -809,8 +825,9 @@ testcase tToolsOptionsWriterGrid3
     printlog "- set defaultsvalues in options"
     Call wOptionenUndo( "Grid" )
     '/// close document
-    Call hCloseDocument
-
+    Do Until GetDocumentCount = 0
+        Call hCloseDocument
+    Loop
 endcase
 
 '------------------------------------------------------------------------------
@@ -849,6 +866,7 @@ testcase tToolsOptionsWriterGrid4
     '///  ( gTesttoolPath + "writer\optional\input\options\gridtst.sxw" ) ///'
 
     Call hFileOpen ( gTesttoolPath + "writer\optional\input\options\gridtst.sxw", False )
+    Call sMakeReadOnlyDocumentEditable
 
     ' select grafik element
     Call wNavigatorAuswahl(4,1)
@@ -909,6 +927,7 @@ testcase tToolsOptionsWriterGrid4
     printlog "- set defaultsvalues in options"
     Call wOptionenUndo( "Grid" )
     '/// close document
-    Call hCloseDocument
-
+    Do Until GetDocumentCount = 0
+        Call hCloseDocument
+    Loop
 endcase

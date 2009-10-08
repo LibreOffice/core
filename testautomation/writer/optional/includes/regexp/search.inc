@@ -297,8 +297,6 @@ endcase
 
 '---------------------------------------------------------
 testcase tItalic_Search
-   QAErrorlog "#i74765#Search for typeface Italic fails"
-   goto endsub
    call wSetFindAndReplaceToDefault(1)
    Such_Text = "k"                     'Suche nach Format "kursiv"
    Meldungs_Text = "Suchen Format kursiv"
@@ -358,9 +356,7 @@ endcase
 
 '---------------------------------------------------------
 testcase tItalic_Replace
-    QAErrorlog "#i74765#Search for typeface Italic fails"
-    goto endsub
-    call wSetFindAndReplaceToDefault(1)
+   call wSetFindAndReplaceToDefault(1)
    Such_Text = "kursiv"                'Suche Format "kursiv", ersetze
    Meldungs_Text = "Ersetzte kursiv mit durchgestrichen"    'mit Format "durchgestrichen"
    SearchFor.SetText Such_Text
@@ -1526,8 +1522,10 @@ sub wSetFindAndReplaceToDefault(WhichDocument as integer)
             Call hNewDocument  ' empty Document
         Case 1
             Call hFileOpen ( gTesttoolPath +"writer\optional\input\search\such_u_e.sxw")
+            Call sMakeReadOnlyDocumentEditable
         case 2
             Call hFileOpen ( gTesttoolPath +"writer\optional\input\search\attrib.sxw")
+            Call sMakeReadOnlyDocumentEditable
     end select
     kontext "FindAndReplace"
     Sleep 2

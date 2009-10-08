@@ -495,7 +495,7 @@ testcase tNumSubpointsMoveUpMoveDown
 
     printlog "   - move down 3 times"
     if Val(mid$(gMinor, 2, Len(gMinor))) >= 139 and Val(mid$(gMinor, 2, Len(gMinor))) <= 140 then
-        QAErrorlog "#57856#Loop when moving numbered list up and down with subpoints" 
+        QAErrorlog "Loop when moving numbered list up and down with subpoints" 
     else
         printlog " click 3 times move down in object bar"
         for i=1 to 3
@@ -911,7 +911,7 @@ testcase tUpSubpointsMoveUpMoveDown
     HochschiebenMitUnterpunkten.Click
 
     if Val(mid$(gMinor, 2, Len(gMinor))) >= 139 and Val(mid$(gMinor, 2, Len(gMinor))) <= 140 then
-        QAErrorlog "#57856#Loop when moving numbered list up and down with subpoints" 
+        QAErrorlog "Loop when moving numbered list up and down with subpoints" 
     else
         printlog "   - move down 3 times"
         for i=1 to 3

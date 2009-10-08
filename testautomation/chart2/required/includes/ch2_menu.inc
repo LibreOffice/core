@@ -116,7 +116,7 @@ testcase tMainMenu
         
         printlog "check if there are 9 items in the INSERT menu."
         DocumentCalc.UseMenu 
-        hMenuSelectNr(4)       
+        hMenuSelectNr(4) 'INSERT       
         iCount = hMenuItemGetCount()
         if (iCount <> 9) then
             warnlog "There should 9 items in the INSERT menu but there are " + iCount + " items."
@@ -134,7 +134,7 @@ testcase tMainMenu
         printlog "check if there are 2 items in the FORMAT/ARRANGEMENT menu."
         DocumentCalc.UseMenu
         hMenuSelectNr(5) ' FORMAT
-        hMenuSelectNr(3) ' AXIS        
+        hMenuSelectNr(3) ' ARRANGEMENT        
         iCount = hMenuItemGetCount()        
         if (iCount <> 2) then
             warnlog "There should 2 items in the FORMAT/ARRANGEMENT menu but there are " + iCount + " items."

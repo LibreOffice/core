@@ -37,7 +37,6 @@
 '*
 '\***********************************************************************
 
-
 sub w_undo_history_4
 
 	Call tUndoHistory34			' Objects (Insert/Delete)
@@ -52,8 +51,6 @@ sub w_undo_history_4
 	Call tUndoHistory43			' Header/Footer insert and delete
 	
 end sub
-
-
 
 testcase tUndoHistory34
 	
@@ -73,7 +70,6 @@ testcase tUndoHistory34
     wait 500
 	'///  string in Undo-list has to be: "Insert object") 
 	Call CheckUndoStringInUndoList ( 10, "InsertObject" )
-    Call wTypeKeys "<ESCAPE>"
 
 	printlog "- delete object"	
 	'/// Select object with <Shift F4>
@@ -106,7 +102,6 @@ testcase tUndoHistory35
 	Sleep 2
 	'///  string in Undo-list has to be: "Insert floating frame") 
 	Call CheckUndoStringInUndoList ( 10, "InsertFloatingFrame" )
-    Call wTypeKeys "<ESCAPE>"
 
 	'/// Delete floating frame
 	printlog "- delete floating frame"
@@ -132,7 +127,7 @@ testcase tUndoHistory36
     Sleep 2
     '/// Choose "..\\writer\\input\\htmltest.sxw"
 	if OeffnenDlg.Exists then
-		Dateiname.Settext Convertpath (gTesttoolPath & "writer\optional\input\htmltest.sxw" )
+		Dateiname.Settext Convertpath (gTesttoolPath & "writer\optional\input\undo\htmltest.sxw" )
 		Oeffnen.Click
 	else
 		Warnlog "File open dialog missing"
@@ -142,7 +137,7 @@ testcase tUndoHistory36
 
 	'///  string in Undo-list has to be: "Insert document") 
 	Call CheckUndoStringInUndoList ( 10, "InsertDocument" )
-	
+
 	'/// close document
 	Call hCloseDocument
 endcase
@@ -194,7 +189,6 @@ testcase tUndoHistory38
 	Call wTypeKeys ( "www.sun.com " )
 	'///  string in Undo-list has to be: "AutoCorrect") 
 	Call CheckUndoStringInUndoList ( 10, "AutoCorrect" )	
-    Call wTypeKeys "<ESCAPE>"
 
     '/// insert a line break
 	Call wTypeKeys ( "<Return>" )
@@ -252,7 +246,9 @@ testcase tUndoHistory40
     Massstab.OK
     Sleep 1
     '/// Insert 2 drawing objects (rectangle) ///
-    Call wZeichenobjektEinfuegen ( "Rechteck", 40, 50, 50, 50 )
+    Call wZeichenobjektEinfuegen ( "Rechteck", 40, 50, 60, 60 )
+    Call wTypeKeys "<ESCAPE>"
+    Call wTypeKeys "<ESCAPE>"
     Call wZeichenobjektEinfuegen ( "Rechteck", 40, 55, 50, 65 )
     '/// Select both objects ///
     Call wObjektSelektieren ( 35, 35, 70, 70 )
@@ -276,11 +272,11 @@ testcase tUndoHistory40
 		'/// Select Format / Group / Ungroup ///
 		printlog "- ungroup objects"
 		FormatUngroupDraw
-		'///  string in Undo-list has to be: "Ungroup group object 'MyGroup'") 
+		'///  string in Undo-list has to be: "Ungroup group object") 
 		Call CheckUndoStringInUndoList ( 10, "DrawUnGroup" )
 
 		'/// Select 1 object and delete it
-		Call gMouseClick ( 25, 25 )
+		Call gMouseClick ( 40, 52 )
 		printlog "- delete object"
 		Call wTypeKeys "<Delete>"
 		'///  string in Undo-list has to be: "Delete 2 Rectangles") 
@@ -290,7 +286,7 @@ testcase tUndoHistory40
     endcatch
 
 	'/// close document
-	Call hCloseDocument	
+	Call hCloseDocument
 endcase
 
 
@@ -300,9 +296,10 @@ testcase tUndoHistory41
 	'/// <B>Spellcheck(Autocheck/Spellcheck)</B>
 	printlog "- Spellcheck: Autocheck"
     '/// new document ///
-    Call hNewDocument
+    hfileOpen (gTesttoolpath + "writer\optional\input\undo\spellcheck_undo.odt")
+    Call sMakeReadOnlyDocumentEditable
 	'/// Type "This is a testp<End>"
-	Call wTypeKeys ( "This is a testp<End>" )
+	Call wTypeKeys ( "<End>" )  'This is a testp
 	'/// Select word' testp'
 	Call wTypeKeys ( "<Mod1 Shift Left>" )
 	'/// Tools / Spellcheck
@@ -323,10 +320,9 @@ testcase tUndoHistory41
 	if Spellcheck.Exists then Spellcheck.Close
 	'///  string in Undo-list has to be: "Replace: 'Testp' -> 'Test'") 
 	Call CheckUndoStringInUndoList ( 10, "Autocheck/Spellcheck" )
-    Call wTypeKeys "<ESCAPE>"
 
     '/// Uncheck 'Autospellcheck' in Toolbar ///
-    'ToolsSpellcheckAutoSpellcheck
+    ToolsSpellcheckAutoSpellcheck
 
 	printlog "- Spellcheck"
 	Call wTypeKeys ( "<End><Return>", 2 )
@@ -359,7 +355,7 @@ testcase tUndoHistory41
 	if Spellcheck.Exists then Spellcheck.Close
 	
 	'///  string in Undo-list has to be: "Replace: 'Testp' -> 'Test'") 
-	Call CheckUndoStringInUndoList ( 10, "Autocheck/Spellcheck" )		
+	Call CheckUndoStringInUndoList ( 10, "Autocheck/Spellcheck" )
 
 	'/// close document
     Call hCloseDocument
@@ -378,21 +374,19 @@ testcase tUndoHistory42
 	'/// Insert a pushbutton from toolbox ///
 	Pushbutton.Click
     Kontext "DocumentWriter"
-    DocumentWriter.MouseDown ( 10, 20 )
-    DocumentWriter.MouseMove ( 20, 25 )
-    DocumentWriter.MouseUp   ( 20, 25 )
+    DocumentWriter.MouseDown ( 40, 50 )
+    DocumentWriter.MouseMove ( 50, 55 )
+    DocumentWriter.MouseUp   ( 50, 55 )
     Sleep 1
 
 	'///  string in Undo-list has to be: "Insert control") 
 	Call CheckUndoStringInUndoList ( 10, "ControlInsert" )
-    Call wTypeKeys "<ESCAPE>"
 
 	printlog "- Form control (move)"
 	'/// Press '<Up>' to move control
 	Call wTypeKeys ( "<Up>" )
 	'///  string in Undo-list has to be: "Move control")
 	Call CheckUndoStringInUndoList ( 10, "ControlMove" )
-    Call wTypeKeys "<ESCAPE>"
 
 	printlog "- Form control (resize)"
 	'/// Press '<Ctrl+Tab>' to enter handle selection mode
@@ -401,7 +395,6 @@ testcase tUndoHistory42
 	Call wTypeKeys ( "<Up>" )
 	'///  string in Undo-list has to be: "Resize control")
 	Call CheckUndoStringInUndoList ( 10, "ControlResize" )
-    Call wTypeKeys "<ESCAPE>"
 
 	printlog "- Form control (replace)"
 	'/// Select 'Format->Replace with-> Text box'
@@ -409,20 +402,17 @@ testcase tUndoHistory42
 	wait 500
 	'///  string in Undo-list has to be: "Replace control")
 	Call CheckUndoStringInUndoList ( 10, "ControlReplace" )
-    Call wTypeKeys "<ESCAPE>"
 
-	printlog "- Form control (change property)"	
+	printlog "- Form control (change property)"
 	'/// Select 'Format->Control' and change name of control
-	FormatControl	
-	Kontext "ControlPropertiesDialog"   
+	FormatControl
+	Kontext "ControlPropertiesTabControl"
     ControlPropertiesTabControl.setPage TabGeneralControl
 	Kontext "TabGeneralControl"
 	NameText.Settext "MyControl"
-	Kontext "ControlPropertiesDialog"
-    ControlPropertiesDialog.Close 
+    FormatControl
 	'///  string in Undo-list has to be: "Set property 'Name'")
 	Call CheckUndoStringInUndoList ( 10, "ControlChange" )
-    Call wTypeKeys "<ESCAPE>"
 
 	printlog "- Form control (delete)"
 	'/// Press '<Delete>' to delete control
@@ -453,7 +443,6 @@ testcase tUndoHistory43
      Sleep 2
 	'///  string in Undo-list has to be: "Header/footer changed")
 	Call CheckUndoStringInUndoList ( 10, "Header/Footer" )
-    Call wTypeKeys "<ESCAPE>"
 
 	'///  Delete header
 	printlog "- Delete header"
@@ -473,7 +462,6 @@ testcase tUndoHistory43
 	end if
 	'///  string in Undo-list has to be: "Header/footer changed")
 	Call CheckUndoStringInUndoList ( 10, "Header/Footer" )
-    Call wTypeKeys "<ESCAPE>"
 
 	'/// Insert footer
 	printlog "- Insert footer"
@@ -488,7 +476,6 @@ testcase tUndoHistory43
      Sleep 2
 	'///  string in Undo-list has to be: "Header/footer changed")
 	Call CheckUndoStringInUndoList ( 10, "Header/Footer" )
-    Call wTypeKeys "<ESCAPE>"
 
 	'///  Delete footer
 	printlog "- Delete footer"

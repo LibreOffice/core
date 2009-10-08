@@ -140,7 +140,7 @@ testcase db_ADOAccess
         aFieldsContent(1,5)=""
         aFieldsContent(1,6)=""
         aFieldsContent(1,7)=""
-        aFieldsContent(1,8)="1"
+        aFieldsContent(1,8)=""
         aFieldsContent(1,9)="1"
         aFieldsContent(1,10)="1"
         aFieldsContent(1,11)="1"

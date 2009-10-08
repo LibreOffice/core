@@ -97,9 +97,10 @@ testcase WriterToHTMLText
   else
    Warnlog "Writer To HTML -> 'Text' failed !"
   end if
-  Call hCloseDocument
   printlog "  Close active document "
-
+    Do Until GetDocumentCount = 0
+        Call hCloseDocument
+    Loop
 endcase
 
 ' ----------------------------------------------------------------------------------------------
@@ -149,9 +150,10 @@ testcase WriterToHTMLField
   else
    Warnlog "Writer To HTML -> 'Field' failed !"
   end if
-  printlog "  Close active document "
-  Call hCloseDocument
-
+    printlog "  Close active document "
+    Do Until GetDocumentCount = 0
+        Call hCloseDocument
+    Loop
 endcase
 
 ' ----------------------------------------------------------------------------------------------
@@ -202,7 +204,9 @@ testcase WriterToHTMLTable
    Warnlog "Writer To HTML -> 'Table' failed !"
   end if
   printlog "  Close active document "
-  Call hCloseDocument
+    Do Until GetDocumentCount = 0
+        Call hCloseDocument
+    Loop
 endcase
 
 ' ----------------------------------------------------------------------------------------------
@@ -253,15 +257,17 @@ testcase WriterToHTMLFrame
    Warnlog "Writer To HTML -> 'Frame' failed !"
   end if
   printlog "  Close active document "
-  Call hCloseDocument
+    Do Until GetDocumentCount = 0
+        Call hCloseDocument
+    Loop
 endcase
 
 ' ----------------------------------------------------------------------------------------------
 
 testcase WriterToHTMLDrawingObject
   gApplication = "WRITER"
-  QAErrorlog "Crashes unreproducable only with testtool"
-  goto endsub
+'      QAErrorlog "Crashes unreproducable only with testtool"
+'  goto endsub
   printlog "  Open File '..\\writer\\optional\\input\\clipboard\\writer.sxw' "
   printlog " + Jump to beginning of document "
   printlog " + Select 'Drawing Object' "
@@ -306,7 +312,9 @@ testcase WriterToHTMLDrawingObject
    Warnlog "Writer To HTML -> 'Drawing Object' failed !"
   end if
   printlog "  Close active document "
-  Call hCloseDocument
+    Do Until GetDocumentCount = 0
+        Call hCloseDocument
+    Loop
 endcase
 
 ' ----------------------------------------------------------------------------------------------
@@ -357,7 +365,9 @@ testcase WriterToHTMLGraphicLinked
    Warnlog "Writer To HTML -> 'Linked Graphic' failed !"
   end if
   printlog "  Close active document "
-  Call hCloseDocument
+    Do Until GetDocumentCount = 0
+        Call hCloseDocument
+    Loop
 endcase
 
 ' ----------------------------------------------------------------------------------------------
@@ -408,15 +418,17 @@ testcase WriterToHTMLGraphicEmbedded
    Warnlog "Writer To HTML -> 'Embedded Graphic' failed !"
   end if
   printlog "  Close active document "
-  Call hCloseDocument
+    Do Until GetDocumentCount = 0
+        Call hCloseDocument
+    Loop
 endcase
 
 ' ----------------------------------------------------------------------------------------------
 
 testcase WriterToHTMLOLEObject
   gApplication = "WRITER"
-  QAErrorlog "Crashes unreproducable only with testtool"
-  goto endsub
+'      QAErrorlog "Crashes unreproducable only with testtool"
+'  goto endsub
   printlog "  Open File '..\\writer\\optional\\input\\clipboard\\writer.sxw' "
   printlog " + Jump to beginning of document "
   printlog " + Select 'OLE Object' "
@@ -461,7 +473,9 @@ testcase WriterToHTMLOLEObject
    Warnlog "Writer To HTML -> 'OLE object' failed !"
   end if
   printlog "  Close active document "
-  Call hCloseDocument
+    Do Until GetDocumentCount = 0
+        Call hCloseDocument
+    Loop
 endcase
 
 ' ----------------------------------------------------------------------------------------------
@@ -512,5 +526,9 @@ testcase WriterToHTMLControl
    Warnlog "Writer To HTML -> 'Control' failed !"
   end if
   printlog "  Close active document "
-  Call hCloseDocument
+    Do Until GetDocumentCount = 0
+        Call hCloseDocument
+    Loop
 endcase
+
+'------------------------------------------------------------------------------------------------------

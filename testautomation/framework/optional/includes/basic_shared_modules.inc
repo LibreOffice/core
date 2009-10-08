@@ -44,6 +44,8 @@ testcase tBasicSharedModules
     
     dim iObjectPosition as integer
     dim iLibraryCount as integer
+
+    const EXPECTED_LIBRARY_COUNT = 12
     
     '///<ul>
     '///+<li>Open a document to work on</li>
@@ -89,8 +91,8 @@ testcase tBasicSharedModules
     iLibraryCount = Library.getItemCount()
     printlog( "There are " & iLibraryCount & " items in the list" )
     
-    if ( iLibraryCount <> 13 ) then
-        warnlog( "The number of items in the library-list is incorrect: " & iLibraryCount )
+    if ( iLibraryCount <> EXPECTED_LIBRARY_COUNT ) then
+        warnlog( "The number of items in the library-list is incorrect (should be 12): " & iLibraryCount )
     endif
     
     '///+<li>Use the Library listbox (Jump to bottom)</li>

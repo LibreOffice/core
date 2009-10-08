@@ -1129,115 +1129,116 @@ endcase
 '-------------------------------------------------------------------------------------
 testcase tSlideShowShowHideSlide
 
-   dim saSlideNames(4) as string
-   dim i as integer
+    dim saSlideNames(4) as string
+    dim i as integer
+    
+    S1 = glLocale (2) + " 1"
+    S2 = glLocale (2) + " 2"
+    S3 = glLocale (2) + " 3"
+    S4 = glLocale (2) + " 4"
+    saSlideNames(1) = S1
+    saSlideNames(2) = S2
+    saSlideNames(3) = S3
+    saSlideNames(4) = S4
 
-   S1 = glLocale (2) + " 1"
-   S2 = glLocale (2) + " 2"
-   S3 = glLocale (2) + " 3"
-   S4 = glLocale (2) + " 4"
-   saSlideNames(1) = S1
-   saSlideNames(2) = S2
-   saSlideNames(3) = S3
-   saSlideNames(4) = S4
-
-   '/// open file 'graphics\\input\\diashow.odp' (Slide Show with 4 Slides) ///'
-   hFileOpen   ConvertPath (gTesttoolPath + "graphics\required\input\diashow.odp")
-   sleep (10)
-   ' check if the document is writable
-   if fIsDocumentWritable = false then
-      ' make the document writable and check if it's succesfull
-      if fMakeDocumentWritable = false then
-         warnlog "   The document can't be make writeable. Test stopped."
-         goto endsub
-      endif
-   endif
-   Kontext "Navigator"
-   if Navigator.exists then
-      '///+ close navigator ! ///'
+    printlog "Open file 'graphics\\input\\diashow.odp' (Slide Show with 4 Slides)"
+    hFileOpen   ConvertPath (gTesttoolPath + "graphics\required\input\diashow.odp")
+    sleep (10)
+    printlog "check if the document is writable"
+    if fIsDocumentWritable = false then
+        printlog "make the document writable and check if it's succesfull"
+        if fMakeDocumentWritable = false then
+            warnlog "   The document can't be make writeable. Test stopped."
+            goto endsub
+        endif
+    endif
+    Kontext "Navigator"
+    if Navigator.exists then
+      printlog "close navigator"
       Navigator.Close
-   else
+    else
       printlog "Navigator: NOT available"
-   endif
-   '/// - View->Workspace->Slides View ///'
-   ViewWorkspaceSlidesView
-      sleep (1)
-      Kontext "Slides"
-      '///Selecting 2nd slide
-      SlidesControl.TypeKeys "<PAGEDOWN>"
-      '///Hiding 2nd slide
-      SlideShowHideSlide
-      '///Selecting 4th slide
-      SlidesControl.TypeKeys "<PAGEDOWN>" ,2
-      '///Hiding 4th slide
-      SlideShowHideSlide
- 
-      sleep (2)
-   '/// View->Workspace->Drawing View ///'
-   ViewWorkspaceDrawingView
-   kontext "DocumentImpress"
-   DocumentImpress.TypeKeys "<HOME>"
-   sleep (2)
-   '/// SlideShow->Slide Show Settings... ///'
-   SlideShowPresentationSettings
-      Kontext "Bildschirmpraesentation"
-      sleep (2)
-      '/// check Radio button 'Type': 'Window' ///'
-      Fenster.Check
-      sleep (1)
-      '/// close dialog 'Slide Show' with OK ///'
-      Bildschirmpraesentation.OK
-   '/// start the slideshow with 'Slide Show->Slide Show' ///'
-   SlideShowSlideshow
-      sleep (1)
-      kontext "DocumentPresentation"
-      '/// type the key [MOD1 SHIFT F5] to open the navigator ///' '--------------------------------------------------------------------------
-      DocumentPresentation.TypeKeys "<MOD1 SHIFT F5>"
-      sleep (1)
-      kontext "NavigatorDraw"
-      for i = 1 to 2
-         if ((i mod 2) = 1) then ' for all odd numbers (ungerade) do
+    endif
+    printlog "View->Workspace->Slides View"
+    ViewWorkspaceSlidesView
+    sleep (1)
+    Kontext "Slides"
+    printlog "Selecting 2nd slide"
+    SlidesControl.TypeKeys "<PAGEDOWN>"
+    printlog "Hiding 2nd slide"
+    SlideShowHideSlide
+    printlog "Selecting 4th slide"
+    SlidesControl.TypeKeys "<PAGEDOWN>" ,2
+    printlog "Hiding 4th slide"
+    SlideShowHideSlide
+    
+    sleep (2)
+    printlog "View->Workspace->Drawing View"
+    ViewWorkspaceDrawingView
+    kontext "DocumentImpress"
+    DocumentImpress.TypeKeys "<HOME>"
+    sleep (2)
+    printlog "SlideShow->Slide Show Settings..."
+    SlideShowPresentationSettings
+    Kontext "Bildschirmpraesentation"
+    sleep (2)
+    printlog "check Radio button 'Type': 'Window'"
+    Fenster.Check
+    sleep (1)
+    printlog "close dialog 'Slide Show' with OK "
+    Bildschirmpraesentation.OK
+    printlog "start the slideshow with 'Slide Show->Slide Show'"
+    SlideShowSlideshow
+    sleep (1)
+    kontext "DocumentPresentation"
+    printlog "type the key [MOD1 SHIFT F5] to open the navigator" '--------------------------------------------------------------------------
+    DocumentPresentation.TypeKeys "<MOD1 SHIFT F5>"
+    sleep (1)
+    kontext "NavigatorDraw"
+    for i = 1 to 2
+        if ((i mod 2) = 1) then ' for all odd numbers (ungerade) do
+            printlog "Getting slide names"
             fGetSlideName(saSlideNames(i))
             kontext "DocumentPresentation"
             DocumentPresentation.TypeKeys "<pagedown>"
             sleep (3)
-         endif
-         Kontext "NavigatorDraw"
-         if NavigatorDraw.exists (5) then
+        endif
+        Kontext "NavigatorDraw"
+        if NavigatorDraw.exists (5) then
             sleep 1
-            '/// check in list, if the page changed ///'
+            printlog "check in list, if the page changed"
             if ((i mod 2) = 1) then ' for all odd numbers (ungerade) do
-               if i = Liste.GetSelIndex then
-                  qaerrorlog "the Navigator didn't update!"
-               endif
+                if i = Liste.GetSelIndex then
+                    qaerrorlog "the Navigator didn't update!"
+                endif
             endif
-         else
+        else
             warnlog "   Navigator doesn't exist?!?!?"
-         endif
-         sleep (1)
-      next i
-      sleep (3)
-      Kontext "DocumentPresentation"
-      DocumentPresentation.TypeKeys "<pagedown>"
-      sleep (2)
-      DocumentPresentation.TypeKeys "<pagedown>"
-      sleep (5)
-      try
-         DocumentPresentation.MouseDown 50,50
-         DocumentPresentation.MouseUp 50,50 'This one works to recognice the not ending.
-         warnlog "   Presentation did NOT END!!!"
-      catch
-         printlog "   ended right."
-      endcatch
-      sleep (2)
-      Kontext "Navigator"
-      if Navigator.exists then
-         '///+ close navigator ! ///'
-         Navigator.Close
-      else
-         printlog "Navigator: NOT available"
-      endif
-   Call hCloseDocument
+        endif
+        sleep (1)
+    next i
+    sleep (3)
+    Kontext "DocumentPresentation"
+    DocumentPresentation.TypeKeys "<pagedown>"
+    sleep (2)
+    DocumentPresentation.TypeKeys "<pagedown>"
+    sleep (5)
+    try
+        DocumentPresentation.MouseDown 50,50
+        DocumentPresentation.MouseUp 50,50 'This one works to recognice the not ending.
+        warnlog "   Presentation did NOT END!!!"
+    catch
+        printlog "   ended right."
+    endcatch
+    sleep (2)
+    Kontext "Navigator"
+    if Navigator.exists then
+        printlog "close navigator !"
+        Navigator.Close
+    else
+        printlog "Navigator: NOT available"
+    endif
+    Call hCloseDocument
 endcase
 
 '------------------------------------------------------------------------------

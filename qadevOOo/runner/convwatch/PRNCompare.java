@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: PRNCompare.java,v $
- * $Revision: 1.8 $
+ * $Revision: 1.8.8.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -35,8 +35,8 @@ import helper.ProcessHandler;
 import java.io.File;
 import convwatch.PixelCounter;
 import convwatch.StatusHelper;
-import convwatch.OSHelper;
-import convwatch.StringHelper;
+import helper.OSHelper;
+import helper.StringHelper;
 import java.util.ArrayList;
 import util.utils;
 

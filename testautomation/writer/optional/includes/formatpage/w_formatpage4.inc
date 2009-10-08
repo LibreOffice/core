@@ -382,6 +382,7 @@ testcase tFormatPage_53
     '/// + There are 8 columns in the page , and a test
     '/// + word is in 3rd column
     Call hFileOpen(sTestFile)
+    Call sMakeReadOnlyDocumentEditable
     
     '/// formatPage , tabpage page, select right to left (vertical)
     Call fFormatPageWriter("TabSeite")
@@ -427,7 +428,7 @@ testcase tFormatPage_54
     Dim sSpacingToContentsYesBorder as String   'border exists  in the page
 
     sSpacingToContentsNoBorder  = "0" + gSeperator + "0" '+ gMeasurementUnit
-    sSpacingToContentsYesBorder = "0" + gSeperator + "5" '+ gMeasurementUnit
+    sSpacingToContentsYesBorder = "0" + gSeperator + "05" '+ gMeasurementUnit
 
     PrintLog "- Only when a border is set, 'spacing to contents' gets a minimum value of 0.05cm"
     '/// Only when a border is set, "spacing to contents" gets a minimum value of 0.05cm
@@ -504,10 +505,12 @@ testcase tFormatPage_55
 
     '/// Check if all "spacing to contents" is 5.00cm
      fFormatPageWriter("TabUmrandung")
-       if InStr( Links.GetText, sSpacingToContentsL) = false then Warnlog "left Spacing to contents is wrong !"
-       if InStr( Rechts.GetText, sSpacingToContentsR) = false then Warnlog "right Spacing to contents is wrong !"
-       if InStr( Oben.GetText, sSpacingToContentsU) = false then Warnlog "up Spacing to contents is wrong !"
-       if InStr( Unten.GetText, sSpacingToContentsB) = false then Warnlog "bottom Spacing to contents is wrong !"
+
+       if InStr( Links.GetText, sSpacingToContents) = false then Warnlog "left Spacing to contents is wrong !"
+       if InStr( Rechts.GetText, sSpacingToContents) = false then Warnlog "right Spacing to contents is wrong !"
+       if InStr( Oben.GetText, sSpacingToContents) = false then Warnlog "up Spacing to contents is wrong !"
+       if InStr( Unten.GetText, sSpacingToContents) = false then Warnlog "bottom Spacing to contents is wrong !"
+
      TabUmrandung.Cancel
 
     Call hCloseDocument
@@ -666,11 +669,12 @@ testcase tFormatPage_59
     Dim sShadowDistance               as String
 
     iBorderColor = 5 : iShadowColor = 4
+
     sSpacingToContentsL = "0" + gSeperator + "5" '+ gMeasurementUnit
     sSpacingToContentsR = "0" + gSeperator + "6" '+ gMeasurementUnit
     sSpacingToContentsU = "0" + gSeperator + "7" '+ gMeasurementUnit
     sSpacingToContentsB = "0" + gSeperator + "8" '+ gMeasurementUnit
-    sShadowDistance     = "25" + gSeperator + "4" '+ gMeasurementUnit
+    sShadowDistance     = "2" + gSeperator + "54" '+ gMeasurementUnit
 
     PrintLog "- Test if the shadow settings is OK after closing the dialog"
     '///  Test if the shadow settings is OK after closing the dialog
@@ -726,11 +730,12 @@ testcase tFormatPage_60
     Dim sShadowDistance               as String
 
     iBorderColor = 5 : iShadowColor = 4
+
     sSpacingToContentsL = "0" + gSeperator + "5" '+ gMeasurementUnit
     sSpacingToContentsR = "0" + gSeperator + "6" '+ gMeasurementUnit
     sSpacingToContentsU = "0" + gSeperator + "7" '+ gMeasurementUnit
     sSpacingToContentsB = "0" + gSeperator + "8" '+ gMeasurementUnit
-    sShadowDistance     = "27" + gSeperator + "4" '+ gMeasurementUnit
+    sShadowDistance     = "2" + gSeperator + "74" '+ gMeasurementUnit
 
     PrintLog "- Test if the shadow settings is OK after reopening the file"
     '///  Test if the shadow settings is OK after reopening the file
@@ -763,6 +768,7 @@ testcase tFormatPage_60
 
     Call hNewDocument
     Call hFileOpen(gOfficepath + "user\work\tFormatPage_60.odt")
+    Call sMakeReadOnlyDocumentEditable
 
     '/// check if the configuration is all right
     fFormatPageWriter("TabUmrandung")

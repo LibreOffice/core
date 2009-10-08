@@ -31,9 +31,9 @@
 '*
 '/************************************************************************
 '*
-'* owner : helge.delfs@sun.com
+'* owner : fredrik.haegg@sun.com
 '*
-'* short description :
+'* short description : Tools for writer tests.
 '*
 '************************************************************************
 '*
@@ -67,7 +67,6 @@
 ' **                                                                **
 ' \*******************************************************************
 
-
 sub wOfficeRestart
     Dim i as integer
     Call sleep(5)
@@ -77,10 +76,9 @@ sub wOfficeRestart
     Call sleep(5)
 	' Close the backing windows
 	FileExit "SynchronMode", TRUE
-	
+
     Call hStartTheOffice
     Call sleep(5)
-    Call hNewDocument
 end sub
 
 '--------------------------------------------------------------
@@ -207,7 +205,7 @@ function wKillUpcomingActives(optional sDocument as string)
             else
                 Select case sDocument
                     Case "sw31.sdw", "sw31.vor"
-                        QAErrorlog "#i76220#Saving sdw-file as sxw fails"
+                        warnlog "Saving sdw-file as sxw fails"
                     Case else
                         Warnlog Active.Gettext
                 end select
@@ -263,8 +261,8 @@ function wGetCharacterFont as String
         sleep (1)
         wGetCharacterFont = FontWest.GetSelText
         TabFont.Cancel
-        sleep (1)        
-        wasAsianLan = ActiveDeactivateAsianSupport (True)        
+        sleep (1)
+        wasAsianLan = ActiveDeactivateAsianSupport (True)
     endcatch
 end function
 
@@ -299,8 +297,8 @@ function wGetCharacterFontSize as String
         sleep (1)
         wGetCharacterFontSize = SizeWest.GetSelText
         TabFont.Cancel
-        sleep (1)        
-        wasAsianLan = ActiveDeactivateAsianSupport (True)        
+        sleep (1)
+        wasAsianLan = ActiveDeactivateAsianSupport (True)
     endcatch
 end function
 
@@ -333,7 +331,7 @@ sub ZeilenHoeheTesten ( Wert as Double )
     FormatRowHeight
     Kontext "ZellenHoehe"
     zWert = ZahlAusSpinnfield ( Hoehe.GetText )
-    if (LiberalMeasurement (Wert, zWert) <> TRUE) then QAErrorlog "Die Zeilenhöhe ist nicht "+ Wert + " sondern "+ zWert + " :-)"
+    if (LiberalMeasurement (Wert, zWert) <> TRUE) then QAErrorlog "#i94556# - Die Zeilenhöhe ist nicht "+ Wert + " sondern "+ zWert + "."
     ZellenHoehe.OK
 end sub
 
@@ -785,7 +783,7 @@ sub wSearchWriteableArea ()
                 Exit Do
             end if
         else
-            NowWriteable = True            
+            NowWriteable = True
             Exit Do
         end if
     Loop
@@ -811,5 +809,3 @@ function fInsertFrame (x1 as Integer , y1 as Integer , x2 as Integer , y2 as Int
     wait 500
 
 end function
-
-

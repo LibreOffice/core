@@ -37,31 +37,28 @@
 '*
 '\***********************************************************************
 
-
 sub wr_o_5
 
     Call tLanguageSettingsComplexTextLayout
 
 end sub
 
-
-
-
 testcase tLanguageSettingsComplexTextLayout
-    
-    Dim i as integer, j as integer
+
+    Dim i as integer
+    Dim j as integer
     Dim bAsianLanguage as boolean
     Dim bCTLLanguage as boolean
-    Dim sCTLLan() as string    
+    Dim sCTLLan() as string
     Dim sCurrentDocumentLanguage as string
     Dim sCurrentCTLLanguage as string
     Dim bSequenceChecking as boolean
-	if Val(mid$(gMinor, 2, Len(gMinor))) < 141 then        
+	if Val(mid$(gMinor, 2, Len(gMinor))) < 141 then
         goto endsub
     end if
     '/// Open new writerdocument
     Call hNewDocument
-    '/// Activate Asian support    
+    '/// Activate Asian support
     bAsianLanguage = ActiveDeactivateAsianSupport(True)
     '/// Activate CTL support 
     bCTLLanguage = ActiveDeactivateCTLSupport(True)
@@ -70,7 +67,7 @@ testcase tLanguageSettingsComplexTextLayout
     '/// Goto 'Tools->Options->Language settings->Languages
 	Call hToolsOptions ("LanguageSettings","Languages")
     sCurrentCTLLanguage = LanguageComplexScript.GetSelText
-	Kontext "TabSprachen"                 	
+	Kontext "TabSprachen"
     For i = 1 to LanguageComplexScript.GetItemCount
         '/// Select CTL-Language
         LanguageComplexScript.Select i
@@ -103,9 +100,10 @@ testcase tLanguageSettingsComplexTextLayout
             if sCTLLan(j) = sCurrentDocumentLanguage then
                 bSequenceChecking = TRUE
                 exit for
-            end if				
+            end if
+
         next j
-                
+
 		Select Case bSequenceChecking
 			Case TRUE
 				if UseSequenceChecking.IsChecked = False then
@@ -116,7 +114,8 @@ testcase tLanguageSettingsComplexTextLayout
 				end if
 				if TypeAndReplace.IsEnabled = False or TypeAndReplace.IsChecked = False then
 					Warnlog "'Type And Replace' should be enabled and checked for language: " & sCurrentDocumentLanguage
-				end if				
+				end if
+
 			Case FALSE
 				if UseSequenceChecking.IsChecked = True then
 					QAErrorlog "'Sequence Checking' should not be checked for language: " & sCurrentDocumentLanguage
@@ -126,13 +125,14 @@ testcase tLanguageSettingsComplexTextLayout
 				end if
 				if TypeAndReplace.IsEnabled = True AND TypeAndReplace.IsChecked = True then
 					QAErrorlog "'Type And Replace' should not checked for language: " & sCurrentDocumentLanguage
-				end if				
-		end select				        
+				end if
+		end select
+
         Kontext "ExtrasOptionenDlg"
 		ExtrasOptionenDlg.Ok
         ToolsOptions
         Call hToolsOptions ("LanguageSettings","Languages")
-        Kontext "TabSprachen"                 		
+        Kontext "TabSprachen"
     next i
 
     Kontext "ExtrasOptionenDlg"
@@ -161,20 +161,23 @@ testcase tLanguageSettingsComplexTextLayout
     end if
     if TypeAndReplace.IsEnabled = False or TypeAndReplace.IsChecked = False then
         Warnlog "'Type And Replace' should be enabled and checked for language: " & sCTLLan(0)
-    end if	
+    end if
+
     '/// Reset CTL Language
     Kontext "ExtrasOptionenDlg"
-    ExtrasOptionenDlg.Ok        
+    ExtrasOptionenDlg.Ok
     ToolsOptions
     Call hToolsOptions ("LanguageSettings","Languages")
     Kontext "TabSprachen"
     LanguageComplexScript.Select sCurrentCTLLanguage
     Kontext "ExtrasOptionenDlg"
-    ExtrasOptionenDlg.Ok    
-    
-IfNoSupport:   
+    ExtrasOptionenDlg.Ok
+
+IfNoSupport:
     Call ActiveDeactivateAsianSupport(bAsianLanguage)
     Call ActiveDeactivateCTLSupport(bCTLLanguage)
-    Call hCloseDocument
-    
+
+	Do Until GetDocumentCount = 0
+    	Call hCloseDocument
+	Loop
 endcase

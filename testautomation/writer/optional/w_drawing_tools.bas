@@ -46,7 +46,7 @@ sub main
 
     use "writer\tools\includes\w_tools.inc"
     use "writer\tools\includes\w_tool3.inc"
-    use "writer\tools\includes\w_tools_drawing.inc"    
+    use "writer\tools\includes\w_tools_drawing.inc"
     use "writer\optional\includes\drawing\w_drawing_tools1.inc"
     use "writer\optional\includes\drawing\w_drawing_tools2.inc"
 

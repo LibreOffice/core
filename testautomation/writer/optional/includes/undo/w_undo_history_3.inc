@@ -37,7 +37,6 @@
 '*
 '\***********************************************************************
 
-
 sub w_undo_history_3
 
 	Call tUndoHistory18			' Section (Insert/Modify/Delete)
@@ -71,9 +70,8 @@ testcase tUndoHistory18
 	Active.Setpage TabBereiche
 	Kontext "TabBereiche"
 	TabBereiche.Ok
-	'///  string in Undo-list has to be: "Insert section") 
+	'///  string in Undo-list has to be: "Insert section")
 	Call CheckUndoStringInUndoList ( 10, "InsertSection" )
-    Call wTypeKeys "<ESCAPE>"
 
 	printlog "Section (Modify)"
 	'/// Open navigator and select section
@@ -84,7 +82,7 @@ testcase tUndoHistory18
 	wait 500
 	Call hMenuSelectNr(4)
 	
-	'/// Change Background-Color 
+	'/// Change Background-Color
 	Kontext "BereicheBearbeiten"
 	Optionen.Click
 	Kontext
@@ -94,10 +92,9 @@ testcase tUndoHistory18
 	TabHintergrund.Ok
 	
 	Kontext "BereicheBearbeiten"
-	BereicheBearbeiten.Ok	
+	BereicheBearbeiten.Ok
 	'///  string in Undo-list has to be: "Modify section") 
 	Call CheckUndoStringInUndoList ( 10, "ModifySection" )
-    Call wTypeKeys "<ESCAPE>"
 	
 	printlog "Section (Delete)"
 	'/// Open navigator and select section
@@ -136,10 +133,9 @@ testcase tUndoHistory19
 	Hyperlink.Close
 	'///  string in Undo-list has to be: "Insert Hyperlink") 
 	Call CheckUndoStringInUndoList ( 10, "InsertHyperlink" )
-    Call wTypeKeys "<ESCAPE>"
 
 	Call wTypeKeys "<Return>"
-	
+
 	'/// Insert / Hyperlink as Button
 	printlog "- Insert hyperlink as Button"
 	InsertHyperlink
@@ -154,7 +150,7 @@ testcase tUndoHistory19
 	Call CheckUndoStringInUndoList ( 10, "InsertHyperlinkButton" )
 	
 	'/// Close Document
-	Call hCloseDocument	
+	Call hCloseDocument
 	
 endcase	
 
@@ -171,7 +167,6 @@ testcase tUndoHistory20
 	FussnoteEinfuegen.Ok
 	'///  string in Undo-list has to be: "Insert footnote") 
 	Call CheckUndoStringInUndoList ( 10, "InsertFootnote" )
-    Call wTypeKeys "<ESCAPE>"
 
 	printlog "- Footnote (Modify)"
 	'/// Tools/Footnote
@@ -190,7 +185,6 @@ testcase tUndoHistory20
 	TabFussnoten.Ok
 	'///  string in Undo-list has to be: "Modify footnote options") 
 	Call CheckUndoStringInUndoList ( 10, "ModifyFootnote" )
-    Call wTypeKeys "<ESCAPE>"
 
 	printlog "- Footnote (Delete)"
 	'/// Point cursor directly to the footnote anchor
@@ -201,9 +195,8 @@ testcase tUndoHistory20
 	Call CheckUndoStringInUndoList ( 10, "DeleteFootnote" )
 	
 	'/// Close document
-	Call hCloseDocument	
-	
-endcase	
+	Call hCloseDocument
+endcase
 
 
 testcase tUndoHistory21
@@ -225,8 +218,7 @@ testcase tUndoHistory21
 	Call CheckUndoStringInUndoList ( 10, "InsertCaption" )
 	
 	'/// Close document
-	Call hCloseDocument	
-
+	Call hCloseDocument
 endcase
 
 
@@ -243,8 +235,7 @@ testcase tUndoHistory22
 	Call CheckUndoStringInUndoList ( 10, "InsertAutotext" )
 	
 	'/// Close document
-	Call hCloseDocument	
-	
+	Call hCloseDocument
 endcase
 
 
@@ -261,7 +252,6 @@ testcase tUndoHistory23
 	TextmarkeEinfuegen.Ok
 	'///  string in Undo-list has to be: "Insert Bookmark: I'm a bookmark") 
 	Call CheckUndoStringInUndoList ( 10, "InsertBookmark" )
-    Call wTypeKeys "<ESCAPE>"
 
 	printlog "- Rename Bookmark"
 	'/// Open navigator and select bookmark
@@ -279,7 +269,6 @@ testcase tUndoHistory23
 	ObjekteUmbenennen.Ok	
 	'///  string in Undo-list has to be: "Rename Bookmark: a book") 
 	Call CheckUndoStringInUndoList ( 10, "RenameBookmark" )
-    Call wTypeKeys "<ESCAPE>"
 
 	printlog "- Delete Bookmark"
 	'/// Open navigator and select bookmark
@@ -297,7 +286,6 @@ testcase tUndoHistory23
 	
 	'/// Close document
 	Call hCloseDocument
-
 endcase
 
 
@@ -309,22 +297,21 @@ testcase tUndoHistory24
 	Call hNewDocument
 	'/// Insert / Note
 	InsertNoteWriter
-	Kontext "NotizBearbeiten"
-	'/// Insert as note 'This is a note'
-	CALL wTypeKeys "This is a note <ENTER>"
 	'///  string in Undo-list has to be: "Insert note") 
 	Call CheckUndoStringInUndoList ( 10, "InsertNote" )
-    Call wTypeKeys "<ESCAPE>"
-
-	printlog "- Delete Note"
-	'/// Enter 'Backspace'
-	Call wTypeKeys "<Backspace>"
-	'///  string in Undo-list has to be: "Delete: 'This is a note'") 
+    printlog "- Delete Note"
+    '/// Bring up the Navigator, find the entry "Notes", expand it, and select the expanded section.
+    Call wNavigatorAuswahl( 11, 1 )
+	'/// Enter 'Delete'      'Backspace'
+    kontext "Navigator"
+    Navigator.TypeKeys "<DELETE>"
+    '/// Close the Navigator
+    EditNavigator
+    '///  string in Undo-list has to be: "Delete: 'This is a note'") 
 	Call CheckUndoStringInUndoList ( 10, "DeleteNote" )
-	
+
 	'/// Close document
 	Call hCloseDocument
-
 endcase
 
 
@@ -339,8 +326,7 @@ testcase tUndoHistory25
 	Kontext "ScriptEinfuegen"
 	ScriptEinfuegen.Ok
 	'///  string in Undo-list has to be: "Insert script") 
-	Call CheckUndoStringInUndoList ( 10, "InsertScript" )	
-    Call wTypeKeys "<ESCAPE>"
+	Call CheckUndoStringInUndoList ( 10, "InsertScript" )
 
 	'/// Point cursor directly to the script
 	Call wTypeKeys "<Mod1 Home>"
@@ -351,7 +337,6 @@ testcase tUndoHistory25
 	
 	'/// Close document
 	Call hCloseDocument
-
 endcase
 
 
@@ -371,35 +356,31 @@ testcase tUndoHistory26
 	VerzeichnisEintragEinfuegen.Close
 	'///  string in Undo-list has to be: "Insert index entry")
 	Call CheckUndoStringInUndoList ( 10, "InsertIndexEntry" )
-    Call wTypeKeys "<ESCAPE>"
 
-	'/// delete index entry with 'Backspace'
+	printlog "delete index entry with 'Backspace'"
 	Call wTypeKeys ( "<Backspace>"
 	'///  string in Undo-list has to be: "Delete index entry")
 	Call CheckUndoStringInUndoList ( 10, "DeleteIndexEntry" )
-    Call wTypeKeys "<ESCAPE>"
 
 	'/// Type a word
 	Call wTypeKeys "BibliographyEntry"
 	Call wTypeKeys "<Shift Home>"
 	printlog "- Insert Bibliography entry"
-	'/// Insert / Index / Bibliography entry
+	printlog "Insert / Index / Bibliography entry"
 	InsertIndexesBibliographyEntry
 	Kontext "LiteratureintragEinfuegen"
 	EintragEinfuegen.Click
 	LiteratureintragEinfuegen.Close
 	'///  string in Undo-list has to be: "Insert bibliography entry")
 	Call CheckUndoStringInUndoList ( 10, "InsertBibliographyEntry" )
-    Call wTypeKeys "<ESCAPE>"
 
-	'/// delete bibliography entry with 'Backspace'
+	Printlog "delete bibliography entry with 'Backspace'"
 	Call wTypeKeys ( "<Backspace>"
 	'///  string in Undo-list has to be: "Delete bibliography entry")
 	Call CheckUndoStringInUndoList ( 10, "DeleteBibliographyEntry" )
 	
 	'/// Close document
 	Call hCloseDocument
-
 endcase
 
 
@@ -418,7 +399,6 @@ testcase tUndoHistory27
 	TabZusaetze.Ok
 	'///  string in Undo-list has to be: "Insert frame: MyFrame")
 	Call CheckUndoStringInUndoList ( 10, "InsertFrame" )
-    Call wTypeKeys "<ESCAPE>"
 
 	printlog "- Rename Frame"
 	'/// Open navigator and select frame
@@ -430,11 +410,9 @@ testcase tUndoHistory27
 	Call hMenuSelectNr(3)	
 	Kontext "ObjekteUmbenennen"
 	Objektname.Settext "MyRenamedFrame"
-	ObjekteUmbenennen.Ok	
+	ObjekteUmbenennen.Ok
 	'///  string in Undo-list has to be: "Rename frame: 'MyFrame' -> 'MyRenamedFrame'") 
 	Call CheckUndoStringInUndoList ( 10, "RenameFrame" )
-    Call wTypeKeys "<ESCAPE>"
-
 	printlog "- Delete Frame"
 	'/// Type 'Del' to delete the frame
 	Call wTypeKeys "<Delete>"
@@ -443,7 +421,6 @@ testcase tUndoHistory27
 	
 	'/// Close document
 	Call hCloseDocument
-	
 endcase
 
 
@@ -460,42 +437,32 @@ testcase tUndoHistory28
 	sTableName = "MyTable"
 	Tabellenname.Settext sTableName
 	TabelleEinfuegenWriter.Ok
-	'///  string in Undo-list has to be: "Insert table") 
+	'///  string in Undo-list has to be: "Insert table")
 	Call CheckUndoStringInUndoList ( 10, "InsertTable" )
-    Call wTypeKeys "<ESCAPE>"
-
 	printlog "- Insert a row"
 	'/// <B>Insert a row</B>
 	Call hToolbarSelect("Table", true)
 	ZeileEinfuegen.Click
-	'///  string in Undo-list has to be: "Insert row") 
+	'///  string in Undo-list has to be: "Insert row")
 	Call CheckUndoStringInUndoList ( 10, "InsertRow" )
-    Call wTypeKeys "<ESCAPE>"
-
 	printlog "- Insert a column"
 	'/// <B>Insert a column</B>
 	Call hToolbarSelect("Table", true)
 	SpalteEinfuegen.Click
-	'///  string in Undo-list has to be: "Insert column") 
+	'///  string in Undo-list has to be: "Insert column")
 	Call CheckUndoStringInUndoList ( 10, "InsertColumn" )
-    Call wTypeKeys "<ESCAPE>"
-
 	printlog "- Delete a row"
 	'/// <B>Delete a row</B>
 	Call hToolbarSelect("Table", true)
 	ZeileLoeschen.Click
-	'///  string in Undo-list has to be: "Delete row") 
+	'///  string in Undo-list has to be: "Delete row")
 	Call CheckUndoStringInUndoList ( 10, "DeleteRow" )
-    Call wTypeKeys "<ESCAPE>"
-
 	printlog "- Delete a column"
 	'/// <B>Delete a column</B>
 	Call hToolbarSelect("Table", true)
 	SpalteLoeschen.Click
-	'///  string in Undo-list has to be: "Delete column") 
+	'///  string in Undo-list has to be: "Delete column")
 	Call CheckUndoStringInUndoList ( 10, "DeleteColumn" )
-    Call wTypeKeys "<ESCAPE>"
-
 	printlog "- format a cell"
 	'/// <B>Format cell (enable number recognition form that)</B>
     ToolsOptions
@@ -507,7 +474,7 @@ testcase tUndoHistory28
 	'/// type '1' in a cell
 	Call wTypeKeys ( "1" )
 	Call wTypeKeys ( "<Right>" )
-	'///  string in Undo-list has to be: "Format cell") 
+	'///  string in Undo-list has to be: "Format cell")
 	Call CheckUndoStringInUndoList ( 10, "FormatCell" )
 	
     ToolsOptions
@@ -518,7 +485,6 @@ testcase tUndoHistory28
 
 	'/// CloseDocument
 	Call hCloseDocument
-
 endcase
 
 
@@ -548,7 +514,6 @@ testcase tUndoHistory29
 	TabTextflussTabelle.Ok
 	'///  string in Undo-list has to be: "Apply table attributes") 
 	Call CheckUndoStringInUndoList ( 10, "ApplyTableAttributes" )
-    Call wTypeKeys "<ESCAPE>"
 
 	printlog "- merge tables"
 	'/// <B>Merge tables</B>
@@ -563,8 +528,7 @@ testcase tUndoHistory29
 	Call CheckUndoStringInUndoList ( 10, "MergeTable" )
 
 	'/// close Document
-	Call hCloseDocument	
-
+	Call hCloseDocument
 endcase
 
 
@@ -582,9 +546,8 @@ testcase tUndoHistory30
 	ToolsTextInTable
     Kontext "TextInTabelleUmwandeln"
     TextInTabelleUmwandeln.OK
-	'///  string in Undo-list has to be: "Convert table -> text") 
+	'///  string in Undo-list has to be: "Convert table -> text")
 	Call CheckUndoStringInUndoList ( 10, "ConvertTable" )
-    Call wTypeKeys "<ESCAPE>"
 
 	printlog "- Sort table"
 	'/// <B>Sort table</B>	
@@ -598,7 +561,6 @@ testcase tUndoHistory30
 
 	'/// Close Document
 	Call hCloseDocument
-
 endcase
 
 
@@ -626,7 +588,6 @@ testcase tUndoHistory31
 	TabelleAuftrennen.Ok
 	'///  string in Undo-list has to be: "Split table") 
 	Call CheckUndoStringInUndoList ( 10, "SplitTable" )
-    Call wTypeKeys "<ESCAPE>"
 
 	'/// <B>Delete table</B>
 	printlog "- Delete table"
@@ -642,7 +603,6 @@ testcase tUndoHistory31
 
 	'/// Close document
 	Call hCloseDocument
-
 endcase
 
 
@@ -658,12 +618,11 @@ testcase tUndoHistory32
 	Kontext "HorizontaleLinieEinfuegen"
 	Auswahl.TypeKeys "<Down>", 4
 	HorizontaleLinieEinfuegen.Ok
-	'///  string in Undo-list has to be: "Insert horizontal ruler") 
+	'///  string in Undo-list has to be: "Insert horizontal ruler")
 	Call CheckUndoStringInUndoList ( 10, "InsertRuler" )
 
 	'/// close document
 	Call hCloseDocument
-
 endcase
 
 
@@ -677,15 +636,13 @@ testcase tUndoHistory33
 	Call hGrafikEinfuegen ( gTesttoolPath & "writer\optional\input\graphics\jolink.jpg" )
 	'///  string in Undo-list has to be: "Insert graphics") 
 	Call CheckUndoStringInUndoList ( 10, "InsertGraphic" )
-    Call wTypeKeys "<ESCAPE>"
 
-	'/// <B>Delete graphic</B>
+    '/// <B>Delete graphic</B>
 	printlog "- delete graphic"
 	'/// press 'delete' to remove graphic
 	Call wTypeKeys "<Delete>"
 	'///  string in Undo-list has to be: "Delete graphics") 
 	Call CheckUndoStringInUndoList ( 10, "DeleteGraphic" )
-    Call wTypeKeys "<ESCAPE>"
 
 	'/// <B>Insert graphic from gallery</B>
 	printlog "- insert graphic from gallery"
@@ -698,7 +655,7 @@ testcase tUndoHistory33
 	Call hMenuSelectNr(1)
 	'///  string in Undo-list has to be: "Insert graphics") 
 	Call CheckUndoStringInUndoList ( 10, "InsertGraphic" )
-    Call wTypeKeys "<ESCAPE>"
+    Sleep (1)
 
 	'/// <B>Replace graphic</B>
 	printlog "- replace graphic"
@@ -716,5 +673,4 @@ testcase tUndoHistory33
 	
 	'/// Close document
 	Call hCloseDocument
-
-endcase	
+endcase

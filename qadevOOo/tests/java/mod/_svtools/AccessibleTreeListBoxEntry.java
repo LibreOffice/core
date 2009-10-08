@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: AccessibleTreeListBoxEntry.java,v $
- * $Revision: 1.11 $
+ * $Revision: 1.11.8.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -291,7 +291,7 @@ public class AccessibleTreeListBoxEntry extends TestCase {
     */
     private void shortWait() {
         try {
-            Thread.currentThread().sleep(500);
+            Thread.sleep(5000);
         } catch (InterruptedException e) {
             System.out.println("While waiting :" + e);
         }

@@ -61,11 +61,11 @@ testcase tDropDownLB_1
 
     Dim iType as Integer
     iType = 2
-       
+
     PrintLog "- Check 'Input List'"
-    
+
     Call hNewDocument
-    
+
     PrintLog "- Insert/Field/Other/ Functions"
     PrintLog "- Check if 'Input List' exists in Type area"
     Call fInsertFieldsOther("TabFunktionen")
@@ -75,7 +75,7 @@ testcase tDropDownLB_1
         Warnlog "Maybe wrong type selected in list. Not 'Input list'"
     end if
     TabFunktionen.Close
-    
+
     Call hCloseDocument
 
 endcase
@@ -1031,6 +1031,7 @@ testcase tDropDownLB_17
     Call hNewDocument
     PrintLog "- Open a word document  which includes 2 entries."
     Call hFileOpen(sTestFile)
+    Call sMakeReadOnlyDocumentEditable
     PrintLog "- Set focus in front of first line."
     Call wTypeKeys "<MOD1 Home>"
     PrintLog "- Edit/Fields."
@@ -1051,8 +1052,9 @@ testcase tDropDownLB_17
             if EntrysList.GetSelText <> sItem1(i-1) then Warnlog "Hope to get " & sItem1(i-1) & " but get " & EntrysList.GetSelText
         next i
     else
-        QAErrorlog "#i56768#Not all entrys in field correctly imported!"
+        warnlog "Not all entrys in field correctly imported!"
     end if
+
     FeldbefehlBearbeitenFunktionen.Cancel
     
     PrintLog "- Set focus in front of third line"
@@ -1078,8 +1080,9 @@ testcase tDropDownLB_17
             if EntrysList.GetSelText <> sItem2(i-1) then Warnlog "Hope to get " & sItem2(i-1) & " but get " & EntrysList.GetSelText
         next i
     else
-        QAErrorlog "#i56768#Not all entrys in field correctly imported!"
+        warnlog "Not all entrys in field correctly imported!"
     end if
+
     FeldbefehlBearbeitenFunktionen.Cancel
     
     Call hCloseDocument ' <- close word document

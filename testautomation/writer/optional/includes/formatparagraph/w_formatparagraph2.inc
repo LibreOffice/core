@@ -31,7 +31,7 @@
 '*
 '/************************************************************************
 '*
-'* owner : helge.delfs@sun.com
+'* owner : fredrik.haegg@sun.com
 '*
 '* short description : Test the functionality of Paragraph Formatting - 2
 '*
@@ -64,8 +64,8 @@
 
 testcase tParagraphAlignment1
 
-  Dim sTestFile          as String
-  Dim sPositionX         as String
+  Dim sTestFile as String
+  Dim sPositionX as String
 
   sTestFile = Convertpath (gTesttoolpath + "writer\optional\input\formatparagraph\alignmentTest.sxw")
 
@@ -77,6 +77,7 @@ testcase tParagraphAlignment1
    '/// + Open the test file
    '/// + This file includes 1 paragraphs , and a pic is anchored to the character
     Call hFileOpen(sTestFile)
+    Call sMakeReadOnlyDocumentEditable
 
    'Get the original coordinate-X
     Call wTypeKeys ( "<Shift F4>" )
@@ -105,15 +106,14 @@ testcase tParagraphAlignment1
     TabPositionAndSizeWriter.Cancel
 
    Call hCloseDocument
-
 endcase
 
 '-------------------------------------------------------------------------------------------
 
 testcase tParagraphAlignment2
 
-  Dim sTestFile          as String
-  Dim sPositionX         as String
+  Dim sTestFile as String
+  Dim sPositionX as String
 
   sTestFile  = Convertpath (gTesttoolpath + "writer\optional\input\formatparagraph\alignmentTestRight.sxw")
   sPositionX = "11" + gSeperator + "00" + gMeasurementUnit
@@ -126,6 +126,7 @@ testcase tParagraphAlignment2
    '/// + Open the test file
    '/// + This file includes 1 paragraphs , and a pic is anchored to the laste character
     Call hFileOpen(sTestFile)
+    Call sMakeReadOnlyDocumentEditable
 
    '/// + Format/Paragraph / Alignment , choose Right/Bottom option
     Call fFormatParagraph("TabAusrichtungAbsatz")
@@ -144,7 +145,6 @@ testcase tParagraphAlignment2
     TabPositionAndSizeWriter.Cancel
 
    Call hCloseDocument
-
 endcase
 
 '-------------------------------------------------------------------------------------------
@@ -163,6 +163,7 @@ testcase tParagraphAlignment3
    '/// + Open the test file
    '/// + This file includes 1 paragraphs , and a pic is anchored to the character
     Call hFileOpen(sTestFile)
+    Call sMakeReadOnlyDocumentEditable
 
    '/// + Format/Paragraph / Alignment , choose Center option
     Call fFormatParagraph("TabAusrichtungAbsatz")
@@ -181,16 +182,15 @@ testcase tParagraphAlignment3
     TabPositionAndSizeWriter.Cancel
 
    Call hCloseDocument
-
 endcase
 
 '-------------------------------------------------------------------------------------------
 
 testcase tParagraphAlignment4
 
-  Dim sTestFile          as String
-  Dim sPositionX1        as String
-  Dim sPositionX2        as String
+  Dim sTestFile as String
+  Dim sPositionX1 as String
+  Dim sPositionX2 as String
 
   sTestFile   = Convertpath (gTesttoolpath + "writer\optional\input\formatparagraph\alignmentTestJustified.sxw")
   sPositionX1 = "12" + gSeperator + "84" + gMeasurementUnit
@@ -203,6 +203,7 @@ testcase tParagraphAlignment4
    '/// Open the test file
    '/// + This file includes 1 paragraphs , and a pic is anchored to the last character
     Call hFileOpen(sTestFile)
+    Call sMakeReadOnlyDocumentEditable
 
     Call wTypeKeys ( "<Shift F4>" )
     Sleep 1
@@ -229,25 +230,36 @@ testcase tParagraphAlignment4
     Sleep 1
 
     Call fPositionAndSize("TabPositionAndSizeWriter")
-        if fCalculateTolerance(Horizontalby.Gettext , sPositionX1) > 0.02 then Warnlog "Alignment Justified doesn't work -1 !"
+        if fCalculateTolerance(Horizontalby.Gettext , sPositionX1) > 0.02 then
+            if gPlatGroup = "unx" then
+                QaErrorLog "#i94769# - Different font-sizes under Linux/Unix compared with windows."
+            else
+                Warnlog "Alignment Justified doesn't work -1 !"
+            end if
+        end if
     TabPositionAndSizeWriter.Cancel
 
     Call wTypeKeys "<Tab>"
     FormatAnchorToPage
     Sleep 1
     Call fPositionAndSize("TabPositionAndSizeWriter")
-        if Horizontalby.Gettext <> sPositionX2 then warnlog "Alignment Justified doesn't work -2 !"
+        if Horizontalby.Gettext <> sPositionX2 then 
+            if gPlatGroup = "unx" then
+                QaErrorLog "#i94769# - Different font-sizes under Linux/Unix compared with windows."
+            else
+                warnlog "Alignment Justified doesn't work -2 !"
+            end if
+        end if
     TabPositionAndSizeWriter.Cancel
 
    Call hCloseDocument
-
 endcase
 
 '-------------------------------------------------------------------------------------------
 
 testcase tParagraphAlignment5
 
-  Dim sTestFile          as String
+  Dim sTestFile as String
 
   sTestFile   = Convertpath (gTesttoolpath + "writer\optional\input\formatparagraph\alignmentTestJustified.sxw")
 
@@ -259,6 +271,7 @@ testcase tParagraphAlignment5
    '/// Open the test file
    '/// + This file includes 1 paragraphs , and a pic is anchored to the last character
     Call hFileOpen(sTestFile)
+    Call sMakeReadOnlyDocumentEditable
 
    '/// Format/Paragraph / Alignment ,
    '/// + choose Justified option , and select centered in last line
@@ -279,16 +292,15 @@ testcase tParagraphAlignment5
     TabPositionAndSizeWriter.Cancel
 
    Call hCloseDocument
-
 endcase
 
 '-------------------------------------------------------------------------------------------
 
 testcase tParagraphAlignment6
 
-  Dim sTestFile          as String
-  Dim sPositionX1        as String
-  Dim sPositionX2        as String
+  Dim sTestFile as String
+  Dim sPositionX1 as String
+  Dim sPositionX2 as String
 
   sTestFile   = Convertpath (gTesttoolpath + "writer\optional\input\formatparagraph\alignmentTestJustifiedCentered.sxw")
   sPositionX2 = "11" + gSeperator + "15" + gMeasurementUnit
@@ -299,9 +311,10 @@ testcase tParagraphAlignment6
    Call hNewDocument
 
    '/// Open the test file
-   '/// + This file includes 1 paragraphs ,
+   '/// + This file includes 1 paragraphs,
    '/// + and 2 pics are in 2nd line
     Call hFileOpen(sTestFile)
+    Call sMakeReadOnlyDocumentEditable
 
     Call wTypeKeys ( "<Shift F4>" )
     Call wTypeKeys "<TAB>"
@@ -332,7 +345,13 @@ testcase tParagraphAlignment6
     Sleep 1
 
     Call fPositionAndSize("TabPositionAndSizeWriter")
-        if Horizontalby.Gettext <> sPositionX1 then warnlog "Alignment Justified doesn't work -1 !"
+        if Horizontalby.Gettext <> sPositionX1 then 
+            if gPlatGroup = "unx" then
+                QaErrorLog "#i94769# - Different font-sizes under Linux/Unix compared with windows."
+            else
+                warnlog "Alignment Justified doesn't work -1 !"
+            end if
+        end if
     TabPositionAndSizeWriter.Cancel
 
     Call wTypeKeys "<Tab>"
@@ -343,33 +362,43 @@ testcase tParagraphAlignment6
     TabPositionAndSizeWriter.Cancel
 
    Call hCloseDocument
-
 endcase
 
 '--------------------------------------------------------------------------
 
 testcase tParagraphAlignment7
-
-  Dim sTestFile          as String
-  Dim sPositionX         as String
+  Dim sTestFile as String
+  Dim sPositionX as String
 
   sTestFile   = Convertpath (gTesttoolpath + "writer\optional\input\formatparagraph\testExpand.sxw")
-  sPositionX  = "7" + gSeperator + "00" + gMeasurementUnit
 
-  PrintLog "- Test 'Expand single word'"
-  '/// <b> Test 'Expand single word' </b> ///
+  Printlog "- Test 'Expand single word'"
+  Call hNewDocument
 
-   Call hNewDocument
-
-   '/// Open the test file
-   '/// + This file includes 1 paragraphs ,
-   '/// + there is only 1 word - "That" in last line ,
-   '/// + and a drawring object is anchored as character after "That"
+    '/// Open the test file
+    '/// + This file includes 1 paragraphs ,
+    '/// + there is only 1 word - "That" in last line ,
+    '/// + and a drawring object is anchored as character after "That"
     Call hFileOpen(sTestFile)
+    Call sMakeReadOnlyDocumentEditable
 
-   '/// Format/Paragraph / Alignment ,
-   '/// + choose Justified option , select Justified in 'last line'
-   '/// + check 'expand single word'
+    printlog "Select the object."
+    Sleep 1
+    Call wTypeKeys ( "<Shift F4>" )
+    Sleep 1
+
+    printlog "Note the position of the drawing object"
+    Call fPositionAndSize("TabPositionAndSizeWriter")
+    sPositionX = Horizontalby.Gettext
+    TabPositionAndSizeWriter.Cancel
+
+    printlog "Deselect the object"
+    Sleep 1
+    Call wTypeKeys ( "<ESCAPE>" )
+
+    '/// Format/Paragraph / Alignment ,
+    '/// + choose Justified option , select Justified in 'last line'
+    '/// + check 'expand single word'
     Call fFormatParagraph("TabAusrichtungAbsatz")
         Blocksatz.Check
         Sleep 1
@@ -379,29 +408,29 @@ testcase tParagraphAlignment7
         Sleep 1
     TabAusrichtungAbsatz.OK
 
-   '/// choose the drawing object , Format/Anchor / To page ///
+    printlog "Select the drawing object , Format/Anchor / To page"
     Call wTypeKeys ( "<Shift F4>" )
+
     Sleep 1
     FormatAnchorToPage
     Sleep 1
 
-   '/// Check if the drawing object is the right of the page
+    printlog "Check if the drawing object has moved from where it was before."
     Call fPositionAndSize("TabPositionAndSizeWriter")
-        if Horizontalby.Gettext <> sPositionX then QAErrorLog "#114314# Expand single word doesn't work "
+        if Horizontalby.Gettext = sPositionX then QAErrorLog "#114314# Expand single word doesn't work"
     TabPositionAndSizeWriter.Cancel
 
-   Call hCloseDocument
-
+    Call hCloseDocument
 endcase
 
 '--------------------------------------------------------------------------
 
 testcase tParagraphAlignment8
 
-  Dim bAsianLanguage     as Boolean
-  Dim sTestFile          as String
-  Dim sPositionX         as String
-  Dim sPositionY         as String
+  Dim bAsianLanguage as Boolean
+  Dim sTestFile as String
+  Dim sPositionX as String
+  Dim sPositionY as String
 
   sTestFile   = Convertpath (gTesttoolpath + "writer\optional\input\formatparagraph\testExpand.sxw")
   sPositionY  = "2" + gSeperator + "80" + gMeasurementUnit
@@ -418,6 +447,7 @@ testcase tParagraphAlignment8
    '/// + This file includes 1 paragraphs ,
    '/// + and a drawring object is anchored as character after "That"
     Call hFileOpen(sTestFile)
+    Call sMakeReadOnlyDocumentEditable
 
    '/// Get the drawing object original position ///
     Call wTypeKeys ( "<Shift F4>" )
@@ -462,17 +492,16 @@ testcase tParagraphAlignment8
     end if
 
    Call hCloseDocument
-
 endcase
 
 '--------------------------------------------------------------------------
 
 testcase tParagraphAlignment9
 
-  Dim bAsianLanguage     as Boolean
-  Dim sTestFile          as String
-  Dim sPositionX         as String
-  Dim sPositionY         as String
+  Dim bAsianLanguage as Boolean
+  Dim sTestFile as String
+  Dim sPositionX as String
+  Dim sPositionY as String
 
   sTestFile   = Convertpath (gTesttoolpath + "writer\optional\input\formatparagraph\testExpand.sxw")
   sPositionY  = "3" + gSeperator + "61" + gMeasurementUnit
@@ -489,6 +518,7 @@ testcase tParagraphAlignment9
    '/// + This file includes 1 paragraphs ,
    '/// + and a drawring object is anchored as character after "That"
     Call hFileOpen(sTestFile)
+    Call sMakeReadOnlyDocumentEditable
 
    '/// Get the drawing object original position ///
     Call wTypeKeys ( "<Shift F4>" )
@@ -533,16 +563,15 @@ testcase tParagraphAlignment9
     end if
 
    Call hCloseDocument
-
 endcase
 
 '--------------------------------------------------------------------------
 
 testcase tParagraphTextFlow1
     
-    Dim sTestFile   as String
-    Dim sTestText   as String
-    Dim i           as Integer
+    Dim sTestFile as String
+    Dim sTestText as String
+    Dim i as Integer
     
     sTestFile = Convertpath (gTesttoolpath + "writer\optional\input\formatparagraph\hyphenation.sxw")
     sTestText = "h"
@@ -555,6 +584,7 @@ testcase tParagraphTextFlow1
     '/// Open the test file
     '/// + This file includes 2 words : AAA and Kilometerhigh
     Call hFileOpen(sTestFile)
+    Call sMakeReadOnlyDocumentEditable
     
     'the focus is in front of Kilometerhigh
     Call wTypeKeys "<Home>"
@@ -583,6 +613,7 @@ testcase tParagraphTextFlow1
     
     Call hNewDocument
     Call hFileOpen(sTestFile)
+    Call sMakeReadOnlyDocumentEditable
     
     '/// 2. Test there is the Hyphenation configuratioin
     '/// + Format/Paragraph / Text Flow ,
@@ -599,7 +630,7 @@ testcase tParagraphTextFlow1
         Call wTypeKeys "<Shift Left>"
         EditCopy
         if GetClipboardText <> sTestText then
-            if GetClipboardText = "r" then
+            if GetClipboardText = "t" then
                 Goto GoON1
             else
                 warnlog "Hyphenation configuratioin doesn't work !"
@@ -611,19 +642,18 @@ testcase tParagraphTextFlow1
     
     GoON1:
     Call hCloseDocument
-
 endcase
 
 '-------------------------------------------------------------------------------------------
 
 testcase tParagraphTextFlow2
 
-    Dim sTestFile    as String
-    Dim sTestText    as String
-    Dim i            as Integer
+    Dim sTestFile as String
+    Dim sTestText as String
+    Dim i as Integer
     
     sTestFile  = Convertpath (gTesttoolpath + "writer\optional\input\formatparagraph\hyphenation.sxw")
-    sTestText  = "Kilome"
+    sTestText  = "Kilomet"
     
     PrintLog "- Hyphenation - Characters at line end"
     '/// Hyphenation - Characters at line end
@@ -633,6 +663,7 @@ testcase tParagraphTextFlow2
     '/// Open the test file
     '/// + This file includes 2 words : AAA and Kilometerhigh
     Call hFileOpen(sTestFile)
+    Call sMakeReadOnlyDocumentEditable
     
     '/// 1.Test Characters at line end ==> 6
     '/// + Format/Paragraph / Text Flow ,
@@ -650,7 +681,8 @@ testcase tParagraphTextFlow2
     For i = 1 to 10
         Call wTypeKeys "M"
         Call wTypeKeys "<End>"
-        Call wTypeKeys "<Shift Left>" , 6
+        Call wTypeKeys "<Shift Left>" , 7
+
         EditCopy
         if GetClipboardText = sTestText then Goto GoON1
         Call wTypeKeys "<Home>"
@@ -663,6 +695,7 @@ testcase tParagraphTextFlow2
     Call hNewDocument
     
     Call hFileOpen(sTestFile)
+    Call sMakeReadOnlyDocumentEditable
     
     '/// 2.Test Characters at line end ==> 8
     '/// + Format/Paragraph / Text Flow ,
@@ -687,19 +720,18 @@ testcase tParagraphTextFlow2
     next i
     
     Call hCloseDocument
-
 endcase
 
 '--------------------------------------------------------------------------
 
 testcase tParagraphTextFlow3
 
-    Dim sTestFile    as String
-    Dim sTestText    as String
-    Dim i            as Integer
+    Dim sTestFile      as String
+    Dim sTestText     as String
+    Dim i                   as Integer
 
     sTestFile  = Convertpath (gTesttoolpath + "writer\optional\input\formatparagraph\hyphenation.sxw")
-    sTestText  = "meter"
+    sTestText  = "lomet"
     
     PrintLog "- Hyphenation - Characters at line begin"
     '/// Hyphenation - Characters at line begin
@@ -709,6 +741,7 @@ testcase tParagraphTextFlow3
     '/// Open the test file
     '/// + This file includes 2 words : AAA and Kilometerhigh
     Call hFileOpen(sTestFile)
+    Call sMakeReadOnlyDocumentEditable
     
     '/// 1.Test Characters at line begin ==> 4
     '/// + Format/Paragraph / Text Flow ,
@@ -739,6 +772,7 @@ testcase tParagraphTextFlow3
     Call hNewDocument
     
     Call hFileOpen(sTestFile)
+    Call sMakeReadOnlyDocumentEditable
     
     '/// 2.Test Characters at line end ==> 6
     '/// + Format/Paragraph / Text Flow ,
@@ -757,25 +791,28 @@ testcase tParagraphTextFlow3
         Call wTypeKeys "M"
         Call wTypeKeys "<End>"
         Call wTypeKeys "<Shift Left>" , 5
-        
-        EditCopy
-        if GetClipboardText = sTestText then  warnlog "Something wrong in Characters at line end = > 6"
-        Call wTypeKeys "<Home>"
-    next i
-    
-    Call hCloseDocument
 
+        EditCopy
+        if GetClipboardText = sTestText then Goto GoON2
+        Call wTypeKeys "<Home>"
+
+    next i
+    warnlog "Something wrong in Characters at line end = > 6"
+    
+    GoON2:
+    Call hCloseDocument
 endcase
 
 '--------------------------------------------------------------------------
 
 testcase tParagraphTextFlow4
 
-  Dim sTestFile    as String
-  Dim i , j        as Integer
+  Dim sTestFile as String
+  Dim i as Integer
+  Dim j as Integer
   Dim sTestText()  as Variant
 
-  sTestFile  = Convertpath (gTesttoolpath + "writer\optional\input\formatparagraph\hyphenationNew.sxw")
+  sTestFile  = Convertpath (gTesttoolpath + "writer\optional\input\formatparagraph\hyphenationNew.odt")
 
   PrintLog "- Hyphenation - maxinum number of consecutive typhens"
   '/// Hyphenation - maxinum number of consecutive typhens
@@ -786,16 +823,17 @@ testcase tParagraphTextFlow4
    '/// + This file includes 4 words : KiloAmterhigh1 kiloAmeterhigh2 kiloAmeterhigh3 kiloAmeterhigh4
    '/// + the words' length is longer then page length
     Call hFileOpen(sTestFile)
+    Call sMakeReadOnlyDocumentEditable
 
    '/// 1.Test maxinum number of consecutive typhens (default => 0)
    '/// + Format/Paragraph / Text Flow ,
    '/// + Check Hyphenation 'Automatically'
    '/// + Set 0 in 'maxinum number of consecutive typhens'
     sTestText = Array( _
-                      "terhigh1 ki"    , _
-                      "high2 kilo"    , _
-                      "high3 kilo"    , _
-                      "high4"    , _
+                      "Amet"    , _
+                      "1 kilo"    , _
+                      "erhigh"    , _
+                      "Amet"    , _
                       )
 
     j = UBound(sTestText)
@@ -813,7 +851,7 @@ testcase tParagraphTextFlow4
         Call wTypeKeys "<Shift End>"
         EditCopy
         if GetClipboardText <> sTestText(i) then
-            QAErrorlog "#i39917# Something wrong in Consecutive typhens 0 : " &i
+            warnlog " Something wrong in Consecutive typhens 0 : " &i
             exit for
         end if
         Call wTypeKeys "<MOD1 Home>"
@@ -825,10 +863,10 @@ testcase tParagraphTextFlow4
    '/// + Check Hyphenation 'Automatically'
    '/// + Set 0 in 'maxinum number of consecutive typhens'
     sTestText = Array( _
-                      "terhigh1"    , _
-                      "terhigh2"    , _
-                      "terhigh3"    , _
-                      "terhigh4"    , _
+                      "Amete"    , _
+                      "kilo"         , _
+                      "rhigh2"    , _
+                      "Amete"    , _
                       )
 
     Call fFormatParagraph("TabTextfluss")
@@ -844,7 +882,7 @@ testcase tParagraphTextFlow4
         Call wTypeKeys "<Shift End>"
         EditCopy
         if GetClipboardText <> sTestText(i) then 
-            QAErrorlog "#i39917# Something wrong in Consecutive typhens 1 : " &i
+            warnlog " Something wrong in Consecutive typhens 1 : " &i
             exit for
         end if
         Call wTypeKeys "<MOD1 Home>"
@@ -856,10 +894,10 @@ testcase tParagraphTextFlow4
    '/// + Check Hyphenation 'Automatically'
    '/// + Set 0 in 'maxinum number of consecutive typhens'
     sTestText = Array( _
-                      "terhigh1 ki" , _
-                      "gh2 kilo"      , _
-                      "high3"       , _
-                      "terhigh4"    , _
+                      "Amet"      , _
+                      "1 kilo"      , _
+                      "erhigh"     , _
+                      "Amet"      , _
                       )
 
     Call fFormatParagraph("TabTextfluss")
@@ -875,7 +913,7 @@ testcase tParagraphTextFlow4
         Call wTypeKeys "<Shift End>"
         EditCopy
         if GetClipboardText <> sTestText(i) then
-            QAErrorlog "#i39917# Something wrong in Consecutive typhens 2 : " &i
+            warnlog " Something wrong in Consecutive typhens 2 : " &i
             exit for
         end if
         Call wTypeKeys "<MOD1 Home>"
@@ -883,14 +921,13 @@ testcase tParagraphTextFlow4
     Next i
 
    Call hCloseDocument
-
 endcase
 
 '--------------------------------------------------------------------------
 
 testcase tParagraphTextFlow5
 
-  Dim sTestFile    as String
+  Dim sTestFile as String
 
   sTestFile  = Convertpath (gTesttoolpath + "writer\optional\input\formatparagraph\columnBreakParagraphBefore.sxw")
 
@@ -904,6 +941,7 @@ testcase tParagraphTextFlow5
    '/// + the 1st paragraph is in 1st and 2nd column
    '/// + the 2nd paragraph is is 2nd and 3rd column
     Call hFileOpen(sTestFile)
+    Call sMakeReadOnlyDocumentEditable
 
    '/// Set the focus to 2nd paragraph
     Kontext
@@ -935,14 +973,13 @@ testcase tParagraphTextFlow5
     fCloseNavigator
 
    Call hCloseDocument
-
 endcase
 
 '--------------------------------------------------------------------------
 
 testcase tParagraphTextFlow6
 
-  Dim sTestFile    as String
+  Dim sTestFile as String
 
   sTestFile  = Convertpath (gTesttoolpath + "writer\optional\input\formatparagraph\columnBreakParagraphAfter.sxw")
 
@@ -956,6 +993,7 @@ testcase tParagraphTextFlow6
    '/// + the paragraph is in 1st and 2nd column
    '/// + and it is NOT full of 2nd column
     Call hFileOpen(sTestFile)
+    Call sMakeReadOnlyDocumentEditable
 
    '/// Format/Paragraph / Text Flow
    '/// + Set 'Breaks' enable
@@ -981,14 +1019,13 @@ testcase tParagraphTextFlow6
     fCloseNavigator
 
    Call hCloseDocument
-
 endcase
 
 '--------------------------------------------------------------------------
 
 testcase tParagraphTextFlow7
 
-  Dim sTestFile    as String
+  Dim sTestFile as String
 
   sTestFile  = Convertpath (gTesttoolpath + "writer\optional\input\formatparagraph\pageBreakBefore.sxw")
 
@@ -1000,6 +1037,7 @@ testcase tParagraphTextFlow7
    '/// Open the test file
    '/// + There are 2 paragraphs in 1 page
     Call hFileOpen(sTestFile)
+    Call sMakeReadOnlyDocumentEditable
 
    '/// Set the focus to 2nd paragraph
     Kontext
@@ -1042,14 +1080,13 @@ testcase tParagraphTextFlow7
     TabTextfluss.OK
 
    Call hCloseDocument
-
 endcase
 
 '--------------------------------------------------------------------------
 
 testcase tParagraphTextFlow8
 
-  Dim sTestFile    as String
+  Dim sTestFile as String
 
   sTestFile  = Convertpath (gTesttoolpath + "writer\optional\input\formatparagraph\pageBreakAfter.sxw")
 
@@ -1061,6 +1098,7 @@ testcase tParagraphTextFlow8
    '/// Open the test file
    '/// + There is 1 paragraph in the file
     Call hFileOpen(sTestFile)
+    Call sMakeReadOnlyDocumentEditable
 
    '/// Format/Paragraph / Text Flow
    '/// + Set 'Breaks' enable
@@ -1086,16 +1124,16 @@ testcase tParagraphTextFlow8
     fCloseNavigator
 
    Call hCloseDocument
-
 endcase
 
 '--------------------------------------------------------------------------
 
 testcase tParagraphTextFlow9
 
-  Dim sTestFile       as String
-  Dim sPage1 , sPage2 as String
-  Dim i               as Integer
+  Dim sTestFile as String
+  Dim sPage1   as String
+  Dim sPage2   as String
+  Dim i              as Integer
 
   sTestFile  = Convertpath (gTesttoolpath + "writer\optional\input\formatparagraph\textFlowOptions.sxw")
 
@@ -1107,7 +1145,9 @@ testcase tParagraphTextFlow9
    '/// Open the test file
    '/// + There is 1 paragraph which cross 2 pages
     Call hFileOpen(sTestFile)
+    Call sMakeReadOnlyDocumentEditable
     Call wTypeKeys "<MOD1 Home>"
+
     Call fFindWord("She")
     Call wTypeKeys "<Home>"
 
@@ -1139,7 +1179,10 @@ testcase tParagraphTextFlow9
    PrintLog "-  Check Don't split paragraph"
    Call hNewDocument
     Call hFileOpen(sTestFile)
+    Call sMakeReadOnlyDocumentEditable
+
     Call wTypeKeys "<MOD1 Home>"
+
     Call fFindWord("She")
     Call wTypeKeys "<Home>"
 
@@ -1166,16 +1209,16 @@ testcase tParagraphTextFlow9
     fCloseNavigator
 
    Call hCloseDocument
-
 endcase
 
 '--------------------------------------------------------------------------
 
 testcase tParagraphTextFlow10
 
-  Dim sTestFile       as String
-  Dim sPage1 , sPage2 as String
-  Dim i               as Integer
+  Dim sTestFile as String
+  Dim sPage1 as String
+  Dim sPage2 as String
+  Dim i as Integer
 
   sTestFile  = Convertpath (gTesttoolpath + "writer\optional\input\formatparagraph\textFlowOptions1.sxw")
 
@@ -1188,6 +1231,7 @@ testcase tParagraphTextFlow10
    '/// There are 2 paragraphes in the file , 1st one crosses
    '/// + 1st and 2nd page , 2nd one is in 2nd page
     Call hFileOpen(sTestFile)
+    Call sMakeReadOnlyDocumentEditable
     EditSearchAndReplace
     Kontext "FindAndReplace"
         SearchFor.SetText "He1"
@@ -1231,6 +1275,7 @@ testcase tParagraphTextFlow10
    Call hNewDocument
 
     Call hFileOpen(sTestFile)
+    Call sMakeReadOnlyDocumentEditable
 
     PrintLog "-  Check Keep with next paragraph"
    '/// 2. Test checking "Keep with next paragraph"
@@ -1272,15 +1317,14 @@ testcase tParagraphTextFlow10
     fCloseNavigator
 
    Call hCloseDocument
-
 endcase
 
 '--------------------------------------------------------------------------
 
 testcase tParagraphTextFlow11
 
-  Dim sTestFile    as String
-  Dim sLines       as String
+  Dim sTestFile as String
+  Dim sLines as String
 
   sTestFile = Convertpath (gTesttoolpath + "writer\optional\input\formatparagraph\eightline.sxw")
   sLines    = "3"
@@ -1293,6 +1337,7 @@ testcase tParagraphTextFlow11
    '/// Open the test file
    '/// + There is 1 paragraph (8 lines) in the file
     Call hFileOpen(sTestFile)
+    Call sMakeReadOnlyDocumentEditable
 
    '/// Format/Paragraph / Text Flow
    '/// + Check 'Orphan control' , set 3 in 'Lines'
@@ -1326,15 +1371,14 @@ testcase tParagraphTextFlow11
     fCloseNavigator
 
    Call hCloseDocument
-
 endcase
 
 '--------------------------------------------------------------------------
 
 testcase tParagraphTextFlow12
 
-  Dim sTestFile    as String
-  Dim sLines       as String
+  Dim sTestFile as String
+  Dim sLines as String
 
   sTestFile = Convertpath (gTesttoolpath + "writer\optional\input\formatparagraph\eightline.sxw")
   sLines    = "3"
@@ -1347,6 +1391,7 @@ testcase tParagraphTextFlow12
    '/// Open the test file
    '/// + There is 1 paragraph (8 lines) in the file
     Call hFileOpen(sTestFile)
+    Call sMakeReadOnlyDocumentEditable
 
    '/// Format/Paragraph / Text Flow
    '/// + Check 'Widow control' , set 3 in 'Lines'
@@ -1378,15 +1423,14 @@ testcase tParagraphTextFlow12
     fCloseNavigator
 
    Call hCloseDocument
-
 endcase
 
 '--------------------------------------------------------------------------
 
 testcase tParagraphTextFlow13
 
-  Dim sTestFile    as String
-  Dim i            as Integer
+  Dim sTestFile as String
+  Dim i as Integer
 
   sTestFile = Convertpath (gTesttoolpath + "writer\optional\input\formatparagraph\specialHyphenation.sxw")
 
@@ -1398,6 +1442,7 @@ testcase tParagraphTextFlow13
    '/// Open the test file
    '/// + There is 1 word TABC in the end of the first line
     Call hFileOpen(sTestFile)
+    Call sMakeReadOnlyDocumentEditable
 
    '/// Press spaces in the head of the first line , we hope
    '/// + the whole word - 'TABC' will go to 2nd line at one time
@@ -1418,7 +1463,6 @@ testcase tParagraphTextFlow13
     next i
 
    Call hCloseDocument
-
 endcase
 
 '--------------------------------------------------------------------------

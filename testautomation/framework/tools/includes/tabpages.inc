@@ -85,7 +85,9 @@ function hDocumentInfoSelectTab( cTabPage as string ) as boolean
     select case ( ucase( cTabPage ) ) 
     case "GENERAL"     : active.setPage TabDokument     : kontext "TabDokument"
     case "DESCRIPTION" : active.setPage TabBeschreibung : kontext "TabBeschreibung"
-    case "USER"        : active.setPage TabBenutzer     : kontext "TabBenutzer"
+    case "USER"        : warnlog( "#i95523# - Cannot access controls on Custom page" )
+                         brc = false
+                        'active.setPage TabBenutzer     : kontext "TabBenutzer"
     case "INTERNET"    : active.setPage TabInternet     : kontext "TabInternet"
     case "STATISTICS"  : active.setPage TabStatistik    : kontext "TabStatistik"
     case default       : brc = false

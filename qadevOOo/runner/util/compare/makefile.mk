@@ -8,7 +8,7 @@
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.6 $
+# $Revision: 1.6.16.1 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -40,7 +40,7 @@ TARGET = runner_util_compare
 
 # --- Files --------------------------------------------------------
 
-JARFILES = ridl.jar unoil.jar jurt.jar juh.jar jut.jar java_uno.jar
+JARFILES = ridl.jar unoil.jar jurt.jar juh.jar java_uno.jar
 JAVAFILES =	\
  DocComparatorFactory.java \
  DocComparator.java \

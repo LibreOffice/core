@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: AccessiblePresentationOLEShape.java,v $
- * $Revision: 1.8 $
+ * $Revision: 1.8.8.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -55,8 +55,8 @@ import com.sun.star.uno.XInterface;
 
 public class AccessiblePresentationOLEShape extends TestCase {
 
-    XComponent xDrawDoc;
-    XModel aModel;
+    static XComponent xDrawDoc;
+    static XModel aModel;
 
     protected void initialize( TestParameters tParam, PrintWriter log ) {
 
@@ -133,8 +133,9 @@ public class AccessiblePresentationOLEShape extends TestCase {
         XAccessible xRoot = at.getAccessibleObject(xWindow);
         at.printAccessibleTree(log, xRoot, tParam.getBool(util.PropertyName.DEBUG_IS_ACTIVE));
 
-        oObj = at.getAccessibleObjectForRole
-            (xRoot, AccessibleRole.SHAPE, "ImpressOLE");
+//        oObj = at.getAccessibleObjectForRole
+//            (xRoot, AccessibleRole.SHAPE, "ImpressOLE");
+        oObj = at.getAccessibleObjectForRole(xRoot, AccessibleRole.UNKNOWN, "ImpressOLE");
 
         // create test environment here
         TestEnvironment tEnv = new TestEnvironment( oObj );

@@ -257,7 +257,7 @@ testcase tAssignComponentFunction
         for i = 1 to x
             sTemp = LibraryTreeList.getItemText(i)
             'printlog "("+i+"/"+x+"): '" + sTemp + "'"
-            if (("DialogComponent"=sTemp) OR ("DIALOGCOMPONENT"=sTemp)) then
+            if (("DialogComponent.odt"=sTemp) OR ("DIALOGCOMPONENT.ODT"=sTemp)) then
                 a = i
                 printlog "Found library ("+i+"/"+x+"): '" + sTemp + "'"
             endif
@@ -292,13 +292,13 @@ testcase tAssignComponentFunction
         '       sleep... at least 60 seconds
                 call sleep(10)
             else
-                warnlog sLocation + "Macro not found: 'TestDialogComponent'"
+                warnlog "Macro not found: 'TestDialogComponent'"
             endif
         else
-            warnlog sLocation + "Library not found: 'DialogComponent' or 'DIALOGCOMPONENT'"
+            warnlog "Library not found: 'DialogComponent' or 'DIALOGCOMPONENT'"
         endif
     else
-        warnlog sLocation + "'Run macro dialog' didn't came up"
+        warnlog "'Run macro dialog' didn't came up"
     endif
     'printlog resetapplication
     

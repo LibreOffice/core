@@ -53,19 +53,17 @@ sub w_206_
 
 end sub
 
-
-
 testcase tToolsNumbering1
     printlog "Create a simple numbering without selection"
 	'/// Create a simple numbering without selection
 	Dim i as integer
 
-	'/// Open a new text document  
+	'/// Open a new text document
 	Call hNewDocument
-	
+
 	'/// Activate Numbering/Bullets via Objectbar
 	Call hToolbarSelect("BulletsAndNumbering", true)
-	
+
 	'/// Create a numbering
 	Kontext "NumObjectbar"
 	if Not NumObjectbar.Exists then
@@ -76,13 +74,13 @@ testcase tToolsNumbering1
 
 	NumberingOnOff.Click
 	For i = 1 to 5
-		Call wDokSchreiben ( "Numbering Level " & i )
-		Call wDokSchreiben ( "<RETURN>" )
+		call wTypeKeys ( "Numbering Level " & i )
+		call wTypeKeys ( "<RETURN>" )
 	next i
 
 	'/// Check if numbering has been created
 	For i = 1 to 5
-		Call wDokSchreiben ( "<UP>" )
+		call wTypeKeys ( "<UP>" )
 		if hIsNumberingBullets() = false then
 			Warnlog "Seems numbering has not been completely created"
 		end if
@@ -114,13 +112,13 @@ testcase tToolsNumbering2
 		
 	BulletsOnOff.Click
 	For i = 1 to 5
-		Call wDokSchreiben ( "Numbering Level " & i )
-		Call wDokSchreiben ( "<RETURN>" )
+		call wTypeKeys ( "Numbering Level " & i )
+		call wTypeKeys ( "<RETURN>" )
 	next i
 
 	'/// Check if numbering has been created
 	For i = 1 to 5
-		Call wDokSchreiben ( "<UP>" )
+		call wTypeKeys ( "<UP>" )
 		if hIsNumberingBullets() = false then
 			Warnlog "Seems numbering has not been completely created"
 		end if
@@ -146,9 +144,9 @@ testcase tToolsNumbering3
 	next i
 	
 	'///  Point cursor to beginning of document
-	Call wDokSchreiben ( "<Mod1 Home>" )
+	call wTypeKeys ( "<Mod1 Home>" )
 	'/// Select all text inserted
-	Call wDokSchreiben ( "<Mod1 A>" )
+	call wTypeKeys ( "<Mod1 A>" )
 		
 	'/// Activate Numbering/Bullets via Objectbar
 	Call hToolbarSelect("BulletsAndNumbering", true)
@@ -162,13 +160,13 @@ testcase tToolsNumbering3
 		
 	NumberingOnOff.Click
 	'/// Check if numbering has been created
-	Call wDokSchreiben ( "<Mod1 Home>" )	
+	call wTypeKeys ( "<Mod1 Home>" )	
 	
 	For i = 1 to 2
 		if hIsNumberingBullets() = false then
 			Warnlog "Seems numbering has not been completely created"
 		end if
-		Call wDokSchreiben ( "<Mod1 Down>" )
+		call wTypeKeys ( "<Mod1 Down>" )
 	next i
 
 	'/// CloseDocument
@@ -191,9 +189,9 @@ testcase tToolsNumbering4
 	next i
 	
 	'///  Point cursor to beginning of document
-	Call wDokSchreiben ( "<Mod1 Home>" )
+	call wTypeKeys ( "<Mod1 Home>" )
 	'/// Select all text inserted
-	Call wDokSchreiben ( "<Mod1 A>" )
+	call wTypeKeys ( "<Mod1 A>" )
 		
 	'/// Activate Numbering/Bullets via Objectbar
 	Call hToolbarSelect("BulletsAndNumbering", true)
@@ -207,13 +205,13 @@ testcase tToolsNumbering4
 		
 	BulletsOnOff.Click
 	'/// Check if numbering has been created
-	Call wDokSchreiben ( "<Mod1 Home>" )	
+	call wTypeKeys ( "<Mod1 Home>" )	
 	
 	For i = 1 to 2
 		if hIsNumberingBullets() = false then
 			Warnlog "Seems bullets have not been completely created"
 		end if
-		Call wDokSchreiben ( "<Mod1 Down>" )
+		call wTypeKeys ( "<Mod1 Down>" )
 	next i
 
 	'/// CloseDocument
@@ -223,50 +221,50 @@ endcase
 
 
 testcase tToolsNumbering5
-    printlog "create numbering via autoformat"  	
-    '/// create numbering via autoformat	
+    printlog "create numbering via autoformat"
+    '/// create numbering via autoformat
 	Dim i as integer, sClipBrd() as string
 
 	For i = 1 to 8
-		'/// Open a new text document  
+		'/// Open a new text document
 		Call hNewDocument
 		
 		'/// Insert '1.' // 'I.' // 'a.' followed by text
 		Select Case i
 			Case 1
 				printlog "- Enter numbering starting with 1)"
-				Call wDokSchreiben ( "1) " )
+				call wTypeKeys ( "1) " )
 			Case 2
-				Call wDokSchreiben ( "1. " )
+				call wTypeKeys ( "1. " )
 				printlog "- Enter numbering starting with 1."
 			Case 3
-				Call wDokSchreiben ( "(1) " )
+				call wTypeKeys ( "(1) " )
 				printlog "- Enter numbering starting with (1)"
 			Case 4
-				Call wDokSchreiben ( "I. " )
+				call wTypeKeys ( "I. " )
 				printlog "- Enter numbering starting with I."
 			Case 5
-				Call wDokSchreiben ( "A) " )
-				printlog "- Enter numbering starting with A)"
-			Case 6
-				Call wDokSchreiben ( "a) " )
-				printlog "- Enter numbering starting with a)"
-			Case 7
-				Call wDokSchreiben ( "(a) " )
-				printlog "- Enter numbering starting with (a)"
-			Case 8
-				Call wDokSchreiben ( "i. " )				
+				call wTypeKeys ( "i. " )
 				printlog "- Enter numbering starting with i."
+			Case 6
+                call wTypeKeys ( "A) " )
+				printlog "- Enter numbering starting with A)"
+			Case 7
+				call wTypeKeys ( "a) " )
+				printlog "- Enter numbering starting with a)"
+			Case 8
+				call wTypeKeys ( "(a) " )
+				printlog "- Enter numbering starting with (a)"
 		end select
 		
 		'/// + 'my new numbering'
 		'/// + followed by return (creats the numbering)
 		'/// + followed by text 'my newer numbering'
-		Call wDokSchreiben "my new numbering<Return>"
-		Call wDokSchreiben "my newer numbering"
+		call wTypeKeys "my new numbering<Return>"
+		call wTypeKeys "my newer numbering"
 		
-		'/// check if numbering has been created		
-		Call wDokSchreiben ( "<MOD1 A>" )
+		'/// check if numbering has been created
+		call wTypeKeys ( "<MOD1 A>" )
 		EditCopy
 		Select Case gPlatGroup
 			Case "unx"
@@ -291,24 +289,23 @@ testcase tToolsNumbering5
 				Case 4
 					if Left$(sClipBrd(1), 3) <> "II." then
 						Warnlog "Seems numbering I. has not been correctly created"
-					end if			
+					end if
 				Case 5
-					if Left$(sClipBrd(1), 2) <> "B)" then
-					    QAErrorlog "Seems numbering A) has not been correctly created"
-					end if			
-				Case 6
-					if Left$(sClipBrd(1), 2) <> "b)" then
-						QAErrorlog "Seems numbering a) has not been correctly created"
-					end if			
-				Case 7
-					if Left$(sClipBrd(1), 2) <> "(b)" then
-						QAErrorlog "Seems numbering (a) has not been correctly created"
-					end if			
-				Case 8
 					if Left$(sClipBrd(1), 3) <> "ii." then
-						'Warnlog "Seems numbering i. has not been correctly created"
-                        QAErrorlog "#i78524#Auto-capitalisation of letter i hinders Automatic numbering"
-					end if							
+                        QaErrorLog "#i78524#Auto-capitalisation of letter i hinders Automatic numbering"    'Warnlog "Seems numbering i. has not been correctly created"
+					end if
+				Case 6
+                    if Left$(sClipBrd(1), 2) <> "B)" then
+					    QaErrorLog "#i71136# - Autocorrect won't start numbering by 'A)'"   'warnlog "Seems numbering A) has not been correctly created"
+					end if
+				Case 7
+                    if Left$(sClipBrd(1), 2) <> "b)" then
+						QaErrorLog "#i71136# - Autocorrect won't start numbering by 'a)'"   'warnlog "Seems numbering a) has not been correctly created"
+					end if
+				Case 8
+					if Left$(sClipBrd(1), 2) <> "(b)" then
+						QaErrorLog "#i71136# - Autocorrect won't start numbering by '(a)'"   'warnlog "Seems numbering (a) has not been correctly created"
+					end if
 			end select
 		else
 			Warnlog "Error in clipboard content! " & Ubound(sClipBrd())
@@ -330,18 +327,18 @@ testcase tToolsNumbering6
 	'/// Open a new text document
 	Call hNewDocument
 	'/// Insert some text '1. This is the first' followed by a return
-	Call wDokSchreiben ( "1. This is the first<Return>" )
+	call wTypeKeys ( "1. This is the first<Return>" )
 	'/// Insert some text 'This is the second' followed by a return
-	Call wDokSchreiben ( "This is the second<Return>" )
+	call wTypeKeys ( "This is the second<Return>" )
 	'/// Insert some text 'This is the third'
-	Call wDokSchreiben ( "This is the third" )
+	call wTypeKeys ( "This is the third" )
 	
 	'/// Press key <STRG HOME> to go to first
-	Call wDokSchreiben ( "<MOD1 Home>" )
+	call wTypeKeys ( "<MOD1 Home>" )
 	'/// Press <HOME> to highlight numbering
-	Call wDokSchreiben ( "<Home>" )
+	call wTypeKeys ( "<Home>" )
 	'/// Press <DELETE> to remove first paragraph numbering
-	Call wDokSchreiben ( "<DELETE>" )
+	call wTypeKeys ( "<DELETE>" )
 	'/// Check if numbering of the following paragraphs has been adapted even after save and reload
 	For j = 1 to 2 
 		if j = 2 then
@@ -351,7 +348,7 @@ testcase tToolsNumbering6
 			Call hCloseDocument
 			Call hFileOpen ( gOfficepath & "user\work\tToolsNumbering6.odt" )
 		end if
-		Call wDokSchreiben ( "<MOD1 A>" )	
+		call wTypeKeys ( "<MOD1 A>" )	
 		EditCopy
 		Select Case gPlatGroup
 			Case "unx"
@@ -430,26 +427,26 @@ testcase tToolsNumbering7
         Select Case i
             Case 1
                 '/// Insert some text 'My first number' followed by a return
-                Call wDokSchreiben ( "My first number<RETURN>" )
+                call wTypeKeys ( "My first number<RETURN>" )
             Case 2
                 '/// Insert some text 'My second number' followed by a return
-                Call wDokSchreiben ( "My second number<RETURN>" )
+                call wTypeKeys ( "My second number<RETURN>" )
             Case 3            
                 '/// Insert some text 'My third number'
-                Call wDokSchreiben ( "My third number" )
+                call wTypeKeys ( "My third number" )
         end select
     next i
 	'/// Select all text
-    Call wDokSchreiben ( "<MOD1 A>" )
+    call wTypeKeys ( "<MOD1 A>" )
     '/// Set Style 'Heading 1'
 	Call wStyleSet ( sVorlage )	
 	
 	'/// Press key <STRG HOME> to go to first
-	Call wDokSchreiben ( "<MOD1 Home>" )
+	call wTypeKeys ( "<MOD1 Home>" )
 	'/// Press <HOME> to highlight numbering
-	Call wDokSchreiben ( "<Home>" )
+	call wTypeKeys ( "<Home>" )
 	'/// Press <DELETE> to remove first paragraph numbering
-	Call wDokSchreiben ( "<DELETE>" )
+	call wTypeKeys ( "<DELETE>" )
 	'/// Check if numbering of the following paragraphs has been adapted even after save and reload
 	For j = 1 to 2 
 		if j = 2 then
@@ -460,7 +457,7 @@ testcase tToolsNumbering7
 			Call hFileOpen ( gOfficepath & "user\work\tToolsNumbering7.odt" )
 		end if
         
-		Call wDokSchreiben ( "<MOD1 A>" )	
+		call wTypeKeys ( "<MOD1 A>" )	
 		EditCopy
 		Select Case gPlatGroup
 			Case "unx"
@@ -511,9 +508,9 @@ testcase tToolsNumbering8
     TabelleEinfuegenWriter.Ok
     
     '/// Select 2nd to 6th row in first column
-    Call wDokSchreiben ( "<Mod1 Home>" )
-    Call wDokSchreiben ( "<Down>" )
-    Call wDokSchreiben ( "<Shift Down>", 4 )
+    call wTypeKeys ( "<Mod1 Home>" )
+    call wTypeKeys ( "<Down>" )
+    call wTypeKeys ( "<Shift Down>", 4 )
     
 	'/// Activate Numbering/Bullets via Objectbar
 	Call hToolbarSelect("BulletsAndNumbering", true)
@@ -527,7 +524,7 @@ testcase tToolsNumbering8
     '/// Enable numbering
 	NumberingOnOff.Click
 	'/// Check if numbering has been created in table
-	Call wDokSchreiben ( "<Mod1 Home>" )		
+	call wTypeKeys ( "<Mod1 Home>" )		
 	For i = 1 to 5
 		if i = 1 then
             if hIsNumberingBullets() = true then
@@ -539,7 +536,7 @@ testcase tToolsNumbering8
                 exit for
             end if        
 		end if
-		Call wDokSchreiben ( "<Down>" )
+		call wTypeKeys ( "<Down>" )
 	next i
     
     '/// Close document
@@ -555,13 +552,13 @@ testcase tToolsNumbering9
     Call hNewDocument
     '/// Create a numbering
     '/// Write in document '1. This numbering' followed by a return
-    Call wDokSchreiben "1. This numbering<Return>"
+    call wTypeKeys "1. This numbering<Return>"
     '/// +  write 'that will be automatically created' followed by a return
-    Call wDokSchreiben "that will be automatically created<RETURN>"
+    call wTypeKeys "that will be automatically created<RETURN>"
     '/// + write 'and be turned off via toolbar'
-    Call wDokSchreiben ( "and turned off via toolbar" )
+    call wTypeKeys ( "and turned off via toolbar" )
     '/// Select all
-    Call wDokSchreiben ( "<Mod1 A>" )
+    call wTypeKeys ( "<Mod1 A>" )
   	'/// Activate Numbering/Bullets via Objectbar
 	Call hToolbarSelect("BulletsAndNumbering", true)
     Kontext "NumObjectbar"
@@ -574,9 +571,9 @@ testcase tToolsNumbering9
 	NumberingOnOff.Click
 
     '/// Check if numbering has been turned off
-    Call wDokSchreiben ( "<Mod1 Home>" )
+    call wTypeKeys ( "<Mod1 Home>" )
     For i = 1 to 3
-        Call wDokSchreiben ( "<Shift End>" )
+        call wTypeKeys ( "<Shift End>" )
         EditCopy
         Select Case i
             Case 1
@@ -592,12 +589,12 @@ testcase tToolsNumbering9
             Case 3
                 if GetClipboardtext <> "and turned off via toolbar" then
                     Warnlog "It seems numbering isn't turned off"
-                end if                
+                end if
         end select
-        Call wDokSchreiben ( "<Down><Home>" )
+        call wTypeKeys ( "<Down><Home>" )
     next i
     '/// Close document
-    Call hCloseDocument        
+    Call hCloseDocument
 endcase
 
 
@@ -609,39 +606,39 @@ testcase tToolsNumbering10
     Call hNewDocument
     '/// Create a numbering
     '/// Write in document '1. This numbering' followed by a return
-    Call wDokSchreiben "1. This numbering<Return>"
+    call wTypeKeys "1. This numbering<Return>"
     '/// +  write 'that will be automatically created' followed by a return
-    Call wDokSchreiben "that will be automatically created<RETURN>"
+    call wTypeKeys "that will be automatically created<RETURN>"
     '/// + write 'and be turned off via return' followed by a return
-    Call wDokSchreiben ( "and turned off via return<RETURN>" )
+    call wTypeKeys ( "and turned off via return<RETURN>" )
     '/// + enter <Return> to create an empty paragraph
-    Call wDokSchreiben ( "<Return>" )    
+    call wTypeKeys ( "<Return>" )    
     '/// Hit <Return> again should leave a numbering with 3 paragraphs
-    Call wDokSchreiben ( "No numbering anymore" )
-    Call wDokSchreiben ( "<Shift Home>" )
+    call wTypeKeys ( "No numbering anymore" )
+    call wTypeKeys ( "<Shift Home>" )
     EditCopy
     if GetClipboardtext <> "No numbering anymore" then
         Warnlog "Seems numbering wasn't turned off !"
     else
-        Call wDokSchreiben ( "<Mod1 Home>" )
+        call wTypeKeys ( "<Mod1 Home>" )
         For i = 1 to 3
             if hIsNumberingBullets() = false then
 			    Warnlog "Seems numbering has been completely turned off"
                 exit for
-            end if   
-            Call wDokSchreiben ( "<Down>" )
-        next i    
+            end if
+            call wTypeKeys ( "<Down>" )
+        next i
     end if
 
     '/// Close document
-    Call hCloseDocument        
+    Call hCloseDocument
 endcase
 
 
 testcase tToolsNumbering11
     Dim i as integer, sVorlage as string
     Dim sClipBrd() as string
-    printlog "Create an empty heading (Ouline numbering)"    
+    printlog "Create an empty heading (Ouline numbering)"
     '/// Create an empty heading (Ouline numbering)
     '/// Open a new text document
     Call hNewDocument
@@ -651,7 +648,7 @@ testcase tToolsNumbering11
 	Active.SetPage TabKapitelnumerierung
 	Kontext "TabKapitelnumerierung"
 	sVorlage = Absatzvorlage.GetSelText
-	TabKapitelnumerierung.Cancel    
+	TabKapitelnumerierung.Cancel
     
     '/// Create a outline numbering
     ' Numbering of outlines will not be copied to clipboard
@@ -673,35 +670,35 @@ testcase tToolsNumbering11
             TabDokumentFeldbefehle.Close
             Call hCloseDocument
             goto endsub
-        endcatch    
+        endcatch
         Einfuegen.Click
         TabDokumentFeldbefehle.Close
         
         Select Case i
             Case 1
                 '/// Insert some text 'A new first paragraph' followed by a return
-                Call wDokSchreiben ( "A new first paragraph<RETURN>" )
+                call wTypeKeys ( "A new first paragraph<RETURN>" )
             Case 2
                 '/// Insert an empty paragraph
-                Call wDokSchreiben ( "<RETURN>" )
-            Case 3            
+                call wTypeKeys ( "<RETURN>" )
+            Case 3
                 '/// Insert some text 'A new third paragraph'
-                Call wDokSchreiben ( "A new third paragraph" )
+                call wTypeKeys ( "A new third paragraph" )
         end select
-    next i        
+    next i
 	'/// Select all text
-    Call wDokSchreiben ( "<MOD1 A>" )
+    call wTypeKeys ( "<MOD1 A>" )
     '/// Set Style 'Heading 1'
 	Call wStyleSet ( sVorlage )
 	'/// Activate Numbering/Bullets via Objectbar
-	Call hToolbarSelect("BulletsAndNumbering", true)	
+	Call hToolbarSelect("BulletsAndNumbering", true)
 	'/// Create a numbering
 	Kontext "NumObjectbar"
 	if Not NumObjectbar.Exists then
 		Warnlog "Numbering/Bullets objectbar not accessible"
 		Call hCloseDocument
 		goto endsub
-	end if		
+	end if
 	NumberingOnOff.Click
     '/// Check if second paragraph is empty but numbered
     
@@ -714,7 +711,7 @@ testcase tToolsNumbering11
     end select
     
     For i = 1 to 3
-        Select Case i	
+        Select Case i
             Case 1
                 if sClipBrd(0) <> "1A new first paragraph" then
                     Warnlog "First Heading not: '1A new first paragraph' but: " &  sClipBrd(0)
@@ -722,13 +719,13 @@ testcase tToolsNumbering11
             Case 2
                 if sClipBrd(1) <> "2" then
                     Warnlog "First paragraph not empty but: " & sClipBrd(1)
-                end if		
+                end if
             Case 3
                 if sClipBrd(2) <> "3A new third paragraph" then
                     Warnlog "First paragraph not '3A new third paragraph' but: " & sClipBrd(2)
                 end if
         end select
-    next i	 	
+    next i
     
     '/// Close document
     Call hCloseDocument

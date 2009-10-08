@@ -134,13 +134,10 @@ testcase func_StarOfficeView_4
    ToolsOptions
    hToolsOptions ( "StarOffice", "View" )
    bSave(4) = VorschauInSchriftlisten.IsChecked
-   bSave(5) = InaktiveMenueeintraege.IsChecked
    bSave(6) = SchriftenHistorie.IsChecked
 
 '///<b>inactive menu items</b>
  printlog "     - inactive menu items : => check"
-'///+check 'Inactive menu items'
-   InaktiveMenueeintraege.Check
 '///+click OK for the options dialog
    Kontext "ExtrasOptionenDlg"
    ExtrasOptionenDlg.OK
@@ -157,8 +154,6 @@ testcase func_StarOfficeView_4
    ToolsOptions
    hToolsOptions ( "StarOffice", "View" )
  printlog "     - inactive menu items : => uncheck"
-'///+uncheck 'Inactive menu items'
-   InaktiveMenueeintraege.UnCheck
 '///+click OK for the options dialog
    Kontext "ExtrasOptionenDlg"
    ExtrasOptionenDlg.OK
@@ -178,8 +173,6 @@ testcase func_StarOfficeView_4
 '///+open tools / options / StarOffice / View
    ToolsOptions
    hToolsOptions ( "StarOffice", "View" )
-'///+set 'Inactive menu items' to default
-   if bSave(5) = TRUE then InaktiveMenueeintraege.Check else InaktiveMenueeintraege.UnCheck
  printlog "     - preview in fontlist : => Uncheck"
 '///check 'preview in fontlist'
    VorschauInSchriftlisten.Check
@@ -189,10 +182,14 @@ testcase func_StarOfficeView_4
    Sleep (2)
 
 '///+select all Fonts in the fontlist in object bar => testtool cannot check if the preview is shown
-   Kontext "OL_SW"
+   Kontext "textobjectbar"
+   if textobjectbar.exists then
    for i=1 to Schriftart.GetItemCount
       Schriftart.Select i
    next i
+   else
+   warnlog "No Textobjectbar?"
+   endif
 
 '///+open tools / options / StarOffice / View
    ToolsOptions
@@ -206,7 +203,7 @@ testcase func_StarOfficeView_4
    Sleep (2)
 
 '///+select all Fonts in the fontlist in object bar => testtool cannot check if the preview is not shown
-   Kontext "OL_SW"
+   Kontext "textobjectbar"
    for i=1 to Schriftart.GetItemCount
       Schriftart.Select i
    next i
@@ -226,7 +223,7 @@ testcase func_StarOfficeView_4
    Sleep (2)
 
 '///+select all Fonts in the fontlist in object bar => testtool cannot check if font history is not shown
-   Kontext "OL_SW"
+   Kontext "textobjectbar"
    for i=1 to Schriftart.GetItemCount
       Schriftart.Select i
    next i
@@ -243,7 +240,7 @@ testcase func_StarOfficeView_4
    Sleep (2)
 
 '///+select all Fonts in the fontlist in object bar => testtool cannot check if font history is not shown
-   Kontext "OL_SW"
+   Kontext "textobjectbar"
    for i=1 to Schriftart.GetItemCount
       Schriftart.Select i
    next i
@@ -696,9 +693,9 @@ testcase func_StarOfficePrint_1
       DruckenDlg.OK
       Sleep 5
 '///+wait a little bit => then you have to get a warning about the printing trancparency
-      Kontext "WarningPrintTransparency"
-      if WarningPrintTransparency.Exists(3) then
-         WarningPrintTransparency.Cancel
+      Kontext "WarningPrintOptions"
+      if WarningPrintOptions.Exists(3) then
+         WarningPrintOptions.Cancel
       else
          Warnlog "The warning-message for papersize does not turn up!"
       end if

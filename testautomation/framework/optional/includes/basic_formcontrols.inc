@@ -192,12 +192,16 @@ testcase tAllControlsOnDialog( cMajor as string )
         
         '///+<li>Select every control, open its properties and verify its name, close properties</li>
         for iCurrentControl = 1 to ICONTROLCOUNT
-        
-            hSelectControl( iCurrentControl )
-            hOpenPropertyBrowser()
-            sCurrentControl = lsControlNames( iCurrentControl )
-            hPBGetControlName( sCurrentControl )
-            hClosePropertyBrowser()
+
+            if ( instr( gtSysName, "Solaris" ) > 0 ) then
+                qaerrorlog( "Skipping frame control on Solaris" )
+            else
+                hSelectControl( iCurrentControl )
+                hOpenPropertyBrowser()
+                sCurrentControl = lsControlNames( iCurrentControl )
+                hPBGetControlName( sCurrentControl )
+                hClosePropertyBrowser()
+            endif
             
         next iCurrentControl
         

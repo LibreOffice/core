@@ -572,9 +572,9 @@ testcase tInsertFunction
     '/// Check option 'Array'
     printlog " Check option 'Array'"
     Matrix.check
-    '/// Choose the second entry (all) in the category listbox
-    printlog " Choose the second entry (all) in the category listbox"
-    Kategorie.Select(2)
+    '/// Choose the third entry (database) in the category listbox
+    printlog " Choose the third entry (database) in the category listbox"
+    Kategorie.Select(3)
     '/// Choose first function
     printlog " Choose first function"
     Funktion.Select (1)

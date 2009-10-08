@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: _XComponent.java,v $
- * $Revision: 1.5 $
+ * $Revision: 1.5.8.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -143,7 +143,7 @@ public class _XComponent extends MultiMethodTest {
         disposed = false;
         executeMethod("removeEventListener()");
 
-        log.println( "begin dispose" + Thread.currentThread());
+        log.println( "begin dispose in thread " + Thread.currentThread());
         XDesktop oDesk = (XDesktop) tEnv.getObjRelation("Desktop");
         if (oDesk !=null) {
             oDesk.terminate();

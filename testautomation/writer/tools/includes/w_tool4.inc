@@ -30,7 +30,7 @@
 '*
 '/************************************************************************
 '*                                                                **
-'* owner : helge.delfs@sun.com                                    **
+'* owner : fredrik.haegg@sun.com                                    **
 '*                                                                **
 '* short description : Misc tools for writer tests                **
 '*                                                                **
@@ -46,14 +46,13 @@
 '*                                                                **
 '\******************************************************************
 
-
 function CountItemsInNavigatorGroup(Group as integer) as Integer
     Dim j as integer,SelectInNavigator as integer
     'First, select the Navigator depending on the application
     Kontext "Navigator"
     If Not Navigator.Exists then EditNavigator
     Kontext "NavigatorWriter"
-    
+
     'In Navigator, close all groups and set focus to first group
     Sleep 2
     if Auswahlliste.GetItemCount<12 then Inhaltsansicht.Click
@@ -65,7 +64,7 @@ function CountItemsInNavigatorGroup(Group as integer) as Integer
             Auswahlliste.TypeKeys "-"
         next j
     end if
-    
+
     Wait 500
     'Select group given by the function
     Auswahlliste.Select Group
@@ -104,7 +103,7 @@ end function
 
 function wSetZoom (  )
 	'/// This function sets the zoom size to 100% in a text document
-	
+
     ViewZoom
     Kontext "Massstab"
     Vergroesserung100.Check
@@ -119,7 +118,6 @@ end function
 function wGetSpellcheckDocumentName(xCategory as integer) as string
     Dim sTemp as string, sReturn as string
     '/// This function is to return the document to load in spellcheck test
-'       
     select case xCategory
         case 1:
             select case iSprache
@@ -147,7 +145,7 @@ function wGetSpellcheckDocumentName(xCategory as integer) as string
                     sTemp = Convertpath(gTesttoolpath + "writer\optional\input\linguistik\007.odt")
                 case else
                     sTemp = Convertpath(gTesttoolpath + "writer\optional\input\linguistik\0" & iSprache & ".odt")
-            end select    
+            end select
     end select
 
     if sReturn <> "None" then
@@ -157,19 +155,19 @@ function wGetSpellcheckDocumentName(xCategory as integer) as string
             sReturn = "Empty"
         end if
     end if
-    
+
     wGetSpellcheckDocumentName = sReturn
-    
+
 end function
 
 '*******************************************************************
 
 sub wToolsSpellcheckCheckWriter
-    '/// This function opens the spellcheck-dialog in all applications    
+    '/// This function opens the spellcheck-dialog in all applications
     Select Case Ucase(gApplication)
-        Case "WRITER"		: ToolsSpellcheck
-        Case "MASTERDOC"	: ToolsSpellcheck
-        Case "HTMLDOKUMENT" : ToolsSpellcheck
+        Case "WRITER"		: ToolsSpellcheckWriter
+        Case "MASTERDOC"	: ToolsSpellcheckWriter
+        Case "HTMLDOKUMENT" : ToolsSpellcheckWriter
         case "DRAW"         : ToolsSpellcheck
         case "IMPRESS"     	: ToolsSpellcheck
     end select
@@ -190,7 +188,7 @@ sub wEnableAutoSpellcheck(sEnable as boolean)
 			Optionen.Check
 		Case false
 			Optionen.UnCheck
-	end select		
+	end select
 	Kontext "ExtrasOptionenDLG"
 	ExtrasOptionenDLG.Ok
 
@@ -205,9 +203,9 @@ sub wEnableHyphenation(sEnable as boolean)
     FormatParagraph
     Kontext
     Active.SetPage TabTextfluss
-    kontext "TabTextfluss"    
+    kontext "TabTextfluss"
     Select Case sEnable
-        case true        
+        case true
             Automatisch.Check
         case false
             Automatisch.UnCheck

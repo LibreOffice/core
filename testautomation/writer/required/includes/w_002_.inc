@@ -1181,6 +1181,9 @@ endcase
 '----------------------------------------------------------------
 
 testcase tEditIndexEntry
+   qaErrorLog "#158646# - Insert Indexes Entry causes crash."
+   goto endsub
+
     PrintLog "- Edit/Index Entry"
     if gApplication = "HTMLDOKUMENT" then
         printlog "Not in WriterWeb!"

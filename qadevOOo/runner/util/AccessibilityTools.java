@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: AccessibilityTools.java,v $
- * $Revision: 1.12 $
+ * $Revision: 1.12.8.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -259,12 +259,14 @@ public class AccessibilityTools {
         XAccessibleContext ac = xacc.getAccessibleContext();
         boolean isShowing = ac.getAccessibleStateSet()
         .contains(com.sun.star.accessibility.AccessibleStateType.SHOWING);
-        if ((ac.getAccessibleRole() == role) &&
+
+        // hotfix for i91828:
+        // if role to serach is 0 then ignore the role.
+        if ( (role == 0 || ac.getAccessibleRole() == role) &&
             (ac.getAccessibleName().indexOf(name) > -1) &&
             (utils.getImplName(ac).indexOf(implName) > -1) &&
             isShowing) {
             SearchedAccessible = xacc;
-
             //System.out.println("FOUND the desired component -- "+ ac.getAccessibleName() +isShowing);
             return ac;
         } else {

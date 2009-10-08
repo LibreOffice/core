@@ -49,19 +49,19 @@ sub main
     use "writer\optional\includes\hangulhanjaonversion\hhConversion1.inc"
     use "writer\optional\includes\hangulhanjaonversion\hhConversion2.inc"
     use "writer\optional\includes\hangulhanjaonversion\hhConversion3.inc"
-    
+
     printlog Chr(13) + "Loading of Include - Files takes: " + Wielange ( StartZeit )
     printlog Chr(13) + "******* Writer - Level 1 - Test *******"
-    
+
     Call hStatusIn ( "writer", "w_hhConversion.bas" , "HH Converstion" )
-    
+
     printlog Chr(13) + "      - Test Hangul/Hanja Conversion"
-    
+
     'Enable 'Asian Language support' ON
     bAsianLanguage = ActiveDeactivateAsianSupport(TRUE)
-    
+
     printlog Chr(13) + "      - No selection "
-    
+
     Call tHHNoSelction_1
     Call tHHNoSelction_2
     Call tHHNoSelction_3
@@ -69,22 +69,22 @@ sub main
     Call tHHNoSelction_5
     Call tHHNoSelction_6
     Call tHHNoSelction_7
-    
+
     printlog Chr(13) + "      - Single selection "
-    
+
     Call tHHSingleSelction_1
-    
+
     printlog Chr(13) + "      - Multi selection "
-    
+
     Call tHHMultiSelction_1
-    
+
     printlog Chr(13) + "      - in text box and draw box "
-    
+
     Call tHHTextBox_1
     Call tHHDrawBox_1
-    
+
     printlog Chr(13) + "      - Hangul/Hanja Conversion"
-    
+
     Call   tHHConversion_1
     Call   tHHConversion_2
     Call   tHHConversion_3
@@ -101,7 +101,7 @@ sub main
     Call   tHHConversion_14
     Call   tHHConversion_15
     Call   tHHConversion_16
-    Call   tHHConversion_17     
+    Call   tHHConversion_17
     Call   tHHConversion_18
     Call   tHHConversion_19
     Call   tHHConversion_20
@@ -111,9 +111,9 @@ sub main
     Call   tHHConversion_24
     Call   tHHConversion_25
     Call   tHHConversion_26
-                                   
+
     printlog Chr(13) + "      - Hangul/Hanja Options"
-    
+
     Call   tHHOptions_1
     Call   tHHOptions_2
     Call   tHHOptions_3
@@ -126,11 +126,11 @@ sub main
     Call   tHHOptions_10
     Call   tHHOptions_11
     Call   tHHOptions_12
-    
+
     'Set the 'Asian Language support' to default
-    Call ActiveDeactivateAsianSupport(bAsianLanguage)    
+    Call ActiveDeactivateAsianSupport(bAsianLanguage)
     Call hStatusOut
-    
+
     Printlog Chr(13) + "End of Level 1 Test - Hangul/Hanja Conversion"
     Printlog "Duration: "+ WieLange ( StartZeit )
     Printlog "Date: " +  Date + "    Time: " + Time
