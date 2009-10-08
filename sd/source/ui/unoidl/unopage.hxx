@@ -45,14 +45,14 @@
 #include <svx/fmdpage.hxx>
 #include <svx/svdpool.hxx>
 
-#include <unotools/servicehelper.hxx>
+#include <comphelper/servicehelper.hxx>
 
 #include "unosrch.hxx"
 
 class SdPage;
 class SvxShape;
 class SdrObject;
-struct SfxItemPropertyMap;
+struct SfxItemPropertySimpleEntry;
 
 #ifdef SVX_LIGHT
 #define SvxFmDrawPage SvxDrawPage
@@ -78,7 +78,7 @@ private:
 protected:
     friend class SdXImpressDocument;
 
-    SvxItemPropertySet  maPropSet;
+    const SvxItemPropertySet*   mpPropSet;
 
     virtual void setBackground( const ::com::sun::star::uno::Any& rValue ) throw(::com::sun::star::lang::IllegalArgumentException);
     virtual void getBackground( ::com::sun::star::uno::Any& rValue ) throw();
@@ -105,7 +105,7 @@ protected:
     void throwIfDisposed() const throw (::com::sun::star::uno::RuntimeException );
 
 public:
-    SdGenericDrawPage( SdXImpressDocument* pModel, SdPage* pInPage, const SfxItemPropertyMap* pMap ) throw();
+    SdGenericDrawPage( SdXImpressDocument* pModel, SdPage* pInPage, const SvxItemPropertySet* pSet ) throw();
     virtual ~SdGenericDrawPage() throw();
 
     // intern

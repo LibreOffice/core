@@ -398,16 +398,21 @@ void SdGRFFilter::SaveGraphic( const ::com::sun::star::uno::Reference< ::com::su
 
         // detect mime type of graphic
         OUString aMimeType;
+        OUString sGraphicURL;
 
         // first try to detect from graphic object
         Reference< XPropertySet > xGraphicSet( xShapeSet->getPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM( "Graphic" ) ) ), UNO_QUERY_THROW );
-        xGraphicSet->getPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM( "MimeType" ) ) ) >>= aMimeType;
+        xShapeSet->getPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM( "GraphicURL" ) ) ) >>= sGraphicURL;
 
-        if( aMimeType.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "image/x-vclgraphic" ) ) || !aMimeType.getLength() )
+        bool bIsLinked = (sGraphicURL.getLength() != 0) && (sGraphicURL.compareToAscii( RTL_CONSTASCII_STRINGPARAM("vnd.sun.star.GraphicObject:") ) != 0);
+
+        if( !bIsLinked )
+               xGraphicSet->getPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM( "MimeType" ) ) ) >>= aMimeType;
+
+        if( bIsLinked || aMimeType.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "image/x-vclgraphic" ) ) || !aMimeType.getLength() )
         {
             // this failed, try to detect it from graphic stream and URL
-            OUString aURL;
-            xShapeSet->getPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM( "GraphicURL" ) ) ) >>= aURL;
+            OUString aURL( sGraphicURL );
 
             if( aURL.getLength() == 0 )
                 xShapeSet->getPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM( "GraphicStreamURL" ) ) ) >>= aURL;

@@ -215,6 +215,7 @@ void ViewShell::construct(void)
     mpZoomList = 0;
     mbStartShowWithDialog = FALSE;
     mnPrintedHandoutPageNum = 1;
+    mnPrintedHandoutPageCount = 0;
     mpWindowUpdater.reset( new ::sd::WindowUpdater() );
     mpImpl.reset(new Implementation(*this));
     meShellType = ST_NONE;

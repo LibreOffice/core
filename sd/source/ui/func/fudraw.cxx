@@ -1006,7 +1006,7 @@ BOOL FuDraw::SetHelpText(SdrObject* pObj, const Point& rPosPixel, const SdrViewE
                 // jump to object/page
                 aHelpText = String(SdResId(STR_CLICK_ACTION_BOOKMARK));
                 aHelpText.AppendAscii( RTL_CONSTASCII_STRINGPARAM( ": " ) );
-                aHelpText.Append( String(INetURLObject::decode( pInfo->maBookmark, '%', INetURLObject::DECODE_WITH_CHARSET ) ));
+                aHelpText.Append( String(INetURLObject::decode( pInfo->GetBookmark(), '%', INetURLObject::DECODE_WITH_CHARSET ) ));
             }
             break;
 
@@ -1015,7 +1015,7 @@ BOOL FuDraw::SetHelpText(SdrObject* pObj, const Point& rPosPixel, const SdrViewE
                 // jump to document (object/page)
                 aHelpText = String(SdResId(STR_CLICK_ACTION_DOCUMENT));
                 aHelpText.AppendAscii( RTL_CONSTASCII_STRINGPARAM( ": " ) );
-                aHelpText.Append( String(INetURLObject::decode( pInfo->maBookmark, '%', INetURLObject::DECODE_WITH_CHARSET ) ));
+                aHelpText.Append( String(INetURLObject::decode( pInfo->GetBookmark(), '%', INetURLObject::DECODE_WITH_CHARSET ) ));
             }
             break;
 
@@ -1024,7 +1024,7 @@ BOOL FuDraw::SetHelpText(SdrObject* pObj, const Point& rPosPixel, const SdrViewE
                 // execute program
                 aHelpText = String(SdResId(STR_CLICK_ACTION_PROGRAM));
                 aHelpText.AppendAscii( RTL_CONSTASCII_STRINGPARAM( ": " ) );
-                aHelpText.Append( String(INetURLObject::decode( pInfo->maBookmark, '%', INetURLObject::DECODE_WITH_CHARSET ) ));
+                aHelpText.Append( String(INetURLObject::decode( pInfo->GetBookmark(), '%', INetURLObject::DECODE_WITH_CHARSET ) ));
             }
             break;
 
@@ -1034,18 +1034,19 @@ BOOL FuDraw::SetHelpText(SdrObject* pObj, const Point& rPosPixel, const SdrViewE
                 aHelpText = String(SdResId(STR_CLICK_ACTION_MACRO));
                 aHelpText.AppendAscii( RTL_CONSTASCII_STRINGPARAM( ": " ) );
 
-                if ( SfxApplication::IsXScriptURL( pInfo->maBookmark ) )
+                if ( SfxApplication::IsXScriptURL( pInfo->GetBookmark() ) )
                 {
-                    aHelpText.Append( pInfo->maBookmark );
+                    aHelpText.Append( pInfo->GetBookmark() );
                 }
                 else
                 {
+                    String sBookmark( pInfo->GetBookmark() );
                     sal_Unicode cToken = '.';
-                    aHelpText.Append( pInfo->maBookmark.GetToken( 2, cToken ) );
+                    aHelpText.Append( sBookmark.GetToken( 2, cToken ) );
                     aHelpText.Append( cToken );
-                    aHelpText.Append( pInfo->maBookmark.GetToken( 1, cToken ) );
+                    aHelpText.Append( sBookmark.GetToken( 1, cToken ) );
                     aHelpText.Append( cToken );
-                    aHelpText.Append(  pInfo->maBookmark.GetToken( 0, cToken ) );
+                    aHelpText.Append( sBookmark.GetToken( 0, cToken ) );
                 }
             }
             break;

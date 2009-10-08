@@ -40,6 +40,7 @@
 #ifndef _SVXIDS_HRC
 #include <svx/svxids.hrc>
 #endif
+#include <svtools/urihelper.hxx>
 #include <svx/svdfppt.hxx>
 #include <svx/svditer.hxx>
 #include <sfx2/docfile.hxx>
@@ -235,7 +236,7 @@ ImplSdPPTImport::ImplSdPPTImport( SdDrawDocument* pDocument, SvStorage& rStorage
 
         InitSvxMSDffManager( nDggContainerOfs, pStData, nSvxMSDffOLEConvFlags2 );
         SetSvxMSDffSettings( SVXMSDFF_SETTINGS_CROP_BITMAPS
-            | SVXMSDFF_SETTINGS_IMPORT_IAS | SVXMSDFF_SETTINGS_IMPORT_PPT );
+            | SVXMSDFF_SETTINGS_IMPORT_PPT );
         SetModel( mpDoc, 576 );
     }
 }
@@ -2098,7 +2099,7 @@ void ImplSdPPTImport::FillSdAnimationInfo( SdAnimationInfo* pInfo, PptInteractiv
     // Lokale Informationen in pInfo eintragen
     if( pIAtom->nSoundRef )
     {
-        pInfo->maBookmark = ReadSound( pIAtom->nSoundRef ); // Pfad zum Soundfile in MSDOS-Notation
+        pInfo->SetBookmark( ReadSound( pIAtom->nSoundRef ) );   // Pfad zum Soundfile in MSDOS-Notation
         pInfo->meClickAction = ::com::sun::star::presentation::ClickAction_SOUND;           // RunProgramAction
     }
 //  if ( nFlags & 0x01 )    // koennen wir nicht ( beim Anklicken markieren )
@@ -2116,7 +2117,7 @@ void ImplSdPPTImport::FillSdAnimationInfo( SdAnimationInfo* pInfo, PptInteractiv
         case 0x02 :                                         // RunProgramAction
         {
             pInfo->meClickAction = ::com::sun::star::presentation::ClickAction_PROGRAM;
-            pInfo->maBookmark = aMacroName;                 // Programmname in aBookmark
+            pInfo->SetBookmark( aMacroName );                   // Programmname in aBookmark
         }
         break;
         case 0x03 :                                         // JumpAction
@@ -2160,23 +2161,36 @@ void ImplSdPPTImport::FillSdAnimationInfo( SdAnimationInfo* pInfo, PptInteractiv
                 switch( pIAtom->nHyperlinkType )
                 {
                     case 9:
-                    case 10:
-                    break;
                     case 8:                                         // hyperlink : URL
                     {
                         if ( pPtr->aTarget.Len() )
                         {
-                            pInfo->maBookmark = String( pPtr->aTarget );
-                            pInfo->meClickAction = ::com::sun::star::presentation::ClickAction_DOCUMENT;
+                            ::sd::DrawDocShell* pDocShell = mpDoc->GetDocSh();
+                            if ( pDocShell )
+                            {
+                                String aBaseURL = pDocShell->GetMedium()->GetBaseURL();
+                                String aBookmarkURL( pInfo->GetBookmark() );
+                                INetURLObject aURL( pPtr->aTarget );
+                                if( INET_PROT_NOT_VALID == aURL.GetProtocol() )
+                                    utl::LocalFileHelper::ConvertSystemPathToURL( pPtr->aTarget, aBaseURL, aBookmarkURL );
+                                if( !aBookmarkURL.Len() )
+                                    aBookmarkURL = URIHelper::SmartRel2Abs( INetURLObject(aBaseURL), pPtr->aTarget, URIHelper::GetMaybeFileHdl(), true );
+                                pInfo->SetBookmark( aBookmarkURL );
+                                pInfo->meClickAction = ::com::sun::star::presentation::ClickAction_PROGRAM;
+                            }
                         }
                     }
                     break;
+
+                    case 10:
+                    break;
+
                     case 7:                                         // hyperlink auf eine Seite
                     {
                         if ( pPtr->aConvSubString.Len() )
                         {
-                            pInfo->maBookmark = pPtr->aConvSubString;
                             pInfo->meClickAction = ::com::sun::star::presentation::ClickAction_BOOKMARK;
+                            pInfo->SetBookmark( pPtr->aConvSubString );
                         }
                     }
                     break;

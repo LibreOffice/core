@@ -79,7 +79,6 @@ SHL1STDLIBS+= \
     $(VCLLIB) \
     $(SVLLIB) \
     $(SOTLIB) \
-    $(CANVASTOOLSLIB) \
     $(UNOTOOLSLIB) \
     $(TOOLSLIB) \
     $(I18NISOLANGLIB) \
@@ -170,7 +169,6 @@ SHL2STDLIBS= \
                         $(SOTLIB) \
             $(TOOLSLIB) \
             $(UCBHELPERLIB) \
-            $(COMPHELPERLIB) \
             $(CPPUHELPERLIB) \
             $(CPPULIB) \
             $(SALLIB)
@@ -198,13 +196,9 @@ SHL4STDLIBS= \
     $(ISDLIB) \
     $(SVXLIB) \
     $(SFXLIB) \
-    $(BASICLIB) \
     $(BASEGFXLIB) \
-    $(DRAWINGLAYERLIB) \
-    $(GOODIESLIB) \
     $(SO2LIB) \
     $(SVTOOLLIB) \
-    $(TKLIB) \
     $(VCLLIB) \
     $(SVLLIB) \
     $(SOTLIB) \
@@ -212,10 +206,8 @@ SHL4STDLIBS= \
     $(TOOLSLIB) \
     $(I18NISOLANGLIB) \
     $(COMPHELPERLIB) \
-    $(UCBHELPERLIB) \
     $(CPPUHELPERLIB) \
     $(CPPULIB) \
-    $(VOSLIB) \
     $(CANVASLIB) \
     $(SALLIB)
 

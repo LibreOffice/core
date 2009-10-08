@@ -45,7 +45,7 @@
 #include <hash_map>
 
 #undef VERBOSE
-//#define VERBOSE 2
+#define VERBOSE 2
 
 namespace sd {
 
@@ -838,6 +838,14 @@ void ViewShellManager::Implementation::MoveSubShellToTop (
 void ViewShellManager::Implementation::MoveToTop (const SfxShell& rShell)
 {
     ::osl::MutexGuard aGuard (maMutex);
+
+    // Check that we have access to a dispatcher.  If not, then we are
+    // (probably) called while the view shell is still being created or
+    // initialized.  Without dispatcher we can not rebuild the shell stack
+    // to move the requested shell to the top.  So return right away instead
+    // of making a mess without being able to clean up afterwards.
+    if (mrBase.GetDispatcher() == NULL)
+        return;
 
     ActiveShellList::iterator iShell (::std::find_if (
         maActiveViewShells.begin(),

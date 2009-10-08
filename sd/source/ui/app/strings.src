@@ -253,6 +253,10 @@ String STR_AUTOLAYOUT_4OBJ
 {
     Text [ en-US ] = "Title, 4 Objects" ;
 };
+String STR_AUTOLAYOUT_4CLIPART
+{
+    Text [ en-US ] = "Title, 4 Cliparts" ;
+};
 String STR_AL_TITLE_VERT_OUTLINE
 {
     Text [ en-US ] = "Title, Vertical Text" ;
@@ -268,6 +272,10 @@ String STR_AL_VERT_TITLE_TEXT_CHART
 String STR_AL_VERT_TITLE_VERT_OUTLINE
 {
     Text [ en-US ] = "Vertical Title, Vertical Text" ;
+};
+String STR_AUTOLAYOUT_6CLIPART
+{
+    Text [ en-US ] = "Title, 6 Cliparts" ;
 };
 
 String STR_AUTOLAYOUT_HANDOUT1
@@ -1166,6 +1174,10 @@ String STR_FIELD_PLACEHOLDER_NUMBER
 {
     Text [ en-US ] = "<number>" ;
 };
+String STR_FIELD_PLACEHOLDER_COUNT
+{
+    Text [ en-US ]="<count>" ;
+};
 
 String STR_PLACEHOLDER_DESCRIPTION_NOTES
 {
@@ -1258,4 +1270,4 @@ String STR_SET_BACKGROUND_PICTURE
     Text [ en-US ] = "Set Background Picture for Slide ..." ;
 };
 
- 
+

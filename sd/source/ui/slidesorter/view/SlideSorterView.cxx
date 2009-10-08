@@ -241,6 +241,9 @@ void SlideSorterView::ModelHasChanged (void)
     }
 }
 
+
+
+
 void SlideSorterView::LocalModelHasChanged(void)
 {
     mbModelChangedWhileModifyEnabled = false;
@@ -290,6 +293,7 @@ void SlideSorterView::PostModelChange (void)
 
     model::PageEnumeration aPageEnumeration (
         model::PageEnumerationProvider::CreateAllPagesEnumeration(mrModel));
+    UpdatePageBorders();
     while (aPageEnumeration.HasMoreElements())
     {
         SdrPageObj* pPageObject = aPageEnumeration.GetNextElement()->GetPageObject();

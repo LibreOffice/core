@@ -1058,7 +1058,7 @@ Rectangle SdPage::GetLayoutRect() const
 |*
 \*************************************************************************/
 
-const int MAX_PRESOBJS = 5; // maximum number of presentation objects per layout
+const int MAX_PRESOBJS = 7; // maximum number of presentation objects per layout
 const int VERTICAL = 0x8000;
 
 struct LayoutDescriptor
@@ -1067,10 +1067,10 @@ struct LayoutDescriptor
     PresObjKind meKind[MAX_PRESOBJS];
     bool mbVertical[MAX_PRESOBJS];
 
-    LayoutDescriptor( int nLayout, int k0 = 0, int k1 = 0, int k2 = 0, int k3 = 0, int k4 = 0 );
+    LayoutDescriptor( int nLayout, int k0 = 0, int k1 = 0, int k2 = 0, int k3 = 0, int k4 = 0, int k5 = 0, int k6 = 0 );
 };
 
-LayoutDescriptor::LayoutDescriptor( int nLayout, int k0, int k1, int k2, int k3, int k4 )
+LayoutDescriptor::LayoutDescriptor( int nLayout, int k0, int k1, int k2, int k3, int k4, int k5, int k6 )
 : mnLayout( nLayout )
 {
     meKind[0] = static_cast<PresObjKind>(k0 & (~VERTICAL)); mbVertical[0] = (k0 & VERTICAL) == VERTICAL;
@@ -1078,6 +1078,8 @@ LayoutDescriptor::LayoutDescriptor( int nLayout, int k0, int k1, int k2, int k3,
     meKind[2] = static_cast<PresObjKind>(k2 & (~VERTICAL)); mbVertical[2] = (k2 & VERTICAL) == VERTICAL;
     meKind[3] = static_cast<PresObjKind>(k3 & (~VERTICAL)); mbVertical[3] = (k3 & VERTICAL) == VERTICAL;
     meKind[4] = static_cast<PresObjKind>(k4 & (~VERTICAL)); mbVertical[4] = (k4 & VERTICAL) == VERTICAL;
+    meKind[5] = static_cast<PresObjKind>(k5 & (~VERTICAL)); mbVertical[5] = (k5 & VERTICAL) == VERTICAL;
+    meKind[6] = static_cast<PresObjKind>(k6 & (~VERTICAL)); mbVertical[6] = (k6 & VERTICAL) == VERTICAL;
 }
 
 static const LayoutDescriptor& GetLayoutDescriptor( AutoLayout eLayout )
@@ -1117,7 +1119,11 @@ static const LayoutDescriptor& GetLayoutDescriptor( AutoLayout eLayout )
         LayoutDescriptor( 0, PRESOBJ_TITLE, PRESOBJ_OUTLINE|VERTICAL ),                     // AUTOLAYOUT_TITLE_VERTICAL_OUTLINE
         LayoutDescriptor( 9, PRESOBJ_TITLE, PRESOBJ_GRAPHIC, PRESOBJ_OUTLINE|VERTICAL ),    // AUTOLAYOUT_TITLE_VERTICAL_OUTLINE_CLIPART
         LayoutDescriptor( 0 ),                                                              // AUTOLAYOUT_HANDOUT9
-        LayoutDescriptor( 10, PRESOBJ_TEXT, PRESOBJ_NONE )                                  // AUTOLAYOUT_ONLY_TEXT
+        LayoutDescriptor( 10, PRESOBJ_TEXT, PRESOBJ_NONE ),                                 // AUTOLAYOUT_ONLY_TEXT
+        LayoutDescriptor( 6, PRESOBJ_TITLE, PRESOBJ_GRAPHIC, PRESOBJ_GRAPHIC,               // AUTOLAYOUT_4CLIPART
+            PRESOBJ_GRAPHIC, PRESOBJ_GRAPHIC ),
+        LayoutDescriptor( 11, PRESOBJ_TITLE, PRESOBJ_GRAPHIC, PRESOBJ_GRAPHIC,              // AUTOLAYOUT_6CLIPART
+            PRESOBJ_GRAPHIC, PRESOBJ_GRAPHIC, PRESOBJ_GRAPHIC, PRESOBJ_GRAPHIC )
     };
 
     if( (eLayout < AUTOLAYOUT__START) || (eLayout >= AUTOLAYOUT__END) )
@@ -1306,6 +1312,32 @@ static void CalcAutoLayoutRectangles( SdPage& rPage, int nLayout, Rectangle* rRe
         rRectangle[0].SetPos( aTitlePos);
         break;
     }
+    case 11: // title, 6 shapes
+    {
+        ULONG nX = long (aLayoutPos.X());
+
+        aLayoutSize.Height() = long (aLayoutSize.Height() * 0.477);
+        aLayoutSize.Width()  = long (aLayoutSize.Width() * 0.322);
+        rRectangle[1] = Rectangle (aLayoutPos, aLayoutSize);
+
+        aLayoutPos.X() = long (nX + aLayoutSize.Width() * 1.05);
+        rRectangle[2] = Rectangle (aLayoutPos, aLayoutSize);
+
+        aLayoutPos.X() = long (nX + aLayoutSize.Width() * 2 * 1.05);
+        rRectangle[3] = Rectangle (aLayoutPos, aLayoutSize);
+
+        aLayoutPos.Y() = long (aLayoutPos.Y() + aLayoutSize.Height() * 1.095);
+        rRectangle[4] = Rectangle (aLayoutPos, aLayoutSize);
+
+        aLayoutPos.X() = long (nX + aLayoutSize.Width() * 1.05);
+        rRectangle[5] = Rectangle (aLayoutPos, aLayoutSize);
+
+        aLayoutPos.X() = nX;
+        rRectangle[6] = Rectangle (aLayoutPos, aLayoutSize);
+
+        break;
+    }
+
     }
 }
 
@@ -2753,7 +2785,9 @@ SdPage* SdPage::getImplementation( const ::com::sun::star::uno::Reference< ::com
 
 void SdPage::SetName (const String& rName)
 {
+    String aOldName = GetName();
     FmFormPage::SetName (rName);
+    static_cast<SdDrawDocument*>(pModel)->UpdatePageRelativeURLs(aOldName, rName);
     ActionChanged();
 }
 

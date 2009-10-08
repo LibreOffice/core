@@ -34,6 +34,7 @@
 #include "CurrentMasterPagesSelector.hxx"
 #include "PreviewValueSet.hxx"
 #include "ViewShellBase.hxx"
+#include "DrawViewShell.hxx"
 #include "drawdoc.hxx"
 #include "sdpage.hxx"
 #include "MasterPageContainer.hxx"
@@ -250,9 +251,19 @@ void CurrentMasterPagesSelector::Execute (SfxRequest& rRequest)
 void CurrentMasterPagesSelector::GetState (SfxItemSet& rItemSet)
 {
     // Disable the SID_DELTE_MASTER slot when there is only one master page.
-    if (mrDocument.GetMasterPageUserCount(GetSelectedMasterPage()) > 0)
+    if (rItemSet.GetItemState(SID_DELETE_MASTER_PAGE) == SFX_ITEM_AVAILABLE
+        && mrDocument.GetMasterPageUserCount(GetSelectedMasterPage()) > 0)
     {
         rItemSet.DisableItem(SID_DELETE_MASTER_PAGE);
+    }
+
+    ::boost::shared_ptr<DrawViewShell> pDrawViewShell (
+        ::boost::dynamic_pointer_cast<DrawViewShell>(mrBase.GetMainViewShell()));
+    if (rItemSet.GetItemState(SID_TP_EDIT_MASTER) == SFX_ITEM_AVAILABLE
+        && pDrawViewShell
+        && pDrawViewShell->GetEditMode() == EM_MASTERPAGE)
+    {
+        rItemSet.DisableItem (SID_TP_EDIT_MASTER);
     }
 
     MasterPagesSelector::GetState(rItemSet);

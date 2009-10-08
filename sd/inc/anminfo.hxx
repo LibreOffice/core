@@ -73,16 +73,19 @@ public:
     String                  maSecondSoundFile; // fuer Objekt ausblenden
     BOOL                    mbSecondSoundOn;    // fuer Objekt ausblenden
     BOOL                    mbSecondPlayFull;// fuer Objekt ausblenden
-    String                  maBookmark;     // Sprung zu Objekt/Seite
+//  String                  maBookmark;     // Sprung zu Objekt/Seite
     USHORT                  mnVerb;         // fuer OLE-Objekt
     ULONG                   mnPresOrder;
+    SdrObject&              mrObject;
 
+    void                    SetBookmark( const String& rBookmark );
+    String                  GetBookmark();
 public:
-                            SdAnimationInfo();
-                            SdAnimationInfo(const SdAnimationInfo& rAnmInfo);
+                            SdAnimationInfo(SdrObject& rObject);
+                            SdAnimationInfo(const SdAnimationInfo& rAnmInfo, SdrObject& rObject);
     virtual                 ~SdAnimationInfo();
 
-    virtual SdrObjUserData* Clone(SdrObject* pObj) const;
+    virtual SdrObjUserData* Clone(SdrObject* pObject) const;
 };
 
 #endif // _SD_ANMINFO_HXX

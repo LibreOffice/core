@@ -90,17 +90,6 @@
 #include <boost/noncopyable.hpp>
 #include <boost/bind.hpp>
 
-// TODO(Q3): This breaks encapsulation. Either export
-// these strings from avmedia, or provide an XManager
-// factory there
-#ifdef WNT
-#   define AVMEDIA_MANAGER_SERVICE_NAME "com.sun.star.media.Manager_DirectX"
-#elif defined QUARTZ
-#   define AVMEDIA_MANAGER_SERVICE_NAME "com.sun.star.media.Manager_QuickTime"
-#else
-#   define AVMEDIA_MANAGER_SERVICE_NAME "com.sun.star.media.Manager_Java"
-#endif
-
 using ::rtl::OUString;
 using ::rtl::OString;
 using ::cppu::OInterfaceContainerHelper;

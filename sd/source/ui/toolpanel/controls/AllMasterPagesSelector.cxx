@@ -33,7 +33,7 @@
 
 #include "AllMasterPagesSelector.hxx"
 #include "PreviewValueSet.hxx"
-
+#include "app.hrc"
 #include "MasterPageContainer.hxx"
 #include "MasterPageDescriptor.hxx"
 #include <tools/link.hxx>
@@ -197,4 +197,15 @@ void AllMasterPagesSelector::UpdatePageSet (ItemList& rItemList)
 
 
 
-} } } // end of namespace ::sd::toolpanel::controls
+void AllMasterPagesSelector::GetState (SfxItemSet& rItemSet)
+{
+    MasterPagesSelector::GetState(rItemSet);
+
+    if (rItemSet.GetItemState(SID_TP_EDIT_MASTER) == SFX_ITEM_AVAILABLE)
+        rItemSet.DisableItem(SID_TP_EDIT_MASTER);
+}
+
+
+
+
+} } } // end of namespace ::sd::toolpanel::control

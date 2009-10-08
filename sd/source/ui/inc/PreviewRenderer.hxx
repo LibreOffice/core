@@ -78,11 +78,17 @@ public:
             When the actual preview can not be created for some reason, then
             this text is painted in an empty rectangle of the requested size
             instead.
+        @param bObeyHighContrastMode
+            When <FALSE/> then the high contrast mode of the application is
+            ignored and the preview is rendered in normal mode.  When
+            <TRUE/> and high contrast mode is active then the preview is
+            rendered in high contrast mode.
     */
     Image RenderPage (
         const SdPage* pPage,
         const sal_Int32 nWidth,
-        const String& sSubstitutionText);
+        const String& sSubstitutionText,
+        const bool bObeyHighContrastMode = true);
 
     /** Render a page with the given pixel size.
         @param pPage
@@ -93,11 +99,17 @@ public:
             When the actual preview can not be created for some reason, then
             this text is painted in an empty rectangle of the requested size
             instead.
+        @param bObeyHighContrastMode
+            When <FALSE/> then the high contrast mode of the application is
+            ignored and the preview is rendered in normal mode.  When
+            <TRUE/> and high contrast mode is active then the preview is
+            rendered in high contrast mode.
     */
     Image RenderPage (
         const SdPage* pPage,
         const Size aPreviewPixelSize,
-        const String& sSubstitutionText);
+        const String& sSubstitutionText,
+        const bool bObeyHighContrastMode = true);
 
     /** Render an image that contains the given substitution text instead of a
         slide preview.
@@ -131,7 +143,8 @@ private:
 
     bool Initialize (
         const SdPage* pPage,
-        const Size& rPixelSize);
+        const Size& rPixelSize,
+        const bool bObeyHighContrastMode);
     void Cleanup (void);
     void PaintPage (const SdPage* pPage);
     void PaintSubstitutionText (const String& rSubstitutionText);

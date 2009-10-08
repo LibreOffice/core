@@ -461,8 +461,8 @@ ToolBox RID_GRAPHIC_TEXT_TOOLBOX
 #endif
         ToolBoxItem
         {
-            Identifier = SID_BULLET;
-            HelpId = SID_BULLET;
+            Identifier = SID_CHARMAP;
+            HelpId = SID_CHARMAP;
             Hide = TRUE;
         };
     };
@@ -670,8 +670,8 @@ ToolBox RID_GRAPHIC_TEXT_TOOLBOX
 #endif
         ToolBoxItem
         {
-            Identifier = SID_BULLET;
-            HelpId = SID_BULLET;
+            Identifier = SID_CHARMAP;
+            HelpId = SID_CHARMAP;
             Hide = TRUE;
         };
     };
@@ -879,8 +879,8 @@ ToolBox RID_GRAPHIC_TEXT_TOOLBOX
 #endif
         ToolBoxItem
         {
-            Identifier = SID_BULLET;
-            HelpId = SID_BULLET;
+            Identifier = SID_CHARMAP;
+            HelpId = SID_CHARMAP;
             Hide = TRUE;
         };
     };

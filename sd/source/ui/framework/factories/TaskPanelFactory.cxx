@@ -176,6 +176,7 @@ void SAL_CALL TaskPanelFactory::initialize(
                 xCM->getConfigurationController(), UNO_QUERY_THROW);
             xCC->addResourceFactory(FrameworkHelper::msMasterPagesTaskPanelURL, this);
             xCC->addResourceFactory(FrameworkHelper::msLayoutTaskPanelURL, this);
+            xCC->addResourceFactory(FrameworkHelper::msTableDesignPanelURL, this);
             xCC->addResourceFactory(FrameworkHelper::msCustomAnimationTaskPanelURL, this);
             xCC->addResourceFactory(FrameworkHelper::msSlideTransitionTaskPanelURL, this);
         }
@@ -210,6 +211,10 @@ Reference<XResource> SAL_CALL TaskPanelFactory::createResource (
         else if (sResourceURL.equals(FrameworkHelper::msLayoutTaskPanelURL))
         {
             ePaneId = TaskPaneViewShell::PID_LAYOUT;
+        }
+        else if (sResourceURL.equals(FrameworkHelper::msTableDesignPanelURL))
+        {
+            ePaneId = TaskPaneViewShell::PID_TABLE_DESIGN;
         }
         else if (sResourceURL.equals(FrameworkHelper::msCustomAnimationTaskPanelURL))
         {

@@ -141,7 +141,7 @@ interface OutlineView
         ExecMethod = FuTemporary ;
         StateMethod = GetMenuState ;
     ]
-    SID_BULLET // ole : no, status : ?
+    SID_CHARMAP // ole : no, status : ?
     [
         ExecMethod = FuTemporaryModify ;
         StateMethod = GetMenuState ;
@@ -387,6 +387,11 @@ interface OutlineView
         StateMethod = GetMenuState ;
     ]
     SID_INSERT_FLD_PAGE // ole : no, status : play rec
+    [
+        ExecMethod = FuTemporaryModify ;
+        StateMethod = GetMenuState ;
+    ]
+    SID_INSERT_FLD_PAGES // ole : no, status : play rec
     [
         ExecMethod = FuTemporaryModify ;
         StateMethod = GetMenuState ;

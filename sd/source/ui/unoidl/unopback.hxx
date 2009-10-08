@@ -38,11 +38,11 @@
 #include <svx/unoshprp.hxx>
 #include <svx/unoipset.hxx>
 
-#include <unotools/servicehelper.hxx>
+#include <comphelper/servicehelper.hxx>
 
 #include <cppuhelper/implbase4.hxx>
 
-const SfxItemPropertyMap* ImplGetPageBackgroundPropertyMap();
+const SvxItemPropertySet* ImplGetPageBackgroundPropertySet();
 
 class SdrObject;
 class SdDrawDocument;
@@ -56,11 +56,11 @@ class SdUnoPageBackground : public ::cppu::WeakImplHelper4<
                             public SfxListener
 {
 protected:
-    SvxItemPropertySet  maPropSet;
+    const SvxItemPropertySet*  mpPropSet;
     SfxItemSet*         mpSet;
     SdrModel*           mpDoc;
 
-    const SfxItemPropertyMap* getPropertyMapEntry( const ::rtl::OUString& rPropertyName ) const throw();
+    const SfxItemPropertySimpleEntry* getPropertyMapEntry( const ::rtl::OUString& rPropertyName ) const throw();
 public:
     SdUnoPageBackground( SdDrawDocument* pDoc = NULL, SdrObject* pObj = NULL ) throw();
     SdUnoPageBackground( SdDrawDocument* pDoc, const SfxItemSet* pSet ) throw();

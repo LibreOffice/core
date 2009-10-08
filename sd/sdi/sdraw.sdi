@@ -340,31 +340,6 @@ SfxVoidItem Break SID_BREAK
 ]
 
 //--------------------------------------------------------------------------
-SfxVoidItem Bullet SID_BULLET
-()
-[
-    /* flags: */
-    AutoUpdate = FALSE,
-    Cachable = Cachable,
-    FastCall = FALSE,
-    HasCoreId = FALSE,
-    HasDialog = TRUE,
-    ReadOnlyDoc = FALSE,
-    Toggle = FALSE,
-    Container = FALSE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
-    Synchron;
-
-    /* config: */
-    AccelConfig = TRUE,
-    MenuConfig = TRUE,
-    StatusBarConfig = FALSE,
-    ToolBoxConfig = TRUE,
-    GroupId = GID_INSERT;
-]
-
-//--------------------------------------------------------------------------
 SfxVoidItem CapturePoint SID_CAPTUREPOINT
 ()
 [
@@ -3587,6 +3562,31 @@ SfxVoidItem InsertPage SID_INSERTPAGE
 
 //--------------------------------------------------------------------------
 SfxVoidItem InsertPageField SID_INSERT_FLD_PAGE
+()
+[
+    /* flags: */
+    AutoUpdate = FALSE,
+    Cachable = Cachable,
+    FastCall = FALSE,
+    HasCoreId = FALSE,
+    HasDialog = FALSE,
+    ReadOnlyDoc = FALSE,
+    Toggle = FALSE,
+    Container = FALSE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+    Synchron;
+
+    /* config: */
+    AccelConfig = TRUE,
+    MenuConfig = TRUE,
+    StatusBarConfig = FALSE,
+    ToolBoxConfig = TRUE,
+    GroupId = GID_INSERT;
+]
+
+//--------------------------------------------------------------------------
+SfxVoidItem InsertPagesField SID_INSERT_FLD_PAGES
 ()
 [
     /* flags: */

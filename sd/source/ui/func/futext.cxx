@@ -120,12 +120,12 @@ static USHORT SidArray[] = {
     SID_SET_SUPER_SCRIPT,             //   10294
     SID_SET_SUB_SCRIPT,               //   10295
     SID_HYPERLINK_GETLINK,            //   10361
+    SID_CHARMAP,                      //   10503
     SID_TEXTDIRECTION_LEFT_TO_RIGHT,  //   10907
     SID_TEXTDIRECTION_TOP_TO_BOTTOM,  //   10908
     SID_ATTR_PARA_LEFT_TO_RIGHT,      //   10950
     SID_ATTR_PARA_RIGHT_TO_LEFT,      //   10951
     FN_NUM_BULLET_ON,                 //   20138
-    SID_BULLET,                       //   27019
     SID_PARASPACE_INCREASE,           //   27346
     SID_PARASPACE_DECREASE,           //   27347
                             0 };
@@ -982,7 +982,7 @@ BOOL FuText::KeyInput(const KeyEvent& rKEvt)
     }
 
     USHORT nKey = nCode.GetCode();
-    KeyCode aKeyCode (nKey, bShift, nCode.IsMod1(), nCode.IsMod2() );
+    KeyCode aKeyCode (nKey, bShift, nCode.IsMod1(), nCode.IsMod2(), nCode.IsMod3() );
     KeyEvent aKEvt(rKEvt.GetCharCode(), aKeyCode);
 
     BOOL bOK = TRUE;

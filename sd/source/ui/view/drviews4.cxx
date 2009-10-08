@@ -31,6 +31,8 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sd.hxx"
 
+#include <com/sun/star/drawing/XDrawPagesSupplier.hpp>
+
 #include "DrawViewShell.hxx"
 #include <vcl/msgbox.hxx>
 #include <svtools/urlbmk.hxx>
@@ -68,6 +70,7 @@
 #include "drawdoc.hxx"
 #include "Window.hxx"
 #include "fupoor.hxx"
+#include "fusnapln.hxx"
 #include "app.hxx"
 #include "Ruler.hxx"
 #include "sdresid.hxx"
@@ -91,6 +94,8 @@ namespace sd {
 #pragma optimize ( "", off )
 #endif
 
+using namespace ::com::sun::star::uno;
+using namespace ::com::sun::star::drawing;
 
 /*************************************************************************
 |*
@@ -101,25 +106,20 @@ namespace sd {
 void DrawViewShell::DeleteActualPage()
 {
     USHORT          nPage = maTabControl.GetCurPageId() - 1;
-    SdPage*         pPage = GetDoc()->GetSdPage(nPage,PK_STANDARD);
-
-#ifdef DBG_UTIL
-    USHORT nPageCount = GetDoc()->GetPageCount();
-    DBG_ASSERT(nPageCount > 1, "aber das ist die letzte!");
-#endif
 
     mpDrawView->SdrEndTextEdit();
 
-    mpDrawView->BegUndo();
-
-    mpDrawView->AddUndo(GetDoc()->GetSdrUndoFactory().CreateUndoDeletePage(*pPage));
-    GetDoc()->RemovePage(pPage->GetPageNum());
-
-    pPage = GetDoc()->GetSdPage(nPage, PK_NOTES);
-    mpDrawView->AddUndo(GetDoc()->GetSdrUndoFactory().CreateUndoDeletePage(*pPage));
-    GetDoc()->RemovePage(pPage->GetPageNum());
-
-    mpDrawView->EndUndo();
+    try
+    {
+        Reference<XDrawPagesSupplier> xDrawPagesSupplier( GetDoc()->getUnoModel(), UNO_QUERY_THROW );
+        Reference<XDrawPages> xPages( xDrawPagesSupplier->getDrawPages(), UNO_QUERY_THROW );
+        Reference< XDrawPage > xPage( xPages->getByIndex( nPage ), UNO_QUERY_THROW );
+        xPages->remove( xPage );
+    }
+    catch( Exception& )
+    {
+        DBG_ERROR("SelectionManager::DeleteSelectedMasterPages(), exception caught!");
+    }
 }
 
 /*************************************************************************
@@ -558,7 +558,8 @@ void DrawViewShell::Command(const CommandEvent& rCEvt, ::sd::Window* pWin)
             if ( mpDrawView->PickHelpLine( aMPos, nHitLog, *GetActiveWindow(), nHelpLine, pPV) )
             {
                 nSdResId = RID_DRAW_SNAPOBJECT_POPUP;
-                mbMousePosFreezed = TRUE;
+                ShowSnapLineContextMenu(*pPV, nHelpLine, rCEvt.GetMousePosPixel());
+                return;
             }
             // Klebepunkt unter dem Mauszeiger markiert?
             else if( mpDrawView->PickGluePoint( aMPos, pObj, nPickId, pPV ) &&
@@ -924,6 +925,70 @@ void DrawViewShell::UnlockInput()
     if ( mnLockCount )
         mnLockCount--;
 }
+
+
+
+
+void DrawViewShell::ShowSnapLineContextMenu (
+    SdrPageView& rPageView,
+    const USHORT nSnapLineIndex,
+    const Point& rMouseLocation)
+{
+    const SdrHelpLine& rHelpLine (rPageView.GetHelpLines()[nSnapLineIndex]);
+    ::boost::scoped_ptr<PopupMenu> pMenu (new PopupMenu ());
+
+    if (rHelpLine.GetKind() == SDRHELPLINE_POINT)
+    {
+        pMenu->InsertItem(
+            SID_SET_SNAPITEM,
+            String(SdResId(STR_POPUP_EDIT_SNAPPOINT)));
+        pMenu->InsertSeparator();
+        pMenu->InsertItem(
+            SID_DELETE_SNAPITEM,
+            String(SdResId(STR_POPUP_DELETE_SNAPPOINT)));
+    }
+    else
+    {
+        pMenu->InsertItem(
+            SID_SET_SNAPITEM,
+            String(SdResId(STR_POPUP_EDIT_SNAPLINE)));
+        pMenu->InsertSeparator();
+        pMenu->InsertItem(
+            SID_DELETE_SNAPITEM,
+            String(SdResId(STR_POPUP_DELETE_SNAPLINE)));
+    }
+
+    pMenu->RemoveDisabledEntries(FALSE, FALSE);
+
+    const USHORT nResult = pMenu->Execute(
+        GetActiveWindow(),
+        Rectangle(rMouseLocation, Size(10,10)),
+        POPUPMENU_EXECUTE_DOWN);
+    switch (nResult)
+    {
+        case SID_SET_SNAPITEM:
+        {
+            SfxUInt32Item aHelpLineItem (ID_VAL_INDEX, nSnapLineIndex);
+            const SfxPoolItem* aArguments[] = {&aHelpLineItem, NULL};
+            GetViewFrame()->GetDispatcher()->Execute(
+                SID_SET_SNAPITEM,
+                SFX_CALLMODE_SLOT,
+                aArguments);
+        }
+        break;
+
+        case SID_DELETE_SNAPITEM:
+        {
+            rPageView.DeleteHelpLine(nSnapLineIndex);
+        }
+        break;
+
+        default:
+            break;
+    }
+}
+
+
 
 
 #ifdef _MSC_VER
