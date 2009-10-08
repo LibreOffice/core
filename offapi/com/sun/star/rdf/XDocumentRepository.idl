@@ -31,10 +31,6 @@
 #ifndef __com_sun_star_rdf_XDocumentRepository_idl__
 #define __com_sun_star_rdf_XDocumentRepository_idl__
 
-#ifndef __com_sun_star_text_XTextRange_idl__
-#include <com/sun/star/text/XTextRange.idl>
-#endif
-
 #ifndef __com_sun_star_rdf_XMetadatable_idl__
 #include <com/sun/star/rdf/XMetadatable.idl>
 #endif
@@ -58,7 +54,7 @@ module com {   module sun {   module star {   module rdf {
     which is stored as RDFa.
     </p>
 
-    @since OOo 3.0
+    @since OOo 3.2
 
     @see XRepositorySupplier
     @see XDocumentMetadataAccess
@@ -73,22 +69,30 @@ interface XDocumentRepository : XRepository
         <p>
         This method will do the following steps:
         <ol>
-        <li>Remove all RDFa statements that involve the Object parameter from
-            the repository</li>
+        <li>Remove all previously set RDFa statements for the Object parameter
+             from the repository</li>
         <li>If the RDFaContent parameter is the empty <atom>string</atom>,
+            for every Predicate in the given list of Predicates,
             add the following RDF statement to an unspecified named graph:
             <ul>
-            <li><code>Subject Predicate XLiteral(Object->getText())</code></li>
+            <li><code>Subject Predicate
+                      XLiteral(Object->getText()^^RDFaDatatype)</code></li>
             </ul>
         </li>
         <li>If the RDFaContent parameter is not the empty <atom>string</atom>,
-            add the following RDF statements to an unspecified named graph:
+            for every Predicate in the given list of Predicates,
+            add the following RDF statement to an unspecified named graph:
             <ul>
             <li>
             <code>Subject Predicate XLiteral(RDFaContent^^RDFaDatatype)</code>
             </li>
+            </ul>
+            Further, add the following RDF statement to the same unspecified
+            named graph:
+            <ul>
             <li>
-            <code>Subject rdfs:label XLiteral(Object->getText())</code></li>
+            <code>Subject rdfs:label XLiteral(Object->getText())</code>
+            </li>
             </ul>
         </li>
         </ol>
@@ -97,22 +101,22 @@ interface XDocumentRepository : XRepository
         <p>
         RDFa statements are handled specially because they are not logically
         part of any named graph in the repository.
-        Also, they have rather unusual semantics.
-        Also, just using <method>XNamedGraph::addStatement</method>
-        for this would be ambiguous:
-        if the object is a XMetadatable, do we insert the object itself (URI)
-        or its literal content (RDFa)?
+        Also, they have rather unusual semantics;
+        just using <member>XNamedGraph::addStatement</member> would be
+        ambiguous:
+        if the object is a <type>XMetadatable</type>, do we insert
+        the object itself (URI) or its literal content (RDFa)?
         </p>
-//FIXME: updates???
 
         @param Subject
-            the subject of the RDF triple.
+            the subject of the RDF triple(s).
 
-        @param Predicate
-            the predicate of the RDF triple.
+        @param Predicates
+            the predicates of the RDF triple(s).
 
         @param Object
-            the object of the RDF triple is the text content of this parameter.
+            the object of the RDF triple(s) is the text content of this
+            parameter.
 
         @param RDFaContent
             the <code>rdfa:content</code> attribute (may be the empty
@@ -122,16 +126,16 @@ interface XDocumentRepository : XRepository
             the <code>rdfa:datatype</code> attribute (may be <NULL/>)
 
         @throws com::sun::star::lang::IllegalArgumentException
-            if any parameter is <NULL/>,
+            if any parameter is <NULL/>, Predicates is empty,
             or Object is of a type that can not have RDFa metadata attached.
 
         @throws RepositoryException
             if an error occurs when accessing the repository.
      */
     void setStatementRDFa(
-            [in] XURI Subject,
-            [in] XURI Predicate,
-            [in] com::sun::star::text::XTextRange Object,
+            [in] XResource Subject,
+            [in] sequence<XURI> Predicates,
+            [in] XMetadatable Object,
             [in] string RDFaContent,
             [in] XURI RDFaDatatype)
         raises( com::sun::star::lang::IllegalArgumentException,
@@ -146,7 +150,7 @@ interface XDocumentRepository : XRepository
         part of any graph.
         </p>
 
-        @param Object
+        @param Element
             the element whose RDFa statement(s) should be removed
 
         @throws com::sun::star::lang::IllegalArgumentException
@@ -156,7 +160,7 @@ interface XDocumentRepository : XRepository
         @throws RepositoryException
             if an error occurs when accessing the repository.
      */
-    void removeStatementRDFa([in] com::sun::star::text::XTextRange Object)
+    void removeStatementRDFa([in] XMetadatable Element)
         raises( com::sun::star::lang::IllegalArgumentException,
                 RepositoryException );
 
@@ -170,13 +174,14 @@ interface XDocumentRepository : XRepository
             <ul>
             <li>if the element has no RDFa meta-data attributes:
                 the empty sequence.</li>
-            <li>if the element has RDFa meta-data attributes,
+            <li>if the element has RDFa meta-data attributes:
                 and no <code>rdfa:content</code> attached:
-                a sequence with a single element: the RDFa-statement</li>
+                a sequence with the RDFa-statements corresponding to the
+                attributes</li>
             <li>if the element has RDFa meta-data attributes,
                 and also <code>rdfa:content</code> attached:
-                a sequence with 2 elements: first the RDFa-statement,
-                then the RDFa-labels-statement</li>
+                a sequence with the RDFa-statements corresponding to the
+                attributes, including the RDFa-labels-statement</li>
             </ul>
 
         @throws com::sun::star::lang::IllegalArgumentException
@@ -198,7 +203,7 @@ interface XDocumentRepository : XRepository
         <p>
         This method exists because RDFa statements are not part of any named
         graph, and thus they cannot be enumerated with
-        <method>XNamedGraph::getStatements</method>.
+        <member>XNamedGraph::getStatements</member>.
         </p>
 
         <p>
@@ -230,7 +235,7 @@ interface XDocumentRepository : XRepository
      */
     com::sun::star::container::XEnumeration/*<Statement>*/ getStatementsRDFa(
             [in] XResource Subject,
-            [in] XResource Predicate,
+            [in] XURI Predicate,
             [in] XNode Object)
         raises( RepositoryException );
 

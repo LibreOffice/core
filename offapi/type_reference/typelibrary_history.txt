@@ -141,3 +141,10 @@
   to maybevoid and deprecate. They should be removed in a future version. The 
   implementation will never return them.
   
+25/02/09 (MST, JSC): TaskID=i96209
+  rename module css.text.FieldMaster to css.text.fieldmaster.
+  the implementation handles both variants.
+
+15/05/09 (MST, JSC): TaskID=i101965
+  fix read-only status of properties of css.text.TextPortion
+

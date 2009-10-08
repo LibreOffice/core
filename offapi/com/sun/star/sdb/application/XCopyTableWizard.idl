@@ -130,6 +130,14 @@ interface XCopyTableWizard : ::com::sun::star::ui::dialogs::XExecutableDialog
         set raises ( ::com::sun::star::lang::IllegalArgumentException );
     };
 
+    /** specifies that the first row should be used to identify column names.
+
+        <p>This attribute is ignored when the source defines the column names which isn't the case when only a part of a table should be copied
+        e.g. in the RTF format or in the HTML format.
+        </p>
+    */
+    [attribute] boolean UseHeaderLineAsColumnNames;
+
     /** adds a listener which is to be notified of progress in the copy operation
     */
     void    addCopyTableListener( [in] XCopyTableListener Listener );

@@ -695,7 +695,7 @@ oslFileError osl_openFile( rtl_uString* ustrFileURL, oslFileHandle* pHandle, sal
                     /* remove the NONBLOCK flag again */
                     flags = fcntl(fd, F_GETFL, NULL);
                     flags &= ~O_NONBLOCK;
-                    if( 0 > fcntl(fd, F_GETFL, flags) )
+                    if( 0 > fcntl(fd, F_SETFL, flags) )
                    {
                         close(fd);
                         return oslTranslateFileError(OSL_FET_ERROR, errno);
