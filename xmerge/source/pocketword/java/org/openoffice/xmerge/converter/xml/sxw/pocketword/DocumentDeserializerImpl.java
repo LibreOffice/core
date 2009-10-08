@@ -44,10 +44,7 @@ import org.openoffice.xmerge.converter.xml.StyleCatalog;
 
 import org.openoffice.xmerge.util.OfficeUtil;
 
-import java.io.InputStream;
 import java.io.IOException;
-import java.io.FileInputStream;
-import java.io.FileDescriptor;
 
 import java.util.Enumeration;
 import java.util.Vector;

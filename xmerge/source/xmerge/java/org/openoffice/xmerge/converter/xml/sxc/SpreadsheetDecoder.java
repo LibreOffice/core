@@ -31,7 +31,6 @@
 package org.openoffice.xmerge.converter.xml.sxc;
 
 import java.io.IOException;
-import java.io.InputStream;
 import java.util.Enumeration;
 
 import org.openoffice.xmerge.converter.xml.sxc.Format;

@@ -31,7 +31,6 @@
 package org.openoffice.xmerge.converter.xml.sxw.pocketword;
 
 import java.io.ByteArrayOutputStream;
-import java.io.ByteArrayInputStream;
 import java.io.IOException;
 
 import java.util.Vector;

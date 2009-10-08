@@ -32,9 +32,6 @@ package org.openoffice.xmerge.merger;
 
 import org.w3c.dom.Node;
 
-import org.openoffice.xmerge.merger.Iterator;
-import org.openoffice.xmerge.merger.Difference;
-
 /**
  *  This is an interface for a {@link
  *  org.openoffice.xmerge.merger.MergeAlgorithm

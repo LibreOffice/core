@@ -45,11 +45,9 @@ import org.openoffice.xmerge.util.registry.ConverterInfo;
 import org.openoffice.xmerge.DocumentMerger;
 import org.openoffice.xmerge.DocumentMergerFactory;
 import org.openoffice.xmerge.ConverterCapabilities;
-import org.openoffice.xmerge.util.registry.ConverterInfo;
 
 import java.io.InputStream;
 import java.util.Enumeration;
-import java.io.InputStream;
 import java.io.IOException;
 import java.util.Properties;
 

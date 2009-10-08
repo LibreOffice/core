@@ -36,7 +36,6 @@ import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.NodeList;
 import org.w3c.dom.Node;
 import org.w3c.dom.Element;
-import java.awt.Point;
 
 import org.openoffice.xmerge.converter.xml.OfficeConstants;
 import org.openoffice.xmerge.util.Debug;

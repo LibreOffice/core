@@ -33,7 +33,6 @@ package org.openoffice.xmerge.converter.xml.sxw.aportisdoc;
 import org.w3c.dom.NodeList;
 import org.w3c.dom.Node;
 import org.w3c.dom.NamedNodeMap;
-import org.w3c.dom.Element;
 
 import java.io.IOException;
 import java.net.URLDecoder;
@@ -45,8 +44,6 @@ import org.openoffice.xmerge.DocumentSerializer;
 import org.openoffice.xmerge.converter.xml.OfficeConstants;
 import org.openoffice.xmerge.converter.xml.sxw.SxwDocument;
 import org.openoffice.xmerge.converter.xml.sxw.aportisdoc.DocConstants;
-import org.openoffice.xmerge.converter.palm.PdbEncoder;
-import org.openoffice.xmerge.converter.palm.PdbDecoder;
 import org.openoffice.xmerge.converter.palm.PalmDB;
 import org.openoffice.xmerge.converter.palm.Record;
 import org.openoffice.xmerge.converter.palm.PalmDocument;

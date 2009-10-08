@@ -32,7 +32,6 @@ package org.openoffice.xmerge.util.registry;
 
 import java.util.*;
 import java.io.*;
-import javax.xml.parsers.*;
 
 /**
  *  Manages the converter plug-ins that are currently active.

@@ -32,7 +32,6 @@ package org.openoffice.xmerge.converter.xml;
 
 import java.io.IOException;
 
-import javax.xml.parsers.ParserConfigurationException;
 import org.xml.sax.SAXException;
 import org.xml.sax.SAXParseException;
 

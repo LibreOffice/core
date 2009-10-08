@@ -30,7 +30,6 @@
 
 package org.openoffice.xmerge.converter.xml;
 
-import java.io.ByteArrayInputStream;
 import java.io.IOException;
 
 import javax.xml.parsers.DocumentBuilder;
@@ -42,8 +41,6 @@ import org.w3c.dom.DOMException;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 
-import org.xml.sax.EntityResolver;
-import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 
 /**

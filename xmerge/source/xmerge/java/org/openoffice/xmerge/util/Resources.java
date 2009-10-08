@@ -31,7 +31,6 @@
 package org.openoffice.xmerge.util;
 
 import java.util.ResourceBundle;
-import java.util.MissingResourceException;
 
 /**
  *  <p>Provides a singleton resource class for converter messages.</p>

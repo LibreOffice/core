@@ -582,6 +582,8 @@ public:
      const uno::Reference< xml::sax::XFastAttributeList > & Attribs)
         throw (uno::RuntimeException, xml::sax::SAXException);
 
+    virtual void setToken(Token_t nToken);
+
     virtual ResourceEnum_t getResource() const { return SHAPE; }
 protected:
     typedef uno::Reference<XFastShapeContextHandler> ShapeContextRef;

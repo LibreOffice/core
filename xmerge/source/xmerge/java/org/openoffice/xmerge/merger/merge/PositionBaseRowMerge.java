@@ -30,23 +30,17 @@
 
 package org.openoffice.xmerge.merger.merge;
 
-import java.util.List;
-
 import org.w3c.dom.Node;
 import org.w3c.dom.Element;
-import org.w3c.dom.Document;
 import org.w3c.dom.NodeList;
 import org.w3c.dom.NamedNodeMap;
 
 import org.openoffice.xmerge.ConverterCapabilities;
-import org.openoffice.xmerge.merger.Difference;
 import org.openoffice.xmerge.merger.Iterator;
-import org.openoffice.xmerge.merger.DiffAlgorithm;
 import org.openoffice.xmerge.merger.NodeMergeAlgorithm;
 import org.openoffice.xmerge.merger.diff.CellNodeIterator;
 import org.openoffice.xmerge.converter.xml.OfficeConstants;
 import org.openoffice.xmerge.util.XmlUtil;
-import org.openoffice.xmerge.util.Debug;
 
 
 /**
@@ -82,7 +76,6 @@ public final class PositionBaseRowMerge implements NodeMergeAlgorithm {
     // used to compare the cell 1 by 1
     private void mergeCellSequences(Iterator orgSeq, Iterator modSeq) {
 
-        int i, j;
         boolean needMerge = true;
         Element orgCell, modCell;
 

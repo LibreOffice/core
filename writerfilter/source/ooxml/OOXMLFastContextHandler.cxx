@@ -2023,6 +2023,14 @@ void SAL_CALL OOXMLFastContextHandlerShape::startUnknownElement
         mrShapeContext->startUnknownElement(Namespace, Name, Attribs);
 }
 
+void OOXMLFastContextHandlerShape::setToken(Token_t nToken)
+{
+    OOXMLFastContextHandler::setToken(nToken);
+
+    if (mrShapeContext.is())
+        mrShapeContext->setStartToken(nToken);
+}
+
 void OOXMLFastContextHandlerShape::lcl_endFastElement
 (Token_t Element)
     throw (uno::RuntimeException, xml::sax::SAXException)

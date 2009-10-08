@@ -30,13 +30,11 @@
 
 package org.openoffice.xmerge.converter.xml.sxc.pexcel.records;
 
-import java.io.DataInputStream;
 import java.io.OutputStream;
 import java.io.InputStream;
 import java.io.IOException;
 
 import org.openoffice.xmerge.util.Debug;
-import org.openoffice.xmerge.util.EndianConverter;
 import org.openoffice.xmerge.converter.xml.sxc.pexcel.PocketExcelConstants;
 
 /**

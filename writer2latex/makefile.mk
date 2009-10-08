@@ -50,7 +50,7 @@ TARFILE_NAME=writer2latex0502
 
 TARFILE_ROOTDIR=writer2latex05
 
-PATCH_FILE_NAME=writer2latex05.patch
+PATCH_FILES=writer2latex05.patch
 
 CONVERTFILES=build.xml
 JARFILES 		= ridl.jar unoil.jar jurt.jar juh.jar

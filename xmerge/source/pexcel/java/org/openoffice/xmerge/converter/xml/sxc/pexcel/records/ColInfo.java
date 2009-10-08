@@ -31,7 +31,6 @@
 package org.openoffice.xmerge.converter.xml.sxc.pexcel.records;
 
 import java.io.IOException;
-import java.io.DataInputStream;
 import java.io.InputStream;
 import java.io.OutputStream;
 

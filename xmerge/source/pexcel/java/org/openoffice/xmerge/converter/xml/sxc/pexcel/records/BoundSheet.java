@@ -36,7 +36,6 @@ import java.io.OutputStream;
 import java.io.InputStream;
 
 import org.openoffice.xmerge.util.Debug;
-import org.openoffice.xmerge.util.EndianConverter;
 import org.openoffice.xmerge.converter.xml.sxc.pexcel.PocketExcelConstants;
 
 /**

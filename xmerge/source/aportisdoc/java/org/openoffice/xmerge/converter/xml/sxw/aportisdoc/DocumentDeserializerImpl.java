@@ -45,7 +45,6 @@ import org.openoffice.xmerge.DocumentDeserializer;
 import org.openoffice.xmerge.converter.xml.OfficeConstants;
 import org.openoffice.xmerge.converter.xml.sxw.SxwDocument;
 import org.openoffice.xmerge.converter.palm.PalmDB;
-import org.openoffice.xmerge.converter.palm.PdbDecoder;
 import org.openoffice.xmerge.converter.palm.Record;
 import org.openoffice.xmerge.converter.palm.PalmDocument;
 import org.openoffice.xmerge.util.Debug;

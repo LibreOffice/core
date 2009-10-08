@@ -487,15 +487,12 @@ void    DomainMapper_Impl::PushProperties(ContextType eId)
     {
         if( m_bIsFirstSection )
             m_bIsFirstSection = false;
-        else
-        {
-            // beginning with the second section group a section has to be inserted
-            // into the document
-            SectionPropertyMap* pSectionContext_ = dynamic_cast< SectionPropertyMap* >( pInsert.get() );
-             uno::Reference< text::XTextAppend >  xTextAppend = m_aTextAppendStack.top().xTextAppend;
-             if(xTextAppend.is())
-                 pSectionContext_->SetStart( xTextAppend->getEnd() );
-        }
+        // beginning with the second section group a section has to be inserted
+        // into the document
+        SectionPropertyMap* pSectionContext_ = dynamic_cast< SectionPropertyMap* >( pInsert.get() );
+         uno::Reference< text::XTextAppend >  xTextAppend = m_aTextAppendStack.top().xTextAppend;
+         if(xTextAppend.is())
+             pSectionContext_->SetStart( xTextAppend->getEnd() );
     }
     m_aPropertyStacks[eId].push( pInsert );
     m_aContextStack.push(eId);

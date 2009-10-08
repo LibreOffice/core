@@ -39,8 +39,6 @@ import org.openoffice.xmerge.util.ColourConverter;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 
-import java.awt.Color;
-
 /**
  * This class represents a portion of text with a particular formatting style.
  * The style may differ from the default style of the paragraph of which it

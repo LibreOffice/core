@@ -32,8 +32,6 @@ package org.openoffice.xmerge.test;
 
 import java.util.Vector;
 import java.util.Enumeration;
-import java.io.IOException;
-import java.io.InputStream;
 import java.io.FileOutputStream;
 import java.io.FileInputStream;
 import java.io.File;
@@ -43,7 +41,6 @@ import org.openoffice.xmerge.Document;
 import org.openoffice.xmerge.ConvertData;
 import org.openoffice.xmerge.ConverterFactory;
 import org.openoffice.xmerge.test.ConverterInfoList;
-import org.openoffice.xmerge.util.registry.ConverterInfo;
 import org.openoffice.xmerge.util.registry.ConverterInfoMgr;
 import org.openoffice.xmerge.util.registry.ConverterInfoReader;
 import org.openoffice.xmerge.DocumentMerger;

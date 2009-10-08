@@ -30,10 +30,6 @@
 
 package org.openoffice.xmerge.converter.xml.sxc.pexcel.records.formula;
 
-import java.io.*;
-import java.util.Vector;
-import java.util.Enumeration;
-
 import org.openoffice.xmerge.util.Debug;
 
 /**

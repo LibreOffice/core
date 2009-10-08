@@ -39,7 +39,7 @@ using namespace drawingml;
 
 ShapeContextHandler::ShapeContextHandler
 (uno::Reference< uno::XComponentContext > const & context) :
-m_xContext(context)
+mnStartToken(0), m_xContext(context)
 {
     try
     {
@@ -57,16 +57,29 @@ ShapeContextHandler::~ShapeContextHandler()
 }
 
 uno::Reference<xml::sax::XFastContextHandler>
-ShapeContextHandler::getGraphicShapeContext()
+ShapeContextHandler::getGraphicShapeContext(::sal_Int32 Element )
 {
     if (! mxGraphicShapeContext.is())
     {
         FragmentHandlerRef rFragmentHandler
             (new ShapeFragmentHandler(*mxFilterBase, msRelationFragmentPath));
         ShapePtr pMasterShape;
-        mpShape.reset(new Shape("com.sun.star.drawing.GraphicObjectShape" ));
-        mxGraphicShapeContext.set
-            (new GraphicShapeContext(*rFragmentHandler, pMasterShape, mpShape));
+
+        switch (Element & 0xffff)
+        {
+            case XML_graphic:
+                mpShape.reset(new Shape("com.sun.star.drawing.OLE2Shape" ));
+                mxGraphicShapeContext.set
+                (new GraphicalObjectFrameContext(*rFragmentHandler, pMasterShape, mpShape));
+                break;
+            case XML_pic:
+                mpShape.reset(new Shape("com.sun.star.drawing.GraphicObjectShape" ));
+                mxGraphicShapeContext.set
+                (new GraphicShapeContext(*rFragmentHandler, pMasterShape, mpShape));
+                break;
+            default:
+                break;
+        }
     }
 
     return mxGraphicShapeContext;
@@ -79,9 +92,9 @@ ShapeContextHandler::getDrawingShapeContext()
     {
         mpDrawing.reset( new oox::vml::Drawing() );
         mxDrawingFragmentHandler.set
-            (dynamic_cast<ContextHandler *>
-             (new oox::vml::DrawingFragmentHandler
-              ( *mxFilterBase, msRelationFragmentPath, mpDrawing->getShapes(), mpDrawing->getShapeTypes() )));
+        (dynamic_cast<ContextHandler *>
+         (new oox::vml::DrawingFragmentHandler
+          ( *mxFilterBase, msRelationFragmentPath, mpDrawing->getShapes(), mpDrawing->getShapeTypes() )));
     }
 
     return mxDrawingFragmentHandler;
@@ -91,10 +104,16 @@ uno::Reference<xml::sax::XFastContextHandler>
 ShapeContextHandler::getContextHandler()
 {
     uno::Reference<xml::sax::XFastContextHandler> xResult;
-    if (mxDrawingFragmentHandler.is())
-        xResult.set(mxDrawingFragmentHandler);
-    else if (mxGraphicShapeContext.is())
-        xResult.set(mxGraphicShapeContext);
+
+    switch (mnStartToken & NMSP_MASK)
+    {
+        case NMSP_VML:
+            xResult.set(getDrawingShapeContext());
+            break;
+        default:
+            xResult.set(getGraphicShapeContext(mnStartToken));
+            break;
+    }
 
     return xResult;
 }
@@ -159,17 +178,7 @@ ShapeContextHandler::createFastChildContext
     throw (uno::RuntimeException, xml::sax::SAXException)
 {
     uno::Reference< xml::sax::XFastContextHandler > xResult;
-    uno::Reference< xml::sax::XFastContextHandler > xContextHandler;
-
-    switch (Element & NMSP_MASK)
-    {
-    case NMSP_VML:
-        xContextHandler.set(getDrawingShapeContext());
-        break;
-    default:
-        xContextHandler.set(getGraphicShapeContext());
-        break;
-    }
+    uno::Reference< xml::sax::XFastContextHandler > xContextHandler(getContextHandler());
 
     if (xContextHandler.is())
         xResult.set(xContextHandler->createFastChildContext
@@ -285,6 +294,18 @@ void SAL_CALL ShapeContextHandler::setRelationFragmentPath
     throw (uno::RuntimeException)
 {
     msRelationFragmentPath = the_value;
+}
+
+::sal_Int32 SAL_CALL ShapeContextHandler::getStartToken() throw (::com::sun::star::uno::RuntimeException)
+{
+    return mnStartToken;
+}
+
+void SAL_CALL ShapeContextHandler::setStartToken( ::sal_Int32 _starttoken ) throw (::com::sun::star::uno::RuntimeException)
+{
+    mnStartToken = _starttoken;
+
+
 }
 
 ::rtl::OUString ShapeContextHandler::getImplementationName()

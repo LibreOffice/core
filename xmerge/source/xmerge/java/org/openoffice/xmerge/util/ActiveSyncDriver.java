@@ -35,13 +35,10 @@ import java.io.FileOutputStream;
 import java.io.FileInputStream;
 import java.util.StringTokenizer;
 
-import java.net.URL;
-
 import org.openoffice.xmerge.Convert;
 import org.openoffice.xmerge.Document;
 import org.openoffice.xmerge.ConvertData;
 import org.openoffice.xmerge.ConverterFactory;
-import org.openoffice.xmerge.util.registry.ConverterInfo;
 import org.openoffice.xmerge.util.registry.ConverterInfoMgr;
 import org.openoffice.xmerge.util.registry.ConverterInfoReader;
 
