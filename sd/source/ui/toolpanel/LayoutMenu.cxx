@@ -241,8 +241,7 @@ LayoutMenu::LayoutMenu (
       mbIsMainViewChangePending(false)
 {
     SetStyle (
-        GetStyle()
-        & ~(WB_ITEMBORDER)
+        ( GetStyle()  & ~(WB_ITEMBORDER) )
         | WB_TABSTOP
         | WB_NO_DIRECTSELECT
         );

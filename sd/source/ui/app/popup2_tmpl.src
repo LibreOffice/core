@@ -806,9 +806,9 @@
                     };
                     MenuItem
                     {
-                        Identifier = SID_TABLE_INSERT_ROW;
-                        HelpID = SID_TABLE_INSERT_ROW;
-                        Text [ en-US ] = "~Insert";
+                        Identifier = SID_TABLE_INSERT_ROW_DLG;
+                        HelpID = SID_TABLE_INSERT_ROW_DLG;
+                        Text [ en-US ] = "~Insert...";
                     };
                     MenuItem
                     {
@@ -843,9 +843,9 @@
                     };
                     MenuItem
                     {
-                        Identifier = SID_TABLE_INSERT_COL;
-                        HelpID = SID_TABLE_INSERT_COL;
-                        Text [ en-US ] = "~Insert";
+                        Identifier = SID_TABLE_INSERT_COL_DLG;
+                        HelpID = SID_TABLE_INSERT_COL_DLG;
+                        Text [ en-US ] = "~Insert...";
                     };
                     MenuItem
                     {

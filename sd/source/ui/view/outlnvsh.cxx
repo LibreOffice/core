@@ -1541,8 +1541,8 @@ BOOL OutlineViewShell::KeyInput(const KeyEvent& rKEvt, ::sd::Window* pWin)
 
     // Pruefen und Unterscheiden von CursorBewegungs- oder Eingabe-Keys
     KeyCode aKeyGroup( rKEvt.GetKeyCode().GetGroup() );
-    if( aKeyGroup != KEYGROUP_CURSOR && aKeyGroup != KEYGROUP_FKEYS ||
-        GetActualPage() != pLastPage )
+    if( (aKeyGroup != KEYGROUP_CURSOR && aKeyGroup != KEYGROUP_FKEYS) ||
+        (GetActualPage() != pLastPage) )
     {
         Invalidate( SID_PREVIEW_STATE );
     }
