@@ -51,7 +51,7 @@ sub create_upgrade_table
     # fix for problematic OOo 1.9 versions
     my $include_ooo_fix = 0;
     my $ooomaxnew = "";
-    if (($installer::globals::product =~ /OpenOffice/i ) && ( ! ( $installer::globals::product =~ /SDK/i )))
+    if (($installer::globals::product =~ /OpenOffice/i ) && ( ! ( $installer::globals::product =~ /SDK/i )) && ( ! $installer::globals::languagepack ))
     {
         $include_ooo_fix = 1;
         $ooomaxnew = "34.0.0";
@@ -68,7 +68,7 @@ sub create_upgrade_table
     $newline = $installer::globals::upgradecode . "\t" . $installer::globals::msimajorproductversion . "\t" . $installer::globals::msiproductversion . "\t" . "\t" . "257" . "\t" . "\t" . "OLDPRODUCTSSAMEMAJOR" . "\n";
     push(@upgradetable, $newline);
 
-    if (( ! $installer::globals::patch ) && ( ! $installer::globals::languagepack ))
+    if ( ! $installer::globals::patch )
     {
         # preventing downgrading
         $newline = $installer::globals::upgradecode . "\t" . $installer::globals::msiproductversion . "\t" . $ooomaxnew . "\t" . "\t" . "2" . "\t" . "\t" . "NEWPRODUCTS" . "\n";
@@ -83,21 +83,21 @@ sub create_upgrade_table
             push(@upgradetable, $newline);
         }
 
-        if ( $allvariableshashref->{'PATCHUPGRADECODE'} )
-        {
-            $newline = $allvariableshashref->{'PATCHUPGRADECODE'} . "\t" . "\t" . $installer::globals::msiproductversion . "\t" . "\t" . "1" . "\t" . "\t" . "OLDPRODUCTSPATCH" . "\n";
-            push(@upgradetable, $newline);
-
-            $newline = $allvariableshashref->{'PATCHUPGRADECODE'} . "\t" . $installer::globals::msiproductversion . "\t" . "\t" . "\t" . "2" . "\t" . "\t" . "NEWPRODUCTSPATCH" . "\n";
-            push(@upgradetable, $newline);
-
-            $newline = $allvariableshashref->{'PATCHUPGRADECODE'} . "\t" . $installer::globals::msiproductversion . "\t" . "\t" . "\t" . "258" . "\t" . "\t" . "SAMEPRODUCTSPATCH" . "\n";
-            push(@upgradetable, $newline);
-        }
+        # if (( $allvariableshashref->{'PATCHUPGRADECODE'} ) && ( ! $installer::globals::languagepack ))
+        # {
+        #   $newline = $allvariableshashref->{'PATCHUPGRADECODE'} . "\t" . "\t" . $installer::globals::msiproductversion . "\t" . "\t" . "1" . "\t" . "\t" . "OLDPRODUCTSPATCH" . "\n";
+        #   push(@upgradetable, $newline);
+        #
+        #   $newline = $allvariableshashref->{'PATCHUPGRADECODE'} . "\t" . $installer::globals::msiproductversion . "\t" . "\t" . "\t" . "2" . "\t" . "\t" . "NEWPRODUCTSPATCH" . "\n";
+        #   push(@upgradetable, $newline);
+        #
+        #   $newline = $allvariableshashref->{'PATCHUPGRADECODE'} . "\t" . $installer::globals::msiproductversion . "\t" . "\t" . "\t" . "258" . "\t" . "\t" . "SAMEPRODUCTSPATCH" . "\n";
+        #   push(@upgradetable, $newline);
+        # }
 
         # also searching for the beta
 
-        if ( $allvariableshashref->{'BETAUPGRADECODE'} )
+        if (( $allvariableshashref->{'BETAUPGRADECODE'} ) && ( ! $installer::globals::languagepack ))
         {
             $newline = $allvariableshashref->{'BETAUPGRADECODE'} . "\t" . "1.0" . "\t" . "\t" . "\t" . "1" . "\t" . "\t" . "BETAPRODUCTS" . "\n";
             push(@upgradetable, $newline);
@@ -105,7 +105,7 @@ sub create_upgrade_table
 
         # also searching for the stub
 
-        if ( $allvariableshashref->{'STUBUPGRADECODE'} )
+        if (( $allvariableshashref->{'STUBUPGRADECODE'} ) && ( ! $installer::globals::languagepack ))
         {
             $newline = $allvariableshashref->{'STUBUPGRADECODE'} . "\t" . "1.0" . "\t" . "\t" . "\t" . "1" . "\t" . "\t" . "STUBPRODUCTS" . "\n";
             push(@upgradetable, $newline);
@@ -113,7 +113,7 @@ sub create_upgrade_table
 
         # searching for all older patches and languagepacks (defined in a extra file)
 
-        if ( $allvariableshashref->{'REMOVE_UPGRADE_CODE_FILE'} )
+        if (( $allvariableshashref->{'REMOVE_UPGRADE_CODE_FILE'} ) && ( ! $installer::globals::languagepack ))
         {
             my $filename = $allvariableshashref->{'REMOVE_UPGRADE_CODE_FILE'};
             my $langpackcodefilename = $installer::globals::idttemplatepath  . $installer::globals::separator . $filename;

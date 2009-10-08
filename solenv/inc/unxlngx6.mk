@@ -8,7 +8,7 @@
 #
 # $RCSfile: unxlngx6.mk,v $
 #
-# $Revision: 1.19 $
+# $Revision: 1.19.12.1 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -139,13 +139,10 @@ CFLAGSWERRCC=-Werror
 # settings.mk):
 
 MODULES_WITH_WARNINGS := \
-    drawinglayer \
     extensions \
-    sd \
     soldep \
     slideshow \
     svtools \
-    sw \
     svx
 
 # switches for dynamic and static linking

@@ -733,7 +733,6 @@ PAM_LINK
 CRYPT_LINK
 GXX_INCLUDE_PATH
 MINGW_LIB_INCLUDE_PATH
-EXCEPTIONS
 STLPORT4
 STLPORT_VER
 USE_SYSTEM_STL
@@ -924,7 +923,10 @@ SYSTEM_CAIRO
 ENABLE_OPENGL
 ENABLE_MINIMIZER
 ENABLE_PRESENTER_SCREEN
+POPPLER_CFLAGS
+POPPLER_LIBS
 ENABLE_PDFIMPORT
+SYSTEM_POPPLER
 ENABLE_MEDIAWIKI
 SYSTEM_APACHE_COMMONS
 COMMONS_CODEC_JAR
@@ -1866,6 +1868,8 @@ Optional Packages:
   --with-system-python    Use python already on system
 
   --with-system-icu       Use icu already on system
+
+  --with-system-poppler   Use poppler already on system
 
   --with-system-db        Use berkeley db already on system
 
@@ -3027,6 +3031,12 @@ fi
 # Check whether --with-system-icu was given.
 if test "${with_system_icu+set}" = set; then
   withval=$with_system_icu;
+fi
+
+
+# Check whether --with-system-poppler was given.
+if test "${with_system_poppler+set}" = set; then
+  withval=$with_system_poppler;
 fi
 
 
@@ -10209,80 +10219,6 @@ echo "${ECHO_T}checked" >&6; }
    fi
 fi
 
-{ echo "$as_me:$LINENO: checking exception type" >&5
-echo $ECHO_N "checking exception type... $ECHO_C" >&6; }
-ac_ext=cpp
-ac_cpp='$CXXCPP $CPPFLAGS'
-ac_compile='$CXX -c $CXXFLAGS $CPPFLAGS conftest.$ac_ext >&5'
-ac_link='$CXX -o conftest$ac_exeext $CXXFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
-ac_compiler_gnu=$ac_cv_cxx_compiler_gnu
-
-
-if test "${exceptions_type+set}" = set; then
-  echo $ECHO_N "(cached) $ECHO_C" >&6
-else
-  cat >conftest.$ac_ext <<_ACEOF
-/* confdefs.h.  */
-_ACEOF
-cat confdefs.h >>conftest.$ac_ext
-cat >>conftest.$ac_ext <<_ACEOF
-/* end confdefs.h.  */
-#include <iostream>
-
-extern "C" void __sjthrow(void) __attribute__ ((__noreturn__));
-
-
-int
-main ()
-{
-__sjthrow()
-  ;
-  return 0;
-}
-_ACEOF
-rm -f conftest.$ac_objext conftest$ac_exeext
-if { (ac_try="$ac_link"
-case "(($ac_try" in
-  *\"* | *\`* | *\\*) ac_try_echo=\$ac_try;;
-  *) ac_try_echo=$ac_try;;
-esac
-eval "echo \"\$as_me:$LINENO: $ac_try_echo\"") >&5
-  (eval "$ac_link") 2>conftest.er1
-  ac_status=$?
-  grep -v '^ *+' conftest.er1 >conftest.err
-  rm -f conftest.er1
-  cat conftest.err >&5
-  echo "$as_me:$LINENO: \$? = $ac_status" >&5
-  (exit $ac_status); } && {
-	 test -z "$ac_cxx_werror_flag" ||
-	 test ! -s conftest.err
-       } && test -s conftest$ac_exeext &&
-       $as_test_x conftest$ac_exeext; then
-  exceptions_type="sjlj"
-else
-  echo "$as_me: failed program was:" >&5
-sed 's/^/| /' conftest.$ac_ext >&5
-
-	exceptions_type="dwarf2"
-fi
-
-rm -f core conftest.err conftest.$ac_objext conftest_ipa8_conftest.oo \
-      conftest$ac_exeext conftest.$ac_ext
-
-fi
-
-
-{ echo "$as_me:$LINENO: result: $exceptions_type" >&5
-echo "${ECHO_T}$exceptions_type" >&6; }
-ac_ext=c
-ac_cpp='$CPP $CPPFLAGS'
-ac_compile='$CC -c $CFLAGS $CPPFLAGS conftest.$ac_ext >&5'
-ac_link='$CC -o conftest$ac_exeext $CFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
-ac_compiler_gnu=$ac_cv_c_compiler_gnu
-
-EXCEPTIONS="$exceptions_type"
-
-
 if test "$_os" = "SunOS"; then
    _temp=`showrev -p | $AWK -F" " '{ print $2 }'`
    if test "$_os_release" = "7"; then
@@ -10643,7 +10579,8 @@ ac_link='$CXX -o conftest$ac_exeext $CXXFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ex
 ac_compiler_gnu=$ac_cv_cxx_compiler_gnu
 
 
-   cat >conftest.$ac_ext <<_ACEOF
+
+cat >conftest.$ac_ext <<_ACEOF
 /* confdefs.h.  */
 _ACEOF
 cat confdefs.h >>conftest.$ac_ext
@@ -18490,10 +18427,7 @@ fi
 
 
 if test  "$_os" = "Darwin"  -a  "x$with_x" != "xyes"  -a  "x$x_includes" = "xNONE"  -a  "x$x_libraries" = "xNONE"; then
-         { echo "$as_me:$LINENO: WARNING: building without-x is not fully supported yet. Specify --with-x or be ready to face build problems" >&5
-echo "$as_me: WARNING: building without-x is not fully supported yet. Specify --with-x or be ready to face build problems" >&2;}
-   echo "building without-x is not fully supported yet. Specify --with-x or be ready to face build problems" >>warn
-   { echo "$as_me:$LINENO: checking for /System/Library/Frameworks/AppKit.framework" >&5
+         { echo "$as_me:$LINENO: checking for /System/Library/Frameworks/AppKit.framework" >&5
 echo $ECHO_N "checking for /System/Library/Frameworks/AppKit.framework... $ECHO_C" >&6; }
    if test -d "/System/Library/Frameworks/AppKit.framework/"; then
       { echo "$as_me:$LINENO: result: yes" >&5
@@ -25050,13 +24984,129 @@ echo $ECHO_N "checking whether to build the PDF Import extension... $ECHO_C" >&6
 if test -n "$enable_pdfimport" -a "$enable_pdfimport" != "no"; then
   { echo "$as_me:$LINENO: result: yes" >&5
 echo "${ECHO_T}yes" >&6; }
-  BUILD_TYPE="$BUILD_TYPE XPDF"
   ENABLE_PDFIMPORT=YES
+
+        { echo "$as_me:$LINENO: checking which pdf backend to use" >&5
+echo $ECHO_N "checking which pdf backend to use... $ECHO_C" >&6; }
+  if test -n "$with_system_poppler" -o -n "$with_system_libs" && \
+  	test "$with_system_poppler" != "no"; then
+      { echo "$as_me:$LINENO: result: external" >&5
+echo "${ECHO_T}external" >&6; }
+      SYSTEM_POPPLER=YES
+
+  succeeded=no
+
+  if test -z "$PKG_CONFIG"; then
+    # Extract the first word of "pkg-config", so it can be a program name with args.
+set dummy pkg-config; ac_word=$2
+{ echo "$as_me:$LINENO: checking for $ac_word" >&5
+echo $ECHO_N "checking for $ac_word... $ECHO_C" >&6; }
+if test "${ac_cv_path_PKG_CONFIG+set}" = set; then
+  echo $ECHO_N "(cached) $ECHO_C" >&6
+else
+  case $PKG_CONFIG in
+  [\\/]* | ?:[\\/]*)
+  ac_cv_path_PKG_CONFIG="$PKG_CONFIG" # Let the user override the test with a path.
+  ;;
+  *)
+  as_save_IFS=$IFS; IFS=$PATH_SEPARATOR
+for as_dir in $PATH
+do
+  IFS=$as_save_IFS
+  test -z "$as_dir" && as_dir=.
+  for ac_exec_ext in '' $ac_executable_extensions; do
+  if { test -f "$as_dir/$ac_word$ac_exec_ext" && $as_test_x "$as_dir/$ac_word$ac_exec_ext"; }; then
+    ac_cv_path_PKG_CONFIG="$as_dir/$ac_word$ac_exec_ext"
+    echo "$as_me:$LINENO: found $as_dir/$ac_word$ac_exec_ext" >&5
+    break 2
+  fi
+done
+done
+IFS=$as_save_IFS
+
+  test -z "$ac_cv_path_PKG_CONFIG" && ac_cv_path_PKG_CONFIG="no"
+  ;;
+esac
+fi
+PKG_CONFIG=$ac_cv_path_PKG_CONFIG
+if test -n "$PKG_CONFIG"; then
+  { echo "$as_me:$LINENO: result: $PKG_CONFIG" >&5
+echo "${ECHO_T}$PKG_CONFIG" >&6; }
+else
+  { echo "$as_me:$LINENO: result: no" >&5
+echo "${ECHO_T}no" >&6; }
+fi
+
+
+  fi
+
+  if test "$PKG_CONFIG" = "no" ; then
+     echo "*** The pkg-config script could not be found. Make sure it is"
+     echo "*** in your path, or set the PKG_CONFIG environment variable"
+     echo "*** to the full path to pkg-config."
+     echo "*** Or see http://www.freedesktop.org/software/pkgconfig to get pkg-config."
+  else
+     PKG_CONFIG_MIN_VERSION=0.9.0
+     if $PKG_CONFIG --atleast-pkgconfig-version $PKG_CONFIG_MIN_VERSION; then
+        { echo "$as_me:$LINENO: checking for poppler >= 0.8.0 " >&5
+echo $ECHO_N "checking for poppler >= 0.8.0 ... $ECHO_C" >&6; }
+
+        if $PKG_CONFIG --exists "poppler >= 0.8.0 " ; then
+            { echo "$as_me:$LINENO: result: yes" >&5
+echo "${ECHO_T}yes" >&6; }
+            succeeded=yes
+
+            { echo "$as_me:$LINENO: checking POPPLER_CFLAGS" >&5
+echo $ECHO_N "checking POPPLER_CFLAGS... $ECHO_C" >&6; }
+            POPPLER_CFLAGS=`$PKG_CONFIG --cflags "poppler >= 0.8.0 "`
+            { echo "$as_me:$LINENO: result: $POPPLER_CFLAGS" >&5
+echo "${ECHO_T}$POPPLER_CFLAGS" >&6; }
+
+            { echo "$as_me:$LINENO: checking POPPLER_LIBS" >&5
+echo $ECHO_N "checking POPPLER_LIBS... $ECHO_C" >&6; }
+            POPPLER_LIBS=`$PKG_CONFIG --libs "poppler >= 0.8.0 "`
+            { echo "$as_me:$LINENO: result: $POPPLER_LIBS" >&5
+echo "${ECHO_T}$POPPLER_LIBS" >&6; }
+        else
+            POPPLER_CFLAGS=""
+            POPPLER_LIBS=""
+            ## If we have a custom action on failure, don't print errors, but
+            ## do set a variable so people can do so.
+            POPPLER_PKG_ERRORS=`$PKG_CONFIG --errors-to-stdout --print-errors "poppler >= 0.8.0 "`
+            echo $POPPLER_PKG_ERRORS
+        fi
+
+
+
+     else
+        echo "*** Your version of pkg-config is too old. You need version $PKG_CONFIG_MIN_VERSION or newer."
+        echo "*** See http://www.freedesktop.org/software/pkgconfig"
+     fi
+  fi
+
+  if test $succeeded = yes; then
+     :
+  else
+     { { echo "$as_me:$LINENO: error: Library requirements (poppler >= 0.8.0 ) not met; consider adjusting the PKG_CONFIG_PATH environment variable if your libraries are in a nonstandard prefix so pkg-config can find them." >&5
+echo "$as_me: error: Library requirements (poppler >= 0.8.0 ) not met; consider adjusting the PKG_CONFIG_PATH environment variable if your libraries are in a nonstandard prefix so pkg-config can find them." >&2;}
+   { (exit 1); exit 1; }; }
+  fi
+
+  else
+      { echo "$as_me:$LINENO: result: internal" >&5
+echo "${ECHO_T}internal" >&6; }
+      SYSTEM_POPPLER=NO
+      BUILD_TYPE="$BUILD_TYPE XPDF"
+  fi
+
 else
   { echo "$as_me:$LINENO: result: no" >&5
 echo "${ECHO_T}no" >&6; }
   ENABLE_PDFIMPORT=NO
 fi
+
+
+
 
 
 { echo "$as_me:$LINENO: checking whether to build the MediaWiki Editor extension" >&5
@@ -27877,7 +27927,6 @@ PAM_LINK!$PAM_LINK$ac_delim
 CRYPT_LINK!$CRYPT_LINK$ac_delim
 GXX_INCLUDE_PATH!$GXX_INCLUDE_PATH$ac_delim
 MINGW_LIB_INCLUDE_PATH!$MINGW_LIB_INCLUDE_PATH$ac_delim
-EXCEPTIONS!$EXCEPTIONS$ac_delim
 STLPORT4!$STLPORT4$ac_delim
 STLPORT_VER!$STLPORT_VER$ac_delim
 USE_SYSTEM_STL!$USE_SYSTEM_STL$ac_delim
@@ -27951,6 +28000,7 @@ HSQLDB_JAR!$HSQLDB_JAR$ac_delim
 SYSTEM_BSH!$SYSTEM_BSH$ac_delim
 BSH_JAR!$BSH_JAR$ac_delim
 SERIALIZER_JAR!$SERIALIZER_JAR$ac_delim
+SYSTEM_SAXON!$SYSTEM_SAXON$ac_delim
 _ACEOF
 
   if test `sed -n "s/.*$ac_delim\$/X/p" conf$$subs.sed | grep -c X` = 97; then
@@ -27992,7 +28042,6 @@ _ACEOF
 ac_delim='%!_!# '
 for ac_last_try in false false false false false :; do
   cat >conf$$subs.sed <<_ACEOF
-SYSTEM_SAXON!$SYSTEM_SAXON$ac_delim
 SAXON_JAR!$SAXON_JAR$ac_delim
 CURLCONFIG!$CURLCONFIG$ac_delim
 SYSTEM_CURL!$SYSTEM_CURL$ac_delim
@@ -28089,6 +28138,7 @@ ENABLE_GTK!$ENABLE_GTK$ac_delim
 ENABLE_KDE!$ENABLE_KDE$ac_delim
 GCONF_CFLAGS!$GCONF_CFLAGS$ac_delim
 GCONF_LIBS!$GCONF_LIBS$ac_delim
+ENABLE_GCONF!$ENABLE_GCONF$ac_delim
 _ACEOF
 
   if test `sed -n "s/.*$ac_delim\$/X/p" conf$$subs.sed | grep -c X` = 97; then
@@ -28130,7 +28180,6 @@ _ACEOF
 ac_delim='%!_!# '
 for ac_last_try in false false false false false :; do
   cat >conf$$subs.sed <<_ACEOF
-ENABLE_GCONF!$ENABLE_GCONF$ac_delim
 GNOMEVFS_CFLAGS!$GNOMEVFS_CFLAGS$ac_delim
 GNOMEVFS_LIBS!$GNOMEVFS_LIBS$ac_delim
 ENABLE_GNOMEVFS!$ENABLE_GNOMEVFS$ac_delim
@@ -28150,7 +28199,10 @@ SYSTEM_CAIRO!$SYSTEM_CAIRO$ac_delim
 ENABLE_OPENGL!$ENABLE_OPENGL$ac_delim
 ENABLE_MINIMIZER!$ENABLE_MINIMIZER$ac_delim
 ENABLE_PRESENTER_SCREEN!$ENABLE_PRESENTER_SCREEN$ac_delim
+POPPLER_CFLAGS!$POPPLER_CFLAGS$ac_delim
+POPPLER_LIBS!$POPPLER_LIBS$ac_delim
 ENABLE_PDFIMPORT!$ENABLE_PDFIMPORT$ac_delim
+SYSTEM_POPPLER!$SYSTEM_POPPLER$ac_delim
 ENABLE_MEDIAWIKI!$ENABLE_MEDIAWIKI$ac_delim
 SYSTEM_APACHE_COMMONS!$SYSTEM_APACHE_COMMONS$ac_delim
 COMMONS_CODEC_JAR!$COMMONS_CODEC_JAR$ac_delim
@@ -28208,7 +28260,7 @@ LIBOBJS!$LIBOBJS$ac_delim
 LTLIBOBJS!$LTLIBOBJS$ac_delim
 _ACEOF
 
-  if test `sed -n "s/.*$ac_delim\$/X/p" conf$$subs.sed | grep -c X` = 76; then
+  if test `sed -n "s/.*$ac_delim\$/X/p" conf$$subs.sed | grep -c X` = 78; then
     break
   elif $ac_last_try; then
     { { echo "$as_me:$LINENO: error: could not make $CONFIG_STATUS" >&5

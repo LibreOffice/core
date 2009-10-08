@@ -460,7 +460,18 @@ sub get_fileversion
     if ( $allvariables->{'USE_FILEVERSION'} )
     {
         if ( ! $allvariables->{'LIBRARYVERSION'} ) { installer::exiter::exit_program("ERROR: USE_FILEVERSION is set, but not LIBRARYVERSION", "get_fileversion"); }
-        $fileversion = $allvariables->{'LIBRARYVERSION'} . "\." . $installer::globals::buildid;
+        my $libraryversion = $allvariables->{'LIBRARYVERSION'};
+        if ( $libraryversion =~ /^\s*(\d+)\.(\d+)\.(\d+)\s*$/ )
+        {
+            my $major = $1;
+            my $minor = $2;
+            my $micro = $3;
+            my $concat = 100 * $minor + $micro;
+            $libraryversion = $major . "\." . $concat;
+        }
+        my $vendornumber = 0;
+        if ( $allvariables->{'VENDORPATCHVERSION'} ) { $vendornumber = $allvariables->{'VENDORPATCHVERSION'}; }
+        $fileversion = $libraryversion . "\." . $installer::globals::buildid . "\." . $vendornumber;
         if ( $onefile->{'FileVersion'} ) { $fileversion = $onefile->{'FileVersion'}; } # overriding FileVersion in scp
     }
 
@@ -475,14 +486,16 @@ sub get_fileversion
 
 sub get_sequence_for_file
 {
-    my ($number, $onefile, $fileentry, $allupdatesequenceshashref, $allupdatefileorderhashref, $allfilecomponents) = @_;
+    my ($number, $onefile, $fileentry, $allupdatesequenceshashref, $allupdatecomponentshashref, $allupdatefileorderhashref, $allfilecomponents) = @_;
 
     my $sequence = "";
 
     if ( $installer::globals::updatedatabase )
     {
-        if ( exists($allupdatesequenceshashref->{$onefile->{'uniquename'}}) )
+        if (( exists($allupdatesequenceshashref->{$onefile->{'uniquename'}}) ) && ( $onefile->{'componentname'} eq $allupdatecomponentshashref->{$onefile->{'uniquename'}} ))
         {
+            # The second condition is necessary to find shifted files, that have same "uniquename", but are now
+            # located in another directory. This can be seen at the component name.
             $sequence = $allupdatesequenceshashref->{$onefile->{'uniquename'}};
             $onefile->{'assignedsequencenumber'} = $sequence;
             # Collecting all used sequences, to guarantee, that no number is unused
@@ -582,7 +595,7 @@ sub generate_registry_keypath
 
 sub check_file_sequences
 {
-    my ($allupdatefileorderhashref) = @_;
+    my ($allupdatefileorderhashref, $allupdatecomponentorderhashref) = @_;
 
     # All used sequences stored in %installer::globals::allusedupdatesequences
     # Maximum sequence number of old database stored in $installer::globals::updatelastsequence
@@ -621,7 +634,8 @@ sub check_file_sequences
         for ( my $j = 0; $j <= $#really_missing_sequences; $j++ )
         {
             my $filename = $allupdatefileorderhashref->{$really_missing_sequences[$j]};
-            $errorstring = "$errorstring$filename (Sequence: $really_missing_sequences[$j])\n";
+            my $comp = $allupdatecomponentorderhashref->{$really_missing_sequences[$j]};
+            $errorstring = "$errorstring$filename (Sequence: $really_missing_sequences[$j], Component: \"$comp\")\n";
         }
 
         $infoline = "ERROR: Files are removed compared with update database.\nThe following files are missing:\n$errorstring";
@@ -721,7 +735,7 @@ sub collect_shortnames_from_old_database
 
 sub create_files_table
 {
-    my ($filesref, $allfilecomponentsref, $basedir, $allvariables, $uniquefilenamehashref, $allupdatesequenceshashref, $allupdatefileorderhashref) = @_;
+    my ($filesref, $allfilecomponentsref, $basedir, $allvariables, $uniquefilenamehashref, $allupdatesequenceshashref, $allupdatecomponentshashref, $allupdatefileorderhashref) = @_;
 
     installer::logger::include_timestamp_into_logfile("Performance Info: File Table start");
 
@@ -788,7 +802,7 @@ sub create_files_table
 
         $installer::globals::insert_file_at_end = 0;
         $counter++;
-        $file{'Sequence'} = get_sequence_for_file($counter, $onefile, \%file, $allupdatesequenceshashref, $allupdatefileorderhashref, \%allfilecomponents);
+        $file{'Sequence'} = get_sequence_for_file($counter, $onefile, \%file, $allupdatesequenceshashref, $allupdatecomponentshashref, $allupdatefileorderhashref, \%allfilecomponents);
 
         $onefile->{'sequencenumber'} = $file{'Sequence'};
 

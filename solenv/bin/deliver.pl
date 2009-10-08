@@ -244,8 +244,8 @@ sub do_linklib
 
     foreach $lib (@globbed_files) {
         $lib = basename($lib);
-        if ( $lib =~ /^(lib[\w-]+(\.so|\.dylib))\.(\d+)\.(\d+)(\.(\d+))?$/
-             || $lib =~ /^(lib[\w-]+(\.so|\.dylib))\.(\d+)$/ )
+        if ( $lib =~ /^(lib\S+(\.so|\.dylib))\.(\d+)\.(\d+)(\.(\d+))?$/
+             || $lib =~ /^(lib\S+(\.so|\.dylib))\.(\d+)$/ )
         {
            push(@{$globbed_hash{$1}}, $lib);
         }
@@ -257,7 +257,7 @@ sub do_linklib
     foreach $lib_base ( sort keys %globbed_hash ) {
         $lib = get_latest_patchlevel(@{$globbed_hash{$lib_base}});
 
-        if ( $lib =~ /^(lib[\w-]+(\.so|\.dylib))\.(\d+)\.(\d+)(\.(\d+))?$/ )
+        if ( $lib =~ /^(lib\S+(\.so|\.dylib))\.(\d+)\.(\d+)(\.(\d+))?$/ )
         {
             $lib_major = "$lib_base.$3";
             $long = 1;

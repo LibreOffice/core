@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: ure_into_ooo.scp,v $
- * $Revision: 1.5 $
+ * $Revision: 1.5.176.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -32,7 +32,11 @@
 
 #ifndef MACOSX
 Directory gid_Dir_Common_Ure
+  #ifdef WNT
+    ParentID = gid_Dir_Brand_Root;
+  #else
     ParentID = gid_Dir_Ooo_Openofficeorg;
+  #endif
   #ifdef WNT
     HostName = "URE";
   #else
@@ -47,7 +51,7 @@ File gid_File_UreLink
     TXT_FILE_BODY;
     Dir = gid_Dir_Ooo_Basis;
     Name = "ure-link";
-    Styles = (PACKED, ONLY_INSTALLED_PRODUCT);
+    Styles = (PACKED);
 End
 #elif defined MACOSX
 Directory gid_Dir_UreLink

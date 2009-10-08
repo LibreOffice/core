@@ -37,6 +37,7 @@
 use strict;
 use Getopt::Long;
 use File::Basename;
+use File::Path;
 use Cwd;
 
 #### module lookup
@@ -81,7 +82,8 @@ my @valid_commands = (
 my %valid_options_hash = (
                             'help'      => ['help'],
                             'create'    => ['help', 'milestone', 'migration'],
-                            'fetch'     => ['help', 'switch', 'milestone', 'childworkspace'],
+                            'fetch'     => ['help', 'switch', 'milestone', 'childworkspace','platforms','quiet',
+                                            'onlysolver'],
                             'rebase'    => ['help', 'milestone','commit'],
                             'analyze'   => ['help'],
                             'query'     => ['help', 'milestone','masterworkspace','childworkspace'],
@@ -123,6 +125,9 @@ sub parse_command_line
                                              'debug',
                                              'commit|C',
                                              'switch|s',
+                                             'platforms|p=s',
+                                             'onlysolver|o',
+                                             'quiet|q',
                                              'help|h'
                             );
 
@@ -151,6 +156,12 @@ sub parse_command_line
     }
     elsif ($command eq 't') {
         $command = 'task';
+    }
+
+    # An unkown option might be accompanied with a valid command.
+    # Show the command specific help
+    if ( !$success ) {
+        do_help([$command])
     }
 
     verify_options($command, \%options_hash);
@@ -406,7 +417,7 @@ sub query_cws
     my $options_ref = shift;
     # get master and child workspace
     my $masterws  = exists $options_ref->{'master'} ? uc($options_ref->{'master'}) : $ENV{WORK_STAMP};
-    my $childws   = exists $options_ref->{'child'} ? $options_ref->{'child'} : $ENV{CWS_WORK_STAMP};
+    my $childws   = exists $options_ref->{'childworkspace'} ? $options_ref->{'childworkspace'} : $ENV{CWS_WORK_STAMP};
     my $milestone = exists $options_ref->{'milestone'} ? $options_ref->{'milestone'} : 'latest';
 
     if ( !defined($masterws) && $query_mode ne 'masters') {
@@ -990,6 +1001,161 @@ sub verify_milestone
     return ($master, $milestone);
 }
 
+sub relink_workspace {
+    my $linkdir = shift;
+
+    # clean out pre-existing linkdir
+    my $bd = dirname($linkdir);
+    if ( !opendir(DIR, $bd) ) {
+        print_error("Can't open directory '$bd': $!.", 44);
+    }
+    my @old_link_dirs = grep { /^src.m\d+/ } readdir(DIR);
+    close(DIR);
+
+    if ( @old_link_dirs > 1 ) {
+        print_error("Found more than one old link directories:", 0);
+        foreach (@old_link_dirs) {
+            print STDERR "@old_link_dirs\n";
+        }
+    }
+    my $old_link_dir = "$bd/" . $old_link_dirs[0];
+    print_message("... removing '$old_link_dir'");
+    rmtree([$old_link_dir], 0);
+
+    print_message("... (re)create '$linkdir'");
+    if ( !mkdir("$linkdir") ) {
+        print_error("Can't create directory '$linkdir': $!.", 44);
+    }
+    if ( !opendir(DIR, "$bd/ooo") ) {
+        print_error("Can't open directory '$bd/sun': $!.", 44);
+    }
+    my @ooo_top_level_dirs = grep { !/^\./ } readdir(DIR);
+    close(DIR);
+    if ( !opendir(DIR, "$bd/sun") ) {
+        print_error("Can't open directory '$bd/sun': $!.", 44);
+    }
+    my @so_top_level_dirs = grep { !/^\./ } readdir(DIR);
+    close(DIR);
+    my $savedir = getcwd();
+    if ( !chdir($linkdir) ) {
+        print_error("Can't chdir() to directory '$linkdir': $!.", 44);
+    }
+    foreach(@ooo_top_level_dirs) {
+        # skip non directory files like REBASE.LOG and REBASE.CONFIG_DONT_DELETE
+        if ( ! -d "../ooo/$_" ) {
+            next;
+        }
+        if ( !symlink("../ooo/$_", $_) ) {
+            print_error("Can't symlink directory '../ooo/$_ -> '$_': $!.", 44);
+        }
+    }
+    foreach(@so_top_level_dirs) {
+        # skip non directory files like REBASE.LOG and REBASE.CONFIG_DONT_DELETE
+        if ( ! -d "../sun/$_" ) {
+            next;
+        }
+        if ( !symlink("../sun/$_", $_) ) {
+            print_error("Can't symlink directory '../sun/$_ -> '$_': $!.", 44);
+        }
+    }
+    if ( !chdir($savedir) ) {
+        print_error("Can't chdir() to directory '$linkdir': $!.", 44);
+    }
+}
+
+sub update_solver
+{
+    my $platform   = shift;
+    my $source     = shift;
+    my $solver     = shift;
+    my $milestone  = shift;
+
+    my @zip_sub_dirs = ('bin', 'doc', 'inc', 'lib', 'par', 'pck', 'pdb', 'rdb', 'res', 'xml');
+
+    use Archive::Zip qw( :ERROR_CODES :CONSTANTS );
+
+    my $platform_solver = "$solver/$platform";
+
+    if ( -d $platform_solver ) {
+        print_message("... removing old solver for platform '$platform'");
+        if ( !rmtree([$platform_solver]) ) {
+            print_error("Can't remove directory '$platform_solver': $!.", 44);
+        }
+    }
+
+    if ( !mkdir("$platform_solver") ) {
+        print_error("Can't create directory '$platform_solver': $!.", 44);
+    }
+
+    my $platform_source = "$source/$platform/zip.$milestone";
+    if ( !opendir(DIR, "$platform_source") ) {
+        print_error("Can't open directory '$platform_source': $!.", 44);
+    }
+    my @zips = grep { /\.zip$/ } readdir(DIR);
+    close(DIR);
+
+    my $nzips = @zips;
+    print_message("... unzipping $nzips zip archives for platform '$platform'");
+
+    foreach(@zips) {
+        my $zip = Archive::Zip->new();
+        unless ( $zip->read( "$platform_source/$_" ) == AZ_OK ) {
+            print_error("Can't read zip file '$platform_source/$_': $!.", 44);
+        }
+        # TODO: check for erorrs
+        foreach (@zip_sub_dirs) {
+            unless ( $zip->extractTree($_, "$platform_solver/$_.$milestone") == AZ_OK ) {
+                print_error("Can't extract stream from zip file '$platform_source/$_': $!.", 44);
+            }
+        }
+     }
+}
+
+sub write_rebase_configuration
+{
+    my $workspace = shift;
+    my $cwsname   = shift;
+    my $master    = shift;
+    my $milestone = shift;
+
+    my $rebase_config = "$workspace/REBASE.CONFIG_DONT_DELETE";
+
+    open(REBASE, ">$rebase_config") or print_error("Can't open file '$rebase_config' for writing: $!", 98);
+    print REBASE "CWS-TOOLING: do not delete this file, it's needed for 'cws rebase -C'\n";
+    print REBASE "CWS: $cwsname\n";
+    print REBASE "New MWS: $master\n";
+    print REBASE "New milestone: $milestone\n";
+    close(REBASE);
+}
+
+sub read_rebase_configuration
+{
+    my $workspace = shift;
+
+    my $rebase_config = "$workspace/REBASE.CONFIG_DONT_DELETE";
+
+    my $master;
+    my $milestone;
+
+    open(REBASE, "<$rebase_config") or print_error("Can't open file '$rebase_config' for reading: $!", 98);
+    while(<REBASE>) {
+        if ( /New MWS: (\w+)/ ) {
+            $master = $1;
+        }
+        if ( /New milestone: (\w+)/ ) {
+            $milestone = $1;
+        }
+    }
+    close(REBASE);
+
+    if ( !defined($master) || !defined($milestone) ) {
+        print_error("File '$rebase_config' seems to be garbled. Can't continue.", 98)
+    }
+
+    return ($master, $milestone);
+}
+
+
 
 # Executes the help command.
 sub do_help
@@ -1078,21 +1244,30 @@ sub do_help
     elsif ($arg eq 'fetch') {
         print STDERR "THE USER-INTERFACE TO THIS SUBCOMMAND IS LIKELY TO CHANGE IN FUTURE\n";
         print STDERR "fetch: fetch a milestone or CWS\n";
-        print STDERR "usage: fetch [-s] <-m milestone>\n";
-        print STDERR "usage: fetch [-s] <-c cws>\n";
-        print STDERR "\t-m milestone:           Checkout milestone <milestone>\n";
+        print STDERR "usage: fetch [-q] [-s] [-p platforms] [-o] <-m milestone> <workspace>\n";
+        print STDERR "usage: fetch [-q] [-s] [-p platforms] [-o] <-c cws> <workspace>\n";
+        print STDERR "usage: fetch [-q] [-s] <-m milestone> <workspace>\n";
+        print STDERR "usage: fetch [-q] [-s] <-c cws> <workspace>\n";
+        print STDERR "\t-m milestone:           Checkout milestone <milestone> to workspace <workspace>\n";
         print STDERR "\t                        Use 'latest' for the for lastest published milestone on the current master\n";
         print STDERR "\t                        For cross master checkouts use the form <MWS>:<milestone>\n";
         print STDERR "\t--milestone milestone:  Same as -m milestone\n";
-        print STDERR "\t-c childworkspace:      Checkout CWS <childworkspace>\n";
+        print STDERR "\t-c childworkspace:      Checkout CWS <childworkspace> to workspace <workspace>\n";
         print STDERR "\t--child childworkspace: Same as -c childworkspace\n";
-        print STDERR "\t-s:                     Try to switch an existing workspace to milestone or CWS\n";
+        print STDERR "\t-s:                     Try to switch an existing workspace <workspace> to milestone or CWS\n";
         print STDERR "\t--switch:               Same as -s\n";
+        print STDERR "\t-p platform:            Copy one or more prebuilt platforms 'platform'. \n";
+        print STDERR "\t                        Separate multiple platforms with commas.\n";
+        print STDERR "\t--platforms platform:   Same as -p\n";
+        print STDERR "\t-o                      Omit checkout of sources, copy only solver. \n";
+        print STDERR "\t--onlysolver:           Same as -o\n";
+        print STDERR "\t-q                      Silence some of the output of the command.\n";
+        print STDERR "\t--quiet:                Same as -q\n";
     }
     elsif ($arg eq 'rebase') {
         print STDERR "rebase: Rebase a child workspace to a new milestone\n";
-        print STDERR "usage: rebase <-m milestone>\n";
-        print STDERR "usage: rebase <-C>\n";
+        print STDERR "usage: rebase <-m milestone> <workspace>\n";
+        print STDERR "usage: rebase <-C> <workspace>\n";
         print STDERR "\t-m milestone:          Merge changes on MWS into CWS up to and including milestone <milestone>\n";
         print STDERR "\t                       Use 'latest' for the for lastest published milestone on the current master\n";
         print STDERR "\t                       For cross master rebases use the form <MWS>:<milestone>\n";
@@ -1274,15 +1449,18 @@ sub do_create
     my $ooo_creation_comment = "CWS-TOOLING: create CWS " . $cws->child() . " from $ooo_short_url (milestone: " . $cws->master() . ":$milestone)";
     # create branches an ooo server and an optional so server
     print STDERR "... create branch:\t'$ooo_cws_url'";
-    svn_copy($ooo_creation_comment, $ooo_milestone_url, $ooo_cws_url);
+    svn_copy($ooo_creation_comment, $ooo_master_url, $ooo_cws_url);
     if ( defined($so_svn_server) ) {
         my $so_short_url = get_short_url($so_svn_server, $so_master_url);
         my $so_creation_comment = "CWS-TOOLING: create CWS " . $cws->child() . " from $so_short_url (milestone: " . $cws->master() . ":$milestone)";
         print STDERR "... create branch:\t'$so_cws_url'";
-        svn_copy($so_creation_comment, $so_milestone_url, $so_cws_url);
+        svn_copy($so_creation_comment, $so_master_url, $so_cws_url);
     }
 
     if ( $is_migration ) {
+        # Set master and milestone
+        $cws->master($master);
+        $cws->milestone($milestone);
         my $rc = $cws->set_subversion_flag(1);
         if ( !$rc ) {
             print_error("Failed to set subversion flag on child workspace '$cws_name'.\nContact EIS administrator!\n", 12);
@@ -1302,11 +1480,18 @@ sub do_rebase
     my $commit_phase = 0;
     my $milestone;
 
-    if (exists $options_ref->{'help'} || @{$args_ref} > 0) {
+    # TODO: Switching to a new master dooes not correctly yet
+
+
+    if (exists $options_ref->{'help'} || @{$args_ref} != 1) {
         do_help(['rebase']);
     }
     if ( exists($options_ref->{'commit'}) && exists($options_ref->{'milestone'}) ) {
         print_error("Option -m (--milestone) and -C (--commit) are mutually exclusive.", 0 );
+        do_help(['rebase']);
+    }
+    if ( !exists($options_ref->{'commit'}) && !exists($options_ref->{'milestone'}) ) {
+        print_error("At least one of the options -m (--milestone) or -C (--commit) are required.", 0 );
         do_help(['rebase']);
     }
 
@@ -1314,8 +1499,15 @@ sub do_rebase
     my $new_milestone;
     my $cws = get_cws_from_environment();
 
+    my $workspace = $args_ref->[0];
+
+    if ( ! -d $workspace ) {
+        print_error("Can't find workspace '$workspace': $!", 99);
+    }
+
     if ( exists($options_ref->{'commit'}) ) {
         $commit_phase=1;
+        ($new_masterws, $new_milestone) = read_rebase_configuration($workspace);
     }
     elsif( exists($options_ref->{'milestone'}) ) {
         $milestone = $options_ref->{'milestone'};
@@ -1336,12 +1528,6 @@ sub do_rebase
     else {
         do_help(['rebase']);
     }
-    print_message("Rebasing to milestone '$new_milestone' of '$new_masterws'.\n");
-
-    my $src_root = $ENV{SRC_ROOT};
-    if ( !$src_root) {
-         print_error("Environment variable SRC_ROOT not set, please initialize build environment.", 20 );
-    }
 
     my $so_setup = 0;
     my $ooo_path;
@@ -1350,14 +1536,13 @@ sub do_rebase
     # This is only needed as long the build system still relies
     # on having "modules" from different repositories in the same
     # directory besides each other.
-    my $so_basedir = dirname($src_root);
-    if ( -d "$so_basedir/so" ) {
-        $so_setup =1;
-        $ooo_path = "$so_basedir/ooo";
-        $so_path = "$so_basedir/so";
+    if ( -d "$workspace/$new_masterws/sun" ) {
+        $so_setup = 1;
+        $ooo_path = "$workspace/$new_masterws/ooo";
+        $so_path = "$workspace/$new_masterws/sun";
     }
     else {
-        $ooo_path = $src_root;
+        $ooo_path = "$workspace";
     }
 
     my $config = CwsConfig->new();
@@ -1382,6 +1567,7 @@ sub do_rebase
     my $ooo_wc_url;
     my $so_wc_url;
     my $cwsname = $cws->child();
+    print_message("... verifying if  workspace '$workspace' is switched to CWS '$cwsname'.");
     if ( $so_setup ) {
         $ooo_wc_url = svn_wc_url($ooo_path);
         $so_wc_url = svn_wc_url($so_path);
@@ -1402,25 +1588,61 @@ sub do_rebase
         }
     }
 
+    my $ooo_milestone_revision;
+    my $so_milestone_revision;
+
+    $ooo_milestone_revision = svn_milestone_revision($ooo_milestone_url);
+    if ( !$ooo_milestone_revision ) {
+        print_error("Can't retrieve revision for milestone '$new_milestone', url '$ooo_milestone_url.", 17 );
+    }
+    if ( defined($so_svn_server) ) {
+        $so_milestone_revision = svn_milestone_revision($so_milestone_url);
+        if ( !$so_milestone_revision ) {
+            print_error("Can't retrieve revision for milestone '$new_milestone', url '$so_milestone_url.", 17 );
+        }
+    }
+
+    my $ooo_master_url;
+    my $so_master_url;
+
+    $ooo_master_url = get_master_url($ooo_svn_server, $cws->master(), $ooo_milestone_revision);
+    if ( defined($so_svn_server) ) {
+        $so_master_url = get_master_url($so_svn_server, $cws->master(), $so_milestone_revision);
+    }
+
     if ( $commit_phase ) {
         # commit
-        my $ooo_short_url = get_short_url($ooo_milestone_url);
-        my $commit_message = "CWS-TOOLING: rebase CWS " . $cws->child() . " to $ooo_short_url (milestone: " . $new_masterws . ":$milestone)";
+        print_message("... committing merged changes to workspace '$workspace'.");
+        my $ooo_short_url = get_short_url($ooo_svn_server, $ooo_master_url);
+        my $commit_message = "CWS-TOOLING: rebase CWS " . $cws->child() . " to $ooo_short_url (milestone: " . $new_masterws . ":$new_milestone)";
         svn_commit($ooo_path, $commit_message);
         if ( $so_setup ) {
-            my $so_short_url = get_short_url($so_milestone_url);
-            $commit_message = "CWS-TOOLING: rebase CWS " . $cws->child() . " to $so_short_url (milestone: " . $new_masterws . ":$milestone)";
+            my $so_short_url = get_short_url($so_svn_server, $so_master_url);
+            $commit_message = "CWS-TOOLING: rebase CWS " . $cws->child() . " to $so_short_url (milestone: " . $new_masterws . ":$new_milestone)";
             svn_commit($so_path, $commit_message);
         }
-        print_message("Updating EIS database\n");
-        $cws->set__and_milestine($new_masterws, $new_milestone);
+        if ( $so_setup) {
+            print_message("... relinking workspace\n");
+            relink_workspace("$workspace/$new_masterws/src.$new_milestone");
+            if ( !unlink("$workspace/REBASE.CONFIG_DONT_DELETE") ) {
+                print_error("Can't unlink '$workspace/REBASE.CONFIG_DONT_DELETE': $!", 0);
+            }
+
+        }
+
+        print_message("... updating EIS database\n");
+        $cws->set_master_and_milestone($new_masterws, $new_milestone);
     }
     else {
         # merge
+        # determine the revision from which the milestone was copied
+        print_message("... merging changes up to '$new_masterws:$new_milestone' to workspace '$workspace'.");
         svn_merge($ooo_milestone_url, $ooo_path);
         if ( $so_setup ) {
             svn_merge($so_milestone_url, $so_path);
         }
+        # write out the rebase configuration to store new milestone and master information
+        write_rebase_configuration($workspace, $cwsname, $new_masterws, $new_milestone);
     }
 }
 
@@ -1452,26 +1674,34 @@ sub do_fetch
     my $args_ref    = shift;
     my $options_ref = shift;
 
-    my $switch = 0;
-
-    if ( exists $options_ref->{'help'} || @{$args_ref} != 0) {
+    if ( exists $options_ref->{'help'} || @{$args_ref} != 1) {
         do_help(['fetch']);
     }
 
-    if ( exists $options_ref->{'switch'} ) {
-        $switch = 1;
-    }
-
-    my $milestone = $options_ref->{'milestone'};
+    my $milestone_opt = $options_ref->{'milestone'};
     my $child = $options_ref->{'childworkspace'};
+    my $platforms = $options_ref->{'platforms'};
+    my $quiet  = $options_ref->{'quiet'}  ? 1 : 0 ;
+    my $switch = $options_ref->{'switch'} ? 1 : 0 ;
+    my $onlysolver = $options_ref->{'onlysolver'} ? 1 : 0 ;
 
-    if ( !defined($milestone) && !defined($child) ) {
+    if ( !defined($milestone_opt) && !defined($child) ) {
         print_error("Specify one of these options: -m or -c", 0);
         do_help(['fetch']);
     }
 
-    if ( defined($milestone) && defined($child) ) {
+    if ( defined($milestone_opt) && defined($child) ) {
         print_error("Options -m and -c are mutally exclusive", 0);
+        do_help(['fetch']);
+    }
+
+    if ( defined($platforms) && $switch ) {
+        print_error("Option '-p' is not yet usuable with Option '-s'. Will be fixed RSN.", 0);
+        do_help(['fetch']);
+    }
+
+    if ( $onlysolver && !defined($platforms) ) {
+        print_error("Option '-o' is Only usuable combination with option '-p'.", 0);
         do_help(['fetch']);
     }
 
@@ -1481,8 +1711,9 @@ sub do_fetch
         print_error("Can't determine current master workspace: check environment variable WORK_STAMP", 21);
     }
     $cws->master($masterws);
-    if( defined($milestone) ) {
-        if ( $milestone eq 'latest' ) {
+    my $milestone;
+    if( defined($milestone_opt) ) {
+        if ( $milestone_opt eq 'latest' ) {
             $cws->master($masterws);
             my $latest = $cws->get_current_milestone($masterws);
 
@@ -1492,95 +1723,140 @@ sub do_fetch
             $milestone = $cws->get_current_milestone($masterws);
         }
         else {
-            ($masterws, $milestone) =  verify_milestone($cws, $milestone);
+            ($masterws, $milestone) =  verify_milestone($cws, $milestone_opt);
         }
     }
     elsif ( defined($child) ) {
         $cws = get_cws_by_name($child);
+        $masterws = $cws->master(); # CWS can have another master than specified in ENV
+        $milestone = $cws->milestone();
     }
     else {
         do_help(['fetch']);
     }
 
-    my $cwsname = $cws->child();
-    my $url_suffix = $milestone ? ("/tags/$masterws" . "_$milestone") : ('/cws/' . $cwsname);
+    my $config = CwsConfig->new();
+    my $ooo_svn_server = $config->get_ooo_svn_server();
+    my $so_svn_server = $config->get_so_svn_server();
+    # Check early for platforms so we can bail out before anything time consuming is done
+    # in case of a missing platform
+    my @platforms;
+    my $prebuild_dir;
+    if ( defined($platforms) ) {
+        use Archive::Zip; # warn early if module is missing
+        $prebuild_dir = $config->get_prebuild_binaries_location();
+        $masterws = $cws->master();
+        $prebuild_dir = "$prebuild_dir/$masterws";
 
-    if ( $switch ) {
-        my $src_root = $ENV{SRC_ROOT};
-        if ( !$src_root) {
-             print_error("Environment variable SRC_ROOT not set, please initialize build environment.", 20 );
-        }
+        @platforms = split(/,/, $platforms);
 
-        # TODO: unify this with the do_rebase implementation
-        my $so_setup = 0;
-        my $ooo_path;
-        my $so_path;
-        # Determine if we got a three directory (so) setup or a plain (ooo) setup.
-        # This is only needed as long the build system still relies
-        # on having "modules" from different repositories in the same
-        # directory besides each other.
-        my $so_basedir = dirname($src_root);
-        if ( -d "$so_basedir/so" ) {
-            $so_setup =1;
-            $ooo_path = "$so_basedir/ooo";
-            $so_path = "$so_basedir/so";
-        }
-        else {
-            $ooo_path = $src_root;
-        }
-
-        # get the working copy URLs
-        my $ooo_new_url = svn_wc_root($ooo_path) . $url_suffix;
-        my $so_new_url;
-        if ( $so_setup ) {
-            $so_new_url = svn_wc_root($so_path) . $url_suffix;
-        }
-
-        svn_switch($ooo_path, $ooo_new_url);
-        # switch working copies
-        if ( $so_setup ) {
-            svn_switch($so_path, $so_new_url);
+        foreach(@platforms) {
+            if ( ! -d "$prebuild_dir/$_") {
+                print_error("Can't find prebuild binaries for platform '$_'.", 22);
+            }
         }
     }
-    else {
-        my $config = CwsConfig->new();
-        my $ooo_svn_server = $config->get_ooo_svn_server();
-        my $so_svn_server = $config->get_so_svn_server();
 
-        if (!defined($ooo_svn_server)) {
-            print_error("No OpenOffice.org SVN server defined, please check your configuration file.", 8);
+    my $cwsname = $cws->child();
+    my $url_suffix = $milestone_opt ? ("/tags/$masterws" . "_$milestone") : ('/cws/' . $cwsname);
+    my $linkdir = $milestone_opt ? "src.$milestone" : "src." . $cws->milestone;
+
+    my $workspace = $args_ref->[0];
+    if ( !$onlysolver ) {
+        if ( $switch ) {
+            # check if to be switched working copy exist or bail out
+            if ( ! -d $workspace ) {
+                print_error("Can't open workspace '$workspace': $!", 21);
+            }
+
+            my $so_setup = 0;
+            my $ooo_path;
+            my $so_path;
+            # Determine if we got a three directory (so) setup or a plain (ooo) setup.
+            # This is only needed as long the build system still relies
+            # on having "modules" from different repositories in the same
+            # directory besides each other.
+            if ( -d "$workspace/$masterws/sun" ) {
+                $so_setup = 1;
+                $ooo_path = "$workspace/$masterws/ooo";
+                $so_path = "$workspace/$masterws/sun";
+            }
+            else {
+                $ooo_path = "$workspace";
+            }
+
+            # get the working copy URLs
+            my $ooo_new_url = svn_wc_root($ooo_path) . $url_suffix;
+            my $so_new_url;
+            if ( $so_setup ) {
+                $so_new_url = svn_wc_root($so_path) . $url_suffix;
+            }
+
+            print_message("... switching '$ooo_path' to URL '$ooo_new_url'");
+            svn_switch($ooo_path, $ooo_new_url, $quiet);
+            # switch working copies
+            if ( $so_setup ) {
+                print_message("... switching '$so_path' to URL '$so_new_url'");
+                svn_switch($so_path, $so_new_url, $quiet);
+            }
+
+            if ( $so_setup ) {
+                relink_workspace("$workspace/$masterws/$linkdir");
+            }
         }
+        else {
+            if (!defined($ooo_svn_server)) {
+                print_error("No OpenOffice.org SVN server defined, please check your configuration file.", 8);
+            }
 
-        my $ooo_url = $ooo_svn_server . $url_suffix;
-        svn_checkout($ooo_url, 'ooo');
+            my $ooo_url = $ooo_svn_server . $url_suffix;
+            if ( -e $workspace ) {
+                print_error("File or directory '$workspace' already exists.", 8);
+            }
 
-        if ( defined($so_svn_server) ) {
-            my $so_url = $so_svn_server . $url_suffix;
-            svn_checkout($so_url, 'sun');
-            my $cwd = getcwd();
-            if ( !mkdir("$cwd/src") ) {
-                print_error("Can't create directory '$cwd/src': $!.", 44);
-            }
-            if ( !opendir(DIR, "$cwd/ooo") ) {
-                print_error("Can't open directory '$cwd/sun': $!.", 44);
-            }
-            my @ooo_top_level_dirs = grep { /^\./ } readdir(DIR);
-            close(DIR);
-            if ( !opendir(DIR, "$cwd/sun") ) {
-                print_error("Can't open directory '$cwd/sun': $!.", 44);
-            }
-            my @so_top_level_dirs = grep { /^\./ } readdir(DIR);
-            close(DIR);
-            foreach(@ooo_top_level_dirs) {
-                if ( !symlink("$cwd/ooo/$_", "$cwd/src/$_") ) {
-                    print_error("Can't symlink directory '$cwd/ooo/$_ -> $cwd/src/$_': $!.", 44);
+            # Check if working directory already exists
+
+            if ( defined($so_svn_server) ) {
+                if ( !mkdir($workspace) ) {
+                    print_error("Can't create directory '$workspace': $!.", 8);
                 }
-            }
-            foreach(@so_top_level_dirs) {
-                if ( !symlink("$cwd/sun/$_", "$cwd/src/$_") ) {
-                    print_error("Can't symlink directory '$cwd/sun/$_ -> $cwd/src/$_': $!.", 44);
+                my $work_master = "$workspace/$masterws";
+                if ( !mkdir($work_master) ) {
+                    print_error("Can't create directory '$work_master': $!.", 8);
                 }
+                print_message("... checkout '$ooo_url' to '$work_master/ooo'");
+                svn_checkout($ooo_url, "$work_master/ooo", $quiet);
+                my $so_url = $so_svn_server . $url_suffix;
+                print_message("... checkout '$so_url' to '$work_master/sun'");
+                svn_checkout($so_url, "$work_master/sun", $quiet);
+                my $linkdir = "$work_master/src.$milestone";
+                if ( !mkdir($linkdir) ) {
+                    print_error("Can't create directory '$linkdir': $!.", 8);
+                }
+                relink_workspace($linkdir);
             }
+            else {
+                print_message("... checkout '$ooo_url' to '$workspace'");
+                svn_checkout($ooo_url, $workspace, $quiet);
+            }
+        }
+    }
+
+    if ( defined($platforms) ) {
+        if ( !-d $workspace ) {
+            if ( !mkdir($workspace) ) {
+                print_error("Can't create directory '$workspace': $!.", 8);
+            }
+        }
+        my $solver = defined($so_svn_server) ? "$workspace/$masterws" : "$workspace/solver";
+        if ( !-d $solver ) {
+            if ( !mkdir($solver) ) {
+                print_error("Can't create directory '$solver': $!.", 8);
+            }
+        }
+        foreach(@platforms) {
+            print_message("... copying platform solver '$_'.");
+            update_solver($_, $prebuild_dir, $solver, $milestone);
         }
     }
 }
@@ -1755,8 +2031,9 @@ sub svn_copy
     my $dest = shift;
 
     if ( $debug ) {
-        print STDERR "CWS-DEBUG: ... preparing branch: '$source' -> '$dest'\n";
+        print STDERR "\nCWS-DEBUG: ... preparing branch: '$source' -> '$dest'\n";
     }
+
     my @result = execute_svn_command(0, 'copy', "-m '$comment'", $source, $dest);
     if ( $result[1] =~ /Committed revision (\d+)\./ ) {
         print STDERR ", committed revision $1\n";
@@ -1771,15 +2048,22 @@ sub svn_milestone_revision
     my $milestone_url = shift;
 
     if ( $debug ) {
-        print STDERR "CWS-DEBUG: ... preparing log --stop-on-copy: '$milestone_url'\n";
+        print STDERR "\nCWS-DEBUG: ... preparing log --stop-on-copy: '$milestone_url'\n";
     }
 
     my @result = execute_svn_command(0, 'log', '--stop-on-copy', $milestone_url);
 
-    if ( defined($result[1]) && $result[1] =~ /^r(\d+) | / ) {
-        return $1;
+    # There might be revisions committed to a tag (allowed in subversion).
+    # The lowestmost revision listed in a 'log --stop-on-copy' is the one which
+    # was current when the tag was created
+    my $revision = 0;
+    foreach ( @result ) {
+        if ( /^r(\d+)\s+\|\s+/ ) {
+            $revision = $1;
+        }
     }
-    return 0;
+
+    return $revision;
 }
 
 sub svn_path_exists
@@ -1788,8 +2072,10 @@ sub svn_path_exists
 
     my @result = svn_info($url);
 
-    if ( defined($result[0]) && $result[0] =~ /^Path: / ) {
-        return 1;
+    foreach ( @result ) {
+        if ( /^Path: / ) {
+            return 1;
+        }
     }
     return 0;
 }
@@ -1800,10 +2086,13 @@ sub svn_wc_url
 
     my @result = svn_info($wc_path);
 
-    if ( defined($result[1]) && $result[1] =~ /^URL: (.+)$/ ) {
-        return $1;
+    foreach ( @result ) {
+        if ( /^URL: (.+)$/ ) {
+            return $1;
+        }
     }
-    print_error("Can't retrive svn info from working copy '$wc_path'\n", 23);
+
+    print_error("Can't retrieve svn info from working copy '$wc_path'\n", 23);
 }
 
 sub svn_wc_root
@@ -1812,10 +2101,13 @@ sub svn_wc_root
 
     my @result = svn_info($wc_path);
 
-    if ( defined($result[1]) && $result[1] =~ /^Repository Root: (.+)$/ ) {
-        return $1;
+    foreach ( @result ) {
+        if ( /^Repository Root: (.+)$/ ) {
+            return $1;
+        }
     }
-    print_error("Can't retrive svn info from working copy '$wc_path'\n", 23);
+
+    print_error("Can't retrieve svn info from working copy '$wc_path'\n", 23);
 }
 
 sub svn_info
@@ -1823,7 +2115,7 @@ sub svn_info
     my $url = shift;
 
     if ( $debug ) {
-        print STDERR "CWS-DEBUG: ... preparing info: '$url'\n";
+        print STDERR "\nCWS-DEBUG: ... preparing info: '$url'\n";
     }
 
     my @result = execute_svn_command(0, 'info', '--depth empty', $url);
@@ -1836,7 +2128,7 @@ sub svn_merge
     my $wc  = shift;
 
     if ( $debug ) {
-        print STDERR "CWS-DEBUG: ... preparing merge: '$url -> $wc'\n";
+        print STDERR "\nCWS-DEBUG: ... preparing merge: '$url -> $wc'\n";
     }
 
     my $log_file = "$wc/REBASE.LOG";
@@ -1846,27 +2138,33 @@ sub svn_merge
 
 sub svn_switch
 {
-    my $url = shift;
     my $wc  = shift;
+    my $url = shift;
+    my $quiet = shift;
 
     if ( $debug ) {
-        print STDERR "CWS-DEBUG: ... preparing switch: '$url -> $wc'\n";
+        print STDERR "\nCWS-DEBUG: ... preparing switch: '$url -> $wc'\n";
     }
 
-    my @result = execute_svn_command('print', 'switch', $url, $wc);
+    my $switch = $quiet ? 'switch --quiet' : 'switch';
+
+    my @result = execute_svn_command('print', $switch, $url, $wc);
     return @result;
 }
 
 sub svn_checkout
 {
-    my $url = shift;
-    my $wc  = shift;
+    my $url   = shift;
+    my $wc    = shift;
+    my $quiet = shift;
 
     if ( $debug ) {
-        print STDERR "CWS-DEBUG: ... preparing checkout: '$url -> $wc'\n";
+        print STDERR "\nCWS-DEBUG: ... preparing checkout: '$url -> $wc'\n";
     }
 
-    my @result = execute_svn_command('print', 'checkout', $url, $wc);
+    my $checkout = $quiet ? 'checkout --quiet' : 'checkout';
+
+    my @result = execute_svn_command('print', $checkout, $url, $wc);
     return @result;
 }
 
@@ -1876,11 +2174,11 @@ sub svn_commit
     my $commit_message = shift;
 
     if ( $debug ) {
-        print STDERR "CWS-DEBUG: ... preparing commit: '$wc'\n";
+        print STDERR "\nCWS-DEBUG: ... preparing commit: '$wc'\n";
     }
 
     my $log_file = "$wc/REBASE.LOG";
-    my @result = execute_svn_command($log_file, 'commit', "-m $commit_message", $wc);
+    my @result = execute_svn_command($log_file, 'commit', "-m '$commit_message'", $wc);
     return @result;
 }
 
@@ -1895,7 +2193,7 @@ sub execute_svn_command
     $command = "svn $command $options $args_str";
 
     if ( $debug ) {
-        print STDERR "CWS-DEBUG: ... execute command line: '$command'\n";
+        print STDERR "\nCWS-DEBUG: ... execute command line: '$command'\n";
     }
 
     my @result;

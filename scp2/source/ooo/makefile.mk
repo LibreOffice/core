@@ -8,7 +8,7 @@
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.80 $
+# $Revision: 1.77.16.3 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -36,8 +36,6 @@ PRJNAME=scp2
 TARGET=ooo
 TARGETTYPE=CUI
 
-USE_JAVAVER=TRUE
-
 # --- Settings -----------------------------------------------------
 
 .INCLUDE :  settings.mk
@@ -55,9 +53,7 @@ SCPDEFS+=-DENABLE_CRASHDUMP
 SCPDEFS+=-DBUILD_SPECIAL
 .ENDIF
 
-.IF "$(JAVANUMVER)" >= "000100050000"
 SCPDEFS+=-DINCLUDE_JAVA_ACCESSBRIDGE
-.ENDIF
 
 .IF "$(PROF_EDITION)"!=""
 SCPDEFS+=-DPROF_EDITION

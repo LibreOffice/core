@@ -905,7 +905,7 @@ sub add_one_line_into_file
 
 sub set_revision_in_pkginfo
 {
-    my ($file, $filename, $variables) = @_;
+    my ($file, $filename, $variables, $packagename) = @_;
 
     my $revisionstring = "\,REV\=" . $installer::globals::packagerevision;
 
@@ -944,7 +944,28 @@ sub set_revision_in_pkginfo
     {
         if ( $variables->{$pkgversion} ne "FINALVERSION" )
         {
-            my $versionstring = $variables->{$pkgversion};
+            # In OOo 3.x timeframe, this string is no longer unique for all packages, because of the three layer.
+            # In the string: "3.0.0,REV=9.2008.09.30" only the part "REV=9.2008.09.30" can be unique for all packages
+            # and therefore be set as $pkgversion.
+            # The first part "3.0.0" has to be derived from the
+
+            my $version = $installer::globals::packageversion;
+            if ( $version =~ /^\s*(\d+)\.(\d+)\.(\d+)\s*$/ )
+            {
+                my $major = $1;
+                my $minor = $2;
+                my $micro = $3;
+
+                my $finalmajor = $major;
+                my $finalminor = 0;
+                my $finalmicro = 0;
+
+                if (( $packagename =~ /-ure\s*$/ ) && ( $finalmajor == 1 )) { $finalminor = 4; }
+
+                $version = "$finalmajor.$finalminor.$finalmicro";
+            }
+
+            my $versionstring = "$version,$variables->{$pkgversion}";
 
             for ( my $i = 0; $i <= $#{$file}; $i++ )
             {
@@ -1048,11 +1069,39 @@ sub set_patchlist_in_pkginfo_for_respin
                 $key =~ s/\s*$//;
 
                 if ( ! $allvariables->{$key} ) { installer::exiter::exit_program("ERROR: No Patch info available in zip list file for $key", "set_patchlist_in_pkginfo"); }
-                $newline = $key . "=" . $allvariables->{$key} . "\n";
+                my $value = set_timestamp_in_patchinfo($allvariables->{$key});
+                $newline = $key . "=" . $value . "\n";
+
                 add_one_line_into_file($changefile, $newline, $filename);
             }
         }
     }
+}
+
+########################################################
+# Solaris requires, that the time of patch installation
+# must not be empty.
+# Format: Mon Mar 24 11:20:56 PDT 2008
+# Log file: Tue Apr 29 23:26:19 2008 (04:31 min.)
+# Replace string: ${TIMESTAMP}
+########################################################
+
+sub set_timestamp_in_patchinfo
+{
+    my ($value) = @_;
+
+    my $currenttime = localtime();
+
+    if ( $currenttime =~ /^\s*(.+?)(\d\d\d\d)\s*$/ )
+    {
+        my $start = $1;
+        my $year = $2;
+        $currenttime = $start . "CET " . $year;
+    }
+
+    $value =~ s/\$\{TIMESTAMP\}/$currenttime/;
+
+    return $value;
 }
 
 ########################################################
@@ -1941,7 +1990,7 @@ sub prepare_packages
 
     if ( $installer::globals::issolarispkgbuild )
     {
-        set_revision_in_pkginfo($changefile, $filename, $variableshashref);
+        set_revision_in_pkginfo($changefile, $filename, $variableshashref, $packagename);
         set_maxinst_in_pkginfo($changefile, $filename);
         set_solaris_parameter_in_pkginfo($changefile, $filename, $variableshashref);
         if ( $installer::globals::issolarisx86build ) { fix_architecture_setting($changefile); }
@@ -2635,6 +2684,7 @@ sub copy_childproject_files
 
     for ( my $i = 0; $i <= $#{$allmodules}; $i++ )
     {
+        my $localdestdir = $destdir;
         my $onemodule = ${$allmodules}[$i];
         my $packagename = $onemodule->{'PackageName'};
         my $sourcefile = "";
@@ -2649,13 +2699,18 @@ sub copy_childproject_files
         }
 
         if ( ! -f $sourcefile ) { installer::exiter::exit_program("ERROR: File not found: $sourcefile ($packagename) !", "copy_childproject_files"); }
-        installer::systemactions::copy_one_file($sourcefile, $destdir);
+        if ( $onemodule->{'Subdir'} )
+        {
+            $localdestdir = $localdestdir . $installer::globals::separator . $onemodule->{'Subdir'};
+            if ( ! -d $localdestdir ) { installer::systemactions::create_directory($localdestdir); }
+        }
+        installer::systemactions::copy_one_file($sourcefile, $localdestdir);
         # Solaris: unpacking tar.gz files and setting new packagename
-        if ( $installer::globals::issolarispkgbuild ) { $packagename = unpack_tar_gz_file($packagename, $destdir); }
+        if ( $installer::globals::issolarispkgbuild ) { $packagename = unpack_tar_gz_file($packagename, $localdestdir); }
 
         if (( $installer::globals::isxpdplatform ) && ( $allvariables->{'XPDINSTALLER'} ))
         {
-            installer::xpdinstaller::create_xpd_file_for_childproject($onemodule, $destdir, $packagename, $allvariableshashref, $modulesarrayref);
+            installer::xpdinstaller::create_xpd_file_for_childproject($onemodule, $localdestdir, $packagename, $allvariableshashref, $modulesarrayref);
         }
     }
 
@@ -3030,13 +3085,13 @@ sub finalize_linux_patch
     my $infoline = "Found  script file $scriptfilename: $$scriptref \n";
     push( @installer::globals::logfileinfo, $infoline);
 
-#   # Collecting all RPMs in the patch directory
-#
-#   my $fileextension = "rpm";
-#   my $rpmfiles = installer::systemactions::find_file_with_file_extension($fileextension, $newepmdir);
-#   if ( ! ( $#{$rpmfiles} > -1 )) { installer::exiter::exit_program("ERROR: Could not find rpm in directory $newepmdir!", "finalize_linux_patch"); }
-#   for ( my $i = 0; $i <= $#{$rpmfiles}; $i++ ) { installer::pathanalyzer::make_absolute_filename_to_relative_filename(\${$rpmfiles}[$i]); }
-#
+    # Collecting all RPMs in the patch directory
+
+    my $fileextension = "rpm";
+    my $rpmfiles = installer::systemactions::find_file_with_file_extension($fileextension, $newepmdir);
+    if ( ! ( $#{$rpmfiles} > -1 )) { installer::exiter::exit_program("ERROR: Could not find rpm in directory $newepmdir!", "finalize_linux_patch"); }
+    for ( my $i = 0; $i <= $#{$rpmfiles}; $i++ ) { installer::pathanalyzer::make_absolute_filename_to_relative_filename(\${$rpmfiles}[$i]); }
+
 #   my $installline = "";
 #
 #   for ( my $i = 0; $i <= $#{$rpmfiles}; $i++ )
@@ -3051,8 +3106,29 @@ sub finalize_linux_patch
 #       ${$scriptfile}[$j] =~ s/INSTALLLINES/$installline/;
 #   }
 
-    # Replacing the productname
+    # Searching packagename containing -core01
+    my $found_package = 0;
+    my $searchpackagename = "";
+    for ( my $i = 0; $i <= $#{$rpmfiles}; $i++ )
+    {
+        if ( ${$rpmfiles}[$i] =~ /-core01-/ )
+        {
+            $searchpackagename = ${$rpmfiles}[$i];
+            $found_package = 1;
+            if ( $searchpackagename =~ /^\s*(.*?-core01)-.*/ ) { $searchpackagename = $1; }
+            last;
+        }
+    }
 
+    if ( ! $found_package ) { installer::exiter::exit_program("ERROR: No package containing \"-core01\" found in directory \"$newepmdir\"", "finalize_linux_patch"); }
+
+    # Replacing the searchpackagename
+    for ( my $j = 0; $j <= $#{$scriptfile}; $j++ ) { ${$scriptfile}[$j] =~ s/SEARCHPACKAGENAMEPLACEHOLDER/$searchpackagename/; }
+
+    # Setting the PRODUCTDIRECTORYNAME to $installer::globals::officedirhostname
+    for ( my $j = 0; $j <= $#{$scriptfile}; $j++ ) { ${$scriptfile}[$j] =~ s/PRODUCTDIRECTORYNAME/$installer::globals::officedirhostname/; }
+
+    # Replacing the productname
     my $productname = $allvariables->{'PRODUCTNAME'};
     $productname = lc($productname);
     $productname =~ s/ /_/g;    # abc office -> abc_office

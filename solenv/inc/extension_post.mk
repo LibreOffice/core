@@ -71,6 +71,9 @@ $(COMPONENT_LIBRARIES) : $(DLLDEST)$/$$(@:f)
     @@-$(MKDIRHIER) $(@:d)
     $(COPY) $< $@
 .IF "$(OS)$(CPU)"=="WNTI"
+.IF "$(COM)"=="GCC"
+   $(GNUCOPY) $(SOLARBINDIR)$/mingwm10.dll $(EXTENSIONDIR)
+.ELSE
 .IF "$(PACKMS)"!=""
 .IF "$(CCNUMVER)" <= "001399999999"
     $(GNUCOPY) $(PACKMS)$/msvcr71.dll $(EXTENSIONDIR)
@@ -106,6 +109,7 @@ $(COMPONENT_LIBRARIES) : $(DLLDEST)$/$$(@:f)
 .ENDIF			# "$(CCNUMVER)" <= "001499999999"
 .ENDIF			# "$(CCNUMVER)" <= "001399999999"
 .ENDIF          # "$(PACKMS)"!=""
+.ENDIF	#"$(COM)"=="GCC" 
 .ENDIF 			# "$(OS)$(CPU)"=="WNTI"
 .ENDIF			# "$(COMPONENT_LIBRARIES)"!=""
 

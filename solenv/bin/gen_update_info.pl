@@ -39,7 +39,7 @@ eval 'exec perl -wS $0 ${1+"$@"}'
 # main
 #
 
-my($product, $buildid, $id, $os, $arch, $lstfile, $languages, $productname, $productversion, $productextension);
+my($product, $buildid, $id, $os, $arch, $lstfile, $languages, $productname, $productversion, $productedition);
 
 while ($_ = $ARGV[0], /^-/) {
     shift;
@@ -79,6 +79,21 @@ if( $^O =~ /cygwin/i ) {
 }
 
 # read openoffice.lst
+### may be hierarchical ...
+if(open(LSTFILE, "sed -n \"/^$product:/,/^}\$/ p\" $lstfile |")) {
+    while (<LSTFILE>) {
+        if ( /^$product\s?:\s?(\w+)$/ ) {
+            $product = $1;
+        }
+        if( /\bPRODUCTEDITION / ) {
+            chomp;
+            s/.*PRODUCTEDITION //;
+            $productedition = $_;
+        }
+    }
+}
+close(LSTFILE);
+
 unless(open(LSTFILE, "sed -n \"/^$product\$/,/^}\$/ p\" $lstfile |")) {
     print STDERR "Can't open $lstfile file: $!\n";
     return;
@@ -95,10 +110,10 @@ while (<LSTFILE>) {
         s/.*PRODUCTVERSION //;
         $productversion = $_;
     }
-    if( /\bPRODUCTEXTENSION / ) {
+    if( /\bPRODUCTEDITION / ) {
         chomp;
-        s/.*PRODUCTEXTENSION //;
-        $productextension = $_;
+        s/.*PRODUCTEDITION //;
+        $productedition = $_;
     }
 }
 
@@ -124,10 +139,10 @@ while (<SOURCE>) {
    s/buildid></buildid>$buildid</;
    s/os></os>$os</;
    s/arch></arch>$arch</;
-   if ( $productextension ) {
-       s/extension></extension>$productextension</;
+   if ( $productedition ) {
+       s/edition></edition>$productedition</;
    } else {
-       next if ( /extension></ );
+       next if ( /edition></ );
    }
    s/version></version>$productversion</;
    s/name></name>$productname</;

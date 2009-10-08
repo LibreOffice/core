@@ -70,7 +70,6 @@ Module gid_Module_Root_Brand
              gid_Brand_File_Bin_Crashreport_Script,
              gid_Brand_File_Bin_Crashreport_Com,
              gid_Brand_File_Bin_Python,
-             gid_Brand_File_Bin_Setofficelang_C01,
              gid_Brand_File_Bin_Soffice,
              gid_Brand_File_Bin_Soffice_Bin,
              gid_Brand_File_Bin_Soffice_Bin_Manifest,
@@ -79,6 +78,8 @@ Module gid_Module_Root_Brand
              gid_Brand_File_Bin_Unopkgcom,
              gid_Brand_File_Bin_Unopkgexe,
              gid_Brand_File_Bin_Unopkg,
+             gid_Brand_File_Bin_Msvcr71,
+             gid_Brand_File_Bin_Libxml2,
              gid_Brand_File_Bmp_IntroAbout,
              gid_Brand_File_C05_Zip_Faq,
              gid_Brand_File_C05_Zip_Register,
@@ -104,7 +105,6 @@ Module gid_Module_Root_Brand
              gid_Brand_File_Registry_Spool_Oo_Office_Ui_Brand_Xcu,
              gid_Brand_File_Registry_Spool_Oo_Office_Writer_directcursor_Xcu_C01,
              gid_Brand_File_Registry_Spool_Oo_Office_Writer_defaultfontarial_Xcu_C01,
-             gid_Brand_File_Script_Setofficelang_C01,
              gid_Brand_File_Script_Unopkg,
              gid_Brand_File_Share_Registry_Modules_Oo_Office_Jobs_Registration,
              gid_Brand_File_Share_Xdg_Base,
@@ -140,6 +140,7 @@ Module gid_Module_Langpack_Brand_Template
             gid_Brand_Dir_Share_Readme);
     Files = (gid_Brand_File_Res_Iso,
              gid_Brand_File_Res_Ooo,
+             gid_Brand_File_Entitlement,
              gid_Brand_File_Help_C05_Sdatabase_Zip,
              gid_Brand_File_Help_C05_Scalc_Zip,
              gid_Brand_File_Help_C05_Sdraw_Zip,
@@ -329,7 +330,7 @@ File gid_Brand_File_BasisLink
    TXT_FILE_BODY;
    Dir = gid_Dir_Brand_Root;
    Name = "basis-link";
-   Styles = (PACKED, SCPZIP_REPLACE, ONLY_INSTALLED_PRODUCT);
+   Styles = (PACKED);
 End
 #elif defined MACOSX
 Directory gid_Brand_Dir_BasisLink
@@ -481,6 +482,33 @@ File gid_Brand_File_Bin_Unopkg
     Styles = (PACKED);
     Name = "unopkg.bin";
 End
+
+#if defined WNT && defined M1310
+File gid_Brand_File_Bin_Msvcr71
+    TXT_FILE_BODY;
+    Dir = gid_Brand_Dir_Program;
+    Name = SCP2_URE_DL_NORMAL("msvcr71" SCP2_STDLP_DEBUG);
+    Styles = (PACKED);
+End
+#endif
+
+// Due to Windows DLL search order, OOo executables might pick up a libxml2 DLL
+// from a Windows system directory instead of the one from the URE; to avoid
+// problems, as a HACK, for now a copy of the URE libxml2 DLL is placed next to
+// the OOo executables (where it takes precedence even over DLLs from the
+// Windows system directory):
+#if defined WNT && !defined SYSTEM_LIBXML
+File gid_Brand_File_Bin_Libxml2
+    TXT_FILE_BODY;
+    Dir = gid_Brand_Dir_Program;
+#if defined _gcc3
+    Name = SCP2_URE_DL_NORMAL("libxml2-2");
+#else
+    Name = SCP2_URE_DL_NORMAL("libxml2");
+#endif
+    Styles = (PACKED);
+End
+#endif
 
 #if !defined WITHOUT_MOZILLA && (!defined UNX || defined ENABLE_GTK)
 File gid_Brand_File_Lib_Npsoplugin

@@ -217,25 +217,6 @@ WindowsCustomAction gid_Customaction_Check_Install_Directory
 	Assignment3 = ("ControlEvent", "CustomSetup", "Next", "DoAction", "CheckInstallDirectory", "Not Installed", "2");
 End
 
-WindowsCustomAction gid_Customaction_Create_Layerlinks
-	Name = "CreateLayerLinks";
-	Typ = "65";
-	Source = "shlxtmsi.dll";
-	Target = "CreateLayerLinks";
-	Inbinarytable = 1;
-	Assignment1 = ("InstallExecuteSequence", "Not REMOVE=\"ALL\"", "behind_InstallFinalize");
-	Assignment2 = ("AdminExecuteSequence", "", "behind_SetUreInstallLocation");
-End
-
-WindowsCustomAction gid_Customaction_Remove_Layerlinks
-	Name = "RemoveLayerLinks";
-	Typ = "65";
-	Source = "shlxtmsi.dll";
-	Target = "RemoveLayerLinks";
-	Inbinarytable = 1;
-	Assignment1 = ("InstallExecuteSequence", "REMOVE=\"ALL\"", "behind_CreateLayerLinks");
-End
-
 WindowsCustomAction gid_Customaction_Dotnetcheck
 	Name = "DotNetCheck";
 	Typ = "321";

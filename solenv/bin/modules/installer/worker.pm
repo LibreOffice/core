@@ -8,7 +8,7 @@
 #
 # $RCSfile: worker.pm,v $
 #
-# $Revision: 1.65 $
+# $Revision: 1.65.56.1 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -459,6 +459,7 @@ sub analyze_and_save_logfile
         {
             if ( $installdir =~ /_download_inprogress/ ) { $destdir = installer::systemactions::rename_string_in_directory($installdir, "_download_inprogress", "_download"); }
             elsif ( $installdir =~ /_jds_inprogress/ ) { $destdir = installer::systemactions::rename_string_in_directory($installdir, "_jds_inprogress", "_jds"); }
+            elsif ( $installdir =~ /_msp_inprogress/ ) { $destdir = installer::systemactions::rename_string_in_directory($installdir, "_msp_inprogress", "_msp"); }
             else { $destdir = installer::systemactions::rename_string_in_directory($installdir, "_inprogress", "_packed"); }
             installer::mail::send_success_mail($allsettingsarrayref, $languagestringref, $destdir);
         }
@@ -1511,6 +1512,7 @@ sub shift_section_to_end
     my @patchfile = ();
     my @lastsection = ();
     my $lastsection = "program";
+    my $notlastsection = "Basis\\program";
     my $record = 0;
 
     for ( my $i = 0; $i <= $#{$patchfilelist}; $i++ )
@@ -1519,7 +1521,7 @@ sub shift_section_to_end
 
         if (( $record ) && ( $line =~ /^\s*\[/ )) { $record = 0; }
 
-        if ( $line =~ /^\s*\[\Q$lastsection\E\\\]\s*$/ ) { $record = 1; }
+        if (( $line =~ /^\s*\[\Q$lastsection\E\\\]\s*$/ ) && ( ! ( $line =~ /\Q$notlastsection\E\\\]\s*$/ ))) { $record = 1; }
 
         if ( $record ) { push(@lastsection, $line); }
         else { push(@patchfile, $line); }
@@ -1553,14 +1555,27 @@ sub shift_file_to_end
     my $lastfileline = "";
     my $foundfile = 0;
 
+    # Only searching this file in the last section
+    my $lastsectionname = "";
+
+    for ( my $i = 0; $i <= $#{$patchfilelist}; $i++ )
+    {
+        my $line = ${$patchfilelist}[$i];
+        if ( $line =~ /^\s*\[(.*?)\]\s*$/ ) { $lastsectionname = $1; }
+    }
+
+    my $record = 0;
     for ( my $i = 0; $i <= $#{$patchfilelist}; $i++ )
     {
         my $line = ${$patchfilelist}[$i];
 
-        if ( $line =~ /^\s*\"\Q$lastfilename\E\"\=/ )
+        if ( $line =~ /^\s*\[\Q$lastsectionname\E\]\s*$/ ) { $record = 1; }
+
+        if (( $line =~ /^\s*\"\Q$lastfilename\E\"\=/ ) && ( $record ))
         {
             $lastfileline = $line;
             $foundfile = 1;
+            $record = 0;
             next;
         }
 

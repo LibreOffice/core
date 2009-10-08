@@ -3,7 +3,7 @@ rem @echo off
 setlocal
 
 SET JARFOLDER=%SOLARVERSION%\%INPATH%\bin%UPDMINOREXT%
-SET APICLASSPATH=%JARFOLDER%\OOoRunner.jar;%JARFOLDER%\ridl.jar;%JARFOLDER%\unoil.jar;%JARFOLDER%\jurt.jar;%JARFOLDER%\juh.jar;%JARFOLDER%\java_uno.jar
+SET APICLASSPATH=%JARFOLDER%\OOoRunner.jar;%JARFOLDER%\ridl.jar;%JARFOLDER%\unoil.jar;%JARFOLDER%\jurt.jar;%JARFOLDER%\juh.jar;%JARFOLDER%\java_uno.jar;\\unoapi\export\unoapi\bin\mysql.jar
 
 IFF "%JAVAI%" != "" THEN
     SET JAVABIN=%JAVAI%
@@ -14,7 +14,11 @@ ELSE
    exit 1
 ENDIFF
 
-SET PARAM=-cs pipe,name=%USERNAME%
+SET PARAM=-cs pipe,name=%USERNAME% -SRC_ROOT %SRC_ROOT%
+
+IFF "%RUNNERPROPS%" != "" THEN
+    SET PARAM=%PARAM% -ini %RUNNERPROPS%
+ENDIFF
 
 set COMMAND=%JAVABIN% -Xmx120m -cp %APICLASSPATH% org.openoffice.Runner %PARAM% %&
 

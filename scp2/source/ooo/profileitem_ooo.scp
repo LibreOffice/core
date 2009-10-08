@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: profileitem_ooo.scp,v $
- * $Revision: 1.68 $
+ * $Revision: 1.67.2.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -272,7 +272,7 @@ ProfileItem gid_Profileitem_Configmgr_Strata
     Section   = "Bootstrap";
     Order = 25;
     Key  = "CFG_Strata";
-    Value  = "${CFG_LocalDataSvc}:$CFG_DefaultLayerUrl;${CFG_LocalModuleDataSvc}:$CFG_ModuleLayerUrl;${CFG_LocalResDataSvc}:$CFG_DefaultLayerUrl;?${CFG_LocalDataSvc}:$CFG_BrandLayerUrl;?${CFG_LocalModuleDataSvc}:$CFG_BrandLayerModulesUrl;${CFG_LocalDataSvc}:$CFG_UnoSharedPackages;?com.sun.star.comp.configuration.backend.SystemIntegration:;?com.sun.star.comp.configuration.backend.PolicyLayerBackend:;${CFG_LocalDataSvc}:$CFG_UnoUserPackages;${CFG_LocalDataSvc}:$CFG_UserLayerUrl;";
+    Value  = "${CFG_LocalDataSvc}:$CFG_DefaultLayerUrl;${CFG_LocalModuleDataSvc}:$CFG_ModuleLayerUrl;${CFG_LocalResDataSvc}:$CFG_DefaultLayerUrl;?${CFG_LocalDataSvc}:$CFG_BrandLayerUrl;?${CFG_LocalModuleDataSvc}:$CFG_BrandLayerModulesUrl;${CFG_LocalDataSvc}:$CFG_UnoSharedPackages;?com.sun.star.comp.configuration.backend.SystemIntegration:;${CFG_LocalDataSvc}:$CFG_UnoUserPackages;${CFG_LocalDataSvc}:$CFG_UserLayerUrl;";
 End
 
 ProfileItem gid_Profileitem_Configmgr_Ldapmappingurl

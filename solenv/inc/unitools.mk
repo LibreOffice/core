@@ -231,3 +231,11 @@ ADJUSTVISIBILITY*:=adjustvisibility
 CONVERT*:=$(PERL) $(SOLARENV)$/bin$/leconvert.pl
 EXECTEST := $(PERL) -w $(SOLARENV)$/bin$/exectest.pl
 GCCINSTLIB:=$(PERL) -w $(SOLARENV)$/bin$/gccinstlib.pl
+
+# The dmake $(PWD) variable and the tcsh pwd command both apparantly produce
+# paths with symlinks resolved, while the bash pwd command by default produces
+# paths with unresolved symlinks, so that computing PATH_IN_MODULE in
+# settings.mk would fail without the -P flag to the bash pwd command:
+.IF "$(USE_SHELL)" == "bash"
+PWDFLAGS = -P
+.ENDIF

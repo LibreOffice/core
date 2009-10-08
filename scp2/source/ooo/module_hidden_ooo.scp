@@ -49,8 +49,6 @@ Module gid_Module_Root_Files_2
 	gid_File_Bin_Senddoc,
 	gid_File_Bin_Gengal,
 	gid_File_Script_Gengal,
-	gid_File_Bin_Setofficelang,
-	gid_File_Bin_Setofficelang_C01,
 	gid_File_Bin_Spadmin_Bin,
 	gid_File_Bin_Uri_Encode,
 	gid_File_Exe_Msfontextract,
@@ -58,8 +56,6 @@ Module gid_Module_Root_Files_2
 	gid_File_Lib_Npsoplugin,
         gid_File_Lib_Soffice,
         gid_File_Lib_Unopkgapp,
-	gid_File_Script_Setofficelang,
-	gid_File_Script_Setofficelang_C01,
 	gid_File_Server_Bonobo_Presentationstarter,
 	gid_File_Txt_Pagein_Common,
 	gid_File_Txt_Pagein_Calc,
@@ -99,7 +95,6 @@ Module gid_Module_Root_Files_3
 	gid_File_Jar_Hsqldb_Sdbc,
 	gid_File_Jar_Accessbridge,
 	gid_File_Jar_Js,
-	gid_File_Jar_Jut,
 	gid_File_Jar_Officebean,
 	gid_File_Jar_Report,
 	gid_File_Jar_Table,
@@ -928,6 +923,7 @@ Module gid_Module_Root_Userland
     InstallOrder = "5";
 	Name = "gid_Module_Root_Userland";
 	Description = "gid_Module_Root_Userland";
+	Subdir = "userland";
     Styles = (HIDDEN_ROOT,USERLANDMODULE,USERINSTALLONLY,NOTRELOCATABLE,XPD_ONLY);
     PackageName = "${USERLANDPACKAGENAME}";
 End

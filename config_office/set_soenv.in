@@ -62,7 +62,7 @@ my ( $CALL_CDECL, $COMMON_OUTDIR, $BMP_WRITES_FLAG,
 my ( $BIG_SVX, $COM, $ARCH, $CPU, $CPUNAME, $CVER, $GLIBC, $GUI, $GUIBASE,
       $GVER, $OS, $OSVERSION, $OUTPATH, $INPATH, $PATH_SEPERATOR,
       $DYNAMIC_CRT, $SET_EXCEPTIONS, $use_shl_versions, $CDPATHx, $JRELIBDIR,
-      $JREEXTRALIBDIR, $JRETOOLKITDIR, $JRETHREADDIR, $EXCEPTIONS,
+      $JREEXTRALIBDIR, $JRETOOLKITDIR, $JRETHREADDIR,
       $FLIPCMD );
 #
 #-------------------------------------------
@@ -144,7 +144,6 @@ if ( $MINGW eq "yes" )
 else
 { $CC             = PathFormat('@CC@');           # C compiler
   $CXX            = PathFormat('@CXX@'); }        # C++ compiler
-$EXCEPTIONS     = '@EXCEPTIONS@';   # Exception handling type
 $MOZILLA_VERSION	= '@MOZILLA_VERSION@'; # mozilla version to use to build mozilla
 $MOZILLA_TOOLKIT	= '@MOZILLA_TOOLKIT@'; # GUI toolkit to use to build mozilla
 $FLIPCMD        = "";               # Flip '/' to '\' wrapper (only for winnt)
@@ -1758,75 +1757,6 @@ ToFile( "KDE_LIBS",          "@KDE_LIBS@",         "e" );
 ToFile( "ENABLE_KAB",        "@ENABLE_KAB@",       "e" );
 ToFile( "MOC",               "@MOC@",              "e" );
 ToFile( "PSPRINT",           "TRUE",             "e" );
-# [ed] 5/14/02 If we're building Aqua graphics, insert a C macro to indicate this.
-# There may be a better way to do this, like splitting unxmacxp into two, but
-# hopefully this hack will work for now...
-
-if ($platform =~ m/darwin/)
-{
-    my $macosxCdefs="";
-    
-    if( ! -x "/usr/bin/sw_vers" ) {
-        
-        ToFile( "BUILD_OS_DARWIN", "TRUE", "e");
-
-        $macosxCdefs.=" -DBUILD_OS_DARWIN";
-        open DARVER, "/usr/bin/uname -v |";
-        my $s=<DARVER>;
-        chomp $s;
-        if ( $s =~ /(\d+?)\.(\d+?)(.*?)/)
-        {
-            ToFile("BUILD_OS_MAJOR", $1, "e");
-            $macosxCdefs.=" -DBUILD_OS_MAJOR=" . $1;
-
-            ToFile("BUILD_OS_MINOR", $2, "e");
-            $macosxCdefs.=" -DBUILD_OS_MINOR=" . $2;
-            
-            $s=$3;
-            if ( $s =~ /(\d+?)/) {
-                ToFile("BUILD_OS_REV", $1, "e");
-                $macosxCdefs.=" -DBUILD_OS_REV=" . $1;
-            } else {
-                ToFile("BUILD_OS_REV", "0", "e");
-                $macosxCdefs.=" -DBUILD_OS_REV=0";
-            }
-        }
-        close DARVER;
-    }
-    else
-    {
-        $macosxCdefs.=" -DBUILD_OS_APPLEOSX";
-        ToFile("BUILD_OS_APPLEOSX", "TRUE", "e");
-        
-        open OSXVER, "/usr/bin/sw_vers -productVersion |";
-        while (<OSXVER>) {
-            if (/^\s*(\d+?)\.(\d+?)(\.(\d+?))*\s*$/) {
-                ToFile("BUILD_OS_MAJOR", $1, "e");
-                $macosxCdefs.=" -DBUILD_OS_MAJOR=" . $1;
-
-                ToFile("BUILD_OS_MINOR", $2, "e");
-                $macosxCdefs.=" -DBUILD_OS_MINOR=" . $2;
-
-                if($3 ne "") {
-                    ToFile("BUILD_OS_REV", $4, "e");
-                    $macosxCdefs.=" -DBUILD_OS_REV=" . $4;
-                } else {
-                    ToFile("BUILD_OS_REV", 0, "e");
-                    $macosxCdefs.=" -DBUILD_OS_REV=0";
-                }
-                last;
-            }
-        }
-        close(OSXVER);
-    }
-    
-    if ( $GUIBASE eq "aqua" ) {
-        $macosxCdefs.=" -DQUARTZ";
-    }
-    
-    ToFile( "ENVCDEFS", $macosxCdefs, "e");
-}
-
 ToFile( "MKDEPENDSOLVER",    "TRUE",             "e" );
 #
 # Writing the platform dependent constant values to file.
@@ -1844,7 +1774,6 @@ ToFile( "GLIBC",             $GLIBC,             "e" );
 ToFile( "GUIBASE",           $GUIBASE,           "e" );
 ToFile( "GVER",              $GVER,              "e" );
 ToFile( "OS",                $OS,                "e" );
-ToFile( "EXCEPTIONS",        $EXCEPTIONS,        "e" );
 ToFile( "OSVERSION",         $OSVERSION,         "e" );
 ToFile( "PTHREAD_CFLAGS",    "@PTHREAD_CFLAGS@", "e" );
 ToFile( "PTHREAD_LIBS",      "@PTHREAD_LIBS@",   "e" );
@@ -2016,6 +1945,9 @@ ToFile( "SYSTEM_GENCMN",     "@SYSTEM_GENCMN@",    "e" );
 ToFile( "SYSTEM_JPEG",       "@SYSTEM_JPEG@",      "e" );
 ToFile( "FREETYPE_CFLAGS",   "@FREETYPE_CFLAGS@",  "e" );
 ToFile( "FREETYPE_LIBS",     "@FREETYPE_LIBS@",    "e" );
+ToFile( "SYSTEM_POPPLER",    "@SYSTEM_POPPLER@",   "e" );
+ToFile( "POPPLER_CFLAGS",    "@POPPLER_CFLAGS@",   "e" );
+ToFile( "POPPLER_LIBS",      "@POPPLER_LIBS@",     "e" );
 ToFile( "SYSTEM_CAIRO",      "@SYSTEM_CAIRO@",     "e" );
 ToFile( "CAIRO_CFLAGS",      "@CAIRO_CFLAGS@",     "e" );
 ToFile( "CAIRO_LIBS",        "@CAIRO_LIBS@",       "e" );

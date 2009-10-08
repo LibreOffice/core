@@ -345,6 +345,9 @@ AC_ARG_WITH(system-python,
 AC_ARG_WITH(system-icu,
 [  --with-system-icu       Use icu already on system
 ],,)
+AC_ARG_WITH(system-poppler,
+[  --with-system-poppler   Use poppler already on system
+],,)
 AC_ARG_WITH(system-db,
 [  --with-system-db        Use berkeley db already on system
 ],,)
@@ -2162,27 +2165,6 @@ if test "$_os" = "OSF1"; then
       AC_MSG_RESULT([checked])
    fi
 fi
-
-dnl *************************************************************
-dnl Testing for exception handling - dwarf2 or sjlj exceptions...
-dnl *************************************************************
-AC_MSG_CHECKING([exception type])
-AC_LANG_PUSH([C++])
-AC_CACHE_VAL(exceptions_type, [AC_TRY_LINK(
-	[#include <iostream>
-
-extern "C" void __sjthrow(void) __attribute__ ((__noreturn__));
-
-	],
-	[__sjthrow() ],
-	[exceptions_type="sjlj"],
-	[exceptions_type="dwarf2"])
-])
-
-AC_MSG_RESULT($exceptions_type)
-AC_LANG_POP([C++])
-EXCEPTIONS="$exceptions_type"
-AC_SUBST(EXCEPTIONS)
 
 dnl **************************************************************
 dnl Testing for required  Solaris and SunStudio compiler patches...
@@ -4261,8 +4243,6 @@ dnl see if we have the AppKit framework for building with Quartz graphics.
 if test  "$_os" = "Darwin"  -a  "x$with_x" != "xyes"  -a  "x$x_includes" = "xNONE"  -a  "x$x_libraries" = "xNONE"; then
    dnl System is either Mac OS X or pure Darwin, and --with-x was not specified
    dnl Default to Aqua graphics if available.
-   AC_MSG_WARN([building without-x is not fully supported yet. Specify --with-x or be ready to face build problems])
-   echo "building without-x is not fully supported yet. Specify --with-x or be ready to face build problems" >>warn
    AC_MSG_CHECKING([for /System/Library/Frameworks/AppKit.framework])
    if test -d "/System/Library/Frameworks/AppKit.framework/"; then
       AC_MSG_RESULT([yes])
@@ -5340,13 +5320,31 @@ fi
 AC_MSG_CHECKING([whether to build the PDF Import extension])
 if test -n "$enable_pdfimport" -a "$enable_pdfimport" != "no"; then
   AC_MSG_RESULT([yes])
-  BUILD_TYPE="$BUILD_TYPE XPDF"
   ENABLE_PDFIMPORT=YES
+
+  dnl ===================================================================
+  dnl Check for system poppler
+  dnl ===================================================================
+  AC_MSG_CHECKING([which pdf backend to use])
+  if test -n "$with_system_poppler" -o -n "$with_system_libs" && \
+  	test "$with_system_poppler" != "no"; then
+      AC_MSG_RESULT([external])
+      SYSTEM_POPPLER=YES
+      PKG_CHECK_MODULES( POPPLER, poppler >= 0.8.0 )
+  else
+      AC_MSG_RESULT([internal])
+      SYSTEM_POPPLER=NO
+      BUILD_TYPE="$BUILD_TYPE XPDF"
+  fi
+
 else
   AC_MSG_RESULT([no])
   ENABLE_PDFIMPORT=NO
 fi
 AC_SUBST(ENABLE_PDFIMPORT)
+AC_SUBST(SYSTEM_POPPLER)
+AC_SUBST(POPPLER_CFLAGS)
+AC_SUBST(POPPLER_LIBS)
 
 AC_MSG_CHECKING([whether to build the MediaWiki Editor extension])
 if test -n "$enable_mediawiki" -a "$enable_mediawiki" != "no" && test "$WITH_JAVA" != "no"; then

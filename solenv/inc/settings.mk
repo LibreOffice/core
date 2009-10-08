@@ -579,12 +579,13 @@ ROUT=$(OUTPATH).tlk
 .IF "$(PRJ)"!="."
 .IF "$(GUI)"=="WNT"
 .IF "$(USE_SHELL)"!="4nt"
-PATH_IN_MODULE:=$(subst,$(normpath $(shell @+cd $(PRJ) && pwd))$/, $(PWD))
+PATH_IN_MODULE:=\
+    $(subst,$(normpath $(shell @+cd $(PRJ) && pwd $(PWDFLAGS)))$/, $(PWD))
 .ELSE			# "$(USE_SHELL)"!="4nt"
 PATH_IN_MODULE:=$(subst,$(shell @+cd $(PRJ) && echo %_cwd)$/, $(PWD))
 .ENDIF			# "$(USE_SHELL)"!="4nt"
 .ELSE			# "$(GUI)"=="WNT"
-PATH_IN_MODULE:=$(subst,$(shell @+cd $(PRJ) && pwd)$/, $(PWD))
+PATH_IN_MODULE:=$(subst,$(shell @+cd $(PRJ) && pwd $(PWDFLAGS))$/, $(PWD))
 .ENDIF			# "$(GUI)"=="WNT"
 .ELSE			# "$(PRJ)"!="."
 PATH_IN_MODULE:=

@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: file_library_ooo.scp,v $
- * $Revision: 1.308 $
+ * $Revision: 1.303.16.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -694,7 +694,7 @@ File gid_File_Lib_Icudata
   #ifdef UNX
     Name = STRING(CONCAT7(libicudata,UNXSUFFIX,.,ICU_MAJOR,ICU_MINOR,.,ICU_MICRO));
   #else
-    Name = STRING(CONCAT5(icudt,ICU_MAJOR,ICU_MINOR,l,.dll));
+    Name = STRING(CONCAT4(icudt,ICU_MAJOR,ICU_MINOR,.dll));
   #endif
     Dir = gid_Dir_Program;
     Styles = (PACKED);
@@ -905,7 +905,7 @@ STD_UNO_LIB_FILE(gid_File_Lib_Writerfilter,writerfilter)
 
 File gid_File_Lib_Mingwm10
     BIN_FILE_BODY;
-    Styles = (PACKED, PATCH);
+    Styles = (PACKED);
     Dir = gid_Dir_Program;
     Name = "mingwm10.dll";
 End
@@ -1093,6 +1093,16 @@ End
 #endif
 #endif
 #endif
+
+#if defined(QUARTZ)
+File gid_File_Lib_AppleRemote
+    Name = LIBNAME(AppleRemote);
+    TXT_FILE_BODY;
+    Styles = (PACKED);
+    Dir = gid_Dir_Program;
+End
+#endif
+
 #if defined(QUARTZ)
 File gid_File_Lib_Basebmp
     Name = LIBNAME(basebmp);
@@ -1672,8 +1682,10 @@ End
 
 STD_UNO_LIB_FILE( gid_File_Lib_Oooimprovecore , oooimprovecore)
 
-#if defined WNT && (defined M1400 || defined M1500) && \
-    !(defined SYSTEM_MOZILLA || defined WITHOUT_MOZILLA)
+#if defined WNT && \
+    (defined M1310 || \
+     ((defined M1400 || defined M1500) && \
+      !(defined SYSTEM_MOZILLA || defined WITHOUT_MOZILLA)))
 File gid_File_Moz_Msvcp71
     TXT_FILE_BODY;
     Dir = gid_Dir_Program;
@@ -1720,7 +1732,7 @@ File gid_File_Lib_Rasqal
     #endif
   #else
    #ifdef _gcc3
-    Name = "librasqal-1.dll";
+    Name = "librasqal-0.dll";
    #else
     Name = "rasqal.dll";
    #endif
@@ -1739,7 +1751,7 @@ File gid_File_Lib_Rdf
     #endif
   #else
    #ifdef _gcc3
-    Name = "librdf-1.dll";
+    Name = "librdf-0.dll";
    #else
     Name = "librdf.dll";
    #endif

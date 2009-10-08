@@ -1168,7 +1168,7 @@ sub change_file_table
 
         my $returnvalue = system($systemcall);
 
-        my $infoline = "Systemcall: $systemcall\n";
+        $infoline = "Systemcall: $systemcall\n";
         push( @installer::globals::logfileinfo, $infoline);
 
         if ($returnvalue)

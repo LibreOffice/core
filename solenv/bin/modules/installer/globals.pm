@@ -39,7 +39,7 @@ BEGIN
 {
     $prog="make_installer.pl";
 
-    @noMSLocaleLangs = ( "br", "dz", "km", "nr", "ns", "rw", "ss", "st", "tg", "ts", "tn", "ve", "xh", "zu" , "ne" , "bn", "bn-BD", "bn-IN", "lo", "cy" , "ku" , "as-IN" , "te-IN" , "ml-IN" , "mr-IN", "ur-IN", "ta-IN", "or-IN" , "ti-ER" , "eo" , "ka" ,"ga" , "uk", "gd" );
+    @noMSLocaleLangs = ( "br", "bs", "dz", "gu", "km", "nr", "ns", "rw", "ss", "st", "tg", "ts", "tn", "ve", "xh", "zu" , "ne" , "bn", "bn-BD", "bn-IN", "lo", "cy" , "ku" , "as-IN" , "te-IN" , "ml-IN" , "mr-IN", "ur-IN", "ta-IN", "or-IN" , "ti-ER" , "eo" , "ka" ,"ga" , "uk", "gd" );
     @items_at_modules = ("Files", "Dirs", "Unixlinks");
     @asianlanguages = ("ja", "ko", "zh-CN", "zh-TW");
 
@@ -131,6 +131,7 @@ BEGIN
     $globalblock = "Globals";
     $rootmodulegid = "";
     %alllangmodules = ();
+    $patharray = "";
 
     $is_special_epm = 0;
     $epm_in_path = 0;
@@ -163,6 +164,7 @@ BEGIN
     $updatelastsequence = 0;
     $updatesequencecounter = 0;
     $updatedatabase = 0;
+    $updatedatabasepath = "";
     $pfffileexists = 0;
     $pffcabfilename = "ooobasis3.0_pff.cab";
     $mergemodulenumber = 0;

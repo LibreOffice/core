@@ -345,6 +345,24 @@ sub get_so_svn_server
     return $self->{SO_SVN_SERVER} ? $self->{SO_SVN_SERVER} : undef;
 }
 
+#### Prebuild binaries configuration ####
+
+sub get_prebuild_binaries_location
+{
+    my $self = shift;
+
+    if ( !defined($self->{PREBUILD_BINARIES}) ) {
+        my $config_file = $self->get_config_file();
+        my $pre_build_binaries = $config_file->{CWS_CONFIG}->{'PREBUILD_BINARIES'};
+        if ( !defined($pre_build_binaries) ) {
+            $pre_build_binaries = "";
+        }
+        $self->{PREBUILD_BINARIES} = $pre_build_binaries;
+    }
+    return $self->{PREBUILD_BINARIES} ? $self->{PREBUILD_BINARIES} : undef;
+}
+
+
 
 #### class methods #####
 sub get_config

@@ -38,6 +38,7 @@ Module gid_Module_Optional_Winexplorerext
     ParentID = gid_Module_Optional;
     Dirs = (gid_Dir_Shlxthdl);
     Files = (gid_File_Lib_Shlxthdl,
+             gid_File_Lib_Shlxthdl_Msvcr71,
              gid_File_Lib_Shlxthdl_Stlport,
              gid_File_Lib_Shlxtmsi,
              gid_File_Tmp_Userinstall_Winexplorerext_Inf);    

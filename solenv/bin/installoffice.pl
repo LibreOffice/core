@@ -34,9 +34,10 @@ eval 'exec perl -wS $0 ${1+"$@"}'
 use strict;
 use File::Find;
 use File::Path;
+my $script = $0;
 
-( our $script_name = $0 ) =~ s/^.*\b(\w+)\.pl$/$1/;
-
+( our $script_name = $script ) =~ s/^.*\b(\w+)\.pl$/$1/;
+( our $script_path = $script ) =~ s/$script_name.*//;
 
 our $debug = 0;           # run without executing commands
 
@@ -102,6 +103,7 @@ our $nul ;
 our $RESPFILE;
 our $SVERSION_INI ;
 our $SOFFICEBIN ;
+our $UNOPKGBIN;
 our $bootstrapini ;
 our $bootstrapiniTemp ;
 our $packpackage ;
@@ -132,6 +134,7 @@ if ($gui eq "WNT") {
     $SVERSION_INI = $ENV{USERPROFILE} . $PS . "Anwendungsdaten" . $PS . "sversion.ini";
     $SOFFICEBIN = "soffice.exe";
     $bootstrapini = "bootstrap.ini";
+    $UNOPKGBIN="unopkg.exe";
     $bootstrapiniTemp = $bootstrapini . "_";
     $packpackage = "msi";
     if (!defined($temp_path)) {
@@ -162,6 +165,7 @@ elsif ($gui eq "UNX") {
     $SVERSION_INI = $ENV{HOME} . $PS . ".sversionrc";
     $SOFFICEBIN = "soffice";
     $bootstrapini = "bootstraprc";
+    $UNOPKGBIN="unopkg";
     $bootstrapiniTemp = $bootstrapini . "_";
     $packpackage = $ENV{PKGFORMAT};
     if (!defined($temp_path)) {
@@ -193,6 +197,7 @@ elsif ($gui eq $cygwin) {
     $SVERSION_INI = $ENV{USERPROFILE} . $PS . "Anwendungsdaten" . $PS . "sversion.ini";
     $SOFFICEBIN = "soffice";
     $bootstrapini = "bootstrap.ini";
+    $UNOPKGBIN="unopkg.exe";
     $bootstrapiniTemp = $bootstrapini . "_";
     $CygwinLineends = $/;
     $WinLineends = "\r\n";
@@ -298,8 +303,7 @@ sub makeAutoRun(){
     patchBootstraprc($destinationPath);
 
     if (patchXCU ($destinationPath) != 0) {
-        #print_error ($error_messages[$error_patchBootstrap], $error_patchBootstrap);
-        print_error("could not pacht XCU files", "1");
+        print_error("could not patch XCU files", "1");
     }
     return 0;
 }

@@ -31,9 +31,11 @@
 
 package installer::windows::update;
 
+use installer::converter;
 use installer::exiter;
 use installer::files;
 use installer::globals;
+use installer::pathanalyzer;
 use installer::systemactions;
 
 #################################################################################
@@ -192,79 +194,216 @@ sub read_all_tables_from_msidatabase
 }
 
 #################################################################################
+# Checking, if this is the correct database.
+#################################################################################
+
+sub correct_database
+{
+    my ($product, $pro, $langs, $languagestringref) = @_;
+
+    my $correct_database = 0;
+
+    # Comparing $product with $installer::globals::product and
+    # $pro with $installer::globals::pro and
+    # $langs with $languagestringref
+
+    my $product_is_good = 0;
+
+    my $localproduct = $installer::globals::product;
+    if ( $installer::globals::languagepack ) { $localproduct = $localproduct . "LanguagePack"; }
+
+    if ( $product eq $localproduct ) { $product_is_good = 1; }
+
+    if ( $product_is_good )
+    {
+        my $pro_is_good = 0;
+
+        if ((( $pro eq "pro" ) && ( $installer::globals::pro )) || (( $pro eq "nonpro" ) && ( ! $installer::globals::pro ))) { $pro_is_good = 1; }
+
+        if ( $pro_is_good )
+        {
+            my $langlisthash = installer::converter::convert_stringlist_into_hash(\$langs, ",");
+            my $langstringhash = installer::converter::convert_stringlist_into_hash($languagestringref, "_");
+
+            my $not_included = 0;
+            foreach my $onelang ( keys %{$langlisthash} )
+            {
+                if ( ! exists($langstringhash->{$onelang}) )
+                {
+                    $not_included = 1;
+                    last;
+                }
+            }
+
+            if ( ! $not_included )
+            {
+                foreach my $onelanguage ( keys %{$langstringhash} )
+                {
+                    if ( ! exists($langlisthash->{$onelanguage}) )
+                    {
+                        $not_included = 1;
+                        last;
+                    }
+                }
+
+                if ( ! $not_included ) { $correct_database = 1; }
+            }
+        }
+    }
+
+    return $correct_database;
+}
+
+#################################################################################
+# Searching for the path to the reference database for this special product.
+#################################################################################
+
+sub get_databasename_from_list
+{
+    my ($filecontent, $languagestringref, $filename) = @_;
+
+    my $databasepath = "";
+
+    for ( my $i = 0; $i <= $#{$filecontent}; $i++ )
+    {
+        my $line = ${$filecontent}[$i];
+        if ( $line =~ /^\s*$/ ) { next; } # empty line
+        if ( $line =~ /^\s*\#/ ) { next; } # comment line
+
+        if ( $line =~ /^\s*(.+?)\s*\t+\s*(.+?)\s*\t+\s*(.+?)\s*\t+\s*(.+?)\s*$/ )
+        {
+            my $product = $1;
+            my $pro = $2;
+            my $langs = $3;
+            my $path = $4;
+
+            if (( $pro ne "pro" ) && ( $pro ne "nonpro" )) { installer::exiter::exit_program("ERROR: Wrong syntax in file: $filename. Only \"pro\" or \"nonpro\" allowed in column 1! Line: \"$line\"", "get_databasename_from_list"); }
+
+            if ( correct_database($product, $pro, $langs, $languagestringref) )
+            {
+                $databasepath = $path;
+                last;
+            }
+        }
+        else
+        {
+            installer::exiter::exit_program("ERROR: Wrong syntax in file: $filename! Line: \"$line\"", "get_databasename_from_list");
+        }
+    }
+
+    return $databasepath;
+}
+
+#################################################################################
 # Reading an existing database completely
 #################################################################################
 
 sub readdatabase
 {
-    my ($databasename,$languagestringref) = @_;
+    my ($allvariables, $languagestringref, $includepatharrayref) = @_;
 
-    installer::logger::include_timestamp_into_logfile("Performance Info: readdatabase start");
+    my $database = "";
+    my $infoline = "";
 
-    # replace variables in database name ?
+    if ( ! $allvariables->{'UPDATE_DATABASE_LISTNAME'} ) { installer::exiter::exit_program("ERROR: If \"UPDATE_DATABASE\" is set, \"UPDATE_DATABASE_LISTNAME\" is required.", "Main"); }
+    my $listfilename = $allvariables->{'UPDATE_DATABASE_LISTNAME'};
 
-    # database has to be located in "."
+    # Searching the list in the include pathes
+    my $listname = installer::scriptitems::get_sourcepath_from_filename_and_includepath(\$listfilename, $includepatharrayref, 1);
+    if ( $$listname eq "" ) { installer::exiter::exit_program("ERROR: List file not found: $listfilename !", "readdatabase"); }
+    my $completelistname = $$listname;
 
-    # create directory for unpacking
-    my $databasedir = installer::systemactions::create_directories("database", $languagestringref);
+    # Reading list file
+    my $listfile = installer::files::read_file($completelistname);
 
-    # copy database
-    if ( ! -f $databasename ) { installer::exiter::exit_program("ERROR: Could not find reference database: $databasename!", "readdatabase"); }
-    my $fulldatabasepath = $databasedir . $installer::globals::separator . $databasename;
-    installer::systemactions::copy_one_file($databasename, $fulldatabasepath);
+    # Get name and path of reference database
+    my $databasename = get_databasename_from_list($listfile, $languagestringref, $completelistname);
 
-    installer::logger::include_timestamp_into_logfile("Performance Info: readdatabase: before extracting tables");
+    # If the correct database was not found, this is not necessarily an error. But in this case, this is not an update packaging process!
+    if (( $databasename ) && ( $databasename ne "" )) # This is an update packaging process!
+    {
+        $installer::globals::updatedatabase = 1;
+        installer::logger::print_message( "... update process, using database $databasename ...\n" );
+        $infoline = "\nDatabase found in $completelistname: \"$databasename\"\n\n";
+        # Saving in global variable
+        $installer::globals::updatedatabasepath = $databasename;
+    }
+    else
+    {
+        # installer::logger::print_message( "... no update process, no database found ...\n" );
+        $infoline = "\nNo database found in $completelistname. This is no update process!\n\n";
+    }
+    push( @installer::globals::logfileinfo, $infoline);
 
-    # extract all tables from database
-    extract_all_tables_from_msidatabase($fulldatabasepath, $databasedir);
+    if ( $installer::globals::updatedatabase )
+    {
+        if ( ! -f $databasename ) { installer::exiter::exit_program("ERROR: Could not find reference database: $databasename!", "readdatabase"); }
 
-    installer::logger::include_timestamp_into_logfile("Performance Info: readdatabase: before reading tables");
+        my $msifilename = $databasename;
+        installer::pathanalyzer::make_absolute_filename_to_relative_filename(\$msifilename);
 
-    # read all tables
-    my $database = read_all_tables_from_msidatabase($databasedir);
+        installer::logger::include_timestamp_into_logfile("Performance Info: readdatabase start");
 
-    # Test output:
+        # create directory for unpacking
+        my $databasedir = installer::systemactions::create_directories("database", $languagestringref);
 
-    #   foreach my $key1 ( keys %{$database} )
-    #   {
-    #       print "Test1: $key1\n";
-    #       foreach my $key2 ( keys %{$database->{$key1}} )
-    #       {
-    #           print "\tTest2: $key2\n";
-    #           foreach my $key3 ( keys %{$database->{$key1}->{$key2}} )
-    #           {
-    #               print "\t\tTest3: $key3: $database->{$key1}->{$key2}->{$key3}\n";
-    #           }
-    #       }
-    #   }
+        # copy database
+        my $fulldatabasepath = $databasedir . $installer::globals::separator . $msifilename;
+        installer::systemactions::copy_one_file($databasename, $fulldatabasepath);
 
-    # Example: File table
+        installer::logger::include_timestamp_into_logfile("Performance Info: readdatabase: before extracting tables");
 
-    # my $filetable = $database->{'File'};
-    # foreach my $linenumber ( keys  %{$filetable} )
-    # {
-    #   print "Test Filenumber: $linenumber\n";
-    #   foreach my $key ( keys %{$filetable->{$linenumber}} )
-    #   {
-    #       print "\t\tTest: $key: $filetable->{$linenumber}->{$key}\n";
-    #   }
-    # }
+        # extract all tables from database
+        extract_all_tables_from_msidatabase($fulldatabasepath, $databasedir);
 
-    # Example: Searching for ProductCode in table Property
+        installer::logger::include_timestamp_into_logfile("Performance Info: readdatabase: before reading tables");
 
-    # my $column1 = "Property";
-    # my $column2 = "Value";
-    # my $searchkey = "ProductCode";
-    # my $propertytable = $database->{'Property'};
-    # foreach my $linenumber ( keys  %{$propertytable} )
-    # {
-    #   if ( $propertytable->{$linenumber}->{$column1} eq $searchkey )
-    #   {
-    #       print("Test: $searchkey : $propertytable->{$linenumber}->{$column2}\n");
-    #   }
-    # }
+        # read all tables
+        $database = read_all_tables_from_msidatabase($databasedir);
 
-    installer::logger::include_timestamp_into_logfile("Performance Info: readdatabase end");
+        # Test output:
+
+        #   foreach my $key1 ( keys %{$database} )
+        #   {
+        #       print "Test1: $key1\n";
+        #       foreach my $key2 ( keys %{$database->{$key1}} )
+        #       {
+        #           print "\tTest2: $key2\n";
+        #           foreach my $key3 ( keys %{$database->{$key1}->{$key2}} )
+        #           {
+        #               print "\t\tTest3: $key3: $database->{$key1}->{$key2}->{$key3}\n";
+        #           }
+        #       }
+        #   }
+
+        # Example: File table
+
+        # my $filetable = $database->{'File'};
+        # foreach my $linenumber ( keys  %{$filetable} )
+        # {
+        #   print "Test Filenumber: $linenumber\n";
+        #   foreach my $key ( keys %{$filetable->{$linenumber}} )
+        #   {
+        #       print "\t\tTest: $key: $filetable->{$linenumber}->{$key}\n";
+        #   }
+        # }
+
+        # Example: Searching for ProductCode in table Property
+
+        # my $column1 = "Property";
+        # my $column2 = "Value";
+        # my $searchkey = "ProductCode";
+        # my $propertytable = $database->{'Property'};
+        # foreach my $linenumber ( keys  %{$propertytable} )
+        # {
+        #   if ( $propertytable->{$linenumber}->{$column1} eq $searchkey )
+        #   {
+        #       print("Test: $searchkey : $propertytable->{$linenumber}->{$column2}\n");
+        #   }
+        # }
+
+        installer::logger::include_timestamp_into_logfile("Performance Info: readdatabase end");
+    }
 
     return $database;
 }
@@ -290,7 +429,7 @@ sub readmergedatabase
         my $filename = $mergemodule->{'Name'};
         my $mergefile = installer::scriptitems::get_sourcepath_from_filename_and_includepath(\$filename, $includepatharrayref, 1);
 
-        if ( ! -f $$mergefile ) { installer::exiter::exit_program("ERROR: msm file not found: $filename !", "readmergedatabase"); }
+        if ( $$mergefile eq "" ) { installer::exiter::exit_program("ERROR: msm file not found: $filename !", "readmergedatabase"); }
         my $completesource = $$mergefile;
 
         my $mergegid = $mergemodule->{'gid'};
@@ -338,7 +477,9 @@ sub create_database_hashes
 
     my %uniquefilename = ();
     my %allupdatesequences = ();
+    my %allupdatecomponents = ();
     my %allupdatefileorder = ();
+    my %allupdatecomponentorder = ();
     my %revuniquefilename = ();
     my %revshortfilename = ();
     my %shortdirname = ();
@@ -377,11 +518,13 @@ sub create_database_hashes
         $revuniquefilename{$uniquename} = $key;
         if ( $shortname ne "" ) { $revshortfilename{$shortname} = $key; }
 
-        # Saving Sequences for unique names
+        # Saving Sequences for unique names (and also components)
         $allupdatesequences{$uniquename} = $sequence;
+        $allupdatecomponents{$uniquename} = $comp;
 
-        # Saving unique names for sequences
+        # Saving unique names and components for sequences
         $allupdatefileorder{$sequence} = $uniquename;
+        $allupdatecomponentorder{$sequence} = $comp;
     }
 
     # 2. Hash, required in Directory table.
@@ -446,7 +589,7 @@ sub create_database_hashes
 
     $installer::globals::updatesequencecounter = $installer::globals::updatelastsequence;
 
-    return (\%uniquefilename, \%revuniquefilename, \%revshortfilename, \%allupdatesequences, \%allupdatefileorder, \%shortdirname, \%componentid, \%componentidkeypath, \%alloldproperties, \%allupdatelastsequences, \%allupdatediskids);
+    return (\%uniquefilename, \%revuniquefilename, \%revshortfilename, \%allupdatesequences, \%allupdatecomponents, \%allupdatefileorder, \%allupdatecomponentorder, \%shortdirname, \%componentid, \%componentidkeypath, \%alloldproperties, \%allupdatelastsequences, \%allupdatediskids);
 }
 
 
