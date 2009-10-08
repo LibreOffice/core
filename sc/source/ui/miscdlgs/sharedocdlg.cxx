@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: sharedocdlg.cxx,v $
- * $Revision: 1.6 $
+ * $Revision: 1.6.134.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -155,11 +155,28 @@ void ScShareDocumentDlg::UpdateView()
                             aUser += String::CreateFromInt32( nUnknownUser++ );
                         }
 
-                        String aDateTime = pUsersData[i][SHARED_EDITTIME_ID];
+                        // parse the edit time string of the format "DD.MM.YYYY hh:mm"
+                        ::rtl::OUString aDateTimeStr = pUsersData[i][SHARED_EDITTIME_ID];
+                        sal_Int32 nIndex = 0;
+                        ::rtl::OUString aDateStr = aDateTimeStr.getToken( 0, ' ', nIndex );
+                        ::rtl::OUString aTimeStr = aDateTimeStr.getToken( 0, ' ', nIndex );
+                        nIndex = 0;
+                        USHORT nDay = sal::static_int_cast< USHORT >( aDateStr.getToken( 0, '.', nIndex ).toInt32() );
+                        USHORT nMonth = sal::static_int_cast< USHORT >( aDateStr.getToken( 0, '.', nIndex ).toInt32() );
+                        USHORT nYear = sal::static_int_cast< USHORT >( aDateStr.getToken( 0, '.', nIndex ).toInt32() );
+                        nIndex = 0;
+                        USHORT nHours = sal::static_int_cast< USHORT >( aTimeStr.getToken( 0, ':', nIndex ).toInt32() );
+                        USHORT nMinutes = sal::static_int_cast< USHORT >( aTimeStr.getToken( 0, ':', nIndex ).toInt32() );
+                        Date aDate( nDay, nMonth, nYear );
+                        Time aTime( nHours, nMinutes );
+                        DateTime aDateTime( aDate, aTime );
 
                         String aString( aUser );
                         aString += '\t';
-                        aString += aDateTime;
+                        aString += ScGlobal::pLocaleData->getDate( aDateTime );
+                        aString += ' ';
+                        aString += ScGlobal::pLocaleData->getTime( aDateTime, FALSE );
+
                         maLbUsers.InsertEntry( aString, NULL );
                     }
                 }
@@ -185,7 +202,7 @@ void ScShareDocumentDlg::UpdateView()
         {
             aUser += ' ';
         }
-        aUser += aUserOpt.GetLastName();
+        aUser += String(aUserOpt.GetLastName());
         if ( aUser.Len() == 0 )
         {
             // get sys user name

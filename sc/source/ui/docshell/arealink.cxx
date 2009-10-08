@@ -54,7 +54,7 @@
 #include "globstr.hrc"
 #include "markdata.hxx"
 #include "hints.hxx"
-#include "htmlimp.hxx"
+#include "filter.hxx"
 //CHINA001 #include "linkarea.hxx"          // dialog
 
 #include "attrib.hxx"           // raus, wenn ResetAttrib am Dokument
@@ -284,7 +284,7 @@ BOOL ScAreaLink::Refresh( const String& rNewFile, const String& rNewFilter,
     String aTempArea;
 
     if( rNewFilter == ScDocShell::GetWebQueryFilterName() )
-        aTempArea = ScHTMLImport::GetHTMLRangeNameList( pSrcDoc, rNewArea );
+        aTempArea = ScFormatFilter::Get().GetHTMLRangeNameList( pSrcDoc, rNewArea );
     else
         aTempArea = rNewArea;
 

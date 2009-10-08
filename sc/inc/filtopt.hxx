@@ -31,16 +31,15 @@
 #ifndef SC_FILTOPT_HXX
 #define SC_FILTOPT_HXX
 
-
 #include <unotools/configitem.hxx>
 #include <tools/solar.h>
-
+#include "scdllapi.h"
 
 //==================================================================
 // filter options
 //==================================================================
 
-class ScFilterOptions : public utl::ConfigItem
+class SC_DLLPUBLIC ScFilterOptions : public utl::ConfigItem
 {
     BOOL        bWK3Flag;
     double      fExcelColScale;

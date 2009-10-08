@@ -43,34 +43,15 @@ TARGET=formdlgs
 
 # --- Files --------------------------------------------------------
 
-CXXFILES = \
-        funcutl.cxx     \
-        parawin.cxx     \
-        structpg.cxx	\
-        funcpage.cxx	\
-        formula.cxx     \
-        formdata.cxx	\
-        privsplt.cxx	\
-        dwfunctr.cxx
-
 SLOFILES =	\
-        $(SLO)$/funcutl.obj  \
-        $(SLO)$/parawin.obj  \
-        $(SLO)$/structpg.obj \
-        $(SLO)$/funcpage.obj	\
         $(SLO)$/formula.obj  \
-        $(SLO)$/formdata.obj \
+        $(SLO)$/formdata.obj  \
         $(SLO)$/privsplt.obj	\
         $(SLO)$/dwfunctr.obj
 
 SRS1NAME=$(TARGET)
 SRC1FILES =	\
-        parawin.src \
-        formdlgs.src \
         dwfunctr.src
-
-EXCEPTIONSFILES+= \
-        $(SLO)$/parawin.obj  \
 
 # --- Tagets -------------------------------------------------------
 

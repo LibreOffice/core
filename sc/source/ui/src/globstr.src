@@ -302,6 +302,14 @@ Resource RID_GLOBSTR
     {
         Text [ en-US ] = "Insert Array Formula" ;
     };
+    String STR_UNDO_INSERTNOTE
+    {
+        Text [ en-US ] = "Insert Note" ;
+    };
+    String STR_UNDO_DELETENOTE
+    {
+        Text [ en-US ] = "Delete Note" ;
+    };
     String STR_UNDO_SHOWNOTE
     {
         Text [ en-US ] = "Show Note" ;
@@ -1712,6 +1720,14 @@ Resource RID_GLOBSTR
     String STR_UNKNOWN_USER
     {
         Text [ en-US ] = "Unknown User";
+    };
+    String STR_STYLE_FAMILY_CELL
+    {
+        Text [ en-US ] = "Cell Styles";
+    };
+    String STR_STYLE_FAMILY_PAGE
+    {
+        Text [ en-US ] = "Page Styles";
     };
 };
 

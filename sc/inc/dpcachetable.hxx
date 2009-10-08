@@ -38,8 +38,8 @@
 #include "collect.hxx"
 
 #include <vector>
-#include <set>
 #include <hash_map>
+#include <hash_set>
 #include <boost/shared_ptr.hpp>
 #include <com/sun/star/uno/Reference.hxx>
 
@@ -57,45 +57,10 @@ class Date;
 class ScDocument;
 class ScRange;
 class ScDPDimension;
+class ScDPCollection;
+struct ScDPCacheCell;
 struct ScDPItemData;
 class Date;
-
-// ----------------------------------------------------------------------------
-
-/** public interface for string-sharing */
-class ScSharedString
-{
-public:
-    static const sal_Int32 EMPTY = 0;
-
-    static const String*    getString(sal_Int32 nId);
-    static sal_Int32        getStringId(const String& aStr);
-    static sal_Int32        insertString(const String& aStr);
-
-private:
-
-    /** internal shared string table implementation */
-    class StringTable
-    {
-    public:
-        sal_Int32 insertString(const String& aStr);
-        sal_Int32 getStringId(const String& aStr);
-        const String* getString(sal_Int32 nId) const;
-
-        StringTable();
-        ~StringTable();
-
-    private:
-        typedef ::std::hash_map< String, sal_Int32, ScStringHashCode, ::std::equal_to< String > > SharedStrMap;
-
-        ::std::vector<String> maSharedStrings;
-        SharedStrMap maSharedStringIds;
-        sal_Int32 mnStrCount;
-    };
-
-    static ::osl::Mutex maStrMutex;
-    static StringTable maStringTable;
-};
 
 // ----------------------------------------------------------------------------
 
@@ -103,16 +68,13 @@ class ScDPCacheTable
 {
 public:
 
-    /** individual cell within table. */
     struct Cell
     {
-        SCROW       mnCategoryRef;
-        sal_Int32   mnStrId;
-        sal_uInt8   mnType;
-        double      mfValue;
-        bool        mbNumeric;
+        SCROW           mnCategoryRef;
+        ScDPCacheCell*  mpContent;
 
         Cell();
+        ~Cell();
     };
 
     /** individual filter item used in SingleFilter and GroupFilter. */
@@ -131,38 +93,48 @@ public:
     public:
         /** returns true if the matching condition is met for a single cell
             value, or false otherwise. */
-        virtual bool match(const Cell& rCell) const = 0;
+        virtual bool match(const ScDPCacheCell& rCell) const = 0;
     };
 
     /** ordinary single-item filter. */
     class SingleFilter : public FilterBase
     {
     public:
-        explicit SingleFilter();
-        explicit SingleFilter(sal_Int32 nMatchStrId, double fValue, bool bHasValue);
+        explicit SingleFilter(ScSimpleSharedString& rSharedString,
+                              sal_Int32 nMatchStrId, double fValue, bool bHasValue);
+        virtual ~SingleFilter(){}
 
-        virtual bool match(const Cell& rCell) const;
+        virtual bool match(const ScDPCacheCell& rCell) const;
 
-        const String    getMatchString() const;
+        const String    getMatchString();
         double          getMatchValue() const;
         bool            hasValue() const;
 
     private:
+        explicit SingleFilter();
+
         FilterItem  maItem;
+        ScSimpleSharedString mrSharedString;
     };
 
     /** multi-item (group) filter. */
     class GroupFilter : public FilterBase
     {
     public:
-        GroupFilter();
+        GroupFilter(ScSimpleSharedString& rSharedString);
         virtual ~GroupFilter(){}
-        virtual bool match(const Cell& rCell) const;
+        virtual bool match(const ScDPCacheCell& rCell) const;
 
+        void setMatchIfFound(bool b);
         void addMatchItem(const String& rStr, double fVal, bool bHasValue);
+        size_t getMatchItemCount() const;
 
     private:
+        GroupFilter();
+
         ::std::vector<FilterItem> maItems;
+        ScSimpleSharedString mrSharedString;
+        bool mbMatchIfFound;
     };
 
     /** single filtering criterion. */
@@ -174,10 +146,9 @@ public:
         Criterion();
     };
 
-    ScDPCacheTable();
+    ScDPCacheTable(ScDPCollection* pCollection);
     ~ScDPCacheTable();
 
-    sal_Int32 getHeaderSize() const;
     sal_Int32 getRowSize() const;
     sal_Int32 getColSize() const;
 
@@ -198,12 +169,12 @@ public:
 
     /** Set filter on/off flag to each row to control visibility.  The caller
         must ensure that the table is filled before calling this function. */
-    void filterByPageDimension(const ::std::vector<Criterion>& rCriteria, bool bRepeatIfEmpty = false);
+    void filterByPageDimension(const ::std::vector<Criterion>& rCriteria, const ::std::hash_set<sal_Int32>& rRepeatIfEmptyDims);
 
     /** Get the cell instance at specified location within the data grid. Note
         that the data grid doesn't include the header row.  Don't delete the
         returned object! */
-    const ::ScDPCacheTable::Cell* getCell(SCCOL nCol, SCROW nRow, bool bRepeatIfEmpty = false) const;
+    const ScDPCacheCell* getCell(SCCOL nCol, SCROW nRow, bool bRepeatIfEmpty) const;
 
     const String* getFieldName(sal_Int32 nIndex) const;
 
@@ -215,29 +186,34 @@ public:
     /** Get the unique entries for a field specified by index.  The caller must
         make sure that the table is filled before calling function, or it will
         get an empty collection. */
-    const TypedStrCollection& getFieldEntries(sal_Int32 nIndex) const;
+    const TypedScStrCollection& getFieldEntries(sal_Int32 nIndex) const;
 
     /** Filter the table based on the specified criteria, and copy the
         result to rTabData.  This method is used, for example, to generate
         a drill-down data table. */
     void filterTable(const ::std::vector<Criterion>& rCriteria,
                      ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any > >& rTabData,
-                     bool bRepeatIfEmpty = false);
+                     const ::std::hash_set<sal_Int32>& rRepeatIfEmptyDims);
 
     void clear();
     void swap(ScDPCacheTable& rOther);
     bool empty() const;
 
 private:
+    ScDPCacheTable();
+    ScDPCacheTable(const ScDPCacheTable&);
+
     /**
      * Check if a given row meets all specified criteria.
+     *
+     * @param nRow index of row to be tested.
+     * @param rCriteria a list of criteria
      */
-    bool isRowQualified(sal_Int32 nRow, const ::std::vector<Criterion>& rCriteria, bool bRepeatIfEmpty) const;
-    void getValueData(ScDocument* pDoc, const ScAddress& rPos, Cell& rCell);
-    ScDPCacheTable::Cell getSelectedDimension(ScDPDimension* pDim) const;
+    bool isRowQualified(sal_Int32 nRow, const ::std::vector<Criterion>& rCriteria, const ::std::hash_set<sal_Int32>& rRepeatIfEmptyDims) const;
+    void getValueData(ScDocument* pDoc, const ScAddress& rPos, ScDPCacheCell& rCell);
 
 private:
-    typedef ::boost::shared_ptr<TypedStrCollection> TypedStrCollectionPtr;
+    typedef ::boost::shared_ptr<TypedScStrCollection> TypedScStrCollectionPtr;
 
     /** main data table. */
     ::std::vector< ::std::vector< ::ScDPCacheTable::Cell > > maTable;
@@ -246,11 +222,14 @@ private:
     ::std::vector<sal_Int32> maHeader;
 
     /** unique field entires for each field (column). */
-    ::std::vector<TypedStrCollectionPtr> maFieldEntries;
+    ::std::vector<TypedScStrCollectionPtr> maFieldEntries;
 
     /** used to track visibility of rows.  The first row below the header row
         has the index of 0. */
     ::std::vector<bool> maRowsVisible;
+
+    ScSimpleSharedString& mrSharedString;
+    ScDPCollection* mpCollection;
 };
 
 

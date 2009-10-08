@@ -31,6 +31,9 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sc.hxx"
 
+#include <set>
+#include <iterator>
+
 #include "xeescher.hxx"
 
 #include <com/sun/star/lang/XServiceInfo.hpp>
@@ -44,6 +47,7 @@
 #include <com/sun/star/form/binding/XListEntrySource.hpp>
 #include <com/sun/star/script/ScriptEventDescriptor.hpp>
 
+#include <rtl/ustrbuf.h>
 #include <vcl/bmpacc.hxx>
 #include <svx/svdoole2.hxx>
 
@@ -59,7 +63,11 @@
 #include "xename.hxx"
 #include "xestyle.hxx"
 
+#include <oox/core/tokens.hxx>
+
+using ::rtl::OString;
 using ::rtl::OUString;
+using ::rtl::OUStringBuffer;
 using ::com::sun::star::uno::UNO_QUERY;
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::Sequence;
@@ -822,6 +830,7 @@ XclExpNote::XclExpNote( const XclExpRoot& rRoot, const ScAddress& rScPos,
         aNoteText = pScNote->GetText();
     // append additional text
     ScGlobal::AddToken( aNoteText, rAddText, '\n', 2 );
+    maOrigNoteText = aNoteText;
 
     // initialize record dependent on BIFF type
     switch( rRoot.GetBiff() )
@@ -952,6 +961,91 @@ void XclExpNote::WriteBody( XclExpStream& rStrm )
             << mnObjId
             << maAuthor
             << sal_uInt8( 0 );
+}
+
+void XclExpNote::WriteXml( sal_Int32 nAuthorId, XclExpXmlStream& rStrm )
+{
+    sax_fastparser::FSHelperPtr rComments = rStrm.GetCurrentStream();
+
+    rComments->startElement( XML_comment,
+            XML_ref,        XclXmlUtils::ToOString( maScPos ).getStr(),
+            XML_authorId,   OString::valueOf( nAuthorId ).getStr(),
+            // OOXTODO: XML_guid,
+            FSEND );
+    rComments->startElement( XML_text, FSEND );
+    // OOXTODO: phoneticPr, rPh, r
+    rComments->startElement( XML_t, FSEND );
+    rComments->writeEscaped( XclXmlUtils::ToOUString( maOrigNoteText ) );
+    rComments->endElement ( XML_t );
+    rComments->endElement( XML_text );
+    rComments->endElement( XML_comment );
+}
+
+// ============================================================================
+
+XclExpComments::XclExpComments( SCTAB nTab, XclExpRecordList< XclExpNote >& rNotes )
+    : mnTab( nTab ), mrNotes( rNotes )
+{
+}
+
+struct OUStringLess : public std::binary_function<OUString, OUString, bool>
+{
+    bool operator()(const OUString& x, const OUString& y) const
+    {
+        return x.compareTo( y ) <= 0;
+    }
+};
+
+void XclExpComments::SaveXml( XclExpXmlStream& rStrm )
+{
+    if( mrNotes.IsEmpty() )
+        return;
+
+    sax_fastparser::FSHelperPtr rComments = rStrm.CreateOutputStream(
+            XclXmlUtils::GetStreamName( "xl/", "comments", mnTab + 1 ),
+            XclXmlUtils::GetStreamName( "../", "comments", mnTab + 1 ),
+            rStrm.GetCurrentStream()->getOutputStream(),
+            "application/vnd.openxmlformats-officedocument.spreadsheetml.comments+xml",
+            "http://schemas.openxmlformats.org/officeDocument/2006/relationships/comments" );
+    rStrm.PushStream( rComments );
+
+    rComments->startElement( XML_comments,
+            XML_xmlns, "http://schemas.openxmlformats.org/spreadsheetml/2006/main",
+            FSEND );
+    rComments->startElement( XML_authors, FSEND );
+
+    typedef std::set< OUString, OUStringLess > Authors;
+    Authors aAuthors;
+
+    size_t nNotes = mrNotes.GetSize();
+    for( size_t i = 0; i < nNotes; ++i )
+    {
+        aAuthors.insert( XclXmlUtils::ToOUString( mrNotes.GetRecord( i )->GetAuthor() ) );
+    }
+
+    for( Authors::const_iterator b = aAuthors.begin(), e = aAuthors.end(); b != e; ++b )
+    {
+        rComments->startElement( XML_author, FSEND );
+        rComments->writeEscaped( *b );
+        rComments->endElement( XML_author );
+    }
+
+    rComments->endElement( XML_authors );
+    rComments->startElement( XML_commentList, FSEND );
+
+    for( size_t i = 0; i < nNotes; ++i )
+    {
+        XclExpNoteList::RecordRefType xNote = mrNotes.GetRecord( i );
+        Authors::const_iterator aAuthor = aAuthors.find(
+                XclXmlUtils::ToOUString( xNote->GetAuthor() ) );
+        sal_Int32 nAuthorId = distance( aAuthors.begin(), aAuthor );
+        xNote->WriteXml( nAuthorId, rStrm );
+    }
+
+    rComments->endElement( XML_commentList );
+    rComments->endElement( XML_comments );
+
+    rStrm.PopStream();
 }
 
 // ============================================================================

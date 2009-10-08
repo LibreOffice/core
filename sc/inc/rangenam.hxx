@@ -34,7 +34,8 @@
 #include "global.hxx" // -> enum UpdateRefMode
 #include "address.hxx"
 #include "collect.hxx"
-#include "grammar.hxx"
+#include "formula/grammar.hxx"
+#include "scdllapi.h"
 
 //------------------------------------------------------------------------
 
@@ -68,7 +69,7 @@ typedef USHORT RangeType;
 class ScTokenArray;
 class ScIndexMap;
 
-class ScRangeData : public DataObject
+class ScRangeData : public ScDataObject
 {
 private:
     String          aName;
@@ -83,27 +84,27 @@ private:
     friend class ScRangeName;
     ScRangeData( USHORT nIndex );
 public:
-                    ScRangeData( ScDocument* pDoc,
+    SC_DLLPUBLIC                ScRangeData( ScDocument* pDoc,
                                  const String& rName,
                                  const String& rSymbol,
                                  const ScAddress& rAdr = ScAddress(),
                                  RangeType nType = RT_NAME,
-                                 const ScGrammar::Grammar eGrammar = ScGrammar::GRAM_DEFAULT );
-                    ScRangeData( ScDocument* pDoc,
+                                 const formula::FormulaGrammar::Grammar eGrammar = formula::FormulaGrammar::GRAM_DEFAULT );
+    SC_DLLPUBLIC                ScRangeData( ScDocument* pDoc,
                                  const String& rName,
                                  const ScTokenArray& rArr,
                                  const ScAddress& rAdr = ScAddress(),
                                  RangeType nType = RT_NAME );
-                    ScRangeData( ScDocument* pDoc,
+    SC_DLLPUBLIC                ScRangeData( ScDocument* pDoc,
                                  const String& rName,
                                  const ScAddress& rTarget );
                                 // rTarget ist ABSPOS Sprungmarke
                     ScRangeData(const ScRangeData& rScRangeData);
 
-    virtual         ~ScRangeData();
+    SC_DLLPUBLIC virtual        ~ScRangeData();
 
 
-    virtual DataObject* Clone() const;
+    virtual ScDataObject* Clone() const;
 
     BOOL            operator== (const ScRangeData& rData) const;
 
@@ -123,22 +124,20 @@ public:
     void            AddType( RangeType nType )      { eType = eType|nType; }
     RangeType       GetType() const                 { return eType; }
     BOOL            HasType( RangeType nType ) const;
-    void            GetSymbol( String& rSymbol, const ScGrammar::Grammar eGrammar = ScGrammar::GRAM_DEFAULT ) const;
-    void            UpdateSymbol( String& rSymbol, const ScAddress&,
-                                    const ScGrammar::Grammar eGrammar = ScGrammar::GRAM_DEFAULT );
+    SC_DLLPUBLIC void           GetSymbol( String& rSymbol, const formula::FormulaGrammar::Grammar eGrammar = formula::FormulaGrammar::GRAM_DEFAULT ) const;
     void            UpdateSymbol( rtl::OUStringBuffer& rBuffer, const ScAddress&,
-                                    const ScGrammar::Grammar eGrammar = ScGrammar::GRAM_DEFAULT );
+                                    const formula::FormulaGrammar::Grammar eGrammar = formula::FormulaGrammar::GRAM_DEFAULT );
     void            UpdateReference( UpdateRefMode eUpdateRefMode,
                              const ScRange& r,
                              SCsCOL nDx, SCsROW nDy, SCsTAB nDz );
     BOOL            IsModified() const              { return bModified; }
 
-    void            GuessPosition();
+    SC_DLLPUBLIC void           GuessPosition();
 
     void            UpdateTranspose( const ScRange& rSource, const ScAddress& rDest );
     void            UpdateGrow( const ScRange& rArea, SCCOL nGrowX, SCROW nGrowY );
 
-    BOOL            IsReference( ScRange& rRef ) const;
+    SC_DLLPUBLIC BOOL           IsReference( ScRange& rRef ) const;
     BOOL            IsReference( ScRange& rRef, const ScAddress& rPos ) const;
     BOOL            IsValidReference( ScRange& rRef ) const;
 
@@ -161,11 +160,7 @@ inline BOOL ScRangeData::HasType( RangeType nType ) const
     return ( ( eType & nType ) == nType );
 }
 
-extern "C" int
-#ifdef WNT
-__cdecl
-#endif
-ScRangeData_QsortNameCompare( const void*, const void* );
+extern "C" int SAL_CALL ScRangeData_QsortNameCompare( const void*, const void* );
 
 #if defined( ICC ) && defined( OS2 )
     static int _Optlink  ICCQsortNameCompare( const void* a, const void* b)
@@ -174,34 +169,34 @@ ScRangeData_QsortNameCompare( const void*, const void* );
 
 //------------------------------------------------------------------------
 
-class ScRangeName : public SortedCollection
+class ScRangeName : public ScSortedCollection
 {
 private:
     ScDocument* pDoc;
     USHORT nSharedMaxIndex;
 
-    using SortedCollection::Clone;    // calcwarnings: shouldn't be used
+    using ScSortedCollection::Clone;    // calcwarnings: shouldn't be used
 
 public:
     ScRangeName(USHORT nLim = 4, USHORT nDel = 4, BOOL bDup = FALSE,
                 ScDocument* pDocument = NULL) :
-        SortedCollection    ( nLim, nDel, bDup ),
+        ScSortedCollection  ( nLim, nDel, bDup ),
         pDoc                ( pDocument ),
         nSharedMaxIndex     ( 1 ) {}            // darf nicht 0 sein!!
 
     ScRangeName(const ScRangeName& rScRangeName, ScDocument* pDocument);
 
-    virtual DataObject*     Clone(ScDocument* pDocP) const
+    virtual ScDataObject*     Clone(ScDocument* pDocP) const
                              { return new ScRangeName(*this, pDocP); }
     ScRangeData*            operator[]( const USHORT nIndex) const
                              { return (ScRangeData*)At(nIndex); }
-    virtual short           Compare(DataObject* pKey1, DataObject* pKey2) const;
-    virtual BOOL            IsEqual(DataObject* pKey1, DataObject* pKey2) const;
+    virtual short           Compare(ScDataObject* pKey1, ScDataObject* pKey2) const;
+    virtual BOOL            IsEqual(ScDataObject* pKey1, ScDataObject* pKey2) const;
 
     ScRangeData*            GetRangeAtCursor( const ScAddress&, BOOL bStartOnly ) const;
-    ScRangeData*            GetRangeAtBlock( const ScRange& ) const;
+    SC_DLLPUBLIC ScRangeData*           GetRangeAtBlock( const ScRange& ) const;
 
-    BOOL                    SearchName( const String& rName, USHORT& rPos ) const;
+    SC_DLLPUBLIC BOOL                   SearchName( const String& rName, USHORT& rPos ) const;
                             // SearchNameUpper must be called with an upper-case search string
     BOOL                    SearchNameUpper( const String& rUpperName, USHORT& rPos ) const;
     void                    UpdateReference(UpdateRefMode eUpdateRefMode,
@@ -210,8 +205,8 @@ public:
     void                    UpdateTabRef(SCTAB nTable, USHORT nFlag, SCTAB nNewTable = 0);
     void                    UpdateTranspose( const ScRange& rSource, const ScAddress& rDest );
     void                    UpdateGrow( const ScRange& rArea, SCCOL nGrowX, SCROW nGrowY );
-    virtual BOOL            Insert(DataObject* pDataObject);
-    ScRangeData*            FindIndex(USHORT nIndex);
+    virtual BOOL            Insert(ScDataObject* pScDataObject);
+    SC_DLLPUBLIC ScRangeData*           FindIndex(USHORT nIndex);
     USHORT                  GetSharedMaxIndex()             { return nSharedMaxIndex; }
     void                    SetSharedMaxIndex(USHORT nInd)  { nSharedMaxIndex = nInd; }
     USHORT                  GetEntryIndex();

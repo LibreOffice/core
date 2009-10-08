@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: validat.cxx,v $
- * $Revision: 1.25 $
+ * $Revision: 1.24.110.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -62,6 +62,7 @@
 #include <math.h>
 #include <memory>
 
+using namespace formula;
 //------------------------------------------------------------------------
 
 SV_IMPL_OP_PTRARR_SORT( ScValidationEntries_Impl, ScValidationDataPtr );
@@ -75,7 +76,7 @@ SV_IMPL_OP_PTRARR_SORT( ScValidationEntries_Impl, ScValidationDataPtr );
 ScValidationData::ScValidationData( ScValidationMode eMode, ScConditionMode eOper,
                             const String& rExpr1, const String& rExpr2,
                             ScDocument* pDocument, const ScAddress& rPos,
-                            const ScGrammar::Grammar eGrammar ) :
+                            const formula::FormulaGrammar::Grammar eGrammar ) :
     ScConditionEntry( eOper, rExpr1, rExpr2, pDocument, rPos, eGrammar ),
     nKey( 0 ),
     eDataMode( eMode ),
@@ -594,11 +595,11 @@ const String* ScStringTokenIterator::Next()
         return NULL;
 
     // seek to next non-separator token
-    const ScToken* pToken = mrTokArr.NextNoSpaces();
+    const FormulaToken* pToken = mrTokArr.NextNoSpaces();
     while( pToken && (pToken->GetOpCode() == ocSep) )
         pToken = mrTokArr.NextNoSpaces();
 
-    mbOk = !pToken || (pToken->GetType() == svString);
+    mbOk = !pToken || (pToken->GetType() == formula::svString);
     const String* pString = (mbOk && pToken) ? &pToken->GetString() : NULL;
     // string found but empty -> get next token; otherwise return it
     return (mbSkipEmpty && pString && !pString->Len()) ? Next() : pString;
@@ -616,7 +617,7 @@ ULONG lclGetCellFormat( ScDocument& rDoc, const ScAddress& rPos )
 }
 
 /** Inserts the passed string object. Always takes ownership. pData is invalid after this call! */
-void lclInsertStringToCollection( TypedStrCollection& rStrColl, TypedStrData* pData, bool bSorted )
+void lclInsertStringToCollection( TypedScStrCollection& rStrColl, TypedStrData* pData, bool bSorted )
 {
     if( !(bSorted ? rStrColl.Insert( pData ) : rStrColl.AtInsert( rStrColl.GetCount(), pData )) )
         delete pData;
@@ -631,7 +632,7 @@ bool ScValidationData::HasSelectionList() const
     return (eDataMode == SC_VALID_LIST) && (mnListType != ValidListType::INVISIBLE);
 }
 
-bool ScValidationData::GetSelectionFromFormula( TypedStrCollection* pStrings,
+bool ScValidationData::GetSelectionFromFormula( TypedScStrCollection* pStrings,
                                                 ScBaseCell* pCell,
                                                 const ScAddress& rPos,
                                                 const ScTokenArray& rTokArr,
@@ -645,7 +646,7 @@ bool ScValidationData::GetSelectionFromFormula( TypedStrCollection* pStrings,
         return false;
 
     ScFormulaCell aValidationSrc( pDocument, rPos, &rTokArr,
-            ScGrammar::GRAM_DEFAULT, MM_FORMULA);
+           formula::FormulaGrammar::GRAM_DEFAULT, MM_FORMULA);
 
     // Make sure the formula gets interpreted and a result is delivered,
     // regardless of the AutoCalc setting.
@@ -711,7 +712,7 @@ bool ScValidationData::GetSelectionFromFormula( TypedStrCollection* pStrings,
             const ScMatrixValue* pMatVal = pValues->Get( nCol, nRow, nMatValType);
 
             // strings and empties
-            if( NULL == pMatVal || ScMatrix::IsStringType( nMatValType ) )
+            if( NULL == pMatVal || ScMatrix::IsNonValueType( nMatValType ) )
             {
                 if( NULL != pMatVal )
                     aValStr = pMatVal->GetString();
@@ -768,7 +769,7 @@ bool ScValidationData::GetSelectionFromFormula( TypedStrCollection* pStrings,
     return bOk || NULL == pCell;
 }
 
-bool ScValidationData::FillSelectionList( TypedStrCollection& rStrColl, const ScAddress& rPos ) const
+bool ScValidationData::FillSelectionList( TypedScStrCollection& rStrColl, const ScAddress& rPos ) const
 {
     bool bOk = false;
 

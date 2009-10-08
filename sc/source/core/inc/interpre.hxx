@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: interpre.hxx,v $
- * $Revision: 1.36 $
+ * $Revision: 1.35.44.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -35,7 +35,7 @@
 
 #include <math.h>
 #include <rtl/math.hxx>
-#include "errorcodes.hxx"
+#include "formula/errorcodes.hxx"
 #include "cell.hxx"
 #include "scdll.hxx"
 #include "document.hxx"
@@ -53,6 +53,7 @@ class SbxVariable;
 class ScBaseCell;
 class ScFormulaCell;
 class SvNumberFormatter;
+struct MatrixDoubleOp;
 
 struct ScCompare
 {
@@ -71,13 +72,13 @@ struct ScCompare
 
 class ScToken;
 
-#define MAXSTACK      (4096 / sizeof(ScToken*))
+#define MAXSTACK      (4096 / sizeof(formula::FormulaToken*))
 
 class ScTokenStack
 {
 public:
     DECL_FIXEDMEMPOOL_NEWDEL( ScTokenStack )
-    ScToken* pPointer[ MAXSTACK ];
+    formula::FormulaToken* pPointer[ MAXSTACK ];
 };
 
 enum ScIterFunc {
@@ -91,12 +92,12 @@ enum ScIterFunc {
     ifMAX                               // Maximum
 };
 
-struct ScConstTokenRef_less
+struct FormulaTokenRef_less
 {
-    bool operator () ( const ScConstTokenRef& r1, const ScConstTokenRef& r2 ) const
+    bool operator () ( const formula::FormulaConstTokenRef& r1, const formula::FormulaConstTokenRef& r2 ) const
         { return &r1 < &r2; }
 };
-typedef ::std::map< const ScConstTokenRef, ScTokenRef, ScConstTokenRef_less> ScTokenMatrixMap;
+typedef ::std::map< const formula::FormulaConstTokenRef, formula::FormulaTokenRef, FormulaTokenRef_less> ScTokenMatrixMap;
 
 class ScInterpreter
 {
@@ -106,6 +107,7 @@ class ScInterpreter
     friend class ScTDistFunction;
     friend class ScFDistFunction;
     friend class ScChiDistFunction;
+    friend class ScChiSqDistFunction;
 
 public:
     DECL_FIXEDMEMPOOL_NEWDEL( ScInterpreter )
@@ -123,26 +125,28 @@ public:
 
     /// Fail safe division, returning an errDivisionByZero coded into a double
     /// if denominator is 0.0
-    static inline double div( double fNumerator, double fDenominator );
+    static inline double div( const double& fNumerator, const double& fDenominator );
 
+    ScMatrixRef GetNewMat(SCSIZE nC, SCSIZE nR);
 private:
     static ScTokenStack*    pGlobalStack;
     static BOOL             bGlobalStackInUse;
 
-    ScTokenIterator aCode;
+    formula::FormulaTokenIterator aCode;
     ScAddress   aPos;
     ScTokenArray& rArr;
     ScDocument* pDok;
-    ScTokenRef  xResult;
+    formula::FormulaTokenRef  xResult;
     ScJumpMatrix*   pJumpMatrix;        // currently active array condition, if any
-    ScTokenMatrixMap* pTokenMatrixMap;  // map ScToken* to ScTokenRef if in array condition
+    ScTokenMatrixMap* pTokenMatrixMap;  // map ScToken* to formula::FormulaTokenRef if in array condition
     ScFormulaCell* pMyFormulaCell;      // the cell of this formula expression
     SvNumberFormatter* pFormatter;
 
-    const ScToken* pCur;                // current token
+    const formula::FormulaToken*
+                pCur;                // current token
     String      aTempStr;               // for GetString()
     ScTokenStack* pStackObj;            // contains the stacks
-    ScToken**   pStack;                 // the current stack
+    formula::FormulaToken**   pStack;                 // the current stack
     USHORT      nGlobalError;           // global (local to this formula expression) error
     USHORT      sp;                     // stack pointer
     USHORT      maxsp;                  // the maximal used stack pointer
@@ -205,37 +209,37 @@ BOOL CreateCellArr(SCCOL nCol1, SCROW nRow1, SCTAB nTab1,
 // Stack operations
 //-----------------------------------------------------------------------------
 
-/** Does substitute with ScErrorToken in case nGlobalError is set and the token
-    passed is not ScErrorToken.
+/** Does substitute with formula::FormulaErrorToken in case nGlobalError is set and the token
+    passed is not formula::FormulaErrorToken.
     Increments RefCount of the original token if not substituted. */
-void Push( ScToken& r );
+void Push( formula::FormulaToken& r );
 
-/** Does not substitute with ScErrorToken in case nGlobalError is set.
+/** Does not substitute with formula::FormulaErrorToken in case nGlobalError is set.
     Used to push RPN tokens or from within Push() or tokens that are already
-    explicit ScErrorToken. Increments RefCount. */
-void PushWithoutError( ScToken& r );
+    explicit formula::FormulaErrorToken. Increments RefCount. */
+void PushWithoutError( formula::FormulaToken& r );
 
-/** Clones the token to be pushed or substitutes with ScErrorToken if
-    nGlobalError is set and the token passed is not ScErrorToken. */
-void PushTempToken( const ScToken& );
+/** Clones the token to be pushed or substitutes with formula::FormulaErrorToken if
+    nGlobalError is set and the token passed is not formula::FormulaErrorToken. */
+void PushTempToken( const formula::FormulaToken& );
 
-/** Does substitute with ScErrorToken in case nGlobalError is set and the token
-    passed is not ScErrorToken.
+/** Does substitute with formula::FormulaErrorToken in case nGlobalError is set and the token
+    passed is not formula::FormulaErrorToken.
     Increments RefCount of the original token if not substituted.
     ATTENTION! The token had to be allocated with `new' and must not be used
     after this call if no RefCount was set because possibly it gets immediately
-    deleted in case of an errStackOverflow or if substituted with ScErrorToken! */
-void PushTempToken( ScToken* );
+    deleted in case of an errStackOverflow or if substituted with formula::FormulaErrorToken! */
+void PushTempToken( formula::FormulaToken* );
 
-/** Does not substitute with ScErrorToken in case nGlobalError is set.
+/** Does not substitute with formula::FormulaErrorToken in case nGlobalError is set.
     Used to push tokens from within PushTempToken() or tokens that are already
-    explicit ScErrorToken. Increments RefCount.
+    explicit formula::FormulaErrorToken. Increments RefCount.
     ATTENTION! The token had to be allocated with `new' and must not be used
     after this call if no RefCount was set because possibly it gets immediately
     decremented again and thus deleted in case of an errStackOverflow! */
-void PushTempTokenWithoutError( ScToken* );
+void PushTempTokenWithoutError( formula::FormulaToken* );
 
-/** If nGlobalError is set push ScErrorToken.
+/** If nGlobalError is set push formula::FormulaErrorToken.
     If nGlobalError is not set do nothing.
     Used in PushTempToken() and alike to simplify handling.
     @return: <TRUE/> if nGlobalError. */
@@ -243,7 +247,7 @@ inline bool IfErrorPushError()
 {
     if (nGlobalError)
     {
-        PushTempTokenWithoutError( new ScErrorToken( nGlobalError));
+        PushTempTokenWithoutError( new formula::FormulaErrorToken( nGlobalError));
         return true;
     }
     return false;
@@ -256,21 +260,21 @@ inline bool IfErrorPushError()
 void PushCellResultToken( bool bDisplayEmptyAsString, const ScAddress & rAddress,
         short * pRetTypeExpr, ULONG * pRetIndexExpr );
 
-ScTokenRef PopToken();
+formula::FormulaTokenRef PopToken();
 void Pop();
 void PopError();
 double PopDouble();
 const String& PopString();
-void ValidateRef( const SingleRefData & rRef );
-void ValidateRef( const ComplRefData & rRef );
+void ValidateRef( const ScSingleRefData & rRef );
+void ValidateRef( const ScComplexRefData & rRef );
 void ValidateRef( const ScRefList & rRefList );
-void SingleRefToVars( const SingleRefData & rRef, SCCOL & rCol, SCROW & rRow, SCTAB & rTab );
+void SingleRefToVars( const ScSingleRefData & rRef, SCCOL & rCol, SCROW & rRow, SCTAB & rTab );
 void PopSingleRef( ScAddress& );
 void PopSingleRef(SCCOL& rCol, SCROW &rRow, SCTAB& rTab);
-void DoubleRefToRange( const ComplRefData&, ScRange&, BOOL bDontCheckForTableOp = FALSE );
-/** If StackVar svDoubleRef pop ScDoubleRefToken and return values of
-    ComplRefData.
-    Else if StackVar svRefList return values of the ComplRefData where
+void DoubleRefToRange( const ScComplexRefData&, ScRange&, BOOL bDontCheckForTableOp = FALSE );
+/** If formula::StackVar formula::svDoubleRef pop ScDoubleRefToken and return values of
+    ScComplexRefData.
+    Else if StackVar svRefList return values of the ScComplexRefData where
     rRefInList is pointing to. rRefInList is incremented. If rRefInList was the
     last element in list pop ScRefListToken and set rRefInList to 0, else
     rParam is incremented (!) to allow usage as in
@@ -287,7 +291,7 @@ void PopDoubleRef(SCCOL& rCol1, SCROW &rRow1, SCTAB& rTab1,
                           BOOL bDontCheckForTableOp = FALSE );
 BOOL PopDoubleRefOrSingleRef( ScAddress& rAdr );
 void PopDoubleRefPushMatrix();
-// If MatrixFormula: convert svDoubleRef to svMatrix, create JumpMatrix.
+// If MatrixFormula: convert formula::svDoubleRef to svMatrix, create JumpMatrix.
 // Else convert area reference parameters marked as ForceArray to array.
 // Returns TRUE if JumpMatrix created.
 bool ConvertMatrixParameters();
@@ -306,11 +310,11 @@ void PushDoubleRef(SCCOL nCol1, SCROW nRow1, SCTAB nTab1,
 void PushMatrix(ScMatrix* pMat);
 void PushError( USHORT nError );
 /// Raw stack type without default replacements.
-StackVar GetRawStackType();
-/// Stack type with replacement of defaults, e.g. svMissing and svEmptyCell will result in svDouble.
-StackVar GetStackType();
+formula::StackVar GetRawStackType();
+/// Stack type with replacement of defaults, e.g. svMissing and formula::svEmptyCell will result in formula::svDouble.
+formula::StackVar GetStackType();
 // peek StackType of Parameter, Parameter 1 == TOS, 2 == TOS-1, ...
-StackVar GetStackType( BYTE nParam );
+formula::StackVar GetStackType( BYTE nParam );
 BYTE GetByte() { return cPar; }
 // generiert aus DoubleRef positionsabhaengige SingleRef
 BOOL DoubleRefToPosSingleRef( const ScRange& rRange, ScAddress& rAdr );
@@ -321,7 +325,7 @@ BOOL GetBool() { return GetDouble() != 0.0; }
 const String& GetString();
 // pop matrix and obtain one element, upper left or according to jump matrix
 ScMatValType GetDoubleOrStringFromMatrix( double& rDouble, String& rString );
-ScMatrixRef CreateMatrixFromDoubleRef( const ScToken* pToken,
+ScMatrixRef CreateMatrixFromDoubleRef( const formula::FormulaToken* pToken,
         SCCOL nCol1, SCROW nRow1, SCTAB nTab1,
         SCCOL nCol2, SCROW nRow2, SCTAB nTab2 );
 inline ScTokenMatrixMap& GetTokenMatrixMap();
@@ -505,6 +509,7 @@ BOOL SetSbxVariable( SbxVariable* pVar, SCCOL nCol, SCROW nRow, SCTAB nTab );
 void ScErrorType();
 void ScDBArea();
 void ScColRowNameAuto();
+void ScExternalRef();
 void ScGetPivotData();
 void ScHyperLink();
 void ScBahtText();
@@ -559,6 +564,7 @@ void ScDde();
 void ScBase();
 void ScDecimal();
 void ScConvert();
+void ScEuroConvert();
 
 //----------------------- Finanzfunktionen ------------------------------------
 void ScNPV();
@@ -606,7 +612,7 @@ double ScGetGCD(double fx, double fy);
 void ScGCD();
 void ScLCM();
 //-------------------------- Matrixfunktionen ---------------------------------
-ScMatrixRef GetNewMat(SCSIZE nC, SCSIZE nR);
+
 void ScMatValue();
 void MEMat(ScMatrix* mM, SCSIZE n);
 void MFastMult(ScMatrix* pA, ScMatrix* pB, ScMatrix* pR, SCSIZE n, SCSIZE m, SCSIZE l);
@@ -616,11 +622,6 @@ void ScMatMult();
 void ScMatTrans();
 void ScEMat();
 void ScMatRef();
-ScMatrixRef MatAdd(ScMatrix* pMat1, ScMatrix* pMat2);
-ScMatrixRef MatSub(ScMatrix* pMat1, ScMatrix* pMat2);
-ScMatrixRef MatMul(ScMatrix* pMat1, ScMatrix* pMat2);
-ScMatrixRef MatDiv(ScMatrix* pMat1, ScMatrix* pMat2);
-ScMatrixRef MatPow(ScMatrix* pMat1, ScMatrix* pMat2);
 ScMatrixRef MatConcat(ScMatrix* pMat1, ScMatrix* pMat2);
 void ScSumProduct();
 void ScSumX2MY2();
@@ -630,6 +631,27 @@ void ScGrowth();
 // multiple Regression: Varianzen der Koeffizienten
 BOOL RGetVariances( ScMatrix* pV, ScMatrix* pX, SCSIZE nC, SCSIZE nR,
     BOOL bSwapColRow, BOOL bZeroConstant );
+void Calculate(ScMatrixRef& pResMat,ScMatrixRef& pE,ScMatrixRef& pQ,ScMatrixRef& pV,ScMatrixRef& pMatX,BOOL bConstant,SCSIZE N,SCSIZE M,BYTE nCase);
+ScMatrixRef Calculate2(const BOOL bConstant,const SCSIZE M ,const SCSIZE N,ScMatrixRef& pMatX,ScMatrixRef& pMatY,BYTE nCase);
+bool Calculate3(const SCSIZE M ,ScMatrixRef& pQ);
+bool Calculate4(BOOL _bExp,ScMatrixRef& pResMat,ScMatrixRef& pQ,BOOL bConstant,SCSIZE N,SCSIZE M);
+bool CalculateSkew(double& fSum,double& fCount,double& vSum,std::vector<double>& values);
+void CalculateSlopeIntercept(BOOL bSlope);
+void CalculateSmallLarge(BOOL bSmall);
+void CalculatePearsonCovar(BOOL _bPearson,BOOL _bStexy);
+bool CalculateTest( BOOL _bTemplin
+                   ,const SCSIZE nC1, const SCSIZE nC2,const SCSIZE nR1,const SCSIZE nR2
+                   ,const ScMatrixRef& pMat1,const ScMatrixRef& pMat2
+                   ,double& fT,double& fF);
+void CalculateLookup(BOOL HLookup);
+bool FillEntry(ScQueryEntry& rEntry);
+void CalculateAddSub(BOOL _bSub);
+void CalculateTrendGrowth(BOOL _bGrowth);
+void CalulateRGPRKP(BOOL _bRKP);
+void CalculateSumX2MY2SumX2DY2(BOOL _bSumX2DY2);
+void CalculateMatrixValue(const ScMatrix* pMat,SCSIZE nC,SCSIZE nR);
+bool CheckMatrix(BOOL _bLOG,BOOL _bTrendGrowth,BYTE& nCase,SCSIZE& nCX,SCSIZE& nCY,SCSIZE& nRX,SCSIZE& nRY,SCSIZE& M,SCSIZE& N,ScMatrixRef& pMatX,ScMatrixRef& pMatY);
+
 void ScRGP();
 void ScRKP();
 void ScForecast();
@@ -641,17 +663,21 @@ double phi(double x);
 double taylor(double* pPolynom, USHORT nMax, double x);
 double gauss(double x);
 double gaussinv(double x);
-double GetBetaDist(double x, double alpha, double beta);
+double GetBetaDist(double x, double alpha, double beta);  //cumulative distribution function
+double GetBetaDistPDF(double fX, double fA, double fB); //probability density function)
 double GetChiDist(double fChi, double fDF);     // for LEGACY.CHIDIST, returns right tail
 double GetChiSqDistCDF(double fX, double fDF);  // for CHISQDIST, returns left tail
+double GetChiSqDistPDF(double fX, double fDF);  // probability density function
 double GetFDist(double x, double fF1, double fF2);
 double GetTDist(double T, double fDF);
 double Fakultaet(double x);
 double BinomKoeff(double n, double k);
 double GetGamma(double x);
 double GetLogGamma(double x);
+double GetBeta(double fAlpha, double fBeta);
+double GetLogBeta(double fAlpha, double fBeta);
 void ScLogGamma();
-void ScGamma();     // ready for ODF 1.2 GAMMA
+void ScGamma();
 void ScPhi();
 void ScGauss();
 void ScStdNormDist();
@@ -675,7 +701,8 @@ void ScLogNormInv();
 void ScTDist();
 void ScFDist();
 void ScChiDist();   // for LEGACY.CHIDIST, returns right tail
-// TODO: void ScChiSqDist;
+void ScChiSqDist(); // returns left tail or density
+void ScChiSqInv(); //invers to CHISQDIST
 void ScWeibull();
 void ScBetaDist();
 void ScFInv();
@@ -739,25 +766,25 @@ public:
                     const ScAddress&, ScTokenArray& );
     ~ScInterpreter();
 
-    StackVar Interpret();
+    formula::StackVar Interpret();
 
     void SetError(USHORT nError)
             { if (nError && !nGlobalError) nGlobalError = nError; }
 
-    USHORT GetError() { return nGlobalError; }
-
-    StackVar  GetResultType()           { return xResult->GetType(); }
-    const     String& GetStringResult() { return xResult->GetString(); }
-    double    GetNumResult()            { return xResult->GetDouble(); }
-    ScTokenRef GetResultToken()         { return xResult; }
-    short     GetRetFormatType()    { return nRetFmtType; }
-    ULONG     GetRetFormatIndex()   { return nRetFmtIndex; }
+    USHORT GetError()                               const   { return nGlobalError; }
+    formula::StackVar  GetResultType()              const   { return xResult->GetType(); }
+    const String&   GetStringResult()               const   { return xResult->GetString(); }
+    double          GetNumResult()                  const   { return xResult->GetDouble(); }
+    formula::FormulaTokenRef
+                    GetResultToken()                const   { return xResult; }
+    short           GetRetFormatType()              const   { return nRetFmtType; }
+    ULONG           GetRetFormatIndex()             const   { return nRetFmtIndex; }
 };
 
 
 inline void ScInterpreter::MatrixDoubleRefToMatrix()
 {
-    if ( bMatrixFormula && GetStackType() == svDoubleRef )
+    if ( bMatrixFormula && GetStackType() == formula::svDoubleRef )
     {
         GetTokenMatrixMap();    // make sure it exists, create if not.
         PopDoubleRefPushMatrix();
@@ -841,7 +868,7 @@ inline void ScInterpreter::TreatDoubleError( double& rVal )
 
 
 // static
-inline double ScInterpreter::div( double fNumerator, double fDenominator )
+inline double ScInterpreter::div( const double& fNumerator, const double& fDenominator )
 {
     return (fDenominator != 0.0) ? (fNumerator / fDenominator) :
         CreateDoubleError( errDivisionByZero);

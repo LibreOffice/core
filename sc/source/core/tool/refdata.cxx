@@ -36,7 +36,7 @@
 #include "refdata.hxx"
 
 
-void SingleRefData::CalcRelFromAbs( const ScAddress& rPos )
+void ScSingleRefData::CalcRelFromAbs( const ScAddress& rPos )
 {
     nRelCol = nCol - rPos.Col();
     nRelRow = nRow - rPos.Row();
@@ -44,7 +44,7 @@ void SingleRefData::CalcRelFromAbs( const ScAddress& rPos )
 }
 
 
-void SingleRefData::SmartRelAbs( const ScAddress& rPos )
+void ScSingleRefData::SmartRelAbs( const ScAddress& rPos )
 {
     if ( Flags.bColRel )
         nCol = nRelCol + rPos.Col();
@@ -63,7 +63,7 @@ void SingleRefData::SmartRelAbs( const ScAddress& rPos )
 }
 
 
-void SingleRefData::CalcAbsIfRel( const ScAddress& rPos )
+void ScSingleRefData::CalcAbsIfRel( const ScAddress& rPos )
 {
     if ( Flags.bColRel )
     {
@@ -85,7 +85,7 @@ void SingleRefData::CalcAbsIfRel( const ScAddress& rPos )
     }
 }
 
-//UNUSED2008-05  void SingleRefData::OldBoolsToNewFlags( const OldSingleRefBools& rBools )
+//UNUSED2008-05  void ScSingleRefData::OldBoolsToNewFlags( const OldSingleRefBools& rBools )
 //UNUSED2008-05  {
 //UNUSED2008-05      switch ( rBools.bRelCol )
 //UNUSED2008-05      {
@@ -163,7 +163,7 @@ void SingleRefData::CalcAbsIfRel( const ScAddress& rPos )
 //UNUSED2008-05   Aber immer noch nCol > MAXCOL und gut sollte sein..
 //UNUSED2008-05   */
 //UNUSED2008-05
-//UNUSED2008-05  BYTE SingleRefData::CreateStoreByteFromFlags() const
+//UNUSED2008-05  BYTE ScSingleRefData::CreateStoreByteFromFlags() const
 //UNUSED2008-05  {
 //UNUSED2008-05      return (BYTE)(
 //UNUSED2008-05            ( (Flags.bRelName     & 0x01) << 7 )
@@ -178,7 +178,7 @@ void SingleRefData::CalcAbsIfRel( const ScAddress& rPos )
 //UNUSED2008-05  }
 //UNUSED2008-05
 //UNUSED2008-05
-//UNUSED2008-05  void SingleRefData::CreateFlagsFromLoadByte( BYTE n )
+//UNUSED2008-05  void ScSingleRefData::CreateFlagsFromLoadByte( BYTE n )
 //UNUSED2008-05  {
 //UNUSED2008-05      Flags.bColRel       = (n & 0x01 );
 //UNUSED2008-05      Flags.bColDeleted   = ( (n >> 1) & 0x01 );
@@ -191,7 +191,7 @@ void SingleRefData::CalcAbsIfRel( const ScAddress& rPos )
 //UNUSED2008-05  }
 
 
-BOOL SingleRefData::operator==( const SingleRefData& r ) const
+BOOL ScSingleRefData::operator==( const ScSingleRefData& r ) const
 {
     return bFlags == r.bFlags &&
         (Flags.bColRel ? nRelCol == r.nRelCol : nCol == r.nCol) &&
@@ -199,8 +199,12 @@ BOOL SingleRefData::operator==( const SingleRefData& r ) const
         (Flags.bTabRel ? nRelTab == r.nRelTab : nTab == r.nTab);
 }
 
+bool ScSingleRefData::operator!=( const ScSingleRefData& r ) const
+{
+    return !operator==(r);
+}
 
-static void lcl_putInOrder( SingleRefData & rRef1, SingleRefData & rRef2 )
+static void lcl_putInOrder( ScSingleRefData & rRef1, ScSingleRefData & rRef2 )
 {
     SCCOL nCol1, nCol2;
     SCROW nRow1, nRow2;
@@ -292,18 +296,18 @@ static void lcl_putInOrder( SingleRefData & rRef1, SingleRefData & rRef2 )
 }
 
 
-void ComplRefData::PutInOrder()
+void ScComplexRefData::PutInOrder()
 {
     lcl_putInOrder( Ref1, Ref2);
 }
 
 
-static void lcl_adjustInOrder( SingleRefData & rRef1, SingleRefData & rRef2, bool bFirstLeader )
+static void lcl_adjustInOrder( ScSingleRefData & rRef1, ScSingleRefData & rRef2, bool bFirstLeader )
 {
     // a1:a2:a3, bFirstLeader: rRef1==a1==r1, rRef2==a3==r2
     //                   else: rRef1==a3==r2, rRef2==a2==r1
-    SingleRefData& r1 = (bFirstLeader ? rRef1 : rRef2);
-    SingleRefData& r2 = (bFirstLeader ? rRef2 : rRef1);
+    ScSingleRefData& r1 = (bFirstLeader ? rRef1 : rRef2);
+    ScSingleRefData& r2 = (bFirstLeader ? rRef2 : rRef1);
     if (r1.Flags.bFlag3D && !r2.Flags.bFlag3D)
     {
         // [$]Sheet1.A5:A6 on Sheet2 do still refer only Sheet1.
@@ -315,10 +319,10 @@ static void lcl_adjustInOrder( SingleRefData & rRef1, SingleRefData & rRef2, boo
 }
 
 
-ComplRefData& ComplRefData::Extend( const SingleRefData & rRef, const ScAddress & rPos )
+ScComplexRefData& ScComplexRefData::Extend( const ScSingleRefData & rRef, const ScAddress & rPos )
 {
     CalcAbsIfRel( rPos);
-    SingleRefData aRef = rRef;
+    ScSingleRefData aRef = rRef;
     aRef.CalcAbsIfRel( rPos);
     bool bInherit3D = Ref1.IsFlag3D() && !Ref2.IsFlag3D();
     bool bInherit3Dtemp = bInherit3D && !rRef.IsFlag3D();
@@ -335,7 +339,22 @@ ComplRefData& ComplRefData::Extend( const SingleRefData & rRef, const ScAddress 
         lcl_adjustInOrder( aRef, Ref2, false);
         if (bInherit3Dtemp)
             Ref2.SetFlag3D( false);
+        aRef = rRef;
+        aRef.CalcAbsIfRel( rPos);
     }
+    // In Ref2 use absolute/relative addressing from non-extended parts if
+    // equal and therefor not adjusted.
+    // A$5:A5 => A$5:A$5:A5 => A$5:A5, and not A$5:A$5
+    // A$6:$A5 => A$6:A$6:$A5 => A5:$A$6
+    if (Ref2.nCol == aRef.nCol)
+        Ref2.SetColRel( aRef.IsColRel());
+    if (Ref2.nRow == aRef.nRow)
+        Ref2.SetRowRel( aRef.IsRowRel());
+    // $Sheet1.$A$5:$A$6 => $Sheet1.$A$5:$A$5:$A$6 => $Sheet1.$A$5:$A$6, and
+    // not $Sheet1.$A$5:Sheet1.$A$6 (with invisible second 3D, but relative).
+    if (Ref2.nTab == aRef.nTab)
+        Ref2.SetTabRel( bInherit3Dtemp ? Ref1.IsTabRel() : aRef.IsTabRel());
+    Ref2.CalcRelFromAbs( rPos);
     // Force 3D if necessary. References to other sheets always.
     if (Ref1.nTab != rPos.Tab())
         Ref1.SetFlag3D( true);
@@ -344,13 +363,13 @@ ComplRefData& ComplRefData::Extend( const SingleRefData & rRef, const ScAddress 
         Ref2.SetFlag3D( true);
     // Merge Flag3D to Ref2 in case there was nothing to inherit and/or range
     // wasn't extended as in A5:A5:Sheet1.A5 if on Sheet1.
-    if (!Ref1.IsFlag3D() && !Ref2.IsFlag3D() && rRef.IsFlag3D())
+    if (rRef.IsFlag3D())
         Ref2.SetFlag3D( true);
     return *this;
 }
 
 
-ComplRefData& ComplRefData::Extend( const ComplRefData & rRef, const ScAddress & rPos )
+ScComplexRefData& ScComplexRefData::Extend( const ScComplexRefData & rRef, const ScAddress & rPos )
 {
     return Extend( rRef.Ref1, rPos).Extend( rRef.Ref2, rPos);
 }

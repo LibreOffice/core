@@ -34,6 +34,7 @@
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/drawing/Direction3D.hpp>
 #include <com/sun/star/drawing/XShapes.hpp>
+#include "chartviewdllapi.hxx"
 
 //.............................................................................
 namespace chart
@@ -44,7 +45,7 @@ namespace chart
 /**
 */
 
-class DataPointSymbolSupplier
+class OOO_DLLPUBLIC_CHARTVIEW DataPointSymbolSupplier
 {
 public:
     static ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShapes >

@@ -34,7 +34,7 @@
 #include <tools/link.hxx>
 #include "global.hxx"
 #include "postit.hxx"
-#include "grammar.hxx"
+#include "formula/grammar.hxx"
 
 class ScEditEngineDefaulter;
 class SfxUndoAction;
@@ -90,11 +90,11 @@ public:
                                 BOOL bInterpret, BOOL bApi );
     BOOL            SetCellText( const ScAddress& rPos, const String& rText,
                                     BOOL bInterpret, BOOL bEnglish, BOOL bApi,
-                                    const ScGrammar::Grammar eGrammar );
+                                    const formula::FormulaGrammar::Grammar eGrammar );
 
                     // creates a new cell for use with PutCell
     ScBaseCell*     InterpretEnglishString( const ScAddress& rPos, const String& rText,
-                                            const ScGrammar::Grammar eGrammar );
+                                            const formula::FormulaGrammar::Grammar eGrammar );
 
     BOOL            SetNoteText( const ScAddress& rPos, const String& rText, BOOL bApi );
 
@@ -103,9 +103,11 @@ public:
     BOOL            ApplyStyle( const ScMarkData& rMark, const String& rStyleName,
                                     BOOL bRecord, BOOL bApi );
 
-    BOOL            InsertCells( const ScRange& rRange, InsCellCmd eCmd, BOOL bRecord, BOOL bApi,
+    BOOL            InsertCells( const ScRange& rRange,const ScMarkData* pTabMark,
+                                 InsCellCmd eCmd, BOOL bRecord, BOOL bApi,
                                     BOOL bPartOfPaste = FALSE );
-    BOOL            DeleteCells( const ScRange& rRange, DelCellCmd eCmd, BOOL bRecord, BOOL bApi );
+    BOOL            DeleteCells( const ScRange& rRange, const ScMarkData* pTabMark,
+                                 DelCellCmd eCmd, BOOL bRecord, BOOL bApi );
 
     BOOL            MoveBlock( const ScRange& rSource, const ScAddress& rDestPos,
                                 BOOL bCut, BOOL bRecord, BOOL bPaint, BOOL bApi );
@@ -118,7 +120,7 @@ public:
 
     BOOL            SetLayoutRTL( SCTAB nTab, BOOL bRTL, BOOL bApi );
 
-    BOOL            SetGrammar( ScGrammar::Grammar eGrammar );
+    BOOL            SetGrammar( formula::FormulaGrammar::Grammar eGrammar );
 
     SC_DLLPUBLIC BOOL           SetWidthOrHeight( BOOL bWidth, SCCOLROW nRangeCnt, SCCOLROW* pRanges,
                                     SCTAB nTab, ScSizeMode eMode, USHORT nSizeTwips,
@@ -140,7 +142,7 @@ public:
     BOOL            EnterMatrix( const ScRange& rRange, const ScMarkData* pTabMark,
                                     const ScTokenArray* pTokenArray,
                                     const String& rString, BOOL bApi, BOOL bEnglish,
-                                    const ScGrammar::Grammar );
+                                    const formula::FormulaGrammar::Grammar );
 
     BOOL            TabOp( const ScRange& rRange, const ScMarkData* pTabMark,
                             const ScTabOpParam& rParam, BOOL bRecord, BOOL bApi );

@@ -33,6 +33,10 @@
 #include "TickmarkProperties.hxx"
 #include "PlottingPositionHelper.hxx"
 #include "LabelAlignment.hxx"
+
+#include <com/sun/star/chart/ChartAxisLabelPosition.hpp>
+#include <com/sun/star/chart/ChartAxisMarkPosition.hpp>
+#include <com/sun/star/chart/ChartAxisPosition.hpp>
 #include <com/sun/star/chart2/XAxis.hpp>
 #include <com/sun/star/chart2/AxisType.hpp>
 #include <com/sun/star/chart2/data/XTextualDataSequence.hpp>
@@ -99,9 +103,20 @@ struct AxisProperties
     sal_Int32   m_nDimensionIndex;
     bool        m_bIsMainAxis;//not secondary axis
     bool        m_bSwapXAndY;
+
+    ::com::sun::star::chart::ChartAxisPosition      m_eCrossoverType;
+    ::com::sun::star::chart::ChartAxisLabelPosition m_eLabelPos;
+    ::com::sun::star::chart::ChartAxisMarkPosition  m_eTickmarkPos;
+
     double*     m_pfMainLinePositionAtOtherAxis;
     double*     m_pfExrtaLinePositionAtOtherAxis;
 
+    bool        m_bCrossingAxisHasReverseDirection;
+    bool        m_bCrossingAxisIsCategoryAxes;
+    bool        m_bAxisBetweenCategories;
+
+    //this direction is used to indicate in which direction the labels are to be drawn
+    double          m_fLabelDirectionSign;
     //this direction is used to indicate in which direction inner tickmarks are to be drawn
     double          m_fInnerDirectionSign;
     bool            m_bLabelsOutside;
@@ -109,11 +124,6 @@ struct AxisProperties
     sal_Bool        m_bDisplayLabels;
 
     sal_Int32       m_nNumberFormatKey;
-
-
-//    enum RelativeLabelPosition { NONE, LEFTORBOTTOM_OF_DIAGRAM, RIGHTORTOP_OF_DIAGRAM,
-//                        LEFTORBOTTOM_OF_AXIS, RIGHTORTOP_OF_AXIS };
-//    RelativeLabelPosition m_eRelativeLabelPosition;
 
     /*
     0: no tickmarks         1: inner tickmarks
@@ -142,6 +152,10 @@ struct AxisProperties
     AxisProperties( const AxisProperties& rAxisProperties );
     virtual ~AxisProperties();
     virtual void init(bool bCartesian=false);//init from model data (m_xAxisModel)
+
+    void initAxisPositioning( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& xAxisProp );
+
+    static TickmarkProperties getBiggestTickmarkProperties();
 
 private:
     AxisProperties();

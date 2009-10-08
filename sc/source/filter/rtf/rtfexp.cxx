@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: rtfexp.cxx,v $
- * $Revision: 1.10 $
+ * $Revision: 1.10.144.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -56,11 +56,11 @@
 #include "cellform.hxx"
 #include "editutil.hxx"
 #include "stlpool.hxx"
-
+#include "ftools.hxx"
 
 //------------------------------------------------------------------
 
-FltError ScExportRTF( SvStream& rStrm, ScDocument* pDoc,
+FltError ScFormatFilterPluginImpl::ScExportRTF( SvStream& rStrm, ScDocument* pDoc,
         const ScRange& rRange, const CharSet /*eNach*/ )
 {
     ScRTFExport aEx( rStrm, pDoc, rRange );
@@ -289,7 +289,7 @@ void ScRTFExport::WriteCell( SCTAB nTab, SCROW nRow, SCCOL nCol )
         bResetAttr = TRUE;
         rStrm << sRTF_I;
     }
-    if ( rUnderlineItem.GetUnderline() != UNDERLINE_NONE )
+    if ( rUnderlineItem.GetLineStyle() != UNDERLINE_NONE )
     {   // underline
         bResetAttr = TRUE;
         rStrm << sRTF_UL;

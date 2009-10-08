@@ -52,7 +52,7 @@
 #include "validate.hrc"
 #include "validate.hxx"
 #include "compiler.hxx"
-#include "opcode.hxx" //CHINA001
+#include "formula/opcode.hxx" //CHINA001
 
 // ============================================================================
 
@@ -172,8 +172,7 @@ void lclGetFormulaFromStringList( String& rFmlaStr, const String& rStringList, s
     for( xub_StrLen nToken = 0, nStringIx = 0; nToken < nTokenCnt; ++nToken )
     {
         String aToken( rStringList.GetToken( 0, '\n', nStringIx ) );
-        aToken.SearchAndReplaceAllAscii( "\"", String( RTL_CONSTASCII_USTRINGPARAM( "\"\"" ) ) );
-        ScGlobal::AddQuotes( aToken );
+        ScGlobal::AddQuotes( aToken, '"' );
         ScGlobal::AddToken( rFmlaStr, aToken, cFmlaSep );
     }
     if( !rFmlaStr.Len() )
@@ -201,11 +200,10 @@ bool lclGetStringListFromFormula( String& rStringList, const String& rFmlaStr, s
         aToken.EraseLeadingAndTrailingChars();
         if( aToken.Len() )      // ignore empty tokens, i.e. "a";;"b"
         {
-            bIsStringList = ScGlobal::IsQuoted( aToken );
+            bIsStringList = ScGlobal::IsQuoted( aToken, '"' );
             if( bIsStringList )
             {
-                ScGlobal::EraseQuotes( aToken );
-                aToken.SearchAndReplaceAllAscii( "\"\"", String( '"' ) );
+                ScGlobal::EraseQuotes( aToken, '"' );
                 ScGlobal::AddToken( rStringList, aToken, '\n', 1, bTokenAdded );
                 bTokenAdded = true;
             }

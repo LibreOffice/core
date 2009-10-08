@@ -51,10 +51,8 @@ public:
 
     virtual rtl::OUString getUndoDescription() const;
 
-    virtual void TakeComment(String& rStr) const;
-    virtual FASTBOOL IsMoveOnly() const;
-    virtual Pointer GetPointer() const;
-    virtual void Brk();
+    virtual void TakeSdrDragComment(String& rStr) const;
+    virtual Pointer GetSdrDragPointer() const;
 
 protected:
     ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel > getChartModel() const;

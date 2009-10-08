@@ -38,7 +38,7 @@
 #include <vcl/fixed.hxx>
 #endif
 #include <svtools/svmedit.hxx>
-#include "anyrefdg.hxx"     // ScRefButton
+#include "anyrefdg.hxx"     // formula::RefButton
 
 
 //============================================================================
@@ -99,7 +99,7 @@ public:
 //============================================================================
 // class ArgEdit
 
-class ArgEdit : public ScRefEdit
+class ArgEdit : public formula::RefEdit
 {
 public:
             ArgEdit( Window* pParent, const ResId& rResId );
@@ -135,12 +135,12 @@ private:
     FixedText*      pFtArg;
     ImageButton*    pBtnFx;
     ArgEdit*        pEdArg;
-    ScRefButton*    pRefBtn;
+    formula::RefButton* pRefBtn;
 
     DECL_LINK(  FxBtnClickHdl, ImageButton* );
-    DECL_LINK(  RefBtnClickHdl,ScRefButton* );
+    DECL_LINK(  RefBtnClickHdl,formula::RefButton* );
     DECL_LINK(  FxBtnFocusHdl, ImageButton* );
-    DECL_LINK(  RefBtnFocusHdl,ScRefButton* );
+    DECL_LINK(  RefBtnFocusHdl,formula::RefButton* );
     DECL_LINK(  EdFocusHdl, ArgEdit* );
     DECL_LINK(  EdModifyHdl,ArgEdit* );
 
@@ -160,7 +160,7 @@ public:
     void        InitArgInput (  FixedText*      pftArg,
                                 ImageButton*    pbtnFx,
                                 ArgEdit*        pedArg,
-                                ScRefButton*    prefBtn);
+                                formula::RefButton* prefBtn);
 
     void        SetArgName(const String &aArg);
     String      GetArgName();

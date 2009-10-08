@@ -97,7 +97,7 @@ enum ObjectSelectionType
 //==================================================================
 
 
-class SC_DLLPUBLIC ScTabViewShell: public SfxViewShell, public ScDBFunc
+class ScTabViewShell: public SfxViewShell, public ScDBFunc
 {
 private:
     static USHORT           nInsertCtrlState;
@@ -182,20 +182,20 @@ private:
     String                  aCurrShapeEnumCommand[ MASTERENUMCOMMANDS ];
 
 private:
-    SC_DLLPRIVATE void  Construct( BYTE nForceDesignMode = SC_FORCEMODE_NONE );
+    void    Construct( BYTE nForceDesignMode = SC_FORCEMODE_NONE );
 
-//UNUSED2008-05  SC_DLLPRIVATE void          SetMySubShell( SfxShell* pShell );
-    SC_DLLPRIVATE SfxShell*     GetMySubShell() const;
+//UNUSED2008-05  void          SetMySubShell( SfxShell* pShell );
+    SfxShell*       GetMySubShell() const;
 
-    SC_DLLPRIVATE void          DoReadUserData( const String& rData );
-    SC_DLLPRIVATE void          DoReadUserDataSequence( const ::com::sun::star::uno::Sequence<
+    void            DoReadUserData( const String& rData );
+    void          DoReadUserDataSequence( const ::com::sun::star::uno::Sequence<
                                      ::com::sun::star::beans::PropertyValue >& rSettings );
 
-    SC_DLLPRIVATE DECL_LINK( SimpleRefClose, String* );
-    SC_DLLPRIVATE DECL_LINK( SimpleRefDone, String* );
-    SC_DLLPRIVATE DECL_LINK( SimpleRefAborted, String* );
-    SC_DLLPRIVATE DECL_LINK( SimpleRefChange, String* );
-    SC_DLLPRIVATE DECL_LINK( FormControlActivated, FmFormShell* );
+    DECL_LINK( SimpleRefClose, String* );
+    DECL_LINK( SimpleRefDone, String* );
+    DECL_LINK( SimpleRefAborted, String* );
+    DECL_LINK( SimpleRefChange, String* );
+    DECL_LINK( FormControlActivated, FmFormShell* );
 
 protected:
     virtual void    Activate(BOOL bMDI);
@@ -231,7 +231,7 @@ protected:
     virtual SdrView* GetDrawView() const;
 
 public:
-                    TYPEINFO();
+                    TYPEINFO_VISIBILITY(SC_DLLPUBLIC);
 
                     SFX_DECL_INTERFACE(SCID_TABVIEW_SHELL)
                     SFX_DECL_VIEWFACTORY(ScTabViewShell);
@@ -268,8 +268,8 @@ public:
 //UNUSED2008-05  void            ExecuteShowNIY( SfxRequest& rReq );
 //UNUSED2008-05  void           StateDisabled( SfxItemSet& rSet );
 
-    void            Execute( SfxRequest& rReq );
-    void            GetState( SfxItemSet& rSet );
+    SC_DLLPUBLIC void           Execute( SfxRequest& rReq );
+    SC_DLLPUBLIC void           GetState( SfxItemSet& rSet );
 
     void            ExecuteTable( SfxRequest& rReq );
     void            GetStateTable( SfxItemSet& rSet );
@@ -380,7 +380,7 @@ public:
 
     void            DeactivateOle();
 
-    static ScTabViewShell* GetActiveViewShell();
+    SC_DLLPUBLIC static ScTabViewShell* GetActiveViewShell();
     SfxModelessDialog*  CreateRefDialog( SfxBindings* pB, SfxChildWindow* pCW,
                                         SfxChildWinInfo* pInfo,
                                         Window* pParent, USHORT nSlotId );

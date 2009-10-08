@@ -57,11 +57,12 @@
 #include "rangenam.hxx"
 #include "attrib.hxx"
 #include "ftools.hxx"
+#include "tokenarray.hxx"
 
 
 //------------------------------------------------------------------------
 
-FltError ScImportHTML( SvStream &rStream, const String& rBaseURL, ScDocument *pDoc,
+FltError ScFormatFilterPluginImpl::ScImportHTML( SvStream &rStream, const String& rBaseURL, ScDocument *pDoc,
         ScRange& rRange, double nOutputFactor, BOOL bCalcWidthHeight )
 {
     ScHTMLImport aImp( pDoc, rBaseURL, rRange, bCalcWidthHeight );
@@ -72,6 +73,10 @@ FltError ScImportHTML( SvStream &rStream, const String& rBaseURL, ScDocument *pD
     return nErr;
 }
 
+ScEEAbsImport *ScFormatFilterPluginImpl::CreateHTMLImport( ScDocument* pDocP, const String& rBaseURL, const ScRange& rRange, BOOL bCalcWidthHeight )
+{
+    return new ScHTMLImport( pDocP, rBaseURL, rRange, bCalcWidthHeight );
+}
 
 ScHTMLImport::ScHTMLImport( ScDocument* pDocP, const String& rBaseURL, const ScRange& rRange, BOOL bCalcWidthHeight ) :
     ScEEImport( pDocP, rRange )
@@ -123,7 +128,7 @@ ScHTMLImport::~ScHTMLImport()
 
 void ScHTMLImport::InsertRangeName( ScDocument* pDoc, const String& rName, const ScRange& rRange )
 {
-    ComplRefData aRefData;
+    ScComplexRefData aRefData;
     aRefData.InitRange( rRange );
     ScTokenArray aTokArray;
     aTokArray.AddDoubleReference( aRefData );
@@ -208,6 +213,11 @@ void ScHTMLImport::WriteToDocument( BOOL bSizeColsRows, double nOutputFactor )
                 InsertRangeName( mpDoc, aName, aNewRange );
         }
     }
+}
+
+String ScFormatFilterPluginImpl::GetHTMLRangeNameList( ScDocument* pDoc, const String& rOrigName )
+{
+    return GetHTMLRangeNameList( pDoc, rOrigName );
 }
 
 String ScHTMLImport::GetHTMLRangeNameList( ScDocument* pDoc, const String& rOrigName )

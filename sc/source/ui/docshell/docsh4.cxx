@@ -123,6 +123,7 @@ using namespace ::com::sun::star;
 #include <com/sun/star/document/UpdateDocMode.hpp>
 #include "scresid.hxx" //add by CHINA001
 #include "scabstdlg.hxx" //CHINA001
+#include "externalrefmgr.hxx"
 
 #include "sharedocdlg.hxx"
 
@@ -510,6 +511,7 @@ void ScDocShell::Execute( SfxRequest& rReq )
                 if (nDlgRet == RET_YES || nSet==LM_ALWAYS)
                 {
                     ReloadTabLinks();
+                    aDocument.UpdateExternalRefLinks();
                     aDocument.UpdateDdeLinks();
                     aDocument.UpdateAreaLinks();
 
@@ -2209,6 +2211,20 @@ void ScDocShell::GetState( SfxItemSet &rSet )
                 rSet.Put( SfxUInt16Item( nWhich,
                     aDocument.GetDocOptions().GetYear2000() ) );
             break;
+
+            case SID_SHARE_DOC:
+                {
+                    if ( IsReadOnly() )
+                    {
+                        rSet.DisableItem( nWhich );
+                    }
+                }
+                break;
+
+            default:
+                {
+                }
+                break;
         }
 
         nWhich = aIter.NextWhich();
@@ -2458,7 +2474,7 @@ long __EXPORT ScDocShell::DdeSetData( const String& rItem,
         }
     }
     ScRange aRange;
-    ScAddress::Convention eConv = aDocument.GetAddressConvention();
+    formula::FormulaGrammar::AddressConvention eConv = aDocument.GetAddressConvention();
     BOOL bValid = ( ( aRange.Parse( aPos, &aDocument, eConv ) & SCA_VALID ) ||
                     ( aRange.aStart.Parse( aPos, &aDocument, eConv ) & SCA_VALID ) );
 

@@ -907,7 +907,7 @@ void XclImpWebQuery::ReadWqtables( XclImpStream& rStrm )
                 ScGlobal::AddToken( maTables, ScfTools::GetNameFromHTMLIndex( static_cast< sal_uInt32 >( nTabNum ) ), cSep );
             else
             {
-                ScGlobal::EraseQuotes( aToken );
+                ScGlobal::EraseQuotes( aToken, '"', false );
                 if( aToken.Len() )
                     ScGlobal::AddToken( maTables, ScfTools::GetNameFromHTMLName( aToken ), cSep );
             }

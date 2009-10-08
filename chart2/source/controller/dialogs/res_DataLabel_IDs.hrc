@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: res_DataLabel_IDs.hrc,v $
- * $Revision: 1.5 $
+ * $Revision: 1.5.72.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -37,5 +37,8 @@
 #define PB_PERCENT_NUMBERFORMAT 21
 
 #define FT_LABEL_PLACEMENT 2
-
 #define LB_LABEL_PLACEMENT 2
+
+#define FT_LABEL_TEXTDIR    31
+#define LB_LABEL_TEXTDIR    32
+

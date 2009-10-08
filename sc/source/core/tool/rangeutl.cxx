@@ -658,7 +658,7 @@ void ScRangeStringConverter::GetStringFromRange(
         ScAddress aEndAddress( rRange.aEnd );
         String sStartAddress;
         String sEndAddress;
-        ScAddress::Convention eConv = pDocument->GetAddressConvention();
+        formula::FormulaGrammar::AddressConvention eConv = pDocument->GetAddressConvention();
         aStartAddress.Format( sStartAddress, nFormatFlags, (ScDocument*) pDocument, eConv );
         aEndAddress.Format( sEndAddress, nFormatFlags, (ScDocument*) pDocument, eConv );
         OUString sOUStartAddress( sStartAddress );

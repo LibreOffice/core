@@ -147,7 +147,7 @@ SeriesOptionsItemConverter::SeriesOptionsItemConverter(
         if( m_bSupportingAxisSideBySide && xDiagramProperties.is() )
         {
             xDiagramProperties->getPropertyValue( C2U("GroupBarsPerAxis")) >>= m_bGroupBarsPerAxis;
-            m_bAllSeriesAttachedToSameAxis = ChartTypeHelper::allSeriesAttachedToSameAxis( xChartType, m_nAllSeriesAxisIndex );
+            m_bAllSeriesAttachedToSameAxis = DataSeriesHelper::areAllSeriesAttachedToSameAxis( xChartType, m_nAllSeriesAxisIndex );
         }
 
         m_bSupportingStartingAngle = ChartTypeHelper::isSupportingStartingAngle( xChartType );

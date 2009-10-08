@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: nameuno.cxx,v $
- * $Revision: 1.21 $
+ * $Revision: 1.21.132.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -138,7 +138,7 @@ ScRangeData* ScNamedRangeObj::GetRangeData_Impl()
 
 void ScNamedRangeObj::Modify_Impl( const String* pNewName, const ScTokenArray* pNewTokens, const String* pNewContent,
                                     const ScAddress* pNewPos, const sal_uInt16* pNewType,
-                                    const ScGrammar::Grammar eGrammar )
+                                    const formula::FormulaGrammar::Grammar eGrammar )
 {
     if (pDocShell)
     {
@@ -206,7 +206,7 @@ void SAL_CALL ScNamedRangeObj::setName( const rtl::OUString& aNewName )
 
     String aNewStr(aNewName);
     // GRAM_PODF_A1 for API compatibility.
-    Modify_Impl( &aNewStr, NULL, NULL, NULL, NULL, ScGrammar::GRAM_PODF_A1 );
+    Modify_Impl( &aNewStr, NULL, NULL, NULL, NULL,formula::FormulaGrammar::GRAM_PODF_A1 );
 
     if ( aName != aNewStr )                 // some error occured...
         throw uno::RuntimeException();      // no other exceptions specified
@@ -219,7 +219,7 @@ rtl::OUString SAL_CALL ScNamedRangeObj::getContent() throw(uno::RuntimeException
     ScRangeData* pData = GetRangeData_Impl();
     if (pData)
         // GRAM_PODF_A1 for API compatibility.
-        pData->GetSymbol( aContent, ScGrammar::GRAM_PODF_A1);
+        pData->GetSymbol( aContent,formula::FormulaGrammar::GRAM_PODF_A1);
     return aContent;
 }
 
@@ -229,11 +229,11 @@ void SAL_CALL ScNamedRangeObj::setContent( const rtl::OUString& aContent )
     ScUnoGuard aGuard;
     String aContStr(aContent);
     // GRAM_PODF_A1 for API compatibility.
-    Modify_Impl( NULL, NULL, &aContStr, NULL, NULL, ScGrammar::GRAM_PODF_A1 );
+    Modify_Impl( NULL, NULL, &aContStr, NULL, NULL,formula::FormulaGrammar::GRAM_PODF_A1 );
 }
 
 void ScNamedRangeObj::SetContentWithGrammar( const ::rtl::OUString& aContent,
-                                    const ScGrammar::Grammar eGrammar )
+                                    const formula::FormulaGrammar::Grammar eGrammar )
                                 throw(::com::sun::star::uno::RuntimeException)
 {
     String aContStr(aContent);
@@ -272,7 +272,7 @@ void SAL_CALL ScNamedRangeObj::setReferencePosition( const table::CellAddress& a
     ScUnoGuard aGuard;
     ScAddress aPos( (SCCOL)aReferencePosition.Column, (SCROW)aReferencePosition.Row, aReferencePosition.Sheet );
     // GRAM_PODF_A1 for API compatibility.
-    Modify_Impl( NULL, NULL, NULL, &aPos, NULL, ScGrammar::GRAM_PODF_A1 );
+    Modify_Impl( NULL, NULL, NULL, &aPos, NULL,formula::FormulaGrammar::GRAM_PODF_A1 );
 }
 
 sal_Int32 SAL_CALL ScNamedRangeObj::getType() throw(uno::RuntimeException)
@@ -303,7 +303,7 @@ void SAL_CALL ScNamedRangeObj::setType( sal_Int32 nUnoType ) throw(uno::RuntimeE
     if ( nUnoType & sheet::NamedRangeFlag::ROW_HEADER )         nNewType |= RT_ROWHEADER;
 
     // GRAM_PODF_A1 for API compatibility.
-    Modify_Impl( NULL, NULL, NULL, NULL, &nNewType, ScGrammar::GRAM_PODF_A1 );
+    Modify_Impl( NULL, NULL, NULL, NULL, &nNewType,formula::FormulaGrammar::GRAM_PODF_A1 );
 }
 
 // XFormulaTokens
@@ -313,11 +313,11 @@ uno::Sequence<sheet::FormulaToken> SAL_CALL ScNamedRangeObj::getTokens() throw(u
     ScUnoGuard aGuard;
     uno::Sequence<sheet::FormulaToken> aSequence;
     ScRangeData* pData = GetRangeData_Impl();
-    if (pData)
+    if (pData && pDocShell)
     {
         ScTokenArray* pTokenArray = pData->GetCode();
         if ( pTokenArray )
-            (void)ScTokenConversion::ConvertToTokenSequence( aSequence, *pTokenArray );
+            (void)ScTokenConversion::ConvertToTokenSequence( *pDocShell->GetDocument(), aSequence, *pTokenArray );
     }
     return aSequence;
 }
@@ -325,10 +325,13 @@ uno::Sequence<sheet::FormulaToken> SAL_CALL ScNamedRangeObj::getTokens() throw(u
 void SAL_CALL ScNamedRangeObj::setTokens( const uno::Sequence<sheet::FormulaToken>& rTokens ) throw(uno::RuntimeException)
 {
     ScUnoGuard aGuard;
-    ScTokenArray aTokenArray;
-    (void)ScTokenConversion::ConvertToTokenArray( aTokenArray, rTokens );
-    // GRAM_PODF_A1 for API compatibility.
-    Modify_Impl( NULL, &aTokenArray, NULL, NULL, NULL, ScGrammar::GRAM_PODF_A1 );
+    if( pDocShell )
+    {
+        ScTokenArray aTokenArray;
+        (void)ScTokenConversion::ConvertToTokenArray( *pDocShell->GetDocument(), aTokenArray, rTokens );
+        // GRAM_PODF_A1 for API compatibility.
+        Modify_Impl( NULL, &aTokenArray, NULL, NULL, NULL, formula::FormulaGrammar::GRAM_PODF_A1 );
+    }
 }
 
 
@@ -375,7 +378,7 @@ void SAL_CALL ScNamedRangeObj::setPropertyValue(
         if( aValue >>= bIsShared )
         {
             sal_uInt16 nNewType = bIsShared ? RT_SHARED : RT_NAME;
-            Modify_Impl( NULL, NULL, NULL, NULL, &nNewType, ScGrammar::GRAM_PODF_A1 );
+            Modify_Impl( NULL, NULL, NULL, NULL, &nNewType,formula::FormulaGrammar::GRAM_PODF_A1 );
         }
     }
 }
@@ -559,7 +562,7 @@ void SAL_CALL ScNamedRangesObj::addNewByName( const rtl::OUString& aName,
             ScRangeName* pNewRanges = new ScRangeName( *pNames );
             // GRAM_PODF_A1 for API compatibility.
             ScRangeData* pNew = new ScRangeData( pDoc, aNameStr, aContStr,
-                                                aPos, nNewType, ScGrammar::GRAM_PODF_A1 );
+                                                aPos, nNewType,formula::FormulaGrammar::GRAM_PODF_A1 );
             if ( pNewRanges->Insert(pNew) )
             {
                 ScDocFunc aFunc(*pDocShell);

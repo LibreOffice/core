@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2008 by Sun Microsystems, Inc.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -86,7 +86,7 @@ using namespace ::com::sun::star;
 #define FILE_PATH_SEPERATOR "/"
 #else // windows
 #define FILE_PATH_SEPERATOR "\\"
-#endif
+#endif 
 
 #define EXCELVERSION "11.0"
 
@@ -94,8 +94,8 @@ class ActiveWorkbook : public ScVbaWorkbook
 {
 protected:
     virtual uno::Reference< frame::XModel > getModel()
-    {
-        return getCurrentDocument();
+    {   
+        return getCurrentDocument(); 
     }
 public:
     ActiveWorkbook( const uno::Reference< vba::XHelperInterface >& xParent, const uno::Reference< uno::XComponentContext >& xContext) : ScVbaWorkbook(  xParent, xContext ){}
@@ -108,15 +108,15 @@ ScVbaApplication::ScVbaApplication( uno::Reference<uno::XComponentContext >& xCo
 ScVbaApplication::~ScVbaApplication()
 {
 }
-
+    
 
 
 uno::Reference< excel::XWorkbook >
 ScVbaApplication::getActiveWorkbook() throw (uno::RuntimeException)
 {
-    return new ActiveWorkbook( this, mxContext );
+    return new ActiveWorkbook( this, mxContext ); 
 }
-uno::Reference< excel::XWorkbook > SAL_CALL
+uno::Reference< excel::XWorkbook > SAL_CALL 
 ScVbaApplication::getThisWorkbook() throw (uno::RuntimeException)
 {
     return getActiveWorkbook();
@@ -222,7 +222,7 @@ ScVbaApplication::setDisplayStatusBar(sal_Bool bDisplayStatusBar) throw (uno::Ru
                 return;
             }
             else if( !bDisplayStatusBar && xLayoutManager->isElementVisible( url ) ){
-                xLayoutManager->hideElement( url );
+                xLayoutManager->hideElement( url ); 
                 return;
             }
         }
@@ -265,17 +265,17 @@ ScVbaApplication::WorksheetFunction( ) throw (::com::sun::star::uno::RuntimeExce
         return uno::makeAny( uno::Reference< script::XInvocation >( new ScVbaWSFunction( this, mxContext) ) );
 }
 
-uno::Any SAL_CALL
+uno::Any SAL_CALL 
 ScVbaApplication::Evaluate( const ::rtl::OUString& Name ) throw (uno::RuntimeException)
 {
     // #TODO Evaluate allows other things to be evaluated, e.g. functions
     // I think ( like SIN(3) etc. ) need to investigate that
     // named Ranges also? e.g. [MyRange] if so need a list of named ranges
     uno::Any aVoid;
-    return uno::Any( getActiveWorkbook()->getActiveSheet()->Range( uno::Any( Name ), aVoid ) );
+    return uno::Any( getActiveWorkbook()->getActiveSheet()->Range( uno::Any( Name ), aVoid ) ); 
 }
 
-uno::Any
+uno::Any 
 ScVbaApplication::Dialogs( const uno::Any &aIndex ) throw (uno::RuntimeException)
 {
     uno::Reference< excel::XDialogs > xDialogs( new ScVbaDialogs( uno::Reference< vba::XHelperInterface >( ScVbaGlobals::getGlobalsImpl( mxContext )->getApplication(), uno::UNO_QUERY_THROW ), mxContext ) );
@@ -284,14 +284,14 @@ ScVbaApplication::Dialogs( const uno::Any &aIndex ) throw (uno::RuntimeException
     return uno::Any( xDialogs->Item( aIndex ) );
 }
 
-uno::Reference< excel::XWindow > SAL_CALL
+uno::Reference< excel::XWindow > SAL_CALL 
 ScVbaApplication::getActiveWindow() throw (uno::RuntimeException)
 {
     // #FIXME sofar can't determine Parent
     return new ScVbaWindow( uno::Reference< vba::XHelperInterface >(), mxContext, getCurrentDocument() );
 }
 
-uno::Any SAL_CALL
+uno::Any SAL_CALL 
 ScVbaApplication::getCutCopyMode() throw (uno::RuntimeException)
 {
     //# FIXME TODO, implementation
@@ -306,7 +306,7 @@ ScVbaApplication::getVersion() throw (uno::RuntimeException)
     return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(EXCELVERSION));
 }
 
-void SAL_CALL
+void SAL_CALL 
 ScVbaApplication::setCutCopyMode( const uno::Any& /*_cutcopymode*/ ) throw (uno::RuntimeException)
 {
     //# FIXME TODO, implementation
@@ -318,7 +318,7 @@ ScVbaApplication::getStatusBar() throw (uno::RuntimeException)
     return uno::makeAny( !getDisplayStatusBar() );
 }
 
-void SAL_CALL
+void SAL_CALL 
 ScVbaApplication::setStatusBar( const uno::Any& _statusbar ) throw (uno::RuntimeException)
 {
     rtl::OUString sText;
@@ -345,7 +345,7 @@ ScVbaApplication::setStatusBar( const uno::Any& _statusbar ) throw (uno::Runtime
             uno::Reference< uno::XInterface >() );
 }
 
-double SAL_CALL
+double SAL_CALL 
 ScVbaApplication::CountA( const uno::Any& arg1 ) throw (uno::RuntimeException)
 {
     double result = 0;
@@ -362,7 +362,7 @@ ScVbaApplication::CountA( const uno::Any& arg1 ) throw (uno::RuntimeException)
     return result;
 }
 
-::sal_Int32 SAL_CALL
+::sal_Int32 SAL_CALL 
 ScVbaApplication::getCalculation() throw (uno::RuntimeException)
 {
     uno::Reference<sheet::XCalculatable> xCalc(getCurrentDocument(), uno::UNO_QUERY_THROW);
@@ -372,7 +372,7 @@ ScVbaApplication::getCalculation() throw (uno::RuntimeException)
         return excel::XlCalculation::xlCalculationManual;
 }
 
-void SAL_CALL
+void SAL_CALL 
 ScVbaApplication::setCalculation( ::sal_Int32 _calculation ) throw (uno::RuntimeException)
 {
     uno::Reference< sheet::XCalculatable > xCalc(getCurrentDocument(), uno::UNO_QUERY_THROW);
@@ -388,15 +388,15 @@ ScVbaApplication::setCalculation( ::sal_Int32 _calculation ) throw (uno::Runtime
     }
 }
 
-uno::Any SAL_CALL
+uno::Any SAL_CALL 
 ScVbaApplication::Windows( const uno::Any& aIndex  ) throw (uno::RuntimeException)
 {
     uno::Reference< vba::XCollection >  xWindows = ScVbaWindows::Windows( mxContext );
     if ( aIndex.getValueTypeClass() == uno::TypeClass_VOID )
         return uno::Any( xWindows );
-    return uno::Any( xWindows->Item( aIndex, uno::Any() ) );
+    return uno::Any( xWindows->Item( aIndex, uno::Any() ) );    
 }
-void SAL_CALL
+void SAL_CALL 
 ScVbaApplication::wait( double time ) throw (uno::RuntimeException)
 {
     StarBASIC* pBasic = SFX_APP()->GetBasic();
@@ -406,7 +406,7 @@ ScVbaApplication::wait( double time ) throw (uno::RuntimeException)
     aRef->PutDouble( time );
     aArgs->Put(  aRef, 1 );
     SbMethod* pMeth = (SbMethod*)pBasic->GetRtl()->Find( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("WaitUntil") ), SbxCLASS_METHOD );
-
+    
     if ( pMeth )
     {
         pMeth->SetParameters( aArgs );
@@ -418,11 +418,11 @@ ScVbaApplication::wait( double time ) throw (uno::RuntimeException)
 
 }
 
-uno::Any SAL_CALL
+uno::Any SAL_CALL 
 ScVbaApplication::Range( const uno::Any& Cell1, const uno::Any& Cell2 ) throw (uno::RuntimeException)
 {
-    uno::Reference< excel::XRange > xVbRange = ScVbaRange::ApplicationRange( mxContext, Cell1, Cell2 );
-    return uno::makeAny( xVbRange );
+    uno::Reference< excel::XRange > xVbRange = ScVbaRange::ApplicationRange( mxContext, Cell1, Cell2 ); 
+    return uno::makeAny( xVbRange ); 
 }
 
 uno::Any SAL_CALL
@@ -435,19 +435,19 @@ ScVbaApplication::Names( ) throw ( uno::RuntimeException )
 }
 
 
-uno::Reference< excel::XWorksheet > SAL_CALL
+uno::Reference< excel::XWorksheet > SAL_CALL 
 ScVbaApplication::getActiveSheet() throw (uno::RuntimeException)
 {
     uno::Reference< excel::XWorksheet > result;
     uno::Reference< excel::XWorkbook > xWorkbook( getActiveWorkbook(), uno::UNO_QUERY );
     if ( xWorkbook.is() )
     {
-        uno::Reference< excel::XWorksheet > xWorksheet(
+        uno::Reference< excel::XWorksheet > xWorksheet( 
             xWorkbook->getActiveSheet(), uno::UNO_QUERY );
         if ( xWorksheet.is() )
         {
             result = xWorksheet;
-        }
+        }   
     }
 
     if ( !result.is() )
@@ -457,26 +457,26 @@ ScVbaApplication::getActiveSheet() throw (uno::RuntimeException)
             "No activeSheet available" ), uno::Reference< uno::XInterface >() );
     }
     return result;
-
+    
 }
 
 /*******************************************************************************
- *  In msdn:
- *  Reference   Optional Variant. The destination. Can be a Range
+ *  In msdn: 
+ *  Reference   Optional Variant. The destination. Can be a Range 
  *  object, a string that contains a cell reference in R1C1-style notation,
  *  or a string that contains a Visual Basic procedure name.
- *  Scroll   Optional Variant. True to scrol, False to not scroll through
+ *  Scroll   Optional Variant. True to scrol, False to not scroll through 
  *  the window. The default is False.
  *  Parser is split to three parts, Range, R1C1 string and procedure name.
- *  by test excel, it seems Scroll no effect. ???
+ *  by test excel, it seems Scroll no effect. ??? 
 *******************************************************************************/
-void SAL_CALL
+void SAL_CALL 
 ScVbaApplication::GoTo( const uno::Any& Reference, const uno::Any& Scroll ) throw (uno::RuntimeException)
 {
     //test Scroll is a boolean
     sal_Bool bScroll = sal_False;
     //R1C1-style string or a string of procedure name.
-
+    
     if( Scroll.hasValue() )
     {
         sal_Bool aScroll = sal_False;
@@ -498,10 +498,10 @@ ScVbaApplication::GoTo( const uno::Any& Reference, const uno::Any& Scroll ) thro
         uno::Reference< sheet::XSpreadsheet > xDoc = xSpreadsheet->getActiveSheet();
 
         ScTabViewShell* pShell = getCurrentBestViewShell();
-        ScGridWindow* gridWindow = (ScGridWindow*)pShell->GetWindow();
+        ScGridWindow* gridWindow = (ScGridWindow*)pShell->GetWindow(); 
         try
         {
-            uno::Reference< excel::XRange > xVbaSheetRange = ScVbaRange::getRangeObjectForName( mxContext, sRangeName, getDocShell( xModel ), ScAddress::CONV_XL_R1C1 );
+            uno::Reference< excel::XRange > xVbaSheetRange = ScVbaRange::getRangeObjectForName( mxContext, sRangeName, getDocShell( xModel ), formula::FormulaGrammar::CONV_XL_R1C1 );
 ;
             if( bScroll )
             {
@@ -510,9 +510,9 @@ ScVbaApplication::GoTo( const uno::Any& Reference, const uno::Any& Scroll ) thro
                 ScSplitPos eWhich = pShell->GetViewData()->GetActivePart();
                 sal_Int32 nValueX = pShell->GetViewData()->GetPosX(WhichH(eWhich));
                 sal_Int32 nValueY = pShell->GetViewData()->GetPosY(WhichV(eWhich));
-                xWindow->SmallScroll( uno::makeAny( (sal_Int16)(xVbaSheetRange->getRow() - 1) ),
+                xWindow->SmallScroll( uno::makeAny( (sal_Int16)(xVbaSheetRange->getRow() - 1) ), 
                          uno::makeAny( (sal_Int16)nValueY ),
-                         uno::makeAny( (sal_Int16)(xVbaSheetRange->getColumn() - 1)  ),
+                         uno::makeAny( (sal_Int16)(xVbaSheetRange->getColumn() - 1)  ), 
                          uno::makeAny( (sal_Int16)nValueX ) );
                 gridWindow->GrabFocus();
             }
@@ -540,7 +540,7 @@ ScVbaApplication::GoTo( const uno::Any& Reference, const uno::Any& Scroll ) thro
     {
         uno::Reference< excel::XRange > xVbaRange( Reference, uno::UNO_QUERY );
         ScTabViewShell* pShell = getCurrentBestViewShell();
-        ScGridWindow* gridWindow = (ScGridWindow*)pShell->GetWindow();
+        ScGridWindow* gridWindow = (ScGridWindow*)pShell->GetWindow(); 
         if ( xVbaRange.is() )
         {
             //TODO bScroll should be using, In this time, it doesenot have effection
@@ -551,9 +551,9 @@ ScVbaApplication::GoTo( const uno::Any& Reference, const uno::Any& Scroll ) thro
                 ScSplitPos eWhich = pShell->GetViewData()->GetActivePart();
                 sal_Int32 nValueX = pShell->GetViewData()->GetPosX(WhichH(eWhich));
                 sal_Int32 nValueY = pShell->GetViewData()->GetPosY(WhichV(eWhich));
-                xWindow->SmallScroll( uno::makeAny( (sal_Int16)(xVbaRange->getRow() - 1) ),
+                xWindow->SmallScroll( uno::makeAny( (sal_Int16)(xVbaRange->getRow() - 1) ), 
                          uno::makeAny( (sal_Int16)nValueY ),
-                         uno::makeAny( (sal_Int16)(xVbaRange->getColumn() - 1)  ),
+                         uno::makeAny( (sal_Int16)(xVbaRange->getColumn() - 1)  ), 
                          uno::makeAny( (sal_Int16)nValueX ) );
                 gridWindow->GrabFocus();
             }
@@ -617,7 +617,7 @@ ScVbaApplication::getCursor() throw (uno::RuntimeException)
     }
 }
 
-void SAL_CALL
+void SAL_CALL 
 ScVbaApplication::setCursor( sal_Int32 _cursor ) throw (uno::RuntimeException)
 {
     try
@@ -692,7 +692,7 @@ ScVbaApplication::setCursor( sal_Int32 _cursor ) throw (uno::RuntimeException)
                     break;
                 }
                 default:
-                    throw uno::RuntimeException( rtl::OUString(
+                    throw uno::RuntimeException( rtl::OUString( 
                             RTL_CONSTASCII_USTRINGPARAM("Unknown value for Cursor pointer")), uno::Reference< uno::XInterface >() );
                     // TODO: isn't this a flaw in the API? It should be allowed to throw an
                     // IllegalArgumentException, or so
@@ -705,7 +705,7 @@ ScVbaApplication::setCursor( sal_Int32 _cursor ) throw (uno::RuntimeException)
     }
 }
 
-// #TODO perhaps we should switch the return type depending of the filter
+// #TODO perhaps we should switch the return type depending of the filter 
 // type, e.g. return Calc for Calc and Excel if its an imported doc
 rtl::OUString SAL_CALL
 ScVbaApplication::getName() throw (uno::RuntimeException)
@@ -714,7 +714,7 @@ ScVbaApplication::getName() throw (uno::RuntimeException)
     return appName;
 }
 
-// #TODO #FIXME get/setDisplayAlerts are just stub impl
+// #TODO #FIXME get/setDisplayAlerts are just stub impl 
 void SAL_CALL
 ScVbaApplication::setDisplayAlerts(sal_Bool /*displayAlerts*/) throw (uno::RuntimeException)
 {
@@ -755,16 +755,16 @@ rtl::OUString ScVbaApplication::getOfficePath( const rtl::OUString& _sPathType )
         // if its a list of paths then use the last one
         sal_Int32 nIndex =  sUrl.lastIndexOf( ';' ) ;
         if ( nIndex > 0 )
-            sUrl = sUrl.copy( nIndex + 1 );
+            sUrl = sUrl.copy( nIndex + 1 );     
         ::osl::File::getSystemPathFromFileURL( sUrl, sRetPath );
     }
     catch (uno::Exception&)
     {
-        DebugHelper::exception(SbERR_METHOD_FAILED, rtl::OUString());
-    }
+        DebugHelper::exception(SbERR_METHOD_FAILED, rtl::OUString());    
+    }       
     return sRetPath;
 }
-void SAL_CALL
+void SAL_CALL 
 ScVbaApplication::setDefaultFilePath( const ::rtl::OUString& DefaultFilePath ) throw (script::BasicErrorException, uno::RuntimeException)
 {
     uno::Reference< beans::XPropertySet > xProps = lcl_getPathSettingsService( mxContext );
@@ -772,35 +772,35 @@ ScVbaApplication::setDefaultFilePath( const ::rtl::OUString& DefaultFilePath ) t
     osl::FileBase::getFileURLFromSystemPath( DefaultFilePath, aURL );
     xProps->setPropertyValue(  rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("Work")), uno::makeAny( aURL ) );
 
-
+    
 }
 
-::rtl::OUString SAL_CALL
+::rtl::OUString SAL_CALL 
 ScVbaApplication::getDefaultFilePath(  ) throw (script::BasicErrorException, uno::RuntimeException)
 {
     return getOfficePath( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("Work")));
 }
 
-::rtl::OUString SAL_CALL
+::rtl::OUString SAL_CALL 
 ScVbaApplication::LibraryPath(  ) throw (script::BasicErrorException, uno::RuntimeException)
 {
     return getOfficePath( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("Basic")));
 }
 
-::rtl::OUString SAL_CALL
+::rtl::OUString SAL_CALL 
 ScVbaApplication::TemplatesPath(  ) throw (script::BasicErrorException, uno::RuntimeException)
 {
     return getOfficePath( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("Template")));
 }
 
-::rtl::OUString SAL_CALL
+::rtl::OUString SAL_CALL 
 ScVbaApplication::PathSeparator(  ) throw (script::BasicErrorException, uno::RuntimeException)
 {
     static rtl::OUString sPathSep( RTL_CONSTASCII_USTRINGPARAM( FILE_PATH_SEPERATOR ) );
     return sPathSep;
 }
 
-uno::Reference< excel::XRange > SAL_CALL
+uno::Reference< excel::XRange > SAL_CALL 
 ScVbaApplication::Intersect( const uno::Reference< excel::XRange >& Arg1, const uno::Reference< excel::XRange >& Arg2, const uno::Any& Arg3, const uno::Any& Arg4, const uno::Any& Arg5, const uno::Any& Arg6, const uno::Any& Arg7, const uno::Any& Arg8, const uno::Any& Arg9, const uno::Any& Arg10, const uno::Any& Arg11, const uno::Any& Arg12, const uno::Any& Arg13, const uno::Any& Arg14, const uno::Any& Arg15, const uno::Any& Arg16, const uno::Any& Arg17, const uno::Any& Arg18, const uno::Any& Arg19, const uno::Any& Arg20, const uno::Any& Arg21, const uno::Any& Arg22, const uno::Any& Arg23, const uno::Any& Arg24, const uno::Any& Arg25, const uno::Any& Arg26, const uno::Any& Arg27, const uno::Any& Arg28, const uno::Any& Arg29, const uno::Any& Arg30 ) throw (script::BasicErrorException, uno::RuntimeException)
 {
     std::vector< uno::Reference< excel::XRange > > vRanges;
@@ -888,14 +888,14 @@ ScVbaApplication::Volatile( const uno::Any& aVolatile )  throw ( uno::RuntimeExc
 {
     sal_Bool bVolatile = sal_True;
     aVolatile >>= bVolatile;
-    return;
+    return; 
 /*
     if ( bVolatile )
         throw uno::RuntimeException( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("Volatile - not supported" ) ), uno::Reference< uno::XInterface >() );
-    // bVoloatile is false - currently this only would make sense if
+    // bVoloatile is false - currently this only would make sense if 
     // the autocalculate mode is set to be true.
 
-    // so really this is crap, #TODO try and understand how ( or if )
+    // so really this is crap, #TODO try and understand how ( or if ) 
     // the calculation mode and volatile interoperate
     if ( ! getCalculation() == excel::XlCalculation::xlCalculationAutomatic )
         setCalculation(  excel::XlCalculation::xlCalculationAutomatic );
@@ -907,7 +907,7 @@ ScVbaApplication::DoEvents() throw ( uno::RuntimeException )
 {
 }
 
-::sal_Bool SAL_CALL
+::sal_Bool SAL_CALL 
 ScVbaApplication::getDisplayFormulaBar() throw ( css::uno::RuntimeException )
 {
     sal_Bool bRes = sal_False;
@@ -926,7 +926,7 @@ ScVbaApplication::getDisplayFormulaBar() throw ( css::uno::RuntimeException )
     return bRes;
 }
 
-void SAL_CALL
+void SAL_CALL 
 ScVbaApplication::setDisplayFormulaBar( ::sal_Bool _displayformulabar ) throw ( css::uno::RuntimeException )
 {
     ScTabViewShell* pViewShell = getCurrentBestViewShell();
@@ -936,17 +936,17 @@ ScVbaApplication::setDisplayFormulaBar( ::sal_Bool _displayformulabar ) throw ( 
         SfxAllItemSet reqList(  SFX_APP()->GetPool() );
         SfxRequest aReq( FID_TOGGLEINPUTLINE, 0, reqList );
         pViewShell->Execute( aReq );
-    }
+    }   
 }
 
-rtl::OUString&
+rtl::OUString& 
 ScVbaApplication::getServiceImplName()
 {
     static rtl::OUString sImplName( RTL_CONSTASCII_USTRINGPARAM("ScVbaApplication") );
     return sImplName;
 }
 
-uno::Sequence< rtl::OUString >
+uno::Sequence< rtl::OUString > 
 ScVbaApplication::getServiceNames()
 {
     static uno::Sequence< rtl::OUString > aServiceNames;

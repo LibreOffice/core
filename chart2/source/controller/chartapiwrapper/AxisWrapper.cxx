@@ -40,6 +40,9 @@
 #include <comphelper/InlineContainer.hxx>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/chart/ChartAxisArrangeOrderType.hpp>
+#include <com/sun/star/chart/ChartAxisPosition.hpp>
+#include <com/sun/star/chart/ChartAxisLabelPosition.hpp>
+#include <com/sun/star/chart/ChartAxisMarkPosition.hpp>
 
 #include "CharacterProperties.hxx"
 #include "LineProperties.hxx"
@@ -76,35 +79,40 @@ enum
 {
     PROP_AXIS_MAX,
     PROP_AXIS_MIN,
-    PROP_AXIS_ORIGIN,
     PROP_AXIS_STEPMAIN,
     PROP_AXIS_STEPHELP, //deprecated property use 'StepHelpCount' instead
     PROP_AXIS_STEPHELP_COUNT,
     PROP_AXIS_AUTO_MAX,
     PROP_AXIS_AUTO_MIN,
-    PROP_AXIS_AUTO_ORIGIN,
     PROP_AXIS_AUTO_STEPMAIN,
     PROP_AXIS_AUTO_STEPHELP,
     PROP_AXIS_LOGARITHMIC,
     PROP_AXIS_REVERSEDIRECTION,
-    PROP_AXIS_DISPLAY_LABELS,
-    PROP_AXIS_TEXT_ROTATION,
+    PROP_AXIS_VISIBLE,
+    PROP_AXIS_CROSSOVER_POSITION,
+    PROP_AXIS_CROSSOVER_VALUE,
+    PROP_AXIS_ORIGIN,
+    PROP_AXIS_AUTO_ORIGIN,
     PROP_AXIS_MARKS,
     PROP_AXIS_HELPMARKS,
-    PROP_AXIS_OVERLAP,
-    PROP_AXIS_GAP_WIDTH,
+    PROP_AXIS_MARK_POSITION,
+    PROP_AXIS_DISPLAY_LABELS,
+    PROP_AXIS_NUMBERFORMAT,
+    PROP_AXIS_LINK_NUMBERFORMAT_TO_SOURCE,
+    PROP_AXIS_LABEL_POSITION,
+    PROP_AXIS_TEXT_ROTATION,
     PROP_AXIS_ARRANGE_ORDER,
     PROP_AXIS_TEXTBREAK,
     PROP_AXIS_CAN_OVERLAP,
-    PROP_AXIS_NUMBERFORMAT,
-    PROP_AXIS_LINK_NUMBERFORMAT_TO_SOURCE,
-    PROP_AXIS_VISIBLE,
-    PROP_AXIS_STACKEDTEXT
+    PROP_AXIS_STACKEDTEXT,
+    PROP_AXIS_OVERLAP,
+    PROP_AXIS_GAP_WIDTH
 };
 
 void lcl_AddPropertiesToVector(
     ::std::vector< Property > & rOutProperties )
 {
+    //Properties for scaling:
     rOutProperties.push_back(
         Property( C2U( "Max" ),
                   PROP_AXIS_MAX,
@@ -120,16 +128,16 @@ void lcl_AddPropertiesToVector(
                   | beans::PropertyAttribute::MAYBEVOID ));
 
     rOutProperties.push_back(
-        Property( C2U( "Origin" ),
-                  PROP_AXIS_ORIGIN,
+        Property( C2U( "StepMain" ),
+                  PROP_AXIS_STEPMAIN,
                   ::getCppuType( reinterpret_cast< const double * >(0)),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEVOID ));
 
     rOutProperties.push_back(
-        Property( C2U( "StepMain" ),
-                  PROP_AXIS_STEPMAIN,
-                  ::getCppuType( reinterpret_cast< const double * >(0)),
+        Property( C2U( "StepHelpCount" ),
+                  PROP_AXIS_STEPHELP_COUNT,
+                  ::getCppuType( reinterpret_cast< const sal_Int32 * >(0)),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEVOID ));
 
@@ -138,14 +146,6 @@ void lcl_AddPropertiesToVector(
         Property( C2U( "StepHelp" ),
                   PROP_AXIS_STEPHELP,
                   ::getCppuType( reinterpret_cast< const double * >(0)),
-                  beans::PropertyAttribute::BOUND
-                  | beans::PropertyAttribute::MAYBEVOID ));
-
-
-    rOutProperties.push_back(
-        Property( C2U( "StepHelpCount" ),
-                  PROP_AXIS_STEPHELP_COUNT,
-                  ::getCppuType( reinterpret_cast< const sal_Int32 * >(0)),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEVOID ));
 
@@ -159,13 +159,6 @@ void lcl_AddPropertiesToVector(
     rOutProperties.push_back(
         Property( C2U( "AutoMin" ),
                   PROP_AXIS_AUTO_MIN,
-                  ::getBooleanCppuType(),
-                  beans::PropertyAttribute::BOUND
-                  | beans::PropertyAttribute::MAYBEDEFAULT ));
-
-    rOutProperties.push_back(
-        Property( C2U( "AutoOrigin" ),
-                  PROP_AXIS_AUTO_ORIGIN,
                   ::getBooleanCppuType(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT ));
@@ -198,20 +191,42 @@ void lcl_AddPropertiesToVector(
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT ));
 
+    //todo: this property is missing in the API
     rOutProperties.push_back(
-        Property( C2U( "DisplayLabels" ),
-                  PROP_AXIS_DISPLAY_LABELS,
+        Property( C2U( "Visible" ),
+                  PROP_AXIS_VISIBLE,
                   ::getBooleanCppuType(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT ));
 
     rOutProperties.push_back(
-        Property( C2U( "TextRotation" ),
-                  PROP_AXIS_TEXT_ROTATION,
-                  ::getCppuType( reinterpret_cast< const sal_Int32 * >(0)),
+        Property( C2U( "CrossoverPosition" ),
+                  PROP_AXIS_CROSSOVER_POSITION,
+                  ::getCppuType( reinterpret_cast< const ::com::sun::star::chart::ChartAxisPosition * >(0)),
+                  beans::PropertyAttribute::MAYBEDEFAULT ));
+
+    rOutProperties.push_back(
+        Property( C2U( "CrossoverValue" ),
+                  PROP_AXIS_CROSSOVER_VALUE,
+                  ::getCppuType( reinterpret_cast< const double * >(0)),
+                  beans::PropertyAttribute::MAYBEVOID ));
+
+
+    rOutProperties.push_back(
+        Property( C2U( "Origin" ),
+                  PROP_AXIS_ORIGIN,
+                  ::getCppuType( reinterpret_cast< const double * >(0)),
+                  beans::PropertyAttribute::BOUND
+                  | beans::PropertyAttribute::MAYBEVOID ));
+
+    rOutProperties.push_back(
+        Property( C2U( "AutoOrigin" ),
+                  PROP_AXIS_AUTO_ORIGIN,
+                  ::getBooleanCppuType(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT ));
 
+    //Properties for interval marks:
     rOutProperties.push_back(
         Property( C2U( "Marks" ),
                   PROP_AXIS_MARKS,
@@ -227,15 +242,43 @@ void lcl_AddPropertiesToVector(
                   | beans::PropertyAttribute::MAYBEDEFAULT ));
 
     rOutProperties.push_back(
-        Property( C2U( "Overlap" ),
-                  PROP_AXIS_OVERLAP,
+        Property( C2U( "MarkPosition" ),
+                  PROP_AXIS_MARK_POSITION,
+                  ::getCppuType( reinterpret_cast< const ::com::sun::star::chart::ChartAxisMarkPosition * >(0)),
+                  beans::PropertyAttribute::MAYBEDEFAULT ));
+
+
+    //Properties for labels:
+    rOutProperties.push_back(
+        Property( C2U( "DisplayLabels" ),
+                  PROP_AXIS_DISPLAY_LABELS,
+                  ::getBooleanCppuType(),
+                  beans::PropertyAttribute::BOUND
+                  | beans::PropertyAttribute::MAYBEDEFAULT ));
+
+    rOutProperties.push_back(
+        Property( C2U( "NumberFormat" ),
+                  PROP_AXIS_NUMBERFORMAT,
                   ::getCppuType( reinterpret_cast< const sal_Int32 * >(0)),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT ));
 
     rOutProperties.push_back(
-        Property( C2U( "GapWidth" ),
-                  PROP_AXIS_GAP_WIDTH,
+        Property( C2U( "LinkNumberFormatToSource" ),
+                  PROP_AXIS_LINK_NUMBERFORMAT_TO_SOURCE,
+                  ::getBooleanCppuType(),
+                  beans::PropertyAttribute::BOUND
+                  | beans::PropertyAttribute::MAYBEDEFAULT ));
+
+    rOutProperties.push_back(
+        Property( C2U( "LabelPosition" ),
+                  PROP_AXIS_LABEL_POSITION,
+                  ::getCppuType( reinterpret_cast< const ::com::sun::star::chart::ChartAxisLabelPosition * >(0)),
+                  beans::PropertyAttribute::MAYBEDEFAULT ));
+
+    rOutProperties.push_back(
+        Property( C2U( "TextRotation" ),
+                  PROP_AXIS_TEXT_ROTATION,
                   ::getCppuType( reinterpret_cast< const sal_Int32 * >(0)),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT ));
@@ -262,30 +305,24 @@ void lcl_AddPropertiesToVector(
                   | beans::PropertyAttribute::MAYBEDEFAULT ));
 
     rOutProperties.push_back(
-        Property( C2U( "NumberFormat" ),
-                  PROP_AXIS_NUMBERFORMAT,
+        Property( C2U( "StackedText" ),
+                  PROP_AXIS_STACKEDTEXT,
+                  ::getBooleanCppuType(),
+                  beans::PropertyAttribute::BOUND
+                  | beans::PropertyAttribute::MAYBEDEFAULT ));
+
+    // Properties related to bar charts:
+    rOutProperties.push_back(
+        Property( C2U( "Overlap" ),
+                  PROP_AXIS_OVERLAP,
                   ::getCppuType( reinterpret_cast< const sal_Int32 * >(0)),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT ));
 
     rOutProperties.push_back(
-        Property( C2U( "LinkNumberFormatToSource" ),
-                  PROP_AXIS_LINK_NUMBERFORMAT_TO_SOURCE,
-                  ::getBooleanCppuType(),
-                  beans::PropertyAttribute::BOUND
-                  | beans::PropertyAttribute::MAYBEDEFAULT ));
-
-    rOutProperties.push_back(
-        Property( C2U( "Visible" ),
-                  PROP_AXIS_VISIBLE,
-                  ::getBooleanCppuType(),
-                  beans::PropertyAttribute::BOUND
-                  | beans::PropertyAttribute::MAYBEDEFAULT ));
-
-    rOutProperties.push_back(
-        Property( C2U( "StackedText" ),
-                  PROP_AXIS_STACKEDTEXT,
-                  ::getBooleanCppuType(),
+        Property( C2U( "GapWidth" ),
+                  PROP_AXIS_GAP_WIDTH,
+                  ::getCppuType( reinterpret_cast< const sal_Int32 * >(0)),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT ));
 }
@@ -518,6 +555,7 @@ const std::vector< WrappedProperty* > AxisWrapper::createWrappedProperties()
     aWrappedProperties.push_back( pWrappedNumberFormatProperty );
     aWrappedProperties.push_back( new WrappedLinkNumberFormatProperty(pWrappedNumberFormatProperty) );
     aWrappedProperties.push_back( new WrappedProperty( C2U( "StackedText" ), C2U( "StackCharacters" ) ) );
+    aWrappedProperties.push_back( new WrappedDirectStateProperty( C2U( "CrossoverPosition" ), C2U( "CrossoverPosition" ) ) );
     {
         WrappedGapwidthProperty* pWrappedGapwidthProperty( new WrappedGapwidthProperty( m_spChart2ModelContact ) );
         WrappedBarOverlapProperty* pWrappedBarOverlapProperty( new WrappedBarOverlapProperty( m_spChart2ModelContact ) );

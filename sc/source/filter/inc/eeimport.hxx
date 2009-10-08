@@ -32,6 +32,8 @@
 
 #include "global.hxx"
 #include "address.hxx"
+#include "filter.hxx"
+#include "scdllapi.h"
 
 class ScDocument;
 class ScEEParser;
@@ -41,7 +43,7 @@ class Table;
 
 struct ScEEParseEntry;
 
-class ScEEImport
+class ScEEImport : public ScEEAbsImport
 {
 protected:
     ScRange             maRange;
@@ -51,20 +53,17 @@ protected:
     Table*              mpRowHeights;
 
     BOOL                GraphicSize( SCCOL nCol, SCROW nRow, SCTAB nTab,
-                            ScEEParseEntry* );
+                                     ScEEParseEntry* );
     void                InsertGraphic( SCCOL nCol, SCROW nRow, SCTAB nTab,
-                            ScEEParseEntry* );
-
+                                       ScEEParseEntry* );
 public:
-                        ScEEImport( ScDocument* pDoc, const ScRange& rRange );
-    virtual             ~ScEEImport();
+    ScEEImport( ScDocument* pDoc, const ScRange& rRange );
+    virtual ~ScEEImport();
 
-    ULONG               Read( SvStream& rStream, const String& rBaseURL );
-    ScRange             GetRange()      { return maRange; }
-    virtual void        WriteToDocument( BOOL bSizeColsRows = FALSE,
-                                        double nOutputFactor = 1.0 );
+    virtual ULONG    Read( SvStream& rStream, const String& rBaseURL );
+    virtual ScRange  GetRange() { return maRange; }
+    virtual void     WriteToDocument( BOOL bSizeColsRows = FALSE,
+                                      double nOutputFactor = 1.0 );
 };
-
-
 
 #endif

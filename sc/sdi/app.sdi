@@ -47,13 +47,6 @@ interface StarCalc
         Export = FALSE;
     ]
 
-    SID_AUTOSPELL_MARKOFF
-    [
-        ExecMethod = Execute ;
-        StateMethod = GetState ;
-        Export = FALSE;
-    ]
-
     SID_ATTR_LANGUAGE
     [
         ExecMethod = Execute;

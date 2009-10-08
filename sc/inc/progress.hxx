@@ -32,10 +32,11 @@
 #define SC_PROGRESS_HXX
 
 #include <sfx2/progress.hxx>
+#include "scdllapi.h"
 
 class ScDocument;
 
-class ScProgress
+class SC_DLLPUBLIC ScProgress
 {
 private:
     static  SfxProgress*    pGlobalProgress;

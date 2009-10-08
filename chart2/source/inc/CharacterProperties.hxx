@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: CharacterProperties.hxx,v $
- * $Revision: 1.4 $
+ * $Revision: 1.4.72.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -32,6 +32,7 @@
 
 #include "PropertyHelper.hxx"
 #include "FastPropertyIdRanges.hxx"
+#include "charttoolsdllapi.hxx"
 #include <com/sun/star/beans/Property.hpp>
 #include <com/sun/star/beans/XMultiPropertySet.hpp>
 #include <com/sun/star/awt/FontDescriptor.hpp>
@@ -45,7 +46,7 @@ namespace chart
 //   com.sun.star.style.CharacterProperties
 //   com.sun.star.style.CharacterPropertiesAsian
 //   com.sun.star.style.CharacterPropertiesComplex
-class CharacterProperties
+class OOO_DLLPUBLIC_CHARTTOOLS CharacterProperties
 {
 public:
     // FastProperty Ids for properties
@@ -120,6 +121,8 @@ public:
         PROP_CHAR_COMPLEX_WEIGHT,
         PROP_CHAR_COMPLEX_POSTURE,
         PROP_CHAR_COMPLEX_LOCALE,
+
+        PROP_WRITING_MODE,
 
         // don't use
         FAST_PROPERTY_ID_END_CHAR_PROP

@@ -32,11 +32,12 @@
 
 #include <tools/resid.hxx>
 #include <rtl/ustring.hxx>
+#include "charttoolsdllapi.hxx"
 
 namespace chart
 {
 
-class SchResId : public ResId
+class OOO_DLLPUBLIC_CHARTTOOLS SchResId : public ResId
 {
 public:
     SchResId( sal_Int16 nId );

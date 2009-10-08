@@ -37,6 +37,7 @@
 #include <comphelper/propertycontainer.hxx>
 #include <comphelper/proparrhlp.hxx>
 #include "ServiceMacros.hxx"
+#include "charttoolsdllapi.hxx"
 
 // interfaces and types
 #include <com/sun/star/lang/XServiceInfo.hpp>
@@ -68,7 +69,7 @@ typedef ::cppu::WeakComponentImplHelper7<
     CachedDataSequence_Base;
 }
 
-class CachedDataSequence :
+class OOO_DLLPUBLIC_CHARTTOOLS CachedDataSequence :
         public ::comphelper::OMutexAndBroadcastHelper,
         public ::comphelper::OPropertyContainer,
         public ::comphelper::OPropertyArrayUsageHelper< CachedDataSequence >,

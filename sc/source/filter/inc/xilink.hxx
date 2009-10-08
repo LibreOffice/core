@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: xilink.hxx,v $
- * $Revision: 1.14 $
+ * $Revision: 1.14.134.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -101,12 +101,15 @@ enum XclImpExtNameType
     xlExtName,                  /// An external defined name.
     xlExtAddIn,                 /// An add-in function name.
     xlExtDDE,                   /// A DDE link range.
-    xlExtOLE                    /// An OLE object link.
+    xlExtOLE,                   /// An OLE object link.
+    xlExtEuroConvert            /// An external in Excel, but internal in OO function name.
 };
 
 // ----------------------------------------------------------------------------
 
 class XclImpCachedMatrix;
+class ScTokenArray;
+class XclImpSupbook;
 
 /** Stores contents of an external name.
     @descr Supported: External defined names, AddIn names, DDE links and OLE objects. */
@@ -114,12 +117,17 @@ class XclImpExtName
 {
 public:
     /** Reads the external name from the stream. */
-    explicit            XclImpExtName( XclImpStream& rStrm, bool bAddIn = false );
+    explicit            XclImpExtName( const XclImpSupbook& rSupbook, XclImpStream& rStrm,
+                                        XclSupbookType eSubType, ExcelToSc* pFormulaConv );
                         ~XclImpExtName();
 
     /** Create and apply the cached list of this DDE Link to the document. */
     void                CreateDdeData( ScDocument& rDoc,
                             const String& rApplc, const String& rExtDoc ) const;
+
+    void                CreateExtNameData( ScDocument& rDoc, sal_uInt16 nFileId ) const;
+
+    bool                HasFormulaTokens() const;
 
     inline XclImpExtNameType GetType() const { return meType; }
     inline const String& GetName() const { return maName; }
@@ -127,8 +135,10 @@ public:
 
 private:
     typedef ::std::auto_ptr< XclImpCachedMatrix > XclImpCachedMatrixPtr;
+    typedef ::std::auto_ptr< ScTokenArray >       TokenArrayPtr;
 
     XclImpCachedMatrixPtr mxDdeMatrix;      /// Cached results of the DDE link.
+    TokenArrayPtr       mxArray;            /// Formula tokens for external name.
     String              maName;             /// The name of the external name.
     sal_uInt32          mnStorageId;        /// Storage ID for OLE object storages.
     XclImpExtNameType   meType;             /// Type of the external name.
@@ -168,7 +178,7 @@ public:
     /** Reads a CRN record and appends it to the current SUPBOOK. */
     void                ReadCrn( XclImpStream& rStrm );
     /** Reads an EXTERNNAME record and appends it to the current SUPBOOK. */
-    void                ReadExternname( XclImpStream& rStrm );
+    void                ReadExternname( XclImpStream& rStrm, ExcelToSc* pFormulaConv = NULL );
 
     /** Returns true, if the specified XTI entry contains an internal reference. */
     bool                IsSelfRef( sal_uInt16 nXtiIndex ) const;
@@ -179,6 +189,11 @@ public:
                             sal_uInt16 nXtiIndex ) const;
     /** Returns the specified external name or 0 on error. */
     const XclImpExtName* GetExternName( sal_uInt16 nXtiIndex, sal_uInt16 nExtName ) const;
+
+    const String* GetSupbookUrl( sal_uInt16 nXtiIndex ) const;
+
+    const String& GetSupbookTabName( sal_uInt16 nXti, sal_uInt16 nXtiTab ) const;
+
     /** Tries to decode the URL of the specified XTI entry to OLE or DDE link components.
         @descr  For DDE links: Decodes to application name and topic.
         For OLE object links: Decodes to class name and document URL.
@@ -186,10 +201,6 @@ public:
     bool                GetLinkData( String& rApplic, String& rTopic, sal_uInt16 nXtiIndex ) const;
     /** Returns the specified macro name or an empty string on error. */
     const String&       GetMacroName( sal_uInt16 nExtSheet, sal_uInt16 nExtName ) const;
-
-    /** Returns the Calc sheet index of a table in an external document.
-        @return  Calc sheet index or EXC_TAB_INVALID on error. */
-    SCTAB               GetScTab( const String& rUrl, const String& rTabName ) const;
 
 private:
     typedef ::std::auto_ptr< XclImpLinkManagerImpl > XclImpLinkMgrImplPtr;

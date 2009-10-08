@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: autoform.cxx,v $
- * $Revision: 1.22.32.3 $
+ * $Revision: 1.22.144.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -88,9 +88,13 @@ const USHORT AUTOFORMAT_DATA_ID_680DR14 = 10012;
 const USHORT AUTOFORMAT_ID_680DR25      = 10021;
 const USHORT AUTOFORMAT_DATA_ID_680DR25 = 10022;
 
+// --- from DEV300/overline2 on: #5991# overline support
+const USHORT AUTOFORMAT_ID_300OVRLN      = 10031;
+const USHORT AUTOFORMAT_DATA_ID_300OVRLN = 10032;
+
 // aktuelle Version
-const USHORT AUTOFORMAT_ID          = AUTOFORMAT_ID_680DR25;
-const USHORT AUTOFORMAT_DATA_ID     = AUTOFORMAT_DATA_ID_680DR25;
+const USHORT AUTOFORMAT_ID          = AUTOFORMAT_ID_300OVRLN;
+const USHORT AUTOFORMAT_DATA_ID     = AUTOFORMAT_DATA_ID_300OVRLN;
 
 
 #ifdef READ_OLDVERS
@@ -110,6 +114,7 @@ public:
     USHORT nWeightVersion;
     USHORT nPostureVersion;
     USHORT nUnderlineVersion;
+    USHORT nOverlineVersion;
     USHORT nCrossedOutVersion;
     USHORT nContourVersion;
     USHORT nShadowedVersion;
@@ -141,6 +146,7 @@ ScAfVersions::ScAfVersions() :
     nWeightVersion(0),
     nPostureVersion(0),
     nUnderlineVersion(0),
+    nOverlineVersion(0),
     nCrossedOutVersion(0),
     nContourVersion(0),
     nShadowedVersion(0),
@@ -167,6 +173,8 @@ void ScAfVersions::Load( SvStream& rStream, USHORT nVer )
     rStream >> nWeightVersion;
     rStream >> nPostureVersion;
     rStream >> nUnderlineVersion;
+    if ( nVer >= AUTOFORMAT_ID_300OVRLN )
+        rStream >> nOverlineVersion;
     rStream >> nCrossedOutVersion;
     rStream >> nContourVersion;
     rStream >> nShadowedVersion;
@@ -196,6 +204,7 @@ void ScAfVersions::Write(SvStream& rStream)
     rStream << SvxWeightItem(WEIGHT_NORMAL, ATTR_FONT_WEIGHT).GetVersion(SOFFICE_FILEFORMAT_40);
     rStream << SvxPostureItem(ITALIC_NONE, ATTR_FONT_POSTURE).GetVersion(SOFFICE_FILEFORMAT_40);
     rStream << SvxUnderlineItem(UNDERLINE_NONE, ATTR_FONT_UNDERLINE).GetVersion(SOFFICE_FILEFORMAT_40);
+    rStream << SvxOverlineItem(UNDERLINE_NONE, ATTR_FONT_OVERLINE).GetVersion(SOFFICE_FILEFORMAT_40);
     rStream << SvxCrossedOutItem(STRIKEOUT_NONE, ATTR_FONT_CROSSEDOUT).GetVersion(SOFFICE_FILEFORMAT_40);
     rStream << SvxContourItem(sal_False, ATTR_FONT_CONTOUR).GetVersion(SOFFICE_FILEFORMAT_40);
     rStream << SvxShadowedItem(sal_False, ATTR_FONT_SHADOWED).GetVersion(SOFFICE_FILEFORMAT_40);
@@ -236,6 +245,7 @@ ScAutoFormatDataField::ScAutoFormatDataField() :
     aCTLPosture( ITALIC_NONE, ATTR_CTL_FONT_POSTURE ),
 
     aUnderline( UNDERLINE_NONE,ATTR_FONT_UNDERLINE ),
+    aOverline( UNDERLINE_NONE,ATTR_FONT_OVERLINE ),
     aCrossedOut( STRIKEOUT_NONE, ATTR_FONT_CROSSEDOUT ),
     aContour( sal_False, ATTR_FONT_CONTOUR ),
     aShadowed( sal_False, ATTR_FONT_SHADOWED ),
@@ -268,6 +278,7 @@ ScAutoFormatDataField::ScAutoFormatDataField( const ScAutoFormatDataField& rCopy
     aCTLWeight( rCopy.aCTLWeight ),
     aCTLPosture( rCopy.aCTLPosture ),
     aUnderline( rCopy.aUnderline ),
+    aOverline( rCopy.aOverline ),
     aCrossedOut( rCopy.aCrossedOut ),
     aContour( rCopy.aContour ),
     aShadowed( rCopy.aShadowed ),
@@ -326,6 +337,10 @@ BOOL ScAutoFormatDataField::Load( SvStream& rStream, const ScAfVersions& rVersio
         READ( aCTLPosture,  SvxPostureItem,     rVersions.nPostureVersion)
     }
     READ( aUnderline,   SvxUnderlineItem,   rVersions.nUnderlineVersion)
+    if ( nVer >= AUTOFORMAT_DATA_ID_300OVRLN )
+    {
+        READ( aOverline,    SvxOverlineItem,    rVersions.nOverlineVersion)
+    }
     READ( aCrossedOut,  SvxCrossedOutItem,  rVersions.nCrossedOutVersion)
     READ( aContour,     SvxContourItem,     rVersions.nContourVersion)
     READ( aShadowed,    SvxShadowedItem,    rVersions.nShadowedVersion)
@@ -436,6 +451,8 @@ BOOL ScAutoFormatDataField::Save( SvStream& rStream )
     aCTLPosture.Store   ( rStream, aCTLPosture.GetVersion( SOFFICE_FILEFORMAT_40 ) );
 
     aUnderline.Store    ( rStream, aUnderline.GetVersion( SOFFICE_FILEFORMAT_40 ) );
+    // --- from DEV300/overline2 on: overline support
+    aOverline.Store     ( rStream, aOverline.GetVersion( SOFFICE_FILEFORMAT_40 ) );
     aCrossedOut.Store   ( rStream, aCrossedOut.GetVersion( SOFFICE_FILEFORMAT_40 ) );
     aContour.Store      ( rStream, aContour.GetVersion( SOFFICE_FILEFORMAT_40 ) );
     aShadowed.Store     ( rStream, aShadowed.GetVersion( SOFFICE_FILEFORMAT_40 ) );
@@ -485,7 +502,7 @@ ScAutoFormatData::ScAutoFormatData()
 }
 
 ScAutoFormatData::ScAutoFormatData( const ScAutoFormatData& rData ) :
-        DataObject(),
+        ScDataObject(),
         aName( rData.aName ),
         nStrResId( rData.nStrResId ),
         bIncludeFont( rData.bIncludeFont ),
@@ -539,6 +556,7 @@ const SfxPoolItem* ScAutoFormatData::GetItem( USHORT nIndex, USHORT nWhich ) con
         case ATTR_CTL_FONT_WEIGHT:  return &rField.GetCTLWeight();
         case ATTR_CTL_FONT_POSTURE: return &rField.GetCTLPosture();
         case ATTR_FONT_UNDERLINE:   return &rField.GetUnderline();
+        case ATTR_FONT_OVERLINE:    return &rField.GetOverline();
         case ATTR_FONT_CROSSEDOUT:  return &rField.GetCrossedOut();
         case ATTR_FONT_CONTOUR:     return &rField.GetContour();
         case ATTR_FONT_SHADOWED:    return &rField.GetShadowed();
@@ -576,6 +594,7 @@ void ScAutoFormatData::PutItem( USHORT nIndex, const SfxPoolItem& rItem )
         case ATTR_CTL_FONT_WEIGHT:  rField.SetCTLWeight( (const SvxWeightItem&)rItem );       break;
         case ATTR_CTL_FONT_POSTURE: rField.SetCTLPosture( (const SvxPostureItem&)rItem );     break;
         case ATTR_FONT_UNDERLINE:   rField.SetUnderline( (const SvxUnderlineItem&)rItem );    break;
+        case ATTR_FONT_OVERLINE:    rField.SetOverline( (const SvxOverlineItem&)rItem );      break;
         case ATTR_FONT_CROSSEDOUT:  rField.SetCrossedOut( (const SvxCrossedOutItem&)rItem );  break;
         case ATTR_FONT_CONTOUR:     rField.SetContour( (const SvxContourItem&)rItem );        break;
         case ATTR_FONT_SHADOWED:    rField.SetShadowed( (const SvxShadowedItem&)rItem );      break;
@@ -633,6 +652,7 @@ BOOL ScAutoFormatData::IsEqualData( USHORT nIndex1, USHORT nIndex2 ) const
             && (rField1.GetCTLWeight()      == rField2.GetCTLWeight())
             && (rField1.GetCTLPosture()     == rField2.GetCTLPosture())
             && (rField1.GetUnderline()      == rField2.GetUnderline())
+            && (rField1.GetOverline()       == rField2.GetOverline())
             && (rField1.GetCrossedOut()     == rField2.GetCrossedOut())
             && (rField1.GetContour()        == rField2.GetContour())
             && (rField1.GetShadowed()       == rField2.GetShadowed())
@@ -713,6 +733,7 @@ void ScAutoFormatData::FillToItemSet( USHORT nIndex, SfxItemSet& rItemSet, ScDoc
             rItemSet.Put( rField.GetPosture(), ATTR_CTL_FONT_POSTURE );
         }
         rItemSet.Put( rField.GetUnderline() );
+        rItemSet.Put( rField.GetOverline() );
         rItemSet.Put( rField.GetCrossedOut() );
         rItemSet.Put( rField.GetContour() );
         rItemSet.Put( rField.GetShadowed() );
@@ -756,6 +777,7 @@ void ScAutoFormatData::GetFromItemSet( USHORT nIndex, const SfxItemSet& rItemSet
     rField.SetCTLWeight     ( (const SvxWeightItem&)        rItemSet.Get( ATTR_CTL_FONT_WEIGHT ) );
     rField.SetCTLPosture    ( (const SvxPostureItem&)       rItemSet.Get( ATTR_CTL_FONT_POSTURE ) );
     rField.SetUnderline     ( (const SvxUnderlineItem&)     rItemSet.Get( ATTR_FONT_UNDERLINE ) );
+    rField.SetOverline      ( (const SvxOverlineItem&)      rItemSet.Get( ATTR_FONT_OVERLINE ) );
     rField.SetCrossedOut    ( (const SvxCrossedOutItem&)    rItemSet.Get( ATTR_FONT_CROSSEDOUT ) );
     rField.SetContour       ( (const SvxContourItem&)       rItemSet.Get( ATTR_FONT_CONTOUR ) );
     rField.SetShadowed      ( (const SvxShadowedItem&)      rItemSet.Get( ATTR_FONT_SHADOWED ) );
@@ -894,7 +916,7 @@ BOOL ScAutoFormatData::Save(SvStream& rStream)
 //---------------------------------------------------------------------------------------
 
 ScAutoFormat::ScAutoFormat(USHORT nLim, USHORT nDel, BOOL bDup):
-    SortedCollection        (nLim, nDel, bDup),
+    ScSortedCollection        (nLim, nDel, bDup),
     bSaveLater              (FALSE)
 {
     //  create default autoformat
@@ -979,7 +1001,7 @@ ScAutoFormat::ScAutoFormat(USHORT nLim, USHORT nDel, BOOL bDup):
 }
 
 ScAutoFormat::ScAutoFormat(const ScAutoFormat& rAutoFormat) :
-    SortedCollection (rAutoFormat),
+    ScSortedCollection (rAutoFormat),
     bSaveLater       (FALSE)
 {}
 
@@ -997,7 +1019,7 @@ void ScAutoFormat::SetSaveLater( BOOL bSet )
     bSaveLater = bSet;
 }
 
-short ScAutoFormat::Compare(DataObject* pKey1, DataObject* pKey2) const
+short ScAutoFormat::Compare(ScDataObject* pKey1, ScDataObject* pKey2) const
 {
     String aStr1;
     String aStr2;

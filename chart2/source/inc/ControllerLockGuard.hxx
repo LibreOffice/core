@@ -31,6 +31,7 @@
 #define CHART2_CONTROLLERLOCKGUARD_HXX
 
 #include <com/sun/star/frame/XModel.hpp>
+#include "charttoolsdllapi.hxx"
 
 namespace chart
 {
@@ -39,7 +40,7 @@ namespace chart
     unlockControllers in the DTOR.  Using this ensures that controllers do not
     remain locked when leaving a function even in case an exception is thrown.
  */
-class ControllerLockGuard
+class OOO_DLLPUBLIC_CHARTTOOLS ControllerLockGuard
 {
 public:
     explicit ControllerLockGuard(
@@ -58,7 +59,7 @@ private:
     Use the ControllerLockHelperGuard to lock/unlock the model during a block of
     instructions.
  */
-class ControllerLockHelper
+class OOO_DLLPUBLIC_CHARTTOOLS ControllerLockHelper
 {
 public:
     explicit ControllerLockHelper(
@@ -79,7 +80,7 @@ private:
     do not remain locked when leaving a function even in case an exception is
     thrown.
  */
-class ControllerLockHelperGuard
+class OOO_DLLPUBLIC_CHARTTOOLS ControllerLockHelperGuard
 {
 public:
     explicit ControllerLockHelperGuard( ControllerLockHelper & rHelper );

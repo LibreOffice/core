@@ -34,6 +34,7 @@
 #include "address.hxx"
 #include <tools/gen.hxx>
 #include <tools/color.hxx>
+#include "scdllapi.h"
 
 class SdrObject;
 class SdrPage;
@@ -58,7 +59,7 @@ enum ScDetectiveObjType
     SC_DETOBJ_CIRCLE
 };
 
-class ScDetectiveFunc
+class SC_DLLPUBLIC ScDetectiveFunc
 {
     static ColorData nArrowColor;
     static ColorData nErrorColor;

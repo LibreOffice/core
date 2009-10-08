@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: excform8.cxx,v $
- * $Revision: 1.47 $
+ * $Revision: 1.47.134.3 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -41,6 +41,18 @@
 #include "xilink.hxx"
 #include "xiname.hxx"
 
+#include "externalrefmgr.hxx"
+
+#include <vector>
+
+using ::std::vector;
+
+ExcelToSc8::ExternalTabInfo::ExternalTabInfo() :
+    mnFileId(0), mbExternal(false)
+{
+}
+
+// ============================================================================
 
 ExcelToSc8::ExcelToSc8( const XclImpRoot& rRoot ) :
     ExcelToSc( rRoot ),
@@ -53,15 +65,33 @@ ExcelToSc8::~ExcelToSc8()
 {
 }
 
+bool ExcelToSc8::GetExternalFileIdFromXti( UINT16 nIxti, sal_uInt16& rFileId ) const
+{
+    const String* pFileUrl = rLinkMan.GetSupbookUrl(nIxti);
+    if (!pFileUrl || pFileUrl->Len() == 0)
+        return false;
 
-BOOL ExcelToSc8::Read3DTabReference( XclImpStream& rStrm, SCTAB& rFirstTab, SCTAB& rLastTab )
+    String aFileUrl = ScGlobal::GetAbsDocName(*pFileUrl, GetDocShell());
+    ScExternalRefManager* pRefMgr = GetDoc().GetExternalRefManager();
+    rFileId = pRefMgr->getExternalFileId(aFileUrl);
+
+    return true;
+}
+
+bool ExcelToSc8::Read3DTabReference( UINT16 nIxti, SCTAB& rFirstTab, SCTAB& rLastTab, ExternalTabInfo& rExtInfo )
 {
     rFirstTab = rLastTab = 0;
+    rExtInfo.mbExternal = !rLinkMan.IsSelfRef(nIxti);
+    bool bSuccess = rLinkMan.GetScTabRange(rFirstTab, rLastTab, nIxti);
+    if (!bSuccess)
+        return false;
 
-    UINT16 nIxti;
-    rStrm >> nIxti;
+    if (!rExtInfo.mbExternal)
+        // This is internal reference.  Stop here.
+        return true;
 
-    return rLinkMan.GetScTabRange( rFirstTab, rLastTab, nIxti );
+    rExtInfo.maTabName = rLinkMan.GetSupbookTabName(nIxti, rFirstTab);
+    return GetExternalFileIdFromXti(nIxti, rExtInfo.mnFileId);
 }
 
 
@@ -80,8 +110,8 @@ ConvErr ExcelToSc8::Convert( const ScTokenArray*& rpTokArray, XclImpStream& aIn,
     const BOOL              bSharedFormula = eFT == FT_SharedFormula;
     const BOOL              bRNorSF = bRangeName || bSharedFormula;
 
-    SingleRefData           aSRD;
-    ComplRefData            aCRD;
+    ScSingleRefData         aSRD;
+    ScComplexRefData            aCRD;
     ExtensionTypeVec        aExtensions;
 
     if( eStatus != ConvOK )
@@ -458,8 +488,8 @@ ConvErr ExcelToSc8::Convert( const ScTokenArray*& rpTokArray, XclImpStream& aIn,
             {
                 UINT16          nRowFirst, nRowLast;
                 UINT16          nColFirst, nColLast;
-                SingleRefData   &rSRef1 = aCRD.Ref1;
-                SingleRefData   &rSRef2 = aCRD.Ref2;
+                ScSingleRefData &rSRef1 = aCRD.Ref1;
+                ScSingleRefData &rSRef2 = aCRD.Ref2;
 
                 aIn >> nRowFirst >> nRowLast >> nColFirst >> nColLast;
 
@@ -608,8 +638,23 @@ ConvErr ExcelToSc8::Convert( const ScTokenArray*& rpTokArray, XclImpStream& aIn,
                     {
                         case xlExtName:
                         {
+                            /* FIXME: enable this code for #i4385# once
+                             * external name reference can be stored in ODF,
+                             * which remains to be done for #i3740#. Until then
+                             * create a #NAME? token. */
+#if 0
+                            sal_uInt16 nFileId;
+                            if (!GetExternalFileIdFromXti(nXtiIndex, nFileId) || !pExtName->HasFormulaTokens())
+                            {
+                                aStack << aPool.Store(ocNoName, pExtName->GetName());
+                                break;
+                            }
+
+                            aStack << aPool.StoreExtName(nFileId, pExtName->GetName());
+                            pExtName->CreateExtNameData(GetDoc(), nFileId);
+#else
                             aStack << aPool.Store( ocNoName, pExtName->GetName() );
-                            GetTracer().TraceFormulaExtName();
+#endif
                         }
                         break;
 
@@ -635,6 +680,12 @@ ConvErr ExcelToSc8::Convert( const ScTokenArray*& rpTokArray, XclImpStream& aIn,
                         }
                         break;
 
+                        case xlExtEuroConvert:
+                            {
+                                aStack << aPool.Store( ocEuroConvert, String() );
+                            }
+                        break;
+
                         default:    // OLE link
                         {
                             aPool << ocBad;
@@ -657,30 +708,55 @@ ConvErr ExcelToSc8::Convert( const ScTokenArray*& rpTokArray, XclImpStream& aIn,
             case 0x7C:
             case 0x3C: // Deleted 3-D Cell Reference            [    277]
             {
-                UINT16 nRw, nGrbitCol;
+                UINT16 nIxti, nRw, nGrbitCol;
                 SCTAB nTabFirst, nTabLast;
 
-                BOOL bOK = Read3DTabReference( aIn, nTabFirst, nTabLast );
-                aIn >> nRw >> nGrbitCol;
+                aIn >> nIxti >> nRw >> nGrbitCol;
 
-                if( bOK )
+                ExternalTabInfo aExtInfo;
+                if (!Read3DTabReference(nIxti, nTabFirst, nTabLast, aExtInfo))
                 {
-                    aSRD.nTab = nTabFirst;
-                    aSRD.SetFlag3D( TRUE );
-                    aSRD.SetTabRel( FALSE );
+                    aPool << ocBad;
+                    aPool >> aStack;
+                    break;
+                }
 
-                    ExcRelToScRel8( nRw, nGrbitCol, aSRD, bRangeName );
+                aSRD.nTab = nTabFirst;
+                aSRD.SetFlag3D( TRUE );
+                aSRD.SetTabRel( FALSE );
 
-                    switch ( nOp )
+                ExcRelToScRel8( nRw, nGrbitCol, aSRD, bRangeName );
+
+                switch ( nOp )
+                {
+                    case 0x5C:
+                    case 0x7C:
+                    case 0x3C: // Deleted 3-D Cell Reference    [    277]
+                        // no information which part is deleted, set both
+                        aSRD.SetColDeleted( TRUE );
+                        aSRD.SetRowDeleted( TRUE );
+                }
+
+                if (aExtInfo.mbExternal)
+                {
+                    // nTabFirst and nTabLast are the indices of the refernced
+                    // sheets in the SUPBOOK record, hence do not represent
+                    // the actual indices of the original sheets since the
+                    // SUPBOOK record only stores referenced sheets and skips
+                    // the ones that are not referenced.
+
+                    if (nTabLast != nTabFirst)
                     {
-                        case 0x5C:
-                        case 0x7C:
-                        case 0x3C: // Deleted 3-D Cell Reference    [    277]
-                            // no information which part is deleted, set both
-                            aSRD.SetColDeleted( TRUE );
-                            aSRD.SetRowDeleted( TRUE );
+                        aCRD.Ref1 = aCRD.Ref2 = aSRD;
+                        aCRD.Ref2.nTab = nTabLast;
+                        aStack << aPool.StoreExtRef(aExtInfo.mnFileId, aExtInfo.maTabName, aCRD);
                     }
-                    if ( !ValidTab(nTabFirst) )
+                    else
+                        aStack << aPool.StoreExtRef(aExtInfo.mnFileId, aExtInfo.maTabName, aSRD);
+                }
+                else
+                {
+                    if ( !ValidTab(nTabFirst))
                         aSRD.SetTabDeleted( TRUE );
 
                     if( nTabLast != nTabFirst )
@@ -693,11 +769,6 @@ ConvErr ExcelToSc8::Convert( const ScTokenArray*& rpTokArray, XclImpStream& aIn,
                     else
                         aStack << aPool.Store( aSRD );
                 }
-                else
-                {
-                    aPool << ocBad;
-                    aPool >> aStack;
-                }
             }
                 break;
             case 0x5B:
@@ -707,54 +778,60 @@ ConvErr ExcelToSc8::Convert( const ScTokenArray*& rpTokArray, XclImpStream& aIn,
             case 0x7D:
             case 0x3D: // Deleted 3-D Area Reference            [    277]
             {
-                UINT16 nRw1, nGrbitCol1, nRw2, nGrbitCol2;
+                UINT16 nIxti, nRw1, nGrbitCol1, nRw2, nGrbitCol2;
                 SCTAB nTabFirst, nTabLast;
+                aIn >> nIxti >> nRw1 >> nRw2 >> nGrbitCol1 >> nGrbitCol2;
 
-                BOOL bOK = Read3DTabReference( aIn, nTabFirst, nTabLast );
-                aIn >> nRw1 >> nRw2 >> nGrbitCol1 >> nGrbitCol2;
-
-                if( bOK )
+                ExternalTabInfo aExtInfo;
+                if (!Read3DTabReference(nIxti, nTabFirst, nTabLast, aExtInfo))
                 {
-                    SingleRefData   &rR1 = aCRD.Ref1;
-                    SingleRefData   &rR2 = aCRD.Ref2;
+                    aPool << ocBad;
+                    aPool >> aStack;
+                    break;
+                }
+                ScSingleRefData &rR1 = aCRD.Ref1;
+                ScSingleRefData &rR2 = aCRD.Ref2;
 
-                    rR1.nTab = nTabFirst;
-                    rR2.nTab = nTabLast;
-                    rR1.SetFlag3D( TRUE );
-                    rR1.SetTabRel( FALSE );
-                    rR2.SetFlag3D( nTabFirst != nTabLast );
-                    rR2.SetTabRel( FALSE );
 
-                    ExcRelToScRel8( nRw1, nGrbitCol1, aCRD.Ref1, bRangeName );
-                    ExcRelToScRel8( nRw2, nGrbitCol2, aCRD.Ref2, bRangeName );
+                rR1.nTab = nTabFirst;
+                rR2.nTab = nTabLast;
+                rR1.SetFlag3D( TRUE );
+                rR1.SetTabRel( FALSE );
+                rR2.SetFlag3D( nTabFirst != nTabLast );
+                rR2.SetTabRel( FALSE );
 
-                    if( IsComplColRange( nGrbitCol1, nGrbitCol2 ) )
-                        SetComplCol( aCRD );
-                    else if( IsComplRowRange( nRw1, nRw2 ) )
-                        SetComplRow( aCRD );
+                ExcRelToScRel8( nRw1, nGrbitCol1, aCRD.Ref1, bRangeName );
+                ExcRelToScRel8( nRw2, nGrbitCol2, aCRD.Ref2, bRangeName );
 
-                    switch ( nOp )
-                    {
-                        case 0x5D:
-                        case 0x7D:
-                        case 0x3D: // Deleted 3-D Area Reference    [    277]
-                            // no information which part is deleted, set all
-                            rR1.SetColDeleted( TRUE );
-                            rR1.SetRowDeleted( TRUE );
-                            rR2.SetColDeleted( TRUE );
-                            rR2.SetRowDeleted( TRUE );
-                    }
+                if( IsComplColRange( nGrbitCol1, nGrbitCol2 ) )
+                    SetComplCol( aCRD );
+                else if( IsComplRowRange( nRw1, nRw2 ) )
+                    SetComplRow( aCRD );
+
+                switch ( nOp )
+                {
+                    case 0x5D:
+                    case 0x7D:
+                    case 0x3D: // Deleted 3-D Area Reference    [    277]
+                        // no information which part is deleted, set all
+                        rR1.SetColDeleted( TRUE );
+                        rR1.SetRowDeleted( TRUE );
+                        rR2.SetColDeleted( TRUE );
+                        rR2.SetRowDeleted( TRUE );
+                }
+
+                if (aExtInfo.mbExternal)
+                {
+                    aStack << aPool.StoreExtRef(aExtInfo.mnFileId, aExtInfo.maTabName, aCRD);
+                }
+                else
+                {
                     if ( !ValidTab(nTabFirst) )
                         rR1.SetTabDeleted( TRUE );
                     if ( !ValidTab(nTabLast) )
                         rR2.SetTabDeleted( TRUE );
 
                     aStack << aPool.Store( aCRD );
-                }
-                else
-                {
-                    aPool << ocBad;
-                    aPool >> aStack;
                 }
             }
                 break;
@@ -809,8 +886,8 @@ ConvErr ExcelToSc8::Convert( _ScRangeListTabs& rRangeList, XclImpStream& aIn, sa
     const BOOL              bSharedFormula = eFT == FT_SharedFormula;
     const BOOL              bRNorSF = bRangeName || bSharedFormula;
 
-    SingleRefData           aSRD;
-    ComplRefData            aCRD;
+    ScSingleRefData         aSRD;
+    ScComplexRefData            aCRD;
 
     bExternName = FALSE;
 
@@ -940,8 +1017,8 @@ ConvErr ExcelToSc8::Convert( _ScRangeListTabs& rRangeList, XclImpStream& aIn, sa
             {
                 UINT16          nRowFirst, nRowLast;
                 UINT16          nColFirst, nColLast;
-                SingleRefData   &rSRef1 = aCRD.Ref1;
-                SingleRefData   &rSRef2 = aCRD.Ref2;
+                ScSingleRefData &rSRef1 = aCRD.Ref1;
+                ScSingleRefData &rSRef2 = aCRD.Ref2;
 
                 aIn >> nRowFirst >> nRowLast >> nColFirst >> nColLast;
 
@@ -1089,8 +1166,8 @@ ConvErr ExcelToSc8::Convert( _ScRangeListTabs& rRangeList, XclImpStream& aIn, sa
                 SCTAB nFirstScTab, nLastScTab;
                 if( rLinkMan.GetScTabRange( nFirstScTab, nLastScTab, nIxti ) )
                 {
-                    SingleRefData   &rR1 = aCRD.Ref1;
-                    SingleRefData   &rR2 = aCRD.Ref2;
+                    ScSingleRefData &rR1 = aCRD.Ref1;
+                    ScSingleRefData &rR2 = aCRD.Ref2;
 
                     rR1.nTab = nFirstScTab;
                     rR2.nTab = nLastScTab;
@@ -1142,9 +1219,154 @@ ConvErr ExcelToSc8::Convert( _ScRangeListTabs& rRangeList, XclImpStream& aIn, sa
     return eRet;
 }
 
+ConvErr ExcelToSc8::ConvertExternName( const ScTokenArray*& rpArray, XclImpStream& rStrm, sal_Size nFormulaLen,
+                                       const String& rUrl, const vector<String>& rTabNames )
+{
+    String aFileUrl = ScGlobal::GetAbsDocName(rUrl, GetDocShell());
 
+    sal_uInt8               nOp, nByte;
+    bool                    bError = false;
 
-void ExcelToSc8::ExcRelToScRel8( UINT16 nRow, UINT16 nC, SingleRefData &rSRD, const BOOL bName )
+    ScSingleRefData           aSRD;
+    ScComplexRefData            aCRD;
+
+    if (eStatus != ConvOK)
+    {
+        rStrm.Ignore(nFormulaLen);
+        return eStatus;
+    }
+
+    if (nFormulaLen == 0)
+    {
+        aPool.Store(CREATE_STRING("-/-"));
+        aPool >> aStack;
+        rpArray = aPool[aStack.Get()];
+        return ConvOK;
+    }
+
+    ScExternalRefManager* pRefMgr = GetDoc().GetExternalRefManager();
+    sal_uInt16 nFileId = pRefMgr->getExternalFileId(aFileUrl);
+    sal_uInt16 nTabCount = static_cast< sal_uInt16 >( rTabNames.size() );
+
+    sal_Size nEndPos = rStrm.GetRecPos() + nFormulaLen;
+
+    while( (rStrm.GetRecPos() < nEndPos) && !bError )
+    {
+        rStrm >> nOp;
+
+        // #98524# always reset flags
+        aSRD.InitFlags();
+        aCRD.InitFlags();
+
+        switch( nOp )
+        {
+            case 0x1C: // Error Value
+            {
+                rStrm >> nByte;
+                DefTokenId eOc;
+                switch( nByte )
+                {
+                    case EXC_ERR_NULL:
+                    case EXC_ERR_DIV0:
+                    case EXC_ERR_VALUE:
+                    case EXC_ERR_REF:
+                    case EXC_ERR_NAME:
+                    case EXC_ERR_NUM:   eOc = ocStop;       break;
+                    case EXC_ERR_NA:    eOc = ocNotAvail;   break;
+                    default:            eOc = ocNoName;
+                }
+                aPool << eOc;
+                if( eOc != ocStop )
+                    aPool << ocOpen << ocClose;
+                aPool >> aStack;
+            }
+            break;
+            case 0x3A:
+            {
+                // cell reference in external range name
+                sal_uInt16 nExtTab1, nExtTab2, nRow, nGrbitCol;
+                rStrm >> nExtTab1 >> nExtTab2 >> nRow >> nGrbitCol;
+                if (nExtTab1 >= nTabCount || nExtTab2 >= nTabCount)
+                {
+                    bError = true;
+                    break;
+                }
+
+                aSRD.nTab = nExtTab1;
+                aSRD.SetFlag3D(true);
+                aSRD.SetTabRel(false);
+                ExcRelToScRel8(nRow, nGrbitCol, aSRD, true);
+                aCRD.Ref1 = aCRD.Ref2 = aSRD;
+                String aTabName = rTabNames[nExtTab1];
+
+                if (nExtTab1 == nExtTab2)
+                {
+                    // single cell reference
+                    aStack << aPool.StoreExtRef(nFileId, aTabName, aSRD);
+                }
+                else
+                {
+                    // area reference
+                    aCRD.Ref2.nTab = nExtTab2;
+                    aStack << aPool.StoreExtRef(nFileId, aTabName, aCRD);
+                }
+            }
+            break;
+            case 0x3B:
+            {
+                // area reference
+                sal_uInt16 nExtTab1, nExtTab2, nRow1, nRow2, nGrbitCol1, nGrbitCol2;
+                rStrm >> nExtTab1 >> nExtTab2 >> nRow1 >> nRow2 >> nGrbitCol1 >> nGrbitCol2;
+                ScSingleRefData& rR1 = aCRD.Ref1;
+                ScSingleRefData& rR2 = aCRD.Ref2;
+
+                rR1.nTab = nExtTab1;
+                rR1.SetFlag3D(true);
+                rR1.SetTabRel(false);
+                ExcRelToScRel8(nRow1, nGrbitCol1, rR1, true);
+
+                rR2.nTab = nExtTab2;
+                rR2.SetFlag3D(true);
+                rR2.SetTabRel(false);
+                ExcRelToScRel8(nRow2, nGrbitCol2, rR2, true);
+
+                String aTabName = rTabNames[nExtTab1];
+                aStack << aPool.StoreExtRef(nFileId, aTabName, aCRD);
+            }
+            break;
+            default:
+                bError = true;
+        }
+        bError |= !rStrm.IsValid();
+    }
+
+    ConvErr eRet;
+
+    if( bError )
+    {
+        aPool << ocBad;
+        aPool >> aStack;
+        rpArray = aPool[ aStack.Get() ];
+        eRet = ConvErrNi;
+    }
+    else if( rStrm.GetRecPos() != nEndPos )
+    {
+        aPool << ocBad;
+        aPool >> aStack;
+        rpArray = aPool[ aStack.Get() ];
+        eRet = ConvErrCount;
+    }
+    else
+    {
+        rpArray = aPool[ aStack.Get() ];
+        eRet = ConvOK;
+    }
+
+    rStrm.Seek(nEndPos);
+    return eRet;
+}
+
+void ExcelToSc8::ExcRelToScRel8( UINT16 nRow, UINT16 nC, ScSingleRefData &rSRD, const BOOL bName )
 {
     const BOOL      bColRel = ( nC & 0x4000 ) != 0;
     const BOOL      bRowRel = ( nC & 0x8000 ) != 0;

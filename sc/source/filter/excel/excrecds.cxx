@@ -88,7 +88,7 @@
 #include "stlsheet.hxx"
 #include "stlpool.hxx"
 #include "editutil.hxx"
-#include "errorcodes.hxx"
+#include "formula/errorcodes.hxx"
 
 #include "excdoc.hxx"
 #include "xeformula.hxx"
@@ -98,7 +98,11 @@
 
 #include "xcl97rec.hxx"
 
+#include <oox/core/tokens.hxx>
 
+
+
+using ::rtl::OString;
 
 //--------------------------------------------------------- class ExcDummy_00 -
 const BYTE      ExcDummy_00::pMyData[] = {
@@ -396,13 +400,22 @@ UINT16 Exc1904::GetNum( void ) const
 }
 
 
+void Exc1904::SaveXml( XclExpXmlStream& rStrm )
+{
+    rStrm.WriteAttributes(
+            XML_date1904, XclXmlUtils::ToPsz( bVal ),
+            FSEND );
+}
+
+
 
 //------------------------------------------------------ class ExcBundlesheet -
 
-ExcBundlesheetBase::ExcBundlesheetBase( RootData& rRootData, SCTAB nTab ) :
+ExcBundlesheetBase::ExcBundlesheetBase( RootData& rRootData, SCTAB nTabNum ) :
     nStrPos( STREAM_SEEK_TO_END ),
     nOwnPos( STREAM_SEEK_TO_END ),
-    nGrbit( rRootData.pER->GetTabInfo().IsVisibleTab( nTab ) ? 0x0000 : 0x0001 )
+    nGrbit( rRootData.pER->GetTabInfo().IsVisibleTab( nTabNum ) ? 0x0000 : 0x0001 ),
+    nTab( nTabNum )
 {
 }
 
@@ -410,7 +423,8 @@ ExcBundlesheetBase::ExcBundlesheetBase( RootData& rRootData, SCTAB nTab ) :
 ExcBundlesheetBase::ExcBundlesheetBase() :
     nStrPos( STREAM_SEEK_TO_END ),
     nOwnPos( STREAM_SEEK_TO_END ),
-    nGrbit( 0x0000 )
+    nGrbit( 0x0000 ),
+    nTab( SCTAB_GLOBAL )
 {
 }
 
@@ -430,10 +444,10 @@ UINT16 ExcBundlesheetBase::GetNum( void ) const
 
 
 
-ExcBundlesheet::ExcBundlesheet( RootData& rRootData, SCTAB nTab ) :
-    ExcBundlesheetBase( rRootData, nTab )
+ExcBundlesheet::ExcBundlesheet( RootData& rRootData, SCTAB _nTab ) :
+    ExcBundlesheetBase( rRootData, _nTab )
 {
-    String sTabName = rRootData.pER->GetTabInfo().GetScTabName( nTab );
+    String sTabName = rRootData.pER->GetTabInfo().GetScTabName( _nTab );
     DBG_ASSERT( sTabName.Len() < 256, "ExcBundlesheet::ExcBundlesheet - table name too long" );
     aName = ByteString( sTabName, rRootData.pER->GetTextEncoding() );
 }
@@ -483,11 +497,35 @@ void XclExpCountry::WriteBody( XclExpStream& rStrm )
 
 // XclExpWsbool ===============================================================
 
-XclExpWsbool::XclExpWsbool( bool bFitToPages ) :
-    XclExpUInt16Record( EXC_ID_WSBOOL, EXC_WSBOOL_DEFAULTFLAGS )
+XclExpWsbool::XclExpWsbool( bool bFitToPages, SCTAB nScTab, XclExpFilterManager* pManager )
+    : XclExpUInt16Record( EXC_ID_WSBOOL, EXC_WSBOOL_DEFAULTFLAGS )
+    , mnScTab( nScTab )
+    , mpManager( pManager )
 {
     if( bFitToPages )
         SetValue( GetValue() | EXC_WSBOOL_FITTOPAGE );
+}
+
+void XclExpWsbool::SaveXml( XclExpXmlStream& rStrm )
+{
+    sax_fastparser::FSHelperPtr& rWorksheet = rStrm.GetCurrentStream();
+    rWorksheet->startElement( XML_sheetPr,
+            // OOXTODO: XML_syncHorizontal,
+            // OOXTODO: XML_syncVertical,
+            // OOXTODO: XML_syncRef,
+            // OOXTODO: XML_transitionEvaluation,
+            // OOXTODO: XML_transitionEntry,
+            // OOXTODO: XML_published,
+            // OOXTODO: XML_codeName,
+            XML_filterMode, mpManager ? XclXmlUtils::ToPsz( mpManager->HasFilterMode( mnScTab ) ) : NULL,
+            // OOXTODO: XML_enableFormatConditionsCalculation,
+            FSEND );
+    // OOXTODO: elements XML_tabColor, XML_outlinePr
+    rWorksheet->singleElement( XML_pageSetUpPr,
+            // OOXTODO: XML_autoPageBreaks,
+            XML_fitToPage,  XclXmlUtils::ToPsz( GetValue() & EXC_WSBOOL_FITTOPAGE ),
+            FSEND );
+    rWorksheet->endElement( XML_sheetPr );
 }
 
 
@@ -496,6 +534,13 @@ XclExpWsbool::XclExpWsbool( bool bFitToPages ) :
 XclExpWindowProtection::XclExpWindowProtection(bool bValue) :
     XclExpBoolRecord(EXC_ID_WINDOWPROTECT,bValue)
 {
+}
+
+void XclExpWindowProtection::SaveXml( XclExpXmlStream& rStrm )
+{
+    rStrm.WriteAttributes(
+            XML_lockWindows, XclXmlUtils::ToPsz( GetBool() ),
+            FSEND );
 }
 
 // XclExpDocProtection ===============================================================
@@ -569,6 +614,43 @@ void ExcFilterCondition::Save( XclExpStream& rStrm )
         default:
             rStrm << (UINT32)0 << (UINT32)0;
     }
+}
+
+static const char* lcl_GetOperator( UINT8 nOper )
+{
+    switch( nOper )
+    {
+        case EXC_AFOPER_EQUAL:          return "equal";
+        case EXC_AFOPER_GREATER:        return "greaterThan";
+        case EXC_AFOPER_GREATEREQUAL:   return "greaterThanOrEqual";
+        case EXC_AFOPER_LESS:           return "lessThan";
+        case EXC_AFOPER_LESSEQUAL:      return "lessThanOrEqual";
+        case EXC_AFOPER_NOTEQUAL:       return "notEqual";
+        case EXC_AFOPER_NONE:
+        default:                        return "**none**";
+    }
+}
+
+static OString lcl_GetValue( UINT8 nType, double fVal, XclExpString* pStr )
+{
+    switch( nType )
+    {
+        case EXC_AFTYPE_STRING:     return XclXmlUtils::ToOString( *pStr );
+        case EXC_AFTYPE_DOUBLE:     return OString::valueOf( fVal );
+        case EXC_AFTYPE_BOOLERR:    return OString::valueOf( (sal_Int32) ( fVal != 0 ? 1 : 0 ) );
+        default:                    return OString();
+    }
+}
+
+void ExcFilterCondition::SaveXml( XclExpXmlStream& rStrm )
+{
+    if( IsEmpty() )
+        return;
+
+    rStrm.GetCurrentStream()->singleElement( XML_customFilter,
+            XML_operator,   lcl_GetOperator( nOper ),
+            XML_val,        lcl_GetValue( nType, fVal, pText ).getStr(),
+            FSEND );
 }
 
 void ExcFilterCondition::SaveText( XclExpStream& rStrm )
@@ -695,6 +777,40 @@ void XclExpAutofilter::WriteBody( XclExpStream& rStrm )
     aCond[ 1 ].SaveText( rStrm );
 }
 
+void XclExpAutofilter::SaveXml( XclExpXmlStream& rStrm )
+{
+    if( !HasCondition() )
+        return;
+
+    sax_fastparser::FSHelperPtr& rWorksheet = rStrm.GetCurrentStream();
+
+    rWorksheet->startElement( XML_filterColumn,
+            XML_colId,          OString::valueOf( (sal_Int32) nCol ).getStr(),
+            // OOXTODO: XML_hiddenButton,   AutoFilter12 fHideArrow?
+            // OOXTODO: XML_showButton,
+            FSEND );
+
+    if( HasTop10() )
+    {
+        rWorksheet->singleElement( XML_top10,
+                XML_top,        XclXmlUtils::ToPsz( get_flag( nFlags, EXC_AFFLAG_TOP10TOP ) ),
+                XML_percent,    XclXmlUtils::ToPsz( get_flag( nFlags, EXC_AFFLAG_TOP10PERC ) ),
+                XML_val,        OString::valueOf( (sal_Int32) (nFlags >> 7 ) ).getStr(),
+                // OOXTODO: XML_filterVal,
+                FSEND );
+    }
+
+    rWorksheet->startElement( XML_customFilters,
+            XML_and,    XclXmlUtils::ToPsz( (nFlags & EXC_AFFLAG_ANDORMASK) == EXC_AFFLAG_AND ),
+            FSEND );
+    aCond[ 0 ].SaveXml( rStrm );
+    aCond[ 1 ].SaveXml( rStrm );
+    rWorksheet->endElement( XML_customFilters );
+    // OOXTODO: XLM_colorFilter, XML_dynamicFilter,
+    // XML_extLst, XML_filters, XML_iconFilter, XML_top10
+    rWorksheet->endElement( XML_filterColumn );
+}
+
 // ----------------------------------------------------------------------------
 
 ExcAutoFilterRecs::ExcAutoFilterRecs( const XclExpRoot& rRoot, SCTAB nTab ) :
@@ -734,6 +850,8 @@ ExcAutoFilterRecs::ExcAutoFilterRecs( const XclExpRoot& rRoot, SCTAB nTab ) :
         ScRange aRange( aParam.nCol1, aParam.nRow1, aParam.nTab,
                         aParam.nCol2, aParam.nRow2, aParam.nTab );
         SCCOL   nColCnt = aParam.nCol2 - aParam.nCol1 + 1;
+
+        maRef = aRange;
 
         // #i2394# #100489# built-in defined names must be sorted by containing sheet name
         rNameMgr.InsertBuiltInName( EXC_BUILTIN_FILTERDATABASE, aRange );
@@ -854,6 +972,25 @@ void ExcAutoFilterRecs::Save( XclExpStream& rStrm )
     maFilterList.Save( rStrm );
 }
 
+void ExcAutoFilterRecs::SaveXml( XclExpXmlStream& rStrm )
+{
+    if( maFilterList.IsEmpty() )
+        return;
+
+    sax_fastparser::FSHelperPtr& rWorksheet = rStrm.GetCurrentStream();
+    rWorksheet->startElement( XML_autoFilter,
+            XML_ref,    XclXmlUtils::ToOString( maRef ).getStr(),
+            FSEND );
+    // OOXTODO: XML_extLst, XML_sortState
+    maFilterList.SaveXml( rStrm );
+    rWorksheet->endElement( XML_autoFilter );
+}
+
+bool ExcAutoFilterRecs::HasFilterMode() const
+{
+    return pFilterMode != NULL;
+}
+
 // ----------------------------------------------------------------------------
 
 XclExpFilterManager::XclExpFilterManager( const XclExpRoot& rRoot ) :
@@ -876,6 +1013,17 @@ XclExpRecordRef XclExpFilterManager::CreateRecord( SCTAB nScTab )
         xRec->AddObjRecs();
     }
     return xRec;
+}
+
+bool XclExpFilterManager::HasFilterMode( SCTAB nScTab )
+{
+    XclExpTabFilterRef xRec;
+    XclExpTabFilterMap::iterator aIt = maFilterMap.find( nScTab );
+    if( aIt != maFilterMap.end() )
+    {
+        return aIt->second->HasFilterMode();
+    }
+    return false;
 }
 
 // ============================================================================

@@ -34,6 +34,7 @@
 #include "OPropertySet.hxx"
 #include "ServiceMacros.hxx"
 #include "ModifyListenerHelper.hxx"
+#include "charttoolsdllapi.hxx"
 
 #include <cppuhelper/implbase6.hxx>
 #include <comphelper/uno3.hxx>
@@ -61,7 +62,7 @@ typedef ::cppu::WeakImplHelper6<
     ErrorBar_Base;
 }
 
-class ErrorBar :
+class OOO_DLLPUBLIC_CHARTTOOLS ErrorBar :
         public MutexContainer,
         public impl::ErrorBar_Base,
         public ::property::OPropertySet

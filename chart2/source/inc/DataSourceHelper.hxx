@@ -39,6 +39,7 @@
 #endif
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/frame/XModel.hpp>
+#include "charttoolsdllapi.hxx"
 
 #include <vector>
 
@@ -51,7 +52,7 @@ namespace chart
 /**
 */
 
-class DataSourceHelper
+class OOO_DLLPUBLIC_CHARTTOOLS DataSourceHelper
 {
 public:
         static ::com::sun::star::uno::Sequence<

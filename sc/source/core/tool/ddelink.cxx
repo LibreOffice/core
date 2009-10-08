@@ -51,11 +51,7 @@
 
 TYPEINIT2(ScDdeLink,::sfx2::SvBaseLink,SfxBroadcaster);
 
-#ifdef PM2
-#define DDE_TXT_ENCODING    RTL_TEXTENCODING_IBM_850
-#else
-#define DDE_TXT_ENCODING    RTL_TEXTENCODING_MS_1252
-#endif
+#define DDE_TXT_ENCODING    gsl_getSystemTextEncoding()
 
 BOOL ScDdeLink::bIsInUpdate = FALSE;
 

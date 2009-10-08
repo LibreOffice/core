@@ -35,6 +35,7 @@ PRJNAME=			chart2
 TARGET=				chcdrawinglayer
 
 ENABLE_EXCEPTIONS=	TRUE
+VISIBILITY_HIDDEN=TRUE
 
 # --- Settings -----------------------------------------------------
 

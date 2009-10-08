@@ -6,8 +6,8 @@
  *
  * OpenOffice.org - a multi-platform office productivity suite
  *
- * $RCSfile: parawin.hrc,v $
- * $Revision: 1.4 $
+ * $RCSfile: htmlimp.hxx,v $
+ * $Revision: 1.7 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -28,29 +28,27 @@
  *
  ************************************************************************/
 
-#include "sc.hrc"   // -> RID_SCTAB_PARAMETER
+#ifndef SC_HTMLIMP_HXX
+#define SC_HTMLIMP_HXX
 
-// #define RID_SCTAB_PARAMETER      256
+#include "eeimport.hxx"
 
-#define FT_PARNAME          1
-#define FT_PARDESC          2
-#define FT_EDITDESC         3
-#define FT_ARG1             4
-#define FT_ARG2             5
-#define FT_ARG3             6
-#define FT_ARG4             7
-#define BTN_FX1             8
-#define BTN_FX2             9
-#define BTN_FX3             10
-#define BTN_FX4             11
-#define ED_ARG1             12
-#define ED_ARG2             13
-#define ED_ARG3             14
-#define ED_ARG4             15
-#define RB_ARG1             16
-#define RB_ARG2             17
-#define RB_ARG3             18
-#define RB_ARG4             19
-#define WND_SLIDER          20
-#define IMG_FX_H            30
+class ScHTMLParser;
 
+class ScHTMLImport : public ScEEImport
+{
+private:
+    static void         InsertRangeName( ScDocument* pDoc, const String& rName, const ScRange& rRange );
+
+public:
+    ScHTMLImport( ScDocument* pDoc, const String& rBaseURL, const ScRange& rRange, BOOL bCalcWidthHeight = TRUE );
+    virtual ~ScHTMLImport();
+    const ScHTMLParser* GetParser() const { return (ScHTMLParser*)mpParser; }
+
+    virtual void        WriteToDocument( BOOL bSizeColsRows = FALSE, double nOutputFactor = 1.0 );
+
+    static String       GetHTMLRangeNameList( ScDocument* pDoc, const String& rOrigName );
+};
+
+
+#endif

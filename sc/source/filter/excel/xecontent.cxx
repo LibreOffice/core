@@ -41,6 +41,7 @@
 #include <sfx2/objsh.hxx>
 #include <tools/urlobj.hxx>
 #include <svtools/itemset.hxx>
+#include <formula/grammar.hxx>
 #include "scitems.hxx"
 #include <svx/eeitem.hxx>
 #include <svx/flditem.hxx>
@@ -57,7 +58,8 @@
 #include "xestyle.hxx"
 #include "xename.hxx"
 
-using ::rtl::OUString;
+#include <oox/core/tokens.hxx>
+
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::Any;
 using ::com::sun::star::uno::UNO_QUERY;
@@ -67,6 +69,9 @@ using ::com::sun::star::frame::XModel;
 using ::com::sun::star::table::CellRangeAddress;
 using ::com::sun::star::sheet::XAreaLinks;
 using ::com::sun::star::sheet::XAreaLink;
+using ::rtl::OString;
+using ::rtl::OUString;
+using ::rtl::OUStringBuffer;
 
 // Shared string table ========================================================
 
@@ -106,6 +111,7 @@ public:
 
     /** Writes the complete SST and EXTSST records. */
     void                Save( XclExpStream& rStrm );
+    void                SaveXml( XclExpXmlStream& rStrm );
 
 private:
     typedef ::std::list< XclExpStringRef >      XclExpStringList;
@@ -253,6 +259,37 @@ void XclExpSstImpl::Save( XclExpStream& rStrm )
     rStrm.EndRecord();
 }
 
+void XclExpSstImpl::SaveXml( XclExpXmlStream& rStrm )
+{
+    if( maStringList.empty() )
+        return;
+
+    sax_fastparser::FSHelperPtr pSst = rStrm.CreateOutputStream(
+            OUString::createFromAscii( "xl/sharedStrings.xml" ),
+            OUString::createFromAscii( "sharedStrings.xml" ),
+            rStrm.GetCurrentStream()->getOutputStream(),
+            "application/vnd.openxmlformats-officedocument.spreadsheetml.sharedStrings+xml",
+            "http://schemas.openxmlformats.org/officeDocument/2006/relationships/sharedStrings" );
+    rStrm.PushStream( pSst );
+
+    pSst->startElement( XML_sst,
+            XML_xmlns, "http://schemas.openxmlformats.org/spreadsheetml/2006/main",
+            XML_count, OString::valueOf( (sal_Int32) mnTotal ).getStr(),
+            XML_uniqueCount, OString::valueOf( (sal_Int32) mnSize ).getStr(),
+            FSEND );
+
+    for( XclExpStringList::const_iterator aIt = maStringList.begin(), aEnd = maStringList.end(); aIt != aEnd; ++aIt )
+    {
+        pSst->startElement( XML_si, FSEND );
+        (*aIt)->WriteXml( rStrm );
+        pSst->endElement( XML_si );
+    }
+
+    pSst->endElement( XML_sst );
+
+    rStrm.PopStream();
+}
+
 // ----------------------------------------------------------------------------
 
 XclExpSst::XclExpSst() :
@@ -272,6 +309,11 @@ sal_uInt32 XclExpSst::Insert( XclExpStringRef xString )
 void XclExpSst::Save( XclExpStream& rStrm )
 {
     mxImpl->Save( rStrm );
+}
+
+void XclExpSst::SaveXml( XclExpXmlStream& rStrm )
+{
+    mxImpl->SaveXml( rStrm );
 }
 
 // Merged cells ===============================================================
@@ -321,6 +363,27 @@ void XclExpMergedcells::Save( XclExpStream& rStrm )
     }
 }
 
+void XclExpMergedcells::SaveXml( XclExpXmlStream& rStrm )
+{
+    ULONG nCount = maMergedRanges.Count();
+    if( !nCount )
+        return;
+    sax_fastparser::FSHelperPtr& rWorksheet = rStrm.GetCurrentStream();
+    rWorksheet->startElement( XML_mergeCells,
+            XML_count,  OString::valueOf( (sal_Int32) nCount ).getStr(),
+            FSEND );
+    for( ULONG i = 0; i < nCount; ++i )
+    {
+        if( const ScRange* pRange = maMergedRanges.GetObject( i ) )
+        {
+            rWorksheet->singleElement( XML_mergeCell,
+                    XML_ref,    XclXmlUtils::ToOString( *pRange ).getStr(),
+                    FSEND );
+        }
+    }
+    rWorksheet->endElement( XML_mergeCells );
+}
+
 // Hyperlinks =================================================================
 
 XclExpHyperlink::XclExpHyperlink( const XclExpRoot& rRoot, const SvxURLField& rUrlField, const ScAddress& rScPos ) :
@@ -335,7 +398,6 @@ XclExpHyperlink::XclExpHyperlink( const XclExpRoot& rRoot, const SvxURLField& rU
     const INetProtocol eProtocol = aUrlObj.GetProtocol();
     bool bWithRepr = rRepr.Len() > 0;
     XclExpStream aXclStrm( *mxVarData, rRoot );         // using in raw write mode.
-    XclExpStringRef xTextMark;
 
     // description
     if( bWithRepr )
@@ -376,6 +438,8 @@ XclExpHyperlink::XclExpHyperlink( const XclExpRoot& rRoot, const SvxURLField& rU
 
         if( !mxRepr.get() )
             mxRepr.reset( new String( aFileName ) );
+
+        msTarget = XclXmlUtils::ToOUString( aLink );
     }
     else if( eProtocol != INET_PROT_NOT_VALID )
     {
@@ -388,22 +452,24 @@ XclExpHyperlink::XclExpHyperlink( const XclExpRoot& rRoot, const SvxURLField& rU
         mnFlags |= EXC_HLINK_BODY | EXC_HLINK_ABS;
         if( !mxRepr.get() )
             mxRepr.reset( new String( rUrl ) );
+
+        msTarget = XclXmlUtils::ToOUString( aUrl );
     }
     else if( rUrl.GetChar( 0 ) == '#' )     // hack for #89066#
     {
         String aTextMark( rUrl.Copy( 1 ) );
         aTextMark.SearchAndReplace( '.', '!' );
-        xTextMark.reset( new XclExpString( aTextMark, EXC_STR_FORCEUNICODE, 255 ) );
+        mxTextMark.reset( new XclExpString( aTextMark, EXC_STR_FORCEUNICODE, 255 ) );
     }
 
     // text mark
-    if( !xTextMark.get() && aUrlObj.HasMark() )
-        xTextMark.reset( new XclExpString( aUrlObj.GetMark(), EXC_STR_FORCEUNICODE, 255 ) );
+    if( !mxTextMark.get() && aUrlObj.HasMark() )
+        mxTextMark.reset( new XclExpString( aUrlObj.GetMark(), EXC_STR_FORCEUNICODE, 255 ) );
 
-    if( xTextMark.get() )
+    if( mxTextMark.get() )
     {
-        aXclStrm    << sal_uInt32( xTextMark->Len() + 1 );  // string length + 1 trailing zero word
-        xTextMark->WriteBuffer( aXclStrm );                 // NO flags
+        aXclStrm    << sal_uInt32( mxTextMark->Len() + 1 );  // string length + 1 trailing zero word
+        mxTextMark->WriteBuffer( aXclStrm );                 // NO flags
         aXclStrm    << sal_uInt16( 0 );
 
         mnFlags |= EXC_HLINK_MARK;
@@ -460,6 +526,23 @@ void XclExpHyperlink::WriteBody( XclExpStream& rStrm )
             << sal_uInt32( 2 )
             << mnFlags;
     rStrm.CopyFromStream( *mxVarData );
+}
+
+void XclExpHyperlink::SaveXml( XclExpXmlStream& rStrm )
+{
+    OUString sId = rStrm.addRelation( rStrm.GetCurrentStream()->getOutputStream(),
+            XclXmlUtils::ToOUString( "http://schemas.openxmlformats.org/officeDocument/2006/relationships/hyperlink" ),
+            msTarget,
+            XclXmlUtils::ToOUString( "External" ) );
+    rStrm.GetCurrentStream()->singleElement( XML_hyperlink,
+            XML_ref,                XclXmlUtils::ToOString( maScPos ).getStr(),
+            FSNS( XML_r, XML_id ),  XclXmlUtils::ToOString( sId ).getStr(),
+            XML_location,           mxTextMark.get() != NULL
+                                        ? XclXmlUtils::ToOString( *mxTextMark ).getStr()
+                                        : NULL,
+            // OOXTODO: XML_tooltip,    from record HLinkTooltip 800h wzTooltip
+            XML_display,            XclXmlUtils::ToOString( *mxRepr ).getStr(),
+            FSEND );
 }
 
 // Label ranges ===============================================================
@@ -740,9 +823,12 @@ XclExpCondfmt::XclExpCondfmt( const XclExpRoot& rRoot, const ScConditionalFormat
     GetDoc().FindConditionalFormat( rCondFormat.GetKey(), aScRanges, GetCurrScTab() );
     GetAddressConverter().ConvertRangeList( maXclRanges, aScRanges, true );
     if( !maXclRanges.empty() )
+    {
         for( USHORT nIndex = 0, nCount = rCondFormat.Count(); nIndex < nCount; ++nIndex )
             if( const ScCondFormatEntry* pEntry = rCondFormat.GetEntry( nIndex ) )
                 maCFList.AppendNewRecord( new XclExpCF( GetRoot(), *pEntry ) );
+        aScRanges.Format( msSeqRef, SCA_VALID, NULL, formula::FormulaGrammar::CONV_XL_A1 );
+    }
 }
 
 XclExpCondfmt::~XclExpCondfmt()
@@ -774,6 +860,21 @@ void XclExpCondfmt::WriteBody( XclExpStream& rStrm )
             << maXclRanges;
 }
 
+void XclExpCondfmt::SaveXml( XclExpXmlStream& rStrm )
+{
+    if( !IsValid() )
+        return;
+
+    sax_fastparser::FSHelperPtr& rWorksheet = rStrm.GetCurrentStream();
+    rWorksheet->startElement( XML_conditionalFormatting,
+            XML_sqref, XclXmlUtils::ToOString( msSeqRef ).getStr(),
+            // OOXTODO: XML_pivot,
+            FSEND );
+    maCFList.SaveXml( rStrm );
+    // OOXTODO: XML_extLst
+    rWorksheet->endElement( XML_conditionalFormatting );
+}
+
 // ----------------------------------------------------------------------------
 
 XclExpCondFormatBuffer::XclExpCondFormatBuffer( const XclExpRoot& rRoot ) :
@@ -802,6 +903,11 @@ void XclExpCondFormatBuffer::Save( XclExpStream& rStrm )
     maCondfmtList.Save( rStrm );
 }
 
+void XclExpCondFormatBuffer::SaveXml( XclExpXmlStream& rStrm )
+{
+    maCondfmtList.SaveXml( rStrm );
+}
+
 // Validation =================================================================
 
 namespace {
@@ -823,6 +929,38 @@ void lclWriteDvFormula( XclExpStream& rStrm, const XclExpString& rString )
             << sal_uInt16( 0 )
             << EXC_TOKID_STR
             << rString;
+}
+
+const char* lcl_GetValidationType( sal_uInt32 nFlags )
+{
+    switch( nFlags & EXC_DV_MODE_MASK )
+    {
+        case EXC_DV_MODE_ANY:       return "none";
+        case EXC_DV_MODE_WHOLE:     return "whole";
+        case EXC_DV_MODE_DECIMAL:   return "decimal";
+        case EXC_DV_MODE_LIST:      return "list";
+        case EXC_DV_MODE_DATE:      return "date";
+        case EXC_DV_MODE_TIME:      return "time";
+        case EXC_DV_MODE_TEXTLEN:   return "textLength";
+        case EXC_DV_MODE_CUSTOM:    return "custom";
+    }
+    return NULL;
+}
+
+const char* lcl_GetOperatorType( sal_uInt32 nFlags )
+{
+    switch( nFlags & EXC_DV_COND_MASK )
+    {
+        case EXC_DV_COND_BETWEEN:       return "between";
+        case EXC_DV_COND_NOTBETWEEN:    return "notBetween";
+        case EXC_DV_COND_EQUAL:         return "equal";
+        case EXC_DV_COND_NOTEQUAL:      return "notEqual";
+        case EXC_DV_COND_GREATER:       return "greaterThan";
+        case EXC_DV_COND_LESS:          return "lessThan";
+        case EXC_DV_COND_EQGREATER:     return "greaterThanOrEqual";
+        case EXC_DV_COND_EQLESS:        return "lessThanOrEqual";
+    }
+    return NULL;
 }
 
 } // namespace
@@ -918,6 +1056,8 @@ XclExpDV::XclExpDV( const XclExpRoot& rRoot, ULONG nScHandle ) :
                 String aString;
                 if( XclTokenArrayHelper::GetStringList( aString, *xScTokArr, '\n' ) )
                 {
+                    OUStringBuffer sFormulaBuf;
+                    sFormulaBuf.append( (sal_Unicode) '"' );
                     /*  Formula is a list of string tokens -> build the Excel string.
                         Data validity is BIFF8 only (important for the XclExpString object).
                         Excel uses the NUL character as string list separator. */
@@ -928,10 +1068,17 @@ XclExpDV::XclExpDV( const XclExpRoot& rRoot, ULONG nScHandle ) :
                     {
                         String aToken( aString.GetToken( 0, '\n', nStringIx ) );
                         if( nToken > 0 )
+                        {
                             mxString1->Append( '\0' );
+                            sFormulaBuf.append( (sal_Unicode) ',' );
+                        }
                         mxString1->Append( aToken );
+                        sFormulaBuf.append( XclXmlUtils::ToOUString( aToken ) );
                     }
                     ::set_flag( mnFlags, EXC_DV_STRINGLIST );
+
+                    sFormulaBuf.append( (sal_Unicode) '"' );
+                    msFormula1 = sFormulaBuf.makeStringAndClear();
                 }
                 else
                 {
@@ -945,19 +1092,24 @@ XclExpDV::XclExpDV( const XclExpRoot& rRoot, ULONG nScHandle ) :
                         Formula compiler supports this by offering two different functions
                         CreateDataValFormula() and CreateListValFormula(). */
                     mxTokArr1 = rFmlaComp.CreateFormula( EXC_FMLATYPE_LISTVAL, *xScTokArr );
+                    msFormula1 = XclXmlUtils::ToOUString( GetDoc(), pValData->GetSrcPos(), xScTokArr.get() );
                 }
             }
             else
             {
                 // no list validation -> convert the formula
                 mxTokArr1 = rFmlaComp.CreateFormula( EXC_FMLATYPE_DATAVAL, *xScTokArr );
+                msFormula1 = XclXmlUtils::ToOUString( GetDoc(), pValData->GetSrcPos(), xScTokArr.get() );
             }
         }
 
         // second formula
         xScTokArr.reset( pValData->CreateTokenArry( 1 ) );
         if( xScTokArr.get() )
+        {
             mxTokArr2 = rFmlaComp.CreateFormula( EXC_FMLATYPE_DATAVAL, *xScTokArr );
+            msFormula2 = XclXmlUtils::ToOUString( GetDoc(), pValData->GetSrcPos(), xScTokArr.get() );
+        }
     }
     else
     {
@@ -993,6 +1145,39 @@ void XclExpDV::WriteBody( XclExpStream& rStrm )
     lclWriteDvFormula( rStrm, mxTokArr2.get() );
     // cell ranges
     rStrm << maXclRanges;
+}
+
+void XclExpDV::SaveXml( XclExpXmlStream& rStrm )
+{
+    sax_fastparser::FSHelperPtr& rWorksheet = rStrm.GetCurrentStream();
+    rWorksheet->startElement( XML_dataValidation,
+            XML_allowBlank,         XclXmlUtils::ToPsz( ::get_flag( mnFlags, EXC_DV_IGNOREBLANK ) ),
+            XML_error,              XESTRING_TO_PSZ( maErrorText ),
+            // OOXTODO: XML_errorStyle,
+            XML_errorTitle,         XESTRING_TO_PSZ( maErrorTitle ),
+            // OOXTODO: XML_imeMode,
+            XML_operator,           lcl_GetOperatorType( mnFlags ),
+            XML_prompt,             XESTRING_TO_PSZ( maPromptText ),
+            XML_promptTitle,        XESTRING_TO_PSZ( maPromptTitle ),
+            XML_showDropDown,       XclXmlUtils::ToPsz( ! ::get_flag( mnFlags, EXC_DV_SUPPRESSDROPDOWN ) ),
+            XML_showErrorMessage,   XclXmlUtils::ToPsz( ::get_flag( mnFlags, EXC_DV_SHOWERROR ) ),
+            XML_showInputMessage,   XclXmlUtils::ToPsz( ::get_flag( mnFlags, EXC_DV_SHOWPROMPT ) ),
+            XML_sqref,              XclXmlUtils::ToOString( maScRanges ).getStr(),
+            XML_type,               lcl_GetValidationType( mnFlags ),
+            FSEND );
+    if( msFormula1.getLength() )
+    {
+        rWorksheet->startElement( XML_formula1, FSEND );
+        rWorksheet->writeEscaped( msFormula1 );
+        rWorksheet->endElement( XML_formula1 );
+    }
+    if( msFormula2.getLength() )
+    {
+        rWorksheet->startElement( XML_formula2, FSEND );
+        rWorksheet->writeEscaped( msFormula2 );
+        rWorksheet->endElement( XML_formula2 );
+    }
+    rWorksheet->endElement( XML_dataValidation );
 }
 
 // ----------------------------------------------------------------------------
@@ -1034,6 +1219,22 @@ void XclExpDval::Save( XclExpStream& rStrm )
         XclExpRecord::Save( rStrm );
         maDVList.Save( rStrm );
     }
+}
+
+void XclExpDval::SaveXml( XclExpXmlStream& rStrm )
+{
+    if( maDVList.IsEmpty() )
+        return;
+
+    sax_fastparser::FSHelperPtr& rWorksheet = rStrm.GetCurrentStream();
+    rWorksheet->startElement( XML_dataValidations,
+            XML_count, OString::valueOf( (sal_Int32) maDVList.GetSize() ).getStr(),
+            // OOXTODO: XML_disablePrompts,
+            // OOXTODO: XML_xWindow,
+            // OOXTODO: XML_yWindow,
+            FSEND );
+    maDVList.SaveXml( rStrm );
+    rWorksheet->endElement( XML_dataValidations );
 }
 
 XclExpDV& XclExpDval::SearchOrCreateDv( ULONG nScHandle )

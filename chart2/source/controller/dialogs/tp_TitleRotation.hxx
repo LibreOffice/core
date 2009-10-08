@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: tp_TitleRotation.hxx,v $
- * $Revision: 1.9 $
+ * $Revision: 1.9.72.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -36,6 +36,7 @@
 #include <svx/wrapfield.hxx>
 #include <svx/orienthelper.hxx>
 #include <vcl/fixed.hxx>
+#include "TextDirectionListBox.hxx"
 
 //.............................................................................
 namespace chart
@@ -51,12 +52,15 @@ private:
     svx::WrapField          aNfRotate;
     TriStateBox             aCbStacked;
     svx::OrientationHelper  aOrientHlp;
+    FixedText               aFtTextDirection;
+    TextDirectionListBox    aLbTextDirection;
 
 public:
-    SchAlignmentTabPage(Window* pParent, const SfxItemSet& rInAttrs);
+    SchAlignmentTabPage(Window* pParent, const SfxItemSet& rInAttrs, bool bWithRotation = true);
     virtual ~SchAlignmentTabPage();
 
     static SfxTabPage* Create(Window* pParent, const SfxItemSet& rInAttrs);
+    static SfxTabPage* CreateWithoutRotation(Window* pParent, const SfxItemSet& rInAttrs);
     virtual BOOL FillItemSet(SfxItemSet& rOutAttrs);
     virtual void Reset(const SfxItemSet& rInAttrs);
 };

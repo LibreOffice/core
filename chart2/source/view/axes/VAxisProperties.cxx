@@ -37,9 +37,6 @@
 #include "AxisHelper.hxx"
 #include "DiagramHelper.hxx"
 
-#ifndef _COM_SUN_STAR_CHART2_XAXISPOSITION_HPP_
-#include <com/sun/star/chart2/AxisPosition.hpp>
-#endif
 #include <tools/color.hxx>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/chart/ChartAxisArrangeOrderType.hpp>
@@ -150,6 +147,17 @@ TickmarkProperties AxisProperties::makeTickmarkProperties(
     return aTickmarkProperties;
 }
 
+//static
+TickmarkProperties AxisProperties::getBiggestTickmarkProperties()
+{
+    TickmarkProperties aTickmarkProperties;
+    sal_Int32 nDepth = 0;
+    sal_Int32 nTickmarkStyle = 3;//inner and outer tickmarks
+    aTickmarkProperties.Length = lcl_calcTickLengthForDepth( nDepth,nTickmarkStyle );
+    aTickmarkProperties.RelativePos = static_cast<sal_Int32>( lcl_getTickOffset( aTickmarkProperties.Length, nTickmarkStyle ) );
+    return aTickmarkProperties;
+}
+
 //--------------------------------------------------------------------------
 
 AxisProperties::AxisProperties( const uno::Reference< XAxis >& xAxisModel
@@ -158,14 +166,20 @@ AxisProperties::AxisProperties( const uno::Reference< XAxis >& xAxisModel
     , m_nDimensionIndex(0)
     , m_bIsMainAxis(true)
     , m_bSwapXAndY(false)
+    , m_eCrossoverType( ::com::sun::star::chart::ChartAxisPosition_ZERO )
+    , m_eLabelPos( ::com::sun::star::chart::ChartAxisLabelPosition_NEAR_AXIS )
+    , m_eTickmarkPos( ::com::sun::star::chart::ChartAxisMarkPosition_AT_LABELS_AND_AXIS )
     , m_pfMainLinePositionAtOtherAxis(NULL)
     , m_pfExrtaLinePositionAtOtherAxis(NULL)
+    , m_bCrossingAxisHasReverseDirection(false)
+    , m_bCrossingAxisIsCategoryAxes(false)
+    , m_bAxisBetweenCategories(false)
+    , m_fLabelDirectionSign(1.0)
     , m_fInnerDirectionSign(1.0)
     , m_bLabelsOutside(true)
     , m_aLabelAlignment(LABEL_ALIGN_RIGHT_TOP)
     , m_bDisplayLabels( true )
     , m_nNumberFormatKey(0)
-//    , m_eRelativeLabelPosition(LEFTORBOTTOM_OF_AXIS)
     , m_nMajorTickmarks(1)
     , m_nMinorTickmarks(1)
     , m_aTickmarkPropertiesList()
@@ -182,14 +196,20 @@ AxisProperties::AxisProperties( const AxisProperties& rAxisProperties )
     , m_nDimensionIndex( m_nDimensionIndex )
     , m_bIsMainAxis( rAxisProperties.m_bIsMainAxis )
     , m_bSwapXAndY( rAxisProperties.m_bSwapXAndY )
+    , m_eCrossoverType( rAxisProperties.m_eCrossoverType )
+    , m_eLabelPos( rAxisProperties.m_eLabelPos )
+    , m_eTickmarkPos( rAxisProperties.m_eTickmarkPos )
     , m_pfMainLinePositionAtOtherAxis( NULL )
     , m_pfExrtaLinePositionAtOtherAxis( NULL )
+    , m_bCrossingAxisHasReverseDirection( rAxisProperties.m_bCrossingAxisHasReverseDirection )
+    , m_bCrossingAxisIsCategoryAxes( rAxisProperties.m_bCrossingAxisIsCategoryAxes )
+    , m_bAxisBetweenCategories( rAxisProperties.m_bAxisBetweenCategories )
+    , m_fLabelDirectionSign( rAxisProperties.m_fLabelDirectionSign )
     , m_fInnerDirectionSign( rAxisProperties.m_fInnerDirectionSign )
     , m_bLabelsOutside( rAxisProperties.m_bLabelsOutside )
     , m_aLabelAlignment( rAxisProperties.m_aLabelAlignment )
     , m_bDisplayLabels( rAxisProperties.m_bDisplayLabels )
     , m_nNumberFormatKey( rAxisProperties.m_nNumberFormatKey )
-//    , m_eRelativeLabelPosition( rAxisProperties.m_eRelativeLabelPosition )
     , m_nMajorTickmarks( rAxisProperties.m_nMajorTickmarks )
     , m_nMinorTickmarks( rAxisProperties.m_nMinorTickmarks )
     , m_aTickmarkPropertiesList( rAxisProperties.m_aTickmarkPropertiesList )
@@ -213,52 +233,69 @@ AxisProperties::~AxisProperties()
 
 LabelAlignment lcl_getLabelAlignmentForZAxis( const AxisProperties& rAxisProperties )
 {
-    LabelAlignment aRet( LABEL_ALIGN_LEFT );
-    if( rAxisProperties.m_bLabelsOutside )
-        aRet = LABEL_ALIGN_RIGHT;
-    else
+    LabelAlignment aRet( LABEL_ALIGN_RIGHT );
+    if( rAxisProperties.m_fLabelDirectionSign<0 )
         aRet = LABEL_ALIGN_LEFT;
     return aRet;
 }
 
 LabelAlignment lcl_getLabelAlignmentForYAxis( const AxisProperties& rAxisProperties )
 {
-    LabelAlignment aRet( LABEL_ALIGN_LEFT );
-    if(rAxisProperties.m_bIsMainAxis)
-    {
-        if( rAxisProperties.m_bLabelsOutside )
-            aRet = LABEL_ALIGN_LEFT;
-        else
-            aRet = LABEL_ALIGN_RIGHT;
-    }
-    else
-    {
-        if( !rAxisProperties.m_bLabelsOutside )
-            aRet = LABEL_ALIGN_LEFT;
-        else
-            aRet = LABEL_ALIGN_RIGHT;
-    }
+    LabelAlignment aRet( LABEL_ALIGN_RIGHT );
+    if( rAxisProperties.m_fLabelDirectionSign<0 )
+        aRet = LABEL_ALIGN_LEFT;
     return aRet;
 }
 
 LabelAlignment lcl_getLabelAlignmentForXAxis( const AxisProperties& rAxisProperties )
 {
-    LabelAlignment aRet( LABEL_ALIGN_LEFT );
-    if(rAxisProperties.m_bIsMainAxis )
-    {
-        if(rAxisProperties.m_bLabelsOutside)
-            aRet = LABEL_ALIGN_BOTTOM;
-        else
-            aRet = LABEL_ALIGN_TOP;
-    }
-    else
-    {
-        if(!rAxisProperties.m_bLabelsOutside)
-            aRet = LABEL_ALIGN_BOTTOM;
-        else
-            aRet = LABEL_ALIGN_TOP;
-    }
+    LabelAlignment aRet( LABEL_ALIGN_BOTTOM );
+    if( rAxisProperties.m_fLabelDirectionSign<0 )
+        aRet = LABEL_ALIGN_TOP;
     return aRet;
+}
+
+void AxisProperties::initAxisPositioning( const uno::Reference< beans::XPropertySet >& xAxisProp )
+{
+    if( !xAxisProp.is() )
+        return;
+    try
+    {
+        if( AxisHelper::isAxisPositioningEnabled() )
+        {
+            xAxisProp->getPropertyValue(C2U( "CrossoverPosition" )) >>= m_eCrossoverType;
+            if( ::com::sun::star::chart::ChartAxisPosition_VALUE == m_eCrossoverType )
+            {
+                double fValue = 0.0;
+                xAxisProp->getPropertyValue(C2U( "CrossoverValue" )) >>= fValue;
+
+                if( m_bCrossingAxisIsCategoryAxes )
+                {
+                    fValue = ::rtl::math::round(fValue);
+                    if( m_bAxisBetweenCategories )
+                        fValue-=0.5;
+                }
+                m_pfMainLinePositionAtOtherAxis = new double(fValue);
+            }
+            else if( ::com::sun::star::chart::ChartAxisPosition_ZERO == m_eCrossoverType )
+                m_pfMainLinePositionAtOtherAxis = new double(0.0);
+
+            xAxisProp->getPropertyValue(C2U( "LabelPosition" )) >>= m_eLabelPos;
+            xAxisProp->getPropertyValue(C2U( "MarkPosition" )) >>= m_eTickmarkPos;
+        }
+        else
+        {
+            m_eCrossoverType = ::com::sun::star::chart::ChartAxisPosition_START;
+            if( m_bIsMainAxis == m_bCrossingAxisHasReverseDirection )
+                m_eCrossoverType = ::com::sun::star::chart::ChartAxisPosition_END;
+            m_eLabelPos = ::com::sun::star::chart::ChartAxisLabelPosition_NEAR_AXIS;
+            m_eTickmarkPos = ::com::sun::star::chart::ChartAxisMarkPosition_AT_LABELS;
+        }
+    }
+    catch( uno::Exception& e )
+    {
+        ASSERT_EXCEPTION( e );
+    }
 }
 
 void AxisProperties::init( bool bCartesian )
@@ -267,21 +304,25 @@ void AxisProperties::init( bool bCartesian )
         uno::Reference<beans::XPropertySet>::query( this->m_xAxisModel );
     if( !xProp.is() )
         return;
+
+    if( m_nDimensionIndex<2 )
+        initAxisPositioning( xProp );
+
     if( bCartesian )
     {
-        try
-        {
-            //todo nAxisPosition and nAxisIndex are the same values so far and maybe need to be seperated in future
-            sal_Int32 nAxisPosition=AxisPosition::MAIN;
-            xProp->getPropertyValue( C2U( "AxisPosition" ) ) >>= nAxisPosition;
-            m_bIsMainAxis = nAxisPosition==AxisPosition::MAIN;
-        }
-        catch( uno::Exception& e )
-        {
-            ASSERT_EXCEPTION( e );
-        }
+        if( ::com::sun::star::chart::ChartAxisPosition_END == m_eCrossoverType )
+            m_fInnerDirectionSign = m_bCrossingAxisHasReverseDirection ? 1 : -1;
+        else
+            m_fInnerDirectionSign = m_bCrossingAxisHasReverseDirection ? -1 : 1;
 
-        m_fInnerDirectionSign = m_bIsMainAxis ? 1 : -1;
+        if( ::com::sun::star::chart::ChartAxisLabelPosition_NEAR_AXIS == m_eLabelPos )
+            m_fLabelDirectionSign = m_fInnerDirectionSign;
+        else if( ::com::sun::star::chart::ChartAxisLabelPosition_NEAR_AXIS_OTHER_SIDE == m_eLabelPos )
+            m_fLabelDirectionSign = -m_fInnerDirectionSign;
+        else if( ::com::sun::star::chart::ChartAxisLabelPosition_OUTSIDE_START == m_eLabelPos )
+            m_fLabelDirectionSign = m_bCrossingAxisHasReverseDirection ? -1 : 1;
+        else if( ::com::sun::star::chart::ChartAxisLabelPosition_OUTSIDE_END == m_eLabelPos )
+            m_fLabelDirectionSign = m_bCrossingAxisHasReverseDirection ? 1 : -1;
 
         if( m_nDimensionIndex==2 )
             m_aLabelAlignment = lcl_getLabelAlignmentForZAxis(*this);
@@ -290,7 +331,10 @@ void AxisProperties::init( bool bCartesian )
             bool bIsYAxisPosition = (m_nDimensionIndex==1 && !m_bSwapXAndY)
                 || (m_nDimensionIndex==0 && m_bSwapXAndY);
             if( bIsYAxisPosition )
+            {
+                m_fLabelDirectionSign*=-1;
                 m_fInnerDirectionSign*=-1;
+            }
 
             if( bIsYAxisPosition )
                 m_aLabelAlignment = lcl_getLabelAlignmentForYAxis(*this);

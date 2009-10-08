@@ -42,7 +42,7 @@
 #include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <cppuhelper/implbase3.hxx>
 #include <cppuhelper/implbase5.hxx>
-
+#include "scdllapi.h"
 
 class EditEngine;
 class EditTextObject;

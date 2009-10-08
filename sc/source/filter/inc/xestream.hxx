@@ -33,7 +33,15 @@
 #ifndef SC_XESTREAM_HXX
 #define SC_XESTREAM_HXX
 
+#include <map>
+#include <stack>
+#include <string>
+
+#include <oox/core/xmlfilterbase.hxx>
+#include <sax/fshelper.hxx>
+
 #include "xlstream.hxx"
+#include "xestring.hxx"
 
 /* ============================================================================
 Output stream class for Excel export
@@ -247,6 +255,103 @@ inline XclExpStream& XclExpStream::operator<<( double fValue )
 
 
 // ============================================================================
+
+// ----------------------------------------------------------------------------
+
+
+// ============================================================================
+
+// `s.GetChar(0) != 0` needed because some strings on export only contain NULL.
+#define XESTRING_TO_PSZ(s) \
+    (s.Len() && s.GetChar( 0 ) != 0 ? XclXmlUtils::ToOString( s ).getStr() : NULL)
+
+class ScAddress;
+class ScDocument;
+class ScRange;
+class ScRangeList;
+class ScTokenArray;
+struct XclAddress;
+struct XclFontData;
+class XclRangeList;
+
+class XclXmlUtils
+{
+    XclXmlUtils();
+    ~XclXmlUtils();
+    XclXmlUtils(const XclXmlUtils&);
+    XclXmlUtils& operator=(const XclXmlUtils&);
+public:
+    static ::rtl::OUString          GetStreamName( const char* sStreamDir, const char* sStream, sal_Int32 nId );
+
+    static ::rtl::OString ToOString( const Color& rColor );
+    static ::rtl::OString ToOString( const ::rtl::OUString& s );
+    static ::rtl::OString ToOString( const ScfUInt16Vec& rBuffer );
+    static ::rtl::OString ToOString( const String& s );
+    static ::rtl::OString ToOString( const ScAddress& rRange );
+    static ::rtl::OString ToOString( const ScRange& rRange );
+    static ::rtl::OString ToOString( const ScRangeList& rRangeList );
+    static ::rtl::OString ToOString( const XclAddress& rAddress );
+    static ::rtl::OString ToOString( const XclExpString& s );
+    static ::rtl::OString ToOString( const XclRangeList& rRangeList );
+
+    static ::rtl::OUString ToOUString( const char* s );
+    static ::rtl::OUString ToOUString( const ScfUInt16Vec& rBuffer, sal_Int32 nStart = 0, sal_Int32 nLength = -1 );
+    static ::rtl::OUString ToOUString( const String& s );
+    static ::rtl::OUString ToOUString( ScDocument& rDocument, const ScAddress& rAddress, ScTokenArray* pTokenArray );
+    static ::rtl::OUString ToOUString( const XclExpString& s );
+    static const char* ToPsz( bool b );
+};
+
+class XclExpXmlStream : public oox::core::XmlFilterBase
+{
+public:
+    XclExpXmlStream( const com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory >& rSMgr, SvStream& rStrm, const XclExpRoot& rRoot );
+    virtual ~XclExpXmlStream();
+
+    /** Returns the filter root data. */
+    inline const XclExpRoot& GetRoot() const { return mrRoot; }
+
+    sax_fastparser::FSHelperPtr& GetCurrentStream();
+    void PushStream( sax_fastparser::FSHelperPtr aStream );
+    void PopStream();
+
+    ::rtl::OUString                 GetIdForPath( const ::rtl::OUString& rPath );
+    sax_fastparser::FSHelperPtr     GetStreamForPath( const ::rtl::OUString& rPath );
+
+    sax_fastparser::FSHelperPtr&    WriteAttributes( sal_Int32 nAttribute, ... );
+    sax_fastparser::FSHelperPtr&    WriteFontData( const XclFontData& rFontData, sal_Int32 nNameId );
+
+    sax_fastparser::FSHelperPtr     CreateOutputStream (
+                                        const ::rtl::OUString& sFullStream,
+                                        const ::rtl::OUString& sRelativeStream,
+                                        const ::com::sun::star::uno::Reference< ::com::sun::star::io::XOutputStream >& xParentRelation,
+                                        const char* sContentType,
+                                        const char* sRelationshipType,
+                                        ::rtl::OUString* pRelationshipId = NULL );
+
+    // ignore
+    virtual bool exportDocument() throw();
+
+    // only needed for import; ignore
+    virtual bool importDocument() throw();
+    virtual sal_Int32 getSchemeClr( sal_Int32 nColorSchemeToken ) const;
+    virtual const oox::vml::DrawingPtr getDrawings();
+    virtual const oox::drawingml::Theme* getCurrentTheme() const;
+    virtual const oox::drawingml::table::TableStyleListPtr getTableStyles();
+    virtual oox::drawingml::chart::ChartConverter& getChartConverter();
+
+    void Trace( const char* format, ...);
+private:
+    virtual ::rtl::OUString implGetImplementationName() const;
+
+    typedef std::map< ::rtl::OUString,
+        std::pair< ::rtl::OUString,
+            sax_fastparser::FSHelperPtr > >     XclExpXmlPathToStateMap;
+
+    const XclExpRoot&                           mrRoot;         /// Filter root data.
+    std::stack< sax_fastparser::FSHelperPtr >   maStreams;
+    XclExpXmlPathToStateMap                     maOpenedStreamMap;
+};
 
 #endif
 

@@ -204,13 +204,6 @@ void XclTracer::TraceFillPattern( bool bFillPattern)
         ProcessTraceOnce(eFillPattern);
 }
 
-void XclTracer::TraceFormulaExtName( )
-{
-    // import cannot access Excel External name ranges in
-    // Formulas - see #i3740#.
-    ProcessTraceOnce(eFormulaExtName);
-}
-
 void XclTracer::TraceFormulaMissingArg()
 {
     // missing parameter in Formula record

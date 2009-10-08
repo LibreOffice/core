@@ -113,7 +113,7 @@
 #include <vcl/apptypes.hxx>
 #include <vcl/vclenum.hxx>
 #include <globstr.hrc>
-#include <compiler.hrc>
+#include <formula/compiler.hrc>
 #include <tools/shl.hxx>
 #include <compiler.hxx>
 #include <vcl/font.hxx>

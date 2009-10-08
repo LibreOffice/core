@@ -38,53 +38,20 @@
 
 //============================================================================
 
-ScFormEditData::ScFormEditData()
+ScFormEditData::ScFormEditData() : formula::FormEditData()
 {
     Reset();
 }
 
 ScFormEditData::~ScFormEditData()
 {
-    delete pParent;
 }
 
-ScFormEditData::ScFormEditData( const ScFormEditData& r )
+ScFormEditData::ScFormEditData( const ScFormEditData& r )  : formula::FormEditData(r)
 {
     *this = r;
 }
-
-void ScFormEditData::Reset()
-{
-    pParent = NULL;
-    nMode = 0;
-    nFStart = 0;
-    nCatSel = 1;        //! oder 0 (zuletzt benutzte)
-    nFuncSel = 0;
-    nOffset = 0;
-    nEdFocus = 0;
-    bMatrix =FALSE;
-    nUniqueId=0;
-    aSelection.Min()=0;
-    aSelection.Max()=0;
-    aUndoStr.Erase();
-}
-
-const ScFormEditData& ScFormEditData::operator=( const ScFormEditData& r )
-{
-    pParent         = r.pParent;
-    nMode           = r.nMode;
-    nFStart         = r.nFStart;
-    nCatSel         = r.nCatSel;
-    nFuncSel        = r.nFuncSel;
-    nOffset         = r.nOffset;
-    nEdFocus        = r.nEdFocus;
-    aUndoStr        = r.aUndoStr;
-    bMatrix         = r.bMatrix ;
-    nUniqueId       = r.nUniqueId;
-    aSelection      = r.aSelection;
-    return *this;
-}
-
+// -----------------------------------------------------------------------------
 void ScFormEditData::SaveValues()
 {
     ScFormEditData* pTemp = new ScFormEditData(*this);

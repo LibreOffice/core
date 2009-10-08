@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: dpobject.hxx,v $
- * $Revision: 1.14.30.5 $
+ * $Revision: 1.15 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -57,15 +57,13 @@ class ScDPSaveData;
 class ScDPOutput;
 class ScMultipleReadHeader;
 class ScMultipleWriteHeader;
-#if OLD_PIVOT_IMPLEMENTATION
 class ScPivot;
 class ScPivotCollection;
-#endif
 struct ScPivotParam;
 struct ScImportSourceDesc;
 struct ScSheetSourceDesc;
-class StrCollection;
-class TypedStrCollection;
+class ScStrCollection;
+class TypedScStrCollection;
 struct PivotField;
 class ScDPCacheTable;
 
@@ -91,7 +89,7 @@ struct ScDPServiceDesc
 };
 
 
-class SC_DLLPUBLIC ScDPObject : public DataObject
+class SC_DLLPUBLIC ScDPObject : public ScDataObject
 {
 private:
     ScDocument*             pDoc;
@@ -121,7 +119,7 @@ public:
                 ScDPObject(const ScDPObject& r);
     virtual     ~ScDPObject();
 
-    virtual DataObject* Clone() const;
+    virtual ScDataObject*   Clone() const;
 
     void                SetAlive(BOOL bSet);
     void                SetAllowMove(BOOL bSet);
@@ -178,17 +176,16 @@ public:
                                       std::vector< ScDPGetPivotDataField >& rFilters,
                                       const String& rFilterList );
 
-    void                GetMemberResultNames( StrCollection& rNames, long nDimension );
+    void                GetMemberResultNames( ScStrCollection& rNames, long nDimension );
 
-    void                FillPageList( TypedStrCollection& rStrings, long nField );
+    void                FillPageList( TypedScStrCollection& rStrings, long nField );
 
     void                ToggleDetails(const ::com::sun::star::sheet::DataPilotTableHeaderData& rElemDesc, ScDPObject* pDestObj);
 
     BOOL                FillOldParam(ScPivotParam& rParam, BOOL bForFile) const;
     BOOL                FillLabelData(ScPivotParam& rParam);
-#if OLD_PIVOT_IMPLEMENTATION
     void                InitFromOldPivot(const ScPivot& rOld, ScDocument* pDoc, BOOL bSetSource);
-#endif
+
     BOOL                GetHierarchiesNA( sal_Int32 nDim, com::sun::star::uno::Reference< com::sun::star::container::XNameAccess >& xHiers );
     BOOL                GetHierarchies( sal_Int32 nDim, com::sun::star::uno::Sequence< rtl::OUString >& rHiers );
 
@@ -242,18 +239,46 @@ public:
                             PivotField* pRefPageFields = NULL, SCSIZE nRefPageCount = 0 );
 };
 
+// ============================================================================
 
-class ScDPCollection : public Collection
+struct ScDPCacheCell
+{
+    sal_Int32   mnStrId;
+    sal_uInt8   mnType;
+    double      mfValue;
+    bool        mbNumeric;
+
+    ScDPCacheCell();
+    ScDPCacheCell(const ScDPCacheCell& r);
+    ~ScDPCacheCell();
+};
+
+// ============================================================================
+
+class ScDPCollection : public ScCollection
 {
 private:
     ScDocument* pDoc;
+    ScSimpleSharedString maSharedString;
+
+    struct CacheCellHash
+    {
+        size_t operator()(const ScDPCacheCell* pCell) const;
+    };
+    struct CacheCellEqual
+    {
+        bool operator()(const ScDPCacheCell* p1, const ScDPCacheCell* p2) const;
+    };
+    typedef ::std::hash_set<ScDPCacheCell*, CacheCellHash, CacheCellEqual> CacheCellPoolType;
+
+    CacheCellPoolType maCacheCellPool;
 
 public:
                 ScDPCollection(ScDocument* pDocument);
                 ScDPCollection(const ScDPCollection& r);
     virtual     ~ScDPCollection();
 
-    virtual DataObject* Clone() const;
+    virtual ScDataObject*   Clone() const;
 
     ScDPObject* operator[](USHORT nIndex) const {return (ScDPObject*)At(nIndex);}
 #if OLD_PIVOT_IMPLEMENTATION
@@ -267,7 +292,11 @@ public:
     void        WriteRefsTo( ScDPCollection& r ) const;
 
     String      CreateNewName( USHORT nMin = 1 ) const;
-//UNUSED2008-05  void       EnsureNames();
+
+    ScSimpleSharedString& GetSharedString();
+
+    ScDPCacheCell* getCacheCellFromPool(const ScDPCacheCell& rCell);
+    void clearCacheCellPool();
 };
 
 

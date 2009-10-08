@@ -589,9 +589,9 @@ String ScChangeAction::GetRefString( const ScBigRange& rRange,
                     pDoc->GetName( aTmpRange.aStart.Tab(), aStr );
                     aStr += '.';
                 }
-                aStr += ::ColToAlpha( aTmpRange.aStart.Col() );
+                aStr += ::ScColToAlpha( aTmpRange.aStart.Col() );
                 aStr += ':';
-                aStr += ::ColToAlpha( aTmpRange.aEnd.Col() );
+                aStr += ::ScColToAlpha( aTmpRange.aEnd.Col() );
             break;
             case SC_CAT_INSERT_ROWS :
             case SC_CAT_DELETE_ROWS :
@@ -2027,7 +2027,7 @@ void ScChangeActionContent::SetValueString( String& rValue, ScBaseCell*& pCell,
     {
         rValue.Erase();
         pCell = new ScFormulaCell(
-            pDoc, aBigRange.aStart.MakeAddress(), rStr, ScGrammar::GRAM_DEFAULT, ScAddress::CONV_OOO );
+            pDoc, aBigRange.aStart.MakeAddress(), rStr, formula::FormulaGrammar::GRAM_DEFAULT, formula::FormulaGrammar::CONV_OOO );
         ((ScFormulaCell*)pCell)->SetInChangeTrack( TRUE );
     }
     else
@@ -2498,7 +2498,7 @@ void ScChangeActionContent::PutValueToDoc( ScBaseCell* pCell,
 
 void lcl_InvalidateReference( ScToken& rTok, const ScBigAddress& rPos )
 {
-    SingleRefData& rRef1 = rTok.GetSingleRef();
+    ScSingleRefData& rRef1 = rTok.GetSingleRef();
     if ( rPos.Col() < 0 || MAXCOL < rPos.Col() )
     {
         rRef1.nCol = SCCOL_MAX;
@@ -2517,9 +2517,9 @@ void lcl_InvalidateReference( ScToken& rTok, const ScBigAddress& rPos )
         rRef1.nRelTab = SCTAB_MAX;
         rRef1.SetTabDeleted( TRUE );
     }
-    if ( rTok.GetType() == svDoubleRef )
+    if ( rTok.GetType() == formula::svDoubleRef )
     {
-        SingleRefData& rRef2 = rTok.GetDoubleRef().Ref2;
+        ScSingleRefData& rRef2 = rTok.GetDoubleRef().Ref2;
         if ( rPos.Col() < 0 || MAXCOL < rPos.Col() )
         {
             rRef2.nCol = SCCOL_MAX;
@@ -2639,10 +2639,10 @@ void ScChangeActionContent::UpdateReference( const ScChangeTrack* pTrack,
                 ScToken* t;
                 ScTokenArray* pArr = ((ScFormulaCell*)pOldCell)->GetCode();
                 pArr->Reset();
-                while ( ( t = pArr->GetNextReference() ) != NULL )
+                while ( ( t = static_cast<ScToken*>(pArr->GetNextReference()) ) != NULL )
                     lcl_InvalidateReference( *t, rPos );
                 pArr->Reset();
-                while ( ( t = pArr->GetNextReferenceRPN() ) != NULL )
+                while ( ( t = static_cast<ScToken*>(pArr->GetNextReferenceRPN()) ) != NULL )
                     lcl_InvalidateReference( *t, rPos );
             }
             if ( bNewFormula )
@@ -2650,10 +2650,10 @@ void ScChangeActionContent::UpdateReference( const ScChangeTrack* pTrack,
                 ScToken* t;
                 ScTokenArray* pArr = ((ScFormulaCell*)pNewCell)->GetCode();
                 pArr->Reset();
-                while ( ( t = pArr->GetNextReference() ) != NULL )
+                while ( ( t = static_cast<ScToken*>(pArr->GetNextReference()) ) != NULL )
                     lcl_InvalidateReference( *t, rPos );
                 pArr->Reset();
-                while ( ( t = pArr->GetNextReferenceRPN() ) != NULL )
+                while ( ( t = static_cast<ScToken*>(pArr->GetNextReferenceRPN()) ) != NULL )
                     lcl_InvalidateReference( *t, rPos );
             }
         }
@@ -2713,7 +2713,7 @@ ScChangeTrack::ScChangeTrack( ScDocument* pDocP ) :
     memset( ppContentSlots, 0, nContentSlots * sizeof( ScChangeActionContent* ) );
 }
 
-ScChangeTrack::ScChangeTrack( ScDocument* pDocP, const StrCollection& aTempUserCollection) :
+ScChangeTrack::ScChangeTrack( ScDocument* pDocP, const ScStrCollection& aTempUserCollection) :
         aUserCollection(aTempUserCollection),
         pDoc( pDocP )
 {
@@ -2760,7 +2760,7 @@ void ScChangeTrack::Init()
     const SvtUserOptions& rUserOpt = SC_MOD()->GetUserOptions();
     aUser = rUserOpt.GetFirstName();
     aUser += ' ';
-    aUser += rUserOpt.GetLastName();
+    aUser += (String)rUserOpt.GetLastName();
     aUserCollection.Insert( new StrData( aUser ) );
 }
 
@@ -2828,7 +2828,7 @@ void __EXPORT ScChangeTrack::Notify( SfxBroadcaster&, const SfxHint& rHint )
 
         String aStr( rUserOptions.GetFirstName() );
         aStr += ' ';
-        aStr += rUserOptions.GetLastName();
+        aStr += (String)rUserOptions.GetLastName();
         SetUser( aStr );
 
         if ( aUserCollection.GetCount() != nOldCount )
@@ -2920,7 +2920,7 @@ void ScChangeTrack::NotifyModified( ScChangeTrackMsgType eMsgType,
 }
 
 
-void lcl_EnsureSorting( StrCollection& rCollection )
+void lcl_EnsureSorting( ScStrCollection& rCollection )
 {
     BOOL bSorted = TRUE;
     USHORT nCount = rCollection.GetCount();
@@ -2932,10 +2932,10 @@ void lcl_EnsureSorting( StrCollection& rCollection )
     if ( !bSorted )
     {
         //  if not sorted, rebuild collection
-        StrCollection aNewColl;
+        ScStrCollection aNewColl;
         for (i=0; i<nCount; i++)
         {
-            DataObject* pNewObj = rCollection[i]->Clone();
+            ScDataObject* pNewObj = rCollection[i]->Clone();
             if (!aNewColl.Insert(pNewObj))
                 delete pNewObj;
         }

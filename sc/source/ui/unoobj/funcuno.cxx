@@ -44,7 +44,7 @@
 #include "scdll.hxx"
 #include "document.hxx"
 #include "compiler.hxx"
-#include "errorcodes.hxx"
+#include "formula/errorcodes.hxx"
 #include "callform.hxx"
 #include "addincol.hxx"
 #include "rangeseq.hxx"
@@ -318,7 +318,7 @@ SC_IMPL_DUMMY_PROPERTY_LISTENER( ScFunctionAccess )
 
 // XFunctionAccess
 
-BOOL lcl_AddFunctionToken( ScTokenArray& rArray, const rtl::OUString& rName )
+BOOL lcl_AddFunctionToken( ScTokenArray& rArray, const rtl::OUString& rName,const ScCompiler& rCompiler )
 {
     // function names are always case-insensitive
     String aUpper( ScGlobal::pCharClass->upper( rName ) );
@@ -326,7 +326,7 @@ BOOL lcl_AddFunctionToken( ScTokenArray& rArray, const rtl::OUString& rName )
     // same options as in ScCompiler::IsOpCode:
     // 1. built-in function name
 
-    OpCode eOp = ScCompiler::GetEnglishOpCode( aUpper );
+    OpCode eOp = rCompiler.GetEnglishOpCode( aUpper );
     if ( eOp != ocNone )
     {
         rArray.AddOpCode( eOp );
@@ -356,7 +356,7 @@ BOOL lcl_AddFunctionToken( ScTokenArray& rArray, const rtl::OUString& rName )
 
 void lcl_AddRef( ScTokenArray& rArray, long nStartRow, long nColCount, long nRowCount )
 {
-    ComplRefData aRef;
+    ScComplexRefData aRef;
     aRef.InitFlags();
     aRef.Ref1.nTab = 0;
     aRef.Ref2.nTab = 0;
@@ -512,15 +512,19 @@ uno::Any SAL_CALL ScFunctionAccess::callFunction( const rtl::OUString& aName,
     if ( !pDoc->HasTable( nTempSheet ) )
         pDoc->MakeTable( nTempSheet );
 
-    if (!ScCompiler::IsInitialized())
-        ScCompiler::InitSymbolsEnglish();
+    /// TODO: check
+    ScAddress aAdr;
+    ScCompiler aCompiler(pDoc,aAdr);
+    aCompiler.SetGrammar(pDoc->GetGrammar());
+    //if (!ScCompiler::IsInitialized())
+ //       ScCompiler::InitSymbolsEnglish();
 
     //
     //  find function
     //
 
     ScTokenArray aTokenArr;
-    if ( !lcl_AddFunctionToken( aTokenArr, aName ) )
+    if ( !lcl_AddFunctionToken( aTokenArr, aName,aCompiler ) )
     {
         // function not found
         throw container::NoSuchElementException();
@@ -648,7 +652,7 @@ uno::Any SAL_CALL ScFunctionAccess::callFunction( const rtl::OUString& aName,
         // GRAM_PODF_A1 doesn't really matter for the token array but fits with
         // other API compatibility grammars.
         ScFormulaCell* pFormula = new ScFormulaCell( pDoc, aFormulaPos,
-                &aTokenArr, ScGrammar::GRAM_PODF_A1, MM_FORMULA );
+                &aTokenArr,formula::FormulaGrammar::GRAM_PODF_A1, MM_FORMULA );
         pDoc->PutCell( aFormulaPos, pFormula );     //! necessary?
 
         //  call GetMatrix before GetErrCode because GetMatrix always recalculates

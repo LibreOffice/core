@@ -176,8 +176,6 @@ void ScViewOptions::SetDefaults()
     aGridColName = ScGlobal::GetRscString( STR_GRIDCOLOR );
 
     aGridOpt.SetDefaults();
-
-    bHideAutoSpell = FALSE;
 }
 
 //------------------------------------------------------------------------
@@ -202,7 +200,6 @@ const ScViewOptions& ScViewOptions::operator=( const ScViewOptions& rCpy )
     aGridCol        = rCpy.aGridCol;
     aGridColName    = rCpy.aGridColName;
     aGridOpt        = rCpy.aGridOpt;
-    bHideAutoSpell  = rCpy.bHideAutoSpell;
 
     return *this;
 }
@@ -220,7 +217,6 @@ int ScViewOptions::operator==( const ScViewOptions& rOpt ) const
     bEqual = bEqual && (aGridCol       == rOpt.aGridCol);
     bEqual = bEqual && (aGridColName   == rOpt.aGridColName);
     bEqual = bEqual && (aGridOpt       == rOpt.aGridOpt);
-    bEqual = bEqual && (bHideAutoSpell == rOpt.bHideAutoSpell);
 
     return bEqual;
 }
@@ -437,12 +433,12 @@ ScViewCfg::ScViewCfg() :
     Sequence<Any> aValues = aLayoutItem.GetProperties(aNames);
     aLayoutItem.EnableNotification(aNames);
     const Any* pValues = aValues.getConstArray();
-    DBG_ASSERT(aValues.getLength() == aNames.getLength(), "GetProperties failed")
+    DBG_ASSERT(aValues.getLength() == aNames.getLength(), "GetProperties failed");
     if(aValues.getLength() == aNames.getLength())
     {
         for(int nProp = 0; nProp < aNames.getLength(); nProp++)
         {
-            DBG_ASSERT(pValues[nProp].hasValue(), "property value missing")
+            DBG_ASSERT(pValues[nProp].hasValue(), "property value missing");
             if(pValues[nProp].hasValue())
             {
                 switch(nProp)
@@ -492,12 +488,12 @@ ScViewCfg::ScViewCfg() :
     aValues = aDisplayItem.GetProperties(aNames);
     aDisplayItem.EnableNotification(aNames);
     pValues = aValues.getConstArray();
-    DBG_ASSERT(aValues.getLength() == aNames.getLength(), "GetProperties failed")
+    DBG_ASSERT(aValues.getLength() == aNames.getLength(), "GetProperties failed");
     if(aValues.getLength() == aNames.getLength())
     {
         for(int nProp = 0; nProp < aNames.getLength(); nProp++)
         {
-            DBG_ASSERT(pValues[nProp].hasValue(), "property value missing")
+            DBG_ASSERT(pValues[nProp].hasValue(), "property value missing");
             if(pValues[nProp].hasValue())
             {
                 switch(nProp)
@@ -558,12 +554,12 @@ ScViewCfg::ScViewCfg() :
     aValues = aGridItem.GetProperties(aNames);
     aGridItem.EnableNotification(aNames);
     pValues = aValues.getConstArray();
-    DBG_ASSERT(aValues.getLength() == aNames.getLength(), "GetProperties failed")
+    DBG_ASSERT(aValues.getLength() == aNames.getLength(), "GetProperties failed");
     if(aValues.getLength() == aNames.getLength())
     {
         for(int nProp = 0; nProp < aNames.getLength(); nProp++)
         {
-            DBG_ASSERT(pValues[nProp].hasValue(), "property value missing")
+            DBG_ASSERT(pValues[nProp].hasValue(), "property value missing");
             if(pValues[nProp].hasValue())
             {
                 switch(nProp)

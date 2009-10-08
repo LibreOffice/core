@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2008 by Sun Microsystems, Inc.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -597,7 +597,7 @@ void ScFunctionDockWin::SetDescription()
                     pAllFuncList->GetSelectEntryPos() );
     if (pDesc)
     {
-        pDesc->InitArgumentInfo();      // full argument info is needed
+        pDesc->initArgumentInfo();      // full argument info is needed
 
         String  aString=pAllFuncList->GetSelectEntry();
         if(nDockMode==0)

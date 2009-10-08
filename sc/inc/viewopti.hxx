@@ -118,9 +118,6 @@ public:
     void                    SetGridOptions( const ScGridOptions& rNew ) { aGridOpt = rNew; }
     SvxGridItem*            CreateGridItem( USHORT nId = SID_ATTR_GRID_OPTIONS ) const;
 
-    BOOL                    IsHideAutoSpell() const             { return bHideAutoSpell; }
-    void                    SetHideAutoSpell( BOOL bSet )       { bHideAutoSpell = bSet; }
-
     const ScViewOptions&    operator=  ( const ScViewOptions& rCpy );
     int                     operator== ( const ScViewOptions& rOpt ) const;
     int                     operator!= ( const ScViewOptions& rOpt ) const { return !(operator==(rOpt)); }
@@ -131,7 +128,6 @@ private:
     Color           aGridCol;
     String          aGridColName;
     ScGridOptions   aGridOpt;
-    BOOL            bHideAutoSpell;
 };
 
 //==================================================================

@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: jumpmatrix.hxx,v $
- * $Revision: 1.6 $
+ * $Revision: 1.6.148.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -31,19 +31,19 @@
 #ifndef SC_JUMPMATRIX_HXX
 #define SC_JUMPMATRIX_HXX
 
-#include "token.hxx"
-#include "scmatrix.hxx"
-#include "errorcodes.hxx"
+#include "formula/token.hxx"
+#include "formula/errorcodes.hxx"
 #include <tools/solar.h>
 #include <vector>
+#include "scmatrix.hxx"
 
-typedef ::std::vector< ScToken*> ScTokenVec;
+typedef ::std::vector< formula::FormulaToken*> ScTokenVec;
 
 struct ScJumpMatrixEntry
 {
     double  fBool;      // 0:= false  1:= true   also if no-path
                         // other values may contain error conditions like NAN and INF
-    short   nStart;     // start of path (actually start-1, see ScTokenIterator)
+    short   nStart;     // start of path (actually start-1, see formula::FormulaTokenIterator)
     short   nNext;      // next after path
                         // jump path exists if nStart != nNext, else no path
     short   nStop;      // optional stop of path (nPC < nStop)
@@ -73,6 +73,8 @@ class ScJumpMatrix
             SCSIZE              nRows;
             SCSIZE              nCurCol;
             SCSIZE              nCurRow;
+            SCSIZE              nResMatCols;
+            SCSIZE              nResMatRows;
             bool                bStarted;
 
                                 // not implemented, prevent usage
@@ -88,6 +90,8 @@ public:
                                         , nRows( nRowsP )
                                         , nCurCol( 0 )
                                         , nCurRow( 0 )
+                                        , nResMatCols( nColsP )
+                                        , nResMatRows( nRowsP )
                                         , bStarted( false )
                                     {
                                         // Initialize result matrix in case of
@@ -128,6 +132,21 @@ public:
                                             short& rStart, short& rNext,
                                             short& rStop ) const
                                     {
+                                        if (nCols == 1 && nRows == 1)
+                                        {
+                                            nCol = 0;
+                                            nRow = 0;
+                                        }
+                                        else if (nCols == 1 && nRow < nRows)
+                                            nCol = 0;
+                                        else if (nRows == 1 && nCol < nCols)
+                                            nRow = 0;
+                                        else if (nCols <= nCol || nRows <= nRow)
+                                        {
+                                            DBG_ERROR("ScJumpMatrix::GetJump: dimension error");
+                                            nCol = 0;
+                                            nRow = 0;
+                                        }
                                         pJump[ (ULONG)nCol * nRows + nRow ].
                                             GetJump( rBool, rStart, rNext, rStop);
                                     }
@@ -160,14 +179,45 @@ public:
                                         }
                                         else
                                         {
-                                            if ( ++nCurRow >= nRows )
+                                            if ( ++nCurRow >= nResMatRows )
                                             {
                                                 nCurRow = 0;
                                                 ++nCurCol;
                                             }
                                         }
                                         GetPos( rCol, rRow );
-                                        return nCurCol < nCols;
+                                        return nCurCol < nResMatCols;
+                                    }
+            void                GetResMatDimensions( SCSIZE& rCols, SCSIZE& rRows )
+                                    {
+                                        rCols = nResMatCols;
+                                        rRows = nResMatRows;
+                                    }
+            void                SetNewResMat( SCSIZE nNewCols, SCSIZE nNewRows )
+                                    {
+                                        if ( nNewCols > nResMatCols || nNewRows > nResMatRows )
+                                        {
+                                            pMat = pMat->CloneAndExtend( nNewCols, nNewRows );
+                                            if ( nResMatCols < nNewCols )
+                                            {
+                                                pMat->FillDouble( CreateDoubleError(
+                                                    NOTAVAILABLE), nResMatCols, 0, nNewCols-1,
+                                                    nResMatRows-1);
+                                            }
+                                            if ( nResMatRows < nNewRows )
+                                            {
+                                                pMat->FillDouble( CreateDoubleError(
+                                                    NOTAVAILABLE), 0, nResMatRows, nNewCols-1,
+                                                    nNewRows-1);
+                                            }
+                                            if ( nRows == 1 && nCurCol != 0 )
+                                            {
+                                                nCurCol = 0;
+                                                nCurRow = nResMatRows - 1;
+                                            }
+                                            nResMatCols = nNewCols;
+                                            nResMatRows = nNewRows;
+                                        }
                                     }
 };
 

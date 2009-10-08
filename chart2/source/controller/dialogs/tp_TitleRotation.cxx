@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: tp_TitleRotation.cxx,v $
- * $Revision: 1.11 $
+ * $Revision: 1.11.72.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -35,6 +35,9 @@
 #include "ResId.hxx"
 #include "TabPages.hrc"
 #include "chartview/ChartSfxItemIds.hxx"
+#include "HelpIds.hrc"
+#include <svx/eeitem.hxx>
+#include <svx/frmdiritem.hxx>
 
 // header for class SfxInt32Item
 #include <svtools/intitem.hxx>
@@ -45,29 +48,47 @@ namespace chart
 //.............................................................................
 
 SchAlignmentTabPage::SchAlignmentTabPage(Window* pWindow,
-                                         const SfxItemSet& rInAttrs) :
+                                         const SfxItemSet& rInAttrs, bool bWithRotation) :
     SfxTabPage(pWindow, SchResId(TP_ALIGNMENT), rInAttrs),
     aFlAlign        ( this, SchResId( FL_ALIGN ) ),
     aCtrlDial       ( this, SchResId( CTR_DIAL ) ),
     aFtRotate       ( this, SchResId( FT_DEGREES ) ),
     aNfRotate       ( this, SchResId( NF_ORIENT ) ),
     aCbStacked      ( this, SchResId( BTN_TXTSTACKED ) ),
-    aOrientHlp      ( this, aCtrlDial, aNfRotate, aCbStacked )
+    aOrientHlp      ( aCtrlDial, aNfRotate, aCbStacked ),
+    aFtTextDirection( this, SchResId( FT_TEXTDIR ) ),
+    aLbTextDirection( this, SchResId( LB_TEXTDIR ), &aFtTextDirection )
 {
     FreeResource();
 
     aCbStacked.EnableTriState( FALSE );
     aOrientHlp.AddDependentWindow( aFtRotate, STATE_CHECK );
+
+    if( !bWithRotation )
+    {
+        aOrientHlp.Hide();
+        Point aMove( 0, aCtrlDial.GetPosPixel().Y() - aFtTextDirection.GetPosPixel().Y() );
+        aFtTextDirection.SetPosPixel( aFtTextDirection.GetPosPixel() + aMove );
+        aLbTextDirection.SetPosPixel( aLbTextDirection.GetPosPixel() + aMove );
+
+        aLbTextDirection.SetHelpId( HID_SCH_TEXTDIRECTION_EQUATION );
+    }
 }
 
 SchAlignmentTabPage::~SchAlignmentTabPage()
 {
 }
 
-SfxTabPage* SchAlignmentTabPage::Create(Window* pWindow,
-                                        const SfxItemSet& rOutAttrs)
+SfxTabPage* SchAlignmentTabPage::Create(Window* pParent,
+                                        const SfxItemSet& rInAttrs)
 {
-    return new SchAlignmentTabPage(pWindow, rOutAttrs);
+    return new SchAlignmentTabPage(pParent, rInAttrs);
+}
+
+SfxTabPage* SchAlignmentTabPage::CreateWithoutRotation(Window* pParent,
+                                        const SfxItemSet& rInAttrs)
+{
+    return new SchAlignmentTabPage(pParent, rInAttrs, false);
 }
 
 BOOL SchAlignmentTabPage::FillItemSet(SfxItemSet& rOutAttrs)
@@ -78,6 +99,10 @@ BOOL SchAlignmentTabPage::FillItemSet(SfxItemSet& rOutAttrs)
 
     sal_Int32 nDegrees = bStacked ? 0 : aCtrlDial.GetRotation();
     rOutAttrs.Put( SfxInt32Item( SCHATTR_TEXT_DEGREES, nDegrees ) );
+
+    SvxFrameDirection aDirection( aLbTextDirection.GetSelectEntryValue() );
+    rOutAttrs.Put( SfxInt32Item( EE_PARA_WRITINGDIR, aDirection ) );
+
     return TRUE;
 }
 
@@ -91,6 +116,10 @@ void SchAlignmentTabPage::Reset(const SfxItemSet& rInAttrs)
     pItem = GetItem( rInAttrs, SCHATTR_TEXT_STACKED );
     bool bStacked = pItem && ((const SfxBoolItem*)pItem)->GetValue();
     aOrientHlp.SetStackedState( bStacked ? STATE_CHECK : STATE_NOCHECK );
+
+
+    if( rInAttrs.GetItemState(EE_PARA_WRITINGDIR, TRUE, &pItem) == SFX_ITEM_SET)
+        aLbTextDirection.SelectEntryValue( SvxFrameDirection(((const SvxFrameDirectionItem*)pItem)->GetValue()) );
 }
 
 //.............................................................................

@@ -33,15 +33,4 @@ INCPRE+=$(SOLARINCDIR)$/offuh
 # define SC_DLLIMPLEMENTATION (see @ scdllapi.h)
 CDEFS += -DSC_DLLIMPLEMENTATION
 
-# set default symbol visibility / scope to hidden
-.IF "$(COMNAME)" == "gcc3"
-.IF "$(HAVE_GCC_VISIBILITY_FEATURE)" == "TRUE"
-CFLAGS += -fvisibility=hidden
-.ENDIF # "$(HAVE_GCC_VISIBILITY_FEATURE)" == "TRUE"
-.ENDIF # gcc3
-
-.IF "$(COMNAME)" == "sunpro5"
-.IF "$(CCNUMVER)" >= "00050005"
-CFLAGS += -xldscope=hidden
-.ENDIF # 5.5
-.ENDIF # sunpro5
+VISIBILITY_HIDDEN=TRUE

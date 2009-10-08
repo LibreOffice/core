@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: xmlcelli.cxx,v $
- * $Revision: 1.96 $
+ * $Revision: 1.96.134.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -114,9 +114,6 @@ ScXMLTableRowCellContext::ScXMLTableRowCellContext( ScXMLImport& rImport,
                                       const sal_Bool bTempIsCovered,
                                       const sal_Int32 nTempRepeatedRows ) :
     SvXMLImportContext( rImport, nPrfx, rLName ),
-    pOUTextValue(NULL),
-    pOUTextContent(NULL),
-    pOUFormula(NULL),
     pContentValidationName(NULL),
     pMyAnnotation(NULL),
     pDetectiveObjVec(NULL),
@@ -127,7 +124,7 @@ ScXMLTableRowCellContext::ScXMLTableRowCellContext( ScXMLImport& rImport,
     nRepeatedRows(nTempRepeatedRows),
     nCellsRepeated(1),
     rXMLImport((ScXMLImport&)rImport),
-    eGrammar( ScGrammar::GRAM_STORAGE_DEFAULT),
+    eGrammar( formula::FormulaGrammar::GRAM_STORAGE_DEFAULT),
     nCellType(util::NumberFormat::TEXT),
     bIsMerged(sal_False),
     bIsMatrix(sal_False),
@@ -139,191 +136,136 @@ ScXMLTableRowCellContext::ScXMLTableRowCellContext( ScXMLImport& rImport,
     bSolarMutexLocked(sal_False),
     bFormulaTextResult(sal_False)
 {
-    ScGrammar::Grammar eStorageGrammar = eGrammar = GetScImport().GetDocument()->GetStorageGrammar();
+    formula::FormulaGrammar::Grammar eStorageGrammar = eGrammar = GetScImport().GetDocument()->GetStorageGrammar();
     rXMLImport.SetRemoveLastChar(sal_False);
     rXMLImport.GetTables().AddColumn(bTempIsCovered);
-    sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
+    const sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
     rtl::OUString aLocalName;
     rtl::OUString* pStyleName = NULL;
     rtl::OUString* pCurrencySymbol = NULL;
-    for( sal_Int16 i=0; i < nAttrCount; ++i )
+    const SvXMLTokenMap& rTokenMap = rImport.GetTableRowCellAttrTokenMap();
+    for (sal_Int16 i = 0; i < nAttrCount; ++i)
     {
-        sal_uInt16 nPrefix = rXMLImport.GetNamespaceMap().GetKeyByAttrName(
-                                            xAttrList->getNameByIndex( i ), &aLocalName );
-        const rtl::OUString& sValue(xAttrList->getValueByIndex( i ));
+        sal_uInt16 nAttrPrefix = rImport.GetNamespaceMap().GetKeyByAttrName(
+            xAttrList->getNameByIndex(i), &aLocalName);
 
-        if (nPrefix == XML_NAMESPACE_TABLE)
+        const rtl::OUString& sValue = xAttrList->getValueByIndex(i);
+        sal_uInt16 nToken = rTokenMap.Get(nAttrPrefix, aLocalName);
+        switch (nToken)
         {
-            sal_uInt32 nLength(aLocalName.getLength());
-
-            switch (nLength)
+            case XML_TOK_TABLE_ROW_CELL_ATTR_STYLE_NAME:
+                pStyleName = new rtl::OUString(sValue);
+            break;
+            case XML_TOK_TABLE_ROW_CELL_ATTR_CONTENT_VALIDATION_NAME:
+                DBG_ASSERT(!pContentValidationName, "here should be only one Validation Name");
+                pContentValidationName = new rtl::OUString(sValue);
+            break;
+            case XML_TOK_TABLE_ROW_CELL_ATTR_SPANNED_ROWS:
+                bIsMerged = sal_True;
+                nMergedRows = sValue.toInt32();
+            break;
+            case XML_TOK_TABLE_ROW_CELL_ATTR_SPANNED_COLS:
+                bIsMerged = sal_True;
+                nMergedCols = sValue.toInt32();
+            break;
+            case XML_TOK_TABLE_ROW_CELL_ATTR_SPANNED_MATRIX_COLS:
+                bIsMatrix = sal_True;
+                nMatrixCols = sValue.toInt32();
+            break;
+            case XML_TOK_TABLE_ROW_CELL_ATTR_SPANNED_MATRIX_ROWS:
+                bIsMatrix = sal_True;
+                nMatrixRows = sValue.toInt32();
+            break;
+            case XML_TOK_TABLE_ROW_CELL_ATTR_REPEATED:
+                nCellsRepeated = std::max( sValue.toInt32(), (sal_Int32) 1 );
+            break;
+            case XML_TOK_TABLE_ROW_CELL_ATTR_VALUE_TYPE:
+                nCellType = GetScImport().GetCellType(sValue);
+                bIsEmpty = sal_False;
+            break;
+            case XML_TOK_TABLE_ROW_CELL_ATTR_VALUE:
             {
-            case 7 :
+                if (sValue.getLength())
                 {
-                    if (IsXMLToken(aLocalName, XML_FORMULA))
-                    {
-                        if (sValue.getLength())
-                        {
-                            DBG_ASSERT(!pOUFormula, "here should be only one formula");
-                            DELETEZ( pOUFormula);
-                            rtl::OUString sFormula;
-                            sal_uInt16 nFormulaPrefix = GetImport().GetNamespaceMap().
-                                    _GetKeyByAttrName( sValue, &sFormula, sal_False );
-
-                            if (ScXMLImport::IsAcceptedFormulaNamespace(
-                                        nFormulaPrefix, sValue, eGrammar,
-                                        eStorageGrammar))
-                            {
-                                // Namespaces we accept.
-                                pOUFormula = new rtl::OUString( sFormula);
-                            }
-                            else
-                            {
-                                // No namespace => entire string.
-                                // Also unknown namespace included in formula,
-                                // so hopefully will result in string or
-                                // compile error.
-                                pOUFormula = new rtl::OUString( sValue);
-                            }
-                        }
-                    }
+                    rXMLImport.GetMM100UnitConverter().convertDouble(fValue, sValue);
+                    bIsEmpty = sal_False;
                 }
-                break;
-            case 10 :
-                {
-                    if (IsXMLToken(aLocalName, XML_STYLE_NAME))
-                        pStyleName = new rtl::OUString(sValue);
-                }
-                break;
-            case 19 :
-                {
-                    if (IsXMLToken(aLocalName, XML_NUMBER_ROWS_SPANNED))
-                    {
-                        bIsMerged = sal_True;
-                        nMergedRows = sValue.toInt32();
-                    }
-                }
-                break;
-            case 22 :
-                {
-                    if (IsXMLToken(aLocalName, XML_NUMBER_COLUMNS_SPANNED))
-                    {
-                        bIsMerged = sal_True;
-                        nMergedCols = sValue.toInt32();
-                    }
-                }
-                break;
-            case 23 :
-                {
-                    if (IsXMLToken(aLocalName, XML_NUMBER_COLUMNS_REPEATED))
-                        nCellsRepeated = std::max( sValue.toInt32(), (sal_Int32) 1 );
-                    else if (IsXMLToken(aLocalName, XML_CONTENT_VALIDATION_NAME))
-                    {
-                        DBG_ASSERT(!pContentValidationName, "here should be only one Validation Name");
-                        pContentValidationName = new rtl::OUString(sValue);
-                    }
-                }
-                break;
-            case 26 :
-                {
-                    if (IsXMLToken(aLocalName, XML_NUMBER_MATRIX_ROWS_SPANNED))
-                    {
-                        bIsMatrix = sal_True;
-                        nMatrixRows = sValue.toInt32();
-                    }
-                }
-                break;
-            case 29 :
-                {
-                    if (IsXMLToken(aLocalName, XML_NUMBER_MATRIX_COLUMNS_SPANNED))
-                    {
-                        bIsMatrix = sal_True;
-                        nMatrixCols = sValue.toInt32();
-                    }
-                }
-                break;
             }
-        }
-        else if (nPrefix == XML_NAMESPACE_OFFICE)
-        {
-            sal_uInt32 nLength(aLocalName.getLength());
-
-            switch (nLength)
+            break;
+            case XML_TOK_TABLE_ROW_CELL_ATTR_DATE_VALUE:
             {
-            case 5 :
+                if (sValue.getLength() && rXMLImport.SetNullDateOnUnitConverter())
                 {
-                    if (IsXMLToken(aLocalName, XML_VALUE))
-                    {
-                        if (sValue.getLength())
-                        {
-                            rXMLImport.GetMM100UnitConverter().convertDouble(fValue, sValue);
-                            bIsEmpty = sal_False;
-                        }
-                    }
+                    rXMLImport.GetMM100UnitConverter().convertDateTime(fValue, sValue);
+                    bIsEmpty = sal_False;
                 }
-                break;
-            case 8 :
-                {
-                    if (IsXMLToken(aLocalName, XML_CURRENCY))
-                        pCurrencySymbol = new rtl::OUString(sValue);
-                }
-                break;
-            case 10 :
-                {
-                    if (IsXMLToken(aLocalName, XML_VALUE_TYPE))
-                    {
-                        nCellType = GetCellType(sValue);
-                        bIsEmpty = sal_False;
-                    }
-                    else if (IsXMLToken(aLocalName, XML_DATE_VALUE))
-                    {
-                        if (sValue.getLength() && rXMLImport.SetNullDateOnUnitConverter())
-                        {
-                            rXMLImport.GetMM100UnitConverter().convertDateTime(fValue, sValue);
-                            bIsEmpty = sal_False;
-                        }
-                    }
-                    else if (IsXMLToken(aLocalName, XML_TIME_VALUE))
-                    {
-                        if (sValue.getLength())
-                        {
-                            rXMLImport.GetMM100UnitConverter().convertTime(fValue, sValue);
-                            bIsEmpty = sal_False;
-                        }
-                    }
-                }
-                break;
-            case 12 :
-                {
-                    if (IsXMLToken(aLocalName, XML_STRING_VALUE))
-                    {
-                        if (sValue.getLength())
-                        {
-                            DBG_ASSERT(!pOUTextValue, "here should be only one string value");
-                            pOUTextValue = new rtl::OUString(sValue);
-                            bIsEmpty = sal_False;
-                        }
-                    }
-                }
-                break;
-            case 13 :
-                {
-                    if (IsXMLToken(aLocalName, XML_BOOLEAN_VALUE))
-                    {
-                        if (sValue.getLength())
-                        {
-                            if ( IsXMLToken(sValue, XML_TRUE) )
-                                fValue = 1.0;
-                            else if ( IsXMLToken(sValue, XML_FALSE) )
-                                fValue = 0.0;
-                            else
-                                rXMLImport.GetMM100UnitConverter().convertDouble(fValue, sValue);
-                            bIsEmpty = sal_False;
-                        }
-                    }
-                }
-                break;
             }
+            break;
+            case XML_TOK_TABLE_ROW_CELL_ATTR_TIME_VALUE:
+            {
+                if (sValue.getLength())
+                {
+                    rXMLImport.GetMM100UnitConverter().convertTime(fValue, sValue);
+                    bIsEmpty = sal_False;
+                }
+            }
+            break;
+            case XML_TOK_TABLE_ROW_CELL_ATTR_STRING_VALUE:
+            {
+                if (sValue.getLength())
+                {
+                    DBG_ASSERT(!pOUTextValue, "here should be only one string value");
+                    pOUTextValue.reset(sValue);
+                    bIsEmpty = sal_False;
+                }
+            }
+            break;
+            case XML_TOK_TABLE_ROW_CELL_ATTR_BOOLEAN_VALUE:
+            {
+                if (sValue.getLength())
+                {
+                    if ( IsXMLToken(sValue, XML_TRUE) )
+                        fValue = 1.0;
+                    else if ( IsXMLToken(sValue, XML_FALSE) )
+                        fValue = 0.0;
+                    else
+                        rXMLImport.GetMM100UnitConverter().convertDouble(fValue, sValue);
+                    bIsEmpty = sal_False;
+                }
+            }
+            break;
+            case XML_TOK_TABLE_ROW_CELL_ATTR_FORMULA:
+            {
+                if (sValue.getLength())
+                {
+                    DBG_ASSERT(!pOUFormula, "here should be only one formula");
+                    rtl::OUString sFormula;
+                    sal_uInt16 nFormulaPrefix = GetImport().GetNamespaceMap().
+                            _GetKeyByAttrName( sValue, &sFormula, sal_False );
+
+                    if (ScXMLImport::IsAcceptedFormulaNamespace(
+                                nFormulaPrefix, sValue, eGrammar,
+                                eStorageGrammar))
+                    {
+                        // Namespaces we accept.
+                        pOUFormula.reset( sFormula);
+                    }
+                    else
+                    {
+                        // No namespace => entire string.
+                        // Also unknown namespace included in formula,
+                        // so hopefully will result in string or
+                        // compile error.
+                        pOUFormula.reset( sValue);
+                    }
+                }
+            }
+            break;
+            case XML_TOK_TABLE_ROW_CELL_ATTR_CURRENCY:
+                pCurrencySymbol = new rtl::OUString(sValue);
+            break;
+            default:
+                ;
         }
     }
     if (pOUFormula)
@@ -335,40 +277,8 @@ ScXMLTableRowCellContext::ScXMLTableRowCellContext( ScXMLImport& rImport,
     rXMLImport.GetStylesImportHelper()->SetAttributes(pStyleName, pCurrencySymbol, nCellType);
 }
 
-sal_Int16 ScXMLTableRowCellContext::GetCellType(const rtl::OUString& sOUValue) const
-{
-    if (IsXMLToken(sOUValue, XML_FLOAT))
-        return util::NumberFormat::NUMBER;
-    else
-        if (IsXMLToken(sOUValue, XML_STRING))
-            return util::NumberFormat::TEXT;
-        else
-            if (IsXMLToken(sOUValue, XML_TIME))
-                return util::NumberFormat::TIME;
-            else
-                if (IsXMLToken(sOUValue, XML_DATE))
-                    return util::NumberFormat::DATETIME;
-                else
-                    if (IsXMLToken(sOUValue, XML_PERCENTAGE))
-                        return util::NumberFormat::PERCENT;
-                    else
-                        if (IsXMLToken(sOUValue, XML_CURRENCY))
-                            return util::NumberFormat::CURRENCY;
-                        else
-                            if (IsXMLToken(sOUValue, XML_BOOLEAN))
-                                return util::NumberFormat::LOGICAL;
-                            else
-                                return util::NumberFormat::UNDEFINED;
-}
-
 ScXMLTableRowCellContext::~ScXMLTableRowCellContext()
 {
-    if (pOUTextValue)
-        delete pOUTextValue;
-    if (pOUTextContent)
-        delete pOUTextContent;
-    if (pOUFormula)
-        delete pOUFormula;
     if (pContentValidationName)
         delete pContentValidationName;
     if (pMyAnnotation)
@@ -466,8 +376,7 @@ SvXMLImportContext *ScXMLTableRowCellContext::CreateChildContext( USHORT nPrefix
                             if (pOUTextContent)
                             {
                                 SetCursorOnTextImport(*pOUTextContent);
-                                delete pOUTextContent;
-                                pOUTextContent = NULL;
+                                pOUTextContent.reset();
                             }
                             else
                                 SetCursorOnTextImport(rtl::OUString());
@@ -491,19 +400,16 @@ SvXMLImportContext *ScXMLTableRowCellContext::CreateChildContext( USHORT nPrefix
         break;
     case XML_TOK_TABLE_ROW_CELL_TABLE:
         {
-            sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
+            const sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
             rtl::OUString aLocalName;
-            rtl::OUString sValue;
             for( sal_Int16 i=0; i < nAttrCount; i++ )
             {
                 sal_uInt16 nAttrPrefix = rXMLImport.GetNamespaceMap().GetKeyByAttrName(
                                                     xAttrList->getNameByIndex( i ), &aLocalName );
-                sValue = xAttrList->getValueByIndex( i );
-
-                if (nAttrPrefix == XML_NAMESPACE_TABLE)
+                if (    nAttrPrefix == XML_NAMESPACE_TABLE
+                    &&  IsXMLToken(aLocalName, XML_IS_SUB_TABLE))
                 {
-                    if (IsXMLToken(aLocalName, XML_IS_SUB_TABLE))
-                        bHasSubTable = IsXMLToken(sValue, XML_TRUE);
+                    bHasSubTable = IsXMLToken(xAttrList->getValueByIndex( i ), XML_TRUE);
                 }
             }
             DBG_ASSERT(bHasSubTable, "it should be a subtable");
@@ -841,7 +747,7 @@ void ScXMLTableRowCellContext::EndElement()
     {
         if (bHasTextImport && rXMLImport.GetRemoveLastChar())
         {
-            if (GetImport().GetTextImport()->GetCursor().is())
+            if (rXMLImport.GetTextImport()->GetCursor().is())
             {
                 //GetImport().GetTextImport()->GetCursor()->gotoEnd(sal_False);
                 if( GetImport().GetTextImport()->GetCursor()->goLeft( 1, sal_True ) )
@@ -863,7 +769,8 @@ void ScXMLTableRowCellContext::EndElement()
                 DoMerge(aCellPos, nMergedCols - 1, nMergedRows - 1);
             if ( !pOUFormula )
             {
-                rtl::OUString* pOUText = NULL;
+                ::boost::optional< rtl::OUString > pOUText;
+
                 if(nCellType == util::NumberFormat::TEXT)
                 {
                     if (xLockable.is())
@@ -888,16 +795,14 @@ void ScXMLTableRowCellContext::EndElement()
                         uno::Reference <text::XText> xTempText (xBaseCell, uno::UNO_QUERY);
                         if (xTempText.is())
                         {
-                            rtl::OUString sBla(xTempText->getString());
-                            pOUText = new rtl::OUString(sBla);
+                            pOUText.reset(xTempText->getString());
                         }
                     }
-                    if (!pOUTextContent && !pOUText && !pOUTextValue)
-                        bIsEmpty = sal_True;
-                    else if ( (pOUTextContent && !pOUTextContent->getLength()) || !pOUTextContent )
-                        if ( (pOUText && !pOUText->getLength()) || !pOUText )
-                            if ( (pOUTextValue && !pOUTextValue->getLength()) || !pOUTextValue )
-                                bIsEmpty = sal_True;
+                    if (     (!pOUTextContent && !pOUText && !pOUTextValue)
+                        && ( (pOUTextContent && !pOUTextContent->getLength()) || !pOUTextContent )
+                        && ( (pOUText && !pOUText->getLength()) || !pOUText )
+                        && ( (pOUTextValue && !pOUTextValue->getLength()) || !pOUTextValue ))
+                            bIsEmpty = sal_True;
                 }
                 sal_Bool bWasEmpty = bIsEmpty;
 //              uno::Reference <table::XCell> xCell;
@@ -905,11 +810,13 @@ void ScXMLTableRowCellContext::EndElement()
                 if ((pContentValidationName && pContentValidationName->getLength()) ||
                     pMyAnnotation || pDetectiveObjVec || pCellRangeSource)
                     bIsEmpty = sal_False;
+
+                ScMyTables& rTables = rXMLImport.GetTables();
                 for (sal_Int32 i = 0; i < nCellsRepeated; ++i)
                 {
                     aCurrentPos.Column = aCellPos.Column + i;
                     if (i > 0)
-                        rXMLImport.GetTables().AddColumn(sal_False);
+                        rTables.AddColumn(sal_False);
                     if (!bIsEmpty)
                     {
                         for (sal_Int32 j = 0; j < nRepeatedRows; ++j)
@@ -917,8 +824,8 @@ void ScXMLTableRowCellContext::EndElement()
                             aCurrentPos.Row = aCellPos.Row + j;
                             if ((aCurrentPos.Column == 0) && (j > 0))
                             {
-                                rXMLImport.GetTables().AddRow();
-                                rXMLImport.GetTables().AddColumn(sal_False);
+                                rTables.AddRow();
+                                rTables.AddColumn(sal_False);
                             }
                             if (CellExists(aCurrentPos))
                             {
@@ -946,7 +853,7 @@ void ScXMLTableRowCellContext::EndElement()
                                     case util::NumberFormat::TEXT:
                                         {
                                             sal_Bool bDoIncrement = sal_True;
-                                            if (rXMLImport.GetTables().IsPartOfMatrix(aCurrentPos.Column, aCurrentPos.Row))
+                                            if (rTables.IsPartOfMatrix(aCurrentPos.Column, aCurrentPos.Row))
                                             {
                                                 LockSolarMutex();
                                                 // test - bypass the API
@@ -969,7 +876,8 @@ void ScXMLTableRowCellContext::EndElement()
                                                 ScAddress aScAddress;
                                                 ScUnoConversion::FillScAddress( aScAddress, aCurrentPos );
                                                 ScBaseCell* pCell = rXMLImport.GetDocument()->GetCell( aScAddress );
-                                                if ( pCell && pCell->GetCellType() == CELLTYPE_FORMULA )
+                                                bDoIncrement = ( pCell && pCell->GetCellType() == CELLTYPE_FORMULA );
+                                                if ( bDoIncrement )
                                                 {
                                                     ScFormulaCell* pFCell = static_cast<ScFormulaCell*>(pCell);
                                                     if (pOUTextValue && pOUTextValue->getLength())
@@ -981,8 +889,6 @@ void ScXMLTableRowCellContext::EndElement()
                                                     else
                                                         bDoIncrement = sal_False;
                                                 }
-                                                else
-                                                    bDoIncrement = sal_False;
                                             }
                                             else
                                             {
@@ -1010,14 +916,14 @@ void ScXMLTableRowCellContext::EndElement()
                                                     pNewCell = ScBaseCell::CreateTextCell( *pOUTextContent, pDoc );
                                                 else if ( i > 0 && pOUText && pOUText->getLength() )
                                                     pNewCell = ScBaseCell::CreateTextCell( *pOUText, pDoc );
-                                                if ( pNewCell )
+
+                                                bDoIncrement = pNewCell != NULL;
+                                                if ( bDoIncrement )
                                                 {
                                                     ScAddress aScAddress;
                                                     ScUnoConversion::FillScAddress( aScAddress, aCurrentPos );
                                                     pDoc->PutCell( aScAddress, pNewCell );
                                                 }
-                                                else
-                                                    bDoIncrement = sal_False;
                                             }
                                             // #i56027# This is about setting simple text, not edit cells,
                                             // so ProgressBarIncrement must be called with bEditCell = FALSE.
@@ -1034,7 +940,7 @@ void ScXMLTableRowCellContext::EndElement()
                                     case util::NumberFormat::DATETIME:
                                     case util::NumberFormat::LOGICAL:
                                         {
-                                            if (rXMLImport.GetTables().IsPartOfMatrix(aCurrentPos.Column, aCurrentPos.Row))
+                                            if (rTables.IsPartOfMatrix(aCurrentPos.Column, aCurrentPos.Row))
                                             {
                                                 LockSolarMutex();
                                                 // test - bypass the API
@@ -1104,8 +1010,8 @@ void ScXMLTableRowCellContext::EndElement()
                         if ((i == 0) && (aCellPos.Column == 0))
                             for (sal_Int32 j = 1; j < nRepeatedRows; ++j)
                             {
-                                    rXMLImport.GetTables().AddRow();
-                                    rXMLImport.GetTables().AddColumn(sal_False);
+                                rTables.AddRow();
+                                rTables.AddColumn(sal_False);
                             }
                     }
                 }
@@ -1131,8 +1037,6 @@ void ScXMLTableRowCellContext::EndElement()
 
                     //SetType(xTempCell);
                 }
-                if (pOUText)
-                    delete pOUText;
             }
             else
             {

@@ -34,6 +34,7 @@ PRJ=..$/..$/..
 PRJNAME=sc
 TARGET=vbaobj
 ENABLE_EXCEPTIONS=TRUE
+VISIBILITY_HIDDEN=TRUE
 
 # --- Settings -----------------------------------------------------
 

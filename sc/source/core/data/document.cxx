@@ -53,6 +53,8 @@
 #include <unotools/transliterationwrapper.hxx>
 #include <tools/tenccvt.hxx>
 
+#include <com/sun/star/text/WritingMode2.hpp>
+
 #include "document.hxx"
 #include "table.hxx"
 #include "attrib.hxx"
@@ -90,6 +92,9 @@
 #include "autonamecache.hxx"
 #include "bcaslot.hxx"
 #include "postit.hxx"
+#include "externalrefmgr.hxx"
+
+namespace WritingMode2 = ::com::sun::star::text::WritingMode2;
 
 struct ScDefaultAttr
 {
@@ -336,6 +341,10 @@ BOOL ScDocument::InsertTab( SCTAB nPos, const String& rName,
                 if ( pChartListenerCollection )
                     pChartListenerCollection->UpdateScheduledSeriesRanges();
 
+                // Update cells containing external references.
+                if (pExternalRefMgr.get())
+                    pExternalRefMgr->updateRefInsertTable(nPos);
+
                 SetDirty();
                 bValid = TRUE;
             }
@@ -424,6 +433,12 @@ BOOL ScDocument::DeleteTab( SCTAB nTab, ScDocument* pRefUndoDoc )
                 }
                 // #81844# sheet names of references are not valid until sheet is deleted
                 pChartListenerCollection->UpdateScheduledSeriesRanges();
+
+
+                // Update cells containing external references.
+                if (pExternalRefMgr.get())
+                    pExternalRefMgr->updateRefDeleteTable(nTab);
+
                 SetAutoCalc( bOldAutoCalc );
                 bValid = TRUE;
             }
@@ -517,6 +532,8 @@ void ScDocument::SetLayoutRTL( SCTAB nTab, BOOL bRTL )
                     ScDrawObjData* pData = ScDrawLayer::GetObjData( pObject );
                     if ( !pData )
                         pDrawLayer->MirrorRTL( pObject );
+
+                    pObject->SetContextWritingMode( bRTL ? WritingMode2::RL_TB : WritingMode2::LR_TB );
 
                     pObject = aIter.Next();
                 }
@@ -2643,6 +2660,12 @@ ULONG ScDocument::GetRowHeight( SCROW nStartRow, SCROW nEndRow, SCTAB nTab ) con
     return 0;
 }
 
+ULONG ScDocument::FastGetRowHeight( SCROW nStartRow, SCROW nEndRow,
+        SCTAB nTab ) const
+{
+    return pTab[nTab]->pRowFlags->SumCoupledArrayForCondition( nStartRow,
+            nEndRow, CR_HIDDEN, 0, *(pTab[nTab]->pRowHeight));
+}
 
 ULONG ScDocument::GetScaledRowHeight( SCROW nStartRow, SCROW nEndRow,
         SCTAB nTab, double fScale ) const
@@ -3494,28 +3517,28 @@ void ScDocument::GetBorderLines( SCCOL nCol, SCROW nRow, SCTAB nTab,
     {
         const SvxBorderLine* pOther = ((const SvxBoxItem*)
                                 GetEffItem( nCol-1, nRow, nTab, ATTR_BORDER ))->GetRight();
-        if ( HasPriority( pOther, pLeftLine ) )
+        if ( ScHasPriority( pOther, pLeftLine ) )
             pLeftLine = pOther;
     }
     if ( nRow > 0 )
     {
         const SvxBorderLine* pOther = ((const SvxBoxItem*)
                                 GetEffItem( nCol, nRow-1, nTab, ATTR_BORDER ))->GetBottom();
-        if ( HasPriority( pOther, pTopLine ) )
+        if ( ScHasPriority( pOther, pTopLine ) )
             pTopLine = pOther;
     }
     if ( nCol < MAXCOL )
     {
         const SvxBorderLine* pOther = ((const SvxBoxItem*)
                                 GetEffItem( nCol+1, nRow, nTab, ATTR_BORDER ))->GetLeft();
-        if ( HasPriority( pOther, pRightLine ) )
+        if ( ScHasPriority( pOther, pRightLine ) )
             pRightLine = pOther;
     }
     if ( nRow < MAXROW )
     {
         const SvxBorderLine* pOther = ((const SvxBoxItem*)
                                 GetEffItem( nCol, nRow+1, nTab, ATTR_BORDER ))->GetTop();
-        if ( HasPriority( pOther, pBottomLine ) )
+        if ( ScHasPriority( pOther, pBottomLine ) )
             pBottomLine = pOther;
     }
 

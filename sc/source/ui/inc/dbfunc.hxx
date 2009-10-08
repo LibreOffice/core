@@ -43,7 +43,7 @@ class ScDBData;
 class ScDBCollection;
 class ScDPObject;
 class ScDPSaveData;
-class StrCollection;
+class ScStrCollection;
 struct ScDPNumGroupInfo;
 
 // ---------------------------------------------------------------------------
@@ -51,7 +51,7 @@ struct ScDPNumGroupInfo;
 class ScDBFunc : public ScViewFunc
 {
 private:
-    void            GetSelectedMemberList( StrCollection& rEntries, long& rDimension );
+    void            GetSelectedMemberList( ScStrCollection& rEntries, long& rDimension );
 
 public:
                     ScDBFunc( Window* pParent, ScDocShell& rDocSh, ScTabViewShell* pViewShell );
@@ -86,7 +86,7 @@ public:
 
     void            Consolidate( const ScConsolidateParam& rParam, BOOL bRecord = TRUE );
 
-    void            MakePivotTable( const ScDPSaveData& rData, const ScRange& rDest, BOOL bNewTable,
+    bool            MakePivotTable( const ScDPSaveData& rData, const ScRange& rDest, BOOL bNewTable,
                                     const ScDPObject& rSource, BOOL bApi = FALSE );
     void            DeletePivotTable();
     void            RecalcPivotTable();

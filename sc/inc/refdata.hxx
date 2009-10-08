@@ -33,6 +33,7 @@
 
 #include "global.hxx"
 #include "address.hxx"
+#include "scdllapi.h"
 
 
 // Ref-Flags for old (until release 3.1) documents
@@ -55,7 +56,7 @@ struct OldSingleRefBools
 #define SRF_BITS    0x03    // Mask of possible bits
 
 
-struct SingleRefData        // Single reference (one address) into the sheet
+struct SC_DLLPUBLIC ScSingleRefData        // Single reference (one address) into the sheet
 {
     SCsCOL  nCol;       // Absolute values
     SCsROW  nRow;
@@ -112,13 +113,11 @@ struct SingleRefData        // Single reference (one address) into the sheet
             void SmartRelAbs( const ScAddress& rPos );
             void CalcRelFromAbs( const ScAddress& rPos );
             void CalcAbsIfRel( const ScAddress& rPos );
-//UNUSED2008-05  void OldBoolsToNewFlags( const OldSingleRefBools& );
-//UNUSED2008-05  BYTE CreateStoreByteFromFlags() const;
-//UNUSED2008-05  void CreateFlagsFromLoadByte( BYTE );
-            BOOL operator==( const SingleRefData& ) const;
+            BOOL operator==( const ScSingleRefData& ) const;
+            bool operator!=( const ScSingleRefData& ) const;
 };
 
-inline void SingleRefData::InitAddress( SCCOL nColP, SCROW nRowP, SCTAB nTabP )
+inline void ScSingleRefData::InitAddress( SCCOL nColP, SCROW nRowP, SCTAB nTabP )
 {
     InitFlags();
     nCol = nColP;
@@ -126,12 +125,12 @@ inline void SingleRefData::InitAddress( SCCOL nColP, SCROW nRowP, SCTAB nTabP )
     nTab = nTabP;
 }
 
-inline void SingleRefData::InitAddress( const ScAddress& rAdr )
+inline void ScSingleRefData::InitAddress( const ScAddress& rAdr )
 {
     InitAddress( rAdr.Col(), rAdr.Row(), rAdr.Tab());
 }
 
-inline void SingleRefData::InitAddressRel( const ScAddress& rAdr,
+inline void ScSingleRefData::InitAddressRel( const ScAddress& rAdr,
                                             const ScAddress& rPos )
 {
     InitAddress( rAdr.Col(), rAdr.Row(), rAdr.Tab());
@@ -141,7 +140,7 @@ inline void SingleRefData::InitAddressRel( const ScAddress& rAdr,
     CalcRelFromAbs( rPos );
 }
 
-inline BOOL SingleRefData::Valid() const
+inline BOOL ScSingleRefData::Valid() const
 {
     return  nCol >= 0 && nCol <= MAXCOL &&
             nRow >= 0 && nRow <= MAXROW &&
@@ -149,10 +148,10 @@ inline BOOL SingleRefData::Valid() const
 }
 
 
-struct ComplRefData         // Complex reference (a range) into the sheet
+struct ScComplexRefData         // Complex reference (a range) into the sheet
 {
-    SingleRefData Ref1;
-    SingleRefData Ref2;
+    ScSingleRefData Ref1;
+    ScSingleRefData Ref2;
 
     inline  void InitFlags()
         { Ref1.InitFlags(); Ref2.InitFlags(); }
@@ -184,13 +183,13 @@ struct ComplRefData         // Complex reference (a range) into the sheet
         { return Ref1.Valid() && Ref2.Valid(); }
     /// Absolute references have to be up-to-date when calling this!
     void PutInOrder();
-    inline  BOOL operator==( const ComplRefData& r ) const
+    inline  BOOL operator==( const ScComplexRefData& r ) const
         { return Ref1 == r.Ref1 && Ref2 == r.Ref2; }
     /** Enlarge range if reference passed is not within existing range.
         ScAddress position is used to calculate absolute references from
         relative references. */
-    ComplRefData& Extend( const SingleRefData & rRef, const ScAddress & rPos );
-    ComplRefData& Extend( const ComplRefData & rRef, const ScAddress & rPos );
+    ScComplexRefData& Extend( const ScSingleRefData & rRef, const ScAddress & rPos );
+    ScComplexRefData& Extend( const ScComplexRefData & rRef, const ScAddress & rPos );
 };
 
 #endif

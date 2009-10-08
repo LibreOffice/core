@@ -62,6 +62,7 @@
 #include <sal/types.h>
 #include <tools/debug.hxx>
 
+using rtl::OUString;
 using namespace com::sun::star;
 using namespace xmloff::token;
 
@@ -82,7 +83,7 @@ ScXMLBodyContext::ScXMLBodyContext( ScXMLImport& rImport,
     {
         // ODF 1.1 and earlier => GRAM_PODF; ODF 1.2 and later => GRAM_ODFF;
         // no version => earlier than 1.2 => GRAM_PODF.
-        ScGrammar::Grammar eGrammar = ScGrammar::GRAM_ODFF;
+        formula::FormulaGrammar::Grammar eGrammar = formula::FormulaGrammar::GRAM_ODFF;
         OUString aVer( rImport.GetODFVersion());
         sal_Int32 nLen = aVer.getLength();
 #if OSL_DEBUG_LEVEL > 1
@@ -90,7 +91,7 @@ ScXMLBodyContext::ScXMLBodyContext( ScXMLImport& rImport,
                 (int)nLen, OUStringToOString( aVer, RTL_TEXTENCODING_UTF8).getStr());
 #endif
         if (!nLen)
-            eGrammar = ScGrammar::GRAM_PODF;
+            eGrammar = formula::FormulaGrammar::GRAM_PODF;
         else
         {
             // In case there was a micro version, e.g. "1.2.3", this would
@@ -98,7 +99,7 @@ ScXMLBodyContext::ScXMLBodyContext( ScXMLImport& rImport,
             // passed here) would point before string end upon return.
             double fVer = ::rtl::math::stringToDouble( aVer, '.', 0, NULL, NULL);
             if (fVer < 1.2)
-                eGrammar = ScGrammar::GRAM_PODF;
+                eGrammar = formula::FormulaGrammar::GRAM_PODF;
         }
         pDoc->SetStorageGrammar( eGrammar);
     }

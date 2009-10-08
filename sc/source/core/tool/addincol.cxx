@@ -60,7 +60,7 @@
 #include "compiler.hxx"
 #include "scmatrix.hxx"
 #include "addinlis.hxx"
-#include "errorcodes.hxx"
+#include "formula/errorcodes.hxx"
 #include "scfuncs.hrc"
 #include "optutil.hxx"
 #include "addincfg.hxx"
@@ -79,24 +79,6 @@ using namespace com::sun::star;
 //------------------------------------------------------------------------
 
 
-#define SC_FUNCGROUP_COUNT  ID_FUNCTION_GRP_ADDINS
-
-static const sal_Char* __FAR_DATA aFuncNames[SC_FUNCGROUP_COUNT] =
-    {
-        //  array index = ID - 1 (ID starts at 1)
-        //  all upper case
-        "Database",         // ID_FUNCTION_GRP_DATABASE
-        "Date&Time",        // ID_FUNCTION_GRP_DATETIME
-        "Financial",        // ID_FUNCTION_GRP_FINANZ
-        "Information",      // ID_FUNCTION_GRP_INFO
-        "Logical",          // ID_FUNCTION_GRP_LOGIC
-        "Mathematical",     // ID_FUNCTION_GRP_MATH
-        "Matrix",           // ID_FUNCTION_GRP_MATRIX
-        "Statistical",      // ID_FUNCTION_GRP_STATISTIC
-        "Spreadsheet",      // ID_FUNCTION_GRP_TABLE
-        "Text",             // ID_FUNCTION_GRP_TEXT
-        "Add-In"            // ID_FUNCTION_GRP_ADDINS
-    };
 
 
 //------------------------------------------------------------------------
@@ -323,7 +305,7 @@ uno::Reference<uno::XComponentContext> getContext(uno::Reference<lang::XMultiSer
 
 void ScUnoAddInCollection::Initialize()
 {
-    DBG_ASSERT( !bInitialized, "Initialize twice?" )
+    DBG_ASSERT( !bInitialized, "Initialize twice?" );
 
     uno::Reference<lang::XMultiServiceFactory> xManager = comphelper::getProcessServiceFactory();
     uno::Reference<container::XContentEnumerationAccess> xEnAc( xManager, uno::UNO_QUERY );
@@ -380,9 +362,26 @@ void ScUnoAddInCollection::Initialize()
 
     bInitialized = TRUE;        // with or without functions
 }
+// -----------------------------------------------------------------------------
 
 USHORT lcl_GetCategory( const String& rName )
 {
+    static const sal_Char* aFuncNames[SC_FUNCGROUP_COUNT] =
+    {
+        //  array index = ID - 1 (ID starts at 1)
+        //  all upper case
+        "Database",         // ID_FUNCTION_GRP_DATABASE
+        "Date&Time",        // ID_FUNCTION_GRP_DATETIME
+        "Financial",        // ID_FUNCTION_GRP_FINANZ
+        "Information",      // ID_FUNCTION_GRP_INFO
+        "Logical",          // ID_FUNCTION_GRP_LOGIC
+        "Mathematical",     // ID_FUNCTION_GRP_MATH
+        "Matrix",           // ID_FUNCTION_GRP_MATRIX
+        "Statistical",      // ID_FUNCTION_GRP_STATISTIC
+        "Spreadsheet",      // ID_FUNCTION_GRP_TABLE
+        "Text",             // ID_FUNCTION_GRP_TEXT
+        "Add-In"            // ID_FUNCTION_GRP_ADDINS
+    };
     for (USHORT i=0; i<SC_FUNCGROUP_COUNT; i++)
         if ( rName.EqualsAscii( aFuncNames[i] ) )
             return i+1;                             // IDs start at 1

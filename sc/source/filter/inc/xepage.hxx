@@ -31,9 +31,9 @@
 #ifndef SC_XEPAGE_HXX
 #define SC_XEPAGE_HXX
 
+#include "xerecord.hxx"
 #include "xlpage.hxx"
 #include "xeroot.hxx"
-#include "xerecord.hxx"
 
 // Page settings records ======================================================
 
@@ -45,6 +45,7 @@ class XclExpHeaderFooter : public XclExpRecord
 public:
     explicit            XclExpHeaderFooter( sal_uInt16 nRecId, const String& rHdrString );
 
+    virtual void        SaveXml( XclExpXmlStream& rStrm );
 private:
     /** Writes the header or footer string. Writes an empty record, if no header/footer present. */
     virtual void        WriteBody( XclExpStream& rStrm );
@@ -61,6 +62,7 @@ class XclExpSetup : public XclExpRecord
 public:
     explicit            XclExpSetup( const XclPageData& rPageData );
 
+    virtual void        SaveXml( XclExpXmlStream& rStrm );
 private:
     /** Writes the contents of the SETUP record. */
     virtual void        WriteBody( XclExpStream& rStrm );
@@ -82,6 +84,7 @@ public:
 
     /** Writes the record, if the list is not empty. */
     virtual void        Save( XclExpStream& rStrm );
+    virtual void        SaveXml( XclExpXmlStream& rStrm );
 
 private:
     /** Writes the page break list. */
@@ -106,6 +109,7 @@ public:
 
     /** Writes all page settings records to the stream. */
     virtual void        Save( XclExpStream& rStrm );
+    virtual void        SaveXml( XclExpXmlStream& rStrm );
 
 private:
     XclPageData         maData;         /// Page settings data.

@@ -310,7 +310,7 @@ void ScTpSubTotalGroup::FillListBoxes()
             {
                 aFieldName = aStrColumn;
                 aFieldName += ' ';
-                aFieldName += ::ColToAlpha( col );  // from global.hxx
+                aFieldName += ::ScColToAlpha( col );  // from global.hxx
             }
             nFieldArr[i] = col;
             aLbGroup.InsertEntry( aFieldName, i+1 );

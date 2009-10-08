@@ -42,12 +42,13 @@
 #include "ChartModelHelper.hxx"
 #include "AxisHelper.hxx"
 #include "CommonConverters.hxx"
+
+#include <com/sun/star/chart/ChartAxisLabelPosition.hpp>
+#include <com/sun/star/chart/ChartAxisMarkPosition.hpp>
+#include <com/sun/star/chart/ChartAxisPosition.hpp>
 #include <com/sun/star/chart2/XAxis.hpp>
 #include <com/sun/star/chart2/AxisOrientation.hpp>
 
-// #ifndef _COMPHELPER_PROCESSFACTORY_HXX_
-// #include <comphelper/processfactory.hxx>
-// #endif
 // for SfxBoolItem
 #include <svtools/eitem.hxx>
 // for SvxDoubleItem
@@ -310,6 +311,55 @@ void AxisItemConverter::FillSpecialItem( USHORT nWhichId, SfxItemSet & rOutItemS
         }
         break;
 
+        case SCHATTR_AXIS_POSITION:
+        {
+            ::com::sun::star::chart::ChartAxisPosition eAxisPos( ::com::sun::star::chart::ChartAxisPosition_ZERO );
+            GetPropertySet()->getPropertyValue(C2U( "CrossoverPosition" )) >>= eAxisPos;
+            rOutItemSet.Put( SfxInt32Item( nWhichId, eAxisPos ) );
+        }
+        break;
+
+        case SCHATTR_AXIS_POSITION_VALUE:
+        {
+            double fValue = 0.0;
+            if( GetPropertySet()->getPropertyValue(C2U( "CrossoverValue" )) >>= fValue )
+                rOutItemSet.Put( SvxDoubleItem( fValue, nWhichId ) );
+        }
+        break;
+
+        case SCHATTR_AXIS_CROSSING_MAIN_AXIS_NUMBERFORMAT:
+        {
+            //read only item
+            //necessary tp display the crossing value with an appropriate format
+
+            Reference< chart2::XCoordinateSystem > xCooSys( AxisHelper::getCoordinateSystemOfAxis(
+                m_xAxis, ChartModelHelper::findDiagram( m_xChartDoc ) ) );
+
+            Reference< chart2::XAxis > xCrossingMainAxis( AxisHelper::getCrossingMainAxis( m_xAxis, xCooSys ) );
+
+            sal_Int32 nFormatKey = ExplicitValueProvider::getExplicitNumberFormatKeyForAxis(
+                xCrossingMainAxis, xCooSys, Reference< util::XNumberFormatsSupplier >( m_xChartDoc, uno::UNO_QUERY ) );
+
+            rOutItemSet.Put( SfxUInt32Item( nWhichId, nFormatKey ));
+        }
+        break;
+
+        case SCHATTR_AXIS_LABEL_POSITION:
+        {
+            ::com::sun::star::chart::ChartAxisLabelPosition ePos( ::com::sun::star::chart::ChartAxisLabelPosition_NEAR_AXIS );
+            GetPropertySet()->getPropertyValue(C2U( "LabelPosition" )) >>= ePos;
+            rOutItemSet.Put( SfxInt32Item( nWhichId, ePos ) );
+        }
+        break;
+
+        case SCHATTR_AXIS_MARK_POSITION:
+        {
+            ::com::sun::star::chart::ChartAxisMarkPosition ePos( ::com::sun::star::chart::ChartAxisMarkPosition_AT_LABELS_AND_AXIS );
+            GetPropertySet()->getPropertyValue(C2U( "MarkPosition" )) >>= ePos;
+            rOutItemSet.Put( SfxInt32Item( nWhichId, ePos ) );
+        }
+        break;
+
         case SCHATTR_TEXT_DEGREES:
         {
             // convert double to int (times 100)
@@ -537,7 +587,159 @@ bool AxisItemConverter::ApplySpecialItem( USHORT nWhichId, const SfxItemSet & rI
                 {
                     aScale.Origin = aValue;
                     bSetScale = true;
+
+                    if( !AxisHelper::isAxisPositioningEnabled() )
+                    {
+                        //keep old and new settings for axis positioning in sync somehow
+                        Reference< chart2::XCoordinateSystem > xCooSys( AxisHelper::getCoordinateSystemOfAxis(
+                            m_xAxis, ChartModelHelper::findDiagram( m_xChartDoc ) ) );
+
+                        sal_Int32 nDimensionIndex=0;
+                        sal_Int32 nAxisIndex=0;
+                        if( AxisHelper::getIndicesForAxis( m_xAxis, xCooSys, nDimensionIndex, nAxisIndex ) && nAxisIndex==0 )
+                        {
+                            Reference< beans::XPropertySet > xCrossingMainAxis( AxisHelper::getCrossingMainAxis( m_xAxis, xCooSys ), uno::UNO_QUERY );
+                            if( xCrossingMainAxis.is() )
+                            {
+                                double fValue = 0.0;
+                                if( aValue >>= fValue )
+                                {
+                                    xCrossingMainAxis->setPropertyValue( C2U( "CrossoverPosition" ), uno::makeAny( ::com::sun::star::chart::ChartAxisPosition_VALUE ));
+                                    xCrossingMainAxis->setPropertyValue( C2U( "CrossoverValue" ), uno::makeAny( fValue ));
+                                }
+                                else
+                                    xCrossingMainAxis->setPropertyValue( C2U( "CrossoverPosition" ), uno::makeAny( ::com::sun::star::chart::ChartAxisPosition_START ));
+                            }
+                        }
+                    }
                 }
+            }
+        }
+        break;
+
+        case SCHATTR_AXIS_POSITION:
+        {
+            ::com::sun::star::chart::ChartAxisPosition eAxisPos =
+                (::com::sun::star::chart::ChartAxisPosition)
+                static_cast< const SfxInt32Item & >( rItemSet.Get( nWhichId )).GetValue();
+
+            ::com::sun::star::chart::ChartAxisPosition eOldAxisPos( ::com::sun::star::chart::ChartAxisPosition_ZERO );
+            bool bPropExisted = ( GetPropertySet()->getPropertyValue(C2U( "CrossoverPosition" )) >>= eOldAxisPos );
+
+            if( !bPropExisted || ( eOldAxisPos != eAxisPos ))
+            {
+                GetPropertySet()->setPropertyValue( C2U( "CrossoverPosition" ), uno::makeAny( eAxisPos ));
+                bChangedOtherwise = true;
+
+                //move the parallel axes to the other side if necessary
+                if( eAxisPos==::com::sun::star::chart::ChartAxisPosition_START || eAxisPos==::com::sun::star::chart::ChartAxisPosition_END )
+                {
+                    Reference< beans::XPropertySet > xParallelAxis( AxisHelper::getParallelAxis( m_xAxis, ChartModelHelper::findDiagram( m_xChartDoc ) ), uno::UNO_QUERY );
+                    if( xParallelAxis.is() )
+                    {
+                        ::com::sun::star::chart::ChartAxisPosition eOtherPos;
+                        if( xParallelAxis->getPropertyValue( C2U( "CrossoverPosition" ) ) >>= eOtherPos )
+                        {
+                            if( eOtherPos == eAxisPos )
+                            {
+                                ::com::sun::star::chart::ChartAxisPosition eOppositePos =
+                                    (eAxisPos==::com::sun::star::chart::ChartAxisPosition_START)
+                                    ? ::com::sun::star::chart::ChartAxisPosition_END
+                                    : ::com::sun::star::chart::ChartAxisPosition_START;
+                                xParallelAxis->setPropertyValue( C2U( "CrossoverPosition" ), uno::makeAny( eOppositePos ));
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        break;
+
+        case SCHATTR_AXIS_POSITION_VALUE:
+        {
+            double fValue = static_cast< const SvxDoubleItem & >( rItemSet.Get( nWhichId )).GetValue();
+
+            double fOldValue = 0.0;
+            bool bPropExisted = ( GetPropertySet()->getPropertyValue(C2U( "CrossoverValue" )) >>= fOldValue );
+
+            if( !bPropExisted || ( fOldValue != fValue ))
+            {
+                GetPropertySet()->setPropertyValue( C2U( "CrossoverValue" ), uno::makeAny( fValue ));
+                bChangedOtherwise = true;
+
+                //keep old and new settings for axis positioning in sync somehow
+                {
+                    Reference< chart2::XCoordinateSystem > xCooSys( AxisHelper::getCoordinateSystemOfAxis(
+                        m_xAxis, ChartModelHelper::findDiagram( m_xChartDoc ) ) );
+
+                    sal_Int32 nDimensionIndex=0;
+                    sal_Int32 nAxisIndex=0;
+                    if( AxisHelper::getIndicesForAxis( m_xAxis, xCooSys, nDimensionIndex, nAxisIndex ) && nAxisIndex==0 && nDimensionIndex==0 )
+                    {
+                        Reference< chart2::XAxis > xCrossingMainAxis( AxisHelper::getCrossingMainAxis( m_xAxis, xCooSys ) );
+                        if( xCrossingMainAxis.is() )
+                        {
+                            ScaleData aCrossingScale( xCrossingMainAxis->getScaleData() );
+                            aCrossingScale.Origin = uno::makeAny(fValue);
+                            xCrossingMainAxis->setScaleData(aCrossingScale);
+                        }
+                    }
+                }
+            }
+        }
+        break;
+
+        case SCHATTR_AXIS_LABEL_POSITION:
+        {
+            ::com::sun::star::chart::ChartAxisLabelPosition ePos =
+                (::com::sun::star::chart::ChartAxisLabelPosition)
+                static_cast< const SfxInt32Item & >( rItemSet.Get( nWhichId )).GetValue();
+
+            ::com::sun::star::chart::ChartAxisLabelPosition eOldPos( ::com::sun::star::chart::ChartAxisLabelPosition_NEAR_AXIS );
+            bool bPropExisted = ( GetPropertySet()->getPropertyValue(C2U( "LabelPosition" )) >>= eOldPos );
+
+            if( !bPropExisted || ( eOldPos != ePos ))
+            {
+                GetPropertySet()->setPropertyValue( C2U( "LabelPosition" ), uno::makeAny( ePos ));
+                bChangedOtherwise = true;
+
+                //move the parallel axes to the other side if necessary
+                if( ePos==::com::sun::star::chart::ChartAxisLabelPosition_OUTSIDE_START || ePos==::com::sun::star::chart::ChartAxisLabelPosition_OUTSIDE_END )
+                {
+                    Reference< beans::XPropertySet > xParallelAxis( AxisHelper::getParallelAxis( m_xAxis, ChartModelHelper::findDiagram( m_xChartDoc ) ), uno::UNO_QUERY );
+                    if( xParallelAxis.is() )
+                    {
+                        ::com::sun::star::chart::ChartAxisLabelPosition eOtherPos;
+                        if( xParallelAxis->getPropertyValue( C2U( "LabelPosition" ) ) >>= eOtherPos )
+                        {
+                            if( eOtherPos == ePos )
+                            {
+                                ::com::sun::star::chart::ChartAxisLabelPosition eOppositePos =
+                                    (ePos==::com::sun::star::chart::ChartAxisLabelPosition_OUTSIDE_START)
+                                    ? ::com::sun::star::chart::ChartAxisLabelPosition_OUTSIDE_END
+                                    : ::com::sun::star::chart::ChartAxisLabelPosition_OUTSIDE_START;
+                                xParallelAxis->setPropertyValue( C2U( "LabelPosition" ), uno::makeAny( eOppositePos ));
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        break;
+
+        case SCHATTR_AXIS_MARK_POSITION:
+        {
+            ::com::sun::star::chart::ChartAxisMarkPosition ePos =
+                (::com::sun::star::chart::ChartAxisMarkPosition)
+                static_cast< const SfxInt32Item & >( rItemSet.Get( nWhichId )).GetValue();
+
+            ::com::sun::star::chart::ChartAxisMarkPosition eOldPos( ::com::sun::star::chart::ChartAxisMarkPosition_AT_LABELS_AND_AXIS );
+            bool bPropExisted = ( GetPropertySet()->getPropertyValue(C2U( "MarkPosition" )) >>= eOldPos );
+
+            if( !bPropExisted || ( eOldPos != ePos ))
+            {
+                GetPropertySet()->setPropertyValue( C2U( "MarkPosition" ), uno::makeAny( ePos ));
+                bChangedOtherwise = true;
             }
         }
         break;

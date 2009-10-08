@@ -76,7 +76,7 @@ ScSpecialFilterDlg::ScSpecialFilterDlg( SfxBindings* pB, SfxChildWindow* pCW, Wi
         aLbFilterArea   ( this, ScResId( LB_CRITERIA_AREA ) ),
         aFtFilterArea   ( this, ScResId( FT_CRITERIA_AREA ) ),
         aEdFilterArea   ( this, ScResId( ED_CRITERIA_AREA ) ),
-        aRbFilterArea   ( this, ScResId( RB_CRITERIA_AREA ), &aEdFilterArea ),
+        aRbFilterArea   ( this, ScResId( RB_CRITERIA_AREA ), &aEdFilterArea, this ),
         //
         _INIT_COMMON_FILTER_RSCOBJS
         //
@@ -249,7 +249,7 @@ void ScSpecialFilterDlg::SetReference( const ScRange& rRef, ScDocument* pDocP )
             RefInputStart( pRefInputEdit );
 
         String aRefStr;
-        const ScAddress::Convention eConv = pDocP->GetAddressConvention();
+        const formula::FormulaGrammar::AddressConvention eConv = pDocP->GetAddressConvention();
 
         if ( pRefInputEdit == &aEdCopyArea)
             rRef.aStart.Format( aRefStr, SCA_ABS_3D, pDocP, eConv );
@@ -324,7 +324,7 @@ IMPL_LINK( ScSpecialFilterDlg, EndDlgHdl, Button*, pBtn )
         BOOL            bEditInputOk    = TRUE;
         BOOL            bQueryOk        = FALSE;
         ScRange         theFilterArea;
-        const ScAddress::Convention eConv = pDoc->GetAddressConvention();
+        const formula::FormulaGrammar::AddressConvention eConv = pDoc->GetAddressConvention();
 
         if ( aBtnCopyResult.IsChecked() )
         {
@@ -490,7 +490,7 @@ IMPL_LINK( ScSpecialFilterDlg, FilterAreaSelHdl, ListBox*, pLb )
 
 //----------------------------------------------------------------------------
 
-IMPL_LINK( ScSpecialFilterDlg, FilterAreaModHdl, ScRefEdit*, pEd )
+IMPL_LINK( ScSpecialFilterDlg, FilterAreaModHdl, formula::RefEdit*, pEd )
 {
     if ( pEd == &aEdFilterArea )
     {

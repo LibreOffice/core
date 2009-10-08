@@ -47,7 +47,6 @@
 #include <vcl/combobox.hxx>
 #endif
 #include "anyrefdg.hxx"
-#include "funcutl.hxx"
 #include "global.hxx"       // ScAddress
 #include "privsplt.hxx"
 #include "funcdesc.hxx"

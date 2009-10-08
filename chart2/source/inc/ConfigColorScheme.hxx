@@ -32,6 +32,7 @@
 
 #include "ServiceMacros.hxx"
 #include "ConfigItemListener.hxx"
+#include "charttoolsdllapi.hxx"
 #include <cppuhelper/implbase2.hxx>
 #include <comphelper/uno3.hxx>
 #include <com/sun/star/chart2/XColorScheme.hpp>
@@ -48,7 +49,7 @@ namespace impl
 class ChartConfigItem;
 }
 
-class ConfigColorScheme :
+class OOO_DLLPUBLIC_CHARTTOOLS ConfigColorScheme :
     public ConfigItemListener,
     public ::cppu::WeakImplHelper2<
         ::com::sun::star::chart2::XColorScheme,

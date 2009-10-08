@@ -78,7 +78,7 @@ public:
 // -----------------------------------------------------------------------
 
 
-class ScDrawLayer: public FmFormModel
+class SC_DLLPUBLIC ScDrawLayer: public FmFormModel
 {
 private:
 //REMOVE        SotStorageRef   xPictureStorage;

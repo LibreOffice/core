@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: scuitphfedit.cxx,v $
- * $Revision: 1.11 $
+ * $Revision: 1.10.172.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -327,7 +327,7 @@ void ScHFEditPage::InitPreDefinedList()
 
     String aUserNameEntry(aUserOpt.GetFirstName());
     aUserNameEntry += ' ';
-    aUserNameEntry += aUserOpt.GetLastName();
+    aUserNameEntry += (String)aUserOpt.GetLastName();
     aUserNameEntry.AppendAscii(RTL_CONSTASCII_STRINGPARAM(", "));
     aUserNameEntry += aPageEntry;
     aUserNameEntry.AppendAscii(RTL_CONSTASCII_STRINGPARAM(", "));
@@ -336,9 +336,9 @@ void ScHFEditPage::InitPreDefinedList()
 
     String aCreatedByEntry(ScGlobal::GetRscString( STR_HF_CREATED_BY ) );
     aCreatedByEntry += ' ';
-    aCreatedByEntry += aUserOpt.GetFirstName();
+    aCreatedByEntry += (String)aUserOpt.GetFirstName();
     aCreatedByEntry += ' ';
-    aCreatedByEntry += aUserOpt.GetLastName();
+    aCreatedByEntry += (String)aUserOpt.GetLastName();
     aCreatedByEntry.AppendAscii(RTL_CONSTASCII_STRINGPARAM(", "));
     aCreatedByEntry += aDateFieldValue;
     aCreatedByEntry.AppendAscii(RTL_CONSTASCII_STRINGPARAM(", "));
@@ -516,7 +516,7 @@ void ScHFEditPage::SetSelectDefinedList()
                 {
                     String aUserNameEntry(aUserOpt.GetFirstName());
                     aUserNameEntry += ' ';
-                    aUserNameEntry += aUserOpt.GetLastName();
+                    aUserNameEntry += (String)aUserOpt.GetLastName();
                     if(aUserNameEntry == aWndLeft.GetEditEngine()->GetText(0))
                     {
                         eSelectEntry = eUserNameEntry;
@@ -532,9 +532,9 @@ void ScHFEditPage::SetSelectDefinedList()
                 {
                     String aCreatedByEntry(ScGlobal::GetRscString( STR_HF_CREATED_BY ) );
                     aCreatedByEntry += ' ';
-                    aCreatedByEntry += aUserOpt.GetFirstName();
+                    aCreatedByEntry += (String)aUserOpt.GetFirstName();
                     aCreatedByEntry += ' ';
-                    aCreatedByEntry += aUserOpt.GetLastName();
+                    aCreatedByEntry += (String)aUserOpt.GetLastName();
                     if(aCreatedByEntry == aWndLeft.GetEditEngine()->GetText(0))
                     {
                         eSelectEntry = eCreatedByEntry;
@@ -796,7 +796,7 @@ void ScHFEditPage::ProcessDefinedListSel(ScHFEntryId eSel, bool bTravelling)
             ClearTextAreas();
             String aUserNameEntry(aUserOpt.GetFirstName());
             aUserNameEntry += ' ';
-            aUserNameEntry += aUserOpt.GetLastName();
+            aUserNameEntry += (String)aUserOpt.GetLastName();
             aWndLeft.GetEditEngine()->SetText(aUserNameEntry);
             String aPageEntry(ScGlobal::GetRscString( STR_PAGE ) );
             aPageEntry += ' ';
@@ -813,9 +813,9 @@ void ScHFEditPage::ProcessDefinedListSel(ScHFEntryId eSel, bool bTravelling)
             ClearTextAreas();
             String aCreatedByEntry(ScGlobal::GetRscString( STR_HF_CREATED_BY ) );
             aCreatedByEntry += ' ';
-            aCreatedByEntry += aUserOpt.GetFirstName();
+            aCreatedByEntry += (String)aUserOpt.GetFirstName();
             aCreatedByEntry += ' ';
-            aCreatedByEntry += aUserOpt.GetLastName();
+            aCreatedByEntry += (String)aUserOpt.GetLastName();
             aWndLeft.GetEditEngine()->SetText(aCreatedByEntry);
             aWndCenter.InsertField( SvxFieldItem(SvxDateField(Date(),SVXDATETYPE_VAR), EE_FEATURE_FIELD) );
             String aPageEntry(ScGlobal::GetRscString( STR_PAGE ) );

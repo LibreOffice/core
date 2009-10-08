@@ -41,6 +41,7 @@
 #include <svtools/zforlist.hxx>
 #include <comphelper/types.hxx>
 #include <ucbhelper/content.hxx>
+#include <unotools/sharedunocomponent.hxx>
 #include <comphelper/processfactory.hxx>
 #include <connectivity/dbcharset.hxx>
 #include <svx/txenctab.hxx>
@@ -417,7 +418,7 @@ void lcl_GetColumnTypes( ScDocShell& rDocShell,
     SCCOL nLastCol = rDataRange.aEnd.Col();
     SCROW nLastRow = rDataRange.aEnd.Row();
 
-    StrCollection aFieldNamesCollection;
+    ScStrCollection aFieldNamesCollection;
 
     long nField = 0;
     SCROW nFirstDataRow = ( bHasFieldNames ? nFirstRow + 1 : nFirstRow );
@@ -595,7 +596,7 @@ void lcl_GetColumnTypes( ScDocShell& rDocShell,
                 else
                     nLen -= nPrec+1;            // auch den . mit raus
             }
-            if ( nLen > nFieldLen )
+            if ( nLen > nFieldLen && !bTypeDefined )
                 nFieldLen = nLen;
             if ( !bPrecDefined )
                 nPrecision = nPrec;
@@ -783,6 +784,7 @@ ULONG ScDocShell::DBaseExport( const String& rFullFileName, CharSet eCharSet, BO
                                 xDrvMan->getConnectionWithInfo( aConnUrl, aProps );
         DBG_ASSERT( xConnection.is(), "can't get Connection" );
         if (!xConnection.is()) return SCERR_EXPORT_CONNECT;
+        ::utl::DisposableComponent aConnectionHelper(xConnection);
 
         // get dBase driver
 
@@ -895,6 +897,7 @@ ULONG ScDocShell::DBaseExport( const String& rFullFileName, CharSet eCharSet, BO
         uno::Reference<sdbc::XRowSet> xRowSet( xFactory->createInstance(
                             rtl::OUString::createFromAscii( SC_SERVICE_ROWSET ) ),
                             uno::UNO_QUERY);
+        ::utl::DisposableComponent aRowSetHelper(xRowSet);
         uno::Reference<beans::XPropertySet> xRowProp( xRowSet, uno::UNO_QUERY );
         DBG_ASSERT( xRowProp.is(), "can't get RowSet" );
         if (!xRowProp.is()) return SCERR_EXPORT_CONNECT;
@@ -1124,8 +1127,10 @@ ULONG ScDocShell::DBaseExport( const String& rFullFileName, CharSet eCharSet, BO
                         SCERR_EXPORT_FIELDWIDTH), sPosition, sEncoding,
                     ERRCODE_BUTTON_OK | ERRCODE_MSG_ERROR);
         }
+        else if ( aException.Message.getLength() )
+            nErr = *new StringErrorInfo( (SCERR_EXPORT_SQLEXCEPTION), aException.Message, ERRCODE_BUTTON_OK | ERRCODE_MSG_ERROR);
         else
-            nErr = SCERR_EXPORT_CONNECT;
+            nErr = SCERR_EXPORT_DATA;
     }
     catch ( uno::Exception& )
     {

@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: res_DataLabel.hxx,v $
- * $Revision: 1.5 $
+ * $Revision: 1.5.72.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -32,11 +32,10 @@
 
 #include "res_TextSeparator.hxx"
 // header for class CheckBox
-#ifndef _SV_BUTTON_HXX
 #include <vcl/button.hxx>
-#endif
 // header for class SfxItemSet
 #include <svtools/itemset.hxx>
+#include "TextDirectionListBox.hxx"
 
 class SvNumberFormatter;
 
@@ -48,7 +47,7 @@ namespace chart
 class DataLabelResources
 {
 public:
-    DataLabelResources( Window* pParent, const SfxItemSet& rInAttrs );
+    DataLabelResources( Window* pParent, const SfxItemSet& rInAttrs, bool bShowTextDirectionListBox );
     virtual ~DataLabelResources();
 
     BOOL FillItemSet(SfxItemSet& rOutAttrs) const;
@@ -68,6 +67,9 @@ private:
 
     FixedText           m_aFT_LabelPlacement;
     ListBox             m_aLB_LabelPlacement;
+
+    FixedText               m_aFT_TextDirection;
+    TextDirectionListBox    m_aLB_TextDirection;
 
     ::std::map< sal_Int32, USHORT > m_aPlacementToListBoxMap;
     ::std::map< USHORT, sal_Int32 > m_aListBoxToPlacementMap;

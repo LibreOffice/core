@@ -62,7 +62,8 @@
 #define TP_OPTIONS      908
 #define TP_POLAROPTIONS 909
 #define TP_AXIS_LABEL   920
-#define TP_SCALE_Y      903
+#define TP_SCALE        903
+#define TP_AXIS_POSITIONS   904
 #define TP_CHARTTYPE    910
 #define TP_RANGECHOOSER 911
 #define TP_WIZARD_TITLEANDOBJECTS 912

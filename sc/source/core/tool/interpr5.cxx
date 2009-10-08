@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: interpr5.cxx,v $
- * $Revision: 1.34 $
+ * $Revision: 1.33.36.3 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -36,7 +36,7 @@
 #ifndef INCLUDED_RTL_MATH_HXX
 #include <rtl/math.hxx>
 #endif
-
+#include <rtl/logfile.hxx>
 #include <string.h>
 #include <math.h>
 #include <stdio.h>
@@ -63,13 +63,50 @@
 #include <vector>
 
 using ::std::vector;
+using namespace formula;
 
 const double fInvEpsilon = 1.0E-7;
 
 // -----------------------------------------------------------------------
+    struct MatrixAdd : public ::std::binary_function<double,double,double>
+    {
+        inline double operator() (const double& lhs, const double& rhs) const
+        {
+            return ::rtl::math::approxAdd( lhs,rhs);
+        }
+    };
+    struct MatrixSub : public ::std::binary_function<double,double,double>
+    {
+        inline double operator() (const double& lhs, const double& rhs) const
+        {
+            return ::rtl::math::approxSub( lhs,rhs);
+        }
+    };
+    struct MatrixMul : public ::std::binary_function<double,double,double>
+    {
+        inline double operator() (const double& lhs, const double& rhs) const
+        {
+            return lhs * rhs;
+        }
+    };
+    struct MatrixDiv : public ::std::binary_function<double,double,double>
+    {
+        inline double operator() (const double& lhs, const double& rhs) const
+        {
+            return ScInterpreter::div( lhs,rhs);
+        }
+    };
+    struct MatrixPow : public ::std::binary_function<double,double,double>
+    {
+        inline double operator() (const double& lhs, const double& rhs) const
+        {
+            return ::pow( lhs,rhs);
+        }
+    };
 
 double ScInterpreter::ScGetGCD(double fx, double fy)
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "Eike.Rathke@sun.com", "ScInterpreter::div" );
     // By ODFF definition GCD(0,a) => a. This is also vital for the code in
     // ScGCD() to work correctly with a preset fy=0.0
     if (fy == 0.0)
@@ -91,6 +128,7 @@ double ScInterpreter::ScGetGCD(double fx, double fy)
 
 void ScInterpreter::ScGCD()
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "Eike.Rathke@sun.com", "ScInterpreter::ScGCD" );
     short nParamCount = GetByte();
     if ( MustHaveParamCountMin( nParamCount, 1 ) )
     {
@@ -272,6 +310,7 @@ void ScInterpreter:: ScLCM()
 
 ScMatrixRef ScInterpreter::GetNewMat(SCSIZE nC, SCSIZE nR)
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "Eike.Rathke@sun.com", "ScInterpreter::GetNewMat" );
     ScMatrix* pMat = new ScMatrix( nC, nR);
     pMat->SetErrorInterpreter( this);
     SCSIZE nCols, nRows;
@@ -285,10 +324,11 @@ ScMatrixRef ScInterpreter::GetNewMat(SCSIZE nC, SCSIZE nR)
     return pMat;
 }
 
-ScMatrixRef ScInterpreter::CreateMatrixFromDoubleRef( const ScToken* pToken,
+ScMatrixRef ScInterpreter::CreateMatrixFromDoubleRef( const FormulaToken* pToken,
         SCCOL nCol1, SCROW nRow1, SCTAB nTab1,
         SCCOL nCol2, SCROW nRow2, SCTAB nTab2 )
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "Eike.Rathke@sun.com", "ScInterpreter::CreateMatrixFromDoubleRef" );
     ScMatrixRef pMat = NULL;
     if (nTab1 == nTab2 && !nGlobalError)
     {
@@ -299,7 +339,7 @@ ScMatrixRef ScInterpreter::CreateMatrixFromDoubleRef( const ScToken* pToken,
             SetError(errStackOverflow);
         else if (pTokenMatrixMap && ((aIter = pTokenMatrixMap->find( pToken))
                     != pTokenMatrixMap->end()))
-            pMat = (*aIter).second->GetMatrix();
+            pMat = static_cast<ScToken*>((*aIter).second.get())->GetMatrix();
         else
         {
             SCSIZE nMatCols = static_cast<SCSIZE>(nCol2 - nCol1 + 1);
@@ -409,6 +449,7 @@ ScMatrixRef ScInterpreter::CreateMatrixFromDoubleRef( const ScToken* pToken,
 
 ScMatrixRef ScInterpreter::GetMatrix()
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "Eike.Rathke@sun.com", "ScInterpreter::GetMatrix" );
     ScMatrixRef pMat = NULL;
     switch (GetRawStackType())
     {
@@ -438,7 +479,7 @@ ScMatrixRef ScInterpreter::GetMatrix()
             SCCOL nCol1, nCol2;
             SCROW nRow1, nRow2;
             SCTAB nTab1, nTab2;
-            const ScToken* p = sp ? pStack[sp-1] : NULL;
+            const ScToken* p = sp ? static_cast<const ScToken*>(pStack[sp-1]) : NULL;
             PopDoubleRef(nCol1, nRow1, nTab1, nCol2, nRow2, nTab2);
             pMat = CreateMatrixFromDoubleRef( p, nCol1, nRow1, nTab1,
                     nCol2, nRow2, nTab2);
@@ -491,6 +532,7 @@ ScMatrixRef ScInterpreter::GetMatrix()
 
 void ScInterpreter::ScMatValue()
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "Eike.Rathke@sun.com", "ScInterpreter::ScMatValue" );
     if ( MustHaveParamCount( GetByte(), 3 ) )
     {
         // 0 to count-1
@@ -511,26 +553,7 @@ void ScInterpreter::ScMatValue()
                     else
                     {
                         const ScMatrix* pMat = ((ScFormulaCell*)pCell)->GetMatrix();
-                        if (pMat)
-                        {
-                            SCSIZE nCl, nRw;
-                            pMat->GetDimensions(nCl, nRw);
-                            if (nC < nCl && nR < nRw)
-                            {
-                                ScMatValType nMatValType;
-                                const ScMatrixValue* pMatVal = pMat->Get( nC,
-                                        nR, nMatValType);
-                                if (ScMatrix::IsStringType( nMatValType))
-                                    PushString( pMatVal->GetString() );
-                                else
-                                    PushDouble(pMatVal->fVal);
-                                    // also handles DoubleError
-                            }
-                            else
-                                PushNoValue();
-                        }
-                        else
-                            PushNoValue();
+                        CalculateMatrixValue(pMat,nC,nR);
                     }
                 }
                 else
@@ -569,26 +592,7 @@ void ScInterpreter::ScMatValue()
             case svMatrix:
             {
                 ScMatrixRef pMat = PopMatrix();
-                if (pMat)
-                {
-                    SCSIZE nCl, nRw;
-                    pMat->GetDimensions(nCl, nRw);
-                    if (nC < nCl && nR < nRw)
-                    {
-                        ScMatValType nMatValType;
-                        const ScMatrixValue* pMatVal = pMat->Get( nC, nR,
-                                nMatValType);
-                        if (ScMatrix::IsStringType( nMatValType))
-                            PushString( pMatVal->GetString() );
-                        else
-                            PushDouble(pMatVal->fVal);
-                            // also handles DoubleError
-                    }
-                    else
-                        PushNoValue();
-                }
-                else
-                    PushNoValue();
+                CalculateMatrixValue(pMat,nC,nR);
             }
             break;
             default:
@@ -598,9 +602,33 @@ void ScInterpreter::ScMatValue()
         }
     }
 }
+void ScInterpreter::CalculateMatrixValue(const ScMatrix* pMat,SCSIZE nC,SCSIZE nR)
+{
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "Eike.Rathke@sun.com", "ScInterpreter::CalculateMatrixValue" );
+    if (pMat)
+    {
+        SCSIZE nCl, nRw;
+        pMat->GetDimensions(nCl, nRw);
+        if (nC < nCl && nR < nRw)
+        {
+            ScMatValType nMatValType;
+            const ScMatrixValue* pMatVal = pMat->Get( nC, nR,nMatValType);
+            if (ScMatrix::IsNonValueType( nMatValType))
+                PushString( pMatVal->GetString() );
+            else
+                PushDouble(pMatVal->fVal);
+                // also handles DoubleError
+        }
+        else
+            PushNoValue();
+    }
+    else
+        PushNoValue();
+}
 
 void ScInterpreter::ScEMat()
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "Eike.Rathke@sun.com", "ScInterpreter::ScEMat" );
     if ( MustHaveParamCount( GetByte(), 1 ) )
     {
         SCSIZE nDim = static_cast<SCSIZE>(::rtl::math::approxFloor(GetDouble()));
@@ -622,6 +650,7 @@ void ScInterpreter::ScEMat()
 
 void ScInterpreter::MEMat(ScMatrix* mM, SCSIZE n)
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "Eike.Rathke@sun.com", "ScInterpreter::MEMat" );
     mM->FillDouble(0.0, 0, 0, n-1, n-1);
     for (SCSIZE i = 0; i < n; i++)
         mM->PutDouble(1.0, i, i);
@@ -631,6 +660,7 @@ void ScInterpreter::MFastMult(ScMatrix* pA, ScMatrix* pB, ScMatrix* pR,
                               SCSIZE n, SCSIZE m, SCSIZE l)
         // Multipliziert n x m Mat a mit m x l Mat b nach Mat r
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "Eike.Rathke@sun.com", "ScInterpreter::MFastMult" );
     double sum;
     for (SCSIZE i = 0; i < n; i++)
     {
@@ -800,6 +830,7 @@ static void lcl_LUP_solve( const ScMatrix* mLU, const SCSIZE n,
 
 void ScInterpreter::ScMatDet()
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "Eike.Rathke@sun.com", "ScInterpreter::ScMatDet" );
     if ( MustHaveParamCount( GetByte(), 1 ) )
     {
         ScMatrixRef pMat = GetMatrix();
@@ -846,6 +877,7 @@ void ScInterpreter::ScMatDet()
 
 void ScInterpreter::ScMatInv()
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "Eike.Rathke@sun.com", "ScInterpreter::ScMatInv" );
     if ( MustHaveParamCount( GetByte(), 1 ) )
     {
         ScMatrixRef pMat = GetMatrix();
@@ -947,6 +979,7 @@ void ScInterpreter::ScMatInv()
 
 void ScInterpreter::ScMatMult()
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "Eike.Rathke@sun.com", "ScInterpreter::ScMatMult" );
     if ( MustHaveParamCount( GetByte(), 2 ) )
     {
         ScMatrixRef pMat2 = GetMatrix();
@@ -996,6 +1029,7 @@ void ScInterpreter::ScMatMult()
 
 void ScInterpreter::ScMatTrans()
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "Eike.Rathke@sun.com", "ScInterpreter::ScMatTrans" );
     if ( MustHaveParamCount( GetByte(), 1 ) )
     {
         ScMatrixRef pMat = GetMatrix();
@@ -1018,57 +1052,34 @@ void ScInterpreter::ScMatTrans()
     }
 }
 
-ScMatrixRef ScInterpreter::MatAdd(ScMatrix* pMat1, ScMatrix* pMat2)
+
+/** Minimum extent of one result matrix dimension.
+    For a row or column vector to be replicated the larger matrix dimension is
+    returned, else the smaller dimension.
+ */
+inline SCSIZE lcl_GetMinExtent( SCSIZE n1, SCSIZE n2 )
 {
-    SCSIZE nC1, nC2, nMinC;
-    SCSIZE nR1, nR2, nMinR;
-    SCSIZE i, j;
-    pMat1->GetDimensions(nC1, nR1);
-    pMat2->GetDimensions(nC2, nR2);
-    if (nC1 < nC2)
-        nMinC = nC1;
+    if (n1 == 1)
+        return n2;
+    else if (n2 == 1)
+        return n1;
+    else if (n1 < n2)
+        return n1;
     else
-        nMinC = nC2;
-    if (nR1 < nR2)
-        nMinR = nR1;
-    else
-        nMinR = nR2;
-    ScMatrixRef xResMat = GetNewMat(nMinC, nMinR);
-    if (xResMat)
-    {
-        ScMatrix* pResMat = xResMat;
-        for (i = 0; i < nMinC; i++)
-        {
-            for (j = 0; j < nMinR; j++)
-            {
-                if (pMat1->IsValueOrEmpty(i,j) && pMat2->IsValueOrEmpty(i,j))
-                    pResMat->PutDouble( ::rtl::math::approxAdd( pMat1->GetDouble(i,j),
-                                       pMat2->GetDouble(i,j)), i, j);
-                else
-                    pResMat->PutString(ScGlobal::GetRscString(
-                                                    STR_NO_VALUE), i, j);
-            }
-        }
-    }
-    return xResMat;
+        return n2;
 }
 
-ScMatrixRef ScInterpreter::MatSub(ScMatrix* pMat1, ScMatrix* pMat2)
+template<class _Function>
+ScMatrixRef lcl_MatrixCalculation(const _Function& _pOperation,ScMatrix* pMat1, ScMatrix* pMat2,ScInterpreter* _pIterpreter)
 {
     SCSIZE nC1, nC2, nMinC;
     SCSIZE nR1, nR2, nMinR;
     SCSIZE i, j;
     pMat1->GetDimensions(nC1, nR1);
     pMat2->GetDimensions(nC2, nR2);
-    if (nC1 < nC2)
-        nMinC = nC1;
-    else
-        nMinC = nC2;
-    if (nR1 < nR2)
-        nMinR = nR1;
-    else
-        nMinR = nR2;
-    ScMatrixRef xResMat = GetNewMat(nMinC, nMinR);
+    nMinC = lcl_GetMinExtent( nC1, nC2);
+    nMinR = lcl_GetMinExtent( nR1, nR2);
+    ScMatrixRef xResMat = _pIterpreter->GetNewMat(nMinC, nMinR);
     if (xResMat)
     {
         ScMatrix* pResMat = xResMat;
@@ -1077,117 +1088,12 @@ ScMatrixRef ScInterpreter::MatSub(ScMatrix* pMat1, ScMatrix* pMat2)
             for (j = 0; j < nMinR; j++)
             {
                 if (pMat1->IsValueOrEmpty(i,j) && pMat2->IsValueOrEmpty(i,j))
-                    pResMat->PutDouble( ::rtl::math::approxSub( pMat1->GetDouble(i,j),
-                                       pMat2->GetDouble(i,j)), i, j);
+                {
+                    double d = _pOperation(pMat1->GetDouble(i,j),pMat2->GetDouble(i,j));
+                    pResMat->PutDouble( d, i, j);
+                }
                 else
-                    pResMat->PutString(ScGlobal::GetRscString(
-                                                    STR_NO_VALUE), i, j);
-            }
-        }
-    }
-    return xResMat;
-}
-
-ScMatrixRef ScInterpreter::MatMul(ScMatrix* pMat1, ScMatrix* pMat2)
-{
-    SCSIZE nC1, nC2, nMinC;
-    SCSIZE nR1, nR2, nMinR;
-    SCSIZE i, j;
-    pMat1->GetDimensions(nC1, nR1);
-    pMat2->GetDimensions(nC2, nR2);
-    if (nC1 < nC2)
-        nMinC = nC1;
-    else
-        nMinC = nC2;
-    if (nR1 < nR2)
-        nMinR = nR1;
-    else
-        nMinR = nR2;
-    ScMatrixRef xResMat = GetNewMat(nMinC, nMinR);
-    if (xResMat)
-    {
-        ScMatrix* pResMat = xResMat;
-        for (i = 0; i < nMinC; i++)
-        {
-            for (j = 0; j < nMinR; j++)
-            {
-                if (pMat1->IsValueOrEmpty(i,j) && pMat2->IsValueOrEmpty(i,j))
-                    pResMat->PutDouble(pMat1->GetDouble(i,j) *
-                                       pMat2->GetDouble(i,j), i, j);
-                else
-                    pResMat->PutString(ScGlobal::GetRscString(
-                                                    STR_NO_VALUE), i, j);
-            }
-        }
-    }
-    return xResMat;
-}
-
-ScMatrixRef ScInterpreter::MatDiv(ScMatrix* pMat1, ScMatrix* pMat2)
-{
-    SCSIZE nC1, nC2, nMinC;
-    SCSIZE nR1, nR2, nMinR;
-    SCSIZE i, j;
-    pMat1->GetDimensions(nC1, nR1);
-    pMat2->GetDimensions(nC2, nR2);
-    if (nC1 < nC2)
-        nMinC = nC1;
-    else
-        nMinC = nC2;
-    if (nR1 < nR2)
-        nMinR = nR1;
-    else
-        nMinR = nR2;
-    ScMatrixRef xResMat = GetNewMat(nMinC, nMinR);
-    if (xResMat)
-    {
-        ScMatrix* pResMat = xResMat;
-        for (i = 0; i < nMinC; i++)
-        {
-            for (j = 0; j < nMinR; j++)
-            {
-                if (pMat1->IsValueOrEmpty(i,j) && pMat2->IsValueOrEmpty(i,j))
-                    pResMat->PutDouble(
-                            div( pMat1->GetDouble(i,j), pMat2->GetDouble(i,j)),
-                            i, j);
-                else
-                    pResMat->PutString(ScGlobal::GetRscString(
-                                                    STR_NO_VALUE), i, j);
-            }
-        }
-    }
-    return xResMat;
-}
-
-ScMatrixRef ScInterpreter::MatPow(ScMatrix* pMat1, ScMatrix* pMat2)
-{
-    SCSIZE nC1, nC2, nMinC;
-    SCSIZE nR1, nR2, nMinR;
-    SCSIZE i, j;
-    pMat1->GetDimensions(nC1, nR1);
-    pMat2->GetDimensions(nC2, nR2);
-    if (nC1 < nC2)
-        nMinC = nC1;
-    else
-        nMinC = nC2;
-    if (nR1 < nR2)
-        nMinR = nR1;
-    else
-        nMinR = nR2;
-    ScMatrixRef xResMat = GetNewMat(nMinC, nMinR);
-    if (xResMat)
-    {
-        ScMatrix* pResMat = xResMat;
-        for (i = 0; i < nMinC; i++)
-        {
-            for (j = 0; j < nMinR; j++)
-            {
-                if (pMat1->IsValueOrEmpty(i,j) && pMat2->IsValueOrEmpty(i,j))
-                    pResMat->PutDouble(pow(pMat1->GetDouble(i,j),
-                                           pMat2->GetDouble(i,j)), i, j);
-                else
-                    pResMat->PutString(ScGlobal::GetRscString(
-                                                    STR_NO_VALUE), i, j);
+                    pResMat->PutString(ScGlobal::GetRscString(STR_NO_VALUE), i, j);
             }
         }
     }
@@ -1196,19 +1102,14 @@ ScMatrixRef ScInterpreter::MatPow(ScMatrix* pMat1, ScMatrix* pMat2)
 
 ScMatrixRef ScInterpreter::MatConcat(ScMatrix* pMat1, ScMatrix* pMat2)
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "Eike.Rathke@sun.com", "ScInterpreter::MatConcat" );
     SCSIZE nC1, nC2, nMinC;
     SCSIZE nR1, nR2, nMinR;
     SCSIZE i, j;
     pMat1->GetDimensions(nC1, nR1);
     pMat2->GetDimensions(nC2, nR2);
-    if (nC1 < nC2)
-        nMinC = nC1;
-    else
-        nMinC = nC2;
-    if (nR1 < nR2)
-        nMinR = nR1;
-    else
-        nMinR = nR2;
+    nMinC = lcl_GetMinExtent( nC1, nC2);
+    nMinR = lcl_GetMinExtent( nR1, nR2);
     ScMatrixRef xResMat = GetNewMat(nMinC, nMinR);
     if (xResMat)
     {
@@ -1265,6 +1166,12 @@ void lcl_GetDiffDateTimeFmtType( short& nFuncFmt, short nFmt1, short nFmt2 )
 
 void ScInterpreter::ScAdd()
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "Eike.Rathke@sun.com", "ScInterpreter::ScAdd" );
+    CalculateAddSub(FALSE);
+}
+void ScInterpreter::CalculateAddSub(BOOL _bSub)
+{
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "Eike.Rathke@sun.com", "ScInterpreter::CalculateAddSub" );
     ScMatrixRef pMat1 = NULL;
     ScMatrixRef pMat2 = NULL;
     double fVal1 = 0.0, fVal2 = 0.0;
@@ -1317,7 +1224,18 @@ void ScInterpreter::ScAdd()
     }
     if (pMat1 && pMat2)
     {
-        ScMatrixRef pResMat = MatAdd(pMat1, pMat2);
+        ScMatrixRef pResMat;
+        if ( _bSub )
+        {
+            MatrixSub aSub;
+            pResMat = lcl_MatrixCalculation(aSub ,pMat1, pMat2,this);
+        }
+        else
+        {
+            MatrixAdd aAdd;
+            pResMat = lcl_MatrixCalculation(aAdd ,pMat1, pMat2,this);
+        }
+
         if (!pResMat)
             PushNoValue();
         else
@@ -1326,32 +1244,51 @@ void ScInterpreter::ScAdd()
     else if (pMat1 || pMat2)
     {
         double fVal;
+        BOOL bFlag;
         ScMatrixRef pMat = pMat1;
         if (!pMat)
         {
             fVal = fVal1;
             pMat = pMat2;
+            bFlag = TRUE;           // double - Matrix
         }
         else
+        {
             fVal = fVal2;
+            bFlag = FALSE;          // Matrix - double
+        }
         SCSIZE nC, nR;
         pMat->GetDimensions(nC, nR);
         ScMatrixRef pResMat = GetNewMat(nC, nR);
         if (pResMat)
         {
             SCSIZE nCount = nC * nR;
-            for ( SCSIZE i = 0; i < nCount; i++ )
+            if (bFlag || !_bSub )
             {
-                if (pMat->IsValue(i))
-                    pResMat->PutDouble( ::rtl::math::approxAdd( pMat->GetDouble(i), fVal), i);
-                else
-                    pResMat->PutString(ScGlobal::GetRscString(STR_NO_VALUE), i);
+                for ( SCSIZE i = 0; i < nCount; i++ )
+                {
+                    if (pMat->IsValue(i))
+                        pResMat->PutDouble( _bSub ? ::rtl::math::approxSub( fVal, pMat->GetDouble(i)) : ::rtl::math::approxAdd( pMat->GetDouble(i), fVal), i);
+                    else
+                        pResMat->PutString(ScGlobal::GetRscString(STR_NO_VALUE), i);
+                } // for ( SCSIZE i = 0; i < nCount; i++ )
+            } // if (bFlag || !_bSub )
+            else
+            {
+                for ( SCSIZE i = 0; i < nCount; i++ )
+                {   if (pMat->IsValue(i))
+                        pResMat->PutDouble( ::rtl::math::approxSub( pMat->GetDouble(i), fVal), i);
+                    else
+                        pResMat->PutString(ScGlobal::GetRscString(STR_NO_VALUE), i);
+                } // for ( SCSIZE i = 0; i < nCount; i++ )
             }
             PushMatrix(pResMat);
         }
         else
             PushIllegalArgument();
     }
+    else if ( _bSub )
+        PushDouble( ::rtl::math::approxSub( fVal1, fVal2 ) );
     else
         PushDouble( ::rtl::math::approxAdd( fVal1, fVal2 ) );
     if ( nFmtCurrencyType == NUMBERFORMAT_CURRENCY )
@@ -1369,6 +1306,7 @@ void ScInterpreter::ScAdd()
 
 void ScInterpreter::ScAmpersand()
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "Eike.Rathke@sun.com", "ScInterpreter::ScAmpersand" );
     ScMatrixRef pMat1 = NULL;
     ScMatrixRef pMat2 = NULL;
     String sStr1, sStr2;
@@ -1460,124 +1398,13 @@ void ScInterpreter::ScAmpersand()
 
 void ScInterpreter::ScSub()
 {
-    ScMatrixRef pMat1 = NULL;
-    ScMatrixRef pMat2 = NULL;
-    double fVal1 = 0.0, fVal2 = 0.0;
-    short nFmt1, nFmt2;
-    nFmt1 = nFmt2 = NUMBERFORMAT_UNDEFINED;
-    short nFmtCurrencyType = nCurFmtType;
-    ULONG nFmtCurrencyIndex = nCurFmtIndex;
-    short nFmtPercentType = nCurFmtType;
-    if ( GetStackType() == svMatrix )
-        pMat2 = GetMatrix();
-    else
-    {
-        fVal2 = GetDouble();
-        switch ( nCurFmtType )
-        {
-            case NUMBERFORMAT_DATE :
-            case NUMBERFORMAT_TIME :
-            case NUMBERFORMAT_DATETIME :
-                nFmt2 = nCurFmtType;
-            break;
-            case NUMBERFORMAT_CURRENCY :
-                nFmtCurrencyType = nCurFmtType;
-                nFmtCurrencyIndex = nCurFmtIndex;
-            break;
-            case NUMBERFORMAT_PERCENT :
-                nFmtPercentType = NUMBERFORMAT_PERCENT;
-            break;
-        }
-    }
-    if ( GetStackType() == svMatrix )
-        pMat1 = GetMatrix();
-    else
-    {
-        fVal1 = GetDouble();
-        switch ( nCurFmtType )
-        {
-            case NUMBERFORMAT_DATE :
-            case NUMBERFORMAT_TIME :
-            case NUMBERFORMAT_DATETIME :
-                nFmt1 = nCurFmtType;
-            break;
-            case NUMBERFORMAT_CURRENCY :
-                nFmtCurrencyType = nCurFmtType;
-                nFmtCurrencyIndex = nCurFmtIndex;
-            break;
-            case NUMBERFORMAT_PERCENT :
-                nFmtPercentType = NUMBERFORMAT_PERCENT;
-            break;
-        }
-    }
-    if (pMat1 && pMat2)
-    {
-        ScMatrixRef pResMat = MatSub(pMat1, pMat2);
-        if (!pResMat)
-            PushNoValue();
-        else
-            PushMatrix(pResMat);
-    }
-    else if (pMat1 || pMat2)
-    {
-        double fVal;
-        BOOL bFlag;
-        ScMatrixRef pMat = pMat1;
-        if (!pMat)
-        {
-            fVal = fVal1;
-            pMat = pMat2;
-            bFlag = TRUE;           // double - Matrix
-        }
-        else
-        {
-            fVal = fVal2;
-            bFlag = FALSE;          // Matrix - double
-        }
-        SCSIZE nC, nR;
-        pMat->GetDimensions(nC, nR);
-        ScMatrixRef pResMat = GetNewMat(nC, nR);
-        if (pResMat)
-        {   // mehr klammern wg. compiler macke
-            SCSIZE nCount = nC * nR;
-            if (bFlag)
-            {   for ( SCSIZE i = 0; i < nCount; i++ )
-                {   if (pMat->IsValue(i))
-                        pResMat->PutDouble( ::rtl::math::approxSub( fVal, pMat->GetDouble(i)), i);
-                    else
-                        pResMat->PutString(ScGlobal::GetRscString(STR_NO_VALUE), i);
-                }
-            }
-            else
-            {   for ( SCSIZE i = 0; i < nCount; i++ )
-                {   if (pMat->IsValue(i))
-                        pResMat->PutDouble( ::rtl::math::approxSub( pMat->GetDouble(i), fVal), i);
-                    else
-                        pResMat->PutString(ScGlobal::GetRscString(STR_NO_VALUE), i);
-                }
-            }
-            PushMatrix(pResMat);
-        }
-        else
-            PushIllegalArgument();
-    }
-    else
-        PushDouble( ::rtl::math::approxSub( fVal1, fVal2 ) );
-    if ( nFmtCurrencyType == NUMBERFORMAT_CURRENCY )
-    {
-        nFuncFmtType = nFmtCurrencyType;
-        nFuncFmtIndex = nFmtCurrencyIndex;
-    }
-    else
-    {
-        lcl_GetDiffDateTimeFmtType( nFuncFmtType, nFmt1, nFmt2 );
-        if ( nFmtPercentType == NUMBERFORMAT_PERCENT && nFuncFmtType == NUMBERFORMAT_NUMBER )
-            nFuncFmtType = NUMBERFORMAT_PERCENT;
-    }
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "Eike.Rathke@sun.com", "ScInterpreter::ScSub" );
+    CalculateAddSub(TRUE);
 }
 
 void ScInterpreter::ScMul()
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "Eike.Rathke@sun.com", "ScInterpreter::ScMul" );
     ScMatrixRef pMat1 = NULL;
     ScMatrixRef pMat2 = NULL;
     double fVal1 = 0.0, fVal2 = 0.0;
@@ -1611,7 +1438,8 @@ void ScInterpreter::ScMul()
     }
     if (pMat1 && pMat2)
     {
-        ScMatrixRef pResMat = MatMul(pMat1, pMat2);
+        MatrixMul aMul;
+        ScMatrixRef pResMat = lcl_MatrixCalculation(aMul,pMat1, pMat2,this);
         if (!pResMat)
             PushNoValue();
         else
@@ -1655,6 +1483,7 @@ void ScInterpreter::ScMul()
 
 void ScInterpreter::ScDiv()
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "Eike.Rathke@sun.com", "ScInterpreter::ScDiv" );
     ScMatrixRef pMat1 = NULL;
     ScMatrixRef pMat2 = NULL;
     double fVal1 = 0.0, fVal2 = 0.0;
@@ -1684,7 +1513,8 @@ void ScInterpreter::ScDiv()
     }
     if (pMat1 && pMat2)
     {
-        ScMatrixRef pResMat = MatDiv(pMat1, pMat2);
+        MatrixDiv aDiv;
+        ScMatrixRef pResMat = lcl_MatrixCalculation(aDiv,pMat1, pMat2,this);
         if (!pResMat)
             PushNoValue();
         else
@@ -1744,12 +1574,14 @@ void ScInterpreter::ScDiv()
 
 void ScInterpreter::ScPower()
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "Eike.Rathke@sun.com", "ScInterpreter::ScPower" );
     if ( MustHaveParamCount( GetByte(), 2 ) )
         ScPow();
 }
 
 void ScInterpreter::ScPow()
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "Eike.Rathke@sun.com", "ScInterpreter::ScPow" );
     ScMatrixRef pMat1 = NULL;
     ScMatrixRef pMat2 = NULL;
     double fVal1 = 0.0, fVal2 = 0.0;
@@ -1763,7 +1595,8 @@ void ScInterpreter::ScPow()
         fVal1 = GetDouble();
     if (pMat1 && pMat2)
     {
-        ScMatrixRef pResMat = MatPow(pMat1, pMat2);
+        MatrixPow aPow;
+        ScMatrixRef pResMat = lcl_MatrixCalculation(aPow,pMat1, pMat2,this);
         if (!pResMat)
             PushNoValue();
         else
@@ -1816,6 +1649,7 @@ void ScInterpreter::ScPow()
 
 void ScInterpreter::ScSumProduct()
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "Eike.Rathke@sun.com", "ScInterpreter::ScSumProduct" );
     BYTE nParamCount = GetByte();
     if ( !MustHaveParamCount( nParamCount, 1, 30 ) )
         return;
@@ -1833,6 +1667,7 @@ void ScInterpreter::ScSumProduct()
     SCSIZE nR, nR1;
     pMat2->GetDimensions(nC, nR);
     pMat = pMat2;
+    MatrixMul aMul;
     for (USHORT i = 1; i < nParamCount; i++)
     {
         pMat1 = GetMatrix();
@@ -1847,7 +1682,7 @@ void ScInterpreter::ScSumProduct()
             PushNoValue();
             return;
         }
-        ScMatrixRef pResMat = MatMul(pMat1, pMat);
+        ScMatrixRef pResMat = lcl_MatrixCalculation(aMul,pMat1, pMat,this);
         if (!pResMat)
         {
             PushNoValue();
@@ -1868,6 +1703,12 @@ void ScInterpreter::ScSumProduct()
 
 void ScInterpreter::ScSumX2MY2()
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "Eike.Rathke@sun.com", "ScInterpreter::ScSumX2MY2" );
+    CalculateSumX2MY2SumX2DY2(FALSE);
+}
+void ScInterpreter::CalculateSumX2MY2SumX2DY2(BOOL _bSumX2DY2)
+{
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "Eike.Rathke@sun.com", "ScInterpreter::CalculateSumX2MY2SumX2DY2" );
     if ( !MustHaveParamCount( GetByte(), 2 ) )
         return;
 
@@ -1898,50 +1739,23 @@ void ScInterpreter::ScSumX2MY2()
                 fVal = pMat1->GetDouble(i,j);
                 fSum += fVal * fVal;
                 fVal = pMat2->GetDouble(i,j);
-                fSum -= fVal * fVal;
+                if ( _bSumX2DY2 )
+                    fSum += fVal * fVal;
+                else
+                    fSum -= fVal * fVal;
             }
     PushDouble(fSum);
 }
 
 void ScInterpreter::ScSumX2DY2()
 {
-    if ( !MustHaveParamCount( GetByte(), 2 ) )
-        return;
-
-    ScMatrixRef pMat1 = NULL;
-    ScMatrixRef pMat2 = NULL;
-    SCSIZE i, j;
-    pMat2 = GetMatrix();
-    pMat1 = GetMatrix();
-    if (!pMat2 || !pMat1)
-    {
-        PushIllegalParameter();
-        return;
-    }
-    SCSIZE nC1, nC2;
-    SCSIZE nR1, nR2;
-    pMat2->GetDimensions(nC2, nR2);
-    pMat1->GetDimensions(nC1, nR1);
-    if (nC1 != nC2 || nR1 != nR2)
-    {
-        PushNoValue();
-        return;
-    }
-    double fVal, fSum = 0.0;
-    for (i = 0; i < nC1; i++)
-        for (j = 0; j < nR1; j++)
-            if (!pMat1->IsString(i,j) && !pMat2->IsString(i,j))
-            {
-                fVal = pMat1->GetDouble(i,j);
-                fSum += fVal * fVal;
-                fVal = pMat2->GetDouble(i,j);
-                fSum += fVal * fVal;
-            }
-    PushDouble(fSum);
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "Eike.Rathke@sun.com", "ScInterpreter::ScSumX2DY2" );
+    CalculateSumX2MY2SumX2DY2(TRUE);
 }
 
 void ScInterpreter::ScSumXMY2()
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "Eike.Rathke@sun.com", "ScInterpreter::ScSumXMY2" );
     if ( !MustHaveParamCount( GetByte(), 2 ) )
         return;
 
@@ -1962,12 +1776,12 @@ void ScInterpreter::ScSumXMY2()
     {
         PushNoValue();
         return;
-    }
-    ScMatrixRef pResMat = MatSub(pMat1, pMat2);
+    } // if (nC1 != nC2 || nR1 != nR2)
+    MatrixSub aSub;
+    ScMatrixRef pResMat = lcl_MatrixCalculation(aSub,pMat1, pMat2,this);
     if (!pResMat)
     {
         PushNoValue();
-        return;
     }
     else
     {
@@ -1985,6 +1799,7 @@ void ScInterpreter::ScSumXMY2()
 
 void ScInterpreter::ScFrequency()
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "Eike.Rathke@sun.com", "ScInterpreter::ScFrequency" );
     if ( !MustHaveParamCount( GetByte(), 2 ) )
         return;
 
@@ -2141,9 +1956,205 @@ BOOL ScInterpreter::RGetVariances( ScMatrix* pV, ScMatrix* pX,
     }
     return bOk;
 }
+// -----------------------------------------------------------------------------
+void ScInterpreter::Calculate(ScMatrixRef& pResMat,ScMatrixRef& pE,ScMatrixRef& pQ,ScMatrixRef& pV,ScMatrixRef& pMatX,BOOL bConstant,SCSIZE N,SCSIZE M,BYTE nCase)
+{
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "Eike.Rathke@sun.com", "ScInterpreter::RGetVariances" );
+    // pE[0]    := Sigma i=1...n (Yi)
+    // pE[k]    := Sigma i=1...n (Xki*Yi)
+    // pE[M+1]  := Sigma i=1...n (Yi**2)
+    // pQ[0,M+1]:= B
+    // pQ[k,M+1]:= Mk
+    double fSQR, fSQT, fSQE;
+    fSQT = pE->GetDouble(M+1)
+        - pE->GetDouble(0) * pE->GetDouble(0) / (double)N;
+    fSQR = pE->GetDouble(M+1);
+    SCSIZE i, j;
+    for (i = 0; i < M+1; i++)
+        fSQR -= pQ->GetDouble(i, M+1) * pE->GetDouble(i);
+    fSQE = fSQT-fSQR;
+    // r2 (Bestimmtheitsmass, 0...1)
+    if (fSQT == 0.0)
+        pResMat->PutString(ScGlobal::GetRscString(STR_NO_VALUE), 0, 2);
+    else
+        pResMat->PutDouble (fSQE/fSQT, 0, 2);
+    // ssReg (Regressions-Quadratsumme)
+    pResMat->PutDouble(fSQE, 0, 4);
+    // ssResid (Residual-Quadratsumme, Summe der Abweichungsquadrate)
+    pResMat->PutDouble(fSQR, 1, 4);
+    for (i = 2; i < 5; i++)
+        for (j = 2; j < M+1; j++)
+            pResMat->PutString(ScGlobal::GetRscString(STR_NV_STR), j, i);
+    if (bConstant)
+    {
+        if (N-M-1 == 0)
+        {
+            pResMat->PutString(ScGlobal::GetRscString(STR_NO_VALUE), 1, 2);
+            for (i = 0; i < M+1; i++)
+                pResMat->PutString(ScGlobal::GetRscString(STR_NO_VALUE), i, 1);
+        }
+        else
+        {
+            double fSE2 = fSQR/(N-M-1);
+            // sey (Standardfehler des Schaetzwertes y)
+            pResMat->PutDouble(sqrt(fSE2), 1, 2);
+            // sen...se1 (Standardfehler der Koeffizienten mn...m1)
+            // seb (Standardfehler der Konstanten b)
+            if ( RGetVariances( pV, pMatX, M+1, N, nCase != 2, FALSE ) )
+            {
+                for (i = 0; i < M+1; i++)
+                    pResMat->PutDouble( sqrt(fSE2 * pV->GetDouble(i)), M-i, 1 );
+            }
+            else
+            {
+                for (i = 0; i < M+1; i++)
+                    pResMat->PutString(ScGlobal::GetRscString(STR_NV_STR), i, 1);
+            }
+        }
+        // F (F-Statistik)
+        if (fSQR == 0.0)
+            pResMat->PutString(ScGlobal::GetRscString(STR_NO_VALUE), 0, 3);
+        else
+            pResMat->PutDouble(((double)(N-M-1))*fSQE/fSQR/((double)M),0, 3);
+        // df (Freiheitsgrad)
+        pResMat->PutDouble(((double)(N-M-1)), 1, 3);
+    }
+    else
+    {
+        if (N-M == 0)
+        {
+            pResMat->PutString(ScGlobal::GetRscString(STR_NO_VALUE), 1, 2);
+            for (i = 0; i < M+1; i++)
+                pResMat->PutString(ScGlobal::GetRscString(STR_NO_VALUE), i, 1);
+        }
+        else
+        {
+            double fSE2 = fSQR/(N-M);
+            pResMat->PutDouble(sqrt(fSE2), 1, 2);
+            if ( RGetVariances( pV, pMatX, M, N, nCase != 2, TRUE ) )
+            {
+                for (i = 0; i < M; i++)
+                    pResMat->PutDouble( sqrt(fSE2 * pV->GetDouble(i)), M-i-1, 1 );
+                pResMat->PutString(ScGlobal::GetRscString(STR_NV_STR), M, 1);
+            }
+            else
+            {
+                for (i = 0; i < M+1; i++)
+                    pResMat->PutString(ScGlobal::GetRscString(STR_NV_STR), i, 1);
+            }
+        }
+        if (fSQR == 0.0)
+            pResMat->PutString(ScGlobal::GetRscString(STR_NO_VALUE), 0, 3);
+        else
+            pResMat->PutDouble(((double)(N-M))*fSQE/fSQR/((double)M),0, 3);
+        pResMat->PutDouble(((double)(N-M)), 1, 3);
+    }
+}
 
 void ScInterpreter::ScRGP()
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "Eike.Rathke@sun.com", "ScInterpreter::ScRGP" );
+    CalulateRGPRKP(FALSE);
+}
+bool ScInterpreter::CheckMatrix(BOOL _bLOG,BOOL _bTrendGrowth,BYTE& nCase,SCSIZE& nCX,SCSIZE& nCY,SCSIZE& nRX,SCSIZE& nRY,SCSIZE& M,SCSIZE& N,ScMatrixRef& pMatX,ScMatrixRef& pMatY)
+{
+    nCX = 0;
+    nCY = 0;
+    nRX = 0;
+    nRY = 0;
+    M = 0;
+    N = 0;
+    pMatY->GetDimensions(nCY, nRY);
+    const SCSIZE nCountY = nCY * nRY;
+    for ( SCSIZE i = 0; i < nCountY; i++ )
+    {
+        if (!pMatY->IsValue(i))
+        {
+            PushIllegalArgument();
+            return false;
+        } // if (!pMatY->IsValue(i))
+    } // for ( SCSIZE i = 0; i < nCountY; i++ )
+    if ( _bLOG )
+    {
+        for (SCSIZE nElem = 0; nElem < nCountY; nElem++)
+        {
+            const double fVal = pMatY->GetDouble(nElem);
+            if (fVal <= 0.0)
+            {
+                PushIllegalArgument();
+                return false;
+            }
+            else
+                pMatY->PutDouble(log(fVal), nElem);
+        } // for (nElem = 0; nElem < nCountY; nElem++)
+    } // if ( _bRKP )
+
+
+    if (pMatX)
+    {
+        pMatX->GetDimensions(nCX, nRX);
+        const SCSIZE nCountX = nCX * nRX;
+        for ( SCSIZE i = 0; i < nCountX; i++ )
+            if (!pMatX->IsValue(i))
+            {
+                PushIllegalArgument();
+                return false;
+            }
+        if (nCX == nCY && nRX == nRY)
+            nCase = 1;                  // einfache Regression
+        else if (nCY != 1 && nRY != 1)
+        {
+            PushIllegalArgument();
+            return false;
+        }
+        else if (nCY == 1)
+        {
+            if (nRX != nRY)
+            {
+                PushIllegalArgument();
+                return false;
+            }
+            else
+            {
+                nCase = 2;              // zeilenweise
+                N = nRY;
+                M = nCX;
+            }
+        }
+        else if (nCX != nCY)
+        {
+            PushIllegalArgument();
+            return false;
+        }
+        else
+        {
+            nCase = 3;                  // spaltenweise
+            N = nCY;
+            M = nRX;
+        }
+    }
+    else
+    {
+        pMatX = GetNewMat(nCY, nRY);
+        if ( _bTrendGrowth )
+        {
+            nCX = nCY;
+            nRX = nRY;
+        }
+        if (!pMatX)
+        {
+            PushIllegalArgument();
+            return false;
+        }
+        for ( SCSIZE i = 1; i <= nCountY; i++ )
+            pMatX->PutDouble((double)i, i-1);
+        nCase = 1;
+    }
+    return true;
+}
+void ScInterpreter::CalulateRGPRKP(BOOL _bRKP)
+{
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "Eike.Rathke@sun.com", "ScInterpreter::CheckMatrix" );
     BYTE nParamCount = GetByte();
     if ( !MustHaveParamCount( nParamCount, 1, 4 ) )
         return;
@@ -2167,74 +2178,14 @@ void ScInterpreter::ScRGP()
     {
         PushIllegalParameter();
         return;
-    }
+    } // if (!pMatY)
     BYTE nCase;                         // 1 = normal, 2,3 = mehrfach
     SCSIZE nCX, nCY;
     SCSIZE nRX, nRY;
     SCSIZE M = 0, N = 0;
-    pMatY->GetDimensions(nCY, nRY);
-    SCSIZE nCountY = nCY * nRY;
-    for ( SCSIZE i = 0; i < nCountY; i++ )
-        if (!pMatY->IsValue(i))
-        {
-            PushIllegalArgument();
-            return;
-        }
-    if (pMatX)
-    {
-        pMatX->GetDimensions(nCX, nRX);
-        SCSIZE nCountX = nCX * nRX;
-        for ( SCSIZE i = 0; i < nCountX; i++ )
-            if (!pMatX->IsValue(i))
-            {
-                PushIllegalArgument();
-                return;
-            }
-        if (nCX == nCY && nRX == nRY)
-            nCase = 1;                  // einfache Regression
-        else if (nCY != 1 && nRY != 1)
-        {
-            PushIllegalArgument();
-            return;
-        }
-        else if (nCY == 1)
-        {
-            if (nRX != nRY)
-            {
-                PushIllegalArgument();
-                return;
-            }
-            else
-            {
-                nCase = 2;              // zeilenweise
-                N = nRY;
-                M = nCX;
-            }
-        }
-        else if (nCX != nCY)
-        {
-            PushIllegalArgument();
-            return;
-        }
-        else
-        {
-            nCase = 3;                  // spaltenweise
-            N = nCY;
-            M = nRX;
-        }
-    }
-    else
-    {
-        pMatX = GetNewMat(nCY, nRY);
-        if (!pMatX)
-        {
-            PushIllegalArgument();
-            return;
-        }
-        for ( SCSIZE i = 1; i <= nCountY; i++ )
-            pMatX->PutDouble((double)i, i-1);
-        nCase = 1;
-    }
+    if ( !CheckMatrix(_bRKP,FALSE,nCase,nCX,nCY,nRX,nRY,M,N,pMatX,pMatY) )
+        return;
+
     ScMatrixRef pResMat;
     if (nCase == 1)
     {
@@ -2283,8 +2234,8 @@ void ScInterpreter::ScRGP()
                 b = 0.0;
                 m = fSumXY/fSumSqrX;
             }
-            pResMat->PutDouble(m, 0, 0);
-            pResMat->PutDouble(b, 1, 0);
+            pResMat->PutDouble(_bRKP ? exp(m) : m, 0, 0);
+            pResMat->PutDouble(_bRKP ? exp(b) : b, 1, 0);
             if (bStats)
             {
                 double fY = fCount*fSumSqrY-fSumY*fSumY;
@@ -2315,8 +2266,8 @@ void ScInterpreter::ScRGP()
                 pResMat->PutDouble(fSyx, 1, 4);
             }
         }
-    }
-    else
+    } // if (nCase == 1)
+    if ( nCase != 1 )
     {
         SCSIZE i, j, k;
         if (!bStats)
@@ -2353,7 +2304,7 @@ void ScInterpreter::ScRGP()
                     pE->PutDouble( sumXikYk, i+1);
                     for (j = i; j < M; j++)
                     {
-                        double fVal = pMatX->GetDouble(j,k);
+                        const double fVal = pMatX->GetDouble(j,k);
                         double sumXikXjk = pQ->GetDouble(j+1, i+1) +
                              Xik * fVal;
                         pQ->PutDouble( sumXikXjk, j+1, i+1);
@@ -2382,7 +2333,7 @@ void ScInterpreter::ScRGP()
                     pE->PutDouble( sumXkiYk, i+1);
                     for (j = i; j < M; j++)
                     {
-                        double fVal = pMatX->GetDouble(k,j);
+                        const double fVal = pMatX->GetDouble(k,j);
                         double sumXkiXkj = pQ->GetDouble(j+1, i+1) +
                              Xki * fVal;
                         pQ->PutDouble( sumXkiXkj, j+1, i+1);
@@ -2391,593 +2342,220 @@ void ScInterpreter::ScRGP()
                 }
             }
         }
-        pQ->PutDouble((double)N, 0, 0);
-        if (bConstant)
-        {
-            SCSIZE S, L;
-            for (S = 0; S < M+1; S++)
-            {
-                i = S;
-                while (i < M+1 && pQ->GetDouble(i, S) == 0.0)
-                    i++;
-                if (i >= M+1)
-                {
-                    PushNoValue();
-                    return;
-                }
-                double fVal;
-                for (L = 0; L < M+2; L++)
-                {
-                    fVal = pQ->GetDouble(S, L);
-                    pQ->PutDouble(pQ->GetDouble(i, L), S, L);
-                    pQ->PutDouble(fVal, i, L);
-                }
-                fVal = 1.0/pQ->GetDouble(S, S);
-                for (L = 0; L < M+2; L++)
-                    pQ->PutDouble(pQ->GetDouble(S, L)*fVal, S, L);
-                for (i = 0; i < M+1; i++)
-                {
-                    if (i != S)
-                    {
-                        fVal = -pQ->GetDouble(i, S);
-                        for (L = 0; L < M+2; L++)
-                            pQ->PutDouble(
-                                pQ->GetDouble(i,L)+fVal*pQ->GetDouble(S,L),i,L);
-                    }
-                }
-            }
-        }
-        else
-        {
-            SCSIZE S, L;
-            for (S = 1; S < M+1; S++)
-            {
-                i = S;
-                while (i < M+1 && pQ->GetDouble(i, S) == 0.0)
-                    i++;
-                if (i >= M+1)
-                {
-                    PushNoValue();
-                    return;
-                }
-                double fVal;
-                for (L = 1; L < M+2; L++)
-                {
-                    fVal = pQ->GetDouble(S, L);
-                    pQ->PutDouble(pQ->GetDouble(i, L), S, L);
-                    pQ->PutDouble(fVal, i, L);
-                }
-                fVal = 1.0/pQ->GetDouble(S, S);
-                for (L = 1; L < M+2; L++)
-                    pQ->PutDouble(pQ->GetDouble(S, L)*fVal, S, L);
-                for (i = 1; i < M+1; i++)
-                {
-                    if (i != S)
-                    {
-                        fVal = -pQ->GetDouble(i, S);
-                        for (L = 1; L < M+2; L++)
-                            pQ->PutDouble(
-                                pQ->GetDouble(i,L)+fVal*pQ->GetDouble(S,L),i,L);
-                    }
-                }
-                pQ->PutDouble(0.0, 0, M+1);     // Konstante b
-            }
-        }
-        // mn ... m1, b
-        for (i = 0; i < M+1; i++)
-            pResMat->PutDouble(pQ->GetDouble(M-i,M+1), i, 0);
+        if ( !Calculate4(_bRKP,pResMat,pQ,bConstant,N,M) )
+            return;
+
         if (bStats)
-        {
-            // pE[0]    := Sigma i=1...n (Yi)
-            // pE[k]    := Sigma i=1...n (Xki*Yi)
-            // pE[M+1]  := Sigma i=1...n (Yi**2)
-            // pQ[0,M+1]:= B
-            // pQ[k,M+1]:= Mk
-            double fSQR, fSQT, fSQE;
-            fSQT = pE->GetDouble(M+1)
-                - pE->GetDouble(0) * pE->GetDouble(0) / (double)N;
-            fSQR = pE->GetDouble(M+1);
-            for (i = 0; i < M+1; i++)
-                fSQR -= pQ->GetDouble(i, M+1) * pE->GetDouble(i);
-            fSQE = fSQT-fSQR;
-            // r2 (Bestimmtheitsmass, 0...1)
-            if (fSQT == 0.0)
-                pResMat->PutString(ScGlobal::GetRscString(STR_NO_VALUE), 0, 2);
-            else
-                pResMat->PutDouble (fSQE/fSQT, 0, 2);
-            // ssReg (Regressions-Quadratsumme)
-            pResMat->PutDouble(fSQE, 0, 4);
-            // ssResid (Residual-Quadratsumme, Summe der Abweichungsquadrate)
-            pResMat->PutDouble(fSQR, 1, 4);
-            for (i = 2; i < 5; i++)
-                for (j = 2; j < M+1; j++)
-                    pResMat->PutString(ScGlobal::GetRscString(STR_NV_STR), j, i);
-            if (bConstant)
-            {
-                if (N-M-1 == 0)
-                {
-                    pResMat->PutString(ScGlobal::GetRscString(STR_NO_VALUE), 1, 2);
-                    for (i = 0; i < M+1; i++)
-                        pResMat->PutString(ScGlobal::GetRscString(STR_NO_VALUE), i, 1);
-                }
-                else
-                {
-                    double fSE2 = fSQR/(N-M-1);
-                    // sey (Standardfehler des Schaetzwertes y)
-                    pResMat->PutDouble(sqrt(fSE2), 1, 2);
-                    // sen...se1 (Standardfehler der Koeffizienten mn...m1)
-                    // seb (Standardfehler der Konstanten b)
-                    if ( RGetVariances( pV, pMatX, M+1, N, nCase != 2, FALSE ) )
-                    {
-                        for (i = 0; i < M+1; i++)
-                            pResMat->PutDouble( sqrt(fSE2 * pV->GetDouble(i)), M-i, 1 );
-                    }
-                    else
-                    {
-                        for (i = 0; i < M+1; i++)
-                            pResMat->PutString(ScGlobal::GetRscString(STR_NV_STR), i, 1);
-                    }
-                }
-                // F (F-Statistik)
-                if (fSQR == 0.0)
-                    pResMat->PutString(ScGlobal::GetRscString(STR_NO_VALUE), 0, 3);
-                else
-                    pResMat->PutDouble(((double)(N-M-1))*fSQE/fSQR/((double)M),0, 3);
-                // df (Freiheitsgrad)
-                pResMat->PutDouble(((double)(N-M-1)), 1, 3);
-            }
-            else
-            {
-                if (N-M == 0)
-                {
-                    pResMat->PutString(ScGlobal::GetRscString(STR_NO_VALUE), 1, 2);
-                    for (i = 0; i < M+1; i++)
-                        pResMat->PutString(ScGlobal::GetRscString(STR_NO_VALUE), i, 1);
-                }
-                else
-                {
-                    double fSE2 = fSQR/(N-M);
-                    pResMat->PutDouble(sqrt(fSE2), 1, 2);
-                    if ( RGetVariances( pV, pMatX, M, N, nCase != 2, TRUE ) )
-                    {
-                        for (i = 0; i < M; i++)
-                            pResMat->PutDouble( sqrt(fSE2 * pV->GetDouble(i)), M-i-1, 1 );
-                        pResMat->PutString(ScGlobal::GetRscString(STR_NV_STR), M, 1);
-                    }
-                    else
-                    {
-                        for (i = 0; i < M+1; i++)
-                            pResMat->PutString(ScGlobal::GetRscString(STR_NV_STR), i, 1);
-                    }
-                }
-                if (fSQR == 0.0)
-                    pResMat->PutString(ScGlobal::GetRscString(STR_NO_VALUE), 0, 3);
-                else
-                    pResMat->PutDouble(((double)(N-M))*fSQE/fSQR/((double)M),0, 3);
-                pResMat->PutDouble(((double)(N-M)), 1, 3);
-            }
-        }
+            Calculate(pResMat,pE,pQ,pV,pMatX,bConstant,N,M,nCase);
     }
     PushMatrix(pResMat);
 }
 
 void ScInterpreter::ScRKP()
 {
-    BYTE nParamCount = GetByte();
-    if ( !MustHaveParamCount( nParamCount, 1, 4 ) )
-        return;
-    BOOL bConstant, bStats;
-    if (nParamCount == 4)
-        bStats = GetBool();
-    else
-        bStats = FALSE;
-    if (nParamCount >= 3)
-        bConstant = GetBool();
-    else
-        bConstant = TRUE;
-    ScMatrixRef pMatX;
-    ScMatrixRef pMatY;
-    if (nParamCount >= 2)
-        pMatX = GetMatrix();
-    else
-        pMatX = NULL;
-    pMatY = GetMatrix();
-    if (!pMatY)
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "Eike.Rathke@sun.com", "ScInterpreter::ScRKP" );
+    CalulateRGPRKP(TRUE);
+}
+// -----------------------------------------------------------------------------
+bool ScInterpreter::Calculate4(BOOL _bExp,ScMatrixRef& pResMat,ScMatrixRef& pQ,BOOL bConstant,SCSIZE N,SCSIZE M)
+{
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "Eike.Rathke@sun.com", "ScInterpreter::Calculate4" );
+    pQ->PutDouble((double)N, 0, 0);
+    if (bConstant)
     {
-        PushIllegalParameter();
-        return;
-    }
-    BYTE nCase;                         // 1 = normal, 2,3 = mehrfach
-    SCSIZE nCX, nCY;
-    SCSIZE nRX, nRY;
-    SCSIZE M = 0, N = 0;
-    pMatY->GetDimensions(nCY, nRY);
-    SCSIZE nCountY = nCY * nRY;
-    SCSIZE nElem;
-    for (nElem = 0; nElem < nCountY; nElem++)
-        if (!pMatY->IsValue(nElem))
+        SCSIZE S, L;
+        for (S = 0; S < M+1; S++)
         {
-            PushIllegalArgument();
-            return;
-        }
-    for (nElem = 0; nElem < nCountY; nElem++)
-    {
-        double fVal = pMatY->GetDouble(nElem);
-        if (fVal <= 0.0)
-        {
-            PushIllegalArgument();
-            return;
-        }
-        else
-            pMatY->PutDouble(log(pMatY->GetDouble(nElem)), nElem);
-    }
-    if (pMatX)
-    {
-        pMatX->GetDimensions(nCX, nRX);
-        SCSIZE nCountX = nCX * nRX;
-        for (nElem = 0; nElem < nCountX; nElem++)
-            if (!pMatX->IsValue(nElem))
+            SCSIZE i = S;
+            while (i < M+1 && pQ->GetDouble(i, S) == 0.0)
+                i++;
+            if (i >= M+1)
             {
-                PushIllegalArgument();
-                return;
+                PushNoValue();
+                return false;
             }
-        if (nCX == nCY && nRX == nRY)
-            nCase = 1;                  // einfache Regression
-        else if (nCY != 1 && nRY != 1)
-        {
-            PushIllegalArgument();
-            return;
-        }
-        else if (nCY == 1)
-        {
-            if (nRX != nRY)
+            double fVal;
+            for (L = 0; L < M+2; L++)
             {
-                PushIllegalArgument();
-                return;
+                fVal = pQ->GetDouble(S, L);
+                pQ->PutDouble(pQ->GetDouble(i, L), S, L);
+                pQ->PutDouble(fVal, i, L);
             }
-            else
-            {
-                nCase = 2;              // zeilenweise
-                N = nRY;
-                M = nCX;
-            }
-        }
-        else if (nCX != nCY)
-        {
-            PushIllegalArgument();
-            return;
-        }
-        else
-        {
-            nCase = 3;                  // spaltenweise
-            N = nCY;
-            M = nRX;
-        }
-    }
-    else
-    {
-        pMatX = GetNewMat(nCY, nRY);
-        if (!pMatX)
-        {
-            PushIllegalArgument();
-            return;
-        }
-        for ( SCSIZE i = 1; i <= nCountY; i++ )
-            pMatX->PutDouble((double)i, i-1);
-        nCase = 1;
-    }
-    ScMatrixRef pResMat;
-    if (nCase == 1)
-    {
-        if (!bStats)
-            pResMat = GetNewMat(2,1);
-        else
-            pResMat = GetNewMat(2,5);
-        if (!pResMat)
-        {
-            PushIllegalArgument();
-            return;
-        }
-        double fCount   = 0.0;
-        double fSumX    = 0.0;
-        double fSumSqrX = 0.0;
-        double fSumY    = 0.0;
-        double fSumSqrY = 0.0;
-        double fSumXY   = 0.0;
-        double fValX, fValY;
-        for (SCSIZE i = 0; i < nCY; i++)
-            for (SCSIZE j = 0; j < nRY; j++)
-            {
-                fValX = pMatX->GetDouble(i,j);
-                fValY = pMatY->GetDouble(i,j);
-                fSumX    += fValX;
-                fSumSqrX += fValX * fValX;
-                fSumY    += fValY;
-                fSumSqrY += fValY * fValY;
-                fSumXY   += fValX*fValY;
-                fCount++;
-            }
-        if (fCount < 1.0)
-            PushNoValue();
-        else
-        {
-            double f1 = fCount*fSumXY-fSumX*fSumY;
-            double fX = fCount*fSumSqrX-fSumX*fSumX;
-            double b, m;
-            if (bConstant)
-            {
-                b = fSumY/fCount - f1/fX*fSumX/fCount;
-                m = f1/fX;
-            }
-            else
-            {
-                b = 0.0;
-                m = fSumXY/fSumSqrX;
-            }
-            pResMat->PutDouble(exp(m), 0, 0);
-            pResMat->PutDouble(exp(b), 1, 0);
-            if (bStats)
-            {
-                double fY = fCount*fSumSqrY-fSumY*fSumY;
-                double fSyx = fSumSqrY-b*fSumY-m*fSumXY;
-                double fR2 = f1*f1/(fX*fY);
-                pResMat->PutDouble (fR2, 0, 2);
-                if (fCount < 3.0)
-                {
-                    pResMat->PutString(ScGlobal::GetRscString(STR_NO_VALUE), 0, 1 );
-                    pResMat->PutString(ScGlobal::GetRscString(STR_NO_VALUE), 1, 1 );
-                    pResMat->PutString(ScGlobal::GetRscString(STR_NO_VALUE), 1, 2 );
-                    pResMat->PutString(ScGlobal::GetRscString(STR_NO_VALUE), 0, 3 );
-                }
-                else
-                {
-                    pResMat->PutDouble(sqrt(fSyx*fCount/(fX*(fCount-2.0))), 0, 1);
-                    pResMat->PutDouble(sqrt(fSyx*fSumSqrX/fX/(fCount-2.0)), 1, 1);
-                    pResMat->PutDouble(
-                        sqrt((fCount*fSumSqrY - fSumY*fSumY - f1*f1/fX)/
-                             (fCount*(fCount-2.0))), 1, 2);
-                    if (fR2 == 1.0)
-                        pResMat->PutString(ScGlobal::GetRscString(STR_NO_VALUE), 0, 3 );
-                    else
-                        pResMat->PutDouble(fR2*(fCount-2.0)/(1.0-fR2), 0, 3);
-                }
-                pResMat->PutDouble(((double)(nCY*nRY))-2.0, 1, 3);
-                pResMat->PutDouble(fY/fCount-fSyx, 0, 4);
-                pResMat->PutDouble(fSyx, 1, 4);
-            }
-        }
-    }
-    else
-    {
-        SCSIZE i, j, k;
-        if (!bStats)
-            pResMat = GetNewMat(M+1,1);
-        else
-            pResMat = GetNewMat(M+1,5);
-        if (!pResMat)
-        {
-            PushIllegalArgument();
-            return;
-        }
-        ScMatrixRef pQ = GetNewMat(M+1, M+2);
-        ScMatrixRef pE = GetNewMat(M+2, 1);
-        ScMatrixRef pV = GetNewMat(M+1, 1);
-        pE->PutDouble(0.0, M+1);
-        pQ->FillDouble(0.0, 0, 0, M, M+1);
-        if (nCase == 2)
-        {
-            for (k = 0; k < N; k++)
-            {
-                double Yk = pMatY->GetDouble(k);
-                pE->PutDouble( pE->GetDouble(M+1)+Yk*Yk, M+1 );
-                double sumYk = pQ->GetDouble(0, M+1) + Yk;
-                pQ->PutDouble( sumYk, 0, M+1 );
-                pE->PutDouble( sumYk, 0 );
-                for (i = 0; i < M; i++)
-                {
-                    double Xik = pMatX->GetDouble(i,k);
-                    double sumXik = pQ->GetDouble(0, i+1) + Xik;
-                    pQ->PutDouble( sumXik, 0, i+1);
-                    pQ->PutDouble( sumXik, i+1, 0);
-                    double sumXikYk = pQ->GetDouble(i+1, M+1) + Xik * Yk;
-                    pQ->PutDouble( sumXikYk, i+1, M+1);
-                    pE->PutDouble( sumXikYk, i+1);
-                    for (j = i; j < M; j++)
-                    {
-                        double sumXikXjk = pQ->GetDouble(j+1, i+1) +
-                             Xik * pMatX->GetDouble(j,k);
-                        pQ->PutDouble( sumXikXjk, j+1, i+1);
-                        pQ->PutDouble( sumXikXjk, i+1, j+1);
-                    }
-                }
-            }
-        }
-        else
-        {
-            for (k = 0; k < N; k++)
-            {
-                double Yk = pMatY->GetDouble(k);
-                pE->PutDouble( pE->GetDouble(M+1)+Yk*Yk, M+1 );
-                double sumYk = pQ->GetDouble(0, M+1) + Yk;
-                pQ->PutDouble( sumYk, 0, M+1 );
-                pE->PutDouble( sumYk, 0 );
-                for (i = 0; i < M; i++)
-                {
-                    double Xki = pMatX->GetDouble(k,i);
-                    double sumXki = pQ->GetDouble(0, i+1) + Xki;
-                    pQ->PutDouble( sumXki, 0, i+1);
-                    pQ->PutDouble( sumXki, i+1, 0);
-                    double sumXkiYk = pQ->GetDouble(i+1, M+1) + Xki * Yk;
-                    pQ->PutDouble( sumXkiYk, i+1, M+1);
-                    pE->PutDouble( sumXkiYk, i+1);
-                    for (j = i; j < M; j++)
-                    {
-                        double sumXkiXkj = pQ->GetDouble(j+1, i+1) +
-                             Xki * pMatX->GetDouble(k,j);
-                        pQ->PutDouble( sumXkiXkj, j+1, i+1);
-                        pQ->PutDouble( sumXkiXkj, i+1, j+1);
-                    }
-                }
-            }
-        }
-        pQ->PutDouble((double)N, 0, 0);
-        if (bConstant)
-        {
-            SCSIZE S, L;
-            for (S = 0; S < M+1; S++)
-            {
-                i = S;
-                while (i < M+1 && pQ->GetDouble(i, S) == 0.0)
-                    i++;
-                if (i >= M+1)
-                {
-                    PushNoValue();
-                    return;
-                }
-                double fVal;
-                for (L = 0; L < M+2; L++)
-                {
-                    fVal = pQ->GetDouble(S, L);
-                    pQ->PutDouble(pQ->GetDouble(i, L), S, L);
-                    pQ->PutDouble(fVal, i, L);
-                }
-                fVal = 1.0/pQ->GetDouble(S, S);
-                for (L = 0; L < M+2; L++)
-                    pQ->PutDouble(pQ->GetDouble(S, L)*fVal, S, L);
-                for (i = 0; i < M+1; i++)
-                {
-                    if (i != S)
-                    {
-                        fVal = -pQ->GetDouble(i, S);
-                        for (L = 0; L < M+2; L++)
-                            pQ->PutDouble(
-                                pQ->GetDouble(i,L)+fVal*pQ->GetDouble(S,L),i,L);
-                    }
-                }
-            }
-        }
-        else
-        {
-            SCSIZE S, L;
-            for (S = 1; S < M+1; S++)
-            {
-                i = S;
-                while (i < M+1 && pQ->GetDouble(i, S) == 0.0)
-                    i++;
-                if (i >= M+1)
-                {
-                    PushNoValue();
-                    return;
-                }
-                double fVal;
-                for (L = 1; L < M+2; L++)
-                {
-                    fVal = pQ->GetDouble(S, L);
-                    pQ->PutDouble(pQ->GetDouble(i, L), S, L);
-                    pQ->PutDouble(fVal, i, L);
-                }
-                fVal = 1.0/pQ->GetDouble(S, S);
-                for (L = 1; L < M+2; L++)
-                    pQ->PutDouble(pQ->GetDouble(S, L)*fVal, S, L);
-                for (i = 1; i < M+1; i++)
-                {
-                    if (i != S)
-                    {
-                        fVal = -pQ->GetDouble(i, S);
-                        for (L = 1; L < M+2; L++)
-                            pQ->PutDouble(
-                                pQ->GetDouble(i,L)+fVal*pQ->GetDouble(S,L),i,L);
-                    }
-                }
-                pQ->PutDouble(0.0, 0, M+1);
-            }
-        }
-        for (i = 0; i < M+1; i++)
-            pResMat->PutDouble(exp(pQ->GetDouble(M-i,M+1)), i, 0);
-        if (bStats)
-        {
-            double fSQR, fSQT, fSQE;
-            fSQT = pE->GetDouble(M+1)-pE->GetDouble(0)*pE->GetDouble(0)/((double)N);
-            fSQR = pE->GetDouble(M+1);
+            fVal = 1.0/pQ->GetDouble(S, S);
+            for (L = 0; L < M+2; L++)
+                pQ->PutDouble(pQ->GetDouble(S, L)*fVal, S, L);
             for (i = 0; i < M+1; i++)
-                fSQR += -pQ->GetDouble(i, M+1)*pE->GetDouble(i);
-            fSQE = fSQT-fSQR;
-            if (fSQT == 0.0)
-                pResMat->PutString(ScGlobal::GetRscString(STR_NO_VALUE), 0, 2);
-            else
-                pResMat->PutDouble (fSQE/fSQT, 0, 2);
-            pResMat->PutDouble(fSQE, 0, 4);
-            pResMat->PutDouble(fSQR, 1, 4);
-            for (i = 2; i < 5; i++)
-                for (j = 2; j < M+1; j++)
-                    pResMat->PutString(ScGlobal::GetRscString(STR_NV_STR), j, i);
-            if (bConstant)
             {
-                if (N-M-1 == 0)
+                if (i != S)
                 {
-                    pResMat->PutString(ScGlobal::GetRscString(STR_NO_VALUE), 1, 2);
-                    for (i = 0; i < M+1; i++)
-                        pResMat->PutString(ScGlobal::GetRscString(STR_NO_VALUE), i, 1);
+                    fVal = -pQ->GetDouble(i, S);
+                    for (L = 0; L < M+2; L++)
+                        pQ->PutDouble(
+                            pQ->GetDouble(i,L)+fVal*pQ->GetDouble(S,L),i,L);
                 }
-                else
-                {
-                    double fSE2 = fSQR/(N-M-1);
-                    pResMat->PutDouble(sqrt(fSE2), 1, 2);
-                    if ( RGetVariances( pV, pMatX, M+1, N, nCase != 2, FALSE ) )
-                    {
-                        for (i = 0; i < M+1; i++)
-                            pResMat->PutDouble( sqrt(fSE2 * pV->GetDouble(i)), M-i, 1 );
-                    }
-                    else
-                    {
-                        for (i = 0; i < M+1; i++)
-                            pResMat->PutString(ScGlobal::GetRscString(STR_NV_STR), i, 1);
-                    }
-                }
-                if (fSQR == 0.0)
-                    pResMat->PutString(ScGlobal::GetRscString(STR_NO_VALUE), 0, 3);
-                else
-                    pResMat->PutDouble(((double)(N-M-1))*fSQE/fSQR/((double)M),0, 3);
-                pResMat->PutDouble(((double)(N-M-1)), 1, 3);
-            }
-            else
-            {
-                if (N-M == 0)
-                {
-                    pResMat->PutString(ScGlobal::GetRscString(STR_NO_VALUE), 1, 2);
-                    for (i = 0; i < M+1; i++)
-                        pResMat->PutString(ScGlobal::GetRscString(STR_NO_VALUE), i, 1);
-                }
-                else
-                {
-                    double fSE2 = fSQR/(N-M);
-                    pResMat->PutDouble(sqrt(fSE2), 1, 2);
-                    if ( RGetVariances( pV, pMatX, M, N, nCase != 2, TRUE ) )
-                    {
-                        for (i = 0; i < M; i++)
-                            pResMat->PutDouble( sqrt(fSE2 * pV->GetDouble(i)), M-i-1, 1 );
-                        pResMat->PutString(ScGlobal::GetRscString(STR_NV_STR), M, 1);
-                    }
-                    else
-                    {
-                        for (i = 0; i < M+1; i++)
-                            pResMat->PutString(ScGlobal::GetRscString(STR_NV_STR), i, 1);
-                    }
-                }
-                if (fSQR == 0.0)
-                    pResMat->PutString(ScGlobal::GetRscString(STR_NO_VALUE), 0, 3);
-                else
-                    pResMat->PutDouble(((double)(N-M))*fSQE/fSQR/((double)M),0, 3);
-                pResMat->PutDouble(((double)(N-M)), 1, 3);
             }
         }
     }
-    PushMatrix(pResMat);
+    else
+    {
+        if ( !Calculate3(M,pQ) )
+            return false;
+
+    }
+    for (SCSIZE i = 0; i < M+1; i++)
+    {
+        const double d = pQ->GetDouble(M-i,M+1);
+        pResMat->PutDouble(_bExp ? exp(d) : d, i, 0);
+    } // for (SCSIZE i = 0; i < M+1; i++)
+    return true;
 }
 
+ScMatrixRef ScInterpreter::Calculate2(const BOOL bConstant,const SCSIZE M ,const SCSIZE N,ScMatrixRef& pMatX,ScMatrixRef& pMatY,BYTE nCase)
+{
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "Eike.Rathke@sun.com", "ScInterpreter::Calculate2" );
+    SCSIZE i, j, k;
+    ScMatrixRef pQ = GetNewMat(M+1, M+2);
+    ScMatrixRef pE = GetNewMat(M+2, 1);
+    pE->PutDouble(0.0, M+1);
+    pQ->FillDouble(0.0, 0, 0, M, M+1);
+    if (nCase == 2)
+    {
+        for (k = 0; k < N; k++)
+        {
+            pE->PutDouble(
+                pE->GetDouble(M+1)+pMatY->GetDouble(k)*pMatY->GetDouble(k), M+1);
+            pQ->PutDouble(pQ->GetDouble(0, M+1) + pMatY->GetDouble(k), 0,   M+1);
+            pE->PutDouble(pQ->GetDouble(0, M+1), 0);
+            for (i = 0; i < M; i++)
+            {
+                pQ->PutDouble(pQ->GetDouble(0, i+1)+pMatX->GetDouble(i,k), 0, i+1);
+                pQ->PutDouble(pQ->GetDouble(0, i+1), i+1, 0);
+                pQ->PutDouble(pQ->GetDouble(i+1, M+1) +
+                         pMatX->GetDouble(i,k)*pMatY->GetDouble(k), i+1, M+1);
+                pE->PutDouble(pQ->GetDouble(i+1, M+1), i+1);
+                for (j = i; j < M; j++)
+                {
+                    pQ->PutDouble(pQ->GetDouble(j+1, i+1) +
+                         pMatX->GetDouble(i,k)*pMatX->GetDouble(j,k), j+1, i+1);
+                    pQ->PutDouble(pQ->GetDouble(j+1, i+1), i+1, j+1);
+                }
+            }
+        }
+    }
+    else
+    {
+        for (k = 0; k < N; k++)
+        {
+            pE->PutDouble(
+                pE->GetDouble(M+1)+pMatY->GetDouble(k)*pMatY->GetDouble(k), M+1);
+            pQ->PutDouble(pQ->GetDouble(0, M+1) + pMatY->GetDouble(k), 0,   M+1);
+            pE->PutDouble(pQ->GetDouble(0, M+1), 0);
+            for (i = 0; i < M; i++)
+            {
+                pQ->PutDouble(pQ->GetDouble(0, i+1)+pMatX->GetDouble(k,i), 0, i+1);
+                pQ->PutDouble(pQ->GetDouble(0, i+1), i+1, 0);
+                pQ->PutDouble(pQ->GetDouble(i+1, M+1) +
+                         pMatX->GetDouble(k,i)*pMatY->GetDouble(k), i+1, M+1);
+                pE->PutDouble(pQ->GetDouble(i+1, M+1), i+1);
+                for (j = i; j < M; j++)
+                {
+                    pQ->PutDouble(pQ->GetDouble(j+1, i+1) +
+                         pMatX->GetDouble(k, i)*pMatX->GetDouble(k, j), j+1, i+1);
+                    pQ->PutDouble(pQ->GetDouble(j+1, i+1), i+1, j+1);
+                }
+            }
+        }
+    }
+    pQ->PutDouble((double)N, 0, 0);
+    if (bConstant)
+    {
+        SCSIZE S, L;
+        for (S = 0; S < M+1; S++)
+        {
+            i = S;
+            while (i < M+1 && pQ->GetDouble(i, S) == 0.0)
+                i++;
+            if (i >= M+1)
+            {
+                PushNoValue();
+                return ScMatrixRef();
+            }
+            double fVal;
+            for (L = 0; L < M+2; L++)
+            {
+                fVal = pQ->GetDouble(S, L);
+                pQ->PutDouble(pQ->GetDouble(i, L), S, L);
+                pQ->PutDouble(fVal, i, L);
+            }
+            fVal = 1.0/pQ->GetDouble(S, S);
+            for (L = 0; L < M+2; L++)
+                pQ->PutDouble(pQ->GetDouble(S, L)*fVal, S, L);
+            for (i = 0; i < M+1; i++)
+            {
+                if (i != S)
+                {
+                    fVal = -pQ->GetDouble(i, S);
+                    for (L = 0; L < M+2; L++)
+                        pQ->PutDouble(
+                            pQ->GetDouble(i,L)+fVal*pQ->GetDouble(S,L),i,L);
+                }
+            }
+        }
+    }
+    else
+    {
+        if ( !Calculate3(M,pQ) )
+            return ScMatrixRef();
+    }
+    return pQ;
+}
+bool ScInterpreter::Calculate3(const SCSIZE M ,ScMatrixRef& pQ)
+{
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "Eike.Rathke@sun.com", "ScInterpreter::Calculate3" );
+    SCSIZE S, L;
+    for (S = 1; S < M+1; S++)
+    {
+        SCSIZE i = S;
+        while (i < M+1 && pQ->GetDouble(i, S) == 0.0)
+            i++;
+        if (i >= M+1)
+        {
+            PushNoValue();
+            return ScMatrixRef();
+        }
+        double fVal;
+        for (L = 1; L < M+2; L++)
+        {
+            fVal = pQ->GetDouble(S, L);
+            pQ->PutDouble(pQ->GetDouble(i, L), S, L);
+            pQ->PutDouble(fVal, i, L);
+        }
+        fVal = 1.0/pQ->GetDouble(S, S);
+        for (L = 1; L < M+2; L++)
+            pQ->PutDouble(pQ->GetDouble(S, L)*fVal, S, L);
+        for (i = 1; i < M+1; i++)
+        {
+            if (i != S)
+            {
+                fVal = -pQ->GetDouble(i, S);
+                for (L = 1; L < M+2; L++)
+                    pQ->PutDouble(
+                        pQ->GetDouble(i,L)+fVal*pQ->GetDouble(S,L),i,L);
+            }
+        }
+        pQ->PutDouble(0.0, 0, M+1);
+    } // for (S = 1; S < M+1; S++)
+    return true;
+}
 
 void ScInterpreter::ScTrend()
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "Eike.Rathke@sun.com", "ScInterpreter::ScTrend" );
+    CalculateTrendGrowth(FALSE);
+}
+void ScInterpreter::CalculateTrendGrowth(BOOL _bGrowth)
+{
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "Eike.Rathke@sun.com", "ScInterpreter::CalculateTrendGrowth" );
     BYTE nParamCount = GetByte();
     if ( !MustHaveParamCount( nParamCount, 1, 4 ) )
         return;
@@ -3002,77 +2580,16 @@ void ScInterpreter::ScTrend()
     {
         PushIllegalParameter();
         return;
-    }
+    } // if (!pMatY)
+
     BYTE nCase;                         // 1 = normal, 2,3 = mehrfach
     SCSIZE nCX, nCY;
     SCSIZE nRX, nRY;
     SCSIZE M = 0, N = 0;
-    pMatY->GetDimensions(nCY, nRY);
-    SCSIZE nCountY = nCY * nRY;
-    SCSIZE nElem;
-    for (nElem = 0; nElem < nCountY; nElem++)
-        if (!pMatY->IsValue(nElem))
-        {
-            PushIllegalArgument();
-            return;
-        }
-    if (pMatX)
-    {
-        pMatX->GetDimensions(nCX, nRX);
-        SCSIZE nCountX = nCX * nRX;
-        for (nElem = 0; nElem < nCountX; nElem++)
-            if (!pMatX->IsValue(nElem))
-            {
-                PushIllegalArgument();
-                return;
-            }
-        if (nCX == nCY && nRX == nRY)
-            nCase = 1;                  // einfache Regression
-        else if (nCY != 1 && nRY != 1)
-        {
-            PushIllegalArgument();
-            return;
-        }
-        else if (nCY == 1)
-        {
-            if (nRX != nRY)
-            {
-                PushIllegalArgument();
-                return;
-            }
-            else
-            {
-                nCase = 2;              // zeilenweise
-                N = nRY;
-                M = nCX;
-            }
-        }
-        else if (nCX != nCY)
-        {
-            PushIllegalArgument();
-            return;
-        }
-        else
-        {
-            nCase = 3;                  // spaltenweise
-            N = nCY;
-            M = nRX;
-        }
-    }
-    else
-    {
-        pMatX = GetNewMat(nCY, nRY);
-        nCX = nCY;
-        nRX = nRY;
-        if (!pMatX)
-        {
-            PushIllegalArgument();
-            return;
-        }
-        for (nElem = 1; nElem <= nCountY; nElem++)
-            pMatX->PutDouble((double)nElem, nElem-1);
-        nCase = 1;
-    }
+    if ( !CheckMatrix(_bGrowth,TRUE,nCase,nCX,nCY,nRX,nRY,M,N,pMatX,pMatY) )
+        return;
+
+
     SCSIZE nCXN, nRXN;
     SCSIZE nCountXN;
     if (!pMatNewX)
@@ -3148,136 +2665,17 @@ void ScInterpreter::ScTrend()
                 return;
             }
             for (i = 0; i < nCountXN; i++)
-                pResMat->PutDouble(pMatNewX->GetDouble(i)*m+b, i);
+            {
+                const double d = pMatNewX->GetDouble(i)*m+b;
+                pResMat->PutDouble(_bGrowth ? exp(d) : d, i);
+            }
         }
     }
     else
     {
-        SCSIZE i, j, k;
-        ScMatrixRef pQ = GetNewMat(M+1, M+2);
-        ScMatrixRef pE = GetNewMat(M+2, 1);
-        pE->PutDouble(0.0, M+1);
-        pQ->FillDouble(0.0, 0, 0, M, M+1);
-        if (nCase == 2)
-        {
-            for (k = 0; k < N; k++)
-            {
-                pE->PutDouble(
-                    pE->GetDouble(M+1)+pMatY->GetDouble(k)*pMatY->GetDouble(k), M+1);
-                pQ->PutDouble(pQ->GetDouble(0, M+1) + pMatY->GetDouble(k), 0,   M+1);
-                pE->PutDouble(pQ->GetDouble(0, M+1), 0);
-                for (i = 0; i < M; i++)
-                {
-                    pQ->PutDouble(pQ->GetDouble(0, i+1)+pMatX->GetDouble(i,k), 0, i+1);
-                    pQ->PutDouble(pQ->GetDouble(0, i+1), i+1, 0);
-                    pQ->PutDouble(pQ->GetDouble(i+1, M+1) +
-                             pMatX->GetDouble(i,k)*pMatY->GetDouble(k), i+1, M+1);
-                    pE->PutDouble(pQ->GetDouble(i+1, M+1), i+1);
-                    for (j = i; j < M; j++)
-                    {
-                        pQ->PutDouble(pQ->GetDouble(j+1, i+1) +
-                             pMatX->GetDouble(i,k)*pMatX->GetDouble(j,k), j+1, i+1);
-                        pQ->PutDouble(pQ->GetDouble(j+1, i+1), i+1, j+1);
-                    }
-                }
-            }
-        }
-        else
-        {
-            for (k = 0; k < N; k++)
-            {
-                pE->PutDouble(
-                    pE->GetDouble(M+1)+pMatY->GetDouble(k)*pMatY->GetDouble(k), M+1);
-                pQ->PutDouble(pQ->GetDouble(0, M+1) + pMatY->GetDouble(k), 0,   M+1);
-                pE->PutDouble(pQ->GetDouble(0, M+1), 0);
-                for (i = 0; i < M; i++)
-                {
-                    pQ->PutDouble(pQ->GetDouble(0, i+1)+pMatX->GetDouble(k,i), 0, i+1);
-                    pQ->PutDouble(pQ->GetDouble(0, i+1), i+1, 0);
-                    pQ->PutDouble(pQ->GetDouble(i+1, M+1) +
-                             pMatX->GetDouble(k,i)*pMatY->GetDouble(k), i+1, M+1);
-                    pE->PutDouble(pQ->GetDouble(i+1, M+1), i+1);
-                    for (j = i; j < M; j++)
-                    {
-                        pQ->PutDouble(pQ->GetDouble(j+1, i+1) +
-                             pMatX->GetDouble(k, i)*pMatX->GetDouble(k, j), j+1, i+1);
-                        pQ->PutDouble(pQ->GetDouble(j+1, i+1), i+1, j+1);
-                    }
-                }
-            }
-        }
-        pQ->PutDouble((double)N, 0, 0);
-        if (bConstant)
-        {
-            SCSIZE S, L;
-            for (S = 0; S < M+1; S++)
-            {
-                i = S;
-                while (i < M+1 && pQ->GetDouble(i, S) == 0.0)
-                    i++;
-                if (i >= M+1)
-                {
-                    PushNoValue();
-                    return;
-                }
-                double fVal;
-                for (L = 0; L < M+2; L++)
-                {
-                    fVal = pQ->GetDouble(S, L);
-                    pQ->PutDouble(pQ->GetDouble(i, L), S, L);
-                    pQ->PutDouble(fVal, i, L);
-                }
-                fVal = 1.0/pQ->GetDouble(S, S);
-                for (L = 0; L < M+2; L++)
-                    pQ->PutDouble(pQ->GetDouble(S, L)*fVal, S, L);
-                for (i = 0; i < M+1; i++)
-                {
-                    if (i != S)
-                    {
-                        fVal = -pQ->GetDouble(i, S);
-                        for (L = 0; L < M+2; L++)
-                            pQ->PutDouble(
-                                pQ->GetDouble(i,L)+fVal*pQ->GetDouble(S,L),i,L);
-                    }
-                }
-            }
-        }
-        else
-        {
-            SCSIZE S, L;
-            for (S = 1; S < M+1; S++)
-            {
-                i = S;
-                while (i < M+1 && pQ->GetDouble(i, S) == 0.0)
-                    i++;
-                if (i >= M+1)
-                {
-                    PushNoValue();
-                    return;
-                }
-                double fVal;
-                for (L = 1; L < M+2; L++)
-                {
-                    fVal = pQ->GetDouble(S, L);
-                    pQ->PutDouble(pQ->GetDouble(i, L), S, L);
-                    pQ->PutDouble(fVal, i, L);
-                }
-                fVal = 1.0/pQ->GetDouble(S, S);
-                for (L = 1; L < M+2; L++)
-                    pQ->PutDouble(pQ->GetDouble(S, L)*fVal, S, L);
-                for (i = 1; i < M+1; i++)
-                {
-                    if (i != S)
-                    {
-                        fVal = -pQ->GetDouble(i, S);
-                        for (L = 1; L < M+2; L++)
-                            pQ->PutDouble(
-                                pQ->GetDouble(i,L)+fVal*pQ->GetDouble(S,L),i,L);
-                    }
-                }
-                pQ->PutDouble(0.0, 0, M+1);
-            }
-        }
+        ScMatrixRef pQ = Calculate2(bConstant,M ,N,pMatX,pMatY,nCase);
+        if ( !pQ.Is() )
+            return;
         if (nCase == 2)
         {
             pResMat = GetNewMat(1, nRXN);
@@ -3287,12 +2685,12 @@ void ScInterpreter::ScTrend()
                 return;
             }
             double fVal;
-            for (i = 0; i < nRXN; i++)
+            for (SCSIZE i = 0; i < nRXN; i++)
             {
                 fVal = pQ->GetDouble(0, M+1);
-                for (j = 0; j < M; j++)
+                for (SCSIZE j = 0; j < M; j++)
                     fVal += pQ->GetDouble(j+1, M+1)*pMatNewX->GetDouble(j, i);
-                pResMat->PutDouble(fVal, i);
+                pResMat->PutDouble(_bGrowth ? exp(fVal) : fVal, i);
             }
         }
         else
@@ -3304,12 +2702,12 @@ void ScInterpreter::ScTrend()
                 return;
             }
             double fVal;
-            for (i = 0; i < nCXN; i++)
+            for (SCSIZE i = 0; i < nCXN; i++)
             {
                 fVal = pQ->GetDouble(0, M+1);
-                for (j = 0; j < M; j++)
+                for (SCSIZE j = 0; j < M; j++)
                     fVal += pQ->GetDouble(j+1, M+1)*pMatNewX->GetDouble(i, j);
-                pResMat->PutDouble(fVal, i);
+                pResMat->PutDouble(_bGrowth ? exp(fVal) : fVal, i);
             }
         }
     }
@@ -3318,359 +2716,15 @@ void ScInterpreter::ScTrend()
 
 void ScInterpreter::ScGrowth()
 {
-    BYTE nParamCount = GetByte();
-    if ( !MustHaveParamCount( nParamCount, 1, 4 ) )
-        return;
-    BOOL bConstant;
-    if (nParamCount == 4)
-        bConstant = GetBool();
-    else
-        bConstant = TRUE;
-    ScMatrixRef pMatX;
-    ScMatrixRef pMatY;
-    ScMatrixRef pMatNewX;
-    if (nParamCount >= 3)
-        pMatNewX = GetMatrix();
-    else
-        pMatNewX = NULL;
-    if (nParamCount >= 2)
-        pMatX = GetMatrix();
-    else
-        pMatX = NULL;
-    pMatY = GetMatrix();
-    if (!pMatY)
-    {
-        PushIllegalParameter();
-        return;
-    }
-    BYTE nCase;                         // 1 = normal, 2,3 = mehrfach
-    SCSIZE nCX, nCY;
-    SCSIZE nRX, nRY;
-    SCSIZE M = 0, N = 0;
-    pMatY->GetDimensions(nCY, nRY);
-    SCSIZE nCountY = nCY * nRY;
-    SCSIZE nElem;
-    for (nElem = 0; nElem < nCountY; nElem++)
-    {
-        if (!pMatY->IsValue(nElem))
-        {
-            PushIllegalArgument();
-            return;
-        }
-    }
-    for (nElem = 0; nElem < nCountY; nElem++)
-    {
-        if (pMatY->GetDouble(nElem) <= 0.0)
-        {
-            PushIllegalArgument();
-            return;
-        }
-        else
-            pMatY->PutDouble(log(pMatY->GetDouble(nElem)), nElem);
-    }
-    if (pMatX)
-    {
-        pMatX->GetDimensions(nCX, nRX);
-        SCSIZE nCountX = nCX * nRX;
-        for ( SCSIZE i = 0; i < nCountX; i++ )
-            if (!pMatX->IsValue(i))
-            {
-                PushIllegalArgument();
-                return;
-            }
-        if (nCX == nCY && nRX == nRY)
-            nCase = 1;                  // einfache Regression
-        else if (nCY != 1 && nRY != 1)
-        {
-            PushIllegalArgument();
-            return;
-        }
-        else if (nCY == 1)
-        {
-            if (nRX != nRY)
-            {
-                PushIllegalArgument();
-                return;
-            }
-            else
-            {
-                nCase = 2;              // zeilenweise
-                N = nRY;
-                M = nCX;
-            }
-        }
-        else if (nCX != nCY)
-        {
-            PushIllegalArgument();
-            return;
-        }
-        else
-        {
-            nCase = 3;                  // spaltenweise
-            N = nCY;
-            M = nRX;
-        }
-    }
-    else
-    {
-        pMatX = GetNewMat(nCY, nRY);
-        nCX = nCY;
-        nRX = nRY;
-        if (!pMatX)
-        {
-            PushIllegalArgument();
-            return;
-        }
-        for (SCSIZE i = 1; i <= nCountY; i++)
-            pMatX->PutDouble((double)i, i-1);
-        nCase = 1;
-    }
-    SCSIZE nCXN, nRXN;
-    SCSIZE nCountXN;
-    if (!pMatNewX)
-    {
-        nCXN = nCX;
-        nRXN = nRX;
-        nCountXN = nCXN * nRXN;
-        pMatNewX = pMatX;
-    }
-    else
-    {
-        pMatNewX->GetDimensions(nCXN, nRXN);
-        if ((nCase == 2 && nCX != nCXN) || (nCase == 3 && nRX != nRXN))
-        {
-            PushIllegalArgument();
-            return;
-        }
-        nCountXN = nCXN * nRXN;
-        for ( SCSIZE i = 0; i < nCountXN; i++ )
-            if (!pMatNewX->IsValue(i))
-            {
-                PushIllegalArgument();
-                return;
-            }
-    }
-    ScMatrixRef pResMat;
-    if (nCase == 1)
-    {
-        double fCount   = 0.0;
-        double fSumX    = 0.0;
-        double fSumSqrX = 0.0;
-        double fSumY    = 0.0;
-        double fSumSqrY = 0.0;
-        double fSumXY   = 0.0;
-        double fValX, fValY;
-        for (SCSIZE i = 0; i < nCY; i++)
-            for (SCSIZE j = 0; j < nRY; j++)
-            {
-                fValX = pMatX->GetDouble(i,j);
-                fValY = pMatY->GetDouble(i,j);
-                fSumX    += fValX;
-                fSumSqrX += fValX * fValX;
-                fSumY    += fValY;
-                fSumSqrY += fValY * fValY;
-                fSumXY   += fValX*fValY;
-                fCount++;
-            }
-        if (fCount < 1.0)
-        {
-            PushNoValue();
-            return;
-        }
-        else
-        {
-            double f1 = fCount*fSumXY-fSumX*fSumY;
-            double fX = fCount*fSumSqrX-fSumX*fSumX;
-            double b, m;
-            if (bConstant)
-            {
-                b = fSumY/fCount - f1/fX*fSumX/fCount;
-                m = f1/fX;
-            }
-            else
-            {
-                b = 0.0;
-                m = fSumXY/fSumSqrX;
-            }
-            pResMat = GetNewMat(nCXN, nRXN);
-            if (!pResMat)
-            {
-                PushIllegalArgument();
-                return;
-            }
-            for (SCSIZE i = 0; i < nCountXN; i++)
-                pResMat->PutDouble(exp(pMatNewX->GetDouble(i)*m+b), i);
-        }
-    }
-    else
-    {
-        SCSIZE i, j, k;
-        ScMatrixRef pQ = GetNewMat(M+1, M+2);
-        ScMatrixRef pE = GetNewMat(M+2, 1);
-        pE->PutDouble(0.0, M+1);
-        pQ->FillDouble(0.0, 0, 0, M, M+1);
-        if (nCase == 2)
-        {
-            for (k = 0; k < N; k++)
-            {
-                pE->PutDouble(
-                    pE->GetDouble(M+1)+pMatY->GetDouble(k)*pMatY->GetDouble(k), M+1);
-                pQ->PutDouble(pQ->GetDouble(0, M+1) + pMatY->GetDouble(k), 0,   M+1);
-                pE->PutDouble(pQ->GetDouble(0, M+1), 0);
-                for (i = 0; i < M; i++)
-                {
-                    pQ->PutDouble(pQ->GetDouble(0, i+1)+pMatX->GetDouble(i,k), 0, i+1);
-                    pQ->PutDouble(pQ->GetDouble(0, i+1), i+1, 0);
-                    pQ->PutDouble(pQ->GetDouble(i+1, M+1) +
-                             pMatX->GetDouble(i,k)*pMatY->GetDouble(k), i+1, M+1);
-                    pE->PutDouble(pQ->GetDouble(i+1, M+1), i+1);
-                    for (j = i; j < M; j++)
-                    {
-                        pQ->PutDouble(pQ->GetDouble(j+1, i+1) +
-                             pMatX->GetDouble(i,k)*pMatX->GetDouble(j,k), j+1, i+1);
-                        pQ->PutDouble(pQ->GetDouble(j+1, i+1), i+1, j+1);
-                    }
-                }
-            }
-        }
-        else
-        {
-            for (k = 0; k < N; k++)
-            {
-                pE->PutDouble(
-                    pE->GetDouble(M+1)+pMatY->GetDouble(k)*pMatY->GetDouble(k), M+1);
-                pQ->PutDouble(pQ->GetDouble(0, M+1) + pMatY->GetDouble(k), 0,   M+1);
-                pE->PutDouble(pQ->GetDouble(0, M+1), 0);
-                for (i = 0; i < M; i++)
-                {
-                    pQ->PutDouble(pQ->GetDouble(0, i+1)+pMatX->GetDouble(k,i), 0, i+1);
-                    pQ->PutDouble(pQ->GetDouble(0, i+1), i+1, 0);
-                    pQ->PutDouble(pQ->GetDouble(i+1, M+1) +
-                             pMatX->GetDouble(k,i)*pMatY->GetDouble(k), i+1, M+1);
-                    pE->PutDouble(pQ->GetDouble(i+1, M+1), i+1);
-                    for (j = i; j < M; j++)
-                    {
-                        pQ->PutDouble(pQ->GetDouble(j+1, i+1) +
-                             pMatX->GetDouble(k, i)*pMatX->GetDouble(k, j), j+1, i+1);
-                        pQ->PutDouble(pQ->GetDouble(j+1, i+1), i+1, j+1);
-                    }
-                }
-            }
-        }
-        pQ->PutDouble((double)N, 0, 0);
-        if (bConstant)
-        {
-            SCSIZE S, L;
-            for (S = 0; S < M+1; S++)
-            {
-                i = S;
-                while (i < M+1 && pQ->GetDouble(i, S) == 0.0)
-                    i++;
-                if (i >= M+1)
-                {
-                    PushNoValue();
-                    return;
-                }
-                double fVal;
-                for (L = 0; L < M+2; L++)
-                {
-                    fVal = pQ->GetDouble(S, L);
-                    pQ->PutDouble(pQ->GetDouble(i, L), S, L);
-                    pQ->PutDouble(fVal, i, L);
-                }
-                fVal = 1.0/pQ->GetDouble(S, S);
-                for (L = 0; L < M+2; L++)
-                    pQ->PutDouble(pQ->GetDouble(S, L)*fVal, S, L);
-                for (i = 0; i < M+1; i++)
-                {
-                    if (i != S)
-                    {
-                        fVal = -pQ->GetDouble(i, S);
-                        for (L = 0; L < M+2; L++)
-                            pQ->PutDouble(
-                                pQ->GetDouble(i,L)+fVal*pQ->GetDouble(S,L),i,L);
-                    }
-                }
-            }
-        }
-        else
-        {
-            SCSIZE S, L;
-            for (S = 1; S < M+1; S++)
-            {
-                i = S;
-                while (i < M+1 && pQ->GetDouble(i, S) == 0.0)
-                    i++;
-                if (i >= M+1)
-                {
-                    PushNoValue();
-                    return;
-                }
-                double fVal;
-                for (L = 1; L < M+2; L++)
-                {
-                    fVal = pQ->GetDouble(S, L);
-                    pQ->PutDouble(pQ->GetDouble(i, L), S, L);
-                    pQ->PutDouble(fVal, i, L);
-                }
-                fVal = 1.0/pQ->GetDouble(S, S);
-                for (L = 1; L < M+2; L++)
-                    pQ->PutDouble(pQ->GetDouble(S, L)*fVal, S, L);
-                for (i = 1; i < M+1; i++)
-                {
-                    if (i != S)
-                    {
-                        fVal = -pQ->GetDouble(i, S);
-                        for (L = 1; L < M+2; L++)
-                            pQ->PutDouble(
-                                pQ->GetDouble(i,L)+fVal*pQ->GetDouble(S,L),i,L);
-                    }
-                }
-                pQ->PutDouble(0.0, 0, M+1);
-            }
-        }
-        if (nCase == 2)
-        {
-            pResMat = GetNewMat(1, nRXN);
-            if (!pResMat)
-            {
-                PushIllegalArgument();
-                return;
-            }
-            double fVal;
-            for (i = 0; i < nRXN; i++)
-            {
-                fVal = pQ->GetDouble(0, M+1);
-                for (j = 0; j < M; j++)
-                    fVal += pQ->GetDouble(j+1, M+1)*pMatNewX->GetDouble(j, i);
-                pResMat->PutDouble(exp(fVal), i);
-            }
-        }
-        else
-        {
-            pResMat = GetNewMat(nCXN, 1);
-            if (!pResMat)
-            {
-                PushIllegalArgument();
-                return;
-            }
-            double fVal;
-            for (i = 0; i < nCXN; i++)
-            {
-                fVal = pQ->GetDouble(0, M+1);
-                for (j = 0; j < M; j++)
-                    fVal += pQ->GetDouble(j+1, M+1)*pMatNewX->GetDouble(i, j);
-                pResMat->PutDouble(exp(fVal), i);
-            }
-        }
-    }
-    PushMatrix(pResMat);
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "Eike.Rathke@sun.com", "ScInterpreter::ScGrowth" );
+    CalculateTrendGrowth(TRUE);
 }
 
 void ScInterpreter::ScMatRef()
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "Eike.Rathke@sun.com", "ScInterpreter::ScMatRef" );
     // Falls Deltarefs drin sind...
-    Push( (ScToken&) *pCur );
+    Push( (FormulaToken&)*pCur );
     ScAddress aAdr;
     PopSingleRef( aAdr );
     ScFormulaCell* pCell = (ScFormulaCell*) GetCell( aAdr );
@@ -3679,25 +2733,27 @@ void ScInterpreter::ScMatRef()
         const ScMatrix* pMat = pCell->GetMatrix();
         if( pMat )
         {
-            SCSIZE nCl, nRw;
-            pMat->GetDimensions( nCl, nRw );
+            SCSIZE nCols, nRows;
+            pMat->GetDimensions( nCols, nRows );
             SCSIZE nC = static_cast<SCSIZE>(aPos.Col() - aAdr.Col());
             SCSIZE nR = static_cast<SCSIZE>(aPos.Row() - aAdr.Row());
-            if (nC < nCl && nR < nRw)
+            if ((nCols <= nC && nCols != 1) || (nRows <= nR && nRows != 1))
+                PushNA();
+            else
             {
                 ScMatValType nMatValType;
                 const ScMatrixValue* pMatVal = pMat->Get( nC, nR, nMatValType);
-                if (ScMatrix::IsStringType( nMatValType))
+                if (ScMatrix::IsNonValueType( nMatValType))
                 {
-                    if (ScMatrix::IsEmptyType( nMatValType))
-                    {
-                        // Not inherited (really?) and display as empty string, not 0.
-                        PushTempToken( new ScEmptyCellToken( false, true));
-                    }
-                    else if (ScMatrix::IsEmptyPathType( nMatValType))
+                    if (ScMatrix::IsEmptyPathType( nMatValType))
                     {   // result of empty FALSE jump path
                         nFuncFmtType = NUMBERFORMAT_LOGICAL;
                         PushInt(0);
+                    }
+                    else if (ScMatrix::IsEmptyType( nMatValType))
+                    {
+                        // Not inherited (really?) and display as empty string, not 0.
+                        PushTempToken( new ScEmptyCellToken( false, true));
                     }
                     else
                         PushString( pMatVal->GetString() );
@@ -3710,8 +2766,6 @@ void ScInterpreter::ScMatRef()
                     nFuncFmtIndex = nCurFmtIndex;
                 }
             }
-            else
-                PushNA();
         }
         else
         {
@@ -3738,6 +2792,7 @@ void ScInterpreter::ScMatRef()
 
 void ScInterpreter::ScInfo()
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "Eike.Rathke@sun.com", "ScInterpreter::ScInfo" );
     if( MustHaveParamCount( GetByte(), 1 ) )
     {
         String aStr = GetString();

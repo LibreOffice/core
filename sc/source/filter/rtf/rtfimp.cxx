@@ -41,9 +41,10 @@
 #include "editutil.hxx"
 #include "rtfimp.hxx"
 #include "rtfparse.hxx"
+#include "ftools.hxx"
 
 
-FltError ScImportRTF( SvStream &rStream, const String& rBaseURL, ScDocument *pDoc, ScRange& rRange )
+FltError ScFormatFilterPluginImpl::ScImportRTF( SvStream &rStream, const String& rBaseURL, ScDocument *pDoc, ScRange& rRange )
 {
     ScRTFImport aImp( pDoc, rRange );
     FltError nErr = (FltError) aImp.Read( rStream, rBaseURL );
@@ -51,6 +52,11 @@ FltError ScImportRTF( SvStream &rStream, const String& rBaseURL, ScDocument *pDo
     rRange.aEnd = aR.aEnd;
     aImp.WriteToDocument();
     return nErr;
+}
+
+ScEEAbsImport *ScFormatFilterPluginImpl::CreateRTFImport( ScDocument* pDoc, const ScRange& rRange )
+{
+    return new ScRTFImport( pDoc, rRange );
 }
 
 

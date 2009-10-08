@@ -70,6 +70,7 @@
 #include "acredlin.hxx"
 #include "highred.hxx"
 #include "simpref.hxx"
+#include "funcdesc.hxx"
 #include "dpobject.hxx"
 
 //------------------------------------------------------------------
@@ -283,7 +284,7 @@ SfxModelessDialog* ScTabViewShell::CreateRefDialog(
         {
             //  Dialog schaut selber, was in der Zelle steht
 
-            pResult = new ScFormulaDlg( pB, pCW, pParent, GetViewData() );
+            pResult = new ScFormulaDlg( pB, pCW, pParent, GetViewData(),ScGlobal::GetStarCalcFunctionMgr() );
         }
         break;
 

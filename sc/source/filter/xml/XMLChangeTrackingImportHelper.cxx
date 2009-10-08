@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: XMLChangeTrackingImportHelper.cxx,v $
- * $Revision: 1.29.32.2 $
+ * $Revision: 1.30 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -43,8 +43,22 @@
 
 #define SC_CHANGE_ID_PREFIX "ct"
 
+ScMyCellInfo::ScMyCellInfo()
+    : pCell(NULL),
+    sFormulaAddress(),
+    sFormula(),
+    sInputString(),
+    fValue(0.0),
+    nMatrixCols(0),
+    nMatrixRows(0),
+    eGrammar( formula::FormulaGrammar::GRAM_STORAGE_DEFAULT),
+    nType(NUMBERFORMAT_ALL),
+    nMatrixFlag(MM_NONE)
+{
+}
+
 ScMyCellInfo::ScMyCellInfo(ScBaseCell* pTempCell, const rtl::OUString& rFormulaAddress, const rtl::OUString& rFormula,
-            const ScGrammar::Grammar eTempGrammar, const rtl::OUString& rInputString,
+            const formula::FormulaGrammar::Grammar eTempGrammar, const rtl::OUString& rInputString,
             const double& rValue, const sal_uInt16 nTempType, const sal_uInt8 nTempMatrixFlag, const sal_Int32 nTempMatrixCols,
             const sal_Int32 nTempMatrixRows)
     : pCell(pTempCell),
@@ -775,7 +789,7 @@ void ScXMLChangeTrackingImportHelper::SetNewCell(ScMyContentAction* pAction)
                             /* FIXME: new cell should be created with a clone
                              * of the token array instead. Any reason why this
                              * wasn't done? */
-                            static_cast<ScFormulaCell*>(pCell)->GetFormula(sFormula, ScGrammar::GRAM_ODFF);
+                            static_cast<ScFormulaCell*>(pCell)->GetFormula(sFormula,formula::FormulaGrammar::GRAM_ODFF);
                             rtl::OUString sOUFormula(sFormula);
 
                             // #i87826# [Collaboration] Rejected move destroys formulas
@@ -792,7 +806,7 @@ void ScXMLChangeTrackingImportHelper::SetNewCell(ScMyContentAction* pAction)
                             }
 
                             String sFormula2(sOUFormula2);
-                            pNewCell = new ScFormulaCell(pDoc, aAddress, sFormula2, ScGrammar::GRAM_ODFF, nMatrixFlag);
+                            pNewCell = new ScFormulaCell(pDoc, aAddress, sFormula2,formula::FormulaGrammar::GRAM_ODFF, nMatrixFlag);
                             if (pNewCell)
                             {
                                 if (nMatrixFlag == MM_FORMULA)

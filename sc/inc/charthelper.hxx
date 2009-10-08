@@ -6,8 +6,8 @@
  *
  * OpenOffice.org - a multi-platform office productivity suite
  *
- * $RCSfile: htmlimp.hxx,v $
- * $Revision: 1.7 $
+ * $RCSfile: charthelper.hxx,v $
+ * $Revision: 1.1.2.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -28,27 +28,21 @@
  *
  ************************************************************************/
 
-#ifndef SC_HTMLIMP_HXX
-#define SC_HTMLIMP_HXX
+#ifndef SC_CHARTHELPER_HXX
+#define SC_CHARTHELPER_HXX
 
-#include "eeimport.hxx"
+#include <tools/solar.h>
 
-class ScHTMLParser;
+class ScDocument;
+class ScAddress;
 
-class ScHTMLImport : public ScEEImport
+/** Use this to handle charts in a calc document
+*/
+class ScChartHelper
 {
-private:
-    static void         InsertRangeName( ScDocument* pDoc, const String& rName, const ScRange& rRange );
-
 public:
-                        ScHTMLImport( ScDocument* pDoc, const String& rBaseURL, const ScRange& rRange, BOOL bCalcWidthHeight = TRUE );
-                        ~ScHTMLImport();
-    const ScHTMLParser* GetParser() const { return (ScHTMLParser*)mpParser; }
-
-    virtual void        WriteToDocument( BOOL bSizeColsRows = FALSE, double nOutputFactor = 1.0 );
-
-    static String       GetHTMLRangeNameList( ScDocument* pDoc, const String& rOrigName );
+    static USHORT DoUpdateAllCharts( ScDocument* pDoc );
+    static USHORT DoUpdateCharts( const ScAddress& rPos, ScDocument* pDoc ); //use this to replace ScDBFunc::DoUpdateCharts in future
 };
-
 
 #endif

@@ -830,7 +830,7 @@ void ScContentTree::GetLinkNames()
         return;
 
     SvxLinkManager* pLinkManager = pDoc->GetLinkManager();
-    DBG_ASSERT(pLinkManager, "kein LinkManager am Dokument?")
+    DBG_ASSERT(pLinkManager, "kein LinkManager am Dokument?");
     const ::sfx2::SvBaseLinks& rLinks = pLinkManager->GetLinks();
     USHORT nCount = rLinks.Count();
     for (USHORT i=0; i<nCount; i++)
@@ -851,7 +851,7 @@ const ScAreaLink* ScContentTree::GetLink( ULONG nIndex )
 
     ULONG nFound = 0;
     SvxLinkManager* pLinkManager = pDoc->GetLinkManager();
-    DBG_ASSERT(pLinkManager, "kein LinkManager am Dokument?")
+    DBG_ASSERT(pLinkManager, "kein LinkManager am Dokument?");
     const ::sfx2::SvBaseLinks& rLinks = pLinkManager->GetLinks();
     USHORT nCount = rLinks.Count();
     for (USHORT i=0; i<nCount; i++)

@@ -32,6 +32,7 @@
 
 #include "PropertyHelper.hxx"
 #include "FastPropertyIdRanges.hxx"
+#include "charttoolsdllapi.hxx"
 #include <com/sun/star/beans/Property.hpp>
 
 #include <vector>
@@ -40,7 +41,7 @@ namespace chart
 {
 
 // implements service com.sun.star.xml.UserDefinedAttributeSupplier
-class UserDefinedProperties
+class OOO_DLLPUBLIC_CHARTTOOLS UserDefinedProperties
 {
 public:
     // FastProperty Ids for properties

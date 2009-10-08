@@ -1,0 +1,361 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2008 by Sun Microsystems, Inc.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * $RCSfile: xmlexternaltabi.cxx,v $
+ * $Revision: 1.1.2.5 $
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+
+// MARKER(update_precomp.py): autogen include statement, do not remove
+#include "precompiled_sc.hxx"
+
+
+
+// INCLUDE ---------------------------------------------------------------
+
+#include "xmlexternaltabi.hxx"
+#include "xmlimprt.hxx"
+#include "xmltabi.hxx"
+#include "xmlstyli.hxx"
+
+#include "token.hxx"
+#include "document.hxx"
+
+#include <xmloff/nmspmap.hxx>
+#include <xmloff/xmlnmspe.hxx>
+#include <xmloff/xmltoken.hxx>
+#include <xmloff/xmluconv.hxx>
+#include <com/sun/star/util/NumberFormat.hpp>
+
+using namespace ::com::sun::star;
+
+using ::rtl::OUString;
+using ::com::sun::star::uno::Reference;
+using ::com::sun::star::xml::sax::XAttributeList;
+
+// ============================================================================
+
+ScXMLExternalRefTabSourceContext::ScXMLExternalRefTabSourceContext(
+    ScXMLImport& rImport, USHORT nPrefix, const OUString& rLName,
+    const Reference<XAttributeList>& xAttrList, ScXMLExternalTabData& rRefInfo ) :
+    SvXMLImportContext( rImport, nPrefix, rLName ),
+    mrScImport(rImport),
+    mrExternalRefInfo(rRefInfo)
+{
+    using namespace ::xmloff::token;
+
+    sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
+    for (sal_Int16 i = 0; i < nAttrCount; ++i)
+    {
+        const rtl::OUString& sAttrName = xAttrList->getNameByIndex(i);
+        rtl::OUString aLocalName;
+        sal_uInt16 nAttrPrefix = mrScImport.GetNamespaceMap().GetKeyByAttrName(sAttrName, &aLocalName);
+        const rtl::OUString& sValue = xAttrList->getValueByIndex(i);
+        if (nAttrPrefix == XML_NAMESPACE_XLINK)
+        {
+            if (IsXMLToken(aLocalName, XML_HREF))
+                maRelativeUrl = sValue;
+        }
+        else if (nAttrPrefix == XML_NAMESPACE_TABLE)
+        {
+            if (IsXMLToken(aLocalName, XML_TABLE_NAME))
+                maTableName = sValue;
+            else if (IsXMLToken(aLocalName, XML_FILTER_NAME))
+                maFilterName = sValue;
+            else if (IsXMLToken(aLocalName, XML_FILTER_OPTIONS))
+                maFilterOptions = sValue;
+        }
+    }
+}
+
+ScXMLExternalRefTabSourceContext::~ScXMLExternalRefTabSourceContext()
+{
+}
+
+SvXMLImportContext* ScXMLExternalRefTabSourceContext::CreateChildContext(
+    USHORT nPrefix, const OUString& rLocalName, const Reference<XAttributeList>& /*xAttrList*/ )
+{
+    return new SvXMLImportContext(GetImport(), nPrefix, rLocalName);
+}
+
+void ScXMLExternalRefTabSourceContext::EndElement()
+{
+    ScDocument* pDoc = mrScImport.GetDocument();
+    if (!pDoc)
+        return;
+
+    ScExternalRefManager* pRefMgr = pDoc->GetExternalRefManager();
+    if (!maRelativeUrl.equals(mrExternalRefInfo.maFileUrl))
+        pRefMgr->setRelativeFileName(mrExternalRefInfo.mnFileId, maRelativeUrl);
+    pRefMgr->setFilterData(mrExternalRefInfo.mnFileId, maFilterName, maFilterOptions);
+}
+
+// ============================================================================
+
+ScXMLExternalRefRowContext::ScXMLExternalRefRowContext(
+    ScXMLImport& rImport, USHORT nPrefix, const OUString& rLName,
+    const Reference<XAttributeList>& xAttrList, ScXMLExternalTabData& rRefInfo ) :
+    SvXMLImportContext( rImport, nPrefix, rLName ),
+    mrScImport(rImport),
+    mrExternalRefInfo(rRefInfo),
+    mnRepeatRowCount(1)
+{
+    mrExternalRefInfo.mnCol = 0;
+
+    sal_Int16 nAttrCount(xAttrList.is() ? xAttrList->getLength() : 0);
+    const SvXMLTokenMap& rAttrTokenMap = mrScImport.GetTableRowAttrTokenMap();
+    for( sal_Int16 i=0; i < nAttrCount; ++i )
+    {
+        const rtl::OUString& sAttrName = xAttrList->getNameByIndex(i);
+        rtl::OUString aLocalName;
+        sal_uInt16 nAttrPrefix = mrScImport.GetNamespaceMap().GetKeyByAttrName(sAttrName, &aLocalName);
+        const rtl::OUString& sValue = xAttrList->getValueByIndex(i);
+
+        switch (rAttrTokenMap.Get(nAttrPrefix, aLocalName))
+        {
+            case XML_TOK_TABLE_ROW_ATTR_REPEATED:
+            {
+                mnRepeatRowCount = std::max(sValue.toInt32(), static_cast<sal_Int32>(1));
+            }
+            break;
+        }
+    }
+}
+
+ScXMLExternalRefRowContext::~ScXMLExternalRefRowContext()
+{
+}
+
+SvXMLImportContext* ScXMLExternalRefRowContext::CreateChildContext(
+    USHORT nPrefix, const OUString& rLocalName, const Reference<XAttributeList>& xAttrList )
+{
+    const SvXMLTokenMap& rTokenMap = mrScImport.GetTableRowElemTokenMap();
+    sal_uInt16 nToken = rTokenMap.Get(nPrefix, rLocalName);
+    if (nToken == XML_TOK_TABLE_ROW_CELL)
+        return new ScXMLExternalRefCellContext(mrScImport, nPrefix, rLocalName, xAttrList, mrExternalRefInfo);
+
+    return new SvXMLImportContext(GetImport(), nPrefix, rLocalName);
+}
+
+void ScXMLExternalRefRowContext::EndElement()
+{
+    ScExternalRefCache::TableTypeRef pTab = mrExternalRefInfo.mpCacheTable;
+
+    for (sal_Int32 i = 1; i < mnRepeatRowCount; ++i)
+    {
+        // Performance: duplicates of a non-existent row will still not exist.
+        // Don't find that out that for every cell.
+        // External references often are a sparse matrix.
+        if (i == 1 && !pTab->hasRow( mrExternalRefInfo.mnRow))
+            return;
+
+        for (sal_Int32 j = 0; j < mrExternalRefInfo.mnCol; ++j)
+        {
+            ScExternalRefCache::TokenRef pToken = pTab->getCell(
+                static_cast<SCCOL>(j), static_cast<SCROW>(mrExternalRefInfo.mnRow));
+
+            if (pToken.get())
+            {
+                pTab->setCell(static_cast<SCCOL>(j),
+                              static_cast<SCROW>(mrExternalRefInfo.mnRow+i), pToken);
+            }
+        }
+    }
+    mrExternalRefInfo.mnRow += mnRepeatRowCount;
+}
+
+// ============================================================================
+
+ScXMLExternalRefCellContext::ScXMLExternalRefCellContext(
+    ScXMLImport& rImport, USHORT nPrefix, const OUString& rLName,
+    const Reference<XAttributeList>& xAttrList, ScXMLExternalTabData& rRefInfo ) :
+    SvXMLImportContext( rImport, nPrefix, rLName ),
+    mrScImport(rImport),
+    mrExternalRefInfo(rRefInfo),
+    mfCellValue(0.0),
+    mnRepeatCount(1),
+    mnNumberFormat(-1),
+    mnCellType(::com::sun::star::util::NumberFormat::UNDEFINED),
+    mbIsNumeric(false),
+    mbIsEmpty(true)
+{
+    using namespace ::xmloff::token;
+
+    sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
+    const SvXMLTokenMap& rTokenMap = rImport.GetTableRowCellAttrTokenMap();
+    for (sal_Int16 i = 0; i < nAttrCount; ++i)
+    {
+        OUString aLocalName;
+        sal_uInt16 nAttrPrefix = rImport.GetNamespaceMap().GetKeyByAttrName(
+            xAttrList->getNameByIndex(i), &aLocalName);
+
+        const rtl::OUString& sValue = xAttrList->getValueByIndex(i);
+        sal_uInt16 nToken = rTokenMap.Get(nAttrPrefix, aLocalName);
+
+        switch (nToken)
+        {
+            case XML_TOK_TABLE_ROW_CELL_ATTR_STYLE_NAME:
+            {
+                XMLTableStylesContext* pStyles = static_cast<XMLTableStylesContext*>(mrScImport.GetAutoStyles());
+                const XMLTableStyleContext* pStyle = static_cast<const XMLTableStyleContext*>(
+                    pStyles->FindStyleChildContext(XML_STYLE_FAMILY_TABLE_CELL, sValue, true));
+                if (pStyle)
+                    mnNumberFormat = const_cast<XMLTableStyleContext*>(pStyle)->GetNumberFormat();
+            }
+            break;
+            case XML_TOK_TABLE_ROW_CELL_ATTR_REPEATED:
+            {
+                mnRepeatCount = ::std::max(sValue.toInt32(), static_cast<sal_Int32>(1));
+            }
+            break;
+            case XML_TOK_TABLE_ROW_CELL_ATTR_VALUE_TYPE:
+            {
+                mnCellType = mrScImport.GetCellType(sValue);
+            }
+            break;
+            case XML_TOK_TABLE_ROW_CELL_ATTR_VALUE:
+            {
+                if (sValue.getLength())
+                {
+                    mrScImport.GetMM100UnitConverter().convertDouble(mfCellValue, sValue);
+                    mbIsNumeric = true;
+                    mbIsEmpty = false;
+                }
+            }
+            break;
+            case XML_TOK_TABLE_ROW_CELL_ATTR_DATE_VALUE:
+            {
+                if (sValue.getLength() && mrScImport.SetNullDateOnUnitConverter())
+                {
+                    mrScImport.GetMM100UnitConverter().convertDateTime(mfCellValue, sValue);
+                    mbIsNumeric = true;
+                    mbIsEmpty = false;
+                }
+            }
+            break;
+            case XML_TOK_TABLE_ROW_CELL_ATTR_TIME_VALUE:
+            {
+                if (sValue.getLength())
+                {
+                    mrScImport.GetMM100UnitConverter().convertTime(mfCellValue, sValue);
+                    mbIsNumeric = true;
+                    mbIsEmpty = false;
+                }
+            }
+            break;
+            case XML_TOK_TABLE_ROW_CELL_ATTR_STRING_VALUE:
+            {
+                if (sValue.getLength())
+                {
+                    maCellString = sValue;
+                    mbIsNumeric = false;
+                    mbIsEmpty = false;
+                }
+            }
+            break;
+            case XML_TOK_TABLE_ROW_CELL_ATTR_BOOLEAN_VALUE:
+            {
+                if (sValue.getLength())
+                {
+                    mfCellValue = IsXMLToken(sValue, XML_TRUE) ? 1.0 : 0.0;
+                    mbIsNumeric = true;
+                    mbIsEmpty = false;
+                }
+            }
+            break;
+            default:
+                ;
+        }
+    }
+}
+
+ScXMLExternalRefCellContext::~ScXMLExternalRefCellContext()
+{
+}
+
+SvXMLImportContext* ScXMLExternalRefCellContext::CreateChildContext(
+    USHORT nPrefix, const OUString& rLocalName, const Reference<XAttributeList>& xAttrList )
+{
+    const SvXMLTokenMap& rTokenMap = mrScImport.GetTableRowCellElemTokenMap();
+    sal_uInt16 nToken = rTokenMap.Get(nPrefix, rLocalName);
+    if (nToken == XML_TOK_TABLE_ROW_CELL_P)
+        return new ScXMLExternalRefCellTextContext(mrScImport, nPrefix, rLocalName, xAttrList, maCellString);
+
+    return new SvXMLImportContext(GetImport(), nPrefix, rLocalName);
+}
+
+void ScXMLExternalRefCellContext::EndElement()
+{
+    if (maCellString.getLength())
+        mbIsEmpty = false;
+
+    for (sal_Int32 i = 0; i < mnRepeatCount; ++i, ++mrExternalRefInfo.mnCol)
+    {
+        if (mbIsEmpty)
+            continue;
+
+        ScExternalRefCache::TokenRef aToken;
+        if (mbIsNumeric)
+            aToken.reset(new formula::FormulaDoubleToken(mfCellValue));
+        else
+            aToken.reset(new formula::FormulaStringToken(maCellString));
+
+        sal_uInt32 nNumFmt = mnNumberFormat >= 0 ? static_cast<sal_uInt32>(mnNumberFormat) : 0;
+        mrExternalRefInfo.mpCacheTable->setCell(
+            static_cast<SCCOL>(mrExternalRefInfo.mnCol),
+            static_cast<SCROW>(mrExternalRefInfo.mnRow),
+            aToken, nNumFmt);
+    }
+}
+
+// ============================================================================
+
+ScXMLExternalRefCellTextContext::ScXMLExternalRefCellTextContext(
+    ScXMLImport& rImport, USHORT nPrefix, const OUString& rLName,
+    const Reference<XAttributeList>& /*xAttrList*/, OUString& rCellString ) :
+    SvXMLImportContext( rImport, nPrefix, rLName ),
+    mrScImport(rImport),
+    mrCellString(rCellString)
+{
+}
+
+ScXMLExternalRefCellTextContext::~ScXMLExternalRefCellTextContext()
+{
+}
+
+SvXMLImportContext* ScXMLExternalRefCellTextContext::CreateChildContext(
+    USHORT nPrefix, const OUString& rLocalName, const Reference<XAttributeList>& /*xAttrList*/ )
+{
+    return new SvXMLImportContext(GetImport(), nPrefix, rLocalName);
+}
+
+void ScXMLExternalRefCellTextContext::Characters(const OUString& rChar)
+{
+    mrCellString = rChar;
+}
+
+void ScXMLExternalRefCellTextContext::EndElement()
+{
+}

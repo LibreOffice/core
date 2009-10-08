@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: tp_LegendPosition.hxx,v $
- * $Revision: 1.5 $
+ * $Revision: 1.5.72.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -36,6 +36,7 @@
 #include <vcl/fixed.hxx>
 //for auto_ptr
 #include <memory>
+#include "TextDirectionListBox.hxx"
 
 //.............................................................................
 namespace chart
@@ -49,6 +50,10 @@ private:
     FixedLine   aGrpLegend;
 
     ::std::auto_ptr< LegendPositionResources >   m_apLegendPositionResources;
+
+    FixedLine           m_aFlTextOrient;
+    FixedText               m_aFtTextDirection;
+    TextDirectionListBox    m_aLbTextDirection;
 
 public:
     SchLegendPosTabPage(Window* pParent, const SfxItemSet& rInAttrs);

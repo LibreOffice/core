@@ -33,17 +33,13 @@
 
 #include <com/sun/star/uno/Reference.hxx>
 
-namespace com { namespace sun { namespace star {
-    namespace lang {
-        class XMultiServiceFactory;
-    }
-}}}
 #include "dptabdat.hxx"
 
 #include <vector>
 #include <set>
 
 class ScDPCacheTable;
+class ScDocument;
 
 // --------------------------------------------------------------------
 //
@@ -74,14 +70,11 @@ private:
     BOOL            OpenDatabase();
 
 public:
-                    ScDatabaseDPData(
-                        ::com::sun::star::uno::Reference<
-                            ::com::sun::star::lang::XMultiServiceFactory > xSMgr,
-                        const ScImportSourceDesc& rImport );
+                    ScDatabaseDPData(ScDocument* pDoc, const ScImportSourceDesc& rImport);
     virtual         ~ScDatabaseDPData();
 
     virtual long                    GetColumnCount();
-    virtual const TypedStrCollection&   GetColumnEntries(long nColumn);
+    virtual const TypedScStrCollection& GetColumnEntries(long nColumn);
     virtual String                  getDimensionName(long nColumn);
     virtual BOOL                    getIsDataLayoutDimension(long nColumn);
     virtual BOOL                    IsDateDimension(long nDim);
@@ -89,8 +82,9 @@ public:
     virtual void                    SetEmptyFlags( BOOL bIgnoreEmptyRows, BOOL bRepeatIfEmpty );
 
     virtual void                    CreateCacheTable();
-    virtual void                    FilterCacheTable(const ::std::vector<ScDPCacheTable::Criterion>& rCriteria);
+    virtual void                    FilterCacheTable(const ::std::vector<ScDPCacheTable::Criterion>& rCriteria, const ::std::hash_set<sal_Int32>& rDataDims);
     virtual void                    GetDrillDownData(const ::std::vector<ScDPCacheTable::Criterion>& rCriteria,
+                                                     const ::std::hash_set<sal_Int32>& rCatDims,
                                                      ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any > >& rData);
     virtual void                    CalcResults(CalcInfo& rInfo, bool bAutoShow);
     virtual const ScDPCacheTable&   GetCacheTable() const;

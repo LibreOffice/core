@@ -98,7 +98,7 @@ ScChartArray::ScChartArray( ScDocument* pDoc, const ScRangeListRef& rRangeList,
 }
 
 ScChartArray::ScChartArray( const ScChartArray& rArr ) :
-        DataObject(),
+        ScDataObject(),
         aName(rArr.aName),
         pDocument(rArr.pDocument),
         aPositioner(rArr.aPositioner),
@@ -110,7 +110,7 @@ ScChartArray::~ScChartArray()
 {
 }
 
-DataObject* ScChartArray::Clone() const
+ScDataObject* ScChartArray::Clone() const
 {
     return new ScChartArray(*this);
 }
@@ -579,7 +579,7 @@ ScMemChart* ScChartArray::CreateMemChartMulti()
 //              Collection
 //
 
-DataObject* ScChartCollection::Clone() const
+ScDataObject*   ScChartCollection::Clone() const
 {
     return new ScChartCollection(*this);
 }

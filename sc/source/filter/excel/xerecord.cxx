@@ -33,6 +33,8 @@
 #include "xerecord.hxx"
 #include "xeroot.hxx"
 
+#include <oox/core/tokens.hxx>
+
 // Base classes to export Excel records =======================================
 
 XclExpRecordBase::~XclExpRecordBase()
@@ -43,11 +45,121 @@ void XclExpRecordBase::Save( XclExpStream& /*rStrm*/ )
 {
 }
 
+void XclExpRecordBase::SaveXml( XclExpXmlStream& /*rStrm*/ )
+{
+}
+
 //UNUSED2008-05  void XclExpRecordBase::SaveRepeated( XclExpStream& rStrm, size_t nCount )
 //UNUSED2008-05  {
 //UNUSED2008-05      for( size_t nIndex = 0; nIndex < nCount; ++nIndex )
 //UNUSED2008-05          Save( rStrm );
 //UNUSED2008-05  }
+
+// ----------------------------------------------------------------------------
+
+XclExpDelegatingRecord::XclExpDelegatingRecord( XclExpRecordBase* pRecord )
+    : mpRecord( pRecord )
+{
+}
+
+XclExpDelegatingRecord::~XclExpDelegatingRecord()
+{
+    // Do Nothing; we use Delegating Record for other objects we "know" will
+    // survive...
+}
+
+void XclExpDelegatingRecord::SaveXml( XclExpXmlStream& rStrm )
+{
+    if( !mpRecord )
+        return;
+    mpRecord->SaveXml( rStrm );
+}
+
+// ----------------------------------------------------------------------------
+
+XclExpXmlElementRecord::XclExpXmlElementRecord( sal_Int32 nElement, void (*pAttributes)( XclExpXmlStream& rStrm) )
+    : mnElement( nElement ), mpAttributes( pAttributes )
+{
+}
+
+XclExpXmlElementRecord::~XclExpXmlElementRecord()
+{
+}
+
+// ----------------------------------------------------------------------------
+
+XclExpXmlStartElementRecord::XclExpXmlStartElementRecord( sal_Int32 nElement, void (*pAttributes)( XclExpXmlStream& rStrm) )
+    : XclExpXmlElementRecord( nElement, pAttributes )
+{
+}
+
+XclExpXmlStartElementRecord::~XclExpXmlStartElementRecord()
+{
+}
+
+void XclExpXmlStartElementRecord::SaveXml( XclExpXmlStream& rStrm )
+{
+    sax_fastparser::FSHelperPtr& rStream = rStrm.GetCurrentStream();
+    if( ! mpAttributes )
+    {
+        rStream->startElement( mnElement, FSEND );
+    }
+    else
+    {
+        rStream->write( "<" )->writeId( mnElement );
+        (*mpAttributes)( rStrm );
+    }
+}
+
+// ----------------------------------------------------------------------------
+
+XclExpXmlEndElementRecord::XclExpXmlEndElementRecord( sal_Int32 nElement )
+    : XclExpXmlElementRecord( nElement )
+{
+}
+
+XclExpXmlEndElementRecord::~XclExpXmlEndElementRecord()
+{
+}
+
+void XclExpXmlEndElementRecord::SaveXml( XclExpXmlStream& rStrm )
+{
+    rStrm.GetCurrentStream()->endElement( mnElement );
+}
+
+// ----------------------------------------------------------------------------
+
+XclExpXmlStartSingleElementRecord::XclExpXmlStartSingleElementRecord( sal_Int32 nElement, void (*pAttributes)( XclExpXmlStream& rStrm) )
+    : XclExpXmlElementRecord( nElement, pAttributes )
+{
+}
+
+XclExpXmlStartSingleElementRecord::~XclExpXmlStartSingleElementRecord()
+{
+}
+
+void XclExpXmlStartSingleElementRecord::SaveXml( XclExpXmlStream& rStrm )
+{
+    sax_fastparser::FSHelperPtr& rStream = rStrm.GetCurrentStream();
+    rStream->write( "<" )->writeId( mnElement );
+    if( mpAttributes )
+        (*mpAttributes)( rStrm );
+}
+
+// ----------------------------------------------------------------------------
+
+XclExpXmlEndSingleElementRecord::XclExpXmlEndSingleElementRecord()
+{
+}
+
+XclExpXmlEndSingleElementRecord::~XclExpXmlEndSingleElementRecord()
+{
+}
+
+void XclExpXmlEndSingleElementRecord::SaveXml( XclExpXmlStream& rStrm )
+{
+    rStrm.GetCurrentStream()->write( "/>" );
+}
 
 // ----------------------------------------------------------------------------
 
@@ -81,9 +193,32 @@ void XclExpRecord::Save( XclExpStream& rStrm )
 
 // ----------------------------------------------------------------------------
 
+template<>
+void XclExpValueRecord<double>::SaveXml( XclExpXmlStream& rStrm )
+{
+    if( mnAttribute == -1 )
+        return;
+    rStrm.WriteAttributes(
+        mnAttribute,    rtl::OString::valueOf( maValue ).getStr(),
+        FSEND );
+}
+
+// ----------------------------------------------------------------------------
+
 void XclExpBoolRecord::WriteBody( XclExpStream& rStrm )
 {
     rStrm << static_cast< sal_uInt16 >( mbValue ? 1 : 0 );
+}
+
+void XclExpBoolRecord::SaveXml( XclExpXmlStream& rStrm )
+{
+    if( mnAttribute == -1 )
+        return;
+
+    rStrm.WriteAttributes(
+            // HACK: HIDEOBJ (excdoc.cxx) should be its own object to handle XML_showObjects
+            mnAttribute, mnAttribute == XML_showObjects ? "all" : XclXmlUtils::ToPsz( mbValue ),
+            FSEND );
 }
 
 // ----------------------------------------------------------------------------

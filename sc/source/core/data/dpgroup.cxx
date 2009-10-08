@@ -49,6 +49,7 @@
 #include "dpcachetable.hxx"
 #include "dptabsrc.hxx"
 #include "dptabres.hxx"
+#include "dpobject.hxx"
 
 #include <com/sun/star/sheet/DataPilotFieldGroupBy.hpp>
 #include <com/sun/star/sheet/DataPilotFieldFilter.hpp>
@@ -86,7 +87,7 @@ public:
     ScDPGroupDateFilter(double fMatchValue, sal_Int32 nDatePart,
                         const Date* pNullDate, const ScDPNumGroupInfo* pNumInfo);
 
-    virtual bool match(const ScDPCacheTable::Cell &rCell) const;
+    virtual bool match(const ScDPCacheCell &rCell) const;
 
 private:
     ScDPGroupDateFilter(); // disabled
@@ -110,7 +111,7 @@ ScDPGroupDateFilter::ScDPGroupDateFilter(double fMatchValue, sal_Int32 nDatePart
 //          mfMatchValue, mnDatePart);
 }
 
-bool ScDPGroupDateFilter::match(const ScDPCacheTable::Cell& rCell) const
+bool ScDPGroupDateFilter::match(const ScDPCacheCell& rCell) const
 {
     using namespace ::com::sun::star::sheet;
     using ::rtl::math::approxFloor;
@@ -418,7 +419,7 @@ String lcl_GetSpecialDateName( double fValue, bool bFirst, SvNumberFormatter* pF
     return aBuffer.makeStringAndClear();
 }
 
-void ScDPDateGroupHelper::FillColumnEntries( TypedStrCollection& rEntries, const TypedStrCollection& rOriginal,
+void ScDPDateGroupHelper::FillColumnEntries( TypedScStrCollection& rEntries, const TypedScStrCollection& rOriginal,
                                             SvNumberFormatter* pFormatter ) const
 {
     // auto min/max is only used for "Years" part, but the loop is always needed
@@ -608,12 +609,12 @@ void ScDPGroupDimension::SetGroupDim( long nDim )
     nGroupDim = nDim;
 }
 
-const TypedStrCollection& ScDPGroupDimension::GetColumnEntries(
-                    const TypedStrCollection& rOriginal, ScDocument* pDoc ) const
+const TypedScStrCollection& ScDPGroupDimension::GetColumnEntries(
+                    const TypedScStrCollection& rOriginal, ScDocument* pDoc ) const
 {
     if ( !pCollection )
     {
-        pCollection = new TypedStrCollection();
+        pCollection = new TypedScStrCollection();
         if ( pDateHelper )
             pDateHelper->FillColumnEntries( *pCollection, rOriginal, pDoc->GetFormatTable() );
         else
@@ -808,14 +809,14 @@ inline bool IsInteger( double fValue )
     return rtl::math::approxEqual( fValue, rtl::math::approxFloor(fValue) );
 }
 
-const TypedStrCollection& ScDPNumGroupDimension::GetNumEntries(
-                    const TypedStrCollection& rOriginal, ScDocument* pDoc ) const
+const TypedScStrCollection& ScDPNumGroupDimension::GetNumEntries(
+                    const TypedScStrCollection& rOriginal, ScDocument* pDoc ) const
 {
     if ( !pCollection )
     {
         SvNumberFormatter* pFormatter = pDoc->GetFormatTable();
 
-        pCollection = new TypedStrCollection();
+        pCollection = new TypedScStrCollection();
         if ( pDateHelper )
             pDateHelper->FillColumnEntries( *pCollection, rOriginal, pFormatter );
         else
@@ -977,6 +978,7 @@ String lcl_GetNumGroupForValue( double fValue, const ScDPNumGroupInfo& rInfo, bo
 }
 
 ScDPGroupTableData::ScDPGroupTableData( ScDPTableData* pSource, ScDocument* pDocument ) :
+    ScDPTableData(pDocument),
     pSourceData( pSource ),
     pDoc( pDocument )
 {
@@ -1041,7 +1043,7 @@ void ScDPGroupTableData::GetNumGroupInfo( long nDimension, ScDPNumGroupInfo& rIn
     }
 }
 
-const TypedStrCollection& ScDPGroupTableData::GetColumnEntries(long nColumn)
+const TypedScStrCollection& ScDPGroupTableData::GetColumnEntries(long nColumn)
 {
     // date handling is in ScDPGroupDimension::GetColumnEntries / ScDPNumGroupDimension::GetNumEntries
     // (to use the pCollection members)
@@ -1055,7 +1057,7 @@ const TypedStrCollection& ScDPGroupTableData::GetColumnEntries(long nColumn)
             const ScDPGroupDimension& rGroupDim = aGroups[nColumn - nSourceCount];
             long nSourceDim = rGroupDim.GetSourceDim();
             // collection is cached at pSourceData, GetColumnEntries can be called every time
-            const TypedStrCollection& rOriginal = pSourceData->GetColumnEntries( nSourceDim );
+            const TypedScStrCollection& rOriginal = pSourceData->GetColumnEntries( nSourceDim );
             return rGroupDim.GetColumnEntries( rOriginal, pDoc );
         }
     }
@@ -1063,7 +1065,7 @@ const TypedStrCollection& ScDPGroupTableData::GetColumnEntries(long nColumn)
     if ( IsNumGroupDimension( nColumn ) )
     {
         // dimension number is unchanged for numerical groups
-        const TypedStrCollection& rOriginal = pSourceData->GetColumnEntries( nColumn );
+        const TypedScStrCollection& rOriginal = pSourceData->GetColumnEntries( nColumn );
         return pNumGroups[nColumn].GetNumEntries( rOriginal, pDoc );
     }
 
@@ -1131,12 +1133,17 @@ void ScDPGroupTableData::SetEmptyFlags( BOOL bIgnoreEmptyRows, BOOL bRepeatIfEmp
     pSourceData->SetEmptyFlags( bIgnoreEmptyRows, bRepeatIfEmpty );
 }
 
+bool ScDPGroupTableData::IsRepeatIfEmpty()
+{
+    return pSourceData->IsRepeatIfEmpty();
+}
+
 void ScDPGroupTableData::CreateCacheTable()
 {
     pSourceData->CreateCacheTable();
 }
 
-void ScDPGroupTableData::ModifyFilterCriteria(vector<ScDPCacheTable::Criterion>& rCriteria) const
+void ScDPGroupTableData::ModifyFilterCriteria(vector<ScDPCacheTable::Criterion>& rCriteria)
 {
     typedef hash_map<long, const ScDPGroupDimension*> GroupFieldMapType;
     GroupFieldMapType aGroupFieldIds;
@@ -1225,7 +1232,7 @@ void ScDPGroupTableData::ModifyFilterCriteria(vector<ScDPCacheTable::Criterion>&
 
                     ScDPCacheTable::Criterion aCri;
                     aCri.mnFieldIndex = nSrcDim;
-                    aCri.mpFilter.reset(new ScDPCacheTable::GroupFilter);
+                    aCri.mpFilter.reset(new ScDPCacheTable::GroupFilter(GetSharedString()));
                     ScDPCacheTable::GroupFilter* pGrpFilter =
                         static_cast<ScDPCacheTable::GroupFilter*>(aCri.mpFilter.get());
 
@@ -1238,18 +1245,18 @@ void ScDPGroupTableData::ModifyFilterCriteria(vector<ScDPCacheTable::Criterion>&
     rCriteria.swap(aNewCriteria);
 }
 
-void ScDPGroupTableData::FilterCacheTable(const vector<ScDPCacheTable::Criterion>& rCriteria)
+void ScDPGroupTableData::FilterCacheTable(const vector<ScDPCacheTable::Criterion>& rCriteria, const hash_set<sal_Int32>& rCatDims)
 {
     vector<ScDPCacheTable::Criterion> aNewCriteria(rCriteria);
     ModifyFilterCriteria(aNewCriteria);
-    pSourceData->FilterCacheTable(aNewCriteria);
+    pSourceData->FilterCacheTable(aNewCriteria, rCatDims);
 }
 
-void ScDPGroupTableData::GetDrillDownData(const vector<ScDPCacheTable::Criterion>& rCriteria, Sequence< Sequence<Any> >& rData)
+void ScDPGroupTableData::GetDrillDownData(const vector<ScDPCacheTable::Criterion>& rCriteria, const hash_set<sal_Int32>& rCatDims, Sequence< Sequence<Any> >& rData)
 {
     vector<ScDPCacheTable::Criterion> aNewCriteria(rCriteria);
     ModifyFilterCriteria(aNewCriteria);
-    pSourceData->GetDrillDownData(aNewCriteria, rData);
+    pSourceData->GetDrillDownData(aNewCriteria, rCatDims, rData);
 }
 
 void ScDPGroupTableData::CalcResults(CalcInfo& rInfo, bool bAutoShow)
@@ -1315,28 +1322,6 @@ void ScDPGroupTableData::CopyFields(const vector<long>& rFieldDims, vector<long>
         else
             rNewFieldDims.push_back(rFieldDims[i]);
     }
-}
-
-long* ScDPGroupTableData::CopyFields( const long* pSourceDims, long nCount )
-{
-    if (!nCount)
-        return NULL;
-
-    long nGroupedColumns = aGroups.size();
-
-    long* pNew = new long[nCount];
-    for (long i=0; i<nCount; i++)
-        if ( pSourceDims[i] >= nSourceCount )
-        {
-            if ( pSourceDims[i] == nSourceCount + nGroupedColumns )
-                pNew[i] = nSourceCount;         // data layout in source
-            else
-                pNew[i] = aGroups[pSourceDims[i] - nSourceCount].GetSourceDim();  // original dimension
-        }
-        else
-            pNew[i] = pSourceDims[i];
-
-    return pNew;    // must be deleted by caller
 }
 
 void ScDPGroupTableData::FillGroupValues( ScDPItemData* pItemData, long nCount, const long* pDims )

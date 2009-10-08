@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: tabvwsh4.cxx,v $
- * $Revision: 1.75.24.3 $
+ * $Revision: 1.76.102.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -100,6 +100,7 @@
 #include "navsett.hxx"
 #include "sc.hrc" //CHINA001
 #include "scabstdlg.hxx" //CHINA001
+#include "externalrefmgr.hxx"
 
 void ActivateOlk( ScViewData* pViewData );
 void DeActivateOlk( ScViewData* pViewData );
@@ -223,7 +224,7 @@ void __EXPORT ScTabViewShell::Activate(BOOL bMDI)
             SfxChildWindow* pChildWnd = pThisFrame->GetChildWindow( nModRefDlgId );
             if ( pChildWnd )
             {
-                ScAnyRefDlg* pRefDlg = (ScAnyRefDlg*)pChildWnd->GetWindow();
+                IAnyRefDialog* pRefDlg = dynamic_cast<IAnyRefDialog*>(pChildWnd->GetWindow());
                 pRefDlg->ViewShellChanged(this);
             }
         }
@@ -1817,11 +1818,8 @@ void ScTabViewShell::Construct( BYTE nForceDesignMode )
         if ( pDocSh->GetCreateMode() != SFX_CREATE_MODE_INTERNAL &&
              pDocSh->IsUpdateEnabled() )  // #105575#; update only in the first creation of the ViewShell
         {
-            BOOL bLink = FALSE;                                 // Links updaten
-            SCTAB nTabCount = pDoc->GetTableCount();
-            for (SCTAB i=0; i<nTabCount && !bLink; i++)
-                if (pDoc->IsLinked(i))
-                    bLink = TRUE;
+            // Check if there are any external data.
+            bool bLink = pDoc->GetExternalRefManager()->hasExternalData();
             if (!bLink)
                 if (pDoc->HasDdeLinks() || pDoc->HasAreaLinks())
                     bLink = TRUE;

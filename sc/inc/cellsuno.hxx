@@ -34,7 +34,7 @@
 #include "global.hxx"           // ScRange, ScAddress
 #include "rangelst.hxx"         // ScRangeList
 
-#include "grammar.hxx"
+#include "formula/grammar.hxx"
 #include <svtools/lstner.hxx>
 #include <svtools/listener.hxx>
 #include <svtools/itemprop.hxx>
@@ -624,7 +624,7 @@ protected:
                                     ::com::sun::star::uno::RuntimeException);
 
             void            SetArrayFormula_Impl( const rtl::OUString& aFormula,
-                                                    const ScGrammar::Grammar eGrammar )
+                                                    const formula::FormulaGrammar::Grammar eGrammar )
                                 throw(::com::sun::star::uno::RuntimeException);
 
 public:
@@ -645,7 +645,7 @@ public:
 
                             // via getImplementation()
     virtual void            SetArrayFormulaWithGrammar( const ::rtl::OUString& aFormula,
-                                    const ScGrammar::Grammar )
+                                    const formula::FormulaGrammar::Grammar )
                                 throw(::com::sun::star::uno::RuntimeException);
 
     // XCellRange ist Basisklasse von XSheetCellRange und XSheetOperation
@@ -862,7 +862,7 @@ public:
     void                    SetFormulaResultString( const ::rtl::OUString& rResult );
     void                    SetFormulaResultDouble( double fResult );
     void                    SetFormulaWithGrammar( const ::rtl::OUString& rFormula,
-                                                    const ScGrammar::Grammar );
+                                                    const formula::FormulaGrammar::Grammar );
     const ScAddress&        GetPosition() const { return aCellPos; }
 
                             // XText

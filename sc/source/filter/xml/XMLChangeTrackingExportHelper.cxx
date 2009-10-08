@@ -397,8 +397,8 @@ void ScChangeTrackingExportHelper::WriteFormulaCell(const ScBaseCell* pCell, con
         const ScDocument* pDoc = rExport.GetDocument();
         ScRangeStringConverter::GetStringFromAddress(sAddress, pFormulaCell->aPos, pDoc);
         rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_CELL_ADDRESS, sAddress);
-        const ScGrammar::Grammar eGrammar = pDoc->GetStorageGrammar();
-        sal_uInt16 nNamespacePrefix = (eGrammar == ScGrammar::GRAM_ODFF ? XML_NAMESPACE_OF : XML_NAMESPACE_OOOC);
+        const formula::FormulaGrammar::Grammar eGrammar = pDoc->GetStorageGrammar();
+        sal_uInt16 nNamespacePrefix = (eGrammar == formula::FormulaGrammar::GRAM_ODFF ? XML_NAMESPACE_OF : XML_NAMESPACE_OOOC);
         String sFormula;
         pFormulaCell->GetFormula(sFormula, eGrammar);
         rtl::OUString sOUFormula(sFormula);

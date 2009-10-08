@@ -537,7 +537,7 @@ struct Sc10ChartTypeData
 
 
 // FontAttribut
-class Sc10FontData : public DataObject
+class Sc10FontData : public ScDataObject
 {
 public:
     INT16               Height;
@@ -546,7 +546,7 @@ public:
     sal_Char            FaceName[32];
 
                         Sc10FontData( const Sc10FontData& rData ) :
-                            DataObject( rData ),
+                            ScDataObject( rData ),
                             Height( rData.Height ),
                             CharSet( rData.CharSet ),
                             PitchAndFamily( rData.PitchAndFamily )
@@ -555,26 +555,26 @@ public:
                                     FaceName[sizeof(FaceName)-1] = 0;
                                 }
                         Sc10FontData( SvStream& rStream );
-    virtual DataObject* Clone() const { return new Sc10FontData(*this); }
+    virtual ScDataObject*   Clone() const { return new Sc10FontData(*this); }
 };
 
 
 // Font-Collection
-class Sc10FontCollection : public Collection
+class Sc10FontCollection : public ScCollection
 {
 protected:
     ULONG nError;
 public:
                         Sc10FontCollection( SvStream& rStream );
     ULONG               GetError() { return nError; }
-    Sc10FontData*       At(USHORT nIndex) { return (Sc10FontData*)Collection::At(nIndex); }
+    Sc10FontData*       At(USHORT nIndex) { return (Sc10FontData*)ScCollection::At(nIndex); }
 private:
-    using               Collection::At;
+    using               ScCollection::At;
 };
 
 
 //BereichsDaten
-class Sc10NameData : public DataObject
+class Sc10NameData : public ScDataObject
 {
 public :
     sal_Char            Name[32];
@@ -582,7 +582,7 @@ public :
     sal_Char            Reserved[12];
 
                         Sc10NameData(const Sc10NameData& rData) :
-                            DataObject( rData )
+                            ScDataObject( rData )
                         {
                             strncpy(Name, rData.Name, sizeof(Name));
                             Name[sizeof(Name)-1] = 0;
@@ -591,26 +591,26 @@ public :
                             memcpy(Reserved, rData.Reserved, sizeof(Reserved));
                         }
                         Sc10NameData(SvStream& rStream);
-    virtual DataObject* Clone() const { return new Sc10NameData(*this); }
+    virtual ScDataObject*   Clone() const { return new Sc10NameData(*this); }
 };
 
 
 // Bereichs-Collection
-class Sc10NameCollection : public Collection
+class Sc10NameCollection : public ScCollection
 {
 protected:
     ULONG               nError;
 public:
                         Sc10NameCollection(SvStream& rStream);
 ULONG                   GetError() { return nError; }
-Sc10NameData*           At(USHORT nIndex) { return (Sc10NameData*)Collection::At(nIndex); }
+Sc10NameData*           At(USHORT nIndex) { return (Sc10NameData*)ScCollection::At(nIndex); }
 private:
-    using               Collection::At;
+    using               ScCollection::At;
 };
 
 
 // Vorlage-Daten
-class Sc10PatternData : public DataObject
+class Sc10PatternData : public ScDataObject
 {
 public:
     sal_Char            Name[32];
@@ -627,7 +627,7 @@ public:
     sal_Char            Reserved[8];
 
                         Sc10PatternData(const Sc10PatternData& rData) :
-                            DataObject( rData )
+                            ScDataObject( rData )
                         {
                             strncpy(Name, rData.Name, sizeof(Name));
                             Name[sizeof(Name)-1] = 0;
@@ -644,42 +644,42 @@ public:
                             memcpy(Reserved, rData.Reserved, sizeof(Reserved));
                         }
                         Sc10PatternData(SvStream& rStream);
-virtual DataObject*     Clone() const { return new Sc10PatternData(*this); }
+virtual ScDataObject*       Clone() const { return new Sc10PatternData(*this); }
 };
 
 
 // Vorlage-Collection
-class Sc10PatternCollection : public Collection
+class Sc10PatternCollection : public ScCollection
 {
 protected:
     ULONG               nError;
 public:
                         Sc10PatternCollection(SvStream& rStream);
     ULONG               GetError() { return nError; }
-    Sc10PatternData*    At(USHORT nIndex) { return (Sc10PatternData*)Collection::At(nIndex); }
+    Sc10PatternData*    At(USHORT nIndex) { return (Sc10PatternData*)ScCollection::At(nIndex); }
 private:
-    using               Collection::At;
+    using               ScCollection::At;
 };
 
 
 // DatenBank-Daten
-class Sc10DataBaseData : public DataObject
+class Sc10DataBaseData : public ScDataObject
 {
 public:
     Sc10DataBaseRec     DataBaseRec;
 
                         Sc10DataBaseData(const Sc10DataBaseData& rData) :
-                            DataObject( rData )
+                            ScDataObject( rData )
                         {
                             memcpy(&DataBaseRec, &rData.DataBaseRec, sizeof(DataBaseRec));
                         }
                         Sc10DataBaseData(SvStream& rStream);
-virtual DataObject*     Clone() const { return new Sc10DataBaseData(*this); }
+virtual ScDataObject*       Clone() const { return new Sc10DataBaseData(*this); }
 };
 
 
 // DatenBank-Collection
-class Sc10DataBaseCollection : public Collection
+class Sc10DataBaseCollection : public ScCollection
 {
 protected:
     ULONG               nError;
@@ -687,32 +687,32 @@ protected:
 public:
                         Sc10DataBaseCollection(SvStream& rStream);
     ULONG               GetError() { return nError; }
-    Sc10DataBaseData*   At(USHORT nIndex) { return (Sc10DataBaseData*)Collection::At(nIndex); }
+    Sc10DataBaseData*   At(USHORT nIndex) { return (Sc10DataBaseData*)ScCollection::At(nIndex); }
 private:
-    using               Collection::At;
+    using               ScCollection::At;
 };
 
 
-class Sc10PageData : public DataObject
+class Sc10PageData : public ScDataObject
 {
 public:
     Sc10PageFormat      aPageFormat;
                         Sc10PageData( const Sc10PageFormat& rFormat ) : aPageFormat(rFormat) {}
     int                 operator==( const Sc10PageData& rData ) const
                             { return aPageFormat == rData.aPageFormat; }
-    virtual DataObject* Clone() const;
+    virtual ScDataObject*   Clone() const;
 };
 
 // Seitenformat-Collection
-class Sc10PageCollection : public Collection
+class Sc10PageCollection : public ScCollection
 {
 public:
-                        Sc10PageCollection() : Collection(1,1) {};
-    Sc10PageData*       At(USHORT nIndex) { return (Sc10PageData*)Collection::At(nIndex); }
+                        Sc10PageCollection() : ScCollection(1,1) {};
+    Sc10PageData*       At(USHORT nIndex) { return (Sc10PageData*)ScCollection::At(nIndex); }
     USHORT              InsertFormat( const Sc10PageFormat& rData );
     void                PutToDoc( ScDocument* pDoc );
 private:
-    using               Collection::At;
+    using               ScCollection::At;
 };
 
 

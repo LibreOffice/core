@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: tp_LegendPosition.cxx,v $
- * $Revision: 1.8 $
+ * $Revision: 1.8.72.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -37,6 +37,8 @@
 #include "chartview/ChartSfxItemIds.hxx"
 #include "NoWarningThisInCTOR.hxx"
 #include <svx/chrtitem.hxx>
+#include <svx/eeitem.hxx>
+#include <svx/frmdiritem.hxx>
 
 //.............................................................................
 namespace chart
@@ -48,6 +50,9 @@ SchLegendPosTabPage::SchLegendPosTabPage(Window* pWindow,
     : SfxTabPage( pWindow, SchResId(TP_LEGEND_POS), rInAttrs )
     , aGrpLegend( this, SchResId(GRP_LEGEND) )
     , m_apLegendPositionResources( new LegendPositionResources(this) )
+    , m_aFlTextOrient( this, SchResId( FL_LEGEND_TEXTORIENT ) )
+    , m_aFtTextDirection( this, SchResId( FT_LEGEND_TEXTDIR ) )
+    , m_aLbTextDirection( this, SchResId( LB_LEGEND_TEXTDIR ), &m_aFlTextOrient, &m_aFtTextDirection )
 {
     FreeResource();
 }
@@ -65,12 +70,20 @@ SfxTabPage* SchLegendPosTabPage::Create(Window* pWindow,
 BOOL SchLegendPosTabPage::FillItemSet(SfxItemSet& rOutAttrs)
 {
     m_apLegendPositionResources->writeToItemSet(rOutAttrs);
+
+    if( m_aLbTextDirection.GetSelectEntryCount() > 0 )
+        rOutAttrs.Put( SfxInt32Item( EE_PARA_WRITINGDIR, m_aLbTextDirection.GetSelectEntryValue() ) );
+
     return TRUE;
 }
 
 void SchLegendPosTabPage::Reset(const SfxItemSet& rInAttrs)
 {
     m_apLegendPositionResources->initFromItemSet(rInAttrs);
+
+    const SfxPoolItem* pPoolItem = 0;
+    if( rInAttrs.GetItemState( EE_PARA_WRITINGDIR, TRUE, &pPoolItem ) == SFX_ITEM_SET )
+        m_aLbTextDirection.SelectEntryValue( SvxFrameDirection(((const SvxFrameDirectionItem*)pPoolItem)->GetValue()) );
 }
 
 //.............................................................................

@@ -981,7 +981,7 @@ void ScViewFunc::SetPrintRanges( BOOL bEntireSheet, const String* pPrint,
             {
                 if ( pPrint->Len() )
                 {
-                    const sal_Unicode sep = ScCompiler::GetStringFromOpCode(ocSep).GetChar(0);
+                    const sal_Unicode sep = ScCompiler::GetNativeSymbol(ocSep).GetChar(0);
                     USHORT nTCount = pPrint->GetTokenCount(sep);
                     for (USHORT i=0; i<nTCount; i++)
                     {

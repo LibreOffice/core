@@ -44,7 +44,8 @@
 #include <com/sun/star/sheet/XSpreadsheetDocument.hpp>
 #include <com/sun/star/document/XActionLockable.hpp>
 
-#include "grammar.hxx"
+#include "formula/grammar.hxx"
+#include <boost/optional.hpp>
 
 class ScXMLImport;
 class OutlinerParaObject;
@@ -67,9 +68,9 @@ class ScXMLTableRowCellContext : public SvXMLImportContext
 {
     com::sun::star::uno::Reference<com::sun::star::table::XCell> xBaseCell;
     com::sun::star::uno::Reference<com::sun::star::document::XActionLockable> xLockable;
-    rtl::OUString* pOUTextValue;
-    rtl::OUString* pOUTextContent;
-    rtl::OUString* pOUFormula;
+    ::boost::optional< rtl::OUString > pOUTextValue;
+    ::boost::optional< rtl::OUString > pOUTextContent;
+    ::boost::optional< rtl::OUString > pOUFormula;
     rtl::OUString* pContentValidationName;
     ScMyImportAnnotation*   pMyAnnotation;
     ScMyImpDetectiveObjVec* pDetectiveObjVec;
@@ -80,7 +81,7 @@ class ScXMLTableRowCellContext : public SvXMLImportContext
     sal_Int32   nRepeatedRows;
     sal_Int32   nCellsRepeated;
     ScXMLImport& rXMLImport;
-    ScGrammar::Grammar  eGrammar;
+    formula::FormulaGrammar::Grammar  eGrammar;
     sal_Int16   nCellType;
     sal_Bool    bIsMerged;
     sal_Bool    bIsMatrix;
@@ -131,10 +132,7 @@ public:
                                      const ::com::sun::star::uno::Reference<
                                           ::com::sun::star::xml::sax::XAttributeList>& xAttrList );
 
-    void SetString(const rtl::OUString& rOUTempText) {
-        if (pOUTextContent)
-            delete pOUTextContent;
-        pOUTextContent = new ::rtl::OUString(rOUTempText); }
+    inline void SetString(const rtl::OUString& rOUTempText) { pOUTextContent.reset(rOUTempText); }
     void SetCursorOnTextImport(const rtl::OUString& rOUTempText);
 
     void SetAnnotation(const ::com::sun::star::table::CellAddress& rPosition );
@@ -147,3 +145,4 @@ public:
 };
 
 #endif
+

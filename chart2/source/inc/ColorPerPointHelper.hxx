@@ -32,6 +32,7 @@
 #define _CHART2_COLORPERPOINTHELPER_HXX
 
 #include <com/sun/star/beans/XPropertySet.hpp>
+#include "charttoolsdllapi.hxx"
 
 //.............................................................................
 namespace chart
@@ -42,7 +43,7 @@ namespace chart
 /**
 */
 
-class ColorPerPointHelper
+class OOO_DLLPUBLIC_CHARTTOOLS ColorPerPointHelper
 {
 public:
     static bool hasPointOwnColor(

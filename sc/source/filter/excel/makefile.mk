@@ -45,7 +45,6 @@ PROJECTPCHSOURCE=..\pch\filt_pch
 .INCLUDE :  scpre.mk
 .INCLUDE :  settings.mk
 .INCLUDE :  sc.mk
-.INCLUDE :  $(PRJ)$/util$/makefile.pmk
 
 # --- Files --------------------------------------------------------
 
@@ -123,6 +122,7 @@ EXCEPTIONSFILES = \
         $(SLO)$/excrecds.obj				\
         $(SLO)$/expop2.obj					\
         $(SLO)$/namebuff.obj				\
+        $(SLO)$/tokstack.obj				\
         $(SLO)$/xecontent.obj				\
         $(SLO)$/xeescher.obj				\
         $(SLO)$/xeformula.obj				\
@@ -132,6 +132,7 @@ EXCEPTIONSFILES = \
         $(SLO)$/xepage.obj					\
         $(SLO)$/xepivot.obj					\
         $(SLO)$/xechart.obj					\
+        $(SLO)$/xestream.obj				\
         $(SLO)$/xestring.obj				\
         $(SLO)$/xestyle.obj					\
         $(SLO)$/xetable.obj					\

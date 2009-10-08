@@ -108,7 +108,7 @@
 
 //------------------------------------------------------------------------
 
-void LimitSizeOnDrawPage( Size& rSize, Point& rPos, const Size& rPage )
+void SC_DLLPUBLIC ScLimitSizeOnDrawPage( Size& rSize, Point& rPos, const Size& rPage )
 {
     if ( !rPage.Width() || !rPage.Height() )
         return;
@@ -186,7 +186,7 @@ void lcl_InsertGraphic( const Graphic& rGraphic,
     if ( pData->GetDocument()->IsNegativePage( pData->GetTabNo() ) )
         aInsertPos.X() -= aLogicSize.Width();       // move position to left edge
 
-    LimitSizeOnDrawPage( aLogicSize, aInsertPos, pPage->GetSize() );
+    ScLimitSizeOnDrawPage( aLogicSize, aInsertPos, pPage->GetSize() );
 
     Rectangle aRect ( aInsertPos, aLogicSize );
 
@@ -233,7 +233,7 @@ void lcl_InsertMedia( const ::rtl::OUString& rMediaURL, bool bApi,
     else
         aSize = Size( 5000, 5000 );
 
-    LimitSizeOnDrawPage( aSize, aInsertPos, pPage->GetSize() );
+    ScLimitSizeOnDrawPage( aSize, aInsertPos, pPage->GetSize() );
 
     if( pData->GetDocument()->IsNegativePage( pData->GetTabNo() ) )
         aInsertPos.X() -= aSize.Width();

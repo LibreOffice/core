@@ -43,6 +43,15 @@
 #define INCLUDED_LIMITS
 #endif
 #include "scdllapi.h"
+#include <formula/grammar.hxx>
+
+#include <com/sun/star/uno/Sequence.hxx>
+
+namespace com { namespace sun { namespace star {
+    namespace sheet {
+        struct ExternalLinkInfo;
+    }
+}}}
 
 class ScDocument;
 
@@ -240,7 +249,7 @@ inline SCTAB SanitizeTab( SCTAB nTab, SCTAB nMaxTab )
 
 // === ScAddress =============================================================
 
-class SC_DLLPUBLIC ScAddress
+class ScAddress
 {
 private:
     SCROW   nRow;
@@ -251,38 +260,34 @@ public:
 
     enum Uninitialized      { UNINITIALIZED };
     enum InitializeInvalid  { INITIALIZE_INVALID };
-    enum Convention         {
-        CONV_UNSPECIFIED = -1,  /* useful when we want method to chose, must be first */
 
-        /* elements must be sequential and changes should be reflected in ScCompiler::pCharTables */
-        CONV_OOO     =  0,  /* 'doc'#sheet.A1:sheet2.B2 */
-        CONV_ODF,           /* ['doc'#sheet.A1:sheet2.B2] */
-        CONV_XL_A1,         /* [doc]sheet:sheet2!A1:B2 */
-        CONV_XL_R1C1,       /* [doc]sheet:sheet2!R1C1:R2C2 */
-        CONV_XL_OOX,        /* [#]sheet:sheet2!A1:B2 */
-
-        CONV_LOTUS_A1,      /* external? 3d? A1.B2 <placeholder/> */
-
-        CONV_LAST   /* for loops, must always be last */
-    };
     struct Details {
-        Convention  eConv;
+        formula::FormulaGrammar::AddressConvention  eConv;
         SCROW       nRow;
         SCCOL       nCol;
-        inline Details( Convention eConvP, SCROW nRowP, SCCOL nColP )
+        inline Details( formula::FormulaGrammar::AddressConvention eConvP, SCROW nRowP, SCCOL nColP )
             : eConv( eConvP ), nRow( nRowP ), nCol( nColP )
             {}
-        inline Details( Convention eConvP, ScAddress const & rAddr )
+        inline Details( formula::FormulaGrammar::AddressConvention eConvP, ScAddress const & rAddr )
             : eConv( eConvP ), nRow( rAddr.Row() ), nCol( rAddr.Col() )
             {}
-        inline Details( Convention eConvP)
+        inline Details( formula::FormulaGrammar::AddressConvention eConvP)
             : eConv( eConvP ), nRow( 0 ), nCol( 0 )
             {}
-        /* Use the convention associated with rAddr::Tab() */
+        /* Use the formula::FormulaGrammar::AddressConvention associated with rAddr::Tab() */
         Details( const ScDocument* pDoc, const ScAddress & rAddr );
         void SetPos( const ScDocument* pDoc, const ScAddress & rAddr );
     };
-    static const Details detailsOOOa1;
+    SC_DLLPUBLIC static const Details detailsOOOa1;
+
+    struct ExternalInfo
+    {
+        String      maTabName;
+        sal_uInt16  mnFileId;
+        bool        mbExternal;
+
+        inline ExternalInfo() : mnFileId(0), mbExternal(false) {}
+    };
 
     inline ScAddress() : nRow(0), nCol(0), nTab(0) {}
     inline ScAddress( SCCOL nColP, SCROW nRowP, SCTAB nTabP )
@@ -314,13 +319,17 @@ public:
     inline void GetVars( SCCOL& nColP, SCROW& nRowP, SCTAB& nTabP ) const
     { nColP = nCol; nRowP = nRow; nTabP = nTab; }
 
-    USHORT Parse( const String&, ScDocument* = NULL,
-                  const Details& rDetails = detailsOOOa1);
-    void Format( String&, USHORT = 0, ScDocument* = NULL,
+    SC_DLLPUBLIC USHORT Parse( const String&, ScDocument* = NULL,
+                  const Details& rDetails = detailsOOOa1,
+                  ExternalInfo* pExtInfo = NULL,
+                  const ::com::sun::star::uno::Sequence<
+                    const ::com::sun::star::sheet::ExternalLinkInfo > * pExternalLinks = NULL );
+
+    SC_DLLPUBLIC void Format( String&, USHORT = 0, ScDocument* = NULL,
                  const Details& rDetails = detailsOOOa1) const;
 
     // The document for the maximum defined sheet number
-    bool Move( SCsCOL dx, SCsROW dy, SCsTAB dz, ScDocument* =NULL );
+    SC_DLLPUBLIC bool Move( SCsCOL dx, SCsROW dy, SCsTAB dz, ScDocument* =NULL );
     inline bool operator==( const ScAddress& r ) const;
     inline bool operator!=( const ScAddress& r ) const;
     inline bool operator<( const ScAddress& r ) const;
@@ -428,7 +437,7 @@ inline size_t ScAddress::hash() const
 
 // === ScRange ===============================================================
 
-class SC_DLLPUBLIC ScRange
+class ScRange
 {
 public:
     ScAddress aStart, aEnd;
@@ -457,23 +466,54 @@ public:
     inline bool In( const ScRange& ) const;     // is Range& in Range?
 
     USHORT Parse( const String&, ScDocument* = NULL,
-                  const ScAddress::Details& rDetails = ScAddress::detailsOOOa1 );
+                  const ScAddress::Details& rDetails = ScAddress::detailsOOOa1,
+                  ScAddress::ExternalInfo* pExtInfo = NULL,
+                  const ::com::sun::star::uno::Sequence<
+                    const ::com::sun::star::sheet::ExternalLinkInfo > * pExternalLinks = NULL );
+
     USHORT ParseAny( const String&, ScDocument* = NULL,
                      const ScAddress::Details& rDetails = ScAddress::detailsOOOa1 );
-    USHORT ParseCols( const String&, ScDocument* = NULL,
+    SC_DLLPUBLIC USHORT ParseCols( const String&, ScDocument* = NULL,
                      const ScAddress::Details& rDetails = ScAddress::detailsOOOa1 );
-    USHORT ParseRows( const String&, ScDocument* = NULL,
+    SC_DLLPUBLIC USHORT ParseRows( const String&, ScDocument* = NULL,
                      const ScAddress::Details& rDetails = ScAddress::detailsOOOa1 );
-    void Format( String&, USHORT = 0, ScDocument* = NULL,
+
+    /** Parse an Excel style reference up to and including the sheet name
+        separator '!', including detection of external documents and sheet
+        names, and in case of MOOXML import the bracketed index is used to
+        determine the actual document name passed in pExternalLinks. For
+        internal references (resulting rExternDocName empty), aStart.nTab and
+        aEnd.nTab are set, or -1 if sheet name not found.
+        @param bOnlyAcceptSingle  If <TRUE/>, a 3D reference (Sheet1:Sheet2)
+            encountered results in an error (NULL returned).
+        @param pExternalLinks  pointer to ExternalLinkInfo sequence, may be
+            NULL for non-filter usage, in which case indices such as [1] are
+            not resolved.
+        @returns
+            Pointer to the position after '!' if successfully parsed, and
+            rExternDocName, rStartTabName and/or rEndTabName filled if
+            applicable. SCA_... flags set in nFlags.
+            Or if no valid document and/or sheet header could be parsed the start
+            position passed with pString.
+            Or NULL if a 3D sheet header could be parsed but
+            bOnlyAcceptSingle==true was given.
+     */
+    const sal_Unicode* Parse_XL_Header( const sal_Unicode* pString, const ScDocument* pDoc,
+            String& rExternDocName, String& rStartTabName, String& rEndTabName, USHORT& nFlags,
+            bool bOnlyAcceptSingle,
+            const ::com::sun::star::uno::Sequence<
+                const ::com::sun::star::sheet::ExternalLinkInfo > * pExternalLinks = NULL );
+
+    SC_DLLPUBLIC void Format( String&, USHORT = 0, ScDocument* = NULL,
                  const ScAddress::Details& rDetails = ScAddress::detailsOOOa1 ) const;
 
     inline void GetVars( SCCOL& nCol1, SCROW& nRow1, SCTAB& nTab1,
         SCCOL& nCol2, SCROW& nRow2, SCTAB& nTab2 ) const;
     // The document for the maximum defined sheet number
-    bool Move( SCsCOL dx, SCsROW dy, SCsTAB dz, ScDocument* =NULL );
-    void Justify();
-    void ExtendTo( const ScRange& rRange );
-    bool Intersects( const ScRange& ) const;    // do two ranges intersect?
+    SC_DLLPUBLIC bool Move( SCsCOL dx, SCsROW dy, SCsTAB dz, ScDocument* =NULL );
+    SC_DLLPUBLIC void Justify();
+    SC_DLLPUBLIC void ExtendTo( const ScRange& rRange );
+    SC_DLLPUBLIC bool Intersects( const ScRange& ) const;    // do two ranges intersect?
     inline bool operator==( const ScRange& r ) const;
     inline bool operator!=( const ScRange& r ) const;
     inline bool operator<( const ScRange& r ) const;
@@ -724,19 +764,19 @@ bool ConvertDoubleRef(ScDocument* pDoc, const String& rRefString,
         const ScAddress::Details& rDetails = ScAddress::detailsOOOa1);
 
 /// append alpha representation of column to buffer
-SC_DLLPUBLIC void ColToAlpha( rtl::OUStringBuffer& rBuffer, SCCOL nCol);
+SC_DLLPUBLIC void ScColToAlpha( rtl::OUStringBuffer& rBuffer, SCCOL nCol);
 
-inline void ColToAlpha( String& rStr, SCCOL nCol)
+inline void ScColToAlpha( String& rStr, SCCOL nCol)
 {
     rtl::OUStringBuffer aBuf(2);
-    ColToAlpha( aBuf, nCol);
+    ScColToAlpha( aBuf, nCol);
     rStr.Append( aBuf.getStr(), static_cast<xub_StrLen>(aBuf.getLength()));
 }
 
-inline String ColToAlpha( SCCOL nCol )
+inline String ScColToAlpha( SCCOL nCol )
 {
     rtl::OUStringBuffer aBuf(2);
-    ColToAlpha( aBuf, nCol);
+    ScColToAlpha( aBuf, nCol);
     return aBuf.makeStringAndClear();
 }
 

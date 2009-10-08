@@ -38,6 +38,13 @@
 #include "AxisIndexDefines.hxx"
 #include "LineProperties.hxx"
 #include "ContainerHelper.hxx"
+#include "servicenames_coosystems.hxx"
+#include "DataSeriesHelper.hxx"
+
+#include <svtools/saveopt.hxx>
+
+#include <com/sun/star/chart/ChartAxisPosition.hpp>
+
 #include <com/sun/star/chart2/XCoordinateSystemContainer.hpp>
 #include <com/sun/star/chart2/XChartTypeContainer.hpp>
 #include <com/sun/star/chart2/XDataSeriesContainer.hpp>
@@ -112,6 +119,8 @@ Reference< XAxis > AxisHelper::createAxis(
 
         if( nAxisIndex>0 )//when inserting secondary axes copy some things from the main axis
         {
+            ::com::sun::star::chart::ChartAxisPosition eNewAxisPos( ::com::sun::star::chart::ChartAxisPosition_END );
+
             Reference< XAxis > xMainAxis( xCooSys->getAxisByDimension( nDimensionIndex, 0 ) );
             if( xMainAxis.is() )
             {
@@ -123,15 +132,26 @@ Reference< XAxis > AxisHelper::createAxis(
                 aScale.Orientation = aMainScale.Orientation;
 
                 xAxis->setScaleData( aScale );
+
+                //ensure that the second axis is not placed on the main axis
+                Reference< beans::XPropertySet > xMainProp( xMainAxis, uno::UNO_QUERY );
+                if( xMainProp.is() )
+                {
+                    ::com::sun::star::chart::ChartAxisPosition eMainAxisPos( ::com::sun::star::chart::ChartAxisPosition_ZERO );
+                    xMainProp->getPropertyValue(C2U( "CrossoverPosition" )) >>= eMainAxisPos;
+                    if( ::com::sun::star::chart::ChartAxisPosition_END == eMainAxisPos )
+                        eNewAxisPos = ::com::sun::star::chart::ChartAxisPosition_START;
+                }
             }
+
+            Reference< beans::XPropertySet > xProp( xAxis, uno::UNO_QUERY );
+            if( xProp.is() )
+                xProp->setPropertyValue(C2U( "CrossoverPosition" ), uno::makeAny(eNewAxisPos) );
         }
 
         Reference< beans::XPropertySet > xProp( xAxis, uno::UNO_QUERY );
         if( xProp.is() ) try
         {
-            //todo nAxisPosition and nAxisIndex are the same values so far and maybe need to be seperated in future
-            xProp->setPropertyValue( C2U( "AxisPosition" ), uno::makeAny( nAxisIndex ) );
-
             // set correct initial AutoScale
             if( pRefSizeProvider )
                 pRefSizeProvider->setValuesAtPropertySet( xProp );
@@ -356,6 +376,49 @@ Reference< XAxis > AxisHelper::getAxis( sal_Int32 nDimensionIndex, sal_Int32 nAx
     {
     }
     return xRet;
+}
+
+//static
+Reference< XAxis > AxisHelper::getCrossingMainAxis( const Reference< XAxis >& xAxis
+            , const Reference< XCoordinateSystem >& xCooSys )
+{
+    sal_Int32 nDimensionIndex = 0;
+    sal_Int32 nAxisIndex = 0;
+    AxisHelper::getIndicesForAxis( xAxis, xCooSys, nDimensionIndex, nAxisIndex );
+    if( 2==nDimensionIndex )
+    {
+        nDimensionIndex=1;
+        bool bSwapXY = false;
+        Reference< beans::XPropertySet > xCooSysProp( xCooSys, uno::UNO_QUERY );
+        if( xCooSysProp.is() && (xCooSysProp->getPropertyValue( C2U("SwapXAndYAxis") ) >>= bSwapXY) && bSwapXY )
+            nDimensionIndex=0;
+    }
+    else if( 1==nDimensionIndex )
+        nDimensionIndex=0;
+    else
+        nDimensionIndex=1;
+    return AxisHelper::getAxis( nDimensionIndex, 0, xCooSys );
+}
+
+//static
+Reference< XAxis > AxisHelper::getParallelAxis( const Reference< XAxis >& xAxis
+            , const Reference< XDiagram >& xDiagram )
+{
+    try
+    {
+        sal_Int32 nCooSysIndex=-1;
+        sal_Int32 nDimensionIndex=-1;
+        sal_Int32 nAxisIndex=-1;
+        if( getIndicesForAxis( xAxis, xDiagram, nCooSysIndex, nDimensionIndex, nAxisIndex ) )
+        {
+            sal_Int32 nParallelAxisIndex = (nAxisIndex==1) ?0 :1;
+            return getAxis( nDimensionIndex, nParallelAxisIndex, getCoordinateSystemByIndex( xDiagram, nCooSysIndex ) );
+        }
+    }
+    catch( uno::RuntimeException& )
+    {
+    }
+    return 0;
 }
 
 sal_Bool AxisHelper::isAxisShown( sal_Int32 nDimensionIndex, bool bMainAxis
@@ -785,6 +848,98 @@ Reference< XChartType > AxisHelper::getChartTypeByIndex( const Reference< XCoord
     }
 
     return xChartType;
+}
+
+void AxisHelper::setRTLAxisLayout( const Reference< XCoordinateSystem >& xCooSys )
+{
+    if( xCooSys.is() )
+    {
+        bool bCartesian = xCooSys->getViewServiceName().equals( CHART2_COOSYSTEM_CARTESIAN_VIEW_SERVICE_NAME );
+        if( bCartesian )
+        {
+            bool bVertical = false;
+            Reference< beans::XPropertySet > xCooSysProp( xCooSys, uno::UNO_QUERY );
+            if( xCooSysProp.is() )
+                xCooSysProp->getPropertyValue( C2U("SwapXAndYAxis") ) >>= bVertical;
+
+            sal_Int32 nHorizontalAxisDimension = bVertical ? 1 : 0;
+            sal_Int32 nVerticalAxisDimension = bVertical ? 0 : 1;
+
+            try
+            {
+                //reverse direction for horizontal main axis
+                Reference< chart2::XAxis > xHorizontalMainAxis( AxisHelper::getAxis( nHorizontalAxisDimension, MAIN_AXIS_INDEX, xCooSys ) );
+                if( xHorizontalMainAxis.is() )
+                {
+                    chart2::ScaleData aScale = xHorizontalMainAxis->getScaleData();
+                    aScale.Orientation = chart2::AxisOrientation_REVERSE;
+                    xHorizontalMainAxis->setScaleData(aScale);
+                }
+
+                //mathematical direction for vertical main axis
+                Reference< chart2::XAxis > xVerticalMainAxis( AxisHelper::getAxis( nVerticalAxisDimension, MAIN_AXIS_INDEX, xCooSys ) );
+                if( xVerticalMainAxis.is() )
+                {
+                    chart2::ScaleData aScale = xVerticalMainAxis->getScaleData();
+                    aScale.Orientation = chart2::AxisOrientation_MATHEMATICAL;
+                    xVerticalMainAxis->setScaleData(aScale);
+                }
+            }
+            catch( uno::Exception & ex )
+            {
+                ASSERT_EXCEPTION( ex );
+            }
+
+            try
+            {
+                //reverse direction for horizontal secondary axis
+                Reference< chart2::XAxis > xHorizontalSecondaryAxis( AxisHelper::getAxis( nHorizontalAxisDimension, SECONDARY_AXIS_INDEX, xCooSys ) );
+                if( xHorizontalSecondaryAxis.is() )
+                {
+                    chart2::ScaleData aScale = xHorizontalSecondaryAxis->getScaleData();
+                    aScale.Orientation = chart2::AxisOrientation_REVERSE;
+                    xHorizontalSecondaryAxis->setScaleData(aScale);
+                }
+
+                //mathematical direction for vertical secondary axis
+                Reference< chart2::XAxis > xVerticalSecondaryAxis( AxisHelper::getAxis( nVerticalAxisDimension, SECONDARY_AXIS_INDEX, xCooSys ) );
+                if( xVerticalSecondaryAxis.is() )
+                {
+                    chart2::ScaleData aScale = xVerticalSecondaryAxis->getScaleData();
+                    aScale.Orientation = chart2::AxisOrientation_MATHEMATICAL;
+                    xVerticalSecondaryAxis->setScaleData(aScale);
+                }
+            }
+            catch( uno::Exception & ex )
+            {
+                ASSERT_EXCEPTION( ex );
+            }
+        }
+    }
+}
+
+Reference< XChartType > AxisHelper::getFirstChartTypeWithSeriesAttachedToAxisIndex( const Reference< chart2::XDiagram >& xDiagram, const sal_Int32 nAttachedAxisIndex )
+{
+    Reference< XChartType > xChartType;
+    ::std::vector< Reference< XDataSeries > > aSeriesVector( DiagramHelper::getDataSeriesFromDiagram( xDiagram ) );
+    ::std::vector< Reference< XDataSeries > >::const_iterator aIter = aSeriesVector.begin();
+    for( ; aIter != aSeriesVector.end(); aIter++ )
+    {
+        sal_Int32 nCurrentIndex = DataSeriesHelper::getAttachedAxisIndex( *aIter );
+        if( nAttachedAxisIndex == nCurrentIndex )
+        {
+            xChartType = DiagramHelper::getChartTypeOfSeries( xDiagram, *aIter );
+            if(xChartType.is())
+                break;
+        }
+    }
+    return xChartType;
+}
+
+bool AxisHelper::isAxisPositioningEnabled()
+{
+    const SvtSaveOptions::ODFDefaultVersion nCurrentVersion( SvtSaveOptions().GetODFDefaultVersion() );
+    return nCurrentVersion >= SvtSaveOptions::ODFVER_012;
 }
 
 //.............................................................................

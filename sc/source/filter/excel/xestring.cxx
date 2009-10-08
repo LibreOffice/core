@@ -30,12 +30,17 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sc.hxx"
-#include "xestring.hxx"
 
 #include <algorithm>
-#include "xlstyle.hxx"
+#include <stdio.h>
 #include "xestream.hxx"
+#include "xlstyle.hxx"
+#include "xestyle.hxx"
+#include "xestring.hxx"
 
+#include <oox/core/tokens.hxx>
+
+using ::rtl::OString;
 using ::rtl::OUString;
 
 // ============================================================================
@@ -473,6 +478,58 @@ void XclExpString::WriteToMem( sal_uInt8* pnMem ) const
 {
     WriteHeaderToMem( pnMem );
     WriteBufferToMem( pnMem + GetHeaderSize() );
+}
+
+static sal_uInt16 lcl_WriteRun( XclExpXmlStream& rStrm, const ScfUInt16Vec& rBuffer, sal_uInt16 nStart, sal_Int32 nLength, const XclExpFont* pFont )
+{
+    if( nLength == 0 )
+        return nStart;
+
+    sax_fastparser::FSHelperPtr& rWorksheet = rStrm.GetCurrentStream();
+
+    rWorksheet->startElement( XML_r, FSEND );
+    if( pFont )
+    {
+        const XclFontData& rFontData = pFont->GetFontData();
+        rWorksheet->startElement( XML_rPr, FSEND );
+        rStrm.WriteFontData( rFontData, XML_rFont );
+        rWorksheet->endElement( XML_rPr );
+    }
+    rWorksheet->startElement( XML_t,
+            FSNS( XML_xml, XML_space ), "preserve",
+            FSEND );
+    rWorksheet->writeEscaped( XclXmlUtils::ToOUString( rBuffer, nStart, nLength ) );
+    rWorksheet->endElement( XML_t );
+    rWorksheet->endElement( XML_r );
+    return static_cast<sal_uInt16>(nStart + nLength);
+}
+
+void XclExpString::WriteXml( XclExpXmlStream& rStrm ) const
+{
+    sax_fastparser::FSHelperPtr rWorksheet = rStrm.GetCurrentStream();
+
+    if( !IsWriteFormats() )
+    {
+        rWorksheet->startElement( XML_t, FSEND );
+        rWorksheet->writeEscaped( XclXmlUtils::ToOUString( *this ) );
+        rWorksheet->endElement( XML_t );
+    }
+    else
+    {
+        XclExpFontBuffer& rFonts = rStrm.GetRoot().GetFontBuffer();
+        XclFormatRunVec::const_iterator aIt = maFormats.begin(), aEnd = maFormats.end();
+
+        sal_uInt16  nStart = 0;
+        const XclExpFont* pFont = NULL;
+        for ( ; aIt != aEnd; ++aIt )
+        {
+            nStart = lcl_WriteRun( rStrm, GetUnicodeBuffer(),
+                    nStart, aIt->mnChar-nStart, pFont );
+            pFont = rFonts.GetFont( aIt->mnFontIdx );
+        }
+        lcl_WriteRun( rStrm, GetUnicodeBuffer(),
+                nStart, GetUnicodeBuffer().size() - nStart, pFont );
+    }
 }
 
 // ----------------------------------------------------------------------------

@@ -84,7 +84,7 @@ BOOL ScTable::SearchCell(const SvxSearchItem& rSearchItem, SCCOL nCol, SCROW nRo
             {
                 if ( eCellType == CELLTYPE_FORMULA )
                     ((ScFormulaCell*)pCell)->GetFormula( aString,
-                        ScGrammar::GRAM_NATIVE_UI);
+                       formula::FormulaGrammar::GRAM_NATIVE_UI);
                 else if ( eCellType == CELLTYPE_EDIT )
                     bMultiLine = lcl_GetTextWithBreaks(
                         *(const ScEditCell*)pCell, pDocument, aString );
@@ -145,8 +145,8 @@ BOOL ScTable::SearchCell(const SvxSearchItem& rSearchItem, SCCOL nCol, SCROW nRo
             ( (rSearchItem.GetCommand() == SVX_SEARCHCMD_REPLACE)
             ||(rSearchItem.GetCommand() == SVX_SEARCHCMD_REPLACE_ALL) ) &&
                 // #60558# Matrix nicht zerreissen, nur Matrixformel ersetzen
-                !( eCellType == CELLTYPE_FORMULA &&
-                ((cMatrixFlag = ((ScFormulaCell*)pCell)->GetMatrixFlag()) == MM_REFERENCE)
+                !( (eCellType == CELLTYPE_FORMULA &&
+                ((cMatrixFlag = ((ScFormulaCell*)pCell)->GetMatrixFlag()) == MM_REFERENCE))
                 // kein UndoDoc => Matrix nicht wiederherstellbar => nicht ersetzen
                 || (cMatrixFlag != MM_NONE && !pUndoDoc) )
             )
@@ -244,7 +244,7 @@ BOOL ScTable::SearchCell(const SvxSearchItem& rSearchItem, SCCOL nCol, SCROW nRo
                 }
                 ScAddress aAdr( nCol, nRow, nTab );
                 ScFormulaCell* pFCell = new ScFormulaCell( pDocument, aAdr,
-                    aString, ScGrammar::GRAM_NATIVE_UI, cMatrixFlag );
+                    aString,formula::FormulaGrammar::GRAM_NATIVE_UI, cMatrixFlag );
                 SCCOL nMatCols;
                 SCROW nMatRows;
                 ((ScFormulaCell*)pCell)->GetMatColsRows( nMatCols, nMatRows );

@@ -30,7 +30,6 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sc.hxx"
-#include "xltools.hxx"
 
 #include <algorithm>
 #include <math.h>
@@ -38,16 +37,17 @@
 #include <vcl/fontcvt.hxx>
 #include <sfx2/objsh.hxx>
 #include <svx/editstat.hxx>
+#include "xestream.hxx"
 #include "document.hxx"
 #include "docuno.hxx"
 #include "editutil.hxx"
-#include "errorcodes.hxx"
+#include "formula/errorcodes.hxx"
 #include "globstr.hrc"
 #include "xlstyle.hxx"
 #include "xlname.hxx"
 #include "xistream.hxx"
-#include "xestream.hxx"
 #include "xiroot.hxx"
+#include "xltools.hxx"
 
 // GUID import/export =========================================================
 

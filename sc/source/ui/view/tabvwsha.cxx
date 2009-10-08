@@ -44,6 +44,7 @@
 #include <svx/boxitem.hxx>
 #include <svx/numinf.hxx>
 #include <svx/srchitem.hxx>
+#include <svx/zoomslideritem.hxx>
 #include <sfx2/bindings.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/dispatch.hxx>
@@ -301,6 +302,25 @@ void __EXPORT ScTabViewShell::GetState( SfxItemSet& rSet )
                 }
                 break;
 
+            case SID_ATTR_ZOOMSLIDER:
+                {
+                    if ( bOle )
+                        rSet.DisableItem( nWhich );
+                    else
+                    {
+                        const Fraction& rOldY = GetViewData()->GetZoomY();
+                        USHORT nCurrentZoom = (USHORT)(( rOldY.GetNumerator() * 100 ) / rOldY.GetDenominator());
+
+                        if( nCurrentZoom )
+                        {
+                            SvxZoomSliderItem aZoomSliderItem( nCurrentZoom, MINZOOM, MAXZOOM, SID_ATTR_ZOOMSLIDER );
+                            aZoomSliderItem.AddSnappingPoint( 100 );
+                            rSet.Put( aZoomSliderItem );
+                        }
+                    }
+                }
+                break;
+
             case FID_TOGGLESYNTAX:
                 rSet.Put(SfxBoolItem(nWhich, GetViewData()->IsSyntaxMode()));
                 break;
@@ -524,7 +544,8 @@ bool ScTabViewShell::IsRefInputMode() const
                         if ( pDoc )
                         {
                             const ScAddress aPos( pViewData->GetCurPos() );
-                            ScCompiler aComp( pDoc, aPos, pDoc->GetGrammar() );
+                            ScCompiler aComp( pDoc, aPos );
+                            aComp.SetGrammar(pDoc->GetGrammar());
                             aComp.SetCloseBrackets( false );
                             ScTokenArray* pArr = aComp.CompileString( aString );
                             if ( pArr && pArr->MayReferenceFollow() )

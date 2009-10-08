@@ -368,7 +368,7 @@ BOOL __EXPORT ScDocShell::Insert( SfxObjectShell &rSource,
 void ScDocShell::UpdateLinks()
 {
     SvxLinkManager* pLinkManager = aDocument.GetLinkManager();
-    StrCollection aNames;
+    ScStrCollection aNames;
 
     // nicht mehr benutzte Links raus
 

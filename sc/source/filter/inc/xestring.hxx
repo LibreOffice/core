@@ -39,6 +39,7 @@ class ScEditCell;
 class ScPatternAttr;
 class EditTextObject;
 class XclExpStream;
+class XclExpXmlStream;
 
 /** This class stores an unformatted or formatted string for Excel export.
 
@@ -228,6 +229,8 @@ public:
     /** Returns a hash value for the string. */
     sal_uInt16          GetHash() const;
 
+    const ScfUInt16Vec& GetUnicodeBuffer() const { return maUniBuffer; }
+
     // streaming --------------------------------------------------------------
 
     /** Writes the string length field (1 byte or 2 bytes). */
@@ -249,6 +252,8 @@ public:
     void                WriteBufferToMem( sal_uInt8* pnMem ) const;
     /** Writes the entire string to memory. */
     void                WriteToMem( sal_uInt8* pnMem ) const;
+
+    void                WriteXml( XclExpXmlStream& rStrm ) const;
 
     // ------------------------------------------------------------------------
 private:

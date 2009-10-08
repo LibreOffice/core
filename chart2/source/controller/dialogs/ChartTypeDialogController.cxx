@@ -41,6 +41,7 @@
 #include "ChartModelHelper.hxx"
 #include "DiagramHelper.hxx"
 #include "ControllerLockGuard.hxx"
+#include "AxisHelper.hxx"
 
 #include <com/sun/star/chart2/DataPointGeometry3D.hpp>
 #include <com/sun/star/chart2/PieChartOffsetMode.hpp>
@@ -53,6 +54,8 @@
 #include <vcl/image.hxx>
 // header for class Bitmap
 #include <vcl/bitmap.hxx>
+#include <vcl/svapp.hxx>
+
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 
 //.............................................................................
@@ -358,6 +361,8 @@ bool ChartTypeDialogController::commitToModel( const ChartTypeParameter& rParame
         if( aTemplateWithService.first.is())
             aTemplateWithService.first->resetStyles( xDiagram );
         xTemplate->changeDiagram( xDiagram );
+        if( Application::GetSettings().GetLayoutRTL() )
+            AxisHelper::setRTLAxisLayout( AxisHelper::getCoordinateSystemByIndex( xDiagram, 0 ) );
         if( rParameter.b3DLook )
             ThreeDHelper::setScheme( xDiagram, rParameter.eThreeDLookScheme );
 

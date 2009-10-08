@@ -61,19 +61,19 @@ void ScRangeList::RemoveAll()
     Clear();
 }
 
-static void defaultDelimiter( char& cDelimiter, ScAddress::Convention eConv)
+static void defaultDelimiter( char& cDelimiter, formula::FormulaGrammar::AddressConvention eConv)
 {
     if( cDelimiter == 0)
     {
         switch( eConv )
         {
         default :
-        case ScAddress::CONV_OOO :
+        case formula::FormulaGrammar::CONV_OOO :
             cDelimiter = ';';
             break;
 
-        case ScAddress::CONV_XL_A1 :
-        case ScAddress::CONV_XL_R1C1 :
+        case formula::FormulaGrammar::CONV_XL_A1 :
+        case formula::FormulaGrammar::CONV_XL_R1C1 :
             cDelimiter = ',';
             break;
         }
@@ -81,7 +81,7 @@ static void defaultDelimiter( char& cDelimiter, ScAddress::Convention eConv)
 }
 
 USHORT ScRangeList::Parse( const String& rStr, ScDocument* pDoc, USHORT nMask,
-                           ScAddress::Convention eConv,
+                           formula::FormulaGrammar::AddressConvention eConv,
                            char cDelimiter )
 {
     if ( rStr.Len() )
@@ -125,7 +125,7 @@ USHORT ScRangeList::Parse( const String& rStr, ScDocument* pDoc, USHORT nMask,
 
 
 void ScRangeList::Format( String& rStr, USHORT nFlags, ScDocument* pDoc,
-                          ScAddress::Convention eConv,
+                          formula::FormulaGrammar::AddressConvention eConv,
                           char cDelimiter ) const
 {
     rStr.Erase();

@@ -46,7 +46,8 @@
 #include "patattr.hxx"
 #include "cellform.hxx"
 #include "collect.hxx"
-#include "errorcodes.hxx"
+#include "formula/errorcodes.hxx"
+#include "formula/token.hxx"
 #include "brdcst.hxx"
 #include "docoptio.hxx"         // GetStdPrecision fuer GetMaxNumberStringLen
 #include "subtotal.hxx"
@@ -56,7 +57,7 @@
 
 // Err527 Workaround
 extern const ScFormulaCell* pLastFormulaTreeTop;    // in cellform.cxx
-
+using namespace formula;
 // STATIC DATA -----------------------------------------------------------
 
 BOOL ScColumn::bDoubleAlloc = FALSE;    // fuer Import: Groesse beim Allozieren verdoppeln
@@ -629,7 +630,7 @@ ScFormulaCell* ScColumn::CreateRefCell( ScDocument* pDestDoc, const ScAddress& r
 
 
     //  Referenz einsetzen
-    SingleRefData aRef;
+    ScSingleRefData aRef;
     aRef.nCol = nCol;
     aRef.nRow = pItems[nIndex].nRow;
     aRef.nTab = nTab;
@@ -705,7 +706,7 @@ void ScColumn::CopyFromClip(SCROW nRow1, SCROW nRow2, long nDy,
         ScAddress aDestPos( nCol, 0, nTab );        // Row wird angepasst
 
         //  Referenz erzeugen (Quell-Position)
-        SingleRefData aRef;
+        ScSingleRefData aRef;
         aRef.nCol = rColumn.nCol;
         //  nRow wird angepasst
         aRef.nTab = rColumn.nTab;
@@ -963,10 +964,10 @@ void lcl_AddCode( ScTokenArray& rArr, ScFormulaCell* pCell )
     ScTokenArray* pCode = pCell->GetCode();
     if (pCode)
     {
-        ScToken* pToken = pCode->First();
+        const formula::FormulaToken* pToken = pCode->First();
         while (pToken)
         {
-            rArr.AddToken(*pToken);
+            rArr.AddToken( *pToken );
             pToken = pCode->Next();
         }
     }
@@ -1240,7 +1241,7 @@ void ScColumn::StartListeningInArea( SCROW nRow1, SCROW nRow2 )
 
 //  TRUE = Zahlformat gesetzt
 BOOL ScColumn::SetString( SCROW nRow, SCTAB nTabP, const String& rString,
-                          ScAddress::Convention eConv )
+                          formula::FormulaGrammar::AddressConvention eConv )
 {
     BOOL bNumFmtSet = FALSE;
     if (VALIDROW(nRow))
@@ -1278,7 +1279,7 @@ BOOL ScColumn::SetString( SCROW nRow, SCTAB nTabP, const String& rString,
                 else                                            // =Formel
                     pNewCell = new ScFormulaCell( pDocument,
                         ScAddress( nCol, nRow, nTabP ), rString,
-                        ScGrammar::mergeToGrammar( ScGrammar::GRAM_DEFAULT,
+                        formula::FormulaGrammar::mergeToGrammar( formula::FormulaGrammar::GRAM_DEFAULT,
                             eConv), MM_NONE );
             }
             else if ( cFirstChar == '\'')                       // 'Text
@@ -1426,7 +1427,7 @@ BOOL ScColumn::SetString( SCROW nRow, SCTAB nTabP, const String& rString,
 }
 
 
-void ScColumn::GetFilterEntries(SCROW nStartRow, SCROW nEndRow, TypedStrCollection& rStrings)
+void ScColumn::GetFilterEntries(SCROW nStartRow, SCROW nEndRow, TypedScStrCollection& rStrings)
 {
     SvNumberFormatter* pFormatter = pDocument->GetFormatTable();
     String aString;
@@ -1491,7 +1492,7 @@ void ScColumn::GetFilterEntries(SCROW nStartRow, SCROW nEndRow, TypedStrCollecti
 #define DATENT_SEARCH   2000
 
 
-BOOL ScColumn::GetDataEntries(SCROW nStartRow, TypedStrCollection& rStrings, BOOL bLimit)
+BOOL ScColumn::GetDataEntries(SCROW nStartRow, TypedScStrCollection& rStrings, BOOL bLimit)
 {
     BOOL bFound = FALSE;
     SCSIZE nThisIndex;

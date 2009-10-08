@@ -33,12 +33,13 @@
 
 #include "conditio.hxx"
 #include <com/sun/star/sheet/TableValidationVisibility.hpp>
+#include "scdllapi.h"
 
 namespace ValidListType = ::com::sun::star::sheet::TableValidationVisibility;
 
 class ScPatternAttr;
 class ScTokenArray;
-class TypedStrCollection;
+class TypedScStrCollection;
 
 enum ScValidationMode
 {
@@ -64,7 +65,7 @@ enum ScValidErrorStyle
 //  Eintrag fuer Gueltigkeit (es gibt nur eine Bedingung)
 //
 
-class ScValidationData : public ScConditionEntry
+class SC_DLLPUBLIC ScValidationData : public ScConditionEntry
 {
     sal_uInt32          nKey;               // Index in Attributen
 
@@ -92,7 +93,7 @@ public:
             ScValidationData( ScValidationMode eMode, ScConditionMode eOper,
                                 const String& rExpr1, const String& rExpr2,
                                 ScDocument* pDocument, const ScAddress& rPos,
-                                const ScGrammar::Grammar eGrammar = ScGrammar::GRAM_DEFAULT );
+                                const formula::FormulaGrammar::Grammar eGrammar = formula::FormulaGrammar::GRAM_DEFAULT );
             ScValidationData( ScValidationMode eMode, ScConditionMode eOper,
                                 const ScTokenArray* pArr1, const ScTokenArray* pArr2,
                                 ScDocument* pDocument, const ScAddress& rPos );
@@ -130,7 +131,7 @@ public:
         @descr  Fills the list only, if this is a list validation and IsShowList() is enabled.
         @param rStrings  (out-param) The string list to fill with list validation entires.
         @return  true = rStrings has been filled with at least one entry. */
-    bool            FillSelectionList( TypedStrCollection& rStrings, const ScAddress& rPos ) const;
+    bool            FillSelectionList( TypedScStrCollection& rStrings, const ScAddress& rPos ) const;
 
                     //  mit String: bei Eingabe, mit Zelle: fuer Detektiv / RC_FORCED
     BOOL            IsDataValid( const String& rTest, const ScPatternAttr& rPattern,
@@ -164,7 +165,7 @@ private:
         @param rTokArr   Formula token array.
         @param rMatch    (out-param) the index of the first item that matched, -1 if nothing matched.
         @return  true = Cell range found, rRange is valid, or an error entry stuffed into the list if pCell==NULL. */
-    bool            GetSelectionFromFormula( TypedStrCollection* pStrings,
+    bool            GetSelectionFromFormula( TypedScStrCollection* pStrings,
                                              ScBaseCell* pCell, const ScAddress& rPos,
                                              const ScTokenArray& rTokArr, int& rMatch ) const;
 

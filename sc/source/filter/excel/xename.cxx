@@ -44,6 +44,11 @@
 // for filter manager
 #include "excrecds.hxx"
 
+#include <oox/core/tokens.hxx>
+#include <formula/grammar.hxx>
+
+using ::rtl::OString;
+
 // ============================================================================
 // *** Helper classes ***
 // ============================================================================
@@ -67,6 +72,13 @@ public:
         @param bVBasic  true = Visual Basic macro, false = Sheet macro.
         @param bFunc  true = Macro function; false = Macro procedure. */
     void                SetMacroCall( bool bVBasic, bool bFunc );
+
+
+    /** Sets the name's symbol value
+        @param sValue   the name's symbolic value */
+    void                SetSymbol( String sValue );
+    /** Returns the name's symbol value */
+    inline const String& GetSymbol() const { return msSymbol; }
 
     /** Returns the original name (title) of this defined name. */
     inline const String& GetOrigName() const { return maOrigName; }
@@ -93,12 +105,15 @@ public:
     /** Writes the entire NAME record to the passed stream. */
     virtual void        Save( XclExpStream& rStrm );
 
+    virtual void        SaveXml( XclExpXmlStream& rStrm );
+
 private:
     /** Writes the body of the NAME record to the passed stream. */
     virtual void        WriteBody( XclExpStream& rStrm );
 
 private:
     String              maOrigName;     /// The original user-defined name.
+    String              msSymbol;       /// The value of the symbol
     XclExpStringRef     mxName;         /// The name as Excel string object.
     XclTokenArrayRef    mxTokArr;       /// The definition of the defined name.
     sal_Unicode         mcBuiltIn;      /// The built-in index for built-in names.
@@ -146,6 +161,8 @@ public:
             consists of an EXTERNCOUNT record, several EXTERNSHEET records, and
             the list of NAME records. */
     void                Save( XclExpStream& rStrm );
+
+    void                SaveXml( XclExpXmlStream& rStrm );
 
 private:
     typedef XclExpRecordList< XclExpName >      XclExpNameList;
@@ -271,6 +288,11 @@ void XclExpName::SetMacroCall( bool bVBasic, bool bFunc )
     ::set_flag( mnFlags, EXC_NAME_FUNC, bFunc );
 }
 
+void XclExpName::SetSymbol( String sSymbol )
+{
+    msSymbol = sSymbol;
+}
+
 bool XclExpName::IsVolatile() const
 {
     return mxTokArr.is() && mxTokArr->IsVolatile();
@@ -294,6 +316,34 @@ void XclExpName::Save( XclExpStream& rStrm )
     DBG_ASSERT( !(IsGlobal() && ::get_flag( mnFlags, EXC_NAME_BUILTIN )), "XclExpName::Save - global built-in name" );
     SetRecSize( 11 + mxName->GetSize() + (mxTokArr.is() ? mxTokArr->GetSize() : 2) );
     XclExpRecord::Save( rStrm );
+}
+
+void XclExpName::SaveXml( XclExpXmlStream& rStrm )
+{
+    // For some reason, AutoFilter creates exportable names where maOrigName==""
+    if( maOrigName.Len() == 0 )
+        return;
+
+    sax_fastparser::FSHelperPtr& rWorkbook = rStrm.GetCurrentStream();
+    rWorkbook->startElement( XML_definedName,
+            // OOXTODO: XML_comment, "",
+            // OOXTODO: XML_customMenu, "",
+            // OOXTODO: XML_description, "",
+            XML_function, XclXmlUtils::ToPsz( ::get_flag( mnFlags, EXC_NAME_VB ) ),
+            // OOXTODO: XML_functionGroupId, "",
+            // OOXTODO: XML_help, "",
+            XML_hidden, XclXmlUtils::ToPsz( ::get_flag( mnFlags, EXC_NAME_HIDDEN ) ),
+            XML_localSheetId, mnScTab == SCTAB_GLOBAL ? NULL : OString::valueOf( (sal_Int32)mnScTab ).getStr(),
+            XML_name, XclXmlUtils::ToOString( maOrigName ).getStr(),
+            // OOXTODO: XML_publishToServer, "",
+            // OOXTODO: XML_shortcutKey, "",
+            // OOXTODO: XML_statusBar, "",
+            XML_vbProcedure, XclXmlUtils::ToPsz( ::get_flag( mnFlags, EXC_NAME_VB ) ),
+            // OOXTODO: XML_workbookParameter, "",
+            // OOXTODO: XML_xlm, "",
+            FSEND );
+    rWorkbook->writeEscaped( XclXmlUtils::ToOUString( msSymbol ) );
+    rWorkbook->endElement( XML_definedName );
 }
 
 void XclExpName::WriteBody( XclExpStream& rStrm )
@@ -422,6 +472,16 @@ void XclExpNameManagerImpl::Save( XclExpStream& rStrm )
     maNameList.Save( rStrm );
 }
 
+void XclExpNameManagerImpl::SaveXml( XclExpXmlStream& rStrm )
+{
+    if( maNameList.IsEmpty() )
+        return;
+    sax_fastparser::FSHelperPtr& rWorkbook = rStrm.GetCurrentStream();
+    rWorkbook->startElement( XML_definedNames, FSEND );
+    maNameList.SaveXml( rStrm );
+    rWorkbook->endElement( XML_definedNames );
+}
+
 // private --------------------------------------------------------------------
 
 sal_uInt16 XclExpNameManagerImpl::FindNameIdx( const XclExpIndexMap& rMap, USHORT nScIdx ) const
@@ -503,6 +563,10 @@ sal_uInt16 XclExpNameManagerImpl::CreateName( const ScRangeData& rRangeData )
     {
         XclTokenArrayRef xTokArr = GetFormulaCompiler().CreateFormula( EXC_FMLATYPE_NAME, *pScTokArr );
         xName->SetTokenArray( xTokArr );
+
+        String sSymbol;
+        rRangeData.GetSymbol( sSymbol, formula::FormulaGrammar::GRAM_NATIVE_XL_A1 );
+        xName->SetSymbol( sSymbol );
 
         /*  Try to replace by existing built-in name - complete token array is
             needed for comparison, and due to the recursion problem above this
@@ -715,6 +779,11 @@ bool XclExpNameManager::IsVolatile( sal_uInt16 nNameIdx ) const
 void XclExpNameManager::Save( XclExpStream& rStrm )
 {
     mxImpl->Save( rStrm );
+}
+
+void XclExpNameManager::SaveXml( XclExpXmlStream& rStrm )
+{
+    mxImpl->SaveXml( rStrm );
 }
 
 // ============================================================================

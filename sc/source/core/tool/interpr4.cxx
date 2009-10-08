@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: interpr4.cxx,v $
- * $Revision: 1.58 $
+ * $Revision: 1.57.92.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -42,6 +42,7 @@
 #include <basic/sbx.hxx>
 #include <svtools/zforlist.hxx>
 #include <tools/urlobj.hxx>
+#include <rtl/logfile.hxx>
 #include <stdlib.h>
 #include <string.h>
 #include <signal.h>
@@ -66,6 +67,7 @@
 #include "addinlis.hxx"
 #include "jumpmatrix.hxx"
 #include "parclass.hxx"
+#include "externalrefmgr.hxx"
 
 #include <math.h>
 #include <float.h>
@@ -74,6 +76,7 @@
 #include <functional>
 
 using namespace com::sun::star;
+using namespace formula;
 
 #define ADDIN_MAXSTRLEN 256
 
@@ -96,6 +99,7 @@ ScSpew ScInterpreter::theSpew;
 
 void ScInterpreter::ReplaceCell( ScAddress& rPos )
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "Eike.Rathke@sun.com", "ScInterpreter::ReplaceCell" );
     ScInterpreterTableOpParams* pTOp = pDok->aTableOpList.First();
     while (pTOp)
     {
@@ -117,6 +121,7 @@ void ScInterpreter::ReplaceCell( ScAddress& rPos )
 
 void ScInterpreter::ReplaceCell( SCCOL& rCol, SCROW& rRow, SCTAB& rTab )
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "Eike.Rathke@sun.com", "ScInterpreter::ReplaceCell" );
     ScAddress aCellPos( rCol, rRow, rTab );
     ScInterpreterTableOpParams* pTOp = pDok->aTableOpList.First();
     while (pTOp)
@@ -143,6 +148,7 @@ void ScInterpreter::ReplaceCell( SCCOL& rCol, SCROW& rRow, SCTAB& rTab )
 
 BOOL ScInterpreter::IsTableOpInRange( const ScRange& rRange )
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "Eike.Rathke@sun.com", "ScInterpreter::IsTableOpInRange" );
     if ( rRange.aStart == rRange.aEnd )
         return FALSE;   // not considered to be a range in TableOp sense
 
@@ -162,6 +168,7 @@ BOOL ScInterpreter::IsTableOpInRange( const ScRange& rRange )
 
 ULONG ScInterpreter::GetCellNumberFormat( const ScAddress& rPos, const ScBaseCell* pCell)
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "Eike.Rathke@sun.com", "ScInterpreter::GetCellNumberFormat" );
     ULONG nFormat;
     USHORT nErr;
     if ( pCell )
@@ -189,6 +196,7 @@ ULONG ScInterpreter::GetCellNumberFormat( const ScAddress& rPos, const ScBaseCel
 // nur ValueCell, Formelzellen speichern das Ergebnis bereits gerundet
 double ScInterpreter::GetValueCellValue( const ScAddress& rPos, const ScValueCell* pCell )
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "Eike.Rathke@sun.com", "ScInterpreter::GetValueCellValue" );
     double fVal = pCell->GetValue();
     if ( bCalcAsShown && fVal != 0.0 )
     {
@@ -201,6 +209,7 @@ double ScInterpreter::GetValueCellValue( const ScAddress& rPos, const ScValueCel
 
 double ScInterpreter::GetCellValue( const ScAddress& rPos, const ScBaseCell* pCell )
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "Eike.Rathke@sun.com", "ScInterpreter::GetCellValue" );
     USHORT nErr = nGlobalError;
     nGlobalError = 0;
     double nVal = GetCellValueOrZero( rPos, pCell );
@@ -212,6 +221,7 @@ double ScInterpreter::GetCellValue( const ScAddress& rPos, const ScBaseCell* pCe
 
 double ScInterpreter::GetCellValueOrZero( const ScAddress& rPos, const ScBaseCell* pCell )
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "Eike.Rathke@sun.com", "ScInterpreter::GetCellValueOrZero" );
     double fValue;
     if (pCell)
     {
@@ -284,6 +294,7 @@ double ScInterpreter::GetCellValueOrZero( const ScAddress& rPos, const ScBaseCel
 
 void ScInterpreter::GetCellString( String& rStr, const ScBaseCell* pCell )
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "Eike.Rathke@sun.com", "ScInterpreter::GetCellString" );
     USHORT nErr = 0;
     if (pCell)
     {
@@ -334,6 +345,7 @@ void ScInterpreter::GetCellString( String& rStr, const ScBaseCell* pCell )
 BOOL ScInterpreter::CreateDoubleArr(SCCOL nCol1, SCROW nRow1, SCTAB nTab1,
                             SCCOL nCol2, SCROW nRow2, SCTAB nTab2, BYTE* pCellArr)
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "Eike.Rathke@sun.com", "ScInterpreter::CreateDoubleArr" );
 #if SC_ROWLIMIT_MORE_THAN_64K
 #error row limit 64k
 #endif
@@ -414,6 +426,7 @@ BOOL ScInterpreter::CreateStringArr(SCCOL nCol1, SCROW nRow1, SCTAB nTab1,
                                     SCCOL nCol2, SCROW nRow2, SCTAB nTab2,
                                     BYTE* pCellArr)
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "Eike.Rathke@sun.com", "ScInterpreter::CreateStringArr" );
 #if SC_ROWLIMIT_MORE_THAN_64K
 #error row limit 64k
 #endif
@@ -508,6 +521,7 @@ BOOL ScInterpreter::CreateCellArr(SCCOL nCol1, SCROW nRow1, SCTAB nTab1,
                                   SCCOL nCol2, SCROW nRow2, SCTAB nTab2,
                                   BYTE* pCellArr)
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "Eike.Rathke@sun.com", "ScInterpreter::CreateCellArr" );
 #if SC_ROWLIMIT_MORE_THAN_64K
 #error row limit 64k
 #endif
@@ -626,8 +640,9 @@ BOOL ScInterpreter::CreateCellArr(SCCOL nCol1, SCROW nRow1, SCTAB nTab1,
 
 // Also releases a TempToken if appropriate.
 
-void ScInterpreter::PushWithoutError( ScToken& r )
+void ScInterpreter::PushWithoutError( FormulaToken& r )
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "Eike.Rathke@sun.com", "ScInterpreter::PushWithoutError" );
     if ( sp >= MAXSTACK )
         SetError( errStackOverflow );
     else
@@ -643,8 +658,9 @@ void ScInterpreter::PushWithoutError( ScToken& r )
     }
 }
 
-void ScInterpreter::Push( ScToken& r )
+void ScInterpreter::Push( FormulaToken& r )
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "Eike.Rathke@sun.com", "ScInterpreter::Push" );
     if ( sp >= MAXSTACK )
         SetError( errStackOverflow );
     else
@@ -657,7 +673,7 @@ void ScInterpreter::Push( ScToken& r )
                 PushWithoutError( r);
             }
             else
-                PushWithoutError( *(new ScErrorToken( nGlobalError)));
+                PushWithoutError( *(new FormulaErrorToken( nGlobalError)));
         }
         else
             PushWithoutError( r);
@@ -665,8 +681,9 @@ void ScInterpreter::Push( ScToken& r )
 }
 
 
-void ScInterpreter::PushTempToken( ScToken* p )
+void ScInterpreter::PushTempToken( FormulaToken* p )
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "Eike.Rathke@sun.com", "ScInterpreter::PushTempToken" );
     if ( sp >= MAXSTACK )
     {
         SetError( errStackOverflow );
@@ -688,7 +705,7 @@ void ScInterpreter::PushTempToken( ScToken* p )
                 if (!p->GetRef())
                     //! p is a dangling pointer hereafter!
                     p->Delete();
-                PushTempTokenWithoutError( new ScErrorToken( nGlobalError));
+                PushTempTokenWithoutError( new FormulaErrorToken( nGlobalError));
             }
         }
         else
@@ -697,8 +714,9 @@ void ScInterpreter::PushTempToken( ScToken* p )
 }
 
 
-void ScInterpreter::PushTempTokenWithoutError( ScToken* p )
+void ScInterpreter::PushTempTokenWithoutError( FormulaToken* p )
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "Eike.Rathke@sun.com", "ScInterpreter::PushTempTokenWithoutError" );
     p->IncRef();
     if ( sp >= MAXSTACK )
     {
@@ -718,8 +736,9 @@ void ScInterpreter::PushTempTokenWithoutError( ScToken* p )
 }
 
 
-void ScInterpreter::PushTempToken( const ScToken& r )
+void ScInterpreter::PushTempToken( const FormulaToken& r )
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "Eike.Rathke@sun.com", "ScInterpreter::PushTempToken" );
     if (!IfErrorPushError())
         PushTempTokenWithoutError( r.Clone());
 }
@@ -728,6 +747,7 @@ void ScInterpreter::PushTempToken( const ScToken& r )
 void ScInterpreter::PushCellResultToken( bool bDisplayEmptyAsString,
         const ScAddress & rAddress, short * pRetTypeExpr, ULONG * pRetIndexExpr )
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "Eike.Rathke@sun.com", "ScInterpreter::PushCellResultToken" );
     ScBaseCell* pCell = pDok->GetCell( rAddress);
     if (!pCell || pCell->HasEmptyData())
     {
@@ -772,6 +792,7 @@ void ScInterpreter::PushCellResultToken( bool bDisplayEmptyAsString,
 
 void ScInterpreter::Pop()
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "Eike.Rathke@sun.com", "ScInterpreter::Pop" );
     if( sp )
         sp--;
     else
@@ -783,6 +804,7 @@ void ScInterpreter::Pop()
 
 void ScInterpreter::PopError()
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "Eike.Rathke@sun.com", "ScInterpreter::PopError" );
     if( sp )
     {
         sp--;
@@ -794,12 +816,13 @@ void ScInterpreter::PopError()
 }
 
 
-ScTokenRef ScInterpreter::PopToken()
+FormulaTokenRef ScInterpreter::PopToken()
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "Eike.Rathke@sun.com", "ScInterpreter::PopToken" );
     if (sp)
     {
         sp--;
-        ScToken* p = pStack[ sp ];
+        FormulaToken* p = pStack[ sp ];
         if (p->GetType() == svError)
             nGlobalError = p->GetError();
         return p;
@@ -812,12 +835,13 @@ ScTokenRef ScInterpreter::PopToken()
 
 double ScInterpreter::PopDouble()
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "Eike.Rathke@sun.com", "ScInterpreter::PopDouble" );
     nCurFmtType = NUMBERFORMAT_NUMBER;
     nCurFmtIndex = 0;
     if( sp )
     {
         --sp;
-        ScToken* p = pStack[ sp ];
+        FormulaToken* p = pStack[ sp ];
         switch (p->GetType())
         {
             case svError:
@@ -840,12 +864,13 @@ double ScInterpreter::PopDouble()
 
 const String& ScInterpreter::PopString()
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "Eike.Rathke@sun.com", "ScInterpreter::PopString" );
     nCurFmtType = NUMBERFORMAT_TEXT;
     nCurFmtIndex = 0;
     if( sp )
     {
         --sp;
-        ScToken* p = pStack[ sp ];
+        FormulaToken* p = pStack[ sp ];
         switch (p->GetType())
         {
             case svError:
@@ -866,8 +891,9 @@ const String& ScInterpreter::PopString()
 }
 
 
-void ScInterpreter::ValidateRef( const SingleRefData & rRef )
+void ScInterpreter::ValidateRef( const ScSingleRefData & rRef )
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "Eike.Rathke@sun.com", "ScInterpreter::ValidateRef" );
     SCCOL nCol;
     SCROW nRow;
     SCTAB nTab;
@@ -875,8 +901,9 @@ void ScInterpreter::ValidateRef( const SingleRefData & rRef )
 }
 
 
-void ScInterpreter::ValidateRef( const ComplRefData & rRef )
+void ScInterpreter::ValidateRef( const ScComplexRefData & rRef )
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "Eike.Rathke@sun.com", "ScInterpreter::ValidateRef" );
     ValidateRef( rRef.Ref1);
     ValidateRef( rRef.Ref2);
 }
@@ -884,6 +911,7 @@ void ScInterpreter::ValidateRef( const ComplRefData & rRef )
 
 void ScInterpreter::ValidateRef( const ScRefList & rRefList )
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "Eike.Rathke@sun.com", "ScInterpreter::ValidateRef" );
     ScRefList::const_iterator it( rRefList.begin());
     ScRefList::const_iterator end( rRefList.end());
     for ( ; it != end; ++it)
@@ -893,9 +921,10 @@ void ScInterpreter::ValidateRef( const ScRefList & rRefList )
 }
 
 
-void ScInterpreter::SingleRefToVars( const SingleRefData & rRef,
+void ScInterpreter::SingleRefToVars( const ScSingleRefData & rRef,
         SCCOL & rCol, SCROW & rRow, SCTAB & rTab )
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "Eike.Rathke@sun.com", "ScInterpreter::SingleRefToVars" );
     if ( rRef.IsColRel() )
         rCol = aPos.Col() + rRef.nRelCol;
     else
@@ -919,17 +948,18 @@ void ScInterpreter::SingleRefToVars( const SingleRefData & rRef,
 
 void ScInterpreter::PopSingleRef(SCCOL& rCol, SCROW &rRow, SCTAB& rTab)
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "Eike.Rathke@sun.com", "ScInterpreter::PopSingleRef" );
     if( sp )
     {
         --sp;
-        ScToken* p = pStack[ sp ];
+        FormulaToken* p = pStack[ sp ];
         switch (p->GetType())
         {
             case svError:
                 nGlobalError = p->GetError();
                 break;
             case svSingleRef:
-                SingleRefToVars( p->GetSingleRef(), rCol, rRow, rTab);
+                SingleRefToVars( static_cast<ScToken*>(p)->GetSingleRef(), rCol, rRow, rTab);
                 if ( pDok->aTableOpList.Count() > 0 )
                     ReplaceCell( rCol, rRow, rTab );
                 break;
@@ -944,10 +974,11 @@ void ScInterpreter::PopSingleRef(SCCOL& rCol, SCROW &rRow, SCTAB& rTab)
 
 void ScInterpreter::PopSingleRef( ScAddress& rAdr )
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "Eike.Rathke@sun.com", "ScInterpreter::PopSingleRef" );
     if( sp )
     {
         --sp;
-        ScToken* p = pStack[ sp ];
+        FormulaToken* p = pStack[ sp ];
         switch (p->GetType())
         {
             case svError:
@@ -958,7 +989,7 @@ void ScInterpreter::PopSingleRef( ScAddress& rAdr )
                     SCCOL nCol;
                     SCROW nRow;
                     SCTAB nTab;
-                    SingleRefToVars( p->GetSingleRef(), nCol, nRow, nTab);
+                    SingleRefToVars( static_cast<ScToken*>(p)->GetSingleRef(), nCol, nRow, nTab);
                     rAdr.Set( nCol, nRow, nTab );
                     if ( pDok->aTableOpList.Count() > 0 )
                         ReplaceCell( rAdr );
@@ -978,7 +1009,8 @@ void ScInterpreter::DoubleRefToVars( const ScToken* p,
         SCCOL& rCol2, SCROW &rRow2, SCTAB& rTab2,
         BOOL bDontCheckForTableOp )
 {
-    const ComplRefData& rCRef = p->GetDoubleRef();
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "Eike.Rathke@sun.com", "ScInterpreter::DoubleRefToVars" );
+    const ScComplexRefData& rCRef = p->GetDoubleRef();
     SingleRefToVars( rCRef.Ref1, rCol1, rRow1, rTab1);
     SingleRefToVars( rCRef.Ref2, rCol2, rRow2, rTab2);
     if ( pDok->aTableOpList.Count() > 0 && !bDontCheckForTableOp )
@@ -994,17 +1026,18 @@ void ScInterpreter::PopDoubleRef(SCCOL& rCol1, SCROW &rRow1, SCTAB& rTab1,
                                  SCCOL& rCol2, SCROW &rRow2, SCTAB& rTab2,
                                  BOOL bDontCheckForTableOp )
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "Eike.Rathke@sun.com", "ScInterpreter::PopDoubleRef" );
     if( sp )
     {
         --sp;
-        ScToken* p = pStack[ sp ];
+        FormulaToken* p = pStack[ sp ];
         switch (p->GetType())
         {
             case svError:
                 nGlobalError = p->GetError();
                 break;
             case svDoubleRef:
-                DoubleRefToVars( p, rCol1, rRow1, rTab1, rCol2, rRow2, rTab2,
+                DoubleRefToVars( static_cast<ScToken*>(p), rCol1, rRow1, rTab1, rCol2, rRow2, rTab2,
                         bDontCheckForTableOp);
                 break;
             default:
@@ -1016,9 +1049,10 @@ void ScInterpreter::PopDoubleRef(SCCOL& rCol1, SCROW &rRow1, SCTAB& rTab1,
 }
 
 
-void ScInterpreter::DoubleRefToRange( const ComplRefData & rCRef,
+void ScInterpreter::DoubleRefToRange( const ScComplexRefData & rCRef,
         ScRange & rRange, BOOL bDontCheckForTableOp )
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "Eike.Rathke@sun.com", "ScInterpreter::DoubleRefToRange" );
     SCCOL nCol;
     SCROW nRow;
     SCTAB nTab;
@@ -1036,10 +1070,12 @@ void ScInterpreter::DoubleRefToRange( const ComplRefData & rCRef,
 
 void ScInterpreter::PopDoubleRef( ScRange & rRange, short & rParam, size_t & rRefInList )
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "Eike.Rathke@sun.com", "ScInterpreter::PopDoubleRef" );
     if (sp)
     {
-        ScToken* p = pStack[ sp-1 ];
-        switch (p->GetType())
+        formula::FormulaToken* pToken = pStack[ sp-1 ];
+        ScToken* p = static_cast<ScToken*>(pToken);
+        switch (pToken->GetType())
         {
             case svError:
                 nGlobalError = p->GetError();
@@ -1081,17 +1117,18 @@ void ScInterpreter::PopDoubleRef( ScRange & rRange, short & rParam, size_t & rRe
 
 void ScInterpreter::PopDoubleRef( ScRange& rRange, BOOL bDontCheckForTableOp )
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "Eike.Rathke@sun.com", "ScInterpreter::PopDoubleRef" );
     if( sp )
     {
         --sp;
-        ScToken* p = pStack[ sp ];
+        FormulaToken* p = pStack[ sp ];
         switch (p->GetType())
         {
             case svError:
                 nGlobalError = p->GetError();
                 break;
             case svDoubleRef:
-                DoubleRefToRange( p->GetDoubleRef(), rRange, bDontCheckForTableOp);
+                DoubleRefToRange( static_cast<ScToken*>(p)->GetDoubleRef(), rRange, bDontCheckForTableOp);
                 break;
             default:
                 SetError( errIllegalParameter);
@@ -1104,6 +1141,7 @@ void ScInterpreter::PopDoubleRef( ScRange& rRange, BOOL bDontCheckForTableOp )
 
 BOOL ScInterpreter::PopDoubleRefOrSingleRef( ScAddress& rAdr )
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "Eike.Rathke@sun.com", "ScInterpreter::PopDoubleRefOrSingleRef" );
     switch ( GetStackType() )
     {
         case svDoubleRef :
@@ -1129,6 +1167,7 @@ BOOL ScInterpreter::PopDoubleRefOrSingleRef( ScAddress& rAdr )
 
 void ScInterpreter::PopDoubleRefPushMatrix()
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "Eike.Rathke@sun.com", "ScInterpreter::PopDoubleRefPushMatrix" );
     if ( GetStackType() == svDoubleRef )
     {
         ScMatrixRef pMat = GetMatrix();
@@ -1144,18 +1183,20 @@ void ScInterpreter::PopDoubleRefPushMatrix()
 
 ScTokenMatrixMap* ScInterpreter::CreateTokenMatrixMap()
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "Eike.Rathke@sun.com", "ScInterpreter::CreateTokenMatrixMap" );
     return new ScTokenMatrixMap;
 }
 
 
 bool ScInterpreter::ConvertMatrixParameters()
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "Eike.Rathke@sun.com", "ScInterpreter::ConvertMatrixParameters" );
     USHORT nParams = pCur->GetParamCount();
     DBG_ASSERT( nParams <= sp, "ConvertMatrixParameters: stack/param count mismatch");
     SCSIZE nJumpCols = 0, nJumpRows = 0;
     for ( USHORT i=1; i <= nParams && i <= sp; ++i )
     {
-        ScToken* p = pStack[ sp - i ];
+        FormulaToken* p = pStack[ sp - i ];
         if ( p->GetOpCode() != ocPush )
         {
             DBG_ERRORFILE( "ConvertMatrixParameters: not a push");
@@ -1177,7 +1218,7 @@ bool ScInterpreter::ConvertMatrixParameters()
                     if ( ScParameterClassification::GetParameterType( pCur, nParams - i)
                             == ScParameterClassification::Value )
                     {   // only if single value expected
-                        ScMatrixRef pMat = p->GetMatrix();
+                        ScMatrixRef pMat = static_cast<ScToken*>(p)->GetMatrix();
                         if ( !pMat )
                             SetError( errUnknownVariable);
                         else
@@ -1201,7 +1242,7 @@ bool ScInterpreter::ConvertMatrixParameters()
                         SCCOL nCol1, nCol2;
                         SCROW nRow1, nRow2;
                         SCTAB nTab1, nTab2;
-                        DoubleRefToVars( p, nCol1, nRow1, nTab1, nCol2, nRow2, nTab2);
+                        DoubleRefToVars( static_cast<const ScToken*>( p), nCol1, nRow1, nTab1, nCol2, nRow2, nTab2);
                         // Make sure the map exists, created if not.
                         GetTokenMatrixMap();
                         ScMatrixRef pMat = CreateMatrixFromDoubleRef( p,
@@ -1245,7 +1286,7 @@ bool ScInterpreter::ConvertMatrixParameters()
         short nStart = nPC - 1;     // restart on current code (-1)
         short nNext = nPC;          // next instruction after subroutine
         short nStop = nPC + 1;      // stop subroutine before reaching that
-        ScTokenRef xNew;
+        FormulaTokenRef xNew;
         ScTokenMatrixMap::const_iterator aMapIter;
         if (pTokenMatrixMap && ((aMapIter = pTokenMatrixMap->find( pCur)) !=
                     pTokenMatrixMap->end()))
@@ -1258,7 +1299,7 @@ bool ScInterpreter::ConvertMatrixParameters()
             ScTokenVec* pParams = new ScTokenVec( nParams);
             for ( USHORT i=1; i <= nParams && sp > 0; ++i )
             {
-                ScToken* p = pStack[ --sp ];
+                FormulaToken* p = pStack[ --sp ];
                 p->IncRef();
                 // store in reverse order such that a push may simply iterate
                 (*pParams)[ nParams - i ] = p;
@@ -1279,10 +1320,11 @@ bool ScInterpreter::ConvertMatrixParameters()
 
 ScMatrixRef ScInterpreter::PopMatrix()
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "Eike.Rathke@sun.com", "ScInterpreter::PopMatrix" );
     if( sp )
     {
         --sp;
-        ScToken* p = pStack[ sp ];
+        FormulaToken* p = pStack[ sp ];
         switch (p->GetType())
         {
             case svError:
@@ -1290,7 +1332,7 @@ ScMatrixRef ScInterpreter::PopMatrix()
                 break;
             case svMatrix:
                 {
-                    ScMatrix* pMat = p->GetMatrix();
+                    ScMatrix* pMat = static_cast<ScToken*>(p)->GetMatrix();
                     if ( pMat )
                         pMat->SetErrorInterpreter( this);
                     else
@@ -1309,21 +1351,24 @@ ScMatrixRef ScInterpreter::PopMatrix()
 
 void ScInterpreter::PushDouble(double nVal)
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "Eike.Rathke@sun.com", "ScInterpreter::PushDouble" );
     TreatDoubleError( nVal );
     if (!IfErrorPushError())
-        PushTempTokenWithoutError( new ScDoubleToken( nVal ) );
+        PushTempTokenWithoutError( new FormulaDoubleToken( nVal ) );
 }
 
 
 void ScInterpreter::PushInt(int nVal)
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "Eike.Rathke@sun.com", "ScInterpreter::PushInt" );
     if (!IfErrorPushError())
-        PushTempTokenWithoutError( new ScDoubleToken( nVal ) );
+        PushTempTokenWithoutError( new FormulaDoubleToken( nVal ) );
 }
 
 
 void ScInterpreter::PushStringBuffer( const sal_Unicode* pString )
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "Eike.Rathke@sun.com", "ScInterpreter::PushStringBuffer" );
     if ( pString )
         PushString( String( pString ) );
     else
@@ -1333,16 +1378,18 @@ void ScInterpreter::PushStringBuffer( const sal_Unicode* pString )
 
 void ScInterpreter::PushString( const String& rString )
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "Eike.Rathke@sun.com", "ScInterpreter::PushString" );
     if (!IfErrorPushError())
-        PushTempTokenWithoutError( new ScStringToken( rString ) );
+        PushTempTokenWithoutError( new FormulaStringToken( rString ) );
 }
 
 
 void ScInterpreter::PushSingleRef(SCCOL nCol, SCROW nRow, SCTAB nTab)
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "Eike.Rathke@sun.com", "ScInterpreter::PushSingleRef" );
     if (!IfErrorPushError())
     {
-        SingleRefData aRef;
+        ScSingleRefData aRef;
         aRef.InitFlags();
         aRef.nCol = nCol;
         aRef.nRow = nRow;
@@ -1355,9 +1402,10 @@ void ScInterpreter::PushSingleRef(SCCOL nCol, SCROW nRow, SCTAB nTab)
 void ScInterpreter::PushDoubleRef(SCCOL nCol1, SCROW nRow1, SCTAB nTab1,
                                   SCCOL nCol2, SCROW nRow2, SCTAB nTab2)
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "Eike.Rathke@sun.com", "ScInterpreter::PushDoubleRef" );
     if (!IfErrorPushError())
     {
-        ComplRefData aRef;
+        ScComplexRefData aRef;
         aRef.InitFlags();
         aRef.Ref1.nCol = nCol1;
         aRef.Ref1.nRow = nRow1;
@@ -1372,6 +1420,7 @@ void ScInterpreter::PushDoubleRef(SCCOL nCol1, SCROW nRow1, SCTAB nTab1,
 
 void ScInterpreter::PushMatrix(ScMatrix* pMat)
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "Eike.Rathke@sun.com", "ScInterpreter::PushMatrix" );
     pMat->SetErrorInterpreter( NULL);
     // No   if (!IfErrorPushError())   because ScMatrix stores errors itself,
     // but with notifying ScInterpreter via nGlobalError, substituting it would
@@ -1384,48 +1433,56 @@ void ScInterpreter::PushMatrix(ScMatrix* pMat)
 
 void ScInterpreter::PushError( USHORT nError )
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "Eike.Rathke@sun.com", "ScInterpreter::PushError" );
     SetError( nError );     // only sets error if not already set
-    PushTempTokenWithoutError( new ScErrorToken( nGlobalError));
+    PushTempTokenWithoutError( new FormulaErrorToken( nGlobalError));
 }
 
 void ScInterpreter::PushParameterExpected()
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "Eike.Rathke@sun.com", "ScInterpreter::PushParameterExpected" );
     PushError( errParameterExpected);
 }
 
 
 void ScInterpreter::PushIllegalParameter()
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "Eike.Rathke@sun.com", "ScInterpreter::PushIllegalParameter" );
     PushError( errIllegalParameter);
 }
 
 
 void ScInterpreter::PushIllegalArgument()
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "Eike.Rathke@sun.com", "ScInterpreter::PushIllegalArgument" );
     PushError( errIllegalArgument);
 }
 
 
 void ScInterpreter::PushNA()
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "Eike.Rathke@sun.com", "ScInterpreter::PushNA" );
     PushError( NOTAVAILABLE);
 }
 
 
 void ScInterpreter::PushNoValue()
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "Eike.Rathke@sun.com", "ScInterpreter::PushNoValue" );
     PushError( errNoValue);
 }
 
 
 BOOL ScInterpreter::IsMissing()
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "Eike.Rathke@sun.com", "ScInterpreter::IsMissing" );
     return sp && pStack[sp - 1]->GetType() == svMissing;
 }
 
 
 StackVar ScInterpreter::GetRawStackType()
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "Eike.Rathke@sun.com", "ScInterpreter::GetRawStackType" );
     StackVar eRes;
     if( sp )
     {
@@ -1442,6 +1499,7 @@ StackVar ScInterpreter::GetRawStackType()
 
 StackVar ScInterpreter::GetStackType()
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "Eike.Rathke@sun.com", "ScInterpreter::GetStackType" );
     StackVar eRes;
     if( sp )
     {
@@ -1460,6 +1518,7 @@ StackVar ScInterpreter::GetStackType()
 
 StackVar ScInterpreter::GetStackType( BYTE nParam )
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "Eike.Rathke@sun.com", "ScInterpreter::GetStackType" );
     StackVar eRes;
     if( sp > nParam-1 )
     {
@@ -1475,6 +1534,7 @@ StackVar ScInterpreter::GetStackType( BYTE nParam )
 
 BOOL ScInterpreter::DoubleRefToPosSingleRef( const ScRange& rRange, ScAddress& rAdr )
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "Eike.Rathke@sun.com", "ScInterpreter::DoubleRefToPosSingleRef" );
     // Check for a singleton first - no implicit intersection for them.
     if( rRange.aStart == rRange.aEnd )
     {
@@ -1563,6 +1623,7 @@ BOOL ScInterpreter::DoubleRefToPosSingleRef( const ScRange& rRange, ScAddress& r
 
 double ScInterpreter::GetDouble()
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "Eike.Rathke@sun.com", "ScInterpreter::GetDouble" );
     double nVal;
     switch( GetRawStackType() )
     {
@@ -1646,6 +1707,7 @@ double ScInterpreter::GetDouble()
 
 double ScInterpreter::GetDoubleWithDefault(double nDefault)
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "Eike.Rathke@sun.com", "ScInterpreter::GetDoubleWithDefault" );
     bool bMissing = IsMissing();
     double nResultVal = GetDouble();
     if ( bMissing )
@@ -1656,6 +1718,7 @@ double ScInterpreter::GetDoubleWithDefault(double nDefault)
 
 const String& ScInterpreter::GetString()
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "Eike.Rathke@sun.com", "ScInterpreter::GetString" );
     switch (GetRawStackType())
     {
         case svError:
@@ -1746,6 +1809,7 @@ const String& ScInterpreter::GetString()
 ScMatValType ScInterpreter::GetDoubleOrStringFromMatrix( double& rDouble,
         String& rString )
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "Eike.Rathke@sun.com", "ScInterpreter::GetDoubleOrStringFromMatrix" );
     ScMatValType nMatValType = SC_MATVAL_EMPTY;
     switch ( GetStackType() )
     {
@@ -1795,6 +1859,7 @@ ScMatValType ScInterpreter::GetDoubleOrStringFromMatrix( double& rDouble,
 
 void ScInterpreter::ScDBGet()
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "Eike.Rathke@sun.com", "ScInterpreter::ScDBGet" );
     SCTAB nTab;
     ScQueryParam aQueryParam;
     BOOL bMissingField = FALSE;
@@ -1872,6 +1937,7 @@ void ScInterpreter::ScDBGet()
 
 void ScInterpreter::ScExternal()
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "Eike.Rathke@sun.com", "ScInterpreter::ScExternal" );
     USHORT nIndex;
     BYTE nParamCount = GetByte();
     String aUnoName;
@@ -2418,12 +2484,14 @@ void ScInterpreter::ScExternal()
 
 void ScInterpreter::ScMissing()
 {
-    PushTempToken( new ScMissingToken );
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "Eike.Rathke@sun.com", "ScInterpreter::ScMissing" );
+    PushTempToken( new FormulaMissingToken );
 }
 
 
 void ScInterpreter::ScMacro()
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "Eike.Rathke@sun.com", "ScInterpreter::ScMacro" );
     SbxBase::ResetError();
 
     BYTE nParamCount = GetByte();
@@ -2652,6 +2720,7 @@ void ScInterpreter::ScMacro()
 
 BOOL ScInterpreter::SetSbxVariable( SbxVariable* pVar, const ScAddress& rPos )
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "Eike.Rathke@sun.com", "ScInterpreter::SetSbxVariable" );
     BOOL bOk = TRUE;
     ScBaseCell* pCell = pDok->GetCell( rPos );
     if (pCell)
@@ -2709,6 +2778,7 @@ BOOL ScInterpreter::SetSbxVariable( SbxVariable* pVar, const ScAddress& rPos )
 
 void ScInterpreter::ScTableOp()
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "Eike.Rathke@sun.com", "ScInterpreter::ScTableOp" );
     BYTE nParamCount = GetByte();
     if (nParamCount != 3 && nParamCount != 5)
     {
@@ -2804,6 +2874,7 @@ void ScInterpreter::ScTableOp()
 
 void ScInterpreter::ScErrCell()
 {
+RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "Eike.Rathke@sun.com", "ScInterpreter::ScErrCell" );
     double fErrNum = GetDouble();
     PushError((USHORT) fErrNum);
 }
@@ -2811,10 +2882,11 @@ void ScInterpreter::ScErrCell()
 
 void ScInterpreter::ScDBArea()
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "Eike.Rathke@sun.com", "ScInterpreter::ScDBArea" );
     ScDBData* pDBData = pDok->GetDBCollection()->FindIndex( pCur->GetIndex());
     if (pDBData)
     {
-        ComplRefData aRefData;
+        ScComplexRefData aRefData;
         aRefData.InitFlags();
         pDBData->GetArea( (SCTAB&) aRefData.Ref1.nTab,
                           (SCCOL&) aRefData.Ref1.nCol,
@@ -2832,7 +2904,8 @@ void ScInterpreter::ScDBArea()
 
 void ScInterpreter::ScColRowNameAuto()
 {
-    ComplRefData aRefData( pCur->GetDoubleRef() );
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "Eike.Rathke@sun.com", "ScInterpreter::ScColRowNameAuto" );
+    ScComplexRefData aRefData( static_cast<const ScToken*>(pCur)->GetDoubleRef() );
     aRefData.CalcAbsIfRel( aPos );
     if ( aRefData.Valid() )
     {
@@ -2911,11 +2984,88 @@ void ScInterpreter::ScColRowNameAuto()
         PushError( errNoRef );
 }
 
+void ScInterpreter::ScExternalRef()
+{
+    ScExternalRefManager* pRefMgr = pDok->GetExternalRefManager();
+    const String* pFile = pRefMgr->getExternalFileName(pCur->GetIndex());
+    if (!pFile)
+        PushError(errNoName);
+
+    switch (pCur->GetType())
+    {
+        case svExternalSingleRef:
+        {
+            ScSingleRefData aData(static_cast<const ScToken*>(pCur)->GetSingleRef());
+            if (aData.IsTabRel())
+            {
+                DBG_ERROR("ScCompiler::GetToken: external single reference must have an absolute table reference!");
+                break;
+            }
+
+            aData.CalcAbsIfRel(aPos);
+            ScAddress aAddr(aData.nCol, aData.nRow, aData.nTab);
+            ScExternalRefCache::CellFormat aFmt;
+            ScExternalRefCache::TokenRef xNew = pRefMgr->getSingleRefToken(
+                pCur->GetIndex(), pCur->GetString(), aAddr, &aPos, NULL, &aFmt);
+
+            if (!xNew)
+                break;
+
+            PushTempToken( *xNew);      // push a clone
+
+            if (aFmt.mbIsSet)
+            {
+                nFuncFmtType = aFmt.mnType;
+                nFuncFmtIndex = aFmt.mnIndex;
+            }
+            return;
+        }
+        //break;    // unreachable, prevent compiler warning
+        case svExternalDoubleRef:
+        {
+            ScComplexRefData aData(static_cast<const ScToken*>(pCur)->GetDoubleRef());
+            if (aData.Ref1.IsTabRel() || aData.Ref2.IsTabRel())
+            {
+                DBG_ERROR("ScCompiler::GetToken: external double reference must have an absolute table reference!");
+                break;
+            }
+
+            aData.CalcAbsIfRel(aPos);
+            ScRange aRange(aData.Ref1.nCol, aData.Ref1.nRow, aData.Ref1.nTab,
+                           aData.Ref2.nCol, aData.Ref2.nRow, aData.Ref2.nTab);
+            ScExternalRefCache::TokenArrayRef xNew = pRefMgr->getDoubleRefTokens(
+                pCur->GetIndex(), pCur->GetString(), aRange, &aPos);
+
+            if (!xNew)
+                break;
+
+            ScToken* p = static_cast<ScToken*>(xNew->First());
+            if (p->GetType() != svMatrix)
+                break;
+
+            if (xNew->Next())
+            {
+                // Can't handle more than one matrix per parameter.
+                SetError( errIllegalArgument);
+                break;
+            }
+
+            PushMatrix(p->GetMatrix());
+            return;
+        }
+        //break;    // unreachable, prevent compiler warning
+        default:
+            ;
+    }
+    PushError(errNoRef);
+}
+
 // --- internals ------------------------------------------------------------
 
 
 void ScInterpreter::ScAnswer()
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "Eike.Rathke@sun.com", "ScInterpreter::ScAnswer" );
     String aStr( GetString() );
     if( aStr.EqualsIgnoreCaseAscii( "Das Leben, das Universum und der ganze Rest" ) )
     {
@@ -2929,6 +3079,7 @@ void ScInterpreter::ScAnswer()
 
 void ScInterpreter::ScCalcTeam()
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "Eike.Rathke@sun.com", "ScInterpreter::ScCalcTeam" );
     static BOOL bShown = FALSE;
     if( !bShown )
     {
@@ -2946,6 +3097,7 @@ void ScInterpreter::ScCalcTeam()
 
 void ScInterpreter::ScSpewFunc()
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "Eike.Rathke@sun.com", "ScInterpreter::ScSpewFunc" );
     BOOL bRefresh = FALSE;
     BOOL bClear = FALSE;
     // Stack aufraeumen
@@ -2993,6 +3145,7 @@ extern "C" { static void SAL_CALL thisModule() {} }
 
 void ScInterpreter::ScGame()
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "Eike.Rathke@sun.com", "ScInterpreter::ScGame" );
     enum GameType {
         SC_GAME_NONE,
         SC_GAME_ONCE,
@@ -3221,6 +3374,7 @@ ScInterpreter::ScInterpreter( ScFormulaCell* pCell, ScDocument* pDoc,
     pFormatter( pDoc->GetFormatTable() ),
     bCalcAsShown( pDoc->GetDocOptions().IsCalcAsShown() )
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "Eike.Rathke@sun.com", "ScInterpreter::ScTTT" );
 //  pStack = new ScToken*[ MAXSTACK ];
 
     BYTE cMatFlag = pMyFormulaCell->GetMatrixFlag();
@@ -3254,6 +3408,7 @@ ScInterpreter::~ScInterpreter()
 
 void ScInterpreter::GlobalExit()        // static
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "Eike.Rathke@sun.com", "ScInterpreter::GlobalExit" );
     DBG_ASSERT(!bGlobalStackInUse, "wer benutzt noch den TokenStack?");
     DELETEZ(pGlobalStack);
 }
@@ -3261,6 +3416,7 @@ void ScInterpreter::GlobalExit()        // static
 
 StackVar ScInterpreter::Interpret()
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "Eike.Rathke@sun.com", "ScInterpreter::Interpret" );
     short nRetTypeExpr = NUMBERFORMAT_UNDEFINED;
     ULONG nRetIndexExpr = 0;
     USHORT nErrorFunction = 0;
@@ -3293,7 +3449,7 @@ StackVar ScInterpreter::Interpret()
         if ( eOp == ocPush )
         {
             // RPN code push without error
-            PushWithoutError( (ScToken&) *pCur );
+            PushWithoutError( (FormulaToken&) *pCur );
         }
         else if (pTokenMatrixMap && !(eOp == ocIf || eOp == ocChose) &&
                 ((aTokenMatrixMapIter = pTokenMatrixMap->find( pCur)) !=
@@ -3343,6 +3499,7 @@ StackVar ScInterpreter::Interpret()
                 case ocDBArea           : ScDBArea();                   break;
                 case ocColRowNameAuto   : ScColRowNameAuto();           break;
 // separated    case ocPush             : Push( (ScToken&) *pCur );     break;
+                case ocExternalRef      : ScExternalRef();              break;
                 case ocIf               : ScIfJump();                   break;
                 case ocChose            : ScChoseJump();                break;
                 case ocAdd              : ScAdd();                      break;
@@ -3572,6 +3729,7 @@ StackVar ScInterpreter::Interpret()
                 case ocTDist            : ScTDist();                    break;
                 case ocFDist            : ScFDist();                    break;
                 case ocChiDist          : ScChiDist();                  break;
+                case ocChiSqDist        : ScChiSqDist();                break;
                 case ocStandard         : ScStandard();                 break;
                 case ocAveDev           : ScAveDev();                   break;
                 case ocDevSq            : ScDevSq();                    break;
@@ -3614,10 +3772,12 @@ StackVar ScInterpreter::Interpret()
                 case ocRKP              : ScRKP();                      break;
                 case ocForecast         : ScForecast();                 break;
                 case ocGammaLn          : ScLogGamma();                 break;
+                case ocGamma            : ScGamma();                    break;
                 case ocGammaDist        : ScGammaDist();                break;
                 case ocGammaInv         : ScGammaInv();                 break;
                 case ocChiTest          : ScChiTest();                  break;
                 case ocChiInv           : ScChiInv();                   break;
+                case ocChiSqInv         : ScChiSqInv();                 break;
                 case ocTInv             : ScTInv();                     break;
                 case ocFInv             : ScFInv();                     break;
                 case ocLogInv           : ScLogNormInv();               break;
@@ -3634,6 +3794,7 @@ StackVar ScInterpreter::Interpret()
                 case ocBase             : ScBase();                     break;
                 case ocDecimal          : ScDecimal();                  break;
                 case ocConvert          : ScConvert();                  break;
+                case ocEuroConvert      : ScEuroConvert();              break;
                 case ocRoman            : ScRoman();                    break;
                 case ocArabic           : ScArabic();                   break;
                 case ocInfo             : ScInfo();                     break;
@@ -3672,7 +3833,7 @@ StackVar ScInterpreter::Interpret()
             // Not all functions pop all parameters in case an error is
             // generated. Clean up stack. Assumes that every function pushes a
             // result, may be arbitrary in case of error.
-            const ScToken* pLocalResult = pStack[ sp - 1 ];
+            const FormulaToken* pLocalResult = pStack[ sp - 1 ];
             while (sp > nStackBase)
                 Pop();
             PushTempToken( *pLocalResult );
@@ -3726,7 +3887,7 @@ StackVar ScInterpreter::Interpret()
         {
             if ( !nErrorFunctionCount )
             {   // count of errorcode functions in formula
-                for ( ScToken* t = rArr.FirstRPN(); t; t = rArr.NextRPN() )
+                for ( FormulaToken* t = rArr.FirstRPN(); t; t = rArr.NextRPN() )
                 {
                     switch ( t->GetOpCode() )
                     {
@@ -3809,18 +3970,18 @@ StackVar ScInterpreter::Interpret()
                         const ScMatrixValue* pMatVal = xMat->Get(0, 0, nMatValType);
                         if ( pMatVal )
                         {
-                            if (ScMatrix::IsStringType( nMatValType))
+                            if (ScMatrix::IsNonValueType( nMatValType))
                             {
                                 if ( xMat->IsEmptyPath( 0, 0))
                                 {   // result of empty FALSE jump path
-                                    ScTokenRef xRes = new ScDoubleToken( 0.0);
+                                    FormulaTokenRef xRes = new FormulaDoubleToken( 0.0);
                                     PushTempToken( new ScMatrixCellResultToken( xMat, xRes));
                                     nRetTypeExpr = NUMBERFORMAT_LOGICAL;
                                 }
                                 else
                                 {
                                     String aStr( pMatVal->GetString());
-                                    ScTokenRef xRes = new ScStringToken( aStr);
+                                    FormulaTokenRef xRes = new FormulaStringToken( aStr);
                                     PushTempToken( new ScMatrixCellResultToken( xMat, xRes));
                                     nRetTypeExpr = NUMBERFORMAT_TEXT;
                                 }
@@ -3828,11 +3989,11 @@ StackVar ScInterpreter::Interpret()
                             else
                             {
                                 USHORT nErr = GetDoubleErrorValue( pMatVal->fVal);
-                                ScTokenRef xRes;
+                                FormulaTokenRef xRes;
                                 if (nErr)
-                                    xRes = new ScErrorToken( nErr);
+                                    xRes = new FormulaErrorToken( nErr);
                                 else
-                                    xRes = new ScDoubleToken( pMatVal->fVal);
+                                    xRes = new FormulaDoubleToken( pMatVal->fVal);
                                 PushTempToken( new ScMatrixCellResultToken( xMat, xRes));
                                 if ( nRetTypeExpr != NUMBERFORMAT_LOGICAL )
                                     nRetTypeExpr = NUMBERFORMAT_NUMBER;
@@ -3879,10 +4040,10 @@ StackVar ScInterpreter::Interpret()
     // THE final result.
     xResult = PopToken();
     if (!xResult)
-        xResult = new ScErrorToken( errUnknownStackVariable);
+        xResult = new FormulaErrorToken( errUnknownStackVariable);
 
     // release tokens in expression stack
-    ScToken** p = pStack;
+    FormulaToken** p = pStack;
     while( maxsp-- )
         (*p++)->DecRef();
 

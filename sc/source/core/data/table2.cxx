@@ -457,7 +457,7 @@ void ScTable::TransposeClip( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
                 //  create simple formula, as in ScColumn::CreateRefCell
 
                 ScAddress aDestPos( static_cast<SCCOL>(nRow-nRow1), static_cast<SCROW>(nCol-nCol1), pTransClip->nTab );
-                SingleRefData aRef;
+                ScSingleRefData aRef;
                 aRef.nCol = nCol;
                 aRef.nRow = nRow;
                 aRef.nTab = nTab;

@@ -57,8 +57,8 @@ private:
     ComboBox        aEdName;
 
     FixedLine       aFlAssign;
-    ScRefEdit       aEdAssign;
-    ScRefButton     aRbAssign;
+    formula::RefEdit        aEdAssign;
+    formula::RefButton      aRbAssign;
 
     FixedLine       aFlType;
     CheckBox        aBtnPrintArea;

@@ -80,6 +80,7 @@
 #define _SVSTDARR_ULONGS
 #include <svtools/svstdarr.hxx>
 
+#include <svx/zoomslideritem.hxx>
 #include <svx/svxdlg.hxx> //CHINA001
 #include <svx/dialogs.hrc> //CHINA001
 #include "scabstdlg.hxx" //CHINA001
@@ -102,7 +103,7 @@ USHORT lcl_ParseRange(ScRange& rScRange, const String& aAddress, ScDocument* pDo
     if ( (nResult & SCA_VALID) )
         return nResult;
 
-    return rScRange.Parse(aAddress, pDoc, ScAddress::Details(ScAddress::CONV_XL_A1, 0, 0));
+    return rScRange.Parse(aAddress, pDoc, ScAddress::Details(formula::FormulaGrammar::CONV_XL_A1, 0, 0));
 }
 
 /** Try to parse the given address using Calc-style syntax first, then
@@ -113,7 +114,7 @@ USHORT lcl_ParseAddress(ScAddress& rScAddress, const String& aAddress, ScDocumen
     if ( (nResult & SCA_VALID) )
         return nResult;
 
-    return rScAddress.Parse(aAddress, pDoc, ScAddress::Details(ScAddress::CONV_XL_A1, 0, 0));
+    return rScAddress.Parse(aAddress, pDoc, ScAddress::Details(formula::FormulaGrammar::CONV_XL_A1, 0, 0));
 }
 
 void ScTabViewShell::Execute( SfxRequest& rReq )
@@ -313,7 +314,7 @@ void ScTabViewShell::Execute( SfxRequest& rReq )
                 else
                 {
                     ScRangeUtil     aRangeUtil;
-                    ScAddress::Convention eConv = pDoc->GetAddressConvention();
+                    formula::FormulaGrammar::AddressConvention eConv = pDoc->GetAddressConvention();
                     if( aRangeUtil.MakeRangeFromName( aAddress, pDoc, nTab, aScRange, RUTL_NAMES, eConv ) ||
                         aRangeUtil.MakeRangeFromName( aAddress, pDoc, nTab, aScRange, RUTL_DBASE, eConv ) )
                     {
@@ -748,6 +749,35 @@ void ScTabViewShell::Execute( SfxRequest& rReq )
                     rBindings.Invalidate( SID_ATTR_ZOOM );
                     rReq.AppendItem( SvxZoomItem( GetZoomType(), nZoom, nSlot ) );
                     rReq.Done();
+                }
+            }
+            break;
+
+        case SID_ATTR_ZOOMSLIDER:
+            {
+                const SfxPoolItem* pItem = NULL;
+                BOOL bSyncZoom = SC_MOD()->GetAppOptions().GetSynchronizeZoom();
+                if ( pReqArgs && pReqArgs->GetItemState(SID_ATTR_ZOOMSLIDER, TRUE, &pItem) == SFX_ITEM_SET )
+                {
+                    const USHORT nCurrentZoom = ((const SvxZoomSliderItem *)pItem)->GetValue();
+                    if( nCurrentZoom )
+                    {
+                        SetZoomType( SVX_ZOOM_PERCENT, bSyncZoom );
+                        if (!GetViewData()->IsPagebreakMode())
+                        {
+                            ScAppOptions aNewOpt = pScMod->GetAppOptions();
+                            aNewOpt.SetZoom( nCurrentZoom );
+                            aNewOpt.SetZoomType( GetZoomType() );
+                            pScMod->SetAppOptions( aNewOpt );
+                        }
+                        Fraction aFract( nCurrentZoom,100 );
+                        SetZoom( aFract, aFract, bSyncZoom );
+                        PaintGrid();
+                        PaintTop();
+                        PaintLeft();
+                        rBindings.Invalidate( SID_ATTR_ZOOMSLIDER );
+                        rReq.Done();
+                    }
                 }
             }
             break;

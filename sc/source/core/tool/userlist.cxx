@@ -74,7 +74,7 @@ ScUserListData::ScUserListData(const String& rStr) :
 }
 
 ScUserListData::ScUserListData(const ScUserListData& rData) :
-    DataObject(),
+    ScDataObject(),
     aStr(rData.aStr)
 {
     InitTokens();
@@ -183,7 +183,7 @@ StringCompare ScUserListData::ICompare(const String& rSubStr1, const String& rSu
 }
 
 ScUserList::ScUserList(USHORT nLim, USHORT nDel) :
-    Collection  ( nLim, nDel )
+    ScCollection    ( nLim, nDel )
 {
     using namespace ::com::sun::star;
 
@@ -249,7 +249,7 @@ ScUserList::ScUserList(USHORT nLim, USHORT nDel) :
     }
 }
 
-DataObject* ScUserList::Clone() const
+ScDataObject* ScUserList::Clone() const
 {
     return ( new ScUserList( *this ) );
 }

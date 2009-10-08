@@ -43,6 +43,7 @@
 #include "global.hxx"
 #include "bigrange.hxx"
 #include "collect.hxx"
+#include "scdllapi.h"
 
 #ifdef SC_CHGTRACK_CXX
 // core/inc
@@ -423,7 +424,7 @@ public:
             BOOL                IsRejectable() const;
 
             const ScBigRange&   GetBigRange() const { return aBigRange; }
-            DateTime            GetDateTime() const;        // local time
+            SC_DLLPUBLIC DateTime           GetDateTime() const;        // local time
             const DateTime&     GetDateTimeUTC() const      // UTC time
                                     { return aDateTime; }
             const String&       GetUser() const { return aUser; }
@@ -729,7 +730,7 @@ public:
                                     { return pFirstCell; } // only to use in the XML export
 
             const ScBigRange&   GetFromRange() const { return aFromRange; }
-            void                GetDelta( INT32& nDx, INT32& nDy, INT32& nDz ) const;
+    SC_DLLPUBLIC        void                GetDelta( INT32& nDx, INT32& nDy, INT32& nDz ) const;
 
     virtual void                GetDescription( String&, ScDocument*,
                                     BOOL bSplitRange = FALSE, bool bWarning = true ) const;
@@ -1066,7 +1067,7 @@ class ScChangeTrack : public SfxListener
         ScChangeTrackMsgQueue   aMsgQueue;
         ScChangeTrackMsgStack   aMsgStackTmp;
         ScChangeTrackMsgStack   aMsgStackFinal;
-            StrCollection       aUserCollection;
+            ScStrCollection     aUserCollection;
             String              aUser;
             Link                aModifiedLink;
             ScRange             aInDeleteRange;
@@ -1146,7 +1147,7 @@ class ScChangeTrack : public SfxListener
             void                UpdateReference( ScChangeAction** ppFirstAction,
                                     ScChangeAction* pAct, BOOL bUndo );
             void                Append( ScChangeAction* pAppend, ULONG nAction );
-            void                AppendDeleteRange( const ScRange&,
+    SC_DLLPUBLIC        void                AppendDeleteRange( const ScRange&,
                                     ScDocument* pRefDoc, SCsTAB nDz,
                                     ULONG nRejectingInsert );
             void                AppendOneDeleteRange( const ScRange& rOrgRange,
@@ -1192,10 +1193,10 @@ public:
                                         return static_cast< SCSIZE >( nRow / nContentRowsPerSlot );
                                     }
 
-                                ScChangeTrack( ScDocument* );
+            SC_DLLPUBLIC        ScChangeTrack( ScDocument* );
                                 ScChangeTrack( ScDocument*,
-                                            const StrCollection& ); // only to use in the XML import
-    virtual                     ~ScChangeTrack();
+                                            const ScStrCollection& ); // only to use in the XML import
+            SC_DLLPUBLIC virtual ~ScChangeTrack();
             void                Clear();
 
             ScChangeActionContent*  GetFirstGenerated() const { return pFirstGeneratedDelContent; }
@@ -1229,9 +1230,9 @@ public:
             BOOL                IsInDeleteTop() const { return bInDeleteTop; }
             BOOL                IsInDeleteUndo() const { return bInDeleteUndo; }
             BOOL                IsInPasteCut() const { return bInPasteCut; }
-            void                SetUser( const String& );
+    SC_DLLPUBLIC        void                SetUser( const String& );
             const String&       GetUser() const { return aUser; }
-            const StrCollection&    GetUserCollection() const
+            const ScStrCollection&  GetUserCollection() const
                                     { return aUserCollection; }
             ScDocument*         GetDocument() const { return pDoc; }
                                 // for import filter
@@ -1253,7 +1254,7 @@ public:
 
                                 // pRefDoc may be NULL => no lookup of contents
                                 // => no generation of deleted contents
-            void                AppendDeleteRange( const ScRange&,
+    SC_DLLPUBLIC        void                AppendDeleteRange( const ScRange&,
                                     ScDocument* pRefDoc,
                                     ULONG& nStartAction, ULONG& nEndAction,
                                     SCsTAB nDz = 0 );
@@ -1299,7 +1300,7 @@ public:
                                 // The action is returned and may be used to
                                 // set user name, description, date/time et al.
                                 // Takes ownership of the cells!
-        ScChangeActionContent*  AppendContentOnTheFly( const ScAddress& rPos,
+    SC_DLLPUBLIC    ScChangeActionContent*  AppendContentOnTheFly( const ScAddress& rPos,
                                     ScBaseCell* pOldCell,
                                     ScBaseCell* pNewCell,
                                     ULONG nOldFormat = 0,
@@ -1317,11 +1318,11 @@ public:
                                     const String& rNewValue,
                                     ScBaseCell* pOldCell );
 
-            void                AppendInsert( const ScRange& );
+    SC_DLLPUBLIC        void                AppendInsert( const ScRange& );
 
                                 // pRefDoc may be NULL => no lookup of contents
                                 // => no generation of deleted contents
-            void                AppendMove( const ScRange& rFromRange,
+    SC_DLLPUBLIC        void                AppendMove( const ScRange& rFromRange,
                                     const ScRange& rToRange,
                                     ScDocument* pRefDoc );
 
@@ -1342,7 +1343,7 @@ public:
                                             pLastCutMove;
                                     }
 
-            void                Undo( ULONG nStartAction, ULONG nEndAction );
+    SC_DLLPUBLIC        void                Undo( ULONG nStartAction, ULONG nEndAction );
 
                                 // fuer MergeDocument, Referenzen anpassen,
                                 //! darf nur in einem temporaer geoeffneten
@@ -1365,7 +1366,7 @@ public:
                                 // Deletes einer Reihe gelistet.
                                 // Mit bAllFlat werden auch alle Abhaengigen
                                 // der Abhaengigen flach eingefuegt.
-            void                GetDependents( ScChangeAction*,
+    SC_DLLPUBLIC        void                GetDependents( ScChangeAction*,
                                     ScChangeActionTable&,
                                     BOOL bListMasterDelete = FALSE,
                                     BOOL bAllFlat = FALSE ) const;
@@ -1374,7 +1375,7 @@ public:
             BOOL                Reject( ScChangeAction* );
 
                                 // Accept visible Action (und abhaengige)
-            BOOL                Accept( ScChangeAction* );
+    SC_DLLPUBLIC        BOOL                Accept( ScChangeAction* );
 
             void                AcceptAll();    // alle Virgins
             BOOL                RejectAll();    // alle Virgins
@@ -1397,8 +1398,8 @@ public:
             void                NotifyModified( ScChangeTrackMsgType eMsgType,
                                     ULONG nStartAction, ULONG nEndAction );
 
-            BOOL                Load( SvStream& rStrm, USHORT nVer );
-            BOOL                Store( SvStream& rStrm );
+    SC_DLLPUBLIC        BOOL                Load( SvStream& rStrm, USHORT nVer );
+    SC_DLLPUBLIC        BOOL                Store( SvStream& rStrm );
             USHORT              GetLoadedFileFormatVersion() const
                                     { return nLoadedFileFormatVersion; }
 

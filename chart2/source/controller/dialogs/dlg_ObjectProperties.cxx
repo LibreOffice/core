@@ -46,6 +46,7 @@
 #include "tp_LegendPosition.hxx"
 #include "tp_PointGeometry.hxx"
 #include "tp_Scale.hxx"
+#include "tp_AxisPositions.hxx"
 #include "tp_ErrorBars.hxx"
 #include "tp_Trendline.hxx"
 #include "tp_SeriesToAxis.hxx"
@@ -60,23 +61,21 @@
 #include "DiagramHelper.hxx"
 #include "chartview/NumberFormatterWrapper.hxx"
 #include "AxisIndexDefines.hxx"
+#include "AxisHelper.hxx"
+
 #include <com/sun/star/chart2/XAxis.hpp>
 #include <com/sun/star/chart2/XChartType.hpp>
 #include <com/sun/star/chart2/XDataSeries.hpp>
 #include <svtools/intitem.hxx>
+#include <svtools/languageoptions.hxx>
 
-#ifndef _SVX_SVXIDS_HRC
 #include <svx/svxids.hrc>
-#endif
-
 
 #include <svx/drawitem.hxx>
 #include <svx/ofaitem.hxx>
 #include <svx/svxgrahicitem.hxx>
 
-#ifndef _SVX_DIALOGS_HRC
 #include <svx/dialogs.hrc>
-#endif
 #include <svx/flstitem.hxx>
 #include <svx/tabline.hxx>
 
@@ -90,6 +89,7 @@ namespace chart
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::chart2;
+using ::com::sun::star::uno::Reference;
 
 //-----------------------------------------------------------------------------
 //-----------------------------------------------------------------------------
@@ -107,11 +107,15 @@ ObjectPropertiesDialogParameter::ObjectPropertiesDialogParameter( const rtl::OUS
         , m_bProvidesBarConnectors(false)
         , m_bHasAreaProperties(false)
         , m_bHasSymbolProperties(false)
-        , m_bHasScaleProperties(false)
-        , m_bCanAxisLabelsBeStaggered(false)
         , m_bHasNumberProperties(false)
         , m_bProvidesStartingAngle(false)
         , m_bProvidesMissingValueTreatments(false)
+        , m_bHasScaleProperties(false)
+        , m_bCanAxisLabelsBeStaggered(false)
+        , m_bSupportingAxisPositioning(false)
+        , m_bShowAxisOrigin(false)
+        , m_bIsCrossingAxisIsCategoryAxis(false)
+        , m_aCategories()
         , m_xChartDocument( 0 )
 {
     rtl::OUString aParticleID = ObjectIdentifier::getParticleID( m_aObjectCID );
@@ -167,17 +171,42 @@ void ObjectPropertiesDialogParameter::init( const uno::Reference< frame::XModel 
         //show scale properties only for a single axis not for multiselection
         m_bHasScaleProperties = !m_bAffectsMultipleObjects;
 
-        //no scale page for series axis
         if( m_bHasScaleProperties )
         {
             uno::Reference< XAxis > xAxis( ObjectIdentifier::getAxisForCID( m_aObjectCID, xChartModel ) );
             if( xAxis.is() )
             {
+                //no scale page for series axis
                 ScaleData aData( xAxis->getScaleData() );
                 if( chart2::AxisType::SERIES == aData.AxisType )
                     m_bHasScaleProperties = false;
                 if( chart2::AxisType::REALNUMBER == aData.AxisType || chart2::AxisType::PERCENT == aData.AxisType )
                     m_bHasNumberProperties = true;
+
+                sal_Int32 nCooSysIndex=0;
+                sal_Int32 nDimensionIndex=0;
+                sal_Int32 nAxisIndex=0;
+                if( AxisHelper::getIndicesForAxis( xAxis, xDiagram, nCooSysIndex, nDimensionIndex, nAxisIndex ) )
+                {
+                    xChartType = AxisHelper::getFirstChartTypeWithSeriesAttachedToAxisIndex( xDiagram, nAxisIndex );
+                    //show positioning controls only if they make sense
+                    m_bSupportingAxisPositioning = ChartTypeHelper::isSupportingAxisPositioning( xChartType, nDimensionCount, nDimensionIndex );
+
+                    //show axis origin only for secondary y axis
+                    if( 1==nDimensionIndex && 1==nAxisIndex && ChartTypeHelper::isSupportingBaseValue( xChartType ) )
+                        m_bShowAxisOrigin = true;
+                }
+
+                //is the crossin main axis a category axes?:
+                uno::Reference< XCoordinateSystem > xCooSys( AxisHelper::getCoordinateSystemOfAxis( xAxis, xDiagram ) );
+                uno::Reference< XAxis > xCrossingMainAxis( AxisHelper::getCrossingMainAxis( xAxis, xCooSys ) );
+                if( xCrossingMainAxis.is() )
+                {
+                    ScaleData aScale( xCrossingMainAxis->getScaleData() );
+                    m_bIsCrossingAxisIsCategoryAxis = ( chart2::AxisType::CATEGORY == aScale.AxisType  );
+                    if( m_bIsCrossingAxisIsCategoryAxis )
+                        m_aCategories = DiagramHelper::generateAutomaticCategories( Reference< chart2::XChartDocument >( xChartModel, uno::UNO_QUERY) );
+                }
             }
         }
 
@@ -238,6 +267,22 @@ bool ObjectPropertiesDialogParameter::HasScaleProperties() const
 bool ObjectPropertiesDialogParameter::CanAxisLabelsBeStaggered() const
 {
     return m_bCanAxisLabelsBeStaggered;
+}
+bool ObjectPropertiesDialogParameter::ShowAxisOrigin() const
+{
+    return m_bShowAxisOrigin;
+}
+bool ObjectPropertiesDialogParameter::IsSupportingAxisPositioning() const
+{
+    return m_bSupportingAxisPositioning;
+}
+bool ObjectPropertiesDialogParameter::IsCrossingAxisIsCategoryAxis() const
+{
+    return m_bIsCrossingAxisIsCategoryAxis;
+}
+const uno::Sequence< rtl::OUString >& ObjectPropertiesDialogParameter::GetCategories() const
+{
+    return m_aCategories;
 }
 bool ObjectPropertiesDialogParameter::HasNumberProperties() const
 {
@@ -345,14 +390,17 @@ SchAttribTabDlg::SchAttribTabDlg(Window* pParent,
 
         case OBJECTTYPE_AXIS:
         {
-            AddTabPage(RID_SVXPAGE_LINE, String(SchResId(STR_PAGE_LINE)));
-            AddTabPage(RID_SVXPAGE_CHAR_NAME, String(SchResId(STR_PAGE_CHARACTERS)));
-            AddTabPage(RID_SVXPAGE_CHAR_EFFECTS, String(SchResId(STR_PAGE_FONT_EFFECTS)));
-            AddTabPage(TP_AXIS_LABEL, String(SchResId(STR_OBJECT_LABEL)), SchAxisLabelTabPage::Create, NULL);
             if( m_pParameter->HasScaleProperties() )
-                AddTabPage(TP_SCALE_Y, String(SchResId(STR_PAGE_SCALE)), ScaleTabPage::Create, NULL);
+                AddTabPage(TP_SCALE, String(SchResId(STR_PAGE_SCALE)), ScaleTabPage::Create, NULL);
+
+            if( m_pParameter->HasScaleProperties() )//no positioning page for z axes so far as the tickmarks are not shown so far
+                AddTabPage(TP_AXIS_POSITIONS, String(SchResId(STR_PAGE_POSITIONING)), AxisPositionsTabPage::Create, NULL);
+            AddTabPage(RID_SVXPAGE_LINE, String(SchResId(STR_PAGE_LINE)));
+            AddTabPage(TP_AXIS_LABEL, String(SchResId(STR_OBJECT_LABEL)), SchAxisLabelTabPage::Create, NULL);
             if( m_pParameter->HasNumberProperties() )
                 AddTabPage(RID_SVXPAGE_NUMBERFORMAT, String(SchResId(STR_PAGE_NUMBERS)));
+            AddTabPage(RID_SVXPAGE_CHAR_NAME, String(SchResId(STR_PAGE_CHARACTERS)));
+            AddTabPage(RID_SVXPAGE_CHAR_EFFECTS, String(SchResId(STR_PAGE_FONT_EFFECTS)));
             break;
         }
 
@@ -399,6 +447,11 @@ SchAttribTabDlg::SchAttribTabDlg(Window* pParent,
             AddTabPage(RID_SVXPAGE_CHAR_NAME, String(SchResId(STR_PAGE_CHARACTERS)));
             AddTabPage(RID_SVXPAGE_CHAR_EFFECTS, String(SchResId(STR_PAGE_FONT_EFFECTS)));
             AddTabPage(RID_SVXPAGE_NUMBERFORMAT, String(SchResId(STR_PAGE_NUMBERS)));
+            if( SvtLanguageOptions().IsCTLFontEnabled() )
+                /*  When rotation is supported for equation text boxes, use
+                    SchAlignmentTabPage::Create here. The special
+                    SchAlignmentTabPage::CreateWithoutRotation can be deleted. */
+                AddTabPage(TP_ALIGNMENT, String(SchResId(STR_PAGE_ALIGNMENT)), SchAlignmentTabPage::CreateWithoutRotation, NULL);
             break;
     }
 
@@ -482,28 +535,39 @@ void SchAttribTabDlg::PageCreated(USHORT nId, SfxTabPage &rPage)
         case TP_ALIGNMENT:
             break;
 
-        case TP_SCALE_Y:
-            {
-                ScaleTabPage & rAxisTabPage = static_cast< ScaleTabPage & >( rPage );
 
-                // #i81259# fix for #101318# undone.  The numberformatter passed
-                // here must contain the actually used number format.  Showing
-                // numbers with more digits is now solved in FormattedField
-                // (using the input format also for output).
-                rAxisTabPage.SetNumFormatter( m_pNumberFormatter );
+        case TP_AXIS_POSITIONS:
+            {
+                AxisPositionsTabPage* pPage = dynamic_cast< AxisPositionsTabPage* >( &rPage );
+                if(pPage)
+                {
+                    pPage->SetNumFormatter( m_pNumberFormatter );
+                    if( m_pParameter->IsCrossingAxisIsCategoryAxis() )
+                    {
+                        pPage->SetCrossingAxisIsCategoryAxis( m_pParameter->IsCrossingAxisIsCategoryAxis() );
+                        pPage->SetCategories( m_pParameter->GetCategories() );
+                    }
+                    pPage->SupportAxisPositioning( m_pParameter->IsSupportingAxisPositioning() );
+                }
             }
             break;
-//DLNF         case TP_DATA_DESCR:
-//DLNF             {
-//DLNF                 DataLabelsTabPage & rLabelPage = static_cast< DataLabelsTabPage & >( rPage );
-//DLNF                 rLabelPage.SetNumberFormatter( m_pNumberFormatter );
-//DLNF             }
-//DLNF             break;
+
+        case TP_SCALE:
+            {
+                ScaleTabPage* pScaleTabPage = dynamic_cast< ScaleTabPage* >( &rPage );
+                if(pScaleTabPage)
+                {
+                    pScaleTabPage->SetNumFormatter( m_pNumberFormatter );
+                    pScaleTabPage->ShowAxisOrigin( m_pParameter->ShowAxisOrigin() );
+                }
+            }
+            break;
 
         case TP_DATA_DESCR:
             {
-                DataLabelsTabPage & rLabelPage = static_cast< DataLabelsTabPage & >( rPage );
-                rLabelPage.SetNumberFormatter( m_pNumberFormatter );
+                DataLabelsTabPage* pLabelPage = dynamic_cast< DataLabelsTabPage* >( &rPage );
+                if( pLabelPage )
+                    pLabelPage->SetNumberFormatter( m_pNumberFormatter );
             }
             break;
 

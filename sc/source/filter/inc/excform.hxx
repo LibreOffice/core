@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: excform.hxx,v $
- * $Revision: 1.22 $
+ * $Revision: 1.22.62.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -35,6 +35,7 @@
 #include "xiroot.hxx"
 #include "formel.hxx"
 
+#include <vector>
 
 class ScRangeList;
 
@@ -55,7 +56,7 @@ protected:
     // ---------------------------------------------------------------
     void                DoMulArgs( DefTokenId eId, sal_uInt8 nNumArgs, sal_uInt8 mnMinParamCount = 0 );
 
-    void                ExcRelToScRel( UINT16 nRow, UINT8 nCol, SingleRefData&, const BOOL bName );
+    void                ExcRelToScRel( UINT16 nRow, UINT8 nCol, ScSingleRefData&, const BOOL bName );
 
 public:
                         ExcelToSc( const XclImpRoot& rRoot );
@@ -64,6 +65,10 @@ public:
                                  bool bAllowArrays, const FORMULA_TYPE eFT = FT_CellFormula );
 
     virtual ConvErr     Convert( _ScRangeListTabs&, XclImpStream& rStrm, sal_Size nFormulaLen, const FORMULA_TYPE eFT = FT_CellFormula );
+
+    virtual ConvErr     ConvertExternName( const ScTokenArray*& rpArray, XclImpStream& rStrm, sal_Size nFormulaLen,
+                                           const String& rUrl, const ::std::vector<String>& rTabNames );
+
     virtual BOOL        GetAbsRefs( ScRangeList& rRangeList, XclImpStream& rStrm, sal_Size nLen );
 
     void                GetDummy( const ScTokenArray*& );
@@ -79,8 +84,8 @@ public:
     static inline BOOL  IsComplColRange( const UINT16 nCol1, const UINT16 nCol2 );
     static inline BOOL  IsComplRowRange( const UINT16 nRow1, const UINT16 nRow2 );
 
-    void                SetComplCol( ComplRefData& );
-    void                SetComplRow( ComplRefData& );
+    void                SetComplCol( ScComplexRefData& );
+    void                SetComplRow( ScComplexRefData& );
 
     void                ReadExtensions( const ExtensionTypeVec& rExtensions,
                                         XclImpStream& aIn );
@@ -102,19 +107,32 @@ inline BOOL ExcelToSc::IsComplRowRange( const UINT16 nRow1, const UINT16 nRow2 )
     return ( ( nRow1 & 0x3FFF ) == 0x0000 ) && ( ( nRow2 & 0x3FFF ) == 0x3FFF );
 }
 
+// ============================================================================
 
 class XclImpLinkManager;
 
 class ExcelToSc8 : public ExcelToSc
 {
+public:
+
+    struct ExternalTabInfo
+    {
+        String      maTabName;
+        sal_uInt16  mnFileId;
+        bool        mbExternal;
+
+        ExternalTabInfo();
+    };
+
 private:
     const XclImpLinkManager&    rLinkMan;
 
-    void                ExcRelToScRel8( UINT16 nRow, UINT16 nCol, SingleRefData&,
+    void                ExcRelToScRel8( UINT16 nRow, UINT16 nCol, ScSingleRefData&,
                             const BOOL bName );
 
-                        // this function must read 2 bytes from stream and adjust <nBytesLeft>
-    virtual BOOL        Read3DTabReference( XclImpStream& rStrm, SCTAB& rFirstTab, SCTAB& rLastTab );
+    bool                GetExternalFileIdFromXti( UINT16 nIxti, sal_uInt16& rFileId ) const;
+
+    virtual bool        Read3DTabReference( UINT16 nIxti, SCTAB& rFirstTab, SCTAB& rLastTab, ExternalTabInfo& rExtInfo );
 
 public:
                         ExcelToSc8( const XclImpRoot& rRoot );
@@ -123,6 +141,9 @@ public:
     virtual ConvErr     Convert( const ScTokenArray*& rpTokArray, XclImpStream& rStrm, sal_Size nFormulaLen, bool bAllowArrays, const FORMULA_TYPE eFT = FT_CellFormula );
 
     virtual ConvErr     Convert( _ScRangeListTabs&, XclImpStream& rStrm, sal_Size nFormulaLen, const FORMULA_TYPE eFT = FT_CellFormula );
+
+    virtual ConvErr     ConvertExternName( const ScTokenArray*& rpArray, XclImpStream& rStrm, sal_Size nFormulaLen,
+                                           const String& rUrl, const ::std::vector<String>& rTabNames );
 
     static inline BOOL  IsComplRowRange( const UINT16 nRow1, const UINT16 nRow2 );
 

@@ -36,7 +36,7 @@
 #include "collect.hxx"
 
 //------------------------------------------------------------------------
-class SC_DLLPUBLIC ScUserListData : public DataObject
+class SC_DLLPUBLIC ScUserListData : public ScDataObject
 {
 friend class ScUserList;
     String  aStr;
@@ -51,7 +51,7 @@ public:
                     ScUserListData(const ScUserListData& rData);
     virtual         ~ScUserListData();
 
-    virtual DataObject*     Clone() const { return new ScUserListData(*this); }
+    virtual ScDataObject*       Clone() const { return new ScUserListData(*this); }
 
     const   String&         GetString() const { return aStr; }
             void            SetString( const String& rStr);
@@ -63,13 +63,13 @@ public:
 };
 
 //------------------------------------------------------------------------
-class SC_DLLPUBLIC ScUserList : public Collection
+class SC_DLLPUBLIC ScUserList : public ScCollection
 {
 public:
                     ScUserList( USHORT nLim = 4, USHORT nDel = 4);
-                    ScUserList( const ScUserList& rUserList ) : Collection ( rUserList ) {}
+                    ScUserList( const ScUserList& rUserList ) : ScCollection ( rUserList ) {}
 
-    virtual DataObject*     Clone() const;
+    virtual ScDataObject*       Clone() const;
 
             ScUserListData* GetData( const String& rSubStr ) const;
             /// If the list in rStr is already inserted
@@ -82,7 +82,7 @@ public:
 };
 
 inline  ScUserList& ScUserList::operator=( const ScUserList& r )
-    { return (ScUserList&)Collection::operator=( r ); }
+    { return (ScUserList&)ScCollection::operator=( r ); }
 
 inline ScUserListData* ScUserList::operator[]( const USHORT nIndex) const
     { return (ScUserListData*)At(nIndex); }

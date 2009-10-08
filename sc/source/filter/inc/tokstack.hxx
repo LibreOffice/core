@@ -34,7 +34,9 @@
 #include <string.h>
 #include <tools/debug.hxx>
 #include "compiler.hxx"
+#include "tokenarray.hxx"
 
+#include <vector>
 
 typedef OpCode DefTokenId;
 // in PRODUCT version: ambiguity between OpCode (being USHORT) and UINT16
@@ -61,7 +63,7 @@ struct TokenId
 
 
 //------------------------------------------------------------------------
-struct ComplRefData;
+struct ScComplexRefData;
 class TokenStack;
 class ScToken;
 
@@ -78,6 +80,9 @@ enum E_TYPE
     T_Ext,      // irgendwas Unbekanntes mit Funktionsnamen
     T_Nlf,      // token for natural language formula
     T_Matrix,   // token for inline arrays
+    T_ExtName,  // token for external names
+    T_ExtRefC,
+    T_ExtRefA,
     T_Error     // fuer Abfrage im Fehlerfall
 };
 
@@ -101,7 +106,7 @@ class TokenPool
         UINT16                      nP_Err;
         UINT16                      nP_ErrAkt;
 
-        SingleRefData**             ppP_RefTr;  // Pool fuer Referenzen
+        ScSingleRefData**               ppP_RefTr;  // Pool fuer Referenzen
         UINT16                      nP_RefTr;
         UINT16                      nP_RefTrAkt;
 
@@ -123,8 +128,8 @@ class TokenPool
 
         struct  NLFCONT
         {
-            SingleRefData           aRef;
-                                    NLFCONT( const SingleRefData& r ) : aRef( r )   {}
+            ScSingleRefData         aRef;
+                                    NLFCONT( const ScSingleRefData& r ) : aRef( r ) {}
         };
         NLFCONT**                   ppP_Nlf;
         UINT16                      nP_Nlf;
@@ -133,6 +138,32 @@ class TokenPool
         ScMatrix**                  ppP_Matrix;     // Pool fuer Matricies
         UINT16                      nP_Matrix;
         UINT16                      nP_MatrixAkt;
+
+        /** for storage of external names */
+        struct ExtName
+        {
+            sal_uInt16  mnFileId;
+            String      maName;
+        };
+        ::std::vector<ExtName>      maExtNames;
+
+        /** for storage of external cell references */
+        struct ExtCellRef
+        {
+            sal_uInt16      mnFileId;
+            String          maTabName;
+            ScSingleRefData   maRef;
+        };
+        ::std::vector<ExtCellRef>   maExtCellRefs;
+
+        /** for storage of external area references */
+        struct ExtAreaRef
+        {
+            sal_uInt16      mnFileId;
+            String          maTabName;
+            ScComplexRefData    maRef;
+        };
+        ::std::vector<ExtAreaRef>   maExtAreaRefs;
 
         UINT16*                     pElement;   // Array mit Indizes fuer Elemente
         E_TYPE*                     pType;      // ...mit Typ-Info
@@ -173,19 +204,21 @@ class TokenPool
         const TokenId               Store( const UINT16 nIndex );
         inline const TokenId        Store( const INT16 nWert );
         const TokenId               Store( const String& rString );
-        const TokenId               Store( const SingleRefData& rTr );
-        const TokenId               Store( const ComplRefData& rTr );
+        const TokenId               Store( const ScSingleRefData& rTr );
+        const TokenId               Store( const ScComplexRefData& rTr );
 
         const TokenId               Store( const DefTokenId eId, const String& rName );
                                         // 4 externals (e.g. AddIns, Makros...)
-        const TokenId               StoreNlf( const SingleRefData& rTr );
+        const TokenId               StoreNlf( const ScSingleRefData& rTr );
         const TokenId               StoreMatrix( SCSIZE nC, SCSIZE nR );
+        const TokenId               StoreExtName( sal_uInt16 nFileId, const String& rName );
+        const TokenId               StoreExtRef( sal_uInt16 nFileId, const String& rTabName, const ScSingleRefData& rRef );
+        const TokenId               StoreExtRef( sal_uInt16 nFileId, const String& rTabName, const ScComplexRefData& rRef );
 
         inline const TokenId        LastId( void ) const;
         inline const ScTokenArray*  operator []( const TokenId nId );
         void                        Reset( void );
         inline E_TYPE               GetType( const TokenId& nId ) const;
-        inline const SingleRefData* GetSRD( const TokenId& nId ) const;
         BOOL                        IsSingleOp( const TokenId& nId, const DefTokenId eId ) const;
         const String*               GetExternal( const TokenId& nId ) const;
 //UNUSED2008-05  const String*               GetString( const TokenId& nId ) const;
@@ -372,22 +405,6 @@ inline E_TYPE TokenPool::GetType( const TokenId& rId ) const
 
     return nRet;
 }
-
-
-inline const SingleRefData* TokenPool::GetSRD( const TokenId& rId ) const
-{
-    SingleRefData* pRet;
-
-    UINT16 nId = (UINT16) rId - 1;
-
-    if( nId < nElementAkt && pType[ nId ] == T_RefC )
-        pRet = ppP_RefTr[ pElement[ nId ] ];
-    else
-        pRet = NULL;
-
-    return pRet;
-}
-
 
 
 #endif

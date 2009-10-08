@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: scmatrix.cxx,v $
- * $Revision: 1.18 $
+ * $Revision: 1.17.136.3 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -36,7 +36,7 @@
 #include "scmatrix.hxx"
 #include "global.hxx"
 #include "address.hxx"
-#include "errorcodes.hxx"
+#include "formula/errorcodes.hxx"
 #include "interpre.hxx"
 #include <svtools/zforlist.hxx>
 #include <tools/stream.hxx>
@@ -76,6 +76,14 @@ ScMatrix* ScMatrix::Clone() const
     ScMatrix* pScMat = new ScMatrix( nColCount, nRowCount);
     MatCopy(*pScMat);
     pScMat->SetErrorInterpreter( pErrorInterpreter);    // TODO: really?
+    return pScMat;
+}
+
+ScMatrix* ScMatrix::CloneAndExtend( SCSIZE nNewCols, SCSIZE nNewRows ) const
+{
+    ScMatrix* pScMat = new ScMatrix( nNewCols, nNewRows);
+    MatCopy(*pScMat);
+    pScMat->SetErrorInterpreter( pErrorInterpreter);
     return pScMat;
 }
 
@@ -180,7 +188,7 @@ void ScMatrix::Store(SvStream& /* rStream */) const
     for (SCSIZE i=0; i<nCount; i++)
     {
         BYTE nType = CELLTYPE_VALUE;
-        if ( mnValType && IsStringType( mnValType[i]))
+        if ( mnValType && IsNonValueType( mnValType[i]))
         {
             if ( pMat[i].pS )
                 aMatStr = *pMat[i].pS;
@@ -208,7 +216,7 @@ void ScMatrix::ResetIsString()
     {
         for (SCSIZE i = 0; i < nCount; i++)
         {
-            if ( IsStringType( mnValType[i]))
+            if ( IsNonValueType( mnValType[i]))
                 delete pMat[i].pS;
         }
     }
@@ -225,7 +233,7 @@ void ScMatrix::DeleteIsString()
         SCSIZE nCount = nColCount * nRowCount;
         for ( SCSIZE i = 0; i < nCount; i++ )
         {
-            if (IsStringType( mnValType[i]))
+            if (IsNonValueType( mnValType[i]))
                 delete pMat[i].pS;
         }
         delete [] mnValType;
@@ -258,7 +266,7 @@ void ScMatrix::PutString(const String& rStr, SCSIZE nIndex)
 {
     if (mnValType == NULL)
         ResetIsString();
-    if ( IsStringType( mnValType[nIndex]) && pMat[nIndex].pS )
+    if ( IsNonValueType( mnValType[nIndex]) && pMat[nIndex].pS )
         *(pMat[nIndex].pS) = rStr;
     else
     {
@@ -277,10 +285,10 @@ void ScMatrix::PutStringEntry( const String* pStr, BYTE bFlag, SCSIZE nIndex )
     // the value with if (IsValueOrEmpty()) GetDouble(). Backup pS first.
     String* pS = pMat[nIndex].pS;
     pMat[nIndex].fVal = 0.0;
-    // An EMPTY entry must not have a string pointer therefor.
+    // An EMPTY or EMPTYPATH entry must not have a string pointer therefor.
     DBG_ASSERT( (((bFlag & SC_MATVAL_EMPTY) == SC_MATVAL_EMPTY) && !pStr) || TRUE,
-            "ScMatrix::PutStringEntry: pStr passed though EMPTY entry");
-    if ( IsStringType( mnValType[nIndex]) && pS )
+            "ScMatrix::PutStringEntry: pStr passed through EMPTY entry");
+    if ( IsNonValueType( mnValType[nIndex]) && pS )
     {
         if ((bFlag & SC_MATVAL_EMPTY) == SC_MATVAL_EMPTY)
             delete pS, pS = NULL;
@@ -312,7 +320,7 @@ void ScMatrix::PutEmpty(SCSIZE nIndex)
 {
     if (mnValType == NULL)
         ResetIsString();
-    if ( IsStringType( mnValType[nIndex]) && pMat[nIndex].pS )
+    if ( IsNonValueType( mnValType[nIndex]) && pMat[nIndex].pS )
     {
         delete pMat[nIndex].pS;
     }
@@ -339,7 +347,7 @@ void ScMatrix::PutEmptyPath(SCSIZE nIndex)
 {
     if (mnValType == NULL)
         ResetIsString();
-    if ( IsStringType( mnValType[nIndex]) && pMat[nIndex].pS )
+    if ( IsNonValueType( mnValType[nIndex]) && pMat[nIndex].pS )
     {
         delete pMat[nIndex].pS;
     }
@@ -366,7 +374,7 @@ void ScMatrix::PutBoolean( bool bVal, SCSIZE nIndex)
 {
     if (mnValType == NULL)
         ResetIsString();
-    if ( IsStringType( mnValType[nIndex]) && pMat[nIndex].pS )
+    if ( IsNonValueType( mnValType[nIndex]) && pMat[nIndex].pS )
     {
         delete pMat[nIndex].pS;
         mnNonValue--;
@@ -379,29 +387,29 @@ void ScMatrix::PutBoolean( bool bVal, SCSIZE nIndex)
 
 USHORT ScMatrix::GetError( SCSIZE nC, SCSIZE nR) const
 {
-    if (ValidColRow( nC, nR))
+    if (ValidColRowOrReplicated( nC, nR ))
         return GetError( CalcOffset( nC, nR) );
     else
     {
         DBG_ERRORFILE("ScMatrix::GetError: dimension error");
-        return 0;   // TODO: do we want an error instead?
+        return errNoValue;
     }
 }
 
 double ScMatrix::GetDouble(SCSIZE nC, SCSIZE nR) const
 {
-    if (ValidColRow( nC, nR))
+    if (ValidColRowOrReplicated( nC, nR ))
         return GetDouble( CalcOffset( nC, nR) );
     else
     {
         DBG_ERRORFILE("ScMatrix::GetDouble: dimension error");
-        return 0.0;
+        return CreateDoubleError( errNoValue);
     }
 }
 
 const String& ScMatrix::GetString(SCSIZE nC, SCSIZE nR) const
 {
-    if (ValidColRow( nC, nR))
+    if (ValidColRowOrReplicated( nC, nR ))
     {
         SCSIZE nIndex = CalcOffset( nC, nR);
         if ( IsString( nIndex ) )
@@ -454,7 +462,7 @@ String ScMatrix::GetString( SvNumberFormatter& rFormatter, SCSIZE nIndex) const
 
 String ScMatrix::GetString( SvNumberFormatter& rFormatter, SCSIZE nC, SCSIZE nR) const
 {
-    if (ValidColRow( nC, nR))
+    if (ValidColRowOrReplicated( nC, nR ))
     {
         SCSIZE nIndex = CalcOffset( nC, nR);
         return GetString( rFormatter, nIndex);
@@ -469,7 +477,7 @@ String ScMatrix::GetString( SvNumberFormatter& rFormatter, SCSIZE nC, SCSIZE nR)
 
 const ScMatrixValue* ScMatrix::Get(SCSIZE nC, SCSIZE nR, ScMatValType& nType) const
 {
-    if (ValidColRow( nC, nR))
+    if (ValidColRowOrReplicated( nC, nR ))
     {
         SCSIZE nIndex = CalcOffset( nC, nR);
         if (mnValType)
@@ -488,11 +496,11 @@ const ScMatrixValue* ScMatrix::Get(SCSIZE nC, SCSIZE nR, ScMatValType& nType) co
 
 void ScMatrix::MatCopy(ScMatrix& mRes) const
 {
-    if (nColCount != mRes.nColCount || nRowCount != mRes.nRowCount)
+    if (nColCount > mRes.nColCount || nRowCount > mRes.nRowCount)
     {
         DBG_ERRORFILE("ScMatrix::MatCopy: dimension error");
     }
-    else
+    else if ( nColCount == mRes.nColCount && nRowCount == mRes.nRowCount )
     {
         if (mnValType)
         {
@@ -503,7 +511,7 @@ void ScMatrix::MatCopy(ScMatrix& mRes) const
                 SCSIZE nStart = i * nRowCount;
                 for (SCSIZE j = 0; j < nRowCount; j++)
                 {
-                    if (IsStringType( (nType = mnValType[nStart+j])))
+                    if (IsNonValueType( (nType = mnValType[nStart+j])))
                         mRes.PutStringEntry( pMat[nStart+j].pS, nType, nStart+j );
                     else
                     {
@@ -519,6 +527,41 @@ void ScMatrix::MatCopy(ScMatrix& mRes) const
             SCSIZE nCount = nColCount * nRowCount;
             for (SCSIZE i = 0; i < nCount; i++)
                 mRes.pMat[i].fVal = pMat[i].fVal;
+        }
+    }
+    else
+    {
+        // Copy this matrix to upper left rectangle of result matrix.
+        if (mnValType)
+        {
+            ScMatValType nType;
+            mRes.ResetIsString();
+            for (SCSIZE i = 0; i < nColCount; i++)
+            {
+                SCSIZE nStart = i * nRowCount;
+                SCSIZE nResStart = i * mRes.nRowCount;
+                for (SCSIZE j = 0; j < nRowCount; j++)
+                {
+                    if (IsNonValueType( (nType = mnValType[nStart+j])))
+                        mRes.PutStringEntry( pMat[nStart+j].pS, nType, nResStart+j );
+                    else
+                    {
+                        mRes.pMat[nResStart+j].fVal = pMat[nStart+j].fVal;
+                        mRes.mnValType[nResStart+j] = nType;
+                    }
+                }
+            }
+        }
+        else
+        {
+            mRes.DeleteIsString();
+            for (SCSIZE i = 0; i < nColCount; i++)
+            {
+                SCSIZE nStart = i * nRowCount;
+                SCSIZE nResStart = i * mRes.nRowCount;
+                for (SCSIZE j = 0; j < nRowCount; j++)
+                    mRes.pMat[nResStart+j].fVal = pMat[nStart+j].fVal;
+            }
         }
     }
 }
@@ -540,7 +583,7 @@ void ScMatrix::MatTrans(ScMatrix& mRes) const
                 SCSIZE nStart = i * nRowCount;
                 for ( SCSIZE j = 0; j < nRowCount; j++ )
                 {
-                    if (IsStringType( (nType = mnValType[nStart+j])))
+                    if (IsNonValueType( (nType = mnValType[nStart+j])))
                         mRes.PutStringEntry( pMat[nStart+j].pS, nType, j*mRes.nRowCount+i );
                     else
                     {
@@ -559,6 +602,49 @@ void ScMatrix::MatTrans(ScMatrix& mRes) const
                 for ( SCSIZE j = 0; j < nRowCount; j++ )
                 {
                     mRes.pMat[j*mRes.nRowCount+i].fVal = pMat[nStart+j].fVal;
+                }
+            }
+        }
+    }
+}
+
+void ScMatrix::MatCopyUpperLeft(ScMatrix& mRes) const
+{
+    if (nColCount < mRes.nColCount || nRowCount < mRes.nRowCount)
+    {
+        DBG_ERRORFILE("ScMatrix::MatCopyUpperLeft: dimension error");
+    }
+    else
+    {
+        if (mnValType)
+        {
+            ScMatValType nType;
+            mRes.ResetIsString();
+            for ( SCSIZE i = 0; i < mRes.nColCount; i++ )
+            {
+                SCSIZE nStart = i * nRowCount;
+                for ( SCSIZE j = 0; j < mRes.nRowCount; j++ )
+                {
+                    if ( IsNonValueType( (nType = mnValType[nStart+j]) ))
+                        mRes.PutStringEntry( pMat[nStart+j].pS, nType,
+                            i*mRes.nRowCount+j );
+                    else
+                    {
+                        mRes.pMat[i*mRes.nRowCount+j].fVal = pMat[nStart+j].fVal;
+                        mRes.mnValType[i*mRes.nRowCount+j] = nType;
+                    }
+                }
+            }
+        }
+        else
+        {
+            mRes.DeleteIsString();
+            for ( SCSIZE i = 0; i < mRes.nColCount; i++ )
+            {
+                SCSIZE nStart = i * nRowCount;
+                for ( SCSIZE j = 0; j < mRes.nRowCount; j++ )
+                {
+                    mRes.pMat[i*mRes.nRowCount+j].fVal = pMat[nStart+j].fVal;
                 }
             }
         }

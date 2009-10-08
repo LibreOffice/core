@@ -50,7 +50,7 @@
 #include "docpool.hxx"
 #include "markdata.hxx"
 #include "attrib.hxx"
-#include "errorcodes.hxx"       // errNoValue
+#include "formula/errorcodes.hxx"       // errNoValue
 #include "miscuno.hxx"
 #include "globstr.hrc"
 #include "stlpool.hxx"
@@ -946,7 +946,7 @@ long ScDPOutput::GetHeaderRows()
     return nPageFieldCount + ( bDoFilter ? 1 : 0 );
 }
 
-void ScDPOutput::GetMemberResultNames( StrCollection& rNames, long nDimension )
+void ScDPOutput::GetMemberResultNames( ScStrCollection& rNames, long nDimension )
 {
     //  Return the list of all member names in a dimension's MemberResults.
     //  Only the dimension has to be compared because this is only used with table data,
@@ -1750,7 +1750,7 @@ long ScDPOutput::GetHeaderDim( const ScAddress& rPos, USHORT& rOrient )
 
     //  test for row header
 
-    if ( nRow+1 == nDataStartRow && nCol >= nTabStartCol == nCol < nTabStartCol + nRowFieldCount )
+    if ( nRow+1 == nDataStartRow && nCol >= nTabStartCol && nCol < nTabStartCol + nRowFieldCount )
     {
         rOrient = sheet::DataPilotFieldOrientation_ROW;
         long nField = nCol - nTabStartCol;

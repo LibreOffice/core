@@ -563,8 +563,7 @@ void ScGridWindow::Draw( SCCOL nX1, SCROW nY1, SCCOL nX2, SCROW nY2, ScUpdateMod
     aOutputData.SetGridColor        ( aGridColor );
     aOutputData.SetShowNullValues   ( rOpts.GetOption( VOPT_NULLVALS ) );
     aOutputData.SetShowFormulas     ( bFormulaMode );
-    aOutputData.SetShowSpellErrors  ( !rOpts.IsHideAutoSpell() &&
-                                        pDoc->GetDocOptions().IsAutoSpell() );
+    aOutputData.SetShowSpellErrors  ( pDoc->GetDocOptions().IsAutoSpell() );
     aOutputData.SetMarkClipped      ( bMarkClipped );
 
     aOutputData.SetUseStyleColor( TRUE );       // always set in table view
@@ -916,7 +915,7 @@ void ScGridWindow::Draw( SCCOL nX1, SCROW nY1, SCCOL nX2, SCROW nY2, ScUpdateMod
             if(pDrawView)
             {
                 // #i74769# work with SdrPaintWindow directly
-                pDrawView->EndDrawLayers(*pTargetPaintWindow);
+                pDrawView->EndDrawLayers(*pTargetPaintWindow, true);
             }
 
             pContentDev->SetMapMode(aCurrentMapMode);

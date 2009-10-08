@@ -46,6 +46,7 @@
 #include <com/sun/star/text/XTextCursor.hpp>
 #include <com/sun/star/text/ControlCharacter.hpp>
 
+using rtl::OUString;
 using namespace com::sun::star;
 using namespace xmloff::token;
 
@@ -116,7 +117,7 @@ class ScXMLCellContentDeletionContext : public SvXMLImportContext
     sal_uInt32                          nID;
     sal_Int32                           nMatrixCols;
     sal_Int32                           nMatrixRows;
-    ScGrammar::Grammar                  eGrammar;
+    formula::FormulaGrammar::Grammar                  eGrammar;
     sal_uInt16                          nType;
     sal_uInt8                           nMatrixFlag;
     sal_Bool                            bBigRange;
@@ -298,7 +299,7 @@ public:
                                       const ::com::sun::star::uno::Reference<
                                       ::com::sun::star::xml::sax::XAttributeList>& xAttrList,
                                       ScBaseCell*& rOldCell, rtl::OUString& sAddress, rtl::OUString& sFormula,
-                                      ScGrammar::Grammar& rGrammar,
+                                      formula::FormulaGrammar::Grammar& rGrammar,
                                       rtl::OUString& rInputString, double& fValue, sal_uInt16& nType,
                                       sal_uInt8& nMatrixFlag, sal_Int32& nMatrixCols, sal_Int32& nMatrixRows);
     virtual ~ScXMLChangeCellContext();
@@ -328,7 +329,7 @@ class ScXMLPreviousContext : public SvXMLImportContext
     sal_uInt32                          nID;
     sal_Int32                           nMatrixCols;
     sal_Int32                           nMatrixRows;
-    ScGrammar::Grammar                  eGrammar;
+    formula::FormulaGrammar::Grammar                  eGrammar;
     sal_uInt16                          nType;
     sal_uInt8                           nMatrixFlag;
 
@@ -1115,7 +1116,7 @@ ScXMLChangeCellContext::ScXMLChangeCellContext(  ScXMLImport& rImport,
                                                    const ::rtl::OUString& rLName,
                                               const uno::Reference<xml::sax::XAttributeList>& xAttrList,
                                             ScBaseCell*& rTempOldCell, rtl::OUString& rAddress, rtl::OUString& rFormula,
-                                            ScGrammar::Grammar& rGrammar,
+                                            formula::FormulaGrammar::Grammar& rGrammar,
                                             rtl::OUString& rTempInputString, double& fDateTimeValue, sal_uInt16& nType,
                                             sal_uInt8& nMatrixFlag, sal_Int32& nMatrixCols, sal_Int32& nMatrixRows ) :
     SvXMLImportContext( rImport, nPrfx, rLName ),
@@ -1129,7 +1130,7 @@ ScXMLChangeCellContext::ScXMLChangeCellContext(  ScXMLImport& rImport,
     bString(sal_True),
     bFormula(sal_False)
 {
-    const ScGrammar::Grammar eStorageGrammar = rGrammar = GetScImport().GetDocument()->GetStorageGrammar();
+    const formula::FormulaGrammar::Grammar eStorageGrammar = rGrammar = GetScImport().GetDocument()->GetStorageGrammar();
     sal_Bool bIsMatrix(sal_False);
     sal_Bool bIsCoveredMatrix(sal_False);
     sal_Int16 nAttrCount(xAttrList.is() ? xAttrList->getLength() : 0);
@@ -1345,7 +1346,7 @@ ScXMLPreviousContext::ScXMLPreviousContext(  ScXMLImport& rImport,
     nID(0),
     nMatrixCols(0),
     nMatrixRows(0),
-    eGrammar( ScGrammar::GRAM_STORAGE_DEFAULT),
+    eGrammar( formula::FormulaGrammar::GRAM_STORAGE_DEFAULT),
     nType(NUMBERFORMAT_ALL),
     nMatrixFlag(MM_NONE)
 {
@@ -2026,5 +2027,6 @@ void ScXMLRejectionContext::EndElement()
 {
     pChangeTrackingImportHelper->EndChangeAction();
 }
+
 
 

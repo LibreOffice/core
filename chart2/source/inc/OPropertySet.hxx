@@ -48,6 +48,7 @@
 // #include <com/sun/star/beans/XFastPropertyState.hpp>
 // #endif
 #include <osl/mutex.hxx>
+#include "charttoolsdllapi.hxx"
 
 #include <memory>
 
@@ -58,7 +59,7 @@ namespace impl
 { class ImplOPropertySet; }
 
 
-class OPropertySet :
+class OOO_DLLPUBLIC_CHARTTOOLS OPropertySet :
     public ::cppu::OBroadcastHelper,
     // includes beans::XPropertySet, XMultiPropertySet and XFastPropertySet
     public ::cppu::OPropertySetHelper,

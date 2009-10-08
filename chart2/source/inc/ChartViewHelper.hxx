@@ -31,6 +31,7 @@
 #define _CHART2_CONTROLLER_CHARTVIEWHELPER_HXX
 
 #include <com/sun/star/frame/XModel.hpp>
+#include "charttoolsdllapi.hxx"
 
 //.............................................................................
 namespace chart
@@ -41,7 +42,7 @@ namespace chart
 /**
 */
 
-class ChartViewHelper
+class OOO_DLLPUBLIC_CHARTTOOLS ChartViewHelper
 {
 public:
     static void setViewToDirtyState( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >& xChartModel );

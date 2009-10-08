@@ -46,7 +46,7 @@
 #include "brdcst.hxx"
 #include "bcaslot.hxx"
 #include "cell.hxx"
-#include "errorcodes.hxx"       // errCircularReference
+#include "formula/errorcodes.hxx"       // errCircularReference
 #include "scerrors.hxx"
 #include "docoptio.hxx"
 #include "refupdat.hxx"

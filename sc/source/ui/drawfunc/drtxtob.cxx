@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: drtxtob.cxx,v $
- * $Revision: 1.34 $
+ * $Revision: 1.34.144.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -521,7 +521,7 @@ void __EXPORT ScDrawTextObjectBar::ExecuteToggle( SfxRequest &rReq )
 
     //  Unterstreichung
     FontUnderline eOld = ((const SvxUnderlineItem&) aViewAttr.
-                                        Get(EE_CHAR_UNDERLINE)).GetUnderline();
+                                        Get(EE_CHAR_UNDERLINE)).GetLineStyle();
     FontUnderline eNew = eOld;
     switch (nSlot)
     {
@@ -679,6 +679,10 @@ void __EXPORT ScDrawTextObjectBar::ExecuteAttr( SfxRequest &rReq )
 
             case SID_ATTR_CHAR_UNDERLINE:
                 aNewAttr.Put( (const SvxUnderlineItem&)aEditAttr.Get( EE_CHAR_UNDERLINE ) );
+                break;
+
+            case SID_ATTR_CHAR_OVERLINE:
+                aNewAttr.Put( (const SvxOverlineItem&)aEditAttr.Get( EE_CHAR_OVERLINE ) );
                 break;
 
             case SID_ATTR_CHAR_CONTOUR:
@@ -927,7 +931,7 @@ void __EXPORT ScDrawTextObjectBar::GetAttrState( SfxItemSet& rDestSet )
     else
     {
         FontUnderline eUnderline = ((const SvxUnderlineItem&)
-                    aAttrSet.Get(EE_CHAR_UNDERLINE)).GetUnderline();
+                    aAttrSet.Get(EE_CHAR_UNDERLINE)).GetLineStyle();
         USHORT nId = SID_ULINE_VAL_NONE;
         switch (eUnderline)
         {

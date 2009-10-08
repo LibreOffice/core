@@ -98,12 +98,12 @@ ScConsolidateDlg::ScConsolidateDlg( SfxBindings* pB, SfxChildWindow* pCW, Window
         aLbDataArea     ( this, ScResId( LB_DATA_AREA ) ),
         aFtDataArea     ( this, ScResId( FT_DATA_AREA ) ),
         aEdDataArea     ( this, ScResId( ED_DATA_AREA ) ),
-        aRbDataArea     ( this, ScResId( RB_DATA_AREA ), &aEdDataArea ),
+        aRbDataArea     ( this, ScResId( RB_DATA_AREA ), &aEdDataArea, this ),
 
         aLbDestArea     ( this, ScResId( LB_DEST_AREA ) ),
         aFtDestArea     ( this, ScResId( FT_DEST_AREA ) ),
         aEdDestArea     ( this, ScResId( ED_DEST_AREA ) ),
-        aRbDestArea     ( this, ScResId( RB_DEST_AREA ), &aEdDestArea ),
+        aRbDestArea     ( this, ScResId( RB_DEST_AREA ), &aEdDestArea, this),
 
         aFlConsBy       ( this, ScResId( FL_CONSBY ) ),
         aBtnByRow       ( this, ScResId( BTN_BYROW ) ),
@@ -192,7 +192,7 @@ void ScConsolidateDlg::Init()
 
     // Einlesen der Konsolidierungsbereiche
     aLbConsAreas.Clear();
-    const ScAddress::Convention eConv = pDoc->GetAddressConvention();
+    const formula::FormulaGrammar::AddressConvention eConv = pDoc->GetAddressConvention();
     for ( i=0; i<theConsData.nDataAreaCount; i++ )
     {
         const ScArea& rArea = *(theConsData.ppDataAreas[i] );
@@ -298,7 +298,7 @@ void ScConsolidateDlg::SetReference( const ScRange& rRef, ScDocument* pDocP )
 
         String      aStr;
         USHORT      nFmt = SCR_ABS_3D;       //!!! nCurTab fehlt noch
-        const ScAddress::Convention eConv = pDocP->GetAddressConvention();
+        const formula::FormulaGrammar::AddressConvention eConv = pDocP->GetAddressConvention();
 
         if ( rRef.aStart.Tab() != rRef.aEnd.Tab() )
             nFmt |= SCA_TAB2_3D;
@@ -354,7 +354,7 @@ void __EXPORT ScConsolidateDlg::Deactivate()
 
 //----------------------------------------------------------------------------
 
-BOOL ScConsolidateDlg::VerifyEdit( ScRefEdit* pEd )
+BOOL ScConsolidateDlg::VerifyEdit( formula::RefEdit* pEd )
 {
     if ( !pRangeUtil || !pDoc || !pViewData ||
          ((pEd != &aEdDataArea) && (pEd != &aEdDestArea)) )
@@ -363,7 +363,7 @@ BOOL ScConsolidateDlg::VerifyEdit( ScRefEdit* pEd )
     SCTAB   nTab    = pViewData->GetTabNo();
     BOOL    bEditOk = FALSE;
     String  theCompleteStr;
-    const ScAddress::Convention eConv = pDoc->GetAddressConvention();
+    const formula::FormulaGrammar::AddressConvention eConv = pDoc->GetAddressConvention();
 
     if ( pEd == &aEdDataArea )
     {
@@ -395,7 +395,7 @@ IMPL_LINK( ScConsolidateDlg, GetFocusHdl, Control*, pCtr )
     if ( pCtr ==(Control*)&aEdDataArea ||
          pCtr ==(Control*)&aEdDestArea)
     {
-        pRefInputEdit = (ScRefEdit*)pCtr;
+        pRefInputEdit = (formula::RefEdit*)pCtr;
     }
     else if(pCtr ==(Control*)&aLbDataArea )
     {
@@ -420,7 +420,7 @@ IMPL_LINK( ScConsolidateDlg, OkHdl, void*, EMPTYARG )
         ScRefAddress aDestAddress;
         SCTAB       nTab = pViewData->GetTabNo();
         String      aDestPosStr( aEdDestArea.GetText() );
-        const ScAddress::Convention eConv = pDoc->GetAddressConvention();
+        const formula::FormulaGrammar::AddressConvention eConv = pDoc->GetAddressConvention();
 
         if ( pRangeUtil->IsAbsPos( aDestPosStr, pDoc, nTab, NULL, &aDestAddress, eConv ) )
         {
@@ -484,7 +484,7 @@ IMPL_LINK( ScConsolidateDlg, ClickHdl, PushButton*, pBtn )
             String      aNewEntry( aEdDataArea.GetText() );
             ScArea**    ppAreas = NULL;
             USHORT      nAreaCount = 0;
-            const ScAddress::Convention eConv = pDoc->GetAddressConvention();
+            const formula::FormulaGrammar::AddressConvention eConv = pDoc->GetAddressConvention();
 
             if ( pRangeUtil->IsAbsTabArea( aNewEntry, pDoc, &ppAreas, &nAreaCount, TRUE, eConv ) )
             {
@@ -586,7 +586,7 @@ IMPL_LINK( ScConsolidateDlg, SelectHdl, ListBox*, pLb )
 
 //----------------------------------------------------------------------------
 
-IMPL_LINK( ScConsolidateDlg, ModifyHdl, ScRefEdit*, pEd )
+IMPL_LINK( ScConsolidateDlg, ModifyHdl, formula::RefEdit*, pEd )
 {
     if ( pEd == &aEdDataArea )
     {

@@ -73,7 +73,7 @@
 #include "globstr.hrc"
 
 // in fuins1.cxx
-extern void LimitSizeOnDrawPage( Size& rSize, Point& rPos, const Size& rPage );
+extern void ScLimitSizeOnDrawPage( Size& rSize, Point& rPos, const Size& rPage );
 
 //------------------------------------------------------------------------
 
@@ -568,7 +568,7 @@ void ScEEImport::InsertGraphic( SCCOL nCol, SCROW nRow, SCTAB nTab,
         Size aSizePix = pI->aSize;
         aLogicSize = pDefaultDev->PixelToLogic( aSizePix, MapMode( MAP_100TH_MM ) );
         //  Groesse begrenzen
-        ::LimitSizeOnDrawPage( aLogicSize, aInsertPos, pPage->GetSize() );
+        ::ScLimitSizeOnDrawPage( aLogicSize, aInsertPos, pPage->GetSize() );
 
         if ( pI->pGraphic )
         {

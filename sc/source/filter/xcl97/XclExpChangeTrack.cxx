@@ -122,7 +122,7 @@ XclExpUserBViewList::XclExpUserBViewList( const ScChangeTrack& rChangeTrack )
 {
     sal_uInt8 aGUID[ 16 ];
     sal_Bool bValidGUID = sal_False;
-    const StrCollection& rStrColl = rChangeTrack.GetUserCollection();
+    const ScStrCollection& rStrColl = rChangeTrack.GetUserCollection();
     for( USHORT nIndex = 0; nIndex < rStrColl.GetCount(); nIndex++ )
     {
         const StrData* pStrData = (const StrData*) rStrColl.At( nIndex );

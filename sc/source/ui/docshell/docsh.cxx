@@ -163,6 +163,7 @@ static const sal_Char __FAR_DATA pFilterExcel95[]   = "MS Excel 95";
 static const sal_Char __FAR_DATA pFilterEx95Temp[]  = "MS Excel 95 Vorlage/Template";
 static const sal_Char __FAR_DATA pFilterExcel97[]   = "MS Excel 97";
 static const sal_Char __FAR_DATA pFilterEx97Temp[]  = "MS Excel 97 Vorlage/Template";
+static const sal_Char __FAR_DATA pFilterEx07Xml[]   = "MS Excel 2007 XML";
 static const sal_Char __FAR_DATA pFilterDBase[]     = "dBase";
 static const sal_Char __FAR_DATA pFilterDif[]       = "DIF";
 static const sal_Char __FAR_DATA pFilterSylk[]      = "SYLK";
@@ -193,7 +194,8 @@ void __EXPORT ScDocShell::FillClass( SvGlobalName* pClassName,
                                         String* /* pAppName */,
                                         String* pFullTypeName,
                                         String* pShortTypeName,
-                                        sal_Int32 nFileFormat ) const
+                                        sal_Int32 nFileFormat,
+                                        sal_Bool bTemplate /* = sal_False */) const
 {
     if ( nFileFormat == SOFFICE_FILEFORMAT_60 )
     {
@@ -205,7 +207,7 @@ void __EXPORT ScDocShell::FillClass( SvGlobalName* pClassName,
     else if ( nFileFormat == SOFFICE_FILEFORMAT_8 )
     {
         *pClassName     = SvGlobalName( SO3_SC_CLASSID_60 );
-        *pFormat        = SOT_FORMATSTR_ID_STARCALC_8;
+        *pFormat        = bTemplate ? SOT_FORMATSTR_ID_STARCALC_8_TEMPLATE : SOT_FORMATSTR_ID_STARCALC_8;
         *pFullTypeName  = String( RTL_CONSTASCII_USTRINGPARAM("calc8") );
         *pShortTypeName = String( ScResId( SCSTR_SHORT_SCDOC_NAME ) );
     }
@@ -526,15 +528,23 @@ void __EXPORT ScDocShell::Notify( SfxBroadcaster&, const SfxHint& rHint )
         {
             case SFX_EVENT_LOADFINISHED:
                 {
-                    if ( HasSharedXMLFlagSet() && !SC_MOD()->IsInSharedDocLoading() )
+                    // the readonly documents should not be opened in shared mode
+                    if ( HasSharedXMLFlagSet() && !SC_MOD()->IsInSharedDocLoading() && !IsReadOnly() )
                     {
-                        SwitchToShared( sal_True, sal_False );
-
-                        ScViewData* pViewData = GetViewData();
-                        ScTabView* pTabView = ( pViewData ? dynamic_cast< ScTabView* >( pViewData->GetView() ) : NULL );
-                        if ( pTabView )
+                        if ( SwitchToShared( sal_True, sal_False ) )
                         {
-                            pTabView->UpdateLayerLocks();
+                            ScViewData* pViewData = GetViewData();
+                            ScTabView* pTabView = ( pViewData ? dynamic_cast< ScTabView* >( pViewData->GetView() ) : NULL );
+                            if ( pTabView )
+                            {
+                                pTabView->UpdateLayerLocks();
+                            }
+                        }
+                        else
+                        {
+                            // switching to shared mode has failed, the document should be opened readonly
+                            // TODO/LATER: And error message should be shown here probably
+                            SetReadOnlyUI( sal_True );
                         }
                     }
                 }
@@ -564,6 +574,7 @@ void __EXPORT ScDocShell::Notify( SfxBroadcaster&, const SfxHint& rHint )
                 {
                     if ( IsDocShared() && !SC_MOD()->IsInSharedDocSaving() )
                     {
+                        bool bSuccess = false;
                         bool bRetry = true;
                         while ( bRetry )
                         {
@@ -586,6 +597,7 @@ void __EXPORT ScDocShell::Notify( SfxBroadcaster&, const SfxHint& rHint )
 
                                 // #i87870# check if shared status was disabled and enabled again
                                 bool bOwnEntry = false;
+                                bool bEntriesNotAccessible = false;
                                 try
                                 {
                                     ::svt::ShareControlFile aControlFile( GetSharedFileURL() );
@@ -593,6 +605,7 @@ void __EXPORT ScDocShell::Notify( SfxBroadcaster&, const SfxHint& rHint )
                                 }
                                 catch ( uno::Exception& )
                                 {
+                                    bEntriesNotAccessible = true;
                                 }
 
                                 if ( bShared && bOwnEntry )
@@ -604,6 +617,7 @@ void __EXPORT ScDocShell::Notify( SfxBroadcaster&, const SfxHint& rHint )
                                         xCloseable->close( sal_True );
 
                                         String aUserName( ScGlobal::GetRscString( STR_UNKNOWN_USER ) );
+                                        bool bNoLockAccess = false;
                                         try
                                         {
                                             ::svt::DocumentLockFile aLockFile( GetSharedFileURL() );
@@ -622,14 +636,24 @@ void __EXPORT ScDocShell::Notify( SfxBroadcaster&, const SfxHint& rHint )
                                         }
                                         catch ( uno::Exception& )
                                         {
+                                            bNoLockAccess = true;
                                         }
-                                        String aMessage( ScGlobal::GetRscString( STR_FILE_LOCKED_SAVE_LATER ) );
-                                        aMessage.SearchAndReplaceAscii( "%1", aUserName );
 
-                                        WarningBox aBox( GetActiveDialogParent(), WinBits( WB_RETRY_CANCEL | WB_DEF_RETRY ), aMessage );
-                                        if ( aBox.Execute() == RET_RETRY )
+                                        if ( bNoLockAccess )
                                         {
-                                            bRetry = true;
+                                            // TODO/LATER: in future an error regarding impossibility to open file for writing could be shown
+                                            ErrorHandler::HandleError( ERRCODE_IO_GENERAL );
+                                        }
+                                        else
+                                        {
+                                            String aMessage( ScGlobal::GetRscString( STR_FILE_LOCKED_SAVE_LATER ) );
+                                            aMessage.SearchAndReplaceAscii( "%1", aUserName );
+
+                                            WarningBox aBox( GetActiveDialogParent(), WinBits( WB_RETRY_CANCEL | WB_DEF_RETRY ), aMessage );
+                                            if ( aBox.Execute() == RET_RETRY )
+                                            {
+                                                bRetry = true;
+                                            }
                                         }
                                     }
                                     else
@@ -685,19 +709,30 @@ void __EXPORT ScDocShell::Notify( SfxBroadcaster&, const SfxHint& rHint )
                                             }
                                         }
 
+                                        bSuccess = true;
                                         GetUndoManager()->Clear();
                                     }
                                 }
                                 else
                                 {
                                     xCloseable->close( sal_True );
-                                    WarningBox aBox( GetActiveDialogParent(), WinBits( WB_OK ),
-                                        ScGlobal::GetRscString( STR_DOC_NOLONGERSHARED ) );
-                                    aBox.Execute();
-                                    SfxBindings* pBindings = GetViewBindings();
-                                    if ( pBindings )
+
+                                    if ( bEntriesNotAccessible )
                                     {
-                                        pBindings->ExecuteSynchron( SID_SAVEASDOC );
+                                        // TODO/LATER: in future an error regarding impossibility to write to share control file could be shown
+                                        ErrorHandler::HandleError( ERRCODE_IO_GENERAL );
+                                    }
+                                    else
+                                    {
+                                        WarningBox aBox( GetActiveDialogParent(), WinBits( WB_OK ),
+                                            ScGlobal::GetRscString( STR_DOC_NOLONGERSHARED ) );
+                                        aBox.Execute();
+
+                                        SfxBindings* pBindings = GetViewBindings();
+                                        if ( pBindings )
+                                        {
+                                            pBindings->ExecuteSynchron( SID_SAVEASDOC );
+                                        }
                                     }
                                 }
                             }
@@ -716,6 +751,9 @@ void __EXPORT ScDocShell::Notify( SfxBroadcaster&, const SfxHint& rHint )
                                 }
                             }
                         }
+
+                        if ( !bSuccess )
+                            SetError( ERRCODE_IO_ABORT ); // this error code will produce no error message, but will break the further saving process
                     }
                 }
                 break;
@@ -813,7 +851,7 @@ BOOL __EXPORT ScDocShell::ConvertFrom( SfxMedium& rMedium )
             SvStream* pStream = rMedium.GetInStream();
             if (pStream)
             {
-                FltError eError = ScImportStarCalc10( *pStream, &aDocument );
+                FltError eError = ScFormatFilter::Get().ScImportStarCalc10( *pStream, &aDocument );
                 if (eError != eERR_OK)
                 {
                     if (!GetError())
@@ -842,7 +880,7 @@ BOOL __EXPORT ScDocShell::ConvertFrom( SfxMedium& rMedium )
             }
 
             ScColumn::bDoubleAlloc = TRUE;
-            FltError eError = ScImportLotus123( rMedium, &aDocument,
+            FltError eError = ScFormatFilter::Get().ScImportLotus123( rMedium, &aDocument,
                                                 ScGlobal::GetCharsetValue(sItStr));
             ScColumn::bDoubleAlloc = FALSE;
             if (eError != eERR_OK)
@@ -875,7 +913,7 @@ BOOL __EXPORT ScDocShell::ConvertFrom( SfxMedium& rMedium )
             MakeDrawLayer();                //! im Filter
             CalcOutputFactor();             // #93255# prepare update of row height
             ScColumn::bDoubleAlloc = TRUE;
-            FltError eError = ScImportExcel( rMedium, &aDocument, eFormat );
+            FltError eError = ScFormatFilter::Get().ScImportExcel( rMedium, &aDocument, eFormat );
             ScColumn::bDoubleAlloc = FALSE;
             aDocument.UpdateFontCharSet();
             if ( aDocument.IsChartListenerCollectionNeedsUpdate() )
@@ -1027,7 +1065,7 @@ BOOL __EXPORT ScDocShell::ConvertFrom( SfxMedium& rMedium )
                     sItStr = ScGlobal::GetCharsetString( RTL_TEXTENCODING_MS_1252 );
                 }
 
-                eError = ScImportDif( *pStream, &aDocument, ScAddress(0,0,0),
+                eError = ScFormatFilter::Get().ScImportDif( *pStream, &aDocument, ScAddress(0,0,0),
                                     ScGlobal::GetCharsetValue(sItStr));
                 if (eError != eERR_OK)
                 {
@@ -1073,7 +1111,7 @@ BOOL __EXPORT ScDocShell::ConvertFrom( SfxMedium& rMedium )
         else if (aFltName.EqualsAscii(pFilterQPro6))
         {
             ScColumn::bDoubleAlloc = TRUE;
-            FltError eError = ScImportQuattroPro( rMedium, &aDocument);
+            FltError eError = ScFormatFilter::Get().ScImportQuattroPro( rMedium, &aDocument);
             ScColumn::bDoubleAlloc = FALSE;
             if (eError != eERR_OK)
             {
@@ -1100,7 +1138,7 @@ BOOL __EXPORT ScDocShell::ConvertFrom( SfxMedium& rMedium )
                 {
                     pInStream->Seek( 0 );
                     ScRange aRange;
-                    eError = ScImportRTF( *pInStream, rMedium.GetBaseURL(), &aDocument, aRange );
+                    eError = ScFormatFilter::Get().ScImportRTF( *pInStream, rMedium.GetBaseURL(), &aDocument, aRange );
                     if (eError != eERR_OK)
                     {
                         if (!GetError())
@@ -1138,7 +1176,7 @@ BOOL __EXPORT ScDocShell::ConvertFrom( SfxMedium& rMedium )
                     ScRange aRange;
                     // HTML macht eigenes ColWidth/RowHeight
                     CalcOutputFactor();
-                    eError = ScImportHTML( *pInStream, rMedium.GetBaseURL(), &aDocument, aRange,
+                    eError = ScFormatFilter::Get().ScImportHTML( *pInStream, rMedium.GetBaseURL(), &aDocument, aRange,
                                             GetOutputFactor(), !bWebQuery );
                     if (eError != eERR_OK)
                     {
@@ -1760,7 +1798,7 @@ BOOL __EXPORT ScDocShell::ConvertTo( SfxMedium &rMed )
         SvStream* pStream = rMed.GetOutStream();
         if (pStream)
         {
-            FltError eError = ScExportLotus123( *pStream, &aDocument, ExpWK1,
+            FltError eError = ScFormatFilter::Get().ScExportLotus123( *pStream, &aDocument, ExpWK1,
                                                 CHARSET_IBMPC_437 );
             bRet = eError == eERR_OK;
         }
@@ -1775,7 +1813,8 @@ BOOL __EXPORT ScDocShell::ConvertTo( SfxMedium &rMed )
     }
     else if (aFltName.EqualsAscii(pFilterExcel5) || aFltName.EqualsAscii(pFilterExcel95) ||
              aFltName.EqualsAscii(pFilterExcel97) || aFltName.EqualsAscii(pFilterEx5Temp) ||
-             aFltName.EqualsAscii(pFilterEx95Temp) || aFltName.EqualsAscii(pFilterEx97Temp))
+             aFltName.EqualsAscii(pFilterEx95Temp) || aFltName.EqualsAscii(pFilterEx97Temp) ||
+             aFltName.EqualsAscii(pFilterEx07Xml))
     {
         WaitObject aWait( GetActiveDialogParent() );
 
@@ -1800,8 +1839,12 @@ BOOL __EXPORT ScDocShell::ConvertTo( SfxMedium &rMed )
 
         if( bDoSave )
         {
-            bool bBiff8 = aFltName.EqualsAscii( pFilterExcel97 ) || aFltName.EqualsAscii( pFilterEx97Temp );
-            FltError eError = ScExportExcel5( rMed, &aDocument, bBiff8, RTL_TEXTENCODING_MS_1252 );
+            ExportFormatExcel eFormat = ExpBiff5;
+            if( aFltName.EqualsAscii( pFilterExcel97 ) || aFltName.EqualsAscii( pFilterEx97Temp ) )
+                eFormat = ExpBiff8;
+            if( aFltName.EqualsAscii( pFilterEx07Xml ) )
+                eFormat = Exp2007Xml;
+            FltError eError = ScFormatFilter::Get().ScExportExcel5( rMed, &aDocument, eFormat, RTL_TEXTENCODING_MS_1252 );
 
             if( eError && !GetError() )
                 SetError( eError );
@@ -1939,7 +1982,7 @@ BOOL __EXPORT ScDocShell::ConvertTo( SfxMedium &rMed )
             }
 
             WaitObject aWait( GetActiveDialogParent() );
-            ScExportDif( *pStream, &aDocument, ScAddress(0,0,0),
+            ScFormatFilter::Get().ScExportDif( *pStream, &aDocument, ScAddress(0,0,0),
                 ScGlobal::GetCharsetValue(sItStr) );
             bRet = TRUE;
 

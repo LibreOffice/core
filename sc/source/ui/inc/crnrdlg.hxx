@@ -61,13 +61,13 @@ private:
     FixedLine       aFlAssign;
     ListBox         aLbRange;
 
-    ScRefEdit       aEdAssign;
-    ScRefButton     aRbAssign;
+    formula::RefEdit        aEdAssign;
+    formula::RefButton      aRbAssign;
     RadioButton     aBtnColHead;
     RadioButton     aBtnRowHead;
     FixedText       aFtAssign2;
-    ScRefEdit       aEdAssign2;
-    ScRefButton     aRbAssign2;
+    formula::RefEdit        aEdAssign2;
+    formula::RefButton      aRbAssign2;
 
     OKButton        aBtnOk;
     CancelButton    aBtnCancel;
@@ -85,7 +85,7 @@ private:
     NameRangeMap    aRangeMap;
     ScViewData*     pViewData;
     ScDocument*     pDoc;
-    ScRefEdit*      pEdActive;
+    formula::RefEdit*       pEdActive;
     BOOL            bDlgLostFocus;
 
 #ifdef _CRNRDLG_CXX

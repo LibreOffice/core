@@ -8,7 +8,7 @@
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.19 $
+# $Revision: 1.19.72.1 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -35,6 +35,7 @@ PRJNAME=			chart2
 TARGET=				chcdialogs
 
 ENABLE_EXCEPTIONS=	TRUE
+VISIBILITY_HIDDEN=TRUE
 GEN_HID_OTHER=TRUE
 
 # --- Settings -----------------------------------------------------
@@ -71,6 +72,7 @@ SLOFILES=   	\
                 $(SLO)$/tp_Wizard_TitlesAndObjects.obj \
                 $(SLO)$/tp_Location.obj \
                 $(SLO)$/tp_AxisLabel.obj \
+                $(SLO)$/tp_AxisPositions.obj \
                 $(SLO)$/tp_DataLabel.obj \
                 $(SLO)$/tp_DataSource.obj \
                 $(SLO)$/tp_DataSourceControls.obj \
@@ -103,7 +105,8 @@ SLOFILES=   	\
                 $(SLO)$/RangeSelectionButton.obj \
                 $(SLO)$/RangeSelectionHelper.obj \
                 $(SLO)$/RangeSelectionListener.obj \
-                $(SLO)$/RangeEdit.obj
+                $(SLO)$/RangeEdit.obj \
+                $(SLO)$/TextDirectionListBox.obj
 
 # --- Resources ---------------------------------------------------------------
 
@@ -119,6 +122,7 @@ SRC1FILES=		\
                 tp_Wizard_TitlesAndObjects.src \
                 tp_Location.src \
                 tp_AxisLabel.src \
+                tp_AxisPositions.src \
                 tp_DataLabel.src \
                 tp_DataSource.src \
                 tp_LegendPosition.src \

@@ -44,41 +44,6 @@ String RID_APPTITLE
 
  // Icons & Bitmaps: ----------------------------------------------------------
 
-Image RID_BMP_REFBTN1
-{
-    ImageBitmap = Bitmap
-    {
-        File = "refinp1.bmp";
-    };
-    MaskColor = STD_MASKCOLOR;
-};
-
-Image RID_BMP_REFBTN1_H
-{
-    ImageBitmap = Bitmap
-    {
-        File = "refinp1_h.bmp";
-    };
-    MaskColor = SC_HC_MASKCOLOR;
-};
-
-Image RID_BMP_REFBTN2
-{
-    ImageBitmap = Bitmap
-    {
-        File = "refinp2.bmp";
-    };
-    MaskColor = STD_MASKCOLOR;
-};
-
-Image RID_BMP_REFBTN2_H
-{
-    ImageBitmap = Bitmap
-    {
-        File = "refinp2_h.bmp";
-    };
-    MaskColor = SC_HC_MASKCOLOR;
-};
 
 
  // ???

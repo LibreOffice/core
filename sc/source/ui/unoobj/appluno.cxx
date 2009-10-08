@@ -36,9 +36,7 @@
 #include <osl/diagnose.h>
 #include <cppuhelper/factory.hxx>
 
-#ifndef _SFX_APP_HXX
 #include <sfx2/app.hxx>
-#endif
 #include <sfx2/sfxmodelfactory.hxx>
 #include "afmtuno.hxx"
 #include "funcuno.hxx"
@@ -49,9 +47,7 @@
 #include "inputopt.hxx"
 #include "printopt.hxx"
 #include "userlist.hxx"
-#ifndef SC_SC_HRC
 #include "sc.hrc"           // VAR_ARGS
-#endif
 #include "unoguard.hxx"
 #include "unonames.hxx"
 #include "funcdesc.hxx"
@@ -478,7 +474,6 @@ SAL_DLLPUBLIC_EXPORT void * SAL_CALL component_getFactory(
                 ScDocument_createInstance,
                 ScDocument_getSupportedServiceNames() ));
 
-
     void* pRet = NULL;
     if (xFactory.is())
     {
@@ -870,7 +865,7 @@ uno::Sequence<rtl::OUString> ScFunctionListObj::getSupportedServiceNames_Static(
 
 static void lcl_FillSequence( uno::Sequence<beans::PropertyValue>& rSequence, const ScFuncDesc& rDesc )
 {
-    rDesc.InitArgumentInfo();   // full argument info is needed
+    rDesc.initArgumentInfo();   // full argument info is needed
 
     DBG_ASSERT( rSequence.getLength() == SC_FUNCDESC_PROPCOUNT, "Falscher Count" );
 

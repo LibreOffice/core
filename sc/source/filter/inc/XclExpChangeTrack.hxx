@@ -36,8 +36,8 @@
 #include <rtl/uuid.h>
 #include "bigrange.hxx"
 #include "chgtrack.hxx"
-#include "ftools.hxx"
 #include "xelink.hxx"
+#include "ftools.hxx"
 #include "excrecds.hxx"
 
 //___________________________________________________________________

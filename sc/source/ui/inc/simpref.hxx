@@ -65,8 +65,8 @@ private:
     Link            aChangeHdl;
 
     FixedText       aFtAssign;
-    ScRefEdit       aEdAssign;
-    ScRefButton     aRbAssign;
+    formula::RefEdit        aEdAssign;
+    formula::RefButton      aRbAssign;
 
     OKButton        aBtnOk;
     CancelButton    aBtnCancel;

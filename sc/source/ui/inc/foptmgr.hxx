@@ -47,7 +47,10 @@
 //----------------------------------------------------------------------------
 
 class FixedInfo;
-class ScRefButton;
+namespace formula
+{
+    class RefButton;
+}
 class MoreButton;
 class Dialog;
 struct ScQueryParam;
@@ -71,7 +74,7 @@ public:
                                 CheckBox&           refBtnDestPers,
                                 ListBox&            refLbCopyArea,
                                 Edit&               refEdCopyArea,
-                                ScRefButton&        refRbCopyArea,
+                                formula::RefButton&     refRbCopyArea,
                                 FixedText&          refFtDbAreaLabel,
                                 FixedInfo&          refFtDbArea,
                                 FixedLine&          refFlOptions,
@@ -95,7 +98,7 @@ private:
     CheckBox&       rBtnDestPers;
     ListBox&        rLbCopyPos;
     Edit&           rEdCopyPos;
-    ScRefButton&    rRbCopyPos;
+    formula::RefButton& rRbCopyPos;
     FixedText&      rFtDbAreaLabel;
     FixedInfo&      rFtDbArea;
     FixedLine&      rFlOptions;

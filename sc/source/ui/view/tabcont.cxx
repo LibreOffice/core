@@ -72,11 +72,15 @@ ScTabControl::ScTabControl( Window* pParent, ScViewData* pData ) :
     for (SCTAB i=0; i<nCount; i++)
     {
         if (pDoc->IsVisible(i))
+        {
             if (pDoc->GetName(i,aString))
+            {
                 if ( pDoc->IsScenario(i) )
                     InsertPage( static_cast<sal_uInt16>(i)+1, aString, TPB_SPECIAL );
                 else
                     InsertPage( static_cast<sal_uInt16>(i)+1, aString );
+            }
+        }
     }
 
     SetCurPageId( static_cast<sal_uInt16>(pViewData->GetTabNo()) + 1 );
@@ -167,6 +171,11 @@ void ScTabControl::MouseButtonUp( const MouseEvent& rMEvt )
     // mouse button down and up on same page?
     if( nMouseClickPageId != GetPageId( aPos ) )
         nMouseClickPageId = TAB_PAGE_NOTFOUND;
+    else if ( rMEvt.GetClicks() == 2 && rMEvt.IsLeft() )
+    {
+        SfxDispatcher* pDispatcher = pViewData->GetViewShell()->GetViewFrame()->GetDispatcher();
+        pDispatcher->Execute( FID_TAB_MENU_RENAME, SFX_CALLMODE_SYNCHRON | SFX_CALLMODE_RECORD );
+    }
 
     if( nMouseClickPageId == 0 )
     {
@@ -293,12 +302,18 @@ void ScTabControl::UpdateStatus()
     {
         Clear();
         for (i=0; i<nCount; i++)
+        {
             if (pDoc->IsVisible(i))
+            {
                 if (pDoc->GetName(i,aString))
-                if ( pDoc->IsScenario(i) )
-                    InsertPage( static_cast<sal_uInt16>(i)+1, aString, TPB_SPECIAL );
-                else
-                    InsertPage( static_cast<sal_uInt16>(i)+1, aString );
+                {
+                    if ( pDoc->IsScenario(i) )
+                        InsertPage( static_cast<sal_uInt16>(i)+1, aString, TPB_SPECIAL );
+                    else
+                        InsertPage( static_cast<sal_uInt16>(i)+1, aString );
+                }
+            }
+        }
     }
     SetCurPageId( static_cast<sal_uInt16>(pViewData->GetTabNo()) + 1 );
 

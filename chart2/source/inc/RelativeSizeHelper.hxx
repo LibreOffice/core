@@ -32,11 +32,12 @@
 
 #include <com/sun/star/awt/Size.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
+#include "charttoolsdllapi.hxx"
 
 namespace chart
 {
 
-class RelativeSizeHelper
+class OOO_DLLPUBLIC_CHARTTOOLS RelativeSizeHelper
 {
 public:
     static double calculate(

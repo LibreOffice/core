@@ -30,11 +30,13 @@
 #ifndef CHART2_TRUEGUARD_HXX
 #define CHART2_TRUEGUARD_HXX
 
+#include "charttoolsdllapi.hxx"
+
 namespace chart
 {
 /** This guard sets the given boolean reference to true in the constructor and to false in the destructor
  */
-class TrueGuard
+class OOO_DLLPUBLIC_CHARTTOOLS TrueGuard
 {
 public:
     explicit TrueGuard( bool& rbTrueDuringGuardedTime );

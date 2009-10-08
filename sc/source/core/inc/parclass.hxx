@@ -31,10 +31,13 @@
 #ifndef SC_PARCLASS_HXX
 #define SC_PARCLASS_HXX
 
-#include "opcode.hxx"
+#include "formula/opcode.hxx"
 #include <sys/types.h>  // size_t
 
-class ScToken;
+namespace formula
+{
+    class FormulaToken;
+}
 
 class ScParameterClassification
 {
@@ -50,19 +53,19 @@ public:
 
         /** In array formula: single value to be passed. Results in JumpMatrix
             being created and multiple calls to function. Functions handling a
-            svDoubleRef by means of DoubleRefToPosSingleRef() or
+            formula::svDoubleRef by means of DoubleRefToPosSingleRef() or
             PopDoubleRefOrSingleRef() or GetDouble() or GetString() should have
             this. */
         Value,
 
         /** In array formula: area reference must stay reference. Otherwise
-            don't care. Functions handling a svDoubleRef by means of
+            don't care. Functions handling a formula::svDoubleRef by means of
             PopDoubleRefOrSingleRef() should not have this. */
         Reference,
 
         /** In array formula: convert area reference to array. Function will be
             called only once if no Value type is involved. Functions able to
-            handle a svMatrix parameter but not a svDoubleRef parameter as area
+            handle a svMatrix parameter but not a formula::svDoubleRef parameter as area
             should have this. */
         Array,
 
@@ -80,7 +83,7 @@ public:
                                 /** Get one parameter type for function eOp.
                                     @param nParameter
                                         Which parameter, 0-based */
-    static  Type                GetParameterType( const ScToken* pToken,
+    static  Type                GetParameterType( const formula::FormulaToken* pToken,
                                         USHORT nParameter);
 
                                 /** Whether OpCode has a parameter of type
@@ -126,7 +129,7 @@ private:
 
     // ocExternal AddIns
     static  Type                GetExternalParameterType(
-                                    const ScToken* pToken, USHORT nParameter);
+                                    const formula::FormulaToken* pToken, USHORT nParameter);
 
 #if OSL_DEBUG_LEVEL > 1
     // Generate documentation to stdout if environment variable

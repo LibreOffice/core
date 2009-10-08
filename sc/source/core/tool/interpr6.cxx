@@ -31,9 +31,10 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sc.hxx"
 
-#include <math.h>
+// #include <math.h>
 
 #include <tools/debug.hxx>
+#include <rtl/logfile.hxx>
 #include "interpre.hxx"
 
 double const fHalfMachEps = 0.5 * ::std::numeric_limits<double>::epsilon();
@@ -47,6 +48,7 @@ double const fHalfMachEps = 0.5 * ::std::numeric_limits<double>::epsilon();
     uses continued fraction with odd items */
 double ScInterpreter::GetGammaContFraction( double fA, double fX )
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "Eike.Rathke@sun.com", "ScInterpreter::GetGammaContFraction" );
 
     double const fBigInv = ::std::numeric_limits<double>::epsilon();
     double const fBig = 1.0/fBigInv;
@@ -103,6 +105,7 @@ double ScInterpreter::GetGammaContFraction( double fA, double fX )
     uses power series */
 double ScInterpreter::GetGammaSeries( double fA, double fX )
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "Eike.Rathke@sun.com", "ScInterpreter::GetGammaSeries" );
     double fDenomfactor = fA;
     double fSummand = 1.0/fA;
     double fSum = fSummand;
@@ -126,6 +129,7 @@ double ScInterpreter::GetGammaSeries( double fA, double fX )
 /** You must ensure fA>0.0 && fX>0.0) */
 double ScInterpreter::GetLowRegIGamma( double fA, double fX )
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "Eike.Rathke@sun.com", "ScInterpreter::GetLowRegIGamma" );
     double fLnFactor = fA * log(fX) - fX - GetLogGamma(fA);
     double fFactor = exp(fLnFactor);    // Do we need more accuracy than exp(ln()) has?
     if (fX>fA+1.0)  // includes fX>1.0; 1-GetUpRegIGamma, continued fraction
@@ -137,6 +141,7 @@ double ScInterpreter::GetLowRegIGamma( double fA, double fX )
 /** You must ensure fA>0.0 && fX>0.0) */
 double ScInterpreter::GetUpRegIGamma( double fA, double fX )
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "Eike.Rathke@sun.com", "ScInterpreter::GetUpRegIGamma" );
 
     double fLnFactor= fA*log(fX)-fX-GetLogGamma(fA);
     double fFactor = exp(fLnFactor); //Do I need more accuracy than exp(ln()) has?;
@@ -151,6 +156,7 @@ double ScInterpreter::GetUpRegIGamma( double fA, double fX )
     You must ensure fAlpha>0.0 and fLambda>0.0 */
 double ScInterpreter::GetGammaDistPDF( double fX, double fAlpha, double fLambda )
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "Eike.Rathke@sun.com", "ScInterpreter::GetGammaDistPDF" );
     if (fX <= 0.0)
         return 0.0;     // see ODFF
     else
@@ -188,6 +194,7 @@ double ScInterpreter::GetGammaDistPDF( double fX, double fAlpha, double fLambda 
     You must ensure fAlpha>0.0 and fLambda>0.0 */
 double ScInterpreter::GetGammaDist( double fX, double fAlpha, double fLambda )
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "Eike.Rathke@sun.com", "ScInterpreter::GetGammaDist" );
     if (fX <= 0.0)
         return 0.0;
     else

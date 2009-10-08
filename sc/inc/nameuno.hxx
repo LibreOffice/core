@@ -33,7 +33,7 @@
 
 #include <svtools/lstner.hxx>
 #include "address.hxx"
-#include "grammar.hxx"
+#include "formula/grammar.hxx"
 #include <com/sun/star/sheet/XLabelRange.hpp>
 #include <com/sun/star/sheet/XLabelRanges.hpp>
 #include <com/sun/star/sheet/XCellRangeReferrer.hpp>
@@ -74,7 +74,7 @@ private:
     void                    Modify_Impl( const String* pNewName,
                                         const ScTokenArray* pNewTokens, const String* pNewContent,
                                         const ScAddress* pNewPos, const sal_uInt16* pNewType,
-                                        const ScGrammar::Grammar eGrammar );
+                                        const formula::FormulaGrammar::Grammar eGrammar );
 
 public:
                             ScNamedRangeObj(ScDocShell* pDocSh, const String& rNm);
@@ -170,7 +170,7 @@ public:
 
                             // methods accessible via getImplementation()
             void            SetContentWithGrammar( const ::rtl::OUString& aContent,
-                                    const ScGrammar::Grammar eGrammar )
+                                    const formula::FormulaGrammar::Grammar eGrammar )
                                 throw(::com::sun::star::uno::RuntimeException);
 };
 

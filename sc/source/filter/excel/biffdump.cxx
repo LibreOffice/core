@@ -760,7 +760,7 @@ static void AddRef( ByteString& t, UINT16 nRow, UINT16 nC, BOOL bName, UINT16 nT
         else
         {
             t += '=';
-            t += GETSTR( ::ColToAlpha( nCol ) );
+            t += GETSTR( ::ScScColToAlpha( nCol ) );
         }
 
         t += ",R";
@@ -782,7 +782,7 @@ static void AddRef( ByteString& t, UINT16 nRow, UINT16 nC, BOOL bName, UINT16 nT
     {
         if( !bColRel )
             t += '$';
-        t += GETSTR( ::ColToAlpha( nCol ) );
+        t += GETSTR( ::ScColToAlpha( nCol ) );
         if( !bRowRel )
             t += '$';
         __AddDec( t, (UINT16)(nRow + 1) );

@@ -32,6 +32,7 @@
 #define SC_CELLFORM_HXX
 
 #include <tools/solar.h>
+#include "scdllapi.h"
 
 class String;
 
@@ -47,7 +48,7 @@ enum ScForceTextFmt {
 
 //------------------------------------------------------------------------
 
-class ScCellFormat
+class SC_DLLPUBLIC ScCellFormat
 {
 public:
     static void     GetString( ScBaseCell* pCell, ULONG nFormat, String& rString,

@@ -184,10 +184,7 @@ bool VAxisBase::prepareShapeCreation()
     m_xGroupShape_Shapes = this->createGroupShape( m_xLogicTarget, m_nDimension==2 ? m_aCID : C2U(""));
 
     if( m_aAxisProperties.m_bDisplayLabels )
-    {
-        m_xTextTarget = ( m_nDimension==2 ? m_xGroupShape_Shapes
-            : m_pShapeFactory->createGroup2D( m_xFinalTarget, m_aCID ) );
-    }
+        m_xTextTarget = m_pShapeFactory->createGroup2D( m_xFinalTarget, m_aCID );
 
     return true;
 }

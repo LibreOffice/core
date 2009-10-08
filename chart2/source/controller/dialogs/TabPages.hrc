@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: TabPages.hrc,v $
- * $Revision: 1.7 $
+ * $Revision: 1.7.20.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -35,7 +35,10 @@
 //see attrib.hrc in old chart
 
 //#define TP_LEGEND_POS 900
-#define GRP_LEGEND 1
+#define GRP_LEGEND                  1
+#define FL_LEGEND_TEXTORIENT        2
+#define FT_LEGEND_TEXTDIR           3
+#define LB_LEGEND_TEXTDIR           4
 
 //#define TP_DATA_DESCR 901
 
@@ -60,6 +63,8 @@
 #define CTR_DUMMY               6034
 #define FT_DUMMY                6035
 #define FL_ALIGN                6037
+#define FT_TEXTDIR              6038
+#define LB_TEXTDIR              6039
 
 /*
 //Symbol-Tabpage (zum Teil sehr Aehnlich der SVX_AREA_TABPAGE) (obsolete)
@@ -123,11 +128,12 @@
 
 #define FL_SEPARATOR                    18
 
-//#define TP_SCALE_Y          903
+#define FT_AXIS_TEXTDIR                 19
+#define LB_AXIS_TEXTDIR                 20
 
-#define FL_SCALE_Y          1
-#define FL_TICKS            2
-#define FL_HELPTICKS        3
+//#define TP_SCALE        903
+
+#define FL_SCALE            1
 
 #define TXT_MIN             1
 #define TXT_MAX             2
@@ -141,17 +147,46 @@
 #define CBX_AUTO_STEP_HELP  4
 #define CBX_AUTO_ORIGIN     5
 #define CBX_LOGARITHM       6
-#define CBX_TICKS_INNER     7
-#define CBX_HELPTICKS_INNER 8
-#define CBX_TICKS_OUTER     9
-#define CBX_HELPTICKS_OUTER 10
-#define CBX_REVERSE         11
+#define CBX_REVERSE         7
 
 #define EDT_STEP_MAIN       1
 #define EDT_MAX             2
 #define EDT_MIN             3
-#define EDT_ORIGIN          5
+#define EDT_ORIGIN          4
 
 #define MT_STEPHELP         10
+
+//#define TP_AXIS_POSITIONS   904
+
+#define FL_AXIS_LINE        1
+#define FL_LABELS           2
+#define FL_TICKS            3
+#define FL_VERTICAL         4
+#define FL_GRIDS            5
+
+#define FT_CROSSES_OTHER_AXIS_AT        1
+#define FT_AXIS_LABEL_DISTANCE          2
+#define FT_PLACE_LABELS                 3
+#define FT_MAJOR                        4
+#define FT_MINOR                        5
+#define FT_PLACE_TICKS                  6
+
+#define LB_CROSSES_OTHER_AXIS_AT    1
+#define LB_PLACE_LABELS             2
+#define EDT_CROSSES_OTHER_AXIS_AT           3
+#define EDT_CROSSES_OTHER_AXIS_AT_CATEGORY  4
+#define EDT_AXIS_LABEL_DISTANCE             5
+#define LB_PLACE_TICKS              6
+
+#define CB_AXIS_BETWEEN_CATEGORIES 1
+#define CB_TICKS_INNER  2
+#define CB_TICKS_OUTER  3
+#define CB_MINOR_INNER  4
+#define CB_MINOR_OUTER  5
+#define CB_MAJOR_GRID   6
+#define CB_MINOR_GRID   7
+
+#define PB_MAJOR_GRID   1
+#define PB_MINOR_GRID   2
 
 #endif

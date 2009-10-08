@@ -51,6 +51,7 @@
 #include <math.h>
 #include <float.h>          //! Test !!!
 #include <algorithm>
+#include <hash_map>
 
 #include <com/sun/star/sheet/DataResultFlags.hpp>
 #include <com/sun/star/sheet/MemberResultFlags.hpp>
@@ -59,9 +60,13 @@
 #include <com/sun/star/sheet/DataPilotFieldReferenceItemType.hpp>
 #include <com/sun/star/sheet/DataPilotFieldShowItemsMode.hpp>
 #include <com/sun/star/sheet/DataPilotFieldSortMode.hpp>
+#include <com/sun/star/sheet/DataPilotFieldFilter.hpp>
 
 using namespace com::sun::star;
 using ::std::vector;
+using ::std::pair;
+using ::std::hash_map;
+using ::com::sun::star::uno::Sequence;
 
 // -----------------------------------------------------------------------
 
@@ -230,7 +235,7 @@ ScDPInitState::~ScDPInitState()
 
 void ScDPInitState::AddMember( long nSourceIndex, const ScDPItemData& rName )
 {
-    DBG_ASSERT( nCount < SC_DAPI_MAXFIELDS, "too many InitState members" )
+    DBG_ASSERT( nCount < SC_DAPI_MAXFIELDS, "too many InitState members" );
     if ( nCount < SC_DAPI_MAXFIELDS )
     {
         pIndex[nCount] = nSourceIndex;
@@ -241,7 +246,7 @@ void ScDPInitState::AddMember( long nSourceIndex, const ScDPItemData& rName )
 
 void ScDPInitState::RemoveMember()
 {
-    DBG_ASSERT( nCount > 0, "RemoveColIndex without index" )
+    DBG_ASSERT( nCount > 0, "RemoveColIndex without index" );
     if ( nCount > 0 )
         --nCount;
 }
@@ -316,7 +321,7 @@ ScDPRunningTotalState::~ScDPRunningTotalState()
 
 void ScDPRunningTotalState::AddColIndex( long nVisible, long nSorted )
 {
-    DBG_ASSERT( nColIndexPos < SC_DAPI_MAXFIELDS, "too many column indexes" )
+    DBG_ASSERT( nColIndexPos < SC_DAPI_MAXFIELDS, "too many column indexes" );
     if ( nColIndexPos < SC_DAPI_MAXFIELDS )
     {
         pColVisible[nColIndexPos] = nVisible;
@@ -329,7 +334,7 @@ void ScDPRunningTotalState::AddColIndex( long nVisible, long nSorted )
 
 void ScDPRunningTotalState::AddRowIndex( long nVisible, long nSorted )
 {
-    DBG_ASSERT( nRowIndexPos < SC_DAPI_MAXFIELDS, "too many row indexes" )
+    DBG_ASSERT( nRowIndexPos < SC_DAPI_MAXFIELDS, "too many row indexes" );
     if ( nRowIndexPos < SC_DAPI_MAXFIELDS )
     {
         pRowVisible[nRowIndexPos] = nVisible;
@@ -342,7 +347,7 @@ void ScDPRunningTotalState::AddRowIndex( long nVisible, long nSorted )
 
 void ScDPRunningTotalState::RemoveColIndex()
 {
-    DBG_ASSERT( nColIndexPos > 0, "RemoveColIndex without index" )
+    DBG_ASSERT( nColIndexPos > 0, "RemoveColIndex without index" );
     if ( nColIndexPos > 0 )
     {
         --nColIndexPos;
@@ -353,7 +358,7 @@ void ScDPRunningTotalState::RemoveColIndex()
 
 void ScDPRunningTotalState::RemoveRowIndex()
 {
-    DBG_ASSERT( nRowIndexPos > 0, "RemoveRowIndex without index" )
+    DBG_ASSERT( nRowIndexPos > 0, "RemoveRowIndex without index" );
     if ( nRowIndexPos > 0 )
     {
         --nRowIndexPos;
@@ -1575,6 +1580,12 @@ void ScDPResultMember::DumpState( const ScDPResultMember* pRefMember, ScDocument
 ScDPAggData* ScDPResultMember::GetColTotal( long nMeasure ) const
 {
     return lcl_GetChildTotal( const_cast<ScDPAggData*>(&aColTotal), nMeasure );
+}
+
+void ScDPResultMember::FillVisibilityData(ScDPResultVisibilityData& rData) const
+{
+    if (pChildDimension)
+        pChildDimension->FillVisibilityData(rData);
 }
 
 // -----------------------------------------------------------------------
@@ -3231,6 +3242,26 @@ ScDPResultDimension* ScDPResultDimension::GetFirstChildDimension() const
         return NULL;
 }
 
+void ScDPResultDimension::FillVisibilityData(ScDPResultVisibilityData& rData) const
+{
+    if (IsDataLayout())
+        return;
+
+    MemberArray::const_iterator itr = maMemberArray.begin(), itrEnd = maMemberArray.end();
+
+    for (;itr != itrEnd; ++itr)
+    {
+        ScDPResultMember* pMember = *itr;
+        if (pMember->IsValid())
+        {
+            ScDPItemData aItem;
+            pMember->FillItemData(aItem);
+            rData.addVisibleMember(GetName(), aItem);
+            pMember->FillVisibilityData(rData);
+        }
+    }
+}
+
 // -----------------------------------------------------------------------
 
 ScDPDataDimension::ScDPDataDimension( const ScDPResultData* pData ) :
@@ -3559,3 +3590,88 @@ ScDPDataMember* ScDPDataDimension::GetMember(long n) const
     return aMembers[(USHORT)n];
 }
 
+// ----------------------------------------------------------------------------
+
+ScDPResultVisibilityData::ScDPResultVisibilityData(
+    ScSimpleSharedString& rSharedString, ScDPSource* pSource) :
+    mrSharedString(rSharedString),
+    mpSource(pSource)
+{
+}
+
+ScDPResultVisibilityData::~ScDPResultVisibilityData()
+{
+}
+
+void ScDPResultVisibilityData::addVisibleMember(const String& rDimName, const ScDPItemData& rMemberItem)
+{
+    DimMemberType::iterator itr = maDimensions.find(rDimName);
+    if (itr == maDimensions.end())
+    {
+        pair<DimMemberType::iterator, bool> r = maDimensions.insert(
+            DimMemberType::value_type(rDimName, VisibleMemberType()));
+
+        if (!r.second)
+            // insertion failed.
+            return;
+
+        itr = r.first;
+    }
+    VisibleMemberType& rMem = itr->second;
+    VisibleMemberType::iterator itrMem = rMem.find(rMemberItem);
+    if (itrMem == rMem.end())
+        rMem.insert(rMemberItem);
+}
+
+void ScDPResultVisibilityData::fillFieldFilters(vector<ScDPCacheTable::Criterion>& rFilters) const
+{
+    typedef hash_map<String, long, ScStringHashCode> FieldNameMapType;
+    FieldNameMapType aFieldNames;
+    ScDPTableData* pData = mpSource->GetData();
+    long nColumnCount = pData->GetColumnCount();
+    for (long i = 0; i < nColumnCount; ++i)
+    {
+        aFieldNames.insert(
+            FieldNameMapType::value_type(pData->getDimensionName(i), i));
+    }
+
+    const ScDPDimensions* pDims = mpSource->GetDimensionsObject();
+    for (DimMemberType::const_iterator itr = maDimensions.begin(), itrEnd = maDimensions.end();
+          itr != itrEnd; ++itr)
+    {
+        const String& rDimName = itr->first;
+        ScDPCacheTable::Criterion aCri;
+        FieldNameMapType::const_iterator itrField = aFieldNames.find(rDimName);
+        if (itrField == aFieldNames.end())
+            // This should never happen!
+            continue;
+
+        long nDimIndex = itrField->second;
+        aCri.mnFieldIndex = static_cast<sal_Int32>(nDimIndex);
+        aCri.mpFilter.reset(new ScDPCacheTable::GroupFilter(mrSharedString));
+        ScDPCacheTable::GroupFilter* pGrpFilter =
+            static_cast<ScDPCacheTable::GroupFilter*>(aCri.mpFilter.get());
+
+        const VisibleMemberType& rMem = itr->second;
+        for (VisibleMemberType::const_iterator itrMem = rMem.begin(), itrMemEnd = rMem.end();
+              itrMem != itrMemEnd; ++itrMem)
+        {
+            const ScDPItemData& rMemItem = *itrMem;
+            pGrpFilter->addMatchItem(rMemItem.aString, rMemItem.fValue, rMemItem.bHasValue);
+        }
+
+        ScDPDimension* pDim = pDims->getByIndex(nDimIndex);
+        ScDPMembers* pMembers = pDim->GetHierarchiesObject()->getByIndex(0)->
+            GetLevelsObject()->getByIndex(0)->GetMembersObject();
+        if (pGrpFilter->getMatchItemCount() < static_cast<size_t>(pMembers->getCount()))
+            rFilters.push_back(aCri);
+    }
+}
+
+size_t ScDPResultVisibilityData::MemberHash::operator() (const ScDPItemData& r) const
+{
+    if (r.bHasValue)
+        return static_cast<size_t>(::rtl::math::approxFloor(r.fValue));
+    else
+        return rtl_ustr_hashCode_WithLength(r.aString.GetBuffer(), r.aString.Len());
+}

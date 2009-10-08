@@ -79,7 +79,7 @@ ScAutoFormatDlg::ScAutoFormatDlg( Window*                   pParent,
     //
     aFlFormat       ( this, ScResId( FL_FORMAT ) ),
     aLbFormat       ( this, ScResId( LB_FORMAT ) ),
-    pWndPreview     ( new AutoFmtPreview( this, ScResId( WND_PREVIEW ), pDoc ) ),
+    pWndPreview     ( new ScAutoFmtPreview( this, ScResId( WND_PREVIEW ), pDoc ) ),
     aBtnOk          ( this, ScResId( BTN_OK ) ),
     aBtnCancel      ( this, ScResId( BTN_CANCEL ) ),
     aBtnHelp        ( this, ScResId( BTN_HELP ) ),

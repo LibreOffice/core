@@ -398,7 +398,7 @@ rtl::OUString SAL_CALL ScAccessiblePreviewHeaderCell::createAccessibleName() thr
         else
         {
             // name of column header
-            sName += ColToAlpha( maCellPos.Col() );
+            sName += ScColToAlpha( maCellPos.Col() );
         }
     }
     else

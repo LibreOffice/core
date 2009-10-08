@@ -30,6 +30,7 @@
 #ifndef _CHART2_TOOLS_AXISHELPER_HXX
 #define _CHART2_TOOLS_AXISHELPER_HXX
 
+#include "charttoolsdllapi.hxx"
 #include "ReferenceSizeProvider.hxx"
 #include <com/sun/star/chart2/XChartType.hpp>
 #include <com/sun/star/chart2/XCoordinateSystem.hpp>
@@ -47,7 +48,7 @@ namespace chart
 /**
 */
 
-class AxisHelper
+class OOO_DLLPUBLIC_CHARTTOOLS AxisHelper
 {
 public:
     static ::com::sun::star::chart2::ScaleData createDefaultScale();
@@ -129,6 +130,21 @@ public:
         getAxis( sal_Int32 nDimensionIndex, sal_Int32 nAxisIndex
             , const ::com::sun::star::uno::Reference<
                     ::com::sun::star::chart2::XCoordinateSystem >& xCooSys );
+
+    static ::com::sun::star::uno::Reference<
+            ::com::sun::star::chart2::XAxis >
+        getCrossingMainAxis( const ::com::sun::star::uno::Reference<
+                ::com::sun::star::chart2::XAxis >& xAxis
+            , const ::com::sun::star::uno::Reference<
+                    ::com::sun::star::chart2::XCoordinateSystem >& xCooSys );
+
+    static ::com::sun::star::uno::Reference<
+            ::com::sun::star::chart2::XAxis >
+        getParallelAxis( const ::com::sun::star::uno::Reference<
+                ::com::sun::star::chart2::XAxis >& xAxis
+            , const ::com::sun::star::uno::Reference<
+                    ::com::sun::star::chart2::XDiagram >& xDiagram );
+
     static ::com::sun::star::uno::Reference<
             ::com::sun::star::beans::XPropertySet >
         getGridProperties( const ::com::sun::star::uno::Reference<
@@ -210,6 +226,16 @@ public:
             ::com::sun::star::chart2::XChartType >
         getChartTypeByIndex( const ::com::sun::star::uno::Reference<
             ::com::sun::star::chart2::XCoordinateSystem >& xCooSys, sal_Int32 nIndex );
+
+    static void setRTLAxisLayout( const ::com::sun::star::uno::Reference<
+            ::com::sun::star::chart2::XCoordinateSystem >& xCooSys );
+
+    static ::com::sun::star::uno::Reference<
+            ::com::sun::star::chart2::XChartType >
+        getFirstChartTypeWithSeriesAttachedToAxisIndex( const ::com::sun::star::uno::Reference<
+            ::com::sun::star::chart2::XDiagram >& xDiagram, const sal_Int32 nAttachedAxisIndex );
+
+    static bool isAxisPositioningEnabled();
 };
 
 //.............................................................................

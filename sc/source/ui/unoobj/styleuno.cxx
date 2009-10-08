@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: styleuno.cxx,v $
- * $Revision: 1.43.32.3 $
+ * $Revision: 1.44.72.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -117,15 +117,18 @@ const SfxItemPropertyMap* lcl_GetCellStyleMap()
         {MAP_CHAR_LEN(SC_UNONAME_CLOCAL),   ATTR_FONT_LANGUAGE, &::getCppuType((const lang::Locale*)0),         0, MID_LANG_LOCALE },
         {MAP_CHAR_LEN(SC_UNO_CJK_CLOCAL),   ATTR_CJK_FONT_LANGUAGE,&::getCppuType((const lang::Locale*)0),          0, MID_LANG_LOCALE },
         {MAP_CHAR_LEN(SC_UNO_CTL_CLOCAL),   ATTR_CTL_FONT_LANGUAGE,&::getCppuType((const lang::Locale*)0),          0, MID_LANG_LOCALE },
+        {MAP_CHAR_LEN(SC_UNONAME_COVER),    ATTR_FONT_OVERLINE, &::getCppuType((const sal_Int16*)0),    0, MID_TL_STYLE },
+        {MAP_CHAR_LEN(SC_UNONAME_COVRLCOL), ATTR_FONT_OVERLINE, &getCppuType((sal_Int32*)0),            0, MID_TL_COLOR },
+        {MAP_CHAR_LEN(SC_UNONAME_COVRLHAS), ATTR_FONT_OVERLINE, &getBooleanCppuType(),                  0, MID_TL_HASCOLOR },
         {MAP_CHAR_LEN(SC_UNONAME_CPOST),    ATTR_FONT_POSTURE,  &::getCppuType((const awt::FontSlant*)0),       0, MID_POSTURE },
         {MAP_CHAR_LEN(SC_UNO_CJK_CPOST),    ATTR_CJK_FONT_POSTURE,&::getCppuType((const awt::FontSlant*)0),     0, MID_POSTURE },
         {MAP_CHAR_LEN(SC_UNO_CTL_CPOST),    ATTR_CTL_FONT_POSTURE,&::getCppuType((const awt::FontSlant*)0),     0, MID_POSTURE },
         {MAP_CHAR_LEN(SC_UNONAME_CRELIEF),  ATTR_FONT_RELIEF,   &getCppuType((sal_Int16*)0),            0, MID_RELIEF },
         {MAP_CHAR_LEN(SC_UNONAME_CSHADD),   ATTR_FONT_SHADOWED, &::getBooleanCppuType(),            0, 0 },
         {MAP_CHAR_LEN(SC_UNONAME_CSTRIKE),  ATTR_FONT_CROSSEDOUT,&getCppuType((sal_Int16*)0),           0, MID_CROSS_OUT },
-        {MAP_CHAR_LEN(SC_UNONAME_CUNDER),   ATTR_FONT_UNDERLINE,&::getCppuType((const sal_Int16*)0),            0, MID_UNDERLINE },
-        {MAP_CHAR_LEN(SC_UNONAME_CUNDLCOL), ATTR_FONT_UNDERLINE,&getCppuType((sal_Int32*)0),            0, MID_UL_COLOR },
-        {MAP_CHAR_LEN(SC_UNONAME_CUNDLHAS), ATTR_FONT_UNDERLINE,&getBooleanCppuType(),                  0, MID_UL_HASCOLOR },
+        {MAP_CHAR_LEN(SC_UNONAME_CUNDER),   ATTR_FONT_UNDERLINE,&::getCppuType((const sal_Int16*)0),    0, MID_TL_STYLE },
+        {MAP_CHAR_LEN(SC_UNONAME_CUNDLCOL), ATTR_FONT_UNDERLINE,&getCppuType((sal_Int32*)0),            0, MID_TL_COLOR },
+        {MAP_CHAR_LEN(SC_UNONAME_CUNDLHAS), ATTR_FONT_UNDERLINE,&getBooleanCppuType(),                  0, MID_TL_HASCOLOR },
         {MAP_CHAR_LEN(SC_UNONAME_CWEIGHT),  ATTR_FONT_WEIGHT,   &::getCppuType((const float*)0),            0, MID_WEIGHT },
         {MAP_CHAR_LEN(SC_UNO_CJK_CWEIGHT),  ATTR_CJK_FONT_WEIGHT,&::getCppuType((const float*)0),           0, MID_WEIGHT },
         {MAP_CHAR_LEN(SC_UNO_CTL_CWEIGHT),  ATTR_CTL_FONT_WEIGHT,&::getCppuType((const float*)0),           0, MID_WEIGHT },
@@ -1008,6 +1011,70 @@ sal_Bool SAL_CALL ScStyleFamilyObj::hasByName( const rtl::OUString& aName )
             return sal_True;
     }
     return sal_False;
+}
+
+// XPropertySet
+
+uno::Reference< beans::XPropertySetInfo > SAL_CALL ScStyleFamilyObj::getPropertySetInfo(  ) throw (uno::RuntimeException)
+{
+    OSL_ENSURE( 0, "###unexpected!" );
+    return uno::Reference< beans::XPropertySetInfo >();
+}
+
+void SAL_CALL ScStyleFamilyObj::setPropertyValue( const ::rtl::OUString&, const uno::Any& ) throw (beans::UnknownPropertyException, beans::PropertyVetoException, lang::IllegalArgumentException, lang::WrappedTargetException, uno::RuntimeException)
+{
+    OSL_ENSURE( 0, "###unexpected!" );
+}
+
+uno::Any SAL_CALL ScStyleFamilyObj::getPropertyValue( const ::rtl::OUString& sPropertyName ) throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
+{
+    uno::Any aRet;
+
+    if ( sPropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("DisplayName") ) )
+    {
+        ScUnoGuard aGuard;
+        sal_uInt32 nResId = 0;
+        switch ( eFamily )
+        {
+            case SFX_STYLE_FAMILY_PARA:
+                nResId = STR_STYLE_FAMILY_CELL; break;
+            case SFX_STYLE_FAMILY_PAGE:
+                nResId = STR_STYLE_FAMILY_PAGE; break;
+            default:
+                OSL_ENSURE( 0, "ScStyleFamilyObj::getPropertyValue(): invalid family" );
+        }
+        if ( nResId > 0 )
+        {
+            ::rtl::OUString sDisplayName( ScGlobal::GetRscString( static_cast< USHORT >( nResId ) ) );
+            aRet = uno::makeAny( sDisplayName );
+        }
+    }
+    else
+    {
+        throw beans::UnknownPropertyException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("unknown property: ") ) + sPropertyName, static_cast<OWeakObject *>(this) );
+    }
+
+    return aRet;
+}
+
+void SAL_CALL ScStyleFamilyObj::addPropertyChangeListener( const ::rtl::OUString&, const uno::Reference< beans::XPropertyChangeListener >& ) throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
+{
+    OSL_ENSURE( 0, "###unexpected!" );
+}
+
+void SAL_CALL ScStyleFamilyObj::removePropertyChangeListener( const ::rtl::OUString&, const uno::Reference< beans::XPropertyChangeListener >& ) throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
+{
+    OSL_ENSURE( 0, "###unexpected!" );
+}
+
+void SAL_CALL ScStyleFamilyObj::addVetoableChangeListener( const ::rtl::OUString&, const uno::Reference< beans::XVetoableChangeListener >& ) throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
+{
+    OSL_ENSURE( 0, "###unexpected!" );
+}
+
+void SAL_CALL ScStyleFamilyObj::removeVetoableChangeListener( const ::rtl::OUString&, const uno::Reference< beans::XVetoableChangeListener >& ) throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
+{
+    OSL_ENSURE( 0, "###unexpected!" );
 }
 
 //------------------------------------------------------------------------

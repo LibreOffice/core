@@ -36,6 +36,7 @@
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/util/XCloneable.hpp>
 #include <cppuhelper/implbase3.hxx>
+#include "charttoolsdllapi.hxx"
 
 #include <map>
 
@@ -53,7 +54,7 @@ typedef ::cppu::WeakImplHelper3<
     NameContainer_Base;
 }
 
-class NameContainer : public impl::NameContainer_Base
+class OOO_DLLPUBLIC_CHARTTOOLS NameContainer : public impl::NameContainer_Base
 {
 public:
     NameContainer( const ::com::sun::star::uno::Type& rType, const rtl::OUString& rServicename, const rtl::OUString& rImplementationName );

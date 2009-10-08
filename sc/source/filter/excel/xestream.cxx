@@ -29,12 +29,41 @@
  ************************************************************************/
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
+#include <stdarg.h>
+#include <stdio.h>
+#include <string.h>
+#include <utility>
+
+#include <rtl/ustring.hxx>
+#include <sax/fshelper.hxx>
+#include <unotools/streamwrap.hxx>
+
 #include "precompiled_sc.hxx"
+#include "docuno.hxx"
 #include "xestream.hxx"
+#include "xladdress.hxx"
 #include "xlstring.hxx"
 #include "xeroot.hxx"
+#include "xestyle.hxx"
+#include "rangelst.hxx"
+#include "compiler.hxx"
 
+#include <oox/core/tokens.hxx>
+#include <formula/grammar.hxx>
 
+using ::com::sun::star::beans::PropertyValue;
+using ::com::sun::star::io::XOutputStream;
+using ::com::sun::star::io::XStream;
+using ::com::sun::star::lang::XComponent;
+using ::com::sun::star::lang::XMultiServiceFactory;
+using ::com::sun::star::lang::XServiceInfo;
+using ::com::sun::star::uno::Reference;
+using ::com::sun::star::uno::Sequence;
+using ::com::sun::star::uno::UNO_QUERY;
+using ::rtl::OString;
+using ::rtl::OUString;
+using ::utl::OStreamWrapper;
+using namespace formula;
 // ============================================================================
 
 XclExpStream::XclExpStream( SvStream& rOutStrm, const XclExpRoot& rRoot, sal_uInt16 nMaxRecSize ) :
@@ -326,4 +355,370 @@ void XclExpStream::WriteRawZeroBytes( sal_Size nBytes )
 }
 
 // ============================================================================
+
+rtl::OUString XclXmlUtils::GetStreamName( const char* sStreamDir, const char* sStream, sal_Int32 nId )
+{
+    rtl::OUStringBuffer sBuf;
+    if( sStreamDir )
+        sBuf.appendAscii( sStreamDir );
+    sBuf.appendAscii( sStream );
+    if( nId )
+        sBuf.append( nId );
+    sBuf.appendAscii( ".xml" );
+    return sBuf.makeStringAndClear();
+}
+
+rtl::OString XclXmlUtils::ToOString( const Color& rColor )
+{
+    char buf[9];
+    sprintf( buf, "%.2X%.2X%.2X%.2X", rColor.GetTransparency(), rColor.GetRed(), rColor.GetGreen(), rColor.GetBlue() );
+    buf[8] = '\0';
+    return OString( buf );
+}
+
+rtl::OString XclXmlUtils::ToOString( const ::rtl::OUString& s )
+{
+    return OUStringToOString( s, RTL_TEXTENCODING_UTF8  );
+}
+
+rtl::OString XclXmlUtils::ToOString( const String& s )
+{
+    return rtl::OString( s.GetBuffer(), s.Len(), RTL_TEXTENCODING_UTF8 );
+}
+
+rtl::OString XclXmlUtils::ToOString( const ScAddress& rAddress )
+{
+    String sAddress;
+    rAddress.Format( sAddress, SCA_VALID, NULL, ScAddress::Details( FormulaGrammar::CONV_XL_A1 ) );
+    return ToOString( sAddress );
+}
+
+rtl::OString XclXmlUtils::ToOString( const ScfUInt16Vec& rBuffer )
+{
+    const sal_uInt16* pBuffer = &rBuffer [0];
+    return ::rtl::OString( pBuffer, rBuffer.size(), RTL_TEXTENCODING_UTF8 );
+}
+
+rtl::OString XclXmlUtils::ToOString( const ScRange& rRange )
+{
+    String sRange;
+    rRange.Format( sRange, SCA_VALID, NULL, ScAddress::Details( FormulaGrammar::CONV_XL_A1 ) );
+    return ToOString( sRange );
+}
+
+rtl::OString XclXmlUtils::ToOString( const ScRangeList& rRangeList )
+{
+    String s;
+    rRangeList.Format( s, SCA_VALID, NULL, FormulaGrammar::CONV_XL_A1, ' ' );
+    return ToOString( s );
+}
+
+static ScAddress lcl_ToAddress( const XclAddress& rAddress )
+{
+    ScAddress aAddress;
+
+    // For some reason, ScRange::Format() returns omits row numbers if
+    // the row is >= MAXROW or the column is >= MAXCOL, and Excel doesn't
+    // like "A:IV" (i.e. no row numbers).  Prevent this.
+    aAddress.SetRow( std::min<sal_Int32>( rAddress.mnRow, MAXROW-1 ) );
+    aAddress.SetCol( static_cast<sal_Int16>(std::min<sal_Int32>( rAddress.mnCol, MAXCOL-1 )) );
+
+    return aAddress;
+}
+
+rtl::OString XclXmlUtils::ToOString( const XclAddress& rAddress )
+{
+    return ToOString( lcl_ToAddress( rAddress ) );
+}
+
+rtl::OString XclXmlUtils::ToOString( const XclExpString& s )
+{
+    DBG_ASSERT( !s.IsRich(), "XclXmlUtils::ToOString(XclExpString): rich text string found!" );
+    return ToOString( s.GetUnicodeBuffer() );
+}
+
+static ScRange lcl_ToRange( const XclRange& rRange )
+{
+    ScRange aRange;
+
+    aRange.aStart = lcl_ToAddress( rRange.maFirst );
+    aRange.aEnd   = lcl_ToAddress( rRange.maLast );
+
+    return aRange;
+}
+
+rtl::OString XclXmlUtils::ToOString( const XclRangeList& rRanges )
+{
+    ScRangeList aRanges;
+    for( XclRangeList::const_iterator i = rRanges.begin(), end = rRanges.end();
+            i != end; ++i )
+    {
+        aRanges.Append( lcl_ToRange( *i ) );
+    }
+    return ToOString( aRanges );
+}
+
+OUString XclXmlUtils::ToOUString( const char* s )
+{
+    return OUString( s, (sal_Int32) strlen( s ), RTL_TEXTENCODING_ASCII_US );
+}
+
+OUString XclXmlUtils::ToOUString( const ScfUInt16Vec& rBuf, sal_Int32 nStart, sal_Int32 nLength )
+{
+    if( nLength == -1 )
+        nLength = rBuf.size();
+
+    return OUString( &rBuf[nStart], nLength );
+}
+
+OUString XclXmlUtils::ToOUString( const String& s )
+{
+    return OUString( s.GetBuffer(), s.Len() );
+}
+
+rtl::OUString XclXmlUtils::ToOUString( ScDocument& rDocument, const ScAddress& rAddress, ScTokenArray* pTokenArray )
+{
+    ScCompiler aCompiler( &rDocument, rAddress, *pTokenArray);
+    aCompiler.SetGrammar(FormulaGrammar::GRAM_NATIVE_XL_A1);
+    String s;
+    aCompiler.CreateStringFromTokenArray( s );
+    return ToOUString( s );
+}
+
+OUString XclXmlUtils::ToOUString( const XclExpString& s )
+{
+    DBG_ASSERT( !s.IsRich(), "XclXmlUtils::ToOString(XclExpString): rich text string found!" );
+    return ToOUString( s.GetUnicodeBuffer() );
+}
+
+const char* XclXmlUtils::ToPsz( bool b )
+{
+    return b ? "true" : "false";
+}
+
+// ============================================================================
+
+XclExpXmlStream::XclExpXmlStream( const Reference< XMultiServiceFactory >& rSMgr, SvStream& rStrm, const XclExpRoot& rRoot )
+    : XmlFilterBase( rSMgr )
+    , mrRoot( rRoot )
+{
+    Sequence< PropertyValue > aArgs( 1 );
+    const OUString sStream( RTL_CONSTASCII_USTRINGPARAM( "StreamForOutput" ) );
+    aArgs[0].Name  = sStream;
+    aArgs[0].Value <<= Reference< XStream > ( new OStreamWrapper( rStrm ) );
+
+    XServiceInfo* pInfo = rRoot.GetDocModelObj();
+    Reference< XComponent > aComponent( pInfo, UNO_QUERY );
+    setSourceDocument( aComponent );
+    filter( aArgs );
+
+    PushStream( CreateOutputStream(
+                OUString::createFromAscii( "xl/workbook.xml" ),
+                OUString::createFromAscii( "xl/workbook.xml" ),
+                Reference< XOutputStream >(),
+                "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet.main+xml",
+                "http://schemas.openxmlformats.org/officeDocument/2006/relationships/officeDocument" ) );
+}
+
+XclExpXmlStream::~XclExpXmlStream()
+{
+}
+
+sax_fastparser::FSHelperPtr& XclExpXmlStream::GetCurrentStream()
+{
+    DBG_ASSERT( !maStreams.empty(), "XclExpXmlStream::GetCurrentStream - no current stream" );
+    return maStreams.top();
+}
+
+void XclExpXmlStream::PushStream( sax_fastparser::FSHelperPtr aStream )
+{
+    maStreams.push( aStream );
+}
+
+void XclExpXmlStream::PopStream()
+{
+    DBG_ASSERT( !maStreams.empty(), "XclExpXmlStream::PopStream - stack is empty!" );
+    maStreams.pop();
+}
+
+OUString XclExpXmlStream::GetIdForPath( const OUString& sPath )
+{
+    if( maOpenedStreamMap.find( sPath ) == maOpenedStreamMap.end() )
+        return OUString();
+    return maOpenedStreamMap[ sPath ].first;
+}
+
+sax_fastparser::FSHelperPtr XclExpXmlStream::GetStreamForPath( const OUString& sPath )
+{
+    if( maOpenedStreamMap.find( sPath ) == maOpenedStreamMap.end() )
+        return sax_fastparser::FSHelperPtr();
+    return maOpenedStreamMap[ sPath ].second;
+}
+
+sax_fastparser::FSHelperPtr& XclExpXmlStream::WriteAttributes( sal_Int32 nAttribute, ... )
+{
+    sax_fastparser::FSHelperPtr& rStream = GetCurrentStream();
+
+    va_list args;
+    va_start( args, nAttribute );
+    do {
+        const char* pValue = va_arg( args, const char* );
+        if( pValue )
+        {
+            rStream->write( " " )
+                ->writeId( nAttribute )
+                ->write( "=\"" )
+                ->writeEscaped( pValue )
+                ->write( "\"" );
+        }
+
+        nAttribute = va_arg( args, sal_Int32 );
+        if( nAttribute == FSEND )
+            break;
+    } while( true );
+    va_end( args );
+
+    return rStream;
+}
+
+static void lcl_WriteValue( sax_fastparser::FSHelperPtr& rStream, sal_Int32 nElement, const char* pValue )
+{
+    if( !pValue )
+        return;
+    rStream->singleElement( nElement,
+            XML_val, pValue,
+            FSEND );
+}
+
+static const char* lcl_GetUnderlineStyle( FontUnderline eUnderline, bool& bHaveUnderline )
+{
+    bHaveUnderline = true;
+    switch( eUnderline )
+    {
+        // OOXTODO: doubleAccounting, singleAccounting
+        // OOXTODO: what should be done with the other FontUnderline values?
+        case UNDERLINE_SINGLE:  return "single";
+        case UNDERLINE_DOUBLE:  return "double";
+        case UNDERLINE_NONE:
+        default:                bHaveUnderline = false; return "none";
+    }
+}
+
+static const char* lcl_ToVerticalAlignmentRun( SvxEscapement eEscapement, bool& bHaveAlignment )
+{
+    bHaveAlignment = true;
+    switch( eEscapement )
+    {
+        case SVX_ESCAPEMENT_SUPERSCRIPT:    return "superscript";
+        case SVX_ESCAPEMENT_SUBSCRIPT:      return "subscript";
+        case SVX_ESCAPEMENT_OFF:
+        default:                            bHaveAlignment = false; return "baseline";
+    }
+}
+
+sax_fastparser::FSHelperPtr& XclExpXmlStream::WriteFontData( const XclFontData& rFontData, sal_Int32 nFontId )
+{
+    bool bHaveUnderline, bHaveVertAlign;
+    const char* pUnderline = lcl_GetUnderlineStyle( rFontData.GetScUnderline(), bHaveUnderline );
+    const char* pVertAlign = lcl_ToVerticalAlignmentRun( rFontData.GetScEscapement(), bHaveVertAlign );
+
+    sax_fastparser::FSHelperPtr& rStream = GetCurrentStream();
+
+    lcl_WriteValue( rStream, nFontId,        XclXmlUtils::ToOString( rFontData.maName ).getStr() );
+    lcl_WriteValue( rStream, XML_charset,    rFontData.mnCharSet != 0 ? OString::valueOf( (sal_Int32) rFontData.mnCharSet ).getStr() : NULL );
+    lcl_WriteValue( rStream, XML_family,     OString::valueOf( (sal_Int32) rFontData.mnFamily ).getStr() );
+    lcl_WriteValue( rStream, XML_b,          rFontData.mnWeight > 400 ? XclXmlUtils::ToPsz( rFontData.mnWeight > 400 ) : NULL );
+    lcl_WriteValue( rStream, XML_i,          rFontData.mbItalic ? XclXmlUtils::ToPsz( rFontData.mbItalic ) : NULL );
+    lcl_WriteValue( rStream, XML_strike,     rFontData.mbStrikeout ? XclXmlUtils::ToPsz( rFontData.mbStrikeout ) : NULL );
+    lcl_WriteValue( rStream, XML_outline,    rFontData.mbOutline ? XclXmlUtils::ToPsz( rFontData.mbOutline ) : NULL );
+    lcl_WriteValue( rStream, XML_shadow,     rFontData.mbShadow ? XclXmlUtils::ToPsz( rFontData.mbShadow ) : NULL );
+    // OOXTODO: lcl_WriteValue( rStream, XML_condense, );    // mac compatibility setting
+    // OOXTODO: lcl_WriteValue( rStream, XML_extend, );      // compatibility setting
+    if( rFontData.maColor != Color( 0xFF, 0xFF, 0xFF, 0xFF ) )
+        rStream->singleElement( XML_color,
+                // OOXTODO: XML_auto,       bool
+                // OOXTODO: XML_indexed,    uint
+                XML_rgb,    XclXmlUtils::ToOString( rFontData.maColor ).getStr(),
+                // OOXTODO: XML_theme,      index into <clrScheme/>
+                // OOXTODO: XML_tint,       double
+                FSEND );
+    lcl_WriteValue( rStream, XML_sz,         OString::valueOf( (double) (rFontData.mnHeight / 20.0) ) );  // Twips->Pt
+    lcl_WriteValue( rStream, XML_u,          bHaveUnderline ? pUnderline : NULL );
+    lcl_WriteValue( rStream, XML_vertAlign,  bHaveVertAlign ? pVertAlign : NULL );
+
+    return rStream;
+}
+
+sax_fastparser::FSHelperPtr XclExpXmlStream::CreateOutputStream (
+    const OUString& sFullStream,
+    const OUString& sRelativeStream,
+    const Reference< XOutputStream >& xParentRelation,
+    const char* sContentType,
+    const char* sRelationshipType,
+    ::rtl::OUString* pRelationshipId )
+{
+    OUString sRelationshipId;
+    if (xParentRelation.is())
+        sRelationshipId = addRelation( xParentRelation, OUString::createFromAscii( sRelationshipType), sRelativeStream );
+    else
+        sRelationshipId = addRelation( OUString::createFromAscii( sRelationshipType ), sRelativeStream );
+
+    if( pRelationshipId )
+        *pRelationshipId = sRelationshipId;
+
+    sax_fastparser::FSHelperPtr p = openOutputStreamWithSerializer( sFullStream, OUString::createFromAscii( sContentType ) );
+
+    maOpenedStreamMap[ sFullStream ] = std::make_pair( sRelationshipId, p );
+
+    return p;
+}
+
+bool XclExpXmlStream::importDocument() throw()
+{
+    return false;
+}
+
+sal_Int32 XclExpXmlStream::getSchemeClr( sal_Int32 /*nColorSchemeToken*/ ) const
+{
+    return -1;
+}
+
+const oox::vml::DrawingPtr XclExpXmlStream::getDrawings()
+{
+    return oox::vml::DrawingPtr();
+}
+
+const oox::drawingml::Theme* XclExpXmlStream::getCurrentTheme() const
+{
+    return NULL;
+}
+
+const oox::drawingml::table::TableStyleListPtr XclExpXmlStream::getTableStyles()
+{
+    return oox::drawingml::table::TableStyleListPtr();
+}
+
+oox::drawingml::chart::ChartConverter& XclExpXmlStream::getChartConverter()
+{
+    // DO NOT CALL
+    return * (oox::drawingml::chart::ChartConverter*) NULL;
+}
+
+bool XclExpXmlStream::exportDocument() throw()
+{
+    return false;
+}
+
+::rtl::OUString XclExpXmlStream::implGetImplementationName() const
+{
+    return CREATE_OUSTRING( "TODO" );
+}
+
+void XclExpXmlStream::Trace( const char* format, ...)
+{
+    va_list ap;
+    va_start( ap, format );
+    vfprintf( stderr, format, ap );
+    va_end( ap );
+}
 

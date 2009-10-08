@@ -145,7 +145,7 @@
 #include "rangelst.hxx"
 #include "convuno.hxx"
 #include "compiler.hxx"
-#include "grammar.hxx"
+#include "formula/grammar.hxx"
 #include "attrib.hxx"
 #include "undodat.hxx"
 #include "dbdocfun.hxx"
@@ -744,9 +744,9 @@ class CellFormulaValueSetter : public CellValueSetter
 {
 private:
     ScDocument*  m_pDoc;
-    ScGrammar::Grammar m_eGrammar;
+    formula::FormulaGrammar::Grammar m_eGrammar;
 public:
-    CellFormulaValueSetter( const uno::Any& aValue, ScDocument* pDoc, ScGrammar::Grammar eGram ):CellValueSetter( aValue ),  m_pDoc( pDoc ), m_eGrammar( eGram ){}
+    CellFormulaValueSetter( const uno::Any& aValue, ScDocument* pDoc, formula::FormulaGrammar::Grammar eGram ):CellValueSetter( aValue ),  m_pDoc( pDoc ), m_eGrammar( eGram ){}
 protected:
     bool processValue( const uno::Any& aValue, const uno::Reference< table::XCell >& xCell )
     {
@@ -756,18 +756,19 @@ protected:
             // convert to CONV_OOO style formula string because XCell::setFormula
             // always compile it in CONV_OOO style.  Perhaps css.sheet.FormulaParser
             // should be used in future to directly pass formula tokens.
-            if ( m_eGrammar != ScGrammar::GRAM_PODF_A1 && ( sFormula.trim().indexOf('=') == 0 ) )
+            if ( m_eGrammar != formula::FormulaGrammar::GRAM_PODF_A1 && ( sFormula.trim().indexOf('=') == 0 ) )
             {
                 uno::Reference< uno::XInterface > xIf( xCell, uno::UNO_QUERY_THROW );
                 ScCellRangesBase* pUnoRangesBase = dynamic_cast< ScCellRangesBase* >( xIf.get() );
                 if ( pUnoRangesBase )
                 {
                     ScRangeList aCellRanges = pUnoRangesBase->GetRangeList();
-                    ScCompiler aCompiler( m_pDoc, aCellRanges.First()->aStart, m_eGrammar );
+                    ScCompiler aCompiler( m_pDoc, aCellRanges.First()->aStart );
+                    aCompiler.SetGrammar(m_eGrammar);
                     // compile the string in the format passed in
                     aCompiler.CompileString( sFormula );
                     // set desired convention to that of the document
-                    aCompiler.SetGrammar( ScGrammar::GRAM_PODF_A1 );
+                    aCompiler.SetGrammar( formula::FormulaGrammar::GRAM_PODF_A1 );
                     String sConverted;
                     aCompiler.CreateStringFromTokenArray(sConverted);
                     sFormula = EQUALS + sConverted;
@@ -786,9 +787,9 @@ class CellFormulaValueGetter : public CellValueGetter
 {
 private:
     ScDocument*  m_pDoc;
-    ScGrammar::Grammar m_eGrammar;
+    formula::FormulaGrammar::Grammar m_eGrammar;
 public:
-    CellFormulaValueGetter(ScDocument* pDoc, ScGrammar::Grammar eGram ) : CellValueGetter( ), m_pDoc( pDoc ), m_eGrammar( eGram ) {}
+    CellFormulaValueGetter(ScDocument* pDoc, formula::FormulaGrammar::Grammar eGram ) : CellValueGetter( ), m_pDoc( pDoc ), m_eGrammar( eGram ) {}
     virtual void visitNode( sal_Int32 x, sal_Int32 y, const uno::Reference< table::XCell >& xCell )
     {
         uno::Any aValue;
@@ -801,7 +802,8 @@ public:
             pUnoRangesBase )
         {
             ScRangeList aCellRanges = pUnoRangesBase->GetRangeList();
-            ScCompiler aCompiler( m_pDoc, aCellRanges.First()->aStart, ScGrammar::GRAM_DEFAULT );
+            ScCompiler aCompiler( m_pDoc, aCellRanges.First()->aStart );
+            aCompiler.SetGrammar(formula::FormulaGrammar::GRAM_DEFAULT);
             aCompiler.CompileString( sVal );
             // set desired convention
             aCompiler.SetGrammar( m_eGrammar );
@@ -1009,7 +1011,7 @@ public:
 };
 
 bool
-getCellRangesForAddress( USHORT& rResFlags, const rtl::OUString& sAddress, ScDocShell* pDocSh, ScRangeList& rCellRanges, ScAddress::Convention& eConv )
+getCellRangesForAddress( USHORT& rResFlags, const rtl::OUString& sAddress, ScDocShell* pDocSh, ScRangeList& rCellRanges, formula::FormulaGrammar::AddressConvention& eConv )
 {
 
     ScDocument* pDoc = NULL;
@@ -1018,7 +1020,7 @@ getCellRangesForAddress( USHORT& rResFlags, const rtl::OUString& sAddress, ScDoc
         pDoc = pDocSh->GetDocument();
         String aString(sAddress);
         USHORT nMask = SCA_VALID;
-        //USHORT nParse = rCellRanges.Parse( sAddress, pDoc, nMask, ScAddress::CONV_XL_A1 );
+        //USHORT nParse = rCellRanges.Parse( sAddress, pDoc, nMask, formula::FormulaGrammar::CONV_XL_A1 );
         rResFlags = rCellRanges.Parse( sAddress, pDoc, nMask, eConv, 0 );
         if ( rResFlags & SCA_VALID )
         {
@@ -1028,7 +1030,7 @@ getCellRangesForAddress( USHORT& rResFlags, const rtl::OUString& sAddress, ScDoc
     return false;
 }
 
-bool getScRangeListForAddress( const rtl::OUString& sName, ScDocShell* pDocSh, ScRange& refRange, ScRangeList& aCellRanges, ScAddress::Convention aConv = ScAddress::CONV_XL_A1 ) throw ( uno::RuntimeException )
+bool getScRangeListForAddress( const rtl::OUString& sName, ScDocShell* pDocSh, ScRange& refRange, ScRangeList& aCellRanges, formula::FormulaGrammar::AddressConvention aConv = formula::FormulaGrammar::CONV_XL_A1 ) throw ( uno::RuntimeException )
 {
     // see if there is a match with a named range
     uno::Reference< beans::XPropertySet > xProps( pDocSh->GetModel(), uno::UNO_QUERY_THROW );
@@ -1051,7 +1053,7 @@ bool getScRangeListForAddress( const rtl::OUString& sName, ScDocShell* pDocSh, S
     for ( ; it != it_end; ++it )
     {
 
-        ScAddress::Convention eConv = aConv;
+        formula::FormulaGrammar::AddressConvention eConv = aConv;
         // spaces are illegal ( but the user of course can enter them )
         rtl::OUString sAddress = (*it).trim();
         if ( xNameAccess->hasByName( sAddress ) )
@@ -1084,7 +1086,7 @@ bool getScRangeListForAddress( const rtl::OUString& sName, ScDocShell* pDocSh, S
 
 
 ScVbaRange*
-getRangeForName( const uno::Reference< uno::XComponentContext >& xContext, const rtl::OUString& sName, ScDocShell* pDocSh, table::CellRangeAddress& pAddr, ScAddress::Convention eConv = ScAddress::CONV_XL_A1 ) throw ( uno::RuntimeException )
+getRangeForName( const uno::Reference< uno::XComponentContext >& xContext, const rtl::OUString& sName, ScDocShell* pDocSh, table::CellRangeAddress& pAddr, formula::FormulaGrammar::AddressConvention eConv = formula::FormulaGrammar::CONV_XL_A1 ) throw ( uno::RuntimeException )
 {
     ScRangeList aCellRanges;
     ScRange refRange;
@@ -1105,14 +1107,14 @@ getRangeForName( const uno::Reference< uno::XComponentContext >& xContext, const
 }
 
 css::uno::Reference< excel::XRange >
-ScVbaRange::getRangeObjectForName( const uno::Reference< uno::XComponentContext >& xContext, const rtl::OUString& sRangeName, ScDocShell* pDocSh, ScAddress::Convention eConv ) throw ( uno::RuntimeException )
+ScVbaRange::getRangeObjectForName( const uno::Reference< uno::XComponentContext >& xContext, const rtl::OUString& sRangeName, ScDocShell* pDocSh, formula::FormulaGrammar::AddressConvention eConv ) throw ( uno::RuntimeException )
 {
     table::CellRangeAddress refAddr;
     return getRangeForName( xContext, sRangeName, pDocSh, refAddr, eConv );
 }
 
 
-table::CellRangeAddress getCellRangeAddressForVBARange( const uno::Any& aParam, ScDocShell* pDocSh,  ScAddress::Convention aConv = ScAddress::CONV_XL_A1) throw ( uno::RuntimeException )
+table::CellRangeAddress getCellRangeAddressForVBARange( const uno::Any& aParam, ScDocShell* pDocSh,  formula::FormulaGrammar::AddressConvention aConv = formula::FormulaGrammar::CONV_XL_A1) throw ( uno::RuntimeException )
 {
     uno::Reference< table::XCellRange > xRangeParam;
     switch ( aParam.getValueTypeClass() )
@@ -1372,7 +1374,7 @@ ScVbaRange::ClearFormats() throw (uno::RuntimeException)
 }
 
 void
-ScVbaRange::setFormulaValue( const uno::Any& rFormula, ScGrammar::Grammar eGram ) throw (uno::RuntimeException)
+ScVbaRange::setFormulaValue( const uno::Any& rFormula, formula::FormulaGrammar::Grammar eGram ) throw (uno::RuntimeException)
 {
     // If this is a multiple selection apply setFormula over all areas
     if ( m_Areas->getCount() > 1 )
@@ -1387,7 +1389,7 @@ ScVbaRange::setFormulaValue( const uno::Any& rFormula, ScGrammar::Grammar eGram 
 }
 
 uno::Any
-ScVbaRange::getFormulaValue( ScGrammar::Grammar eGram ) throw (uno::RuntimeException)
+ScVbaRange::getFormulaValue( formula::FormulaGrammar::Grammar eGram ) throw (uno::RuntimeException)
 {
     // #TODO code within the test below "if ( m_Areas.... " can be removed
     // Test is performed only because m_xRange is NOT set to be
@@ -1407,25 +1409,25 @@ void
 ScVbaRange::setFormula(const uno::Any &rFormula ) throw (uno::RuntimeException)
 {
     // #FIXME converting "=$a$1" e.g. CONV_XL_A1 -> CONV_OOO                            // results in "=$a$1:a1", temporalily disable conversion
-    setFormulaValue( rFormula, ScGrammar::GRAM_NATIVE_XL_A1 );;
+    setFormulaValue( rFormula,formula::FormulaGrammar::GRAM_NATIVE_XL_A1 );;
 }
 
 uno::Any
 ScVbaRange::getFormulaR1C1() throw (::com::sun::star::uno::RuntimeException)
 {
-    return getFormulaValue( ScGrammar::GRAM_NATIVE_XL_R1C1 );
+    return getFormulaValue( formula::FormulaGrammar::GRAM_NATIVE_XL_R1C1 );
 }
 
 void
 ScVbaRange::setFormulaR1C1(const uno::Any& rFormula ) throw (uno::RuntimeException)
 {
-    setFormulaValue( rFormula, ScGrammar::GRAM_NATIVE_XL_R1C1 );
+    setFormulaValue( rFormula,formula::FormulaGrammar::GRAM_NATIVE_XL_R1C1 );
 }
 
 uno::Any
 ScVbaRange::getFormula() throw (::com::sun::star::uno::RuntimeException)
 {
-    return getFormulaValue( ScGrammar::GRAM_NATIVE_XL_A1 );
+    return getFormulaValue( formula::FormulaGrammar::GRAM_NATIVE_XL_A1 );
 }
 
 sal_Int32
@@ -1755,13 +1757,13 @@ ScVbaRange::Address(  const uno::Any& RowAbsolute, const uno::Any& ColumnAbsolut
         return sAddress;
 
     }
-    ScAddress::Details dDetails( ScAddress::CONV_XL_A1, 0, 0 );
+    ScAddress::Details dDetails( formula::FormulaGrammar::CONV_XL_A1, 0, 0 );
     if ( ReferenceStyle.hasValue() )
     {
         sal_Int32 refStyle = excel::XlReferenceStyle::xlA1;
         ReferenceStyle >>= refStyle;
         if ( refStyle == excel::XlReferenceStyle::xlR1C1 )
-            dDetails = ScAddress::Details( ScAddress::CONV_XL_R1C1, 0, 0 );
+            dDetails = ScAddress::Details( formula::FormulaGrammar::CONV_XL_R1C1, 0, 0 );
     }
     USHORT nFlags = SCA_VALID;
     ScDocShell* pDocShell =  getScDocShell();
@@ -1801,7 +1803,7 @@ ScVbaRange::Address(  const uno::Any& RowAbsolute, const uno::Any& ColumnAbsolut
         // #TODO should I throw an error if R1C1 is not set?
 
         table::CellRangeAddress refAddress = getCellRangeAddressForVBARange( RelativeTo, pDocShell );
-        dDetails = ScAddress::Details( ScAddress::CONV_XL_R1C1, static_cast< SCROW >( refAddress.StartRow ), static_cast< SCCOL >( refAddress.StartColumn ) );
+        dDetails = ScAddress::Details( formula::FormulaGrammar::CONV_XL_R1C1, static_cast< SCROW >( refAddress.StartRow ), static_cast< SCCOL >( refAddress.StartColumn ) );
     }
     aRange.Format( sRange,  nFlags, pDoc, dDetails );
     return sRange;
@@ -1986,7 +1988,7 @@ ScVbaRange::Rows(const uno::Any& aIndex ) throw (uno::RuntimeException)
 
         else if ( aIndex >>= sAddress )
         {
-            ScAddress::Details dDetails( ScAddress::CONV_XL_A1, 0, 0 );
+            ScAddress::Details dDetails( formula::FormulaGrammar::CONV_XL_A1, 0, 0 );
             ScRange tmpRange;
             tmpRange.ParseRows( sAddress, getDocumentFromRange( mxRange ), dDetails );
             nStartRow = tmpRange.aStart.Row();
@@ -2033,7 +2035,7 @@ ScVbaRange::Columns(const uno::Any& aIndex ) throw (uno::RuntimeException)
 
         else if ( aIndex >>= sAddress )
         {
-            ScAddress::Details dDetails( ScAddress::CONV_XL_A1, 0, 0 );
+            ScAddress::Details dDetails( formula::FormulaGrammar::CONV_XL_A1, 0, 0 );
             ScRange tmpRange;
             tmpRange.ParseCols( sAddress, getDocumentFromRange( mxRange ), dDetails );
             nStartCol = tmpRange.aStart.Col();

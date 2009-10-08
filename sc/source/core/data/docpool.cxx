@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: docpool.cxx,v $
- * $Revision: 1.25.32.1 $
+ * $Revision: 1.25.144.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -94,6 +94,7 @@ USHORT* ScDocumentPool::pVersionMap7 = 0;
 USHORT* ScDocumentPool::pVersionMap8 = 0;
 USHORT* ScDocumentPool::pVersionMap9 = 0;
 USHORT* ScDocumentPool::pVersionMap10 = 0;
+USHORT* ScDocumentPool::pVersionMap11 = 0;
 
 // ATTR_FONT_TWOLINES (not used) was changed to ATTR_USERDEF (not saved in binary format) in 641c
 
@@ -104,6 +105,7 @@ static SfxItemInfo __READONLY_DATA  aItemInfos[] =
     { SID_ATTR_CHAR_WEIGHT,         SFX_ITEM_POOLABLE },    // ATTR_FONT_WEIGHT
     { SID_ATTR_CHAR_POSTURE,        SFX_ITEM_POOLABLE },    // ATTR_FONT_POSTURE
     { SID_ATTR_CHAR_UNDERLINE,      SFX_ITEM_POOLABLE },    // ATTR_FONT_UNDERLINE
+    { SID_ATTR_CHAR_OVERLINE,       SFX_ITEM_POOLABLE },    // ATTR_FONT_OVERLINE
     { SID_ATTR_CHAR_STRIKEOUT,      SFX_ITEM_POOLABLE },    // ATTR_FONT_CROSSEDOUT
     { SID_ATTR_CHAR_CONTOUR,        SFX_ITEM_POOLABLE },    // ATTR_FONT_CONTOUR
     { SID_ATTR_CHAR_SHADOWED,       SFX_ITEM_POOLABLE },    // ATTR_FONT_SHADOWED
@@ -234,6 +236,7 @@ ScDocumentPool::ScDocumentPool( SfxItemPool* pSecPool, BOOL bLoadRefCounts )
     ppPoolDefaults[ ATTR_FONT_WEIGHT     - ATTR_STARTINDEX ] = new SvxWeightItem( WEIGHT_NORMAL, ATTR_FONT_WEIGHT );
     ppPoolDefaults[ ATTR_FONT_POSTURE    - ATTR_STARTINDEX ] = new SvxPostureItem( ITALIC_NONE, ATTR_FONT_POSTURE );
     ppPoolDefaults[ ATTR_FONT_UNDERLINE  - ATTR_STARTINDEX ] = new SvxUnderlineItem( UNDERLINE_NONE, ATTR_FONT_UNDERLINE );
+    ppPoolDefaults[ ATTR_FONT_OVERLINE   - ATTR_STARTINDEX ] = new SvxOverlineItem( UNDERLINE_NONE, ATTR_FONT_OVERLINE );
     ppPoolDefaults[ ATTR_FONT_CROSSEDOUT - ATTR_STARTINDEX ] = new SvxCrossedOutItem( STRIKEOUT_NONE, ATTR_FONT_CROSSEDOUT );
     ppPoolDefaults[ ATTR_FONT_CONTOUR    - ATTR_STARTINDEX ] = new SvxContourItem( sal_False, ATTR_FONT_CONTOUR );
     ppPoolDefaults[ ATTR_FONT_SHADOWED   - ATTR_STARTINDEX ] = new SvxShadowedItem( sal_False, ATTR_FONT_SHADOWED );
@@ -365,8 +368,14 @@ ScDocumentPool::ScDocumentPool( SfxItemPool* pSecPool, BOOL bLoadRefCounts )
     // ATTR_WRITINGDIR from 643y
     SetVersionMap( 9, 100, 182, pVersionMap9 );
 
+    // ATTR_PAGE_SCALETO added in 680/sab008
+    // new version map not required
+
     // ATTR_SHRINKTOFIT, ATTR_BORDER_TL_BR, ATTR_BORDER_BL_TR added in 680/dr14
-    SetVersionMap( 10, 100, 137, pVersionMap10 );
+    SetVersionMap( 10, 100, 184, pVersionMap10 );
+
+    // ATTR_FONT_OVERLINE added in DEV300/overline2
+    SetVersionMap( 11, 100, 187, pVersionMap11 );
 }
 
 __EXPORT ScDocumentPool::~ScDocumentPool()
@@ -389,7 +398,8 @@ void ScDocumentPool::InitVersionMaps()
                 !pVersionMap3 && !pVersionMap4 &&
                 !pVersionMap5 && !pVersionMap6 &&
                 !pVersionMap7 && !pVersionMap8 &&
-                !pVersionMap9 && !pVersionMap10, "InitVersionMaps call multiple times" );
+                !pVersionMap9 && !pVersionMap10 &&
+                !pVersionMap11, "InitVersionMaps call multiple times" );
 
     // alte WhichId's mappen
     // nicht mit ATTR_* zaehlen, falls die sich nochmal aendern
@@ -512,10 +522,12 @@ void ScDocumentPool::InitVersionMaps()
     for ( i=nMap9New, j=nMap9Start+nMap9New+1; i < nMap9Count; i++, j++ )
         pVersionMap9[i] = j;
 
+    // ATTR_PAGE_SCALETO added in 680/sab008
+
     // 10th map: ATTR_SHRINKTOFIT, ATTR_BORDER_TL_BR, ATTR_BORDER_BL_TR added in 680/dr14
 
     const USHORT nMap10Start = 100;  // ATTR_STARTINDEX
-    const USHORT nMap10End   = 185;  // ATTR_ENDINDEX
+    const USHORT nMap10End   = 184;  // ATTR_ENDINDEX
     const USHORT nMap10Count = nMap10End - nMap10Start + 1;
     const USHORT nMap10New   = 37;   // ATTR_SHRINKTOFIT - ATTR_STARTINDEX
     pVersionMap10 = new USHORT [ nMap10Count ];
@@ -524,6 +536,19 @@ void ScDocumentPool::InitVersionMaps()
     // 3 entries inserted
     for ( i=nMap10New, j=nMap10Start+nMap10New+3; i < nMap10Count; i++, j++ )
         pVersionMap10[i] = j;
+
+    // 11th map: ATTR_FONT_OVERLINE added in DEV300/overline2
+
+    const USHORT nMap11Start = 100;  // ATTR_STARTINDEX
+    const USHORT nMap11End   = 187;  // ATTR_ENDINDEX
+    const USHORT nMap11Count = nMap11End - nMap11Start + 1;
+    const USHORT nMap11New   = 5;    // ATTR_FONT_OVERLINE - ATTR_STARTINDEX
+    pVersionMap11 = new USHORT [ nMap11Count ];
+    for ( i=0, j=nMap11Start; i < nMap11New; i++, j++ )
+        pVersionMap11[i] = j;
+    // 1 entry inserted
+    for ( i=nMap11New, j=nMap11Start+nMap11New+1; i < nMap11Count; i++, j++ )
+        pVersionMap11[i] = j;
 }
 
 void ScDocumentPool::DeleteVersionMaps()
@@ -532,8 +557,11 @@ void ScDocumentPool::DeleteVersionMaps()
                 pVersionMap3 && pVersionMap4 &&
                 pVersionMap5 && pVersionMap6 &&
                 pVersionMap7 && pVersionMap8 &&
-                pVersionMap9 && pVersionMap10, "DeleteVersionMaps without maps" );
+                pVersionMap9 && pVersionMap10 &&
+                pVersionMap11, "DeleteVersionMaps without maps" );
 
+    delete[] pVersionMap11;
+    pVersionMap11 = 0;
     delete[] pVersionMap10;
     pVersionMap10 = 0;
     delete[] pVersionMap9;

@@ -44,6 +44,7 @@
 #include "collect.hxx"
 #include "cell.hxx"
 #include "dpcachetable.hxx"
+#include "dpobject.hxx"
 #include "globstr.hrc"
 
 #include <com/sun/star/sheet/DataPilotFieldFilter.hpp>
@@ -55,8 +56,8 @@ using namespace ::com::sun::star;
 using ::com::sun::star::uno::Any;
 using ::com::sun::star::uno::Sequence;
 using ::std::vector;
-using ::std::set;
 using ::std::hash_map;
+using ::std::hash_set;
 
 // -----------------------------------------------------------------------
 
@@ -74,17 +75,19 @@ public:
 
     ScDPCacheTable  aCacheTable;
 
-    ScSheetDPData_Impl() :
-        pSpecial(NULL)
+    ScSheetDPData_Impl(ScDPCollection* p) :
+        pSpecial(NULL),
+        aCacheTable(p)
     {
     }
 };
 
 // -----------------------------------------------------------------------
 
-ScSheetDPData::ScSheetDPData( ScDocument* pD, const ScSheetSourceDesc& rDesc )
+ScSheetDPData::ScSheetDPData( ScDocument* pD, const ScSheetSourceDesc& rDesc ) :
+    ScDPTableData(pD)
 {
-    pImpl = new ScSheetDPData_Impl;
+    pImpl = new ScSheetDPData_Impl(pD->GetDPCollection());
     pImpl->pDoc = pD;
     pImpl->aRange = rDesc.aSourceRange;
     pImpl->aQuery = rDesc.aQueryParam;
@@ -143,7 +146,7 @@ BOOL lcl_HasQuery( const ScQueryParam& rParam )
             rParam.GetEntry(0).bDoQuery;
 }
 
-const TypedStrCollection& ScSheetDPData::GetColumnEntries(long nColumn)
+const TypedScStrCollection& ScSheetDPData::GetColumnEntries(long nColumn)
 {
     DBG_ASSERT(nColumn>=0 && nColumn < pImpl->aCacheTable.getColSize(), "ScSheetDPData: wrong column");
     CreateCacheTable();
@@ -266,20 +269,22 @@ void ScSheetDPData::CreateCacheTable()
                                  pImpl->bIgnoreEmptyRows);
 }
 
-void ScSheetDPData::FilterCacheTable(const vector<ScDPCacheTable::Criterion>& rCriteria)
+void ScSheetDPData::FilterCacheTable(const vector<ScDPCacheTable::Criterion>& rCriteria, const hash_set<sal_Int32>& rCatDims)
 {
     CreateCacheTable();
-    pImpl->aCacheTable.filterByPageDimension(rCriteria, IsRepeatIfEmpty());
+    pImpl->aCacheTable.filterByPageDimension(
+        rCriteria, (IsRepeatIfEmpty() ? rCatDims : hash_set<sal_Int32>()));
 }
 
-void ScSheetDPData::GetDrillDownData(const vector<ScDPCacheTable::Criterion>& rCriteria, Sequence< Sequence<Any> >& rData)
+void ScSheetDPData::GetDrillDownData(const vector<ScDPCacheTable::Criterion>& rCriteria, const hash_set<sal_Int32>& rCatDims, Sequence< Sequence<Any> >& rData)
 {
     CreateCacheTable();
     sal_Int32 nRowSize = pImpl->aCacheTable.getRowSize();
     if (!nRowSize)
         return;
 
-    pImpl->aCacheTable.filterTable(rCriteria, rData, IsRepeatIfEmpty());
+    pImpl->aCacheTable.filterTable(
+        rCriteria, rData, IsRepeatIfEmpty() ? rCatDims : hash_set<sal_Int32>());
 }
 
 void ScSheetDPData::CalcResults(CalcInfo& rInfo, bool bAutoShow)

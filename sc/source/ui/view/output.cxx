@@ -91,7 +91,7 @@ class ScActionColorChanger
 {
 private:
     const ScAppOptions&     rOpt;
-    const StrCollection&    rUsers;
+    const ScStrCollection&  rUsers;
     String                  aLastUserName;
     USHORT                  nLastUserIndex;
     ColorData               nColor;
@@ -1315,7 +1315,7 @@ const SvxBorderLine* lcl_FindHorLine( ScDocument* pDoc,
     else
         pNextTop = NULL;
 
-    if ( HasPriority( pThisBottom, pNextTop ) )
+    if ( ScHasPriority( pThisBottom, pNextTop ) )
         return pThisBottom;
     else
         return pNextTop;

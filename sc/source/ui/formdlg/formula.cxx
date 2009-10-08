@@ -40,16 +40,19 @@
 #include <sfx2/docfile.hxx>
 #include <sfx2/objsh.hxx>
 #include <svtools/zforlist.hxx>
+#include <svtools/stritem.hxx>
+#include <svtools/svtreebx.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/topfrm.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/mnemonic.hxx>
 #include <unotools/charclass.hxx>
-#include <svtools/stritem.hxx>
 #include <tools/urlobj.hxx>
+#include <formula/formulahelper.hxx>
+#include <formula/IFunctionDescription.hxx>
 
+#include "tokenuno.hxx"
 #include "formula.hxx"
-#include "formdlgs.hrc"
 #include "formdata.hxx"
 #include "globstr.hrc"
 #include "scresid.hxx"
@@ -62,185 +65,87 @@
 #include "appoptio.hxx"
 #include "docsh.hxx"
 #include "funcdesc.hxx"
+#include "formula/token.hxx"
+#include "tokenarray.hxx"
+#include "sc.hrc"
+#include "servuno.hxx"
+#include "unonames.hxx"
+
+#include <com/sun/star/table/CellAddress.hpp>
 
 //============================================================================
+using namespace formula;
+using namespace com::sun::star;
 
 ScDocument* ScFormulaDlg::pDoc = NULL;
 ScAddress ScFormulaDlg::aCursorPos;
 
 
 
-inline void ShowHide( Window& rWin, BOOL bShow )
-{
-    if (bShow)
-        rWin.Show();
-    else
-        rWin.Hide();
-}
-
 //  --------------------------------------------------------------------------
 //      Initialisierung / gemeinsame Funktionen  fuer Dialog
 //  --------------------------------------------------------------------------
 
 ScFormulaDlg::ScFormulaDlg( SfxBindings* pB, SfxChildWindow* pCW,
-                                    Window* pParent, ScViewData* pViewData ) :
-        ScAnyRefDlg     ( pB, pCW, pParent, RID_SCDLG_FORMULA ),
-        //
-        aTabCtrl        ( this, ScResId( TC_FUNCTION ) ),
-        aGbEdit         ( this, ScResId( GB_EDIT ) ),
-        aScParaWin      ( this, aGbEdit.GetPosPixel()),
-        aFtHeadLine     ( this, ScResId( FT_HEADLINE ) ),
-        aFtFuncName     ( this, ScResId( FT_FUNCNAME ) ),
-        aFtFuncDesc     ( this, ScResId( FT_FUNCDESC ) ),
-        //
-        aFtEditName     ( this, ScResId( FT_EDITNAME ) ),
-        aFtResult       ( this, ScResId( FT_RESULT ) ),
-        aWndResult      ( this, ScResId( WND_RESULT ) ),
-
-        aFtFormula      ( this, ScResId( FT_FORMULA ) ),
-        aMEFormula      ( this, ScResId( ED_FORMULA ) ),
-        //
-        aBtnMatrix      ( this, ScResId( BTN_MATRIX ) ),
-        aBtnHelp        ( this, ScResId( BTN_HELP ) ),
-        aBtnCancel      ( this, ScResId( BTN_CANCEL ) ),
-        aBtnBackward    ( this, ScResId( BTN_BACKWARD ) ),
-        aBtnForward     ( this, ScResId( BTN_FORWARD ) ),
-        aBtnEnd         ( this, ScResId( BTN_END ) ),
-        aEdRef          ( this, ScResId( ED_REF) ),
-        aRefBtn         ( this, ScResId( RB_REF),&aEdRef ),
-        aFtFormResult   ( this, ScResId( FT_FORMULA_RESULT)),
-        aWndFormResult  ( this, ScResId( WND_FORMULA_RESULT)),
-        //
-        pTheRefEdit     (NULL),
-        pScTokA         (NULL),
-        pMEdit          (NULL),
-        bUserMatrixFlag (FALSE),
-        //
-        aTitle1         ( ScResId( STR_TITLE1 ) ),      // lokale Resource
-        aTitle2         ( ScResId( STR_TITLE2 ) ),      // lokale Resource
-        aTxtEnd         ( ScResId( SCSTR_END ) ),       // globale Resource
-        aTxtOk          ( aBtnEnd.GetText() ),
-        //
-        nActivWinId     (0),
-        bIsShutDown     (FALSE),
-        nEdFocus        (0),
-        pFuncDesc       (NULL),
-        nArgs           (0),
-        pArgArr         (NULL)
+                                    Window* pParent, ScViewData* pViewData,formula::IFunctionManager* _pFunctionMgr )
+    : formula::FormulaDlg( pB, pCW, pParent, true,true,true,this, _pFunctionMgr,this)
+    , m_aHelper(this,pB)
 {
-    FreeResource();
-    SetText(aTitle1);
-
-    aEdRef.Hide();
-    aRefBtn.Hide();
-
-    pMEdit=aMEFormula.GetEdit();
-    bEditFlag=FALSE;
-    bStructUpdate=TRUE;
-    Point aPos=aGbEdit.GetPosPixel();
-    aScParaWin.SetPosPixel(aPos);
-    aScParaWin.SetArgModifiedHdl(LINK( this, ScFormulaDlg, ModifyHdl ) );
-    aScParaWin.SetFxHdl(LINK( this, ScFormulaDlg, FxHdl ) );
-
-    pScFuncPage= new    ScFuncPage( &aTabCtrl);
-    pScStructPage= new  ScStructPage( &aTabCtrl);
-    pScFuncPage->Hide();
-    pScStructPage->Hide();
-    aTabCtrl.SetTabPage( TP_FUNCTION, pScFuncPage);
-    aTabCtrl.SetTabPage( TP_STRUCT, pScStructPage);
-
-    nOldHelp = GetHelpId();             // HelpId aus Resource immer fuer "Seite 1"
-    nOldUnique = GetUniqueId();
-
-    aBtnMatrix.SetClickHdl(LINK( this, ScFormulaDlg, MatrixHdl ) );
-    aBtnCancel  .SetClickHdl( LINK( this, ScFormulaDlg, BtnHdl ) );
-    aBtnEnd     .SetClickHdl( LINK( this, ScFormulaDlg, BtnHdl ) );
-    aBtnForward .SetClickHdl( LINK( this, ScFormulaDlg, BtnHdl ) );
-    aBtnBackward.SetClickHdl( LINK( this, ScFormulaDlg, BtnHdl ) );
-
-    pScFuncPage->SetDoubleClickHdl( LINK( this, ScFormulaDlg, DblClkHdl ) );
-    pScFuncPage->SetSelectHdl( LINK( this, ScFormulaDlg, FuncSelHdl) );
-    pScStructPage->SetSelectionHdl( LINK( this, ScFormulaDlg, StructSelHdl ) );
-    pMEdit->SetModifyHdl( LINK( this, ScFormulaDlg, FormulaHdl ) );
-    aMEFormula  .SetSelChangedHdl( LINK( this, ScFormulaDlg, FormulaCursorHdl ) );
-
-    aFntLight = aFtFormula.GetFont();
-    aFntLight.SetTransparent( TRUE );
-    aFntBold = aFntLight;
-    aFntBold.SetWeight( WEIGHT_BOLD );
-
-    aScParaWin.SetArgumentFonts(aFntBold,aFntLight);
-
-    //  function description for choosing a function is no longer in a different color
-
-    aFtHeadLine.SetFont(aFntBold);
-    aFtFuncName.SetFont(aFntLight);
-    aFtFuncDesc.SetFont(aFntLight);
-
+    m_aHelper.SetWindow(this);
     ScModule* pScMod = SC_MOD();
+    pScMod->InputEnterHandler();
+    ScTabViewShell* pScViewShell = NULL;
 
-    ScInputHandler* pInputHdl = pScMod->GetInputHdl();
+    // title has to be from the view that opened the dialog,
+    // even if it's not the current view
+
+    SfxObjectShell* pParentDoc = NULL;
+    if ( pB )
+    {
+        SfxDispatcher* pMyDisp = pB->GetDispatcher();
+        if (pMyDisp)
+        {
+            SfxViewFrame* pMyViewFrm = pMyDisp->GetFrame();
+            if (pMyViewFrm)
+            {
+                pScViewShell = PTR_CAST( ScTabViewShell, pMyViewFrm->GetViewShell() );
+                if( pScViewShell )
+                    pScViewShell->UpdateInputHandler(TRUE);
+                pParentDoc = pMyViewFrm->GetObjectShell();
+            }
+        }
+    }
+    //if ( !pParentDoc && pScViewShell )                    // use current only if above fails
+    //  pParentDoc = pScViewShell->GetObjectShell();
+    //if ( pParentDoc )
+    //  aDocName = pParentDoc->GetTitle();
+
+    if ( pDoc == NULL )
+        pDoc = pViewData->GetDocument();
+    m_xParser.set(ScServiceProvider::MakeInstance(SC_SERVICE_FORMULAPARS,(ScDocShell*)pDoc->GetDocumentShell()),uno::UNO_QUERY);
+    uno::Reference< beans::XPropertySet> xSet(m_xParser,uno::UNO_QUERY);
+    xSet->setPropertyValue(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNO_COMPILEFAP)),uno::makeAny(sal_True));
+    xSet->setPropertyValue(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNO_REFERENCEPOS)),uno::makeAny(table::CellAddress(aCursorPos.Tab(),aCursorPos.Col(),aCursorPos.Row())));
+
+    m_xOpCodeMapper.set(ScServiceProvider::MakeInstance(SC_SERVICE_OPCODEMAPPER,(ScDocShell*)pDoc->GetDocumentShell()),uno::UNO_QUERY);
+
+    ScInputHandler* pInputHdl = SC_MOD()->GetInputHdl(pScViewShell);
+
+    DBG_ASSERT( pInputHdl, "Missing input handler :-/" );
+
     if ( pInputHdl )
         pInputHdl->NotifyChange( NULL );
 
+    m_aHelper.enableInput( FALSE );
+    m_aHelper.EnableSpreadsheets();
+    m_aHelper.Init();
+    m_aHelper.SetDispatcherLock( TRUE );
+
+    notifyChange();
+    fill();
 
     ScFormEditData* pData = pScMod->GetFormEditData();
-    String rStrExp;
-    if (pData)
-    {
-        //  Daten schon vorhanden -> Zustand wiederherstellen (nach Umschalten)
-        //  pDoc und aCursorPos nicht neu initialisieren
-        //pDoc = pViewData->GetDocument();
-        if(IsInputHdl(pData->GetInputHandler()))
-        {
-            pScMod->SetRefInputHdl(pData->GetInputHandler());
-        }
-        else
-        {
-            PtrTabViewShell pTabViewShell;
-            pInputHdl=GetNextInputHandler(pData->GetDocShell(),&pTabViewShell);
-
-            if(pInputHdl==NULL) //DocShell hat keinen InputHandler mehr,
-            {                   //hat der Anwender halt Pech gehabt.
-                aBtnEnd.Disable();
-                pInputHdl=pScMod->GetInputHdl();
-            }
-            else
-            {
-                pInputHdl->SetRefViewShell(pTabViewShell);
-            }
-            pScMod->SetRefInputHdl(pInputHdl);
-            pData->SetInputHandler(pInputHdl);
-        }
-
-        String aOldFormulaTmp(pScMod->InputGetFormulaStr());
-        pScMod->InputSetSelection( 0, aOldFormulaTmp.Len());
-
-        rStrExp=pData->GetUndoStr();
-        pScMod->InputReplaceSelection(rStrExp);
-        pMEdit->SetText(rStrExp);
-        pMEdit->SetSelection( pData->GetSelection());
-        aMEFormula.UpdateOldSel();
-
-        pCell = new ScFormulaCell( pDoc, aCursorPos, rStrExp );
-        pComp=new ScCompiler( pDoc, aCursorPos, pDoc->GetGrammar() );
-        pComp->SetCompileForFAP(TRUE);
-        UpdateTokenArray(pMEdit->GetText());
-        FormulaCursorHdl(&aMEFormula);
-        CalcStruct(rStrExp);
-        if(pData->GetMode()==SC_FORMDLG_FORMULA)
-            aTabCtrl.SetCurPageId(TP_FUNCTION);
-        else
-            aTabCtrl.SetCurPageId(TP_STRUCT);
-        aBtnMatrix.Check(pData->GetMatrixFlag());
-        aTimer.SetTimeout(200);
-        aTimer.SetTimeoutHdl(LINK( this, ScFormulaDlg, UpdateFocusHdl));
-        aTimer.Start();
-
-        // Jetzt nochmals zurueckschalten, da evtl. neues Doc geoeffnet wurde!
-        pScMod->SetRefInputHdl(NULL);
-    }
-    else
+    if (!pData)
     {
         //Nun wird es Zeit den Inputhandler festzulegen
         pScMod->SetRefInputHdl(pScMod->GetInputHdl());
@@ -258,7 +163,7 @@ ScFormulaDlg::ScFormulaDlg( SfxBindings* pB, SfxChildWindow* pCW,
 
         DBG_ASSERT(pData,"FormEditData ist nicht da");
 
-        ScFormulaDlgMode eMode = SC_FORMDLG_FORMULA;            // Default...
+        formula::FormulaDlgMode eMode = FORMULA_FORMDLG_FORMULA;            // Default...
 
         //  Formel vorhanden? Dann editieren
 
@@ -268,56 +173,19 @@ ScFormulaDlg::ScFormulaDlg( SfxBindings* pB, SfxChildWindow* pCW,
         BOOL bMatrix = FALSE;
         if ( bEdit )
         {
-            pMEdit->GrabFocus();
-            xub_StrLen nLen = aFormula.Len();
-            bMatrix =  nLen > 3                     // Matrix-Formel ?
-                    && aFormula.GetChar(0) == '{'
-                    && aFormula.GetChar(1) == '='
-                    && aFormula.GetChar(nLen-1) == '}';
-            if ( bMatrix )
-            {
-                aFormula.Erase( 0, 1 );
-                aFormula.Erase( aFormula.Len()-1, 1);
-                aBtnMatrix.Check( bMatrix );
-                aBtnMatrix.Disable();
-            }
-
-            // #40892# auch Formeln mit Fehlern koennen editiert werden
-            // (ob ueberhaupt gueltige Funktionen enthalten sind, wird bei
-            // ScFormulaUtil::GetNextFunc getestet)
-#if 0
-            //  Test auf Fehler (ohne Interpretieren, also nur Compiler-Fehler)
-            ScFormulaCell aCell( pDoc, aCursorPos, aFormula);
-            BOOL bAutoCalc = pDoc->GetAutoCalc();
-            pDoc->SetAutoCalc( FALSE );             // Interpretieren fuer GetErrCode abstellen
-            USHORT  nErrCode = aCell.GetErrCode();
-            pDoc->SetAutoCalc( bAutoCalc );
-            bEdit = ( nErrCode == 0 );
-#endif
-        }
-
-        if ( bEdit )
-        {
-            aTabCtrl.SetCurPageId(TP_STRUCT);
+            bMatrix = CheckMatrix(aFormula);
 
             xub_StrLen nFStart = 0;
             xub_StrLen nFEnd   = 0;
-            if ( ScFormulaUtil::GetNextFunc( aFormula, FALSE, nFStart, &nFEnd) )
+            if ( GetFormulaHelper().GetNextFunc( aFormula, FALSE, nFStart, &nFEnd) )
             {
                 pScMod->InputReplaceSelection( aFormula );
                 pScMod->InputSetSelection( nFStart, nFEnd );
-                if(!bEditFlag)
-                    pMEdit->SetText(pScMod->InputGetFormulaStr());
                 xub_StrLen PrivStart, PrivEnd;
                 pScMod->InputGetSelection( PrivStart, PrivEnd);
-                pMEdit->SetSelection( Selection(PrivStart, PrivEnd));
-                aMEFormula.UpdateOldSel();
-                pMEdit->Invalidate();
-                HighlightFunctionParas(pMEdit->GetSelected());
-                eMode = SC_FORMDLG_EDIT;
 
-                pData->SetFStart(nFStart );
-                aBtnMatrix.Check( bMatrix );
+                eMode = SetMeText(pScMod->InputGetFormulaStr(),PrivStart, PrivEnd,bMatrix,TRUE,TRUE);
+                pData->SetFStart( nFStart );
             }
             else
                 bEdit = FALSE;
@@ -326,33 +194,83 @@ ScFormulaDlg::ScFormulaDlg( SfxBindings* pB, SfxChildWindow* pCW,
         if ( !bEdit )
         {
             String aNewFormula = '=';
-            if(aFormula.Len()>0)
-            {
-                if ( aFormula.GetChar(0) == '=' )
-                    aNewFormula=aFormula;
-            }
+            if ( aFormula.Len() > 0 && aFormula.GetChar(0) == '=' )
+                aNewFormula=aFormula;
+
             pScMod->InputReplaceSelection( aNewFormula );
             pScMod->InputSetSelection( 1, aNewFormula.Len()+1 );
-            if(!bEditFlag)
-                pMEdit->SetText(pScMod->InputGetFormulaStr());
             xub_StrLen PrivStart, PrivEnd;
             pScMod->InputGetSelection( PrivStart, PrivEnd);
-            if(!bEditFlag)
-                pMEdit->SetSelection( Selection(PrivStart, PrivEnd));
+            SetMeText(pScMod->InputGetFormulaStr(),PrivStart, PrivEnd,bMatrix,FALSE,FALSE);
 
             pData->SetFStart( 1 );      // hinter dem "="
         }
 
         pData->SetMode( (USHORT) eMode );
-        rStrExp=pMEdit->GetText();
-        pCell = new ScFormulaCell( pDoc, aCursorPos, rStrExp );
-        pComp=new ScCompiler( pDoc, aCursorPos, pDoc->GetGrammar() );
-        pComp->SetCompileForFAP(TRUE);
-        CalcStruct(rStrExp);
-        FillDialog();
-        //aBtnForward.Enable(TRUE); //@New
-        FuncSelHdl(NULL);
+        String rStrExp = GetMeText();
 
+        pCell = new ScFormulaCell( pDoc, aCursorPos, rStrExp );
+
+        Update(rStrExp);
+    } // if (!pData)
+
+}
+
+void ScFormulaDlg::notifyChange()
+{
+    ScModule* pScMod = SC_MOD();
+
+    ScInputHandler* pInputHdl = pScMod->GetInputHdl();
+    if ( pInputHdl )
+        pInputHdl->NotifyChange( NULL );
+}
+// -----------------------------------------------------------------------------
+void ScFormulaDlg::fill()
+{
+    ScModule* pScMod = SC_MOD();
+    ScFormEditData* pData = pScMod->GetFormEditData();
+    notifyChange();
+    String rStrExp;
+    if (pData)
+    {
+        //  Daten schon vorhanden -> Zustand wiederherstellen (nach Umschalten)
+        //  pDoc und aCursorPos nicht neu initialisieren
+        //pDoc = pViewData->GetDocument();
+        if(IsInputHdl(pData->GetInputHandler()))
+        {
+            pScMod->SetRefInputHdl(pData->GetInputHandler());
+        }
+        else
+        {
+            PtrTabViewShell pTabViewShell;
+            ScInputHandler* pInputHdl = GetNextInputHandler(pData->GetDocShell(),&pTabViewShell);
+
+            if ( pInputHdl == NULL ) //DocShell hat keinen InputHandler mehr,
+            {                   //hat der Anwender halt Pech gehabt.
+                disableOk();
+                pInputHdl = pScMod->GetInputHdl();
+            }
+            else
+            {
+                pInputHdl->SetRefViewShell(pTabViewShell);
+            }
+            pScMod->SetRefInputHdl(pInputHdl);
+            pData->SetInputHandler(pInputHdl);
+        }
+
+        String aOldFormulaTmp(pScMod->InputGetFormulaStr());
+        pScMod->InputSetSelection( 0, aOldFormulaTmp.Len());
+
+        rStrExp=pData->GetUndoStr();
+        pScMod->InputReplaceSelection(rStrExp);
+
+        SetMeText(rStrExp);
+
+        pCell = new ScFormulaCell( pDoc, aCursorPos, rStrExp );
+
+        Update();
+        // Jetzt nochmals zurueckschalten, da evtl. neues Doc geoeffnet wurde!
+        pScMod->SetRefInputHdl(NULL);
     }
 }
 
@@ -364,35 +282,10 @@ __EXPORT ScFormulaDlg::~ScFormulaDlg()
     if (pData) // wird nicht ueber Close zerstoert;
     {
         //Referenz Inputhandler zuruecksetzen
-
         pScMod->SetRefInputHdl(NULL);
+    } // if (pData) // wird nicht ueber Close zerstoert;
 
-        if(aTimer.IsActive())
-        {
-            aTimer.SetTimeoutHdl(Link());
-            aTimer.Stop();
-        }
-        bIsShutDown=TRUE;// Setzen, damit PreNotify keinen GetFocus speichert.
-
-        pData->SetFStart((xub_StrLen)pMEdit->GetSelection().Min());
-        pData->SetSelection(pMEdit->GetSelection());
-
-        if(aTabCtrl.GetCurPageId()==TP_FUNCTION)
-            pData->SetMode( (USHORT) SC_FORMDLG_FORMULA );
-        else
-            pData->SetMode( (USHORT) SC_FORMDLG_EDIT );
-        pData->SetUndoStr(pMEdit->GetText());
-        pData->SetMatrixFlag(aBtnMatrix.IsChecked());
-    }
-
-    aTabCtrl.RemovePage(TP_FUNCTION);
-    aTabCtrl.RemovePage(TP_STRUCT);
-
-    delete pComp;
     delete pCell;
-    delete pScStructPage;
-    delete pScFuncPage;
-    DeleteArgs();
 }
 
 BOOL ScFormulaDlg::IsInputHdl(ScInputHandler* pHdl)
@@ -436,973 +329,110 @@ ScInputHandler* ScFormulaDlg::GetNextInputHandler(ScDocShell* pDocShell,PtrTabVi
 }
 
 
-
-void ScFormulaDlg::FillDialog(BOOL nFlag)
-{
-    if(nFlag) FillControls();
-    FillListboxes();
-
-    String aStrResult;
-
-    ScModule* pScMod = SC_MOD();
-    if ( CalcValue(pScMod->InputGetFormulaStr(), aStrResult ) )
-        aWndFormResult.SetValue( aStrResult );
-    else
-    {
-        aStrResult.Erase();
-        aWndFormResult.SetValue( aStrResult );
-    }
-
-}
-
-void ScFormulaDlg::FillListboxes()
-{
-    //  Umschalten zwischen den "Seiten"
-
-    ScModule* pScMod = SC_MOD();
-    ScFormEditData* pData = pScMod->GetFormEditData();
-
-    String aNewTitle;
-    //  1. Seite: Funktion auswaehlen
-
-    if(pFuncDesc)
-    {
-        if(pScFuncPage->GetCategory()!=pFuncDesc->nCategory+1)
-                pScFuncPage->SetCategory(pFuncDesc->nCategory+1);
-
-        USHORT nPos=pScFuncPage->GetFuncPos(pFuncDesc);
-
-        pScFuncPage->SetFunction(nPos);
-    }
-    else if (pData)
-    {
-        pScFuncPage->SetCategory(pData->GetCatSel() );
-        pScFuncPage->SetFunction( pData->GetFuncSel() );
-    }
-    FuncSelHdl(NULL);
-
-    //  ResizeArgArr jetzt schon in UpdateFunctionDesc
-
-    //pScFuncPage->GetFunctionPtr()->GrabFocus();
-
-    SetDispatcherLock( TRUE ); // Modal-Modus einschalten
-
-    /*
-    aBtnBackward.Enable(FALSE);
-    aBtnForward.Enable(TRUE);
-    */
-    aNewTitle = aTitle1;
-
-    //  HelpId fuer 1. Seite ist die aus der Resource
-    SetHelpId( nOldHelp );
-    SetUniqueId( nOldUnique );
-
-}
-void ScFormulaDlg::FillControls()
-{
-    //  Umschalten zwischen den "Seiten"
-
-    ScModule* pScMod = SC_MOD();
-    ScFormEditData* pData = pScMod->GetFormEditData();
-    if (!pData) return;
-
-    String aNewTitle;
-    //  2. Seite oder Editieren: ausgewaehlte Funktion anzeigen
-
-    xub_StrLen nFStart     = pData->GetFStart();
-    String aFormula        = pScMod->InputGetFormulaStr();
-    xub_StrLen nNextFStart = nFStart;
-    xub_StrLen nNextFEnd   = 0;
-
-    aFormula.AppendAscii(RTL_CONSTASCII_STRINGPARAM( " )" ));
-    DeleteArgs();
-    const ScFuncDesc*       pOldFuncDesc=pFuncDesc;
-    BOOL            bTestFlag=FALSE;
-
-    if ( ScFormulaUtil::GetNextFunc( aFormula, FALSE,
-                                     nNextFStart, &nNextFEnd, &pFuncDesc, &pArgArr ) )
-    {
-        bTestFlag=(pOldFuncDesc!=pFuncDesc);
-        if(bTestFlag)
-        {
-            aFtHeadLine.Hide();
-            aFtFuncName.Hide();
-            aFtFuncDesc.Hide();
-            aScParaWin.SetFunctionDesc(pFuncDesc);
-            if(pFuncDesc->pFuncName)
-                aFtEditName.SetText( *(pFuncDesc->pFuncName) );
-            else
-                aFtEditName.SetText( EMPTY_STRING);
-
-        }
-
-        xub_StrLen nOldStart, nOldEnd;
-        pScMod->InputGetSelection( nOldStart, nOldEnd );
-        if ( nOldStart != nNextFStart || nOldEnd != nNextFEnd )
-        {
-            pScMod->InputSetSelection( nNextFStart, nNextFEnd );
-        }
-        aFuncSel.Min()=nNextFStart;
-        aFuncSel.Max()=nNextFEnd;
-
-        if(!bEditFlag)
-            pMEdit->SetText(pScMod->InputGetFormulaStr());
-        xub_StrLen PrivStart, PrivEnd;
-        pScMod->InputGetSelection( PrivStart, PrivEnd);
-        if(!bEditFlag)
-            pMEdit->SetSelection( Selection(PrivStart, PrivEnd));
-
-        nArgs = pFuncDesc->GetSuppressedArgCount();
-        USHORT nOffset = pData->GetOffset();
-        nEdFocus = pData->GetEdFocus();
-
-        //  Verkettung der Edit's fuer Focus-Kontrolle
-
-        if(bTestFlag)
-            aScParaWin.SetArgumentOffset(nOffset);
-        USHORT nActiv=0;
-        xub_StrLen nArgPos=ScFormulaUtil::GetArgStart( aFormula, nFStart, 0 );
-        xub_StrLen nEditPos=(xub_StrLen) pMEdit->GetSelection().Min();
-        BOOL    bFlag=FALSE;
-
-        for(USHORT i=0;i<nArgs;i++)
-        {
-            xub_StrLen nLength=(pArgArr[i])->Len()+1;
-            aScParaWin.SetArgument(i,*(pArgArr[i]));
-            if(nArgPos<=nEditPos && nEditPos<nArgPos+nLength)
-            {
-                nActiv=i;
-                bFlag=TRUE;
-            }
-            nArgPos = sal::static_int_cast<xub_StrLen>( nArgPos + nLength );
-        }
-        aScParaWin.UpdateParas();
-
-        if(bFlag)
-        {
-            aScParaWin.SetActiveLine(nActiv);
-        }
-
-        //aScParaWin.SetEdFocus( nEdFocus );
-        UpdateValues();
-    }
-    else
-    {
-        aFtEditName.SetText(EMPTY_STRING);
-    }
-        //  Test, ob vorne/hinten noch mehr Funktionen sind
-
-    xub_StrLen nTempStart = ScFormulaUtil::GetArgStart( aFormula, nFStart, 0 );
-    BOOL bNext = ScFormulaUtil::GetNextFunc( aFormula, FALSE, nTempStart );
-    nTempStart=(xub_StrLen)pMEdit->GetSelection().Min();
-    pData->SetFStart(nTempStart);
-    BOOL bPrev = ScFormulaUtil::GetNextFunc( aFormula, TRUE, nTempStart );
-    aBtnBackward.Enable(bPrev);
-    aBtnForward.Enable(bNext);
-}
-
-void ScFormulaDlg::ClearAllParas()
-{
-    DeleteArgs();
-    pFuncDesc=NULL;
-    aScParaWin.ClearAll();
-    aWndResult.SetValue(EMPTY_STRING);
-    aFtEditName.SetText(EMPTY_STRING);
-    FuncSelHdl(NULL);
-
-    if(pScFuncPage->IsVisible())
-    {
-        aBtnForward.Enable(TRUE); //@new
-        aFtHeadLine.Show();
-        aFtFuncName.Show();
-        aFtFuncDesc.Show();
-        aFtHeadLine.ToTop();
-        aFtFuncName.ToTop();
-        aFtFuncDesc.ToTop();
-    }
-}
-
-void ScFormulaDlg::DeleteArgs()
-{
-    if ( pArgArr )
-    {
-        for ( USHORT i=0; i<nArgs; i++ )
-            delete pArgArr[i];
-        delete [] pArgArr;
-    }
-
-    pArgArr = NULL;
-    nArgs = 0;
-}
-
 BOOL __EXPORT ScFormulaDlg::Close()
 {
     DoEnter(FALSE);
     return TRUE;
 }
 
-void ScFormulaDlg::DoEnter(BOOL bOk)
-{
-    //  Eingabe ins Dokument uebernehmen oder abbrechen
-
-    ScModule* pScMod = SC_MOD();
-
-    if ( bOk)
-    {
-        //  ggf. Dummy-Argumente entfernen
-        String  aInputFormula=pScMod->InputGetFormulaStr();
-        String  aString=RepairFormula(pMEdit->GetText());
-        pScMod->InputSetSelection(0, aInputFormula.Len());
-        pScMod->InputReplaceSelection(aString);
-    }
-
-    // auf das Dokument zurueckschalten
-    // (noetig, weil ein fremdes oben sein kann - #34222#)
-    ScInputHandler* pHdl = pScMod->GetInputHdl();
-    if ( pHdl )
-    {
-        pHdl->ViewShellGone(NULL);  // -> aktive View neu holen
-        pHdl->ShowRefFrame();
-    }
-
-    // aktuelle Tabelle ggF. restaurieren (wg. Maus-RefInput)
-    ScTabViewShell* pScViewShell = PTR_CAST(ScTabViewShell, SfxViewShell::Current());
-    if ( pScViewShell )
-    {
-        ScViewData* pVD=pScViewShell->GetViewData();
-        SCTAB nExecTab = aCursorPos.Tab();
-        if ( nExecTab != pVD->GetTabNo() )
-            pScViewShell->SetTabNo( nExecTab );
-
-        SCROW nRow=aCursorPos.Row();
-        SCCOL nCol=aCursorPos.Col();
-
-        if(pVD->GetCurX()!=nCol || pVD->GetCurY()!=nRow)
-            pScViewShell->SetCursor(nCol,nRow);
-    }
-
-    SfxBoolItem   aRetItem( SID_DLG_RETOK, bOk );
-    SfxBoolItem   aMatItem( SID_DLG_MATRIX, aBtnMatrix.IsChecked() );
-    SfxStringItem aStrItem( SCITEM_STRING, pScMod->InputGetFormulaStr() );
-
-    // Wenn durch Dokument-Umschalterei die Eingabezeile weg war/ist,
-    // ist der String leer. Dann nicht die alte Formel loeschen.
-    if ( !aStrItem.GetValue().Len() )
-        aRetItem.SetValue( FALSE );     // FALSE = Cancel
-
-    SetDispatcherLock( FALSE ); // Modal-Modus ausschalten
-
-    pDoc = NULL;
-
-    //Referenz Inputhandler zuruecksetzen
-
-    pScMod->SetRefInputHdl(NULL);
-
-
-    // Enable() der Eingabezeile erzwingen:
-    if ( pScViewShell )
-        pScViewShell->UpdateInputHandler();
-    GetBindings().GetDispatcher()->Execute( SID_INS_FUNCTION,
-                              SFX_CALLMODE_ASYNCHRON | SFX_CALLMODE_RECORD,
-                              &aRetItem, &aStrItem, &aMatItem, 0L );
-
-    //  Daten loeschen
-    pScMod->ClearFormEditData();        // pData wird ungueltig!
-
-    /*
-
-    ScInputHandler* pInputHdl = pScMod->GetInputHdl();
-    if ( pInputHdl )
-        pInputHdl->NotifyChange( NULL );
-
-    */
-    //  Dialog schliessen
-    DoClose( ScFormulaDlgWrapper::GetChildWindowId() );
-}
-
-IMPL_LINK( ScFormulaDlg, BtnHdl, PushButton*, pBtn )
-{
-    if ( pBtn == &aBtnCancel )
-    {
-        DoEnter(FALSE);                 // schliesst den Dialog
-    }
-    else if ( pBtn == &aBtnEnd )
-    {
-        DoEnter(TRUE);                  // schliesst den Dialog
-    }
-    else if ( pBtn == &aBtnForward )
-    {
-        //@pMEdit->GrabFocus();         // Damit die Selektion auch angezeigt wird.
-        const ScFuncDesc* pDesc =pScFuncPage->GetFuncDesc(
-                                pScFuncPage->GetFunction() );
-
-        if(pDesc==pFuncDesc || !pScFuncPage->IsVisible())
-            EditNextFunc( TRUE );
-        else
-        {
-            DblClkHdl(pScFuncPage);    //new
-            aBtnForward.Enable(FALSE); //new
-        }
-        //@EditNextFunc( TRUE );
-    }
-    else if ( pBtn == &aBtnBackward )
-    {
-        bEditFlag=FALSE;
-        aBtnForward.Enable(TRUE);
-        EditNextFunc( FALSE );
-        aMEFormula.Invalidate();
-        aMEFormula.Update();
-    }
-    //...
-
-    return 0;
-}
-
-
-//  --------------------------------------------------------------------------
-//                          Funktionen fuer 1. Seite
-//  --------------------------------------------------------------------------
-
-//UNUSED2008-05  void ScFormulaDlg::ResizeArgArr( const ScFuncDesc* pNewFunc )
-//UNUSED2008-05  {
-//UNUSED2008-05      if ( pFuncDesc != pNewFunc )
-//UNUSED2008-05      {
-//UNUSED2008-05          DeleteArgs();
-//UNUSED2008-05
-//UNUSED2008-05          if ( pNewFunc )
-//UNUSED2008-05          {
-//UNUSED2008-05              nArgs = pNewFunc->GetSuppressedArgCount();
-//UNUSED2008-05              if ( nArgs > 0 )
-//UNUSED2008-05              {
-//UNUSED2008-05                  pArgArr = new String*[nArgs];
-//UNUSED2008-05                  for ( USHORT i=0; i<nArgs; i++ )
-//UNUSED2008-05                      pArgArr[i] = new String;
-//UNUSED2008-05              }
-//UNUSED2008-05          }
-//UNUSED2008-05
-//UNUSED2008-05          pFuncDesc = pNewFunc;
-//UNUSED2008-05      }
-//UNUSED2008-05  }
-
-// Handler fuer Listboxen
-
-IMPL_LINK( ScFormulaDlg, DblClkHdl, ScFuncPage*, EMPTYARG )
-{
-    ScModule* pScMod = SC_MOD();
-
-    USHORT nFunc = pScFuncPage->GetFunction();
-
-    //  ex-UpdateLRUList
-    const ScFuncDesc*   pDesc = pScFuncPage->GetFuncDesc(nFunc);
-    if (pDesc && pDesc->nFIndex!=0)
-        pScMod->InsertEntryToLRUList(pDesc->nFIndex);
-
-    String aFuncName=pScFuncPage->GetSelFunctionName();
-    aFuncName.AppendAscii(RTL_CONSTASCII_STRINGPARAM( "()" ));
-    pScMod->InputReplaceSelection(aFuncName);
-    pMEdit->ReplaceSelected(aFuncName);
-
-    Selection aSel=pMEdit->GetSelection();
-    aSel.Max()=aSel.Max()-1;
-    pMEdit->SetSelection(aSel);
-
-    FormulaHdl(pMEdit);
-
-    aSel.Min()=aSel.Max();
-    pMEdit->SetSelection(aSel);
-
-    if(nArgs==0)
-    {
-        BtnHdl(&aBtnBackward);
-    }
-
-    aScParaWin.SetEdFocus(0);
-    aBtnForward.Enable(FALSE); //@New
-
-    return 0;
-}
-
 //  --------------------------------------------------------------------------
 //                          Funktionen fuer rechte Seite
 //  --------------------------------------------------------------------------
-
-void ScFormulaDlg::EditThisFunc(xub_StrLen nFStart)
-{
-    ScModule* pScMod = SC_MOD();
-    ScFormEditData* pData = pScMod->GetFormEditData();
-    if (!pData) return;
-
-    String aFormula = pScMod->InputGetFormulaStr();
-
-    if(nFStart==NOT_FOUND)
-    {
-        nFStart = pData->GetFStart();
-    }
-    else
-    {
-        pData->SetFStart(nFStart);
-    }
-
-    xub_StrLen nNextFStart  = nFStart;
-    xub_StrLen nNextFEnd    = 0;
-
-    BOOL bFound;
-
-    //@bFound = ScFormulaUtil::GetNextFunc( aFormula, FALSE, nNextFStart, &nNextFEnd, &pFuncDesc );
-
-    bFound = ScFormulaUtil::GetNextFunc( aFormula, FALSE, nNextFStart, &nNextFEnd);
-    if ( bFound )
-    {
-        xub_StrLen nFEnd;
-
-        // Selektion merken und neue setzen
-        pScMod->InputGetSelection( nFStart, nFEnd );
-        pScMod->InputSetSelection( nNextFStart, nNextFEnd );
-        if(!bEditFlag)
-            pMEdit->SetText(pScMod->InputGetFormulaStr());
-
-        xub_StrLen PrivStart, PrivEnd;
-        pScMod->InputGetSelection( PrivStart, PrivEnd);
-        if(!bEditFlag)
-        {
-            pMEdit->SetSelection( Selection(PrivStart, PrivEnd));
-            aMEFormula.UpdateOldSel();
-        }
-
-        pData->SetFStart( nNextFStart );
-        pData->SetOffset( 0 );
-        pData->SetEdFocus( 0 );
-
-        HighlightFunctionParas(aFormula.Copy(PrivStart, PrivEnd-PrivStart));
-        FillDialog();
-    }
-    else
-    {
-        ClearAllParas();
-        /*
-        aScParaWin.ClearAll();
-        aWndResult.SetValue(EMPTY_STRING);
-        aFtEditName.SetText(EMPTY_STRING);
-        */
-    }
-}
-
-void ScFormulaDlg::EditNextFunc( BOOL bForward, xub_StrLen nFStart )
-{
-    ScModule* pScMod = SC_MOD();
-    ScFormEditData* pData = pScMod->GetFormEditData();
-    if (!pData) return;
-
-    String aFormula = pScMod->InputGetFormulaStr();
-
-    if(nFStart==NOT_FOUND)
-    {
-        nFStart = pData->GetFStart();
-    }
-    else
-    {
-        pData->SetFStart(nFStart);
-    }
-
-    xub_StrLen nNextFStart  = 0;
-    xub_StrLen nNextFEnd    = 0;
-
-    BOOL bFound;
-    if ( bForward )
-    {
-        nNextFStart = ScFormulaUtil::GetArgStart( aFormula, nFStart, 0 );
-        //@bFound = ScFormulaUtil::GetNextFunc( aFormula, FALSE, nNextFStart, &nNextFEnd, &pFuncDesc );
-        bFound = ScFormulaUtil::GetNextFunc( aFormula, FALSE, nNextFStart, &nNextFEnd);
-    }
-    else
-    {
-        nNextFStart = nFStart;
-        //@bFound = ScFormulaUtil::GetNextFunc( aFormula, TRUE, nNextFStart, &nNextFEnd, &pFuncDesc );
-        bFound = ScFormulaUtil::GetNextFunc( aFormula, TRUE, nNextFStart, &nNextFEnd);
-    }
-
-    if ( bFound )
-    {
-        xub_StrLen nFEnd;
-
-        // Selektion merken und neue setzen
-        pScMod->InputGetSelection( nFStart, nFEnd );
-        pScMod->InputSetSelection( nNextFStart, nNextFEnd );
-        if(!bEditFlag)
-            pMEdit->SetText(pScMod->InputGetFormulaStr());
-
-        xub_StrLen PrivStart, PrivEnd;
-        pScMod->InputGetSelection( PrivStart, PrivEnd);
-        if(!bEditFlag)
-        {
-            pMEdit->SetSelection( Selection(PrivStart, PrivEnd));
-            aMEFormula.UpdateOldSel();
-        }
-
-        pData->SetFStart( nNextFStart );
-        pData->SetOffset( 0 );
-        pData->SetEdFocus( 0 );
-
-        FillDialog();
-    }
-}
-
-//UNUSED2008-05  IMPL_LINK( ScFormulaDlg, ScrollHdl, ScParaWin*, EMPTYARG )
-//UNUSED2008-05  {
-//UNUSED2008-05      ScModule* pScMod = SC_MOD();
-//UNUSED2008-05      ScFormEditData* pData = pScMod->GetFormEditData();
-//UNUSED2008-05      if (!pData) return 0;
-//UNUSED2008-05      USHORT nOffset = aScParaWin.GetSliderPos();
-//UNUSED2008-05      pData->SetOffset( nOffset );
-//UNUSED2008-05
-//UNUSED2008-05      aScParaWin.UpdateParas();
-//UNUSED2008-05
-//UNUSED2008-05      UpdateValues();
-//UNUSED2008-05
-//UNUSED2008-05      return 0;
-//UNUSED2008-05  }
-
-BOOL ScFormulaDlg::CalcValue( const String& rStrExp, String& rStrResult )
+bool ScFormulaDlg::calculateValue( const String& rStrExp, String& rStrResult )
 {
     BOOL bResult = TRUE;
 
-    if ( rStrExp.Len() > 0 )
+    ::std::auto_ptr<ScFormulaCell> pFCell( new ScFormulaCell( pDoc, aCursorPos, rStrExp ) );
+
+    // #35521# HACK! um bei ColRowNames kein #REF! zu bekommen,
+    // wenn ein Name eigentlich als Bereich in die Gesamt-Formel
+    // eingefuegt wird, bei der Einzeldarstellung aber als
+    // single-Zellbezug interpretiert wird
+    BOOL bColRowName = pCell->HasColRowName();
+    if ( bColRowName )
     {
-        // nur, wenn keine Tastatureingabe mehr anliegt, den Wert berechnen:
-
-        if ( !Application::AnyInput( INPUT_KEYBOARD ) )
-        {
-            ScFormulaCell* pFCell = new ScFormulaCell( pDoc, aCursorPos, rStrExp );
-
-            // #35521# HACK! um bei ColRowNames kein #REF! zu bekommen,
-            // wenn ein Name eigentlich als Bereich in die Gesamt-Formel
-            // eingefuegt wird, bei der Einzeldarstellung aber als
-            // single-Zellbezug interpretiert wird
-            BOOL bColRowName = pCell->HasColRowName();
-            if ( bColRowName )
-            {
-                // ColRowName im RPN-Code?
-                if ( pCell->GetCode()->GetCodeLen() <= 1 )
-                {   // ==1: einzelner ist als Parameter immer Bereich
-                    // ==0: es waere vielleicht einer, wenn..
-                    String aBraced( '(' );
-                    aBraced += rStrExp;
-                    aBraced += ')';
-                    delete pFCell;
-                    pFCell = new ScFormulaCell( pDoc, aCursorPos, aBraced );
-                }
-                else
-                    bColRowName = FALSE;
-            }
-
-            USHORT nErrCode = pFCell->GetErrCode();
-            if ( nErrCode == 0 )
-            {
-                SvNumberFormatter& aFormatter = *(pDoc->GetFormatTable());
-                Color* pColor;
-                if ( pFCell->IsValue() )
-                {
-                    double n = pFCell->GetValue();
-                    ULONG nFormat = aFormatter.GetStandardFormat( n, 0,
-                                    pFCell->GetFormatType(), ScGlobal::eLnge );
-                    aFormatter.GetOutputString( n, nFormat,
-                                                rStrResult, &pColor );
-                }
-                else
-                {
-                    String aStr;
-
-                    pFCell->GetString( aStr );
-                    ULONG nFormat = aFormatter.GetStandardFormat(
-                                    pFCell->GetFormatType(), ScGlobal::eLnge);
-                    aFormatter.GetOutputString( aStr, nFormat,
-                                                rStrResult, &pColor );
-                }
-
-                ScRange aTestRange;
-                if ( bColRowName || (aTestRange.Parse(rStrExp) & SCA_VALID) )
-                    rStrResult.AppendAscii(RTL_CONSTASCII_STRINGPARAM( " ..." ));
-                    // Bereich
-            }
-            else
-                rStrResult += ScGlobal::GetErrorString(nErrCode);
-
-            if(!bUserMatrixFlag && pFCell->GetMatrixFlag())
-            {
-                aBtnMatrix.Check();
-            }
-
-            delete pFCell;
+        // ColRowName im RPN-Code?
+        if ( pCell->GetCode()->GetCodeLen() <= 1 )
+        {   // ==1: einzelner ist als Parameter immer Bereich
+            // ==0: es waere vielleicht einer, wenn..
+            String aBraced( '(' );
+            aBraced += rStrExp;
+            aBraced += ')';
+            pFCell.reset( new ScFormulaCell( pDoc, aCursorPos, aBraced ) );
         }
         else
-            bResult = FALSE;
+            bColRowName = FALSE;
+    }
+
+    USHORT nErrCode = pFCell->GetErrCode();
+    if ( nErrCode == 0 )
+    {
+        SvNumberFormatter& aFormatter = *(pDoc->GetFormatTable());
+        Color* pColor;
+        if ( pFCell->IsValue() )
+        {
+            double n = pFCell->GetValue();
+            ULONG nFormat = aFormatter.GetStandardFormat( n, 0,
+                            pFCell->GetFormatType(), ScGlobal::eLnge );
+            aFormatter.GetOutputString( n, nFormat,
+                                        rStrResult, &pColor );
+        }
+        else
+        {
+            String aStr;
+
+            pFCell->GetString( aStr );
+            ULONG nFormat = aFormatter.GetStandardFormat(
+                            pFCell->GetFormatType(), ScGlobal::eLnge);
+            aFormatter.GetOutputString( aStr, nFormat,
+                                        rStrResult, &pColor );
+        }
+
+        ScRange aTestRange;
+        if ( bColRowName || (aTestRange.Parse(rStrExp) & SCA_VALID) )
+            rStrResult.AppendAscii(RTL_CONSTASCII_STRINGPARAM( " ..." ));
+            // Bereich
+    }
+    else
+        rStrResult += ScGlobal::GetErrorString(nErrCode);
+
+    if(!isUserMatrix() && pFCell->GetMatrixFlag())
+    {
+        CheckMatrix();
     }
 
     return bResult;
 }
 
-void ScFormulaDlg::UpdateValues()
-{
-    ScModule* pScMod = SC_MOD();
-    String aStrResult;
 
-    if ( CalcValue( pFuncDesc->GetFormulaString( pArgArr ), aStrResult ) )
-        aWndResult.SetValue( aStrResult );
-
-    aStrResult.Erase();
-    if ( CalcValue(pScMod->InputGetFormulaStr(), aStrResult ) )
-        aWndFormResult.SetValue( aStrResult );
-    else
-    {
-        aStrResult.Erase();
-        aWndFormResult.SetValue( aStrResult );
-    }
-    CalcStruct(pMEdit->GetText());
-}
-
-void ScFormulaDlg::SaveArg( USHORT nEd )
-{
-    if (nEd<nArgs)
-    {
-        USHORT i;
-        for(i=0;i<=nEd;i++)
-        {
-            if(pArgArr[i]->Len()==0)
-                *(pArgArr[i]) = ' ';
-        }
-        if(aScParaWin.GetArgument(nEd).Len()!=0)
-            *(pArgArr[nEd]) = aScParaWin.GetArgument(nEd);
-
-        USHORT nClearPos=nEd+1;
-        for(i=nEd+1;i<nArgs;i++)
-        {
-            if(aScParaWin.GetArgument(i).Len()!=0)
-            {
-                nClearPos=i+1;
-            }
-        }
-
-        for(i=nClearPos;i<nArgs;i++)
-        {
-            *(pArgArr[i]) = EMPTY_STRING;
-        }
-    }
-}
-
-IMPL_LINK( ScFormulaDlg, FxHdl, ScParaWin*, pPtr )
-{
-    if(pPtr==&aScParaWin)
-    {
-        aBtnForward.Enable(TRUE); //@ Damit eine neue Fkt eingegeben werden kann.
-        aTabCtrl.SetCurPageId(TP_FUNCTION);
-        ScModule* pScMod = SC_MOD();
-        String aUndoStr = pScMod->InputGetFormulaStr();     // bevor unten ein ";" eingefuegt wird
-        ScFormEditData* pData = pScMod->GetFormEditData();
-        if (!pData) return 0;
-
-        USHORT nArgNo = aScParaWin.GetActiveLine();
-        nEdFocus=nArgNo;
-
-        SaveArg(nArgNo);
-        UpdateSelection();
-
-        xub_StrLen nFormulaStrPos = pData->GetFStart();
-
-        String aFormula = pScMod->InputGetFormulaStr();
-        xub_StrLen n1 = ScFormulaUtil::GetArgStart( aFormula, nFormulaStrPos, nEdFocus+pData->GetOffset() );
-
-        pData->SetEdFocus( nEdFocus );
-        pData->SaveValues();
-        pData->SetMode( (USHORT) SC_FORMDLG_FORMULA );
-        pData->SetFStart( n1 );
-        pData->SetUndoStr( aUndoStr );
-        ClearAllParas();
-
-        FillDialog(FALSE);
-        pScFuncPage->SetFocus(); //Da Parawin nicht mehr sichtbar
-    }
-    return 0;
-}
-
-IMPL_LINK( ScFormulaDlg, ModifyHdl, ScParaWin*, pPtr )
-{
-    if(pPtr==&aScParaWin)
-    {
-        SaveArg(aScParaWin.GetActiveLine());
-        UpdateValues();
-
-        UpdateSelection();
-        CalcStruct(pMEdit->GetText());
-    }
-    return 0;
-}
-
-IMPL_LINK( ScFormulaDlg, FormulaHdl, MultiLineEdit*, EMPTYARG )
-{
-    ScModule* pScMod = SC_MOD();
-    ScFormEditData* pData = pScMod->GetFormEditData();
-    if (!pData) return 0;
-
-    bEditFlag=TRUE;
-    String      aInputFormula=pScMod->InputGetFormulaStr();
-    String      aString=pMEdit->GetText();
-
-    Selection   aSel =pMEdit->GetSelection();
-    xub_StrLen nTest=0;
-
-    if(aString.Len()==0) //falls alles geloescht wurde
-    {
-        aString +='=';
-        pMEdit->SetText(aString);
-        aSel .Min()=1;
-        aSel .Max()=1;
-        pMEdit->SetSelection(aSel);
-    }
-    else if(aString.GetChar(nTest)!='=') //falls ersetzt wurde;
-    {
-        aString.Insert( (sal_Unicode)'=', 0 );
-        pMEdit->SetText(aString);
-        aSel .Min()+=1;
-        aSel .Max()+=1;
-        pMEdit->SetSelection(aSel);
-    }
-
-
-    pScMod->InputSetSelection(0, aInputFormula.Len());
-    pScMod->InputReplaceSelection(aString);
-    pScMod->InputSetSelection((xub_StrLen)aSel.Min(),(xub_StrLen)aSel.Max());
-
-    xub_StrLen nPos=(xub_StrLen)aSel.Min()-1;
-
-    String aStrResult;
-
-    if ( CalcValue(pScMod->InputGetFormulaStr(), aStrResult ) )
-        aWndFormResult.SetValue( aStrResult );
-    else
-    {
-        aStrResult.Erase();
-        aWndFormResult.SetValue( aStrResult );
-    }
-    CalcStruct(aString);
-
-    nPos=GetFunctionPos(nPos);
-
-    if(nPos<aSel.Min()-1)
-    {
-        xub_StrLen nPos1=aString.Search('(',nPos);
-        EditNextFunc( FALSE, nPos1);
-    }
-    else
-    {
-        ClearAllParas();
-        /*
-        aScParaWin.ClearAll();
-        aWndResult.SetValue(EMPTY_STRING);
-        aFtEditName.SetText(EMPTY_STRING);
-        */
-    }
-
-    pScMod->InputSetSelection((xub_StrLen)aSel.Min(),(xub_StrLen)aSel.Max());
-    bEditFlag=FALSE;
-    return 0;
-}
-
-IMPL_LINK( ScFormulaDlg, FormulaCursorHdl, ScEditBox*, EMPTYARG )
-{
-    ScModule* pScMod = SC_MOD();
-    ScFormEditData* pData = pScMod->GetFormEditData();
-    if (!pData) return 0;
-    xub_StrLen nFStart = pData->GetFStart();
-
-    bEditFlag=TRUE;
-
-    String      aInputFormula=pScMod->InputGetFormulaStr();
-    String      aString=pMEdit->GetText();
-
-    Selection   aSel =pMEdit->GetSelection();
-    pScMod->InputSetSelection((xub_StrLen)aSel.Min(),(xub_StrLen)aSel.Max());
-
-
-    if(aSel.Min()==0)
-    {
-        aSel.Min()=1;
-        pMEdit->SetSelection(aSel);
-    }
-
-    if(aSel.Min()!=aString.Len())
-    {
-
-        xub_StrLen nPos=(xub_StrLen)aSel.Min();
-
-        nFStart=GetFunctionPos(nPos-1);
-
-        if(nFStart<nPos)
-        {
-            xub_StrLen nPos1=ScFormulaUtil::GetFunctionEnd(aString,nFStart);
-
-            if(nPos1>nPos || nPos1==STRING_NOTFOUND)
-            {
-                EditThisFunc(nFStart);
-            }
-            else
-            {
-                xub_StrLen n=nPos;
-                short nCount=1;
-                while(n>0)
-                {
-                   if(aString.GetChar(n)==')')
-                       nCount++;
-                   else if(aString.GetChar(n)=='(')
-                       nCount--;
-                   if(nCount==0) break;
-                   n--;
-                }
-                if(nCount==0)
-                {
-                    nFStart=ScFormulaUtil::GetFunctionStart(aString,n,TRUE);
-                    EditThisFunc(nFStart);
-                }
-                else
-                {
-                    ClearAllParas();
-                }
-            }
-        }
-        else
-        {
-            ClearAllParas();
-        }
-    }
-    pScMod->InputSetSelection((xub_StrLen)aSel.Min(),(xub_StrLen)aSel.Max());
-
-    bEditFlag=FALSE;
-    return 0;
-}
-
-void ScFormulaDlg::UpdateSelection()
-{
-    ScModule* pScMod = SC_MOD();
-
-    pScMod->InputSetSelection((xub_StrLen)aFuncSel.Min(),(xub_StrLen)aFuncSel.Max());
-
-    pScMod->InputReplaceSelection( pFuncDesc->GetFormulaString( pArgArr ) );
-    pMEdit->SetText(pScMod->InputGetFormulaStr());
-    xub_StrLen PrivStart, PrivEnd;
-    pScMod->InputGetSelection( PrivStart, PrivEnd);
-    aFuncSel.Min()=PrivStart;
-    aFuncSel.Max()=PrivEnd;
-
-    nArgs = pFuncDesc->GetSuppressedArgCount();
-
-    String aFormula=pMEdit->GetText();
-    xub_StrLen nArgPos=ScFormulaUtil::GetArgStart( aFormula,PrivStart,0);
-
-    USHORT nPos=aScParaWin.GetActiveLine();
-
-    for(USHORT i=0;i<nPos;i++)
-    {
-        xub_StrLen nTmpLength=(pArgArr[i])->Len();
-        nArgPos+=nTmpLength+1;
-    }
-    xub_StrLen nLength=(pArgArr[nPos])->Len();
-
-    Selection aSel(nArgPos,nArgPos+nLength);
-    pScMod->InputSetSelection(nArgPos,nArgPos+nLength);
-    pMEdit->SetSelection(aSel);
-    aMEFormula.UpdateOldSel();
-}
 
 //  virtuelle Methoden von ScAnyRefDlg:
-void ScFormulaDlg::RefInputStart( ScRefEdit* pEdit, ScRefButton* pButton )
+void ScFormulaDlg::RefInputStart( formula::RefEdit* pEdit, formula::RefButton* pButton )
 {
-    aEdRef.Show();
-    pTheRefEdit = pEdit;
-    pTheRefButton = pButton;
-
-    if( pTheRefEdit )
-    {
-        aEdRef.SetRefString( pTheRefEdit->GetText() );
-        aEdRef.SetSelection( pTheRefEdit->GetSelection() );
-        aEdRef.SetHelpId( pTheRefEdit->GetHelpId() );
-        aEdRef.SetUniqueId( pTheRefEdit->GetUniqueId() );
-    }
-
-    aRefBtn.Show( pButton != NULL );
-    ScAnyRefDlg::RefInputStart( &aEdRef, pButton ? &aRefBtn : NULL );
-    aRefBtn.SetEndImage();
-
-    if( pTheRefEdit )
-    {
-        String aStr = aTitle2;
-        aStr += ' ';
-        aStr += aFtEditName.GetText();
-        aStr.AppendAscii( RTL_CONSTASCII_STRINGPARAM( "( " ) );
-        if( aScParaWin.GetActiveLine() > 0 )
-            aStr.AppendAscii( RTL_CONSTASCII_STRINGPARAM( "...; " ) );
-        aStr += aScParaWin.GetActiveArgName();
-        if( aScParaWin.GetActiveLine() + 1 < nArgs )
-            aStr.AppendAscii(RTL_CONSTASCII_STRINGPARAM( "; ..." ));
-        aStr.AppendAscii( RTL_CONSTASCII_STRINGPARAM( " )" ) );
-
-        SetText( MnemonicGenerator::EraseAllMnemonicChars( aStr ) );
-    }
+    ::std::pair<formula::RefButton*,formula::RefEdit*> aPair = RefInputStartBefore( pEdit, pButton );
+    m_aHelper.RefInputStart( aPair.second, aPair.first);
+    RefInputStartAfter( aPair.second, aPair.first );
 }
-
 void ScFormulaDlg::RefInputDone( BOOL bForced )
 {
-    ScAnyRefDlg::RefInputDone( bForced );
-    aRefBtn.SetStartImage();
-    if( bForced || !aRefBtn.IsVisible() )
-    {
-        aEdRef.Hide();
-        aRefBtn.Hide();
-        if( pTheRefEdit )
-        {
-            pTheRefEdit->SetRefString( aEdRef.GetText() );
-            pTheRefEdit->GrabFocus();
-
-            if( pTheRefButton )
-                pTheRefButton->SetStartImage();
-
-            USHORT nPrivActiv = aScParaWin.GetActiveLine();
-            aScParaWin.SetArgument( nPrivActiv, aEdRef.GetText() );
-            ModifyHdl( &aScParaWin );
-            pTheRefEdit = NULL;
-        }
-        SetText( aTitle1 );
-    }
+    m_aHelper.RefInputDone( bForced );
+    RefInputDoneAfter( bForced );
 }
 
 void ScFormulaDlg::SetReference( const ScRange& rRef, ScDocument* pRefDoc )
 {
-    if (nArgs > 0 )
+    const IFunctionDescription* pFunc = getCurrentFunctionDescription();
+    if ( pFunc && pFunc->getSuppressedArgumentCount() > 0 )
     {
-        aScParaWin.SetRefMode(TRUE);
+        Selection theSel;
+        BOOL bRefNull = UpdateParaWin(theSel);
 
-        Selection   theSel;
-        String      aStrEd;
-        Edit* pEd = GetCurrRefEdit();
-        if(pEd!=NULL && pTheRefEdit==NULL)
+        if ( rRef.aStart != rRef.aEnd && bRefNull )
         {
-            theSel=pEd->GetSelection();
-            theSel.Justify();
-            aStrEd=pEd->GetText();
-            aEdRef.SetRefString(aStrEd);
-            aEdRef.SetSelection( theSel );
+            RefInputStart(GetActiveEdit());
         }
-        else
-        {
-            theSel=aEdRef.GetSelection();
-            theSel.Justify();
-            aStrEd=aEdRef.GetText();
-        }
+
         String      aRefStr;
-
-        if ( rRef.aStart != rRef.aEnd && pTheRefEdit==NULL)
-        {
-            RefInputStart(aScParaWin.GetActiveEdit());
-        }
-
         BOOL bOtherDoc = ( pRefDoc != pDoc && pRefDoc->GetDocumentShell()->HasName() );
         if ( bOtherDoc )
         {
@@ -1432,26 +462,14 @@ void ScFormulaDlg::SetReference( const ScRange& rRef, ScDocument* pRefDoc )
             rRef.Format( aRefStr, nFmt, pRefDoc, pRefDoc->GetAddressConvention() );
         }
 
-        aEdRef.ReplaceSelected( aRefStr );
-        theSel.Max() = theSel.Min() + aRefStr.Len();
-        aEdRef.SetSelection( theSel );
-
-        //-------------------------------------
-        // Manuelles Update der Ergebnisfelder:
-        //-------------------------------------
-        USHORT nPrivActiv=aScParaWin.GetActiveLine();
-        aScParaWin.SetArgument(nPrivActiv,aEdRef.GetText());
-        aScParaWin.UpdateParas();
-
-        if(pEd!=NULL) pEd->SetSelection( theSel );
-
-        aScParaWin.SetRefMode(FALSE);
+        UpdateParaWin(theSel,aRefStr);
     }
 }
 
 BOOL ScFormulaDlg::IsRefInputMode() const
 {
-    BOOL bRef = (nArgs > 0)&& (pDoc!=NULL);
+    const IFunctionDescription* pDesc = getCurrentFunctionDescription();
+    BOOL bRef = (!pDesc || (pDesc->getSuppressedArgumentCount() > 0)) && (pDoc!=NULL);
     return bRef;
 }
 
@@ -1467,476 +485,12 @@ BOOL ScFormulaDlg::IsDocAllowed(SfxObjectShell* pDocSh) const
 
 void ScFormulaDlg::SetActive()
 {
-    if(nArgs > 0)
+    const IFunctionDescription* pFunc = getCurrentFunctionDescription();
+    if ( pFunc && pFunc->getSuppressedArgumentCount() > 0 )
     {
         RefInputDone();
-        Edit* pEd = GetCurrRefEdit()/*aScParaWin.GetActiveEdit()*/;
-        if( pEd )
-        {
-            Selection theSel=aEdRef.GetSelection();
-            //  Edit may have the focus -> call ModifyHdl in addition
-            //  to what's happening in GetFocus
-            pEd->GetModifyHdl().Call(pEd);
-            pEd->GrabFocus();
-            pEd->SetSelection(theSel);
-        }
+        SetEdSelection();
     }
-}
-
-void ScFormulaDlg::MakeTree(SvLBoxEntry* pParent,ScToken* pScToken,long Count,
-                            ScTokenArray* pScTokAP, ScCompiler* pCompP)
-{
-    if(pScToken!=NULL && Count>0)
-    {
-        String aResult;
-        long nParas=pScToken->GetParamCount();
-        OpCode eOp = pScToken->GetOpCode();
-
-        if(nParas>0)
-        {
-            pCompP->CreateStringFromToken( aResult,pScToken);
-
-            SvLBoxEntry* pEntry;
-
-            String aTest=pScStructPage->GetEntryText(pParent);
-
-            if(aTest==aResult &&
-                (eOp==ocAdd || eOp==ocMul ||
-                 eOp==ocAmpersand))
-            {
-                pEntry=pParent;
-            }
-            else
-            {
-                if(eOp==ocBad)
-                {
-                    pEntry=pScStructPage->InsertEntry(aResult,pParent,STRUCT_ERROR,0,pScToken);
-                }
-                else
-                {
-                    pEntry=pScStructPage->InsertEntry(aResult,pParent,STRUCT_FOLDER,0,pScToken);
-                }
-            }
-
-            MakeTree(pEntry,pScTokAP->PrevRPN(),nParas,pScTokAP,pCompP);
-            --Count;
-            pScTokAP->NextRPN();
-            MakeTree(pParent,pScTokAP->PrevRPN(),Count,pScTokAP,pCompP);
-        }
-        else
-        {
-            pCompP->CreateStringFromToken( aResult,pScToken);
-
-            if(eOp==ocBad)
-            {
-                pScStructPage->InsertEntry(aResult,pParent,STRUCT_ERROR,0,pScToken);
-            }
-            else
-            {
-                pScStructPage->InsertEntry(aResult,pParent,STRUCT_END,0,pScToken);
-            }
-            --Count;
-            MakeTree(pParent,pScTokAP->PrevRPN(),Count,pScTokAP,pCompP);
-        }
-    }
-}
-
-
-void ScFormulaDlg::UpdateTokenArray( const String& rStrExp)
-{
-    if(pScTokA!=NULL) delete pScTokA;
-    pScTokA=pComp->CompileString(rStrExp);
-    pComp->CompileTokenArray();
-}
-
-xub_StrLen ScFormulaDlg::GetFunctionPos(xub_StrLen nPos)
-{
-    const sal_Unicode sep = ScCompiler::GetStringFromOpCode(ocSep).GetChar(0);
-
-    xub_StrLen nTokPos=1;
-    xub_StrLen nOldTokPos=1;
-    xub_StrLen nFuncPos=STRING_NOTFOUND;    //@ Testweise
-    xub_StrLen nPrevFuncPos=1;
-    short  nBracketCount=0;
-    BOOL   bFlag=FALSE;
-    String aFormString=pMEdit->GetText();
-    ScGlobal::pCharClass->toUpper( aFormString );
-    if(pScTokA!=NULL)
-    {
-        ScToken*  pToken=pScTokA->First();
-        while(pToken!=NULL)
-        {
-            String aString;
-            OpCode eOp = pToken->GetOpCode();
-            pComp->CreateStringFromToken( aString,pToken);
-            ScToken*  pNextToken=pScTokA->Next();
-
-            if(!bUserMatrixFlag && pToken->IsMatrixFunction())
-            {
-                aBtnMatrix.Check();
-            }
-
-            if(eOp==ocPush || eOp==ocSpaces)
-            {
-                xub_StrLen n1=aFormString.Search(sep, nTokPos);
-                xub_StrLen n2=aFormString.Search(')',nTokPos);
-                xub_StrLen nXXX=nTokPos;
-                if(n1<n2)
-                {
-                    nTokPos=n1;
-                }
-                else
-                {
-                    nTokPos=n2;
-                }
-                if(pNextToken!=NULL)
-                {
-                    String a2String;
-                    pComp->CreateStringFromToken( a2String,pNextToken);
-                    xub_StrLen n3=aFormString.Search(a2String,nXXX);
-
-                    if(n3<nTokPos)
-                        nTokPos=n3;
-                }
-            }
-            else
-            {
-                nTokPos = sal::static_int_cast<xub_StrLen>( nTokPos + aString.Len() );
-            }
-
-            if(eOp==ocOpen)
-            {
-                nBracketCount++;
-                bFlag=TRUE;
-            }
-            else if(eOp==ocClose)
-            {
-                nBracketCount--;
-                bFlag=FALSE;
-                nFuncPos=nPrevFuncPos;
-            }
-
-            if((pToken->IsFunction()|| ocArcTan2<=eOp) && ocSpaces!=eOp)
-            {
-                nPrevFuncPos=nFuncPos;
-                nFuncPos=nOldTokPos;
-            }
-
-            if(nOldTokPos<=nPos && nPos<nTokPos)
-            {
-                if(!(pToken->IsFunction()|| ocArcTan2<=eOp))
-                {
-                    if(nBracketCount<1)
-                    {
-                        nFuncPos=pMEdit->GetText().Len();
-                    }
-                    else if(!bFlag)
-                    {
-                        nFuncPos=nPrevFuncPos;
-                    }
-                }
-                break;
-            }
-
-            pToken=pNextToken;
-            nOldTokPos=nTokPos;
-        }
-    }
-
-    return nFuncPos;
-}
-
-BOOL ScFormulaDlg::CalcStruct( const String& rStrExp)
-{
-    BOOL bResult = TRUE;
-    xub_StrLen nLength=rStrExp.Len();
-
-    if ( rStrExp.Len() > 0 && aOldFormula!=rStrExp && bStructUpdate)
-    {
-        // nur, wenn keine Tastatureingabe mehr anliegt, den Wert berechnen:
-
-        if ( !Application::AnyInput( INPUT_KEYBOARD ) )
-        {
-            pScStructPage->ClearStruct();
-
-            String aString=rStrExp;
-            if(rStrExp.GetChar(nLength-1)=='(')
-            {
-                aString.Erase((xub_StrLen)(nLength-1));
-            }
-
-            aString.EraseAllChars('\n');
-            String aStrResult;
-
-            if ( CalcValue(aString, aStrResult ) )
-                    aWndFormResult.SetValue( aStrResult );
-
-            UpdateTokenArray(aString);
-
-            ScToken*  pScToken=pScTokA->LastRPN();
-
-            if(pScToken!=NULL)
-            {
-                MakeTree(NULL,pScToken,1,pScTokA,pComp);
-            }
-            aOldFormula=rStrExp;
-            if(rStrExp.GetChar(nLength-1)=='(')
-                UpdateTokenArray(rStrExp);
-        }
-        else
-            bResult = FALSE;
-    }
-    return bResult;
-}
-
-IMPL_LINK( ScFormulaDlg, StructSelHdl, ScStructPage*, pStruP )
-{
-    bStructUpdate=FALSE;
-    if(pScStructPage->IsVisible())  aBtnForward.Enable(FALSE); //@New
-
-    if(pScStructPage==pStruP)
-    {
-        ScToken* pSelToken = pScStructPage->GetSelectedToken();
-        ScToken* pOrigToken = ((pSelToken && pSelToken->GetType() == svFAP) ?
-                pSelToken->GetFAPOrigToken() : pSelToken);
-        xub_StrLen nTokPos=1;
-
-        if(pScTokA!=NULL)
-        {
-            ScToken* pToken = pScTokA->First();
-
-            while(pToken!=NULL)
-            {
-                String aString;
-                if ( pToken == pOrigToken )
-                    break;
-                pComp->CreateStringFromToken( aString,pToken);
-                nTokPos = sal::static_int_cast<xub_StrLen>( nTokPos + aString.Len() );
-                pToken=pScTokA->Next();
-            }
-            EditThisFunc(nTokPos);
-        }
-
-        if( pOrigToken )
-        {
-            String aStr;
-            pComp->CreateStringFromToken( aStr, pOrigToken );
-            String aEntryTxt=pScStructPage->GetSelectedEntryText();
-
-            if(aEntryTxt!=aStr)
-                ShowReference(aEntryTxt);
-        }
-
-    }
-    bStructUpdate=TRUE;
-    return 0;
-}
-
-ULONG ScFormulaDlg::FindFocusWin(Window *pWin)
-{
-    ULONG nUniqueId=0;
-    if(pWin->HasFocus())
-    {
-        nUniqueId=pWin->GetUniqueId();
-        if(nUniqueId==0)
-        {
-            Window* pParent=pWin->GetParent();
-            while(pParent!=NULL)
-            {
-                nUniqueId=pParent->GetUniqueId();
-
-                if(nUniqueId!=0) break;
-
-                pParent=pParent->GetParent();
-            }
-        }
-    }
-    else
-    {
-        USHORT nCount=pWin->GetChildCount();
-
-        for(USHORT i=0;i<nCount;i++)
-        {
-            Window* pChild=pWin->GetChild(i);
-            nUniqueId=FindFocusWin(pChild);
-            if(nUniqueId>0) break;
-        }
-    }
-    return nUniqueId;
-}
-
-void ScFormulaDlg::SetFocusWin(Window *pWin,ULONG nUniqueId)
-{
-    if(pWin->GetUniqueId()==nUniqueId)
-    {
-        pWin->GrabFocus();
-    }
-    else
-    {
-        USHORT nCount=pWin->GetChildCount();
-
-        for(USHORT i=0;i<nCount;i++)
-        {
-            Window* pChild=pWin->GetChild(i);
-            SetFocusWin(pChild,nUniqueId);
-        }
-    }
-}
-
-IMPL_LINK( ScFormulaDlg, MatrixHdl, CheckBox *, EMPTYARG )
-{
-    bUserMatrixFlag=TRUE;
-    return 0;
-}
-
-IMPL_LINK( ScFormulaDlg, FuncSelHdl, ScFuncPage*, EMPTYARG )
-{
-    USHORT nCat = pScFuncPage->GetCategory();
-    if ( nCat == LISTBOX_ENTRY_NOTFOUND ) nCat = 0;
-    USHORT nFunc = pScFuncPage->GetFunction();
-    if ( nFunc == LISTBOX_ENTRY_NOTFOUND ) nFunc = 0;
-
-    if (   (pScFuncPage->GetFunctionEntryCount() > 0)
-        && (pScFuncPage->GetFunction() != LISTBOX_ENTRY_NOTFOUND) )
-    {
-        const ScFuncDesc* pDesc =pScFuncPage->GetFuncDesc(
-                                pScFuncPage->GetFunction() );
-
-        if(pDesc!=pFuncDesc) aBtnForward.Enable(TRUE); //new
-
-        if (pDesc)
-        {
-            pDesc->InitArgumentInfo();      // full argument info is needed
-
-            String aSig = pDesc->GetSignature();
-            if(pDesc->pFuncName)
-                aFtHeadLine.SetText( *(pDesc->pFuncName) );
-            else
-                aFtHeadLine.SetText( EMPTY_STRING);
-            aFtFuncName.SetText( aSig );
-            if(pDesc->pFuncDesc)
-                aFtFuncDesc.SetText( *(pDesc->pFuncDesc) );
-            else
-                aFtFuncDesc.SetText( EMPTY_STRING);
-        }
-    }
-    else
-    {
-        aFtHeadLine.SetText( EMPTY_STRING );
-        aFtFuncName.SetText( EMPTY_STRING );
-        aFtFuncDesc.SetText( EMPTY_STRING );
-    }
-    return 0;
-}
-
-IMPL_LINK( ScFormulaDlg, UpdateFocusHdl, Timer*, EMPTYARG )
-{
-    ScModule* pScMod = SC_MOD();
-    ScFormEditData* pData = pScMod->GetFormEditData();
-
-    if (pData) // wird nicht ueber Close zerstoert;
-    {
-        pScMod->SetRefInputHdl(pData->GetInputHandler());
-        ULONG nUniqueId=pData->GetUniqueId();
-        SetFocusWin((Window *)this,nUniqueId);
-    }
-    return 0;
-}
-
-long ScFormulaDlg::PreNotify( NotifyEvent& rNEvt )
-{
-    USHORT nSwitch=rNEvt.GetType();
-    if(nSwitch==EVENT_GETFOCUS && !bIsShutDown)
-    {
-        Window* pWin=rNEvt.GetWindow();
-        if(pWin!=NULL)
-        {
-            nActivWinId=pWin->GetUniqueId();
-            if(nActivWinId==0)
-            {
-                Window* pParent=pWin->GetParent();
-                while(pParent!=NULL)
-                {
-                    nActivWinId=pParent->GetUniqueId();
-
-                    if(nActivWinId!=0) break;
-
-                    pParent=pParent->GetParent();
-                }
-            }
-            if(nActivWinId!=0)
-            {
-                ScModule* pScMod = SC_MOD();
-                ScFormEditData* pData = pScMod->GetFormEditData();
-
-                if (pData && !aTimer.IsActive()) // wird nicht ueber Close zerstoert;
-                {
-                    pData->SetUniqueId(nActivWinId);
-                }
-            }
-        }
-    }
-    return ScAnyRefDlg::PreNotify(rNEvt);
-}
-
-String ScFormulaDlg::RepairFormula(const String& aFormula)
-{
-    String aResult('=');
-    String aString2;
-    BOOL   bSep=FALSE;
-
-    ScFunctionMgr* pFuncMgr = ScGlobal::GetStarCalcFunctionMgr();
-
-    UpdateTokenArray(aFormula);
-
-    if(pScTokA!=NULL)
-    {
-        ScToken*  pToken=pScTokA->First();
-        while(pToken!=NULL)
-        {
-            String aString;
-            OpCode eOp = pToken->GetOpCode();
-            pComp->CreateStringFromToken( aString,pToken);
-            ScToken*  pNextToken=pScTokA->Next();
-
-            if(eOp==ocSep)
-            {
-                bSep=TRUE;
-                //aResult+=aString2;
-                aString2+=aString;
-            }
-            else if(eOp==ocClose &&bSep)
-            {
-                aString2.Erase();
-                bSep=FALSE;
-                aResult+=aString;
-            }
-            else if(eOp!=ocSpaces)
-            {
-                if(bSep)
-                {
-                    aResult+=aString2;
-                    aString2.Erase();
-                    bSep=FALSE;
-                }
-                aResult+=aString;
-            }
-
-            const ScFuncDesc* pDesc= pFuncMgr->Get(aString);
-
-            SaveLRUEntry(pDesc);    //! is this necessary?? (EnterData updates the list)
-
-            pToken=pNextToken;
-        }
-
-    }
-
-    return aResult;
-}
-
-void ScFormulaDlg::HighlightFunctionParas(const String& aFormula)
-{
-    ShowReference(aFormula);
 }
 
 void ScFormulaDlg::SaveLRUEntry(const ScFuncDesc* pFuncDescP)
@@ -1948,9 +502,164 @@ void ScFormulaDlg::SaveLRUEntry(const ScFuncDesc* pFuncDescP)
     }
 }
 
-ScRefEdit* ScFormulaDlg::GetCurrRefEdit()
+void ScFormulaDlg::doClose(BOOL /*_bOk*/)
 {
-    return aEdRef.IsVisible() ? &aEdRef : aScParaWin.GetActiveEdit();
+    m_aHelper.DoClose( ScFormulaDlgWrapper::GetChildWindowId() );
 }
+void ScFormulaDlg::insertEntryToLRUList(const formula::IFunctionDescription*    _pDesc)
+{
+    const ScFuncDesc* pDesc = dynamic_cast<const ScFuncDesc*>(_pDesc);
+    SaveLRUEntry(pDesc);
+}
+void ScFormulaDlg::showReference(const String& _sFormula)
+{
+    ShowReference(_sFormula);
+}
+void ScFormulaDlg::ShowReference(const String& _sFormula)
+{
+    m_aHelper.ShowReference(_sFormula);
+}
+void ScFormulaDlg::HideReference( BOOL bDoneRefMode )
+{
+    m_aHelper.HideReference(bDoneRefMode);
+}
+void ScFormulaDlg::ViewShellChanged( ScTabViewShell* pScViewShell )
+{
+    m_aHelper.ViewShellChanged( pScViewShell );
+}
+void ScFormulaDlg::AddRefEntry( )
+{
 
+}
+BOOL ScFormulaDlg::IsTableLocked( ) const
+{
+    // per Default kann bei Referenzeingabe auch die Tabelle umgeschaltet werden
+    return FALSE;
+}
+void ScFormulaDlg::ToggleCollapsed( formula::RefEdit* pEdit, formula::RefButton* pButton)
+{
+    m_aHelper.ToggleCollapsed(pEdit,pButton);
+}
+void ScFormulaDlg::ReleaseFocus( formula::RefEdit* pEdit, formula::RefButton* pButton)
+{
+    m_aHelper.ReleaseFocus(pEdit,pButton);
+}
+void ScFormulaDlg::dispatch(BOOL _bOK,BOOL _bMartixChecked)
+{
+    SfxBoolItem   aRetItem( SID_DLG_RETOK, _bOK );
+    SfxBoolItem   aMatItem( SID_DLG_MATRIX, _bMartixChecked );
+    SfxStringItem aStrItem( SCITEM_STRING, getCurrentFormula() );
+
+    // Wenn durch Dokument-Umschalterei die Eingabezeile weg war/ist,
+    // ist der String leer. Dann nicht die alte Formel loeschen.
+    if ( !aStrItem.GetValue().Len() )
+        aRetItem.SetValue( FALSE );     // FALSE = Cancel
+
+    m_aHelper.SetDispatcherLock( FALSE ); // Modal-Modus ausschalten
+
+    clear();
+
+    GetBindings().GetDispatcher()->Execute( SID_INS_FUNCTION,
+                              SFX_CALLMODE_ASYNCHRON | SFX_CALLMODE_RECORD,
+                              &aRetItem, &aStrItem, &aMatItem, 0L );
+}
+void ScFormulaDlg::setDispatcherLock( BOOL bLock )
+{
+    m_aHelper.SetDispatcherLock( bLock );
+}
+void ScFormulaDlg::setReferenceInput(const formula::FormEditData* _pData)
+{
+    ScModule* pScMod = SC_MOD();
+    ScFormEditData* pData = const_cast<ScFormEditData*>(dynamic_cast<const ScFormEditData*>(_pData));
+    pScMod->SetRefInputHdl(pData->GetInputHandler());
+}
+void ScFormulaDlg::deleteFormData()
+{
+    ScModule* pScMod = SC_MOD();
+    pScMod->ClearFormEditData();        // pData wird ungueltig!
+}
+void ScFormulaDlg::clear()
+{
+    pDoc = NULL;
+
+    //Referenz Inputhandler zuruecksetzen
+    ScModule* pScMod = SC_MOD();
+    pScMod->SetRefInputHdl(NULL);
+
+    // Enable() der Eingabezeile erzwingen:
+    ScTabViewShell* pScViewShell = PTR_CAST(ScTabViewShell, SfxViewShell::Current());
+    if ( pScViewShell )
+        pScViewShell->UpdateInputHandler();
+}
+void ScFormulaDlg::switchBack()
+{
+    ScModule* pScMod = SC_MOD();
+    // auf das Dokument zurueckschalten
+    // (noetig, weil ein fremdes oben sein kann - #34222#)
+    ScInputHandler* pHdl = pScMod->GetInputHdl();
+    if ( pHdl )
+    {
+        pHdl->ViewShellGone(NULL);  // -> aktive View neu holen
+        pHdl->ShowRefFrame();
+    }
+
+    // aktuelle Tabelle ggF. restaurieren (wg. Maus-RefInput)
+    ScTabViewShell* pScViewShell = PTR_CAST(ScTabViewShell, SfxViewShell::Current());
+    if ( pScViewShell )
+    {
+        ScViewData* pVD=pScViewShell->GetViewData();
+        SCTAB nExecTab = aCursorPos.Tab();
+        if ( nExecTab != pVD->GetTabNo() )
+            pScViewShell->SetTabNo( nExecTab );
+
+        SCROW nRow=aCursorPos.Row();
+        SCCOL nCol=aCursorPos.Col();
+
+        if(pVD->GetCurX()!=nCol || pVD->GetCurY()!=nRow)
+            pScViewShell->SetCursor(nCol,nRow);
+    }
+}
+formula::FormEditData* ScFormulaDlg::getFormEditData() const
+{
+    ScModule* pScMod = SC_MOD();
+    return pScMod->GetFormEditData();
+}
+void ScFormulaDlg::setCurrentFormula(const String& _sReplacement)
+{
+    ScModule* pScMod = SC_MOD();
+    pScMod->InputReplaceSelection(_sReplacement);
+}
+void ScFormulaDlg::setSelection(xub_StrLen _nStart,xub_StrLen _nEnd)
+{
+    ScModule* pScMod = SC_MOD();
+    pScMod->InputSetSelection( _nStart, _nEnd );
+}
+void ScFormulaDlg::getSelection(xub_StrLen& _nStart,xub_StrLen& _nEnd) const
+{
+    ScModule* pScMod = SC_MOD();
+    pScMod->InputGetSelection( _nStart, _nEnd );
+}
+String ScFormulaDlg::getCurrentFormula() const
+{
+    ScModule* pScMod = SC_MOD();
+    return pScMod->InputGetFormulaStr();
+}
+formula::IFunctionManager* ScFormulaDlg::getFunctionManager()
+{
+    return ScGlobal::GetStarCalcFunctionMgr();
+}
+uno::Reference< sheet::XFormulaParser> ScFormulaDlg::getFormulaParser() const
+{
+    return m_xParser;
+}
+uno::Reference< sheet::XFormulaOpCodeMapper> ScFormulaDlg::getFormulaOpCodeMapper() const
+{
+    return m_xOpCodeMapper;
+}
+::std::auto_ptr<formula::FormulaTokenArray> ScFormulaDlg::convertToTokenArray(const uno::Sequence< sheet::FormulaToken >& _aTokenList)
+{
+    ::std::auto_ptr<formula::FormulaTokenArray> pArray(new ScTokenArray());
+    pArray->Fill(_aTokenList);
+    return pArray;
+}
 

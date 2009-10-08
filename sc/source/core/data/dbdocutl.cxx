@@ -43,7 +43,7 @@
 #include "dbdocutl.hxx"
 #include "document.hxx"
 #include "cell.hxx"
-#include "errorcodes.hxx"
+#include "formula/errorcodes.hxx"
 
 using namespace ::com::sun::star;
 

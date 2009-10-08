@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: scitems.hxx,v $
- * $Revision: 1.12 $
+ * $Revision: 1.12.144.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -71,99 +71,100 @@
 #define ATTR_FONT_WEIGHT        102
 #define ATTR_FONT_POSTURE       103
 #define ATTR_FONT_UNDERLINE     104
-#define ATTR_FONT_CROSSEDOUT    105
-#define ATTR_FONT_CONTOUR       106
-#define ATTR_FONT_SHADOWED      107
-#define ATTR_FONT_COLOR         108
-#define ATTR_FONT_LANGUAGE      109
-#define ATTR_CJK_FONT           110
-#define ATTR_CJK_FONT_HEIGHT    111
-#define ATTR_CJK_FONT_WEIGHT    112
-#define ATTR_CJK_FONT_POSTURE   113
-#define ATTR_CJK_FONT_LANGUAGE  114
-#define ATTR_CTL_FONT           115
-#define ATTR_CTL_FONT_HEIGHT    116
-#define ATTR_CTL_FONT_WEIGHT    117
-#define ATTR_CTL_FONT_POSTURE   118
-#define ATTR_CTL_FONT_LANGUAGE  119
-#define ATTR_FONT_EMPHASISMARK  120
-#define ATTR_USERDEF            121     // not saved in binary files
-#define ATTR_FONT_WORDLINE      122
-#define ATTR_FONT_RELIEF        123
-#define ATTR_HYPHENATE          124
-#define ATTR_SCRIPTSPACE        125
-#define ATTR_HANGPUNCTUATION    126
-#define ATTR_FORBIDDEN_RULES    127
-#define ATTR_HOR_JUSTIFY        128
-#define ATTR_INDENT             129
-#define ATTR_VER_JUSTIFY        130
-#define ATTR_STACKED            131
-#define ATTR_ROTATE_VALUE       132
-#define ATTR_ROTATE_MODE        133
-#define ATTR_VERTICAL_ASIAN     134
-#define ATTR_WRITINGDIR         135
-#define ATTR_LINEBREAK          136
-#define ATTR_SHRINKTOFIT        137
-#define ATTR_BORDER_TLBR        138
-#define ATTR_BORDER_BLTR        139
-#define ATTR_MARGIN             140
-#define ATTR_MERGE              141
-#define ATTR_MERGE_FLAG         142
-#define ATTR_VALUE_FORMAT       143
-#define ATTR_LANGUAGE_FORMAT    144
-#define ATTR_BACKGROUND         145
-#define ATTR_PROTECTION         146
-#define ATTR_BORDER             147
-#define ATTR_BORDER_INNER       148     // innen, wg. Vorlagen-EditDialog
-#define ATTR_SHADOW             149
-#define ATTR_VALIDDATA          150
-#define ATTR_CONDITIONAL        151
+#define ATTR_FONT_OVERLINE      105
+#define ATTR_FONT_CROSSEDOUT    106
+#define ATTR_FONT_CONTOUR       107
+#define ATTR_FONT_SHADOWED      108
+#define ATTR_FONT_COLOR         109
+#define ATTR_FONT_LANGUAGE      110
+#define ATTR_CJK_FONT           111
+#define ATTR_CJK_FONT_HEIGHT    112
+#define ATTR_CJK_FONT_WEIGHT    113
+#define ATTR_CJK_FONT_POSTURE   114
+#define ATTR_CJK_FONT_LANGUAGE  115
+#define ATTR_CTL_FONT           116
+#define ATTR_CTL_FONT_HEIGHT    117
+#define ATTR_CTL_FONT_WEIGHT    118
+#define ATTR_CTL_FONT_POSTURE   119
+#define ATTR_CTL_FONT_LANGUAGE  120
+#define ATTR_FONT_EMPHASISMARK  121
+#define ATTR_USERDEF            122     // not saved in binary files
+#define ATTR_FONT_WORDLINE      123
+#define ATTR_FONT_RELIEF        124
+#define ATTR_HYPHENATE          125
+#define ATTR_SCRIPTSPACE        126
+#define ATTR_HANGPUNCTUATION    127
+#define ATTR_FORBIDDEN_RULES    128
+#define ATTR_HOR_JUSTIFY        129
+#define ATTR_INDENT             130
+#define ATTR_VER_JUSTIFY        131
+#define ATTR_STACKED            132
+#define ATTR_ROTATE_VALUE       133
+#define ATTR_ROTATE_MODE        134
+#define ATTR_VERTICAL_ASIAN     135
+#define ATTR_WRITINGDIR         136
+#define ATTR_LINEBREAK          137
+#define ATTR_SHRINKTOFIT        138
+#define ATTR_BORDER_TLBR        139
+#define ATTR_BORDER_BLTR        140
+#define ATTR_MARGIN             141
+#define ATTR_MERGE              142
+#define ATTR_MERGE_FLAG         143
+#define ATTR_VALUE_FORMAT       144
+#define ATTR_LANGUAGE_FORMAT    145
+#define ATTR_BACKGROUND         146
+#define ATTR_PROTECTION         147
+#define ATTR_BORDER             148
+#define ATTR_BORDER_INNER       149     // innen, wg. Vorlagen-EditDialog
+#define ATTR_SHADOW             150
+#define ATTR_VALIDDATA          151
+#define ATTR_CONDITIONAL        152
 
-#define ATTR_PATTERN_END        151     // Ende Zellattribut-Pattern
+#define ATTR_PATTERN_END        152     // Ende Zellattribut-Pattern
 
-#define ATTR_PATTERN            152
+#define ATTR_PATTERN            153
                                         // Seitenattribute
-#define ATTR_LRSPACE            153     // Editor: PageDesc-TabPage
-#define ATTR_ULSPACE            154
-#define ATTR_PAGE               155
-#define ATTR_PAGE_PAPERTRAY     156
-#define ATTR_PAGE_PAPERBIN      157
-#define ATTR_PAGE_SIZE          158
-#define ATTR_PAGE_MAXSIZE       159
-#define ATTR_PAGE_HORCENTER     160
-#define ATTR_PAGE_VERCENTER     161
+#define ATTR_LRSPACE            154     // Editor: PageDesc-TabPage
+#define ATTR_ULSPACE            155
+#define ATTR_PAGE               156
+#define ATTR_PAGE_PAPERTRAY     157
+#define ATTR_PAGE_PAPERBIN      158
+#define ATTR_PAGE_SIZE          159
+#define ATTR_PAGE_MAXSIZE       160
+#define ATTR_PAGE_HORCENTER     161
+#define ATTR_PAGE_VERCENTER     162
 
-#define ATTR_PAGE_ON            162     // Editor: Header/Footer-Page
-#define ATTR_PAGE_DYNAMIC       163
-#define ATTR_PAGE_SHARED        164
+#define ATTR_PAGE_ON            163     // Editor: Header/Footer-Page
+#define ATTR_PAGE_DYNAMIC       164
+#define ATTR_PAGE_SHARED        165
 
-#define ATTR_PAGE_NOTES         165     // Editor: Tabelle
-#define ATTR_PAGE_GRID          166
-#define ATTR_PAGE_HEADERS       167
-#define ATTR_PAGE_CHARTS        168
-#define ATTR_PAGE_OBJECTS       169
-#define ATTR_PAGE_DRAWINGS      170
-#define ATTR_PAGE_TOPDOWN       171
-#define ATTR_PAGE_SCALE         172
-#define ATTR_PAGE_SCALETOPAGES  173
-#define ATTR_PAGE_FIRSTPAGENO   174
+#define ATTR_PAGE_NOTES         166     // Editor: Tabelle
+#define ATTR_PAGE_GRID          167
+#define ATTR_PAGE_HEADERS       168
+#define ATTR_PAGE_CHARTS        169
+#define ATTR_PAGE_OBJECTS       170
+#define ATTR_PAGE_DRAWINGS      171
+#define ATTR_PAGE_TOPDOWN       172
+#define ATTR_PAGE_SCALE         173
+#define ATTR_PAGE_SCALETOPAGES  174
+#define ATTR_PAGE_FIRSTPAGENO   175
 
-#define ATTR_PAGE_PRINTAREA     175     // Editor: Druckbereiche
-#define ATTR_PAGE_REPEATROW     176
-#define ATTR_PAGE_REPEATCOL     177
-#define ATTR_PAGE_PRINTTABLES   178
+#define ATTR_PAGE_PRINTAREA     176     // Editor: Druckbereiche
+#define ATTR_PAGE_REPEATROW     177
+#define ATTR_PAGE_REPEATCOL     178
+#define ATTR_PAGE_PRINTTABLES   179
 
-#define ATTR_PAGE_HEADERLEFT    179     // Inhalte der Kopf-/
-#define ATTR_PAGE_FOOTERLEFT    180     // Fusszeilen (links)
-#define ATTR_PAGE_HEADERRIGHT   181     // Inhalte der Kopf-/
-#define ATTR_PAGE_FOOTERRIGHT   182     // Fusszeilen (rechts)
-#define ATTR_PAGE_HEADERSET     183     // die Sets dazu...
-#define ATTR_PAGE_FOOTERSET     184
+#define ATTR_PAGE_HEADERLEFT    180     // Inhalte der Kopf-/
+#define ATTR_PAGE_FOOTERLEFT    181     // Fusszeilen (links)
+#define ATTR_PAGE_HEADERRIGHT   182     // Inhalte der Kopf-/
+#define ATTR_PAGE_FOOTERRIGHT   183     // Fusszeilen (rechts)
+#define ATTR_PAGE_HEADERSET     184     // die Sets dazu...
+#define ATTR_PAGE_FOOTERSET     185
 
-#define ATTR_PAGE_FORMULAS      185
-#define ATTR_PAGE_NULLVALS      186
+#define ATTR_PAGE_FORMULAS      186
+#define ATTR_PAGE_NULLVALS      187
 
-#define ATTR_PAGE_SCALETO       187     // #i8868# scale printout to with/height
+#define ATTR_PAGE_SCALETO       188     // #i8868# scale printout to with/height
 
 #define ATTR_ENDINDEX           ATTR_PAGE_SCALETO        // Ende Pool-Range
 

@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: xmltabi.cxx,v $
- * $Revision: 1.40 $
+ * $Revision: 1.40.134.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -40,6 +40,7 @@
 #include "xmlrowi.hxx"
 #include "xmlcoli.hxx"
 #include "xmlsceni.hxx"
+#include "xmlexternaltabi.hxx"
 #include "document.hxx"
 #include "docuno.hxx"
 #include "olinetab.hxx"
@@ -48,6 +49,7 @@
 #include "XMLTableSourceContext.hxx"
 #include "XMLStylesImportHelper.hxx"
 #include "rangeutl.hxx"
+#include "externalrefmgr.hxx"
 
 #include <xmloff/xmltkmap.hxx>
 #include <xmloff/nmspmap.hxx>
@@ -63,6 +65,77 @@
 using namespace com::sun::star;
 using namespace xmloff::token;
 
+/**
+ * Determine whether this table is an external reference cache from its
+ * name.  There is currently no way of determining whether a table is a
+ * regular table or an external reference cache other than examining the
+ * name itself.  We should probably introduce a new boolean value for
+ * table:table element and use it instead of doing this, to make it more
+ * reliable and future-proof.
+ *
+ * @param rName
+ *
+ * @return
+ */
+static bool lcl_isExternalRefCache(const rtl::OUString& rName, rtl::OUString& rUrl, rtl::OUString& rExtTabName)
+{
+    // 'file:///path/to/file.ods'#MySheet
+    // 'file:///path/to/file.ods'#MySheet with space
+    // 'file:///path/to/file's.ods'#Sheet (Notice the quote in the file name.
+    //  That's allowed.)
+
+    static const sal_Unicode aPrefix[] = {
+        '\'', 'f', 'i', 'l', 'e', ':', '/', '/'
+    };
+
+    rtl::OUStringBuffer aUrlBuf, aTabNameBuf;
+    aUrlBuf.appendAscii("file://");
+    sal_Int32 n = rName.getLength();
+    const sal_Unicode* p = rName.getStr();
+
+    bool bInUrl = true;
+    sal_Unicode cPrev = 0;
+    for (sal_Int32 i = 0; i < n; ++i)
+    {
+        const sal_Unicode c = p[i];
+        if (i <= 7)
+        {
+            if (c != aPrefix[i])
+                return false;
+        }
+        else if (c == '#')
+        {
+            if (cPrev != '\'')
+                return false;
+
+            rUrl = aUrlBuf.makeStringAndClear();
+            rUrl = rUrl.copy(0, rUrl.getLength()-1); // remove the trailing single-quote.
+            bInUrl = false;
+        }
+        else if (bInUrl)
+            aUrlBuf.append(c);
+        else
+            aTabNameBuf.append(c);
+
+        cPrev = c;
+    }
+
+    if (bInUrl)
+        return false;
+
+    if (aTabNameBuf.getLength() == 0)
+        return false;
+
+    rExtTabName = aTabNameBuf.makeStringAndClear();
+
+    return true;
+}
+
+ScXMLExternalTabData::ScXMLExternalTabData() :
+    mpCacheTable(), mnRow(0), mnCol(0), mnFileId(0)
+{
+}
+
 //------------------------------------------------------------------
 
 ScXMLTableContext::ScXMLTableContext( ScXMLImport& rImport,
@@ -73,6 +146,7 @@ ScXMLTableContext::ScXMLTableContext( ScXMLImport& rImport,
                                       const sal_Bool bTempIsSubTable,
                                       const sal_Int32 nSpannedCols) :
     SvXMLImportContext( rImport, nPrfx, rLName ),
+    pExternalRefInfo(NULL),
     bStartFormPage(sal_False),
     bPrintEntireSheet(sal_True)
 {
@@ -117,7 +191,26 @@ ScXMLTableContext::ScXMLTableContext( ScXMLImport& rImport,
                     break;
             }
         }
-        GetScImport().GetTables().NewSheet(sName, sStyleName, bProtection, sPassword);
+
+        rtl::OUString aExtUrl, aExtTabName;
+        if (lcl_isExternalRefCache(sName, aExtUrl, aExtTabName))
+        {
+            // This is an external ref cache table.
+            pExternalRefInfo.reset(new ScXMLExternalTabData);
+            pExternalRefInfo->maFileUrl = aExtUrl;
+            ScDocument* pDoc = GetScImport().GetDocument();
+            if (pDoc)
+            {
+                ScExternalRefManager* pRefMgr = pDoc->GetExternalRefManager();
+                pExternalRefInfo->mnFileId = pRefMgr->getExternalFileId(aExtUrl);
+                pExternalRefInfo->mpCacheTable = pRefMgr->getCacheTable(pExternalRefInfo->mnFileId, aExtTabName, true);
+            }
+        }
+        else
+        {
+            // This is a regular table.
+            GetScImport().GetTables().NewSheet(sName, sStyleName, bProtection, sPassword);
+        }
     }
     else
     {
@@ -134,10 +227,30 @@ SvXMLImportContext *ScXMLTableContext::CreateChildContext( USHORT nPrefix,
                                             const ::com::sun::star::uno::Reference<
                                           ::com::sun::star::xml::sax::XAttributeList>& xAttrList )
 {
+    const SvXMLTokenMap& rTokenMap(GetScImport().GetTableElemTokenMap());
+    sal_uInt16 nToken = rTokenMap.Get(nPrefix, rLName);
+    if (pExternalRefInfo.get())
+    {
+        // We only care about the table-row and table-source elements for
+        // external cache data.
+        switch (nToken)
+        {
+            case XML_TOK_TABLE_ROW:
+                return new ScXMLExternalRefRowContext(
+                    GetScImport(), nPrefix, rLName, xAttrList, *pExternalRefInfo);
+            case XML_TOK_TABLE_SOURCE:
+                return new ScXMLExternalRefTabSourceContext(
+                    GetScImport(), nPrefix, rLName, xAttrList, *pExternalRefInfo);
+            default:
+                ;
+        }
+
+        return new SvXMLImportContext(GetImport(), nPrefix, rLName);
+    }
+
     SvXMLImportContext *pContext(0);
 
-    const SvXMLTokenMap& rTokenMap(GetScImport().GetTableElemTokenMap());
-    switch( rTokenMap.Get( nPrefix, rLName ) )
+    switch (nToken)
     {
     case XML_TOK_TABLE_COL_GROUP:
         pContext = new ScXMLTableColsContext( GetScImport(), nPrefix,
@@ -195,6 +308,8 @@ SvXMLImportContext *ScXMLTableContext::CreateChildContext( USHORT nPrefix,
             pContext = GetScImport().GetFormImport()->createOfficeFormsContext( GetScImport(), nPrefix, rLName );
         }
         break;
+    default:
+        ;
     }
 
     if( !pContext )

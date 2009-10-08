@@ -421,7 +421,7 @@ Sc10FontData::Sc10FontData(SvStream& rStream)
 
 
 Sc10FontCollection::Sc10FontCollection(SvStream& rStream) :
-    Collection (4, 4),
+    ScCollection (4, 4),
     nError     (0)
 {
   USHORT ID;
@@ -464,7 +464,7 @@ Sc10NameData::Sc10NameData(SvStream& rStream)
 
 
 Sc10NameCollection::Sc10NameCollection(SvStream& rStream) :
-    Collection (4, 4),
+    ScCollection (4, 4),
     nError     (0)
 {
   USHORT ID;
@@ -512,7 +512,7 @@ Sc10PatternData::Sc10PatternData(SvStream& rStream)
 
 
 Sc10PatternCollection::Sc10PatternCollection(SvStream& rStream) :
-  Collection (4, 4),
+  ScCollection (4, 4),
   nError     (0)
 {
   USHORT ID;
@@ -578,7 +578,7 @@ Sc10DataBaseData::Sc10DataBaseData(SvStream& rStream)
 
 
 Sc10DataBaseCollection::Sc10DataBaseCollection(SvStream& rStream) :
-  Collection (4, 4),
+  ScCollection (4, 4),
   nError     (0)
 {
   USHORT ID;
@@ -956,7 +956,7 @@ void Sc10PageCollection::PutToDoc( ScDocument* pDoc )
 }
 
 
-DataObject* Sc10PageData::Clone() const
+ScDataObject* Sc10PageData::Clone() const
 {
     return new Sc10PageData(aPageFormat);
 }
@@ -1690,7 +1690,7 @@ void Sc10Import::LoadCol(SCCOL Col, SCTAB Tab)
                     s[0] = '=';
                     s[Len + 1] = 0;
                     ScFormulaCell* pCell = new ScFormulaCell( pDoc, ScAddress( Col, static_cast<SCROW> (Row), Tab ) );
-                    pCell->SetHybridFormula( SC10TOSTRING( s ), ScGrammar::GRAM_NATIVE );
+                    pCell->SetHybridFormula( SC10TOSTRING( s ),formula::FormulaGrammar::GRAM_NATIVE );
                     pDoc->PutCell( Col, static_cast<SCROW> (Row), Tab, pCell, (BOOL)TRUE );
                     break;
                 }
@@ -2499,7 +2499,7 @@ void Sc10Import::LoadObjects()
 
 //-----------------------------------------------------------------------------------------------
 
-FltError ScImportStarCalc10( SvStream& rStream, ScDocument* pDocument )
+FltError ScFormatFilterPluginImpl::ScImportStarCalc10( SvStream& rStream, ScDocument* pDocument )
 {
     rStream.Seek( 0UL );
     Sc10Import  aImport( rStream, pDocument );

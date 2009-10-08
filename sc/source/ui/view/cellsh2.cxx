@@ -335,15 +335,27 @@ void ScCellShell::ExecuteDB( SfxRequest& rReq )
                 SfxItemSet  aArgSet( GetPool(), SCITEM_SORTDATA, SCITEM_SORTDATA );
                 ScSortParam aSortParam;
                 ScDBData*   pDBData = pTabViewShell->GetDBData();
+                SCCOL nCol          = GetViewData()->GetCurX();
+                SCCOL nTab          = GetViewData()->GetTabNo();
+                ScDocument* pDoc    = GetViewData()->GetDocument();
+                BOOL  bHasHeader    = FALSE;
 
                 pDBData->GetSortParam( aSortParam );
-                aSortParam.bHasHeader       = FALSE;
+
+                bHasHeader = pDoc->HasColHeader( aSortParam.nCol1, aSortParam.nRow1, aSortParam.nCol2, aSortParam.nRow2, nTab );
+
+                if( nCol < aSortParam.nCol1 )
+                    nCol = aSortParam.nCol1;
+                else if( nCol > aSortParam.nCol2 )
+                    nCol = aSortParam.nCol2;
+
+                aSortParam.bHasHeader       = bHasHeader;
                 aSortParam.bByRow           = TRUE;
                 aSortParam.bCaseSens        = FALSE;
                 aSortParam.bIncludePattern  = FALSE;
                 aSortParam.bInplace         = TRUE;
                 aSortParam.bDoSort[0]       = TRUE;
-                aSortParam.nField[0]        = aSortParam.nCol1;
+                aSortParam.nField[0]        = nCol;
                 aSortParam.bAscending[0]    = (nSlotId == SID_SORT_ASCENDING);
 
                 for ( USHORT i=1; i<MAXSORT; i++ )
@@ -615,11 +627,10 @@ void ScCellShell::ExecuteDB( SfxRequest& rReq )
                     if ( pDPObject )
                     {
                         const ScPivotItem* pPItem = (const ScPivotItem*)pItem;
-                        pTabViewShell->MakePivotTable(
-                                            pPItem->GetData(),
-                                            pPItem->GetDestRange(),
-                                            pPItem->IsNewSheet(),
-                                            *pDPObject );
+                        bool bSuccess = pTabViewShell->MakePivotTable(
+                            pPItem->GetData(), pPItem->GetDestRange(), pPItem->IsNewSheet(), *pDPObject );
+                        SfxBoolItem aRet(0, bSuccess);
+                        rReq.SetReturnValue(aRet);
                     }
                     rReq.Done();
                 }
@@ -710,7 +721,8 @@ void ScCellShell::ExecuteDB( SfxRequest& rReq )
                         {
                             //! use database ranges (select before type dialog?)
                             ScRange aRange;
-                            if ( GetViewData()->GetSimpleArea( aRange ) == SC_MARK_SIMPLE )
+                            ScMarkType eType = GetViewData()->GetSimpleArea(aRange);
+                            if ( (eType & SC_MARK_SIMPLE) == SC_MARK_SIMPLE )
                             {
                                 BOOL bOK = TRUE;
                                 if ( pDoc->HasSubTotalCells( aRange ) )

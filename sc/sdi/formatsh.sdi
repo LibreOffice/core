@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: formatsh.sdi,v $
- * $Revision: 1.14 $
+ * $Revision: 1.14.144.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -94,6 +94,7 @@ interface FormatForSelection
     SID_SCATTR_PROTECTION [ ExecMethod = ExecuteAttr; StateMethod = GetAttrState; ]
     SID_BACKGROUND_COLOR    [ ExecMethod = ExecuteAttr; StateMethod = GetAttrState; ]
     SID_ATTR_BRUSH      [ ExecMethod = ExecuteAttr; StateMethod = GetAttrState; ]
+    SID_ATTR_CHAR_OVERLINE  [ ExecMethod = ExecuteAttr; StateMethod = GetAttrState; ]
     SID_ATTR_CHAR_STRIKEOUT [ ExecMethod = ExecuteAttr; StateMethod = GetAttrState; ]
     SID_ATTR_CHAR_CONTOUR [ ExecMethod = ExecuteAttr; StateMethod = GetAttrState; ]
     SID_ATTR_CHAR_SHADOWED [ ExecMethod = ExecuteAttr; StateMethod = GetAttrState; ]

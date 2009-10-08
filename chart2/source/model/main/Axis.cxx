@@ -41,16 +41,16 @@
 #include "CloneHelper.hxx"
 #include "AxisHelper.hxx"
 #include "EventListenerHelper.hxx"
+#include <com/sun/star/chart/ChartAxisArrangeOrderType.hpp>
+#include <com/sun/star/chart/ChartAxisLabelPosition.hpp>
+#include <com/sun/star/chart/ChartAxisMarkPosition.hpp>
+#include <com/sun/star/chart/ChartAxisPosition.hpp>
 #include <com/sun/star/chart2/AxisType.hpp>
-#ifndef _COM_SUN_STAR_CHART2_XAXISPOSITION_HPP_
-#include <com/sun/star/chart2/AxisPosition.hpp>
-#endif
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/lang/Locale.hpp>
 #include <com/sun/star/drawing/LineStyle.hpp>
 #include <com/sun/star/drawing/LineDash.hpp>
 #include <com/sun/star/drawing/LineJoint.hpp>
-#include <com/sun/star/chart/ChartAxisArrangeOrderType.hpp>
 #include <com/sun/star/awt/Size.hpp>
 #include <rtl/uuid.h>
 #include <cppuhelper/queryinterface.hxx>
@@ -77,20 +77,21 @@ static const OUString lcl_aServiceName(
 enum
 {
     PROP_AXIS_SHOW,
-    PROP_AXIS_POSITION,
+    PROP_AXIS_CROSSOVER_POSITION,
+    PROP_AXIS_CROSSOVER_VALUE,
     PROP_AXIS_DISPLAY_LABELS,
+    PROP_AXIS_NUMBER_FORMAT,
+    PROP_AXIS_LABEL_POSITION,
     PROP_AXIS_TEXT_ROTATION,
     PROP_AXIS_TEXT_BREAK,
     PROP_AXIS_TEXT_OVERLAP,
     PROP_AXIS_TEXT_STACKED,
     PROP_AXIS_TEXT_ARRANGE_ORDER,
-    PROP_AXIS_NUMBER_FORMAT,
     PROP_AXIS_REFERENCE_DIAGRAM_SIZE,
 
-    // for Testing only!
     PROP_AXIS_MAJOR_TICKMARKS,
-    // for Testing only!
-    PROP_AXIS_MINOR_TICKMARKS
+    PROP_AXIS_MINOR_TICKMARKS,
+    PROP_AXIS_MARK_POSITION
 };
 
 void lcl_AddPropertiesToVector(
@@ -104,11 +105,16 @@ void lcl_AddPropertiesToVector(
                   | beans::PropertyAttribute::MAYBEDEFAULT ));
 
     rOutProperties.push_back(
-        Property( C2U( "AxisPosition" ),
-                  PROP_AXIS_POSITION,
-                  ::getCppuType( reinterpret_cast< const sal_Int32 * >(0)),
-                  beans::PropertyAttribute::BOUND
-                  | beans::PropertyAttribute::MAYBEDEFAULT ));
+        Property( C2U( "CrossoverPosition" ),
+                  PROP_AXIS_CROSSOVER_POSITION,
+                  ::getCppuType( reinterpret_cast< const ::com::sun::star::chart::ChartAxisPosition * >(0)),
+                  beans::PropertyAttribute::MAYBEDEFAULT ));
+
+    rOutProperties.push_back(
+        Property( C2U( "CrossoverValue" ),
+                  PROP_AXIS_CROSSOVER_VALUE,
+                  ::getCppuType( reinterpret_cast< const double * >(0)),
+                  beans::PropertyAttribute::MAYBEVOID ));
 
     rOutProperties.push_back(
         Property( C2U( "DisplayLabels" ),
@@ -116,6 +122,19 @@ void lcl_AddPropertiesToVector(
                   ::getBooleanCppuType(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT ));
+
+    rOutProperties.push_back(
+        Property( C2U( "NumberFormat" ),
+                  PROP_AXIS_NUMBER_FORMAT,
+                  ::getCppuType( reinterpret_cast< const sal_Int32 * >(0)),
+                  beans::PropertyAttribute::BOUND
+                  | beans::PropertyAttribute::MAYBEVOID ));
+
+    rOutProperties.push_back(
+        Property( C2U( "LabelPosition" ),
+                  PROP_AXIS_LABEL_POSITION,
+                  ::getCppuType( reinterpret_cast< const ::com::sun::star::chart::ChartAxisLabelPosition * >(0)),
+                  beans::PropertyAttribute::MAYBEDEFAULT ));
 
     rOutProperties.push_back(
         Property( C2U( "TextRotation" ),
@@ -153,42 +172,38 @@ void lcl_AddPropertiesToVector(
                   | beans::PropertyAttribute::MAYBEDEFAULT ));
 
     rOutProperties.push_back(
-        Property( C2U( "NumberFormat" ),
-                  PROP_AXIS_NUMBER_FORMAT,
-                  ::getCppuType( reinterpret_cast< const sal_Int32 * >(0)),
-                  beans::PropertyAttribute::BOUND
-                  | beans::PropertyAttribute::MAYBEVOID ));
-
-    rOutProperties.push_back(
         Property( C2U( "ReferencePageSize" ),
                   PROP_AXIS_REFERENCE_DIAGRAM_SIZE,
                   ::getCppuType( reinterpret_cast< const awt::Size * >(0)),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEVOID ));
 
-    // for Testing only!
     rOutProperties.push_back(
         Property( C2U( "MajorTickmarks" ),
                   PROP_AXIS_MAJOR_TICKMARKS,
                   ::getCppuType( reinterpret_cast< const sal_Int32 * >(0)),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT ));
-    // for Testing only!
     rOutProperties.push_back(
         Property( C2U( "MinorTickmarks" ),
                   PROP_AXIS_MINOR_TICKMARKS,
                   ::getCppuType( reinterpret_cast< const sal_Int32 * >(0)),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT ));
-
+    rOutProperties.push_back(
+        Property( C2U( "MarkPosition" ),
+                  PROP_AXIS_MARK_POSITION,
+                  ::getCppuType( reinterpret_cast< const ::com::sun::star::chart::ChartAxisMarkPosition * >(0)),
+                  beans::PropertyAttribute::MAYBEDEFAULT ));
 }
 
 void lcl_AddDefaultsToMap(
     ::chart::tPropertyValueMap & rOutMap )
 {
     ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_AXIS_SHOW, true );
-    ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_AXIS_POSITION, chart2::AxisPosition::MAIN );
+    ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_AXIS_CROSSOVER_POSITION, ::com::sun::star::chart::ChartAxisPosition_ZERO );
     ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_AXIS_DISPLAY_LABELS, true );
+    ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_AXIS_LABEL_POSITION, ::com::sun::star::chart::ChartAxisLabelPosition_NEAR_AXIS );
     ::chart::PropertyHelper::setPropertyValueDefault< double >( rOutMap, PROP_AXIS_TEXT_ROTATION, 0.0 );
     ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_AXIS_TEXT_BREAK, false );
     ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_AXIS_TEXT_OVERLAP, false );
@@ -200,10 +215,9 @@ void lcl_AddDefaultsToMap(
     ::chart::PropertyHelper::setPropertyValue( rOutMap, ::chart::CharacterProperties::PROP_CHAR_ASIAN_CHAR_HEIGHT, fDefaultCharHeight );
     ::chart::PropertyHelper::setPropertyValue( rOutMap, ::chart::CharacterProperties::PROP_CHAR_COMPLEX_CHAR_HEIGHT, fDefaultCharHeight );
 
-    // for Testing only!
     ::chart::PropertyHelper::setPropertyValueDefault< sal_Int32 >( rOutMap, PROP_AXIS_MAJOR_TICKMARKS, 2 /* CHAXIS_MARK_OUTER */ );
-    // for Testing only!
     ::chart::PropertyHelper::setPropertyValueDefault< sal_Int32 >( rOutMap, PROP_AXIS_MINOR_TICKMARKS, 0 /* CHAXIS_MARK_NONE */ );
+    ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_AXIS_MARK_POSITION, ::com::sun::star::chart::ChartAxisMarkPosition_AT_LABELS_AND_AXIS );
 }
 
 const Sequence< Property > & lcl_GetPropertySequence()

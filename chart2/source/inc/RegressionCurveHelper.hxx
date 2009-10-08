@@ -38,13 +38,14 @@
 #include <com/sun/star/chart2/XDiagram.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/frame/XModel.hpp>
+#include "charttoolsdllapi.hxx"
 
 #include <vector>
 
 namespace chart
 {
 
-class RegressionCurveHelper
+class OOO_DLLPUBLIC_CHARTTOOLS RegressionCurveHelper
 {
 public:
     /// returns a model mean-value line

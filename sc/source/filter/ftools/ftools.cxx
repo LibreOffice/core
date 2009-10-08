@@ -379,7 +379,7 @@ bool ScfTools::GetHTMLNameFromName( const String& rSource, String& rName )
     if( rSource.EqualsIgnoreCaseAscii( GetHTMLNamePrefix(), 0, GetHTMLNamePrefix().Len() ) )
     {
         rName = rSource.Copy( GetHTMLNamePrefix().Len() );
-        ScGlobal::AddQuotes( rName );
+        ScGlobal::AddQuotes( rName, '"', false );
     }
     else if( rSource.EqualsIgnoreCaseAscii( GetHTMLIndexPrefix(), 0, GetHTMLIndexPrefix().Len() ) )
     {
@@ -391,4 +391,16 @@ bool ScfTools::GetHTMLNameFromName( const String& rSource, String& rName )
 }
 
 // ============================================================================
+
+ScFormatFilterPluginImpl::ScFormatFilterPluginImpl()
+{
+  fprintf (stderr, "loaded\n");
+}
+
+ScFormatFilterPlugin * SAL_CALL ScFilterCreate(void)
+{
+    return new ScFormatFilterPluginImpl();
+}
+
+// implementation class inside the filters
 

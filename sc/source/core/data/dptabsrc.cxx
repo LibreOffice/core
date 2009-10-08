@@ -31,7 +31,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sc.hxx"
 
-#include <stdio.h>
+
 
 
 // INCLUDE ---------------------------------------------------------------
@@ -40,6 +40,7 @@
 #include <vector>
 #include <set>
 #include <hash_map>
+#include <hash_set>
 
 #include <tools/debug.hxx>
 #include <rtl/math.hxx>
@@ -68,6 +69,7 @@
 #include <com/sun/star/sheet/DataPilotFieldFilter.hpp>
 #include <com/sun/star/sheet/DataPilotFieldReferenceType.hpp>
 #include <com/sun/star/sheet/DataPilotFieldSortMode.hpp>
+#include <com/sun/star/sheet/DataPilotFieldAutoShowInfo.hpp>
 #include <com/sun/star/table/CellAddress.hpp>
 
 #include <unotools/collatorwrapper.hxx>
@@ -78,9 +80,11 @@ using namespace com::sun::star;
 using ::std::vector;
 using ::std::set;
 using ::std::hash_map;
+using ::std::hash_set;
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::Sequence;
 using ::com::sun::star::uno::Any;
+using ::com::sun::star::sheet::DataPilotFieldAutoShowInfo;
 
 // -----------------------------------------------------------------------
 
@@ -422,6 +426,15 @@ Sequence< Sequence<Any> > SAL_CALL ScDPSource::getDrillDownData(const Sequence<s
     throw (uno::RuntimeException)
 {
     long nColumnCount = GetData()->GetColumnCount();
+    ScSimpleSharedString& rSharedString = GetData()->GetSharedString();
+
+    typedef hash_map<String, long, ScStringHashCode> FieldNameMapType;
+    FieldNameMapType aFieldNames;
+    for (long i = 0; i < nColumnCount; ++i)
+    {
+        aFieldNames.insert(
+            FieldNameMapType::value_type(GetData()->getDimensionName(i), i));
+    }
 
     // collect ScDPItemData for each filtered column
     vector<ScDPCacheTable::Criterion> aFilterCriteria;
@@ -443,17 +456,25 @@ Sequence< Sequence<Any> > SAL_CALL ScDPSource::getDrillDownData(const Sequence<s
                     ScDPItemData aItem;
                     pMembers->getByIndex(nIndex)->FillItemData( aItem );
                     aFilterCriteria.push_back( ScDPCacheTable::Criterion() );
-                    sal_Int32 nMatchStrId = ScSharedString::getStringId(aItem.aString);
+                    sal_Int32 nMatchStrId = rSharedString.getStringId(aItem.aString);
                     aFilterCriteria.back().mnFieldIndex = nCol;
                     aFilterCriteria.back().mpFilter.reset(
-                        new ScDPCacheTable::SingleFilter(nMatchStrId, aItem.fValue, aItem.bHasValue) );
+                        new ScDPCacheTable::SingleFilter(rSharedString, nMatchStrId, aItem.fValue, aItem.bHasValue) );
                 }
             }
         }
     }
 
+    // Take into account the visibilities of field members.
+    ScDPResultVisibilityData aResVisData(rSharedString, this);
+    pRowResRoot->FillVisibilityData(aResVisData);
+    pColResRoot->FillVisibilityData(aResVisData);
+    aResVisData.fillFieldFilters(aFilterCriteria);
+
     Sequence< Sequence<Any> > aTabData;
-    pData->GetDrillDownData(aFilterCriteria, aTabData);
+    hash_set<sal_Int32> aCatDims;
+    GetCategoryDimensionIndices(aCatDims);
+    pData->GetDrillDownData(aFilterCriteria, aCatDims, aTabData);
     return aTabData;
 }
 
@@ -668,6 +689,86 @@ void ScDPSource::FillCalcInfo(bool bIsRow, ScDPTableData::CalcInfo& rInfo, bool 
     }
 }
 
+void ScDPSource::GetCategoryDimensionIndices(hash_set<sal_Int32>& rCatDims)
+{
+    hash_set<sal_Int32> aCatDims;
+    for (long i = 0; i < nColDimCount; ++i)
+    {
+        sal_Int32 nDim = static_cast<sal_Int32>(nColDims[i]);
+        if (!IsDataLayoutDimension(nDim))
+            aCatDims.insert(nDim);
+    }
+
+    for (long i = 0; i < nRowDimCount; ++i)
+    {
+        sal_Int32 nDim = static_cast<sal_Int32>(nRowDims[i]);
+        if (!IsDataLayoutDimension(nDim))
+            aCatDims.insert(nDim);
+    }
+
+    for (long i = 0; i < nPageDimCount; ++i)
+    {
+        sal_Int32 nDim = static_cast<sal_Int32>(nPageDims[i]);
+        if (!IsDataLayoutDimension(nDim))
+            aCatDims.insert(nDim);
+    }
+
+    rCatDims.swap(aCatDims);
+}
+
+void ScDPSource::FilterCacheTableByPageDimensions()
+{
+    ScSimpleSharedString& rSharedString = GetData()->GetSharedString();
+
+    // filter table by page dimensions.
+    vector<ScDPCacheTable::Criterion> aCriteria;
+    for (long i = 0; i < nPageDimCount; ++i)
+    {
+        ScDPDimension* pDim = GetDimensionsObject()->getByIndex(nPageDims[i]);
+        long nField = pDim->GetDimension();
+
+        ScDPMembers* pMems = pDim->GetHierarchiesObject()->getByIndex(0)->
+            GetLevelsObject()->getByIndex(0)->GetMembersObject();
+
+        long nMemCount = pMems->getCount();
+        ScDPCacheTable::Criterion aFilter;
+        aFilter.mnFieldIndex = static_cast<sal_Int32>(nField);
+        aFilter.mpFilter.reset(new ScDPCacheTable::GroupFilter(rSharedString));
+        ScDPCacheTable::GroupFilter* pGrpFilter =
+            static_cast<ScDPCacheTable::GroupFilter*>(aFilter.mpFilter.get());
+        for (long j = 0; j < nMemCount; ++j)
+        {
+            ScDPMember* pMem = pMems->getByIndex(j);
+            if (pMem->getIsVisible())
+            {
+                ScDPItemData aData;
+                pMem->FillItemData(aData);
+                pGrpFilter->addMatchItem(aData.aString, aData.fValue, aData.bHasValue);
+            }
+        }
+        if (pGrpFilter->getMatchItemCount() < static_cast<size_t>(nMemCount))
+            // there is at least one invisible item.  Add this filter criterion to the mix.
+            aCriteria.push_back(aFilter);
+
+        if (!pDim || !pDim->HasSelectedPage())
+            continue;
+
+        const ScDPItemData& rData = pDim->GetSelectedData();
+        aCriteria.push_back(ScDPCacheTable::Criterion());
+        ScDPCacheTable::Criterion& r = aCriteria.back();
+        r.mnFieldIndex = static_cast<sal_Int32>(nField);
+        sal_Int32 nStrId = rSharedString.getStringId(rData.aString);
+        r.mpFilter.reset(
+            new ScDPCacheTable::SingleFilter(rSharedString, nStrId, rData.fValue, rData.bHasValue));
+    }
+    if (!aCriteria.empty())
+    {
+        hash_set<sal_Int32> aCatDims;
+        GetCategoryDimensionIndices(aCatDims);
+        pData->FilterCacheTable(aCriteria, aCatDims);
+    }
+}
+
 void ScDPSource::CreateRes_Impl()
 {
     if ( !pResData )
@@ -833,27 +934,8 @@ void ScDPSource::CreateRes_Impl()
         }
         else
         {
-            {
-                // filter table by page dimensions.
-                vector<ScDPCacheTable::Criterion> aCriteria;
-                for (i = 0; i < nPageDimCount; ++i)
-                {
-                    ScDPDimension* pDim = GetDimensionsObject()->getByIndex(nPageDims[i]);
-                    if (!pDim || !pDim->HasSelectedPage())
-                        continue;
+            FilterCacheTableByPageDimensions();
 
-                    long nField = pDim->GetDimension();
-                    const ScDPItemData& rData = pDim->GetSelectedData();
-                    aCriteria.push_back(ScDPCacheTable::Criterion());
-                    ScDPCacheTable::Criterion& r = aCriteria.back();
-                    r.mnFieldIndex = static_cast<sal_Int32>(nField);
-                    sal_Int32 nStrId = ScSharedString::getStringId(rData.aString);
-                    r.mpFilter.reset(
-                        new ScDPCacheTable::SingleFilter(nStrId, rData.fValue, rData.bHasValue));
-                }
-                if (!aCriteria.empty())
-                    pData->FilterCacheTable(aCriteria);
-            }
             aInfo.aPageDims.reserve(nPageDimCount);
             for (i = 0; i < nPageDimCount; ++i)
                 aInfo.aPageDims.push_back(nPageDims[i]);
@@ -946,7 +1028,7 @@ void ScDPSource::FillLevelList( USHORT nOrientation, List& rList )
     }
     if (!pDimIndex)
     {
-        DBG_ERROR("invalid orientation")
+        DBG_ERROR("invalid orientation");
         return;
     }
 
@@ -2181,7 +2263,7 @@ SC_IMPL_DUMMY_PROPERTY_LISTENER( ScDPLevel )
 
 // -----------------------------------------------------------------------
 
-USHORT lcl_GetFirstStringPos( const TypedStrCollection& rColl )
+USHORT lcl_GetFirstStringPos( const TypedScStrCollection& rColl )
 {
     USHORT nPos = 0;
     USHORT nCount = rColl.GetCount();
@@ -2211,7 +2293,7 @@ ScDPMembers::ScDPMembers( ScDPSource* pSrc, long nD, long nH, long nL ) :
             {
                 case SC_DAPI_LEVEL_YEAR:
                     {
-                        const TypedStrCollection& rStrings = pSource->GetData()->GetColumnEntries(nSrcDim);
+                        const TypedScStrCollection& rStrings = pSource->GetData()->GetColumnEntries(nSrcDim);
                         USHORT nFirstString = lcl_GetFirstStringPos( rStrings );
                         if ( nFirstString > 0 )
                         {
@@ -2255,7 +2337,7 @@ ScDPMembers::ScDPMembers( ScDPSource* pSrc, long nD, long nH, long nL ) :
     else
     {
         //  StringCollection is cached at TableData
-        const TypedStrCollection& rStrings = pSource->GetData()->GetColumnEntries(nSrcDim);
+        const TypedScStrCollection& rStrings = pSource->GetData()->GetColumnEntries(nSrcDim);
         nMbrCount = rStrings.GetCount();
     }
 }
@@ -2405,7 +2487,7 @@ ScDPMember* ScDPMembers::getByIndex(long nIndex) const
                 {
                     //! cache year range here!
 
-                    const TypedStrCollection& rStrings = pSource->GetData()->GetColumnEntries(nSrcDim);
+                    const TypedScStrCollection& rStrings = pSource->GetData()->GetColumnEntries(nSrcDim);
                     double fFirstVal = rStrings[0]->GetValue();
                     long nFirstYear = pSource->GetData()->GetDatePart(
                                         (long)::rtl::math::approxFloor( fFirstVal ),
@@ -2437,7 +2519,7 @@ ScDPMember* ScDPMembers::getByIndex(long nIndex) const
             }
             else
             {
-                const TypedStrCollection& rStrings = pSource->GetData()->GetColumnEntries(nSrcDim);
+                const TypedScStrCollection& rStrings = pSource->GetData()->GetColumnEntries(nSrcDim);
                 const TypedStrData* pData = rStrings[(USHORT)nIndex];
                 pNew = new ScDPMember( pSource, nDim, nHier, nLev,
                                         pData->GetString(), pData->GetValue(), !pData->IsStrData() );

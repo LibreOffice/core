@@ -42,7 +42,7 @@
 #include "olinetab.hxx"
 #include "globstr.hrc"
 #include "subtotal.hxx"
-#include "errorcodes.hxx"
+#include "formula/errorcodes.hxx"
 #include "cell.hxx"
 
 #include <math.h>
@@ -746,11 +746,11 @@ void ScConsData::OutputToDocument( ScDocument* pDestDoc, SCCOL nCol, SCROW nRow,
                                 //! unterscheiden, ob nach Kategorien aufgeteilt
         String aString;
 
-        SingleRefData aSRef;        // Daten fuer Referenz-Formelzellen
+        ScSingleRefData aSRef;      // Daten fuer Referenz-Formelzellen
         aSRef.InitFlags();
         aSRef.SetFlag3D(TRUE);
 
-        ComplRefData aCRef;         // Daten fuer Summen-Zellen
+        ScComplexRefData aCRef;         // Daten fuer Summen-Zellen
         aCRef.InitFlags();
         aCRef.Ref1.SetColRel(TRUE); aCRef.Ref1.SetRowRel(TRUE); aCRef.Ref1.SetTabRel(TRUE);
         aCRef.Ref2.SetColRel(TRUE); aCRef.Ref2.SetRowRel(TRUE); aCRef.Ref2.SetTabRel(TRUE);

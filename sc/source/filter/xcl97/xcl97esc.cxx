@@ -30,7 +30,6 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sc.hxx"
-#include "xcl97esc.hxx"
 
 #include <com/sun/star/awt/XControlModel.hpp>
 #include <com/sun/star/embed/XClassifiedObject.hpp>
@@ -61,6 +60,7 @@
 #include "xcl97rec.hxx"
 #include "xehelper.hxx"
 #include "xechart.hxx"
+#include "xcl97esc.hxx"
 
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::Sequence;

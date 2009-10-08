@@ -31,6 +31,7 @@
 #define _CHART2_TOOLS_TITLEHELPER_HXX
 
 #include "ReferenceSizeProvider.hxx"
+#include "charttoolsdllapi.hxx"
 #include <com/sun/star/chart2/XTitled.hpp>
 #include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
@@ -41,7 +42,7 @@ namespace chart
 {
 //.............................................................................
 
-class TitleHelper
+class OOO_DLLPUBLIC_CHARTTOOLS TitleHelper
 {
 public:
     enum eTitleType

@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: output2.cxx,v $
- * $Revision: 1.57 $
+ * $Revision: 1.56.142.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -366,6 +366,9 @@ void ScDrawStringsVars::SetPattern( const ScPatternAttr* pNew, const SfxItemSet*
 
     Color aULineColor( ((const SvxUnderlineItem&)pPattern->GetItem( ATTR_FONT_UNDERLINE, pCondSet )).GetColor() );
     pDev->SetTextLineColor( aULineColor );
+
+    Color aOLineColor( ((const SvxOverlineItem&)pPattern->GetItem( ATTR_FONT_OVERLINE, pCondSet )).GetColor() );
+    pDev->SetOverlineColor( aOLineColor );
 
     //  Zahlenformat
 
@@ -781,6 +784,8 @@ inline BOOL StringDiffer( const ScPatternAttr*& rpOldPattern, const ScPatternAtt
     else if ( &rpNewPattern->GetItem( ATTR_CTL_FONT_POSTURE ) != &rpOldPattern->GetItem( ATTR_CTL_FONT_POSTURE ) )
         return TRUE;
     else if ( &rpNewPattern->GetItem( ATTR_FONT_UNDERLINE ) != &rpOldPattern->GetItem( ATTR_FONT_UNDERLINE ) )
+        return TRUE;
+    else if ( &rpNewPattern->GetItem( ATTR_FONT_OVERLINE ) != &rpOldPattern->GetItem( ATTR_FONT_OVERLINE ) )
         return TRUE;
     else if ( &rpNewPattern->GetItem( ATTR_FONT_WORDLINE ) != &rpOldPattern->GetItem( ATTR_FONT_WORDLINE ) )
         return TRUE;

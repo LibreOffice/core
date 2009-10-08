@@ -87,12 +87,12 @@ private:
     static DefTokenId   IndexToTokenWK123( BYTE );
     void                DoFunc( DefTokenId eOc, BYTE nAnz, const sal_Char* pExtName );
     void                LotusRelToScRel( UINT16 nCol, UINT16 nRow,
-                            SingleRefData& rSRD );
+                            ScSingleRefData& rSRD );
     BOOL                bWK3;       // alternative Codeumsetzung statt fuer < WK1
         BOOL                            bWK123;         // alternative for 123
     // -------------------------------------------------------------------
-    void                ReadSRD( SingleRefData& rSRD, BYTE nFlags );
-    inline void         ReadCRD( ComplRefData& rCRD, BYTE nFlags );
+    void                ReadSRD( ScSingleRefData& rSRD, BYTE nFlags );
+    inline void         ReadCRD( ScComplexRefData& rCRD, BYTE nFlags );
     void                IncToken( TokenId &rParam );
                         // ACHTUNG: hier wird die aktuelle Token-Kette im Pool
                         // mit '(<rParam>)+1' fortgeschrieben und mit
@@ -114,7 +114,7 @@ private:
 };
 
 
-inline void LotusToSc::ReadCRD( ComplRefData& rCRD, BYTE nRelBit )
+inline void LotusToSc::ReadCRD( ScComplexRefData& rCRD, BYTE nRelBit )
 {
     // erster Teil
     ReadSRD( rCRD.Ref1, nRelBit );

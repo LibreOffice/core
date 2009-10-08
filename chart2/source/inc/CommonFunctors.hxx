@@ -36,6 +36,7 @@
 #include <com/sun/star/uno/Any.hxx>
 #include <rtl/ustring.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
+#include "charttoolsdllapi.hxx"
 
 namespace chart
 {
@@ -61,7 +62,7 @@ template< typename T >
     <p>In case no number can be generated from the Any, NaN (see
     rtl::math::SetNAN()) is returned.</p>
 */
-struct AnyToDouble : public ::std::unary_function< ::com::sun::star::uno::Any, double >
+struct OOO_DLLPUBLIC_CHARTTOOLS AnyToDouble : public ::std::unary_function< ::com::sun::star::uno::Any, double >
 {
     double operator() ( const ::com::sun::star::uno::Any & rAny )
     {
@@ -92,7 +93,7 @@ struct AnyToDouble : public ::std::unary_function< ::com::sun::star::uno::Any, d
 /** unary function to convert ::com::sun::star::uno::Any into an
     ::rtl::OUString.
 */
-struct AnyToString : public ::std::unary_function< ::com::sun::star::uno::Any,  ::rtl::OUString >
+struct OOO_DLLPUBLIC_CHARTTOOLS AnyToString : public ::std::unary_function< ::com::sun::star::uno::Any,  ::rtl::OUString >
 {
     ::rtl::OUString operator() ( const ::com::sun::star::uno::Any & rAny )
     {
@@ -120,7 +121,7 @@ struct AnyToString : public ::std::unary_function< ::com::sun::star::uno::Any,  
 
     <p>For conversion rtl::math::StringToDouble is used.</p>
  */
-struct OUStringToDouble : public ::std::unary_function< ::rtl::OUString, double >
+struct OOO_DLLPUBLIC_CHARTTOOLS OUStringToDouble : public ::std::unary_function< ::rtl::OUString, double >
 {
     double operator() ( const ::rtl::OUString & rStr )
     {
@@ -138,7 +139,7 @@ struct OUStringToDouble : public ::std::unary_function< ::rtl::OUString, double 
 
     <p>For conversion rtl::math::DoubleToOUString is used.</p>
  */
-struct DoubleToOUString : public ::std::unary_function< double, ::rtl::OUString >
+struct OOO_DLLPUBLIC_CHARTTOOLS DoubleToOUString : public ::std::unary_function< double, ::rtl::OUString >
 {
     ::rtl::OUString operator() ( double fNumber )
     {

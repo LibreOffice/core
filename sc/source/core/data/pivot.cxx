@@ -172,8 +172,8 @@ ScPivot::ScPivot(ScDocument* pDocument) :
 {
     for (SCSIZE i=0; i<PIVOT_MAXFIELD; i++)
     {
-        pColList[i] = new PivotStrCollection();
-        pRowList[i] = new PivotStrCollection();
+        pColList[i] = new PivotScStrCollection();
+        pRowList[i] = new PivotScStrCollection();
     }
     pDataList = pColList[0];
     ppDataArr = NULL;
@@ -208,7 +208,7 @@ ScPivot::ScPivot(ScDocument* pDocument) :
 }
 
 ScPivot::ScPivot(const ScPivot& rPivot):
-    DataObject(),
+    ScDataObject(),
     pDoc            (rPivot.pDoc),
     aQuery          (rPivot.aQuery),
     bHasHeader      (rPivot.bHasHeader),
@@ -248,8 +248,8 @@ ScPivot::ScPivot(const ScPivot& rPivot):
 
     for (SCSIZE i=0; i<PIVOT_MAXFIELD; i++)
     {
-        pColList[i] = new PivotStrCollection();
-        pRowList[i] = new PivotStrCollection();
+        pColList[i] = new PivotScStrCollection();
+        pRowList[i] = new PivotScStrCollection();
     }
     pDataList = pColList[0];
     ppDataArr = NULL;
@@ -432,7 +432,7 @@ BOOL ScPivot::Load( SvStream& /* rStream */, ScMultipleReadHeader& rHdr )
         rStream.ReadByteString( aName, rStream.GetStreamCharSet() );
         rStream.ReadByteString( aTag,  rStream.GetStreamCharSet() );
 
-        DBG_ASSERT(!pColNames, "Spaltennamen schon gesetzt?")
+        DBG_ASSERT(!pColNames, "Spaltennamen schon gesetzt?");
         rStream >> nColNameCount;
         if (nColNameCount)
         {
@@ -878,7 +878,7 @@ void ScPivot::SetDataFields(const PivotField* pFieldArr, SCSIZE nCount)
                     String aStr;
                     pDoc->GetString(aDataArr[nDataCount].nCol, nSrcRow1, nSrcTab, aStr);
                     if (aStr.Len() == 0)
-                        aStr = ColToAlpha( aDataArr[nDataCount].nCol );
+                        aStr = ScColToAlpha( aDataArr[nDataCount].nCol );
                     TypedStrData* pStrData = new TypedStrData(aStr);
                     if (!(pDataList->AtInsert(pDataList->GetCount(), pStrData)))
                     {
@@ -1017,7 +1017,7 @@ void ScPivot::DrawData()
                 {
                     pDoc->GetString(aColArr[i].nCol, nSrcRow1, nSrcTab, aStr);
                     if ( !aStr.Len() )
-                        aStr = ColToAlpha( aColArr[i].nCol );
+                        aStr = ScColToAlpha( aColArr[i].nCol );
                     pDoc->SetString(nCol, nRow, nDestTab, aStr);
                     //  Kategorie 2
                     nCol++;
@@ -1042,7 +1042,7 @@ void ScPivot::DrawData()
                 {
                     pDoc->GetString(aRowArr[i].nCol, nSrcRow1, nSrcTab, aStr);
                     if ( !aStr.Len() )
-                        aStr = ColToAlpha( aRowArr[i].nCol );
+                        aStr = ScColToAlpha( aRowArr[i].nCol );
                     pDoc->SetString(nCol, nRow, nDestTab, aStr);
                     //  Kategorie 4
                     nCol++;
@@ -1412,7 +1412,7 @@ void ScPivot::CreateFieldData()
                 //  Daten eintragen
                 if ((nCIndex < nDataColCount) && (nRIndex < nDataRowCount))
                 {
-                    DBG_ASSERT(ppDataArr[nRIndex][nCIndex].nIndex == i, "falsch init.")
+                    DBG_ASSERT(ppDataArr[nRIndex][nCIndex].nIndex == i, "falsch init.");
 
                     ppDataArr[nRIndex][nCIndex].nIndex = i;
                     aAdr.SetCol( aDataArr[i].nCol );

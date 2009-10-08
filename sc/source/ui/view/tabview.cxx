@@ -908,8 +908,8 @@ void ScTabView::UpdateVarZoom()
             PaintGrid();
             PaintTop();
             PaintLeft();
-            aViewData.GetViewShell()->GetViewFrame()->GetBindings().
-                Invalidate( SID_ATTR_ZOOM );
+            aViewData.GetViewShell()->GetViewFrame()->GetBindings().Invalidate( SID_ATTR_ZOOM );
+            aViewData.GetViewShell()->GetViewFrame()->GetBindings().Invalidate( SID_ATTR_ZOOMSLIDER );
         }
         bInZoomUpdate = FALSE;
     }
@@ -1194,6 +1194,7 @@ BOOL ScTabView::ScrollCommand( const CommandEvent& rCEvt, ScSplitPos ePos )
                 PaintTop();
                 PaintLeft();
                 aViewData.GetBindings().Invalidate( SID_ATTR_ZOOM );
+                aViewData.GetBindings().Invalidate( SID_ATTR_ZOOMSLIDER );
             }
 
             bDone = TRUE;
@@ -1292,7 +1293,7 @@ IMPL_LINK( ScTabView, ScrollHdl, ScrollBar*, pScroll )
             {
                 aHelpStr = ScGlobal::GetRscString(STR_COLUMN);
                 aHelpStr += ' ';
-                aHelpStr += ColToAlpha((SCCOL) nScrollPos);
+                aHelpStr += ScColToAlpha((SCCOL) nScrollPos);
 
                 aRect.Left() = aMousePos.X();
                 aRect.Top()  = aPos.Y() - 4;

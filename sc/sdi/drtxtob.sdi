@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: drtxtob.sdi,v $
- * $Revision: 1.17 $
+ * $Revision: 1.17.144.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -80,6 +80,7 @@ interface TableDrawText
     SID_ULINE_VAL_DOUBLE        [ ExecMethod = ExecuteToggle; StateMethod = GetAttrState; Export = FALSE; ]
     SID_ULINE_VAL_DOTTED        [ ExecMethod = ExecuteToggle; StateMethod = GetAttrState; Export = FALSE; ]
 
+    SID_ATTR_CHAR_OVERLINE      [ ExecMethod = ExecuteAttr; StateMethod = GetAttrState; Export = FALSE; ]
     SID_ATTR_CHAR_CONTOUR       [ ExecMethod = ExecuteAttr; StateMethod = GetAttrState; Export = FALSE; ]
     SID_ATTR_CHAR_SHADOWED      [ ExecMethod = ExecuteAttr; StateMethod = GetAttrState; Export = FALSE; ]
     SID_ATTR_CHAR_STRIKEOUT     [ ExecMethod = ExecuteAttr; StateMethod = GetAttrState; Export = FALSE; ]

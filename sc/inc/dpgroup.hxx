@@ -35,6 +35,7 @@
 #include <hash_set>
 
 #include "dptabdat.hxx"
+#include "scdllapi.h"
 
 class ScDocument;
 class SvNumberFormatter;
@@ -74,7 +75,7 @@ public:
     sal_Int32   GetDatePart() const { return nDatePart; }
     const ScDPNumGroupInfo& GetNumInfo() const { return aNumInfo; }
 
-    void        FillColumnEntries( TypedStrCollection& rEntries, const TypedStrCollection& rOriginal,
+    void        FillColumnEntries( TypedScStrCollection& rEntries, const TypedScStrCollection& rOriginal,
                                     SvNumberFormatter* pFormatter ) const;
 };
 
@@ -109,7 +110,7 @@ class ScDPGroupDimension
     String                      aGroupName;
     ScDPDateGroupHelper*        pDateHelper;
     ScDPGroupItemVec            aItems;
-    mutable TypedStrCollection* pCollection;        // collection of item names (cached)
+    mutable TypedScStrCollection* pCollection;        // collection of item names (cached)
 
 public:
                 ScDPGroupDimension( long nSource, const String& rNewName );
@@ -125,7 +126,7 @@ public:
     long        GetGroupDim() const     { return nGroupDim; }
     const String& GetName() const       { return aGroupName; }
 
-    const TypedStrCollection& GetColumnEntries( const TypedStrCollection& rOriginal, ScDocument* pDoc ) const;
+    const TypedScStrCollection& GetColumnEntries( const TypedScStrCollection& rOriginal, ScDocument* pDoc ) const;
     const ScDPGroupItem* GetGroupForData( const ScDPItemData& rData ) const;  // rData = entry in original dim.
     const ScDPGroupItem* GetGroupForName( const ScDPItemData& rName ) const;  // rName = entry in group dim.
     const ScDPGroupItem* GetGroupByIndex( size_t nIndex ) const;
@@ -143,11 +144,11 @@ typedef ::std::vector<ScDPGroupDimension> ScDPGroupDimensionVec;
 
 // --------------------------------------------------------------------
 
-class ScDPNumGroupDimension
+class SC_DLLPUBLIC ScDPNumGroupDimension
 {
     ScDPNumGroupInfo            aGroupInfo;         // settings
     ScDPDateGroupHelper*        pDateHelper;
-    mutable TypedStrCollection* pCollection;        // collection of item names (cached)
+    mutable TypedScStrCollection* pCollection;        // collection of item names (cached)
     mutable bool                bHasNonInteger;     // initialized in GetNumEntries
     mutable sal_Unicode         cDecSeparator;      // initialized in GetNumEntries
 
@@ -159,7 +160,7 @@ public:
 
     ScDPNumGroupDimension&  operator=( const ScDPNumGroupDimension& rOther );
 
-    const TypedStrCollection& GetNumEntries( const TypedStrCollection& rOriginal, ScDocument* pDoc ) const;
+    const TypedScStrCollection& GetNumEntries( const TypedScStrCollection& rOriginal, ScDocument* pDoc ) const;
 
     const ScDPNumGroupInfo& GetInfo() const     { return aGroupInfo; }
     bool        HasNonInteger() const           { return bHasNonInteger; }
@@ -190,13 +191,12 @@ class ScDPGroupTableData : public ScDPTableData
 
     void        FillGroupValues( ScDPItemData* pItemData, long nCount, const long* pDims );
     void        CopyFields(const ::std::vector<long>& rFieldDims, ::std::vector<long>& rNewFieldDims);
-    long*       CopyFields( const long* pSourceDims, long nCount );
 
     bool        IsNumGroupDimension( long nDimension ) const;
     void        GetNumGroupInfo( long nDimension, ScDPNumGroupInfo& rInfo,
                                     bool& rNonInteger, sal_Unicode& rDecimal );
 
-    void        ModifyFilterCriteria(::std::vector<ScDPCacheTable::Criterion>& rCriteria) const;
+    void        ModifyFilterCriteria(::std::vector<ScDPCacheTable::Criterion>& rCriteria);
 
 public:
                 // takes ownership of pSource
@@ -210,7 +210,7 @@ public:
     ScDocument* GetDocument()   { return pDoc; }
 
     virtual long                    GetColumnCount();
-    virtual const TypedStrCollection& GetColumnEntries(long nColumn);
+    virtual const TypedScStrCollection& GetColumnEntries(long nColumn);
     virtual String                  getDimensionName(long nColumn);
     virtual BOOL                    getIsDataLayoutDimension(long nColumn);
     virtual BOOL                    IsDateDimension(long nDim);
@@ -218,9 +218,12 @@ public:
     virtual void                    DisposeData();
     virtual void                    SetEmptyFlags( BOOL bIgnoreEmptyRows, BOOL bRepeatIfEmpty );
 
+    virtual bool                    IsRepeatIfEmpty();
+
     virtual void                    CreateCacheTable();
-    virtual void                    FilterCacheTable(const ::std::vector<ScDPCacheTable::Criterion>& rCriteria);
+    virtual void                    FilterCacheTable(const ::std::vector<ScDPCacheTable::Criterion>& rCriteria, const ::std::hash_set<sal_Int32>& rDataDims);
     virtual void                    GetDrillDownData(const ::std::vector<ScDPCacheTable::Criterion>& rCriteria,
+                                                     const ::std::hash_set<sal_Int32>& rCatDims,
                                                      ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any > >& rData);
     virtual void                    CalcResults(CalcInfo& rInfo, bool bAutoShow);
     virtual const ScDPCacheTable&   GetCacheTable() const;

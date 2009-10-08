@@ -39,6 +39,7 @@
 #include "compiler.hxx"
 #include "tokstack.hxx"
 #include "global.hxx"
+#include "scmatrix.hxx"
 
 #include <stdio.h> // printf
 
@@ -100,7 +101,7 @@ TokenPool::TokenPool( void )
 
     // Sammelstellen fuer Referenzen
     nP_RefTr = 32;
-    ppP_RefTr = new SingleRefData *[ nP_RefTr ];
+    ppP_RefTr = new ScSingleRefData *[ nP_RefTr ];
     for( nLauf = 0 ; nLauf < nP_RefTr ; nLauf++ )
         ppP_RefTr[ nLauf ] = NULL;
 
@@ -228,7 +229,7 @@ void TokenPool::GrowTripel( void )
     UINT16          nP_RefTrNew = nP_RefTr * 2;
     UINT16          nL;
 
-    SingleRefData** ppP_RefTrNew = new SingleRefData *[ nP_RefTrNew ];
+    ScSingleRefData**   ppP_RefTrNew = new ScSingleRefData *[ nP_RefTrNew ];
 
     for( nL = 0 ; nL < nP_RefTr ; nL++ )
         ppP_RefTrNew[ nL ] = ppP_RefTr[ nL ];
@@ -359,10 +360,10 @@ void TokenPool::GetElement( const UINT16 nId )
                 break;
             case T_RefA:
                 {
-                ComplRefData    aComplRefData;
-                aComplRefData.Ref1 = *ppP_RefTr[ pElement[ nId ] ];
-                aComplRefData.Ref2 = *ppP_RefTr[ pElement[ nId ] + 1 ];
-                pScToken->AddDoubleReference( aComplRefData );
+                ScComplexRefData    aScComplexRefData;
+                aScComplexRefData.Ref1 = *ppP_RefTr[ pElement[ nId ] ];
+                aScComplexRefData.Ref2 = *ppP_RefTr[ pElement[ nId ] + 1 ];
+                pScToken->AddDoubleReference( aScComplexRefData );
                 }
                 break;
             case T_RN:
@@ -374,7 +375,12 @@ void TokenPool::GetElement( const UINT16 nId )
                 EXTCONT*        p = ( n < nP_Ext )? ppP_Ext[ n ] : NULL;
 
                 if( p )
+                {
+                    if( p->eId == ocEuroConvert )
+                        pScToken->AddOpCode( p->eId );
+                    else
                         pScToken->AddExternal( p->aText, p->eId );
+                }
                 }
                 break;
             case T_Nlf:
@@ -395,6 +401,34 @@ void TokenPool::GetElement( const UINT16 nId )
                         pScToken->AddMatrix( p );
                 }
                 break;
+            case T_ExtName:
+            {
+                UINT16 n = pElement[nId];
+                if (n < maExtNames.size())
+                {
+                    const ExtName& r = maExtNames[n];
+                    pScToken->AddExternalName(r.mnFileId, r.maName);
+                }
+            }
+            case T_ExtRefC:
+            {
+                UINT16 n = pElement[nId];
+                if (n < maExtCellRefs.size())
+                {
+                    const ExtCellRef& r = maExtCellRefs[n];
+                    pScToken->AddExternalSingleReference(r.mnFileId, r.maTabName, r.maRef);
+                }
+            }
+            case T_ExtRefA:
+            {
+                UINT16 n = pElement[nId];
+                if (n < maExtAreaRefs.size())
+                {
+                    const ExtAreaRef& r = maExtAreaRefs[n];
+                    pScToken->AddExternalDoubleReference(r.mnFileId, r.maTabName, r.maRef);
+                }
+            }
+            break;
             default:
                 DBG_ERROR("-TokenPool::GetElement(): Zustand undefiniert!?");
         }
@@ -441,10 +475,10 @@ void TokenPool::GetElementRek( const UINT16 nId )
                     break;
                 case T_RefA:
                     {
-                    ComplRefData    aComplRefData;
-                    aComplRefData.Ref1 = *ppP_RefTr[ pElement[ *pAkt ] ];
-                    aComplRefData.Ref2 = *ppP_RefTr[ pElement[ *pAkt ] + 1 ];
-                    pScToken->AddDoubleReference( aComplRefData );
+                    ScComplexRefData    aScComplexRefData;
+                    aScComplexRefData.Ref1 = *ppP_RefTr[ pElement[ *pAkt ] ];
+                    aScComplexRefData.Ref2 = *ppP_RefTr[ pElement[ *pAkt ] + 1 ];
+                    pScToken->AddDoubleReference( aScComplexRefData );
                     }
                     break;
                 case T_RN:
@@ -477,6 +511,34 @@ void TokenPool::GetElementRek( const UINT16 nId )
                             pScToken->AddMatrix( p );
                     }
                     break;
+                case T_ExtName:
+                {
+                    UINT16 n = pElement[*pAkt];
+                    if (n < maExtNames.size())
+                    {
+                        const ExtName& r = maExtNames[n];
+                        pScToken->AddExternalName(r.mnFileId, r.maName);
+                    }
+                }
+                case T_ExtRefC:
+                {
+                    UINT16 n = pElement[*pAkt];
+                    if (n < maExtCellRefs.size())
+                    {
+                        const ExtCellRef& r = maExtCellRefs[n];
+                        pScToken->AddExternalSingleReference(r.mnFileId, r.maTabName, r.maRef);
+                    }
+                }
+                case T_ExtRefA:
+                {
+                    UINT16 n = pElement[*pAkt];
+                    if (n < maExtAreaRefs.size())
+                    {
+                        const ExtAreaRef& r = maExtAreaRefs[n];
+                        pScToken->AddExternalDoubleReference(r.mnFileId, r.maTabName, r.maRef);
+                    }
+                }
+                break;
                 default:
                     DBG_ERROR("-TokenPool::GetElementRek(): Zustand undefiniert!?");
             }
@@ -598,7 +660,7 @@ const TokenId TokenPool::Store( const String& rString )
 }
 
 
-const TokenId TokenPool::Store( const SingleRefData& rTr )
+const TokenId TokenPool::Store( const ScSingleRefData& rTr )
 {
     if( nElementAkt >= nElement )
         GrowElement();
@@ -610,7 +672,7 @@ const TokenId TokenPool::Store( const SingleRefData& rTr )
     pType[ nElementAkt ] = T_RefC;          // Typinfo Cell-Reff eintragen
 
     if( !ppP_RefTr[ nP_RefTrAkt ] )
-        ppP_RefTr[ nP_RefTrAkt ] = new SingleRefData( rTr );
+        ppP_RefTr[ nP_RefTrAkt ] = new ScSingleRefData( rTr );
     else
         *ppP_RefTr[ nP_RefTrAkt ] = rTr;
 
@@ -621,7 +683,7 @@ const TokenId TokenPool::Store( const SingleRefData& rTr )
 }
 
 
-const TokenId TokenPool::Store( const ComplRefData& rTr )
+const TokenId TokenPool::Store( const ScComplexRefData& rTr )
 {
     if( nElementAkt >= nElement )
         GrowElement();
@@ -633,13 +695,13 @@ const TokenId TokenPool::Store( const ComplRefData& rTr )
     pType[ nElementAkt ] = T_RefA;          // Typinfo Area-Reff eintragen
 
     if( !ppP_RefTr[ nP_RefTrAkt ] )
-        ppP_RefTr[ nP_RefTrAkt ] = new SingleRefData( rTr.Ref1 );
+        ppP_RefTr[ nP_RefTrAkt ] = new ScSingleRefData( rTr.Ref1 );
     else
         *ppP_RefTr[ nP_RefTrAkt ] = rTr.Ref1;
     nP_RefTrAkt++;
 
     if( !ppP_RefTr[ nP_RefTrAkt ] )
-        ppP_RefTr[ nP_RefTrAkt ] = new SingleRefData( rTr.Ref2 );
+        ppP_RefTr[ nP_RefTrAkt ] = new ScSingleRefData( rTr.Ref2 );
     else
         *ppP_RefTr[ nP_RefTrAkt ] = rTr.Ref2;
     nP_RefTrAkt++;
@@ -676,7 +738,7 @@ const TokenId TokenPool::Store( const DefTokenId e, const String& r )
 }
 
 
-const TokenId TokenPool::StoreNlf( const SingleRefData& rTr )
+const TokenId TokenPool::StoreNlf( const ScSingleRefData& rTr )
 {
     if( nElementAkt >= nElement )
         GrowElement();
@@ -724,9 +786,68 @@ const TokenId TokenPool::StoreMatrix( SCSIZE nC, SCSIZE nR )
     return ( const TokenId ) nElementAkt;
 }
 
+const TokenId TokenPool::StoreExtName( sal_uInt16 nFileId, const String& rName )
+{
+    if ( nElementAkt >= nElement )
+        GrowElement();
+
+    pElement[nElementAkt] = static_cast<UINT16>(maExtNames.size());
+    pType[nElementAkt] = T_ExtName;
+
+    maExtNames.push_back(ExtName());
+    ExtName& r = maExtNames.back();
+    r.mnFileId = nFileId;
+    r.maName = rName;
+
+    ++nElementAkt;
+
+    return static_cast<const TokenId>(nElementAkt);
+}
+
+const TokenId TokenPool::StoreExtRef( sal_uInt16 nFileId, const String& rTabName, const ScSingleRefData& rRef )
+{
+    if ( nElementAkt >= nElement )
+        GrowElement();
+
+    pElement[nElementAkt] = static_cast<UINT16>(maExtCellRefs.size());
+    pType[nElementAkt] = T_ExtRefC;
+
+    maExtCellRefs.push_back(ExtCellRef());
+    ExtCellRef& r = maExtCellRefs.back();
+    r.mnFileId = nFileId;
+    r.maTabName = rTabName;
+    r.maRef = rRef;
+
+    ++nElementAkt;
+
+    return static_cast<const TokenId>(nElementAkt);
+}
+
+const TokenId TokenPool::StoreExtRef( sal_uInt16 nFileId, const String& rTabName, const ScComplexRefData& rRef )
+{
+    if ( nElementAkt >= nElement )
+        GrowElement();
+
+    pElement[nElementAkt] = static_cast<UINT16>(maExtAreaRefs.size());
+    pType[nElementAkt] = T_ExtRefA;
+
+    maExtAreaRefs.push_back(ExtAreaRef());
+    ExtAreaRef& r = maExtAreaRefs.back();
+    r.mnFileId = nFileId;
+    r.maTabName = rTabName;
+    r.maRef = rRef;
+
+    ++nElementAkt;
+
+    return static_cast<const TokenId>(nElementAkt);
+}
+
 void TokenPool::Reset( void )
 {
     nP_IdAkt = nP_IdLast = nElementAkt = nP_StrAkt = nP_DblAkt = nP_ErrAkt = nP_RefTrAkt = nP_ExtAkt = nP_NlfAkt = nP_MatrixAkt = 0;
+    maExtNames.clear();
+    maExtCellRefs.clear();
+    maExtAreaRefs.clear();
 }
 
 

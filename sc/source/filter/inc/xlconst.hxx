@@ -48,6 +48,13 @@ enum XclBiff
     EXC_BIFF_UNKNOWN            /// Unknown BIFF version.
 };
 
+/** An enumeration for all Excel output format types. */
+enum XclOutput
+{
+    EXC_OUTPUT_BINARY,          /// MS Excel binary .xls
+    EXC_OUTPUT_XML_2007,        /// MS Excel 2007 .xlsx
+};
+
 // Excel sheet dimensions -----------------------------------------------------
 
 const SCCOL EXC_MAXCOL2                     = 255;

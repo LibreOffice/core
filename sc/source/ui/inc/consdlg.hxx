@@ -80,13 +80,13 @@ private:
 
     ListBox         aLbDataArea;
     FixedText       aFtDataArea;
-    ScRefEdit       aEdDataArea;
-    ScRefButton     aRbDataArea;
+    formula::RefEdit        aEdDataArea;
+    formula::RefButton      aRbDataArea;
 
     ListBox         aLbDestArea;
     FixedText       aFtDestArea;
-    ScRefEdit       aEdDestArea;
-    ScRefButton     aRbDestArea;
+    formula::RefEdit        aEdDestArea;
+    formula::RefButton      aRbDestArea;
 
     FixedLine       aFlConsBy;
     CheckBox        aBtnByRow;
@@ -113,19 +113,19 @@ private:
     USHORT              nAreaDataCount;
     USHORT              nWhichCons;
 
-    ScRefEdit*          pRefInputEdit;
+    formula::RefEdit*           pRefInputEdit;
     BOOL                bDlgLostFocus;
 
 #ifdef _CONSDLG_CXX
 private:
     void Init               ();
     void FillAreaLists      ();
-    BOOL VerifyEdit         ( ScRefEdit* pEd );
+    BOOL VerifyEdit         ( formula::RefEdit* pEd );
 
     DECL_LINK( OkHdl,        void* );
     DECL_LINK( ClickHdl,     PushButton* );
     DECL_LINK( GetFocusHdl, Control* );
-    DECL_LINK( ModifyHdl,    ScRefEdit* );
+    DECL_LINK( ModifyHdl,    formula::RefEdit* );
     DECL_LINK( SelectHdl,    ListBox* );
 
     ScSubTotalFunc  LbPosToFunc( USHORT nPos );

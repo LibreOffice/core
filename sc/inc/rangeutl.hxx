@@ -107,7 +107,7 @@ public:
 
 //------------------------------------------------------------------------
 
-class ScRangeStringConverter
+class SC_DLLPUBLIC ScRangeStringConverter
 {
 public:
 

@@ -32,9 +32,8 @@
 #define SC_XEESCHER_HXX
 
 #include <vcl/graph.hxx>
-#include "xlescher.hxx"
-
 #include "xcl97rec.hxx"
+#include "xlescher.hxx"
 
 namespace com { namespace sun { namespace star {
     namespace script { struct ScriptEventDescriptor; }
@@ -208,16 +207,37 @@ public:
     /** Writes the NOTE record, if the respective Escher object is present. */
     virtual void        Save( XclExpStream& rStrm );
 
+    void                WriteXml( sal_Int32 nAuthorId, XclExpXmlStream& rStrm );
+
+    const XclExpString& GetAuthor() const { return maAuthor; }
 private:
     /** Writes the body of the NOTE record. */
     virtual void        WriteBody( XclExpStream& rStrm );
 
 private:
     XclExpString        maAuthor;       /// Name of the author.
+    String              maOrigNoteText; /// Original main text of the note.
     ByteString          maNoteText;     /// Main text of the note (<=BIFF7).
     ScAddress           maScPos;        /// Calc cell address of the note.
     sal_uInt16          mnObjId;        /// Escher object ID (BIFF8).
     bool                mbVisible;      /// true = permanently visible.
+};
+
+// ============================================================================
+
+class XclExpComments : public XclExpRecord
+{
+public:
+    typedef XclExpRecordList< XclExpNote >
+                        XclExpNoteList;
+
+                        XclExpComments( SCTAB nTab, XclExpNoteList& rNotes );
+
+    virtual void        SaveXml( XclExpXmlStream& rStrm );
+
+private:
+    SCTAB               mnTab;
+    XclExpNoteList&     mrNotes;
 };
 
 // ============================================================================

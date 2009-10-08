@@ -45,6 +45,7 @@
 #include <svx/svdocapt.hxx>
 #include "global.hxx"
 #include <com/sun/star/drawing/XShape.hpp>
+#include "scdllapi.h"
 
 //  indicative text length for a note object
 #define SC_NOTE_SMALLTEXT   100
@@ -56,7 +57,7 @@ class ScDocument;
 // Notes
 //==================================================================
 
-class ScPostIt
+class SC_DLLPUBLIC ScPostIt
 {
 private:
     typedef ::boost::shared_ptr< EditTextObject > EditObjPtr;

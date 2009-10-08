@@ -34,6 +34,7 @@
 #include "dptabdat.hxx"
 #include "global.hxx"
 #include "address.hxx"
+#include "scdllapi.h"
 
 #include <vector>
 
@@ -61,7 +62,7 @@ struct ScSheetSourceDesc
 
 class ScSheetDPData_Impl;
 
-class ScSheetDPData : public ScDPTableData
+class SC_DLLPUBLIC ScSheetDPData : public ScDPTableData
 {
 private:
     ScSheetDPData_Impl* pImpl;
@@ -71,7 +72,7 @@ public:
     virtual         ~ScSheetDPData();
 
     virtual long                    GetColumnCount();
-    virtual const TypedStrCollection&   GetColumnEntries(long nColumn);
+    virtual const TypedScStrCollection& GetColumnEntries(long nColumn);
     virtual String                  getDimensionName(long nColumn);
     virtual BOOL                    getIsDataLayoutDimension(long nColumn);
     virtual BOOL                    IsDateDimension(long nDim);
@@ -82,8 +83,9 @@ public:
     virtual bool                    IsRepeatIfEmpty();
 
     virtual void                    CreateCacheTable();
-    virtual void                    FilterCacheTable(const ::std::vector<ScDPCacheTable::Criterion>& rCriteria);
+    virtual void                    FilterCacheTable(const ::std::vector<ScDPCacheTable::Criterion>& rCriteria, const ::std::hash_set<sal_Int32>& rCatDims);
     virtual void                    GetDrillDownData(const ::std::vector<ScDPCacheTable::Criterion>& rCriteria,
+                                                     const ::std::hash_set<sal_Int32>& rCatDims,
                                                      ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any > >& rData);
     virtual void                    CalcResults(CalcInfo& rInfo, bool bAutoShow);
     virtual const ScDPCacheTable&   GetCacheTable() const;

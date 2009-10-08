@@ -91,8 +91,10 @@
 #include "markdata.hxx"
 #include "scmod.hxx"
 #include "printopt.hxx"
+#include "externalrefmgr.hxx"
 #include "globstr.hrc"
 #include "sc.hrc"
+#include "charthelper.hxx"
 
 #define GET_SCALEVALUE(set,id)  ((const SfxUInt16Item&)(set.Get( id ))).GetValue()
 
@@ -252,6 +254,13 @@ void ScDocument::ModifyStyleSheet( SfxStyleSheetBase& rStyleSheet,
 
                 if ( (nOldScale != nNewScale) || (nOldScaleToPages != nNewScaleToPages) )
                     InvalidateTextWidth( rStyleSheet.GetName() );
+
+                if( SvtLanguageOptions().IsCTLFontEnabled() )
+                {
+                    const SfxPoolItem *pItem = NULL;
+                    if( rChanges.GetItemState(ATTR_WRITINGDIR, TRUE, &pItem ) == SFX_ITEM_SET )
+                        ScChartHelper::DoUpdateAllCharts( this );
+                }
             }
             break;
 
@@ -1011,6 +1020,33 @@ void ScDocument::SetInLinkUpdate(BOOL bSet)
 BOOL ScDocument::IsInLinkUpdate() const
 {
     return bInLinkUpdate || IsInDdeLinkUpdate();
+}
+
+void ScDocument::UpdateExternalRefLinks()
+{
+    if (!pLinkManager)
+        return;
+
+    const ::sfx2::SvBaseLinks& rLinks = pLinkManager->GetLinks();
+    USHORT nCount = rLinks.Count();
+
+    bool bAny = false;
+    for (USHORT i = 0; i < nCount; ++i)
+    {
+        ::sfx2::SvBaseLink* pBase = *rLinks[i];
+        ScExternalRefLink* pRefLink = dynamic_cast<ScExternalRefLink*>(pBase);
+        if (pRefLink)
+        {
+            pRefLink->Update();
+            bAny = true;
+        }
+    }
+    if (bAny)
+    {
+        TrackFormulas();
+        pShell->Broadcast( SfxSimpleHint(FID_DATACHANGED) );
+        ResetChanged( ScRange(0, 0, 0, MAXCOL, MAXROW, MAXTAB) );
+    }
 }
 
 void ScDocument::UpdateDdeLinks()

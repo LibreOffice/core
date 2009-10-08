@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: linkuno.cxx,v $
- * $Revision: 1.18 $
+ * $Revision: 1.18.134.11 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -48,8 +48,22 @@
 #include "hints.hxx"
 #include "unonames.hxx"
 #include "rangeseq.hxx"
+#include "token.hxx"
+
+#include <vector>
+#include <climits>
 
 using namespace com::sun::star;
+using namespace formula;
+using ::com::sun::star::uno::Any;
+using ::com::sun::star::uno::Reference;
+using ::com::sun::star::uno::Sequence;
+using ::com::sun::star::uno::UNO_QUERY;
+using ::com::sun::star::uno::UNO_QUERY_THROW;
+using ::com::sun::star::lang::IllegalArgumentException;
+using ::com::sun::star::uno::RuntimeException;
+using ::rtl::OUString;
+using ::std::vector;
 
 //------------------------------------------------------------------------
 
@@ -411,7 +425,7 @@ ScSheetLinkObj* ScSheetLinksObj::GetObjectByIndex_Impl(INT32 nIndex)
     if (pDocShell)
     {
         INT32 nCount = 0;
-        StrCollection aNames;   // um doppelte wegzulassen
+        ScStrCollection aNames; // um doppelte wegzulassen
         ScDocument* pDoc = pDocShell->GetDocument();
         SCTAB nTabCount = pDoc->GetTableCount();
         for (SCTAB nTab=0; nTab<nTabCount; nTab++)
@@ -472,7 +486,7 @@ sal_Int32 SAL_CALL ScSheetLinksObj::getCount() throw(uno::RuntimeException)
     INT32 nCount = 0;
     if (pDocShell)
     {
-        StrCollection aNames;   // um doppelte wegzulassen
+        ScStrCollection aNames; // um doppelte wegzulassen
         ScDocument* pDoc = pDocShell->GetDocument();
         SCTAB nTabCount = pDoc->GetTableCount();
         for (SCTAB nTab=0; nTab<nTabCount; nTab++)
@@ -558,7 +572,7 @@ uno::Sequence<rtl::OUString> SAL_CALL ScSheetLinksObj::getElementNames() throw(u
 
     if (pDocShell)
     {
-        StrCollection aNames;   // um doppelte wegzulassen
+        ScStrCollection aNames; // um doppelte wegzulassen
         ScDocument* pDoc = pDocShell->GetDocument();
         SCTAB nTabCount = pDoc->GetTableCount();
         String aName;
@@ -1480,4 +1494,327 @@ uno::Reference< sheet::XDDELink > ScDDELinksObj::addDDELink(
     return xLink;
 }
 
-//------------------------------------------------------------------------
+// ============================================================================
+
+ScExternalSheetCacheObj::ScExternalSheetCacheObj(ScExternalRefCache::TableTypeRef pTable, size_t nIndex) :
+    mpTable(pTable),
+    mnIndex(nIndex)
+{
+}
+
+ScExternalSheetCacheObj::~ScExternalSheetCacheObj()
+{
+}
+
+void SAL_CALL ScExternalSheetCacheObj::setCellValue(sal_Int32 nCol, sal_Int32 nRow, const Any& rValue)
+    throw (IllegalArgumentException, RuntimeException)
+{
+    ScUnoGuard aGuard;
+    if (nRow < 0 || nCol < 0)
+        throw IllegalArgumentException();
+
+    ScExternalRefCache::TokenRef pToken;
+    double fVal = 0.0;
+    OUString aVal;
+    if (rValue >>= fVal)
+        pToken.reset(new FormulaDoubleToken(fVal));
+    else if (rValue >>= aVal)
+        pToken.reset(new FormulaStringToken(aVal));
+    else
+        // unidentified value type.
+        return;
+
+    mpTable->setCell(static_cast<SCCOL>(nCol), static_cast<SCROW>(nRow), pToken);
+}
+
+Any SAL_CALL ScExternalSheetCacheObj::getCellValue(sal_Int32 nCol, sal_Int32 nRow)
+    throw (IllegalArgumentException, RuntimeException)
+{
+    ScUnoGuard aGuard;
+    if (nRow < 0 || nCol < 0)
+        throw IllegalArgumentException();
+
+    FormulaToken* pToken = mpTable->getCell(static_cast<SCCOL>(nCol), static_cast<SCROW>(nRow)).get();
+    if (!pToken)
+        throw IllegalArgumentException();
+
+    Any aValue;
+    switch (pToken->GetType())
+    {
+        case svDouble:
+        {
+            double fVal = pToken->GetDouble();
+            aValue <<= fVal;
+        }
+        break;
+        case svString:
+        {
+            OUString aVal = pToken->GetString();
+            aValue <<= aVal;
+        }
+        break;
+        default:
+            throw IllegalArgumentException();
+    }
+    return aValue;
+}
+
+Sequence< sal_Int32 > SAL_CALL ScExternalSheetCacheObj::getAllRows()
+    throw (RuntimeException)
+{
+    ScUnoGuard aGuard;
+    vector<SCROW> aRows;
+    mpTable->getAllRows(aRows);
+    size_t nSize = aRows.size();
+    Sequence<sal_Int32> aRowsSeq(nSize);
+    for (size_t i = 0; i < nSize; ++i)
+        aRowsSeq[i] = aRows[i];
+
+    return aRowsSeq;
+}
+
+Sequence< sal_Int32 > SAL_CALL ScExternalSheetCacheObj::getAllColumns(sal_Int32 nRow)
+    throw (IllegalArgumentException, RuntimeException)
+{
+    ScUnoGuard aGuard;
+    if (nRow < 0)
+        throw IllegalArgumentException();
+
+    vector<SCCOL> aCols;
+    mpTable->getAllCols(static_cast<SCROW>(nRow), aCols);
+    size_t nSize = aCols.size();
+    Sequence<sal_Int32> aColsSeq(nSize);
+    for (size_t i = 0; i < nSize; ++i)
+        aColsSeq[i] = aCols[i];
+
+    return aColsSeq;
+}
+
+sal_Int32 SAL_CALL ScExternalSheetCacheObj::getTokenIndex()
+        throw (RuntimeException)
+{
+    return static_cast< sal_Int32 >( mnIndex );
+}
+
+// ============================================================================
+
+ScExternalDocLinkObj::ScExternalDocLinkObj(ScExternalRefManager* pRefMgr, sal_uInt16 nFileId) :
+    mpRefMgr(pRefMgr), mnFileId(nFileId)
+{
+}
+
+ScExternalDocLinkObj::~ScExternalDocLinkObj()
+{
+}
+
+Reference< sheet::XExternalSheetCache > SAL_CALL ScExternalDocLinkObj::addSheetCache(
+    const OUString& aSheetName )
+        throw (RuntimeException)
+{
+    ScUnoGuard aGuard;
+    size_t nIndex = 0;
+    ScExternalRefCache::TableTypeRef pTable = mpRefMgr->getCacheTable(mnFileId, aSheetName, true, &nIndex);
+    Reference< sheet::XExternalSheetCache > aSheetCache(new ScExternalSheetCacheObj(pTable, nIndex));
+    return aSheetCache;
+}
+
+Any SAL_CALL ScExternalDocLinkObj::getByName(const::rtl::OUString &aName)
+        throw (container::NoSuchElementException, lang::WrappedTargetException, RuntimeException)
+{
+    ScUnoGuard aGuard;
+    size_t nIndex = 0;
+    ScExternalRefCache::TableTypeRef pTable = mpRefMgr->getCacheTable(mnFileId, aName, false, &nIndex);
+    if (!pTable)
+        throw container::NoSuchElementException();
+
+    Reference< sheet::XExternalSheetCache > aSheetCache(new ScExternalSheetCacheObj(pTable, nIndex));
+
+    Any aAny;
+    aAny <<= aSheetCache;
+    return aAny;
+}
+
+Sequence< OUString > SAL_CALL ScExternalDocLinkObj::getElementNames()
+        throw (RuntimeException)
+{
+    ScUnoGuard aGuard;
+    vector<String> aTabNames;
+    mpRefMgr->getAllCachedTableNames(mnFileId, aTabNames);
+    size_t n = aTabNames.size();
+    Sequence<OUString> aSeq(n);
+    for (size_t i = 0; i < n; ++i)
+        aSeq[i] = aTabNames[i];
+    return aSeq;
+}
+
+sal_Bool SAL_CALL ScExternalDocLinkObj::hasByName(const OUString &aName)
+        throw (RuntimeException)
+{
+    ScUnoGuard aGuard;
+    return static_cast<sal_Bool>(mpRefMgr->hasCacheTable(mnFileId, aName));
+}
+
+sal_Int32 SAL_CALL ScExternalDocLinkObj::getCount()
+        throw (RuntimeException)
+{
+    ScUnoGuard aGuard;
+    return static_cast<sal_Int32>(mpRefMgr->getCacheTableCount(mnFileId));
+}
+
+Any SAL_CALL ScExternalDocLinkObj::getByIndex(sal_Int32 nIndex)
+        throw (lang::IndexOutOfBoundsException, lang::WrappedTargetException, RuntimeException)
+{
+    ScUnoGuard aGuard;
+    size_t nTabCount = mpRefMgr->getCacheTableCount(mnFileId);
+    if (nIndex < 0 || nIndex >= static_cast<sal_Int32>(nTabCount))
+        throw lang::IndexOutOfBoundsException();
+
+    ScExternalRefCache::TableTypeRef pTable = mpRefMgr->getCacheTable(mnFileId, static_cast<size_t>(nIndex));
+    if (!pTable)
+        throw lang::IndexOutOfBoundsException();
+
+    Reference< sheet::XExternalSheetCache > aSheetCache(new ScExternalSheetCacheObj(pTable, nIndex));
+
+    Any aAny;
+    aAny <<= aSheetCache;
+    return aAny;
+}
+
+Reference< container::XEnumeration > SAL_CALL ScExternalDocLinkObj::createEnumeration()
+        throw (RuntimeException)
+{
+    ScUnoGuard aGuard;
+    Reference< container::XEnumeration > aRef(
+        new ScIndexEnumeration(this, OUString::createFromAscii(
+            "com.sun.star.sheet.ExternalDocLink")));
+    return aRef;
+}
+
+uno::Type SAL_CALL ScExternalDocLinkObj::getElementType()
+        throw (RuntimeException)
+{
+    ScUnoGuard aGuard;
+    return getCppuType(static_cast<Reference<sheet::XExternalDocLink>*>(0));
+}
+
+sal_Bool SAL_CALL ScExternalDocLinkObj::hasElements()
+        throw (RuntimeException)
+{
+    ScUnoGuard aGuard;
+    return static_cast<sal_Bool>(mpRefMgr->getCacheTableCount(mnFileId) > 0);
+}
+
+sal_Int32 SAL_CALL ScExternalDocLinkObj::getTokenIndex()
+        throw (RuntimeException)
+{
+    return static_cast<sal_Int32>(mnFileId);
+}
+
+// ============================================================================
+
+ScExternalDocLinksObj::ScExternalDocLinksObj(ScDocShell* pDocShell) :
+    mpDocShell(pDocShell),
+    mpRefMgr(pDocShell->GetDocument()->GetExternalRefManager())
+{
+}
+
+ScExternalDocLinksObj::~ScExternalDocLinksObj()
+{
+}
+
+Reference< sheet::XExternalDocLink > SAL_CALL ScExternalDocLinksObj::addDocLink(
+    const OUString& aDocName )
+        throw (RuntimeException)
+{
+    ScUnoGuard aGuard;
+    sal_uInt16 nFileId = mpRefMgr->getExternalFileId(aDocName);
+    Reference< sheet::XExternalDocLink > aDocLink(new ScExternalDocLinkObj(mpRefMgr, nFileId));
+    return aDocLink;
+}
+
+Any SAL_CALL ScExternalDocLinksObj::getByName(const::rtl::OUString &aName)
+        throw (container::NoSuchElementException, lang::WrappedTargetException, RuntimeException)
+{
+    ScUnoGuard aGuard;
+    if (!mpRefMgr->hasExternalFile(aName))
+        throw container::NoSuchElementException();
+
+    sal_uInt16 nFileId = mpRefMgr->getExternalFileId(aName);
+    Reference< sheet::XExternalDocLink > aDocLink(new ScExternalDocLinkObj(mpRefMgr, nFileId));
+
+    Any aAny;
+    aAny <<= aDocLink;
+    return aAny;
+}
+
+Sequence< OUString > SAL_CALL ScExternalDocLinksObj::getElementNames()
+        throw (RuntimeException)
+{
+    ScUnoGuard aGuard;
+    sal_uInt16 n = mpRefMgr->getExternalFileCount();
+    Sequence<OUString> aSeq(n);
+    for (sal_uInt16 i = 0; i < n; ++i)
+    {
+        const String* pName = mpRefMgr->getExternalFileName(i);
+        aSeq[i] = pName ? *pName : EMPTY_STRING;
+    }
+
+    return aSeq;
+}
+
+sal_Bool SAL_CALL ScExternalDocLinksObj::hasByName(const OUString &aName)
+        throw (RuntimeException)
+{
+    ScUnoGuard aGuard;
+    return mpRefMgr->hasExternalFile(aName);
+}
+
+sal_Int32 SAL_CALL ScExternalDocLinksObj::getCount()
+        throw (RuntimeException)
+{
+    ScUnoGuard aGuard;
+    return mpRefMgr->getExternalFileCount();
+}
+
+Any SAL_CALL ScExternalDocLinksObj::getByIndex(sal_Int32 nIndex)
+        throw (lang::IndexOutOfBoundsException, lang::WrappedTargetException, RuntimeException)
+{
+    ScUnoGuard aGuard;
+    if (nIndex > ::std::numeric_limits<sal_uInt16>::max() || nIndex < ::std::numeric_limits<sal_uInt16>::min())
+        throw lang::IndexOutOfBoundsException();
+
+    sal_uInt16 nFileId = static_cast<sal_uInt16>(nIndex);
+
+    if (!mpRefMgr->hasExternalFile(nFileId))
+        throw lang::IndexOutOfBoundsException();
+
+    Reference< sheet::XExternalDocLink > aDocLink(new ScExternalDocLinkObj(mpRefMgr, nFileId));
+    Any aAny;
+    aAny <<= aDocLink;
+    return aAny;
+}
+
+Reference< container::XEnumeration > SAL_CALL ScExternalDocLinksObj::createEnumeration()
+        throw (RuntimeException)
+{
+    ScUnoGuard aGuard;
+    Reference< container::XEnumeration > aRef(
+        new ScIndexEnumeration(this, OUString::createFromAscii(
+            "com.sun.star.sheet.ExternalDocLinks")));
+    return aRef;
+}
+
+uno::Type SAL_CALL ScExternalDocLinksObj::getElementType()
+        throw (RuntimeException)
+{
+    ScUnoGuard aGuard;
+    return getCppuType(static_cast<Reference<sheet::XExternalDocLinks>*>(0));
+}
+
+sal_Bool SAL_CALL ScExternalDocLinksObj::hasElements()
+        throw (RuntimeException)
+{
+    ScUnoGuard aGuard;
+    return mpRefMgr->getExternalFileCount() > 0;
+}
+

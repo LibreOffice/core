@@ -77,7 +77,7 @@
 #include "userlist.hxx"
 #include "zforauto.hxx"
 #include "subtotal.hxx"
-#include "errorcodes.hxx"
+#include "formula/errorcodes.hxx"
 #include "rangenam.hxx"
 #include "docpool.hxx"
 #include "progress.hxx"
@@ -1767,7 +1767,7 @@ void ScTable::GetAutoFormatFrame(SCCOL nCol, SCROW nRow, USHORT nFlags, USHORT n
     {
         if (pLeftBox)
         {
-            if (HasPriority(pTheBox->GetLeft(), pLeftBox->GetRight()))
+            if (ScHasPriority(pTheBox->GetLeft(), pLeftBox->GetRight()))
                 aBox.SetLine(pTheBox->GetLeft(), BOX_LINE_LEFT);
             else
                 aBox.SetLine(pLeftBox->GetRight(), BOX_LINE_LEFT);
@@ -1779,7 +1779,7 @@ void ScTable::GetAutoFormatFrame(SCCOL nCol, SCROW nRow, USHORT nFlags, USHORT n
     {
         if (pTopBox)
         {
-            if (HasPriority(pTheBox->GetTop(), pTopBox->GetBottom()))
+            if (ScHasPriority(pTheBox->GetTop(), pTopBox->GetBottom()))
                 aBox.SetLine(pTheBox->GetTop(), BOX_LINE_TOP);
             else
                 aBox.SetLine(pTopBox->GetBottom(), BOX_LINE_TOP);
@@ -1791,7 +1791,7 @@ void ScTable::GetAutoFormatFrame(SCCOL nCol, SCROW nRow, USHORT nFlags, USHORT n
     {
         if (pRightBox)
         {
-            if (HasPriority(pTheBox->GetRight(), pRightBox->GetLeft()))
+            if (ScHasPriority(pTheBox->GetRight(), pRightBox->GetLeft()))
                 aBox.SetLine(pTheBox->GetRight(), BOX_LINE_RIGHT);
             else
                 aBox.SetLine(pRightBox->GetLeft(), BOX_LINE_RIGHT);
@@ -1803,7 +1803,7 @@ void ScTable::GetAutoFormatFrame(SCCOL nCol, SCROW nRow, USHORT nFlags, USHORT n
     {
         if (pBottomBox)
         {
-            if (HasPriority(pTheBox->GetBottom(), pBottomBox->GetTop()))
+            if (ScHasPriority(pTheBox->GetBottom(), pBottomBox->GetTop()))
                 aBox.SetLine(pTheBox->GetBottom(), BOX_LINE_BOTTOM);
             else
                 aBox.SetLine(pBottomBox->GetTop(), BOX_LINE_BOTTOM);

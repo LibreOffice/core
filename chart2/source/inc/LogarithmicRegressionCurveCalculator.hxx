@@ -31,11 +31,13 @@
 #define CHART2_LOGARITHMICREGRESSIONCURVECALCULATOR_HXX
 
 #include "RegressionCurveCalculator.hxx"
+#include "charttoolsdllapi.hxx"
 
 namespace chart
 {
 
-class LogarithmicRegressionCurveCalculator : public RegressionCurveCalculator
+class OOO_DLLPUBLIC_CHARTTOOLS LogarithmicRegressionCurveCalculator :
+        public RegressionCurveCalculator
 {
 public:
     LogarithmicRegressionCurveCalculator();

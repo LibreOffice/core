@@ -90,7 +90,7 @@ const SfxItemPropertyMap* lcl_GetViewOptPropertyMap()
         {MAP_CHAR_LEN(SC_UNO_HORSCROLL),    0,  &getBooleanCppuType(),          0, 0},
         {MAP_CHAR_LEN(SC_UNO_SHEETTABS),    0,  &getBooleanCppuType(),          0, 0},
         {MAP_CHAR_LEN(SC_UNO_VERTSCROLL),   0,  &getBooleanCppuType(),          0, 0},
-        {MAP_CHAR_LEN(SC_UNO_HIDESPELL),    0,  &getBooleanCppuType(),          0, 0},
+        {MAP_CHAR_LEN(SC_UNO_HIDESPELL),    0,  &getBooleanCppuType(),          0, 0},  /* deprecated #i91949 */
         {MAP_CHAR_LEN(OLD_UNO_HORSCROLL),   0,  &getBooleanCppuType(),          0, 0},
         {MAP_CHAR_LEN(SC_UNO_OUTLSYMB),     0,  &getBooleanCppuType(),          0, 0},
         {MAP_CHAR_LEN(SC_UNO_VALUEHIGH),    0,  &getBooleanCppuType(),          0, 0},
@@ -1440,6 +1440,7 @@ void ScTabViewObj::SetZoom(INT16 nZoom)
         pViewSh->PaintTop();
         pViewSh->PaintLeft();
         pViewSh->GetViewFrame()->GetBindings().Invalidate( SID_ATTR_ZOOM );
+        pViewSh->GetViewFrame()->GetBindings().Invalidate( SID_ATTR_ZOOMSLIDER );
     }
 }
 
@@ -1801,8 +1802,6 @@ void SAL_CALL ScTabViewObj::setPropertyValue(
             if ( aValue >>= nIntVal )
                 aNewOpt.SetGridColor( nIntVal, String() );
         }
-        else if ( aString.EqualsAscii( SC_UNO_HIDESPELL ) )
-            aNewOpt.SetHideAutoSpell( ScUnoHelpFunctions::GetBoolFromAny( aValue ) );
         else if ( aString.EqualsAscii( SC_UNO_ZOOMTYPE ) )
         {
             sal_Int16 nIntVal = 0;
@@ -1878,7 +1877,6 @@ uno::Any SAL_CALL ScTabViewObj::getPropertyValue( const rtl::OUString& aProperty
         else if ( aString.EqualsAscii( SC_UNO_SHOWCHARTS ) ) aRet <<= (sal_Int16)( rOpt.GetObjMode( VOBJ_TYPE_CHART ) );
         else if ( aString.EqualsAscii( SC_UNO_SHOWDRAW ) )   aRet <<= (sal_Int16)( rOpt.GetObjMode( VOBJ_TYPE_DRAW ) );
         else if ( aString.EqualsAscii( SC_UNO_GRIDCOLOR ) )  aRet <<= (sal_Int32)( rOpt.GetGridColor().GetColor() );
-        else if ( aString.EqualsAscii( SC_UNO_HIDESPELL ) )  ScUnoHelpFunctions::SetBoolInAny( aRet, rOpt.IsHideAutoSpell() );
         else if ( aString.EqualsAscii( SC_UNO_VISAREA ) ) aRet <<= GetVisArea();
         else if ( aString.EqualsAscii( SC_UNO_ZOOMTYPE ) ) aRet <<= GetZoomType();
         else if ( aString.EqualsAscii( SC_UNO_ZOOMVALUE ) ) aRet <<= GetZoom();

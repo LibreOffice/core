@@ -261,7 +261,7 @@ bool ScDPSaveGroupDimension::IsEmpty() const
     return aGroups.empty();
 }
 
-bool ScDPSaveGroupDimension::HasOnlyHidden( const StrCollection& rVisible )
+bool ScDPSaveGroupDimension::HasOnlyHidden( const ScStrCollection& rVisible )
 {
     // check if there are only groups that don't appear in the list of visible names
 

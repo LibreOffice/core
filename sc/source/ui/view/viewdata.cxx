@@ -793,7 +793,8 @@ BOOL ScViewData::IsMultiMarked()
     // and taking filtered in simple area marks into account.
 
     ScRange aDummy;
-    return GetSimpleArea( aDummy) != SC_MARK_SIMPLE;
+    ScMarkType eType = GetSimpleArea(aDummy);
+    return (eType & SC_MARK_SIMPLE) != SC_MARK_SIMPLE;
 }
 
 void ScViewData::SetFillMode( SCCOL nStartCol, SCROW nStartRow, SCCOL nEndCol, SCROW nEndRow )
@@ -2993,16 +2994,11 @@ void ScViewData::UpdateOutlinerFlags( Outliner& rOutl ) const
 {
     ScDocument* pLocalDoc = GetDocument();
     BOOL bOnlineSpell = pLocalDoc->GetDocOptions().IsAutoSpell();
-    BOOL bHideSpell = GetOptions().IsHideAutoSpell();
 
     ULONG nCntrl = rOutl.GetControlWord();
     nCntrl |= EE_CNTRL_URLSFXEXECUTE;
     nCntrl |= EE_CNTRL_MARKFIELDS;
     nCntrl |= EE_CNTRL_AUTOCORRECT;
-    if( bHideSpell )
-        nCntrl |= EE_CNTRL_NOREDLINES;
-    else
-        nCntrl &= ~EE_CNTRL_NOREDLINES;
     if( bOnlineSpell )
         nCntrl |= EE_CNTRL_ONLINESPELLING;
     else

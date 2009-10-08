@@ -120,7 +120,6 @@ public:
     void                        TraceDates(sal_uInt16 nNumFmt);
     void                        TraceBorderLineStyle(bool bBorderLineStyle);
     void                        TraceFillPattern(bool bFillPattern);
-    void                        TraceFormulaExtName();
     void                        TraceFormulaMissingArg();
     void                        TracePivotDataSource(bool bExternal);
     void                        TracePivotChartExists();

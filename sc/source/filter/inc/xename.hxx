@@ -31,10 +31,10 @@
 #ifndef SC_XENAME_HXX
 #define SC_XENAME_HXX
 
+#include "xerecord.hxx"
 #include "xlname.hxx"
 #include "xlformula.hxx"
 #include "xeroot.hxx"
-#include "xerecord.hxx"
 
 // ============================================================================
 
@@ -81,6 +81,7 @@ public:
 
     /** Writes the entire list of NAME records. */
     virtual void        Save( XclExpStream& rStrm );
+    virtual void        SaveXml( XclExpXmlStream& rStrm );
 
 private:
     typedef ScfRef< XclExpNameManagerImpl > XclExpNameMgrImplRef;

@@ -1553,7 +1553,7 @@ String __EXPORT ScUndoLayoutRTL::GetComment() const
 //
 
 ScUndoSetGrammar::ScUndoSetGrammar( ScDocShell* pShell,
-                                    ScGrammar::Grammar eGrammar ) :
+                                    formula::FormulaGrammar::Grammar eGrammar ) :
     ScSimpleUndo( pShell ),
     meNewGrammar( eGrammar )
 {
@@ -1564,7 +1564,7 @@ __EXPORT ScUndoSetGrammar::~ScUndoSetGrammar()
 {
 }
 
-void ScUndoSetGrammar::DoChange( ScGrammar::Grammar eGrammar )
+void ScUndoSetGrammar::DoChange( formula::FormulaGrammar::Grammar eGrammar )
 {
     pDocShell->SetInUndo( TRUE );
     ScDocument* pDoc = pDocShell->GetDocument();

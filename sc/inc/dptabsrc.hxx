@@ -108,9 +108,6 @@ class ScDPSource : public cppu::WeakImplHelper6<
                             com::sun::star::lang::XServiceInfo >
 {
 private:
-    void FillCalcInfo(bool bIsRow, ScDPTableData::CalcInfo& rInfo, bool &bHasAutoShow);
-
-private:
     ScDPTableData*          pData;              // data source
     ScDPDimensions*         pDimensions;        // api objects
                                                 // settings:
@@ -142,6 +139,19 @@ private:
     void                    CreateRes_Impl();
     void                    FillMemberResults();
     void                    FillLevelList( USHORT nOrientation, List& rList );
+    void                    FillCalcInfo(bool bIsRow, ScDPTableData::CalcInfo& rInfo, bool &bHasAutoShow);
+
+    /**
+     * Compile a list of dimension indices that are either, column, row or
+     * page dimensions (i.e. all but data dimensions).
+     */
+    void                    GetCategoryDimensionIndices(::std::hash_set<sal_Int32>& rCatDims);
+
+    /**
+     * Set visibilities of individual rows in the cache table based on the
+     * page field data.
+     */
+    void                    FilterCacheTableByPageDimensions();
 
     void                    SetDupCount( long nNew );
 

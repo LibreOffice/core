@@ -40,6 +40,7 @@
 #include <cppuhelper/weakref.hxx>
 
 #include "MutexContainer.hxx"
+#include "charttoolsdllapi.hxx"
 
 #include <list>
 #include <algorithm>
@@ -67,7 +68,7 @@ namespace ModifyListenerHelper
     life time of the listeners is independent of the broadcaster's lifetime in
     this case.</p>
  */
-class ModifyEventForwarder :
+class OOO_DLLPUBLIC_CHARTTOOLS ModifyEventForwarder :
         public MutexContainer,
         public ::cppu::WeakComponentImplHelper2<
             ::com::sun::star::util::XModifyBroadcaster,

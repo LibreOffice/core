@@ -32,6 +32,7 @@
 
 #include "WrappedProperty.hxx"
 #include "MutexContainer.hxx"
+#include "charttoolsdllapi.hxx"
 #include <com/sun/star/beans/XMultiPropertySet.hpp>
 #include <com/sun/star/beans/XMultiPropertyStates.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
@@ -52,7 +53,8 @@ namespace chart
 {
 //.............................................................................
 
-class WrappedPropertySet : public MutexContainer
+class OOO_DLLPUBLIC_CHARTTOOLS WrappedPropertySet :
+                           public MutexContainer
                          , public ::cppu::WeakImplHelper4
                          < ::com::sun::star::beans::XPropertySet
                          , ::com::sun::star::beans::XMultiPropertySet

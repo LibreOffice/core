@@ -365,6 +365,15 @@ short ScTable::Compare( ScSortInfoArray* pArray, SCCOLROW nIndex1, SCCOLROW nInd
                 pInfo1->pCell, static_cast<SCCOL>(pInfo1->nOrg), aSortParam.nField[nSort],
                 pInfo2->pCell, static_cast<SCCOL>(pInfo2->nOrg), aSortParam.nField[nSort] );
     } while ( nRes == 0 && ++nSort < pArray->GetUsedSorts() );
+    if( nRes == 0 )
+    {
+        ScSortInfo* pInfo1 = pArray->Get( 0, nIndex1 );
+        ScSortInfo* pInfo2 = pArray->Get( 0, nIndex2 );
+        if( pInfo1->nOrg < pInfo2->nOrg )
+            nRes = -1;
+        else if( pInfo1->nOrg > pInfo2->nOrg )
+            nRes = 1;
+    }
     return nRes;
 }
 
@@ -864,7 +873,7 @@ BOOL ScTable::DoSubTotals( ScSubTotalParam& rParam )
     }
 
     // now insert the formulas
-    ComplRefData aRef;
+    ScComplexRefData aRef;
     aRef.InitFlags();
     aRef.Ref1.nTab = nTab;
     aRef.Ref2.nTab = nTab;
@@ -1340,7 +1349,7 @@ static void lcl_PrepareQuery( ScDocument* pDoc, ScTable* pTab, ScQueryParam& rPa
 SCSIZE ScTable::Query(ScQueryParam& rParamOrg, BOOL bKeepSub)
 {
     ScQueryParam    aParam( rParamOrg );
-    StrCollection   aStrCollection;
+    ScStrCollection aScStrCollection;
     StrData*        pStrData = NULL;
 
     BOOL    bStarted = FALSE;
@@ -1399,7 +1408,7 @@ SCSIZE ScTable::Query(ScQueryParam& rParamOrg, BOOL bKeepSub)
 
                 BOOL bIsUnique = TRUE;
                 if (pStrData)
-                    bIsUnique = aStrCollection.Insert(pStrData);
+                    bIsUnique = aScStrCollection.Insert(pStrData);
                 if (bIsUnique)
                     bResult = TRUE;
                 else
@@ -1685,12 +1694,12 @@ BOOL ScTable::HasRowHeader( SCCOL nStartCol, SCROW nStartRow, SCCOL /* nEndCol *
     return TRUE;
 }
 
-void ScTable::GetFilterEntries(SCCOL nCol, SCROW nRow1, SCROW nRow2, TypedStrCollection& rStrings)
+void ScTable::GetFilterEntries(SCCOL nCol, SCROW nRow1, SCROW nRow2, TypedScStrCollection& rStrings)
 {
     aCol[nCol].GetFilterEntries( nRow1, nRow2, rStrings );
 }
 
-void ScTable::GetFilteredFilterEntries( SCCOL nCol, SCROW nRow1, SCROW nRow2, const ScQueryParam& rParam, TypedStrCollection& rStrings )
+void ScTable::GetFilteredFilterEntries( SCCOL nCol, SCROW nRow1, SCROW nRow2, const ScQueryParam& rParam, TypedScStrCollection& rStrings )
 {
     // remove the entry for this column from the query parameter
     ScQueryParam aParam( rParam );
@@ -1720,7 +1729,7 @@ void ScTable::GetFilteredFilterEntries( SCCOL nCol, SCROW nRow1, SCROW nRow2, co
     delete[] pSpecial;
 }
 
-BOOL ScTable::GetDataEntries(SCCOL nCol, SCROW nRow, TypedStrCollection& rStrings, BOOL bLimit)
+BOOL ScTable::GetDataEntries(SCCOL nCol, SCROW nRow, TypedScStrCollection& rStrings, BOOL bLimit)
 {
     return aCol[nCol].GetDataEntries( nRow, rStrings, bLimit );
 }

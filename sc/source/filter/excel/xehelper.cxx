@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: xehelper.cxx,v $
- * $Revision: 1.31.32.2 $
+ * $Revision: 1.31.148.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -30,7 +30,6 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sc.hxx"
-#include "xehelper.hxx"
 #include <com/sun/star/i18n/XBreakIterator.hpp>
 #include <com/sun/star/i18n/ScriptType.hpp>
 #include <sfx2/objsh.hxx>
@@ -56,11 +55,12 @@
 #include "cell.hxx"
 #include "editutil.hxx"
 #include "patattr.hxx"
+#include "xestyle.hxx"
 #include "fprogressbar.hxx"
 #include "xltracer.hxx"
-#include "xestyle.hxx"
 #include "xecontent.hxx"
 #include "xelink.hxx"
+#include "xehelper.hxx"
 
 using ::rtl::OUString;
 using ::com::sun::star::uno::Reference;
@@ -1114,7 +1114,7 @@ void XclExpCachedMatrix::Save( XclExpStream& rStrm ) const
                 rStrm << EXC_CACHEDVAL_EMPTY;
                 rStrm.WriteZeroBytes( 8 );
             }
-            else if( ScMatrix::IsStringType( nMatValType ) )
+            else if( ScMatrix::IsNonValueType( nMatValType ) )
             {
                 XclExpString aStr( pMatVal->GetString(), EXC_STR_DEFAULT );
                 rStrm.SetSliceSize( 6 );

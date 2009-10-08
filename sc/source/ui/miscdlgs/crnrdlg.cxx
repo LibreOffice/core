@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2008 by Sun Microsystems, Inc.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -94,12 +94,12 @@ ScColRowNameRangesDlg::ScColRowNameRangesDlg( SfxBindings* pB,
         aLbRange        ( this, ScResId( LB_RANGE ) ),
 
         aEdAssign       ( this, ScResId( ED_AREA ) ),
-        aRbAssign       ( this, ScResId( RB_AREA ), &aEdAssign ),
+        aRbAssign       ( this, ScResId( RB_AREA ), &aEdAssign, this ),
         aBtnColHead     ( this, ScResId( BTN_COLHEAD ) ),
         aBtnRowHead     ( this, ScResId( BTN_ROWHEAD ) ),
         aFtAssign2      ( this, ScResId( FT_DATA_LABEL ) ),
         aEdAssign2      ( this, ScResId( ED_DATA ) ),
-        aRbAssign2      ( this, ScResId( RB_DATA ), &aEdAssign2 ),
+        aRbAssign2      ( this, ScResId( RB_DATA ), &aEdAssign2, this ),
 
         aBtnOk          ( this, ScResId( BTN_OK ) ),
         aBtnCancel      ( this, ScResId( BTN_CANCEL ) ),
@@ -279,7 +279,7 @@ void ScColRowNameRangesDlg::SetColRowData( const ScRange& rLabelRange,BOOL bRef)
     }
     if ( bValid )
     {
-        const ScAddress::Convention eConv = pDoc->GetAddressConvention();
+        const formula::FormulaGrammar::AddressConvention eConv = pDoc->GetAddressConvention();
         String aStr;
         theCurArea.Format( aStr, SCR_ABS_3D, pDoc, eConv );
 
@@ -647,7 +647,7 @@ void ScColRowNameRangesDlg::UpdateRangeData( const ScRange& rRange, BOOL bColNam
 
     if ( bFound )
     {
-        const ScAddress::Convention eConv = pDoc->GetAddressConvention();
+        const formula::FormulaGrammar::AddressConvention eConv = pDoc->GetAddressConvention();
         String aStr;
         theCurArea = rRange;
         theCurArea.Format( aStr, SCR_ABS_3D, pDoc, eConv );
@@ -775,7 +775,7 @@ IMPL_LINK( ScColRowNameRangesDlg, AddBtnHdl, void *, EMPTYARG )
 
     if ( aNewArea.Len() > 0 && aNewData.Len() > 0 )
     {
-        const ScAddress::Convention eConv = pDoc->GetAddressConvention();
+        const formula::FormulaGrammar::AddressConvention eConv = pDoc->GetAddressConvention();
         ScRange aRange1, aRange2;
         BOOL bOk1;
         if ( (bOk1 = ((aRange1.ParseAny( aNewArea, pDoc, eConv ) & SCA_VALID) == SCA_VALID)) != FALSE

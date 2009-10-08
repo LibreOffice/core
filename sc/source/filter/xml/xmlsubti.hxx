@@ -42,7 +42,7 @@
 #include <vector>
 #include <list>
 #include "XMLTableShapeResizer.hxx"
-#include "grammar.hxx"
+#include "formula/grammar.hxx"
 
 class ScXMLImport;
 
@@ -97,9 +97,9 @@ public:
 struct ScMatrixRange
 {
     rtl::OUString sFormula;
-    ScGrammar::Grammar eGrammar;
+    formula::FormulaGrammar::Grammar eGrammar;
     com::sun::star::table::CellRangeAddress aRange;
-    ScMatrixRange(const com::sun::star::table::CellRangeAddress& rRange, const rtl::OUString& rFormula, const ScGrammar::Grammar eGrammarP) :
+    ScMatrixRange(const com::sun::star::table::CellRangeAddress& rRange, const rtl::OUString& rFormula, const formula::FormulaGrammar::Grammar eGrammarP) :
         sFormula(rFormula),
         eGrammar(eGrammarP),
         aRange(rRange)
@@ -181,12 +181,12 @@ public:
                                                 sal_Int32 nEndColumn,
                                                 sal_Int32 nEndRow,
                                                 const rtl::OUString& rFormula,
-                                                const ScGrammar::Grammar );
+                                                const formula::FormulaGrammar::Grammar );
 
     sal_Bool                            IsPartOfMatrix(sal_Int32 nColumn, sal_Int32 nRow);
     void                                SetMatrix( const com::sun::star::table::CellRangeAddress& rRange,
                                                 const rtl::OUString& rFormula,
-                                                const ScGrammar::Grammar );
+                                                const formula::FormulaGrammar::Grammar );
 };
 
 #endif

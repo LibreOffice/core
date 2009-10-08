@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: global.cxx,v $
- * $Revision: 1.55.30.2 $
+ * $Revision: 1.56.118.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -88,6 +88,8 @@
 #include "globstr.hrc"
 #include "scfuncs.hrc"
 #include "sc.hrc"
+#include "scmod.hxx"
+#include "appoptio.hxx"
 
 // -----------------------------------------------------------------------
 
@@ -148,6 +150,11 @@ static USHORT nPPTZoom = 0;     // ScreenZoom used to determine nScreenPPTX/Y
 // ... oder so?
 
 BOOL bOderSo;
+
+bool SC_DLLPUBLIC ScGetWriteTeamInfo()
+{
+  return bOderSo;
+}
 
 class SfxViewShell;
 SfxViewShell* pScActiveViewShell = NULL;            //! als Member !!!!!
@@ -260,6 +267,7 @@ BOOL ScGlobal::CheckWidthInvalidate( BOOL& bNumFormatChanged,
         || HasAttrChanged( rNewAttrs, rOldAttrs, ATTR_CJK_FONT_POSTURE )
         || HasAttrChanged( rNewAttrs, rOldAttrs, ATTR_CTL_FONT_POSTURE )
         || HasAttrChanged( rNewAttrs, rOldAttrs, ATTR_FONT_UNDERLINE )
+        || HasAttrChanged( rNewAttrs, rOldAttrs, ATTR_FONT_OVERLINE )
         || HasAttrChanged( rNewAttrs, rOldAttrs, ATTR_FONT_CROSSEDOUT )
         || HasAttrChanged( rNewAttrs, rOldAttrs, ATTR_FONT_CONTOUR )
         || HasAttrChanged( rNewAttrs, rOldAttrs, ATTR_FONT_SHADOWED )
@@ -580,7 +588,7 @@ void ScGlobal::Init()
     pProtectedBrushItem = new SvxBrushItem( Color( COL_LIGHTGRAY ), ATTR_BACKGROUND );
 
     UpdatePPT(NULL);
-    ScCompiler::InitSymbolsNative();
+    //ScCompiler::InitSymbolsNative();
     // ScParameterClassification _after_ Compiler, needs function resources if
     // arguments are to be merged in, which in turn need strings of function
     // names from the compiler.
@@ -838,15 +846,79 @@ bool ScGlobal::IsQuoted( const String& rString, sal_Unicode cQuote )
     return (rString.Len() >= 2) && (rString.GetChar( 0 ) == cQuote) && (rString.GetChar( rString.Len() - 1 ) == cQuote);
 }
 
-void ScGlobal::AddQuotes( String& rString, sal_Unicode cQuote )
+void ScGlobal::AddQuotes( String& rString, sal_Unicode cQuote, bool bEscapeEmbedded )
 {
+    if (bEscapeEmbedded)
+    {
+        sal_Unicode pQ[3];
+        pQ[0] = pQ[1] = cQuote;
+        pQ[2] = 0;
+        String aQuotes( pQ );
+        rString.SearchAndReplaceAll( cQuote, aQuotes);
+    }
     rString.Insert( cQuote, 0 ).Append( cQuote );
 }
 
-void ScGlobal::EraseQuotes( String& rString, sal_Unicode /* cQuote */ )
+void ScGlobal::EraseQuotes( String& rString, sal_Unicode cQuote, bool bUnescapeEmbedded )
 {
-    if( IsQuoted( rString ) )
+    if ( IsQuoted( rString, cQuote ) )
+    {
         rString.Erase( rString.Len() - 1 ).Erase( 0, 1 );
+        if (bUnescapeEmbedded)
+        {
+            sal_Unicode pQ[3];
+            pQ[0] = pQ[1] = cQuote;
+            pQ[2] = 0;
+            String aQuotes( pQ );
+            rString.SearchAndReplaceAll( aQuotes, cQuote);
+        }
+    }
+}
+
+xub_StrLen ScGlobal::FindUnquoted( const String& rString, sal_Unicode cChar, xub_StrLen nStart, sal_Unicode cQuote )
+{
+    const sal_Unicode* const pStart = rString.GetBuffer();
+    const sal_Unicode* const pStop = pStart + rString.Len();
+    const sal_Unicode* p = pStart + nStart;
+    bool bQuoted = false;
+    while (p < pStop)
+    {
+        if (*p == cChar && !bQuoted)
+            return xub_StrLen(p - pStart);
+        else if (*p == cQuote)
+        {
+            if (!bQuoted)
+                bQuoted = true;
+            else if (p < pStop-1 && *(p+1) == cQuote)
+                ++p;
+            else
+                bQuoted = false;
+        }
+        ++p;
+    }
+    return STRING_NOTFOUND;
+}
+
+const sal_Unicode* ScGlobal::FindUnquoted( const sal_Unicode* pString, sal_Unicode cChar, sal_Unicode cQuote )
+{
+    const sal_Unicode* p = pString;
+    bool bQuoted = false;
+    while (*p)
+    {
+        if (*p == cChar && !bQuoted)
+            return p;
+        else if (*p == cQuote)
+        {
+            if (!bQuoted)
+                bQuoted = true;
+            else if (*(p+1) == cQuote)
+                ++p;
+            else
+                bQuoted = false;
+        }
+        ++p;
+    }
+    return NULL;
 }
 
 //------------------------------------------------------------------------
@@ -1059,344 +1131,6 @@ void ScGlobal::AddLanguage( SfxItemSet& rSet, SvNumberFormatter& rFormatter )
 
 
 
-//===================================================================
-//  class ScFormulaUtil - statische Methoden
-//===================================================================
-
-#define FUNC_NOTFOUND 0xffff
-
-ScFuncDesc aDefaultFuncDesc;
-
-BOOL ScFormulaUtil::GetNextFunc( const String&  rFormula,
-                                 BOOL           bBack,
-                                 xub_StrLen&    rFStart,   // Ein- und Ausgabe
-                                 xub_StrLen*    pFEnd,     // = NULL
-                                 const ScFuncDesc** ppFDesc,   // = NULL
-                                 String***      pppArgs )  // = NULL
-{
-    BOOL        bFound = FALSE;
-    xub_StrLen  nOldStart = rFStart;
-    String      aFname;
-
-    rFStart = GetFunctionStart( rFormula, rFStart, bBack, ppFDesc ? &aFname : NULL );
-    bFound  = ( rFStart != FUNC_NOTFOUND );
-
-    if ( bFound )
-    {
-        if ( pFEnd )
-            *pFEnd = GetFunctionEnd( rFormula, rFStart );
-
-        if ( ppFDesc )
-        {
-            ScFunctionMgr* pFuncMgr = ScGlobal::GetStarCalcFunctionMgr();
-            *ppFDesc = pFuncMgr->Get( aFname );
-            if ( *ppFDesc )
-            {
-                if (pppArgs)
-                    *pppArgs = GetArgStrings( rFormula, rFStart, (*ppFDesc)->nArgCount );
-            }
-            else
-            {
-                *ppFDesc = &aDefaultFuncDesc;
-            }
-        }
-    }
-    else
-        rFStart = nOldStart;
-
-    return bFound;
-}
-
-//------------------------------------------------------------------------
-
-void ScFormulaUtil::FillArgStrings( const String&   rFormula,
-                                    xub_StrLen      nFuncPos,
-                                    USHORT          nArgs,
-                                    String**        aArgArr )
-{
-    if ( !aArgArr ) return;
-
-    xub_StrLen  nStart  = 0;
-    xub_StrLen  nEnd    = 0;
-    USHORT      i;
-    BOOL        bLast   = FALSE;
-
-    for ( i=0; i<nArgs && !bLast; i++ )
-    {
-        nStart = GetArgStart( rFormula, nFuncPos, i );
-
-        if ( i+1<nArgs ) // letztes Argument?
-        {
-            nEnd = GetArgStart( rFormula, nFuncPos, i+1 );
-
-            if ( nEnd != nStart )
-                aArgArr[i] = new String( rFormula.Copy( nStart, nEnd-1-nStart ) );
-            else
-                aArgArr[i] = new String, bLast = TRUE;
-        }
-        else
-        {
-            nEnd = GetFunctionEnd( rFormula, nFuncPos )-1;
-            if ( nStart < nEnd )
-                aArgArr[i] = new String( rFormula.Copy( nStart, nEnd-nStart ) );
-            else
-                aArgArr[i] = new String;
-        }
-    }
-
-    if ( bLast )
-        for ( ; i<nArgs; i++ )
-            aArgArr[i] = new String;
-}
-
-//------------------------------------------------------------------------
-
-String** ScFormulaUtil::GetArgStrings( const String& rFormula,
-                                       xub_StrLen nFuncPos,
-                                       USHORT nArgs )
-{
-    String** aArgArr = NULL;
-    if (nArgs)
-    {
-        aArgArr = new String*[nArgs];
-        FillArgStrings( rFormula, nFuncPos, nArgs, aArgArr );
-    }
-    return aArgArr;
-}
-
-//------------------------------------------------------------------------
-
-inline BOOL IsFormulaText( const String& rStr, xub_StrLen nPos )
-{
-    if( ScGlobal::pCharClass->isLetterNumeric( rStr, nPos ) )
-        return TRUE;
-    else
-    {   // In internationalized versions function names may contain a dot
-        //  and in every version also an underscore... ;-)
-        sal_Unicode c = rStr.GetChar(nPos);
-        return c == '.' || c == '_';
-    }
-
-}
-
-xub_StrLen ScFormulaUtil::GetFunctionStart( const String&   rFormula,
-                                        xub_StrLen      nStart,
-                                        BOOL            bBack,
-                                        String*         pFuncName )
-{
-    xub_StrLen nStrLen = rFormula.Len();
-
-    if ( nStrLen < nStart )
-        return nStart;
-
-    xub_StrLen  nFStart = FUNC_NOTFOUND;
-    xub_StrLen  nParPos = nStart;
-
-    BOOL bRepeat, bFound;
-    do
-    {
-        bFound  = FALSE;
-        bRepeat = FALSE;
-
-        if ( bBack )
-        {
-            while ( !bFound && (nParPos > 0) )
-            {
-                if ( rFormula.GetChar(nParPos) == '"' )
-                {
-                    nParPos--;
-                    while ( (nParPos > 0) && rFormula.GetChar(nParPos) != '"' )
-                        nParPos--;
-                    if (nParPos > 0)
-                        nParPos--;
-                }
-                else if ( (bFound = ( rFormula.GetChar(nParPos) == '(' ) ) == FALSE )
-                    nParPos--;
-            }
-        }
-        else
-        {
-            while ( !bFound && (nParPos < nStrLen) )
-            {
-                if ( rFormula.GetChar(nParPos) == '"' )
-                {
-                    nParPos++;
-                    while ( (nParPos < nStrLen) && rFormula.GetChar(nParPos) != '"' )
-                        nParPos++;
-                    nParPos++;
-                }
-                else if ( (bFound = ( rFormula.GetChar(nParPos) == '(' ) ) == FALSE )
-                    nParPos++;
-            }
-        }
-
-        if ( bFound && (nParPos > 0) )
-        {
-            nFStart = nParPos-1;
-
-            while ( (nFStart > 0) && IsFormulaText( rFormula, nFStart ))
-                nFStart--;
-        }
-
-        nFStart++;
-
-        if ( bFound )
-        {
-            if ( IsFormulaText( rFormula, nFStart ) )
-            {
-                                    //  Funktion gefunden
-                if ( pFuncName )
-                    *pFuncName = rFormula.Copy( nFStart, nParPos-nFStart );
-            }
-            else                    // Klammern ohne Funktion -> weitersuchen
-            {
-                bRepeat = TRUE;
-                if ( !bBack )
-                    nParPos++;
-                else if (nParPos > 0)
-                    nParPos--;
-                else
-                    bRepeat = FALSE;
-            }
-        }
-        else                        // keine Klammern gefunden
-        {
-            nFStart = FUNC_NOTFOUND;
-            if ( pFuncName )
-                pFuncName->Erase();
-        }
-    }
-    while(bRepeat);
-
-    return nFStart;
-}
-
-//------------------------------------------------------------------------
-
-xub_StrLen  ScFormulaUtil::GetFunctionEnd( const String& rStr, xub_StrLen nStart )
-{
-    xub_StrLen nStrLen = rStr.Len();
-
-    if ( nStrLen < nStart )
-        return nStart;
-
-    // We assume the following tokens are single-character tokens.
-    const sal_Unicode open       = ScCompiler::GetStringFromOpCode(ocOpen).GetChar(0);
-    const sal_Unicode close      = ScCompiler::GetStringFromOpCode(ocClose).GetChar(0);
-    const sal_Unicode sep        = ScCompiler::GetStringFromOpCode(ocSep).GetChar(0);
-    const sal_Unicode arrayOpen  = ScCompiler::GetStringFromOpCode(ocArrayOpen).GetChar(0);
-    const sal_Unicode arrayClose = ScCompiler::GetStringFromOpCode(ocArrayClose).GetChar(0);
-
-    short   nParCount = 0;
-    bool    bInArray = false;
-    BOOL    bFound = FALSE;
-
-    while ( !bFound && (nStart < nStrLen) )
-    {
-        sal_Unicode c = rStr.GetChar(nStart);
-
-        if ( c == '"' )
-        {
-            nStart++;
-            while ( (nStart < nStrLen) && rStr.GetChar(nStart) != '"' )
-                nStart++;
-        }
-        else if ( c == open )
-            nParCount++;
-        else if ( c == close )
-        {
-            nParCount--;
-            if ( nParCount == 0 )
-                bFound = TRUE;
-            else if ( nParCount < 0 )
-            {
-                bFound = TRUE;
-                nStart--;   // einen zu weit gelesen
-            }
-        }
-        else if ( c == arrayOpen )
-        {
-            bInArray = true;
-        }
-        else if ( c == arrayClose )
-        {
-            bInArray = false;
-        }
-        else if ( c == sep )
-        {
-            if ( !bInArray && nParCount == 0 )
-            {
-                bFound = TRUE;
-                nStart--;   // einen zu weit gelesen
-            }
-        }
-        nStart++; // hinter gefundene Position stellen
-    }
-
-    return nStart;
-}
-
-//------------------------------------------------------------------
-
-xub_StrLen ScFormulaUtil::GetArgStart( const String& rStr, xub_StrLen nStart, USHORT nArg )
-{
-    xub_StrLen nStrLen = rStr.Len();
-
-    if ( nStrLen < nStart )
-        return nStart;
-
-    // We assume the following tokens are single-character tokens.
-    const sal_Unicode open       = ScCompiler::GetStringFromOpCode(ocOpen).GetChar(0);
-    const sal_Unicode close      = ScCompiler::GetStringFromOpCode(ocClose).GetChar(0);
-    const sal_Unicode sep        = ScCompiler::GetStringFromOpCode(ocSep).GetChar(0);
-    const sal_Unicode arrayOpen  = ScCompiler::GetStringFromOpCode(ocArrayOpen).GetChar(0);
-    const sal_Unicode arrayClose = ScCompiler::GetStringFromOpCode(ocArrayClose).GetChar(0);
-
-    short   nParCount   = 0;
-    bool    bInArray    = false;
-    BOOL    bFound      = FALSE;
-
-    while ( !bFound && (nStart < nStrLen) )
-    {
-        sal_Unicode c = rStr.GetChar(nStart);
-
-        if ( c == '"' )
-        {
-            nStart++;
-            while ( (nStart < nStrLen) && rStr.GetChar(nStart) != '"' )
-                nStart++;
-        }
-        else if ( c == open )
-        {
-            bFound = ( nArg == 0 );
-            nParCount++;
-        }
-        else if ( c == close )
-        {
-            nParCount--;
-            bFound = ( nParCount == 0 );
-        }
-        else if ( c == arrayOpen )
-        {
-            bInArray = true;
-        }
-        else if ( c == arrayClose )
-        {
-            bInArray = false;
-        }
-        else if ( c == sep )
-        {
-            if ( !bInArray && nParCount == 1 )
-            {
-                nArg--;
-                bFound = ( nArg == 0  );
-            }
-        }
-        nStart++;
-    }
-
-    return nStart;
-}
 
 
 //===================================================================
@@ -1500,11 +1234,14 @@ USHORT ScFuncRes::GetNum()
 // um an die protected von Resource ranzukommen
 class ScResourcePublisher : public Resource
 {
+private:
+    void            FreeResource() { Resource::FreeResource(); }
 public:
         ScResourcePublisher( const ScResId& rId ) : Resource( rId ) {}
+        ~ScResourcePublisher() { FreeResource(); }
     BOOL            IsAvailableRes( const ResId& rId ) const
                         { return Resource::IsAvailableRes( rId ); }
-    void            FreeResource() { Resource::FreeResource(); }
+
 };
 
 
@@ -1526,8 +1263,7 @@ ScFunctionList::ScFunctionList() :
 
     for ( USHORT k = 0; k < nBlocks; k++ )
     {
-        ScResourcePublisher* pBlock =
-            new ScResourcePublisher( ScResId( nDescBlock[k] ) );
+        ::std::auto_ptr<ScResourcePublisher> pBlock( new ScResourcePublisher( ScResId( nDescBlock[k] ) ) );
         // Browse for all possible OpCodes. This is not the fastest method, but
         // otherwise the sub resources within the resource blocks and the
         // resource blocks themselfs would had to be ordered according to
@@ -1558,25 +1294,23 @@ ScFunctionList::ScFunctionList() :
                 }
             }
         }
-        pBlock->FreeResource();
-        delete pBlock;
     }
 
     USHORT nNextId = SC_OPCODE_LAST_OPCODE_ID + 1;      // FuncID for AddIn functions
 
     // Auswertung AddIn-Liste
-    String aDefArgNameValue =   String::CreateFromAscii(RTL_CONSTASCII_STRINGPARAM("value"));
-    String aDefArgNameString =  String::CreateFromAscii(RTL_CONSTASCII_STRINGPARAM("string"));
-    String aDefArgNameValues =  String::CreateFromAscii(RTL_CONSTASCII_STRINGPARAM("values"));
-    String aDefArgNameStrings = String::CreateFromAscii(RTL_CONSTASCII_STRINGPARAM("strings"));
-    String aDefArgNameCells =   String::CreateFromAscii(RTL_CONSTASCII_STRINGPARAM("cells"));
-    String aDefArgNameNone =    String::CreateFromAscii(RTL_CONSTASCII_STRINGPARAM("none"));
-    String aDefArgDescValue =   String::CreateFromAscii(RTL_CONSTASCII_STRINGPARAM("a value"));
-    String aDefArgDescString =  String::CreateFromAscii(RTL_CONSTASCII_STRINGPARAM("a string"));
-    String aDefArgDescValues =  String::CreateFromAscii(RTL_CONSTASCII_STRINGPARAM("array of values"));
-    String aDefArgDescStrings = String::CreateFromAscii(RTL_CONSTASCII_STRINGPARAM("array of strings"));
-    String aDefArgDescCells =   String::CreateFromAscii(RTL_CONSTASCII_STRINGPARAM("range of cells"));
-    String aDefArgDescNone =    String::CreateFromAscii(RTL_CONSTASCII_STRINGPARAM("none"));
+    String aDefArgNameValue(RTL_CONSTASCII_STRINGPARAM("value"));
+    String aDefArgNameString(RTL_CONSTASCII_STRINGPARAM("string"));
+    String aDefArgNameValues(RTL_CONSTASCII_STRINGPARAM("values"));
+    String aDefArgNameStrings(RTL_CONSTASCII_STRINGPARAM("strings"));
+    String aDefArgNameCells(RTL_CONSTASCII_STRINGPARAM("cells"));
+    String aDefArgNameNone(RTL_CONSTASCII_STRINGPARAM("none"));
+    String aDefArgDescValue(RTL_CONSTASCII_STRINGPARAM("a value"));
+    String aDefArgDescString(RTL_CONSTASCII_STRINGPARAM("a string"));
+    String aDefArgDescValues(RTL_CONSTASCII_STRINGPARAM("array of values"));
+    String aDefArgDescStrings(RTL_CONSTASCII_STRINGPARAM("array of strings"));
+    String aDefArgDescCells(RTL_CONSTASCII_STRINGPARAM("range of cells"));
+    String aDefArgDescNone(RTL_CONSTASCII_STRINGPARAM("none"));
     String aArgName, aArgDesc;
     pFuncColl = ScGlobal::GetFuncCollection();
     for (i = 0; i < pFuncColl->GetCount(); i++)
@@ -1762,37 +1496,9 @@ void ScFuncDesc::Clear()
 
 //------------------------------------------------------------------------
 
-void ScFuncDesc::InitArgumentInfo() const
-{
-    // get the full argument description
-    // (add-in has to be instantiated to get the type information)
-
-    if ( bIncomplete && pFuncName )
-    {
-        ScUnoAddInCollection& rAddIns = *ScGlobal::GetAddInCollection();
-        String aIntName = rAddIns.FindFunction( *pFuncName, TRUE );         // pFuncName is upper-case
-
-        if ( aIntName.Len() )
-        {
-            // GetFuncData with bComplete=true loads the component and updates
-            // the global function list if needed.
-
-            rAddIns.GetFuncData( aIntName, true );
-        }
-
-        if ( bIncomplete )
-        {
-            DBG_ERRORFILE( "couldn't initialize add-in function" );
-            const_cast<ScFuncDesc*>(this)->bIncomplete = FALSE;         // even if there was an error, don't try again
-        }
-    }
-}
-
-//------------------------------------------------------------------------
-
 String ScFuncDesc::GetParamList() const
 {
-    const String& sep = ScCompiler::GetStringFromOpCode(ocSep);
+    const String& sep = ScCompiler::GetNativeSymbol(ocSep);
 
     String aSig;
 
@@ -1879,41 +1585,41 @@ String ScFuncDesc::GetSignature() const
 
 //------------------------------------------------------------------------
 
-String ScFuncDesc::GetFormulaString( String** aArgArr ) const
+::rtl::OUString ScFuncDesc::getFormula( const ::std::vector< ::rtl::OUString >& _aArguments ) const
 {
-    const String& sep = ScCompiler::GetStringFromOpCode(ocSep);
+    const String& sep = ScCompiler::GetNativeSymbol(ocSep);
 
-    String aFormula;
+    ::rtl::OUStringBuffer aFormula;
 
     if(pFuncName)
     {
-        aFormula= *pFuncName;
+        aFormula.append( *pFuncName );
 
-        aFormula += '(';
+        aFormula.appendAscii( "(" );
+        ::std::vector< ::rtl::OUString >::const_iterator aIter = _aArguments.begin();
+        ::std::vector< ::rtl::OUString >::const_iterator aEnd = _aArguments.end();
 
-        if ( nArgCount > 0 && aArgArr )
+        if ( nArgCount > 0 && aIter != aEnd )
         {
-            BOOL bLastArg = ( aArgArr[0]->Len() == 0 );
+            BOOL bLastArg = ( aIter->getLength() == 0 );
 
-            if ( !bLastArg )
+            while( aIter != aEnd && !bLastArg )
             {
-                for ( USHORT i=0; i<nArgCount && !bLastArg; i++ )
+                aFormula.append( *(aIter) );
+                if ( aIter != (aEnd-1) )
                 {
-                    aFormula += *(aArgArr[i]);
-
-                    if ( i < (nArgCount-1) )
-                    {
-                        bLastArg = !( aArgArr[i+1]->Len() > 0 );
-                        if ( !bLastArg )
-                            aFormula += sep;
-                    }
+                    bLastArg = !( (aIter+1)->getLength() > 0 );
+                    if ( !bLastArg )
+                        aFormula.append( sep );
                 }
+
+                ++aIter;
             }
         }
 
-        aFormula += ')';
+        aFormula.appendAscii( ")" );
     }
-    return aFormula;
+    return aFormula.makeStringAndClear();
 }
 
 //------------------------------------------------------------------------
@@ -1939,28 +1645,111 @@ USHORT ScFuncDesc::GetSuppressedArgCount() const
 
 //------------------------------------------------------------------------
 
-::std::vector<USHORT> ScFuncDesc::GetVisibleArgMapping() const
+::rtl::OUString ScFuncDesc::getFunctionName() const
 {
-    ::std::vector<USHORT> aMap;
+    ::rtl::OUString sRet;
+    if ( pFuncName )
+        sRet = *pFuncName;
+    return sRet;
+}
+// -----------------------------------------------------------------------------
+const formula::IFunctionCategory* ScFuncDesc::getCategory() const
+{
+    return ScGlobal::GetStarCalcFunctionMgr()->getCategory(nCategory);
+}
+// -----------------------------------------------------------------------------
+::rtl::OUString ScFuncDesc::getDescription() const
+{
+    ::rtl::OUString sRet;
+    if ( pFuncDesc )
+        sRet = *pFuncDesc;
+    return sRet;
+}
+// -----------------------------------------------------------------------------
+// GetSuppressedArgCount
+xub_StrLen ScFuncDesc::getSuppressedArgumentCount() const
+{
+    return GetSuppressedArgCount();
+}
+// -----------------------------------------------------------------------------
+//
+void ScFuncDesc::fillVisibleArgumentMapping(::std::vector<USHORT>& _rArguments) const
+{
     if (!bHasSuppressedArgs || !pDefArgFlags)
     {
-        aMap.resize( nArgCount);
-        ::std::iota( aMap.begin(), aMap.end(), 0);
-        return aMap;
+        _rArguments.resize( nArgCount);
+        ::std::iota( _rArguments.begin(), _rArguments.end(), 0);
     }
 
-    aMap.reserve( nArgCount);
+    _rArguments.reserve( nArgCount);
     USHORT nArgs = nArgCount;
     if (nArgs >= VAR_ARGS)
         nArgs -= VAR_ARGS - 1;
     for (USHORT i=0; i < nArgs; ++i)
     {
         if (!pDefArgFlags[i].bSuppress)
-            aMap.push_back(i);
+            _rArguments.push_back(i);
     }
-    return aMap;
 }
+// -----------------------------------------------------------------------------
+void ScFuncDesc::initArgumentInfo()  const
+{
+    // get the full argument description
+    // (add-in has to be instantiated to get the type information)
 
+    if ( bIncomplete && pFuncName )
+    {
+        ScUnoAddInCollection& rAddIns = *ScGlobal::GetAddInCollection();
+        String aIntName = rAddIns.FindFunction( *pFuncName, TRUE );         // pFuncName is upper-case
+
+        if ( aIntName.Len() )
+        {
+            // GetFuncData with bComplete=true loads the component and updates
+            // the global function list if needed.
+
+            rAddIns.GetFuncData( aIntName, true );
+        }
+
+        if ( bIncomplete )
+        {
+            DBG_ERRORFILE( "couldn't initialize add-in function" );
+            const_cast<ScFuncDesc*>(this)->bIncomplete = FALSE;         // even if there was an error, don't try again
+        }
+    }
+}
+// -----------------------------------------------------------------------------
+::rtl::OUString ScFuncDesc::getSignature() const
+{
+    return GetSignature();
+}
+// -----------------------------------------------------------------------------
+long ScFuncDesc::getHelpId() const
+{
+    return nHelpId;
+}
+// -----------------------------------------------------------------------------
+
+// parameter
+sal_uInt32 ScFuncDesc::getParameterCount() const
+{
+    return nArgCount;
+}
+// -----------------------------------------------------------------------------
+::rtl::OUString ScFuncDesc::getParameterName(sal_uInt32 _nPos) const
+{
+    return *(ppDefArgNames[_nPos]);
+}
+// -----------------------------------------------------------------------------
+::rtl::OUString ScFuncDesc::getParameterDescription(sal_uInt32 _nPos) const
+{
+    return *(ppDefArgDescs[_nPos]);
+}
+// -----------------------------------------------------------------------------
+bool ScFuncDesc::isParameterOptional(sal_uInt32 _nPos) const
+{
+    return pDefArgFlags[_nPos].bOptional;
+}
+// -----------------------------------------------------------------------------
 //========================================================================
 // class ScFunctionMgr:
 
@@ -2014,7 +1803,7 @@ ScFunctionMgr::~ScFunctionMgr()
 
 //------------------------------------------------------------------------
 
-const ScFuncDesc* ScFunctionMgr::Get( const String& rFName )
+const ScFuncDesc* ScFunctionMgr::Get( const String& rFName ) const
 {
     const ScFuncDesc*   pDesc = NULL;
     if (rFName.Len() <= pFuncList->GetMaxFuncNameLen())
@@ -2026,7 +1815,7 @@ const ScFuncDesc* ScFunctionMgr::Get( const String& rFName )
 
 //------------------------------------------------------------------------
 
-const ScFuncDesc* ScFunctionMgr::Get( USHORT nFIndex )
+const ScFuncDesc* ScFunctionMgr::Get( USHORT nFIndex ) const
 {
     const ScFuncDesc*   pDesc;
     for (pDesc = First(0); pDesc; pDesc = Next())
@@ -2037,7 +1826,7 @@ const ScFuncDesc* ScFunctionMgr::Get( USHORT nFIndex )
 
 //------------------------------------------------------------------------
 
-const ScFuncDesc*   ScFunctionMgr::First( USHORT nCategory )
+const ScFuncDesc*   ScFunctionMgr::First( USHORT nCategory ) const
 {
     DBG_ASSERT( nCategory < MAX_FUNCCAT, "Unbekannte Kategorie" );
 
@@ -2062,6 +1851,100 @@ const ScFuncDesc* ScFunctionMgr::Next() const
     else
         return NULL;
 }
+sal_uInt32 ScFunctionMgr::getCount() const
+{
+    return MAX_FUNCCAT - 1;
+}
+const formula::IFunctionCategory* ScFunctionMgr::getCategory(sal_uInt32 nCategory) const
+{
+    formula::IFunctionCategory* pRet = NULL;
+    if ( nCategory < (MAX_FUNCCAT-1) )
+    {
+         pRet = new ScFunctionCategory(const_cast<ScFunctionMgr*>(this),aCatLists[nCategory+1],nCategory); // aCatLists[0] is "all"
+    }
+    return pRet;
+}
+// -----------------------------------------------------------------------------
+const formula::IFunctionDescription* ScFunctionMgr::getFunctionByName(const ::rtl::OUString& _sFunctionName) const
+{
+    return Get(_sFunctionName);
+}
+// -----------------------------------------------------------------------------
+void ScFunctionMgr::fillLastRecentlyUsedFunctions(::std::vector< const formula::IFunctionDescription*>& _rLastRUFunctions) const
+{
+#define LRU_MAX 10
+
+    const ScAppOptions& rAppOpt = SC_MOD()->GetAppOptions();
+    USHORT nLRUFuncCount = Min( rAppOpt.GetLRUFuncListCount(), (USHORT)LRU_MAX );
+    USHORT* pLRUListIds = rAppOpt.GetLRUFuncList();
+
+    if ( pLRUListIds )
+    {
+        for ( USHORT i=0; i<nLRUFuncCount; i++ )
+            _rLastRUFunctions.push_back( Get( pLRUListIds[i] ) );
+    }
+}
+// -----------------------------------------------------------------------------
+String ScFunctionMgr::GetCategoryName(sal_uInt32 _nCategoryNumber )
+{
+    if ( _nCategoryNumber > SC_FUNCGROUP_COUNT )
+    {
+        DBG_ERROR("Invalid category number!");
+        return String();
+    } // if ( _nCategoryNumber >= SC_FUNCGROUP_COUNT )
+
+    ::std::auto_ptr<ScResourcePublisher> pCategories( new ScResourcePublisher( ScResId( RID_FUNCTION_CATEGORIES ) ) );
+    return String(ScResId((USHORT)_nCategoryNumber));
+}
+const sal_Unicode ScFunctionMgr::getSingleToken(const formula::IFunctionManager::EToken _eToken) const
+{
+    switch(_eToken)
+    {
+        case eOk:
+            return ScCompiler::GetNativeSymbol(ocOpen).GetChar(0);
+        case eClose:
+            return ScCompiler::GetNativeSymbol(ocClose).GetChar(0);
+        case eSep:
+            return ScCompiler::GetNativeSymbol(ocSep).GetChar(0);
+        case eArrayOpen:
+            return ScCompiler::GetNativeSymbol(ocArrayOpen).GetChar(0);
+        case eArrayClose:
+            return ScCompiler::GetNativeSymbol(ocArrayClose).GetChar(0);
+    } // switch(_eToken)
+    return 0;
+}
+// -----------------------------------------------------------------------------
+sal_uInt32 ScFunctionCategory::getCount() const
+{
+    return m_pCategory->Count();
+}
+// -----------------------------------------------------------------------------
+const formula::IFunctionManager* ScFunctionCategory::getFunctionManager() const
+{
+    return m_pMgr;
+}
+// -----------------------------------------------------------------------------
+::rtl::OUString ScFunctionCategory::getName() const
+{
+    if ( !m_sName.getLength() )
+        m_sName = ScFunctionMgr::GetCategoryName(m_nCategory+1);
+    return m_sName;
+}
+// -----------------------------------------------------------------------------
+const formula::IFunctionDescription* ScFunctionCategory::getFunction(sal_uInt32 _nPos) const
+{
+    const ScFuncDesc*   pDesc = NULL;
+    sal_uInt32 i = 0;
+    for (pDesc = (const ScFuncDesc*)m_pCategory->First(); i < _nPos &&  pDesc; pDesc = (const ScFuncDesc*)m_pCategory->Next(),++i)
+        ;
+    return pDesc;
+}
+// -----------------------------------------------------------------------------
+sal_uInt32 ScFunctionCategory::getNumber() const
+{
+    return m_nCategory;
+}
+// -----------------------------------------------------------------------------
 
 //------------------------------------------------------------------------
 

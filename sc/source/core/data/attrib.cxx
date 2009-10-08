@@ -77,7 +77,7 @@ TYPEINIT1(ScPageScaleToItem,    SfxPoolItem);
 //      allgemeine Hilfsfunktionen
 //
 
-BOOL HasPriority( const SvxBorderLine* pThis, const SvxBorderLine* pOther )
+BOOL ScHasPriority( const SvxBorderLine* pThis, const SvxBorderLine* pOther )
 {
 //    DBG_ASSERT( pThis || pOther, "LineAttr == 0" );
 
@@ -268,7 +268,7 @@ BOOL ScProtectionAttr::QueryValue( uno::Any& rVal, BYTE nMemberId ) const
         case MID_4 :
             rVal <<= (sal_Bool ) bHidePrint; break;
         default:
-            DBG_ERROR("Wrong MemberID!")
+            DBG_ERROR("Wrong MemberID!");
             return FALSE;
     }
 

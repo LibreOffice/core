@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2008 by Sun Microsystems, Inc.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -62,7 +62,7 @@ class ScXMLContentValidationContext : public SvXMLImportContext
     rtl::OUString      sErrorMessageType;
     rtl::OUString      sBaseCellAddress;
     rtl::OUString      sCondition;
-    ScGrammar::Grammar eGrammar;
+    formula::FormulaGrammar::Grammar eGrammar;
     sal_Int16          nShowList;
     sal_Bool           bAllowEmptyCell;
     sal_Bool           bDisplayHelp;
@@ -248,7 +248,7 @@ ScXMLContentValidationContext::ScXMLContentValidationContext( ScXMLImport& rImpo
     bDisplayHelp(sal_False),
     bDisplayError(sal_False)
 {
-    const ScGrammar::Grammar eStorageGrammar = eGrammar = GetScImport().GetDocument()->GetStorageGrammar();
+    const formula::FormulaGrammar::Grammar eStorageGrammar = eGrammar = GetScImport().GetDocument()->GetStorageGrammar();
     sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
     const SvXMLTokenMap& rAttrTokenMap = GetScImport().GetContentValidationAttrTokenMap();
     for( sal_Int16 i=0; i < nAttrCount; ++i )

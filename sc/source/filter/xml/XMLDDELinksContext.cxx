@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: XMLDDELinksContext.cxx,v $
- * $Revision: 1.18 $
+ * $Revision: 1.18.134.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -46,6 +46,7 @@
 
 using namespace com::sun::star;
 using namespace xmloff::token;
+using ::rtl::OUString;
 
 //------------------------------------------------------------------
 
@@ -227,12 +228,14 @@ ScXMLDDESourceContext::ScXMLDDESourceContext( ScXMLImport& rImport,
                 pDDELink->SetItem(sValue);
         }
         else if ((nPrefix == XML_NAMESPACE_TABLE) && IsXMLToken(aLocalName, XML_CONVERSION_MODE))
+        {
             if (IsXMLToken(sValue, XML_INTO_ENGLISH_NUMBER))
                 pDDELink->SetMode(SC_DDE_ENGLISH);
             else if (IsXMLToken(sValue, XML_KEEP_TEXT))
                 pDDELink->SetMode(SC_DDE_TEXT);
             else
                 pDDELink->SetMode(SC_DDE_DEFAULT);
+        }
     }
 }
 
@@ -279,10 +282,12 @@ SvXMLImportContext *ScXMLDDETableContext::CreateChildContext( USHORT nPrefix,
     SvXMLImportContext *pContext = NULL;
 
     if (nPrefix == XML_NAMESPACE_TABLE)
+    {
         if (IsXMLToken(rLName, XML_TABLE_COLUMN))
             pContext = new ScXMLDDEColumnContext(GetScImport(), nPrefix, rLName, xAttrList, pDDELink);
         else if (IsXMLToken(rLName, XML_TABLE_ROW))
             pContext = new ScXMLDDERowContext(GetScImport(), nPrefix, rLName, xAttrList, pDDELink);
+    }
 
     if (!pContext)
         pContext = new SvXMLImportContext( GetImport(), nPrefix, rLName );

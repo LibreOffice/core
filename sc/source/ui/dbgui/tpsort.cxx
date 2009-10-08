@@ -237,7 +237,15 @@ void __EXPORT ScTabPageSortFields::Reset( const SfxItemSet& /* rArgSet */ )
     }
     else
     {
-        aLbSort1.SelectEntryPos( 1 );
+        SCCOL  nCol = pViewData->GetCurX();
+
+        if( nCol < rSortData.nCol1 )
+            nCol = rSortData.nCol1;
+        else if( nCol > rSortData.nCol2 )
+            nCol = rSortData.nCol2;
+
+        USHORT  nSort1Pos = nCol - rSortData.nCol1+1;
+        aLbSort1.SelectEntryPos( nSort1Pos );
         aLbSort2.SelectEntryPos( 0 );
         aLbSort3.SelectEntryPos( 0 );
         aBtnUp1.Check();
@@ -433,7 +441,7 @@ void ScTabPageSortFields::FillFieldLists()
                     {
                         aFieldName  = aStrColumn;
                         aFieldName += ' ';
-                        aFieldName += ColToAlpha( col );
+                        aFieldName += ScColToAlpha( col );
                     }
                     nFieldArr[i] = col;
                     aLbSort1.InsertEntry( aFieldName, i );
@@ -628,7 +636,7 @@ void ScTabPageSortOptions::Init()
         String          theDbArea;
         String          theDbName   = aStrNoName;
         const SCTAB nCurTab     = pViewData->GetTabNo();
-        const ScAddress::Convention eConv = pDoc->GetAddressConvention();
+        const formula::FormulaGrammar::AddressConvention eConv = pDoc->GetAddressConvention();
 
         aLbOutPos.Clear();
         aLbOutPos.InsertEntry( aStrUndefined, 0 );

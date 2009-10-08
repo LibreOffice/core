@@ -38,6 +38,8 @@
 #include <tools/string.hxx>
 #include <tools/list.hxx>
 #include <tools/debug.hxx>
+#include "filter.hxx"
+#include "scdllapi.h"
 
 // Common macros ==============================================================
 
@@ -49,6 +51,7 @@
 /** Expands to a temporary String, created from an ASCII character array. */
 #define CREATE_STRING( ascii )      String( RTL_CONSTASCII_USTRINGPARAM( ascii ) )
 /** Expands to a temporary ::rtl::OUString, created from an ASCII character array. */
+#undef CREATE_OUSTRING
 #define CREATE_OUSTRING( ascii )    ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ascii ) )
 
 // items and item sets --------------------------------------------------------
@@ -503,7 +506,42 @@ public:
     using               ScfDelList< Type >::Empty;
 };
 
+// ----------------------------------------------------------------------------
+class ScFormatFilterPluginImpl : public ScFormatFilterPlugin {
+  public:
+    ScFormatFilterPluginImpl();
+    // various import filters
+    virtual FltError ScImportLotus123( SfxMedium&, ScDocument*, CharSet eSrc = RTL_TEXTENCODING_DONTKNOW );
+    virtual FltError ScImportQuattroPro( SfxMedium &rMedium, ScDocument *pDoc );
+    virtual FltError ScImportExcel( SfxMedium&, ScDocument*, const EXCIMPFORMAT );
+        // eFormat == EIF_AUTO  -> passender Filter wird automatisch verwendet
+        // eFormat == EIF_BIFF5 -> nur Biff5-Stream fuehrt zum Erfolg (auch wenn in einem Excel97-Doc)
+        // eFormat == EIF_BIFF8 -> nur Biff8-Stream fuehrt zum Erfolg (nur in Excel97-Docs)
+        // eFormat == EIF_BIFF_LE4 -> nur Nicht-Storage-Dateien _koennen_ zum Erfolg fuehren
+    virtual FltError ScImportStarCalc10( SvStream&, ScDocument* );
+    virtual FltError ScImportDif( SvStream&, ScDocument*, const ScAddress& rInsPos,
+                 const CharSet eSrc = RTL_TEXTENCODING_DONTKNOW, UINT32 nDifOption = SC_DIFOPT_EXCEL );
+    virtual FltError ScImportRTF( SvStream&, const String& rBaseURL, ScDocument*, ScRange& rRange );
+    virtual FltError ScImportHTML( SvStream&, const String& rBaseURL, ScDocument*, ScRange& rRange, double nOutputFactor = 1.0, BOOL bCalcWidthHeight = TRUE );
+
+    virtual ScEEAbsImport *CreateRTFImport( ScDocument* pDoc, const ScRange& rRange );
+    virtual ScEEAbsImport *CreateHTMLImport( ScDocument* pDocP, const String& rBaseURL, const ScRange& rRange, BOOL bCalcWidthHeight );
+    virtual String         GetHTMLRangeNameList( ScDocument* pDoc, const String& rOrigName );
+
+    // various export filters
+#if ENABLE_LOTUS123_EXPORT
+    virtual FltError ScExportLotus123( SvStream&, ScDocument*, ExportFormatLotus, CharSet eDest );
+#endif
+    virtual FltError ScExportExcel5( SfxMedium&, ScDocument*, ExportFormatExcel eFormat, CharSet eDest );
+    virtual FltError ScExportDif( SvStream&, ScDocument*, const ScAddress& rOutPos, const CharSet eDest,
+                                 UINT32 nDifOption = SC_DIFOPT_EXCEL );
+    virtual FltError ScExportDif( SvStream&, ScDocument*, const ScRange& rRange, const CharSet eDest,
+                 UINT32 nDifOption = SC_DIFOPT_EXCEL );
+    virtual FltError ScExportHTML( SvStream&, const String& rBaseURL, ScDocument*, const ScRange& rRange, const CharSet eDest, BOOL bAll,
+                  const String& rStreamPath, String& rNonConvertibleChars );
+    virtual FltError ScExportRTF( SvStream&, ScDocument*, const ScRange& rRange, const CharSet eDest );
+};
+
 // ============================================================================
 
 #endif
-

@@ -32,8 +32,8 @@
 #define SC_EXCDOC_HXX
 
 #include <tools/solar.h>
-#include "xeroot.hxx"
 #include "excrecds.hxx"
+#include "xeroot.hxx"
 #include "root.hxx"
 
 //------------------------------------------------------------------ Forwards -
@@ -72,6 +72,8 @@ private:
     // pRec mit new anlegen und vergessen, delete macht ExcTable selber!
     void                        Add( XclExpRecordBase* pRec );
 
+    void                        FillAsXmlTable( size_t nCodeNameIdx );
+
 public:
                                 ExcTable( const XclExpRoot& rRoot );
                                 ExcTable( const XclExpRoot& rRoot, SCTAB nScTab );
@@ -82,6 +84,7 @@ public:
     void                        FillAsEmptyTable( size_t nCodeNameIdx );
 
     void                        Write( XclExpStream& );
+    void                        WriteXml( XclExpXmlStream& );
 };
 
 
@@ -110,6 +113,7 @@ public:
 
     void                ReadDoc( void );
     void                Write( SvStream& rSvStrm );
+    void                WriteXml( SvStream& rSvStrm );
 };
 
 

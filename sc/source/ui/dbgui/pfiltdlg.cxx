@@ -314,7 +314,7 @@ void ScPivotFilterDlg::FillFieldLists()
             {
                 aFieldName  = aStrColumn;
                 aFieldName += ' ';
-                aFieldName += ColToAlpha( col );
+                aFieldName += ScColToAlpha( col );
             }
             aLbField1.InsertEntry( aFieldName, i );
             aLbField2.InsertEntry( aFieldName, i );
@@ -353,13 +353,13 @@ void ScPivotFilterDlg::UpdateValueList( USHORT nList )
                 SCROW   nLastRow    = theQueryData.nRow2;
                 nFirstRow++;
 
-                pEntryLists[nColumn] = new TypedStrCollection( 128, 128 );
+                pEntryLists[nColumn] = new TypedScStrCollection( 128, 128 );
                 pEntryLists[nColumn]->SetCaseSensitive( aBtnCase.IsChecked() );
                 pDoc->GetFilterEntriesArea( nColumn, nFirstRow, nLastRow,
                                             nTab, *pEntryLists[nColumn] );
             }
 
-            TypedStrCollection* pColl = pEntryLists[nColumn];
+            TypedScStrCollection* pColl = pEntryLists[nColumn];
             USHORT nValueCount = pColl->GetCount();
             if ( nValueCount > 0 )
             {

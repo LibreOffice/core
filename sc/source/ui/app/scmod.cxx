@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: scmod.cxx,v $
- * $Revision: 1.58.32.1 $
+ * $Revision: 1.58.172.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -52,6 +52,8 @@
 #include <sfx2/objface.hxx>
 
 #include <svx/hyprlink.hxx>
+#include "IAnyRefDialog.hxx"
+
 #include <svtools/ehdl.hxx>
 #include <svtools/accessibilityoptions.hxx>
 #include <svtools/ctloptions.hxx>
@@ -70,6 +72,7 @@
 #include <svx/zoomctrl.hxx>
 #include <svx/modctrl.hxx>
 #include <svx/pszctrl.hxx>
+#include <svx/zoomsliderctrl.hxx>
 #include <vcl/msgbox.hxx>
 #include <svtools/inethist.hxx>
 #include <vcl/waitobj.hxx>
@@ -389,12 +392,6 @@ void ScModule::FillStatusBar(StatusBar& rStatusBar)
                             SIB_LEFT|SIB_AUTOSIZE );
     rStatusBar.SetHelpId( SID_STATUS_PAGESTYLE, SID_STATUS_PAGESTYLE );
 
-    // Ma"sstab
-    rStatusBar.InsertItem( SID_ATTR_ZOOM,
-                            SvxZoomStatusBarControl::GetDefItemWidth(rStatusBar),
-                            SIB_CENTER );
-    rStatusBar.SetHelpId( SID_ATTR_ZOOM, SID_ATTR_ZOOM );
-
     // Einfuege-/Ueberschreibmodus
     rStatusBar.InsertItem( SID_ATTR_INSERT,
                             SvxInsertStatusBarControl::GetDefItemWidth(rStatusBar),
@@ -423,6 +420,18 @@ void ScModule::FillStatusBar(StatusBar& rStatusBar)
                             SvxPosSizeStatusBarControl::GetDefItemWidth(rStatusBar),
                             SIB_AUTOSIZE|SIB_LEFT|SIB_USERDRAW);
     rStatusBar.SetHelpId( SID_ATTR_SIZE, SID_ATTR_SIZE );
+
+    // Ma"sstab
+    rStatusBar.InsertItem( SID_ATTR_ZOOM,
+        SvxZoomStatusBarControl::GetDefItemWidth(rStatusBar),
+        SIB_CENTER );
+    rStatusBar.SetHelpId( SID_ATTR_ZOOM, SID_ATTR_ZOOM );
+
+    // ZoomSlider
+    rStatusBar.InsertItem( SID_ATTR_ZOOMSLIDER,
+        TEXT_WIDTH( String().Fill( 15, 'X' ) ),
+        SIB_CENTER );
+    rStatusBar.SetHelpId( SID_ATTR_ZOOMSLIDER, SID_ATTR_ZOOMSLIDER );
 }
 
 #undef TEXT_WIDTH
@@ -480,31 +489,6 @@ void ScModule::Execute( SfxRequest& rReq )
 
                 SfxItemSet aSet( GetPool(), SID_AUTOSPELL_CHECK, SID_AUTOSPELL_CHECK );
                 aSet.Put( SfxBoolItem( SID_AUTOSPELL_CHECK, bSet ) );
-                ModifyOptions( aSet );
-                rReq.Done();
-            }
-            break;
-
-        case SID_AUTOSPELL_MARKOFF:
-            {
-                BOOL bSet;
-                const SfxPoolItem* pItem;
-                if ( pReqArgs && SFX_ITEM_SET == pReqArgs->GetItemState( nSlot, TRUE, &pItem ) )
-                    bSet = ((const SfxBoolItem*)pItem)->GetValue();
-                else
-                {                       //  Toggle
-                    ScTabViewShell* pViewSh = PTR_CAST(ScTabViewShell, SfxViewShell::Current());
-                    ScDocShell* pDocSh = PTR_CAST(ScDocShell, SfxObjectShell::Current());
-                    if ( pViewSh )
-                        bSet = !pViewSh->GetViewData()->GetOptions().IsHideAutoSpell();
-                    else if ( pDocSh )
-                        bSet = !pDocSh->GetDocument()->GetViewOptions().IsHideAutoSpell();
-                    else
-                        bSet = !GetViewOptions().IsHideAutoSpell();
-                }
-
-                SfxItemSet aSet( GetPool(), SID_AUTOSPELL_MARKOFF, SID_AUTOSPELL_MARKOFF );
-                aSet.Put( SfxBoolItem( SID_AUTOSPELL_MARKOFF, bSet ) );
                 ModifyOptions( aSet );
                 rReq.Done();
             }
@@ -697,28 +681,9 @@ void ScModule::GetState( SfxItemSet& rSet )
                     else
                     {
                         USHORT nDummyLang, nDummyCjk, nDummyCtl;
-                        BOOL bDummyHide;
-                        GetSpellSettings( nDummyLang, nDummyCjk, nDummyCtl, bAuto, bDummyHide );
+                        GetSpellSettings( nDummyLang, nDummyCjk, nDummyCtl, bAuto );
                     }
                     rSet.Put( SfxBoolItem( nWhich, bAuto ) );
-                }
-                break;
-            case SID_AUTOSPELL_MARKOFF:
-                {
-                    BOOL bHide;
-                    ScTabViewShell* pViewSh = PTR_CAST(ScTabViewShell, SfxViewShell::Current());
-                    ScDocShell* pDocSh = PTR_CAST(ScDocShell, SfxObjectShell::Current());
-                    if ( pViewSh )
-                        bHide = pViewSh->GetViewData()->GetOptions().IsHideAutoSpell();
-                    else if ( pDocSh )
-                        bHide = pDocSh->GetDocument()->GetViewOptions().IsHideAutoSpell();
-                    else
-                    {
-                        USHORT nDummyLang, nDummyCjk, nDummyCtl;
-                        BOOL bDummyAuto;
-                        GetSpellSettings( nDummyLang, nDummyCjk, nDummyCtl, bDummyAuto, bHide );
-                    }
-                    rSet.Put( SfxBoolItem( nWhich, bHide ) );
                 }
                 break;
             case SID_ATTR_LANGUAGE:
@@ -1044,7 +1009,7 @@ USHORT ScModule::GetOptDigitLanguage()
 {
     SvtCTLOptions::TextNumerals eNumerals = GetCTLOptions().GetCTLTextNumerals();
     return ( eNumerals == SvtCTLOptions::NUMERALS_ARABIC ) ? LANGUAGE_ENGLISH_US :
-           ( eNumerals == SvtCTLOptions::NUMERALS_HINDI)   ? LANGUAGE_ARABIC :
+           ( eNumerals == SvtCTLOptions::NUMERALS_HINDI)   ? LANGUAGE_ARABIC_SAUDI_ARABIA :
                                                              LANGUAGE_SYSTEM;
 }
 
@@ -1056,7 +1021,7 @@ USHORT ScModule::GetOptDigitLanguage()
 
 //
 //      ModifyOptions - Items aus Calc-Options-Dialog
-//                      und SID_AUTOSPELL_CHECK / SID_AUTOSPELL_MARKOFF
+//                      und SID_AUTOSPELL_CHECK
 //
 
 #define IS_AVAILABLE(w,item) (SFX_ITEM_SET==rOptSet.GetItemState((w),TRUE,&item))
@@ -1064,8 +1029,8 @@ USHORT ScModule::GetOptDigitLanguage()
 void ScModule::ModifyOptions( const SfxItemSet& rOptSet )
 {
     USHORT nOldSpellLang, nOldCjkLang, nOldCtlLang;
-    BOOL bOldAutoSpell, bOldHideAuto;
-    GetSpellSettings( nOldSpellLang, nOldCjkLang, nOldCtlLang, bOldAutoSpell, bOldHideAuto );
+    BOOL bOldAutoSpell;
+    GetSpellSettings( nOldSpellLang, nOldCjkLang, nOldCtlLang, bOldAutoSpell );
 
     if (!pAppCfg)
         GetAppOptions();
@@ -1182,44 +1147,6 @@ void ScModule::ModifyOptions( const SfxItemSet& rOptSet )
         }
     }
 
-    //
-    //  AutoSpell ausblenden auch nach den ViewOptions
-    //
-
-    if ( IS_AVAILABLE(SID_AUTOSPELL_MARKOFF,pItem) )            // an View-Options
-    {
-        BOOL bHideAutoSpell = ((const SfxBoolItem*)pItem)->GetValue();
-
-        if (pViewSh)
-        {
-            ScViewData* pViewData = pViewSh->GetViewData();
-            ScViewOptions aNewOpt = pViewData->GetOptions();
-            if ( aNewOpt.IsHideAutoSpell() != bHideAutoSpell )
-            {
-                aNewOpt.SetHideAutoSpell( bHideAutoSpell );
-                pViewData->SetOptions( aNewOpt );
-                bRepaint = TRUE;
-            }
-            ScViewOptions aDocView = pDoc->GetViewOptions();    // auch am Dokument
-            if ( aDocView.IsHideAutoSpell() != bHideAutoSpell )
-            {
-                aDocView.SetHideAutoSpell( bHideAutoSpell );
-                pDoc->SetViewOptions( aDocView );
-                //#92038#; don't set document modified, because this flag is no longer saved
-//              pDocSh->SetDocumentModified();
-            }
-        }
-        if ( bOldHideAuto != bHideAutoSpell )
-        {
-            SetHideAutoProperty( bHideAutoSpell );
-            bSaveSpellCheck = TRUE;
-        }
-        ScInputHandler* pInputHandler = GetInputHdl();
-        if ( pInputHandler )
-            pInputHandler->UpdateSpellSettings();               // EditEngine-Flags
-        if ( pViewSh )
-            pViewSh->UpdateDrawTextOutliner();                  // EditEngine-Flags
-    }
 
     //============================================
     // DocOptions
@@ -1762,7 +1689,7 @@ BOOL ScModule::IsModalMode(SfxObjectShell* pDocSh)
         SfxChildWindow* pChildWnd = lcl_GetChildWinFromAnyView( nCurRefDlgId );
         if ( pChildWnd )
         {
-            ScAnyRefDlg* pRefDlg = (ScAnyRefDlg*)pChildWnd->GetWindow();
+            IAnyRefDialog* pRefDlg = dynamic_cast<IAnyRefDialog*>(pChildWnd->GetWindow());
             bIsModal = pChildWnd->IsVisible() &&
                 !( pRefDlg->IsRefInputMode() && pRefDlg->IsDocAllowed(pDocSh) );
         }
@@ -1800,7 +1727,7 @@ BOOL ScModule::IsTableLocked()
     {
         SfxChildWindow* pChildWnd = lcl_GetChildWinFromAnyView( nCurRefDlgId );
         if ( pChildWnd )
-            bLocked = ((ScAnyRefDlg*)pChildWnd->GetWindow())->IsTableLocked();
+            bLocked = dynamic_cast<IAnyRefDialog*>(pChildWnd->GetWindow())->IsTableLocked();
         else
             bLocked = TRUE;     // for other views, see IsModalMode
     }
@@ -1839,7 +1766,7 @@ BOOL ScModule::IsFormulaMode()
         SfxChildWindow* pChildWnd = lcl_GetChildWinFromAnyView( nCurRefDlgId );
         if ( pChildWnd )
         {
-            ScAnyRefDlg* pRefDlg = (ScAnyRefDlg*)pChildWnd->GetWindow();
+            IAnyRefDialog* pRefDlg = dynamic_cast<IAnyRefDialog*>(pChildWnd->GetWindow());
             bIsFormula = pChildWnd->IsVisible() && pRefDlg->IsRefInputMode();
         }
     }
@@ -1899,7 +1826,7 @@ void ScModule::SetReference( const ScRange& rRef, ScDocument* pDoc,
                 aNew.aEnd.SetTab(nEndTab);
             }
 
-            ScAnyRefDlg* pRefDlg = (ScAnyRefDlg*)pChildWnd->GetWindow();
+            IAnyRefDialog* pRefDlg = dynamic_cast<IAnyRefDialog*>(pChildWnd->GetWindow());
 
             //  hide the (color) selection now instead of later from LoseFocus,
             //  don't abort the ref input that causes this call (bDoneRefMode = FALSE)
@@ -1930,7 +1857,7 @@ void ScModule::AddRefEntry()                        // "Mehrfachselektion"
         DBG_ASSERT( pChildWnd, "NoChildWin" );
         if ( pChildWnd )
         {
-            ScAnyRefDlg* pRefDlg = (ScAnyRefDlg*)pChildWnd->GetWindow();
+            IAnyRefDialog* pRefDlg = dynamic_cast<IAnyRefDialog*>(pChildWnd->GetWindow());
             pRefDlg->AddRefEntry();
         }
     }
@@ -1957,7 +1884,7 @@ void ScModule::EndReference()
         DBG_ASSERT( pChildWnd, "NoChildWin" );
         if ( pChildWnd )
         {
-            ScAnyRefDlg* pRefDlg = (ScAnyRefDlg*)pChildWnd->GetWindow();
+            IAnyRefDialog* pRefDlg = dynamic_cast<IAnyRefDialog*>(pChildWnd->GetWindow());
             pRefDlg->SetActive();
         }
     }

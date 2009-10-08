@@ -88,7 +88,7 @@ ScHighlightChgDlg::ScHighlightChgDlg( SfxBindings* pB, SfxChildWindow* pCW, Wind
         aCancelButton   ( this, ScResId( BTN_CANCEL ) ),
         aHelpButton     ( this, ScResId( BTN_HELP ) ),
         aEdAssign       ( this, ScResId( ED_ASSIGN ) ),
-        aRbAssign       ( this, ScResId( RB_ASSIGN ), &aEdAssign ),
+        aRbAssign       ( this, ScResId( RB_ASSIGN ), &aEdAssign, this ),
         //
         pViewData       ( ptrViewData ),
         pDoc            ( ptrViewData->GetDocument() ),
@@ -131,7 +131,7 @@ void __EXPORT ScHighlightChgDlg::Init()
     {
         aChangeViewSet.SetTheAuthorToShow(pChanges->GetUser());
         aFilterCtr.ClearAuthors();
-        StrCollection aUserColl=pChanges->GetUserCollection();
+        ScStrCollection aUserColl=pChanges->GetUserCollection();
         for(USHORT  i=0;i<aUserColl.GetCount();i++)
             aFilterCtr.InsertAuthor(aUserColl[i]->GetString());
     }

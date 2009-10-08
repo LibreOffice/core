@@ -58,12 +58,14 @@
 #include "globstr.hrc"
 #include "dpcachetable.hxx"
 #include "dptabres.hxx"
+#include "document.hxx"
+#include "dpobject.hxx"
 
 using namespace com::sun::star;
 
 using ::std::vector;
-using ::std::set;
 using ::std::hash_map;
+using ::std::hash_set;
 using ::com::sun::star::uno::Sequence;
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::Any;
@@ -91,17 +93,21 @@ public:
 
     ScDPCacheTable      aCacheTable;
 
-    ScDatabaseDPData_Impl() {}
+    ScDatabaseDPData_Impl(ScDPCollection* p) :
+        aCacheTable(p)
+    {
+    }
 };
 
 // -----------------------------------------------------------------------
 
 ScDatabaseDPData::ScDatabaseDPData(
-    ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > xSMgr,
-    const ScImportSourceDesc& rImport )
+    ScDocument* pDoc,
+    const ScImportSourceDesc& rImport ) :
+    ScDPTableData(pDoc)
 {
-    pImpl = new ScDatabaseDPData_Impl;
-    pImpl->xServiceManager = xSMgr;
+    pImpl = new ScDatabaseDPData_Impl(pDoc->GetDPCollection());
+    pImpl->xServiceManager = pDoc->GetServiceManager();
     pImpl->aDesc = rImport;
     pImpl->nColCount = 0;
     pImpl->pTypes = NULL;
@@ -234,7 +240,7 @@ void lcl_Reset( const uno::Reference<sdbc::XRowSet>& xRowSet )
     xRowSet->execute();     // restart
 }
 
-const TypedStrCollection& ScDatabaseDPData::GetColumnEntries(long nColumn)
+const TypedScStrCollection& ScDatabaseDPData::GetColumnEntries(long nColumn)
 {
     CreateCacheTable();
     return pImpl->aCacheTable.getFieldEntries(nColumn);
@@ -287,20 +293,22 @@ void ScDatabaseDPData::CreateCacheTable()
     pImpl->aCacheTable.fillTable(pImpl->xRowSet, *pImpl->pFormatter->GetNullDate());
 }
 
-void ScDatabaseDPData::FilterCacheTable(const vector<ScDPCacheTable::Criterion>& rCriteria)
+void ScDatabaseDPData::FilterCacheTable(const vector<ScDPCacheTable::Criterion>& rCriteria, const hash_set<sal_Int32>& rCatDims)
 {
     CreateCacheTable();
-    pImpl->aCacheTable.filterByPageDimension(rCriteria, IsRepeatIfEmpty());
+    pImpl->aCacheTable.filterByPageDimension(
+        rCriteria, (IsRepeatIfEmpty() ? rCatDims : hash_set<sal_Int32>()));
 }
 
-void ScDatabaseDPData::GetDrillDownData(const vector<ScDPCacheTable::Criterion>& rCriteria, Sequence< Sequence<Any> >& rData)
+void ScDatabaseDPData::GetDrillDownData(const vector<ScDPCacheTable::Criterion>& rCriteria, const hash_set<sal_Int32>& rCatDims, Sequence< Sequence<Any> >& rData)
 {
     CreateCacheTable();
     sal_Int32 nRowSize = pImpl->aCacheTable.getRowSize();
     if (!nRowSize)
         return;
 
-    pImpl->aCacheTable.filterTable(rCriteria, rData, IsRepeatIfEmpty());
+    pImpl->aCacheTable.filterTable(
+        rCriteria, rData, IsRepeatIfEmpty() ? rCatDims : hash_set<sal_Int32>());
 }
 
 void ScDatabaseDPData::CalcResults(CalcInfo& rInfo, bool bAutoShow)

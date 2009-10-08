@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: XMLExportDDELinks.cxx,v $
- * $Revision: 1.18 $
+ * $Revision: 1.18.148.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -80,6 +80,7 @@ void ScXMLExportDDELinks::WriteCell(const sal_Bool bEmpty, const sal_Bool bStrin
 {
     rtl::OUStringBuffer sBuffer;
     if (!bEmpty)
+    {
         if (bString)
         {
             rExport.AddAttribute(XML_NAMESPACE_OFFICE, XML_VALUE_TYPE, XML_STRING);
@@ -91,6 +92,7 @@ void ScXMLExportDDELinks::WriteCell(const sal_Bool bEmpty, const sal_Bool bStrin
             rExport.GetMM100UnitConverter().convertDouble(sBuffer, fValue);
             rExport.AddAttribute(XML_NAMESPACE_OFFICE, XML_VALUE, sBuffer.makeStringAndClear());
         }
+    }
     if (nRepeat > 1)
     {
         rExport.GetMM100UnitConverter().convertNumber(sBuffer, nRepeat);
@@ -133,7 +135,7 @@ void ScXMLExportDDELinks::WriteTable(const sal_Int32 nPos)
             {
                 ScMatValType nType = SC_MATVAL_VALUE;
                 const ScMatrixValue* pMatVal = pMatrix->Get( static_cast<SCSIZE>(nColumn), static_cast<SCSIZE>(nRow), nType );
-                BOOL bIsString = ScMatrix::IsStringType( nType);
+                BOOL bIsString = ScMatrix::IsNonValueType( nType);
 
                 if (nColumn == 0)
                 {

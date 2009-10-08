@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: autoform.hxx,v $
- * $Revision: 1.8.32.3 $
+ * $Revision: 1.8.144.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -95,6 +95,7 @@ private:
     SvxPostureItem              aCTLPosture;
 
     SvxUnderlineItem            aUnderline;
+    SvxOverlineItem             aOverline;
     SvxCrossedOutItem           aCrossedOut;
     SvxContourItem              aContour;
     SvxShadowedItem             aShadowed;
@@ -139,6 +140,7 @@ public:
     const SvxWeightItem&        GetCTLWeight() const    { return aCTLWeight; }
     const SvxPostureItem&       GetCTLPosture() const   { return aCTLPosture; }
     const SvxUnderlineItem&     GetUnderline() const    { return aUnderline; }
+    const SvxOverlineItem&      GetOverline() const     { return aOverline; }
     const SvxCrossedOutItem&    GetCrossedOut() const   { return aCrossedOut; }
     const SvxContourItem&       GetContour() const      { return aContour; }
     const SvxShadowedItem&      GetShadowed() const     { return aShadowed; }
@@ -170,6 +172,7 @@ public:
     void    SetCTLWeight( const SvxWeightItem& rCTLWeight )         { aCTLWeight = rCTLWeight; }
     void    SetCTLPosture( const SvxPostureItem& rCTLPosture )      { aCTLPosture = rCTLPosture; }
     void    SetUnderline( const SvxUnderlineItem& rUnderline )      { aUnderline = rUnderline; }
+    void    SetOverline( const SvxOverlineItem& rOverline )         { aOverline = rOverline; }
     void    SetCrossedOut( const SvxCrossedOutItem& rCrossedOut )   { aCrossedOut = rCrossedOut; }
     void    SetContour( const SvxContourItem& rContour )            { aContour = rContour; }
     void    SetShadowed( const SvxShadowedItem& rShadowed )         { aShadowed = rShadowed; }
@@ -196,7 +199,7 @@ public:
 };
 
 
-class SC_DLLPUBLIC ScAutoFormatData : public DataObject
+class SC_DLLPUBLIC ScAutoFormatData : public ScDataObject
 {
 private:
     String                      aName;
@@ -221,7 +224,7 @@ public:
                     ScAutoFormatData( const ScAutoFormatData& rData );
     virtual         ~ScAutoFormatData();
 
-    virtual         DataObject* Clone() const { return new ScAutoFormatData( *this ); }
+    virtual         ScDataObject* Clone() const { return new ScAutoFormatData( *this ); }
 
     void            SetName( const String& rName )              { aName = rName; nStrResId = USHRT_MAX; }
     void            GetName( String& rName ) const              { rName = aName; }
@@ -259,7 +262,7 @@ public:
 #endif
 };
 
-class SC_DLLPUBLIC ScAutoFormat : public SortedCollection
+class SC_DLLPUBLIC ScAutoFormat : public ScSortedCollection
 {
 private:
     BOOL                        bSaveLater;
@@ -268,9 +271,9 @@ public:
                                 ScAutoFormat( USHORT nLim = 4, USHORT nDel = 4, BOOL bDup = FALSE );
                                 ScAutoFormat( const ScAutoFormat& AutoFormat );
     virtual                     ~ScAutoFormat();
-    virtual                     DataObject*         Clone() const { return new ScAutoFormat( *this ); }
+    virtual                     ScDataObject*         Clone() const { return new ScAutoFormat( *this ); }
                                 ScAutoFormatData*   operator[]( const USHORT nIndex ) const {return (ScAutoFormatData*)At( nIndex );}
-    virtual short               Compare( DataObject* pKey1, DataObject* pKey2 ) const;
+    virtual short               Compare( ScDataObject* pKey1, ScDataObject* pKey2 ) const;
     BOOL                        Load();
     BOOL                        Save();
     USHORT                      FindIndexPerName( const String& rName ) const;

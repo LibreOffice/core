@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: CharacterPropertyItemConverter.cxx,v $
- * $Revision: 1.14 $
+ * $Revision: 1.14.56.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -69,6 +69,8 @@ namespace
         IPM_MAP_ENTRY( EE_CHAR_RELIEF, "CharRelief", 0 )
         IPM_MAP_ENTRY( EE_CHAR_OUTLINE, "CharContoured", 0 )
         IPM_MAP_ENTRY( EE_CHAR_EMPHASISMARK, "CharEmphasis", 0 )
+
+        IPM_MAP_ENTRY( EE_PARA_WRITINGDIR, "WritingMode", 0 )
 
 //         IPM_MAP_ENTRY( EE_CHAR_FONTHEIGHT_CJK, "CharHeightAsian", 0 )
 //         IPM_MAP_ENTRY( EE_CHAR_FONTHEIGHT_CTL, "CharHeightComplex", 0 )
@@ -169,7 +171,7 @@ void CharacterPropertyItemConverter::FillSpecialItem(
             uno::Any aValue( GetPropertySet()->getPropertyValue( C2U( "CharUnderline" )));
             if( aValue.hasValue())
             {
-                aItem.PutValue( aValue, MID_UNDERLINE );
+                aItem.PutValue( aValue, MID_TL_STYLE );
                 bModified = true;
             }
 
@@ -177,14 +179,14 @@ void CharacterPropertyItemConverter::FillSpecialItem(
             if( aValue.hasValue() &&
                 ( *reinterpret_cast< const sal_Bool * >( aValue.getValue()) != sal_False ))
             {
-                aItem.PutValue( aValue, MID_UL_HASCOLOR );
+                aItem.PutValue( aValue, MID_TL_HASCOLOR );
                 bModified = true;
             }
 
             aValue = GetPropertySet()->getPropertyValue( C2U( "CharUnderlineColor" ));
             if( aValue.hasValue())
             {
-                aItem.PutValue( aValue, MID_UL_COLOR );
+                aItem.PutValue( aValue, MID_TL_COLOR );
                 bModified = true;
             }
 
@@ -363,7 +365,7 @@ bool CharacterPropertyItemConverter::ApplySpecialItem(
                static_cast< const SvxUnderlineItem & >(
                     rItemSet.Get( nWhichId ));
 
-            if( rItem.QueryValue( aValue, MID_UNDERLINE ))
+            if( rItem.QueryValue( aValue, MID_TL_STYLE ))
             {
                 if( aValue != GetPropertySet()->getPropertyValue( C2U( "CharUnderline" ) ))
                 {
@@ -372,7 +374,7 @@ bool CharacterPropertyItemConverter::ApplySpecialItem(
                 }
             }
 
-            if( rItem.QueryValue( aValue, MID_UL_COLOR ))
+            if( rItem.QueryValue( aValue, MID_TL_COLOR ))
             {
                 if( aValue != GetPropertySet()->getPropertyValue( C2U( "CharUnderlineColor" ) ))
                 {
@@ -381,7 +383,7 @@ bool CharacterPropertyItemConverter::ApplySpecialItem(
                 }
             }
 
-            if( rItem.QueryValue( aValue, MID_UL_HASCOLOR ))
+            if( rItem.QueryValue( aValue, MID_TL_HASCOLOR ))
             {
                 if( aValue != GetPropertySet()->getPropertyValue( C2U( "CharUnderlineHasColor" ) ))
                 {

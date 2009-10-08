@@ -31,6 +31,7 @@
 #define CHART_WRAPPED_IGNORE_PROPERTY_HXX
 
 #include "WrappedProperty.hxx"
+#include "charttoolsdllapi.hxx"
 
 #include <vector>
 
@@ -39,7 +40,7 @@ namespace chart
 {
 //.............................................................................
 
-class WrappedIgnoreProperty : public WrappedProperty
+class OOO_DLLPUBLIC_CHARTTOOLS WrappedIgnoreProperty : public WrappedProperty
 {
 public:
     WrappedIgnoreProperty( const ::rtl::OUString& rOuterName, const ::com::sun::star::uno::Any& rDefaultValue );
@@ -65,7 +66,7 @@ protected:
     mutable ::com::sun::star::uno::Any  m_aCurrentValue;
 };
 
-class WrappedIgnoreProperties
+class OOO_DLLPUBLIC_CHARTTOOLS WrappedIgnoreProperties
 {
 public:
     static void addIgnoreLineProperties( std::vector< WrappedProperty* >& rList );

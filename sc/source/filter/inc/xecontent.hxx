@@ -34,8 +34,8 @@
 #include "rangelst.hxx"
 #include "xlcontent.hxx"
 #include "xladdress.hxx"
-#include "xeroot.hxx"
 #include "xerecord.hxx"
+#include "xeroot.hxx"
 #include "xestring.hxx"
 #include "xeformula.hxx"
 
@@ -69,6 +69,7 @@ public:
 
     /** Writes the complete SST and EXTSST records. */
     virtual void        Save( XclExpStream& rStrm );
+    virtual void        SaveXml( XclExpXmlStream& rStrm );
 
 private:
     typedef ::std::auto_ptr< XclExpSstImpl > XclExpSstImplPtr;
@@ -90,6 +91,7 @@ public:
 
     /** Writes the record, if it contains at least one merged cell range. */
     virtual void        Save( XclExpStream& rStrm );
+    virtual void        SaveXml( XclExpXmlStream& rStrm );
 
 private:
     ScRangeList         maMergedRanges;     /// All merged cell ranges of the sheet.
@@ -113,6 +115,7 @@ public:
     /** Returns the cell representation text or 0, if not available. */
     inline const String* GetRepr() const { return mxRepr.get(); }
 
+    virtual void        SaveXml( XclExpXmlStream& rStrm );
 private:
     /** Builds file name from the passed file URL. Tries to convert to relative file name.
         @param rnLevel  (out-param) The parent directory level.
@@ -132,6 +135,8 @@ private:
     StringPtr           mxRepr;             /// Cell representation text.
     SvStreamPtr         mxVarData;          /// Buffer stream with variable data.
     sal_uInt32          mnFlags;            /// Option flags.
+    XclExpStringRef     mxTextMark;         /// Location within mxRepr
+    ::rtl::OUString     msTarget;           /// Target URL
 };
 
 typedef XclExpRecordList< XclExpHyperlink > XclExpHyperlinkList;
@@ -199,6 +204,7 @@ public:
 
     /** Writes the CONDFMT record with following CF records, if there is valid data. */
     virtual void        Save( XclExpStream& rStrm );
+    virtual void        SaveXml( XclExpXmlStream& rStrm );
 
 private:
     /** Writes the body of the CONDFMT record. */
@@ -209,6 +215,7 @@ private:
 
     XclExpCFList        maCFList;       /// List of CF records.
     XclRangeList        maXclRanges;    /// Cell ranges for this conditional format.
+    String              msSeqRef;       /// OOXML Sequence of References
 };
 
 // ----------------------------------------------------------------------------
@@ -222,6 +229,7 @@ public:
 
     /** Writes all contained CONDFMT records with their CF records. */
     virtual void        Save( XclExpStream& rStrm );
+    virtual void        SaveXml( XclExpXmlStream& rStrm );
 
 private:
     typedef XclExpRecordList< XclExpCondfmt > XclExpCondfmtList;
@@ -251,6 +259,8 @@ public:
         @return  false = Resulting range list empty - do not write this record. */
     bool                Finalize();
 
+    virtual void        SaveXml( XclExpXmlStream& rStrm );
+
 private:
     /** Writes the body of the DV record. */
     virtual void        WriteBody( XclExpStream& rStrm );
@@ -264,7 +274,9 @@ private:
     XclExpString        maErrorText;    /// The error text.
     XclExpStringRef     mxString1;      /// String for first condition formula.
     XclTokenArrayRef    mxTokArr1;      /// Formula for first condition.
+    ::rtl::OUString     msFormula1;     /// OOXML Formula for first condition.
     XclTokenArrayRef    mxTokArr2;      /// Formula for second condition.
+    ::rtl::OUString     msFormula2;     /// OOXML Formula for second condition.
     sal_uInt32          mnFlags;        /// Miscellaneous flags.
     ULONG               mnScHandle;     /// The core handle for quick list search.
 };
@@ -283,6 +295,7 @@ public:
 
     /** Writes the DVAL record and the DV record list. */
     virtual void        Save( XclExpStream& rStrm );
+    virtual void        SaveXml( XclExpXmlStream& rStrm );
 
 private:
     /** Searches for or creates a XclExpDV record object with the specified handle. */

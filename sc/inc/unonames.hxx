@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: unonames.hxx,v $
- * $Revision: 1.82 $
+ * $Revision: 1.82.104.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -47,6 +47,7 @@
 //  document
 #define SC_UNO_AREALINKS            "AreaLinks"
 #define SC_UNO_DDELINKS             "DDELinks"
+#define SC_UNO_EXTERNALDOCLINKS     "ExternalDocLinks"
 #define SC_UNO_COLLABELRNG          "ColumnLabelRanges"
 #define SC_UNO_DATABASERNG          "DatabaseRanges"
 #define SC_UNO_NAMEDRANGES          "NamedRanges"
@@ -61,6 +62,9 @@
 #define SC_UNONAME_CUNDER           "CharUnderline"
 #define SC_UNONAME_CUNDLCOL         "CharUnderlineColor"
 #define SC_UNONAME_CUNDLHAS         "CharUnderlineHasColor"
+#define SC_UNONAME_COVER            "CharOverline"
+#define SC_UNONAME_COVRLCOL         "CharOverlineColor"
+#define SC_UNONAME_COVRLHAS         "CharOverlineHasColor"
 #define SC_UNONAME_CWEIGHT          "CharWeight"
 #define SC_UNONAME_CPOST            "CharPosture"
 #define SC_UNONAME_CCROSS           "CharCrossedOut"
@@ -487,7 +491,7 @@
 //  view options
 #define SC_UNO_COLROWHDR            "HasColumnRowHeaders"
 #define SC_UNO_GRIDCOLOR            "GridColor"
-#define SC_UNO_HIDESPELL            "HideSpellMarks"
+#define SC_UNO_HIDESPELL            "HideSpellMarks"                /* deprecated #i91949 */
 #define SC_UNO_HORSCROLL            "HasHorizontalScrollBar"
 #define SC_UNO_OUTLSYMB             "IsOutlineSymbolsSet"
 #define SC_UNO_SHEETTABS            "HasSheetTabs"
@@ -600,6 +604,8 @@
 #define SC_UNO_FORMULACONVENTION    "FormulaConvention"
 #define SC_UNO_IGNORELEADING        "IgnoreLeadingSpaces"
 #define SC_UNO_OPCODEMAP            "OpCodeMap"
+#define SC_UNO_EXTERNALLINKS        "ExternalLinks"
+#define SC_UNO_COMPILEFAP           "CompileFAP"
 
 // Chart2
 #define SC_UNONAME_ISHIDDEN         "IsHidden"

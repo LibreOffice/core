@@ -38,6 +38,7 @@
 #include <com/sun/star/chart2/XChartType.hpp>
 
 #include "StackMode.hxx"
+#include "charttoolsdllapi.hxx"
 
 #include <vector>
 #include <functional>
@@ -48,7 +49,7 @@ namespace chart
 namespace DataSeriesHelper
 {
 
-::rtl::OUString GetRole(
+OOO_DLLPUBLIC_CHARTTOOLS ::rtl::OUString GetRole(
         const ::com::sun::star::uno::Reference<
             ::com::sun::star::chart2::data::XLabeledDataSequence >& xLabeledDataSequence );
 
@@ -62,7 +63,7 @@ namespace DataSeriesHelper
     @param aRole
         The role that is to be filtered out.
 */
-::com::sun::star::uno::Reference< ::com::sun::star::chart2::data::XLabeledDataSequence >
+OOO_DLLPUBLIC_CHARTTOOLS ::com::sun::star::uno::Reference< ::com::sun::star::chart2::data::XLabeledDataSequence >
     getDataSequenceByRole( const ::com::sun::star::uno::Reference<
                                ::com::sun::star::chart2::data::XDataSource > & xSource,
                            ::rtl::OUString aRole,
@@ -77,7 +78,7 @@ namespace DataSeriesHelper
     @param aRole
         The role that is to be filtered out.
 */
-::std::vector<
+OOO_DLLPUBLIC_CHARTTOOLS ::std::vector<
   ::com::sun::star::uno::Reference< ::com::sun::star::chart2::data::XLabeledDataSequence > >
     getAllDataSequencesByRole( const ::com::sun::star::uno::Sequence<
                                    ::com::sun::star::uno::Reference<
@@ -89,7 +90,7 @@ namespace DataSeriesHelper
     into a data source.  The order of sequences will match the order of the data
     series.
  */
-::com::sun::star::uno::Reference<
+OOO_DLLPUBLIC_CHARTTOOLS ::com::sun::star::uno::Reference<
         ::com::sun::star::chart2::data::XDataSource >
     getDataSource( const ::com::sun::star::uno::Sequence<
                           ::com::sun::star::uno::Reference<
@@ -102,75 +103,82 @@ namespace DataSeriesHelper
         The data sequence contained in xSeries that has this role will be used
         to take its label.
  */
-::rtl::OUString getDataSeriesLabel(
+OOO_DLLPUBLIC_CHARTTOOLS ::rtl::OUString getDataSeriesLabel(
     const ::com::sun::star::uno::Reference<
         ::com::sun::star::chart2::XDataSeries > & xSeries,
     const ::rtl::OUString & rLabelSequenceRole );
 
 /** Get the label of a labeled sequence including neccessary automatic generation
  */
-::rtl::OUString getLabelForLabeledDataSequence(
+OOO_DLLPUBLIC_CHARTTOOLS ::rtl::OUString getLabelForLabeledDataSequence(
     const ::com::sun::star::uno::Reference<
         ::com::sun::star::chart2::data::XLabeledDataSequence > & xLabeledSeq );
 
-void setStackModeAtSeries(
+OOO_DLLPUBLIC_CHARTTOOLS void setStackModeAtSeries(
     const ::com::sun::star::uno::Sequence<
         ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XDataSeries > > & aSeries,
     const ::com::sun::star::uno::Reference<
         ::com::sun::star::chart2::XCoordinateSystem > & xCorrespondingCoordinateSystem,
     StackMode eStackMode );
 
-sal_Int32 getAttachedAxisIndex(
+OOO_DLLPUBLIC_CHARTTOOLS sal_Int32 getAttachedAxisIndex(
     const ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XDataSeries > & xSeries );
 
 /// @param nAxisIndex, if -1 it is determined by the given data series via getAttachedAxisIndex
-sal_Int32 getNumberFormatKeyFromAxis(
+OOO_DLLPUBLIC_CHARTTOOLS sal_Int32 getNumberFormatKeyFromAxis(
     const ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XDataSeries > & xSeries,
     const ::com::sun::star::uno::Reference<
         ::com::sun::star::chart2::XCoordinateSystem > & xCorrespondingCoordinateSystem,
     sal_Int32 nDimensionIndex,
     sal_Int32 nAxisIndex = -1 );
 
+OOO_DLLPUBLIC_CHARTTOOLS
 ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XCoordinateSystem >
     getCoordinateSystemOfSeries(
         const ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XDataSeries > & xSeries,
         const ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XDiagram > & xDiagram );
 
+OOO_DLLPUBLIC_CHARTTOOLS
 ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XChartType >
     getChartTypeOfSeries(
         const ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XDataSeries > & xSeries,
         const ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XDiagram > & xDiagram );
 
-void deleteSeries(
+OOO_DLLPUBLIC_CHARTTOOLS void deleteSeries(
     const ::com::sun::star::uno::Reference<
         ::com::sun::star::chart2::XDataSeries > & xSeries,
     const ::com::sun::star::uno::Reference<
         ::com::sun::star::chart2::XChartType > & xChartType );
 
-void switchSymbolsOnOrOff(
+OOO_DLLPUBLIC_CHARTTOOLS void switchSymbolsOnOrOff(
     const ::com::sun::star::uno::Reference<
         ::com::sun::star::beans::XPropertySet > & xSeriesProperties,
     bool bSymbolsOn, sal_Int32 nSeriesIndex );
 
-void switchLinesOnOrOff(
+OOO_DLLPUBLIC_CHARTTOOLS void switchLinesOnOrOff(
     const ::com::sun::star::uno::Reference<
         ::com::sun::star::beans::XPropertySet > & xSeriesProperties,
     bool bLinesOn );
 
+OOO_DLLPUBLIC_CHARTTOOLS
 void makeLinesThickOrThin( const ::com::sun::star::uno::Reference<
         ::com::sun::star::beans::XPropertySet > & xSeriesProperties, bool bThick );
 
-void setPropertyAlsoToAllAttributedDataPoints(
+OOO_DLLPUBLIC_CHARTTOOLS void setPropertyAlsoToAllAttributedDataPoints(
     const ::com::sun::star::uno::Reference<
         ::com::sun::star::chart2::XDataSeries >& xSeries,
         const ::rtl::OUString& rPropertyName,
         const ::com::sun::star::uno::Any& rPropertyValue );
 
-bool hasAttributedDataPointDifferentValue(
+OOO_DLLPUBLIC_CHARTTOOLS bool hasAttributedDataPointDifferentValue(
     const ::com::sun::star::uno::Reference<
         ::com::sun::star::chart2::XDataSeries >& xSeries,
     const ::rtl::OUString& rPropertyName,
     const ::com::sun::star::uno::Any& rPropertyValue );
+
+OOO_DLLPUBLIC_CHARTTOOLS bool areAllSeriesAttachedToSameAxis(
+        const ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XChartType >& xChartType,
+        sal_Int32 & rOutAxisIndex );
 
 } //  namespace DataSeriesHelper
 } //  namespace chart

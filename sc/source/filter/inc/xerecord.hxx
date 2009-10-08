@@ -50,9 +50,84 @@ public:
 
     /** Overwrite this method to do any operation while saving the record. */
     virtual void        Save( XclExpStream& rStrm );
+    virtual void        SaveXml( XclExpXmlStream& rStrm );
 
 //UNUSED2008-05  /** Calls Save(XclExpStream&) nCount times. */
 //UNUSED2008-05  void                SaveRepeated( XclExpStream& rStrm, size_t nCount );
+};
+
+// ----------------------------------------------------------------------------
+
+class XclExpDelegatingRecord : public XclExpRecordBase
+{
+public:
+                        XclExpDelegatingRecord( XclExpRecordBase* pRecord );
+                        ~XclExpDelegatingRecord();
+
+    virtual void        SaveXml( XclExpXmlStream& rStrm );
+private:
+    XclExpRecordBase*   mpRecord;
+};
+
+// ----------------------------------------------------------------------------
+
+class XclExpXmlElementRecord : public XclExpRecordBase
+{
+public:
+                        XclExpXmlElementRecord( sal_Int32 nElement, void (*pAttributes)( XclExpXmlStream& rStrm) = NULL );
+    virtual             ~XclExpXmlElementRecord();
+
+protected:
+    sal_Int32           mnElement;
+    void                (*mpAttributes)( XclExpXmlStream& rStrm );
+};
+
+// ----------------------------------------------------------------------------
+
+class XclExpXmlStartElementRecord : public XclExpXmlElementRecord
+{
+public:
+                        XclExpXmlStartElementRecord( sal_Int32 nElement, void (*pAttributes)( XclExpXmlStream& rStrm) = NULL );
+    virtual             ~XclExpXmlStartElementRecord();
+
+    /** Starts the element nElement */
+    virtual void        SaveXml( XclExpXmlStream& rStrm );
+};
+
+// ----------------------------------------------------------------------------
+
+class XclExpXmlEndElementRecord : public XclExpXmlElementRecord
+{
+public:
+                        XclExpXmlEndElementRecord( sal_Int32 nElement );
+    virtual             ~XclExpXmlEndElementRecord();
+
+    /** Ends the element nElement */
+    virtual void        SaveXml( XclExpXmlStream& rStrm );
+};
+
+// ----------------------------------------------------------------------------
+
+class XclExpXmlStartSingleElementRecord : public XclExpXmlElementRecord
+{
+public:
+                        XclExpXmlStartSingleElementRecord( sal_Int32 nElement, void (*pAttributes)( XclExpXmlStream& rStrm) = NULL );
+    virtual             ~XclExpXmlStartSingleElementRecord();
+
+    /** Starts the single element nElement */
+    virtual void        SaveXml( XclExpXmlStream& rStrm );
+};
+
+// ----------------------------------------------------------------------------
+
+class XclExpXmlEndSingleElementRecord : public XclExpRecordBase
+{
+public:
+                        XclExpXmlEndSingleElementRecord();
+    virtual             ~XclExpXmlEndSingleElementRecord();
+
+    /** Ends the single element nElement */
+    virtual void        SaveXml( XclExpXmlStream& rStrm );
 };
 
 // ----------------------------------------------------------------------------
@@ -131,12 +206,18 @@ public:
         @param rValue  The value for the record body.
         @param nSize  Record size. Uses sizeof( Type ), if this parameter is omitted. */
     inline explicit     XclExpValueRecord( sal_uInt16 nRecId, const Type& rValue, sal_Size nSize = sizeof( Type ) ) :
-                            XclExpRecord( nRecId, nSize ), maValue( rValue ) {}
+                            XclExpRecord( nRecId, nSize ), maValue( rValue ), mnAttribute( -1 ) {}
 
     /** Returns the value of the record. */
     inline const Type&  GetValue() const { return maValue; }
     /** Sets a new record value. */
     inline void         SetValue( const Type& rValue ) { maValue = rValue; }
+
+    /** Sets the OOXML attribute this record corresponds to */
+    XclExpValueRecord*  SetAttribute( sal_Int32 nId );
+
+    /** Write the OOXML attribute and its value */
+    void                SaveXml( XclExpXmlStream& rStrm );
 
 private:
     /** Writes the body of the record. */
@@ -145,7 +226,28 @@ private:
 
 private:
     Type                maValue;        /// The record data.
+    sal_Int32           mnAttribute;    /// The OOXML attribute Id
 };
+
+template< typename Type >
+void XclExpValueRecord< Type >::SaveXml( XclExpXmlStream& rStrm )
+{
+    if( mnAttribute == -1 )
+        return;
+    rStrm.WriteAttributes(
+        mnAttribute,    rtl::OString::valueOf( (sal_Int32) maValue ).getStr(),
+        FSEND );
+}
+
+template<>
+void XclExpValueRecord<double>::SaveXml( XclExpXmlStream& rStrm );
+
+template< typename Type >
+XclExpValueRecord< Type >* XclExpValueRecord< Type >::SetAttribute( sal_Int32 nId )
+{
+    mnAttribute = nId;
+    return this;
+}
 
 // ----------------------------------------------------------------------------
 
@@ -167,13 +269,15 @@ class XclExpBoolRecord : public XclExpRecord
 public:
     /** @param nRecId  The record ID of this record.
         @param nValue  The value for the record body. */
-    inline explicit     XclExpBoolRecord( sal_uInt16 nRecId, bool bValue ) :
-                            XclExpRecord( nRecId, 2 ), mbValue( bValue ) {}
+    inline explicit     XclExpBoolRecord( sal_uInt16 nRecId, bool bValue, sal_Int32 nAttribute = -1 ) :
+                            XclExpRecord( nRecId, 2 ), mbValue( bValue ), mnAttribute( nAttribute ) {}
 
     /** Returns the Boolean value of the record. */
     inline bool         GetBool() const { return mbValue; }
     /** Sets a new Boolean record value. */
     inline void         SetBool( bool bValue ) { mbValue = bValue; }
+
+    virtual void        SaveXml( XclExpXmlStream& rStrm );
 
 private:
     /** Writes the body of the record. */
@@ -181,6 +285,7 @@ private:
 
 private:
     bool                mbValue;        /// The record data.
+    sal_Int32           mnAttribute;    /// The attribute to generate within SaveXml()
 };
 
 // ----------------------------------------------------------------------------
@@ -270,6 +375,13 @@ public:
         // inlining prevents warning in wntmsci10
         for( typename RecordVec::iterator aIt = maRecs.begin(), aEnd = maRecs.end(); aIt != aEnd; ++aIt )
             (*aIt)->Save( rStrm );
+    }
+
+    inline virtual void SaveXml( XclExpXmlStream& rStrm )
+    {
+        // inlining prevents warning in wntmsci10
+        for( typename RecordVec::iterator aIt = maRecs.begin(), aEnd = maRecs.end(); aIt != aEnd; ++aIt )
+            (*aIt)->SaveXml( rStrm );
     }
 
 private:

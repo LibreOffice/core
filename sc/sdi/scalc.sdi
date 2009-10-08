@@ -7625,6 +7625,30 @@ SfxVoidItem Margins SID_PREVIEW_MARGIN
 ]
 
 //--------------------------------------------------------------------------
+SvxZoomSliderItem ScalingFactor SID_PREVIEW_SCALINGFACTOR
+[
+    /* flags: */
+    AutoUpdate = FALSE,
+    Cachable = Cachable,
+    FastCall = TRUE,
+    HasCoreId = FALSE,
+    HasDialog = FALSE,
+    ReadOnlyDoc = TRUE,
+    Toggle = FALSE,
+    Container = FALSE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+    Asynchron;
+
+    /* config: */
+    AccelConfig = TRUE,
+    MenuConfig = TRUE,
+    StatusBarConfig = FALSE,
+    ToolBoxConfig = TRUE,
+    GroupId = GID_FORMAT;
+]
+
+//--------------------------------------------------------------------------
 SfxVoidItem SelectTables SID_SELECT_TABLES
 (SfxIntegerListItem Tables SID_SELECT_TABLES)
 [

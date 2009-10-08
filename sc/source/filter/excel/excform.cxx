@@ -37,7 +37,7 @@
 #include "document.hxx"
 #include "rangenam.hxx"
 #include "global.hxx"
-#include "errorcodes.hxx"
+#include "formula/errorcodes.hxx"
 
 #include "imp_op.hxx"
 #include "root.hxx"
@@ -46,6 +46,7 @@
 #include "xilink.hxx"
 #include "xiname.hxx"
 
+using ::std::vector;
 
 const UINT16 ExcelToSc::nRowMask = 0x3FFF;
 const UINT16 ExcelToSc::nLastInd = 399;
@@ -215,8 +216,8 @@ ConvErr ExcelToSc::Convert( const ScTokenArray*& pErgebnis, XclImpStream& aIn, s
     const BOOL      bSharedFormula = eFT == FT_SharedFormula;
     const BOOL      bRNorSF = bRangeName || bSharedFormula;
 
-    SingleRefData       aSRD;
-    ComplRefData        aCRD;
+    ScSingleRefData     aSRD;
+    ScComplexRefData        aCRD;
     ExtensionTypeVec    aExtensions;
 
     bExternName = FALSE;
@@ -576,8 +577,8 @@ ConvErr ExcelToSc::Convert( const ScTokenArray*& pErgebnis, XclImpStream& aIn, s
             {
                 UINT16          nRowFirst, nRowLast;
                 UINT8           nColFirst, nColLast;
-                SingleRefData&  rSRef1 = aCRD.Ref1;
-                SingleRefData&  rSRef2 = aCRD.Ref2;
+                ScSingleRefData&    rSRef1 = aCRD.Ref1;
+                ScSingleRefData&    rSRef2 = aCRD.Ref2;
 
                 aIn >> nRowFirst >> nRowLast >> nColFirst >> nColLast;
 
@@ -818,8 +819,8 @@ ConvErr ExcelToSc::Convert( const ScTokenArray*& pErgebnis, XclImpStream& aIn, s
                 if( nExtSheet <= 0 )
                 {// in aktuellem Workbook
                     // erster Teil des Bereichs
-                    SingleRefData&  rR1 = aCRD.Ref1;
-                    SingleRefData&  rR2 = aCRD.Ref2;
+                    ScSingleRefData&    rR1 = aCRD.Ref1;
+                    ScSingleRefData&    rR2 = aCRD.Ref2;
 
                     rR1.nTab = static_cast<SCTAB>(nTabFirst);
                     rR2.nTab = static_cast<SCTAB>(nTabLast);
@@ -916,8 +917,8 @@ ConvErr ExcelToSc::Convert( _ScRangeListTabs& rRangeList, XclImpStream& aIn, sal
     const BOOL      bSharedFormula = eFT == FT_SharedFormula;
     const BOOL      bRNorSF = bRangeName || bSharedFormula;
 
-    SingleRefData   aSRD;
-    ComplRefData    aCRD;
+    ScSingleRefData aSRD;
+    ScComplexRefData    aCRD;
     aCRD.Ref1.nTab = aCRD.Ref2.nTab = aEingPos.Tab();
 
     bExternName = FALSE;
@@ -1079,8 +1080,8 @@ ConvErr ExcelToSc::Convert( _ScRangeListTabs& rRangeList, XclImpStream& aIn, sal
             {
                 UINT16          nRowFirst, nRowLast;
                 UINT8           nColFirst, nColLast;
-                SingleRefData   &rSRef1 = aCRD.Ref1;
-                SingleRefData   &rSRef2 = aCRD.Ref2;
+                ScSingleRefData &rSRef1 = aCRD.Ref1;
+                ScSingleRefData &rSRef2 = aCRD.Ref2;
 
                 aIn >> nRowFirst >> nRowLast >> nColFirst >> nColLast;
 
@@ -1271,8 +1272,8 @@ ConvErr ExcelToSc::Convert( _ScRangeListTabs& rRangeList, XclImpStream& aIn, sal
                 if( nExtSheet <= 0 )
                 {// in aktuellem Workbook
                     // erster Teil des Bereichs
-                    SingleRefData   &rR1 = aCRD.Ref1;
-                    SingleRefData   &rR2 = aCRD.Ref2;
+                    ScSingleRefData &rR1 = aCRD.Ref1;
+                    ScSingleRefData &rR2 = aCRD.Ref2;
 
                     rR1.nTab = static_cast<SCTAB>(nTabFirst);
                     rR2.nTab = static_cast<SCTAB>(nTabLast);
@@ -1325,6 +1326,13 @@ ConvErr ExcelToSc::Convert( _ScRangeListTabs& rRangeList, XclImpStream& aIn, sal
 
     aIn.Seek( nEndPos );
     return eRet;
+}
+
+ConvErr ExcelToSc::ConvertExternName( const ScTokenArray*& /*rpArray*/, XclImpStream& /*rStrm*/, sal_Size /*nFormulaLen*/,
+                                      const String& /*rUrl*/, const vector<String>& /*rTabNames*/ )
+{
+    // not implemented ...
+    return ConvErrNi;
 }
 
 BOOL ExcelToSc::GetAbsRefs( ScRangeList& rRangeList, XclImpStream& rStrm, sal_Size nLen )
@@ -1626,7 +1634,7 @@ void ExcelToSc::DoMulArgs( DefTokenId eId, sal_uInt8 nAnz, sal_uInt8 nMinParamCo
 }
 
 
-void ExcelToSc::ExcRelToScRel( UINT16 nRow, UINT8 nCol, SingleRefData &rSRD, const BOOL bName )
+void ExcelToSc::ExcRelToScRel( UINT16 nRow, UINT8 nCol, ScSingleRefData &rSRD, const BOOL bName )
 {
     if( bName )
     {
@@ -1839,9 +1847,9 @@ void ExcelToSc::SetError( ScFormulaCell &rCell, const ConvErr eErr )
 }
 
 
-void ExcelToSc::SetComplCol( ComplRefData &rCRD )
+void ExcelToSc::SetComplCol( ScComplexRefData &rCRD )
 {
-    SingleRefData   &rSRD = rCRD.Ref2;
+    ScSingleRefData &rSRD = rCRD.Ref2;
     if( rSRD.IsColRel() )
         rSRD.nRelCol = MAXCOL - aEingPos.Col();
     else
@@ -1849,9 +1857,9 @@ void ExcelToSc::SetComplCol( ComplRefData &rCRD )
 }
 
 
-void ExcelToSc::SetComplRow( ComplRefData &rCRD )
+void ExcelToSc::SetComplRow( ScComplexRefData &rCRD )
 {
-    SingleRefData   &rSRD = rCRD.Ref2;
+    ScSingleRefData &rSRD = rCRD.Ref2;
     if( rSRD.IsRowRel() )
         rSRD.nRelRow = MAXROW - aEingPos.Row();
     else

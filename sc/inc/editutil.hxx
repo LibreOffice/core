@@ -169,7 +169,7 @@ public:
 
 
 // 1/100 mm
-class ScTabEditEngine : public ScEditEngineDefaulter
+class SC_DLLPUBLIC ScTabEditEngine : public ScEditEngineDefaulter
 {
 private:
     void    Init(const ScPatternAttr& rPattern);
@@ -200,7 +200,7 @@ struct ScHeaderFieldData
 
 
 // fuer Feldbefehle in der Tabelle
-class ScFieldEditEngine : public ScEditEngineDefaulter
+class SC_DLLPUBLIC ScFieldEditEngine : public ScEditEngineDefaulter
 {
 private:
     BOOL    bExecuteURL;
@@ -220,7 +220,7 @@ public:
 
 
 // for headers/footers with fields
-class ScHeaderEditEngine : public ScEditEngineDefaulter
+class SC_DLLPUBLIC ScHeaderEditEngine : public ScEditEngineDefaulter
 {
 private:
     ScHeaderFieldData   aData;

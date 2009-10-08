@@ -31,12 +31,14 @@
 #define CHART2_POTENTIALREGRESSIONCURVECALCULATOR_HXX
 
 #include "RegressionCurveCalculator.hxx"
+#include "charttoolsdllapi.hxx"
 
 namespace chart
 {
 
 
-class PotentialRegressionCurveCalculator : public RegressionCurveCalculator
+class OOO_DLLPUBLIC_CHARTTOOLS PotentialRegressionCurveCalculator :
+        public RegressionCurveCalculator
 {
 public:
     PotentialRegressionCurveCalculator();

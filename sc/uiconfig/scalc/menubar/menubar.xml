@@ -73,7 +73,6 @@
             </menu:menu>
             <menu:menuitem menu:id=".uno:CompareDocuments"/>
             <menu:menuitem menu:id=".uno:SearchDialog"/>
-            <menu:menuitem menu:id=".uno:Navigator"/>
             <menu:menuitem menu:id=".uno:EditHeaderAndFooter"/>
             <menu:menuseparator/>
             <menu:menu menu:id=".uno:FillCellsMenu">
@@ -122,6 +121,7 @@
             <menu:menuitem menu:id=".uno:ViewValueHighlighting"/>
             <menu:menuseparator/>
             <menu:menuitem menu:id=".uno:ViewDataSourceBrowser"/>
+            <menu:menuitem menu:id=".uno:Navigator"/>
             <menu:menuseparator/>
             <menu:menuitem menu:id=".uno:FullScreen"/>
             <menu:menuitem menu:id=".uno:Zoom"/>
@@ -331,9 +331,6 @@
                     <menu:menuitem menu:id=".uno:AuditingFillMode"/>
                 </menu:menupopup>
             </menu:menu>
-            <menu:menuseparator/>
-            <menu:menuitem menu:id=".uno:AutoCorrectDlg"/>
-            <menu:menuseparator/>
             <menu:menuitem menu:id=".uno:GoalSeekDialog"/>
             <menu:menuitem menu:id=".uno:SolverDialog"/>
             <menu:menuitem menu:id=".uno:ScenarioManager"/>
@@ -373,6 +370,7 @@
             <menu:menuitem menu:id="service:com.sun.star.deployment.ui.PackageManagerDialog"/>
 
             <menu:menuitem menu:id=".uno:OpenXMLFilterSettings"/>
+            <menu:menuitem menu:id=".uno:AutoCorrectDlg"/>
             <menu:menuitem menu:id=".uno:ConfigureDialog"/>
             <menu:menuitem menu:id=".uno:OptionsTreeDialog"/>
         </menu:menupopup>

@@ -38,15 +38,14 @@
 #include "scerrors.hxx"
 #include "root.hxx"
 #include "filtopt.hxx"
+#include "ftools.hxx"
 
 //------------------------------------------------------------------------
 
 extern FltError ScImportLotus123old( SvStream&, ScDocument*, CharSet eSrc );
         // alter Krempel in filter.cxx!
 
-
-
-FltError ScImportLotus123( SfxMedium& rMedium, ScDocument* pDocument, CharSet eSrc )
+FltError ScFormatFilterPluginImpl::ScImportLotus123( SfxMedium& rMedium, ScDocument* pDocument, CharSet eSrc )
 {
         ScFilterOptions aFilterOpt;
     BOOL bWithWK3 = aFilterOpt.GetWK3Flag();
@@ -103,7 +102,4 @@ FltError ScImportLotus123( SfxMedium& rMedium, ScDocument* pDocument, CharSet eS
 
     return eRet;
 }
-
-
-
 

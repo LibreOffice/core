@@ -55,7 +55,7 @@
 #include "userlist.hxx"
 #include "pivot.hxx"
 #include "rechead.hxx"
-#include "errorcodes.hxx"                           // fuer errNoValue
+#include "formula/errorcodes.hxx"                           // fuer errNoValue
 #include "refupdat.hxx"
 #include "stlpool.hxx"
 #include "stlsheet.hxx"
@@ -259,23 +259,23 @@ void ScPivot::SetParam( const ScPivotParam& rParam, const ScQueryParam& rQuery,
     SetDataFields( rParam.aDataArr, rParam.nDataCount );
 }
 
-DataObject* ScPivot::Clone() const
+ScDataObject*   ScPivot::Clone() const
 {
     return new ScPivot(*this);
 }
 
 //--------------------------------------------------------------------------------------------------
-// PivotStrCollection
+// PivotScStrCollection
 //--------------------------------------------------------------------------------------------------
 
-DataObject* PivotStrCollection::Clone() const
+ScDataObject*   PivotScStrCollection::Clone() const
 {
-    return new PivotStrCollection(*this);
+    return new PivotScStrCollection(*this);
 }
 
-short PivotStrCollection::Compare(DataObject* pKey1, DataObject* pKey2) const
+short PivotScStrCollection::Compare(ScDataObject* pKey1, ScDataObject* pKey2) const
 {
-    DBG_ASSERT(pKey1&&pKey2,"0-Zeiger bei PivotStrCollection::Compare");
+    DBG_ASSERT(pKey1&&pKey2,"0-Zeiger bei PivotScStrCollection::Compare");
 
     short nResult = 0;
 
@@ -313,7 +313,7 @@ short PivotStrCollection::Compare(DataObject* pKey1, DataObject* pKey2) const
     return nResult;
 }
 
-USHORT PivotStrCollection::GetIndex(TypedStrData* pData) const
+USHORT PivotScStrCollection::GetIndex(TypedStrData* pData) const
 {
     USHORT nIndex = 0;
     if (!Search(pData, nIndex))
@@ -483,7 +483,7 @@ BOOL ScPivotCollection::operator==(const ScPivotCollection& rCmp) const
     return TRUE;
 }
 
-DataObject* ScPivotCollection::Clone() const
+ScDataObject*   ScPivotCollection::Clone() const
 {
     return new ScPivotCollection(*this);
 }

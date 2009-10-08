@@ -40,6 +40,7 @@
 #include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/drawing/XShape.hpp>
 #include <com/sun/star/util/XNumberFormatsSupplier.hpp>
+#include "chartviewdllapi.hxx"
 
 //.............................................................................
 namespace chart
@@ -51,7 +52,7 @@ namespace chart
 */
 
 class DrawModelWrapper;
-class ExplicitValueProvider
+class OOO_DLLPUBLIC_CHARTVIEW ExplicitValueProvider
 {
 public:
     /** Gives calculated scale and increment values for a given xAxis in the current view.

@@ -67,25 +67,25 @@ public:
 private:
     ListBox         aLbPrintArea;
     FixedLine       aFlPrintArea;
-    ScRefEdit       aEdPrintArea;
-    ScRefButton     aRbPrintArea;
+    formula::RefEdit        aEdPrintArea;
+    formula::RefButton      aRbPrintArea;
 
     ListBox         aLbRepeatRow;
     FixedLine       aFlRepeatRow;
-    ScRefEdit       aEdRepeatRow;
-    ScRefButton     aRbRepeatRow;
+    formula::RefEdit        aEdRepeatRow;
+    formula::RefButton      aRbRepeatRow;
 
     ListBox         aLbRepeatCol;
     FixedLine       aFlRepeatCol;
-    ScRefEdit       aEdRepeatCol;
-    ScRefButton     aRbRepeatCol;
+    formula::RefEdit        aEdRepeatCol;
+    formula::RefButton      aRbRepeatCol;
 
     OKButton        aBtnOk;
     CancelButton    aBtnCancel;
     HelpButton      aBtnHelp;
 
     BOOL            bDlgLostFocus;
-    ScRefEdit*      pRefInputEdit;
+    formula::RefEdit*       pRefInputEdit;
     ScDocument*     pDoc;
     ScViewData*     pViewData;
     SCTAB           nCurTab;
@@ -99,7 +99,7 @@ private:
 
     // Handler:
     DECL_LINK( Impl_SelectHdl,      ListBox*    );
-    DECL_LINK( Impl_ModifyHdl,      ScRefEdit*  );
+    DECL_LINK( Impl_ModifyHdl,      formula::RefEdit*  );
     DECL_LINK( Impl_BtnHdl,         PushButton* );
     DECL_LINK( Impl_GetFocusHdl,    Control*    );
 #endif

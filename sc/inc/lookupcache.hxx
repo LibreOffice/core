@@ -32,7 +32,8 @@
 #define INCLUDED_SC_LOOKUPCACHE_HXX
 
 #include "address.hxx"
-#include "token.hxx"
+#include "global.hxx"
+#include "formula/token.hxx"
 #include <svtools/listener.hxx>
 #include <tools/string.hxx>
 

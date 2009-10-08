@@ -52,6 +52,7 @@
 #include "stlpool.hxx"
 #include "rangenam.hxx"
 
+using namespace formula;
 //------------------------------------------------------------------------
 
 SV_IMPL_OP_PTRARR_SORT( ScConditionalFormats_Impl, ScConditionalFormatPtr );
@@ -63,14 +64,14 @@ BOOL lcl_HasRelRef( ScDocument* pDoc, ScTokenArray* pFormula, USHORT nRecursion 
     if (pFormula)
     {
         pFormula->Reset();
-        ScToken* t;
+        FormulaToken* t;
         for( t = pFormula->Next(); t; t = pFormula->Next() )
         {
             switch( t->GetType() )
             {
                 case svDoubleRef:
                 {
-                    SingleRefData& rRef2 = t->GetDoubleRef().Ref2;
+                    ScSingleRefData& rRef2 = static_cast<ScToken*>(t)->GetDoubleRef().Ref2;
                     if ( rRef2.IsColRel() || rRef2.IsRowRel() || rRef2.IsTabRel() )
                         return TRUE;
                 }
@@ -78,7 +79,7 @@ BOOL lcl_HasRelRef( ScDocument* pDoc, ScTokenArray* pFormula, USHORT nRecursion 
 
                 case svSingleRef:
                 {
-                    SingleRefData& rRef1 = t->GetSingleRef();
+                    ScSingleRefData& rRef1 = static_cast<ScToken*>(t)->GetSingleRef();
                     if ( rRef1.IsColRel() || rRef1.IsRowRel() || rRef1.IsTabRel() )
                         return TRUE;
                 }
@@ -188,7 +189,7 @@ ScConditionEntry::ScConditionEntry( ScDocument* pDocument, const ScConditionEntr
 ScConditionEntry::ScConditionEntry( ScConditionMode eOper,
                                 const String& rExpr1, const String& rExpr2,
                                 ScDocument* pDocument, const ScAddress& rPos,
-                                const ScGrammar::Grammar eGrammar ) :
+                                const FormulaGrammar::Grammar eGrammar ) :
     eOp(eOper),
     nOptions(0),    // spaeter...
     nVal1(0.0),
@@ -218,7 +219,7 @@ ScConditionEntry::ScConditionEntry( ScConditionMode eOper,
     nOptions(0),    // spaeter...
     nVal1(0.0),
     nVal2(0.0),
-    eTempGrammar(ScGrammar::GRAM_DEFAULT),
+    eTempGrammar(FormulaGrammar::GRAM_DEFAULT),
     bIsStr1(FALSE),
     bIsStr2(FALSE),
     pFormula1(NULL),
@@ -237,7 +238,7 @@ ScConditionEntry::ScConditionEntry( ScConditionMode eOper,
         if ( pFormula1->GetLen() == 1 )
         {
             // einzelne (konstante Zahl) ?
-            ScToken* pToken = pFormula1->First();
+            FormulaToken* pToken = pFormula1->First();
             if ( pToken->GetOpCode() == ocPush )
             {
                 if ( pToken->GetType() == svDouble )
@@ -261,7 +262,7 @@ ScConditionEntry::ScConditionEntry( ScConditionMode eOper,
         if ( pFormula2->GetLen() == 1 )
         {
             // einzelne (konstante Zahl) ?
-            ScToken* pToken = pFormula2->First();
+            FormulaToken* pToken = pFormula2->First();
             if ( pToken->GetOpCode() == ocPush )
             {
                 if ( pToken->GetType() == svDouble )
@@ -293,11 +294,12 @@ ScConditionEntry::~ScConditionEntry()
 }
 
 void ScConditionEntry::Compile( const String& rExpr1, const String& rExpr2,
-                                const ScGrammar::Grammar eGrammar, BOOL bTextToReal )
+                                const FormulaGrammar::Grammar eGrammar, BOOL bTextToReal )
 {
     if ( rExpr1.Len() || rExpr2.Len() )
     {
-        ScCompiler aComp( pDoc, aSrcPos, eGrammar );
+        ScCompiler aComp( pDoc, aSrcPos );
+        aComp.SetGrammar(eGrammar);
 
         if ( rExpr1.Len() )
         {
@@ -315,7 +317,7 @@ void ScConditionEntry::Compile( const String& rExpr1, const String& rExpr2,
                 if ( pFormula1->GetLen() == 1 )
                 {
                     // einzelne (konstante Zahl) ?
-                    ScToken* pToken = pFormula1->First();
+                    FormulaToken* pToken = pFormula1->First();
                     if ( pToken->GetOpCode() == ocPush )
                     {
                         if ( pToken->GetType() == svDouble )
@@ -351,7 +353,7 @@ void ScConditionEntry::Compile( const String& rExpr1, const String& rExpr2,
                 if ( pFormula2->GetLen() == 1 )
                 {
                     // einzelne (konstante Zahl) ?
-                    ScToken* pToken = pFormula2->First();
+                    FormulaToken* pToken = pFormula2->First();
                     if ( pToken->GetOpCode() == ocPush )
                     {
                         if ( pToken->GetType() == svDouble )
@@ -467,10 +469,10 @@ void lcl_CondUpdateInsertTab( ScTokenArray& rCode, SCTAB nInsTab, SCTAB nPosTab,
     //  For deleting, ScCompiler::UpdateDeleteTab is used because of the handling of invalid references.
 
     rCode.Reset();
-    ScToken* p = rCode.GetNextReference();
+    ScToken* p = static_cast<ScToken*>(rCode.GetNextReference());
     while( p )
     {
-        SingleRefData& rRef1 = p->GetSingleRef();
+        ScSingleRefData& rRef1 = p->GetSingleRef();
         if ( !rRef1.IsTabRel() && nInsTab <= rRef1.nTab )
         {
             rRef1.nTab += 1;
@@ -479,7 +481,7 @@ void lcl_CondUpdateInsertTab( ScTokenArray& rCode, SCTAB nInsTab, SCTAB nPosTab,
         }
         if( p->GetType() == svDoubleRef )
         {
-            SingleRefData& rRef2 = p->GetDoubleRef().Ref2;
+            ScSingleRefData& rRef2 = p->GetDoubleRef().Ref2;
             if ( !rRef2.IsTabRel() && nInsTab <= rRef2.nTab )
             {
                 rRef2.nTab += 1;
@@ -487,7 +489,7 @@ void lcl_CondUpdateInsertTab( ScTokenArray& rCode, SCTAB nInsTab, SCTAB nPosTab,
                 rChanged = TRUE;
             }
         }
-        p = rCode.GetNextReference();
+        p = static_cast<ScToken*>(rCode.GetNextReference());
     }
 }
 
@@ -506,7 +508,8 @@ void ScConditionEntry::UpdateReference( UpdateRefMode eUpdateRefMode,
             lcl_CondUpdateInsertTab( *pFormula1, rRange.aStart.Tab(), aSrcPos.Tab(), bChanged1 );
         else
         {
-            ScCompiler aComp( pDoc, aSrcPos, *pFormula1, pDoc->GetGrammar() );
+            ScCompiler aComp( pDoc, aSrcPos, *pFormula1 );
+            aComp.SetGrammar(pDoc->GetGrammar());
             if ( bDeleteTab )
                 aComp.UpdateDeleteTab( rRange.aStart.Tab(), FALSE, TRUE, bChanged1 );
             else
@@ -522,7 +525,8 @@ void ScConditionEntry::UpdateReference( UpdateRefMode eUpdateRefMode,
             lcl_CondUpdateInsertTab( *pFormula2, rRange.aStart.Tab(), aSrcPos.Tab(), bChanged2 );
         else
         {
-            ScCompiler aComp( pDoc, aSrcPos, *pFormula2, pDoc->GetGrammar() );
+            ScCompiler aComp( pDoc, aSrcPos, *pFormula2);
+            aComp.SetGrammar(pDoc->GetGrammar());
             if ( bDeleteTab )
                 aComp.UpdateDeleteTab( rRange.aStart.Tab(), FALSE, TRUE, bChanged2 );
             else
@@ -538,13 +542,15 @@ void ScConditionEntry::UpdateMoveTab( SCTAB nOldPos, SCTAB nNewPos )
 {
     if (pFormula1)
     {
-        ScCompiler aComp( pDoc, aSrcPos, *pFormula1, pDoc->GetGrammar() );
+        ScCompiler aComp( pDoc, aSrcPos, *pFormula1);
+        aComp.SetGrammar(pDoc->GetGrammar());
         aComp.UpdateMoveTab(nOldPos, nNewPos, TRUE );
         DELETEZ(pFCell1);
     }
     if (pFormula2)
     {
-        ScCompiler aComp( pDoc, aSrcPos, *pFormula2, pDoc->GetGrammar() );
+        ScCompiler aComp( pDoc, aSrcPos, *pFormula2);
+        aComp.SetGrammar(pDoc->GetGrammar());
         aComp.UpdateMoveTab(nOldPos, nNewPos, TRUE );
         DELETEZ(pFCell2);
     }
@@ -562,8 +568,8 @@ BOOL lcl_IsEqual( const ScTokenArray* pArr1, const ScTokenArray* pArr2 )
         if ( pArr2->GetLen() != nLen )
             return FALSE;
 
-        ScToken** ppToken1 = pArr1->GetArray();
-        ScToken** ppToken2 = pArr2->GetArray();
+        FormulaToken** ppToken1 = pArr1->GetArray();
+        FormulaToken** ppToken2 = pArr2->GetArray();
         for (USHORT i=0; i<nLen; i++)
         {
             if ( ppToken1[i] != ppToken2[i] &&
@@ -877,18 +883,19 @@ BOOL ScConditionEntry::IsCellValid( ScBaseCell* pCell, const ScAddress& rPos ) c
 
 String ScConditionEntry::GetExpression( const ScAddress& rCursor, USHORT nIndex,
                                         ULONG nNumFmt,
-                                        const ScGrammar::Grammar eGrammar ) const
+                                        const FormulaGrammar::Grammar eGrammar ) const
 {
     String aRet;
 
-    if ( ScGrammar::isEnglish( eGrammar) && nNumFmt == 0 )
+    if ( FormulaGrammar::isEnglish( eGrammar) && nNumFmt == 0 )
         nNumFmt = pDoc->GetFormatTable()->GetStandardIndex( LANGUAGE_ENGLISH_US );
 
     if ( nIndex==0 )
     {
         if ( pFormula1 )
         {
-            ScCompiler aComp(pDoc, rCursor, *pFormula1, eGrammar);
+            ScCompiler aComp(pDoc, rCursor, *pFormula1);
+            aComp.SetGrammar(eGrammar);
             aComp.CreateStringFromTokenArray( aRet );
         }
         else if (bIsStr1)
@@ -904,7 +911,8 @@ String ScConditionEntry::GetExpression( const ScAddress& rCursor, USHORT nIndex,
     {
         if ( pFormula2 )
         {
-            ScCompiler aComp(pDoc, rCursor, *pFormula2, eGrammar);
+            ScCompiler aComp(pDoc, rCursor, *pFormula2);
+            aComp.SetGrammar(eGrammar);
             aComp.CreateStringFromTokenArray( aRet );
         }
         else if (bIsStr2)
@@ -972,7 +980,7 @@ void ScConditionEntry::SourceChanged( const ScAddress& rChanged )
         {
             pFormula->Reset();
             ScToken* t;
-            for( t = pFormula->GetNextReference(); t; t = pFormula->GetNextReference() )
+            while ( ( t = static_cast<ScToken*>(pFormula->GetNextReference()) ) != NULL )
             {
                 SingleDoubleRefProvider aProv( *t );
                 if ( aProv.Ref1.IsColRel() || aProv.Ref1.IsRowRel() || aProv.Ref1.IsTabRel() ||
@@ -1062,9 +1070,9 @@ ScAddress ScConditionEntry::GetValidSrcPos() const
         {
             pFormula->Reset();
             ScToken* t;
-            while ( ( t = pFormula->GetNextReference() ) != NULL )
+            while ( ( t = static_cast<ScToken*>(pFormula->GetNextReference()) ) != NULL )
             {
-                SingleRefData& rRef1 = t->GetSingleRef();
+                ScSingleRefData& rRef1 = t->GetSingleRef();
                 if ( rRef1.IsTabRel() && !rRef1.IsTabDeleted() )
                 {
                     if ( rRef1.nTab < nMinTab )
@@ -1074,7 +1082,7 @@ ScAddress ScConditionEntry::GetValidSrcPos() const
                 }
                 if ( t->GetType() == svDoubleRef )
                 {
-                    SingleRefData& rRef2 = t->GetDoubleRef().Ref2;
+                    ScSingleRefData& rRef2 = t->GetDoubleRef().Ref2;
                     if ( rRef2.IsTabRel() && !rRef2.IsTabDeleted() )
                     {
                         if ( rRef2.nTab < nMinTab )
@@ -1109,7 +1117,7 @@ ScCondFormatEntry::ScCondFormatEntry( ScConditionMode eOper,
                                         const String& rExpr1, const String& rExpr2,
                                         ScDocument* pDocument, const ScAddress& rPos,
                                         const String& rStyle,
-                                        const ScGrammar::Grammar eGrammar ) :
+                                        const FormulaGrammar::Grammar eGrammar ) :
     ScConditionEntry( eOper, rExpr1, rExpr2, pDocument, rPos, eGrammar ),
     aStyleName( rStyle ),
     pParent( NULL )

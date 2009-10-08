@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: Strings.src,v $
- * $Revision: 1.12 $
+ * $Revision: 1.12.72.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -117,6 +117,11 @@ String STR_PAGE_OPTIONS
 String STR_PAGE_SCALE
 {
     Text [ en-US ] = "Scale" ;
+};
+
+String STR_PAGE_POSITIONING
+{
+    Text [ en-US ] = "Positioning" ;
 };
 
 // String STR_PAGE_STATISTICS
@@ -547,6 +552,23 @@ String STR_DATA_SELECT_RANGE_FOR_NEGATIVE_ERRORBARS
 String STR_DATA_EDITOR_INCORRECT_INPUT
 {
     Text [ en-US ] = "Your last input is incorrect.\nIgnore this change and close the dialog?" ;
+};
+
+// frame direction ------------------------------------------------------------
+
+String STR_TEXT_DIRECTION_LTR
+{
+    Text [ en-US ] = "Left-to-right";
+};
+
+String STR_TEXT_DIRECTION_RTL
+{
+    Text [ en-US ] = "Right-to-left";
+};
+
+String STR_TEXT_DIRECTION_SUPER
+{
+    Text [ en-US ] = "Use superordinate object settings";
 };
 
 //-----------------------------------------------------------------------------

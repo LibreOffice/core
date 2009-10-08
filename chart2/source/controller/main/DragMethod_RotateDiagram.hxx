@@ -56,12 +56,13 @@ public:
         );
     virtual ~DragMethod_RotateDiagram();
 
-    virtual void TakeComment(String& rStr) const;
-    virtual FASTBOOL Beg();
-    virtual void Mov(const Point& rPnt);
-    virtual FASTBOOL End(FASTBOOL bCopy);
+    virtual void TakeSdrDragComment(String& rStr) const;
 
-    virtual void CreateOverlayGeometry(::sdr::overlay::OverlayManager& rOverlayManager, ::sdr::overlay::OverlayObjectList& rOverlayList);
+    virtual bool BeginSdrDrag();
+    virtual void MoveSdrDrag(const Point& rPnt);
+    virtual bool EndSdrDrag(bool bCopy);
+
+    virtual void CreateOverlayGeometry(sdr::overlay::OverlayManager& rOverlayManager);
 
 private:
     E3dScene*   m_pScene;

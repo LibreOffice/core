@@ -48,6 +48,8 @@
 #include "global.hxx"
 #include "dpcachetable.hxx"
 #include "dptabres.hxx"
+#include "document.hxx"
+#include "dpobject.hxx"
 
 using namespace ::com::sun::star;
 using ::com::sun::star::uno::Sequence;
@@ -125,7 +127,8 @@ ScDPTableData::CalcInfo::CalcInfo() :
 
 // ---------------------------------------------------------------------------
 
-ScDPTableData::ScDPTableData()
+ScDPTableData::ScDPTableData(ScDocument* pDoc) :
+    mrSharedString(pDoc->GetDPCollection()->GetSharedString())
 {
     nLastDateVal = nLastHier = nLastLevel = nLastRet = -1;      // invalid
 
@@ -186,26 +189,6 @@ bool ScDPTableData::IsRepeatIfEmpty()
     return false;
 }
 
-void ScDPTableData::CreateCacheTable()
-{
-    fprintf(stdout, "ScDPTableData::CreateCacheTable: un-implemented...\n");fflush(stdout);
-}
-
-void ScDPTableData::FilterCacheTable(const vector<ScDPCacheTable::Criterion>&)
-{
-    fprintf(stdout, "ScDPTableData::FilterCacheTable: un-implemented...\n");
-}
-
-void ScDPTableData::GetDrillDownData(const vector<ScDPCacheTable::Criterion>&, Sequence< Sequence<Any> >&)
-{
-    fprintf(stdout, "ScDPTableData::GetDrillDownData: un-implemented...\n");fflush(stdout);
-}
-
-void ScDPTableData::CalcResults(CalcInfo&, bool)
-{
-    fprintf(stdout, "ScDPTableData::CalcResults: un-implemented...\n");fflush(stdout);
-}
-
 UINT32 ScDPTableData::GetNumberFormat(long)
 {
     return 0;           // default format
@@ -240,6 +223,11 @@ BOOL ScDPTableData::HasCommonElement( const ScDPItemData&, long,
     return FALSE;
 }
 
+ScSimpleSharedString& ScDPTableData::GetSharedString()
+{
+    return mrSharedString;
+}
+
 void ScDPTableData::FillRowDataFromCacheTable(sal_Int32 nRow, const ScDPCacheTable& rCacheTable,
                                         const CalcInfo& rInfo, CalcRowData& rData)
 {
@@ -258,7 +246,8 @@ void ScDPTableData::FillRowDataFromCacheTable(sal_Int32 nRow, const ScDPCacheTab
         long nDim = rInfo.aDataSrcCols[i];
         rData.aValues.push_back( ScDPValueData() );
         ScDPValueData& rVal = rData.aValues.back();
-        const ScDPCacheTable::Cell* pCell = rCacheTable.getCell(static_cast<SCCOL>(nDim), static_cast<SCROW>(nRow));
+        const ScDPCacheCell* pCell = rCacheTable.getCell(
+            static_cast<SCCOL>(nDim), static_cast<SCROW>(nRow), false);
         if (pCell)
         {
             rVal.fValue = pCell->mbNumeric ? pCell->mfValue : 0.0;
@@ -321,11 +310,12 @@ void ScDPTableData::GetItemData(const ScDPCacheTable& rCacheTable, sal_Int32 nRo
             continue;
         }
 
-        const ScDPCacheTable::Cell* pCell = rCacheTable.getCell(static_cast<SCCOL>(nDim), static_cast<SCROW>(nRow), IsRepeatIfEmpty());
+        const ScDPCacheCell* pCell = rCacheTable.getCell(
+            static_cast<SCCOL>(nDim), static_cast<SCROW>(nRow), IsRepeatIfEmpty());
         if (!pCell || pCell->mnType == SC_VALTYPE_EMPTY)
             continue;
 
-        const String* pString = ScSharedString::getString(pCell->mnStrId);
+        const String* pString = GetSharedString().getString(pCell->mnStrId);
         if (!pString)
             continue;
 

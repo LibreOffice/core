@@ -36,6 +36,7 @@
 #include <com/sun/star/chart2/XDiagram.hpp>
 #include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
+#include "charttoolsdllapi.hxx"
 
 //.............................................................................
 namespace chart
@@ -46,7 +47,7 @@ namespace chart
 /**
 */
 
-class LegendHelper
+class OOO_DLLPUBLIC_CHARTTOOLS LegendHelper
 {
 public:
     static ::com::sun::star::uno::Reference<

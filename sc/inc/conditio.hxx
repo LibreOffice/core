@@ -33,8 +33,9 @@
 
 #include "global.hxx"
 #include "address.hxx"
-#include "grammar.hxx"
+#include "formula/grammar.hxx"
 #include <svtools/svarray.hxx>
+#include "scdllapi.h"
 
 class ScBaseCell;
 class ScFormulaCell;
@@ -74,7 +75,7 @@ enum ScConditionValType
     SC_VAL_FORMULA
 };
 
-class ScConditionEntry
+class SC_DLLPUBLIC ScConditionEntry
 {
                                         // gespeicherte Daten:
     ScConditionMode     eOp;
@@ -83,7 +84,7 @@ class ScConditionEntry
     double              nVal2;
     String              aStrVal1;       // eingegeben oder berechnet
     String              aStrVal2;
-    ScGrammar::Grammar  eTempGrammar;   // grammar to be used on (re)compilation, e.g. in XML import
+    formula::FormulaGrammar::Grammar  eTempGrammar;   // grammar to be used on (re)compilation, e.g. in XML import
     BOOL                bIsStr1;        // um auch leere Strings zu erkennen
     BOOL                bIsStr2;
     ScTokenArray*       pFormula1;      // eingegebene Formel
@@ -100,7 +101,7 @@ class ScConditionEntry
 
     void    MakeCells( const ScAddress& rPos );
     void    Compile( const String& rExpr1, const String& rExpr2,
-                        const ScGrammar::Grammar eGrammar, BOOL bTextToReal );
+                        const formula::FormulaGrammar::Grammar eGrammar, BOOL bTextToReal );
     void    Interpret( const ScAddress& rPos );
 
     BOOL    IsValid( double nArg ) const;
@@ -110,7 +111,7 @@ public:
             ScConditionEntry( ScConditionMode eOper,
                                 const String& rExpr1, const String& rExpr2,
                                 ScDocument* pDocument, const ScAddress& rPos,
-                                const ScGrammar::Grammar eGrammar );
+                                const formula::FormulaGrammar::Grammar eGrammar );
             ScConditionEntry( ScConditionMode eOper,
                                 const ScTokenArray* pArr1, const ScTokenArray* pArr2,
                                 ScDocument* pDocument, const ScAddress& rPos );
@@ -136,7 +137,7 @@ public:
     void            SetFormula2( const ScTokenArray& rArray );
 
     String          GetExpression( const ScAddress& rCursor, USHORT nPos, ULONG nNumFmt = 0,
-                                    const ScGrammar::Grammar eGrammar = ScGrammar::GRAM_DEFAULT ) const;
+                                    const formula::FormulaGrammar::Grammar eGrammar = formula::FormulaGrammar::GRAM_DEFAULT ) const;
 
     ScTokenArray*   CreateTokenArry( USHORT nPos ) const;
 
@@ -159,7 +160,7 @@ protected:
 
 class ScConditionalFormat;
 
-class ScCondFormatEntry : public ScConditionEntry
+class SC_DLLPUBLIC ScCondFormatEntry : public ScConditionEntry
 {
     String                  aStyleName;
     ScConditionalFormat*    pParent;
@@ -171,7 +172,7 @@ public:
                                 const String& rExpr1, const String& rExpr2,
                                 ScDocument* pDocument, const ScAddress& rPos,
                                 const String& rStyle,
-                                const ScGrammar::Grammar eGrammar = ScGrammar::GRAM_DEFAULT );
+                                const formula::FormulaGrammar::Grammar eGrammar = formula::FormulaGrammar::GRAM_DEFAULT );
             ScCondFormatEntry( ScConditionMode eOper,
                                 const ScTokenArray* pArr1, const ScTokenArray* pArr2,
                                 ScDocument* pDocument, const ScAddress& rPos,
@@ -194,7 +195,7 @@ protected:
 //  komplette bedingte Formatierung
 //
 
-class ScConditionalFormat
+class SC_DLLPUBLIC ScConditionalFormat
 {
     ScDocument*         pDoc;
     ScRangeList*        pAreas;             // Bereiche fuer Paint

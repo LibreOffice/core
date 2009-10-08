@@ -33,109 +33,46 @@
 
 #include <memory>
 #include <vector>
-#include "opcode.hxx"
+#include "formula/opcode.hxx"
 #include "refdata.hxx"
 #include "scmatrix.hxx"
-#include "intruref.hxx"
+#include "formula/intruref.hxx"
 #include <tools/mempool.hxx>
-
-
-enum StackVarEnum
-{
-    svByte,
-    svDouble,
-    svString,
-    svSingleRef,
-    svDoubleRef,
-    svMatrix,
-    svIndex,
-    svJump,
-    svExternal,                         // Byte + String
-    svFAP,                              // FormulaAutoPilot only, ever exported
-    svJumpMatrix,                       // 2003-07-02
-    svRefList,                          // ocUnion result
-    svEmptyCell,                        // Result is an empty cell, e.g. in LOOKUP()
-
-    svMatrixCell,                       // Result is a matrix with bells and
-                                        // whistles as needed for _the_ matrix
-                                        // formula result.
-
-    svHybridCell,                       // A temporary condition of a formula
-                                        // cell during import, having a double
-                                        // and/or string result and a formula
-                                        // string to be compiled.
-
-    svError,                            // error token
-    svMissing = 0x70,                   // 0 or ""
-    svSep,                              // separator, ocSep, ocOpen, ocClose
-    svUnknown                           // unknown StackType
-};
-
-#ifdef PRODUCT
-// save memory since compilers tend to int an enum
-typedef BYTE StackVar;
-#else
-// have enum names in debugger
-typedef StackVarEnum StackVar;
-#endif
+#include "scdllapi.h"
+#include "formula/IFunctionDescription.hxx"
+#include "formula/token.hxx"
 
 
 class ScJumpMatrix;
-
 class ScToken;
-typedef ScSimpleIntrusiveReference< class ScToken > ScTokenRef;
-typedef ScSimpleIntrusiveReference< const class ScToken > ScConstTokenRef;
 
-typedef ::std::vector< ComplRefData > ScRefList;
+typedef ::std::vector< ScComplexRefData > ScRefList;
+typedef formula::SimpleIntrusiveReference< class ScToken > ScTokenRef;
 
 
-class ScToken
+class SC_DLLPUBLIC ScToken : public formula::FormulaToken
 {
 private:
-
-            const StackVar      eType;          // type of data
-            mutable USHORT      nRefCnt;        // reference count
-
                                 // not implemented, prevent usage
                                 ScToken();
             ScToken&            operator=( const ScToken& );
 
 protected:
 
-    static  String              aDummyString;
-
-                                ScToken( StackVar eTypeP ) :
-                                    eType( eTypeP ), nRefCnt(0) {}
-                                ScToken( const ScToken& r ) :
-                                    eType( r.eType ), nRefCnt(0) {}
+    ScToken( formula::StackVar eTypeP,OpCode e = ocPush ) : formula::FormulaToken(eTypeP,e) {}
+    ScToken( const ScToken& r ): formula::FormulaToken(r) {}
 
 public:
 
     virtual                     ~ScToken();
-
-    inline  void                Delete()                { delete this; }
-    inline  StackVar      GetType() const         { return eType; }
-            BOOL                IsFunction() const; // pure functions, no operators
-            BOOL                IsMatrixFunction() const;   // if a function _always_ returns a Matrix
-            BYTE                GetParamCount() const;
-    inline  void                IncRef() const          { nRefCnt++; }
-    inline  void                DecRef() const
-                                    {
-                                        if (!--nRefCnt)
-                                            const_cast<ScToken*>(this)->Delete();
-                                    }
-    inline  USHORT              GetRef() const          { return nRefCnt; }
 
     /**
         Dummy methods to avoid switches and casts where possible,
         the real token classes have to overload the appropriate method[s].
         The only methods valid anytime if not overloaded are:
 
-        - GetOpCode() since for a token type not needing an explicit OpCode set
-          the implicit OpCode is ocPush.
-
         - GetByte() since this represents the count of parameters to a function
-          which of course is 0 on non-functions. ScByteToken and ScExternal do
+          which of course is 0 on non-functions. formula::FormulaByteToken and ScExternal do
           overload it.
 
         - HasForceArray() since also this is only used for operators and
@@ -144,45 +81,22 @@ public:
         Any other non-overloaded method pops up an assertion.
      */
 
-    virtual OpCode              GetOpCode() const;
-    virtual BYTE                GetByte() const;
-    virtual void                SetByte( BYTE n );
-    virtual bool                HasForceArray() const;
-    virtual void                SetForceArray( bool b );
-    virtual double              GetDouble() const;
-    virtual double&             GetDoubleAsReference();
-    virtual const String&       GetString() const;
-    virtual const SingleRefData&    GetSingleRef() const;
-    virtual SingleRefData&      GetSingleRef();
-    virtual const ComplRefData& GetDoubleRef() const;
-    virtual ComplRefData&       GetDoubleRef();
-    virtual const SingleRefData&    GetSingleRef2() const;
-    virtual SingleRefData&      GetSingleRef2();
+    virtual const ScSingleRefData&    GetSingleRef() const;
+    virtual ScSingleRefData&      GetSingleRef();
+    virtual const ScComplexRefData& GetDoubleRef() const;
+    virtual ScComplexRefData&       GetDoubleRef();
+    virtual const ScSingleRefData&    GetSingleRef2() const;
+    virtual ScSingleRefData&      GetSingleRef2();
     virtual void                CalcAbsIfRel( const ScAddress& );
     virtual void                CalcRelFromAbs( const ScAddress& );
     virtual const ScMatrix*     GetMatrix() const;
     virtual ScMatrix*           GetMatrix();
-    virtual USHORT              GetIndex() const;
-    virtual void                SetIndex( USHORT n );
-    virtual short*              GetJump() const;
-    virtual const String&       GetExternal() const;
-    virtual ScToken*            GetFAPOrigToken() const;
     virtual ScJumpMatrix*       GetJumpMatrix() const;
     virtual const ScRefList*    GetRefList() const;
     virtual       ScRefList*    GetRefList();
-    virtual USHORT              GetError() const;
-    virtual void                SetError( USHORT );
 
-            ScToken*            Clone() const;
-
-    virtual BOOL                operator==( const ScToken& rToken ) const;
-            BOOL                TextEqual( const ScToken& rToken ) const;
-            BOOL                Is3DRef() const;    // reference with 3D flag set
-
-//UNUSED2008-05  // If token in RPN resulted from resolving a name and contains an absolute
-//UNUSED2008-05  // reference. Token must be obtained through ScTokenArray::GetNextReferenceRPN()
-//UNUSED2008-05  // or similar.
-//UNUSED2008-05  BOOL                IsRPNReferenceAbsName() const;
+    virtual BOOL                TextEqual( const formula::FormulaToken& rToken ) const;
+    virtual BOOL                Is3DRef() const;    // reference with 3D flag set
 
     /** If rTok1 and rTok2 both are SingleRef or DoubleRef tokens, extend/merge
         ranges as needed for ocRange.
@@ -196,227 +110,56 @@ public:
             A reused or new'ed ScDoubleRefToken, or a NULL TokenRef if rTok1 or
             rTok2 are not of sv(Single|Double)Ref
      */
-    static  ScTokenRef          ExtendRangeReference( ScToken & rTok1, ScToken & rTok2, const ScAddress & rPos, bool bReuseDoubleRef );
-
-    static  size_t              GetStrLenBytes( xub_StrLen nLen )
-                                    { return nLen * sizeof(sal_Unicode); }
-    static  size_t              GetStrLenBytes( const String& rStr )
-                                    { return GetStrLenBytes( rStr.Len() ); }
+    static  formula::FormulaTokenRef          ExtendRangeReference( formula::FormulaToken & rTok1, formula::FormulaToken & rTok2, const ScAddress & rPos, bool bReuseDoubleRef );
 };
-
-
-/** Tokens that need a different OpCode than ocPush are derived from this. */
-class ScOpToken : public ScToken
-{
-private:
-            OpCode              eOp;
-public:
-                                ScOpToken( OpCode e, StackVar v ) :
-                                    ScToken( v ), eOp( e ) {}
-                                ScOpToken( const ScOpToken & r ) :
-                                    ScToken( r ), eOp( r.eOp ) {}
-    /** This is dirty and only the compiler should use it! */
-    inline  void                NewOpCode( OpCode e ) { eOp = e; }
-    virtual OpCode              GetOpCode() const;
-
-    // No operator== to be overloaded, ScToken::operator== already checks the
-    // OpCode as well via GetOpCode().
-};
-
-
-class ScByteToken : public ScOpToken
-{
-private:
-            BYTE                nByte;
-            bool                bHasForceArray;
-protected:
-                                ScByteToken( OpCode e, BYTE n, StackVar v, bool b ) :
-                                    ScOpToken( e, v ), nByte( n ),
-                                    bHasForceArray( b ) {}
-public:
-                                ScByteToken( OpCode e, BYTE n, bool b ) :
-                                    ScOpToken( e, svByte ), nByte( n ),
-                                    bHasForceArray( b ) {}
-                                ScByteToken( OpCode e, BYTE n ) :
-                                    ScOpToken( e, svByte ), nByte( n ),
-                                    bHasForceArray( false ) {}
-                                ScByteToken( OpCode e ) :
-                                    ScOpToken( e, svByte ), nByte( 0 ),
-                                    bHasForceArray( false ) {}
-                                ScByteToken( const ScByteToken& r ) :
-                                    ScOpToken( r ), nByte( r.nByte ),
-                                    bHasForceArray( r.bHasForceArray ) {}
-    virtual BYTE                GetByte() const;
-    virtual void                SetByte( BYTE n );
-    virtual bool                HasForceArray() const;
-    virtual void                SetForceArray( bool b );
-    virtual BOOL                operator==( const ScToken& rToken ) const;
-
-    DECL_FIXEDMEMPOOL_NEWDEL( ScByteToken );
-};
-
-
-// A special token for the FormulaAutoPilot only. Keeps a reference pointer of
-// the token of which it was created for comparison.
-class ScFAPToken : public ScByteToken
-{
-private:
-            ScTokenRef          pOrigToken;
-public:
-                                ScFAPToken( OpCode e, BYTE n, ScToken* p ) :
-                                    ScByteToken( e, n, svFAP, false ),
-                                    pOrigToken( p ) {}
-                                ScFAPToken( const ScFAPToken& r ) :
-                                    ScByteToken( r ), pOrigToken( r.pOrigToken ) {}
-    virtual ScToken*            GetFAPOrigToken() const;
-    virtual BOOL                operator==( const ScToken& rToken ) const;
-};
-
-
-class ScDoubleToken : public ScToken
-{
-private:
-            double              fDouble;
-public:
-                                ScDoubleToken( double f ) :
-                                    ScToken( svDouble ), fDouble( f ) {}
-                                ScDoubleToken( const ScDoubleToken& r ) :
-                                    ScToken( r ), fDouble( r.fDouble ) {}
-    virtual double              GetDouble() const;
-    virtual double&             GetDoubleAsReference();
-    virtual BOOL                operator==( const ScToken& rToken ) const;
-
-    DECL_FIXEDMEMPOOL_NEWDEL( ScDoubleToken );
-};
-
-
-class ScStringToken : public ScToken
-{
-private:
-            String              aString;
-public:
-                                ScStringToken( const String& r ) :
-                                    ScToken( svString ), aString( r ) {}
-                                ScStringToken( const ScStringToken& r ) :
-                                    ScToken( r ), aString( r.aString ) {}
-    virtual const String&       GetString() const;
-    virtual BOOL                operator==( const ScToken& rToken ) const;
-
-    DECL_FIXEDMEMPOOL_NEWDEL( ScStringToken );
-};
-
-
-/** Identical to ScStringToken, but with explicit OpCode instead of implicit
-    ocPush, and an optional BYTE for ocBad tokens. */
-class ScStringOpToken : public ScByteToken
-{
-private:
-            String              aString;
-public:
-                                ScStringOpToken( OpCode e, const String& r ) :
-                                    ScByteToken( e, 0, svString, false ), aString( r ) {}
-                                ScStringOpToken( const ScStringOpToken& r ) :
-                                    ScByteToken( r ), aString( r.aString ) {}
-    virtual const String&       GetString() const;
-    virtual BOOL                operator==( const ScToken& rToken ) const;
-};
-
 
 class ScSingleRefToken : public ScToken
 {
 private:
-            SingleRefData       aSingleRef;
+            ScSingleRefData       aSingleRef;
 public:
-                                ScSingleRefToken( const SingleRefData& r ) :
-                                    ScToken( svSingleRef ), aSingleRef( r ) {}
+                                ScSingleRefToken( const ScSingleRefData& r, OpCode e = ocPush ) :
+                                    ScToken( formula::svSingleRef, e ), aSingleRef( r ) {}
                                 ScSingleRefToken( const ScSingleRefToken& r ) :
                                     ScToken( r ), aSingleRef( r.aSingleRef ) {}
-    virtual const SingleRefData&    GetSingleRef() const;
-    virtual SingleRefData&      GetSingleRef();
+    virtual const ScSingleRefData&    GetSingleRef() const;
+    virtual ScSingleRefData&      GetSingleRef();
     virtual void                CalcAbsIfRel( const ScAddress& );
     virtual void                CalcRelFromAbs( const ScAddress& );
-    virtual BOOL                operator==( const ScToken& rToken ) const;
+    virtual BOOL                operator==( const formula::FormulaToken& rToken ) const;
+    virtual FormulaToken*       Clone() const { return new ScSingleRefToken(*this); }
 
     DECL_FIXEDMEMPOOL_NEWDEL( ScSingleRefToken );
 };
 
-
-/** Identical to ScSingleRefToken, but with explicit OpCode instead of implicit
-    ocPush. */
-class ScSingleRefOpToken : public ScOpToken
-{
-private:
-            SingleRefData       aSingleRef;
-public:
-                                ScSingleRefOpToken( OpCode e, const SingleRefData& r ) :
-                                    ScOpToken( e, svSingleRef ), aSingleRef( r ) {}
-                                ScSingleRefOpToken( const ScSingleRefOpToken& r ) :
-                                    ScOpToken( r ), aSingleRef( r.aSingleRef ) {}
-    virtual const SingleRefData&    GetSingleRef() const;
-    virtual SingleRefData&      GetSingleRef();
-    virtual void                CalcAbsIfRel( const ScAddress& );
-    virtual void                CalcRelFromAbs( const ScAddress& );
-    virtual BOOL                operator==( const ScToken& rToken ) const;
-};
-
-
 class ScDoubleRefToken : public ScToken
 {
 private:
-            ComplRefData        aDoubleRef;
+            ScComplexRefData        aDoubleRef;
 public:
-                                ScDoubleRefToken( const ComplRefData& r ) :
-                                    ScToken( svDoubleRef ), aDoubleRef( r ) {}
-                                ScDoubleRefToken( const SingleRefData& r ) :
-                                    ScToken( svDoubleRef )
+                                ScDoubleRefToken( const ScComplexRefData& r, OpCode e = ocPush  ) :
+                                    ScToken( formula::svDoubleRef, e ), aDoubleRef( r ) {}
+                                ScDoubleRefToken( const ScSingleRefData& r, OpCode e = ocPush  ) :
+                                    ScToken( formula::svDoubleRef, e )
                                 {
                                     aDoubleRef.Ref1 = r;
                                     aDoubleRef.Ref2 = r;
                                 }
                                 ScDoubleRefToken( const ScDoubleRefToken& r ) :
                                     ScToken( r ), aDoubleRef( r.aDoubleRef ) {}
-    virtual const SingleRefData&    GetSingleRef() const;
-    virtual SingleRefData&      GetSingleRef();
-    virtual const ComplRefData& GetDoubleRef() const;
-    virtual ComplRefData&       GetDoubleRef();
-    virtual const SingleRefData&    GetSingleRef2() const;
-    virtual SingleRefData&      GetSingleRef2();
+    virtual const ScSingleRefData&    GetSingleRef() const;
+    virtual ScSingleRefData&      GetSingleRef();
+    virtual const ScComplexRefData& GetDoubleRef() const;
+    virtual ScComplexRefData&       GetDoubleRef();
+    virtual const ScSingleRefData&    GetSingleRef2() const;
+    virtual ScSingleRefData&      GetSingleRef2();
     virtual void                CalcAbsIfRel( const ScAddress& );
     virtual void                CalcRelFromAbs( const ScAddress& );
-    virtual BOOL                operator==( const ScToken& rToken ) const;
+    virtual BOOL                operator==( const formula::FormulaToken& rToken ) const;
+    virtual FormulaToken*       Clone() const { return new ScDoubleRefToken(*this); }
 
     DECL_FIXEDMEMPOOL_NEWDEL( ScDoubleRefToken );
 };
-
-
-/** Identical to ScDoubleRefToken, but with explicit OpCode instead of implicit
-    ocPush. */
-class ScDoubleRefOpToken : public ScOpToken
-{
-private:
-            ComplRefData        aDoubleRef;
-public:
-                                ScDoubleRefOpToken( OpCode e, const ComplRefData& r ) :
-                                    ScOpToken( e, svDoubleRef ), aDoubleRef( r ) {}
-                                ScDoubleRefOpToken( OpCode e, const SingleRefData& r ) :
-                                    ScOpToken( e, svDoubleRef )
-                                {
-                                    aDoubleRef.Ref1 = r;
-                                    aDoubleRef.Ref2 = r;
-                                }
-                                ScDoubleRefOpToken( const ScDoubleRefOpToken& r ) :
-                                    ScOpToken( r ), aDoubleRef( r.aDoubleRef ) {}
-    virtual const SingleRefData&    GetSingleRef() const;
-    virtual SingleRefData&      GetSingleRef();
-    virtual const ComplRefData& GetDoubleRef() const;
-    virtual ComplRefData&       GetDoubleRef();
-    virtual const SingleRefData&    GetSingleRef2() const;
-    virtual SingleRefData&      GetSingleRef2();
-    virtual void                CalcAbsIfRel( const ScAddress& );
-    virtual void                CalcRelFromAbs( const ScAddress& );
-    virtual BOOL                operator==( const ScToken& rToken ) const;
-};
-
 
 class ScMatrixToken : public ScToken
 {
@@ -424,50 +167,76 @@ private:
             ScMatrixRef         pMatrix;
 public:
                                 ScMatrixToken( ScMatrix* p ) :
-                                    ScToken( svMatrix ), pMatrix( p ) {}
+                                    ScToken( formula::svMatrix ), pMatrix( p ) {}
                                 ScMatrixToken( const ScMatrixToken& r ) :
                                     ScToken( r ), pMatrix( r.pMatrix ) {}
     virtual const ScMatrix*     GetMatrix() const;
     virtual ScMatrix*           GetMatrix();
-    virtual BOOL                operator==( const ScToken& rToken ) const;
+    virtual BOOL                operator==( const formula::FormulaToken& rToken ) const;
+    virtual FormulaToken*       Clone() const { return new ScMatrixToken(*this); }
 };
 
 
-class ScIndexToken : public ScOpToken
+class ScExternalSingleRefToken : public ScToken
 {
 private:
-            USHORT              nIndex;
+    sal_uInt16                  mnFileId;
+    String                      maTabName;
+    ScSingleRefData             maSingleRef;
+
+                                ScExternalSingleRefToken(); // disabled
 public:
-                                ScIndexToken( OpCode e, USHORT n ) :
-                                    ScOpToken( e, svIndex ), nIndex( n ) {}
-                                ScIndexToken( const ScIndexToken& r ) :
-                                    ScOpToken( r ), nIndex( r.nIndex ) {}
+                                ScExternalSingleRefToken( sal_uInt16 nFileId, const String& rTabName, const ScSingleRefData& r );
+                                ScExternalSingleRefToken( const ScExternalSingleRefToken& r );
+    virtual                     ~ScExternalSingleRefToken();
+
+    virtual USHORT                  GetIndex() const;
+    virtual const String&           GetString() const;
+    virtual const ScSingleRefData&  GetSingleRef() const;
+    virtual ScSingleRefData&          GetSingleRef();
+    virtual BOOL                operator==( const formula::FormulaToken& rToken ) const;
+};
+
+
+class ScExternalDoubleRefToken : public ScToken
+{
+private:
+    sal_uInt16                  mnFileId;
+    String                      maTabName;  // name of the first sheet
+    ScComplexRefData            maDoubleRef;
+
+                                ScExternalDoubleRefToken(); // disabled
+public:
+                                ScExternalDoubleRefToken( sal_uInt16 nFileId, const String& rTabName, const ScComplexRefData& r );
+                                ScExternalDoubleRefToken( const ScExternalDoubleRefToken& r );
+    virtual                     ~ScExternalDoubleRefToken();
+
+    virtual USHORT                 GetIndex() const;
+    virtual const String&          GetString() const;
+    virtual const ScSingleRefData& GetSingleRef() const;
+    virtual ScSingleRefData&       GetSingleRef();
+    virtual const ScSingleRefData& GetSingleRef2() const;
+    virtual ScSingleRefData&       GetSingleRef2();
+    virtual const ScComplexRefData&    GetDoubleRef() const;
+    virtual ScComplexRefData&      GetDoubleRef();
+    virtual BOOL                operator==( const formula::FormulaToken& rToken ) const;
+};
+
+
+class ScExternalNameToken : public ScToken
+{
+private:
+    sal_uInt16                  mnFileId;
+    String                      maName;
+private:
+                                ScExternalNameToken(); // disabled
+public:
+                                ScExternalNameToken( sal_uInt16 nFileId, const String& rName );
+                                ScExternalNameToken( const ScExternalNameToken& r );
+    virtual                     ~ScExternalNameToken();
     virtual USHORT              GetIndex() const;
-    virtual void                SetIndex( USHORT n );
-    virtual BOOL                operator==( const ScToken& rToken ) const;
-};
-
-
-class ScJumpToken : public ScOpToken
-{
-private:
-            short*              pJump;
-public:
-                                ScJumpToken( OpCode e, short* p ) :
-                                    ScOpToken( e, svJump )
-                                {
-                                    pJump = new short[ p[0] + 1 ];
-                                    memcpy( pJump, p, (p[0] + 1) * sizeof(short) );
-                                }
-                                ScJumpToken( const ScJumpToken& r ) :
-                                    ScOpToken( r )
-                                {
-                                    pJump = new short[ r.pJump[0] + 1 ];
-                                    memcpy( pJump, r.pJump, (r.pJump[0] + 1) * sizeof(short) );
-                                }
-    virtual                     ~ScJumpToken();
-    virtual short*              GetJump() const;
-    virtual BOOL                operator==( const ScToken& rToken ) const;
+    virtual const String&       GetString() const;
+    virtual BOOL                operator==( const formula::FormulaToken& rToken ) const;
 };
 
 
@@ -479,12 +248,13 @@ private:
             ScJumpMatrix*       pJumpMatrix;
 public:
                                 ScJumpMatrixToken( ScJumpMatrix* p ) :
-                                    ScToken( svJumpMatrix ), pJumpMatrix( p ) {}
+                                    ScToken( formula::svJumpMatrix ), pJumpMatrix( p ) {}
                                 ScJumpMatrixToken( const ScJumpMatrixToken& r ) :
                                     ScToken( r ), pJumpMatrix( r.pJumpMatrix ) {}
     virtual                     ~ScJumpMatrixToken();
     virtual ScJumpMatrix*       GetJumpMatrix() const;
-    virtual BOOL                operator==( const ScToken& rToken ) const;
+    virtual BOOL                operator==( const formula::FormulaToken& rToken ) const;
+    virtual FormulaToken*       Clone() const { return new ScJumpMatrixToken(*this); }
 };
 
 
@@ -496,84 +266,25 @@ private:
             ScRefList           aRefList;
 public:
                                 ScRefListToken() :
-                                    ScToken( svRefList ) {}
+                                    ScToken( formula::svRefList ) {}
                                 ScRefListToken( const ScRefListToken & r ) :
                                     ScToken( r ), aRefList( r.aRefList ) {}
     virtual void                CalcAbsIfRel( const ScAddress& );
     virtual void                CalcRelFromAbs( const ScAddress& );
     virtual const ScRefList*    GetRefList() const;
     virtual       ScRefList*    GetRefList();
-    virtual BOOL                operator==( const ScToken& rToken ) const;
+    virtual BOOL                operator==( const formula::FormulaToken& rToken ) const;
+    virtual FormulaToken*       Clone() const { return new ScRefListToken(*this); }
 };
 
 
-class ScExternalToken : public ScOpToken
-{
-private:
-            String              aExternal;
-            BYTE                nByte;
-public:
-                                ScExternalToken( OpCode e, BYTE n, const String& r ) :
-                                    ScOpToken( e, svExternal ), aExternal( r ),
-                                    nByte( n ) {}
-                                ScExternalToken( OpCode e, const String& r ) :
-                                    ScOpToken( e, svExternal ), aExternal( r ),
-                                    nByte( 0 ) {}
-                                ScExternalToken( const ScExternalToken& r ) :
-                                    ScOpToken( r ), aExternal( r.aExternal ),
-                                    nByte( r.nByte ) {}
-    virtual const String&       GetExternal() const;
-    virtual BYTE                GetByte() const;
-    virtual void                SetByte( BYTE n );
-    virtual BOOL                operator==( const ScToken& rToken ) const;
-};
-
-
-class ScMissingToken : public ScOpToken
-{
-public:
-                                ScMissingToken() :
-                                    ScOpToken( ocMissing, svMissing ) {}
-                                ScMissingToken( const ScMissingToken& r ) :
-                                    ScOpToken( r ) {}
-    virtual double              GetDouble() const;
-    virtual const String&       GetString() const;
-    virtual BOOL                operator==( const ScToken& rToken ) const;
-};
-
-
-class ScUnknownToken : public ScOpToken
-{
-public:
-                                ScUnknownToken( OpCode e ) :
-                                    ScOpToken( e, svUnknown ) {}
-                                ScUnknownToken( const ScUnknownToken& r ) :
-                                    ScOpToken( r ) {}
-    virtual BOOL                operator==( const ScToken& rToken ) const;
-};
-
-
-class ScErrorToken : public ScToken
-{
-            USHORT              nError;
-public:
-                                ScErrorToken( USHORT nErr ) :
-                                    ScToken( svError ), nError( nErr) {}
-                                ScErrorToken( const ScErrorToken& r ) :
-                                    ScToken( r ), nError( r.nError) {}
-    virtual USHORT              GetError() const;
-    virtual void                SetError( USHORT nErr );
-    virtual BOOL                operator==( const ScToken& rToken ) const;
-};
-
-
-class ScEmptyCellToken : public ScToken
+class SC_DLLPUBLIC ScEmptyCellToken : public ScToken
 {
             bool                bInherited          :1;
             bool                bDisplayedAsString  :1;
 public:
     explicit                    ScEmptyCellToken( bool bInheritedP, bool bDisplayAsString ) :
-                                    ScToken( svEmptyCell ),
+                                    ScToken( formula::svEmptyCell ),
                                     bInherited( bInheritedP ),
                                     bDisplayedAsString( bDisplayAsString ) {}
                                 ScEmptyCellToken( const ScEmptyCellToken& r ) :
@@ -584,12 +295,13 @@ public:
             bool                IsDisplayedAsString() const { return bDisplayedAsString; }
     virtual double              GetDouble() const;
     virtual const String &      GetString() const;
-    virtual BOOL                operator==( const ScToken& rToken ) const;
+    virtual BOOL                operator==( const formula::FormulaToken& rToken ) const;
+    virtual FormulaToken*       Clone() const { return new ScEmptyCellToken(*this); }
 };
 
 
 /**  Transports the result from the interpreter to the formula cell. */
-class ScMatrixCellResultToken : public ScToken
+class SC_DLLPUBLIC ScMatrixCellResultToken : public ScToken
 {
     // No non-const access implemented, silence down unxsols4 complaining about
     // the public GetMatrix() hiding the one from ScToken.
@@ -597,10 +309,10 @@ class ScMatrixCellResultToken : public ScToken
 
 protected:
             ScConstMatrixRef    xMatrix;
-            ScConstTokenRef     xUpperLeft;
+            formula::FormulaConstTokenRef     xUpperLeft;
 public:
-                                ScMatrixCellResultToken( ScMatrix* pMat, ScToken* pUL ) :
-                                    ScToken( svMatrixCell ),
+                                ScMatrixCellResultToken( ScMatrix* pMat, formula::FormulaToken* pUL ) :
+                                    ScToken( formula::svMatrixCell ),
                                     xMatrix( pMat), xUpperLeft( pUL) {}
                                 ScMatrixCellResultToken( const ScMatrixCellResultToken& r ) :
                                     ScToken( r ), xMatrix( r.xMatrix ),
@@ -608,14 +320,15 @@ public:
     virtual double              GetDouble() const;
     virtual const String &      GetString() const;
     virtual const ScMatrix*     GetMatrix() const;
-    virtual BOOL                operator==( const ScToken& rToken ) const;
-            StackVar            GetUpperLeftType() const
+    virtual BOOL                operator==( const formula::FormulaToken& rToken ) const;
+    virtual FormulaToken*       Clone() const { return new ScMatrixCellResultToken(*this); }
+    formula::StackVar           GetUpperLeftType() const
                                     {
                                         return xUpperLeft ?
                                             xUpperLeft->GetType() :
-                                            static_cast<StackVar>(svUnknown);
+                                            static_cast<formula::StackVar>(formula::svUnknown);
                                     }
-            ScConstTokenRef     GetUpperLeftToken() const   { return xUpperLeft; }
+    inline formula::FormulaConstTokenRef     GetUpperLeftToken() const   { return xUpperLeft; }
             void                Assign( const ScMatrixCellResultToken & r )
                                     {
                                         xMatrix = r.xMatrix;
@@ -626,7 +339,7 @@ public:
 
 /** Stores the matrix result at the formula cell, additionally the range the
     matrix formula occupies. */
-class ScMatrixFormulaCellToken : public ScMatrixCellResultToken
+class SC_DLLPUBLIC ScMatrixFormulaCellToken : public ScMatrixCellResultToken
 {
 private:
             SCROW               nRows;
@@ -644,7 +357,8 @@ public:
                                         if (xUpperLeft)
                                             xUpperLeft = xUpperLeft->Clone();
                                     }
-    virtual BOOL                operator==( const ScToken& rToken ) const;
+    virtual BOOL                operator==( const formula::FormulaToken& rToken ) const;
+    virtual FormulaToken*       Clone() const { return new ScMatrixFormulaCellToken(*this); }
             void                SetMatColsRows( SCCOL nC, SCROW nR )
                                     {
                                         nRows = nR;
@@ -671,10 +385,10 @@ public:
                                     appropriate Assign() call, other tokens
                                     are assigned to xUpperLeft and xMatrix will
                                     be assigned NULL. */
-            void                Assign( const ScToken & r );
+            void                Assign( const formula::FormulaToken & r );
 
-                                /** Modify xUpperLeft if svDouble, or create
-                                    new ScDoubleToken if not set yet. Does
+                                /** Modify xUpperLeft if formula::svDouble, or create
+                                    new formula::FormulaDoubleToken if not set yet. Does
                                     nothing if xUpperLeft is of different type! */
             void                SetUpperLeftDouble( double f);
 
@@ -688,7 +402,7 @@ public:
 };
 
 
-class ScHybridCellToken : public ScToken
+class SC_DLLPUBLIC ScHybridCellToken : public ScToken
 {
 private:
             double              fDouble;
@@ -698,7 +412,7 @@ public:
                                 ScHybridCellToken( double f,
                                         const String & rStr,
                                         const String & rFormula ) :
-                                    ScToken( svHybridCell ),
+                                    ScToken( formula::svHybridCell ),
                                     fDouble( f ), aString( rStr ),
                                     aFormula( rFormula ) {}
                                 ScHybridCellToken( const ScHybridCellToken& r ) :
@@ -707,7 +421,8 @@ public:
             const String &      GetFormula() const  { return aFormula; }
     virtual double              GetDouble() const;
     virtual const String &      GetString() const;
-    virtual BOOL                operator==( const ScToken& rToken ) const;
+    virtual BOOL                operator==( const formula::FormulaToken& rToken ) const;
+    virtual FormulaToken*       Clone() const { return new ScHybridCellToken(*this); }
 };
 
 
@@ -715,9 +430,9 @@ public:
 // ScDoubleRefToken
 class SingleDoubleRefModifier
 {
-    ComplRefData    aDub;
-    SingleRefData*  pS;
-    ComplRefData*   pD;
+    ScComplexRefData    aDub;
+    ScSingleRefData*  pS;
+    ScComplexRefData*   pD;
 
                 // not implemented, prevent usage
                 SingleDoubleRefModifier( const SingleDoubleRefModifier& );
@@ -726,7 +441,7 @@ class SingleDoubleRefModifier
 public:
                 SingleDoubleRefModifier( ScToken& rT )
                     {
-                        if ( rT.GetType() == svSingleRef )
+                        if ( rT.GetType() == formula::svSingleRef )
                         {
                             pS = &rT.GetSingleRef();
                             aDub.Ref1 = aDub.Ref2 = *pS;
@@ -738,7 +453,7 @@ public:
                             pD = &rT.GetDoubleRef();
                         }
                     }
-                SingleDoubleRefModifier( SingleRefData& rS )
+                SingleDoubleRefModifier( ScSingleRefData& rS )
                     {
                         pS = &rS;
                         aDub.Ref1 = aDub.Ref2 = *pS;
@@ -749,25 +464,25 @@ public:
                         if ( pS )
                             *pS = (*pD).Ref1;
                     }
-    inline  ComplRefData& Ref() { return *pD; }
+    inline  ScComplexRefData& Ref() { return *pD; }
 };
 
 class SingleDoubleRefProvider
 {
 public:
 
-    const SingleRefData&    Ref1;
-    const SingleRefData&    Ref2;
+    const ScSingleRefData&    Ref1;
+    const ScSingleRefData&    Ref2;
 
                 SingleDoubleRefProvider( const ScToken& r )
                         : Ref1( r.GetSingleRef() ),
-                        Ref2( r.GetType() == svDoubleRef ?
+                        Ref2( r.GetType() == formula::svDoubleRef ?
                         r.GetDoubleRef().Ref2 : Ref1 )
                     {}
-                SingleDoubleRefProvider( const SingleRefData& r )
+                SingleDoubleRefProvider( const ScSingleRefData& r )
                         : Ref1( r ), Ref2( r )
                     {}
-                SingleDoubleRefProvider( const ComplRefData& r )
+                SingleDoubleRefProvider( const ScComplexRefData& r )
                         : Ref1( r.Ref1 ), Ref2( r.Ref2 )
                     {}
                 ~SingleDoubleRefProvider()

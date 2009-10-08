@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: tp_TitleRotation.src,v $
- * $Revision: 1.10 $
+ * $Revision: 1.10.72.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -75,7 +75,22 @@ TabPage TP_ALIGNMENT
     {
         Pos = MAP_APPFONT ( 6 , 3  ) ;
         Size = MAP_APPFONT ( 248 , 8 ) ;
-        Text [ en-US ] = "Text direction" ;
+        Text [ en-US ] = "Text orientation" ;
+    };
+    FixedText FT_TEXTDIR
+    {
+        Pos = MAP_APPFONT ( 12 , 65 ) ;
+        Size = MAP_APPFONT ( 64 , 8 ) ;
+        Text [ en-US ] = "Te~xt direction" ;
+    };
+    ListBox LB_TEXTDIR
+    {
+        HelpId = HID_SCH_TEXTDIRECTION_TITLE ;
+        Pos = MAP_APPFONT ( 78 , 63 ) ;
+        Size = MAP_APPFONT ( 170 , 100 ) ;
+        Border = TRUE;
+        TabStop = TRUE;
+        DropDown = TRUE;
     };
 };
 

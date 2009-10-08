@@ -379,6 +379,7 @@ public:
                             const ScPatternAttr* pPattern, sal_uInt32 nForcedXFId,
                             double fValue );
 
+    virtual void        SaveXml( XclExpXmlStream& rStrm );
 private:
     virtual void        WriteContents( XclExpStream& rStrm );
 
@@ -398,6 +399,7 @@ public:
                             const ScPatternAttr* pPattern, sal_uInt32 nForcedXFId,
                             bool bValue );
 
+    virtual void        SaveXml( XclExpXmlStream& rStrm );
 private:
     virtual void        WriteContents( XclExpStream& rStrm );
 
@@ -417,6 +419,7 @@ public:
                             const ScPatternAttr* pPattern, sal_uInt32 nForcedXFId,
                             sal_uInt8 nErrCode );
 
+    virtual void        SaveXml( XclExpXmlStream& rStrm );
 private:
     virtual void        WriteContents( XclExpStream& rStrm );
 
@@ -454,6 +457,7 @@ public:
     /** Returns true if the cell contains multi-line text. */
     virtual bool        IsMultiLineText() const;
 
+    virtual void        SaveXml( XclExpXmlStream& rStrm );
 private:
     /** Initializes the record contents. Called from constructors. */
     void                Init( const XclExpRoot& rRoot,
@@ -486,6 +490,7 @@ public:
 
     /** Writes the FORMULA record and additional records related to the formula. */
     virtual void        Save( XclExpStream& rStrm );
+    virtual void        SaveXml( XclExpXmlStream& rStrm );
 
 private:
     virtual void        WriteContents( XclExpStream& rStrm );
@@ -525,6 +530,7 @@ public:
     /** Writes the record, calls WriteContents() for each contained cell.
         @descr  May write several records, if unused XF indexes are contained. */
     virtual void        Save( XclExpStream& rStrm );
+    virtual void        SaveXml( XclExpXmlStream& rStrm );
 
 protected:
     explicit            XclExpMultiCellBase( sal_uInt16 nRecId, sal_uInt16 nMulRecId,
@@ -558,6 +564,7 @@ private:
     /** Derived classes write the remaining contents of the specified cell (without XF index).
         @param nRelCol  Relative column index (starts with 0 for first cell of this record). */
     virtual void        WriteContents( XclExpStream& rStrm, sal_uInt16 nRelCol ) = 0;
+    virtual void        WriteXmlContents( XclExpXmlStream& rStrm, const XclAddress& rAddress, sal_uInt32 nXFId, sal_uInt16 nRelCol ) = 0;
 
 private:
     typedef ::std::deque< XclExpMultiXFId > XclExpMultiXFIdDeq;
@@ -591,6 +598,7 @@ public:
 private:
     /** Writes the remaining contents of the specified cell (without XF index). */
     virtual void        WriteContents( XclExpStream& rStrm, sal_uInt16 nRelCol );
+    virtual void        WriteXmlContents( XclExpXmlStream& rStrm, const XclAddress& rAddress, sal_uInt32 nXFId, sal_uInt16 nRelCol );
 };
 
 // ----------------------------------------------------------------------------
@@ -611,6 +619,7 @@ public:
 private:
     /** Writes the remaining contents of the specified cell (without XF index). */
     virtual void        WriteContents( XclExpStream& rStrm, sal_uInt16 nRelCol );
+    virtual void        WriteXmlContents( XclExpXmlStream& rStrm, const XclAddress& rAddress, sal_uInt32 nXFId, sal_uInt16 nRelCol );
 
 private:
     ScfInt32Vec         maRkValues;     /// The cell values.
@@ -714,6 +723,7 @@ public:
                             sal_uInt16 nFirstUsedXclCol, sal_uInt32 nFirstUsedXclRow,
                             sal_uInt16 nFirstFreeXclCol, sal_uInt32 nFirstFreeXclRow );
 
+    virtual void        SaveXml( XclExpXmlStream& rStrm );
 private:
     /** Writes the contents of the DIMENSIONS record. */
     virtual void        WriteBody( XclExpStream& rStrm );
@@ -785,6 +795,8 @@ public:
     /** Returns true, if the column has default format and width. */
     bool                IsDefault( const XclExpDefcolwidth& rDefColWidth ) const;
 
+    virtual void        SaveXml( XclExpXmlStream& rStrm );
+
 private:
     /** Writes the contents of this COLINFO record. */
     virtual void        WriteBody( XclExpStream& rStrm );
@@ -820,6 +832,7 @@ public:
 
     /** Writes all COLINFO records of this buffer. */
     virtual void        Save( XclExpStream& rStrm );
+    virtual void        SaveXml( XclExpXmlStream& rStrm );
 
 private:
     typedef XclExpRecordList< XclExpColinfo >   XclExpColinfoList;
@@ -931,6 +944,7 @@ public:
 
     /** Writes the ROW record if the row is not disabled (see DisableIfDefault() function). */
     virtual void        Save( XclExpStream& rStrm );
+    virtual void        SaveXml( XclExpXmlStream& rStrm );
 
 private:
     /** Initializes the record data. Called from constructors. */
@@ -949,6 +963,7 @@ private:
     sal_uInt16          mnHeight;           /// Row height in twips.
     sal_uInt16          mnFlags;            /// Flags for the ROW record.
     sal_uInt16          mnXFIndex;          /// Default row formatting.
+    sal_uInt16          mnOutlineLevel;     /// Outline Level (for OOXML)
     bool                mbAlwaysEmpty;      /// true = Do not add blank cells in Finalize().
     bool                mbEnabled;          /// true = Write this ROW record.
 };
@@ -979,6 +994,9 @@ public:
 
     /** Writes the DIMENSIONS record, all ROW records and all cell records. */
     virtual void        Save( XclExpStream& rStrm );
+    virtual void        SaveXml( XclExpXmlStream& rStrm );
+
+    XclExpDimensions*   GetDimensions();
 
 private:
     /** Returns access to the specified ROW record. Inserts preceding missing ROW records.
@@ -1045,6 +1063,7 @@ public:
     XclExpRecordRef     CreateRecord( sal_uInt16 nRecId ) const;
     /** Saves the entire cell table. */
     virtual void        Save( XclExpStream& rStrm );
+    virtual void        SaveXml( XclExpXmlStream& rStrm );
 
 private:
     typedef XclExpRecordList< XclExpNote >      XclExpNoteList;

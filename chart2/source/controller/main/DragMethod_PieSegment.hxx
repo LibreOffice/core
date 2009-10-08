@@ -43,11 +43,15 @@ public:
         , const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >& xChartModel );
     virtual ~DragMethod_PieSegment();
 
-    virtual void TakeComment(String& rStr) const;
-    virtual void MovPoint(Point& rPnt);
-    virtual FASTBOOL Beg();
-    virtual void Mov(const Point& rPnt);
-    virtual FASTBOOL End(FASTBOOL bCopy);
+    virtual void TakeSdrDragComment(String& rStr) const;
+    virtual bool BeginSdrDrag();
+    virtual void MoveSdrDrag(const Point& rPnt);
+    virtual bool EndSdrDrag(bool bCopy);
+
+    virtual basegfx::B2DHomMatrix getCurrentTransformation();
+
+protected:
+    virtual void createSdrDragEntries();
 
 private:
     ::basegfx::B2DVector    m_aStartVector;

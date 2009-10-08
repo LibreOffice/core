@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: XclImpChangeTrack.cxx,v $
- * $Revision: 1.34 $
+ * $Revision: 1.34.48.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -40,6 +40,7 @@
 #include "chgtrack.hxx"
 #include "xihelper.hxx"
 #include "xilink.hxx"
+#include "externalrefmgr.hxx"
 
 //___________________________________________________________________
 // class XclImpChangeTrack
@@ -153,10 +154,11 @@ sal_Bool XclImpChangeTrack::CheckRecord( sal_uInt16 nOpCode )
     return aRecHeader.nIndex != 0;
 }
 
-sal_Bool XclImpChangeTrack::Read3DTabRefInfo( SCTAB& rFirstTab, SCTAB& rLastTab )
+sal_Bool XclImpChangeTrack::Read3DTabRefInfo( SCTAB& rFirstTab, SCTAB& rLastTab, ExcelToSc8::ExternalTabInfo& rExtInfo )
 {
     if( LookAtuInt8() == 0x01 )
     {
+        rExtInfo.mbExternal = false;
         // internal ref - read tab num and return sc tab num (position in TABID list)
         pStrm->Ignore( 3 );
         rFirstTab = static_cast< SCTAB >( GetTabInfo().GetCurrentIndex( pStrm->ReaduInt16(), nTabIdCount ) );
@@ -176,7 +178,13 @@ sal_Bool XclImpChangeTrack::Read3DTabRefInfo( SCTAB& rFirstTab, SCTAB& rLastTab 
         // - sheet name, always separated from URL
         String aTabName( pStrm->ReadUniString() );
         pStrm->Ignore( 1 );
-        rFirstTab = rLastTab = static_cast<SCTAB>(GetLinkManager().GetScTab( aUrl, aTabName ));
+
+        rExtInfo.mbExternal = true;
+        ScExternalRefManager* pRefMgr = GetDoc().GetExternalRefManager();
+        pRefMgr->convertToAbsName(aUrl);
+        rExtInfo.mnFileId = pRefMgr->getExternalFileId(aUrl);
+        rExtInfo.maTabName = aTabName;
+        rFirstTab = rLastTab = 0;
     }
     return sal_True;
 }
@@ -327,7 +335,8 @@ void XclImpChangeTrack::ReadChTrCellContent()
     if( CheckRecord( EXC_CHTR_OP_CELL ) )
     {
         ScAddress aPosition;
-        aPosition.SetTab( ReadTabNum() );
+        SCTAB nTab = ReadTabNum();
+        aPosition.SetTab( nTab );
         sal_uInt16 nValueType;
         *pStrm >> nValueType;
         sal_uInt16 nOldValueType = (nValueType >> 3) & EXC_CHTR_TYPE_MASK;
@@ -488,9 +497,9 @@ XclImpChTrFmlConverter::~XclImpChTrFmlConverter()
 }
 
 // virtual, called from ExcToSc8::Convert()
-BOOL XclImpChTrFmlConverter::Read3DTabReference( XclImpStream& rStrm, SCTAB& rFirstTab, SCTAB& rLastTab )
+bool XclImpChTrFmlConverter::Read3DTabReference( UINT16 /*nIxti*/, SCTAB& rFirstTab, SCTAB& rLastTab,
+                                                 ExternalTabInfo& rExtInfo )
 {
-    rStrm.Ignore( 2 );
-    return rChangeTrack.Read3DTabRefInfo( rFirstTab, rLastTab );
+    return rChangeTrack.Read3DTabRefInfo( rFirstTab, rLastTab, rExtInfo );
 }
 

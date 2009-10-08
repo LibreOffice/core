@@ -54,8 +54,8 @@ class ScUndoInsertCells: public ScMoveUndo
 public:
                     TYPEINFO();
                     ScUndoInsertCells( ScDocShell* pNewDocShell,
-                                       const ScRange& rRange, InsCellCmd eNewCmd,
-                                       ScDocument* pUndoDocument, ScRefUndoData* pRefData,
+                                       const ScRange& rRange, SCTAB nNewCount, SCTAB* pNewTabs, SCTAB* pNewScenarios,
+                                       InsCellCmd eNewCmd, ScDocument* pUndoDocument, ScRefUndoData* pRefData,
                                        BOOL bNewPartOfPaste );
     virtual         ~ScUndoInsertCells();
 
@@ -70,6 +70,9 @@ public:
 
 private:
     ScRange         aEffRange;
+    SCTAB           nCount;
+    SCTAB*          pTabs;
+    SCTAB*          pScenarios;
     ULONG           nEndChangeAction;
     InsCellCmd      eCmd;
     BOOL            bPartOfPaste;
@@ -85,8 +88,8 @@ class ScUndoDeleteCells: public ScMoveUndo
 public:
                     TYPEINFO();
                     ScUndoDeleteCells( ScDocShell* pNewDocShell,
-                                       const ScRange& rRange, DelCellCmd eNewCmd,
-                                       ScDocument* pUndoDocument, ScRefUndoData* pRefData );
+                                       const ScRange& rRange, SCTAB nNewCount, SCTAB* pNewTabs, SCTAB* pNewScenarios,
+                                       DelCellCmd eNewCmd, ScDocument* pUndoDocument, ScRefUndoData* pRefData );
     virtual         ~ScUndoDeleteCells();
 
     virtual void    Undo();
@@ -98,6 +101,9 @@ public:
 
 private:
     ScRange         aEffRange;
+    SCTAB           nCount;
+    SCTAB*          pTabs;
+    SCTAB*          pScenarios;
     ULONG           nStartChangeAction;
     ULONG           nEndChangeAction;
     DelCellCmd      eCmd;
@@ -705,7 +711,7 @@ public:
 private:
     ScDocument*     pUndoDoc;
     String          aFormula;
-    ScAddress::Convention eConv;
+    formula::FormulaGrammar::AddressConvention eConv;
     ULONG           nStartChangeAction;
     ULONG           nEndChangeAction;
 

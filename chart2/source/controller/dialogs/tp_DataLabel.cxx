@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: tp_DataLabel.cxx,v $
- * $Revision: 1.9 $
+ * $Revision: 1.9.72.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -42,7 +42,7 @@ namespace chart
 
 DataLabelsTabPage::DataLabelsTabPage(Window* pWindow, const SfxItemSet& rInAttrs) :
         SfxTabPage(pWindow, SchResId(TP_DATA_DESCR), rInAttrs),
-        m_aDataLabelResources(this, rInAttrs)
+        m_aDataLabelResources(this, rInAttrs, true)
 {
     FreeResource();
 }

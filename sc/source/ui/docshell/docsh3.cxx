@@ -429,14 +429,13 @@ void ScDocShell::InitOptions()          // Fortsetzung von InitNew (CLOOKs)
     //  Einstellungen aus dem SpellCheckCfg kommen in Doc- und ViewOptions
 
     USHORT nDefLang, nCjkLang, nCtlLang;
-    BOOL bAutoSpell, bHideAuto;
-    ScModule::GetSpellSettings( nDefLang, nCjkLang, nCtlLang, bAutoSpell, bHideAuto );
+    BOOL bAutoSpell;
+    ScModule::GetSpellSettings( nDefLang, nCjkLang, nCtlLang, bAutoSpell );
     ScModule* pScMod = SC_MOD();
 
     ScDocOptions  aDocOpt  = pScMod->GetDocOptions();
     ScViewOptions aViewOpt = pScMod->GetViewOptions();
     aDocOpt.SetAutoSpell( bAutoSpell );
-    aViewOpt.SetHideAutoSpell( bHideAuto );
 
     // zweistellige Jahreszahleneingabe aus Extras->Optionen->Allgemein->Sonstiges
     aDocOpt.SetYear2000( sal::static_int_cast<USHORT>( SFX_APP()->GetMiscConfig()->GetYear2000() ) );
@@ -1043,7 +1042,7 @@ void ScDocShell::MergeDocument( ScDocument& rOtherDoc, bool bShared, bool bCheck
                                     aValue.Erase( aValue.Len()-1, 1 );
                                     GetDocFunc().EnterMatrix( aSourceRange,
                                             NULL, NULL, aValue, FALSE, FALSE,
-                                            ScGrammar::GRAM_DEFAULT );
+                                           formula::FormulaGrammar::GRAM_DEFAULT );
                                 }
                                 break;
                                 case MM_REFERENCE :     // do nothing
@@ -1065,10 +1064,10 @@ void ScDocShell::MergeDocument( ScDocument& rOtherDoc, bool bShared, bool bCheck
                         }
                         break;
                         case SC_CAT_INSERT_ROWS:
-                            GetDocFunc().InsertCells( aSourceRange, INS_INSROWS, TRUE, FALSE );
+                            GetDocFunc().InsertCells( aSourceRange, NULL, INS_INSROWS, TRUE, FALSE );
                         break;
                         case SC_CAT_INSERT_COLS:
-                            GetDocFunc().InsertCells( aSourceRange, INS_INSCOLS, TRUE, FALSE );
+                            GetDocFunc().InsertCells( aSourceRange, NULL, INS_INSCOLS, TRUE, FALSE );
                         break;
                         case SC_CAT_DELETE_TABS :
                             GetDocFunc().DeleteTable( aSourceRange.aStart.Tab(), TRUE, FALSE );
@@ -1079,7 +1078,7 @@ void ScDocShell::MergeDocument( ScDocument& rOtherDoc, bool bShared, bool bCheck
                             if ( pDel->IsTopDelete() )
                             {
                                 aSourceRange = pDel->GetOverAllRange().MakeRange();
-                                GetDocFunc().DeleteCells( aSourceRange, DEL_DELROWS, TRUE, FALSE );
+                                GetDocFunc().DeleteCells( aSourceRange, NULL, DEL_DELROWS, TRUE, FALSE );
                             }
                         }
                         break;
@@ -1089,7 +1088,7 @@ void ScDocShell::MergeDocument( ScDocument& rOtherDoc, bool bShared, bool bCheck
                             if ( pDel->IsTopDelete() && !pDel->IsTabDeleteCol() )
                             {   // deleted Table enthaelt deleted Cols, die nicht
                                 aSourceRange = pDel->GetOverAllRange().MakeRange();
-                                GetDocFunc().DeleteCells( aSourceRange, DEL_DELCOLS, TRUE, FALSE );
+                                GetDocFunc().DeleteCells( aSourceRange, NULL, DEL_DELCOLS, TRUE, FALSE );
                             }
                         }
                         break;

@@ -40,6 +40,7 @@
 #include <algorithm>
 #define INCLUDED_ALGORITHM
 #endif
+#include "scdllapi.h"
 
 const size_t nScCompressedArrayDelta = 4;
 
@@ -120,7 +121,7 @@ public:
 
     // methods public for the coupled array sum methods
     /** Obtain index into entries for nPos */
-    size_t                      Search( A nPos ) const;
+    SC_DLLPUBLIC size_t                      Search( A nPos ) const;
     /** Get number of entries */
     size_t                      GetEntryCount() const;
     /** Get data entry for an index */
@@ -489,7 +490,7 @@ public:
         ((aValue & rBitMask) == rMaskedCompare), searching between nStart and
         nEnd. If no entry meets this condition, ::std::numeric_limits<A>::max()
         is returned. */
-    A                           GetFirstForCondition( A nStart, A nEnd,
+    SC_DLLPUBLIC A                           GetFirstForCondition( A nStart, A nEnd,
                                     const D& rBitMask,
                                     const D& rMaskedCompare ) const;
 
@@ -497,7 +498,7 @@ public:
         ((aValue & rBitMask) == rMaskedCompare), searching between nStart and
         nEnd. If no entry meets this condition, ::std::numeric_limits<A>::max()
         is returned. */
-    A                           GetLastForCondition( A nStart, A nEnd,
+    SC_DLLPUBLIC A                           GetLastForCondition( A nStart, A nEnd,
                                     const D& rBitMask,
                                     const D& rMaskedCompare ) const;
 
@@ -509,7 +510,7 @@ public:
 
     /** Whether there is any entry between nStart and nEnd where the condition
         is met: ((aValue & rBitMask) == rMaskedCompare) */
-    bool                        HasCondition( A nStart, A nEnd,
+    SC_DLLPUBLIC bool                        HasCondition( A nStart, A nEnd,
                                     const D& rBitMask,
                                     const D& rMaskedCompare ) const;
 
@@ -535,14 +536,14 @@ public:
     /** Sum values of a ScSummableCompressedArray for each row where in *this*
         array the condition is met: ((aValue & rBitMask) == rMaskedCompare). */
     template< typename S >
-    unsigned long               SumCoupledArrayForCondition( A nStart, A nEnd,
+    SC_DLLPUBLIC unsigned long               SumCoupledArrayForCondition( A nStart, A nEnd,
                                     const D& rBitMask, const D& rMaskedCompare,
                                     const ScSummableCompressedArray<A,S>& rArray ) const;
 
     /** Sum scaled values of a ScSummableCompressedArray for each row where in
         *this* array the condition is met: ((aValue & rBitMask) == rMaskedCompare). */
     template< typename S >
-    unsigned long               SumScaledCoupledArrayForCondition( A nStart, A nEnd,
+    SC_DLLPUBLIC unsigned long               SumScaledCoupledArrayForCondition( A nStart, A nEnd,
                                     const D& rBitMask, const D& rMaskedCompare,
                                     const ScSummableCompressedArray<A,S>& rArray,
                                     double fScale ) const;
@@ -577,7 +578,7 @@ void ScBitMaskCompressedArray<A,D>::OrValue( A nPos, const D& rValueToOr )
 template< typename A, typename D, typename S > class ScCoupledCompressedArrayIterator
 {
 public:
-                                ScCoupledCompressedArrayIterator(
+    SC_DLLPUBLIC                            ScCoupledCompressedArrayIterator(
                                         const ScBitMaskCompressedArray<A,D> & rArray1,
                                         A nStart, A nEnd,
                                         const D& rBitMask,
@@ -590,7 +591,7 @@ public:
     A                           GetPos() const;
                                 operator bool() const;
     const S&                    operator *() const;
-    bool                        NextRange();
+    SC_DLLPUBLIC bool                        NextRange();
     A                           GetRangeStart() const;
     A                           GetRangeEnd() const;
     void                        Resync( A nPos );

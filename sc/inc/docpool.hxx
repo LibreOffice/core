@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: docpool.hxx,v $
- * $Revision: 1.10.32.1 $
+ * $Revision: 1.10.144.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -32,12 +32,13 @@
 #define SC_SCDOCPOL_HXX
 
 #include <svtools/itempool.hxx>
+#include "scdllapi.h"
 
 class ScStyleSheet;
 
 //------------------------------------------------------------------------
 
-class ScDocumentPool: public SfxItemPool
+class SC_DLLPUBLIC ScDocumentPool: public SfxItemPool
 {
     SfxPoolItem**   ppPoolDefaults;
     SfxItemPool*    pSecondary;
@@ -51,6 +52,7 @@ class ScDocumentPool: public SfxItemPool
     static USHORT*  pVersionMap8;
     static USHORT*  pVersionMap9;
     static USHORT*  pVersionMap10;
+    static USHORT*  pVersionMap11;
 
 public:
             ScDocumentPool( SfxItemPool* pSecPool = NULL, BOOL bLoadRefCounts = FALSE );

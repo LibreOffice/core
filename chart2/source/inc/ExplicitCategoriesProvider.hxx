@@ -36,11 +36,13 @@
 #include <com/sun/star/chart2/XCoordinateSystem.hpp>
 #include <com/sun/star/chart2/data/XTextualDataSequence.hpp>
 #include <com/sun/star/frame/XModel.hpp>
+#include "charttoolsdllapi.hxx"
 
 namespace chart
 {
 
-class ExplicitCategoriesProvider : public ::cppu::WeakImplHelper1<
+class OOO_DLLPUBLIC_CHARTTOOLS ExplicitCategoriesProvider :
+        public ::cppu::WeakImplHelper1<
         ::com::sun::star::chart2::data::XTextualDataSequence
         >
 {

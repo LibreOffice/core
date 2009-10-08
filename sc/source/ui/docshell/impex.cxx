@@ -65,6 +65,7 @@ class StarBASIC;
 #include <unotools/transliterationwrapper.hxx>
 
 #include "global.hxx"
+#include "scerrors.hxx"
 #include "docsh.hxx"
 #include "undoblk.hxx"
 #include "rangenam.hxx"
@@ -73,8 +74,6 @@ class StarBASIC;
 #include "filter.hxx"
 #include "asciiopt.hxx"
 #include "cell.hxx"
-#include "rtfimp.hxx"
-#include "htmlimp.hxx"
 #include "docoptio.hxx"
 #include "progress.hxx"
 #include "scitems.hxx"
@@ -90,6 +89,7 @@ class StarBASIC;
 #include "globstr.hrc"
 #include <vcl/msgbox.hxx>
 #include <vcl/svapp.hxx>
+#include <osl/module.hxx>
 
 //========================================================================
 
@@ -172,7 +172,7 @@ ScImportExport::ScImportExport( ScDocument* p, const String& rPos )
                 pData->GetSymbol( aPos );                   // mit dem Inhalt weitertesten
         }
     }
-    ScAddress::Convention eConv = pDoc->GetAddressConvention();
+    formula::FormulaGrammar::AddressConvention eConv = pDoc->GetAddressConvention();
     // Bereich?
     if( aRange.Parse( aPos, pDoc, eConv ) & SCA_VALID )
         bSingle = FALSE;
@@ -1479,8 +1479,9 @@ BOOL ScImportExport::Sylk2Doc( SvStream& rStrm )
                             /* FIXME: do we want GRAM_ODFF_A1 instead? At the
                              * end it probably should be GRAM_ODFF_R1C1, since
                              * R1C1 is what Excel writes in SYLK. */
-                            const ScGrammar::Grammar eGrammar = ScGrammar::GRAM_PODF_A1;
-                            ScCompiler aComp( pDoc, aPos, eGrammar );
+                            const formula::FormulaGrammar::Grammar eGrammar = formula::FormulaGrammar::GRAM_PODF_A1;
+                            ScCompiler aComp( pDoc, aPos);
+                            aComp.SetGrammar(eGrammar);
                             ScTokenArray* pCode = aComp.CompileString( aText );
                             if ( ch == 'M' )
                             {
@@ -1680,7 +1681,7 @@ BOOL ScImportExport::Doc2Sylk( SvStream& rStrm )
                                 aCellStr.Erase();
                             break;
                             default:
-                                pFCell->GetFormula( aCellStr, ScGrammar::GRAM_PODF_A1);
+                                pFCell->GetFormula( aCellStr,formula::FormulaGrammar::GRAM_PODF_A1);
                                 /* FIXME: do we want GRAM_ODFF_A1 instead? At
                                  * the end it probably should be
                                  * GRAM_ODFF_R1C1, since R1C1 is what Excel
@@ -1755,7 +1756,7 @@ BOOL ScImportExport::Doc2Sylk( SvStream& rStrm )
 BOOL ScImportExport::Doc2HTML( SvStream& rStrm, const String& rBaseURL )
 {
     // CharSet is ignored in ScExportHTML, read from Load/Save HTML options
-    ScExportHTML( rStrm, rBaseURL, pDoc, aRange, RTL_TEXTENCODING_DONTKNOW, bAll,
+    ScFormatFilter::Get().ScExportHTML( rStrm, rBaseURL, pDoc, aRange, RTL_TEXTENCODING_DONTKNOW, bAll,
         aStreamPath, aNonConvertibleChars );
     return BOOL( rStrm.GetError() == SVSTREAM_OK );
 }
@@ -1763,7 +1764,7 @@ BOOL ScImportExport::Doc2HTML( SvStream& rStrm, const String& rBaseURL )
 BOOL ScImportExport::Doc2RTF( SvStream& rStrm )
 {
     //  CharSet is ignored in ScExportRTF
-    ScExportRTF( rStrm, pDoc, aRange, RTL_TEXTENCODING_DONTKNOW );
+    ScFormatFilter::Get().ScExportRTF( rStrm, pDoc, aRange, RTL_TEXTENCODING_DONTKNOW );
     return BOOL( rStrm.GetError() == SVSTREAM_OK );
 }
 
@@ -1771,7 +1772,7 @@ BOOL ScImportExport::Doc2RTF( SvStream& rStrm )
 BOOL ScImportExport::Doc2Dif( SvStream& rStrm )
 {
     // for DIF in the clipboard, IBM_850 is always used
-    ScExportDif( rStrm, pDoc, aRange, RTL_TEXTENCODING_IBM_850 );
+    ScFormatFilter::Get().ScExportDif( rStrm, pDoc, aRange, RTL_TEXTENCODING_IBM_850 );
     return TRUE;
 }
 
@@ -1783,7 +1784,7 @@ BOOL ScImportExport::Dif2Doc( SvStream& rStrm )
     pImportDoc->InitUndo( pDoc, nTab, nTab );
 
     // for DIF in the clipboard, IBM_850 is always used
-    ScImportDif( rStrm, pImportDoc, aRange.aStart, RTL_TEXTENCODING_IBM_850 );
+    ScFormatFilter::Get().ScImportDif( rStrm, pImportDoc, aRange.aStart, RTL_TEXTENCODING_IBM_850 );
 
     SCCOL nEndCol;
     SCROW nEndRow;
@@ -1812,44 +1813,100 @@ BOOL ScImportExport::Dif2Doc( SvStream& rStrm )
 
 BOOL ScImportExport::RTF2Doc( SvStream& rStrm, const String& rBaseURL )
 {
-    ScRTFImport aImp( pDoc, aRange );
-    aImp.Read( rStrm, rBaseURL );
-    aRange = aImp.GetRange();
+    ScEEAbsImport *pImp = ScFormatFilter::Get().CreateRTFImport( pDoc, aRange );
+    if (pImp)
+        return false;
+    pImp->Read( rStrm, rBaseURL );
+    aRange = pImp->GetRange();
 
     BOOL bOk = StartPaste();
     if (bOk)
     {
         USHORT nFlags = IDF_ALL & ~IDF_STYLES;
         pDoc->DeleteAreaTab( aRange, nFlags );
-        aImp.WriteToDocument();
+        pImp->WriteToDocument();
         EndPaste();
     }
-
+    delete pImp;
     return bOk;
 }
 
 
 BOOL ScImportExport::HTML2Doc( SvStream& rStrm, const String& rBaseURL )
 {
-    ScHTMLImport aImp( pDoc, rBaseURL, aRange );
-    aImp.Read( rStrm, rBaseURL );
-    aRange = aImp.GetRange();
+    ScEEAbsImport *pImp = ScFormatFilter::Get().CreateHTMLImport( pDoc, rBaseURL, aRange, TRUE);
+    if (pImp)
+        return false;
+    pImp->Read( rStrm, rBaseURL );
+    aRange = pImp->GetRange();
 
     BOOL bOk = StartPaste();
     if (bOk)
     {
-        //  ScHTMLImport may call ScDocument::InitDrawLayer, resulting in
-        //  a Draw Layer but no Draw View -> create Draw Layer and View here
+        // ScHTMLImport may call ScDocument::InitDrawLayer, resulting in
+        // a Draw Layer but no Draw View -> create Draw Layer and View here
         if (pDocSh)
             pDocSh->MakeDrawLayer();
 
         USHORT nFlags = IDF_ALL & ~IDF_STYLES;
         pDoc->DeleteAreaTab( aRange, nFlags );
-        aImp.WriteToDocument();
+        pImp->WriteToDocument();
         EndPaste();
     }
-
+    delete pImp;
     return bOk;
 }
 
+#define RETURN_ERROR { return eERR_INTERN; }
+class ScFormatFilterMissing : public ScFormatFilterPlugin {
+  public:
+    ScFormatFilterMissing()
+    {
+      OSL_ASSERT ("Missing file filters");
+    }
+    virtual FltError ScImportLotus123( SfxMedium&, ScDocument*, CharSet ) RETURN_ERROR
+    virtual FltError ScImportQuattroPro( SfxMedium &, ScDocument * ) RETURN_ERROR
+    virtual FltError ScImportExcel( SfxMedium&, ScDocument*, const EXCIMPFORMAT ) RETURN_ERROR
+    virtual FltError ScImportStarCalc10( SvStream&, ScDocument* ) RETURN_ERROR
+    virtual FltError ScImportDif( SvStream&, ScDocument*, const ScAddress&,
+                 const CharSet, UINT32 ) RETURN_ERROR
+    virtual FltError ScImportRTF( SvStream&, const String&, ScDocument*, ScRange& ) RETURN_ERROR
+    virtual FltError ScImportHTML( SvStream&, const String&, ScDocument*, ScRange&, double, BOOL ) RETURN_ERROR
 
+    virtual ScEEAbsImport *CreateRTFImport( ScDocument*, const ScRange& ) { return NULL; }
+    virtual ScEEAbsImport *CreateHTMLImport( ScDocument*, const String&, const ScRange&, BOOL ) { return NULL; }
+    virtual String         GetHTMLRangeNameList( ScDocument*, const String& ) { return String(); }
+
+#if ENABLE_LOTUS123_EXPORT
+    virtual FltError ScExportLotus123( SvStream&, ScDocument*, ExportFormatLotus, CharSet ) RETURN_ERROR
+#endif
+    virtual FltError ScExportExcel5( SfxMedium&, ScDocument*, ExportFormatExcel, CharSet ) RETURN_ERROR
+    virtual FltError ScExportDif( SvStream&, ScDocument*, const ScAddress&, const CharSet, UINT32 ) RETURN_ERROR
+    virtual FltError ScExportDif( SvStream&, ScDocument*, const ScRange&, const CharSet, UINT32 ) RETURN_ERROR
+    virtual FltError ScExportHTML( SvStream&, const String&, ScDocument*, const ScRange&, const CharSet, BOOL,
+                  const String&, String& ) RETURN_ERROR
+    virtual FltError ScExportRTF( SvStream&, ScDocument*, const ScRange&, const CharSet ) RETURN_ERROR
+};
+
+extern "C" { static void SAL_CALL thisModule() {} }
+typedef ScFormatFilterPlugin * (*FilterFn)(void);
+ScFormatFilterPlugin &ScFormatFilter::Get()
+{
+    static ScFormatFilterPlugin *plugin;
+
+    if (plugin != NULL)
+        return *plugin;
+
+    static ::osl::Module aModule;
+    if ( aModule.loadRelative( &thisModule,
+                   ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( SVLIBRARY( "scfilt" ) ) ) ) )
+    {
+    oslGenericFunction fn = aModule.getFunctionSymbol( ::rtl::OUString::createFromAscii( "ScFilterCreate" ) );
+    if (fn != NULL)
+        plugin = reinterpret_cast<FilterFn>(fn)();
+    }
+    if (plugin == NULL)
+        plugin = new ScFormatFilterMissing();
+
+    return *plugin;
+}

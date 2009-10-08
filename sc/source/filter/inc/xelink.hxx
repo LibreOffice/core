@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: xelink.hxx,v $
- * $Revision: 1.13 $
+ * $Revision: 1.13.134.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -33,13 +33,14 @@
 
 #include "markdata.hxx"
 #include "xllink.hxx"
-#include "xehelper.hxx"
 #include "xerecord.hxx"
+#include "xehelper.hxx"
 #include "xeformula.hxx"
+#include "externalrefmgr.hxx"
 
 class ScRange;
-struct SingleRefData;
-struct ComplRefData;
+struct ScSingleRefData;
+struct ScComplexRefData;
 
 /* ============================================================================
 Classes for export of different kinds of internal/external references.
@@ -173,16 +174,28 @@ public:
     /** Searches for a special EXTERNSHEET index for the own document. */
     sal_uInt16          FindExtSheet( sal_Unicode cCode );
 
+    void                FindExtSheet( sal_uInt16 nFileId, const String& rTabName, sal_uInt16 nXclTabSpan,
+                                      sal_uInt16& rnExtSheet, sal_uInt16& rnFirstSBTab, sal_uInt16& rnLastSBTab,
+                                      XclExpRefLogEntry* pRefLogEntry = NULL );
+
     /** Stores the cell with the given address in a CRN record list. */
-    void                StoreCell( const SingleRefData& rRef );
+    void                StoreCell( const ScSingleRefData& rRef );
     /** Stores all cells in the given range in a CRN record list. */
-    void                StoreCellRange( const ComplRefData& rRef );
+    void                StoreCellRange( const ScComplexRefData& rRef );
+
+    void                StoreCell( sal_uInt16 nFileId, const String& rTabName, const ScSingleRefData& rRef );
+
+    void                StoreCellRange( sal_uInt16 nFileId, const String& rTabName, const ScComplexRefData& rRef );
 
     /** Finds or inserts an EXTERNNAME record for an add-in function name.
         @param rnExtSheet  (out-param) Returns the index of the EXTSHEET structure for the add-in function name.
         @param rnExtName  (out-param) Returns the 1-based EXTERNNAME record index.
         @return  true = add-in function inserted; false = error (i.e. not supported in current BIFF). */
     bool                InsertAddIn(
+                            sal_uInt16& rnExtSheet, sal_uInt16& rnExtName,
+                            const String& rName );
+    /** InsertEuroTool */
+    bool                InsertEuroTool(
                             sal_uInt16& rnExtSheet, sal_uInt16& rnExtName,
                             const String& rName );
     /** Finds or inserts an EXTERNNAME record for DDE links.
@@ -192,6 +205,10 @@ public:
     bool                InsertDde(
                             sal_uInt16& rnExtSheet, sal_uInt16& rnExtName,
                             const String& rApplic, const String& rTopic, const String& rItem );
+
+    bool                InsertExtName(
+                            sal_uInt16& rnExtSheet, sal_uInt16& rnExtName, const String& rUrl,
+                            const String& rName, const ScExternalRefCache::TokenArrayRef pArray );
 
     /** Writes the entire Link table. */
     virtual void        Save( XclExpStream& rStrm );

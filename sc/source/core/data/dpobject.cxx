@@ -56,6 +56,7 @@
 #include "scitems.hxx"
 #include "unonames.hxx"
 
+#include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/sheet/GeneralFunction.hpp>
 #include <com/sun/star/sheet/DataPilotFieldFilter.hpp>
 #include <com/sun/star/sheet/DataPilotFieldOrientation.hpp>
@@ -83,6 +84,8 @@ using ::com::sun::star::uno::UNO_QUERY;
 using ::com::sun::star::uno::Any;
 using ::com::sun::star::sheet::DataPilotTableHeaderData;
 using ::com::sun::star::sheet::DataPilotTablePositionData;
+using ::com::sun::star::beans::XPropertySet;
+using ::rtl::OUString;
 
 // -----------------------------------------------------------------------
 
@@ -169,7 +172,7 @@ ScDPObject::ScDPObject( ScDocument* pD ) :
 }
 
 ScDPObject::ScDPObject(const ScDPObject& r) :
-    DataObject(),
+    ScDataObject(),
     pDoc( r.pDoc ),
     pSaveData( NULL ),
     aTableName( r.aTableName ),
@@ -205,7 +208,7 @@ ScDPObject::~ScDPObject()
     delete pServDesc;
 }
 
-DataObject* ScDPObject::Clone() const
+ScDataObject* ScDPObject::Clone() const
 {
     return new ScDPObject(*this);
 }
@@ -393,7 +396,7 @@ void ScDPObject::CreateObjects()
             if ( pImpDesc )
             {
                 // database data
-                pData = new ScDatabaseDPData( pDoc->GetServiceManager(), *pImpDesc );
+                pData = new ScDatabaseDPData( pDoc, *pImpDesc );
             }
             else
             {
@@ -768,7 +771,7 @@ long ScDPObject::GetDimCount()
     return nRet;
 }
 
-void ScDPObject::FillPageList( TypedStrCollection& rStrings, long nField )
+void ScDPObject::FillPageList( TypedScStrCollection& rStrings, long nField )
 {
     //! merge members access with ToggleDetails?
 
@@ -835,16 +838,24 @@ void ScDPObject::FillPageList( TypedStrCollection& rStrings, long nField )
     uno::Sequence<rtl::OUString> aNames = xMembers->getElementNames();
     long nNameCount = aNames.getLength();
     const rtl::OUString* pNameArr = aNames.getConstArray();
-    for (long nPos=0; nPos<nNameCount; nPos++)
+    for (long nPos = 0; nPos < nNameCount; ++nPos)
     {
-        TypedStrData* pData = new TypedStrData( pNameArr[nPos] );
+        // Make sure to insert only visible members.
+        Reference<XPropertySet> xPropSet(xMembers->getByName(pNameArr[nPos]), UNO_QUERY);
+        sal_Bool bVisible = false;
+        if (xPropSet.is())
+        {
+            Any any = xPropSet->getPropertyValue(OUString::createFromAscii(SC_UNO_ISVISIBL));
+            any >>= bVisible;
+        }
 
-//      if ( !rStrings.Insert( pData ) )
-//          delete pData;                               // duplicate
-
-        // use the order from getElementNames
-        if ( !rStrings.AtInsert( rStrings.GetCount(), pData ) )
-            delete pData;
+        if (bVisible)
+        {
+            // use the order from getElementNames
+            TypedStrData* pData = new TypedStrData( pNameArr[nPos] );
+            if ( !rStrings.AtInsert( rStrings.GetCount(), pData ) )
+                delete pData;
+        }
     }
 
     //  add "-all-" entry to the top (unsorted)
@@ -901,7 +912,7 @@ BOOL ScDPObject::GetHeaderDrag( const ScAddress& rPos, BOOL bMouseLeft, BOOL bMo
     return pOutput->GetHeaderDrag( rPos, bMouseLeft, bMouseTop, nDragDim, rPosRect, rOrient, rDimPos );
 }
 
-void ScDPObject::GetMemberResultNames( StrCollection& rNames, long nDimension )
+void ScDPObject::GetMemberResultNames( ScStrCollection& rNames, long nDimension )
 {
     CreateOutput();             // create xSource and pOutput if not already done
 
@@ -2281,7 +2292,49 @@ uno::Reference<sheet::XDimensionsSupplier> ScDPObject::CreateSource( const ScDPS
     return xRet;
 }
 
-// -----------------------------------------------------------------------
+// ============================================================================
+
+ScDPCacheCell::ScDPCacheCell() :
+    mnStrId(ScSimpleSharedString::EMPTY),
+    mnType(SC_VALTYPE_EMPTY),
+    mfValue(0.0),
+    mbNumeric(false)
+{
+}
+
+ScDPCacheCell::ScDPCacheCell(const ScDPCacheCell& r) :
+    mnStrId(r.mnStrId),
+    mnType(r.mnType),
+    mfValue(r.mfValue),
+    mbNumeric(r.mbNumeric)
+{
+}
+
+ScDPCacheCell::~ScDPCacheCell()
+{
+}
+
+// ============================================================================
+
+size_t ScDPCollection::CacheCellHash::operator()(const ScDPCacheCell* pCell) const
+{
+    return pCell->mnStrId + static_cast<size_t>(pCell->mnType) +
+        static_cast<size_t>(pCell->mfValue) + static_cast<size_t>(pCell->mbNumeric);
+}
+
+bool ScDPCollection::CacheCellEqual::operator()(const ScDPCacheCell* p1, const ScDPCacheCell* p2) const
+{
+    if (!p1 && !p2)
+        return true;
+
+    if ((!p1 && p2) || (p1 && !p2))
+        return false;
+
+    return p1->mnStrId == p2->mnStrId && p1->mfValue == p2->mfValue &&
+        p1->mbNumeric == p2->mbNumeric && p1->mnType == p2->mnType;
+}
+
+// ----------------------------------------------------------------------------
 
 ScDPCollection::ScDPCollection(ScDocument* pDocument) :
     pDoc( pDocument )
@@ -2289,16 +2342,19 @@ ScDPCollection::ScDPCollection(ScDocument* pDocument) :
 }
 
 ScDPCollection::ScDPCollection(const ScDPCollection& r) :
-    Collection(r),
-    pDoc(r.pDoc)
+    ScCollection(r),
+    pDoc(r.pDoc),
+    maSharedString(r.maSharedString),
+    maCacheCellPool(r.maCacheCellPool)
 {
 }
 
 ScDPCollection::~ScDPCollection()
 {
+    clearCacheCellPool();
 }
 
-DataObject* ScDPCollection::Clone() const
+ScDataObject* ScDPCollection::Clone() const
 {
     return new ScDPCollection(*this);
 }
@@ -2400,12 +2456,60 @@ String ScDPCollection::CreateNewName( USHORT nMin ) const
     return String();                    // should not happen
 }
 
-//UNUSED2008-05  void ScDPCollection::EnsureNames()
-//UNUSED2008-05  {
-//UNUSED2008-05      for (USHORT i=0; i<nCount; i++)
-//UNUSED2008-05          if (!((const ScDPObject*)At(i))->GetName().Len())
-//UNUSED2008-05              ((ScDPObject*)At(i))->SetName( CreateNewName() );
-//UNUSED2008-05  }
+ScSimpleSharedString& ScDPCollection::GetSharedString()
+{
+    return maSharedString;
+}
+
+ScDPCacheCell* ScDPCollection::getCacheCellFromPool(const ScDPCacheCell& rCell)
+{
+    ScDPCacheCell aCell(rCell);
+    CacheCellPoolType::iterator itr = maCacheCellPool.find(&aCell);
+    if (itr == maCacheCellPool.end())
+    {
+        // Insert a new instance.
+        ScDPCacheCell* p = new ScDPCacheCell(rCell);
+        ::std::pair<CacheCellPoolType::iterator, bool> r =
+            maCacheCellPool.insert(p);
+        if (!r.second)
+            delete p;
+
+        ScDPCacheCell* p2 = r.second ? *r.first : NULL;
+        DBG_ASSERT(p == p2, "ScDPCollection::getCacheCellFromPool: pointer addresses differ");
+        return p2;
+    }
+    return *itr;
+}
+
+namespace {
+
+class DeleteCacheCells : public ::std::unary_function<ScDPCacheCell*, void>
+{
+public:
+    void operator()(ScDPCacheCell* p) const
+    {
+        delete p;
+    }
+};
+
+}
+
+void ScDPCollection::clearCacheCellPool()
+{
+    // Transferring all stored pointers to a vector first.  For some unknown
+    // reason, deleting cell content instances by directly iterating through
+    // the hash set causes the iteration to return an identical pointer
+    // value twice, causing a double-delete.  I have no idea why this happens.
+
+    using ::std::copy;
+    using ::std::back_inserter;
+
+    vector<ScDPCacheCell*> ps;
+    ps.reserve(maCacheCellPool.size());
+    copy(maCacheCellPool.begin(), maCacheCellPool.end(), back_inserter(ps));
+    for_each(ps.begin(), ps.end(), DeleteCacheCells());
+    maCacheCellPool.clear();
+}
 
 //------------------------------------------------------------------------
 //  convert old pivot tables into new datapilot tables

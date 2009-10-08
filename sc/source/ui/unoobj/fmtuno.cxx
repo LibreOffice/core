@@ -135,7 +135,7 @@ ScConditionMode lcl_ConditionOperatorToMode( sheet::ConditionOperator eOper )
 //UNUSED2008-05  }
 
 ScTableConditionalFormat::ScTableConditionalFormat(ScDocument* pDoc, ULONG nKey,
-                                                    const ScGrammar::Grammar eGrammar)
+                                                    const formula::FormulaGrammar::Grammar eGrammar)
 {
     //  Eintrag aus dem Dokument lesen...
 
@@ -167,7 +167,7 @@ ScTableConditionalFormat::ScTableConditionalFormat(ScDocument* pDoc, ULONG nKey,
 }
 
 void ScTableConditionalFormat::FillFormat( ScConditionalFormat& rFormat,
-                                            ScDocument* pDoc, ScGrammar::Grammar eGrammar ) const
+                                            ScDocument* pDoc, formula::FormulaGrammar::Grammar eGrammar ) const
 {
     //  ScConditionalFormat = Core-Struktur, muss leer sein
 
@@ -181,12 +181,12 @@ void ScTableConditionalFormat::FillFormat( ScConditionalFormat& rFormat,
 
         ScCondFormatEntryItem aData;
         pEntry->GetData(aData);
-        if (eGrammar == ScGrammar::GRAM_UNSPECIFIED)
+        if (eGrammar == formula::FormulaGrammar::GRAM_UNSPECIFIED)
             eGrammar = aData.meGrammar;
-        if (eGrammar == ScGrammar::GRAM_UNSPECIFIED)
+        if (eGrammar == formula::FormulaGrammar::GRAM_UNSPECIFIED)
         {
             DBG_ERRORFILE("FillFormat: unspecified grammar, using GRAM_PODF_A1");
-            eGrammar = ScGrammar::GRAM_PODF_A1;
+            eGrammar = formula::FormulaGrammar::GRAM_PODF_A1;
         }
         ScCondFormatEntry aCoreEntry( static_cast<ScConditionMode>(aData.mnMode),
             aData.maExpr1, aData.maExpr2, pDoc, aData.maPos, aData.maStyle, eGrammar );
@@ -197,14 +197,14 @@ void ScTableConditionalFormat::FillFormat( ScConditionalFormat& rFormat,
         if ( aData.maTokens1.getLength() )
         {
             ScTokenArray aTokenArray;
-            if ( ScTokenConversion::ConvertToTokenArray(aTokenArray, aData.maTokens1) )
+            if ( ScTokenConversion::ConvertToTokenArray(*pDoc, aTokenArray, aData.maTokens1) )
                 aCoreEntry.SetFormula1(aTokenArray);
         }
 
         if ( aData.maTokens2.getLength() )
         {
             ScTokenArray aTokenArray;
-            if ( ScTokenConversion::ConvertToTokenArray(aTokenArray, aData.maTokens2) )
+            if ( ScTokenConversion::ConvertToTokenArray(*pDoc, aTokenArray, aData.maTokens2) )
                 aCoreEntry.SetFormula2(aTokenArray);
         }
         rFormat.AddEntry( aCoreEntry );
@@ -306,7 +306,7 @@ void SAL_CALL ScTableConditionalFormat::addNew(
         {
             sal_Int32 nVal = 0;
             if ( rProp.Value >>= nVal )
-                aEntry.meGrammar = static_cast<ScGrammar::Grammar>(nVal);
+                aEntry.meGrammar = static_cast<formula::FormulaGrammar::Grammar>(nVal);
         }
         else
         {
@@ -599,14 +599,8 @@ void SAL_CALL ScTableConditionalEntry::setStyleName( const rtl::OUString& aStyle
 
 //------------------------------------------------------------------------
 
-//UNUSED2008-05  ScTableValidationObj::ScTableValidationObj() :
-//UNUSED2008-05  aPropSet( lcl_GetValidatePropertyMap() ),
-//UNUSED2008-05  meGrammar( ScGrammar::GRAM_UNSPECIFIED )
-//UNUSED2008-05  {
-//UNUSED2008-05  }
-
 ScTableValidationObj::ScTableValidationObj(ScDocument* pDoc, ULONG nKey,
-                                            const ScGrammar::Grammar eGrammar) :
+                                            const formula::FormulaGrammar::Grammar eGrammar) :
     aPropSet( lcl_GetValidatePropertyMap() )
 {
     //  Eintrag aus dem Dokument lesen...
@@ -638,16 +632,16 @@ ScTableValidationObj::ScTableValidationObj(ScDocument* pDoc, ULONG nKey,
 }
 
 ScValidationData* ScTableValidationObj::CreateValidationData( ScDocument* pDoc,
-                                            ScGrammar::Grammar eGrammar ) const
+                                            formula::FormulaGrammar::Grammar eGrammar ) const
 {
     //  ScValidationData = Core-Struktur
 
-    if (eGrammar == ScGrammar::GRAM_UNSPECIFIED)
+    if (eGrammar == formula::FormulaGrammar::GRAM_UNSPECIFIED)
         eGrammar = meGrammar;
-    if (eGrammar == ScGrammar::GRAM_UNSPECIFIED)
+    if (eGrammar == formula::FormulaGrammar::GRAM_UNSPECIFIED)
     {
         DBG_ERRORFILE("CreateValidationData: unspecified grammar, using GRAM_PODF_A1");
-        eGrammar = ScGrammar::GRAM_PODF_A1;
+        eGrammar = formula::FormulaGrammar::GRAM_PODF_A1;
     }
 
     ScValidationData* pRet = new ScValidationData( (ScValidationMode)nValMode,
@@ -660,14 +654,14 @@ ScValidationData* ScTableValidationObj::CreateValidationData( ScDocument* pDoc,
     if ( aTokens1.getLength() )
     {
         ScTokenArray aTokenArray;
-        if ( ScTokenConversion::ConvertToTokenArray(aTokenArray, aTokens1) )
+        if ( ScTokenConversion::ConvertToTokenArray(*pDoc, aTokenArray, aTokens1) )
             pRet->SetFormula1(aTokenArray);
     }
 
     if ( aTokens2.getLength() )
     {
         ScTokenArray aTokenArray;
-        if ( ScTokenConversion::ConvertToTokenArray(aTokenArray, aTokens2) )
+        if ( ScTokenConversion::ConvertToTokenArray(*pDoc, aTokenArray, aTokens2) )
             pRet->SetFormula2(aTokenArray);
     }
 
@@ -697,7 +691,7 @@ void ScTableValidationObj::ClearData_Impl()
     aSrcPos.Set(0,0,0);
     aExpr1.Erase();
     aExpr2.Erase();
-    meGrammar = ScGrammar::GRAM_UNSPECIFIED;  // will be overriden when needed
+    meGrammar = formula::FormulaGrammar::GRAM_UNSPECIFIED;  // will be overriden when needed
     aInputTitle.Erase();
     aInputMessage.Erase();
     aErrorTitle.Erase();
@@ -906,7 +900,7 @@ void SAL_CALL ScTableValidationObj::setPropertyValue(
 
         sal_Int32 nVal = 0;
         if ( aValue >>= nVal )
-            meGrammar = static_cast<ScGrammar::Grammar>(nVal);
+            meGrammar = static_cast<formula::FormulaGrammar::Grammar>(nVal);
     }
 
     DataChanged();

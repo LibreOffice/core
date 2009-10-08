@@ -33,6 +33,8 @@
 #include "xestyle.hxx"
 
 #include <algorithm>
+#include <iterator>
+#include <set>
 #include <com/sun/star/i18n/ScriptType.hpp>
 #include <vcl/font.hxx>
 #include <svtools/zformat.hxx>
@@ -55,6 +57,11 @@
 #include "attrib.hxx"
 #include "globstr.hrc"
 #include "xestring.hxx"
+
+#include <oox/core/tokens.hxx>
+
+using ::rtl::OString;
+using ::rtl::OUString;
 
 // PALETTE record - color information =========================================
 
@@ -264,6 +271,7 @@ public:
     bool                IsDefaultPalette() const;
     /** Writes the color list (contents of the palette record) to the passed stream. */
     void                WriteBody( XclExpStream& rStrm );
+    void                SaveXml( XclExpXmlStream& rStrm );
 
 private:
     /** Returns the Excel index of a 0-based color index. */
@@ -492,6 +500,22 @@ void XclExpPaletteImpl::WriteBody( XclExpStream& rStrm )
     rStrm << static_cast< sal_uInt16 >( maPalette.size() );
     for( XclPaletteColorVec::const_iterator aIt = maPalette.begin(), aEnd = maPalette.end(); aIt != aEnd; ++aIt )
         rStrm << aIt->maColor;
+}
+
+void XclExpPaletteImpl::SaveXml( XclExpXmlStream& rStrm )
+{
+    if( !maPalette.size() )
+        return;
+
+    sax_fastparser::FSHelperPtr& rStyleSheet = rStrm.GetCurrentStream();
+    rStyleSheet->startElement( XML_colors, FSEND );
+    rStyleSheet->startElement( XML_indexedColors, FSEND );
+    for( XclPaletteColorVec::const_iterator aIt = maPalette.begin(), aEnd = maPalette.end(); aIt != aEnd; ++aIt )
+        rStyleSheet->singleElement( XML_rgbColor,
+                XML_rgb,    XclXmlUtils::ToOString( aIt->maColor ).getStr(),
+                FSEND );
+    rStyleSheet->endElement( XML_indexedColors );
+    rStyleSheet->endElement( XML_colors );
 }
 
 const Color& XclExpPaletteImpl::GetOriginalColor( sal_uInt32 nColorId ) const
@@ -784,6 +808,12 @@ void XclExpPalette::Save( XclExpStream& rStrm )
         XclExpRecord::Save( rStrm );
 }
 
+void XclExpPalette::SaveXml( XclExpXmlStream& rStrm )
+{
+    if( !mxImpl->IsDefaultPalette() )
+        mxImpl->SaveXml( rStrm );
+}
+
 void XclExpPalette::WriteBody( XclExpStream& rStrm )
 {
     mxImpl->WriteBody( rStrm );
@@ -832,6 +862,15 @@ XclExpFont::XclExpFont( const XclExpRoot& rRoot,
 bool XclExpFont::Equals( const XclFontData& rFontData, sal_uInt32 nHash ) const
 {
     return (mnHash == nHash) && (maData == rFontData);
+}
+
+void XclExpFont::SaveXml( XclExpXmlStream& rStrm )
+{
+    sax_fastparser::FSHelperPtr& rStyleSheet = rStrm.GetCurrentStream();
+    rStyleSheet->startElement( XML_font, FSEND );
+    rStrm.WriteFontData( maData, XML_name );
+    // OOXTODO: XML_scheme; //scheme/@val values: "major", "minor", "none"
+    rStyleSheet->endElement( XML_font );
 }
 
 // private --------------------------------------------------------------------
@@ -968,6 +1007,21 @@ void XclExpFontBuffer::Save( XclExpStream& rStrm )
     maFontList.Save( rStrm );
 }
 
+void XclExpFontBuffer::SaveXml( XclExpXmlStream& rStrm )
+{
+    if( maFontList.IsEmpty() )
+        return;
+
+    sax_fastparser::FSHelperPtr& rStyleSheet = rStrm.GetCurrentStream();
+    rStyleSheet->startElement( XML_fonts,
+            XML_count,  OString::valueOf( (sal_Int32) maFontList.GetSize() ).getStr(),
+            FSEND );
+
+    maFontList.SaveXml( rStrm );
+
+    rStyleSheet->endElement( XML_fonts );
+}
+
 sal_Int16 XclExpFontBuffer::GetFirstUsedScript( const SfxItemSet& rItemSet )
 {
     /*  #i17050# We need to determine if a CJK or CTL font item is set in the
@@ -1090,8 +1144,9 @@ void XclExpFontBuffer::InitDefaultFonts()
             maFontList.AppendRecord( xFont );
             maFontList.AppendRecord( xFont );
             maFontList.AppendRecord( xFont );
-            // the blind font with index 4
-            maFontList.AppendNewRecord( new XclExpBlindFont( GetRoot() ) );
+            if( GetOutput() == EXC_OUTPUT_BINARY )
+                // the blind font with index 4
+                maFontList.AppendNewRecord( new XclExpBlindFont( GetRoot() ) );
         }
         break;
         default:
@@ -1176,6 +1231,25 @@ void XclExpNumFmtBuffer::Save( XclExpStream& rStrm )
         WriteFormatRecord( rStrm, *aIt );
 }
 
+void XclExpNumFmtBuffer::SaveXml( XclExpXmlStream& rStrm )
+{
+    if( !maFormatMap.size() )
+        return;
+
+    sax_fastparser::FSHelperPtr& rStyleSheet = rStrm.GetCurrentStream();
+    rStyleSheet->startElement( XML_numFmts,
+            XML_count,  OString::valueOf( (sal_Int32) maFormatMap.size() ).getStr(),
+            FSEND );
+    for( XclExpNumFmtVec::const_iterator aIt = maFormatMap.begin(), aEnd = maFormatMap.end(); aIt != aEnd; ++aIt )
+    {
+        rStyleSheet->singleElement( XML_numFmt,
+                XML_numFmtId,   OString::valueOf( sal_Int32(aIt->mnXclNumFmt) ).getStr(),
+                XML_formatCode, XclXmlUtils::ToOString( GetFormatCode( *aIt ) ).getStr(),
+                FSEND );
+    }
+    rStyleSheet->endElement( XML_numFmts );
+}
+
 void XclExpNumFmtBuffer::WriteFormatRecord( XclExpStream& rStrm, sal_uInt16 nXclNumFmt, const String& rFormatStr )
 {
     XclExpString aExpStr;
@@ -1190,6 +1264,11 @@ void XclExpNumFmtBuffer::WriteFormatRecord( XclExpStream& rStrm, sal_uInt16 nXcl
 }
 
 void XclExpNumFmtBuffer::WriteFormatRecord( XclExpStream& rStrm, const XclExpNumFmt& rFormat )
+{
+    WriteFormatRecord( rStrm, rFormat.mnXclNumFmt, GetFormatCode( rFormat ) );
+}
+
+String XclExpNumFmtBuffer::GetFormatCode( const XclExpNumFmt& rFormat )
 {
     String aFormatStr;
 
@@ -1230,7 +1309,7 @@ void XclExpNumFmtBuffer::WriteFormatRecord( XclExpStream& rStrm, const XclExpNum
         aFormatStr.AssignAscii( "General" );
     }
 
-    WriteFormatRecord( rStrm, rFormat.mnXclNumFmt, aFormatStr );
+    return aFormatStr;
 }
 
 // XF, STYLE record - Cell formatting =========================================
@@ -1255,6 +1334,14 @@ void XclExpCellProt::FillToXF3( sal_uInt16& rnProt ) const
 {
     ::set_flag( rnProt, EXC_XF_LOCKED, mbLocked );
     ::set_flag( rnProt, EXC_XF_HIDDEN, mbHidden );
+}
+
+void XclExpCellProt::SaveXml( XclExpXmlStream& rStrm ) const
+{
+    rStrm.GetCurrentStream()->singleElement( XML_protection,
+            XML_locked,     XclXmlUtils::ToPsz( mbLocked ),
+            XML_hidden,     XclXmlUtils::ToPsz( mbHidden ),
+            FSEND );
 }
 
 // ----------------------------------------------------------------------------
@@ -1369,6 +1456,50 @@ void XclExpCellAlign::FillToXF8( sal_uInt16& rnAlign, sal_uInt16& rnMiscAttrib )
     ::insert_value( rnMiscAttrib, mnTextDir, 6, 2 );
 }
 
+static const char* ToHorizontalAlignment( sal_uInt8 nHorAlign )
+{
+    switch( nHorAlign )
+    {
+        case EXC_XF_HOR_GENERAL:    return "general";
+        case EXC_XF_HOR_LEFT:       return "left";
+        case EXC_XF_HOR_CENTER:     return "center";
+        case EXC_XF_HOR_RIGHT:      return "right";
+        case EXC_XF_HOR_FILL:       return "fill";
+        case EXC_XF_HOR_JUSTIFY:    return "justify";
+        case EXC_XF_HOR_CENTER_AS:  return "centerContinuous";
+        case EXC_XF_HOR_DISTRIB:    return "distributed";
+    }
+    return "*unknown*";
+}
+
+static const char* ToVerticalAlignment( sal_uInt8 nVerAlign )
+{
+    switch( nVerAlign )
+    {
+        case EXC_XF_VER_TOP:        return "top";
+        case EXC_XF_VER_CENTER:     return "center";
+        case EXC_XF_VER_BOTTOM:     return "bottom";
+        case EXC_XF_VER_JUSTIFY:    return "justify";
+        case EXC_XF_VER_DISTRIB:    return "distributed";
+    }
+    return "*unknown*";
+}
+
+void XclExpCellAlign::SaveXml( XclExpXmlStream& rStrm ) const
+{
+    rStrm.GetCurrentStream()->singleElement( XML_alignment,
+            XML_horizontal,         ToHorizontalAlignment( mnHorAlign ),
+            XML_vertical,           ToVerticalAlignment( mnVerAlign ),
+            XML_textRotation,       OString::valueOf( (sal_Int32) mnRotation ).getStr(),
+            XML_wrapText,           XclXmlUtils::ToPsz( mbLineBreak ),
+            XML_indent,             OString::valueOf( (sal_Int32) mnIndent ).getStr(),
+            // OOXTODO: XML_relativeIndent,     mnIndent?
+            // OOXTODO: XML_justifyLastLine,
+            XML_shrinkToFit,        XclXmlUtils::ToPsz( mbShrink ),
+            // OOXTODO: XML_readingOrder,
+            FSEND );
+}
+
 // ----------------------------------------------------------------------------
 
 namespace {
@@ -1439,7 +1570,7 @@ bool XclExpCellBorder::FillFromItemSet(
             lclGetBorderLine( nBLTRLine, nBLTRColorId, rBLTRItem.GetLine(), rPalette, eBiff );
             mbDiagBLtoTR = (nBLTRLine != EXC_LINE_NONE);
 
-            if( ::HasPriority( rTLBRItem.GetLine(), rBLTRItem.GetLine() ) )
+            if( ::ScHasPriority( rTLBRItem.GetLine(), rBLTRItem.GetLine() ) )
             {
                 mnDiagLine = nTLBRLine;
                 mnDiagColorId = nTLBRColorId;
@@ -1545,6 +1676,61 @@ void XclExpCellBorder::FillToCF8( sal_uInt16& rnLine, sal_uInt32& rnColor ) cons
     ::insert_value( rnColor, mnBottomColor, 23, 7 );
 }
 
+static const char* ToLineStyle( sal_uInt8 nLineStyle )
+{
+    switch( nLineStyle )
+    {
+        case EXC_LINE_NONE:     return "none";
+        case EXC_LINE_THIN:     return "thin";
+        case EXC_LINE_MEDIUM:   return "medium";
+        case EXC_LINE_THICK:    return "thick";
+        case EXC_LINE_DOUBLE:   return "double";
+        case EXC_LINE_HAIR:     return "hair";
+    }
+    return "*unknown*";
+}
+
+static void lcl_WriteBorder( XclExpXmlStream& rStrm, sal_Int32 nElement, sal_uInt8 nLineStyle, const Color& rColor )
+{
+    sax_fastparser::FSHelperPtr& rStyleSheet = rStrm.GetCurrentStream();
+    if( nLineStyle == EXC_LINE_NONE )
+        rStyleSheet->singleElement( nElement, FSEND );
+    else if( rColor == Color( 0, 0, 0, 0 ) )
+        rStyleSheet->singleElement( nElement,
+                XML_style,  ToLineStyle( nLineStyle ),
+                FSEND );
+    else
+    {
+        rStyleSheet->startElement( nElement,
+                XML_style,  ToLineStyle( nLineStyle ),
+                FSEND );
+        rStyleSheet->singleElement( XML_color,
+                XML_rgb,    XclXmlUtils::ToOString( rColor ).getStr(),
+                FSEND );
+        rStyleSheet->endElement( nElement );
+    }
+}
+
+void XclExpCellBorder::SaveXml( XclExpXmlStream& rStrm ) const
+{
+    sax_fastparser::FSHelperPtr& rStyleSheet = rStrm.GetCurrentStream();
+
+    XclExpPalette& rPalette = rStrm.GetRoot().GetPalette();
+
+    rStyleSheet->startElement( XML_border,
+            XML_diagonalUp,     XclXmlUtils::ToPsz( mbDiagBLtoTR ),
+            XML_diagonalDown,   XclXmlUtils::ToPsz( mbDiagTLtoBR ),
+            // OOXTODO: XML_outline,
+            FSEND );
+    lcl_WriteBorder( rStrm, XML_left,       mnLeftLine,     rPalette.GetColor( mnLeftColor ) );
+    lcl_WriteBorder( rStrm, XML_right,      mnRightLine,    rPalette.GetColor( mnRightColor ) );
+    lcl_WriteBorder( rStrm, XML_top,        mnTopLine,      rPalette.GetColor( mnTopColor ) );
+    lcl_WriteBorder( rStrm, XML_bottom,     mnBottomLine,   rPalette.GetColor( mnBottomColor ) );
+    lcl_WriteBorder( rStrm, XML_diagonal,   mnDiagLine,     rPalette.GetColor( mnDiagColor ) );
+    // OOXTODO: XML_vertical, XML_horizontal
+    rStyleSheet->endElement( XML_border );
+}
+
 // ----------------------------------------------------------------------------
 
 XclExpCellArea::XclExpCellArea() :
@@ -1614,6 +1800,52 @@ void XclExpCellArea::FillToCF8( sal_uInt16& rnPattern, sal_uInt16& rnColor ) con
     ::insert_value( rnColor,   aTmp.mnForeColor,  0, 7 );
     ::insert_value( rnColor,   aTmp.mnBackColor,  7, 7 );
     ::insert_value( rnPattern, aTmp.mnPattern,   10, 6 );
+}
+
+static const char* ToPatternType( sal_uInt8 nPattern )
+{
+    switch( nPattern )
+    {
+        case EXC_PATT_NONE:         return "none";
+        case EXC_PATT_SOLID:        return "solid";
+        case EXC_PATT_50_PERC:      return "mediumGray";
+        case EXC_PATT_75_PERC:      return "darkGray";
+        case EXC_PATT_25_PERC:      return "lightGray";
+        case EXC_PATT_12_5_PERC:    return "gray125";
+        case EXC_PATT_6_25_PERC:    return "gray0625";
+    }
+    return "*unknown*";
+}
+
+void XclExpCellArea::SaveXml( XclExpXmlStream& rStrm ) const
+{
+    sax_fastparser::FSHelperPtr& rStyleSheet = rStrm.GetCurrentStream();
+    rStyleSheet->startElement( XML_fill,
+            FSEND );
+
+    // OOXTODO: XML_gradientFill
+
+    XclExpPalette& rPalette = rStrm.GetRoot().GetPalette();
+
+    if( mnPattern == EXC_PATT_NONE || ( mnForeColor == 0 && mnBackColor == 0 ) )
+        rStyleSheet->singleElement( XML_patternFill,
+                XML_patternType,    ToPatternType( mnPattern ),
+                FSEND );
+    else
+    {
+        rStyleSheet->startElement( XML_patternFill,
+                XML_patternType,    ToPatternType( mnPattern ),
+                FSEND );
+        rStyleSheet->singleElement( XML_fgColor,
+                XML_rgb,    XclXmlUtils::ToOString( rPalette.GetColor( mnForeColor ) ).getStr(),
+                FSEND );
+        rStyleSheet->singleElement( XML_bgColor,
+                XML_rgb,    XclXmlUtils::ToOString( rPalette.GetColor( mnBackColor ) ).getStr(),
+                FSEND );
+        rStyleSheet->endElement( XML_patternFill );
+    }
+
+    rStyleSheet->endElement( XML_fill );
 }
 
 // ----------------------------------------------------------------------------
@@ -1804,6 +2036,46 @@ void XclExpXF::WriteBody( XclExpStream& rStrm )
     }
 }
 
+void XclExpXF::SetXmlIds( sal_uInt32 nBorderId, sal_uInt32 nFillId )
+{
+    mnBorderId = nBorderId;
+    mnFillId   = nFillId;
+}
+
+void XclExpXF::SaveXml( XclExpXmlStream& rStrm )
+{
+    sax_fastparser::FSHelperPtr& rStyleSheet = rStrm.GetCurrentStream();
+
+    sal_Int32 nXfId = 0;
+    if( IsCellXF() )
+    {
+        sal_uInt16 nXFIndex = rStrm.GetRoot().GetXFBuffer().GetXFIndex( mnParentXFId );
+        nXfId = rStrm.GetRoot().GetXFBuffer().GetXmlStyleIndex( nXFIndex );
+    }
+
+    rStyleSheet->startElement( XML_xf,
+            XML_numFmtId,           OString::valueOf( (sal_Int32) mnXclNumFmt ).getStr(),
+            XML_fontId,             OString::valueOf( (sal_Int32) mnXclFont ).getStr(),
+            XML_fillId,             OString::valueOf( (sal_Int32) mnFillId ).getStr(),
+            XML_borderId,           OString::valueOf( (sal_Int32) mnBorderId ).getStr(),
+            XML_xfId,               IsStyleXF() ? NULL : OString::valueOf( nXfId ).getStr(),
+            // OOXTODO: XML_quotePrefix,
+            // OOXTODO: XML_pivotButton,
+            // OOXTODO: XML_applyNumberFormat,  ;
+            XML_applyFont,          XclXmlUtils::ToPsz( mbFontUsed ),
+            // OOXTODO: XML_applyFill,
+            XML_applyBorder,        XclXmlUtils::ToPsz( mbBorderUsed ),
+            XML_applyAlignment,     XclXmlUtils::ToPsz( mbAlignUsed ),
+            XML_applyProtection,    XclXmlUtils::ToPsz( mbProtUsed ),
+            FSEND );
+    if( mbAlignUsed )
+        maAlignment.SaveXml( rStrm );
+    if( mbProtUsed )
+        maProtection.SaveXml( rStrm );
+    // OOXTODO: XML_extLst
+    rStyleSheet->endElement( XML_xf );
+}
+
 // ----------------------------------------------------------------------------
 
 XclExpDefaultXF::XclExpDefaultXF( const XclExpRoot& rRoot, bool bCellXF ) :
@@ -1912,6 +2184,41 @@ void XclExpStyle::WriteBody( XclExpStream& rStrm )
     }
 }
 
+static const char* lcl_StyleNameFromId( sal_Int32 nStyleId )
+{
+    switch( nStyleId )
+    {
+        case 0:     return "Normal";
+        case 3:     return "Comma";
+        case 4:     return "Currency";
+        case 5:     return "Percent";
+        case 6:     return "Comma [0]";
+        case 7:     return "Currency [0]";
+    }
+    return "*unknown*";
+}
+
+void XclExpStyle::SaveXml( XclExpXmlStream& rStrm )
+{
+    OString sName;
+    if( IsBuiltIn() )
+    {
+        sName = OString( lcl_StyleNameFromId( mnStyleId ) );
+    }
+    else
+        sName = XclXmlUtils::ToOString( maName );
+    sal_Int32 nXFId = rStrm.GetRoot().GetXFBuffer().GetXmlStyleIndex( maXFId.mnXFId );
+    rStrm.GetCurrentStream()->singleElement( XML_cellStyle,
+            XML_name,           sName.getStr(),
+            XML_xfId,           OString::valueOf( nXFId ).getStr(),
+            XML_builtinId,      OString::valueOf( (sal_Int32) mnStyleId ).getStr(),
+            // OOXTODO: XML_iLevel,
+            // OOXTODO: XML_hidden,
+            XML_customBuiltin,  XclXmlUtils::ToPsz( ! IsBuiltIn() ),
+            FSEND );
+    // OOXTODO: XML_extLst
+}
+
 // ----------------------------------------------------------------------------
 
 namespace {
@@ -1940,6 +2247,55 @@ XclExpXFBuffer::XclExpBuiltInInfo::XclExpBuiltInInfo() :
 }
 
 // ----------------------------------------------------------------------------
+
+/** Predicate for search algorithm. */
+struct XclExpBorderPred
+{
+    const XclExpCellBorder&
+                        mrBorder;
+    inline explicit     XclExpBorderPred( const XclExpCellBorder& rBorder ) : mrBorder( rBorder ) {}
+    bool                operator()( const XclExpCellBorder& rBorder ) const;
+};
+
+bool XclExpBorderPred::operator()( const XclExpCellBorder& rBorder ) const
+{
+    return
+        mrBorder.mnLeftColor     == rBorder.mnLeftColor &&
+        mrBorder.mnRightColor    == rBorder.mnRightColor &&
+        mrBorder.mnTopColor      == rBorder.mnTopColor &&
+        mrBorder.mnBottomColor   == rBorder.mnBottomColor &&
+        mrBorder.mnDiagColor     == rBorder.mnDiagColor &&
+        mrBorder.mnLeftLine      == rBorder.mnLeftLine &&
+        mrBorder.mnRightLine     == rBorder.mnRightLine &&
+        mrBorder.mnTopLine       == rBorder.mnTopLine &&
+        mrBorder.mnBottomLine    == rBorder.mnBottomLine &&
+        mrBorder.mnDiagLine      == rBorder.mnDiagLine &&
+        mrBorder.mbDiagTLtoBR    == rBorder.mbDiagTLtoBR &&
+        mrBorder.mbDiagBLtoTR    == rBorder.mbDiagBLtoTR &&
+        mrBorder.mnLeftColorId   == rBorder.mnLeftColorId &&
+        mrBorder.mnRightColorId  == rBorder.mnRightColorId &&
+        mrBorder.mnTopColorId    == rBorder.mnTopColorId &&
+        mrBorder.mnBottomColorId == rBorder.mnBottomColorId &&
+        mrBorder.mnDiagColorId   == rBorder.mnDiagColorId;
+}
+
+struct XclExpFillPred
+{
+    const XclExpCellArea&
+                        mrFill;
+    inline explicit     XclExpFillPred( const XclExpCellArea& rFill ) : mrFill( rFill ) {}
+    bool                operator()( const XclExpCellArea& rFill ) const;
+};
+
+bool XclExpFillPred::operator()( const XclExpCellArea& rFill ) const
+{
+    return
+        mrFill.mnForeColor      == rFill.mnForeColor &&
+        mrFill.mnBackColor      == rFill.mnBackColor &&
+        mrFill.mnPattern        == rFill.mnPattern &&
+        mrFill.mnForeColorId    == rFill.mnForeColorId &&
+        mrFill.mnBackColorId    == rFill.mnBackColorId;
+}
 
 XclExpXFBuffer::XclExpXFBuffer( const XclExpRoot& rRoot ) :
     XclExpRoot( rRoot )
@@ -1996,6 +2352,8 @@ void XclExpXFBuffer::Finalize()
     sal_uInt32 nTotalCount = static_cast< sal_uInt32 >( maXFList.GetSize() );
     sal_uInt32 nId;
     maXFIndexVec.resize( nTotalCount, EXC_XF_DEFAULTCELL );
+    maStyleIndexes.resize( nTotalCount, EXC_XF_DEFAULTCELL );
+    maCellIndexes.resize( nTotalCount, EXC_XF_DEFAULTCELL );
 
     XclExpBuiltInMap::const_iterator aBuiltInEnd = maBuiltInMap.end();
     /*  nMaxBuiltInXFId used to decide faster whether an XF record is
@@ -2068,6 +2426,19 @@ void XclExpXFBuffer::Finalize()
                 AppendXFIndex( nId );
         }
     }
+
+    sal_uInt16 nXmlStyleIndex   = 0;
+    sal_uInt16 nXmlCellIndex    = 0;
+
+    size_t nXFCount = maSortedXFList.GetSize();
+    for( size_t i = 0; i < nXFCount; ++i )
+    {
+        XclExpXFList::RecordRefType xXF = maSortedXFList.GetRecord( i );
+        if( xXF->IsStyleXF() )
+            maStyleIndexes[ i ] = nXmlStyleIndex++;
+        else
+            maCellIndexes[ i ] = nXmlCellIndex++;
+    }
 }
 
 sal_uInt16 XclExpXFBuffer::GetXFIndex( sal_uInt32 nXFId ) const
@@ -2080,12 +2451,130 @@ sal_uInt16 XclExpXFBuffer::GetXFIndex( sal_uInt32 nXFId ) const
     return nXFIndex;
 }
 
+sal_Int32 XclExpXFBuffer::GetXmlStyleIndex( sal_uInt32 nXFIndex ) const
+{
+    DBG_ASSERT( nXFIndex < maStyleIndexes.size(), "XclExpXFBuffer::GetXmlStyleIndex - invalid index!" );
+    if( nXFIndex > maStyleIndexes.size() )
+        return 0;   // should be caught/debugged via above assert; return "valid" index.
+    return maStyleIndexes[ nXFIndex ];
+}
+
+sal_Int32 XclExpXFBuffer::GetXmlCellIndex( sal_uInt32 nXFIndex ) const
+{
+    DBG_ASSERT( nXFIndex < maCellIndexes.size(), "XclExpXFBuffer::GetXmlStyleIndex - invalid index!" );
+    if( nXFIndex > maCellIndexes.size() )
+        return 0;   // should be caught/debugged via above assert; return "valid" index.
+    return maCellIndexes[ nXFIndex ];
+}
+
 void XclExpXFBuffer::Save( XclExpStream& rStrm )
 {
     // save all XF records contained in the maSortedXFList vector (sorted by XF index)
     maSortedXFList.Save( rStrm );
     // save all STYLE records
     maStyleList.Save( rStrm );
+}
+
+static void lcl_GetCellCounts( const XclExpRecordList< XclExpXF >& rXFList, sal_Int32& rCells, sal_Int32& rStyles )
+{
+    rCells  = 0;
+    rStyles = 0;
+    size_t nXFCount = rXFList.GetSize();
+    for( size_t i = 0; i < nXFCount; ++i )
+    {
+        XclExpRecordList< XclExpXF >::RecordRefType xXF = rXFList.GetRecord( i );
+        if( xXF->IsCellXF() )
+            ++rCells;
+        else if( xXF->IsStyleXF() )
+            ++rStyles;
+    }
+}
+
+void XclExpXFBuffer::SaveXml( XclExpXmlStream& rStrm )
+{
+    sax_fastparser::FSHelperPtr& rStyleSheet = rStrm.GetCurrentStream();
+
+    rStyleSheet->startElement( XML_fills,
+            XML_count,  OString::valueOf( (sal_Int32) maFills.size() ).getStr(),
+            FSEND );
+    for( XclExpFillList::iterator aIt = maFills.begin(), aEnd = maFills.end();
+            aIt != aEnd; ++aIt )
+    {
+        aIt->SaveXml( rStrm );
+    }
+    rStyleSheet->endElement( XML_fills );
+
+    rStyleSheet->startElement( XML_borders,
+            XML_count,  OString::valueOf( (sal_Int32) maBorders.size() ).getStr(),
+            FSEND );
+    for( XclExpBorderList::iterator aIt = maBorders.begin(), aEnd = maBorders.end();
+            aIt != aEnd; ++aIt )
+    {
+        aIt->SaveXml( rStrm );
+    }
+    rStyleSheet->endElement( XML_borders );
+
+    // save all XF records contained in the maSortedXFList vector (sorted by XF index)
+    sal_Int32 nCells, nStyles;
+    lcl_GetCellCounts( maSortedXFList, nCells, nStyles );
+
+    if( nStyles > 0 )
+    {
+        rStyleSheet->startElement( XML_cellStyleXfs,
+                XML_count,  OString::valueOf( nStyles ).getStr(),
+                FSEND );
+        size_t nXFCount = maSortedXFList.GetSize();
+        for( size_t i = 0; i < nXFCount; ++i )
+        {
+            XclExpXFList::RecordRefType xXF = maSortedXFList.GetRecord( i );
+            if( ! xXF->IsStyleXF() )
+                continue;
+            SaveXFXml( rStrm, *xXF );
+        }
+        rStyleSheet->endElement( XML_cellStyleXfs );
+    }
+
+    if( nCells > 0 )
+    {
+        rStyleSheet->startElement( XML_cellXfs,
+                XML_count,  OString::valueOf( nCells ).getStr(),
+                FSEND );
+        size_t nXFCount = maSortedXFList.GetSize();
+        for( size_t i = 0; i < nXFCount; ++i )
+        {
+            XclExpXFList::RecordRefType xXF = maSortedXFList.GetRecord( i );
+            if( ! xXF->IsCellXF() )
+                continue;
+            SaveXFXml( rStrm, *xXF );
+        }
+        rStyleSheet->endElement( XML_cellXfs );
+    }
+
+    // save all STYLE records
+    rStyleSheet->startElement( XML_cellStyles,
+            XML_count,  OString::valueOf( (sal_Int32) maStyleList.GetSize() ).getStr(),
+            FSEND );
+    maStyleList.SaveXml( rStrm );
+    rStyleSheet->endElement( XML_cellStyles );
+}
+
+void XclExpXFBuffer::SaveXFXml( XclExpXmlStream& rStrm, XclExpXF& rXF )
+{
+    XclExpBorderList::iterator aBorderPos =
+        std::find_if( maBorders.begin(), maBorders.end(), XclExpBorderPred( rXF.GetBorderData() ) );
+    DBG_ASSERT( aBorderPos != maBorders.end(), "XclExpXFBuffer::SaveXml - Invalid @borderId!" );
+    XclExpFillList::iterator aFillPos =
+        std::find_if( maFills.begin(), maFills.end(), XclExpFillPred( rXF.GetAreaData() ) );
+    DBG_ASSERT( aFillPos != maFills.end(), "XclExpXFBuffer::SaveXml - Invalid @fillId!" );
+
+    sal_Int32 nBorderId = 0, nFillId = 0;
+    if( aBorderPos != maBorders.end() )
+        nBorderId = std::distance( maBorders.begin(), aBorderPos );
+    if( aFillPos != maFills.end() )
+        nFillId = std::distance( maFills.begin(), aFillPos );
+
+    rXF.SetXmlIds( nBorderId, nFillId );
+    rXF.SaveXml( rStrm );
 }
 
 sal_uInt32 XclExpXFBuffer::FindXF( const ScPatternAttr& rPattern,
@@ -2246,8 +2735,27 @@ sal_uInt32 XclExpXFBuffer::AppendBuiltInXFWithStyle( XclExpXFRef xXF, sal_uInt8 
     return nXFId;
 }
 
+static XclExpCellArea lcl_GetPatternFill_None()
+{
+    XclExpCellArea aFill;
+    aFill.mnPattern = EXC_PATT_NONE;
+    return aFill;
+}
+
+static XclExpCellArea lcl_GetPatternFill_Gray125()
+{
+    XclExpCellArea aFill;
+    aFill.mnPattern     = EXC_PATT_12_5_PERC;
+    aFill.mnForeColor   = 0;
+    aFill.mnBackColor   = 0;
+    return aFill;
+}
+
 void XclExpXFBuffer::InsertDefaultRecords()
 {
+    maFills.push_back( lcl_GetPatternFill_None() );
+    maFills.push_back( lcl_GetPatternFill_Gray125() );
+
     // index 0: default style
     if( SfxStyleSheetBase* pDefStyleSheet = GetStyleSheetPool().Find( ScGlobal::GetRscString( STR_STYLENAME_STANDARD ), SFX_STYLE_FAMILY_PARA ) )
     {
@@ -2311,8 +2819,54 @@ void XclExpXFBuffer::AppendXFIndex( sal_uInt32 nXFId )
 {
     DBG_ASSERT( nXFId < maXFIndexVec.size(), "XclExpXFBuffer::AppendXFIndex - XF ID out of range" );
     maXFIndexVec[ nXFId ] = static_cast< sal_uInt16 >( maSortedXFList.GetSize() );
-    maSortedXFList.AppendRecord( maXFList.GetRecord( nXFId ) );
+    XclExpXFRef xXF = maXFList.GetRecord( nXFId );
+    AddBorderAndFill( *xXF );
+    maSortedXFList.AppendRecord( xXF );
     DBG_ASSERT( maXFList.HasRecord( nXFId ), "XclExpXFBuffer::AppendXFIndex - XF not found" );
+}
+
+void XclExpXFBuffer::AddBorderAndFill( const XclExpXF& rXF )
+{
+    if( std::find_if( maBorders.begin(), maBorders.end(), XclExpBorderPred( rXF.GetBorderData() ) ) == maBorders.end() )
+    {
+        maBorders.push_back( rXF.GetBorderData() );
+    }
+
+    if( std::find_if( maFills.begin(), maFills.end(), XclExpFillPred( rXF.GetAreaData() ) ) == maFills.end() )
+    {
+        maFills.push_back( rXF.GetAreaData() );
+    }
+}
+
+// ============================================================================
+
+XclExpXmlStyleSheet::XclExpXmlStyleSheet( const XclExpRoot& rRoot )
+    : XclExpRoot( rRoot )
+{
+}
+
+void XclExpXmlStyleSheet::SaveXml( XclExpXmlStream& rStrm )
+{
+    sax_fastparser::FSHelperPtr aStyleSheet = rStrm.CreateOutputStream(
+            OUString::createFromAscii( "xl/styles.xml" ),
+            OUString::createFromAscii( "styles.xml" ),
+            rStrm.GetCurrentStream()->getOutputStream(),
+            "application/vnd.openxmlformats-officedocument.spreadsheetml.styles+xml",
+            "http://schemas.openxmlformats.org/officeDocument/2006/relationships/styles" );
+    rStrm.PushStream( aStyleSheet );
+
+    aStyleSheet->startElement( XML_styleSheet,
+            XML_xmlns, "http://schemas.openxmlformats.org/spreadsheetml/2006/main",
+            FSEND );
+
+    CreateRecord( EXC_ID_FORMATLIST )->SaveXml( rStrm );
+    CreateRecord( EXC_ID_FONTLIST )->SaveXml( rStrm );
+    CreateRecord( EXC_ID_XFLIST )->SaveXml( rStrm );
+    CreateRecord( EXC_ID_PALETTE )->SaveXml( rStrm );
+
+    aStyleSheet->endElement( XML_styleSheet );
+
+    rStrm.PopStream();
 }
 
 // ============================================================================

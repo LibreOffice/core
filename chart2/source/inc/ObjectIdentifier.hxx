@@ -36,6 +36,7 @@
 #include <com/sun/star/chart2/XDataSeries.hpp>
 #include <com/sun/star/chart2/XChartDocument.hpp>
 #include "TitleHelper.hxx"
+#include "charttoolsdllapi.hxx"
 
 // header for class OUString
 #include <rtl/ustring.hxx>
@@ -81,7 +82,7 @@ enum ObjectType
     OBJECTTYPE_UNKNOWN
 };
 
-class ObjectIdentifier
+class OOO_DLLPUBLIC_CHARTTOOLS ObjectIdentifier
 {
     //CID == ClassifiedIdentifier <--> name of shape
     //semicolon, colon, equal sign and slash have special meanings in a CID

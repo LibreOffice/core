@@ -67,7 +67,7 @@ enum ParamType
 
 //------------------------------------------------------------------------
 class ModuleData;
-class FuncData : public DataObject
+class FuncData : public ScDataObject
 {
 friend class FuncCollection;
     const ModuleData* pModuleData;
@@ -88,7 +88,7 @@ public:
              const ParamType* peType,
                    ParamType  eType);
     FuncData(const FuncData& rData);
-    virtual DataObject* Clone() const { return new FuncData(*this); }
+    virtual ScDataObject*   Clone() const { return new FuncData(*this); }
 
     const   String&     GetModuleName() const;
     const   String&     GetInternalName() const { return aInternalName; }
@@ -108,15 +108,15 @@ public:
 
 
 //------------------------------------------------------------------------
-class FuncCollection : public SortedCollection
+class FuncCollection : public ScSortedCollection
 {
 public:
-    FuncCollection(USHORT nLim = 4, USHORT nDel = 4, BOOL bDup = FALSE) : SortedCollection ( nLim, nDel, bDup ) {}
-    FuncCollection(const FuncCollection& rFuncCollection) : SortedCollection ( rFuncCollection ) {}
+    FuncCollection(USHORT nLim = 4, USHORT nDel = 4, BOOL bDup = FALSE) : ScSortedCollection ( nLim, nDel, bDup ) {}
+    FuncCollection(const FuncCollection& rFuncCollection) : ScSortedCollection ( rFuncCollection ) {}
 
-    virtual DataObject* Clone() const { return new FuncCollection(*this); }
+    virtual ScDataObject*   Clone() const { return new FuncCollection(*this); }
             FuncData*   operator[]( const USHORT nIndex) const {return (FuncData*)At(nIndex);}
-    virtual short       Compare(DataObject* pKey1, DataObject* pKey2) const;
+    virtual short       Compare(ScDataObject* pKey1, ScDataObject* pKey2) const;
             BOOL        SearchFunc( const String& rName, USHORT& rIndex ) const;
 };
 

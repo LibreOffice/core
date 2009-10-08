@@ -38,6 +38,8 @@
 #include <com/sun/star/uno/Reference.hxx>
 #include "scdllapi.h"
 
+#include <hash_map>
+
 class ImageList;
 class Bitmap;
 class SfxItemSet;
@@ -545,53 +547,53 @@ public:
     static ::com::sun::star::lang::Locale*      pLocale;
     static SvtSysLocale*        pSysLocale;
     // for faster access a pointer to the single instance provided by SvtSysLocale
-    static const CharClass*     pCharClass;
+    SC_DLLPUBLIC static const CharClass*     pCharClass;
     // for faster access a pointer to the single instance provided by SvtSysLocale
-    static const LocaleDataWrapper* pLocaleData;
-SC_DLLPUBLIC    static const LocaleDataWrapper* GetpLocaleData();
+    SC_DLLPUBLIC static const LocaleDataWrapper* pLocaleData;
+    SC_DLLPUBLIC static const LocaleDataWrapper* GetpLocaleData();
 
     static CalendarWrapper*     pCalendar;
-    static CollatorWrapper*     pCollator;
+    SC_DLLPUBLIC static CollatorWrapper*        pCollator;
     static CollatorWrapper*     pCaseCollator;
 
     static ::utl::TransliterationWrapper* pTransliteration;
-SC_DLLPUBLIC    static ::utl::TransliterationWrapper* GetpTransliteration(); //CHINA001
+    SC_DLLPUBLIC static ::utl::TransliterationWrapper* GetpTransliteration(); //CHINA001
 
     static ::utl::TransliterationWrapper* pCaseTransliteration;
     static IntlWrapper*         pScIntlWrapper;
-    static LanguageType         eLnge;
+    SC_DLLPUBLIC static LanguageType            eLnge;
     static sal_Unicode          cListDelimiter;
 
     static const String&        GetClipDocName();
     static void                 SetClipDocName( const String& rNew );
-    static SC_DLLPUBLIC const SvxSearchItem&    GetSearchItem();
-    static SC_DLLPUBLIC void                    SetSearchItem( const SvxSearchItem& rNew );
-SC_DLLPUBLIC    static ScAutoFormat*        GetAutoFormat();
+    SC_DLLPUBLIC static const SvxSearchItem&    GetSearchItem();
+    SC_DLLPUBLIC static void                    SetSearchItem( const SvxSearchItem& rNew );
+    SC_DLLPUBLIC static ScAutoFormat*       GetAutoFormat();
     static void                 ClearAutoFormat(); //BugId 54209
     static FuncCollection*      GetFuncCollection();
-    static ScUnoAddInCollection* GetAddInCollection();
-SC_DLLPUBLIC    static ScUserList*          GetUserList();
+    SC_DLLPUBLIC static ScUnoAddInCollection* GetAddInCollection();
+    SC_DLLPUBLIC static ScUserList*         GetUserList();
     static void                 SetUserList( const ScUserList* pNewList );
-SC_DLLPUBLIC    static const String&        GetRscString( USHORT nIndex );
+    SC_DLLPUBLIC static const String&       GetRscString( USHORT nIndex );
     static void                 OpenURL( const String& rURL, const String& rTarget );
-    static String               GetAbsDocName( const String& rFileName,
+    SC_DLLPUBLIC static String              GetAbsDocName( const String& rFileName,
                                                 SfxObjectShell* pShell );
-    static String               GetDocTabName( const String& rFileName,
+    SC_DLLPUBLIC static String              GetDocTabName( const String& rFileName,
                                                 const String& rTabName );
-    static ULONG                GetStandardFormat( SvNumberFormatter&,
+    SC_DLLPUBLIC static ULONG               GetStandardFormat( SvNumberFormatter&,
                                     ULONG nFormat, short nType );
-    static ULONG                GetStandardFormat( double, SvNumberFormatter&,
+    SC_DLLPUBLIC static ULONG               GetStandardFormat( double, SvNumberFormatter&,
                                     ULONG nFormat, short nType );
 
-    static double               nScreenPPTX;
-    static double               nScreenPPTY;
+    SC_DLLPUBLIC static double              nScreenPPTX;
+    SC_DLLPUBLIC static double              nScreenPPTY;
 
     static ScDocShellRef*   pDrawClipDocShellRef;
 
     static USHORT           nDefFontHeight;
     static USHORT           nStdRowHeight;
 
-    static long             nLastRowHeightExtra;
+    SC_DLLPUBLIC static long                nLastRowHeightExtra;
     static long             nLastColWidthExtra;
 
     static void             Init();                     // am Anfang
@@ -605,7 +607,7 @@ SC_DLLPUBLIC    static const String&        GetRscString( USHORT nIndex );
     static SvxBrushItem*    GetButtonBrushItem();
     static SvxBrushItem*    GetEmbeddedBrushItem()  { return pEmbeddedBrushItem; }
     static SvxBrushItem*    GetProtectedBrushItem() { return pProtectedBrushItem; }
-SC_DLLPUBLIC       static const String& GetEmptyString();
+    SC_DLLPUBLIC    static const String&    GetEmptyString();
     static const String&    GetScDocString();
 
     /** Returns the specified image list with outline symbols.
@@ -645,17 +647,42 @@ SC_DLLPUBLIC       static const String& GetEmptyString();
         @param cSep  The character to separate the tokens.
         @param nSepCount  Specifies how often cSep is inserted between two tokens.
         @param bForceSep  true = Always insert separator; false = Only, if not at begin or end. */
-SC_DLLPUBLIC    static void             AddToken(
+    SC_DLLPUBLIC static void             AddToken(
                                 String& rTokenList, const String& rToken,
                                 sal_Unicode cSep, xub_StrLen nSepCount = 1,
                                 bool bForceSep = false );
 
     /** Returns true, if the first and last character of the string is cQuote. */
-SC_DLLPUBLIC    static bool             IsQuoted( const String& rString, sal_Unicode cQuote = '"' );
-    /** Inserts the character cQuote at beginning and end of rString. */
-SC_DLLPUBLIC    static void             AddQuotes( String& rString, sal_Unicode cQuote = '"' );
-    /** Erases the character cQuote from rString, if it exists at beginning AND end. */
-SC_DLLPUBLIC    static void             EraseQuotes( String& rString, sal_Unicode cQuote = '"' );
+    SC_DLLPUBLIC static bool             IsQuoted( const String& rString, sal_Unicode cQuote = '\'' );
+
+    /** Inserts the character cQuote at beginning and end of rString.
+        @param bEscapeEmbedded      If <TRUE/>, embedded quote characters are
+                                    escaped by doubling them.
+     */
+SC_DLLPUBLIC    static void             AddQuotes( String& rString, sal_Unicode cQuote = '\'', bool bEscapeEmbedded = true );
+
+    /** Erases the character cQuote from rString, if it exists at beginning AND end.
+        @param bUnescapeEmbedded    If <TRUE/>, embedded doubled quote characters
+                                    are unescaped by replacing them with a
+                                    single instance.
+     */
+SC_DLLPUBLIC    static void             EraseQuotes( String& rString, sal_Unicode cQuote = '\'', bool bUnescapeEmbedded = true );
+
+    /** Finds an unquoted instance of cChar in rString, starting at
+        offset nStart. Unquoted instances may occur when concatenating two
+        quoted strings with a separator, for example, 's1':'s2'. Embedded
+        quotes have to be escaped by being doubled. Caller must ensure that
+        nStart points into an unquoted range or the opening quote. Specialty:
+        if cChar==cQuote the first cQuote character from nStart on is found.
+        @returns offset if found, else STRING_NOTFOUND
+     */
+SC_DLLPUBLIC    static xub_StrLen       FindUnquoted( const String& rString, sal_Unicode cChar, xub_StrLen nStart = 0, sal_Unicode cQuote = '\'' );
+
+    /** Finds an unquoted instance of cChar in null-terminated pString. Same
+        semantics as FindUnquoted( const String&, ...)
+        @returns: pointer to cChar if found, else NULL
+     */
+SC_DLLPUBLIC    static const sal_Unicode* FindUnquoted( const sal_Unicode* pString, sal_Unicode cChar, sal_Unicode cQuote = '\'' );
 
 
     static  CharSet         GetCharsetValue( const String& rCharSet );
@@ -666,15 +693,15 @@ SC_DLLPUBLIC    static void             EraseQuotes( String& rString, sal_Unicod
 
     static BOOL IsSystemRTL();                      // depending on system language
     static LanguageType GetEditDefaultLanguage();   // for EditEngine::SetDefaultLanguage
-    static BYTE GetDefaultScriptType();             // for all WEAK characters
+    SC_DLLPUBLIC static BYTE    GetDefaultScriptType();             // for all WEAK characters
     /** Map ATTR_((CJK|CTL)_)?FONT_... to proper WhichIDs.
         If more than one SCRIPTTYPE_... values are or'ed together, prefers
         first COMPLEX, then ASIAN */
-    static USHORT GetScriptedWhichID( BYTE nScriptType, USHORT nWhich );
+    SC_DLLPUBLIC static USHORT GetScriptedWhichID( BYTE nScriptType, USHORT nWhich );
 
     /** Adds a language item to the item set, if the number format item contains
         a language that differs from its parent's language. */
-    static void             AddLanguage( SfxItemSet& rSet, SvNumberFormatter& rFormatter );
+    SC_DLLPUBLIC static void             AddLanguage( SfxItemSet& rSet, SvNumberFormatter& rFormatter );
 
     /** Obtain the ordinal suffix for a number according to the system locale */
     static String           GetOrdinalSuffix( sal_Int32 nNumber);
@@ -881,6 +908,46 @@ struct ScConsolidateParam
     void                Clear           (); // = ClearDataAreas()+Members
     void                ClearDataAreas  ();
     void                SetAreas        ( ScArea* const* ppAreas, USHORT nCount );
+};
+
+// -----------------------------------------------------------------------
+
+class ScSimpleSharedString
+{
+public:
+    static const sal_Int32 EMPTY = 0;
+
+    ScSimpleSharedString();
+    ScSimpleSharedString(const ScSimpleSharedString& r);
+    ~ScSimpleSharedString();
+
+    const String*    getString(sal_Int32 nId);
+    sal_Int32        getStringId(const String& aStr);
+    sal_Int32        insertString(const String& aStr);
+
+private:
+
+    /** internal shared string table implementation */
+    class StringTable
+    {
+    public:
+        sal_Int32 insertString(const String& aStr);
+        sal_Int32 getStringId(const String& aStr);
+        const String* getString(sal_Int32 nId) const;
+
+        StringTable();
+        StringTable(const StringTable& r);
+        ~StringTable();
+
+    private:
+        typedef ::std::hash_map< String, sal_Int32, ScStringHashCode, ::std::equal_to< String > > SharedStrMap;
+
+        ::std::vector<String> maSharedStrings;
+        SharedStrMap maSharedStringIds;
+        sal_Int32 mnStrCount;
+    };
+
+    StringTable maStringTable;
 };
 
 // -----------------------------------------------------------------------

@@ -36,6 +36,7 @@
 #include "macros.hxx"
 #include "AxisIndexDefines.hxx"
 #include "AxisHelper.hxx"
+#include "ChartTypeHelper.hxx"
 
 //for auto_ptr
 #include <memory>
@@ -145,8 +146,28 @@ void VCartesianCoordinateSystem::createVAxisList(
             AxisProperties aAxisProperties(xAxis,this->getExplicitCategoriesProvider());
             aAxisProperties.m_nDimensionIndex = nDimensionIndex;
             aAxisProperties.m_bSwapXAndY = bSwapXAndY;
+            aAxisProperties.m_bIsMainAxis = (nAxisIndex==0);
+            Reference< XAxis > xCrossingMainAxis( AxisHelper::getCrossingMainAxis( xAxis, m_xCooSysModel ) );
+            if( xCrossingMainAxis.is() )
+            {
+                ScaleData aCrossingScale( xCrossingMainAxis->getScaleData() );
+                aAxisProperties.m_bCrossingAxisHasReverseDirection = (AxisOrientation_REVERSE==aCrossingScale.Orientation);
+
+                if( aCrossingScale.AxisType == AxisType::CATEGORY )
+                {
+                    aAxisProperties.m_bCrossingAxisIsCategoryAxes = true;
+                    aAxisProperties.m_bAxisBetweenCategories = ChartTypeHelper::shiftTicksAtXAxisPerDefault( AxisHelper::getChartTypeByIndex( m_xCooSysModel, 0 ) );
+                }
+            }
+
             if( nDimensionIndex == 2 )
+            {
                 aAxisProperties.m_xAxisTextProvider = new TextualDataProvider( m_aSeriesNamesForZAxis );
+
+                //for the z axis copy the positioning properties from the x axis (or from the y axis for swapped coordinate systems)
+                Reference< XAxis > xSisterAxis( AxisHelper::getCrossingMainAxis( xCrossingMainAxis, m_xCooSysModel ) );
+                aAxisProperties.initAxisPositioning( Reference< beans::XPropertySet >( xSisterAxis, uno::UNO_QUERY) );
+            }
             aAxisProperties.init(true);
             if(aAxisProperties.m_bDisplayLabels)
                 aAxisProperties.m_nNumberFormatKey = this->getNumberFormatKeyForAxis( xAxis, xNumberFormatsSupplier );

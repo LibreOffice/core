@@ -30,13 +30,15 @@
 #ifndef CHART2_RESSOURCEMANAGER_HXX
 #define CHART2_RESSOURCEMANAGER_HXX
 
+#include "charttoolsdllapi.hxx"
+
 // defined in <tools/resmgr.hxx>
 class ResMgr;
 
 namespace chart
 {
 
-class RessourceManager
+class OOO_DLLPUBLIC_CHARTTOOLS RessourceManager
 {
 public:
     static ::ResMgr &  getRessourceManager();

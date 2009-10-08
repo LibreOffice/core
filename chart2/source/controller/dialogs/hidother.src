@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: hidother.src,v $
- * $Revision: 1.7 $
+ * $Revision: 1.7.56.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -88,6 +88,9 @@ hidspecial HID_SCH_PB_NUMBERFORMAT {HelpId= HID_SCH_PB_NUMBERFORMAT; };
 hidspecial HID_SCH_PB_PERCENT_NUMBERFORMAT {HelpId= HID_SCH_PB_PERCENT_NUMBERFORMAT; };
 hidspecial HID_SCH_DATALABEL_SEPARATOR {HelpId= HID_SCH_DATALABEL_SEPARATOR; };
 hidspecial HID_SCH_DATALABEL_PLACEMENT {HelpId= HID_SCH_DATALABEL_PLACEMENT; };
+hidspecial HID_SCH_TEXTDIRECTION {HelpId= HID_SCH_TEXTDIRECTION; };
+hidspecial HID_SCH_TEXTDIRECTION_TITLE {HelpId= HID_SCH_TEXTDIRECTION_TITLE; };
+hidspecial HID_SCH_TEXTDIRECTION_EQUATION {HelpId= HID_SCH_TEXTDIRECTION_EQUATION; };
 
 hidspecial HID_SCH_TITLE_MAIN {HelpId= HID_SCH_TITLE_MAIN; };
 hidspecial HID_SCH_TITLE_SUB {HelpId= HID_SCH_TITLE_SUB; };

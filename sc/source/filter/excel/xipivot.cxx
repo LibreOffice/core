@@ -286,9 +286,8 @@ void XclImpPCField::ReadSxfield( XclImpStream& rStrm )
     // for now, ignore data type of calculated fields
     DBG_ASSERT( bCalced || bType || bTypeNone, "XclImpPCField::ReadSxfield - unknown item data type" );
 
-    if( nVisC > 0 )
+    if( nVisC > 0 || bPostp )
     {
-        DBG_ASSERT( !bItems || !bPostp, "XclImpPCField::ReadSxfield - postponed field with inline items" );
         if( bItems && !bPostp )
         {
             if( !bCalced )

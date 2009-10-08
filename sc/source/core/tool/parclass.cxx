@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: parclass.cxx,v $
- * $Revision: 1.12 $
+ * $Revision: 1.12.148.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -149,6 +149,7 @@ const ScParameterClassification::RawData ScParameterClassification::pRawData[] =
     { ocN,               {{ Reference                              },   false }},
     { ocNPV,             {{ Value, Reference                       },   true }},
     { ocNeg,             {{ Array                                  },   false }},
+    { ocNegSub,          {{ Array                                  },   false }},
     { ocNot,             {{ Array                                  },   false }},
     { ocNotEqual,        {{ Array, Array                           },   false }},
     { ocOffset,          {{ Reference, Value, Value, Value, Value  },   false }},
@@ -287,7 +288,7 @@ void ScParameterClassification::Exit()
 
 
 ScParameterClassification::Type ScParameterClassification::GetParameterType(
-        const ScToken* pToken, USHORT nParameter)
+        const formula::FormulaToken* pToken, USHORT nParameter)
 {
     OpCode eOp = pToken->GetOpCode();
     switch ( eOp )
@@ -320,7 +321,7 @@ ScParameterClassification::Type ScParameterClassification::GetParameterType(
 
 
 ScParameterClassification::Type
-ScParameterClassification::GetExternalParameterType( const ScToken* pToken,
+ScParameterClassification::GetExternalParameterType( const formula::FormulaToken* pToken,
         USHORT nParameter)
 {
     Type eRet = Unknown;
@@ -450,8 +451,9 @@ void ScParameterClassification::GenerateDocumentation()
     if ( !getenv( aEnvVarName) )
         return;
     MergeArgumentsFromFunctionResource();
-    ScCompiler::OpCodeMapPtr xMap( ScCompiler::GetOpCodeMap(
-                ::com::sun::star::sheet::FormulaLanguage::ENGLISH));
+    ScAddress aAddress;
+    ScCompiler aComp(NULL,aAddress);
+    ScCompiler::OpCodeMapPtr xMap( aComp.GetOpCodeMap(::com::sun::star::sheet::FormulaLanguage::ENGLISH));
     if (!xMap)
         return;
     fflush( stderr);
@@ -464,7 +466,7 @@ void ScParameterClassification::GenerateDocumentation()
             fprintf( stdout, "%s: ", aEnvVarName);
             ByteString aStr( xMap->getSymbol(eOp), RTL_TEXTENCODING_UTF8);
             aStr += "(";
-            ScByteToken aToken( eOp);
+            formula::FormulaByteToken aToken( eOp);
             BYTE nParams = GetMinimumParameters( eOp);
             // preset parameter count according to opcode value, with some
             // special handling
@@ -573,3 +575,4 @@ void ScParameterClassification::GenerateDocumentation()
 }
 
 #endif // OSL_DEBUG_LEVEL
+

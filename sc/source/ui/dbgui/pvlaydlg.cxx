@@ -123,7 +123,7 @@ ScDPLayoutDlg::ScDPLayoutDlg( SfxBindings* pB, SfxChildWindow* pCW, Window* pPar
         aLbOutPos       ( this, ScResId( LB_OUTAREA ) ),
         aFtOutArea      ( this, ScResId( FT_OUTAREA ) ),
         aEdOutPos       ( this, ScResId( ED_OUTAREA ) ),
-        aRbOutPos       ( this, ScResId( RB_OUTAREA ), &aEdOutPos ),
+        aRbOutPos       ( this, ScResId( RB_OUTAREA ), &aEdOutPos, this ),
         aBtnIgnEmptyRows( this, ScResId( BTN_IGNEMPTYROWS ) ),
         aBtnDetectCat   ( this, ScResId( BTN_DETECTCAT ) ),
         aBtnTotalCol    ( this, ScResId( BTN_TOTALCOL ) ),
@@ -1464,10 +1464,25 @@ IMPL_LINK( ScDPLayoutDlg, OkHdl, OKButton *, EMPTYARG )
             //  #95513# don't hide the dialog before executing the slot, instead it is used as
             //  parent for message boxes in ScTabViewShell::GetDialogParent
 
-            GetBindings().GetDispatcher()->Execute( SID_PIVOT_TABLE,
-                                      SFX_CALLMODE_SLOT | SFX_CALLMODE_RECORD,
-                                      &aOutItem, 0L, 0L );
-            Close();
+            const SfxPoolItem* pRet = GetBindings().GetDispatcher()->Execute(
+                SID_PIVOT_TABLE, SFX_CALLMODE_SLOT | SFX_CALLMODE_RECORD, &aOutItem, 0L, 0L );
+
+            bool bSuccess = true;
+            if (pRet)
+            {
+                const SfxBoolItem* pItem = dynamic_cast<const SfxBoolItem*>(pRet);
+                if (pItem)
+                    bSuccess = pItem->GetValue();
+            }
+            if (bSuccess)
+                // Table successfully inserted.
+                Close();
+            else
+            {
+                // Table insertion failed.  Keep the dialog open.
+                bRefInputMode = true;
+                SetDispatcherLock(true);
+            }
         }
         else
         {

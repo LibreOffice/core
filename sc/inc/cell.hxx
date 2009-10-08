@@ -37,11 +37,12 @@
 #include <tools/mempool.hxx>
 #include <svtools/listener.hxx>
 #include "global.hxx"
+#include "formula/grammar.hxx"
 #include "tokenarray.hxx"
-#include "grammar.hxx"
 #include "formularesult.hxx"
 #include <rtl/ustrbuf.hxx>
 #include <vcl/fontcvt.hxx>
+#include "scdllapi.h"
 
 #define USE_MEMPOOL
 #define TEXTWIDTH_DIRTY     0xffff
@@ -55,14 +56,13 @@ class EditTextObject;
 class ScMatrix;
 class SvtBroadcaster;
 class ScCodeArray;
-class ScTokenArray;
 class ScProgress;
 class ScPostIt;
 
 class ScMultipleReadHeader;
 class ScMultipleWriteHeader;
 
-class ScBaseCell
+class SC_DLLPUBLIC ScBaseCell
 {
 protected:
     ScPostIt*       pNote;
@@ -110,7 +110,7 @@ public:
 
     /** Error code if ScFormulaCell, else 0. */
     USHORT          GetErrorCode() const;
-    /** ScFormulaCell with svEmptyCell result, or ScNoteCell (may have been
+    /** ScFormulaCell with formula::svEmptyCell result, or ScNoteCell (may have been
         created due to reference to empty cell). */
     BOOL            HasEmptyData() const;
     BOOL            HasValueData() const;
@@ -122,7 +122,7 @@ public:
 
 
 
-class ScValueCell : public ScBaseCell
+class SC_DLLPUBLIC ScValueCell : public ScBaseCell
 {
 private:
     double      aValue;
@@ -144,7 +144,7 @@ public:
 };
 
 
-class ScStringCell : public ScBaseCell
+class SC_DLLPUBLIC ScStringCell : public ScBaseCell
 {
 private:
     String      aString;
@@ -168,7 +168,7 @@ public:
 };
 
 
-class ScEditCell : public ScBaseCell
+class SC_DLLPUBLIC ScEditCell : public ScBaseCell
 {
 private:
     EditTextObject*     pData;
@@ -215,11 +215,11 @@ enum ScMatrixMode {
 
 class ScIndexMap;
 
-class ScFormulaCell : public ScBaseCell, public SvtListener
+class SC_DLLPUBLIC ScFormulaCell : public ScBaseCell, public SvtListener
 {
 private:
     ScFormulaResult aResult;
-    ScGrammar::Grammar  eTempGrammar;   // used between string (creation) and (re)compilation
+    formula::FormulaGrammar::Grammar  eTempGrammar;   // used between string (creation) and (re)compilation
     ScTokenArray*   pCode;              // The (new) token array
     ScDocument*     pDocument;
     ScFormulaCell*  pPrevious;
@@ -261,16 +261,16 @@ public:
 
     /** Empty formula cell, or with a preconstructed token array. */
     ScFormulaCell( ScDocument*, const ScAddress&, const ScTokenArray* = NULL,
-                    const ScGrammar::Grammar = ScGrammar::GRAM_DEFAULT,
+                    const formula::FormulaGrammar::Grammar = formula::FormulaGrammar::GRAM_DEFAULT,
                     BYTE = MM_NONE );
 
     /** With formula string and grammar to compile with.
-        ScGrammar::GRAM_DEFAULT effectively is ScGrammar::GRAM_NATIVE_UI that
-        also includes ScAddress::CONV_UNSPECIFIED, therefor uses the address
+       formula::FormulaGrammar::GRAM_DEFAULT effectively isformula::FormulaGrammar::GRAM_NATIVE_UI that
+        also includes formula::FormulaGrammar::CONV_UNSPECIFIED, therefor uses the address
         convention associated with rPos::nTab by default. */
     ScFormulaCell( ScDocument* pDoc, const ScAddress& rPos,
                     const String& rFormula,
-                    const ScGrammar::Grammar = ScGrammar::GRAM_DEFAULT,
+                    const formula::FormulaGrammar::Grammar = formula::FormulaGrammar::GRAM_DEFAULT,
                     BYTE cMatInd = MM_NONE );
 
     // copy-ctor
@@ -284,9 +284,9 @@ public:
                             BOOL bNoListening = FALSE ) const;
 
     void            GetFormula( String& rFormula,
-                                const ScGrammar::Grammar = ScGrammar::GRAM_DEFAULT ) const;
+                                const formula::FormulaGrammar::Grammar = formula::FormulaGrammar::GRAM_DEFAULT ) const;
     void            GetFormula( rtl::OUStringBuffer& rBuffer,
-                                const ScGrammar::Grammar = ScGrammar::GRAM_DEFAULT ) const;
+                                const formula::FormulaGrammar::Grammar = formula::FormulaGrammar::GRAM_DEFAULT ) const;
 
     void            SetDirty();
     inline void     SetDirtyVar() { bDirty = TRUE; }
@@ -300,7 +300,7 @@ public:
     void            SetNeedsListening( BOOL bVar ) { bNeedListening = bVar; }
     void            Compile(const String& rFormula,
                             BOOL bNoListening = FALSE,
-                            const ScGrammar::Grammar = ScGrammar::GRAM_DEFAULT );
+                            const formula::FormulaGrammar::Grammar = formula::FormulaGrammar::GRAM_DEFAULT );
     void            CompileTokenArray( BOOL bNoListening = FALSE );
     void            CompileXML( ScProgress& rProgress );        // compile temporary string tokens
     void            CalcAfterLoad();
@@ -336,10 +336,10 @@ public:
     BOOL            IsSubTotal() const                      { return bSubTotal; }
     BOOL            IsChanged() const                       { return bChanged; }
     void            ResetChanged()                          { bChanged = FALSE; }
-    BOOL            IsEmpty();      // svEmptyCell result
-                    // display as empty string if svEmptyCell result
+    BOOL            IsEmpty();      // formula::svEmptyCell result
+                    // display as empty string if formula::svEmptyCell result
     BOOL            IsEmptyDisplayedAsString();
-    BOOL            IsValue();      // also TRUE if svEmptyCell
+    BOOL            IsValue();      // also TRUE if formula::svEmptyCell
     double          GetValue();
     double          GetValueAlways();   // ignore errors
     void            GetString( String& rString );
@@ -387,7 +387,7 @@ public:
     ULONG           GetStandardFormat( SvNumberFormatter& rFormatter, ULONG nFormat ) const;
 
     // For import filters!
-    void            AddRecalcMode( ScRecalcMode );
+    void            AddRecalcMode( formula::ScRecalcMode );
     /** For import only: set a double result. */
     void            SetHybridDouble( double n )     { aResult.SetHybridDouble( n); }
     /** For import only: set a string result.
@@ -401,7 +401,7 @@ public:
         SetHybridString() or SetHybridFormula(), use SetHybridDouble() first
         for performance reasons.*/
     void            SetHybridFormula( const String& r,
-                                    const ScGrammar::Grammar eGrammar )
+                                    const formula::FormulaGrammar::Grammar eGrammar )
                         { aResult.SetHybridFormula( r); eTempGrammar = eGrammar; }
     void            SetErrCode( USHORT n );
     inline BOOL     IsHyperLinkCell() const { return pCode && pCode->IsHyperLink(); }

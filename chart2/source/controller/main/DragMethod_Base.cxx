@@ -63,6 +63,7 @@ DragMethod_Base::DragMethod_Base( DrawViewWrapper& rDrawViewWrapper
     , m_eActionType( eActionType )
     , m_xChartModel( WeakReference< frame::XModel >(xChartModel) )
 {
+    setMoveOnly(true);
 }
 DragMethod_Base::~DragMethod_Base()
 {
@@ -79,24 +80,16 @@ rtl::OUString DragMethod_Base::getUndoDescription() const
                 m_eActionType,
                 ObjectNameProvider::getName( ObjectIdentifier::getObjectType( m_aObjectCID )));
 }
-void DragMethod_Base::TakeComment(String& rStr) const
+void DragMethod_Base::TakeSdrDragComment(String& rStr) const
 {
     rStr = String( getUndoDescription() );
 }
-void DragMethod_Base::Brk()
-{
-    Hide();
-}
-Pointer DragMethod_Base::GetPointer() const
+Pointer DragMethod_Base::GetSdrDragPointer() const
 {
     if( IsDraggingPoints() || IsDraggingGluePoints() )
         return Pointer(POINTER_MOVEPOINT);
     else
         return Pointer(POINTER_MOVE);
-}
-FASTBOOL DragMethod_Base::IsMoveOnly() const
-{
-    return TRUE;
 }
 //.............................................................................
 } //namespace chart

@@ -393,7 +393,7 @@ void XMLTableStyleContext::SetFormulas(com::sun::star::uno::Sequence<com::sun::s
 }
 
 void XMLTableStyleContext::SetGrammar(com::sun::star::uno::Sequence<com::sun::star::beans::PropertyValue>& aProps,
-        const ScGrammar::Grammar eGrammar) const
+        const formula::FormulaGrammar::Grammar eGrammar) const
 {
     sal_Int32 nLength(aProps.getLength());
     aProps.realloc(nLength + 1);
@@ -411,8 +411,8 @@ void XMLTableStyleContext::GetConditionalFormat(uno::Any& aAny,
         uno::Reference<sheet::XSheetConditionalEntries> xConditionalEntries(aAny, uno::UNO_QUERY);
         if (xConditionalEntries.is())
         {
-            const ScGrammar::Grammar eStorageGrammar = GetScImport().GetDocument()->GetStorageGrammar();
-            ScGrammar::Grammar eGrammar = eStorageGrammar;
+            const formula::FormulaGrammar::Grammar eStorageGrammar = GetScImport().GetDocument()->GetStorageGrammar();
+            formula::FormulaGrammar::Grammar eGrammar = eStorageGrammar;
             // ToDo: erase all blanks in the condition, but not in formulas or strings
             rtl::OUString scell_content(RTL_CONSTASCII_USTRINGPARAM("cell_content"));
             rtl::OUString scell_content_is_between(RTL_CONSTASCII_USTRINGPARAM("cell_content_is_between"));
@@ -584,28 +584,9 @@ void XMLTableStyleContext::FillPropertySet(
                 AddProperty(CTF_SC_CELLSTYLE, uno::makeAny(GetImport().GetStyleDisplayName( XML_STYLE_FAMILY_TABLE_CELL, GetParentName() )));
                 bParentSet = sal_True;
             }
-            if ((nNumberFormat == -1) && sDataStyleName.getLength())
-            {
-                SvXMLNumFormatContext* pStyle((SvXMLNumFormatContext *)pStyles->FindStyleChildContext(
-                    XML_STYLE_FAMILY_DATA_STYLE, sDataStyleName, sal_True));
-                if (!pStyle)
-                {
-                    XMLTableStylesContext* pMyStyles((XMLTableStylesContext *)GetScImport().GetStyles());
-                    if (pMyStyles)
-                        pStyle = (SvXMLNumFormatContext *)pMyStyles->
-                            FindStyleChildContext(XML_STYLE_FAMILY_DATA_STYLE, sDataStyleName, sal_True);
-                    else
-                    {
-                        DBG_ERROR("not possible to get style");
-                    }
-                }
-                if (pStyle)
-                {
-                    //rPropSet->setPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_NUMBERFORMAT)), aNumberFormat);
-                    nNumberFormat = pStyle->GetKey();
-                    AddProperty(CTF_SC_NUMBERFORMAT, uno::makeAny(nNumberFormat));
-                }
-            }
+            sal_Int32 nNumFmt = GetNumberFormat();
+            if (nNumFmt >= 0)
+                AddProperty(CTF_SC_NUMBERFORMAT, uno::makeAny(nNumFmt));
             if (!bConditionalFormatCreated && (aMaps.size() > 0))
             {
                 aConditionalFormat = rPropSet->getPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNONAME_CONDXML)));
@@ -683,6 +664,29 @@ XMLPropertyState* XMLTableStyleContext::FindProperty(const sal_Int16 nContextID)
     return pRet;
 }
 
+sal_Int32 XMLTableStyleContext::GetNumberFormat()
+{
+    if (nNumberFormat < 0 && sDataStyleName.getLength())
+    {
+        const SvXMLNumFormatContext* pStyle = static_cast<const SvXMLNumFormatContext*>(
+            pStyles->FindStyleChildContext(XML_STYLE_FAMILY_DATA_STYLE, sDataStyleName, sal_True));
+
+        if (!pStyle)
+        {
+            XMLTableStylesContext* pMyStyles = static_cast<XMLTableStylesContext*>(GetScImport().GetStyles());
+            if (pMyStyles)
+                pStyle = static_cast<const SvXMLNumFormatContext*>(
+                    pMyStyles->FindStyleChildContext(XML_STYLE_FAMILY_DATA_STYLE, sDataStyleName, sal_True));
+            else
+            {
+                DBG_ERROR("not possible to get style");
+            }
+        }
+        if (pStyle)
+            nNumberFormat = const_cast<SvXMLNumFormatContext*>(pStyle)->GetKey();
+    }
+    return nNumberFormat;
+}
 // ----------------------------------------------------------------------------
 
 SvXMLStyleContext *XMLTableStylesContext::CreateStyleStyleChildContext(
@@ -1036,10 +1040,12 @@ SvXMLImportContext *ScMasterPageContext::CreateHeaderFooterContext(
             const sal_Bool bLeft )
 {
     if (!bLeft)
+    {
         if (bFooter)
             bContainsRightFooter = sal_True;
         else
             bContainsRightHeader = sal_True;
+    }
     if (!xPropSet.is())
         xPropSet.set(GetStyle(), UNO_QUERY );
     return new XMLTableHeaderFooterContext( GetImport(),
@@ -1075,3 +1081,4 @@ void ScMasterPageContext::Finish( sal_Bool bOverwrite )
     if (!bContainsRightHeader)
         ClearContent(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNO_PAGE_RIGHTHDRCON)));
 }
+

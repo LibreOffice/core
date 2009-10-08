@@ -82,7 +82,7 @@
 // resource entries must consider this and undo the conversion.
 
 #include "scfuncs.hrc" // ID_FUNCTION_GRP_XXX, HID_FUNC_XXX
-#include "compiler.hrc" // SC_OPCODE_XXX
+#include "formula/compiler.hrc" // SC_OPCODE_XXX
 
 Resource RID_SC_FUNCTION_DESCRIPTIONS1
 {
@@ -3554,7 +3554,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             0;
             ID_FUNCTION_GRP_MATH;
             U2S( HID_FUNC_LOG );
-            2;  0;  0;
+            2;  0;  1;
             0;
         };
         String 2 // Name of Parameter 1
@@ -3571,7 +3571,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
         };
         String 5 // Description of Parameter 2
         {
-            Text [ en-US ] = "The base of the logarithm." ;
+            Text [ en-US ] = "The base of the logarithm. If omitted, the base is regarded as 10." ;
         };
     };
      // -=*# Resource for function LN #*=-
@@ -5678,7 +5678,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             0;
             ID_FUNCTION_GRP_STATISTIC;
             U2S( HID_FUNC_POISSON );
-            3;  0;  0;  0;
+            3;  0;  0;  1;
             0;
         };
         String 2 // Name of Parameter 1
@@ -5699,11 +5699,11 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
         };
         String 6 // Name of Parameter 3
         {
-            Text [ en-US ] = "C" ;
+            Text [ en-US ] = "Cumulative" ;
         };
         String 7 // Description of Parameter 3
         {
-            Text [ en-US ] = "Cumulated. C=0 calculates the density function, C=1 the distribution." ;
+            Text [ en-US ] = "0 or FALSE calculates the probability density function. Any other value or TRUE or omitted calculates the cumulative distribution function." ;
         };
     };
      // -=*# Resource for function NORMVERT #*=-
@@ -5967,14 +5967,14 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
     {
         String 1 // Description
         {
-            Text [ en-US ] = "Values of the gamma distribution." ;
+            Text [ en-US ] = "Returns the value of the probability density function or the cumulative distribution function for the Gamma distribution." ;
         };
         ExtraData =
         {
             0;
             ID_FUNCTION_GRP_STATISTIC;
             U2S( HID_FUNC_GAMMAVERT );
-            4;  0;  0;  0;  0;
+            4;  0;  0;  0;  1;
             0;
         };
         String 2 // Name of Parameter 1
@@ -6003,11 +6003,11 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
         };
         String 8 // Name of Parameter 4
         {
-            Text [ en-US ] = "C" ;
+            Text [ en-US ] = "Cumulative" ;
         };
         String 9 // Description of Parameter 4
         {
-            Text [ en-US ] = "Cumulated. C=0 calculates the density function, C=1 the distribution." ;
+            Text [ en-US ] = "0 or FALSE calculates the probability density function. Any other value or TRUE or omitted calculates the cumulative distribution function." ;
         };
     };
      // -=*# Resource for function GAMMAINV #*=-
@@ -6027,7 +6027,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
         };
         String 2 // Name of Parameter 1
         {
-            Text [ en-US ] = "number" ;
+            Text [ en-US ] = "Number" ;
         };
         String 3 // Description of Parameter 1
         {
@@ -6039,7 +6039,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
         };
         String 5 // Description of Parameter 2
         {
-            Text [ en-US ] = "The Alpha parameter of the Gamma distribution." ;
+            Text [ en-US ] = "The Alpha (shape) parameter of the Gamma distribution." ;
         };
         String 6 // Name of Parameter 3
         {
@@ -6047,7 +6047,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
         };
         String 7 // Description of Parameter 3
         {
-            Text [ en-US ] = "The Beta parameter of the Gamma distribution." ;
+            Text [ en-US ] = "The Beta (scale) parameter of the Gamma distribution." ;
         };
     };
      // -=*# Resource for function GAMMALN #*=-
@@ -6074,6 +6074,32 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text [ en-US ] = "The value for which the natural logarithm of the gamma function is to be calculated." ;
         };
     };
+
+     // -=*# Resource for function GAMMA #*=-
+    Resource SC_OPCODE_GAMMA
+    {
+        String 1 // Description
+        {
+            Text [ en-US ] = "Returns the value of the Gamma function." ;
+        };
+        ExtraData =
+        {
+            0;
+            ID_FUNCTION_GRP_STATISTIC;
+            U2S( HID_FUNC_GAMMA );
+            1;  0;
+            0;
+        };
+        String 2 // Name of Parameter 1
+        {
+            Text [ en-US ] = "Number" ;
+        };
+        String 3 // Description of Parameter 1
+        {
+            Text [ en-US ] = "The value for which the Gamma function is to be calculated." ;
+        };
+    };
+
      // -=*# Resource for function BETAVERT #*=-
     Resource SC_OPCODE_BETA_DIST
     {
@@ -6086,7 +6112,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             0;
             ID_FUNCTION_GRP_STATISTIC;
             U2S( HID_FUNC_BETAVERT );
-            5;  0;  0;  0;  1;  1;
+            6;  0;  0;  0;  1;  1;  1;
             0;
         };
         String 2 // Name of Parameter 1
@@ -6128,6 +6154,14 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
         String 11 // Description of Parameter 5
         {
             Text [ en-US ] = "The final value for the value interval of the distribution." ;
+        };
+        String 12 // Name of Parameter 6
+        {
+            Text [en-US ] = "Cumulative" ;
+        };
+        String 13 // Description of Parameter 6
+        {
+            Text [ en-US ] = "0 or FALSE for probability density function, any other value or TRUE or omitted for cumulative distribution function.";
         };
     };
      // -=*# Resource for function BETAINV #*=-
@@ -6439,7 +6473,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
     {
         String 1 // Description
         {
-            Text [ en-US ] = "Values of the chi square distribution." ;
+            Text [ en-US ] = "Returns the right-tail probability of the chi-square distribution." ;
         };
         ExtraData =
         {
@@ -6466,12 +6500,55 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text [ en-US ] = "The degrees of freedom of the chi square distribution." ;
         };
     };
+
+     // -=*# Resource for function CHISQDIST #*=-
+    Resource SC_OPCODE_CHISQ_DIST
+    {
+        String 1 // Description
+        {
+            Text [ en-US ] = "Returns left-tail probability of the cumulative distribution function or values of the probability density function of the chi-square distribution." ;
+        };
+        ExtraData =
+        {
+            0;
+            ID_FUNCTION_GRP_STATISTIC;
+            U2S( HID_FUNC_CHISQDIST );
+            3;  0;  0;  1;
+            0;
+        };
+        String 2 // Name of Parameter 1
+        {
+            Text [ en-US ] = "Number" ;
+        };
+        String 3 // Description of Parameter 1
+        {
+            Text [ en-US ] = "The value for which the probability density function or cumulative distribution function is to be calculated." ;
+        };
+        String 4 // Name of Parameter 2
+        {
+            Text [ en-US ] = "Degrees of Freedom" ;
+        };
+        String 5 // Description of Parameter 2
+        {
+            Text [ en-US ] = "The degrees of freedom of the chi-square distribution." ;
+        };
+        String 6 // Name of Parameter 3
+        {
+            Text [ en-US ] = "Cumulative" ;
+        };
+        String 7 // Description of Parameter 3
+        {
+            Text [ en-US ] = "0 or FALSE calculates the probability density function. Any other value or TRUE or omitted calculates the cumulative distribution function." ;
+        };
+    };
+
+
      // -=*# Resource for function CHIINV #*=-
     Resource SC_OPCODE_CHI_INV
     {
         String 1 // Description
         {
-            Text [ en-US ] = "Values of the inverse chi-squared distribution." ;
+            Text [ en-US ] = "Values of the inverse of CHIDIST(x; DegreesOfFreedom)." ;
         };
         ExtraData =
         {
@@ -6498,6 +6575,40 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text [ en-US ] = "The degrees of freedom of the chi square distribution." ;
         };
     };
+
+     // -=*# Resource for function CHISQINV #*=-
+    Resource SC_OPCODE_CHISQ_INV
+    {
+        String 1 // Description
+        {
+            Text [ en-US ] = "Values of the inverse of CHISQDIST(x;DegreesOfFreedom;TRUE())." ;
+        };
+        ExtraData =
+        {
+            0;
+            ID_FUNCTION_GRP_STATISTIC;
+            U2S( HID_FUNC_CHISQINV );
+            2;  0;  0;
+            0;
+        };
+        String 2 // Name of Parameter 1
+        {
+            Text [ en-US ] = "Probability" ;
+        };
+        String 3 // Description of Parameter 1
+        {
+            Text [ en-US ] = "The probability value for which the inverse of the chi square distribution is to be calculated." ;
+        };
+        String 4 // Name of Parameter 2
+        {
+            Text [ en-US ] = "Degrees of Freedom" ;
+        };
+        String 5 // Description of Parameter 2
+        {
+            Text [ en-US ] = "The degrees of freedom of the chi square distribution." ;
+        };
+    };
+
      // -=*# Resource for function STANDARDISIERUNG #*=-
     Resource SC_OPCODE_STANDARD
     {
@@ -8841,7 +8952,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
         };
         ExtraData =
         {
-            1;  // TODO: implementation and unsuppress
+            0;  // DOING
             ID_FUNCTION_GRP_MATH;
             U2S( HID_FUNC_EUROCONVERT );
             5;  0;  0;  0;  1;  1;

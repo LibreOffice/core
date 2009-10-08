@@ -457,7 +457,7 @@ ScChart2DataProvider::createDataSource(
                                 pR->Justify();
                                 if (pR->aStart != pR->aEnd)
                                 {
-                                    DBG_ASSERT(pR->aStart.Tab() == pR->aEnd.Tab(), "a 3D range should not happen in this case")
+                                    DBG_ASSERT(pR->aStart.Tab() == pR->aEnd.Tab(), "a 3D range should not happen in this case");
                                         if(bOrientCol)
                                         {
                                             if (pR->aStart.Col() == pR->aEnd.Col())

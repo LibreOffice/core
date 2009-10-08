@@ -389,6 +389,9 @@ hidspecial HID_FUNC_UNICODE         { HelpID = HID_FUNC_UNICODE; };
 hidspecial HID_FUNC_UNICHAR         { HelpID = HID_FUNC_UNICHAR; };
 hidspecial HID_FUNC_EUROCONVERT     { HelpID = HID_FUNC_EUROCONVERT; };
 hidspecial HID_FUNC_NUMBERVALUE     { HelpID = HID_FUNC_NUMBERVALUE; };
+hidspecial HID_FUNC_GAMMA           { HelpID = HID_FUNC_GAMMA; };
+hidspecial HID_FUNC_CHISQDIST       { HelpID = HID_FUNC_CHISQDIST; };
+hidspecial HID_FUNC_CHISQINV        { HelpID = HID_FUNC_CHISQINV; };
 
 // ... and from Analysis Addin
 

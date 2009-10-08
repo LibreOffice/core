@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: HelpIds.hrc,v $
- * $Revision: 1.8 $
+ * $Revision: 1.8.56.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -31,7 +31,7 @@
 #define CHART_HELPIDS_HRC
 
 #include <svtools/solar.hrc>
-//next is 115
+//next is 118
 
 //see old chart: schhids.h
 
@@ -44,8 +44,6 @@
 #define HID_SCH_ALIGNMENT           (HID_SCH_START + 4)
 #define HID_SCH_LEGEND_POS          (HID_SCH_START + 5)
 #define HID_SCH_DATA_DESCR          (HID_SCH_START + 6)
-
-#define HID_SCH_SCALE_Y             (HID_SCH_START + 7)
 
 #define HID_SCH_STAT                (HID_SCH_START + 8)
 #define HID_SCH_WIN_DOCUMENT        (HID_SCH_START + 9)
@@ -141,6 +139,9 @@
 #define HID_SCH_PB_PERCENT_NUMBERFORMAT     (HID_SCH_START + 89)
 #define HID_SCH_DATALABEL_SEPARATOR         (HID_SCH_START + 90)
 #define HID_SCH_DATALABEL_PLACEMENT         (HID_SCH_START + 91)
+#define HID_SCH_TEXTDIRECTION               (HID_SCH_START + 115)
+#define HID_SCH_TEXTDIRECTION_TITLE         (HID_SCH_START + 116)
+#define HID_SCH_TEXTDIRECTION_EQUATION      (HID_SCH_START + 117)
 
 #define HID_SCH_TITLE_MAIN  (HID_SCH_START + 80)
 #define HID_SCH_TITLE_SUB   (HID_SCH_START + 81)

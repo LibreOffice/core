@@ -58,11 +58,16 @@ public:
     bool ProvidesBarConnectors() const;
     bool HasAreaProperties() const;
     bool HasSymbolProperties() const;
-    bool HasScaleProperties() const;
-    bool CanAxisLabelsBeStaggered() const;
     bool HasNumberProperties() const;
     bool ProvidesStartingAngle() const;
     bool ProvidesMissingValueTreatments() const;
+
+    bool HasScaleProperties() const;
+    bool CanAxisLabelsBeStaggered() const;
+    bool IsSupportingAxisPositioning() const;
+    bool ShowAxisOrigin() const;
+    bool IsCrossingAxisIsCategoryAxis() const;
+    const ::com::sun::star::uno::Sequence< rtl::OUString >& GetCategories() const;
 
     ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XChartDocument >
         getDocument() const;
@@ -81,11 +86,17 @@ private:
     bool m_bProvidesBarConnectors;
     bool m_bHasAreaProperties;
     bool m_bHasSymbolProperties;
-    bool m_bHasScaleProperties;
-    bool m_bCanAxisLabelsBeStaggered;
     bool m_bHasNumberProperties;
     bool m_bProvidesStartingAngle;
     bool m_bProvidesMissingValueTreatments;
+
+    bool m_bHasScaleProperties;
+    bool m_bCanAxisLabelsBeStaggered;
+
+    bool m_bSupportingAxisPositioning;
+    bool m_bShowAxisOrigin;
+    bool m_bIsCrossingAxisIsCategoryAxis;
+    ::com::sun::star::uno::Sequence< rtl::OUString > m_aCategories;
 
     ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XChartDocument > m_xChartDocument;
 };

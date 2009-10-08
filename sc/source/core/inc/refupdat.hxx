@@ -35,7 +35,7 @@
 
 class ScDocument;
 class ScBigRange;
-struct ComplRefData;
+struct ScComplexRefData;
 class ScAddress;
 class ScRange;
 
@@ -74,20 +74,20 @@ public:
                                   UpdateRefMode eUpdateRefMode,
                                   const ScAddress& rPos, const ScRange& rRange,
                                   SCsCOL nDx, SCsROW nDy, SCsTAB nDz,
-                                  ComplRefData& rRef, WhatType eWhat = ALL );
+                                  ScComplexRefData& rRef, WhatType eWhat = ALL );
 
     /// Before calling, the absolute references must be up-to-date!
     static ScRefUpdateRes Move( ScDocument* pDoc, const ScAddress& rPos,
                                 SCsCOL nDx, SCsROW nDy, SCsTAB nDz,
-                                ComplRefData& rRef, BOOL bWrap, BOOL bAbsolute );
+                                ScComplexRefData& rRef, BOOL bWrap, BOOL bAbsolute );
 
     static void MoveRelWrap( ScDocument* pDoc, const ScAddress& rPos,
-                                ComplRefData& rRef );
+                                ScComplexRefData& rRef );
 
     /// Before calling, the absolute references must be up-to-date!
     static ScRefUpdateRes UpdateTranspose( ScDocument* pDoc,
                                 const ScRange& rSource, const ScAddress& rDest,
-                                ComplRefData& rRef );
+                                ScComplexRefData& rRef );
 
     static void DoTranspose( SCsCOL& rCol, SCsROW& rRow, SCsTAB& rTab, ScDocument* pDoc,
                                 const ScRange& rSource, const ScAddress& rDest );
@@ -95,7 +95,7 @@ public:
     /// Before calling, the absolute references must be up-to-date!
     static ScRefUpdateRes UpdateGrow(
                                 const ScRange& rArea, SCCOL nGrowX, SCROW nGrowY,
-                                ComplRefData& rRef );
+                                ScComplexRefData& rRef );
 
 #if OLD_PIVOT_IMPLEMENTATION
     static ScRefUpdateRes DoGrow( const ScRange& rArea, SCCOL nGrowX, SCROW nGrowY,

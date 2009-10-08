@@ -69,7 +69,7 @@ inline BOOL IsText( BOOL& bQuote, sal_Unicode c )
 }
 
 ScRefFinder::ScRefFinder(const String& rFormula, ScDocument* pDocument,
-             ScAddress::Convention eConvP) :
+             formula::FormulaGrammar::AddressConvention eConvP) :
     aFormula( rFormula ),
     eConv( eConvP ),
     pDoc( pDocument )

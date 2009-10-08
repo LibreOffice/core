@@ -49,81 +49,81 @@
 
 class ScDocument;
 
-class DataObject
+class SC_DLLPUBLIC ScDataObject
 {
 public:
-                            DataObject() {}
-    virtual                 ~DataObject();
-    virtual DataObject*     Clone() const = 0;
+                            ScDataObject() {}
+    virtual                 ~ScDataObject();
+    virtual ScDataObject*       Clone() const = 0;
 };
 
-class SC_DLLPUBLIC Collection : public DataObject
+class SC_DLLPUBLIC ScCollection : public ScDataObject
 {
 protected:
     USHORT          nCount;
     USHORT          nLimit;
     USHORT          nDelta;
-    DataObject**    pItems;
+    ScDataObject**  pItems;
 public:
-                        Collection(USHORT nLim = 4, USHORT nDel = 4);
-                        Collection(const Collection& rCollection);
-    virtual             ~Collection();
+                        ScCollection(USHORT nLim = 4, USHORT nDel = 4);
+                        ScCollection(const ScCollection& rCollection);
+    virtual             ~ScCollection();
 
-    virtual DataObject* Clone() const;
+    virtual ScDataObject*   Clone() const;
 
             void        AtFree(USHORT nIndex);
-            void        Free(DataObject* pDataObject);
+            void        Free(ScDataObject* pScDataObject);
             void        FreeAll();
 
-            BOOL        AtInsert(USHORT nIndex, DataObject* pDataObject);
-    virtual BOOL        Insert(DataObject* pDataObject);
+            BOOL        AtInsert(USHORT nIndex, ScDataObject* pScDataObject);
+    virtual BOOL        Insert(ScDataObject* pScDataObject);
 
-            DataObject* At(USHORT nIndex) const;
-    virtual USHORT      IndexOf(DataObject* pDataObject) const;
+            ScDataObject*   At(USHORT nIndex) const;
+    virtual USHORT      IndexOf(ScDataObject* pScDataObject) const;
             USHORT      GetCount() const { return nCount; }
 
-            DataObject* operator[]( const USHORT nIndex) const {return At(nIndex);}
-            Collection& operator=( const Collection& rCol );
+            ScDataObject* operator[]( const USHORT nIndex) const {return At(nIndex);}
+            ScCollection&   operator=( const ScCollection& rCol );
 };
 
 
-class SC_DLLPUBLIC SortedCollection : public Collection
+class SC_DLLPUBLIC ScSortedCollection : public ScCollection
 {
 private:
     BOOL    bDuplicates;
 protected:
-                        // fuer StrCollection Load/Store
+                        // fuer ScStrCollection Load/Store
             void        SetDups( BOOL bVal ) { bDuplicates = bVal; }
             BOOL        IsDups() const { return bDuplicates; }
 public:
-                        SortedCollection(USHORT nLim = 4, USHORT nDel = 4, BOOL bDup = FALSE);
-                        SortedCollection(const SortedCollection& rSortedCollection) :
-                            Collection(rSortedCollection),
-                            bDuplicates(rSortedCollection.bDuplicates) {}
+                        ScSortedCollection(USHORT nLim = 4, USHORT nDel = 4, BOOL bDup = FALSE);
+                        ScSortedCollection(const ScSortedCollection& rScSortedCollection) :
+                            ScCollection(rScSortedCollection),
+                            bDuplicates(rScSortedCollection.bDuplicates) {}
 
-    virtual USHORT      IndexOf(DataObject* pDataObject) const;
-    virtual short       Compare(DataObject* pKey1, DataObject* pKey2) const = 0;
-    virtual BOOL        IsEqual(DataObject* pKey1, DataObject* pKey2) const;
-            BOOL        Search(DataObject* pDataObject, USHORT& rIndex) const;
-    virtual BOOL        Insert(DataObject* pDataObject);
-    virtual BOOL        InsertPos(DataObject* pDataObject, USHORT& nIndex);
+    virtual USHORT      IndexOf(ScDataObject* pScDataObject) const;
+    virtual short       Compare(ScDataObject* pKey1, ScDataObject* pKey2) const = 0;
+    virtual BOOL        IsEqual(ScDataObject* pKey1, ScDataObject* pKey2) const;
+            BOOL        Search(ScDataObject* pScDataObject, USHORT& rIndex) const;
+    virtual BOOL        Insert(ScDataObject* pScDataObject);
+    virtual BOOL        InsertPos(ScDataObject* pScDataObject, USHORT& nIndex);
 
-            BOOL        operator==(const SortedCollection& rCmp) const;
+            BOOL        operator==(const ScSortedCollection& rCmp) const;
 };
 
 
 
 //------------------------------------------------------------------------
-class StrData : public DataObject
+class StrData : public ScDataObject
 {
-friend class StrCollection;
+friend class ScStrCollection;
     String aStr;
 public:
                         StrData(const String& rStr) : aStr(rStr) {}
-                        StrData(const StrData& rData) : DataObject(), aStr(rData.aStr) {}
-    virtual DataObject* Clone() const;
+                        StrData(const StrData& rData) : ScDataObject(), aStr(rData.aStr) {}
+    virtual ScDataObject*   Clone() const;
     const String&       GetString() const { return aStr; }
-    // SetString nur, wenn StrData nicht in StrCollection ist! !!!
+    // SetString nur, wenn StrData nicht in ScStrCollection ist! !!!
     // z.B. fuer Searcher
     void                SetString( const String& rNew ) { aStr = rNew; }
 };
@@ -132,27 +132,27 @@ public:
 
 class SvStream;
 
-class SC_DLLPUBLIC StrCollection : public SortedCollection
+class SC_DLLPUBLIC ScStrCollection : public ScSortedCollection
 {
 public:
-    StrCollection(USHORT nLim = 4, USHORT nDel = 4, BOOL bDup = FALSE) :
-                        SortedCollection    ( nLim, nDel, bDup ) {}
-    StrCollection(const StrCollection& rStrCollection) :
-                        SortedCollection    ( rStrCollection ) {}
+    ScStrCollection(USHORT nLim = 4, USHORT nDel = 4, BOOL bDup = FALSE) :
+                        ScSortedCollection  ( nLim, nDel, bDup ) {}
+    ScStrCollection(const ScStrCollection& rScStrCollection) :
+                        ScSortedCollection  ( rScStrCollection ) {}
 
-    virtual DataObject* Clone() const;
+    virtual ScDataObject*   Clone() const;
             StrData*    operator[]( const USHORT nIndex) const {return (StrData*)At(nIndex);}
-    virtual short       Compare(DataObject* pKey1, DataObject* pKey2) const;
+    virtual short       Compare(ScDataObject* pKey1, ScDataObject* pKey2) const;
 
             void        Load( SvStream& );
             void        Store( SvStream& ) const;
 };
 
 //------------------------------------------------------------------------
-// TypedStrCollection: wie StrCollection, nur, dass Zahlen vor Strings
+// TypedScStrCollection: wie ScStrCollection, nur, dass Zahlen vor Strings
 //                     sortiert werden
 
-class TypedStrData : public DataObject
+class TypedStrData : public ScDataObject
 {
 public:
             TypedStrData( const String& rStr, double nVal = 0.0,
@@ -165,21 +165,21 @@ public:
 //UNUSED2008-05                  BOOL bAllStrings );
 
             TypedStrData( const TypedStrData& rCpy )
-                : DataObject(),
+                : ScDataObject(),
                   aStrValue(rCpy.aStrValue),
                   nValue(rCpy.nValue),
                   nStrType(rCpy.nStrType) {}
 
-    virtual DataObject* Clone() const;
+    virtual ScDataObject*   Clone() const;
 
     BOOL                IsStrData() const { return nStrType != 0; }
     const String&       GetString() const { return aStrValue; }
     double              GetValue () const { return nValue; }
 
 private:
-    friend class TypedStrCollection;
+    friend class TypedScStrCollection;
 #if OLD_PIVOT_IMPLEMENTATION
-    friend class PivotStrCollection;
+    friend class PivotScStrCollection;
 #endif
 
     String  aStrValue;
@@ -187,20 +187,20 @@ private:
     USHORT  nStrType;           // 0 = Value
 };
 
-class SC_DLLPUBLIC TypedStrCollection : public SortedCollection
+class SC_DLLPUBLIC TypedScStrCollection : public ScSortedCollection
 {
 private:
     BOOL    bCaseSensitive;
 
 public:
-            TypedStrCollection( USHORT nLim = 4, USHORT nDel = 4, BOOL bDup = FALSE )
-                : SortedCollection( nLim, nDel, bDup ) { bCaseSensitive = FALSE; }
+            TypedScStrCollection( USHORT nLim = 4, USHORT nDel = 4, BOOL bDup = FALSE )
+                : ScSortedCollection( nLim, nDel, bDup ) { bCaseSensitive = FALSE; }
 
-            TypedStrCollection( const TypedStrCollection& rCpy )
-                : SortedCollection( rCpy ) { bCaseSensitive = rCpy.bCaseSensitive; }
+            TypedScStrCollection( const TypedScStrCollection& rCpy )
+                : ScSortedCollection( rCpy ) { bCaseSensitive = rCpy.bCaseSensitive; }
 
-    virtual DataObject*     Clone() const;
-    virtual short           Compare( DataObject* pKey1, DataObject* pKey2 ) const;
+    virtual ScDataObject*       Clone() const;
+    virtual short           Compare( ScDataObject* pKey1, ScDataObject* pKey2 ) const;
 
     TypedStrData*   operator[]( const USHORT nIndex) const
                         { return (TypedStrData*)At(nIndex); }

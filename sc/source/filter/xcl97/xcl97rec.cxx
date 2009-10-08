@@ -79,6 +79,9 @@
 #include "docoptio.hxx"
 #include "patattr.hxx"
 
+#include <oox/core/tokens.hxx>
+
+using ::rtl::OString;
 using ::rtl::OUString;
 using namespace ::com::sun::star;
 using ::com::sun::star::uno::Reference;
@@ -918,17 +921,23 @@ ExcBofW8::ExcBofW8()
 
 // --- class ExcBundlesheet8 -----------------------------------------
 
-ExcBundlesheet8::ExcBundlesheet8( RootData& rRootData, SCTAB nTab ) :
-    ExcBundlesheetBase( rRootData, static_cast<sal_uInt16>(nTab) )
+ExcBundlesheet8::ExcBundlesheet8( RootData& rRootData, SCTAB _nTab ) :
+    ExcBundlesheetBase( rRootData, static_cast<sal_uInt16>(_nTab) ),
+    sUnicodeName( rRootData.pER->GetTabInfo().GetScTabName( _nTab ) )
 {
-    aUnicodeName.Assign( rRootData.pER->GetTabInfo().GetScTabName( nTab ), EXC_STR_8BITLENGTH );
 }
 
 
 ExcBundlesheet8::ExcBundlesheet8( const String& rString ) :
     ExcBundlesheetBase(),
-    aUnicodeName( rString, EXC_STR_8BITLENGTH )
+    sUnicodeName( rString )
 {
+}
+
+
+XclExpString ExcBundlesheet8::GetName() const
+{
+    return XclExpString( sUnicodeName, EXC_STR_8BITLENGTH );
 }
 
 
@@ -936,13 +945,33 @@ void ExcBundlesheet8::SaveCont( XclExpStream& rStrm )
 {
     nOwnPos = rStrm.GetSvStreamPos();
     // write dummy position, real position comes later
-    rStrm << sal_uInt32( 0 ) << nGrbit << aUnicodeName;
+    rStrm << sal_uInt32( 0 ) << nGrbit << GetName();
 }
 
 
 sal_Size ExcBundlesheet8::GetLen() const
 {   // Text max 255 chars
-    return 8 + aUnicodeName.GetBufferSize();
+    return 8 + GetName().GetBufferSize();
+}
+
+
+void ExcBundlesheet8::SaveXml( XclExpXmlStream& rStrm )
+{
+    OUString sId;
+    rStrm.CreateOutputStream(
+            XclXmlUtils::GetStreamName( "xl/", "worksheets/sheet", nTab+1),
+            XclXmlUtils::GetStreamName( NULL, "worksheets/sheet", nTab+1),
+            rStrm.GetCurrentStream()->getOutputStream(),
+            "application/vnd.openxmlformats-officedocument.spreadsheetml.worksheet+xml",
+            "http://schemas.openxmlformats.org/officeDocument/2006/relationships/worksheet",
+            &sId );
+
+    rStrm.GetCurrentStream()->singleElement( XML_sheet,
+            XML_name,               XclXmlUtils::ToOString( sUnicodeName ).getStr(),
+            XML_sheetId,            rtl::OString::valueOf( (sal_Int32)( nTab+1 ) ).getStr(),
+            XML_state,              nGrbit == 0x0000 ? "visible" : "hidden",
+            FSNS( XML_r, XML_id ),  XclXmlUtils::ToOString( sId ).getStr(),
+            FSEND );
 }
 
 
@@ -1004,6 +1033,17 @@ void ExcEScenarioCell::WriteAddress( XclExpStream& rStrm )
 void ExcEScenarioCell::WriteText( XclExpStream& rStrm )
 {
     rStrm << sText;
+}
+
+void ExcEScenarioCell::SaveXml( XclExpXmlStream& rStrm )
+{
+    rStrm.GetCurrentStream()->singleElement( XML_inputCells,
+            // OOXTODO: XML_deleted,
+            // OOXTODO: XML_numFmtId,
+            XML_r,      XclXmlUtils::ToOString( ScAddress( nCol, nRow, 0 ) ).getStr(),
+            // OOXTODO: XML_undone,
+            XML_val,    XclXmlUtils::ToOString( sText ).getStr(),
+            FSEND );
 }
 
 
@@ -1122,6 +1162,24 @@ sal_Size ExcEScenario::GetLen() const
     return nRecLen;
 }
 
+void ExcEScenario::SaveXml( XclExpXmlStream& rStrm )
+{
+    sax_fastparser::FSHelperPtr& rWorkbook = rStrm.GetCurrentStream();
+    rWorkbook->startElement( XML_scenario,
+            XML_name,       XclXmlUtils::ToOString( sName ).getStr(),
+            XML_locked,     XclXmlUtils::ToPsz( nProtected ),
+            // OOXTODO: XML_hidden,
+            XML_count,      OString::valueOf( (sal_Int32) List::Count() ).getStr(),
+            XML_user,       XESTRING_TO_PSZ( sUsername ),
+            XML_comment,    XESTRING_TO_PSZ( sComment ),
+            FSEND );
+
+    for( ExcEScenarioCell* pCell = _First(); pCell; pCell = _Next() )
+        pCell->SaveXml( rStrm );
+
+    rWorkbook->endElement( XML_scenario );
+}
+
 
 
 
@@ -1165,6 +1223,24 @@ void ExcEScenarioManager::Save( XclExpStream& rStrm )
 
     for( ExcEScenario* pScen = _First(); pScen; pScen = _Next() )
         pScen->Save( rStrm );
+}
+
+void ExcEScenarioManager::SaveXml( XclExpXmlStream& rStrm )
+{
+    if( ! List::Count() )
+        return;
+
+    sax_fastparser::FSHelperPtr& rWorkbook = rStrm.GetCurrentStream();
+    rWorkbook->startElement( XML_scenarios,
+            XML_current,    OString::valueOf( (sal_Int32)nActive ).getStr(),
+            XML_show,       OString::valueOf( (sal_Int32)nActive ).getStr(),
+            // OOXTODO: XML_sqref,
+            FSEND );
+
+    for( ExcEScenario* pScen = _First(); pScen; pScen = _Next() )
+        pScen->SaveXml( rStrm );
+
+    rWorkbook->endElement( XML_scenarios );
 }
 
 UINT16 ExcEScenarioManager::GetNum() const
@@ -1232,6 +1308,14 @@ sal_Size XclCalccount::GetLen() const
 }
 
 
+void XclCalccount::SaveXml( XclExpXmlStream& rStrm )
+{
+    rStrm.WriteAttributes(
+            XML_iterateCount, OString::valueOf( (sal_Int32)nCount ).getStr(),
+            FSEND );
+}
+
+
 
 
 void XclIteration::SaveCont( XclExpStream& rStrm )
@@ -1255,6 +1339,14 @@ UINT16 XclIteration::GetNum() const
 sal_Size XclIteration::GetLen() const
 {
     return 2;
+}
+
+
+void XclIteration::SaveXml( XclExpXmlStream& rStrm )
+{
+    rStrm.WriteAttributes(
+            XML_iterate, XclXmlUtils::ToPsz( nIter == 1 ),
+            FSEND );
 }
 
 
@@ -1285,9 +1377,25 @@ sal_Size XclDelta::GetLen() const
 }
 
 
+void XclDelta::SaveXml( XclExpXmlStream& rStrm )
+{
+    rStrm.WriteAttributes(
+            XML_iterateDelta, OString::valueOf( fDelta ).getStr(),
+            FSEND );
+}
+
+
 
 
 XclRefmode::XclRefmode( const ScDocument& rDoc ) :
-    XclExpBoolRecord( 0x000F, rDoc.GetAddressConvention() != ScAddress::CONV_XL_R1C1 )
+    XclExpBoolRecord( 0x000F, rDoc.GetAddressConvention() != formula::FormulaGrammar::CONV_XL_R1C1 )
 {
 }
+
+void XclRefmode::SaveXml( XclExpXmlStream& rStrm )
+{
+    rStrm.WriteAttributes(
+            XML_refMode, GetBool() ? "A1" : "R1C1",
+            FSEND );
+}
+

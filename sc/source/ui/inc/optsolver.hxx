@@ -47,7 +47,7 @@ namespace com { namespace sun { namespace star {
 
 //============================================================================
 
-class ScCursorRefEdit : public ScRefEdit
+class ScCursorRefEdit : public formula::RefEdit
 {
     Link    maCursorUpLink;
     Link    maCursorDownLink;
@@ -118,51 +118,51 @@ public:
 
 private:
     FixedText       maFtObjectiveCell;
-    ScRefEdit       maEdObjectiveCell;
-    ScRefButton     maRBObjectiveCell;
+    formula::RefEdit       maEdObjectiveCell;
+    formula::RefButton     maRBObjectiveCell;
 
     FixedText       maFtDirection;
     RadioButton     maRbMax;
     RadioButton     maRbMin;
     RadioButton     maRbValue;
-    ScRefEdit       maEdTargetValue;
-    ScRefButton     maRBTargetValue;
+    formula::RefEdit       maEdTargetValue;
+    formula::RefButton     maRBTargetValue;
 
     FixedText       maFtVariableCells;
-    ScRefEdit       maEdVariableCells;
-    ScRefButton     maRBVariableCells;
+    formula::RefEdit       maEdVariableCells;
+    formula::RefButton     maRBVariableCells;
 
     FixedLine       maFlConditions;
 
     FixedText       maFtCellRef;        // labels are together with controls for the first row
     ScCursorRefEdit maEdLeft1;
-    ScRefButton     maRBLeft1;
+    formula::RefButton     maRBLeft1;
     FixedText       maFtOperator;
     ListBox         maLbOp1;
     FixedText       maFtConstraint;
     ScCursorRefEdit maEdRight1;
-    ScRefButton     maRBRight1;
+    formula::RefButton     maRBRight1;
     ImageButton     maBtnDel1;
 
     ScCursorRefEdit maEdLeft2;
-    ScRefButton     maRBLeft2;
+    formula::RefButton     maRBLeft2;
     ListBox         maLbOp2;
     ScCursorRefEdit maEdRight2;
-    ScRefButton     maRBRight2;
+    formula::RefButton     maRBRight2;
     ImageButton     maBtnDel2;
 
     ScCursorRefEdit maEdLeft3;
-    ScRefButton     maRBLeft3;
+    formula::RefButton     maRBLeft3;
     ListBox         maLbOp3;
     ScCursorRefEdit maEdRight3;
-    ScRefButton     maRBRight3;
+    formula::RefButton     maRBRight3;
     ImageButton     maBtnDel3;
 
     ScCursorRefEdit maEdLeft4;
-    ScRefButton     maRBLeft4;
+    formula::RefButton     maRBLeft4;
     ListBox         maLbOp4;
     ScCursorRefEdit maEdRight4;
-    ScRefButton     maRBRight4;
+    formula::RefButton     maRBRight4;
     ImageButton     maBtnDel4;
 
     ScrollBar       maScrollBar;
@@ -180,14 +180,14 @@ private:
     ScDocShell*     mpDocShell;
     ScDocument*     mpDoc;
     const SCTAB     mnCurTab;
-    ScRefEdit*      mpEdActive;
+    formula::RefEdit*      mpEdActive;
     bool            mbDlgLostFocus;
 
     static const sal_uInt16 EDIT_ROW_COUNT = 4;
     ScCursorRefEdit* mpLeftEdit[EDIT_ROW_COUNT];
-    ScRefButton*     mpLeftButton[EDIT_ROW_COUNT];
+    formula::RefButton*     mpLeftButton[EDIT_ROW_COUNT];
     ScCursorRefEdit* mpRightEdit[EDIT_ROW_COUNT];
-    ScRefButton*     mpRightButton[EDIT_ROW_COUNT];
+    formula::RefButton*     mpRightButton[EDIT_ROW_COUNT];
     ListBox*         mpOperator[EDIT_ROW_COUNT];
     ImageButton*     mpDelButton[EDIT_ROW_COUNT];
 
@@ -206,7 +206,7 @@ private:
     void    EnableButtons();
     bool    ParseRef( ScRange& rRange, const String& rInput, bool bAllowRange );
     bool    FindTimeout( sal_Int32& rTimeout );
-    void    ShowError( bool bCondition, ScRefEdit* pFocus );
+    void    ShowError( bool bCondition, formula::RefEdit* pFocus );
 
     DECL_LINK( BtnHdl, PushButton* );
     DECL_LINK( DelBtnHdl, PushButton* );

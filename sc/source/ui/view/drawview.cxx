@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: drawview.cxx,v $
- * $Revision: 1.51 $
+ * $Revision: 1.50.142.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -227,6 +227,7 @@ void ScDrawView::InvalidateDrawTextAttrs()
     rBindings.Invalidate( SID_ULINE_VAL_SINGLE );
     rBindings.Invalidate( SID_ULINE_VAL_DOUBLE );
     rBindings.Invalidate( SID_ULINE_VAL_DOTTED );
+    rBindings.Invalidate( SID_ATTR_CHAR_OVERLINE );
     rBindings.Invalidate( SID_ATTR_CHAR_COLOR );
     rBindings.Invalidate( SID_ALIGNLEFT );
     rBindings.Invalidate( SID_ALIGNCENTERHOR );

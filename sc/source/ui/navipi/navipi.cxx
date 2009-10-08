@@ -33,7 +33,7 @@
 
 //------------------------------------------------------------------
 
-#include <math.h>
+// #include <math.h>
 #include <rangelst.hxx>
 #include <sfx2/app.hxx>
 #include <sfx2/bindings.hxx>
@@ -74,7 +74,7 @@
 // macro is sufficient since only used in ctor
 #define SCNAV_COLDIGITS     (static_cast<xub_StrLen>( floor( log10( static_cast<double>(SCNAV_MAXCOL)))) + 1)   // 1...256...18278
 // precomputed constant because it is used in every change of spin button field
-static const xub_StrLen SCNAV_COLLETTERS = ::ColToAlpha(SCNAV_MAXCOL).Len();    // A...IV...ZZZ
+static const xub_StrLen SCNAV_COLLETTERS = ::ScColToAlpha(SCNAV_MAXCOL).Len();    // A...IV...ZZZ
 
 #define SCNAV_MAXROW        (MAXROWCOUNT)
 
@@ -300,7 +300,7 @@ SCCOL ColumnEdit::NumToAlpha( SCCOL nColNo, String& rStr )
     else if ( nColNo < 1 )
         nColNo = 1;
 
-    ::ColToAlpha( rStr, nColNo - 1);
+    ::ScColToAlpha( rStr, nColNo - 1);
 
     return nColNo;
 }
@@ -1523,7 +1523,7 @@ BOOL __EXPORT ScNavigatorDlg::Drop( const DropEvent& rEvt )
     {
         String aFileName;
 
-        SvDataObjectRef pObject = SvDataObject::PasteDragServer(rEvt);
+        SvScDataObjectRef pObject = SvScDataObject::PasteDragServer(rEvt);
 
         ULONG nFormat = INetBookmark::HasFormat(*pObject);
         INetBookmark aBookmark;
@@ -1551,7 +1551,7 @@ BOOL __EXPORT ScNavigatorDlg::QueryDrop( DropEvent& rEvt )
 
     if ( !aLbEntries.IsInDrag() )       // kein Verschieben innerhalb der TreeListBox
     {
-        SvDataObjectRef pObject = SvDataObject::PasteDragServer(rEvt);
+        SvScDataObjectRef pObject = SvScDataObject::PasteDragServer(rEvt);
         if ( pObject->HasFormat(FORMAT_FILE)
             || INetBookmark::HasFormat(*pObject) )
         {

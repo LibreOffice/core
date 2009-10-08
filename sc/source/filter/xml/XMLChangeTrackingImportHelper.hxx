@@ -55,12 +55,12 @@ struct ScMyCellInfo
     double             fValue;
     sal_Int32          nMatrixCols;
     sal_Int32          nMatrixRows;
-    ScGrammar::Grammar eGrammar;
+    formula::FormulaGrammar::Grammar eGrammar;
     sal_uInt16         nType;
     sal_uInt8          nMatrixFlag;
 
     ScMyCellInfo(ScBaseCell* pCell, const rtl::OUString& sFormulaAddress, const rtl::OUString& sFormula,
-                const ScGrammar::Grammar eGrammar, const rtl::OUString& sInputString,
+                const formula::FormulaGrammar::Grammar eGrammar, const rtl::OUString& sInputString,
                 const double& fValue, const sal_uInt16 nType, const sal_uInt8 nMatrixFlag, const sal_Int32 nMatrixCols,
                 const sal_Int32 nMatrixRows);
     ~ScMyCellInfo();
@@ -188,7 +188,7 @@ class ScChangeViewSettings;
 
 class ScXMLChangeTrackingImportHelper
 {
-    StrCollection       aUsers;
+    ScStrCollection     aUsers;
     ScMyActions         aActions;
     com::sun::star::uno::Sequence<sal_Int8> aProtect;
     ScDocument*         pDoc;

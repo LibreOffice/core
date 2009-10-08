@@ -45,9 +45,9 @@ ScTokenArray* DbgMakeTokenArray
     ( ScDocument* pDoc, SCTAB nTab, const String& r, USHORT& rErr );
 void DbgDumpTokenArray( const BYTE* pArr, USHORT nLen, const char* pMsg );
 void DbgDelTokenArray( ScTokenArray* );
-StackVar DbgInterpret( ScDocument* pDok, const ScTokenArray* pToken,
+formula::StackVar DbgInterpret( ScDocument* pDok, const ScTokenArray* pToken,
                        SCCOL nCOL, SCROW nROW, SCTAB nTAB,
-                                  StackVar eStackVar,
+                                  formula::StackVar eformula::StackVar,
                                   char* &rStringErgPtr,
                                   double& rDoubleErg,
                                   USHORT& rError,

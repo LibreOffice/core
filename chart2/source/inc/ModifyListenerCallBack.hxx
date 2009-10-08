@@ -35,6 +35,7 @@
 #include <tools/link.hxx>
 #include <com/sun/star/util/XModifyBroadcaster.hpp>
 #include <com/sun/star/util/XModifyListener.hpp>
+#include "charttoolsdllapi.hxx"
 
 namespace chart {
 
@@ -44,7 +45,7 @@ without becoming a XModifyListener yourself
 
 class ModifyListenerCallBack_impl;
 
-class ModifyListenerCallBack
+class OOO_DLLPUBLIC_CHARTTOOLS ModifyListenerCallBack
 {
 public:
     explicit ModifyListenerCallBack( const Link& rCallBack );

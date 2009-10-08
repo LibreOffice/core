@@ -31,11 +31,13 @@
 #define CHART2_EXPONENTIALREGRESSIONCURVECALCULATOR_HXX
 
 #include "RegressionCurveCalculator.hxx"
+#include "charttoolsdllapi.hxx"
 
 namespace chart
 {
 
-class ExponentialRegressionCurveCalculator : public RegressionCurveCalculator
+class OOO_DLLPUBLIC_CHARTTOOLS ExponentialRegressionCurveCalculator :
+        public RegressionCurveCalculator
 {
 public:
     ExponentialRegressionCurveCalculator();

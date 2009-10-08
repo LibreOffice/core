@@ -62,6 +62,7 @@ class ScPreviewShell: public SfxViewShell
     ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > aSourceData;  // ViewData
     BYTE            nSourceDesignMode;      // form design mode from TabView
     SvxZoomType     eZoom;
+    long            nMaxVertPos;
 
     SfxBroadcaster* pAccessibilityBroadcaster;
 

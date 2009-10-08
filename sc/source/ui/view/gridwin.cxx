@@ -601,7 +601,7 @@ void ScGridWindow::DoPageFieldMenue( SCCOL nCol, SCROW nRow )
 
     //  SetSize comes later
 
-    TypedStrCollection aStrings( 128, 128 );
+    TypedScStrCollection aStrings( 128, 128 );
 
     //  get list box entries and selection
     BOOL bHasCurrentPage = FALSE;
@@ -895,7 +895,7 @@ void ScGridWindow::DoAutoFilterMenue( SCCOL nCol, SCROW nRow, BOOL bDataSelect )
 */
 
     BOOL bEmpty = FALSE;
-    TypedStrCollection aStrings( 128, 128 );
+    TypedScStrCollection aStrings( 128, 128 );
     if ( bDataSelect )                                  // Auswahl-Liste
     {
         //  Liste fuellen
@@ -3783,7 +3783,7 @@ sal_Int8 ScGridWindow::DropTransferObj( ScTransferObj* pTransObj, SCCOL nDestPos
                 if ( meDragInsertMode != INS_NONE )
                 {
                     // call with bApi = TRUE to avoid error messages in drop handler
-                    bDone = pDocSh->GetDocFunc().InsertCells( aDest, meDragInsertMode, TRUE /*bRecord*/, TRUE /*bApi*/, TRUE /*bPartOfPaste*/ );
+                    bDone = pDocSh->GetDocFunc().InsertCells( aDest, NULL, meDragInsertMode, TRUE /*bRecord*/, TRUE /*bApi*/, TRUE /*bPartOfPaste*/ );
                     if ( bDone )
                     {
                         if ( nThisTab == nSourceTab )
@@ -3834,7 +3834,7 @@ sal_Int8 ScGridWindow::DropTransferObj( ScTransferObj* pTransObj, SCCOL nDestPos
                          ( eCmd == DEL_CELLSLEFT && nDestPosY == aSource.aStart.Row() ) )
                     {
                         // call with bApi = TRUE to avoid error messages in drop handler
-                        bDone = pDocSh->GetDocFunc().DeleteCells( aSource, eCmd, TRUE /*bRecord*/, TRUE /*bApi*/ );
+                        bDone = pDocSh->GetDocFunc().DeleteCells( aSource, NULL, eCmd, TRUE /*bRecord*/, TRUE /*bApi*/ );
                         if ( bDone )
                         {
                             if ( eCmd == DEL_CELLSUP && nDestPosY > aSource.aEnd.Row() )
@@ -3920,7 +3920,7 @@ sal_Int8 ScGridWindow::DropTransferObj( ScTransferObj* pTransObj, SCCOL nDestPos
                 if ( meDragInsertMode != INS_NONE )
                 {
                     // call with bApi = TRUE to avoid error messages in drop handler
-                    bDone = pDocSh->GetDocFunc().InsertCells( aDest, meDragInsertMode, TRUE /*bRecord*/, TRUE /*bApi*/, TRUE /*bPartOfPaste*/ );
+                    bDone = pDocSh->GetDocFunc().InsertCells( aDest, NULL, meDragInsertMode, TRUE /*bRecord*/, TRUE /*bApi*/, TRUE /*bPartOfPaste*/ );
                     if ( bDone )
                     {
                         pDocSh->UpdateOle( pViewData );
@@ -3936,18 +3936,19 @@ sal_Int8 ScGridWindow::DropTransferObj( ScTransferObj* pTransObj, SCCOL nDestPos
                     aSource.Format( aItem, SCA_VALID | SCA_TAB_3D, pSourceDoc );
 
                     // TODO: we could define ocQuote for "
-                    String aQuote( '"' );
+                    const String aQuote( '"' );
+                    const String& sSep = ScCompiler::GetNativeSymbol( ocSep);
                     String aFormula( '=' );
                     aFormula += ScCompiler::GetNativeSymbol( ocDde);
                     aFormula += ScCompiler::GetNativeSymbol( ocOpen);
                     aFormula += aQuote;
                     aFormula += aApp;
                     aFormula += aQuote;
-                    aFormula += ScCompiler::GetNativeSymbol( ocSep);
+                    aFormula += sSep;
                     aFormula += aQuote;
                     aFormula += aTopic;
                     aFormula += aQuote;
-                    aFormula += ScCompiler::GetNativeSymbol( ocSep);
+                    aFormula += sSep;
                     aFormula += aQuote;
                     aFormula += aItem;
                     aFormula += aQuote;
@@ -3979,7 +3980,7 @@ sal_Int8 ScGridWindow::DropTransferObj( ScTransferObj* pTransObj, SCCOL nDestPos
             if ( meDragInsertMode != INS_NONE )
             {
                 // call with bApi = TRUE to avoid error messages in drop handler
-                bDone = pDocSh->GetDocFunc().InsertCells( aDest, meDragInsertMode, TRUE /*bRecord*/, TRUE /*bApi*/, TRUE /*bPartOfPaste*/ );
+                bDone = pDocSh->GetDocFunc().InsertCells( aDest, NULL, meDragInsertMode, TRUE /*bRecord*/, TRUE /*bApi*/, TRUE /*bPartOfPaste*/ );
                 if ( bDone )
                 {
                     pDocSh->UpdateOle( pViewData );
@@ -4087,7 +4088,7 @@ sal_Int8 ScGridWindow::ExecuteDrop( const ExecuteDropEvent& rEvt )
     if (rData.aJumpTarget.Len())
     {
         //  internal bookmark (from Navigator)
-        //  bookmark clipboard formats are in PasteDataObject
+        //  bookmark clipboard formats are in PasteScDataObject
 
         if ( !rData.pJumpLocalDoc || rData.pJumpLocalDoc == pViewData->GetDocument() )
         {
@@ -4317,6 +4318,8 @@ void ScGridWindow::UpdateFormulas()
     {
         Invalidate( aChangedPoly );
     }
+
+    CheckNeedsRepaint();    // #i90362# used to be called via Draw() - still needed here
 }
 
 void ScGridWindow::UpdateAutoFillMark(BOOL bMarked, const ScRange& rMarkRange)
@@ -5475,9 +5478,6 @@ void ScGridWindow::UpdateDragRectOverlay()
         if(pOverlayManager)
         {
             ScOverlayType eType = SC_OVERLAY_INVERT;
-//                ScOverlayType eType = SC_OVERLAY_HATCH;
-//                ScOverlayType eType = SC_OVERLAY_TRANSPARENT;
-
             Color aHighlight = GetSettings().GetStyleSettings().GetHighlightColor();
             sdr::overlay::OverlayObjectCell* pOverlay =
                 new sdr::overlay::OverlayObjectCell( eType, aHighlight, aRanges );
@@ -5529,9 +5529,6 @@ void ScGridWindow::UpdateHeaderOverlay()
         if(pOverlayManager)
         {
             ScOverlayType eType = SC_OVERLAY_INVERT;
-//                ScOverlayType eType = SC_OVERLAY_HATCH;
-//                ScOverlayType eType = SC_OVERLAY_TRANSPARENT;
-
             Color aHighlight = GetSettings().GetStyleSettings().GetHighlightColor();
             sdr::overlay::OverlayObjectCell* pOverlay =
                 new sdr::overlay::OverlayObjectCell( eType, aHighlight, aRanges );
@@ -5606,9 +5603,6 @@ void ScGridWindow::UpdateShrinkOverlay()
         if(pOverlayManager)
         {
             ScOverlayType eType = SC_OVERLAY_INVERT;
-//                ScOverlayType eType = SC_OVERLAY_HATCH;
-//                ScOverlayType eType = SC_OVERLAY_TRANSPARENT;
-
             Color aHighlight = GetSettings().GetStyleSettings().GetHighlightColor();
             sdr::overlay::OverlayObjectCell* pOverlay =
                 new sdr::overlay::OverlayObjectCell( eType, aHighlight, aRanges );
@@ -5672,6 +5666,10 @@ namespace sdr
 
         void OverlayObjectCell::drawGeometry(OutputDevice& rOutputDevice)
         {
+            // safe original AA and switch off for selection
+            const sal_uInt16 nOriginalAA(rOutputDevice.GetAntialiasing());
+            rOutputDevice.SetAntialiasing(0);
+
             // set colors
             rOutputDevice.SetLineColor();
             rOutputDevice.SetFillColor(getBaseColor());
@@ -5724,32 +5722,11 @@ namespace sdr
                         case SC_OVERLAY_INVERT :
                         {
                             rOutputDevice.DrawRect( aRectangle );
-
-                            // if(OUTDEV_WINDOW == rOutputDevice.GetOutDevType())
-                            // {
-                            //     ((Window&)rOutputDevice).Invert(aRectangle, INVERT_HIGHLIGHT);
-                            // }
-
-                            break;
-                        }
-                        case SC_OVERLAY_HATCH :
-                        {
-                            rOutputDevice.DrawHatch(PolyPolygon(Polygon(aRectangle)), Hatch(HATCH_SINGLE, getBaseColor(), 2, 450));
                             break;
                         }
                         case SC_OVERLAY_SOLID :
                         {
                             rOutputDevice.DrawRect(aRectangle);
-                            break;
-                        }
-                        case SC_OVERLAY_TRANSPARENT :
-                        {
-                            rOutputDevice.DrawTransparent(PolyPolygon(Polygon(aRectangle)), 50);
-                            break;
-                        }
-                        case SC_OVERLAY_LIGHT_TRANSPARENT :
-                        {
-                            rOutputDevice.DrawTransparent(PolyPolygon(Polygon(aRectangle)), 75);
                             break;
                         }
                         default:
@@ -5760,8 +5737,13 @@ namespace sdr
                 }
 
                 if ( mePaintType == SC_OVERLAY_INVERT )
+                {
                     rOutputDevice.Pop();
+                }
             }
+
+            // restore original AA
+            rOutputDevice.SetAntialiasing(nOriginalAA);
         }
 
         void OverlayObjectCell::createBaseRange(OutputDevice& /* rOutputDevice */)

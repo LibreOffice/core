@@ -59,6 +59,7 @@
 #include <com/sun/star/i18n/XForbiddenCharacters.hpp>
 #include <com/sun/star/script/XLibraryContainer.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
+#include <com/sun/star/lang/ServiceNotRegisteredException.hpp>
 #include <comphelper/processfactory.hxx>
 
 #include "docuno.hxx"
@@ -119,6 +120,7 @@ const SfxItemPropertyMap* lcl_GetDocOptPropertyMap()
         {MAP_CHAR_LEN(SC_UNO_COLLABELRNG),       0, &getCppuType((uno::Reference<sheet::XLabelRanges>*)0),    0, 0},
         {MAP_CHAR_LEN(SC_UNO_DDELINKS),          0, &getCppuType((uno::Reference<container::XNameAccess>*)0), 0, 0},
         {MAP_CHAR_LEN(SC_UNO_DEFTABSTOP),        0, &getCppuType((sal_Int16*)0),                              0, 0},
+        {MAP_CHAR_LEN(SC_UNO_EXTERNALDOCLINKS),  0, &getCppuType((uno::Reference<sheet::XExternalDocLinks>*)0), 0, 0},
         {MAP_CHAR_LEN(SC_UNO_FORBIDDEN),         0, &getCppuType((uno::Reference<i18n::XForbiddenCharacters>*)0), beans::PropertyAttribute::READONLY, 0},
         {MAP_CHAR_LEN(SC_UNO_HASDRAWPAGES),      0, &getBooleanCppuType(),                                    beans::PropertyAttribute::READONLY, 0},
         {MAP_CHAR_LEN(SC_UNO_IGNORECASE),        0, &getBooleanCppuType(),                                    0, 0},
@@ -1508,6 +1510,10 @@ uno::Any SAL_CALL ScModelObj::getPropertyValue( const rtl::OUString& aPropertyNa
         {
             aRet <<= uno::Reference<container::XNameAccess>(new ScDDELinksObj( pDocShell ));
         }
+        else if ( aString.EqualsAscii( SC_UNO_EXTERNALDOCLINKS ) )
+        {
+            aRet <<= uno::Reference<sheet::XExternalDocLinks>(new ScExternalDocLinksObj(pDocShell));
+        }
         else if ( aString.EqualsAscii( SC_UNO_SHEETLINKS ) )
         {
             aRet <<= uno::Reference<container::XNameAccess>(new ScSheetLinksObj( pDocShell ));
@@ -1647,9 +1653,13 @@ uno::Reference<uno::XInterface> SAL_CALL ScModelObj::createInstance(
         //  alles was ich nicht kenn, werf ich der SvxFmMSFactory an den Hals,
         //  da wird dann 'ne Exception geworfen, wenn's nicht passt...
 
+        try
         {
             xRet.set(SvxFmMSFactory::createInstance(aServiceSpecifier));
             // extra block to force deletion of the temporary before ScShapeObj ctor (setDelegator)
+        }
+        catch ( lang::ServiceNotRegisteredException & )
+        {
         }
 
         //  #96117# if the drawing factory created a shape, a ScShapeObj has to be used
@@ -1998,8 +2008,14 @@ void SAL_CALL ScTableSheetsObj::copyByName( const rtl::OUString& aName,
             bDone = pDocShell->MoveTable( nSource, nDestination, TRUE, TRUE );
             if (bDone)
             {
+                // #i92477# any index past the last sheet means "append" in MoveTable
+                SCTAB nResultTab = static_cast<SCTAB>(nDestination);
+                SCTAB nTabCount = pDocShell->GetDocument()->GetTableCount();    // count after copying
+                if (nResultTab >= nTabCount)
+                    nResultTab = nTabCount - 1;
+
                 ScDocFunc aFunc(*pDocShell);
-                bDone = aFunc.RenameTable( nDestination, aNewStr, TRUE, TRUE );
+                bDone = aFunc.RenameTable( nResultTab, aNewStr, TRUE, TRUE );
             }
         }
     }
@@ -2348,7 +2364,7 @@ void SAL_CALL ScTableColumnsObj::insertByIndex( sal_Int32 nPosition, sal_Int32 n
         ScDocFunc aFunc(*pDocShell);
         ScRange aRange( (SCCOL)(nStartCol+nPosition), 0, nTab,
                         (SCCOL)(nStartCol+nPosition+nCount-1), MAXROW, nTab );
-        bDone = aFunc.InsertCells( aRange, INS_INSCOLS, TRUE, TRUE );
+        bDone = aFunc.InsertCells( aRange, NULL, INS_INSCOLS, TRUE, TRUE );
     }
     if (!bDone)
         throw uno::RuntimeException();      // no other exceptions specified
@@ -2365,7 +2381,7 @@ void SAL_CALL ScTableColumnsObj::removeByIndex( sal_Int32 nIndex, sal_Int32 nCou
         ScDocFunc aFunc(*pDocShell);
         ScRange aRange( (SCCOL)(nStartCol+nIndex), 0, nTab,
                         (SCCOL)(nStartCol+nIndex+nCount-1), MAXROW, nTab );
-        bDone = aFunc.DeleteCells( aRange, DEL_DELCOLS, TRUE, TRUE );
+        bDone = aFunc.DeleteCells( aRange, NULL, DEL_DELCOLS, TRUE, TRUE );
     }
     if (!bDone)
         throw uno::RuntimeException();      // no other exceptions specified
@@ -2434,7 +2450,7 @@ uno::Sequence<rtl::OUString> SAL_CALL ScTableColumnsObj::getElementNames()
     uno::Sequence<rtl::OUString> aSeq(nCount);
     rtl::OUString* pAry = aSeq.getArray();
     for (SCCOL i=0; i<nCount; i++)
-        pAry[i] = ::ColToAlpha( nStartCol + i );
+        pAry[i] = ::ScColToAlpha( nStartCol + i );
 
     return aSeq;
 }
@@ -2613,7 +2629,7 @@ void SAL_CALL ScTableRowsObj::insertByIndex( sal_Int32 nPosition, sal_Int32 nCou
         ScDocFunc aFunc(*pDocShell);
         ScRange aRange( 0, (SCROW)(nStartRow+nPosition), nTab,
                         MAXCOL, (SCROW)(nStartRow+nPosition+nCount-1), nTab );
-        bDone = aFunc.InsertCells( aRange, INS_INSROWS, TRUE, TRUE );
+        bDone = aFunc.InsertCells( aRange, NULL, INS_INSROWS, TRUE, TRUE );
     }
     if (!bDone)
         throw uno::RuntimeException();      // no other exceptions specified
@@ -2630,7 +2646,7 @@ void SAL_CALL ScTableRowsObj::removeByIndex( sal_Int32 nIndex, sal_Int32 nCount 
         ScDocFunc aFunc(*pDocShell);
         ScRange aRange( 0, (SCROW)(nStartRow+nIndex), nTab,
                         MAXCOL, (SCROW)(nStartRow+nIndex+nCount-1), nTab );
-        bDone = aFunc.DeleteCells( aRange, DEL_DELROWS, TRUE, TRUE );
+        bDone = aFunc.DeleteCells( aRange, NULL, DEL_DELROWS, TRUE, TRUE );
     }
     if (!bDone)
         throw uno::RuntimeException();      // no other exceptions specified

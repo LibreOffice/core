@@ -37,12 +37,9 @@
 // header for FixedText
 #include <vcl/fixed.hxx>
 // header for CheckBox
-#ifndef _SV_BUTTON_HXX
 #include <vcl/button.hxx>
-#endif
 // header for MetricField
 #include <vcl/field.hxx>
-//class SvNumberFormatter;
 
 //.............................................................................
 namespace chart
@@ -51,6 +48,20 @@ namespace chart
 
 class ScaleTabPage : public SfxTabPage
 {
+public:
+    ScaleTabPage( Window* pParent, const SfxItemSet& rInAttrs );
+
+    static SfxTabPage* Create( Window* pParent, const SfxItemSet& rInAttrs );
+    virtual BOOL FillItemSet( SfxItemSet& rOutAttrs );
+    virtual void Reset( const SfxItemSet& rInAttrs );
+    using TabPage::DeactivatePage;
+    virtual int DeactivatePage( SfxItemSet* pItemSet = NULL );
+
+    void SetNumFormatter( SvNumberFormatter* pFormatter );
+    void SetNumFormat();
+
+    void ShowAxisOrigin( bool bShowOrigin );
+
 private:
     FixedLine           aFlScale;
 
@@ -73,16 +84,9 @@ private:
     FixedText           aTxtOrigin;
     FormattedField      aFmtFldOrigin;
     CheckBox            aCbxAutoOrigin;
+
     CheckBox            aCbxLogarithm;
     CheckBox            aCbxReverse;
-
-    FixedLine aFlTicks;
-    CheckBox aCbxTicksInner;
-    CheckBox aCbxTicksOuter;
-
-    FixedLine aFlHelpTicks;
-    CheckBox aCbxHelpTicksInner;
-    CheckBox aCbxHelpTicksOuter;
 
     double              fMin;
     double              fMax;
@@ -91,6 +95,8 @@ private:
     double              fOrigin;
     int                 nAxisType;
     SvNumberFormatter*  pNumFormatter;
+
+    bool                m_bShowAxisOrigin;
 
     void EnableControls();
 
@@ -110,18 +116,6 @@ private:
         @return false, if nResIdMessage was 0, true otherwise
      */
     bool ShowWarning( USHORT nResIdMessage, Edit * pControl = NULL );
-
-public:
-    ScaleTabPage( Window* pParent, const SfxItemSet& rInAttrs );
-
-    static SfxTabPage* Create( Window* pParent, const SfxItemSet& rInAttrs );
-    virtual BOOL FillItemSet( SfxItemSet& rOutAttrs );
-    virtual void Reset( const SfxItemSet& rInAttrs );
-    using TabPage::DeactivatePage;
-    virtual int DeactivatePage( SfxItemSet* pItemSet = NULL );
-
-    void SetNumFormatter( SvNumberFormatter* pFormatter );
-    void SetNumFormat();
 };
 
 //.............................................................................

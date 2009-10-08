@@ -569,7 +569,12 @@
 #define STR_UNKNOWN_USER            429
 #define STR_LONG_ERR_NULL           430
 
-#define STR_COUNT                   431
+#define STR_UNDO_INSERTNOTE         431
+#define STR_UNDO_DELETENOTE         432
+#define STR_STYLE_FAMILY_CELL       433
+#define STR_STYLE_FAMILY_PAGE       434
+
+#define STR_COUNT                   435
 
 #endif
 

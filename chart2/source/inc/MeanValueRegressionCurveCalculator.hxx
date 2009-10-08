@@ -31,11 +31,13 @@
 #define CHART2_MEANVALUEREGRESSIONCURVECALCULATOR_HXX
 
 #include "RegressionCurveCalculator.hxx"
+#include "charttoolsdllapi.hxx"
 
 namespace chart
 {
 
-class MeanValueRegressionCurveCalculator : public RegressionCurveCalculator
+class OOO_DLLPUBLIC_CHARTTOOLS MeanValueRegressionCurveCalculator :
+        public RegressionCurveCalculator
 {
 public:
     MeanValueRegressionCurveCalculator();

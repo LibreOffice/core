@@ -66,6 +66,8 @@ public:
                         const ::com::sun::star::uno::Reference<
                             ::com::sun::star::frame::XModel > & xModel );
 
+    void setDefaultWritingMode( sal_Int16 nDefaultWritingMode );
+
     void createShapes( const ::com::sun::star::awt::Size & rAvailableSpace,
                        const ::com::sun::star::awt::Size & rPageSize );
 
@@ -101,6 +103,8 @@ private:
                     ::com::sun::star::uno::XComponentContext >      m_xContext;
 
     std::vector< LegendEntryProvider* >         m_aLegendEntryProviderList;
+
+    sal_Int16 m_nDefaultWritingMode;//to be used when writing mode is set to page
 };
 
 //.............................................................................

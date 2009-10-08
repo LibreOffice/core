@@ -39,7 +39,7 @@
 #include "cellform.hxx"
 #include "cell.hxx"
 #include "document.hxx"
-#include "errorcodes.hxx"
+#include "formula/errorcodes.hxx"
 #include "sc.hrc"
 
 // STATIC DATA -----------------------------------------------------------

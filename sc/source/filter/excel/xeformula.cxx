@@ -30,7 +30,6 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sc.hxx"
-#include "xeformula.hxx"
 
 #include <list>
 #include <map>
@@ -41,7 +40,16 @@
 #include "xehelper.hxx"
 #include "xelink.hxx"
 #include "xename.hxx"
+#include "xeformula.hxx"
+#include "token.hxx"
+#include "tokenarray.hxx"
 
+#include "document.hxx"
+#include "externalrefmgr.hxx"
+
+#include <memory>
+
+using namespace formula;
 // External reference log =====================================================
 
 XclExpRefLogEntry::XclExpRefLogEntry() :
@@ -130,12 +138,13 @@ XclExpCompData::XclExpCompData() :
 /** Working data for a processed Calc formula token. */
 struct XclExpTokenData
 {
-    const ScToken*      mpScToken;          /// Currently processed Calc token.
+    const formula::FormulaToken*
+                        mpScToken;          /// Currently processed Calc token.
     sal_uInt8           mnSpaces;           /// Number of spaces before the Calc token.
 
     inline explicit     XclExpTokenData() : mpScToken( 0 ), mnSpaces( 0 ) {}
     inline bool         Is() const { return mpScToken != 0; }
-    inline StackVar     GetType() const { return mpScToken ? mpScToken->GetType() : static_cast< StackVar >( svUnknown ); }
+    inline formula::StackVar     GetType() const { return mpScToken ? mpScToken->GetType() : static_cast< formula::StackVar >( svUnknown ); }
     inline OpCode       GetOpCode() const { return mpScToken ? mpScToken->GetOpCode() : static_cast< OpCode >( ocNone ); }
 };
 
@@ -171,7 +180,7 @@ public:
                             const XclExpExtFuncData& rExtFuncData,
                             sal_uInt8 nExpRetClass );
 
-    inline const ScToken& GetScToken() const { return *mrTokData.mpScToken; }
+    inline const formula::FormulaToken& GetScToken() const { return *mrTokData.mpScToken; }
     inline OpCode       GetOpCode() const { return mrFuncInfo.meOpCode; }
     inline sal_uInt16   GetXclFuncIdx() const { return mrFuncInfo.mnXclFunc; }
     inline bool         IsVolatile() const { return mrFuncInfo.IsVolatile(); }
@@ -215,7 +224,7 @@ XclExpFuncData::XclExpFuncData(
 {
     DBG_ASSERT( mrTokData.mpScToken, "XclExpFuncData::XclExpFuncData - missing core token" );
     // set name of an add-in function
-    if( !maExtFuncData.maFuncName.Len() && dynamic_cast< const ScExternalToken* >( mrTokData.mpScToken ) )
+    if( !maExtFuncData.maFuncName.Len() && dynamic_cast< const formula::FormulaExternalToken* >( mrTokData.mpScToken ) )
         maExtFuncData.Set( GetScToken().GetExternal(), true, false );
 }
 
@@ -224,6 +233,32 @@ void XclExpFuncData::IncExpParamClassIdx()
     if( (mnClassIdx + 1 < EXC_FUNCINFO_CLASSCOUNT) && (mrFuncInfo.mpnParamClass[ mnClassIdx + 1 ] != EXC_TOKCLASS_NONE) )
         ++mnClassIdx;
 }
+
+// reference handling ---------------------------------------------------------
+
+namespace {
+
+inline bool lclIsRefRel2D( const ScSingleRefData& rRefData )
+{
+    return rRefData.IsColRel() || rRefData.IsRowRel();
+}
+
+inline bool lclIsRefDel2D( const ScSingleRefData& rRefData )
+{
+    return rRefData.IsColDeleted() || rRefData.IsRowDeleted();
+}
+
+inline bool lclIsRefRel2D( const ScComplexRefData& rRefData )
+{
+    return lclIsRefRel2D( rRefData.Ref1 ) || lclIsRefRel2D( rRefData.Ref2 );
+}
+
+inline bool lclIsRefDel2D( const ScComplexRefData& rRefData )
+{
+    return lclIsRefDel2D( rRefData.Ref1 ) || lclIsRefDel2D( rRefData.Ref2 );
+}
+
+} // namespace
 
 // ----------------------------------------------------------------------------
 
@@ -265,8 +300,8 @@ private:
     // compiler ---------------------------------------------------------------
     // XclExpTokenData: pass-by-value and return-by-value is intended
 
-    const ScToken*      GetNextRawToken();
-    const ScToken*      PeekNextRawToken( bool bSkipSpaces ) const;
+    const formula::FormulaToken*      GetNextRawToken();
+    const formula::FormulaToken*      PeekNextRawToken( bool bSkipSpaces ) const;
 
     bool                GetNextToken( XclExpTokenData& rTokData );
     XclExpTokenData     GetNextToken();
@@ -299,6 +334,7 @@ private:
     void                ProcessBoolean( const XclExpTokenData& rTokData );
     void                ProcessDdeLink( const XclExpTokenData& rTokData, sal_uInt8 nExpClass );
     void                ProcessExternal( const XclExpTokenData& rTokData, sal_uInt8 nExpClass );
+    void                ProcessExternalName( const XclExpTokenData& rTokData, sal_uInt8 nExpClass );
 
     void                ProcessFunction( const XclExpTokenData& rTokData, sal_uInt8 nExpClass );
     void                PrepareFunction( XclExpFuncData& rFuncData );
@@ -314,13 +350,13 @@ private:
 
     // reference handling -----------------------------------------------------
 
-    SCTAB               GetScTab( const SingleRefData& rRefData ) const;
-    bool                IsRef2D( const SingleRefData& rRefData ) const;
-    bool                IsRef2D( const ComplRefData& rRefData ) const;
+    SCTAB               GetScTab( const ScSingleRefData& rRefData ) const;
+    bool                IsRef2D( const ScSingleRefData& rRefData ) const;
+    bool                IsRef2D( const ScComplexRefData& rRefData ) const;
 
-    void                ConvertRefData( SingleRefData& rRefData, XclAddress& rXclPos,
+    void                ConvertRefData( ScSingleRefData& rRefData, XclAddress& rXclPos,
                             bool bNatLangRef, bool bTruncMaxCol, bool bTruncMaxRow ) const;
-    void                ConvertRefData( ComplRefData& rRefData, XclRange& rXclRange,
+    void                ConvertRefData( ScComplexRefData& rRefData, XclRange& rXclRange,
                             bool bNatLangRef ) const;
 
     XclExpRefLogEntry*  GetNewRefLogEntry();
@@ -367,6 +403,7 @@ private:
     void                AppendNameXToken( sal_uInt16 nExtSheet, sal_uInt16 nExtName, sal_uInt8 nExpClass, sal_uInt8 nSpaces = 0 );
     void                AppendMacroCallToken( const XclExpExtFuncData& rExtFuncData, sal_uInt8 nExpClass, sal_uInt8 nSpaces = 0 );
     void                AppendAddInFuncToken( const XclExpExtFuncData& rExtFuncData, sal_uInt8 nExpClass, sal_uInt8 nSpaces = 0 );
+    void                AppendEuroToolFuncToken( const XclExpExtFuncData& rExtFuncData, sal_uInt8 nExpClass, sal_uInt8 nSpaces = 0 );
     void                AppendParenToken( sal_uInt8 nOpenSpaces = 0, sal_uInt8 nCloseSpaces = 0 );
     void                AppendJumpToken( XclExpFuncData& rFuncData, sal_uInt8 nAttrType );
 
@@ -752,14 +789,14 @@ XclTokenArrayRef XclExpFmlaCompImpl::CreateTokenArray( ScfUInt8Vec* pExtensionTo
 
 // compiler -------------------------------------------------------------------
 
-const ScToken* XclExpFmlaCompImpl::GetNextRawToken()
+const formula::FormulaToken* XclExpFmlaCompImpl::GetNextRawToken()
 {
-    const ScToken* pScToken = maTokArrIt.Get();
+    const formula::FormulaToken* pScToken = maTokArrIt.Get();
     ++maTokArrIt;
     return pScToken;
 }
 
-const ScToken* XclExpFmlaCompImpl::PeekNextRawToken( bool bSkipSpaces ) const
+const formula::FormulaToken* XclExpFmlaCompImpl::PeekNextRawToken( bool bSkipSpaces ) const
 {
     /*  Returns pointer to next raw token in the token array. The token array
         iterator already points to the next token (A call to GetNextToken()
@@ -1111,19 +1148,25 @@ XclExpTokenData XclExpFmlaCompImpl::Factor( XclExpTokenData aTokData, sal_uInt8 
 {
     if( !mbOk || !aTokData.Is() ) return XclExpTokenData();
 
-    StackVar eTokType = aTokData.GetType();
+    formula::StackVar eTokType = aTokData.GetType();
     OpCode eOpCode = aTokData.GetOpCode();
+
+    if (eOpCode == ocExternalRef)
+    {
+        ProcessExternalName( aTokData, nExpClass );
+        return GetNextToken();
+    }
 
     switch( eTokType )
     {
         case svUnknown:     mbOk = false;                           break;
-        case svDouble:      ProcessDouble( aTokData );              break;
-        case svString:      ProcessString( aTokData );              break;
+        case formula::svDouble:      ProcessDouble( aTokData );              break;
+        case formula::svString:      ProcessString( aTokData );              break;
 #if 0   // erAck
-        case svError:       ProcessError( aTokData );               break;
+        case formula::svError:       ProcessError( aTokData );               break;
 #endif
         case svSingleRef:   ProcessCellRef( aTokData, nExpClass );  break;
-        case svDoubleRef:   ProcessRangeRef( aTokData, nExpClass ); break;
+        case formula::svDoubleRef:   ProcessRangeRef( aTokData, nExpClass ); break;
         case svMatrix:      ProcessMatrix( aTokData, nExpClass );   break;
         case svExternal:    ProcessExternal( aTokData, nExpClass ); break;
 
@@ -1205,7 +1248,7 @@ namespace {
 
 inline bool lclGetTokenString( String& rString, const XclExpTokenData& rTokData )
 {
-    bool bIsStr = (rTokData.GetType() == svString) && (rTokData.GetOpCode() == ocPush);
+    bool bIsStr = (rTokData.GetType() == formula::svString) && (rTokData.GetOpCode() == ocPush);
     if( bIsStr )
         rString = rTokData.mpScToken->GetString();
     return bIsStr;
@@ -1241,11 +1284,138 @@ void XclExpFmlaCompImpl::ProcessExternal( const XclExpTokenData& rTokData, sal_u
         names and for external/invalid function calls. This function looks for
         the next token in the token array. If it is an opening parenthesis, the
         token is processed as external function call, otherwise as undefined name. */
-    const ScToken* pNextScToken = PeekNextRawToken( true );
+    const formula::FormulaToken* pNextScToken = PeekNextRawToken( true );
     if( !pNextScToken || (pNextScToken->GetOpCode() != ocOpen) )
         AppendMissingNameToken( rTokData.mpScToken->GetExternal(), nExpClass, rTokData.mnSpaces );
     else
         ProcessFunction( rTokData, nExpClass );
+}
+
+void XclExpFmlaCompImpl::ProcessExternalName( const XclExpTokenData& rTokData, sal_uInt8 nExpClass )
+{
+    StackVar eType = rTokData.GetType();
+
+    ScExternalRefManager* pRefMgr = GetDoc().GetExternalRefManager();
+    USHORT nFileId = rTokData.mpScToken->GetIndex();
+    switch (eType)
+    {
+        case svExternalSingleRef:
+        {
+            if (!mpScBasePos)
+            {
+                AppendErrorToken(EXC_ERR_REF, rTokData.mnSpaces);
+                break;
+            }
+            ScSingleRefData aRef(static_cast<const ScToken*>(rTokData.mpScToken)->GetSingleRef());
+            aRef.CalcAbsIfRel(*mpScBasePos);
+            const String& rTabName = rTokData.mpScToken->GetString();
+            ScExternalRefCache::TokenRef p = pRefMgr->getSingleRefToken(nFileId, rTabName, ScAddress(aRef.nCol, aRef.nRow, aRef.nTab), NULL, NULL);
+            if (!p.get())
+            {
+                AppendErrorToken(EXC_ERR_REF, rTokData.mnSpaces);
+                break;
+            }
+
+            mpLinkMgr->StoreCell(nFileId, rTabName, aRef);
+
+            XclAddress aXclPos(ScAddress::UNINITIALIZED);
+            ConvertRefData(aRef, aXclPos, false, false, false);
+
+            sal_uInt16 nExtSheet, nFirstSBTab, nLastSBTab;
+            mpLinkMgr->FindExtSheet(nFileId, rTabName, 1, nExtSheet, nFirstSBTab, nLastSBTab, GetNewRefLogEntry());
+            sal_uInt8 nBaseId = lclIsRefDel2D(aRef) ? EXC_TOKID_REFERR3D : EXC_TOKID_REF3D;
+            AppendOpTokenId(GetTokenId(nBaseId, EXC_TOKCLASS_REF), nExpClass, rTokData.mnSpaces);
+            Append(nExtSheet);
+            if (meBiff <= EXC_BIFF5)
+            {
+                Append(0, 8);
+                Append(static_cast<sal_uInt16>(nFirstSBTab));
+                Append(static_cast<sal_uInt16>(nFirstSBTab));
+            }
+            AppendAddress(aXclPos);
+        }
+        break;
+        case svExternalDoubleRef:
+        {
+            if (!mpScBasePos)
+            {
+                AppendErrorToken(XclTools::GetXclErrorCode(errNoRef), rTokData.mnSpaces);
+                break;
+            }
+            ScComplexRefData aRef(static_cast<const ScToken*>(rTokData.mpScToken)->GetDoubleRef());
+            aRef.CalcAbsIfRel(*mpScBasePos);
+            const String& rTabName = rTokData.mpScToken->GetString();
+            const ScSingleRefData& r1 = aRef.Ref1;
+            const ScSingleRefData& r2 = aRef.Ref2;
+            ScRange aRange(r1.nCol, r1.nRow, r1.nTab, r2.nCol, r2.nRow, r2.nTab);
+            ScExternalRefCache::TokenArrayRef pArray = pRefMgr->getDoubleRefTokens(nFileId, rTabName, aRange, NULL);
+            if (!pArray.get())
+            {
+                AppendErrorToken(EXC_ERR_REF, rTokData.mnSpaces);
+                break;
+            }
+
+            mpLinkMgr->StoreCellRange(nFileId, rTabName, aRef);
+            XclRange aXclRange(ScAddress::UNINITIALIZED);
+            ConvertRefData(aRef, aXclRange, false);
+            sal_uInt16 nExtSheet, nFirstSBTab, nLastSBTab;
+            sal_uInt16 nTabSpan = r2.nTab - r1.nTab + 1;
+            mpLinkMgr->FindExtSheet(nFileId, rTabName, nTabSpan, nExtSheet, nFirstSBTab, nLastSBTab, GetNewRefLogEntry());
+
+            sal_uInt8 nBaseId = lclIsRefDel2D(aRef) ? EXC_TOKID_AREAERR3D : EXC_TOKID_AREA3D;
+            AppendOpTokenId(GetTokenId( nBaseId, EXC_TOKCLASS_REF ), nExpClass, rTokData.mnSpaces);
+            Append(nExtSheet);
+            if (meBiff <= EXC_BIFF5)
+            {
+                Append(0, 8);
+                Append(static_cast<sal_uInt16>(nFirstSBTab));
+                Append(static_cast<sal_uInt16>(nLastSBTab));
+            }
+            AppendRange(aXclRange);
+        }
+        break;
+        case svExternalName:
+        {
+            const String& aName = rTokData.mpScToken->GetString();
+            ScExternalRefCache::TokenArrayRef pArray = pRefMgr->getRangeNameTokens(nFileId, aName);
+            if (!pArray.get() || !mpScBasePos)
+            {
+                AppendErrorToken(XclTools::GetXclErrorCode(errNoName), rTokData.mnSpaces);
+                break;
+            }
+
+            // Go through all these tokens to store the external cell/range
+            // references for CRN records.
+            for (formula::FormulaToken* p = pArray->First(); p; p = pArray->Next())
+            {
+                if (p->GetOpCode() == ocExternalRef)
+                {
+                    if (p->GetType() == svExternalSingleRef)
+                    {
+                        ScSingleRefData aData(static_cast<ScToken*>(p)->GetSingleRef());
+                        aData.CalcAbsIfRel(*mpScBasePos);
+                        mpLinkMgr->StoreCell(nFileId, p->GetString(), aData);
+                    }
+                    else if (p->GetType() == svExternalDoubleRef)
+                    {
+                        ScComplexRefData aData(static_cast<ScToken*>(p)->GetDoubleRef());
+                        aData.CalcAbsIfRel(*mpScBasePos);
+                        mpLinkMgr->StoreCellRange(nFileId, p->GetString(), aData);
+                    }
+                }
+            }
+
+            const String* pFile = pRefMgr->getExternalFileName(nFileId);
+            sal_uInt16 nExtSheet, nExtName;
+            if (mpLinkMgr->InsertExtName(nExtSheet, nExtName, *pFile, aName, pArray))
+                AppendNameXToken(nExtSheet, nExtName, nExpClass, rTokData.mnSpaces);
+            else
+                AppendErrorToken(EXC_ERR_REF, rTokData.mnSpaces);
+        }
+        break;
+        default:
+            ;   // nothing
+    }
 }
 
 void XclExpFmlaCompImpl::ProcessFunction( const XclExpTokenData& rTokData, sal_uInt8 nExpClass )
@@ -1258,7 +1428,7 @@ void XclExpFmlaCompImpl::ProcessFunction( const XclExpTokenData& rTokData, sal_u
     // no exportable function found - try to create an external macro call
     if( !pFuncInfo && (eOpCode >= SC_OPCODE_START_NO_PAR) )
     {
-        const String& rFuncName = ScCompiler::GetStringFromOpCode( eOpCode );
+        const String& rFuncName = ScCompiler::GetNativeSymbol( eOpCode );
         if( rFuncName.Len() )
         {
             aExtFuncData.Set( rFuncName, true, false );
@@ -1558,6 +1728,9 @@ void XclExpFmlaCompImpl::AppendDefaultParam( XclExpFuncData& rFuncData )
         case ocExternal:
             AppendAddInFuncToken( rFuncData.GetExtFuncData(), EXC_TOKCLASS_REF );
         break;
+        case ocEuroConvert:
+            AppendEuroToolFuncToken(  rFuncData.GetExtFuncData(), EXC_TOKCLASS_REF );
+        break;
         case ocMacro:
             AppendMacroCallToken( rFuncData.GetExtFuncData(), EXC_TOKCLASS_REF );
         break;
@@ -1619,45 +1792,39 @@ void XclExpFmlaCompImpl::AppendTrailingParam( XclExpFuncData& rFuncData )
                 AppendDefaultParam( rFuncData );
         break;
 
+        case ocGammaDist:
+            if( nParamCount == 3 )
+            {
+                // GAMMADIST function needs 4 parameters in Excel
+                PrepareParam( rFuncData );
+                AppendIntToken( 1 );
+                FinishParam( rFuncData );
+            }
+        break;
+
+        case ocPoissonDist:
+            if( nParamCount == 2 )
+            {
+                // POISSON function needs 3 parameters in Excel
+                PrepareParam( rFuncData );
+                AppendIntToken( 1 );
+                FinishParam( rFuncData );
+            }
+        break;
+
         default:;
     }
 }
 
-// reference handling ---------------------------------------------------------
-
-namespace {
-
-inline bool lclIsRefRel2D( const SingleRefData& rRefData )
-{
-    return rRefData.IsColRel() || rRefData.IsRowRel();
-}
-
-inline bool lclIsRefDel2D( const SingleRefData& rRefData )
-{
-    return rRefData.IsColDeleted() || rRefData.IsRowDeleted();
-}
-
-inline bool lclIsRefRel2D( const ComplRefData& rRefData )
-{
-    return lclIsRefRel2D( rRefData.Ref1 ) || lclIsRefRel2D( rRefData.Ref2 );
-}
-
-inline bool lclIsRefDel2D( const ComplRefData& rRefData )
-{
-    return lclIsRefDel2D( rRefData.Ref1 ) || lclIsRefDel2D( rRefData.Ref2 );
-}
-
-} // namespace
-
 // ----------------------------------------------------------------------------
 
-SCTAB XclExpFmlaCompImpl::GetScTab( const SingleRefData& rRefData ) const
+SCTAB XclExpFmlaCompImpl::GetScTab( const ScSingleRefData& rRefData ) const
 {
     bool bInvTab = rRefData.IsTabDeleted() || (!mpScBasePos && rRefData.IsTabRel());
     return bInvTab ? SCTAB_INVALID : static_cast< SCTAB >( rRefData.nTab );
 }
 
-bool XclExpFmlaCompImpl::IsRef2D( const SingleRefData& rRefData ) const
+bool XclExpFmlaCompImpl::IsRef2D( const ScSingleRefData& rRefData ) const
 {
     /*  rRefData.IsFlag3D() determines if sheet name is always visible, even on the
         own sheet. If 3D references are allowed, the passed reference does not count
@@ -1667,13 +1834,13 @@ bool XclExpFmlaCompImpl::IsRef2D( const SingleRefData& rRefData ) const
         (rRefData.IsTabRel() ? (rRefData.nRelTab == 0) : (static_cast< SCTAB >( rRefData.nTab ) == GetCurrScTab()));
 }
 
-bool XclExpFmlaCompImpl::IsRef2D( const ComplRefData& rRefData ) const
+bool XclExpFmlaCompImpl::IsRef2D( const ScComplexRefData& rRefData ) const
 {
     return IsRef2D( rRefData.Ref1 ) && IsRef2D( rRefData.Ref2 );
 }
 
 void XclExpFmlaCompImpl::ConvertRefData(
-    SingleRefData& rRefData, XclAddress& rXclPos,
+    ScSingleRefData& rRefData, XclAddress& rXclPos,
     bool bNatLangRef, bool bTruncMaxCol, bool bTruncMaxRow ) const
 {
     if( mpScBasePos )
@@ -1726,7 +1893,7 @@ void XclExpFmlaCompImpl::ConvertRefData(
 }
 
 void XclExpFmlaCompImpl::ConvertRefData(
-        ComplRefData& rRefData, XclRange& rXclRange, bool bNatLangRef ) const
+        ScComplexRefData& rRefData, XclRange& rXclRange, bool bNatLangRef ) const
 {
     // convert start and end of the range
     ConvertRefData( rRefData.Ref1, rXclRange.maFirst, bNatLangRef, false, false );
@@ -1749,7 +1916,7 @@ void XclExpFmlaCompImpl::ProcessCellRef( const XclExpTokenData& rTokData, sal_uI
 {
     // get the Excel address components, adjust internal data in aRefData
     bool bNatLangRef = (meBiff == EXC_BIFF8) && mpScBasePos && (rTokData.GetOpCode() == ocColRowName);
-    SingleRefData aRefData( rTokData.mpScToken->GetSingleRef() );
+    ScSingleRefData aRefData( static_cast<const ScToken*>(rTokData.mpScToken)->GetSingleRef() );
     XclAddress aXclPos( ScAddress::UNINITIALIZED );
     ConvertRefData( aRefData, aXclPos, bNatLangRef, false, false );
 
@@ -1806,7 +1973,7 @@ void XclExpFmlaCompImpl::ProcessCellRef( const XclExpTokenData& rTokData, sal_uI
 void XclExpFmlaCompImpl::ProcessRangeRef( const XclExpTokenData& rTokData, sal_uInt8 nExpClass )
 {
     // get the Excel address components, adjust internal data in aRefData
-    ComplRefData aRefData( rTokData.mpScToken->GetDoubleRef() );
+    ScComplexRefData aRefData( static_cast<const ScToken*>(rTokData.mpScToken)->GetDoubleRef() );
     XclRange aXclRange( ScAddress::UNINITIALIZED );
     ConvertRefData( aRefData, aXclRange, false );
 
@@ -2184,6 +2351,15 @@ void XclExpFmlaCompImpl::AppendAddInFuncToken( const XclExpExtFuncData& rExtFunc
     AppendMacroCallToken( rExtFuncData, nExpClass, nSpaces );
 }
 
+void XclExpFmlaCompImpl::AppendEuroToolFuncToken( const XclExpExtFuncData& rExtFuncData, sal_uInt8 nExpClass, sal_uInt8 nSpaces )
+{
+    sal_uInt16 nExtSheet, nExtName;
+    if( mpLinkMgr && mpLinkMgr->InsertEuroTool( nExtSheet, nExtName, rExtFuncData.maFuncName ) )
+        AppendNameXToken( nExtSheet, nExtName, nExpClass, nSpaces );
+    else
+        AppendMacroCallToken( rExtFuncData, nExpClass, nSpaces );
+}
+
 void XclExpFmlaCompImpl::AppendParenToken( sal_uInt8 nOpenSpaces, sal_uInt8 nCloseSpaces )
 {
     AppendSpaceToken( EXC_TOK_ATTR_SPACE_SP_OPEN, nOpenSpaces );
@@ -2245,7 +2421,7 @@ void XclExpFmlaCompImpl::RemoveTrailingParen()
 
 namespace {
 
-void lclInitOwnTab( SingleRefData& rRef, const ScAddress& rScPos, SCTAB nCurrScTab, bool b3DRefOnly )
+void lclInitOwnTab( ScSingleRefData& rRef, const ScAddress& rScPos, SCTAB nCurrScTab, bool b3DRefOnly )
 {
     if( b3DRefOnly )
     {
@@ -2261,7 +2437,7 @@ void lclInitOwnTab( SingleRefData& rRef, const ScAddress& rScPos, SCTAB nCurrScT
 
 void lclPutCellToTokenArray( ScTokenArray& rScTokArr, const ScAddress& rScPos, SCTAB nCurrScTab, bool b3DRefOnly )
 {
-    SingleRefData aRef;
+    ScSingleRefData aRef;
     aRef.InitAddress( rScPos );
     lclInitOwnTab( aRef, rScPos, nCurrScTab, b3DRefOnly );
     rScTokArr.AddSingleReference( aRef );
@@ -2275,7 +2451,7 @@ void lclPutRangeToTokenArray( ScTokenArray& rScTokArr, const ScRange& rScRange, 
     }
     else
     {
-        ComplRefData aRef;
+        ScComplexRefData aRef;
         aRef.InitRange( rScRange );
         lclInitOwnTab( aRef.Ref1, rScRange.aStart, nCurrScTab, b3DRefOnly );
         lclInitOwnTab( aRef.Ref2, rScRange.aEnd, nCurrScTab, b3DRefOnly );
@@ -2355,7 +2531,7 @@ XclTokenArrayRef XclExpFormulaCompiler::CreateNameXFormula(
 
 void XclExpFmlaCompImpl::ProcessMatrix( const XclExpTokenData& rTokData, sal_uInt8 nExpClass )
 {
-    const ScMatrix* pMatrix = rTokData.mpScToken->GetMatrix();
+    const ScMatrix* pMatrix = static_cast<const ScToken*>(rTokData.mpScToken)->GetMatrix();
     if( maCfg.mbAllowArrays && pMatrix )
     {
         SCSIZE nCols, nRows;
