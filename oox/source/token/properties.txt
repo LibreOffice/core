@@ -1,4 +1,5 @@
 AbsoluteName
+Action
 ActiveSplitRange
 ActiveTable
 Adjust
@@ -135,6 +136,7 @@ FirstPageNumber
 FocusOnClick
 FontCharset
 FontHeight
+FontIndependentLineSpacing
 FontName
 FontSlant
 FontStrikeout
@@ -288,7 +290,6 @@ Printable
 Protected
 Reference
 ReferenceDevice
-ReferencePosition
 RegularExpressions
 RelId
 RelativeHorizontalTabbarWidth

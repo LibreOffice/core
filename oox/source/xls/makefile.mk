@@ -68,6 +68,7 @@ SLOFILES =										\
         $(SLO)$/formulabase.obj					\
         $(SLO)$/formulaparser.obj				\
         $(SLO)$/numberformatsbuffer.obj			\
+        $(SLO)$/ooxformulaparser.obj			\
         $(SLO)$/pagesettings.obj				\
         $(SLO)$/pivotcachebuffer.obj			\
         $(SLO)$/pivotcachefragment.obj			\

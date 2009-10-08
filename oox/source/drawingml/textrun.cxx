@@ -91,12 +91,21 @@ void TextRun::insertAt(
             Reference< XTextField > xField( xFactory->createInstance( CREATE_OUSTRING( "com.sun.star.text.TextField.URL" ) ), UNO_QUERY );
             if( xField.is() )
             {
+                Reference< XTextCursor > xTextFieldCursor = xText->createTextCursor();
+                xTextFieldCursor->gotoEnd( sal_False );
+
                 PropertySet aFieldProps( xField );
                 aFieldProps.setProperties( maTextCharacterProperties.maHyperlinkPropertyMap );
                 aFieldProps.setProperty( PROP_Representation, getText() );
-
                 Reference< XTextContent > xContent( xField, UNO_QUERY);
                 xText->insertTextContent( xStart, xContent, sal_False );
+
+                xTextFieldCursor->gotoEnd( sal_True );
+                oox::core::TextField aTextField;
+                aTextField.xText = xText;
+                aTextField.xTextCursor = xTextFieldCursor;
+                aTextField.xTextField = xField;
+                rFilterBase.getTextFieldStack().push_back( aTextField );
             }
             else
             {

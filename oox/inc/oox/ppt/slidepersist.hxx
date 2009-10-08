@@ -38,6 +38,7 @@
 #include "oox/drawingml/clrscheme.hxx"
 #include "oox/drawingml/textliststyle.hxx"
 #include "oox/drawingml/textparagraphproperties.hxx"
+#include <oox/ppt/headerfooter.hxx>
 #include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/drawing/XDrawPage.hpp>
 #include <com/sun/star/animations/XAnimationNode.hpp>
@@ -109,6 +110,7 @@ public:
 
     oox::drawingml::ShapePtr getShapes() { return maShapesPtr; }
     ::std::list< boost::shared_ptr< TimeNode > >& getTimeNodeList() { return maTimeNodeList; }
+    oox::ppt::HeaderFooter& getHeaderFooter(){ return maHeaderFooter; };
 
     oox::vml::Drawing* getDrawing() { return mpDrawingPtr.get(); }
 
@@ -134,6 +136,7 @@ private:
     oox::drawingml::FillPropertiesPtr                                       mpBackgroundPropertiesPtr;
     ::std::list< boost::shared_ptr< TimeNode > >                            maTimeNodeList;
 
+    oox::ppt::HeaderFooter                                                  maHeaderFooter;
     sal_Int32                                                               mnLayoutValueToken;
     sal_Bool                                                                mbMaster;
     sal_Bool                                                                mbNotes;

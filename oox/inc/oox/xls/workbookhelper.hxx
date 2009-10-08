@@ -321,7 +321,7 @@ public:
 
     // converters -------------------------------------------------------------
 
-    /** Returns the import formula parser. */
+    /** Returns the import formula parser (import filter only!). */
     FormulaParser&      getFormulaParser() const;
     /** Returns the measurement unit converter. */
     UnitConverter&      getUnitConverter() const;
