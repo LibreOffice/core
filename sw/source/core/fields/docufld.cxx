@@ -47,9 +47,7 @@
 #include <com/sun/star/text/UserFieldFormat.hpp>
 #include <com/sun/star/text/PageNumberType.hpp>
 #include <com/sun/star/text/ReferenceFieldPart.hpp>
-#ifndef _COM_SUN_STAR_TEXT_FilenameDisplayFormat_HPP_
 #include <com/sun/star/text/FilenameDisplayFormat.hpp>
-#endif
 #include <com/sun/star/text/XDependentTextField.hpp>
 #include <com/sun/star/text/DocumentStatistic.hpp>
 #include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
@@ -61,17 +59,19 @@
 #include <comphelper/types.hxx>
 #include <comphelper/string.hxx>
 #include <tools/urlobj.hxx>
-#ifndef _APP_HXX //autogen
 #include <vcl/svapp.hxx>
-#endif
 #include <svtools/urihelper.hxx>
 #include <svtools/useroptions.hxx>
 #include <svtools/syslocale.hxx>
+#include <svtools/zforlist.hxx>
 
 #include <tools/time.hxx>
 #include <tools/datetime.hxx>
 
 #include <com/sun/star/beans/PropertyAttribute.hpp>
+#include <com/sun/star/util/Date.hpp>
+#include <com/sun/star/util/DateTime.hpp>
+#include <com/sun/star/util/Time.hpp>
 
 #include <tools/shl.hxx>
 #include <swmodule.hxx>
@@ -90,9 +90,7 @@
 #include <cntfrm.hxx>       //
 #include <pam.hxx>
 #include <viewsh.hxx>
-#ifndef _DBMGR_HXX
 #include <dbmgr.hxx>
-#endif
 #include <shellres.hxx>
 #include <docufld.hxx>
 #include <flddat.hxx>
@@ -100,16 +98,10 @@
 #include <ndtxt.hxx>
 #include <expfld.hxx>
 #include <poolfmt.hxx>
-#ifndef _DOCSH_HXX
 #include <docsh.hxx>
-#endif
-#ifndef _UNOFLDMID_H
 #include <unofldmid.h>
-#endif
 #include <swunohelper.hxx>
-#ifndef _COMCORE_HRC
 #include <comcore.hrc>
-#endif
 
 #include <svx/outliner.hxx>
 #include <svx/outlobj.hxx>
@@ -1114,6 +1106,21 @@ SwDocInfoField::SwDocInfoField(SwDocInfoFieldType* pTyp, sal_uInt16 nSub, const 
 /* ---------------------------------------------------------------------------
 
  ---------------------------------------------------------------------------*/
+template<class T>
+double lcl_TimeToDouble( const T& rTime )
+{
+    const double fMilliSecondsPerDay = 86400000.0;
+    return ((rTime.Hours*3600000)+(rTime.Minutes*60000)+(rTime.Seconds*1000)+(rTime.HundredthSeconds*10)) / fMilliSecondsPerDay;
+}
+
+template<class D>
+double lcl_DateToDouble( const D& rDate, const Date& rNullDate )
+{
+    long nDate = Date::DateToDays( rDate.Day, rDate.Month, rDate.Year );
+    long nNullDate = Date::DateToDays( rNullDate.GetDay(), rNullDate.GetMonth(), rNullDate.GetYear() );
+    return double( nDate - nNullDate );
+}
+
 String SwDocInfoField::Expand() const
 {
     if ( ( nSubType & 0xFF ) == DI_CUSTOM )
@@ -1145,17 +1152,34 @@ String SwDocInfoField::Expand() const
                     ::rtl::OUString sVal;
                     uno::Reference < script::XTypeConverter > xConverter( comphelper::getProcessServiceFactory()
                         ->createInstance(::rtl::OUString::createFromAscii("com.sun.star.script.Converter")), uno::UNO_QUERY );
-                    uno::Any aNew = xConverter->convertToSimpleType( aAny, uno::TypeClass_STRING );
-                    aNew >>= sVal;
+                    util::Date aDate;
+                    util::DateTime aDateTime;
+                    util::Time aTime;
+                    if( aAny >>= aDate)
+                    {
+                        SvNumberFormatter* pFormatter = pDocShell->GetDoc()->GetNumberFormatter();
+                        Date* pNullDate = pFormatter->GetNullDate();
+                        sVal = ExpandValue( lcl_DateToDouble<util::Date>( aDate, *pNullDate ), GetFormat(), GetLanguage());
+                    }
+                    else if( aAny >>= aDateTime )
+                    {
+                        double fDateTime = lcl_TimeToDouble<util::DateTime>( aDateTime );
+                        SvNumberFormatter* pFormatter = pDocShell->GetDoc()->GetNumberFormatter();
+                        Date* pNullDate = pFormatter->GetNullDate();
+                        fDateTime += lcl_DateToDouble<util::DateTime>( aDateTime, *pNullDate );
+                        sVal = ExpandValue( fDateTime, GetFormat(), GetLanguage());
+                    }
+                    else if( aAny >>= aTime )
+                    {
+                        sVal = ExpandValue( lcl_TimeToDouble<util::Time>( aTime ), GetFormat(), GetLanguage());
+                    }
+                    else
+                    {
+                        uno::Any aNew = xConverter->convertToSimpleType( aAny, uno::TypeClass_STRING );
+                        aNew >>= sVal;
+                    }
                     ((SwDocInfoField*)this)->aContent = sVal;
                 }
-            }
-            else
-            {
-                // property is "void" - means it has not been added until now - do it!
-                aAny <<= ::rtl::OUString(aContent);
-                uno::Reference < beans::XPropertyContainer > xCont( xSet, uno::UNO_QUERY );
-                xCont->addProperty( aName, ::com::sun::star::beans::PropertyAttribute::REMOVEABLE, aAny );
             }
         }
         catch (uno::Exception&) {}

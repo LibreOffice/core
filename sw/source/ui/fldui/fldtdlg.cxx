@@ -48,47 +48,23 @@
 #include <vcl/msgbox.hxx>
 #include <svx/htmlmode.hxx>
 #include <viewopt.hxx>
-#ifndef _DOCSH_HXX
 #include <docsh.hxx>
-#endif
 #include <fldwrap.hxx>
-#ifndef _FLDDB_HXX
 #include <flddb.hxx>
-#endif
-#ifndef _FLDDINF_HXX
 #include <flddinf.hxx>
-#endif
-#ifndef _FLDVAR_HXX
 #include <fldvar.hxx>
-#endif
-#ifndef _FLDDOK_HXX
 #include <flddok.hxx>
-#endif
-#ifndef _FLDFUNC_HXX
 #include <fldfunc.hxx>
-#endif
-#ifndef _FLDREF_HXX
 #include <fldref.hxx>
-#endif
 #include <wrtsh.hxx>
 #include <view.hxx>
-#ifndef _FLDTDLG_HXX
 #include <fldtdlg.hxx>
-#endif
 #include <swmodule.hxx>
 
-#ifndef _HELPID_H
 #include <helpid.h>
-#endif
-#ifndef _FLDUI_HRC
 #include <fldui.hrc>
-#endif
-#ifndef _GLOBALS_HRC
 #include <globals.hrc>
-#endif
-#ifndef _FLDTDLG_HRC
 #include <fldtdlg.hrc>
-#endif
 
 #include <com/sun/star/document/XDocumentProperties.hpp>
 #include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
@@ -245,15 +221,7 @@ SfxItemSet* SwFldDlg::CreateInputItemSet( USHORT nID  )
         uno::Reference< beans::XPropertySet > xUDProps(
             xDocProps->getUserDefinedProperties(),
             uno::UNO_QUERY_THROW);
-        uno::Reference< beans::XPropertySetInfo > xSetInfo
-            = xUDProps->getPropertySetInfo();
-        const uno::Sequence< beans::Property > props
-            = xSetInfo->getProperties();
-        uno::Sequence< ::rtl::OUString > names(props.getLength());
-        for (sal_Int32 i = 0; i < props.getLength(); ++i) {
-            names[i] = props[i].Name;
-        }
-        pISet->Put( SfxUnoAnyItem( SID_DOCINFO, uno::makeAny(names) ) );
+        pISet->Put( SfxUnoAnyItem( SID_DOCINFO, uno::makeAny(xUDProps) ) );
         return pISet;
     }
     else

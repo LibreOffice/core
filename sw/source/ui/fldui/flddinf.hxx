@@ -33,15 +33,16 @@
 #include <sfx2/tabdlg.hxx>
 #include <vcl/fixed.hxx>
 #include <vcl/lstbox.hxx>
-#ifndef _SV_BUTTON_HXX //autogen
 #include <vcl/button.hxx>
-#endif
 #include <vcl/group.hxx>
 #include <svtools/svtreebx.hxx>
 
 #include "numfmtlb.hxx"
 #include "fldpage.hxx"
 
+namespace com{namespace sun{ namespace star{ namespace beans{
+    class XPropertySet;
+}}}}
 /*--------------------------------------------------------------------
    Beschreibung:
  --------------------------------------------------------------------*/
@@ -57,7 +58,7 @@ class SwFldDokInfPage : public SwFldPage
     CheckBox            aFixedCB;
 
     SvLBoxEntry*        pSelEntry;
-    com::sun::star::uno::Sequence < ::rtl::OUString > aPropertyNames;
+    com::sun::star::uno::Reference < ::com::sun::star::beans::XPropertySet > xCustomPropertySet;
 
     String              aInfoStr;
 
