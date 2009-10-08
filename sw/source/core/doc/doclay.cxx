@@ -104,10 +104,8 @@
 #include <ftnidx.hxx>
 #include <ftninfo.hxx>
 #include <pagedesc.hxx>
-
-#ifndef _COMCORE_HRC
+#include <PostItMgr.hxx>
 #include <comcore.hrc>      // STR-ResId's
-#endif
 
 // #i11176#
 #include <unoframe.hxx>

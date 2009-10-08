@@ -251,6 +251,8 @@ class SW_DLLPUBLIC SwView: public SfxViewShell
 
     String          aCurrShapeEnumCommand[ MASTERENUMCOMMANDS ];
 
+    USHORT          nPageCnt;
+
     // Aktueller Drawmode
     USHORT          nDrawSfxId;
     String          sDrawCustom; //some drawing types are marked with strings!

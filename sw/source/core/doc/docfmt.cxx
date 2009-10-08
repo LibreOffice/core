@@ -619,22 +619,22 @@ BOOL InsAttr( SwDoc *pDoc, const SwPaM &rRg, const SfxItemSet& rChgSet,
         const SfxPoolItem* pItem = aIter.FirstItem();
         const USHORT nWhich = pItem->Which();
 
-        if ( RES_CHRATR_BEGIN <= nWhich && nWhich < RES_CHRATR_END ||
+        if ( (RES_CHRATR_BEGIN <= nWhich && nWhich < RES_CHRATR_END) ||
              RES_TXTATR_CHARFMT == nWhich ||
              RES_TXTATR_INETFMT == nWhich ||
              RES_TXTATR_AUTOFMT == nWhich ||
-             RES_UNKNOWNATR_BEGIN <= nWhich && nWhich < RES_UNKNOWNATR_END )
+             (RES_UNKNOWNATR_BEGIN <= nWhich && nWhich < RES_UNKNOWNATR_END) )
         {
             pCharSet  = &rChgSet;
             bCharAttr = true;
         }
 
-        if ( RES_PARATR_BEGIN <= nWhich && nWhich < RES_PARATR_END ||
+        if ( (RES_PARATR_BEGIN <= nWhich && nWhich < RES_PARATR_END) ||
              // --> OD 2008-02-25 #refactorlists#
-             RES_PARATR_LIST_BEGIN <= nWhich && nWhich < RES_PARATR_LIST_END ||
+             (RES_PARATR_LIST_BEGIN <= nWhich && nWhich < RES_PARATR_LIST_END) ||
              // <--
-             RES_FRMATR_BEGIN <= nWhich && nWhich < RES_FRMATR_END ||
-             RES_GRFATR_BEGIN <= nWhich && nWhich < RES_GRFATR_END )
+             (RES_FRMATR_BEGIN <= nWhich && nWhich < RES_FRMATR_END) ||
+             (RES_GRFATR_BEGIN <= nWhich && nWhich < RES_GRFATR_END) )
         {
             pOtherSet = &rChgSet;
             bOtherAttr = true;

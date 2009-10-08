@@ -113,6 +113,7 @@ BOOL SwViewOption::IsEqualFlags( const SwViewOption &rOpt ) const
             && aRetoucheColor == rOpt.GetRetoucheColor()
             && bFormView == rOpt.IsFormView()
             && mbViewLayoutBookMode == rOpt.mbViewLayoutBookMode
+            && bShowPlaceHolderFields == rOpt.bShowPlaceHolderFields
 #ifndef PRODUCT
             // korrespondieren zu den Angaben in ui/config/cfgvw.src
             && bTest1 == rOpt.IsTest1()

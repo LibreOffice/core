@@ -68,9 +68,7 @@
 #include <comphelper/extract.hxx>
 #include <comphelper/stl_types.hxx>
 #include <svx/scene3d.hxx>
-#ifndef _COM_SUN_STAR_BEANS_PROPERTYATTRIBUTE_HPPP_
 #include <com/sun/star/beans/PropertyAttribute.hpp>
-#endif
 #include <com/sun/star/drawing/XDrawPageSupplier.hpp>
 #include <com/sun/star/text/HoriOrientation.hpp>
 #include <com/sun/star/text/VertOrientation.hpp>
@@ -78,13 +76,14 @@
 // OD 2004-05-05 #i28701#
 #include <fmtwrapinfluenceonobjpos.hxx>
 // --> OD 2004-11-10 #i35007#
-#ifndef _COM_SUN_STAR_TEXT_TEXTCONTENTANCHORTYPE_HPP
 #include <com/sun/star/text/TextContentAnchorType.hpp>
-#endif
 // <--
 // --> OD 2005-03-10 #i44334#, #i44681#
 // --> OD 2007-01-03 #i73079# - use correct matrix type
 #include <basegfx/matrix/b2dhommatrix.hxx>
+// <--
+// --> OD 2009-01-16 #i59051
+#include <com/sun/star/drawing/PointSequence.hpp>
 // <--
 
 #include <vcl/svapp.hxx>
@@ -1634,13 +1633,25 @@ uno::Any SwXShape::getPropertyValue(const rtl::OUString& rPropertyName)
             {
                 awt::Point aStartPos;
                 aRet >>= aStartPos;
-                aRet <<= _ConvertStartPosToLayoutDir( aStartPos );
+                // --> OD 2009-01-12 #i59051#
+                aRet <<= _ConvertStartOrEndPosToLayoutDir( aStartPos );
+                // <--
             }
             else if ( rPropertyName.equals(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("EndPosition"))) )
             {
                 awt::Point aEndPos;
                 aRet >>= aEndPos;
-                aRet <<= _ConvertEndPosToLayoutDir( aEndPos );
+                // --> OD 2009-01-12 #i59051#
+                aRet <<= _ConvertStartOrEndPosToLayoutDir( aEndPos );
+                // <--
+            }
+            // --> OD 2009-01-16 #i59051#
+            else if ( rPropertyName.equals(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("PolyPolygonBezier"))) )
+            {
+                drawing::PolyPolygonBezierCoords aPath;
+                aRet >>= aPath;
+                aRet <<= _ConvertPolyPolygonBezierToLayoutDir( aPath );
+                // <--
             }
             // <--
         }
@@ -2628,96 +2639,104 @@ void SwXShape::_AdjustPositionProperties( const awt::Point _aPosition )
     }
 }
 
-/** method to convert start and end position of the drawing object to the
+/** method to convert start or end position of the drawing object to the
     Writer specific position, which is the attribute position in layout direction
 
-    OD 2004-10-28 #i36248#
+    OD 2009-01-12 #i59051#
 
     @author OD
 */
-void SwXShape::__ConvertStartEndPosToLayoutDir( awt::Point& _rioStartPos,
-                                                awt::Point& _rioEndPos )
+::com::sun::star::awt::Point SwXShape::_ConvertStartOrEndPosToLayoutDir(
+                            const ::com::sun::star::awt::Point& aStartOrEndPos )
 {
-    awt::Point aPos( getPosition() );
-    awt::Size aSize( getSize() );
+    awt::Point aConvertedPos( aStartOrEndPos );
 
-    if ( _rioStartPos.X == _rioEndPos.X )
-    {
-        _rioStartPos.X = aPos.X;
-        _rioEndPos.X = aPos.X;
-    }
-    else if ( _rioStartPos.X < _rioEndPos.X )
-    {
-        _rioStartPos.X = aPos.X;
-        _rioEndPos.X = aPos.X + aSize.Width;
-    }
-    else
-    {
-        _rioEndPos.X = aPos.X;
-        _rioStartPos.X = aPos.X + aSize.Width;
-    }
-
-    if ( _rioStartPos.Y == _rioEndPos.Y )
-    {
-        _rioStartPos.Y = aPos.Y;
-        _rioEndPos.Y = aPos.Y;
-    }
-    else if ( _rioStartPos.Y < _rioEndPos.Y )
-    {
-        _rioStartPos.Y = aPos.Y;
-        _rioEndPos.Y = aPos.Y + aSize.Height;
-    }
-    else
-    {
-        _rioEndPos.Y = aPos.Y;
-        _rioStartPos.Y = aPos.Y + aSize.Height;
-    }
-}
-
-/** method to convert start position of the drawing object to the
-    Writer specific position, which is the attribute position in layout direction
-
-    OD 2004-10-28 #i36248#
-
-    @author OD
-*/
-awt::Point SwXShape::_ConvertStartPosToLayoutDir( const awt::Point& _aStartPos )
-{
-    awt::Point aStartPos( _aStartPos );
-    awt::Point aEndPos( 0, 0 );
-    SvxShape* pSvxShape( GetSvxShape() );
+    SvxShape* pSvxShape = GetSvxShape();
+    ASSERT( pSvxShape,
+            "<SwXShape::_ConvertStartOrEndPosToLayoutDir(..)> - no SvxShape found!")
     if ( pSvxShape )
     {
-        pSvxShape->_getPropertyValue( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("EndPosition")) )
-                                                                >>= aEndPos;
-
-        __ConvertStartEndPosToLayoutDir( aStartPos, aEndPos );
+        const SdrObject* pObj = pSvxShape->GetSdrObject();
+        ASSERT( pObj,
+                "<SwXShape::_ConvertStartOrEndPosToLayoutDir(..)> - no SdrObject found!")
+        if ( pObj )
+        {
+            // get position of object in Writer coordinate system.
+            awt::Point aPos( getPosition() );
+            // get position of object in Drawing layer coordinate system
+            const Point aTmpObjPos( pObj->GetSnapRect().TopLeft() );
+            const awt::Point aObjPos(
+                    TWIP_TO_MM100( aTmpObjPos.X() - pObj->GetAnchorPos().X() ),
+                    TWIP_TO_MM100( aTmpObjPos.Y() - pObj->GetAnchorPos().Y() ) );
+            // determine difference between these positions according to the
+            // Writer coordinate system
+            const awt::Point aTranslateDiff( aPos.X - aObjPos.X,
+                                             aPos.Y - aObjPos.Y );
+            // apply translation difference to transformation matrix.
+            if ( aTranslateDiff.X != 0 || aTranslateDiff.Y != 0 )
+            {
+                aConvertedPos.X = aConvertedPos.X + aTranslateDiff.X;
+                aConvertedPos.Y = aConvertedPos.Y + aTranslateDiff.Y;
+            }
+        }
     }
 
-    return aStartPos;
+    return aConvertedPos;
 }
 
-/** method to convert end position of the drawing object to the
-    Writer specific position, which is the attribute position in layout direction
-
-    OD 2004-10-28 #i36248#
-
-    @author OD
-*/
-awt::Point SwXShape::_ConvertEndPosToLayoutDir( const awt::Point& _aEndPos )
+::com::sun::star::drawing::PolyPolygonBezierCoords SwXShape::_ConvertPolyPolygonBezierToLayoutDir(
+                    const ::com::sun::star::drawing::PolyPolygonBezierCoords& aPath )
 {
-    awt::Point aEndPos( _aEndPos );
-    awt::Point aStartPos( 0, 0 );
-    SvxShape* pSvxShape( GetSvxShape() );
+    drawing::PolyPolygonBezierCoords aConvertedPath( aPath );
+
+    SvxShape* pSvxShape = GetSvxShape();
+    ASSERT( pSvxShape,
+            "<SwXShape::_ConvertStartOrEndPosToLayoutDir(..)> - no SvxShape found!")
     if ( pSvxShape )
     {
-        pSvxShape->_getPropertyValue( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("StartPosition")) )
-                                                                >>= aStartPos;
+        const SdrObject* pObj = pSvxShape->GetSdrObject();
+        ASSERT( pObj,
+                "<SwXShape::_ConvertStartOrEndPosToLayoutDir(..)> - no SdrObject found!")
+        if ( pObj )
+        {
+            // get position of object in Writer coordinate system.
+            awt::Point aPos( getPosition() );
+            // get position of object in Drawing layer coordinate system
+            const Point aTmpObjPos( pObj->GetSnapRect().TopLeft() );
+            const awt::Point aObjPos(
+                    TWIP_TO_MM100( aTmpObjPos.X() - pObj->GetAnchorPos().X() ),
+                    TWIP_TO_MM100( aTmpObjPos.Y() - pObj->GetAnchorPos().Y() ) );
+            // determine difference between these positions according to the
+            // Writer coordinate system
+            const awt::Point aTranslateDiff( aPos.X - aObjPos.X,
+                                             aPos.Y - aObjPos.Y );
+            // apply translation difference to PolyPolygonBezier.
+            if ( aTranslateDiff.X != 0 || aTranslateDiff.Y != 0 )
+            {
+                basegfx::B2DHomMatrix aMatrix;
+                aMatrix.translate( aTranslateDiff.X, aTranslateDiff.Y );
 
-        __ConvertStartEndPosToLayoutDir( aStartPos, aEndPos );
+                const sal_Int32 nOuterSequenceCount(aConvertedPath.Coordinates.getLength());
+                drawing::PointSequence* pInnerSequence = aConvertedPath.Coordinates.getArray();
+                for(sal_Int32 a(0); a < nOuterSequenceCount; a++)
+                {
+                    const sal_Int32 nInnerSequenceCount(pInnerSequence->getLength());
+                    awt::Point* pArray = pInnerSequence->getArray();
+
+                    for(sal_Int32 b(0); b < nInnerSequenceCount; b++)
+                    {
+                        basegfx::B2DPoint aNewCoordinatePair(pArray->X, pArray->Y);
+                        aNewCoordinatePair *= aMatrix;
+                        pArray->X = basegfx::fround(aNewCoordinatePair.getX());
+                        pArray->Y = basegfx::fround(aNewCoordinatePair.getY());
+                        pArray++;
+                    }
+                }
+            }
+        }
     }
 
-    return aEndPos;
+    return aConvertedPath;
 }
 
 /*-- 31.05.01 09:59:19---------------------------------------------------

@@ -72,6 +72,9 @@ SwAttrPool::SwAttrPool( SwDoc* pD )
     SetVersionMap( 6, 1,136, pVersionMap6 );
 }
 
+SwAttrPool::~SwAttrPool()
+{
+}
 
 SwAttrSet::SwAttrSet( SwAttrPool& rPool, USHORT nWh1, USHORT nWh2 )
     : SfxItemSet( rPool, nWh1, nWh2 ), pOldSet( 0 ), pNewSet( 0 )

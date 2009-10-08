@@ -833,6 +833,11 @@ void SwTextShell::StateInsert( SfxItemSet &rSet )
     SvtModuleOptions aMOpt;
     SfxObjectCreateMode eCreateMode =
                         GetView().GetDocShell()->GetCreateMode();
+
+    rSh.Push();
+    const BOOL bCrsrInHidden = rSh.SelectHiddenRange();
+    rSh.Pop(FALSE);
+
     while ( nWhich )
     {
         switch ( nWhich )
@@ -841,21 +846,21 @@ void SwTextShell::StateInsert( SfxItemSet &rSet )
             case SID_INSERT_VIDEO:
                 if ( GetShell().IsSelFrmMode() ||
                      !SvxPluginFileDlg::IsAvailable( nWhich ) ||
-                     SFX_CREATE_MODE_EMBEDDED == eCreateMode )
+                     SFX_CREATE_MODE_EMBEDDED == eCreateMode || bCrsrInHidden )
                 {
                     rSet.DisableItem( nWhich );
                 }
                 break;
 
             case SID_INSERT_DIAGRAM:
-                if( !aMOpt.IsChart() || eCreateMode == SFX_CREATE_MODE_EMBEDDED)
+                if( !aMOpt.IsChart() || eCreateMode == SFX_CREATE_MODE_EMBEDDED || bCrsrInHidden )
                 {
                     rSet.DisableItem( nWhich );
                 }
                 break;
 
             case FN_INSERT_SMA:
-                if( !aMOpt.IsMath() || eCreateMode == SFX_CREATE_MODE_EMBEDDED)
+                if( !aMOpt.IsMath() || eCreateMode == SFX_CREATE_MODE_EMBEDDED || bCrsrInHidden )
                 {
                     rSet.DisableItem( nWhich );
                 }
@@ -870,7 +875,7 @@ void SwTextShell::StateInsert( SfxItemSet &rSet )
 #ifndef SOLAR_JAVA
                     nWhich == SID_INSERT_APPLET ||
 #endif
-                    eCreateMode == SFX_CREATE_MODE_EMBEDDED)
+                    eCreateMode == SFX_CREATE_MODE_EMBEDDED || bCrsrInHidden )
                 {
                     rSet.DisableItem( nWhich );
                 }
@@ -889,7 +894,7 @@ void SwTextShell::StateInsert( SfxItemSet &rSet )
             case FN_INSERT_FRAME_INTERACT:
             {
                 if ( GetShell().IsSelFrmMode() ||
-                    (0 != (nHtmlMode & HTMLMODE_ON) && 0 == (nHtmlMode & HTMLMODE_SOME_ABS_POS)))
+                    (0 != (nHtmlMode & HTMLMODE_ON) && 0 == (nHtmlMode & HTMLMODE_SOME_ABS_POS)) || bCrsrInHidden )
                     rSet.DisableItem(nWhich);
             }
             break;
@@ -949,12 +954,12 @@ void SwTextShell::StateInsert( SfxItemSet &rSet )
                 if(rSh.IsSelFrmMode())
                 {
                     const int nSel = rSh.GetSelectionType();
-                    if( (nsSelectionType::SEL_GRF | nsSelectionType::SEL_OLE ) & nSel )
+                    if( ((nsSelectionType::SEL_GRF | nsSelectionType::SEL_OLE ) & nSel ) || bCrsrInHidden )
                         rSet.DisableItem(nWhich);
                 }
             break;
             case FN_INSERT_HRULER :
-                if(rSh.IsReadOnlyAvailable() && rSh.HasReadonlySel() )
+                if(rSh.IsReadOnlyAvailable() && rSh.HasReadonlySel() || bCrsrInHidden )
                     rSet.DisableItem(nWhich);
             break;
             case FN_FORMAT_COLUMN :

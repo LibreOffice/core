@@ -729,7 +729,7 @@ SmDocShell::~SmDocShell()
     EndListening(*pp->GetConfig());
 
     delete pEditEngine;
-    delete pEditEngineItemPool;
+    SfxItemPool::Free(pEditEngineItemPool);
     delete pTree;
     delete pPrinter;
 }

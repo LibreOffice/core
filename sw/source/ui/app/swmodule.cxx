@@ -295,7 +295,7 @@ uno::Reference< linguistic2::XLanguageGuessing > SwModule::GetLanguageGuesser()
 SwModule::~SwModule()
 {
     SetPool(0);
-    delete pAttrPool;
+    SfxItemPool::Free(pAttrPool);
     delete pErrorHdl;
     EndListening( *SFX_APP() );
 }
@@ -514,7 +514,7 @@ void    SwModule::InitAttrPool()
 void    SwModule::RemoveAttrPool()
 {
     SetPool(0);
-    DELETEZ(pAttrPool);
+    SfxItemPool::Free(pAttrPool);
 }
 
 

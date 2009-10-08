@@ -4391,7 +4391,9 @@ void SwWW8ImplReader::SetOutLineStyles()
     // <--
 
     sw::ParaStyles aOutLined(sw::util::GetParaStyles(rDoc));
-    sw::util::SortByOutline(aOutLined);
+    // --> OD 2009-02-04 #i98791# - sorting algorithm adjusted
+    sw::util::SortByAssignedOutlineStyleListLevel(aOutLined);
+    // <--
 
     typedef sw::ParaStyleIter myParaStyleIter;
     /*

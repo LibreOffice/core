@@ -144,10 +144,19 @@ long SwWrtShell::SelAll()
     {
         MV_KONTEXT(this);
         BOOL bMoveTable = FALSE;
+        SwPosition *pStartPos = 0;
+        SwPosition *pEndPos = 0;
+        SwShellCrsr* pTmpCrsr = 0;
         if( !HasWholeTabSelection() )
         {
             if ( IsSelection() && IsCrsrPtAtEnd() )
                 SwapPam();
+            pTmpCrsr = getShellCrsr( false );
+            if( pTmpCrsr )
+            {
+                pStartPos = new SwPosition( *pTmpCrsr->GetPoint() );
+                pEndPos = new SwPosition( *pTmpCrsr->GetMark() );
+            }
             Push();
             BOOL bIsFullSel = !MoveSection( fnSectionCurr, fnSectionStart);
             SwapPam();
@@ -162,6 +171,24 @@ long SwWrtShell::SelAll()
         }
         SttSelect();
         GoEnd(TRUE, &bMoveTable);
+        if( pStartPos )
+        {
+            pTmpCrsr = getShellCrsr( false );
+            if( pTmpCrsr )
+            {
+                // Some special handling for sections (e.g. TOC) at the beginning of the document body
+                // to avoid the selection of the first section
+                // if the last selection was behind the first section or
+                // if the last selection was already the first section
+                // In this both cases we select to the end of document
+                if( *pTmpCrsr->GetPoint() < *pEndPos ||
+                    ( *pStartPos == *pTmpCrsr->GetMark() &&
+                      *pEndPos == *pTmpCrsr->GetPoint() ) )
+                    SwCrsrShell::SttEndDoc(FALSE);
+            }
+            delete pStartPos;
+            delete pEndPos;
+        }
     }
     EndSelect();
 

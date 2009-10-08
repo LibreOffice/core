@@ -303,7 +303,7 @@ class SW_DLLPUBLIC SwDoc :
     // die Objecte
     SwNodes     aNodes;                 // Inhalt des Dokumentes
     SwNodes     aUndoNodes;             // Inhalt fuer das Undo
-    SwAttrPool  aAttrPool;              // der Attribut Pool
+    SwAttrPool* mpAttrPool;             // der Attribut Pool
     SwPageDescs aPageDescs;             // PageDescriptoren
     Link        aOle2Link;              // OLE 2.0-Benachrichtigung
     /* @@@MAINTAINABILITY-HORROR@@@
@@ -1782,8 +1782,8 @@ public:
         const sal_uInt16 nId, const String& rCharacterStyle, SdrObject& rObj );
 
     // erfrage den Attribut Pool
-    const SwAttrPool& GetAttrPool() const   { return aAttrPool; }
-          SwAttrPool& GetAttrPool()         { return aAttrPool; }
+    const SwAttrPool& GetAttrPool() const   { return *mpAttrPool; }
+          SwAttrPool& GetAttrPool()         { return *mpAttrPool; }
 
     // suche ueber das Layout eine EditShell und ggfs. eine ViewShell
     SwEditShell* GetEditShell( ViewShell** ppSh = 0 ) const;

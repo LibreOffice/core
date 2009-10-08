@@ -200,8 +200,8 @@ void SwWW8Writer::OutListTab()
         aNumVector.push_back(n);
 
     BYTE aPapSprms [] = {
-        0x0f, 0x84, 0, 0,               // sprmPDxaLeft
-        0x11, 0x84, 0, 0,               // sprmPDxaLeft1
+        0x5e, 0x84, 0, 0,               // sprmPDxaLeft
+        0x60, 0x84, 0, 0,               // sprmPDxaLeft1
         0x15, 0xc6, 0x05, 0x00, 0x01, 0, 0, 0x06
     };
 
@@ -227,9 +227,6 @@ void SwWW8Writer::OutListTab()
             {
             case SVX_ADJUST_CENTER:
                 nAlign = 1;
-                break;
-            case SVX_ADJUST_RIGHT:
-                nAlign = 2;
                 break;
             default:
                 nAlign = 0;

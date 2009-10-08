@@ -235,24 +235,16 @@ SwTabPortion *SwTxtFormatter::NewTabPortion( SwTxtFormatInfo &rInf, bool bAuto )
         }
 
         // <--
-        // --> OD 2008-02-07 #newlistlevelattrs#
-        // In case that the proposed new tab stop position is the list tab stop
-        // position, do not force a tab stop at left margin.
-//        if( nNextPos > 0 &&
-//             (  bRTL && nTabLeft - nForced < nCurrentAbsPos ||
-//               !bRTL && nTabLeft + nForced > nCurrentAbsPos ) )
-        // --> OD 2008-06-05 #i89181#
-        // Now the application of a tab stop at the left margin in case a list
-        // tab stop is processed depends on compatibility option TAB_AT_LEFT_INDENT_FOR_PARA_IN_LIST.
-//        const bool bIsListTabStopPosition( pTabStop &&
-//                                aLineInf.IsListTabStopIncluded() &&
-//                                nNextPos == aLineInf.GetListTabStopPosition() );
-//        if ( !bIsListTabStopPosition &&
+        // --> OD 2009-02-23 #i99384#
+        // correction of condition, when a tab stop at the left margin can
+        // be applied:
+        // If the paragraph is not inside a list having a list tab stop following
+        // the list label or no further tab stop found in such a paragraph,
+        // a tab stop at the left margin can be applied. If this condition is
+        // not hold, it is overruled by compatibility option TAB_AT_LEFT_INDENT_FOR_PARA_IN_LIST.
         const bool bTabAtLeftMargin =
-            // it is not the list tab stop:
-            ( !pTabStop ||
-              !aLineInf.IsListTabStopIncluded() ||
-              nNextPos != aLineInf.GetListTabStopPosition() ) ||
+            ( !aLineInf.IsListTabStopIncluded() ||
+              !pTabStop ) ||
             // compatibility option TAB_AT_LEFT_INDENT_FOR_PARA_IN_LIST:
             pFrm->GetTxtNode()->getIDocumentSettingAccess()->
                 get(IDocumentSettingAccess::TAB_AT_LEFT_INDENT_FOR_PARA_IN_LIST);

@@ -938,10 +938,10 @@ static void lcl_DrawLineForWrongListData(
             if (rInf.GetOut().GetConnectMetaFile())
                 rInf.GetOut().Push();
 
-            const Color aCol( rInf.GetOut().GetTextLineColor() );
+            const Color aCol( rInf.GetOut().GetLineColor() );
             const BOOL bColSave = aCol != aLineColor;
             if (bColSave)
-                rInf.GetOut().SetTextLineColor( aLineColor );
+                rInf.GetOut().SetLineColor( aLineColor );
 
             // iterate over all ranges stored in the respective SwWrongList
             do
@@ -1012,7 +1012,7 @@ static void lcl_DrawLineForWrongListData(
             while (nWrLen && pWList->Check( nStart, nWrLen ));
 
             if (bColSave)
-                rInf.GetOut().SetTextLineColor( aCol );
+                rInf.GetOut().SetLineColor( aCol );
 
             if (rInf.GetOut().GetConnectMetaFile())
                 rInf.GetOut().Pop();
@@ -1932,10 +1932,10 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
                             WRONG_SHOW_MEDIUM < nHght ? WAVE_NORMAL :
                             ( WRONG_SHOW_SMALL < nHght ? WAVE_SMALL :
                             WAVE_FLAT );
-                        Color aCol( rInf.GetOut().GetTextLineColor() );
+                        Color aCol( rInf.GetOut().GetLineColor() );
                         BOOL bColSave = aCol != *pWaveCol;
                         if ( bColSave )
-                            rInf.GetOut().SetTextLineColor( *pWaveCol );
+                            rInf.GetOut().SetLineColor( *pWaveCol );
 
                         Point aEnd;
                         long nKernVal = pKernArray[ USHORT( rInf.GetLen() - 1 ) ];
@@ -1982,7 +1982,7 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
                         rInf.GetOut().DrawWaveLine( aCurrPos, aEnd, nWave );
 
                         if ( bColSave )
-                            rInf.GetOut().SetTextLineColor( aCol );
+                            rInf.GetOut().SetLineColor( aCol );
 
                         if ( rInf.GetOut().GetConnectMetaFile() )
                             rInf.GetOut().Pop();

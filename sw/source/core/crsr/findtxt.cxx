@@ -463,8 +463,8 @@ bool SwPaM::DoSearch( const SearchOptions& rSearchOpt, utl::TextSearch& rSTxt,
     }
 
     xub_StrLen nStringEnd = nEnde;
-    while ( bSrchForward && nStart < nStringEnd ||
-            ! bSrchForward && nStart > nStringEnd )
+    while ( (bSrchForward && nStart < nStringEnd) ||
+            (! bSrchForward && nStart > nStringEnd) )
     {
         // SearchAlgorithms_APPROXIMATE works on a per word base
         // so we have to provide the text searcher with the correct

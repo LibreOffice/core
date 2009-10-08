@@ -204,6 +204,7 @@ SfxChildWinInfo SwSpellDialogChildWindow::GetInfo (void) const
 
 /*-- 09.09.2003 10:39:40---------------------------------------------------
 
+
   -----------------------------------------------------------------------*/
 svx::SpellPortions SwSpellDialogChildWindow::GetNextWrongSentence (void)
 {

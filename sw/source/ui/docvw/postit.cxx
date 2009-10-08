@@ -720,6 +720,7 @@ void SwMarginWin::ShowAnkorOnly(const Point &aPoint)
     {
         mpAnkor->SetSixthPosition(basegfx::B2DPoint(aPoint.X(),aPoint.Y()));
         mpAnkor->SetSeventhPosition(basegfx::B2DPoint(aPoint.X(),aPoint.Y()));
+        mpAnkor->SetAnkorState(AS_ALL);
         mpAnkor->setVisible(true);
     }
     if (mpShadow)
@@ -729,7 +730,7 @@ void SwMarginWin::ShowAnkorOnly(const Point &aPoint)
 void SwMarginWin::InitControls()
 {
     // actual window which holds the user text
-    mpPostItTxt = new PostItTxt(this, 0);
+    mpPostItTxt = new PostItTxt(this, WB_NODIALOGCONTROL);
     mpPostItTxt->SetPointer(Pointer(POINTER_TEXT));
 
     // window control for author and date
@@ -807,9 +808,10 @@ void SwMarginWin::InitControls()
 
     CheckMetaText();
     SetPopup();
-    SetPostItText();
     SetLanguage(GetLanguage());
     View()->StartSpeller();
+    SetPostItText();
+    Engine()->CompleteOnlineSpelling();
 
     mpMeta->Show();
     mpVScrollbar->Show();
@@ -915,7 +917,8 @@ void SwMarginWin::SetPosAndSize()
                                             basegfx::B2DPoint( aLineStart.X(),aLineStart.Y()),
                                             basegfx::B2DPoint( aLineEnd.X(),aLineEnd.Y()) , mColorAnkor,LineInfo(LINE_DASH,ANKORLINE_WIDTH*15), false);
                 mpAnkor->SetHeight(mAnkorRect.Height());
-                mpAnkor->setVisible(false);
+                mpAnkor->setVisible(true);
+                mpAnkor->SetAnkorState(AS_TRI);
                 if (HasChildPathFocus())
                     mpAnkor->SetLineInfo(LineInfo(LINE_SOLID,ANKORLINE_WIDTH*15));
                 pOverlayManager->add(*mpAnkor);
@@ -938,16 +941,20 @@ void SwMarginWin::SetPosAndSize()
         Point aEnd = EditWin()->PixelToLogic(GetPosPixel()+Point(GetSizePixel().Width()-1,GetSizePixel().Height()));
         mpShadow->SetPosition(basegfx::B2DPoint(aStart.X(),aStart.Y()), basegfx::B2DPoint(aEnd.X(),aEnd.Y()));
     }
-    if (IsFollow() && !HasChildPathFocus())
+
+    if (mpMgr->ShowNotes())
     {
-        mpAnkor->SetAnkorState(AS_END);
-    }
-    else
-    {
-        mpAnkor->SetAnkorState(AS_ALL);
-        SwMarginWin* pWin = GetTopReplyNote();
-        if (IsFollow() && pWin )
-            pWin->Ankor()->SetAnkorState(AS_END);
+        if (IsFollow() && !HasChildPathFocus())
+        {
+            mpAnkor->SetAnkorState(AS_END);
+        }
+        else
+        {
+            mpAnkor->SetAnkorState(AS_ALL);
+            SwMarginWin* pWin = GetTopReplyNote();
+            if (IsFollow() && pWin )
+                pWin->Ankor()->SetAnkorState(AS_END);
+        }
     }
 }
 
@@ -1187,8 +1194,13 @@ void SwMarginWin::HideNote()
 {
     if (IsVisible())
         Window::Hide();
-    if (mpAnkor && mpAnkor->isVisible())
-        mpAnkor->setVisible(false);
+    if (mpAnkor)
+    {
+        if (mpMgr->IsShowAnkor())
+            mpAnkor->SetAnkorState(AS_TRI);
+        else
+            mpAnkor->setVisible(false);
+    }
     if (mpShadow && mpShadow->isVisible())
         mpShadow->setVisible(false);
 }
@@ -1504,9 +1516,14 @@ void SwMarginWin::SetViewState(ShadowState bState)
                     // if there is no visible parent note, we want to see the complete anchor ??
                     //if (IsAnyStackParentVisible())
                     mpAnkor->SetAnkorState(AS_END);
-                    SwMarginWin* pWin = GetTopReplyNote();
-                    if (pWin)
-                        pWin->Ankor()->SetAnkorState(AS_ALL);
+                    SwMarginWin* pTopWinSelf = GetTopReplyNote();
+                    SwMarginWin* pTopWinActive = mpMgr->GetActivePostIt() ? mpMgr->GetActivePostIt()->GetTopReplyNote() : 0;
+                    if (pTopWinSelf && (pTopWinSelf!=pTopWinActive))
+                    {
+                        if (pTopWinSelf!=mpMgr->GetActivePostIt())
+                        pTopWinSelf->Ankor()->SetLineInfo(LineInfo(LINE_DASH,ANKORLINE_WIDTH*15));
+                        pTopWinSelf->Ankor()->SetAnkorState(AS_ALL);
+                    }
                 }
                 mpAnkor->SetLineInfo(LineInfo(LINE_DASH,ANKORLINE_WIDTH*15));
             }
@@ -1544,10 +1561,6 @@ SwMarginWin* SwMarginWin::GetTopReplyNote()
         pMarginWin = pMarginWin->IsFollow() ? mpMgr->GetNextPostIt(KEY_PAGEUP, pMarginWin) : 0;
     }
     return pTopNote;
-}
-
-void SwMarginWin::SetPostItText()
-{
 }
 
 void SwMarginWin::SwitchToFieldPos()
@@ -1768,8 +1781,11 @@ void SwPostIt::InitAnswer(OutlinerParaObject* pText)
     //collect our old meta data
     SwMarginWin* pWin = Mgr()->GetNextPostIt(KEY_PAGEUP, this);
     const LocaleDataWrapper& rLocalData = SvtSysLocale().GetLocaleData();
-    String aText = String((SW_RES(STR_REPLY)));
-    aText.Append(String(pWin->GetAuthor() + rtl::OUString::createFromAscii(" (") +
+    String aText = String(SW_RES(STR_REPLY));
+           SwRewriter aRewriter;
+        aRewriter.AddRule(UNDO_ARG1, pWin->GetAuthor());
+           aText = aRewriter.Apply(aText);
+           aText.Append(String(rtl::OUString::createFromAscii(" (") +
         String(rLocalData.getDate( pWin->GetDate())) + rtl::OUString::createFromAscii(", ") +
         String(rLocalData.getTime( pWin->GetTime(),false)) + rtl::OUString::createFromAscii("): \"")));
     View()->InsertText(aText,false);
@@ -2105,6 +2121,13 @@ void SwPostItAnkor::implDrawGeometry(OutputDevice& rOutputDevice, Color aColor, 
 
     switch (mAnkorState)
     {
+        case AS_TRI:
+                {
+                        rOutputDevice.SetLineColor();
+                        rOutputDevice.SetFillColor(aColor);
+                        rOutputDevice.DrawPolygon(Polygon(aTri));
+                        break;
+                }
         case AS_ALL:
         {
             rOutputDevice.SetLineColor();

@@ -133,6 +133,7 @@ using namespace nsHdFtFlags;
 #define MM_250 1417             // WW-Default fuer Hor. Seitenraender: 2.5 cm
 #define MM_200 1134             // WW-Default fuer u.Seitenrand: 2.0 cm
 
+
 BYTE lcl_ReadBorders(bool bVer67, WW8_BRC* brc, WW8PLCFx_Cp_FKP* pPap,
     const WW8RStyle* pSty = 0, const WW8PLCFx_SEPX* pSep = 0);
 
@@ -5512,13 +5513,13 @@ const wwSprmDispatcher *GetWW8SprmDispatcher()
                                                      //pap.itbdMac, pap.rgdxaTab,
                                                      //pap.rgtbd;complex;variable
                                                      //length
-        {0x840E, &SwWW8ImplReader::Read_LR},         //"sprmPDxaRight" pap.dxaRight;
+        {0x840E, &SwWW8ImplReader::Read_LR},         //Word 97 version of "sprmPDxaRight" pap.dxaRight;
                                                      //dxa;word;
-        {0x840F, &SwWW8ImplReader::Read_LR},         //"sprmPDxaLeft" pap.dxaLeft;
+        {0x840F, &SwWW8ImplReader::Read_LR},         //Apparently Word 97 version of "sprmPDxaLeft" pap.dxaLeft;
                                                      //dxa;word;
         {0x4610, 0},                                 //"sprmPNest" pap.dxaLeft;
                                                      //dxa;word;
-        {0x8411, &SwWW8ImplReader::Read_LR},         //"sprmPDxaLeft1" pap.dxaLeft1;
+        {0x8411, &SwWW8ImplReader::Read_LR},         //Word 97 version of "sprmPDxaLeft1" pap.dxaLeft1;
                                                      //dxa;word;
         {0x6412, &SwWW8ImplReader::Read_LineSpace},  //"sprmPDyaLine" pap.lspd;
                                                      //an LSPD, a long word
@@ -6026,12 +6027,9 @@ const wwSprmDispatcher *GetWW8SprmDispatcher()
         {0x6463, 0},                                 //undocumented
         {0x2461, &SwWW8ImplReader::Read_RTLJustify}, //undoc, must be asian version
                                                      //of "sprmPJc"
-        {0x845E, &SwWW8ImplReader::Read_LR},         //undoc, must be asian version
-                                                     //of "sprmPDxaLeft"
-        {0x8460, &SwWW8ImplReader::Read_LR},         //undoc, must be asian version
-                                                     //of "sprmPDxaLeft1"
-        {0x845D, &SwWW8ImplReader::Read_LR},         //undoc, must be asian version
-                                                     //of "sprmPDxaRight"
+        {0x845E, &SwWW8ImplReader::Read_LR},         //Apparently post-Word 97 version of "sprmPDxaLeft"
+        {0x8460, &SwWW8ImplReader::Read_LR},         //Post-Word 97 version of "sprmPDxaLeft1"
+        {0x845D, &SwWW8ImplReader::Read_LR},         //Post-Word 97 version of "sprmPDxaRight"
         {0x3615, 0},                                 //undocumented
         {0x360D, 0},                                 //undocumented
         {0x940E, 0},                                 //undocumented

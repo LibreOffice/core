@@ -58,6 +58,7 @@
 #include <undobj.hxx>
 #include <tools/color.hxx>
 
+#include <swmodule.hxx>
 #include <docvw.hrc>
 #include "cmdid.h"
 
@@ -133,6 +134,12 @@ SwPostItMgr::SwPostItMgr(SwView* pView)
     if(!mpView->GetDrawView() )
         mpView->GetWrtShell().MakeDrawView();
 
+    SwNoteProps aProps;
+    mpIsShowAnkor = aProps.IsShowAnkor();
+
+    //make sure we get the colour yellow always, even if not the first one of comments or redlining
+    SW_MOD()->GetRedlineAuthor();
+
     // collect all PostIts and redline comments that exist after loading the document
     // don't check for existance for any of them, don't focus them
     AddPostIts(false,false);
@@ -141,7 +148,7 @@ SwPostItMgr::SwPostItMgr(SwView* pView)
     */
     // we want to receive stuff like SFX_HINT_DOCCHANGED
     StartListening(*mpView->GetDocShell());
-    if (!mvPostItFlds.empty() && ShowNotes())
+    if (!mvPostItFlds.empty())
     {
         mbWaitingForCalcRects = true;
         mnEventId = Application::PostUserEvent( LINK( this, SwPostItMgr, CalcHdl), 0 );
@@ -171,6 +178,8 @@ void SwPostItMgr::CheckForRemovedPostIts()
         {
             SwMarginItem* p = (*it);
             mvPostItFlds.remove(*it);
+            if (GetActivePostIt() == p->pPostIt)
+                 SetActivePostIt(0);
             if (p->pPostIt)
                 delete p->pPostIt;
             delete p;
@@ -243,7 +252,7 @@ void SwPostItMgr::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
         sal_uInt32 nId = ((SfxEventHint&)rHint).GetEventId();
         if ( nId == SW_EVENT_LAYOUT_FINISHED )
         {
-            if ( !mbWaitingForCalcRects && ShowNotes() && !mvPostItFlds.empty())
+            if ( !mbWaitingForCalcRects && !mvPostItFlds.empty())
             {
                 mbWaitingForCalcRects = true;
                 mnEventId = Application::PostUserEvent( LINK( this, SwPostItMgr, CalcHdl), 0 );
@@ -269,7 +278,7 @@ void SwPostItMgr::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
             {
                 if ( mpView->GetDocShell() == &rBC )
                 {
-                    if ( !mbWaitingForCalcRects && ShowNotes() && !mvPostItFlds.empty())
+                    if ( !mbWaitingForCalcRects && !mvPostItFlds.empty())
                     {
                         mbWaitingForCalcRects = true;
                         mnEventId = Application::PostUserEvent( LINK( this, SwPostItMgr, CalcHdl), 0 );
@@ -436,9 +445,6 @@ void SwPostItMgr::Focus(SfxBroadcaster& rBC)
 
 bool SwPostItMgr::CalcRects()
 {
-    if (!ShowNotes())
-        return false;
-
     if ( mnEventId )
     {
         // if CalcRects() was forced and an event is still pending: remove it
@@ -466,8 +472,7 @@ bool SwPostItMgr::CalcRects()
             SwRect aOldRect(pItem->mPos);
             SwPostItHelper::SwLayoutStatus eOldStatus = pItem->mLayoutStatus;
             std::vector< SwLayoutInfo > aInfo;
-            //pItem->mLayoutStatus = SwPostItHelper::getLayoutInfos( aInfo, pItem->pFmtFld->GetTxtFld() );
-            SwPosition aPosition = pItem->GetPosition();
+             SwPosition aPosition = pItem->GetPosition();
             pItem->mLayoutStatus = SwPostItHelper::getLayoutInfos( aInfo, aPosition );
             if( aInfo.size() )
             {
@@ -588,8 +593,7 @@ void SwPostItMgr::LayoutPostIts()
     if ( !mvPostItFlds.empty() && !mbWaitingForCalcRects )
     {
         mbLayouting = true;
-        if (ShowNotes())
-        {
+
             //loop over all pages and do the layout
             // - create SwPostIt if neccessary
             // - place SwPostIts on their initial position
@@ -631,7 +635,7 @@ void SwPostItMgr::LayoutPostIts()
                             long aPostItHeight = 0;
                             if (!pPostIt)
                             {
-                                pPostIt = (*i)->GetMarginWindow(static_cast<Window*>(&mpView->GetEditWin()),WINDOW_CONTROL,this,0);
+                                pPostIt = (*i)->GetMarginWindow(static_cast<Window*>(&mpView->GetEditWin()),WINDOW_CONTROL|WB_NODIALOGCONTROL,this,0);
                                 pPostIt->InitControls();
                                 pPostIt->SetReadonly(mbReadOnly);
                                 pItem->pPostIt = pPostIt;
@@ -644,7 +648,7 @@ void SwPostItMgr::LayoutPostIts()
                                 }
                             }
 
-                            if (pItem->pPostIt->ISA(SwPostIt))
+                                            if (pItem->pPostIt->ISA(SwPostIt))
                             {
                                 static_cast<SwPostIt*>(pPostIt)->SetChangeTracking(pItem->mLayoutStatus,GetColorAnkor(pItem->mRedlineAuthor));
                             }
@@ -656,7 +660,7 @@ void SwPostItMgr::LayoutPostIts()
                             if (pItem->bFocus)
                             {
                                 mbLayout = true;
-                                pPostIt->GrabFocus();
+                                                pPostIt->GrabFocus();
                                 pItem->bFocus = false;
                             }
                             // only the visible postits are used for the final layout
@@ -670,10 +674,13 @@ void SwPostItMgr::LayoutPostIts()
                         }
                     }
 
-                    if (aVisiblePostItList.size()>0)
+                    if ((aVisiblePostItList.size()>0) && ShowNotes())
                     {
                         bool bOldScrollbar = mPages[n]->bScrollbar;
-                        mPages[n]->bScrollbar = LayoutByPage(aVisiblePostItList, mPages[n]->mPageRect.SVRect(), lNeededHeight);
+                        if (ShowNotes())
+                            mPages[n]->bScrollbar = LayoutByPage(aVisiblePostItList, mPages[n]->mPageRect.SVRect(), lNeededHeight);
+                        else
+                            mPages[n]->bScrollbar = false;
                         if (!mPages[n]->bScrollbar)
                         {
                             mPages[n]->lOffset = 0;
@@ -689,9 +696,9 @@ void SwPostItMgr::LayoutPostIts()
                         bUpdate = (bOldScrollbar != mPages[n]->bScrollbar) || bUpdate;
                         const long aSidebarheight = mPages[n]->bScrollbar ? mpEditWin->PixelToLogic(Size(0,GetSidebarScrollerHeight())).Height() : 0;
                         /*
-                       TODO
-                       - enlarge all notes till GetNextBorder(), as we resized to average value before
-                       */
+                                           TODO
+                                           - enlarge all notes till GetNextBorder(), as we resized to average value before
+                                           */
                         //lets hide the ones which overlap the page
                         for(SwMarginWin_iterator i = aVisiblePostItList.begin(); i!= aVisiblePostItList.end() ; i++)
                         {
@@ -723,15 +730,25 @@ void SwPostItMgr::LayoutPostIts()
                                 DBG_ASSERT(mPages[n]->bScrollbar,"SwPostItMgr::LayoutByPage(): note overlaps, but bScrollbar is not true");
                             }
                         }
+
                         // do some magic so we really see the focused note
                         for(SwMarginWin_iterator i = aVisiblePostItList.begin(); i!= aVisiblePostItList.end() ; i++)
                         {
-                            if ((*i)->HasChildPathFocus())
+                                            if ((*i)->HasChildPathFocus())
                             {
                                 MakeVisible((*i),n+1);
                                 break;
                             }
                         }
+                    }
+                    else
+                    {
+                        for(SwMarginWin_iterator i = aVisiblePostItList.begin(); i!= aVisiblePostItList.end() ; i++)
+                                                                (*i)->SetPosAndSize();
+
+                                                        bool bOldScrollbar = mPages[n]->bScrollbar;
+                                                        mPages[n]->bScrollbar = false;
+                                                        bUpdate = (bOldScrollbar != mPages[n]->bScrollbar) || bUpdate;
                     }
                     aVisiblePostItList.clear();
                 }
@@ -742,38 +759,39 @@ void SwPostItMgr::LayoutPostIts()
                 }
             }
 
+            if (!ShowNotes())
+            {       // we do not want to see the notes anymore -> Options-Writer-View-Notes
+                bool bRepair = false;
+                for(SwMarginItem_iterator i = mvPostItFlds.begin(); i!= mvPostItFlds.end() ; i++)
+                {
+                    SwMarginItem* pItem = (*i);
+                    if ( !pItem->UseElement() )
+                    {
+                        DBG_ERROR("PostIt is not in doc!");
+                        bRepair = true;
+                        continue;
+                    }
+
+                    if ((*i)->pPostIt)
+                    {
+                        (*i)->pPostIt->HideNote();
+                        if ((*i)->pPostIt->HasChildPathFocus())
+                        {
+                            SetActivePostIt(0);
+                            (*i)->pPostIt->GrabFocusToDocument();
+                        }
+                    }
+                }
+
+                if ( bRepair )
+                    CheckForRemovedPostIts();
+            }
+
+
             // notes scrollbar is otherwise not drawn correctly for some cases
             // scrollbar area is enough
             if (bUpdate)
                 mpEditWin->Invalidate();
-        }
-        else
-        {   // we do not want to see the notes anymore -> Options-Writer-View-Notes
-            bool bRepair = false;
-            for(SwMarginItem_iterator i = mvPostItFlds.begin(); i!= mvPostItFlds.end() ; i++)
-            {
-                SwMarginItem* pItem = (*i);
-                if ( !pItem->UseElement() )
-                {
-                    DBG_ERROR("PostIt is not in doc!");
-                    bRepair = true;
-                    continue;
-                }
-
-                if ((*i)->pPostIt)
-                {
-                    (*i)->pPostIt->HideNote();
-                    if ((*i)->pPostIt->HasChildPathFocus())
-                    {
-                        SetActivePostIt(0);
-                        (*i)->pPostIt->GrabFocusToDocument();
-                    }
-                }
-            }
-
-            if ( bRepair )
-                CheckForRemovedPostIts();
-        }
         mbLayouting = false;
     }
 }
@@ -1148,7 +1166,8 @@ void SwPostItMgr::RemoveMarginWin()
         for(std::list<SwMarginItem*>::iterator i = mvPostItFlds.begin(); i!= mvPostItFlds.end() ; i++)
         {
             EndListening( *((*i)->GetBroadCaster()) );
-            delete (*i)->pPostIt;
+            if ((*i)->pPostIt)
+                delete (*i)->pPostIt;
             delete (*i);
         }
         mvPostItFlds.clear();
@@ -1841,101 +1860,12 @@ void SwPostItMgr::SetReadOnlyState()
             (*i)->pPostIt->SetReadonly( mbReadOnly );
 }
 
-void SwPostItMgr::StartSearchAndReplace(const SvxSearchItem& rSearchItem)
+void SwPostItMgr::CheckMetaText()
 {
-    for(std::list<SwMarginItem*>::iterator i = mvPostItFlds.begin(); i!= mvPostItFlds.end() ; i++)
-        if ( (*i)->pPostIt )
-        {
-            ESelection aOldSelection = (*i)->pPostIt->View()->GetSelection();
-            (*i)->pPostIt->View()->SetSelection(ESelection(0,0,0,0));
-            if (!(*i)->pPostIt->View()->StartSearchAndReplace( rSearchItem ))
-                (*i)->pPostIt->View()->SetSelection(aOldSelection);
-                /*          if ((*i)->pPostIt->View()->StartSearchAndReplace( rSearchItem ))
-                (*i)->pPostIt->GrabFocus();
-            return;
-        */
-        }
+        for(std::list<SwMarginItem*>::iterator i = mvPostItFlds.begin(); i!= mvPostItFlds.end() ; i++)
+                if ( (*i)->pPostIt )
+                       (*i)->pPostIt->CheckMetaText();
 
-    /*
-    673                                                     BOOL bFromStart,
-    674                                                     BOOL bApi,
-    675                                                     BOOL bRecursive)
-    676 {
-    677     ExtTextView* pTextView = aEditWin.GetTextView();
-    678     TextSelection aSel;
-    679     TextPaM aPaM;
-    680
-    681     BOOL bForward = !rSearchItem.GetBackward();
-    682     BOOL bAtStart = pTextView->GetSelection() == TextSelection( aPaM, aPaM );
-    683
-    684     if( !bForward )
-    685         aPaM = TextPaM( (ULONG)-1, (USHORT)-1 );
-    686
-    687     if( bFromStart )
-    688     {
-    689         aSel = pTextView->GetSelection();
-    690         pTextView->SetSelection( TextSelection( aPaM, aPaM ));
-    691     }
-    692
-    693     SearchOptions aSearchOpt( rSearchItem.GetSearchOptions() );
-    694     aSearchOpt.Locale = SvxCreateLocale(
-    695         static_cast< LanguageType >( GetAppLanguage() ) );
-    696
-    697     USHORT nFound;
-    698     BOOL bAll = FALSE;
-    699     switch( rSearchItem.GetCommand() )
-    700     {
-    701     case SVX_SEARCHCMD_FIND:
-    702     case SVX_SEARCHCMD_FIND_ALL:
-    703         nFound = pTextView->Search( aSearchOpt, bForward );
-    704         break;
-    705
-    706     case SVX_SEARCHCMD_REPLACE_ALL: bAll = TRUE;
-    707     case SVX_SEARCHCMD_REPLACE:
-    708         nFound = pTextView->Replace( aSearchOpt, bAll, bForward );
-    709         break;
-    710
-    711     default:
-    712         nFound = 0;
-    713     }
-    714
-    715     if( !nFound )
-    716     {
-    717         BOOL bNotFoundMessage = FALSE;
-    718         if(!bRecursive)
-    719         {
-    720             if(!bFromStart)
-    721             {
-    722                 bNotFoundMessage = bAtStart;
-    723             }
-    724             else
-    725             {
-    726                 bNotFoundMessage = TRUE;
-    727                 pTextView->SetSelection( aSel );
-    728             }
-    729         }
-    730         else if(bAtStart)
-    731         {
-    732             bNotFoundMessage = TRUE;
-    733         }
-    734
-    735
-    736         if(!bApi)
-    737             if(bNotFoundMessage)
-    738             {
-    739                 InfoBox( 0, SW_RES(MSG_NOT_FOUND)).Execute();
-    740             }
-    741             else if(!bRecursive && RET_YES ==
-    742                 QueryBox(0, SW_RES( bForward ? MSG_SEARCH_END
-    743                                              : MSG_SEARCH_START)).Execute())
-    744             {
-    745                 pTextView->SetSelection( TextSelection( aPaM, aPaM ) );
-    746                 StartSearchAndReplace( rSearchItem, FALSE, FALSE, TRUE );
-    747             }
-    748     }
-    749     return nFound;
-
-    */
 }
 
 sal_uInt16 SwPostItMgr::Replace(SvxSearchItem* pItem)
@@ -1946,7 +1876,6 @@ sal_uInt16 SwPostItMgr::Replace(SvxSearchItem* pItem)
         SetActivePostIt(0);
     return aResult;
 }
-
 
 sal_uInt16 SwPostItMgr::FinishSearchReplace(const ::com::sun::star::util::SearchOptions& rSearchOptions, bool bSrchForward)
 {

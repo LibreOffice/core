@@ -63,6 +63,7 @@
 // --> OD 2007-10-23 #i81002#
 #include <ndtxt.hxx>
 // <--
+#include <stdio.h>
 
 SV_IMPL_OP_PTRARR_SORT(SwBookmarks, SwBookmarkPtr)
 

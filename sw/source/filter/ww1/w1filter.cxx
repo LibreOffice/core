@@ -1158,7 +1158,7 @@ void W1_CHP::Out(Ww1Shell& rOut, Ww1Manager& rMan)
             sQps = sQps - 64;
         rOut << SvxKerningItem(sQps, RES_CHRATR_KERNING);
     }
-    if (fsPosGet())
+    if (fsPosGet()) {
         if (hpsPosGet() == 0)
             rOut << SvxEscapementItem(SVX_ESCAPEMENT_OFF, 100, RES_CHRATR_ESCAPEMENT);
         else {
@@ -1169,6 +1169,7 @@ void W1_CHP::Out(Ww1Shell& rOut, Ww1Manager& rMan)
             sHps /= 24;
             rOut << SvxEscapementItem(sHps, 100, RES_CHRATR_ESCAPEMENT);
         }
+    }
     if (fsFtcGet()) {
         SvxFontItem aFont(rMan.GetFont(ftcGet()));
         rOut << aFont;

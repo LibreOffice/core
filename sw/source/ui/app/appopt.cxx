@@ -332,10 +332,10 @@ void SwModule::ApplyItemSet( USHORT nId, const SfxItemSet& rSet )
 
         if(!aViewOpt.IsViewMetaChars())
         {
-            if(     !aViewOpt.IsTab( TRUE ) &&  pDocDispItem->bTab ||
-                    !aViewOpt.IsBlank( TRUE ) && pDocDispItem->bSpace ||
-                    !aViewOpt.IsParagraph( TRUE ) && pDocDispItem->bParagraphEnd ||
-                    !aViewOpt.IsLineBreak( TRUE ) && pDocDispItem->bManualBreak )
+            if(     (!aViewOpt.IsTab( TRUE ) &&  pDocDispItem->bTab) ||
+                    (!aViewOpt.IsBlank( TRUE ) && pDocDispItem->bSpace) ||
+                    (!aViewOpt.IsParagraph( TRUE ) && pDocDispItem->bParagraphEnd) ||
+                    (!aViewOpt.IsLineBreak( TRUE ) && pDocDispItem->bManualBreak) )
             {
                 aViewOpt.SetViewMetaChars(TRUE);
                 if(pBindings)

@@ -1869,8 +1869,8 @@ BOOL SwCursor::GoPrevNextCell( BOOL bNext, USHORT nCnt )
                                  pTableBoxStartNode;
 
         SwNodeIndex aCellIdx( *pTmpNode, bNext ? 1 : -1 );
-        if(  bNext && !aCellIdx.GetNode().IsStartNode() ||
-            !bNext && !aCellIdx.GetNode().IsEndNode() )
+        if(  (bNext && !aCellIdx.GetNode().IsStartNode()) ||
+            (!bNext && !aCellIdx.GetNode().IsEndNode()) )
             return FALSE;
 
         rPtIdx = bNext ? aCellIdx : SwNodeIndex(*aCellIdx.GetNode().StartOfSectionNode());

@@ -137,10 +137,6 @@ void SwTextShell::ExecField(SfxRequest &rReq)
                 {
                     case TYP_DDEFLD:
                     {
-#if !defined(DDE_AVAILABLE)
-                        return;
-#endif
-
                         ::sfx2::SvBaseLink& rLink = ((SwDDEFieldType*)pFld->GetTyp())->
                                                 GetBaseLink();
                         if(rLink.IsVisible())

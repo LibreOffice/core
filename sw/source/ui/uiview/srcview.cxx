@@ -865,9 +865,14 @@ SfxPrinter* SwSrcView::GetPrinter( BOOL bCreate )
 void SwSrcView::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
 {
     if ( rHint.ISA(SfxSimpleHint) &&
-            (((SfxSimpleHint&) rHint).GetId() == SFX_HINT_MODECHANGED) ||
-            (((SfxSimpleHint&) rHint).GetId() == SFX_HINT_TITLECHANGED &&
-               !GetDocShell()->IsReadOnly() && aEditWin.IsReadonly()))
+            (
+                ((SfxSimpleHint&) rHint).GetId() == SFX_HINT_MODECHANGED ||
+                (
+                    ((SfxSimpleHint&) rHint).GetId() == SFX_HINT_TITLECHANGED &&
+                    !GetDocShell()->IsReadOnly() && aEditWin.IsReadonly()
+                )
+            )
+       )
     {
         // Broadcast kommt nur einmal!
         const SwDocShell* pDocSh = GetDocShell();

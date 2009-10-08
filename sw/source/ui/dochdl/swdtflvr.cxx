@@ -183,8 +183,6 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::datatransfer;
 using namespace nsTransferBufferType;
 
-#ifdef DDE_AVAILABLE
-
 #define DDE_TXT_ENCODING    gsl_getSystemTextEncoding()
 
 //---------------------------------------------
@@ -233,8 +231,6 @@ public:
 
     void Disconnect( BOOL bRemoveDataAdvise );
 };
-
-#endif
 
 // helper class for Action and Undo enclosing
 class SwTrnsfrActionAndUndo
@@ -287,6 +283,8 @@ SwTransferable::SwTransferable( SwWrtShell& rSh )
                                 INetURLObject::WAS_ENCODED,
                                    INetURLObject::DECODE_UNAMBIGUOUS );
         }
+
+        PrepareOLE( aObjDesc );
     }
 }
 
@@ -296,14 +294,12 @@ SwTransferable::~SwTransferable()
 {
     Application::GetSolarMutex().acquire();
 
-#ifdef DDE_AVAILABLE
     // der DDELink braucht noch die WrtShell!
     if( refDdeLink.Is() )
     {
         ((SwTrnsfrDdeLink*)&refDdeLink)->Disconnect( TRUE );
         refDdeLink.Clear();
     }
-#endif
 
     pWrtShell = 0;
 
@@ -543,13 +539,12 @@ sal_Bool SwTransferable::GetData( const DATA_FLAVOR& rFlavor )
     {
         switch( nFormat )
         {
-#ifdef DDE_AVAILABLE
         case SOT_FORMATSTR_ID_LINK:
             if( refDdeLink.Is() )
                 bOK = SetObject( &refDdeLink,
                                     SWTRANSFER_OBJECTTYPE_DDE, rFlavor );
             break;
-#endif
+
         case SOT_FORMATSTR_ID_OBJECTDESCRIPTOR:
         case SOT_FORMATSTR_ID_LINKSRCDESCRIPTOR:
             bOK = SetTransferableObjectDescriptor( aObjDesc, rFlavor );
@@ -732,7 +727,6 @@ sal_Bool SwTransferable::WriteObject( SotStorageStreamRef& xStream,
 
 
     case SWTRANSFER_OBJECTTYPE_DDE:
-#ifdef DDE_AVAILABLE
         {
             xStream->SetBufferSize( 1024 );
             SwTrnsfrDdeLink* pDdeLnk = (SwTrnsfrDdeLink*)pObject;
@@ -742,7 +736,6 @@ sal_Bool SwTransferable::WriteObject( SotStorageStreamRef& xStream,
                 bRet = ERRCODE_NONE == xStream->GetError();
             }
         }
-#endif
         break;
 
     case SWTRANSFER_OBJECTTYPE_HTML:
@@ -835,7 +828,9 @@ int SwTransferable::PrepareForCopy( BOOL bIsCut )
         if (pOrigGrf && !pOrigGrf->GetBitmap().IsEmpty())
           AddFormat( SOT_FORMATSTR_ID_SVXB );
 
+        PrepareOLE( aObjDesc );
         AddFormat( SOT_FORMATSTR_ID_OBJECTDESCRIPTOR );
+
         // --> OD 2005-02-09 #119353# - robust
         const Graphic* pGrf = pWrtShell->GetGraphic();
         if( pGrf && pGrf->IsSupportedGraphic() )
@@ -856,7 +851,10 @@ int SwTransferable::PrepareForCopy( BOOL bIsCut )
         pWrtShell->Copy( pDoc );
 
         AddFormat( SOT_FORMATSTR_ID_EMBED_SOURCE );
+
+        PrepareOLE( aObjDesc );
         AddFormat( SOT_FORMATSTR_ID_OBJECTDESCRIPTOR );
+
         AddFormat( FORMAT_GDIMETAFILE );
         eBufferType = TRNSFR_OLE;
     }
@@ -884,7 +882,6 @@ int SwTransferable::PrepareForCopy( BOOL bIsCut )
         pTmpDoc->LockExpFlds();     // nie die Felder updaten - Text so belassen
         pWrtShell->Copy( pTmpDoc );
 
-#ifdef DDE_AVAILABLE
         {
             // remove all DDE-Bookmarks, they are invalid inside the clipdoc!
             const SwBookmarks& rBkmk = pTmpDoc->getBookmarks();
@@ -892,7 +889,6 @@ int SwTransferable::PrepareForCopy( BOOL bIsCut )
                 if( IDocumentBookmarkAccess::DDE_BOOKMARK == rBkmk[ --n ]->GetType() )
                     pTmpDoc->deleteBookmark( n );
         }
-#endif
 
         // es wurde in der CORE eine neu angelegt (OLE-Objekte kopiert!)
         if( aDocShellRef.Is() )
@@ -917,7 +913,6 @@ int SwTransferable::PrepareForCopy( BOOL bIsCut )
 
         //Wenn's einer braucht OLE'n wir ihm was.
         AddFormat( SOT_FORMATSTR_ID_EMBED_SOURCE );
-        AddFormat( SOT_FORMATSTR_ID_OBJECTDESCRIPTOR );
 
         //RTF vor das Metafile von OLE stellen, weil mit weniger verlusten
         //behaftet.
@@ -961,7 +956,6 @@ int SwTransferable::PrepareForCopy( BOOL bIsCut )
             }
         }
 
-#ifdef DDE_AVAILABLE
         // beim Cut hat DDE-Link keinen Sinn!!
         SwDocShell* pDShell;
         if( !bIsCut && bDDELink &&
@@ -971,13 +965,16 @@ int SwTransferable::PrepareForCopy( BOOL bIsCut )
             AddFormat( SOT_FORMATSTR_ID_LINK );
             refDdeLink = new SwTrnsfrDdeLink( *this, *pWrtShell );
         }
-#endif
+
         //ObjectDescriptor wurde bereits aus der alten DocShell gefuellt.
         //Jetzt noch anpassen. Dadurch kann im GetData die erste Anfrage
         //auch noch mit delayed rendering beantwortet werden.
         aObjDesc.mbCanLink = FALSE;
         Size aSz( OLESIZE );
         aObjDesc.maSize = OutputDevice::LogicToLogic( aSz, MAP_TWIP, MAP_100TH_MM );
+
+        PrepareOLE( aObjDesc );
+        AddFormat( SOT_FORMATSTR_ID_OBJECTDESCRIPTOR );
 
         delete pWait;
     }
@@ -1069,7 +1066,6 @@ int SwTransferable::CopyGlossary( SwTextBlocks& rGlossary,
 
     //Wenn's einer braucht OLE'n wir ihm was.
     AddFormat( SOT_FORMATSTR_ID_EMBED_SOURCE );
-    AddFormat( SOT_FORMATSTR_ID_OBJECTDESCRIPTOR );
     AddFormat( FORMAT_RTF );
     AddFormat( SOT_FORMATSTR_ID_HTML );
     AddFormat( FORMAT_STRING );
@@ -1080,6 +1076,9 @@ int SwTransferable::CopyGlossary( SwTextBlocks& rGlossary,
     aObjDesc.mbCanLink = FALSE;
     Size aSz( OLESIZE );
     aObjDesc.maSize = OutputDevice::LogicToLogic( aSz, MAP_TWIP, MAP_100TH_MM );
+
+    PrepareOLE( aObjDesc );
+    AddFormat( SOT_FORMATSTR_ID_OBJECTDESCRIPTOR );
 
     SW_MOD()->pClipboard = this;
     CopyToClipboard( &pWrtShell->GetView().GetEditWin() );
@@ -1444,12 +1443,10 @@ ASSERT( pPt, "EXCHG_OUT_ACTION_MOVE_PRIVATE: was soll hier passieren?" );
             break;
 
         case EXCHG_OUT_ACTION_INSERT_DDE:
-#ifdef DDE_AVAILABLE
             {
                 BOOL bReRead = 0 != CNT_HasGrf( rSh.GetCntType() );
                 nRet = SwTransferable::_PasteDDE( rData, rSh, bReRead, bMsg );
             }
-#endif
             break;
 
         case EXCHG_OUT_ACTION_INSERT_HYPERLINK:
@@ -1871,12 +1868,18 @@ int SwTransferable::_PasteOLE( TransferableDataHelper& rData, SwWrtShell& rSh,
             // try to get the replacement image from the clipboard
             Graphic aGraphic;
             ULONG nGrFormat = 0;
+
+// (wg. Selection Manager bei Trustet Solaris)
+#ifndef SOLARIS
+/*
             if( rData.GetGraphic( SOT_FORMATSTR_ID_SVXB, aGraphic ) )
                 nGrFormat = SOT_FORMATSTR_ID_SVXB;
             else if( rData.GetGraphic( FORMAT_GDIMETAFILE, aGraphic ) )
                 nGrFormat = SOT_FORMAT_GDIMETAFILE;
             else if( rData.GetGraphic( FORMAT_BITMAP, aGraphic ) )
                 nGrFormat = SOT_FORMAT_BITMAP;
+*/
+#endif
 
             // insert replacement image ( if there is one ) into the object helper
             if ( nGrFormat )
@@ -2089,7 +2092,6 @@ int SwTransferable::_PasteDDE( TransferableDataHelper& rData,
                                 SwWrtShell& rWrtShell, BOOL bReReadGrf,
                                 BOOL bMsg )
 {
-#ifdef DDE_AVAILABLE
     // Daten aus dem Clipboardformat
     String aApp, aTopic, aItem;
 
@@ -2248,9 +2250,6 @@ int SwTransferable::_PasteDDE( TransferableDataHelper& rData,
     }
 
     return 1;
-#else
-    return 0;
-#endif
 }
 
 // -----------------------------------------------------------------------
@@ -2936,12 +2935,8 @@ int SwTransferable::PasteSpecial( SwWrtShell& rSh, TransferableDataHelper& rData
             pDlg->Insert( SOT_FORMATSTR_ID_LINK_SOURCE, aEmptyStr );
     }
 
-#ifdef DDE_AVAILABLE
-
     if( SwTransferable::_TestAllowedFormat( rData, SOT_FORMATSTR_ID_LINK, nDest ))
         pDlg->Insert( SOT_FORMATSTR_ID_LINK, SW_RES(STR_DDEFORMAT) );
-
-#endif
 
     for( USHORT* pIds = aPasteSpecialIds; *pIds; ++pIds )
         if( SwTransferable::_TestAllowedFormat( rData, *pIds, nDest ))
@@ -3004,12 +2999,8 @@ void SwTransferable::FillClipFmtItem( const SwWrtShell& rSh,
         }
     }
 
-#ifdef DDE_AVAILABLE
-
     if( SwTransferable::_TestAllowedFormat( rData, SOT_FORMATSTR_ID_LINK, nDest ))
         rToFill.AddClipbrdFormat( SOT_FORMATSTR_ID_LINK, SW_RES(STR_DDEFORMAT) );
-
-#endif
 
     for( USHORT* pIds = aPasteSpecialIds; *pIds; ++pIds )
         if( SwTransferable::_TestAllowedFormat( rData, *pIds, nDest ))
@@ -3039,6 +3030,7 @@ void SwTransferable::SetDataForDragAndDrop( const Point& rSttPos )
     else if( nsSelectionType::SEL_OLE == nSelection )
     {
         AddFormat( SOT_FORMATSTR_ID_EMBED_SOURCE );
+        PrepareOLE( aObjDesc );
         AddFormat( SOT_FORMATSTR_ID_OBJECTDESCRIPTOR );
         AddFormat( FORMAT_GDIMETAFILE );
         eBufferType = TRNSFR_OLE;
@@ -3062,7 +3054,6 @@ void SwTransferable::SetDataForDragAndDrop( const Point& rSttPos )
             eBufferType = (TransferBufferType)(TRNSFR_TABELLE | eBufferType);
 
         AddFormat( SOT_FORMATSTR_ID_EMBED_SOURCE );
-        AddFormat( SOT_FORMATSTR_ID_OBJECTDESCRIPTOR );
 
         //RTF vor das Metafile von OLE stellen, weil mit weniger verlusten
         //behaftet.
@@ -3112,6 +3103,8 @@ void SwTransferable::SetDataForDragAndDrop( const Point& rSttPos )
         aObjDesc.maDragStartPos = rSttPos;
         aObjDesc.maSize = OutputDevice::LogicToLogic( Size( OLESIZE ),
                                                 MAP_TWIP, MAP_100TH_MM );
+        PrepareOLE( aObjDesc );
+        AddFormat( SOT_FORMATSTR_ID_OBJECTDESCRIPTOR );
     }
     else if( nSelection & nsSelectionType::SEL_TXT && !pWrtShell->HasMark() )
     {
@@ -3235,6 +3228,9 @@ int SwTransferable::PrivatePaste( SwWrtShell& rShell )
     // erst den SelectionType erfragen, dann Action-Klammerung !!!!
     // (sonst wird nicht in eine TabellenSelektion gepastet!!!)
     ASSERT( !rShell.ActionPend(), "Paste darf nie eine Actionklammerung haben" );
+    if ( !pClpDocFac )
+        return sal_False; // the return value of the SwFEShell::Paste also is BOOL!
+
     const int nSelection = rShell.GetSelectionType();
 
     // #111827#
@@ -3622,8 +3618,6 @@ sal_Int64 SwTransferable::getSomething( const Sequence< sal_Int8 >& rId ) throw(
 
 /*  */
 
-#ifdef DDE_AVAILABLE
-
 // -----------------------------------------------------------------------
 
 SwTrnsfrDdeLink::SwTrnsfrDdeLink( SwTransferable& rTrans, SwWrtShell& rSh )
@@ -3833,8 +3827,3 @@ void SwTrnsfrDdeLink::Closed()
         refObj.Clear();
     }
 }
-
-#endif
-
-
-

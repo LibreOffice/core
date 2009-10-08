@@ -421,7 +421,7 @@ void SwLayoutViewConfig::Load()
                     }
                     break;// "ViewLayout/Columns",
                     case 17: rParent.SetViewLayoutBookMode(bSet); break;// "ViewLayout/BookMode",
-                    case 18: rParent.SetDefaultPageMode(bSet); break;// "Other/IsSquaredPageMode",
+                    case 18: rParent.SetDefaultPageMode(bSet,TRUE); break;// "Other/IsSquaredPageMode",
                 }
             }
         }
