@@ -1034,8 +1034,8 @@ void SwNavigationPI::StateChanged( USHORT nSID, SfxItemState /*eState*/,
             aContentTree.SetActiveShell(pWrtShell);
             BOOL bGlobal = IsGlobalDoc();
             aContentToolBox.EnableItem(FN_GLOBAL_SWITCH, bGlobal);
-            if(!bGlobal && IsGlobalMode() ||
-                    !IsGlobalMode() && pConfig->IsGlobalActive())
+            if( (!bGlobal && IsGlobalMode()) ||
+                    (!IsGlobalMode() && pConfig->IsGlobalActive()) )
             {
                 ToggleTree();
             }
