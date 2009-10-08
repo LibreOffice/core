@@ -3419,7 +3419,7 @@ void SwRedline::CopyToSection()
             SwNodeIndex aNdIdx( *pSttNd, 1 );
             SwTxtNode* pTxtNd = aNdIdx.GetNode().GetTxtNode();
             SwPosition aPos( aNdIdx, SwIndex( pTxtNd ));
-            pDoc->Copy( *this, aPos );
+            pDoc->Copy( *this, aPos, false );
 
             // JP 08.10.98: die Vorlage vom EndNode ggfs. mit uebernehmen
             //              - ist im Doc::Copy nicht erwuenscht
@@ -3444,13 +3444,13 @@ void SwRedline::CopyToSection()
             if( pCEndNd )
             {
                 SwPosition aPos( *pSttNd->EndOfSectionNode() );
-                pDoc->Copy( *this, aPos );
+                pDoc->Copy( *this, aPos, false );
             }
             else
             {
                 SwNodeIndex aInsPos( *pSttNd->EndOfSectionNode() );
                 SwNodeRange aRg( pStt->nNode, 0, pEnd->nNode, 1 );
-                pDoc->CopyWithFlyInFly( aRg, aInsPos );
+                pDoc->CopyWithFlyInFly( aRg, 0, aInsPos );
             }
         }
         pCntntSect = new SwNodeIndex( *pSttNd );

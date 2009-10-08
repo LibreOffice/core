@@ -249,7 +249,7 @@ long SwEditShell::Copy( SwEditShell* pDestShell )
             bFirstMove = FALSE;
         }
 
-        if( !GetDoc()->Copy( *PCURCRSR, *pPos ))
+        if( !GetDoc()->Copy( *PCURCRSR, *pPos, false ))
             continue;
 
         SwPaM aInsertPaM(*pPos, SwPosition(aSttNdIdx));

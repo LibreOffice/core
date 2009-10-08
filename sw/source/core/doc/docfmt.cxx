@@ -2139,7 +2139,7 @@ void SwDoc::_CopyPageDescHeaderFooter( BOOL bCpyHeader,
                 aTmpIdx = *pSttNd->EndOfSectionNode();
                 rSrcNds._Copy( aRg, aTmpIdx );
                 aTmpIdx = *pSttNd;
-                rSrcFmt.GetDoc()->_CopyFlyInFly( aRg, aTmpIdx );
+                rSrcFmt.GetDoc()->_CopyFlyInFly( aRg, 0, aTmpIdx );
                 pNewFmt->SetFmtAttr( SwFmtCntnt( pSttNd ));
             }
             else

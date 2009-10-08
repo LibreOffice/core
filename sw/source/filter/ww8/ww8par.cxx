@@ -4346,6 +4346,13 @@ ULONG SwWW8ImplReader::LoadThroughDecryption(SwPaM& rPaM ,WW8Glossary *pGloss)
                             DecryptRC4(aCtx, *pDataStream, aDecryptData);
                             pDataStream = &aDecryptData;
                         }
+                        SfxMedium* pMedium = mpDocShell->GetMedium();
+                        if ( pMedium )
+                        {
+                            SfxItemSet* pSet = pMedium->GetItemSet();
+                            if ( pSet )
+                                pSet->Put( SfxStringItem(SID_PASSWORD, sUniPassword) );
+                        }
                     }
                 }
             }
@@ -4360,8 +4367,6 @@ ULONG SwWW8ImplReader::LoadThroughDecryption(SwPaM& rPaM ,WW8Glossary *pGloss)
             pWwFib = new WW8Fib(*pStrm, nWantedVersion);
             if (pWwFib->nFibError)
                 nErrRet = ERR_SWG_READ_ERROR;
-            if(!nErrRet && mpDocShell->GetDoc())
-                mpDocShell->GetDoc()->SetWinEncryption(true);
         }
     }
 

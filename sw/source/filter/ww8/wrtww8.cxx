@@ -107,6 +107,13 @@
 
 #include "dbgoutsw.hxx"
 
+#include <sfx2/docfile.hxx>
+#include <svtools/stritem.hxx>
+#include <unotools/tempfile.hxx>
+#include <svx/mscodec.hxx>
+#include <osl/time.h>
+#include <rtl/random.h>
+
 using namespace sw::util;
 using namespace sw::types;
 
@@ -2687,6 +2694,28 @@ void SwWW8Writer::CollectOutlineBookmarks(const SwDoc &rDoc)
     }
 }
 
+namespace
+{
+#define WW_BLOCKSIZE 0x200
+
+    void EncryptRC4(svx::MSCodec_Std97& rCtx, SvStream &rIn, SvStream &rOut)
+    {
+        rIn.Seek(STREAM_SEEK_TO_END);
+        ULONG nLen = rIn.Tell();
+        rIn.Seek(0);
+
+        sal_uInt8 in[WW_BLOCKSIZE];
+        for (ULONG nI = 0, nBlock = 0; nI < nLen; nI += WW_BLOCKSIZE, ++nBlock)
+        {
+            ULONG nBS = (nLen - nI > WW_BLOCKSIZE) ? WW_BLOCKSIZE : nLen - nI;
+            rIn.Read(in, nBS);
+            rCtx.InitCipher(nBlock);
+            rCtx.Encode(in, nBS, in, nBS);
+            rOut.Write(in, nBS);
+        }
+    }
+}
+
 ULONG SwWW8Writer::StoreDoc()
 {
     nCharFmtStart = ANZ_DEFAULT_STYLES;
@@ -2785,6 +2814,41 @@ ULONG SwWW8Writer::StoreDoc()
 
     pStrm->SetNumberFormatInt( NUMBERFORMAT_INT_LITTLEENDIAN );
 
+    String sUniPassword;
+    if ( mpMedium )
+    {
+        SfxItemSet* pSet = mpMedium->GetItemSet();
+
+        const SfxPoolItem* pPasswordItem = NULL;
+        if ( pSet && SFX_ITEM_SET == pSet->GetItemState( SID_PASSWORD, sal_True, &pPasswordItem ) )
+            if( pPasswordItem != NULL )
+                sUniPassword = ( (const SfxStringItem*)pPasswordItem )->GetValue();
+    }
+
+    utl::TempFile aTempMain;
+    aTempMain.EnableKillingFile();
+    utl::TempFile aTempTable;
+    aTempTable.EnableKillingFile();
+    utl::TempFile aTempData;
+    aTempData.EnableKillingFile();
+
+    bool bEncrypt = false;
+
+    xub_StrLen nLen = sUniPassword.Len();
+    if ( nLen > 0 && nLen <= 15) // Password has been set
+    {
+        bEncrypt =true;
+
+        pStrm = aTempMain.GetStream( STREAM_READWRITE | STREAM_SHARE_DENYWRITE );
+
+        pTableStrm = aTempTable.GetStream( STREAM_READWRITE | STREAM_SHARE_DENYWRITE );
+
+        pDataStrm = aTempData.GetStream( STREAM_READWRITE | STREAM_SHARE_DENYWRITE );
+
+        sal_uInt8 aRC4EncryptionHeader[ 52 ] = {0};
+        pTableStrm->Write( aRC4EncryptionHeader, 52 );
+    }
+
     const SwSectionFmt *pFmt=0;
     // Default: "Standard"
     pAktPageDesc = &const_cast<const SwDoc *>(pDoc)->GetPageDesc( 0 );
@@ -2882,6 +2946,62 @@ ULONG SwWW8Writer::StoreDoc()
         pDoc->GetDrawModel()->GetPage( 0 )->RecalcObjOrdNums();
 
     StoreDoc1();
+
+    if ( bEncrypt )
+    {
+        // Generate random number with a seed of time as salt.
+        TimeValue aTime;
+        osl_getSystemTime( &aTime );
+        rtlRandomPool aRandomPool = rtl_random_createPool ();
+        rtl_random_addBytes ( aRandomPool, &aTime, 8 );
+
+        sal_uInt8 aDocId[ 16 ] = {0};
+        rtl_random_getBytes( aRandomPool, aDocId, 16 );
+
+        rtl_random_destroyPool( aRandomPool );
+
+        sal_Unicode aPassword[16] = {0};
+        for (xub_StrLen nChar = 0; nChar < nLen; ++nChar )
+            aPassword[nChar] = sUniPassword.GetChar(nChar);
+
+        svx::MSCodec_Std97 aCtx;
+        aCtx.InitKey(aPassword, aDocId);
+
+        SvStream *pStrmTemp, *pTableStrmTemp, *pDataStrmTemp;
+        pStrmTemp = &xWwStrm;
+        pTableStrmTemp = &xTableStrm;
+        pDataStrmTemp = &xDataStrm;
+
+        if ( pDataStrmTemp && pDataStrmTemp != pStrmTemp)
+            EncryptRC4(aCtx, *pDataStrm, *pDataStrmTemp);
+
+        EncryptRC4(aCtx, *pTableStrm, *pTableStrmTemp);
+
+        // Write Unencrypted Header 52 bytes to the start of the table stream
+        // EncryptionVersionInfo (4 bytes): A Version structure where Version.vMajor MUST be 0x0001, and Version.vMinor MUST be 0x0001.
+        pTableStrmTemp->Seek( 0 );
+        sal_uInt32 nEncType = 0x10001;
+        *pTableStrmTemp << nEncType;
+
+        sal_uInt8 pSaltData[16] = {0};
+        sal_uInt8 pSaltDigest[16] = {0};
+        aCtx.GetEncryptKey( aDocId, pSaltData, pSaltDigest );
+
+        pTableStrmTemp->Write( aDocId, 16 );
+        pTableStrmTemp->Write( pSaltData, 16 );
+        pTableStrmTemp->Write( pSaltDigest, 16 );
+
+        EncryptRC4(aCtx, *pStrm, *pStrmTemp);
+
+        // Write Unencrypted Fib 68 bytes to the start of the workdocument stream
+        pFib->fEncrypted = 1; // fEncrypted indicates the document is encrypted.
+        pFib->fObfuscated = 0; // Must be 0 for RC4.
+        pFib->nHash = 0x34; // encrypt header bytes count of table stream.
+        pFib->nKey = 0; // lkey2 must be 0 for RC4.
+
+        pStrmTemp->Seek( 0 );
+        pFib->WriteHeader( *pStrmTemp );
+    }
 
     if (nRedlineMode != pDoc->GetRedlineMode())
       pDoc->SetRedlineMode((RedlineMode_t)(nRedlineMode));
@@ -3064,11 +3184,38 @@ ULONG SwWW8Writer::WriteMedium( SfxMedium& )
     return WriteStorage();
 }
 
+ULONG SwWW8Writer::Write( SwPaM& rPaM, SfxMedium& rMed,
+                               const String* pFileName )
+{
+    mpMedium = &rMed;
+    ULONG nRet = StgWriter::Write( rPaM, rMed, pFileName );
+    mpMedium = NULL;
+    return nRet;
+}
+
+ULONG SwWW8Writer::Write( SwPaM& rPaM, const uno::Reference < embed::XStorage >& xStorage, const String* pFileName, SfxMedium* pMedium )
+{
+    // this method was added to let the windows compiler be happy, otherwise it shows warning
+    return StgWriter::Write( rPaM, xStorage, pFileName, pMedium );
+}
+
+ULONG SwWW8Writer::Write( SwPaM& rPaM, SotStorage& rStorage, const String* pFileName )
+{
+    // this method was added to let the windows compiler be happy, otherwise it shows warning
+    return StgWriter::Write( rPaM, rStorage, pFileName );
+}
+
+ULONG SwWW8Writer::Write( SwPaM& rPaM, SvStream& rStream, const String* pFileName )
+{
+    // this method was added to let the solaris compiler be happy, otherwise it shows warning
+    return StgWriter::Write( rPaM, rStream, pFileName );
+}
+
 SwWW8Writer::SwWW8Writer(const String& rFltName, const String& rBaseURL)
     : aMainStg(sMainStream), pISet(0), pUsedNumTbl(0), mpTopNodeOfHdFtPage(0),
     pBmpPal(0), pKeyMap(0), pOLEExp(0), pOCXExp(0), pOleMap(0),
     mpTableInfo(new ww8::WW8TableInfo()), nUniqueList(0),
-    mnHdFtIndex(0), pAktPageDesc(0), pPapPlc(0), pChpPlc(0), pChpIter(0), pO(0),
+    mnHdFtIndex(0), mpMedium(0), pAktPageDesc(0), pPapPlc(0), pChpPlc(0), pChpIter(0), pO(0),
     bHasHdr(false), bHasFtr(false)
 {
     SetBaseURL( rBaseURL );

@@ -1651,8 +1651,8 @@ const SwFrmFmt* SwFEShell::IsURLGrfAtPos( const Point& rPt, String* pURL,
                         Point aPt( rPt );
                         aPt -= pFly->Frm().Pos();
                         // ohne MapMode-Offset, ohne Offset, o ... !!!!!
-                        aPt = (Point&)(const Size&)GetOut()->LogicToPixel(
-                                (const Size&)aPt, MapMode( MAP_TWIP ) );
+                        aPt = GetOut()->LogicToPixel(
+                                aPt, MapMode( MAP_TWIP ) );
                         ((( *pURL += '?' ) += String::CreateFromInt32( aPt.X() ))
                                   += ',' ) += String::CreateFromInt32(aPt.Y() );
                     }

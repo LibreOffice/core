@@ -578,17 +578,6 @@ BOOL SwDocShell::ConvertTo( SfxMedium& rMedium )
         return FALSE;
     }
 
-    // if the imported word document is password protected - warn the user
-    // about saving it without the password.
-    if(pDoc->IsWinEncrypted())
-    {
-        if(!SwWarnPassword::WarningOnPassword( rMedium ))
-        {
-            SetError(ERRCODE_ABORT, ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ) );
-            return FALSE;
-        }
-    }
-
     //#i3370# remove quick help to prevent saving of autocorrection suggestions
     if(pView)
         pView->GetEditWin().StopQuickHelp();

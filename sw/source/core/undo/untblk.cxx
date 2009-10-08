@@ -346,7 +346,7 @@ void SwUndoInserts::Repeat( SwUndoIter& rUndoIter )
 
     SwPaM aPam( *rUndoIter.pAktPam->GetPoint() );
     SetPaM( aPam );
-    aPam.GetDoc()->Copy( aPam, *rUndoIter.pAktPam->GetPoint() );
+    aPam.GetDoc()->Copy( aPam, *rUndoIter.pAktPam->GetPoint(), false );
 
     rUndoIter.pLastUndoObj = this;
 }

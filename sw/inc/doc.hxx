@@ -486,7 +486,6 @@ private:
     bool mbPurgeOLE              : 1;    // TRUE: Purge OLE-Objects
     bool mbKernAsianPunctuation  : 1;    // TRUE: kerning also for ASIAN punctuation
     bool mbReadlineChecked       : 1;    // TRUE: if the query was already shown
-    bool mbWinEncryption         : 1;    // imported document password encrypted?
     bool mbLinksUpdated          : 1;    // OD 2005-02-11 #i38810#
                                          // flag indicating, that the links have been updated.
     bool mbClipBoard             : 1;    // true: this document represents the clipboard
@@ -622,7 +621,7 @@ private:
         // Kopieren eines Bereiches im oder in ein anderes Dokument !
         // Die Position darf nicht im Bereich liegen !!
     sal_Bool _Copy( SwPaM&, SwPosition&,
-                sal_Bool MakeNewFrms = sal_True, SwPaM* pCpyRng = 0 ) const;    // in ndcopy.cxx
+                sal_Bool MakeNewFrms /*= sal_True*/, bool bCopyAll, SwPaM* pCpyRng /*= 0*/ ) const; // in ndcopy.cxx
 
     SwFlyFrmFmt* _MakeFlySection( const SwPosition& rAnchPos,
                                 const SwCntntNode& rNode, RndStdIds eRequestId,
@@ -634,7 +633,8 @@ private:
                                 const SfxItemSet* pGrfAttrSet,
                                 SwFrmFmt* = 0 );
 
-    void _CopyFlyInFly( const SwNodeRange& rRg, const SwNodeIndex& rSttIdx,
+    void _CopyFlyInFly( const SwNodeRange& rRg, const xub_StrLen nEndContentIndex,
+                        const SwNodeIndex& rSttIdx,
                         sal_Bool bCopyFlyAtFly = sal_False ) const; // steht im ndcopy.cxx
     sal_Int8 SetFlyFrmAnchor( SwFrmFmt& rFlyFmt, SfxItemSet& rSet, sal_Bool bNewFrms );
 
@@ -707,6 +707,7 @@ private:
      SwFmt *_MakeTxtFmtColl(const String &, SwFmt *, BOOL, BOOL );
 
      void InitTOXTypes();
+     void   Paste( const SwDoc& );
 public:
 
     /** Life cycle
@@ -883,7 +884,7 @@ public:
 
     /** IDocumentContentOperations
     */
-    virtual bool Copy(SwPaM&, SwPosition&) const;
+    virtual bool Copy(SwPaM&, SwPosition&, bool bCopyAll) const;
     virtual void DeleteSection(SwNode* pNode);
     virtual bool Delete(SwPaM&);
     virtual bool DelFullPara(SwPaM&);
@@ -1086,6 +1087,7 @@ public:
                                 SwFrmFmt *pParent = 0 );
 
     void CopyWithFlyInFly( const SwNodeRange& rRg,
+                            const xub_StrLen nEndContentIndex,
                             const SwNodeIndex& rInsPos,
                             sal_Bool bMakeNewFrms = sal_True,
                             sal_Bool bDelRedlines = sal_True,
@@ -1970,9 +1972,6 @@ public:
     USHORT SetRubyList( const SwPaM& rPam, const SwRubyList& rList,
                         USHORT nMode );
 
-    inline void SetWinEncryption(const bool bImportWinEncryption) {mbWinEncryption = bImportWinEncryption; }
-    inline bool IsWinEncrypted() const         { return mbWinEncryption; }
-
     void ReadLayoutCache( SvStream& rStream );
     void WriteLayoutCache( SvStream& rStream );
     SwLayoutCache* GetLayoutCache() const { return pLayoutCache; }
@@ -2097,6 +2096,7 @@ public:
     }
 
     ::sfx2::IXmlIdRegistry& GetXmlIdRegistry();
+    SwDoc* CreateCopy() const;
 };
 
 

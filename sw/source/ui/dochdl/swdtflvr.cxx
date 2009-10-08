@@ -468,7 +468,7 @@ sal_Bool SwTransferable::GetData( const DATA_FLAVOR& rFlavor )
         pClpDocFac = new SwDocFac;
         SwDoc* pTmpDoc = pClpDocFac->GetDoc();
 
-        pTmpDoc->SetRefForDocShell( (SfxObjectShellRef*)&(long&)aDocShellRef );
+        pTmpDoc->SetRefForDocShell( boost::addressof(aDocShellRef) );
         pTmpDoc->LockExpFlds();     // nie die Felder updaten - Text so belassen
         pWrtShell->Copy( pTmpDoc );
 
@@ -883,7 +883,7 @@ int SwTransferable::PrepareForCopy( BOOL bIsCut )
         SwDoc* pTmpDoc = pClpDocFac->GetDoc();
         pTmpDoc->SetClipBoard( true );
 
-        pTmpDoc->SetRefForDocShell( (SfxObjectShellRef*)&(long&)aDocShellRef );
+        pTmpDoc->SetRefForDocShell( boost::addressof(aDocShellRef) );
         pTmpDoc->LockExpFlds();     // nie die Felder updaten - Text so belassen
         pWrtShell->Copy( pTmpDoc );
 
@@ -1067,7 +1067,7 @@ int SwTransferable::CopyGlossary( SwTextBlocks& rGlossary,
     SwCntntNode* pCNd = rNds.GoNext( &aNodeIdx ); // gehe zum 1. ContentNode
     SwPaM aPam( *pCNd );
 
-    pCDoc->SetRefForDocShell( (SfxObjectShellRef*)&(long&)aDocShellRef );
+    pCDoc->SetRefForDocShell( boost::addressof(aDocShellRef) );
     pCDoc->LockExpFlds();   // nie die Felder updaten - Text so belassen
 
     pCDoc->InsertGlossary( rGlossary, rStr, aPam, 0 );
