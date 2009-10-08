@@ -621,7 +621,17 @@
 +
  #include "ne_request.h" /* for ne_session + ne_request */
  #include "ne_uri.h" /* for ne_uri */
- 
+
+--- misc/neon-0.28.2/src/ne_socket.c	2006-10-30 14:18:51.000000000 +0100
++++ misc/build/neon-0.28.2/src/ne_socket.c	2008-07-16 13:32:11.022546400 +0200
+@@ -60,6 +60,7 @@
+ #include <stddef.h>
+ #ifdef USE_GETADDRINFO
+ #include <ws2tcpip.h>
++#include <Wspiapi.h>
+ #endif
+ #endif
+
 --- misc/neon-0.28.2/src/ne_sspi.c	2007-08-10 17:26:08.000000000 +0200
 +++ misc/build/neon-0.28.2/src/ne_sspi.c	2009-01-09 10:31:05.752056400 +0100
 @@ -202,9 +202,48 @@

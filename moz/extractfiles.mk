@@ -36,16 +36,28 @@ RUNTIME_DIR=$(MISC)$/$(MOZTARGET)runtime
 LIB_DIR=$(LB)
 INCLUDE_DIR=$(INCCOM)
 
+.IF "$(GUI)" == "WNT"
+    FREEBL_LIB=freebl3
+.ELSE # "$(GUI)" == "WNT"
+    .IF "$(OS)$(CPUNAME)" == "SOLARISSPARC"
+        FREEBL_LIB=freebl_32fpu_3
+    .ELSE # "$(OS)$(CPUNAME)" == "SOLARISSPARC"
+        FREEBL_LIB=freebl3
+    .ENDIF # "$(OS)$(CPUNAME)" == "SOLARISSPARC"
+.ENDIF # "$(GUI)" == "WNT"
+
 BIN_RUNTIMELIST=	\
     nspr4	\
     plc4	\
     plds4	\
     xpcom	\
+    xpcom_core	\
     xpcom_compat	\
     nss3	\
     ssl3	\
     softokn3	\
-    smime3
+    smime3 \
+    $(FREEBL_LIB)
     
 .IF "$(GUI)"=="WNT"
 BIN_RUNTIMELIST+=	\
@@ -61,12 +73,6 @@ BIN_RUNTIMELIST+=	\
     msgbaseutil	\
     ldap50	\
     prldap50
-.IF	"$(OS)"=="SOLARIS"
-.IF	"$(CPU)"=="S"
-BIN_RUNTIMELIST+=	\
-    freebl_hybrid_3
-.ENDIF
-.ENDIF #"$(OS)"=="SOLARIS"
 .ENDIF
 
 COMPONENT_RUNTIMELIST=	\
@@ -101,7 +107,8 @@ COMREGISTRY_FILELIST=	\
     xpcom_io.xpt	\
     xpcom_xpti.xpt	\
     addrbook.xpt	\
-    mozldap.xpt
+    mozldap.xpt \
+    pref.xpt
 
 .IF "$(GUI)"=="WNT"
 COMREGISTRY_FILELIST+=	xpcom_thread.xpt
@@ -127,6 +134,7 @@ LIBLIST=	\
     libnslber32v50.a	\
     libnsldap32v50.a	\
     libnspr4.a 	\
+    libxpcom_core.dll.a	\
     libxpcom.dll.a	\
     libnss3.a	\
     libsmime3.a
@@ -137,6 +145,7 @@ LIBLIST=	\
     nslber32v50.lib	\
     nsldap32v50.lib	\
     nspr4.lib 	\
+    xpcom_core.lib	\
     xpcom.lib	\
     plc4.lib	\
     plds4.lib	\
@@ -150,6 +159,7 @@ LIBLIST=	\
     libmozreg_s.a	\
     liblber50.a	\
     libnspr4$(DLLPOST)	\
+    libxpcom_core$(DLLPOST)	\
     libxpcom$(DLLPOST)	\
     libmsgbaseutil$(DLLPOST)	\
     libldap50$(DLLPOST) \
@@ -227,8 +237,6 @@ $(MISC)$/build$/so_moz_runtime_files: 	$(OUT)$/bin$/mozruntime.zip
     @@-$(MKDIR)	$(RUNTIME_DIR)$/greprefs
     $(foreach,file,$(DEFAULTS_RUNTIMELIST) $(COPY) $(MOZ_BIN_DIR)$/$(file) $(RUNTIME_DIR)$/$(file) &&) \
     echo >& $(NULLDEV)
-# copy regxpcom
-    @$(COPY) $(MOZ_BIN_DIR)$/regxpcom$(REG_SUBFIX) $(RUNTIME_DIR)$/regxpcom$(REG_SUBFIX)
 
 .IF "$(GUI)"=="UNX"
 .IF "$(OS)"!="MACOSX"
@@ -266,23 +274,6 @@ $(MISC)$/build$/so_moz_runtime_files: 	$(OUT)$/bin$/mozruntime.zip
 .ENDIF
 
 # zip runtime files to mozruntime.zip
-.IF "$(OS)"=="LINUX" || "$(OS)"=="SOLARIS"
-# regxpcom needs to find libxpcom.so next to itself:
-.IF "$(USE_SHELL)"=="bash"
-    cd $(RUNTIME_DIR) && \
-        LD_LIBRARY_PATH=$${{LD_LIBRARY_PATH+$${{LD_LIBRARY_PATH}}:}}. \
-        .$/regxpcom$(REG_SUBFIX)
-.ELSE
-    cd $(RUNTIME_DIR) && if ($$?LD_LIBRARY_PATH == 1) \
-        eval 'setenv LD_LIBRARY_PATH "$${{LD_LIBRARY_PATH}}:."' && \
-        if ($$?LD_LIBRARY_PATH == 0) setenv LD_LIBRARY_PATH . && \
-        .$/regxpcom$(REG_SUBFIX)
-.ENDIF
-.ELSE
-    cd $(RUNTIME_DIR) && .$/regxpcom$(REG_SUBFIX)
-.ENDIF
-    $(COPY) $(RUNTIME_DIR)$/components$/xpti.dat $(RUNTIME_DIR)$/components$/xptitemp.dat
-    $(RM) $(RUNTIME_DIR)$/regxpcom$(REG_SUBFIX)
     cd $(RUNTIME_DIR) && zip -r ..$/..$/bin$/mozruntime.zip *
     
     $(TOUCH) $@

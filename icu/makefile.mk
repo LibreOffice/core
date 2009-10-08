@@ -68,7 +68,7 @@ icu_CFLAGS+=$(C_RESTRICTIONFLAGS)
 # add SYSBASE libraries and make certain that they are found *after* the
 # icu build internal libraries - in case that icu is available in SYSBASE
 # as well
-icu_LDFLAGS+= -L../../lib -L../../stubdata  -L$(SYSBASE)$/usr$/lib
+icu_LDFLAGS+= -L../lib  -L../../lib -L../stubdata -L../../stubdata  -L$(SYSBASE)$/usr$/lib
 .ENDIF			# "$(SYSBASE)"!=""
 
 .IF "$(OS)"=="MACOSX"
