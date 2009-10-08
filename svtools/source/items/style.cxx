@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: style.cxx,v $
- * $Revision: 1.19 $
+ * $Revision: 1.19.60.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -1283,10 +1283,9 @@ BOOL SfxStyleSheet::SetParent( const XubString& rName )
 
 // alle Zuhoerer benachtichtigen
 
-void SfxStyleSheet::SFX_NOTIFY(SfxBroadcaster& rBC, const TypeId& rBCType,
-                           const SfxHint& rHint, const TypeId& rHintType )
+void SfxStyleSheet::Notify(SfxBroadcaster& rBC, const SfxHint& rHint )
 {
-    SFX_FORWARD(rBC, rBCType, rHint, rHintType);
+    Forward(rBC, rHint);
 }
 
 //////////////////////// SfxStyleSheetPool ///////////////////////////////

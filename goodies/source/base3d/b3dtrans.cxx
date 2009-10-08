@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: b3dtrans.cxx,v $
- * $Revision: 1.10 $
+ * $Revision: 1.10.42.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -31,12 +31,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_goodies.hxx"
 #include "b3dtrans.hxx"
-#include <goodies/base3d.hxx>
 #include <tools/debug.hxx>
-
-//#ifndef _B3D_VOLUM_HXX
-//#include "b3dvolum.hxx"
-//#endif
 
 /*************************************************************************
 |*

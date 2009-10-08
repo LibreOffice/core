@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: wrkwin.cxx,v $
- * $Revision: 1.21 $
+ * $Revision: 1.21.138.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -45,7 +45,6 @@
 #include <vcl/brdwin.hxx>
 #include <vcl/window.h>
 #include <vcl/wrkwin.hxx>
-#include <vcl/opengl.hxx>
 #include <vcl/sysdata.hxx>
 
 // =======================================================================
@@ -70,15 +69,6 @@ void WorkWindow::ImplInitWorkWindowData()
 
 void WorkWindow::ImplInit( Window* pParent, WinBits nStyle, SystemParentData* pSystemParentData )
 {
-#if defined WNT
-    /*
-     * #98153# since SystemParentData typically contains a HWND from
-     * another process and the OpenGL implementation does not like
-     * our child window of another processes frame we disable it here.
-     */
-    if( pSystemParentData )
-        OpenGL::Invalidate();
-#endif
     USHORT nFrameStyle = BORDERWINDOW_STYLE_FRAME;
     if ( nStyle & WB_APP )
         nFrameStyle |= BORDERWINDOW_STYLE_APP;
@@ -195,6 +185,12 @@ void WorkWindow::ShowFullScreenMode( BOOL bFullScreenMode, sal_Int32 nDisplay )
 {
     if ( !mbFullScreenMode == !bFullScreenMode )
         return;
+
+    if( (nDisplay < 0)
+    || (nDisplay >= static_cast<sal_Int32>(Application::GetScreenCount()) ) )
+    {
+        nDisplay = GetScreenNumber();
+    }
 
     mbFullScreenMode = bFullScreenMode != 0;
     if ( !mbSysChild )

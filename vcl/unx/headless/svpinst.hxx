@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: svpinst.hxx,v $
- * $Revision: 1.6 $
+ * $Revision: 1.6.116.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -165,8 +165,6 @@ public:
 
     // SalTimer
     virtual SalTimer*       CreateSalTimer();
-    // SalOpenGL
-    virtual SalOpenGL*      CreateSalOpenGL( SalGraphics* pGraphics );
     // SalI18NImeStatus
     virtual SalI18NImeStatus*   CreateI18NImeStatus();
     // SalSystem

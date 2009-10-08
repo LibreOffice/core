@@ -513,6 +513,9 @@ void Bitmap::ReleaseAccess( BitmapReadAccess* pBitmapAccess )
 
 BOOL Bitmap::Erase( const Color& rFillColor )
 {
+    if( !(*this) )
+        return TRUE;
+
     BitmapWriteAccess*  pWriteAcc = AcquireWriteAccess();
     BOOL                bRet = FALSE;
 

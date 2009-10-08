@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: ppdparser.hxx,v $
- * $Revision: 1.12 $
+ * $Revision: 1.12.10.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -222,7 +222,7 @@ public:
     ULONG           getLanguageLevel() const { return m_nLanguageLevel; }
 
     const String&   getDefaultPaperDimension() const;
-    const void      getDefaultPaperDimension( int& rWidth, int& rHeight ) const
+    void            getDefaultPaperDimension( int& rWidth, int& rHeight ) const
     { getPaperDimension( getDefaultPaperDimension(), rWidth, rHeight ); }
     bool getPaperDimension( const String& rPaperName,
                             int& rWidth, int& rHeight ) const;

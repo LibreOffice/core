@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: hommatrixtemplate.hxx,v $
- * $Revision: 1.19 $
+ * $Revision: 1.18.12.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -587,7 +587,7 @@ namespace basegfx
                 testLastLine();
             }
 
-            bool isEqual(const ImplHomMatrixTemplate& rMat)
+            bool isEqual(const ImplHomMatrixTemplate& rMat) const
             {
                 const sal_uInt16 nMaxLine(
                     sal::static_int_cast<sal_uInt16>((mpLine || rMat.mpLine) ? RowSize : (RowSize - 1)) );

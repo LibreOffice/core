@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: fastparser.cxx,v $
- * $Revision: 1.5 $
+ * $Revision: 1.4.10.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -161,7 +161,6 @@ public:
 
     // The implementation details
     static Sequence< OUString >     getSupportedServiceNames_Static(void);
-    static OUString                 getImplementationName_Static();
 
     // XFastParser
     virtual void SAL_CALL parseStream( const InputSource& aInputSource ) throw (SAXException, IOException, RuntimeException);
@@ -669,11 +668,6 @@ void FastSaxParser::setEntityResolver(const Reference < XEntityResolver > & Reso
 void FastSaxParser::setLocale( const Locale & Locale ) throw (RuntimeException)
 {
     maLocale = Locale;
-}
-
-OUString FastSaxParser::getImplementationName_Static()
-{
-    return OUString::createFromAscii( IMPLEMENTATION_NAME );
 }
 
 // XServiceInfo

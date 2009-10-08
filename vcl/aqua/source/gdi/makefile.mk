@@ -8,7 +8,7 @@
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.15 $
+# $Revision: 1.15.154.1 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -62,8 +62,7 @@ SLOFILES=   $(SLO)$/salmathutils.obj      \
             $(SLO)$/salvd.obj             \
             $(SLO)$/salprn.obj            \
             $(SLO)$/aquaprintview.obj     \
-            $(SLO)$/salbmp.obj            \
-            $(SLO)$/salogl.obj
+            $(SLO)$/salbmp.obj
 
 .IF "$(ENABLE_CAIRO)" == "TRUE"
 CDEFS+= -DCAIRO

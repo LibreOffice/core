@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: outdev6.cxx,v $
- * $Revision: 1.33 $
+ * $Revision: 1.33.16.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -1108,13 +1108,11 @@ void OutputDevice::DrawEPS( const Point& rPoint, const Size& rSize,
         return;
 
     Rectangle   aRect( ImplLogicToDevicePixel( Rectangle( rPoint, rSize ) ) );
-    BOOL        bDrawn = FALSE;
-
     if( !aRect.IsEmpty() )
     {
-        aRect.Justify();
-
-        if( GetOutDevType() == OUTDEV_PRINTER )
+        // draw the real EPS graphics
+        bool bDrawn = FALSE;
+        if( rGfxLink.GetData() && rGfxLink.GetDataSize() )
         {
             if( !mpGraphics && !ImplGetGraphics() )
                 return;
@@ -1122,11 +1120,12 @@ void OutputDevice::DrawEPS( const Point& rPoint, const Size& rSize,
             if( mbInitClipRegion )
                 ImplInitClipRegion();
 
-            if( rGfxLink.GetData() && rGfxLink.GetDataSize() )
-                bDrawn = mpGraphics->DrawEPS( aRect.Left(), aRect.Top(), aRect.GetWidth(), aRect.GetHeight(),
-                                              (BYTE*) rGfxLink.GetData(), rGfxLink.GetDataSize(), this );
+            aRect.Justify();
+            bDrawn = mpGraphics->DrawEPS( aRect.Left(), aRect.Top(), aRect.GetWidth(), aRect.GetHeight(),
+                         (BYTE*) rGfxLink.GetData(), rGfxLink.GetDataSize(), this );
         }
 
+        // else draw the substitution graphics
         if( !bDrawn && pSubst )
         {
             GDIMetaFile* pOldMetaFile = mpMetaFile;

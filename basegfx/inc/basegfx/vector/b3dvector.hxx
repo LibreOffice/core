@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: b3dvector.hxx,v $
- * $Revision: 1.12 $
+ * $Revision: 1.12.4.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -295,6 +295,20 @@ namespace basegfx
         B3DVector aPerpendicular(-rNormalizedVec.getY(), rNormalizedVec.getX(), rNormalizedVec.getZ());
         return aPerpendicular;
     }
+
+    /** Test two vectors which need not to be normalized for parallelism
+
+        @param rVecA
+        The first 3D Vector
+
+        @param rVecB
+        The second 3D Vector
+
+        @return
+        bool if the two values are parallel. Also true if
+        one of the vectors is empty.
+    */
+    bool areParallel( const B3DVector& rVecA, const B3DVector& rVecB );
 
     /** Transform vector by given transformation matrix.
 

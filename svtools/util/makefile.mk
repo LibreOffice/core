@@ -217,27 +217,6 @@ DEF2DEPN=	$(MISC)$/$(SHL2TARGET).flt $(SLB)$/svl.lib
 DEFLIB2NAME=svl
 DEF2DES =SvTools lite
 
-# --- bmpgui application --------------------------------------------------
-
-APP1TARGET	=	bmpgui
-APP1BASE	=	0x10000000
-APP1DEPN	=   $(SHL1TARGETN) $(SHL2TARGETN)
-APP1OBJS	=   $(OBJ)$/bmpgui.obj	\
-                $(OBJ)$/bmpcore.obj
-
-.IF "$(GUI)"!="UNX"
-APP1STDLIBS+= $(SVTOOLLIB)
-.ELSE
-APP1STDLIBS+= -lsvt$(DLLPOSTFIX)
-APP1STDLIBS+= -lsvl$(DLLPOSTFIX)
-.ENDIF # UNX
-
-APP1STDLIBS+=	\
-                $(VCLLIB)		\
-                $(TOOLSLIB)		\
-                $(VOSLIB) 		\
-                $(SALLIB)
-
 # --- g2g application --------------------------------------------------
 
 APP2TARGET	=	g2g

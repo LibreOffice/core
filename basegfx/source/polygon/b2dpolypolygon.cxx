@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: b2dpolypolygon.cxx,v $
- * $Revision: 1.21 $
+ * $Revision: 1.21.4.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -106,7 +106,7 @@ public:
 
             for(sal_uInt32 a(0L); a < nCount; a++)
             {
-                maPolygons.insert(aIndex, rPolyPolygon.getB2DPolygon(a));
+                aIndex = maPolygons.insert(aIndex, rPolyPolygon.getB2DPolygon(a));
                 aIndex++;
             }
         }

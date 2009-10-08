@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: salgdi.cxx,v $
- * $Revision: 1.81 $
+ * $Revision: 1.81.14.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -413,24 +413,6 @@ void AquaSalGraphics::GetResolution( long& rDPIX, long& rDPIY )
 
     rDPIX = static_cast<long>(mfFakeDPIScale * mnRealDPIX);
     rDPIY = static_cast<long>(mfFakeDPIScale * mnRealDPIY);
-}
-
-// -----------------------------------------------------------------------
-
-void AquaSalGraphics::GetScreenFontResolution( long& rDPIX, long& rDPIY )
-{
-    GetResolution( rDPIX, rDPIY );
-
-    // the screen font resolution should equal the real resolution
-    // but to satisfy the quite insane heuristics in Window::ImplUpdateGlobalSettings()
-    // it needs to be tweaked
-    // TODO: remove the tweaking below if it becomes possible
-    if( (rDPIX < 72) || (rDPIY < 72) )
-    {
-        const long nMinDPI = (rDPIX <= rDPIY) ? rDPIX : rDPIY;
-        rDPIX = (72 * rDPIX + (nMinDPI/2)) / nMinDPI;
-        rDPIY = (72 * rDPIY + (nMinDPI/2)) / nMinDPI;
-    }
 }
 
 // -----------------------------------------------------------------------
@@ -1232,6 +1214,31 @@ SalColor AquaSalGraphics::getPixel( long nX, long nY )
 
 // -----------------------------------------------------------------------
 
+
+static void DrawPattern50( void* info, CGContextRef rContext )
+{
+    static const CGRect aRects[2] = { { {0,0}, { 2, 2 } }, { { 2, 2 }, { 2, 2 } } };
+    CGContextAddRects( rContext, aRects, 2 );
+    CGContextFillPath( rContext );
+}
+
+void AquaSalGraphics::Pattern50Fill()
+{
+    static const float aFillCol[4] = { 1,1,1,1 };
+    static const CGPatternCallbacks aCallback = { 0, &DrawPattern50, NULL };
+    if( ! GetSalData()->mxP50Space )
+        GetSalData()->mxP50Space = CGColorSpaceCreatePattern( GetSalData()->mxRGBSpace );
+    if( ! GetSalData()->mxP50Pattern )
+        GetSalData()->mxP50Pattern = CGPatternCreate( NULL, CGRectMake( 0, 0, 4, 4 ),
+                                                      CGAffineTransformIdentity, 4, 4,
+                                                      kCGPatternTilingConstantSpacing,
+                                                      false, &aCallback );
+
+    CGContextSetFillColorSpace( mrContext, GetSalData()->mxP50Space );
+    CGContextSetFillPattern( mrContext, GetSalData()->mxP50Pattern, aFillCol );
+    CGContextFillPath( mrContext );
+}
+
 void AquaSalGraphics::invert( long nX, long nY, long nWidth, long nHeight, SalInvert nFlags )
 {
     if ( CheckContext() )
@@ -1250,11 +1257,10 @@ void AquaSalGraphics::invert( long nX, long nY, long nWidth, long nHeight, SalIn
         }
         else if ( nFlags & SAL_INVERT_50 )
         {
-            //workaround
-            // no xor in Core Graphics, so just invert
+            //CGContextSetAllowsAntialiasing( mrContext, false );
             CGContextSetBlendMode(mrContext, kCGBlendModeDifference);
-            CGContextSetRGBFillColor( mrContext,1.0, 1.0, 1.0 , 1.0 );
-            CGContextFillRect ( mrContext, aCGRect );
+            CGContextAddRect( mrContext, aCGRect );
+            Pattern50Fill();
         }
         else // just invert
         {
@@ -1288,11 +1294,8 @@ void AquaSalGraphics::invert( ULONG nPoints, const SalPoint*  pPtAry, SalInvert 
         }
         else if ( nSalFlags & SAL_INVERT_50 )
         {
-            // workaround
-            // no xor in Core Graphics, so just invert
             CGContextSetBlendMode(mrContext, kCGBlendModeDifference);
-            CGContextSetRGBFillColor( mrContext,1.0, 1.0, 1.0 , 1.0 );
-            CGContextFillPath( mrContext );
+            Pattern50Fill();
         }
         else // just invert
         {
@@ -1309,9 +1312,39 @@ void AquaSalGraphics::invert( ULONG nPoints, const SalPoint*  pPtAry, SalInvert 
 
 // -----------------------------------------------------------------------
 
-BOOL AquaSalGraphics::drawEPS( long nX, long nY, long nWidth, long nHeight, void*  pPtr, ULONG nSize )
+BOOL AquaSalGraphics::drawEPS( long nX, long nY, long nWidth, long nHeight,
+    void* pEpsData, ULONG nByteCount )
 {
-    return FALSE;
+    // convert the raw data to an NSImageRef
+    NSData* xNSData = [NSData dataWithBytes:(void*)pEpsData length:(int)nByteCount];
+    NSImageRep* xEpsImage = [NSEPSImageRep imageRepWithData: xNSData];
+    if( !xEpsImage )
+        return false;
+
+    // get the target context
+    if( !CheckContext() )
+        return false;
+
+    // NOTE: flip drawing, else the nsimage would be drawn upside down
+    CGContextSaveGState( mrContext );
+//  CGContextTranslateCTM( mrContext, 0, +mnHeight );
+    CGContextScaleCTM( mrContext, +1, -1 );
+    nY = /*mnHeight*/ - (nY + nHeight);
+
+    // prepare the target context
+    NSGraphicsContext* pOrigNSCtx = [NSGraphicsContext currentContext];
+    NSGraphicsContext* pDrawNSCtx = [NSGraphicsContext graphicsContextWithGraphicsPort: mrContext flipped: IsFlipped()];
+    [NSGraphicsContext setCurrentContext: pDrawNSCtx];
+    // draw the EPS
+    const NSRect aDstRect = {{nX,nY},{nWidth,nHeight}};
+    const BOOL bOK = [xEpsImage drawInRect: aDstRect];
+    CGContextRestoreGState( mrContext );
+    // mark the destination rectangle as updated
+       RefreshRect( aDstRect );
+    // restore the NSGraphicsContext, TODO: do we need this?
+    [NSGraphicsContext setCurrentContext: pOrigNSCtx];
+
+    return bOK;
 }
 
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=

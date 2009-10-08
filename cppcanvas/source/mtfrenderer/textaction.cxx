@@ -2307,7 +2307,7 @@ namespace cppcanvas
                 }
             }
 #if defined __GNUC__
-#if __GNUC__ == 4 && __GNUC_MINOR__ == 1
+#if __GNUC__ == 4 && __GNUC_MINOR__ >= 1
             // Unreachable; to avoid bogus warning:
             return ActionSharedPtr();
 #endif

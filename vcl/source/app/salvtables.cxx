@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: salvtables.cxx,v $
- * $Revision: 1.14 $
+ * $Revision: 1.14.30.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -36,7 +36,6 @@
 #include <vcl/salvd.hxx>
 #include <vcl/salprn.hxx>
 #include <vcl/saltimer.hxx>
-#include <vcl/salogl.hxx>
 #include <vcl/salimestatus.hxx>
 #include <vcl/salsys.hxx>
 #include <vcl/salbmp.hxx>
@@ -67,10 +66,6 @@ SalInstance::~SalInstance()
 }
 
 SalTimer::~SalTimer()
-{
-}
-
-SalOpenGL::~SalOpenGL()
 {
 }
 

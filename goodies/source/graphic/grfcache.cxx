@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: grfcache.cxx,v $
- * $Revision: 1.23 $
+ * $Revision: 1.23.38.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -458,10 +458,10 @@ public:
 
     const GraphicAttr&          GetAttr() const { return maAttr; }
     const Size&                 GetOutputSizePixel() const { return maOutSizePix; }
-    const ULONG                 GetCacheSize() const { return mnCacheSize; }
+    ULONG                   GetCacheSize() const { return mnCacheSize; }
     const GraphicCacheEntry*    GetReferencedCacheEntry() const { return mpRefCacheEntry; }
-    const ULONG                 GetOutDevDrawMode() const { return mnOutDevDrawMode; }
-    const USHORT                GetOutDevBitCount() const { return mnOutDevBitCount; }
+    ULONG                   GetOutDevDrawMode() const { return mnOutDevDrawMode; }
+    USHORT              GetOutDevBitCount() const { return mnOutDevBitCount; }
 
     void                        SetReleaseTime( const ::vos::TTimeValue& rReleaseTime ) { maReleaseTime = rReleaseTime; }
     const ::vos::TTimeValue&    GetReleaseTime() const { return maReleaseTime; }

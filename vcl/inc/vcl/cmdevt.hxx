@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: cmdevt.hxx,v $
- * $Revision: 1.6 $
+ * $Revision: 1.6.68.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -339,6 +339,42 @@ class VCL_DLLPUBLIC CommandDialogData
 #define MEDIA_COMMAND_VOLUME_DOWN            ((sal_Int16)15)// Lower the volume.
 #define MEDIA_COMMAND_VOLUME_MUTE            ((sal_Int16)16)// Mute the volume.
 #define MEDIA_COMMAND_VOLUME_UP              ((sal_Int16)17)// Raise the volume.
+#define MEDIA_COMMAND_MENU                   ((sal_Int16)18)// Button Menu pressed.
+#define MEDIA_COMMAND_MENU_HOLD              ((sal_Int16)19)// Button Menu (long) pressed.
+#define MEDIA_COMMAND_PLAY_HOLD              ((sal_Int16)20)// Button Play (long) pressed.
+#define MEDIA_COMMAND_NEXTTRACK_HOLD         ((sal_Int16)21)// Button Right holding pressed.
+#define MEDIA_COMMAND_PREVIOUSTRACK_HOLD     ((sal_Int16)22)// Button Left holding pressed.
+
+
+// ------------------------------
+// - CommandSelectionChangeData -
+// ------------------------------
+
+class VCL_DLLPUBLIC CommandSelectionChangeData
+{
+private:
+    ULONG          mnStart;
+    ULONG          mnEnd;
+
+public:
+    CommandSelectionChangeData();
+    CommandSelectionChangeData( ULONG nStart, ULONG nEnd );
+
+    ULONG          GetStart() const { return mnStart; }
+    ULONG          GetEnd() const { return mnEnd; }
+};
+
+inline CommandSelectionChangeData::CommandSelectionChangeData()
+{
+    mnStart = mnEnd = 0;
+}
+
+inline CommandSelectionChangeData::CommandSelectionChangeData( ULONG nStart,
+                                   ULONG nEnd )
+{
+    mnStart = nStart;
+    mnEnd = nEnd;
+}
 
 // ----------------
 // - CommandEvent -
@@ -361,7 +397,8 @@ class VCL_DLLPUBLIC CommandDialogData
 #define COMMAND_INPUTLANGUAGECHANGE     ((USHORT)15)
 #define COMMAND_SHOWDIALOG              ((USHORT)16)
 #define COMMAND_MEDIA                   ((USHORT)17)
-
+#define COMMAND_SELECTIONCHANGE         ((USHORT)18)
+#define COMMAND_PREPARERECONVERSION     ((USHORT)19)
 #define COMMAND_USER                    ((USHORT)4096)
 
 class VCL_DLLPUBLIC CommandEvent
@@ -390,6 +427,7 @@ public:
     const CommandModKeyData*            GetModKeyData() const;
     const CommandDialogData*            GetDialogData() const;
     sal_Int16                           GetMediaCommand() const;
+    const CommandSelectionChangeData*   GetSelectionChangeData() const;
 };
 
 inline CommandEvent::CommandEvent()
@@ -471,5 +509,14 @@ inline sal_Int16 CommandEvent::GetMediaCommand() const
     else
         return 0;
 }
+
+inline const CommandSelectionChangeData* CommandEvent::GetSelectionChangeData() const
+{
+    if( mnCommand == COMMAND_SELECTIONCHANGE )
+    return (const CommandSelectionChangeData*)mpData;
+    else
+    return NULL;
+}
+
 
 #endif // _VCL_CMDEVT_HXX

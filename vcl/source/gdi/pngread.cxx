@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: pngread.cxx,v $
- * $Revision: 1.28 $
+ * $Revision: 1.28.78.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -328,7 +328,7 @@ bool PNGReaderImpl::ReadNextChunk()
 // read the remaining chunks from mrPNGStream
 void PNGReaderImpl::ReadRemainingChunks()
 {
-    while( ReadNextChunk() );
+    while( ReadNextChunk() ) ;
 }
 
 // ------------------------------------------------------------------------

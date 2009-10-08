@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: lstner.cxx,v $
- * $Revision: 1.8 $
+ * $Revision: 1.8.60.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -182,11 +182,9 @@ BOOL SfxListener::IsListening( SfxBroadcaster& rBroadcaster ) const
 // base implementation of notification handler
 
 #ifdef DBG_UTIL
-void SfxListener::SFX_NOTIFY( SfxBroadcaster& rBC, const TypeId& rBCType,
-                              const SfxHint&, const TypeId& rHintType )
+void SfxListener::Notify( SfxBroadcaster& rBC, const SfxHint& )
 #else
-void SfxListener::SFX_NOTIFY( SfxBroadcaster&, const TypeId&,
-                              const SfxHint&, const TypeId& )
+void SfxListener::Notify( SfxBroadcaster&, const SfxHint& )
 #endif
 {
     #ifdef DBG_UTIL

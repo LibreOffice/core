@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: indexentrysupplier_default.cxx,v $
- * $Revision: 1.14 $
+ * $Revision: 1.14.22.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -226,7 +226,7 @@ void Index::makeIndexKeys(const lang::Locale &rLocale, const OUString &algorithm
             case sal_Unicode('('):
                 if (key_count > 0) {
                     sal_Int16 end = i+1;
-                    for (end=i+1; end < len && keyStr[end] != close; end++);
+                    for (end=i+1; end < len && keyStr[end] != close; end++) ;
 
                     if (end >= len) // no found
                         throw RuntimeException();

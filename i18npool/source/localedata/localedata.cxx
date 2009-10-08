@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: localedata.cxx,v $
- * $Revision: 1.59 $
+ * $Revision: 1.59.16.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -614,7 +614,7 @@ LocaleData::getAllCurrencies( const Locale& rLocale ) throw(RuntimeException)
 
 // return a static (!) string resulting from replacing all occurrences of
 // 'oldStr' string in 'formatCode' string with 'newStr' string
-static sal_Unicode const * const replace( sal_Unicode const * const formatCode, sal_Unicode const * const oldStr, sal_Unicode const * const newStr)
+static const sal_Unicode * replace( sal_Unicode const * const formatCode, sal_Unicode const * const oldStr, sal_Unicode const * const newStr)
 {
 // make reasonable assumption of maximum length of formatCode.
 #define MAX_FORMATCODE_LENTH 512
@@ -999,6 +999,21 @@ LocaleData::getForbiddenCharacters( const Locale& rLocale ) throw(RuntimeExcepti
         }
 }
 
+OUString SAL_CALL
+LocaleData::getHangingCharacters( const Locale& rLocale ) throw(RuntimeException)
+{
+        sal_Int16 LCForbiddenCharactersCount = 0;
+        sal_Unicode **LCForbiddenCharactersArray = NULL;
+
+        MyFunc_Type func = (MyFunc_Type) getFunctionSymbol( rLocale, "getForbiddenCharacters" );
+
+        if ( func ) {
+            LCForbiddenCharactersArray = func(LCForbiddenCharactersCount);
+            return OUString(LCForbiddenCharactersArray[2]);
+        }
+
+        return OUString();
+}
 
 Sequence< OUString > SAL_CALL
 LocaleData::getBreakIteratorRules( const Locale& rLocale  ) throw(RuntimeException)

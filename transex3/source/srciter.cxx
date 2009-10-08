@@ -66,19 +66,13 @@ void SourceTreeIterator::ExecuteDirectory( transex::Directory& aDirectory )
     if ( bInExecute ) {
         rtl::OUString sDirName = aDirectory.getDirectoryName();
 
-        static rtl::OUString WCARD1 ( rtl::OUString::createFromAscii( "unxlngi" ) );
-        static rtl::OUString WCARD2 ( rtl::OUString::createFromAscii( "unxsoli" ) );
-        static rtl::OUString WCARD3 ( rtl::OUString::createFromAscii( "wntmsci" ) );
-        static rtl::OUString WCARD4 ( rtl::OUString::createFromAscii( "unxsols" ) );
-        static rtl::OUString WCARD5 ( rtl::OUString::createFromAscii( "common" ) );
-        static rtl::OUString WCARD6 ( rtl::OUString::createFromAscii( "unxmacx" ) );
-        static rtl::OUString WCARD7 ( rtl::OUString::createFromAscii( "unxlngx" ) );
-        static rtl::OUString WCARD8 ( rtl::OUString::createFromAscii( "unxsolsx" ) );
-        static rtl::OUString WCARD9 ( rtl::OUString::createFromAscii( "unxsolsu" ) );
-        static rtl::OUString WCARD10 ( rtl::OUString::createFromAscii( "wntmscx" ) );
-        static rtl::OUString WCARD11 ( rtl::OUString::createFromAscii( "unxubti8" ) );
-        static rtl::OUString WCARD12 ( rtl::OUString::createFromAscii( "unxsolx" ) );
-        static rtl::OUString WCARD13 ( rtl::OUString::createFromAscii( "unxsolu" ) );
+        static rtl::OUString WCARD1 ( rtl::OUString::createFromAscii( "unxlng" ) );
+        static rtl::OUString WCARD2 ( rtl::OUString::createFromAscii( "unxsol" ) );
+        static rtl::OUString WCARD3 ( rtl::OUString::createFromAscii( "wntmsc" ) );
+        static rtl::OUString WCARD4 ( rtl::OUString::createFromAscii( "common" ) );
+        static rtl::OUString WCARD5 ( rtl::OUString::createFromAscii( "unxmac" ) );
+        static rtl::OUString WCARD6 ( rtl::OUString::createFromAscii( "unxubt" ) );
+        static rtl::OUString WCARD7 ( rtl::OUString::createFromAscii( ".svn" ) );
 
 
         if( sDirName.indexOf( WCARD1 , 0 ) > -1 ||
@@ -87,13 +81,7 @@ void SourceTreeIterator::ExecuteDirectory( transex::Directory& aDirectory )
             sDirName.indexOf( WCARD4 , 0 ) > -1 ||
             sDirName.indexOf( WCARD5 , 0 ) > -1 ||
             sDirName.indexOf( WCARD6 , 0 ) > -1 ||
-            sDirName.indexOf( WCARD7 , 0 ) > -1 ||
-            sDirName.indexOf( WCARD8 , 0 ) > -1 ||
-            sDirName.indexOf( WCARD9 , 0 ) > -1 ||
-            sDirName.indexOf( WCARD10 , 0 ) > -1 ||
-            sDirName.indexOf( WCARD11 , 0 ) > -1 ||
-            sDirName.indexOf( WCARD12 , 0 ) > -1 ||
-            sDirName.indexOf( WCARD13 , 0 ) > -1
+            sDirName.indexOf( WCARD7 , 0 ) > -1
            )    return;
         //printf("**** %s \n", OUStringToOString( sDirName , RTL_TEXTENCODING_UTF8 , sDirName.getLength() ).getStr() );
 

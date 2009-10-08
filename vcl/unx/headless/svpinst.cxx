@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: svpinst.cxx,v $
- * $Revision: 1.5 $
+ * $Revision: 1.5.154.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -267,11 +267,6 @@ void SvpSalInstance::DestroyVirtualDevice( SalVirtualDevice* pDevice )
 SalTimer* SvpSalInstance::CreateSalTimer()
 {
     return new SvpSalTimer( this );
-}
-
-SalOpenGL* SvpSalInstance::CreateSalOpenGL( SalGraphics* )
-{
-    return new SvpSalOpenGL();
 }
 
 SalI18NImeStatus* SvpSalInstance::CreateI18NImeStatus()

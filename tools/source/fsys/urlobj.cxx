@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: urlobj.cxx,v $
- * $Revision: 1.63 $
+ * $Revision: 1.63.36.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -1571,7 +1571,7 @@ bool INetURLObject::convertRelToAbs(rtl::OUString const & rTheRelURIRef,
         && getSchemeInfo().m_bHierarchical)
     {
         hasScheme = false;
-        while (p != pEnd && *p++ != ':');
+        while (p != pEnd && *p++ != ':') ;
     }
     rWasAbsolute = hasScheme;
 

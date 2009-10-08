@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: brdcst.cxx,v $
- * $Revision: 1.8 $
+ * $Revision: 1.8.60.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -61,22 +61,12 @@ void SfxBroadcaster::Broadcast( const SfxHint &rHint )
     // is anybody to notify?
     if ( aListeners.Count() /*! || aGlobListeners.Count() */ )
     {
-        #if 0
-        // determine the type only once, because of its expensiveness
-        const TypeId& rBCType = Type();
-        const TypeId& rHintType = rHint.Type();
-        #endif
-
         // notify all registered listeners exactly once
         for ( USHORT n = 0; n < aListeners.Count(); ++n )
         {
             SfxListener* pListener = aListeners[n];
             if ( pListener )
-                #if 0
-                pListener->SFX_NOTIFY( *this, rBCType, rHint, rHintType );
-                #else
                 pListener->Notify( *this, rHint );
-                #endif
         }
     }
 }
@@ -183,15 +173,14 @@ void SfxBroadcaster::ListenersGone()
 
 // forward a notification to all registered listeners
 
-void SfxBroadcaster::SFX_FORWARD(SfxBroadcaster& rBC, const TypeId& rBCType,
-                               const SfxHint& rHint, const TypeId& rHintType)
+void SfxBroadcaster::Forward(SfxBroadcaster& rBC, const SfxHint& rHint)
 {
     const USHORT nCount = aListeners.Count();
     for ( USHORT i = 0; i < nCount; ++i )
     {
         SfxListener *pListener = aListeners[i];
         if ( pListener )
-            pListener->SFX_NOTIFY( rBC, rBCType, rHint, rHintType);
+            pListener->Notify( rBC, rHint );
     }
 }
 

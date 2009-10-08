@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: salframe.cxx,v $
- * $Revision: 1.157 $
+ * $Revision: 1.157.20.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -30,6 +30,13 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_vcl.hxx"
+
+// i72022: ad-hoc to forcibly enable reconversion
+#if WINVER < 0x0500
+#undef WINVER
+#define WINVER 0x0500
+#endif
+
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/container/XIndexAccess.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
@@ -2181,7 +2188,7 @@ static void ImplSalToTop( HWND hWnd, USHORT nFlags )
         }
     }
 
-    if ( !IsIconic( hWnd ) )
+    if ( !IsIconic( hWnd ) && IsWindowVisible( hWnd ) )
     {
         SetFocus( hWnd );
 
@@ -2894,6 +2901,7 @@ void WinSalFrame::UpdateSettings( AllSettings& rSettings )
             aStyleSettings.SetDeactiveColor( ImplWinColorToSal( GetSysColor( COLOR_GRADIENTINACTIVECAPTION ) ) );
         }
         aStyleSettings.SetFaceColor( ImplWinColorToSal( GetSysColor( COLOR_3DFACE ) ) );
+        aStyleSettings.SetInactiveTabColor( aStyleSettings.GetFaceColor() );
         aStyleSettings.SetLightColor( ImplWinColorToSal( GetSysColor( COLOR_3DHILIGHT ) ) );
         aStyleSettings.SetLightBorderColor( ImplWinColorToSal( GetSysColor( COLOR_3DLIGHT ) ) );
         aStyleSettings.SetShadowColor( ImplWinColorToSal( GetSysColor( COLOR_3DSHADOW ) ) );
@@ -2911,6 +2919,7 @@ void WinSalFrame::UpdateSettings( AllSettings& rSettings )
     aStyleSettings.SetLabelTextColor( aStyleSettings.GetRadioCheckTextColor() );
     aStyleSettings.SetInfoTextColor( aStyleSettings.GetRadioCheckTextColor() );
     aStyleSettings.SetWindowColor( ImplWinColorToSal( GetSysColor( COLOR_WINDOW ) ) );
+    aStyleSettings.SetActiveTabColor( aStyleSettings.GetWindowColor() );
     aStyleSettings.SetWindowTextColor( ImplWinColorToSal( GetSysColor( COLOR_WINDOWTEXT ) ) );
     aStyleSettings.SetFieldColor( aStyleSettings.GetWindowColor() );
     aStyleSettings.SetFieldTextColor( aStyleSettings.GetWindowTextColor() );
@@ -5685,6 +5694,91 @@ static void ImplHandleIMENotify( HWND hWnd, WPARAM wParam )
 }
 
 // -----------------------------------------------------------------------
+#if WINVER >= 0x0500
+
+static LRESULT ImplHandleIMEReconvertString( HWND hWnd, LPARAM lParam )
+{
+    WinSalFrame* pFrame = GetWindowPtr( hWnd );
+    LPRECONVERTSTRING pReconvertString = (LPRECONVERTSTRING) lParam;
+    LRESULT nRet = 0;
+    SalSurroundingTextRequestEvent aEvt;
+    aEvt.maText = UniString();
+    aEvt.mnStart = aEvt.mnEnd = 0;
+
+    UINT nImeProps = ImmGetProperty( GetKeyboardLayout( 0 ), IGP_SETCOMPSTR );
+    if( (nImeProps & SCS_CAP_SETRECONVERTSTRING) == 0 )
+    {
+    // This IME does not support reconversion.
+    return 0;
+    }
+
+    if( !pReconvertString )
+    {
+    // The first call for reconversion.
+    pFrame->CallCallback( SALEVENT_STARTRECONVERSION, (void*)NULL );
+
+    // Retrieve the surrounding text from the focused control.
+    pFrame->CallCallback( SALEVENT_SURROUNDINGTEXTREQUEST, (void*)&aEvt );
+
+    if( aEvt.maText.Len() == 0 )
+    {
+        return 0;
+    }
+
+    nRet = sizeof(RECONVERTSTRING) + (aEvt.maText.Len() + 1) * sizeof(WCHAR);
+    }
+    else
+    {
+    // The second call for reconversion.
+
+    // Retrieve the surrounding text from the focused control.
+    pFrame->CallCallback( SALEVENT_SURROUNDINGTEXTREQUEST, (void*)&aEvt );
+    nRet = sizeof(RECONVERTSTRING) + (aEvt.maText.Len() + 1) * sizeof(WCHAR);
+
+    pReconvertString->dwStrOffset = sizeof(RECONVERTSTRING);
+    pReconvertString->dwStrLen = aEvt.maText.Len();
+    pReconvertString->dwCompStrOffset = aEvt.mnStart * sizeof(WCHAR);
+    pReconvertString->dwCompStrLen = aEvt.mnEnd - aEvt.mnStart;
+    pReconvertString->dwTargetStrOffset = pReconvertString->dwCompStrOffset;
+    pReconvertString->dwTargetStrLen = pReconvertString->dwCompStrLen;
+
+    memcpy( (LPWSTR)(pReconvertString + 1), aEvt.maText.GetBuffer(), (aEvt.maText.Len() + 1) * sizeof(WCHAR) );
+    }
+
+    // just return the required size of buffer to reconvert.
+    return nRet;
+}
+
+// -----------------------------------------------------------------------
+
+static LRESULT ImplHandleIMEConfirmReconvertString( HWND hWnd, LPARAM lParam )
+{
+    WinSalFrame* pFrame = GetWindowPtr( hWnd );
+    LPRECONVERTSTRING pReconvertString = (LPRECONVERTSTRING) lParam;
+    SalSurroundingTextRequestEvent aEvt;
+    aEvt.maText = UniString();
+    aEvt.mnStart = aEvt.mnEnd = 0;
+
+    pFrame->CallCallback( SALEVENT_SURROUNDINGTEXTREQUEST, (void*)&aEvt );
+
+    ULONG nTmpStart = pReconvertString->dwCompStrOffset / sizeof(WCHAR);
+    ULONG nTmpEnd = nTmpStart + pReconvertString->dwCompStrLen;
+
+    if( nTmpStart != aEvt.mnStart || nTmpEnd != aEvt.mnEnd )
+    {
+    SalSurroundingTextSelectionChangeEvent aSelEvt;
+    aSelEvt.mnStart = nTmpStart;
+    aSelEvt.mnEnd = nTmpEnd;
+
+    pFrame->CallCallback( SALEVENT_SURROUNDINGTEXTSELECTIONCHANGE, (void*)&aSelEvt );
+    }
+
+    return TRUE;
+}
+
+#endif // WINVER >= 0x0500
+
+// -----------------------------------------------------------------------
 
 void SalTestMouseLeave()
 {
@@ -6100,10 +6194,23 @@ LRESULT CALLBACK SalFrameWndProc( HWND hWnd, UINT nMsg, WPARAM wParam, LPARAM lP
         case WM_IME_NOTIFY:
             ImplHandleIMENotify( hWnd, wParam );
             break;
-
         case WM_APPCOMMAND:
             ImplHandleAppCommand( hWnd, lParam );
             break;
+#if WINVER >= 0x0500
+        case WM_IME_REQUEST:
+            if ( PtrToInt( wParam ) == IMR_RECONVERTSTRING )
+            {
+                nRet = ImplHandleIMEReconvertString( hWnd, lParam );
+                rDef = FALSE;
+            }
+        else if( PtrToInt( wParam ) == IMR_CONFIRMRECONVERTSTRING )
+        {
+        nRet = ImplHandleIMEConfirmReconvertString( hWnd, lParam );
+        rDef = FALSE;
+        }
+            break;
+#endif // WINVER >= 0x0500
     }
 
     // WheelMouse-Message abfangen

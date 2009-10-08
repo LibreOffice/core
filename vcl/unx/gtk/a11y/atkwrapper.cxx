@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: atkwrapper.cxx,v $
- * $Revision: 1.11 $
+ * $Revision: 1.11.52.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -344,8 +344,13 @@ wrapper_get_name( AtkObject *atk_obj )
                     obj->mpContext->getAccessibleName(),
                     RTL_TEXTENCODING_UTF8);
 
-            g_free(atk_obj->name);
-            atk_obj->name = g_strdup(aName.getStr());
+            int nCmp = atk_obj->name ? rtl_str_compare( atk_obj->name, aName.getStr() ) : -1;
+            if( nCmp != 0 )
+            {
+                if( atk_obj->name )
+                    g_free(atk_obj->name);
+                atk_obj->name = g_strdup(aName.getStr());
+            }
         }
         catch(const uno::Exception& e) {
             g_warning( "Exception in getAccessibleName()" );

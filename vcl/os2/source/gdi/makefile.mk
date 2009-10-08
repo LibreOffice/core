@@ -8,7 +8,7 @@
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.7 $
+# $Revision: 1.7.154.1 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -45,16 +45,14 @@ YD00_CXXFILES=   salgdi.cxx          \
             salgdi3.cxx         \
             salvd.cxx           \
             salprn.cxx          \
-            salbmp.cxx			\
-            salogl.cxx			
-
+            salbmp.cxx
+            
 SLOFILES=   $(SLO)$/salgdi.obj   \
             $(SLO)$/salgdi2.obj  \
             $(SLO)$/salgdi3.obj  \
             $(SLO)$/salvd.obj    \
             $(SLO)$/salprn.obj   \
             $(SLO)$/salbmp.obj	 \
-            $(SLO)$/salogl.obj	 \
             $(SLO)$/os2layout.obj
 
 # --- Targets ------------------------------------------------------

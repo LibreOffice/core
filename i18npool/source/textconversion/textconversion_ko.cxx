@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: textconversion_ko.cxx,v $
- * $Revision: 1.15 $
+ * $Revision: 1.15.22.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -133,7 +133,7 @@ TextConversion_ko::getCharConversions(const OUString& aText, sal_Int32 nStartPos
     Sequence< OUString > output;
     const sal_Unicode* (*getHangul2HanjaData)() = (const sal_Unicode* (*)())getFunctionBySymbol("getHangul2HanjaData");
     const Hangul_Index* (*getHangul2HanjaIndex)() = (const Hangul_Index* (*)()) getFunctionBySymbol("getHangul2HanjaIndex");
-    const sal_Int16 (*getHangul2HanjaIndexCount)() = (const sal_Int16 (*)()) getFunctionBySymbol("getHangul2HanjaIndexCount");
+    sal_Int16 (*getHangul2HanjaIndexCount)() = (sal_Int16 (*)()) getFunctionBySymbol("getHangul2HanjaIndexCount");
     const sal_uInt16* (*getHanja2HangulIndex)() = (const sal_uInt16* (*)()) getFunctionBySymbol("getHanja2HangulIndex");
     const sal_Unicode* (*getHanja2HangulData)() = (const sal_Unicode* (*)()) getFunctionBySymbol("getHanja2HangulData");
     if (toHanja && getHangul2HanjaIndex && getHangul2HanjaIndexCount && getHangul2HanjaData) {

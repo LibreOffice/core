@@ -808,14 +808,6 @@ void WinSalGraphics::GetResolution( long& rDPIX, long& rDPIY )
 
 // -----------------------------------------------------------------------
 
-void WinSalGraphics::GetScreenFontResolution( long& rDPIX, long& rDPIY )
-{
-    rDPIX = GetDeviceCaps( mhDC, LOGPIXELSX );
-    rDPIY = GetDeviceCaps( mhDC, LOGPIXELSY );
-}
-
-// -----------------------------------------------------------------------
-
 USHORT WinSalGraphics::GetBitCount()
 {
     return (USHORT)GetDeviceCaps( mhDC, BITSPIXEL );

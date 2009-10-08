@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: xdictionary.cxx,v $
- * $Revision: 1.18 $
+ * $Revision: 1.18.22.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -164,13 +164,13 @@ sal_Bool SAL_CALL xdictionary::seekSegment(const sal_Unicode *text, sal_Int32 po
         for (segBoundary.startPos = pos - 1;
             segBoundary.startPos >= 0 &&
                 (u_isWhitespace((sal_uInt32)text[segBoundary.startPos]) || exists(text[segBoundary.startPos]));
-            segBoundary.startPos--);
+            segBoundary.startPos--) ;
         segBoundary.startPos++;
 
         for (segBoundary.endPos = pos;
             segBoundary.endPos < len &&
                     (u_isWhitespace((sal_uInt32)text[segBoundary.endPos]) || exists(text[segBoundary.endPos]));
-            segBoundary.endPos++);
+            segBoundary.endPos++) ;
 
         return segBoundary.endPos > segBoundary.startPos + 1;
 }

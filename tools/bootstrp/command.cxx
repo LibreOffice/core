@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: command.cxx,v $
- * $Revision: 1.18 $
+ * $Revision: 1.18.40.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -440,7 +440,7 @@ void CCommand::ImplInit()
 }
 
 /*****************************************************************************/
-CCommand::operator const int()
+CCommand::operator int()
 /*****************************************************************************/
 {
     int nRet;
@@ -589,7 +589,7 @@ CCommandd::CCommandd( const char *pChar, CommandBits nBits )
 }
 
 /*****************************************************************************/
-CCommandd::operator const int()
+CCommandd::operator int()
 /*****************************************************************************/
 {
     int nRet = 0;

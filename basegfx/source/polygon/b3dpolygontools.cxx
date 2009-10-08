@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: b3dpolygontools.cxx,v $
- * $Revision: 1.11 $
+ * $Revision: 1.11.4.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -36,6 +36,9 @@
 #include <basegfx/numeric/ftools.hxx>
 #include <basegfx/range/b3drange.hxx>
 #include <basegfx/point/b2dpoint.hxx>
+#include <basegfx/matrix/b3dhommatrix.hxx>
+#include <basegfx/polygon/b2dpolygon.hxx>
+#include <basegfx/polygon/b2dpolygontools.hxx>
 #include <numeric>
 
 //////////////////////////////////////////////////////////////////////////////
@@ -746,6 +749,323 @@ namespace basegfx
             }
 
             return aRetval;
+        }
+
+        bool isInEpsilonRange(const B3DPoint& rEdgeStart, const B3DPoint& rEdgeEnd, const B3DPoint& rTestPosition, double fDistance)
+        {
+            // build edge vector
+            const B3DVector aEdge(rEdgeEnd - rEdgeStart);
+            bool bDoDistanceTestStart(false);
+            bool bDoDistanceTestEnd(false);
+
+            if(aEdge.equalZero())
+            {
+                // no edge, just a point. Do one of the distance tests.
+                bDoDistanceTestStart = true;
+            }
+            else
+            {
+                // calculate fCut in aEdge
+                const B3DVector aTestEdge(rTestPosition - rEdgeStart);
+                const double fScalarTestEdge(aEdge.scalar(aTestEdge));
+                const double fScalarStartEdge(aEdge.scalar(rEdgeStart));
+                const double fScalarEdge(aEdge.scalar(aEdge));
+                const double fCut((fScalarTestEdge - fScalarStartEdge) / fScalarEdge);
+                const double fZero(0.0);
+                const double fOne(1.0);
+
+                if(fTools::less(fCut, fZero))
+                {
+                    // left of rEdgeStart
+                    bDoDistanceTestStart = true;
+                }
+                else if(fTools::more(fCut, fOne))
+                {
+                    // right of rEdgeEnd
+                    bDoDistanceTestEnd = true;
+                }
+                else
+                {
+                    // inside line [0.0 .. 1.0]
+                    const B3DPoint aCutPoint(interpolate(rEdgeStart, rEdgeEnd, fCut));
+                    const B3DVector aDelta(rTestPosition - aCutPoint);
+                    const double fDistanceSquare(aDelta.scalar(aDelta));
+
+                    if(fDistanceSquare <= fDistance * fDistance * fDistance)
+                    {
+                        return true;
+                    }
+                    else
+                    {
+                        return false;
+                    }
+                }
+            }
+
+            if(bDoDistanceTestStart)
+            {
+                const B3DVector aDelta(rTestPosition - rEdgeStart);
+                const double fDistanceSquare(aDelta.scalar(aDelta));
+
+                if(fDistanceSquare <= fDistance * fDistance * fDistance)
+                {
+                    return true;
+                }
+            }
+            else if(bDoDistanceTestEnd)
+            {
+                const B3DVector aDelta(rTestPosition - rEdgeEnd);
+                const double fDistanceSquare(aDelta.scalar(aDelta));
+
+                if(fDistanceSquare <= fDistance * fDistance * fDistance)
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+        bool isInEpsilonRange(const B3DPolygon& rCandidate, const B3DPoint& rTestPosition, double fDistance)
+        {
+            const sal_uInt32 nPointCount(rCandidate.count());
+
+            if(nPointCount)
+            {
+                const sal_uInt32 nEdgeCount(rCandidate.isClosed() ? nPointCount : nPointCount - 1L);
+                B3DPoint aCurrent(rCandidate.getB3DPoint(0));
+
+                if(nEdgeCount)
+                {
+                    // edges
+                    for(sal_uInt32 a(0); a < nEdgeCount; a++)
+                    {
+                        const sal_uInt32 nNextIndex((a + 1) % nPointCount);
+                        const B3DPoint aNext(rCandidate.getB3DPoint(nNextIndex));
+
+                        if(isInEpsilonRange(aCurrent, aNext, rTestPosition, fDistance))
+                        {
+                            return true;
+                        }
+
+                        // prepare next step
+                        aCurrent = aNext;
+                    }
+                }
+                else
+                {
+                    // no edges, but points -> not closed. Check single point. Just
+                    // use isInEpsilonRange with twice the same point, it handles those well
+                    if(isInEpsilonRange(aCurrent, aCurrent, rTestPosition, fDistance))
+                    {
+                        return true;
+                    }
+                }
+            }
+
+            return false;
+        }
+
+        bool isInside(const B3DPolygon& rCandidate, const B3DPoint& rPoint, bool bWithBorder)
+        {
+            if(bWithBorder && isPointOnPolygon(rCandidate, rPoint, true))
+            {
+                return true;
+            }
+            else
+            {
+                const B3DVector aPlaneNormal(rCandidate.getNormal());
+
+                if(!aPlaneNormal.equalZero())
+                {
+                    const double fAbsX(fabs(aPlaneNormal.getX()));
+                    const double fAbsY(fabs(aPlaneNormal.getY()));
+                    const double fAbsZ(fabs(aPlaneNormal.getZ()));
+
+                    if(fAbsX > fAbsY && fAbsX > fAbsZ)
+                    {
+                        // normal points mostly in X-Direction, use YZ-Polygon projection for check
+                        B3DHomMatrix aTrans;
+
+                        aTrans.set(0, 0, 0.0);
+                        aTrans.set(0, 1, 1.0);
+                        aTrans.set(1, 1, 0.0);
+                        aTrans.set(1, 2, 1.0);
+
+                        const B2DPolygon aYZ(createB2DPolygonFromB3DPolygon(rCandidate, aTrans));
+
+                        return isInside(aYZ, B2DPoint(rPoint.getY(), rPoint.getZ()), bWithBorder);
+                    }
+                    else if(fAbsY > fAbsX && fAbsY > fAbsZ)
+                    {
+                        // normal points mostly in Y-Direction, use XZ-Polygon projection for check
+                        B3DHomMatrix aTrans;
+
+                        aTrans.set(1, 1, 0.0);
+                        aTrans.set(1, 2, 1.0);
+
+                        const B2DPolygon aXZ(createB2DPolygonFromB3DPolygon(rCandidate, aTrans));
+
+                        return isInside(aXZ, B2DPoint(rPoint.getX(), rPoint.getZ()), bWithBorder);
+                    }
+                    else
+                    {
+                        // normal points mostly in Z-Direction, use XY-Polygon projection for check
+                        B3DHomMatrix aTrans;
+
+                        const B2DPolygon aXY(createB2DPolygonFromB3DPolygon(rCandidate, aTrans));
+
+                        return isInside(aXY, B2DPoint(rPoint.getX(), rPoint.getY()), bWithBorder);
+                    }
+                }
+
+                return false;
+            }
+        }
+
+        bool isInside(const B3DPolygon& rCandidate, const B3DPolygon& rPolygon, bool bWithBorder)
+        {
+            const sal_uInt32 nPointCount(rPolygon.count());
+
+            for(sal_uInt32 a(0L); a < nPointCount; a++)
+            {
+                const B3DPoint aTestPoint(rPolygon.getB3DPoint(a));
+
+                if(!isInside(rCandidate, aTestPoint, bWithBorder))
+                {
+                    return false;
+                }
+            }
+
+            return true;
+        }
+
+        bool isPointOnLine(const B3DPoint& rStart, const B3DPoint& rEnd, const B3DPoint& rCandidate, bool bWithPoints)
+        {
+            if(rCandidate.equal(rStart) || rCandidate.equal(rEnd))
+            {
+                // candidate is in epsilon around start or end -> inside
+                return bWithPoints;
+            }
+            else if(rStart.equal(rEnd))
+            {
+                // start and end are equal, but candidate is outside their epsilon -> outside
+                return false;
+            }
+            else
+            {
+                const B3DVector aEdgeVector(rEnd - rStart);
+                const B3DVector aTestVector(rCandidate - rStart);
+
+                if(areParallel(aEdgeVector, aTestVector))
+                {
+                    const double fZero(0.0);
+                    const double fOne(1.0);
+                    double fParamTestOnCurr(0.0);
+
+                    if(aEdgeVector.getX() > aEdgeVector.getY())
+                    {
+                        if(aEdgeVector.getX() > aEdgeVector.getZ())
+                        {
+                            // X is biggest
+                            fParamTestOnCurr = aTestVector.getX() / aEdgeVector.getX();
+                        }
+                        else
+                        {
+                            // Z is biggest
+                            fParamTestOnCurr = aTestVector.getZ() / aEdgeVector.getZ();
+                        }
+                    }
+                    else
+                    {
+                        if(aEdgeVector.getY() > aEdgeVector.getZ())
+                        {
+                            // Y is biggest
+                            fParamTestOnCurr = aTestVector.getY() / aEdgeVector.getY();
+                        }
+                        else
+                        {
+                            // Z is biggest
+                            fParamTestOnCurr = aTestVector.getZ() / aEdgeVector.getZ();
+                        }
+                    }
+
+                    if(fTools::more(fParamTestOnCurr, fZero) && fTools::less(fParamTestOnCurr, fOne))
+                    {
+                        return true;
+                    }
+                }
+
+                return false;
+            }
+        }
+
+        bool isPointOnPolygon(const B3DPolygon& rCandidate, const B3DPoint& rPoint, bool bWithPoints)
+        {
+            const sal_uInt32 nPointCount(rCandidate.count());
+
+            if(nPointCount > 1L)
+            {
+                const sal_uInt32 nLoopCount(rCandidate.isClosed() ? nPointCount : nPointCount - 1L);
+                B3DPoint aCurrentPoint(rCandidate.getB3DPoint(0));
+
+                for(sal_uInt32 a(0); a < nLoopCount; a++)
+                {
+                    const B3DPoint aNextPoint(rCandidate.getB3DPoint((a + 1) % nPointCount));
+
+                    if(isPointOnLine(aCurrentPoint, aNextPoint, rPoint, bWithPoints))
+                    {
+                        return true;
+                    }
+
+                    aCurrentPoint = aNextPoint;
+                }
+            }
+            else if(nPointCount && bWithPoints)
+            {
+                return rPoint.equal(rCandidate.getB3DPoint(0));
+            }
+
+            return false;
+        }
+
+        bool getCutBetweenLineAndPlane(const B3DVector& rPlaneNormal, const B3DPoint& rPlanePoint, const B3DPoint& rEdgeStart, const B3DPoint& rEdgeEnd, double& fCut)
+        {
+            if(!rPlaneNormal.equalZero() && !rEdgeStart.equal(rEdgeEnd))
+            {
+                const B3DVector aTestEdge(rEdgeEnd - rEdgeStart);
+                const double fScalarEdge(rPlaneNormal.scalar(aTestEdge));
+
+                if(!fTools::equalZero(fScalarEdge))
+                {
+                    const B3DVector aCompareEdge(rPlanePoint - rEdgeStart);
+                    const double fScalarCompare(rPlaneNormal.scalar(aCompareEdge));
+
+                    fCut = fScalarCompare / fScalarEdge;
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+        bool getCutBetweenLineAndPolygon(const B3DPolygon& rCandidate, const B3DPoint& rEdgeStart, const B3DPoint& rEdgeEnd, double& fCut)
+        {
+            const sal_uInt32 nPointCount(rCandidate.count());
+
+            if(nPointCount > 2 && !rEdgeStart.equal(rEdgeEnd))
+            {
+                const B3DVector aPlaneNormal(rCandidate.getNormal());
+
+                if(!aPlaneNormal.equalZero())
+                {
+                    const B3DPoint aPointOnPlane(rCandidate.getB3DPoint(0));
+
+                    return getCutBetweenLineAndPlane(aPlaneNormal, aPointOnPlane, rEdgeStart, rEdgeEnd, fCut);
+                }
+            }
+
+            return false;
         }
 
         //////////////////////////////////////////////////////////////////////

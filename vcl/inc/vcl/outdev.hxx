@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: outdev.hxx,v $
- * $Revision: 1.11 $
+ * $Revision: 1.11.28.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -69,8 +69,6 @@ class TextRectInfo;
 class FontInfo;
 class FontMetric;
 class GDIMetaFile;
-class OutDev3D;
-class OpenGL;
 class List;
 class GfxLink;
 class Line;
@@ -304,7 +302,6 @@ class VCL_DLLPUBLIC OutputDevice : public Resource
     friend class Bitmap;
     friend class ImplImageBmp;
     friend class ImplQPrinter;
-    friend class OpenGL;
     friend class Printer;
     friend class SalGraphicsLayout;
     friend class System;
@@ -328,7 +325,6 @@ private:
     ImplObjStack*       mpObjStack;
     ImplOutDevData*     mpOutDevData;
     List*               mpUnoGraphicsList;
-    OutDev3D*           mp3DContext;
     vcl::PDFWriterImpl* mpPDFWriter;
     vcl::ExtOutDevData* mpExtOutDevData;
 
@@ -575,10 +571,6 @@ public:
     */
     bool                supportsOperation( OutDevSupportType ) const;
 
-    void                Set3DContext( OutDev3D* p3DContext ) { mp3DContext = p3DContext; }
-
-    OutDev3D*           Get3DContext() const { return mp3DContext; }
-    OpenGL*             GetOpenGL();
     vcl::PDFWriterImpl* GetPDFWriter() const { return mpPDFWriter; }
 
     void                SetExtOutDevData( vcl::ExtOutDevData* pExtOutDevData ) { mpExtOutDevData = pExtOutDevData; }
@@ -1087,6 +1079,37 @@ public:
                                         LanguageType eLang,
                                         ULONG nFlags,
                                         const OutputDevice* pOutDev = NULL );
+
+    /** helper method removing transparencies from a metafile (e.g. for printing)
+
+        @returns
+        true: transparencies were removed
+        false: output metafile is unchanged input metafile
+
+        @attention this is a member method, so current state can influence the result !
+    */
+    bool                RemoveTransparenciesFromMetaFile( const GDIMetaFile& rInMtf, GDIMetaFile& rOutMtf,
+                                                          long nMaxBmpDPIX, long nMaxBmpDPIY,
+                                                          bool bReduceTransparency,
+                                                          bool bTransparencyAutoMode,
+                                                          bool bDownsampleBitmaps
+                                                          );
+    /** Retrieve downsampled and cropped bitmap
+
+        @attention This method ignores negative rDstSz values, thus
+        mirroring must happen outside this method (e.g. in DrawBitmap)
+     */
+    Bitmap              GetDownsampledBitmap( const Size& rDstSz,
+                                              const Point& rSrcPt, const Size& rSrcSz,
+                                              const Bitmap& rBmp, long nMaxBmpDPIX, long nMaxBmpDPIY );
+    /** Retrieve downsampled and cropped bitmapEx
+
+        @attention This method ignores negative rDstSz values, thus
+        mirroring must happen outside this method (e.g. in DrawBitmapEx)
+     */
+    BitmapEx            GetDownsampledBitmapEx( const Size& rDstSz,
+                                                const Point& rSrcPt, const Size& rSrcSz,
+                                                const BitmapEx& rBmpEx, long nMaxBmpDPIX, long nMaxBmpDPIY );
 };
 
 #endif // _SV_OUTDEV_HXX

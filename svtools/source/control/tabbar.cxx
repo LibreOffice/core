@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: tabbar.cxx,v $
- * $Revision: 1.21 $
+ * $Revision: 1.21.100.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -488,7 +488,7 @@ void TabBar::ImplGetColors( Color& rFaceColor, Color& rFaceTextColor,
     if ( IsControlBackground() )
         rFaceColor = GetControlBackground();
     else
-        rFaceColor = rStyleSettings.GetFaceColor();
+        rFaceColor = rStyleSettings.GetInactiveTabColor();
     if ( IsControlForeground() )
         rFaceTextColor = GetControlForeground();
     else
@@ -496,7 +496,7 @@ void TabBar::ImplGetColors( Color& rFaceColor, Color& rFaceTextColor,
     if ( mbSelColor )
         rSelectColor = maSelColor;
     else
-        rSelectColor = rStyleSettings.GetWindowColor();
+        rSelectColor = rStyleSettings.GetActiveTabColor();
     if ( mbSelTextColor )
         rSelectTextColor = maSelTextColor;
     else
@@ -809,14 +809,31 @@ void TabBar::MouseButtonDown( const MouseEvent& rMEvt )
         return;
     }
 
+    ImplTabBarItem* pItem;
+    USHORT          nSelId = GetPageId( rMEvt.GetPosPixel() );
+
     if ( !rMEvt.IsLeft() )
     {
         Window::MouseButtonDown( rMEvt );
+        if ( (nSelId > 0) && (nSelId != mnCurPageId) )
+        {
+            USHORT nPos = GetPagePos( nSelId );
+            pItem = mpItemList->GetObject( nPos );
+
+            if ( pItem->mbEnable )
+            {
+                if ( ImplDeactivatePage() )
+                {
+                    SetCurPageId( nSelId );
+                    Update();
+                    ImplActivatePage();
+                    ImplSelect();
+                }
+                mbInSelect = TRUE;
+            }
+        }
         return;
     }
-
-    ImplTabBarItem* pItem;
-    USHORT          nSelId = GetPageId( rMEvt.GetPosPixel() );
 
     if ( rMEvt.IsMod2() && mbAutoEditMode && nSelId )
     {

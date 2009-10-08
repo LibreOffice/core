@@ -8,7 +8,7 @@
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.113 $
+# $Revision: 1.111.36.3 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -97,7 +97,6 @@ HXXDEPNLST= $(INC)$/vcl$/accel.hxx       \
             $(INC)$/vcl$/msgbox.hxx      \
             $(INC)$/vcl$/octree.hxx      \
             $(INC)$/vcl$/outdev.hxx      \
-            $(INC)$/vcl$/outdev3d.hxx    \
             $(INC)$/vcl$/pointr.hxx      \
             $(INC)$/vcl$/ptrstyle.hxx    \
             $(INC)$/vcl$/prntypes.hxx    \
@@ -171,6 +170,7 @@ SHL1STDLIBS+=\
             $(UNOTOOLSLIB)      \
             $(TOOLSLIB)         \
             $(I18NISOLANGLIB)   \
+            $(I18NUTILLIB)   \
             $(COMPHELPERLIB)	\
             $(UCBHELPERLIB)     \
             $(CPPUHELPERLIB)    \
@@ -184,7 +184,10 @@ SHL1STDLIBS+=\
 SHL1USE_EXPORTS=name
 
 .IF "$(GUIBASE)"=="aqua"
-SHL1STDLIBS+=$(BASEBMPLIB)
+SHL1STDLIBS+= \
+    $(BASEBMPLIB) \
+    -lAppleRemote$(DLLPOSTFIX)
+
 SHL1STDLIBS+= \
              -framework QTKit
 LIB1FILES+= \

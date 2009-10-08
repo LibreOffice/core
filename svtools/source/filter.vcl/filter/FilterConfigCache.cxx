@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: FilterConfigCache.cxx,v $
- * $Revision: 1.24 $
+ * $Revision: 1.24.100.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -356,8 +356,9 @@ FilterConfigCache::~FilterConfigCache()
 
 String FilterConfigCache::GetImportFilterName( sal_uInt16 nFormat )
 {
-    CacheVector::iterator aIter( aImport.begin() + nFormat );
-    return ( aIter < aImport.end() ) ? aIter->sFilterName : String();
+    if( nFormat < aImport.size() )
+        return aImport[ nFormat ].sFilterName;
+    return String::EmptyString();
 }
 
 sal_uInt16 FilterConfigCache::GetImportFormatNumber( const String& rFormatName )
@@ -410,60 +411,44 @@ sal_uInt16 FilterConfigCache::GetImportFormatNumberForTypeName( const String& rT
 
 String FilterConfigCache::GetImportFormatName( sal_uInt16 nFormat )
 {
-    CacheVector::iterator aIter( aImport.begin() + nFormat );
-    String aUIName;
-    if ( aIter < aImport.end() )
-        aUIName = aIter->sUIName;
-    return aUIName;
+    if( nFormat < aImport.size() )
+        return aImport[ nFormat ].sUIName;
+    return String::EmptyString();
 }
 
 String FilterConfigCache::GetImportFormatMediaType( sal_uInt16 nFormat )
 {
-    CacheVector::iterator aIter( aImport.begin() + nFormat );
-    String aMediaType;
-    if ( aIter < aImport.end() )
-        aMediaType = aIter->sMediaType;
-    return aMediaType;
+    if( nFormat < aImport.size() )
+        return aImport[ nFormat ].sMediaType;
+    return String::EmptyString();
 }
 
 String FilterConfigCache::GetImportFormatShortName( sal_uInt16 nFormat )
 {
-    CacheVector::iterator aIter( aImport.begin() + nFormat );
-    String aType;
-    if ( aIter < aImport.end() )
-        aType = aIter->GetShortName();
-    aType.ToUpperAscii();
-    return aType;
+    if( nFormat < aImport.size() )
+        return aImport[ nFormat ].GetShortName();
+    return String::EmptyString();
 }
 
 String FilterConfigCache::GetImportFormatExtension( sal_uInt16 nFormat, sal_Int32 nEntry )
 {
-    CacheVector::iterator aIter( aImport.begin() + nFormat );
-    String aExtension;
-    if ( aIter < aImport.end() )
-    {
-        if ( nEntry < aIter->lExtensionList.getLength() )
-            aExtension = aIter->lExtensionList[ nEntry ];
-    }
-    return aExtension;
+    if ( (nFormat < aImport.size()) && (nEntry < aImport[ nFormat ].lExtensionList.getLength()) )
+        return aImport[ nFormat ].lExtensionList[ nEntry ];
+    return String::EmptyString();
 }
 
 String FilterConfigCache::GetImportFilterType( sal_uInt16 nFormat )
 {
-    CacheVector::iterator aIter( aImport.begin() + nFormat );
-    String aType;
-    if ( aIter < aImport.end() )
-        aType = aIter->sType;
-    return aType;
+    if( nFormat < aImport.size() )
+        return aImport[ nFormat ].sType;
+    return String::EmptyString();
 }
 
 String FilterConfigCache::GetImportFilterTypeName( sal_uInt16 nFormat )
 {
-    CacheVector::iterator aIter( aImport.begin() + nFormat );
-    String aFilterType;
-    if ( aIter < aImport.end() )
-        aFilterType = aIter->sFilterType;
-    return aFilterType;
+    if( nFormat < aImport.size() )
+        return aImport[ nFormat ].sFilterType;
+    return String::EmptyString();
 }
 
 String FilterConfigCache::GetImportWildcard( sal_uInt16 nFormat, sal_Int32 nEntry )
@@ -476,28 +461,26 @@ String FilterConfigCache::GetImportWildcard( sal_uInt16 nFormat, sal_Int32 nEntr
 
 sal_Bool FilterConfigCache::IsImportInternalFilter( sal_uInt16 nFormat )
 {
-    CacheVector::iterator aIter( aImport.begin() + nFormat );
-    return ( aIter < aImport.end() ) ? aIter->bIsInternalFilter != 0 : sal_False;
+    return (nFormat < aImport.size()) && aImport[ nFormat ].bIsInternalFilter;
 }
 
 sal_Bool FilterConfigCache::IsImportPixelFormat( sal_uInt16 nFormat )
 {
-    CacheVector::iterator aIter( aImport.begin() + nFormat );
-    return ( aIter < aImport.end() ) ? aIter->bIsPixelFormat != 0 : sal_False;
+    return (nFormat < aImport.size()) && aImport[ nFormat ].bIsPixelFormat;
 }
 
 sal_Bool FilterConfigCache::IsImportDialog( sal_uInt16 nFormat )
 {
-    CacheVector::iterator aIter( aImport.begin() + nFormat );
-    return ( aIter < aImport.end() ) ? aIter->bHasDialog != 0: sal_False;
+    return (nFormat < aImport.size()) && aImport[ nFormat ].bHasDialog;
 }
 
 // ------------------------------------------------------------------------
 
 String FilterConfigCache::GetExportFilterName( sal_uInt16 nFormat )
 {
-    CacheVector::iterator aIter( aExport.begin() + nFormat );
-    return ( aIter < aExport.end() ) ? aIter->sFilterName : String();
+    if( nFormat < aExport.size() )
+        return aExport[ nFormat ].sFilterName;
+    return String::EmptyString();
 }
 
 sal_uInt16 FilterConfigCache::GetExportFormatNumber( const String& rFormatName )
@@ -550,60 +533,44 @@ sal_uInt16 FilterConfigCache::GetExportFormatNumberForTypeName( const String& rT
 
 String FilterConfigCache::GetExportFormatName( sal_uInt16 nFormat )
 {
-    CacheVector::iterator aIter( aExport.begin() + nFormat );
-    String aUIName;
-    if ( aIter < aExport.end() )
-        aUIName = aIter->sUIName;
-    return aUIName;
+    if( nFormat < aExport.size() )
+        return aExport[ nFormat ].sUIName;
+    return String::EmptyString();
 }
 
 String FilterConfigCache::GetExportFormatMediaType( sal_uInt16 nFormat )
 {
-    CacheVector::iterator aIter( aExport.begin() + nFormat );
-    String aMediaType;
-    if ( aIter < aExport.end() )
-        aMediaType = aIter->sMediaType;
-    return aMediaType;
+    if( nFormat < aExport.size() )
+        return aExport[ nFormat ].sMediaType;
+    return String::EmptyString();
 }
 
 String FilterConfigCache::GetExportFormatShortName( sal_uInt16 nFormat )
 {
-    CacheVector::iterator aIter( aExport.begin() + nFormat );
-    String aType;
-    if ( aIter < aExport.end() )
-        aType = aIter->GetShortName();
-    aType.ToUpperAscii();
-    return aType;
+    if( nFormat < aExport.size() )
+        return aExport[ nFormat ].GetShortName();
+    return String::EmptyString();
 }
 
 String FilterConfigCache::GetExportFormatExtension( sal_uInt16 nFormat, sal_Int32 nEntry )
 {
-    CacheVector::iterator aIter( aExport.begin() + nFormat );
-    String aExtension;
-    if ( aIter < aExport.end() )
-    {
-        if ( nEntry < aIter->lExtensionList.getLength() )
-            aExtension = aIter->lExtensionList[ nEntry ];
-    }
-    return aExtension;
+    if ( (nFormat < aExport.size()) && (nEntry < aExport[ nFormat ].lExtensionList.getLength()) )
+        return aExport[ nFormat ].lExtensionList[ nEntry ];
+    return String::EmptyString();
 }
 
 String FilterConfigCache::GetExportFilterTypeName( sal_uInt16 nFormat )
 {
-    CacheVector::iterator aIter( aExport.begin() + nFormat );
-    String aFilterType;
-    if ( aIter < aExport.end() )
-        aFilterType = aIter->sFilterType;
-    return aFilterType;
+    if( nFormat < aExport.size() )
+        return aExport[ nFormat ].sFilterType;
+    return String::EmptyString();
 }
 
 String FilterConfigCache::GetExportInternalFilterName( sal_uInt16 nFormat )
 {
-    CacheVector::iterator aIter( aExport.begin() + nFormat );
-    String aInternalFilterName;
-    if ( aIter < aExport.end() )
-        aInternalFilterName = aIter->sInternalFilterName;
-    return aInternalFilterName;
+    if( nFormat < aExport.size() )
+        return aExport[ nFormat ].sInternalFilterName;
+    return String::EmptyString();
 }
 
 String FilterConfigCache::GetExportWildcard( sal_uInt16 nFormat, sal_Int32 nEntry )
@@ -616,20 +583,17 @@ String FilterConfigCache::GetExportWildcard( sal_uInt16 nFormat, sal_Int32 nEntr
 
 sal_Bool FilterConfigCache::IsExportInternalFilter( sal_uInt16 nFormat )
 {
-    CacheVector::iterator aIter( aExport.begin() + nFormat );
-    return ( aIter < aExport.end() ) ? aIter->bIsInternalFilter != 0 : sal_False;
+    return (nFormat < aExport.size()) && aExport[ nFormat ].bIsInternalFilter;
 }
 
 sal_Bool FilterConfigCache::IsExportPixelFormat( sal_uInt16 nFormat )
 {
-    CacheVector::iterator aIter( aExport.begin() + nFormat );
-    return ( aIter < aExport.end() ) ? aIter->bIsPixelFormat != 0 : sal_False;
+    return (nFormat < aExport.size()) && aExport[ nFormat ].bIsPixelFormat;
 }
 
 sal_Bool FilterConfigCache::IsExportDialog( sal_uInt16 nFormat )
 {
-    CacheVector::iterator aIter( aExport.begin() + nFormat );
-    return ( aIter < aExport.end() ) ? aIter->bHasDialog != 0: sal_False;
+    return (nFormat < aExport.size()) && aExport[ nFormat ].bHasDialog;
 }
 
 // ------------------------------------------------------------------------

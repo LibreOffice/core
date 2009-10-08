@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: salgdi.cxx,v $
- * $Revision: 1.53 $
+ * $Revision: 1.53.16.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -515,12 +515,6 @@ void X11SalGraphics::GetResolution( sal_Int32 &rDPIX, sal_Int32 &rDPIY ) // cons
             rDPIX = rDPIY; // y-resolution is more trustworthy
         }
     }
-}
-
-// -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-void X11SalGraphics::GetScreenFontResolution( sal_Int32 &rDPIX, sal_Int32 &rDPIY ) // const
-{
-    GetDisplay()->GetScreenFontResolution( rDPIX, rDPIY );
 }
 
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -1306,7 +1300,7 @@ bool X11SalGraphics::drawPolyPolygon( const ::basegfx::B2DPolyPolygon& rPolyPoly
             typedef std::pair<VerticalTrapSet::iterator, VerticalTrapSet::iterator> VTSPair;
             VTSPair aVTSPair = aVerticalTraps.equal_range( *aActiveTrapsIt );
             VerticalTrapSet::iterator aVTSit = aVTSPair.first;
-            for(; (aVTSit != aVTSPair.second) && (*aVTSit != *aActiveTrapsIt); ++aVTSit );
+            for(; (aVTSit != aVTSPair.second) && (*aVTSit != *aActiveTrapsIt); ++aVTSit ) ;
             if( aVTSit != aVTSPair.second )
                 aVerticalTraps.erase( aVTSit );
             // then update the old trapezoid's bottom
@@ -1367,36 +1361,25 @@ bool X11SalGraphics::drawPolyPolygon( const ::basegfx::B2DPolyPolygon& rPolyPoly
     }
 
     // create xrender Picture for polygon foreground
-    Display* pXDisplay = GetXDisplay();
-    int nVisualDepth = pVisualFormat->depth;
-    SalDisplay::RenderEntry& rEntry = GetDisplay()->GetRenderEntries( m_nScreen )[ nVisualDepth ];
+    SalDisplay::RenderEntry& rEntry = GetDisplay()->GetRenderEntries( m_nScreen )[ 32 ];
     if( !rEntry.m_aPicture )
     {
-#ifdef DBG_UTIL
-        int iDummy;
-        unsigned uDummy;
-        XLIB_Window wDummy;
-        unsigned int nDrawDepth;
-        ::XGetGeometry( pXDisplay, hDrawable_, &wDummy, &iDummy, &iDummy,
-                      &uDummy, &uDummy, &uDummy, &nDrawDepth );
-        DBG_ASSERT( static_cast<unsigned>(nVisualDepth) == nDrawDepth, "depth messed up for XRender" );
-#endif // DBG_UTIL
+        Display* pXDisplay = GetXDisplay();
 
-        rEntry.m_aPixmap = ::XCreatePixmap( pXDisplay, hDrawable_, 1, 1, nVisualDepth );
+        rEntry.m_aPixmap = ::XCreatePixmap( pXDisplay, hDrawable_, 1, 1, 32 );
         XRenderPictureAttributes aAttr;
         aAttr.repeat = true;
 
-        XRenderPictFormat* pXRPF = rRenderPeer.FindStandardFormat(PictStandardARGB32);
-        rEntry.m_aPicture = rRenderPeer.CreatePicture ( rEntry.m_aPixmap, pXRPF, CPRepeat, aAttr );
+        XRenderPictFormat* pXRPF = rRenderPeer.FindStandardFormat( PictStandardARGB32 );
+        rEntry.m_aPicture = rRenderPeer.CreatePicture( rEntry.m_aPixmap, pXRPF, CPRepeat, &aAttr );
     }
 
     // set polygon foreground color and opacity
-    XRenderColor aRenderColor = GetXRenderColor( nBrushColor_ , fTransparency);
+    XRenderColor aRenderColor = GetXRenderColor( nBrushColor_ , fTransparency );
     rRenderPeer.FillRectangle( PictOpSrc, rEntry.m_aPicture, &aRenderColor, 0, 0, 1, 1 );
 
     // notify xrender of target drawable
-    XRenderPictureAttributes aAttr;
-    Picture aDst = rRenderPeer.CreatePicture( hDrawable_, pVisualFormat, 0, aAttr );
+    Picture aDst = rRenderPeer.CreatePicture( hDrawable_, pVisualFormat, 0, NULL );
 
     // set clipping
     if( pClipRegion_ && !XEmptyRegion( pClipRegion_ ) )

@@ -8,7 +8,7 @@
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.33.92.1 $
+# $Revision: 1.33.132.1 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -100,7 +100,6 @@ SLOFILES=	$(SLO)$/salmisc.obj 	\
             $(SLO)$/regband.obj 	\
             $(SLO)$/region.obj		\
             $(SLO)$/wall.obj		\
-            $(SLO)$/opengl.obj		\
             $(SLO)$/fontcfg.obj		\
             $(SLO)$/base14.obj		\
             $(SLO)$/pdfwriter.obj	\

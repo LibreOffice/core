@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: ownlist.cxx,v $
- * $Revision: 1.6 $
+ * $Revision: 1.6.136.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -53,7 +53,7 @@ static String parseString(const String & rCmd, USHORT * pIndex)
 
         USHORT begin = *pIndex;
 
-        while(*pIndex < rCmd.Len() && rCmd.GetChar((*pIndex) ++) != '\"');
+        while(*pIndex < rCmd.Len() && rCmd.GetChar((*pIndex) ++) != '\"') ;
 
         result = String(rCmd.Copy(begin, *pIndex - begin - 1));
     }

@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: gtkframe.cxx,v $
- * $Revision: 1.84 $
+ * $Revision: 1.84.36.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -1624,6 +1624,7 @@ void GtkSalFrame::moveToScreen( int nScreen )
         GtkSalDisplay* pDisp = getDisplay();
         m_aSystemData.aWindow       = GDK_WINDOW_XWINDOW(m_pWindow->window);
         m_aSystemData.pVisual       = pDisp->GetVisual( m_nScreen ).GetVisual();
+        m_aSystemData.nScreen       = nScreen;
         m_aSystemData.nDepth        = pDisp->GetVisual( m_nScreen ).GetDepth();
         m_aSystemData.aColormap     = pDisp->GetColormap( m_nScreen ).GetXColormap();
         m_aSystemData.pAppContext   = NULL;

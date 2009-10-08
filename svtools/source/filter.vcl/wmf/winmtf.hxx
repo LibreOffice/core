@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: winmtf.hxx,v $
- * $Revision: 1.35 $
+ * $Revision: 1.34.134.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -308,7 +308,7 @@ struct LOGFONTW
 #define WIN_MTF_ASSERT_ONCE     0x40000000
 #define WIN_MTF_ASSERT_MIFE     0x20000000
 
-const void WinMtfAssertHandler( const sal_Char*, sal_uInt32 nFlags = WIN_MTF_ASSERT_MIFE );
+void WinMtfAssertHandler( const sal_Char*, sal_uInt32 nFlags = WIN_MTF_ASSERT_MIFE );
 #endif
 
 enum WinMtfClipPathType{ EMPTY, RECTANGLE, COMPLEX };

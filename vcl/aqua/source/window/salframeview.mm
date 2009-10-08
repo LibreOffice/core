@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: salframeview.mm,v $
- * $Revision: 1.13 $
+ * $Revision: 1.12.22.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -383,9 +383,37 @@ static const struct ExceptionalKey
     return mpFrame ? (mpFrame->getClipPath() != 0 ? NO : YES) : YES;
 }
 
+// helper class similar to a vos::OGuard for the SalYieldMutex
+// the difference is that it only does tryToAcquire instead of aquire
+// so dreaded deadlocks like #i93512# are prevented
+class TryGuard
+{
+public:
+			TryGuard()  { mbGuarded = ImplSalYieldMutexTryToAcquire(); }
+			~TryGuard() { if( mbGuarded ) ImplSalYieldMutexRelease(); }
+	bool	IsGuarded() { return mbGuarded; }
+private:
+	bool	mbGuarded;
+};
+
 -(void)drawRect: (NSRect)aRect
 {
-    YIELD_GUARD;
+	// HOTFIX: #i93512# prevent deadlocks if any other thread already has the SalYieldMutex
+	TryGuard aTryGuard;
+	if( !aTryGuard.IsGuarded() )
+	{
+		// NOTE: the mpFrame access below is not guarded yet!
+		// TODO: mpFrame et al need to be guarded by an independent mutex
+		AquaSalGraphics* pGraphics = (mpFrame && AquaSalFrame::isAlive(mpFrame)) ? mpFrame->mpGraphics : NULL;
+		if( pGraphics )
+		{
+			// we did not get the mutex so we cannot draw now => request to redraw later
+			// convert the NSRect to a CGRect for Refreshrect()
+			const CGRect aCGRect = {{aRect.origin.x,aRect.origin.y},{aRect.size.width,aRect.size.height}};
+			pGraphics->RefreshRect( aCGRect );
+		}
+		return;
+	}
 
     if( mpFrame && AquaSalFrame::isAlive( mpFrame ) )
     {
@@ -395,7 +423,6 @@ static const struct ExceptionalKey
             if( mpFrame->getClipPath() )
                 [mpFrame->getWindow() invalidateShadow];
         }
-
     }
 }
 
@@ -429,10 +456,7 @@ static const struct ExceptionalKey
         NSPoint aPt = [NSEvent mouseLocation];
         NSRect aFrameRect = [pDispatchFrame->getWindow() frame];
         
-        if( aPt.x < aFrameRect.origin.x ||
-            aPt.y < aFrameRect.origin.y ||
-            aPt.x >= aFrameRect.origin.x + aFrameRect.size.width ||
-            aPt.y >= aFrameRect.origin.y + aFrameRect.size.height )
+	if ( ! NSPointInRect( aPt, aFrameRect ) )
         {
             // no, it is not
             // now we need to find the one it may be in

@@ -8,7 +8,7 @@
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.6 $
+# $Revision: 1.6.42.1 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -40,23 +40,8 @@ AUTOSEG=true
 .INCLUDE :  settings.mk
 
 # --- Files --------------------------------------------------------
-EXCEPTIONSFILES=\
-                $(SLO)$/b3dgeom.obj
 
-SLOFILES= \
-                $(SLO)$/base3d.obj      \
-                $(SLO)$/b3dtrans.obj    \
-                $(SLO)$/b3ddeflt.obj    \
-                $(SLO)$/b3dopngl.obj    \
-                $(SLO)$/b3dcommn.obj    \
-                $(SLO)$/matril3d.obj	\
-                $(SLO)$/b3dcolor.obj	\
-                $(SLO)$/b3dlight.obj	\
-                $(SLO)$/b3dentty.obj	\
-                $(SLO)$/b3dcompo.obj	\
-                $(SLO)$/b3dtex.obj		\
-                $(SLO)$/b3dgeom.obj		
-
+SLOFILES = $(SLO)$/b3dtrans.obj
 
 .INCLUDE :  target.mk
 

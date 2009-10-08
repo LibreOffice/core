@@ -430,6 +430,7 @@
 <ForbiddenCharacters>
 <ForbiddenLineBeginCharacters>:!),.:;?]}¢'"、。〉》」』】〕〗〞︰︱︳﹐､﹒﹔﹕﹖﹗﹚﹜﹞！），．：；？｜｝︴︶︸︺︼︾﹀﹂﹄﹏､～￠々‖•·ˇˉ―--′</ForbiddenLineBeginCharacters>
 <ForbiddenLineEndCharacters>([{£¥'"‵〈《「『【〔〖（［｛￡￥〝︵︷︹︻︽︿﹁﹃﹙﹛﹝（｛</ForbiddenLineEndCharacters>
+<LineBreakHangingCharacters>!,.:;?、。！，．：；？</LineBreakHangingCharacters>
 </ForbiddenCharacters>
 <ReservedWords>
 <trueWord>真</trueWord>

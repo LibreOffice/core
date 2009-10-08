@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: sft.c,v $
- * $Revision: 1.47 $
+ * $Revision: 1.47.4.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -1925,6 +1925,9 @@ void CloseTTFont(TrueTypeFont *ttf) /*FOLD01*/
     free(ttf->tables);
     free(ttf->tlens);
     free(ttf->kerntables);
+
+    ReleaseGSUB(ttf);
+
     free(ttf);
     return;
 }

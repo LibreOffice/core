@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: sax_expat.cxx,v $
- * $Revision: 1.18 $
+ * $Revision: 1.18.10.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -160,7 +160,6 @@ public:
 
     // The implementation details
     static Sequence< OUString >     getSupportedServiceNames_Static(void) throw ();
-    static OUString                 getImplementationName_Static() throw ();
 
 public:
     // The SAX-Parser-Interface
@@ -574,11 +573,6 @@ void SaxExpatParser::setEntityResolver(const Reference < XEntityResolver > & xRe
 void SaxExpatParser::setLocale( const Locale & locale ) throw (RuntimeException)
 {
     m_pImpl->locale = locale;
-}
-
-OUString    SaxExpatParser::getImplementationName_Static() throw ()
-{
-    return OUString::createFromAscii( IMPLEMENTATION_NAME );
 }
 
 // XServiceInfo

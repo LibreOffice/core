@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: unoevent.cxx,v $
- * $Revision: 1.13 $
+ * $Revision: 1.13.136.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -495,7 +495,7 @@ SvDetachedEventDescriptor::~SvDetachedEventDescriptor()
     delete aMacros;
 }
 
-sal_Int16 SvDetachedEventDescriptor::getIndex(const sal_uInt16 nID)
+sal_Int16 SvDetachedEventDescriptor::getIndex(const sal_uInt16 nID) const
 {
     // iterate over supported events
     sal_Int16 nIndex = 0;
@@ -548,8 +548,8 @@ void SvDetachedEventDescriptor::getByName(
         rMacro = (*aMacros[nIndex]);
 }
 
-const sal_Bool SvDetachedEventDescriptor::hasByName(
-    const sal_uInt16 nEvent )       /// item ID of event
+sal_Bool SvDetachedEventDescriptor::hasByName(
+    const sal_uInt16 nEvent ) const     /// item ID of event
         throw(IllegalArgumentException)
 {
     sal_Int16 nIndex = getIndex(nEvent);

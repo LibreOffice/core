@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: inimgr.cxx,v $
- * $Revision: 1.10 $
+ * $Revision: 1.10.40.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -110,14 +110,14 @@ ByteString IniManager::ToLocal( ByteString &rPath )
 
     sTmp.SearchAndReplace( sIni, sLocalPath );
 
-    while ( sTmp.SearchAndReplace( "\\\\", "\\" ) != STRING_NOTFOUND );
+    while ( sTmp.SearchAndReplace( "\\\\", "\\" ) != STRING_NOTFOUND ) ;
 #else
     sTmp.SearchAndReplace( sGlobalDir, sLocalPath );
 
     ByteString sOldGlobalDir( GetIniRootOld() );
     sTmp.SearchAndReplace( sOldGlobalDir, sLocalPath );
 
-    while ( sTmp.SearchAndReplace( "//", "/" ) != STRING_NOTFOUND );
+    while ( sTmp.SearchAndReplace( "//", "/" ) != STRING_NOTFOUND ) ;
 #endif
 
     return sTmp;

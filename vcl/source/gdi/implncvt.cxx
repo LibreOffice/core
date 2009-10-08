@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: implncvt.cxx,v $
- * $Revision: 1.10 $
+ * $Revision: 1.10.136.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -61,8 +61,8 @@ struct ImplFloatPoint
     void            operator+=( const ImplFloatPoint& rPoint ) { fX += rPoint.fX; fY += rPoint.fY; }
     void            operator-=( const ImplFloatPoint& rPoint ) { fX -= rPoint.fX; fY -= rPoint.fY; }
     void            operator*=( const double& rD ) { fX *= rD; fY *= rD; }
-    BOOL            operator==( const ImplFloatPoint& rPoint ) const { return ( ( rPoint.fX == fX ) && ( rPoint.fY == fY ) ); } const
-    void            operator=( const Point rPoint ) { fX = rPoint.X(); fY = rPoint.Y(); }
+    BOOL            operator==( const ImplFloatPoint& rPoint ) const { return ( ( rPoint.fX == fX ) && ( rPoint.fY == fY ) ); }
+    void            operator=( const Point& rPoint ) { fX = rPoint.X(); fY = rPoint.Y(); }
 
     ImplFloatPoint  GetOVec( const ImplFloatPoint& rPoint ) const;
     ImplFloatPoint  GetNVec( const ImplFloatPoint& rPoint ) const;

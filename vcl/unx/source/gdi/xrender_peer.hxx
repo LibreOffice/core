@@ -65,7 +65,7 @@ public:
     XRenderPictFormat* FindPictureFormat( unsigned long nMask,
         const XRenderPictFormat& ) const;
     Picture     CreatePicture( Drawable, const XRenderPictFormat*,
-                    unsigned long nDrawable, const XRenderPictureAttributes& ) const;
+                    unsigned long nDrawable, const XRenderPictureAttributes* ) const;
     void        SetPictureClipRegion( Picture, XLIB_Region ) const;
     void        CompositePicture( int nOp, Picture aSrc, Picture aMask, Picture aDst,
                     int nXSrc, int nYSrc, int nXMask, int nYMask,
@@ -183,14 +183,14 @@ inline XRenderPictFormat* XRenderPeer::FindPictureFormat( unsigned long nFormatM
 
 inline Picture XRenderPeer::CreatePicture( Drawable aDrawable,
     const XRenderPictFormat* pVisFormat, unsigned long nValueMask,
-    const XRenderPictureAttributes& rRenderAttr ) const
+    const XRenderPictureAttributes* pRenderAttr ) const
 {
 #ifdef XRENDER_LINK
     return XRenderCreatePicture( mpDisplay, aDrawable, pVisFormat,
-                                 nValueMask, &rRenderAttr );
+                                 nValueMask, pRenderAttr );
 #else
     return (*mpXRenderCreatePicture)( mpDisplay, aDrawable, pVisFormat,
-        nValueMask, &rRenderAttr );
+        nValueMask, pRenderAttr );
 #endif
 }
 
@@ -350,10 +350,23 @@ inline Picture& ScopedPic::Get()
 inline XRenderColor GetXRenderColor( const SalColor& rSalColor, double fTransparency = 0.0 )
 {
     XRenderColor aRetVal;
+    // convert the SalColor
     aRetVal.red   = SALCOLOR_RED(   rSalColor ); aRetVal.red   |= (aRetVal.red   << 8);
     aRetVal.green = SALCOLOR_GREEN( rSalColor ); aRetVal.green |= (aRetVal.green << 8);
     aRetVal.blue  = SALCOLOR_BLUE(  rSalColor ); aRetVal.blue  |= (aRetVal.blue  << 8);
-    aRetVal.alpha = static_cast< unsigned short >((1.0 - fTransparency) * double(0xffff));
+
+    // handle transparency
+    aRetVal.alpha = 0xFFFF; // default to opaque
+    if( fTransparency != 0 )
+    {
+        const double fAlpha = 1.0 - fTransparency;
+        aRetVal.alpha = static_cast<sal_uInt16>(fAlpha * 0xFFFF + 0.5);
+        // xrender wants pre-multiplied colors
+        aRetVal.red   = static_cast<sal_uInt16>(fAlpha * aRetVal.red + 0.5);
+        aRetVal.green = static_cast<sal_uInt16>(fAlpha * aRetVal.green + 0.5);
+        aRetVal.blue  = static_cast<sal_uInt16>(fAlpha * aRetVal.blue + 0.5);
+    }
+
     return aRetVal;
 }
 

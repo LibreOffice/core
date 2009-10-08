@@ -1060,6 +1060,15 @@ public:
     sal_Int32 newPage( sal_Int32 nPageWidth , sal_Int32 nPageHeight, PDFWriter::Orientation eOrientation );
     bool emit();
     std::set< PDFWriter::ErrorCode > getErrors();
+    void insertError( PDFWriter::ErrorCode eErr ) { m_aErrors.insert( eErr ); }
+
+    Size getCurPageSize() const
+    {
+        Size aSize;
+        if( m_nCurrentPage >= 0 && m_nCurrentPage < (sal_Int32)m_aPages.size() )
+            aSize = Size( m_aPages[ m_nCurrentPage ].m_nPageWidth, m_aPages[ m_nCurrentPage ].m_nPageHeight );
+        return aSize;
+    }
 
     PDFWriter::PDFVersion getVersion() const { return m_aContext.Version; }
     void setDocInfo( const PDFDocInfo& rInfo );

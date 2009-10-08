@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: cppdep.cxx,v $
- * $Revision: 1.16 $
+ * $Revision: 1.16.42.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -185,6 +185,26 @@ ByteString CppDep::Exists( ByteString aFileName )
 ByteString CppDep::IsIncludeStatement( ByteString aLine )
 {
     ByteString aRetStr;
+    if ( aLine.Search("/*",0) != STRING_NOTFOUND )
+    {
+#ifdef DEBUG_VERBOSE
+        fprintf( stderr, "found starting C comment : %s\n", aLine.GetBuffer() );
+#endif
+        aLine.Erase(aLine.Search("/*",0), aLine.Len() - 1);
+#ifdef DEBUG_VERBOSE
+        fprintf( stderr, "cleaned string : %s\n", aLine.GetBuffer() );
+#endif
+    }
+    if ( aLine.Search("//",0) != STRING_NOTFOUND )
+    {
+#ifdef DEBUG_VERBOSE
+        fprintf( stderr, "found C++ comment : %s\n", aLine.GetBuffer() );
+#endif
+        aLine.Erase(aLine.Search("//",0), aLine.Len() - 1);
+#ifdef DEBUG_VERBOSE
+        fprintf( stderr, "cleaned string : %s\n", aLine.GetBuffer() );
+#endif
+    }
     // WhiteSpacesfressen
     aLine.EraseAllChars(' ');
     aLine.EraseAllChars('\t');

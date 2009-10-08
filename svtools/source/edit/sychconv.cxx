@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: sychconv.cxx,v $
- * $Revision: 1.5 $
+ * $Revision: 1.5.136.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -33,7 +33,7 @@
 #include "sychconv.hxx"
 #include <vcl/outdev.hxx>
 
-const BOOL SymCharConverter::Convert( Font& rFont, UniString& rString, OutputDevice* pDev )
+BOOL SymCharConverter::Convert( Font& rFont, UniString& rString, OutputDevice* pDev )
 {
     // hibyte 0 = exact matching
     //        1 = little differences,

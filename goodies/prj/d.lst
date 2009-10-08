@@ -78,16 +78,5 @@ mkdir: %COMMON_DEST%\bin%_EXT%\hid
 mkdir: %_DEST%\inc%_EXT%\goodies
 ..\inc\grfmgr.hxx %_DEST%\inc%_EXT%\goodies\grfmgr.hxx
 ..\inc\mailenum.hxx %_DEST%\inc%_EXT%\goodies\mailenum.hxx
-..\inc\goodies\base3d.hxx %_DEST%\inc%_EXT%\goodies\base3d.hxx
-..\inc\goodies\b3dlight.hxx %_DEST%\inc%_EXT%\goodies\b3dlight.hxx
-..\inc\goodies\matril3d.hxx %_DEST%\inc%_EXT%\goodies\matril3d.hxx
-..\inc\goodies\bucket.hxx %_DEST%\inc%_EXT%\goodies\bucket.hxx
-..\inc\goodies\b3dentty.hxx %_DEST%\inc%_EXT%\goodies\b3dentty.hxx
-..\inc\goodies\b3dcolor.hxx %_DEST%\inc%_EXT%\goodies\b3dcolor.hxx
-..\inc\goodies\b3dcompo.hxx %_DEST%\inc%_EXT%\goodies\b3dcompo.hxx
-..\inc\b3dtex.hxx %_DEST%\inc%_EXT%\goodies\b3dtex.hxx
-..\inc\goodies\b3dgeom.hxx %_DEST%\inc%_EXT%\goodies\b3dgeom.hxx
 ..\inc\b3dtrans.hxx %_DEST%\inc%_EXT%\goodies\b3dtrans.hxx
-..\inc\goodies\bxdintpo.hxx %_DEST%\inc%_EXT%\goodies\bxdintpo.hxx
 ..\inc\agsdkdll.hxx %_DEST%\inc%_EXT%\goodies\agsdkdll.hxx
-..\inc\goodies\vdevcache.hxx %_DEST%\inc%_EXT%\goodies\vdevcache.hxx

@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: saldata.cxx,v $
- * $Revision: 1.14 $
+ * $Revision: 1.13.64.3 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -34,6 +34,7 @@
 #include "saldata.hxx"
 #include "salnsmenu.h"
 #include "salinst.h"
+#import "apple_remote/RemoteMainController.h"
 
 oslThreadKey SalData::s_aAutoReleaseKey = 0;
 
@@ -54,9 +55,12 @@ SalData::SalData()
     mpStatusItem( nil ),
     mxRGBSpace( CGColorSpaceCreateWithName(kCGColorSpaceGenericRGB) ),
     mxGraySpace( CGColorSpaceCreateWithName(kCGColorSpaceGenericGray) ),
+    mxP50Space( NULL ),
+    mxP50Pattern( NULL ),
     maCursors( POINTER_COUNT, INVALID_CURSOR_PTR ),
     mbIsScrollbarDoubleMax( false ),
     mnSystemVersion( VER_TIGER ),
+    mpMainController( NULL ),
     mbIsTestTool( false )
 {
     if( s_aAutoReleaseKey == 0 )
@@ -65,8 +69,10 @@ SalData::SalData()
 
 SalData::~SalData()
 {
-    CFRelease( mxRGBSpace );
-    CFRelease( mxGraySpace );
+    CGPatternRelease( mxP50Pattern );
+    CGColorSpaceRelease( mxP50Space );
+    CGColorSpaceRelease( mxRGBSpace );
+    CGColorSpaceRelease( mxGraySpace );
     for( unsigned int i = 0; i < maCursors.size(); i++ )
     {
         NSCursor* pCurs = maCursors[i];
@@ -87,6 +93,8 @@ SalData::~SalData()
         osl_destroyThreadKey( s_aAutoReleaseKey );
         s_aAutoReleaseKey = NULL;
     }
+    if ( mpMainController )
+        [mpMainController release];
 }
 
 void SalData::ensureThreadAutoreleasePool()

@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: b3dpolypolygontools.hxx,v $
- * $Revision: 1.8 $
+ * $Revision: 1.8.4.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -141,6 +141,10 @@ namespace basegfx
             If bChangeY, y texture coordinate will be recalculated.
          */
         B3DPolyPolygon applyDefaultTextureCoordinatesSphere( const B3DPolyPolygon& rCandidate, const B3DPoint& rCenter, bool bChangeX = true, bool bChangeY = true);
+
+        // isInside test for B3DPoint. On border is not inside as long as not true is given
+        // in bWithBorder flag. It is assumed that the orientations of the given polygon are correct.
+        bool isInside(const B3DPolyPolygon& rCandidate, const B3DPoint& rPoint, bool bWithBorder = false);
 
         //////////////////////////////////////////////////////////////////////
         // comparators with tolerance for 3D PolyPolygons

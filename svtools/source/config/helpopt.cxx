@@ -269,7 +269,9 @@ void  SvtHelpOptions_Impl::Load(const uno::Sequence< ::rtl::OUString>& rProperty
                     }
                 }
                 else
-                    DBG_ERRORFILE( "Wrong Type!" );
+                {
+            DBG_ERRORFILE( "Wrong Type!" );
+        }
             }
         }
         if ( IsHelpTips() != Help::IsQuickHelpEnabled() )

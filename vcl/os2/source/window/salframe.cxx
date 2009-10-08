@@ -2123,6 +2123,7 @@ void Os2SalFrame::UpdateSettings( AllSettings& rSettings )
     if ( bCompBorder )
     {
         aStyleSettings.SetFaceColor( ImplOS2ColorToSal( WinQuerySysColor( HWND_DESKTOP, SYSCLR_BUTTONMIDDLE, 0 ) ) );
+        aStyleSettings.SetInactiveTabColor( aStyleSettings.GetFaceColor() );
         aStyleSettings.SetLightColor( ImplOS2ColorToSal( WinQuerySysColor( HWND_DESKTOP, SYSCLR_BUTTONLIGHT, 0 ) ) );
         aStyleSettings.SetLightBorderColor( ImplOS2ColorToSal( WinQuerySysColor( HWND_DESKTOP, SYSCLR_BUTTONMIDDLE, 0 ) ) );
         aStyleSettings.SetShadowColor( ImplOS2ColorToSal( WinQuerySysColor( HWND_DESKTOP, SYSCLR_BUTTONDARK, 0 ) ) );
@@ -2144,6 +2145,7 @@ void Os2SalFrame::UpdateSettings( AllSettings& rSettings )
     aStyleSettings.SetLabelTextColor( aStyleSettings.GetGroupTextColor() );
     aStyleSettings.SetInfoTextColor( aStyleSettings.GetGroupTextColor() );
     aStyleSettings.SetWindowColor( ImplOS2ColorToSal( WinQuerySysColor( HWND_DESKTOP, SYSCLR_WINDOW, 0 ) ) );
+    aStyleSettings.SetActiveTabColor( aStyleSettings.GetWindowColor() );
     aStyleSettings.SetWindowTextColor( ImplOS2ColorToSal( WinQuerySysColor( HWND_DESKTOP, SYSCLR_WINDOWTEXT, 0 ) ) );
     aStyleSettings.SetFieldColor( ImplOS2ColorToSal( WinQuerySysColor( HWND_DESKTOP, SYSCLR_ENTRYFIELD, 0 ) ) );
     aStyleSettings.SetFieldTextColor( aStyleSettings.GetWindowTextColor() );

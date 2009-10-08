@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: attrlistimpl.hxx,v $
- * $Revision: 1.5 $
+ * $Revision: 1.5.10.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -59,10 +59,6 @@ public:
     void addAttribute( const ::rtl::OUString &sName ,
         const ::rtl::OUString &sType , const ::rtl::OUString &sValue );
     void clear();
-    void removeAttribute( const ::rtl::OUString &sName );
-    void setAttributeList( const ::com::sun::star::uno::Reference<
-            ::com::sun::star::xml::sax::XAttributeList > & );
-
 public:
     // XAttributeList
     virtual sal_Int16 SAL_CALL getLength(void)

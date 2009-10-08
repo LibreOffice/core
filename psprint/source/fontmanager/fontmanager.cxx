@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: fontmanager.cxx,v $
- * $Revision: 1.81 $
+ * $Revision: 1.81.22.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -2089,6 +2089,20 @@ void PrintFontManager::initFontsAlias()
     }
 }
 
+// code stolen from vcl's RegisterFontSubstitutors()
+// TODO: use that method once psprint gets merged into vcl
+static bool AreFCSubstitutionsEnabled()
+{
+    bool bDisableFC = false;
+#ifdef SOLARIS
+    bDisableFC = true;
+#endif
+    const char* pEnvStr = ::getenv( "SAL_DISABLE_FC_SUBST" );
+    if( pEnvStr )
+        bDisableFC = (*pEnvStr == '\0') || (*pEnvStr != '0');
+    return bDisableFC;
+}
+
 void PrintFontManager::initialize( void* pInitDisplay )
 {
     #ifdef CALLGRIND_COMPILE
@@ -2149,13 +2163,19 @@ void PrintFontManager::initialize( void* pInitDisplay )
     if( rSalPrivatePath.getLength() )
     {
         OString aPath = rtl::OUStringToOString( rSalPrivatePath, aEncoding );
+        const bool bAreFCSubstitutionsEnabled = AreFCSubstitutionsEnabled();
         sal_Int32 nIndex = 0;
         do
         {
             OString aToken = aPath.getToken( 0, ';', nIndex );
             normPath( aToken );
-        addFontconfigDir( aToken );
-        m_aFontDirectories.push_back( aToken );
+            // if registering an app-specific fontdir with fontconfig fails
+            // and fontconfig-based substitutions are enabled
+            // then trying to use these app-specific fonts doesn't make sense
+            if( m_bFontconfigSuccess && !addFontconfigDir( aToken ) )
+                if( bAreFCSubstitutionsEnabled )
+                    continue;
+            m_aFontDirectories.push_back( aToken );
             m_aPrivateFontDirectories.push_back( getDirectoryAtom( aToken, true ) );
         } while( nIndex >= 0 );
     }

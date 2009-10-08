@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: fileview.cxx,v $
- * $Revision: 1.73 $
+ * $Revision: 1.73.104.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -89,7 +89,6 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::io;
 using namespace ::com::sun::star::beans;
 using namespace ::comphelper;
-using namespace ::ucbhelper;
 using ::svt::SortingData_Impl;
 using ::svt::FolderDescriptor;
 using ::vos::TTimeValue;
@@ -463,7 +462,7 @@ void NameTranslationList::Init()
 
     try
     {
-        Content aTestContent( maTransFile.GetMainURL( INetURLObject::NO_DECODE ), Reference< XCommandEnvironment >() );
+        ::ucbhelper::Content aTestContent( maTransFile.GetMainURL( INetURLObject::NO_DECODE ), Reference< XCommandEnvironment >() );
 
         if( aTestContent.isDocument() )
         {// ... also tests the existence of maTransFile by throwing an Exception
@@ -580,8 +579,9 @@ public:
     String                  maCurrentFilter;
     Image                   maFolderImage;
     Link                    maOpenDoneLink;
+    Reference< XCommandEnvironment >    mxCmdEnv;
 
-                            SvtFileView_Impl( SvtFileView* pAntiImpl,
+    SvtFileView_Impl( SvtFileView* pAntiImpl, Reference < XCommandEnvironment > xEnv,
                                               sal_Int16 nFlags,
                                               sal_Bool bOnlyFolder );
     virtual                ~SvtFileView_Impl();
@@ -774,7 +774,7 @@ ViewTabListBox_Impl::ViewTabListBox_Impl( Window* pParentWin,
     Reference< XInteractionHandler > xInteractionHandler = Reference< XInteractionHandler > (
                xFactory->createInstance( OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.uui.InteractionHandler") ) ), UNO_QUERY );
 
-    mxCmdEnv = new CommandEnvironment( xInteractionHandler, Reference< XProgressHandler >() );
+    mxCmdEnv = new ::ucbhelper::CommandEnvironment( xInteractionHandler, Reference< XProgressHandler >() );
 
     EnableContextMenuHandling();
 }
@@ -974,7 +974,7 @@ BOOL ViewTabListBox_Impl::EditedEntry( SvLBoxEntry* pEntry,
 
     try
     {
-        Content aContent( aURL, mxCmdEnv );
+        ::ucbhelper::Content aContent( aURL, mxCmdEnv );
 
         OUString aPropName = OUString::createFromAscii( "Title" );
         Any aValue;
@@ -1084,7 +1084,7 @@ sal_Bool ViewTabListBox_Impl::Kill( const OUString& rContent )
 
     try
     {
-        Content aCnt( rContent, mxCmdEnv );
+        ::ucbhelper::Content aCnt( rContent, mxCmdEnv );
         aCnt.executeCommand( OUString::createFromAscii( "delete" ), makeAny( sal_Bool( sal_True ) ) );
     }
     catch( ::com::sun::star::ucb::CommandAbortedException& )
@@ -1119,7 +1119,11 @@ SvtFileView::SvtFileView( Window* pParent, const ResId& rResId,
     if ( bMultiSelection )
         nFlags |= FILEVIEW_MULTISELECTION;
 
-    mpImp = new SvtFileView_Impl( this, nFlags, bOnlyFolder );
+    Reference< XInteractionHandler > xInteractionHandler = Reference< XInteractionHandler > (
+        ::comphelper::getProcessServiceFactory()->createInstance( OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.uui.InteractionHandler") ) ), UNO_QUERY );
+    Reference < XCommandEnvironment > xCmdEnv = new ::ucbhelper::CommandEnvironment( xInteractionHandler, Reference< XProgressHandler >() );
+
+    mpImp = new SvtFileView_Impl( this, xCmdEnv, nFlags, bOnlyFolder );
     mpImp->mpView->ForbidEmptyText();
 
     long pTabs[] = { 5, 20, 180, 320, 400, 600 };
@@ -1138,7 +1142,10 @@ SvtFileView::SvtFileView( Window* pParent, const ResId& rResId, sal_Int8 nFlags 
 
     Control( pParent, rResId )
 {
-    mpImp = new SvtFileView_Impl( this, nFlags,
+    Reference< XInteractionHandler > xInteractionHandler = Reference< XInteractionHandler > (
+        ::comphelper::getProcessServiceFactory()->createInstance( OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.uui.InteractionHandler") ) ), UNO_QUERY );
+    Reference < XCommandEnvironment > xCmdEnv = new ::ucbhelper::CommandEnvironment( xInteractionHandler, Reference< XProgressHandler >() );
+    mpImp = new SvtFileView_Impl( this, xCmdEnv, nFlags,
                                   ( nFlags & FILEVIEW_ONLYFOLDER ) == FILEVIEW_ONLYFOLDER );
 
     if ( ( nFlags & FILEVIEW_SHOW_ALL ) == FILEVIEW_SHOW_ALL )
@@ -1286,7 +1293,7 @@ sal_Bool SvtFileView::GetParentURL( String& rParentURL ) const
     sal_Bool bRet = sal_False;
     try
     {
-        Content aCnt( mpImp->maViewURL, Reference< XCommandEnvironment > () );
+        ::ucbhelper::Content aCnt( mpImp->maViewURL, mpImp->mxCmdEnv );
         Reference< XContent > xContent( aCnt.get() );
         Reference< com::sun::star::container::XChild > xChild( xContent, UNO_QUERY );
         if ( xChild.is() )
@@ -1343,7 +1350,7 @@ sal_Bool SvtFileView::Initialize( const ::com::sun::star::uno::Reference< ::com:
     WaitObject aWaitCursor( this );
 
     mpImp->Clear();
-    Content aContent(_xContent,Reference< XCommandEnvironment >());
+    ::ucbhelper::Content aContent(_xContent, mpImp->mxCmdEnv );
     FileViewResult eResult = mpImp->GetFolderContent_Impl( FolderDescriptor( aContent ), NULL );
     OSL_ENSURE( eResult != eStillRunning, "SvtFileView::Initialize: this was expected to be synchronous!" );
     if ( eResult != eSuccess )
@@ -1745,7 +1752,7 @@ const String* NameTranslator_Impl::GetTransTableFileName() const
 // class SvtFileView_Impl
 // -----------------------------------------------------------------------
 
-SvtFileView_Impl::SvtFileView_Impl( SvtFileView* pAntiImpl, sal_Int16 nFlags, sal_Bool bOnlyFolder )
+SvtFileView_Impl::SvtFileView_Impl( SvtFileView* pAntiImpl, Reference < XCommandEnvironment > xEnv, sal_Int16 nFlags, sal_Bool bOnlyFolder )
 
     :mpAntiImpl                 ( pAntiImpl )
     ,m_eAsyncActionResult       ( ::svt::ERROR )
@@ -1761,6 +1768,7 @@ SvtFileView_Impl::SvtFileView_Impl( SvtFileView* pAntiImpl, sal_Int16 nFlags, sa
     ,mbIsFirstResort            ( sal_True )
     ,aIntlWrapper               ( ::comphelper::getProcessServiceFactory(), Application::GetSettings().GetLocale() )
     ,maFolderImage              ( SvtResId( IMG_SVT_FOLDER ) )
+    ,mxCmdEnv ( xEnv )
 
 {
     maAllFilter = String::CreateFromAscii( "*.*" );

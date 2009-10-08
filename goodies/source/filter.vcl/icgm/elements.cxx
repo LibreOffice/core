@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: elements.cxx,v $
- * $Revision: 1.6 $
+ * $Revision: 1.6.38.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -200,12 +200,12 @@ void CGMElements::Init()
     eColorModel = CM_RGB;
     nColorMaximumIndex = 63;
     int i;
-    for ( i = 0; i < 256; aColorTableEntryIs[ i++ ] = 0 );
+    for ( i = 0; i < 256; aColorTableEntryIs[ i++ ] = 0 ) ;
     aColorTable[ 0 ] = 0;
-    for ( i = 1; i < 256; aColorTable[ i++ ] = 0xffffff );
+    for ( i = 1; i < 256; aColorTable[ i++ ] = 0xffffff ) ;
     nLatestColorMaximumIndex = 63;
     aLatestColorTable[ 0 ] = 0;
-    for ( i = 1; i < 256; aLatestColorTable[ i++ ] = 0xffffff );
+    for ( i = 1; i < 256; aLatestColorTable[ i++ ] = 0xffffff ) ;
     nColorValueExtent[ 0 ] = nColorValueExtent[ 1 ] = nColorValueExtent[ 2 ] = 0;
     nColorValueExtent[ 3 ] = nColorValueExtent[ 4 ] = nColorValueExtent[ 5 ] = 255;
 

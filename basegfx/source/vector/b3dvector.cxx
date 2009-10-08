@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: b3dvector.cxx,v $
- * $Revision: 1.9 $
+ * $Revision: 1.9.4.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -99,6 +99,19 @@ namespace basegfx
         B3DVector aRes( rVec );
         return aRes*=rMat;
     }
+
+    bool areParallel( const B3DVector& rVecA, const B3DVector& rVecB )
+    {
+        // i think fastest is to compare relations, need no square or division
+        if(!fTools::equal(rVecA.getX() * rVecB.getY(), rVecA.getY() * rVecB.getX()))
+            return false;
+
+        if(!fTools::equal(rVecA.getX() * rVecB.getZ(), rVecA.getZ() * rVecB.getX()))
+            return false;
+
+        return (fTools::equal(rVecA.getY() * rVecB.getZ(), rVecA.getZ() * rVecB.getY()));
+    }
+
 } // end of namespace basegfx
 
 //////////////////////////////////////////////////////////////////////////////

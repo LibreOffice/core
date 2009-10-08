@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: ctypeitm.cxx,v $
- * $Revision: 1.7 $
+ * $Revision: 1.7.136.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -200,7 +200,7 @@ SfxItemPresentation CntContentTypeItem::GetPresentation(
 }
 
 //----------------------------------------------------------------------------
-const INetContentType CntContentTypeItem::GetEnumValue() const
+INetContentType CntContentTypeItem::GetEnumValue() const
 {
     if ( _eType == CONTENT_TYPE_NOT_INIT )
     {

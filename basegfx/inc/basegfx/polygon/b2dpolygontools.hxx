@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: b2dpolygontools.hxx,v $
- * $Revision: 1.24 $
+ * $Revision: 1.24.4.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -242,8 +242,9 @@ namespace basegfx
         bool isInEpsilonRange(const B2DPoint& rEdgeStart, const B2DPoint& rEdgeEnd, const B2DPoint& rTestPosition, double fDistance);
 
         // test if point is inside epsilon-range around the given Polygon. Can be used
-        // for HitTesting. The epsilon-range is defined to be the tube around the polygon
-        // with distance fDistance and rounded edges (start and end point).
+        // for HitTesting. The epsilon-range is defined to be the rectangle centered
+        // to the given edge, using height 2 x fDistance, and the circle around both points
+        // with radius fDistance.
         bool isInEpsilonRange(const B2DPolygon& rCandidate, const B2DPoint& rTestPosition, double fDistance);
 
         /** Create a polygon from a rectangle.
@@ -379,7 +380,7 @@ namespace basegfx
 
         /** Create an unit ellipse polygon with the given angles, from start to end
          */
-        B2DPolygon createPolygonFromEllipseSegment( const B2DPoint& rCenter, double fRadiusX, double fRadiusY, double fStart, double fEnd );
+        B2DPolygon createPolygonFromEllipseSegment( const B2DPoint& rCenter, double fRadiusX, double fRadiusY, double   fStart, double fEnd );
 
         B2DPolygon createPolygonFromUnitEllipseSegment( double fStart, double fEnd );
 

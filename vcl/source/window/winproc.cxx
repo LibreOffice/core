@@ -2289,6 +2289,78 @@ static long ImplHandleShowDialog( Window* pWindow, int nDialogId )
 
 // -----------------------------------------------------------------------
 
+static void ImplHandleSurroundingTextRequest( Window *pWindow,
+                          XubString& rText,
+                          Selection &rSelRange )
+{
+    Window* pChild = ImplGetKeyInputWindow( pWindow );
+
+    if ( !pChild )
+    {
+    rText = XubString::EmptyString();
+    rSelRange.setMin( 0 );
+    rSelRange.setMax( 0 );
+    }
+    else
+    {
+
+    rText = pChild->GetSurroundingText();
+    Selection aSel = pChild->GetSurroundingTextSelection();
+    rSelRange.setMin( aSel.Min() );
+    rSelRange.setMax( aSel.Max() );
+    }
+}
+
+// -----------------------------------------------------------------------
+
+static void ImplHandleSalSurroundingTextRequest( Window *pWindow,
+                         SalSurroundingTextRequestEvent *pEvt )
+{
+    Selection aSelRange;
+    ImplHandleSurroundingTextRequest( pWindow, pEvt->maText, aSelRange );
+
+    aSelRange.Justify();
+
+    if( aSelRange.Min() < 0 )
+        pEvt->mnStart = 0;
+    else if( aSelRange.Min() > pEvt->maText.Len() )
+        pEvt->mnStart = pEvt->maText.Len();
+    else
+        pEvt->mnStart = aSelRange.Min();
+
+    if( aSelRange.Max() < 0 )
+        pEvt->mnStart = 0;
+    else if( aSelRange.Max() > pEvt->maText.Len() )
+        pEvt->mnEnd = pEvt->maText.Len();
+    else
+        pEvt->mnEnd = aSelRange.Max();
+}
+
+// -----------------------------------------------------------------------
+
+static void ImplHandleSurroundingTextSelectionChange( Window *pWindow,
+                              ULONG nStart,
+                              ULONG nEnd )
+{
+    Window* pChild = ImplGetKeyInputWindow( pWindow );
+    if( pChild )
+    {
+        CommandSelectionChangeData data( nStart, nEnd );
+        ImplCallCommand( pChild, COMMAND_SELECTIONCHANGE, &data );
+    }
+}
+
+// -----------------------------------------------------------------------
+
+static void ImplHandleStartReconversion( Window *pWindow )
+{
+    Window* pChild = ImplGetKeyInputWindow( pWindow );
+    if( pChild )
+    ImplCallCommand( pChild, COMMAND_PREPARERECONVERSION );
+}
+
+// -----------------------------------------------------------------------
+
 long ImplWindowFrameProc( Window* pWindow, SalFrame* /*pFrame*/,
                           USHORT nEvent, const void* pEvent )
 {
@@ -2521,7 +2593,20 @@ long ImplWindowFrameProc( Window* pWindow, SalFrame* /*pFrame*/,
                 nRet = ImplHandleShowDialog( pWindow, nDialogID );
             }
             break;
-
+        case SALEVENT_SURROUNDINGTEXTREQUEST:
+            ImplHandleSalSurroundingTextRequest( pWindow, (SalSurroundingTextRequestEvent*)pEvent );
+            break;
+        case SALEVENT_SURROUNDINGTEXTSELECTIONCHANGE:
+        {
+            SalSurroundingTextSelectionChangeEvent* pEvt
+             = (SalSurroundingTextSelectionChangeEvent*)pEvent;
+            ImplHandleSurroundingTextSelectionChange( pWindow,
+                              pEvt->mnStart,
+                              pEvt->mnEnd );
+        }
+        case SALEVENT_STARTRECONVERSION:
+            ImplHandleStartReconversion( pWindow );
+            break;
 #ifdef DBG_UTIL
         default:
             DBG_ERROR1( "ImplWindowFrameProc(): unknown event (%lu)", (ULONG)nEvent );

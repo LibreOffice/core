@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: b3dpolypolygontools.cxx,v $
- * $Revision: 1.8 $
+ * $Revision: 1.8.4.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -494,6 +494,33 @@ namespace basegfx
             }
 
             return aRetval;
+        }
+
+        bool isInside(const B3DPolyPolygon& rCandidate, const B3DPoint& rPoint, bool bWithBorder)
+        {
+            const sal_uInt32 nPolygonCount(rCandidate.count());
+
+            if(1L == nPolygonCount)
+            {
+                return isInside(rCandidate.getB3DPolygon(0), rPoint, bWithBorder);
+            }
+            else
+            {
+                sal_Int32 nInsideCount(0);
+
+                for(sal_uInt32 a(0); a < nPolygonCount; a++)
+                {
+                    const B3DPolygon aPolygon(rCandidate.getB3DPolygon(a));
+                    const bool bInside(isInside(aPolygon, rPoint, bWithBorder));
+
+                    if(bInside)
+                    {
+                        nInsideCount++;
+                    }
+                }
+
+                return (nInsideCount % 2L);
+            }
         }
 
         //////////////////////////////////////////////////////////////////////

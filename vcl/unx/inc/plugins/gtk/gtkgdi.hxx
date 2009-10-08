@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: gtkgdi.hxx,v $
- * $Revision: 1.15 $
+ * $Revision: 1.15.50.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -167,6 +167,11 @@ protected:
                             ControlState nState, const ImplControlValue& aValue,
                             SalControlHandle& rControlHandle, const OUString& rCaption );
     BOOL NWPaintGTKProgress( GdkDrawable* gdkDrawable, ControlType nType, ControlPart nPart,
+                            const Rectangle& rControlRectangle,
+                            const clipList& rClipList,
+                            ControlState nState, const ImplControlValue& aValue,
+                            SalControlHandle& rControlHandle, const OUString& rCaption );
+    BOOL NWPaintGTKListNode( GdkDrawable* gdkDrawable, ControlType nType, ControlPart nPart,
                             const Rectangle& rControlRectangle,
                             const clipList& rClipList,
                             ControlState nState, const ImplControlValue& aValue,

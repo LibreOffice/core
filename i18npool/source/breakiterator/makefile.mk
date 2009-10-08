@@ -8,7 +8,7 @@
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.17 $
+# $Revision: 1.17.16.1 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -57,7 +57,6 @@ SLOFILES=   \
         $(SLO)$/breakiterator_cjk.obj \
         $(SLO)$/breakiterator_ctl.obj \
         $(SLO)$/breakiterator_th.obj \
-        $(SLO)$/breakiterator_hi.obj \
         $(SLO)$/breakiterator_unicode.obj \
         $(SLO)$/xdictionary.obj \
         $(subst,$(MISC)$/,$(SLO)$/ $(MY_MISC_CXXFILES:s/.c/.obj/))

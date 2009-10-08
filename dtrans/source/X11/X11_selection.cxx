@@ -889,6 +889,7 @@ OUString SelectionManager::convertTypeFromNative( Atom nType, Atom selection, in
 
 bool SelectionManager::getPasteData( Atom selection, Atom type, Sequence< sal_Int8 >& rData )
 {
+    ResettableMutexGuard aGuard(m_aMutex);
     ::std::hash_map< Atom, Selection* >::iterator it;
     bool bSuccess = false;
 
@@ -901,44 +902,40 @@ bool SelectionManager::getPasteData( Atom selection, Atom type, Sequence< sal_In
              );
 #endif
 
+    if( ! m_pDisplay )
+        return false;
+
+    it = m_aSelections.find( selection );
+    if( it == m_aSelections.end() )
+        return false;
+
+    Window aSelectionOwner = XGetSelectionOwner( m_pDisplay, selection );
+    if( aSelectionOwner == None )
+        return false;
+    if( aSelectionOwner == m_aWindow )
     {
-        MutexGuard aGuard(m_aMutex);
-
-        if( ! m_pDisplay )
-            return false;
-
-        it = m_aSelections.find( selection );
-        if( it == m_aSelections.end() )
-            return false;
-
-        Window aSelectionOwner = XGetSelectionOwner( m_pDisplay, selection );
-        if( aSelectionOwner == None )
-            return false;
-        if( aSelectionOwner == m_aWindow )
-        {
-            // probably bad timing led us here
+        // probably bad timing led us here
 #if OSL_DEBUG_LEVEL > 1
-            fprintf( stderr, "Innere Nabelschau\n" );
+        fprintf( stderr, "Innere Nabelschau\n" );
 #endif
-            return false;
-        }
-
-        // ICCCM recommends to destroy property before convert request unless
-        // parameters are transported; we do only in case of MULTIPLE,
-        // so destroy property unless target is MULTIPLE
-        if( type != m_nMULTIPLEAtom )
-            XDeleteProperty( m_pDisplay, m_aWindow, selection );
-
-        XConvertSelection( m_pDisplay, selection, type, selection, m_aWindow, selection == m_nXdndSelection ? m_nDropTime : CurrentTime );
-        it->second->m_eState            = Selection::WaitingForResponse;
-        it->second->m_aRequestedType    = type;
-        it->second->m_aData             = Sequence< sal_Int8 >();
-        it->second->m_aDataArrived.reset();
-        // really start the request; if we don't flush the
-        // queue the request won't leave it because there are no more
-        // X calls after this until the data arrived or timeout
-        XFlush( m_pDisplay );
+        return false;
     }
+
+    // ICCCM recommends to destroy property before convert request unless
+    // parameters are transported; we do only in case of MULTIPLE,
+    // so destroy property unless target is MULTIPLE
+    if( type != m_nMULTIPLEAtom )
+        XDeleteProperty( m_pDisplay, m_aWindow, selection );
+
+    XConvertSelection( m_pDisplay, selection, type, selection, m_aWindow, selection == m_nXdndSelection ? m_nDropTime : CurrentTime );
+    it->second->m_eState            = Selection::WaitingForResponse;
+    it->second->m_aRequestedType    = type;
+    it->second->m_aData             = Sequence< sal_Int8 >();
+    it->second->m_aDataArrived.reset();
+    // really start the request; if we don't flush the
+    // queue the request won't leave it because there are no more
+    // X calls after this until the data arrived or timeout
+    XFlush( m_pDisplay );
 
     // do a reschedule
     struct timeval tv_last, tv_current;
@@ -950,7 +947,6 @@ bool SelectionManager::getPasteData( Atom selection, Atom type, Sequence< sal_In
     {
         bool bAdjustTime = false;
         {
-            ClearableMutexGuard aGuard(m_aMutex);
             bool bHandle = false;
 
             if( XCheckTypedEvent( m_pDisplay,
@@ -995,12 +991,15 @@ bool SelectionManager::getPasteData( Atom selection, Atom type, Sequence< sal_In
                 TimeValue aTVal;
                 aTVal.Seconds = 0;
                 aTVal.Nanosec = 100000000;
+                aGuard.clear();
                 osl_waitThread( &aTVal );
+                aGuard.reset();
             }
             if( bHandle )
             {
                 aGuard.clear();
                 handleXEvent( aEvent );
+                aGuard.reset();
             }
         }
         gettimeofday( &tv_current, NULL );

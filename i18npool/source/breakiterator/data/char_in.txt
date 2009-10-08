@@ -17,8 +17,10 @@ $CR = \r;
 $LF = \n;
 $Control    = [[:Zl:] [:Zp:] [:Cc:] [:Cf:]];
 
-$TAMIL = [ \u0bc1-\u0bc2 \u0bc6-\u0bc8 \u0bca-\u0bcc ];
-$Extend     = [[:Grapheme_Extend = TRUE:] $TAMIL]; 
+# add Japanese Half Width voicing marks to $Extend
+$VoiceMarks = [\uff9e\uff9f];
+$cmcextend = [ \u0903 \u093e-\u0940 \u0949-\u094C \u09bf-\u09c0 \u09c7-\u09c8 \u09cb-\u09cc \u0bc1-\u0bc2 \u0bc6-\u0bc8 \u0bca-\u0bcc \u0c01-\u0c03 \u0c41-\u0c44];
+$Extend     = [[:Grapheme_Extend = TRUE:] $VoiceMarks $cmcextend]; 
 
 #
 # Korean Syllable Definitions

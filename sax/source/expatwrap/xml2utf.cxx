@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: xml2utf.cxx,v $
- * $Revision: 1.11 $
+ * $Revision: 1.11.10.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -372,12 +372,6 @@ Text2UnicodeConverter::Text2UnicodeConverter( const OString &sEncoding )
     }
 }
 
-Text2UnicodeConverter::Text2UnicodeConverter( rtl_TextEncoding encoding )
-{
-    init( encoding );
-}
-
-
 Text2UnicodeConverter::~Text2UnicodeConverter()
 {
     if( m_bInitialized )
@@ -470,19 +464,6 @@ Sequence<sal_Unicode> Text2UnicodeConverter::convert( const Sequence<sal_Int8> &
 // Unicode2TextConverter
 //
 //----------------------------------------------
-Unicode2TextConverter::Unicode2TextConverter( const OString &sEncoding )
-{
-    rtl_TextEncoding encoding = rtl_getTextEncodingFromMimeCharset( sEncoding.getStr() );
-    if( RTL_TEXTENCODING_DONTKNOW == encoding ) {
-        m_bCanContinue = sal_False;
-        m_bInitialized = sal_False;
-    }
-    else {
-        init( encoding );
-    }
-
-}
-
 Unicode2TextConverter::Unicode2TextConverter( rtl_TextEncoding encoding )
 {
     init( encoding );

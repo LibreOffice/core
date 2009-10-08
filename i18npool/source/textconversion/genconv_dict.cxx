@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: genconv_dict.cxx,v $
- * $Revision: 1.12 $
+ * $Revision: 1.12.22.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -178,7 +178,7 @@ void make_hhc_char(FILE *sfp, FILE *cfp)
     // create function to return arrays
     fprintf (cfp, "\tconst sal_Unicode* getHangul2HanjaData() { return Hangul2HanjaData; }\n");
     fprintf (cfp, "\tconst com::sun::star::i18n::Hangul_Index* getHangul2HanjaIndex() { return Hangul2HanjaIndex; }\n");
-    fprintf (cfp, "\tconst sal_Int16 getHangul2HanjaIndexCount() { return sizeof(Hangul2HanjaIndex) / sizeof(com::sun::star::i18n::Hangul_Index); }\n");
+    fprintf (cfp, "\tsal_Int16 getHangul2HanjaIndexCount() { return sizeof(Hangul2HanjaIndex) / sizeof(com::sun::star::i18n::Hangul_Index); }\n");
     fprintf (cfp, "\tconst sal_uInt16* getHanja2HangulIndex() { return Hanja2HangulIndex; }\n");
     fprintf (cfp, "\tconst sal_Unicode* getHanja2HangulData() { return Hanja2HangulData; }\n");
 }

@@ -201,11 +201,6 @@ void PspGraphics::GetResolution( sal_Int32 &rDPIX, sal_Int32 &rDPIY )
     }
 }
 
-void PspGraphics::GetScreenFontResolution( sal_Int32 &rDPIX, sal_Int32 &rDPIY )
-{
-    m_pPrinterGfx->GetScreenFontResolution (rDPIX, rDPIY);
-}
-
 USHORT PspGraphics::GetBitCount()
 {
     return m_pPrinterGfx->GetBitCount();

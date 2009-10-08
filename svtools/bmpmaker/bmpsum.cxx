@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: bmpsum.cxx,v $
- * $Revision: 1.13 $
+ * $Revision: 1.13.150.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -31,8 +31,8 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_svtools.hxx"
 
-#include <stdio.h>
-#include <signal.h>
+#include <cstdio>
+#include <csignal>
 #include <vector>
 #include <set>
 #include <map>
@@ -46,7 +46,6 @@
 #include <vcl/pngread.hxx>
 
 #include "svtools/solar.hrc"
-#include "filedlg.hxx"
 
 #define EXIT_NOERROR        0x00000000
 #define EXIT_INVALIDFILE    0x00000001
@@ -73,13 +72,13 @@ private:
     void            ShowUsage();
     void            Message( const String& rText, BYTE cExitCode );
 
-    sal_uInt64      GetCRC( Bitmap& rBmp );
+    sal_uInt64      GetCRC( const BitmapEx& rBmpEx );
 
     void            ProcessFile( const String& rBmpFileName );
     void            ProcessFileList( const String& rInFileList, const String& rOutFileList, const String& rOutPath );
 
 public:
-
+//
                     BmpSum();
                     ~BmpSum();
 
@@ -220,11 +219,20 @@ int BmpSum::Start( const ::std::vector< String >& rArgs )
 
 // -----------------------------------------------------------------------------
 
-sal_uInt64 BmpSum::GetCRC( Bitmap& rBmp )
+sal_uInt64 BmpSum::GetCRC( const BitmapEx& rBmpEx )
 {
-    BitmapReadAccess* pRAcc = rBmp.AcquireReadAccess();
-    sal_uInt64        nRet = 0;
-    sal_uInt32        nCrc = 0;
+    Bitmap              aBmp( rBmpEx.GetBitmap() );
+    BitmapReadAccess*   pRAcc = aBmp.AcquireReadAccess();
+    AlphaMask           aAlpha;
+    BitmapReadAccess*   pAAcc = NULL;
+    sal_uInt64          nRet = 0;
+    sal_uInt32          nCrc = 0;
+
+    if( rBmpEx.IsTransparent() )
+    {
+        aAlpha = rBmpEx.GetAlpha();
+        pAAcc = aAlpha.AcquireReadAccess();
+    }
 
     if( pRAcc && pRAcc->Width() && pRAcc->Height() )
     {
@@ -244,6 +252,20 @@ sal_uInt64 BmpSum::GetCRC( Bitmap& rBmp )
 
                 UInt32ToSVBT32( aCol.GetBlue(), aBT32 );
                 nCrc = rtl_crc32( nCrc, aBT32, 4 );
+
+                if( pAAcc )
+                {
+                    const BitmapColor aMaskCol( pAAcc->GetColor( nY, nX ) );
+
+                    UInt32ToSVBT32( aMaskCol.GetRed(), aBT32 );
+                    nCrc = rtl_crc32( nCrc, aBT32, 4 );
+
+                    UInt32ToSVBT32( aMaskCol.GetGreen(), aBT32 );
+                    nCrc = rtl_crc32( nCrc, aBT32, 4 );
+
+                    UInt32ToSVBT32( aMaskCol.GetBlue(), aBT32 );
+                    nCrc = rtl_crc32( nCrc, aBT32, 4 );
+                }
             }
         }
 
@@ -252,7 +274,10 @@ sal_uInt64 BmpSum::GetCRC( Bitmap& rBmp )
                ( (sal_uInt64) nCrc );
     }
 
-    rBmp.ReleaseAccess( pRAcc );
+    if( pAAcc )
+        aAlpha.ReleaseAccess( pAAcc);
+
+    aBmp.ReleaseAccess( pRAcc );
 
     return nRet;
 }
@@ -265,13 +290,13 @@ void BmpSum::ProcessFile( const String& rBmpFileName )
 
     if( aIStm.IsOpen() )
     {
-        Bitmap aBmp;
+        BitmapEx aBmpEx;
 
-        aIStm >> aBmp;
+        aIStm >> aBmpEx;
 
-        if( !aBmp.IsEmpty() )
+        if( !aBmpEx.IsEmpty() )
         {
-            fprintf( stdout, "%" SAL_PRIuUINT64 "\r\n", GetCRC( aBmp ) );
+            fprintf( stdout, "%" SAL_PRIuUINT64 "\r\n", GetCRC( aBmpEx ) );
         }
         else
         {
@@ -280,11 +305,11 @@ void BmpSum::ProcessFile( const String& rBmpFileName )
 
                ::vcl::PNGReader aPngReader( aIStm );
 
-            aBmp = aPngReader.Read().GetBitmap();
+            aBmpEx = aPngReader.Read();
 
-              if( !aBmp.IsEmpty() )
+              if( !aBmpEx.IsEmpty() )
             {
-                fprintf( stdout, "%" SAL_PRIuUINT64 "\r\n", GetCRC( aBmp ) );
+                fprintf( stdout, "%" SAL_PRIuUINT64 "\r\n", GetCRC( aBmpEx ) );
             }
             else
                 Message( String( RTL_CONSTASCII_USTRINGPARAM( "file not valid" ) ), EXIT_INVALIDFILE );
@@ -365,12 +390,12 @@ void BmpSum::ProcessFileList( const String& rInFileList,
 
             if( aBmpStm.IsOpen() )
             {
-                Bitmap aBmp;
+                BitmapEx aBmpEx;
 
-                aBmpStm >> aBmp;
+                aBmpStm >> aBmpEx;
 
-                if( !aBmp.IsEmpty() )
-                    nCRC = GetCRC( aBmp );
+                if( !aBmpEx.IsEmpty() )
+                    nCRC = GetCRC( aBmpEx );
                 else
                 {
                     aBmpStm.ResetError();
@@ -378,10 +403,10 @@ void BmpSum::ProcessFileList( const String& rInFileList,
 
                        ::vcl::PNGReader aPngReader( aBmpStm );
 
-                    aBmp = aPngReader.Read().GetBitmap();
+                    aBmpEx = aPngReader.Read();
 
-                      if( !aBmp.IsEmpty() )
-                           nCRC = GetCRC( aBmp );
+                      if( !aBmpEx.IsEmpty() )
+                           nCRC = GetCRC( aBmpEx );
 
                     else
                         fprintf( stderr, "%s could not be opened\n", aStr.GetBuffer() );
@@ -467,6 +492,13 @@ void BmpSum::ProcessFileList( const String& rInFileList,
 
 int main( int nArgCount, char* ppArgs[] )
 {
+#ifdef UNX
+    static char aDisplayVar[ 1024 ];
+
+    strcpy( aDisplayVar, "DISPLAY=" );
+    putenv( aDisplayVar );
+#endif
+
     ::std::vector< String > aArgs;
     BmpSum                  aBmpSum;
 

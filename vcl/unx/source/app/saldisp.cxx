@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: saldisp.cxx,v $
- * $Revision: 1.101 $
+ * $Revision: 1.101.30.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -95,7 +95,6 @@ Status XineramaGetInfo(Display*, int, XRectangle*, unsigned char*, int*);
 #include <vcl/keycodes.hxx>
 #include <vcl/salbtype.hxx>
 #include <salbmp.h>
-#include <salogl.h>
 #ifndef _OSL_THREADMUTEX_H_
 #include <osl/mutex.h>
 #endif
@@ -494,8 +493,6 @@ BOOL SalDisplay::BestVisual( Display     *pDisplay,
         pWeight[ i ] = bUsable ? nTrueColor*pVInfos[i].depth : -1024;
         pWeight[ i ] -= pVInfos[ i ].visualid;
     }
-
-    X11SalOpenGL::MakeVisualWeights( pDisplay, pVInfos, pWeight, nVisuals );
 
     int nBestVisual = 0;
     int nBestWeight = -1024;
@@ -2607,31 +2604,6 @@ void SalDisplay::PrintInfo() const
              GetVisual(m_nDefaultScreen).GetDepth(),
              VisualClassName[ GetVisual(m_nDefaultScreen).GetClass() ],
              sal::static_int_cast< unsigned int >(GetVisual(m_nDefaultScreen).GetVisualId()) );
-}
-
-void SalDisplay::GetScreenFontResolution( sal_Int32& rDPIX, sal_Int32& rDPIY ) const
-{
-    rDPIX = aResolution_.A();
-    rDPIY = aResolution_.B();
-    if( mbExactResolution )
-        return;
-
-    int   nThreshold;
-    if (m_aScreens[m_nDefaultScreen].m_aSize.Height() <= 600)
-        nThreshold =  96;
-    else if (m_aScreens[m_nDefaultScreen].m_aSize.Height() <= 768)
-        nThreshold = 108;
-    else
-        nThreshold = 120;
-
-    if( rDPIY < nThreshold )
-    {
-        rDPIX = Divide( rDPIX * nThreshold, rDPIY );
-        rDPIY = nThreshold;
-    }
-
-    // #i18602# always equalize x- and y-resolution
-    rDPIX = rDPIY;
 }
 
 void SalDisplay::InitXinerama()

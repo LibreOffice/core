@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: fontconfig.cxx,v $
- * $Revision: 1.30 $
+ * $Revision: 1.30.24.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -91,7 +91,6 @@ using namespace rtl;
 class FontCfgWrapper
 {
     oslModule       m_pLib;
-    FcConfig*       m_pDefConfig;
     FcFontSet*      m_pOutlineSet;
 
     FcBool          (*m_pFcInit)();
@@ -140,7 +139,6 @@ public:
     bool isValid() const
     { return m_pLib != NULL;}
 
-    FcConfig* getDefConfig() { return m_pDefConfig; }
     FcFontSet* getFontSet();
 
     FcBool FcInit()
@@ -252,7 +250,6 @@ oslGenericFunction FontCfgWrapper::loadSymbol( const char* pSymbol )
 
 FontCfgWrapper::FontCfgWrapper()
         : m_pLib( NULL ),
-          m_pDefConfig( NULL ),
           m_pOutlineSet( NULL )
 {
      OUString aLib( RTL_CONSTASCII_USTRINGPARAM( "libfontconfig.so.1" ) );
@@ -379,8 +376,7 @@ FontCfgWrapper::FontCfgWrapper()
 
 
     FcInit();
-    m_pDefConfig = FcConfigGetCurrent();
-    if( ! m_pDefConfig )
+    if( ! FcConfigGetCurrent() )
     {
         osl_unloadModule( (oslModule)m_pLib );
         m_pLib = NULL;
@@ -394,7 +390,7 @@ void FontCfgWrapper::addFontSet( FcSetName eSetName )
       add only acceptable outlined fonts to our config,
       for future fontconfig use
     */
-    FcFontSet* pOrig = FcConfigGetFonts( getDefConfig(), eSetName );
+    FcFontSet* pOrig = FcConfigGetFonts( FcConfigGetCurrent(), eSetName );
     if( !pOrig )
         return;
 
@@ -788,12 +784,13 @@ bool PrintFontManager::addFontconfigDir( const rtl::OString& rDirName )
     if( ! rWrapper.isValid() )
         return false;
 
-    // libfontcconfig's AppFontAddDir was broken in version 2.4.0
+    // workaround for a stability problems in older FC versions
+    // when handling application specifc fonts
     const int nVersion = rWrapper.FcGetVersion();
     if( nVersion <= 20400 )
-    return false;
+        return false;
     const char* pDirName = (const char*)rDirName.getStr();
-    bool bRet = (rWrapper.FcConfigAppFontAddDir( rWrapper.getDefConfig(), (FcChar8*)pDirName ) == FcTrue);
+    bool bRet = (rWrapper.FcConfigAppFontAddDir( rWrapper.FcConfigGetCurrent(), (FcChar8*)pDirName ) == FcTrue);
 
 #if OSL_DEBUG_LEVEL > 1
     fprintf( stderr, "FcConfigAppFontAddDir( \"%s\") => %d\n", pDirName, bRet );
@@ -913,13 +910,13 @@ rtl::OUString PrintFontManager::Substitute(const rtl::OUString& rFontName,
     addtopattern(rWrapper, pPattern, eItalic, eWeight, eWidth, ePitch);
 
     // query fontconfig for a substitute
-    rWrapper.FcConfigSubstitute( rWrapper.getDefConfig(), pPattern, FcMatchPattern );
+    rWrapper.FcConfigSubstitute( rWrapper.FcConfigGetCurrent(), pPattern, FcMatchPattern );
     rWrapper.FcDefaultSubstitute( pPattern );
 
     // process the result of the fontconfig query
     FcResult eResult = FcResultNoMatch;
     FcFontSet* pFontSet = rWrapper.getFontSet();
-    FcPattern* pResult = rWrapper.FcFontSetMatch( rWrapper.getDefConfig(), &pFontSet, 1, pPattern, &eResult );
+    FcPattern* pResult = rWrapper.FcFontSetMatch( rWrapper.FcConfigGetCurrent(), &pFontSet, 1, pPattern, &eResult );
     rWrapper.FcPatternDestroy( pPattern );
 
     FcFontSet*  pSet = NULL;
@@ -981,7 +978,7 @@ bool PrintFontManager::matchFont( FastPrintFontInfo& rInfo, const com::sun::star
     if( ! rWrapper.isValid() )
         return false;
 
-    FcConfig* pConfig = rWrapper.getDefConfig();
+    FcConfig* pConfig = rWrapper.FcConfigGetCurrent();
     FcPattern* pPattern = rWrapper.FcPatternCreate();
 
     OString aLangAttrib;

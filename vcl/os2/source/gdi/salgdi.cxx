@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: salgdi.cxx,v $
- * $Revision: 1.8 $
+ * $Revision: 1.8.6.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -163,14 +163,6 @@ void Os2SalGraphics::GetResolution( long& rDPIX, long& rDPIY )
     // since OOo asks for DPI, I will query FONT_RES, which seems to be
     // more correct than _RESOLUTION fields (on my wide screen lcd)
     // and does not require conversion
-    DevQueryCaps( mhDC, CAPS_HORIZONTAL_FONT_RES, 1, &rDPIX );
-    DevQueryCaps( mhDC, CAPS_VERTICAL_FONT_RES, 1, &rDPIY );
-}
-
-// -----------------------------------------------------------------------
-
-void Os2SalGraphics::GetScreenFontResolution( long& rDPIX, long& rDPIY )
-{
     DevQueryCaps( mhDC, CAPS_HORIZONTAL_FONT_RES, 1, &rDPIX );
     DevQueryCaps( mhDC, CAPS_VERTICAL_FONT_RES, 1, &rDPIY );
 }

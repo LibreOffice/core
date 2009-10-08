@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: cow_wrapper.hxx,v $
- * $Revision: 1.6 $
+ * $Revision: 1.6.10.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -205,6 +205,7 @@ void cow_wrapper_client::queryUnmodified() const
     public:
         typedef T        value_type;
         typedef T*       pointer;
+        typedef const T* const_pointer;
         typedef MTPolicy mt_policy;
 
         /** Default-construct wrapped type instance
@@ -278,11 +279,11 @@ void cow_wrapper_client::queryUnmodified() const
 
         pointer           operator->()       { return &make_unique(); }
         value_type&       operator*()        { return make_unique(); }
-        const pointer     operator->() const { return &m_pimpl->m_value; }
+        const_pointer     operator->() const { return &m_pimpl->m_value; }
         const value_type& operator*()  const { return m_pimpl->m_value; }
 
         pointer           get()       { return &make_unique(); }
-        const pointer     get() const { return &m_pimpl->m_value; }
+        const_pointer     get() const { return &m_pimpl->m_value; }
 
         /// true, if both cow_wrapper internally share the same object
         bool              same_object( const cow_wrapper& rOther ) const

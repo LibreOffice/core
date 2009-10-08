@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: urihelper.cxx,v $
- * $Revision: 1.22 $
+ * $Revision: 1.22.136.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -661,17 +661,17 @@ URIHelper::FindFirstURLInText(UniString const & rText,
                                                                      rEnd));
                 if (eScheme == INET_PROT_FILE) // 2nd
                 {
-                    while (rText.GetChar(i++) != ':');
+                    while (rText.GetChar(i++) != ':') ;
                     xub_StrLen nPrefixEnd = i;
                     xub_StrLen nUriEnd = i;
                     while (i != rEnd
                            && checkWChar(rCharClass, rText, &i, &nUriEnd, true,
-                                         true));
+                                         true)) ;
                     if (i != nPrefixEnd && rText.GetChar(i) == '#')
                     {
                         ++i;
                         while (i != rEnd
-                               && checkWChar(rCharClass, rText, &i, &nUriEnd));
+                               && checkWChar(rCharClass, rText, &i, &nUriEnd)) ;
                     }
                     if (nUriEnd != nPrefixEnd
                         && isBoundary1(rCharClass, rText, nUriEnd, rEnd))
@@ -691,16 +691,16 @@ URIHelper::FindFirstURLInText(UniString const & rText,
                 }
                 else if (eScheme != INET_PROT_NOT_VALID) // 1st
                 {
-                    while (rText.GetChar(i++) != ':');
+                    while (rText.GetChar(i++) != ':') ;
                     xub_StrLen nPrefixEnd = i;
                     xub_StrLen nUriEnd = i;
                     while (i != rEnd
-                           && checkWChar(rCharClass, rText, &i, &nUriEnd));
+                           && checkWChar(rCharClass, rText, &i, &nUriEnd)) ;
                     if (i != nPrefixEnd && rText.GetChar(i) == '#')
                     {
                         ++i;
                         while (i != rEnd
-                               && checkWChar(rCharClass, rText, &i, &nUriEnd));
+                               && checkWChar(rCharClass, rText, &i, &nUriEnd)) ;
                     }
                     if (nUriEnd != nPrefixEnd
                         && (isBoundary1(rCharClass, rText, nUriEnd, rEnd)
@@ -745,13 +745,13 @@ URIHelper::FindFirstURLInText(UniString const & rText,
                     {
                         nUriEnd = ++i;
                         while (i != rEnd
-                               && checkWChar(rCharClass, rText, &i, &nUriEnd));
+                               && checkWChar(rCharClass, rText, &i, &nUriEnd)) ;
                     }
                     if (i != rEnd && rText.GetChar(i) == '#')
                     {
                         ++i;
                         while (i != rEnd
-                               && checkWChar(rCharClass, rText, &i, &nUriEnd));
+                               && checkWChar(rCharClass, rText, &i, &nUriEnd)) ;
                     }
                     if (isBoundary1(rCharClass, rText, nUriEnd, rEnd)
                         || rText.GetChar(nUriEnd) == '\\')
@@ -778,7 +778,7 @@ URIHelper::FindFirstURLInText(UniString const & rText,
                     i = nPos + 3;
                     xub_StrLen nUriEnd = i;
                     while (i != rEnd
-                           && checkWChar(rCharClass, rText, &i, &nUriEnd));
+                           && checkWChar(rCharClass, rText, &i, &nUriEnd)) ;
                     if (isBoundary1(rCharClass, rText, nUriEnd, rEnd))
                     {
                         INetURLObject aUri(UniString(rText, nPos,
@@ -808,7 +808,7 @@ URIHelper::FindFirstURLInText(UniString const & rText,
                     xub_StrLen nUriEnd = ++i;
                     while (i != rEnd
                            && checkWChar(rCharClass, rText, &i, &nUriEnd,
-                                         true));
+                                         true)) ;
                     if (isBoundary1(rCharClass, rText, nUriEnd, rEnd))
                     {
                         INetURLObject aUri(UniString(rText, nPos,

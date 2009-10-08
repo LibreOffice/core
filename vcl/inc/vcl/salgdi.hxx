@@ -191,9 +191,6 @@ public:
 
     // get device resolution
     virtual void            GetResolution( sal_Int32& rDPIX, sal_Int32& rDPIY ) = 0;
-    // get resolution for fonts (an implementations specific adjustment,
-    // ideally would be the same as the Resolution)
-    virtual void            GetScreenFontResolution( sal_Int32& rDPIX, sal_Int32& rDPIY ) = 0;
     // get the depth of the device
     virtual USHORT          GetBitCount() = 0;
     // get the width of the device

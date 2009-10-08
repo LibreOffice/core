@@ -140,7 +140,9 @@ void SvtUndoOptions_Impl::Load()
                         if ( pValues[nProp] >>= nTemp )
                             nUndoCount = nTemp;
                         else
+                        {
                             DBG_ERROR( "Wrong Type!" );
+                        }
                         break;
                     }
 

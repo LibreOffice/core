@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: LocaleNode.hxx,v $
- * $Revision: 1.14 $
+ * $Revision: 1.14.22.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -127,7 +127,7 @@ public:
     inline const OUString& getName() const { return aName; };
     inline const OUString& getValue() const { return aValue; };
     inline const Attr* getAttr() const { return xAttribs; };
-    inline const sal_Int32 getNumberOfChildren () const { return nChildren; };
+    inline sal_Int32 getNumberOfChildren () const { return nChildren; };
     inline  LocaleNode * getChildAt (sal_Int32 idx) const { return children[idx] ; };
     const LocaleNode * findNode ( const sal_Char *name) const;
     void print () const;

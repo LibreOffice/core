@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: salnativewidgets-gtk.cxx,v $
- * $Revision: 1.47 $
+ * $Revision: 1.47.32.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -98,6 +98,7 @@ struct NWFWidgetData
     GtkWidget *  gMenuItemRadioMenuWidget;
     GtkWidget *  gTooltipPopup;
     GtkWidget *  gProgressBar;
+    GtkWidget *  gTreeView;
 
     NWPixmapCacheList* gNWPixmapCacheList;
     NWPixmapCache* gCacheTabItems;
@@ -132,6 +133,7 @@ struct NWFWidgetData
         gMenuItemRadioMenuWidget( NULL ),
         gTooltipPopup( NULL ),
         gProgressBar( NULL ),
+        gTreeView( NULL ),
         gNWPixmapCacheList( NULL ),
         gCacheTabItems( NULL ),
         gCacheTabPages( NULL )
@@ -168,6 +170,7 @@ static void NWEnsureGTKMenubar          ( int nScreen );
 static void NWEnsureGTKMenu             ( int nScreen );
 static void NWEnsureGTKTooltip          ( int nScreen );
 static void NWEnsureGTKProgressBar      ( int nScreen );
+static void NWEnsureGTKTreeView         ( int nScreen );
 
 static void NWConvertVCLStateToGTKState( ControlState nVCLState, GtkStateType* nGTKState, GtkShadowType* nGTKShadow );
 static void NWAddWidgetToCacheWindow( GtkWidget* widget, int nScreen );
@@ -575,6 +578,9 @@ BOOL GtkSalGraphics::IsNativeControlSupported( ControlType nType, ControlPart nP
                 )                                                   ||
         ((nType == CTRL_PROGRESS) &&
                 (   (nPart == PART_ENTIRE_CONTROL) )
+                )                                                   ||
+        ((nType == CTRL_LISTNODE || nType == CTRL_LISTNET) &&
+                (   (nPart == PART_ENTIRE_CONTROL) )
                 )
         )
         return( TRUE );
@@ -852,6 +858,16 @@ BOOL GtkSalGraphics::drawNativeControl( ControlType nType,
     {
         returnVal = NWPaintGTKProgress( gdkDrawable, nType, nPart, aCtrlRect, aClip, nState, aValue, rControlHandle, rCaption );
     }
+    else if( (nType == CTRL_LISTNODE) && (nPart == PART_ENTIRE_CONTROL) )
+    {
+        returnVal = NWPaintGTKListNode( gdkDrawable, nType, nPart, aCtrlRect, aClip, nState, aValue, rControlHandle, rCaption );
+    }
+    else if( (nType == CTRL_LISTNET) && (nPart == PART_ENTIRE_CONTROL) )
+    {
+        // don't actually draw anything; gtk treeviews do not draw lines
+        returnVal = true;
+    }
+
     if( pixmap )
     {
         returnVal = NWRenderPixmapToScreen( pixmap, aPixmapRect ) && returnVal;
@@ -2285,11 +2301,11 @@ BOOL GtkSalGraphics::NWPaintGTKTabItem( ControlType nType, ControlPart,
 
         // Allow the tab to draw a right border if needed
         tabRect.Right() -= 1;
-    }
 
-    // #129732# avoid degenerate cases which might lead to crashes
-    if( tabRect.GetWidth() <= 1 || tabRect.GetHeight() <= 1 )
-        return false;
+        // #129732# avoid degenerate cases which might lead to crashes
+        if( tabRect.GetWidth() <= 1 || tabRect.GetHeight() <= 1 )
+            return false;
+    }
 
     if( nType == CTRL_TAB_ITEM )
     {
@@ -2857,6 +2873,60 @@ BOOL GtkSalGraphics::NWPaintGTKTooltip(
     return( TRUE );
 }
 
+BOOL GtkSalGraphics::NWPaintGTKListNode(
+            GdkDrawable*,
+            ControlType, ControlPart,
+            const Rectangle& rControlRectangle,
+            const clipList&,
+            ControlState nState, const ImplControlValue& rValue,
+            SalControlHandle&, const OUString& )
+{
+    NWEnsureGTKTreeView( m_nScreen );
+
+    Rectangle aRect( rControlRectangle );
+    aRect.Left() -= 2;
+    aRect.Right() += 2;
+    aRect.Top() -= 2;
+    aRect.Bottom() += 2;
+    gint            w, h;
+    w = aRect.GetWidth();
+    h = aRect.GetHeight();
+
+    GtkStateType    stateType;
+    GtkShadowType   shadowType;
+    NWConvertVCLStateToGTKState( nState, &stateType, &shadowType );
+
+    ButtonValue aButtonValue = rValue.getTristateVal();
+    GtkExpanderStyle eStyle = GTK_EXPANDER_EXPANDED;
+
+    switch( aButtonValue )
+    {
+        case BUTTONVALUE_ON: eStyle = GTK_EXPANDER_EXPANDED;break;
+        case BUTTONVALUE_OFF: eStyle = GTK_EXPANDER_COLLAPSED; break;
+        default:
+            break;
+    }
+
+    GdkPixmap* pixmap = NWGetPixmapFromScreen( aRect );
+    if( ! pixmap )
+        return FALSE;
+
+    GdkDrawable* const &pixDrawable = GDK_DRAWABLE( pixmap );
+    gtk_paint_expander( gWidgetData[m_nScreen].gTreeView->style,
+                        pixDrawable,
+                        stateType,
+                        NULL,
+                        gWidgetData[m_nScreen].gTreeView,
+                        "treeview",
+                        w/2, h/2,
+                        eStyle );
+
+    BOOL bRet = NWRenderPixmapToScreen( pixmap, aRect );
+    g_object_unref( pixmap );
+
+    return bRet;
+}
+
 BOOL GtkSalGraphics::NWPaintGTKProgress(
             GdkDrawable*,
             ControlType, ControlPart,
@@ -3196,6 +3266,11 @@ void GtkSalGraphics::updateSettings( AllSettings& rSettings )
         gdk_color_free (link_color);
     }
 
+    // Tab colors
+    aStyleSet.SetActiveTabColor( aBackFieldColor ); // same as the window color.
+    Color aSelectedBackColor = getColor( pStyle->bg[GTK_STATE_ACTIVE] );
+    aStyleSet.SetInactiveTabColor( aSelectedBackColor );
+
     // menu disabled entries handling
     aStyleSet.SetSkipDisabledInMenus( TRUE );
     // menu colors
@@ -3222,7 +3297,7 @@ void GtkSalGraphics::updateSettings( AllSettings& rSettings )
 
     // UI font
     OString aFamily     = pango_font_description_get_family( pStyle->font_desc );
-    int nPixelHeight    = pango_font_description_get_size( pStyle->font_desc )/PANGO_SCALE;
+    int nPangoHeight    = pango_font_description_get_size( pStyle->font_desc );
     PangoStyle  eStyle  = pango_font_description_get_style( pStyle->font_desc );
     PangoWeight eWeight = pango_font_description_get_weight( pStyle->font_desc );
     PangoStretch eStretch = pango_font_description_get_stretch( pStyle->font_desc );
@@ -3275,17 +3350,17 @@ void GtkSalGraphics::updateSettings( AllSettings& rSettings )
              OUStringToOString( aInfo.m_aFamilyName, RTL_TEXTENCODING_ISO_8859_1 ).getStr() );
 #endif
 
-    sal_Int32 nDPIX, nDPIY;
     sal_Int32 nDispDPIY = GetDisplay()->GetResolution().B();
-    GetDisplay()->GetScreenFontResolution( nDPIX, nDPIY );
-    int nHeight = nPixelHeight * nDispDPIY / nDPIY;
-    // allow for rounding in back conversion (at SetFont)
-    while( (nHeight * nDPIY / nDispDPIY) > nPixelHeight )
-        nHeight--;
-    while( (nHeight * nDPIY / nDispDPIY) < nPixelHeight )
-        nHeight++;
+    int nPointHeight = 0;
+    static gboolean(*pAbso)(const PangoFontDescription*) =
+        (gboolean(*)(const PangoFontDescription*))osl_getAsciiFunctionSymbol( GetSalData()->m_pPlugin, "pango_font_description_get_size_is_absolute" );
 
-    Font aFont( aInfo.m_aFamilyName, Size( 0, nHeight ) );
+    if( ! pAbso || pAbso( pStyle->font_desc ) )
+        nPointHeight = (nPangoHeight * 72 + nDispDPIY*PANGO_SCALE/2) / (nDispDPIY * PANGO_SCALE);
+    else
+        nPointHeight = nPangoHeight/PANGO_SCALE;
+
+    Font aFont( aInfo.m_aFamilyName, Size( 0, nPointHeight ) );
     if( aInfo.m_eWeight != psp::weight::Unknown )
         aFont.SetWeight( PspGraphics::ToFontWeight( aInfo.m_eWeight ) );
     if( aInfo.m_eWidth != psp::width::Unknown )
@@ -3635,7 +3710,7 @@ static void NWEnsureGTKSpinButton( int nScreen )
 {
     if ( !gWidgetData[nScreen].gSpinButtonWidget )
     {
-        GtkAdjustment *adj = GTK_ADJUSTMENT( gtk_adjustment_new(0, 0, 2, 1, 1, 1) );
+        GtkAdjustment *adj = GTK_ADJUSTMENT( gtk_adjustment_new(0, 0, 1, 1, 1, 0) );
         gWidgetData[nScreen].gSpinButtonWidget = gtk_spin_button_new( adj, 1, 2 );
 
         //Setting non-editable means it doesn't blink, so there's no timeouts
@@ -3810,5 +3885,14 @@ static void NWEnsureGTKProgressBar( int nScreen )
     {
         gWidgetData[nScreen].gProgressBar = gtk_progress_bar_new ();
         NWAddWidgetToCacheWindow( gWidgetData[nScreen].gProgressBar, nScreen );
+    }
+}
+
+static void NWEnsureGTKTreeView( int nScreen )
+{
+    if( !gWidgetData[nScreen].gTreeView )
+    {
+        gWidgetData[nScreen].gTreeView = gtk_tree_view_new ();
+        NWAddWidgetToCacheWindow( gWidgetData[nScreen].gTreeView, nScreen );
     }
 }

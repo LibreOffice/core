@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: ctypeitm.hxx,v $
- * $Revision: 1.3 $
+ * $Revision: 1.3.136.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -76,7 +76,7 @@ public:
     virtual BOOL PutValue  ( const com::sun::star::uno::Any& rVal,
                              BYTE nMemberId = 0);
 
-    const INetContentType GetEnumValue() const;
+    INetContentType GetEnumValue() const;
 
     void                  SetValue( const INetContentType eType );
 };

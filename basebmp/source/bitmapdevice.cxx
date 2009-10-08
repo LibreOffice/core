@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: bitmapdevice.cxx,v $
- * $Revision: 1.33 $
+ * $Revision: 1.33.4.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -1093,7 +1093,7 @@ PaletteMemorySharedVector BitmapDevice::getPalette() const
     return mpImpl->mpPalette;
 }
 
-const sal_Int32 BitmapDevice::getPaletteEntryCount() const
+sal_Int32 BitmapDevice::getPaletteEntryCount() const
 {
     return mpImpl->mpPalette ? mpImpl->mpPalette->size() : 0;
 }

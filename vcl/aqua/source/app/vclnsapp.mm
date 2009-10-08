@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: vclnsapp.mm,v $
- * $Revision: 1.9 $
+ * $Revision: 1.8.46.3 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -39,8 +39,13 @@
 
 #include "vcl/window.hxx"
 #include "vcl/svapp.hxx"
-
+#include "vcl/cmdevt.hxx"
 #include "rtl/ustrbuf.hxx"
+
+#include "premac.h"
+#import "Carbon/Carbon.h"
+#import "apple_remote/RemoteControl.h"
+#include "postmac.h"
 
  
 @implementation CocoaThreadEnabler
@@ -338,6 +343,42 @@
 {
     NSMenu* pDock = AquaSalInstance::GetDynamicDockMenu();
     [pDock insertItem: pNewItem atIndex: [pDock numberOfItems]];
+}
+
+// for Apple Remote implementation
+
+#pragma mark -
+#pragma mark NSApplication Delegates
+- (void)applicationWillBecomeActive:(NSNotification *)aNotification {
+    if (GetSalData()->mpMainController->remoteControl) {
+
+        // [remoteControl startListening: self];
+        // does crash because the right thing to do is 
+        // [GetSalData()->mpMainController->remoteControl startListening: self];
+        // but the instance variable 'remoteControl' is declared protected
+        // workaround : declare remoteControl instance variable as public in RemoteMainController.m
+
+        [GetSalData()->mpMainController->remoteControl startListening: self];
+#ifdef DEBUG
+        NSLog(@"Apple Remote will become active - Using remote controls");
+#endif
+    }
+}
+
+- (void)applicationWillResignActive:(NSNotification *)aNotification {
+    if (GetSalData()->mpMainController->remoteControl) {
+
+        // [remoteControl stopListening: self];
+        // does crash because the right thing to do is 
+        // [GetSalData()->mpMainController->remoteControl stopListening: self];
+        // but the instance variable 'remoteControl' is declared protected
+        // workaround : declare remoteControl instance variable as public in RemoteMainController.m
+
+        [GetSalData()->mpMainController->remoteControl stopListening: self]; 
+#ifdef DEBUG
+        NSLog(@"Apple Remote will resign active - Releasing remote controls");
+#endif
+    }
 }
 
 @end
