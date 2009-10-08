@@ -84,9 +84,7 @@
 #include "sdresid.hxx"
 #include "sdpage.hxx"
 #include "fuoltext.hxx"
-#ifndef SD_FRAME_VIEW
 #include "FrameView.hxx"
-#endif
 #include "zoomlist.hxx"
 #include "stlsheet.hxx"
 #include "slideshow.hxx"
@@ -122,8 +120,6 @@ namespace sd {
 |* SFX-Slotmap und Standardinterface deklarieren
 |*
 \************************************************************************/
-
-SFX_DECL_TYPE(13);
 
 
 SFX_IMPL_INTERFACE(OutlineViewShell, SfxShell, SdResId(STR_OUTLINEVIEWSHELL))

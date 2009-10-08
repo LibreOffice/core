@@ -384,12 +384,12 @@ BOOL DrawDocShell::Load( SfxMedium& rMedium )
     else
     {
         if( nError == ERRCODE_IO_BROKENPACKAGE )
-            SetError( ERRCODE_IO_BROKENPACKAGE );
+            SetError( ERRCODE_IO_BROKENPACKAGE, ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ) );
 
         // TODO/LATER: correct error handling?!
-        //pStore->SetError( SVSTREAM_WRONGVERSION );
+        //pStore->SetError( SVSTREAM_WRONGVERSION, ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ) );
         else
-            SetError( ERRCODE_ABORT );
+            SetError( ERRCODE_ABORT, ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ) );
     }
 
     // tell SFX to change viewshell when in preview mode
@@ -610,7 +610,7 @@ BOOL DrawDocShell::SaveAs( SfxMedium& rMedium )
     }
 
     if( GetError() == ERRCODE_NONE )
-        SetError( nVBWarning );
+        SetError( nVBWarning, ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ) );
 
     return bRet;
 }

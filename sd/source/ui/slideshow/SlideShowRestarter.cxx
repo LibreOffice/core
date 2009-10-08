@@ -98,7 +98,8 @@ void SlideShowRestarter::Restart (void)
 
 sal_Int32 SlideShowRestarter::GetDisplayCount (void)
 {
-    Reference<XComponentContext> xContext (comphelper_getProcessComponentContext());
+    const Reference<XComponentContext> xContext (
+        ::comphelper::getProcessComponentContext() );
     Reference<XMultiComponentFactory> xFactory (
         xContext->getServiceManager(), UNO_QUERY);
     if ( ! xFactory.is())

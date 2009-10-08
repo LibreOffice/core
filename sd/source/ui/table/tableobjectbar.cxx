@@ -65,8 +65,6 @@ using namespace sd::ui::table;
 #define TableObjectBar
 #include "sdslots.hxx"
 
-SFX_DECL_TYPE( 13 );
-
 
 namespace sd { namespace ui { namespace table {
 

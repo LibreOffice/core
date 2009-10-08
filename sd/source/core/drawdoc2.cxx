@@ -566,8 +566,7 @@ void SdDrawDocument::CreateFirstPages( SdDrawDocument* pRefDocument /* = 0 */ )
     if (nPageCount <= 1)
     {
         // #i57181# Paper size depends on Language, like in Writer
-        SvxPaper ePaper = SvxPaperInfo::GetDefaultSvxPaper( Application::GetSettings().GetLanguage() );
-        Size aDefSize( SvxPaperInfo::GetPaperSize(ePaper, MAP_100TH_MM) );
+        Size aDefSize = SvxPaperInfo::GetDefaultPaperSize( MAP_100TH_MM );
 
         /**********************************************************************
         * Handzettel-Seite einfuegen
@@ -661,7 +660,7 @@ void SdDrawDocument::CreateFirstPages( SdDrawDocument* pRefDocument /* = 0 */ )
             else
             {
                 // Impress: stets Bildschirmformat, quer
-                Size aSz( SvxPaperInfo::GetPaperSize(SVX_PAPER_SCREEN, MAP_100TH_MM) );
+                Size aSz( SvxPaperInfo::GetPaperSize(PAPER_SCREEN, MAP_100TH_MM) );
                 pPage->SetSize( Size( aSz.Height(), aSz.Width() ) );
                 pPage->SetBorder(0, 0, 0, 0);
             }

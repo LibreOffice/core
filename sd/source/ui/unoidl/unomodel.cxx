@@ -1878,6 +1878,8 @@ void SAL_CALL SdXImpressDocument::render( sal_Int32 nRenderer, const uno::Any& r
                 pOut->SetMapMode( MAP_100TH_MM );
                 pOut->IntersectClipRegion( aVisArea );
 
+
+
                 uno::Reference< frame::XModel > xModel;
                 rSelection >>= xModel;
 
@@ -1885,6 +1887,16 @@ void SAL_CALL SdXImpressDocument::render( sal_Int32 nRenderer, const uno::Any& r
                 {
                     pView->ShowSdrPage( mpDoc->GetSdPage( (USHORT)nPageNumber - 1, ePageKind ));
                     SdrPageView* pPV = pView->GetSdrPageView();
+
+                    if( pOldSdView )
+                    {
+                        SdrPageView* pOldPV = pOldSdView->GetSdrPageView();
+                        if( pPV && pOldPV )
+                        {
+                            pPV->SetVisibleLayers( pOldPV->GetVisibleLayers() );
+                            pPV->SetPrintableLayers( pOldPV->GetPrintableLayers() );
+                        }
+                    }
 
                     ImplRenderPaintProc aImplRenderPaintProc( mpDoc->GetLayerAdmin(),
                         pPV, pPDFExtOutDevData );

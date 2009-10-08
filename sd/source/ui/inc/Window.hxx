@@ -211,6 +211,9 @@ protected:
     virtual ::com::sun::star::uno::Reference<
         ::com::sun::star::accessibility::XAccessible>
         CreateAccessible (void);
+
+    XubString GetSurroundingText() const;
+    Selection GetSurroundingTextSelection() const;
 };
 
 } // end of namespace sd

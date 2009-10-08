@@ -1419,10 +1419,12 @@ void ViewShellBase::Implementation::SetPaneVisibility (
     {
         Reference<XControllerManager> xControllerManager (mrBase.GetController(), UNO_QUERY_THROW);
 
+        const Reference< XComponentContext > xContext(
+            ::comphelper::getProcessComponentContext() );
         Reference<XResourceId> xPaneId (ResourceId::create(
-            comphelper_getProcessComponentContext(), rsPaneURL));
+            xContext, rsPaneURL));
         Reference<XResourceId> xViewId (ResourceId::createWithAnchorURL(
-            comphelper_getProcessComponentContext(), rsViewURL, rsPaneURL));
+            xContext, rsViewURL, rsPaneURL));
 
         // Determine the new visibility state.
         const SfxItemSet* pArguments = rRequest.GetArgs();
@@ -1489,6 +1491,8 @@ void ViewShellBase::Implementation::GetSlotState (SfxItemSet& rSet)
         if ( ! xConfiguration.is())
             throw RuntimeException();
 
+        const Reference< XComponentContext > xContext(
+            ::comphelper::getProcessComponentContext() );
         SfxWhichIter aSetIterator (rSet);
         sal_uInt16 nItemId (aSetIterator.FirstWhich());
         while (nItemId > 0)
@@ -1501,25 +1505,22 @@ void ViewShellBase::Implementation::GetSlotState (SfxItemSet& rSet)
                 {
                     case SID_LEFT_PANE_IMPRESS:
                         xResourceId = ResourceId::create(
-                            comphelper_getProcessComponentContext(),
-                            FrameworkHelper::msLeftImpressPaneURL);
+                            xContext, FrameworkHelper::msLeftImpressPaneURL);
                         break;
 
                     case SID_LEFT_PANE_DRAW:
                         xResourceId = ResourceId::create(
-                            comphelper_getProcessComponentContext(),
-                            FrameworkHelper::msLeftDrawPaneURL);
+                            xContext, FrameworkHelper::msLeftDrawPaneURL);
                         break;
 
                     case SID_RIGHT_PANE:
                         xResourceId = ResourceId::create(
-                            comphelper_getProcessComponentContext(),
-                                FrameworkHelper::msRightPaneURL);
+                            xContext, FrameworkHelper::msRightPaneURL);
                         break;
 
                     case SID_NORMAL_MULTI_PANE_GUI:
                         xResourceId = ResourceId::createWithAnchorURL(
-                            comphelper_getProcessComponentContext(),
+                            xContext,
                             FrameworkHelper::msImpressViewURL,
                             FrameworkHelper::msCenterPaneURL);
                         break;
@@ -1527,14 +1528,14 @@ void ViewShellBase::Implementation::GetSlotState (SfxItemSet& rSet)
                     case SID_SLIDE_SORTER_MULTI_PANE_GUI:
                     case SID_DIAMODE:
                         xResourceId = ResourceId::createWithAnchorURL(
-                            comphelper_getProcessComponentContext(),
+                            xContext,
                             FrameworkHelper::msSlideSorterURL,
                             FrameworkHelper::msCenterPaneURL);
                         break;
 
                     case SID_OUTLINEMODE:
                         xResourceId = ResourceId::createWithAnchorURL(
-                            comphelper_getProcessComponentContext(),
+                            xContext,
                             FrameworkHelper::msOutlineViewURL,
                             FrameworkHelper::msCenterPaneURL);
                         break;
@@ -1543,14 +1544,14 @@ void ViewShellBase::Implementation::GetSlotState (SfxItemSet& rSet)
                         // There is only the master page mode for the handout
                         // view so ignore the master page flag.
                         xResourceId = ResourceId::createWithAnchorURL(
-                            comphelper_getProcessComponentContext(),
+                            xContext,
                             FrameworkHelper::msHandoutViewURL,
                             FrameworkHelper::msCenterPaneURL);
                         break;
 
                     case SID_NOTESMODE:
                         xResourceId = ResourceId::createWithAnchorURL(
-                            comphelper_getProcessComponentContext(),
+                            xContext,
                             FrameworkHelper::msNotesViewURL,
                             FrameworkHelper::msCenterPaneURL);
                         break;
