@@ -46,6 +46,12 @@ shell TextObjectBar
         StateMethod = GetAttrState;
     ]
 
+    SID_ATTR_CHAR_OVERLINE  // ole : ?, status : ?
+    [
+        ExecMethod = Execute;
+        StateMethod = GetAttrState;
+    ]
+
     SID_ATTR_CHAR_CONTOUR  // ole : ?, status : ?
     [
         ExecMethod = Execute;
@@ -186,4 +192,15 @@ shell TextObjectBar
         ExecMethod = Execute;
         StateMethod = GetAttrState;
     ]
+    SID_GROW_FONT_SIZE
+    [
+        ExecMethod = Execute;
+        StateMethod = GetAttrState;
+    ]
+    SID_SHRINK_FONT_SIZE
+    [
+        ExecMethod = Execute;
+        StateMethod = GetAttrState;
+    ]
+
 }

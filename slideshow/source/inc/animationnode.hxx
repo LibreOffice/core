@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: animationnode.hxx,v $
- * $Revision: 1.6 $
+ * $Revision: 1.6.18.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -150,8 +150,9 @@ public:
 
     /** Query node whether it has an animation pending.
 
-        @return true, if this node (or at least one of its
-        children) has an animation pending.
+        @return true, if this node (or at least one of its children)
+        has an animation pending. Used to determine if the main
+        sequence is actually empty, or contains effects
     */
     virtual bool hasPendingAnimation() const = 0;
 };

@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: docshel4.cxx,v $
- * $Revision: 1.81 $
+ * $Revision: 1.80.86.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -948,7 +948,8 @@ void DrawDocShell::FillClass(SvGlobalName* pClassName,
                                         String* ,
                                         String* pFullTypeName,
                                         String* pShortTypeName,
-                                        sal_Int32 nFileFormat ) const
+                                        sal_Int32 nFileFormat,
+                                        sal_Bool bTemplate /* = sal_False */) const
 {
     if (nFileFormat == SOFFICE_FILEFORMAT_60)
     {
@@ -970,13 +971,13 @@ void DrawDocShell::FillClass(SvGlobalName* pClassName,
         if ( meDocType == DOCUMENT_TYPE_DRAW )
         {
                 *pClassName = SvGlobalName(SO3_SDRAW_CLASSID_60);
-                *pFormat = SOT_FORMATSTR_ID_STARDRAW_8;
+                *pFormat = bTemplate ? SOT_FORMATSTR_ID_STARDRAW_8_TEMPLATE : SOT_FORMATSTR_ID_STARDRAW_8;
                 *pFullTypeName = String(RTL_CONSTASCII_USTRINGPARAM("Draw 8")); // HACK: method will be removed with new storage API
         }
         else
         {
                 *pClassName = SvGlobalName(SO3_SIMPRESS_CLASSID_60);
-                *pFormat = SOT_FORMATSTR_ID_STARIMPRESS_8;
+                *pFormat = bTemplate ? SOT_FORMATSTR_ID_STARIMPRESS_8_TEMPLATE : SOT_FORMATSTR_ID_STARIMPRESS_8;
                 *pFullTypeName = String(RTL_CONSTASCII_USTRINGPARAM("Impress 8")); // HACK: method will be removed with new storage API
         }
     }

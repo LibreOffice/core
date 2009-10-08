@@ -495,7 +495,8 @@ namespace slideshow
             if( !mbActive || mrViews.empty() )
                 return;
 
-            if( rShape->isVisible() )
+            // hidden sprite-shape needs render() call still, to hide sprite
+            if( rShape->isVisible() || rShape->isBackgroundDetached() )
                 maUpdateShapes.insert( rShape );
             else
                 addUpdateArea( rShape );

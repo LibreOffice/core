@@ -495,7 +495,7 @@ void DrawViewShell::ScannerEvent( const ::com::sun::star::lang::EventObject& )
                     aPageSize.Width() -= pPage->GetLftBorder() + pPage->GetRgtBorder();
                     aPageSize.Height() -= pPage->GetUppBorder() + pPage->GetLwrBorder();
 
-                    if( ( aBmpSize.Height() > aPageSize.Height() ) || ( aBmpSize.Width()    > aPageSize.Width() ) && aBmpSize.Height() && aPageSize.Height() )
+                    if( ( ( aBmpSize.Height() > aPageSize.Height() ) || ( aBmpSize.Width() > aPageSize.Width() ) ) && aBmpSize.Height() && aPageSize.Height() )
                     {
                         double fGrfWH = (double) aBmpSize.Width() / aBmpSize.Height();
                         double fWinWH = (double) aPageSize.Width() / aPageSize.Height();

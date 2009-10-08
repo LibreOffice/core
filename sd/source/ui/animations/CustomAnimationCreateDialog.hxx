@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: CustomAnimationCreateDialog.hxx,v $
- * $Revision: 1.9 $
+ * $Revision: 1.9.74.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -80,7 +80,7 @@ private:
     CancelButton* mpCancelButton;
     HelpButton* mpHelpButton;
 
-    CustomAnimationCreateTabPage* mpTabPages[4];
+    CustomAnimationCreateTabPage* mpTabPages[5];
 };
 
 }

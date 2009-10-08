@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: drawdoc4.cxx,v $
- * $Revision: 1.58 $
+ * $Revision: 1.58.34.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -234,6 +234,7 @@ void SdDrawDocument::CreateLayoutTemplates()
     rISet.Put(SvxContourItem(FALSE, EE_CHAR_OUTLINE ));
     rISet.Put(SvxShadowedItem(FALSE, EE_CHAR_SHADOW ));
     rISet.Put(SvxUnderlineItem(UNDERLINE_NONE, EE_CHAR_UNDERLINE));
+    rISet.Put(SvxOverlineItem(UNDERLINE_NONE, EE_CHAR_OVERLINE));
     rISet.Put(SvxCrossedOutItem(STRIKEOUT_NONE, EE_CHAR_STRIKEOUT ));
     rISet.Put(SvxEmphasisMarkItem(EMPHASISMARK_NONE, EE_CHAR_EMPHASISMARK));
     rISet.Put(SvxCharReliefItem(RELIEF_NONE, EE_CHAR_RELIEF));
@@ -649,6 +650,7 @@ void SdDrawDocument::CreateDefaultCellStyles()
     rISet.Put(SvxContourItem(FALSE, EE_CHAR_OUTLINE ));
     rISet.Put(SvxShadowedItem(FALSE, EE_CHAR_SHADOW ));
     rISet.Put(SvxUnderlineItem(UNDERLINE_NONE, EE_CHAR_UNDERLINE));
+    rISet.Put(SvxOverlineItem(UNDERLINE_NONE, EE_CHAR_OVERLINE));
     rISet.Put(SvxCrossedOutItem(STRIKEOUT_NONE, EE_CHAR_STRIKEOUT ));
     rISet.Put(SvxEmphasisMarkItem(EMPHASISMARK_NONE, EE_CHAR_EMPHASISMARK));
     rISet.Put(SvxCharReliefItem(RELIEF_NONE, EE_CHAR_RELIEF));
@@ -1012,11 +1014,19 @@ void SdDrawDocument::SpellObject(SdrTextObj* pObj)
             if (mbHasOnlineSpellErrors)
             {
                 sd::ModifyGuard aGuard( this );
-
-                // Text aus Outliner holen
+                SdrModel* pModel = pObj->GetModel();
+                sal_Bool bLock = sal_False;
+                if ( pModel )
+                {
+                    bLock = pModel->isLocked();
+                    pModel->setLock( sal_True );
+                }
+                // taking text from the outliner
                 ((SdrTextObj*) pObj)->SetOutlinerParaObject( pOutl->CreateParaObject() );
 
                 pObj->BroadcastObjectChange();
+                if ( pModel )
+                    pModel->setLock( bLock );
             }
         }
 

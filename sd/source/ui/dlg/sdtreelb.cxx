@@ -593,10 +593,12 @@ void SdPageObjsTLB::SetShowAllShapes (
 {
     mbShowAllShapes = bShowAllShapes;
     if (bFillList)
+    {
         if (mpMedium == NULL)
             Fill(mpDoc, mbShowAllPages, maDocName);
         else
             Fill(mpDoc, mpMedium, maDocName);
+    }
 }
 
 
@@ -880,8 +882,10 @@ void SdPageObjsTLB::RequestingChilds( SvLBoxEntry* pFileEntry )
 
 SdDrawDocument* SdPageObjsTLB::GetBookmarkDoc(SfxMedium* pMed)
 {
-    if (!mpBookmarkDoc ||
-        pMed && (!mpOwnMedium || mpOwnMedium->GetName() != pMed->GetName()))
+    if (
+       !mpBookmarkDoc ||
+         (pMed && (!mpOwnMedium || mpOwnMedium->GetName() != pMed->GetName()))
+      )
     {
         // create a new BookmarkDoc if now one exists or if a new Medium is provided
         if (mpOwnMedium != pMed)

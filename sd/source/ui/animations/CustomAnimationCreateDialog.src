@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: CustomAnimationCreateDialog.src,v $
- * $Revision: 1.8 $
+ * $Revision: 1.8.74.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -70,6 +70,12 @@ TabDialog DLG_CUSTOMANIMATION_CREATE
             {
                 Identifier = RID_TP_CUSTOMANIMATION_MOTIONPATH;
                 Text [ en-US ] = "Motion Paths";
+            };
+
+            PageItem
+            {
+                Identifier = RID_TP_CUSTOMANIMATION_MISCEFFECTS;
+                Text [ en-US ] = "Misc Effects";
             };
         };
     };

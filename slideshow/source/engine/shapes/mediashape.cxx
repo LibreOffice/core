@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: mediashape.cxx,v $
- * $Revision: 1.3 $
+ * $Revision: 1.3.18.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -97,10 +97,14 @@ namespace slideshow
             virtual void implViewsChanged();
             virtual bool implStartIntrinsicAnimation();
             virtual bool implEndIntrinsicAnimation();
+            virtual bool implPauseIntrinsicAnimation();
+            virtual bool implIsIntrinsicAnimationPlaying() const;
+            virtual void implSetIntrinsicAnimationTime(double);
 
             /// the list of active view shapes (one for each registered view layer)
             typedef ::std::vector< ViewMediaShapeSharedPtr > ViewMediaShapeVector;
             ViewMediaShapeVector                             maViewMediaShapes;
+            bool                                             mbIsPlaying;
         };
 
 
@@ -108,7 +112,8 @@ namespace slideshow
                                   double                                     nPrio,
                                 const SlideShowContext&                  rContext ) :
             ExternalShapeBase( xShape, nPrio, rContext ),
-            maViewMediaShapes()
+            maViewMediaShapes(),
+            mbIsPlaying(false)
         {
         }
 
@@ -230,6 +235,8 @@ namespace slideshow
                              maViewMediaShapes.end(),
                              ::boost::mem_fn( &ViewMediaShape::startMedia ) );
 
+            mbIsPlaying = true;
+
             return true;
         }
 
@@ -241,8 +248,42 @@ namespace slideshow
                              maViewMediaShapes.end(),
                              ::boost::mem_fn( &ViewMediaShape::endMedia ) );
 
+            mbIsPlaying = false;
+
             return true;
         }
+
+        // ---------------------------------------------------------------------
+
+        bool MediaShape::implPauseIntrinsicAnimation()
+        {
+            ::std::for_each( maViewMediaShapes.begin(),
+                             maViewMediaShapes.end(),
+                             ::boost::mem_fn( &ViewMediaShape::pauseMedia ) );
+
+            mbIsPlaying = false;
+
+            return true;
+        }
+
+        // ---------------------------------------------------------------------
+
+        bool MediaShape::implIsIntrinsicAnimationPlaying() const
+        {
+            return mbIsPlaying;
+        }
+
+        // ---------------------------------------------------------------------
+
+        void MediaShape::implSetIntrinsicAnimationTime(double fTime)
+        {
+            ::std::for_each( maViewMediaShapes.begin(),
+                             maViewMediaShapes.end(),
+                             ::boost::bind( &ViewMediaShape::setMediaTime,
+                                            _1, boost::cref(fTime)) );
+        }
+
+        // ---------------------------------------------------------------------
 
         ShapeSharedPtr createMediaShape(
             const uno::Reference< drawing::XShape >& xShape,

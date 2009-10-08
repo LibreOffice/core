@@ -1062,6 +1062,7 @@ void SlotManager::InsertSlide (SfxRequest& rRequest)
         for (int nIndex=rSelector.GetPageCount()-1; nIndex>=0; --nIndex)
         {
             if (rSelector.IsPageSelected(nIndex))
+            {
                 if (bLastSelectedSlideSeen)
                     rSelector.DeselectPage (nIndex);
                 else
@@ -1069,6 +1070,7 @@ void SlotManager::InsertSlide (SfxRequest& rRequest)
                     nInsertionIndex = nIndex;
                     bLastSelectedSlideSeen = true;
                 }
+            }
         }
     }
 

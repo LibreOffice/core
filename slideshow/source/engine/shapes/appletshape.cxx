@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: appletshape.cxx,v $
- * $Revision: 1.3 $
+ * $Revision: 1.3.18.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -111,6 +111,9 @@ namespace slideshow
             virtual void implViewsChanged();
             virtual bool implStartIntrinsicAnimation();
             virtual bool implEndIntrinsicAnimation();
+            virtual bool implPauseIntrinsicAnimation();
+            virtual bool implIsIntrinsicAnimationPlaying() const;
+            virtual void implSetIntrinsicAnimationTime(double);
 
             const ::rtl::OUString                           maServiceName;
             const char**                                    mpPropCopyTable;
@@ -119,6 +122,7 @@ namespace slideshow
             /// the list of active view shapes (one for each registered view layer)
             typedef ::std::vector< ViewAppletShapeSharedPtr > ViewAppletShapeVector;
             ViewAppletShapeVector                           maViewAppletShapes;
+            bool                                             mbIsPlaying;
         };
 
         AppletShape::AppletShape( const uno::Reference< drawing::XShape >& xShape,
@@ -131,7 +135,8 @@ namespace slideshow
             maServiceName( rServiceName ),
             mpPropCopyTable( pPropCopyTable ),
             mnNumPropEntries( nNumPropEntries ),
-            maViewAppletShapes()
+            maViewAppletShapes(),
+            mbIsPlaying(false)
         {
         }
 
@@ -265,6 +270,7 @@ namespace slideshow
                              ::boost::bind( &ViewAppletShape::startApplet,
                                             _1,
                                             ::boost::cref( getBounds() )));
+            mbIsPlaying = true;
 
             return true;
         }
@@ -277,7 +283,32 @@ namespace slideshow
                              maViewAppletShapes.end(),
                              ::boost::mem_fn( &ViewAppletShape::endApplet ) );
 
+            mbIsPlaying = false;
+
             return true;
+        }
+
+        // ---------------------------------------------------------------------
+
+        bool AppletShape::implPauseIntrinsicAnimation()
+        {
+            // TODO(F1): any way of temporarily disabling/deactivating
+            // applets?
+            return true;
+        }
+
+        // ---------------------------------------------------------------------
+
+        bool AppletShape::implIsIntrinsicAnimationPlaying() const
+        {
+            return mbIsPlaying;
+        }
+
+        // ---------------------------------------------------------------------
+
+        void AppletShape::implSetIntrinsicAnimationTime(double)
+        {
+            // No way of doing this, or?
         }
 
         boost::shared_ptr<Shape> createAppletShape(

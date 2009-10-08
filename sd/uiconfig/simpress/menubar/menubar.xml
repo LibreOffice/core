@@ -58,7 +58,6 @@
             <menu:menuitem menu:id=".uno:SelectAll"/>
             <menu:menuseparator/>
             <menu:menuitem menu:id=".uno:SearchDialog"/>
-            <menu:menuitem menu:id=".uno:Navigator"/>
             <menu:menuseparator/>
             <menu:menuitem menu:id=".uno:CopyObjects"/>
             <menu:menuseparator/>
@@ -120,6 +119,8 @@
                     <menu:menuitem menu:id=".uno:HelplinesFront"/>
                 </menu:menupopup>
             </menu:menu>
+            <menu:menuseparator/>
+            <menu:menuitem menu:id=".uno:Navigator"/>
             <menu:menuseparator/>
             <menu:menuitem menu:id=".uno:HeaderAndFooter"/>
             <menu:menuitem menu:id=".uno:Zoom"/>
@@ -241,9 +242,7 @@
                     <menu:menuitem menu:id=".uno:MoreDictionaries"/>
                 </menu:menupopup>
             </menu:menu>
-            <menu:menuseparator/>
-            <menu:menuitem menu:id=".uno:AutoCorrectDlg"/>
-            <menu:menuseparator/>
+      <menu:menuseparator/>
             <menu:menuitem menu:id=".uno:Gallery"/>
             <menu:menuitem menu:id=".uno:BmpMask"/>
             <menu:menuitem menu:id=".uno:AVMediaPlayer"/>
@@ -261,6 +260,7 @@
 
             <menu:menuitem menu:id="service:com.sun.star.deployment.ui.PackageManagerDialog"/>
             <menu:menuitem menu:id=".uno:OpenXMLFilterSettings"/>
+            <menu:menuitem menu:id=".uno:AutoCorrectDlg"/>
             <menu:menuitem menu:id=".uno:ConfigureDialog"/>
             <menu:menuitem menu:id=".uno:OptionsTreeDialog"/>
         </menu:menupopup>

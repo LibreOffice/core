@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: fuprlout.cxx,v $
- * $Revision: 1.17 $
+ * $Revision: 1.17.130.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -286,33 +286,5 @@ void FuPresentationLayout::DoExecute( SfxRequest& rReq )
         mpDocSh->SetWaitCursor( FALSE );
     }
 }
-
-/*************************************************************************
-|*
-|* Layoutvorlage von einem StyleSheetPool in einen anderen uebertragen
-|*
-\************************************************************************/
-
-void FuPresentationLayout::TransferLayoutTemplate(String aFromName,
-                                                  String aToName,
-                                                  SfxStyleSheetBasePool* pFrom,
-                                                  SfxStyleSheetBasePool* pTo)
-{
-    SfxStyleSheetBase* pHis = pFrom->Find(aFromName,SD_STYLE_FAMILY_MASTERPAGE);
-    SfxStyleSheetBase* pMy  = pTo->Find(aToName, SD_STYLE_FAMILY_MASTERPAGE);
-
-    DBG_ASSERT(pHis, "neue Layoutvorlage nicht gefunden");
-
-    // gibt's noch nicht: neu anlegen
-    if (!pMy)
-    {
-        pMy = &(pTo->Make(aToName, SD_STYLE_FAMILY_MASTERPAGE));
-    }
-
-    // Inhalte neu setzen
-    if (pHis)
-        pMy->GetItemSet().Set(pHis->GetItemSet());
-}
-
 
 } // end of namespace sd

@@ -54,6 +54,7 @@ public:
         const String& rURL,
         const String& rPageName,
         const String& rStyleName,
+        const bool bIsPrecious,
         const ::boost::shared_ptr<PageObjectProvider>& rpPageObjectProvider,
         const ::boost::shared_ptr<PreviewProvider>& rpPreviewProvider);
     MasterPageDescriptor (const MasterPageDescriptor& rDescriptor);
@@ -169,6 +170,9 @@ public:
     /** Taken from the master page object.
     */
     ::rtl::OUString msStyleName;
+
+    const bool mbIsPrecious;
+
     /** The actual master page.
     */
     SdPage* mpMasterPage;

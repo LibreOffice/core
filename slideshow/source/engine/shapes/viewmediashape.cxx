@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: viewmediashape.cxx,v $
- * $Revision: 1.6 $
+ * $Revision: 1.6.2.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -162,6 +162,22 @@ namespace slideshow
 
                 mxPlayer.clear();
             }
+        }
+
+        // ---------------------------------------------------------------------
+
+        void ViewMediaShape::pauseMedia()
+        {
+            if( mxPlayer.is() && ( mxPlayer->getDuration() > 0.0 ) )
+                mxPlayer->stop();
+        }
+
+        // ---------------------------------------------------------------------
+
+        void ViewMediaShape::setMediaTime(double fTime)
+        {
+            if( mxPlayer.is() && ( mxPlayer->getDuration() > 0.0 ) )
+                mxPlayer->setMediaTime(fTime);
         }
 
         // ---------------------------------------------------------------------

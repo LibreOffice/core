@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: CustomAnimationPreset.cxx,v $
- * $Revision: 1.7 $
+ * $Revision: 1.7.74.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -469,6 +469,9 @@ void CustomAnimationPresets::importResources()
 
         const OUString aMotionPathsPath( RTL_CONSTASCII_USTRINGPARAM( "/org.openoffice.Office.UI.Effects/Presets/MotionPaths" ) );
         importPresets( xConfigProvider, aMotionPathsPath, maMotionPathsPresets );
+
+        const OUString aMiscPath( RTL_CONSTASCII_USTRINGPARAM( "/org.openoffice.Office.UI.Effects/Presets/Misc" ) );
+        importPresets( xConfigProvider, aMiscPath, maMiscPresets );
     }
     catch( lang::WrappedTargetException& e )
     {

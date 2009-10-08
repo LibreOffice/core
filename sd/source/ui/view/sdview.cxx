@@ -647,7 +647,7 @@ BOOL View::IsPresObjSelected(BOOL bOnPage, BOOL bOnMasterPage, BOOL bCheckPresOb
             pPage = (SdPage*) pObj->GetPage();
             bMasterPage = pPage->IsMasterPage();
 
-            if (bMasterPage && bOnMasterPage || !bMasterPage && bOnPage)
+            if ( (bMasterPage && bOnMasterPage) || (!bMasterPage && bOnPage) )
             {
                 if ( pPage && pPage->IsPresObj(pObj) )
                 {
@@ -729,13 +729,7 @@ BOOL View::SetStyleSheet(SfxStyleSheet* pStyleSheet, BOOL bDontRemoveHardAttr)
 
 static void SetSpellOptions( SdDrawDocument* pDoc, ULONG& rCntrl )
 {
-    BOOL bHideSpell = pDoc->GetHideSpell();
     BOOL bOnlineSpell = pDoc->GetOnlineSpell();
-
-    if( bHideSpell )
-        rCntrl |= EE_CNTRL_NOREDLINES;
-    else
-        rCntrl &= ~EE_CNTRL_NOREDLINES;
 
     if( bOnlineSpell )
         rCntrl |= EE_CNTRL_ONLINESPELLING;

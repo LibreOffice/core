@@ -199,8 +199,9 @@ void SdTransformOOo2xDocument::transformShape( SdrObject& rObj )
 
 void SdTransformOOo2xDocument::transformTextShape( SdrTextObj& rTextShape )
 {
-    const SfxItemSet& rSet = rTextShape.GetMergedItemSet();
 /*
+    const SfxItemSet& rSet = rTextShape.GetMergedItemSet();
+
     if( (rSet.GetItemState( EE_PARA_LRSPACE ) == SFX_ITEM_SET) && (rSet.GetItemState( EE_PARA_NUMBULLET ) == SFX_ITEM_SET) )
     {
         SvxLRSpaceItem aItem( *static_cast<const SvxLRSpaceItem*>(rSet.GetItem( EE_PARA_LRSPACE )) );
@@ -209,12 +210,6 @@ void SdTransformOOo2xDocument::transformTextShape( SdrTextObj& rTextShape )
         rTextShape.SetMergedItem( aItem );
     }
 */
-    if( rSet.GetItemState( SDRATTR_TEXT_WORDWRAP ) == SFX_ITEM_SET )
-    {
-        SdrTextWordWrapItem aItem( *static_cast<const SdrTextWordWrapItem*>(rSet.GetItem( SDRATTR_TEXT_WORDWRAP )) );
-        aItem.SetValue( !aItem.GetValue() );
-        rTextShape.SetMergedItem( aItem );
-    }
 
     if(!rTextShape.IsEmptyPresObj())
     {
@@ -237,7 +232,7 @@ void SdTransformOOo2xDocument::transformTextShape( SdrTextObj& rTextShape )
 
                 bool bState = false;
                 const sal_Int16 nDepth = mrOutliner.GetDepth( nPara );
-                if( (nDepth != -1) && getBulletState( aParaSet, mrOutliner.GetStyleSheet( nPara ), bState ) && !bState )
+                if( (nDepth != -1) && (!getBulletState( aParaSet, mrOutliner.GetStyleSheet( nPara ), bState ) || !bState) )
                 {
                     // disable bullet if text::enable-bullet="false" is found
                     if( (nDepth > 0 ) && (rTextShape.GetObjInventor()  == SdrInventor) && (rTextShape.GetObjIdentifier() == OBJ_OUTLINETEXT) )
@@ -257,7 +252,10 @@ void SdTransformOOo2xDocument::transformTextShape( SdrTextObj& rTextShape )
                             while(nWhich)
                             {
                                 if(SFX_ITEM_SET != aParaSet.GetItemState(nWhich, true))
+                                {
                                     aParaSet.Put(rStyleSet.Get(nWhich));
+                                    bItemChange = true;
+                                }
 
                                 nWhich = aIter.NextWhich();
                             }
@@ -336,14 +334,6 @@ bool SdTransformOOo2xDocument::transformItemSet( SfxItemSet& rSet, bool bNumberi
             rSet.Put( aItem );
             bRet = true;
         }
-    }
-
-    if( rSet.GetItemState( SDRATTR_TEXT_WORDWRAP ) == SFX_ITEM_SET )
-    {
-        SdrTextWordWrapItem aItem( *static_cast<const SdrTextWordWrapItem*>(rSet.GetItem( SDRATTR_TEXT_WORDWRAP )) );
-        aItem.SetValue( !aItem.GetValue() );
-        rSet.Put( aItem );
-        bRet = true;
     }
 
     return bRet;

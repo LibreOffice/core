@@ -163,7 +163,7 @@ bool MasterPageContainerQueue::RequestPreview (const SharedMasterPageDescriptor&
                 iRequest = mpRequestQueue->end();
             }
 
-        // Add a new request when for none exists or just has been erased.
+        // Add a new request when none exists (or has just been erased).
         if (iRequest == mpRequestQueue->end())
         {
             mpRequestQueue->insert(PreviewCreationRequest(rpDescriptor,nPriority));

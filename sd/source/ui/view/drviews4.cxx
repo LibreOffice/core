@@ -920,7 +920,7 @@ void DrawViewShell::LockInput()
 
 void DrawViewShell::UnlockInput()
 {
-    DBG_ASSERT( mnLockCount, "Input for this shell is not locked!" )
+    DBG_ASSERT( mnLockCount, "Input for this shell is not locked!" );
     if ( mnLockCount )
         mnLockCount--;
 }

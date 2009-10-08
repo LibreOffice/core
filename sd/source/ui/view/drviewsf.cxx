@@ -79,10 +79,10 @@
 #include "ViewShellBase.hxx"
 #include "FormShellManager.hxx"
 #include "cfgids.hxx"
+#include "anminfo.hxx"
 
-using namespace ::rtl;
+using ::rtl::OUString;
 using namespace ::com::sun::star;
-
 
 namespace sd {
 
@@ -138,56 +138,65 @@ void DrawViewShell::GetCtrlState(SfxItemSet &rSet)
         {
             if (mpDrawView->GetMarkedObjectList().GetMarkCount() > 0)
             {
-                SdrUnoObj* pUnoCtrl = PTR_CAST(SdrUnoObj, mpDrawView->GetMarkedObjectList().GetMark(0)->GetMarkedSdrObj());
+                bool bFound = false;
 
-                if (pUnoCtrl && FmFormInventor == pUnoCtrl->GetObjInventor())
+                SdrObject* pMarkedObj = mpDrawView->GetMarkedObjectList().GetMark(0)->GetMarkedSdrObj();
+                if( pMarkedObj && (FmFormInventor == pMarkedObj->GetObjInventor()) )
                 {
-                    uno::Reference< awt::XControlModel > xControlModel( pUnoCtrl->GetUnoControlModel() );
+                    SdrUnoObj* pUnoCtrl = dynamic_cast< SdrUnoObj* >( pMarkedObj );
 
-                    if( !xControlModel.is() )
-                        return;
-
-                    uno::Reference< beans::XPropertySet > xPropSet( xControlModel, uno::UNO_QUERY );
-                    if( !xPropSet.is())
-                        return;
-
-                    uno::Reference< beans::XPropertySetInfo > xPropInfo( xPropSet->getPropertySetInfo() );
-
-                    uno::Any aTmp;
-
-                    form::FormButtonType eButtonType = form::FormButtonType_URL;
-                    if(!xPropInfo->hasPropertyByName( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ButtonType" ))))
-                        return;
-
-                    aTmp = xPropSet->getPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ButtonType" )));
-                    if( aTmp >>= eButtonType )
+                    if(pUnoCtrl) try
                     {
-                        OUString aString;
+                        uno::Reference< awt::XControlModel > xControlModel( pUnoCtrl->GetUnoControlModel(), uno::UNO_QUERY_THROW );
+                        uno::Reference< beans::XPropertySet > xPropSet( xControlModel, uno::UNO_QUERY_THROW );
+                        uno::Reference< beans::XPropertySetInfo > xPropInfo( xPropSet->getPropertySetInfo(), uno::UNO_QUERY_THROW );
 
-                        // Label
-                        if(!xPropInfo->hasPropertyByName(rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Label" ))))
-                            return;
-                        aTmp = xPropSet->getPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Label" )));
+                        form::FormButtonType eButtonType = form::FormButtonType_URL;
+                        const OUString sButtonType( RTL_CONSTASCII_USTRINGPARAM( "ButtonType" ) );
+                        if(xPropInfo->hasPropertyByName( sButtonType ) && (xPropSet->getPropertyValue( sButtonType ) >>= eButtonType ) )
+                        {
+                            OUString aString;
 
-                        if( aTmp >>= aString )
-                            aHLinkItem.SetName(String( aString ));
+                            // Label
+                            const OUString sLabel( RTL_CONSTASCII_USTRINGPARAM( "Label" ) );
+                            if(xPropInfo->hasPropertyByName(sLabel))
+                            {
+                                if( xPropSet->getPropertyValue(sLabel) >>= aString )
+                                    aHLinkItem.SetName(String( aString ));
+                            }
 
-                        // URL
-                        if(!xPropInfo->hasPropertyByName(rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "TargetURL" ))))
-                            return;
-                        aTmp = xPropSet->getPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "TargetURL" )));
-                        if( aTmp >>= aString )
-                            aHLinkItem.SetURL(String( aString ));
+                            // URL
+                            const OUString sTargetURL(RTL_CONSTASCII_USTRINGPARAM( "TargetURL" ));
+                            if(xPropInfo->hasPropertyByName(sTargetURL))
+                            {
+                                if( xPropSet->getPropertyValue(sTargetURL) >>= aString )
+                                    aHLinkItem.SetURL(String( aString ));
+                            }
 
-                        // Target
-                        if(!xPropInfo->hasPropertyByName(rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "TargetFrame" ))))
-                            return;
-                        aTmp = xPropSet->getPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "TargetFrame" )));
-                        if( aTmp >>= aString )
-                            aHLinkItem.SetTargetFrame(String( aString ));
+                            // Target
+                            const OUString sTargetFrame( RTL_CONSTASCII_USTRINGPARAM( "TargetFrame" ) );
+                            if(xPropInfo->hasPropertyByName(sTargetFrame) )
+                            {
+                                if( xPropSet->getPropertyValue(sTargetFrame) >>= aString )
+                                    aHLinkItem.SetTargetFrame(String( aString ));
+                            }
 
-                        aHLinkItem.SetInsertMode(HLINK_BUTTON);
+                            aHLinkItem.SetInsertMode(HLINK_BUTTON);
+                            bFound = true;
+                        }
                     }
+                    catch( uno::Exception& )
+                    {
+                    }
+                }
+
+                // try interaction link
+                if( !bFound && pMarkedObj )
+                {
+                    SdAnimationInfo* pInfo = SdDrawDocument::GetShapeUserData(*pMarkedObj);
+                    if( pInfo && (pInfo->meClickAction == presentation::ClickAction_DOCUMENT) )
+                        aHLinkItem.SetURL( pInfo->maBookmark );
+                    aHLinkItem.SetInsertMode(HLINK_BUTTON);
                 }
             }
         }

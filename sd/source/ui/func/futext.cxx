@@ -7,11 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: futext.cxx,v $
-<<<<<<< futext.cxx
- * $Revision: 1.66 $
-=======
- * $Revision: 1.66 $
->>>>>>> 1.63.50.1
+ * $Revision: 1.66.8.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -68,6 +64,7 @@
 #include <svx/frmdiritem.hxx>
 
 #include <svx/svdetc.hxx>
+#include <svx/editview.hxx>
 
 #include "sdresid.hxx"
 #include "app.hrc"
@@ -1039,7 +1036,9 @@ void FuText::Activate()
 {
     mpView->SetQuickTextEditMode(mpViewShell->GetFrameView()->IsQuickEdit());
 
-    mpView->SetHitTolerancePixel( 4 * HITPIX );
+    // #i89661# it's no longer necessary to make it so big here, it's fine tuned
+    // for text objects in SdrMarkView::ImpCheckObjHit
+    mpView->SetHitTolerancePixel( 2 * HITPIX );
 
     OutlinerView* pOLV = mpView->GetTextEditOutlinerView();
 
@@ -1484,6 +1483,63 @@ bool FuText::cancel()
     else
     {
         return false;
+    }
+}
+
+void FuText::ChangeFontSize( bool bGrow, OutlinerView* pOLV, const FontList* pFontList, ::sd::View* pView )
+{
+    if( !pFontList || !pView )
+        return;
+
+    if( pOLV )
+    {
+        pOLV->GetEditView().ChangeFontSize( bGrow, pFontList );
+    }
+    else
+    {
+//      SdDrawDocument* pDoc = pView->GetDoc();
+
+        const SdrMarkList& rMarkList = pView->GetMarkedObjectList();
+        for( sal_uInt32 nMark = 0; nMark < rMarkList.GetMarkCount(); nMark++ )
+        {
+            SdrTextObj* pTextObj = dynamic_cast< SdrTextObj* >( rMarkList.GetMark(nMark)->GetMarkedSdrObj() );
+            if( pTextObj )
+            {
+                for( sal_Int32 nText = 0; nText < pTextObj->getTextCount(); nText++ )
+                {
+                    pTextObj->setActiveText( nText );
+
+                    // Put text object into edit mode.
+                    SdrPageView* pPV = pView->GetSdrPageView();
+                    pView->SdrBeginTextEdit(pTextObj, pPV);
+
+                    pOLV = pView->GetTextEditOutlinerView();
+                    if( pOLV )
+                    {
+                        EditEngine* pEditEngine = pOLV->GetEditView().GetEditEngine();
+                        if( pEditEngine )
+                        {
+                            ESelection aSel;
+                            aSel.nEndPara = pEditEngine->GetParagraphCount()-1;
+                            aSel.nEndPos = pEditEngine->GetTextLen(aSel.nEndPara);
+                            pOLV->SetSelection(aSel);
+                        }
+
+                        ChangeFontSize( bGrow, pOLV, pFontList, pView );
+                    }
+
+                    pView->SdrEndTextEdit();
+                }
+
+                SfxItemSet aShapeSet( pTextObj->GetMergedItemSet() );
+                if( EditView::ChangeFontSize( bGrow, aShapeSet, pFontList ) )
+                {
+                    pTextObj->SetObjectItemNoBroadcast( aShapeSet.Get( EE_CHAR_FONTHEIGHT ) );
+                    pTextObj->SetObjectItemNoBroadcast( aShapeSet.Get( EE_CHAR_FONTHEIGHT_CJK ) );
+                    pTextObj->SetObjectItemNoBroadcast( aShapeSet.Get( EE_CHAR_FONTHEIGHT_CTL ) );
+                }
+            }
+        }
     }
 }
 

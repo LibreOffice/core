@@ -154,7 +154,7 @@ SfxVoidItem TaskPaneShowLargePreview SID_TP_SHOW_LARGE_PREVIEW
     GroupId = GID_VIEW;
 ]
 
-SfxVoidItem InsertPage SID_INSERTPAGE_LAYOUT_MENU
+SfxVoidItem TaskPaneInsertPage SID_INSERTPAGE_LAYOUT_MENU
 [
     /* flags: */
     AutoUpdate = FALSE,
@@ -221,6 +221,11 @@ interface MasterPagesSelectorInterface
         StateMethod = GetState ;
     ]
     SID_PASTE
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+    ]
+    SID_DELETE_MASTER_PAGE
     [
         ExecMethod = Execute ;
         StateMethod = GetState ;

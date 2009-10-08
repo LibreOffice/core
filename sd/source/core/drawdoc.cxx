@@ -235,7 +235,6 @@ SdDrawDocument::SdDrawDocument(DocumentType eType, SfxObjectShell* pDrDocSh)
         SetLanguage( aOptions.nDefaultLanguage_CTL, EE_CHAR_LANGUAGE_CTL );
 
         mbOnlineSpell = aOptions.bIsSpellAuto;
-        mbHideSpell = aOptions.bIsSpellHideMarkings;
     }
 
     LanguageType eRealLanguage = MsLangId::getRealLanguage( meLanguage );
@@ -290,11 +289,6 @@ SdDrawDocument::SdDrawDocument(DocumentType eType, SfxObjectShell* pDrDocSh)
     nCntrl |= EE_CNTRL_ALLOWBIGOBJS;
     nCntrl |= EE_CNTRL_URLSFXEXECUTE;
 
-    if (mbHideSpell)
-        nCntrl |= EE_CNTRL_NOREDLINES;
-    else
-        nCntrl &= ~EE_CNTRL_NOREDLINES;
-
     if (mbOnlineSpell)
         nCntrl |= EE_CNTRL_ONLINESPELLING;
     else
@@ -343,7 +337,6 @@ SdDrawDocument::SdDrawDocument(DocumentType eType, SfxObjectShell* pDrDocSh)
     ULONG nCntrl2 = pHitTestOutliner->GetControlWord();
     nCntrl2 |= EE_CNTRL_ALLOWBIGOBJS;
     nCntrl2 |= EE_CNTRL_URLSFXEXECUTE;
-    nCntrl2 |= EE_CNTRL_NOREDLINES;
     nCntrl2 &= ~EE_CNTRL_ONLINESPELLING;
 
     nCntrl2 &= ~ EE_CNTRL_ULSPACESUMMATION;
@@ -614,7 +607,7 @@ void SdDrawDocument::NewOrLoadCompleted(DocCreationMode eMode)
         CheckMasterPages();
 
         if ( GetMasterSdPageCount(PK_STANDARD) > 1 )
-            RemoveUnnessesaryMasterPages( NULL, TRUE, FALSE );
+            RemoveUnnecessaryMasterPages( NULL, TRUE, FALSE );
 
         for ( USHORT i = 0; i < GetPageCount(); i++ )
         {
@@ -994,47 +987,6 @@ void SdDrawDocument::SetOnlineSpell(BOOL bIn)
 |* OnlineSpelling: Markierung ein/aus
 |*
 \************************************************************************/
-
-void SdDrawDocument::SetHideSpell(BOOL bIn)
-{
-    mbHideSpell = bIn;
-    ULONG nCntrl = 0;
-
-    if(mpOutliner)
-    {
-        nCntrl = mpOutliner->GetControlWord();
-
-        if (mbHideSpell)
-            nCntrl |= EE_CNTRL_NOREDLINES;
-        else
-            nCntrl &= ~EE_CNTRL_NOREDLINES;
-
-        mpOutliner->SetControlWord(nCntrl);
-    }
-
-    if(mpInternalOutliner)
-    {
-        nCntrl = mpInternalOutliner->GetControlWord();
-
-        if (mbHideSpell)
-            nCntrl |= EE_CNTRL_NOREDLINES;
-        else
-            nCntrl &= ~EE_CNTRL_NOREDLINES;
-
-        mpInternalOutliner->SetControlWord(nCntrl);
-    }
-
-    ::Outliner& rOutliner = GetDrawOutliner();
-
-    nCntrl = rOutliner.GetControlWord();
-
-    if (mbHideSpell)
-       nCntrl |= EE_CNTRL_NOREDLINES;
-    else
-       nCntrl &= ~EE_CNTRL_NOREDLINES;
-
-    rOutliner.SetControlWord(nCntrl);
-}
 
 uno::Reference< uno::XInterface > SdDrawDocument::createUnoModel()
 {

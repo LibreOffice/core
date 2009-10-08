@@ -48,6 +48,7 @@ MasterPageDescriptor::MasterPageDescriptor (
     const String& rsURL,
     const String& rsPageName,
     const String& rsStyleName,
+    const bool bIsPrecious,
     const ::boost::shared_ptr<PageObjectProvider>& rpPageObjectProvider,
     const ::boost::shared_ptr<PreviewProvider>& rpPreviewProvider)
     : maToken(MasterPageContainer::NIL_TOKEN),
@@ -55,6 +56,7 @@ MasterPageDescriptor::MasterPageDescriptor (
       msURL(INetURLObject(rsURL).GetMainURL(INetURLObject::DECODE_UNAMBIGUOUS)),
       msPageName(rsPageName),
       msStyleName(rsStyleName),
+      mbIsPrecious(bIsPrecious),
       mpMasterPage(NULL),
       mpSlide(NULL),
       maSmallPreview(),
@@ -76,6 +78,7 @@ MasterPageDescriptor::MasterPageDescriptor (const MasterPageDescriptor& rDescrip
       msURL(rDescriptor.msURL),
       msPageName(rDescriptor.msPageName),
       msStyleName(rDescriptor.msStyleName),
+      mbIsPrecious(rDescriptor.mbIsPrecious),
       mpMasterPage(rDescriptor.mpMasterPage),
       mpSlide(rDescriptor.mpSlide),
       maSmallPreview(rDescriptor.maSmallPreview),
@@ -204,6 +207,8 @@ bool MasterPageDescriptor::UpdatePageObject (
         if (meOrigin == MasterPageContainer::MASTERPAGE)
         {
             mpMasterPage = pPage;
+            if (mpMasterPage != NULL)
+                mpMasterPage->SetPrecious(mbIsPrecious);
         }
         else
         {

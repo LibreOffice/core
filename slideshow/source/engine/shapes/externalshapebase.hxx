@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: externalshapebase.hxx,v $
- * $Revision: 1.3 $
+ * $Revision: 1.3.18.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -33,7 +33,7 @@
 
 #include <vector>
 
-#include "animatableshape.hxx"
+#include "externalmediashape.hxx"
 #include "unoview.hxx"
 #include "subsettableshapemanager.hxx"
 #include "slideshowexceptions.hxx"
@@ -55,7 +55,7 @@ namespace slideshow
             (including mutual overdraw). It therefore reports yes for
             the isBackgroundDetached() question.
          */
-        class ExternalShapeBase : public AnimatableShape
+        class ExternalShapeBase : public ExternalMediaShape
         {
         public:
             /** Create a shape for the given XShape for an external shape
@@ -79,9 +79,11 @@ namespace slideshow
             // animation methods
             //------------------------------------------------------------------
 
-            virtual void enterAnimationMode();
-            virtual void leaveAnimationMode();
-
+            virtual void play();
+            virtual void stop();
+            virtual void pause();
+            virtual bool isPlaying() const;
+            virtual void setMediaTime(double);
 
             // render methods
             //------------------------------------------------------------------
@@ -120,6 +122,12 @@ namespace slideshow
             virtual bool implStartIntrinsicAnimation() = 0;
             /// override in derived class to stop external viewer
             virtual bool implEndIntrinsicAnimation() = 0;
+            /// override in derived class to pause external viewer
+            virtual bool implPauseIntrinsicAnimation() = 0;
+            /// override in derived class to return status of animation
+            virtual bool implIsIntrinsicAnimationPlaying() const = 0;
+            /// override in derived class to set media time
+            virtual void implSetIntrinsicAnimationTime(double) = 0;
 
 
             /// The associated XShape

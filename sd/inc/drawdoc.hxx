@@ -188,7 +188,6 @@ private:
     BOOL                mbNewOrLoadCompleted;
 
     BOOL                mbOnlineSpell;
-    BOOL                mbHideSpell;
     BOOL                mbSummationOfParagraphs;
     bool                mbStartWithPresentation;        // is set to true when starting with command line parameter -start
     LanguageType        meLanguage;
@@ -266,7 +265,11 @@ public:
     void                InsertPage(SdrPage* pPage, USHORT nPos=0xFFFF);
     void                DeletePage(USHORT nPgNum);
     SdrPage*            RemovePage(USHORT nPgNum);
-    void                RemoveUnnessesaryMasterPages( SdPage* pMaster=NULL, BOOL bOnlyDuplicatePages=FALSE, BOOL bUndo=TRUE );
+
+    virtual void     InsertMasterPage(SdrPage* pPage, USHORT nPos=0xFFFF);
+    virtual SdrPage* RemoveMasterPage(USHORT nPgNum);
+
+    void                RemoveUnnecessaryMasterPages( SdPage* pMaster=NULL, BOOL bOnlyDuplicatePages=FALSE, BOOL bUndo=TRUE );
     SD_DLLPUBLIC void   SetMasterPage(USHORT nSdPageNum, const String& rLayoutName,
                                       SdDrawDocument* pSourceDoc, BOOL bMaster, BOOL bCheckMasters);
 
@@ -404,9 +407,6 @@ public:
 
     void                InsertObject(SdrObject* pObj, SdPage* pPage);
     void                RemoveObject(SdrObject* pObj, SdPage* pPage);
-
-    void                SetHideSpell( BOOL bIn );
-    BOOL                GetHideSpell() const { return mbHideSpell; }
 
     ULONG               GetLinkCount();
 

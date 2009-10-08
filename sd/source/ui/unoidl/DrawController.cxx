@@ -316,7 +316,7 @@ void SAL_CALL DrawController::removeSelectionChangeListener(
     const Reference< view::XSelectionChangeListener >& xListener )
     throw(RuntimeException)
 {
-    if( mbDisposing )
+    if (rBHelper.bDisposed)
         throw lang::DisposedException();
 
     BroadcastHelperOwner::maBroadcastHelper.removeListener (saSelectionTypeIdentifier, xListener);

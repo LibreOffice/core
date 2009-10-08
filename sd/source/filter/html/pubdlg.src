@@ -474,7 +474,13 @@ ModalDialog DLG_PUBLISHING
         Pos = MAP_APPFONT ( 12, 125 );
         Size = MAP_APPFONT ( 252, 10 );
         Text [ en-US ] = "~Export sounds when slide advances" ;
+    };
 
+    CheckBox PAGE3_HIDDEN_SLIDES
+    {
+        Pos = MAP_APPFONT ( 12, 138 );
+        Size = MAP_APPFONT ( 252, 10 );
+        Text [ en-US ] = "Export ~hidden slides" ;
     };
 
     ////////////////////////////////////////

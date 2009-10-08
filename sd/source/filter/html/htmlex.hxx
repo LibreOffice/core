@@ -50,6 +50,7 @@
 #endif
 #include "pubdlg.hxx"
 
+#include <vector>
 #include <boost/scoped_ptr.hpp>
 
 #define NUM_BUTTONS 12
@@ -100,6 +101,9 @@ public:
 // =====================================================================
 class HtmlExport
 {
+    std::vector< SdPage* > maPages;
+    std::vector< SdPage* > maNotesPages;
+
     String maPath;
 
     SdDrawDocument* mpDoc;
@@ -135,6 +139,7 @@ class HtmlExport
     bool mbAutoSlide;
     UINT32  mnSlideDuration;
     bool mbSlideSound;
+    bool mbHiddenSlides;
     bool mbEndless;
 
     bool mbUserAttr;            // die folgenden Farben werden fuer das <body>

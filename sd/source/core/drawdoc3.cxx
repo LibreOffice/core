@@ -942,7 +942,7 @@ BOOL SdDrawDocument::InsertBookmarkAsPage(
     }
 
     // #91146# Make absolutely sure no double masterpages are there
-    RemoveUnnessesaryMasterPages(NULL, TRUE, TRUE);
+    RemoveUnnecessaryMasterPages(NULL, TRUE, TRUE);
 
     EndUndo();
     pUndoMgr->LeaveListAction();
@@ -1316,7 +1316,7 @@ SvStream* SdDrawDocument::GetDocumentStream(SdrDocumentStreamInfo& rStreamInfo) 
 |*
 \************************************************************************/
 
-void SdDrawDocument::RemoveUnnessesaryMasterPages(SdPage* pMasterPage, BOOL bOnlyDuplicatePages, BOOL bUndo)
+void SdDrawDocument::RemoveUnnecessaryMasterPages(SdPage* pMasterPage, BOOL bOnlyDuplicatePages, BOOL bUndo)
 {
     ::sd::View* pView = NULL;
     SfxUndoManager* pUndoMgr = NULL;
@@ -1361,10 +1361,11 @@ void SdDrawDocument::RemoveUnnessesaryMasterPages(SdPage* pMasterPage, BOOL bOnl
              GetMasterPageUserCount( pMaster ) == 0 &&
              pNotesMaster )
         {
-            BOOL bDeleteMaster = TRUE;
+            // Do not delete master pages that have their precious flag set.
+            BOOL bDeleteMaster = !pMaster->IsPrecious();
             String aLayoutName = pMaster->GetLayoutName();
 
-            if( bOnlyDuplicatePages )
+            if(bOnlyDuplicatePages )
             {
                 // remove only duplicate pages
                 bDeleteMaster = FALSE;
@@ -1954,12 +1955,12 @@ void SdDrawDocument::SetMasterPage(USHORT nSdPageNum,
     if (bCheckMasters)
     {
         // Alle pruefen
-        RemoveUnnessesaryMasterPages();
+        RemoveUnnecessaryMasterPages();
     }
     else
     {
         // Nur die ausgetauschte MasterPage pruefen
-        RemoveUnnessesaryMasterPages(&rOldMaster);
+        RemoveUnnecessaryMasterPages(&rOldMaster);
     }
 
     pUndoMgr->LeaveListAction();
@@ -1976,5 +1977,19 @@ void SdDrawDocument::Merge(SdrModel& rSourceModel,
                FASTBOOL bMergeMasterPages, FASTBOOL bAllMasterPages,
                FASTBOOL bUndo, FASTBOOL bTreadSourceAsConst)
 {
+    sal_uInt16 nMasterPageCount = GetMasterPageCount();
     SdrModel::Merge( rSourceModel, nFirstPageNum, nLastPageNum, nDestPos, bMergeMasterPages, bAllMasterPages, bUndo, bTreadSourceAsConst );
+
+    // add style family for each new master page
+    for( sal_uInt16 nMaster = nMasterPageCount; nMaster < GetMasterPageCount(); nMaster++ )
+    {
+        SdPage* pPage = static_cast< SdPage* >( GetMasterPage( nMaster ) );
+        if( pPage && pPage->IsMasterPage() && (pPage->GetPageKind() == PK_STANDARD) )
+        {
+            // new master page created, add its style family
+            SdStyleSheetPool* pStylePool = (SdStyleSheetPool*) GetStyleSheetPool();
+            if( pStylePool )
+                pStylePool->AddStyleFamily( pPage );
+        }
+    }
 }

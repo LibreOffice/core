@@ -2826,7 +2826,7 @@ void SAL_CALL SdMasterPagesAccess::remove( const uno::Reference< drawing::XDrawP
 
     SdPage* pPage = dynamic_cast< SdPage* > (pSdPage->GetSdrPage());
 
-    DBG_ASSERT( pPage && pPage->IsMasterPage(), "SdMasterPage is not masterpage?")
+    DBG_ASSERT( pPage && pPage->IsMasterPage(), "SdMasterPage is not masterpage?");
 
     if( !pPage || !pPage->IsMasterPage() || (mpModel->mpDoc->GetMasterPageUserCount(pPage) > 0))
         return; //Todo: this should be excepted

@@ -99,8 +99,8 @@ public:
     virtual ::Window* GetWindow (void);
     virtual sal_Int32 GetMinimumWidth (void);
 
-    void Execute (SfxRequest& rRequest);
-    void GetState (SfxItemSet& rItemSet);
+    virtual void Execute (SfxRequest& rRequest);
+    virtual void GetState (SfxItemSet& rItemSet);
 
     /** Update the selection of previews according to whatever
         influences them appart from mouse and keyboard.  If, for
@@ -211,6 +211,12 @@ protected:
 
     void Fill (void);
     virtual void Fill (ItemList& rItemList) = 0;
+
+    /** Give derived classes the oportunity to provide their own context
+        menu.  If they do then they probably have to provide their own
+        Execute() and GetState() methods as well.
+    */
+    virtual ResId GetContextMenuResId (void) const;
 
 private:
     /** The offset between ValueSet index and MasterPageContainer::Token

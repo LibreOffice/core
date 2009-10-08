@@ -169,57 +169,60 @@ sal_uInt32 ImplTranslatePresetSubType( const sal_uInt32 nPresetClass, const sal_
     sal_uInt32  nPresetSubType = 0;
     sal_Bool    bTranslated = sal_False;
 
-    if ( ( nPresetClass == (sal_uInt32)EffectPresetClass::ENTRANCE ) || ( nPresetClass == (sal_uInt32)EffectPresetClass::EXIT ) && ( nPresetId != 21 ) )
+    if ( ( nPresetClass == (sal_uInt32)EffectPresetClass::ENTRANCE ) || ( nPresetClass == (sal_uInt32)EffectPresetClass::EXIT ) )
     {
-        switch( nPresetId )
+        if ( nPresetId != 21 )
         {
-            case 5 :
+            switch( nPresetId )
             {
-                if ( rPresetSubType.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "downward" ) ) )
+                case 5 :
                 {
-                    nPresetSubType = 5;
-                    bTranslated = sal_True;
+                    if ( rPresetSubType.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "downward" ) ) )
+                    {
+                        nPresetSubType = 5;
+                        bTranslated = sal_True;
+                    }
+                    else if ( rPresetSubType.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "across" ) ) )
+                    {
+                        nPresetSubType = 10;
+                        bTranslated = sal_True;
+                    }
                 }
-                else if ( rPresetSubType.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "across" ) ) )
+                break;
+                case 17 :
                 {
-                    nPresetSubType = 10;
-                    bTranslated = sal_True;
+                    if ( rPresetSubType.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "across" ) ) )
+                    {
+                        nPresetSubType = 10;
+                        bTranslated = sal_True;
+                    }
                 }
+                break;
+                case 18 :
+                {
+                    if ( rPresetSubType.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "right-to-top" ) ) )
+                    {
+                        nPresetSubType = 3;
+                        bTranslated = sal_True;
+                    }
+                    else if ( rPresetSubType.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "right-to-bottom" ) ) )
+                    {
+                        nPresetSubType = 6;
+                        bTranslated = sal_True;
+                    }
+                    else if ( rPresetSubType.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "left-to-top" ) ) )
+                    {
+                        nPresetSubType = 9;
+                        bTranslated = sal_True;
+                    }
+                    else if ( rPresetSubType.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "left-to-bottom" ) ) )
+                    {
+                        nPresetSubType = 12;
+                        bTranslated = sal_True;
+                    }
+                }
+                break;
             }
-            break;
-            case 17 :
-            {
-                if ( rPresetSubType.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "across" ) ) )
-                {
-                    nPresetSubType = 10;
-                    bTranslated = sal_True;
-                }
-            }
-            break;
-            case 18 :
-            {
-                if ( rPresetSubType.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "right-to-top" ) ) )
-                {
-                    nPresetSubType = 3;
-                    bTranslated = sal_True;
-                }
-                else if ( rPresetSubType.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "right-to-bottom" ) ) )
-                {
-                    nPresetSubType = 6;
-                    bTranslated = sal_True;
-                }
-                else if ( rPresetSubType.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "left-to-top" ) ) )
-                {
-                    nPresetSubType = 9;
-                    bTranslated = sal_True;
-                }
-                else if ( rPresetSubType.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "left-to-bottom" ) ) )
-                {
-                    nPresetSubType = 12;
-                    bTranslated = sal_True;
-                }
-            }
-            break;
         }
         if ( !bTranslated )
         {
@@ -1302,10 +1305,13 @@ void AnimationExporter::exportAnimEvent( SvStream& rStrm, const Reference< XAnim
                         // taking the first child
                         Reference< XEnumerationAccess > xEA( xNode, UNO_QUERY_THROW );
                         Reference< XEnumeration > xE( xEA->createEnumeration(), UNO_QUERY_THROW );
-//                      while( xE->hasMoreElements() )
+                        if ( xE.is() && xE->hasMoreElements() )
                         {
-                            Reference< XAnimationNode > xClickNode( xE->nextElement(), UNO_QUERY );
-                            aAny = xClickNode->getBegin();
+//                          while( xE->hasMoreElements() )
+                            {
+                                Reference< XAnimationNode > xClickNode( xE->nextElement(), UNO_QUERY );
+                                aAny = xClickNode->getBegin();
+                            }
                         }
                     }
                     else if ( nFlags & 0x40 )

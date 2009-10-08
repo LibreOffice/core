@@ -257,10 +257,10 @@ void FuTemplate::DoExecute( SfxRequest& rReq )
                     pStyleSheet->GetFamily() == pOldStyleSheet->GetFamily() ||
 
                     // allow if old was background objects and new is graphics
-                    pStyleSheet->GetFamily() == SD_STYLE_FAMILY_GRAPHICS && pOldStyleSheet->GetHelpId( aStr ) == HID_PSEUDOSHEET_BACKGROUNDOBJECTS ||
+                    pStyleSheet->GetFamily() == (SD_STYLE_FAMILY_GRAPHICS && pOldStyleSheet->GetHelpId( aStr ) == HID_PSEUDOSHEET_BACKGROUNDOBJECTS) ||
 
                     // allow if old was presentation and we are a drawing document
-                    pOldStyleSheet->GetFamily() == SD_STYLE_FAMILY_MASTERPAGE && mpDoc->GetDocumentType() == DOCUMENT_TYPE_DRAW )
+                    (pOldStyleSheet->GetFamily() == SD_STYLE_FAMILY_MASTERPAGE && mpDoc->GetDocumentType() == DOCUMENT_TYPE_DRAW) )
                 {
                     mpView->SetStyleSheet( (SfxStyleSheet*) pStyleSheet);
                     mpDoc->SetChanged(TRUE);

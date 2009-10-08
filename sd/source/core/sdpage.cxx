@@ -124,6 +124,7 @@ SdPage::SdPage(SdDrawDocument& rNewDoc, StarBASIC* pBasic, BOOL bMasterPage)
 ,   mbTransitionDirection(sal_True)
 ,   mnTransitionFadeColor(0)
 ,   mfTransitionDuration(2.0)
+,   mbIsPrecious(true)
 {
     // Der Layoutname der Seite wird von SVDRAW benutzt, um die Praesentations-
     // vorlagen der Gliederungsobjekte zu ermitteln. Darum enthaelt er bereits
@@ -197,7 +198,7 @@ SdrObject* SdPage::CreatePresObj(PresObjKind eObjKind, BOOL bVertical, const Rec
         {
             pSdrObj = new SdrRectObj(OBJ_TITLETEXT);
 
-            if (bMaster)
+            if (mbMaster)
             {
                 pSdrObj->SetNotVisibleAsMaster(TRUE);
             }
@@ -208,7 +209,7 @@ SdrObject* SdPage::CreatePresObj(PresObjKind eObjKind, BOOL bVertical, const Rec
         {
             pSdrObj = new SdrRectObj(OBJ_OUTLINETEXT);
 
-            if (bMaster)
+            if (mbMaster)
             {
                 pSdrObj->SetNotVisibleAsMaster(TRUE);
             }
@@ -219,7 +220,7 @@ SdrObject* SdPage::CreatePresObj(PresObjKind eObjKind, BOOL bVertical, const Rec
         {
             pSdrObj = new SdrRectObj(OBJ_TEXT);
 
-            if (bMaster)
+            if (mbMaster)
             {
                 pSdrObj->SetNotVisibleAsMaster(TRUE);
             }
@@ -365,7 +366,7 @@ SdrObject* SdPage::CreatePresObj(PresObjKind eObjKind, BOOL bVertical, const Rec
             else
                 aTempAttr.Put( SdrTextMinFrameHeightItem( rRect.GetSize().Height() ) );
 
-            if (bMaster)
+            if (mbMaster)
             {
                 // Bei Praesentationsobjekten auf der MasterPage soll die
                 // Groesse vom Benutzwer frei waehlbar sein
@@ -443,7 +444,7 @@ SdrObject* SdPage::CreatePresObj(PresObjKind eObjKind, BOOL bVertical, const Rec
             pSdrObj->SetMergedItemSet(aTempAttr);
         }
 
-        if (bMaster)
+        if (mbMaster)
         {
             SdrLayerAdmin& rLayerAdmin = pModel->GetLayerAdmin();
 
@@ -644,7 +645,7 @@ void SdPage::Changed(const SdrObject& rObj, SdrUserCallType eType, const Rectang
 
                 if (pObj)
                 {
-                    if (!bMaster)
+                    if (!mbMaster)
                     {
                         if( pObj->GetUserCall() )
                         {
@@ -704,7 +705,7 @@ void SdPage::CreateTitleAndLayout(BOOL bInit, BOOL bCreate )
 
     SdPage* pMasterPage = this;
 
-    if (!bMaster)
+    if (!mbMaster)
     {
         pMasterPage = (SdPage*)(&(TRG_GetMasterPage()));
     }
@@ -1089,7 +1090,7 @@ static const LayoutDescriptor& GetLayoutDescriptor( AutoLayout eLayout )
         LayoutDescriptor( 1, PRESOBJ_TITLE, PRESOBJ_OUTLINE, PRESOBJ_OUTLINE ),             // AUTOLAYOUT_2TEXT
         LayoutDescriptor( 1, PRESOBJ_TITLE, PRESOBJ_OUTLINE, PRESOBJ_CHART ),               // AUTOLAYOUT_TEXTCHART
         LayoutDescriptor( 0, PRESOBJ_TITLE, PRESOBJ_ORGCHART ),                             // AUTOLAYOUT_ORG
-        LayoutDescriptor( 1, PRESOBJ_TITLE, PRESOBJ_OUTLINE, PRESOBJ_GRAPHIC ),             // AUTOLAYOUT_TEXTCLIP
+        LayoutDescriptor( 1, PRESOBJ_TITLE, PRESOBJ_OUTLINE, PRESOBJ_GRAPHIC ),             // AUTOLAYOUT_TEXTCLbIP
         LayoutDescriptor( 1, PRESOBJ_TITLE, PRESOBJ_CHART, PRESOBJ_OUTLINE ),               // AUTOLAYOUT_CHARTTEXT
         LayoutDescriptor( 0, PRESOBJ_TITLE, PRESOBJ_TABLE ),                                // AUTOLAYOUT_TAB
         LayoutDescriptor( 1, PRESOBJ_TITLE, PRESOBJ_GRAPHIC, PRESOBJ_OUTLINE ),             // AUTOLAYOUT_CLIPTEXT
@@ -1116,6 +1117,7 @@ static const LayoutDescriptor& GetLayoutDescriptor( AutoLayout eLayout )
         LayoutDescriptor( 0, PRESOBJ_TITLE, PRESOBJ_OUTLINE|VERTICAL ),                     // AUTOLAYOUT_TITLE_VERTICAL_OUTLINE
         LayoutDescriptor( 9, PRESOBJ_TITLE, PRESOBJ_GRAPHIC, PRESOBJ_OUTLINE|VERTICAL ),    // AUTOLAYOUT_TITLE_VERTICAL_OUTLINE_CLIPART
         LayoutDescriptor( 0 ),                                                              // AUTOLAYOUT_HANDOUT9
+        LayoutDescriptor( 10, PRESOBJ_TEXT, PRESOBJ_NONE )                                  // AUTOLAYOUT_ONLY_TEXT
     };
 
     if( (eLayout < AUTOLAYOUT__START) || (eLayout >= AUTOLAYOUT__END) )
@@ -1297,6 +1299,13 @@ static void CalcAutoLayoutRectangles( SdPage& rPage, int nLayout, Rectangle* rRe
         rRectangle[1].SetSize( aSize );
         break;
     }
+    case 10: // onlytext
+    {
+        Size aSize( rRectangle[0].GetSize().Width(), rRectangle[1].BottomLeft().Y() - rRectangle[0].TopLeft().Y() );
+        rRectangle[0].SetSize( aSize );
+        rRectangle[0].SetPos( aTitlePos);
+        break;
+    }
     }
 }
 
@@ -1458,7 +1467,7 @@ void SdPage::SetAutoLayout(AutoLayout eLayout, BOOL bInit, BOOL bCreate )
     // if needed, creates and initialises the presentation shapes on this slides master page
     CreateTitleAndLayout(bInit, bCreate);
 
-    if((meAutoLayout == AUTOLAYOUT_NONE && maPresentationShapeList.isEmpty()) || bMaster)
+    if((meAutoLayout == AUTOLAYOUT_NONE && maPresentationShapeList.isEmpty()) || mbMaster)
     {
         // MasterPage or no layout and no presentation shapes available, noting to do
         return;
@@ -1536,7 +1545,7 @@ void SdPage::NbcInsertObject(SdrObject* pObj, ULONG nPos, const SdrInsertReason*
     ((SdDrawDocument*) pModel)->InsertObject(pObj, this);
 
     SdrLayerID nId = pObj->GetLayer();
-    if( bMaster )
+    if( mbMaster )
     {
         if( nId == 0 )
             pObj->NbcSetLayer( 2 );     // wrong layer. corrected to BackgroundObj layer
@@ -1810,7 +1819,7 @@ void SdPage::ScaleObjects(const Size& rNewPageSize, const Rectangle& rNewBorderR
         // Alle Objekte
         pObj = GetObj(nObj);
 
-        if (bMaster && IsPresObj(pObj))
+        if (mbMaster && IsPresObj(pObj))
         {
             // Es ist ein Praesentationsobjekt auf der MasterPage
             bIsPresObjOnMaster = TRUE;
@@ -2226,7 +2235,7 @@ SdrObject* SdPage::InsertAutoLayoutShape( SdrObject* pObj, PresObjKind eObjKind,
                     pTextObject->SetMergedItem(SdrTextHorzAdjustItem( bVertical ? SDRTEXTHORZADJUST_RIGHT : SDRTEXTHORZADJUST_BLOCK ));
             }
 
-            if( !bMaster )
+            if( !mbMaster )
             {
                 if ( pTextObject->IsAutoGrowHeight() )
                 {
@@ -2389,7 +2398,7 @@ void SdPage::SetObjText(SdrTextObj* pObj, SdrOutliner* pOutliner, PresObjKind eO
                 aString += sal_Unicode( '\t' );
                 aString += rString;
 
-                if (bMaster)
+                if (mbMaster)
                 {
                     pOutl->SetStyleSheet( 0, GetStyleSheetForPresObj(eObjKind) );
                     aString += String::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM( "\n\t\t" ));
@@ -2505,7 +2514,7 @@ void SdPage::SetLayoutName(String aName)
 {
     maLayoutName = aName;
 
-    if( bMaster )
+    if( mbMaster )
     {
         String aSep( RTL_CONSTASCII_USTRINGPARAM(SD_LT_SEPARATOR) );
         USHORT nPos = maLayoutName.Search( aSep );
@@ -2528,7 +2537,7 @@ const String& SdPage::GetName() const
     String aCreatedPageName( maCreatedPageName );
     if (GetRealName().Len() == 0)
     {
-        if ((mePageKind == PK_STANDARD || mePageKind == PK_NOTES) && !bMaster)
+        if ((mePageKind == PK_STANDARD || mePageKind == PK_NOTES) && !mbMaster)
         {
             // default name for handout pages
             USHORT  nNum = (GetPageNum() + 1) / 2;
@@ -2565,7 +2574,7 @@ const String& SdPage::GetName() const
         aCreatedPageName += sal_Unicode( ' ' );
         aCreatedPageName += String(SdResId(STR_NOTES));
     }
-    else if (mePageKind == PK_HANDOUT && bMaster)
+    else if (mePageKind == PK_HANDOUT && mbMaster)
     {
         aCreatedPageName += String::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM( " (" ));
         aCreatedPageName += String(SdResId(STR_HANDOUT));
@@ -2647,7 +2656,7 @@ String SdPage::GetPresObjText(PresObjKind eObjKind) const
 
     if (eObjKind == PRESOBJ_TITLE)
     {
-        if (bMaster)
+        if (mbMaster)
         {
             if (mePageKind != PK_NOTES)
             {
@@ -2665,7 +2674,7 @@ String SdPage::GetPresObjText(PresObjKind eObjKind) const
     }
     else if (eObjKind == PRESOBJ_OUTLINE)
     {
-        if (bMaster)
+        if (mbMaster)
         {
             aString = String ( SdResId( STR_PRESOBJ_MPOUTLINE ) );
         }
@@ -2676,7 +2685,7 @@ String SdPage::GetPresObjText(PresObjKind eObjKind) const
     }
     else if (eObjKind == PRESOBJ_NOTES)
     {
-        if (bMaster)
+        if (mbMaster)
         {
             aString = String ( SdResId( STR_PRESOBJ_MPNOTESTEXT ) );
         }
@@ -2750,7 +2759,7 @@ void SdPage::SetName (const String& rName)
 
 const HeaderFooterSettings& SdPage::getHeaderFooterSettings() const
 {
-    if( mePageKind == PK_HANDOUT && !bMaster )
+    if( mePageKind == PK_HANDOUT && !mbMaster )
     {
         return (((SdPage&)TRG_GetMasterPage()).maHeaderFooterSettings);
     }
@@ -2762,7 +2771,7 @@ const HeaderFooterSettings& SdPage::getHeaderFooterSettings() const
 
 void SdPage::setHeaderFooterSettings( const sd::HeaderFooterSettings& rNewSettings )
 {
-    if( mePageKind == PK_HANDOUT && !bMaster )
+    if( mePageKind == PK_HANDOUT && !mbMaster )
     {
         (((SdPage&)TRG_GetMasterPage()).maHeaderFooterSettings) = rNewSettings;
     }
@@ -3053,6 +3062,25 @@ void SdPage::CalculateHandoutAreas( SdDrawDocument& rModel, AutoLayout eLayout, 
         aPos.Y() += nOffsetY;
     }
 }
+
+
+
+
+void SdPage::SetPrecious (const bool bIsPrecious)
+{
+    mbIsPrecious = bIsPrecious;
+}
+
+
+
+
+bool SdPage::IsPrecious (void) const
+{
+    return mbIsPrecious;
+}
+
+
+
 
 HeaderFooterSettings::HeaderFooterSettings()
 {

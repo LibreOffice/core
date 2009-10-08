@@ -178,6 +178,7 @@ struct SOParagraph
     sal_Bool                bExtendedBulletsUsed;
     sal_uInt16              nBulletId;
     sal_uInt32              nMappedNumType;
+    sal_Bool                bNumberingIsNumber;
 
     SOParagraph()
     {
@@ -189,6 +190,7 @@ struct SOParagraph
         nTextOfs = 0;
         bExtendedBulletsUsed = FALSE;
         nBulletId = 0xffff;
+        bNumberingIsNumber = sal_True;
     };
 };
 

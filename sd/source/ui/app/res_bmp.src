@@ -229,6 +229,14 @@ Bitmap BMP_FOIL_24_H
 {
     File = "foil24_h.bmp" ;
 };
+Bitmap BMP_FOIL_25
+{
+    File = "foil25.bmp" ;
+};
+Bitmap BMP_FOIL_25_H
+{
+    File = "foil25_h.bmp" ;
+};
 Bitmap BMP_FOILH_01
 {
     File = "foilh01.bmp" ;

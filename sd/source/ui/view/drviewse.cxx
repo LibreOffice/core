@@ -31,20 +31,13 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sd.hxx"
 
-#include "DrawViewShell.hxx"
-#include "slideshow.hxx"
-
-#include "ViewShellImplementation.hxx"
-#include "ViewShellHint.hxx"
-#include "framework/FrameworkHelper.hxx"
-
 #include <com/sun/star/presentation/XPresentation2.hpp>
-
 #include <com/sun/star/form/FormButtonType.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
-#ifndef _COM_SUN_STAR_I18N_TRANSLITERATIONMODULES_HDL_
 #include <com/sun/star/i18n/TransliterationModules.hdl>
-#endif
+
+#include <comphelper/processfactory.hxx>
+
 #include "undo/undomanager.hxx"
 #include <vcl/waitobj.hxx>
 #include <svtools/aeitem.hxx>
@@ -63,30 +56,27 @@
 #include <sfx2/dispatch.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/request.hxx>
-#ifndef _SVXIDS_HRC
 #include <svx/svxids.hrc>
-#endif
-#ifndef _FLDITEM_HXX
 #include <svx/flditem.hxx>
-#endif
 #include <svx/ruler.hxx>
-#ifndef _OBJ3D_HXX
 #include <svx/obj3d.hxx>
-#endif
 #include <svx/fmglob.hxx>
 #include <svx/svdouno.hxx>
+#include <svx/dataaccessdescriptor.hxx>
 #include <tools/urlobj.hxx>
-
-// #UndoRedo#
 #include <svtools/slstitm.hxx>
-
 #include <sfx2/ipclient.hxx>
-
-
+#include <toolkit/helper/vclunohelper.hxx>
+#include <avmedia/mediawindow.hxx>
 #include <svtools/urihelper.hxx>
 #include <sfx2/topfrm.hxx>
 #include <sfx2/docfile.hxx>
 
+#include "DrawViewShell.hxx"
+#include "slideshow.hxx"
+#include "ViewShellImplementation.hxx"
+#include "ViewShellHint.hxx"
+#include "framework/FrameworkHelper.hxx"
 #include "app.hrc"
 #include "glob.hrc"
 #include "strings.hrc"
@@ -106,27 +96,15 @@
 #include "Outliner.hxx"
 #include "PresentationViewShell.hxx"
 #include "sdpage.hxx"
-#ifndef SD_FRAME_VIEW
 #include "FrameView.hxx"
-#endif
 #include "zoomlist.hxx"
 #include "drawview.hxx"
 #include "DrawDocShell.hxx"
 #include "sdattr.hxx"
 #include "ViewShellBase.hxx"
 #include "ToolBarManager.hxx"
-
-// #97016#
+#include "anminfo.hxx"
 #include "optsitem.hxx"
-
-// #98721#
-#include <svx/dataaccessdescriptor.hxx>
-
-// #110496#
-#include <toolkit/helper/vclunohelper.hxx>
-#include <comphelper/processfactory.hxx>
-#include <avmedia/mediawindow.hxx>
-
 #include "Window.hxx"
 
 
@@ -973,7 +951,7 @@ void DrawViewShell::FuSupport(SfxRequest& rReq)
             else
             {
                 // Switch to requested ViewShell.
-                ::rtl::OUString sRequestedView;
+                ::OUString sRequestedView;
                 PageKind ePageKind;
                 switch (nSId)
                 {
@@ -1536,87 +1514,70 @@ void DrawViewShell::InsertURLButton(const String& rURL, const String& rText,
 {
     BOOL bNewObj = TRUE;
 
-    if (mpDrawView->GetMarkedObjectList().GetMarkCount() > 0)
-    {
-        SdrUnoObj* pUnoCtrl = PTR_CAST(SdrUnoObj, mpDrawView->GetMarkedObjectList().GetMark(0)->GetMarkedSdrObj());
-
-        if (pUnoCtrl && FmFormInventor == pUnoCtrl->GetObjInventor() &&
-               pUnoCtrl->GetObjIdentifier() == OBJ_FM_BUTTON)
-           {
-               // Markiertes Objekt aendern
-            bNewObj = FALSE;
-            uno::Reference< awt::XControlModel > xControlModel( pUnoCtrl->GetUnoControlModel() );
-
-               if( !xControlModel.is() )
-                   return;
-
-            uno::Reference< beans::XPropertySet > xPropSet( xControlModel, uno::UNO_QUERY );
-
-            uno::Any aTmp;
-
-            aTmp <<= rtl::OUString( rText );
-            xPropSet->setPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Label" )), aTmp );
-
-            aTmp <<= rtl::OUString( ::URIHelper::SmartRel2Abs( INetURLObject( GetDocSh()->GetMedium()->GetBaseURL() ), rURL, URIHelper::GetMaybeFileHdl(), true, false,
+    const OUString sTargetURL( ::URIHelper::SmartRel2Abs( INetURLObject( GetDocSh()->GetMedium()->GetBaseURL() ), rURL, URIHelper::GetMaybeFileHdl(), true, false,
                                                                 INetURLObject::WAS_ENCODED,
                                                                 INetURLObject::DECODE_UNAMBIGUOUS ) );
-            xPropSet->setPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "TargetURL" )), aTmp );
-
-            if( rTarget.Len() )
+    if (mpDrawView->GetMarkedObjectList().GetMarkCount() > 0)
+    {
+        SdrObject* pMarkedObj = mpDrawView->GetMarkedObjectList().GetMark(0)->GetMarkedSdrObj();
+        if( pMarkedObj ) try
+        {
+            // change first marked object
+            if( (FmFormInventor == pMarkedObj->GetObjInventor() && pMarkedObj->GetObjIdentifier() == OBJ_FM_BUTTON) )
             {
-                aTmp <<= rtl::OUString(rTarget);
-                xPropSet->setPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "TargetFrame" )), aTmp );
-            }
+                bNewObj = FALSE;
 
-            form::FormButtonType eButtonType = form::FormButtonType_URL;
-            aTmp <<= eButtonType;
-            xPropSet->setPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ButtonType" )), aTmp );
-            if ( ::avmedia::MediaWindow::isMediaURL( rURL ) )
-            {
-                // #105638# OJ
-                aTmp <<= sal_True;
-                xPropSet->setPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "DispatchURLInternal" )), aTmp );
+                SdrUnoObj* pUnoCtrl = static_cast< SdrUnoObj* >( pMarkedObj );
+
+                Reference< awt::XControlModel > xControlModel( pUnoCtrl->GetUnoControlModel(), UNO_QUERY_THROW );
+                Reference< beans::XPropertySet > xPropSet( xControlModel, UNO_QUERY_THROW );
+
+                xPropSet->setPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM( "Label" )), Any( OUString( rText ) ) );
+                xPropSet->setPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM( "TargetURL" )), Any( sTargetURL ) );
+
+                if( rTarget.Len() )
+                    xPropSet->setPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM( "TargetFrame" )), Any( OUString( rTarget ) ) );
+
+                xPropSet->setPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM( "ButtonType" )), Any( form::FormButtonType_URL ) );
+                if ( ::avmedia::MediaWindow::isMediaURL( rURL ) )
+                {
+                    // #105638# OJ
+                    xPropSet->setPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM( "DispatchURLInternal" )), Any( sal_True ) );
+                }
             }
+            else
+            {
+                // add url as interaction for first selected shape
+                bNewObj = FALSE;
+
+                SdAnimationInfo* pInfo = SdDrawDocument::GetShapeUserData(*pMarkedObj, true);
+                pInfo->meClickAction = presentation::ClickAction_DOCUMENT;
+                pInfo->maBookmark = sTargetURL;
+            }
+        }
+        catch( uno::Exception& )
+        {
         }
     }
 
-    if (bNewObj)
+    if (bNewObj) try
     {
-        SdrUnoObj* pUnoCtrl = (SdrUnoObj*) SdrObjFactory::MakeNewObject(FmFormInventor, OBJ_FM_BUTTON,
-                                mpDrawView->GetSdrPageView()->GetPage(), GetDoc());
+        SdrUnoObj* pUnoCtrl = static_cast< SdrUnoObj* >( SdrObjFactory::MakeNewObject(FmFormInventor, OBJ_FM_BUTTON,
+                                mpDrawView->GetSdrPageView()->GetPage(), GetDoc()) );
 
-        uno::Reference< awt::XControlModel > xControlModel( pUnoCtrl->GetUnoControlModel() );
+        Reference< awt::XControlModel > xControlModel( pUnoCtrl->GetUnoControlModel(), uno::UNO_QUERY_THROW );
+        Reference< beans::XPropertySet > xPropSet( xControlModel, uno::UNO_QUERY_THROW );
 
-        if( !xControlModel.is())
-            return;
-
-        uno::Reference< beans::XPropertySet > xPropSet( xControlModel, uno::UNO_QUERY );
-
-        uno::Any aTmp;
-
-        aTmp <<= rtl::OUString(rText);
-        xPropSet->setPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Label" )), aTmp );
-
-        aTmp <<= rtl::OUString( ::URIHelper::SmartRel2Abs( INetURLObject( GetDocSh()->GetMedium()->GetBaseURL() ), rURL, URIHelper::GetMaybeFileHdl(), true, false,
-                                                            INetURLObject::WAS_ENCODED,
-                                                            INetURLObject::DECODE_UNAMBIGUOUS ) );
-        xPropSet->setPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "TargetURL" )), aTmp );
+        xPropSet->setPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM( "Label" )), Any( OUString( rText ) ) );
+        xPropSet->setPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM( "TargetURL" )), Any( sTargetURL ) );
 
         if( rTarget.Len() )
-        {
-            aTmp <<= rtl::OUString(rTarget);
-            xPropSet->setPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "TargetFrame" )), aTmp );
-        }
+            xPropSet->setPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM( "TargetFrame" )), Any( OUString( rTarget ) ) );
 
-        form::FormButtonType eButtonType = form::FormButtonType_URL;
-        aTmp <<= eButtonType;
-        xPropSet->setPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ButtonType" )), aTmp );
+        xPropSet->setPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM( "ButtonType" )), Any(  form::FormButtonType_URL ) );
         // #105638# OJ
         if ( ::avmedia::MediaWindow::isMediaURL( rURL ) )
-        {
-            aTmp <<= sal_True;
-            xPropSet->setPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "DispatchURLInternal" )), aTmp );
-        }
+            xPropSet->setPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM( "DispatchURLInternal" )), Any( sal_True ) );
 
         Point aPos;
 
@@ -1645,6 +1606,9 @@ void DrawViewShell::InsertURLButton(const String& rURL, const String& rText,
         }
 
         mpDrawView->InsertObjectAtView(pUnoCtrl, *mpDrawView->GetSdrPageView(), nOptions);
+    }
+    catch( Exception& )
+    {
     }
 }
 

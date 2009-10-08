@@ -33,6 +33,7 @@ PRJ=..$/..$/..
 PRJNAME=sd
 TARGET=eppt
 ENABLE_EXCEPTIONS=TRUE
+VISIBILITY_HIDDEN=TRUE
 
 # --- Settings -----------------------------------------------------
 

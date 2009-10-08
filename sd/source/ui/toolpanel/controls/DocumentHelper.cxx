@@ -238,6 +238,9 @@ SdPage* DocumentHelper::AddMasterPage (
             if (pSourceDocument != NULL)
                 ProvideStyles (*pSourceDocument, rTargetDocument, pClonedMasterPage);
 
+            // Copy the precious flag.
+            pClonedMasterPage->SetPrecious(pMasterPage->IsPrecious());
+
             // Now that the styles are available we can insert the cloned
             // master page.
             rTargetDocument.InsertMasterPage (pClonedMasterPage);
@@ -381,6 +384,9 @@ SdPage* DocumentHelper::AddMasterPage (
         // Duplicate the master page.
         pClonedMasterPage = static_cast<SdPage*>(pMasterPage->Clone());
 
+        // Copy the precious flag.
+        pClonedMasterPage->SetPrecious(pMasterPage->IsPrecious());
+
         // Copy the necessary styles.
         SdDrawDocument* pSourceDocument
             = static_cast<SdDrawDocument*>(pMasterPage->GetModel());
@@ -485,7 +491,7 @@ void DocumentHelper::AssignMasterPageToPage (
         {
             // 3. Replace the master page A by a copy of the given master
             // page B.
-            pDocument->RemoveUnnessesaryMasterPages (
+            pDocument->RemoveUnnecessaryMasterPages (
                 pPage, FALSE);
         }
     }

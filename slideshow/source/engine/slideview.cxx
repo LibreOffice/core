@@ -543,8 +543,14 @@ private:
                                                   maTransformation );
 
         basegfx::B2DHomMatrix aMatrix( maTransformation );
-        aMatrix.translate( -basegfx::fround(aTmpRect.getMinX()),
-                           -basegfx::fround(aTmpRect.getMinY()) );
+
+        // Add translation according to the origin of aTmpRect.  Ignore the
+        // translation when aTmpRect was not properly initialized.
+        if ( ! aTmpRect.isEmpty())
+        {
+            aMatrix.translate( -basegfx::fround(aTmpRect.getMinX()),
+                               -basegfx::fround(aTmpRect.getMinY()) );
+        }
 
         return aMatrix;
     }

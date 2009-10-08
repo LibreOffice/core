@@ -74,8 +74,6 @@ class SfxViewFrame;
 
 namespace accessibility {
 
-static SfxViewFrame* mpViewFrame = NULL;
-
 //=====  internal  ============================================================
 AccessibleDocumentViewBase::AccessibleDocumentViewBase (
     ::sd::Window* pSdWindow,
@@ -103,8 +101,6 @@ AccessibleDocumentViewBase::AccessibleDocumentViewBase (
     maShapeTreeInfo.SetViewForwarder (&maViewForwarder);
 
     mxWindow = ::VCLUnoHelper::GetInterface (pSdWindow);
-
-    mpViewFrame = pViewShell->GetViewFrame();
 }
 
 
@@ -149,13 +145,20 @@ void AccessibleDocumentViewBase::Init (void)
             OUString (RTL_CONSTASCII_USTRINGPARAM("")),
             static_cast<beans::XPropertyChangeListener*>(this));
 
+    // Register this object as dispose event listener at the controller.
+    if (mxController.is())
+        mxController->addEventListener (
+            static_cast<awt::XWindowListener*>(this));
+
     // Register at VCL Window to be informed of activated and deactivated
     // OLE objects.
     Window* pWindow = maShapeTreeInfo.GetWindow();
     if (pWindow != NULL)
     {
-        pWindow->AddChildEventListener (LINK(
-            this, AccessibleDocumentViewBase, WindowChildEventListener));
+        maWindowLink = LINK(
+            this, AccessibleDocumentViewBase, WindowChildEventListener);
+
+        pWindow->AddChildEventListener (maWindowLink);
 
         USHORT nCount = pWindow->GetChildCount();
         for (sal_uInt16 i=0; i<nCount; i++)
@@ -191,12 +194,10 @@ IMPL_LINK(AccessibleDocumentViewBase, WindowChildEventListener,
                 Window* pWindow = maShapeTreeInfo.GetWindow();
                 Window* pDyingWindow = static_cast<Window*>(
                     pWindowEvent->GetWindow());
-                if (pWindow==pDyingWindow && pWindow!=NULL)
+                if (pWindow==pDyingWindow && pWindow!=NULL && maWindowLink.IsSet())
                 {
-                    pWindow->RemoveChildEventListener (LINK(
-                        this,
-                        AccessibleDocumentViewBase,
-                        WindowChildEventListener));
+                    pWindow->RemoveChildEventListener (maWindowLink);
+                    maWindowLink = Link();
                 }
             }
             break;
@@ -545,6 +546,61 @@ void SAL_CALL
 
 
 
+void AccessibleDocumentViewBase::impl_dispose()
+{
+    // Unregister from VCL Window.
+    Window* pWindow = maShapeTreeInfo.GetWindow();
+    if (maWindowLink.IsSet())
+    {
+        if (pWindow)
+            pWindow->RemoveChildEventListener (maWindowLink);
+        maWindowLink = Link();
+    }
+    else
+    {
+        DBG_ASSERT (pWindow, "AccessibleDocumentViewBase::disposing");
+    }
+
+    // Unregister from window.
+    if (mxWindow.is())
+    {
+        mxWindow->removeWindowListener (this);
+        mxWindow->removeFocusListener (this);
+        mxWindow = NULL;
+    }
+
+    // Unregister form the model.
+    if (mxModel.is())
+        mxModel->removeEventListener (
+            static_cast<awt::XWindowListener*>(this));
+
+    // Unregister from the controller.
+    if (mxController.is())
+    {
+        uno::Reference<beans::XPropertySet> xSet (mxController, uno::UNO_QUERY);
+        if (xSet.is())
+            xSet->removePropertyChangeListener (
+                OUString (RTL_CONSTASCII_USTRINGPARAM("")),
+                static_cast<beans::XPropertyChangeListener*>(this));
+
+        mxController->removeEventListener (
+            static_cast<awt::XWindowListener*>(this));
+    }
+
+    // Propagate change of controller down the shape tree.
+    maShapeTreeInfo.SetControllerBroadcaster (NULL);
+
+    // Reset the model reference.
+    mxModel = NULL;
+    // Reset the model reference.
+    mxController = NULL;
+
+    maShapeTreeInfo.SetDocumentWindow (NULL);
+}
+
+
+
+
 //=====  XEventListener  ======================================================
 
 void SAL_CALL
@@ -560,32 +616,9 @@ void SAL_CALL
     {
         // Paranoia. Can this really happen?
     }
-    else if (rEventObject.Source == mxModel)
+    else if (rEventObject.Source == mxModel || rEventObject.Source == mxController)
     {
-        ::osl::Guard< ::osl::Mutex> aGuard (::osl::Mutex::getGlobalMutex());
-
-        mxModel->removeEventListener (
-            static_cast<awt::XWindowListener*>(this));
-
-        // Reset the model reference.
-        mxModel = NULL;
-
-        // Propagate change of controller down the shape tree.
-        maShapeTreeInfo.SetControllerBroadcaster (NULL);
-    }
-    else if (rEventObject.Source == mxController)
-    {
-        ::osl::Guard< ::osl::Mutex> aGuard (::osl::Mutex::getGlobalMutex());
-
-        // Unregister as property change listener at the controller.
-        uno::Reference<beans::XPropertySet> xSet (mxController,uno::UNO_QUERY);
-        if (xSet.is())
-            xSet->removePropertyChangeListener (
-                OUString (RTL_CONSTASCII_USTRINGPARAM("")),
-                static_cast<beans::XPropertyChangeListener*>(this));
-
-        // Reset the model reference.
-        mxController = NULL;
+        impl_dispose();
     }
 }
 
@@ -688,36 +721,7 @@ void AccessibleDocumentViewBase::focusLost (const ::com::sun::star::awt::FocusEv
 // This method is called from the component helper base class while disposing.
 void SAL_CALL AccessibleDocumentViewBase::disposing (void)
 {
-    // Unregister from VCL Window.
-    Window* pWindow = maShapeTreeInfo.GetWindow();
-    if (pWindow != NULL)
-    {
-        pWindow->RemoveChildEventListener (LINK(
-            this, AccessibleDocumentViewBase, WindowChildEventListener));
-    }
-    else
-    {
-        DBG_ASSERT (pWindow, "AccessibleDocumentViewBase::disposing");
-    }
-
-    // Unregister from window.
-    if (mxWindow.is())
-    {
-        mxWindow->removeWindowListener (this);
-        mxWindow->removeFocusListener (this);
-    }
-
-    // Unregister form the model.
-    if (mxModel.is())
-        mxModel->removeEventListener (
-            static_cast<awt::XWindowListener*>(this));
-
-    // Unregister from the controller.
-    uno::Reference<beans::XPropertySet> xSet (mxController, uno::UNO_QUERY);
-    if (xSet.is())
-        xSet->removePropertyChangeListener (
-            OUString (RTL_CONSTASCII_USTRINGPARAM("")),
-            static_cast<beans::XPropertyChangeListener*>(this));
+    impl_dispose();
 
     AccessibleContextBase::disposing ();
 }

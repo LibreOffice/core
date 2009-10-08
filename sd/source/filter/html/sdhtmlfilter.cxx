@@ -61,15 +61,12 @@
 SdHTMLFilter::SdHTMLFilter( SfxMedium& rMedium, ::sd::DrawDocShell& rDocShell, sal_Bool bShowProgress ) :
     SdFilter( rMedium, rDocShell, bShowProgress )
 {
-    mbHideSpell = mrDocument.GetHideSpell();
-    mrDocument.SetHideSpell(TRUE);
 }
 
 // -----------------------------------------------------------------------------
 
 SdHTMLFilter::~SdHTMLFilter()
 {
-    mrDocument.SetHideSpell(mbHideSpell);
 }
 
 // -----------------------------------------------------------------------------

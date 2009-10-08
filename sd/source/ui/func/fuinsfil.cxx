@@ -477,7 +477,7 @@ BOOL FuInsertFile::InsSDDinDrMode(SfxMedium* pMedium)
         }
 
         if( pDlg->IsRemoveUnnessesaryMasterPages() )
-            mpDoc->RemoveUnnessesaryMasterPages();
+            mpDoc->RemoveUnnecessaryMasterPages();
     }
 
     delete pDlg;

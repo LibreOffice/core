@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: pubdlg.cxx,v $
- * $Revision: 1.15 $
+ * $Revision: 1.12.186.3 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -124,6 +124,7 @@ public:
     String  m_aCompression;
     PublishingFormat m_eFormat;
     BOOL    m_bSlideSound;
+    BOOL    m_bHiddenSlides;
 
     // titel page information
     String  m_aAuthor;
@@ -172,9 +173,9 @@ SdPublishingDesign::SdPublishingDesign()
 
     m_nResolution   = PUB_LOWRES_WIDTH;
     m_aAuthor       = aUserOptions.GetFirstName();
-    if( m_aAuthor.Len() && aUserOptions.GetLastName().Len() )
+    if( m_aAuthor.Len() && aUserOptions.GetLastName().getLength() )
         m_aAuthor      += sal_Unicode(' ');
-    m_aAuthor      += aUserOptions.GetLastName();
+    m_aAuthor      += (String)aUserOptions.GetLastName();
     m_aEMail        = aUserOptions.GetEmail();
     m_bDownload     = FALSE;
 //-/    m_bCreated      = TRUE;
@@ -197,6 +198,7 @@ SdPublishingDesign::SdPublishingDesign()
     m_bEndless       = TRUE;
 
     m_bSlideSound    = TRUE;
+    m_bHiddenSlides  = FALSE;
 }
 
 // =====================================================================
@@ -210,6 +212,7 @@ int SdPublishingDesign::operator ==(const SdPublishingDesign & rDesign) const
         m_nResolution  == rDesign.m_nResolution &&
         m_aCompression == rDesign.m_aCompression &&
         m_eFormat      == rDesign.m_eFormat &&
+        m_bHiddenSlides == rDesign.m_bHiddenSlides &&
         (  // compare html options
             (m_eMode != PUBLISH_HTML && m_eMode != PUBLISH_FRAMES) ||
             (
@@ -306,6 +309,7 @@ SvStream& operator >> (SvStream& rIn, SdPublishingDesign& rDesign)
     rIn >> rDesign.m_nSlideDuration;
     rIn >> rDesign.m_bEndless;
     rIn >> rDesign.m_bSlideSound;
+    rIn >> rDesign.m_bHiddenSlides;
 
     return rIn;
 }
@@ -351,6 +355,7 @@ SvStream& operator << (SvStream& rOut, const SdPublishingDesign& rDesign)
     rOut << rDesign.m_nSlideDuration;
     rOut << rDesign.m_bEndless;
     rOut << rDesign.m_bSlideSound;
+    rOut << rDesign.m_bHiddenSlides;
 
     return rOut;
 }
@@ -611,6 +616,8 @@ void SdPublishingDlg::CreatePages()
         pPage3_Titel3 = new FixedLine(this,SdResId(PAGE3_TITEL_3)));
     aAssistentFunc.InsertControl(3,
         pPage3_SldSound = new CheckBox(this,SdResId(PAGE3_SLD_SOUND)));
+    aAssistentFunc.InsertControl(3,
+        pPage3_HiddenSlides = new CheckBox(this,SdResId(PAGE3_HIDDEN_SLIDES)));
 
     // Seite 4
     aAssistentFunc.InsertControl(4,
@@ -749,6 +756,7 @@ void SdPublishingDlg::RemovePages()
     delete pPage3_Resolution_3;
     delete pPage3_Titel3;
     delete pPage3_SldSound;
+    delete pPage3_HiddenSlides;
 
     delete pPage4_Bmp;
     delete pPage4_Titel1;
@@ -876,6 +884,14 @@ void SdPublishingDlg::GetParameterSequence( Sequence< PropertyValue >& rParams )
     else
         nFormat = static_cast<sal_Int32>(FORMAT_JPG);
     aValue.Value <<= nFormat;
+    aProps.push_back( aValue );
+
+    aValue.Name = OUString( RTL_CONSTASCII_USTRINGPARAM( "SlideSound" ) );
+    aValue.Value <<= pPage3_SldSound->IsChecked() ? sal_True : sal_False;
+    aProps.push_back( aValue );
+
+    aValue.Name = OUString( RTL_CONSTASCII_USTRINGPARAM( "HiddenSlides" ) );
+    aValue.Value <<= pPage3_HiddenSlides->IsChecked() ? sal_True : sal_False;
     aProps.push_back( aValue );
 
     // Page 4
@@ -1379,7 +1395,7 @@ void SdPublishingDlg::UpdatePage()
             aNextPageButton.Disable();
 
         if( pPage2_WebCast->IsChecked() )
-            pPage3_SldSound->Hide();
+            pPage3_SldSound->Disable();
 
         pPage3_Quality->Enable(pPage3_Jpg->IsChecked());
 
@@ -1491,6 +1507,7 @@ void SdPublishingDlg::SetDesign( SdPublishingDesign* pDesign )
     pPage3_Resolution_3->Check(pDesign->m_nResolution == PUB_HIGHRES_WIDTH);
 
     pPage3_SldSound->Check( pDesign->m_bSlideSound );
+    pPage3_HiddenSlides->Check( pDesign->m_bHiddenSlides );
 
     pPage4_Author->SetText(pDesign->m_aAuthor);
     pPage4_Email->SetText(pDesign->m_aEMail);
@@ -1556,6 +1573,7 @@ void SdPublishingDlg::GetDesign( SdPublishingDesign* pDesign )
                             (pPage3_Resolution_2->IsChecked()?PUB_MEDRES_WIDTH:PUB_HIGHRES_WIDTH);
 
     pDesign->m_bSlideSound = pPage3_SldSound->IsChecked();
+    pDesign->m_bHiddenSlides = pPage3_HiddenSlides->IsChecked();
 
     pDesign->m_aAuthor = pPage4_Author->GetText();
     pDesign->m_aEMail = pPage4_Email->GetText();

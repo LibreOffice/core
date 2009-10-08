@@ -337,6 +337,7 @@ sal_uInt32 ControlContainer::GetNextIndex (
         // Go to the regular successor.
         nCandidate += 1;
         if (nCandidate==maControlList.size())
+        {
             if ( ! bCycle)
             {
                 // We have reached the end of the list of controls and must
@@ -348,6 +349,7 @@ sal_uInt32 ControlContainer::GetNextIndex (
                 // Cycle to the head of the list.
                 nCandidate = 0;
             }
+        }
 
         if (nCandidate == nIndex)
         {

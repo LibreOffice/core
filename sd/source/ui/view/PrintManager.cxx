@@ -313,7 +313,6 @@ USHORT  PrintManager::Print (SfxProgress& rProgress, BOOL bIsAPI, PrintDialog* p
         ::Outliner& rOutliner = mrBase.GetDocument()->GetDrawOutliner();
         ULONG nOldCntrl = rOutliner.GetControlWord();
         ULONG nCntrl = nOldCntrl;
-        nCntrl |= EE_CNTRL_NOREDLINES;
         nCntrl &= ~EE_CNTRL_MARKFIELDS;
         nCntrl &= ~EE_CNTRL_ONLINESPELLING;
         rOutliner.SetControlWord( nCntrl );

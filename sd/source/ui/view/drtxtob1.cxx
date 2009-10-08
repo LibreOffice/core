@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: drtxtob1.cxx,v $
- * $Revision: 1.32 $
+ * $Revision: 1.32.72.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -63,6 +63,8 @@
 #include <svx/xtable.hxx>
 #include <svx/svdobj.hxx>
 #include <svx/outlobj.hxx>
+#include <svx/flstitem.hxx>
+#include <svx/editeng.hxx>
 #include <svtools/intitem.hxx>
 #ifndef _SVX_SRIPTTYPEITEM_HXX //autogen
 #include <svx/scripttypeitem.hxx>
@@ -82,6 +84,9 @@
 #include "OutlineView.hxx"
 #include "Window.hxx"
 #include "futempl.hxx"
+#include "DrawDocShell.hxx"
+#include "Outliner.hxx"
+#include "futext.hxx"
 
 namespace sd {
 
@@ -312,6 +317,20 @@ void TextObjectBar::Execute( SfxRequest &rReq )
                 pOLV->ToggleBullets();
         break;
 
+        case SID_GROW_FONT_SIZE:
+        case SID_SHRINK_FONT_SIZE:
+        {
+            const SvxFontListItem* pFonts = (const SvxFontListItem*)mpViewShell->GetDocSh()->GetItem( SID_ATTR_CHAR_FONTLIST );
+            const FontList* pFontList = pFonts ? pFonts->GetFontList(): 0;
+            if( pFontList )
+            {
+                FuText::ChangeFontSize( nSlot == SID_GROW_FONT_SIZE, pOLV, pFontList, mpView );
+                mpViewShell->GetViewFrame()->GetBindings().Invalidate( SID_ATTR_CHAR_FONTHEIGHT );
+            }
+            rReq.Done();
+        }
+        break;
+
 
         default:
         {
@@ -346,10 +365,19 @@ void TextObjectBar::Execute( SfxRequest &rReq )
                     case SID_ATTR_CHAR_UNDERLINE:
                     {
                         FontUnderline eFU = ( (const SvxUnderlineItem&) aEditAttr.
-                                        Get( EE_CHAR_UNDERLINE ) ).GetUnderline();
+                                        Get( EE_CHAR_UNDERLINE ) ).GetLineStyle();
                         aNewAttr.Put( SvxUnderlineItem( eFU == UNDERLINE_SINGLE ?
                                             UNDERLINE_NONE : UNDERLINE_SINGLE,
                                             EE_CHAR_UNDERLINE ) );
+                    }
+                    break;
+                    case SID_ATTR_CHAR_OVERLINE:
+                    {
+                        FontUnderline eFO = ( (const SvxOverlineItem&) aEditAttr.
+                                        Get( EE_CHAR_OVERLINE ) ).GetLineStyle();
+                        aNewAttr.Put( SvxOverlineItem( eFO == UNDERLINE_SINGLE ?
+                                            UNDERLINE_NONE : UNDERLINE_SINGLE,
+                                            EE_CHAR_OVERLINE ) );
                     }
                     break;
                     case SID_ATTR_CHAR_CONTOUR:
@@ -566,6 +594,5 @@ void TextObjectBar::Execute( SfxRequest &rReq )
     Invalidate( SID_OUTLINE_UP );
     Invalidate( SID_OUTLINE_DOWN );
 }
-
 
 } // end of namespace sd

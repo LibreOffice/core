@@ -35,13 +35,6 @@ interface StarImpress
         StateMethod = GetState ;
     ]
 
-    SID_AUTOSPELL_MARKOFF // ole() api()
-    [
-
-        ExecMethod = Execute ;
-        StateMethod = GetState ;
-    ]
-
     SID_AUTOSPELL_CHECK // ole() api()
     [
 

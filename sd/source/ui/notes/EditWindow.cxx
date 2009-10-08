@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: EditWindow.cxx,v $
- * $Revision: 1.7 $
+ * $Revision: 1.7.138.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -118,8 +118,10 @@ void SmGetLeftSelectionPart(const ESelection aSel,
     // returns paragraph number and position of the selections left part
 {
     // compare start and end of selection and use the one that comes first
-    if (    aSel.nStartPara <  aSel.nEndPara
-        ||  aSel.nStartPara == aSel.nEndPara  &&  aSel.nStartPos < aSel.nEndPos)
+    if (
+        (aSel.nStartPara <  aSel.nEndPara) ||
+        (aSel.nStartPara == aSel.nEndPara && aSel.nStartPos < aSel.nEndPos)
+       )
     {   nPara = aSel.nStartPara;
         nPos  = aSel.nStartPos;
     }
@@ -169,7 +171,7 @@ EditEngine* EditWindow::CreateEditEngine (void)
             {   LANGUAGE_JAPANESE,      LANGUAGE_NONE,
                 DEFAULTFONT_CJK_TEXT,   EE_CHAR_FONTINFO_CJK },
             // info to get CTL font to be used
-            {   LANGUAGE_ARABIC,        LANGUAGE_NONE,
+            {   LANGUAGE_ARABIC_SAUDI_ARABIA,  LANGUAGE_NONE,
                 DEFAULTFONT_CTL_TEXT,   EE_CHAR_FONTINFO_CTL }
         };
         aTable[0].nLang = aOpt.nDefaultLanguage;

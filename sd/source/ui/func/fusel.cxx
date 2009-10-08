@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: fusel.cxx,v $
- * $Revision: 1.55 $
+ * $Revision: 1.55.74.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -144,7 +144,6 @@ void FuSelection::DoExecute( SfxRequest& rReq )
 
 FuSelection::~FuSelection()
 {
-    HPUX_DTOR_BUG;
     mpView->UnmarkAllPoints();
     mpView->ResetCreationActive();
 
@@ -414,26 +413,29 @@ BOOL FuSelection::MouseButtonDown(const MouseEvent& rMEvt)
                         }
                     }
 
-                    if ( !bReadOnly &&
-                        bMarked                                                   &&
-                        (!rMEvt.IsShift() || mpView->IsMarkedHit(aMDPos, nHitLog)))
+                    if( !bDeactivateOLE )
                     {
-                        /**********************************************************
-                        * Objekt verschieben
-                        **********************************************************/
-                        aDragTimer.Start();
+                        if ( !bReadOnly &&
+                             bMarked                                                   &&
+                             (!rMEvt.IsShift() || mpView->IsMarkedHit(aMDPos, nHitLog)))
+                        {
+                            /**********************************************************
+                             * Objekt verschieben
+                             **********************************************************/
+                            aDragTimer.Start();
 
-                        pHdl=mpView->PickHandle(aMDPos);
-                        if ( ! rMEvt.IsRight())
-                            mpView->BegDragObj(aMDPos, (OutputDevice*) NULL, pHdl, nDrgLog);
-                    }
-                    else
-                    {
-                        /**********************************************************
-                        * Objekt selektieren
-                        **********************************************************/
-                        if ( ! rMEvt.IsRight())
-                            mpView->BegMarkObj(aMDPos);
+                            pHdl=mpView->PickHandle(aMDPos);
+                            if ( ! rMEvt.IsRight())
+                                mpView->BegDragObj(aMDPos, (OutputDevice*) NULL, pHdl, nDrgLog);
+                        }
+                        else
+                        {
+                            /**********************************************************
+                             * Objekt selektieren
+                             **********************************************************/
+                            if ( ! rMEvt.IsRight())
+                                mpView->BegMarkObj(aMDPos);
+                        }
                     }
                 }
             }

@@ -40,9 +40,14 @@
 #include "MasterPageDescriptor.hxx"
 #include "EventMultiplexer.hxx"
 #include "app.hrc"
+#include "DrawDocShell.hxx"
+#include "DrawViewShell.hxx"
+#include "res_bmp.hrc"
+#include "sdresid.hxx"
 
 #include <vcl/image.hxx>
 #include <svx/svdmodel.hxx>
+#include <sfx2/request.hxx>
 
 #include <set>
 
@@ -73,8 +78,6 @@ CurrentMasterPagesSelector::CurrentMasterPagesSelector (
         | sd::tools::EventMultiplexerEvent::EID_SHAPE_CHANGED
         | sd::tools::EventMultiplexerEvent::EID_SHAPE_INSERTED
         | sd::tools::EventMultiplexerEvent::EID_SHAPE_REMOVED);
-
-
 }
 
 
@@ -82,6 +85,15 @@ CurrentMasterPagesSelector::CurrentMasterPagesSelector (
 
 CurrentMasterPagesSelector::~CurrentMasterPagesSelector (void)
 {
+    if (mrDocument.GetDocSh() != NULL)
+    {
+        EndListening(*mrDocument.GetDocSh());
+    }
+    else
+    {
+        OSL_ASSERT(mrDocument.GetDocSh() != NULL);
+    }
+
     Link aLink (LINK(this,CurrentMasterPagesSelector,EventMultiplexerListener));
     mrBase.GetEventMultiplexer()->RemoveEventListener(aLink);
 }
@@ -93,6 +105,14 @@ void CurrentMasterPagesSelector::LateInit (void)
 {
     MasterPagesSelector::LateInit();
     MasterPagesSelector::Fill();
+    if (mrDocument.GetDocSh() != NULL)
+    {
+        StartListening(*mrDocument.GetDocSh());
+    }
+    else
+    {
+        OSL_ASSERT(mrDocument.GetDocSh() != NULL);
+    }
 }
 
 
@@ -128,6 +148,7 @@ void CurrentMasterPagesSelector::Fill (ItemList& rItemList)
                 String(),
                 pMasterPage->GetName(),
                 String(),
+                pMasterPage->IsPrecious(),
                 ::boost::shared_ptr<PageObjectProvider>(new ExistingPageProvider(pMasterPage)),
                 ::boost::shared_ptr<PreviewProvider>(new PagePreviewProvider())));
             aToken = mpContainer->PutMasterPage(pDescriptor);
@@ -140,14 +161,9 @@ void CurrentMasterPagesSelector::Fill (ItemList& rItemList)
 
 
 
-SdPage* CurrentMasterPagesSelector::GetSelectedMasterPage (void)
+ResId CurrentMasterPagesSelector::GetContextMenuResId (void) const
 {
-    USHORT nIndex = mpPageSet->GetSelectItemId();
-    UserData* pData = GetUserData(nIndex);
-    if (pData != NULL)
-        return mpContainer->GetPageObjectForToken(pData->second);
-    else
-        return NULL;
+    return SdResId(RID_TASKPANE_CURRENT_MASTERPAGESSELECTOR_POPUP);
 }
 
 
@@ -202,6 +218,51 @@ void CurrentMasterPagesSelector::UpdateSelection (void)
 
 
 
+void CurrentMasterPagesSelector::Execute (SfxRequest& rRequest)
+{
+    switch (rRequest.GetSlot())
+    {
+        case SID_DELETE_MASTER_PAGE:
+        {
+            // Check once again that the master page can safely be deleted,
+            // i.e. is not used.
+            SdPage* pMasterPage = GetSelectedMasterPage();
+            if (pMasterPage != NULL
+                && mrDocument.GetMasterPageUserCount(pMasterPage) > 0)
+            {
+                // Removing the precious flag so that the following call to
+                // RemoveUnnessesaryMasterPages() will remove this master page.
+                pMasterPage->SetPrecious(false);
+                mrDocument.RemoveUnnecessaryMasterPages(pMasterPage, FALSE, TRUE);
+            }
+        }
+        break;
+
+        default:
+            MasterPagesSelector::Execute(rRequest);
+            break;
+    }
+}
+
+
+
+
+void CurrentMasterPagesSelector::GetState (SfxItemSet& rItemSet)
+{
+    // Disable the SID_DELTE_MASTER slot when there is only one master page.
+    if (mrDocument.GetMasterPageUserCount(GetSelectedMasterPage()) > 0)
+    {
+        rItemSet.DisableItem(SID_DELETE_MASTER_PAGE);
+    }
+
+    MasterPagesSelector::GetState(rItemSet);
+}
+
+
+
+
+
+
 IMPL_LINK(CurrentMasterPagesSelector,EventMultiplexerListener,
     sd::tools::EventMultiplexerEvent*,pEvent)
 {
@@ -237,6 +298,36 @@ IMPL_LINK(CurrentMasterPagesSelector,EventMultiplexerListener,
 
     return 0;
 }
+
+
+
+
+void CurrentMasterPagesSelector::Notify (SfxBroadcaster&, const SfxHint& rHint)
+{
+    const SfxSimpleHint* pSimpleHint = dynamic_cast<const SfxSimpleHint*>(&rHint);
+    if (pSimpleHint != NULL)
+    {
+        if (pSimpleHint->GetId() == SFX_HINT_DOCCHANGED)
+        {
+            // Is the edit view visible in the center pane?
+            ::boost::shared_ptr<DrawViewShell> pDrawViewShell (
+                ::boost::dynamic_pointer_cast<DrawViewShell>(mrBase.GetMainViewShell()));
+            if (pDrawViewShell.get() != NULL)
+            {
+                // Is the edit view in master page mode?
+                if (pDrawViewShell->GetEditMode() == EM_MASTERPAGE)
+                {
+                    // Mark the currently edited master page as precious.
+                    SdPage* pCurrentMasterPage = pDrawViewShell->getCurrentPage();
+                    if (pCurrentMasterPage != NULL)
+                        pCurrentMasterPage->SetPrecious(true);
+                }
+            }
+        }
+    }
+}
+
+
 
 
 } } } // end of namespace ::sd::toolpanel::controls

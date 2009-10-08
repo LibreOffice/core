@@ -98,6 +98,7 @@
 #define BMP_FOILH_06            RID_APP_START+35
 #define BMP_FOILH_09            RID_APP_START+36
 #define BMP_FOILN_01            RID_APP_START+40
+#define BMP_FOIL_25             RID_APP_START+41
 
 // Bitmaps fuer Tree-ListBox im Effekte-TabDialog
 #define BMP_PAGE                RID_APP_START+42
@@ -229,6 +230,7 @@
 #define BMP_FADE_EFFECT_INDICATOR_H         RID_SD_START+332
 
 #define BMP_FOILH_09_H                      RID_SD_START+333
+#define BMP_FOIL_25_H                       RID_SD_START+334
 
 // -----------------------------------------------------------------------------
 
@@ -296,6 +298,8 @@
 
 #define RID_DRAW_TABLE_POPUP                RID_APP_START+91
 #define RID_GRAPHIC_TABLE_POPUP             RID_APP_START+92
+
+#define RID_TASKPANE_CURRENT_MASTERPAGESSELECTOR_POPUP  RID_APP_START+93
 
 /*
  * Pointer (Mauszeiger)

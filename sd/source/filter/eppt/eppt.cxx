@@ -2438,7 +2438,7 @@ void PPTExStyleSheet::WriteTxCFStyleAtom( SvStream& rSt )
 // - exported function -
 // ---------------------
 
-extern "C" BOOL __LOADONCALLAPI ExportPPT( SvStorageRef& rSvStorage,
+extern "C" SAL_DLLPUBLIC_EXPORT BOOL __LOADONCALLAPI ExportPPT( SvStorageRef& rSvStorage,
                     ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel > & rXModel,
                         ::com::sun::star::uno::Reference< ::com::sun::star::task::XStatusIndicator > & rXStatInd,
                             SvMemoryStream* pVBA, sal_uInt32 nCnvrtFlags )

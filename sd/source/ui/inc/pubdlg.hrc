@@ -89,6 +89,7 @@
 #define PAGE3_TITEL_3       60
 #define PAGE3_SLD_SOUND     61
 #define PAGE3_VERT          62
+#define PAGE3_HIDDEN_SLIDES 63
 
 //////////////////////////////
 

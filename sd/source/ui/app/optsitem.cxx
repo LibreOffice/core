@@ -521,7 +521,7 @@ SdOptionsMisc::SdOptionsMisc( USHORT nConfigId, BOOL bUseConfig ) :
     bDoubleClickTextEdit( TRUE ),
     bClickChangeRotation( FALSE ),
     bStartWithActualPage( FALSE ),
-    bSolidDragging( FALSE ),
+    bSolidDragging( TRUE ),
     bSolidMarkHdl( TRUE ),
     bSummationOfParagraphs( FALSE ),
     // #90356#
@@ -555,7 +555,7 @@ void SdOptionsMisc::SetDefaults()
     SetClickChangeRotation( FALSE );
     SetStartWithActualPage( FALSE );
     SetSummationOfParagraphs( FALSE );
-    SetSolidDragging( FALSE );
+    SetSolidDragging( TRUE );
     SetSolidMarkHdl( TRUE );
     // #90356#
     SetShowUndoDeleteWarning( TRUE );
@@ -622,7 +622,7 @@ void SdOptionsMisc::GetPropNameArray( const char**& ppNames, ULONG& rCount ) con
         "DclickTextedit",
         "RotateClick",
         "Preview",
-        "CreateWithAttributes",
+        "ModifyWithAttributes",
         "SimpleHandles",
         // #97016#
         "DefaultObjectSize/Width",
@@ -1584,8 +1584,8 @@ BOOL SdOptionsPrint::ReadData( const Any* pValues )
         if( pValues[12].hasValue() ) SetNotes( *(sal_Bool*) pValues[ 12 ].getValue() );
         if( pValues[13].hasValue() ) SetHandout( *(sal_Bool*) pValues[ 13 ].getValue() );
         if( pValues[14].hasValue() ) SetOutline( *(sal_Bool*) pValues[ 14 ].getValue() );
-        if( pValues[15].hasValue() ) SetHandoutHorizontal( *(sal_Bool*) pValues[12].getValue() );
-        if( pValues[16].hasValue() ) SetHandoutPages( (UINT16)*(sal_Int32*) pValues[13].getValue() );
+        if( pValues[15].hasValue() ) SetHandoutHorizontal( *(sal_Bool*) pValues[15].getValue() );
+        if( pValues[16].hasValue() ) SetHandoutPages( (UINT16)*(sal_Int32*) pValues[16].getValue() );
     }
 
     return TRUE;

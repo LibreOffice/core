@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: Outliner.cxx,v $
- * $Revision: 1.37 $
+ * $Revision: 1.37.24.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -33,8 +33,6 @@
 
 #include "Outliner.hxx"
 #include <vcl/wrkwin.hxx>
-#include <svx/fontitem.hxx>
-#include <svx/fhgtitem.hxx>
 #include <sfx2/srchitem.hxx>
 #include <svx/colritem.hxx>
 #include <svx/eeitem.hxx>
@@ -61,7 +59,7 @@
 #include <svtools/linguprops.hxx>
 #include <svtools/lingucfg.hxx>
 #include <svx/editeng.hxx>
-
+#include <vcl/metric.hxx>
 #include <sfx2/viewfrm.hxx>
 
 #include "strings.hrc"
@@ -200,29 +198,22 @@ Outliner::Outliner( SdDrawDocument* pDoc, USHORT nMode )
     nCntrl |= EE_CNTRL_MARKFIELDS;
     nCntrl |= EE_CNTRL_AUTOCORRECT;
 
-    BOOL bHideSpell = true;
     BOOL bOnlineSpell = false;
 
     DrawDocShell* pDocSh = mpDrawDocument->GetDocSh();
 
     if (pDocSh)
     {
-        bHideSpell = mpDrawDocument->GetHideSpell();
         bOnlineSpell = mpDrawDocument->GetOnlineSpell();
     }
     else
     {
-        bHideSpell = true;
         bOnlineSpell = false;
 
         try
         {
             const SvtLinguConfig    aLinguConfig;
             Any                     aAny;
-
-            aAny = aLinguConfig.GetProperty(
-                rtl::OUString::createFromAscii( UPN_IS_SPELL_HIDE ) );
-            aAny >>= bHideSpell;
 
             aAny = aLinguConfig.GetProperty(
                 rtl::OUString::createFromAscii( UPN_IS_SPELL_AUTO ) );
@@ -233,10 +224,6 @@ Outliner::Outliner( SdDrawDocument* pDoc, USHORT nMode )
             DBG_ERROR( "Ill. type in linguistic property" );
         }
     }
-
-    if (bHideSpell)
-        nCntrl |= EE_CNTRL_NOREDLINES;  else
-        nCntrl &= ~EE_CNTRL_NOREDLINES;
 
     if (bOnlineSpell)
         nCntrl |= EE_CNTRL_ONLINESPELLING;
@@ -1235,6 +1222,7 @@ void Outliner::PrepareSpellCheck (void)
         // When spell checking we have to test whether we have processed the
         // whole document and have reached the start page again.
         if (meMode == SPELL)
+        {
             if (maSearchStartPosition == ::sd::outliner::Iterator())
                 // Remember the position of the first text object so that we
                 // know when we have processed the whole document.
@@ -1243,7 +1231,7 @@ void Outliner::PrepareSpellCheck (void)
             {
                 mbEndOfSearch = true;
             }
-
+        }
 
         EnterEditMode( FALSE );
     }

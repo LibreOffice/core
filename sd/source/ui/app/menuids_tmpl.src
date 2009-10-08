@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: menuids_tmpl.src,v $
- * $Revision: 1.19 $
+ * $Revision: 1.19.106.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -467,6 +467,12 @@
                     Identifier = SID_ATTR_CHAR_POSTURE ; \
                     HelpID = SID_ATTR_CHAR_POSTURE ; \
                     Text [ en-US ] = "Italic" ; \
+                };\
+                MenuItem\
+                {\
+                    Identifier = SID_ATTR_CHAR_OVERLINE ; \
+                    HelpID = SID_ATTR_CHAR_OVERLINE ; \
+                    Text [ en-US ] = "Overline" ; \
                 };\
                 MenuItem\
                 {\

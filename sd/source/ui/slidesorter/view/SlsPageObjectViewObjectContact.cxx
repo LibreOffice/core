@@ -600,7 +600,7 @@ private:
 
     /// the FadeEffect bitmap. Static since it is usable outside this primitive
     /// for size comparisons
-    static BitmapEx                     maFadeEffectIconBitmap;
+    static BitmapEx*                    mpFadeEffectIconBitmap;
 
     /// page name, number and needed infos
     String                              maPageName;
@@ -648,21 +648,21 @@ public:
 
 const sal_Int32 SdPageObjectFadeNameNumberPrimitive::mnFadeEffectIndicatorOffset(9);
 const sal_Int32 SdPageObjectFadeNameNumberPrimitive::mnPageNumberOffset(9);
-BitmapEx SdPageObjectFadeNameNumberPrimitive::maFadeEffectIconBitmap;
+BitmapEx* SdPageObjectFadeNameNumberPrimitive::mpFadeEffectIconBitmap = 0;
 
 const BitmapEx& SdPageObjectFadeNameNumberPrimitive::getFadeEffectIconBitmap() const
 {
-    if(maFadeEffectIconBitmap.IsEmpty())
+    if(mpFadeEffectIconBitmap == NULL)
     {
         // prepare FadeEffectIconBitmap on demand
         const sal_uInt16 nIconId(Application::GetSettings().GetStyleSettings().GetHighContrastMode()
             ? BMP_FADE_EFFECT_INDICATOR_H
             : BMP_FADE_EFFECT_INDICATOR);
         const BitmapEx aFadeEffectIconBitmap(IconCache::Instance().GetIcon(nIconId).GetBitmapEx());
-        const_cast< SdPageObjectFadeNameNumberPrimitive* >(this)->maFadeEffectIconBitmap = aFadeEffectIconBitmap;
+        const_cast< SdPageObjectFadeNameNumberPrimitive* >(this)->mpFadeEffectIconBitmap = new BitmapEx(aFadeEffectIconBitmap);
     }
 
-    return maFadeEffectIconBitmap;
+    return *mpFadeEffectIconBitmap;
 }
 
 drawinglayer::primitive2d::Primitive2DSequence SdPageObjectFadeNameNumberPrimitive::createLocalDecomposition(const drawinglayer::geometry::ViewInformation2D& rViewInformation) const

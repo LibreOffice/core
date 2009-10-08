@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: fuprlout.hxx,v $
- * $Revision: 1.5 $
+ * $Revision: 1.5.130.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -59,10 +59,6 @@ private:
         ::sd::View* pView,
         SdDrawDocument* pDoc,
         SfxRequest& rReq);
-
-    void TransferLayoutTemplate(String aFromName, String aToName,
-                                SfxStyleSheetBasePool* pFrom,
-                                SfxStyleSheetBasePool* pTo);
 };
 
 } // end of namespace sd

@@ -247,10 +247,12 @@ uno::Reference<XAccessible> SAL_CALL
     // Take care of children of the base class.
     sal_Int32 nCount = AccessibleDocumentViewBase::getAccessibleChildCount();
     if (nCount > 0)
+    {
         if (nIndex < nCount)
             return AccessibleDocumentViewBase::getAccessibleChild(nIndex);
         else
             nIndex -= nCount;
+    }
 
     // Create a copy of the pointer to the children manager and release the
     // mutex before calling any of its methods.
@@ -663,6 +665,19 @@ void AccessibleDrawDocumentView::Deactivated (void)
     ResetState (AccessibleStateType::FOCUSED);
 }
 
+
+
+
+void AccessibleDrawDocumentView::impl_dispose (void)
+{
+    if (mpChildrenManager != NULL)
+    {
+        delete mpChildrenManager;
+        mpChildrenManager = NULL;
+    }
+
+    AccessibleDocumentViewBase::impl_dispose();
+}
 
 
 

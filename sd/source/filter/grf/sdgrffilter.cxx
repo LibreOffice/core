@@ -153,15 +153,12 @@ void SdGRFFilter_ImplInteractionHdl::handle( const com::sun::star::uno::Referenc
 SdGRFFilter::SdGRFFilter( SfxMedium& rMedium, ::sd::DrawDocShell& rDocShell ) :
     SdFilter( rMedium, rDocShell, sal_True )
 {
-    mbHideSpell = mrDocument.GetHideSpell();
-    mrDocument.SetHideSpell(TRUE);
 }
 
 // -----------------------------------------------------------------------------
 
 SdGRFFilter::~SdGRFFilter()
 {
-    mrDocument.SetHideSpell(mbHideSpell);
 }
 
 // -----------------------------------------------------------------------------
@@ -241,7 +238,7 @@ sal_Bool SdGRFFilter::Import()
             aPagSize.Height() -= pPage->GetUppBorder() + pPage->GetLwrBorder();
 
             // scale to fit page
-            if ( ( aGrfSize.Height() > aPagSize.Height() ) || (aGrfSize.Width() > aPagSize.Width() ) &&
+            if ( ( ( aGrfSize.Height() > aPagSize.Height() ) || ( aGrfSize.Width() > aPagSize.Width() ) ) &&
                  aGrfSize.Height() && aPagSize.Height() )
             {
                 double fGrfWH = (double) aGrfSize.Width() / aGrfSize.Height();

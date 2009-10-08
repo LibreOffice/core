@@ -164,6 +164,8 @@ protected:
         change event indicating that it has lost the focus.
     */
     virtual void Deactivated (void);
+
+    virtual void impl_dispose (void);
 };
 
 } // end of namespace accessibility

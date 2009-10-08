@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: viewmediashape.hxx,v $
- * $Revision: 1.3 $
+ * $Revision: 1.3.18.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -106,6 +106,20 @@ namespace slideshow
                 target view
              */
             void endMedia();
+
+            /** Notify the ViewShape that it should pause playback
+
+                This methods pauses animation on the associate
+                target view. The content stays visible (for video)
+             */
+            void pauseMedia();
+
+            /** Set current time of media.
+
+            @param fTime
+            Local media time that should now be presented, in seconds.
+             */
+            void setMediaTime(double fTime);
 
             // render methods
             //------------------------------------------------------------------

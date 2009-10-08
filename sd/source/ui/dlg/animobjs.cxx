@@ -569,7 +569,7 @@ IMPL_LINK( AnimationWindow, ModifyTimeHdl, void *, EMPTYARG )
     ULONG nPos = static_cast<ULONG>(aNumFldBitmap.GetValue() - 1);
 
     Time* pTime = static_cast< Time* >( aTimeList.GetObject( nPos ) );
-    DBG_ASSERT( pTime, "Zeit nicht gefunden!" )
+    DBG_ASSERT( pTime, "Zeit nicht gefunden!" );
 
     *pTime = aTimeField.GetTime();
 

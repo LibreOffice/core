@@ -173,6 +173,8 @@ static snewfoil_value_info standard[] =
      AUTOLAYOUT_2TEXT},
     {BMP_FOIL_19, BMP_FOIL_19_H, STR_AUTOLAYOUT_ONLY_TITLE, WritingMode_LR_TB,
      AUTOLAYOUT_ONLY_TITLE},
+    {BMP_FOIL_25, BMP_FOIL_25_H, STR_AUTOLAYOUT_ONLY_TEXT, WritingMode_LR_TB,
+     AUTOLAYOUT_ONLY_TEXT},
     {BMP_FOIL_11, BMP_FOIL_11_H, STR_AUTOLAYOUT_OBJ, WritingMode_LR_TB,
      AUTOLAYOUT_OBJ},
     {BMP_FOIL_02, BMP_FOIL_02_H, STR_AUTOLAYOUT_CHART, WritingMode_LR_TB,
@@ -781,7 +783,7 @@ void LayoutMenu::Fill (void)
     {
         if ((WritingMode_TB_RL != pInfo->meWritingMode) || bVertical)
         {
-            Bitmap aBmp (SdResId (bHighContrast
+            BitmapEx aBmp (SdResId (bHighContrast
                              ? pInfo->mnHCBmpResId
                              : pInfo->mnBmpResId));
 

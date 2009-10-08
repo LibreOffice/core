@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: fuolbull.cxx,v $
- * $Revision: 1.11 $
+ * $Revision: 1.11.104.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -101,16 +101,22 @@ void FuOutlineBullet::DoExecute( SfxRequest& rReq )
                 case RET_OK:
                 {
                     SfxItemSet aSet( *pDlg->GetOutputItemSet() );
-/* i35937
-                    if (mpView->ISA(DrawViewShell) )
+
+                    OutlinerView* pOLV = mpView->GetTextEditOutlinerView();
+
+                    std::auto_ptr< OutlineViewModelChangeGuard > aGuard;
+
+                    if (mpView->ISA(OutlineView))
                     {
-                        if( mpView->GetMarkedObjectList().GetMarkCount() == 0)
-                        {
-                            SfxUInt16Item aBulletState( EE_PARA_BULLETSTATE, 0 );
-                            aSet.Put(aBulletState);
-                        }
+                        pOLV = static_cast<OutlineView*>(mpView)
+                            ->GetViewByWindow(mpViewShell->GetActiveWindow());
+
+                        aGuard.reset( new OutlineViewModelChangeGuard( static_cast<OutlineView&>(*mpView) ) );
                     }
-*/
+
+                    if( pOLV )
+                        pOLV->EnableBullets();
+
                     rReq.Done( aSet );
                     pArgs = rReq.GetArgs();
                 }

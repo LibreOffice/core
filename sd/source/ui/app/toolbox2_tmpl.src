@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: toolbox2_tmpl.src,v $
- * $Revision: 1.9 $
+ * $Revision: 1.9.106.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -289,6 +289,10 @@ ToolBox RID_GRAPHIC_TEXT_TOOLBOX
         };
         ToolBoxItem
         {
+            ITEM_FORMAT_ATTR_CHAR_OVERLINE
+        };
+        ToolBoxItem
+        {
             ITEM_TOOLBAR_ATTR_CHAR_COLOR
             DropDown = TRUE ;
         };
@@ -494,6 +498,10 @@ ToolBox RID_GRAPHIC_TEXT_TOOLBOX
         };
         ToolBoxItem
         {
+            ITEM_FORMAT_ATTR_CHAR_OVERLINE
+        };
+        ToolBoxItem
+        {
             ITEM_TOOLBAR_ATTR_CHAR_COLOR
             DropDown = TRUE ;
         };
@@ -696,6 +704,10 @@ ToolBox RID_GRAPHIC_TEXT_TOOLBOX
         ToolBoxItem
         {
             ITEM_FORMAT_ATTR_CHAR_UNDERLINE
+        };
+        ToolBoxItem
+        {
+            ITEM_FORMAT_ATTR_CHAR_OVERLINE
         };
         ToolBoxItem
         {
