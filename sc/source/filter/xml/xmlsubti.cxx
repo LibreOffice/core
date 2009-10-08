@@ -38,10 +38,13 @@
 #include "xmlstyli.hxx"
 #include "xmlimprt.hxx"
 #include "document.hxx"
+#include "markdata.hxx"
 #include "XMLConverter.hxx"
 #include "docuno.hxx"
 #include "cellsuno.hxx"
 #include "XMLStylesImportHelper.hxx"
+#include "tabprotection.hxx"
+#include <svx/svdpage.hxx>
 
 #include <xmloff/xmltkmap.hxx>
 #include <xmloff/nmspmap.hxx>
@@ -57,6 +60,10 @@
 #include <com/sun/star/container/XNamed.hpp>
 #include <com/sun/star/util/XProtectable.hpp>
 #include <com/sun/star/sheet/XArrayFormulaRange.hpp>
+
+#include <memory>
+
+using ::std::auto_ptr;
 
 //------------------------------------------------------------------
 
@@ -576,7 +583,35 @@ void ScMyTables::UpdateRowHeights()
     {
         rImport.LockSolarMutex();
         // update automatic row heights
-        ScModelObj::getImplementation(rImport.GetModel())->UpdateAllRowHeights();
+
+        // For sheets with any kind of shapes (including notes),
+        // update row heights immediately (before setting the positions).
+        // For sheets without shapes, set "pending" flag
+        // and update row heights when a sheet is shown.
+        // The current sheet (from view settings) is always updated immediately.
+
+        ScDocument* pDoc = ScXMLConverter::GetScDocument(rImport.GetModel());
+        if (pDoc)
+        {
+            SCTAB nCount = pDoc->GetTableCount();
+            ScDrawLayer* pDrawLayer = pDoc->GetDrawLayer();
+
+            SCTAB nVisible = static_cast<SCTAB>( rImport.GetVisibleSheet() );
+
+            ScMarkData aUpdateSheets;
+            for (SCTAB nTab=0; nTab<nCount; ++nTab)
+            {
+                const SdrPage* pPage = pDrawLayer ? pDrawLayer->GetPage(nTab) : NULL;
+                if ( nTab == nVisible || ( pPage && pPage->GetObjCount() != 0 ) )
+                    aUpdateSheets.SelectTable( nTab, TRUE );
+                else
+                    pDoc->SetPendingRowHeights( nTab, TRUE );
+            }
+
+            if (aUpdateSheets.GetSelectCount())
+                ScModelObj::getImplementation(rImport.GetModel())->UpdateAllRowHeights(&aUpdateSheets);
+        }
+
         rImport.UnlockSolarMutex();
     }
 }
@@ -616,13 +651,10 @@ void ScMyTables::DeleteTable()
     {
         uno::Sequence<sal_Int8> aPass;
         SvXMLUnitConverter::decodeBase64(aPass, sPassword);
-        rImport.GetDocument()->SetTabProtection(static_cast<SCTAB>(nCurrentSheet), bProtection, aPass);
-        /*uno::Reference <util::XProtectable> xProtectable(xCurrentSheet, uno::UNO_QUERY);
-        if (xProtectable.is())
-        {
-            rtl::OUString sKey;
-            xProtectable->protect(sKey);
-        }*/
+        auto_ptr<ScTableProtection> pProtect(new ScTableProtection);
+        pProtect->setProtected(bProtection);
+        pProtect->setPasswordHash(aPass, PASSHASH_OOO);
+        rImport.GetDocument()->SetTabProtection(static_cast<SCTAB>(nCurrentSheet), pProtect.get());
     }
 
     rImport.UnlockSolarMutex();

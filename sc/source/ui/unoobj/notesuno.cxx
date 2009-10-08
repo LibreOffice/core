@@ -220,14 +220,14 @@ rtl::OUString SAL_CALL ScAnnotationObj::getAuthor() throw(uno::RuntimeException)
 {
     ScUnoGuard aGuard;
     const ScPostIt* pNote = ImplGetNote();
-    return pNote ? pNote->GetAuthor() : EMPTY_STRING;
+    return pNote ? pNote->GetAuthor() : rtl::OUString();
 }
 
 rtl::OUString SAL_CALL ScAnnotationObj::getDate() throw(uno::RuntimeException)
 {
     ScUnoGuard aGuard;
     const ScPostIt* pNote = ImplGetNote();
-    return pNote ? pNote->GetDate() : EMPTY_STRING;
+    return pNote ? pNote->GetDate() : rtl::OUString();
 }
 
 sal_Bool SAL_CALL ScAnnotationObj::getIsVisible() throw(uno::RuntimeException)
@@ -298,7 +298,7 @@ uno::Reference < drawing::XShape > ScAnnotationShapeObj::GetXShape()
 {
     if (!xShape.is())
         if( ScPostIt* pNote = pDocShell->GetDocument()->GetNote( aCellPos ) )
-            if( SdrObject* pCaption = pNote->GetCaption() )
+            if( SdrObject* pCaption = pNote->GetOrCreateCaption( aCellPos ) )
                 xShape.set( pCaption->getUnoShape(), uno::UNO_QUERY );
     return xShape;
 }

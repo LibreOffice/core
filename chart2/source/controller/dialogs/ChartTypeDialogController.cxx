@@ -808,7 +808,7 @@ String XYChartDialogController::getName()
 }
 Image XYChartDialogController::getImage( bool bIsHighContrast )
 {
-    return SELECT_IMAGE( IMG_TYPE_LINE );
+    return SELECT_IMAGE( IMG_TYPE_XY );
 }
 const tTemplateServiceChartTypeParameterMap& XYChartDialogController::getTemplateMap() const
 {
@@ -1237,6 +1237,40 @@ void CombiColumnLineChartDialogController::adjustParameterToSubType( ChartTypePa
             rParameter.eStackMode=GlobalStackMode_NONE;
             break;
     }
+}
+//--------------------------------------------------------------------------
+BubbleChartDialogController::BubbleChartDialogController()
+{
+}
+BubbleChartDialogController::~BubbleChartDialogController()
+{
+}
+String BubbleChartDialogController::getName()
+{
+    return String( SchResId( STR_TYPE_BUBBLE ));
+}
+Image BubbleChartDialogController::getImage( bool bIsHighContrast )
+{
+    return SELECT_IMAGE( IMG_TYPE_BUBBLE );
+}
+const tTemplateServiceChartTypeParameterMap& BubbleChartDialogController::getTemplateMap() const
+{
+    static tTemplateServiceChartTypeParameterMap m_aTemplateMap =
+    tTemplateServiceChartTypeParameterMap
+        ( C2U( "com.sun.star.chart2.template.Bubble" ),          ChartTypeParameter(1,true) ) ;
+    return m_aTemplateMap;
+}
+void BubbleChartDialogController::fillSubTypeList( ValueSet& rSubTypeList, bool bIsHighContrast, const ChartTypeParameter& /*rParameter*/ )
+{
+    rSubTypeList.Clear();
+    rSubTypeList.InsertItem( 1, SELECT_BITMAP( BMP_BUBBLE_1 ) );
+
+    rSubTypeList.SetItemText( 1, String( SchResId( STR_BUBBLE_1 )) );
+}
+void BubbleChartDialogController::adjustParameterToSubType( ChartTypeParameter& rParameter )
+{
+    rParameter.b3DLook = false;
+    rParameter.eStackMode = GlobalStackMode_NONE;
 }
 //.............................................................................
 } //namespace chart

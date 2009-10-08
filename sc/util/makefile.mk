@@ -85,6 +85,7 @@ SHL1STDLIBS=       \
     $(SVXLIB)		\
     $(GOODIESLIB)	\
     $(BASEGFXLIB) \
+    $(DRAWINGLAYERLIB) \
     $(VCLLIB)		\
     $(CPPULIB)		\
     $(CPPUHELPERLIB)	\
@@ -189,6 +190,7 @@ SHL6STDLIBS= \
     $(SVLLIB)		\
     $(SVXLIB)		\
     $(BASEGFXLIB) \
+    $(DRAWINGLAYERLIB) \
     $(VCLLIB)		\
     $(CPPULIB)		\
     $(CPPUHELPERLIB)	\

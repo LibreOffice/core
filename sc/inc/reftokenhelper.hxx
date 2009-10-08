@@ -56,7 +56,8 @@ public:
      * The source range may consist of multiple ranges separated by ';'s.
      */
     static void compileRangeRepresentation(
-        ::std::vector<ScSharedTokenRef>& rRefTokens, const ::rtl::OUString& rRangeStr, ScDocument* pDoc);
+        ::std::vector<ScSharedTokenRef>& rRefTokens, const ::rtl::OUString& rRangeStr, ScDocument* pDoc,
+        ::formula::FormulaGrammar::Grammar eGrammar = ::formula::FormulaGrammar::GRAM_ENGLISH);
 
     static bool getRangeFromToken(ScRange& rRange, const ScSharedTokenRef& pToken, bool bExternal = false);
 

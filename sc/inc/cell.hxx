@@ -102,7 +102,7 @@ public:
 
     /** Returns a clone of this cell, clones cell note and caption object too
         (unless SC_CLONECELL_NOCAPTION flag is set). Broadcaster will not be cloned. */
-    ScBaseCell*     CloneWithNote( ScDocument& rDestDoc, const ScAddress& rDestPos, int nCloneFlags = SC_CLONECELL_DEFAULT ) const;
+    ScBaseCell*     CloneWithNote( const ScAddress& rOwnPos, ScDocument& rDestDoc, const ScAddress& rDestPos, int nCloneFlags = SC_CLONECELL_DEFAULT ) const;
 
     /** Due to the fact that ScBaseCell does not have a vtable, this function
         deletes the cell by calling the appropriate d'tor of the derived class. */
@@ -393,7 +393,8 @@ public:
     void            UpdateReference(UpdateRefMode eUpdateRefMode,
                                     const ScRange& r,
                                     SCsCOL nDx, SCsROW nDy, SCsTAB nDz,
-                                    ScDocument* pUndoDoc = NULL );
+                                    ScDocument* pUndoDoc = NULL,
+                                    const ScAddress* pUndoCellPos = NULL );
 
     void            TransposeReference();
     void            UpdateTranspose( const ScRange& rSource, const ScAddress& rDest,

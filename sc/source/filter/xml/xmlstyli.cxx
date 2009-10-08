@@ -248,8 +248,14 @@ void ScXMLRowImportPropertyMapper::finished(::std::vector< XMLPropertyState >& r
         if (::cppu::any2bool(pOptimalHeight->maValue))
         {
             if (pHeight)
+            {
+                // set the stored height, but keep "optimal" flag:
+                // pass the height value as OptimalHeight property (only allowed while loading!)
+                pOptimalHeight->maValue = pHeight->maValue;
                 pHeight->mnIndex = -1;
-            pOptimalHeight->mnIndex = -1;
+            }
+            else
+                pOptimalHeight->mnIndex = -1;
         }
     }
     else if (pHeight)

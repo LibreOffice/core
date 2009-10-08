@@ -472,7 +472,7 @@ BOOL ScFormulaCell::HasColRowName() const
 void ScFormulaCell::UpdateReference(UpdateRefMode eUpdateRefMode,
                                     const ScRange& r,
                                     SCsCOL nDx, SCsROW nDy, SCsTAB nDz,
-                                    ScDocument* pUndoDoc )
+                                    ScDocument* pUndoDoc, const ScAddress* pUndoCellPos )
 {
     SCCOL nCol1 = r.aStart.Col();
     SCROW nRow1 = r.aStart.Row();
@@ -484,6 +484,8 @@ void ScFormulaCell::UpdateReference(UpdateRefMode eUpdateRefMode,
     SCROW nRow = aPos.Row();
     SCTAB nTab = aPos.Tab();
     ScAddress aUndoPos( aPos );         // position for undo cell in pUndoDoc
+    if ( pUndoCellPos )
+        aUndoPos = *pUndoCellPos;
     ScAddress aOldPos( aPos );
 //  BOOL bPosChanged = FALSE;           // ob diese Zelle bewegt wurde
     BOOL bIsInsert = FALSE;
@@ -706,10 +708,15 @@ void ScFormulaCell::UpdateReference(UpdateRefMode eUpdateRefMode,
             //  (InsertCells/DeleteCells - aPos is changed above) as well as when UpdateReference
             //  is called after moving the cells (MoveBlock/PasteFromClip - aOldPos is changed).
 
-            ScFormulaCell* pFCell = new ScFormulaCell( pUndoDoc, aUndoPos,
-                    pOld, eTempGrammar, cMatrixFlag );
-            pFCell->aResult.SetToken( NULL);  // to recognize it as changed later (Cut/Paste!)
-            pUndoDoc->PutCell( aUndoPos, pFCell );
+            // If there is already a formula cell in the undo document, don't overwrite it,
+            // the first (oldest) is the important cell.
+            if ( pUndoDoc->GetCellType( aUndoPos ) != CELLTYPE_FORMULA )
+            {
+                ScFormulaCell* pFCell = new ScFormulaCell( pUndoDoc, aUndoPos,
+                        pOld, eTempGrammar, cMatrixFlag );
+                pFCell->aResult.SetToken( NULL);  // to recognize it as changed later (Cut/Paste!)
+                pUndoDoc->PutCell( aUndoPos, pFCell );
+            }
         }
         bValChanged = FALSE;
         if ( pRangeData )

@@ -49,7 +49,7 @@ using ::std::auto_ptr;
 using ::rtl::OUString;
 
 void ScRefTokenHelper::compileRangeRepresentation(
-    vector<ScSharedTokenRef>& rRefTokens, const OUString& rRangeStr, ScDocument* pDoc)
+    vector<ScSharedTokenRef>& rRefTokens, const OUString& rRangeStr, ScDocument* pDoc, FormulaGrammar::Grammar eGrammar)
 {
     const sal_Unicode cSep = ';';
     const sal_Unicode cQuote = '\'';
@@ -63,7 +63,7 @@ void ScRefTokenHelper::compileRangeRepresentation(
             break;
 
         ScCompiler aCompiler(pDoc, ScAddress(0,0,0));
-        aCompiler.SetGrammar(FormulaGrammar::GRAM_ENGLISH);
+        aCompiler.SetGrammar(eGrammar);
         auto_ptr<ScTokenArray> pArray(aCompiler.CompileString(aToken));
 
         // There should only be one reference per range token.

@@ -1842,6 +1842,10 @@ void lcl_GetPrintData( ScDocShell* pDocShell /*in*/,
         rOptions = SC_MOD()->GetPrintOptions();
     }
 
+    // update all pending row heights with a single progress bar,
+    // instead of a separate progress for each sheet from ScPrintFunc
+    pDocShell->UpdatePendingRowHeights( MAXTAB, true );
+
     // get number of total pages
     rnTotalPages = 0;
     SCTAB nTabCount = pDocument->GetTableCount();
@@ -2506,10 +2510,14 @@ long __EXPORT ScDocShell::DdeSetData( const String& rItem,
                 pData->GetSymbol( aPos );           // continue with the name's contents
         }
     }
+
+    // Address in DDE function must be always parsed as CONV_OOO so that it
+    // would always work regardless of current address convension.  We do this
+    // because the address item in a DDE entry is *not* normalized when saved
+    // into ODF.
     ScRange aRange;
-    formula::FormulaGrammar::AddressConvention eConv = aDocument.GetAddressConvention();
-    BOOL bValid = ( ( aRange.Parse( aPos, &aDocument, eConv ) & SCA_VALID ) ||
-                    ( aRange.aStart.Parse( aPos, &aDocument, eConv ) & SCA_VALID ) );
+    bool bValid = ( (aRange.Parse(aPos, &aDocument, formula::FormulaGrammar::CONV_OOO ) & SCA_VALID) ||
+                    (aRange.aStart.Parse(aPos, &aDocument, formula::FormulaGrammar::CONV_OOO) & SCA_VALID) );
 
     ScServerObject* pObj = NULL;            // NULL = error
     if ( bValid )

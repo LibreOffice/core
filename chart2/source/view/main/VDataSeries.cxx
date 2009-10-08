@@ -140,6 +140,13 @@ void lcl_clearIfTextIsContained( VDataSequence& rData, const uno::Reference<data
     }
 }
 
+void lcl_maybeReplaceNanWithZero( double& rfValue, sal_Int32 nMissingValueTreatment )
+{
+    if( nMissingValueTreatment == ::com::sun::star::chart::MissingValueTreatment::USE_ZERO
+        && ::rtl::math::isNan(rfValue) || ::rtl::math::isInf(rfValue) )
+            rfValue = 0.0;
+}
+
 }
 
 VDataSeries::VDataSeries( const uno::Reference< XDataSeries >& xDataSeries )
@@ -163,6 +170,8 @@ VDataSeries::VDataSeries( const uno::Reference< XDataSeries >& xDataSeries )
     , m_aValues_Y_Max()
     , m_aValues_Y_First()
     , m_aValues_Y_Last()
+    , m_aValues_Bubble_Size()
+    , m_pValueSequenceForDataLabelNumberFormatDetection(&m_aValues_Y)
 
     , m_fYMeanValue(1.0)
 
@@ -193,6 +202,7 @@ VDataSeries::VDataSeries( const uno::Reference< XDataSeries >& xDataSeries )
     , m_apSymbolProperties_InvisibleSymbolForSelection(NULL)
     , m_nCurrentAttributedPoint(-1)
     , m_nMissingValueTreatment(::com::sun::star::chart::MissingValueTreatment::LEAVE_GAP)
+    , m_bAllowPercentValueInDataLabel(false)
 {
     ::rtl::math::setNan( & m_fYMeanValue );
 
@@ -230,7 +240,8 @@ VDataSeries::VDataSeries( const uno::Reference< XDataSeries >& xDataSeries )
                     m_aValues_Y_First.init( xDataSequence );
                 else if( aRole.equals(C2U("values-last")) )
                     m_aValues_Y_Last.init( xDataSequence );
-                //@todo assign the other roles (+ error for unknown?)
+                else if( aRole.equals(C2U("values-size")) )
+                    m_aValues_Bubble_Size.init( xDataSequence );
             }
             catch( uno::Exception& e )
             {
@@ -242,13 +253,15 @@ VDataSeries::VDataSeries( const uno::Reference< XDataSeries >& xDataSeries )
     //determine the point count
     m_nPointCount = m_aValues_Y.getLength();
     {
+        if( m_nPointCount < m_aValues_Bubble_Size.getLength() )
+            m_nPointCount = m_aValues_Bubble_Size.getLength();
         if( m_nPointCount < m_aValues_Y_Min.getLength() )
             m_nPointCount = m_aValues_Y_Min.getLength();
-       if( m_nPointCount < m_aValues_Y_Max.getLength() )
+        if( m_nPointCount < m_aValues_Y_Max.getLength() )
             m_nPointCount = m_aValues_Y_Max.getLength();
-       if( m_nPointCount < m_aValues_Y_First.getLength() )
+        if( m_nPointCount < m_aValues_Y_First.getLength() )
             m_nPointCount = m_aValues_Y_First.getLength();
-       if( m_nPointCount < m_aValues_Y_Last.getLength() )
+        if( m_nPointCount < m_aValues_Y_Last.getLength() )
             m_nPointCount = m_aValues_Y_Last.getLength();
     }
 
@@ -331,6 +344,7 @@ void VDataSeries::releaseShapes()
 void VDataSeries::setCategoryXAxis()
 {
     m_aValues_X.clear();
+    m_bAllowPercentValueInDataLabel = true;
 }
 
 void VDataSeries::setGlobalSeriesIndex( sal_Int32 nGlobalSeriesIndex )
@@ -445,27 +459,48 @@ sal_Int32 VDataSeries::getTotalPointCount() const
     return m_nPointCount;
 }
 
-double VDataSeries::getX( sal_Int32 index ) const
+double VDataSeries::getXValue( sal_Int32 index ) const
 {
+    double fRet = 0.0;
     if(m_aValues_X.is())
     {
         if( 0<=index && index<m_aValues_X.getLength() )
-            return m_aValues_X.Doubles[index];
+            fRet = m_aValues_X.Doubles[index];
+        else
+            ::rtl::math::setNan( &fRet );
     }
     else
     {
         // #i70133# always return correct X position - needed for short data series
         if( 0<=index /*&& index < m_nPointCount*/ )
-            return index+1;//first category (index 0) matches with real number 1.0
+            fRet = index+1;//first category (index 0) matches with real number 1.0
+        else
+            ::rtl::math::setNan( &fRet );
     }
-    double fNan;
-    ::rtl::math::setNan( & fNan );
-    return fNan;
+    lcl_maybeReplaceNanWithZero( fRet, getMissingValueTreatment() );
+    return fRet;
 }
 
-double VDataSeries::getY( sal_Int32 index ) const
+double VDataSeries::getYValue( sal_Int32 index ) const
 {
-    return m_aValues_Y.getValue( index );
+    double fRet = 0.0;
+    if(m_aValues_Y.is())
+    {
+        if( 0<=index && index<m_aValues_Y.getLength() )
+            fRet = m_aValues_Y.Doubles[index];
+        else
+            ::rtl::math::setNan( &fRet );
+    }
+    else
+    {
+        // #i70133# always return correct X position - needed for short data series
+        if( 0<=index /*&& index < m_nPointCount*/ )
+            fRet = index+1;//first category (index 0) matches with real number 1.0
+        else
+            ::rtl::math::setNan( &fRet );
+    }
+    lcl_maybeReplaceNanWithZero( fRet, getMissingValueTreatment() );
+    return fRet;
 }
 
 double VDataSeries::getY_Min( sal_Int32 index ) const
@@ -483,6 +518,10 @@ double VDataSeries::getY_First( sal_Int32 index ) const
 double VDataSeries::getY_Last( sal_Int32 index ) const
 {
     return m_aValues_Y_Last.getValue( index );
+}
+double VDataSeries::getBubble_Size( sal_Int32 index ) const
+{
+    return m_aValues_Bubble_Size.getValue( index );
 }
 
 bool VDataSeries::hasExplicitNumberFormat( sal_Int32 nPointIndex, bool bForPercentage ) const
@@ -504,9 +543,37 @@ sal_Int32 VDataSeries::getExplicitNumberFormat( sal_Int32 nPointIndex, bool bFor
         xPointProp->getPropertyValue(aPropName) >>= nNumberFormat;
     return nNumberFormat;
 }
+void VDataSeries::setRoleOfSequenceForDataLabelNumberFormatDetection( const rtl::OUString& rRole )
+{
+    if( rRole.equals(C2U("values-y")) )
+        m_pValueSequenceForDataLabelNumberFormatDetection = &m_aValues_Y;
+    else if( rRole.equals(C2U("values-size")) )
+        m_pValueSequenceForDataLabelNumberFormatDetection = &m_aValues_Bubble_Size;
+    else if( rRole.equals(C2U("values-min")) )
+        m_pValueSequenceForDataLabelNumberFormatDetection = &m_aValues_Y_Min;
+    else if( rRole.equals(C2U("values-max")) )
+        m_pValueSequenceForDataLabelNumberFormatDetection = &m_aValues_Y_Max;
+    else if( rRole.equals(C2U("values-first")) )
+        m_pValueSequenceForDataLabelNumberFormatDetection = &m_aValues_Y_First;
+    else if( rRole.equals(C2U("values-last")) )
+        m_pValueSequenceForDataLabelNumberFormatDetection = &m_aValues_Y_Last;
+    else if( rRole.equals(C2U("values-x")) )
+        m_pValueSequenceForDataLabelNumberFormatDetection = &m_aValues_X;
+}
+bool VDataSeries::shouldLabelNumberFormatKeyBeDetectedFromYAxis() const
+{
+    if( m_pValueSequenceForDataLabelNumberFormatDetection == &m_aValues_Bubble_Size )
+        return false;
+    else if( m_pValueSequenceForDataLabelNumberFormatDetection == &m_aValues_X )
+        return false;
+    return true;
+}
 sal_Int32 VDataSeries::detectNumberFormatKey( sal_Int32 index ) const
 {
-    return m_aValues_Y.detectNumberFormatKey( index );
+    sal_Int32 nRet = 0;
+    if( m_pValueSequenceForDataLabelNumberFormatDetection )
+        nRet = m_pValueSequenceForDataLabelNumberFormatDetection->detectNumberFormatKey( index );
+    return nRet;
 }
 
 sal_Int32 VDataSeries::getLabelPlacement( sal_Int32 nPointIndex, const uno::Reference< chart2::XChartType >& xChartType, sal_Int32 nDimensionCount, sal_Bool bSwapXAndY ) const
@@ -545,7 +612,7 @@ sal_Int32 VDataSeries::getLabelPlacement( sal_Int32 nPointIndex, const uno::Refe
 
 double VDataSeries::getMinimumofAllDifferentYValues( sal_Int32 index ) const
 {
-    double fY = getY( index );
+    double fY = getYValue( index );
     double fY_Min = getY_Min( index );
     double fY_Max = getY_Max( index );
     double fY_First = getY_First( index );
@@ -572,7 +639,7 @@ double VDataSeries::getMinimumofAllDifferentYValues( sal_Int32 index ) const
 
 double VDataSeries::getMaximumofAllDifferentYValues( sal_Int32 index ) const
 {
-    double fY = getY( index );
+    double fY = getYValue( index );
     double fY_Min = getY_Min( index );
     double fY_Max = getY_Max( index );
     double fY_First = getY_First( index );
@@ -612,6 +679,14 @@ uno::Sequence< double > VDataSeries::getAllX() const
 
 uno::Sequence< double > VDataSeries::getAllY() const
 {
+    if(!m_aValues_Y.is() && !m_aValues_Y.getLength() && m_nPointCount)
+    {
+        //init y values from indexes
+        //first y-value (index 0) matches with real number 1.0
+        m_aValues_Y.Doubles.realloc( m_nPointCount );
+        for(sal_Int32 nN=m_aValues_Y.getLength();nN--;)
+            m_aValues_Y.Doubles[nN] = nN+1;
+    }
     return m_aValues_Y.Doubles;
 }
 
@@ -805,6 +880,11 @@ DataPointLabel* VDataSeries::getDataPointLabel( sal_Int32 index ) const
         if(!m_apLabel_Series.get())
             m_apLabel_Series = getDataPointLabelFromPropertySet( this->getPropertiesOfPoint( index ) );
         pRet = m_apLabel_Series.get();
+    }
+    if( !m_bAllowPercentValueInDataLabel )
+    {
+        if( pRet )
+            pRet->ShowNumberInPercent = false;
     }
     return pRet;
 }

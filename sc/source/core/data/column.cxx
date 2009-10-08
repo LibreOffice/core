@@ -1272,11 +1272,14 @@ void ScColumn::CopyToClip(SCROW nRow1, SCROW nRow2, ScColumn& rColumn, BOOL bKee
     {
         int nCloneFlags = bCloneNoteCaptions ? SC_CLONECELL_DEFAULT : SC_CLONECELL_NOCAPTION;
         rColumn.Resize( rColumn.GetCellCount() + nBlockCount );
-        ScAddress aPos( rColumn.nCol, 0, rColumn.nTab );
+        ScAddress aOwnPos( nCol, 0, nTab );
+        ScAddress aDestPos( rColumn.nCol, 0, rColumn.nTab );
         for (i = nStartIndex; i <= nEndIndex; i++)
         {
-            aPos.SetRow( pItems[i].nRow );
-            rColumn.Append( aPos.Row(), pItems[i].pCell->CloneWithNote( *rColumn.pDocument, aPos, nCloneFlags ) );
+            aOwnPos.SetRow( pItems[i].nRow );
+            aDestPos.SetRow( pItems[i].nRow );
+            ScBaseCell* pNewCell = pItems[i].pCell->CloneWithNote( aOwnPos, *rColumn.pDocument, aDestPos, nCloneFlags );
+            rColumn.Append( aDestPos.Row(), pNewCell );
         }
     }
 }
@@ -1376,16 +1379,18 @@ void ScColumn::UndoToColumn(SCROW nRow1, SCROW nRow2, USHORT nFlags, BOOL bMarke
 void ScColumn::CopyUpdated( const ScColumn& rPosCol, ScColumn& rDestCol ) const
 {
     ScDocument& rDestDoc = *rDestCol.pDocument;
+    ScAddress aOwnPos( nCol, 0, nTab );
     ScAddress aDestPos( rDestCol.nCol, 0, rDestCol.nTab );
 
     SCSIZE nPosCount = rPosCol.nCount;
     for (SCSIZE nPosIndex = 0; nPosIndex < nPosCount; nPosIndex++)
     {
-        aDestPos.SetRow( rPosCol.pItems[nPosIndex].nRow );
+        aOwnPos.SetRow( rPosCol.pItems[nPosIndex].nRow );
+        aDestPos.SetRow( aOwnPos.Row() );
         SCSIZE nThisIndex;
         if ( Search( aDestPos.Row(), nThisIndex ) )
         {
-            ScBaseCell* pNew = pItems[nThisIndex].pCell->CloneWithNote( rDestDoc, aDestPos );
+            ScBaseCell* pNew = pItems[nThisIndex].pCell->CloneWithNote( aOwnPos, rDestDoc, aDestPos );
             rDestCol.Insert( aDestPos.Row(), pNew );
         }
     }
@@ -1673,7 +1678,10 @@ void ScColumn::UpdateReference( UpdateRefMode eUpdateRefMode, SCCOL nCol1, SCROW
                     if( pCell->GetCellType() == CELLTYPE_FORMULA)
                     {
                         SCROW nRow = pItems[i].nRow;
-                        ((ScFormulaCell*)pCell)->UpdateReference( eUpdateRefMode, aRange, nDx, nDy, nDz, pUndoDoc );
+                        // When deleting rows on several sheets, the formula's position may be updated with the first call,
+                        // so the undo position must be passed from here.
+                        ScAddress aUndoPos( nCol, nRow, nTab );
+                        ((ScFormulaCell*)pCell)->UpdateReference( eUpdateRefMode, aRange, nDx, nDy, nDz, pUndoDoc, &aUndoPos );
                         if ( nRow != pItems[i].nRow )
                             Search( nRow, i );  // Listener removed/inserted?
                     }

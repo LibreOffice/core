@@ -94,6 +94,7 @@
 #include "recursionhelper.hxx"
 #include "lookupcache.hxx"
 #include "externalrefmgr.hxx"
+#include "tabprotection.hxx"
 
 // pImpl because including lookupcache.hxx in document.hxx isn't wanted, and
 // dtor plus helpers are convenient.
@@ -152,6 +153,7 @@ ScDocument::ScDocument( ScDocumentMode  eMode,
         pChangeViewSettings( NULL ),
         pScriptTypeData( NULL ),
         pCacheFieldEditEngine( NULL ),
+        pDocProtection( NULL ),
         pExternalRefMgr( NULL ),
         pViewOptions( NULL ),
         pDocOptions( NULL ),
@@ -175,7 +177,6 @@ ScDocument::ScDocument( ScDocumentMode  eMode,
         nHardRecalcState(0),
         nVisibleTab( 0 ),
         eLinkMode(LM_UNKNOWN),
-        bProtected( FALSE ),
         bAutoCalc( eMode == SCDOCMODE_DOCUMENT ),
         bAutoCalcShellDisabled( FALSE ),
         bForcedFormulaPending( FALSE ),
@@ -931,6 +932,7 @@ BOOL ScDocument::CopyTab( SCTAB nOldPos, SCTAB nNewPos, const ScMarkData* pOnlyM
             DrawCopyPage( static_cast<sal_uInt16>(nOldPos), static_cast<sal_uInt16>(nNewPos) );
 
         pTab[nNewPos]->SetPageStyle( pTab[nOldPos]->GetPageStyle() );
+        pTab[nNewPos]->SetPendingRowHeights( pTab[nOldPos]->IsPendingRowHeights() );
 
         // Update cells containing external references.
         if (pExternalRefMgr.get())
@@ -1109,6 +1111,8 @@ ULONG ScDocument::TransferTab( ScDocument* pSrcDoc, SCTAB nSrcPos,
 
         if (bInsertNew)
             TransferDrawPage( pSrcDoc, nSrcPos, nDestPos );
+
+        pTab[nDestPos]->SetPendingRowHeights( pSrcDoc->pTab[nSrcPos]->IsPendingRowHeights() );
     }
     if (!bValid)
         nRetVal = 0;

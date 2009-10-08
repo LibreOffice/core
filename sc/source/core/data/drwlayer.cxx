@@ -493,7 +493,7 @@ void ScDrawLayer::MoveCells( SCTAB nTab, SCCOL nCol1,SCROW nRow1, SCCOL nCol2,SC
                 if ( pObj->ISA( SdrRectObj ) && pData->maStart.IsValid() && pData->maEnd.IsValid() )
                     pData->maStart.PutInOrder( pData->maEnd );
                 AddCalcUndo( new ScUndoObjData( pObj, aOldStt, aOldEnd, pData->maStart, pData->maEnd ) );
-                RecalcPos( pObj, *pData, aOldStt, aOldEnd, bNegativePage );
+                RecalcPos( pObj, *pData, bNegativePage );
             }
         }
     }
@@ -522,27 +522,33 @@ void ScDrawLayer::SetPageSize( USHORT nPageNo, const Size& rSize )
             SdrObject* pObj = pPage->GetObj( i );
             ScDrawObjData* pData = GetObjDataTab( pObj, static_cast<SCTAB>(nPageNo) );
             if( pData )
-                RecalcPos( pObj, *pData, pData->maStart, pData->maEnd, bNegativePage );
+                RecalcPos( pObj, *pData, bNegativePage );
         }
     }
 }
 
-void ScDrawLayer::RecalcPos( SdrObject* pObj, const ScDrawObjData& rData,
-        const ScAddress& rOldStart, const ScAddress& /*rOldEnd*/, bool bNegativePage )
+void ScDrawLayer::RecalcPos( SdrObject* pObj, const ScDrawObjData& rData, bool bNegativePage )
 {
     DBG_ASSERT( pDoc, "ScDrawLayer::RecalcPos - missing document" );
     if( !pDoc )
         return;
 
+    /*  TODO CleanUp: Updating note position works just by chance currently...
+        When inserting rows/columns, this function is called after the
+        insertion, and the note is located at the new position contained in the
+        passed ScDrawObjData already. But when deleting rows/columns, this
+        function is called *before* the deletion, so the note is still at the
+        old cell position, and ScDocument::GetNote() will fail to get the note
+        or will get another note. But after the rows/columns are deleted, a
+        call to ScDrawLayer::SetPageSize() will call this function again, and
+        now the note is at the expected position in the document. */
     if( rData.mbNote )
     {
-        /*  #i63671# while inserting/deleting cells/rows/columns: note has
-            not been moved yet in document, get it from old position. */
-        DBG_ASSERT( rOldStart.IsValid(), "ScDrawLayer::RecalcPos - invalid position for cell note" );
+        DBG_ASSERT( rData.maStart.IsValid(), "ScDrawLayer::RecalcPos - invalid position for cell note" );
         /*  When inside an undo action, there may be pending note captions
             where cell note is already deleted. The caption will be deleted
             later with drawing undo. */
-        if( ScPostIt* pNote = pDoc->GetNote( rOldStart ) )
+        if( ScPostIt* pNote = pDoc->GetNote( rData.maStart ) )
             pNote->UpdateCaptionPos( rData.maStart );
         return;
     }

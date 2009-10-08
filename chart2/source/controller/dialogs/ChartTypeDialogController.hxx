@@ -301,6 +301,19 @@ private:
     MetricField*    m_pMF_NumberOfLines;
 };
 
+class BubbleChartDialogController : public ChartTypeDialogController
+{
+public:
+    BubbleChartDialogController();
+    virtual ~BubbleChartDialogController();
+
+    virtual String  getName();
+    virtual Image   getImage( bool bIsHighContrast );
+    virtual const tTemplateServiceChartTypeParameterMap& getTemplateMap() const;
+    virtual void fillSubTypeList( ValueSet& rSubTypeList, bool bIsHighContrast, const ChartTypeParameter& rParameter );
+    virtual void adjustParameterToSubType( ChartTypeParameter& rParameter );
+};
+
 //.............................................................................
 } //namespace chart
 //.............................................................................

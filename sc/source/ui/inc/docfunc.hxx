@@ -33,7 +33,6 @@
 
 #include <tools/link.hxx>
 #include "global.hxx"
-#include "postit.hxx"
 #include "formula/grammar.hxx"
 
 class ScEditEngineDefaulter;
@@ -47,7 +46,7 @@ class ScRangeName;
 class ScBaseCell;
 class ScTokenArray;
 struct ScTabOpParam;
-
+class ScTableProtection;
 
 // ---------------------------------------------------------------------------
 
@@ -134,6 +133,8 @@ public:
                                     BOOL bRecord, BOOL bSetModified, BOOL bApi );
     BOOL            RemovePageBreak( BOOL bColumn, const ScAddress& rPos,
                                     BOOL bRecord, BOOL bSetModified, BOOL bApi );
+
+    void            ProtectSheet( SCTAB nTab, const ScTableProtection& rProtect );
 
     BOOL            Protect( SCTAB nTab, const String& rPassword, BOOL bApi );
     BOOL            Unprotect( SCTAB nTab, const String& rPassword, BOOL bApi );

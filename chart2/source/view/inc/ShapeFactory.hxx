@@ -159,6 +159,11 @@ public:
                     , const ::com::sun::star::drawing::PolyPolygonShape3D& rPoints
                     , const VLineProperties& rLineProperties );
 
+    ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape >
+        createCircle2D( const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShapes >& xTarget
+                    , const ::com::sun::star::drawing::Position3D& rPos
+                    , const ::com::sun::star::drawing::Direction3D& rSize );
+
     //------------------- create 2D elements:
 
     ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape >

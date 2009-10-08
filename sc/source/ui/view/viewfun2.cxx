@@ -2197,7 +2197,7 @@ BOOL ScViewFunc::DeleteTables(const SvShorts &TheTabs, BOOL bRecord )
             pUndoDoc->SetVisible( nTab, pDoc->IsVisible( nTab ) );
 
             if ( pDoc->IsTabProtected( nTab ) )
-                pUndoDoc->SetTabProtection( nTab, TRUE, pDoc->GetTabPassword( nTab ) );
+                pUndoDoc->SetTabProtection(nTab, pDoc->GetTabProtection(nTab));
 
             //  Drawing-Layer muss sein Undo selbst in der Hand behalten !!!
             //      pUndoDoc->TransferDrawPage(pDoc, nTab,nTab);
@@ -2612,7 +2612,7 @@ void ScViewFunc::MoveTable( USHORT nDestDocNo, SCTAB nDestTab, BOOL bCopy )
                 }
 
                 if ( nErrVal > 0 && pDoc->IsTabProtected( TheTabs[i] ) )
-                    pDestDoc->SetTabProtection( nDestTab1, TRUE, pDoc->GetTabPassword( TheTabs[i] ) );
+                    pDestDoc->SetTabProtection(nDestTab1, pDoc->GetTabProtection(TheTabs[i]));
 
                 nDestTab1++;
             }

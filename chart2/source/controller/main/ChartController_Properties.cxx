@@ -240,9 +240,8 @@ namespace
                         }
                     }
                 }
-                sal_Int32 nNumberFormat=ExplicitValueProvider::getExplicitNumberFormatKeyForLabel( xObjectProperties, xSeries, nPointIndex,
-                        uno::Reference< beans::XPropertySet >( DiagramHelper::getAttachedAxis( xSeries, xDiagram ), uno::UNO_QUERY ) );
-                sal_Int32 nPercentNumberFormat=ExplicitValueProvider::getExplicitPercentageNumberFormatKeyForLabel(
+                sal_Int32 nNumberFormat=ExplicitValueProvider::getExplicitNumberFormatKeyForDataLabel( xObjectProperties, xSeries, nPointIndex, xDiagram );
+                sal_Int32 nPercentNumberFormat=ExplicitValueProvider::getExplicitPercentageNumberFormatKeyForDataLabel(
                         xObjectProperties,uno::Reference< util::XNumberFormatsSupplier >(xChartModel, uno::UNO_QUERY));
 
                 pItemConverter =  new wrapper::DataPointItemConverter( xChartModel, xContext,

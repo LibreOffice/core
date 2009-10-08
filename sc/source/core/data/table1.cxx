@@ -114,6 +114,7 @@
 #include "progress.hxx"
 #include "hints.hxx"        // fuer Paint-Broadcast
 #include "prnsave.hxx"
+#include "tabprotection.hxx"
 
 // STATIC DATA -----------------------------------------------------------
 
@@ -132,7 +133,7 @@ ScTable::ScTable( ScDocument* pDoc, SCTAB nNewTab, const String& rNewName,
     bPageSizeValid( FALSE ),
     nRepeatStartX( SCCOL_REPEAT_NONE ),
     nRepeatStartY( SCROW_REPEAT_NONE ),
-    bProtected( FALSE ),
+    pTabProtection( NULL ),
     pColWidth( NULL ),
     pRowHeight( NULL ),
     pColFlags( NULL ),
@@ -140,6 +141,7 @@ ScTable::ScTable( ScDocument* pDoc, SCTAB nNewTab, const String& rNewName,
     pOutlineTable( NULL ),
     bTableAreaValid( FALSE ),
     bVisible( TRUE ),
+    bPendingRowHeights( FALSE ),
     nTab( nNewTab ),
     nRecalcLvl( 0 ),
     pDocument( pDoc ),
@@ -247,6 +249,11 @@ const String& ScTable::GetUpperName() const
 void ScTable::SetVisible( BOOL bVis )
 {
     bVisible = bVis;
+}
+
+void ScTable::SetPendingRowHeights( BOOL bSet )
+{
+    bPendingRowHeights = bSet;
 }
 
 void ScTable::SetLayoutRTL( BOOL bSet )
@@ -1095,6 +1102,7 @@ void ScTable::UpdateDrawRef( UpdateRefMode eUpdateRefMode, SCCOL nCol1, SCROW nR
 {
     if ( nTab >= nTab1 && nTab <= nTab2 && nDz == 0 )       // only within the table
     {
+        InitializeNoteCaptions();
         ScDrawLayer* pDrawLayer = pDocument->GetDrawLayer();
         if ( eUpdateRefMode != URM_COPY && pDrawLayer )
         {

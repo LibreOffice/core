@@ -1197,14 +1197,10 @@ void __EXPORT ScUndoReplace::Undo()
     }
     else if (pSearchItem->GetCellType() == SVX_SEARCHIN_NOTE)
     {
-        if (ScPostIt* pNote = pDoc->GetNote(aCursorPos))
-        {
-            pNote->SetText( aUndoStr );
-        }
-        else
-        {
-            DBG_ERROR("ScUndoReplace: Hier ist keine Notizzelle");
-        }
+        ScPostIt* pNote = pDoc->GetNote( aCursorPos );
+        DBG_ASSERT( pNote, "ScUndoReplace::Undo - cell does not contain a note" );
+        if (pNote)
+            pNote->SetText( aCursorPos, aUndoStr );
         if (pViewShell)
             pViewShell->MoveCursorAbs( aCursorPos.Col(), aCursorPos.Row(),
                                        SC_FOLLOW_JUMP, FALSE, FALSE );

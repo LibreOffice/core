@@ -1317,8 +1317,9 @@ void ScExternalRefManager::RefCells::moveTable(SCTAB nOldTab, SCTAB nNewTab, boo
         xNewTab->mnIndex = nNewTab;
         maTables.insert(itrNew, xNewTab);
         list<TabItemRef>::iterator itr = itrNew, itrEnd = maTables.end();
-        for (++itr; itr != itrEnd; ++itr)
-            (*itr)->mnIndex += 1;
+        if (itr != itrEnd)  // #i99807# check that itr is not at end already
+            for (++itr; itr != itrEnd; ++itr)
+                (*itr)->mnIndex += 1;
     }
     else
     {

@@ -103,6 +103,7 @@
 #include "dpsave.hxx"
 #include "dpgroup.hxx"      // for ScDPNumGroupInfo
 #include "spellparam.hxx"
+#include "postit.hxx"
 
 #include "globstr.hrc"
 #include "scui_def.hxx" //CHINA001

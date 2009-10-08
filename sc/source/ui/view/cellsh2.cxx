@@ -138,6 +138,77 @@ bool lcl_GetTextToColumnsRange( const ScViewData* pData, ScRange& rRange )
     return bRet;
 }
 
+BOOL lcl_GetSortParam( const ScViewData* pData, ScSortParam& rSortParam )
+{
+    ScTabViewShell* pTabViewShell   = pData->GetViewShell();
+    ScDBData*   pDBData             = pTabViewShell->GetDBData();
+    ScDocument* pDoc                = pData->GetDocument();
+    SCTAB nTab                      = pData->GetTabNo();
+    ScDirection eFillDir            = DIR_TOP;
+    BOOL  bSort                     = TRUE;
+    ScRange aExternalRange;
+
+    if( rSortParam.nCol1 != rSortParam.nCol2 )
+        eFillDir = DIR_LEFT;
+    if( rSortParam.nRow1 != rSortParam.nRow2 )
+        eFillDir = DIR_TOP;
+
+    SCSIZE nCount = pDoc->GetEmptyLinesInBlock( rSortParam.nCol1, rSortParam.nRow1, nTab, rSortParam.nCol2, rSortParam.nRow2, nTab, eFillDir );
+
+    if( rSortParam.nRow2 == MAXROW )
+        aExternalRange = ScRange( rSortParam.nCol1,sal::static_int_cast<SCROW>( nCount ), nTab );
+    else
+        aExternalRange = ScRange( pData->GetCurX(), pData->GetCurY(), nTab );
+
+    SCROW nStartRow = aExternalRange.aStart.Row();
+    SCCOL nStartCol = aExternalRange.aStart.Col();
+    SCROW nEndRow   = aExternalRange.aEnd.Row();
+    SCCOL nEndCol   = aExternalRange.aEnd.Col();
+    pDoc->GetDataArea( aExternalRange.aStart.Tab(), nStartCol, nStartRow, nEndCol, nEndRow, FALSE );
+    aExternalRange.aStart.SetRow( nStartRow );
+    aExternalRange.aStart.SetCol( nStartCol );
+    aExternalRange.aEnd.SetRow( nEndRow );
+    aExternalRange.aEnd.SetCol( nEndCol );
+
+    if(( rSortParam.nCol1 == rSortParam.nCol2 && aExternalRange.aStart.Col() != aExternalRange.aEnd.Col() ) ||
+        ( rSortParam.nRow1 == rSortParam.nRow2 && aExternalRange.aStart.Row() != aExternalRange.aEnd.Row() ) )
+    {
+        USHORT nFmt = SCA_VALID;
+        String aExtendStr,aCurrentStr;
+
+        pTabViewShell->AddHighlightRange( aExternalRange,Color( COL_LIGHTBLUE ) );
+        ScRange rExtendRange( aExternalRange.aStart.Col(), aExternalRange.aStart.Row(), nTab, aExternalRange.aEnd.Col(), aExternalRange.aEnd.Row(), nTab );
+        rExtendRange.Format( aExtendStr, nFmt, pDoc );
+
+        ScRange rCurrentRange( rSortParam.nCol1, rSortParam.nRow1, nTab, rSortParam.nCol2, rSortParam.nRow2, nTab );
+        rCurrentRange.Format( aCurrentStr, nFmt, pDoc );
+
+        ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
+        DBG_ASSERT(pFact, "ScAbstractFactory create fail!");//CHINA001
+
+        VclAbstractDialog* pWarningDlg = pFact->CreateScSortWarningDlg( pTabViewShell->GetDialogParent(),aExtendStr,aCurrentStr,RID_SCDLG_SORT_WARNING );
+        DBG_ASSERT(pWarningDlg, "Dialog create fail!");//CHINA001
+        short bResult = pWarningDlg->Execute();
+        if( bResult == BTN_EXTEND_RANGE || bResult == BTN_CURRENT_SELECTION )
+        {
+            if( bResult == BTN_EXTEND_RANGE )
+            {
+                pTabViewShell->MarkRange( aExternalRange, FALSE );
+                pDBData->SetArea( nTab, aExternalRange.aStart.Col(), aExternalRange.aStart.Row(), aExternalRange.aEnd.Col(), aExternalRange.aEnd.Row() );
+            }
+        }
+        else
+        {
+            bSort = FALSE;
+            pData->GetDocShell()->CancelAutoDBRange();
+        }
+
+        delete pWarningDlg;
+        pTabViewShell->ClearHighlightRanges();
+    }
+    return bSort;
+}
+
 void ScCellShell::ExecuteDB( SfxRequest& rReq )
 {
     ScTabViewShell* pTabViewShell   = GetViewData()->GetViewShell();
@@ -332,40 +403,47 @@ void ScCellShell::ExecuteDB( SfxRequest& rReq )
         case SID_SORT_DESCENDING:
         case SID_SORT_ASCENDING:
             {
-                SfxItemSet  aArgSet( GetPool(), SCITEM_SORTDATA, SCITEM_SORTDATA );
+                //#i60401 ux-ctest: Calc does not support all users' strategies regarding sorting data
+                //the patch comes from maoyg
                 ScSortParam aSortParam;
                 ScDBData*   pDBData = pTabViewShell->GetDBData();
-                SCCOL nCol          = GetViewData()->GetCurX();
-                SCCOL nTab          = GetViewData()->GetTabNo();
-                ScDocument* pDoc    = GetViewData()->GetDocument();
-                BOOL  bHasHeader    = FALSE;
+                ScViewData* pData   = GetViewData();
 
                 pDBData->GetSortParam( aSortParam );
 
-                bHasHeader = pDoc->HasColHeader( aSortParam.nCol1, aSortParam.nRow1, aSortParam.nCol2, aSortParam.nRow2, nTab );
+                if( lcl_GetSortParam( pData, aSortParam ) )
+                {
+                    SfxItemSet  aArgSet( GetPool(), SCITEM_SORTDATA, SCITEM_SORTDATA );
+                    SCCOL nCol  = GetViewData()->GetCurX();
+                    SCCOL nTab  = GetViewData()->GetTabNo();
+                    ScDocument* pDoc    = GetViewData()->GetDocument();
 
-                if( nCol < aSortParam.nCol1 )
-                    nCol = aSortParam.nCol1;
-                else if( nCol > aSortParam.nCol2 )
-                    nCol = aSortParam.nCol2;
+                    pDBData->GetSortParam( aSortParam );
+                    BOOL bHasHeader = pDoc->HasColHeader( aSortParam.nCol1, aSortParam.nRow1, aSortParam.nCol2, aSortParam.nRow2, nTab );
 
-                aSortParam.bHasHeader       = bHasHeader;
-                aSortParam.bByRow           = TRUE;
-                aSortParam.bCaseSens        = FALSE;
-                aSortParam.bIncludePattern  = TRUE;
-                aSortParam.bInplace         = TRUE;
-                aSortParam.bDoSort[0]       = TRUE;
-                aSortParam.nField[0]        = nCol;
-                aSortParam.bAscending[0]    = (nSlotId == SID_SORT_ASCENDING);
+                    if( nCol < aSortParam.nCol1 )
+                        nCol = aSortParam.nCol1;
+                    else if( nCol > aSortParam.nCol2 )
+                        nCol = aSortParam.nCol2;
 
-                for ( USHORT i=1; i<MAXSORT; i++ )
-                    aSortParam.bDoSort[i] = FALSE;
+                    aSortParam.bHasHeader       = bHasHeader;
+                    aSortParam.bByRow           = TRUE;
+                    aSortParam.bCaseSens        = FALSE;
+                    aSortParam.bIncludePattern  = TRUE;
+                    aSortParam.bInplace         = TRUE;
+                    aSortParam.bDoSort[0]       = TRUE;
+                    aSortParam.nField[0]        = nCol;
+                    aSortParam.bAscending[0]    = (nSlotId == SID_SORT_ASCENDING);
 
-                aArgSet.Put( ScSortItem( SCITEM_SORTDATA, GetViewData(), &aSortParam ) );
+                    for ( USHORT i=1; i<MAXSORT; i++ )
+                        aSortParam.bDoSort[i] = FALSE;
 
-                pTabViewShell->UISort( aSortParam );        // Teilergebnisse bei Bedarf neu
+                    aArgSet.Put( ScSortItem( SCITEM_SORTDATA, GetViewData(), &aSortParam ) );
 
-                rReq.Done();
+                    pTabViewShell->UISort( aSortParam );        // Teilergebnisse bei Bedarf neu
+
+                    rReq.Done();
+                }
             }
             break;
 
@@ -373,140 +451,154 @@ void ScCellShell::ExecuteDB( SfxRequest& rReq )
             {
                 const SfxItemSet* pArgs = rReq.GetArgs();
 
+                //#i60401 ux-ctest: Calc does not support all users' strategies regarding sorting data
+                //the patch comes from maoyg
+
                 if ( pArgs )        // Basic
                 {
                     ScSortParam aSortParam;
-                    ScDBData* pDBData = pTabViewShell->GetDBData();
+                    ScDBData*   pDBData = pTabViewShell->GetDBData();
+                    ScViewData* pData   = GetViewData();
+
                     pDBData->GetSortParam( aSortParam );
-                    aSortParam.bInplace = TRUE;             // von Basic immer
 
-                    const SfxPoolItem* pItem;
-                    if ( pArgs->GetItemState( SID_SORT_BYROW, TRUE, &pItem ) == SFX_ITEM_SET )
-                        aSortParam.bByRow = ((const SfxBoolItem*)pItem)->GetValue();
-                    if ( pArgs->GetItemState( SID_SORT_HASHEADER, TRUE, &pItem ) == SFX_ITEM_SET )
-                        aSortParam.bHasHeader = ((const SfxBoolItem*)pItem)->GetValue();
-                    if ( pArgs->GetItemState( SID_SORT_CASESENS, TRUE, &pItem ) == SFX_ITEM_SET )
-                        aSortParam.bCaseSens = ((const SfxBoolItem*)pItem)->GetValue();
-                    if ( pArgs->GetItemState( SID_SORT_ATTRIBS, TRUE, &pItem ) == SFX_ITEM_SET )
-                        aSortParam.bIncludePattern = ((const SfxBoolItem*)pItem)->GetValue();
-                    if ( pArgs->GetItemState( SID_SORT_USERDEF, TRUE, &pItem ) == SFX_ITEM_SET )
+                    if( lcl_GetSortParam( pData, aSortParam ) )
                     {
-                        USHORT nUserIndex = ((const SfxUInt16Item*)pItem)->GetValue();
-                        aSortParam.bUserDef = ( nUserIndex != 0 );
-                        if ( nUserIndex )
-                            aSortParam.nUserIndex = nUserIndex - 1;     // Basic: 1-basiert
+                        ScDocument* pDoc = GetViewData()->GetDocument();
+
+                        pDBData->GetSortParam( aSortParam );
+                        BOOL bHasHeader = pDoc->HasColHeader( aSortParam.nCol1, aSortParam.nRow1, aSortParam.nCol2, aSortParam.nRow2, pData->GetTabNo() );
+                        if( bHasHeader )
+                            aSortParam.bHasHeader = bHasHeader;
+
+                        aSortParam.bInplace = TRUE;             // von Basic immer
+
+                        const SfxPoolItem* pItem;
+                        if ( pArgs->GetItemState( SID_SORT_BYROW, TRUE, &pItem ) == SFX_ITEM_SET )
+                            aSortParam.bByRow = ((const SfxBoolItem*)pItem)->GetValue();
+                        if ( pArgs->GetItemState( SID_SORT_HASHEADER, TRUE, &pItem ) == SFX_ITEM_SET )
+                            aSortParam.bHasHeader = ((const SfxBoolItem*)pItem)->GetValue();
+                        if ( pArgs->GetItemState( SID_SORT_CASESENS, TRUE, &pItem ) == SFX_ITEM_SET )
+                            aSortParam.bCaseSens = ((const SfxBoolItem*)pItem)->GetValue();
+                        if ( pArgs->GetItemState( SID_SORT_ATTRIBS, TRUE, &pItem ) == SFX_ITEM_SET )
+                            aSortParam.bIncludePattern = ((const SfxBoolItem*)pItem)->GetValue();
+                        if ( pArgs->GetItemState( SID_SORT_USERDEF, TRUE, &pItem ) == SFX_ITEM_SET )
+                        {
+                            USHORT nUserIndex = ((const SfxUInt16Item*)pItem)->GetValue();
+                            aSortParam.bUserDef = ( nUserIndex != 0 );
+                            if ( nUserIndex )
+                                aSortParam.nUserIndex = nUserIndex - 1;     // Basic: 1-basiert
+                        }
+
+                        SCCOLROW nField0 = 0;
+                        if ( pArgs->GetItemState( FN_PARAM_1, TRUE, &pItem ) == SFX_ITEM_SET )
+                            nField0 = ((const SfxInt32Item*)pItem)->GetValue();
+                        aSortParam.bDoSort[0] = ( nField0 != 0 );
+                        aSortParam.nField[0] = nField0 > 0 ? (nField0-1) : 0;
+                        if ( pArgs->GetItemState( FN_PARAM_2, TRUE, &pItem ) == SFX_ITEM_SET )
+                            aSortParam.bAscending[0] = ((const SfxBoolItem*)pItem)->GetValue();
+                        SCCOLROW nField1 = 0;
+                        if ( pArgs->GetItemState( FN_PARAM_3, TRUE, &pItem ) == SFX_ITEM_SET )
+                            nField1 = ((const SfxInt32Item*)pItem)->GetValue();
+                        aSortParam.bDoSort[1] = ( nField1 != 0 );
+                        aSortParam.nField[1] = nField1 > 0 ? (nField1-1) : 0;
+                        if ( pArgs->GetItemState( FN_PARAM_4, TRUE, &pItem ) == SFX_ITEM_SET )
+                            aSortParam.bAscending[1] = ((const SfxBoolItem*)pItem)->GetValue();
+                        SCCOLROW nField2 = 0;
+                        if ( pArgs->GetItemState( FN_PARAM_5, TRUE, &pItem ) == SFX_ITEM_SET )
+                            nField2 = ((const SfxInt32Item*)pItem)->GetValue();
+                        aSortParam.bDoSort[2] = ( nField2 != 0 );
+                        aSortParam.nField[2] = nField2 > 0 ? (nField2-1) : 0;
+                        if ( pArgs->GetItemState( FN_PARAM_6, TRUE, &pItem ) == SFX_ITEM_SET )
+                            aSortParam.bAscending[2] = ((const SfxBoolItem*)pItem)->GetValue();
+
+                        // Teilergebnisse bei Bedarf neu
+                        pTabViewShell->UISort( aSortParam );
+                        rReq.Done();
                     }
-
-                    SCCOLROW nField0 = 0;
-                    if ( pArgs->GetItemState( FN_PARAM_1, TRUE, &pItem ) == SFX_ITEM_SET )
-                        nField0 = ((const SfxInt32Item*)pItem)->GetValue();
-                    aSortParam.bDoSort[0] = ( nField0 != 0 );
-                    aSortParam.nField[0] = nField0 > 0 ? (nField0-1) : 0;
-                    if ( pArgs->GetItemState( FN_PARAM_2, TRUE, &pItem ) == SFX_ITEM_SET )
-                        aSortParam.bAscending[0] = ((const SfxBoolItem*)pItem)->GetValue();
-                    SCCOLROW nField1 = 0;
-                    if ( pArgs->GetItemState( FN_PARAM_3, TRUE, &pItem ) == SFX_ITEM_SET )
-                        nField1 = ((const SfxInt32Item*)pItem)->GetValue();
-                    aSortParam.bDoSort[1] = ( nField1 != 0 );
-                    aSortParam.nField[1] = nField1 > 0 ? (nField1-1) : 0;
-                    if ( pArgs->GetItemState( FN_PARAM_4, TRUE, &pItem ) == SFX_ITEM_SET )
-                        aSortParam.bAscending[1] = ((const SfxBoolItem*)pItem)->GetValue();
-                    SCCOLROW nField2 = 0;
-                    if ( pArgs->GetItemState( FN_PARAM_5, TRUE, &pItem ) == SFX_ITEM_SET )
-                        nField2 = ((const SfxInt32Item*)pItem)->GetValue();
-                    aSortParam.bDoSort[2] = ( nField2 != 0 );
-                    aSortParam.nField[2] = nField2 > 0 ? (nField2-1) : 0;
-                    if ( pArgs->GetItemState( FN_PARAM_6, TRUE, &pItem ) == SFX_ITEM_SET )
-                        aSortParam.bAscending[2] = ((const SfxBoolItem*)pItem)->GetValue();
-
-                    // Teilergebnisse bei Bedarf neu
-                    pTabViewShell->UISort( aSortParam );
-                    rReq.Done();
                 }
                 else
                 {
-                    //CHINA001 ScSortDlg*   pDlg = NULL;
-                    SfxAbstractTabDialog* pDlg = NULL;
                     ScSortParam aSortParam;
-                    SfxItemSet  aArgSet( GetPool(), SCITEM_SORTDATA, SCITEM_SORTDATA );
+                    ScDBData*   pDBData = pTabViewShell->GetDBData();
+                    ScViewData* pData   = GetViewData();
 
-                    ScDBData* pDBData = pTabViewShell->GetDBData();
                     pDBData->GetSortParam( aSortParam );
 
-                    aArgSet.Put( ScSortItem( SCITEM_SORTDATA, GetViewData(), &aSortParam ) );
-                    //CHINA001 pDlg = new ScSortDlg( pTabViewShell->GetDialogParent(), &aArgSet );
-                    ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
-                    DBG_ASSERT(pFact, "ScAbstractFactory create fail!");//CHINA001
-
-                    pDlg = pFact->CreateScSortDlg( pTabViewShell->GetDialogParent(),  &aArgSet, RID_SCDLG_SORT );
-                    DBG_ASSERT(pDlg, "Dialog create fail!");//CHINA001
-                    pDlg->SetCurPageId(1);
-
-                    if ( pDlg->Execute() == RET_OK )
+                    if( lcl_GetSortParam( pData, aSortParam ) )
                     {
-                        const SfxItemSet* pOutSet = pDlg->GetOutputItemSet();
-                        const ScSortParam& rOutParam = ((const ScSortItem&)
-                                       pOutSet->Get( SCITEM_SORTDATA )).GetSortData();
+                        SfxAbstractTabDialog* pDlg = NULL;
+                        ScDocument* pDoc = GetViewData()->GetDocument();
+                        SfxItemSet  aArgSet( GetPool(), SCITEM_SORTDATA, SCITEM_SORTDATA );
 
-                        // Teilergebnisse bei Bedarf neu
-                        pTabViewShell->UISort( rOutParam );
+                        pDBData->GetSortParam( aSortParam );
+                        BOOL bHasHeader = pDoc->HasColHeader( aSortParam.nCol1, aSortParam.nRow1, aSortParam.nCol2, aSortParam.nRow2, pData->GetTabNo() );
+                        if( bHasHeader )
+                            aSortParam.bHasHeader = bHasHeader;
 
-                        if ( rOutParam.bInplace )
+                        aArgSet.Put( ScSortItem( SCITEM_SORTDATA, GetViewData(), &aSortParam ) );
+
+                        ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
+                        DBG_ASSERT(pFact, "ScAbstractFactory create fail!");//CHINA001
+
+                        pDlg = pFact->CreateScSortDlg( pTabViewShell->GetDialogParent(),  &aArgSet, RID_SCDLG_SORT );
+                        DBG_ASSERT(pDlg, "Dialog create fail!");//CHINA001
+                        pDlg->SetCurPageId(1);
+
+                        if ( pDlg->Execute() == RET_OK )
                         {
-                            rReq.AppendItem( SfxBoolItem( SID_SORT_BYROW,
-                                                rOutParam.bByRow ) );
-                            rReq.AppendItem( SfxBoolItem( SID_SORT_HASHEADER,
-                                                rOutParam.bHasHeader ) );
-                            rReq.AppendItem( SfxBoolItem( SID_SORT_CASESENS,
-                                                rOutParam.bCaseSens ) );
-                            rReq.AppendItem( SfxBoolItem( SID_SORT_ATTRIBS,
-                                                rOutParam.bIncludePattern ) );
-                            USHORT nUser = rOutParam.bUserDef ? ( rOutParam.nUserIndex + 1 ) : 0;
-                            rReq.AppendItem( SfxUInt16Item( SID_SORT_USERDEF, nUser ) );
-                            if ( rOutParam.bDoSort[0] )
+                            const SfxItemSet* pOutSet = pDlg->GetOutputItemSet();
+                            const ScSortParam& rOutParam = ((const ScSortItem&)
+                                pOutSet->Get( SCITEM_SORTDATA )).GetSortData();
+
+                            // Teilergebnisse bei Bedarf neu
+                            pTabViewShell->UISort( rOutParam );
+
+                            if ( rOutParam.bInplace )
                             {
-                                rReq.AppendItem( SfxInt32Item( FN_PARAM_1,
-                                                    rOutParam.nField[0] + 1 ) );
-                                rReq.AppendItem( SfxBoolItem( FN_PARAM_2,
-                                                    rOutParam.bAscending[0] ) );
+                                rReq.AppendItem( SfxBoolItem( SID_SORT_BYROW,
+                                    rOutParam.bByRow ) );
+                                rReq.AppendItem( SfxBoolItem( SID_SORT_HASHEADER,
+                                    rOutParam.bHasHeader ) );
+                                rReq.AppendItem( SfxBoolItem( SID_SORT_CASESENS,
+                                    rOutParam.bCaseSens ) );
+                                rReq.AppendItem( SfxBoolItem( SID_SORT_ATTRIBS,
+                                    rOutParam.bIncludePattern ) );
+                                USHORT nUser = rOutParam.bUserDef ? ( rOutParam.nUserIndex + 1 ) : 0;
+                                rReq.AppendItem( SfxUInt16Item( SID_SORT_USERDEF, nUser ) );
+                                if ( rOutParam.bDoSort[0] )
+                                {
+                                    rReq.AppendItem( SfxInt32Item( FN_PARAM_1,
+                                        rOutParam.nField[0] + 1 ) );
+                                    rReq.AppendItem( SfxBoolItem( FN_PARAM_2,
+                                        rOutParam.bAscending[0] ) );
+                                }
+                                if ( rOutParam.bDoSort[1] )
+                                {
+                                    rReq.AppendItem( SfxInt32Item( FN_PARAM_3,
+                                        rOutParam.nField[1] + 1 ) );
+                                    rReq.AppendItem( SfxBoolItem( FN_PARAM_4,
+                                        rOutParam.bAscending[1] ) );
+                                }
+                                if ( rOutParam.bDoSort[2] )
+                                {
+                                    rReq.AppendItem( SfxInt32Item( FN_PARAM_5,
+                                        rOutParam.nField[2] + 1 ) );
+                                    rReq.AppendItem( SfxBoolItem( FN_PARAM_6,
+                                        rOutParam.bAscending[2] ) );
+                                }
                             }
-                            if ( rOutParam.bDoSort[1] )
-                            {
-                                rReq.AppendItem( SfxInt32Item( FN_PARAM_3,
-                                                    rOutParam.nField[1] + 1 ) );
-                                rReq.AppendItem( SfxBoolItem( FN_PARAM_4,
-                                                    rOutParam.bAscending[1] ) );
-                            }
-                            if ( rOutParam.bDoSort[2] )
-                            {
-                                rReq.AppendItem( SfxInt32Item( FN_PARAM_5,
-                                                    rOutParam.nField[2] + 1 ) );
-                                rReq.AppendItem( SfxBoolItem( FN_PARAM_6,
-                                                    rOutParam.bAscending[2] ) );
-                            }
+
+                            rReq.Done();
                         }
+                        else
+                            GetViewData()->GetDocShell()->CancelAutoDBRange();
 
-                        rReq.Done();
+                        delete pDlg;
                     }
-                    else
-                        GetViewData()->GetDocShell()->CancelAutoDBRange();
-
-                    delete pDlg;
                 }
             }
             break;
-
-/*
-            {
-
-                USHORT          nId  = ScPivotLayoutWrapper::GetChildWindowId();
-                SfxChildWindow* pWnd = pSfxApp->GetChildWindow( nId );
-
-                pScMod->SetRefDialog( nId, pWnd ? FALSE : TRUE );
-
-            }
-            break;
-*/
 
         case SID_FILTER:
             {
@@ -1239,6 +1331,10 @@ void __EXPORT ScCellShell::GetDBState( SfxItemSet& rSet )
                         ScRange aDummy;
                         ScMarkType eMarkType = GetViewData()->GetSimpleArea( aDummy);
                         if (eMarkType != SC_MARK_SIMPLE && eMarkType != SC_MARK_SIMPLE_FILTERED)
+                        {
+                            rSet.DisableItem( nWhich );
+                        }
+                        else if (pDoc->GetDPAtBlock(aDummy))
                         {
                             rSet.DisableItem( nWhich );
                         }

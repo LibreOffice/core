@@ -78,7 +78,9 @@ SLOFILES =  \
     $(SLO)$/warnbox.obj	\
     $(SLO)$/scuiautofmt.obj     \
     $(SLO)$/conflictsdlg.obj    \
-    $(SLO)$/sharedocdlg.obj
+    $(SLO)$/sharedocdlg.obj \
+    $(SLO)$/protectiondlg.obj \
+    $(SLO)$/retypepassdlg.obj
 
 EXCEPTIONSFILES = \
     $(SLO)$/acredlin.obj        \
@@ -87,7 +89,9 @@ EXCEPTIONSFILES = \
     $(SLO)$/optsolver.obj       \
     $(SLO)$/solveroptions.obj   \
     $(SLO)$/crnrdlg.obj         \
-    $(SLO)$/solverutil.obj
+    $(SLO)$/solverutil.obj \
+    $(SLO)$/protectiondlg.obj \
+    $(SLO)$/retypepassdlg.obj
 
 SRS1NAME=$(TARGET)
 SRC1FILES = \
@@ -96,7 +100,9 @@ SRC1FILES = \
     highred.src					\
     linkarea.src                \
     conflictsdlg.src            \
-    sharedocdlg.src
+    sharedocdlg.src \
+    protectiondlg.src \
+    retypepassdlg.src
 
 LIB1TARGET = $(SLB)$/$(TARGET).lib
 
@@ -116,7 +122,9 @@ LIB1OBJFILES =  \
     $(SLO)$/redcom.obj			\
     $(SLO)$/warnbox.obj         \
     $(SLO)$/conflictsdlg.obj    \
-    $(SLO)$/sharedocdlg.obj
+    $(SLO)$/sharedocdlg.obj \
+    $(SLO)$/protectiondlg.obj \
+    $(SLO)$/retypepassdlg.obj
 
 # --- Tagets -------------------------------------------------------
 

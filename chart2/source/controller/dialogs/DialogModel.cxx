@@ -108,6 +108,7 @@ OUString lcl_ConvertRole( const OUString & rRoleString, bool bFromInternalToUI )
         aTranslationMap[ C2U( "values-min" ) ] =   OUString( String( ::chart::SchResId( STR_DATA_ROLE_MIN )));
         aTranslationMap[ C2U( "values-x" ) ] =     OUString( String( ::chart::SchResId( STR_DATA_ROLE_X )));
         aTranslationMap[ C2U( "values-y" ) ] =     OUString( String( ::chart::SchResId( STR_DATA_ROLE_Y )));
+        aTranslationMap[ C2U( "values-size" ) ] =  OUString( String( ::chart::SchResId( STR_DATA_ROLE_SIZE )));
     }
 
     if( bFromInternalToUI )
@@ -155,6 +156,7 @@ void lcl_createRoleIndexMap( lcl_tRoleIndexMap & rOutMap )
     rOutMap[ C2U( "values-min" ) ] =            ++nIndex;
     rOutMap[ C2U( "values-max" ) ] =            ++nIndex;
     rOutMap[ C2U( "values-last" ) ] =           ++nIndex;
+    rOutMap[ C2U( "values-size" ) ] =           ++nIndex;
 }
 
 struct lcl_DataSeriesContainerAppend : public

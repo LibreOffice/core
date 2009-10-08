@@ -61,6 +61,7 @@
 #include "PieChart.hxx"
 #include "AreaChart.hxx"
 #include "CandleStickChart.hxx"
+#include "BubbleChart.hxx"
 //
 
 #include <com/sun/star/chart/ErrorBarStyle.hpp>
@@ -389,7 +390,7 @@ OUString VSeriesPlotter::getLabelTextForValue( VDataSeries& rDataSeries
         }
         else
         {
-            if( m_aAxesNumberFormats.hasFormat(1,rDataSeries.getAttachedAxisIndex()) ) //y-axis
+            if( rDataSeries.shouldLabelNumberFormatKeyBeDetectedFromYAxis() && m_aAxesNumberFormats.hasFormat(1,rDataSeries.getAttachedAxisIndex()) ) //y-axis
                 nNumberFormatKey = m_aAxesNumberFormats.getFormat(1,rDataSeries.getAttachedAxisIndex());
             else
                 nNumberFormatKey = rDataSeries.detectNumberFormatKey( nPointIndex );
@@ -1409,7 +1410,7 @@ void VDataSeriesGroup::getMinimumAndMaximiumX( double& rfMinimum, double& rfMaxi
         sal_Int32 nPointCount = (*aSeriesIter)->getTotalPointCount();
         for(sal_Int32 nN=0;nN<nPointCount;nN++)
         {
-            double fX = (*aSeriesIter)->getX( nN );
+            double fX = (*aSeriesIter)->getXValue( nN );
             if( ::rtl::math::isNan(fX) )
                 continue;
             if(rfMaximum<fX)
@@ -1441,12 +1442,12 @@ void VDataSeriesGroup::getMinimumAndMaximiumYInContinuousXRange( double& rfMinY,
             if( nAxisIndex != (*aSeriesIter)->getAttachedAxisIndex() )
                 continue;
 
-            double fX = (*aSeriesIter)->getX( nN );
+            double fX = (*aSeriesIter)->getXValue( nN );
             if( ::rtl::math::isNan(fX) )
                 continue;
             if( fX < fMinX || fX > fMaxX )
                 continue;
-            double fY = (*aSeriesIter)->getY( nN );
+            double fY = (*aSeriesIter)->getYValue( nN );
             if( ::rtl::math::isNan(fY) )
                 continue;
             if(rfMaxY<fY)
@@ -2063,6 +2064,8 @@ VSeriesPlotter* VSeriesPlotter::createSeriesPlotter(
         pRet = new AreaChart(xChartTypeModel,nDimensionCount,true,true);
     else if( aChartType.equalsIgnoreAsciiCase(CHART2_SERVICE_NAME_CHARTTYPE_SCATTER) )
         pRet = new AreaChart(xChartTypeModel,nDimensionCount,false,true);
+    else if( aChartType.equalsIgnoreAsciiCase(CHART2_SERVICE_NAME_CHARTTYPE_BUBBLE) )
+        pRet = new BubbleChart(xChartTypeModel,nDimensionCount);
     else if( aChartType.equalsIgnoreAsciiCase(CHART2_SERVICE_NAME_CHARTTYPE_PIE) )
         pRet = new PieChart(xChartTypeModel,nDimensionCount);
     else if( aChartType.equalsIgnoreAsciiCase(CHART2_SERVICE_NAME_CHARTTYPE_NET) )

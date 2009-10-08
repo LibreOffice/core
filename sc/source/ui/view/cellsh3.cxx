@@ -950,15 +950,11 @@ void ScCellShell::Execute( SfxRequest& rReq )
             DBG_ERROR("Execute von InputLine-Status");
             break;
 
-
         case SID_STATUS_DOCPOS:
-            {
-                //! Navigator an-/ausschalten (wie im Writer) ???
-                //!pViewData->GetDispatcher().Execute( SID_NAVIGATOR,
-                //!                       SFX_CALLMODE_SYNCHRON|SFX_CALLMODE_RECORD );
-            }
+            // Launch navigator.
+            GetViewData()->GetDispatcher().Execute(
+                SID_NAVIGATOR, SFX_CALLMODE_SYNCHRON|SFX_CALLMODE_RECORD );
             break;
-
 
         case SID_MARKAREA:
             // called from Basic at the hidden view to select a range in the visible view

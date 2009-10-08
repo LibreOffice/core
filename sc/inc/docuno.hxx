@@ -128,7 +128,7 @@ public:
     ScDocument*             GetDocument() const;
     SfxObjectShell*         GetEmbeddedObject() const;
 
-    void                    UpdateAllRowHeights();
+    void                    UpdateAllRowHeights( const ScMarkData* pTabMark = NULL );
 
     ScDrawLayer*                            MakeDrawLayer();
     void                    BeforeXMLLoading();

@@ -32,12 +32,16 @@
 #define SC_TABLE_HXX
 
 #include <vector>
+#include <memory>
+#include <utility>
 #include <tools/gen.hxx>
 #include <tools/color.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
 #include "column.hxx"
 #include "sortparam.hxx"
 #include "compressedarray.hxx"
+
+#include <memory>
 
 namespace utl {
     class SearchParam;
@@ -65,6 +69,7 @@ class ScRangeList;
 class ScSortInfoArray;
 class ScStyleSheet;
 class ScTableLink;
+class ScTableProtection;
 class ScUserListData;
 class ScIndexMap;
 struct RowInfo;
@@ -77,6 +82,10 @@ class ScTable
 {
 private:
     typedef ::std::vector< ScRange > ScRangeVec;
+    typedef ::std::pair< SCCOL, SCROW > ScAddress2D;
+    typedef ::std::vector< ScAddress2D > ScAddress2DVec;
+    typedef ::std::auto_ptr< ScAddress2DVec > ScAddress2DVecPtr;
+
                                             //  Daten pro Tabelle   ------------------
     ScColumn        aCol[MAXCOLCOUNT];
 
@@ -102,8 +111,7 @@ private:
     SCROW           nRepeatStartY;
     SCROW           nRepeatEndY;
 
-    BOOL            bProtected;
-    com::sun::star::uno::Sequence<sal_Int8> aProtectPass;
+    ::std::auto_ptr<ScTableProtection> pTabProtection;
 
     USHORT*         pColWidth;
     ScSummableCompressedArray< SCROW, USHORT>*  pRowHeight;
@@ -119,6 +127,7 @@ private:
 
                                             //  interne Verwaltung  ------------------
     BOOL            bVisible;
+    BOOL            bPendingRowHeights;
 
     SCTAB           nTab;
     USHORT          nRecalcLvl;             // Rekursionslevel Size-Recalc
@@ -127,6 +136,8 @@ private:
     utl::TextSearch*    pSearchText;
 
     mutable String  aUpperName;             // #i62977# filled only on demand, reset in SetName
+
+    ScAddress2DVecPtr mxUninitNotes;
 
     // SortierParameter um den Stackbedarf von Quicksort zu Minimieren
     ScSortParam     aSortParam;
@@ -182,6 +193,9 @@ public:
     BOOL        IsVisible() const                            { return bVisible; }
     void        SetVisible( BOOL bVis );
 
+    BOOL        IsPendingRowHeights() const                  { return bPendingRowHeights; }
+    void        SetPendingRowHeights( BOOL bSet );
+
     BOOL        IsLayoutRTL() const                          { return bLayoutRTL; }
     BOOL        IsLoadingRTL() const                         { return bLoadingRTL; }
     void        SetLayoutRTL( BOOL bSet );
@@ -218,10 +232,9 @@ public:
     void            SetPageStyle( const String& rName );
     void            PageStyleModified( const String& rNewName );
 
-    BOOL            IsProtected() const                     { return bProtected; }
-    const com::sun::star::uno::Sequence<sal_Int8>&  GetPassword() const                     { return aProtectPass; }
-    void            SetProtection( BOOL bProtect, const com::sun::star::uno::Sequence<sal_Int8>& rPasswd )
-                                        { bProtected = bProtect; aProtectPass = rPasswd; }
+    BOOL            IsProtected() const;
+    void            SetProtection(const ScTableProtection* pProtect);
+    ScTableProtection* GetProtection();
 
     Size            GetPageSize() const;
     void            SetPageSize( const Size& rSize );
@@ -276,6 +289,9 @@ public:
     ScPostIt*   ReleaseNote( SCCOL nCol, SCROW nRow );
     /** Deletes the note at the passed cell address. */
     void        DeleteNote( SCCOL nCol, SCROW nRow );
+    /** Creates the captions of all uninitialized cell notes.
+        @param bForced  True = always create all captions, false = skip when Undo is disabled. */
+    void        InitializeNoteCaptions( bool bForced = false );
 
     BOOL        TestInsertRow( SCCOL nStartCol, SCCOL nEndCol, SCSIZE nSize );
     void        InsertRow( SCCOL nStartCol, SCCOL nEndCol, SCROW nStartRow, SCSIZE nSize );
