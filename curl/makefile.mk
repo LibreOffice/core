@@ -81,7 +81,7 @@ BUILD_ACTION=$(GNUMAKE)
 .ENDIF
 BUILD_FLAGS+= -j$(EXTMAXPROCESS)
 
-OUT2LIB=$(BUILD_DIR)$/.libs$/libcurl*$(DLLPOST)*
+OUT2LIB=$(BUILD_DIR)$/.libs$/libcurl$(DLLPOST).3
 .ENDIF			# "$(GUI)"=="UNX"
 
 

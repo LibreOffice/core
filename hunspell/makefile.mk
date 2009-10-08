@@ -45,7 +45,9 @@ TARFILE_ROOTDIR=hunspell-1.2.8
 
 #ADDITIONAL_FILES += src/hunspell/makefile.mk
 
-PATCH_FILES=hunspell-1.2.8.patch
+PATCH_FILES=\
+    hunspell-1.2.8.patch \
+    hunspell-consts-1.2.8.patch # hunspell#2064983
 
 .IF "$(GUI)"=="UNX"
 #CONFIGURE_DIR=$(BUILD_DIR)
@@ -71,7 +73,14 @@ OUT2LIB=$(BUILD_DIR)$/src$/hunspell$/.libs$/libhunspell-1.2.a
 
 
 .IF "$(GUI)"=="WNT"
+.IF "$(COM)"=="GCC"
+CONFIGURE_ACTION=configure
+CONFIGURE_FLAGS= --disable-shared --with-pic
+BUILD_ACTION=make
+OUT2LIB=$(BUILD_DIR)$/src$/hunspell$/.libs$/libhunspell-1.2.a
+.ELSE
 BUILD_ACTION=cd src/hunspell && dmake
+.ENDIF
 .ENDIF # "$(GUI)"=="WNT"
 
 .IF "$(GUI)"=="OS2"

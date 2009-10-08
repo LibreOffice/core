@@ -52,38 +52,7 @@ all:
 TARFILE_NAME=Python-$(PYVERSION)
 PATCH_FILES=Python-$(PYVERSION).patch
 
-PYPROJECTS= \
-    datetime 	\
-    mmap		\
-    parser		\
-    pyexpat		\
-    python 		\
-    pythonw		\
-    select		\
-    unicodedata	\
-    w9xpopen 	\
-    winreg		\
-    winsound	\
-    _socket		\
-    _csv		\
-    _sre	 	\
-    _symtable	\
-    _testcapi
-
-PYADDITIONAL_PROJECTS = \
-    zlib 			\
-    make_versioninfo	\
-    bz2			\
-    _tkinter		\
-    _bsddb			\
-    pythoncore
-
-ADDITIONAL_FILES_TMP=$(PYPROJECTS) $(PYADDITIONAL_PROJECTS)
-ADDITIONAL_FILES=$(foreach,i,$(ADDITIONAL_FILES_TMP) PCbuild/$(i).mak PCbuild/$(i).dep)
-
 CONFIGURE_DIR=
-
-ADDITIONAL_FILES+=Lib/plat-cygwin Python/fileblocks.c
 
 .IF "$(GUI)"=="UNX"
 BUILD_DIR=
@@ -100,15 +69,6 @@ CC+:=$(C_RESTRICTIONFLAGS)
 
 .IF "$(OS)$(COM)"=="LINUXGCC"
 python_LDFLAGS+=-Wl,-z,noexecstack
-.ENDIF
-
-# SunStudio on Solaris 10 and above needs the -xc99=all flag already 
-# during the configuration tests, otherwise the HAVE_LIMITS_H check will
-# be wrong resulting in a build breaker.
-.IF "$(OS)"=="SOLARIS"
-.IF "$(COMNAME)"=="sunpro5"
-CC+:=-xc99=all
-.ENDIF          # "$(COMNAME)"=="sunpro5"
 .ENDIF
 
 .IF "$(OS)$(CPU)"=="SOLARISU"
@@ -130,38 +90,38 @@ BUILD_ACTION=$(ENV_BUILD) $(GNUMAKE) -j$(EXTMAXPROCESS) ; $(GNUMAKE) install ; c
 # WINDOWS
 # ----------------------------------
 .IF "$(COM)"=="GCC"
+PATCH_FILES=Python-$(PYVERSION)-mingw.patch
 BUILD_DIR=
 MYCWD=$(shell cygpath -m $(shell @pwd))/$(INPATH)/misc/build
-CC:=$(CC:s/guw.exe //)
-CXX:=$(CXX:s/guw.exe //)
-LDFLAGS:=-mno-cygwin
-.EXPORT : LDFLAGS
-CONFIGURE_ACTION= ./configure --prefix=$(MYCWD)/python-inst --enable-shared LN="cp -p" LDFLAGS=-mno-cygwin
+python_CFLAGS=-mno-cygwin -mthreads
+python_LDFLAGS=-mno-cygwin -mthreads
+CONFIGURE_ACTION=./configure --prefix=$(MYCWD)/python-inst --enable-shared CC="$(CC:s/guw.exe //)" CXX="$(CXX:s/guw.exe //)" MACHDEP=MINGW32 LN="cp -p" CFLAGS="$(python_CFLAGS)" LDFLAGS="$(python_LDFLAGS)"
 BUILD_ACTION=$(ENV_BUILD) make ; make install
 .ELSE
-PYTHONPATH:=..$/Lib
-.EXPORT : PYTHONPATH
+#PYTHONPATH:=..$/Lib
+#.EXPORT : PYTHONPATH
 
-.IF "$(CCNUMVER)" <= "001400000000"
-EXFLAGS="/GX /YX"
-.ELSE
-.IF "$(WINDOWS_VISTA_PSDK)"!=""
-EXFLAGS="/EHa /Zc:wchar_t- /D "_CRT_SECURE_NO_DEPRECATE""
-ADDITIONALLIBS=ws2_32.lib
-.ELSE  #"$(WINDOWS_VISTA_PSDK)"!=""
-EXFLAGS="/EHa /Zc:wchar_t- /D "_CRT_SECURE_NO_DEPRECATE""
-.ENDIF #"$(WINDOWS_VISTA_PSDK)"!=""
-.ENDIF
+#.IF "$(CCNUMVER)" <= "001400000000"
+#EXFLAGS="/GX /YX"
+#.ELSE
+#.IF "$(WINDOWS_VISTA_PSDK)"!=""
+#EXFLAGS="/EHa /Zc:wchar_t- /D "_CRT_SECURE_NO_DEPRECATE""
+#ADDITIONALLIBS=ws2_32.lib
+#.ELSE  #"$(WINDOWS_VISTA_PSDK)"!=""
+#EXFLAGS="/EHa /Zc:wchar_t- /D "_CRT_SECURE_NO_DEPRECATE""
+#.ENDIF #"$(WINDOWS_VISTA_PSDK)"!=""
+#.ENDIF
 
 BUILD_DIR=PCbuild
 
 # Build python executable and then runs a minimal script. Running the minimal script
 # ensures that certain *.pyc files are generated which would otherwise be created on
 # solver during registration in insetoo_native
-BUILD_ACTION= \
-    $(foreach,i,$(PYPROJECTS) nmake /f $(i).mak CFG="$(i) - Win32 Release" EXFLAGS=$(EXFLAGS) ADDITIONALLIBS=$(ADDITIONALLIBS) && ) \
-    python.exe -c "import os" && \
-    echo build done
+.IF "$(SYSBASE)" != ""
+BUILD_ACTION=$(COMPATH)$/vcpackages$/vcbuild.exe -useenv pcbuild.sln "Release|Win32"
+.ELSE
+BUILD_ACTION=$(COMPATH)$/vcpackages$/vcbuild.exe pcbuild.sln "Release|Win32"
+.ENDIF # "$(SYSBASE)" != ""
 .ENDIF
 .ENDIF
 

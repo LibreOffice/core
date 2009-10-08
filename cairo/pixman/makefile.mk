@@ -109,11 +109,22 @@ LDFLAGS+=-L$(SYSBASE)$/lib -L$(SYSBASE)$/usr$/lib -L$(SOLARLIBDIR) -lpthread -ld
 pixman_CFLAGS+=-xc99=none
 .ENDIF
 
+.IF "$(CPU)"=="I"
+pixman_CFLAGS+=-march=i486
+.ENDIF
+
 pixman_CFLAGS+=-fPIC
 
 CONFIGURE_DIR=
 CONFIGURE_ACTION=.$/configure
-CONFIGURE_FLAGS=--enable-static=no --enable-shared=yes CFLAGS="$(pixman_CFLAGS)"
+.IF "$(CPUNAME)"=="X86_64"
+# static builds tend to fail on 64bit
+CONFIGURE_FLAGS=--enable-static=no --enable-shared=yes
+.ELSE
+# use static lib to avoid linking problems with older system pixman libs
+CONFIGURE_FLAGS=--enable-static=yes --enable-shared=no
+.ENDIF
+CONFIGURE_FLAGS+=CFLAGS="$(pixman_CFLAGS)"
 BUILD_ACTION=$(GNUMAKE)
 BUILD_FLAGS+= -j$(EXTMAXPROCESS)
 BUILD_DIR=$(CONFIGURE_DIR)
@@ -135,7 +146,11 @@ OUT2LIB+=pixman$/.libs$/*.a
 OUT2LIB+=pixman$/release$/*.lib
 .ENDIF
 .ELSE
+.IF "$(CPUNAME)"=="X86_64"
 OUT2LIB+=pixman$/.libs$/libpixman-1.so
+.ELSE
+OUT2LIB+=pixman$/.libs$/libpixman-1.a
+.ENDIF
 .ENDIF
 
 # --- Targets ------------------------------------------------------
