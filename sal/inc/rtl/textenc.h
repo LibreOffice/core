@@ -149,6 +149,7 @@ typedef sal_uInt16 rtl_TextEncoding;
 #define RTL_TEXTENCODING_ADOBE_STANDARD         (RTL_TEXTENC_CAST( 91 ))
 #define RTL_TEXTENCODING_ADOBE_SYMBOL           (RTL_TEXTENC_CAST( 92 ))
 #define RTL_TEXTENCODING_PT154                  (RTL_TEXTENC_CAST( 93 ))
+#define RTL_TEXTENCODING_ADOBE_DINGBATS         (RTL_TEXTENC_CAST( 94 ))
 /* ATTENTION!  Whenever some encoding is added here, make sure to update
  * rtl_isOctetTextEncoding in tencinfo.c.
  */

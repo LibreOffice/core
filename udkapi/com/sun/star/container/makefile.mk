@@ -47,6 +47,7 @@ IDLFILES=\
     XIdentifierContainer.idl\
     ContainerEvent.idl\
     ElementExistException.idl\
+    EnumerableMap.idl\
     NoSuchElementException.idl\
     XChild.idl\
     XUniqueIDAccess.idl\
@@ -59,6 +60,7 @@ IDLFILES=\
     XContainerQuery.idl\
     XContentEnumerationAccess.idl\
     XElementAccess.idl\
+    XEnumerableMap.idl\
     XEnumeration.idl\
     XEnumerationAccess.idl\
     XHierarchicalName.idl\
@@ -71,6 +73,7 @@ IDLFILES=\
     XIndexAccess.idl\
     XIndexContainer.idl\
     XIndexReplace.idl\
+    XMap.idl\
     XNameAccess.idl\
     XNameContainer.idl\
     XNamed.idl\

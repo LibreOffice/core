@@ -57,7 +57,7 @@ module com {  module sun {  module star {  module sheet {
 
     <p>This interface extends the interface
     <type scope="com::sun::star::container">XNamed</type> which provides
-    access to the name of the data pilot table used i.e. in collections.</p>
+    access to the name of the data pilot table used e.g. in collections.</p>
 
     @see com::sun::star::sheet::DataPilotDescriptor
     @see com::sun::star::sheet::DataPilotTable

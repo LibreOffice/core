@@ -65,10 +65,18 @@ interface XImageControl
      */
     [attribute,bound] string ImageURL;
 
-    /** specifies if the image is automatically scaled to the size of the
-        control.
-     */
-    [attribute,bound] boolean ScaleImage;
+    /** defines how to scale the image
+
+        <p>If this property is present, it supersedes the <member>ScaleImage</member> property.</p>
+
+        <p>The value of this property is one of the <type scope="com::sun::star::awt">ImageScaleMode</type> constants.</p>
+
+        @since OOo 3.2
+    */
+    [attribute,bound] short ScaleMode
+    {
+        set raises (com::sun::star::lang::IllegalArgumentException);
+    };
 
     /** Specifies that the IRI given in the data field should be preserved, otherwise the content will be inserted in the resulting report document.
         If the data field contains something different as string then this attribute will be ignored.

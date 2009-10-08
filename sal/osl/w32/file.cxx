@@ -1460,7 +1460,7 @@ namespace /* private */
     void parse_UNC_path(const sal_Unicode* path, UNCComponents* puncc)
     {
         OSL_PRECOND(is_UNC_path(path), "Precondition violated: No UNC path");
-        OSL_PRECOND(!wcschr(path, SLASH), "Path must not contain slashes");
+        OSL_PRECOND(rtl_ustr_indexOfChar(path, SLASH) != -1, "Path must not contain slashes");
 
         const sal_Unicode* pend = path + rtl_ustr_getLength(path);
         const sal_Unicode* ppos = path + 2;
@@ -1580,7 +1580,7 @@ namespace /* private */
     e.g. 'c:\' or '\\Share' have no more parents */
     int path_make_parent(sal_Unicode* path)
     {
-        OSL_PRECOND(!wcschr(path, SLASH), "Path must not contain slashes");
+        OSL_PRECOND(rtl_ustr_indexOfChar(path, SLASH) != -1, "Path must not contain slashes");
         OSL_PRECOND(has_path_parent(path), "Path must have a parent");
 
         sal_Unicode* pos_last_backslash = path + rtl_ustr_lastIndexOfChar(path, BACKSLASH);
@@ -1833,7 +1833,7 @@ namespace /* private */
         oslDirectoryCreationCallbackFunc aDirectoryCreationCallbackFunc,
         void* pData)
     {
-        OSL_PRECOND(wcslen(dir_path) > 0 && (wcsrchr(dir_path, BACKSLASH) != (dir_path + (wcslen(dir_path) - 1))), \
+        OSL_PRECOND(rtl_ustr_getLength(dir_path) > 0 && (rtl_ustr_lastIndexOfChar(dir_path, BACKSLASH) != rtl_ustr_getLength(dir_path) - 1), \
         "Path must not end with a backslash");
 
         DWORD w32_error = create_dir_with_callback(

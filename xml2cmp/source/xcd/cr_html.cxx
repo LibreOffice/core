@@ -229,16 +229,6 @@ HtmlCreator::Write_ReferenceDocu( const Simstr &      i_sName,
 
 
 void
-HtmlCreator::PrintH1( const char * i_pText)
-{
-    static const char sH1a[] = "<H1 ALIGN=CENTER>";
-    static const char sH1e[] = "</H1>";
-    WriteStr(sH1a);
-    WriteStr(i_pText);
-    WriteStr(sH1e);
-}
-
-void
 HtmlCreator::StartRow()
 {
     WriteStr( "     <TR VALIGN=TOP>\n" );

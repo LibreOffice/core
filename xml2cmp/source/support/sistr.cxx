@@ -63,42 +63,6 @@ Simstr::Simstr(const char * str_)
       }
 }
 
-Simstr::Simstr(const char * txt, int anzahl)
-{
-   int txtlen = txt != 0 ? strlen(txt) : 0;
-   if (txt == 0 || anzahl < 1 || long(anzahl) * txtlen > INT_MAX)
-   {
-      len = 0;
-      sz = new char[1];
-      *sz = 0;
-   }
-   else
-   {
-      len = anzahl * txtlen;
-      sz = new char[len+1];
-      for (int i = 0; i < anzahl; i++)
-         memcpy(sz + (i*txtlen), txt, txtlen);
-      sz[len] = 0;
-   }
-}
-
-Simstr::Simstr(char c, int anzahl)
-{
-   if (anzahl < 1)
-      {
-         len = 0;
-         sz = new char[1];
-         *sz = 0;
-      }
-   else
-      {
-         len = anzahl;
-         sz = new char[len+1];
-         memset(sz,c,anzahl);
-         sz[len] = 0;
-      }
-}
-
 Simstr::Simstr( const char *   anybytes,
                 int            firstBytesPos,
                 int            nrOfBytes)
@@ -149,18 +113,6 @@ Simstr::~Simstr()
    delete [] sz;
 }
 
-char &
-Simstr::ch(int  n)
-{
-   static char nullCh = NULCH;
-   nullCh = NULCH;
-   if (n >= long(len) || n < 0)
-      return nullCh;
-   else
-      return sz[unsigned(n)];
-}
-
-
 Simstr
 Simstr::operator+(const Simstr & S) const
 {
@@ -208,96 +160,7 @@ Simstr::operator>=(const Simstr & S) const
 
 // **************          LIST - Funktionen        *****************
 
-
-// Einzelzugriff
-
-char
-Simstr::get(int  n) const     { return (n >= len || n < 0) ? 0 : sz[n]; }
-
-char
-Simstr::get_front() const        { return sz[0]; }
-
-char
-Simstr::get_back() const        { return  len ? sz[len-1] : 0; }
-
-Simstr
-Simstr::get(int  startPos, int  anzahl) const
-{
-   if (startPos >= len || startPos < 0 || anzahl < 1)
-      return "";
-
-   int anz = len - startPos < anzahl ? len - startPos : anzahl;
-
-   Simstr ret(' ',anz);
-   memcpy(ret.sz, sz+startPos, anz);
-   return ret;
-}
-
-Simstr
-Simstr::get_front(int  anzahl) const
-{
-   int anz = len < anzahl ? len : anzahl;
-   if (anz < 1)
-      return "";
-
-   Simstr ret(' ',anz);
-   memcpy(ret.sz, sz, anz);
-   return ret;
-}
-
-Simstr
-Simstr::get_back(int  anzahl) const
-{
-   int anz = len < anzahl ? len : anzahl;
-   if (anz < 1)
-      return "";
-   int start = len-anz;
-
-   Simstr ret(' ',anz);
-   memcpy(ret.sz, sz+start, anz);
-   return ret;
-}
-
-Simstr
-Simstr::get_first_token(char c) const
-{
-   int posc = pos_first(c);
-   if (posc != NO_POS)
-      return get_front(posc);
-   else
-      return sz;
-}
-
-Simstr
-Simstr::get_last_token(char c) const
-{
-   int posc = pos_last(c);
-   if (posc != NO_POS)
-      return get_back(len-posc-1);
-   else
-      return sz;
-}
-
-
-
 // Insert
-
-void
-Simstr::insert(int  pos, char c)
-{
-   if (pos < 0 || pos > len)
-      return;
-
-   char * result = new char[len+2];
-
-   memcpy(result,sz,pos);
-   result[pos] = c;
-   memcpy(result+pos+1,sz+pos,len-pos+1);
-
-   delete [] sz;
-   sz = result;
-   len++;
-}
 
 void
 Simstr::push_front(char c)
@@ -324,23 +187,6 @@ Simstr::push_back(char c)
    delete [] sz;
    sz = result;
    len++;
-}
-
-void
-Simstr::insert(int  pos, const Simstr & S)
-{
-   if (pos < 0 || pos > len)
-      return;
-
-   char * result = new char[len+1+S.len];
-
-   memcpy(result,sz,pos);
-   memcpy(result+pos,S.sz,S.len);
-   memcpy(result+pos+S.len,sz+pos,len-pos+1);
-
-   delete [] sz;
-   sz = result;
-   len += S.len;
 }
 
 void
@@ -400,167 +246,6 @@ Simstr::remove_trailing_blanks()
         remove ( newlen+1, len-newlen);
 }
 
-void
-Simstr::pop_front(int  anzahl)
-{
-   if (anzahl < 1)
-      return;
-   int anz = len < anzahl ? len : anzahl;
-
-   char * result = new char[len-anz+1];
-
-   memcpy(result,sz+anz,len-anz+1);
-
-   delete [] sz;
-   sz = result;
-   len -= anz;
-}
-
-void
-Simstr::pop_back(int  anzahl)
-{
-   if (anzahl < 1)
-      return;
-
-   int anz = len < anzahl ? len : anzahl;
-
-   char * result = new char[len-anz+1];
-
-   memcpy(result,sz,len-anz);
-   result[len-anz] = 0;
-
-   delete [] sz;
-   sz = result;
-   len -= anz;
-}
-
-void
-Simstr::rem_back_from(int  removeStartPos)
-{
-   if (removeStartPos != NO_POS)
-      pop_back(len-removeStartPos);
-}
-
-void
-Simstr::remove_all(char c)
-{
-   if (!len)
-      return;
-   char * result = new char[len];
-   int i,j=0;
-   for (i = 0; i < len; i++)
-       if (sz[i] != c)
-          result[j++] = sz[i];
-
-   delete [] sz;
-   sz = new char[j+1];
-   memcpy(sz,result,j);
-   sz[j] = 0;
-   len = j;
-   delete [] result;
-}
-
-void
-Simstr::remove_all(const Simstr & S)
-{
-   int  pos;
-   while ( (pos=pos_first(S)) != NO_POS )
-      remove(pos,S.len);
-}
-
-void
-Simstr::strip(char c)
-{
-    int start = 0;
-   if (c == ' ')
-   {  // Sonderbehandlung: SPC entfernt auch TABs:
-       while ( start < len
-                 ?  sz[start] == ' '
-                    || sz[start] == '\t'
-                 :  false )
-           start++;
-   }
-   else
-   {
-       while (start < len && sz[start] == c)
-           start++;
-   }
-
-    int ende = len-1;
-   if (c == ' ')
-   {  // Sonderbehandlung: SPC entfernt auch TABs:
-       while ( ende >= start
-                 ?  sz[ende] == ' '
-                    || sz[ende] == '\t'
-                 :  false  )
-           ende--;
-   }
-   else
-   {
-       while (ende >= start && sz[ende] == c)
-           ende--;
-   }
-    *this = get(start,ende-start+1);
-}
-
-void
-Simstr::empty()
-{
-   if (len > 0)
-   {
-      delete [] sz;
-      sz = new char[1];
-      *sz = 0;
-      len = 0;
-   }
-}
-
-Simstr
-Simstr::take_first_token(char c)
-{
-   Simstr ret;
-   int pos = pos_first(c);
-   if (pos != NO_POS)
-      {
-         ret = get_front(pos);
-         pop_front(pos+1);
-      }
-   else
-      {
-         ret = sz;
-         delete [] sz;
-         sz = new char[1];
-         *sz = NULCH;
-         len = 0;
-      }
-
-   return ret;
-}
-
-Simstr
-Simstr::take_last_token(char c)
-{
-   Simstr ret;
-   int pos = pos_last(c);
-   if (pos != NO_POS)
-      {
-         ret = get_back(len-pos-1);
-         pop_back(len-pos);
-      }
-   else
-      {
-         ret = sz;
-         delete [] sz;
-         sz = new char[1];
-         *sz = NULCH;
-         len = 0;
-      }
-
-   return ret;
-}
-
-
-
 // Find
 
 int
@@ -575,21 +260,6 @@ Simstr::pos_first(char c) const
 }
 
 int
-Simstr::pos_first_after( char           c,
-                         int            startSearchPos) const
-{
-   int i = 0;
-   if (startSearchPos >= i)
-      i = startSearchPos+1;
-   for (; i < len ? sz[i] != c : false; i++) ;
-   if (i >= len)
-      return NO_POS;
-   else
-      return i;
-}
-
-
-int
 Simstr::pos_last(char c) const
 {
    int i = 0;
@@ -598,43 +268,6 @@ Simstr::pos_last(char c) const
       return NO_POS;
    else
       return i;
-}
-
-int
-Simstr::pos_first(const Simstr & S) const
-{
-   char * ptr = strstr(sz,S.sz);
-   if (ptr)
-      return int(ptr-sz);
-   else
-      return NO_POS;
-}
-
-int
-Simstr::pos_last(const Simstr & S) const
-{
-   Simstr vgl;
-   int i;
-   for (i = len-S.len; i >= 0 ; i--)
-      {
-         vgl = get(i,S.len);
-         if (vgl == S)
-            break;
-      }
-   if (i >= 0)
-      return i;
-   else
-      return NO_POS;
-}
-
-int
-Simstr::count(char c) const
-{
-   int ret = 0;
-   for (int i =0; i < len; i++)
-      if (sz[i] == c)
-         ret++;
-   return ret;
 }
 
 bool
@@ -653,67 +286,12 @@ Simstr::is_no_text() const
 // Change
 
 void
-Simstr::replace(int  pos, char c)
-{
-    if (pos < 0 || pos >= len)
-      return;
-   else
-      sz[unsigned(pos)] = c;
-}
-
-void
-Simstr::replace(int  startPos, int  anzahl, const Simstr & S)
-{
-   if (startPos >= len || startPos < 0 || anzahl < 1)
-      return;
-
-   int anz = len - startPos < anzahl ? len - startPos : anzahl;
-
-   char * result = new char[len-anz+S.len+1];
-
-   memcpy(result,sz,startPos);
-   memcpy(result+startPos, S.sz, S.len);
-   memcpy(result+startPos+S.len, sz+startPos+anz, len-startPos-anz+1);
-
-   delete [] sz;
-   sz = result;
-   len = len-anz+S.len;
-}
-
-void
 Simstr::replace_all(char oldCh, char newCh)
 {
    for (int i=0; i < len; i++)
       if (sz[i] == oldCh)
          sz[i] = newCh;
 }
-
-void
-Simstr::replace_all(const Simstr & oldS, const Simstr & newS)
-{
-   Simstr vgl;
-   int i = 0;
-    while (i <= len-oldS.len)
-        {
-         vgl = get(i,oldS.len);
-         if (strcmp(vgl.sz,oldS.sz) == 0)
-            {
-               replace(i,oldS.len,newS);
-               i += newS.len;
-            }
-         else
-            i++;
-      }
-}
-
-void
-Simstr::to_lower()
-{
-    for (int i = 0; i < len; i++)
-       sz[i] = (char) tolower(sz[i]);
-}
-
-
 
 //   Simstr addition
 Simstr

@@ -29,11 +29,7 @@
  ************************************************************************/
 package com.sun.star.lib.connections.pipe;
 
-import java.io.BufferedInputStream;
-import java.io.BufferedOutputStream;
-import java.io.InputStream;
 import java.io.IOException;
-import java.io.OutputStream;
 
 import java.util.StringTokenizer;
 import java.util.Enumeration;

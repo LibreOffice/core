@@ -1,0 +1,139 @@
+/*************************************************************************
+* DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+*
+* Copyright 2009 by Sun Microsystems, Inc.
+*
+* OpenOffice.org - a multi-platform office productivity suite
+*
+* This file is part of OpenOffice.org.
+*
+* OpenOffice.org is free software: you can redistribute it and/or modify
+* it under the terms of the GNU Lesser General Public License version 3
+* only, as published by the Free Software Foundation.
+*
+* OpenOffice.org is distributed in the hope that it will be useful,
+* but WITHOUT ANY WARRANTY; without even the implied warranty of
+* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+* GNU Lesser General Public License version 3 for more details
+* (a copy is included in the LICENSE file that accompanied this code).
+*
+* You should have received a copy of the GNU Lesser General Public License
+* version 3 along with OpenOffice.org.  If not, see
+* <http://www.openoffice.org/license.html>
+* for a copy of the LGPLv3 License.
+************************************************************************/
+
+#ifndef __com_sun_star_container_Map_idl__
+#define __com_sun_star_container_Map_idl__
+
+#include <com/sun/star/beans/IllegalTypeException.idl>
+#include <com/sun/star/beans/Pair.idl>
+#include <com/sun/star/container/XEnumerableMap.idl>
+
+//=============================================================================
+
+module com { module sun { module star { module container {
+
+//=============================================================================
+
+/** provides a default <type>XEnumerableMap</type> implementation
+
+    <p>For the keys put into the map using <member>XMap::put</member> or <member>createImmutable</member>,
+    the following rules apply:
+    <a name="keyrules"></a>
+    <ul><li>A <VOID/> key is not allowed.</li>
+        <li>If the key type is <code>BOOLEAN</code>, <code>CHAR</code>, <code>FLOAT</code>, <code>DOUBLE</code>,
+            <code>STRING</code>, <code>TYPE</code>, or <code>UNSIGNED HYPER</code>, then only keys of exactly this
+            type are accepted.</li>
+        <li>If the key type is <code>DOUBLE</code> or <code>FLOAT</code>, then <code>Double.NaN</code> respectively
+            <code>Float.NaN</code> is not accepted as key.</li>
+        <li>If the key type's class is <member scope="com::sun::star::uno">TypeClass::ENUM</member>, then only keys
+            of exactly this type are accepted.</li>
+        <li>If the key type is any of <code>BYTE</code>, <code>SHORT</code>, <code>UNSIGNED SHORT</code>,
+            <code>LONG</code>, <code>UNSIGNED LONG</code>, or <code>HYPER</code>, then all keys which can losslessly
+            be converted to this type (possibly using widening conversions) are accepted.</li>
+        <li>If the key type is an interface type, then all key values denoting objects which can be queried for
+            the given interface are accepted.</li>
+        <li>All other key types are rejected.</li>
+    </ul></p>
+
+    <p>For the values put into the map using <member>XMap::put</member> or <member>createImmutable</member>,
+    the following rules apply:
+    <a name="valuerules"></a>
+    <ul><li>The <VOID/> value will be accepted to be put into the map.</p>
+        <li>If the value type's class is <member scope="com::sun::star::uno">TypeClass::ANY</member>, any value
+            will be accepted.</li>
+        <li>If the value type is an interface type, then all values denoting objects which can be queried for
+            the given interface are accepted.</li>
+        <li>If the value type's class is <member scope="com::sun::star::uno">TypeClass::EXCEPTION</member>
+            or <member scope="com::sun::star::uno">TypeClass::STRUCT</member>, then values whose type equals the
+            value type, or is a sub class of the value type, are accepted.</li>
+        <li>For all other value types, only values whose type matches exactly are accepted.</li>
+        <li>If the value type is <code>DOUBLE</code> or <code>FLOAT</code>, then <code>Double.NaN</code> respectively
+            <code>Float.NaN</code> is not accepted.</li>
+    </ul></p>
+
+    <p>The factory methods of the <code>XEnumerableMap</code> interface support both <em>isolated</em>
+    and <em>non-isolated</em> enumerators. The latter one will be automatically disposed when the map changes
+    after enumerator creation, so every attempt to use them will result in a
+    <type scope="com::sun::star::lang">DisposedException</type> being thrown.</p>
+
+    @see http://udk.openoffice.org/common/man/typesystem.html
+*/
+service EnumerableMap : XEnumerableMap
+{
+    /** creates an instance mapping from the given key type to the given value type
+
+        @param KeyType
+            denotes the type of the keys in the to-be-created map
+        @param ValueType
+            denotes the type of the values in the to-be-created map
+
+        @throws ::com::sun::star::beans::IllegalTypeException
+            if <arg>KeyType</arg> or <arg>ValueType</arg> are unsupported types.
+            For values, all type classes except <member scope="com::sun::star::uno">TypeClass::VOID</member>
+            and <member scope="com::sun::star::uno">TypeClass::UNKNOWN</member> are accepted.
+            For keys, scalar types, strings, <type scope="com::sun::star::uno">Type</type> itself, and interface
+            types are accepted.
+    */
+    create( [in] type KeyType, [in] type ValueType )
+        raises( ::com::sun::star::beans::IllegalTypeException );
+
+    /** creates an instance mapping from the given key type to the given value type
+
+        <p>The resulting map is immutable, so later alter operations on it will fail
+        with a <type scope="com::sun::star::lang">NoSupportException</type>.</p>
+
+        @param KeyType
+            denotes the type of the keys in the to-be-created map
+        @param ValueType
+            denotes the type of the values in the to-be-created map
+        @param Values
+            denote the values contained in the to-be-created map
+
+        @throws ::com::sun::star::beans::IllegalTypeException
+            if <arg>KeyType</arg> or <arg>ValueType</arg> are unsupported types.
+            For values, all type classes except <member scope="com::sun::star::uno">TypeClass::VOID</member>
+            are accepted.<br/>
+            For keys, scalar types, strings, <type scope="com::sun::star::uno">Type</type> itself, and interface
+            types are accepted.
+        @throws ::com::sun::star::lang::IllegalArgumentException
+            if any of the given values or keys violates the <a href="#keyrules">key rules</a> or
+            <a href="#valuerules">value rules</a>.
+    */
+    createImmutable(
+        [in] type KeyType,
+        [in] type ValueType,
+        [in] sequence< ::com::sun::star::beans::Pair< any, any > > Values
+    )
+        raises( ::com::sun::star::beans::IllegalTypeException,
+                ::com::sun::star::lang::IllegalArgumentException );
+};
+
+//=============================================================================
+
+}; }; }; };
+
+//=============================================================================
+
+#endif

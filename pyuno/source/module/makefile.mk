@@ -59,6 +59,7 @@ PYUNORC=pyunorc
 .ELSE
 .INCLUDE :  pyversion.mk
 PYUNORC=pyuno.ini
+DLLPOST=.pyd
 .ENDIF
 
 .IF "$(SYSTEM_PYTHON)" == "YES"
@@ -108,11 +109,23 @@ DEFLIB1NAME=$(TARGET)
 
 # --- Targets ------------------------------------------------------
 
+.IF "$(GUI)$(COM)"=="WNTGCC"
+ALLTAR : \
+    $(DLLDEST)$/uno.py 		\
+    $(DLLDEST)$/unohelper.py	\
+    $(PYUNO_MODULE)			\
+    $(MISC)$/$(PYUNORC)		\
+    $(LB)$/lib$(TARGET).a
+
+$(LB)$/lib$(TARGET).a: $(MISC)$/$(TARGET).def
+    dlltool --dllname $(TARGET)$(DLLPOST) --input-def=$(MISC)$/$(TARGET).def --kill-at --output-lib=$(LB)$/lib$(TARGET).a
+.ELSE
 ALLTAR : \
     $(DLLDEST)$/uno.py 		\
     $(DLLDEST)$/unohelper.py	\
     $(PYUNO_MODULE)			\
     $(MISC)$/$(PYUNORC)		
+.ENDIF
 
 .INCLUDE :  target.mk
 

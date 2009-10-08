@@ -35,6 +35,10 @@
 #include <com/sun/star/sheet/XDataPilotDescriptor.idl>
 #endif
 
+#ifndef __com_sun_star_sheet_XDataPilotDataLayoutFieldSupplier_idl__
+#include <com/sun/star/sheet/XDataPilotDataLayoutFieldSupplier.idl>
+#endif
+
 #ifndef __com_sun_star_beans_XPropertySet_idl__
 #include <com/sun/star/beans/XPropertySet.idl>
 #endif
@@ -55,13 +59,20 @@ published service DataPilotDescriptor
 
     /** provides access to the layout settings of the data pilot table.
      */
-    interface com::sun::star::sheet::XDataPilotDescriptor;
+    interface XDataPilotDescriptor;
 
     //-------------------------------------------------------------------------
 
     /** provides access to the layout settings of the data pilot table.
      */
     [optional] interface com::sun::star::beans::XPropertySet;
+
+    //-------------------------------------------------------------------------
+
+    /** Provides access to the <type>DataPilotField</type> used to layout
+        multiple data fields.
+     */
+    [optional] interface XDataPilotDataLayoutFieldSupplier;
 
     //=========================================================================
 

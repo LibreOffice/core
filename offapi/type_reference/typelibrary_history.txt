@@ -135,3 +135,9 @@
   
 04/12/08 (JSC): TaskID=i96902
   update reference rdb with the released version from OO.org 3.0 (ooo300m9)
+  
+04/17/09 (tl, JSC): TaskID=i96846
+  changed old and not longer used properties in css.linguistic2.LinguProperties
+  to maybevoid and deprecate. They should be removed in a future version. The 
+  implementation will never return them.
+  

@@ -83,9 +83,9 @@ module com {  module sun {  module star {  module sheet {
 
 /** represents a single field in a data pilot table.
 
-    <p>If the data pilot table is based on a spreadsheet cell range, a
-    field is representred by a column of the range and is named using
-    the topmost cell of the column.</p>
+    <p>If the data pilot table is based on a spreadsheet cell range, a field
+    is representred by a column of the range and is named using the topmost
+    cell of the column.</p>
  */
 published service DataPilotField
 {
@@ -104,17 +104,21 @@ published service DataPilotField
 
     //-------------------------------------------------------------------------
 
-    [optional] interface com::sun::star::sheet::XDataPilotField;
+    [optional] interface XDataPilotField;
 
     //-------------------------------------------------------------------------
 
-    [optional] interface com::sun::star::sheet::XDataPilotFieldGrouping;
+    [optional] interface XDataPilotFieldGrouping;
 
     //=========================================================================
 
     /** specifies the orientation of the field.
+
+        <p>If the orientation of a field has been changed using this property,
+        the field will be moved to the last position in the collection of all
+        fields with the specified orientation.</p>
      */
-    [property] com::sun::star::sheet::DataPilotFieldOrientation Orientation;
+    [property] DataPilotFieldOrientation Orientation;
 
     //-------------------------------------------------------------------------
 
@@ -125,21 +129,39 @@ published service DataPilotField
         For data fields, this is the function shown in the data pilot
         table.</p>
      */
-    [property] com::sun::star::sheet::GeneralFunction Function;
+    [property] GeneralFunction Function;
 
+    //-------------------------------------------------------------------------
+
+    /** specifies the functions used to calculate subtotals for this field.
+
+        <p>This property is supported by column and row fields only.</p>
+
+        <p>An empty sequence means no subtotals. The same effect can be
+        achieved by setting the property <member>Function</member> to the
+        value <const>GeneralFunction::NONE</const>. If the length of the
+        sequence is greater then 1, then the sequence MUST NOT contain one of
+        the values <const>GeneralFunction::NONE</const> or
+        <const>GeneralFunction::AUTO</const>.</p>
+
+        <p>The order of the functions in this sequence is reflected in the
+        DataPilot table. Multiple entries of the same function are ignored
+        when setting the property.</p>
+     */
+    [property, optional] sequence<GeneralFunction> Subtotals;
 
     //-------------------------------------------------------------------------
 
     /** specifies the selected page which is used to filter the data pilot.
      */
-    [property,optional] string SelectedPage;
+    [property, optional] string SelectedPage;
 
     //-------------------------------------------------------------------------
 
     /** specifies whether to use the selected page to filter the data pilot or
         show all.
      */
-    [property,optional] boolean UseSelectedPage;
+    [property, optional] boolean UseSelectedPage;
 
     //-------------------------------------------------------------------------
 
@@ -147,73 +169,78 @@ published service DataPilotField
 
     @see com::sun::star::sheet::DataPilotSourceHierarchies
      */
-    [property,optional] string UsedHierarchy;
+    [property, optional] string UsedHierarchy;
 
     //-------------------------------------------------------------------------
 
     /** specifies whether this field has sorting information.
      */
-    [property,optional] boolean HasSortInfo;
+    [property, optional] boolean HasSortInfo;
 
     //-------------------------------------------------------------------------
 
     /** controls how the field's items are sorted.
      */
-    [property,optional] com::sun::star::sheet::DataPilotFieldSortInfo SortInfo;
+    [property, optional] DataPilotFieldSortInfo SortInfo;
 
     //-------------------------------------------------------------------------
 
     /** specifies whether this field has layout information.
      */
-    [property,optional] boolean HasLayoutInfo;
+    [property, optional] boolean HasLayoutInfo;
 
     //-------------------------------------------------------------------------
 
     /** controls how the field's items are laid out in the result table.
      */
-    [property,optional] com::sun::star::sheet::DataPilotFieldLayoutInfo LayoutInfo;
+    [property, optional] DataPilotFieldLayoutInfo LayoutInfo;
 
     //-------------------------------------------------------------------------
 
     /** specifies whether this field has auto show information.
      */
-    [property,optional] boolean HasAutoShowInfo;
+    [property, optional] boolean HasAutoShowInfo;
 
     //-------------------------------------------------------------------------
 
     /** enables the automatic inclusion of only a number of items with
         the highest or lowest result values.
      */
-    [property,optional] com::sun::star::sheet::DataPilotFieldAutoShowInfo AutoShowInfo;
+    [property, optional] DataPilotFieldAutoShowInfo AutoShowInfo;
 
     //-------------------------------------------------------------------------
 
     /** specifies whether this field has a reference.
      */
-    [property,optional] boolean HasReference;
+    [property, optional] boolean HasReference;
 
     //-------------------------------------------------------------------------
 
     /** controls how the results are shown in relation to a selected
         reference result.
      */
-    [property,optional] com::sun::star::sheet::DataPilotFieldReference Reference;
+    [property, optional] DataPilotFieldReference Reference;
 
     //-------------------------------------------------------------------------
 
     /** specifies whether this field is a group field.
      */
-    [property,optional] boolean IsGroupField;
+    [property, optional] boolean IsGroupField;
 
     //-------------------------------------------------------------------------
 
-    /** contains the grouping information of the Field
+    /** contains the grouping information of the DataPilot field.
+
+        <p>By changing the value of this property it is possible to modify the
+        grouping settings of this field.</p>
      */
-    [property,optional] com::sun::star::sheet::DataPilotFieldGroupInfo GroupInfo;
+    [property, optional] DataPilotFieldGroupInfo GroupInfo;
+
+    //-------------------------------------------------------------------------
 
     /** specifies whether to show this field also if it is empty or not.
      */
-    [property,optional] boolean ShowEmpty;
+    [property, optional] boolean ShowEmpty;
 };
 
 //=============================================================================

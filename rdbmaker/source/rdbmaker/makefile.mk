@@ -53,7 +53,6 @@ APP1TARGET= $(TARGET)
 APP1OBJS=   $(OBJFILES)
 
 APP1STDLIBS=\
-            $(STORELIB)\
             $(SALLIB) \
             $(SALHELPERLIB) \
             $(REGLIB) \

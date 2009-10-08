@@ -46,14 +46,22 @@ NO_DEFAULT_STL=TRUE
 .IF "$(GUI)" == "UNX"
 STORELIB=	-lstore
 .ELSE  # unx
+.IF "$(GUI)$(COM)"=="WNTGCC"
+STORELIB=	-lstore$(UDK_MAJOR)
+.ELSE
 STORELIB=	$(LB)$/istore.lib
+.ENDIF
 .ENDIF # unx
 .ENDIF # storelib
 
 .IF "$(GUI)" == "UNX"
 STOREDBGLIB=	$(LB)$/libstoredbg.a
 .ELSE  # unx
+.IF "$(GUI)$(COM)"=="WNTGCC"
+STOREDBGLIB=	$(LB)$/libstoredbg.a
+.ELSE
 STOREDBGLIB=	$(LB)$/storedbg.lib
+.ENDIF
 .ENDIF # unx
 
 CFLAGS+= -I..$/source

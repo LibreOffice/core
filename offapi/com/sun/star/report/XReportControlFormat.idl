@@ -30,21 +30,14 @@
 #ifndef __com_sun_star_report_XReportControlFormat_idl__
 #define __com_sun_star_report_XReportControlFormat_idl__
 
-#ifndef __com_sun_star_awt_FontDescriptor_idl__
 #include <com/sun/star/awt/FontDescriptor.idl>
-#endif
-#ifndef __com_sun_star_util_Color_idl__
-#include <com/sun/star/util/Color.idl>
-#endif
-#ifndef __com_sun_star_beans_XPropertySet_idl__
-#include <com/sun/star/beans/XPropertySet.idl>
-#endif
-#ifndef __com_sun_star_lang_IllegalArgumentException_idl__
-#include <com/sun/star/lang/IllegalArgumentException.idl>
-#endif
-#include <com/sun/star/lang/Locale.idl>
 #include <com/sun/star/awt/FontSlant.idl>
-
+#include <com/sun/star/beans/XPropertySet.idl>
+#include <com/sun/star/lang/IllegalArgumentException.idl>
+#include <com/sun/star/lang/Locale.idl>
+#include <com/sun/star/style/ParagraphAdjust.idl>
+#include <com/sun/star/style/VerticalAlignment.idl>
+#include <com/sun/star/util/Color.idl>
 //=============================================================================
 
  module com {  module sun {  module star {  module report {
@@ -70,15 +63,8 @@ interface XReportControlFormat
         get raises ( com::sun::star::beans::UnknownPropertyException );
     };
 
-    /** specifies the horizontal alignment of the text in the control.
-
-        <pre>
-        0: left
-        1: center
-        2: right
-        </pre>
-
-        @since OOo 2.0.0
+    /** specifies the horizontal alignment of the text.
+        @see ::com::sun::star::style::ParagraphAdjust
      */
     [attribute,bound] short ParaAdjust
     {
@@ -414,11 +400,12 @@ interface XReportControlFormat
     };
 
     /** specifies the vertical alignment of the text in the control.
-        @see com::sun::star::text::ParagraphVertAlign
+        @see com::sun::star::style::VerticalAlignment
      */
-    [attribute,bound] short ParaVertAlignment
+    [attribute,bound] com::sun::star::style::VerticalAlignment VerticalAlign
     {
-        set raises ( com::sun::star::lang::IllegalArgumentException );
+        set raises ( com::sun::star::lang::IllegalArgumentException,com::sun::star::beans::UnknownPropertyException );
+        get raises ( com::sun::star::beans::UnknownPropertyException );
     };
 
     //-------------------------------------------------------------------------

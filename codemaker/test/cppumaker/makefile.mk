@@ -59,8 +59,8 @@ $(SHL1OBJS): $(MISC)$/$(TARGET).cppumaker.flag
 $(MISC)$/$(TARGET).cppumaker.flag: $(BIN)$/cppumaker$(EXECPOST)
 $(MISC)$/$(TARGET).cppumaker.flag: $(MISC)$/$(TARGET).rdb
     - $(MKDIRHIER) $(MISC)$/$(TARGET)$/inc
-    $(BIN)$/cppumaker$(EXECPOST) -O$(MISC)$/$(TARGET)$/inc -BUCR -C $< \
-        $(SOLARBINDIR)$/udkapi.rdb
+    $(AUGMENT_LIBRARY_PATH) $(BIN)$/cppumaker$(EXECPOST) \
+        -O$(MISC)$/$(TARGET)$/inc -BUCR -C $< $(SOLARBINDIR)$/udkapi.rdb
     $(TOUCH) $@
 
 $(MISC)$/$(TARGET).rdb: $(MISC)$/$(TARGET)$/types.urd
@@ -72,4 +72,4 @@ $(MISC)$/$(TARGET)$/types.urd: types.idl
     $(IDLC) -O$(MISC)$/$(TARGET) -I$(SOLARIDLDIR) -cid -we $<
 
 test .PHONY: $(SHL1TARGETN)
-    testshl2 $<
+    $(AUGMENT_LIBRARY_PATH) testshl2 $<

@@ -33,7 +33,6 @@ package com.sun.star.comp.connections;
 import com.sun.star.bridge.XInstanceProvider;
 
 import com.sun.star.lang.XMultiServiceFactory;
-import com.sun.star.lang.XServiceInfo;
 import com.sun.star.lang.XSingleServiceFactory;
 
 import com.sun.star.registry.XRegistryKey;

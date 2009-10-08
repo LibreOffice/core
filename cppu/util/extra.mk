@@ -46,7 +46,7 @@ USE_DEFFILE      :=TRUE
 
 SHL3TARGET  := unsafe_uno_uno
 SHL3IMPLIB  := i$(SHL3TARGET)
-SHL3STDLIBS := $(purpenv_helper_LIB) $(CPPULIB) $(SALHELPERLIB) $(SALLIB) 
+SHL3STDLIBS := $(purpenv_helper_LIB) $(SALLIB) 
 SHL3OBJS    := $(SLO)$/UnsafeBridge.obj
 .IF "$(GUI)"=="OS2"
 SHL3VERSIONMAP=unsafe_os2.map
@@ -60,7 +60,7 @@ SHL3RPATH   := URELIB
 
 SHL4TARGET  := affine_uno_uno
 SHL4IMPLIB  := i$(SHL4TARGET)
-SHL4STDLIBS := $(purpenv_helper_LIB) $(CPPULIB) $(SALHELPERLIB) $(SALLIB) 
+SHL4STDLIBS := $(purpenv_helper_LIB) $(SALLIB) 
 SHL4OBJS    := $(SLO)$/AffineBridge.obj
 .IF "$(GUI)"=="OS2"
 SHL4VERSIONMAP=unsafe_os2.map

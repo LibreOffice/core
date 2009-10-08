@@ -250,19 +250,16 @@ def invoke( object, methodname, argTuple ):
 #---------------------------------------------------------------------------------------
 # don't use any functions beyond this point, private section, likely to change
 #---------------------------------------------------------------------------------------
-def _uno_import( name, *optargs ):
+#def _uno_import( name, globals={}, locals={}, fromlist=[], level=-1 ):
+def _uno_import( name, *optargs, **kwargs ):
     try:
 #       print "optargs = " + repr(optargs)
-        if len(optargs) == 0:
-           return _g_delegatee( name )
-           #print _g_delegatee
-        return _g_delegatee( name, *optargs )
+        return _g_delegatee( name, *optargs, **kwargs )
     except ImportError:
-        if len(optargs) != 3 or not optargs[2]:
-           raise
-    globals = optargs[0]
-    locals = optargs[1]
-    fromlist = optargs[2]
+        # process optargs
+        globals, locals, fromlist = list(optargs)[:3] + [kwargs.get('globals',{}), kwargs.get('locals',{}), kwargs.get('fromlist',[])][len(optargs):]
+        if not fromlist:
+            raise
     modnames = name.split( "." )
     mod = None
     d = sys.modules

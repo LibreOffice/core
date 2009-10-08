@@ -484,8 +484,8 @@ ImplIso2022CnTranslateTo116431(sal_uInt8 const * pCns116431992Data,
     nPlane = pCns116431992Data[nOffset++];
     if (nPlane != 1)
         return 0;
-    return (0x20 + pCns116431992Data[nOffset++]) << 8
-               | (0x20 + pCns116431992Data[nOffset]);
+    return (0x20 + pCns116431992Data[nOffset]) << 8
+               | (0x20 + pCns116431992Data[nOffset + 1]);
 }
 
 sal_Size ImplConvertUnicodeToIso2022Cn(ImplTextConverterData const * pData,
