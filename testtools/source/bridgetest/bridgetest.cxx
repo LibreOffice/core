@@ -32,6 +32,7 @@
 #include "precompiled_testtools.hxx"
 
 #include <stdio.h>
+#include <string.h>
 #include <osl/diagnose.h>
 #include "osl/diagnose.hxx"
 #include <osl/time.h>
@@ -532,6 +533,27 @@ static sal_Bool performTest(
         aRet2 = xLBT->getStruct();
 
         bRet = check( equals( aData, aRet ) && equals( aData, aRet2 ) , "struct comparison test") && bRet;
+
+        {
+                SmallStruct aIn(1, 2);
+                SmallStruct aOut = xLBT->echoSmallStruct(aIn);
+                bRet = check( memcmp(&aIn, &aOut, sizeof(SmallStruct)) == 0, "small struct test" ) && bRet;
+        }
+        {
+                MediumStruct aIn(1, 2, 3, 4);
+                MediumStruct aOut = xLBT->echoMediumStruct(aIn);
+                bRet = check( memcmp(&aIn, &aOut, sizeof(MediumStruct)) == 0, "medium struct test" ) && bRet;
+        }
+        {
+                BigStruct aIn(1, 2, 3, 4, 5, 6, 7, 8);
+                BigStruct aOut = xLBT->echoBigStruct(aIn);
+                bRet = check( memcmp(&aIn, &aOut, sizeof(BigStruct)) == 0, "big struct test" ) && bRet;
+        }
+        {
+                AllFloats aIn(1.1, 2.2, 3.3, 4.4);
+                AllFloats aOut = xLBT->echoAllFloats(aIn);
+                bRet = check( memcmp(&aIn, &aOut, sizeof(AllFloats)) == 0, "all floats struct test" ) && bRet;
+        }
 
         // Test extended attributes that raise exceptions:
         try {

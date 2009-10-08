@@ -92,7 +92,7 @@ PYCOMPONENTS = \
 ALL : 	\
     $(PYFILES)				\
     $(DLLDEST)$/pyuno_regcomp.rdb		\
-    doc					\
+    runtest					\
     ALLTAR
 .ENDIF # L10N_framework
 
@@ -111,11 +111,8 @@ $(DLLDEST)$/pyuno_regcomp.rdb: $(DLLDEST)$/uno_types.rdb $(SOLARBINDIR)$/pyuno_s
     -rm -f $@
     $(WRAPCMD) $(REGMERGE) $(DLLDEST)$/pyuno_regcomp.rdb / $(DLLDEST)$/uno_types.rdb $(SOLARBINDIR)$/pyuno_services.rdb
 
-doc .PHONY:
-    @echo start test with  dmake runtest
-
-runtest : ALL
-    cd $(DLLDEST) && $(TEST_ENV) && python main.py
+runtest : $(DLLDEST)$/pyuno_regcomp.rdb $(PYFILES)
+    cd $(DLLDEST) && $(TEST_ENV) && $(PYTHON) main.py
     cd $(DLLDEST) && $(TEST_ENV) && $(WRAPCMD) $(REGCOMP) -register -br pyuno_regcomp.rdb -r dummy.rdb \
             -l com.sun.star.loader.Python $(foreach,i,$(PYCOMPONENTS) -c vnd.openoffice.pymodule:$(i))
     cd $(DLLDEST) && $(TEST_ENV) && $(WRAPCMD) $(REGCOMP) -register -br pyuno_regcomp.rdb -r dummy2.rdb \

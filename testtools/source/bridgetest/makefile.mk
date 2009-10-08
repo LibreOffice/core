@@ -134,7 +134,7 @@ JAVATARGETS=\
 .INCLUDE :	target.mk
 .IF "$(L10N_framework)"==""
 ALLTAR: \
-        test \
+        runtest \
         $(DLLDEST)$/uno_types.rdb \
         $(DLLDEST)$/uno_services.rdb \
         $(DLLDEST)$/bridgetest_inprocess$(BATCH_SUFFIX) \
@@ -144,8 +144,11 @@ ALLTAR: \
 
 #################################################################
 
-test: 
-    echo $(compcheck)
+runtest : $(DLLDEST)$/uno_types.rdb $(DLLDEST)$/uno_services.rdb makefile.mk
+        cd $(DLLDEST) && $(AUGMENT_LIBRARY_PATH) $(SOLARBINDIR)/uno \
+        -ro uno_services.rdb -ro uno_types.rdb \
+        -s com.sun.star.test.bridge.BridgeTest -- \
+        com.sun.star.test.bridge.CppTestObject
     
 $(DLLDEST)$/uno_types.rdb : $(SOLARBINDIR)$/udkapi.rdb
     echo $(DLLDEST)
