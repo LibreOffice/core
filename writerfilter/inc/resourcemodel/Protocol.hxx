@@ -37,11 +37,11 @@ namespace writerfilter
 
 class StreamProtocol : public Stream
 {
-    Stream::Pointer_t m_pStream;
+    Stream * m_pStream;
     TagLogger::Pointer_t m_pTagLogger;
 
 public:
-    StreamProtocol(Stream::Pointer_t, TagLogger::Pointer_t pTagLogger);
+    StreamProtocol(Stream * pStream, TagLogger::Pointer_t pTagLogger);
     virtual ~StreamProtocol();
 
     virtual void startSectionGroup();
@@ -57,6 +57,7 @@ public:
                        writerfilter::Reference<Table>::Pointer_t ref);
     virtual void substream(Id name,
                            writerfilter::Reference<Stream>::Pointer_t ref);
+    virtual void info(const string & rInfo);
 };
 
 }

@@ -35,7 +35,7 @@
 namespace writerfilter
 {
 
-StreamProtocol::StreamProtocol(Stream::Pointer_t pStream,
+StreamProtocol::StreamProtocol(Stream * pStream,
                                TagLogger::Pointer_t pTagLogger)
   : m_pStream(pStream), m_pTagLogger(pTagLogger)
 {
@@ -132,6 +132,11 @@ void StreamProtocol::substream(Id name,
 
     m_pStream->substream(name, ref);
     m_pTagLogger->endElement("protocol:substream");
+}
+
+void StreamProtocol::info(const string & rInfo)
+{
+    m_pStream->info(rInfo);
 }
 
 }
