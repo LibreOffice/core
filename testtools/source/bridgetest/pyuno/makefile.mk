@@ -52,10 +52,15 @@ DOLLAR_SIGN=$$
 
 .IF "$(SYSTEM_PYTHON)"!="YES"
 PYTHON=$(AUGMENT_LIBRARY_PATH) $(WRAPCMD) $(SOLARBINDIR)/python
-.ELSE                   # "$(SYSTEM_LIBXSLT)"!="YES"
+.ELSE                   # "$(SYSTEM_PYTHON)"!="YES"
 PYTHON=$(AUGMENT_LIBRARY_PATH) $(WRAPCMD) python
-.ENDIF                  # "$(SYSTEM_LIBXSLT)"!="YES"
-
+.ENDIF                  # "$(SYSTEM_PYTHON)"!="YES"
+.IF "$(GUI)"=="WNT"
+PYTHONPATH:=$(SOLARLIBDIR)$/pyuno;$(PWD);$(SOLARLIBDIR)
+.ELSE                   # "$(GUI)"=="WNT"
+PYTHONPATH:=$(SOLARLIBDIR)$/pyuno:$(PWD):$(SOLARLIBDIR)
+.ENDIF                  # "$(GUI)"=="WNT"
+.EXPORT: PYTHONPATH
 
 .IF "$(GUI)"!="WNT" && "$(GUI)"!="OS2"
 .IF "$(USE_SHELL)"=="bash"
