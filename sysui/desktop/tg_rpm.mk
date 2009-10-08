@@ -31,9 +31,9 @@
 
 .IF "$(PKGFORMAT)"!="$(PKGFORMAT:s/rpm//)"
 
-ALLTAR : $(RPMFILES)
+ALLTAR : $(RPMFLAGFILES)
 
-$(RPMFILES) : $(SPECFILE)
+$(RPMFLAGFILES) : $(SPECFILE)
     @-$(MKDIRHIER) $(@:d)
     -$(RM) $(@:d)$(@:b:s/-/ /:1)-$(SPECFILE:b)-*
     $(RPM) -bb $< $(RPMMACROS) \
@@ -44,5 +44,6 @@ $(RPMFILES) : $(SPECFILE)
         --define "unixfilename $(UNIXFILENAME.$(@:b:s/-/ /:1))" \
         --define "iconprefix $(ICONPREFIX.$(@:b:s/-/ /:1))" \
         --define "version $(PKGVERSION.$(@:b:s/-/ /:1))" \
-        --define "release $(PKGREV)"
+        --define "release $(PKGREV)" \
+        --define "_unpackaged_files_terminate_build  0" && $(TOUCH) $@
 .ENDIF

@@ -197,6 +197,9 @@ protected:
     // Get (modifyable) namespace map
     SvXMLNamespaceMap& _GetNamespaceMap() { return *mpNamespaceMap; }
 
+    // get a new namespave map (used in starmath to have a default namespace)
+    void ResetNamespaceMap();
+
     // This method can be overloaded to export the content of <office:meta>.
     // There is a default implementation.
     virtual void _ExportMeta();
@@ -577,6 +580,9 @@ public:
     // --> OD 2008-11-26 #158694#
     sal_Bool exportTextNumberElement() const;
     // <--
+
+    /// set null date from model to unit converter, if not already done
+    sal_Bool SetNullDateOnUnitConverter();
 };
 
 inline UniReference< XMLTextParagraphExport > SvXMLExport::GetTextParagraphExport()

@@ -1292,14 +1292,14 @@ namespace xmloff
         // one or both of the selected flags.
         // 21.05.2001 - 85388 - frank.schoenheit@germany.sun.com
 
-        if (aSelection.size() || aDefaultSelection.size())
+        if ( !aSelection.empty() || !aDefaultSelection.empty() )
         {
             sal_Int16 nLastSelected = -1;
-            if (aSelection.size())
+            if ( !aSelection.empty() )
                 nLastSelected = *(--aSelection.end());
 
             sal_Int16 nLastDefaultSelected = -1;
-            if (aDefaultSelection.size())
+            if ( !aDefaultSelection.empty() )
                 nLastDefaultSelected = *(--aDefaultSelection.end());
 
             // the maximum element in both sets

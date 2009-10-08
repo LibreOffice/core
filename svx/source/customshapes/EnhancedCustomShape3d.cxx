@@ -534,9 +534,9 @@ SdrObject* EnhancedCustomShape3d::Create3DObject( const SdrObject* pShape2d, con
             if ( fZRotate != 0.0 )
                 aNewTransform.rotate( 0.0, 0.0, fZRotate );
             if ( bIsMirroredX )
-                aNewTransform.scale( -1.0, 0.0, 0.0 );
+                aNewTransform.scale( -1.0, 1, 1 );
             if ( bIsMirroredY )
-                aNewTransform.scale( 0.0, -1.0, 0.0 );
+                aNewTransform.scale( 1, -1.0, 1 );
             if( fYRotate != 0.0 )
                 aNewTransform.rotate( 0.0, -fYRotate, 0.0 );
             if( fXRotate != 0.0 )
@@ -663,9 +663,7 @@ SdrObject* EnhancedCustomShape3d::Create3DObject( const SdrObject* pShape2d, con
             pScene->GetProperties().SetObjectItem( Svx3DMaterialSpecularItem( aSpecularCol ) );
             pScene->GetProperties().SetObjectItem( Svx3DMaterialSpecularIntensityItem( (sal_uInt16)nIntensity ) );
 
-// SJ: not setting model, so we save a lot of broadcasting and the model is not modified any longer
-//          pScene->SetModel( pModel );
-            pRet->SetSnapRect( CalculateNewSnapRect( pCustomShape, aBoundRect2d, pMap ) );
+            pScene->SetLogicRect( CalculateNewSnapRect( pCustomShape, aSnapRect, aBoundRect2d, pMap ) );
 
             // removing placeholder objects
             std::vector< E3dCompoundObject* >::iterator aObjectListIter( aPlaceholderObjectList.begin() );
@@ -681,10 +679,10 @@ SdrObject* EnhancedCustomShape3d::Create3DObject( const SdrObject* pShape2d, con
     return pRet;
 }
 
-Rectangle EnhancedCustomShape3d::CalculateNewSnapRect( const SdrObject* pCustomShape, const Rectangle& rBoundRect, const double* pMap )
+Rectangle EnhancedCustomShape3d::CalculateNewSnapRect( const SdrObject* pCustomShape, const Rectangle& rSnapRect, const Rectangle& rBoundRect, const double* pMap )
 {
     SdrCustomShapeGeometryItem& rGeometryItem = (SdrCustomShapeGeometryItem&)pCustomShape->GetMergedItem( SDRATTR_CUSTOMSHAPE_GEOMETRY );
-    const Point aCenter( pCustomShape->GetSnapRect().Center() );
+    const Point aCenter( rSnapRect.Center() );
     double fExtrusionBackward, fExtrusionForward;
     GetExtrusionDepth( rGeometryItem, pMap, fExtrusionBackward, fExtrusionForward );
     sal_uInt32 i;
@@ -717,35 +715,31 @@ Rectangle EnhancedCustomShape3d::CalculateNewSnapRect( const SdrObject* pCustomS
 
     double fXRotate, fYRotate;
     GetRotateAngle( rGeometryItem, fXRotate, fYRotate );
-    double fZRotate = -(360.0-(double)pCustomShape->GetRotateAngle()/100.0) * F_PI180;
-    // double fRotationAngle = Fix16ToAngle( rPropSet.GetPropertyValue( DFF_Prop_c3DRotationAngle, 0 ) );       // * F_PI180;
+    double fZRotate = - ((SdrObjCustomShape*)pCustomShape)->GetObjectRotation() * F_PI180;
 
     // rotating bound volume
     basegfx::B3DHomMatrix aMatrix;
     aMatrix.translate(-aRotationCenter.DirectionX, -aRotationCenter.DirectionY, -aRotationCenter.DirectionZ);
-    aMatrix.rotate(fXRotate, fYRotate, fZRotate);
+    if ( fZRotate != 0.0 )
+        aMatrix.rotate( 0.0, 0.0, fZRotate );
+    if ( ((SdrObjCustomShape*)pCustomShape)->IsMirroredX() )
+        aMatrix.scale( -1.0, 1, 1 );
+    if ( ((SdrObjCustomShape*)pCustomShape)->IsMirroredY() )
+        aMatrix.scale( 1, -1.0, 1 );
+    if( fYRotate != 0.0 )
+        aMatrix.rotate( 0.0, fYRotate, 0.0 );
+    if( fXRotate != 0.0 )
+        aMatrix.rotate( -fXRotate, 0.0, 0.0 );
     aMatrix.translate(aRotationCenter.DirectionX, aRotationCenter.DirectionY, aRotationCenter.DirectionZ);
     aBoundVolume.transform(aMatrix);
 
-//  for( i = 0L; i < 8L; i++ )
-//  {
-//      basegfx::B3DPoint aPoint(aBoundVolume.getB3DPoint(i));
-//      aPoint.setX(aPoint.getX() - aRotationCenter.DirectionX);
-//      aPoint.setY(aPoint.getY() - aRotationCenter.DirectionY);
-//      aPoint.setZ(aPoint.getZ() - aRotationCenter.DirectionZ);
-//      Rotate( rPoint, fXRotate, fYRotate, fZRotate );
-//      aPoint.setX(aPoint.getX() + aRotationCenter.DirectionX);
-//      aPoint.setY(aPoint.getY() + aRotationCenter.DirectionY);
-//      aPoint.setZ(aPoint.getZ() + aRotationCenter.DirectionZ);
-//      aBoundVolume.setB3DPoint(i, aPoint);
-//  }
-
-    Transformation2D aTransformation2D( pCustomShape, rBoundRect, pMap );
+    Transformation2D aTransformation2D( pCustomShape, rSnapRect, pMap );
     if ( aTransformation2D.IsParallel() )
         aBoundVolume = aTransformation2D.ApplySkewSettings( aBoundVolume );
 
     Polygon aTransformed( 8 );
     for ( i = 0L; i < 8L; i++ )
         aTransformed[ (sal_uInt16)i ] = aTransformation2D.Transform2D( aBoundVolume.getB3DPoint( i ) );
+
     return aTransformed.GetBoundRect();
 }

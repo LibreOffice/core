@@ -32,6 +32,7 @@
 #define _SVX_XFLBMSXY_HXX
 
 #include <svtools/metitem.hxx>
+#include "svx/svxdllapi.h"
 
 /*************************************************************************
 |*
@@ -39,7 +40,7 @@
 |*
 \************************************************************************/
 
-class XFillBmpSizeXItem : public SfxMetricItem
+class SVX_DLLPUBLIC XFillBmpSizeXItem : public SfxMetricItem
 {
 public:
                             TYPEINFO();
@@ -66,7 +67,7 @@ public:
 |*
 \************************************************************************/
 
-class XFillBmpSizeYItem : public SfxMetricItem
+class SVX_DLLPUBLIC XFillBmpSizeYItem : public SfxMetricItem
 {
 public:
                             TYPEINFO();

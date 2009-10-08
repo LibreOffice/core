@@ -64,6 +64,7 @@ static ::osl::Mutex m_aMetaMutex;
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/beans/XPropertySetInfo.hpp>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
+#include <com/sun/star/sdb/ErrorCondition.hpp>
 #include <unotools/processfactory.hxx>
 #include <com/sun/star/mozilla/XMozillaBootstrap.hpp>
 
@@ -86,6 +87,7 @@ using namespace com::sun::star::lang;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::sdbc;
 using namespace com::sun::star::mozilla;
+using namespace com::sun::star::sdb;
 
 namespace connectivity
 {
@@ -341,43 +343,43 @@ static nsresult getSubsFromURI(const rtl::OString& aUri, nsIEnumerator **aSubs)
     return retCode ;
 }
 
-void MDatabaseMetaDataHelper::setAbSpecificError( OConnection* _pCon, sal_Bool bGivenURI )
+namespace
 {
-    if ( ! bGivenURI && m_ProductType ==::com::sun::star::mozilla::MozillaProductType_Mozilla)
+    static void lcl_setNoAddressBookFoundError( ErrorDescriptor& _rError, OConnection& _rCon, MozillaProductType _eProductType,
+                    sal_Bool bGivenURI )
     {
-        setError( STR_NO_MOZIILA_ADDRESSBOOK );
-    }
-    else
-    {
-        if ( m_ProductType ==::com::sun::star::mozilla::MozillaProductType_Thunderbird)
+        sal_uInt16 nAddressBookNameRes = 0;
+        if ( !bGivenURI && _eProductType == MozillaProductType_Mozilla)
         {
-            setError( STR_NO_THUNDERBIRD_ADDRESSBOOK );
+            nAddressBookNameRes = STR_MOZILLA_ADDRESSBOOKS;
         }
         else
         {
-            if (_pCon->usesFactory())
+            if ( _eProductType == MozillaProductType_Thunderbird )
             {
-                if ( _pCon->isOutlookExpress() )
-                {
-                    setError( STR_NO_OUTLOOKEXPRESS_ADDRESSBOOK );
-                }
-                else
-                {
-                    setError( STR_NO_OUTLOOK_ADDRESSBOOK );
-                }
+                nAddressBookNameRes = STR_THUNDERBIRD_ADDRESSBOOKS;
             }
             else
             {
-                if (_pCon->isLDAP())
+                if ( _rCon.usesFactory() )
                 {
-                    setError( STR_COULDNOTCONNECT_TO_LDAP );
+                    if ( _rCon.isOutlookExpress() )
+                    {
+                        nAddressBookNameRes = STR_OE_ADDRESSBOOK;
+                    }
+                    else
+                    {
+                        nAddressBookNameRes = STR_OUTLOOK_MAPI_ADDRESSBOOK;
+                    }
                 }
                 else
                 {
-                    setError( STR_NO_MOZIILA_ADDRESSBOOK );
+                    OSL_ENSURE( !_rCon.isLDAP(), "lcl_setNoAddressBookFoundError: not to be called for LDAP connections!" );
+                    nAddressBookNameRes = STR_MOZILLA_ADDRESSBOOKS;
                 }
             }
         }
+        _rError.set( 0, ErrorCondition::AB_ADDRESSBOOK_NOT_FOUND, _rCon.getResources().getResourceString( nAddressBookNameRes ) );
     }
 }
 
@@ -521,7 +523,7 @@ sal_Bool MDatabaseMetaDataHelper::getTableStrings( OConnection*                 
     nsresult rv = NS_OK;
     nsCOMPtr<nsIEnumerator> subDirectories;
     sal_Int32 nDirectoryType=0;
-    m_ProductType=::com::sun::star::mozilla::MozillaProductType_Mozilla;
+    m_ProductType = MozillaProductType_Mozilla;
     m_ProfileName = _pCon->getMozProfile();
 
 
@@ -530,30 +532,35 @@ sal_Bool MDatabaseMetaDataHelper::getTableStrings( OConnection*                 
         if (!bGivenURI)
             sAbURIString = s_pADDRESSBOOKROOTDIR;
         nDirectoryType = SDBCAddress::ThunderBird;
-        m_ProductType = ::com::sun::star::mozilla::MozillaProductType_Thunderbird;
+        m_ProductType = MozillaProductType_Thunderbird;
     }
-    else
-    if (!bGivenURI) {
+    else if (!bGivenURI)
+    {
         sAbURIString = s_pADDRESSBOOKROOTDIR;
         nDirectoryType = SDBCAddress::Mozilla;
     }
-    else {
-        if (_pCon->usesFactory()) {
+    else
+    {
+        if (_pCon->usesFactory())
+        {
             nDirectoryType = SDBCAddress::Outlook;
         }
-        else {
-            if (_pCon->isLDAP()) {
+        else
+        {
+            if (_pCon->isLDAP())
+            {
                 nDirectoryType = SDBCAddress::LDAP;
             }
-            else {
+            else
+            {
                 sAbURIString = s_pADDRESSBOOKROOTDIR;
                 nDirectoryType = SDBCAddress::Mozilla;
             }
         }
     }
 
-    if (!m_bProfileExists)
-    {
+    if ( !_pCon->isLDAP() && !m_bProfileExists )
+    {   // no need to boot up a Mozilla profile for an LDAP connection
         Reference<XMozillaBootstrap> xMozillaBootstrap;
         Reference<XMultiServiceFactory> xFactory = ::comphelper::getProcessServiceFactory();
         OSL_ENSURE( xFactory.is(), "can't get service factory" );
@@ -572,11 +579,14 @@ sal_Bool MDatabaseMetaDataHelper::getTableStrings( OConnection*                 
                 m_bProfileExists = sal_True;
 
     }
-    if ( ( nDirectoryType == SDBCAddress::Mozilla
-         || m_ProductType ==::com::sun::star::mozilla::MozillaProductType_Thunderbird)
-        && !m_bProfileExists)
+    if  (   !m_bProfileExists
+        &&  !_pCon->isLDAP()
+        &&  (   ( nDirectoryType == SDBCAddress::Mozilla )
+            ||  ( nDirectoryType == SDBCAddress::ThunderBird )
+            )
+        )
     {
-        setAbSpecificError( _pCon, bGivenURI );
+        lcl_setNoAddressBookFoundError( m_aError, *_pCon, m_ProductType, bGivenURI );
         return sal_False;
     }
 
@@ -596,11 +606,12 @@ sal_Bool MDatabaseMetaDataHelper::getTableStrings( OConnection*                 
     args.arg5 = (void*)&m_aTableTypes;
     args.arg6 = (void*)&nErrorResourceId;
     rv = xMProxy.StartProxy(&args,m_ProductType,m_ProfileName);
-    setError( static_cast<sal_uInt16>(nErrorResourceId) );
+    m_aError.setResId( static_cast<sal_uInt16>(nErrorResourceId) );
 
     if (NS_FAILED(rv))
     {
-        setAbSpecificError( _pCon, bGivenURI );
+        if ( nErrorResourceId == 0 )
+            m_aError.setResId( STR_UNSPECIFIED_ERROR );
         return sal_False;
     }
     OSL_TRACE( "\tOUT MDatabaseMetaDataHelper::getTableStrings()\n" );
@@ -729,7 +740,7 @@ MDatabaseMetaDataHelper::testLDAPConnection( OConnection* _pCon )
             osl_waitThread( &timeValue );
         }
     }
-    setError( STR_COULD_NOT_CONNECT_LDAP );
+    m_aError.setResId( STR_COULD_NOT_CONNECT_LDAP );
     return NS_SUCCEEDED( rv ) ? sal_True : sal_False;
 }
 
@@ -741,7 +752,7 @@ sal_Bool MDatabaseMetaDataHelper::NewAddressBook(OConnection* _pCon,const ::rtl:
 
     if ( !bIsMozillaAB )
     {
-        setError( STR_NO_TABLE_CREATION_SUPPORT );
+        m_aError.setResId( STR_NO_TABLE_CREATION_SUPPORT );
         return sal_False;
     }
     else
@@ -760,11 +771,11 @@ sal_Bool MDatabaseMetaDataHelper::NewAddressBook(OConnection* _pCon,const ::rtl:
     _pCon->setForceLoadTables(sal_True); //force reload table next time
     if (rv == NS_ERROR_FILE_IS_LOCKED)
     {
-        setError( STR_MOZILLA_IS_RUNNING );
+        m_aError.setResId( STR_MOZILLA_IS_RUNNING );
     }
     else if (NS_FAILED(rv))
     {
-        setAbSpecificError( _pCon, !bIsMozillaAB );
+        m_aError.set( STR_COULD_NOT_CREATE_ADDRESSBOOK, 0, ::rtl::OUString::valueOf( sal_Int32(rv), 16 ) );
     }
     OSL_TRACE( "OUT MDatabaseMetaDataHelper::NewAddressBook()\n" );
     return( NS_SUCCEEDED(rv) ? sal_True : sal_False );

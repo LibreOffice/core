@@ -88,12 +88,12 @@ static HTMLOptionEnum aAreaShapeOptEnums[] =
 static HTMLOptionEnum __READONLY_DATA aAreaShapeOptEnums[] =
 #endif
 {
-    { sHTML_SH_rect,        IMAP_OBJ_RECTANGLE  },
-    { sHTML_SH_rectangle,   IMAP_OBJ_RECTANGLE  },
-    { sHTML_SH_circ,        IMAP_OBJ_CIRCLE     },
-    { sHTML_SH_circle,      IMAP_OBJ_CIRCLE     },
-    { sHTML_SH_poly,        IMAP_OBJ_POLYGON    },
-    { sHTML_SH_polygon,     IMAP_OBJ_POLYGON    },
+    { OOO_STRING_SVTOOLS_HTML_SH_rect,      IMAP_OBJ_RECTANGLE  },
+    { OOO_STRING_SVTOOLS_HTML_SH_rectangle, IMAP_OBJ_RECTANGLE  },
+    { OOO_STRING_SVTOOLS_HTML_SH_circ,      IMAP_OBJ_CIRCLE     },
+    { OOO_STRING_SVTOOLS_HTML_SH_circle,    IMAP_OBJ_CIRCLE     },
+    { OOO_STRING_SVTOOLS_HTML_SH_poly,          IMAP_OBJ_POLYGON    },
+    { OOO_STRING_SVTOOLS_HTML_SH_polygon,       IMAP_OBJ_POLYGON    },
     { 0,                    0                   }
 };
 
@@ -104,18 +104,18 @@ static HTMLOptionEnum aHTMLMetaNameTable[] =
 static HTMLOptionEnum __READONLY_DATA aHTMLMetaNameTable[] =
 #endif
 {
-    { sHTML_META_author,        HTML_META_AUTHOR        },
-    { sHTML_META_changed,       HTML_META_CHANGED       },
-    { sHTML_META_changedby,     HTML_META_CHANGEDBY     },
-    { sHTML_META_classification,HTML_META_CLASSIFICATION},
-    { sHTML_META_content_type,  HTML_META_CONTENT_TYPE  },
-    { sHTML_META_created,       HTML_META_CREATED       },
-    { sHTML_META_description,   HTML_META_DESCRIPTION   },
-    { sHTML_META_keywords,      HTML_META_KEYWORDS      },
-    { sHTML_META_generator,     HTML_META_GENERATOR     },
-    { sHTML_META_refresh,       HTML_META_REFRESH       },
-    { sHTML_META_sdendnote,     HTML_META_SDENDNOTE     },
-    { sHTML_META_sdfootnote,    HTML_META_SDFOOTNOTE    },
+    { OOO_STRING_SVTOOLS_HTML_META_author,      HTML_META_AUTHOR        },
+    { OOO_STRING_SVTOOLS_HTML_META_changed,     HTML_META_CHANGED       },
+    { OOO_STRING_SVTOOLS_HTML_META_changedby,       HTML_META_CHANGEDBY     },
+    { OOO_STRING_SVTOOLS_HTML_META_classification,HTML_META_CLASSIFICATION},
+    { OOO_STRING_SVTOOLS_HTML_META_content_type,    HTML_META_CONTENT_TYPE  },
+    { OOO_STRING_SVTOOLS_HTML_META_created,     HTML_META_CREATED       },
+    { OOO_STRING_SVTOOLS_HTML_META_description, HTML_META_DESCRIPTION   },
+    { OOO_STRING_SVTOOLS_HTML_META_keywords,        HTML_META_KEYWORDS      },
+    { OOO_STRING_SVTOOLS_HTML_META_generator,       HTML_META_GENERATOR     },
+    { OOO_STRING_SVTOOLS_HTML_META_refresh,     HTML_META_REFRESH       },
+    { OOO_STRING_SVTOOLS_HTML_META_sdendnote,       HTML_META_SDENDNOTE     },
+    { OOO_STRING_SVTOOLS_HTML_META_sdfootnote,  HTML_META_SDFOOTNOTE    },
     { 0,                        0                       }
 };
 
@@ -586,7 +586,7 @@ rtl_TextEncoding SfxHTMLParser::GetEncodingByHttpHeader( SvKeyValueIterator *pHT
         for( BOOL bCont = pHTTPHeader->GetFirst( aKV ); bCont;
              bCont = pHTTPHeader->GetNext( aKV ) )
         {
-            if( aKV.GetKey().EqualsIgnoreCaseAscii( sHTML_META_content_type ) )
+            if( aKV.GetKey().EqualsIgnoreCaseAscii( OOO_STRING_SVTOOLS_HTML_META_content_type ) )
             {
                 if( aKV.GetValue().Len() )
                 {
@@ -622,7 +622,7 @@ void SfxHTMLParser::GetScriptType_Impl( SvKeyValueIterator *pHTTPHeader )
              bCont = pHTTPHeader->GetNext( aKV ) )
         {
             if( aKV.GetKey().EqualsIgnoreCaseAscii(
-                                    sHTML_META_content_script_type ) )
+                                    OOO_STRING_SVTOOLS_HTML_META_content_script_type ) )
             {
                 if( aKV.GetValue().Len() )
                 {
@@ -641,12 +641,12 @@ void SfxHTMLParser::GetScriptType_Impl( SvKeyValueIterator *pHTTPHeader )
                         aTmp.Erase( 0, 2 );
                     }
 
-                    if( aTmp.EqualsIgnoreCaseAscii( sHTML_LG_starbasic ) )
+                    if( aTmp.EqualsIgnoreCaseAscii( OOO_STRING_SVTOOLS_HTML_LG_starbasic ) )
                     {
                         eScriptType = STARBASIC;
                         aScriptType = DEFINE_CONST_UNICODE(SVX_MACRO_LANGUAGE_STARBASIC);
                     }
-                    if( !aTmp.EqualsIgnoreCaseAscii( sHTML_LG_javascript ) )
+                    if( !aTmp.EqualsIgnoreCaseAscii( OOO_STRING_SVTOOLS_HTML_LG_javascript ) )
                     {
                         eScriptType = EXTENDED_STYPE;
                         aScriptType = aTmp;

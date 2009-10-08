@@ -1511,7 +1511,7 @@ SfxAppToolBoxControl_Impl::SfxAppToolBoxControl_Impl( USHORT nSlotId, USHORT nId
     const StyleSettings& rSettings = Application::GetSettings().GetStyleSettings();
     m_nSymbolsStyle         = rSettings.GetSymbolsStyle();
     m_bWasHiContrastMode    = rSettings.GetMenuColor().IsDark();
-    m_bShowMenuImages       = SvtMenuOptions().IsMenuIconsEnabled();
+    m_bShowMenuImages       = rSettings.GetUseImagesInMenus();
 
     SetImage( String() );
 }
@@ -1787,7 +1787,7 @@ IMPL_LINK( SfxAppToolBoxControl_Impl, Activate, Menu *, pActMenu )
         const StyleSettings& rSettings = Application::GetSettings().GetStyleSettings();
         ULONG nSymbolsStyle     = rSettings.GetSymbolsStyle();
         BOOL bIsHiContrastMode  = rSettings.GetMenuColor().IsDark();
-        BOOL bShowMenuImages    = SvtMenuOptions().IsMenuIconsEnabled();
+        BOOL bShowMenuImages    = rSettings.GetUseImagesInMenus();
 
         if (( nSymbolsStyle != m_nSymbolsStyle ) ||
             ( bIsHiContrastMode != m_bWasHiContrastMode ) ||

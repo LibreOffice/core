@@ -157,7 +157,7 @@ void SvxReadXML( EditEngine& rEditEngine, SvStream& rStream, const ESelection& r
 {
     SvxEditEngineSource aEditSource( &rEditEngine );
 
-    static const SfxItemPropertyMap SvxXMLTextImportComponentPropertyMap[] =
+    static const SfxItemPropertyMapEntry SvxXMLTextImportComponentPropertyMap[] =
     {
         SVX_UNOEDIT_CHAR_PROPERTIES,
         SVX_UNOEDIT_FONT_PROPERTIES,
@@ -165,9 +165,10 @@ void SvxReadXML( EditEngine& rEditEngine, SvStream& rStream, const ESelection& r
         SVX_UNOEDIT_PARA_PROPERTIES,
         {0,0,0,0,0,0}
     };
+    static SvxItemPropertySet aSvxXMLTextImportComponentPropertySet( SvxXMLTextImportComponentPropertyMap );
 
     uno::Reference<text::XText > xParent;
-    SvxUnoText* pUnoText = new SvxUnoText( &aEditSource, SvxXMLTextImportComponentPropertyMap, xParent );
+    SvxUnoText* pUnoText = new SvxUnoText( &aEditSource, &aSvxXMLTextImportComponentPropertySet, xParent );
     pUnoText->SetSelection( rSel );
     uno::Reference<text::XText > xText( pUnoText );
 

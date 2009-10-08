@@ -70,7 +70,6 @@ SHL1STDLIBS= \
     $(TOOLSLIB)	\
     $(I18NISOLANGLIB) \
     $(JVMFWKLIB) \
-    $(COMPHELPERLIB) \
     $(XMLSCRIPTLIB) \
     $(BERKELEYLIB)
     

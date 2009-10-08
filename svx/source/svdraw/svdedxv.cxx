@@ -858,7 +858,8 @@ SdrEndTextEditKind SdrObjEditView::SdrEndTextEdit(sal_Bool bDontDeleteReally)
     pTextEditCursorMerker=NULL;
     aTextEditArea=Rectangle();
 
-    if (pTEOutliner!=NULL) {
+    if (pTEOutliner!=NULL)
+    {
         BOOL bModified=pTEOutliner->IsModified();
         if (pTEOutlinerView!=NULL)
         {
@@ -886,9 +887,13 @@ SdrEndTextEditKind SdrObjEditView::SdrEndTextEdit(sal_Bool bDontDeleteReally)
             pTEOutliner->SetBeginPasteOrDropHdl(Link());
             pTEOutliner->SetEndPasteOrDropHdl(Link());
 
-            XubString aObjName;
-            pTEObj->TakeObjNameSingul(aObjName);
-            BegUndo(ImpGetResStr(STR_UndoObjSetText),aObjName);
+            const bool bUndo = IsUndoEnabled();
+            if( bUndo )
+            {
+                XubString aObjName;
+                pTEObj->TakeObjNameSingul(aObjName);
+                BegUndo(ImpGetResStr(STR_UndoObjSetText),aObjName);
+            }
 
             pTEObj->EndTextEdit(*pTEOutliner);
 
@@ -922,25 +927,43 @@ SdrEndTextEditKind SdrObjEditView::SdrEndTextEdit(sal_Bool bDontDeleteReally)
                 if(pTEObj->IsInserted() && bDelObj && pTextObj->GetObjInventor()==SdrInventor && !bDontDeleteReally)
                 {
                     SdrObjKind eIdent=(SdrObjKind)pTextObj->GetObjIdentifier();
-                    if (eIdent==OBJ_TEXT || eIdent==OBJ_TEXTEXT)
+                    if(eIdent==OBJ_TEXT || eIdent==OBJ_TEXTEXT)
                     {
                         pDelUndo= GetModel()->GetSdrUndoFactory().CreateUndoDeleteObject(*pTEObj);
                     }
                 }
             }
-            if (pTxtUndo!=NULL) { AddUndo(pTxtUndo); eRet=SDRENDTEXTEDIT_CHANGED; }
-            if (pDelUndo!=NULL) {
-                AddUndo(pDelUndo);
+            if (pTxtUndo!=NULL)
+            {
+                if( bUndo )
+                    AddUndo(pTxtUndo);
+                eRet=SDRENDTEXTEDIT_CHANGED;
+            }
+            if (pDelUndo!=NULL)
+            {
+                if( bUndo )
+                {
+                    AddUndo(pDelUndo);
+                }
+                else
+                {
+                    delete pDelUndo;
+                }
                 eRet=SDRENDTEXTEDIT_DELETED;
                 DBG_ASSERT(pTEObj->GetObjList()!=NULL,"SdrObjEditView::SdrEndTextEdit(): Fatal: Editiertes Objekt hat keine ObjList!");
-                if (pTEObj->GetObjList()!=NULL) {
+                if (pTEObj->GetObjList()!=NULL)
+                {
                     pTEObj->GetObjList()->RemoveObject(pTEObj->GetOrdNum());
                     CheckMarked(); // und gleich die Maekierung entfernen...
                 }
-            } else if (bDelObj) { // Fuer den Writer: Loeschen muss die App nachholen.
+            }
+            else if (bDelObj)
+            { // Fuer den Writer: Loeschen muss die App nachholen.
                 eRet=SDRENDTEXTEDIT_SHOULDBEDELETED;
             }
-            EndUndo(); // EndUndo hinter Remove, falls der UndoStack gleich weggehaun' wird
+
+            if( bUndo )
+                EndUndo(); // EndUndo hinter Remove, falls der UndoStack gleich weggehaun' wird
 
             // #111096#
             // Switch on evtl. TextAnimation again after TextEdit
@@ -955,14 +978,16 @@ SdrEndTextEditKind SdrObjEditView::SdrEndTextEdit(sal_Bool bDontDeleteReally)
             AdjustMarkHdl();
         }
         // alle OutlinerViews loeschen
-        for (ULONG i=pTEOutliner->GetViewCount(); i>0;) {
+        for (ULONG i=pTEOutliner->GetViewCount(); i>0;)
+        {
             i--;
             OutlinerView* pOLV=pTEOutliner->GetView(i);
             USHORT nMorePix=pOLV->GetInvalidateMore() + 10; // solaris aw033 test #i#
             Window* pWin=pOLV->GetWindow();
             Rectangle aRect(pOLV->GetOutputArea());
             pTEOutliner->RemoveView(i);
-            if (!bTextEditDontDelete || i!=0) {
+            if (!bTextEditDontDelete || i!=0)
+            {
                 // die nullte gehoert mir u.U. nicht.
                 delete pOLV;
             }
@@ -1564,21 +1589,26 @@ BOOL SdrObjEditView::SetAttributes(const SfxItemSet& rSet, BOOL bReplaceAll)
 
             if( !bRet )
             {
-                String aStr;
-                ImpTakeDescriptionStr(STR_EditSetAttributes,aStr);
-                BegUndo(aStr);
-                AddUndo(GetModel()->GetSdrUndoFactory().CreateUndoGeoObject(*mxTextEditObj.get()));
+                const bool bUndo = IsUndoEnabled();
 
-                // #i43537#
-                // If this is a text object also rescue the OutlinerParaObject since
-                // applying attributes to the object may change text layout when
-                // multiple portions exist with multiple formats. If a OutlinerParaObject
-                // really exists and needs to be rescued is evaluated in the undo
-                // implementation itself.
-                sal_Bool bRescueText(mxTextEditObj->ISA(SdrTextObj));
+                if( bUndo )
+                {
+                    String aStr;
+                    ImpTakeDescriptionStr(STR_EditSetAttributes,aStr);
+                    BegUndo(aStr);
+                    AddUndo(GetModel()->GetSdrUndoFactory().CreateUndoGeoObject(*mxTextEditObj.get()));
 
-                AddUndo(GetModel()->GetSdrUndoFactory().CreateUndoAttrObject(*mxTextEditObj.get(),false,!bNoEEItems || bRescueText));
-                EndUndo();
+                    // #i43537#
+                    // If this is a text object also rescue the OutlinerParaObject since
+                    // applying attributes to the object may change text layout when
+                    // multiple portions exist with multiple formats. If a OutlinerParaObject
+                    // really exists and needs to be rescued is evaluated in the undo
+                    // implementation itself.
+                    bool bRescueText = dynamic_cast< SdrTextObj* >(mxTextEditObj.get());
+
+                    AddUndo(GetModel()->GetSdrUndoFactory().CreateUndoAttrObject(*mxTextEditObj.get(),false,!bNoEEItems || bRescueText));
+                    EndUndo();
+                }
 
                 mxTextEditObj->SetMergedItemSetAndBroadcast(*pSet, bReplaceAll);
 
@@ -1610,12 +1640,15 @@ BOOL SdrObjEditView::SetAttributes(const SfxItemSet& rSet, BOOL bReplaceAll)
 
             if( !bRet )
             {
-                String aStr;
-                ImpTakeDescriptionStr(STR_EditSetAttributes,aStr);
-                BegUndo(aStr);
-                AddUndo(GetModel()->GetSdrUndoFactory().CreateUndoGeoObject(*mxTextEditObj.get()));
-                AddUndo(GetModel()->GetSdrUndoFactory().CreateUndoAttrObject(*mxTextEditObj.get(),false,false));
-                EndUndo();
+                if( IsUndoEnabled() )
+                {
+                    String aStr;
+                    ImpTakeDescriptionStr(STR_EditSetAttributes,aStr);
+                    BegUndo(aStr);
+                    AddUndo(GetModel()->GetSdrUndoFactory().CreateUndoGeoObject(*mxTextEditObj.get()));
+                    AddUndo(GetModel()->GetSdrUndoFactory().CreateUndoAttrObject(*mxTextEditObj.get(),false,false));
+                    EndUndo();
+                }
 
                 mxTextEditObj->SetMergedItemSetAndBroadcast(aSet, bReplaceAll);
 
@@ -1645,7 +1678,8 @@ BOOL SdrObjEditView::SetAttributes(const SfxItemSet& rSet, BOOL bReplaceAll)
         }
         bRet=TRUE;
     }
-    if (pModifiedSet!=NULL) delete pModifiedSet;
+    if (pModifiedSet!=NULL)
+        delete pModifiedSet;
     return bRet;
 }
 

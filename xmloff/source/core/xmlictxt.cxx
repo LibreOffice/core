@@ -39,14 +39,15 @@
 #include <xmloff/nmspmap.hxx>
 #include <xmloff/xmlimp.hxx>
 #include <xmloff/xmlictxt.hxx>
+#include <tools/debug.hxx>
 
 using ::rtl::OUString;
 using ::rtl::OUStringBuffer;
 
 using namespace ::com::sun::star;
 
+DBG_NAME(SvXMLImportContext)
 TYPEINIT0( SvXMLImportContext );
-
 SvXMLImportContext::SvXMLImportContext( SvXMLImport& rImp, USHORT nPrfx,
                               const OUString& rLName ) :
     mrImport( rImp ),
@@ -54,10 +55,14 @@ SvXMLImportContext::SvXMLImportContext( SvXMLImport& rImp, USHORT nPrfx,
     maLocalName( rLName ),
     mpRewindMap( 0 )
 {
+    DBG_CTOR(SvXMLImportContext,NULL);
+
 }
 
 SvXMLImportContext::~SvXMLImportContext()
 {
+
+    DBG_DTOR(SvXMLImportContext,NULL);
 }
 
 SvXMLImportContext *SvXMLImportContext::CreateChildContext( USHORT nPrefix,

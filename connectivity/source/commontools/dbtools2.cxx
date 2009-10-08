@@ -752,6 +752,7 @@ void collectColumnInformation(const Reference< XConnection>& _xConnection,
         Reference< XResultSetMetaData > xMeta( xSuppMeta->getMetaData(), UNO_QUERY_THROW );
 
         sal_Int32 nCount = xMeta->getColumnCount();
+        OSL_ENSURE( nCount != 0, "::dbtools::collectColumnInformation: result set has empty (column-less) meta data!" );
         for (sal_Int32 i=1; i <= nCount ; ++i)
         {
             _rInfo.insert(ColumnInformationMap::value_type(xMeta->getColumnName(i),

@@ -85,7 +85,6 @@ static const struct
     INT32       nPropHdl;
 } aFlushProperties[ NUM_FLUSH_PROPS ] =
 {
-    { UPN_IS_GERMAN_PRE_REFORM,           UPH_IS_GERMAN_PRE_REFORM },   /* deprecated */
     { UPN_IS_USE_DICTIONARY_LIST,         UPH_IS_USE_DICTIONARY_LIST },
     { UPN_IS_IGNORE_CONTROL_CHARACTERS,   UPH_IS_IGNORE_CONTROL_CHARACTERS },
     { UPN_IS_SPELL_UPPER_CASE,            UPH_IS_SPELL_UPPER_CASE },

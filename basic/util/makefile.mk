@@ -103,7 +103,7 @@ SRS1FILES= \
         $(SRS)$/sbx.srs
 
 # --- TESTTOOL IDE ------------------------------------------------------
-# die ressourcen werden hier gelinkt
+# The resources are linked here
 
 RESLIB1NAME=stt
 RESLIB1IMAGES=$(PRJ)$/res

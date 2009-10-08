@@ -191,9 +191,6 @@ namespace configmgr
         virtual sal_Bool fetchDefaultData(configuration::AbsolutePath const& aSubtreePath, const RequestOptions& _aOptions
                                           ) SAL_THROW((com::sun::star::uno::Exception));
 
-        void SAL_CALL acquire(  ) throw ();
-        void SAL_CALL release(  ) throw ();
-
         // DefaultProvider access
         rtl::Reference< TreeManager >  getDefaultProvider() const SAL_THROW((com::sun::star::uno::RuntimeException));
 

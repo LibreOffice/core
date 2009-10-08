@@ -108,8 +108,19 @@ namespace configmgr
 
         class ElementSet
         {
+            struct FastLess
+            {
+                bool operator ()(
+                    rtl::OUString const & a, rtl::OUString const & b) const
+                {
+                    // first sort by length; order is immaterial, and it is fast
+                    return a.getLength() == b.getLength()
+                        ? a < b : a.getLength() < b.getLength();
+                }
+            };
+
         public:
-            typedef std::map<rtl::OUString, ElementTreeData>    Data;
+            typedef std::map<rtl::OUString, ElementTreeData, FastLess> Data;
 
         // the following must be implemented by derived classes
             bool isEmpty() const { return m_aData.empty(); }

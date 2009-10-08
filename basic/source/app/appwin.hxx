@@ -64,30 +64,30 @@ typedef USHORT QueryBits;
 
 class BasicFrame;
 
-class AppWin : public DockingWindow, public SfxListener     // Dokumentfenster
+class AppWin : public DockingWindow, public SfxListener // Document window
 {
     friend class MsgEdit;
 protected:
-    static short nNumber;           // fortlaufende Nummer
-    static short nCount;            // Anzahl Editfenster
+    static short nNumber;           // serial number
+    static short nCount;            // number of edit windows
     static String *pNoName;         // "Untitled"
-    FileStat aLastAccess;           // Wann wurde die geladene Dateiversion verändert
-    USHORT nSkipReload;             // Manchmal darf kein Reload erfolgen
-    BOOL bHasFile;                  // Ansonsten hat reload auch keinen Sinn
-    BOOL bReloadAborted;            // Wird gesetzt, wenn reload abgelehnt wurde, so daß beim Schließen nochmal gefragt werden kann
+    FileStat aLastAccess;           // Last access time of loaded file
+    USHORT nSkipReload;             // Sometimes there must not be a reload
+    BOOL bHasFile;                  // Otherwise reload does not make sense
+    BOOL bReloadAborted;            // Is set if reload was cancelled so that we can ask again wehn closing
 
-    short nId;                      // ID-Nummer( "Unbenannt n" )
+    short nId;                      // ID-Nummer( "Unnamed n" )
     BasicFrame* pFrame;             // Parent-Window
-//  Icon* pIcon;                    // Dokument-Icon
-    String aFind;                   // Suchstring
-    String aReplace;                // Ersetze-String
-    BOOL bFind;                     // TRUE, wenn Suchen und nicht Ersetzen
-    void RequestHelp( const HelpEvent& );// Hilfe-Handler
-    void GetFocus();                // aktivieren
-    virtual USHORT ImplSave();      // Datei speichern
-    USHORT nWinState;               // Maximized, Iconized oder Normal
-    Point nNormalPos;               // Position wenn Normal
-    Size nNormalSize;               // Größe wenn Normal
+//  Icon* pIcon;                    // Document icon
+    String aFind;                   // Search string
+    String aReplace;                // Replace string
+    BOOL bFind;                     // TRUE if search not replace
+    void RequestHelp( const HelpEvent& );           // Help handler
+    void GetFocus();                // activate
+    virtual USHORT ImplSave();      // Save file
+    USHORT nWinState;               // Maximized, Iconized or Normal
+    Point nNormalPos;               // Position if normal
+    Size nNormalSize;               // Size if Normal
     virtual long    PreNotify( NotifyEvent& rNEvt );
     USHORT nWinId;
 
@@ -95,30 +95,30 @@ public:
     TYPEINFO();
     AppWin( BasicFrame* );
     ~AppWin();
-    DataEdit* pDataEdit;                // Daten-Flaeche
-    virtual USHORT GetLineNr()=0;       // Aktuelle Zeilennummer
-    virtual long InitMenu( Menu* );     // Initialisierung des Menues
-    virtual long DeInitMenu( Menu* );   // rücksetzen, so daß wieder alle Shortcuts enabled sind
-    virtual void Command( const CommandEvent& rCEvt );  // Kommando-Handler
-    virtual void Resize();              // Aenderung Fenstergroesse
-    virtual void Help();                // Hilfe aktivieren
-    virtual BOOL Load( const String& ); // Datei laden
-    virtual void PostLoad(){}           // Nachbearbeiten des geladenen (Source am Modul setzen)
-    virtual USHORT SaveAs();                // Datei unter neuem Namen speichern
-    virtual void PostSaveAs(){}         // Nachbearbeiten des Moduls ...
-    virtual void Find();                // Text suchen
-    virtual void Replace();             // Text ersetzen
-    virtual void Repeat();              // Suche wiederholen
-    virtual BOOL Close();               // Fenster schliessen
-    virtual void Activate();            // Fenster wurde aktiviert
-    virtual FileType GetFileType()=0;   // Liefert den Filetype
-    virtual BOOL ReloadAllowed(){ return TRUE; } // Ermöglicht dem Dok temporär NEIN zu sagen
-    virtual void Reload();              // Reload nach änderung auf Platte
+    DataEdit* pDataEdit;                // Data area
+    virtual USHORT GetLineNr()=0;       // Current line number
+    virtual long InitMenu( Menu* );     // Init of the menu
+    virtual long DeInitMenu( Menu* );   // reset to enable all shortcuts
+    virtual void Command( const CommandEvent& rCEvt );  // Command handler
+    virtual void Resize();
+    virtual void Help();
+    virtual BOOL Load( const String& ); // Load file
+    virtual void PostLoad(){}               // Set source at module
+    virtual USHORT SaveAs();                // Save file as
+    virtual void PostSaveAs(){}
+    virtual void Find();                    // find text
+    virtual void Replace();                 // replace text
+    virtual void Repeat();                  // repeat find/replace
+    virtual BOOL Close();                   // close window
+    virtual void Activate();                // window was activated
+    virtual FileType GetFileType()=0;   // returns the filetype
+    virtual BOOL ReloadAllowed(){ return TRUE; }
+    virtual void Reload();                  // Reload after change on disk
     virtual void LoadIniFile(){;}       // (re)load ini file after change
-    void CheckReload();                 // Prüft und Fragt ob reloaded werden soll
-    BOOL DiskFileChanged( USHORT nWhat );   // Prüft ob die Datei sich verändert hat
-    void UpdateFileInfo( USHORT nWhat );    // Merkt sich den aktuellen Zustand der Datei
-    BOOL IsSkipReload();                // Soll reload getestet werden
+    void CheckReload();                     // Checks and asks if reload should performed
+    BOOL DiskFileChanged( USHORT nWhat );   // Checks file for changes
+    void UpdateFileInfo( USHORT nWhat );    // Remembers last file state
+    BOOL IsSkipReload();                    // Should we test reload?
     void SkipReload( BOOL bSkip = TRUE );
     USHORT GetWinState(){ return nWinState; }
     void Maximize();
@@ -126,7 +126,7 @@ public:
     void Minimize( BOOL bMinimize );
     void Cascade( USHORT nNr );
 
-    USHORT QuerySave( QueryBits nBits = QUERY_ALL );        // Speichern
+    USHORT QuerySave( QueryBits nBits = QUERY_ALL );
     BOOL IsModified()               { return pDataEdit->IsModified(); }
     BasicFrame* GetBasicFrame() { return pFrame; }
     virtual void    TitleButtonClick( USHORT nButton );

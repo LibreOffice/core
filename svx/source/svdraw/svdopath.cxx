@@ -983,7 +983,7 @@ String ImpPathForDragAndCreate::getSpecialDragComment(const SdrDragStat& rDrag) 
             XubString aStr2(ImpGetResStr(STR_EditDelete));
 
             // UNICODE: Punkt von ... loeschen
-            aStr2.SearchAndReplaceAscii("%O", aStr);
+            aStr2.SearchAndReplaceAscii("%1", aStr);
 
             return aStr2;
         }

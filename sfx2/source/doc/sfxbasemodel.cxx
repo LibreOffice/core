@@ -3609,7 +3609,7 @@ css::uno::Reference< css::frame::XUntitledNumbers > SfxBaseModel::impl_getUntitl
                 aResult += String( SfxResId(STR_REPAIREDDOCUMENT) );
         }
 
-        if ( m_pData->m_pObjectShell->IsReadOnlyUI() || m_pData->m_pObjectShell->GetMedium() && m_pData->m_pObjectShell->GetMedium()->IsReadOnly() )
+        if ( m_pData->m_pObjectShell->IsReadOnlyUI() || (m_pData->m_pObjectShell->GetMedium() && m_pData->m_pObjectShell->GetMedium()->IsReadOnly()) )
             aResult += ::rtl::OUString( String( SfxResId(STR_READONLY) ) );
         else if ( m_pData->m_pObjectShell->IsDocShared() )
             aResult += ::rtl::OUString( String( SfxResId(STR_SHARED) ) );

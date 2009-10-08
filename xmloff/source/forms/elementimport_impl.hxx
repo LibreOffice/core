@@ -99,7 +99,7 @@ inline void OContainerImport< BASE >::EndElement()
 //=========================================================================
 //-------------------------------------------------------------------------
 template <class BASE>
-OColumnImport< BASE >::OColumnImport(IFormsImportContext& _rImport, IEventAttacherManager& _rEventManager, sal_uInt16 _nPrefix, const ::rtl::OUString& _rName,
+OColumnImport< BASE >::OColumnImport(OFormLayerXMLImport_Impl& _rImport, IEventAttacherManager& _rEventManager, sal_uInt16 _nPrefix, const ::rtl::OUString& _rName,
         const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer >& _rxParentContainer,
         OControlElement::ElementType _eType)
     :BASE(_rImport, _rEventManager, _nPrefix, _rName, _rxParentContainer, _eType)

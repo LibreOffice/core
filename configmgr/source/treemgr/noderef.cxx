@@ -422,13 +422,6 @@ bool SubNodeID::isValidNode() const
 }
 //-----------------------------------------------------------------------------
 
-// hashing
-size_t SubNodeID::hashCode() const
-{
-    return m_aParentID.hashCode() + 5*m_sNodeName.hashCode();
-}
-//-----------------------------------------------------------------------------
-
 bool operator < (SubNodeID const& lhs, SubNodeID const& rhs)
 {
     if (lhs.m_aParentID == rhs.m_aParentID)

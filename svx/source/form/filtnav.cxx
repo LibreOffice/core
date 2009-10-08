@@ -73,6 +73,7 @@
 #include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <comphelper/sequence.hxx>
 #include "gridcell.hxx"
+#include <rtl/logfile.hxx>
 
 #include <functional>
 
@@ -169,6 +170,7 @@ TYPEINIT1(FmFilterItems, FmParentData);
 //------------------------------------------------------------------------
 FmFilterItem* FmFilterItems::Find(const Reference< ::com::sun::star::awt::XTextComponent > & _xText) const
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmFilterItems::Find" );
     for (::std::vector<FmFilterData*>::const_iterator i = m_aChilds.begin();
          i != m_aChilds.end(); ++i)
     {
@@ -183,6 +185,7 @@ FmFilterItem* FmFilterItems::Find(const Reference< ::com::sun::star::awt::XTextC
 //------------------------------------------------------------------------
 Image FmFilterItems::GetImage( BmpColorMode _eMode ) const
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmFilterItems::GetImage" );
     static Image aImage;
     static Image aImage_HC;
 
@@ -209,6 +212,7 @@ FmFilterItem::FmFilterItem(const Reference< ::com::sun::star::lang::XMultiServic
           ,m_aFieldName(aFieldName)
           ,m_xText(_xText)
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmFilterItems::FmFilterItem" );
 }
 
 //------------------------------------------------------------------------
@@ -343,6 +347,7 @@ public:
 FmFilterAdapter::FmFilterAdapter(FmFilterModel* pModel, const Reference< ::com::sun::star::container::XIndexAccess >& xControllers)
                  :m_pModel(pModel)
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmFilterAdapter::FmFilterAdapter" );
     InsertElements(xControllers);
 
     // listen on all controls as text listener
@@ -354,6 +359,7 @@ FmFilterAdapter::FmFilterAdapter(FmFilterModel* pModel, const Reference< ::com::
 //------------------------------------------------------------------------
 void FmFilterAdapter::dispose() throw( RuntimeException )
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmFilterAdapter::dispose" );
     // clear the filter control map
     for (FmFilterControls::const_iterator iter = m_aFilterControls.begin();
          iter != m_aFilterControls.end(); iter++)
@@ -367,6 +373,7 @@ void FmFilterAdapter::dispose() throw( RuntimeException )
 void FmFilterAdapter::DeleteItemsByText(::std::vector<FmFilterData*>& _rItems,
                                         const Reference< ::com::sun::star::awt::XTextComponent > & xText)
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmFilterAdapter::DeleteItemsByText" );
     for (::std::vector<FmFilterData*>::reverse_iterator i = _rItems.rbegin();
         // link problems with operator ==
         i.base() != _rItems.rend().base(); i++)
@@ -394,6 +401,7 @@ void FmFilterAdapter::DeleteItemsByText(::std::vector<FmFilterData*>& _rItems,
 //------------------------------------------------------------------------
 void FmFilterAdapter::InsertElements(const Reference< ::com::sun::star::container::XIndexAccess >& xControllers)
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmFilterAdapter::InsertElements" );
     for (sal_Int32 i = 0, nLen = xControllers->getCount(); i < nLen; ++i)
     {
         Reference< ::com::sun::star::container::XIndexAccess > xElement;
@@ -415,6 +423,7 @@ void FmFilterAdapter::InsertElements(const Reference< ::com::sun::star::containe
 //------------------------------------------------------------------------------
 void FmFilterAdapter::RemoveElement(const Reference< ::com::sun::star::awt::XTextComponent > & xText)
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmFilterAdapter::RemoveElement" );
     if (xText.is())
     {
         // alle Level durchlaufen und eintraege entfernen
@@ -430,6 +439,7 @@ void FmFilterAdapter::RemoveElement(const Reference< ::com::sun::star::awt::XTex
 //------------------------------------------------------------------------
 Reference< ::com::sun::star::beans::XPropertySet >  FmFilterAdapter::getField(const Reference< ::com::sun::star::awt::XTextComponent > & xText) const
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmFilterAdapter::getField" );
     Reference< ::com::sun::star::beans::XPropertySet >  xField;
     FmFilterControls::const_iterator i = m_aFilterControls.find(xText);
     if (i != m_aFilterControls.end())
@@ -443,6 +453,7 @@ void FmFilterAdapter::setText(sal_Int32 nRowPos,
                               const FmFilterItem* pFilterItem,
                               const ::rtl::OUString& rText)
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmFilterAdapter::setText" );
     // set the text for the text component
     Reference< ::com::sun::star::awt::XTextComponent > xText(pFilterItem->GetTextComponent());
     xText->setText(rText);
@@ -475,6 +486,7 @@ void FmFilterAdapter::setText(sal_Int32 nRowPos,
 //------------------------------------------------------------------------
 void SAL_CALL FmFilterAdapter::disposing(const ::com::sun::star::lang::EventObject& e) throw( RuntimeException )
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmFilterAdapter::disposing" );
     Reference< ::com::sun::star::awt::XTextComponent >  xText(e.Source,UNO_QUERY);
     if (xText.is())
         RemoveElement(xText);
@@ -484,6 +496,7 @@ void SAL_CALL FmFilterAdapter::disposing(const ::com::sun::star::lang::EventObje
 //------------------------------------------------------------------------
 Reference< ::com::sun::star::form::XForm > FmFilterAdapter::findForm(const Reference< ::com::sun::star::container::XChild >& xChild)
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmFilterAdapter::findForm" );
     Reference< ::com::sun::star::form::XForm > xForm;
     if (xChild.is())
     {
@@ -498,6 +511,7 @@ Reference< ::com::sun::star::form::XForm > FmFilterAdapter::findForm(const Refer
 //------------------------------------------------------------------------
 void FmFilterAdapter::textChanged(const ::com::sun::star::awt::TextEvent& e) throw( ::com::sun::star::uno::RuntimeException )
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmFilterAdapter::textChanged" );
     // Find the according formitem in the
     Reference< ::com::sun::star::awt::XControl > xControl(e.Source, UNO_QUERY);
     if (!m_pModel || !xControl.is())
@@ -552,6 +566,7 @@ FmFilterModel::FmFilterModel(const Reference< ::com::sun::star::lang::XMultiServ
               ,m_pAdapter(NULL)
               ,m_pCurrentItems(NULL)
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmFilterModel::FmFilterModel" );
 }
 
 //------------------------------------------------------------------------
@@ -563,6 +578,7 @@ FmFilterModel::~FmFilterModel()
 //------------------------------------------------------------------------
 void FmFilterModel::Clear()
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmFilterModel::Clear" );
     // notify
     FilterClearingHint aClearedHint;
     Broadcast( aClearedHint );
@@ -589,6 +605,7 @@ void FmFilterModel::Clear()
 //------------------------------------------------------------------------
 void FmFilterModel::Update(const Reference< ::com::sun::star::container::XIndexAccess > & xControllers, const Reference< ::com::sun::star::form::XFormController > & xCurrent)
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmFilterModel::Update" );
     if ((::com::sun::star::form::XFormController*) xCurrent.get() == (::com::sun::star::form::XFormController*) m_xController.get())
         return;
 
@@ -622,6 +639,7 @@ void FmFilterModel::Update(const Reference< ::com::sun::star::container::XIndexA
 //------------------------------------------------------------------------
 void FmFilterModel::Update(const Reference< ::com::sun::star::container::XIndexAccess > & xControllers, FmParentData* pParent)
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmFilterModel::Update" );
     sal_Int32 nCount = xControllers->getCount();
     for (sal_Int32 i = 0; i < nCount; i++)
     {
@@ -671,6 +689,7 @@ void FmFilterModel::Update(const Reference< ::com::sun::star::container::XIndexA
 //------------------------------------------------------------------------
 FmFormItem* FmFilterModel::Find(const ::std::vector<FmFilterData*>& rItems, const Reference< ::com::sun::star::form::XFormController > & xController) const
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmFilterModel::Find" );
     for (::std::vector<FmFilterData*>::const_iterator i = rItems.begin();
          i != rItems.end(); i++)
     {
@@ -693,6 +712,7 @@ FmFormItem* FmFilterModel::Find(const ::std::vector<FmFilterData*>& rItems, cons
 //------------------------------------------------------------------------
 FmFormItem* FmFilterModel::Find(const ::std::vector<FmFilterData*>& rItems, const Reference< ::com::sun::star::form::XForm >& xForm) const
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmFilterModel::Find" );
     for (::std::vector<FmFilterData*>::const_iterator i = rItems.begin();
          i != rItems.end(); i++)
     {
@@ -715,6 +735,7 @@ FmFormItem* FmFilterModel::Find(const ::std::vector<FmFilterData*>& rItems, cons
 //------------------------------------------------------------------------
 void FmFilterModel::SetCurrentController(const Reference< ::com::sun::star::form::XFormController > & xCurrent)
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmFilterModel::SetCurrentController" );
     if ((::com::sun::star::form::XFormController*) xCurrent.get() == (::com::sun::star::form::XFormController*) m_xController.get())
         return;
 
@@ -731,6 +752,7 @@ void FmFilterModel::SetCurrentController(const Reference< ::com::sun::star::form
 //------------------------------------------------------------------------
 void FmFilterModel::AppendFilterItems(FmFormItem* pFormItem)
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmFilterModel::AppendFilterItems" );
     DBG_ASSERT(pFormItem, "AppendFilterItems(): no form item present");
 
     FmFilterItems* pFilterItems = new FmFilterItems(m_xORB,pFormItem, ::rtl::OUString(String(SVX_RES(RID_STR_FILTER_FILTER_OR))));
@@ -761,6 +783,7 @@ void FmFilterModel::AppendFilterItems(FmFormItem* pFormItem)
 //------------------------------------------------------------------------
 void FmFilterModel::Insert(const ::std::vector<FmFilterData*>::iterator& rPos, FmFilterData* pData)
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmFilterModel::Insert" );
     ::std::vector<FmFilterData*>& rItems = pData->GetParent()->GetChilds();
     sal_Int32 nPos = rPos == rItems.end() ? LIST_APPEND : rPos - rItems.begin();
     rItems.insert(rPos, pData);
@@ -773,6 +796,7 @@ void FmFilterModel::Insert(const ::std::vector<FmFilterData*>::iterator& rPos, F
 //------------------------------------------------------------------------
 void FmFilterModel::Remove(FmFilterData* pData)
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmFilterModel::Remove" );
     FmParentData* pParent = pData->GetParent();
     ::std::vector<FmFilterData*>& rItems = pParent->GetChilds();
 
@@ -885,6 +909,7 @@ void FmFilterModel::Remove(FmFilterData* pData)
 //------------------------------------------------------------------------
 void FmFilterModel::Remove(const ::std::vector<FmFilterData*>::iterator& rPos, FmFilterData* pData)
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmFilterModel::Remove" );
     ::std::vector<FmFilterData*>& rItems = pData->GetParent()->GetChilds();
     rItems.erase(rPos);
 
@@ -898,6 +923,7 @@ void FmFilterModel::Remove(const ::std::vector<FmFilterData*>::iterator& rPos, F
 //------------------------------------------------------------------------
 sal_Bool FmFilterModel::ValidateText(FmFilterItem* pItem, UniString& rText, UniString& rErrorMsg) const
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmFilterModel::ValidateText" );
     // check the input
     Reference< XPropertySet >   xField(m_pAdapter->getField(pItem->GetTextComponent()));
 
@@ -928,12 +954,14 @@ sal_Bool FmFilterModel::ValidateText(FmFilterItem* pItem, UniString& rText, UniS
 //------------------------------------------------------------------------
 void FmFilterModel::Append(FmFilterItems* pItems, FmFilterItem* pFilterItem)
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmFilterModel::Append" );
     Insert(pItems->GetChilds().end(), pFilterItem);
 }
 
 //------------------------------------------------------------------------
 void FmFilterModel::SetTextForItem(FmFilterItem* pItem, const ::rtl::OUString& rText)
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmFilterModel::SetTextForItem" );
     ::std::vector<FmFilterData*>& rItems = pItem->GetParent()->GetParent()->GetChilds();
     ::std::vector<FmFilterData*>::iterator i = ::std::find(rItems.begin(), rItems.end(), pItem->GetParent());
     sal_Int32 nParentPos = i - rItems.begin();
@@ -954,6 +982,7 @@ void FmFilterModel::SetTextForItem(FmFilterItem* pItem, const ::rtl::OUString& r
 //------------------------------------------------------------------------
 void FmFilterModel::SetCurrentItems(FmFilterItems* pCurrent)
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmFilterModel::SetCurrentItems" );
     if (m_pCurrentItems == pCurrent)
         return;
 
@@ -994,6 +1023,7 @@ void FmFilterModel::SetCurrentItems(FmFilterItems* pCurrent)
 //------------------------------------------------------------------------
 void FmFilterModel::CheckIntegrity(FmParentData* pItem)
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmFilterModel::CheckIntegrity" );
     // checks whether for each form there's one free level for input
 
     ::std::vector<FmFilterData*>& rItems = pItem->GetChilds();
@@ -1138,6 +1168,7 @@ FmFilterNavigator::FmFilterNavigator( Window* pParent )
                   ,m_aTimerCounter( 0 )
                   ,m_aDropActionType( DA_SCROLLUP )
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmFilterNavigator::FmFilterNavigator" );
     SetHelpId( HID_FILTER_NAVIGATOR );
 
     {
@@ -1180,12 +1211,14 @@ FmFilterNavigator::~FmFilterNavigator()
 //------------------------------------------------------------------------
 void FmFilterNavigator::Clear()
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmFilterNavigator::Clear" );
     m_pModel->Clear();
 }
 
 //------------------------------------------------------------------------
 void FmFilterNavigator::UpdateContent(const Reference< ::com::sun::star::container::XIndexAccess > & xControllers, const Reference< ::com::sun::star::form::XFormController > & xCurrent)
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmFilterNavigator::UpdateContent" );
     if (xCurrent == m_pModel->GetCurrentController())
         return;
 
@@ -1213,6 +1246,7 @@ void FmFilterNavigator::UpdateContent(const Reference< ::com::sun::star::contain
 //------------------------------------------------------------------------
 sal_Bool FmFilterNavigator::EditingEntry( SvLBoxEntry* pEntry, Selection& rSelection )
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmFilterNavigator::EditingEntry" );
     m_pEditingCurrently = pEntry;
     if (!SvTreeListBox::EditingEntry( pEntry, rSelection ))
         return sal_False;
@@ -1223,6 +1257,7 @@ sal_Bool FmFilterNavigator::EditingEntry( SvLBoxEntry* pEntry, Selection& rSelec
 //------------------------------------------------------------------------
 sal_Bool FmFilterNavigator::EditedEntry( SvLBoxEntry* pEntry, const XubString& rNewText )
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmFilterNavigator::EditedEntry" );
     DBG_ASSERT(pEntry == m_pEditingCurrently, "FmFilterNavigator::EditedEntry: suspicious entry!");
     m_pEditingCurrently = NULL;
 
@@ -1315,6 +1350,7 @@ IMPL_LINK( FmFilterNavigator, OnDropActionTimer, void*, EMPTYARG )
 //------------------------------------------------------------------------
 sal_Int8 FmFilterNavigator::AcceptDrop( const AcceptDropEvent& rEvt )
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmFilterNavigator::AcceptDrop" );
     Point aDropPos = rEvt.maPosPixel;
 
     // kuemmern wir uns erst mal um moeglich DropActions (Scrollen und Aufklappen)
@@ -1421,6 +1457,7 @@ namespace
 //------------------------------------------------------------------------
 sal_Int8 FmFilterNavigator::ExecuteDrop( const ExecuteDropEvent& rEvt )
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmFilterNavigator::ExecuteDrop" );
     // ware schlecht, wenn nach dem Droppen noch gescrollt wird ...
     if (m_aDropActionTimer.IsActive())
         m_aDropActionTimer.Stop();
@@ -1454,6 +1491,7 @@ void FmFilterNavigator::InitEntry(SvLBoxEntry* pEntry,
                                   const Image& rImg2,
                                                                   SvLBoxButtonKind eButtonKind)
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmFilterNavigator::InitEntry" );
     SvTreeListBox::InitEntry( pEntry, rStr, rImg1, rImg2, eButtonKind );
     SvLBoxString* pString = NULL;
 
@@ -1469,6 +1507,7 @@ void FmFilterNavigator::InitEntry(SvLBoxEntry* pEntry,
 //------------------------------------------------------------------------
 sal_Bool FmFilterNavigator::Select( SvLBoxEntry* pEntry, sal_Bool bSelect )
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmFilterNavigator::Select" );
     if (bSelect == IsSelected(pEntry))  // das passiert manchmal, ich glaube, die Basisklasse geht zu sehr auf Nummer sicher ;)
         return sal_True;
 
@@ -1504,6 +1543,7 @@ sal_Bool FmFilterNavigator::Select( SvLBoxEntry* pEntry, sal_Bool bSelect )
 //------------------------------------------------------------------------
 void FmFilterNavigator::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint )
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmFilterNavigator::Notify" );
     if (rHint.ISA(FmFilterInsertedHint))
     {
         FmFilterInsertedHint* pHint = (FmFilterInsertedHint*)&rHint;
@@ -1537,6 +1577,7 @@ void FmFilterNavigator::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint )
 //------------------------------------------------------------------------
 SvLBoxEntry* FmFilterNavigator::FindEntry(const FmFilterData* pItem) const
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmFilterNavigator::FindEntry" );
     SvLBoxEntry* pEntry = NULL;
     if (pItem)
     {
@@ -1553,6 +1594,7 @@ SvLBoxEntry* FmFilterNavigator::FindEntry(const FmFilterData* pItem) const
 //------------------------------------------------------------------------
 void FmFilterNavigator::Insert(FmFilterData* pItem, sal_Int32 nPos)
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmFilterNavigator::Insert" );
     const FmParentData* pParent = pItem->GetParent() ? pItem->GetParent() : GetFilterModel();
 
     // insert the item
@@ -1568,6 +1610,7 @@ void FmFilterNavigator::Insert(FmFilterData* pItem, sal_Int32 nPos)
 //------------------------------------------------------------------------
 void FmFilterNavigator::Remove(FmFilterData* pItem)
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmFilterNavigator::Remove" );
     // der Entry zu den Daten
     SvLBoxEntry* pEntry = FindEntry(pItem);
 
@@ -1581,6 +1624,7 @@ void FmFilterNavigator::Remove(FmFilterData* pItem)
 // -----------------------------------------------------------------------------
 FmFormItem* FmFilterNavigator::getSelectedFilterItems(::std::vector<FmFilterItem*>& _rItemList)
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmFilterNavigator::getSelectedFilterItems" );
     // be sure that the data is only used within only one form!
     FmFormItem* pFirstItem = NULL;
 
@@ -1615,6 +1659,7 @@ FmFormItem* FmFilterNavigator::getSelectedFilterItems(::std::vector<FmFilterItem
 // -----------------------------------------------------------------------------
 void FmFilterNavigator::insertFilterItem(const ::std::vector<FmFilterItem*>& _rFilterList,FmFilterItems* _pTargetItems,sal_Bool _bCopy)
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmFilterNavigator::insertFilterItem" );
     ::std::vector<FmFilterItem*>::const_iterator aEnd = _rFilterList.end();
     for (::std::vector<FmFilterItem*>::const_iterator i = _rFilterList.begin(); i != aEnd; ++i)
     {
@@ -1642,6 +1687,7 @@ void FmFilterNavigator::insertFilterItem(const ::std::vector<FmFilterItem*>& _rF
 //------------------------------------------------------------------------------
 void FmFilterNavigator::StartDrag( sal_Int8 /*_nAction*/, const Point& /*_rPosPixel*/ )
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmFilterNavigator::StartDrag" );
     EndSelection();
 
     // be sure that the data is only used within a only one form!
@@ -1659,6 +1705,7 @@ void FmFilterNavigator::StartDrag( sal_Int8 /*_nAction*/, const Point& /*_rPosPi
 //------------------------------------------------------------------------------
 void FmFilterNavigator::Command( const CommandEvent& rEvt )
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmFilterNavigator::Command" );
     sal_Bool bHandled = sal_False;
     switch (rEvt.GetCommand())
     {
@@ -1761,6 +1808,7 @@ void FmFilterNavigator::Command( const CommandEvent& rEvt )
 // -----------------------------------------------------------------------------
 SvLBoxEntry* FmFilterNavigator::getNextEntry(SvLBoxEntry* _pStartWith)
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmFilterNavigator::getNextEntry" );
     SvLBoxEntry* pEntry = _pStartWith ? _pStartWith : LastSelected();
     pEntry = Next(pEntry);
     // we need the next filter entry
@@ -1771,6 +1819,7 @@ SvLBoxEntry* FmFilterNavigator::getNextEntry(SvLBoxEntry* _pStartWith)
 // -----------------------------------------------------------------------------
 SvLBoxEntry* FmFilterNavigator::getPrevEntry(SvLBoxEntry* _pStartWith)
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmFilterNavigator::getPrevEntry" );
     SvLBoxEntry* pEntry = _pStartWith ? _pStartWith : FirstSelected();
     pEntry = Prev(pEntry);
     // check if the previous entry is a filter, if so get the next prev
@@ -1786,6 +1835,7 @@ SvLBoxEntry* FmFilterNavigator::getPrevEntry(SvLBoxEntry* _pStartWith)
 //------------------------------------------------------------------------
 void FmFilterNavigator::KeyInput(const KeyEvent& rKEvt)
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmFilterNavigator::KeyInput" );
     const KeyCode&  rKeyCode = rKEvt.GetKeyCode();
     if (    rKeyCode.IsMod1()
         &&  rKeyCode.IsMod2()
@@ -1859,6 +1909,7 @@ void FmFilterNavigator::KeyInput(const KeyEvent& rKEvt)
 //------------------------------------------------------------------------------
 void FmFilterNavigator::DeleteSelection()
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmFilterNavigator::DeleteSelection" );
     // to avoid the deletion of an entry twice (e.g. deletion of a parent and afterward
     // the deletion of it's child, i have to shrink the selecton list
     ::std::vector<SvLBoxEntry*> aEntryList;
@@ -1898,6 +1949,7 @@ FmFilterNavigatorWin::FmFilterNavigatorWin( SfxBindings* _pBindings, SfxChildWin
                      :SfxDockingWindow( _pBindings, _pMgr, _pParent, WinBits(WB_STDMODELESS|WB_SIZEABLE|WB_ROLLABLE|WB_3DLOOK|WB_DOCKABLE) )
                      ,SfxControllerItem( SID_FM_FILTER_NAVIGATOR_CONTROL, *_pBindings )
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmFilterNavigatorWin::FmFilterNavigatorWin" );
     SetHelpId( HID_FILTER_NAVIGATOR_WIN );
 
     m_pNavigator = new FmFilterNavigator( this );
@@ -1915,6 +1967,7 @@ FmFilterNavigatorWin::~FmFilterNavigatorWin()
 //-----------------------------------------------------------------------
 void FmFilterNavigatorWin::UpdateContent(FmFormShell* pFormShell)
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmFilterNavigatorWin::UpdateContent" );
     if (!pFormShell)
         m_pNavigator->UpdateContent( NULL, NULL );
     else
@@ -1939,6 +1992,7 @@ void FmFilterNavigatorWin::UpdateContent(FmFormShell* pFormShell)
 //-----------------------------------------------------------------------
 void FmFilterNavigatorWin::StateChanged( sal_uInt16 nSID, SfxItemState eState, const SfxPoolItem* pState )
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmFilterNavigatorWin::StateChanged" );
     if( !pState  || SID_FM_FILTER_NAVIGATOR_CONTROL != nSID )
         return;
 
@@ -1954,6 +2008,7 @@ void FmFilterNavigatorWin::StateChanged( sal_uInt16 nSID, SfxItemState eState, c
 //-----------------------------------------------------------------------
 sal_Bool FmFilterNavigatorWin::Close()
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmFilterNavigatorWin::Close" );
     if ( m_pNavigator && m_pNavigator->IsEditingActive() )
         m_pNavigator->EndEditing();
 
@@ -1968,6 +2023,7 @@ sal_Bool FmFilterNavigatorWin::Close()
 //-----------------------------------------------------------------------
 void FmFilterNavigatorWin::FillInfo( SfxChildWinInfo& rInfo ) const
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmFilterNavigatorWin::FillInfo" );
     SfxDockingWindow::FillInfo( rInfo );
     rInfo.bVisible = sal_False;
 }
@@ -1975,6 +2031,7 @@ void FmFilterNavigatorWin::FillInfo( SfxChildWinInfo& rInfo ) const
 //-----------------------------------------------------------------------
 Size FmFilterNavigatorWin::CalcDockingSize( SfxChildAlignment eAlign )
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmFilterNavigatorWin::CalcDockingSize" );
     if ( ( eAlign == SFX_ALIGN_TOP ) || ( eAlign == SFX_ALIGN_BOTTOM ) )
         return Size();
 
@@ -1984,6 +2041,7 @@ Size FmFilterNavigatorWin::CalcDockingSize( SfxChildAlignment eAlign )
 //-----------------------------------------------------------------------
 SfxChildAlignment FmFilterNavigatorWin::CheckAlignment( SfxChildAlignment eActAlign, SfxChildAlignment eAlign )
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmFilterNavigatorWin::CheckAlignment" );
     switch (eAlign)
     {
         case SFX_ALIGN_LEFT:
@@ -2000,6 +2058,7 @@ SfxChildAlignment FmFilterNavigatorWin::CheckAlignment( SfxChildAlignment eActAl
 //------------------------------------------------------------------------
 void FmFilterNavigatorWin::Resize()
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmFilterNavigatorWin::Resize" );
     SfxDockingWindow::Resize();
 
     Size aLogOutputSize = PixelToLogic( GetOutputSizePixel(), MAP_APPFONT );
@@ -2015,6 +2074,7 @@ void FmFilterNavigatorWin::Resize()
 // -----------------------------------------------------------------------------
 void FmFilterNavigatorWin::GetFocus()
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmFilterNavigatorWin::GetFocus" );
     // oj #97405#
     if ( m_pNavigator )
         m_pNavigator->GrabFocus();

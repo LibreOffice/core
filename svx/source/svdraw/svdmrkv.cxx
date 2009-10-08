@@ -970,9 +970,12 @@ void SdrMarkView::AddDragModeHdl(SdrDragMode eMode)
                     aNewItem.SetGradientValue(aGrad);
 
                     // add undo to allow user to take back this step
-                    pModel->BegUndo(SVX_RESSTR(SIP_XA_FILLTRANSPARENCE));
-                    pModel->AddUndo(pModel->GetSdrUndoFactory().CreateUndoAttrObject(*pObj));
-                    pModel->EndUndo();
+                    if( pModel->IsUndoEnabled() )
+                    {
+                        pModel->BegUndo(SVX_RESSTR(SIP_XA_FILLTRANSPARENCE));
+                        pModel->AddUndo(pModel->GetSdrUndoFactory().CreateUndoAttrObject(*pObj));
+                        pModel->EndUndo();
+                    }
 
                     //pObj->SetItemAndBroadcast(aNewItem);
                     SfxItemSet aNewSet(pModel->GetItemPool());

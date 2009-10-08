@@ -107,6 +107,7 @@
 #include <comphelper/extract.hxx>
 #include <cppuhelper/typeprovider.hxx>
 #include <algorithm>
+#include <rtl/logfile.hxx>
 
 namespace svxform
 {
@@ -158,6 +159,7 @@ namespace
 //  ------------------------------------------------------------------------------
 void displayException(const Any& _rExcept, Window* _pParent)
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "fmtools::displayException" );
     // check whether we need to display it
     if ( !lcl_shouldDisplayError( _rExcept ) )
         return;
@@ -213,6 +215,7 @@ void displayException(const ::com::sun::star::sdb::SQLErrorEvent& _rEvent, Windo
 //------------------------------------------------------------------------------
 Reference< XInterface > cloneUsingProperties(const Reference< ::com::sun::star::io::XPersistObject>& _xObj)
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "fmtools::cloneUsingProperties" );
     if (!_xObj.is())
         return Reference< XInterface >();
 
@@ -276,6 +279,7 @@ Reference< XInterface > cloneUsingProperties(const Reference< ::com::sun::star::
 //------------------------------------------------------------------------------
 sal_Bool searchElement(const Reference< ::com::sun::star::container::XIndexAccess>& xCont, const Reference< XInterface >& xElement)
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "fmtools::searchElement" );
     if (!xCont.is() || !xElement.is())
         return sal_False;
 
@@ -308,6 +312,7 @@ sal_Bool searchElement(const Reference< ::com::sun::star::container::XIndexAcces
 //------------------------------------------------------------------------------
 sal_Int32 getElementPos(const Reference< ::com::sun::star::container::XIndexAccess>& xCont, const Reference< XInterface >& xElement)
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "fmtools::getElementPos" );
     sal_Int32 nIndex = -1;
     if (!xCont.is())
         return nIndex;
@@ -323,8 +328,7 @@ sal_Int32 getElementPos(const Reference< ::com::sun::star::container::XIndexAcce
         {
             try
             {
-                Reference< XInterface > xCurrent;
-                xCont->getByIndex( nIndex ) >>= xCurrent;
+                Reference< XInterface > xCurrent(xCont->getByIndex( nIndex ),UNO_QUERY);
                 DBG_ASSERT( xCurrent.get() == Reference< XInterface >( xCurrent, UNO_QUERY ).get(),
                     "getElementPos: container element not normalized!" );
                 if ( xNormalized.get() == xCurrent.get() )
@@ -343,6 +347,7 @@ sal_Int32 getElementPos(const Reference< ::com::sun::star::container::XIndexAcce
 //------------------------------------------------------------------
 String getFormComponentAccessPath(const Reference< XInterface >& _xElement, Reference< XInterface >& _rTopLevelElement)
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "fmtools::getFormComponentAccessPath" );
     Reference< ::com::sun::star::form::XFormComponent> xChild(_xElement, UNO_QUERY);
     Reference< ::com::sun::star::container::XIndexAccess> xParent;
     if (xChild.is())
@@ -385,6 +390,7 @@ String getFormComponentAccessPath(const Reference< XInterface >& _xElement)
 //------------------------------------------------------------------------------
 Reference< XInterface > getElementFromAccessPath(const Reference< ::com::sun::star::container::XIndexAccess>& _xParent, const String& _rRelativePath)
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "fmtools::getElementFromAccessPath" );
     if (!_xParent.is())
         return Reference< XInterface >();
     Reference< ::com::sun::star::container::XIndexAccess> xContainer(_xParent);
@@ -428,6 +434,7 @@ _Optlink
 //------------------------------------------------------------------------------
 sal_Int32 findPos(const ::rtl::OUString& aStr, const Sequence< ::rtl::OUString>& rList)
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "fmtools::findPos" );
     const ::rtl::OUString* pStrList = rList.getConstArray();
     ::rtl::OUString* pResult = (::rtl::OUString*) bsearch(&aStr, (void*)pStrList, rList.getLength(), sizeof(::rtl::OUString),
         &NameCompare);
@@ -441,6 +448,7 @@ sal_Int32 findPos(const ::rtl::OUString& aStr, const Sequence< ::rtl::OUString>&
 //------------------------------------------------------------------
 Reference< ::com::sun::star::frame::XModel> getXModel(const Reference< XInterface >& xIface)
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "fmtools::getXModel" );
     Reference< ::com::sun::star::frame::XModel> xModel(xIface, UNO_QUERY);
     if (xModel.is())
         return xModel;
@@ -460,6 +468,7 @@ Reference< ::com::sun::star::frame::XModel> getXModel(const Reference< XInterfac
 //------------------------------------------------------------------
 ::rtl::OUString getLabelName(const Reference< ::com::sun::star::beans::XPropertySet>& xControlModel)
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "fmtools::getLabelName" );
     if (!xControlModel.is())
         return ::rtl::OUString();
 
@@ -617,6 +626,7 @@ void FmXDisposeMultiplexer::dispose()
 //------------------------------------------------------------------------------
 sal_Int16 getControlTypeByObject(const Reference< ::com::sun::star::lang::XServiceInfo>& _rxObject)
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "fmtools::getControlTypeByObject" );
     // ask for the persistent service name
     Reference< ::com::sun::star::io::XPersistObject> xPersistence(_rxObject, UNO_QUERY);
     DBG_ASSERT(xPersistence.is(), "::getControlTypeByObject : argument shold be an ::com::sun::star::io::XPersistObject !");
@@ -721,6 +731,7 @@ sal_Int16 getControlTypeByObject(const Reference< ::com::sun::star::lang::XServi
 //------------------------------------------------------------------------------
 Sequence< ::rtl::OUString> getEventMethods(const Type& type)
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "fmtools::getEventMethods" );
     typelib_InterfaceTypeDescription *pType=0;
     type.getDescription( (typelib_TypeDescription**)&pType);
 
@@ -752,6 +763,7 @@ Sequence< ::rtl::OUString> getEventMethods(const Type& type)
 void TransferEventScripts(const Reference< ::com::sun::star::awt::XControlModel>& xModel, const Reference< ::com::sun::star::awt::XControl>& xControl,
     const Sequence< ::com::sun::star::script::ScriptEventDescriptor>& rTransferIfAvailable)
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "fmtools::TransferEventScripts" );
     // first check if we have a XEventAttacherManager for the model
     Reference< ::com::sun::star::container::XChild> xModelChild(xModel, UNO_QUERY);
     if (!xModelChild.is())
@@ -849,6 +861,7 @@ void TransferEventScripts(const Reference< ::com::sun::star::awt::XControlModel>
 //------------------------------------------------------------------------------
 sal_Int16   GridView2ModelPos(const Reference< ::com::sun::star::container::XIndexAccess>& rColumns, sal_Int16 nViewPos)
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "fmtools::GridView2ModelPos" );
     try
     {
         if (rColumns.is())
@@ -1056,6 +1069,7 @@ void FmXDispatchInterceptorImpl::disposing()
 //------------------------------------------------------------------------------
 sal_Bool isLoadable( const Reference< XInterface >& _rxLoadable )
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "fmtools::isLoadable" );
     // determines whether a form should be loaded or not
     // if there is no datasource or connection there is no reason to load a form
     Reference< XPropertySet > xSet( _rxLoadable, UNO_QUERY );
@@ -1093,6 +1107,7 @@ sal_Bool isLoadable( const Reference< XInterface >& _rxLoadable )
 //------------------------------------------------------------------------------
 void setConnection(const Reference< ::com::sun::star::sdbc::XRowSet>& _rxRowSet, const Reference< ::com::sun::star::sdbc::XConnection>& _rxConn)
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "fmtools::setConnection" );
     Reference< ::com::sun::star::beans::XPropertySet> xRowSetProps(_rxRowSet, UNO_QUERY);
     if (xRowSetProps.is())
     {
@@ -1111,6 +1126,7 @@ void setConnection(const Reference< ::com::sun::star::sdbc::XRowSet>& _rxRowSet,
 //------------------------------------------------------------------------------
 sal_Bool isRowSetAlive(const Reference< XInterface >& _rxRowSet)
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "fmtools::isRowSetAlive" );
     sal_Bool bIsAlive = sal_False;
     Reference< ::com::sun::star::sdbcx::XColumnsSupplier> xSupplyCols(_rxRowSet, UNO_QUERY);
     Reference< ::com::sun::star::container::XIndexAccess> xCols;

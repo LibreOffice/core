@@ -579,7 +579,7 @@ void SdrUnoObj::CreateUnoControlModel(const String& rModelName,
     SetUnoControlModel(xModel);
 }
 
-void SdrUnoObj::SetUnoControlModel( uno::Reference< awt::XControlModel > xModel)
+void SdrUnoObj::SetUnoControlModel( const uno::Reference< awt::XControlModel >& xModel)
 {
     if (xUnoControlModel.is())
     {

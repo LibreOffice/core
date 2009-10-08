@@ -86,15 +86,6 @@ XMLFootnoteSeparatorImport::~XMLFootnoteSeparatorImport()
 {
 }
 
-
-static const SvXMLEnumMapEntry aXML_HorizontalAdjust_Enum[] =
-{
-    { XML_LEFT,     text::HorizontalAdjust_LEFT },
-    { XML_CENTER,   text::HorizontalAdjust_CENTER },
-    { XML_RIGHT,    text::HorizontalAdjust_RIGHT },
-    { XML_TOKEN_INVALID, 0 }
-};
-
 void XMLFootnoteSeparatorImport::StartElement(
     const Reference<XAttributeList> & xAttrList)
 {
@@ -114,12 +105,11 @@ void XMLFootnoteSeparatorImport::StartElement(
         sal_uInt16 nPrefix = GetImport().GetNamespaceMap().
             GetKeyByAttrName( xAttrList->getNameByIndex(nAttr),
                               &sLocalName );
-        OUString sAttrValue = xAttrList->getValueByIndex(nAttr);
-
-        sal_Int32 nTmp;
 
         if (XML_NAMESPACE_STYLE == nPrefix)
         {
+            OUString sAttrValue = xAttrList->getValueByIndex(nAttr);
+            sal_Int32 nTmp;
             if (IsXMLToken( sLocalName, XML_WIDTH ))
             {
                 if (GetImport().GetMM100UnitConverter().convertMeasure(
@@ -143,6 +133,14 @@ void XMLFootnoteSeparatorImport::StartElement(
             else if (IsXMLToken( sLocalName, XML_ADJUSTMENT ))
             {
                 sal_uInt16 nTmpU;
+                static const SvXMLEnumMapEntry aXML_HorizontalAdjust_Enum[] =
+                {
+                    { XML_LEFT,     text::HorizontalAdjust_LEFT },
+                    { XML_CENTER,   text::HorizontalAdjust_CENTER },
+                    { XML_RIGHT,    text::HorizontalAdjust_RIGHT },
+                    { XML_TOKEN_INVALID, 0 }
+                };
+
                 if (SvXMLUnitConverter::convertEnum(
                             nTmpU, sAttrValue, aXML_HorizontalAdjust_Enum))
                     eLineAdjust = (sal_Int16)nTmpU;

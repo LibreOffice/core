@@ -181,6 +181,7 @@ typedef ::utl::ConfigItem                   FmXFormShell_CFGBASE;
 
 struct SdrViewEvent;
 class FmFormShell;
+class FmFormView;
 class SAL_DLLPRIVATE FmXFormShell   :public FmXFormShell_BASE
                                     ,public FmXFormShell_CFGBASE
                                     ,public ::svxform::OStaticDataAccessTools
@@ -550,6 +551,14 @@ private:
     /** adds or removes ourself as XEventListener at m_xActiveController
     */
     void    impl_switchActiveControllerListening( const bool _bListen );
+
+    /** add an element
+    */
+    void    impl_AddElement_nothrow(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface>& Element);
+
+    /** remove an element
+    */
+    void    impl_RemoveElement_nothrow(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface>& Element);
 
     // ---------------------------------------------------
     // asyncronous cursor actions/navigation slot handling

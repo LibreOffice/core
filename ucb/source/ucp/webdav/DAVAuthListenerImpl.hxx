@@ -63,7 +63,8 @@ namespace webdav_ucp
         virtual int authenticate( const ::rtl::OUString & inRealm,
                                   const ::rtl::OUString & inHostName,
                                   ::rtl::OUString & inoutUserName,
-                                  ::rtl::OUString & outPassWord );
+                                  ::rtl::OUString & outPassWord,
+                                  const sal_Bool & bAllowPersistentStoring);
     private:
 
         com::sun::star::uno::Reference<

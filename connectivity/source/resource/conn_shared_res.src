@@ -28,7 +28,6 @@
  *
  ************************************************************************/
 
-// #include "resource/common_res.hrc"
 #include "resource/mozab_res.hrc"
 #include "resource/macab_res.hrc"
 #include "resource/calc_res.hrc"
@@ -44,29 +43,28 @@
 // = the mozab driver's resource strings
 // ============================================================================
 
-String STR_NO_MOZIILA_ADDRESSBOOK
+String STR_MOZILLA_ADDRESSBOOKS
 {
-    Text [ en-US ] = "No Mozilla Addressbook Directories Exist.";
+    Text [ en-US ] = "Mozilla/Seamonkey Addressbook Directory";
+    Text [ x-comment ] = "This must be the term referring to address books in the user's "
+        "Mozilla/Seamonkey profile in the system.";
 };
 
-String STR_NO_THUNDERBIRD_ADDRESSBOOK
+String STR_THUNDERBIRD_ADDRESSBOOKS
 {
-    Text [ en-US ] = "No Thunderbird Addressbook Directories Exist.";
+    Text [ en-US ] = "Thunderbird Addressbook Directory";
+    Text [ x-comment ] = "This must be the term referring to address books in the user's "
+        "Thunderbird profile in the system.";
 };
 
-String STR_NO_OUTLOOKEXPRESS_ADDRESSBOOK
+String STR_OE_ADDRESSBOOK
 {
-    Text [ en-US ] = "No Outlook Express Addressbook Exists.";
+    Text [ en-US ] = "Outlook Express Addressbook";
 };
 
-String STR_NO_OUTLOOK_ADDRESSBOOK
+String STR_OUTLOOK_MAPI_ADDRESSBOOK
 {
-    Text [ en-US ] = "No Outlook (MAPI) Addressbook Exists.";
-};
-
-String STR_COULDNOTCONNECT_TO_LDAP
-{
-    Text [ en-US ] = "Unable to connect to LDAP Server.";
+    Text [ en-US ] = "Outlook (MAPI) Addressbook";
 };
 
 String STR_NO_TABLE_CREATION_SUPPORT
@@ -117,6 +115,96 @@ String STR_CANT_FIND_ROW
 String STR_CANT_FIND_CARD_FOR_ROW
 {
     Text [ en-US ] = "Can't find the card for the requested row.";
+};
+
+String STR_QUERY_AT_LEAST_ONE_TABLES
+{
+    Text [ en-US ] = "The query can not be executed. It needs at least one table.";
+};
+
+String STR_NO_COUNT_SUPPORT
+{
+    Text [ en-US ] = "The driver does not support the 'COUNT' function.";
+};
+
+String STR_STMT_TYPE_NOT_SUPPORTED
+{
+    Text [ en-US ] = "This statement type not supported by this database driver.";
+};
+
+String STR_UNSPECIFIED_ERROR
+{
+    Text [ en-US ] = "An unknown error occured.";
+};
+
+String STR_COULD_NOT_CREATE_ADDRESSBOOK
+{
+    Text [ en-US ] = "Could not create a new address book. Mozilla error code is $1$.";
+};
+
+String STR_COULD_NOT_LOAD_LIB
+{
+    Text [ en-US ] = "The library '$libname$' could not be loaded.";
+};
+
+String STR_ERROR_REFRESH_ROW
+{
+    Text [ en-US ] = "An error occured while refreshing the current row.";
+};
+
+String STR_ERROR_GET_ROW
+{
+    Text [ en-US ] = "An error occured while getting the current row.";
+};
+
+String STR_CAN_NOT_CANCEL_ROW_UPDATE
+{
+    Text [ en-US ] = "The row update can not be canceled.";
+};
+
+String STR_CAN_NOT_CREATE_ROW
+{
+    Text [ en-US ] = "A new row can not be created.";
+};
+
+String STR_QUERY_INVALID_IS_NULL_COLUMN
+{
+    Text [ en-US ] = "The query can not be executed. The 'IS NULL' can only be used with a column name.";
+};
+
+String STR_ILLEGAL_MOVEMENT
+{
+    Text [ en-US ] = "Illegal cursor movement occured.";
+};
+
+String STR_COMMIT_ROW
+{
+    Text [ en-US ] = "Please commit row '$position$' before update rows or insert new rows.";
+};
+
+String STR_INVALID_ROW_UPDATE
+{
+    Text [ en-US ] = "The update call can not be executed. The row is invalid.";
+};
+
+String STR_ROW_CAN_NOT_SAVE
+{
+    Text [ en-US ] = "The current row can not be saved.";
+};
+
+String STR_NO_HOSTNAME
+{
+    Text [ en-US ] = "No hostname was provided.";
+};
+
+String STR_NO_BASEDN
+{
+    Text [ en-US ] = "No Base DN was provided.";
+};
+
+String STR_COULD_NOT_CONNECT_LDAP
+{
+    Text [ en-US ] = "The connection to the LDAP server could not be established.";
 };
 
 // ============================================================================
@@ -235,31 +323,6 @@ String STR_COLUMN_NOT_UPDATEABLE
     Text [ en-US ] = "The column at position '$position$' could not be updated.";
 };
 
-//
-String STR_NO_HOSTNAME
-{
-    Text [ en-US ] = "No hostname was provided.";
-};
-
-String STR_NO_BASEDN
-{
-    Text [ en-US ] = "No Base DN was provided.";
-};
-
-String STR_COULD_NOT_CONNECT_LDAP
-{
-    Text [ en-US ] = "The connection to the LDAP server could not be established.";
-};
-
-// ============================================================================
-// = the mozab driver's resource strings
-// ============================================================================
-
-String STR_COULD_NOT_LOAD_LIB
-{
-    Text [ en-US ] = "The library '$libname$' could not be loaded.";
-};
-
 String STR_COULD_NOT_LOAD_FILE
 {
     Text [ en-US ] = "The file $filename$ could not be loaded.";
@@ -270,63 +333,6 @@ String STR_LOAD_FILE_ERROR_MESSAGE
     Text [ en-US ] = "The attempt to load the file resulted in the following error message ($exception_type$):\n\n$error_message$";
 };
 
-String STR_ERROR_REFRESH_ROW
-{
-    Text [ en-US ] = "An error occured while refreshing the current row.";
-};
-
-String STR_ERROR_GET_ROW
-{
-    Text [ en-US ] = "An error occured while getting the current row.";
-};
-String STR_CAN_NOT_CANCEL_ROW_UPDATE
-{
-    Text [ en-US ] = "The row update can not be canceled.";
-};
-
-String STR_CAN_NOT_CREATE_ROW
-{
-    Text [ en-US ] = "A new row can not be created.";
-};
-
-String STR_QUERY_INVALID_IS_NULL_COLUMN
-{
-    Text [ en-US ] = "The query can not be executed. The 'IS NULL' can only be used with a column name.";
-};
-
-String STR_ILLEGAL_MOVEMENT
-{
-    Text [ en-US ] = "Illegal cursor movement occured.";
-};
-
-String STR_COMMIT_ROW
-{
-    Text [ en-US ] = "Please commit row '$position$' before update rows or insert new rows.";
-};
-
-String STR_INVALID_ROW_UPDATE
-{
-    Text [ en-US ] = "The update call can not be executed. The row is invalid.";
-};
-
-String STR_ROW_CAN_NOT_SAVE
-{
-    Text [ en-US ] = "The current row can not be saved.";
-};
-
-String STR_QUERY_AT_LEAST_ONE_TABLES
-{
-    Text [ en-US ] = "The query can not be executed. It needs at least one table.";
-};
-
-String STR_NO_COUNT_SUPPORT
-{
-    Text [ en-US ] = "The driver does not support the 'COUNT' function.";
-};
-String STR_STMT_TYPE_NOT_SUPPORTED
-{
-    Text [ en-US ] = "This statement type not supported by this database driver.";
-};
 // ============================================================================
 // = the ado driver's resource strings
 // ============================================================================
@@ -399,6 +405,10 @@ String STR_COULD_NOT_CREATE_INDEX_NAME
 {
     Text [ en-US ] = "The index could not be created. The file '$filename$' is used by an other index.";
 };
+String STR_COULD_NOT_CREATE_INDEX_KEYSIZE
+{
+    Text [ en-US ] = "The index could not be created. The size of the choosen column is to big.";
+};
 
 String STR_SQL_NAME_ERROR
 {
@@ -470,9 +480,14 @@ String STR_INVALID_DBASE_FILE
 
 // Evoab2
 
-String STR_USE_WHERE_CRIT
+String STR_CANNOT_OPEN_BOOK
 {
-    Text [ en-US ] = "Use the SQL query with \"where clause\" or \"criteria\", to get the results.";
+    Text [ en-US ] = "Cannot open Evolution address book.";
+};
+
+String STR_SORT_BY_COL_ONLY
+{
+    Text [ en-US ] = "Can only sort by table columns.";
 };
 
 // File

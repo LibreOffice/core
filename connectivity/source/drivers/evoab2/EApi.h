@@ -60,7 +60,7 @@ typedef int EContactField;
 
 EAPI_EXTERN const char      *(*e_contact_field_name)   ( EContactField field_id);
 EAPI_EXTERN gpointer        (*e_contact_get)   (EContact *contact, EContactField field_id);
-EAPI_EXTERN const gpointer  (*e_contact_get_const)   (EContact *contact, EContactField field_id);
+EAPI_EXTERN gconstpointer  (*e_contact_get_const)   (EContact *contact, EContactField field_id);
 // e-source.h
 typedef void ESource;
 #define E_SOURCE(a) ((ESource *)(a))
@@ -124,6 +124,7 @@ EAPI_EXTERN EBookQuery* (*e_book_query_field_test)   (EContactField   field,
 EAPI_EXTERN EBookQuery* (*e_book_query_and)          (int nqs, EBookQuery **qs, gboolean unref);
 EAPI_EXTERN EBookQuery* (*e_book_query_or)           (int nqs, EBookQuery **qs, gboolean unref);
 EAPI_EXTERN EBookQuery* (*e_book_query_not)          (EBookQuery *q, gboolean unref);
+EAPI_EXTERN EBookQuery* (*e_book_query_ref)          (EBookQuery *q);
 EAPI_EXTERN void        (*e_book_query_unref)        (EBookQuery *q);
 EAPI_EXTERN char*       (*e_book_query_to_string)    (EBookQuery *q);
 EAPI_EXTERN EBookQuery* (*e_book_query_from_string)   (const char *query_string);

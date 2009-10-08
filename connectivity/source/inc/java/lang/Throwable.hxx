@@ -42,16 +42,15 @@ namespace connectivity
     protected:
     // statische Daten fuer die Klasse
         static jclass theClass;
-        // der Destruktor um den Object-Counter zu aktualisieren
-        static void saveClassRef( jclass pClass );
     public:
-        static jclass getMyClass();
+        virtual jclass getMyClass() const;
         virtual ~java_lang_Throwable();
         // ein Konstruktor, der fuer das Returnen des Objektes benoetigt wird:
         java_lang_Throwable( JNIEnv * pEnv, jobject myObj ) : java_lang_Object( pEnv, myObj ){}
         ::rtl::OUString getMessage() const;
         ::rtl::OUString getLocalizedMessage() const;
-        virtual ::rtl::OUString toString() const;
+
+        static jclass st_getMyClass();
     };
 }
 #endif // _CONNECTIVITY_JAVA_LANG_THROWABLE_HXX_

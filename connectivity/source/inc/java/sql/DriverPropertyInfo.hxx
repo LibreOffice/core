@@ -38,27 +38,25 @@ namespace connectivity
 {
 
 //**************************************************************
-//************ Class: java.sql.DriverManager
+//************ Class: java.sql.DriverPropertyInfo
 //**************************************************************
     class java_sql_DriverPropertyInfo : public java_lang_Object
     {
     protected:
     // statische Daten fuer die Klasse
         static jclass theClass;
-        // der Destruktor um den Object-Counter zu aktualisieren
-        static void saveClassRef( jclass pClass );
     public:
-        static jclass getMyClass();
+        virtual jclass getMyClass() const;
         virtual ~java_sql_DriverPropertyInfo();
         // ein Konstruktor, der fuer das Returnen des Objektes benoetigt wird:
         java_sql_DriverPropertyInfo( JNIEnv * pEnv, jobject myObj ) : java_lang_Object( pEnv, myObj ){}
                 operator ::com::sun::star::sdbc::DriverPropertyInfo();
 
-        ::rtl::OUString name() const;
-        ::rtl::OUString description() const;
-        ::rtl::OUString value() const;
-        sal_Bool        required() const;
-                ::com::sun::star::uno::Sequence< ::rtl::OUString> choices() const;
+        ::rtl::OUString name();
+        ::rtl::OUString description();
+        ::rtl::OUString value();
+        sal_Bool        required();
+                ::com::sun::star::uno::Sequence< ::rtl::OUString> choices();
     };
 }
 

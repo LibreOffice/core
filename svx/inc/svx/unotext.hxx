@@ -45,6 +45,7 @@
 #include <com/sun/star/beans/XPropertyState.hpp>
 #include <com/sun/star/beans/XMultiPropertySet.hpp>
 #include <com/sun/star/text/XTextRangeCompare.hpp>
+#include <com/sun/star/beans/XMultiPropertyStates.hpp>
 #include <com/sun/star/text/XTextAppend.hpp>
 #include <com/sun/star/text/XTextCopy.hpp>
 #include <cppuhelper/weak.hxx>
@@ -72,7 +73,7 @@
 #include <osl/mutex.hxx>
 #include "svx/svxdllapi.h"
 
-#include <unotools/servicehelper.hxx>
+#include <comphelper/servicehelper.hxx>
 
 #ifndef SEQTYPE
  #if defined(__SUNPRO_CC) && (__SUNPRO_CC == 0x500)
@@ -254,6 +255,7 @@ namespace accessibility
 class SVX_DLLPUBLIC SvxUnoTextRangeBase : public ::com::sun::star::text::XTextRange,
                             public ::com::sun::star::beans::XPropertySet,
                             public ::com::sun::star::beans::XMultiPropertySet,
+                            public ::com::sun::star::beans::XMultiPropertyStates,
                             public ::com::sun::star::beans::XPropertyState,
                             public ::com::sun::star::lang::XServiceInfo,
                             public ::com::sun::star::text::XTextRangeCompare,
@@ -266,7 +268,7 @@ class SVX_DLLPUBLIC SvxUnoTextRangeBase : public ::com::sun::star::text::XTextRa
 protected:
     SvxEditSource*          mpEditSource;
     ESelection              maSelection;
-    SvxItemPropertySet      maPropSet;
+    const SvxItemPropertySet* mpPropSet;
 
     virtual void SAL_CALL _setPropertyValue( const ::rtl::OUString& aPropertyName, const ::com::sun::star::uno::Any& aValue, sal_Int32 nPara = -1 ) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::beans::PropertyVetoException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
     virtual ::com::sun::star::uno::Any SAL_CALL _getPropertyValue( const ::rtl::OUString& PropertyName, sal_Int32 nPara = -1 ) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
@@ -274,22 +276,22 @@ protected:
     virtual void SAL_CALL _setPropertyValues( const ::com::sun::star::uno::Sequence< ::rtl::OUString >& aPropertyNames, const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& aValues, sal_Int32 nPara = -1 ) throw (::com::sun::star::beans::PropertyVetoException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
     virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any > SAL_CALL _getPropertyValues( const ::com::sun::star::uno::Sequence< ::rtl::OUString >& aPropertyNames, sal_Int32 nPara = -1 ) throw (::com::sun::star::uno::RuntimeException);
 
-    virtual ::com::sun::star::beans::PropertyState SAL_CALL _getPropertyState( const SfxItemPropertyMap* pMap, sal_Int32 nPara = -1 ) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::uno::RuntimeException);
+    virtual ::com::sun::star::beans::PropertyState SAL_CALL _getPropertyState( const SfxItemPropertySimpleEntry* pMap, sal_Int32 nPara = -1 ) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::uno::RuntimeException);
     virtual ::com::sun::star::beans::PropertyState SAL_CALL _getPropertyState( const ::rtl::OUString& PropertyName, sal_Int32 nPara = -1 ) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::uno::RuntimeException);
     virtual ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyState > SAL_CALL _getPropertyStates( const ::com::sun::star::uno::Sequence< ::rtl::OUString >& aPropertyName, sal_Int32 nPara = -1  ) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::uno::RuntimeException);
     // returns true if property found or false if unknown property
-    virtual sal_Bool _getOnePropertyStates(const SfxItemSet* pSet, const SfxItemPropertyMap* pMap, ::com::sun::star::beans::PropertyState& rState);
+    virtual sal_Bool _getOnePropertyStates(const SfxItemSet* pSet, const SfxItemPropertySimpleEntry* pMap, ::com::sun::star::beans::PropertyState& rState);
 
     virtual void SAL_CALL _setPropertyToDefault( const ::rtl::OUString& PropertyName, sal_Int32 nPara = -1 ) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::uno::RuntimeException);
-
+    virtual void _setPropertyToDefault( SvxTextForwarder* pForwarder, const SfxItemPropertySimpleEntry* pMap, sal_Int32 nPara ) throw( ::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::uno::RuntimeException );
     void SetEditSource( SvxEditSource* _pEditSource ) throw();
 
-    virtual void getPropertyValue( const SfxItemPropertyMap* pMap, com::sun::star::uno::Any& rAny, const SfxItemSet& rSet ) throw(::com::sun::star::beans::UnknownPropertyException );
-    virtual void setPropertyValue( const SfxItemPropertyMap* pMap, const com::sun::star::uno::Any& rValue, const ESelection& rSelection, const SfxItemSet& rOldSet, SfxItemSet& rNewSet ) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::IllegalArgumentException );
+    virtual void getPropertyValue( const SfxItemPropertySimpleEntry* pMap, com::sun::star::uno::Any& rAny, const SfxItemSet& rSet ) throw(::com::sun::star::beans::UnknownPropertyException );
+    virtual void setPropertyValue( const SfxItemPropertySimpleEntry* pMap, const com::sun::star::uno::Any& rValue, const ESelection& rSelection, const SfxItemSet& rOldSet, SfxItemSet& rNewSet ) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::IllegalArgumentException );
 
 public:
-    SvxUnoTextRangeBase( const SfxItemPropertyMap* _pMap ) throw();
-    SvxUnoTextRangeBase( const SvxEditSource* pSource, const SfxItemPropertyMap* _pMap ) throw();
+    SvxUnoTextRangeBase( const SvxItemPropertySet* _pSet ) throw();
+    SvxUnoTextRangeBase( const SvxEditSource* pSource, const SvxItemPropertySet* _pSet ) throw();
     SvxUnoTextRangeBase( const SvxUnoTextRangeBase& rRange ) throw();
     virtual ~SvxUnoTextRangeBase() throw();
 
@@ -305,11 +307,12 @@ public:
     virtual void            GotoStart(sal_Bool Expand) throw();
     virtual void            GotoEnd(sal_Bool Expand) throw();
 
-    const SfxItemPropertyMap*   getPropertyMap() const throw() { return maPropSet.getPropertyMap(); }
+    //const SfxItemPropertyMapEntry*   getPropertyMapEntries() const throw() { return maPropSet.getPropertyMapEntries(); }
+    const SvxItemPropertySet*   getPropertySet() const throw() { return mpPropSet; }
     SvxEditSource*              GetEditSource() const throw() { return mpEditSource; }
 
-    static sal_Bool SetPropertyValueHelper( const SfxItemSet& rOldSet, const SfxItemPropertyMap* pMap, const ::com::sun::star::uno::Any& aValue, SfxItemSet& rNewSet, const ESelection* pSelection = NULL, SvxTextEditSource* pEditSource = NULL ) throw( ::com::sun::star::uno::RuntimeException );
-    static sal_Bool GetPropertyValueHelper(  SfxItemSet& rSet, const SfxItemPropertyMap* pMap, ::com::sun::star::uno::Any& aAny, const ESelection* pSelection = NULL,  SvxTextEditSource* pEditSource = NULL  ) throw( ::com::sun::star::uno::RuntimeException );
+    static sal_Bool SetPropertyValueHelper( const SfxItemSet& rOldSet, const SfxItemPropertySimpleEntry* pMap, const ::com::sun::star::uno::Any& aValue, SfxItemSet& rNewSet, const ESelection* pSelection = NULL, SvxTextEditSource* pEditSource = NULL ) throw( ::com::sun::star::uno::RuntimeException );
+    static sal_Bool GetPropertyValueHelper(  SfxItemSet& rSet, const SfxItemPropertySimpleEntry* pMap, ::com::sun::star::uno::Any& aAny, const ESelection* pSelection = NULL,  SvxTextEditSource* pEditSource = NULL  ) throw( ::com::sun::star::uno::RuntimeException );
 
     void attachField( const SvxFieldData* pData ) throw();
 
@@ -342,6 +345,12 @@ public:
     virtual ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyState > SAL_CALL getPropertyStates( const ::com::sun::star::uno::Sequence< ::rtl::OUString >& aPropertyName ) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL setPropertyToDefault( const ::rtl::OUString& PropertyName ) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::uno::RuntimeException);
     virtual ::com::sun::star::uno::Any SAL_CALL getPropertyDefault( const ::rtl::OUString& aPropertyName ) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
+
+    // ::com::sun::star::beans::XMultiPropertyStates
+    //virtual ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyState > SAL_CALL getPropertyStates( const ::com::sun::star::uno::Sequence< ::rtl::OUString >& aPropertyName ) throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL setAllPropertiesToDefault(  ) throw (::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL setPropertiesToDefault( const ::com::sun::star::uno::Sequence< ::rtl::OUString >& aPropertyNames ) throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::uno::RuntimeException);
+    virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any > SAL_CALL getPropertyDefaults( const ::com::sun::star::uno::Sequence< ::rtl::OUString >& aPropertyNames ) throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
 
     // XTextRangeCompare
     virtual ::sal_Int16 SAL_CALL compareRegionStarts( const ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextRange >& xR1, const ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextRange >& xR2 ) throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException);
@@ -402,9 +411,9 @@ protected:
 
 public:
     SvxUnoTextBase( ) throw();
-    SvxUnoTextBase( const SfxItemPropertyMap* _pMap ) throw();
-    SvxUnoTextBase( const SvxEditSource* pSource, const SfxItemPropertyMap* _pMap ) throw();
-    SvxUnoTextBase( const SvxEditSource* pSource, const SfxItemPropertyMap* _pMap, ::com::sun::star::uno::Reference < ::com::sun::star::text::XText > xParent ) throw();
+    SvxUnoTextBase( const SvxItemPropertySet* _pSet ) throw();
+    SvxUnoTextBase( const SvxEditSource* pSource, const SvxItemPropertySet* _pSet ) throw();
+    SvxUnoTextBase( const SvxEditSource* pSource, const SvxItemPropertySet* _pSet, ::com::sun::star::uno::Reference < ::com::sun::star::text::XText > xParent ) throw();
     SvxUnoTextBase( const SvxUnoTextBase& rText ) throw();
     virtual ~SvxUnoTextBase() throw();
 
@@ -471,8 +480,8 @@ class SVX_DLLPUBLIC SvxUnoText  : public SvxUnoTextBase,
 {
 public:
     SvxUnoText( ) throw();
-    SvxUnoText( const SfxItemPropertyMap* _pMap ) throw();
-    SvxUnoText( const SvxEditSource* pSource, const SfxItemPropertyMap* _pMap, ::com::sun::star::uno::Reference < ::com::sun::star::text::XText > xParent ) throw();
+    SvxUnoText( const SvxItemPropertySet* _pSet ) throw();
+    SvxUnoText( const SvxEditSource* pSource, const SvxItemPropertySet* _pSet, ::com::sun::star::uno::Reference < ::com::sun::star::text::XText > xParent ) throw();
     SvxUnoText( const SvxUnoText& rText ) throw();
     virtual ~SvxUnoText() throw();
 
@@ -664,7 +673,9 @@ public:
 
 };
 
-const SfxItemPropertyMap* ImplGetSvxUnoOutlinerTextCursorPropertyMap();
-const SfxItemPropertyMap* ImplGetSvxTextPortionPropertyMap();
+const SvxItemPropertySet* ImplGetSvxUnoOutlinerTextCursorSvxPropertySet();
+const SfxItemPropertyMapEntry* ImplGetSvxUnoOutlinerTextCursorPropertyMap();
+const SvxItemPropertySet* ImplGetSvxTextPortionSvxPropertySet();
+const SfxItemPropertyMapEntry* ImplGetSvxTextPortionPropertyMap();
 
 #endif

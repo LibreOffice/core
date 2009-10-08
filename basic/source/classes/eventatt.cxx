@@ -235,13 +235,13 @@ public:
     BasicScriptListener_Impl( StarBASIC* pBasic, const Reference< frame::XModel >& xModel )
         : maBasicRef( pBasic ), m_xModel( xModel ) {}
 
-    // Methoden von XAllListener
+    // Methods of XAllListener
     virtual void SAL_CALL firing(const ScriptEvent& aScriptEvent)
         throw( RuntimeException );
     virtual Any SAL_CALL approveFiring(const ScriptEvent& aScriptEvent)
         throw( InvocationTargetException, RuntimeException );
 
-    // Methoden von XEventListener
+    // Methods of XEventListener
     virtual void SAL_CALL disposing(const EventObject& Source)
         throw( RuntimeException );
 };

@@ -73,6 +73,31 @@ do
   esac
 done
 
+# pagein
+sd_pagein_args=@pagein-common
+for sd_arg in "$@"; do
+    case ${sd_arg} in
+    -calc)
+        sd_pagein_args="${sd_pagein_args} @pagein-calc"
+        break;
+        ;;
+    -draw)
+        sd_pagein_args="${sd_pagein_args} @pagein-draw"
+        break;
+        ;;
+    -impress)
+        sd_pagein_args="${sd_pagein_args} @pagein-impress"
+        break;
+        ;;
+    -writer)
+        sd_pagein_args="${sd_pagein_args} @pagein-writer"
+        break;
+        ;;
+    esac
+done
+"$sd_prog/../basis-link/program/pagein" -L"$sd_prog/../basis-link/program" \
+    ${sd_pagein_args}
+
 # extend the ld_library_path for java: javaldx checks the sofficerc for us
 if [ -x "$sd_prog/../basis-link/ure-link/bin/javaldx" ] ; then
     my_path=`"$sd_prog/../basis-link/ure-link/bin/javaldx" $BOOTSTRAPVARS \
@@ -91,38 +116,10 @@ unset XENVIRONMENT
 # uncomment line below if you encounter problems starting soffice on your system
 # SAL_NO_XINITTHREADS=true; export SAL_NO_XINITTHREADS
 
-# pagein
-for sd_arg in ${1+"$@"} ; do
-    case ${sd_arg} in
-    -calc)
-        sd_pagein_args="${sd_pagein_args:+${sd_pagein_args} }@pagein-calc"
-        break;
-        ;;
-    -draw)
-        sd_pagein_args="${sd_pagein_args:+${sd_pagein_args} }@pagein-draw"
-        break;
-        ;;
-    -impress)
-        sd_pagein_args="${sd_pagein_args:+${sd_pagein_args} }@pagein-impress"
-        break;
-        ;;
-    -writer)
-        sd_pagein_args="${sd_pagein_args:+${sd_pagein_args} }@pagein-writer"
-        break;
-        ;;
-    *)
-        ;;
-    esac
-done
-
 # read database entries for Adabas D
 if [ -f /etc/adabasrc ]; then
   . /etc/adabasrc
 fi
-
-sd_pagein_args="${sd_pagein_args:+${sd_pagein_args} }@pagein-common"
-"$sd_prog/../basis-link/program/pagein" -L"$sd_prog/../basis-link/program" \
-    ${sd_pagein_args}
 
 # Set PATH so that crash_report is found:
 PATH=$sd_prog${PATH+:$PATH}

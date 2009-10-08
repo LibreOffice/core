@@ -172,8 +172,9 @@ void DbGridColumn::CreateControl(sal_Int32 _nFieldPos, const Reference< ::com::s
             case DataType::TINYINT:
             case DataType::SMALLINT:
             case DataType::INTEGER:
-            case DataType::REAL:
             case DataType::BIGINT:
+            case DataType::FLOAT:
+            case DataType::REAL:
             case DataType::DOUBLE:
             case DataType::NUMERIC:
             case DataType::DECIMAL:
@@ -182,6 +183,7 @@ void DbGridColumn::CreateControl(sal_Int32 _nFieldPos, const Reference< ::com::s
                 break;
             default:
                 m_nAlign = ::com::sun::star::awt::TextAlign::LEFT;
+                break;
         }
     }
 

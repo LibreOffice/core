@@ -99,13 +99,13 @@ void SfxFrameHTMLWriter::OutMeta( SvStream& rStrm,
         rStrm << pIndent;
 
     ByteString sOut( '<' );
-    (((sOut += sHTML_meta) += ' ')
-        += (bHTTPEquiv ? sHTML_O_httpequiv : sHTML_O_name)) += "=\"";
+    (((sOut += OOO_STRING_SVTOOLS_HTML_meta) += ' ')
+        += (bHTTPEquiv ? OOO_STRING_SVTOOLS_HTML_O_httpequiv : OOO_STRING_SVTOOLS_HTML_O_name)) += "=\"";
     rStrm << sOut.GetBuffer();
 
     HTMLOutFuncs::Out_String( rStrm, rName, eDestEnc, pNonConvertableChars );
 
-    ((sOut = "\" ") += sHTML_O_content) += "=\"";
+    ((sOut = "\" ") += OOO_STRING_SVTOOLS_HTML_O_content) += "=\"";
     rStrm << sOut.GetBuffer();
 
     HTMLOutFuncs::Out_String( rStrm, rContent, eDestEnc, pNonConvertableChars ) << "\">";
@@ -124,7 +124,7 @@ void SfxFrameHTMLWriter::Out_DocInfo( SvStream& rStrm, const String& rBaseURL,
     {
         String aContentType = String::CreateFromAscii( sHTML_MIME_text_html );
         aContentType.AppendAscii( pCharSet );
-        OutMeta( rStrm, pIndent, sHTML_META_content_type, aContentType, TRUE,
+        OutMeta( rStrm, pIndent, OOO_STRING_SVTOOLS_HTML_META_content_type, aContentType, TRUE,
                  eDestEnc, pNonConvertableChars );
     }
 
@@ -132,14 +132,14 @@ void SfxFrameHTMLWriter::Out_DocInfo( SvStream& rStrm, const String& rBaseURL,
     rStrm << sNewLine;
     if( pIndent )
         rStrm << pIndent;
-    HTMLOutFuncs::Out_AsciiTag( rStrm, sHTML_title );
+    HTMLOutFuncs::Out_AsciiTag( rStrm, OOO_STRING_SVTOOLS_HTML_title );
     if( i_xDocProps.is() )
     {
         const String& rTitle = i_xDocProps->getTitle();
         if( rTitle.Len() )
             HTMLOutFuncs::Out_String( rStrm, rTitle, eDestEnc, pNonConvertableChars );
     }
-    HTMLOutFuncs::Out_AsciiTag( rStrm, sHTML_title, FALSE );
+    HTMLOutFuncs::Out_AsciiTag( rStrm, OOO_STRING_SVTOOLS_HTML_title, FALSE );
 
     // Target-Frame
     if( i_xDocProps.is() )
@@ -152,7 +152,7 @@ void SfxFrameHTMLWriter::Out_DocInfo( SvStream& rStrm, const String& rBaseURL,
                 rStrm << pIndent;
 
             ByteString sOut( '<' );
-            (((sOut += sHTML_base) += ' ') += sHTML_O_target) += "=\"";
+            (((sOut += OOO_STRING_SVTOOLS_HTML_base) += ' ') += OOO_STRING_SVTOOLS_HTML_O_target) += "=\"";
             rStrm << sOut.GetBuffer();
             HTMLOutFuncs::Out_String( rStrm, rTarget, eDestEnc, pNonConvertableChars )
                 << "\">";
@@ -162,7 +162,7 @@ void SfxFrameHTMLWriter::Out_DocInfo( SvStream& rStrm, const String& rBaseURL,
     // Who we are
     String sGenerator( SfxResId( STR_HTML_GENERATOR ) );
     sGenerator.SearchAndReplaceAscii( "%1", String( DEFINE_CONST_UNICODE( TOOLS_INETDEF_OS ) ) );
-    OutMeta( rStrm, pIndent, sHTML_META_generator, sGenerator, FALSE, eDestEnc, pNonConvertableChars );
+    OutMeta( rStrm, pIndent, OOO_STRING_SVTOOLS_HTML_META_generator, sGenerator, FALSE, eDestEnc, pNonConvertableChars );
 
     if( i_xDocProps.is() )
     {
@@ -182,14 +182,14 @@ void SfxFrameHTMLWriter::Out_DocInfo( SvStream& rStrm, const String& rBaseURL,
                         rBaseURL, rReloadURL));
             }
 
-            OutMeta( rStrm, pIndent, sHTML_META_refresh, sContent, TRUE,
+            OutMeta( rStrm, pIndent, OOO_STRING_SVTOOLS_HTML_META_refresh, sContent, TRUE,
                      eDestEnc, pNonConvertableChars );
         }
 
         // Author
         const String& rAuthor = i_xDocProps->getAuthor();
         if( rAuthor.Len() )
-            OutMeta( rStrm, pIndent, sHTML_META_author, rAuthor, FALSE,
+            OutMeta( rStrm, pIndent, OOO_STRING_SVTOOLS_HTML_META_author, rAuthor, FALSE,
                      eDestEnc, pNonConvertableChars );
 
         // created
@@ -199,13 +199,13 @@ void SfxFrameHTMLWriter::Out_DocInfo( SvStream& rStrm, const String& rBaseURL,
         String sOut = String::CreateFromInt32(aD.GetDate());
         sOut += ';';
         sOut += String::CreateFromInt32(aT.GetTime());
-        OutMeta( rStrm, pIndent, sHTML_META_created, sOut, FALSE,
+        OutMeta( rStrm, pIndent, OOO_STRING_SVTOOLS_HTML_META_created, sOut, FALSE,
                  eDestEnc, pNonConvertableChars );
 
         // changedby
         const String& rChangedBy = i_xDocProps->getModifiedBy();
         if( rChangedBy.Len() )
-            OutMeta( rStrm, pIndent, sHTML_META_changedby, rChangedBy, FALSE,
+            OutMeta( rStrm, pIndent, OOO_STRING_SVTOOLS_HTML_META_changedby, rChangedBy, FALSE,
                      eDestEnc, pNonConvertableChars );
 
         // changed
@@ -215,26 +215,26 @@ void SfxFrameHTMLWriter::Out_DocInfo( SvStream& rStrm, const String& rBaseURL,
         sOut = String::CreateFromInt32(aD2.GetDate());
         sOut += ';';
         sOut += String::CreateFromInt32(aT2.GetTime());
-        OutMeta( rStrm, pIndent, sHTML_META_changed, sOut, FALSE,
+        OutMeta( rStrm, pIndent, OOO_STRING_SVTOOLS_HTML_META_changed, sOut, FALSE,
                  eDestEnc, pNonConvertableChars );
 
         // Subject
         const String& rTheme = i_xDocProps->getSubject();
         if( rTheme.Len() )
-            OutMeta( rStrm, pIndent, sHTML_META_classification, rTheme, FALSE,
+            OutMeta( rStrm, pIndent, OOO_STRING_SVTOOLS_HTML_META_classification, rTheme, FALSE,
                      eDestEnc, pNonConvertableChars );
 
         // Description
         const String& rComment = i_xDocProps->getDescription();
         if( rComment.Len() )
-            OutMeta( rStrm, pIndent, sHTML_META_description, rComment, FALSE,
+            OutMeta( rStrm, pIndent, OOO_STRING_SVTOOLS_HTML_META_description, rComment, FALSE,
                      eDestEnc, pNonConvertableChars);
 
         // Keywords
         String Keywords = ::comphelper::string::convertCommaSeparated(
             i_xDocProps->getKeywords());
         if( Keywords.Len() )
-            OutMeta( rStrm, pIndent, sHTML_META_keywords, Keywords, FALSE,
+            OutMeta( rStrm, pIndent, OOO_STRING_SVTOOLS_HTML_META_keywords, Keywords, FALSE,
                      eDestEnc, pNonConvertableChars);
 
         uno::Reference < script::XTypeConverter > xConverter(
@@ -301,7 +301,7 @@ void SfxFrameHTMLWriter::Out_FrameDescriptor(
             {
                 aURL = URIHelper::simpleNormalizedMakeRelative(
                     rBaseURL, aURL );
-                ((sOut += ' ') += sHTML_O_src) += "=\"";
+                ((sOut += ' ') += OOO_STRING_SVTOOLS_HTML_O_src) += "=\"";
                 rOut << sOut.GetBuffer();
                 HTMLOutFuncs::Out_String( rOut, aURL, eDestEnc, pNonConvertableChars );
                 sOut = '\"';
@@ -311,7 +311,7 @@ void SfxFrameHTMLWriter::Out_FrameDescriptor(
         aAny = xSet->getPropertyValue( ::rtl::OUString::createFromAscii("FrameName") );
         if ( (aAny >>= aStr) && aStr.getLength() )
         {
-            ((sOut += ' ') += sHTML_O_name) += "=\"";
+            ((sOut += ' ') += OOO_STRING_SVTOOLS_HTML_O_name) += "=\"";
             rOut << sOut.GetBuffer();
             HTMLOutFuncs::Out_String( rOut, aStr, eDestEnc, pNonConvertableChars );
             sOut = '\"';
@@ -320,10 +320,10 @@ void SfxFrameHTMLWriter::Out_FrameDescriptor(
         sal_Int32 nVal = SIZE_NOT_SET;
         aAny = xSet->getPropertyValue( ::rtl::OUString::createFromAscii("FrameMarginWidth") );
         if ( (aAny >>= nVal) && nVal != SIZE_NOT_SET )
-            (((sOut += ' ') += sHTML_O_marginwidth) += '=') += ByteString::CreateFromInt32( nVal );
+            (((sOut += ' ') += OOO_STRING_SVTOOLS_HTML_O_marginwidth) += '=') += ByteString::CreateFromInt32( nVal );
         aAny = xSet->getPropertyValue( ::rtl::OUString::createFromAscii("FrameMarginHeight") );
         if ( (aAny >>= nVal) && nVal != SIZE_NOT_SET )
-            (((sOut += ' ') += sHTML_O_marginheight) += '=') += ByteString::CreateFromInt32( nVal );
+            (((sOut += ' ') += OOO_STRING_SVTOOLS_HTML_O_marginheight) += '=') += ByteString::CreateFromInt32( nVal );
 
         sal_Bool bVal = sal_True;
         aAny = xSet->getPropertyValue( ::rtl::OUString::createFromAscii("FrameIsAutoScroll") );
@@ -333,7 +333,7 @@ void SfxFrameHTMLWriter::Out_FrameDescriptor(
             if ( aAny >>= bVal )
             {
                 const sal_Char *pStr = bVal ? sHTML_SC_yes : sHTML_SC_no;
-                (((sOut += ' ') += sHTML_O_scrolling) += '=') += pStr;
+                (((sOut += ' ') += OOO_STRING_SVTOOLS_HTML_O_scrolling) += '=') += pStr;
             }
         }
 
@@ -345,7 +345,7 @@ void SfxFrameHTMLWriter::Out_FrameDescriptor(
             if ( aAny >>= bVal )
             {
                 const char* pStr = bVal ? sHTML_SC_yes : sHTML_SC_no;
-                (((sOut += ' ') += sHTML_O_frameborder) += '=') += pStr;
+                (((sOut += ' ') += OOO_STRING_SVTOOLS_HTML_O_frameborder) += '=') += pStr;
             }
         }
 

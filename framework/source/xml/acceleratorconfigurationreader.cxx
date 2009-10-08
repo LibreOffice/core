@@ -174,6 +174,9 @@ void SAL_CALL AcceleratorConfigurationReader::startElement(const ::rtl::OUString
                 case E_ATTRIBUTE_MOD_MOD2  :
                     aEvent.Modifiers |= css::awt::KeyModifier::MOD2;
                     break;
+
+                case E_ATTRIBUTE_MOD_MOD3  :
+                    aEvent.Modifiers |= css::awt::KeyModifier::MOD3;
             }
         }
 
@@ -306,6 +309,9 @@ AcceleratorConfigurationReader::EXMLAttribute AcceleratorConfigurationReader::im
     else
     if (sAttribute.equals(NS_ATTRIBUTE_MOD_MOD2))
         eAttribute = E_ATTRIBUTE_MOD_MOD2;
+    else
+    if (sAttribute.equals(NS_ATTRIBUTE_MOD_MOD3))
+        eAttribute = E_ATTRIBUTE_MOD_MOD3;
     else
     if (sAttribute.equals(NS_ATTRIBUTE_URL))
         eAttribute = E_ATTRIBUTE_URL;

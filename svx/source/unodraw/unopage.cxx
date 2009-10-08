@@ -79,8 +79,6 @@ using namespace ::com::sun::star::drawing;
 
 DECLARE_LIST( SvxDrawPageList, SvxDrawPage * )
 
-extern SfxItemPropertyMap* ImplGetSvxOle2PropertyMap();
-extern SfxItemPropertyMap* ImplGetSvxPageShapePropertyMap();
 
 /**********************************************************************
 * class SvxDrawPage                                                   *
@@ -828,7 +826,7 @@ SvxShape* SvxDrawPage::CreateShapeByTypeAndInventor( sal_uInt16 nType, sal_uInt3
                         }
                         if( pRet == NULL )
                         {
-                            pRet = new SvxOle2Shape( pObj, ImplGetSvxOle2PropertyMap() );
+                            pRet = new SvxOle2Shape( pObj, aSvxMapProvider.GetMap(SVXMAP_OLE2),  aSvxMapProvider.GetPropertySet(SVXMAP_OLE2) );
                         }
                      }
                     break;
@@ -842,7 +840,7 @@ SvxShape* SvxDrawPage::CreateShapeByTypeAndInventor( sal_uInt16 nType, sal_uInt3
                     pRet = new SvxShapePolyPolygon( pObj , PolygonKind_PATHPLIN );
                     break;
                 case OBJ_PAGE:
-                    pRet = new SvxShape( pObj, ImplGetSvxPageShapePropertyMap() );
+                    pRet = new SvxShape( pObj, aSvxMapProvider.GetMap(SVXMAP_PAGE),  aSvxMapProvider.GetPropertySet(SVXMAP_PAGE) );
                     break;
                 case OBJ_MEASURE:
                     pRet = new SvxShapeDimensioning( pObj );

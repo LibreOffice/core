@@ -43,7 +43,7 @@
 #include "textedit.hxx"
 #include "appedit.hxx"
 #include "brkpnts.hxx"
-#include <basic/testtool.hxx>       // defines für das Syntaxhighlighting
+#include <basic/testtool.hxx>  // defines for syntax highlighting
 
 TextEditImp::TextEditImp( AppEdit* pParent, const WinBits& aBits )
 : Window( pParent, aBits )
@@ -70,8 +70,8 @@ TextEditImp::TextEditImp( AppEdit* pParent, const WinBits& aBits )
 
     StartListening( *pTextEngine );
 
-    HideTipTimer.SetTimeout( 5000 );    // 5 Sekunden
-    ShowTipTimer.SetTimeout( 500 );     // 1/2 Sekunde
+    HideTipTimer.SetTimeout( 5000 );    // 5 seconds
+    ShowTipTimer.SetTimeout( 500 );     // 1/2 seconds
     HideTipTimer.SetTimeoutHdl( LINK( this, TextEditImp, HideVarContents ) );
     ShowTipTimer.SetTimeoutHdl( LINK( this, TextEditImp, ShowVarContents ) );
 }
@@ -123,7 +123,7 @@ void TextEditImp::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
             {
                 pAppEdit->nCurTextWidth = nWidth;
                 if ( pAppEdit->pHScroll )
-                {   // Initialisierung abgeschlossen?
+                {   // Initialization finished?
                     pAppEdit->pHScroll->SetRange( Range( 0, (long)nWidth) );
                     pAppEdit->pHScroll->SetThumbPos( pTextView->GetStartDocPos().X() );
                 }
@@ -139,7 +139,7 @@ void TextEditImp::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
             if ( ((TextEdit*)(pAppEdit->pDataEdit))->GetBreakpointWindow() )
                 ((TextEdit*)(pAppEdit->pDataEdit))->GetBreakpointWindow()->AdjustBreakpoints( rTextHint.GetValue()+1, FALSE );
 
-            // Lästiges anpassen für 2 Zeichen am Zeilenende statt einem(Hartverdrateter Default)
+            // Itchy adaption for two signs at line ends instead of one (hard coded default)
             pTextEngine->SetMaxTextLen( STRING_MAXLEN - pTextEngine->GetParagraphCount() );
         }
         else if( rTextHint.GetId() == TEXT_HINT_FORMATPARA )
@@ -159,9 +159,9 @@ private:
     FontWeight  maFontWeight;
 
 public:
-                            TextAttribSpechial( const FontWeight& rFontWeight );
-                            TextAttribSpechial( const TextAttribSpechial& rAttr );
-                            ~TextAttribSpechial() {;}
+    TextAttribSpechial( const FontWeight& rFontWeight );
+    TextAttribSpechial( const TextAttribSpechial& rAttr );
+    ~TextAttribSpechial() {;}
 
     virtual void            SetFont( Font& rFont ) const;
     virtual TextAttrib*     Clone() const;
@@ -213,7 +213,7 @@ void TextEditImp::ImpDoHighlight( const String& rSource, ULONG nLineOff )
             return;
     }
 
-    /// hier werden die Type für das Testtool nachbearbeitet
+    // here is the postprocessing for types for the TestTool
     USHORT i;
     BOOL bWasTTControl = FALSE;
     for ( i = 0; i < aPortionList.Count(); i++ )
@@ -250,23 +250,17 @@ void TextEditImp::ImpDoHighlight( const String& rSource, ULONG nLineOff )
         }
     }
 
-    // Evtl. Optimieren:
-    // Wenn haufig gleiche Farbe, dazwischen Blank ohne Farbe,
-    // ggf. zusammenfassen, oder zumindest das Blank,
-    // damit weniger Attribute
-    if ( TRUE /*bOptimizeHighlight*/ )
-    {
         // Es muessen nur die Blanks und Tabs mit attributiert werden.
-        // Wenn zwei gleiche Attribute hintereinander eingestellt werden,
-        // optimiert das die EditEngine.
+        // If there are two equal attributes one after another,
+        // they are optimized by the EditEngine.
         xub_StrLen nLastEnd = 0;
 #ifdef DBG_UTIL
-        xub_StrLen nLine = aPortionList[0].nLine;
+        xub_StrLen nLine1 = aPortionList[0].nLine;
 #endif
         for ( i = 0; i < nCount; i++ )
         {
             SbTextPortion& r = aPortionList[i];
-            DBG_ASSERT( r.nLine == nLine, "doch mehrere Zeilen ?" );
+            DBG_ASSERT( r.nLine == nLine1, "doch mehrere Zeilen ?" );
             DBG_ASSERT( r.nStart <= r.nEnd, "Highlight: Start > End?" );
             if ( r.nStart > r.nEnd )    // Nur bis Bug von MD behoben
                 continue;
@@ -281,7 +275,6 @@ void TextEditImp::ImpDoHighlight( const String& rSource, ULONG nLineOff )
             if ( ( i == (nCount-1) ) && ( r.nEnd < rSource.Len() ) )
                 r.nEnd = rSource.Len()-1;
         }
-    }
 
     BOOL bWasModified = pTextEngine->IsModified();
     for ( i = 0; i < aPortionList.Count(); i++ )
@@ -293,7 +286,7 @@ void TextEditImp::ImpDoHighlight( const String& rSource, ULONG nLineOff )
 
         SbTextType eCol = r.eType;
         Color aColor;
-        ULONG nLine = nLineOff+r.nLine-1; // -1, weil Basic bei 1 beginnt
+        ULONG nLine = nLineOff+r.nLine-1; // -1, because BASIC starts with 1
         switch ( +eCol )
         {
             case SB_KEYWORD:
@@ -337,19 +330,19 @@ void TextEditImp::ImpDoHighlight( const String& rSource, ULONG nLineOff )
             default:
                 {
                     aColor = Color( RGB_COLORDATA( 0xff, 0x80, 0x80 ) );
-                    DBG_ERROR( "Unbekannte Syntax-Farbe?" );
+                    DBG_ERROR( "Unknown syntax color" );
                 }
         }
         pTextEngine->SetAttrib( TextAttribFontColor( aColor ), nLine, r.nStart, r.nEnd+1 );
     }
-    // Das Highlighten soll kein Modify setzen
+    // Highlighting should not modify the text
     pTextEngine->SetModified( bWasModified );
 }
 
 void TextEditImp::DoSyntaxHighlight( ULONG nPara )
 {
-    // Durch das DelayedSyntaxHighlight kann es passieren,
-    // dass die Zeile nicht mehr existiert!
+    // Due to delayed syntax highlight it can happend that the
+        // paragraph does no longer exist
     if ( nPara < pTextEngine->GetParagraphCount() )
     {
         // leider weis ich nicht, ob genau diese Zeile Modified() ...
@@ -363,8 +356,8 @@ void TextEditImp::DoSyntaxHighlight( ULONG nPara )
 
 void TextEditImp::DoDelayedSyntaxHighlight( xub_StrLen nPara )
 {
-    // Zeile wird nur in 'Liste' aufgenommen, im TimerHdl abgearbeitet.
-    // => Nicht Absaetze manipulieren, waehrend EditEngine formatiert.
+    // Paragraph is added to 'List', processed in TimerHdl.
+    // => Do not manipulate paragraphs while EditEngine is formatting
 //  if ( pProgress )
 //      pProgress->StepProgress();
 
@@ -382,7 +375,7 @@ void TextEditImp::DoDelayedSyntaxHighlight( xub_StrLen nPara )
 
 IMPL_LINK( TextEditImp, SyntaxTimerHdl, Timer *, EMPTYARG )
 {
-    DBG_ASSERT( pTextView, "Noch keine View, aber Syntax-Highlight ?!" );
+    DBG_ASSERT( pTextView, "Not yet a View but Syntax-Highlight ?!" );
     pTextEngine->SetUpdateMode( FALSE );
 
     bHighlightning = TRUE;
@@ -405,13 +398,13 @@ IMPL_LINK( TextEditImp, SyntaxTimerHdl, Timer *, EMPTYARG )
     }
 
     BOOL bWasModified = pTextEngine->IsModified();
-    if ( aSyntaxLineTable.Count() > 3 )                 // Ohne VDev
+    if ( aSyntaxLineTable.Count() > 3 )                 // Without VDev
     {
         pTextEngine->SetUpdateMode( TRUE );
         pTextView->ShowCursor( TRUE, TRUE );
     }
     else
-        pTextEngine->SetUpdateMode( TRUE );             // ! Mit VDev
+        pTextEngine->SetUpdateMode( TRUE );             // ! With VDev
 //  pTextView->ForceUpdate();
 
     // SetUpdateMode( TRUE ) soll kein Modify setzen
@@ -489,7 +482,7 @@ void TextEditImp::KeyInput( const KeyEvent& rKeyEvent )
     if ( pTextView->GetTextEngine()->IsModified() )
         ModifyHdl.Call( NULL );
     else
-        pTextView->GetTextEngine()->SetModified( bWasModified );    // Eventuell wieder setzen
+        pTextView->GetTextEngine()->SetModified( bWasModified );
 }
 
 void TextEditImp::Paint( const Rectangle& rRect ){ pTextView->Paint( rRect );}
@@ -559,8 +552,8 @@ SbxBase* TextEditImp::GetSbxAtMousePos( String &aWord )
         String aSuffixes = CUniString( cSuffixes );
         if ( aSuffixes.Search( aWord.GetChar(nLastChar) ) != STRING_NOTFOUND )
             aWord.Erase( nLastChar, 1 );
-
-        BOOL bWasError = SbxBase::IsError();    // Da eventuell im Testtool ein Fehler geschmissen wird.
+        // because perhaps TestTools throws an error
+        BOOL bWasError = SbxBase::IsError();
         pAppEdit->GetBasicFrame()->Basic().DebugFindNoErrors( TRUE );
         SbxBase* pSBX = StarBASIC::FindSBXInCurrentScope( aWord );
         pAppEdit->GetBasicFrame()->Basic().DebugFindNoErrors( FALSE );
@@ -587,8 +580,7 @@ IMPL_LINK( TextEditImp, ShowVarContents, void*, EMPTYARG )
         SbxDataType eType = pVar->GetType();
         if ( eType == SbxOBJECT )
         {
-            // Kann zu Absturz, z.B. bei Selections-Objekt fuehren
-            // Type == Object heisst nicht, dass pVar == Object!
+        // Can cause a crash: Type == Object does not mean pVar == Object
             if ( pVar->GetObject() && pVar->GetObject()->ISA( SbxObject ) )
                 aHelpText = ((SbxObject*)(pVar->GetObject()))->GetClassName();
             else
@@ -599,7 +591,7 @@ IMPL_LINK( TextEditImp, ShowVarContents, void*, EMPTYARG )
         else if ( eType != SbxEMPTY )
         {
             aHelpText = pVar->GetName();
-            if ( !aHelpText.Len() )     // Bei Uebergabeparametern wird der Name nicht kopiert
+            if ( !aHelpText.Len() ) // Name is not copied in arguments
                 aHelpText = aWord;
             aHelpText += '=';
             aHelpText += pVar->GetString();
@@ -660,11 +652,11 @@ Variant(Empty)
                 case SbxDOUBLE:
                 case SbxINTEGER:
                 case SbxLONG:
-//              case SbxOBJECT:     // kann nicht editiert werden
+//              case SbxOBJECT:     // cannot be edited
                 case SbxSINGLE:
                 case SbxSTRING:
 
-                case SbxVARIANT:    // Taucht wohl auch nicht auf. stattdessen SbxEMPTY
+                case SbxVARIANT:    // does not occure, instead SbxEMPTY
                 case SbxEMPTY:
                     {
                         pAppEdit->GetBasicFrame()->SetEditVar( pVar );
@@ -702,28 +694,30 @@ TextEdit::~TextEdit()
 
 void TextEdit::Highlight( ULONG nLine, xub_StrLen nCol1, xub_StrLen nCol2 )
 {
-    if ( nLine )    // Kann eigentlich nicht vorkommen, außer bei Fehler 'Sub erwartet' in erster Zeile
+    if ( nLine )    // Should not occure but at 'Sub expected' in first line
         nLine--;
 
     String s = aEdit.pTextEngine->GetText( nLine );
 
     if( nCol1 == STRING_NOTFOUND )
-        // Keine Spalte angegeben
-        nCol1 = 0, nCol2 = STRING_NOTFOUND;
+    {
+        // No column given
+        nCol1 = 0;
+        nCol2 = STRING_NOTFOUND;
+    }
     if( nCol2 == STRING_NOTFOUND )
     {
         nCol2 = s.Len();
     }
-    // Anpassung an den Precompiler | EditText != Compilierter Text
+    // Adaption to the Precompiler | EditText != Compilied Text
     if ( nCol2 > s.Len() )
         nCol2 = s.Len();
     if ( nCol1 >= nCol2 )
         nCol1 = 0;
 
-    // Da nCol2 u.U. hinter das aktuelle Statement zeigt
-    // (weil dort schon das naechste beginnt), muessen
-    // wird am Ende evtl. Whitespace, einen Doppelpunkt
-    // und mehr Whitespace entfernen
+    // Because nCol2 *may* point after the current statement
+    // (because the next one starts there) there are space
+    // that must be removed
     BOOL bColon = FALSE;
 
     while ( s.GetChar( nCol2 ) == ' ' && nCol2 > nCol1 && !bColon )
@@ -775,8 +769,7 @@ void TextEdit::SetText( const String& rStr ){ aEdit.pTextEngine->SetText(rStr); 
 void TextEdit::SetModifyHdl( Link l ){ aEdit.SetModifyHdl(l); }
 BOOL TextEdit::HasText() const { return aEdit.pTextEngine->GetTextLen() > 0; }
 
-// Es wird entweder ab Beginn oder ab Markierungsbegin + 1 gesucht.
-
+// Search from the beginning or at mark + 1
 BOOL TextEdit::Find( const String& s )
 {
     DBG_CHKTHIS(TextEdit,0);

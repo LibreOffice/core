@@ -887,7 +887,7 @@ SdrObject* SdrEscherImport::ProcessObj( SvStream& rSt, DffObjData& rObjData, voi
 
             // replacing the object which we will return with a SdrPageObj
             SdrObject::Free( pRet );
-            pRet = new SdrPageObj( rObjData.rBoundRect, pSdrModel->GetPage( nPageNum - 1 ) );
+            pRet = new SdrPageObj( rObjData.aBoundRect, pSdrModel->GetPage( nPageNum - 1 ) );
         }
         else
         {
@@ -1155,7 +1155,7 @@ SdrObject* SdrEscherImport::ProcessObj( SvStream& rSt, DffObjData& rObjData, voi
                     pTObj->SetModel( pSdrModel );
                     SfxItemSet aSet( pSdrModel->GetItemPool() );
                     if ( !pRet )
-                        ((SdrEscherImport*)this)->ApplyAttributes( rSt, aSet, rObjData.eShapeType, rObjData.nSpFlags );
+                        ((SdrEscherImport*)this)->ApplyAttributes( rSt, aSet, rObjData );
                     pTObj->SetMergedItemSet( aSet );
                     if ( pRet )
                     {
@@ -1278,7 +1278,7 @@ SdrObject* SdrEscherImport::ProcessObj( SvStream& rSt, DffObjData& rObjData, voi
                         if ( nAngle )
                         {
                             double a = nAngle * nPi180;
-                            pTObj->NbcRotate( rObjData.rBoundRect.Center(), nAngle, sin( a ), cos( a ) );
+                            pTObj->NbcRotate( rObjData.aBoundRect.Center(), nAngle, sin( a ), cos( a ) );
                         }
                     }
                     if ( pRet )
@@ -2500,7 +2500,7 @@ SdrObject* SdrPowerPointImport::ApplyTextObj( PPTTextObj* pTextObj, SdrTextObj* 
                 UINT32  nIsBullet2 = 0; //, nInstance = nDestinationInstance != 0xffffffff ? nDestinationInstance : pTextObj->GetInstance();
                 pPara->GetAttrib( PPT_ParaAttr_BulletOn, nIsBullet2, nDestinationInstance );
                 if ( !nIsBullet2 )
-                    rOutliner.SetDepth( rOutliner.GetParagraph( nParaIndex ), -1 );
+                    aParagraphAttribs.Put( SfxBoolItem( EE_PARA_BULLETSTATE, FALSE ) );
 
                 if ( oStartNumbering )
                 {
@@ -2911,7 +2911,7 @@ void SdrPowerPointImport::ImportPage( SdrPage* pRet, const PptSlidePersistEntry*
                             {
                                 case DFF_msofbtSpContainer :
                                 {
-                                    Rectangle aEmpty;
+                                    Rectangle aPageSize( Point(), pRet->GetSize() );
                                     if ( rSlidePersist.aSlideAtom.nFlags & 4 )          // follow master background ?
                                     {
                                         if ( HasMasterPage( nAktPageNum, eAktPageKind ) )
@@ -2933,7 +2933,7 @@ void SdrPowerPointImport::ImportPage( SdrPage* pRet, const PptSlidePersistEntry*
                                                 sal_Bool bTemporary = ( rSlidePersist.aSlideAtom.nFlags & 2 ) != 0;
                                                 sal_uInt32 nPos = rStCtrl.Tell();
                                                 rStCtrl.Seek( pE->nBackgroundOffset );
-                                                rSlidePersist.pBObj = ImportObj( rStCtrl, (void*)&aProcessData, aEmpty, aEmpty );
+                                                rSlidePersist.pBObj = ImportObj( rStCtrl, (void*)&aProcessData, aPageSize, aPageSize );
                                                 rSlidePersist.bBObjIsTemporary = bTemporary;
                                                 rStCtrl.Seek( nPos );
                                             }
@@ -2950,7 +2950,7 @@ void SdrPowerPointImport::ImportPage( SdrPage* pRet, const PptSlidePersistEntry*
                                             if ( nSpFlags & SP_FBACKGROUND )
                                             {
                                                 aEscherObjListHd.SeekToBegOfRecord( rStCtrl );
-                                                rSlidePersist.pBObj = ImportObj( rStCtrl, (void*)&aProcessData, aEmpty, aEmpty );
+                                                rSlidePersist.pBObj = ImportObj( rStCtrl, (void*)&aProcessData, aPageSize, aPageSize );
                                                 rSlidePersist.bBObjIsTemporary = sal_False;
                                             }
                                         }
@@ -3150,7 +3150,8 @@ SdrObject* SdrPowerPointImport::ImportPageBackgroundObject( const SdrPage& rPage
                         mnFix16Angle = Fix16ToAngle( GetPropertyValue( DFF_Prop_Rotation, 0 ) );
                         UINT32 nColor = GetPropertyValue( DFF_Prop_fillColor, 0xffffff );
                         pSet = new SfxItemSet( pSdrModel->GetItemPool() );
-                        ApplyAttributes( rStCtrl, *pSet );
+                        DffObjData aObjData( aEscherObjectHd, Rectangle( 0, 0, 28000, 21000 ), 0 );
+                        ApplyAttributes( rStCtrl, *pSet, aObjData );
                         Color aColor( MSO_CLR_ToColor( nColor ) );
                         pSet->Put( XFillColorItem( String(), aColor ) );
                     }
@@ -3817,17 +3818,22 @@ BOOL PPTNumberFormatCreator::GetNumberFormat( SdrPowerPointImport& rManager, Svx
     nHardCount += pParaObj->GetAttrib( PPT_ParaAttr_TextOfs, nTextOfs, nDestinationInstance );
     nHardCount += pParaObj->GetAttrib( PPT_ParaAttr_BulletOfs, nBulletOfs, nDestinationInstance );
 
-    UINT32 nFontHeight = 24;
-    PPTPortionObj* pPtr = pParaObj->First();
-    if ( pPtr )
-        pPtr->GetAttrib( PPT_CharAttr_FontHeight, nFontHeight, nDestinationInstance );
-    nHardCount += ImplGetExtNumberFormat( rManager, rNumberFormat, pParaObj->pParaSet->mnDepth,
-                                                pParaObj->mnInstance, nDestinationInstance, rStartNumbering, nFontHeight, pParaObj );
+    if ( nIsBullet )
+    {
+        rNumberFormat.SetNumberingType( SVX_NUM_CHAR_SPECIAL );
 
-    if ( rNumberFormat.GetNumberingType() != SVX_NUM_BITMAP )
-        pParaObj->UpdateBulletRelSize( nBulletHeight );
-    if ( nHardCount )
-        ImplGetNumberFormat( rManager, rNumberFormat, pParaObj->pParaSet->mnDepth );
+        UINT32 nFontHeight = 24;
+        PPTPortionObj* pPtr = pParaObj->First();
+        if ( pPtr )
+            pPtr->GetAttrib( PPT_CharAttr_FontHeight, nFontHeight, nDestinationInstance );
+        nHardCount += ImplGetExtNumberFormat( rManager, rNumberFormat, pParaObj->pParaSet->mnDepth,
+                                                    pParaObj->mnInstance, nDestinationInstance, rStartNumbering, nFontHeight, pParaObj );
+
+        if ( rNumberFormat.GetNumberingType() != SVX_NUM_BITMAP )
+            pParaObj->UpdateBulletRelSize( nBulletHeight );
+        if ( nHardCount )
+            ImplGetNumberFormat( rManager, rNumberFormat, pParaObj->pParaSet->mnDepth );
+    }
 
     if ( nHardCount )
     {
@@ -3841,6 +3847,7 @@ BOOL PPTNumberFormatCreator::GetNumberFormat( SdrPowerPointImport& rManager, Svx
             case SVX_NUM_CHARS_UPPER_LETTER_N :
             case SVX_NUM_CHARS_LOWER_LETTER_N :
             {
+                PPTPortionObj* pPtr = pParaObj->First();
                 if ( pPtr )
                 {
                     sal_uInt32 nFont;
@@ -6133,10 +6140,18 @@ void PPTParagraphObj::ApplyTo( SfxItemSet& rSet,  boost::optional< sal_Int16 >& 
         SvxNumBulletItem* pNumBulletItem = mrStyleSheet.mpNumBulletItem[ nInstance ];
         if ( pNumBulletItem )
         {
-            SvxNumberFormat aNumberFormat( SVX_NUM_CHAR_SPECIAL );
-            aNumberFormat.SetBulletChar( ' ' );
+            SvxNumberFormat aNumberFormat( SVX_NUM_NUMBER_NONE );
             if ( GetNumberFormat( rManager, aNumberFormat, this, nDestinationInstance, rStartNumbering ) )
             {
+                if ( aNumberFormat.GetNumberingType() == SVX_NUM_NUMBER_NONE )
+                {
+                    aNumberFormat.SetLSpace( 0 );
+                    aNumberFormat.SetAbsLSpace( 0 );
+                    aNumberFormat.SetFirstLineOffset( 0 );
+                    aNumberFormat.SetCharTextDistance( 0 );
+                    aNumberFormat.SetFirstLineIndent( 0 );
+                    aNumberFormat.SetIndentAt( 0 );
+                }
                 SvxNumBulletItem aNewNumBulletItem( *pNumBulletItem );
                 SvxNumRule* pRule = aNewNumBulletItem.GetNumRule();
                 if ( pRule )

@@ -34,12 +34,10 @@
 // include ---------------------------------------------------------------
 #include <vcl/settings.hxx>
 #include <svtools/viewoptions.hxx>
-#include "cuihyperdlg.hxx"  //CHINA001
 #include "hyperdlg.hxx"
 #include <svx/svxdlg.hxx> //CHINA001
-
 #include <sfx2/app.hxx>
-
+#include <sfx2/sfxsids.hrc>
 #include "hyperdlg.hrc"
 
 

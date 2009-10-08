@@ -36,6 +36,9 @@
 #include <berkeleydb/db.h>
 #endif
 
+#include "com/sun/star/ucb/XSimpleFileAccess.hpp"
+
+#include <hash_map>
 #include <rtl/string.hxx>
 
 extern "C" {
@@ -75,15 +78,105 @@ namespace berkeleydbproxy {
         { return what_.getStr(); }
     };
 
+    struct eq
+    {
+        bool operator()( const rtl::OString& rKey1, const rtl::OString& rKey2 ) const
+            { return rKey1.compareTo( rKey2 ) == 0; }
+    };
+
+    struct ha
+    {
+        size_t operator()( const rtl::OString& rName ) const
+            { return rName.hashCode(); }
+    };
+
+
+//#define TEST_DBHELP
+
+    class DBData
+    {
+        friend class        DBHelp;
+
+        int                 m_nSize;
+        char*               m_pBuffer;
+
+        void copyToBuffer( const char* pSrcData, int nSize );
+
+    public:
+        DBData( void )
+            : m_nSize( 0 )
+            , m_pBuffer( NULL )
+        {}
+        ~DBData()
+            { delete m_pBuffer; }
+
+          int getSize() const
+            { return m_nSize; }
+          const char* getData() const
+            { return m_pBuffer; }
+    };
+
+    typedef std::hash_map< rtl::OString,std::pair<int,int>,ha,eq >  StringToValPosMap;
+    typedef std::hash_map< rtl::OString,rtl::OString,ha,eq >        StringToDataMap;
+
+    class DBHelp
+    {
+        rtl::OUString       m_aFileName;
+        StringToDataMap*    m_pStringToDataMap;
+        StringToValPosMap*  m_pStringToValPosMap;
+        com::sun::star::uno::Reference< com::sun::star::ucb::XSimpleFileAccess >
+                            m_xSFA;
+
+        com::sun::star::uno::Sequence< sal_Int8 >
+                            m_aItData;
+        const char*         m_pItData;
+        int                 m_nItRead;
+        int                 m_iItPos;
+
+        bool implReadLenAndData( const char* pData, int& riPos, DBData& rValue );
+
+    public:
+        DBHelp( const rtl::OUString& rFileName,
+            com::sun::star::uno::Reference< com::sun::star::ucb::XSimpleFileAccess > xSFA )
+                : m_aFileName( rFileName )
+                , m_pStringToDataMap( NULL )
+                , m_pStringToValPosMap( NULL )
+                , m_xSFA( xSFA )
+                , m_pItData( NULL )
+                , m_nItRead( -1 )
+                , m_iItPos( -1 )
+        {}
+        ~DBHelp()
+            { releaseHashMap(); }
+
+        void createHashMap( bool bOptimizeForPerformance = false );
+        void releaseHashMap( void );
+
+#ifdef TEST_DBHELP
+        bool testAgainstDb( const rtl::OString& fileName, bool bOldDbAccess );
+#endif
+
+        bool getValueForKey( const rtl::OString& rKey, DBData& rValue );
+
+        bool startIteration( void );
+        bool getNextKeyAndValue( DBData& rKey, DBData& rValue );
+        void stopIteration( void );
+    };
 
     class Db : db_internal::Noncopyable
     {
     private:
         DB* m_pDBP;
+        DBHelp* m_pDBHelp;
 
     public:
         Db();
         ~Db();
+
+        void setDBHelp( DBHelp* pDBHelp )
+            { m_pDBHelp = pDBHelp; }
+        DBHelp* getDBHelp( void )
+            { return m_pDBHelp; }
 
         int close(u_int32_t flags);
 
@@ -126,8 +219,8 @@ namespace berkeleydbproxy {
         Dbt(void *data_arg, u_int32_t size_arg);
 
         Dbt();
-        Dbt(const Dbt & other);
-        Dbt & operator=(const Dbt & other);
+        //Dbt(const Dbt & other);
+        //Dbt & operator=(const Dbt & other);
 
         ~Dbt();
 

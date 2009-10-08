@@ -43,6 +43,7 @@
 #include <com/sun/star/io/IOException.hpp>
 #include <com/sun/star/io/XOutputStream.hpp>
 #include <com/sun/star/io/XActiveDataSource.hpp>
+#include <com/sun/star/io/XDataInputStream.hpp>
 #include <com/sun/star/io/XDataOutputStream.hpp>
 #include <com/sun/star/io/BufferSizeExceededException.hpp>
 #include <com/sun/star/io/UnexpectedEOFException.hpp>
@@ -513,6 +514,11 @@ namespace configmgr
         // BinaryReader implementation.
         // --------------------------------------------------------------------------
 
+        BinaryReader::BinaryReader(rtl::OUString const & _sFileURL):
+            m_sFileURL(_sFileURL) {}
+
+        BinaryReader::~BinaryReader() {}
+
         bool BinaryReader::open()
             SAL_THROW( (io::IOException, uno::RuntimeException) )
         {
@@ -532,10 +538,10 @@ namespace configmgr
 
         // --------------------------------------------------------------------------
 
-        inline uno::Reference<io::XDataInputStream> BinaryReader::getDataInputStream()
+        inline BinaryReader_Impl * BinaryReader::getDataInputStream()
         {
             OSL_ENSURE(m_xDataInputStream.is(),"Binary Cache: Reader was not opened - no input stream");
-            return m_xDataInputStream;
+            return m_xDataInputStream.get();
         }
 
         // --------------------------------------------------------------------------

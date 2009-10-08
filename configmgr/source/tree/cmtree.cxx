@@ -65,12 +65,11 @@ namespace configmgr
 
 // ------------------------ ChildListSet implementations ------------------------
     ChildListSet::ChildListSet(ChildListSet const& aSet, treeop::DeepChildCopy)
-        : m_aChildList(0)
+        : m_aChildList(aSet.m_aChildList.size())
     {
         for (size_t i = 0; i < aSet.m_aChildList.size(); i++)
         {
-            m_aChildList.insert(m_aChildList.end(),
-                                aSet.m_aChildList[i]->clone().release());
+            m_aChildList[i] = aSet.m_aChildList[i]->clone().release();
         }
     }
     ChildListSet::~ChildListSet()
@@ -81,6 +80,8 @@ namespace configmgr
 
     struct ltNode
     {
+        ltNode() {}
+
         bool operator()(const configmgr::INode* n1, const configmgr::INode* n2) const
         {
             return n1->getName().compareTo(n2->getName()) < 0;

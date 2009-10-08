@@ -160,7 +160,7 @@ MenuManager::MenuManager(
 
     const StyleSettings& rSettings = Application::GetSettings().GetStyleSettings();
     m_bWasHiContrast    = rSettings.GetMenuColor().IsDark();
-    m_bShowMenuImages   = SvtMenuOptions().IsMenuIconsEnabled();
+    m_bShowMenuImages   = rSettings.GetUseImagesInMenus();
 
     sal_Int32 nAddonsURLPrefixLength = ADDONSPOPUPMENU_URL_PREFIX.getLength();
     ::std::vector< USHORT > aQueryLabelItemIdVector;
@@ -1150,7 +1150,8 @@ IMPL_LINK( MenuManager, Activate, Menu *, pMenu )
     {
         // set/unset hiding disabled menu entries
         sal_Bool bDontHide          = SvtMenuOptions().IsEntryHidingEnabled();
-        sal_Bool bShowMenuImages    = SvtMenuOptions().IsMenuIconsEnabled();
+        const StyleSettings& rSettings = Application::GetSettings().GetStyleSettings();
+        sal_Bool bShowMenuImages    = rSettings.GetUseImagesInMenus();
 
         sal_uInt16 nFlag = pMenu->GetMenuFlags();
         if ( bDontHide )
@@ -1181,7 +1182,6 @@ IMPL_LINK( MenuManager, Activate, Menu *, pMenu )
             UpdateSpecialWindowMenu( pMenu );
 
         // Check if some modes have changed so we have to update our menu images
-        const StyleSettings& rSettings = Application::GetSettings().GetStyleSettings();
         sal_Bool bIsHiContrast = rSettings.GetMenuColor().IsDark();
 
         if ( m_bWasHiContrast != bIsHiContrast || bShowMenuImages != m_bShowMenuImages )

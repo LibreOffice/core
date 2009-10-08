@@ -619,31 +619,31 @@ SvxTextForwarder* SvxTextEditSourceImpl::GetBackgroundTextForwarder()
     {
         mpTextForwarder->flushCache();
 
-        OutlinerParaObject* mpOutlinerParaObject = NULL;
-        BOOL bTextEditActive = FALSE;
+        OutlinerParaObject* pOutlinerParaObject = NULL;
+        bool bTextEditActive = false;
         SdrTextObj* pTextObj = PTR_CAST( SdrTextObj, mpObject );
         if( pTextObj && pTextObj->getActiveText() == mpText )
-            mpOutlinerParaObject = pTextObj->GetEditOutlinerParaObject(); // Get the OutlinerParaObject if text edit is active
+            pOutlinerParaObject = pTextObj->GetEditOutlinerParaObject(); // Get the OutlinerParaObject if text edit is active
 
-        if( mpOutlinerParaObject )
-            bTextEditActive = TRUE; // text edit active
+        if( pOutlinerParaObject )
+            bTextEditActive = true; // text edit active
         else
-            mpOutlinerParaObject = mpText->GetOutlinerParaObject();
+            pOutlinerParaObject = mpText->GetOutlinerParaObject();
 
-        if( mpOutlinerParaObject && ( bTextEditActive || !mpObject->IsEmptyPresObj() || mpObject->GetPage()->IsMasterPage() ) )
+        if( pOutlinerParaObject && ( bTextEditActive || !mpObject->IsEmptyPresObj() || mpObject->GetPage()->IsMasterPage() ) )
         {
-            mpOutliner->SetText( *mpOutlinerParaObject );
+            mpOutliner->SetText( *pOutlinerParaObject );
 
             // #91254# put text to object and set EmptyPresObj to FALSE
-            if( mpText && bTextEditActive && mpOutlinerParaObject && mpObject->IsEmptyPresObj() && pTextObj->IsRealyEdited() )
+            if( mpText && bTextEditActive && pOutlinerParaObject && mpObject->IsEmptyPresObj() && pTextObj->IsRealyEdited() )
             {
                 mpObject->SetEmptyPresObj( FALSE );
-                static_cast< SdrTextObj* >( mpObject)->NbcSetOutlinerParaObjectForText( mpOutlinerParaObject, mpText );
+                static_cast< SdrTextObj* >( mpObject)->NbcSetOutlinerParaObjectForText( pOutlinerParaObject, mpText );
             }
         }
         else
         {
-            sal_Bool bVertical = mpOutlinerParaObject ? mpOutlinerParaObject->IsVertical() : sal_False;
+            sal_Bool bVertical = pOutlinerParaObject ? pOutlinerParaObject->IsVertical() : sal_False;
 
             // set objects style sheet on empty outliner
             SfxStyleSheetPool* pPool = (SfxStyleSheetPool*)mpObject->GetModel()->GetStyleSheetPool();
@@ -675,6 +675,9 @@ SvxTextForwarder* SvxTextEditSourceImpl::GetBackgroundTextForwarder()
         }
 
         mbDataValid = TRUE;
+
+        if( bTextEditActive )
+            delete pOutlinerParaObject;
     }
 
     if( bCreated && mpOutliner && HasView() )

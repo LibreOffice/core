@@ -29,15 +29,11 @@
 ************************************************************************/
 package com.sun.star.script.framework.provider.beanshell;
 
-import java.io.File;
 import java.io.InputStream;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
 import java.io.IOException;
 
 import java.net.URL;
 
-import java.lang.reflect.InvocationTargetException;
 import com.sun.star.script.provider.XScriptContext;
 
 public class ScriptSourceModel {

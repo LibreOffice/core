@@ -776,33 +776,11 @@ EnhancedCustomShape2d::EnhancedCustomShape2d( SdrObject* pAObj ) :
         break;
         case mso_sptCurvedDownArrow :           nFlags |= DFF_CUSTOMSHAPE_EXCH; break;
         case mso_sptRibbon2 :                   nColorData = 0x30dd0000; break;
-        case mso_sptRibbon :
-        {
-            if ( ( seqAdjustmentValues.getLength() > 1 ) && ( seqAdjustmentValues[ 1 ].State == com::sun::star::beans::PropertyState_DIRECT_VALUE ) )
-            {
-                double fValue;
-                seqAdjustmentValues[ 1 ].Value >>= fValue;
-                fValue = 21600 - fValue;
-                seqAdjustmentValues[ 1 ].Value <<= fValue;
-            }
-            nFlags |= DFF_CUSTOMSHAPE_FLIP_V;
-            nColorData = 0x30dd0000;
-        }
-        break;
+        case mso_sptRibbon :                    nColorData = 0x30dd0000; break;
+
         case mso_sptEllipseRibbon2 :            nColorData = 0x30dd0000; break;
-        case mso_sptEllipseRibbon :             // !!!!!!!!!!
-        {
-            if ( ( seqAdjustmentValues.getLength() > 1 ) && ( seqAdjustmentValues[ 1 ].State == com::sun::star::beans::PropertyState_DIRECT_VALUE ) )
-            {
-                double fValue;
-                seqAdjustmentValues[ 1 ].Value >>= fValue;
-                fValue = 21600 - fValue;
-                seqAdjustmentValues[ 1 ].Value <<= fValue;
-            }
-            nFlags |= DFF_CUSTOMSHAPE_FLIP_V;
-            nColorData = 0x30dd0000;
-        }
-        break;
+        case mso_sptEllipseRibbon :             nColorData = 0x30dd0000; break;
+
         case mso_sptVerticalScroll :            nColorData = 0x30dd0000; break;
         case mso_sptHorizontalScroll :          nColorData = 0x30dd0000; break;
         default:

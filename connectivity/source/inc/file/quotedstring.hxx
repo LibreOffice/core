@@ -40,13 +40,18 @@ namespace connectivity
     // Ableitung von String mit ueberladenen GetToken/GetTokenCount-Methoden
     // Speziell fuer FLAT FILE-Format: Strings koennen gequotet sein
     //==================================================================
-    class OOO_DLLPUBLIC_FILE QuotedTokenizedString : public String
+    class OOO_DLLPUBLIC_FILE QuotedTokenizedString
     {
+        String m_sString;
     public:
-        QuotedTokenizedString(){}
+        QuotedTokenizedString() {}
+        QuotedTokenizedString(const String& _sString) : m_sString(_sString){}
 
-        xub_StrLen  GetTokenCount( sal_Unicode cTok = ';', sal_Unicode cStrDel = '\0' ) const;
+        xub_StrLen  GetTokenCount( sal_Unicode cTok , sal_Unicode cStrDel ) const;
         void        GetTokenSpecial( String& _rStr,xub_StrLen& nStartPos, sal_Unicode cTok = ';', sal_Unicode cStrDel = '\0' ) const;
+        inline String& GetString() { return m_sString; }
+        inline xub_StrLen Len() const { return m_sString.Len(); }
+        inline operator String&() { return m_sString; }
     };
 }
 

@@ -111,7 +111,8 @@ void XMLTextListsHelper::PopListContext()
     OSL_ENSURE(mListStack.size(),
         "internal error: PopListContext: mListStack empty");
 //    fprintf(stderr, "PopListContext\n");
-    if (mListStack.size()) mListStack.pop();
+    if ( !mListStack.empty())
+        mListStack.pop();
 }
 
 void XMLTextListsHelper::ListContextTop(
@@ -119,7 +120,7 @@ void XMLTextListsHelper::ListContextTop(
     XMLTextListItemContext*& o_pListItemContext,
     XMLNumberedParaContext*& o_pNumberedParagraphContext )
 {
-    if (mListStack.size()) {
+    if ( !mListStack.empty() ) {
         o_pListBlockContext =
             static_cast<XMLTextListBlockContext*>(&mListStack.top().get<0>());
         o_pListItemContext  =
@@ -140,7 +141,7 @@ void XMLTextListsHelper::SetListItem( XMLTextListItemContext *i_pListItem )
         OSL_ENSURE(!mListStack.top().get<1>(),
             "error: SetListItem: list item already exists");
     }
-    if (mListStack.size()) {
+    if ( !mListStack.empty() ) {
         mListStack.top().get<1>() = i_pListItem;
     }
 }
@@ -397,7 +398,7 @@ XMLTextListsHelper::EnsureNumberedParagraph(
     OSL_ENSURE(io_rLevel >= 0, "inavlid Level");
     NumParaList_t & rNPList( mNPLists[i_ListId] );
     const ::rtl::OUString none; // default
-    if (!rNPList.size() && (0 != io_rLevel)) {
+    if ( rNPList.empty() && (0 != io_rLevel)) {
         // create default list style for top level
         sal_Int16 lev(0);
         rNPList.push_back(::std::make_pair(none,
@@ -405,7 +406,7 @@ XMLTextListsHelper::EnsureNumberedParagraph(
     }
     // create num rule first because this might clamp the level...
     uno::Reference<container::XIndexReplace> xNumRules;
-    if ((0 == io_rLevel) || !rNPList.size() || i_StyleName.getLength()) {
+    if ((0 == io_rLevel) || rNPList.empty() || i_StyleName.getLength()) {
         // no parent to inherit from, or explicit style given => new numrules!
         // index of parent: level - 1, but maybe that does not exist
         const size_t parent( std::min(static_cast<size_t>(io_rLevel),

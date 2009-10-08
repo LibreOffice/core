@@ -126,7 +126,68 @@ def readTextFromStream( inputStream ):
            break
     return code.value
     
+def toIniName( str ):
+    # TODO: what is the official way to get to know whether i am on the windows platform ?
+    if( hasattr(sys , "dllhandle") ):
+        return str + ".ini"
+    return str + "rc"
+
+
+""" definition: storageURI is the system dependent, absolute file url, where the script is stored on disk
+                scriptURI is the system independent uri
+"""
+class MyUriHelper:
+
+    def __init__( self, ctx, location ):
+        self.s_UriMap = \
+        { "share" : "vnd.sun.star.expand:${$BRAND_BASE_DIR/program/" +  toIniName( "bootstrap") + "::BaseInstallation}/share/Scripts/python" , \
+          "share:uno_packages" : "vnd.sun.star.expand:$UNO_SHARED_PACKAGES_CACHE/uno_packages", \
+          "user" : "vnd.sun.star.expand:${$BRAND_BASE_DIR/program/" + toIniName( "bootstrap") + "::UserInstallation}/user/Scripts/python" , \
+          "user:uno_packages" : "vnd.sun.star.expand:$UNO_USER_PACKAGES_CACHE/uno_packages" } 
+        self.m_uriRefFac = ctx.ServiceManager.createInstanceWithContext("com.sun.star.uri.UriReferenceFactory",ctx)
+        if location.startswith( "vnd.sun.star.tdoc" ):
+            self.m_baseUri = location + "/Scripts/python"
+            self.m_scriptUriLocation = "document"
+        else:
+            self.m_baseUri = expandUri( self.s_UriMap[location] )
+            self.m_scriptUriLocation = location
+        log.isDebugLevel() and log.debug( "initialized urihelper with baseUri="+self.m_baseUri + ",m_scriptUriLocation="+self.m_scriptUriLocation )
+        
+    def getRootStorageURI( self ):
+        return self.m_baseUri
     
+    def getStorageURI( self, scriptURI ):
+        return self.scriptURI2StorageUri(scriptURI)
+
+    def getScriptURI( self, storageURI ):
+        return self.storageURI2ScriptUri(storageURI)
+
+    def storageURI2ScriptUri( self, storageURI ):
+        if not storageURI.startswith( self.m_baseUri ):
+            message = "pythonscript: storage uri '" + storageURI + "' not in base uri '" + self.m_baseUri + "'"
+            log.isDebugLevel() and log.debug( message )
+            raise RuntimeException( message )
+
+        ret = "vnd.sun.star.script:" + \
+              storageURI[len(self.m_baseUri)+1:].replace("/","|") + \
+              "?language=" + LANGUAGENAME + "&location=" + self.m_scriptUriLocation
+        log.isDebugLevel() and log.debug( "converting storageURI="+storageURI + " to scriptURI=" + ret )
+        return ret
+    
+    def scriptURI2StorageUri( self, scriptURI ):
+        try:
+            myUri = self.m_uriRefFac.parse(scriptURI)
+            ret = self.m_baseUri + "/" + myUri.getName().replace( "|", "/" )
+            log.isDebugLevel() and log.debug( "converting scriptURI="+scriptURI + " to storageURI=" + ret )
+            return ret
+        except UnoException, e:
+            log.error( "error during converting scriptURI="+scriptURI + ": " + e.Message)
+            raise RuntimeException( "pythonscript:scriptURI2StorageUri: " +e.getMessage(), None )
+        except Exception, e:
+            log.error( "error during converting scriptURI="+scriptURI + ": " + str(e))
+            raise RuntimeException( "pythonscript:scriptURI2StorageUri: " + str(e), None )
+        
+
 class ModuleEntry:
     def __init__( self, lastRead, module ):
         self.lastRead = lastRead
@@ -342,15 +403,20 @@ class ScriptBrowseNode( unohelper.Base, XBrowseNode , XPropertySet, XInvocation,
 
     def getPropertyValue( self, name ):
         ret = None
-        if name == "URI":
-            ret = self.provCtx.uriHelper.getScriptURI(
-                self.provCtx.getPersistentUrlFromStorageUrl( self.uri + "$" + self.funcName ) )
-        elif name == "Description":
-            ret = getattr( self.func, "__doc__", None )
-        elif name == "Editable" and ENABLE_EDIT_DIALOG:
-            ret = not self.provCtx.sfa.isReadOnly( self.uri )
+        try:
+            if name == "URI":
+                ret = self.provCtx.uriHelper.getScriptURI(
+                    self.provCtx.getPersistentUrlFromStorageUrl( self.uri + "$" + self.funcName ) )
+            elif name == "Description":
+                ret = getattr( self.func, "__doc__", None )
+            elif name == "Editable" and ENABLE_EDIT_DIALOG:
+                ret = not self.provCtx.sfa.isReadOnly( self.uri )
         
-        log.isDebugLevel() and log.debug( "ScriptBrowseNode.getPropertyValue called for " + name + ", returning " + str(ret) )
+            log.isDebugLevel() and log.debug( "ScriptBrowseNode.getPropertyValue called for " + name + ", returning " + str(ret) )
+        except Exception,e:
+            log.error( "ScriptBrowseNode.getPropertyValue error " + lastException2String())
+            raise
+                                              
         return ret
     def setPropertyValue( self, name, value ):
         log.isDebugLevel() and log.debug( "ScriptBrowseNode.setPropertyValue called " + name + "=" +str(value ) )
@@ -757,9 +823,9 @@ class PythonScriptProvider( unohelper.Base, XBrowseNode, XScriptProvider, XNameC
         isPackage = storageType.endswith( ":uno_packages" )
 
         try:
-            urlHelper = ctx.ServiceManager.createInstanceWithArgumentsAndContext(
-                "com.sun.star.script.provider.ScriptURIHelper", (LANGUAGENAME, storageType), ctx)
-            
+#            urlHelper = ctx.ServiceManager.createInstanceWithArgumentsAndContext(
+#                "com.sun.star.script.provider.ScriptURIHelper", (LANGUAGENAME, storageType), ctx)
+            urlHelper = MyUriHelper( ctx, storageType )
             log.isDebugLevel() and log.debug( "got urlHelper " + str( urlHelper ) )
         
             rootUrl = expandUri( urlHelper.getRootStorageURI() )

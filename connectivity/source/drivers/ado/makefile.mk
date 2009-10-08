@@ -34,6 +34,7 @@ PRJ=..$/..$/..
 PRJINC=..$/..
 PRJNAME=connectivity
 TARGET=ado
+VISIBILITY_HIDDEN=TRUE
 
 #	ENABLE_EXCEPTIONS=TRUE
 

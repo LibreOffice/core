@@ -102,7 +102,7 @@ namespace configmgr
             // checking
             bool isValidNode() const;
             // hashing
-            size_t hashCode() const;
+            size_t hashCode() const { return m_aParentID.hashCode() + 5*m_sNodeName.hashCode(); }
             // containing node this
             NodeID getParentID() const { return m_aParentID; }
             // containing node this

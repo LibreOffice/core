@@ -90,6 +90,7 @@
 #ifndef _DBHELPER_DBCONVERSION_HXX_
 #include "connectivity/dbconversion.hxx"
 #endif
+#include <rtl/ustrbuf.hxx>
 
 #if defined __GNUC__
     #pragma GCC system_header
@@ -3362,34 +3363,44 @@ const double fMilliSecondsPerDay = 86400000.0;
 //------------------------------------------------------------------
 ::rtl::OUString ConvertLikeToken(const OSQLParseNode* pTokenNode, const OSQLParseNode* pEscapeNode, sal_Bool bInternational)
 {
-	::rtl::OUString aMatchStr;
+	::rtl::OUStringBuffer aMatchStr;
 	if (pTokenNode->isToken())
 	{
-		sal_Char cEscape = 0;
+		sal_Unicode cEscape = 0;
 		if (pEscapeNode->count())
-			cEscape = static_cast<sal_Char>(pEscapeNode->getChild(1)->getTokenValue().toChar());
+			cEscape = pEscapeNode->getChild(1)->getTokenValue().toChar();
 
 		// Platzhalter austauschen
 		aMatchStr = pTokenNode->getTokenValue();
-		sal_Int32 nLen = aMatchStr.getLength();
-		const sal_Char* sSearch  = bInternational ? "%_" : "*?";
-		const sal_Char* sReplace = bInternational ? "*?" : "%_";
+		const sal_Int32 nLen = aMatchStr.getLength();
+		::rtl::OUStringBuffer sSearch,sReplace;
+		if ( bInternational )
+		{
+		    sSearch.appendAscii("%_",2);
+		    sReplace.appendAscii("*?",2);
+		}
+		else
+		{
+		    sSearch.appendAscii("*?",2);
+		    sReplace.appendAscii("%_",2);
+		}
+		
 		for (sal_Int32 i = 0; i < nLen; i++)
 		{
-			sal_Char c = static_cast<sal_Char>(aMatchStr.getStr()[i]);
-			if (c == sSearch[0] || c == sSearch[1])
+			const sal_Unicode c = aMatchStr.charAt(i);
+			if (c == sSearch.charAt(0) || c == sSearch.charAt(1))
 			{
-				if (i > 0 && aMatchStr.getStr()[i-1] == cEscape)
+				if (i > 0 && aMatchStr.charAt(i-1) == cEscape)
 					continue;
 				else
 				{
-					sal_Unicode cCharacter = sReplace[(c == sSearch[0]) ? 0 : 1];
-					aMatchStr = aMatchStr.replaceAt(i , 1, ::rtl::OUString(&cCharacter, 1));
+					const sal_Unicode cCharacter = sReplace.charAt( (c == sSearch.charAt(0)) ? 0 : 1);
+					aMatchStr.setCharAt(i , cCharacter);
 				}
 			}
 		}
 	}
-	return aMatchStr;
+	return aMatchStr.makeStringAndClear();
 }
 
 //==========================================================================
@@ -3403,7 +3414,7 @@ OParseContext		    OSQLParser::s_aDefaultContext;
 sal_Int32			OSQLParser::s_nRefCount	= 0;
 //	::osl::Mutex		OSQLParser::s_aMutex;
 OSQLScanner*		OSQLParser::s_pScanner = 0;
-OSQLParseNodes*		OSQLParser::s_pGarbageCollector = 0;
+OSQLParseNodesGarbageCollector*		OSQLParser::s_pGarbageCollector = 0;
 ::com::sun::star::uno::Reference< ::com::sun::star::i18n::XLocaleData>		OSQLParser::s_xLocaleData = NULL;
 //-----------------------------------------------------------------------------
 void setParser(OSQLParser* _pParser)
@@ -3449,18 +3460,12 @@ OSQLParseNode* OSQLParser::parseTree(::rtl::OUString& rErrorMessage,
 		rErrorMessage = m_sErrorMessage;
 
 		// clear the garbage collector
-		while (!s_pGarbageCollector->empty())
-		{
-			OSQLParseNode* pNode = *s_pGarbageCollector->begin();
-			while (pNode->getParent())
-				pNode = pNode->getParent();
-			delete pNode;
-		}
+		(*s_pGarbageCollector)->clearAndDelete();
 		return NULL;
 	}
 	else
 	{
-		s_pGarbageCollector->clear();
+		(*s_pGarbageCollector)->clear();
 
 		// Das Ergebnis liefern (den Root Parse Node):
 

@@ -80,6 +80,7 @@
 #include <com/sun/star/chart/ChartSeriesAddress.hpp>
 #include <com/sun/star/chart/X3DDisplay.hpp>
 #include <com/sun/star/chart/XStatisticDisplay.hpp>
+#include <com/sun/star/chart/XSecondAxisTitleSupplier.hpp>
 
 #include <com/sun/star/chart2/XChartDocument.hpp>
 #include <com/sun/star/chart2/XDiagram.hpp>
@@ -102,7 +103,8 @@
 #include <com/sun/star/drawing/XShapes.hpp>
 #include <com/sun/star/embed/Aspects.hpp>
 #include <com/sun/star/embed/XVisualObject.hpp>
-#include <com/sun/star/chart/XSecondAxisTitleSupplier.hpp>
+#include <com/sun/star/container/XChild.hpp>
+
 
 #include "MultiPropertySetHandler.hxx"
 #include "PropertyMap.hxx"
@@ -552,6 +554,31 @@ double lcl_getValueFromSequence( const Reference< chart2::data::XDataSequence > 
     return aResult;
 }
 
+bool lcl_SequenceHasUnhiddenData( const uno::Reference< chart2::data::XDataSequence >& xDataSequence )
+{
+    if( !xDataSequence.is() )
+        return false;
+    uno::Reference< beans::XPropertySet > xProp( xDataSequence, uno::UNO_QUERY );
+    if( xProp.is() )
+    {
+        uno::Sequence< sal_Int32 > aHiddenValues;
+        try
+        {
+            xProp->getPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM( "HiddenValues" ) ) ) >>= aHiddenValues;
+            if( !aHiddenValues.getLength() )
+                return true;
+        }
+        catch( uno::Exception& e )
+        {
+            (void)e; // avoid warning
+            return true;
+        }
+    }
+    if( xDataSequence->getData().getLength() )
+        return true;
+    return false;
+}
+
 struct lcl_TableData
 {
     typedef ::std::vector< OUString > tStringContainer;
@@ -563,6 +590,8 @@ struct lcl_TableData
     tStringContainer       aFirstRowRangeRepresentations;
     tStringContainer       aFirstColumnStrings;
     tStringContainer       aFirstColumnRangeRepresentations;
+
+    ::std::vector< sal_Int32 > aHiddenColumns;
 };
 
 // ::std::bind2nd( ::std::mem_fun_ref( &T::resize ), nSize ) does not work
@@ -739,6 +768,10 @@ lcl_TableData lcl_getDataForLocalTable(
                 aRange = xRangeConversion->convertRangeToXML( aRange );
         }
         aResult.aDataRangeRepresentations.push_back( aRange );
+
+        //is column hidden?
+        if( !lcl_SequenceHasUnhiddenData(aIt->first) && !lcl_SequenceHasUnhiddenData(aIt->second) )
+            aResult.aHiddenColumns.push_back(nSeqIdx);
     }
 
     return aResult;
@@ -992,6 +1025,7 @@ void SchXMLExportHelper::parseDocument( Reference< chart::XChartDocument >& rCha
     sal_Bool bHasMainTitle = sal_False;
     sal_Bool bHasSubTitle = sal_False;
     sal_Bool bHasLegend = sal_False;
+    util::DateTime aNullDate(0,0,0,0,30,12,1899);
 
     std::vector< XMLPropertyState > aPropertyStates;
 
@@ -1009,10 +1043,38 @@ void SchXMLExportHelper::parseDocument( Reference< chart::XChartDocument >& rCha
             aAny = xDocPropSet->getPropertyValue(
                 OUString( RTL_CONSTASCII_USTRINGPARAM( "HasLegend" )));
             aAny >>= bHasLegend;
+            if ( bIncludeTable )
+            {
+                OUString sNullDate( RTL_CONSTASCII_USTRINGPARAM( "NullDate" ));
+                aAny = xDocPropSet->getPropertyValue(sNullDate);
+                if ( !aAny.hasValue() )
+                {
+                    Reference<container::XChild> xChild(rChartDoc, uno::UNO_QUERY );
+                    if ( xChild.is() )
+                    {
+                        Reference< beans::XPropertySet > xParentDoc( xChild->getParent(),uno::UNO_QUERY);
+                        if ( xParentDoc.is() && xParentDoc->getPropertySetInfo()->hasPropertyByName(sNullDate) )
+                            aAny = xParentDoc->getPropertyValue(sNullDate);
+                    }
+                }
+
+                aAny >>= aNullDate;
+            }
         }
         catch( beans::UnknownPropertyException & )
         {
             DBG_WARNING( "Required property not found in ChartDocument" );
+        }
+    } // if( xDocPropSet.is())
+
+    if ( bIncludeTable && (aNullDate.Day != 30 || aNullDate.Month != 12 || aNullDate.Year != 1899 ) )
+    {
+        SvXMLElementExport aSet( mrExport, XML_NAMESPACE_TABLE, XML_CALCULATION_SETTINGS, sal_True, sal_True );
+        {
+            ::rtl::OUStringBuffer sBuffer;
+            SvXMLUnitConverter::convertDateTime(sBuffer,aNullDate);
+            mrExport.AddAttribute( XML_NAMESPACE_TABLE,XML_DATE_VALUE,sBuffer.makeStringAndClear());
+            SvXMLElementExport aNull( mrExport, XML_NAMESPACE_TABLE, XML_NULL_DATE, sal_True, sal_True );
         }
     }
 
@@ -1383,9 +1445,34 @@ void SchXMLExportHelper::exportTable()
     }
     {
         SvXMLElementExport aColumns( mrExport, XML_NAMESPACE_TABLE, XML_TABLE_COLUMNS, sal_True, sal_True );
-        mrExport.AddAttribute( XML_NAMESPACE_TABLE, XML_NUMBER_COLUMNS_REPEATED,
-                               OUString::valueOf( static_cast< sal_Int64 >( aData.aFirstRowStrings.size())));
-        SvXMLElementExport aColumn( mrExport, XML_NAMESPACE_TABLE, XML_TABLE_COLUMN, sal_True, sal_True );
+
+        sal_Int32 nNextIndex = 0;
+        for( size_t nN=0; nN< aData.aHiddenColumns.size(); nN++ )
+        {
+            //i91578 display of hidden values (copy paste scenario; export hidden flag thus it can be used during migration to locale table upon paste )
+            sal_Int32 nHiddenIndex = aData.aHiddenColumns[nN];
+            if( nHiddenIndex > nNextIndex )
+            {
+                sal_Int64 nRepeat = static_cast< sal_Int64 >( nHiddenIndex - nNextIndex );
+                if(nRepeat>1)
+                    mrExport.AddAttribute( XML_NAMESPACE_TABLE, XML_NUMBER_COLUMNS_REPEATED,
+                                   OUString::valueOf( nRepeat ));
+                SvXMLElementExport aColumn( mrExport, XML_NAMESPACE_TABLE, XML_TABLE_COLUMN, sal_True, sal_True );
+            }
+            mrExport.AddAttribute( XML_NAMESPACE_TABLE, XML_VISIBILITY, GetXMLToken( XML_COLLAPSE ) );
+            SvXMLElementExport aColumn( mrExport, XML_NAMESPACE_TABLE, XML_TABLE_COLUMN, sal_True, sal_True );
+            nNextIndex = nHiddenIndex+1;
+        }
+
+        sal_Int32 nEndIndex = aData.aFirstRowStrings.size()-1;
+        if( nEndIndex >= nNextIndex )
+        {
+            sal_Int64 nRepeat = static_cast< sal_Int64 >( nEndIndex - nNextIndex + 1 );
+            if(nRepeat>1)
+                mrExport.AddAttribute( XML_NAMESPACE_TABLE, XML_NUMBER_COLUMNS_REPEATED,
+                               OUString::valueOf( nRepeat ));
+            SvXMLElementExport aColumn( mrExport, XML_NAMESPACE_TABLE, XML_TABLE_COLUMN, sal_True, sal_True );
+        }
     }
 
     // export rows with content
@@ -1662,7 +1749,7 @@ void SchXMLExportHelper::exportPlotArea(
                 aPropertyStates.clear();
                 aPropertyStates = mxExpPropMapper->Filter( xStockPropSet );
 
-                if( aPropertyStates.size() > 0 )
+                if( !aPropertyStates.empty() )
                 {
                     if( bExportContent )
                     {
@@ -1684,7 +1771,7 @@ void SchXMLExportHelper::exportPlotArea(
                 aPropertyStates.clear();
                 aPropertyStates = mxExpPropMapper->Filter( xStockPropSet );
 
-                if( aPropertyStates.size() > 0 )
+                if( !aPropertyStates.empty() )
                 {
                     if( bExportContent )
                     {
@@ -1706,7 +1793,7 @@ void SchXMLExportHelper::exportPlotArea(
                 aPropertyStates.clear();
                 aPropertyStates = mxExpPropMapper->Filter( xStockPropSet );
 
-                if( aPropertyStates.size() > 0 )
+                if( !aPropertyStates.empty() )
                 {
                     if( bExportContent )
                     {
@@ -1738,7 +1825,7 @@ void SchXMLExportHelper::exportPlotArea(
         {
             aPropertyStates = mxExpPropMapper->Filter( xWallPropSet );
 
-            if( aPropertyStates.size() > 0 )
+            if( !aPropertyStates.empty() )
             {
                 // write element
                 if( bExportContent )
@@ -1766,7 +1853,7 @@ void SchXMLExportHelper::exportPlotArea(
         {
             aPropertyStates = mxExpPropMapper->Filter( xFloorPropSet );
 
-            if( aPropertyStates.size() > 0 )
+            if( !aPropertyStates.empty() )
             {
                 // write element
                 if( bExportContent )
@@ -2674,7 +2761,7 @@ void SchXMLExportHelper::exportSeries(
                         {
                             aPropertyStates = mxExpPropMapper->Filter( xStatProp );
 
-                            if( aPropertyStates.size() > 0 )
+                            if( !aPropertyStates.empty() )
                             {
                                 // write element
                                 if( bExportContent )
@@ -2735,7 +2822,7 @@ void SchXMLExportHelper::exportSeries(
 
                             aPropertyStates = mxExpPropMapper->Filter( xStatProp );
 
-                            if( aPropertyStates.size() > 0 )
+                            if( !aPropertyStates.empty() )
                             {
                                 // write element
                                 if( bExportContent )
@@ -3090,7 +3177,7 @@ void SchXMLExportHelper::exportDataPoints(
                     }
 
                     aPropertyStates = mxExpPropMapper->Filter( xPropSet );
-                    if( aPropertyStates.size() > 0 )
+                    if( !aPropertyStates.empty() )
                     {
                         if( bExportContent )
                         {
@@ -3154,7 +3241,7 @@ void SchXMLExportHelper::exportDataPoints(
                     }
 
                     aPropertyStates = mxExpPropMapper->Filter( xPropSet );
-                    if( aPropertyStates.size() > 0 )
+                    if( !aPropertyStates.empty() )
                     {
                         if( bExportContent )
                         {
@@ -3324,13 +3411,13 @@ void SchXMLExportHelper::swapDataArray( Sequence< Sequence< double > >& rSequenc
 
 void SchXMLExportHelper::CollectAutoStyle( const std::vector< XMLPropertyState >& aStates )
 {
-    if( aStates.size())
+    if( !aStates.empty() )
         maAutoStyleNameQueue.push( GetAutoStylePoolP().Add( XML_STYLE_FAMILY_SCH_CHART_ID, aStates ));
 }
 
 void SchXMLExportHelper::AddAutoStyleAttribute( const std::vector< XMLPropertyState >& aStates )
 {
-    if( aStates.size())
+    if( !aStates.empty() )
     {
         DBG_ASSERT( ! maAutoStyleNameQueue.empty(), "Autostyle queue empty!" );
 

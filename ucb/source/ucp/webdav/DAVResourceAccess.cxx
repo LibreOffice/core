@@ -59,7 +59,8 @@ int DAVAuthListener_Impl::authenticate(
     const ::rtl::OUString & inRealm,
     const ::rtl::OUString & inHostName,
     ::rtl::OUString & inoutUserName,
-    ::rtl::OUString & outPassWord )
+    ::rtl::OUString & outPassWord,
+    const sal_Bool & bAllowPersistentStoring)
 {
     if ( m_xEnv.is() )
     {
@@ -79,7 +80,9 @@ int DAVAuthListener_Impl::authenticate(
                 = new ucbhelper::SimpleAuthenticationRequest( inHostName,
                                                               inRealm,
                                                               inoutUserName,
-                                                              outPassWord );
+                                                              outPassWord,
+                                                              ::rtl::OUString(),
+                                                              bAllowPersistentStoring);
             xIH->handle( xRequest.get() );
 
             rtl::Reference< ucbhelper::InteractionContinuation > xSelection
@@ -530,6 +533,13 @@ void DAVResourceAccess::GET(
     while ( bRetry );
 }
 
+//=========================================================================
+void DAVResourceAccess::ABORT()
+  throw( DAVException )
+{
+    initialize();
+    m_xSession->ABORT();
+}
 //=========================================================================
 namespace {
 

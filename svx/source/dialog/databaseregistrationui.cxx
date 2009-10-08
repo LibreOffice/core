@@ -42,7 +42,7 @@
 #ifndef _SVX_DIALOGS_HRC
 #include <svx/dialogs.hrc>
 #endif
-#include "connpooloptions.hxx"
+//#include "connpooloptions.hxx"
 // === /includes (project) ===============================================
 
 // === includes (global) =================================================
@@ -60,9 +60,9 @@ namespace svx
         SfxItemSet aRegistrationItems( SFX_APP()->GetPool(), SID_SB_DB_REGISTER, SID_SB_DB_REGISTER, 0 );
 
         SvxAbstractDialogFactory* pDialogFactory = SvxAbstractDialogFactory::Create();
-        ::std::auto_ptr< AbstractSfxSingleTabDialog > pDialog;
+        ::std::auto_ptr< SfxAbstractDialog > pDialog;
         if ( pDialogFactory )
-            pDialog.reset( pDialogFactory->CreateSfxSingleTabDialog( _parentWindow, aRegistrationItems, NULL, RID_SFXPAGE_DBREGISTER ) );
+            pDialog.reset( pDialogFactory->CreateSfxDialog( _parentWindow, aRegistrationItems, NULL, RID_SFXPAGE_DBREGISTER ) );
         if ( pDialog.get() )
             nResult = pDialog->Execute();
 

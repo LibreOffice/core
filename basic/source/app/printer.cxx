@@ -69,11 +69,11 @@ BasicPrinter::BasicPrinter() : Printer()
     nPage = 0; nLine = 9999;
     SetMapMode( MapMode( MAP_POINT ) );
     Size s( GetOutputSize() );
-    // 10-Punkt-Schrift verwenden
+    // Use 10 point font
     Font aFont( FAMILY_MODERN, Size( 0, 10 ) );
     aFont.SetPitch( PITCH_FIXED );
     SetFont( aFont );
-    // Ausgabe: 6 Zeilen/Zoll = 12 Punkt
+    // Output: 6 Lines/Inch = 12 Point
     nLines = (short) s.Height() / 12;
     nYoff  = 12;
     SetStartPrintHdl( LINK( this, BasicPrinter, StartPrintHdl ) );
@@ -100,16 +100,16 @@ void BasicPrinter::Print( const String& rFile, const String& rText, BasicFrame *
 {
     nPage = 0; nLine = 9999;
     aFile = rFile;
-    // Dialog einrichten
+    // Setup dialog
     SttResId aResId( IDD_PRINT_DIALOG );
     pDlg = new PrintingDialog
           ( aBasicApp.pFrame, this, aResId, aFile );
-    // Position des Dialogs setzen
+    // Set position of dialog
     Size s1 = aBasicApp.pFrame->GetSizePixel();
     Size s2 = pDlg->GetSizePixel();
     pDlg->SetPosPixel( Point( (s1.Width() - s2.Width() )  / 2,
                                 (s1.Height()- s2.Height() ) / 2 ) );
-    // PRINT-Menu disablen
+    // Disable PRINT-Menu
     MenuBar* pBar = pFrame->GetMenuBar();
     Menu* pFileMenu = pBar->GetPopupMenu( RID_APPFILE );
     pFileMenu->EnableItem( RID_FILEPRINT, FALSE );
@@ -141,7 +141,8 @@ void BasicPrinter::Print( const String& rFile, const String& rText, BasicFrame *
 IMPL_LINK_INLINE_START( BasicPrinter, StartPrintHdl, Printer *, pPrinter )
 {
     (void) pPrinter; /* avoid warning about unused parameter */
-    if( pDlg ) pDlg->Show();
+    if( pDlg != NULL )
+        pDlg->Show();
     return 0;
 }
 IMPL_LINK_INLINE_END( BasicPrinter, StartPrintHdl, Printer *, pPrinter )
@@ -149,7 +150,8 @@ IMPL_LINK_INLINE_END( BasicPrinter, StartPrintHdl, Printer *, pPrinter )
 IMPL_LINK_INLINE_START( BasicPrinter, EndPrintHdl, Printer *, pPrinter )
 {
     (void) pPrinter; /* avoid warning about unused parameter */
-    if( pDlg ) pDlg->Hide();
+    if( pDlg != NULL)
+       pDlg->Hide();
     return 0;
 }
 IMPL_LINK_INLINE_END( BasicPrinter, EndPrintHdl, Printer *, pPrinter )
@@ -157,7 +159,8 @@ IMPL_LINK_INLINE_END( BasicPrinter, EndPrintHdl, Printer *, pPrinter )
 IMPL_LINK_INLINE_START( BasicPrinter, PrintPageHdl, Printer *, pPrinter )
 {
     (void) pPrinter; /* avoid warning about unused parameter */
-    if( pDlg ) pDlg->ChangeMessage( nPage );
+    if( pDlg != NULL)
+        pDlg->ChangeMessage( nPage );
     return 0;
 }
 IMPL_LINK_INLINE_END( BasicPrinter, PrintPageHdl, Printer *, pPrinter )

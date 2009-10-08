@@ -96,6 +96,9 @@ namespace connectivity
 
             ::rtl::OUString getCompletePath();
             void closeImpl();
+            /* closes and kill the index file and throws an error.
+            */
+            void impl_killFileAndthrowError_throw(sal_uInt16 _nErrorId,const ::rtl::OUString& _sFile);
         protected:
             virtual ~ODbaseIndex();
         public:
