@@ -656,6 +656,7 @@ WinSalInstance::WinSalInstance()
 {
     mhComWnd                 = 0;
     mpSalYieldMutex          = new SalYieldMutex( this );
+    ::tools::SolarMutex::SetSolarMutex( mpSalYieldMutex );
     mpSalWaitMutex           = new vos::OMutex;
     mnYieldWaitCount         = 0;
     mpSalYieldMutex->acquire();
@@ -666,6 +667,7 @@ WinSalInstance::WinSalInstance()
 WinSalInstance::~WinSalInstance()
 {
     mpSalYieldMutex->release();
+    ::tools::SolarMutex::SetSolarMutex( 0 );
     delete mpSalYieldMutex;
     delete mpSalWaitMutex;
     DestroyWindow( mhComWnd );

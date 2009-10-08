@@ -34,6 +34,7 @@ mkdir: %_DEST%\inc%_EXT%\bootstrp
 ..\inc\tools\postx.h %_DEST%\inc%_EXT%\tools\postx.h
 ..\inc\tools\prex.h %_DEST%\inc%_EXT%\tools\prex.h
 
+..\inc\tools\solarmutex.hxx %_DEST%\inc%_EXT%\tools\solarmutex.hxx
 ..\inc\tools\agapi.hxx %_DEST%\inc%_EXT%\tools\agapi.hxx
 ..\inc\tools\agapi.hxx %_DEST%\inc%_EXT%\tools\agapi.hxx
 ..\inc\tools\agitem.hxx %_DEST%\inc%_EXT%\tools\agitem.hxx
