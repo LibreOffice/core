@@ -34,7 +34,7 @@ PRJNAME=vbahelper
 TARGET=vbahelperbits
 
 ENABLE_EXCEPTIONS := TRUE
-
+VISIBILITY_HIDDEN=TRUE
 # --- Settings -----------------------------------------------------
 
 .INCLUDE :  settings.mk
