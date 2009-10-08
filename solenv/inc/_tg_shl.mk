@@ -32,6 +32,14 @@ SHL1LINKFLAGS+=$(LINKFLAGSRUNPATH_$(SHL1RPATH))
 SHL1DEF*=$(MISC)$/$(SHL1TARGET).def
 .ENDIF			# "$(SHL1USE_EXPORTS)"==""
 
+EXTRALIBPATHS1=$(EXTRALIBPATHS)
+.IF "$(UPDATER)"=="YES"
+.IF "$(SHL1NOCHECK)"==""
+.IF "$(SOLAR_STLLIBPATH)"!=""
+EXTRALIBPATHS1+=-L$(SOLAR_STLLIBPATH)
+.ENDIF
+.ENDIF				# "$(SHL1NOCHECK)"!=""
+.ENDIF
 #+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 #+++++++++++    version object      ++++++++++++++++++++++++++++++++++++++++
 #+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -233,7 +241,7 @@ $(MISC)$/%linkinc.ls:
 .IF "$(GUI)" == "OS2"
 #21/02/2006 YD dll names must be 8.3, invoke fix script
 #check osl/os2/module.c/osl_loadModule()
-SHL1TARGET8=$(shell @fix_shl.cmd $(SHL1TARGET))
+SHL1TARGET8=$(shell @fix_shl $(SHL1TARGET))
 .ENDIF
 
 .IF "$(GUI)" == "OS2"
@@ -436,7 +444,7 @@ $(SHL1TARGETN) : \
     @macosx-create-bundle $@
 .IF "$(UPDATER)"=="YES"
 .IF "$(SHL1NOCHECK)"==""
-    $(SOLARENV)$/bin$/checkdll.sh -L$(LB) -L$(SOLARLIBDIR) $(EXTRALIBPATHS) $(SHL1TARGETN)
+    $(SOLARENV)$/bin$/checkdll.sh -L$(LB) -L$(SOLARLIBDIR) $(EXTRALIBPATHS1) $(SHL1TARGETN)
 .ENDIF				# "$(SHL1NOCHECK)"!=""
 .ENDIF
 .ELSE			# "$(OS)"=="MACOSX"
@@ -451,7 +459,7 @@ $(SHL1TARGETN) : \
 .IF "$(SHL1NOCHECK)"==""
     -$(RM) $(SHL1TARGETN:d)check_$(SHL1TARGETN:f)
     $(RENAME) $(SHL1TARGETN) $(SHL1TARGETN:d)check_$(SHL1TARGETN:f)
-    $(SOLARENV)$/bin$/checkdll.sh -L$(LB) -L$(SOLARLIBDIR) $(EXTRALIBPATHS) $(SHL1TARGETN:d)check_$(SHL1TARGETN:f)
+    $(SOLARENV)$/bin$/checkdll.sh -L$(LB) -L$(SOLARLIBDIR) $(EXTRALIBPATHS1) $(SHL1TARGETN:d)check_$(SHL1TARGETN:f)
 .ENDIF				# "$(SHL1NOCHECK)"!=""
 .ENDIF			# "$(UPDATER)"=="YES"
 .ENDIF			# "$(OS)"=="MACOSX"
@@ -572,6 +580,14 @@ SHL2LINKFLAGS+=$(LINKFLAGSRUNPATH_$(SHL2RPATH))
 SHL2DEF*=$(MISC)$/$(SHL2TARGET).def
 .ENDIF			# "$(SHL2USE_EXPORTS)"==""
 
+EXTRALIBPATHS2=$(EXTRALIBPATHS)
+.IF "$(UPDATER)"=="YES"
+.IF "$(SHL2NOCHECK)"==""
+.IF "$(SOLAR_STLLIBPATH)"!=""
+EXTRALIBPATHS2+=-L$(SOLAR_STLLIBPATH)
+.ENDIF
+.ENDIF				# "$(SHL2NOCHECK)"!=""
+.ENDIF
 #+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 #+++++++++++    version object      ++++++++++++++++++++++++++++++++++++++++
 #+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -773,7 +789,7 @@ $(MISC)$/%linkinc.ls:
 .IF "$(GUI)" == "OS2"
 #21/02/2006 YD dll names must be 8.3, invoke fix script
 #check osl/os2/module.c/osl_loadModule()
-SHL2TARGET8=$(shell @fix_shl.cmd $(SHL2TARGET))
+SHL2TARGET8=$(shell @fix_shl $(SHL2TARGET))
 .ENDIF
 
 .IF "$(GUI)" == "OS2"
@@ -976,7 +992,7 @@ $(SHL2TARGETN) : \
     @macosx-create-bundle $@
 .IF "$(UPDATER)"=="YES"
 .IF "$(SHL2NOCHECK)"==""
-    $(SOLARENV)$/bin$/checkdll.sh -L$(LB) -L$(SOLARLIBDIR) $(EXTRALIBPATHS) $(SHL2TARGETN)
+    $(SOLARENV)$/bin$/checkdll.sh -L$(LB) -L$(SOLARLIBDIR) $(EXTRALIBPATHS2) $(SHL2TARGETN)
 .ENDIF				# "$(SHL2NOCHECK)"!=""
 .ENDIF
 .ELSE			# "$(OS)"=="MACOSX"
@@ -991,7 +1007,7 @@ $(SHL2TARGETN) : \
 .IF "$(SHL2NOCHECK)"==""
     -$(RM) $(SHL2TARGETN:d)check_$(SHL2TARGETN:f)
     $(RENAME) $(SHL2TARGETN) $(SHL2TARGETN:d)check_$(SHL2TARGETN:f)
-    $(SOLARENV)$/bin$/checkdll.sh -L$(LB) -L$(SOLARLIBDIR) $(EXTRALIBPATHS) $(SHL2TARGETN:d)check_$(SHL2TARGETN:f)
+    $(SOLARENV)$/bin$/checkdll.sh -L$(LB) -L$(SOLARLIBDIR) $(EXTRALIBPATHS2) $(SHL2TARGETN:d)check_$(SHL2TARGETN:f)
 .ENDIF				# "$(SHL2NOCHECK)"!=""
 .ENDIF			# "$(UPDATER)"=="YES"
 .ENDIF			# "$(OS)"=="MACOSX"
@@ -1112,6 +1128,14 @@ SHL3LINKFLAGS+=$(LINKFLAGSRUNPATH_$(SHL3RPATH))
 SHL3DEF*=$(MISC)$/$(SHL3TARGET).def
 .ENDIF			# "$(SHL3USE_EXPORTS)"==""
 
+EXTRALIBPATHS3=$(EXTRALIBPATHS)
+.IF "$(UPDATER)"=="YES"
+.IF "$(SHL3NOCHECK)"==""
+.IF "$(SOLAR_STLLIBPATH)"!=""
+EXTRALIBPATHS3+=-L$(SOLAR_STLLIBPATH)
+.ENDIF
+.ENDIF				# "$(SHL3NOCHECK)"!=""
+.ENDIF
 #+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 #+++++++++++    version object      ++++++++++++++++++++++++++++++++++++++++
 #+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -1313,7 +1337,7 @@ $(MISC)$/%linkinc.ls:
 .IF "$(GUI)" == "OS2"
 #21/02/2006 YD dll names must be 8.3, invoke fix script
 #check osl/os2/module.c/osl_loadModule()
-SHL3TARGET8=$(shell @fix_shl.cmd $(SHL3TARGET))
+SHL3TARGET8=$(shell @fix_shl $(SHL3TARGET))
 .ENDIF
 
 .IF "$(GUI)" == "OS2"
@@ -1516,7 +1540,7 @@ $(SHL3TARGETN) : \
     @macosx-create-bundle $@
 .IF "$(UPDATER)"=="YES"
 .IF "$(SHL3NOCHECK)"==""
-    $(SOLARENV)$/bin$/checkdll.sh -L$(LB) -L$(SOLARLIBDIR) $(EXTRALIBPATHS) $(SHL3TARGETN)
+    $(SOLARENV)$/bin$/checkdll.sh -L$(LB) -L$(SOLARLIBDIR) $(EXTRALIBPATHS3) $(SHL3TARGETN)
 .ENDIF				# "$(SHL3NOCHECK)"!=""
 .ENDIF
 .ELSE			# "$(OS)"=="MACOSX"
@@ -1531,7 +1555,7 @@ $(SHL3TARGETN) : \
 .IF "$(SHL3NOCHECK)"==""
     -$(RM) $(SHL3TARGETN:d)check_$(SHL3TARGETN:f)
     $(RENAME) $(SHL3TARGETN) $(SHL3TARGETN:d)check_$(SHL3TARGETN:f)
-    $(SOLARENV)$/bin$/checkdll.sh -L$(LB) -L$(SOLARLIBDIR) $(EXTRALIBPATHS) $(SHL3TARGETN:d)check_$(SHL3TARGETN:f)
+    $(SOLARENV)$/bin$/checkdll.sh -L$(LB) -L$(SOLARLIBDIR) $(EXTRALIBPATHS3) $(SHL3TARGETN:d)check_$(SHL3TARGETN:f)
 .ENDIF				# "$(SHL3NOCHECK)"!=""
 .ENDIF			# "$(UPDATER)"=="YES"
 .ENDIF			# "$(OS)"=="MACOSX"
@@ -1652,6 +1676,14 @@ SHL4LINKFLAGS+=$(LINKFLAGSRUNPATH_$(SHL4RPATH))
 SHL4DEF*=$(MISC)$/$(SHL4TARGET).def
 .ENDIF			# "$(SHL4USE_EXPORTS)"==""
 
+EXTRALIBPATHS4=$(EXTRALIBPATHS)
+.IF "$(UPDATER)"=="YES"
+.IF "$(SHL4NOCHECK)"==""
+.IF "$(SOLAR_STLLIBPATH)"!=""
+EXTRALIBPATHS4+=-L$(SOLAR_STLLIBPATH)
+.ENDIF
+.ENDIF				# "$(SHL4NOCHECK)"!=""
+.ENDIF
 #+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 #+++++++++++    version object      ++++++++++++++++++++++++++++++++++++++++
 #+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -1853,7 +1885,7 @@ $(MISC)$/%linkinc.ls:
 .IF "$(GUI)" == "OS2"
 #21/02/2006 YD dll names must be 8.3, invoke fix script
 #check osl/os2/module.c/osl_loadModule()
-SHL4TARGET8=$(shell @fix_shl.cmd $(SHL4TARGET))
+SHL4TARGET8=$(shell @fix_shl $(SHL4TARGET))
 .ENDIF
 
 .IF "$(GUI)" == "OS2"
@@ -2056,7 +2088,7 @@ $(SHL4TARGETN) : \
     @macosx-create-bundle $@
 .IF "$(UPDATER)"=="YES"
 .IF "$(SHL4NOCHECK)"==""
-    $(SOLARENV)$/bin$/checkdll.sh -L$(LB) -L$(SOLARLIBDIR) $(EXTRALIBPATHS) $(SHL4TARGETN)
+    $(SOLARENV)$/bin$/checkdll.sh -L$(LB) -L$(SOLARLIBDIR) $(EXTRALIBPATHS4) $(SHL4TARGETN)
 .ENDIF				# "$(SHL4NOCHECK)"!=""
 .ENDIF
 .ELSE			# "$(OS)"=="MACOSX"
@@ -2071,7 +2103,7 @@ $(SHL4TARGETN) : \
 .IF "$(SHL4NOCHECK)"==""
     -$(RM) $(SHL4TARGETN:d)check_$(SHL4TARGETN:f)
     $(RENAME) $(SHL4TARGETN) $(SHL4TARGETN:d)check_$(SHL4TARGETN:f)
-    $(SOLARENV)$/bin$/checkdll.sh -L$(LB) -L$(SOLARLIBDIR) $(EXTRALIBPATHS) $(SHL4TARGETN:d)check_$(SHL4TARGETN:f)
+    $(SOLARENV)$/bin$/checkdll.sh -L$(LB) -L$(SOLARLIBDIR) $(EXTRALIBPATHS4) $(SHL4TARGETN:d)check_$(SHL4TARGETN:f)
 .ENDIF				# "$(SHL4NOCHECK)"!=""
 .ENDIF			# "$(UPDATER)"=="YES"
 .ENDIF			# "$(OS)"=="MACOSX"
@@ -2192,6 +2224,14 @@ SHL5LINKFLAGS+=$(LINKFLAGSRUNPATH_$(SHL5RPATH))
 SHL5DEF*=$(MISC)$/$(SHL5TARGET).def
 .ENDIF			# "$(SHL5USE_EXPORTS)"==""
 
+EXTRALIBPATHS5=$(EXTRALIBPATHS)
+.IF "$(UPDATER)"=="YES"
+.IF "$(SHL5NOCHECK)"==""
+.IF "$(SOLAR_STLLIBPATH)"!=""
+EXTRALIBPATHS5+=-L$(SOLAR_STLLIBPATH)
+.ENDIF
+.ENDIF				# "$(SHL5NOCHECK)"!=""
+.ENDIF
 #+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 #+++++++++++    version object      ++++++++++++++++++++++++++++++++++++++++
 #+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -2393,7 +2433,7 @@ $(MISC)$/%linkinc.ls:
 .IF "$(GUI)" == "OS2"
 #21/02/2006 YD dll names must be 8.3, invoke fix script
 #check osl/os2/module.c/osl_loadModule()
-SHL5TARGET8=$(shell @fix_shl.cmd $(SHL5TARGET))
+SHL5TARGET8=$(shell @fix_shl $(SHL5TARGET))
 .ENDIF
 
 .IF "$(GUI)" == "OS2"
@@ -2596,7 +2636,7 @@ $(SHL5TARGETN) : \
     @macosx-create-bundle $@
 .IF "$(UPDATER)"=="YES"
 .IF "$(SHL5NOCHECK)"==""
-    $(SOLARENV)$/bin$/checkdll.sh -L$(LB) -L$(SOLARLIBDIR) $(EXTRALIBPATHS) $(SHL5TARGETN)
+    $(SOLARENV)$/bin$/checkdll.sh -L$(LB) -L$(SOLARLIBDIR) $(EXTRALIBPATHS5) $(SHL5TARGETN)
 .ENDIF				# "$(SHL5NOCHECK)"!=""
 .ENDIF
 .ELSE			# "$(OS)"=="MACOSX"
@@ -2611,7 +2651,7 @@ $(SHL5TARGETN) : \
 .IF "$(SHL5NOCHECK)"==""
     -$(RM) $(SHL5TARGETN:d)check_$(SHL5TARGETN:f)
     $(RENAME) $(SHL5TARGETN) $(SHL5TARGETN:d)check_$(SHL5TARGETN:f)
-    $(SOLARENV)$/bin$/checkdll.sh -L$(LB) -L$(SOLARLIBDIR) $(EXTRALIBPATHS) $(SHL5TARGETN:d)check_$(SHL5TARGETN:f)
+    $(SOLARENV)$/bin$/checkdll.sh -L$(LB) -L$(SOLARLIBDIR) $(EXTRALIBPATHS5) $(SHL5TARGETN:d)check_$(SHL5TARGETN:f)
 .ENDIF				# "$(SHL5NOCHECK)"!=""
 .ENDIF			# "$(UPDATER)"=="YES"
 .ENDIF			# "$(OS)"=="MACOSX"
@@ -2732,6 +2772,14 @@ SHL6LINKFLAGS+=$(LINKFLAGSRUNPATH_$(SHL6RPATH))
 SHL6DEF*=$(MISC)$/$(SHL6TARGET).def
 .ENDIF			# "$(SHL6USE_EXPORTS)"==""
 
+EXTRALIBPATHS6=$(EXTRALIBPATHS)
+.IF "$(UPDATER)"=="YES"
+.IF "$(SHL6NOCHECK)"==""
+.IF "$(SOLAR_STLLIBPATH)"!=""
+EXTRALIBPATHS6+=-L$(SOLAR_STLLIBPATH)
+.ENDIF
+.ENDIF				# "$(SHL6NOCHECK)"!=""
+.ENDIF
 #+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 #+++++++++++    version object      ++++++++++++++++++++++++++++++++++++++++
 #+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -2933,7 +2981,7 @@ $(MISC)$/%linkinc.ls:
 .IF "$(GUI)" == "OS2"
 #21/02/2006 YD dll names must be 8.3, invoke fix script
 #check osl/os2/module.c/osl_loadModule()
-SHL6TARGET8=$(shell @fix_shl.cmd $(SHL6TARGET))
+SHL6TARGET8=$(shell @fix_shl $(SHL6TARGET))
 .ENDIF
 
 .IF "$(GUI)" == "OS2"
@@ -3136,7 +3184,7 @@ $(SHL6TARGETN) : \
     @macosx-create-bundle $@
 .IF "$(UPDATER)"=="YES"
 .IF "$(SHL6NOCHECK)"==""
-    $(SOLARENV)$/bin$/checkdll.sh -L$(LB) -L$(SOLARLIBDIR) $(EXTRALIBPATHS) $(SHL6TARGETN)
+    $(SOLARENV)$/bin$/checkdll.sh -L$(LB) -L$(SOLARLIBDIR) $(EXTRALIBPATHS6) $(SHL6TARGETN)
 .ENDIF				# "$(SHL6NOCHECK)"!=""
 .ENDIF
 .ELSE			# "$(OS)"=="MACOSX"
@@ -3151,7 +3199,7 @@ $(SHL6TARGETN) : \
 .IF "$(SHL6NOCHECK)"==""
     -$(RM) $(SHL6TARGETN:d)check_$(SHL6TARGETN:f)
     $(RENAME) $(SHL6TARGETN) $(SHL6TARGETN:d)check_$(SHL6TARGETN:f)
-    $(SOLARENV)$/bin$/checkdll.sh -L$(LB) -L$(SOLARLIBDIR) $(EXTRALIBPATHS) $(SHL6TARGETN:d)check_$(SHL6TARGETN:f)
+    $(SOLARENV)$/bin$/checkdll.sh -L$(LB) -L$(SOLARLIBDIR) $(EXTRALIBPATHS6) $(SHL6TARGETN:d)check_$(SHL6TARGETN:f)
 .ENDIF				# "$(SHL6NOCHECK)"!=""
 .ENDIF			# "$(UPDATER)"=="YES"
 .ENDIF			# "$(OS)"=="MACOSX"
@@ -3272,6 +3320,14 @@ SHL7LINKFLAGS+=$(LINKFLAGSRUNPATH_$(SHL7RPATH))
 SHL7DEF*=$(MISC)$/$(SHL7TARGET).def
 .ENDIF			# "$(SHL7USE_EXPORTS)"==""
 
+EXTRALIBPATHS7=$(EXTRALIBPATHS)
+.IF "$(UPDATER)"=="YES"
+.IF "$(SHL7NOCHECK)"==""
+.IF "$(SOLAR_STLLIBPATH)"!=""
+EXTRALIBPATHS7+=-L$(SOLAR_STLLIBPATH)
+.ENDIF
+.ENDIF				# "$(SHL7NOCHECK)"!=""
+.ENDIF
 #+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 #+++++++++++    version object      ++++++++++++++++++++++++++++++++++++++++
 #+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -3473,7 +3529,7 @@ $(MISC)$/%linkinc.ls:
 .IF "$(GUI)" == "OS2"
 #21/02/2006 YD dll names must be 8.3, invoke fix script
 #check osl/os2/module.c/osl_loadModule()
-SHL7TARGET8=$(shell @fix_shl.cmd $(SHL7TARGET))
+SHL7TARGET8=$(shell @fix_shl $(SHL7TARGET))
 .ENDIF
 
 .IF "$(GUI)" == "OS2"
@@ -3676,7 +3732,7 @@ $(SHL7TARGETN) : \
     @macosx-create-bundle $@
 .IF "$(UPDATER)"=="YES"
 .IF "$(SHL7NOCHECK)"==""
-    $(SOLARENV)$/bin$/checkdll.sh -L$(LB) -L$(SOLARLIBDIR) $(EXTRALIBPATHS) $(SHL7TARGETN)
+    $(SOLARENV)$/bin$/checkdll.sh -L$(LB) -L$(SOLARLIBDIR) $(EXTRALIBPATHS7) $(SHL7TARGETN)
 .ENDIF				# "$(SHL7NOCHECK)"!=""
 .ENDIF
 .ELSE			# "$(OS)"=="MACOSX"
@@ -3691,7 +3747,7 @@ $(SHL7TARGETN) : \
 .IF "$(SHL7NOCHECK)"==""
     -$(RM) $(SHL7TARGETN:d)check_$(SHL7TARGETN:f)
     $(RENAME) $(SHL7TARGETN) $(SHL7TARGETN:d)check_$(SHL7TARGETN:f)
-    $(SOLARENV)$/bin$/checkdll.sh -L$(LB) -L$(SOLARLIBDIR) $(EXTRALIBPATHS) $(SHL7TARGETN:d)check_$(SHL7TARGETN:f)
+    $(SOLARENV)$/bin$/checkdll.sh -L$(LB) -L$(SOLARLIBDIR) $(EXTRALIBPATHS7) $(SHL7TARGETN:d)check_$(SHL7TARGETN:f)
 .ENDIF				# "$(SHL7NOCHECK)"!=""
 .ENDIF			# "$(UPDATER)"=="YES"
 .ENDIF			# "$(OS)"=="MACOSX"
@@ -3812,6 +3868,14 @@ SHL8LINKFLAGS+=$(LINKFLAGSRUNPATH_$(SHL8RPATH))
 SHL8DEF*=$(MISC)$/$(SHL8TARGET).def
 .ENDIF			# "$(SHL8USE_EXPORTS)"==""
 
+EXTRALIBPATHS8=$(EXTRALIBPATHS)
+.IF "$(UPDATER)"=="YES"
+.IF "$(SHL8NOCHECK)"==""
+.IF "$(SOLAR_STLLIBPATH)"!=""
+EXTRALIBPATHS8+=-L$(SOLAR_STLLIBPATH)
+.ENDIF
+.ENDIF				# "$(SHL8NOCHECK)"!=""
+.ENDIF
 #+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 #+++++++++++    version object      ++++++++++++++++++++++++++++++++++++++++
 #+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -4013,7 +4077,7 @@ $(MISC)$/%linkinc.ls:
 .IF "$(GUI)" == "OS2"
 #21/02/2006 YD dll names must be 8.3, invoke fix script
 #check osl/os2/module.c/osl_loadModule()
-SHL8TARGET8=$(shell @fix_shl.cmd $(SHL8TARGET))
+SHL8TARGET8=$(shell @fix_shl $(SHL8TARGET))
 .ENDIF
 
 .IF "$(GUI)" == "OS2"
@@ -4216,7 +4280,7 @@ $(SHL8TARGETN) : \
     @macosx-create-bundle $@
 .IF "$(UPDATER)"=="YES"
 .IF "$(SHL8NOCHECK)"==""
-    $(SOLARENV)$/bin$/checkdll.sh -L$(LB) -L$(SOLARLIBDIR) $(EXTRALIBPATHS) $(SHL8TARGETN)
+    $(SOLARENV)$/bin$/checkdll.sh -L$(LB) -L$(SOLARLIBDIR) $(EXTRALIBPATHS8) $(SHL8TARGETN)
 .ENDIF				# "$(SHL8NOCHECK)"!=""
 .ENDIF
 .ELSE			# "$(OS)"=="MACOSX"
@@ -4231,7 +4295,7 @@ $(SHL8TARGETN) : \
 .IF "$(SHL8NOCHECK)"==""
     -$(RM) $(SHL8TARGETN:d)check_$(SHL8TARGETN:f)
     $(RENAME) $(SHL8TARGETN) $(SHL8TARGETN:d)check_$(SHL8TARGETN:f)
-    $(SOLARENV)$/bin$/checkdll.sh -L$(LB) -L$(SOLARLIBDIR) $(EXTRALIBPATHS) $(SHL8TARGETN:d)check_$(SHL8TARGETN:f)
+    $(SOLARENV)$/bin$/checkdll.sh -L$(LB) -L$(SOLARLIBDIR) $(EXTRALIBPATHS8) $(SHL8TARGETN:d)check_$(SHL8TARGETN:f)
 .ENDIF				# "$(SHL8NOCHECK)"!=""
 .ENDIF			# "$(UPDATER)"=="YES"
 .ENDIF			# "$(OS)"=="MACOSX"
@@ -4352,6 +4416,14 @@ SHL9LINKFLAGS+=$(LINKFLAGSRUNPATH_$(SHL9RPATH))
 SHL9DEF*=$(MISC)$/$(SHL9TARGET).def
 .ENDIF			# "$(SHL9USE_EXPORTS)"==""
 
+EXTRALIBPATHS9=$(EXTRALIBPATHS)
+.IF "$(UPDATER)"=="YES"
+.IF "$(SHL9NOCHECK)"==""
+.IF "$(SOLAR_STLLIBPATH)"!=""
+EXTRALIBPATHS9+=-L$(SOLAR_STLLIBPATH)
+.ENDIF
+.ENDIF				# "$(SHL9NOCHECK)"!=""
+.ENDIF
 #+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 #+++++++++++    version object      ++++++++++++++++++++++++++++++++++++++++
 #+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -4553,7 +4625,7 @@ $(MISC)$/%linkinc.ls:
 .IF "$(GUI)" == "OS2"
 #21/02/2006 YD dll names must be 8.3, invoke fix script
 #check osl/os2/module.c/osl_loadModule()
-SHL9TARGET8=$(shell @fix_shl.cmd $(SHL9TARGET))
+SHL9TARGET8=$(shell @fix_shl $(SHL9TARGET))
 .ENDIF
 
 .IF "$(GUI)" == "OS2"
@@ -4756,7 +4828,7 @@ $(SHL9TARGETN) : \
     @macosx-create-bundle $@
 .IF "$(UPDATER)"=="YES"
 .IF "$(SHL9NOCHECK)"==""
-    $(SOLARENV)$/bin$/checkdll.sh -L$(LB) -L$(SOLARLIBDIR) $(EXTRALIBPATHS) $(SHL9TARGETN)
+    $(SOLARENV)$/bin$/checkdll.sh -L$(LB) -L$(SOLARLIBDIR) $(EXTRALIBPATHS9) $(SHL9TARGETN)
 .ENDIF				# "$(SHL9NOCHECK)"!=""
 .ENDIF
 .ELSE			# "$(OS)"=="MACOSX"
@@ -4771,7 +4843,7 @@ $(SHL9TARGETN) : \
 .IF "$(SHL9NOCHECK)"==""
     -$(RM) $(SHL9TARGETN:d)check_$(SHL9TARGETN:f)
     $(RENAME) $(SHL9TARGETN) $(SHL9TARGETN:d)check_$(SHL9TARGETN:f)
-    $(SOLARENV)$/bin$/checkdll.sh -L$(LB) -L$(SOLARLIBDIR) $(EXTRALIBPATHS) $(SHL9TARGETN:d)check_$(SHL9TARGETN:f)
+    $(SOLARENV)$/bin$/checkdll.sh -L$(LB) -L$(SOLARLIBDIR) $(EXTRALIBPATHS9) $(SHL9TARGETN:d)check_$(SHL9TARGETN:f)
 .ENDIF				# "$(SHL9NOCHECK)"!=""
 .ENDIF			# "$(UPDATER)"=="YES"
 .ENDIF			# "$(OS)"=="MACOSX"
@@ -4892,6 +4964,14 @@ SHL10LINKFLAGS+=$(LINKFLAGSRUNPATH_$(SHL10RPATH))
 SHL10DEF*=$(MISC)$/$(SHL10TARGET).def
 .ENDIF			# "$(SHL10USE_EXPORTS)"==""
 
+EXTRALIBPATHS10=$(EXTRALIBPATHS)
+.IF "$(UPDATER)"=="YES"
+.IF "$(SHL10NOCHECK)"==""
+.IF "$(SOLAR_STLLIBPATH)"!=""
+EXTRALIBPATHS10+=-L$(SOLAR_STLLIBPATH)
+.ENDIF
+.ENDIF				# "$(SHL10NOCHECK)"!=""
+.ENDIF
 #+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 #+++++++++++    version object      ++++++++++++++++++++++++++++++++++++++++
 #+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -5093,7 +5173,7 @@ $(MISC)$/%linkinc.ls:
 .IF "$(GUI)" == "OS2"
 #21/02/2006 YD dll names must be 8.3, invoke fix script
 #check osl/os2/module.c/osl_loadModule()
-SHL10TARGET8=$(shell @fix_shl.cmd $(SHL10TARGET))
+SHL10TARGET8=$(shell @fix_shl $(SHL10TARGET))
 .ENDIF
 
 .IF "$(GUI)" == "OS2"
@@ -5296,7 +5376,7 @@ $(SHL10TARGETN) : \
     @macosx-create-bundle $@
 .IF "$(UPDATER)"=="YES"
 .IF "$(SHL10NOCHECK)"==""
-    $(SOLARENV)$/bin$/checkdll.sh -L$(LB) -L$(SOLARLIBDIR) $(EXTRALIBPATHS) $(SHL10TARGETN)
+    $(SOLARENV)$/bin$/checkdll.sh -L$(LB) -L$(SOLARLIBDIR) $(EXTRALIBPATHS10) $(SHL10TARGETN)
 .ENDIF				# "$(SHL10NOCHECK)"!=""
 .ENDIF
 .ELSE			# "$(OS)"=="MACOSX"
@@ -5311,7 +5391,7 @@ $(SHL10TARGETN) : \
 .IF "$(SHL10NOCHECK)"==""
     -$(RM) $(SHL10TARGETN:d)check_$(SHL10TARGETN:f)
     $(RENAME) $(SHL10TARGETN) $(SHL10TARGETN:d)check_$(SHL10TARGETN:f)
-    $(SOLARENV)$/bin$/checkdll.sh -L$(LB) -L$(SOLARLIBDIR) $(EXTRALIBPATHS) $(SHL10TARGETN:d)check_$(SHL10TARGETN:f)
+    $(SOLARENV)$/bin$/checkdll.sh -L$(LB) -L$(SOLARLIBDIR) $(EXTRALIBPATHS10) $(SHL10TARGETN:d)check_$(SHL10TARGETN:f)
 .ENDIF				# "$(SHL10NOCHECK)"!=""
 .ENDIF			# "$(UPDATER)"=="YES"
 .ENDIF			# "$(OS)"=="MACOSX"

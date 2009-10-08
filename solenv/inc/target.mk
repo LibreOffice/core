@@ -226,7 +226,7 @@ NEWCLASS+=$(CLASSGENDIR)
 .ENDIF			# "$(GENJAVACLASSFILES)"!=""
 .IF "$(NEWCLASS)"!=""
 # See iz36027 for the reason for the strange $(subst ..) construct
-CLASSPATH:=.$(PATH_SEPERATOR)$(CLASSDIR)$(PATH_SEPERATOR)$(XCLASSPATH)$(PATH_SEPERATOR){$(subst,%Z*Z%,$(PATH_SEPERATOR) $(NEWCLASS:s/ /%Z*Z%/))}
+CLASSPATH:=.$(PATH_SEPERATOR)$(CLASSDIR)$(PATH_SEPERATOR)$(XCLASSPATH)$(PATH_SEPERATOR){$(subst,%Z*Z%,$(PATH_SEPERATOR) $(NEWCLASS:s/ /%Z*Z%/))}$(PATH_SEPERATOR)$(SOLARLIBDIR)
 .ENDIF			# "$(NEWCLASS)"!=""
 .ENDIF			# "$(L10N_framework)"==""
 
@@ -1442,9 +1442,9 @@ $(SCP_PRODUCT_TYPE):
 
 .IF "$(COMPVERMK)"!=""
 .IF "$(UPDATER)"!="" || "$(CWS_WORK_STAMP)"!=""
-.IF "$(COMPATH)"!="$(COMPATH_STORED)"
+.IF "$(COMPATH:s!\!/!)"!="$(COMPATH_STORED)"
 COMPVERMK_PHONY:=.PHONY
-.ENDIF			# "$(COMPATH)"!="$(COMPATH_STORED)"
+.ENDIF			# "$(COMPATH:s!\!/!)"!="$(COMPATH_STORED)"
 COMPVTMP:=$(mktmp iii)
 "$(COMPVERMK)" $(COMPVERMK_PHONY): $(SOLARVERSION)$/$(INPATH)$/inc$(UPDMINOREXT)$/minormkchanged.flg
 .IF "$(CCNUMVER)"!=""
@@ -1456,9 +1456,9 @@ COMPVTMP:=$(mktmp iii)
     @echo CCNUMVER:=$(CCNUMVER) >> $(COMPVTMP)
     @echo CCVER:=$(CCVER:s/-/ /:1) >> $(COMPVTMP)
     @echo CDEFS+=-DCPPU_ENV=$(COMNAME) >> $(COMPVTMP)
-    @echo COMPATH_STORED:=$(COMPATH) >> $(COMPVTMP)
+    @echo COMPATH_STORED:=$(COMPATH:s!\!/!) >> $(COMPVTMP)
     @@-$(RM) $(@)_$(COMPVTMP:b)
-    @$(TYPE) $(COMPVTMP) > $(@)_$(COMPVTMP:b)
+    @$(TYPE) $(COMPVTMP) | tr -d "\015" > $(@)_$(COMPVTMP:b)
     @$(IFEXIST) $@ $(THEN) $(RM:s/+//) $@ >& $(NULLDEV) $(FI)
     @-$(RENAME) $(@)_$(COMPVTMP:b) $@
     @@-$(RM) $(@)_$(COMPVTMP:b)

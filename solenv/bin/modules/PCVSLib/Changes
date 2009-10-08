@@ -1,8 +1,0 @@
-Revision history for Perl extension PCVSLib.
-
-0.01  Thu Dec 30 14:11:26 2004
-	- original version; created by h2xs 1.23 with options
-		-b 5.6.0 -X -n PCVSLib
-0.02  Thu Mar 16  18:30:00 2006
-    - first implementation committed to OOo
-

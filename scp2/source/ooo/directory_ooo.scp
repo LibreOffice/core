@@ -430,11 +430,6 @@ Directory gid_Dir_Share_Xslt_Docbook
     DosName = "docbook";
 End
 
-Directory gid_Dir_Share_Xslt_Wiki
-    ParentID = gid_Dir_Share_Xslt;
-    DosName = "wiki";
-End
-
 Directory gid_Dir_Share_Xslt_Common
     ParentID = gid_Dir_Share_Xslt;
     DosName = "common";
@@ -885,6 +880,11 @@ End
 Directory gid_Dir_Share_Registry_Modules_Oo_Inet
     ParentID = gid_Dir_Share_Registry_Modules_Oo;
     HostName = "Inet";
+End
+
+Directory gid_Dir_Share_Registry_Modules_Oo_Office_Accelerators
+    ParentID = gid_Dir_Share_Registry_Modules_Oo_Office;
+    HostName = "Accelerators";
 End
 
 Directory gid_Dir_Share_Registry_Modules_Oo_Office_Common

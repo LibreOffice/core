@@ -427,7 +427,7 @@ End
 RegistryItem gid_Regitem_Software_Manufacturer_Productname_Productversion_Capabilities_FileAssociations_sxm
     ParentID = PREDEFINED_HKEY_LOCAL_MACHINE;
     Subkey = "Software\%MANUFACTURER\%PRODUCTNAME%PRODUCTADDON\%PRODUCTVERSION\Capabilities\FileAssociations";
-    ModuleID = gid_Module_Root;
+    ModuleID = gid_Module_Prg_Math_Bin;
     Name = ".sxm";
     Value = "soffice.StarMathDocument.6";
     Styles = ();
@@ -489,7 +489,7 @@ End
 RegistryItem gid_Regitem_Software_Manufacturer_Productname_Productversion_Capabilities_FileAssociations_odf
     ParentID = PREDEFINED_HKEY_LOCAL_MACHINE;
     Subkey = "Software\%MANUFACTURER\%PRODUCTNAME%PRODUCTADDON\%PRODUCTVERSION\Capabilities\FileAssociations";
-    ModuleID = gid_Module_Root;
+    ModuleID = gid_Module_Prg_Math_Bin;
     Name = ".odf";
     Value = "opendocument.MathDocument.1";
     Styles = ();
@@ -648,7 +648,7 @@ End
 // RegistryItem gid_Regitem_Software_Manufacturer_Productname_Productversion_Capabilities_FileAssociations_Mml
 //     ParentID = PREDEFINED_HKEY_LOCAL_MACHINE;
 //     Subkey = "Software\%MANUFACTURER\%PRODUCTNAME%PRODUCTADDON\%PRODUCTVERSION\Capabilities\FileAssociations";
-//     ModuleID = gid_Module_Root;
+//     ModuleID = gid_Module_Prg_Math_Bin;
 //     Name = ".mml";
 //     Value = "opendocument.MathDocument.1";
 //     Styles = ();

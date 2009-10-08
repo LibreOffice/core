@@ -56,11 +56,12 @@ use Cws;
 ( my $script_name = $0 ) =~ s/^.*\b(\w+)\.pl$/$1/;
 
 my $is_debug = 1;           # enable debug
-my $opt_master = '';        # option: master workspace
-my $opt_child  = '';        # option: child workspace
+my $opt_master;             # option: master workspace
+my $opt_child;              # option: child workspace
+my $opt_milestone;              # option: milestone
 my $opt_testrunName;        # option: testrunName
-my $opt_testrunPlatform;    # option: testrunName
-my $opt_resultPage;         # option: testrunName
+my $opt_testrunPlatform;    # option: testrunPlatfrom
+my $opt_resultPage;         # option: resultPage
 
 
 #### main #####
@@ -76,33 +77,42 @@ sub testresult
     my $status = shift;
     # get master and child workspace
     my $masterws = $opt_master ? uc($opt_master) : $ENV{WORK_STAMP};
-    my $childws  = $opt_child  ? $opt_child  : $ENV{CWS_WORK_STAMP};
+    my $milestone = $opt_milestone ? $opt_milestone : $ENV{UPDMINOR};
+    my $childws  = $opt_milestone ? undef : ( $opt_child  ? $opt_child  : $ENV{CWS_WORK_STAMP} );
 
     if ( !defined($masterws) ) {
         print_error("Can't determine master workspace environment.\n"
                     . "Please initialize environment with setsolar ...", 1);
     }
 
-    if ( !defined($childws) ) {
-        print_error("Can't determine child workspace environment.\n"
+    if ( !defined($childws) && !defined($milestone) ) {
+        print_error("Can't determine child workspace environment or milestone.\n"
                     . "Please initialize environment with setsolar ...", 1);
     }
     if ( !defined($opt_resultPage) ) {
     $opt_resultPage="";
     }
     my $cws = Cws->new();
-    $cws->child($childws);
+    if ( defined($childws) ) {
+        $cws->child($childws);
+    }
     $cws->master($masterws);
-    my $id = $cws->eis_id();
     my $eis = $cws->eis();
 
     no strict;
+    my $result='';
 
-    if ( is_valid_cws($cws) ) {
-        my $result=$eis->submitTestResult($id,$opt_testrunName,$opt_testrunPlatform, $opt_resultPage, $status);
+    if ( defined($childws) ) {
+        my $id = $cws->eis_id();
+        if ( is_valid_cws($cws) ) {
+            $result=$eis->submitTestResult($id,$opt_testrunName,$opt_testrunPlatform, $opt_resultPage, $status);
     } else {
-        print STDERR "cws is not valid";
+         print STDERR "cws is not valid";
     }
+    } else {
+        $result=$eis->submitTestResultMWS($masterws,$milestone,$opt_testrunName,$opt_testrunPlatform, $opt_resultPage, $status);
+    }
+
     exit(0)
 }
 
@@ -124,11 +134,15 @@ sub is_valid_cws
 sub parse_options
 {
     # parse options and do some sanity checks
+    Getopt::Long::Configure("no_ignore_case");
     my $help = 0;
-    my $success = GetOptions('h' => \$help, 'm=s' => \$opt_master, 'c=s'=> \$opt_child, 'n=s' => \$opt_testrunName, 'p=s' => \$opt_testrunPlatform , 'r=s' => \$opt_resultPage );
+    my $success = GetOptions('h' => \$help, 'M=s' => \$opt_master, 'm=s' => \$opt_milestone, 'c=s' => \$opt_child, 'n=s' => \$opt_testrunName, 'p=s' => \$opt_testrunPlatform , 'r=s' => \$opt_resultPage );
     if ( $help || !$success || $#ARGV < 0 || (!defined($opt_testrunName)) || ( !defined($opt_testrunPlatform)) ) {
         usage();
         exit(1);
+    }
+    if ( defined($opt_milestone) && defined($opt_child) ) {
+    print_error("-m and -c are mutually exclusive options",1);
     }
 
     return $ARGV[0];
@@ -160,13 +174,14 @@ sub print_error
 
 sub usage
 {
-    print STDERR "Usage: cwstestresult[-h] [-m masterws] [-c childws] <-n testrunName> <-p testrunPlatform> <-r resultPage> statusName\n";
+    print STDERR "Usage: cwstestresult[-h] [-m masterws] [-m milestone|-c childws] <-n testrunName> <-p testrunPlatform> <-r resultPage> statusName\n";
     print STDERR "\n";
-    print STDERR "Publish result of CWS test to EIS\n";
+    print STDERR "Publish result of CWS- or milestone-test to EIS\n";
     print STDERR "\n";
     print STDERR "Options:\n";
     print STDERR "\t-h\t\t\thelp\n";
-    print STDERR "\t-m master\t\toverride MWS specified in environment\n";
+    print STDERR "\t-M master\t\toverride MWS specified in environment\n";
+    print STDERR "\t-m milestone\t\toverride milestone specified in environment\n";
     print STDERR "\t-c child\t\toverride CWS specified in environment\n";
     print STDERR "\t-n testrunName\t\tspecifiy name of the test\n";
     print STDERR "\t-p testrunPlatform\tspecify platform where the test ran on\n";

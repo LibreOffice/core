@@ -121,25 +121,9 @@ void Connector::Paint( const Rectangle& rRect )
     //SolDep *pSoldep = pApp->GetSolDep();
     if (msbHideMode)
     {
-    /*
-        if ((mpStartWin->GetMarkMode() == 0) || (mpEndWin->GetMarkMode() == 0))
-        {
-            //bVisible = FALSE;
-            UpdateVisibility();
-            fprintf( ((MyApp*)GetpApp())->pDebugFile, "FALSE connctr: Start: %s %i - End: %s %i\n",
-                mpStartWin->GetBodyText().GetBuffer(),mpStartWin->GetMarkMode(),
-                mpEndWin->GetBodyText().GetBuffer(),mpEndWin->GetMarkMode());
-        } else
-        {
-            bVisible = TRUE;
-            fprintf( ((MyApp*)GetpApp())->pDebugFile, "TRUE connctr: Start: %s %i - End: %s %i\n",
-                mpStartWin->GetBodyText().GetBuffer(),mpStartWin->GetMarkMode(),
-                mpEndWin->GetBodyText().GetBuffer(),mpEndWin->GetMarkMode());
-        }
-     */
     if (!(mpStartWin->IsNullObject())) //null_project
     {
-        if (mpStartWin->GetMarkMode() == 0)
+        if ( mpStartWin->GetMarkMode() == 0 || mpStartWin->GetMarkMode() == MARKMODE_DEPENDING )
         {
             mpStartWin->SetViewMask(0); //objwin invisible
         } else
@@ -149,7 +133,7 @@ void Connector::Paint( const Rectangle& rRect )
     }
     if (!(mpEndWin->IsNullObject()))
     {
-        if (mpEndWin->GetMarkMode() == 0)
+        if ( mpEndWin->GetMarkMode() == 0 || mpEndWin->GetMarkMode() == MARKMODE_DEPENDING )
         {
             mpEndWin->SetViewMask(0); //objwin invisible
         } else
@@ -176,6 +160,18 @@ void Connector::Paint( const Rectangle& rRect )
     {
         mpParent->DrawLine( mEnd, mStart );
         mpParent->DrawEllipse( Rectangle( mEnd - Point( 2, 2), mEnd + Point( 2, 2)));
+    }
+}
+
+void Connector::DrawOutput( OutputDevice* pDevice, const Point& rOffset )
+{
+    if ( (mpStartWin->GetBodyText() != ByteString("null")) &&              //null_project
+         (mpEndWin->GetBodyText() != ByteString("null")) && IsVisible())  //null_project
+    {
+        pDevice->DrawLine( pDevice->PixelToLogic( mEnd ) - rOffset, pDevice->PixelToLogic( mStart ) - rOffset );
+        Rectangle aRect( pDevice->PixelToLogic( Rectangle( mEnd - Point( 2, 2), mEnd + Point( 2, 2) ) ) );
+        aRect.Move( -rOffset.X(), -rOffset.Y() );
+        pDevice->DrawEllipse( aRect );
     }
 }
 

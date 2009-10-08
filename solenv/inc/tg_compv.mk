@@ -33,7 +33,7 @@ COMPVERMK:=$(SOLARINCDIR)$/comp_ver.mk
 
 .INCLUDE .IGNORE : $(COMPVERMK)
 
-.IF "$(COMNAME)"=="" || "$(COMPATH)"!="$(COMPATH_STORED)"
+.IF "$(COMNAME)"=="" || "$(COMPATH:s!\!/!)"!="$(COMPATH_STORED)"
 .IF "$(L10N_framework)"==""
 
 COMNAME:=

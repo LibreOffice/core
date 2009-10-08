@@ -138,6 +138,7 @@ public:
         virtual void LoseFocus();
 
         BOOL            ConnectionExistsInAnyDirection( ObjectWin *pWin );
+        void    DrawOutput( OutputDevice* pDevice, const Point& rOffset  );
 };
 
 DECL_DEST_LIST( TmpObjWinList, ObjWinList, ObjectWin* )

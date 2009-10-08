@@ -37,6 +37,7 @@ use installer::files;
 use installer::globals;
 use installer::pathanalyzer;
 use installer::systemactions;
+use installer::worker;
 use installer::windows::idtglobal;
 
 #################################################################################
@@ -51,6 +52,19 @@ sub unpack_cabinet_file
     push( @installer::globals::logfileinfo, $infoline);
 
     my $expandfile = "expand.exe";  # Has to be in the path
+
+    # expand.exe has to be located in the system directory.
+    # Cygwin has another tool expand.exe, that converts tabs to spaces. This cannot be used of course.
+    # But this wrong expand.exe is typically in the PATH before this expand.exe, to unpack
+    # cabinet files.
+
+    if ( $^O =~ /cygwin/i )
+    {
+        $expandfile = $ENV{'SYSTEMROOT'} . "/system32/expand.exe"; # Has to be located in the systemdirectory
+        $expandfile =~ s/\\/\//;
+        if ( ! -f $expandfile ) { exit_program("ERROR: Did not find file $expandfile in the Windows system folder!"); }
+    }
+
     my $expandlogfile = $unpackdir . $installer::globals::separator . "expand.log";
 
     # exclude cabinet file
@@ -60,7 +74,9 @@ sub unpack_cabinet_file
     if ( $^O =~ /cygwin/i ) {
         my $localunpackdir = qx{cygpath -w "$unpackdir"};
         $localunpackdir =~ s/\\/\\\\/g;
-        $systemcall = $expandfile . " " . $cabfilename . " -F:\\\* " . $localunpackdir;
+        $cabfilename =~ s/\\/\\\\/g;
+        $cabfilename =~ s/\s*$//g;
+        $systemcall = $expandfile . " " . $cabfilename . " -F:\* " . $localunpackdir;
     }
     else
     {
@@ -152,9 +168,33 @@ sub extract_tables_from_pcpfile
     my $systemcall = "";
     my $returnvalue = "";
 
+    my $localfullmsidatabasepath = $fullmsidatabasepath;
+
     # Export of all tables by using "*"
 
-    $systemcall = $msidb . " -d " . $fullmsidatabasepath . " -f " . $workdir . " -e $tablelist";
+    if ( $^O =~ /cygwin/i ) {
+        # Copying the msi database locally guarantees the format of the directory.
+        # Otherwise it is defined in the file of UPDATE_DATABASE_LISTNAME
+
+        my $msifilename = $localfullmsidatabasepath;
+        installer::pathanalyzer::make_absolute_filename_to_relative_filename(\$msifilename);
+        my $destdatabasename = $workdir . $installer::globals::separator . $msifilename;
+        installer::systemactions::copy_one_file($localfullmsidatabasepath, $destdatabasename);
+        $localfullmsidatabasepath = $destdatabasename;
+
+        chomp( $localfullmsidatabasepath = qx{cygpath -w "$localfullmsidatabasepath"} );
+        chomp( $workdir = qx{cygpath -w "$workdir"} );
+
+        # msidb.exe really wants backslashes. (And double escaping because system() expands the string.)
+        $localfullmsidatabasepath =~ s/\\/\\\\/g;
+        $workdir =~ s/\\/\\\\/g;
+
+        # and if there are still slashes, they also need to be double backslash
+        $localfullmsidatabasepath =~ s/\//\\\\/g;
+        $workdir =~ s/\//\\\\/g;
+    }
+
+    $systemcall = $msidb . " -d " . $localfullmsidatabasepath . " -f " . $workdir . " -e $tablelist";
     $returnvalue = system($systemcall);
 
     $infoline = "Systemcall: $systemcall\n";
@@ -164,7 +204,7 @@ sub extract_tables_from_pcpfile
     {
         $infoline = "ERROR: Could not execute $systemcall !\n";
         push( @installer::globals::logfileinfo, $infoline);
-        installer::exiter::exit_program("ERROR: Could not exclude tables from pcp file: $fullmsidatabasepath !", "extract_tables_from_pcpfile");
+        installer::exiter::exit_program("ERROR: Could not exclude tables from pcp file: $localfullmsidatabasepath !", "extract_tables_from_pcpfile");
     }
     else
     {
@@ -672,7 +712,16 @@ sub write_sis_info
     my $lastprinted = get_sis_time_string();
     my $lastsavedby = "Installer";
 
-    $systemcall = $msiinfo . " " . "\"" . $msidatabase . "\"" . " -w " . $wordcount . " -s " . "\"" . $lastprinted . "\"" . " -l $lastsavedby";
+    my $localmsidatabase = $msidatabase;
+
+    if( $^O =~ /cygwin/i )
+    {
+        $localmsidatabase = qx{cygpath -w "$localmsidatabase"};
+        $localmsidatabase =~ s/\\/\\\\/g;
+        $localmsidatabase =~ s/\s*$//g;
+    }
+
+    $systemcall = $msiinfo . " " . "\"" . $localmsidatabase . "\"" . " -w " . $wordcount . " -s " . "\"" . $lastprinted . "\"" . " -l $lastsavedby";
     push(@installer::globals::logfileinfo, $systemcall);
     $returnvalue = system($systemcall);
 
@@ -706,7 +755,13 @@ sub make_admin_install
 
     # Unpack all cab files into $helperdir, cab files must be located next to msi database
     my $installdir = $databasepath;
+
+    if ( $^O =~ /cygwin/i ) { $installdir =~ s/\\/\//g; } # backslash to slash
+
     installer::pathanalyzer::get_path_from_fullqualifiedname(\$installdir);
+
+    if ( $^O =~ /cygwin/i ) { $installdir =~ s/\//\\/g; } # slash to backslash
+
     my $databasefilename = $databasepath;
     installer::pathanalyzer::make_absolute_filename_to_relative_filename(\$databasefilename);
 
@@ -720,7 +775,15 @@ sub make_admin_install
 
     for ( my $i = 0; $i <= $#{$cabfiles}; $i++ )
     {
-        my $cabfile = $installdir . $installer::globals::separator . ${$cabfiles}[$i];
+        my $cabfile = "";
+        if ( $^O =~ /cygwin/i )
+        {
+            $cabfile = $installdir . ${$cabfiles}[$i];
+        }
+        else
+        {
+            $cabfile = $installdir . $installer::globals::separator . ${$cabfiles}[$i];
+        }
         unpack_cabinet_file($cabfile, $unpackdir);
     }
 

@@ -1640,4 +1640,41 @@ sub read_complete_directory
     }
 }
 
+##############################################################
+# Reading all files from a directory and its subdirectories
+# Version 2
+##############################################################
+
+sub read_full_directory {
+    my ( $currentdir, $pathstring, $collector ) = @_;
+    my $item;
+    my $fullname;
+    local *DH;
+
+    unless (opendir(DH, $currentdir))
+    {
+        return;
+    }
+    while (defined ($item = readdir(DH)))
+    {
+        next if($item eq "." or $item eq "..");
+        $fullname = $currentdir . $installer::globals::separator . $item;
+        my $sep = "";
+        if ( $pathstring ne "" ) { $sep = $installer::globals::separator; }
+
+        if( -d $fullname)
+        {
+            my $newpathstring = $pathstring . $sep . $item;
+            read_full_directory($fullname, $newpathstring, $collector) if(-d $fullname);
+        }
+        else
+        {
+            my $content = $pathstring . $sep . $item;
+            push(@{$collector}, $content);
+        }
+    }
+    closedir(DH);
+    return
+}
+
 1;

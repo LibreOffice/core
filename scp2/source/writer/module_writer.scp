@@ -75,9 +75,7 @@ Module gid_Module_Prg_Wrt_Bin
     gid_File_Registry_Spool_Oo_TypeDetection_Writer_Types_Xcu, gid_File_Registry_Spool_Oo_TypeDetection_Writer_Filters_Xcu,
     gid_File_Registry_Spool_Oo_TypeDetection_Web_Types_Xcu, gid_File_Registry_Spool_Oo_TypeDetection_Web_Filters_Xcu,
     gid_File_Registry_Spool_Oo_TypeDetection_Global_Types_Xcu, gid_File_Registry_Spool_Oo_TypeDetection_Global_Filters_Xcu,
-    gid_File_Tmp_Userinstall_Wrt_Inf,
-    gid_File_Stw_MediaWikiTemplate,
-    gid_File_Xsl_MediaWiki);
+    gid_File_Tmp_Userinstall_Wrt_Inf);
 End
 
 // Module gid_Module_Prg_Wrt_Help
@@ -109,16 +107,6 @@ Module gid_Module_Langpack_Writer_Template
     Styles = (TEMPLATEMODULE);
     Files = (gid_File_Help_Swriter_Zip,
              gid_File_Res_T602Filter);
-End
-
-Module gid_Module_Optional_Writer2latex
-    MOD_NAME_DESC(MODULE_PRG_WRT_WRITER2LATEX);
-    ParentID = gid_Module_Optional;
-    Default = YES;
-    InstallOrder = "1980";
-    PackageInfo = "packinfo_office.txt";
-    Styles = (FORCEINTOUPDATE);
-    Files = (gid_File_Oxt_Writer2latex);
 End
 
 #include "alllangmodules_writer.inc"

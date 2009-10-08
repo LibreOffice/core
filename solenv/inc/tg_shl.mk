@@ -65,6 +65,14 @@ SHL$(TNR)LINKFLAGS+=$(LINKFLAGSRUNPATH_$(SHL$(TNR)RPATH))
 SHL$(TNR)DEF*=$(MISC)$/$(SHL$(TNR)TARGET).def
 .ENDIF			# "$(SHL$(TNR)USE_EXPORTS)"==""
 
+EXTRALIBPATHS$(TNR)=$(EXTRALIBPATHS)
+.IF "$(UPDATER)"=="YES"
+.IF "$(SHL$(TNR)NOCHECK)"==""
+.IF "$(SOLAR_STLLIBPATH)"!=""
+EXTRALIBPATHS$(TNR)+=-L$(SOLAR_STLLIBPATH)
+.ENDIF
+.ENDIF				# "$(SHL$(TNR)NOCHECK)"!=""
+.ENDIF
 #+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 #+++++++++++    version object      ++++++++++++++++++++++++++++++++++++++++
 #+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -469,7 +477,7 @@ $(SHL$(TNR)TARGETN) : \
     @macosx-create-bundle $@
 .IF "$(UPDATER)"=="YES"
 .IF "$(SHL$(TNR)NOCHECK)"==""
-    $(SOLARENV)$/bin$/checkdll.sh -L$(LB) -L$(SOLARLIBDIR) $(EXTRALIBPATHS) $(SHL$(TNR)TARGETN)
+    $(SOLARENV)$/bin$/checkdll.sh -L$(LB) -L$(SOLARLIBDIR) $(EXTRALIBPATHS$(TNR)) $(SHL$(TNR)TARGETN)
 .ENDIF				# "$(SHL$(TNR)NOCHECK)"!=""
 .ENDIF
 .ELSE			# "$(OS)"=="MACOSX"
@@ -484,7 +492,7 @@ $(SHL$(TNR)TARGETN) : \
 .IF "$(SHL$(TNR)NOCHECK)"==""
     -$(RM) $(SHL$(TNR)TARGETN:d)check_$(SHL$(TNR)TARGETN:f)
     $(RENAME) $(SHL$(TNR)TARGETN) $(SHL$(TNR)TARGETN:d)check_$(SHL$(TNR)TARGETN:f)
-    $(SOLARENV)$/bin$/checkdll.sh -L$(LB) -L$(SOLARLIBDIR) $(EXTRALIBPATHS) $(SHL$(TNR)TARGETN:d)check_$(SHL$(TNR)TARGETN:f)
+    $(SOLARENV)$/bin$/checkdll.sh -L$(LB) -L$(SOLARLIBDIR) $(EXTRALIBPATHS$(TNR)) $(SHL$(TNR)TARGETN:d)check_$(SHL$(TNR)TARGETN:f)
 .ENDIF				# "$(SHL$(TNR)NOCHECK)"!=""
 .ENDIF			# "$(UPDATER)"=="YES"
 .ENDIF			# "$(OS)"=="MACOSX"

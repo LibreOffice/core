@@ -48,7 +48,12 @@ File gid_File_Exe_Swriter
     BIN_FILE_BODY;
     Dir = gid_Brand_Dir_Program;
     Name = EXENAME(swriter);
+  #ifdef WNT
+    FileDescription = "%PRODUCTNAME Writer";
+    Styles = (PACKED, PATCH_SO_NAME);
+  #else
     Styles = (PACKED);
+  #endif
 End
 
 #ifdef WNT
@@ -56,19 +61,9 @@ File gid_File_Exe_Sweb
     BIN_FILE_BODY;
     Dir = gid_Brand_Dir_Program;
     Name = EXENAME(sweb);
-    Styles = (PACKED);
+    FileDescription = "%PRODUCTNAME Writer(Web)";
+    Styles = (PACKED, PATCH_SO_NAME);
 End
-#endif
-
-#ifdef SOLAR_JAVA
-#ifndef WITHOUT_WRITER2LATEX
-File gid_File_Oxt_Writer2latex
-    TXT_FILE_BODY;
-    Name = "writer2latex.oxt";
-    Dir = gid_Brand_Dir_Share_Extension_Install;
-    Styles = (PACKED);
-End
-#endif
 #endif
 
 File gid_File_Registry_Spool_Oo_Office_Embedding_Writer_Xcu
@@ -266,19 +261,5 @@ File gid_File_Oo_Office_Ui_Writerwebwindowstate_Xcu
     Styles = (PACKED);
     Dir = gid_Dir_Share_Registry_Data_Org_Openoffice_Office_Ui;
     Name = "/registry/data/org/openoffice/Office/UI/WriterWebWindowState.xcu";
-End
-
-File gid_File_Stw_MediaWikiTemplate
-    TXT_FILE_BODY;
-    Styles = (PACKED);
-    Dir = gid_Dir_Share_Xslt_Wiki;
-    Name = "/xslt/export/wiki/oopedia-style.ott";
-End
-
-File gid_File_Xsl_MediaWiki
-    TXT_FILE_BODY;
-    Styles = (PACKED);
-    Dir = gid_Dir_Share_Xslt_Wiki;
-    Name = "/xslt/export/wiki/odt2mediawiki.xsl";
 End
 

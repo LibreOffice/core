@@ -69,9 +69,17 @@ ProfileItem gid_Profileitem_Pythonloader_Pythonpath
 		   /lib/lib-tk $ORIGIN/python-core-,PYVERSION,
 		   /lib/site-packages $ORIGIN);
   #else
+   #ifdef _gcc3
+    Value = STRING(CONCAT9($ORIGIN/python-core-,PYVERSION,
+		   /lib $ORIGIN/python-core-,PYVERSION,
+		   /lib/lib-dynload $ORIGIN/python-core-,PYVERSION,
+		   /lib/lib-tk $ORIGIN/python-core-,PYVERSION,
+		   /lib/site-packages $ORIGIN));
+   #else
     Value = STRING(CONCAT5($ORIGIN/python-core-,PYVERSION,
                    /lib $ORIGIN/python-core-,PYVERSION,
 		   /lib/site-packages $ORIGIN));
+   #endif
   #endif
 #endif
 End

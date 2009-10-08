@@ -1016,7 +1016,7 @@ sub relink_workspace {
     # if these are not present.
     my %added_modules_hash;
     if (defined $ENV{ADDED_MODULES}) {
-        for ( split /\s/, $ENV{ADDED_MODULES} ) {
+        for ( split(/\s/, $ENV{ADDED_MODULES}) ) {
             $added_modules_hash{$_}++;
         }
     }
@@ -1039,12 +1039,16 @@ sub relink_workspace {
         }
     }
 
+    # Originally the extension .lnk indicated a linked module. This turned out to be
+    # not an overly smart choice. Cygwin has some heuristics which regards .lnk
+    # files as Windows shortcuts, breaking the build. Use .link instead.
+    # When in restoring mode still consider .lnk as link to modules (for old CWSs)
     my $old_link_dir = "$bd/" . $old_link_dirs[0];
     if ( $restore ) {
         if ( !opendir(DIR, $old_link_dir) ) {
             print_error("Can't open directory '$old_link_dir': $!.", 44);
         }
-        my @links = grep { !/\.lnk/ } readdir(DIR);
+        my @links = grep { !(/\.lnk/ || /\.link/)   } readdir(DIR);
         close(DIR);
         # everything which is not a link to a directory can't be an "added" module
         foreach (@links) {
@@ -1076,7 +1080,7 @@ sub relink_workspace {
     if ( !chdir($linkdir) ) {
         print_error("Can't chdir() to directory '$linkdir': $!.", 44);
     }
-    my $suffix = '.lnk';
+    my $suffix = '.link';
     foreach(@ooo_top_level_dirs) {
         if ( $_ eq 'REBASE.LOG' || $_ eq 'REBASE.CONFIG_DONT_DELETE'  ) {
             next;
