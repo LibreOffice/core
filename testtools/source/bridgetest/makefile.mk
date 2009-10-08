@@ -52,7 +52,6 @@ GIVE_EXEC_RIGHTS=@echo
 MY_URE_INTERNAL_JAVA_DIR=$(strip $(subst,\,/ file:///$(shell @$(WRAPCMD) echo $(SOLARBINDIR))))
 MY_LOCAL_CLASSDIR=$(strip $(subst,\,/ file:///$(shell $(WRAPCMD) echo $(PWD)$/$(CLASSDIR))))
 .ELSE
-BATCH_INPROCESS=bridgetest_inprocess
 GIVE_EXEC_RIGHTS=chmod +x 
 MY_URE_INTERNAL_JAVA_DIR=file://$(SOLARBINDIR)
 MY_LOCAL_CLASSDIR=file://$(PWD)$/$(CLASSDIR)
@@ -137,7 +136,6 @@ ALLTAR: \
         runtest \
         $(DLLDEST)$/uno_types.rdb \
         $(DLLDEST)$/uno_services.rdb \
-        $(DLLDEST)$/bridgetest_inprocess$(BATCH_SUFFIX) \
         $(DLLDEST)$/bridgetest_server$(BATCH_SUFFIX) \
         $(DLLDEST)$/bridgetest_client$(BATCH_SUFFIX) \
         $(JAVATARGETS)
@@ -154,16 +152,6 @@ $(DLLDEST)$/uno_types.rdb : $(SOLARBINDIR)$/udkapi.rdb
     echo $(DLLDEST)
     $(GNUCOPY) $? $@
     $(REGMERGE) $@ / $(BIN)$/bridgetest.rdb
-
-$(DLLDEST)$/bridgetest_inprocess$(BATCH_SUFFIX) .ERRREMOVE: makefile.mk
-.IF "$(USE_SHELL)" == "bash"
-    echo '$(AUGMENT_LIBRARY_PATH)' '$(SOLARBINDIR)'/uno -ro uno_services.rdb -ro uno_types.rdb \
-        -s com.sun.star.test.bridge.BridgeTest -- \
-        com.sun.star.test.bridge.CppTestObject > $@
-.ELSE
-    echo ERROR: this script can only be created properly for USE_SHELL=bash > $@
-.ENDIF
-    $(GIVE_EXEC_RIGHTS) $@
 
 $(DLLDEST)$/bridgetest_client$(BATCH_SUFFIX) .ERRREMOVE: makefile.mk
 .IF "$(USE_SHELL)" == "bash"
