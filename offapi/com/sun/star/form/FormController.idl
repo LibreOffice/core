@@ -121,6 +121,9 @@ module runtime {
     For the latter, you need to set the respective property of the data source's <code>Settings</code>
     (also named <code>FormsCheckRequiredFields</code>) to <FALSE/>.</p>
 
+    <p>Alternatively, you can prevent the check on a per-control basis, using the
+    <member>DataAwareControlModel::InputRequired</member> property of a single control model.</p>
+
     @see com::sun::star::form::component:Form
     @see com::sun::star::awt::XTabController
     @see com::sun::star::form::binding::BindableControlModel

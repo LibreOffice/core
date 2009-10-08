@@ -92,6 +92,13 @@ published constants MeasureUnit
 
     /** all measures for this component are in pixel */
     const short PIXEL = 16;
+
+    /** all measures for this component are in APPFONT */
+    const short APPFONT = 17;
+
+    /** all measures for this component are in SYSFONT */
+    const short SYSFONT = 18;
+
 };
 
 //=============================================================================

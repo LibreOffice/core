@@ -29,20 +29,18 @@
  ************************************************************************/
 
 #ifndef _STORE_STORTREE_HXX
-#define _STORE_STORTREE_HXX "$Revision: 1.6 $"
+#define _STORE_STORTREE_HXX "$Revision: 1.6.8.2 $"
 
-#include <sal/types.h>
-#include <rtl/memory.h>
-#include <osl/endian.h>
-#include <osl/mutex.hxx>
-#include <store/types.h>
+#include "sal/types.h"
 
-#ifndef _STORE_STORBASE_HXX
-#include <storbase.hxx>
-#endif
+#include "store/types.h"
+
+#include "storbase.hxx"
 
 namespace store
 {
+
+class OStorePageBIOS;
 
 /*========================================================================
  *
@@ -62,21 +60,26 @@ struct OStoreBTreeEntry
 
     /** Construction.
     */
-    OStoreBTreeEntry (void)
-        : m_nAttrib (0)
+    explicit OStoreBTreeEntry (
+        K const &  rKey    = K(),
+        L const &  rLink   = L(),
+        sal_uInt32 nAttrib = 0)
+        : m_aKey    (rKey),
+          m_aLink   (rLink),
+          m_nAttrib (store::htonl(nAttrib))
     {}
 
-    OStoreBTreeEntry (const OStoreBTreeEntry& rOther)
-        : m_aKey    (rOther.m_aKey),
-          m_aLink   (rOther.m_aLink),
-          m_nAttrib (rOther.m_nAttrib)
+    OStoreBTreeEntry (const OStoreBTreeEntry & rhs)
+        : m_aKey    (rhs.m_aKey),
+          m_aLink   (rhs.m_aLink),
+          m_nAttrib (rhs.m_nAttrib)
     {}
 
-    OStoreBTreeEntry& operator= (const OStoreBTreeEntry& rOther)
+    OStoreBTreeEntry& operator= (const OStoreBTreeEntry & rhs)
     {
-        m_aKey    = rOther.m_aKey;
-        m_aLink   = rOther.m_aLink;
-        m_nAttrib = rOther.m_nAttrib;
+        m_aKey    = rhs.m_aKey;
+        m_aLink   = rhs.m_aLink;
+        m_nAttrib = rhs.m_nAttrib;
         return *this;
     }
 
@@ -98,17 +101,6 @@ struct OStoreBTreeEntry
         else
             return COMPARE_GREATER;
     }
-
-    /** swap (internal and external representation).
-    */
-    void swap (void)
-    {
-#ifdef OSL_BIGENDIAN
-        m_aKey.swap();
-        m_aLink.swap();
-        m_nAttrib = OSL_SWAPDWORD(m_nAttrib);
-#endif /* OSL_BIGENDIAN */
-    }
 };
 
 /*========================================================================
@@ -127,26 +119,25 @@ struct OStoreBTreeNodeData : public store::OStorePageData
     typedef OStoreBTreeEntry    T;
 
     /** Representation.
-    */
+     */
     G m_aGuard;
     T m_pData[1];
 
-    /** size.
-    */
-    static sal_uInt16 size (void)
-    {
-        return sal_uInt16(sizeof(G));
-    }
+    /** type.
+     */
+    static const sal_uInt32 theTypeId = STORE_MAGIC_BTREENODE;
+
+    /** theSize.
+     */
+    static const size_t     theSize     = sizeof(G);
+    static const sal_uInt16 thePageSize = base::theSize + self::theSize;
+    STORE_STATIC_ASSERT(STORE_MINIMUM_PAGESIZE >= self::thePageSize);
 
     /** capacity.
     */
-    static sal_uInt16 capacity (const D& rDescr)
-    {
-        return (rDescr.m_nSize - (base::size() + self::size()));
-    }
     sal_uInt16 capacity (void) const
     {
-        return self::capacity (base::m_aDescr);
+        return (store::ntohs(base::m_aDescr.m_nSize) - self::thePageSize);
     }
 
     /** capacityCount (must be even).
@@ -158,13 +149,9 @@ struct OStoreBTreeNodeData : public store::OStorePageData
 
     /** usage.
     */
-    static sal_uInt16 usage (const D& rDescr)
-    {
-        return (rDescr.m_nUsed - (base::size() + self::size()));
-    }
     sal_uInt16 usage (void) const
     {
-        return self::usage (base::m_aDescr);
+        return (store::ntohs(base::m_aDescr.m_nUsed) - self::thePageSize);
     }
 
     /** usageCount.
@@ -175,62 +162,32 @@ struct OStoreBTreeNodeData : public store::OStorePageData
     }
     void usageCount (sal_uInt16 nCount)
     {
-        base::m_aDescr.m_nUsed = base::size() + self::size() +
-            sal_uInt16(nCount * sizeof(T));
+        size_t const nBytes = self::thePageSize + nCount * sizeof(T);
+        base::m_aDescr.m_nUsed = store::htons(sal::static_int_cast< sal_uInt16 >(nBytes));
     }
 
     /** Construction.
     */
-    OStoreBTreeNodeData (sal_uInt16 nPageSize);
-    void initialize (void);
-
-    self& operator= (const self& rOther)
-    {
-        if (this != &rOther)
-        {
-            base::operator= (rOther);
-
-            m_aGuard = rOther.m_aGuard;
-            rtl_copyMemory (m_pData, rOther.m_pData, capacity());
-        }
-        return *this;
-    }
-
-    /** Comparison.
-    */
-    sal_Bool operator== (const self& rOther) const
-    {
-        return (base::operator==(rOther) && (m_aGuard == rOther.m_aGuard));
-    }
-
-    /** swap (external and internal representation).
-    */
-    void swap (const D& rDescr);
+    explicit OStoreBTreeNodeData (sal_uInt16 nPageSize = self::thePageSize);
 
     /** guard (external representation).
     */
-    void guard (const D& rDescr)
+    void guard()
     {
         sal_uInt32 nCRC32 = 0;
-        nCRC32 = G::crc32 (nCRC32, &m_aGuard.m_nMagic, sizeof(sal_uInt32));
-        nCRC32 = G::crc32 (nCRC32, m_pData, capacity(rDescr));
-#ifdef OSL_BIGENDIAN
-        nCRC32 = OSL_SWAPDWORD(nCRC32);
-#endif /* OSL_BIGENDIAN */
-        m_aGuard.m_nCRC32 = nCRC32;
+        nCRC32 = rtl_crc32 (nCRC32, &m_aGuard.m_nMagic, sizeof(sal_uInt32));
+        nCRC32 = rtl_crc32 (nCRC32, m_pData, capacity());
+        m_aGuard.m_nCRC32 = store::htonl(nCRC32);
     }
 
     /** verify (external representation).
     */
-    storeError verify (const D& rDescr)
+    storeError verify() const
     {
         sal_uInt32 nCRC32 = 0;
-        nCRC32 = G::crc32 (nCRC32, &m_aGuard.m_nMagic, sizeof(sal_uInt32));
-        nCRC32 = G::crc32 (nCRC32, m_pData, capacity(rDescr));
-#ifdef OSL_BIGENDIAN
-        nCRC32 = OSL_SWAPDWORD(nCRC32);
-#endif /* OSL_BIGENDIAN */
-        if (m_aGuard.m_nCRC32 != nCRC32)
+        nCRC32 = rtl_crc32 (nCRC32, &m_aGuard.m_nMagic, sizeof(sal_uInt32));
+        nCRC32 = rtl_crc32 (nCRC32, m_pData, capacity());
+        if (m_aGuard.m_nCRC32 != store::htonl(nCRC32))
             return store_E_InvalidChecksum;
         else
             return store_E_None;
@@ -240,11 +197,11 @@ struct OStoreBTreeNodeData : public store::OStorePageData
     */
     sal_uInt32 depth (void) const
     {
-        return self::m_aGuard.m_nMagic;
+        return store::ntohl(self::m_aGuard.m_nMagic);
     }
     void depth (sal_uInt32 nDepth)
     {
-        self::m_aGuard.m_nMagic = nDepth;
+        self::m_aGuard.m_nMagic = store::htonl(nDepth);
     }
 
     /** queryMerge.
@@ -291,60 +248,36 @@ class OStoreBTreeNodeObject : public store::OStorePageObject
     typedef OStoreBTreeNodeObject self;
     typedef OStoreBTreeNodeData   page;
 
-    typedef OStorePageDescriptor  D;
     typedef OStoreBTreeEntry      T;
 
 public:
     /** Construction.
     */
-    inline OStoreBTreeNodeObject (page& rPage);
+    explicit OStoreBTreeNodeObject (PageHolder const & rxPage = PageHolder())
+        : OStorePageObject (rxPage)
+    {}
 
     /** External representation.
     */
-    virtual void       swap   (const D& rDescr);
-    virtual void       guard  (const D& rDescr);
-    virtual storeError verify (const D& rDescr);
-
-    /** Query split.
-    */
-    inline sal_Bool querySplit (void) const;
+    virtual storeError guard  (sal_uInt32 nAddr);
+    virtual storeError verify (sal_uInt32 nAddr) const;
 
     /** split.
-    */
-    virtual storeError split (
-        sal_uInt16             nIndexL,
-        OStoreBTreeNodeData   &rPageL,
-        OStoreBTreeNodeData   &rPageR,
-        OStorePageBIOS        &rBIOS,
-        osl::Mutex            *pMutex = NULL);
+     *
+     *  @param rxPageL [inout] left child to be split
+     */
+    storeError split (
+        sal_uInt16                 nIndexL,
+        PageHolderObject< page > & rxPageL,
+        OStorePageBIOS &           rBIOS);
 
     /** remove (down to leaf node, recursive).
     */
     storeError remove (
-        sal_uInt16             nIndexL,
-        OStoreBTreeEntry      &rEntryL,
-        OStoreBTreeNodeData   &rPageL,
-#if 0   /* NYI */
-        OStoreBTreeNodeData   &rPageR,
-#endif  /* NYI */
-        OStorePageBIOS        &rBIOS,
-        osl::Mutex            *pMutex = NULL);
-
-private:
-    /** Representation.
-    */
-    page& m_rPage;
+        sal_uInt16         nIndexL,
+        OStoreBTreeEntry & rEntryL,
+        OStorePageBIOS &   rBIOS);
 };
-
-inline OStoreBTreeNodeObject::OStoreBTreeNodeObject (page& rPage)
-    : OStorePageObject (rPage), m_rPage (rPage)
-{
-}
-
-inline sal_Bool OStoreBTreeNodeObject::querySplit (void) const
-{
-    return m_rPage.querySplit();
-}
 
 /*========================================================================
  *
@@ -356,37 +289,51 @@ class OStoreBTreeRootObject : public store::OStoreBTreeNodeObject
     typedef OStoreBTreeNodeObject base;
     typedef OStoreBTreeNodeData   page;
 
+    typedef OStoreBTreeEntry      T;
+
 public:
     /** Construction.
-    */
-    inline OStoreBTreeRootObject (page& rPage);
+     */
+    explicit OStoreBTreeRootObject (PageHolder const & rxPage = PageHolder())
+        : OStoreBTreeNodeObject (rxPage)
+    {}
 
-    /** split.
-    */
-    virtual storeError split (
-        sal_uInt16             nIndexL,
-        OStoreBTreeNodeData   &rPageL,
-        OStoreBTreeNodeData   &rPageR,
-        OStorePageBIOS        &rBIOS,
-        osl::Mutex            *pMutex = NULL);
+    storeError loadOrCreate (
+        sal_uInt32       nAddr,
+        OStorePageBIOS & rBIOS);
+
+    /** find_lookup (w/o split()).
+     *  Precond: root node page loaded.
+     */
+    storeError find_lookup (
+        OStoreBTreeNodeObject & rNode,  // [out]
+        sal_uInt16 &            rIndex, // [out]
+        OStorePageKey const &   rKey,
+        OStorePageBIOS &        rBIOS);
+
+    /** find_insert (possibly with split()).
+     *  Precond: root node page loaded.
+     */
+    storeError find_insert (
+        OStoreBTreeNodeObject & rNode,
+        sal_uInt16 &            rIndex,
+        OStorePageKey const &   rKey,
+        OStorePageBIOS &        rBIOS);
 
 private:
-    /** Representation.
-    */
-    page& m_rPage;
+    /** testInvariant.
+     *  Precond: root node page loaded.
+     */
+    bool testInvariant (char const * message);
 
     /** change (Root).
-    */
+     *
+     *  @param rxPageL [out] prev. root (needs split)
+     */
     storeError change (
-        OStoreBTreeNodeData   &rPageL,
-        OStorePageBIOS        &rBIOS,
-        osl::Mutex            *pMutex = NULL);
+        PageHolderObject< page > & rxPageL,
+        OStorePageBIOS &           rBIOS);
 };
-
-inline OStoreBTreeRootObject::OStoreBTreeRootObject (page& rPage)
-    : OStoreBTreeNodeObject (rPage), m_rPage (rPage)
-{
-}
 
 /*========================================================================
  *
@@ -397,4 +344,3 @@ inline OStoreBTreeRootObject::OStoreBTreeRootObject (page& rPage)
 } // namespace store
 
 #endif /* !_STORE_STORTREE_HXX */
-

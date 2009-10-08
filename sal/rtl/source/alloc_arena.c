@@ -51,6 +51,8 @@
 #ifdef OS2
 #undef OSL_TRACE
 #define OSL_TRACE                  1 ? ((void)0) : _OSL_GLOBAL osl_trace
+#define INCL_DOS
+#include <os2.h>
 #endif
 
 /* ================================================================= *

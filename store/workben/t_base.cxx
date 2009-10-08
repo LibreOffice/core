@@ -31,96 +31,20 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_store.hxx"
 
-#define _T_BASE_CXX "$Revision: 1.8 $"
-#include <sal/types.h>
-#include <osl/thread.h>
-#include <rtl/memory.h>
-#include <rtl/ustring.hxx>
-#include <rtl/ref.hxx>
-#include <store/filelckb.hxx>
+#include "sal/types.h"
+#include "osl/diagnose.h"
+#include "osl/thread.h"
+#include "rtl/memory.h"
+#include "rtl/ustring.hxx"
+
+#include "object.hxx"
 #include "storbase.hxx"
+#include "storbios.hxx"
+#include "lockbyte.hxx"
 
 using namespace store;
 
 #define TEST_PAGESIZE 1024
-
-/*========================================================================
- *
- * OTestDaemon.
- *
- *======================================================================*/
-
-#if 1  /* EXP */
-
-#include <osl/interlck.h>
-
-class OTestDaemon : public rtl::IReference
-{
-public:
-    static sal_Bool getOrCreate (
-        rtl::Reference<OTestDaemon> &rxDaemon);
-
-    virtual oslInterlockedCount SAL_CALL acquire (void);
-    virtual oslInterlockedCount SAL_CALL release (void);
-
-protected:
-    OTestDaemon (void);
-    virtual ~OTestDaemon (void);
-
-private:
-    static OTestDaemon *m_pThis;
-
-    oslInterlockedCount m_nRefCount;
-};
-
-#include <osl/mutex.hxx>
-
-OTestDaemon* OTestDaemon::m_pThis = 0;
-
-OTestDaemon::OTestDaemon (void)
-{
-}
-
-OTestDaemon::~OTestDaemon (void)
-{
-}
-
-sal_Bool OTestDaemon::getOrCreate (rtl::Reference<OTestDaemon> &rxDaemon)
-{
-    osl::MutexGuard aGuard (osl::Mutex::getGlobalMutex());
-
-    rxDaemon = m_pThis;
-    if (!rxDaemon.is())
-    {
-        m_pThis  = new OTestDaemon();
-        rxDaemon = m_pThis;
-    }
-    return rxDaemon.is();
-}
-
-oslInterlockedCount SAL_CALL OTestDaemon::acquire (void)
-{
-    return osl_incrementInterlockedCount (&m_nRefCount);
-}
-
-oslInterlockedCount SAL_CALL OTestDaemon::release (void)
-{
-    oslInterlockedCount result;
-
-    result = osl_decrementInterlockedCount (&m_nRefCount);
-    if (result == 0)
-    {
-        osl::MutexGuard aGuard (osl::Mutex::getGlobalMutex());
-        if (m_nRefCount == 0)
-        {
-            m_pThis = 0;
-            delete this;
-        }
-    }
-    return (result);
-}
-
-#endif /* EXP */
 
 /*========================================================================
  *
@@ -167,22 +91,30 @@ static OTestObject* SAL_CALL query (IStoreHandle *pHandle, OTestObject*)
  * OTestBIOS.
  *
  *======================================================================*/
+namespace store
+{
+
 class OTestBIOS : public store::OStorePageBIOS
 {
     typedef store::OStorePageBIOS base;
+
+    friend OTestBIOS* SAL_CALL query<> (IStoreHandle * pHandle, OTestBIOS *);
 
 public:
     OTestBIOS (void);
 
     virtual storeError initialize (
-        ILockBytes      *pLockBytes,
-        storeAccessMode  eAccessMode);
+        ILockBytes *    pLockBytes,
+        storeAccessMode eAccessMode,
+        sal_uInt16 &    rnPageSize);
 
     virtual sal_Bool SAL_CALL isKindOf (sal_uInt32 nTypeId);
 
 protected:
     virtual ~OTestBIOS (void);
 };
+
+} // namespace store
 
 OTestBIOS::OTestBIOS (void)
 {
@@ -198,26 +130,14 @@ sal_Bool SAL_CALL OTestBIOS::isKindOf (sal_uInt32 nTypeId)
 }
 
 storeError OTestBIOS::initialize (
-    ILockBytes *pLockBytes, storeAccessMode eAccessMode)
+    ILockBytes *pLockBytes, storeAccessMode eAccessMode, sal_uInt16 & rnPageSize)
 {
-    storeError eErrCode = base::initialize (pLockBytes, eAccessMode);
-    if (eErrCode != store_E_None)
-    {
-        if (eAccessMode == store_AccessReadWrite)
-            return eErrCode;
-        if (eAccessMode == store_AccessReadOnly)
-            return eErrCode;
-        if (eErrCode != store_E_NotExists)
-            return eErrCode;
-
-        eErrCode = base::create (TEST_PAGESIZE);
-    }
-    return eErrCode;
+    return base::initialize (pLockBytes, eAccessMode, rnPageSize);
 }
 
 namespace store
 {
-static OTestBIOS* SAL_CALL query (IStoreHandle *pHandle, OTestBIOS*)
+template<> OTestBIOS* SAL_CALL query (IStoreHandle *pHandle, OTestBIOS*)
 {
     if (pHandle && pHandle->isKindOf (4242))
         return static_cast<OTestBIOS*>(pHandle);
@@ -248,15 +168,6 @@ static void __store_test_handle (void* Handle)
         pObj->isKindOf (42);
         pObj->release();
     }
-
-    store::OStoreHandle<OTestObject> xObj (
-        store::OStoreHandle<OTestObject>::query (Handle));
-    if (xObj.is())
-    {
-        xObj->acquire();
-        xObj->isKindOf (42);
-        xObj->release();
-    }
 }
 
 /*========================================================================
@@ -274,26 +185,20 @@ static void __store_string_newFromUnicode_WithLength (
         OUSTRING_TO_OSTRING_CVTFLAGS);
 }
 
+#if 0  /* UNSUSED */
 static void __store_string_newFromUnicode (
     rtl_String **newString, const rtl_uString *value)
 {
     __store_string_newFromUnicode_WithLength (
         newString, value->buffer, value->length);
 }
+#endif /* UNUSED */
 
 static void __store_string_newFromUnicode (
     rtl_String **newString, const sal_Unicode *value)
 {
     __store_string_newFromUnicode_WithLength (
         newString, value, rtl_ustr_getLength (value));
-}
-
-static storeError __store_namei (
-    const rtl::OString &rPath,
-    const rtl::OString &rName,
-    OStorePageKey      &rKey)
-{
-    return store_E_Unknown;
 }
 
 static storeError __store_namei (
@@ -308,14 +213,13 @@ static storeError __store_namei (
     __store_string_newFromUnicode (&pszNameA, pszName);
 
     storeError eErrCode = store_E_NameTooLong;
-    if (pszNameA->length < sizeof(sal_Char[STORE_MAXIMUM_NAMESIZE]))
+    if (pszNameA->length < sal_Int32(sizeof(sal_Char[STORE_MAXIMUM_NAMESIZE])))
     {
         rtl_String *pszPathA = 0;
         __store_string_newFromUnicode (&pszPathA, pszPath);
 
-        typedef OStorePageGuard G;
-        rKey.m_nLow  = G::crc32 (0, pszNameA->buffer, pszNameA->length);
-        rKey.m_nHigh = G::crc32 (0, pszPathA->buffer, pszPathA->length);
+        rKey.m_nLow  = rtl_crc32 (0, pszNameA->buffer, pszNameA->length);
+        rKey.m_nHigh = rtl_crc32 (0, pszPathA->buffer, pszPathA->length);
 
         rtl_string_release (pszPathA);
         eErrCode = store_E_None;
@@ -418,20 +322,16 @@ int SAL_CALL main (int argc, char **argv)
     if (argc < 2)
         return 0;
 
-#if 0  /* EXP */
     __store_testUnicode (argv[1]);
-#endif /* EXP */
 
-    rtl::Reference<OFileLockBytes> xLockBytes (new OFileLockBytes());
-    if (!xLockBytes.is())
-        return 0;
+    rtl::Reference<ILockBytes> xLockBytes;
 
     rtl::OUString aFilename (
         argv[1], rtl_str_getLength(argv[1]),
         osl_getThreadTextEncoding());
 
-    storeError eErrCode = xLockBytes->create (
-        aFilename.pData, store_AccessReadCreate);
+    storeError eErrCode = FileLockBytes_createInstance (
+        xLockBytes, aFilename.pData, store_AccessReadCreate);
     if (eErrCode != store_E_None)
         return eErrCode;
 
@@ -446,7 +346,8 @@ int SAL_CALL main (int argc, char **argv)
     if (!xBIOS.is())
         return 0;
 
-    eErrCode = xBIOS->initialize (&*xLockBytes, store_AccessReadWrite);
+    sal_uInt16 nPageSize = TEST_PAGESIZE;
+    eErrCode = xBIOS->initialize (&*xLockBytes, store_AccessReadWrite, nPageSize);
     if (eErrCode != store_E_None)
     {
         // Check reason.
@@ -454,7 +355,7 @@ int SAL_CALL main (int argc, char **argv)
             return eErrCode;
 
         // Create.
-        eErrCode = xBIOS->initialize (&*xLockBytes, store_AccessReadCreate);
+        eErrCode = xBIOS->initialize (&*xLockBytes, store_AccessReadCreate, nPageSize);
         if (eErrCode != store_E_None)
             return eErrCode;
     }
@@ -482,4 +383,3 @@ int SAL_CALL main (int argc, char **argv)
     xBIOS.clear();
     return 0;
 }
-

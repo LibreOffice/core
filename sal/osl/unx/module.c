@@ -150,22 +150,16 @@ void SAL_CALL osl_unloadModule(oslModule hModule)
     if (hModule)
     {
 #ifndef NO_DL_FUNCTIONS
-#ifndef GCC
-        /*     gcc (2.9.1 (egcs), 295) registers atexit handlers for
-         *     static destructors which obviously cannot
-         *     be called after dlclose. A compiler "feature". The workaround for now
-         *     is not to dlclose libraries. Since most of them are closed at shutdown
-         *     this does not make that much a difference
-         */
         int nRet = dlclose(hModule);
 
 #if OSL_DEBUG_LEVEL > 1
         if (nRet != 0)
         {
-            fprintf(stderr, "Error osl_unlocadModule: %s\n", dlerror());
+            fprintf(stderr, "Error osl_unloadModule: %s\n", dlerror());
         }
+#else
+        (void) nRet;
 #endif /* if OSL_DEBUG_LEVEL */
-#endif /* ifndef GCC */
 
 #endif /* ifndef NO_DL_FUNCTIONS */
     }

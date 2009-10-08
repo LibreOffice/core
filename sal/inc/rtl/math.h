@@ -424,6 +424,16 @@ double SAL_CALL rtl_math_expm1(double fValue) SAL_THROW_EXTERN_C();
   */
 double SAL_CALL rtl_math_log1p(double fValue) SAL_THROW_EXTERN_C();
 
+/** Returns more accurate atanh(x) for x near 0 than calculating
+    0.5*log((1+x)/(1-x)).
+
+    atanh is part of the C99 standard, but not provided by some compilers.
+
+    @param fValue
+    The value x in the term atanh(x).
+  */
+double SAL_CALL rtl_math_atanh(double fValue) SAL_THROW_EXTERN_C();
+
 #if defined __cplusplus
 }
 #endif /* __cplusplus */

@@ -40,7 +40,6 @@
 #include "com/sun/star/uno/RuntimeException.hpp"
 #include "com/sun/star/uno/XComponentContext.hpp"
 #include "com/sun/star/uno/XInterface.hpp"
-#include "com/sun/star/uri/ExternalUriReferenceTranslator.hpp"
 #include "com/sun/star/uri/UriReferenceFactory.hpp"
 #include "com/sun/star/uri/XVndSunStarExpandUrlReference.hpp"
 #include "com/sun/star/util/XMacroExpander.hpp"
@@ -98,19 +97,6 @@ void * ::jvmaccess::ClassPath::doTranslateToUrls(
                             RTL_CONSTASCII_USTRINGPARAM(
                                 "com.sun.star.lang.IllegalArgumentException: "))
                          + e.Message),
-                        css::uno::Reference< css::uno::XInterface >());
-                }
-            }
-            if (url.getLength() != 0) {
-                url = css::uri::ExternalUriReferenceTranslator::create(
-                    context)->translateToExternal(url);
-                if (url.getLength() == 0) {
-                    throw css::uno::RuntimeException(
-                        ::rtl::OUString(
-                            RTL_CONSTASCII_USTRINGPARAM(
-                                "com.sun.star.uri."
-                                "ExternalUriReferenceTranslator."
-                                "translateToExternal failed")),
                         css::uno::Reference< css::uno::XInterface >());
                 }
             }

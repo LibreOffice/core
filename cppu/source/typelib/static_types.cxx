@@ -39,6 +39,7 @@
 #include <rtl/ustring.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <rtl/memory.h>
+#include <rtl/instance.hxx>
 
 #include <typelib/typedescription.h>
 
@@ -114,19 +115,10 @@ static inline sal_Int32 newAlignedSize(
 }
 
 //--------------------------------------------------------------------------------------------------
-static Mutex & typelib_getStaticInitMutex() SAL_THROW( () )
+
+namespace
 {
-    static Mutex * s_pMutex = 0;
-    if (! s_pMutex)
-    {
-        MutexGuard aGuard( Mutex::getGlobalMutex() );
-        if (! s_pMutex)
-        {
-            static Mutex s_aMutex;
-            s_pMutex = &s_aMutex;
-        }
-    }
-    return *s_pMutex;
+    struct typelib_StaticInitMutex : public rtl::Static< Mutex, typelib_StaticInitMutex > {};
 }
 
 // !for NOT REALLY WEAK TYPES only!
@@ -159,7 +151,7 @@ typelib_TypeDescriptionReference ** SAL_CALL typelib_static_type_getByTypeClass(
 
     if (! s_aTypes[eTypeClass])
     {
-        MutexGuard aGuard( typelib_getStaticInitMutex() );
+        MutexGuard aGuard( typelib_StaticInitMutex::get() );
         if (! s_aTypes[eTypeClass])
         {
             static const char * s_aTypeNames[] = {
@@ -332,7 +324,7 @@ void SAL_CALL typelib_static_type_init(
 {
     if (! *ppRef)
     {
-        MutexGuard aGuard( typelib_getStaticInitMutex() );
+        MutexGuard aGuard( typelib_StaticInitMutex::get() );
         if (! *ppRef)
         {
             OUString aTypeName( OUString::createFromAscii( pTypeName ) );
@@ -354,7 +346,7 @@ void SAL_CALL typelib_static_sequence_type_init(
 {
     if (! *ppRef)
     {
-        MutexGuard aGuard( typelib_getStaticInitMutex() );
+        MutexGuard aGuard( typelib_StaticInitMutex::get() );
         if (! *ppRef)
         {
             OUStringBuffer aBuf( 32 );
@@ -398,7 +390,7 @@ void init(
 
     if (! *ppRef)
     {
-        MutexGuard aGuard( typelib_getStaticInitMutex() );
+        MutexGuard aGuard( typelib_StaticInitMutex::get() );
         if (! *ppRef)
         {
             OSL_ASSERT( ! TYPELIB_TYPEDESCRIPTIONREFERENCE_ISREALLYWEAK(eTypeClass) );
@@ -514,7 +506,7 @@ void SAL_CALL typelib_static_mi_interface_type_init(
 {
     if (! *ppRef)
     {
-        MutexGuard aGuard( typelib_getStaticInitMutex() );
+        MutexGuard aGuard( typelib_StaticInitMutex::get() );
         if (! *ppRef)
         {
             OSL_ASSERT( ! TYPELIB_TYPEDESCRIPTIONREFERENCE_ISREALLYWEAK(typelib_TypeClass_INTERFACE) );
@@ -579,7 +571,7 @@ void SAL_CALL typelib_static_enum_type_init(
 {
     if (! *ppRef)
     {
-        MutexGuard aGuard( typelib_getStaticInitMutex() );
+        MutexGuard aGuard( typelib_StaticInitMutex::get() );
         if (! *ppRef)
         {
             OSL_ASSERT( ! TYPELIB_TYPEDESCRIPTIONREFERENCE_ISREALLYWEAK(typelib_TypeClass_ENUM) );
@@ -621,7 +613,7 @@ void SAL_CALL typelib_static_array_type_init(
 {
     if (! *ppRef)
     {
-        MutexGuard aGuard( typelib_getStaticInitMutex() );
+        MutexGuard aGuard( typelib_StaticInitMutex::get() );
         if (! *ppRef)
         {
             OUStringBuffer aBuf( 32 );
@@ -693,7 +685,7 @@ void SAL_CALL typelib_static_union_type_init(
 {
     if (! *ppRef)
     {
-        MutexGuard aGuard( typelib_getStaticInitMutex() );
+        MutexGuard aGuard( typelib_StaticInitMutex::get() );
         if (! *ppRef)
         {
             OSL_ASSERT( ! TYPELIB_TYPEDESCRIPTIONREFERENCE_ISREALLYWEAK(typelib_TypeClass_UNION) );

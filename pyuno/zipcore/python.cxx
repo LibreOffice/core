@@ -91,6 +91,15 @@ int wmain(int argc, wchar_t ** argv, wchar_t **) {
         exit(EXIT_FAILURE);
     }
     wchar_t * pathEnd = tools::filename(path);
+    *pathEnd = L'\0';
+    n = GetEnvironmentVariableW(L"UNO_PATH", NULL, 0);
+    if (n == 0) {
+        if (GetLastError() != ERROR_ENVVAR_NOT_FOUND ||
+            !SetEnvironmentVariableW(L"UNO_PATH", path))
+        {
+            exit(EXIT_FAILURE);
+        }
+    }
     wchar_t bootstrap[MY_LENGTH(L"vnd.sun.star.pathname:") + MAX_PATH] =
         L"vnd.sun.star.pathname:"; //TODO: overflow
     wchar_t * bootstrapEnd = tools::buildPath(

@@ -31,6 +31,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_registry.hxx"
 
+#include <memory>
 #include    <string.h>
 #include    <stdio.h>
 
@@ -641,10 +642,7 @@ RegError ORegistry::createKey(RegKeyHandle hKey, const OUString& keyName,
     else
         pKey = m_openKeyTable[ROOT];
 
-    OUString sFullKeyName = resolveLinks(pKey, keyName);
-
-    if ( !sFullKeyName.getLength() )
-        return REG_DETECT_RECURSION;
+    OUString sFullKeyName = pKey->getFullPath(keyName);
 
     if (m_openKeyTable.count(sFullKeyName) > 0)
     {
@@ -688,107 +686,16 @@ RegError ORegistry::createKey(RegKeyHandle hKey, const OUString& keyName,
 //*********************************************************************
 //  openKey
 //
-static OUString makePath( const OUString & resolvedPath, const OUString &path )
-{
-    OUStringBuffer buf(resolvedPath);
-    if( ! resolvedPath.getLength() ||
-        '/' != resolvedPath[resolvedPath.getLength()-1])
-    {
-        buf.appendAscii( "/" );
-    }
-
-    if( path[0] == '/' )
-    {
-        buf.append( path.getStr()+1 );
-    }
-    else
-    {
-        buf.append( path );
-    }
-    return buf.makeStringAndClear();
-}
-
-RegError ORegistry::openKeyWithoutLink(
-    RegKeyHandle hKey, const OUString& keyName,
-    RegKeyHandle* phOpenKey)
-{
-    ORegKey*        pKey;
-    ORegKey* pRet;
-    storeAccessMode accessMode = KEY_MODE_OPEN;
-
-    *phOpenKey = NULL;
-
-    if ( !keyName.getLength() )
-    {
-        return REG_INVALID_KEYNAME;
-    }
-
-    if ( isReadOnly() )
-    {
-        accessMode = KEY_MODE_OPENREAD;
-    }
-
-    REG_GUARD(m_mutex);
-
-    if (hKey)
-        pKey = (ORegKey*)hKey;
-    else
-        pKey = m_openKeyTable[ROOT];
-
-    OUString    sFullKeyName  = makePath( pKey->getName(), keyName );
-    OUString    sFullPath;
-    OUString    sRelativKey;
-
-    sal_Int32 lastIndex = sFullKeyName.lastIndexOf('/');
-    sRelativKey = sFullKeyName.copy(lastIndex + 1);
-    sFullPath = sFullKeyName.copy(0, lastIndex + 1);
-
-    KeyMap::iterator ii = m_openKeyTable.find( sFullKeyName );
-    if( ii == m_openKeyTable.end() )
-    {
-        OStoreDirectory rStoreDir;
-        storeError      _err = rStoreDir.create(pKey->getStoreFile(), sFullPath, sRelativKey, accessMode);
-
-        if (_err == store_E_NotExists)
-            return REG_KEY_NOT_EXISTS;
-        else
-            if (_err == store_E_WrongFormat)
-                return REG_INVALID_KEY;
-
-        if( _err != store_E_None )
-            return REG_KEY_NOT_EXISTS;
-
-        pRet = new ORegKey(sFullKeyName, this);
-        *phOpenKey = pRet;
-        m_openKeyTable[sFullKeyName] = pRet;
-    }
-    else
-    {
-        // try to open it directly
-        pRet = ii->second;
-        OSL_ASSERT( pRet );
-        *phOpenKey = pRet;
-        pRet->acquire();
-    }
-    return REG_NO_ERROR;
-}
-
 RegError ORegistry::openKey(RegKeyHandle hKey, const OUString& keyName,
-                            RegKeyHandle* phOpenKey, RESOLVE eResolve)
+                            RegKeyHandle* phOpenKey)
 {
     ORegKey*        pKey;
-    storeAccessMode accessMode = KEY_MODE_OPEN;
 
     *phOpenKey = NULL;
 
     if ( !keyName.getLength() )
     {
         return REG_INVALID_KEYNAME;
-    }
-
-    if ( isReadOnly() )
-    {
-        accessMode = KEY_MODE_OPENREAD;
     }
 
     REG_GUARD(m_mutex);
@@ -798,111 +705,28 @@ RegError ORegistry::openKey(RegKeyHandle hKey, const OUString& keyName,
     else
         pKey = m_openKeyTable[ROOT];
 
-    OUString    sFullKeyName;
-    OUString    sFullPath;
-    OUString    sRelativKey;
-
-    switch (eResolve)
-    {
-        case RESOLVE_FULL:
-            {
-                // try the optimistic approach (links aren't recognized)
-                RegKeyHandle handle = 0;
-                if( REG_NO_ERROR == openKeyWithoutLink( hKey, keyName,&handle ) )
-                {
-                    *phOpenKey = handle;
-                    return REG_NO_ERROR;
-                }
-
-                sFullKeyName = resolveLinks(pKey, keyName);
-                if ( !sFullKeyName.getLength() )
-                    return REG_DETECT_RECURSION;
-
-                sal_Int32 lastIndex = sFullKeyName.lastIndexOf('/');
-                sRelativKey = sFullKeyName.copy(lastIndex + 1);
-                   sFullPath = sFullKeyName.copy(0, lastIndex + 1);
-            }
+    OUString path(pKey->getFullPath(keyName));
+    KeyMap::iterator i(m_openKeyTable.find(path));
+    if (i == m_openKeyTable.end()) {
+        sal_Int32 n = path.lastIndexOf('/') + 1;
+        switch (OStoreDirectory().create(
+                    pKey->getStoreFile(), path.copy(0, n), path.copy(n),
+                    isReadOnly() ? KEY_MODE_OPENREAD : KEY_MODE_OPEN))
+        {
+        case store_E_NotExists:
+            return REG_KEY_NOT_EXISTS;
+        case store_E_WrongFormat:
+            return REG_INVALID_KEY;
+        default:
             break;
-        case RESOLVE_PART:
-            {
-                sal_Int32 lastIndex = keyName.lastIndexOf('/');
-                if ( lastIndex >= 0 )
-                {
-                    OUString sRelativ(keyName.copy(lastIndex));
-                    OUString tmpKey(keyName.copy(0, lastIndex + 1));
-                    sFullKeyName = resolveLinks(pKey, tmpKey);
-
-                    sFullPath = sFullKeyName;
-                    sFullPath += ROOT;
-                    sFullKeyName += sRelativ;
-                    sRelativKey = sRelativ.copy(1);
-                } else
-                {
-                    sFullKeyName = pKey->getName();
-                    sFullPath = sFullKeyName;
-
-                    sRelativKey = keyName;
-
-                    if ( sFullKeyName.getLength() > 1 )
-                        sFullKeyName += ROOT;
-
-                    sFullKeyName += keyName;
-
-                    if ( sFullPath.getLength() > 1 )
-                        sFullPath += ROOT;
-                }
-            }
-            break;
-        case RESOLVE_NOTHING:
-            {
-                sFullKeyName = pKey->getName();
-                sFullPath = sFullKeyName;
-
-                if (sFullKeyName.getLength() > 1)
-                    sFullKeyName += ROOT;
-
-                sal_Int32 lastIndex = keyName.lastIndexOf('/');
-                if ( lastIndex >= 0 && lastIndex < keyName.getLength() )
-                {
-                    OUString sRelativ(keyName.copy(lastIndex+1));
-                    sRelativKey = sRelativ;
-                    sFullKeyName += keyName.copy(1);
-
-                    sFullPath = sFullKeyName.copy(0, keyName.lastIndexOf('/') + 1);
-                } else
-                {
-
-                    sRelativKey += keyName;
-                    sFullKeyName += keyName;
-
-                    if ( sFullPath.getLength() > 1 )
-                        sFullPath += ROOT;
-                }
-            }
-            break;
+        }
+        std::auto_ptr< ORegKey > p(new ORegKey(path, this));
+        i = m_openKeyTable.insert(std::make_pair(path, p.get())).first;
+        p.release();
+    } else {
+        i->second->acquire();
     }
-
-    if (m_openKeyTable.count(sFullKeyName) > 0)
-    {
-        m_openKeyTable[sFullKeyName]->acquire();
-        *phOpenKey = m_openKeyTable[sFullKeyName];
-        return REG_NO_ERROR;
-    }
-
-    OStoreDirectory rStoreDir;
-    storeError      _err = rStoreDir.create(pKey->getStoreFile(), sFullPath, sRelativKey, accessMode);
-
-    if (_err == store_E_NotExists)
-        return REG_KEY_NOT_EXISTS;
-    else
-    if (_err == store_E_WrongFormat)
-        return REG_INVALID_KEY;
-
-    pKey = new ORegKey(sFullKeyName, this);
-
-    *phOpenKey = pKey;
-    m_openKeyTable[sFullKeyName] = pKey;
-
+    *phOpenKey = i->second;
     return REG_NO_ERROR;
 }
 
@@ -956,18 +780,15 @@ RegError ORegistry::deleteKey(RegKeyHandle hKey, const OUString& keyName)
     else
         pKey = m_openKeyTable[ROOT];
 
-    OUString sFullKeyName = resolveLinks(pKey, keyName);
-
-    if ( !sFullKeyName.getLength() )
-        return REG_DETECT_RECURSION;
+    OUString sFullKeyName = pKey->getFullPath(keyName);
 
     pKey = m_openKeyTable[ROOT];
-    _ret = eraseKey(pKey, sFullKeyName, RESOLVE_NOTHING);
+    _ret = eraseKey(pKey, sFullKeyName);
 
     return _ret;
 }
 
-RegError ORegistry::eraseKey(ORegKey* pKey, const OUString& keyName, RESOLVE eResolve)
+RegError ORegistry::eraseKey(ORegKey* pKey, const OUString& keyName)
 {
     RegError _ret = REG_NO_ERROR;
 
@@ -1004,13 +825,13 @@ RegError ORegistry::eraseKey(ORegKey* pKey, const OUString& keyName, RESOLVE eRe
     }
 
     RegKeyHandle    hOldKey;
-    _ret = pKey->openKey(keyName, &hOldKey, eResolve);
+    _ret = pKey->openKey(keyName, &hOldKey);
     if (_ret)
     {
         return _ret;
     }
 
-    _ret = deleteSubkeysAndValues((ORegKey*)hOldKey, eResolve);
+    _ret = deleteSubkeysAndValues((ORegKey*)hOldKey);
     if (_ret)
     {
         pKey->closeKey(hOldKey);
@@ -1043,7 +864,7 @@ RegError ORegistry::eraseKey(ORegKey* pKey, const OUString& keyName, RESOLVE eRe
 //*********************************************************************
 //  deleteSubKeys
 //
-RegError ORegistry::deleteSubkeysAndValues(ORegKey* pKey, RESOLVE eResolve)
+RegError ORegistry::deleteSubkeysAndValues(ORegKey* pKey)
 {
     OStoreDirectory::iterator   iter;
     OUString                    keyName;
@@ -1057,7 +878,7 @@ RegError ORegistry::deleteSubkeysAndValues(ORegKey* pKey, RESOLVE eResolve)
 
         if (iter.m_nAttrib & STORE_ATTRIB_ISDIR)
         {
-            _ret = eraseKey(pKey, keyName, eResolve);
+            _ret = eraseKey(pKey, keyName);
             if (_ret)
                 return _ret;
         } else
@@ -1434,7 +1255,7 @@ RegError ORegistry::checkBlop(OStoreStream& rValue,
 
 static sal_uInt32 checkTypeReaders(RegistryTypeReader& reader1,
                                    RegistryTypeReader& reader2,
-                                   StringSet& nameSet)
+                                   std::set< OUString >& nameSet)
 {
     sal_uInt32 count=0;
     sal_uInt16 i;
@@ -1463,7 +1284,7 @@ RegError ORegistry::mergeModuleValue(OStoreStream& rTargetValue,
 {
     sal_uInt16                  index = 0;
 
-    StringSet nameSet;
+    std::set< OUString > nameSet;
     sal_uInt32 count = checkTypeReaders(reader, reader2, nameSet);
 
     if (count != reader.getFieldCount())
@@ -1567,7 +1388,7 @@ RegError ORegistry::loadAndSaveKeys(ORegKey* pTargetKey,
     }
 
     _ret = pSourceKey->openKey(
-        keyName, (RegKeyHandle*)&pTmpKey, RESOLVE_NOTHING);
+        keyName, (RegKeyHandle*)&pTmpKey);
     if (_ret)
     {
         return _ret;
@@ -1616,33 +1437,6 @@ ORegKey* ORegistry::getRootKey()
     return m_openKeyTable[ROOT];
 }
 
-
-//*********************************************************************
-//  getResolvedKeyName()
-//
-RegError ORegistry::getResolvedKeyName(RegKeyHandle hKey,
-                                       const OUString& keyName,
-                                       OUString& resolvedName)
-{
-    ORegKey*    pKey;
-
-    if ( !keyName.getLength() )
-        return REG_INVALID_KEYNAME;
-
-    REG_GUARD(m_mutex);
-
-    if (hKey)
-        pKey = (ORegKey*)hKey;
-    else
-        pKey = m_openKeyTable[ROOT];
-
-       resolvedName = resolveLinks(pKey, keyName);
-
-    if ( resolvedName.getLength() )
-        return REG_NO_ERROR;
-    else
-        return REG_DETECT_RECURSION;
-}
 
 //*********************************************************************
 //  dumpRegistry()
@@ -1696,7 +1490,6 @@ RegError ORegistry::dumpValue(const OUString& sPath, const OUString& sName, sal_
     OUString        sFullPath(sPath);
     OString         sIndent;
     storeAccessMode accessMode = VALUE_MODE_OPEN;
-    sal_Bool        bLinkValue = sal_False;
 
     if (isReadOnly())
     {
@@ -1714,12 +1507,6 @@ RegError ORegistry::dumpValue(const OUString& sPath, const OUString& sName, sal_
         return REG_VALUE_NOT_EXISTS;
     }
 
-    OUString tmpName( RTL_CONSTASCII_USTRINGPARAM(VALUE_PREFIX) );
-    tmpName += OUString( RTL_CONSTASCII_USTRINGPARAM("LINK_TARGET") );
-    if (sName == tmpName)
-    {
-        bLinkValue = sal_True;
-    }
     pBuffer = (sal_uInt8*)rtl_allocateMemory(VALUE_HEADERSIZE);
 
     sal_uInt32  rwBytes;
@@ -1773,20 +1560,11 @@ RegError ORegistry::dumpValue(const OUString& sPath, const OUString& sName, sal_
             {
                 sal_Char* value = (sal_Char*)rtl_allocateMemory(valueSize);
                 readUtf8(pBuffer, value, valueSize);
-
-                if (bLinkValue)
-                {
-                    fprintf(stdout, "%sKEY: Type = RG_LINKTYPE\n", indent);
-                    fprintf(stdout, "%s     LinkTarget = \"%s\"\n", indent, value);
-                } else
-                {
-                    fprintf(stdout, "%sValue: Type = RG_VALUETYPE_STRING\n", indent);
-                    fprintf(
-                        stdout, "%s       Size = %lu\n", indent,
-                        sal::static_int_cast< unsigned long >(valueSize));
-                    fprintf(stdout, "%s       Data = \"%s\"\n", indent, value);
-                }
-
+                fprintf(stdout, "%sValue: Type = RG_VALUETYPE_STRING\n", indent);
+                fprintf(
+                    stdout, "%s       Size = %lu\n", indent,
+                    sal::static_int_cast< unsigned long >(valueSize));
+                fprintf(stdout, "%s       Data = \"%s\"\n", indent, value);
                 rtl_freeMemory(value);
             }
             break;
@@ -2001,185 +1779,3 @@ RegError ORegistry::dumpKey(const OUString& sPath, const OUString& sName, sal_In
 
     return REG_NO_ERROR;
 }
-
-//*********************************************************************
-//  deleteLink()
-//
-RegError ORegistry::deleteLink(RegKeyHandle hKey, const OUString& linkName)
-{
-    ORegKey*    pKey;
-
-    if ( !linkName.getLength() )
-    {
-        return REG_INVALID_LINKNAME;
-    }
-
-    REG_GUARD(m_mutex);
-
-    if (hKey)
-        pKey = (ORegKey*)hKey;
-    else
-        pKey = m_openKeyTable[ROOT];
-
-    OUString    tmpPath(linkName);
-    OUString    tmpName;
-    OUString    resolvedPath;
-    sal_Int32   lastIndex = tmpPath.lastIndexOf('/');
-
-    if ( lastIndex > 0 && tmpPath.getStr()[0] == '/')
-    {
-        tmpName = tmpPath.copy(lastIndex);
-
-        OUString linkPath = tmpPath.copy(0, lastIndex);
-
-        resolvedPath = resolveLinks(pKey, linkPath);
-
-        if ( !resolvedPath.getLength() )
-        {
-            return REG_DETECT_RECURSION;
-        }
-
-        resolvedPath += tmpName;
-    } else
-    {
-        resolvedPath = pKey->getName();
-
-        if (lastIndex != 0 && resolvedPath.getLength() > 1)
-            resolvedPath += ROOT;
-
-        resolvedPath += linkName;
-    }
-
-    pKey = m_openKeyTable[ROOT];
-
-    RegKeyType  keyType;
-    RegError    ret = REG_NO_ERROR;
-    ret = pKey->getKeyType(resolvedPath, &keyType);
-    if (ret)
-        return ret;
-
-    if (keyType != RG_LINKTYPE)
-        return REG_INVALID_LINK;
-
-    return eraseKey(pKey, resolvedPath, RESOLVE_PART);
-}
-
-//*********************************************************************
-//  resolveLinks()
-//
-
-OUString ORegistry::resolveLinks(ORegKey* pKey, const OUString& path)
-{
-    OUString    resolvedPath(pKey->getName());
-    sal_Int32   nIndex = 0;
-    OUString    token;
-    ORegKey*    pLink = NULL;
-
-    if ( path.getStr()[0] == '/' )
-        nIndex++;
-
-    do
-    {
-        token = path.getToken( 0, '/', nIndex );
-        if( token.getLength() && resolvedPath.getLength() > 1 )
-            resolvedPath += ROOT;
-
-        pLink = resolveLink(pKey, resolvedPath, token);
-
-        if (pLink)
-        {
-            OUString    tmpName;
-            sal_Int32   lastIndex;
-
-            while(pLink)
-            {
-                if (!insertRecursionLink(pLink))
-                {
-                    resetRecursionLinks();
-                    delete pLink;
-                    return OUString();
-                }
-
-
-                lastIndex = resolvedPath.lastIndexOf('/');
-                tmpName = resolvedPath.copy(lastIndex + 1);
-                resolvedPath = resolvedPath.copy(0, lastIndex + 1);
-
-                pLink = resolveLink(pKey, resolvedPath, tmpName);
-            }
-
-            resetRecursionLinks();
-        }
-    } while( nIndex != -1 );
-
-    return resolvedPath;
-}
-
-//*********************************************************************
-//  resolveLink()
-//
-ORegKey* ORegistry::resolveLink(ORegKey* pKey, OUString& resolvedPath, const OUString& name)
-{
-    OStoreDirectory rStoreDir;
-    ORegKey*        pTmpKey = NULL;
-
-    if ( !rStoreDir.create(pKey->getStoreFile(), resolvedPath,
-                          name, KEY_MODE_OPENREAD) )
-    {
-        resolvedPath += name;
-        pTmpKey = new ORegKey(resolvedPath, pKey->getRegistry());
-        RegKeyType  keyType;
-        if (!pTmpKey->getKeyType(OUString(), &keyType) && (keyType == RG_LINKTYPE))
-        {
-            resolvedPath = pTmpKey->getLinkTarget();
-            return pTmpKey;
-        }
-
-        delete pTmpKey;
-        return NULL;
-    } else
-    {
-        resolvedPath += name;
-
-        return NULL;
-    }
-}
-
-sal_Bool ORegistry::insertRecursionLink(ORegKey* pLink)
-{
-    if (m_recursionList.empty())
-    {
-        m_recursionList.push_back(pLink);
-    } else
-    {
-        LinkList::iterator iter = m_recursionList.begin();
-
-        while (iter != m_recursionList.end())
-        {
-            if ((*iter)->getName() == pLink->getName())
-                return sal_False;
-
-            iter++;
-        }
-        m_recursionList.push_back(pLink);
-    }
-
-    return sal_True;
-}
-
-sal_Bool ORegistry::resetRecursionLinks()
-{
-    LinkList::iterator iter = m_recursionList.begin();
-
-    while (iter != m_recursionList.end())
-    {
-        delete *iter;
-        iter++;
-    }
-
-    m_recursionList.erase(m_recursionList.begin(), m_recursionList.end());
-
-    return sal_True;
-}
-
-

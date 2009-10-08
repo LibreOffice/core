@@ -66,33 +66,9 @@ SHL1VERSIONMAP=	$(TARGET).map
 
 SHL1STDLIBS=	$(SALLIB)
 
-# system STLport5 needs it
-.IF "$(USE_STLP_DEBUG)" != "" || "$(STLPORT_VER)" >= "500"
-SHL1STDLIBS+=$(LIBSTLPORT)
-.ENDIF
-
-# On gcc3 __Unwind_SetIP is not in supc++ but in libgcc_s.so
-.IF "$(COMID)"=="gcc3" && "$(GUI)"!="OS2"
-.IF "$(GUI)"=="WNT"
-SHL1STDLIBS+= 	-lsupc++
-.ELSE
-.IF "$(OS)"=="NETBSD"
-SHL1STDLIBS+= 	-lsupc++
-.ELIF "$(OS)"=="MACOSX"
-.IF "$(CCNUMVER)"<="000399999999"
-SHL1STDLIBS+=	-lsupc++
-.ENDIF # CCNUMVER
-.ELIF "$(CCNUMVER)"<="000400000999"
-SHL1STDLIBS+= 	-lsupc++ -lgcc_s
-.ENDIF
-.ENDIF
-.ENDIF
-
-
 SHL1DEF=	$(MISC)$/$(SHL1TARGET).def
 SHL1LIBS=	$(SLB)$/store.lib
 SHL1RPATH=  URELIB
-
 
 # --- Def-File ---
 

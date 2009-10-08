@@ -64,13 +64,13 @@ typedef sal_uInt16  RegAccessMode;
 
     The registry differs between normal keys which can contain subkeys or
     a value and link keys which navigate over the linktarget to an existing
-    other key. The mechanism is similar to links in a UNIX filesystem.
+    other key (which are no longer supported).
 */
 enum RegKeyType
 {
     /// represents a real key
     RG_KEYTYPE,
-    /// represents a link
+    /// represents a link (which is no longer supported)
     RG_LINKTYPE
 };
 
@@ -158,15 +158,19 @@ enum RegError
     */
     REG_MERGE_CONFLICT,
 
-    /// a recursion was detected resolving different link targets.
+    /** a recursion was detected resolving different link targets (no longer
+        used).
+    */
     REG_DETECT_RECURSION,
-    /// the link is invalid and can not be resolved.
+    /** the link is invalid and can not be resolved (now used by all
+        link-related operations, as links are no longer supported).
+    */
     REG_INVALID_LINK,
-    /// the specified linkname is not valid.
+    /// the specified linkname is not valid (no longer used).
     REG_INVALID_LINKNAME,
-    /// the linknane is not valid.
+    /// the linknane is not valid (no longer used).
     REG_INVALID_LINKTARGET,
-    /// the link target points to a nonexisting key.
+    /// the link target points to a nonexisting key (no longer used).
     REG_LINKTARGET_NOT_EXIST,
     /// the reserved buffer for the resolved keyname is to small.
     REG_BUFFERSIZE_TOSMALL

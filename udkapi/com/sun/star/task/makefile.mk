@@ -45,6 +45,7 @@ IDLFILES=\
     XInteractionAbort.idl\
     XInteractionContinuation.idl\
     XInteractionHandler.idl\
+    XInteractionHandler2.idl\
     XInteractionRequest.idl\
     XInteractionRetry.idl
 # ------------------------------------------------------------------

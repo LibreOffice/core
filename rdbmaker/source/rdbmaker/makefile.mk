@@ -53,6 +53,7 @@ APP1TARGET= $(TARGET)
 APP1OBJS=   $(OBJFILES)
 
 APP1STDLIBS=\
+            $(STORELIB)\
             $(SALLIB) \
             $(SALHELPERLIB) \
             $(REGLIB) \
@@ -61,5 +62,7 @@ APP1STDLIBS=\
 
 APP1LIBS= \
         $(LB)$/codemaker.lib
+
+APP1RPATH=  NONE
 
 .INCLUDE :  target.mk

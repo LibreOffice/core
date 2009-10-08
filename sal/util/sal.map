@@ -577,8 +577,15 @@ UDK_3.8 { # OOo 3.0
 
 UDK_3.9 { # OOo 3.1
     global:
+        osl_mapFile;
+        osl_unmapFile;
+
+        osl_readFileAt;
+        osl_writeFileAt;
+
         rtl_math_expm1;
         rtl_math_log1p;
+        rtl_math_atanh;
 } UDK_3.8;
 
 PRIVATE_1.0 {

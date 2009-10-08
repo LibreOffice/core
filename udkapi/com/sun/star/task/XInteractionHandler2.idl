@@ -6,8 +6,8 @@
  *
  * OpenOffice.org - a multi-platform office productivity suite
  *
- * $RCSfile: XFastShapeContextHandler.idl,v $
- * $Revision: 1.4 $
+ * $RCSfile: XInteractionHandler.idl,v $
+ * $Revision: 1.7 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -27,39 +27,45 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#ifndef __com_sun_star_xml_sax_XFastShapeContextHandler_idl__
-#define __com_sun_star_xml_sax_XFastShapeContextHandler_idl__
+#ifndef __com_sun_star_task_XInteractionHandler2_idl__
+#define __com_sun_star_task_XInteractionHandler2_idl__
 
-#include <com/sun/star/xml/sax/XFastContextHandler.idl>
-#include <com/sun/star/drawing/XShape.idl>
-#include <com/sun/star/drawing/XShapes.idl>
-#include <com/sun/star/frame/XModel.idl>
-#include <com/sun/star/io/XInputStream.idl>
-
-//=============================================================================
-
-module com {  module sun {  module star {  module xml {  module sax {
-
-//=============================================================================
-
-/** receives notification of sax document events from a
-    <type>XFastParser</type>.
-
-    @see XFastDocumentHandler
- */
-interface XFastShapeContextHandler: com::sun::star::xml::sax::XFastContextHandler
-{
-    [attribute, readonly] com::sun::star::drawing::XShape Shape;
-    [attribute] com::sun::star::drawing::XShapes Shapes;
-    [attribute] com::sun::star::frame::XModel Model;
-    [attribute] com::sun::star::io::XInputStream InputStream;
-    [attribute] string RelationFragmentPath;
-    [attribute] long StartToken;
-  };
-
-//=============================================================================
-
-}; }; }; }; };
-
+#ifndef __com_sun_star_task_XInteractionHandler_idl__
+#include <com/sun/star/task/XInteractionHandler.idl>
 #endif
 
+
+//=============================================================================
+
+ module com {  module sun {  module star {  module task {
+
+//=============================================================================
+
+/** An interaction request handler.
+
+   <p>This interface extends the interface <type>XInteractionHandler</type>
+      the way that a caller can determine whether an interaction request was
+      actually handled by the interaction handler.</p>
+ */
+/* published */ interface XInteractionHandler2 : com::sun::star::task::XInteractionHandler
+{
+    //-------------------------------------------------------------------------
+    /** Handle an interaction request.
+
+        @param Request the inteaction request to handle.
+
+        @return <true/>, if the handler handled the request, <false/> otherwise.
+     */
+    boolean handleInteractionRequest(
+        [in] com::sun::star::task::XInteractionRequest Request );
+
+};
+
+//=============================================================================
+
+}; }; }; };
+
+/*=============================================================================
+
+=============================================================================*/
+#endif

@@ -31,13 +31,13 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_store.hxx"
 
-#define _STORE_OBJECT_CXX_ "$Revision: 1.5 $"
-#include <sal/types.h>
-#include <rtl/alloc.h>
-#include <rtl/ref.hxx>
-#include <osl/diagnose.h>
-#include <osl/interlck.h>
-#include <store/object.hxx>
+#include "object.hxx"
+
+#include "sal/types.h"
+#include "rtl/alloc.h"
+#include "rtl/ref.hxx"
+#include "osl/diagnose.h"
+#include "osl/interlck.h"
 
 namespace store
 {
@@ -76,7 +76,7 @@ void* OStoreObject::operator new (size_t n)
 /*
  * operator delete.
  */
-void OStoreObject::operator delete (void *p)
+void OStoreObject::operator delete (void *p, size_t)
 {
     rtl_freeMemory (p);
 }

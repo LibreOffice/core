@@ -211,6 +211,14 @@ service OfficeDatabaseDocument
                     <td>the title of the document changed.</td>
                     <td align="center">no</td>
                 </tr>
+                <tr><td valign="top"><em>OnSubComponentOpened</em></td>
+                    <td>From with a view to the document, a view to a sub component (e.g. a table or a report) has been opened.</td>
+                    <td align="center">no</td>
+                </tr>
+                <tr><td valign="top"><em>OnSubComponentClosed</em></td>
+                    <td>From with a view to the document, a view to a sub component (e.g. a table or a report) has been closed.</td>
+                    <td align="center">no</td>
+                </tr>
             </tbody>
         </table>
         </p>

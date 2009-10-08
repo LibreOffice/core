@@ -31,18 +31,20 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_store.hxx"
 
-#define _STORE_STORE_CXX_ "$Revision: 1.8 $"
+#include "store/store.h"
+
 #include <sal/types.h>
 #include <rtl/memory.h>
 #include <rtl/string.hxx>
 #include <rtl/ref.hxx>
-#include <store/store.h>
-#include <store/object.hxx>
-#include <store/filelckb.hxx>
-#include <store/memlckb.hxx>
-#include <storbase.hxx>
-#include <storpage.hxx>
-#include <storlckb.hxx>
+
+#include "object.hxx"
+#include "lockbyte.hxx"
+
+#include "storbase.hxx"
+#include "storpage.hxx"
+#include "stordir.hxx"
+#include "storlckb.hxx"
 
 using rtl::Reference;
 using rtl::OString;
@@ -123,15 +125,18 @@ storeError SAL_CALL store_createMemoryFile (
         return store_E_InvalidParameter;
     *phFile = NULL;
 
-    Reference<OMemoryLockBytes> xLockBytes (new OMemoryLockBytes());
-    if (!xLockBytes.is())
-        return store_E_OutOfMemory;
+    Reference<ILockBytes> xLockBytes;
+
+    storeError eErrCode = MemoryLockBytes_createInstance(xLockBytes);
+    if (eErrCode != store_E_None)
+        return eErrCode;
+    OSL_ASSERT(xLockBytes.is());
 
     Reference<OStorePageManager> xManager (new OStorePageManager());
     if (!xManager.is())
         return store_E_OutOfMemory;
 
-    storeError eErrCode = xManager->initializeManager (
+    eErrCode = xManager->initialize (
         &*xLockBytes, store_AccessCreate, nPageSize);
     if (eErrCode != store_E_None)
         return eErrCode;
@@ -158,19 +163,18 @@ storeError SAL_CALL store_openFile (
     if (!(pFilename && phFile))
         return store_E_InvalidParameter;
 
-    Reference<OFileLockBytes> xLockBytes (new OFileLockBytes());
-    if (!xLockBytes.is())
-        return store_E_OutOfMemory;
+    Reference<ILockBytes> xLockBytes;
 
-    storeError eErrCode = xLockBytes->create (pFilename, eAccessMode);
+    storeError eErrCode = FileLockBytes_createInstance (xLockBytes, pFilename, eAccessMode);
     if (eErrCode != store_E_None)
         return eErrCode;
+    OSL_ASSERT(xLockBytes.is());
 
     Reference<OStorePageManager> xManager (new OStorePageManager());
     if (!xManager.is())
         return store_E_OutOfMemory;
 
-    eErrCode = xManager->initializeManager (
+    eErrCode = xManager->initialize (
         &*xLockBytes, eAccessMode, nPageSize);
     if (eErrCode != store_E_None)
         return eErrCode;
@@ -269,21 +273,17 @@ storeError SAL_CALL store_rebuildFile (
     if (!xManager.is())
         return store_E_OutOfMemory;
 
-    Reference<OFileLockBytes> xSrcLB (new OFileLockBytes());
-    if (!xSrcLB.is())
-        return store_E_OutOfMemory;
-
-    eErrCode = xSrcLB->create (pSrcFilename, store_AccessReadOnly);
+    Reference<ILockBytes> xSrcLB;
+    eErrCode = FileLockBytes_createInstance (xSrcLB, pSrcFilename, store_AccessReadOnly);
     if (eErrCode != store_E_None)
         return eErrCode;
+    OSL_ASSERT(xSrcLB.is());
 
-    Reference<OFileLockBytes> xDstLB (new OFileLockBytes());
-    if (!xDstLB.is())
-        return store_E_OutOfMemory;
-
-    eErrCode = xDstLB->create (pDstFilename, store_AccessCreate);
+    Reference<ILockBytes> xDstLB;
+    eErrCode = FileLockBytes_createInstance (xDstLB, pDstFilename, store_AccessCreate);
     if (eErrCode != store_E_None)
         return eErrCode;
+    OSL_ASSERT(xDstLB.is());
 
     return xManager->rebuild (&*xSrcLB, &*xDstLB);
 }
@@ -316,11 +316,14 @@ storeError SAL_CALL store_openDirectory (
     if (!(pPath && pName && phDirectory))
         return store_E_InvalidParameter;
 
-    Reference<OStoreDirectory> xDirectory (new OStoreDirectory());
+    Reference<OStoreDirectory_Impl> xDirectory (new OStoreDirectory_Impl());
     if (!xDirectory.is())
         return store_E_OutOfMemory;
 
-    eErrCode = xDirectory->create (&*xManager, pPath, pName, eAccessMode);
+    OString aPath (pPath->buffer, pPath->length, RTL_TEXTENCODING_UTF8);
+    OString aName (pName->buffer, pName->length, RTL_TEXTENCODING_UTF8);
+
+    eErrCode = xDirectory->create (&*xManager, aPath.pData, aName.pData, eAccessMode);
     if (eErrCode != store_E_None)
         return eErrCode;
 
@@ -337,8 +340,8 @@ storeError SAL_CALL store_closeDirectory (
     storeDirectoryHandle Handle
 ) SAL_THROW_EXTERN_C()
 {
-    OStoreDirectory *pDirectory =
-        OStoreHandle<OStoreDirectory>::query (Handle);
+    OStoreDirectory_Impl *pDirectory =
+        OStoreHandle<OStoreDirectory_Impl>::query (Handle);
     if (!pDirectory)
         return store_E_InvalidHandle;
 
@@ -354,8 +357,8 @@ storeError SAL_CALL store_findFirst (
     storeFindData        *pFindData
 ) SAL_THROW_EXTERN_C()
 {
-    OStoreHandle<OStoreDirectory> xDirectory (
-        OStoreHandle<OStoreDirectory>::query (Handle));
+    OStoreHandle<OStoreDirectory_Impl> xDirectory (
+        OStoreHandle<OStoreDirectory_Impl>::query (Handle));
     if (!xDirectory.is())
         return store_E_InvalidHandle;
 
@@ -378,8 +381,8 @@ storeError SAL_CALL store_findNext (
     storeFindData        *pFindData
 ) SAL_THROW_EXTERN_C()
 {
-    OStoreHandle<OStoreDirectory> xDirectory (
-        OStoreHandle<OStoreDirectory>::query (Handle));
+    OStoreHandle<OStoreDirectory_Impl> xDirectory (
+        OStoreHandle<OStoreDirectory_Impl>::query (Handle));
     if (!xDirectory.is())
         return store_E_InvalidHandle;
 
@@ -427,7 +430,10 @@ storeError SAL_CALL store_openStream (
     if (!xLockBytes.is())
         return store_E_OutOfMemory;
 
-    eErrCode = xLockBytes->create (&*xManager, pPath, pName, eAccessMode);
+    OString aPath (pPath->buffer, pPath->length, RTL_TEXTENCODING_UTF8);
+    OString aName (pName->buffer, pName->length, RTL_TEXTENCODING_UTF8);
+
+    eErrCode = xLockBytes->create (&*xManager, aPath.pData, aName.pData, eAccessMode);
     if (eErrCode != store_E_None)
         return eErrCode;
 
@@ -581,7 +587,7 @@ storeError SAL_CALL store_attrib (
     OString aName (pName->buffer, pName->length, RTL_TEXTENCODING_UTF8);
     OStorePageKey aKey;
 
-    eErrCode = OStorePageNameBlock::namei (aPath.pData, aName.pData, aKey);
+    eErrCode = OStorePageManager::namei (aPath.pData, aName.pData, aKey);
     if (eErrCode != store_E_None)
         return eErrCode;
 
@@ -622,7 +628,7 @@ storeError SAL_CALL store_link (
         pSrcName->buffer, pSrcName->length, RTL_TEXTENCODING_UTF8);
     OStorePageKey aSrcKey;
 
-    eErrCode = OStorePageNameBlock::namei (
+    eErrCode = OStorePageManager::namei (
         aSrcPath.pData, aSrcName.pData, aSrcKey);
     if (eErrCode != store_E_None)
         return eErrCode;
@@ -634,7 +640,7 @@ storeError SAL_CALL store_link (
         pDstName->buffer, pDstName->length, RTL_TEXTENCODING_UTF8);
     OStorePageKey aDstKey;
 
-    eErrCode = OStorePageNameBlock::namei (
+    eErrCode = OStorePageManager::namei (
         aDstPath.pData, aDstName.pData, aDstKey);
     if (eErrCode != store_E_None)
         return eErrCode;
@@ -672,7 +678,7 @@ storeError SAL_CALL store_symlink (
         pDstName->buffer, pDstName->length, RTL_TEXTENCODING_UTF8);
     OStorePageKey aDstKey;
 
-    eErrCode = OStorePageNameBlock::namei (
+    eErrCode = OStorePageManager::namei (
         aDstPath.pData, aDstName.pData, aDstKey);
     if (eErrCode != store_E_None)
         return eErrCode;
@@ -715,7 +721,7 @@ storeError SAL_CALL store_rename (
         pSrcName->buffer, pSrcName->length, RTL_TEXTENCODING_UTF8);
     OStorePageKey aSrcKey;
 
-    eErrCode = OStorePageNameBlock::namei (
+    eErrCode = OStorePageManager::namei (
         aSrcPath.pData, aSrcName.pData, aSrcKey);
     if (eErrCode != store_E_None)
         return eErrCode;
@@ -753,11 +759,10 @@ storeError SAL_CALL store_remove (
     OString aName (pName->buffer, pName->length, RTL_TEXTENCODING_UTF8);
     OStorePageKey aKey;
 
-    eErrCode = OStorePageNameBlock::namei (aPath.pData, aName.pData, aKey);
+    eErrCode = OStorePageManager::namei (aPath.pData, aName.pData, aKey);
     if (eErrCode != store_E_None)
         return eErrCode;
 
     // Remove.
     return xManager->remove (aKey);
 }
-

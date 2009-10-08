@@ -1,39 +1,52 @@
 /*************************************************************************
  *
- * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *  OpenOffice.org - a multi-platform office productivity suite
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ *  $RCSfile: object.hxx,v $
  *
- * OpenOffice.org - a multi-platform office productivity suite
+ *  $Revision: 1.1.2.1 $
  *
- * $RCSfile: object.hxx,v $
- * $Revision: 1.6 $
+ *  last change: $Author: mhu $ $Date: 2008/09/18 16:10:51 $
  *
- * This file is part of OpenOffice.org.
+ *  The Contents of this file are made available subject to
+ *  the terms of GNU Lesser General Public License Version 2.1.
  *
- * OpenOffice.org is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Lesser General Public License version 3
- * only, as published by the Free Software Foundation.
  *
- * OpenOffice.org is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU Lesser General Public License version 3 for more details
- * (a copy is included in the LICENSE file that accompanied this code).
+ *    GNU Lesser General Public License Version 2.1
+ *    =============================================
+ *    Copyright 2005 by Sun Microsystems, Inc.
+ *    901 San Antonio Road, Palo Alto, CA 94303, USA
  *
- * You should have received a copy of the GNU Lesser General Public License
- * version 3 along with OpenOffice.org.  If not, see
- * <http://www.openoffice.org/license.html>
- * for a copy of the LGPLv3 License.
+ *    This library is free software; you can redistribute it and/or
+ *    modify it under the terms of the GNU Lesser General Public
+ *    License version 2.1, as published by the Free Software Foundation.
+ *
+ *    This library is distributed in the hope that it will be useful,
+ *    but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *    Lesser General Public License for more details.
+ *
+ *    You should have received a copy of the GNU Lesser General Public
+ *    License along with this library; if not, write to the Free Software
+ *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *    MA  02111-1307  USA
  *
  ************************************************************************/
 
 #ifndef _STORE_OBJECT_HXX_
-#define _STORE_OBJECT_HXX_ "$Revision: 1.6 $"
+#define _STORE_OBJECT_HXX_ "$Revision: 1.1.2.1 $"
 
-#include <sal/types.h>
-#include <rtl/ref.hxx>
-#include <osl/interlck.h>
+#ifndef _SAL_TYPES_H_
+#include "sal/types.h"
+#endif
+
+#ifndef _RTL_REF_HXX_
+#include "rtl/ref.hxx"
+#endif
+
+#ifndef _OSL_INTERLCK_H_
+#include "osl/interlck.h"
+#endif
 
 namespace store
 {
@@ -78,7 +91,7 @@ public:
     /** Allocation.
      */
     static void* operator new (size_t n);
-    static void  operator delete (void *p);
+    static void  operator delete (void *p, size_t);
 
     /** IStoreHandle.
      */
@@ -131,4 +144,3 @@ SAL_CALL query (IStoreHandle *pHandle, OStoreObject*)
 } // namespace store
 
 #endif /* !_STORE_OBJECT_HXX_ */
-
