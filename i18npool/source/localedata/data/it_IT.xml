@@ -332,16 +332,16 @@
     <ReservedWords>
       <trueWord>vero</trueWord>
       <falseWord>falso</falseWord>
-      <quarter1Word>1. quarto</quarter1Word>
-      <quarter2Word>2. quarto</quarter2Word>
-      <quarter3Word>3. quarto</quarter3Word>
-      <quarter4Word>4. quarto</quarter4Word>
+      <quarter1Word>1o trimestre</quarter1Word>
+      <quarter2Word>2o trimestre</quarter2Word>
+      <quarter3Word>3o trimestre</quarter3Word>
+      <quarter4Word>4o trimestre</quarter4Word>
       <aboveWord>sopra</aboveWord>
       <belowWord>sotto</belowWord>
-      <quarter1Abbreviation>Q1</quarter1Abbreviation>
-      <quarter2Abbreviation>Q2</quarter2Abbreviation>
-      <quarter3Abbreviation>Q3</quarter3Abbreviation>
-      <quarter4Abbreviation>Q4</quarter4Abbreviation>
+      <quarter1Abbreviation>T1</quarter1Abbreviation>
+      <quarter2Abbreviation>T2</quarter2Abbreviation>
+      <quarter3Abbreviation>T3</quarter3Abbreviation>
+      <quarter4Abbreviation>T4</quarter4Abbreviation>
     </ReservedWords>
   </LC_MISC>
   <LC_NumberingLevel ref="en_US"/>

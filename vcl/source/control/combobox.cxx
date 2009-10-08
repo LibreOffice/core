@@ -130,8 +130,6 @@ void ComboBox::ImplInitComboBoxData()
     mbSyntheticModify   = FALSE;
     mbMatchCase         = FALSE;
     mcMultiSep          = ';';
-
-    EnableRTL( TRUE );
 }
 
 // -----------------------------------------------------------------------
@@ -671,7 +669,7 @@ void ComboBox::Resize()
         else
         {
             nSBWidth = CalcZoom( nSBWidth );
-            mpSubEdit->SetSizePixel( Size( aOutSz.Width() - nSBWidth, aOutSz.Height() ) );
+            mpSubEdit->SetPosSizePixel( Point( 0, 0 ), Size( aOutSz.Width() - nSBWidth, aOutSz.Height() ) );
             mpBtn->SetPosSizePixel( aOutSz.Width() - nSBWidth, nTop, nSBWidth, (nBottom-nTop) );
         }
     }
@@ -766,6 +764,17 @@ void ComboBox::StateChanged( StateChangedType nType )
         SetStyle( ImplInitStyle( GetStyle() ) );
         mpImplLB->GetMainWindow()->EnableSort( ( GetStyle() & WB_SORT ) ? TRUE : FALSE );
     }
+    else if( nType == STATE_CHANGE_MIRRORING )
+    {
+        if( mpBtn )
+        {
+            mpBtn->EnableRTL( IsRTLEnabled() );
+            ImplInitDropDownButton( mpBtn );
+        }
+        mpSubEdit->StateChanged( STATE_CHANGE_MIRRORING );
+        mpImplLB->EnableRTL( IsRTLEnabled() );
+        Resize();
+    }
 }
 
 // -----------------------------------------------------------------------
@@ -840,8 +849,6 @@ long ComboBox::Notify( NotifyEvent& rNEvt )
                 }
                 else
                 {
-                    if( mpFloatWin )
-                        mpImplLB->GetMainWindow()->CalcMaxVisibleEntries( mpFloatWin->CalcFloatSize() );
                     nDone = mpImplLB->ProcessKeyInput( aKeyEvt );
                 }
             }

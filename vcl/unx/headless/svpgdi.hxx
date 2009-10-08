@@ -82,7 +82,7 @@ public:
 
     virtual void            SetFillColor( SalColor nSalColor );
 
-    virtual void            SetXORMode( BOOL bSet );
+    virtual void            SetXORMode( bool bSet, bool );
 
     virtual void            SetROPLineColor( SalROPColor nROPColor );
     virtual void            SetROPFillColor( SalROPColor nROPColor );

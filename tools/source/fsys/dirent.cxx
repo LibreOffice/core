@@ -2462,9 +2462,13 @@ BOOL IsValidEntry_Impl( const DirEntry &rPath,
 
         // Pfad-Trenner sind nicht erlaubt (bei ungek"urzten auch nicht FSYS_SHORTNAME_DELIMITER)
         char cDelim = bUseDelim == 2 ? FSYS_SHORTNAME_DELIMITER : char(0);
-    if ( rLongName.Search( DirEntry::GetAccessDelimiter() ) != STRING_NOTFOUND ||
-         !bIsShortened && rLongName.Search(cDelim) != STRING_NOTFOUND )
+    if (
+         rLongName.Search(DirEntry::GetAccessDelimiter()) != STRING_NOTFOUND ||
+         (!bIsShortened && rLongName.Search(cDelim) != STRING_NOTFOUND)
+       )
+    {
         return FALSE;
+    }
 
     // MI: Abfrage nach 'CON:' etc. wird jetzt in Exists() mitgemacht
     if ( aPath.Exists() )

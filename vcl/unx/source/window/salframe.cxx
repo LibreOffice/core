@@ -996,7 +996,7 @@ void X11SalFrame::SetIcon( USHORT nIcon )
         {
             const String& rWM( pDisplay_->getWMAdaptor()->getWindowManagerName() );
             if( rWM.EqualsAscii( "KWin" ) )         // assume KDE is running
-                iconSize = 16;
+                iconSize = 48;
             static bool bGnomeIconSize = false;
             static bool bGnomeChecked = false;
             if( ! bGnomeChecked )
@@ -1018,7 +1018,7 @@ void X11SalFrame::SetIcon( USHORT nIcon )
                     XFree( pProps );
             }
             if( bGnomeIconSize )
-                iconSize = 20;
+                iconSize = 48;
         }
 
         XWMHints Hints;
@@ -3907,7 +3907,7 @@ long X11SalFrame::HandleStateEvent( XPropertyEvent *pEvent )
     DBG_ASSERT( actual_type = pEvent->atom
                 && 32 == actual_format
                 &&  2 == nitems
-                &&  0 == bytes_after, "HandleStateEvent" )
+                &&  0 == bytes_after, "HandleStateEvent" );
 
     if( *(unsigned long*)prop == NormalState )
         nShowState_ = SHOWSTATE_NORMAL;

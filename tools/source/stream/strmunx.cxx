@@ -485,12 +485,15 @@ sal_Bool SvFileStream::LockRange( sal_Size nByteOffset, sal_Size nBytes )
         return sal_False;
 
     if ( eStreamMode & STREAM_SHARE_DENYALL )
+        {
         if (bIsWritable)
             nLockMode = F_WRLCK;
         else
             nLockMode = F_RDLCK;
+        }
 
     if ( eStreamMode & STREAM_SHARE_DENYREAD )
+        {
         if (bIsWritable)
             nLockMode = F_WRLCK;
         else
@@ -498,12 +501,15 @@ sal_Bool SvFileStream::LockRange( sal_Size nByteOffset, sal_Size nBytes )
             SetError(SVSTREAM_LOCKING_VIOLATION);
             return sal_False;
         }
+        }
 
     if ( eStreamMode & STREAM_SHARE_DENYWRITE )
+        {
         if (bIsWritable)
             nLockMode = F_WRLCK;
         else
             nLockMode = F_RDLCK;
+        }
 
     if (!nLockMode)
         return sal_True;

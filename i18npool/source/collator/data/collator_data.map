@@ -18,6 +18,7 @@ global:
     get_ku_alphanumeric;
     get_hu_charset;
     get_ln_charset;
+    get_my_dictionary;
 
 local:
     *;

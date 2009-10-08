@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: font.cxx,v $
- * $Revision: 1.19 $
+ * $Revision: 1.19.134.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -64,6 +64,7 @@ Impl_Font::Impl_Font() :
     meWidthType         = WIDTH_DONTKNOW;
     meItalic            = ITALIC_NONE;
     meUnderline         = UNDERLINE_NONE;
+    meOverline          = UNDERLINE_NONE;
     meStrikeout         = STRIKEOUT_NONE;
     meRelief            = RELIEF_NONE;
     meEmphasisMark      = EMPHASISMARK_NONE;
@@ -97,6 +98,7 @@ Impl_Font::Impl_Font( const Impl_Font& rImplFont )
     meWidthType         = rImplFont.meWidthType;
     meItalic            = rImplFont.meItalic;
     meUnderline         = rImplFont.meUnderline;
+    meOverline          = rImplFont.meOverline;
     meStrikeout         = rImplFont.meStrikeout;
     meRelief            = rImplFont.meRelief;
     meEmphasisMark      = rImplFont.meEmphasisMark;
@@ -141,6 +143,7 @@ bool Impl_Font::operator==( const Impl_Font& rOther ) const
         return false;
 
     if( (meUnderline    != rOther.meUnderline)
+    ||  (meOverline     != rOther.meOverline)
     ||  (meStrikeout    != rOther.meStrikeout)
     ||  (meRelief       != rOther.meRelief)
     ||  (meEmphasisMark != rOther.meEmphasisMark)
@@ -593,6 +596,19 @@ void Font::SetUnderline( FontUnderline eUnderline )
 
 // -----------------------------------------------------------------------
 
+void Font::SetOverline( FontUnderline eOverline )
+{
+    DBG_CHKTHIS( Font, NULL );
+
+    if( mpImplFont->meOverline != eOverline )
+    {
+        MakeUnique();
+        mpImplFont->meOverline = eOverline;
+    }
+}
+
+// -----------------------------------------------------------------------
+
 void Font::SetStrikeout( FontStrikeout eStrikeout )
 {
     DBG_CHKTHIS( Font, NULL );
@@ -718,6 +734,11 @@ void Font::Merge( const Font& rFont )
         SetUnderline( rFont.GetUnderline() );
         SetWordLineMode( rFont.IsWordLineMode() );
     }
+    if ( rFont.GetOverline() != UNDERLINE_DONTKNOW )
+    {
+        SetOverline( rFont.GetOverline() );
+        SetWordLineMode( rFont.IsWordLineMode() );
+    }
     if ( rFont.GetStrikeout() != STRIKEOUT_DONTKNOW )
     {
         SetStrikeout( rFont.GetStrikeout() );
@@ -785,6 +806,10 @@ SvStream& operator>>( SvStream& rIStm, Impl_Font& rImpl_Font )
         rIStm >> bTmp;      rImpl_Font.mbVertical = bTmp;
         rIStm >> nTmp16;    rImpl_Font.meEmphasisMark = (FontEmphasisMark)nTmp16;
     }
+    if( aCompat.GetVersion() >= 3 )
+    {
+        rIStm >> nTmp16; rImpl_Font.meOverline = (FontUnderline) nTmp16;
+    }
     // Relief
     // CJKContextLanguage
 
@@ -795,7 +820,7 @@ SvStream& operator>>( SvStream& rIStm, Impl_Font& rImpl_Font )
 
 SvStream& operator<<( SvStream& rOStm, const Impl_Font& rImpl_Font )
 {
-    VersionCompat aCompat( rOStm, STREAM_WRITE, 2 );
+    VersionCompat aCompat( rOStm, STREAM_WRITE, 3 );
     rOStm.WriteByteString( rImpl_Font.maFamilyName, rOStm.GetStreamCharSet() );
     rOStm.WriteByteString( rImpl_Font.maStyleName, rOStm.GetStreamCharSet() );
     rOStm << rImpl_Font.maSize;
@@ -822,6 +847,9 @@ SvStream& operator<<( SvStream& rOStm, const Impl_Font& rImpl_Font )
     rOStm << (UINT16)   rImpl_Font.meCJKLanguage;
     rOStm << (BOOL)     rImpl_Font.mbVertical;
     rOStm << (UINT16)   rImpl_Font.meEmphasisMark;
+
+    // new in version 3
+    rOStm << (UINT16) rImpl_Font.meOverline;
 
     return rOStm;
 }
@@ -1082,8 +1110,8 @@ BOOL Font::IsOutline() const { return mpImplFont->mbOutline; }
 BOOL Font::IsShadow() const { return mpImplFont->mbShadow; }
 FontRelief Font::GetRelief() const { return mpImplFont->meRelief; }
 FontUnderline Font::GetUnderline() const { return mpImplFont->meUnderline; }
+FontUnderline Font::GetOverline()  const { return mpImplFont->meOverline; }
 FontStrikeout Font::GetStrikeout() const { return mpImplFont->meStrikeout; }
 FontEmphasisMark Font::GetEmphasisMark() const { return mpImplFont->meEmphasisMark; }
 BOOL Font::IsWordLineMode() const { return mpImplFont->mbWordLine; }
 BOOL Font::IsSameInstance( const Font& rFont ) const { return (mpImplFont == rFont.mpImplFont); }
-

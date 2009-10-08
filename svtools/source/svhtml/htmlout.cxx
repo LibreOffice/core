@@ -629,7 +629,7 @@ SvStream& HTMLOutFuncs::Out_ImageMap( SvStream& rStream,
         eDestEnc = gsl_getSystemTextEncoding();
 
     const String& rOutName = rName.Len() ? rName : rIMap.GetName();
-    DBG_ASSERT( rOutName.Len(), "Kein ImageMap-Name" )
+    DBG_ASSERT( rOutName.Len(), "Kein ImageMap-Name" );
     if( !rOutName.Len() )
         return rStream;
 

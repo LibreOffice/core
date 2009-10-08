@@ -406,8 +406,20 @@ void AquaSalFrame::Show(BOOL bVisible, BOOL bNoActivate)
         else
             [mpWindow makeKeyAndOrderFront: NSApp];
 
-        if( mpParent && mpParent->mbShown )
-            [mpParent->mpWindow addChildWindow: mpWindow ordered: NSWindowAbove];
+        if( mpParent )
+        {
+            /* #i92674# #i96433# we do not want an invisible parent to show up (which adding a visible
+               child implicitly does). However we also do not want a parentless toolbar.
+
+               HACK: try to decide when we should not insert a child to its parent
+               floaters and ownerdraw windows have not yet shown up in cases where
+               we don't want the parent to become visible
+            */
+            if( mpParent->mbShown || (mnStyle & (SAL_FRAME_STYLE_OWNERDRAWDECORATION | SAL_FRAME_STYLE_FLOAT) ) )
+            {
+                [mpParent->mpWindow addChildWindow: mpWindow ordered: NSWindowAbove];
+            }
+        }
 
         if( mbPresentation )
             [mpWindow makeMainWindow];
@@ -421,9 +433,9 @@ void AquaSalFrame::Show(BOOL bVisible, BOOL bNoActivate)
 
         //YieldMutexReleaser aRel;
 
-        // #i90440# work around the focus going back to some other window
-        // if a child gets hidden for a fullscreen window
-        if( mpParent && mpParent->mbFullScreen && mpParent->mbShown )
+        // #i90440# #i94443# work around the focus going back to some other window
+        // if a child gets hidden for a parent window
+        if( mpParent && mpParent->mbShown && [mpWindow isKeyWindow] )
             [mpParent->mpWindow makeKeyAndOrderFront: NSApp];
 
         [SalFrameView unsetMouseFrame: this];
@@ -1091,9 +1103,10 @@ void AquaSalFrame::UpdateSettings( AllSettings& rSettings )
     Color aBackgroundColor = Color( 0xEC, 0xEC, 0xEC );
     aStyleSettings.Set3DColors( aBackgroundColor );
     aStyleSettings.SetFaceColor( aBackgroundColor );
-    aStyleSettings.SetInactiveTabColor( aBackgroundColor );
+    Color aInactiveTabColor( aBackgroundColor );
+    aInactiveTabColor.DecreaseLuminance( 32 );
+    aStyleSettings.SetInactiveTabColor( aInactiveTabColor );
 
-    // [FIXME] Dialog Color is the one to modify to complete Aqua Theme on windows
     aStyleSettings.SetDialogColor( aBackgroundColor );
     aStyleSettings.SetLightBorderColor( aBackgroundColor );
     Color aShadowColor( aStyleSettings.GetShadowColor() );

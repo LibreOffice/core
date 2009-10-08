@@ -141,9 +141,15 @@ BitmapBuffer* X11SalBitmap::ImplCreateDIB( const Size& rSize, USHORT nBitCount, 
                 case( 4 ): pDIB->mnFormat |= BMP_FORMAT_4BIT_MSN_PAL; break;
                 case( 8 ): pDIB->mnFormat |= BMP_FORMAT_8BIT_PAL; break;
 #ifdef OSL_BIGENDIAN
-                case(16 ) : pDIB->mnFormat|= BMP_FORMAT_16BIT_TC_MSB_MASK; break;
+                case(16 ):
+                    pDIB->mnFormat|= BMP_FORMAT_16BIT_TC_MSB_MASK;
+                    pDIB->maColorMask = ColorMask( 0xf800, 0x07e0, 0x001f );
+                    break;
 #else
-                case(16 ) : pDIB->mnFormat|= BMP_FORMAT_16BIT_TC_LSB_MASK; break;
+                case(16 ):
+                    pDIB->mnFormat|= BMP_FORMAT_16BIT_TC_LSB_MASK;
+                    pDIB->maColorMask = ColorMask( 0xf800, 0x07e0, 0x001f );
+                    break;
 #endif
                 default:
                     nBitCount = 24;
@@ -251,7 +257,7 @@ BitmapBuffer* X11SalBitmap::ImplCreateDIB( Drawable aDrawable,
                 case( 16 ):
                 {
                     nDstFormat |= BMP_FORMAT_24BIT_TC_BGR;
-                        aSrcBuf.maColorMask = ColorMask( pImage->red_mask, pImage->green_mask, pImage->blue_mask );
+                    aSrcBuf.maColorMask = ColorMask( pImage->red_mask, pImage->green_mask, pImage->blue_mask );
 
                     if( LSBFirst == pImage->byte_order )
                     {

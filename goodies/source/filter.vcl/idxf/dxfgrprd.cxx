@@ -57,10 +57,12 @@ BOOL DXFReadLine( SvStream& rIStm, ByteString& rStr )
     {
         USHORT nLen = (USHORT)rIStm.Read( buf, sizeof(buf)-1 );
         if( !nLen )
+        {
             if( rStr.Len() == 0 )
                 return FALSE;
             else
                 break;
+        }
 
         for( USHORT n = 0; n < nLen ; n++ )
         {

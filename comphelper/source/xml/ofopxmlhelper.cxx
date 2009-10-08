@@ -108,7 +108,7 @@ void SAL_CALL OFOPXMLHelper::WriteRelationsInfoSequence( const uno::Reference< i
     pRootAttrList->AddAttribute(
         ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM ( "xmlns" ) ),
         aCDATAString,
-        ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM ( "http://schemas.openxmlformats.org/package/2006/relationsships" ) ) );
+        ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM ( "http://schemas.openxmlformats.org/package/2006/relationships" ) ) );
 
     xWriterHandler->startDocument();
     xWriterHandler->startElement( aRelListElement, xRootAttrList );

@@ -159,6 +159,8 @@ namespace toolkit
         ImplRegisterProperty( BASEPROPERTY_TEXTCOLOR );
         ImplRegisterProperty( BASEPROPERTY_HIDEINACTIVESELECTION );
         ImplRegisterProperty( BASEPROPERTY_ENFORCE_FORMAT );
+        ImplRegisterProperty( BASEPROPERTY_WRITING_MODE );
+        ImplRegisterProperty( BASEPROPERTY_CONTEXT_WRITING_MODE );
 
         Any aTreatAsNumber;
         aTreatAsNumber <<= (sal_Bool) sal_True;

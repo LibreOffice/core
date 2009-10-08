@@ -92,6 +92,7 @@ mkdir: %_DEST%\inc%_EXT%\basegfx\tools
 ..\inc\basegfx\tools\unopolypolygon.hxx %_DEST%\inc%_EXT%\basegfx\tools\unopolypolygon.hxx
 ..\inc\basegfx\tools\rectcliptools.hxx %_DEST%\inc%_EXT%\basegfx\tools\rectcliptools.hxx
 ..\inc\basegfx\tools\tools.hxx %_DEST%\inc%_EXT%\basegfx\tools\tools.hxx
+..\inc\basegfx\tools\gradienttools.hxx %_DEST%\inc%_EXT%\basegfx\tools\gradienttools.hxx
 
 mkdir: %_DEST%\inc%_EXT%\basegfx\color
 ..\inc\basegfx\color\bcolor.hxx %_DEST%\inc%_EXT%\basegfx\color\bcolor.hxx

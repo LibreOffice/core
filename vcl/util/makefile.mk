@@ -179,6 +179,7 @@ SHL1STDLIBS+=\
             $(SALLIB)			\
             $(BASEGFXLIB)		\
             $(ICUUCLIB)			\
+            $(ICUDATALIB)		\
             $(ICULELIB)			\
             $(JVMACCESSLIB)
 SHL1USE_EXPORTS=name
@@ -228,7 +229,8 @@ SHL1STDLIBS += $(PSPLIB)
 
 SHL1STDLIBS += $(UWINAPILIB)      \
                $(GDI32LIB)        \
-               $(MSIMG32LIB)        \
+               $(GDIPLUSLIB)	  \
+               $(MSIMG32LIB)      \
                $(WINSPOOLLIB)     \
                $(OLE32LIB)        \
                $(SHELL32LIB)      \

@@ -106,7 +106,7 @@ inline sal_Bool AccessibleStateSetHelperImpl::IsEmpty ()
 inline sal_Bool AccessibleStateSetHelperImpl::Contains (sal_Int16 aState)
     throw (uno::RuntimeException)
 {
-    DBG_ASSERT(aState < BITFIELDSIZE, "the statesset is to small")
+    DBG_ASSERT(aState < BITFIELDSIZE, "the statesset is too small");
 #if 0
     return maStates.test(aState);
 #endif
@@ -140,7 +140,7 @@ inline void AccessibleStateSetHelperImpl::AddStates( const sal_Int64 _nStates ) 
 inline void AccessibleStateSetHelperImpl::AddState(sal_Int16 aState)
     throw (uno::RuntimeException)
 {
-    DBG_ASSERT(aState < BITFIELDSIZE, "the statesset is to small")
+    DBG_ASSERT(aState < BITFIELDSIZE, "the statesset is too small");
 #if 0
     maStates.set(aState);
 #endif
@@ -152,7 +152,7 @@ inline void AccessibleStateSetHelperImpl::AddState(sal_Int16 aState)
 inline void AccessibleStateSetHelperImpl::RemoveState(sal_Int16 aState)
     throw (uno::RuntimeException)
 {
-    DBG_ASSERT(aState < BITFIELDSIZE, "the statesset is to small")
+    DBG_ASSERT(aState < BITFIELDSIZE, "the statesset is too small");
 #if 0
     maStates.set(aState, 0);
 #endif

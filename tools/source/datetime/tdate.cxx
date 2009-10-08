@@ -65,7 +65,10 @@ static USHORT aDaysInMonth[12] = { 31, 28, 31, 30, 31, 30,
 
 inline BOOL ImpIsLeapYear( USHORT nYear )
 {
-    return (((nYear % 4) == 0) && ((nYear % 100) != 0) || ((nYear % 400) == 0));
+    return (
+                 ( ((nYear % 4) == 0) && ((nYear % 100) != 0) ) ||
+                 ( (nYear % 400) == 0 )
+               );
 }
 
 // -----------------------------------------------------------------------
@@ -76,8 +79,7 @@ inline USHORT DaysInMonth( USHORT nMonth, USHORT nYear )
         return aDaysInMonth[nMonth-1];
     else
     {
-        if ( ((nYear % 4) == 0) && ((nYear % 100) != 0) ||
-             ((nYear % 400) == 0) )
+        if (ImpIsLeapYear(nYear))
             return aDaysInMonth[nMonth-1] + 1;
         else
             return aDaysInMonth[nMonth-1];

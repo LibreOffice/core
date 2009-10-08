@@ -32,6 +32,7 @@
 #include "precompiled_svtools.hxx"
 #include "supservs.hxx"
 #include <com/sun/star/lang/Locale.hpp>
+#include <comphelper/sharedmutex.hxx>
 #include <i18npool/mslangid.hxx>
 #include <tools/debug.hxx>
 #include <vos/mutex.hxx>
@@ -91,8 +92,7 @@ Any SAL_CALL SvNumberFormatsSupplierServiceObject::queryAggregation( const Type&
 //-------------------------------------------------------------------------
 void SAL_CALL SvNumberFormatsSupplierServiceObject::initialize( const Sequence< Any >& _rArguments ) throw(Exception, RuntimeException)
 {
-    OGuard aGuard(Application::GetSolarMutex());
-        // the mutex of the base class .... hope we have a real (i.e. own) mutex sometimes
+    ::osl::MutexGuard aGuard( getSharedMutex() );
 
     DBG_ASSERT(m_pOwnFormatter == NULL,
         "SvNumberFormatsSupplierServiceObject::initialize : already initialized !");
@@ -166,7 +166,7 @@ Sequence< ::rtl::OUString > SAL_CALL SvNumberFormatsSupplierServiceObject::getSu
 //-------------------------------------------------------------------------
 void SAL_CALL SvNumberFormatsSupplierServiceObject::write( const Reference< XObjectOutputStream >& _rxOutStream ) throw(IOException, RuntimeException)
 {
-    OGuard aGuard(Application::GetSolarMutex());
+    ::osl::MutexGuard aGuard( getSharedMutex() );
     implEnsureFormatter();
 
     Reference< XOutputStream > xStream(_rxOutStream.get());
@@ -179,7 +179,7 @@ void SAL_CALL SvNumberFormatsSupplierServiceObject::write( const Reference< XObj
 //-------------------------------------------------------------------------
 void SAL_CALL SvNumberFormatsSupplierServiceObject::read( const Reference< XObjectInputStream >& _rxInStream ) throw(IOException, RuntimeException)
 {
-    OGuard aGuard(Application::GetSolarMutex());
+    ::osl::MutexGuard aGuard( getSharedMutex() );
     implEnsureFormatter();
 
     Reference< XInputStream > xStream(_rxInStream.get());
@@ -191,7 +191,7 @@ void SAL_CALL SvNumberFormatsSupplierServiceObject::read( const Reference< XObje
 //-------------------------------------------------------------------------
 Reference< XPropertySet > SAL_CALL SvNumberFormatsSupplierServiceObject::getNumberFormatSettings() throw(RuntimeException)
 {
-    OGuard aGuard(Application::GetSolarMutex());
+    ::osl::MutexGuard aGuard( getSharedMutex() );
     implEnsureFormatter();
     return SvNumberFormatsSupplierObj::getNumberFormatSettings();
 }
@@ -199,7 +199,7 @@ Reference< XPropertySet > SAL_CALL SvNumberFormatsSupplierServiceObject::getNumb
 //-------------------------------------------------------------------------
 Reference< XNumberFormats > SAL_CALL SvNumberFormatsSupplierServiceObject::getNumberFormats() throw(RuntimeException)
 {
-    OGuard aGuard(Application::GetSolarMutex());
+    ::osl::MutexGuard aGuard( getSharedMutex() );
     implEnsureFormatter();
     return SvNumberFormatsSupplierObj::getNumberFormats();
 }

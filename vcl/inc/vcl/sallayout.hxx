@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: sallayout.hxx,v $
- * $Revision: 1.8 $
+ * $Revision: 1.8.54.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -206,6 +206,7 @@ public:
     virtual long    FillDXArray( sal_Int32* pDXArray ) const = 0;
     virtual long    GetTextWidth() const { return FillDXArray( NULL ); }
     virtual void    GetCaretPositions( int nArraySize, sal_Int32* pCaretXArray ) const = 0;
+    virtual bool    IsKashidaPosValid ( int /*nCharPos*/ ) const { return true; } // i60594
 
     // methods using glyph indexing
     virtual int     GetNextGlyphs( int nLen, sal_GlyphId* pGlyphIdAry, Point& rPos, int&,
@@ -223,6 +224,7 @@ public:
     virtual void    MoveGlyph( int nStart, long nNewXPos ) = 0;
     virtual void    DropGlyph( int nStart ) = 0;
     virtual void    Simplify( bool bIsBase ) = 0;
+    virtual void    DisableGlyphInjection( bool /*bDisable*/ ) {}
 
 protected:
     // used by layout engines

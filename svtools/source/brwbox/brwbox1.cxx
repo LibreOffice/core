@@ -291,11 +291,10 @@ void BrowseBox::InsertHandleColumn( ULONG nWidth )
     // Headerbar anpassen
     if ( getDataWindow()->pHeaderBar )
     {
-        getDataWindow()->pHeaderBar->SetPosPixel(
-                    Point(nWidth, 0));
-
-        getDataWindow()->pHeaderBar->SetSizePixel(
-                    Size( GetOutputSizePixel().Width() - nWidth, GetTitleHeight() ) );
+        getDataWindow()->pHeaderBar->SetPosSizePixel(
+                    Point(nWidth, 0),
+                    Size( GetOutputSizePixel().Width() - nWidth, GetTitleHeight() )
+                    );
     }
 
     /*if ( getDataWindow()->pHeaderBar )
@@ -837,11 +836,10 @@ void BrowseBox::RemoveColumn( USHORT nItemId )
         // Headerbar anpassen
         if ( getDataWindow()->pHeaderBar )
         {
-            getDataWindow()->pHeaderBar->SetPosPixel(
-                        Point(0, 0));
-
-            getDataWindow()->pHeaderBar->SetSizePixel(
-                        Size( GetOutputSizePixel().Width(), GetTitleHeight() ) );
+            getDataWindow()->pHeaderBar->SetPosSizePixel(
+                        Point(0, 0),
+                        Size( GetOutputSizePixel().Width(), GetTitleHeight() )
+                        );
         }
     }
 
@@ -1028,93 +1026,83 @@ long BrowseBox::ScrollColumns( long nCols )
     BOOL bScrollable = pDataWin->GetBackground().IsScrollable();
     BOOL bInvalidateView = FALSE;
 
-    // eine Spalte nach links scrollen?
+    // scrolling one column to the right?
     if ( nCols == 1 )
     {
         // update internal value and scrollbar
         ++nFirstCol;
         aHScroll.SetThumbPos( nFirstCol - FrozenColCount() );
 
-        long nDelta = pCols->GetObject(nFirstCol-1)->Width();
-        long nFrozenWidth = GetFrozenWidth();
-
-        // scroll the title-line
-        Rectangle aScrollRect(
-                Point( nFrozenWidth + nDelta, 0 ),
-                Size( GetOutputSizePixel().Width() - nFrozenWidth - nDelta,
-                      GetTitleHeight() - 1 ) );
-
-        // ggf. Headerbar mitscrollen
-        if ( !getDataWindow()->pHeaderBar && nTitleLines )
+        if ( !bScrollable )
         {
-            if( bScrollable )
-                Scroll( -nDelta, 0, aScrollRect, SCROLL_FLAGS );
-            else
-                bInvalidateView = TRUE;
-        }
-
-
-        long nSkippedWidth = GetOutputSizePixel().Width() -
-            2 * aScrollRect.GetWidth() - nFrozenWidth;
-        if ( nSkippedWidth > 0 )
-        {
-            aScrollRect.Right() = aScrollRect.Left()-1;
-            aScrollRect.Left() -= nSkippedWidth;
-            Invalidate( aScrollRect );
-        }
-
-        // scroll the data-area
-        aScrollRect = Rectangle(
-                Point( nFrozenWidth + nDelta, 0 ),
-                Size( pDataWin->GetOutputSizePixel().Width() - nFrozenWidth -
-                      nDelta, pDataWin->GetOutputSizePixel().Height() ) );
-
-        if( bScrollable )
-            pDataWin->Scroll( -nDelta, 0, aScrollRect, SCROLL_FLAGS );
-        else
             bInvalidateView = TRUE;
-        nSkippedWidth = pDataWin->GetOutputSizePixel().Width() -
-            2 * aScrollRect.GetWidth() - nFrozenWidth;
-        if ( nSkippedWidth > 0 )
+        }
+        else
         {
-            aScrollRect.Right() = aScrollRect.Left()-1;
-            aScrollRect.Left() -= nSkippedWidth;
+            long nDelta = pCols->GetObject(nFirstCol-1)->Width();
+            long nFrozenWidth = GetFrozenWidth();
+
+            Rectangle aScrollRect(  Point( nFrozenWidth + nDelta, 0 ),
+                                    Size ( GetOutputSizePixel().Width() - nFrozenWidth - nDelta,
+                                           GetTitleHeight() - 1
+                                         ) );
+
+            // scroll the header bar area (if there is no dedicated HeaderBar control)
+            if ( !getDataWindow()->pHeaderBar && nTitleLines )
+            {
+                // actually scroll
+                Scroll( -nDelta, 0, aScrollRect, SCROLL_FLAGS );
+
+                // invalidate the area of the column which was scrolled out to the left hand side
+                Rectangle aInvalidateRect( aScrollRect );
+                aInvalidateRect.Left() = nFrozenWidth;
+                aInvalidateRect.Right() = nFrozenWidth + nDelta - 1;
+                Invalidate( aInvalidateRect );
+            }
+
+            // scroll the data-area
+            aScrollRect.Bottom() = pDataWin->GetOutputSizePixel().Height();
+
+            // actually scroll
+            pDataWin->Scroll( -nDelta, 0, aScrollRect, SCROLL_FLAGS );
+
+            // invalidate the area of the column which was scrolled out to the left hand side
+            aScrollRect.Left() = nFrozenWidth;
+            aScrollRect.Right() = nFrozenWidth + nDelta - 1;
             getDataWindow()->Invalidate( aScrollRect );
         }
     }
 
-    // eine Spalte nach rechts scrollen?
+    // scrolling one column to the left?
     else if ( nCols == -1 )
     {
         --nFirstCol;
         aHScroll.SetThumbPos( nFirstCol - FrozenColCount() );
 
-        long nDelta = pCols->GetObject(nFirstCol)->Width();
-        long nFrozenWidth = GetFrozenWidth();
-
-        // ggf. Headerbar mitscrollen
-        if ( !getDataWindow()->pHeaderBar && nTitleLines )
+        if ( !bScrollable )
         {
-            if( bScrollable )
-            {
-                Scroll( nDelta, 0, Rectangle(
-                    Point( nFrozenWidth, 0 ),
-                    Size( GetOutputSizePixel().Width() - nFrozenWidth,
-                        GetTitleHeight() - 1 ) ), SCROLL_FLAGS );
-            }
-            else
-                bInvalidateView = TRUE;
-        }
-        if( bScrollable )
-        {
-            pDataWin->Scroll( nDelta, 0, Rectangle(
-                Point( nFrozenWidth, 0 ),
-                Size( pDataWin->GetSizePixel().Width() - nFrozenWidth,
-                    pDataWin->GetSizePixel().Height() ) ), SCROLL_FLAGS );
+            bInvalidateView = TRUE;
         }
         else
-            bInvalidateView = TRUE;
+        {
+            long nDelta = pCols->GetObject(nFirstCol)->Width();
+            long nFrozenWidth = GetFrozenWidth();
 
+            Rectangle aScrollRect(  Point(  nFrozenWidth, 0 ),
+                                    Size (  GetOutputSizePixel().Width() - nFrozenWidth,
+                                            GetTitleHeight() - 1
+                                         ) );
+
+            // scroll the header bar area (if there is no dedicated HeaderBar control)
+            if ( !getDataWindow()->pHeaderBar && nTitleLines )
+            {
+                Scroll( nDelta, 0, aScrollRect, SCROLL_FLAGS );
+            }
+
+            // scroll the data-area
+            aScrollRect.Bottom() = pDataWin->GetOutputSizePixel().Height();
+            pDataWin->Scroll( nDelta, 0, aScrollRect, SCROLL_FLAGS );
+        }
     }
     else
     {

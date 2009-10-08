@@ -74,7 +74,7 @@ private:
     float           mfFontScale;
 
 private:
-    bool    InitGIA() const;
+    bool    InitGIA( ImplLayoutArgs* pArgs = NULL ) const;
     bool    GetIdealX() const;
     bool    GetDeltaY() const;
 
@@ -95,6 +95,10 @@ private:
     mutable Fixed*          mpGlyphAdvances;    // contains glyph widths for the justified layout
     mutable Fixed*          mpGlyphOrigAdvs;    // contains glyph widths for the unjustified layout
     mutable Fixed*          mpDeltaY;           // vertical offset from the baseline
+
+    struct SubPortion { int mnMinCharPos, mnEndCharPos; Fixed mnXOffset; };
+    typedef std::vector<SubPortion> SubPortionVector;
+    mutable SubPortionVector    maSubPortions;      // Writer&ATSUI layouts can differ quite a bit...
 
     // storing details about fonts used in glyph-fallback for this layout
     mutable class FallbackInfo* mpFallbackInfo;
@@ -313,6 +317,10 @@ void ATSLayout::AdjustLayout( ImplLayoutArgs& rArgs )
     OSStatus eStatus = ATSUSetLayoutControls( maATSULayout, 3, nTags, nBytes, nVals );
     if( eStatus != noErr )
         return;
+
+    // check result of the justied layout
+    if( rArgs.mpDXArray )
+        InitGIA( &rArgs );
 }
 
 // -----------------------------------------------------------------------
@@ -367,12 +375,23 @@ void ATSLayout::DrawText( SalGraphics& rGraphics ) const
     DBG_ASSERT( (theErr==noErr), "ATSLayout::DrawText ATSUSetLayoutControls failed!\n" );
 
     // Draw the text
-    DBG_ASSERT( mnBaseAdv==0, "ATSLayout::DrawText() not yet implemented for glyph fallback layouts" );
     const Point aPos = GetDrawPosition( Point(mnBaseAdv,0) );
     const Fixed nFixedX = Vcl2Fixed( +aPos.X() );
     const Fixed nFixedY = Vcl2Fixed( -aPos.Y() ); // adjusted for y-mirroring
-    theErr = ATSUDrawText( maATSULayout, mnMinCharPos, mnCharCount, nFixedX, nFixedY );
-    DBG_ASSERT( (theErr==noErr), "ATSLayout::DrawText ATSUDrawText failed!\n" );
+    if( maSubPortions.empty() )
+        ATSUDrawText( maATSULayout, mnMinCharPos, mnCharCount, nFixedX, nFixedY );
+    else
+    {
+        // draw the sub-portions and apply individual adjustments
+        SubPortionVector::const_iterator it = maSubPortions.begin();
+        for(; it != maSubPortions.end(); ++it )
+        {
+            const SubPortion& rSubPortion = *it;
+            ATSUDrawText( maATSULayout,
+                rSubPortion.mnMinCharPos, rSubPortion.mnEndCharPos - rSubPortion.mnMinCharPos,
+                nFixedX + rSubPortion.mnXOffset, nFixedY );
+        }
+    }
 
     // request an update of the changed window area
     if( rAquaGraphics.IsWindowGraphics() )
@@ -437,6 +456,28 @@ int ATSLayout::GetNextGlyphs( int nLen, sal_GlyphId* pGlyphIDs, Point& rPos, int
     Fixed nXOffset = mnBaseAdv;
     for( int i = 0; i < nStart; ++i )
         nXOffset += mpGlyphAdvances[ i ];
+    // if sub-portion offsets are involved there is an additional x-offset
+    if( !maSubPortions.empty() )
+    {
+        // prepare to find the sub-portion
+        int nCharPos = nStart + mnMinCharPos;
+        if( mpGlyphs2Chars )
+            nCharPos = mpGlyphs2Chars[nStart];
+
+        // find the matching subportion
+        // TODO: is a non-linear search worth it?
+        SubPortionVector::const_iterator it = maSubPortions.begin();
+        for(; it != maSubPortions.end(); ++it) {
+            const SubPortion& r = *it;
+            if( nCharPos < r.mnMinCharPos )
+                continue;
+            if( nCharPos >= r.mnEndCharPos )
+                continue;
+            // apply the sub-portion xoffset
+            nXOffset += r.mnXOffset;
+            break;
+        }
+    }
 
     Fixed nYOffset = 0;
     if( mpDeltaY )
@@ -455,7 +496,7 @@ int ATSLayout::GetNextGlyphs( int nLen, sal_GlyphId* pGlyphIDs, Point& rPos, int
 
            // check if glyph fallback is needed for this glyph
         // TODO: use ATSUDirectGetLayoutDataArrayPtrFromTextLayout(kATSUDirectDataStyleIndex) API instead?
-    const int nCharPos = mpGlyphs2Chars ? mpGlyphs2Chars[nStart] : nStart + mnMinCharPos;
+        const int nCharPos = mpGlyphs2Chars ? mpGlyphs2Chars[nStart] : nStart + mnMinCharPos;
         ATSUFontID nFallbackFontID = kATSUInvalidFontID;
         UniCharArrayOffset nChangedOffset = 0;
         UniCharCount nChangedLength = 0;
@@ -495,6 +536,8 @@ int ATSLayout::GetNextGlyphs( int nLen, sal_GlyphId* pGlyphIDs, Point& rPos, int
             break;
 
         // stop when next the x-position is unexpected
+        if( !maSubPortions.empty() )
+            break;   // TODO: finish the complete sub-portion
         if( !pGlyphAdvances && mpGlyphOrigAdvs )
             if( mpGlyphAdvances[nStart-1] != mpGlyphOrigAdvs[nStart-1] )
                 break;
@@ -616,6 +659,7 @@ long ATSLayout::FillDXArray( long* pDXArray ) const
 **/
 int ATSLayout::GetTextBreak( long nMaxWidth, long nCharExtra, int nFactor ) const
 {
+    // get a quick overview on what could fit
     const long nPixelWidth = (nMaxWidth - (nCharExtra * mnCharCount)) / nFactor;
 
     UniCharArrayOffset nBreakPos = mnMinCharPos;
@@ -633,6 +677,26 @@ int ATSLayout::GetTextBreak( long nMaxWidth, long nCharExtra, int nFactor ) cons
     // #i89789# OOo's application layers expect STRING_LEN if everything fits
     if( nBreakPos >= static_cast<UniCharArrayOffset>(mnEndCharPos) )
         return STRING_LEN;
+
+    // for the nCharExtra!=0 case the resulting nBreakPos needs be involved
+    if( nCharExtra != 0 )
+    {
+        // age-old nCharExtra!=0 semantic is quite incompatible with ATSUBreakLine()
+        // TODO: use a better way than by testing each the char position
+        InitGIA();
+        ATSUTextMeasurement nATSUSumWidth = 0;
+        const ATSUTextMeasurement nATSUMaxWidth = Vcl2Fixed( nMaxWidth / nFactor );
+        const ATSUTextMeasurement nATSUExtraWidth = Vcl2Fixed( nCharExtra ) / nFactor;
+        for( int i = 0; i < mnCharCount; ++i)
+        {
+            nATSUSumWidth += mpCharWidths[i];
+            if( nATSUSumWidth >= nATSUMaxWidth )
+                return (mnMinCharPos + i);
+            nATSUSumWidth += nATSUExtraWidth;
+        }
+
+        return STRING_LEN;
+    }
 
     // GetTextBreak()'s callers expect it to return the "stupid visual line break".
     // Returning anything else result.s in subtle problems in the application layers.
@@ -730,7 +794,7 @@ bool ATSLayout::GetBoundRect( SalGraphics&, Rectangle& rVCLRect ) const
 
 // -----------------------------------------------------------------------
 /**
- * ATSLayout::InitGIA() : Get many informations about layouted text
+ * ATSLayout::InitGIA() : get many informations about layouted text
  *
  * Fills arrays of information about the gylph layout previously done
  *  in ASTLayout::LayoutText() : glyph advance (width), glyph delta Y (from baseline),
@@ -738,7 +802,7 @@ bool ATSLayout::GetBoundRect( SalGraphics&, Rectangle& rVCLRect ) const
  *
  * @return : true if everything could be computed, otherwise false
 **/
-bool ATSLayout::InitGIA() const
+bool ATSLayout::InitGIA( ImplLayoutArgs* pArgs ) const
 {
     // no need to run InitGIA more than once on the same ATSLayout object
     if( mnGlyphCount >= 0 )
@@ -795,7 +859,7 @@ bool ATSLayout::InitGIA() const
             continue;
 
         DBG_ASSERT( !(rALR.flags & kATSGlyphInfoTerminatorGlyph),
-            "ATSLayout::InitGIA(): terminator glyph not marked as deleted!" )
+            "ATSLayout::InitGIA(): terminator glyph not marked as deleted!" );
 
         // store details of the visible glyphs
         nLeftPos = rALR.realPos;
@@ -820,7 +884,53 @@ bool ATSLayout::InitGIA() const
         "ATSLayout::InitGIA(): measured widths do not match!\n" );
 #endif
 
-    // Release data array ptr
+    // #i91183# we need to split up the portion into sub-portions
+    // if the ATSU-layout differs too much from the requested layout
+    if( pArgs && pArgs->mpDXArray )
+    {
+        // TODO: non-strong-LTR case cases should be handled too
+        if( 0 == (~pArgs->mnFlags & (TEXT_LAYOUT_BIDI_STRONG|TEXT_LAYOUT_BIDI_LTR)) )
+        {
+            Fixed nSumCharWidths = 0;
+            SubPortion aSubPortion = { mnMinCharPos, 0, 0 };
+            for( int i = 0; i < mnCharCount; ++i )
+            {
+                // calculate related logical position
+                nSumCharWidths += mpCharWidths[i];
+
+                // start new sub-portion if needed
+                const Fixed nNextXPos = Vcl2Fixed(pArgs->mpDXArray[i]);
+                const Fixed nNextXOffset = nNextXPos - nSumCharWidths;
+                const Fixed nFixedDiff = aSubPortion.mnXOffset - nNextXOffset;
+                if( (nFixedDiff < -0xC000) || (nFixedDiff > +0xC000) ) {
+                    // get to the end of the current sub-portion
+                    // prevent splitting up at diacritics etc.
+                    int j = i;
+                    while( (++j < mnCharCount) && !mpCharWidths[j] );
+                    aSubPortion.mnEndCharPos = mnMinCharPos + j;
+                    // emit current sub-portion
+                    maSubPortions.push_back( aSubPortion );
+                    // prepare next sub-portion
+                    aSubPortion.mnMinCharPos = aSubPortion.mnEndCharPos;
+                    aSubPortion.mnXOffset = nNextXOffset;
+                }
+            }
+
+            // emit the remaining sub-portion
+            if( !maSubPortions.empty() )
+            {
+                aSubPortion.mnEndCharPos = mnEndCharPos;
+                if( aSubPortion.mnEndCharPos != aSubPortion.mnMinCharPos )
+                    maSubPortions.push_back( aSubPortion );
+            }
+        }
+
+        // override layouted charwidths with requested charwidths
+        for( int n = 0; n < mnCharCount; ++n )
+            mpCharWidths[ n ] = pArgs->mpDXArray[ n ];
+    }
+
+    // release the ATSU layout records
     ATSUDirectReleaseLayoutDataArrayPtr(NULL,
         kATSUDirectDataLayoutRecordATSLayoutRecordCurrent, (void**)&pALR );
 
@@ -998,84 +1108,10 @@ void PolyArgs::ClosePolygon()
 }
 #endif
 // =======================================================================
-#if 0
-// helper functions for ATSLayout::GetGlyphOutlines()
-OSStatus MyATSCubicMoveToCallback( const Float32Point *pt1,
-   void* pData )
-{
-    PolyArgs& rA = *reinterpret_cast<PolyArgs*>(pData);
-    // MoveTo implies a new polygon => finish old polygon first
-    rA.ClosePolygon();
-    rA.AddPoint( *pt1, POLY_NORMAL );
-}
-
-OSStatus MyATSCubicLineToCallback( const Float32Point* pt1,
-    void* pData )
-{
-    PolyArgs& rA = *reinterpret_cast<PolyArgs*>(pData);
-    rA.AddPoint( *pt1, POLY_NORMAL );
-}
-
-OSStatus MyATSCubicCurveToCallback( const Float32Point* pt1,
-    const Float32Point* pt2, const Float32Point* pt3, void* pData )
-{
-    PolyArgs& rA = *reinterpret_cast<PolyArgs*>(pData);
-    rA.AddPoint( *pt1, POLY_CONTROL );
-    rA.AddPoint( *pt2, POLY_CONTROL );
-    rA.AddPoint( *pt3, POLY_NORMAL );
-}
-
-OSStatus MyATSCubicClosePathCallback (
-   void *pData )
-{
-    PolyArgs& rA = *reinterpret_cast<PolyArgs*>(pData);
-    rA.ClosePolygon();
-}
-#endif
-// -----------------------------------------------------------------------
-
-bool ATSLayout::GetGlyphOutlines( SalGraphics&, PolyPolyVector& rPPV ) const
-{
-    return false;
-
-    /*
-    rPPV.clear();
-
-    if( !InitGIA() )
-        return false;
-
-    rPPV.resize( mpGIA->numGlyphs );
-    PolyArgs aPolyArgs;
-    const ATSUGlyphInfo* pG = mpGIA->glyphs;
-    for( int i = 0; i < mpGIA->numGlyphs; ++i, ++pG )
-    {
-        // convert glyphid at glyphpos to outline
-        GlyphID nGlyphId = pG->glyphID;
-        long nDeltaY = Float32ToInt( pG->deltaY );
-        aPolyArgs.Init( &rPPV[i], pG->screenX, nDeltaY );
-        OSStatus nStatus, nCBStatus;
-        nStatus = ATSUGlyphGetCubicPaths(
-            mrATSUStyle, nGlyphId,
-            MyATSCubicMoveToCallback, MyATSCubicLineToCallback,
-            MyATSCubicCurveToCallback, MyATSCubicClosePathCallback,
-            &aPolyArgs, &nCBStatus );
-
-        if( (nStatus != noErr) && (nCBStatus != noErr) )
-        {
-            fprintf(stderr,"ATSUCallback = %d,%d\n", nStatus, nCBStatus );
-            rPPV.resize( i );
-            break;
-        }
-    }
-
-    return true;
-     */
-}
-
-// -----------------------------------------------------------------------
 
 // glyph fallback is supported directly by Aqua
-// so MultiSalLayout-only methods can be dummy implementated
+// so methods used only by MultiSalLayout can be dummy implementated
+bool ATSLayout::GetGlyphOutlines( SalGraphics&, PolyPolyVector& rPPV ) const { return false; }
 void ATSLayout::InitFont() {}
 void ATSLayout::MoveGlyph( int /*nStart*/, long /*nNewXPos*/ ) {}
 void ATSLayout::DropGlyph( int /*nStart*/ ) {}

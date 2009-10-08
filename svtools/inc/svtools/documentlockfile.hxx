@@ -79,6 +79,7 @@ public:
     sal_Bool CreateOwnLockFile();
     ::com::sun::star::uno::Sequence< ::rtl::OUString > GetLockData();
     ::com::sun::star::uno::Sequence< ::rtl::OUString > GenerateOwnEntry();
+    sal_Bool OverwriteOwnLockFile();
     void RemoveFile();
 
     // the methods allow to control whether UI interaction regarding the locked document file is allowed

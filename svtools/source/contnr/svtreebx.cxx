@@ -344,16 +344,16 @@ void SvTreeListBox::InitEntry( SvLBoxEntry* pEntry,
 String SvTreeListBox::GetEntryText(SvLBoxEntry* pEntry) const
 {
     DBG_CHKTHIS(SvTreeListBox,0);
-    DBG_ASSERT( pEntry, "SvTreeListBox::GetEntryText(): no entry" )
+    DBG_ASSERT( pEntry, "SvTreeListBox::GetEntryText(): no entry" );
     SvLBoxString* pItem = (SvLBoxString*)(pEntry->GetFirstItem(SV_ITEM_ID_LBOXSTRING));
-    DBG_ASSERT( pEntry, "SvTreeListBox::GetEntryText(): item not found" )
+    DBG_ASSERT( pEntry, "SvTreeListBox::GetEntryText(): item not found" );
     return pItem->GetText();
 }
 
 String SvTreeListBox::SearchEntryText( SvLBoxEntry* pEntry ) const
 {
     DBG_CHKTHIS(SvTreeListBox,0);
-    DBG_ASSERT( pEntry, "SvTreeListBox::SearchEntryText(): no entry" )
+    DBG_ASSERT( pEntry, "SvTreeListBox::SearchEntryText(): no entry" );
     String sRet;
     USHORT nCount = pEntry->ItemCount();
     USHORT nCur = 0;
@@ -375,18 +375,18 @@ String SvTreeListBox::SearchEntryText( SvLBoxEntry* pEntry ) const
 const Image& SvTreeListBox::GetExpandedEntryBmp(SvLBoxEntry* pEntry, BmpColorMode _eMode) const
 {
     DBG_CHKTHIS(SvTreeListBox,0);
-    DBG_ASSERT(pEntry,"Entry?")
+    DBG_ASSERT(pEntry,"Entry?");
     SvLBoxContextBmp* pItem = (SvLBoxContextBmp*)(pEntry->GetFirstItem(SV_ITEM_ID_LBOXCONTEXTBMP));
-    DBG_ASSERT(pItem,"GetContextBmp:Item not found")
+    DBG_ASSERT(pItem,"GetContextBmp:Item not found");
     return pItem->GetBitmap2( _eMode );
 }
 
 const Image& SvTreeListBox::GetCollapsedEntryBmp( SvLBoxEntry* pEntry, BmpColorMode _eMode ) const
 {
     DBG_CHKTHIS(SvTreeListBox,0);
-    DBG_ASSERT(pEntry,"Entry?")
+    DBG_ASSERT(pEntry,"Entry?");
     SvLBoxContextBmp* pItem = (SvLBoxContextBmp*)(pEntry->GetFirstItem(SV_ITEM_ID_LBOXCONTEXTBMP));
-    DBG_ASSERT(pItem,"GetContextBmp:Item not found")
+    DBG_ASSERT(pItem,"GetContextBmp:Item not found");
     return pItem->GetBitmap1( _eMode );
 }
 
@@ -494,7 +494,7 @@ void SvTreeListBox::SetEntryText( SvLBoxEntry* pEntry, const XubString& aStr)
 {
     DBG_CHKTHIS(SvTreeListBox,0);
     SvLBoxString* pItem = (SvLBoxString*)(pEntry->GetFirstItem(SV_ITEM_ID_LBOXSTRING));
-    DBG_ASSERT(pItem,"SetText:Item not found")
+    DBG_ASSERT(pItem,"SetText:Item not found");
     pItem->SetText( pEntry, aStr );
     pItem->InitViewData( this, pEntry, 0 );
     GetModel()->InvalidateEntry( pEntry );
@@ -1065,7 +1065,7 @@ BOOL SvTreeListBox::Collapse( SvLBoxEntry* pParent )
 BOOL SvTreeListBox::Select( SvLBoxEntry* pEntry, BOOL bSelect )
 {
     DBG_CHKTHIS(SvTreeListBox,0);
-    DBG_ASSERT(pEntry,"Select: Null-Ptr")
+    DBG_ASSERT(pEntry,"Select: Null-Ptr");
     BOOL bRetVal = SvListView::Select( pEntry, bSelect );
     DBG_ASSERT(IsSelected(pEntry)==bSelect,"Select failed");
     if( bRetVal )
@@ -1526,7 +1526,7 @@ void SvTreeListBox::SetWindowBits( WinBits nWinStyle )
 void SvTreeListBox::PaintEntry( SvLBoxEntry* pEntry )
 {
     DBG_CHKTHIS(SvTreeListBox,0);
-    DBG_ASSERT(pEntry,"PaintEntry:No Entry")
+    DBG_ASSERT(pEntry,"PaintEntry:No Entry");
     if( pEntry )
         pImp->PaintEntry( pEntry );
 }
@@ -1534,7 +1534,7 @@ void SvTreeListBox::PaintEntry( SvLBoxEntry* pEntry )
 void SvTreeListBox::InvalidateEntry( SvLBoxEntry* pEntry )
 {
     DBG_CHKTHIS(SvTreeListBox,0);
-    DBG_ASSERT(pEntry,"InvalidateEntry:No Entry")
+    DBG_ASSERT(pEntry,"InvalidateEntry:No Entry");
     if( pEntry )
     {
         GetModel()->InvalidateEntry( pEntry );
@@ -1959,7 +1959,7 @@ Rectangle SvTreeListBox::GetFocusRect( SvLBoxEntry* pEntry, long nLine )
 long SvTreeListBox::GetTabPos( SvLBoxEntry* pEntry, SvLBoxTab* pTab)
 {
     DBG_CHKTHIS(SvTreeListBox,0);
-    DBG_ASSERT(pTab,"No Tab")
+    DBG_ASSERT(pTab,"No Tab");
     long nPos = pTab->GetPos();
     if( pTab->IsDynamic() )
     {

@@ -1006,6 +1006,7 @@ void WinSalGraphics::SetLineColor()
 
 void WinSalGraphics::SetLineColor( SalColor nSalColor )
 {
+    maLineColor = nSalColor;
     COLORREF    nPenColor = PALETTERGB( SALCOLOR_RED( nSalColor ),
                                         SALCOLOR_GREEN( nSalColor ),
                                         SALCOLOR_BLUE( nSalColor ) );
@@ -1087,6 +1088,7 @@ void WinSalGraphics::SetFillColor()
 
 void WinSalGraphics::SetFillColor( SalColor nSalColor )
 {
+    maFillColor = nSalColor;
     SalData*    pSalData    = GetSalData();
     BYTE        nRed        = SALCOLOR_RED( nSalColor );
     BYTE        nGreen      = SALCOLOR_GREEN( nSalColor );
@@ -1189,7 +1191,7 @@ void WinSalGraphics::SetFillColor( SalColor nSalColor )
 
 // -----------------------------------------------------------------------
 
-void WinSalGraphics::SetXORMode( BOOL bSet )
+void WinSalGraphics::SetXORMode( bool bSet, bool )
 {
     mbXORMode = bSet;
     ::SetROP2( mhDC, bSet ? R2_XORPEN : R2_COPYPEN );
@@ -1414,25 +1416,6 @@ void WinSalGraphics::drawPolyPolygon( sal_uInt32 nPoly, const sal_uInt32* pPoint
         delete [] pWinPointAry;
     if ( pWinPointAryAry != aWinPointAryAry )
         delete [] pWinPointAryAry;
-}
-
-// -----------------------------------------------------------------------
-
-bool WinSalGraphics::drawPolyPolygon( const ::basegfx::B2DPolyPolygon&, double /*fTransparency*/ )
-{
-    // TODO: implement and advertise OutDevSupport_B2DDraw support
-    return false;
-}
-
-// -----------------------------------------------------------------------
-
-bool WinSalGraphics::drawPolyLine(
-    const basegfx::B2DPolygon& /*rPolygon*/,
-    const basegfx::B2DVector& /*rLineWidths*/,
-    basegfx::B2DLineJoin /*eLineJoin*/)
-{
-    // TODO: implement
-    return false;
 }
 
 // -----------------------------------------------------------------------

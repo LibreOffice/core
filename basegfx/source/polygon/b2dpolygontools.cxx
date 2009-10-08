@@ -1975,14 +1975,16 @@ namespace basegfx
         {
             B2DPolygon aRetval;
 
+            // truncate fStart, fEnd to a range of [0.0 .. F_2PI[ where F_2PI
+            // falls back to 0.0 to ensure a unique definition
             if(fTools::less(fStart, 0.0))
             {
                 fStart = 0.0;
             }
 
-            if(fTools::more(fStart, F_2PI))
+            if(fTools::moreOrEqual(fStart, F_2PI))
             {
-                fStart = F_2PI;
+                fStart = 0.0;
             }
 
             if(fTools::less(fEnd, 0.0))
@@ -1990,9 +1992,9 @@ namespace basegfx
                 fEnd = 0.0;
             }
 
-            if(fTools::more(fEnd, F_2PI))
+            if(fTools::moreOrEqual(fEnd, F_2PI))
             {
-                fEnd = F_2PI;
+                fEnd = 0.0;
             }
 
             const sal_uInt32 nQuadrantStart(sal_uInt32(fStart / F_PI2) % 4L);

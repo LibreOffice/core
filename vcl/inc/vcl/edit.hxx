@@ -97,7 +97,7 @@ private:
 
     DECL_DLLPRIVATE_LINK(      ImplUpdateDataHdl, Timer* );
 
-    SAL_DLLPRIVATE void        ImplTruncateToMaxLen( rtl::OUString&, sal_uInt32 nSelectionLen ) const;
+    SAL_DLLPRIVATE bool        ImplTruncateToMaxLen( rtl::OUString&, sal_uInt32 nSelectionLen ) const;
     SAL_DLLPRIVATE void        ImplInitEditData();
     SAL_DLLPRIVATE void        ImplModified();
     SAL_DLLPRIVATE XubString   ImplGetText() const;

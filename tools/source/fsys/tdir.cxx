@@ -736,14 +736,15 @@ Dir& Dir::operator+=( const Dir& rDir )
         } while ( !bStat && pSortLst->Next() );
     }
     FileStat * stat = NULL;
-    for ( USHORT nNr = 0; nNr < rDir.Count(); nNr++ ) {
+    for ( USHORT nNr = 0; nNr < rDir.Count(); nNr++ )
+    {
         if ( bStat )
+        {
             if ( rDir.pStatLst )
-            {
                 stat = new FileStat( *rDir.pStatLst->GetObject(nNr) );
-            }
             else
                 stat = new FileStat( rDir[nNr] );
+        }
         ImpSortedInsert( new DirEntry( rDir[nNr] ), stat );
     }
     return *this;

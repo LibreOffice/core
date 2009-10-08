@@ -2291,7 +2291,7 @@ Size Menu::ImplCalcSize( Window* pWin )
         for ( USHORT i = (USHORT)pItemList->Count(); i; )
         {
             MenuItemData* pData = pItemList->GetDataFromPos( --i );
-            if ( ImplIsVisible( i ) && ( pData->eType == MENUITEM_IMAGE ) || ( pData->eType == MENUITEM_STRINGIMAGE ))
+            if ( ImplIsVisible( i ) && (( pData->eType == MENUITEM_IMAGE ) || ( pData->eType == MENUITEM_STRINGIMAGE )))
             {
                 Size aImgSz = pData->aImage.GetSizePixel();
                 if ( aImgSz.Height() > aMaxImgSz.Height() )
@@ -3577,7 +3577,15 @@ USHORT PopupMenu::ImplExecute( Window* pW, const Rectangle& rRect, ULONG nPopupM
     if ( GetItemCount() )
     {
         SalMenu* pMenu = ImplGetSalMenu();
-        if( pMenu && pMenu->ShowNativePopupMenu( pWin, aRect, nPopupModeFlags | FLOATWIN_POPUPMODE_GRABFOCUS ) )
+        Rectangle aNativeRect( aRect );
+        if( pW->IsRTLEnabled() && Application::GetSettings().GetLayoutRTL() )
+        {
+            Point aPt( aRect.TopLeft() );
+            aPt.X() += aSz.Width();
+            pW->ImplMirrorFramePos( aPt );
+            aNativeRect = Rectangle( aPt, aNativeRect.GetSize() );
+        }
+        if( pMenu && pMenu->ShowNativePopupMenu( pWin, aNativeRect, nPopupModeFlags | FLOATWIN_POPUPMODE_GRABFOCUS ) )
         {
             pWin->StopExecute(0);
             pWin->doShutdown();

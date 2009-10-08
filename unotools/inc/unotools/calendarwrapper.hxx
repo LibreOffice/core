@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: calendarwrapper.hxx,v $
- * $Revision: 1.10 $
+ * $Revision: 1.10.24.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -81,6 +81,9 @@ public:
     void setLocalDateTime( double nTimeInDays );
     /// convenience method to get local date/time
     double getLocalDateTime() const;
+
+    // wrapper implementations of XCalendar
+
     void setValue( sal_Int16 nFieldIndex, sal_Int16 nValue );
     sal_Bool isValid() const;
     sal_Int16 getValue( sal_Int16 nFieldIndex ) const;
@@ -94,6 +97,13 @@ public:
     ::com::sun::star::uno::Sequence< ::com::sun::star::i18n::CalendarItem > getMonths() const;
     ::com::sun::star::uno::Sequence< ::com::sun::star::i18n::CalendarItem > getDays() const;
     String getDisplayName( sal_Int16 nCalendarDisplayIndex, sal_Int16 nIdx, sal_Int16 nNameType ) const;
+
+    /** Convenience method to get timezone offset in milliseconds, taking both
+        fields ZONE_OFFSET and ZONE_OFFSET_SECOND_MILLIS into account. */
+    sal_Int32 getZoneOffsetInMillis() const;
+    /** Convenience method to get DST offset in milliseconds, taking both
+        fields DST_OFFSET and DST_OFFSET_SECOND_MILLIS into account. */
+    sal_Int32 getDSTOffsetInMillis() const;
 
     // wrapper implementations of XExtendedCalendar
 
@@ -114,6 +124,13 @@ public:
     inline  DateTime            getGregorianDateTime() const
                                     { return aEpochStart + getLocalDateTime(); }
 
+private:
+
+    /** get timezone or DST offset in milliseconds, fields are
+        CalendarFieldIndex ZONE_OFFSET and ZONE_OFFSET_SECOND_MILLIS
+        respectively DST_OFFSET and DST_OFFSET_SECOND_MILLIS.
+     */
+    sal_Int32 getCombinedOffsetInMillis( sal_Int16 nParentFieldIndex, sal_Int16 nChildFieldIndex ) const;
 };
 
 #endif

@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: mediadescriptor.cxx,v $
- * $Revision: 1.20 $
+ * $Revision: 1.20.22.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -86,11 +86,14 @@
 #include <com/sun/star/uri/XUriReference.hpp>
 #endif
 #include <com/sun/star/ucb/PostCommandArgument2.hpp>
+#include <com/sun/star/container/XNameAccess.hpp>
+
 #include <ucbhelper/interceptedinteraction.hxx>
 #include <ucbhelper/content.hxx>
 #include <ucbhelper/commandenvironment.hxx>
 #include <ucbhelper/activedatasink.hxx>
 #include <comphelper/processfactory.hxx>
+#include <comphelper/configurationhelper.hxx>
 
 #if OSL_DEBUG_LEVEL>0
     #ifndef _RTL_USTRBUF_HXX_
@@ -297,6 +300,12 @@ const ::rtl::OUString& MediaDescriptor::PROP_STREAM()
     return sProp;
 }
 
+const ::rtl::OUString& MediaDescriptor::PROP_STREAMFOROUTPUT()
+{
+    static const ::rtl::OUString sProp(RTL_CONSTASCII_USTRINGPARAM("StreamForOutput"));
+    return sProp;
+}
+
 const ::rtl::OUString& MediaDescriptor::PROP_TEMPLATENAME()
 {
     static const ::rtl::OUString sProp(RTL_CONSTASCII_USTRINGPARAM("TemplateName"));
@@ -495,15 +504,39 @@ sal_Bool MediaDescriptor::isStreamReadOnly() const
 -----------------------------------------------*/
 sal_Bool MediaDescriptor::addInputStream()
 {
-    return addInputStream_Impl( sal_True );
+    return impl_addInputStream( sal_True );
 }
 
-sal_Bool MediaDescriptor::addInputStreamNoLock()
+/*-----------------------------------------------*/
+sal_Bool MediaDescriptor::addInputStreamOwnLock()
 {
-    return addInputStream_Impl( sal_False );
+    // Own lock file implementation
+
+    sal_Bool bUseLock = sal_True; // the system file locking is used per default
+    try
+    {
+
+        css::uno::Reference< css::uno::XInterface > xCommonConfig = ::comphelper::ConfigurationHelper::openConfig(
+                            ::comphelper::getProcessServiceFactory(),
+                            ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "/org.openoffice.Office.Common" ) ),
+                            ::comphelper::ConfigurationHelper::E_STANDARD );
+        if ( !xCommonConfig.is() )
+            throw css::uno::RuntimeException();
+
+        ::comphelper::ConfigurationHelper::readRelativeKey(
+                xCommonConfig,
+                ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Misc/" ) ),
+                ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "UseDocumentSystemFileLocking" ) ) ) >>= bUseLock;
+    }
+    catch( const css::uno::Exception& )
+    {
+    }
+
+    return impl_addInputStream( bUseLock );
 }
 
-sal_Bool MediaDescriptor::addInputStream_Impl( sal_Bool bLockFile )
+/*-----------------------------------------------*/
+sal_Bool MediaDescriptor::impl_addInputStream( sal_Bool bLockFile )
 {
     // check for an already existing stream item first
     const_iterator pIt = find(MediaDescriptor::PROP_INPUTSTREAM());
@@ -524,18 +557,15 @@ sal_Bool MediaDescriptor::addInputStream_Impl( sal_Bool bLockFile )
             return impl_openStreamWithPostData( xPostData );
         }
 
-        // b) is there a reference to a file which is just being salvaged?
-        ::rtl::OUString sFileURL = getUnpackedValueOrDefault(MediaDescriptor::PROP_SALVAGEDFILE(), ::rtl::OUString());
-        // c) finally, the last resort is the URL property
-        if ( !sFileURL.getLength() )
-            sFileURL = getUnpackedValueOrDefault(MediaDescriptor::PROP_URL(), ::rtl::OUString());
-        if (!sFileURL.getLength())
+        // b) ... or we must get it from the given URL
+        ::rtl::OUString sURL = getUnpackedValueOrDefault(MediaDescriptor::PROP_URL(), ::rtl::OUString());
+        if (!sURL.getLength())
             throw css::uno::Exception(
                     ::rtl::OUString::createFromAscii("Found no URL."),
                     css::uno::Reference< css::uno::XInterface >());
 
         // Parse URL! Only the main part has to be used further. E.g. a jumpmark can make trouble
-        ::rtl::OUString sNormalizedURL = impl_normalizeURL( sFileURL );
+        ::rtl::OUString sNormalizedURL = impl_normalizeURL( sURL );
         return impl_openStreamWithURL( sNormalizedURL, bLockFile );
     }
 #if OSL_DEBUG_LEVEL>0
@@ -827,7 +857,12 @@ sal_Bool MediaDescriptor::impl_openStreamWithURL( const ::rtl::OUString& sURL, s
             if( bLockFile && aScheme.equalsIgnoreAsciiCaseAscii( "file" ) )
                 bReadOnly = sal_True;
             else
+            {
+                sal_Bool bRequestReadOnly = bReadOnly;
                 aContent.getPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "IsReadOnly" ) ) ) >>= bReadOnly;
+                if ( bReadOnly && !bRequestReadOnly && bModeRequestedExplicitly )
+                        return sal_False; // the document is explicitly requested with WRITEABLE mode
+            }
         }
         catch(const css::uno::RuntimeException&)
             { throw; }

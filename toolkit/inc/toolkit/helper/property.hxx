@@ -188,6 +188,9 @@ namespace rtl {
 #define BASEPROPERTY_URL                            134  // ::rtl::OUString
 #define BASEPROPERTY_UNIT                           135  // ::awt::FieldUnit
 #define BASEPROPERTY_CUSTOMUNITTEXT                 136  // ::rtl::OUString
+#define BASEPROPERTY_IMAGE_SCALE_MODE               137
+#define BASEPROPERTY_WRITING_MODE                   138
+#define BASEPROPERTY_CONTEXT_WRITING_MODE           139
 
 // Keine gebundenen Properties, werden immer aus der Property BASEPROPERTY_FONTDESCRIPTOR entnommen.
 #define BASEPROPERTY_FONTDESCRIPTORPART_START           1000

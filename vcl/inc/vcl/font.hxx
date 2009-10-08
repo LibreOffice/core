@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: font.hxx,v $
- * $Revision: 1.3 $
+ * $Revision: 1.3.134.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -116,6 +116,8 @@ public:
     FontRelief          GetRelief() const;
     void                SetUnderline( FontUnderline );
     FontUnderline       GetUnderline() const;
+    void                SetOverline( FontUnderline );
+    FontUnderline       GetOverline() const;
     void                SetStrikeout( FontStrikeout );
     FontStrikeout       GetStrikeout() const;
     void                SetEmphasisMark( FontEmphasisMark );

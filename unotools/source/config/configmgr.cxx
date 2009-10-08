@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: configmgr.cxx,v $
- * $Revision: 1.47 $
+ * $Revision: 1.47.14.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -58,6 +58,8 @@ using namespace com::sun::star::beans;
 using namespace com::sun::star::container;
 
 #define C2U(cChar) OUString::createFromAscii(cChar)
+#define UNISTRING(s) rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(s))
+
 //-----------------------------------------------------------------------------
 const char* cConfigBaseURL = "/org.openoffice.";
 //const char* cConfigBaseURL = "/com.sun.star.";
@@ -567,7 +569,11 @@ Any ConfigManager::GetDirectConfigProperty(ConfigProperty eProp)
         aRet >>= rProductVersion;
 
     if ( eProp == ABOUTBOXPRODUCTVERSION )
+    {
         aRet >>= rAboutBoxProductVersion;
+        getBasisAboutBoxProductVersion( rAboutBoxProductVersion );
+        aRet <<= rAboutBoxProductVersion;
+    }
 
     if ( eProp == PRODUCTEXTENSION )
         aRet >>= rProductExtension;
@@ -580,6 +586,49 @@ Any ConfigManager::GetDirectConfigProperty(ConfigProperty eProp)
 
     return aRet;
 }
+
+/*---------------------------------------------------------------------------*/
+void ConfigManager::getBasisAboutBoxProductVersion( OUString& rVersion )
+{
+    rtl::OUString aPackageVersion = UNISTRING( "${$OOO_BASE_DIR/program/" SAL_CONFIGFILE("version") ":OOOPackageVersion}" );
+    rtl::Bootstrap::expandMacros( aPackageVersion );
+
+    if ( aPackageVersion.getLength() )
+    {
+        sal_Int32 nTokIndex = 0;
+        rtl::OUString aVersionMinor = aPackageVersion.getToken( 1, '.', nTokIndex );
+        rtl::OUString aVersionMicro;
+
+        if ( nTokIndex > 0 )
+            aVersionMicro = aPackageVersion.getToken( 0, '.', nTokIndex );
+
+        if ( aVersionMinor.getLength() == 0 )
+            aVersionMinor = UNISTRING( "0" );
+        if ( aVersionMicro.getLength() == 0 )
+            aVersionMicro = UNISTRING( "0" );
+
+        sal_Int32 nIndex = rVersion.indexOf( '.' );
+        if ( nIndex == -1 )
+        {
+            rVersion += UNISTRING( "." );
+            rVersion += aVersionMinor;
+        }
+        else
+        {
+            nIndex = rVersion.indexOf( '.', nIndex+1 );
+        }
+        if ( nIndex == -1 )
+        {
+            rVersion += UNISTRING( "." );
+            rVersion += aVersionMicro;
+        }
+        else
+        {
+            rVersion = rVersion.replaceAt( nIndex+1, rVersion.getLength()-nIndex-1, aVersionMicro );
+        }
+    }
+}
+
 /* -----------------------------12.12.00 17:22--------------------------------
 
  ---------------------------------------------------------------------------*/

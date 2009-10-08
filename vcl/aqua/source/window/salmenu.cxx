@@ -369,10 +369,10 @@ bool AquaSalMenu::ShowNativePopupMenu(FloatingWindow * pWin, const Rectangle& rR
     // adjust frame rect when necessary
     USHORT nArrangeIndex;
     Point position = pWin->ImplCalcPos( pWin, rRect, nFlags, nArrangeIndex );
-    if( position.nB < rRect.nTop ) {
+    if( position.Y() < rRect.nTop ) {
         displayPopupFrame.origin.y += ( lineHeight*drawnItems );
     }
-    if( position.nA < rRect.nLeft ) {
+    if( position.X() < rRect.nLeft ) {
         displayPopupFrame.origin.x -= popupFrame.size.width;
     }
 
@@ -661,17 +661,31 @@ void AquaSalMenu::SetItemImage( unsigned nPos, SalMenuItem* pSMI, const Image& r
     }
 }
 
-void AquaSalMenu::SetItemText( unsigned nPos, SalMenuItem* pSalMenuItem, const XubString& rText )
+void AquaSalMenu::SetItemText( unsigned i_nPos, SalMenuItem* i_pSalMenuItem, const XubString& i_rText )
 {
-    if (!pSalMenuItem)
+    if (!i_pSalMenuItem)
         return;
 
-    AquaSalMenuItem *pAquaSalMenuItem = (AquaSalMenuItem *) pSalMenuItem;
+    AquaSalMenuItem *pAquaSalMenuItem = (AquaSalMenuItem *) i_pSalMenuItem;
 
-    String aText( rText );
+    String aText( i_rText );
 
     // Delete mnemonics
     aText.EraseAllChars( '~' );
+
+    /* #i90015# until there is a correct solution
+       strip out any appended (.*) in menubar entries
+    */
+    if( mbMenuBar )
+    {
+        xub_StrLen nPos = aText.SearchBackward( sal_Unicode(  '(' ) );
+        if( nPos != STRING_NOTFOUND )
+        {
+            xub_StrLen nPos2 = aText.Search( sal_Unicode( ')' ) );
+            if( nPos2 != STRING_NOTFOUND )
+                aText.Erase( nPos, nPos2-nPos+1 );
+        }
+    }
 
     NSString* pString = CreateNSString( aText );
     if (pString)

@@ -8,7 +8,7 @@
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.47 $
+# $Revision: 1.47.24.4 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -182,6 +182,8 @@ MY_MISC_CXXFILES = \
     $(MISC)$/localedata_mn_MN.cxx  \
     $(MISC)$/localedata_mr_IN.cxx  \
     $(MISC)$/localedata_ms_MY.cxx  \
+    $(MISC)$/localedata_mt_MT.cxx  \
+    $(MISC)$/localedata_my_MM.cxx  \
     $(MISC)$/localedata_nb_NO.cxx  \
     $(MISC)$/localedata_ne_NP.cxx  \
     $(MISC)$/localedata_nl_BE.cxx  \
@@ -203,6 +205,7 @@ MY_MISC_CXXFILES = \
     $(MISC)$/localedata_sh_ME.cxx  \
     $(MISC)$/localedata_sh_RS.cxx  \
     $(MISC)$/localedata_sh_YU.cxx  \
+    $(MISC)$/localedata_shs_CA.cxx  \
     $(MISC)$/localedata_sk_SK.cxx  \
     $(MISC)$/localedata_sl_SI.cxx  \
     $(MISC)$/localedata_so_SO.cxx  \
@@ -221,6 +224,7 @@ MY_MISC_CXXFILES = \
     $(MISC)$/localedata_ti_ER.cxx  \
     $(MISC)$/localedata_tk_TM.cxx  \
     $(MISC)$/localedata_tn_ZA.cxx  \
+    $(MISC)$/localedata_tpi_PG.cxx  \
     $(MISC)$/localedata_tr_TR.cxx  \
     $(MISC)$/localedata_ts_ZA.cxx  \
     $(MISC)$/localedata_uk_UA.cxx  \
@@ -359,6 +363,7 @@ SHL3OBJS=	\
     $(SLO)$/localedata_lt_LT.obj	\
     $(SLO)$/localedata_lv_LV.obj	\
     $(SLO)$/localedata_mk_MK.obj	\
+    $(SLO)$/localedata_mt_MT.obj	\
     $(SLO)$/localedata_nb_NO.obj	\
     $(SLO)$/localedata_nl_BE.obj	\
     $(SLO)$/localedata_nl_NL.obj	\
@@ -441,6 +446,7 @@ SHL4OBJS= \
     $(SLO)$/localedata_mn_MN.obj \
     $(SLO)$/localedata_mr_IN.obj \
     $(SLO)$/localedata_ms_MY.obj \
+    $(SLO)$/localedata_my_MM.obj \
     $(SLO)$/localedata_ne_NP.obj \
     $(SLO)$/localedata_nr_ZA.obj \
     $(SLO)$/localedata_nso_ZA.obj \
@@ -448,6 +454,7 @@ SHL4OBJS= \
     $(SLO)$/localedata_pa_IN.obj \
     $(SLO)$/localedata_rw_RW.obj \
     $(SLO)$/localedata_sg_CF.obj \
+    $(SLO)$/localedata_shs_CA.obj \
     $(SLO)$/localedata_so_SO.obj \
     $(SLO)$/localedata_ss_ZA.obj \
     $(SLO)$/localedata_st_ZA.obj \
@@ -459,6 +466,7 @@ SHL4OBJS= \
     $(SLO)$/localedata_ti_ER.obj \
     $(SLO)$/localedata_tk_TM.obj \
     $(SLO)$/localedata_tn_ZA.obj \
+    $(SLO)$/localedata_tpi_PG.obj \
     $(SLO)$/localedata_ts_ZA.obj \
     $(SLO)$/localedata_uz_UZ.obj \
     $(SLO)$/localedata_ve_ZA.obj \

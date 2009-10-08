@@ -125,11 +125,11 @@
 <DefaultName></DefaultName>
 </FormatElement>
 <FormatElement msgid="DateFormatskey6" default="false" type="medium" usage="DATE" formatindex="23">
-<FormatCode>YYYY"年"MMMD"月"</FormatCode>
+<FormatCode>YYYY"年"MMMD"日"</FormatCode>
 <DefaultName></DefaultName>
 </FormatElement>
 <FormatElement msgid="DateFormatskey7" default="false" type="medium" usage="DATE" formatindex="24">
-<FormatCode>YYYY "年" MMM D "月"</FormatCode>
+<FormatCode>YYYY "年" MMM D "日"</FormatCode>
 <DefaultName></DefaultName>
 </FormatElement>
 <FormatElement msgid="DateFormatskey8" default="false" type="long" usage="DATE" formatindex="25">
@@ -428,8 +428,8 @@
 </LC_TRANSLITERATION>
 <LC_MISC>
 <ForbiddenCharacters>
-<ForbiddenLineBeginCharacters>:!),.:;?]}¢'"、。〉》」』】〕〗〞︰︱︳﹐､﹒﹔﹕﹖﹗﹚﹜﹞！），．：；？｜｝︴︶︸︺︼︾﹀﹂﹄﹏､～￠々‖•·ˇˉ―--′</ForbiddenLineBeginCharacters>
-<ForbiddenLineEndCharacters>([{£¥'"‵〈《「『【〔〖（［｛￡￥〝︵︷︹︻︽︿﹁﹃﹙﹛﹝（｛</ForbiddenLineEndCharacters>
+<ForbiddenLineBeginCharacters>:!),.:;?]}¢'"、。〉》」』】〕〗〞︰︱︳﹐､﹒﹔﹕﹖﹗﹚﹜﹞！），．：；？｜｝︴︶︸︺︼︾﹀﹂﹄﹏､～￠々‖•·ˇˉ―--′’”</ForbiddenLineBeginCharacters>
+<ForbiddenLineEndCharacters>([{£¥'"‵〈《「『【〔〖（［｛￡￥〝︵︷︹︻︽︿﹁﹃﹙﹛﹝（｛“‘</ForbiddenLineEndCharacters>
 <LineBreakHangingCharacters>!,.:;?、。！，．：；？</LineBreakHangingCharacters>
 </ForbiddenCharacters>
 <ReservedWords>

@@ -130,7 +130,7 @@ protected:
     BOOL            bInvert50GC_ : 1;   // is Invert50 GC valid
     BOOL            bStippleGC_ : 1;    // is Stipple GC valid
     BOOL            bTrackingGC_ : 1;   // is Tracking GC valid
-    BOOL            bXORMode_ : 1;      // is ROP XOR Mode set
+    bool            bXORMode_ : 1;      // is ROP XOR Mode set
     BOOL            bDitherBrush_ : 1;  // is solid or tile
 
     void            SetClipRegion( GC          pGC,
@@ -242,7 +242,7 @@ public:
 
     virtual void            SetFillColor( SalColor nSalColor );
 
-    virtual void            SetXORMode( BOOL bSet );
+    virtual void            SetXORMode( bool bSet, bool );
 
     virtual void            SetROPLineColor( SalROPColor nROPColor );
     virtual void            SetROPFillColor( SalROPColor nROPColor );

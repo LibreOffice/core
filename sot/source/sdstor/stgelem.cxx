@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: stgelem.cxx,v $
- * $Revision: 1.12 $
+ * $Revision: 1.12.6.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -158,12 +158,18 @@ BOOL StgHeader::Store( StgIo& rIo )
     return BOOL( !bDirty );
 }
 
-// Perform thorough checks also on unknown variables
+static bool lcl_wontoverflow(short shift)
+{
+    return shift >= 0 && shift < (short)sizeof(short) * 8 - 1;
+}
 
+// Perform thorough checks also on unknown variables
 BOOL StgHeader::Check()
 {
     return BOOL( memcmp( cSignature, cStgSignature, 8 ) == 0
-            &&   (short) ( nVersion >> 16 ) == 3 );
+            && (short) ( nVersion >> 16 ) == 3 )
+            && lcl_wontoverflow(nPageSize)
+            && lcl_wontoverflow(nDataPageSize);
 }
 
 INT32 StgHeader::GetFATPage( short n ) const
@@ -383,7 +389,7 @@ BOOL StgEntry::Load( const void* pFrom )
     UINT16 n = nNameLen;
     if( n )
         n = ( n >> 1 ) - 1;
-    if( n > 31 || nSize < 0 && cType != STG_STORAGE )
+    if( n > 31 || (nSize < 0 && cType != STG_STORAGE) )
     {
         // the size makes no sence for the substorage
         // TODO/LATER: actually the size should be an unsigned value, but in this case it would mean a stream of more than 2Gb

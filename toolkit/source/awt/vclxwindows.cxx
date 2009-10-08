@@ -45,6 +45,7 @@
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/system/XSystemShellExecute.hpp>
 #include <com/sun/star/system/SystemShellExecuteFlags.hpp>
+#include <com/sun/star/awt/ImageScaleMode.hpp>
 #include <comphelper/processfactory.hxx>
 
 #ifndef _SV_BUTTON_HXX
@@ -69,6 +70,7 @@ using ::com::sun::star::graphic::XGraphic;
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::awt::VisualEffect;
+namespace ImageScaleMode = ::com::sun::star::awt::ImageScaleMode;
 
 static double ImplCalcLongValue( double nValue, sal_uInt16 nDigits )
 {
@@ -403,6 +405,8 @@ void VCLXButton::ImplGetPropertyIds( std::list< sal_uInt16 > &rIds )
                      BASEPROPERTY_MULTILINE,
                      BASEPROPERTY_ALIGN,
                      BASEPROPERTY_VERTICALALIGN,
+                     BASEPROPERTY_WRITING_MODE,
+                     BASEPROPERTY_CONTEXT_WRITING_MODE,
                      0);
     VCLXImageConsumer::ImplGetPropertyIds( rIds );
 }
@@ -663,7 +667,10 @@ void VCLXImageControl::ImplGetPropertyIds( std::list< sal_uInt16 > &rIds )
                      BASEPROPERTY_IMAGEURL,
                      BASEPROPERTY_PRINTABLE,
                      BASEPROPERTY_SCALEIMAGE,
+                     BASEPROPERTY_IMAGE_SCALE_MODE,
                      BASEPROPERTY_TABSTOP,
+                     BASEPROPERTY_WRITING_MODE,
+                     BASEPROPERTY_CONTEXT_WRITING_MODE,
                      0);
     VCLXImageConsumer::ImplGetPropertyIds( rIds );
 }
@@ -716,22 +723,34 @@ void VCLXImageControl::setProperty( const ::rtl::OUString& PropertyName, const :
     ::vos::OGuard aGuard( GetMutex() );
 
     ImageControl* pImageControl = (ImageControl*)GetWindow();
-    if ( pImageControl )
+
+    sal_uInt16 nPropType = GetPropertyId( PropertyName );
+    switch ( nPropType )
     {
-        sal_uInt16 nPropType = GetPropertyId( PropertyName );
-        switch ( nPropType )
+        case BASEPROPERTY_IMAGE_SCALE_MODE:
         {
-            case BASEPROPERTY_SCALEIMAGE:
+            sal_Int16 nScaleMode( ImageScaleMode::Anisotropic );
+            if ( pImageControl && ( Value >>= nScaleMode ) )
             {
-                sal_Bool b = sal_Bool();
-                if ( Value >>= b )
-                     pImageControl->SetScaleImage( b );
+                pImageControl->SetScaleMode( nScaleMode );
             }
-            break;
-            default:
-                VCLXImageConsumer::setProperty( PropertyName, Value );
-                break;
         }
+        break;
+
+        case BASEPROPERTY_SCALEIMAGE:
+        {
+            // this is for compatibility only, nowadays, the ImageScaleMode property should be used
+            sal_Bool bScaleImage = sal_False;
+            if ( pImageControl && ( Value >>= bScaleImage ) )
+            {
+                pImageControl->SetScaleMode( bScaleImage ? ImageScaleMode::Anisotropic : ImageScaleMode::None );
+            }
+        }
+        break;
+
+        default:
+            VCLXImageConsumer::setProperty( PropertyName, Value );
+            break;
     }
 }
 
@@ -741,18 +760,21 @@ void VCLXImageControl::setProperty( const ::rtl::OUString& PropertyName, const :
 
     ::com::sun::star::uno::Any aProp;
     ImageControl* pImageControl = (ImageControl*)GetWindow();
-    if ( pImageControl )
+    sal_uInt16 nPropType = GetPropertyId( PropertyName );
+
+    switch ( nPropType )
     {
-        sal_uInt16 nPropType = GetPropertyId( PropertyName );
-        switch ( nPropType )
-        {
-            case BASEPROPERTY_SCALEIMAGE:
-                 aProp <<= (sal_Bool)pImageControl->IsScaleImage();
-                break;
-            default:
-                aProp = VCLXImageConsumer::getProperty( PropertyName );
-                break;
-        }
+        case BASEPROPERTY_IMAGE_SCALE_MODE:
+            aProp <<= ( pImageControl ? pImageControl->GetScaleMode() : ImageScaleMode::Anisotropic );
+            break;
+
+        case BASEPROPERTY_SCALEIMAGE:
+            aProp <<= ( pImageControl && pImageControl->GetScaleMode() != ImageScaleMode::None ) ? sal_True : sal_False;
+            break;
+
+        default:
+            aProp = VCLXImageConsumer::getProperty( PropertyName );
+            break;
     }
     return aProp;
 }
@@ -783,6 +805,8 @@ void VCLXCheckBox::ImplGetPropertyIds( std::list< sal_uInt16 > &rIds )
                      BASEPROPERTY_BACKGROUNDCOLOR,
                      BASEPROPERTY_ALIGN,
                      BASEPROPERTY_VERTICALALIGN,
+                     BASEPROPERTY_WRITING_MODE,
+                     BASEPROPERTY_CONTEXT_WRITING_MODE,
                      0);
     VCLXImageConsumer::ImplGetPropertyIds( rIds );
 }
@@ -1079,6 +1103,8 @@ void VCLXRadioButton::ImplGetPropertyIds( std::list< sal_uInt16 > &rIds )
                      BASEPROPERTY_BACKGROUNDCOLOR,
                      BASEPROPERTY_ALIGN,
                      BASEPROPERTY_VERTICALALIGN,
+                     BASEPROPERTY_WRITING_MODE,
+                     BASEPROPERTY_CONTEXT_WRITING_MODE,
                      0);
     VCLXImageConsumer::ImplGetPropertyIds( rIds );
 }
@@ -1490,6 +1516,8 @@ void VCLXListBox::ImplGetPropertyIds( std::list< sal_uInt16 > &rIds )
                      BASEPROPERTY_TABSTOP,
                      BASEPROPERTY_READONLY,
                      BASEPROPERTY_ALIGN,
+                     BASEPROPERTY_WRITING_MODE,
+                     BASEPROPERTY_CONTEXT_WRITING_MODE,
                      0);
     VCLXWindow::ImplGetPropertyIds( rIds );
 }
@@ -2223,7 +2251,7 @@ void SAL_CALL VCLXDialog::draw( sal_Int32 nX, sal_Int32 nY ) throw(::com::sun::s
 
     if ( pWindow )
     {
-        OutputDevice* pDev = VCLUnoHelper::GetOutputDevice( GetViewGraphics() );
+        OutputDevice* pDev = VCLUnoHelper::GetOutputDevice( getGraphics() );
         if ( !pDev )
             pDev = pWindow->GetParent();
 
@@ -2324,7 +2352,7 @@ throw(::com::sun::star::uno::RuntimeException)
 
     if ( pWindow )
     {
-        OutputDevice* pDev = VCLUnoHelper::GetOutputDevice( GetViewGraphics() );
+        OutputDevice* pDev = VCLUnoHelper::GetOutputDevice( getGraphics() );
         if ( !pDev )
             pDev = pWindow->GetParent();
 
@@ -2674,6 +2702,8 @@ void VCLXFixedHyperlink::ImplGetPropertyIds( std::list< sal_uInt16 > &rIds )
                      BASEPROPERTY_TABSTOP,
                      BASEPROPERTY_VERTICALALIGN,
                      BASEPROPERTY_URL,
+                     BASEPROPERTY_WRITING_MODE,
+                     BASEPROPERTY_CONTEXT_WRITING_MODE,
                      0);
     VCLXWindow::ImplGetPropertyIds( rIds );
 }
@@ -2699,6 +2729,8 @@ void VCLXFixedText::ImplGetPropertyIds( std::list< sal_uInt16 > &rIds )
                      BASEPROPERTY_PRINTABLE,
                      BASEPROPERTY_TABSTOP,
                      BASEPROPERTY_VERTICALALIGN,
+                     BASEPROPERTY_WRITING_MODE,
+                     BASEPROPERTY_CONTEXT_WRITING_MODE,
                      0);
     VCLXWindow::ImplGetPropertyIds( rIds );
 }
@@ -2843,6 +2875,8 @@ void VCLXScrollBar::ImplGetPropertyIds( std::list< sal_uInt16 > &rIds )
                      BASEPROPERTY_SYMBOL_COLOR,
                      BASEPROPERTY_TABSTOP,
                      BASEPROPERTY_VISIBLESIZE,
+                     BASEPROPERTY_WRITING_MODE,
+                     BASEPROPERTY_CONTEXT_WRITING_MODE,
                      0);
     VCLXWindow::ImplGetPropertyIds( rIds );
 }
@@ -3324,6 +3358,8 @@ void VCLXEdit::ImplGetPropertyIds( std::list< sal_uInt16 > &rIds )
                      BASEPROPERTY_PAINTTRANSPARENT,
                      BASEPROPERTY_AUTOHSCROLL,
                      BASEPROPERTY_AUTOVSCROLL,
+                     BASEPROPERTY_WRITING_MODE,
+                     BASEPROPERTY_CONTEXT_WRITING_MODE,
                      0);
     VCLXWindow::ImplGetPropertyIds( rIds );
 }
@@ -3693,6 +3729,8 @@ void VCLXComboBox::ImplGetPropertyIds( std::list< sal_uInt16 > &rIds )
                      BASEPROPERTY_TEXT,
                      BASEPROPERTY_HIDEINACTIVESELECTION,
                      BASEPROPERTY_ALIGN,
+                     BASEPROPERTY_WRITING_MODE,
+                     BASEPROPERTY_CONTEXT_WRITING_MODE,
                      0);
     // no, don't call VCLXEdit here - it has properties which we do *not* want to have at at combo box
     // #i92690# / 2008-08-12 / frank.schoenheit@sun.com
@@ -4177,6 +4215,7 @@ void VCLXFormattedSpinField::setProperty( const ::rtl::OUString& PropertyName, c
 void VCLXDateField::ImplGetPropertyIds( std::list< sal_uInt16 > &rIds )
 {
     PushPropertyIds( rIds,
+                     BASEPROPERTY_ALIGN,
                      BASEPROPERTY_BACKGROUNDCOLOR,
                      BASEPROPERTY_BORDER,
                      BASEPROPERTY_BORDERCOLOR,
@@ -4201,6 +4240,8 @@ void VCLXDateField::ImplGetPropertyIds( std::list< sal_uInt16 > &rIds )
                      BASEPROPERTY_ENFORCE_FORMAT,
                      BASEPROPERTY_TEXT,
                      BASEPROPERTY_HIDEINACTIVESELECTION,
+                     BASEPROPERTY_WRITING_MODE,
+                     BASEPROPERTY_CONTEXT_WRITING_MODE,
                      0);
     VCLXFormattedSpinField::ImplGetPropertyIds( rIds );
 }
@@ -4515,6 +4556,7 @@ sal_Bool VCLXDateField::isStrictFormat() throw(::com::sun::star::uno::RuntimeExc
 void VCLXTimeField::ImplGetPropertyIds( std::list< sal_uInt16 > &rIds )
 {
     PushPropertyIds( rIds,
+                     BASEPROPERTY_ALIGN,
                      BASEPROPERTY_BACKGROUNDCOLOR,
                      BASEPROPERTY_BORDER,
                      BASEPROPERTY_BORDERCOLOR,
@@ -4537,6 +4579,8 @@ void VCLXTimeField::ImplGetPropertyIds( std::list< sal_uInt16 > &rIds )
                      BASEPROPERTY_ENFORCE_FORMAT,
                      BASEPROPERTY_TEXT,
                      BASEPROPERTY_HIDEINACTIVESELECTION,
+                     BASEPROPERTY_WRITING_MODE,
+                     BASEPROPERTY_CONTEXT_WRITING_MODE,
                      0);
     VCLXFormattedSpinField::ImplGetPropertyIds( rIds );
 }
@@ -4812,6 +4856,7 @@ void VCLXTimeField::setProperty( const ::rtl::OUString& PropertyName, const ::co
 void VCLXNumericField::ImplGetPropertyIds( std::list< sal_uInt16 > &rIds )
 {
     PushPropertyIds( rIds,
+                     BASEPROPERTY_ALIGN,
                      BASEPROPERTY_BACKGROUNDCOLOR,
                      BASEPROPERTY_BORDER,
                      BASEPROPERTY_BORDERCOLOR,
@@ -4835,6 +4880,8 @@ void VCLXNumericField::ImplGetPropertyIds( std::list< sal_uInt16 > &rIds )
                      BASEPROPERTY_VALUE_DOUBLE,
                      BASEPROPERTY_ENFORCE_FORMAT,
                      BASEPROPERTY_HIDEINACTIVESELECTION,
+                     BASEPROPERTY_WRITING_MODE,
+                     BASEPROPERTY_CONTEXT_WRITING_MODE,
                      0);
     VCLXFormattedSpinField::ImplGetPropertyIds( rIds );
 }
@@ -5149,6 +5196,7 @@ void VCLXNumericField::setProperty( const ::rtl::OUString& PropertyName, const :
 void VCLXMetricField::ImplGetPropertyIds( std::list< sal_uInt16 > &rIds )
 {
     PushPropertyIds( rIds,
+                     BASEPROPERTY_ALIGN,
                      BASEPROPERTY_BACKGROUNDCOLOR,
                      BASEPROPERTY_BORDER,
                      BASEPROPERTY_BORDERCOLOR,
@@ -5170,6 +5218,8 @@ void VCLXMetricField::ImplGetPropertyIds( std::list< sal_uInt16 > &rIds )
                      BASEPROPERTY_HIDEINACTIVESELECTION,
                      BASEPROPERTY_UNIT,
                      BASEPROPERTY_CUSTOMUNITTEXT,
+                     BASEPROPERTY_WRITING_MODE,
+                     BASEPROPERTY_CONTEXT_WRITING_MODE,
                      0);
     VCLXFormattedSpinField::ImplGetPropertyIds( rIds );
 }
@@ -5394,6 +5444,7 @@ void VCLXMetricField::setProperty( const ::rtl::OUString& PropertyName, const ::
 void VCLXCurrencyField::ImplGetPropertyIds( std::list< sal_uInt16 > &rIds )
 {
     PushPropertyIds( rIds,
+                     BASEPROPERTY_ALIGN,
                      BASEPROPERTY_BACKGROUNDCOLOR,
                      BASEPROPERTY_BORDER,
                      BASEPROPERTY_BORDERCOLOR,
@@ -5419,6 +5470,8 @@ void VCLXCurrencyField::ImplGetPropertyIds( std::list< sal_uInt16 > &rIds )
                      BASEPROPERTY_VALUE_DOUBLE,
                      BASEPROPERTY_ENFORCE_FORMAT,
                      BASEPROPERTY_HIDEINACTIVESELECTION,
+                     BASEPROPERTY_WRITING_MODE,
+                     BASEPROPERTY_CONTEXT_WRITING_MODE,
                      0);
     VCLXFormattedSpinField::ImplGetPropertyIds( rIds );
 }
@@ -5744,6 +5797,7 @@ void VCLXCurrencyField::setProperty( const ::rtl::OUString& PropertyName, const 
 void VCLXPatternField::ImplGetPropertyIds( std::list< sal_uInt16 > &rIds )
 {
     PushPropertyIds( rIds,
+                     BASEPROPERTY_ALIGN,
                      BASEPROPERTY_BACKGROUNDCOLOR,
                      BASEPROPERTY_BORDER,
                      BASEPROPERTY_BORDERCOLOR,
@@ -5761,6 +5815,8 @@ void VCLXPatternField::ImplGetPropertyIds( std::list< sal_uInt16 > &rIds )
                      BASEPROPERTY_TABSTOP,
                      BASEPROPERTY_TEXT,
                      BASEPROPERTY_HIDEINACTIVESELECTION,
+                     BASEPROPERTY_WRITING_MODE,
+                     BASEPROPERTY_CONTEXT_WRITING_MODE,
                      0);
     VCLXFormattedSpinField::ImplGetPropertyIds( rIds );
 }

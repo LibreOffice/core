@@ -96,6 +96,10 @@
                since they tend to clash with system shortcuts on all platforms so
                we can skip this case here.
             */
+            // get information whether the event was handled; keyDown returns nothing
+            GetSalData()->maKeyEventAnswer[ pEvent ] = false;
+            bool bHandled = false;
+            
             if( nModMask != (NSCommandKeyMask | NSAlternateKeyMask) )
             {
                 // dispatch to view directly to avoid the key event being consumed by the menubar
@@ -105,7 +109,7 @@
                 if( pFrame->mpParent && (pFrame->mnStyle & SAL_FRAME_STYLE_FLOAT) == 0 ) 
                 {
                     [[pKeyWin contentView] keyDown: pEvent];
-                    return;
+                    bHandled = GetSalData()->maKeyEventAnswer[ pEvent ];
                 }
                 
                 // see whether the main menu consumes this event
@@ -113,13 +117,46 @@
                 // the main menu just beeps for an unknown or disabled key equivalent
                 // and swallows the event wholesale
                 NSMenu* pMainMenu = [NSApp mainMenu];
-                if( pMainMenu == 0 || ! [pMainMenu performKeyEquivalent: pEvent] )
+                if( ! bHandled && (pMainMenu == 0 || ! [pMainMenu performKeyEquivalent: pEvent]) )
+                {
                     [[pKeyWin contentView] keyDown: pEvent];
-                
-                // at this point either the menu has executed the accelerator
-                // or we have dispatched the event
-                // so no need to dispatch further
+                    bHandled = GetSalData()->maKeyEventAnswer[ pEvent ];
+                }
+                else
+                    bHandled = true;  // event handled already or main menu just handled it
+            }
+            GetSalData()->maKeyEventAnswer.erase( pEvent );
+            if( bHandled )
                 return;
+        }
+        else if( pKeyWin )
+        {
+            // #i94601# a window not of vcl's making has the focus.
+            // Since our menus do not invoke the usual commands
+            // try to play nice with native windows like the file dialog
+            // and emulate them
+            // precondition: this ONLY works because CMD-V (paste), CMD-C (copy) and CMD-X (cut) are
+            // NOT localized, that is the same in all locales. Should this be
+            // different in any locale, this hack will fail.
+            unsigned int nModMask = ([pEvent modifierFlags] & (NSShiftKeyMask|NSControlKeyMask|NSAlternateKeyMask|NSCommandKeyMask));
+            if( nModMask == NSCommandKeyMask )
+            {
+                
+                if( [[pEvent charactersIgnoringModifiers] isEqualToString: @"v"] )
+                {
+                    if( [NSApp sendAction: @selector(paste:) to: nil from: nil] )
+                        return;
+                }
+                else if( [[pEvent charactersIgnoringModifiers] isEqualToString: @"c"] )
+                {
+                    if( [NSApp sendAction: @selector(copy:) to: nil from: nil] )
+                        return;
+                }
+                else if( [[pEvent charactersIgnoringModifiers] isEqualToString: @"x"] )
+                {
+                    if( [NSApp sendAction: @selector(cut:) to: nil from: nil] )
+                        return;
+                }
             }
         }
     }
@@ -380,6 +417,22 @@
 #endif
     }
 }
+
+- (MacOSBOOL)applicationShouldHandleReopen: (NSApplication*)pApp hasVisibleWindows: (MacOSBOOL) bWinVisible
+{
+    NSObject* pHdl = GetSalData()->mpDockIconClickHandler;
+    if( pHdl && [pHdl respondsToSelector: @selector(dockIconClicked:)] )
+    {
+        [pHdl performSelector:@selector(dockIconClicked:) withObject: self];
+    }
+    return YES;
+}
+
+-(void)setDockIconClickHandler: (NSObject*)pHandler
+{
+    GetSalData()->mpDockIconClickHandler = pHandler;
+}
+
 
 @end
 

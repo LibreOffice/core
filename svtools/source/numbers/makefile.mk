@@ -8,7 +8,7 @@
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.12 $
+# $Revision: 1.12.148.1 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -48,12 +48,12 @@ PROJECTPCHSOURCE=
 EXCEPTIONSFILES= \
         $(SLO)$/numuno.obj \
         $(SLO)$/numfmuno.obj \
-        $(SLO)$/supservs.obj
+        $(SLO)$/supservs.obj \
+        $(SLO)$/zforlist.obj
 
 SLOFILES =  \
         $(EXCEPTIONSFILES) \
         $(SLO)$/zforfind.obj	\
-        $(SLO)$/zforlist.obj \
         $(SLO)$/zformat.obj 	\
         $(SLO)$/zforscan.obj \
         $(SLO)$/numhead.obj

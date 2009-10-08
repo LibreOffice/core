@@ -89,7 +89,7 @@ $(MISC)$/unittest_succeeded : $(SHL1TARGETN)
         @echo ----------------------------------------------------------
         @echo - start unit test on library $(SHL1TARGETN)
         @echo ----------------------------------------------------------
-        testshl2 -forward $(BIN)$/ $(SHL1TARGETN)
+        testshl2 -sf $(mktmp ) -forward $(BIN)$/ $(SHL1TARGETN)
         $(TOUCH) $@
 
 ALLTAR : $(MISC)$/unittest_succeeded

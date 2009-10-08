@@ -56,6 +56,25 @@
 #include <vcl/timer.hxx>
 #include <wincomp.hxx>  // CS_DROPSHADOW
 
+#ifndef min
+#define min(a,b)    (((a) < (b)) ? (a) : (b))
+#endif
+#ifndef max
+#define max(a,b)    (((a) > (b)) ? (a) : (b))
+#endif
+
+#if defined _MSC_VER
+#pragma warning(push, 1)
+#endif
+
+#include <GdiPlus.h>
+#include <GdiPlusEnums.h>
+#include <GdiPlusColor.h>
+
+#if defined _MSC_VER
+#pragma warning(pop)
+#endif
+
 // =======================================================================
 
 void SalAbort( const XubString& rErrorText )
@@ -418,6 +437,9 @@ SalData::SalData()
     mpTempFontItem = 0;
     mbThemeChanged = FALSE;     // true if visual theme was changed: throw away theme handles
 
+    // init with NULL
+    gdiplusToken = 0;
+
     initKeyCodeMap();
 
     SetSalData( this );
@@ -433,8 +455,11 @@ SalData::~SalData()
 void InitSalData()
 {
     SalData* pSalData = new SalData;
-    (void)pSalData;
     CoInitialize(0);
+
+    // init GDIPlus
+    static Gdiplus::GdiplusStartupInput gdiplusStartupInput;
+    Gdiplus::GdiplusStartup(&pSalData->gdiplusToken, &gdiplusStartupInput, NULL);
 }
 
 
@@ -442,6 +467,13 @@ void DeInitSalData()
 {
     CoUninitialize();
     SalData* pSalData = GetSalData();
+
+    // deinit GDIPlus
+    if(pSalData)
+    {
+        Gdiplus::GdiplusShutdown(pSalData->gdiplusToken);
+    }
+
     delete pSalData;
 }
 

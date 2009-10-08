@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: cvtsvm.cxx,v $
- * $Revision: 1.16 $
+ * $Revision: 1.16.134.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -408,9 +408,7 @@ void SVMConverter::ImplConvertFromSVM1( SvStream& rIStm, GDIMetaFile& rMtf )
     rIStm.SetNumberFormatInt( NUMBERFORMAT_INT_LITTLEENDIAN );
 
     char    aCode[ 5 ];
-    MapMode aMapMode;
     Size    aPrefSz;
-    INT32   nActions;
     INT16   nSize;
     INT16   nVersion;
 
@@ -420,11 +418,11 @@ void SVMConverter::ImplConvertFromSVM1( SvStream& rIStm, GDIMetaFile& rMtf )
     rIStm >> nVersion;                              // Version
     rIStm >> aPrefSz.Width();                       // PrefSize.Width()
     rIStm >> aPrefSz.Height();                      // PrefSize.Height()
-    ImplReadMapMode( rIStm, aMapMode );             // MapMode
-    rIStm >> nActions;                              // Action count
 
     // Header-Kennung und Versionsnummer pruefen
-    if( ( memcmp( aCode, "SVGDI", sizeof( aCode ) ) != 0 ) || ( nVersion != 200 ) )
+    if( rIStm.GetError()
+        || ( memcmp( aCode, "SVGDI", sizeof( aCode ) ) != 0 )
+        || ( nVersion != 200 ) )
     {
         rIStm.SetError( SVSTREAM_FILEFORMAT_ERROR );
         rIStm.SetNumberFormatInt( nOldFormat );
@@ -432,16 +430,21 @@ void SVMConverter::ImplConvertFromSVM1( SvStream& rIStm, GDIMetaFile& rMtf )
     }
     else
     {
+        MapMode     aMapMode;
         Polygon     aActionPoly;
         Rectangle   aRect;
         Point       aPt, aPt1;
         Size        aSz;
         Color       aActionColor;
         INT32       nTmp, nTmp1, nActionSize;
+        INT32       nActions;
         INT16       nType;
 
         sal_uInt32  nUnicodeCommentStreamPos = 0;
         INT32       nUnicodeCommentActionNumber = 0;
+
+        ImplReadMapMode( rIStm, aMapMode );             // MapMode
+        rIStm >> nActions;                              // Action count
 
         rMtf.SetPrefSize( aPrefSz );
         rMtf.SetPrefMapMode( aMapMode );
@@ -1084,7 +1087,8 @@ void SVMConverter::ImplConvertFromSVM1( SvStream& rIStm, GDIMetaFile& rMtf )
                     ImplSkipActions( rIStm, nFollowingActionCount );
                     rMtf.AddAction( new MetaTextLineAction( aStartPt, nWidth,
                                                             (FontStrikeout) nStrikeout,
-                                                            (FontUnderline) nUnderline ) );
+                                                            (FontUnderline) nUnderline,
+                                                            UNDERLINE_NONE ) );
 
 #ifdef CVTSVM_WRITE_SUBACTIONCOUNT
                     i += nFollowingActionCount;
@@ -2058,6 +2062,11 @@ ULONG SVMConverter::ImplWriteActions( SvStream& rOStm, GDIMetaFile& rMtf,
                 nCount++;
             }
             break;
+
+#if 0
+            case( META_OVERLINECOLOR_ACTION ):
+            break;
+#endif
 
             case( META_TEXTLINE_ACTION ):
             {

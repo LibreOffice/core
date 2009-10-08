@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: xdictionary.cxx,v $
- * $Revision: 1.18.22.1 $
+ * $Revision: 1.18.24.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -56,6 +56,7 @@ extern "C" { static void SAL_CALL thisModule() {} }
 
 xdictionary::xdictionary(const sal_Char *lang)
 {
+    index1 = 0;
 #ifdef SAL_DLLPREFIX
     OUStringBuffer aBuf( strlen(lang) + 7 + 6 );    // mostly "lib*.so" (with * == dict_zh)
     aBuf.appendAscii( SAL_DLLPREFIX );
@@ -78,12 +79,20 @@ xdictionary::xdictionary(const sal_Char *lang)
             dataArea = (sal_Unicode*) (*func)();
         }
         else
+        {
             existMark = NULL;
+            index1 = NULL;
+            index2 = NULL;
+            lenArray = NULL;
+            dataArea = NULL;
+        }
+
         for (sal_Int32 i = 0; i < CACHE_MAX; i++)
             cache[i].size = 0;
 
-        // for CTL breakiterator, which the word boundary should not inside cell.
+#if USE_CELL_BOUNDARY_CODE
         useCellBoundary = sal_False;
+#endif
         japaneseWordBreak = sal_False;
 }
 
@@ -97,7 +106,7 @@ xdictionary::~xdictionary() {
         }
 }
 
-void SAL_CALL xdictionary::setJapaneseWordBreak()
+void xdictionary::setJapaneseWordBreak()
 {
         japaneseWordBreak = sal_True;
 }
@@ -110,8 +119,9 @@ sal_Bool xdictionary::exists(const sal_Unicode c) {
             return exist;
 }
 
-sal_Int32 SAL_CALL
-xdictionary::getLongestMatch(const sal_Unicode* str, sal_Int32 sLen) {
+sal_Int32 xdictionary::getLongestMatch(const sal_Unicode* str, sal_Int32 sLen) {
+
+        if ( !index1 ) return 0;
 
         sal_Int16 idx = index1[str[0] >> 8];
 
@@ -143,7 +153,7 @@ xdictionary::getLongestMatch(const sal_Unicode* str, sal_Int32 sLen) {
  * Compare two unicode string,
  */
 
-sal_Bool SAL_CALL WordBreakCache::equals(const sal_Unicode* str, Boundary& boundary) {
+sal_Bool WordBreakCache::equals(const sal_Unicode* str, Boundary& boundary) {
         // Different length, different string.
         if (length != boundary.endPos - boundary.startPos) return sal_False;
 
@@ -159,7 +169,7 @@ sal_Bool SAL_CALL WordBreakCache::equals(const sal_Unicode* str, Boundary& bound
  * @param pos : Position of the given character.
  * @return true if CJK.
  */
-sal_Bool SAL_CALL xdictionary::seekSegment(const sal_Unicode *text, sal_Int32 pos,
+sal_Bool xdictionary::seekSegment(const sal_Unicode *text, sal_Int32 pos,
                 sal_Int32 len, Boundary& segBoundary) {
         for (segBoundary.startPos = pos - 1;
             segBoundary.startPos >= 0 &&
@@ -179,7 +189,7 @@ sal_Bool SAL_CALL xdictionary::seekSegment(const sal_Unicode *text, sal_Int32 po
 #define KATAKANA    2
 #define HIRAKANA    3
 
-static sal_Int16 SAL_CALL JapaneseCharType(sal_Unicode c)
+static sal_Int16 JapaneseCharType(sal_Unicode c)
 {
     if (0x3041 <= c && c <= 0x309e)
         return HIRAKANA;
@@ -188,7 +198,7 @@ static sal_Int16 SAL_CALL JapaneseCharType(sal_Unicode c)
     return KANJA;
 }
 
-WordBreakCache& SAL_CALL xdictionary::getCache(const sal_Unicode *text, Boundary& wordBoundary)
+WordBreakCache& xdictionary::getCache(const sal_Unicode *text, Boundary& wordBoundary)
 {
 
         WordBreakCache& aCache = cache[text[0] & 0x1f];
@@ -243,11 +253,14 @@ WordBreakCache& SAL_CALL xdictionary::getCache(const sal_Unicode *text, Boundary
                 if (count) {
                     aCache.wordboundary[i+1] = aCache.wordboundary[i] + count;
                     i++;
+
+#if USE_CELL_BOUNDARY_CODE
                     if (useCellBoundary) {
                         sal_Int32 cBoundary = cellBoundary[aCache.wordboundary[i] + wordBoundary.startPos - 1];
                         if (cBoundary > 0)
                             aCache.wordboundary[i] = cBoundary - wordBoundary.startPos;
                     }
+#endif
                 }
             }
 
@@ -255,11 +268,13 @@ WordBreakCache& SAL_CALL xdictionary::getCache(const sal_Unicode *text, Boundary
                 aCache.wordboundary[i+1] = aCache.wordboundary[i] + len;
                 i++;
 
+#if USE_CELL_BOUNDARY_CODE
                 if (useCellBoundary) {
                     sal_Int32 cBoundary = cellBoundary[aCache.wordboundary[i] + wordBoundary.startPos - 1];
                     if (cBoundary > 0)
                         aCache.wordboundary[i] = cBoundary - wordBoundary.startPos;
                 }
+#endif
             }
         }
         aCache.wordboundary[i + 1] = aCache.length + 1;
@@ -267,7 +282,7 @@ WordBreakCache& SAL_CALL xdictionary::getCache(const sal_Unicode *text, Boundary
         return aCache;
 }
 
-Boundary SAL_CALL xdictionary::previousWord(const OUString& rText, sal_Int32 anyPos, sal_Int16 wordType)
+Boundary xdictionary::previousWord(const OUString& rText, sal_Int32 anyPos, sal_Int16 wordType)
 {
         // looking for the first non-whitespace character from anyPos
         sal_uInt32 ch = rText.iterateCodePoints(&anyPos, -1);
@@ -277,7 +292,7 @@ Boundary SAL_CALL xdictionary::previousWord(const OUString& rText, sal_Int32 any
         return getWordBoundary(rText, anyPos, wordType, true);
 }
 
-Boundary SAL_CALL xdictionary::nextWord(const OUString& rText, sal_Int32 anyPos, sal_Int16 wordType)
+Boundary xdictionary::nextWord(const OUString& rText, sal_Int32 anyPos, sal_Int16 wordType)
 {
         boundary = getWordBoundary(rText, anyPos, wordType, true);
         anyPos = boundary.endPos;
@@ -291,7 +306,7 @@ Boundary SAL_CALL xdictionary::nextWord(const OUString& rText, sal_Int32 anyPos,
         return getWordBoundary(rText, anyPos, wordType, true);
 }
 
-Boundary SAL_CALL xdictionary::getWordBoundary(const OUString& rText, sal_Int32 anyPos, sal_Int16 wordType, sal_Bool bDirection)
+Boundary xdictionary::getWordBoundary(const OUString& rText, sal_Int32 anyPos, sal_Int16 wordType, sal_Bool bDirection)
 {
         const sal_Unicode *text=rText.getStr();
         sal_Int32 len=rText.getLength();
@@ -324,11 +339,12 @@ Boundary SAL_CALL xdictionary::getWordBoundary(const OUString& rText, sal_Int32 
         return boundary;
 }
 
-
-void SAL_CALL xdictionary::setCellBoundary(sal_Int32* cellArray)
+#if USE_CELL_BOUNDARY_CODE
+void xdictionary::setCellBoundary(sal_Int32* cellArray)
 {
         useCellBoundary = sal_True;
         cellBoundary = cellArray;
 }
+#endif
 
 } } } }

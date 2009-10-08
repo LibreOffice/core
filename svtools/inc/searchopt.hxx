@@ -63,6 +63,7 @@ public:
     BOOL    IsSimilaritySearch() const;
     BOOL    IsUseAsianOptions() const;
     BOOL    IsMatchCase() const;            // also Japanese search option
+    BOOL    IsNotes() const;
 
     void    SetWholeWordsOnly( BOOL bVal );
     void    SetBackwards( BOOL bVal );
@@ -71,6 +72,7 @@ public:
     void    SetSimilaritySearch( BOOL bVal );
     void    SetUseAsianOptions( BOOL bVal );
     void    SetMatchCase( BOOL bVal );      // also Japanese search option
+    void    SetNotes( BOOL bVal);
 
     //
     // Japanese search options

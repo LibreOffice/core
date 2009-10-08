@@ -190,7 +190,9 @@ sal_Int8 DropTarget::determineDropAction(sal_Int8 dropActions, id sender) const
   // has been set and we map this to ACTION_MOVE or ACTION_COPY
   // depending on whether or not source and dest are equal,
   // this hopefully satisfies all parties
-  if (dropActions == DNDConstants::ACTION_DEFAULT)
+  if( (dropActions == DNDConstants::ACTION_DEFAULT)
+  || ((dropActions == mDragSourceSupportedActions)
+     && !(~mDragSourceSupportedActions & DNDConstants::ACTION_COPY_OR_MOVE ) ) )
     {
       dropAct = srcAndDestEqual ? DNDConstants::ACTION_MOVE :
         DNDConstants::ACTION_COPY;

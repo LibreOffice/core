@@ -876,6 +876,18 @@ void ListBox::StateChanged( StateChangedType nType )
         SetStyle( ImplInitStyle( GetStyle() ) );
         mpImplLB->GetMainWindow()->EnableSort( ( GetStyle() & WB_SORT ) ? TRUE : FALSE );
     }
+    else if( nType == STATE_CHANGE_MIRRORING )
+    {
+        if( mpBtn )
+        {
+            mpBtn->EnableRTL( IsRTLEnabled() );
+            ImplInitDropDownButton( mpBtn );
+        }
+        mpImplLB->EnableRTL( IsRTLEnabled() );
+        if( mpImplWin )
+            mpImplWin->EnableRTL( IsRTLEnabled() );
+        Resize();
+    }
 
     Control::StateChanged( nType );
 }
@@ -934,8 +946,6 @@ long ListBox::PreNotify( NotifyEvent& rNEvt )
 
                 default:
                 {
-                    if( mpFloatWin )
-                        mpImplLB->GetMainWindow()->CalcMaxVisibleEntries( mpFloatWin->CalcFloatSize() );
                     nDone = mpImplLB->ProcessKeyInput( aKeyEvt );
                 }
             }

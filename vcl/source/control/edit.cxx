@@ -340,7 +340,7 @@ void Edit::ImplInit( Window* pParent, WinBits nStyle )
     mnAlign = EDIT_ALIGN_LEFT;
 
     // --- RTL --- hack: right align until keyinput and cursor travelling works
-    if( Application::GetSettings().GetLayoutRTL() )
+    if( IsRTLEnabled() )
         mnAlign = EDIT_ALIGN_RIGHT;
 
     if ( nStyle & WB_RIGHT )
@@ -840,16 +840,18 @@ void Edit::ShowTruncationWarning( Window* pParent )
 
 // -----------------------------------------------------------------------
 
-void Edit::ImplTruncateToMaxLen( rtl::OUString& rStr, sal_uInt32 nSelectionLen ) const
+bool Edit::ImplTruncateToMaxLen( rtl::OUString& rStr, sal_uInt32 nSelectionLen ) const
 {
+    bool bWasTruncated = false;
     const sal_uInt32 nMaxLen = mnMaxTextLen < 65534 ? mnMaxTextLen : 65534;
     sal_uInt32 nLenAfter = static_cast<sal_uInt32>(maText.Len()) + rStr.getLength() - nSelectionLen;
     if ( nLenAfter > nMaxLen )
     {
         sal_uInt32 nErasePos = nMaxLen - static_cast<sal_uInt32>(maText.Len()) + nSelectionLen;
         rStr = rStr.copy( 0, nErasePos );
-        ShowTruncationWarning( const_cast<Edit*>(this) );
+        bWasTruncated = true;
     }
+    return bWasTruncated;
 }
 
 // -----------------------------------------------------------------------
@@ -1251,7 +1253,10 @@ void Edit::ImplAlign()
     else if ( mnAlign == EDIT_ALIGN_RIGHT )
     {
         long nMinXOffset = nOutWidth - nTextWidth - 1 - ImplGetExtraOffset();
-        if( Application::GetSettings().GetLayoutRTL() )
+        bool bRTL = IsRTLEnabled();
+        if( mbIsSubEdit && GetParent() )
+            bRTL = GetParent()->IsRTLEnabled();
+        if( bRTL )
         {
             if( nTextWidth < nOutWidth )
                 mnXOffset = nMinXOffset;
@@ -1410,7 +1415,8 @@ void Edit::ImplPaste( uno::Reference< datatransfer::clipboard::XClipboard >& rxC
                 uno::Any aData = xDataObj->getTransferData( aFlavor );
                 ::rtl::OUString aText;
                 aData >>= aText;
-                ImplTruncateToMaxLen( aText, maSelection.Len() );
+                if( ImplTruncateToMaxLen( aText, maSelection.Len() ) )
+                    ShowTruncationWarning( const_cast<Edit*>(this) );
                 ReplaceSelected( aText );
             }
             catch( const ::com::sun::star::uno::Exception& )
@@ -1601,10 +1607,33 @@ BOOL Edit::ImplHandleKeyEvent( const KeyEvent& rKEvt )
     {
         switch ( nCode )
         {
+            case com::sun::star::awt::Key::SELECT_ALL:
+            {
+                ImplSetSelection( Selection( 0, maText.Len() ) );
+                bDone = TRUE;
+            }
+            break;
+
             case KEY_LEFT:
             case KEY_RIGHT:
             case KEY_HOME:
             case KEY_END:
+            case com::sun::star::awt::Key::MOVE_WORD_FORWARD:
+            case com::sun::star::awt::Key::SELECT_WORD_FORWARD:
+            case com::sun::star::awt::Key::MOVE_WORD_BACKWARD:
+            case com::sun::star::awt::Key::SELECT_WORD_BACKWARD:
+            case com::sun::star::awt::Key::MOVE_TO_BEGIN_OF_LINE:
+            case com::sun::star::awt::Key::MOVE_TO_END_OF_LINE:
+            case com::sun::star::awt::Key::SELECT_TO_BEGIN_OF_LINE:
+            case com::sun::star::awt::Key::SELECT_TO_END_OF_LINE:
+            case com::sun::star::awt::Key::MOVE_TO_BEGIN_OF_PARAGRAPH:
+            case com::sun::star::awt::Key::MOVE_TO_END_OF_PARAGRAPH:
+            case com::sun::star::awt::Key::SELECT_TO_BEGIN_OF_PARAGRAPH:
+            case com::sun::star::awt::Key::SELECT_TO_END_OF_PARAGRAPH:
+            case com::sun::star::awt::Key::MOVE_TO_BEGIN_OF_DOCUMENT:
+            case com::sun::star::awt::Key::MOVE_TO_END_OF_DOCUMENT:
+            case com::sun::star::awt::Key::SELECT_TO_BEGIN_OF_DOCUMENT:
+            case com::sun::star::awt::Key::SELECT_TO_END_OF_DOCUMENT:
             {
                 if ( !rKEvt.GetKeyCode().IsMod2() )
                 {
@@ -1612,9 +1641,47 @@ BOOL Edit::ImplHandleKeyEvent( const KeyEvent& rKEvt )
                     uno::Reference < i18n::XBreakIterator > xBI = ImplGetBreakIterator();
 
                     Selection aSel( maSelection );
-                    BOOL bWord = rKEvt.GetKeyCode().IsMod1();
+                    bool bWord = rKEvt.GetKeyCode().IsMod1();
+                    bool bSelect = rKEvt.GetKeyCode().IsShift();
+                    bool bGoLeft = (nCode == KEY_LEFT);
+                    bool bGoRight = (nCode == KEY_RIGHT);
+                    bool bGoHome = (nCode == KEY_HOME);
+                    bool bGoEnd = (nCode == KEY_END);
+
+                    switch( nCode )
+                    {
+                    case com::sun::star::awt::Key::MOVE_WORD_FORWARD:
+                        bGoRight = bWord = true;break;
+                    case com::sun::star::awt::Key::SELECT_WORD_FORWARD:
+                        bGoRight = bSelect = bWord = true;break;
+                    case com::sun::star::awt::Key::MOVE_WORD_BACKWARD:
+                        bGoLeft = bWord = true;break;
+                    case com::sun::star::awt::Key::SELECT_WORD_BACKWARD:
+                        bGoLeft = bSelect = bWord = true;break;
+                    case com::sun::star::awt::Key::SELECT_TO_BEGIN_OF_LINE:
+                    case com::sun::star::awt::Key::SELECT_TO_BEGIN_OF_PARAGRAPH:
+                    case com::sun::star::awt::Key::SELECT_TO_BEGIN_OF_DOCUMENT:
+                        bSelect = true;
+                        // fallthrough intended
+                    case com::sun::star::awt::Key::MOVE_TO_BEGIN_OF_LINE:
+                    case com::sun::star::awt::Key::MOVE_TO_BEGIN_OF_PARAGRAPH:
+                    case com::sun::star::awt::Key::MOVE_TO_BEGIN_OF_DOCUMENT:
+                        bGoHome = true;break;
+                    case com::sun::star::awt::Key::SELECT_TO_END_OF_LINE:
+                    case com::sun::star::awt::Key::SELECT_TO_END_OF_PARAGRAPH:
+                    case com::sun::star::awt::Key::SELECT_TO_END_OF_DOCUMENT:
+                        bSelect = true;
+                        // fallthrough intended
+                    case com::sun::star::awt::Key::MOVE_TO_END_OF_LINE:
+                    case com::sun::star::awt::Key::MOVE_TO_END_OF_PARAGRAPH:
+                    case com::sun::star::awt::Key::MOVE_TO_END_OF_DOCUMENT:
+                        bGoEnd = true;break;
+                    default:
+                        break;
+                    };
+
                     // Range wird in ImplSetSelection geprueft...
-                    if ( ( nCode == KEY_LEFT ) && aSel.Max() )
+                    if ( bGoLeft && aSel.Max() )
                     {
                         if ( bWord )
                         {
@@ -1629,7 +1696,7 @@ BOOL Edit::ImplHandleKeyEvent( const KeyEvent& rKEvt )
                             aSel.Max() = xBI->previousCharacters( maText, aSel.Max(), GetSettings().GetLocale(), i18n::CharacterIteratorMode::SKIPCHARACTER, nCount, nCount );
                         }
                     }
-                    else if ( ( nCode == KEY_RIGHT ) && ( aSel.Max() < maText.Len() ) )
+                    else if ( bGoRight && ( aSel.Max() < maText.Len() ) )
                     {
                         if ( bWord )
                            {
@@ -1642,12 +1709,16 @@ BOOL Edit::ImplHandleKeyEvent( const KeyEvent& rKEvt )
                             aSel.Max() = xBI->nextCharacters( maText, aSel.Max(), GetSettings().GetLocale(), i18n::CharacterIteratorMode::SKIPCHARACTER, nCount, nCount );
                         }
                     }
-                    else if ( nCode == KEY_HOME )
+                    else if ( bGoHome )
+                    {
                         aSel.Max() = 0;
-                    else if ( nCode == KEY_END )
+                    }
+                    else if ( bGoEnd )
+                    {
                         aSel.Max() = 0xFFFF;
+                    }
 
-                    if ( !rKEvt.GetKeyCode().IsShift() )
+                    if ( !bSelect )
                         aSel.Min() = aSel.Max();
 
                     if ( aSel != GetSelection() )
@@ -1656,7 +1727,7 @@ BOOL Edit::ImplHandleKeyEvent( const KeyEvent& rKEvt )
                         ImplCopyToSelectionClipboard();
                     }
 
-                    if ( (nCode == KEY_END) && maAutocompleteHdl.IsSet() && !rKEvt.GetKeyCode().GetModifier() )
+                    if ( bGoEnd && maAutocompleteHdl.IsSet() && !rKEvt.GetKeyCode().GetModifier() )
                     {
                         if ( (maSelection.Min() == maSelection.Max()) && (maSelection.Min() == maText.Len()) )
                         {
@@ -1670,6 +1741,10 @@ BOOL Edit::ImplHandleKeyEvent( const KeyEvent& rKEvt )
             }
             break;
 
+            case com::sun::star::awt::Key::DELETE_WORD_BACKWARD:
+            case com::sun::star::awt::Key::DELETE_WORD_FORWARD:
+            case com::sun::star::awt::Key::DELETE_TO_BEGIN_OF_LINE:
+            case com::sun::star::awt::Key::DELETE_TO_END_OF_LINE:
             case KEY_BACKSPACE:
             case KEY_DELETE:
             {
@@ -1679,6 +1754,26 @@ BOOL Edit::ImplHandleKeyEvent( const KeyEvent& rKEvt )
                     BYTE nMode = rKEvt.GetKeyCode().IsMod1() ? EDIT_DELMODE_RESTOFWORD : EDIT_DELMODE_SIMPLE;
                     if ( (nMode == EDIT_DELMODE_RESTOFWORD) && rKEvt.GetKeyCode().IsShift() )
                         nMode = EDIT_DELMODE_RESTOFCONTENT;
+                    switch( nCode )
+                    {
+                    case com::sun::star::awt::Key::DELETE_WORD_BACKWARD:
+                        nDel = EDIT_DEL_LEFT;
+                        nMode = EDIT_DELMODE_RESTOFWORD;
+                        break;
+                    case com::sun::star::awt::Key::DELETE_WORD_FORWARD:
+                        nDel = EDIT_DEL_RIGHT;
+                        nMode = EDIT_DELMODE_RESTOFWORD;
+                        break;
+                    case com::sun::star::awt::Key::DELETE_TO_BEGIN_OF_LINE:
+                        nDel = EDIT_DEL_LEFT;
+                        nMode = EDIT_DELMODE_RESTOFCONTENT;
+                        break;
+                    case com::sun::star::awt::Key::DELETE_TO_END_OF_LINE:
+                        nDel = EDIT_DEL_RIGHT;
+                        nMode = EDIT_DELMODE_RESTOFCONTENT;
+                        break;
+                    default: break;
+                    }
                     xub_StrLen nOldLen = maText.Len();
                     ImplDelete( maSelection, nDel, nMode );
                     if ( maText.Len() != nOldLen )
@@ -2255,17 +2350,33 @@ void Edit::StateChanged( StateChangedType nType )
             ImplInvalidateOrRepaint( 0, 0xFFFF );
         }
     }
-    else if ( nType == STATE_CHANGE_STYLE )
+    else if ( nType == STATE_CHANGE_STYLE || nType == STATE_CHANGE_MIRRORING )
     {
-        WinBits nStyle = ImplInitStyle( GetStyle() );
-        SetStyle( nStyle );
+        WinBits nStyle = GetStyle();
+        if( nType == STATE_CHANGE_STYLE )
+        {
+            nStyle = ImplInitStyle( GetStyle() );
+            SetStyle( nStyle );
+        }
 
         USHORT nOldAlign = mnAlign;
         mnAlign = EDIT_ALIGN_LEFT;
 
         // --- RTL --- hack: right align until keyinput and cursor travelling works
-        if( Application::GetSettings().GetLayoutRTL() )
-            mnAlign = EDIT_ALIGN_RIGHT;
+        // edits are always RTL disabled
+        // however the parent edits contain the correct setting
+        if( mbIsSubEdit && GetParent()->IsRTLEnabled() )
+        {
+            if( GetParent()->GetStyle() & WB_LEFT )
+                mnAlign = EDIT_ALIGN_RIGHT;
+            if ( nType == STATE_CHANGE_MIRRORING )
+                SetLayoutMode( TEXT_LAYOUT_BIDI_RTL | TEXT_LAYOUT_TEXTORIGIN_LEFT );
+        }
+        else if( mbIsSubEdit && !GetParent()->IsRTLEnabled() )
+        {
+            if ( nType == STATE_CHANGE_MIRRORING )
+                SetLayoutMode( TEXT_LAYOUT_BIDI_LTR | TEXT_LAYOUT_TEXTORIGIN_LEFT );
+        }
 
         if ( nStyle & WB_RIGHT )
             mnAlign = EDIT_ALIGN_RIGHT;

@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: zformat.cxx,v $
- * $Revision: 1.78 $
+ * $Revision: 1.78.138.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -33,7 +33,7 @@
 #include <stdio.h>
 #include <ctype.h>
 #include <float.h>
-#include <math.h>
+// #include <math.h>
 #include <errno.h>
 #include <stdlib.h>
 #include <tools/debug.hxx>
@@ -1816,6 +1816,7 @@ void SvNumberformat::ImpGetOutputStandard(double& fNumber, String& OutString)
             OutString.GetTokenCount('0') == OutString.Len())
             OutString.EraseLeadingChars('-');            // nicht -0
     }
+    ImpTransliterate( OutString, NumFor[0].GetNatNum() );
     return;
 }
 
@@ -2391,16 +2392,16 @@ BOOL SvNumberformat::GetOutputString(double fNumber,
                         ExpStr = String::CreateFromInt32( nExp );
                     }
                 }
-                USHORT j = nAnz-1;              // last symbol
-                xub_StrLen k;
+                USHORT j = nAnz-1;                  // last symbol
+                xub_StrLen k;                       // position in ExpStr
                 bRes |= ImpNumberFill(ExpStr, fNumber, k, j, nIx, NF_SYMBOLTYPE_EXP);
 
-                while (k > 0)                   // erase leading zeros
-                {
-                    k--;
-                    if (ExpStr.GetChar(k) == '0')
-                        ExpStr.Erase(0,1);
-                }
+                xub_StrLen nZeros = 0;              // erase leading zeros
+                while (nZeros < k && ExpStr.GetChar(nZeros) == '0')
+                    ++nZeros;
+                if (nZeros)
+                    ExpStr.Erase( 0, nZeros);
+
                 BOOL bCont = TRUE;
                 if (rInfo.nTypeArray[j] == NF_SYMBOLTYPE_EXP)
                 {

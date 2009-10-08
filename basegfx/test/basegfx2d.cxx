@@ -1444,9 +1444,9 @@ public:
 }; // class b2dvector
 
 // -----------------------------------------------------------------------------
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(basegfx2d::b2dmultirange, "basegfx2d");
+//CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(basegfx2d::b2dmultirange, "basegfx2d");
 CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(basegfx2d::b2dsvgdimpex, "basegfx2d");
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(basegfx2d::b2dbeziertools, "basegfx2d");
+//CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(basegfx2d::b2dbeziertools, "basegfx2d");
 CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(basegfx2d::b2dcubicbezier, "basegfx2d");
 CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(basegfx2d::b2dhommatrix, "basegfx2d");
 CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(basegfx2d::b2dhompoint, "basegfx2d");

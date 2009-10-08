@@ -1253,10 +1253,12 @@ Window* Application::GetTopWindow( long nIndex )
     while( pWin )
     {
         if( pWin->ImplGetWindow()->IsTopWindow() )
+        {
             if( nIdx == nIndex )
                 return pWin->ImplGetWindow();
             else
                 nIdx++;
+        }
         pWin = pWin->mpWindowImpl->mpFrameData->mpNextFrame;
     }
     return NULL;

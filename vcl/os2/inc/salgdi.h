@@ -64,7 +64,7 @@ public:
     virtual ImplFontEntry*  CreateFontInstance( ImplFontSelectData& ) const;
     virtual sal_IntPtr      GetFontId() const;
     void                    SetFontId( sal_IntPtr nId ) { mnId = nId; }
-    void                    UpdateFromHPS( HPS );
+    void                    UpdateFromHPS( HPS ) const;
 
     bool                    HasChar( sal_uInt32 cChar ) const;
 
@@ -77,15 +77,15 @@ public:
     bool                    AliasSymbolsHigh() const    { return mbAliasSymbolsHigh; }
     bool                    AliasSymbolsLow() const     { return mbAliasSymbolsLow; }
 
-    ImplFontCharMap*        GetImplFontCharMap();
+    ImplFontCharMap*        GetImplFontCharMap() const;
 
 private:
     sal_IntPtr              mnId;
-    bool                    mbDisableGlyphApi;
-    bool                    mbHasKoreanRange;
-    bool                    mbHasCJKSupport;
+    mutable bool                    mbDisableGlyphApi;
+    mutable bool                    mbHasKoreanRange;
+    mutable bool                    mbHasCJKSupport;
 
-    ImplFontCharMap*        mpUnicodeMap;
+    mutable ImplFontCharMap*        mpUnicodeMap;
 
     // TODO: get rid of the members below needed to work with the Win9x non-unicode API
     BYTE*                   mpFontCharSets;     // all Charsets for the current font (used on W98 for kerning)
@@ -97,8 +97,8 @@ private:
     PFONTMETRICS            pFontMetric;
 
 private:
-    void                    ReadCmapTable( HDC );
-    void                    ReadOs2Table( HDC );
+    void                    ReadCmapTable( HDC ) const;
+    void                    ReadOs2Table( HDC ) const;
 
 #ifdef GNG_VERT_HACK
     void                    ReadGsubTable( HDC ) const;
@@ -137,9 +137,9 @@ public:
     BOOL                    mbVirDev;           // is VirDev
     BOOL                    mbWindow;           // is Window
     BOOL                    mbScreen;           // is Screen compatible
-    BOOL                    mbXORMode;          // _every_ output with RasterOp XOR
+    bool                    mbXORMode;          // _every_ output with RasterOp XOR
     ULONG                   mhFonts[ MAX_FALLBACK ];        // Font + Fallbacks
-    ImplOs2FontData*            mpOs2FontData[ MAX_FALLBACK ];  // pointer to the most recent font face
+    const ImplOs2FontData*          mpOs2FontData[ MAX_FALLBACK ];  // pointer to the most recent font face
     ImplOs2FontEntry*           mpOs2FontEntry[ MAX_FALLBACK ]; // pointer to the most recent font instance
     ULONG                   mhDefFont;          // DefaultFont
     float                   mfFontScale;            // allows metrics emulation of huge font sizes
@@ -155,6 +155,7 @@ public:
 
 protected:
     virtual BOOL        unionClipRegion( long nX, long nY, long nWidth, long nHeight );
+    virtual bool                unionClipRegion( const ::basegfx::B2DPolyPolygon& );
     // draw --> LineColor and FillColor and RasterOp and ClipRegion
     virtual void        drawPixel( long nX, long nY );
     virtual void        drawPixel( long nX, long nY, SalColor nSalColor );
@@ -163,6 +164,8 @@ protected:
     virtual void        drawPolyLine( ULONG nPoints, const SalPoint* pPtAry );
     virtual void        drawPolygon( ULONG nPoints, const SalPoint* pPtAry );
     virtual void        drawPolyPolygon( ULONG nPoly, const ULONG* pPoints, PCONSTSALPOINT* pPtAry );
+    virtual bool        drawPolyPolygon( const ::basegfx::B2DPolyPolygon&, double fTransparency );
+    virtual bool        drawPolyLine( const ::basegfx::B2DPolygon&, const ::basegfx::B2DVector& rLineWidth, basegfx::B2DLineJoin);
     virtual sal_Bool    drawPolyLineBezier( ULONG nPoints, const SalPoint* pPtAry, const BYTE* pFlgAry );
     virtual sal_Bool    drawPolygonBezier( ULONG nPoints, const SalPoint* pPtAry, const BYTE* pFlgAry );
     virtual sal_Bool    drawPolyPolygonBezier( ULONG nPoly, const ULONG* pPoints, const SalPoint* const* pPtAry, const BYTE* const* pFlgAry );
@@ -242,7 +245,7 @@ public:
     // filled accordingly
     virtual void            SetFillColor( SalColor nSalColor );
     // enable/disable XOR drawing
-    virtual void            SetXORMode( BOOL bSet );
+    virtual void            SetXORMode( bool bSet, bool );
     // set line color for raster operations
     virtual void            SetROPLineColor( SalROPColor nROPColor );
     // set fill color for raster operations
@@ -277,7 +280,7 @@ public:
     // implementation note: encoding 0 with glyph id 0 should be added implicitly
     // as "undefined character"
     virtual BOOL            CreateFontSubset( const rtl::OUString& rToFile,
-                                              ImplFontData* pFont,
+                                              const ImplFontData* pFont,
                                               long* pGlyphIDs,
                                               sal_uInt8* pEncoding,
                                               sal_Int32* pWidths,
@@ -309,7 +312,7 @@ public:
     // frees the font data again
     virtual void            FreeEmbedFontData( const void* pData, long nDataLen );
 
-    virtual void            GetGlyphWidths( ImplFontData* pFont,
+    virtual void            GetGlyphWidths( const ImplFontData* pFont,
                                             bool bVertical,
                                             Int32Vector& rWidths,
                                             Ucs2UIntMap& rUnicodeEnc );

@@ -62,6 +62,10 @@ SLOFILES=\
             $(SLO)$/gtkinst.obj	\
             $(SLO)$/gtksys.obj
 
+EXCEPTIONSFILES=\
+            $(SLO)$/gtkdata.obj\
+            $(SLO)$/gtkinst.obj
+
 .ELSE # "$(ENABLE_GTK)" != ""
 
 dummy:

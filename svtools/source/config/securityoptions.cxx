@@ -881,7 +881,7 @@ Sequence< OUString > SvtSecurityOptions_Impl::GetSecureURLs() const
 
 void SvtSecurityOptions_Impl::SetSecureURLs( const Sequence< OUString >& seqURLList )
 {
-    DBG_ASSERT(!m_bROSecureURLs, "SvtSecurityOptions_Impl::SetSecureURLs()\nYou tried to write on a readonly value!\n")
+    DBG_ASSERT(!m_bROSecureURLs, "SvtSecurityOptions_Impl::SetSecureURLs()\nYou tried to write on a readonly value!\n");
     if (!m_bROSecureURLs && m_seqSecureURLs!=seqURLList)
     {
         m_seqSecureURLs = seqURLList;
@@ -970,7 +970,7 @@ Sequence< SvtSecurityOptions::Certificate > SvtSecurityOptions_Impl::GetTrustedA
 
 void SvtSecurityOptions_Impl::SetTrustedAuthors( const Sequence< SvtSecurityOptions::Certificate >& rAuthors )
 {
-    DBG_ASSERT(!m_bROTrustedAuthors, "SvtSecurityOptions_Impl::SetTrustedAuthors()\nYou tried to write on a readonly value!\n")
+    DBG_ASSERT(!m_bROTrustedAuthors, "SvtSecurityOptions_Impl::SetTrustedAuthors()\nYou tried to write on a readonly value!\n");
     if( !m_bROTrustedAuthors && rAuthors != m_seqTrustedAuthors )
     {
         m_seqTrustedAuthors = rAuthors;
@@ -1208,7 +1208,7 @@ EBasicSecurityMode SvtSecurityOptions_Impl::GetBasicMode() const
 
 void SvtSecurityOptions_Impl::SetBasicMode( EBasicSecurityMode eMode )
 {
-    DBG_ASSERT(!m_bROBasicMode, "SvtSecurityOptions_Impl::SetBasicMode()\nYou tried to write on a readonly value!\n")
+    DBG_ASSERT(!m_bROBasicMode, "SvtSecurityOptions_Impl::SetBasicMode()\nYou tried to write on a readonly value!\n");
     if (!m_bROBasicMode && m_eBasicMode!=eMode)
     {
         m_eBasicMode = eMode;
@@ -1223,7 +1223,7 @@ sal_Bool SvtSecurityOptions_Impl::IsExecutePlugins() const
 
 void SvtSecurityOptions_Impl::SetExecutePlugins( sal_Bool bSet )
 {
-    DBG_ASSERT(!m_bROExecutePlugins, "SvtSecurityOptions_Impl::SetExecutePlugins()\nYou tried to write on a readonly value!\n")
+    DBG_ASSERT(!m_bROExecutePlugins, "SvtSecurityOptions_Impl::SetExecutePlugins()\nYou tried to write on a readonly value!\n");
     if (!m_bROExecutePlugins && m_bExecutePlugins!=bSet)
     {
         m_bExecutePlugins = bSet;
@@ -1238,7 +1238,7 @@ sal_Bool SvtSecurityOptions_Impl::IsWarningEnabled() const
 
 void SvtSecurityOptions_Impl::SetWarningEnabled( sal_Bool bSet )
 {
-    DBG_ASSERT(!m_bROWarning, "SvtSecurityOptions_Impl::SetWarningEnabled()\nYou tried to write on a readonly value!\n")
+    DBG_ASSERT(!m_bROWarning, "SvtSecurityOptions_Impl::SetWarningEnabled()\nYou tried to write on a readonly value!\n");
     if (!m_bROWarning && m_bWarning!=bSet)
     {
         m_bWarning = bSet;
@@ -1253,7 +1253,7 @@ sal_Bool SvtSecurityOptions_Impl::IsConfirmationEnabled() const
 
 void SvtSecurityOptions_Impl::SetConfirmationEnabled( sal_Bool bSet )
 {
-    DBG_ASSERT(!m_bROConfirmation, "SvtSecurityOptions_Impl::SetConfirmationEnabled()\nYou tried to write on a readonly value!\n")
+    DBG_ASSERT(!m_bROConfirmation, "SvtSecurityOptions_Impl::SetConfirmationEnabled()\nYou tried to write on a readonly value!\n");
     if (!m_bROConfirmation && m_bConfirmation!=bSet)
     {
         m_bConfirmation = bSet;

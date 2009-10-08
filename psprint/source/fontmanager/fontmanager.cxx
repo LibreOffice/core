@@ -2093,14 +2093,24 @@ void PrintFontManager::initFontsAlias()
 // TODO: use that method once psprint gets merged into vcl
 static bool AreFCSubstitutionsEnabled()
 {
-    bool bDisableFC = false;
+    // init font substitution defaults
+    int nDisableBits = 0;
 #ifdef SOLARIS
-    bDisableFC = true;
+    // TODO: check the OS version and fc-data maintenance level
+    nDisableBits = 1; // disable "font fallback" here on default
 #endif
+    // apply the environment variable if any
     const char* pEnvStr = ::getenv( "SAL_DISABLE_FC_SUBST" );
     if( pEnvStr )
-        bDisableFC = (*pEnvStr == '\0') || (*pEnvStr != '0');
-    return bDisableFC;
+    {
+        //
+        if( (*pEnvStr >= '0') && (*pEnvStr <= '9') )
+            nDisableBits = (*pEnvStr - '0');
+        else
+            nDisableBits = ~0U; // no specific bits set: disable all
+    }
+
+    return ((nDisableBits & 3) == 0);
 }
 
 void PrintFontManager::initialize( void* pInitDisplay )

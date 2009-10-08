@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: sallayout.cxx,v $
- * $Revision: 1.94 $
+ * $Revision: 1.94.90.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -243,97 +243,86 @@ sal_UCS4 GetLocalizedChar( sal_UCS4 nChar, LanguageType eLang )
         return nChar;
 
     int nOffset;
-    switch( eLang )
+    // eLang & LANGUAGE_MASK_PRIMARY catches language independent of region.
+    // CAVEAT! To some like Mongolian MS assigned the same primary language
+    // although the script type is different!
+    switch( eLang & LANGUAGE_MASK_PRIMARY )
     {
         default:
             nOffset = 0;
             break;
-        case LANGUAGE_ARABIC:
-        case LANGUAGE_ARABIC_SAUDI_ARABIA:
-        case LANGUAGE_ARABIC_IRAQ:
-        case LANGUAGE_ARABIC_EGYPT:
-        case LANGUAGE_ARABIC_LIBYA:
-        case LANGUAGE_ARABIC_ALGERIA:
-        case LANGUAGE_ARABIC_MOROCCO:
-        case LANGUAGE_ARABIC_TUNISIA:
-        case LANGUAGE_ARABIC_OMAN:
-        case LANGUAGE_ARABIC_YEMEN:
-        case LANGUAGE_ARABIC_SYRIA:
-        case LANGUAGE_ARABIC_JORDAN:
-        case LANGUAGE_ARABIC_LEBANON:
-        case LANGUAGE_ARABIC_KUWAIT:
-        case LANGUAGE_ARABIC_UAE:
-        case LANGUAGE_ARABIC_BAHRAIN:
-        case LANGUAGE_ARABIC_QATAR:
-        case LANGUAGE_URDU:
-        case LANGUAGE_URDU_PAKISTAN:
-        case LANGUAGE_URDU_INDIA:
-        case LANGUAGE_PUNJABI: //???
-            nOffset = 0x0660 - '0';  // arabic/persian/urdu
+        case LANGUAGE_ARABIC_SAUDI_ARABIA  & LANGUAGE_MASK_PRIMARY:
+            nOffset = 0x0660 - '0';  // arabic-indic digits
             break;
-        case LANGUAGE_BENGALI:
+        case LANGUAGE_URDU          & LANGUAGE_MASK_PRIMARY:
+        case LANGUAGE_PUNJABI       & LANGUAGE_MASK_PRIMARY: //???
+        case LANGUAGE_SINDHI        & LANGUAGE_MASK_PRIMARY:
+            nOffset = 0x06F0 - '0';  // eastern arabic-indic digits
+            break;
+        case LANGUAGE_BENGALI       & LANGUAGE_MASK_PRIMARY:
             nOffset = 0x09E6 - '0';  // bengali
             break;
-        case LANGUAGE_HINDI:
+        case LANGUAGE_HINDI         & LANGUAGE_MASK_PRIMARY:
             nOffset = 0x0966 - '0';  // devanagari
             break;
-        #if 0
+        case LANGUAGE_AMHARIC_ETHIOPIA & LANGUAGE_MASK_PRIMARY:
+        case LANGUAGE_TIGRIGNA_ETHIOPIA & LANGUAGE_MASK_PRIMARY:
         // TODO case:
             nOffset = 0x1369 - '0';  // ethiopic
             break;
-        #endif
-        case LANGUAGE_GUJARATI:
+        case LANGUAGE_GUJARATI      & LANGUAGE_MASK_PRIMARY:
             nOffset = 0x0AE6 - '0';  // gujarati
             break;
-        #if 0
-        // TODO case:
+#ifdef LANGUAGE_GURMUKHI // TODO case:
+        case LANGUAGE_GURMUKHI      & LANGUAGE_MASK_PRIMARY:
             nOffset = 0x0A66 - '0';  // gurmukhi
             break;
-        #endif
-        case LANGUAGE_KANNADA:
+#endif
+        case LANGUAGE_KANNADA       & LANGUAGE_MASK_PRIMARY:
             nOffset = 0x0CE6 - '0';  // kannada
             break;
-        case LANGUAGE_KHMER:
+        case LANGUAGE_KHMER         & LANGUAGE_MASK_PRIMARY:
             nOffset = 0x17E0 - '0';  // khmer
             break;
-        case LANGUAGE_LAO:
+        case LANGUAGE_LAO           & LANGUAGE_MASK_PRIMARY:
             nOffset = 0x0ED0 - '0';  // lao
             break;
-        case LANGUAGE_MALAYALAM:
-            nOffset = 0x0D66 - '0';   // malayalam
+        case LANGUAGE_MALAYALAM     & LANGUAGE_MASK_PRIMARY:
+            nOffset = 0x0D66 - '0';  // malayalam
             break;
-        case LANGUAGE_MONGOLIAN:
-            nOffset = 0x1810 - '0';   // mongolian
+        case LANGUAGE_MONGOLIAN     & LANGUAGE_MASK_PRIMARY:
+            if (eLang == LANGUAGE_MONGOLIAN_MONGOLIAN)
+                nOffset = 0x1810 - '0';   // mongolian
+            else
+                nOffset = 0;              // mongolian cyrillic
             break;
-        #if 0
-        // TODO case:
-            nOffset = 0x1040 - '0';   // myanmar
+        case LANGUAGE_BURMESE       & LANGUAGE_MASK_PRIMARY:
+            nOffset = 0x1040 - '0';  // myanmar
             break;
-        #endif
-        case LANGUAGE_ORIYA:
-            nOffset = 0x0B66 - '0';   // oriya
+        case LANGUAGE_ORIYA         & LANGUAGE_MASK_PRIMARY:
+            nOffset = 0x0B66 - '0';  // oriya
             break;
-        case LANGUAGE_TAMIL:
-            nOffset = 0x0BE7 - '0';   // tamil
+        case LANGUAGE_TAMIL         & LANGUAGE_MASK_PRIMARY:
+            nOffset = 0x0BE7 - '0';  // tamil
             break;
-        case LANGUAGE_TELUGU:
-            nOffset = 0x0C66 - '0';   // telugu
+        case LANGUAGE_TELUGU        & LANGUAGE_MASK_PRIMARY:
+            nOffset = 0x0C66 - '0';  // telugu
             break;
-        case LANGUAGE_THAI:
-            nOffset = 0x0E50 - '0';   // thai
+        case LANGUAGE_THAI          & LANGUAGE_MASK_PRIMARY:
+            nOffset = 0x0E50 - '0';  // thai
             break;
-        case LANGUAGE_TIBETAN:
-            nOffset = 0x0F20 - '0';   // tibetan
+        case LANGUAGE_TIBETAN       & LANGUAGE_MASK_PRIMARY:
+            nOffset = 0x0F20 - '0';  // tibetan
             break;
 #if 0 // TODO: use language type for these digit substitutions?
         // TODO case:
-            nOffset = 0x2776 - '0';   // dingbat circled
+            nOffset = 0x2776 - '0';  // dingbat circled
             break;
         // TODO case:
-            nOffset = 0x2070 - '0';   // superscript
+            nOffset = 0x2070 - '0';  // superscript
             break;
         // TODO case:
-            nOffset = 0x2080 - '0';   // subscript
+            nOffset = 0x2080 - '0';  // subscript
             break;
 #endif
     }
@@ -567,7 +556,7 @@ ImplLayoutArgs::ImplLayoutArgs( const xub_Unicode* pStr, int nLen,
         UBiDi* pParaBidi = ubidi_openSized( mnLength, 0, &rcI18n );
         if( !pParaBidi )
             return;
-        ubidi_setPara( pParaBidi, mpStr, mnLength, nLevel, NULL, &rcI18n );
+        ubidi_setPara( pParaBidi, reinterpret_cast<const UChar *>(mpStr), mnLength, nLevel, NULL, &rcI18n );    // UChar != sal_Unicode in MinGW
 
         UBiDi* pLineBidi = pParaBidi;
         int nSubLength = mnEndCharPos - mnMinCharPos;
@@ -1715,6 +1704,9 @@ void MultiSalLayout::AdjustLayout( ImplLayoutArgs& rArgs )
         }
         mpLayouts[n]->AdjustLayout( aMultiArgs );
 
+        // disable glyph-injection for glyph-fallback SalLayout iteration
+        mpLayouts[n]->DisableGlyphInjection( true );
+
         // remove unused parts of component
         if( n > 0 )
         {
@@ -1893,6 +1885,10 @@ void MultiSalLayout::AdjustLayout( ImplLayoutArgs& rArgs )
     }
 
     mpLayouts[0]->Simplify( true );
+
+    // reenable glyph-injection
+    for( n = 0; n < mnLevel; ++n )
+        mpLayouts[n]->DisableGlyphInjection( false );
 }
 
 // -----------------------------------------------------------------------

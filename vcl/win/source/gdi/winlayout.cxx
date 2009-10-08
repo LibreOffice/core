@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: winlayout.cxx,v $
- * $Revision: 1.115 $
+ * $Revision: 1.113.6.9 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -54,6 +54,7 @@
 // for GetMirroredChar
 #include <vcl/svapp.hxx>
 
+#define USE_UNISCRIBE
 #ifdef USE_UNISCRIBE
 #include <Usp10.h>
 #include <ShLwApi.h>
@@ -102,8 +103,15 @@ private:
 public:
     int                     GetCachedGlyphWidth( int nCharCode ) const;
     void                    CacheGlyphWidth( int nCharCode, int nCharWidth );
+
+    bool                    InitKashidaHandling( HDC );
+    int                     GetMinKashidaWidth() const { return mnMinKashidaWidth; }
+    int                     GetMinKashidaGlyph() const { return mnMinKashidaGlyph; }
+
 private:
     IntMap                  maWidthMap;
+    mutable int             mnMinKashidaWidth;
+    mutable int             mnMinKashidaGlyph;
 };
 
 // -----------------------------------------------------------------------
@@ -545,6 +553,8 @@ bool SimpleWinLayout::LayoutText( ImplLayoutArgs& rArgs )
     }
 
     // scale layout metrics if needed
+    // TODO: does it make the code more simple if the metric scaling
+    // is moved to the methods that need metric scaling (e.g. FillDXArray())?
     if( mfFontScale != 1.0 )
     {
         mnWidth   = (long)(mnWidth * mfFontScale);
@@ -886,7 +896,7 @@ void SimpleWinLayout::ApplyDXArray( const ImplLayoutArgs& rArgs )
             nOldWidth += mpGlyphAdvances[ j ];
             int nDiff = nOldWidth - pDXArray[ i ];
 
-           // disabled because of #104768#
+            // disabled because of #104768#
             // works great for static text, but problems when typing
             // if( nDiff>+1 || nDiff<-1 )
             // only bother with changing anything when something moved
@@ -1046,10 +1056,14 @@ public:
     //long          mnPixelWidth;
     int             mnXOffset;
     ABC             maABCWidths;
+    bool            mbHasKashidas;
 
 public:
     bool            IsEmpty() const { return (mnEndGlyphPos <= 0); }
+    bool            HasKashidas() const { return mbHasKashidas; }
 };
+
+// -----------------------------------------------------------------------
 
 class UniscribeLayout : public WinLayout
 {
@@ -1065,11 +1079,13 @@ public:
     virtual long    FillDXArray( long* pDXArray ) const;
     virtual int     GetTextBreak( long nMaxWidth, long nCharExtra, int nFactor ) const;
     virtual void    GetCaretPositions( int nArraySize, long* pCaretXArray ) const;
+    virtual bool    IsKashidaPosValid ( int nCharPos ) const;
 
     // for glyph+font+script fallback
     virtual void    MoveGlyph( int nStart, long nNewXPos );
     virtual void    DropGlyph( int nStart );
     virtual void    Simplify( bool bIsBase );
+    virtual void    DisableGlyphInjection( bool bDisable ) { mbDisableGlyphInjection = bDisable; }
 
 protected:
     virtual         ~UniscribeLayout();
@@ -1103,6 +1119,15 @@ private:
     GOFFSET*        mpGlyphOffsets;     // glyph offsets to the "naive" layout
     SCRIPT_VISATTR* mpVisualAttrs;      // glyph visual attributes
     mutable int*    mpGlyphs2Chars;     // map from absolute_glyph_pos to absolute_char_pos
+
+    // kashida stuff
+    void InitKashidaHandling();
+    void KashidaItemFix( int nMinGlyphPos, int nEndGlyphPos );
+    bool KashidaWordFix( int nMinGlyphPos, int nEndGlyphPos, int* pnCurrentPos );
+
+    int            mnMinKashidaWidth;
+    int            mnMinKashidaGlyph;
+    bool           mbDisableGlyphInjection;
 };
 
 // -----------------------------------------------------------------------
@@ -1243,21 +1268,23 @@ static bool InitUSP()
 UniscribeLayout::UniscribeLayout( HDC hDC,
     const ImplWinFontData& rWinFontData, ImplWinFontEntry& rWinFontEntry )
 :   WinLayout( hDC, rWinFontData, rWinFontEntry ),
-    mnItemCount(0),
+    mnItemCount( 0 ),
     mpScriptItems( NULL ),
     mpVisualItems( NULL ),
     mpLogClusters( NULL ),
     mpCharWidths( NULL ),
     mnCharCapacity( 0 ),
     mnSubStringMin( 0 ),
-    mnGlyphCapacity(0),
+    mnGlyphCapacity( 0 ),
     mnGlyphCount( 0 ),
     mpOutGlyphs( NULL ),
     mpGlyphAdvances( NULL ),
     mpJustifications( NULL ),
     mpGlyphOffsets( NULL ),
     mpVisualAttrs( NULL ),
-    mpGlyphs2Chars( NULL )
+    mpGlyphs2Chars( NULL ),
+    mnMinKashidaGlyph( 0 ),
+    mbDisableGlyphInjection( false )
 {}
 
 // -----------------------------------------------------------------------
@@ -1669,6 +1696,8 @@ bool UniscribeLayout::LayoutText( ImplLayoutArgs& rArgs )
     }
 
     // scale layout metrics if needed
+    // TODO: does it make the code more simple if the metric scaling
+    // is moved to the methods that need metric scaling (e.g. FillDXArray())?
     if( mfFontScale != 1.0 )
     {
         mnBaseAdv = (int)((double)mnBaseAdv*mfFontScale);
@@ -1757,9 +1786,16 @@ bool UniscribeLayout::GetItemSubrange( const VisualItem& rVisualItem,
 // -----------------------------------------------------------------------
 
 int UniscribeLayout::GetNextGlyphs( int nLen, sal_GlyphId* pGlyphs, Point& rPos,
-    int& nStart, sal_Int32* pGlyphAdvances, int* pCharPosAry ) const
+    int& nStartx8, sal_Int32* pGlyphAdvances, int* pCharPosAry ) const
 {
-    if( nStart > mnGlyphCount )        // nStart>MAX means no more glyphs
+    // HACK to allow fake-glyph insertion (e.g. for kashidas)
+    // TODO: use iterator idiom instead of GetNextGlyphs(...)
+    // TODO: else make sure that the limit for glyph injection is sufficient (currently 256)
+    int nSubIter = nStartx8 & 0xff;
+    int nStart = nStartx8 >> 8;
+
+    // check the glyph iterator
+    if( nStart > mnGlyphCount )       // nStart>MAX means no more glyphs
         return 0;
 
     // find the visual item for the nStart glyph position
@@ -1788,9 +1824,9 @@ int UniscribeLayout::GetNextGlyphs( int nLen, sal_GlyphId* pGlyphs, Point& rPos,
     }
 
     // after the last visual item there are no more glyphs
-    if( nItem >= mnItemCount )
+    if( (nItem >= mnItemCount) || (nStart < 0) )
     {
-        nStart = mnGlyphCount + 1;
+        nStartx8 = (mnGlyphCount + 1) << 8;
         return 0;
     }
 
@@ -1809,7 +1845,10 @@ int UniscribeLayout::GetNextGlyphs( int nLen, sal_GlyphId* pGlyphs, Point& rPos,
     bool bRC = GetItemSubrange( *pVI, nMinGlyphPos, nEndGlyphPos );
     DBG_ASSERT( bRC, "USPLayout::GNG GISR() returned false" );
     if( !bRC )
+    {
+        nStartx8 = (mnGlyphCount + 1) << 8;
         return 0;
+    }
 
     // make sure nStart is inside the range of relevant glyphs
     if( nStart < nMinGlyphPos )
@@ -1880,15 +1919,71 @@ int UniscribeLayout::GetNextGlyphs( int nLen, sal_GlyphId* pGlyphs, Point& rPos,
     int nCount = 0;
     while( nCount < nLen )
     {
+        // prepare return values
+        sal_GlyphId aGlyphId = mpOutGlyphs[ nStart ];
+        int nGlyphWidth = pGlyphWidths[ nStart ];
+        int nCharPos = -1;    // no need to determine charpos
+        if( mpGlyphs2Chars )  // unless explicitly requested+provided
+            nCharPos = mpGlyphs2Chars[ nStart ];
+
+        // inject kashida glyphs if needed
+        if( !mbDisableGlyphInjection
+        && mpJustifications
+        && mnMinKashidaWidth
+        && mpVisualAttrs[nStart].uJustification >= SCRIPT_JUSTIFY_ARABIC_NORMAL )
+        {
+            // prepare draw position adjustment
+            int nExtraOfs = (nSubIter++) * mnMinKashidaWidth;
+            // calculate space available for the injected glyphs
+               nGlyphWidth = mpGlyphAdvances[ nStart ];
+            const int nExtraWidth = mpJustifications[ nStart ] - nGlyphWidth;
+            const int nToFillWidth = nExtraWidth - nExtraOfs;
+            if( (4*nToFillWidth >= mnMinKashidaWidth)    // prevent glyph-injection if there is no room
+            ||  ((nSubIter > 1) && (nToFillWidth > 0)) ) // unless they can overlap with others
+            {
+                // handle if there is not sufficient room for a full glyph
+                if( nToFillWidth < mnMinKashidaWidth )
+                {
+                    // overlap it with the previously injected glyph if possible
+                    int nOverlap = mnMinKashidaWidth - nToFillWidth;
+                    // else overlap it with both neighboring glyphs
+                    if( nSubIter <= 1 )
+                        nOverlap /= 2;
+                    nExtraOfs -= nOverlap;
+                }
+                nGlyphWidth = mnMinKashidaWidth;
+                aGlyphId = mnMinKashidaGlyph;
+                nCharPos = -1;
+            }
+            else
+            {
+                nExtraOfs += nToFillWidth;  // at right of cell
+                nSubIter = 0;               // done with glyph injection
+            }
+            if( !bManualCellAlign )
+                nExtraOfs -= nExtraWidth;   // adjust for right-aligned cells
+
+            // adjust the draw position for the injected-glyphs case
+            if( nExtraOfs )
+            {
+                aRelativePos.X() += nExtraOfs;
+                rPos = GetDrawPosition( aRelativePos );
+            }
+        }
+
         // update return values
-        *(pGlyphs++) = mpOutGlyphs[ nStart ];
+        *(pGlyphs++) = aGlyphId;
         if( pGlyphAdvances )
-            *(pGlyphAdvances++) = pGlyphWidths[ nStart ];
+            *(pGlyphAdvances++) = nGlyphWidth;
         if( pCharPosAry )
-            *(pCharPosAry++) = mpGlyphs2Chars[ nStart ];
+            *(pCharPosAry++) = nCharPos;
 
         // increment counter of returned glyphs
         ++nCount;
+
+        // reduce code complexity by returning early in glyph-injection case
+           if( nSubIter != 0 )
+               break;
 
         // stop after the last visible glyph in this visual item
         if( ++nStart >= nEndGlyphPos )
@@ -1899,7 +1994,7 @@ int UniscribeLayout::GetNextGlyphs( int nLen, sal_GlyphId* pGlyphs, Point& rPos,
 
         // RTL-justified glyph positioning is not easy
         // simplify the code by just returning only one glyph at a time
-        if( mpJustifications && !bManualCellAlign && pVI->mpScriptItem->a.fRTL )
+        if( mpJustifications && pVI->mpScriptItem->a.fRTL )
             break;
 
         // stop when the x-position of the next glyph is unexpected
@@ -1914,13 +2009,16 @@ int UniscribeLayout::GetNextGlyphs( int nLen, sal_GlyphId* pGlyphs, Point& rPos,
     }
 
     ++nStart;
+    nStartx8 = (nStart << 8) + nSubIter;
     return nCount;
 }
 
 // -----------------------------------------------------------------------
 
-void UniscribeLayout::MoveGlyph( int nStart, long nNewXPos )
+void UniscribeLayout::MoveGlyph( int nStartx8, long nNewXPos )
 {
+    DBG_ASSERT( !(nStartx8 & 0xff), "USP::MoveGlyph(): glyph injection not disabled!" );
+    int nStart = nStartx8 >> 8;
     if( nStart > mnGlyphCount )
         return;
 
@@ -1940,14 +2038,9 @@ void UniscribeLayout::MoveGlyph( int nStart, long nNewXPos )
         for( int i = mnItemCount; --i >= 0; ++pVI )
             if( (nStart >= pVI->mnMinGlyphPos) && (nStart < pVI->mnEndGlyphPos) )
                 break;
-        #if OSL_DEBUG_LEVEL > 0
-        bool bRC =
-        #endif
-        GetItemSubrange( *pVI, nMinGlyphPos, nEndGlyphPos );
+        bool bRC = GetItemSubrange( *pVI, nMinGlyphPos, nEndGlyphPos );
+    (void)bRC; // avoid var-not-used warning
         DBG_ASSERT( bRC, "USPLayout::MoveG GISR() returned false" );
-        #if OSL_DEBUG_LEVEL > 0
-        (void)bRC;
-        #endif
     }
 
     long nDelta = nNewXPos - pVI->mnXOffset;
@@ -1968,13 +2061,15 @@ void UniscribeLayout::MoveGlyph( int nStart, long nNewXPos )
 
 // -----------------------------------------------------------------------
 
-void UniscribeLayout::DropGlyph( int nStart )
+void UniscribeLayout::DropGlyph( int nStartx8 )
 {
+    DBG_ASSERT( !(nStartx8 & 0xff), "USP::DropGlyph(): glyph injection not disabled!" );
+    int nStart = nStartx8 >> 8;
     DBG_ASSERT( nStart<=mnGlyphCount, "USPLayout::MoveG nStart overflow" );
 
     if( nStart > 0 )        // nStart>0 means absolute glyph pos + 1
         --nStart;
-    else // if( !nStart )   // nStart==0 for first visible glyph
+    else                    // nStart<=0 for first visible glyph
     {
         const VisualItem* pVI = mpVisualItems;
         for( int i = mnItemCount, nDummy; --i >= 0; ++pVI )
@@ -2336,19 +2431,25 @@ void UniscribeLayout::ApplyDXArray( const ImplLayoutArgs& rArgs )
          || (rVisualItem.mnEndCharPos <= mnMinCharPos) )
             continue;
 
-        bool bHasKashida = false;
+        // if needed prepare special handling for arabic justification
+        rVisualItem.mbHasKashidas = false;
         if( rVisualItem.mpScriptItem->a.fRTL )
         {
             for( i = rVisualItem.mnMinGlyphPos; i < rVisualItem.mnEndGlyphPos; ++i )
-                if ( (1U << mpVisualAttrs[i].uJustification) & 0x7F89 )  //  any Arabic justification ?
-                {
-                    // yes
-                    bHasKashida = true;
+                if ( (1U << mpVisualAttrs[i].uJustification) & 0xFF89 )  //  any Arabic justification ?
+                {                                                        //  the last SCRIPT_JUSTIFY_xxx
+                    // yes                                               //  == 15 (usp 1.6)
+                    rVisualItem.mbHasKashidas = true;
+                    // so prepare for kashida handling
+                    InitKashidaHandling();
                     break;
                 }
-            if ( bHasKashida )
+
+            if( rVisualItem.HasKashidas() )
                 for( i = rVisualItem.mnMinGlyphPos; i < rVisualItem.mnEndGlyphPos; ++i )
                 {
+                    // TODO: check if we still need this hack after correction of kashida placing?
+                    // (i87688): apparently yes, we still need it!
                     if ( mpVisualAttrs[i].uJustification == SCRIPT_JUSTIFY_NONE )
                         // usp decided that justification can't be applied here
                         // but maybe our Kashida algorithm thinks differently.
@@ -2362,7 +2463,6 @@ void UniscribeLayout::ApplyDXArray( const ImplLayoutArgs& rArgs )
                         mpVisualAttrs[i].uJustification = SCRIPT_JUSTIFY_ARABIC_KASHIDA;
                 }
         }
-
 
         // convert virtual charwidths to glyph justification values
         HRESULT nRC = (*pScriptApplyLogicalWidth)(
@@ -2383,24 +2483,23 @@ void UniscribeLayout::ApplyDXArray( const ImplLayoutArgs& rArgs )
             break;
         }
 
-        // TODO: for kashida justification
-        // check the widths which are added to mpJustification
-        // if added width is smaller than iKashidaWidth returned by
-        // ScriptGetFontProperties, do something (either enlarge to
-        // iKashidaWidth, or reduce to original width).
-        // Need to think of a way to compensate the change in overall
-        // width.
-
         // to prepare for the next visual item
         // update nXOffset to the next items position
         // before the mpJustifications[] array gets modified
         int nMinGlyphPos, nEndGlyphPos;
         if( GetItemSubrange( rVisualItem, nMinGlyphPos, nEndGlyphPos ) )
+        {
             for( i = nMinGlyphPos; i < nEndGlyphPos; ++i )
                 nXOffset += mpJustifications[ i ];
 
+            if( rVisualItem.mbHasKashidas )
+                KashidaItemFix( nMinGlyphPos, nEndGlyphPos );
+        }
+
+        // workaround needed for older USP versions:
         // right align the justification-adjusted glyphs in their cells for RTL-items
-        if( bManualCellAlign && rVisualItem.mpScriptItem->a.fRTL && !bHasKashida )
+        // unless the right alignment is done by inserting kashidas
+        if( bManualCellAlign && rVisualItem.mpScriptItem->a.fRTL && !rVisualItem.HasKashidas() )
         {
             for( i = nMinGlyphPos; i < nEndGlyphPos; ++i )
             {
@@ -2417,17 +2516,164 @@ void UniscribeLayout::ApplyDXArray( const ImplLayoutArgs& rArgs )
 
 // -----------------------------------------------------------------------
 
+void UniscribeLayout::InitKashidaHandling()
+{
+    if( mnMinKashidaGlyph != 0 )    // already initialized
+        return;
+
+    mrWinFontEntry.InitKashidaHandling( mhDC );
+    mnMinKashidaWidth = static_cast<int>(mfFontScale * mrWinFontEntry.GetMinKashidaWidth());
+    mnMinKashidaGlyph = mrWinFontEntry.GetMinKashidaGlyph();
+}
+
+// adjust the kashida placement matching to the WriterEngine
+void UniscribeLayout::KashidaItemFix( int nMinGlyphPos, int nEndGlyphPos )
+{
+    // workaround needed for all known USP versions:
+    // ApplyLogicalWidth does not match ScriptJustify behaviour
+    for( int i = nMinGlyphPos; i < nEndGlyphPos; ++i )
+    {
+        // check for vowels
+        if( (i > nMinGlyphPos && !mpGlyphAdvances[ i-1 ])
+        &&  (1U << mpVisualAttrs[i].uJustification) & 0xFF89 )
+        {
+            // vowel, we do it like ScriptJustify does
+            // the vowel gets the extra width
+            long nSpaceAdded =  mpJustifications[ i ] - mpGlyphAdvances[ i ];
+            mpJustifications [ i ] = mpGlyphAdvances [ i ];
+            mpJustifications [ i - 1 ] += nSpaceAdded;
+        }
+    }
+
+    // redistribute the widths for kashidas
+    for( int i = nMinGlyphPos; i < nEndGlyphPos; )
+        KashidaWordFix ( nMinGlyphPos, nEndGlyphPos, &i );
+}
+
+bool UniscribeLayout::KashidaWordFix ( int nMinGlyphPos, int nEndGlyphPos, int* pnCurrentPos )
+{
+    // doing pixel work within a word.
+    // sometimes we have extra pixels and sometimes we miss some pixels to get to mnMinKashidaWidth
+
+    // find the next kashida
+    int nMinPos = *pnCurrentPos;
+    int nMaxPos = *pnCurrentPos;
+    for( int i = nMaxPos; i < nEndGlyphPos; ++i )
+    {
+        if( (mpVisualAttrs[ i ].uJustification >= SCRIPT_JUSTIFY_ARABIC_BLANK)
+        &&  (mpVisualAttrs[ i ].uJustification < SCRIPT_JUSTIFY_ARABIC_NORMAL) )
+            break;
+        nMaxPos = i;
+    }
+    *pnCurrentPos = nMaxPos + 1;
+    if( nMinPos == nMaxPos )
+        return false;
+
+    // calculate the available space for an extra kashida
+    long nMaxAdded = 0;
+    int nKashPos = -1;
+    for( int i = nMaxPos; i >= nMinPos; --i )
+    {
+        long nSpaceAdded = mpJustifications[ i ] - mpGlyphAdvances[ i ];
+        if( nSpaceAdded > nMaxAdded )
+        {
+            nKashPos = i;
+            nMaxAdded = nSpaceAdded;
+        }
+    }
+
+    // return early if there is no need for an extra kashida
+    if ( nMaxAdded <= 0 )
+        return false;
+    // return early if there is not enough space for an extra kashida
+    if( 2*nMaxAdded < mnMinKashidaWidth )
+        return false;
+
+    // redistribute the extra spacing to the kashida position
+    for( int i = nMinPos; i <= nMaxPos; ++i )
+    {
+        if( i == nKashPos )
+            continue;
+        // everything else should not have extra spacing
+        long nSpaceAdded = mpJustifications[ i ] - mpGlyphAdvances[ i ];
+        if( nSpaceAdded > 0 )
+        {
+            mpJustifications[ i ] -= nSpaceAdded;
+            mpJustifications[ nKashPos ] += nSpaceAdded;
+        }
+    }
+
+    // check if we fulfill minimal kashida width
+    long nSpaceAdded = mpJustifications[ nKashPos ] - mpGlyphAdvances[ nKashPos ];
+    if( nSpaceAdded < mnMinKashidaWidth )
+    {
+        // ugly: steal some pixels
+        long nSteal = 1;
+        if ( nMaxPos - nMinPos > 0 && ((mnMinKashidaWidth - nSpaceAdded) > (nMaxPos - nMinPos)))
+            nSteal = (mnMinKashidaWidth - nSpaceAdded) / (nMaxPos - nMinPos);
+        for( int i = nMinPos; i <= nMaxPos; ++i )
+        {
+            if( i == nKashPos )
+                continue;
+            nSteal = Min( mnMinKashidaWidth - nSpaceAdded, nSteal );
+            if ( nSteal > 0 )
+            {
+                mpJustifications [ i ] -= nSteal;
+                mpJustifications [ nKashPos ] += nSteal;
+                nSpaceAdded += nSteal;
+            }
+            if( nSpaceAdded >= mnMinKashidaWidth )
+                return true;
+        }
+    }
+
+    // blank padding
+    long nSpaceMissing = mnMinKashidaWidth - nSpaceAdded;
+    if( nSpaceMissing > 0 )
+    {
+        // inner glyph: distribute extra space evenly
+        if( (nMinPos > nMinGlyphPos) && (nMaxPos < nEndGlyphPos - 1) )
+        {
+            mpJustifications [ nKashPos ] += nSpaceMissing;
+            long nHalfSpace = nSpaceMissing / 2;
+            mpJustifications [ nMinPos - 1 ] -= nHalfSpace;
+            mpJustifications [ nMaxPos + 1 ] -= nSpaceMissing - nHalfSpace;
+        }
+        // rightmost: left glyph gets extra space
+        else if( nMinPos > nMinGlyphPos )
+        {
+            mpJustifications [ nMinPos - 1 ] -= nSpaceMissing;
+            mpJustifications [ nKashPos ] += nSpaceMissing;
+        }
+        // leftmost: right glyph gets extra space
+        else if( nMaxPos < nEndGlyphPos - 1 )
+        {
+            mpJustifications [ nKashPos ] += nSpaceMissing;
+            mpJustifications [ nMaxPos + 1 ] -= nSpaceMissing;
+        }
+        else
+            return false;
+    }
+
+    return true;
+}
+
+// -----------------------------------------------------------------------
+
 void UniscribeLayout::Justify( long nNewWidth )
 {
     long nOldWidth = 0;
     int i;
     for( i = mnMinCharPos; i < mnEndCharPos; ++i )
         nOldWidth += mpCharWidths[ i ];
+    if( nOldWidth <= 0 )
+        return;
 
-    nNewWidth *= mnUnitsPerPixel;
+    nNewWidth *= mnUnitsPerPixel;   // convert into font units
     if( nNewWidth == nOldWidth )
         return;
-    double fStretch = (double)nNewWidth / nOldWidth;
+    // prepare to distribute the extra width evenly among the visual items
+    const double fStretch = (double)nNewWidth / nOldWidth;
 
     // initialize justifications array
     mpJustifications = new int[ mnGlyphCapacity ];
@@ -2451,24 +2697,57 @@ void UniscribeLayout::Justify( long nNewWidth )
                 nItemWidth += mpCharWidths[ i ];
             nItemWidth = (int)((fStretch - 1.0) * nItemWidth + 0.5);
 
-            SCRIPT_FONTPROPERTIES aFontProperties;
-            int nMinKashida = 1;
-            HRESULT nRC = (*pScriptGetFontProperties)( mhDC, &rScriptCache, &aFontProperties );
-            if( !nRC )
-                nMinKashida = aFontProperties.iKashidaWidth;
-
-            nRC = (*pScriptJustify) (
+            HRESULT nRC = (*pScriptJustify) (
                 mpVisualAttrs + rVisualItem.mnMinGlyphPos,
                 mpGlyphAdvances + rVisualItem.mnMinGlyphPos,
                 rVisualItem.mnEndGlyphPos - rVisualItem.mnMinGlyphPos,
                 nItemWidth,
-                nMinKashida,
+                mnMinKashidaWidth,
                 mpJustifications + rVisualItem.mnMinGlyphPos );
 
             rVisualItem.mnXOffset = nXOffset;
             nXOffset += nItemWidth;
         }
     }
+}
+
+// -----------------------------------------------------------------------
+
+bool UniscribeLayout::IsKashidaPosValid ( int nCharPos ) const
+{
+    // we have to find the visual item first since the mpLogClusters[]
+    // needed to find the cluster start is relative to to the visual item
+    int nMinGlyphIndex = -1;
+    for( int nItem = 0; nItem < mnItemCount; ++nItem )
+    {
+        const VisualItem& rVisualItem = mpVisualItems[ nItem ];
+        if( (nCharPos >= rVisualItem.mnMinCharPos)
+        &&  (nCharPos < rVisualItem.mnEndCharPos) )
+        {
+            nMinGlyphIndex = rVisualItem.mnMinGlyphPos;
+            break;
+        }
+    }
+    // Invalid char pos or leftmost glyph in visual item
+    if ( nMinGlyphIndex == -1 || !mpLogClusters[ nCharPos ] )
+        return false;
+
+//  This test didn't give the expected results
+/*  if( mpLogClusters[ nCharPos+1 ] == mpLogClusters[ nCharPos ])
+    // two chars, one glyph
+        return false;*/
+
+    const int nGlyphPos = mpLogClusters[ nCharPos ] + nMinGlyphIndex;
+    if( nGlyphPos <= 0 )
+        return true;
+    // justification is only allowed if the glyph to the left has not SCRIPT_JUSTIFY_NONE
+    // and not SCRIPT_JUSTIFY_ARABIC_BLANK
+    // special case: glyph to the left is vowel (no advance width)
+    if ( mpVisualAttrs[ nGlyphPos-1 ].uJustification == SCRIPT_JUSTIFY_ARABIC_BLANK
+        || ( mpVisualAttrs[ nGlyphPos-1 ].uJustification == SCRIPT_JUSTIFY_NONE
+            && mpGlyphAdvances [ nGlyphPos-1 ] ))
+        return false;
+    return true;
 }
 
 #endif // USE_UNISCRIBE
@@ -2519,13 +2798,26 @@ SalLayout* WinSalGraphics::GetTextLayout( ImplLayoutArgs& rArgs, int nFallbackLe
     return pWinLayout;
 }
 
+// -----------------------------------------------------------------------
+
+int WinSalGraphics::GetMinKashidaWidth()
+{
+    if( !mpWinFontEntry[0] )
+        return 0;
+    mpWinFontEntry[0]->InitKashidaHandling( mhDC );
+    int nMinKashida = static_cast<int>(mfFontScale * mpWinFontEntry[0]->GetMinKashidaWidth());
+    return nMinKashida;
+}
+
 // =======================================================================
 
 ImplWinFontEntry::ImplWinFontEntry( ImplFontSelectData& rFSD )
-:   ImplFontEntry( rFSD ),
-    maWidthMap( 512 ),
-    mpKerningPairs( NULL ),
-    mnKerningPairs( -1 )
+:   ImplFontEntry( rFSD )
+,   maWidthMap( 512 )
+,   mpKerningPairs( NULL )
+,   mnKerningPairs( -1 )
+,   mnMinKashidaWidth( -1 )
+,   mnMinKashidaGlyph( -1 )
 {
 #ifdef USE_UNISCRIBE
     maScriptCache = NULL;
@@ -2580,6 +2872,33 @@ int ImplWinFontEntry::GetKerning( sal_Unicode cLeft, sal_Unicode cRight ) const
     }
 
     return nKernAmount;
+}
+
+// -----------------------------------------------------------------------
+
+bool ImplWinFontEntry::InitKashidaHandling( HDC hDC )
+{
+    if( mnMinKashidaWidth >= 0 )    // already cached?
+        return mnMinKashidaWidth;
+
+    // initialize the kashida width
+    mnMinKashidaWidth = 0;
+    mnMinKashidaGlyph = 0;
+#ifdef USE_UNISCRIBE
+    if (aUspModule || (bUspEnabled && InitUSP()))
+    {
+        SCRIPT_FONTPROPERTIES aFontProperties;
+        aFontProperties.cBytes = sizeof (aFontProperties);
+        SCRIPT_CACHE& rScriptCache = GetScriptCache();
+        HRESULT nRC = (*pScriptGetFontProperties)( hDC, &rScriptCache, &aFontProperties );
+        if( nRC != 0 )
+            return false;
+        mnMinKashidaWidth = aFontProperties.iKashidaWidth;
+        mnMinKashidaGlyph = aFontProperties.wgKashida;
+    }
+#endif // USE_UNISCRIBE
+
+    return true;
 }
 
 // =======================================================================

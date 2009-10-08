@@ -131,6 +131,7 @@ ByteString SimpleConfig::GetCleanedNextLine( BOOL bReadComments )
 
     aFileStream.ReadLine ( aTmpStr );
     if ( aTmpStr.Search( "#" ) == 0 )
+        {
         if (bReadComments )
             return aTmpStr;
         else
@@ -138,6 +139,7 @@ ByteString SimpleConfig::GetCleanedNextLine( BOOL bReadComments )
             {
                 aFileStream.ReadLine ( aTmpStr );
             }
+        }
 
     aTmpStr = aTmpStr.EraseLeadingChars();
     aTmpStr = aTmpStr.EraseTrailingChars();

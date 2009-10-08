@@ -634,8 +634,8 @@ TextPaM TextEngine::ImpDeleteText( const TextSelection& rSel )
     CursorMoved( aStartPaM.GetPara() ); // nur damit neu eingestellte Attribute verschwinden...
     CursorMoved( aEndPaM.GetPara() );   // nur damit neu eingestellte Attribute verschwinden...
 
-    DBG_ASSERT( mpDoc->IsValidPaM( aStartPaM ), "Index im Wald in ImpDeleteText" )
-    DBG_ASSERT( mpDoc->IsValidPaM( aEndPaM ), "Index im Wald in ImpDeleteText" )
+    DBG_ASSERT( mpDoc->IsValidPaM( aStartPaM ), "Index im Wald in ImpDeleteText" );
+    DBG_ASSERT( mpDoc->IsValidPaM( aEndPaM ), "Index im Wald in ImpDeleteText" );
 
     ULONG nStartNode = aStartPaM.GetPara();
     ULONG nEndNode = aEndPaM.GetPara();
@@ -3106,7 +3106,7 @@ void TextEngine::ImpInitWritingDirections( ULONG nPara )
         UBiDi* pBidi = ubidi_openSized( aText.Len(), 0, &nError );
         nError = U_ZERO_ERROR;
 
-        ubidi_setPara( pBidi, aText.GetBuffer(), aText.Len(), nBidiLevel, NULL, &nError );
+        ubidi_setPara( pBidi, reinterpret_cast<const UChar *>(aText.GetBuffer()), aText.Len(), nBidiLevel, NULL, &nError ); // UChar != sal_Unicode in MinGW
         nError = U_ZERO_ERROR;
 
         long nCount = ubidi_countRuns( pBidi, &nError );

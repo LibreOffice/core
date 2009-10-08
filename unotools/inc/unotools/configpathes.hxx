@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: configpathes.hxx,v $
- * $Revision: 1.5 $
+ * $Revision: 1.5.22.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -134,7 +134,7 @@ namespace utl
             <var>_sNestedPath</var> is returned unaltered.
 
     */
-    ::rtl::OUString dropPrefixFromConfigurationPath(::rtl::OUString const& _sNestedPath,
+    UNOTOOLS_DLLPUBLIC ::rtl::OUString dropPrefixFromConfigurationPath(::rtl::OUString const& _sNestedPath,
                                                     ::rtl::OUString const& _sPrefixPath);
 
 //----------------------------------------------------------------------------

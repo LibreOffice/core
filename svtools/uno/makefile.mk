@@ -34,6 +34,7 @@ PRJNAME=svtools
 TARGET=svtmisc.uno
 LIBTARGET=NO
 ENABLE_EXCEPTIONS=TRUE
+VISIBILITY_HIDDEN=TRUE
 
 # --- Settings ----------------------------------
 

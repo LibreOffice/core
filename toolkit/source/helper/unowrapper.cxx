@@ -289,13 +289,8 @@ void UnoWrapper::WindowDestroyed( Window* pWindow )
     }
 
     Window* pParent = pWindow->GetParent();
-    if ( pParent && pParent->GetWindowPeer() && pParent->GetWindowPeer()->GetContainerListeners().getLength() )
-    {
-        ::com::sun::star::awt::VclContainerEvent aEvent;
-        aEvent.Source = (::cppu::OWeakObject*)pParent->GetWindowPeer();
-        aEvent.Child = (::cppu::OWeakObject*)pWindow->GetWindowPeer();
-        pParent->GetWindowPeer()->GetContainerListeners().windowRemoved( aEvent );
-    }
+    if ( pParent && pParent->GetWindowPeer() )
+        pParent->GetWindowPeer()->notifyWindowRemoved( *pWindow );
 
     if ( pWindow && pWindow->GetWindowPeer() )
     {

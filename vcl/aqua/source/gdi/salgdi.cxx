@@ -267,6 +267,7 @@ AquaSalGraphics::AquaSalGraphics()
     , mxLayer( NULL )
     , mrContext( NULL )
     , mpXorEmulation( NULL )
+    , mnXorMode( 0 )
     , mnWidth( 0 )
     , mnHeight( 0 )
     , mnBitmapDepth( 0 )
@@ -403,6 +404,14 @@ void AquaSalGraphics::initResolution( NSWindow* pWin )
     {
         mnRealDPIX = mnRealDPIY = (mnRealDPIX + mnRealDPIY + 1) / 2;
     }
+    else // #i89650# workaround bogus device resolutions
+    {
+        if( mnRealDPIY < 72 )
+            mnRealDPIY = 72;
+        if( mnRealDPIX < mnRealDPIY ) // e.g. for TripleHead2Go only mnRealDPIX is off
+            mnRealDPIX = mnRealDPIY;
+    }
+
     mfFakeDPIScale = 1.0;
 }
 
@@ -453,6 +462,14 @@ static void AddPolygonToPath( CGMutablePathRef xPath,
         }
 
         ::basegfx::B2DPoint aPoint = rPolygon.getB2DPoint( nClosedIdx );
+
+        if(bPixelSnap)
+        {
+            // snap device coordinates to full pixels
+            aPoint.setX( basegfx::fround( aPoint.getX() ) );
+            aPoint.setY( basegfx::fround( aPoint.getY() ) );
+        }
+
         if( bLineDraw )
             aPoint += aHalfPointOfs;
 
@@ -545,7 +562,7 @@ bool AquaSalGraphics::unionClipRegion( const ::basegfx::B2DPolyPolygon& rPolyPol
 
     if( !mxClipPath )
         mxClipPath = CGPathCreateMutable();
-    AddPolyPolygonToPath( mxClipPath, rPolyPolygon, false, false );
+    AddPolyPolygonToPath( mxClipPath, rPolyPolygon, !getAntiAliasB2DDraw(), false );
     return true;
 }
 
@@ -897,7 +914,7 @@ bool AquaSalGraphics::drawPolyPolygon( const ::basegfx::B2DPolyPolygon& rPolyPol
     for( int nPolyIdx = 0; nPolyIdx < nPolyCount; ++nPolyIdx )
     {
         const ::basegfx::B2DPolygon rPolygon = rPolyPoly.getB2DPolygon( nPolyIdx );
-        AddPolygonToPath( xPath, rPolygon, true, false, IsPenVisible() );
+        AddPolygonToPath( xPath, rPolygon, true, !getAntiAliasB2DDraw(), IsPenVisible() );
     }
     CGContextSaveGState( mrContext );
     CGContextBeginPath( mrContext );
@@ -943,7 +960,7 @@ bool AquaSalGraphics::drawPolyLine( const ::basegfx::B2DPolygon& rPolyLine,
 
     // setup poly-polygon path
     CGMutablePathRef xPath = CGPathCreateMutable();
-    AddPolygonToPath( xPath, rPolyLine, rPolyLine.isClosed(), false, true );
+    AddPolygonToPath( xPath, rPolyLine, rPolyLine.isClosed(), !getAntiAliasB2DDraw(), true );
     CGContextSaveGState( mrContext );
     CGContextAddPath( mrContext, xPath );
     const CGRect aRefreshRect = CGPathGetBoundingBox( xPath );
@@ -1020,43 +1037,45 @@ void AquaSalGraphics::copyBits( const SalTwoRect *pPosAry, SalGraphics *pSrcGrap
     ApplyXorContext();
     pSrc->ApplyXorContext();
 
-#if 0 // TODO: make AquaSalBitmap as fast as the alternative implementation below
-    SalBitmap* pBitmap = pSrc->getBitmap( pPosAry->mnSrcX, pPosAry->mnSrcY, pPosAry->mnSrcWidth, pPosAry->mnSrcHeight );
+    DBG_ASSERT( pSrc->mxLayer!=NULL, "AquaSalGraphics::copyBits() from non-layered graphics" );
 
-    if( pBitmap )
-    {
-        SalTwoRect aPosAry( *pPosAry );
-        aPosAry.mnSrcX = 0;
-        aPosAry.mnSrcY = 0;
-        drawBitmap( &aPosAry, *pBitmap );
-        delete pBitmap;
-    }
-#else
-    DBG_ASSERT( pSrc->mxLayer!=NULL, "AquaSalGraphics::copyBits() from non-layered graphics" )
-
-    // in XOR mode the drawing context is redirected to the XOR mask
-    // if source and target are identical then copyBits() paints onto the target context though
-    CGContextRef xCopyContext = mrContext;
-    if( mpXorEmulation && mpXorEmulation->IsEnabled() )
-        if( pSrcGraphics == this )
-            xCopyContext = mpXorEmulation->GetTargetContext();
-
-    CGContextSaveGState( xCopyContext );
-    const CGRect aDstRect = { {pPosAry->mnDestX, pPosAry->mnDestY}, {pPosAry->mnDestWidth, pPosAry->mnDestHeight} };
-    CGContextClipToRect( xCopyContext, aDstRect );
-
-    // draw at new destination
-    // NOTE: flipped drawing gets disabled for this, else the subimage would be drawn upside down
-    if( pSrc->IsFlipped() )
-        { CGContextTranslateCTM( xCopyContext, 0, +mnHeight ); CGContextScaleCTM( xCopyContext, +1, -1 ); }
-    // TODO: pSrc->size() != this->size()
     const CGPoint aDstPoint = { +pPosAry->mnDestX - pPosAry->mnSrcX, pPosAry->mnDestY - pPosAry->mnSrcY };
     if( !mnBitmapDepth || (aDstPoint.x + pSrc->mnWidth) <= mnWidth ) // workaround a Quartz crasher
-        ::CGContextDrawLayerAtPoint( xCopyContext, aDstPoint, pSrc->mxLayer );
-    CGContextRestoreGState( xCopyContext );
-    // mark the destination rectangle as updated
-       RefreshRect( aDstRect );
-#endif
+    {
+        // in XOR mode the drawing context is redirected to the XOR mask
+        // if source and target are identical then copyBits() paints onto the target context though
+        CGContextRef xCopyContext = mrContext;
+        if( mpXorEmulation && mpXorEmulation->IsEnabled() )
+            if( pSrcGraphics == this )
+                xCopyContext = mpXorEmulation->GetTargetContext();
+
+        CGContextSaveGState( xCopyContext );
+        const CGRect aDstRect = { {pPosAry->mnDestX, pPosAry->mnDestY}, {pPosAry->mnDestWidth, pPosAry->mnDestHeight} };
+        CGContextClipToRect( xCopyContext, aDstRect );
+
+        // draw at new destination
+        // NOTE: flipped drawing gets disabled for this, else the subimage would be drawn upside down
+        if( pSrc->IsFlipped() )
+            { CGContextTranslateCTM( xCopyContext, 0, +mnHeight ); CGContextScaleCTM( xCopyContext, +1, -1 ); }
+        // TODO: pSrc->size() != this->size()
+            ::CGContextDrawLayerAtPoint( xCopyContext, aDstPoint, pSrc->mxLayer );
+        CGContextRestoreGState( xCopyContext );
+        // mark the destination rectangle as updated
+           RefreshRect( aDstRect );
+    }
+    else
+    {
+        SalBitmap* pBitmap = pSrc->getBitmap( pPosAry->mnSrcX, pPosAry->mnSrcY, pPosAry->mnSrcWidth, pPosAry->mnSrcHeight );
+
+        if( pBitmap )
+        {
+            SalTwoRect aPosAry( *pPosAry );
+            aPosAry.mnSrcX = 0;
+            aPosAry.mnSrcY = 0;
+            drawBitmap( &aPosAry, *pBitmap );
+            delete pBitmap;
+        }
+    }
 }
 
 // -----------------------------------------------------------------------
@@ -1082,7 +1101,7 @@ void AquaSalGraphics::copyArea( long nDstX, long nDstY,long nSrcX, long nSrcY, l
         delete pBitmap;
     }
 #else
-    DBG_ASSERT( mxLayer!=NULL, "AquaSalGraphics::copyArea() for non-layered graphics" )
+    DBG_ASSERT( mxLayer!=NULL, "AquaSalGraphics::copyArea() for non-layered graphics" );
 
     // in XOR mode the drawing context is redirected to the XOR mask
     // copyArea() always works on the target context though
@@ -1190,7 +1209,7 @@ void AquaSalGraphics::drawMask( const SalTwoRect* pPosAry, const SalBitmap& rSal
 
 SalBitmap* AquaSalGraphics::getBitmap( long  nX, long  nY, long  nDX, long  nDY )
 {
-    DBG_ASSERT( mxLayer, "AquaSalGraphics::getBitmap() with no layer" )
+    DBG_ASSERT( mxLayer, "AquaSalGraphics::getBitmap() with no layer" );
 
     ApplyXorContext();
 
@@ -1484,12 +1503,7 @@ static bool AddTempFontDir( const char* pDir )
     FSRef aPathFSRef;
     Boolean bIsDirectory = true;
     OSStatus eStatus = FSPathMakeRef( reinterpret_cast<const UInt8*>(pDir), &aPathFSRef, &bIsDirectory );
-    if( eStatus != noErr )
-        return false;
-
-    FSSpec aPathFSSpec;
-    eStatus = ::FSGetCatalogInfo( &aPathFSRef, kFSCatInfoNone,
-        NULL, NULL, &aPathFSSpec, NULL );
+    DBG_ASSERTWARNING( (eStatus==noErr) && bIsDirectory, "vcl AddTempFontDir() with invalid directory name!" );
     if( eStatus != noErr )
         return false;
 
@@ -1497,16 +1511,28 @@ static bool AddTempFontDir( const char* pDir )
     ATSFontContainerRef aATSFontContainer;
 
     const ATSFontContext eContext = kATSFontContextLocal; // TODO: *Global???
+#if defined(MAC_OS_X_VERSION_10_5) && (MAC_OS_X_VERSION_MIN_REQUIRED >= MAC_OS_X_VERSION_10_5)
+    eStatus = ::ATSFontActivateFromFileReference( &aPathFSRef,
+        eContext, kATSFontFormatUnspecified, NULL, kATSOptionFlagsDefault,
+        &aATSFontContainer );
+#else
+    FSSpec aPathFSSpec;
+    eStatus = ::FSGetCatalogInfo( &aPathFSRef, kFSCatInfoNone,
+        NULL, NULL, &aPathFSSpec, NULL );
+    if( eStatus != noErr )
+        return false;
+
     eStatus = ::ATSFontActivateFromFileSpecification( &aPathFSSpec,
         eContext, kATSFontFormatUnspecified, NULL, kATSOptionFlagsDefault,
         &aATSFontContainer );
+#endif
     if( eStatus != noErr )
         return false;
 
     return true;
 }
 
-static bool AddTempFontDir( void )
+static bool AddLocalTempFontDirs( void )
 {
     static bool bFirst = true;
     if( !bFirst )
@@ -1542,7 +1568,7 @@ void AquaSalGraphics::GetDevFontList( ImplDevFontList* pFontList )
 {
     DBG_ASSERT( pFontList, "AquaSalGraphics::GetDevFontList(NULL) !");
 
-    AddTempFontDir();
+    AddLocalTempFontDirs();
 
     // The idea is to cache the list of system fonts once it has been generated.
     // SalData seems to be a good place for this caching. However we have to
@@ -1572,21 +1598,28 @@ bool AquaSalGraphics::AddTempDevFont( ImplDevFontList* pFontList,
     Boolean bIsDirectory = true;
     ::rtl::OString aCFileName = rtl::OUStringToOString( aUSytemPath, RTL_TEXTENCODING_UTF8 );
     OSStatus eStatus = FSPathMakeRef( (UInt8*)aCFileName.getStr(), &aNewRef, &bIsDirectory );
-    if( eStatus != noErr )
-        return false;
-
-    FSSpec aFontFSSpec;
-    eStatus = ::FSGetCatalogInfo( &aNewRef, kFSCatInfoNone,
-        NULL, NULL, &aFontFSSpec, NULL );
+    DBG_ASSERT( (eStatus==noErr) && !bIsDirectory, "vcl AddTempDevFont() with invalid fontfile name!" );
     if( eStatus != noErr )
         return false;
 
     ATSFontContainerRef oContainer;
 
     const ATSFontContext eContext = kATSFontContextLocal; // TODO: *Global???
+#if defined(MAC_OS_X_VERSION_10_5) && (MAC_OS_X_VERSION_MIN_REQUIRED >= MAC_OS_X_VERSION_10_5)
+    eStatus = ::ATSFontActivateFromFileReference( &aNewRef,
+        eContext, kATSFontFormatUnspecified, NULL, kATSOptionFlagsDefault,
+        &oContainer );
+#else
+    FSSpec aFontFSSpec;
+    eStatus = ::FSGetCatalogInfo( &aNewRef, kFSCatInfoNone,
+        NULL, NULL, &aFontFSSpec, NULL );
+    if( eStatus != noErr )
+        return false;
+
     eStatus = ::ATSFontActivateFromFileSpecification( &aFontFSSpec,
         eContext, kATSFontFormatUnspecified, NULL, kATSOptionFlagsDefault,
         &oContainer );
+#endif
     if( eStatus != noErr )
         return false;
 
@@ -2210,11 +2243,25 @@ SystemGraphicsData AquaSalGraphics::GetGraphicsData() const
 
 // -----------------------------------------------------------------------
 
-void AquaSalGraphics::SetXORMode( BOOL bSet )
+void AquaSalGraphics::SetXORMode( bool bSet, bool bInvertOnly )
 {
     // return early if XOR mode remains unchanged
     if( mbPrinter )
         return;
+
+    if( ! bSet && mnXorMode == 2 )
+    {
+        CGContextSetBlendMode( mrContext, kCGBlendModeNormal );
+        mnXorMode = 0;
+        return;
+    }
+    else if( bSet && bInvertOnly && mnXorMode == 0)
+    {
+        CGContextSetBlendMode( mrContext, kCGBlendModeDifference );
+        mnXorMode = 2;
+        return;
+    }
+
     if( (mpXorEmulation == NULL) && !bSet )
         return;
     if( (mpXorEmulation != NULL) && (bSet == mpXorEmulation->IsEnabled()) )
@@ -2234,12 +2281,14 @@ void AquaSalGraphics::SetXORMode( BOOL bSet )
     {
         mpXorEmulation->Enable();
         mrContext = mpXorEmulation->GetMaskContext();
+        mnXorMode = 1;
     }
     else
     {
         mpXorEmulation->UpdateTarget();
         mpXorEmulation->Disable();
         mrContext = mpXorEmulation->GetTargetContext();
+        mnXorMode = 0;
     }
 }
 

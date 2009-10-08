@@ -162,13 +162,20 @@ void SAL_CALL OInstanceLocker::initialize( const uno::Sequence< uno::Any >& aArg
                     uno::Reference< uno::XInterface >(),
                     0 );
 
-        if ( !( aArguments[1] >>= nModes )
-          || !( nModes & embed::Actions::PREVENT_CLOSE ) && !( nModes & embed::Actions::PREVENT_TERMINATION ) )
+        if (
+            !( aArguments[1] >>= nModes ) ||
+            (
+              !( nModes & embed::Actions::PREVENT_CLOSE ) &&
+              !( nModes & embed::Actions::PREVENT_TERMINATION )
+            )
+           )
+        {
             throw lang::IllegalArgumentException(
                     ::rtl::OUString(
                             RTL_CONSTASCII_USTRINGPARAM("The correct modes set is expected as the second argument!" ) ),
                     uno::Reference< uno::XInterface >(),
                     0 );
+        }
 
         if ( nLen == 3 && !( aArguments[2] >>= xApproval ) )
             throw lang::IllegalArgumentException(

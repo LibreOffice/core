@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: resmgr.cxx,v $
- * $Revision: 1.53 $
+ * $Revision: 1.52.30.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -275,6 +275,10 @@ void ResMgrContainer::init()
                  OUStringToOString( it->second.aFileURL, osl_getThreadTextEncoding() ).getStr() );
     }
     #endif
+
+    // set default language
+    LanguageType nLang = MsLangId::getSystemUILanguage();
+    MsLangId::convertLanguageToLocale(nLang, m_aDefLocale);
 }
 
 InternalResMgr* ResMgrContainer::getResMgr( const OUString& rPrefix,
@@ -1567,7 +1571,7 @@ const char* ResMgr::GetLang( LanguageType& nType, USHORT nPrio )
             case LANGUAGE_PORTUGUESE_BRAZILIAN:
                 return "55";
 
-            case LANGUAGE_SPANISH:
+            case LANGUAGE_SPANISH_DATED:
             case LANGUAGE_SPANISH_MEXICAN:
             case LANGUAGE_SPANISH_MODERN:
             case LANGUAGE_SPANISH_GUATEMALA:
@@ -1619,7 +1623,7 @@ const char* ResMgr::GetLang( LanguageType& nType, USHORT nPrio )
             case LANGUAGE_HINDI:
                 return "91";
 
-            case LANGUAGE_ARABIC:
+            case LANGUAGE_ARABIC_PRIMARY_ONLY:
             case LANGUAGE_ARABIC_IRAQ:
             case LANGUAGE_ARABIC_EGYPT:
             case LANGUAGE_ARABIC_LIBYA:
@@ -2026,6 +2030,7 @@ sal_uInt32 SimpleResMgr::ReadBlob( sal_uInt32 nId, void** pBuffer )
             if( pOldFallback != m_pResImpl )
                 ResMgrContainer::get().freeResMgr( pOldFallback );
             if( pFallback )
+            {
                 // handle possible recursion
                 if( pFallback->aLocale.Language != m_pResImpl->aLocale.Language ||
                     pFallback->aLocale.Country  != m_pResImpl->aLocale.Country  ||
@@ -2038,6 +2043,7 @@ sal_uInt32 SimpleResMgr::ReadBlob( sal_uInt32 nId, void** pBuffer )
                     ResMgrContainer::get().freeResMgr( pFallback );
                     pFallback = NULL;
                 }
+            }
         }
         if( ! pResHandle )
             // no exception handling, this would require the locking of the solar mutex which isn't allowed within this class

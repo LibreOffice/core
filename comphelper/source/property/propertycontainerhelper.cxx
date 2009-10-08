@@ -492,7 +492,7 @@ const Property& OPropertyContainerHelper::getProperty( const ::rtl::OUString& _r
         PropertyDescriptionNameMatch( _rName )
     );
     if ( pos == m_aProperties.end() )
-        throw UnknownPropertyException();
+        throw UnknownPropertyException( _rName, NULL );
 
     return pos->aProperty;
 }

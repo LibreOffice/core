@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: salgdi3.cxx,v $
- * $Revision: 1.97 $
+ * $Revision: 1.95.14.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -33,6 +33,7 @@
 
 #include <string.h>
 #include <malloc.h>
+#include <osl/module.h>
 #include <tools/svwin.h>
 #include <rtl/logfile.hxx>
 #include <rtl/tencinfo.h>
@@ -72,14 +73,13 @@
 #include <tools/stream.hxx>
 #include <rtl/bootstrap.hxx>
 
-
 #include <vector>
 #include <set>
 
-#ifndef INCLUDED_MAP
+//#ifndef INCLUDED_MAP
 #include <map>
-#define INCLUDED_MAP
-#endif
+//#define INCLUDED_MAP
+//#endif
 
 
 static const int MAXFONTHEIGHT = 2048;
@@ -110,6 +110,8 @@ static bool bImplSalCourierNew = false;
 
 
 // =======================================================================
+
+// -----------------------------------------------------------------------
 
 // TODO: also support temporary TTC font files
 typedef std::map< String, ImplDevFontAttributes > FontAttrMap;
@@ -806,6 +808,7 @@ ImplWinFontData::ImplWinFontData( const ImplDevFontAttributes& rDFS,
     mbDisableGlyphApi( false ),
     mbHasKoreanRange( false ),
     mbHasCJKSupport( false ),
+    mbHasArabicSupport ( false ),
     mbAliasSymbolsLow( false ),
     mbAliasSymbolsHigh( false ),
     mnId( 0 ),
@@ -936,7 +939,8 @@ void ImplWinFontData::ReadOs2Table( HDC hDC ) const
         mbHasCJKSupport = (ulUnicodeRange2 & 0x2DF00000);
         mbHasKoreanRange= (ulUnicodeRange1 & 0x10000000)
                         | (ulUnicodeRange2 & 0x01100000);
-    }
+        mbHasArabicSupport = (ulUnicodeRange1 & 0x00002000);
+   }
 }
 
 // -----------------------------------------------------------------------
@@ -1521,6 +1525,8 @@ void WinSalGraphics::GetFontMetric( ImplFontMetricData* pMetric )
             if( mpWinFontData[0]->SupportsKorean() )
                 pMetric->mnDescent += pMetric->mnExtLeading;
     }
+
+    pMetric->mnMinKashida = GetMinKashidaWidth();
 }
 
 // -----------------------------------------------------------------------

@@ -147,6 +147,7 @@ namespace vclcanvas
     void CanvasHelper::setBackgroundOutDev( const OutDevProviderSharedPtr& rOutDev )
     {
         mp2ndOutDev = rOutDev;
+        mp2ndOutDev->getOutDev().EnableMapMode( FALSE );
     }
 
     void CanvasHelper::clear()
@@ -155,6 +156,7 @@ namespace vclcanvas
         if( mpOutDev )
         {
             OutputDevice& rOutDev( mpOutDev->getOutDev() );
+            tools::OutDevStateKeeper aStateKeeper( mpProtectedOutDev );
 
             rOutDev.EnableMapMode( FALSE );
             rOutDev.SetLineColor( COL_WHITE );
@@ -188,7 +190,6 @@ namespace vclcanvas
         {
             // nope, render
             tools::OutDevStateKeeper aStateKeeper( mpProtectedOutDev );
-
             setupOutDevState( viewState, renderState, LINE_COLOR );
 
             const Point aOutPoint( tools::mapRealPoint2D( aPoint,
@@ -212,7 +213,6 @@ namespace vclcanvas
         {
             // nope, render
             tools::OutDevStateKeeper aStateKeeper( mpProtectedOutDev );
-
             setupOutDevState( viewState, renderState, LINE_COLOR );
 
             const Point aStartPoint( tools::mapRealPoint2D( aStartRealPoint2D,
@@ -236,7 +236,6 @@ namespace vclcanvas
         if( mpOutDev )
         {
             tools::OutDevStateKeeper aStateKeeper( mpProtectedOutDev );
-
             setupOutDevState( viewState, renderState, LINE_COLOR );
 
             const Point& rStartPoint( tools::mapRealPoint2D( geometry::RealPoint2D(aBezierSegment.Px,
@@ -279,7 +278,6 @@ namespace vclcanvas
         if( mpOutDev )
         {
             tools::OutDevStateKeeper aStateKeeper( mpProtectedOutDev );
-
             setupOutDevState( viewState, renderState, LINE_COLOR );
 
             const ::basegfx::B2DPolyPolygon& rPolyPoly(
@@ -688,7 +686,6 @@ namespace vclcanvas
         if( mpOutDev )
         {
             tools::OutDevStateKeeper aStateKeeper( mpProtectedOutDev );
-
             setupOutDevState( viewState, renderState, IGNORE_COLOR );
 
             ::basegfx::B2DHomMatrix aMatrix;
@@ -916,11 +913,16 @@ namespace vclcanvas
         if( !mpOutDev.get() || !mpDevice )
             return uno::Reference< rendering::XBitmap >(); // we're disposed
 
+        OutputDevice& rOutDev( mpOutDev->getOutDev() );
+
+        tools::OutDevStateKeeper aStateKeeper( mpProtectedOutDev );
+        rOutDev.EnableMapMode( FALSE );
+
         // TODO(F2): Support alpha vdev canvas here
         const Point aEmptyPoint(0,0);
-        const Size  aBmpSize( mpOutDev->getOutDev().GetOutputSizePixel() );
+        const Size  aBmpSize( rOutDev.GetOutputSizePixel() );
 
-        Bitmap aBitmap( mpOutDev->getOutDev().GetBitmap(aEmptyPoint, aBmpSize) );
+        Bitmap aBitmap( rOutDev.GetBitmap(aEmptyPoint, aBmpSize) );
 
         aBitmap.Scale( ::vcl::unotools::sizeFromRealSize2D(newSize),
                        beFast ? BMP_SCALE_FAST : BMP_SCALE_INTERPOLATE );
@@ -940,8 +942,13 @@ namespace vclcanvas
         // TODO(F2): Support alpha canvas here
         const Rectangle aRect( ::vcl::unotools::rectangleFromIntegerRectangle2D(rect) );
 
-        Bitmap aBitmap( mpOutDev->getOutDev().GetBitmap(aRect.TopLeft(),
-                                                        aRect.GetSize()) );
+        OutputDevice& rOutDev( mpOutDev->getOutDev() );
+
+        tools::OutDevStateKeeper aStateKeeper( mpProtectedOutDev );
+        rOutDev.EnableMapMode( FALSE );
+
+        Bitmap aBitmap( rOutDev.GetBitmap(aRect.TopLeft(),
+                                          aRect.GetSize()) );
 
         ScopedBitmapReadAccess pReadAccess( aBitmap.AcquireReadAccess(),
                                             aBitmap );
@@ -989,6 +996,9 @@ namespace vclcanvas
                              "Mismatching memory layout" );
 
         OutputDevice& rOutDev( mpOutDev->getOutDev() );
+
+        tools::OutDevStateKeeper aStateKeeper( mpProtectedOutDev );
+        rOutDev.EnableMapMode( FALSE );
 
         const Rectangle aRect( ::vcl::unotools::rectangleFromIntegerRectangle2D(rect) );
         const USHORT    nBitCount( ::std::min( (USHORT)24U,
@@ -1099,10 +1109,7 @@ namespace vclcanvas
         // destroyed beforehand
         if( bCopyBack )
         {
-            tools::OutDevStateKeeper aStateKeeper( mpProtectedOutDev );
-
             // TODO(F2): Support alpha canvas here
-            rOutDev.EnableMapMode( FALSE );
             rOutDev.DrawBitmap(aRect.TopLeft(), aBitmap);
         }
     }
@@ -1115,6 +1122,10 @@ namespace vclcanvas
             return; // we're disposed
 
         OutputDevice& rOutDev( mpOutDev->getOutDev() );
+
+        tools::OutDevStateKeeper aStateKeeper( mpProtectedOutDev );
+        rOutDev.EnableMapMode( FALSE );
+
         const Size aBmpSize( rOutDev.GetOutputSizePixel() );
 
         ENSURE_ARG_OR_THROW( pos.X >= 0 && pos.X < aBmpSize.Width(),
@@ -1130,10 +1141,6 @@ namespace vclcanvas
                              aRefLayout.Palette     != rLayout.Palette ||
                              aRefLayout.IsMsbFirst  != rLayout.IsMsbFirst,
                              "Mismatching memory layout" );
-
-        tools::OutDevStateKeeper aStateKeeper( mpProtectedOutDev );
-
-        rOutDev.EnableMapMode( FALSE );
 
         // TODO(F2): Support alpha canvas here
         rOutDev.DrawPixel( ::vcl::unotools::pointFromIntegerPoint2D( pos ),
@@ -1153,16 +1160,15 @@ namespace vclcanvas
 
         OutputDevice& rOutDev( mpOutDev->getOutDev() );
 
+        tools::OutDevStateKeeper aStateKeeper( mpProtectedOutDev );
+        rOutDev.EnableMapMode( FALSE );
+
         const Size aBmpSize( rOutDev.GetOutputSizePixel() );
 
         ENSURE_ARG_OR_THROW( pos.X >= 0 && pos.X < aBmpSize.Width(),
                              "X coordinate out of bounds" );
         ENSURE_ARG_OR_THROW( pos.Y >= 0 && pos.Y < aBmpSize.Height(),
                              "Y coordinate out of bounds" );
-
-        tools::OutDevStateKeeper aStateKeeper( mpProtectedOutDev );
-
-        rOutDev.EnableMapMode( FALSE );
 
         // TODO(F2): Support alpha canvas here
         return ::canvas::tools::colorToStdIntSequence(
@@ -1193,6 +1199,8 @@ namespace vclcanvas
 
         OutputDevice& rOutDev( mpOutDev->getOutDev() );
         OutputDevice* p2ndOutDev = NULL;
+
+        rOutDev.EnableMapMode( FALSE );
 
         if( mp2ndOutDev )
             p2ndOutDev = &mp2ndOutDev->getOutDev();
@@ -1389,6 +1397,7 @@ namespace vclcanvas
             return false; // disposed
         else
         {
+            tools::OutDevStateKeeper aStateKeeper( mpProtectedOutDev );
             setupOutDevState( viewState, renderState, IGNORE_COLOR );
 
             if( !rGrf->Draw( &mpOutDev->getOutDev(), rPt, rSz, &rAttr ) )

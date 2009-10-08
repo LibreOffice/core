@@ -129,6 +129,7 @@ public:
                         InfoBox( Window* pParent, const ResId & rResId );
 
     static Image        GetStandardImage();
+    static Image        GetStandardImageHC();
 };
 
 // --------------
@@ -148,6 +149,7 @@ public:
     void                SetDefaultCheckBoxText();
 
     static Image        GetStandardImage();
+    static Image        GetStandardImageHC();
 };
 
 // ------------
@@ -165,6 +167,7 @@ public:
                         ErrorBox( Window* pParent, const ResId& rResId );
 
     static Image        GetStandardImage();
+    static Image        GetStandardImageHC();
 };
 
 // ------------
@@ -184,6 +187,7 @@ public:
     void                SetDefaultCheckBoxText();
 
     static Image        GetStandardImage();
+    static Image        GetStandardImageHC();
 };
 
 #endif  // _SV_MSGBOX_HXX

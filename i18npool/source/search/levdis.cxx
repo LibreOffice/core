@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: levdis.cxx,v $
- * $Revision: 1.6 $
+ * $Revision: 1.6.24.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -121,7 +121,7 @@
     }                                               \
 }
 
-sal_Int32 Impl_WLD_StringLen( const sal_Unicode* pStr )
+static sal_Int32 Impl_WLD_StringLen( const sal_Unicode* pStr )
 {
     const sal_Unicode* pTempStr = pStr;
     while( *pTempStr )
@@ -131,7 +131,7 @@ sal_Int32 Impl_WLD_StringLen( const sal_Unicode* pStr )
 
 #ifdef erTESTMAT
 #define erTESTMATMAX 180
-static int far npMatrix[erTESTMATMAX][erTESTMATMAX];        // nearly 64K
+static int npMatrix[erTESTMATMAX][erTESTMATMAX];        // nearly 64K
 #endif
 
 // Distanz von String zu Pattern
@@ -366,19 +366,6 @@ int WLevDistance::WLD( const sal_Unicode* cString, sal_Int32 nStringLen )
 }
 
 
-int WLevDistance::WLD( const ::rtl::OUString& rString )
-{
-    return( WLD( rString.getStr(), rString.getLength() ));
-}
-
-
-
-int WLevDistance::WLD( const sal_Unicode* cString )
-{
-    return( WLD( cString, Impl_WLD_StringLen(cString) ));
-}
-
-
 
 // Berechnung von nLimit,   nReplP0,    nInsQ0,     nDelR0,     bSplitCount
 // aus Userwerten           nOtherX,    nShorterY,  nLongerZ,   bRelaxed
@@ -511,34 +498,7 @@ void WLevDistance::InitData( const sal_Unicode* cPattern )
 
 // CTor
 
-WLevDistance::WLevDistance( const sal_Unicode* cPattern ) :
-    nPatternLen( Impl_WLD_StringLen(cPattern) ),
-    aPatMem( nPatternLen + 1 ),
-    nArrayLen( nPatternLen + 1 ),
-    aDisMem( nArrayLen ),
-    nLimit( LEVDISDEFAULTLIMIT ),
-    nRepP0( LEVDISDEFAULT_P0 ),
-    nInsQ0( LEVDISDEFAULT_Q0 ),
-    nDelR0( LEVDISDEFAULT_R0 ),
-    bSplitCount( false )
-{
-    InitData( cPattern );
-}
-
-
-
-WLevDistance::WLevDistance( const sal_Unicode* cPattern,
-                            int nOtherX, int nShorterY, int nLongerZ,
-                            bool bRelaxed ) :
-    nPatternLen( Impl_WLD_StringLen(cPattern) ),
-    aPatMem( nPatternLen + 1 ),
-    nArrayLen( nPatternLen + 1 ),
-    aDisMem( nArrayLen )
-{
-    InitData( cPattern );
-    CalcLPQR( nOtherX, nShorterY, nLongerZ, bRelaxed );
-}
-
+#ifdef erTEST
 
 WLevDistance::WLevDistance( const ::rtl::OUString& rPattern ) :
     nPatternLen( rPattern.getLength() ),
@@ -552,6 +512,21 @@ WLevDistance::WLevDistance( const ::rtl::OUString& rPattern ) :
     bSplitCount( false )
 {
     InitData( rPattern.getStr() );
+}
+
+#endif  // erTEST
+
+
+WLevDistance::WLevDistance( const sal_Unicode* cPattern,
+                            int nOtherX, int nShorterY, int nLongerZ,
+                            bool bRelaxed ) :
+    nPatternLen( Impl_WLD_StringLen(cPattern) ),
+    aPatMem( nPatternLen + 1 ),
+    nArrayLen( nPatternLen + 1 ),
+    aDisMem( nArrayLen )
+{
+    InitData( cPattern );
+    CalcLPQR( nOtherX, nShorterY, nLongerZ, bRelaxed );
 }
 
 
@@ -597,17 +572,19 @@ typedef char MAXSTRING [LINESIZE+1];
 
 #ifdef erTESTMAT
 
-void WLevDistance::ShowMatrix( const char* cString )
+void WLevDistance::ShowMatrix( const sal_Unicode* cString )
 {
-    sal_Int32 r, c, l = strlen(cString);
+    sal_Int32 r, c, l = Impl_WLD_StringLen(cString);
     printf("   |   ");
     for ( c=0; c<nPatternLen; c++ )
+#error Error: conversion from sal_Unicode to char needed!
         printf( " %c ", cpPattern[c] );
     printf("\n---+---");
     for ( c=0; c<nPatternLen; c++ )
         printf( "---" );
     for ( r=0; r<=l && r < erTESTMATMAX; r++ )
     {
+#error Error: conversion from sal_Unicode to char needed!
         printf( "\n %c |", ( r==0 ? ' ' : cString[r-1] ) );
         for ( c=0; c<=nPatternLen && c < erTESTMATMAX; c++ )
             printf( "%2d ", npMatrix[r][c] );
@@ -623,18 +600,20 @@ MAXSTRING cDelim = "\t, ;(){}[]<>&=+-/%!|.\\'\"~";
 void WLevDistance::ShowTest()
 {
     printf("  \n");
+#error Error: conversion from sal_Unicode to char needed!
     printf(" a *cpPattern . . . . : %s\n", cpPattern);
     printf(" b *bpPatIsWild . . . : ");
     for ( sal_Int32 i=0; i<nPatternLen; i++ )
         printf("%d", bpPatIsWild[i]);
     printf("\n");
-    printf(" c nPatternLen  . . . : %d\n", nPatternLen);
+    printf(" c nPatternLen  . . . : %d\n", (int)nPatternLen);
     printf(" d nStars . . . . . . : %d\n", nStars);
     printf(" e nLimit . . . . . . : %d\n", nLimit);
     printf(" f nRepP0 (Ersetzen)  : %d\n", nRepP0);
     printf(" g nInsQ0 (Einfuegen) : %d\n", nInsQ0);
     printf(" h nDelR0 (Loeschen)  : %d\n", nDelR0);
     printf(" i bSplitCount  . . . : %d\n", bSplitCount);
+#error Error: conversion from sal_Unicode to char needed!
     printf(" j cDelim . . . . . . : '%s'\n", cDelim);
     printf(" ~\n");
 }
@@ -650,7 +629,7 @@ inline bool IsDelim( char c )
 
 MAXSTRING cString, cLine, cIgString;
 
-main( int argc, char **argv )
+int main( int argc, char **argv )
 {
     int nLim, nP0, nQ0, nR0, nX, nY, nZ;
     int args = 0;
@@ -674,7 +653,7 @@ main( int argc, char **argv )
             {
                 IgnoreCase = true;
                 char* cp = argv[args+1];
-                while ( *cp = tolower( *cp ) )
+                while ( (*cp = tolower( *cp )) != 0 )
                     cp++;
         break;
             }
@@ -731,6 +710,7 @@ main( int argc, char **argv )
     }
     if ( Direct )
     {
+#error Error: conversion from char to OUString needed!
         pTest = new WLevDistance( argv[args+1] );
 #ifdef erTESTDEFAULT
         pTest->ShowTest();
@@ -742,6 +722,7 @@ main( int argc, char **argv )
     }
     else
     {
+#error Error: conversion from char to sal_Unicode needed!
         pTest = new WLevDistance( argv[args+1], nX, nY, nZ, !bStrict );
 #ifdef erTESTCCTOR
         WLevDistance aTmp( *pTest );
@@ -753,7 +734,7 @@ main( int argc, char **argv )
     do
     {
         char* cp1, *cp2;
-        static ULONG nLine = 0;
+        static long unsigned int nLine = 0;
         cp1 = cLine;
         cin.getline( cLine, LINESIZE ) ;
         nLine++;
@@ -772,21 +753,24 @@ main( int argc, char **argv )
                 int ret;
                 if ( IgnoreCase )
                 {
-                    char* cp1 = cString;
-                    char* cp2 = cIgString;
-                    while ( *cp1 )
-                        *cp2++ = tolower( *cp1++ );
-                    *cp2 = '\0';
+                    char* cpi1 = cString;
+                    char* cpi2 = cIgString;
+                    while ( *cpi1 )
+                        *cpi2++ = tolower( *cpi1++ );
+                    *cpi2 = '\0';
+#error Error: conversion from char to OUString / sal_Unicode,length needed!
                     ret = pTest->WLD( cIgString );
                 }
                 else
+#error Error: conversion from char to OUString / sal_Unicode,length needed!
                     ret = pTest->WLD( cString );
 #ifdef erTESTMAT
                 printf("\n# %3d : %s\n", ret, cString);
+#error Error: conversion from char to sal_Unicode needed!
                 pTest->ShowMatrix( cString );
 #else
                 if ( ret <= nLim )
-                    printf("# %3d : %s\t(line %ld)\t%s\n", ret, cString, nLine, cLine);
+                    printf("# %3d : %s\t(line %lu)\t%s\n", ret, cString, nLine, cLine);
 #endif
             }
         }

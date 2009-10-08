@@ -7,7 +7,7 @@
 *
 * $RCSfile: uieventslogger.cxx,v $
 *
-* $Revision: 1.3 $
+* $Revision: 1.3.20.3 $
 *
 * This file is part of OpenOffice.org.
 *
@@ -31,16 +31,23 @@
 #include "precompiled_comphelper.hxx"
 
 #include <comphelper/uieventslogger.hxx>
+#include <boost/shared_ptr.hpp>
+#include <com/sun/star/frame/XDesktop.hpp>
+#include <com/sun/star/frame/XTerminateListener.hpp>
+#include <com/sun/star/lang/XEventListener.hpp>
 #include <com/sun/star/lang/XMultiComponentFactory.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/logging/LogLevel.hpp>
+#include <com/sun/star/logging/XCsvLogFormatter.hpp>
 #include <com/sun/star/logging/XLogHandler.hpp>
+#include <com/sun/star/logging/XLogger.hpp>
 #include <com/sun/star/logging/XLoggerPool.hpp>
 #include <com/sun/star/oooimprovement/XCoreController.hpp>
 #include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/util/XStringSubstitution.hpp>
 #include <comphelper/configurationhelper.hxx>
 #include <comphelper/processfactory.hxx>
+#include <map>
 #include <osl/file.hxx>
 #include <osl/mutex.hxx>
 #include <osl/time.h>
@@ -48,14 +55,50 @@
 
 
 using namespace com::sun::star::beans;
-using namespace com::sun::star::uno;
+using namespace com::sun::star::frame;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::logging;
 using namespace com::sun::star::oooimprovement;
+using namespace com::sun::star::uno;
 using namespace com::sun::star::util;
-using namespace rtl;
 using namespace cppu;
 using namespace osl;
+using namespace rtl;
+using namespace std;
+
+
+namespace
+{
+    static void lcl_SetupOriginAppAbbr(map<OUString, OUString>& abbrs)
+    {
+        abbrs[OUString::createFromAscii("com.sun.star.text.TextDocument")] = OUString::createFromAscii("W"); // Writer
+        abbrs[OUString::createFromAscii("com.sun.star.sheet.SpreadsheetDocument")] = OUString::createFromAscii("C"); // Calc
+        abbrs[OUString::createFromAscii("com.sun.star.presentation.PresentationDocument")] = OUString::createFromAscii("I"); // Impress
+        abbrs[OUString::createFromAscii("com.sun.star.drawing.DrawingDocument")] = OUString::createFromAscii("D"); // Draw
+    };
+
+    static void lcl_SetupOriginWidgetAbbr(map<OUString,OUString>& abbrs)
+    {
+        abbrs[OUString::createFromAscii("ButtonToolbarController")] = OUString::createFromAscii("0");
+        abbrs[OUString::createFromAscii("ComplexToolbarController")] = OUString::createFromAscii("1");
+        abbrs[OUString::createFromAscii("ControlMenuController")] = OUString::createFromAscii("2");
+        abbrs[OUString::createFromAscii("FontMenuController")] = OUString::createFromAscii("3");
+        abbrs[OUString::createFromAscii("FontSizeMenuController")] = OUString::createFromAscii("4");
+        abbrs[OUString::createFromAscii("FooterMenuController")] = OUString::createFromAscii("5");
+        abbrs[OUString::createFromAscii("GenericToolbarController")] = OUString::createFromAscii("6");
+        abbrs[OUString::createFromAscii("HeaderMenuController")] = OUString::createFromAscii("7");
+        abbrs[OUString::createFromAscii("LanguageSelectionMenuController")] = OUString::createFromAscii("8");
+        abbrs[OUString::createFromAscii("LangSelectionStatusbarController")] = OUString::createFromAscii("9");
+        abbrs[OUString::createFromAscii("MacrosMenuController")] = OUString::createFromAscii("10");
+        abbrs[OUString::createFromAscii("MenuBarManager")] = OUString::createFromAscii("11");
+        abbrs[OUString::createFromAscii("NewMenuController")] = OUString::createFromAscii("12");
+        abbrs[OUString::createFromAscii("ObjectMenuController")] = OUString::createFromAscii("13");
+        abbrs[OUString::createFromAscii("RecentFilesMenuController")] = OUString::createFromAscii("14");
+        abbrs[OUString::createFromAscii("ToolbarsMenuController")] = OUString::createFromAscii("15");
+        abbrs[OUString::createFromAscii("SfxToolBoxControl")] = OUString::createFromAscii("16");
+        abbrs[OUString::createFromAscii("SfxAsyncExec")] = OUString::createFromAscii("17");
+    };
+}
 
 namespace comphelper
 {
@@ -66,7 +109,7 @@ namespace comphelper
         private:
             //typedefs and friends
             friend class UiEventsLogger;
-            typedef ::boost::shared_ptr<UiEventsLogger_Impl> ptr;
+            typedef UiEventsLogger_Impl* ptr;
 
             // instance methods and data
             UiEventsLogger_Impl();
@@ -85,6 +128,7 @@ namespace comphelper
             void checkIdleTimeout();
             OUString getCurrentPath();
             OUString getRotatedPath();
+            void disposing();
 
             bool m_Active;
             TimeValue m_LastLogEventTime;
@@ -95,6 +139,9 @@ namespace comphelper
             Reference<XLogger> m_Logger;
             Reference<XLogHandler> m_LogHandler;
             Reference<XCsvLogFormatter> m_Formatter;
+            map<OUString, OUString> m_OriginAppAbbr;
+            map<OUString, OUString> m_OriginWidgetAbbr;
+
 
             // static methods and data
             static ptr getInstance();
@@ -103,7 +150,7 @@ namespace comphelper
             static bool getEnabledFromCfg();
             static TimeValue getIdleTimeoutFromCfg();
             static OUString getLogPathFromCfg();
-            static sal_Int32 findDispatchOriginIdx(const Sequence<PropertyValue>& args);
+            static sal_Int32 findIdx(const Sequence<PropertyValue>& args, const OUString& key);
 
             static ptr instance;
             static Mutex * singleton_mutex;
@@ -123,19 +170,21 @@ namespace comphelper
             static const OUString CSST_JOBEXECUTOR;
             static const OUString CSSU_PATHSUB;
             static const OUString LOGGERNAME;
-            static const OUString LOGORIGINNAME;
+            static const OUString LOGORIGINAPP;
+            static const OUString LOGORIGINWIDGET;
             static const OUString UNKNOWN_ORIGIN;
             static const OUString FN_CURRENTLOG;
             static const OUString FN_ROTATEDLOG;
             static const OUString LOGROTATE_EVENTNAME;
             static const OUString URL_UNO;
+            static const OUString URL_FILE;
     };
 }
 
 namespace comphelper
 {
     // consts
-    const sal_Int32 UiEventsLogger_Impl::COLUMNS = 8;
+    const sal_Int32 UiEventsLogger_Impl::COLUMNS = 9;
     const OUString UiEventsLogger_Impl::CFG_ENABLED = OUString::createFromAscii("EnablingAllowed");
     const OUString UiEventsLogger_Impl::CFG_IDLETIMEOUT = OUString::createFromAscii("IdleTimeout");
     const OUString UiEventsLogger_Impl::CFG_LOGGING = OUString::createFromAscii("/org.openoffice.Office.Logging");
@@ -153,7 +202,8 @@ namespace comphelper
     const OUString UiEventsLogger_Impl::ETYPE_VCL = OUString::createFromAscii("vcl");
 
     const OUString UiEventsLogger_Impl::LOGGERNAME = OUString::createFromAscii("org.openoffice.oooimprovement.Core.UiEventsLogger");
-    const OUString UiEventsLogger_Impl::LOGORIGINNAME = OUString::createFromAscii("comphelper.UiEventsLogger.LogOrigin");
+    const OUString UiEventsLogger_Impl::LOGORIGINWIDGET = OUString::createFromAscii("comphelper.UiEventsLogger.LogOriginWidget");
+    const OUString UiEventsLogger_Impl::LOGORIGINAPP = OUString::createFromAscii("comphelper.UiEventsLogger.LogOriginApp");
 
     const OUString UiEventsLogger_Impl::UNKNOWN_ORIGIN = OUString::createFromAscii("unknown origin");
     const OUString UiEventsLogger_Impl::FN_CURRENTLOG = OUString::createFromAscii("Current");
@@ -161,6 +211,7 @@ namespace comphelper
     const OUString UiEventsLogger_Impl::LOGROTATE_EVENTNAME = OUString::createFromAscii("onOOoImprovementLogRotated");
 
     const OUString UiEventsLogger_Impl::URL_UNO = OUString::createFromAscii(".uno:");
+    const OUString UiEventsLogger_Impl::URL_FILE = OUString::createFromAscii("file:");
 
 
     // public UiEventsLogger interface
@@ -182,24 +233,27 @@ namespace comphelper
 
     void UiEventsLogger::appendDispatchOrigin(
         Sequence<PropertyValue>& args,
-        const OUString& origin)
+        const OUString& originapp,
+        const OUString& originwidget)
     {
         sal_Int32 old_length = args.getLength();
-        args.realloc(old_length+1);
-        args[old_length].Name = UiEventsLogger_Impl::LOGORIGINNAME;
-        args[old_length].Value = static_cast<Any>(origin);
+        args.realloc(old_length+2);
+        args[old_length].Name = UiEventsLogger_Impl::LOGORIGINAPP;
+        args[old_length].Value = static_cast<Any>(originapp);
+        args[old_length+1].Name = UiEventsLogger_Impl::LOGORIGINWIDGET;
+        args[old_length+1].Value = static_cast<Any>(originwidget);
     }
 
     Sequence<PropertyValue> UiEventsLogger::purgeDispatchOrigin(
         const Sequence<PropertyValue>& args)
     {
-        if(args.getLength()==0) return args;
-        sal_Int32 idx = UiEventsLogger_Impl::findDispatchOriginIdx(args);
-        if(idx==-1) return args;
-        Sequence<PropertyValue> result(args);
-        if(idx!=result.getLength()-1)
-            result[idx] = result[result.getLength()-1];
-        result.realloc(result.getLength()-1);
+        Sequence<PropertyValue> result(args.getLength());
+        sal_Int32 target_idx=0;
+        for(sal_Int32 source_idx=0; source_idx<args.getLength(); source_idx++)
+            if(args[source_idx].Name != UiEventsLogger_Impl::LOGORIGINAPP
+                && args[source_idx].Name != UiEventsLogger_Impl::LOGORIGINWIDGET)
+                result[target_idx++] = args[source_idx];
+        result.realloc(target_idx);
         return result;
     }
 
@@ -247,6 +301,12 @@ namespace comphelper
         UiEventsLogger::logVcl(parent_id, window_type, id, method, empty);
     }
 
+    void UiEventsLogger::disposing()
+    {
+        if(UiEventsLogger_Impl::instance!=UiEventsLogger_Impl::ptr())
+            UiEventsLogger_Impl::instance->disposing();
+    }
+
     // private UiEventsLogger_Impl methods
     UiEventsLogger_Impl::UiEventsLogger_Impl()
         : m_Active(UiEventsLogger_Impl::shouldActivate())
@@ -254,6 +314,8 @@ namespace comphelper
         , m_IdleTimeout(UiEventsLogger_Impl::getIdleTimeoutFromCfg())
         , m_SessionLogEventCount(0)
     {
+        lcl_SetupOriginAppAbbr(m_OriginAppAbbr);
+        lcl_SetupOriginWidgetAbbr(m_OriginWidgetAbbr);
         m_LastLogEventTime.Seconds = m_LastLogEventTime.Nanosec = 0;
         if(m_Active) rotate();
         if(m_Active) initializeLogger();
@@ -263,19 +325,40 @@ namespace comphelper
         const URL& url,
         const Sequence<PropertyValue>& args)
     {
-        if(!m_Active) return;
-        if(!url.Complete.match(URL_UNO)) return;
         Guard<Mutex> log_guard(m_LogMutex);
+        if(!m_Active) return;
+        if(!url.Complete.match(URL_UNO) && !url.Complete.match(URL_FILE)) return;
         checkIdleTimeout();
 
         Sequence<OUString> logdata = Sequence<OUString>(COLUMNS);
         logdata[0] = ETYPE_DISPATCH;
-        sal_Int32 origin_idx = findDispatchOriginIdx(args);
-        if(origin_idx!=-1)
-            args[origin_idx].Value >>= logdata[1];
+        sal_Int32 originapp_idx = findIdx(args, LOGORIGINAPP);
+        if(originapp_idx!=-1)
+        {
+            OUString app;
+            args[originapp_idx].Value >>= app;
+            map<OUString, OUString>::iterator abbr_it = m_OriginAppAbbr.find(app);
+            if(abbr_it != m_OriginAppAbbr.end())
+                app = abbr_it->second;
+            logdata[1] = app;
+        }
         else
             logdata[1] = UNKNOWN_ORIGIN;
-        logdata[2] = url.Complete;
+        sal_Int32 originwidget_idx = findIdx(args, LOGORIGINWIDGET);
+        if(originwidget_idx!=-1)
+        {
+            OUString widget;
+            args[originwidget_idx].Value >>= widget;
+            map<OUString, OUString>::iterator widget_it = m_OriginWidgetAbbr.find(widget);
+            if(widget_it != m_OriginWidgetAbbr.end())
+                widget = widget_it->second;
+            logdata[2] = widget;
+        }
+        else
+            logdata[2] = UNKNOWN_ORIGIN;
+        logdata[3] = url.Complete;
+        if(url.Complete.match(URL_FILE))
+            logdata[3] = URL_FILE;
         m_Logger->log(LogLevel::INFO, m_Formatter->formatMultiColumn(logdata));
         m_SessionLogEventCount++;
     }
@@ -294,18 +377,18 @@ namespace comphelper
         const OUString& method,
         const OUString& param)
     {
-        if(!m_Active) return;
         Guard<Mutex> log_guard(m_LogMutex);
+        if(!m_Active) return;
         checkIdleTimeout();
 
         OUStringBuffer buf;
         Sequence<OUString> logdata = Sequence<OUString>(COLUMNS);
         logdata[0] = ETYPE_VCL;
-        logdata[3] = parent_id;
-        logdata[4] = buf.append(window_type).makeStringAndClear();
-        logdata[5] = id;
-        logdata[6] = method;
-        logdata[7] = param;
+        logdata[4] = parent_id;
+        logdata[5] = buf.append(window_type).makeStringAndClear();
+        logdata[6] = id;
+        logdata[7] = method;
+        logdata[8] = param;
         m_Logger->log(LogLevel::INFO, m_Formatter->formatMultiColumn(logdata));
         m_SessionLogEventCount++;
     }
@@ -394,6 +477,22 @@ namespace comphelper
     {
         Reference<XMultiServiceFactory> sm = getProcessServiceFactory();
 
+        // getting the Core Uno proxy object
+        // It will call disposing and make sure we clear all our references
+        {
+            Reference<XTerminateListener> xCore(
+                sm->createInstance(OUString::createFromAscii("com.sun.star.oooimprovement.Core")),
+                UNO_QUERY);
+            Reference<XDesktop> xDesktop(
+                sm->createInstance(OUString::createFromAscii("com.sun.star.frame.Desktop")),
+                UNO_QUERY);
+            if(!(xCore.is() && xDesktop.is()))
+            {
+                m_Active = false;
+                return;
+            }
+            xDesktop->addTerminateListener(xCore);
+        }
         // getting the LoggerPool
         Reference<XLoggerPool> pool;
         {
@@ -419,13 +518,14 @@ namespace comphelper
         {
             Sequence<OUString> columns = Sequence<OUString>(COLUMNS);
             columns[0] = OUString::createFromAscii("eventtype");
-            columns[1] = OUString::createFromAscii("origin");
-            columns[2] = OUString::createFromAscii("uno url");
-            columns[3] = OUString::createFromAscii("parent id");
-            columns[4] = OUString::createFromAscii("window type");
-            columns[5] = OUString::createFromAscii("id");
-            columns[6] = OUString::createFromAscii("method");
-            columns[7] = OUString::createFromAscii("parameter");
+            columns[1] = OUString::createFromAscii("originapp");
+            columns[2] = OUString::createFromAscii("originwidget");
+            columns[3] = OUString::createFromAscii("uno url");
+            columns[4] = OUString::createFromAscii("parent id");
+            columns[5] = OUString::createFromAscii("window type");
+            columns[6] = OUString::createFromAscii("id");
+            columns[7] = OUString::createFromAscii("method");
+            columns[8] = OUString::createFromAscii("parameter");
             m_Formatter->setColumnnames(columns);
             m_LogHandler->setFormatter(Reference<XLogFormatter>(m_Formatter, UNO_QUERY));
             m_Logger->setLevel(LogLevel::ALL);
@@ -515,11 +615,20 @@ namespace comphelper
         return instance;
     }
 
-    sal_Int32 UiEventsLogger_Impl::findDispatchOriginIdx(const Sequence<PropertyValue>& args)
+    sal_Int32 UiEventsLogger_Impl::findIdx(const Sequence<PropertyValue>& args, const OUString& key)
     {
         for(sal_Int32 i=0; i<args.getLength(); i++)
-            if(args[i].Name == LOGORIGINNAME)
+            if(args[i].Name == key)
                 return i;
         return -1;
+    }
+
+    void UiEventsLogger_Impl::disposing()
+    {
+        Guard<Mutex> log_guard(m_LogMutex);
+        m_Active = false;
+        m_Logger.clear() ;
+        m_LogHandler.clear();
+        m_Formatter.clear();
     }
 }

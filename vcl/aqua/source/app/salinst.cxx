@@ -59,6 +59,7 @@
 #include <Foundation/Foundation.h>
 #include <ApplicationServices/ApplicationServices.h>
 #import "apple_remote/RemoteMainController.h"
+#include "apple_remote/RemoteControl.h"
 #include "postmac.h"
 
 
@@ -585,9 +586,73 @@ void AquaSalInstance::handleAppDefinedEvent( NSEvent* pEvent )
         }
     }
     break;
+    case AppleRemoteEvent:
+    {
+        sal_Int16 nCommand = 0;
+        SalData* pSalData = GetSalData();
+        bool bIsFullScreenMode = false;
+
+        std::list<AquaSalFrame*>::iterator it = pSalData->maFrames.begin();
+        while( (*it) &&  ( (it != pSalData->maFrames.end() ) || ( (*it)->mbFullScreen == false ) ) )
+        {
+            if ( ((*it)->mbFullScreen == true) )
+                bIsFullScreenMode = true;
+            it++;
+        }
+
+        switch ([pEvent data1])
+        {
+            case kRemoteButtonPlay:
+                nCommand = ( bIsFullScreenMode == true ) ? MEDIA_COMMAND_PLAY_PAUSE : MEDIA_COMMAND_PLAY;
+                break;
+
+            // kept for experimentation purpose (scheduled for future implementation)
+            // case kRemoteButtonMenu:         nCommand = MEDIA_COMMAND_MENU; break;
+
+            case kRemoteButtonPlus:         nCommand = MEDIA_COMMAND_VOLUME_UP; break;
+
+            case kRemoteButtonMinus:        nCommand = MEDIA_COMMAND_VOLUME_DOWN; break;
+
+            case kRemoteButtonRight:        nCommand = MEDIA_COMMAND_NEXTTRACK; break;
+
+            case kRemoteButtonRight_Hold:   nCommand = MEDIA_COMMAND_NEXTTRACK_HOLD; break;
+
+            case kRemoteButtonLeft:         nCommand = MEDIA_COMMAND_PREVIOUSTRACK; break;
+
+            case kRemoteButtonLeft_Hold:    nCommand = MEDIA_COMMAND_REWIND; break;
+
+            case kRemoteButtonPlay_Hold:    nCommand = MEDIA_COMMAND_PLAY_HOLD; break;
+
+            case kRemoteButtonMenu_Hold:    nCommand = MEDIA_COMMAND_STOP; break;
+
+            // FIXME : not detected
+            case kRemoteButtonPlus_Hold:
+            case kRemoteButtonMinus_Hold:
+                break;
+
+            default:
+                break;
+        }
+        AquaSalFrame* pFrame = pSalData->maFrames.front();
+        Window * pWindow = pFrame->GetWindow() ? pSalData->maFrames.front()->GetWindow() : NULL;
+
+        if( pWindow )
+        {
+            const Point aPoint;
+            CommandEvent aCEvt( aPoint, COMMAND_MEDIA, FALSE, &nCommand );
+            NotifyEvent aNCmdEvt( EVENT_COMMAND, pWindow, &aCEvt );
+
+            if ( !ImplCallPreNotify( aNCmdEvt ) )
+                pWindow->Command( aCEvt );
+        }
+
+    }
+    break;
+
     case YieldWakeupEvent:
         // do nothing, fall out of Yield
     break;
+
     default:
         DBG_ERROR( "unhandled NSApplicationDefined event" );
         break;

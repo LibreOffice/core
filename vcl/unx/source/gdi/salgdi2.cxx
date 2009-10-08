@@ -1158,6 +1158,7 @@ bool X11SalGraphics::supportsOperation( OutDevSupportType eType ) const
     switch( eType )
     {
     case OutDevSupport_TransparentRect:
+    case OutDevSupport_B2DDraw:
         {
             XRenderPeer& rPeer = XRenderPeer::GetInstance();
             if( rPeer.GetVersion() >= 0x02 )

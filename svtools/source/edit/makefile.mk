@@ -8,7 +8,7 @@
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.15 $
+# $Revision: 1.15.108.1 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -52,7 +52,9 @@ SLOFILES=   \
             $(SLO)$/sychconv.obj	\
             $(SLO)$/svmedit.obj		\
             $(SLO)$/svmedit2.obj    \
-            $(SLO)$/textwindowpeer.obj
+            $(SLO)$/textwindowpeer.obj	\
+            $(SLO)$/syntaxhighlight.obj \
+        $(SLO)$/editsyntaxhighlighter.obj
 
 EXCEPTIONSFILES=	\
             $(SLO)$/textview.obj	\

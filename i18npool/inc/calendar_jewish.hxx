@@ -48,8 +48,8 @@ public:
     virtual rtl::OUString SAL_CALL getDisplayString( sal_Int32 nCalendarDisplayCode, sal_Int16 nNativeNumberMode ) throw (com::sun::star::uno::RuntimeException);
 
 protected:
-    void SAL_CALL mapToGregorian() throw(com::sun::star::uno::RuntimeException);
-    void SAL_CALL mapFromGregorian() throw(com::sun::star::uno::RuntimeException);
+    void mapToGregorian() throw(com::sun::star::uno::RuntimeException);
+    void mapFromGregorian() throw(com::sun::star::uno::RuntimeException);
 };
 
 } } } }

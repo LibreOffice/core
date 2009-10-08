@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: langtab.cxx,v $
- * $Revision: 1.3 $
+ * $Revision: 1.3.140.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -37,6 +37,7 @@
 #include <tools/debug.hxx>
 
 #include <i18npool/lang.h>
+#include <i18npool/mslangid.hxx>
 
 #include <svtools/svtools.hrc>
 #include <svtools/svtdata.hxx>
@@ -59,9 +60,7 @@ SvtLanguageTable::~SvtLanguageTable()
 
 const String& SvtLanguageTable::GetString( const LanguageType eType ) const
 {
-    // no_NO is an alias for nb_NO
-    LanguageType eLang = (eType == LANGUAGE_NORWEGIAN ?
-            LANGUAGE_NORWEGIAN_BOKMAL : eType);
+    LanguageType eLang = MsLangId::getReplacementForObsoleteLanguage( eType);
     sal_uInt32 nPos = FindIndex( eLang );
 
     if ( RESARRAY_INDEX_NOTFOUND != nPos && nPos < Count() )

@@ -50,6 +50,7 @@ friend class SvtMatchContext_Impl;
 friend class SvtURLBox_Impl;
     Link                            aOpenHdl;
     String                          aBaseURL;
+    String                          aPlaceHolder;
     SvtMatchContext_Impl*           pCtx;
     SvtURLBox_Impl*                 pImp;
     INetProtocol                    eSmartProtocol;
@@ -104,6 +105,9 @@ public:
 
     inline void                     EnableAutocompletion( BOOL _bEnable = TRUE )
                                         { bIsAutoCompleteEnabled = _bEnable; }
+    void SetPlaceHolder( const String& sPlaceHolder ) { aPlaceHolder = sPlaceHolder; }
+    String GetPlaceHolder() { return aPlaceHolder; }
+    bool MatchesPlaceHolder( const String& sToMatch ) { return ( ( aPlaceHolder.Len() > 0 ) && ( aPlaceHolder == sToMatch ) ); }
 };
 
 #endif

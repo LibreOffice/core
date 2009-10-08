@@ -254,8 +254,17 @@ bool AquaSalBitmap::AllocateUserData()
         }
     }
 
-    if( mnBytesPerRow )
-        maUserBuffer.reset( new sal_uInt8[mnBytesPerRow * mnHeight] );
+    try
+    {
+        if( mnBytesPerRow )
+            maUserBuffer.reset( new sal_uInt8[mnBytesPerRow * mnHeight] );
+    }
+    catch( const std::bad_alloc& )
+    {
+        DBG_ERROR( "vcl::AquaSalBitmap::AllocateUserData: bad alloc" );
+        maUserBuffer.reset( NULL );
+        mnBytesPerRow = 0;
+    }
 
     return maUserBuffer.get() != 0;
 }

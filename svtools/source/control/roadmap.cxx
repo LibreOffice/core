@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: roadmap.cxx,v $
- * $Revision: 1.16 $
+ * $Revision: 1.16.56.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -665,7 +665,7 @@ namespace svt
 
         // draw it
         DrawText( Rectangle( aTextPos, aOutputSize ), GetText(), TEXT_DRAW_LEFT | TEXT_DRAW_TOP | TEXT_DRAW_MULTILINE | TEXT_DRAW_WORDBREAK );
-        DrawTextLine( aTextPos, aOutputSize.Width(), STRIKEOUT_NONE, UNDERLINE_SINGLE, sal_False );
+        DrawTextLine( aTextPos, aOutputSize.Width(), STRIKEOUT_NONE, UNDERLINE_SINGLE, UNDERLINE_NONE, sal_False );
         const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
         SetLineColor( rStyleSettings.GetFieldTextColor());
         SetTextColor(rStyleSettings.GetFieldTextColor());

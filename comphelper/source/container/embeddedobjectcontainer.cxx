@@ -1414,7 +1414,7 @@ sal_Bool EmbeddedObjectContainer::StoreAsChildren(sal_Bool _bOasisFormat,sal_Boo
                                                             &aMediaType );
                 }
 
-                if ( _bOasisFormat || xLink.is() && xLink->isLink() )
+                if ( _bOasisFormat || (xLink.is() && xLink->isLink()) )
                 {
                     if ( xStream.is() )
                     {

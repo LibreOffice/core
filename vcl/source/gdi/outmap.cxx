@@ -987,11 +987,11 @@ void OutputDevice::SetRelativeMapMode( const MapMode& rNewMapMode )
     {
         if ( eOld > MAP_PIXEL )
         {
-            DBG_ERRORFILE( "Not implemented MapUnit" )
+            DBG_ERRORFILE( "Not implemented MapUnit" );
         }
         else if ( eNew > MAP_PIXEL )
         {
-            DBG_ERRORFILE( "Not implemented MapUnit" )
+            DBG_ERRORFILE( "Not implemented MapUnit" );
         }
         else
         {

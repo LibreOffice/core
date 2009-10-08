@@ -8,7 +8,7 @@
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.48 $
+# $Revision: 1.48.16.3 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -81,6 +81,7 @@ SLOFILES=   \
             $(SLO)$/sequenceashashmap.obj \
             $(SLO)$/sequence.obj \
             $(SLO)$/servicedecl.obj \
+            $(SLO)$/sharedmutex.obj \
             $(SLO)$/synchronousdispatch.obj \
             $(SLO)$/storagehelper.obj \
             $(SLO)$/string.obj \

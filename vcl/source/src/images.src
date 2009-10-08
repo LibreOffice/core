@@ -112,7 +112,14 @@ Bitmap (SV_RESID_BITMAP_RADIO + SV_RESID_MONOOFFSET)
 
 Bitmap SV_RESID_BITMAP_MSGBOX
 {
-    File = "msgbox.bmp";
+    File = "msgbox.png";
+};
+
+// -----------------------------------------------------------------------
+
+Bitmap SV_RESID_BITMAP_MSGBOX_HC
+{
+    File = "msgbox_hc.png";
 };
 
 // -----------------------------------------------------------------------

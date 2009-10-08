@@ -60,7 +60,8 @@ APP1OBJS   = $(DEPOBJFILES)
 
 APP1STDLIBS = $(SALLIB) \
         $(ICUINLIB) \
-        $(ICUUCLIB)
+        $(ICUUCLIB) \
+        $(ICUDATALIB)
 
 # --- Targets ------------------------------------------------------
 

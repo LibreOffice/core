@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: zforfind.cxx,v $
- * $Revision: 1.51 $
+ * $Revision: 1.51.96.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -1385,13 +1385,14 @@ input for the following reasons:
         { "ko", "KR", "hanja_yoil" },
         { "th", "TH",   "buddhist" },
         { "zh", "TW",        "ROC" },
-        0
+        {0,0,0}
     };
     lang::Locale aLocale;
     sal_Bool bValid;
-    sal_Int16 nDay, nMonth, nYear, nHour, nMinute, nSecond;
+    sal_Int16 nDay, nMyMonth, nYear, nHour, nMinute, nSecond;
     sal_Int16 nDaySet, nMonthSet, nYearSet, nHourSet, nMinuteSet, nSecondSet;
-    sal_Int16 nZO, nDST1, nDST2, nDST;
+    sal_Int16 nZO, nDST1, nDST2, nDST, nZOmillis, nDST1millis, nDST2millis, nDSTmillis;
+    sal_Int32 nZoneInMillis, nDST1InMillis, nDST2InMillis;
     uno::Reference< lang::XMultiServiceFactory > xSMgr =
         ::comphelper::getProcessServiceFactory();
     uno::Reference< ::com::sun::star::i18n::XExtendedCalendar > xCal(
@@ -1402,18 +1403,27 @@ input for the following reasons:
     for ( const entry* p = cals; p->lan; ++p )
     {
         aLocale.Language = ::rtl::OUString::createFromAscii( p->lan );
-        aLocale.Country = ::rtl::OUString::createFromAscii( p->cou );
+        aLocale.Country  = ::rtl::OUString::createFromAscii( p->cou );
         xCal->loadCalendar( ::rtl::OUString::createFromAscii( p->cal ),
                 aLocale );
         double nDateTime = 0.0;     // 1-Jan-1970 00:00:00
-        nZO        = xCal->getValue( i18n::CalendarFieldIndex::ZONE_OFFSET );
-        nDST1      = xCal->getValue( i18n::CalendarFieldIndex::DST_OFFSET );
-        nDateTime -= (double)(nZO + nDST1) / 60.0 / 24.0;
+        nZO           = xCal->getValue( i18n::CalendarFieldIndex::ZONE_OFFSET );
+        nZOmillis     = xCal->getValue( i18n::CalendarFieldIndex::ZONE_OFFSET_SECOND_MILLIS );
+        nZoneInMillis = static_cast<sal_Int32>(nZO) * 60000 +
+            (nZO < 0 ? -1 : 1) * static_cast<sal_uInt16>(nZOmillis);
+        nDST1         = xCal->getValue( i18n::CalendarFieldIndex::DST_OFFSET );
+        nDST1millis   = xCal->getValue( i18n::CalendarFieldIndex::DST_OFFSET_SECOND_MILLIS );
+        nDST1InMillis = static_cast<sal_Int32>(nDST1) * 60000 +
+            (nDST1 < 0 ? -1 : 1) * static_cast<sal_uInt16>(nDST1millis);
+        nDateTime    -= (double)(nZoneInMillis + nDST1InMillis) / 1000.0 / 60.0 / 60.0 / 24.0;
         xCal->setDateTime( nDateTime );
-        nDST2      = xCal->getValue( i18n::CalendarFieldIndex::DST_OFFSET );
-        if ( nDST1 != nDST2 )
+        nDST2         = xCal->getValue( i18n::CalendarFieldIndex::DST_OFFSET );
+        nDST2millis   = xCal->getValue( i18n::CalendarFieldIndex::DST_OFFSET_SECOND_MILLIS );
+        nDST2InMillis = static_cast<sal_Int32>(nDST2) * 60000 +
+            (nDST2 < 0 ? -1 : 1) * static_cast<sal_uInt16>(nDST2millis);
+        if ( nDST1InMillis != nDST2InMillis )
         {
-            nDateTime = 0.0 - (double)(nZO + nDST2) / 60.0 / 24.0;
+            nDateTime = 0.0 - (double)(nZoneInMillis + nDST2InMillis) / 1000.0 / 60.0 / 60.0 / 24.0;
             xCal->setDateTime( nDateTime );
         }
         nDaySet    = xCal->getValue( i18n::CalendarFieldIndex::DAY_OF_MONTH );
@@ -1423,7 +1433,9 @@ input for the following reasons:
         nMinuteSet = xCal->getValue( i18n::CalendarFieldIndex::MINUTE );
         nSecondSet = xCal->getValue( i18n::CalendarFieldIndex::SECOND );
         nZO        = xCal->getValue( i18n::CalendarFieldIndex::ZONE_OFFSET );
+        nZOmillis  = xCal->getValue( i18n::CalendarFieldIndex::ZONE_OFFSET_SECOND_MILLIS );
         nDST       = xCal->getValue( i18n::CalendarFieldIndex::DST_OFFSET );
+        nDSTmillis = xCal->getValue( i18n::CalendarFieldIndex::DST_OFFSET_SECOND_MILLIS );
         xCal->setValue( i18n::CalendarFieldIndex::DAY_OF_MONTH, nDaySet );
         xCal->setValue( i18n::CalendarFieldIndex::MONTH, nMonthSet );
         xCal->setValue( i18n::CalendarFieldIndex::YEAR, nYearSet );
@@ -1432,12 +1444,12 @@ input for the following reasons:
         xCal->setValue( i18n::CalendarFieldIndex::SECOND, nSecondSet );
         bValid  = xCal->isValid();
         nDay    = xCal->getValue( i18n::CalendarFieldIndex::DAY_OF_MONTH );
-        nMonth  = xCal->getValue( i18n::CalendarFieldIndex::MONTH );
+        nMyMonth= xCal->getValue( i18n::CalendarFieldIndex::MONTH );
         nYear   = xCal->getValue( i18n::CalendarFieldIndex::YEAR );
         nHour   = xCal->getValue( i18n::CalendarFieldIndex::HOUR );
         nMinute = xCal->getValue( i18n::CalendarFieldIndex::MINUTE );
         nSecond = xCal->getValue( i18n::CalendarFieldIndex::SECOND );
-        bValid = bValid && nDay == nDaySet && nMonth == nMonthSet && nYear ==
+        bValid = bValid && nDay == nDaySet && nMyMonth == nMonthSet && nYear ==
             nYearSet && nHour == nHourSet && nMinute == nMinuteSet && nSecond
             == nSecondSet;
     }

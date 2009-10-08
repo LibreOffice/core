@@ -32,9 +32,9 @@
 #define _TOOLKIT_AWT_VCLXMENU_HXX_
 
 #include <toolkit/dllapi.h>
-#include <com/sun/star/awt/XMenuBar.hpp>
-#include <com/sun/star/awt/XPopupMenu.hpp>
-#include <com/sun/star/awt/XMenuExtended.hpp>
+#include <com/sun/star/awt/XMenuBarExtended.hpp>
+#include <com/sun/star/awt/XPopupMenuExtended.hpp>
+#include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XTypeProvider.hpp>
 #include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <cppuhelper/weak.hxx>
@@ -55,12 +55,12 @@ DECLARE_LIST( PopupMenuRefList, ::com::sun::star::uno::Reference< ::com::sun::st
 //  class VCLXMenu
 //  ----------------------------------------------------
 
-class TOOLKIT_DLLPUBLIC VCLXMenu :  public ::com::sun::star::awt::XMenuBar,
-                    public ::com::sun::star::awt::XPopupMenu,
-                    public ::com::sun::star::awt::XMenuExtended,
-                    public ::com::sun::star::lang::XTypeProvider,
-                    public ::com::sun::star::lang::XUnoTunnel,
-                    public ::cppu::OWeakObject
+class TOOLKIT_DLLPUBLIC VCLXMenu :  public ::com::sun::star::awt::XMenuBarExtended,
+                                    public ::com::sun::star::awt::XPopupMenuExtended,
+                                    public ::com::sun::star::lang::XServiceInfo,
+                                    public ::com::sun::star::lang::XTypeProvider,
+                                    public ::com::sun::star::lang::XUnoTunnel,
+                                    public ::cppu::OWeakObject
 {
 private:
     ::osl::Mutex            maMutex;
@@ -128,6 +128,43 @@ public:
     virtual ::rtl::OUString SAL_CALL getCommand( sal_Int16 nItemId ) throw (::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL setHelpCommand( sal_Int16 nItemId, const ::rtl::OUString& aHelp ) throw (::com::sun::star::uno::RuntimeException);
     virtual ::rtl::OUString SAL_CALL getHelpCommand( sal_Int16 nItemId ) throw (::com::sun::star::uno::RuntimeException);
+
+    // ========================================================================
+    // ========================================================================
+    // ========================================================================
+
+    // XMenuExtended2 Methods
+    virtual ::sal_Bool SAL_CALL isPopupMenu(  ) throw (::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL clear(  ) throw (::com::sun::star::uno::RuntimeException);
+    virtual ::com::sun::star::awt::MenuItemType SAL_CALL getItemType( ::sal_Int16 nItemPos ) throw (::com::sun::star::container::NoSuchElementException, ::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL hideDisabledEntries( ::sal_Bool bHide ) throw (::com::sun::star::uno::RuntimeException);
+
+    // XMenuBarExtended Methods
+
+    // XPopupMenuExtended Methods
+    virtual ::sal_Bool SAL_CALL isInExecute(  ) throw (::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL endExecute(  ) throw (::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL setLogo( const ::com::sun::star::awt::MenuLogo& aMenuLogo ) throw (::com::sun::star::uno::RuntimeException);
+    virtual ::com::sun::star::awt::MenuLogo SAL_CALL getLogo(  ) throw (::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL enableAutoMnemonics( ::sal_Bool bEnable ) throw (::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL setAcceleratorKeyEvent( ::sal_Int16 nItemId, const ::com::sun::star::awt::KeyEvent& aKeyEvent ) throw (::com::sun::star::container::NoSuchElementException, ::com::sun::star::uno::RuntimeException);
+    virtual ::com::sun::star::awt::KeyEvent SAL_CALL getAcceleratorKeyEvent( ::sal_Int16 nItemId ) throw (::com::sun::star::container::NoSuchElementException, ::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL setHelpText( ::sal_Int16 nItemId, const ::rtl::OUString& sHelpText ) throw (::com::sun::star::container::NoSuchElementException, ::com::sun::star::uno::RuntimeException);
+    virtual ::rtl::OUString SAL_CALL getHelpText( ::sal_Int16 nItemId ) throw (::com::sun::star::container::NoSuchElementException, ::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL setTipHelpText( ::sal_Int16 nItemId, const ::rtl::OUString& sTipHelpText ) throw (::com::sun::star::container::NoSuchElementException, ::com::sun::star::uno::RuntimeException);
+    virtual ::rtl::OUString SAL_CALL getTipHelpText( ::sal_Int16 nItemId ) throw (::com::sun::star::container::NoSuchElementException, ::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL setItemImage( ::sal_Int16 nItemId, const ::com::sun::star::uno::Reference< ::com::sun::star::graphic::XGraphic >& xGraphic, ::sal_Bool bScale ) throw (::com::sun::star::container::NoSuchElementException, ::com::sun::star::uno::RuntimeException);
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::graphic::XGraphic > SAL_CALL getItemImage( ::sal_Int16 nItemId ) throw (::com::sun::star::container::NoSuchElementException, ::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL setItemImageAngle( ::sal_Int16 nItemId, ::sal_Int32 nAngle ) throw (::com::sun::star::container::NoSuchElementException, ::com::sun::star::uno::RuntimeException);
+    virtual ::sal_Int32 SAL_CALL getItemImageAngle( ::sal_Int16 nItemId ) throw (::com::sun::star::container::NoSuchElementException, ::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL setItemImageMirrorMode( ::sal_Int16 nItemId, ::sal_Bool bMirror ) throw (::com::sun::star::container::NoSuchElementException, ::com::sun::star::uno::RuntimeException);
+    virtual ::sal_Bool SAL_CALL isItemImageInMirrorMode( ::sal_Int16 nItemId ) throw (::com::sun::star::container::NoSuchElementException, ::com::sun::star::uno::RuntimeException);
+
+    // ::com::sun::star::lang::XServiceInfo
+    virtual ::rtl::OUString SAL_CALL getImplementationName(  ) throw (::com::sun::star::uno::RuntimeException);
+    virtual ::sal_Bool SAL_CALL supportsService( const ::rtl::OUString& ServiceName ) throw (::com::sun::star::uno::RuntimeException);
+    virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames(  ) throw (::com::sun::star::uno::RuntimeException);
+
 };
 
 //  ----------------------------------------------------

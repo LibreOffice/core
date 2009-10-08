@@ -1781,7 +1781,7 @@ sal_Size SvStream::Seek( sal_Size nFilePos )
     if( !pRWBuf )
     {
         nBufFilePos = SeekPos( nFilePos );
-        DBG_ASSERT(Tell()==nBufFilePos,"Out Of Sync!")
+        DBG_ASSERT(Tell()==nBufFilePos,"Out Of Sync!");
         return nBufFilePos;
     }
 
@@ -1813,7 +1813,7 @@ sal_Size SvStream::Seek( sal_Size nFilePos )
 #ifdef OV_DEBUG
     {
         sal_Size nDebugTemp = nBufFilePos + nBufActualPos;
-        DBG_ASSERT(Tell()==nDebugTemp,"Sync?")
+        DBG_ASSERT(Tell()==nDebugTemp,"Sync?");
     }
 #endif
     return nBufFilePos + nBufActualPos;
@@ -2359,7 +2359,7 @@ sal_Bool SvStream::SetStreamSize( sal_Size nSize )
     SetBufferSize( 0 );
     SetSize( nSize );
     SetBufferSize( nBuf );
-    DBG_ASSERT(Tell()==nFPos,"SetStreamSize failed")
+    DBG_ASSERT(Tell()==nFPos,"SetStreamSize failed");
     return (sal_Bool)(nError == 0);
 }
 

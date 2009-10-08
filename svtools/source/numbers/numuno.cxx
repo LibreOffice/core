@@ -53,7 +53,8 @@ using namespace com::sun::star;
 class SvNumFmtSuppl_Impl
 {
 public:
-    SvNumberFormatter* pFormatter;
+    SvNumberFormatter*                  pFormatter;
+    mutable ::comphelper::SharedMutex   aMutex;
 
     SvNumFmtSuppl_Impl(SvNumberFormatter* p) :
         pFormatter(p) {}
@@ -75,6 +76,11 @@ SvNumberFormatsSupplierObj::SvNumberFormatsSupplierObj(SvNumberFormatter* pForm)
 SvNumberFormatsSupplierObj::~SvNumberFormatsSupplierObj()
 {
     delete pImpl;
+}
+
+::comphelper::SharedMutex& SvNumberFormatsSupplierObj::getSharedMutex() const
+{
+    return pImpl->aMutex;
 }
 
 SvNumberFormatter* SvNumberFormatsSupplierObj::GetNumberFormatter() const
@@ -103,17 +109,17 @@ void SvNumberFormatsSupplierObj::SettingsChanged()
 uno::Reference<beans::XPropertySet> SAL_CALL SvNumberFormatsSupplierObj::getNumberFormatSettings()
                                         throw(uno::RuntimeException)
 {
-    NAMESPACE_VOS(OGuard) aGuard(Application::GetSolarMutex());
+    ::osl::MutexGuard aGuard( pImpl->aMutex );
 
-    return new SvNumberFormatSettingsObj( this );
+    return new SvNumberFormatSettingsObj( *this, pImpl->aMutex );
 }
 
 uno::Reference<util::XNumberFormats> SAL_CALL SvNumberFormatsSupplierObj::getNumberFormats()
                                         throw(uno::RuntimeException)
 {
-    NAMESPACE_VOS(OGuard) aGuard(Application::GetSolarMutex());
+    ::osl::MutexGuard aGuard( pImpl->aMutex );
 
-    return new SvNumberFormatsObj( this );
+    return new SvNumberFormatsObj( *this, pImpl->aMutex );
 }
 
 // XUnoTunnel

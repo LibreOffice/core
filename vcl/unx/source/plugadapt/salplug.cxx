@@ -434,7 +434,7 @@ static const char * get_desktop_environment()
 static const char* autodetect_plugin()
 {
     const char * desktop = get_desktop_environment();
-    const char * pRet = NULL;
+    const char * pRet = "gen";
 
     // no server at all: dummy plugin
     if ( desktop == desktop_strings[DESKTOP_NONE] )
@@ -444,7 +444,13 @@ static const char* autodetect_plugin()
     else if( desktop == desktop_strings[DESKTOP_KDE] )
         pRet = "kde";
     else
-        pRet = "gen";
+    {
+        // #i95296# use the much nicer looking gtk plugin
+        // on desktops that set gtk variables (e.g. XFCE)
+        static const char* pEnv = getenv( "GTK2_RC_FILES" );
+        if( pEnv && *pEnv ) // check for existance and non emptiness
+            pRet = "gtk";
+    }
 
 #if OSL_DEBUG_LEVEL > 1
     std::fprintf( stderr, "plugin autodetection: %s\n", pRet );

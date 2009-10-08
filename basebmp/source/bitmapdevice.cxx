@@ -1207,6 +1207,7 @@ void BitmapDevice::drawPolygon( const basegfx::B2DPolygon&   rPoly,
 
     const sal_uInt32 numVertices( rPoly.count() );
     if( numVertices )
+    {
         if( isCompatibleClipMask( rClip ) )
             drawPolygon_i( rPoly,
                            mpImpl->maLineClipRect,
@@ -1214,6 +1215,7 @@ void BitmapDevice::drawPolygon( const basegfx::B2DPolygon&   rPoly,
         else
             getGenericRenderer()->drawPolygon( rPoly, lineColor,
                                                drawMode, rClip );
+    }
 }
 
 void BitmapDevice::fillPolyPolygon( const basegfx::B2DPolyPolygon& rPoly,

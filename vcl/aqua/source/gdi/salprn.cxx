@@ -48,6 +48,8 @@
 #include "com/sun/star/container/XNameAccess.hpp"
 #include "com/sun/star/beans/PropertyValue.hpp"
 
+#include <algorithm>
+
 using namespace rtl;
 using namespace vcl;
 using namespace com::sun::star::uno;
@@ -122,11 +124,12 @@ void AquaSalInfoPrinter::SetupPrinterGraphics( CGContextRef i_rContext ) const
             long nDPIX = 720, nDPIY = 720;
             NSSize aPaperSize = [mpPrintInfo paperSize];
 
+            NSRect aImageRect = [mpPrintInfo imageablePageBounds];
             if( mePageOrientation == ORIENTATION_PORTRAIT )
             {
                 double dX = 0, dY = aPaperSize.height;
-                // dX += [mpPrintInfo leftMargin];
-                // dY -= [mpPrintInfo topMargin];
+                // dX += aImageRect.origin.x;
+                // dY -= aPaperSize.height - aImageRect.size.height - aImageRect.origin.y;
                 CGContextTranslateCTM( i_rContext, dX + mnStartPageOffsetX, dY - mnStartPageOffsetY );
                 CGContextScaleCTM( i_rContext, 0.1, -0.1 );
             }
@@ -134,8 +137,8 @@ void AquaSalInfoPrinter::SetupPrinterGraphics( CGContextRef i_rContext ) const
             {
                 CGContextRotateCTM( i_rContext, M_PI/2 );
                 double dX = aPaperSize.height, dY = -aPaperSize.width;
-                // dY += [mpPrintInfo topMargin];
-                // dX -= [mpPrintInfo rightMargin];
+                // dY += aPaperSize.height - aImageRect.size.height - aImageRect.origin.y;
+                // dX -= aImageRect.origin.x;
 
                 CGContextTranslateCTM( i_rContext, dX + mnStartPageOffsetY, dY - mnStartPageOffsetX );
                 CGContextScaleCTM( i_rContext, -0.1, 0.1 );
@@ -440,10 +443,19 @@ void AquaSalInfoPrinter::GetPageInfo( const ImplJobSetup*,
         NSSize aPaperSize = [mpPrintInfo paperSize];
         o_rPageWidth  = static_cast<long>( double(aPaperSize.width) * fXScaling );
         o_rPageHeight = static_cast<long>( double(aPaperSize.height) * fYScaling );
-        o_rPageOffX   = static_cast<long>( [mpPrintInfo leftMargin] * fXScaling );
-        o_rPageOffY   = static_cast<long>( [mpPrintInfo topMargin] * fYScaling );
-        o_rOutWidth   = static_cast<long>( o_rPageWidth - double([mpPrintInfo leftMargin] + [mpPrintInfo rightMargin]) * fXScaling );
-        o_rOutHeight  = static_cast<long>( o_rPageHeight - double([mpPrintInfo topMargin] + [mpPrintInfo bottomMargin]) * fYScaling );
+
+        NSRect aImageRect = [mpPrintInfo imageablePageBounds];
+        o_rPageOffX   = static_cast<long>( aImageRect.origin.x * fXScaling );
+        o_rPageOffY   = static_cast<long>( (aPaperSize.height - aImageRect.size.height - aImageRect.origin.y) * fYScaling );
+        o_rOutWidth   = static_cast<long>( aImageRect.size.width * fXScaling );
+        o_rOutHeight  = static_cast<long>( aImageRect.size.height * fYScaling );
+
+        if( mePageOrientation == ORIENTATION_LANDSCAPE )
+        {
+            std::swap( o_rOutWidth, o_rOutHeight );
+            std::swap( o_rPageWidth, o_rPageHeight );
+            std::swap( o_rPageOffX, o_rPageOffY );
+        }
     }
 }
 

@@ -7,7 +7,7 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_transex3.hxx"
-#if defined( UNX )
+#if defined(UNX) || defined(OS2)
 int main( int argc, char *argv[] )
 #else
 int _cdecl main( int argc, char *argv[] )

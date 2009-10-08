@@ -842,6 +842,7 @@ void FormattedField::Commit()
 void FormattedField::ReFormat()
 {
     if (!IsEmptyFieldEnabled() || GetText().Len())
+    {
         if (TreatingAsNumber())
         {
             double dValue = GetValue();
@@ -851,6 +852,7 @@ void FormattedField::ReFormat()
         }
         else
             SetTextFormatted(GetTextValue());
+    }
 }
 
 //------------------------------------------------------------------------------
@@ -1073,10 +1075,12 @@ double FormattedField::GetValue()
     DBG_CHKTHIS(FormattedField, NULL);
 
     if ( !ImplGetValue( m_dCurrentValue ) )
+    {
         if ( m_bEnableNaN )
             ::rtl::math::setNan( &m_dCurrentValue );
         else
             m_dCurrentValue = m_dDefaultValue;
+    }
 
     m_bValueDirty = FALSE;
     return m_dCurrentValue;

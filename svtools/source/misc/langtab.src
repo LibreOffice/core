@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: langtab.src,v $
- * $Revision: 1.6 $
+ * $Revision: 1.6.126.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -46,22 +46,32 @@ StringArray STR_ARR_SVT_LANGUAGE_TABLE
         < "Default" ; LANGUAGE_SYSTEM ; > ;
         < "Afrikaans (South Africa)" ; LANGUAGE_AFRIKAANS ; > ;
         < "Albanian" ; LANGUAGE_ALBANIAN ; > ;
-        < "Arabic (Iraq)" ; LANGUAGE_ARABIC_IRAQ ; > ;
-        < "Arabic (Egypt)" ; LANGUAGE_ARABIC_EGYPT ; > ;
-        < "Arabic (Libya)" ; LANGUAGE_ARABIC_LIBYA ; > ;
-        < "Arabic (Algerian)" ; LANGUAGE_ARABIC_ALGERIA ; > ;
-        < "Arabic (Morocco)" ; LANGUAGE_ARABIC_MOROCCO ; > ;
-        < "Arabic (Tunisia)" ; LANGUAGE_ARABIC_TUNISIA ; > ;
-        < "Arabic (Oman)" ; LANGUAGE_ARABIC_OMAN ; > ;
-        < "Arabic (Yemen)" ; LANGUAGE_ARABIC_YEMEN ; > ;
-        < "Arabic (Syria)" ; LANGUAGE_ARABIC_SYRIA ; > ;
-        < "Arabic (Jordan)" ; LANGUAGE_ARABIC_JORDAN ; > ;
-        < "Arabic (Lebanon)" ; LANGUAGE_ARABIC_LEBANON ; > ;
-        < "Arabic (Kuwait)" ; LANGUAGE_ARABIC_KUWAIT ; > ;
-        < "Arabic (UAE)" ; LANGUAGE_ARABIC_UAE ; > ;
+        < "Arabic" ; LANGUAGE_ARABIC_PRIMARY_ONLY ; > ;
+        < "Arabic (Algeria)" ; LANGUAGE_ARABIC_ALGERIA ; > ;
         < "Arabic (Bahrain)" ; LANGUAGE_ARABIC_BAHRAIN ; > ;
+        < "Arabic (Chad)" ; LANGUAGE_USER_ARABIC_CHAD ; > ;
+        < "Arabic (Comoros)" ; LANGUAGE_USER_ARABIC_COMOROS ; > ;
+        < "Arabic (Djibouti)" ; LANGUAGE_USER_ARABIC_DJIBOUTI ; > ;
+        < "Arabic (Egypt)" ; LANGUAGE_ARABIC_EGYPT ; > ;
+        < "Arabic (Eritrea)" ; LANGUAGE_USER_ARABIC_ERITREA ; > ;
+        < "Arabic (Iraq)" ; LANGUAGE_ARABIC_IRAQ ; > ;
+        < "Arabic (Israel)" ; LANGUAGE_USER_ARABIC_ISRAEL ; > ;
+        < "Arabic (Jordan)" ; LANGUAGE_ARABIC_JORDAN ; > ;
+        < "Arabic (Kuwait)" ; LANGUAGE_ARABIC_KUWAIT ; > ;
+        < "Arabic (Lebanon)" ; LANGUAGE_ARABIC_LEBANON ; > ;
+        < "Arabic (Libya)" ; LANGUAGE_ARABIC_LIBYA ; > ;
+        < "Arabic (Mauritania)" ; LANGUAGE_USER_ARABIC_MAURITANIA ; > ;
+        < "Arabic (Morocco)" ; LANGUAGE_ARABIC_MOROCCO ; > ;
+        < "Arabic (Oman)" ; LANGUAGE_ARABIC_OMAN ; > ;
+        < "Arabic (Palestine)" ; LANGUAGE_USER_ARABIC_PALESTINE ; > ;
         < "Arabic (Qatar)" ; LANGUAGE_ARABIC_QATAR ; > ;
         < "Arabic (Saudi Arabia)" ; LANGUAGE_ARABIC_SAUDI_ARABIA ; > ;
+        < "Arabic (Somalia)" ; LANGUAGE_USER_ARABIC_SOMALIA ; > ;
+        < "Arabic (Sudan)" ; LANGUAGE_USER_ARABIC_SUDAN ; > ;
+        < "Arabic (Syria)" ; LANGUAGE_ARABIC_SYRIA ; > ;
+        < "Arabic (Tunisia)" ; LANGUAGE_ARABIC_TUNISIA ; > ;
+        < "Arabic (UAE)" ; LANGUAGE_ARABIC_UAE ; > ;
+        < "Arabic (Yemen)" ; LANGUAGE_ARABIC_YEMEN ; > ;
         < "Armenian" ; LANGUAGE_ARMENIAN ; > ;
         < "Assami" ; LANGUAGE_ASSAMESE ; > ;
         < "Azerbaijani Latin" ; LANGUAGE_AZERI_LATIN ; > ;
@@ -69,7 +79,7 @@ StringArray STR_ARR_SVT_LANGUAGE_TABLE
         < "Basque" ; LANGUAGE_BASQUE ; > ;
         < "Bengali (India)" ; LANGUAGE_BENGALI ; > ;
         < "Bulgarian" ; LANGUAGE_BULGARIAN ; > ;
-        < "Byelorussian" ; LANGUAGE_BELARUSIAN ; > ;
+        < "Belarusian" ; LANGUAGE_BELARUSIAN ; > ;
         < "Catalan" ; LANGUAGE_CATALAN ; > ;
         < "Chinese (traditional)" ; LANGUAGE_CHINESE_TRADITIONAL ; > ;
         < "Chinese (simplified)" ; LANGUAGE_CHINESE_SIMPLIFIED ; > ;
@@ -159,7 +169,6 @@ StringArray STR_ARR_SVT_LANGUAGE_TABLE
         < "Slovenian" ; LANGUAGE_SLOVENIAN ; > ;
         < "Spanish (Spain)" ; LANGUAGE_SPANISH ; > ;
         < "Spanish (Mexico)" ; LANGUAGE_SPANISH_MEXICAN ; > ;
-        < "Spanish, Modern (Spain)" ; LANGUAGE_SPANISH_MODERN ; > ;
         < "Spanish (Guatemala)" ; LANGUAGE_SPANISH_GUATEMALA ; > ;
         < "Spanish (Costa Rica)" ; LANGUAGE_SPANISH_COSTARICA ; > ;
         < "Spanish (Panama)" ; LANGUAGE_SPANISH_PANAMA ; > ;
@@ -290,6 +299,9 @@ StringArray STR_ARR_SVT_LANGUAGE_TABLE
         < "Santali" ; LANGUAGE_USER_SANTALI_INDIA ; > ;
         < "Tetun (Timor-Leste)" ; LANGUAGE_USER_TETUN_TIMOR_LESTE ; > ;
         < "Turkmen" ; LANGUAGE_TURKMEN ; > ;
+        < "Maltese" ; LANGUAGE_MALTESE ; > ;
+        < "Tok Pisin" ; LANGUAGE_USER_TOK_PISIN ; > ;
+        < "Shuswap" ; LANGUAGE_USER_SHUSWAP ; > ;
     };
 };
 

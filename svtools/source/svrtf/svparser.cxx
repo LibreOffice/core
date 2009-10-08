@@ -281,7 +281,7 @@ sal_Unicode SvParser::GetNextChar()
                 else
                 {
                     DBG_ASSERT( pImplData && pImplData->hConv,
-                                "no text converter!" )
+                                "no text converter!" );
 
                     sal_Unicode cUC;
                     sal_uInt32 nInfo = 0;

@@ -96,6 +96,10 @@
 #define COMPILE_MULTIMON_STUBS
 #include <multimon.h>
 #include <vector>
+#ifdef __MINGW32__
+#include <algorithm>
+using ::std::max;
+#endif
 
 #include <com/sun/star/uno/Exception.hdl>
 
@@ -2504,7 +2508,7 @@ static void ImplGetKeyNameText( LONG lParam, sal_Unicode* pBuf,
             nKeyLen = GetKeyNameTextW( lParam, aKeyBuf, nMaxKeyLen );
             // #i12401# the current unicows.dll has a bug in CharUpperBuffW, which corrupts the stack
             // fall back to the ANSI version instead
-            DBG_ASSERT( nKeyLen <= nMaxKeyLen, "Invalid key name length!" )
+            DBG_ASSERT( nKeyLen <= nMaxKeyLen, "Invalid key name length!" );
             if( nKeyLen > nMaxKeyLen )
                 nKeyLen = 0;
             else if( nKeyLen > 0 )
@@ -2525,7 +2529,7 @@ static void ImplGetKeyNameText( LONG lParam, sal_Unicode* pBuf,
         {
             sal_Char aAnsiKeyBuf[ nMaxKeyLen ];
             int nAnsiKeyLen = GetKeyNameTextA( lParam, aAnsiKeyBuf, nMaxKeyLen );
-            DBG_ASSERT( nAnsiKeyLen <= nMaxKeyLen, "Invalid key name length!" )
+            DBG_ASSERT( nAnsiKeyLen <= nMaxKeyLen, "Invalid key name length!" );
             if( nAnsiKeyLen > nMaxKeyLen )
                 nAnsiKeyLen = 0;
             else if( nAnsiKeyLen > 0 )
@@ -5598,7 +5602,7 @@ static BOOL ImplHandleIMEEndComposition( HWND hWnd )
 
 // -----------------------------------------------------------------------
 
-static void ImplHandleAppCommand( HWND hWnd, LPARAM lParam )
+static boolean ImplHandleAppCommand( HWND hWnd, LPARAM lParam )
 {
     sal_Int16 nCommand = 0;
     switch( GET_APPCOMMAND_LPARAM(lParam) )
@@ -5622,7 +5626,7 @@ static void ImplHandleAppCommand( HWND hWnd, LPARAM lParam )
     case APPCOMMAND_VOLUME_UP:                  nCommand = MEDIA_COMMAND_VOLUME_UP; break;
         break;
     default:
-        return;
+        return false;
     }
 
     WinSalFrame* pFrame = GetWindowPtr( hWnd );
@@ -5635,8 +5639,13 @@ static void ImplHandleAppCommand( HWND hWnd, LPARAM lParam )
         NotifyEvent aNCmdEvt( EVENT_COMMAND, pWindow, &aCEvt );
 
         if ( !ImplCallPreNotify( aNCmdEvt ) )
+        {
             pWindow->Command( aCEvt );
+            return true;
+        }
     }
+
+    return false;
 }
 
 
@@ -6195,7 +6204,11 @@ LRESULT CALLBACK SalFrameWndProc( HWND hWnd, UINT nMsg, WPARAM wParam, LPARAM lP
             ImplHandleIMENotify( hWnd, wParam );
             break;
         case WM_APPCOMMAND:
-            ImplHandleAppCommand( hWnd, lParam );
+            if( ImplHandleAppCommand( hWnd, lParam ) )
+            {
+                rDef = false;
+                nRet = 1;
+            }
             break;
 #if WINVER >= 0x0500
         case WM_IME_REQUEST:

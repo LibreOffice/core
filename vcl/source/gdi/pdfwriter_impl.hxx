@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: pdfwriter_impl.hxx,v $
- * $Revision: 1.56 $
+ * $Revision: 1.55.134.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -474,7 +474,7 @@ public:
         sal_Int32                                           m_nParentElement; // index into structure vector
         sal_Int32                                           m_nFirstPageObject;
         bool                                                m_bOpenMCSeq;
-        std::list< sal_Int32 >                              m_aChildren; // indices into strucure vector
+        std::list< sal_Int32 >                              m_aChildren; // indexes into structure vector
         std::list< PDFStructureElementKid >                 m_aKids;
         PDFStructAttributes                                 m_aAttributes;
         Rectangle                                           m_aBBox;
@@ -654,6 +654,7 @@ private:
         Color           m_aLineColor;
         Color           m_aFillColor;
         Color           m_aTextLineColor;
+        Color           m_aOverlineColor;
         Region          m_aClipRegion;
         sal_Int32       m_nAntiAlias;
         sal_Int32       m_nLayoutMode;
@@ -667,16 +668,18 @@ private:
         static const sal_uInt16 updateLineColor             = 0x0004;
         static const sal_uInt16 updateFillColor             = 0x0008;
         static const sal_uInt16 updateTextLineColor         = 0x0010;
-        static const sal_uInt16 updateClipRegion            = 0x0020;
-        static const sal_uInt16 updateAntiAlias             = 0x0040;
-        static const sal_uInt16 updateLayoutMode            = 0x0080;
-        static const sal_uInt16 updateTransparentPercent    = 0x0100;
-        static const sal_uInt16 updateDigitLanguage         = 0x0200;
+        static const sal_uInt16 updateOverlineColor         = 0x0020;
+        static const sal_uInt16 updateClipRegion            = 0x0040;
+        static const sal_uInt16 updateAntiAlias             = 0x0080;
+        static const sal_uInt16 updateLayoutMode            = 0x0100;
+        static const sal_uInt16 updateTransparentPercent    = 0x0200;
+        static const sal_uInt16 updateDigitLanguage         = 0x0400;
 
         GraphicsState() :
                 m_aLineColor( COL_TRANSPARENT ),
                 m_aFillColor( COL_TRANSPARENT ),
                 m_aTextLineColor( COL_TRANSPARENT ),
+                m_aOverlineColor( COL_TRANSPARENT ),
                 m_nAntiAlias( 1 ),
                 m_nLayoutMode( 0 ),
                 m_nTransparentPercent( 0 ),
@@ -689,6 +692,7 @@ private:
                 m_aLineColor( rState.m_aLineColor ),
                 m_aFillColor( rState.m_aFillColor ),
                 m_aTextLineColor( rState.m_aTextLineColor ),
+                m_aOverlineColor( rState.m_aOverlineColor ),
                 m_aClipRegion( rState.m_aClipRegion ),
                 m_nAntiAlias( rState.m_nAntiAlias ),
                 m_nLayoutMode( rState.m_nLayoutMode ),
@@ -705,6 +709,7 @@ private:
             m_aLineColor            = rState.m_aLineColor;
             m_aFillColor            = rState.m_aFillColor;
             m_aTextLineColor        = rState.m_aTextLineColor;
+            m_aOverlineColor        = rState.m_aOverlineColor;
             m_aClipRegion           = rState.m_aClipRegion;
             m_nAntiAlias            = rState.m_nAntiAlias;
             m_nLayoutMode           = rState.m_nLayoutMode;
@@ -949,6 +954,12 @@ i12626
     // puts the attribute objects of a structure element into the returned string,
     // helper for emitStructure
     rtl::OString emitStructureAttributes( PDFStructureElement& rEle );
+    //--->i94258
+    // the maximum array elements allowed for PDF array object
+    static const sal_uInt32 ncMaxPDFArraySize = 8191;
+    //check if internal dummy container are needed in the structure elements
+    void addInternalStructureContainer( PDFStructureElement& rEle );
+    //<---i94258
     // writes document structure
     sal_Int32 emitStructure( PDFStructureElement& rEle );
     // writes structure parent tree
@@ -1114,6 +1125,18 @@ public:
         m_aGraphicsStack.front().m_nUpdateFlags |= GraphicsState::updateTextLineColor;
     }
 
+    void setOverlineColor()
+    {
+        m_aGraphicsStack.front().m_aOverlineColor = Color( COL_TRANSPARENT );
+        m_aGraphicsStack.front().m_nUpdateFlags |= GraphicsState::updateOverlineColor;
+    }
+
+    void setOverlineColor( const Color& rColor )
+    {
+        m_aGraphicsStack.front().m_aOverlineColor = rColor;
+        m_aGraphicsStack.front().m_nUpdateFlags |= GraphicsState::updateOverlineColor;
+    }
+
     void setTextFillColor( const Color& rColor )
     {
         m_aGraphicsStack.front().m_aFont.SetFillColor( rColor );
@@ -1177,7 +1200,11 @@ public:
                           xub_StrLen nIndex = 0, xub_StrLen nLen = STRING_LEN,
                           bool bTextLines = true  );
     void drawText( const Rectangle& rRect, const String& rOrigStr, USHORT nStyle, bool bTextLines = true  );
-    void drawTextLine( const Point& rPos, long nWidth, FontStrikeout eStrikeout, FontUnderline eUnderline, bool bUnderlineAbove );
+    void drawTextLine( const Point& rPos, long nWidth, FontStrikeout eStrikeout, FontUnderline eUnderline, FontUnderline eOverline, bool bUnderlineAbove );
+    void drawWaveTextLine( rtl::OStringBuffer& aLine, long nWidth, FontUnderline eTextLine, Color aColor, bool bIsAbove );
+    void drawStraightTextLine( rtl::OStringBuffer& aLine, long nWidth, FontUnderline eTextLine, Color aColor, bool bIsAbove );
+    void drawStrikeoutLine( rtl::OStringBuffer& aLine, long nWidth, FontStrikeout eStrikeout, Color aColor );
+    void drawStrikeoutChar( const Point& rPos, long nWidth, FontStrikeout eStrikeout );
 
     void drawLine( const Point& rStart, const Point& rStop );
     void drawLine( const Point& rStart, const Point& rStop, const LineInfo& rInfo );

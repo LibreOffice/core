@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: salgdi.h,v $
- * $Revision: 1.32 $
+ * $Revision: 1.30.20.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -52,7 +52,7 @@ class ImplFontAttrCache;
 #define PALRGB_TO_RGB(nPalRGB)      ((nPalRGB)&0x00ffffff)
 
 // win32 platform specific options. Move them to the PMK file?
-#define USE_UNISCRIBE
+
 #define GCP_KERN_HACK
 #define GNG_VERT_HACK
 
@@ -78,6 +78,7 @@ public:
     bool                    IsGlyphApiDisabled() const  { return mbDisableGlyphApi; }
     bool                    SupportsKorean() const      { return mbHasKoreanRange; }
     bool                    SupportsCJK() const         { return mbHasCJKSupport; }
+    bool                    SupportsArabic() const      { return mbHasArabicSupport; }
     bool                    AliasSymbolsHigh() const    { return mbAliasSymbolsHigh; }
     bool                    AliasSymbolsLow() const     { return mbAliasSymbolsLow; }
 
@@ -96,6 +97,7 @@ private:
     mutable bool                    mbDisableGlyphApi;
     mutable bool                    mbHasKoreanRange;
     mutable bool                    mbHasCJKSupport;
+    mutable bool                    mbHasArabicSupport;
     mutable ImplFontCharMap*        mpUnicodeMap;
     mutable const Ucs2SIntMap*      mpEncodingVector;
 
@@ -165,7 +167,11 @@ public:
     BOOL                    mbVirDev;           // is VirDev
     BOOL                    mbWindow;           // is Window
     BOOL                    mbScreen;           // is Screen compatible
-    BOOL                    mbXORMode;          // _every_ output with RasterOp XOR
+    bool                    mbXORMode;          // _every_ output with RasterOp XOR
+
+    // remember RGB values for SetLineColor/SetFillColor
+    SalColor                maLineColor;
+    SalColor                maFillColor;
 
     HFONT                   ImplDoSetFont( ImplFontSelectData* i_pFont, float& o_rFontScale, HFONT& o_rOldFont );
 
@@ -263,7 +269,7 @@ public:
     // filled accordingly
     virtual void            SetFillColor( SalColor nSalColor );
     // enable/disable XOR drawing
-    virtual void            SetXORMode( BOOL bSet );
+    virtual void            SetXORMode( bool bSet, bool );
     // set line color for raster operations
     virtual void            SetROPLineColor( SalROPColor nROPColor );
     // set fill color for raster operations
@@ -333,6 +339,7 @@ public:
                                             bool bVertical,
                                             Int32Vector& rWidths,
                                             Ucs2UIntMap& rUnicodeEnc );
+    virtual int             GetMinKashidaWidth();
 
     virtual BOOL                    GetGlyphBoundRect( long nIndex, Rectangle& );
     virtual BOOL                    GetGlyphOutline( long nIndex, ::basegfx::B2DPolyPolygon& );

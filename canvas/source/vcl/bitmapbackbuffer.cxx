@@ -119,7 +119,17 @@ namespace vclcanvas
                         "BitmapBackBuffer::createVDev(): Unable to create VirtualDevice" );
 
             mpVDev->SetOutputSizePixel( maBitmap->GetSizePixel() );
+
+            // #i95645#
+#if defined( QUARTZ )
+            // use AA on VCLCanvas for Mac
             mpVDev->SetAntialiasing( ANTIALIASING_ENABLE_B2DDRAW | mpVDev->GetAntialiasing() );
+#else
+            // switch off AA for WIN32 and UNIX, the VCLCanvas does not look good with it and
+            // is not required to do AA. It would need to be adapted to use it correctly
+            // (especially gradient painting). This will need extra work.
+            mpVDev->SetAntialiasing(mpVDev->GetAntialiasing() & !ANTIALIASING_ENABLE_B2DDRAW);
+#endif
         }
     }
 

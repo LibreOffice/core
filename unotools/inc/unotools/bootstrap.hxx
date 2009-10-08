@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: bootstrap.hxx,v $
- * $Revision: 1.15 $
+ * $Revision: 1.15.16.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -62,9 +62,6 @@ namespace utl
 
         /// retrieve the BUILDID information item; uses the given default, if not found
         static rtl::OUString getBuildIdData(rtl::OUString const& _sDefault);
-
-        /// retrieve the product patch level; uses the given default, if not found
-        static rtl::OUString getProductPatchLevel(rtl::OUString const& _sDefault);
 
         /// retrieve the ALLUSERS information item from setup.ini file; uses the given default, if not found
         static rtl::OUString getAllUsersValue(rtl::OUString const& _sDefault);

@@ -36,6 +36,7 @@
 #include "salframe.h"
 #include "salframeview.h"
 #include "aqua11yfactory.h"
+#include <sal/alloca.h>
 #include "vcl/window.hxx"
 
 #include "vcl/svapp.hxx"
@@ -128,6 +129,23 @@ static const struct ExceptionalKey
     { KEY_D, NSControlKeyMask | NSShiftKeyMask | NSAlternateKeyMask },
     { KEY_D, NSCommandKeyMask | NSShiftKeyMask | NSAlternateKeyMask }
 };
+
+static AquaSalFrame* getMouseContainerFrame()
+{
+    int nWindows = 0;
+    NSCountWindows( &nWindows );
+    int* pWindows = (int*)alloca( nWindows * sizeof(int) );
+    // note: NSWindowList is supposed to be in z-order front to back
+    NSWindowList( nWindows, pWindows );
+    AquaSalFrame* pDispatchFrame = NULL;
+    for(int i = 0; i < nWindows && ! pDispatchFrame; i++ )
+    {
+        NSWindow* pWin = [NSApp windowWithWindowNumber: pWindows[i]];
+        if( pWin && [pWin isMemberOfClass: [SalFrameWindow class]] && [(SalFrameWindow*)pWin containsMouse] )
+            pDispatchFrame = [(SalFrameWindow*)pWin getSalFrame];
+    }
+    return pDispatchFrame;
+}
 
 @implementation SalFrameWindow
 -(id)initWithSalFrame: (AquaSalFrame*)pFrame
@@ -460,10 +478,23 @@ private:
         {
             // no, it is not
             // now we need to find the one it may be in
-            // use NSApp to check windows in ZOrder whether they contain the mouse pointer
-            NSWindow* pWindow = [NSApp makeWindowsPerform: @selector(containsMouse) inOrder: YES];
-            if( pWindow && [pWindow isMemberOfClass: [SalFrameWindow class]] )
-                pDispatchFrame = [(SalFrameWindow*)pWindow getSalFrame];
+            /* #i93756# we ant to get enumerate the application windows in z-order
+               to check if any contains the mouse. This could be elegantly done with this
+               code:
+
+               // use NSApp to check windows in ZOrder whether they contain the mouse pointer
+               NSWindow* pWindow = [NSApp makeWindowsPerform: @selector(containsMouse) inOrder: YES];
+               if( pWindow && [pWindow isMemberOfClass: [SalFrameWindow class]] )
+                   pDispatchFrame = [(SalFrameWindow*)pWindow getSalFrame];
+               
+               However if a non SalFrameWindow is on screen (like e.g. the file dialog)
+               it can be hit with the containsMouse selector, which it doesn't support.
+               Sadly NSApplication:makeWindowsPerform does not check (for performance reasons
+               I assume) whether a window supports a selector before sending it. 
+            */
+            AquaSalFrame* pMouseFrame = getMouseContainerFrame();
+            if( pMouseFrame )
+                pDispatchFrame = pMouseFrame;
         }
     }
     
@@ -845,6 +876,11 @@ private:
     [self sendKeyInputAndReleaseToFrame: com::sun::star::awt::Key::SELECT_WORD_BACKWARD character: 0  modifiers: 0];
 }
 
+-(void)moveWordLeftAndModifySelection: (id)aSender
+{
+    [self sendKeyInputAndReleaseToFrame: com::sun::star::awt::Key::SELECT_WORD_BACKWARD character: 0  modifiers: 0];
+}
+
 -(void)moveWordRight: (id)aSender
 {
     [self sendKeyInputAndReleaseToFrame: com::sun::star::awt::Key::MOVE_WORD_FORWARD character: 0  modifiers: 0];
@@ -860,9 +896,19 @@ private:
     [self sendKeyInputAndReleaseToFrame: com::sun::star::awt::Key::SELECT_WORD_FORWARD character: 0  modifiers: 0];
 }
 
+-(void)moveWordRightAndModifySelection: (id)aSender
+{
+    [self sendKeyInputAndReleaseToFrame: com::sun::star::awt::Key::SELECT_WORD_FORWARD character: 0  modifiers: 0];
+}
+
 -(void)moveToEndOfLine: (id)aSender
 {
     [self sendKeyInputAndReleaseToFrame: com::sun::star::awt::Key::MOVE_TO_END_OF_LINE character: 0  modifiers: 0];
+}
+
+-(void)moveToEndOfLineAndModifySelection: (id)aSender
+{
+    [self sendKeyInputAndReleaseToFrame: com::sun::star::awt::Key::SELECT_TO_END_OF_LINE character: 0  modifiers: 0];
 }
 
 -(void)moveToBeginningOfLine: (id)aSender
@@ -870,14 +916,69 @@ private:
     [self sendKeyInputAndReleaseToFrame: com::sun::star::awt::Key::MOVE_TO_BEGIN_OF_LINE character: 0  modifiers: 0];
 }
 
+-(void)moveToBeginningOfLineAndModifySelection: (id)aSender
+{
+    [self sendKeyInputAndReleaseToFrame: com::sun::star::awt::Key::SELECT_TO_BEGIN_OF_LINE character: 0  modifiers: 0];
+}
+
 -(void)moveToEndOfParagraph: (id)aSender
 {
     [self sendKeyInputAndReleaseToFrame: com::sun::star::awt::Key::MOVE_TO_END_OF_PARAGRAPH character: 0  modifiers: 0];
 }
 
+-(void)moveToEndOfParagraphAndModifySelection: (id)aSender
+{
+    [self sendKeyInputAndReleaseToFrame: com::sun::star::awt::Key::SELECT_TO_END_OF_PARAGRAPH character: 0  modifiers: 0];
+}
+
+-(void)moveParagraphForward: (id)aSender
+{
+    [self sendKeyInputAndReleaseToFrame: com::sun::star::awt::Key::MOVE_TO_END_OF_PARAGRAPH character: 0  modifiers: 0];
+}
+
+-(void)moveParagraphForwardAndModifySelection: (id)aSender
+{
+    [self sendKeyInputAndReleaseToFrame: com::sun::star::awt::Key::SELECT_TO_END_OF_PARAGRAPH character: 0  modifiers: 0];
+}
+
 -(void)moveToBeginningOfParagraph: (id)aSender
 {
     [self sendKeyInputAndReleaseToFrame: com::sun::star::awt::Key::MOVE_TO_BEGIN_OF_PARAGRAPH character: 0  modifiers: 0];
+}
+
+-(void)moveParagraphBackward: (id)aSender
+{
+    [self sendKeyInputAndReleaseToFrame: com::sun::star::awt::Key::MOVE_TO_BEGIN_OF_PARAGRAPH character: 0  modifiers: 0];
+}
+
+-(void)moveToBeginningOfParagraphAndModifySelection: (id)aSender
+{
+    [self sendKeyInputAndReleaseToFrame: com::sun::star::awt::Key::SELECT_TO_BEGIN_OF_PARAGRAPH character: 0  modifiers: 0];
+}
+
+-(void)moveParagraphBackwardAndModifySelection: (id)aSender
+{
+    [self sendKeyInputAndReleaseToFrame: com::sun::star::awt::Key::SELECT_TO_BEGIN_OF_PARAGRAPH character: 0  modifiers: 0];
+}
+
+-(void)moveToEndOfDocument: (id)aSender
+{
+    [self sendKeyInputAndReleaseToFrame: com::sun::star::awt::Key::MOVE_TO_END_OF_DOCUMENT character: 0  modifiers: 0];
+}
+
+-(void)moveToEndOfDocumentAndModifySelection: (id)aSender
+{
+    [self sendKeyInputAndReleaseToFrame: com::sun::star::awt::Key::SELECT_TO_END_OF_DOCUMENT character: 0  modifiers: 0];
+}
+
+-(void)moveToBeginningOfDocument: (id)aSender
+{
+    [self sendKeyInputAndReleaseToFrame: com::sun::star::awt::Key::MOVE_TO_BEGIN_OF_DOCUMENT character: 0  modifiers: 0];
+}
+
+-(void)moveToBeginningOfDocumentAndModifySelection: (id)aSender
+{
+    [self sendKeyInputAndReleaseToFrame: com::sun::star::awt::Key::SELECT_TO_BEGIN_OF_DOCUMENT character: 0  modifiers: 0];
 }
 
 -(void)moveUp: (id)aSender
@@ -1012,6 +1113,9 @@ private:
         aEvent.mnCharCode       = aChar;
         aEvent.mnRepeat         = FALSE;
         nRet = mpFrame->CallCallback( SALEVENT_KEYINPUT, &aEvent );
+        std::map< NSEvent*, bool >::iterator it = GetSalData()->maKeyEventAnswer.find( mpLastEvent );
+        if( it != GetSalData()->maKeyEventAnswer.end() )
+            it->second = nRet ? true : false;
         if( AquaSalFrame::isAlive( mpFrame ) )
             mpFrame->CallCallback( SALEVENT_KEYUP, &aEvent );
     }
@@ -1153,7 +1257,13 @@ private:
     return 0;
 }
 
+#ifdef MAC_OS_X_VERSION_10_5
+/* build target 10.5 or greater */
+- (NSInteger)conversationIdentifier
+#else
+/* build target 10.4 */ 
 - (long)conversationIdentifier
+#endif
 {
     return (long)self;
 }

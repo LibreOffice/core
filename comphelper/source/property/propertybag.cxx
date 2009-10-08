@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: propertybag.cxx,v $
- * $Revision: 1.4 $
+ * $Revision: 1.4.60.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -66,7 +66,9 @@ namespace comphelper
     typedef ::std::map< sal_Int32, Any >    MapInt2Any;
     struct PropertyBag_Impl
     {
+        PropertyBag_Impl() : m_bAllowEmptyPropertyName(false) { }
         MapInt2Any  aDefaults;
+        bool m_bAllowEmptyPropertyName;
     };
 
     //====================================================================
@@ -83,18 +85,24 @@ namespace comphelper
     }
 
     //--------------------------------------------------------------------
+    void PropertyBag::setAllowEmptyPropertyName( bool i_isAllowed )
+    {
+        m_pImpl->m_bAllowEmptyPropertyName = i_isAllowed;
+    }
+
+    //--------------------------------------------------------------------
     void PropertyBag::addProperty( const ::rtl::OUString& _rName, sal_Int32 _nHandle, sal_Int32 _nAttributes, const Any& _rInitialValue )
     {
         // check type sanity
         Type aPropertyType = _rInitialValue.getValueType();
         if ( aPropertyType.getTypeClass() == TypeClass_VOID )
             throw IllegalTypeException(
-                ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "The initial vallue must be non-NULL, to determine the property type." ) ),
+                ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "The initial value must be non-NULL to determine the property type." ) ),
                 // TODO: resource
                 NULL );
 
         // check name/handle sanity
-        if ( !_rName.getLength() )
+        if ( !m_pImpl->m_bAllowEmptyPropertyName && !_rName.getLength() )
             throw IllegalArgumentException(
             ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "The property name must not be empty." ) ),
             // TODO: resource

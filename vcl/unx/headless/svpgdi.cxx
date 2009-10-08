@@ -219,7 +219,7 @@ void SvpSalGraphics::SetFillColor( SalColor nSalColor )
     m_aFillColor = basebmp::Color( nSalColor );
 }
 
-void SvpSalGraphics::SetXORMode( BOOL bSet )
+void SvpSalGraphics::SetXORMode( bool bSet, bool )
 {
     m_aDrawMode = bSet ? DrawMode_XOR : DrawMode_PAINT;
 }

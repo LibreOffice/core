@@ -54,7 +54,8 @@
 #
 
 $AI = [:LineBreak =  Ambiguous:];
-$AL = [:LineBreak =  Alphabetic:];
+$DG = \u00B0;
+$AL = [[:LineBreak =  Alphabetic:] $DG];
 $BA = [:LineBreak =  Break_After:];
 $BB = [:LineBreak =  Break_Before:];
 $BK = [:LineBreak =  Mandatory_Break:];
@@ -78,7 +79,7 @@ $LF = [:LineBreak =  Line_Feed:];
 $NL = [:LineBreak =  Next_Line:];
 $NS = [:LineBreak =  Nonstarter:];
 $NU = [:LineBreak =  Numeric:];
-$OP = [:LineBreak =  Open_Punctuation:];
+$OP = [[:LineBreak =  Open_Punctuation:] - $DG];
 $PO = [:LineBreak =  Postfix_Numeric:];
 $BS = \u005C;
 $PR = [[:LineBreak =  Prefix_Numeric:] - $BS];

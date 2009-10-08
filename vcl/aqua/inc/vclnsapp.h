@@ -61,8 +61,10 @@
 -(void)removeFallbackMenuItem: (NSMenuItem*)pOldItem;
 -(void)getSystemVersionMajor:(unsigned *)major minor:(unsigned *)minor bugFix:(unsigned *)bugFix;
 -(void)addDockMenuItem: (NSMenuItem*)pNewItem;
--(void)applicationWillBecomeActive:(NSNotification *)aNotification;
--(void)applicationWillResignActive:(NSNotification *)aNotification;
+-(void)applicationWillBecomeActive: (NSNotification *)pNotification;
+-(void)applicationWillResignActive: (NSNotification *)pNotification;
+-(MacOSBOOL)applicationShouldHandleReopen: (NSApplication*)pApp hasVisibleWindows: (MacOSBOOL)bWinVisible;
+-(void)setDockIconClickHandler: (NSObject*)pHandler;
 @end
 
 #endif

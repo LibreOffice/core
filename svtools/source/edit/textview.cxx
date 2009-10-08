@@ -630,6 +630,22 @@ BOOL TextView::KeyInput( const KeyEvent& rKeyEvent )
             case KEY_END:
             case KEY_PAGEUP:
             case KEY_PAGEDOWN:
+            case com::sun::star::awt::Key::MOVE_WORD_FORWARD:
+            case com::sun::star::awt::Key::SELECT_WORD_FORWARD:
+            case com::sun::star::awt::Key::MOVE_WORD_BACKWARD:
+            case com::sun::star::awt::Key::SELECT_WORD_BACKWARD:
+            case com::sun::star::awt::Key::MOVE_TO_BEGIN_OF_LINE:
+            case com::sun::star::awt::Key::MOVE_TO_END_OF_LINE:
+            case com::sun::star::awt::Key::SELECT_TO_BEGIN_OF_LINE:
+            case com::sun::star::awt::Key::SELECT_TO_END_OF_LINE:
+            case com::sun::star::awt::Key::MOVE_TO_BEGIN_OF_PARAGRAPH:
+            case com::sun::star::awt::Key::MOVE_TO_END_OF_PARAGRAPH:
+            case com::sun::star::awt::Key::SELECT_TO_BEGIN_OF_PARAGRAPH:
+            case com::sun::star::awt::Key::SELECT_TO_END_OF_PARAGRAPH:
+            case com::sun::star::awt::Key::MOVE_TO_BEGIN_OF_DOCUMENT:
+            case com::sun::star::awt::Key::MOVE_TO_END_OF_DOCUMENT:
+            case com::sun::star::awt::Key::SELECT_TO_BEGIN_OF_DOCUMENT:
+            case com::sun::star::awt::Key::SELECT_TO_END_OF_DOCUMENT:
             {
                 if ( ( !rKeyEvent.GetKeyCode().IsMod2() || ( nCode == KEY_LEFT ) || ( nCode == KEY_RIGHT ) )
                       && !( rKeyEvent.GetKeyCode().IsMod1() && ( nCode == KEY_PAGEUP || nCode == KEY_PAGEDOWN ) ) )
@@ -649,6 +665,10 @@ BOOL TextView::KeyInput( const KeyEvent& rKeyEvent )
             break;
             case KEY_BACKSPACE:
             case KEY_DELETE:
+            case com::sun::star::awt::Key::DELETE_WORD_BACKWARD:
+            case com::sun::star::awt::Key::DELETE_WORD_FORWARD:
+            case com::sun::star::awt::Key::DELETE_TO_BEGIN_OF_LINE:
+            case com::sun::star::awt::Key::DELETE_TO_END_OF_LINE:
             {
                 if ( !mpImpl->mbReadOnly && !rKeyEvent.GetKeyCode().IsMod2() )
                 {
@@ -656,6 +676,27 @@ BOOL TextView::KeyInput( const KeyEvent& rKeyEvent )
                     BYTE nMode = rKeyEvent.GetKeyCode().IsMod1() ? DELMODE_RESTOFWORD : DELMODE_SIMPLE;
                     if ( ( nMode == DELMODE_RESTOFWORD ) && rKeyEvent.GetKeyCode().IsShift() )
                         nMode = DELMODE_RESTOFCONTENT;
+
+                    switch( nCode )
+                    {
+                    case com::sun::star::awt::Key::DELETE_WORD_BACKWARD:
+                        nDel = DEL_LEFT;
+                        nMode = DELMODE_RESTOFWORD;
+                        break;
+                    case com::sun::star::awt::Key::DELETE_WORD_FORWARD:
+                        nDel = DEL_RIGHT;
+                        nMode = DELMODE_RESTOFWORD;
+                        break;
+                    case com::sun::star::awt::Key::DELETE_TO_BEGIN_OF_LINE:
+                        nDel = DEL_LEFT;
+                        nMode = DELMODE_RESTOFCONTENT;
+                        break;
+                    case com::sun::star::awt::Key::DELETE_TO_END_OF_LINE:
+                        nDel = DEL_RIGHT;
+                        nMode = DELMODE_RESTOFCONTENT;
+                        break;
+                    default: break;
+                    }
 
                     mpImpl->mpTextEngine->UndoActionStart( TEXTUNDO_DELETE );
                     if(mpImpl->mbSupportProtectAttribute)
@@ -1163,13 +1204,10 @@ void TextView::Paste( uno::Reference< datatransfer::clipboard::XClipboard >& rxC
                     uno::Any aData = xDataObj->getTransferData( aFlavor );
                     ::rtl::OUString aText;
                     aData >>= aText;
-
-                    bool bWasTruncated = ImplTruncateNewText( aText );
-
-                    String aStr( aText );
-                    aStr.ConvertLineEnd( LINEEND_LF );
-
-                    InsertText( aText, FALSE );
+                    bool bWasTruncated = false;
+                    if( mpImpl->mpTextEngine->GetMaxTextLen() != 0 )
+                        bWasTruncated = ImplTruncateNewText( aText );
+                    InsertNewText( aText, FALSE );
                     mpImpl->mpTextEngine->Broadcast( TextHint( TEXT_HINT_MODIFIED ) );
 
                     if( bWasTruncated )
@@ -1239,6 +1277,7 @@ TextSelection TextView::ImpMoveCursor( const KeyEvent& rKeyEvent )
     BOOL bCtrl = aTranslatedKeyEvent.GetKeyCode().IsMod1() ? TRUE : FALSE;
     USHORT nCode = aTranslatedKeyEvent.GetKeyCode().GetCode();
 
+    bool bSelect = aTranslatedKeyEvent.GetKeyCode().IsShift();
     switch ( nCode )
     {
         case KEY_UP:        aPaM = CursorUp( aPaM );
@@ -1257,10 +1296,50 @@ TextSelection TextView::ImpMoveCursor( const KeyEvent& rKeyEvent )
                             break;
         case KEY_RIGHT:     aPaM = bCtrl ? CursorWordRight( aPaM ) : CursorRight( aPaM, aTranslatedKeyEvent.GetKeyCode().IsMod2() ? (USHORT)i18n::CharacterIteratorMode::SKIPCHARACTER : (USHORT)i18n::CharacterIteratorMode::SKIPCELL );
                             break;
+        case com::sun::star::awt::Key::SELECT_WORD_FORWARD:
+                            bSelect = true; // fallthrough intentional
+        case com::sun::star::awt::Key::MOVE_WORD_FORWARD:
+                            aPaM = CursorWordRight( aPaM );
+                            break;
+        case com::sun::star::awt::Key::SELECT_WORD_BACKWARD:
+                            bSelect = true; // fallthrough intentional
+        case com::sun::star::awt::Key::MOVE_WORD_BACKWARD:
+                            aPaM = CursorWordLeft( aPaM );
+                            break;
+        case com::sun::star::awt::Key::SELECT_TO_BEGIN_OF_LINE:
+                            bSelect = true; // fallthrough intentional
+        case com::sun::star::awt::Key::MOVE_TO_BEGIN_OF_LINE:
+                            aPaM = CursorStartOfLine( aPaM );
+                            break;
+        case com::sun::star::awt::Key::SELECT_TO_END_OF_LINE:
+                            bSelect = true; // fallthrough intentional
+        case com::sun::star::awt::Key::MOVE_TO_END_OF_LINE:
+                            aPaM = CursorEndOfLine( aPaM );
+                            break;
+        case com::sun::star::awt::Key::SELECT_TO_BEGIN_OF_PARAGRAPH:
+                            bSelect = true; // falltthrough intentional
+        case com::sun::star::awt::Key::MOVE_TO_BEGIN_OF_PARAGRAPH:
+                            aPaM = CursorStartOfParagraph( aPaM );
+                            break;
+        case com::sun::star::awt::Key::SELECT_TO_END_OF_PARAGRAPH:
+                            bSelect = true; // falltthrough intentional
+        case com::sun::star::awt::Key::MOVE_TO_END_OF_PARAGRAPH:
+                            aPaM = CursorEndOfParagraph( aPaM );
+                            break;
+        case com::sun::star::awt::Key::SELECT_TO_BEGIN_OF_DOCUMENT:
+                            bSelect = true; // falltthrough intentional
+        case com::sun::star::awt::Key::MOVE_TO_BEGIN_OF_DOCUMENT:
+                            aPaM = CursorStartOfDoc();
+                            break;
+        case com::sun::star::awt::Key::SELECT_TO_END_OF_DOCUMENT:
+                            bSelect = true; // falltthrough intentional
+        case com::sun::star::awt::Key::MOVE_TO_END_OF_DOCUMENT:
+                            aPaM = CursorEndOfDoc();
+                            break;
     }
 
     // Bewirkt evtl. ein CreateAnchor oder Deselection all
-    mpImpl->mpSelEngine->CursorPosChanging( aTranslatedKeyEvent.GetKeyCode().IsShift(), aTranslatedKeyEvent.GetKeyCode().IsMod1() );
+    mpImpl->mpSelEngine->CursorPosChanging( bSelect, aTranslatedKeyEvent.GetKeyCode().IsMod1() );
 
     if ( aOldEnd != aPaM )
     {
@@ -1270,7 +1349,7 @@ TextSelection TextView::ImpMoveCursor( const KeyEvent& rKeyEvent )
         TextSelection aOldSelection( mpImpl->maSelection );
         TextSelection aNewSelection( mpImpl->maSelection );
         aNewSelection.GetEnd() = aPaM;
-        if ( aTranslatedKeyEvent.GetKeyCode().IsShift() )
+        if ( bSelect )
         {
             // Dann wird die Selektion erweitert...
             ImpSetSelection( aNewSelection );
@@ -1286,6 +1365,55 @@ TextSelection TextView::ImpMoveCursor( const KeyEvent& rKeyEvent )
     return mpImpl->maSelection;
 }
 
+void TextView::InsertText( const XubString& rStr, BOOL bSelect )
+{
+    InsertNewText( rStr, bSelect );
+}
+
+void TextView::InsertNewText( const rtl::OUString& rStr, BOOL bSelect )
+{
+//  HideSelection();
+    mpImpl->mpTextEngine->UndoActionStart( TEXTUNDO_INSERT );
+
+    /* #i87633#
+    break inserted text into chunks that fit into the underlying String
+    based API (which has a maximum length of 65534 elements
+
+    note: this will of course still cause problems for lines longer than those
+    65534 elements, but those cases will hopefully be few.
+    In the long run someone should switch the TextEngine to OUString instead of String
+    */
+    sal_Int32 nLen = rStr.getLength();
+    sal_Int32 nPos = 0;
+    while( nLen )
+    {
+        sal_Int32 nChunkLen = nLen > 65534 ? 65534 : nLen;
+        String aChunk( rStr.copy( nPos, nChunkLen ) );
+
+        TextSelection aNewSel( mpImpl->maSelection );
+
+        TextPaM aPaM = mpImpl->mpTextEngine->ImpInsertText( mpImpl->maSelection, aChunk );
+
+        if ( bSelect )
+        {
+            aNewSel.Justify();
+            aNewSel.GetEnd() = aPaM;
+        }
+        else
+        {
+            aNewSel = aPaM;
+        }
+
+        ImpSetSelection( aNewSel );
+        nLen -= nChunkLen;
+        nPos += nChunkLen;
+    }
+    mpImpl->mpTextEngine->UndoActionEnd( TEXTUNDO_INSERT );
+
+    mpImpl->mpTextEngine->FormatAndUpdate( this );
+}
+
+/*
 void TextView::InsertText( const XubString& rStr, BOOL bSelect )
 {
 //  HideSelection();
@@ -1310,6 +1438,7 @@ void TextView::InsertText( const XubString& rStr, BOOL bSelect )
 
     mpImpl->mpTextEngine->FormatAndUpdate( this );
 }
+*/
 
 // OLD
 TextPaM TextView::CursorLeft( const TextPaM& rPaM, BOOL bWordMode )
@@ -1922,20 +2051,22 @@ bool TextView::ImplTruncateNewText( rtl::OUString& rNewText ) const
     }
 
     ULONG nMaxLen = mpImpl->mpTextEngine->GetMaxTextLen();
-    if( nMaxLen == 0 )   // 0 means unlimited
-        nMaxLen = 65534; // limit to string api
-    ULONG nCurLen = mpImpl->mpTextEngine->GetTextLen();
-
-    sal_uInt32 nNewLen = rNewText.getLength();
-    if ( nCurLen + nNewLen > nMaxLen )
+    // 0 means unlimited, there is just the String API limit handled above
+    if( nMaxLen != 0 )
     {
-        // see how much text will be replaced
-        ULONG nSelLen = mpImpl->mpTextEngine->GetTextLen( mpImpl->maSelection );
-        if ( nCurLen + nNewLen - nSelLen > nMaxLen )
+        ULONG nCurLen = mpImpl->mpTextEngine->GetTextLen();
+
+        sal_uInt32 nNewLen = rNewText.getLength();
+        if ( nCurLen + nNewLen > nMaxLen )
         {
-            sal_uInt32 nTruncatedLen = static_cast<sal_uInt32>(nMaxLen - (nCurLen - nSelLen));
-            rNewText = rNewText.copy( 0, nTruncatedLen );
-            bTruncated = true;
+            // see how much text will be replaced
+            ULONG nSelLen = mpImpl->mpTextEngine->GetTextLen( mpImpl->maSelection );
+            if ( nCurLen + nNewLen - nSelLen > nMaxLen )
+            {
+                sal_uInt32 nTruncatedLen = static_cast<sal_uInt32>(nMaxLen - (nCurLen - nSelLen));
+                rNewText = rNewText.copy( 0, nTruncatedLen );
+                bTruncated = true;
+            }
         }
     }
     return bTruncated;

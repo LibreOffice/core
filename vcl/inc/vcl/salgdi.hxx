@@ -102,7 +102,16 @@ typedef std::vector< sal_Int32 > Int32Vector;
 class VCL_DLLPUBLIC SalGraphics
 {
     int                     m_nLayout; // 0: mirroring off, 1: mirror x-axis
+
+protected:
+    // flags which hold the SetAntialiasing() value from OutputDevice
+    bool                    m_bAntiAliasB2DDraw;
+
 public:
+    // get/set AA
+    void setAntiAliasB2DDraw(bool bNew) { m_bAntiAliasB2DDraw = bNew; }
+    bool getAntiAliasB2DDraw() const { return m_bAntiAliasB2DDraw; }
+
     SalGraphics();
     virtual ~SalGraphics();
 
@@ -214,7 +223,7 @@ public:
     // filled accordingly
     virtual void            SetFillColor( SalColor nSalColor ) = 0;
     // enable/disable XOR drawing
-    virtual void            SetXORMode( BOOL bSet ) = 0;
+    virtual void            SetXORMode( bool bSet, bool bInvertOnly ) = 0;
     // set line color for raster operations
     virtual void            SetROPLineColor( SalROPColor nROPColor ) = 0;
     // set fill color for raster operations
@@ -343,7 +352,10 @@ public:
     BOOL                    mirror( sal_uInt32 nPoints, const SalPoint *pPtAry, SalPoint *pPtAry2, const OutputDevice *pOutDev, bool bBack = false ) const;
     void                    mirror( Rectangle& rRect, const OutputDevice*, bool bBack = false ) const;
     void                    mirror( Region& rRgn, const OutputDevice *pOutDev, bool bBack = false ) const;
-    void                    mirror(ControlType,const ImplControlValue&,const OutputDevice*,bool bBack = false) const;
+    void                    mirror( ControlType,const ImplControlValue&,const OutputDevice*,bool bBack = false) const;
+    basegfx::B2DPoint       mirror( const basegfx::B2DPoint& i_rPoint, const OutputDevice *pOutDev, bool bBack = false ) const;
+    basegfx::B2DPolygon     mirror( const basegfx::B2DPolygon& i_rPoly, const OutputDevice *pOutDev, bool bBack = false ) const;
+    basegfx::B2DPolyPolygon mirror( const basegfx::B2DPolyPolygon& i_rPoly, const OutputDevice *pOutDev, bool bBack = false ) const;
 
     // non virtual methods; these do eventual coordinate mirroring and
     // then delegate to protected virtual methods

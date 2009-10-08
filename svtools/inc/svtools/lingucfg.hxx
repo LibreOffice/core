@@ -78,15 +78,11 @@ struct SVL_DLLPUBLIC SvtLinguOptions
 
     // spelling options (non-service specific)
     BOOL    bIsSpellSpecial;
-    BOOL    bIsSpellInAllLanguages;
     BOOL    bIsSpellAuto;
-    BOOL    bIsSpellHideMarkings;
     BOOL    bIsSpellReverse;
 
     BOOL    bROIsSpellSpecial;
-    BOOL    bROIsSpellInAllLanguages;
     BOOL    bROIsSpellAuto;
-    BOOL    bROIsSpellHideMarkings;
     BOOL    bROIsSpellReverse;
 
     // hyphenation options (non-service specific)
@@ -97,11 +93,9 @@ struct SVL_DLLPUBLIC SvtLinguOptions
     BOOL    bROIsHyphAuto;
 
     // common to SpellChecker, Hyphenator and Thesaurus service
-    BOOL    bIsGermanPreReform;
     BOOL    bIsUseDictionaryList;
     BOOL    bIsIgnoreControlCharacters;
 
-    BOOL    bROIsGermanPreReform;
     BOOL    bROIsUseDictionaryList;
     BOOL    bROIsIgnoreControlCharacters;
 
@@ -164,11 +158,6 @@ struct SVL_DLLPUBLIC SvtLinguConfigDictionaryEntry
 
 class SVL_DLLPUBLIC SvtLinguConfig: public svt::detail::Options
 {
-
-    // disallow copy-constructor and assignment-operator for now
-    SvtLinguConfig( const SvtLinguConfig & );
-    SvtLinguConfig & operator = ( const SvtLinguConfig & );
-
     // returns static object
     SVL_DLLPRIVATE SvtLinguConfigItem &   GetConfigItem();
 
@@ -181,6 +170,12 @@ class SVL_DLLPUBLIC SvtLinguConfig: public svt::detail::Options
 
     com::sun::star::uno::Sequence< rtl::OUString > GetCurrentOrLastActiveDicts_Impl( const rtl::OUString &rPropName ) const;
     void SetCurrentOrLastActiveDicts_Impl( const rtl::OUString &rPropName, const com::sun::star::uno::Sequence< rtl::OUString > &rDictionaries ) const;
+
+    rtl::OUString GetVendorImageUrl_Impl( const rtl::OUString &rServiceImplName, const rtl::OUString &rImageName ) const;
+
+    // disallow copy-constructor and assignment-operator for now
+    SvtLinguConfig( const SvtLinguConfig & );
+    SvtLinguConfig & operator = ( const SvtLinguConfig & );
 
 public:
     SvtLinguConfig();
@@ -234,10 +229,12 @@ public:
     //
     std::vector< SvtLinguConfigDictionaryEntry > GetActiveDictionariesByFormat( const rtl::OUString &rFormatName );
 
-    ::rtl::OUString     GetSpellAndGrammarDialogImage( LanguageType nLang ) const;
-    ::rtl::OUString     GetSpellAndGrammarContextImage( LanguageType nLang ) const;
-    bool                HasAnySpellAndGrammarDialogImage() const;
-    bool                HasAnySpellAndGrammarContextImage() const;
+    // functions returning file URLs to the respective images (if found) and empty string otherwise
+    ::rtl::OUString     GetSpellAndGrammarDialogImage( const ::rtl::OUString &rServiceImplName, bool bHighContrast = false ) const;
+    ::rtl::OUString     GetSpellAndGrammarContextSuggestionImage( const ::rtl::OUString &rServiceImplName, bool bHighContrast = false ) const;
+    ::rtl::OUString     GetSpellAndGrammarContextDictionaryImage( const ::rtl::OUString &rServiceImplName, bool bHighContrast = false ) const;
+
+    bool                HasAnyVendorImages() const;
     bool                HasGrammarChecker() const;
 };
 

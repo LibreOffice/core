@@ -8,7 +8,7 @@
  *
  * $RCSfile: documentlockfile.cxx,v $
  *
- * $Revision: 1.3 $
+ * $Revision: 1.3.82.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -184,26 +184,24 @@ uno::Sequence< ::rtl::OUString > DocumentLockFile::ParseEntry( const uno::Sequen
         if ( o_nCurPos >= aBuffer.getLength() )
             throw io::WrongFormatException();
 
-        if ( aBuffer[o_nCurPos] == ',' || aBuffer[o_nCurPos] == ';' )
+        if ( bEscape )
+        {
+            if ( aBuffer[o_nCurPos] == ',' || aBuffer[o_nCurPos] == ';' || aBuffer[o_nCurPos] == '\\' )
+                aResult.append( (sal_Char)aBuffer[o_nCurPos] );
+            else
+                throw io::WrongFormatException();
+
+            bEscape = sal_False;
+            o_nCurPos++;
+        }
+        else if ( aBuffer[o_nCurPos] == ',' || aBuffer[o_nCurPos] == ';' )
             bHaveName = sal_True;
         else
         {
-            if ( bEscape )
-            {
-                if ( aBuffer[o_nCurPos] == ',' || aBuffer[o_nCurPos] == ';' || aBuffer[o_nCurPos] == '\\' )
-                    aResult.append( (sal_Char)aBuffer[o_nCurPos] );
-                else
-                    throw io::WrongFormatException();
-
-                bEscape = sal_False;
-            }
+            if ( aBuffer[o_nCurPos] == '\\' )
+                bEscape = sal_True;
             else
-            {
-                if ( aBuffer[o_nCurPos] == '\\' )
-                    bEscape = sal_True;
-                else
-                    aResult.append( (sal_Char)aBuffer[o_nCurPos] );
-            }
+                aResult.append( (sal_Char)aBuffer[o_nCurPos] );
 
             o_nCurPos++;
         }
@@ -314,6 +312,33 @@ uno::Reference< io::XInputStream > DocumentLockFile::OpenStream()
 
     // the file can be opened readonly, no locking will be done
     return xSimpleFileAccess->openFileRead( m_aURL );
+}
+
+// ----------------------------------------------------------------------
+sal_Bool DocumentLockFile::OverwriteOwnLockFile()
+{
+    // allows to overwrite the lock file with the current data
+    try
+    {
+        uno::Reference < ::com::sun::star::ucb::XCommandEnvironment > xEnv;
+        ::ucbhelper::Content aTargetContent( m_aURL, xEnv );
+
+        uno::Sequence< ::rtl::OUString > aNewEntry = GenerateOwnEntry();
+
+        uno::Reference< io::XStream > xStream = aTargetContent.openWriteableStreamNoLock();
+        uno::Reference< io::XOutputStream > xOutput = xStream->getOutputStream();
+        uno::Reference< io::XTruncate > xTruncate( xOutput, uno::UNO_QUERY_THROW );
+
+        xTruncate->truncate();
+        WriteEntryToStream( aNewEntry, xOutput );
+        xOutput->closeOutput();
+    }
+    catch( ucb::NameClashException& )
+    {
+        return sal_False;
+    }
+
+    return sal_True;
 }
 
 // ----------------------------------------------------------------------

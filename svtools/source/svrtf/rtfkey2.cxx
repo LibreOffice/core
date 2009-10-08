@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: rtfkey2.cxx,v $
- * $Revision: 1.14 $
+ * $Revision: 1.14.134.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -1137,5 +1137,26 @@ sal_Char const SVTOOLS_CONSTASCII_DEF( sRTF_SHPTOP, "\\shptop" );
 sal_Char const SVTOOLS_CONSTASCII_DEF( sRTF_SHPBOTTOM, "\\shpbottom" );
 sal_Char const SVTOOLS_CONSTASCII_DEF( sRTF_SHPRIGHT, "\\shpright" );
 */
+
+// Support for overline attributes
+sal_Char const SVTOOLS_CONSTASCII_DEF( sRTF_OL, "\\ol" );
+sal_Char const SVTOOLS_CONSTASCII_DEF( sRTF_OLD, "\\old" );
+sal_Char const SVTOOLS_CONSTASCII_DEF( sRTF_OLDB, "\\oldb" );
+sal_Char const SVTOOLS_CONSTASCII_DEF( sRTF_OLNONE, "\\olnone" );
+sal_Char const SVTOOLS_CONSTASCII_DEF( sRTF_OLW, "\\olw" );
+sal_Char const SVTOOLS_CONSTASCII_DEF( sRTF_OLDASH, "\\oldash" );
+sal_Char const SVTOOLS_CONSTASCII_DEF( sRTF_OLDASHD, "\\oldashd" );
+sal_Char const SVTOOLS_CONSTASCII_DEF( sRTF_OLDASHDD, "\\oldashdd" );
+sal_Char const SVTOOLS_CONSTASCII_DEF( sRTF_OLTH, "\\olth" );
+sal_Char const SVTOOLS_CONSTASCII_DEF( sRTF_OLWAVE, "\\olwave" );
+sal_Char const SVTOOLS_CONSTASCII_DEF( sRTF_OLC, "\\olc" );
+sal_Char const SVTOOLS_CONSTASCII_DEF( sRTF_OLTHD, "\\olthd" );
+sal_Char const SVTOOLS_CONSTASCII_DEF( sRTF_OLTHDASH, "\\olthdash" );
+sal_Char const SVTOOLS_CONSTASCII_DEF( sRTF_OLLDASH, "\\olldash" );
+sal_Char const SVTOOLS_CONSTASCII_DEF( sRTF_OLTHLDASH, "\\olthldash" );
+sal_Char const SVTOOLS_CONSTASCII_DEF( sRTF_OLTHDASHD, "\\olthdashd" );
+sal_Char const SVTOOLS_CONSTASCII_DEF( sRTF_OLTHDASHDD, "\\olthdashdd" );
+sal_Char const SVTOOLS_CONSTASCII_DEF( sRTF_OLHWAVE, "\\olhwave" );
+sal_Char const SVTOOLS_CONSTASCII_DEF( sRTF_OLOLDBWAVE, "\\ololdbwave" );
 
 /* vi:set tabstop=4 shiftwidth=4 expandtab: */

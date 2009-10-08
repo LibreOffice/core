@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: acceleratorexecute.cxx,v $
- * $Revision: 1.14 $
+ * $Revision: 1.14.90.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -388,6 +388,12 @@ KeyCode AcceleratorExecute::st_AWTKey2VCLKey(const css::awt::KeyEvent& aAWTKey)
         case com::sun::star::awt::Key::MOVE_TO_END_OF_PARAGRAPH:
             return rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:GoToEndOfPara" ) );
 
+        case com::sun::star::awt::Key::MOVE_TO_BEGIN_OF_DOCUMENT:
+            return rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:GoToStartOfDoc" ) );
+
+        case com::sun::star::awt::Key::MOVE_TO_END_OF_DOCUMENT:
+            return rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:GoToEndOfDoc" ) );
+
         case com::sun::star::awt::Key::SELECT_BACKWARD:
             return rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:CharLeftSel" ) );
 
@@ -408,6 +414,24 @@ KeyCode AcceleratorExecute::st_AWTKey2VCLKey(const css::awt::KeyEvent& aAWTKey)
 
         case com::sun::star::awt::Key::SELECT_PARAGRAPH:
             return rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:SelectText" ) );
+
+        case com::sun::star::awt::Key::SELECT_TO_BEGIN_OF_LINE:
+            return rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:StartOfLineSel" ) );
+
+        case com::sun::star::awt::Key::SELECT_TO_END_OF_LINE:
+            return rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:EndOfLineSel" ) );
+
+        case com::sun::star::awt::Key::SELECT_TO_BEGIN_OF_PARAGRAPH:
+            return rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:StartOfParaSel" ) );
+
+        case com::sun::star::awt::Key::SELECT_TO_END_OF_PARAGRAPH:
+            return rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:EndOfParaSel" ) );
+
+        case com::sun::star::awt::Key::SELECT_TO_BEGIN_OF_DOCUMENT:
+            return rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:StartOfDocumentSel" ) );
+
+        case com::sun::star::awt::Key::SELECT_TO_END_OF_DOCUMENT:
+            return rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:EndOfDocumentSel" ) );
 
         case com::sun::star::awt::Key::SELECT_ALL:
             return rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:SelectAll" ) );
@@ -442,7 +466,7 @@ css::uno::Reference< css::ui::XAcceleratorConfiguration > AcceleratorExecute::st
         sModule = xModuleDetection->identify(xFrame);
     }
     catch(const css::uno::RuntimeException& exRuntime)
-        { throw exRuntime; }
+        { throw; }
     catch(const css::uno::Exception&)
         { return css::uno::Reference< css::ui::XAcceleratorConfiguration >(); }
 
@@ -537,7 +561,7 @@ IMPL_LINK(AsyncAccelExec, impl_ts_asyncCallback, void*,)
     catch(const css::lang::DisposedException&)
         {}
     catch(const css::uno::RuntimeException& exRuntime)
-        { throw exRuntime; }
+        { throw; }
     catch(const css::uno::Exception&)
         {}
 

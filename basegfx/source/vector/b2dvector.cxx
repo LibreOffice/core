@@ -74,6 +74,15 @@ namespace basegfx
 
     double B2DVector::getLength() const
     {
+        if(fTools::equalZero(mfX))
+        {
+            return fabs(mfY);
+        }
+        else if(fTools::equalZero(mfY))
+        {
+            return fabs(mfX);
+        }
+
         return hypot( mfX, mfY );
     }
 

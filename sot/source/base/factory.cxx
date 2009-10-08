@@ -84,7 +84,7 @@ void SotFactory::DeInit()
 #ifdef DBG_UTIL
         ByteString aStr( "Objects alive: " );
         aStr.Append( ByteString::CreateFromInt32( pSotData->nSvObjCount ) );
-        DBG_WARNING(  aStr.GetBuffer()  )
+        DBG_WARNING(  aStr.GetBuffer()  );
 
 /*
         SotObjectList *pObjList = pSotData->pObjectList;
@@ -163,7 +163,7 @@ SotFactory::SotFactory( const SvGlobalName & rName,
     SvGlobalName aEmptyName;
     if( aEmptyName != *this )
     { // wegen Sfx-BasicFactories
-    DBG_ASSERT( aEmptyName != *this, "create factory without SvGlobalName" )
+    DBG_ASSERT( aEmptyName != *this, "create factory without SvGlobalName" );
     if( Find( *this ) )
     {
         /*

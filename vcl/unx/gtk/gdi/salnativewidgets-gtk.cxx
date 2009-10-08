@@ -571,11 +571,12 @@ BOOL GtkSalGraphics::IsNativeControlSupported( ControlType nType, ControlPart nP
         ((nType == CTRL_TOOLTIP) &&
                 (   (nPart==PART_ENTIRE_CONTROL) )              )   ||
         ((nType == CTRL_MENU_POPUP) &&
-                (   (nPart==PART_ENTIRE_CONTROL) )
+                (   (nPart==PART_ENTIRE_CONTROL)
                 ||  (nPart==PART_MENU_ITEM)
                 ||  (nPart==PART_MENU_ITEM_CHECK_MARK)
                 ||  (nPart==PART_MENU_ITEM_RADIO_MARK)
-                )                                                   ||
+                )
+                                                                )   ||
         ((nType == CTRL_PROGRESS) &&
                 (   (nPart == PART_ENTIRE_CONTROL) )
                 )                                                   ||

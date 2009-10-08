@@ -125,7 +125,7 @@ Property SAL_CALL ChainablePropertySetInfo::getPropertyByName( const ::rtl::OUSt
     PropertyInfoHash::iterator aIter = maMap.find( rName );
 
     if ( maMap.end() == aIter )
-        throw UnknownPropertyException();
+        throw UnknownPropertyException( rName, *this );
 
     PropertyInfo *pInfo = (*aIter).second;
     Property aProperty;

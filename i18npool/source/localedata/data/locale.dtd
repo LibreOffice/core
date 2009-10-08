@@ -179,9 +179,18 @@
         we received got that right, especially not in date formats!
 
         For easier comparison between locales in future please sort the
-        FormatElements by their formatindex="..." value. This isn't necessary
-        to be technically correct and isn't done in many locales yet, but will
-        certainly help.
+        FormatElements by their formatindex="..." value within a usage group.
+        This isn't necessary to be technically correct and isn't done in many
+        locales yet, but will certainly help.
+
+    Of usage="FIXED_NUMBER":
+        formatindex="0" MUST be the format containing the 'General' keyword.
+        The keyword itself may be localized, it is good practice though to
+        stick with a wording known from another spreadsheet application for
+        better user experience. Like other format codes it may be prepended
+        with a [NatNum1] modifier if values are to be displayed using native
+        numbering if no specific format was applied. The format must have the
+        default="true" and type="medium" attributes.
 
     Of usage="DATE":
         formatindex="21" is used to edit already existing date data. In order

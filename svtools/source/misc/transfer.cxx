@@ -78,6 +78,7 @@
 
 #include "urlbmk.hxx"
 #include "inetimg.hxx"
+#include <svtools/wmf.hxx>
 #include <svtools/imap.hxx>
 #include <svtools/transfer.hxx>
 
@@ -286,10 +287,10 @@ Any SAL_CALL TransferableHelper::getTransferData( const DataFlavor& rFlavor ) th
                         *pSrcStm >> aMtf;
                         delete pSrcStm;
 
-                        Graphic         aGraphic( aMtf );
                         SvMemoryStream  aDstStm( 65535, 65535 );
 
-                        if( GraphicConverter::Export( aDstStm, aGraphic, CVT_WMF ) == ERRCODE_NONE )
+                        // taking wmf without file header
+                        if ( ConvertGDIMetaFileToWMF( aMtf, aDstStm, NULL, FALSE ) )
                         {
                             maAny <<= ( aSeq = Sequence< sal_Int8 >( reinterpret_cast< const sal_Int8* >( aDstStm.GetData() ),
                                                                      aDstStm.Seek( STREAM_SEEK_TO_END ) ) );
@@ -1790,11 +1791,11 @@ sal_Bool TransferableDataHelper::GetINetBookmark( const ::com::sun::star::datatr
 
                     if( !nLen && aString.GetChar( 0 ) != '0' )
                     {
-                        DBG_WARNING( "SOLK: 1. len=0" )
+                        DBG_WARNING( "SOLK: 1. len=0" );
                     }
                     if( nStart == STRING_NOTFOUND || nLen > aString.Len() - nStart - 3 )
                     {
-                        DBG_WARNING( "SOLK: 1. illegal start or wrong len" )
+                        DBG_WARNING( "SOLK: 1. illegal start or wrong len" );
                     }
                     aURL = aString.Copy( nStart + 1, nLen );
 
@@ -1804,11 +1805,11 @@ sal_Bool TransferableDataHelper::GetINetBookmark( const ::com::sun::star::datatr
 
                     if( !nLen && aString.GetChar( 0 ) != '0' )
                     {
-                        DBG_WARNING( "SOLK: 2. len=0" )
+                        DBG_WARNING( "SOLK: 2. len=0" );
                     }
                     if( nStart == STRING_NOTFOUND || nLen > aString.Len() - nStart - 1 )
                     {
-                        DBG_WARNING( "SOLK: 2. illegal start or wrong len" )
+                        DBG_WARNING( "SOLK: 2. illegal start or wrong len" );
                     }
                     aDesc = aString.Copy( nStart+1, nLen );
 

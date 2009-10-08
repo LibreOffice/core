@@ -223,7 +223,7 @@ ImplRegion::ImplRegion( const ImplRegion& rImplRegion )
 ImplRegion::~ImplRegion()
 {
     DBG_ASSERT( (this != &aImplEmptyRegion) && (this != &aImplNullRegion),
-                "ImplRegion::~ImplRegion() - Empty oder NULL-Region" )
+                "ImplRegion::~ImplRegion() - Empty oder NULL-Region" );
 
     ImplRegionBand* pBand = mpFirstBand;
     while ( pBand )

@@ -38,16 +38,6 @@
 #endif
 #include <tools/solar.h>
 
-#ifdef HPUX
-// Workaround aCC-Compiler (v1.04, v1.06) dtor bug:
-// A single ";" as first statement in a dtor
-// results in wrong code (check for delete with a
-// NULL-pointer missing or unreliable)
-#define HPUX_DTOR_BUG (1==1)
-#else
-#define HPUX_DTOR_BUG
-#endif
-
 // ------------
 // - DBG_UITL -
 // ------------
@@ -448,8 +438,6 @@ public:
 #define DBG_MEMTEST()                       DbgMemTest()
 #define DBG_MEMTEST_PTR( p )                DbgMemTest( (void*)p )
 
-#define DBG_COREDUMP()                      DbgCoreDump()
-
 #define DBG_PROFSTART( aName )                      \
     DbgProf( DBG_PROF_START, DBG_FUNC( aName ) )
 
@@ -485,6 +473,8 @@ public:
              (const void*)pObj, (DbgUsr)fTest )
 
 #define DBG_ASSERTWARNING( sCon, aWarning )         \
+do                                                  \
+{                                                   \
     if ( DbgIsAssertWarning() )                     \
     {                                               \
         if ( !( sCon ) )                            \
@@ -492,9 +482,12 @@ public:
             DbgWarning( aWarning, __FILE__,         \
                         __LINE__ );                 \
         }                                           \
-    }
+    }                                               \
+} while(0)
 
 #define DBG_ASSERT( sCon, aError )                  \
+do                                                  \
+{                                                   \
     if ( DbgIsAssert() )                            \
     {                                               \
         if ( !( sCon ) )                            \
@@ -502,190 +495,222 @@ public:
             DbgError( aError,                       \
                       __FILE__, __LINE__ );         \
         }                                           \
-    }
+    }                                               \
+} while(0)
 
 #ifdef DBG_BINFILTER
-#define DBG_BF_ASSERT( sCon, aError )                  \
+#define DBG_BF_ASSERT( sCon, aError )           \
+do                                              \
+{                                               \
     if ( !( sCon ) )                            \
     {                                           \
         DbgError( aError,                       \
                   __FILE__, __LINE__ );         \
-    }
+    }                                           \
+} while(0)
 #else
-#define DBG_BF_ASSERT( sCon, aError )
+#define DBG_BF_ASSERT( sCon, aError ) ((void)0)
 #endif
 
 #define DBG_TRACE( aTrace )                         \
+do                                                  \
 {                                                   \
     if ( DbgIsTraceOut() )                          \
         DbgTrace( aTrace );                         \
-}
+} while(0)
 #define DBG_TRACE1( aTrace, x1 )                    \
+do                                                  \
 {                                                   \
     if ( DbgIsTraceOut() )                          \
     {                                               \
         DbgOutTypef( DBG_OUT_TRACE, aTrace,         \
                      x1 );                          \
     }                                               \
-}
+} while(0)
 #define DBG_TRACE2( aTrace, x1, x2 )                \
+do                                                  \
 {                                                   \
     if ( DbgIsTraceOut() )                          \
     {                                               \
         DbgOutTypef( DBG_OUT_TRACE, aTrace,         \
                      x1, x2 );                      \
     }                                               \
-}
+} while(0)
 #define DBG_TRACE3( aTrace, x1, x2, x3 )            \
+do                                                  \
 {                                                   \
     if ( DbgIsTraceOut() )                          \
     {                                               \
         DbgOutTypef( DBG_OUT_TRACE, aTrace,         \
                      x1, x2, x3 );                  \
     }                                               \
-}
+} while(0)
 #define DBG_TRACE4( aTrace, x1, x2, x3, x4 )        \
+do                                                  \
 {                                                   \
     if ( DbgIsTraceOut() )                          \
     {                                               \
         DbgOutTypef( DBG_OUT_TRACE, aTrace,         \
                      x1, x2, x3, x4 );              \
     }                                               \
-}
+} while(0)
 #define DBG_TRACE5( aTrace, x1, x2, x3, x4, x5 )    \
+do                                                  \
 {                                                   \
     if ( DbgIsTraceOut() )                          \
     {                                               \
         DbgOutTypef( DBG_OUT_TRACE, aTrace,         \
                      x1, x2, x3, x4, x5 );          \
     }                                               \
-}
+} while(0)
 #define DBG_TRACEFILE( aTrace )                     \
+do                                                  \
 {                                                   \
     if ( DbgIsTraceOut() )                          \
         DbgTrace( aTrace, __FILE__, __LINE__ );     \
-}
+} while(0)
 
 #define DBG_WARNING( aWarning )                     \
+do                                                  \
 {                                                   \
     if ( DbgIsWarningOut() )                        \
         DbgWarning( aWarning );                     \
-}
+} while(0)
 #define DBG_WARNING1( aWarning, x1 )                \
+do                                                  \
 {                                                   \
     if ( DbgIsWarningOut() )                        \
     {                                               \
         DbgOutTypef( DBG_OUT_WARNING, aWarning,     \
                      x1 );                          \
     }                                               \
-}
+} while(0)
 #define DBG_WARNING2( aWarning, x1, x2 )            \
+do                                                  \
 {                                                   \
     if ( DbgIsWarningOut() )                        \
     {                                               \
         DbgOutTypef( DBG_OUT_WARNING, aWarning,     \
                      x1, x2 );                      \
     }                                               \
-}
+} while(0)
 #define DBG_WARNING3( aWarning, x1, x2, x3 )        \
+do                                                  \
 {                                                   \
     if ( DbgIsWarningOut() )                        \
     {                                               \
         DbgOutTypef( DBG_OUT_WARNING, aWarning,     \
                      x1, x2, x3 );                  \
     }                                               \
-}
+} while(0)
 #define DBG_WARNING4( aWarning, x1, x2, x3, x4 )    \
+do                                                  \
 {                                                   \
     if ( DbgIsWarningOut() )                        \
     {                                               \
         DbgOutTypef( DBG_OUT_WARNING, aWarning,     \
                      x1, x2, x3, x4 );              \
     }                                               \
-}
+} while(0)
 #define DBG_WARNING5( aWarning, x1, x2, x3, x4, x5 )\
+do                                                  \
 {                                                   \
     if ( DbgIsWarningOut() )                        \
     {                                               \
         DbgOutTypef( DBG_OUT_WARNING, aWarning,     \
                      x1, x2, x3, x4, x5 );          \
     }                                               \
-}
+} while(0)
 #define DBG_WARNINGFILE( aWarning )                 \
+do                                                  \
 {                                                   \
     if ( DbgIsWarningOut() )                        \
         DbgWarning( aWarning, __FILE__, __LINE__ ); \
-}
+} while(0)
 
 #define DBG_ERROR( aError )                         \
+do                                                  \
 {                                                   \
     if ( DbgIsErrorOut() )                          \
         DbgError( aError );                         \
-}
+} while(0)
 #define DBG_ERROR1( aError, x1 )                    \
+do                                                  \
 {                                                   \
     if ( DbgIsErrorOut() )                          \
     {                                               \
         DbgOutTypef( DBG_OUT_ERROR, aError,         \
                      x1 );                          \
     }                                               \
-}
+} while(0)
 #define DBG_ERROR2( aError, x1, x2 )                \
+do                                                  \
 {                                                   \
     if ( DbgIsErrorOut() )                          \
     {                                               \
         DbgOutTypef( DBG_OUT_ERROR, aError,         \
                      x1, x2 );                      \
     }                                               \
-}
+} while(0)
 #define DBG_ERROR3( aError, x1, x2, x3 )            \
+do                                                  \
 {                                                   \
     if ( DbgIsErrorOut() )                          \
     {                                               \
         DbgOutTypef( DBG_OUT_ERROR, aError,         \
                      x1, x2, x3 );                  \
     }                                               \
-}
+} while(0)
 #define DBG_ERROR4( aError, x1, x2, x3, x4 )        \
+do                                                  \
 {                                                   \
     if ( DbgIsErrorOut() )                          \
     {                                               \
         DbgOutTypef( DBG_OUT_ERROR, aError,         \
                      x1, x2, x3, x4 );              \
     }                                               \
-}
+} while(0)
 #define DBG_ERROR5( aError, x1, x2, x3, x4, x5 )    \
+do                                                  \
 {                                                   \
     if ( DbgIsErrorOut() )                          \
     {                                               \
         DbgOutTypef( DBG_OUT_ERROR, aError,         \
                      x1, x2, x3, x4, x5 );          \
     }                                               \
-}
+} while(0)
 #define DBG_ERRORFILE( aError )                     \
+do                                                  \
 {                                                   \
     if ( DbgIsErrorOut() )                          \
         DbgError( aError, __FILE__, __LINE__ );     \
-}
+} while(0)
 
-#define DBG_TESTSOLARMUTEX() { DbgTestSolarMutex(); }
+#define DBG_TESTSOLARMUTEX()                \
+do                                          \
+{                                           \
+    DbgTestSolarMutex();                    \
+} while(0)
 
 // --- Dbg-Defines (An/Ausschlaten) ---
 
 #define DBG_INSTOUTTRACE( nOut )            \
+do                                          \
 {                                           \
     DbgGetData()->nTraceOut = nOut;         \
-}
+} while(0)
 
 #define DBG_INSTOUTWARNING( nOut )          \
+do                                          \
 {                                           \
     DbgGetData()->nWarningOut = nOut;       \
-}
+} while(0)
 
 #define DBG_INSTOUTERROR( nOut )            \
+do                                          \
 {                                           \
     DbgGetData()->nErrorOut = nOut;         \
-}
+} while(0)
 
 #else
 
@@ -700,62 +725,60 @@ struct DbgDataType;
 typedef void (*DbgPrintLine)( const sal_Char* pLine );
 typedef const sal_Char* (*DbgUsr)(const void* pThis );
 
-#define DBG_DEBUGSTART()
-#define DBG_DEBUGEND()
-#define DBG_GLOBALDEBUGEND()
+#define DBG_DEBUGSTART() ((void)0)
+#define DBG_DEBUGEND() ((void)0)
+#define DBG_GLOBALDEBUGEND() ((void)0)
 
-#define DBG_STARTAPPEXECUTE()
-#define DBG_ENDAPPEXECUTE()
+#define DBG_STARTAPPEXECUTE() ((void)0)
+#define DBG_ENDAPPEXECUTE() ((void)0)
 
-#define DBG_MEMTEST()                       HPUX_DTOR_BUG
-#define DBG_MEMTEST_PTR( p )                HPUX_DTOR_BUG
-
-#define DBG_COREDUMP()
+#define DBG_MEMTEST() ((void)0)
+#define DBG_MEMTEST_PTR( p ) ((void)0)
 
 #define DBG_NAME( aName )
 #define DBG_NAMEEX( aName )
 #define DBG_NAMEEX_VISIBILITY( aName, vis )
 
-#define DBG_PROFSTART( aName )
-#define DBG_PROFSTOP( aName )
-#define DBG_PROFCONTINUE( aName )
-#define DBG_PROFPAUSE( aName )
+#define DBG_PROFSTART( aName ) ((void)0)
+#define DBG_PROFSTOP( aName ) ((void)0)
+#define DBG_PROFCONTINUE( aName ) ((void)0)
+#define DBG_PROFPAUSE( aName ) ((void)0)
 
-#define DBG_CTOR( aName, fTest )
-#define DBG_DTOR( aName, fTest )            HPUX_DTOR_BUG
-#define DBG_CHKTHIS( aName, fTest )         HPUX_DTOR_BUG
-#define DBG_CHKOBJ( pObj, aName, fTest )    HPUX_DTOR_BUG
+#define DBG_CTOR( aName, fTest ) ((void)0)
+#define DBG_DTOR( aName, fTest ) ((void)0)
+#define DBG_CHKTHIS( aName, fTest ) ((void)0)
+#define DBG_CHKOBJ( pObj, aName, fTest ) ((void)0)
 
-#define DBG_ASSERTWARNING( sCon, aWarning )
-#define DBG_ASSERT( sCon, aError )
-#define DBG_BF_ASSERT( sCon, aError )
-#define DBG_TRACE( aTrace )
-#define DBG_TRACE1( aTrace, x1 )
-#define DBG_TRACE2( aTrace, x1, x2 )
-#define DBG_TRACE3( aTrace, x1, x2, x3 )
-#define DBG_TRACE4( aTrace, x1, x2, x3, x4 )
-#define DBG_TRACE5( aTrace, x1, x2, x3, x4, x5 )
-#define DBG_TRACEFILE( aTrace )
-#define DBG_WARNING( aWarning )
-#define DBG_WARNING1( aWarning, x1 )
-#define DBG_WARNING2( aWarning, x1, x2 )
-#define DBG_WARNING3( aWarning, x1, x2, x3 )
-#define DBG_WARNING4( aWarning, x1, x2, x3, x4 )
-#define DBG_WARNING5( aWarning, x1, x2, x3, x4, x5 )
-#define DBG_WARNINGFILE( aWarning )
-#define DBG_ERROR( aError )
-#define DBG_ERROR1( aError, x1 )
-#define DBG_ERROR2( aError, x1, x2 )
-#define DBG_ERROR3( aError, x1, x2, x3 )
-#define DBG_ERROR4( aError, x1, x2, x3, x4 )
-#define DBG_ERROR5( aError, x1, x2, x3, x4, x5 )
-#define DBG_ERRORFILE( aError )
+#define DBG_ASSERTWARNING( sCon, aWarning ) ((void)0)
+#define DBG_ASSERT( sCon, aError ) ((void)0)
+#define DBG_BF_ASSERT( sCon, aError ) ((void)0)
+#define DBG_TRACE( aTrace ) ((void)0)
+#define DBG_TRACE1( aTrace, x1 ) ((void)0)
+#define DBG_TRACE2( aTrace, x1, x2 ) ((void)0)
+#define DBG_TRACE3( aTrace, x1, x2, x3 ) ((void)0)
+#define DBG_TRACE4( aTrace, x1, x2, x3, x4 ) ((void)0)
+#define DBG_TRACE5( aTrace, x1, x2, x3, x4, x5 ) ((void)0)
+#define DBG_TRACEFILE( aTrace ) ((void)0)
+#define DBG_WARNING( aWarning ) ((void)0)
+#define DBG_WARNING1( aWarning, x1 ) ((void)0)
+#define DBG_WARNING2( aWarning, x1, x2 ) ((void)0)
+#define DBG_WARNING3( aWarning, x1, x2, x3 ) ((void)0)
+#define DBG_WARNING4( aWarning, x1, x2, x3, x4 ) ((void)0)
+#define DBG_WARNING5( aWarning, x1, x2, x3, x4, x5 ) ((void)0)
+#define DBG_WARNINGFILE( aWarning ) ((void)0)
+#define DBG_ERROR( aError ) ((void)0)
+#define DBG_ERROR1( aError, x1 ) ((void)0)
+#define DBG_ERROR2( aError, x1, x2 ) ((void)0)
+#define DBG_ERROR3( aError, x1, x2, x3 ) ((void)0)
+#define DBG_ERROR4( aError, x1, x2, x3, x4 ) ((void)0)
+#define DBG_ERROR5( aError, x1, x2, x3, x4, x5 ) ((void)0)
+#define DBG_ERRORFILE( aError ) ((void)0)
 
-#define DBG_TESTSOLARMUTEX()
+#define DBG_TESTSOLARMUTEX() ((void)0)
 
-#define DBG_INSTOUTTRACE( nOut )
-#define DBG_INSTOUTWARNING( nOut )
-#define DBG_INSTOUTERROR( nOut )
+#define DBG_INSTOUTTRACE( nOut ) ((void)0)
+#define DBG_INSTOUTWARNING( nOut ) ((void)0)
+#define DBG_INSTOUTERROR( nOut ) ((void)0)
 
 #endif
 

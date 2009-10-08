@@ -52,7 +52,6 @@
 #include <salframe.h>
 #include <salobj.h>
 #include <saltimer.h>
-#include <salsound.h>
 #include <salbmp.h>
 #include <vcl/salimestatus.hxx>
 #include <vcl/timer.hxx>
@@ -817,13 +816,6 @@ void* Os2SalInstance::GetConnectionIdentifier( ConnectionIdentifierType& rReturn
 SalTimer* Os2SalInstance::CreateSalTimer()
 {
     return new Os2SalTimer();
-}
-
-// -----------------------------------------------------------------------
-
-SalSound* Os2SalInstance::CreateSalSound()
-{
-    return new Os2SalSound();
 }
 
 // -----------------------------------------------------------------------

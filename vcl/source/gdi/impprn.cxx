@@ -577,7 +577,11 @@ void ImplQPrinter::AddQueuePage( GDIMetaFile* pPage, USHORT nPage, BOOL bNewJobS
     pQueuePage->mpMtf       = pPage;
     pQueuePage->mnPage      = nPage;
     pQueuePage->mbEndJob    = FALSE;
-    if ( bNewJobSetup )
+    // ensure that the first page has a valid setup, this is needed
+    // in GetPaperRanges (used in pullmodel)
+    // caution: this depends on mnCurPage in Printer being
+    // 0: not printing 1: after StartJob, 2 after first EndPage, 3+ at following EndPage calls
+    if ( bNewJobSetup || (nPage == 2 && ImplGetSVData()->maGDIData.mbPrinterPullModel) )
         pQueuePage->mpSetup = new JobSetup( mpParent->GetJobSetup() );
     maQueue.push_back( pQueuePage );
 }

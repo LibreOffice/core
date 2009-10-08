@@ -72,6 +72,8 @@ namespace toolkit
         ImplRegisterProperty( BASEPROPERTY_SPINVALUE_MAX );
         ImplRegisterProperty( BASEPROPERTY_SPININCREMENT );
         ImplRegisterProperty( BASEPROPERTY_TABSTOP );
+        ImplRegisterProperty( BASEPROPERTY_WRITING_MODE );
+        ImplRegisterProperty( BASEPROPERTY_CONTEXT_WRITING_MODE );
     }
 
     //--------------------------------------------------------------------

@@ -40,7 +40,10 @@
 #include <fstream>
 #include <iostream>
 #include "osl/mutex.hxx"
-
+#ifdef __MINGW32__
+#include <tools/prewin.h>
+#include <tools/postwin.h>
+#endif
 using namespace std;
 using namespace osl;
 
@@ -278,7 +281,7 @@ BOOL XMLFile::Write( ByteString &aFilename )
             if( !aFStream )     // From time to time the stream can not be opened the first time on NFS volumes,
             {                   // I wasn't able to track this down. I think this is an NFS issue .....
                 //cerr << "ERROR: - helpex - Can't write to tempfile " << aFilename.GetBuffer() << " No#" << x << "\n";
-#ifdef UNX
+#if defined(UNX) || defined(OS2)
                 sleep( 3 );
 #else
                 Sleep( 3 );

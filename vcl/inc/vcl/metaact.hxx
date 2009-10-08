@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: metaact.hxx,v $
- * $Revision: 1.3 $
+ * $Revision: 1.3.134.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -104,6 +104,7 @@ class SvStream;
 #define META_GRADIENTEX_ACTION              (148)
 #define META_LAYOUTMODE_ACTION              (149)
 #define META_TEXTLANGUAGE_ACTION            (150)
+#define META_OVERLINECOLOR_ACTION           (151)
 
 #define META_COMMENT_ACTION                 (512)
 
@@ -631,6 +632,7 @@ private:
     long                mnWidth;
     FontStrikeout       meStrikeout;
     FontUnderline       meUnderline;
+    FontUnderline       meOverline;
 
     virtual sal_Bool    Compare( const MetaAction& ) const;
 
@@ -639,7 +641,8 @@ public:
 
                         MetaTextLineAction( const Point& rPos, long nWidth,
                                             FontStrikeout eStrikeout,
-                                            FontUnderline eUnderline );
+                                            FontUnderline eUnderline,
+                                            FontUnderline eOverline );
     virtual void        Move( long nHorzMove, long nVertMove );
     virtual void        Scale( double fScaleX, double fScaleY );
 
@@ -647,6 +650,7 @@ public:
     long                GetWidth() const { return mnWidth; }
     FontStrikeout       GetStrikeout() const { return meStrikeout; }
     FontUnderline       GetUnderline() const { return meUnderline; }
+    FontUnderline       GetOverline()  const { return meOverline; }
 };
 
 // -----------------
@@ -1216,6 +1220,28 @@ public:
                         DECL_META_ACTION( TextLineColor, META_TEXTLINECOLOR_ACTION )
 
                         MetaTextLineColorAction( const Color& rColor, BOOL bSet );
+
+    const Color&        GetColor() const { return maColor; }
+    BOOL                IsSetting() const { return mbSet; }
+};
+
+// ---------------------------
+// - MetaOverlineColorAction -
+// ---------------------------
+
+class VCL_DLLPUBLIC MetaOverlineColorAction : public MetaAction
+{
+private:
+
+    Color               maColor;
+    BOOL                mbSet;
+
+    virtual sal_Bool    Compare( const MetaAction& ) const;
+
+public:
+                        DECL_META_ACTION( OverlineColor, META_OVERLINECOLOR_ACTION )
+
+                        MetaOverlineColorAction( const Color& rColor, BOOL bSet );
 
     const Color&        GetColor() const { return maColor; }
     BOOL                IsSetting() const { return mbSet; }

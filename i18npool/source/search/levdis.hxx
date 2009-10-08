@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: levdis.hxx,v $
- * $Revision: 1.4 $
+ * $Revision: 1.4.24.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -147,10 +147,12 @@ class WLevDistance
     int KGV( int a, int b );    // Kleinstes Gemeinsames Vielfaches
 
 public:
+
+#ifdef erTEST
     // CToren fuer direktes Setzen der Gewichtung mit Set...()
     // im CTor werden die Defaultwerte fuer Limit/Rep/Ins/Del gesetzt
-    WLevDistance( const sal_Unicode* cPattern );
-    WLevDistance( const ::rtl::OUString& rPattern );
+    explicit WLevDistance( const ::rtl::OUString& rPattern );
+#endif
 
     // CToren mit Userangaben, danach mit GetLimit() Limit holen
     // interner Aufruf von CalcLPQR()
@@ -162,9 +164,7 @@ public:
     ~WLevDistance();
 
     // Berechnung der Levenshtein-Distanz von String zu Pattern
-    int WLD( const sal_Unicode* cString, sal_Int32 nStringLen );       // prefered
-    int WLD( const sal_Unicode* cString );
-    int WLD( const ::rtl::OUString& rString );
+    int WLD( const sal_Unicode* cString, sal_Int32 nStringLen );
 
     // Berechnung der Gewichtung aus Userangaben, return nLimit
     int CalcLPQR( int nOtherX, int nShorterY, int nLongerZ,
@@ -187,7 +187,7 @@ public:
 #ifdef erTEST
     void    ShowTest();
 #ifdef erTESTMAT
-    void    ShowMatrix( const char* cString );
+    void    ShowMatrix( const sal_Unicode* cString );
 #endif
 #endif
 

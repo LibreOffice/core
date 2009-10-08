@@ -37,6 +37,7 @@
 #include <com/sun/star/awt/FontWeight.hpp>
 #include <com/sun/star/awt/FontSlant.hpp>
 #include <com/sun/star/graphic/XGraphicProvider.hpp>
+#include <com/sun/star/text/WritingMode2.hpp>
 #include <com/sun/star/io/XMarkableStream.hpp>
 #include <toolkit/controls/unocontrolmodel.hxx>
 #include <toolkit/helper/macros.hxx>
@@ -224,8 +225,13 @@ void UnoControlModel::ImplPropertyChanged( sal_uInt16 )
 {
     ::com::sun::star::uno::Any aDefault;
 
-    if ( ( nPropId == BASEPROPERTY_FONTDESCRIPTOR ) ||
-         ( nPropId >= BASEPROPERTY_FONTDESCRIPTORPART_START ) && ( nPropId <= BASEPROPERTY_FONTDESCRIPTORPART_END ) )
+    if (
+        (nPropId == BASEPROPERTY_FONTDESCRIPTOR) ||
+        (
+         (nPropId >= BASEPROPERTY_FONTDESCRIPTORPART_START) &&
+         (nPropId <= BASEPROPERTY_FONTDESCRIPTORPART_END)
+        )
+       )
     {
         EmptyFontDescriptor aFD;
         switch ( nPropId )
@@ -254,8 +260,10 @@ void UnoControlModel::ImplPropertyChanged( sal_uInt16 )
     {
         switch ( nPropId )
         {
-            case BASEPROPERTY_GRAPHIC:              aDefault <<= ::com::sun::star::uno::makeAny(
-                                                                    ::com::sun::star::uno::Reference< graphic::XGraphic >() ); break;
+            case BASEPROPERTY_GRAPHIC:
+                aDefault <<= makeAny( Reference< graphic::XGraphic >() );
+                break;
+
             case BASEPROPERTY_VERTICALALIGN:
             case BASEPROPERTY_BORDERCOLOR:
             case BASEPROPERTY_SYMBOL_COLOR:
@@ -308,7 +316,6 @@ void UnoControlModel::ImplPropertyChanged( sal_uInt16 )
             case BASEPROPERTY_REPEAT_DELAY:         aDefault <<= (sal_Int32)  50;   break;    // 50 milliseconds
             case BASEPROPERTY_DEFAULTCONTROL:       aDefault <<= ((UnoControlModel*)this)->getServiceName();    break;
 
-
             case BASEPROPERTY_AUTOHSCROLL:
             case BASEPROPERTY_AUTOVSCROLL:
             case BASEPROPERTY_MOVEABLE:
@@ -349,6 +356,11 @@ void UnoControlModel::ImplPropertyChanged( sal_uInt16 )
             case BASEPROPERTY_LABEL:
             case BASEPROPERTY_TITLE:
             case BASEPROPERTY_TEXT:                 aDefault <<= ::rtl::OUString(); break;
+
+            case BASEPROPERTY_WRITING_MODE:
+            case BASEPROPERTY_CONTEXT_WRITING_MODE:
+                aDefault <<= text::WritingMode2::CONTEXT;
+                break;
 
             case BASEPROPERTY_STRINGITEMLIST:
             {

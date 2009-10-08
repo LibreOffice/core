@@ -516,7 +516,7 @@ BOOL Bitmap::ImplMakeMonoDither()
 
 BOOL Bitmap::ImplMakeGreyscales( USHORT nGreys )
 {
-    DBG_ASSERT( nGreys == 16 || nGreys == 256, "Only 16 or 256 greyscales are supported!" )
+    DBG_ASSERT( nGreys == 16 || nGreys == 256, "Only 16 or 256 greyscales are supported!" );
 
     BitmapReadAccess*   pReadAcc = AcquireReadAccess();
     BOOL                bRet = FALSE;

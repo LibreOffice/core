@@ -472,8 +472,11 @@ void SvtMatchContext_Impl::ReadFolder( const String& rURL,
                     // matching is always done case insensitive, but completion will be case sensitive and case preserving
                     aTitle.ToLowerAscii();
 
-                    if( !nMatchLen || bExectMatch && aMatchName.Equals( aTitle )
-                     || !bExectMatch && aMatchName.CompareTo( aTitle, nMatchLen ) == COMPARE_EQUAL )
+                    if (
+                        !nMatchLen ||
+                        (bExectMatch && aMatchName.Equals(aTitle)) ||
+                        (!bExectMatch && aMatchName.CompareTo(aTitle, nMatchLen) == COMPARE_EQUAL)
+                       )
                     {
                         // all names fit if matchstring is empty
                         INetURLObject aObj( aURL );
@@ -490,8 +493,7 @@ void SvtMatchContext_Impl::ReadFolder( const String& rURL,
                         String aInput( aText );
                         if ( nMatchLen )
                         {
-                            if ( aText.Len() && aText.GetChar( aText.Len() - 1 ) == '.'
-                              || bPureHomePath )
+                            if ((aText.Len() && aText.GetChar(aText.Len() - 1) == '.') || bPureHomePath)
                             {
                                 // if a "special folder" URL was typed, don't touch the user input
                                 aMatch.Erase( 0, nMatchLen );
@@ -1079,6 +1081,13 @@ long SvtURLBox::PreNotify( NotifyEvent& rNEvt )
             SetSelection( Selection( nLen, GetText().Len() ) );
             return TRUE;
         }
+
+        if ( MatchesPlaceHolder( GetText() ) )
+        {
+            // set the selection so a key stroke will overwrite
+            // the placeholder rather than edit it
+            SetSelection( Selection( 0, GetText().Len() ) );
+        }
     }
 
     return ComboBox::PreNotify( rNEvt );
@@ -1148,6 +1157,8 @@ String SvtURLBox::GetURL()
     ::vos::OGuard aGuard( SvtMatchContext_Impl::GetMutex() );
 
     String aText( GetText() );
+    if ( MatchesPlaceHolder( aText ) )
+        return aPlaceHolder;
     // try to get the right case preserving URL from the list of URLs
     if ( pImp->pCompletions && pImp->pURLs )
     {
@@ -1216,8 +1227,8 @@ String SvtURLBox::GetURL()
 
             if( success &&
                 ( aTitle.Len() > 1 ||
-                  aTitle.CompareToAscii("/") != 0 &&
-                  aTitle.CompareToAscii(".") != 0 ) )
+                  (aTitle.CompareToAscii("/") != 0 &&
+                  aTitle.CompareToAscii(".") != 0) ) )
             {
                     aObj.SetName( aTitle );
                     if ( bSlash )

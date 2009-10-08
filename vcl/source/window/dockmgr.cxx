@@ -768,6 +768,8 @@ void ImplPopupFloatWin::MouseButtonDown( const MouseEvent& rMEvt )
     {
         // get mouse pos at a static window to have a fixed reference point
         PointerState aState = GetParent()->GetPointerState();
+        if (ImplHasMirroredGraphics() && IsRTLEnabled())
+            ImplMirrorFramePos(aState.maPos);
         maTearOffPosition = GetWindow( WINDOW_BORDER )->GetPosPixel();
         maDelta = aState.maPos - maTearOffPosition;
     }
@@ -786,6 +788,8 @@ void ImplPopupFloatWin::Tracking( const TrackingEvent& rTEvt )
         {
             // move the window according to mouse pos
             PointerState aState = GetParent()->GetPointerState();
+            if (ImplHasMirroredGraphics() && IsRTLEnabled())
+                ImplMirrorFramePos(aState.maPos);
             maTearOffPosition = aState.maPos - maDelta;
             GetWindow( WINDOW_BORDER )->SetPosPixel( maTearOffPosition );
         }

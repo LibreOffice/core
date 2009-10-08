@@ -56,7 +56,7 @@
 #include <salgdi.h>
 #include <salframe.h>
 #include <vcl/timer.hxx>
-#include <settings.hxx>
+#include <vcl/settings.hxx>
 #ifndef _SV_KEYCOES_HXX
 #include <vcl/keycodes.hxx>
 #endif
@@ -962,7 +962,7 @@ SalFrame* Os2SalFrame::GetParent() const
 
 // -----------------------------------------------------------------------
 
-static void ImplSalShow( HWND hWnd, BOOL bVisible, BOOL bNoActivate )
+static void ImplSalShow( HWND hWnd, ULONG bVisible, ULONG bNoActivate )
 {
     Os2SalFrame* pFrame = GetWindowPtr( hWnd );
     if ( !pFrame )
@@ -1392,6 +1392,40 @@ BOOL Os2SalFrame::GetWindowState( SalFrameState* pState )
 
 // -----------------------------------------------------------------------
 
+void Os2SalFrame::SetScreenNumber( unsigned int nNewScreen )
+{
+#if 0
+    WinSalSystem* pSys = static_cast<WinSalSystem*>(ImplGetSalSystem());
+    if( pSys )
+    {
+        const std::vector<WinSalSystem::DisplayMonitor>& rMonitors =
+            pSys->getMonitors();
+        size_t nMon = rMonitors.size();
+        if( nNewScreen < nMon )
+        {
+            Point aOldMonPos, aNewMonPos( rMonitors[nNewScreen].m_aArea.TopLeft() );
+            Point aCurPos( maGeometry.nX, maGeometry.nY );
+            for( size_t i = 0; i < nMon; i++ )
+            {
+                if( rMonitors[i].m_aArea.IsInside( aCurPos ) )
+                {
+                    aOldMonPos = rMonitors[i].m_aArea.TopLeft();
+                    break;
+                }
+            }
+            mnDisplay = nNewScreen;
+            maGeometry.nScreenNumber = nNewScreen;
+            SetPosSize( aNewMonPos.X() + (maGeometry.nX - aOldMonPos.X()),
+                        aNewMonPos.Y() + (maGeometry.nY - aOldMonPos.Y()),
+                        0, 0,
+                        SAL_FRAME_POSSIZE_X | SAL_FRAME_POSSIZE_Y );
+        }
+    }
+#endif
+}
+
+// -----------------------------------------------------------------------
+
 // native menu implementation - currently empty
 void Os2SalFrame::DrawMenuBar()
 {
@@ -1453,7 +1487,7 @@ void Os2SalFrame::SetAlwaysOnTop( BOOL bOnTop )
 
 // -----------------------------------------------------------------------
 
-static void ImplSalToTop( HWND hWnd, USHORT nFlags )
+static void ImplSalToTop( HWND hWnd, ULONG nFlags )
 {
     Os2SalFrame* pFrame = GetWindowPtr( hWnd );
 #if OSL_DEBUG_LEVEL>0
@@ -3591,11 +3625,11 @@ MRESULT EXPENTRY SalFrameWndProc( HWND hWnd, ULONG nMsg,
             bDef = FALSE;
             break;
         case SAL_MSG_TOTOP:
-            ImplSalToTop( hWnd, (USHORT)nMP1 );
+            ImplSalToTop( hWnd, (ULONG)nMP1 );
             bDef = FALSE;
             break;
         case SAL_MSG_SHOW:
-            ImplSalShow( hWnd, (BOOL)nMP1, (BOOL)nMP2 );
+            ImplSalShow( hWnd, (ULONG)nMP1, (ULONG)nMP2 );
             bDef = FALSE;
             break;
 

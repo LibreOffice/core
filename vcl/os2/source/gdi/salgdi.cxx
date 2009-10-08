@@ -242,6 +242,14 @@ BOOL Os2SalGraphics::unionClipRegion( long nX, long nY, long nWidth, long nHeigh
 
 // -----------------------------------------------------------------------
 
+bool Os2SalGraphics::unionClipRegion( const ::basegfx::B2DPolyPolygon& )
+{
+    // TODO: implement and advertise OutDevSupport_B2DClip support
+    return false;
+}
+
+// -----------------------------------------------------------------------
+
 void Os2SalGraphics::EndSetClipRegion()
 {
 #ifdef SAL_PRINTER_CLIPPATH
@@ -344,7 +352,7 @@ void Os2SalGraphics::SetFillColor( SalColor nSalColor )
 
 // -----------------------------------------------------------------------
 
-void Os2SalGraphics::SetXORMode( BOOL bSet )
+void Os2SalGraphics::SetXORMode( bool bSet, bool )
 {
     mbXORMode = bSet;
     LONG nMixMode = bSet ? FM_XOR : FM_OVERPAINT;
@@ -651,6 +659,25 @@ void Os2SalGraphics::drawPolyPolygon( ULONG nPoly, const ULONG* pPoints,
     for( i = 0; i < nPoly; i++ )
         delete [] aPolygonAry[ i ].aPointl;
     delete [] aPolygonAry;
+}
+
+// -----------------------------------------------------------------------
+
+bool Os2SalGraphics::drawPolyPolygon( const ::basegfx::B2DPolyPolygon&, double /*fTransparency*/ )
+{
+    // TODO: implement and advertise OutDevSupport_B2DDraw support
+    return false;
+}
+
+// -----------------------------------------------------------------------
+
+bool Os2SalGraphics::drawPolyLine(
+    const basegfx::B2DPolygon& /*rPolygon*/,
+    const basegfx::B2DVector& /*rLineWidths*/,
+    basegfx::B2DLineJoin /*eLineJoin*/)
+{
+    // TODO: implement
+    return false;
 }
 
 // -----------------------------------------------------------------------
@@ -1010,7 +1037,9 @@ SystemGraphicsData Os2SalGraphics::GetGraphicsData() const
 {
     SystemGraphicsData aRes;
     aRes.nSize = sizeof(aRes);
+#if 0
     aRes.hDC = mhDC;
+#endif
     return aRes;
 }
 

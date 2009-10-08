@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: svmedit.cxx,v $
- * $Revision: 1.44 $
+ * $Revision: 1.44.108.7 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -31,20 +31,24 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_svtools.hxx"
 
+
 #include <memory>
 
+#include "unoiface.hxx"
+
 #include <tools/rc.h>
+
 #include <vcl/decoview.hxx>
 #include <vcl/svapp.hxx>
 
 #include <svtools/svmedit.hxx>
 #include <svtools/xtextedt.hxx>
 #include <svtools/brdcst.hxx>
-#include <svtools/lstner.hxx>
-#include "unoiface.hxx"
 #include <svtools/undo.hxx>
-
 #include <svtools/textwindowpeer.hxx>
+#include <svtools/lstner.hxx>
+#include <svtools/smplhint.hxx>
+
 
 // IDs erstmal aus VCL geklaut, muss mal richtig delivert werden...
 #define SV_MENU_EDIT_UNDO           1
@@ -181,22 +185,16 @@ public:
     void        SetTextWindowOffset( const Point& rOffset );
 };
 
-
 ImpSvMEdit::ImpSvMEdit( MultiLineEdit* pEdt, WinBits nWinStyle )
     :mpHScrollBar(NULL)
     ,mpVScrollBar(NULL)
     ,mpScrollBox(NULL)
 {
     pSvMultiLineEdit = pEdt;
-
     mnTextWidth = 0;
-
     mpTextWindow = new TextWindow( pEdt );
-
     mpTextWindow->Show();
-
     InitFromStyle( nWinStyle );
-
     StartListening( *mpTextWindow->GetTextEngine() );
 }
 
@@ -796,7 +794,9 @@ void TextWindow::KeyInput( const KeyEvent& rKEvent )
 {
     BOOL bDone = FALSE;
     USHORT nCode = rKEvent.GetKeyCode().GetCode();
-    if ( (nCode == KEY_A) && rKEvent.GetKeyCode().IsMod1() && !rKEvent.GetKeyCode().IsMod2() )
+    if ( nCode == com::sun::star::awt::Key::SELECT_ALL ||
+         ( (nCode == KEY_A) && rKEvent.GetKeyCode().IsMod1() && !rKEvent.GetKeyCode().IsMod2() )
+       )
     {
         mpExtTextView->SetSelection( TextSelection( TextPaM( 0, 0 ), TextPaM( 0xFFFF, 0xFFFF ) ) );
         bDone = TRUE;
@@ -1641,4 +1641,3 @@ void MultiLineEdit::DisableSelectionOnFocus()
 {
     pImpSvMEdit->GetTextWindow()->DisableSelectionOnFocus();
 }
-

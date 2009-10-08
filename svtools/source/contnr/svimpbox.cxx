@@ -681,7 +681,7 @@ void SvImpLBox::SetCursor( SvLBoxEntry* pEntry, BOOL bForceNoSelect )
 
         if( pAnchor )
         {
-            DBG_ASSERT(aSelEng.GetSelectionMode() != SINGLE_SELECTION,"Mode?")
+            DBG_ASSERT(aSelEng.GetSelectionMode() != SINGLE_SELECTION,"Mode?");
             SetAnchorSelection( pOldCursor, pCursor );
         }
     }
@@ -1097,7 +1097,7 @@ void SvImpLBox::DrawNet()
     long nY = 0;
     nY -= ( nOffs * nEntryHeight );
 
-    DBG_ASSERT(pFirstDynamicTab,"No Tree!")
+    DBG_ASSERT(pFirstDynamicTab,"No Tree!");
 
     Color aOldLineColor = pView->GetLineColor();
     const StyleSettings& rStyleSettings = pView->GetSettings().GetStyleSettings();
@@ -1126,7 +1126,7 @@ void SvImpLBox::DrawNet()
             aPos1.Y() += nEntryHeightDIV2;
 
             pChild = pView->FirstChild( pEntry );
-            DBG_ASSERT(pChild,"Child?")
+            DBG_ASSERT(pChild,"Child?");
             pChild = pTree->LastSibling( pChild );
             nDistance = (USHORT)(pView->GetVisiblePos(pChild) -
                                  pView->GetVisiblePos(pEntry));
@@ -1697,7 +1697,7 @@ void SvImpLBox::EntrySelected( SvLBoxEntry* pEntry, BOOL bSelect )
         pEntry != pCursor )
     {
         SetCursor( pEntry );
-        DBG_ASSERT(pView->GetSelectionCount()==1,"selection count?")
+        DBG_ASSERT(pView->GetSelectionCount()==1,"selection count?");
     }
 
     if( GetUpdateMode() && pView->IsEntryVisible(pEntry) )
@@ -2430,7 +2430,7 @@ BOOL SvImpLBox::KeyInput( const KeyEvent& rKEvt)
 
                 if( nDelta )
                 {
-                    DBG_ASSERT(pNewCursor&&(ULONG)pNewCursor!=(ULONG)pCursor,"Cursor?")
+                    DBG_ASSERT(pNewCursor&&(ULONG)pNewCursor!=(ULONG)pCursor,"Cursor?");
                     aSelEng.CursorPosChanging( bShift, bMod1 );
                     if( IsEntryInView( pNewCursor ) )
                         SetCursor( pNewCursor );
@@ -2458,7 +2458,7 @@ BOOL SvImpLBox::KeyInput( const KeyEvent& rKEvt)
 
                 if( nDelta )
                 {
-                    DBG_ASSERT(pNewCursor&&(ULONG)pNewCursor!=(ULONG)pCursor,"Cursor?")
+                    DBG_ASSERT(pNewCursor&&(ULONG)pNewCursor!=(ULONG)pCursor,"Cursor?");
                     aSelEng.CursorPosChanging( bShift, bMod1 );
                     if( IsEntryInView( pNewCursor ) )
                         SetCursor( pNewCursor );

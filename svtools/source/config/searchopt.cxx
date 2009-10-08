@@ -46,7 +46,7 @@ using namespace utl;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::i18n;
 
-#define MAX_FLAGS_OFFSET    24
+#define MAX_FLAGS_OFFSET    25
 
 //////////////////////////////////////////////////////////////////////
 
@@ -164,8 +164,9 @@ Sequence< OUString > SvtSearchOptions_Impl::GetPropertyNames() const
         "Japanese/IsMatch_KiKu",                // 20
         "Japanese/IsIgnorePunctuation",         // 21
         "Japanese/IsIgnoreWhitespace",          // 22
-        "Japanese/IsIgnoreProlongedSoundMark",  // 23
-        "Japanese/IsIgnoreMiddleDot"            // 24
+        "Japanese/IsIgnoreProlongedSoundMark",      // 23
+        "Japanese/IsIgnoreMiddleDot",           // 24
+        "IsNotes"                   // 25
     };
 
     const int nCount = sizeof( aPropNames ) / sizeof( aPropNames[0] );
@@ -618,7 +619,16 @@ void SvtSearchOptions::SetIgnoreMiddleDot( BOOL bVal )
     pImpl->SetFlag( 24, bVal );
 }
 
+BOOL SvtSearchOptions::IsNotes() const
+{
+        return pImpl->GetFlag( 25 );
+}
 
+
+void SvtSearchOptions::SetNotes( BOOL bVal )
+{
+        pImpl->SetFlag( 25, bVal );
+}
 
 //////////////////////////////////////////////////////////////////////
 

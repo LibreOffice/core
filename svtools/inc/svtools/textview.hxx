@@ -136,6 +136,8 @@ public:
     String              GetSelected( LineEnd aSeparator );
     void                DeleteSelected();
 
+    void                InsertNewText( const rtl::OUString& rNew, BOOL bSelect = FALSE );
+    // deprecated: use InsertNewText instead
     void                InsertText( const String& rNew, BOOL bSelect = FALSE );
 
     BOOL                KeyInput( const KeyEvent& rKeyEvent );

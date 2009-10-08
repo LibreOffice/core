@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: defaultnumberingprovider.cxx,v $
- * $Revision: 1.30 $
+ * $Revision: 1.30.24.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -120,6 +120,13 @@ static sal_Unicode table_Alphabet_dz[] = {
     0x0F62, 0x0F63, 0x0F64, 0x0F66, 0x0F67, 0x0F68
 };
 
+static sal_Unicode table_Alphabet_my[] = {
+    0x1000, 0x1001, 0x1002, 0x1003, 0x1004, 0x1005, 0x1006, 0x1007,
+    0x1008,/*0x1009,*/0x100A, 0x100B, 0x100C, 0x100D, 0x100E, 0x100F,
+    0x1010, 0x1011, 0x1012, 0x1013, 0x1014, 0x1015, 0x1016, 0x1017,
+    0x1018, 0x1019, 0x101A, 0x101B, 0x101C, 0x101D, 0x101E, 0x101F,
+    0x1020, 0x1021
+};
 
 // Bulgarian Cyrillic upper case letters
 static sal_Unicode table_CyrillicUpperLetter_bg[] = {
@@ -151,6 +158,22 @@ static sal_Unicode table_CyrillicLowerLetter_ru[] = {
     0x0438, 0x043A, 0x043B, 0x043C, 0x043D, 0x043E, 0x043F, 0x0440,
     0x0441, 0x0442, 0x0443, 0x0444, 0x0445, 0x0446, 0x0447, 0x0448,
     0x0449, 0x044B, 0x044D, 0x044E, 0x044F
+};
+
+// Serbian Cyrillic upper letters
+static sal_Unicode table_CyrillicUpperLetter_sr[] = {
+    0x0410, 0x0411, 0x0412, 0x0413, 0x0414, 0x0402, 0x0415, 0x0416,
+    0x0417, 0x0418, 0x0408, 0x041A, 0x041B, 0x0409, 0x041C, 0x041D,
+    0x040A, 0x041E, 0x041F, 0x0420, 0x0421, 0x0422, 0x040B, 0x0423,
+    0x0424, 0x0425, 0x0426, 0x0427, 0x040F, 0x0428
+};
+
+// Serbian cyrillic lower letters
+static sal_Unicode table_CyrillicLowerLetter_sr[] = {
+    0x0430, 0x0431, 0x0432, 0x0433, 0x0434, 0x0452, 0x0435, 0x0436,
+    0x0437, 0x0438, 0x0458, 0x043A, 0x043B, 0x0459, 0x043C, 0x043D,
+    0x045A, 0x043E, 0x043F, 0x0440, 0x0441, 0x0442, 0x045B, 0x0443,
+    0x0444, 0x0445, 0x0446, 0x0447, 0x045F, 0x0448
 };
 
 static sal_Unicode table_Alphabet_fa[] = {
@@ -555,6 +578,9 @@ DefaultNumberingProvider::makeNumberingString( const Sequence<beans::PropertyVal
           case CHARS_LAO:
               lcl_formatChars(table_Alphabet_lo, sizeof(table_Alphabet_lo) / sizeof(sal_Unicode), number - 1, result);
               break;
+          case CHARS_MYANMAR:
+              lcl_formatChars(table_Alphabet_my, sizeof(table_Alphabet_my) / sizeof(sal_Unicode), number - 1, result);
+              break;
          case CHARS_TIBETAN:
               lcl_formatChars(table_Alphabet_dz, sizeof(table_Alphabet_dz) / sizeof(sal_Unicode), number - 1, result);
               break;
@@ -608,6 +634,32 @@ DefaultNumberingProvider::makeNumberingString( const Sequence<beans::PropertyVal
               lcl_formatChars1( table_CyrillicLowerLetter_ru,
                       sizeof(table_CyrillicLowerLetter_ru) /
                       sizeof(table_CyrillicLowerLetter_ru[0]), number-1,
+                      result); // 1=>a, 2=>b, ..., 27=>z, 28=>aa, 29=>bb, ...
+              break;
+         case CHARS_CYRILLIC_UPPER_LETTER_SR:
+              lcl_formatChars2( table_CyrillicUpperLetter_sr,
+                      table_CyrillicLowerLetter_sr,
+                      sizeof(table_CyrillicLowerLetter_sr) /
+                      sizeof(table_CyrillicLowerLetter_sr[0]), number-1,
+                      result); // 1=>a, 2=>b, ..., 27=>z, 28=>Aa, 29=>Ab, ...
+              break;
+         case CHARS_CYRILLIC_LOWER_LETTER_SR:
+              lcl_formatChars( table_CyrillicLowerLetter_sr,
+                      sizeof(table_CyrillicLowerLetter_sr) /
+                      sizeof(table_CyrillicLowerLetter_sr[0]), number-1,
+                      result); // 1=>a, 2=>b, ..., 27=>z, 28=>aa, 29=>ab, ...
+              break;
+         case CHARS_CYRILLIC_UPPER_LETTER_N_SR:
+              lcl_formatChars3( table_CyrillicUpperLetter_sr,
+                      table_CyrillicLowerLetter_sr,
+                      sizeof(table_CyrillicLowerLetter_sr) /
+                      sizeof(table_CyrillicLowerLetter_sr[0]), number-1,
+                      result); // 1=>a, 2=>b, ..., 27=>z, 28=>Aa, 29=>Bb, ...
+              break;
+         case CHARS_CYRILLIC_LOWER_LETTER_N_SR:
+              lcl_formatChars1( table_CyrillicLowerLetter_sr,
+                      sizeof(table_CyrillicLowerLetter_sr) /
+                      sizeof(table_CyrillicLowerLetter_sr[0]), number-1,
                       result); // 1=>a, 2=>b, ..., 27=>z, 28=>aa, 29=>bb, ...
               break;
           case CHARS_PERSIAN:
@@ -686,6 +738,7 @@ static const Supported_NumberingType aSupportedTypes[] =
         {style::NumberingType::CHARS_NEPALI,    NULL, LANG_CTL},
         {style::NumberingType::CHARS_KHMER,     NULL, LANG_CTL},
         {style::NumberingType::CHARS_LAO,       NULL, LANG_CTL},
+        {style::NumberingType::CHARS_MYANMAR,   NULL, LANG_CTL},
         {style::NumberingType::CHARS_TIBETAN,   NULL, LANG_CTL},
         {style::NumberingType::CHARS_CYRILLIC_UPPER_LETTER_BG,   C_CYR_A ", " C_CYR_B ", .., " C_CYR_A S_CYR_A ", " C_CYR_A S_CYR_B ", ... (bg)", LANG_ALL},
         {style::NumberingType::CHARS_CYRILLIC_LOWER_LETTER_BG,   S_CYR_A ", " S_CYR_B ", .., " S_CYR_A S_CYR_A ", " S_CYR_A S_CYR_B ", ... (bg)", LANG_ALL},
@@ -695,6 +748,10 @@ static const Supported_NumberingType aSupportedTypes[] =
         {style::NumberingType::CHARS_CYRILLIC_LOWER_LETTER_RU,   S_CYR_A ", " S_CYR_B ", .., " S_CYR_A S_CYR_A ", " S_CYR_A S_CYR_B ", ... (ru)", LANG_ALL},
         {style::NumberingType::CHARS_CYRILLIC_UPPER_LETTER_N_RU, C_CYR_A ", " C_CYR_B ", .., " C_CYR_A S_CYR_A ", " C_CYR_B S_CYR_B ", ... (ru)", LANG_ALL},
         {style::NumberingType::CHARS_CYRILLIC_LOWER_LETTER_N_RU, S_CYR_A ", " S_CYR_B ", .., " S_CYR_A S_CYR_A ", " S_CYR_B S_CYR_B ", ... (ru)", LANG_ALL},
+        {style::NumberingType::CHARS_CYRILLIC_UPPER_LETTER_SR,   C_CYR_A ", " C_CYR_B ", .., " C_CYR_A S_CYR_A ", " C_CYR_A S_CYR_B ", ... (sr)", LANG_ALL},
+        {style::NumberingType::CHARS_CYRILLIC_LOWER_LETTER_SR,   S_CYR_A ", " S_CYR_B ", .., " S_CYR_A S_CYR_A ", " S_CYR_A S_CYR_B ", ... (sr)", LANG_ALL},
+        {style::NumberingType::CHARS_CYRILLIC_UPPER_LETTER_N_SR, C_CYR_A ", " C_CYR_B ", .., " C_CYR_A S_CYR_A ", " C_CYR_B S_CYR_B ", ... (sr)", LANG_ALL},
+        {style::NumberingType::CHARS_CYRILLIC_LOWER_LETTER_N_SR, S_CYR_A ", " S_CYR_B ", .., " S_CYR_A S_CYR_A ", " S_CYR_B S_CYR_B ", ... (sr)", LANG_ALL},
         {style::NumberingType::CHARS_PERSIAN,   NULL, LANG_CTL},
 };
 static const sal_Int32 nSupported_NumberingTypes = sizeof(aSupportedTypes) / sizeof(Supported_NumberingType);

@@ -719,12 +719,14 @@ ValueSetItem* ValueSetAcc::getItem (USHORT nIndex) const
     ValueSetItem* pItem = NULL;
 
     if (HasNoneField())
+    {
         if (nIndex == 0)
             // When present the first item is the then allways visible none field.
             pItem = mpParent->ImplGetItem (VALUESET_ITEM_NONEITEM);
         else
             // Shift down the index to compensate for the none field.
             nIndex -= 1;
+    }
     if (pItem == NULL)
         pItem = mpParent->ImplGetVisibleItem (static_cast<USHORT>(nIndex));
 

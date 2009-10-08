@@ -49,8 +49,8 @@ namespace basegfx
         typedef Traits  TraitsType;
 
         BasicRange() :
-            mnMinimum(Traits::initMin()),
-            mnMaximum(Traits::initMax())
+            mnMinimum(Traits::maxVal()),
+            mnMaximum(Traits::minVal())
         {
         }
 
@@ -68,13 +68,13 @@ namespace basegfx
 
         void reset()
         {
-            mnMinimum = Traits::initMin();
-            mnMaximum = Traits::initMax();
+            mnMinimum = Traits::maxVal();
+            mnMaximum = Traits::minVal();
         }
 
         bool isEmpty() const
         {
-            return Traits::initMin() == mnMinimum;
+            return Traits::maxVal() == mnMinimum;
         }
 
         T getMinimum() const { return mnMinimum; }
@@ -271,8 +271,8 @@ namespace basegfx
     // some pre-fabricated traits
     struct DoubleTraits
     {
-        static double initMin() { return DBL_MAX; };
-        static double initMax() { return DBL_MIN; };
+        static double minVal() { return DBL_MIN; };
+        static double maxVal() { return DBL_MAX; };
         static double neutral() { return 0.0; };
 
         typedef double DifferenceType;
@@ -280,8 +280,8 @@ namespace basegfx
 
     struct Int32Traits
     {
-        static sal_Int32 initMin() { return 0x7FFFFFFFL; };
-        static sal_Int32 initMax() { return 0x80000000UL; };
+        static sal_Int32 minVal() { return SAL_MIN_INT32; };
+        static sal_Int32 maxVal() { return SAL_MAX_INT32; };
         static sal_Int32 neutral() { return 0L; };
 
         typedef sal_Int64 DifferenceType;

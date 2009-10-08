@@ -89,7 +89,7 @@ void SAL_CALL DNDEventDispatcher::drop( const DropTargetDropEvent& dtde )
     while( pChildWindow->ImplGetClientWindow() )
         pChildWindow = pChildWindow->ImplGetClientWindow();
 
-    if( pChildWindow->ImplHasMirroredGraphics() && !pChildWindow->IsRTLEnabled() )
+    if( pChildWindow->ImplIsAntiparallel() )
         pChildWindow->ImplReMirror( location );
 
     aSolarGuard.clear();
@@ -145,7 +145,7 @@ void SAL_CALL DNDEventDispatcher::dragEnter( const DropTargetDragEnterEvent& dtd
     while( pChildWindow->ImplGetClientWindow() )
         pChildWindow = pChildWindow->ImplGetClientWindow();
 
-    if( pChildWindow->ImplHasMirroredGraphics() && !pChildWindow->IsRTLEnabled() )
+    if( pChildWindow->ImplIsAntiparallel() )
         pChildWindow->ImplReMirror( location );
 
     aSolarGuard.clear();
@@ -208,7 +208,7 @@ void SAL_CALL DNDEventDispatcher::dragOver( const DropTargetDragEvent& dtde )
     while( pChildWindow->ImplGetClientWindow() )
         pChildWindow = pChildWindow->ImplGetClientWindow();
 
-    if( pChildWindow->ImplHasMirroredGraphics() && !pChildWindow->IsRTLEnabled() )
+    if( pChildWindow->ImplIsAntiparallel() )
         pChildWindow->ImplReMirror( location );
 
     aSolarGuard.clear();
@@ -266,7 +266,7 @@ void SAL_CALL DNDEventDispatcher::dropActionChanged( const DropTargetDragEvent& 
     while( pChildWindow->ImplGetClientWindow() )
         pChildWindow = pChildWindow->ImplGetClientWindow();
 
-    if( pChildWindow->ImplHasMirroredGraphics() && !pChildWindow->IsRTLEnabled() )
+    if( pChildWindow->ImplIsAntiparallel() )
         pChildWindow->ImplReMirror( location );
 
     aSolarGuard.clear();
@@ -323,7 +323,7 @@ void SAL_CALL DNDEventDispatcher::dragGestureRecognized( const DragGestureEvent&
     while( pChildWindow->ImplGetClientWindow() )
         pChildWindow = pChildWindow->ImplGetClientWindow();
 
-    if( pChildWindow->ImplHasMirroredGraphics() && !pChildWindow->IsRTLEnabled() )
+    if( pChildWindow->ImplIsAntiparallel() )
         pChildWindow->ImplReMirror( origin );
 
     aSolarGuard.clear();
