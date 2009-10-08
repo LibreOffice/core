@@ -30,42 +30,39 @@
 #ifndef DBACCESS_CORE_FILTERED_CONTAINER_HXX
 #define DBACCESS_CORE_FILTERED_CONTAINER_HXX
 
-#ifndef _CONNECTIVITY_SDBCX_COLLECTION_HXX_
-#include <connectivity/sdbcx/VCollection.hxx>
-#endif
-#ifndef _COM_SUN_STAR_CONTAINER_XNAMEACCESS_HPP_
 #include <com/sun/star/container/XNameAccess.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDBC_XCONNECTION_HPP_
 #include <com/sun/star/sdbc/XConnection.hpp>
-#endif
 
-class WildCard;
-namespace dbaccess
+#include <connectivity/sdbcx/VCollection.hxx>
+
+namespace dbtools
 {
     class IWarningsContainer;
+}
+
+namespace dbaccess
+{
     class IRefreshListener;
 
     class OFilteredContainer : public ::connectivity::sdbcx::OCollection
     {
+    private:
+        mutable sal_Bool m_bConstructed;        // late ctor called
+
     protected:
-        IWarningsContainer*     m_pWarningsContainer;
-        IRefreshListener*       m_pRefreshListener;
-        oslInterlockedCount&    m_nInAppend;
+        ::dbtools::IWarningsContainer*  m_pWarningsContainer;
+        IRefreshListener*               m_pRefreshListener;
+        oslInterlockedCount&            m_nInAppend;
 
         // holds the original container which where set in construct but they can be null
         ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >    m_xMasterContainer;
         ::com::sun::star::uno::WeakReference< ::com::sun::star::sdbc::XConnection >     m_xConnection;
         ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDatabaseMetaData >   m_xMetaData;
 
-        mutable sal_Bool m_bConstructed;        // late ctor called
-
-        virtual sal_Bool isNameValid(const ::rtl::OUString& _rName,
-            const ::com::sun::star::uno::Sequence< ::rtl::OUString >& _rTableFilter,
-            const ::com::sun::star::uno::Sequence< ::rtl::OUString >& _rTableTypeFilter,
-            const ::std::vector< WildCard >& _rWCSearch) const;
-
-        virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > getTableTypeFilter(const ::com::sun::star::uno::Sequence< ::rtl::OUString >& _rTableTypeFilter) const = 0;
+        /** returns a string denoting the only type of tables allowed in this container, or an empty string
+            if there is no such restriction
+        */
+        virtual ::rtl::OUString getTableTypeRestriction() const = 0;
 
         inline virtual void addMasterContainerListener(){}
         inline virtual void removeMasterContainerListener(){}
@@ -97,6 +94,12 @@ namespace dbaccess
         private:
             oslInterlockedCount&   m_rValue;
         };
+
+        /** retrieve a table type filter to pass to <member scope="com::sun::star::sdbc">XDatabaseMetaData::getTables</member>,
+            according to the current data source settings
+        */
+        void    getAllTableTypeFilter( ::com::sun::star::uno::Sequence< ::rtl::OUString >& /* [out] */ _rFilter ) const;
+
     public:
         /** ctor of the container. The parent has to support the <type scope="com::sun::star::sdbc">XConnection</type>
             interface.<BR>
@@ -108,12 +111,12 @@ namespace dbaccess
             @see            construct
         */
         OFilteredContainer( ::cppu::OWeakObject& _rParent,
-                        ::osl::Mutex& _rMutex,
-                        const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >& _xCon,
-                        sal_Bool _bCase,
-                        IRefreshListener*   _pRefreshListener,
-                        IWarningsContainer* _pWarningsContainer,
-                        oslInterlockedCount& _nInAppend
+                            ::osl::Mutex& _rMutex,
+                            const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >& _xCon,
+                            sal_Bool _bCase,
+                            IRefreshListener*   _pRefreshListener,
+                            ::dbtools::IWarningsContainer* _pWarningsContainer,
+                            oslInterlockedCount& _nInAppend
                         );
 
         inline void dispose() { disposing(); }

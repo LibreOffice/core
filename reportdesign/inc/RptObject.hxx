@@ -125,6 +125,7 @@ public:
     void EndListening(sal_Bool bRemoveListener = sal_True);
     // PropertyChangeListener
     virtual void _propertyChange( const  ::com::sun::star::beans::PropertyChangeEvent& evt ) throw(::com::sun::star::uno::RuntimeException);
+    virtual void initializeOle() {}
 
     sal_Bool        supportsService( const ::rtl::OUString& _sServiceName ) const;
 
@@ -193,6 +194,7 @@ class REPORTDESIGN_DLLPUBLIC OOle2Obj: public SdrOle2Obj , public OObjectBase
     friend class DlgEdFactory;
 
     UINT16 m_nType;
+    bool    m_bOnlyOnce;
     void impl_createDataProvider_nothrow( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel>& _xModel);
 public:
     static OOle2Obj* Create( const ::com::sun::star::uno::Reference< ::com::sun::star::report::XReportComponent>& _xComponent,UINT16 _nType )
@@ -227,6 +229,7 @@ public:
     virtual UINT32 GetObjInventor() const;
     // Clone() soll eine komplette Kopie des Objektes erzeugen.
     virtual SdrObject* Clone() const;
+    virtual void initializeOle();
 
     void initializeChart( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel>& _xModel);
 };
@@ -280,6 +283,10 @@ public:
     virtual UINT16 GetObjIdentifier() const;
     virtual UINT32 GetObjInventor() const;
     virtual SdrObject* Clone() const;
+
+private:
+    void    impl_setReportComponent_nothrow();
+    void    impl_initializeModel_nothrow();
 };
 
 //============================================================================

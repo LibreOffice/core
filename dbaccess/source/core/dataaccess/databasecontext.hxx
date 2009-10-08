@@ -98,7 +98,7 @@ namespace com { namespace sun { namespace star {
 namespace dbaccess
 {
 //........................................................................
-
+class DatabaseDocumentLoader;
 //============================================================
 //= ODatabaseContext
 //============================================================
@@ -159,6 +159,7 @@ protected:
         // properties.
 
     ::cppu::OInterfaceContainerHelper       m_aContainerListeners;
+    DatabaseDocumentLoader*                 m_pDatabaseDocumentLoader;
 
 public:
     ODatabaseContext( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& );
@@ -213,6 +214,8 @@ public:
     void deregisterPrivate(const ::rtl::OUString& _sName);
     void nameChangePrivate(const ::rtl::OUString& _sOldName, const ::rtl::OUString& _sNewName);
     void storeTransientProperties( ODatabaseModelImpl& _rModelImpl);
+    void appendAtTerminateListener(const ODatabaseModelImpl& _rDataSourceModel);
+    void removeFromTerminateListener(const ODatabaseModelImpl& _rDataSourceModel);
 
 private:
     // BasicManagerCreationListener

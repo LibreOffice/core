@@ -90,6 +90,7 @@
 #define DSID_CHECK_REQUIRED_FIELDS  54
 #define DSID_IGNORECURRENCY         55
 #define DSID_CONN_SOCKET            56
+#define DSID_ESCAPE_DATETIME        57
     // don't forget to adjust DSID_LAST_ITEM_ID below!
 
 
@@ -97,7 +98,7 @@
 //= item range. Adjust this if you introduce new items above
 
 #define DSID_FIRST_ITEM_ID  DSID_NAME
-#define DSID_LAST_ITEM_ID   DSID_CONN_SOCKET
+#define DSID_LAST_ITEM_ID   DSID_ESCAPE_DATETIME
 
 #endif // _DBAUI_DATASOURCEITEMS_HXX_
 

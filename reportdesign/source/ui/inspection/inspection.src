@@ -336,3 +336,62 @@ String RID_STR_MIMETYPE
 {
     Text [ en-US ] = "Report Output Format" ;
 };
+String RID_STR_VERTICALALIGN
+{
+    Text [ en-US ] = "Vert. Alignment" ;
+};
+Resource RID_STR_VERTICAL_ALIGN_CONST
+{
+    String 1
+    {
+        Text [ en-US ] = "Top";
+    };
+    String 2
+    {
+        Text [ en-US ] = "Middle";
+    };
+    String 3
+    {
+        Text [ en-US ] = "Bottom";
+    };
+};
+String RID_STR_PARAADJUST
+{
+    Text [ en-US ] = "Horz. Alignment" ;
+};
+Resource RID_STR_PARAADJUST_CONST
+{
+    String 1
+    {
+        Text [ en-US ] = "Left";
+    };
+    String 2
+    {
+        Text [ en-US ] = "Right";
+    };
+    String 3
+    {
+        Text [ en-US ] = "Block";
+    };
+    String 4
+    {
+        Text [ en-US ] = "Center";
+    };
+};
+String RID_STR_F_COUNTER
+{
+    Text [ en-US ] = "Counter" ;
+};
+String RID_STR_F_ACCUMULATION
+{
+    Text [ en-US ] = "Accumulation" ;
+};
+String RID_STR_F_MINIMUM
+{
+    Text [ en-US ] = "Minimum" ;
+};
+String RID_STR_F_MAXIMUM
+{
+    Text [ en-US ] = "Maximum" ;
+};
+

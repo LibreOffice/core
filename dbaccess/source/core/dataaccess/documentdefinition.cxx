@@ -254,31 +254,31 @@
 #include <com/sun/star/sdb/application/DatabaseObject.hpp>
 
 using namespace ::com::sun::star;
-using namespace ::com::sun::star::view;
-using namespace ::com::sun::star::uno;
-using namespace ::com::sun::star::util;
-using namespace ::com::sun::star::ucb;
-using namespace ::com::sun::star::beans;
-using namespace ::com::sun::star::lang;
-using namespace ::com::sun::star::awt;
-using namespace ::com::sun::star::embed;
-using namespace ::com::sun::star::frame;
-using namespace ::com::sun::star::document;
-using namespace ::com::sun::star::sdbc;
-using namespace ::com::sun::star::sdb;
-using namespace ::com::sun::star::io;
-using namespace ::com::sun::star::container;
-using namespace ::com::sun::star::datatransfer;
-using namespace ::com::sun::star::task;
-using namespace ::com::sun::star::form;
-using namespace ::com::sun::star::drawing;
+using namespace view;
+using namespace uno;
+using namespace util;
+using namespace ucb;
+using namespace beans;
+using namespace lang;
+using namespace awt;
+using namespace embed;
+using namespace frame;
+using namespace document;
+using namespace sdbc;
+using namespace sdb;
+using namespace io;
+using namespace container;
+using namespace datatransfer;
+using namespace task;
+using namespace form;
+using namespace drawing;
 using namespace ::osl;
 using namespace ::comphelper;
 using namespace ::cppu;
 namespace css = ::com::sun::star;
 
-using ::com::sun::star::sdb::application::XDatabaseDocumentUI;
-namespace DatabaseObject = ::com::sun::star::sdb::application::DatabaseObject;
+using sdb::application::XDatabaseDocumentUI;
+namespace DatabaseObject = sdb::application::DatabaseObject;
 
 
 #define DEFAULT_WIDTH  10000
@@ -318,7 +318,7 @@ namespace dbaccess
     //==================================================================
     // OEmbedObjectHolder
     //==================================================================
-    typedef ::cppu::WeakComponentImplHelper1<   ::com::sun::star::embed::XStateChangeListener > TEmbedObjectHolder;
+    typedef ::cppu::WeakComponentImplHelper1<   embed::XStateChangeListener > TEmbedObjectHolder;
     class OEmbedObjectHolder :   public ::comphelper::OBaseMutex
                                 ,public TEmbedObjectHolder
     {
@@ -344,9 +344,9 @@ namespace dbaccess
             osl_decrementInterlockedCount( &m_refCount );
         }
 
-        virtual void SAL_CALL changingState( const ::com::sun::star::lang::EventObject& aEvent, ::sal_Int32 nOldState, ::sal_Int32 nNewState ) throw (::com::sun::star::embed::WrongStateException, ::com::sun::star::uno::RuntimeException);
-        virtual void SAL_CALL stateChanged( const ::com::sun::star::lang::EventObject& aEvent, ::sal_Int32 nOldState, ::sal_Int32 nNewState ) throw (::com::sun::star::uno::RuntimeException);
-        virtual void SAL_CALL disposing( const ::com::sun::star::lang::EventObject& Source ) throw (::com::sun::star::uno::RuntimeException);
+        virtual void SAL_CALL changingState( const lang::EventObject& aEvent, ::sal_Int32 nOldState, ::sal_Int32 nNewState ) throw (embed::WrongStateException, uno::RuntimeException);
+        virtual void SAL_CALL stateChanged( const lang::EventObject& aEvent, ::sal_Int32 nOldState, ::sal_Int32 nNewState ) throw (uno::RuntimeException);
+        virtual void SAL_CALL disposing( const lang::EventObject& Source ) throw (uno::RuntimeException);
     };
     //------------------------------------------------------------------
     void SAL_CALL OEmbedObjectHolder::disposing()
@@ -357,7 +357,7 @@ namespace dbaccess
         m_pDefinition = NULL;
     }
     //------------------------------------------------------------------
-    void SAL_CALL OEmbedObjectHolder::changingState( const ::com::sun::star::lang::EventObject& /*aEvent*/, ::sal_Int32 nOldState, ::sal_Int32 nNewState ) throw (::com::sun::star::embed::WrongStateException, ::com::sun::star::uno::RuntimeException)
+    void SAL_CALL OEmbedObjectHolder::changingState( const lang::EventObject& /*aEvent*/, ::sal_Int32 nOldState, ::sal_Int32 nNewState ) throw (embed::WrongStateException, uno::RuntimeException)
     {
         if ( !m_bInChangingState && nNewState == EmbedStates::RUNNING && nOldState == EmbedStates::ACTIVE && m_pDefinition )
         {
@@ -367,7 +367,7 @@ namespace dbaccess
         }
     }
     //------------------------------------------------------------------
-    void SAL_CALL OEmbedObjectHolder::stateChanged( const ::com::sun::star::lang::EventObject& aEvent, ::sal_Int32 nOldState, ::sal_Int32 nNewState ) throw (::com::sun::star::uno::RuntimeException)
+    void SAL_CALL OEmbedObjectHolder::stateChanged( const lang::EventObject& aEvent, ::sal_Int32 nOldState, ::sal_Int32 nNewState ) throw (uno::RuntimeException)
     {
         if ( !m_bInStateChange && nNewState == EmbedStates::RUNNING && nOldState == EmbedStates::ACTIVE && m_pDefinition )
         {
@@ -382,7 +382,7 @@ namespace dbaccess
         }
     }
     //------------------------------------------------------------------
-    void SAL_CALL OEmbedObjectHolder::disposing( const ::com::sun::star::lang::EventObject& /*Source*/ ) throw (::com::sun::star::uno::RuntimeException)
+    void SAL_CALL OEmbedObjectHolder::disposing( const lang::EventObject& /*Source*/ ) throw (uno::RuntimeException)
     {
         m_xBroadCaster = NULL;
     }
@@ -405,7 +405,7 @@ namespace dbaccess
         {
         }
         // XComponentSupplier
-        virtual Reference< ::com::sun::star::util::XCloseable > SAL_CALL getComponent(  ) throw (RuntimeException)
+        virtual Reference< util::XCloseable > SAL_CALL getComponent(  ) throw (RuntimeException)
         {
             return Reference< css::util::XCloseable >();
         }
@@ -561,6 +561,7 @@ ODocumentDefinition::ODocumentDefinition(const Reference< XInterface >& _rxConta
     ,m_bForm(_bForm)
     ,m_bOpenInDesign(sal_False)
     ,m_bInExecute(sal_False)
+    ,m_bRemoveListener(sal_False)
     ,m_pClientHelper(NULL)
 {
     DBG_CTOR(ODocumentDefinition, NULL);
@@ -568,7 +569,6 @@ ODocumentDefinition::ODocumentDefinition(const Reference< XInterface >& _rxConta
     if ( _aClassID.getLength() )
         loadEmbeddedObject( _xConnection, _aClassID, Sequence< PropertyValue >(), false, false );
 }
-
 //--------------------------------------------------------------------------
 ODocumentDefinition::~ODocumentDefinition()
 {
@@ -617,6 +617,12 @@ void SAL_CALL ODocumentDefinition::disposing()
     ::osl::MutexGuard aGuard(m_aMutex);
     closeObject();
     ::comphelper::disposeComponent(m_xListener);
+    if ( m_bRemoveListener && m_xDesktop.is() )
+    {
+        Reference<util::XCloseable> xCloseable(m_pImpl->m_pDataSource->getModel_noCreate(),UNO_QUERY);
+        if ( xCloseable.is() )
+            xCloseable->removeCloseListener(this);
+    }
     m_xDesktop = NULL;
 }
 // -----------------------------------------------------------------------------
@@ -745,7 +751,7 @@ namespace
     {
     private:
         Reference< XVisualObject >  m_xVisObject;
-        ::com::sun::star::awt::Size m_aOriginalSize;
+        awt::Size m_aOriginalSize;
 
     public:
         inline PreserveVisualAreaSize( const Reference< XModel >& _rxModel )
@@ -948,9 +954,9 @@ void ODocumentDefinition::onCommandOpenSomething( const Any& _rOpenArgument, con
         // So, in such a case, and with 2. above, we would silently execute those macros,
         // regardless of the global security settings - which would be a security issue, of
         // course.
-        if ( !m_pImpl->m_pDataSource->hasAnyObjectWithMacros() )
+        if ( m_pImpl->m_pDataSource->determineEmbeddedMacros() == ODatabaseModelImpl::eNoMacros )
         {
-            // this is case 2. from above (not *exactly*, but sufficiently)
+            // this is case 2. from above
             // So, pass a USE_CONFIG to the to-be-loaded document. This means that
             // the user will be prompted with a security message upon opening this
             // sub document, in case the settings require this, *and* the document
@@ -1555,7 +1561,8 @@ namespace
 // -----------------------------------------------------------------------------
 sal_Bool ODocumentDefinition::objectSupportsEmbeddedScripts() const
 {
-    bool bAllowDocumentMacros = !m_pImpl->m_pDataSource || m_pImpl->m_pDataSource->hasAnyObjectWithMacros();
+    bool bAllowDocumentMacros = !m_pImpl->m_pDataSource
+                            ||  ( m_pImpl->m_pDataSource->determineEmbeddedMacros() == ODatabaseModelImpl::eSubDocumentMacros );
 
     // if *any* of the objects of the database document already has macros, we continue to allow it
     // to have them, until the user did a migration.
@@ -1603,6 +1610,15 @@ Sequence< PropertyValue > ODocumentDefinition::fillLoadArgs( const Reference< XC
         if ( !m_xDesktop.is() )
             m_xDesktop.set( m_aContext.createComponent( (::rtl::OUString)SERVICE_FRAME_DESKTOP ), UNO_QUERY_THROW );
         xParentFrame.set(m_xDesktop,uno::UNO_QUERY);
+        if ( xParentFrame.is() )
+        {
+            Reference<util::XCloseable> xCloseable(m_pImpl->m_pDataSource->getModel_noCreate(),UNO_QUERY);
+            if ( xCloseable.is() )
+            {
+                xCloseable->addCloseListener(this);
+                m_bRemoveListener = sal_True;
+            }
+        }
     }
     OSL_ENSURE( xParentFrame.is(), "ODocumentDefinition::fillLoadArgs: no parent frame!" );
     if  ( xParentFrame.is() )
@@ -1632,6 +1648,8 @@ Sequence< PropertyValue > ODocumentDefinition::fillLoadArgs( const Reference< XC
 
     if ( m_pImpl->m_aProps.aTitle.getLength() )
         aMediaDesc.put( "DocumentTitle", m_pImpl->m_aProps.aTitle );
+
+    aMediaDesc.put( "DocumentBaseURL", m_pImpl->m_pDataSource->getURL() );
 
     // .........................................................................
     // put the common load arguments into the document's media descriptor
@@ -1716,7 +1734,7 @@ void ODocumentDefinition::loadEmbeddedObject( const Reference< XConnection >& _x
                     m_xEmbeddedObject->changeState(EmbedStates::RUNNING);
                     if ( bSetSize )
                     {
-                        ::com::sun::star::awt::Size aSize( DEFAULT_WIDTH, DEFAULT_HEIGHT );
+                        awt::Size aSize( DEFAULT_WIDTH, DEFAULT_HEIGHT );
 
                         m_xEmbeddedObject->setVisualAreaSize(Aspects::MSOLE_CONTENT,aSize);
                     }
@@ -1760,6 +1778,9 @@ void ODocumentDefinition::loadEmbeddedObject( const Reference< XConnection >& _x
                 Sequence< PropertyValue > aArgs = xModel->getArgs();
 
                 ::comphelper::NamedValueCollection aMediaDesc( aArgs );
+                ::comphelper::NamedValueCollection aArguments( _rAdditionalArgs );
+                aMediaDesc.merge( aArguments, sal_False );
+
                 lcl_putLoadArgs( aMediaDesc, optional_bool(), optional_bool() );
                     // don't put _bSuppressMacros and _bReadOnly here - if the document was already
                     // loaded, we should not tamper with its settings.
@@ -1844,10 +1865,10 @@ void ODocumentDefinition::onCommandGetDocumentProperties( Any& _rProps )
     }
 }
 // -----------------------------------------------------------------------------
-Reference< ::com::sun::star::util::XCloseable> ODocumentDefinition::getComponent() throw (RuntimeException)
+Reference< util::XCloseable> ODocumentDefinition::getComponent() throw (RuntimeException)
 {
     OSL_ENSURE(m_xEmbeddedObject.is(),"Illegal call for embeddedObject");
-    Reference< ::com::sun::star::util::XCloseable> xComp;
+    Reference< util::XCloseable> xComp;
     if ( m_xEmbeddedObject.is() )
     {
         int nOldState = m_xEmbeddedObject->getCurrentState();
@@ -2146,6 +2167,29 @@ void ODocumentDefinition::updateDocumentTitle()
     Reference< XTitle> xTitle(getComponent(),UNO_QUERY);
     if ( xTitle.is() )
         xTitle->setTitle(sName);
+}
+// -----------------------------------------------------------------------------
+void SAL_CALL ODocumentDefinition::queryClosing( const lang::EventObject& Source, ::sal_Bool GetsOwnership ) throw (util::CloseVetoException, uno::RuntimeException)
+{
+    (void) Source;
+    (void) GetsOwnership;
+    try
+    {
+        if ( !close() )
+            throw util::CloseVetoException();
+    }
+    catch(const lang::WrappedTargetException&)
+    {
+        throw util::CloseVetoException();
+    }
+}
+// -----------------------------------------------------------------------------
+void SAL_CALL ODocumentDefinition::notifyClosing( const lang::EventObject& /*Source*/ ) throw (uno::RuntimeException)
+{
+}
+// -----------------------------------------------------------------------------
+void SAL_CALL ODocumentDefinition::disposing( const lang::EventObject& /*Source*/ ) throw (uno::RuntimeException)
+{
 }
 //........................................................................
 }   // namespace dbaccess

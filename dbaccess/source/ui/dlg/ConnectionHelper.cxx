@@ -155,9 +155,11 @@
 #endif
 
 #ifdef _ADO_DATALINK_BROWSE_
-typedef void*               HWND;
-typedef void*               HMENU;
-typedef void*               HDC;
+#if defined( WNT )
+    #include <tools/prewin.h>
+    #include <windows.h>
+    #include <tools/postwin.h>
+#endif
 #ifndef _SV_SYSDATA_HXX
 #include <vcl/sysdata.hxx>
 #endif
@@ -952,7 +954,7 @@ DBG_NAME(OConnectionHelper)
                     {
                         String sFile = String( ModuleRes( STR_FILE_DOES_NOT_EXIST ) );
                         sFile.SearchAndReplaceAscii("$file$", aTransformer.get(OFileNotation::N_SYSTEM));
-                        OSQLMessageBox(this,String(ModuleRes(STR_STAT_WARNING)),sFile).Execute();
+                        OSQLWarningBox( this, sFile ).Execute();
                         setURLNoPrefix(sOldPath);
                         SetRoadmapStateValue(sal_False);
                         callModifiedHdl();

@@ -394,8 +394,6 @@ void SbaExternalSourceBrowser::Attach(const Reference< XRowSet > & xMaster)
     Reference< XRowLocate > xCursor(xMaster, UNO_QUERY);
     Reference< XPropertySet > xMasterProps(xMaster, UNO_QUERY);
 
-    setLoadingStarted();
-
     try
     {
         // switch the control to design mode
@@ -419,6 +417,8 @@ void SbaExternalSourceBrowser::Attach(const Reference< XRowSet > & xMaster)
     {
         DBG_UNHANDLED_EXCEPTION();
     }
+
+    onStartLoading( Reference< XLoadable >( xMaster, UNO_QUERY ) );
 
     stopListening();
     m_pDataSourceImpl->AttachForm(xMaster);

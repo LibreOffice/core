@@ -692,11 +692,9 @@ sal_Bool OSelectionBrowseBox::fillColumnRef(const ::rtl::OUString& _sColumnName,
             sal_uInt16 nTabCount = 0;
             if ( !static_cast<OQueryTableView*>(getDesignView()->getTableView())->FindTableFromField(_sColumnName,_pEntry,nTabCount) ) // error occured: column not in table window
             {
-                String sTitle(ModuleRes(STR_STAT_WARNING));
                 String sErrorMsg(ModuleRes(RID_STR_FIELD_DOESNT_EXIST));
                 sErrorMsg.SearchAndReplaceAscii("$name$",_sColumnName);
-                OSQLMessageBox aDlg(this,sTitle,sErrorMsg,WB_OK | WB_DEF_OK,OSQLMessageBox::Warning);
-                aDlg.Execute();
+                OSQLWarningBox( this, sErrorMsg ).Execute();
                 bError = sal_True;
             }
             else
@@ -742,6 +740,7 @@ sal_Bool OSelectionBrowseBox::saveField(const String& _sFieldName,OTableFieldDes
     // second test if the name can be set as select columns in a pseudo statement
     // we have to look which entries  we should quote
 
+    const ::rtl::OUString sFieldAlias = _pEntry->GetFieldAlias();
     size_t nPass = 4;
     ::connectivity::OSQLParser& rParser( rController.getParser() );
     OSQLParseNode* pParseNode = NULL;
@@ -761,6 +760,11 @@ sal_Bool OSelectionBrowseBox::saveField(const String& _sFieldName,OTableFieldDes
             sSql += ::dbtools::quoteName( xMetaData->getIdentifierQuoteString(), _sFieldName );
         else
             sSql += _sFieldName;
+        if ( sFieldAlias.getLength() )
+        { // always quote the alias name there canbe no function in it
+            sSql += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" "));
+            sSql += ::dbtools::quoteName( xMetaData->getIdentifierQuoteString(), sFieldAlias );
+        }
         sSql += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" FROM x"));
 
         pParseNode = rParser.parseTree( sErrorMsg, sSql, bInternational );
@@ -772,10 +776,7 @@ sal_Bool OSelectionBrowseBox::saveField(const String& _sFieldName,OTableFieldDes
         // something different which we have to check (may be a select statement)
         String sErrorMessage( ModuleRes( STR_QRY_COLUMN_NOT_FOUND ) );
         sErrorMessage.SearchAndReplaceAscii("$name$",_sFieldName);
-        OSQLMessageBox aDlg( this,
-            String( ModuleRes( STR_STAT_WARNING ) ), sErrorMessage,
-            WB_OK | WB_DEF_OK, OSQLMessageBox::Warning );
-        aDlg.Execute();
+        OSQLWarningBox( this, sErrorMessage ).Execute();
         return sal_True;
     }
 
@@ -964,10 +965,7 @@ sal_Bool OSelectionBrowseBox::saveField(const String& _sFieldName,OTableFieldDes
             { // the field could not be isnerted
                 String sErrorMessage( ModuleRes( RID_STR_FIELD_DOESNT_EXIST ) );
                 sErrorMessage.SearchAndReplaceAscii("$name$",aSelEntry->GetField());
-                OSQLMessageBox aDlg( this,
-                    String( ModuleRes( STR_STAT_WARNING ) ), sErrorMessage,
-                    WB_OK | WB_DEF_OK, OSQLMessageBox::Warning );
-                aDlg.Execute();
+                OSQLWarningBox( this, sErrorMessage ).Execute();
                 bError = sal_True;
             }
         }
@@ -1238,9 +1236,7 @@ sal_Bool OSelectionBrowseBox::SaveModified()
                             {
                                 if ( !m_bDisableErrorBox )
                                 {
-                                    String sTitle(ModuleRes(STR_STAT_WARNING));
-                                    OSQLMessageBox aDlg(this,sTitle,aErrorMsg,WB_OK | WB_DEF_OK,OSQLMessageBox::Warning);
-                                    aDlg.Execute();
+                                    OSQLWarningBox( this, aErrorMsg ).Execute();
                                 }
                                 bError = sal_True;
                             }
@@ -1249,9 +1245,7 @@ sal_Bool OSelectionBrowseBox::SaveModified()
                         {
                             if ( !m_bDisableErrorBox )
                             {
-                                String sTitle(ModuleRes(STR_STAT_WARNING));
-                                OSQLMessageBox aDlg(this,sTitle,aErrorMsg,WB_OK | WB_DEF_OK,OSQLMessageBox::Warning);
-                                aDlg.Execute();
+                                OSQLWarningBox( this, aErrorMsg ).Execute();
                             }
                             bError = sal_True;
                         }

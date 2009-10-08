@@ -398,9 +398,7 @@ sal_Bool OTableController::doSaveDoc(sal_Bool _bSaveAs)
     if (!xTablesSup.is())
     {
         String aMessage(ModuleRes(STR_TABLEDESIGN_CONNECTION_MISSING));
-        String sTitle(ModuleRes(STR_STAT_WARNING));
-        OSQLMessageBox aMsg(getView(),sTitle,aMessage);
-        aMsg.Execute();
+        OSQLWarningBox( getView(), aMessage ).Execute();
         return sal_False;
     }
 
@@ -642,8 +640,7 @@ void OTableController::impl_initialize()
     }
     catch(const SQLException&)
     {
-        OSQLMessageBox aErr(getView(),ModuleRes(STR_STAT_WARNING),ModuleRes(STR_NO_TYPE_INFO_AVAILABLE));
-        aErr.Execute();
+        OSQLWarningBox( getView(), ModuleRes( STR_NO_TYPE_INFO_AVAILABLE ) ).Execute();
         throw;
     }
     try
@@ -1109,9 +1106,7 @@ sal_Bool OTableController::checkColumns(sal_Bool _bNew) throw(::com::sun::star::
                 {
                     String strMessage = String(ModuleRes(STR_TABLEDESIGN_DUPLICATE_NAME));
                     strMessage.SearchAndReplaceAscii("$column$", pFieldDesc->GetName());
-                    String sTitle(ModuleRes(STR_STAT_WARNING));
-                    OSQLMessageBox aMsg(getView(),sTitle,strMessage,WB_OK | WB_DEF_OK,OSQLMessageBox::Error);
-                    aMsg.Execute();
+                    OSQLWarningBox( getView(), strMessage ).Execute();
                     return sal_False;
                 }
             }
@@ -1257,10 +1252,9 @@ void OTableController::alterColumns()
                     {
                         String aMessage( ModuleRes( STR_TABLEDESIGN_ALTER_ERROR ) );
                         aMessage.SearchAndReplaceAscii( "$column$", pField->GetName() );
-                        String sTitle( ModuleRes( STR_STAT_WARNING ) );
 
                         SQLExceptionInfo aError( ::cppu::getCaughtException() );
-                        OSQLMessageBox aMsg( getView(), sTitle, aMessage, WB_YES_NO | WB_DEF_YES , OSQLMessageBox::Warning, &aError );
+                        OSQLWarningBox aMsg( getView(), aMessage, WB_YES_NO | WB_DEF_YES , &aError );
                         bNotOk = aMsg.Execute() == RET_YES;
                     }
                     else
@@ -1336,8 +1330,7 @@ void OTableController::alterColumns()
                 {
                     String aMessage(ModuleRes(STR_TABLEDESIGN_ALTER_ERROR));
                     aMessage.SearchAndReplaceAscii("$column$",pField->GetName());
-                    String sTitle(ModuleRes(STR_STAT_WARNING));
-                    OSQLMessageBox aMsg(getView(),sTitle,aMessage,WB_YES_NO|WB_DEF_YES,OSQLMessageBox::Warning);
+                    OSQLWarningBox aMsg( getView(), aMessage, WB_YES_NO | WB_DEF_YES );
                     if ( aMsg.Execute() != RET_YES )
                     {
                         Reference<XPropertySet> xNewColumn(xIdxColumns->getByIndex(nPos),UNO_QUERY_THROW);
@@ -1489,6 +1482,7 @@ void OTableController::alterColumns()
 // -----------------------------------------------------------------------------
 void OTableController::dropPrimaryKey()
 {
+    SQLExceptionInfo aInfo;
     try
     {
         Reference<XKeysSupplier> xKeySup(m_xTable,UNO_QUERY);
@@ -1513,11 +1507,24 @@ void OTableController::dropPrimaryKey()
             }
         }
     }
+    catch(const SQLContext& e)
+    {
+        aInfo = SQLExceptionInfo(e);
+    }
+    catch(const SQLWarning& e)
+    {
+        aInfo = SQLExceptionInfo(e);
+    }
+    catch(const SQLException& e)
+    {
+        aInfo = SQLExceptionInfo(e);
+    }
     catch( const Exception& )
     {
         DBG_UNHANDLED_EXCEPTION();
     }
 
+    showError(aInfo);
 }
 // -----------------------------------------------------------------------------
 void OTableController::assignTable()

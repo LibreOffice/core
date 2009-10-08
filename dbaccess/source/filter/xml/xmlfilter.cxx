@@ -753,13 +753,14 @@ const SvXMLTokenMap& ODBFilter::GetColumnElemTokenMap() const
     {
         static __FAR_DATA SvXMLTokenMapEntry aElemTokenMap[]=
         {
-            { XML_NAMESPACE_DB, XML_NAME,           XML_TOK_COLUMN_NAME },
-            { XML_NAMESPACE_DB, XML_STYLE_NAME,     XML_TOK_COLUMN_STYLE_NAME   },
-            { XML_NAMESPACE_DB, XML_HELP_MESSAGE,   XML_TOK_COLUMN_HELP_MESSAGE },
-            { XML_NAMESPACE_DB, XML_VISIBILITY,     XML_TOK_COLUMN_VISIBILITY   },
-            { XML_NAMESPACE_DB, XML_DEFAULT_VALUE,  XML_TOK_COLUMN_DEFAULT_VALUE},
-            { XML_NAMESPACE_DB, XML_TYPE_NAME,      XML_TOK_COLUMN_TYPE_NAME    },
-            { XML_NAMESPACE_DB, XML_VISIBLE,        XML_TOK_COLUMN_VISIBLE      },
+            { XML_NAMESPACE_DB, XML_NAME,                       XML_TOK_COLUMN_NAME             },
+            { XML_NAMESPACE_DB, XML_STYLE_NAME,                 XML_TOK_COLUMN_STYLE_NAME       },
+            { XML_NAMESPACE_DB, XML_HELP_MESSAGE,               XML_TOK_COLUMN_HELP_MESSAGE     },
+            { XML_NAMESPACE_DB, XML_VISIBILITY,                 XML_TOK_COLUMN_VISIBILITY       },
+            { XML_NAMESPACE_DB, XML_DEFAULT_VALUE,              XML_TOK_COLUMN_DEFAULT_VALUE    },
+            { XML_NAMESPACE_DB, XML_TYPE_NAME,                  XML_TOK_COLUMN_TYPE_NAME        },
+            { XML_NAMESPACE_DB, XML_VISIBLE,                    XML_TOK_COLUMN_VISIBLE          },
+            { XML_NAMESPACE_DB, XML_DEFAULT_CELL_STYLE_NAME,    XML_TOK_DEFAULT_CELL_STYLE_NAME },
             XML_TOKEN_MAP_END
         };
         m_pColumnElemTokenMap.reset(new SvXMLTokenMap( aElemTokenMap ));
@@ -805,6 +806,15 @@ UniReference < XMLPropertySetMapper > ODBFilter::GetColumnStylesPropertySetMappe
         m_xColumnStylesPropertySetMapper = OXMLHelper::GetColumnStylesPropertySetMapper();
     }
     return m_xColumnStylesPropertySetMapper;
+}
+// -----------------------------------------------------------------------------
+UniReference < XMLPropertySetMapper > ODBFilter::GetCellStylesPropertySetMapper() const
+{
+    if ( !m_xCellStylesPropertySetMapper.is() )
+    {
+        m_xCellStylesPropertySetMapper = OXMLHelper::GetCellStylesPropertySetMapper();
+    }
+    return m_xCellStylesPropertySetMapper;
 }
 // -----------------------------------------------------------------------------
 void ODBFilter::setPropertyInfo()

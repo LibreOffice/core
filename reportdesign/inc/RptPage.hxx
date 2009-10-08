@@ -46,17 +46,18 @@ class OReportModel;
 
 class REPORTDESIGN_DLLPUBLIC OReportPage : public SdrPage
 {
-    OReportModel&   rModel;
-    ::com::sun::star::uno::Reference< ::com::sun::star::report::XSection >
-                    m_xSection;
+    OReportModel&           rModel;
+    ::com::sun::star::uno::Reference< ::com::sun::star::report::XSection > m_xSection;
+    bool                    m_bSpecialInsertMode;
+    std::vector<SdrObject*> m_aTemporaryObjectList;
 
     OReportPage(const OReportPage&);
 
-    bool m_bSpecialInsertMode;
-    std::vector<SdrObject*> m_aTemporaryObjectList;
     // methode to remove temporary objects, created by 'special mode'
     // (BegDragObj)
     void removeTempObject(SdrObject *_pToRemoveObj);
+
+    virtual ~OReportPage();
 
 protected:
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > createUnoPage();
@@ -67,7 +68,6 @@ public:
                 ,const ::com::sun::star::uno::Reference< ::com::sun::star::report::XSection >& _xSection
                 ,FASTBOOL bMasterPage=FALSE );
 
-    virtual ~OReportPage();
 
     virtual SdrPage* Clone() const;
     using SdrPage::Clone;
@@ -75,7 +75,7 @@ public:
     virtual void NbcInsertObject(SdrObject* pObj, ULONG nPos, const SdrInsertReason* pReason);
     virtual SdrObject* RemoveObject(ULONG nObjNum);
 
-    /** returns teh index inside the object list which belongs to the report component.
+    /** returns the index inside the object list which belongs to the report component.
         @param  _xObject    the report component
     */
     ULONG getIndexOf(const ::com::sun::star::uno::Reference< ::com::sun::star::report::XReportComponent >& _xObject);

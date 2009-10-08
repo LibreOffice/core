@@ -88,13 +88,14 @@
 #endif
 /** === end UNO includes === **/
 
-#include <cppuhelper/compbase10.hxx>
+#include <cppuhelper/compbase11.hxx>
 #include <connectivity/paramwrapper.hxx>
 #include <connectivity/FValue.hxx>
+#include <connectivity/warningscontainer.hxx>
 
 namespace dbaccess
 {
-    typedef ::cppu::WeakAggComponentImplHelper10    <   ::com::sun::star::sdb::XResultSetAccess
+    typedef ::cppu::WeakAggComponentImplHelper11    <   ::com::sun::star::sdb::XResultSetAccess
                                                     ,   ::com::sun::star::sdb::XRowSetApproveBroadcaster
                                                     ,   ::com::sun::star::sdbcx::XDeleteRows
                                                     ,   ::com::sun::star::sdbc::XParameters
@@ -104,6 +105,7 @@ namespace dbaccess
                                                     ,   ::com::sun::star::util::XCancellable
                                                     ,   ::com::sun::star::sdb::XCompletedExecution
                                                     ,   ::com::sun::star::sdb::XParametersSupplier
+                                                    ,   ::com::sun::star::sdbc::XWarningsSupplier
                                                     >   ORowSet_BASE1;
 
     class OTableContainer;
@@ -131,9 +133,12 @@ namespace dbaccess
             (since we have not been executed, yet)
         */
         ORowSetValueVector                          m_aPrematureParamValues;
+        ::std::bit_vector                           m_aParametersSet;
 
         ::cppu::OInterfaceContainerHelper           m_aRowsetListeners;
         ::cppu::OInterfaceContainerHelper           m_aApproveListeners;
+
+        ::dbtools::WarningsContainer                m_aWarnings;
 
         OTableContainer*                            m_pTables;
 
@@ -422,6 +427,10 @@ namespace dbaccess
         virtual void SAL_CALL setClob( sal_Int32 parameterIndex, const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XClob >& x ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
         virtual void SAL_CALL setArray( sal_Int32 parameterIndex, const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XArray >& x ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
         virtual void SAL_CALL clearParameters(  ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
+
+        // XWarningsSupplier
+        virtual ::com::sun::star::uno::Any SAL_CALL getWarnings(  ) throw (::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
+        virtual void SAL_CALL clearWarnings(  ) throw (::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
 
     protected:
         /** implement the <method>execute</method>, without calling the approve listeners and without building a new

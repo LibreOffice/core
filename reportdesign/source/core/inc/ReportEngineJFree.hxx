@@ -57,6 +57,7 @@ namespace reportdesign
         ::com::sun::star::uno::Reference< ::com::sun::star::report::XReportDefinition >     m_xReport;
         ::com::sun::star::uno::Reference< ::com::sun::star::task::XStatusIndicator>         m_StatusIndicator;
         ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >             m_xActiveConnection;
+        ::sal_Int32                                                                         m_nMaxRows;
     private:
         OReportEngineJFree(const OReportEngineJFree&);
         OReportEngineJFree& operator=(const OReportEngineJFree&);
@@ -116,6 +117,8 @@ namespace reportdesign
         virtual void SAL_CALL setActiveConnection( const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >& _activeconnection ) throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException);
         virtual ::com::sun::star::uno::Reference< ::com::sun::star::task::XStatusIndicator > SAL_CALL getStatusIndicator() throw (::com::sun::star::uno::RuntimeException) ;
         virtual void SAL_CALL setStatusIndicator( const ::com::sun::star::uno::Reference< ::com::sun::star::task::XStatusIndicator >& _statusindicator ) throw (::com::sun::star::uno::RuntimeException) ;
+        virtual ::sal_Int32 SAL_CALL getMaxRows() throw (::com::sun::star::uno::RuntimeException);
+        virtual void SAL_CALL setMaxRows( ::sal_Int32 _MaxRows ) throw (::com::sun::star::uno::RuntimeException);
             // Methods
         virtual ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel > SAL_CALL createDocumentModel(  ) throw (::com::sun::star::lang::DisposedException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException) ;
         virtual ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel > SAL_CALL createDocumentAlive( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& _frame ) throw (::com::sun::star::lang::DisposedException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException) ;

@@ -173,6 +173,8 @@ IMPL_LINK(ODbTypeWizDialog, OnTypeSelected, OGeneralPage*, _pTabPage)
         case  ::dbaccess::DST_OUTLOOK:
         case  ::dbaccess::DST_OUTLOOKEXP:
         case  ::dbaccess::DST_EVOLUTION:
+        case  ::dbaccess::DST_EVOLUTION_GROUPWISE:
+        case  ::dbaccess::DST_EVOLUTION_LDAP:
         case  ::dbaccess::DST_KAB:
         case  ::dbaccess::DST_MACAB:
             enableButtons(WZB_NEXT,sal_False);
@@ -198,6 +200,8 @@ WizardTypes::WizardState ODbTypeWizDialog::determineNextState( WizardState _nCur
                 case  ::dbaccess::DST_OUTLOOK:
                 case  ::dbaccess::DST_OUTLOOKEXP:
                 case  ::dbaccess::DST_EVOLUTION:
+                case  ::dbaccess::DST_EVOLUTION_GROUPWISE:
+                case  ::dbaccess::DST_EVOLUTION_LDAP:
                 case  ::dbaccess::DST_KAB:
                 case  ::dbaccess::DST_MACAB:
                     nNextState = WZS_INVALID_STATE;
@@ -218,6 +222,8 @@ WizardTypes::WizardState ODbTypeWizDialog::determineNextState( WizardState _nCur
                 case  ::dbaccess::DST_OUTLOOK:
                 case  ::dbaccess::DST_OUTLOOKEXP:
                 case  ::dbaccess::DST_EVOLUTION:
+                case  ::dbaccess::DST_EVOLUTION_GROUPWISE:
+                case  ::dbaccess::DST_EVOLUTION_LDAP:
                 case  ::dbaccess::DST_KAB:
                 case  ::dbaccess::DST_MACAB:
                 case  ::dbaccess::DST_MSACCESS:

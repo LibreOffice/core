@@ -544,7 +544,10 @@ void DlgEdFunc::checkMovementAllowed(const MouseEvent& rMEvt)
     if ( m_pParent->getSectionWindow()->getViewsWindow()->IsDragObj() )
     {
         if ( isRectangleHit(rMEvt) )
+        {
+            // there is an other component under use, break action
             m_pParent->getSectionWindow()->getViewsWindow()->BrkAction();
+        }
         // object was dragged
         Point aPnt( m_pParent->PixelToLogic( rMEvt.GetPosPixel() ) );
         if (m_bSelectionMode)
@@ -558,6 +561,14 @@ void DlgEdFunc::checkMovementAllowed(const MouseEvent& rMEvt)
             if (bControlKeyPressed && (aPnt.Y() < 0))
             {
                 aPnt.Y() = 0;
+            }
+            if (m_rView.IsDragResize())
+            {
+                // we resize the object don't resize to above sections
+                if ( aPnt.Y() < 0 )
+                {
+                    aPnt.Y() = 0;
+                }
             }
             m_pParent->getSectionWindow()->getViewsWindow()->EndDragObj( bControlKeyPressed, &m_rView, aPnt );
         }
@@ -626,7 +637,7 @@ bool DlgEdFunc::isRectangleHit(const MouseEvent& rMEvt)
                         ::ResizeRect(aNewRect,rDragStat.GetRef1(),rDragStat.GetXFact(),rDragStat.GetYFact());
 
 
-                    SdrObject* pObjOverlapped = isOver(aNewRect,*m_pParent->getPage(),m_rView,false,pObjIter);
+                    SdrObject* pObjOverlapped = isOver(aNewRect,*m_pParent->getPage(),m_rView,false,pObjIter, ISOVER_IGNORE_CUSTOMSHAPES);
                     bIsSetPoint = pObjOverlapped ? true : false;
                     if (pObjOverlapped && !m_bSelectionMode)
                     {
@@ -683,9 +694,24 @@ BOOL DlgEdFuncInsert::MouseButtonDown( const MouseEvent& rMEvt )
         return TRUE;
 
     SdrViewEvent aVEvt;
+    sal_Int16 nId = m_rView.GetCurrentObjIdentifier();
+
     const SdrHitKind eHit = m_rView.PickAnything(rMEvt, SDRMOUSEBUTTONDOWN, aVEvt);
 
-    if( eHit != SDRHIT_UNMARKEDOBJECT )
+// eHit == SDRHIT_UNMARKEDOBJECT under the mouse cursor is a unmarked object
+
+    if (eHit == SDRHIT_UNMARKEDOBJECT &&
+        nId != OBJ_CUSTOMSHAPE)
+    {
+        // there is an object under the mouse cursor, but not a customshape
+        // rtl::OUString suWasN = m_rView.getInsertObjString();
+        // rtl::OUString suWasN2 = m_pParent->getSectionWindow()->getViewsWindow()->GetInsertObjString();
+
+        m_pParent->getSectionWindow()->getViewsWindow()->BrkAction();
+        return FALSE;
+    }
+
+    if( eHit != SDRHIT_UNMARKEDOBJECT || nId == OBJ_CUSTOMSHAPE)
     {
         // if no action, create object
         if ( !m_pParent->getSectionWindow()->getViewsWindow()->IsAction() )
@@ -700,8 +726,10 @@ BOOL DlgEdFuncInsert::MouseButtonDown( const MouseEvent& rMEvt )
     else
     {
         if( !rMEvt.IsShift() )
+        {
+            // shift key pressed?
             m_pParent->getSectionWindow()->getViewsWindow()->unmarkAllObjects(NULL);
-
+        }
         m_pParent->getSectionWindow()->getViewsWindow()->BegMarkObj( m_aMDPos,&m_rView );
     }
 
@@ -777,7 +805,7 @@ BOOL DlgEdFuncInsert::MouseMove( const MouseEvent& rMEvt )
 {
     if ( DlgEdFunc::MouseMove(rMEvt ) )
         return TRUE;
-    const Point aPos( m_pParent->PixelToLogic( rMEvt.GetPosPixel() ) );
+    Point   aPos( m_pParent->PixelToLogic( rMEvt.GetPosPixel() ) );
 
     if ( m_rView.IsCreateObj() )
     {
@@ -788,6 +816,14 @@ BOOL DlgEdFuncInsert::MouseMove( const MouseEvent& rMEvt )
     bool bIsSetPoint = false;
     if ( m_rView.IsAction() )
     {
+        if ( m_rView.IsDragResize() )
+        {
+            // we resize the object don't resize to above sections
+            if ( aPos.Y() < 0 )
+            {
+                aPos.Y() = 0;
+            }
+        }
         bIsSetPoint = setMovementPointer(rMEvt);
         ForceScroll(aPos);
         m_pParent->getSectionWindow()->getViewsWindow()->MovAction(aPos,&m_rView, m_rView.GetDragMethod() == NULL, false);
@@ -893,7 +929,7 @@ BOOL DlgEdFuncSelect::MouseMove( const MouseEvent& rMEvt )
     if ( DlgEdFunc::MouseMove(rMEvt ) )
         return TRUE;
 
-    const Point aPnt( m_pParent->PixelToLogic( rMEvt.GetPosPixel() ) );
+    Point aPnt( m_pParent->PixelToLogic( rMEvt.GetPosPixel() ) );
     bool bIsSetPoint = false;
 
     if ( m_rView.IsAction() ) // Drag Mode
@@ -902,10 +938,29 @@ BOOL DlgEdFuncSelect::MouseMove( const MouseEvent& rMEvt )
         ForceScroll(aPnt);
         if (m_rView.GetDragMethod()==NULL)
         {
+            // create a selection
             m_pParent->getSectionWindow()->getViewsWindow()->MovAction(aPnt, &m_rView, true, false);
         }
         else
         {
+            if ( m_rView.IsDragResize() )
+            {
+                // we resize the object don't resize to above sections
+                if ( aPnt.Y() < 0 )
+                {
+                    aPnt.Y() = 0;
+                }
+                // grow section if it is under the current section
+//                else
+//                {
+//                    const Size& aSectionSize = m_rView->GetSizePixel();
+//                    if ( aPnt.Y() > aSectionSize.Height() )
+//                    {
+//                        aPnt.Y() = aSectionSize.Height();
+//                    }
+//                }
+            }
+            // drag or resize an object
             bool bControlKey = rMEvt.IsMod1();
             m_pParent->getSectionWindow()->getViewsWindow()->MovAction(aPnt, &m_rView, false, bControlKey);
         }

@@ -49,8 +49,8 @@ SLOFILES=	$(SLO)$/RptModel.obj			\
             $(SLO)$/PropertyForward.obj		\
             $(SLO)$/ReportDrawPage.obj		\
             $(SLO)$/ReportUndoFactory.obj   \
+            $(SLO)$/UndoEnv.obj \
             $(SLO)$/formatnormalizer.obj
-
 # --- Targets ----------------------------------
 
 .INCLUDE :  target.mk

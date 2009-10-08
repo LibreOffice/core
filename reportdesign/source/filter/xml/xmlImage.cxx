@@ -33,14 +33,17 @@
 #include <xmloff/xmltoken.hxx>
 #include <xmloff/xmlnmspe.hxx>
 #include <xmloff/nmspmap.hxx>
+#include <xmloff/xmluconv.hxx>
 #include "xmlEnums.hxx"
 #include "xmlComponent.hxx"
 #include "xmlReportElement.hxx"
 #include "xmlControlProperty.hxx"
+#include "xmlHelper.hxx"
 #include <tools/debug.hxx>
+#include <svtools/pathoptions.hxx>
 
 #include <comphelper/componentcontext.hxx>
-#include <com/sun/star/util/XStringSubstitution.hpp>
+#include <com/sun/star/awt/ImageScaleMode.hpp>
 
 namespace rptxml
 {
@@ -50,24 +53,7 @@ namespace rptxml
 DBG_NAME( rpt_OXMLImage )
 
 
-//--------------------------------------------------------------------
-::rtl::OUString OXMLImage::lcl_doStringsubstitution_nothrow( ::rtl::OUString const& _inout_rURL )
-{
-    try
-    {
-        Reference< XInterface > xInt = m_rImport.getORB()->createInstance( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.util.PathSubstitution" ) ) );
-        Reference< util::XStringSubstitution > xStringSubst(xInt, UNO_QUERY);
-
-        return xStringSubst->substituteVariables( _inout_rURL, true );
-    }
-    catch( const Exception& )
-    {
-        // DBG_UNHANDLED_EXCEPTION();
-    }
-    return ::rtl::OUString();
-}
 // -----------------------------------------------------------------------------
-
 OXMLImage::OXMLImage( ORptFilter& rImport,
                 sal_uInt16 nPrfx, const ::rtl::OUString& rLName,
                 const Reference< XAttributeList > & _xAttrList
@@ -96,37 +82,8 @@ OXMLImage::OXMLImage( ORptFilter& rImport,
             {
                 case XML_TOK_IMAGE_DATA:
                     {
-                        // rtl::OUString sTest = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("$(inst)"));
-                        // sTest = lcl_doStringsubstitution_nothrow( sTest );
-                        //
-                        // sTest = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("$(prog)"));
-                        // sTest = lcl_doStringsubstitution_nothrow( sTest );
-                        //
-                        // sTest = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("$(user)"));
-                        // sTest = lcl_doStringsubstitution_nothrow( sTest );
-                        //
-                        // sTest = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("$(work)"));
-                        // sTest = lcl_doStringsubstitution_nothrow( sTest );
-                        //
-                        // sTest = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("$(home)"));
-                        // sTest = lcl_doStringsubstitution_nothrow( sTest );
-                        //
-                        // sTest = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("$(temp)"));
-                        // sTest = lcl_doStringsubstitution_nothrow( sTest );
-                        //
-                        // sTest = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("$(path)"));
-                        // sTest = lcl_doStringsubstitution_nothrow( sTest );
-                        //
-                        // sTest = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("$(lang)"));
-                        // sTest = lcl_doStringsubstitution_nothrow( sTest );
-                        //
-                        // sTest = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("$(langid)"));
-                        // sTest = lcl_doStringsubstitution_nothrow( sTest );
-                        //
-                        // sTest = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("$(vlang)"));
-                        // sTest = lcl_doStringsubstitution_nothrow( sTest );
-
-                        sValue = lcl_doStringsubstitution_nothrow( sValue );
+                        SvtPathOptions aPathOptions;
+                        sValue = aPathOptions.SubstituteVariable(sValue);
                         _xComponent->setImageURL(rImport.GetAbsoluteReference( sValue ));
                     }
 
@@ -135,7 +92,19 @@ OXMLImage::OXMLImage( ORptFilter& rImport,
                     _xComponent->setPreserveIRI(s_sTRUE == sValue);
                     break;
                 case XML_TOK_SCALE:
-                    _xComponent->setScaleImage(s_sTRUE == sValue);
+                    {
+                        sal_uInt16 nRet = awt::ImageScaleMode::None;
+                        if ( s_sTRUE == sValue )
+                        {
+                            nRet = awt::ImageScaleMode::Anisotropic;
+                        }
+                        else
+                        {
+                                   const SvXMLEnumMapEntry* aXML_EnumMap = OXMLHelper::GetImageScaleOptions();
+                                   SvXMLUnitConverter::convertEnum( nRet, sValue, aXML_EnumMap );
+                        }
+                        _xComponent->setScaleMode( nRet );
+                    }
                     break;
                 case XML_TOK_DATA_FORMULA:
                     _xComponent->setDataField(ORptFilter::convertFormula(sValue));

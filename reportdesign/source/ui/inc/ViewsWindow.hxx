@@ -260,7 +260,8 @@ namespace rptui
         /** returns the report section window for the given xsection
             @param  _xSection   the section
         */
-        ::boost::shared_ptr<OSectionWindow> getReportSection(const ::com::sun::star::uno::Reference< ::com::sun::star::report::XSection >& _xSection);
+        // ::boost::shared_ptr<OSectionWindow>  getReportSection(const ::com::sun::star::uno::Reference< ::com::sun::star::report::XSection >& _xSection);
+        ::boost::shared_ptr<OSectionWindow> getSectionWindow(const ::com::sun::star::uno::Reference< ::com::sun::star::report::XSection>& _xSection) const;
 
         /** checks if the keycode is known by the child windows
             @param  _rCode  the keycode

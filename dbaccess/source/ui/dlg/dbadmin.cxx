@@ -410,7 +410,7 @@ SfxItemSet* ODbAdminDialog::createItemSet(SfxItemSet*& _rpSet, SfxItemPool*& _rp
     *pCounter++ = new SfxStringItem(DSID_THOUSANDSDELIMITER, String());
     *pCounter++ = new SfxStringItem(DSID_TEXTFILEEXTENSION, String::CreateFromAscii("txt"));
     *pCounter++ = new SfxBoolItem(DSID_TEXTFILEHEADER, sal_True);
-    *pCounter++ = new SfxBoolItem(DSID_PARAMETERNAMESUBST, sal_True);
+    *pCounter++ = new SfxBoolItem(DSID_PARAMETERNAMESUBST, sal_False);
     *pCounter++ = new SfxInt32Item(DSID_CONN_PORTNUMBER, 8100);
     *pCounter++ = new SfxBoolItem(DSID_SUPPRESSVERSIONCL, sal_False);
     *pCounter++ = new OPropertySetItem(DSID_DATASOURCE_UNO);
@@ -445,6 +445,7 @@ SfxItemSet* ODbAdminDialog::createItemSet(SfxItemSet*& _rpSet, SfxItemPool*& _rp
     *pCounter++ = new SfxBoolItem(DSID_CHECK_REQUIRED_FIELDS, sal_True);
     *pCounter++ = new SfxBoolItem(DSID_IGNORECURRENCY, sal_False);
     *pCounter++ = new SfxStringItem(DSID_CONN_SOCKET, String());
+    *pCounter++ = new SfxBoolItem(DSID_ESCAPE_DATETIME, sal_True); // must be the same as in ModelImpl.cxx
 
     // create the pool
     static SfxItemInfo __READONLY_DATA aItemInfos[DSID_LAST_ITEM_ID - DSID_FIRST_ITEM_ID + 1] =
@@ -504,10 +505,11 @@ SfxItemSet* ODbAdminDialog::createItemSet(SfxItemSet*& _rpSet, SfxItemPool*& _rp
         {0,0},
         {0,0},
         {0,0},
+        {0,0}, /* for Escape DateTime*/
         {0,0}
     };
 
-    OSL_ENSURE(sizeof(aItemInfos)/sizeof(aItemInfos[0]) == DSID_LAST_ITEM_ID,"Invlaid Ids!");
+    OSL_ENSURE(sizeof(aItemInfos)/sizeof(aItemInfos[0]) == DSID_LAST_ITEM_ID,"Invalid Ids!");
     _rpPool = new SfxItemPool(String::CreateFromAscii("DSAItemPool"), DSID_FIRST_ITEM_ID, DSID_LAST_ITEM_ID,
         aItemInfos, _rppDefaults);
     _rpPool->FreezeIdRanges();

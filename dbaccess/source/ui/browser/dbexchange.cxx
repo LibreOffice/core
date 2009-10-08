@@ -164,7 +164,7 @@ namespace dbaui
     // -----------------------------------------------------------------------------
     sal_Bool ODataClipboard::WriteObject( SotStorageStreamRef& rxOStm, void* pUserObject, sal_uInt32 nUserObjectId, const ::com::sun::star::datatransfer::DataFlavor& /*rFlavor*/ )
     {
-        if (nUserObjectId == SOT_FORMAT_RTF || nUserObjectId == SOT_FORMATSTR_ID_HTML || nUserObjectId == SOT_FORMATSTR_ID_HTML_SIMPLE)
+        if (nUserObjectId == SOT_FORMAT_RTF || nUserObjectId == SOT_FORMATSTR_ID_HTML )
         {
             ODatabaseImportExport* pExport = reinterpret_cast<ODatabaseImportExport*>(pUserObject);
             if ( pExport && rxOStm.Is() )
@@ -185,10 +185,7 @@ namespace dbaui
 
         // HTML?
         if (m_pHtml)
-        {
             AddFormat(SOT_FORMATSTR_ID_HTML);
-            AddFormat(SOT_FORMATSTR_ID_HTML_SIMPLE);
-        }
 
         ODataAccessObjectTransferable::AddSupportedFormats();
     }
@@ -196,8 +193,7 @@ namespace dbaui
     // -----------------------------------------------------------------------------
     sal_Bool ODataClipboard::GetData( const DataFlavor& rFlavor )
     {
-        ULONG nFormat = SotExchange::GetFormat(rFlavor);
-        sal_uInt32 nHtml = SOT_FORMATSTR_ID_HTML_SIMPLE;
+        const ULONG nFormat = SotExchange::GetFormat(rFlavor);
         switch (nFormat)
         {
             case SOT_FORMAT_RTF:
@@ -205,12 +201,9 @@ namespace dbaui
                     m_pRtf->initialize(getDescriptor());
                 return m_pRtf && SetObject(m_pRtf, SOT_FORMAT_RTF, rFlavor);
             case SOT_FORMATSTR_ID_HTML:
-                nHtml = SOT_FORMATSTR_ID_HTML;
-                // run through
-            case SOT_FORMATSTR_ID_HTML_SIMPLE:
                 if ( m_pHtml )
                     m_pHtml->initialize(getDescriptor());
-                return m_pHtml && SetObject(m_pHtml, nHtml, rFlavor);
+                return m_pHtml && SetObject(m_pHtml, SOT_FORMATSTR_ID_HTML, rFlavor);
         }
 
         return ODataAccessObjectTransferable::GetData( rFlavor );
@@ -219,8 +212,16 @@ namespace dbaui
     // -----------------------------------------------------------------------------
     void ODataClipboard::ObjectReleased()
     {
-        m_pHtml = NULL;
-        m_pRtf = NULL;
+        if ( m_pHtml )
+        {
+            m_pHtml->dispose();
+            m_pHtml = NULL;
+        } // if ( m_pHtml )
+        if ( m_pRtf )
+        {
+            m_pRtf->dispose();
+            m_pRtf = NULL;
+        }
         m_aEventListeners.clear();
         Reference<XConnection> xConnection;
         Reference<XResultSet> xProp;
@@ -237,16 +238,30 @@ namespace dbaui
         Reference<XConnection> xConnection;
         Reference<XResultSet> xProp;
         if ( getDescriptor().has(daConnection) && (getDescriptor()[daConnection] >>= xConnection) )
+        {
             lcl_removeListener(xConnection,this);
+            getDescriptor().erase(daConnection);
+        } // if ( getDescriptor().has(daConnection) && (getDescriptor()[daConnection] >>= xConnection) )
         if ( getDescriptor().has(daCursor) && (getDescriptor()[daCursor] >>= xProp) )
+        {
             lcl_removeListener(xProp,this);
+            getDescriptor().erase(daCursor);
+        } // if ( getDescriptor().has(daCursor) && (getDescriptor()[daCursor] >>= xProp) )
+
+        if ( getDescriptor().has(daColumnObject) )
+            getDescriptor().erase(daColumnObject);
+
+        if ( getDescriptor().has(daComponent) )
+            getDescriptor().erase(daComponent);
+
 
         ClearFormats();
-        getDescriptor().clear();
+        //getDescriptor().clear();
+        AddSupportedFormats();
 
-        m_pHtml = NULL;
+        /*m_pHtml = NULL;
         m_pRtf = NULL;
-        m_aEventListeners.clear();
+        m_aEventListeners.clear();*/
     }
     // -----------------------------------------------------------------------------
     IMPLEMENT_FORWARD_XINTERFACE2( ODataClipboard, ODataAccessObjectTransferable, TDataClipboard_BASE )

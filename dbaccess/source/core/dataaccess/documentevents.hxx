@@ -32,17 +32,22 @@
 
 /** === begin UNO includes === **/
 #include <com/sun/star/container/XNameReplace.hpp>
+#include <com/sun/star/beans/PropertyValue.hpp>
 /** === end UNO includes === **/
 
 #include <cppuhelper/implbase1.hxx>
 
 #include <memory>
+#include <map>
 #include <boost/noncopyable.hpp>
 
 //........................................................................
 namespace dbaccess
 {
 //........................................................................
+
+    typedef ::std::map< ::rtl::OUString, ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > >
+            DocumentEventsData;
 
     //====================================================================
     //= DocumentEvents
@@ -52,12 +57,11 @@ namespace dbaccess
     typedef ::cppu::WeakImplHelper1 <   ::com::sun::star::container::XNameReplace
                                     >   DocumentEvents_Base;
 
-    class DocumentEvents
-                                    :public DocumentEvents_Base
-                                    ,public ::boost::noncopyable
+    class DocumentEvents    :public DocumentEvents_Base
+                            ,public ::boost::noncopyable
     {
     public:
-        DocumentEvents( ::cppu::OWeakObject& _rParent, ::osl::Mutex& _rMutex );
+        DocumentEvents( ::cppu::OWeakObject& _rParent, ::osl::Mutex& _rMutex, DocumentEventsData& _rEventsData );
         ~DocumentEvents();
 
         static bool needsSynchronousNotification( const ::rtl::OUString& _rEventName );

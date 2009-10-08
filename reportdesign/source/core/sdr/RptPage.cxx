@@ -58,6 +58,9 @@ OReportPage::OReportPage( OReportModel& _rModel
 OReportPage::OReportPage( const OReportPage& rPage )
     :SdrPage( rPage )
     ,rModel(rPage.rModel)
+     ,m_xSection(rPage.m_xSection)
+     ,m_bSpecialInsertMode(rPage.m_bSpecialInsertMode)
+     ,m_aTemporaryObjectList(rPage.m_aTemporaryObjectList)
 {
     DBG_CTOR( rpt_OReportPage,NULL);
 }
@@ -83,18 +86,15 @@ ULONG OReportPage::getIndexOf(const uno::Reference< report::XReportComponent >& 
     DBG_CHKTHIS( rpt_OReportPage,NULL);
     ULONG nCount = GetObjCount();
     ULONG i = 0;
-    if ( nCount != CONTAINER_ENTRY_NOTFOUND )
+    for (; i < nCount; ++i)
     {
-        for (; i < nCount; ++i)
+        OObjectBase* pObj = dynamic_cast<OObjectBase*>(GetObj(i));
+        OSL_ENSURE(pObj,"Invalid object found!");
+        if ( pObj && pObj->getReportComponent() == _xObject )
         {
-            OObjectBase* pObj = dynamic_cast<OObjectBase*>(GetObj(i));
-            OSL_ENSURE(pObj,"Invalid object found!");
-            if ( pObj && pObj->getReportComponent() == _xObject )
-            {
-                break;
-            }
-        } // for (; i < nCount; ++i)
-    }
+            break;
+        }
+    } // for (; i < nCount; ++i)
     return i;
 }
 //----------------------------------------------------------------------------
@@ -187,6 +187,7 @@ void OReportPage::removeTempObject(SdrObject *_pToRemoveObj)
             {
                 SdrObject* pObject = RemoveObject(i);
                 (void)pObject;
+                break;
                 // delete pObject;
             }
         }
@@ -195,6 +196,7 @@ void OReportPage::removeTempObject(SdrObject *_pToRemoveObj)
 
 void OReportPage::resetSpecialMode()
 {
+    const sal_Bool bChanged = rModel.IsChanged();
     ::std::vector<SdrObject*>::iterator aIter = m_aTemporaryObjectList.begin();
     ::std::vector<SdrObject*>::iterator aEnd = m_aTemporaryObjectList.end();
 
@@ -202,6 +204,8 @@ void OReportPage::resetSpecialMode()
     {
          removeTempObject(*aIter);
     }
+    m_aTemporaryObjectList.clear();
+    rModel.SetChanged(bChanged);
 
     m_bSpecialInsertMode = false;
 }

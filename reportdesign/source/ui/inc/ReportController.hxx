@@ -49,7 +49,8 @@
 #include <com/sun/star/report/XReportEngine.hpp>
 #include <com/sun/star/report/XSection.hpp>
 #include <com/sun/star/view/XSelectionSupplier.hpp>
-#include <cppuhelper/implbase4.hxx>
+#include <com/sun/star/embed/XVisualObject.hpp>
+#include <cppuhelper/implbase5.hxx>
 #include <svtools/transfer.hxx>
 #include <svtools/lstner.hxx>
 #include <svx/svdedtv.hxx>
@@ -65,7 +66,7 @@
 #include <functional>
 #include <boost/shared_ptr.hpp>
 #include <com/sun/star/util/XModeSelector.hpp>
-
+#include "ReportControllerObserver.hxx"
 
 class TransferableHelper;
 class TransferableClipboardListener;
@@ -78,12 +79,14 @@ namespace rptui
     class OReportModel;
     class OSectionView;
     class OAddFieldWindow;
+    class OSectionWindow;
 
     typedef ::dbaui::OSingleDocumentController  OReportController_BASE;
-    typedef ::cppu::ImplHelper4 <   ::com::sun::star::container::XContainerListener
+    typedef ::cppu::ImplHelper5 <   ::com::sun::star::container::XContainerListener
                                 ,   ::com::sun::star::beans::XPropertyChangeListener
                                 ,   ::com::sun::star::view::XSelectionSupplier
                                 ,   ::com::sun::star::util::XModeSelector
+                                ,   ::com::sun::star::embed::XVisualObject
                                 >   OReportController_Listener;
 
     class OReportController :    public OReportController_BASE
@@ -103,6 +106,9 @@ namespace rptui
         TransferableClipboardListener*
                                 m_pClipbordNotifier;    /// notifier for changes in the clipboard
         OGroupsSortingDialog*   m_pGroupsFloater;
+
+        OXReportControllerObserver* m_pReportControllerObserver;
+
         ::com::sun::star::uno::Reference< ::com::sun::star::report::XReportDefinition>          m_xReportDefinition;
         ::com::sun::star::uno::Reference< ::com::sun::star::report::XReportEngine>              m_xReportEngine;
         ::com::sun::star::uno::Reference < ::com::sun::star::frame::XComponentLoader>           m_xFrameLoader;
@@ -110,6 +116,7 @@ namespace rptui
         ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XRowSet >                     m_xRowSet;
         ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertyChangeListener >    m_xRowSetMediator;
         ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatter >            m_xFormatter;   // a number formatter working with the report's NumberFormatsSupplier
+        ::com::sun::star::awt::Size                                                             m_aVisualAreaSize;
 
         ::boost::shared_ptr<rptui::OReportModel>
                                 m_aReportModel;
@@ -119,6 +126,7 @@ namespace rptui
         sal_Int32               m_nSplitPos;            /// the position of the splitter
         sal_Int32               m_nPageNum;             /// the page number from the restoreView call
         sal_Int32               m_nSelectionCount;
+        ::sal_Int64             m_nAspect;
         sal_Int16               m_nZoomValue;
         SvxZoomType             m_eZoomType;
         sal_Bool                m_bShowRuler;
@@ -129,6 +137,7 @@ namespace rptui
         sal_Bool                m_bHelplinesMove;
         bool                    m_bChartEnabled;
         bool                    m_bChartEnabledAsked;
+        bool                    m_bInGeneratePreview;
 
         /** creates a formatted field in the given section with the given formula as data field
         *
@@ -206,6 +215,16 @@ namespace rptui
 
         void executeMethodWithUndo(USHORT _nUndoStrId,const ::std::mem_fun_t<void,ODesignView>& _pMemfun);
         void alignControlsWithUndo(USHORT _nUndoStrId,sal_Int32 _nControlModification,bool _bAlignAtSection = false);
+        /** shrink a section
+        @param _nUndoStrId the string id of the string which is shown in undo menu
+        @param _nShrinkId  ID of what you would like to shrink.
+        */
+    protected:
+        void shrinkSectionBottom(::com::sun::star::uno::Reference< ::com::sun::star::report::XSection > _xSection);
+        void shrinkSectionTop(::com::sun::star::uno::Reference< ::com::sun::star::report::XSection > _xSection);
+    public:
+
+        void shrinkSection(USHORT _nUndoStrId, ::com::sun::star::uno::Reference< ::com::sun::star::report::XSection > _xSection, sal_Int32 _nShrinkId);
 
         /** opens the file open dialog to allow the user to select a image which will be
         * bound to a newly created image button.
@@ -267,9 +286,10 @@ namespace rptui
         */
         void impl_zoom_nothrow();
 
+    private:
         OReportController(OReportController const&);
         OReportController& operator =(OReportController const&);
-
+    public:
         ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame > getXFrame();
 
         // open the help agent of report designer at start time
@@ -394,6 +414,12 @@ namespace rptui
         virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getSupportedModes(  ) throw (::com::sun::star::uno::RuntimeException) ;
         virtual ::sal_Bool SAL_CALL supportsMode( const ::rtl::OUString& aMode ) throw (::com::sun::star::uno::RuntimeException) ;
 
+        // XVisualObject
+        virtual void SAL_CALL setVisualAreaSize( ::sal_Int64 nAspect, const ::com::sun::star::awt::Size& aSize ) throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::embed::WrongStateException, ::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException);
+        virtual ::com::sun::star::awt::Size SAL_CALL getVisualAreaSize( ::sal_Int64 nAspect ) throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::embed::WrongStateException, ::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException);
+        virtual ::com::sun::star::embed::VisualRepresentation SAL_CALL getPreferredVisualRepresentation( ::sal_Int64 nAspect ) throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::embed::WrongStateException, ::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException);
+        virtual ::sal_Int32 SAL_CALL getMapUnit( ::sal_Int64 nAspect ) throw (::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException);
+
 
         /** returns the current position of the splitter
         *
@@ -439,6 +465,8 @@ namespace rptui
 
     // cppu::OPropertySetHelper
         virtual ::cppu::IPropertyArrayHelper& SAL_CALL getInfoHelper();
+
+        ::boost::shared_ptr<OSectionWindow> getSectionWindow(const ::com::sun::star::uno::Reference< ::com::sun::star::report::XSection>& _xSection) const;
 
     private:
         virtual void onLoadedMenu( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XLayoutManager >& _xLayoutManager );

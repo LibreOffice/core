@@ -163,6 +163,8 @@ namespace dbaccess
         sal_Bool reFillMatrix(sal_Int32 _nNewStartPos,sal_Int32 nNewEndPos);
         sal_Bool fillMatrix(sal_Int32 &_nNewStartPos,sal_Int32 _nNewEndPos);
         sal_Bool moveWindow();
+        // returns true when a keyset needs to be created.
+        sal_Bool impl_createBookmarkSet_nothrow(const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSet >& _xRs);
 
         void firePropertyChange(sal_Int32 _nColumnIndex,const ::connectivity::ORowSetValue& _rOldValue);
 
@@ -187,7 +189,7 @@ namespace dbaccess
         // is called when after a moveToInsertRow a movement (next, etc) was called
         void cancelRowModification();
     public:
-        ORowSetCache(const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSet >&,
+        ORowSetCache(const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSet >& _xRs,
                      const ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XSingleSelectQueryAnalyzer >& _xAnalyzer,
                      const ::comphelper::ComponentContext& _rContext,
                      const ::rtl::OUString& _rUpdateTableName,

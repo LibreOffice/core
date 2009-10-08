@@ -74,7 +74,7 @@ namespace reportdesign
         ::rtl::OUString                                     sHyperLinkName;
         ::rtl::OUString                                     sVisitedCharStyleName;
         ::rtl::OUString                                     sUnvisitedCharStyleName;
-        short                                               aVerticalAlignment;
+        com::sun::star::style::VerticalAlignment            aVerticalAlignment;
         ::sal_Int16                                         nCharEscapement;
         ::sal_Int16                                         nCharCaseMap;
         ::sal_Int16                                         nCharKerning;

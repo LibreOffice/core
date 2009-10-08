@@ -45,6 +45,7 @@
 
 #include <svx/globlmn.hrc>
 #include <svx/svxids.hrc>
+#include <svtools/imgdef.hxx>
 
 #include "GroupExchange.hxx"
 #include "UITools.hxx"
@@ -58,6 +59,8 @@
 #include <vcl/msgbox.hxx>
 #include <algorithm>
 #include <boost/bind.hpp>
+
+#include <cppuhelper/bootstrap.hxx>
 
 #define HANDLE_ID           0
 #define FIELD_EXPRESSION    1
@@ -89,8 +92,8 @@ class OFieldExpressionControl : public TContainerListenerBase
     void fillListBox(const uno::Reference< beans::XPropertySet>& _xDest,long nRow,USHORT nColumnId);
     BOOL SaveModified(bool _bAppend);
 
-    OFieldExpressionControl(const OFieldExpressionControl&);
-    void operator =(const OFieldExpressionControl&);
+    OFieldExpressionControl(const OFieldExpressionControl&); // NO COPY
+    void operator =(const OFieldExpressionControl&);         // NO ASSIGN
 public:
     OFieldExpressionControl( OGroupsSortingDialog* _pParent,const ResId& _rResId);
     virtual ~OFieldExpressionControl();
@@ -153,10 +156,13 @@ private:
     DECL_LINK( AsynchActivate, void* );
     DECL_LINK( AsynchDeactivate, void* );
     DECL_LINK( DelayedPaste, void* );
-    DECL_LINK( DelayedDelete, void* );
     DECL_LINK( CBChangeHdl,ComboBox*);
 
     void InsertRows( long nRow );
+
+public:
+    DECL_LINK( DelayedDelete, void* );
+
 };
 //========================================================================
 // class OFieldExpressionControl
@@ -771,7 +777,16 @@ void OFieldExpressionControl::DeleteRows()
 {
     DBG_CHKTHIS( rpt_OFieldExpressionControl,NULL);
 
+    sal_Bool bIsEditing = IsEditing();
+    if (bIsEditing)
+    {
+        DeactivateCell();
+    }
     long nIndex = FirstSelectedRow();
+    if (nIndex == -1)
+    {
+        nIndex = GetCurRow();
+    }
     bool bFirstTime = true;
 
     long nOldDataPos = nIndex;
@@ -945,8 +960,13 @@ OGroupsSortingDialog::OGroupsSortingDialog( Window* _pParent
     ,OPropertyChangeListener(m_aMutex)
     ,m_aFL2(this, ModuleRes(FL_SEPARATOR2) )
     ,m_aMove(this, ModuleRes(FT_MOVELABEL) )
-    ,m_aUp(this, ModuleRes(PB_UP) )
-    ,m_aDown(this, ModuleRes(PB_DOWN) )
+/*
+    ,m_aPB_Up(this, ModuleRes(PB_UP) )
+    ,m_aPB_Down(this, ModuleRes(PB_DOWN) )
+    ,m_aPB_Delete(this, ModuleRes(PB_DELETE) )
+*/
+    ,m_aToolBox(this, ModuleRes(TB_TOOLBOX) )
+
     ,m_aFL3(this, ModuleRes(FL_SEPARATOR3) )
     ,m_aOrder(this, ModuleRes(FT_ORDER) )
     ,m_aOrderLst(this, ModuleRes(LST_ORDER) )
@@ -999,11 +1019,12 @@ OGroupsSortingDialog::OGroupsSortingDialog( Window* _pParent
         nMaxTextWidth = ::std::max<sal_Int32>(nTextWidth,nMaxTextWidth);
     }
 
-    Size aSpace = LogicToPixel( Size( UNRELATED_CONTROLS, PAGE_HEIGHT), MAP_APPFONT );
+    Size aSize(UNRELATED_CONTROLS, PAGE_HEIGHT);
+    Size aSpace = LogicToPixel( aSize, MAP_APPFONT );
     Size aOutSize(nMaxTextWidth + m_aHeader.GetSizePixel().Width() + 3*aSpace.Width(),aSpace.Height());
     SetMinOutputSizePixel(aOutSize);
     SetOutputSizePixel(aOutSize);
-    Resize();
+//  Resize();
 
     m_pReportListener = new OPropertyChangeMultiplexer(this,m_pController->getReportDefinition().get());
     m_pReportListener->addProperty(PROPERTY_COMMAND);
@@ -1015,19 +1036,25 @@ OGroupsSortingDialog::OGroupsSortingDialog( Window* _pParent
 
     //m_aHelpWindow.SetReadOnly();
     m_aHelpWindow.SetControlBackground( GetSettings().GetStyleSettings().GetFaceColor() );
-    m_aUp.SetClickHdl(LINK(this,OGroupsSortingDialog,ClickHdl));
-    m_aDown.SetClickHdl(LINK(this,OGroupsSortingDialog,ClickHdl));
+    //BTN m_aPB_Up.SetClickHdl(LINK(this,OGroupsSortingDialog,ClickHdl));
+    //BTN m_aPB_Down.SetClickHdl(LINK(this,OGroupsSortingDialog,ClickHdl));
+    //BTN m_aPB_Delete.SetClickHdl(LINK(this,OGroupsSortingDialog,ClickHdl));
 
     m_pFieldExpression->SetZOrder(&m_aFL2, WINDOW_ZORDER_BEHIND);
 
     m_aMove.SetZOrder(m_pFieldExpression, WINDOW_ZORDER_BEHIND);
-    m_aUp.SetZOrder(&m_aMove, WINDOW_ZORDER_BEHIND);
-    m_aDown.SetZOrder(&m_aUp, WINDOW_ZORDER_BEHIND);
+    //BTN m_aPB_Up.SetZOrder(&m_aMove, WINDOW_ZORDER_BEHIND);
+    //BTN m_aPB_Down.SetZOrder(&m_aPB_Up, WINDOW_ZORDER_BEHIND);
     // set Hi contrast bitmaps
-    m_aUp.SetModeImage(     ModuleRes(IMG_UP_H),BMP_COLOR_HIGHCONTRAST);
-    m_aDown.SetModeImage(   ModuleRes(IMG_DOWN_H),BMP_COLOR_HIGHCONTRAST);
+    //BTN m_aPB_Up.SetModeImage(        ModuleRes(IMG_UP_H),BMP_COLOR_HIGHCONTRAST);
+    //BTN m_aPB_Down.SetModeImage(  ModuleRes(IMG_DOWN_H),BMP_COLOR_HIGHCONTRAST);
+    m_aToolBox.SetStyle(m_aToolBox.GetStyle()|WB_LINESPACING);
+    m_aToolBox.SetSelectHdl(LINK(this, OGroupsSortingDialog, OnFormatAction));
+    m_aToolBox.SetImageListProvider(this);
+    setToolBox(&m_aToolBox);
 
     checkButtons(0);
+    Resize();
 
     FreeResource();
 }
@@ -1182,9 +1209,13 @@ IMPL_LINK(OGroupsSortingDialog, OnControlFocusLost, Control*, pControl )
     return 0L;
 }
 // -----------------------------------------------------------------------------
-IMPL_LINK( OGroupsSortingDialog, ClickHdl, ImageButton*, _pButton )
+IMPL_LINK( OGroupsSortingDialog, OnFormatAction, ToolBox*, /*NOTINTERESTEDIN*/ )
+// IMPL_LINK( OGroupsSortingDialog, ClickHdl, ImageButton*, _pButton )
 {
     DBG_CHKTHIS( rpt_OGroupsSortingDialog,NULL);
+
+    USHORT nCommand = m_aToolBox.GetCurItemId();
+
     if ( m_pFieldExpression )
     {
         long nIndex = m_pFieldExpression->GetCurrRow();
@@ -1195,20 +1226,35 @@ IMPL_LINK( OGroupsSortingDialog, ClickHdl, ImageButton*, _pButton )
             aClipboardList.realloc(1);
             aClipboardList[0] = m_xGroups->getByIndex(nGroupPos);
         }
-        if ( _pButton == &m_aUp )
-            --nIndex;
-        else
-            ++nIndex;
-
-        if ( nIndex >= 0 && aClipboardList.getLength() )
+        //BTN if ( _pButton == &m_aPB_Up )
+        if ( nCommand == SID_RPT_GROUPSORT_MOVE_UP )
         {
-            m_pFieldExpression->SetNoSelection();
-            m_pFieldExpression->moveGroups(aClipboardList,nIndex,sal_False);
-            m_pFieldExpression->DeactivateCell();
-            m_pFieldExpression->GoToRow(nIndex);
-            //long nCurRow = m_pFieldExpression->GetCurRow();
-            m_pFieldExpression->ActivateCell(nIndex, m_pFieldExpression->GetCurColumnId());
-            DisplayData(nIndex);
+            --nIndex;
+        }
+        //BTN if ( _pButton == &m_aPB_Down )
+        if ( nCommand == SID_RPT_GROUPSORT_MOVE_DOWN )
+        {
+            ++nIndex;
+        }
+        //BTN if ( _pButton == &m_aPB_Delete )
+        if ( nCommand == SID_RPT_GROUPSORT_DELETE )
+        {
+            // m_pFieldExpression->DeleteCurrentRow();
+            Application::PostUserEvent( LINK(m_pFieldExpression, OFieldExpressionControl, DelayedDelete) );
+            // UpdateData( );
+        }
+        else
+        {
+            if ( nIndex >= 0 && aClipboardList.getLength() )
+            {
+                m_pFieldExpression->SetNoSelection();
+                m_pFieldExpression->moveGroups(aClipboardList,nIndex,sal_False);
+                m_pFieldExpression->DeactivateCell();
+                m_pFieldExpression->GoToRow(nIndex);
+                //long nCurRow = m_pFieldExpression->GetCurRow();
+                m_pFieldExpression->ActivateCell(nIndex, m_pFieldExpression->GetCurColumnId());
+                DisplayData(nIndex);
+            }
         }
     }
     return 1L;
@@ -1393,10 +1439,17 @@ void OGroupsSortingDialog::Resize()
     m_aFL2.SetSizePixel(Size(aTotalOutputSize.Width() - aSpace.Width(),m_aFL2.GetSizePixel().Height()));
     m_aFL3.SetSizePixel(Size(aTotalOutputSize.Width() - aSpace.Width(),m_aFL3.GetSizePixel().Height()));
 
-    sal_Int32 nPos = aTotalOutputSize.Width() - aSpace.Width() - m_aUp.GetSizePixel().Width();
-    m_aDown.SetPosPixel(Point(nPos,m_aDown.GetPosPixel().Y()));
-    nPos -= (m_aUp.GetSizePixel().Width() + LogicToPixel( Size( RELATED_CONTROLS, 0 ), MAP_APPFONT ).Width());
-    m_aUp.SetPosPixel(Point(nPos,m_aUp.GetPosPixel().Y()));
+//BTN   sal_Int32 nPos = aTotalOutputSize.Width() - aSpace.Width() - m_aPB_Up.GetSizePixel().Width();
+//BTN   m_aPB_Delete.SetPosPixel(Point(nPos,m_aPB_Delete.GetPosPixel().Y()));
+//BTN
+//BTN   nPos -= (m_aPB_Up.GetSizePixel().Width() + LogicToPixel( Size( UNRELATED_CONTROLS, 0 ), MAP_APPFONT ).Width());
+//BTN   m_aPB_Down.SetPosPixel(Point(nPos,m_aPB_Down.GetPosPixel().Y()));
+//BTN
+//BTN   nPos -= (m_aPB_Up.GetSizePixel().Width() + LogicToPixel( Size( RELATED_CONTROLS, 0 ), MAP_APPFONT ).Width());
+//BTN   m_aPB_Up.SetPosPixel(Point(nPos,m_aPB_Up.GetPosPixel().Y()));
+    sal_Int32 nPos = aTotalOutputSize.Width() - aSpace.Width() - m_aToolBox.GetSizePixel().Width();
+    m_aToolBox.SetPosPixel(Point(nPos,m_aToolBox.GetPosPixel().Y()));
+
     Point aHelpPos = m_aHelpWindow.GetPosPixel();
     m_aHelpWindow.SetSizePixel(Size(aTotalOutputSize.Width() - aHelpPos.X(),aTotalOutputSize.Height() - aHelpPos.Y()));
 }
@@ -1404,10 +1457,86 @@ void OGroupsSortingDialog::Resize()
 void OGroupsSortingDialog::checkButtons(sal_Int32 _nRow)
 {
     sal_Int32 nGroupCount = m_xGroups->getCount();
-    sal_Bool bEnable = nGroupCount > 1;
-    m_aUp.Enable(bEnable && _nRow > 0 );
-    m_aDown.Enable(bEnable && _nRow < (m_pFieldExpression->GetRowCount()-1) );
+    sal_Int32 nRowCount = m_pFieldExpression->GetRowCount();
+    sal_Bool bEnabled = nGroupCount > 1;
+
+    if (bEnabled && _nRow > 0 /* && _nRow < nGroupCount */ )
+    {
+        m_aToolBox.EnableItem(SID_RPT_GROUPSORT_MOVE_UP, sal_True);
+    }
+    else
+    {
+        m_aToolBox.EnableItem(SID_RPT_GROUPSORT_MOVE_UP, sal_False);
+    }
+    if (bEnabled && _nRow < (nRowCount - 1) /* && _nRow < (nGroupCount - 1) */ )
+    {
+        m_aToolBox.EnableItem(SID_RPT_GROUPSORT_MOVE_DOWN, sal_True);
+    }
+    else
+    {
+        m_aToolBox.EnableItem(SID_RPT_GROUPSORT_MOVE_DOWN, sal_False);
+    }
+    //BTN m_aPB_Up.Enable(bEnable && _nRow > 0 );
+    //BTN m_aPB_Down.Enable(bEnable && _nRow < (m_pFieldExpression->GetRowCount()-1) );
+    // m_aToolBox.EnableItem(SID_RPT_GROUPSORT_MOVE_DOWN, bEnable && _nRow < (-1) );
+
+    sal_Int32 nGroupPos = m_pFieldExpression->getGroupPosition(_nRow);
+    if ( nGroupPos != NO_GROUP )
+    {
+        sal_Bool bEnableDelete = nGroupCount > 0;
+        //BTN m_aPB_Delete.Enable(bEnableDelete );
+        m_aToolBox.EnableItem(SID_RPT_GROUPSORT_DELETE, bEnableDelete);
+    }
+    else
+    {
+        //BTN m_aPB_Delete.Enable( sal_False );
+        m_aToolBox.EnableItem(SID_RPT_GROUPSORT_DELETE, sal_False);
+    }
 }
+
+ImageList OGroupsSortingDialog::getImageList(sal_Int16 _eBitmapSet,sal_Bool _bHiContast) const
+{
+    sal_Int16 nN = IMG_CONDFORMAT_DLG_SC;
+    sal_Int16 nH = IMG_CONDFORMAT_DLG_SCH;
+    if ( _eBitmapSet == SFX_SYMBOLS_SIZE_LARGE )
+    {
+        nN = IMG_CONDFORMAT_DLG_LC;
+        nH = IMG_CONDFORMAT_DLG_LCH;
+    }
+    return ImageList(ModuleRes( _bHiContast ? nH : nN ));
+}
+
+//------------------------------------------------------------------
+void OGroupsSortingDialog::resizeControls(const Size& _rDiff)
+{
+    // we use large images so we must change them
+    if ( _rDiff.Width() || _rDiff.Height() )
+    {
+        Point aPos = LogicToPixel( Point( 2*RELATED_CONTROLS , 0), MAP_APPFONT );
+        Invalidate();
+    }
+}
+
+//------------------------------------------------------------------
+// load the images
+ImageList OGroupsSortingDialog::getImageList(vcl::ImageListType _eType) SAL_THROW (( com::sun::star::lang::IllegalArgumentException ))
+{
+    if (_eType == vcl::HIGHCONTRAST_NO)
+    {
+        return ImageList(ModuleRes(IMGLST_GROUPSORT_DLG_SC));
+    }
+    else if (_eType == vcl::HIGHCONTRAST_YES)
+    {
+        return ImageList(ModuleRes(IMGLST_GROUPSORT_DLG_SCH));
+    }
+    else
+    {
+        throw com::sun::star::lang::IllegalArgumentException(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("High contrast parameter is wrong.")), NULL, 0);
+    }
+}
+
+
+
 // =============================================================================
 } // rptui
 // =============================================================================

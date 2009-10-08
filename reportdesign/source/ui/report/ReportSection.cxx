@@ -420,7 +420,7 @@ void OReportSection::Copy(uno::Sequence< beans::NamedValue >& _rAllreadyCopiedOb
 //----------------------------------------------------------------------------
 void OReportSection::MouseButtonDown( const MouseEvent& rMEvt )
 {
-    m_pParent->getViewsWindow()->getView()->setMarked(m_pView,sal_True);
+    m_pParent->getViewsWindow()->getView()->setMarked(m_pView,sal_True); // mark the section in which is clicked
     m_pFunc->MouseButtonDown( rMEvt );
     Window::MouseButtonDown(rMEvt);
 }
@@ -436,6 +436,7 @@ void OReportSection::MouseButtonUp( const MouseEvent& rMEvt )
 void OReportSection::MouseMove( const MouseEvent& rMEvt )
 {
     m_pFunc->MouseMove( rMEvt );
+
 }
 //----------------------------------------------------------------------------
 void OReportSection::SetGridVisible(BOOL _bVisible)

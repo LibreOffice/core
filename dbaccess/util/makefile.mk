@@ -67,7 +67,6 @@ SHL1STDLIBS= \
         $(UCBHELPERLIB) \
         $(SVLLIB)	\
         $(CPPULIB) \
-        $(VOSLIB) \
         $(SALLIB) \
         $(SFXLIB) \
         $(BASICLIB) \
@@ -114,7 +113,6 @@ SHL2TARGET=$(TARGET2)$(DLLPOSTFIX)
 SHL2STDLIBS= \
         $(SVXLIB)				\
         $(SFXLIB)				\
-        $(BASICLIB)				\
         $(SVTOOLLIB)			\
         $(FWELIB)				\
         $(TKLIB)				\

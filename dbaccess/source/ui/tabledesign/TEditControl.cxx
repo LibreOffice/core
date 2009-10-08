@@ -349,6 +349,16 @@ void OTableEditorCtrl::InitCellController()
     pTypeCell->SetHelpId(HID_TABDESIGN_TYPECELL);
     pDescrCell->SetHelpId(HID_TABDESIGN_COMMENTCELL);
 
+    Size aHeight;
+    const Control* pControls[] = { pTypeCell,pDescrCell,pNameCell};
+    for(sal_Size i= 0; i < sizeof(pControls)/sizeof(pControls[0]);++i)
+    {
+        const Size aTemp( pControls[i]->GetOptimalSize(WINDOWSIZE_PREFERRED) );
+        if ( aTemp.Height() > aHeight.Height() )
+            aHeight.Height() = aTemp.Height();
+    } // for(int i= 0; i < sizeof(pControls)/sizeof(pControls[0]);++i
+    SetDataRowHeight(aHeight.Height());
+
     ClearModified();
 }
 

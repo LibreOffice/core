@@ -454,17 +454,13 @@ namespace dbaui
             aInfo = dbtools::SQLExceptionInfo(aSQLException);
 
             // more like a hack, insert an empty message
-            OExtensionNotPresentDialog aDlg(m_pDialogParent, m_xORB);
-
-            String sText = aDlg.getText();
+            String sText( ModuleRes( RID_STR_EXTENSION_NOT_PRESENT ) );
             sText = sText.GetToken(0,'\n');
             aInfo.prepend(sText);
 
             String sMessage = String(ModuleRes(STR_COULDNOTOPEN_LINKEDDOC));
             sMessage.SearchAndReplaceAscii("$file$",_rLinkName);
             aInfo.prepend(sMessage);
-        //  OExtensionNotPresentDialog aDlg(m_pDialogParent, m_xORB);
-  //          aDlg.Execute();
         }
         catch(Exception& e)
         {

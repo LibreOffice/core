@@ -129,6 +129,7 @@ private:
 
     mutable UniReference < XMLPropertySetMapper >   m_xTableStylesPropertySetMapper;
     mutable UniReference < XMLPropertySetMapper >   m_xColumnStylesPropertySetMapper;
+    mutable UniReference < XMLPropertySetMapper >   m_xCellStylesPropertySetMapper;
     Reference<XPropertySet>                         m_xDataSource;
     sal_Int32                                       m_nPreviewMode;
     bool                                            m_bNewFormat;
@@ -188,6 +189,7 @@ public:
 
     UniReference < XMLPropertySetMapper > GetTableStylesPropertySetMapper() const;
     UniReference < XMLPropertySetMapper > GetColumnStylesPropertySetMapper() const;
+    UniReference < XMLPropertySetMapper > GetCellStylesPropertySetMapper() const;
 
     /** add a Info to the sequence which will be appened to the data source
         @param  _rInfo The property to append.

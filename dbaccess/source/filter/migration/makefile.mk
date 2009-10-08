@@ -59,7 +59,6 @@ SHL1STDLIBS=\
     $(COMPHELPERLIB)	\
     $(CPPUHELPERLIB)	\
     $(CPPULIB)			\
-    $(UCBHELPERLIB)		\
     $(SFXLIB)			\
     $(SVLLIB)			\
     $(SALLIB)

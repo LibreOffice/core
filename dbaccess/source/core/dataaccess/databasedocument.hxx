@@ -206,6 +206,7 @@ class ODatabaseDocument :public ModelDependentComponent             // ModelDepe
     */
     InitState                                                                                   m_eInitState;
     bool                                                                                        m_bClosing;
+    bool                                                                                        m_bAllowDocumentScripting;
 
     enum StoreType { SAVE, SAVE_AS };
     /** stores the document to the given URL, rebases it to the respective new storage, if necessary, resets
@@ -267,7 +268,7 @@ class ODatabaseDocument :public ModelDependentComponent             // ModelDepe
         @param  _xStorageToSaveTo
             The storage which should be used for saving
     */
-    void writeStorage(
+    void impl_writeStorage_throw(
         const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& _rxTargetStorage,
         const ::comphelper::NamedValueCollection& _rMediaDescriptor
     ) const;
@@ -534,7 +535,12 @@ private:
 
     /** imports the document from the given resource.
     */
-    void    impl_import_throw( const ::comphelper::NamedValueCollection& _rResource );
+    static void
+            impl_import_nolck_throw(
+                const ::comphelper::ComponentContext _rContext,
+                const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _rxTargetComponent,
+                const ::comphelper::NamedValueCollection& _rResource
+            );
 
     /** creates a storage for the given URL, truncating it if a file with this name already exists
 
@@ -570,6 +576,14 @@ private:
         Note that the document is actually not rebased to this storage, it just stores a copy of itself
         to the given target storage.
 
+        @param _rxTargetStorage
+            denotes the storage to store the document into
+        @param _rMediaDescriptor
+            contains additional parameters for storing the document
+        @param _rDocGuard
+            a guard which holds the (only) lock to the document, and which will be temporarily
+            released where necessary (e.g. for notifications, or calling into other components)
+
         @throws ::com::sun::star::uno::IllegalArgumentException
             if the given storage is <NULL/>.
 
@@ -582,21 +596,15 @@ private:
     */
     void    impl_storeToStorage_throw(
                 const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& _rxTargetStorage,
-                const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& _rMediaDescriptor
+                const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& _rMediaDescriptor,
+                DocumentGuard& _rDocGuard
             ) const;
-
-    /// determines whether we should disable the scripting related interfaces
-    bool    impl_shouldDisallowScripting_nolck_nothrow() const;
-
-    /** checks whether we need to implicitly initialize the document
-
-    */
 };
 
 /** an extended version of the ModelMethodGuard, which also cares for the initialization state
     of the document
 */
-class DocumentGuard : public ModelMethodGuard
+class DocumentGuard : private ModelMethodGuard
 {
 public:
     enum MethodType
@@ -629,12 +637,13 @@ public:
     */
     DocumentGuard( const ODatabaseDocument& _document, MethodType _eType = DefaultMethod )
         :ModelMethodGuard( _document )
+        ,m_document( _document )
     {
         switch ( _eType )
         {
-            case InitMethod:            _document.checkNotInitialized();   break;
-            case DefaultMethod:         _document.checkInitialized();      break;
-            case MethodUsedDuringInit:  _document.checkNotUninitilized();  break;
+            case InitMethod:            m_document.checkNotInitialized();    break;
+            case DefaultMethod:         m_document.checkInitialized();       break;
+            case MethodUsedDuringInit:  m_document.checkNotUninitilized();   break;
             case MethodWithoutInit:                                         break;
         }
     }
@@ -642,6 +651,20 @@ public:
     ~DocumentGuard()
     {
     }
+
+    void clear()
+    {
+        ModelMethodGuard::clear();
+    }
+    void reset()
+    {
+        ModelMethodGuard::reset();
+        m_document.checkDisposed();
+    }
+
+private:
+
+    const ODatabaseDocument& m_document;
 };
 
 //........................................................................

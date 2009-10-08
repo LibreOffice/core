@@ -57,9 +57,15 @@ namespace rptui
     protected:
         virtual ~OXUndoEnvironment();
 
+        void SetUndoMode(sal_Bool _bUndo);
+
     public:
         OXUndoEnvironment(OReportModel& _rModel);
 
+        /**
+           Create an object ob OUndoEnvLock locks the undo possibility
+           As long as in the OUndoEnvLock scope, no undo is possible for manipulated object.
+         */
         class OUndoEnvLock
         {
             OXUndoEnvironment& m_rUndoEnv;
@@ -68,9 +74,33 @@ namespace rptui
             ~OUndoEnvLock(){ m_rUndoEnv.UnLock(); }
         };
 
+        /**
+           This is near the same as OUndoEnvLock but it is also possible to ask for the current mode.
+           UndoMode will set if SID_UNDO is called in execute()
+         */
+        class OUndoMode
+        {
+            OXUndoEnvironment& m_rUndoEnv;
+        public:
+            OUndoMode(OXUndoEnvironment& _rUndoEnv)
+                :m_rUndoEnv(_rUndoEnv)
+            {
+                m_rUndoEnv.Lock();
+                m_rUndoEnv.SetUndoMode(sal_True);
+            }
+            ~OUndoMode()
+            {
+                m_rUndoEnv.SetUndoMode(sal_False);
+                m_rUndoEnv.UnLock();
+            }
+        };
+
         void Lock();
         void UnLock();
         sal_Bool IsLocked() const;
+
+        // returns sal_True is we are in UNDO
+        sal_Bool IsUndoMode() const;
 
         // access control
         struct Accessor { friend class OReportModel; private: Accessor() { } };

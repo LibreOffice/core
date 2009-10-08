@@ -64,6 +64,11 @@ class ResMgr;
 struct FmFoundRecordInformation;
 struct FmSearchContext;
 
+namespace dbtools
+{
+    class SQLExceptionInfo;
+}
+
 namespace dbaui
 {
 
@@ -98,7 +103,8 @@ namespace dbaui
         ::com::sun::star::uno::Reference< ::com::sun::star::form::XFormComponent >      m_xGridModel;   // the model of our grid
         ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatter >    m_xFormatter;   // a number formatter working with the connection's NumberFormatsSupplier
         ::com::sun::star::uno::Reference< ::com::sun::star::uno::XAggregation >         m_xFormControllerImpl;
-        ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XSingleSelectQueryComposer >   m_xParser;      // for sorting 'n filtering
+        mutable ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XSingleSelectQueryComposer >
+                                                                                        m_xParser;      // for sorting 'n filtering
 
         AutoTimer               m_aInvalidateClipboard;             // for testing the state of the CUT/COPY/PASTE-slots
 
@@ -124,6 +130,7 @@ namespace dbaui
         sal_Bool                m_bLoadCanceled : 1;            // the load was canceled somehow
         sal_Bool                m_bClosingKillOpen : 1;         // are we killing the load thread because we are to be suspended ?
         sal_Bool                m_bErrorOccured : 1;            // see enter-/leaveFormAction
+        bool                    m_bCannotSelectUnfiltered : 1;  // recieved an DATA_CANNOT_SELECT_UNFILTERED error
 
     protected:
         class FormErrorHelper
@@ -150,7 +157,7 @@ namespace dbaui
         sal_Bool    isValidCursor() const;  // checks the ::com::sun::star::data::XDatabaseCursor-interface of m_xRowSet
         sal_Bool    isLoaded() const;
         sal_Bool    loadingCancelled() const { return m_bLoadCanceled; }
-        void        setLoadingStarted()     { m_bLoadCanceled = sal_False; }
+        void        onStartLoading( const ::com::sun::star::uno::Reference< ::com::sun::star::form::XLoadable >& _rxLoadable );
         void        setLoadingCancelled()   { m_bLoadCanceled = sal_True; }
 
         const TransferableDataHelper&
@@ -337,12 +344,15 @@ namespace dbaui
         // execute the search slot
         void        ExecuteSearch();
 
+        void        initializeParser() const; // changes the mutable member m_xParser
         void        applyParserFilter(const ::rtl::OUString& _rOldFilter, sal_Bool _bOldFilterApplied,const ::rtl::OUString& _sOldHaving = ::rtl::OUString());
         void        applyParserOrder(const ::rtl::OUString& _rOldOrder);
 
         sal_Int16   getCurrentColumnPosition();
         void        setCurrentColumnPosition( sal_Int16 _nPos );
         void        addColumnListeners(const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlModel > & _xGridControlModel);
+
+        void        impl_checkForCannotSelectUnfiltered( const ::dbtools::SQLExceptionInfo& _rError );
 
         // time to check the CUT/COPY/PASTE-slot-states
         DECL_LINK( OnInvalidateClipboard, AutoTimer* );

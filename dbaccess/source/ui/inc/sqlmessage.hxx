@@ -100,7 +100,7 @@ public:
     );
 
     /** display a database related error message
-        <p/>
+
         @param  rTitle      the title to display
         @param  rMessage    the detailed message to display
         @param  _eType      determines the image to use. AUTO is disallowed in this constructor version
@@ -124,6 +124,18 @@ private:
     void    impl_initImage( MessageType _eImage );
     void    impl_createStandardButtons( WinBits _nStyle );
     void    impl_addDetailsButton();
+};
+
+//==================================================================
+// OSQLWarningBox
+//==================================================================
+class OSQLWarningBox : public OSQLMessageBox
+{
+public:
+    OSQLWarningBox( Window* _pParent,
+                    const UniString& _rMessage,
+                    WinBits _nStyle = WB_OK | WB_DEF_OK,
+                    const ::dbtools::SQLExceptionInfo* _pAdditionalErrorInfo = NULL );
 };
 
 //.........................................................................

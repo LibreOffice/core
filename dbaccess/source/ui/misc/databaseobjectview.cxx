@@ -166,7 +166,7 @@ namespace dbaui
         {
             try
             {
-                // get the desktop object
+                // if we have no externally provided frame, create one
                 if ( !m_xFrameLoader.is() )
                 {
                     Reference< XSingleServiceFactory > xFact(m_xORB->createInstance(::rtl::OUString::createFromAscii("com.sun.star.frame.TaskCreator")), UNO_QUERY_THROW);
@@ -185,7 +185,7 @@ namespace dbaui
                     m_xFrameLoader.set(xFact->createInstanceWithArguments(lArgs), UNO_QUERY_THROW);
                 }
 
-                Reference< XComponentLoader > xFrameLoader(m_xFrameLoader, UNO_QUERY_THROW);
+                Reference< XComponentLoader > xFrameLoader( m_xFrameLoader, UNO_QUERY_THROW );
                 xReturn = xFrameLoader->loadComponentFromURL(
                     m_sComponentURL,
                     ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("_self")),
@@ -193,8 +193,8 @@ namespace dbaui
                     _rArgs
                 );
 
-                if ( xReturn.is() )
-                    xReturn.set(m_xFrameLoader,UNO_QUERY);
+                if ( !xReturn.is() )
+                    xReturn.set( m_xFrameLoader, UNO_QUERY );
             }
             catch( const Exception& )
             {

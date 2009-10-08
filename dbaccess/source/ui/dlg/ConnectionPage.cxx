@@ -161,9 +161,11 @@
 #endif
 
 #ifdef _ADO_DATALINK_BROWSE_
-typedef void*               HWND;
-typedef void*               HMENU;
-typedef void*               HDC;
+#if defined( WNT )
+    #include <tools/prewin.h>
+    #include <windows.h>
+    #include <tools/postwin.h>
+#endif
 #ifndef _SV_SYSDATA_HXX
 #include <vcl/sysdata.hxx>
 #endif
@@ -302,6 +304,8 @@ namespace dbaui
             case  ::dbaccess::DST_OUTLOOK:
             case  ::dbaccess::DST_OUTLOOKEXP:
             case  ::dbaccess::DST_EVOLUTION:
+            case  ::dbaccess::DST_EVOLUTION_GROUPWISE:
+            case  ::dbaccess::DST_EVOLUTION_LDAP:
             case  ::dbaccess::DST_KAB:
             case  ::dbaccess::DST_MACAB:
                 m_aFT_Connection.SetText(String(ModuleRes(STR_NO_ADDITIONAL_SETTINGS)));

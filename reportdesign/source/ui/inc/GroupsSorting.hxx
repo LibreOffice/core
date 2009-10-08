@@ -38,6 +38,7 @@
 #include <vcl/edit.hxx>
 #include <vcl/field.hxx>
 #include <vcl/imagebtn.hxx>
+#include <vcl/toolbox.hxx>
 #include <com/sun/star/report/XGroups.hpp>
 #include <com/sun/star/report/XGroup.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
@@ -48,6 +49,10 @@
 #include <rtl/ref.hxx>
 
 #include <vector>
+
+#include <dbaccess/ToolBoxHelper.hxx>
+
+#include <vcl/ImageListProvider.hxx>
 
 namespace comphelper
 {
@@ -62,16 +67,22 @@ class OReportController;
 |* Groups and Sorting dialog
 |*
 \************************************************************************/
+
 class OGroupsSortingDialog :    public FloatingWindow
                             ,   public ::cppu::BaseMutex
-                            ,   public ::comphelper::OPropertyChangeListener
+                                ,   public ::comphelper::OPropertyChangeListener
+                           ,public dbaui::OToolBoxHelper
+                           ,public vcl::IImageListProvider
 {
     friend class OFieldExpressionControl;
 
     FixedLine                               m_aFL2;
     FixedText                               m_aMove;
-    ImageButton                             m_aUp;
-    ImageButton                             m_aDown;
+//BTN   ImageButton                             m_aPB_Up;
+//BTN   ImageButton                             m_aPB_Down;
+//BTN   ImageButton                             m_aPB_Delete;
+    ToolBox                                 m_aToolBox;
+
     FixedLine                               m_aFL3;
     FixedText                               m_aOrder;
     ListBox                                 m_aOrderLst;
@@ -100,7 +111,8 @@ private:
     DECL_LINK( OnControlFocusLost, Control* );
     DECL_LINK( OnControlFocusGot, Control* );
     DECL_LINK( LBChangeHdl, ListBox* );
-    DECL_LINK( ClickHdl, ImageButton* );
+//BTN   DECL_LINK( ClickHdl, ImageButton* );
+    DECL_LINK( OnFormatAction,      ToolBox* );
 
     /** returns the groups
         @return the groups which now have to check which one changes
@@ -171,6 +183,24 @@ public:
     /* updates the current view
     */
     void UpdateData( );
+
+        /** will be called when the controls need to be resized.
+            @param  _rDiff
+                Contains the difference of the old and new toolbox size.
+        */
+        virtual void resizeControls(const Size& _rDiff);
+
+        /** will be called when the image list is needed.
+            @param  _eSymbolsSize
+                <svtools/imgdef.hxx>
+            @param  _bHiContast
+                <TRUE/> when in high contrast mode.
+        */
+    virtual ImageList getImageList(sal_Int16 _eSymbolsSize,sal_Bool _bHiContast) const;
+
+    // ImageListProvider interface
+    virtual ImageList getImageList(vcl::ImageListType) SAL_THROW ((com::sun::star::lang::IllegalArgumentException ));
+
 };
 // =============================================================================
 } // namespace rptui

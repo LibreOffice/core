@@ -37,6 +37,10 @@
 #include <com/sun/star/container/XChild.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#include <com/sun/star/report/XFixedText.hpp>
+#include <com/sun/star/report/XFormattedField.hpp>
+
+
 #include "Section.hxx"
 #include "corestrings.hrc"
 
@@ -99,9 +103,12 @@ namespace reportdesign
             if ( _pShape->m_aProps.aComponent.m_xShape.is() )
             {
                 ::com::sun::star::awt::Size aOldSize = _pShape->m_aProps.aComponent.m_xShape->getSize();
-                _pShape->m_aProps.aComponent.m_nWidth = aOldSize.Width;
-                _pShape->m_aProps.aComponent.m_nHeight = aOldSize.Height;
-                _pShape->m_aProps.aComponent.m_xShape->setSize(aSize);
+                if ( aOldSize.Height != aSize.Height || aOldSize.Width != aSize.Width )
+                {
+                    _pShape->m_aProps.aComponent.m_nWidth = aOldSize.Width;
+                    _pShape->m_aProps.aComponent.m_nHeight = aOldSize.Height;
+                    _pShape->m_aProps.aComponent.m_xShape->setSize(aSize);
+                }
             }
             _pShape->set(PROPERTY_WIDTH,aSize.Width,_pShape->m_aProps.aComponent.m_nWidth);
             _pShape->set(PROPERTY_HEIGHT,aSize.Height,_pShape->m_aProps.aComponent.m_nHeight);
@@ -118,19 +125,29 @@ namespace reportdesign
             return ::com::sun::star::awt::Size(_pShape->m_aProps.aComponent.m_nWidth,_pShape->m_aProps.aComponent.m_nHeight);
         }
 
-        template<typename T> static void setPosition( const ::com::sun::star::awt::Point& aPosition ,T* _pShape)
+        template<typename T> static void setPosition( const ::com::sun::star::awt::Point& _aPosition ,T* _pShape)
         {
-            OSL_ENSURE(aPosition.X >= 0 && aPosition.Y >= 0,"Illegal position!");
+            // we know it is not allowed that the position in smaller 0, but in NbcMove() it will handled right.
+            // only at 'Undo' it is possible to short set the position smaller 0
+            // OSL_ENSURE(_aPosition.X >= 0 && _aPosition.Y >= 0,"set to Illegal position!");
             ::osl::MutexGuard aGuard(_pShape->m_aMutex);
+            ::com::sun::star::awt::Point aOldPos;
+            aOldPos.X = _pShape->m_aProps.aComponent.m_nPosX;
+            aOldPos.Y = _pShape->m_aProps.aComponent.m_nPosY;
+
+            ::com::sun::star::awt::Point aPosition(_aPosition);
             if ( _pShape->m_aProps.aComponent.m_xShape.is() )
             {
-                ::com::sun::star::awt::Point aOldPos = _pShape->m_aProps.aComponent.m_xShape->getPosition();
-                _pShape->m_aProps.aComponent.m_nPosX = aOldPos.X;
-                _pShape->m_aProps.aComponent.m_nPosY = aOldPos.Y;
-                _pShape->m_aProps.aComponent.m_xShape->setPosition(aPosition);
+                aOldPos = _pShape->m_aProps.aComponent.m_xShape->getPosition();
+                if ( aOldPos.X != aPosition.X || aOldPos.Y != aPosition.Y )
+                {
+                    _pShape->m_aProps.aComponent.m_nPosX = aOldPos.X;
+                    _pShape->m_aProps.aComponent.m_nPosY = aOldPos.Y;
+                    _pShape->m_aProps.aComponent.m_xShape->setPosition(aPosition);
+                }
             }
-            _pShape->set(PROPERTY_POSITIONX,aPosition.X,_pShape->m_aProps.aComponent.m_nPosX);
-            _pShape->set(PROPERTY_POSITIONY,aPosition.Y,_pShape->m_aProps.aComponent.m_nPosY);
+            _pShape->set(PROPERTY_POSITIONX,aPosition.X,aOldPos.X);
+            _pShape->set(PROPERTY_POSITIONY,aPosition.Y,aOldPos.Y);
         }
         template<typename T> static ::com::sun::star::awt::Point getPosition(T* _pShape)
         {
@@ -138,7 +155,7 @@ namespace reportdesign
             if ( _pShape->m_aProps.aComponent.m_xShape.is() )
             {
                 ::com::sun::star::awt::Point aPosition = _pShape->m_aProps.aComponent.m_xShape->getPosition();
-                OSL_ENSURE(aPosition.X >= 0 && aPosition.Y >= 0,"Illegal position!");
+//                OSL_ENSURE(aPosition.X >= 0 && aPosition.Y >= 0,"Illegal position!");
                 return aPosition;
             }
             return ::com::sun::star::awt::Point(_pShape->m_aProps.aComponent.m_nPosX,_pShape->m_aProps.aComponent.m_nPosY);

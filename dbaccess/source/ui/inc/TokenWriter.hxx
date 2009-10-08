@@ -93,13 +93,7 @@ namespace dbaui
     class ODatabaseImportExport : public ODatabaseImportExport_BASE
     {
     private:
-        void disposing();
         void impl_initializeRowMember_throw();
-
-    protected:
-        typedef ::utl::SharedUNOComponent   <   ::com::sun::star::frame::XModel
-                                            ,   ::utl::CloseableComponent
-                                            >   SharedModel;
 
     protected:
         ::com::sun::star::lang::Locale                                                  m_aLocale;
@@ -114,7 +108,6 @@ namespace dbaui
         ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess >   m_xRowSetColumns;
         ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatter >    m_xFormatter;   // a number formatter working with the connection's NumberFormatsSupplier
         ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory> m_xFactory;
-        SharedModel                                                                     m_aKeepModelAlive;
 
         ::rtl::OUString m_sName;
         //dyf add 20070601
@@ -123,6 +116,7 @@ namespace dbaui
         //dyf add end
         ::rtl::OUString m_sDataSourceName;
         sal_Int32       m_nCommandType;
+        bool            m_bNeedToReInitialize;
 
 #if defined UNX
         static const char __FAR_DATA sNewLine;
@@ -158,17 +152,18 @@ namespace dbaui
         void setSTableName(const ::rtl::OUString &_sTableName){ m_sDefaultTableName = _sTableName; }
         //dyf add end
 
-        virtual BOOL Write()    = 0; // Export
-        virtual BOOL Read()     = 0; // Import
+        virtual BOOL Write(); // Export
+        virtual BOOL Read(); // Import
 
         void initialize(const ::svx::ODataAccessDescriptor& _aDataDescriptor);
-
-        virtual void SAL_CALL disposing( const ::com::sun::star::lang::EventObject& Source ) throw(::com::sun::star::uno::RuntimeException);
+        void dispose();
 
         void enableCheckOnly() { m_bCheckOnly = sal_True; }
         sal_Bool isCheckEnabled() const { return m_bCheckOnly; }
 
+
     private:
+        virtual void SAL_CALL disposing( const ::com::sun::star::lang::EventObject& Source ) throw(::com::sun::star::uno::RuntimeException);
         void impl_initFromDescriptor( const ::svx::ODataAccessDescriptor& _aDataDescriptor, bool _bPlusDefaultInit );
     };
 

@@ -337,6 +337,9 @@ ImageList IMG_CONDFORMAT_DLG_LCH
         < "res/commandimagelist/lch_fontdialog.png" ; SID_CHAR_DLG ; > ;
     };
 };
+
+
+
 ImageList 31000
 {
     MASKCOLOR;
@@ -345,6 +348,7 @@ ImageList 31000
     IdCount = 1;
 
 };
+
 ToolBox RID_TB_SORTING
 {
     Pos = MAP_APPFONT ( 0,0 ) ;
@@ -381,6 +385,7 @@ ToolBox RID_TB_SORTING
         };
     };
 };
+
 ImageList IMG_ADDFIELD_DLG_SC
 {
     MASKCOLOR;
@@ -391,6 +396,7 @@ ImageList IMG_ADDFIELD_DLG_SC
         < "res/commandimagelist/sc_removefiltersort.png" ; SID_FM_REMOVE_FILTER_SORT ; > ;
     };
 };
+
 ImageList IMG_ADDFIELD_DLG_SCH
 {
     MASKCOLOR;
@@ -401,6 +407,7 @@ ImageList IMG_ADDFIELD_DLG_SCH
         < "res/commandimagelist/sch_removefiltersort.png" ; SID_FM_REMOVE_FILTER_SORT ; > ;
     };
 };
+
 ImageList IMG_ADDFIELD_DLG_LC
 {
     MASKCOLOR;
@@ -411,6 +418,7 @@ ImageList IMG_ADDFIELD_DLG_LC
         < "res/commandimagelist/lc_removefiltersort.png" ; SID_FM_REMOVE_FILTER_SORT ; > ;
     };
 };
+
 ImageList IMG_ADDFIELD_DLG_LCH
 {
     MASKCOLOR;
@@ -420,4 +428,21 @@ ImageList IMG_ADDFIELD_DLG_LCH
         < "res/commandimagelist/lch_sortdown.png" ; SID_FM_SORTDOWN ; > ;
         < "res/commandimagelist/lch_removefiltersort.png" ; SID_FM_REMOVE_FILTER_SORT ; > ;
     };
+};
+
+FixedLine ADDFIELD_FL_HELP_SEPARATOR
+{
+    SVLook = TRUE ;
+    Pos = MAP_APPFONT ( RELATED_CONTROLS , RELATED_CONTROLS ) ;
+    Size = MAP_APPFONT ( RELATED_CONTROLS , RELATED_CONTROLS ) ;
+    Text [ en-US ] = "Help";
+};
+
+FixedText ADDFIELD_HELP_FIELD
+{
+    SVLook = TRUE ;
+    Pos = MAP_APPFONT ( RELATED_CONTROLS , RELATED_CONTROLS ) ;
+    Size = MAP_APPFONT ( RELATED_CONTROLS , RELATED_CONTROLS ) ;
+    WordBreak = TRUE;
+    Text [ en-US ] = "Highlight the fields to insert into the selected section of the template, then click Insert or press Enter.";
 };

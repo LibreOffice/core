@@ -1503,7 +1503,6 @@ void SbaGridControl::DoFieldDrag(sal_uInt16 nColumnPos, sal_Int16 nRowPos)
             {
 //              case SOT_FORMAT_RTF:                    // RTF data descriptions
 //              case SOT_FORMATSTR_ID_HTML:             // HTML data descriptions
-//              case SOT_FORMATSTR_ID_HTML_SIMPLE:      // HTML data descriptions
                 case SOT_FORMATSTR_ID_DBACCESS_TABLE:   // table descriptor
                 case SOT_FORMATSTR_ID_DBACCESS_QUERY:   // query descriptor
                 case SOT_FORMATSTR_ID_DBACCESS_COMMAND: // SQL command

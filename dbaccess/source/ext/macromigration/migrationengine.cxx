@@ -68,6 +68,8 @@
 #include <com/sun/star/script/XEventAttacherManager.hpp>
 #include <com/sun/star/script/XLibraryContainerPassword.hpp>
 #include <com/sun/star/io/WrongFormatException.hpp>
+#include <com/sun/star/script/XScriptEventsSupplier.hpp>
+#include <com/sun/star/io/XInputStreamProvider.hpp>
 /** === end UNO includes === **/
 
 #include <comphelper/documentinfo.hxx>
@@ -82,6 +84,7 @@
 #include <rtl/ustrbuf.hxx>
 #include <rtl/ref.hxx>
 #include <unotools/sharedunocomponent.hxx>
+#include <xmlscript/xmldlg_imexp.hxx>
 
 #include <vector>
 #include <set>
@@ -143,6 +146,9 @@ namespace dbmm
     using ::com::sun::star::script::ScriptEventDescriptor;
     using ::com::sun::star::script::XLibraryContainerPassword;
     using ::com::sun::star::io::WrongFormatException;
+    using ::com::sun::star::script::XScriptEventsSupplier;
+    using ::com::sun::star::io::XInputStreamProvider;
+    using ::com::sun::star::io::XInputStream;
     /** === end UNO using === **/
     namespace ElementModes = ::com::sun::star::embed::ElementModes;
 
@@ -925,6 +931,23 @@ namespace dbmm
                     const PhaseID _nPhaseID
                 ) const;
 
+        /** adjusts the events for the given dialog/element, taking into account the new names
+            of the moved libraries
+        */
+        void    impl_adjustDialogElementEvents_throw(
+                    const Reference< XInterface >& _rxElement
+                ) const;
+
+        /** adjusts the events in the given dialog, and its controls, taking into account the new names
+            of the moved libraries
+        */
+        bool    impl_adjustDialogEvents_nothrow(
+                    Any& _inout_rDialogLibraryElement,
+                    const ::rtl::OUString& _rDocName,
+                    const ::rtl::OUString& _rDialogLibName,
+                    const ::rtl::OUString& _rDialogName
+                ) const;
+
         /** adjust the document-events which refer to macros/scripts in the document, taking into
             account the new names of the moved libraries
         */
@@ -1158,6 +1181,8 @@ namespace dbmm
         bSuccess =  bSuccess
                 &&  impl_migrateContainerLibraries_nothrow( aSubDocument, eBasic, aProgressMixer, PHASE_BASIC )
                 &&  impl_migrateContainerLibraries_nothrow( aSubDocument, eDialog, aProgressMixer, PHASE_DIALOGS );
+                // order matters: First Basic scripts, then dialogs. So we can adjust references from the latter
+                // to the former
 
         // adjust the events in the document
         // (note that errors are ignored here - failure to convert a script reference
@@ -1547,6 +1572,14 @@ namespace dbmm
                         Any aElement = xSourceLib->getByName( *pSourceElementName );
                         OSL_ENSURE( aElement.hasValue(),
                             "MigrationEngine_Impl::impl_migrateContainerLibraries_nothrow: invalid (empty) lib element!" );
+
+                        // if this is a dialog, adjust the references to scripts
+                        if ( _eScriptType == eDialog )
+                        {
+                            impl_adjustDialogEvents_nothrow( aElement, lcl_getSubDocumentDescription( _rDocument ),
+                                *pSourceLibName, *pSourceElementName );
+                        }
+
                         xTargetLib->insertByName( *pSourceElementName, aElement );
                     }
 
@@ -1765,6 +1798,71 @@ namespace dbmm
             m_rLogger.logRecoverable( MigrationError(
                 ERR_ADJUSTING_DOCUMENT_EVENTS_FAILED,
                 lcl_getSubDocumentDescription( _rDocument ),
+                ::cppu::getCaughtException()
+            ) );
+            return false;
+        }
+        return true;
+    }
+
+    //--------------------------------------------------------------------
+    void MigrationEngine_Impl::impl_adjustDialogElementEvents_throw( const Reference< XInterface >& _rxElement ) const
+    {
+        Reference< XScriptEventsSupplier > xEventsSupplier( _rxElement, UNO_QUERY_THROW );
+        Reference< XNameReplace > xEvents( xEventsSupplier->getEvents(), UNO_QUERY_THROW );
+        Sequence< ::rtl::OUString > aEventNames( xEvents->getElementNames() );
+
+        const ::rtl::OUString* eventName = aEventNames.getArray();
+        const ::rtl::OUString* eventNamesEnd = eventName + aEventNames.getLength();
+
+        ScriptEventDescriptor aScriptEvent;
+        for ( ; eventName != eventNamesEnd; ++eventName )
+        {
+            OSL_VERIFY( xEvents->getByName( *eventName ) >>= aScriptEvent );
+
+            if ( !impl_adjustScriptLibrary_nothrow( aScriptEvent ) )
+                continue;
+
+            xEvents->replaceByName( *eventName, makeAny( aScriptEvent ) );
+        }
+    }
+
+    //--------------------------------------------------------------------
+    bool MigrationEngine_Impl::impl_adjustDialogEvents_nothrow( Any& _inout_rDialogLibraryElement,
+        const ::rtl::OUString& _rDocName, const ::rtl::OUString& _rDialogLibName, const ::rtl::OUString& _rDialogName ) const
+    {
+        try
+        {
+            // load a dialog model from the stream describing it
+            Reference< XInputStreamProvider > xISP( _inout_rDialogLibraryElement, UNO_QUERY_THROW );
+            Reference< XInputStream > xInput( xISP->createInputStream(), UNO_QUERY_THROW );
+
+            Reference< XNameContainer > xDialogModel( m_aContext.createComponent( "com.sun.star.awt.UnoControlDialogModel" ), UNO_QUERY_THROW );
+            ::xmlscript::importDialogModel( xInput, xDialogModel, m_aContext.getUNOContext() );
+
+            // adjust the events of the dialog
+            impl_adjustDialogElementEvents_throw( xDialogModel );
+
+            // adjust the events of the controls
+            Sequence< ::rtl::OUString > aControlNames( xDialogModel->getElementNames() );
+            const ::rtl::OUString* controlName = aControlNames.getConstArray();
+            const ::rtl::OUString* controlNamesEnd = controlName + aControlNames.getLength();
+            for ( ; controlName != controlNamesEnd; ++controlName )
+            {
+                impl_adjustDialogElementEvents_throw( Reference< XInterface >( xDialogModel->getByName( *controlName ), UNO_QUERY ) );
+            }
+
+            // export dialog model
+            xISP = ::xmlscript::exportDialogModel( xDialogModel, m_aContext.getUNOContext() );
+            _inout_rDialogLibraryElement <<= xISP;
+        }
+        catch( const Exception& )
+        {
+            m_rLogger.logRecoverable( MigrationError(
+                ERR_ADJUSTING_DIALOG_EVENTS_FAILED,
+                _rDocName,
+                _rDialogLibName,
+                _rDialogName,
                 ::cppu::getCaughtException()
             ) );
             return false;

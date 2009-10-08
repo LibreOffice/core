@@ -56,6 +56,7 @@ SRC1FILES =	\
         Navigator.src	\
         GroupsSorting.src
 
+
 # ... object files ............................
 
 EXCEPTIONSFILES=	\
@@ -69,7 +70,7 @@ EXCEPTIONSFILES=	\
         $(SLO)$/Navigator.obj				\
         $(SLO)$/GroupsSorting.obj           \
         $(SLO)$/Formula.obj
-        
+
 SLOFILES=	\
         $(EXCEPTIONSFILES)					\
 

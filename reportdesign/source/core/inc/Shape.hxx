@@ -59,6 +59,7 @@ namespace reportdesign
         OReportControlModel                                             m_aProps;
         com::sun::star::drawing::HomogenMatrix3                         m_Transformation;
         ::sal_Int32                                                     m_nZOrder;
+        ::sal_Bool                                                      m_bOpaque;
 
         ::rtl::OUString                                                 m_sServiceName;
         ::rtl::OUString                                                 m_CustomShapeEngine;
@@ -124,6 +125,9 @@ namespace reportdesign
         virtual void SAL_CALL setCustomShapeData( const ::rtl::OUString& _customshapedata ) throw (::com::sun::star::uno::RuntimeException);
         virtual ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > SAL_CALL getCustomShapeGeometry() throw (::com::sun::star::uno::RuntimeException);
         virtual void SAL_CALL setCustomShapeGeometry( const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& _customshapegeometry ) throw (::com::sun::star::uno::RuntimeException);
+
+        virtual ::sal_Bool SAL_CALL getOpaque() throw (::com::sun::star::uno::RuntimeException);
+        virtual void SAL_CALL setOpaque( ::sal_Bool _opaque ) throw (::com::sun::star::uno::RuntimeException);
 
         // XShapeDescriptor
         virtual ::rtl::OUString SAL_CALL getShapeType(  ) throw (::com::sun::star::uno::RuntimeException);

@@ -46,6 +46,7 @@
 #ifndef _COM_SUN_STAR_SDBC_XDATABASEMETADATA_HPP_
 #include <com/sun/star/sdbc/XDatabaseMetaData.hpp>
 #endif
+#include <com/sun/star/sdbc/ColumnValue.hpp>
 #ifndef _COM_SUN_STAR_SDBC_XPREPAREDSTATEMENT_HPP_
 #include <com/sun/star/sdbc/XPreparedStatement.hpp>
 #endif
@@ -113,6 +114,7 @@
 #include <tools/debug.hxx>
 #endif
 #include <string.h>
+#include <rtl/logfile.hxx>
 
 using namespace dbaccess;
 using namespace ::connectivity;
@@ -165,6 +167,7 @@ OKeySet::OKeySet(const connectivity::OSQLTable& _xTable,
             ,m_sUpdateTableName(_rUpdateTableName)
             ,m_bRowCountFinal(sal_False)
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "OKeySet::OKeySet" );
     DBG_CTOR(OKeySet,NULL);
 
 }
@@ -193,6 +196,7 @@ OKeySet::~OKeySet()
 // -----------------------------------------------------------------------------
 void OKeySet::construct(const Reference< XResultSet>& _xDriverSet)
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "OKeySet::construct" );
     OCacheSet::construct(_xDriverSet);
 
     Reference<XDatabaseMetaData> xMeta = m_xConnection->getMetaData();
@@ -307,6 +311,7 @@ void OKeySet::construct(const Reference< XResultSet>& _xDriverSet)
 // -------------------------------------------------------------------------
 Any SAL_CALL OKeySet::getBookmark() throw(SQLException, RuntimeException)
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "OKeySet::getBookmark" );
     OSL_ENSURE(m_aKeyIter != m_aKeyMap.end() && m_aKeyIter != m_aKeyMap.begin(),
         "getBookmark is only possible when we stand on a valid row!");
     return makeAny(m_aKeyIter->first);
@@ -315,6 +320,7 @@ Any SAL_CALL OKeySet::getBookmark() throw(SQLException, RuntimeException)
 // -------------------------------------------------------------------------
 sal_Bool SAL_CALL OKeySet::moveToBookmark( const Any& bookmark ) throw(SQLException, RuntimeException)
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "OKeySet::moveToBookmark" );
     m_bInserted = m_bUpdated = m_bDeleted = sal_False;
     m_aKeyIter = m_aKeyMap.find(::comphelper::getINT32(bookmark));
     return m_aKeyIter != m_aKeyMap.end();
@@ -322,6 +328,7 @@ sal_Bool SAL_CALL OKeySet::moveToBookmark( const Any& bookmark ) throw(SQLExcept
 // -------------------------------------------------------------------------
 sal_Bool SAL_CALL OKeySet::moveRelativeToBookmark( const Any& bookmark, sal_Int32 rows ) throw(SQLException, RuntimeException)
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "OKeySet::moveRelativeToBookmark" );
     m_bInserted = m_bUpdated = m_bDeleted = sal_False;
     m_aKeyIter = m_aKeyMap.find(::comphelper::getINT32(bookmark));
     if(m_aKeyIter != m_aKeyMap.end())
@@ -334,6 +341,7 @@ sal_Bool SAL_CALL OKeySet::moveRelativeToBookmark( const Any& bookmark, sal_Int3
 // -------------------------------------------------------------------------
 sal_Int32 SAL_CALL OKeySet::compareBookmarks( const Any& _first, const Any& _second ) throw(SQLException, RuntimeException)
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "OKeySet::compareBookmarks" );
     sal_Int32 nFirst = 0, nSecond = 0;
     _first >>= nFirst;
     _second >>= nSecond;
@@ -343,17 +351,20 @@ sal_Int32 SAL_CALL OKeySet::compareBookmarks( const Any& _first, const Any& _sec
 // -------------------------------------------------------------------------
 sal_Bool SAL_CALL OKeySet::hasOrderedBookmarks(  ) throw(SQLException, RuntimeException)
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "OKeySet::hasOrderedBookmarks" );
     return sal_True;
 }
 // -------------------------------------------------------------------------
 sal_Int32 SAL_CALL OKeySet::hashBookmark( const Any& bookmark ) throw(SQLException, RuntimeException)
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "OKeySet::hashBookmark" );
     return ::comphelper::getINT32(bookmark);
 }
 // -------------------------------------------------------------------------
 // ::com::sun::star::sdbcx::XDeleteRows
 Sequence< sal_Int32 > SAL_CALL OKeySet::deleteRows( const Sequence< Any >& rows ,const connectivity::OSQLTable& _xTable) throw(SQLException, RuntimeException)
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "OKeySet::deleteRows" );
     Reference<XPropertySet> xSet(_xTable,UNO_QUERY);
     fillTableName(xSet);
 
@@ -438,6 +449,7 @@ Sequence< sal_Int32 > SAL_CALL OKeySet::deleteRows( const Sequence< Any >& rows 
 // -------------------------------------------------------------------------
 void SAL_CALL OKeySet::updateRow(const ORowSetRow& _rInsertRow ,const ORowSetRow& _rOrginalRow,const connectivity::OSQLTable& _xTable  ) throw(SQLException, RuntimeException)
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "OKeySet::updateRow" );
     Reference<XPropertySet> xSet(_xTable,UNO_QUERY);
     fillTableName(xSet);
 
@@ -587,6 +599,7 @@ void SAL_CALL OKeySet::updateRow(const ORowSetRow& _rInsertRow ,const ORowSetRow
 // -------------------------------------------------------------------------
 void SAL_CALL OKeySet::insertRow( const ORowSetRow& _rInsertRow,const connectivity::OSQLTable& _xTable ) throw(SQLException, RuntimeException)
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "OKeySet::insertRow" );
     ::rtl::OUString aSql(::rtl::OUString::createFromAscii("INSERT INTO "));
     Reference<XPropertySet> xSet(_xTable,UNO_QUERY);
     fillTableName(xSet);
@@ -671,7 +684,7 @@ void SAL_CALL OKeySet::insertRow( const ORowSetRow& _rInsertRow,const connectivi
 #endif
                         SelectColumnsMetaData::iterator aFind = m_pKeyColumnNames->find(*aAutoIter);
                         if ( aFind != m_pKeyColumnNames->end() )
-                            (_rInsertRow->get())[aFind->second.nPosition].fill(i,aFind->second.nType,xRow);
+                            (_rInsertRow->get())[aFind->second.nPosition].fill(i,aFind->second.nType,aFind->second.bNullable,xRow);
                     }
                     bAutoValuesFetched = sal_True;
                 }
@@ -724,7 +737,7 @@ void SAL_CALL OKeySet::insertRow( const ORowSetRow& _rInsertRow,const connectivi
                         // we will only fetch values which are keycolumns
                         SelectColumnsMetaData::iterator aFind = m_pKeyColumnNames->find(*aAutoIter);
                         if(aFind != m_pKeyColumnNames->end())
-                            (_rInsertRow->get())[aFind->second.nPosition].fill(i,aFind->second.nType,xRow);
+                            (_rInsertRow->get())[aFind->second.nPosition].fill(i,aFind->second.nType,aFind->second.bNullable,xRow);
                     }
                 }
                 ::comphelper::disposeComponent(xStatement);
@@ -750,6 +763,7 @@ void SAL_CALL OKeySet::insertRow( const ORowSetRow& _rInsertRow,const connectivi
 // -----------------------------------------------------------------------------
 void OKeySet::copyRowValue(const ORowSetRow& _rInsertRow,ORowSetRow& _rKeyRow)
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "OKeySet::copyRowValue" );
     connectivity::ORowVector< ORowSetValue >::Vector::iterator aIter = _rKeyRow->get().begin();
     SelectColumnsMetaData::const_iterator aPosIter = (*m_pKeyColumnNames).begin();
     SelectColumnsMetaData::const_iterator aPosEnd = (*m_pKeyColumnNames).end();
@@ -762,6 +776,7 @@ void OKeySet::copyRowValue(const ORowSetRow& _rInsertRow,ORowSetRow& _rKeyRow)
 // -------------------------------------------------------------------------
 void SAL_CALL OKeySet::deleteRow(const ORowSetRow& _rDeleteRow,const connectivity::OSQLTable& _xTable   ) throw(SQLException, RuntimeException)
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "OKeySet::deleteRow" );
     Reference<XPropertySet> xSet(_xTable,UNO_QUERY);
     fillTableName(xSet);
 
@@ -861,19 +876,23 @@ void SAL_CALL OKeySet::deleteRow(const ORowSetRow& _rDeleteRow,const connectivit
 // -------------------------------------------------------------------------
 void SAL_CALL OKeySet::cancelRowUpdates(  ) throw(SQLException, RuntimeException)
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "OKeySet::cancelRowUpdates" );
     m_bInserted = m_bUpdated = m_bDeleted = sal_False;
 }
 // -------------------------------------------------------------------------
 void SAL_CALL OKeySet::moveToInsertRow(  ) throw(SQLException, RuntimeException)
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "OKeySet::moveToInsertRow" );
 }
 // -------------------------------------------------------------------------
 void SAL_CALL OKeySet::moveToCurrentRow(  ) throw(SQLException, RuntimeException)
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "OKeySet::moveToCurrentRow" );
 }
 // -------------------------------------------------------------------------
 Reference<XNameAccess> OKeySet::getKeyColumns() const
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "OKeySet::getKeyColumns" );
     // use keys and indexes for excat postioning
     // first the keys
 
@@ -914,6 +933,7 @@ Reference<XNameAccess> OKeySet::getKeyColumns() const
 // -----------------------------------------------------------------------------
 sal_Bool SAL_CALL OKeySet::next(  ) throw(SQLException, RuntimeException)
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "OKeySet::next" );
     m_bInserted = m_bUpdated = m_bDeleted = sal_False;
 
     if(isAfterLast())
@@ -933,16 +953,19 @@ sal_Bool SAL_CALL OKeySet::next(  ) throw(SQLException, RuntimeException)
 // -----------------------------------------------------------------------------
 sal_Bool SAL_CALL OKeySet::isBeforeFirst(  ) throw(SQLException, RuntimeException)
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "OKeySet::isBeforeFirst" );
     return m_aKeyIter == m_aKeyMap.begin();
 }
 // -----------------------------------------------------------------------------
 sal_Bool SAL_CALL OKeySet::isAfterLast(  ) throw(SQLException, RuntimeException)
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "OKeySet::isAfterLast" );
     return  m_bRowCountFinal && m_aKeyIter == m_aKeyMap.end();
 }
 // -----------------------------------------------------------------------------
 sal_Bool SAL_CALL OKeySet::isFirst(  ) throw(SQLException, RuntimeException)
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "OKeySet::isFirst" );
     OKeySetMatrix::iterator aTemp = m_aKeyMap.begin();
     ++aTemp;
     return m_aKeyIter == aTemp && m_aKeyIter != m_aKeyMap.end();
@@ -950,6 +973,7 @@ sal_Bool SAL_CALL OKeySet::isFirst(  ) throw(SQLException, RuntimeException)
 // -----------------------------------------------------------------------------
 sal_Bool SAL_CALL OKeySet::isLast(  ) throw(SQLException, RuntimeException)
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "OKeySet::isLast" );
     if(!m_bRowCountFinal)
         return sal_False;
 
@@ -960,6 +984,7 @@ sal_Bool SAL_CALL OKeySet::isLast(  ) throw(SQLException, RuntimeException)
 // -----------------------------------------------------------------------------
 void SAL_CALL OKeySet::beforeFirst(  ) throw(SQLException, RuntimeException)
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "OKeySet::beforeFirst" );
     m_bInserted = m_bUpdated = m_bDeleted = sal_False;
     m_aKeyIter = m_aKeyMap.begin();
     m_xSet = NULL;
@@ -968,6 +993,7 @@ void SAL_CALL OKeySet::beforeFirst(  ) throw(SQLException, RuntimeException)
 // -----------------------------------------------------------------------------
 void SAL_CALL OKeySet::afterLast(  ) throw(SQLException, RuntimeException)
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "OKeySet::afterLast" );
     m_bInserted = m_bUpdated = m_bDeleted = sal_False;
     fillAllRows();
     m_aKeyIter = m_aKeyMap.end();
@@ -977,6 +1003,7 @@ void SAL_CALL OKeySet::afterLast(  ) throw(SQLException, RuntimeException)
 // -----------------------------------------------------------------------------
 sal_Bool SAL_CALL OKeySet::first(  ) throw(SQLException, RuntimeException)
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "OKeySet::first" );
     m_bInserted = m_bUpdated = m_bDeleted = sal_False;
     m_aKeyIter = m_aKeyMap.begin();
     ++m_aKeyIter;
@@ -989,6 +1016,7 @@ sal_Bool SAL_CALL OKeySet::first(  ) throw(SQLException, RuntimeException)
 // -----------------------------------------------------------------------------
 sal_Bool SAL_CALL OKeySet::last(  ) throw(SQLException, RuntimeException)
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "OKeySet::last" );
     m_bInserted = m_bUpdated = m_bDeleted = sal_False;
     fillAllRows();
 
@@ -1000,6 +1028,7 @@ sal_Bool SAL_CALL OKeySet::last(  ) throw(SQLException, RuntimeException)
 // -----------------------------------------------------------------------------
 sal_Int32 SAL_CALL OKeySet::getRow(  ) throw(SQLException, RuntimeException)
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "OKeySet::getRow" );
     OSL_ENSURE(!isAfterLast(),"getRow is not allowed when afterlast record!");
     OSL_ENSURE(!isBeforeFirst(),"getRow is not allowed when beforefirst record!");
 
@@ -1008,6 +1037,7 @@ sal_Int32 SAL_CALL OKeySet::getRow(  ) throw(SQLException, RuntimeException)
 // -----------------------------------------------------------------------------
 sal_Bool SAL_CALL OKeySet::absolute( sal_Int32 row ) throw(SQLException, RuntimeException)
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "OKeySet::absolute" );
     m_bInserted = m_bUpdated = m_bDeleted = sal_False;
     OSL_ENSURE(row,"absolute(0) isn't allowed!");
     if(row < 0)
@@ -1045,6 +1075,7 @@ sal_Bool SAL_CALL OKeySet::absolute( sal_Int32 row ) throw(SQLException, Runtime
 // -----------------------------------------------------------------------------
 sal_Bool SAL_CALL OKeySet::relative( sal_Int32 rows ) throw(SQLException, RuntimeException)
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "OKeySet::relative" );
     if(!rows)
     {
         refreshRow();
@@ -1055,6 +1086,7 @@ sal_Bool SAL_CALL OKeySet::relative( sal_Int32 rows ) throw(SQLException, Runtim
 // -----------------------------------------------------------------------------
 sal_Bool SAL_CALL OKeySet::previous(  ) throw(SQLException, RuntimeException)
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "OKeySet::previous" );
     m_bInserted = m_bUpdated = m_bDeleted = sal_False;
     if(m_aKeyIter != m_aKeyMap.begin())
     {
@@ -1066,6 +1098,7 @@ sal_Bool SAL_CALL OKeySet::previous(  ) throw(SQLException, RuntimeException)
 // -----------------------------------------------------------------------------
 void SAL_CALL OKeySet::refreshRow() throw(SQLException, RuntimeException)
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "OKeySet::refreshRow" );
     if(isBeforeFirst() || isAfterLast() || !m_xStatement.is())
         return;
 
@@ -1094,6 +1127,7 @@ void SAL_CALL OKeySet::refreshRow() throw(SQLException, RuntimeException)
 // -----------------------------------------------------------------------------
 sal_Bool OKeySet::fetchRow()
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "OKeySet::fetchRow" );
     // fetch the next row and append on the keyset
     sal_Bool bRet = sal_False;
     if ( !m_bRowCountFinal )
@@ -1104,17 +1138,19 @@ sal_Bool OKeySet::fetchRow()
         connectivity::ORowVector< ORowSetValue >::Vector::iterator aIter = aKeyRow->get().begin();
         // first fetch the values needed for the key column
         SelectColumnsMetaData::const_iterator aPosIter = (*m_pKeyColumnNames).begin();
-        for(;aPosIter != (*m_pKeyColumnNames).end();++aPosIter,++aIter)
+        SelectColumnsMetaData::const_iterator aPosEnd = (*m_pKeyColumnNames).end();
+        for(;aPosIter != aPosEnd;++aPosIter,++aIter)
         {
             const SelectColumnDescription& rColDesc = aPosIter->second;
-            aIter->fill(rColDesc.nPosition,rColDesc.nType,m_xDriverRow);
+            aIter->fill(rColDesc.nPosition,rColDesc.nType,rColDesc.bNullable,m_xDriverRow);
         }
         // now fetch the values from the missing columns from other tables
         aPosIter = (*m_pForeignColumnNames).begin();
-        for(;aPosIter != (*m_pForeignColumnNames).end();++aPosIter,++aIter)
+        aPosEnd = (*m_pForeignColumnNames).end();
+        for(;aPosIter != aPosEnd;++aPosIter,++aIter)
         {
             const SelectColumnDescription& rColDesc = aPosIter->second;
-            aIter->fill(rColDesc.nPosition,rColDesc.nType,m_xDriverRow);
+            aIter->fill(rColDesc.nPosition,rColDesc.nType,rColDesc.bNullable,m_xDriverRow);
         }
         m_aKeyIter = m_aKeyMap.insert(OKeySetMatrix::value_type(m_aKeyMap.rbegin()->first+1,OKeySetValue(aKeyRow,0))).first;
     }
@@ -1125,6 +1161,7 @@ sal_Bool OKeySet::fetchRow()
 // -------------------------------------------------------------------------
 void OKeySet::fillAllRows()
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "OKeySet::fillAllRows" );
     if(!m_bRowCountFinal)
     {
         while(fetchRow())
@@ -1134,135 +1171,158 @@ void OKeySet::fillAllRows()
 // XRow
 sal_Bool SAL_CALL OKeySet::wasNull(  ) throw(SQLException, RuntimeException)
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "OKeySet::wasNull" );
     return m_xRow->wasNull();
 }
 // -------------------------------------------------------------------------
 ::rtl::OUString SAL_CALL OKeySet::getString( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "OKeySet::getString" );
     OSL_ENSURE(m_xRow.is(),"m_xRow is null!");
     return m_xRow->getString(columnIndex);
 }
 // -------------------------------------------------------------------------
 sal_Bool SAL_CALL OKeySet::getBoolean( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "OKeySet::getBoolean" );
     OSL_ENSURE(m_xRow.is(),"m_xRow is null!");
     return m_xRow->getBoolean(columnIndex);
 }
 // -------------------------------------------------------------------------
 sal_Int8 SAL_CALL OKeySet::getByte( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "OKeySet::getByte" );
     OSL_ENSURE(m_xRow.is(),"m_xRow is null!");
     return m_xRow->getByte(columnIndex);
 }
 // -------------------------------------------------------------------------
 sal_Int16 SAL_CALL OKeySet::getShort( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "OKeySet::getShort" );
     OSL_ENSURE(m_xRow.is(),"m_xRow is null!");
     return m_xRow->getShort(columnIndex);
 }
 // -------------------------------------------------------------------------
 sal_Int32 SAL_CALL OKeySet::getInt( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "OKeySet::getInt" );
     OSL_ENSURE(m_xRow.is(),"m_xRow is null!");
     return m_xRow->getInt(columnIndex);
 }
 // -------------------------------------------------------------------------
 sal_Int64 SAL_CALL OKeySet::getLong( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "OKeySet::getLong" );
     OSL_ENSURE(m_xRow.is(),"m_xRow is null!");
     return m_xRow->getLong(columnIndex);
 }
 // -------------------------------------------------------------------------
 float SAL_CALL OKeySet::getFloat( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "OKeySet::getFloat" );
     OSL_ENSURE(m_xRow.is(),"m_xRow is null!");
     return m_xRow->getFloat(columnIndex);
 }
 // -------------------------------------------------------------------------
 double SAL_CALL OKeySet::getDouble( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "OKeySet::getDouble" );
     OSL_ENSURE(m_xRow.is(),"m_xRow is null!");
     return m_xRow->getDouble(columnIndex);
 }
 // -------------------------------------------------------------------------
 Sequence< sal_Int8 > SAL_CALL OKeySet::getBytes( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "OKeySet::getBytes" );
     OSL_ENSURE(m_xRow.is(),"m_xRow is null!");
     return m_xRow->getBytes(columnIndex);
 }
 // -------------------------------------------------------------------------
 ::com::sun::star::util::Date SAL_CALL OKeySet::getDate( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "OKeySet::getDate" );
     OSL_ENSURE(m_xRow.is(),"m_xRow is null!");
     return m_xRow->getDate(columnIndex);
 }
 // -------------------------------------------------------------------------
 ::com::sun::star::util::Time SAL_CALL OKeySet::getTime( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "OKeySet::getTime" );
     OSL_ENSURE(m_xRow.is(),"m_xRow is null!");
     return m_xRow->getTime(columnIndex);
 }
 // -------------------------------------------------------------------------
 ::com::sun::star::util::DateTime SAL_CALL OKeySet::getTimestamp( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "OKeySet::getTimestamp" );
     OSL_ENSURE(m_xRow.is(),"m_xRow is null!");
     return m_xRow->getTimestamp(columnIndex);
 }
 // -------------------------------------------------------------------------
 Reference< ::com::sun::star::io::XInputStream > SAL_CALL OKeySet::getBinaryStream( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "OKeySet::getBinaryStream" );
     OSL_ENSURE(m_xRow.is(),"m_xRow is null!");
     return m_xRow->getBinaryStream(columnIndex);
 }
 // -------------------------------------------------------------------------
 Reference< ::com::sun::star::io::XInputStream > SAL_CALL OKeySet::getCharacterStream( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "OKeySet::getCharacterStream" );
     OSL_ENSURE(m_xRow.is(),"m_xRow is null!");
     return m_xRow->getCharacterStream(columnIndex);
 }
 // -------------------------------------------------------------------------
 Any SAL_CALL OKeySet::getObject( sal_Int32 columnIndex, const Reference< ::com::sun::star::container::XNameAccess >& typeMap ) throw(SQLException, RuntimeException)
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "OKeySet::getObject" );
     OSL_ENSURE(m_xRow.is(),"m_xRow is null!");
     return m_xRow->getObject(columnIndex,typeMap);
 }
 // -------------------------------------------------------------------------
 Reference< XRef > SAL_CALL OKeySet::getRef( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "OKeySet::getRef" );
     OSL_ENSURE(m_xRow.is(),"m_xRow is null!");
     return m_xRow->getRef(columnIndex);
 }
 // -------------------------------------------------------------------------
 Reference< XBlob > SAL_CALL OKeySet::getBlob( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "OKeySet::getBlob" );
     OSL_ENSURE(m_xRow.is(),"m_xRow is null!");
     return m_xRow->getBlob(columnIndex);
 }
 // -------------------------------------------------------------------------
 Reference< XClob > SAL_CALL OKeySet::getClob( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "OKeySet::getClob" );
     OSL_ENSURE(m_xRow.is(),"m_xRow is null!");
     return m_xRow->getClob(columnIndex);
 }
 // -------------------------------------------------------------------------
 Reference< XArray > SAL_CALL OKeySet::getArray( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "OKeySet::getArray" );
     OSL_ENSURE(m_xRow.is(),"m_xRow is null!");
     return m_xRow->getArray(columnIndex);
 }
 // -------------------------------------------------------------------------
 sal_Bool SAL_CALL OKeySet::rowUpdated(  ) throw(SQLException, RuntimeException)
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "OKeySet::rowUpdated" );
     return m_aKeyIter != m_aKeyMap.begin() && m_aKeyIter != m_aKeyMap.end() && m_aKeyIter->second.second == 2;
 }
 // -------------------------------------------------------------------------
 sal_Bool SAL_CALL OKeySet::rowInserted(  ) throw(SQLException, RuntimeException)
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "OKeySet::rowInserted" );
     return m_aKeyIter != m_aKeyMap.begin() && m_aKeyIter != m_aKeyMap.end() && m_aKeyIter->second.second == 1;
 }
 // -------------------------------------------------------------------------
 sal_Bool SAL_CALL OKeySet::rowDeleted(  ) throw(SQLException, RuntimeException)
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "OKeySet::rowDeleted" );
     sal_Bool bDeleted = m_bDeleted;
     m_bDeleted = sal_False;
     return bDeleted;
@@ -1272,6 +1332,7 @@ sal_Bool SAL_CALL OKeySet::rowDeleted(  ) throw(SQLException, RuntimeException)
                                               const ::rtl::OUString& _sSchema,
                                               const ::rtl::OUString& _sTable)
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "OKeySet::getComposedTableName" );
     ::rtl::OUString aComposedName;
     Reference<XDatabaseMetaData> xMetaData = m_xConnection->getMetaData();
 
@@ -1340,7 +1401,11 @@ namespace dbaccess
                     if ( xColumnProp->getPropertySetInfo()->hasPropertyByName(PROPERTY_DEFAULTVALUE) )
                         xColumnProp->getPropertyValue(PROPERTY_DEFAULTVALUE) >>= sColumnDefault;
 
-                    _rColumnNames[sRealName] = SelectColumnDescription( nPos, nType,nScale, sColumnDefault );
+                    sal_Int32 bNullable = sal_False;
+                    xColumnProp->getPropertyValue(PROPERTY_ISNULLABLE)  >>= bNullable;
+
+
+                    _rColumnNames[sRealName] = SelectColumnDescription( nPos, nType,nScale,bNullable != sdbc::ColumnValue::NO_NULLS, sColumnDefault );
                     break;
                 }
             }

@@ -57,6 +57,7 @@ namespace dbaccess
         sal_Int32       nPosition;
         sal_Int32       nType;
         sal_Int32       nScale;
+        sal_Bool        bNullable;
 
         ::rtl::OUString sDefaultValue;
 
@@ -64,14 +65,16 @@ namespace dbaccess
             :nPosition( 0 )
             ,nType( 0 )
             ,nScale( 0 )
+            ,bNullable(sal_False)
             ,sDefaultValue()
         {
         }
 
-        SelectColumnDescription( sal_Int32 _nPosition, sal_Int32 _nType, sal_Int32 _nScale, const ::rtl::OUString& _rDefaultValue )
+        SelectColumnDescription( sal_Int32 _nPosition, sal_Int32 _nType, sal_Int32 _nScale,sal_Bool _bNullable, const ::rtl::OUString& _rDefaultValue )
             :nPosition( _nPosition )
             ,nType( _nType )
             ,nScale( _nScale )
+            ,bNullable(_bNullable)
             ,sDefaultValue( _rDefaultValue )
         {
         }

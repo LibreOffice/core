@@ -79,7 +79,6 @@ protected:
 
     ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection>          m_xConnection;
     ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >    m_xUsers;
-    ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory> m_xORB;
     ::com::sun::star::uno::Sequence< ::rtl::OUString>                               m_aUserNames;
 
     String              m_UserName;
@@ -93,8 +92,6 @@ protected:
 
     OUserAdmin( Window* pParent, const SfxItemSet& _rCoreAttrs);
 public:
-    void setServiceFactory(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory>& _xORB) { m_xORB = _xORB; }
-
     static  SfxTabPage* Create( Window* pParent, const SfxItemSet& _rAttrSet );
 
     ~OUserAdmin();

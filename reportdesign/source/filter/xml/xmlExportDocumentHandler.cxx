@@ -88,9 +88,11 @@ void lcl_correctCellAddress(const ::rtl::OUString & _sName, const uno::Reference
 ExportDocumentHandler::ExportDocumentHandler(uno::Reference< uno::XComponentContext > const & context) :
     m_xContext(context)
     ,m_nCurrentCellIndex(0)
+    ,m_nColumnCount(0)
     ,m_bTableRowsStarted(false)
     ,m_bFirstRowExported(false)
     ,m_bExportChar(false)
+    ,m_bCountColumnHeader(false)
 {
 }
 // -----------------------------------------------------------------------------
@@ -189,12 +191,31 @@ void SAL_CALL ExportDocumentHandler::startElement(const ::rtl::OUString & _sName
         pList->AddAttribute(lcl_createAttribute(XML_NP_OFFICE,XML_MIMETYPE),MIMETYPE_OASIS_OPENDOCUMENT_CHART);
 
         m_xDelegatee->startElement(lcl_createAttribute(XML_NP_OFFICE,XML_REPORT),xNewAttribs);
+
+        const ::rtl::OUString sTableCalc = lcl_createAttribute(XML_NP_TABLE,XML_CALCULATION_SETTINGS);
+        m_xDelegatee->startElement(sTableCalc,NULL);
+        pList = new SvXMLAttributeList();
+        uno::Reference< xml::sax::XAttributeList > xNullAttr = pList;
+        pList->AddAttribute(lcl_createAttribute(XML_NP_TABLE,XML_DATE_VALUE),::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("1900-01-01")));
+
+        const ::rtl::OUString sNullDate = lcl_createAttribute(XML_NP_TABLE,XML_NULL_DATE);
+        m_xDelegatee->startElement(sNullDate,xNullAttr);
+        m_xDelegatee->endElement(sNullDate);
+        m_xDelegatee->endElement(sTableCalc);
         bExport = false;
     }
     else if ( _sName.equalsAscii("table:table") )
     {
         m_xDelegatee->startElement(lcl_createAttribute(XML_NP_RPT,XML_DETAIL),NULL);
         lcl_exportPrettyPrinting(m_xDelegatee);
+    }
+    else if ( _sName.equalsAscii("table:table-header-rows") )
+    {
+        m_bCountColumnHeader = true;
+    }
+    else if ( m_bCountColumnHeader && _sName.equalsAscii("table:table-cell") )
+    {
+        ++m_nColumnCount;
     }
     else if ( _sName.equalsAscii("table:table-rows") )
     {
@@ -248,6 +269,10 @@ void SAL_CALL ExportDocumentHandler::endElement(const ::rtl::OUString & _sName) 
         m_xDelegatee->endElement(_sName);
         lcl_exportPrettyPrinting(m_xDelegatee);
         sNewName = lcl_createAttribute(XML_NP_RPT,XML_DETAIL);
+    }
+    else if ( _sName.equalsAscii("table:table-header-rows") )
+    {
+        m_bCountColumnHeader = false;
     }
     else if ( _sName.equalsAscii("table:table-rows") )
         m_bTableRowsStarted = false;
@@ -360,8 +385,26 @@ void ExportDocumentHandler::exportTableRows()
     uno::Reference< xml::sax::XAttributeList > xCellAtt = pCellAtt;
     pCellAtt->AddAttribute(sValueType,s_sString);
 
+    bool bRemoveString = true;
     ::rtl::OUString sFormula;
     const sal_Int32 nCount = m_aColumns.getLength();
+    if ( m_nColumnCount > nCount )
+    {
+        const sal_Int32 nEmptyCellCount = m_nColumnCount - nCount;
+        for(sal_Int32 i = 0; i < nEmptyCellCount ; ++i)
+        {
+            m_xDelegatee->startElement(sCell,xCellAtt);
+            if ( bRemoveString )
+            {
+                bRemoveString = false;
+                pCellAtt->RemoveAttribute(sValueType);
+                pCellAtt->AddAttribute(sValueType,s_sFloat);
+            } // if ( i == 0 )
+            m_xDelegatee->startElement(sP,NULL);
+            m_xDelegatee->endElement(sP);
+            m_xDelegatee->endElement(sCell);
+        }
+    }
     for(sal_Int32 i = 0; i < nCount ; ++i)
     {
         sFormula = s_sFieldPrefix;
@@ -372,8 +415,9 @@ void ExportDocumentHandler::exportTableRows()
         pList->AddAttribute(sFormulaAttrib,sFormula);
 
         m_xDelegatee->startElement(sCell,xCellAtt);
-        if ( i == 0 )
+        if ( bRemoveString )
         {
+            bRemoveString = false;
             pCellAtt->RemoveAttribute(sValueType);
             pCellAtt->AddAttribute(sValueType,s_sFloat);
         }

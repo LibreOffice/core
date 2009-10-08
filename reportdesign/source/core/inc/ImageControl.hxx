@@ -55,7 +55,7 @@ namespace reportdesign
         friend class OShapeHelper;
         OReportControlModel                 m_aProps;
         ::rtl::OUString                     m_aImageURL;
-        ::sal_Bool                          m_bScaleImage;
+        sal_Int16                           m_nScaleMode;
         ::sal_Bool                          m_bPreserveIRI;
     private:
         OImageControl(const OImageControl&);
@@ -119,12 +119,12 @@ namespace reportdesign
         virtual ::com::sun::star::uno::Reference< ::com::sun::star::util::XCloneable > SAL_CALL createClone(  ) throw (::com::sun::star::uno::RuntimeException);
 
         // XImageControl
-        virtual ::sal_Bool SAL_CALL getScaleImage() throw (::com::sun::star::uno::RuntimeException);
-        virtual void SAL_CALL setScaleImage( ::sal_Bool _scaleimage ) throw (::com::sun::star::uno::RuntimeException);
         virtual ::rtl::OUString SAL_CALL getImageURL() throw (::com::sun::star::uno::RuntimeException);
         virtual void SAL_CALL setImageURL( const ::rtl::OUString& _imageurl ) throw (::com::sun::star::uno::RuntimeException);
         virtual ::sal_Bool SAL_CALL getPreserveIRI() throw (::com::sun::star::uno::RuntimeException);
         virtual void SAL_CALL setPreserveIRI( ::sal_Bool _preserveiri ) throw (::com::sun::star::uno::RuntimeException);
+        virtual ::sal_Int16 SAL_CALL getScaleMode() throw (::com::sun::star::uno::RuntimeException);
+        virtual void SAL_CALL setScaleMode( ::sal_Int16 _scalemode ) throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException);
 
         // XImageProducerSupplier
         virtual ::com::sun::star::uno::Reference< ::com::sun::star::awt::XImageProducer > SAL_CALL getImageProducer(  ) throw (::com::sun::star::uno::RuntimeException);

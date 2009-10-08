@@ -88,9 +88,9 @@
 #ifndef _COM_SUN_STAR_SDB_XQUERYDEFINITIONSSUPPLIER_HPP_
 #include <com/sun/star/sdb/XQueryDefinitionsSupplier.hpp>
 #endif
-#ifndef _COM_SUN_STAR_SDBCX_XTABLESSUPPLIER_HPP_
 #include <com/sun/star/sdbcx/XTablesSupplier.hpp>
-#endif
+#include <com/sun/star/sdbcx/XDataDescriptorFactory.hpp>
+
 #ifndef _COM_SUN_STAR_AWT_TEXTALIGN_HPP_
 #include <com/sun/star/awt/TextAlign.hpp>
 #endif
@@ -106,6 +106,8 @@
 #include <svtools/filenotation.hxx>
 #include <svtools/pathoptions.hxx>
 #include <tools/diagnose_ex.h>
+
+#include <boost/optional.hpp>
 
 namespace dbaxml
 {
@@ -222,6 +224,7 @@ namespace dbaxml
                 return s_sTypeInteger;
 
             default:
+                OSL_ENSURE( false, "lcl_implGetPropertyXMLType: unsupported value type!" );
                 return s_sTypeDouble;
         }
     }
@@ -318,19 +321,17 @@ IMPLEMENT_SERVICE_INFO1_STATIC( ODBExport, "com.sun.star.comp.sdb.DBExportFilter
 // -----------------------------------------------------------------------------
 void ODBExport::exportDataSource()
 {
-    Reference<XPropertySet> xProp(getDataSource());
-    if ( xProp.is() )
+    try
     {
+        Reference<XPropertySet> xProp( getDataSource(), UNO_SET_THROW );
+
         sal_Bool bAutoIncrementEnabled = sal_True;
         TStringPair aAutoIncrement;
 
         Reference< XPropertySet > xDataSourceSettings;
         OSL_VERIFY( xProp->getPropertyValue( PROPERTY_SETTINGS ) >>= xDataSourceSettings );
-        Reference< XPropertyState > xSettingsState( xDataSourceSettings, UNO_QUERY );
-        Reference< XPropertySetInfo > xSettingsInfo;
-        if ( xDataSourceSettings.is() )
-            xSettingsInfo = xDataSourceSettings->getPropertySetInfo();
-        OSL_ENSURE( xSettingsState.is() && xSettingsInfo.is(), "ODBExport::exportDataSource: invalid Setting property of the data source!" );
+        Reference< XPropertyState > xSettingsState( xDataSourceSettings, UNO_QUERY_THROW );
+        Reference< XPropertySetInfo > xSettingsInfo( xDataSourceSettings->getPropertySetInfo(), UNO_SET_THROW );
 
         TDelimiter aDelimiter;
         xSettingsState->getPropertyDefault( INFO_TEXTDELIMITER ) >>= aDelimiter.sText;
@@ -339,6 +340,7 @@ void ODBExport::exportDataSource()
         xSettingsState->getPropertyDefault( INFO_THOUSANDSDELIMITER ) >>= aDelimiter.sThousand;
 
         static ::rtl::OUString s_sTrue(::xmloff::token::GetXMLToken( XML_TRUE ));
+        static ::rtl::OUString s_sFalse(::xmloff::token::GetXMLToken( XML_FALSE ));
         // loop through the properties, and export only those which are not defaulted
         TSettingsMap aSettingsMap;
         Sequence< Property > aProperties = xSettingsInfo->getProperties();
@@ -346,14 +348,6 @@ void ODBExport::exportDataSource()
         const Property* pPropertiesEnd = pProperties + aProperties.getLength();
         for ( ; pProperties != pPropertiesEnd; ++pProperties )
         {
-            // for properties which are not REMOVEABLE, we care for their state, and
-            // only export them if they're not DEFAULTed
-            if ( ( pProperties->Attributes & PropertyAttribute::REMOVEABLE ) == 0 )
-            {
-                PropertyState ePropertyState = xSettingsState->getPropertyState( pProperties->Name );
-                if ( PropertyState_DEFAULT_VALUE == ePropertyState )
-                    continue;
-            }
             ::rtl::OUString sValue;
             Any aValue = xDataSourceSettings->getPropertyValue( pProperties->Name );
             switch ( aValue.getValueTypeClass() )
@@ -379,146 +373,144 @@ void ODBExport::exportDataSource()
             }
 
             ::xmloff::token::XMLTokenEnum eToken = XML_TOKEN_INVALID;
-            if ( pProperties->Name == INFO_JDBCDRIVERCLASS )
-                eToken = XML_JAVA_DRIVER_CLASS;
-            else if ( pProperties->Name == INFO_TEXTFILEHEADER )
+
+            struct PropertyMap
             {
-                if ( sValue == s_sTrue )
-                    continue;
-                eToken = XML_IS_FIRST_ROW_HEADER_LINE;
+                const ::rtl::OUString                       sPropertyName;
+                const XMLTokenEnum                          eAttributeToken;
+                const ::boost::optional< ::rtl::OUString >  aXMLDefault;
+
+                PropertyMap( const ::rtl::OUString& _rPropertyName, const XMLTokenEnum _eToken )
+                    :sPropertyName( _rPropertyName )
+                    ,eAttributeToken( _eToken )
+                    ,aXMLDefault()
+                {
+                }
+
+                PropertyMap( const ::rtl::OUString& _rPropertyName, const XMLTokenEnum _eToken, const ::rtl::OUString& _rDefault )
+                    :sPropertyName( _rPropertyName )
+                    ,eAttributeToken( _eToken )
+                    ,aXMLDefault( _rDefault )
+                {
+                }
+            };
+
+            PropertyMap aTokens[] =
+            {
+                PropertyMap( INFO_JDBCDRIVERCLASS,      XML_JAVA_DRIVER_CLASS                           ),
+                PropertyMap( INFO_TEXTFILEHEADER,       XML_IS_FIRST_ROW_HEADER_LINE,       s_sTrue     ),
+                PropertyMap( INFO_SHOWDELETEDROWS,      XML_SHOW_DELETED,                   s_sFalse    ),
+                PropertyMap( INFO_ALLOWLONGTABLENAMES,  XML_IS_TABLE_NAME_LENGTH_LIMITED,   s_sTrue     ),
+                PropertyMap( INFO_ADDITIONALOPTIONS,    XML_SYSTEM_DRIVER_SETTINGS                      ),
+                PropertyMap( PROPERTY_ENABLESQL92CHECK, XML_ENABLE_SQL92_CHECK,             s_sFalse    ),
+                PropertyMap( INFO_APPEND_TABLE_ALIAS,   XML_APPEND_TABLE_ALIAS_NAME,        s_sTrue     ),
+                PropertyMap( INFO_PARAMETERNAMESUBST,   XML_PARAMETER_NAME_SUBSTITUTION,    s_sTrue     ),
+                PropertyMap( INFO_IGNOREDRIVER_PRIV,    XML_IGNORE_DRIVER_PRIVILEGES,       s_sTrue     ),
+                PropertyMap( INFO_USECATALOG,           XML_USE_CATALOG,                    s_sFalse    ),
+                PropertyMap( PROPERTY_SUPPRESSVERSIONCL,XML_SUPPRESS_VERSION_COLUMNS,       s_sTrue     ),
+                PropertyMap( INFO_CONN_LDAP_BASEDN,     XML_BASE_DN                                     ),
+                PropertyMap( INFO_CONN_LDAP_ROWCOUNT,   XML_MAX_ROW_COUNT                               )
+            };
+
+            bool bIsXMLDefault = false;
+            for ( size_t i=0; i < sizeof( aTokens ) / sizeof( aTokens[0] ); ++i )
+            {
+                if ( pProperties->Name == aTokens[i].sPropertyName )
+                {
+                    eToken = aTokens[i].eAttributeToken;
+
+                    if  (   !!aTokens[i].aXMLDefault
+                        &&  ( sValue == *aTokens[i].aXMLDefault )
+                        )
+                    {
+                        bIsXMLDefault = true;
+                    }
+                    break;
+                }
             }
-            else if ( pProperties->Name == INFO_SHOWDELETEDROWS )
-            {
-                if ( sValue != s_sTrue )
-                    continue;
-                eToken = XML_SHOW_DELETED;
-            }
-            else if ( pProperties->Name == INFO_ALLOWLONGTABLENAMES )
-            {
-                if ( sValue == s_sTrue )
-                    continue;
-                eToken = XML_IS_TABLE_NAME_LENGTH_LIMITED;
-            }
-            else if ( pProperties->Name == INFO_ADDITIONALOPTIONS )
-                eToken = XML_SYSTEM_DRIVER_SETTINGS;
-            else if ( pProperties->Name == PROPERTY_ENABLESQL92CHECK )
-            {
-                if ( sValue != s_sTrue )
-                    continue;
-                eToken = XML_ENABLE_SQL92_CHECK;
-            }
-            else if ( pProperties->Name == INFO_APPEND_TABLE_ALIAS )
-            {
-                if ( sValue == s_sTrue )
-                    continue;
-                eToken = XML_APPEND_TABLE_ALIAS_NAME;
-            }
-            else if ( pProperties->Name == INFO_PARAMETERNAMESUBST )
-            {
-                if ( sValue == s_sTrue )
-                    continue;
-                eToken = XML_PARAMETER_NAME_SUBSTITUTION;
-            }
-            else if ( pProperties->Name == INFO_IGNOREDRIVER_PRIV )
-            {
-                if ( sValue == s_sTrue )
-                    continue;
-                eToken = XML_IGNORE_DRIVER_PRIVILEGES;
-            }
-            else if ( pProperties->Name == PROPERTY_BOOLEANCOMPARISONMODE )
-            {
-                sal_Int32 nValue = 0;
-                aValue >>= nValue;
-                if ( sValue.equalsAscii("0") )
-                    sValue = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("equal-integer"));
-                else if ( sValue.equalsAscii("1") )
-                    sValue = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("is-boolean"));
-                else if ( sValue.equalsAscii("2") )
-                    sValue = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("equal-boolean"));
-                else if ( sValue.equalsAscii("3") )
-                    sValue = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("equal-use-only-zero"));
-                if ( sValue.equalsAscii("equal-integer") )
-                    continue;
-                eToken = XML_BOOLEAN_COMPARISON_MODE;
-            }
-            else if ( pProperties->Name == INFO_USECATALOG )
-            {
-                if ( sValue != s_sTrue )
-                    continue;
-                eToken = XML_USE_CATALOG;
-            }
-            else if ( pProperties->Name == PROPERTY_SUPPRESSVERSIONCL )
-            {
-                if ( sValue == s_sTrue )
-                    continue;
-                eToken = XML_SUPPRESS_VERSION_COLUMNS;
-            }
-            else if ( pProperties->Name == INFO_CONN_LDAP_BASEDN )
-                eToken = XML_BASE_DN;
-            else if ( pProperties->Name == INFO_CONN_LDAP_ROWCOUNT )
-                eToken = XML_MAX_ROW_COUNT;
-            else if ( pProperties->Name == INFO_AUTORETRIEVEENABLED )
-            {
-                aValue >>= bAutoIncrementEnabled;
-                // special handling
+
+            if ( bIsXMLDefault )
+                // the property has the value which is specified as default in the XML schema -> no need to write it
                 continue;
-            }
-            else if ( pProperties->Name == INFO_AUTORETRIEVEVALUE )
+
+            if ( eToken == XML_TOKEN_INVALID )
             {
-                aAutoIncrement.first = sValue;
-                // special handling
-                continue;
-            }
-            else if ( pProperties->Name == PROPERTY_AUTOINCREMENTCREATION )
-            {
-                aAutoIncrement.second = sValue;
-                // special handling
-                continue;
-            }
-            else if ( pProperties->Name == INFO_TEXTDELIMITER )
-            {
-                aDelimiter.sText = sValue;
-                aDelimiter.bUsed = true;
-                // special handling
-                continue;
-            }
-            else if ( pProperties->Name == INFO_FIELDDELIMITER )
-            {
-                aDelimiter.sField = sValue;
-                aDelimiter.bUsed = true;
-                // special handling
-                continue;
-            }
-            else if ( pProperties->Name == INFO_DECIMALDELIMITER )
-            {
-                aDelimiter.sDecimal = sValue;
-                aDelimiter.bUsed = true;
-                // special handling
-                continue;
-            }
-            else if ( pProperties->Name == INFO_THOUSANDSDELIMITER )
-            {
-                aDelimiter.sThousand = sValue;
-                aDelimiter.bUsed = true;
-                // special handling
-                continue;
-            }
-            else if ( pProperties->Name == INFO_CHARSET )
-            {
-                m_sCharSet = sValue;
-                // special handling
-                continue;
-            }
-            else
-            {
-                m_aDataSourceSettings.push_back( makeAny( PropertyValue(
-                    pProperties->Name,
-                    -1,
-                    aValue,
-                    PropertyState_DIRECT_VALUE
-                ) ) );
-                // special handling
-                continue;
+                // for properties which are not REMOVEABLE, we care for their state, and
+                // only export them if they're not DEFAULTed
+                if ( ( pProperties->Attributes & PropertyAttribute::REMOVEABLE ) == 0 )
+                {
+                    PropertyState ePropertyState = xSettingsState->getPropertyState( pProperties->Name );
+                    if ( PropertyState_DEFAULT_VALUE == ePropertyState )
+                        continue;
+                }
+
+                // special handlings
+                if ( pProperties->Name == PROPERTY_BOOLEANCOMPARISONMODE )
+                {
+                    sal_Int32 nValue = 0;
+                    aValue >>= nValue;
+                    if ( sValue.equalsAscii("0") )
+                        sValue = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("equal-integer"));
+                    else if ( sValue.equalsAscii("1") )
+                        sValue = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("is-boolean"));
+                    else if ( sValue.equalsAscii("2") )
+                        sValue = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("equal-boolean"));
+                    else if ( sValue.equalsAscii("3") )
+                        sValue = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("equal-use-only-zero"));
+                    if ( sValue.equalsAscii("equal-integer") )
+                        continue;
+                    eToken = XML_BOOLEAN_COMPARISON_MODE;
+                }
+                else if ( pProperties->Name == INFO_AUTORETRIEVEENABLED )
+                {
+                    aValue >>= bAutoIncrementEnabled;
+                    continue;
+                }
+                else if ( pProperties->Name == INFO_AUTORETRIEVEVALUE )
+                {
+                    aAutoIncrement.first = sValue;
+                    continue;
+                }
+                else if ( pProperties->Name == PROPERTY_AUTOINCREMENTCREATION )
+                {
+                    aAutoIncrement.second = sValue;
+                    continue;
+                }
+                else if ( pProperties->Name == INFO_TEXTDELIMITER )
+                {
+                    aDelimiter.sText = sValue;
+                    aDelimiter.bUsed = true;
+                    continue;
+                }
+                else if ( pProperties->Name == INFO_FIELDDELIMITER )
+                {
+                    aDelimiter.sField = sValue;
+                    aDelimiter.bUsed = true;
+                    continue;
+                }
+                else if ( pProperties->Name == INFO_DECIMALDELIMITER )
+                {
+                    aDelimiter.sDecimal = sValue;
+                    aDelimiter.bUsed = true;
+                    continue;
+                }
+                else if ( pProperties->Name == INFO_THOUSANDSDELIMITER )
+                {
+                    aDelimiter.sThousand = sValue;
+                    aDelimiter.bUsed = true;
+                    continue;
+                }
+                else if ( pProperties->Name == INFO_CHARSET )
+                {
+                    m_sCharSet = sValue;
+                    continue;
+                }
+                else
+                {
+                    m_aDataSourceSettings.push_back( TypedPropertyValue(
+                        pProperties->Name, pProperties->Type, aValue ) );
+                    continue;
+                }
             }
 
             aSettingsMap.insert(TSettingsMap::value_type(eToken,sValue));
@@ -533,6 +525,10 @@ void ODBExport::exportDataSource()
         exportConnectionData();
         exportDriverSettings(aSettingsMap);
         exportApplicationConnectionSettings(aSettingsMap);
+    }
+    catch( const Exception& )
+    {
+        DBG_UNHANDLED_EXCEPTION();
     }
 }
 // -----------------------------------------------------------------------------
@@ -700,84 +696,83 @@ void ODBExport::exportConnectionData()
 // -----------------------------------------------------------------------------
 void ODBExport::exportDataSourceSettings()
 {
-    if ( !m_aDataSourceSettings.empty() )
+    if ( m_aDataSourceSettings.empty() )
+        return;
+
+    SvXMLElementExport aElem(*this,XML_NAMESPACE_DB, XML_DATA_SOURCE_SETTINGS, sal_True, sal_True);
+    ::std::vector< TypedPropertyValue >::iterator aIter = m_aDataSourceSettings.begin();
+    ::std::vector< TypedPropertyValue >::iterator aEnd = m_aDataSourceSettings.end();
+    for ( ; aIter != aEnd; ++aIter )
     {
-        SvXMLElementExport aElem(*this,XML_NAMESPACE_DB, XML_DATA_SOURCE_SETTINGS, sal_True, sal_True);
-        PropertyValue aValue;
-        ::std::vector< Any>::iterator aIter = m_aDataSourceSettings.begin();
-        ::std::vector< Any>::iterator aEnd = m_aDataSourceSettings.end();
-        for (; aIter != aEnd; ++aIter)
+        sal_Bool bIsSequence = TypeClass_SEQUENCE == aIter->Type.getTypeClass();
+
+        Type aSimpleType;
+        if ( bIsSequence )
+            aSimpleType = ::comphelper::getSequenceElementType( aIter->Value.getValueType() );
+        else
+            aSimpleType = aIter->Type;
+
+        AddAttribute( XML_NAMESPACE_DB, XML_DATA_SOURCE_SETTING_IS_LIST,bIsSequence ? XML_TRUE : XML_FALSE );
+        AddAttribute( XML_NAMESPACE_DB, XML_DATA_SOURCE_SETTING_NAME, aIter->Name );
+
+        ::rtl::OUString sTypeName = lcl_implGetPropertyXMLType( aSimpleType );
+        if ( bIsSequence && aSimpleType.getTypeClass() == TypeClass_ANY )
         {
-            *aIter >>= aValue;
-            sal_Bool bIsSequence = TypeClass_SEQUENCE == aValue.Value.getValueTypeClass();
+            Sequence<Any> aSeq;
+            aIter->Value >>= aSeq;
+            if ( aSeq.getLength() )
+                sTypeName = lcl_implGetPropertyXMLType(aSeq[0].getValueType());
+        }
 
-            Type aSimpleType;
-            if ( bIsSequence )
-                aSimpleType = ::comphelper::getSequenceElementType(aValue.Value.getValueType());
-            else
-                aSimpleType = aValue.Value.getValueType();
+        AddAttribute( XML_NAMESPACE_DB, XML_DATA_SOURCE_SETTING_TYPE, sTypeName );
 
-            AddAttribute(XML_NAMESPACE_DB, XML_DATA_SOURCE_SETTING_IS_LIST,bIsSequence ? XML_TRUE : XML_FALSE);
-            AddAttribute(XML_NAMESPACE_DB, XML_DATA_SOURCE_SETTING_NAME,aValue.Name);
-            ::rtl::OUString sTypeName = lcl_implGetPropertyXMLType(aSimpleType);
-            if ( bIsSequence && aSimpleType.getTypeClass() == TypeClass_ANY )
+        SvXMLElementExport aDataSourceSetting( *this, XML_NAMESPACE_DB, XML_DATA_SOURCE_SETTING, sal_True, sal_True );
+
+        if ( !bIsSequence )
+        {
+            SvXMLElementExport aDataValue( *this, XML_NAMESPACE_DB, XML_DATA_SOURCE_SETTING_VALUE, sal_True, sal_False );
+            // (no whitespace inside the tag)
+            Characters( implConvertAny( aIter->Value ) );
+        }
+        else
+        {
+            // the not-that-simple case, we need to iterate through the sequence elements
+            ::std::auto_ptr<IIterator> pSequenceIterator;
+            switch (aSimpleType.getTypeClass())
             {
-                Sequence<Any> aSeq;
-                aValue.Value >>= aSeq;
-                if ( aSeq.getLength() )
-                    sTypeName = lcl_implGetPropertyXMLType(aSeq[0].getValueType());
+                case TypeClass_STRING:
+                    pSequenceIterator.reset( new OSequenceIterator< ::rtl::OUString >( aIter->Value ) );
+                    break;
+                case TypeClass_DOUBLE:
+                    pSequenceIterator.reset( new OSequenceIterator< double >( aIter->Value ) );
+                    break;
+                case TypeClass_BOOLEAN:
+                    pSequenceIterator.reset( new OSequenceIterator< sal_Bool >( aIter->Value ) );
+                    break;
+                case TypeClass_BYTE:
+                    pSequenceIterator.reset( new OSequenceIterator< sal_Int8 >( aIter->Value ) );
+                    break;
+                case TypeClass_SHORT:
+                    pSequenceIterator.reset( new OSequenceIterator< sal_Int16 >( aIter->Value ) );
+                    break;
+                case TypeClass_LONG:
+                    pSequenceIterator.reset( new OSequenceIterator< sal_Int32 >( aIter->Value ) );
+                    break;
+                case TypeClass_ANY:
+                    pSequenceIterator.reset( new OSequenceIterator< Any >( aIter->Value ) );
+                    break;
+                default:
+                    OSL_ENSURE(sal_False, "unsupported sequence type !");
+                    break;
             }
-
-            AddAttribute(XML_NAMESPACE_DB, XML_DATA_SOURCE_SETTING_TYPE,sTypeName);
-
-            SvXMLElementExport aDataSourceSetting(*this,XML_NAMESPACE_DB, XML_DATA_SOURCE_SETTING, sal_True, sal_True);
-
-            if ( !bIsSequence )
+            if ( pSequenceIterator.get() )
             {
-                SvXMLElementExport aDataValue(*this,XML_NAMESPACE_DB, XML_DATA_SOURCE_SETTING_VALUE, sal_True, sal_False);
-                // (no whitespace inside the tag)
-                Characters(implConvertAny(aValue.Value));
-            }
-            else
-            {
-                // the not-that-simple case, we need to iterate through the sequence elements
-                ::std::auto_ptr<IIterator> pSequenceIterator;
-                switch (aSimpleType.getTypeClass())
+                ::rtl::OUString sCurrent;
+                while (pSequenceIterator->hasMoreElements())
                 {
-                    case TypeClass_STRING:
-                        pSequenceIterator.reset(new OSequenceIterator< ::rtl::OUString >(aValue.Value));
-                        break;
-                    case TypeClass_DOUBLE:
-                        pSequenceIterator.reset(new OSequenceIterator< double >(aValue.Value));
-                        break;
-                    case TypeClass_BOOLEAN:
-                        pSequenceIterator.reset(new OSequenceIterator< sal_Bool >(aValue.Value));
-                        break;
-                    case TypeClass_BYTE:
-                        pSequenceIterator.reset(new OSequenceIterator< sal_Int8 >(aValue.Value));
-                        break;
-                    case TypeClass_SHORT:
-                        pSequenceIterator.reset(new OSequenceIterator< sal_Int16 >(aValue.Value));
-                        break;
-                    case TypeClass_LONG:
-                        pSequenceIterator.reset(new OSequenceIterator< sal_Int32 >(aValue.Value));
-                        break;
-                    case TypeClass_ANY:
-                        pSequenceIterator.reset(new OSequenceIterator< Any >(aValue.Value));
-                        break;
-                    default:
-                        OSL_ENSURE(sal_False, "unsupported sequence type !");
-                        break;
-                }
-                if ( pSequenceIterator.get() )
-                {
-                    ::rtl::OUString sCurrent;
-                    while (pSequenceIterator->hasMoreElements())
-                    {
-                        SvXMLElementExport aDataValue(*this,XML_NAMESPACE_DB, XML_DATA_SOURCE_SETTING_VALUE, sal_True, sal_False);
-                        // (no whitespace inside the tag)
-                        Characters(implConvertAny(pSequenceIterator->nextElement()));
-                    }
+                    SvXMLElementExport aDataValue(*this,XML_NAMESPACE_DB, XML_DATA_SOURCE_SETTING_VALUE, sal_True, sal_False);
+                    // (no whitespace inside the tag)
+                    Characters(implConvertAny(pSequenceIterator->nextElement()));
                 }
             }
         }
@@ -1015,7 +1010,21 @@ void ODBExport::exportColumns(const Reference<XColumnsSupplier>& _xColSup)
     {
         Reference<XNameAccess> xNameAccess( _xColSup->getColumns(), UNO_SET_THROW );
         if ( !xNameAccess->hasElements() )
+        {
+            Reference< XPropertySet > xComponent(_xColSup,UNO_QUERY);
+            TTableColumnMap::iterator aFind = m_aTableDummyColumns.find(xComponent);
+            if ( aFind != m_aTableDummyColumns.end() )
+            {
+                SvXMLElementExport aColumns(*this,XML_NAMESPACE_DB, XML_COLUMNS, sal_True, sal_True);
+                SvXMLAttributeList* pAtt = new SvXMLAttributeList;
+                Reference<XAttributeList> xAtt = pAtt;
+                exportStyleName(aFind->second.get(),*pAtt);
+                AddAttributeList(xAtt);
+                SvXMLElementExport aColumn(*this,XML_NAMESPACE_DB, XML_COLUMN, sal_True, sal_True);
+
+            }
             return;
+        }
 
         SvXMLElementExport aColumns(*this,XML_NAMESPACE_DB, XML_COLUMNS, sal_True, sal_True);
         Sequence< ::rtl::OUString> aSeq = xNameAccess->getElementNames();
@@ -1166,8 +1175,21 @@ void ODBExport::exportAutoStyle(XPropertySet* _xProp)
             GetFontAutoStylePool()->Add(aFont.Name,aFont.StyleName,aFont.Family,aFont.Pitch,aFont.CharSet );
 
             m_aCurrentPropertyStates = m_xCellExportHelper->Filter(_xProp);
-            ::comphelper::mem_fun1_t<ODBExport,XPropertySet* > aMemFunc(&ODBExport::exportAutoStyle);
-            exportCollection(xCollection,XML_TOKEN_INVALID,XML_TOKEN_INVALID,sal_False,aMemFunc);
+            if ( !m_aCurrentPropertyStates.empty() && !xCollection->hasElements() )
+            {
+                Reference< XDataDescriptorFactory> xFac(xCollection,UNO_QUERY);
+                if ( xFac.is() )
+                {
+                    Reference< XPropertySet> xColumn = xFac->createDataDescriptor();
+                    m_aTableDummyColumns.insert(TTableColumnMap::value_type(Reference< XPropertySet>(_xProp),xColumn));
+                    exportAutoStyle(xColumn.get());
+                }
+            }
+            else
+            {
+                ::comphelper::mem_fun1_t<ODBExport,XPropertySet* > aMemFunc(&ODBExport::exportAutoStyle);
+                exportCollection(xCollection,XML_TOKEN_INVALID,XML_TOKEN_INVALID,sal_False,aMemFunc);
+            }
         }
         catch(Exception&)
         {

@@ -38,7 +38,6 @@
 
 #include <comphelper/namedvaluecollection.hxx>
 
-#include <map>
 #include <algorithm>
 #include <functional>
 
@@ -68,17 +67,16 @@ namespace dbaccess
     //====================================================================
     //= DocumentEvents_Data
     //====================================================================
-    typedef ::std::map< ::rtl::OUString, Sequence< PropertyValue > >    NamedEventDescriptors;
-
     struct DocumentEvents_Data : public ::boost::noncopyable
     {
         ::cppu::OWeakObject&    rParent;
         ::osl::Mutex&           rMutex;
-        NamedEventDescriptors   aEventDescs;
+        DocumentEventsData&     rEventsData;
 
-        DocumentEvents_Data( ::cppu::OWeakObject& _rParent, ::osl::Mutex& _rMutex )
+        DocumentEvents_Data( ::cppu::OWeakObject& _rParent, ::osl::Mutex& _rMutex, DocumentEventsData& _rEventsData )
             :rParent( _rParent )
             ,rMutex( _rMutex )
+            ,rEventsData( _rEventsData )
         {
         }
     };
@@ -132,14 +130,16 @@ namespace dbaccess
     //= DocumentEvents
     //====================================================================
     //--------------------------------------------------------------------
-    DocumentEvents::DocumentEvents( ::cppu::OWeakObject& _rParent, ::osl::Mutex& _rMutex )
-        :m_pData( new DocumentEvents_Data( _rParent, _rMutex ) )
+    DocumentEvents::DocumentEvents( ::cppu::OWeakObject& _rParent, ::osl::Mutex& _rMutex, DocumentEventsData& _rEventsData )
+        :m_pData( new DocumentEvents_Data( _rParent, _rMutex, _rEventsData ) )
     {
         const DocumentEventData* pEventData = lcl_getDocumentEventData();
         while ( pEventData->pAsciiEventName )
         {
-            m_pData->aEventDescs[ ::rtl::OUString::createFromAscii( pEventData->pAsciiEventName ) ] =
-                Sequence< PropertyValue >();
+            ::rtl::OUString sEventName = ::rtl::OUString::createFromAscii( pEventData->pAsciiEventName );
+            DocumentEventsData::iterator existingPos = m_pData->rEventsData.find( sEventName );
+            if ( existingPos == m_pData->rEventsData.end() )
+                m_pData->rEventsData[ sEventName ] = Sequence< PropertyValue >();
             ++pEventData;
         }
     }
@@ -181,8 +181,8 @@ namespace dbaccess
     {
         ::osl::MutexGuard aGuard( m_pData->rMutex );
 
-        NamedEventDescriptors::iterator elementPos = m_pData->aEventDescs.find( _Name );
-        if ( elementPos == m_pData->aEventDescs.end() )
+        DocumentEventsData::iterator elementPos = m_pData->rEventsData.find( _Name );
+        if ( elementPos == m_pData->rEventsData.end() )
             throw NoSuchElementException( _Name, *this );
 
         Sequence< PropertyValue > aEventDescriptor;
@@ -215,8 +215,8 @@ namespace dbaccess
     {
         ::osl::MutexGuard aGuard( m_pData->rMutex );
 
-        NamedEventDescriptors::const_iterator elementPos = m_pData->aEventDescs.find( _Name );
-        if ( elementPos == m_pData->aEventDescs.end() )
+        DocumentEventsData::const_iterator elementPos = m_pData->rEventsData.find( _Name );
+        if ( elementPos == m_pData->rEventsData.end() )
             throw NoSuchElementException( _Name, *this );
 
         Any aReturn;
@@ -231,12 +231,12 @@ namespace dbaccess
     {
         ::osl::MutexGuard aGuard( m_pData->rMutex );
 
-        Sequence< ::rtl::OUString > aNames( m_pData->aEventDescs.size() );
+        Sequence< ::rtl::OUString > aNames( m_pData->rEventsData.size() );
         ::std::transform(
-            m_pData->aEventDescs.begin(),
-            m_pData->aEventDescs.end(),
+            m_pData->rEventsData.begin(),
+            m_pData->rEventsData.end(),
             aNames.getArray(),
-            ::std::select1st< NamedEventDescriptors::value_type >()
+            ::std::select1st< DocumentEventsData::value_type >()
         );
         return aNames;
     }
@@ -246,7 +246,7 @@ namespace dbaccess
     {
         ::osl::MutexGuard aGuard( m_pData->rMutex );
 
-        return m_pData->aEventDescs.find( _Name ) != m_pData->aEventDescs.end();
+        return m_pData->rEventsData.find( _Name ) != m_pData->rEventsData.end();
     }
 
     //--------------------------------------------------------------------
@@ -259,7 +259,7 @@ namespace dbaccess
     ::sal_Bool SAL_CALL DocumentEvents::hasElements(  ) throw (RuntimeException)
     {
         ::osl::MutexGuard aGuard( m_pData->rMutex );
-        return !m_pData->aEventDescs.empty();
+        return !m_pData->rEventsData.empty();
     }
 
 

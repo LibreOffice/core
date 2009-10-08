@@ -59,6 +59,7 @@ void ODriversSettings::getSupportedIndirectSettings( ::dbaccess::DATASOURCE_TYPE
          DSID_AUTOINCREMENTVALUE,
          DSID_AUTORETRIEVEVALUE,
          DSID_BOOLEANCOMPARISON,
+         DSID_ESCAPE_DATETIME,
          0
     };
     for ( const USHORT* pGenericKnowSetting = nGenericKnownSettings; *pGenericKnowSetting; ++pGenericKnowSetting )

@@ -42,6 +42,7 @@
 #include <tools/debug.hxx>
 #include <comphelper/property.hxx>
 #include "FormatCondition.hxx"
+#include <com/sun/star/awt/ImageScaleMode.hpp>
 #include <com/sun/star/text/ParagraphVertAlign.hpp>
 #include "ReportHelperImpl.hxx"
 // =============================================================================
@@ -131,7 +132,7 @@ OImageControl::OImageControl(uno::Reference< uno::XComponentContext > const & _x
 :ImageControlBase(m_aMutex)
 ,ImageControlPropertySet(_xContext,static_cast< Implements >(IMPLEMENTS_PROPERTY_SET),lcl_getImageOptionals())
 ,m_aProps(m_aMutex,static_cast< container::XContainer*>( this ),_xContext)
-,m_bScaleImage(sal_False)
+,m_nScaleMode(awt::ImageScaleMode::None)
 ,m_bPreserveIRI(sal_True)
 {
     DBG_CTOR( rpt_OImageControl,NULL);
@@ -144,7 +145,7 @@ OImageControl::OImageControl(uno::Reference< uno::XComponentContext > const & _x
 :ImageControlBase(m_aMutex)
 ,ImageControlPropertySet(_xContext,static_cast< Implements >(IMPLEMENTS_PROPERTY_SET),lcl_getImageOptionals())
 ,m_aProps(m_aMutex,static_cast< container::XContainer*>( this ),_xContext)
-,m_bScaleImage(sal_False)
+,m_nScaleMode(awt::ImageScaleMode::None)
 ,m_bPreserveIRI(sal_True)
 {
     DBG_CTOR( rpt_OImageControl,NULL);
@@ -254,7 +255,7 @@ void SAL_CALL OImageControl::setHyperLinkName(const ::rtl::OUString & the_value)
 }
 
 // -----------------------------------------------------------------------------
-::sal_Int32 SAL_CALL OImageControl::getControlBackground() throw (::com::sun::star::beans::UnknownPropertyException, uno::RuntimeException)
+::sal_Int32 SAL_CALL OImageControl::getControlBackground() throw (beans::UnknownPropertyException, uno::RuntimeException)
 {
     ::osl::MutexGuard aGuard(m_aMutex);
     return m_aProps.aFormatProperties.m_bBackgroundTransparent ? COL_TRANSPARENT : m_aProps.aFormatProperties.nBackgroundColor;
@@ -364,16 +365,6 @@ uno::Reference< util::XCloneable > SAL_CALL OImageControl::createClone(  ) throw
 // -----------------------------------------------------------------------------
 
 // XImageControl
-::sal_Bool SAL_CALL OImageControl::getScaleImage() throw (uno::RuntimeException)
-{
-    ::osl::MutexGuard aGuard(m_aMutex);
-    return m_bScaleImage;
-}
-// -----------------------------------------------------------------------------
-void SAL_CALL OImageControl::setScaleImage( ::sal_Bool _scaleimage ) throw (uno::RuntimeException)
-{
-    set(PROPERTY_SCALEIMAGE,_scaleimage,m_bScaleImage);
-}
 // -----------------------------------------------------------------------------
 ::rtl::OUString SAL_CALL OImageControl::getImageURL() throw (uno::RuntimeException)
 {
@@ -486,6 +477,19 @@ void SAL_CALL OImageControl::setSize( const awt::Size& aSize ) throw (beans::Pro
     if ( m_aProps.aComponent.m_xShape.is() )
         return m_aProps.aComponent.m_xShape->getShapeType();
     return ::rtl::OUString();
+}
+// -----------------------------------------------------------------------------
+::sal_Int16 SAL_CALL OImageControl::getScaleMode() throw (uno::RuntimeException)
+{
+    ::osl::MutexGuard aGuard(m_aMutex);
+    return m_nScaleMode;
+}
+// -----------------------------------------------------------------------------
+void SAL_CALL OImageControl::setScaleMode( ::sal_Int16 _scalemode ) throw (lang::IllegalArgumentException, uno::RuntimeException)
+{
+    if ( _scalemode < awt::ImageScaleMode::None ||_scalemode > awt::ImageScaleMode::Anisotropic )
+        throw lang::IllegalArgumentException();
+    set(PROPERTY_SCALEMODE,_scalemode,m_nScaleMode);
 }
 // -----------------------------------------------------------------------------
 ::sal_Bool SAL_CALL OImageControl::getPreserveIRI() throw (uno::RuntimeException)

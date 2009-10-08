@@ -48,6 +48,9 @@ IMGLST_SRS=$(SRS)$/$(TARGET).srs
 SLOFILES =\
             $(SLO)$/SectionWindow.obj			\
             $(SLO)$/ReportController.obj		\
+            $(SLO)$/ReportControllerObserver.obj \
+            $(SLO)$/FormattedFieldBeautifier.obj \
+            $(SLO)$/FixedTextColor.obj           \
             $(SLO)$/ReportSection.obj			\
             $(SLO)$/SectionView.obj				\
             $(SLO)$/ViewsWindow.obj				\

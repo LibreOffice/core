@@ -45,8 +45,8 @@
 #ifndef DBA_CORE_REFRESHLISTENER_HXX
 #include "RefreshListener.hxx"
 #endif
-#ifndef DBA_CORE_WARNINGS_HXX
-#include "warning.hxx"
+#ifndef DBTOOLS_WARNINGSCONTAINER_HXX
+#include <connectivity/warningscontainer.hxx>
 #endif
 
 /** === begin UNO includes === **/
@@ -152,13 +152,13 @@ protected:
     ::com::sun::star::uno::Reference< ::com::sun::star::sdb::application::XTableUIProvider >    m_xTableUIProvider;
 
 
-    OTableContainer*            m_pTables;
-    OViewContainer*             m_pViews;
-    WarningsContainer           m_aWarnings;
-    oslInterlockedCount         m_nInAppend;
-    sal_Bool                    m_bSupportsViews;       // true when the getTableTypes return "VIEW" as type
-    sal_Bool                    m_bSupportsUsers;
-    sal_Bool                    m_bSupportsGroups;
+    OTableContainer*                m_pTables;
+    OViewContainer*                 m_pViews;
+    ::dbtools::WarningsContainer    m_aWarnings;
+    oslInterlockedCount             m_nInAppend;
+    sal_Bool                        m_bSupportsViews;       // true when the getTableTypes return "VIEW" as type
+    sal_Bool                        m_bSupportsUsers;
+    sal_Bool                        m_bSupportsGroups;
 
 protected:
     virtual ~OConnection();

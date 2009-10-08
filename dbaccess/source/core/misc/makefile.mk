@@ -51,7 +51,6 @@ SLOFILES=	\
         $(SLO)$/userinformation.obj     \
         $(SLO)$/ContainerListener.obj   \
         $(SLO)$/objectnameapproval.obj  \
-        $(SLO)$/warnings.obj            \
         $(SLO)$/DatabaseDataProvider.obj \
         $(SLO)$/module_dba.obj          \
         $(SLO)$/dsntypes.obj            \

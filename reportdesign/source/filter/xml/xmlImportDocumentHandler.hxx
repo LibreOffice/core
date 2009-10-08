@@ -90,6 +90,7 @@ private:
     ::osl::Mutex                                                                        m_aMutex;
     ::std::vector< ::rtl::OUString>                                                     m_aMasterFields;
     ::std::vector< ::rtl::OUString>                                                     m_aDetailFields;
+    ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >           m_aArguments;
     ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >        m_xContext;
     ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XDocumentHandler >    m_xDelegatee;
     ::com::sun::star::uno::Reference< ::com::sun::star::uno::XAggregation >             m_xProxy;
@@ -99,6 +100,7 @@ private:
     ::com::sun::star::uno::Reference< ::com::sun::star::chart2::data::XDatabaseDataProvider >   m_xDatabaseDataProvider;
 
     ::std::auto_ptr<SvXMLTokenMap>                                                      m_pReportElemTokenMap;
+    bool                                                                                m_bOnlyOnce;
 };
 // -----------------------------------------------------------------------------
 } // namespace rptxml

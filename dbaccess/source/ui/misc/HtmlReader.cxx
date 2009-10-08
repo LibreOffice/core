@@ -30,117 +30,44 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_dbaccess.hxx"
-#ifndef DBAUI_HTMLREADER_HXX
 #include "HtmlReader.hxx"
-#endif
-#ifndef _DBHELPER_DBCONVERSION_HXX_
 #include <connectivity/dbconversion.hxx>
-#endif
-#ifndef _CONNECTIVITY_DBTOOLS_HXX_
 #include <connectivity/dbtools.hxx>
-#endif
-#ifndef _TOOLS_TENCCVT_HXX
 #include <tools/tenccvt.hxx>
-#endif
-#ifndef _COMPHELPER_EXTRACT_HXX_
 #include <comphelper/extract.hxx>
-#endif
-#ifndef _DBU_MISC_HRC_
 #include "dbu_misc.hrc"
-#endif
-#ifndef DBACCESS_SHARED_DBUSTRINGS_HRC
 #include "dbustrings.hrc"
-#endif
-#ifndef _SFXHTML_HXX
 #include <sfx2/sfxhtml.hxx>
-#endif
-#ifndef _TOOLS_DEBUG_HXX
 #include <tools/debug.hxx>
-#endif
-#ifndef _TOOLS_TENCCVT_HXX
 #include <tools/tenccvt.hxx>
-#endif
-#ifndef _DBAUI_MODULE_DBU_HXX_
 #include "moduledbu.hxx"
-#endif
-#ifndef _COM_SUN_STAR_SDBCX_XDATADESCRIPTORFACTORY_HPP_
 #include <com/sun/star/sdbcx/XDataDescriptorFactory.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDBCX_XCOLUMNSSUPPLIER_HPP_
 #include <com/sun/star/sdbcx/XColumnsSupplier.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDBCX_XAPPEND_HPP_
 #include <com/sun/star/sdbcx/XAppend.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDBC_DATATYPE_HPP_
 #include <com/sun/star/sdbc/DataType.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDBC_COLUMNVALUE_HPP_
 #include <com/sun/star/sdbc/ColumnValue.hpp>
-#endif
-#ifndef _COM_SUN_STAR_AWT_FONTDESCRIPTOR_HPP_
 #include <com/sun/star/awt/FontDescriptor.hpp>
-#endif
-#ifndef _COM_SUN_STAR_AWT_FONTWEIGHT_HPP_
 #include <com/sun/star/awt/FontWeight.hpp>
-#endif
-#ifndef _COM_SUN_STAR_AWT_FONTSTRIKEOUT_HPP_
 #include <com/sun/star/awt/FontStrikeout.hpp>
-#endif
-#ifndef _COM_SUN_STAR_AWT_FONTSLANT_HPP_
 #include <com/sun/star/awt/FontSlant.hpp>
-#endif
-#ifndef _COM_SUN_STAR_AWT_FONTUNDERLINE_HPP_
 #include <com/sun/star/awt/FontUnderline.hpp>
-#endif
-#ifndef _COM_SUN_STAR_UTIL_NUMBERFORMAT_HPP_
 #include <com/sun/star/util/NumberFormat.hpp>
-#endif
-#ifndef _COM_SUN_STAR_UTIL_XNUMBERFORMATTYPES_HPP_
 #include <com/sun/star/util/XNumberFormatTypes.hpp>
-#endif
-#ifndef _HTMLTOKN_H
 #include <svtools/htmltokn.h>
-#endif
-#ifndef _HTMLKYWD_HXX
 #include <svtools/htmlkywd.hxx>
-#endif
-#ifndef _TOOLS_COLOR_HXX
 #include <tools/color.hxx>
-#endif
-#ifndef DBAUI_WIZ_COPYTABLEDIALOG_HXX
 #include "WCopyTable.hxx"
-#endif
-#ifndef DBAUI_WIZ_EXTENDPAGES_HXX
 #include "WExtendPages.hxx"
-#endif
-#ifndef DBAUI_WIZ_NAMEMATCHING_HXX
 #include "WNameMatch.hxx"
-#endif
-#ifndef DBAUI_WIZ_COLUMNSELECT_HXX
 #include "WColumnSelect.hxx"
-#endif
-#ifndef DBAUI_ENUMTYPES_HXX
 #include "QEnumTypes.hxx"
-#endif
-#ifndef DBAUI_WIZARD_CPAGE_HXX
 #include "WCPage.hxx"
-#endif
-#ifndef TOOLS_INETMIME_HXX
 #include <tools/inetmime.hxx>
-#endif
-#ifndef _INETTYPE_HXX
 #include <svtools/inettype.hxx>
-#endif
-#ifndef _RTL_TENCINFO_H
 #include <rtl/tencinfo.h>
-#endif
-#ifndef DBAUI_TOOLS_HXX
 #include "UITools.hxx"
-#endif
-#ifndef _SV_SVAPP_HXX
 #include <vcl/svapp.hxx>
-#endif
+#include <rtl/logfile.hxx>
 
 using namespace dbaui;
 using namespace ::com::sun::star::uno;
@@ -182,6 +109,7 @@ OHTMLReader::OHTMLReader(SvStream& rIn,const SharedConnection& _rxConnection,
     ,m_bMetaOptions(sal_False)
     ,m_bSDNum(sal_False)
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "misc", "Ocke.Janssen@sun.com", "OHTMLReader::OHTMLReader" );
     DBG_CTOR(OHTMLReader,NULL);
     SetSrcEncoding( GetExtendedCompatibilityTextEncoding(  RTL_TEXTENCODING_ISO_8859_1 ) );
     // If the file starts with a BOM, switch to UCS2.
@@ -203,6 +131,7 @@ OHTMLReader::OHTMLReader(SvStream& rIn,
     ,m_bMetaOptions(sal_False)
     ,m_bSDNum(sal_False)
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "misc", "Ocke.Janssen@sun.com", "OHTMLReader::OHTMLReader" );
     DBG_CTOR(OHTMLReader,NULL);
     SetSrcEncoding( GetExtendedCompatibilityTextEncoding(  RTL_TEXTENCODING_ISO_8859_1 ) );
     // If the file starts with a BOM, switch to UCS2.
@@ -216,6 +145,7 @@ OHTMLReader::~OHTMLReader()
 // ---------------------------------------------------------------------------
 SvParserState OHTMLReader::CallParser()
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "misc", "Ocke.Janssen@sun.com", "OHTMLReader::CallParser" );
     DBG_CHKTHIS(OHTMLReader,NULL);
     rInput.Seek(STREAM_SEEK_TO_BEGIN);
     rInput.ResetError();
@@ -226,6 +156,7 @@ SvParserState OHTMLReader::CallParser()
 // -----------------------------------------------------------------------------
 void OHTMLReader::NextToken( int nToken )
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "misc", "Ocke.Janssen@sun.com", "OHTMLReader::NextToken" );
     DBG_CHKTHIS(OHTMLReader,NULL);
     if(m_bError || !m_nRows) // falls Fehler oder keine Rows mehr zur "Uberpr"ufung dann gleich zur"uck
         return;
@@ -396,6 +327,7 @@ void OHTMLReader::NextToken( int nToken )
 // -----------------------------------------------------------------------------
 void OHTMLReader::fetchOptions()
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "misc", "Ocke.Janssen@sun.com", "OHTMLReader::fetchOptions" );
     m_bInTbl = TRUE;
     const HTMLOptions* options = GetOptions();
     sal_Int16 nArrLen = options->Count();
@@ -420,6 +352,7 @@ void OHTMLReader::fetchOptions()
 //---------------------------------------------------------------------------------
 void OHTMLReader::TableDataOn(SvxCellHorJustify& eVal,int nToken)
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "misc", "Ocke.Janssen@sun.com", "OHTMLReader::TableDataOn" );
     DBG_CHKTHIS(OHTMLReader,NULL);
     sal_Bool bHorJustifyCenterTH = (nToken == HTML_TABLEHEADER_ON);
     const HTMLOptions* pHtmlOptions = GetOptions();
@@ -433,11 +366,11 @@ void OHTMLReader::TableDataOn(SvxCellHorJustify& eVal,int nToken)
             {
                 bHorJustifyCenterTH = sal_False;
                 const String& rOptVal = pOption->GetString();
-                if (rOptVal.EqualsIgnoreCaseAscii( sHTML_AL_right ))
+                if (rOptVal.EqualsIgnoreCaseAscii( OOO_STRING_SVTOOLS_HTML_AL_right ))
                     eVal = SVX_HOR_JUSTIFY_RIGHT;
-                else if (rOptVal.EqualsIgnoreCaseAscii( sHTML_AL_center ))
+                else if (rOptVal.EqualsIgnoreCaseAscii( OOO_STRING_SVTOOLS_HTML_AL_center ))
                     eVal = SVX_HOR_JUSTIFY_CENTER;
-                else if (rOptVal.EqualsIgnoreCaseAscii( sHTML_AL_left ))
+                else if (rOptVal.EqualsIgnoreCaseAscii( OOO_STRING_SVTOOLS_HTML_AL_left ))
                     eVal = SVX_HOR_JUSTIFY_LEFT;
                 else
                     eVal = SVX_HOR_JUSTIFY_STANDARD;
@@ -453,6 +386,7 @@ void OHTMLReader::TableDataOn(SvxCellHorJustify& eVal,int nToken)
 //---------------------------------------------------------------------------------
 void OHTMLReader::TableFontOn(FontDescriptor& _rFont,sal_Int32 &_rTextColor)
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "misc", "Ocke.Janssen@sun.com", "OHTMLReader::TableFontOn" );
     DBG_CHKTHIS(OHTMLReader,NULL);
     const HTMLOptions* pHtmlOptions = GetOptions();
     sal_Int16 nArrLen = pHtmlOptions->Count();
@@ -502,6 +436,7 @@ void OHTMLReader::TableFontOn(FontDescriptor& _rFont,sal_Int32 &_rTextColor)
 // ---------------------------------------------------------------------------
 sal_Int16 OHTMLReader::GetWidthPixel( const HTMLOption* pOption )
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "misc", "Ocke.Janssen@sun.com", "OHTMLReader::GetWidthPixel" );
     DBG_CHKTHIS(OHTMLReader,NULL);
     const String& rOptVal = pOption->GetString();
     if ( rOptVal.Search('%') != STRING_NOTFOUND )
@@ -523,6 +458,7 @@ sal_Int16 OHTMLReader::GetWidthPixel( const HTMLOption* pOption )
 // ---------------------------------------------------------------------------
 sal_Bool OHTMLReader::CreateTable(int nToken)
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "misc", "Ocke.Janssen@sun.com", "OHTMLReader::CreateTable" );
     DBG_CHKTHIS(OHTMLReader,NULL);
     String aTempName(ModuleRes(STR_TBL_TITLE));
     aTempName = aTempName.GetToken(0,' ');
@@ -637,6 +573,7 @@ sal_Bool OHTMLReader::CreateTable(int nToken)
 // -----------------------------------------------------------------------------
 void OHTMLReader::setTextEncoding()
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "misc", "Ocke.Janssen@sun.com", "OHTMLReader::setTextEncoding" );
     DBG_CHKTHIS(OHTMLReader,NULL);
     m_bMetaOptions = sal_True;
     USHORT nContentOption = HTML_O_CONTENT;
@@ -657,12 +594,14 @@ void OHTMLReader::setTextEncoding()
 // -----------------------------------------------------------------------------
 void OHTMLReader::release()
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "misc", "Ocke.Janssen@sun.com", "OHTMLReader::release" );
     DBG_CHKTHIS(OHTMLReader,NULL);
     ReleaseRef();
 }
 // -----------------------------------------------------------------------------
 TypeSelectionPageFactory OHTMLReader::getTypeSelectionPageFactory()
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "misc", "Ocke.Janssen@sun.com", "OHTMLReader::getTypeSelectionPageFactory" );
     DBG_CHKTHIS(OHTMLReader,NULL);
     return &OWizHTMLExtend::Create;
 }

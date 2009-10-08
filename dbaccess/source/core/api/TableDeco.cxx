@@ -98,6 +98,7 @@
 #ifndef DBA_CONTAINERMEDIATOR_HXX
 #include "ContainerMediator.hxx"
 #endif
+#include <rtl/logfile.hxx>
 
 using namespace dbaccess;
 using namespace ::com::sun::star::uno;
@@ -129,6 +130,7 @@ ODBTableDecorator::ODBTableDecorator( const Reference< XConnection >& _rxConnect
     ,m_nPrivileges(-1)
     ,m_pColumns(NULL)
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "ODBTableDecorator::ODBTableDecorator" );
     DBG_CTOR(ODBTableDecorator, NULL);
     ODataSettings::registerPropertiesFor(this);
 }
@@ -143,6 +145,7 @@ ODBTableDecorator::~ODBTableDecorator()
 //--------------------------------------------------------------------------
 Sequence< sal_Int8 > ODBTableDecorator::getImplementationId() throw (RuntimeException)
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "ODBTableDecorator::getImplementationId" );
     static OImplementationId * pId = 0;
     if (! pId)
     {
@@ -160,6 +163,7 @@ Sequence< sal_Int8 > ODBTableDecorator::getImplementationId() throw (RuntimeExce
 //------------------------------------------------------------------------------
 void SAL_CALL ODBTableDecorator::disposing()
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "ODBTableDecorator::disposing" );
     OPropertySetHelper::disposing();
     OTableDescriptor_BASE::disposing();
 
@@ -181,6 +185,7 @@ sal_Bool SAL_CALL ODBTableDecorator::convertFastPropertyValue(
                             const Any& rValue )
                                 throw (::com::sun::star::lang::IllegalArgumentException)
 {
+    //RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "ODBTableDecorator::convertFastPropertyValue" );
     sal_Bool bRet = sal_True;
     switch(nHandle)
     {
@@ -226,6 +231,7 @@ sal_Bool SAL_CALL ODBTableDecorator::convertFastPropertyValue(
 // -----------------------------------------------------------------------------
 void ODBTableDecorator::setFastPropertyValue_NoBroadcast(sal_Int32 _nHandle, const Any& _rValue) throw (Exception)
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "ODBTableDecorator::setFastPropertyValue_NoBroadcast" );
     switch(_nHandle)
     {
         case PROPERTY_ID_PRIVILEGES:
@@ -293,6 +299,7 @@ void ODBTableDecorator::setFastPropertyValue_NoBroadcast(sal_Int32 _nHandle, con
 //------------------------------------------------------------------------------
 void ODBTableDecorator::getFastPropertyValue(Any& _rValue, sal_Int32 _nHandle) const
 {
+    //RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "ODBTableDecorator::getFastPropertyValue" );
     switch(_nHandle)
     {
         case PROPERTY_ID_PRIVILEGES:
@@ -373,6 +380,7 @@ void ODBTableDecorator::getFastPropertyValue(Any& _rValue, sal_Int32 _nHandle) c
 // -------------------------------------------------------------------------
 void ODBTableDecorator::construct()
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "ODBTableDecorator::construct" );
     sal_Bool bNotFound = sal_True;
     Reference<XPropertySet> xProp(m_xTable,UNO_QUERY);
     if ( xProp.is() )
@@ -387,6 +395,7 @@ void ODBTableDecorator::construct()
 // -----------------------------------------------------------------------------
 ::cppu::IPropertyArrayHelper* ODBTableDecorator::createArrayHelper(sal_Int32 /*_nId*/) const
 {
+    //RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "ODBTableDecorator::createArrayHelper" );
     Reference<XPropertySet> xProp(m_xTable,UNO_QUERY);
     Reference<XPropertySetInfo> xInfo = xProp->getPropertySetInfo();
 
@@ -416,6 +425,7 @@ void ODBTableDecorator::construct()
 // -----------------------------------------------------------------------------
 ::cppu::IPropertyArrayHelper & SAL_CALL ODBTableDecorator::getInfoHelper()
 {
+    //RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "ODBTableDecorator::getInfoHelper" );
     Reference<XPropertySet> xProp(m_xTable,UNO_QUERY);
 
     Reference<XPropertySetInfo> xInfo = xProp->getPropertySetInfo();
@@ -437,6 +447,7 @@ IMPLEMENT_SERVICE_INFO1(ODBTableDecorator, "com.sun.star.sdb.dbaccess.ODBTableDe
 // -------------------------------------------------------------------------
 Any SAL_CALL ODBTableDecorator::queryInterface( const Type & rType ) throw(RuntimeException)
 {
+    //RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "ODBTableDecorator::queryInterface" );
     Any aRet;
     if(m_xTable.is())
     {
@@ -454,6 +465,7 @@ Any SAL_CALL ODBTableDecorator::queryInterface( const Type & rType ) throw(Runti
 // -------------------------------------------------------------------------
 Sequence< Type > SAL_CALL ODBTableDecorator::getTypes(  ) throw(RuntimeException)
 {
+    //RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "ODBTableDecorator::getTypes" );
     Reference<XTypeProvider> xTypes(m_xTable,UNO_QUERY);
     OSL_ENSURE(xTypes.is(),"Table must be a TypePropvider!");
     return xTypes->getTypes();
@@ -464,6 +476,7 @@ Sequence< Type > SAL_CALL ODBTableDecorator::getTypes(  ) throw(RuntimeException
 //------------------------------------------------------------------------------
 void SAL_CALL ODBTableDecorator::rename( const ::rtl::OUString& _rNewName ) throw(SQLException, ElementExistException, RuntimeException)
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "ODBTableDecorator::rename" );
     ::osl::MutexGuard aGuard(m_aMutex);
     ::connectivity::checkDisposed(OTableDescriptor_BASE::rBHelper.bDisposed);
     Reference<XRename> xRename(m_xTable,UNO_QUERY);
@@ -482,6 +495,7 @@ void SAL_CALL ODBTableDecorator::rename( const ::rtl::OUString& _rNewName ) thro
 //------------------------------------------------------------------------------
 void SAL_CALL ODBTableDecorator::alterColumnByName( const ::rtl::OUString& _rName, const Reference< XPropertySet >& _rxDescriptor ) throw(SQLException, NoSuchElementException, RuntimeException)
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "ODBTableDecorator::alterColumnByName" );
     ::osl::MutexGuard aGuard(m_aMutex);
     ::connectivity::checkDisposed(OTableDescriptor_BASE::rBHelper.bDisposed);
     Reference<XAlterTable> xAlter(m_xTable,UNO_QUERY);
@@ -498,6 +512,7 @@ void SAL_CALL ODBTableDecorator::alterColumnByName( const ::rtl::OUString& _rNam
 //------------------------------------------------------------------------------
 void SAL_CALL ODBTableDecorator::alterColumnByIndex( sal_Int32 _nIndex, const Reference< XPropertySet >& _rxDescriptor ) throw(SQLException, IndexOutOfBoundsException, RuntimeException)
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "ODBTableDecorator::alterColumnByIndex" );
     ::osl::MutexGuard aGuard(m_aMutex);
     ::connectivity::checkDisposed(OTableDescriptor_BASE::rBHelper.bDisposed);
     Reference<XAlterTable> xAlter(m_xTable,UNO_QUERY);
@@ -513,6 +528,7 @@ void SAL_CALL ODBTableDecorator::alterColumnByIndex( sal_Int32 _nIndex, const Re
 // -----------------------------------------------------------------------------
 Reference< XNameAccess> ODBTableDecorator::getIndexes() throw (RuntimeException)
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "ODBTableDecorator::getIndexes" );
     ::osl::MutexGuard aGuard(m_aMutex);
     ::connectivity::checkDisposed(OTableDescriptor_BASE::rBHelper.bDisposed);
     return Reference< XIndexesSupplier>(m_xTable,UNO_QUERY)->getIndexes();
@@ -520,6 +536,7 @@ Reference< XNameAccess> ODBTableDecorator::getIndexes() throw (RuntimeException)
 // -------------------------------------------------------------------------
 Reference< XIndexAccess> ODBTableDecorator::getKeys() throw (RuntimeException)
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "ODBTableDecorator::getKeys" );
     ::osl::MutexGuard aGuard(m_aMutex);
     ::connectivity::checkDisposed(OTableDescriptor_BASE::rBHelper.bDisposed);
     return Reference< XKeysSupplier>(m_xTable,UNO_QUERY)->getKeys();
@@ -527,6 +544,7 @@ Reference< XIndexAccess> ODBTableDecorator::getKeys() throw (RuntimeException)
 // -------------------------------------------------------------------------
 Reference< XNameAccess> ODBTableDecorator::getColumns() throw (RuntimeException)
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "ODBTableDecorator::getColumns" );
     ::osl::MutexGuard aGuard(m_aMutex);
     ::connectivity::checkDisposed(OTableDescriptor_BASE::rBHelper.bDisposed);
 
@@ -538,6 +556,7 @@ Reference< XNameAccess> ODBTableDecorator::getColumns() throw (RuntimeException)
 // -----------------------------------------------------------------------------
 ::rtl::OUString SAL_CALL ODBTableDecorator::getName() throw(RuntimeException)
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "ODBTableDecorator::getName" );
     ::osl::MutexGuard aGuard(m_aMutex);
     ::connectivity::checkDisposed(OTableDescriptor_BASE::rBHelper.bDisposed);
     Reference<XNamed> xName(m_xTable,UNO_QUERY);
@@ -547,6 +566,7 @@ Reference< XNameAccess> ODBTableDecorator::getColumns() throw (RuntimeException)
 // -----------------------------------------------------------------------------
 sal_Int64 SAL_CALL ODBTableDecorator::getSomething( const Sequence< sal_Int8 >& rId ) throw(RuntimeException)
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "ODBTableDecorator::getSomething" );
     if (rId.getLength() == 16 && 0 == rtl_compareMemory(getUnoTunnelImplementationId().getConstArray(),  rId.getConstArray(), 16 ) )
         return reinterpret_cast<sal_Int64>(this);
 
@@ -559,6 +579,7 @@ sal_Int64 SAL_CALL ODBTableDecorator::getSomething( const Sequence< sal_Int8 >& 
 // -----------------------------------------------------------------------------
 Sequence< sal_Int8 > ODBTableDecorator::getUnoTunnelImplementationId()
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "ODBTableDecorator::getUnoTunnelImplementationId" );
     static ::cppu::OImplementationId * pId = 0;
     if (! pId)
     {
@@ -574,6 +595,7 @@ Sequence< sal_Int8 > ODBTableDecorator::getUnoTunnelImplementationId()
 // -----------------------------------------------------------------------------
 void ODBTableDecorator::fillPrivileges() const
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "ODBTableDecorator::fillPrivileges" );
     // somebody is asking for the privileges an we do not know them, yet
     m_nPrivileges = 0;
     try
@@ -604,6 +626,7 @@ void ODBTableDecorator::fillPrivileges() const
 // -----------------------------------------------------------------------------
 Reference< XPropertySet > SAL_CALL ODBTableDecorator::createDataDescriptor(  ) throw (RuntimeException)
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "ODBTableDecorator::createDataDescriptor" );
     ::osl::MutexGuard aGuard(m_aMutex);
     ::connectivity::checkDisposed(OTableDescriptor_BASE::rBHelper.bDisposed);
 
@@ -623,11 +646,13 @@ Reference< XPropertySet > SAL_CALL ODBTableDecorator::createDataDescriptor(  ) t
 // -----------------------------------------------------------------------------
 Reference< ::com::sun::star::beans::XPropertySetInfo > SAL_CALL ODBTableDecorator::getPropertySetInfo(  ) throw(RuntimeException)
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "ODBTableDecorator::getPropertySetInfo" );
     return ::cppu::OPropertySetHelper::createPropertySetInfo(getInfoHelper());
 }
 // -----------------------------------------------------------------------------
 void ODBTableDecorator::refreshColumns()
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "ODBTableDecorator::refreshColumns" );
     ::osl::MutexGuard aGuard(m_aMutex);
     ::connectivity::checkDisposed(OTableDescriptor_BASE::rBHelper.bDisposed);
 
@@ -665,6 +690,7 @@ void ODBTableDecorator::refreshColumns()
 // -----------------------------------------------------------------------------
 OColumn* ODBTableDecorator::createColumn(const ::rtl::OUString& _rName) const
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "ODBTableDecorator::createColumn" );
     OColumn* pReturn = NULL;
 
     Reference<XNameAccess> xNames;
@@ -688,11 +714,13 @@ OColumn* ODBTableDecorator::createColumn(const ::rtl::OUString& _rName) const
 // -----------------------------------------------------------------------------
 void ODBTableDecorator::columnAppended( const Reference< XPropertySet >& /*_rxSourceDescriptor*/ )
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "ODBTableDecorator::columnAppended" );
     // not interested in
 }
 // -----------------------------------------------------------------------------
 void ODBTableDecorator::columnDropped(const ::rtl::OUString& _sName)
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "ODBTableDecorator::columnDropped" );
     Reference<XDrop> xDrop(m_xColumnDefinitions,UNO_QUERY);
     if ( xDrop.is() && m_xColumnDefinitions->hasByName(_sName) )
         xDrop->dropByName(_sName);
@@ -701,6 +729,7 @@ void ODBTableDecorator::columnDropped(const ::rtl::OUString& _sName)
 // -----------------------------------------------------------------------------
 Reference< XPropertySet > ODBTableDecorator::createColumnDescriptor()
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "ODBTableDecorator::createColumnDescriptor" );
     Reference<XDataDescriptorFactory> xNames;
     if(m_xTable.is())
         xNames.set(m_xTable->getColumns(),UNO_QUERY);
@@ -723,6 +752,7 @@ void SAL_CALL ODBTableDecorator::release() throw()
 // -----------------------------------------------------------------------------
 void SAL_CALL ODBTableDecorator::setName( const ::rtl::OUString& /*aName*/ ) throw (::com::sun::star::uno::RuntimeException)
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "ODBTableDecorator::setName" );
     throwFunctionNotSupportedException( "XNamed::setName", *this );
 }
 

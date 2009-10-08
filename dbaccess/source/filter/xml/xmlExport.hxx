@@ -130,15 +130,31 @@ class ODBExport : public SvXMLExport
 
         TDelimiter() : bUsed( false ) { }
     };
-    typedef ::std::map< Reference<XPropertySet> ,::rtl::OUString > TPropertyStyleMap;
+    typedef ::std::map< Reference<XPropertySet> ,::rtl::OUString >          TPropertyStyleMap;
+    typedef ::std::map< Reference<XPropertySet> ,Reference<XPropertySet> >  TTableColumnMap;
+
+    struct TypedPropertyValue
+    {
+        ::rtl::OUString               Name;
+        ::com::sun::star::uno::Type   Type;
+        ::com::sun::star::uno::Any    Value;
+
+        TypedPropertyValue( const ::rtl::OUString& _name, const ::com::sun::star::uno::Type& _type, const ::com::sun::star::uno::Any& _value )
+            :Name( _name )
+            ,Type( _type )
+            ,Value( _value )
+        {
+        }
+    };
 
     ::std::auto_ptr< TStringPair >                  m_aAutoIncrement;
     ::std::auto_ptr< TDelimiter >                   m_aDelimiter;
-    ::std::vector< Any>                             m_aDataSourceSettings;
+    ::std::vector< TypedPropertyValue >             m_aDataSourceSettings;
     ::std::vector< XMLPropertyState >               m_aCurrentPropertyStates;
     TPropertyStyleMap                               m_aAutoStyleNames;
     TPropertyStyleMap                               m_aCellAutoStyleNames;
     TPropertyStyleMap                               m_aRowAutoStyleNames;
+    TTableColumnMap                                 m_aTableDummyColumns;
     ::rtl::OUString                                 m_sCharSet;
     UniReference < SvXMLExportPropertyMapper>       m_xExportHelper;
     UniReference < SvXMLExportPropertyMapper>       m_xColumnExportHelper;

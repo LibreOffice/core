@@ -76,7 +76,6 @@ namespace dbaui
             {
                 case SOT_FORMAT_RTF:                    // RTF data descriptions
                 case SOT_FORMATSTR_ID_HTML:             // HTML data descriptions
-                case SOT_FORMATSTR_ID_HTML_SIMPLE:      // HTML data descriptions
                 case SOT_FORMATSTR_ID_DBACCESS_TABLE:   // table descriptor
                     return (E_TABLE == eEntryType);
                 case SOT_FORMATSTR_ID_DBACCESS_QUERY:   // query descriptor

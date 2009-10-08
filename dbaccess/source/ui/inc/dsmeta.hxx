@@ -109,6 +109,8 @@ namespace dbaui
         bool    bFormsCheckRequiredFields;
         bool    bIgnoreCurrency;
         bool    bAutoIncrementIsPrimaryKey;
+        bool    bEscapeDateTime;
+
         // Note: If you extend this list, you need to adjust the ctor (of course)
         // and (maybe) the implementation of supportsAnySpecialSetting
 
@@ -129,6 +131,7 @@ namespace dbaui
             ,bFormsCheckRequiredFields      ( true )
             ,bIgnoreCurrency                ( false )
             ,bAutoIncrementIsPrimaryKey     ( false )
+            ,bEscapeDateTime                ( false )
         {
         }
 
@@ -156,6 +159,7 @@ namespace dbaui
             ||  ( bFormsCheckRequiredFields     == true )
             ||  ( bIgnoreCurrency               == true )
             ||  ( bAutoIncrementIsPrimaryKey    == true )
+            ||  ( bEscapeDateTime               == true )
             ;
     }
 

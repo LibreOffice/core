@@ -35,6 +35,7 @@
 #include "bookmarkcontainer.hxx"
 #include "ContentHelper.hxx"
 #include "core_resource.hxx"
+#include "documentevents.hxx"
 
 /** === begin UNO includes === **/
 #include <com/sun/star/beans/PropertyAttribute.hpp>
@@ -162,6 +163,16 @@ public:
         E_TABLE  = 3
     };
 
+    enum EmbeddedMacros
+    {
+        // the database document (storage) itself contains macros
+        eDocumentWideMacros,
+        // there are sub document( storage)s containing macros
+        eSubDocumentMacros,
+        // there are no known macro( storage)s
+        eNoMacros
+    };
+
 private:
     OModuleClient                                                               m_aModuleClient;
     ::com::sun::star::uno::WeakReference< ::com::sun::star::frame::XModel >     m_xModel;
@@ -181,6 +192,7 @@ private:
     SharedStorage                                                               m_xDocumentStorage;
     ::rtl::Reference< ::sfx2::DocumentStorageModifyListener >                   m_pStorageModifyListener;
     ODatabaseContext*                                                           m_pDBContext;
+    DocumentEventsData                                                          m_aDocumentEvents;
 
     ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >   m_aArgs;
     /// the URL the document was loaded from
@@ -189,7 +201,7 @@ private:
     oslInterlockedCount                                 m_refCount;
 
     /// do we have any object (forms/reports) which contains macros?
-    bool                                                m_bHasAnyObjectWithMacros;
+    ::boost::optional< EmbeddedMacros >                 m_aEmbeddedMacros;
 
     /// true if setting the Modified flag of the document is currently locked
     bool                                                m_bModificationLock;
@@ -288,6 +300,9 @@ public:
 // helper
     const ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatsSupplier >&
             getNumberFormatsSupplier();
+
+    DocumentEventsData&
+            getDocumentEvents() { return m_aDocumentEvents; }
 
     const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >&
             getResource() const { return m_aArgs; }
@@ -408,12 +423,9 @@ public:
                         const ::rtl::OUString& _rPersistentName
                     );
 
-    /** determines whether the database document has any object (form/report) which contains macros
-
-        In such a case, *all* objects in the document keep the macro capability, and the database document
-        itself does *not* allow embedding macros.
+    /** determines which kind of embedded macros are present in the document
     */
-    bool    hasAnyObjectWithMacros() const { return m_bHasAnyObjectWithMacros; }
+    EmbeddedMacros  determineEmbeddedMacros();
 
     /** checks our document's macro execution mode, using the interaction handler as supplied with our
         load arguments

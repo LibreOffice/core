@@ -30,15 +30,10 @@
 #ifndef DBA_XMLHIERARCHYCOLLECTION_HXX
 #define DBA_XMLHIERARCHYCOLLECTION_HXX
 
-#ifndef _XMLOFF_XMLICTXT_HXX
 #include <xmloff/xmlictxt.hxx>
-#endif
-#ifndef DBA_XMLENUMS_HXX
 #include "xmlEnums.hxx"
-#endif
-#ifndef _COM_SUN_STAR_CONTAINER_XNAMEACCESS_HPP_
 #include <com/sun/star/container/XNameAccess.hpp>
-#endif
+#include <com/sun/star/beans/XPropertySet.hpp>
 
 
 namespace dbaxml
@@ -48,6 +43,7 @@ namespace dbaxml
     {
         ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess > m_xParentContainer;
         ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess > m_xContainer;
+        ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >    m_xTable;
         ::rtl::OUString     m_sName;
         ::rtl::OUString     m_sCollectionServiceName;
         ::rtl::OUString     m_sComponentServiceName;
@@ -67,6 +63,7 @@ namespace dbaxml
                     ,sal_uInt16 nPrfx
                     ,const ::rtl::OUString& rLName
                     ,const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >& _xContainer
+                    ,const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >&    _xTable
                     );
         virtual ~OXMLHierarchyCollection();
 

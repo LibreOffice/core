@@ -125,7 +125,7 @@ OViewContainer::OViewContainer(::cppu::OWeakObject& _rParent
                                  ,const Reference< XConnection >& _xCon
                                  ,sal_Bool _bCase
                                  ,IRefreshListener* _pRefreshListener
-                                 ,IWarningsContainer* _pWarningsContainer
+                                 ,::dbtools::IWarningsContainer* _pWarningsContainer
                                  ,oslInterlockedCount& _nInAppend)
     :OFilteredContainer(_rParent,_rMutex,_xCon,_bCase,_pRefreshListener,_pWarningsContainer,_nInAppend)
     ,m_bInElementRemoved(false)
@@ -316,30 +316,8 @@ void SAL_CALL OViewContainer::elementReplaced( const ContainerEvent& /*Event*/ )
 {
 }
 // -----------------------------------------------------------------------------
-Sequence< ::rtl::OUString > OViewContainer::getTableTypeFilter(const Sequence< ::rtl::OUString >& _rTableTypeFilter) const
+::rtl::OUString OViewContainer::getTableTypeRestriction() const
 {
-    static const ::rtl::OUString s_sTableTypeView(RTL_CONSTASCII_USTRINGPARAM("VIEW"));
-
-    if(_rTableTypeFilter.getLength() != 0)
-    {
-        const ::rtl::OUString* pBegin = _rTableTypeFilter.getConstArray();
-        const ::rtl::OUString* pEnd   = pBegin + _rTableTypeFilter.getLength();
-        for(;pBegin != pEnd;++pBegin)
-        {
-            if ( *pBegin == s_sTableTypeView )
-                break;
-        }
-        if ( pBegin != pEnd )
-        { // view are filtered out
-            m_bConstructed = sal_True;
-            return Sequence< ::rtl::OUString >();
-        }
-    }
-    // we want all catalogues, all schemas, all tables
-    Sequence< ::rtl::OUString > sTableTypes(1);
-    sTableTypes[0] = s_sTableTypeView;
-    return sTableTypes;
+    // no restriction at all (other than the ones provided externally)
+    return ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "VIEW" ) );
 }
-// -----------------------------------------------------------------------------
-
-

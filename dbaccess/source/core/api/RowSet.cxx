@@ -375,6 +375,18 @@ void ORowSet::getPropertyDefaultByHandle( sal_Int32 _nHandle, Any& _rDefault ) c
         case PROPERTY_ID_ESCAPE_PROCESSING:
             _rDefault <<= sal_True;
             break;
+        case PROPERTY_ID_MAXROWS:
+            _rDefault <<= sal_Int32( 0 );
+            break;
+        case PROPERTY_ID_FILTER:
+        case PROPERTY_ID_HAVING_CLAUSE:
+        case PROPERTY_ID_GROUP_BY:
+        case PROPERTY_ID_ORDER:
+        case PROPERTY_ID_UPDATE_CATALOGNAME:
+        case PROPERTY_ID_UPDATE_SCHEMANAME:
+        case PROPERTY_ID_UPDATE_TABLENAME:
+            _rDefault <<= ::rtl::OUString();
+            break;
     }
 }
 // -------------------------------------------------------------------------
@@ -1510,7 +1522,14 @@ void SAL_CALL ORowSet::executeWithCompletion( const Reference< XInteractionHandl
         m_bRebuildConnOnExecute = sal_False;
 
         Reference< XSingleSelectQueryComposer > xComposer = getCurrentSettingsComposer( this, m_aContext.getLegacyServiceFactory() );
-        ::dbtools::askForParameters( xComposer, this, m_xActiveConnection, _rxHandler );
+        Reference<XParametersSupplier>  xParameters(xComposer, UNO_QUERY);
+
+        Reference<XIndexAccess>  xParamsAsIndicies = xParameters.is() ? xParameters->getParameters() : Reference<XIndexAccess>();
+        const sal_Int32 nParamCount = xParamsAsIndicies.is() ? xParamsAsIndicies->getCount() : 0;
+        if ( m_aParametersSet.size() < (size_t)nParamCount )
+            m_aParametersSet.resize( nParamCount ,false);
+
+        ::dbtools::askForParameters( xComposer, this, m_xActiveConnection, _rxHandler,m_aParametersSet );
     }
     // ensure that only the allowed exceptions leave this block
     catch(SQLException&)
@@ -1830,6 +1849,13 @@ void ORowSet::execute_NoApprove_NoNewConn(ResettableMutexGuard& _rClearForNotifi
         m_xComposer     = NULL;
 
         Reference< XResultSet > xResultSet( impl_prepareAndExecute_throw() );
+
+        // let our warnings container forget the reference to the (possibly disposed) old result set
+        m_aWarnings.setExternalWarnings( NULL );
+        // clear all current warnings
+        m_aWarnings.clearWarnings();
+        // let the warnings container know about the new "external warnings"
+        m_aWarnings.setExternalWarnings( Reference< XWarningsSupplier >( xResultSet, UNO_QUERY ) );
 
         ::rtl::OUString aComposedUpdateTableName;
         if ( m_aUpdateTableName.getLength() )
@@ -2455,6 +2481,14 @@ ORowSetValue& ORowSet::getParameterStorage(sal_Int32 parameterIndex)
     if ( parameterIndex < 1 )
         throwInvalidIndexException( *this );
 
+    if ( m_aParametersSet.size() < (size_t)parameterIndex )
+        m_aParametersSet.resize( parameterIndex ,false);
+    m_aParametersSet[parameterIndex - 1] = true;
+
+    if ( m_aParametersSet.size() < (size_t)parameterIndex )
+        m_aParametersSet.resize( parameterIndex ,false);
+    m_aParametersSet[parameterIndex - 1] = true;
+
     if ( m_pParameters.is() )
     {
         if ( m_bCommandFacetsDirty )
@@ -2640,7 +2674,21 @@ void SAL_CALL ORowSet::clearParameters(  ) throw(SQLException, RuntimeException)
     size_t nParamCount( m_pParameters.is() ? m_pParameters->size() : m_aPrematureParamValues.get().size() );
     for ( size_t i=1; i<=nParamCount; ++i )
         getParameterStorage( (sal_Int32)i ).setNull();
+    m_aParametersSet.clear();
 }
+
+// -------------------------------------------------------------------------
+Any SAL_CALL ORowSet::getWarnings(  ) throw (SQLException, RuntimeException)
+{
+    return m_aWarnings.getWarnings();
+}
+
+// -------------------------------------------------------------------------
+void SAL_CALL ORowSet::clearWarnings(  ) throw (SQLException, RuntimeException)
+{
+    m_aWarnings.clearWarnings();
+}
+
 // -------------------------------------------------------------------------
 void ORowSet::firePropertyChange(sal_Int32 _nPos,const ::connectivity::ORowSetValue& _rOldValue)
 {
@@ -2762,40 +2810,43 @@ ORowSetClone::ORowSetClone( const ::comphelper::ComponentContext& _rContext, ORo
     //  pConfigMgr->GetDirectConfigProperty(ConfigManager::LOCALE) >>= aLocale;
     Locale aLocale = SvtSysLocale().GetLocaleData().getLocale();
 
-    Sequence< ::rtl::OUString> aSeq = rParent.m_pColumns->getElementNames();
-    const ::rtl::OUString* pBegin   = aSeq.getConstArray();
-    const ::rtl::OUString* pEnd     = pBegin + aSeq.getLength();
-    aColumns->get().reserve(aSeq.getLength()+1);
-    for(sal_Int32 i=1;pBegin != pEnd ;++pBegin,++i)
+    if ( rParent.m_pColumns )
     {
-        Reference<XPropertySet> xColumn;
-        rParent.m_pColumns->getByName(*pBegin) >>= xColumn;
-        if(xColumn->getPropertySetInfo()->hasPropertyByName(PROPERTY_DESCRIPTION))
-            aDescription = comphelper::getString(xColumn->getPropertyValue(PROPERTY_DESCRIPTION));
+        Sequence< ::rtl::OUString> aSeq = rParent.m_pColumns->getElementNames();
+        const ::rtl::OUString* pIter    = aSeq.getConstArray();
+        const ::rtl::OUString* pEnd     = pIter + aSeq.getLength();
+        aColumns->get().reserve(aSeq.getLength()+1);
+        for(sal_Int32 i=1;pIter != pEnd ;++pIter,++i)
+        {
+            Reference<XPropertySet> xColumn;
+            rParent.m_pColumns->getByName(*pIter) >>= xColumn;
+            if(xColumn->getPropertySetInfo()->hasPropertyByName(PROPERTY_DESCRIPTION))
+                aDescription = comphelper::getString(xColumn->getPropertyValue(PROPERTY_DESCRIPTION));
 
-        ORowSetColumn* pColumn = new ORowSetColumn( rParent.getMetaData(),
-                                                            this,
-                                                            i,
-                                                            rParent.m_xActiveConnection->getMetaData(),
-                                                            aDescription,
-                                                            m_aCurrentRow);
-        aColumns->get().push_back(pColumn);
-        pColumn->setName(*pBegin);
-        aNames.push_back(*pBegin);
-        m_aDataColumns.push_back(pColumn);
+            ORowSetColumn* pColumn = new ORowSetColumn( rParent.getMetaData(),
+                                                                this,
+                                                                i,
+                                                                rParent.m_xActiveConnection->getMetaData(),
+                                                                aDescription,
+                                                                m_aCurrentRow);
+            aColumns->get().push_back(pColumn);
+            pColumn->setName(*pIter);
+            aNames.push_back(*pIter);
+            m_aDataColumns.push_back(pColumn);
 
-        pColumn->setFastPropertyValue_NoBroadcast(PROPERTY_ID_ALIGN,xColumn->getPropertyValue(PROPERTY_ALIGN));
-        sal_Int32 nFormatKey = comphelper::getINT32(xColumn->getPropertyValue(PROPERTY_NUMBERFORMAT));
-        if(!nFormatKey && xColumn.is() && m_xNumberFormatTypes.is())
-            nFormatKey = ::dbtools::getDefaultNumberFormat(xColumn,m_xNumberFormatTypes,aLocale);
-        pColumn->setFastPropertyValue_NoBroadcast(PROPERTY_ID_NUMBERFORMAT,makeAny(nFormatKey));
-        pColumn->setFastPropertyValue_NoBroadcast(PROPERTY_ID_RELATIVEPOSITION,xColumn->getPropertyValue(PROPERTY_RELATIVEPOSITION));
-        pColumn->setFastPropertyValue_NoBroadcast(PROPERTY_ID_WIDTH,xColumn->getPropertyValue(PROPERTY_WIDTH));
-        pColumn->setFastPropertyValue_NoBroadcast(PROPERTY_ID_HIDDEN,xColumn->getPropertyValue(PROPERTY_HIDDEN));
-        pColumn->setFastPropertyValue_NoBroadcast(PROPERTY_ID_CONTROLMODEL,xColumn->getPropertyValue(PROPERTY_CONTROLMODEL));
-        pColumn->setFastPropertyValue_NoBroadcast(PROPERTY_ID_HELPTEXT,xColumn->getPropertyValue(PROPERTY_HELPTEXT));
-        pColumn->setFastPropertyValue_NoBroadcast(PROPERTY_ID_CONTROLDEFAULT,xColumn->getPropertyValue(PROPERTY_CONTROLDEFAULT));
+            pColumn->setFastPropertyValue_NoBroadcast(PROPERTY_ID_ALIGN,xColumn->getPropertyValue(PROPERTY_ALIGN));
+            sal_Int32 nFormatKey = comphelper::getINT32(xColumn->getPropertyValue(PROPERTY_NUMBERFORMAT));
+            if(!nFormatKey && xColumn.is() && m_xNumberFormatTypes.is())
+                nFormatKey = ::dbtools::getDefaultNumberFormat(xColumn,m_xNumberFormatTypes,aLocale);
+            pColumn->setFastPropertyValue_NoBroadcast(PROPERTY_ID_NUMBERFORMAT,makeAny(nFormatKey));
+            pColumn->setFastPropertyValue_NoBroadcast(PROPERTY_ID_RELATIVEPOSITION,xColumn->getPropertyValue(PROPERTY_RELATIVEPOSITION));
+            pColumn->setFastPropertyValue_NoBroadcast(PROPERTY_ID_WIDTH,xColumn->getPropertyValue(PROPERTY_WIDTH));
+            pColumn->setFastPropertyValue_NoBroadcast(PROPERTY_ID_HIDDEN,xColumn->getPropertyValue(PROPERTY_HIDDEN));
+            pColumn->setFastPropertyValue_NoBroadcast(PROPERTY_ID_CONTROLMODEL,xColumn->getPropertyValue(PROPERTY_CONTROLMODEL));
+            pColumn->setFastPropertyValue_NoBroadcast(PROPERTY_ID_HELPTEXT,xColumn->getPropertyValue(PROPERTY_HELPTEXT));
+            pColumn->setFastPropertyValue_NoBroadcast(PROPERTY_ID_CONTROLDEFAULT,xColumn->getPropertyValue(PROPERTY_CONTROLDEFAULT));
 
+        } // for(sal_Int32 i=1;pIter != pEnd ;++pIter,++i)
     }
     Reference<XDatabaseMetaData> xMeta = rParent.m_xActiveConnection->getMetaData();
     m_pColumns = new ORowSetDataColumns(xMeta.is() && xMeta->supportsMixedCaseQuotedIdentifiers(),

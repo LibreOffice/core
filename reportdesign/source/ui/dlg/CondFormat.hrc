@@ -31,6 +31,7 @@
 #define RPTUI_CONDFORMAT_HRC
 
 #define CHECKBOX_HEIGHT      8
+#define FIXEDTEXT_WIDTH     60
 #define FIXEDTEXT_HEIGHT     8
 #define EDIT_WIDTH          75
 #define RELATED_CONTROLS     4

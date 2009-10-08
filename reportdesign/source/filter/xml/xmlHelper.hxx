@@ -39,8 +39,7 @@
 
 #include <memory>
 
-#define CTF_RPT_NUMBERFORMAT                            (XML_DB_CTF_START + 1)
-#define CTF_RPT_PARAVERTALIGNMENT                       (XML_DB_CTF_START + 2)
+#define CTF_RPT_NUMBERFORMAT                    (XML_DB_CTF_START + 1)
 
 #define XML_STYLE_FAMILY_REPORT_ID              700
 #define XML_STYLE_FAMILY_REPORT_NAME            "report-element"
@@ -76,6 +75,7 @@ namespace rptxml
         static const SvXMLEnumMapEntry* GetForceNewPageOptions();
         static const SvXMLEnumMapEntry* GetKeepTogetherOptions();
         static const SvXMLEnumMapEntry* GetCommandTypeOptions();
+        static const SvXMLEnumMapEntry* GetImageScaleOptions();
 
         static const XMLPropertyMapEntry* GetTableStyleProps();
         static const XMLPropertyMapEntry* GetColumnStyleProps();
@@ -87,6 +87,7 @@ namespace rptxml
 
         static SvXMLTokenMap* GetReportElemTokenMap();
         static SvXMLTokenMap* GetSubDocumentElemTokenMap();
+
     };
 // -----------------------------------------------------------------------------
 } // rptxml

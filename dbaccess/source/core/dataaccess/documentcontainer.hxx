@@ -77,6 +77,7 @@ class ODocumentContainer    : public ODefinitionContainer
                             , public ::comphelper::OPropertyArrayUsageHelper< ODocumentContainer >
 {
     sal_Bool        m_bFormsContainer;
+
 public:
     /** constructs the container.<BR>
     */

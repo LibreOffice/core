@@ -102,6 +102,7 @@
 #ifndef DBA_CONTAINERMEDIATOR_HXX
 #include "ContainerMediator.hxx"
 #endif
+#include <rtl/logfile.hxx>
 
 using namespace dbaccess;
 using namespace connectivity;
@@ -135,6 +136,7 @@ ODBTable::ODBTable(connectivity::sdbcx::OCollection* _pTables
     ,m_xColumnDefinitions(_xColumnDefinitions)
     ,m_nPrivileges(0)
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "ODBTable::ODBTable" );
     DBG_CTOR(ODBTable, NULL);
     DBG_ASSERT(getMetaData().is(), "ODBTable::ODBTable : invalid conn !");
     DBG_ASSERT(_rName.getLength(), "ODBTable::ODBTable : name !");
@@ -150,6 +152,7 @@ ODBTable::ODBTable(connectivity::sdbcx::OCollection* _pTables
     :OTable_Base(_pTables,_rxConn, _rxConn->getMetaData().is() && _rxConn->getMetaData()->supportsMixedCaseQuotedIdentifiers())
     ,m_nPrivileges(-1)
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "ODBTable::ODBTable" );
 }
 // -------------------------------------------------------------------------
 ODBTable::~ODBTable()
@@ -162,6 +165,7 @@ IMPLEMENT_FORWARD_REFCOUNT(ODBTable,OTable_Base)
 //--------------------------------------------------------------------------
 OColumn* ODBTable::createColumn(const ::rtl::OUString& _rName) const
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "ODBTable::createColumn" );
     OColumn* pReturn = NULL;
 
     Reference<XPropertySet> xProp;
@@ -185,11 +189,13 @@ OColumn* ODBTable::createColumn(const ::rtl::OUString& _rName) const
 // -----------------------------------------------------------------------------
 void ODBTable::columnAppended( const Reference< XPropertySet >& /*_rxSourceDescriptor*/ )
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "ODBTable::columnAppended" );
     // not interested in
 }
 // -----------------------------------------------------------------------------
 void ODBTable::columnDropped(const ::rtl::OUString& _sName)
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "ODBTable::columnDropped" );
     Reference<XDrop> xDrop(m_xColumnDefinitions,UNO_QUERY);
     if ( xDrop.is() && m_xColumnDefinitions->hasByName(_sName) )
     {
@@ -199,6 +205,7 @@ void ODBTable::columnDropped(const ::rtl::OUString& _sName)
 //--------------------------------------------------------------------------
 Sequence< sal_Int8 > ODBTable::getImplementationId() throw (RuntimeException)
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "ODBTable::getImplementationId" );
     static OImplementationId * pId = 0;
     if (! pId)
     {
@@ -216,6 +223,7 @@ Sequence< sal_Int8 > ODBTable::getImplementationId() throw (RuntimeException)
 //------------------------------------------------------------------------------
 void SAL_CALL ODBTable::disposing()
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "ODBTable::disposing" );
     OPropertySetHelper::disposing();
     OTable_Base::disposing();
     m_xColumnDefinitions = NULL;
@@ -226,6 +234,7 @@ void SAL_CALL ODBTable::disposing()
 //------------------------------------------------------------------------------
 void ODBTable::getFastPropertyValue(Any& _rValue, sal_Int32 _nHandle) const
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "ODBTable::getFastPropertyValue" );
     if ((PROPERTY_ID_PRIVILEGES == _nHandle) && (-1 == m_nPrivileges))
     {   // somebody is asking for the privileges an we do not know them, yet
         const_cast<ODBTable*>(this)->m_nPrivileges = ::dbtools::getTablePrivileges(getMetaData(),m_CatalogName,m_SchemaName, m_Name);
@@ -236,6 +245,7 @@ void ODBTable::getFastPropertyValue(Any& _rValue, sal_Int32 _nHandle) const
 // -------------------------------------------------------------------------
 void ODBTable::construct()
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "ODBTable::construct" );
     ::osl::MutexGuard aGuard(m_aMutex);
 
     // we don't collect the privileges here, this is potentially expensive. Instead we determine them on request.
@@ -296,6 +306,7 @@ void ODBTable::construct()
 // -----------------------------------------------------------------------------
 ::cppu::IPropertyArrayHelper* ODBTable::createArrayHelper( sal_Int32 _nId) const
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "ODBTable::createArrayHelper" );
     Sequence< Property > aProps;
     describeProperties(aProps);
     if(!_nId)
@@ -328,6 +339,7 @@ IMPLEMENT_SERVICE_INFO1(ODBTable, "com.sun.star.sdb.dbaccess.ODBTable", SERVICE_
 // -------------------------------------------------------------------------
 Any SAL_CALL ODBTable::queryInterface( const Type & rType ) throw(RuntimeException)
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "ODBTable::getInfoHelper" );
     Any aRet;
     if(rType == getCppuType( (Reference<XRename>*)0))
         return Any();
@@ -340,6 +352,7 @@ Any SAL_CALL ODBTable::queryInterface( const Type & rType ) throw(RuntimeExcepti
 // -------------------------------------------------------------------------
 Sequence< Type > SAL_CALL ODBTable::getTypes(  ) throw(RuntimeException)
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "ODBTable::getTypes" );
     Type aRenameType = getCppuType( (Reference<XRename>*)0);
     Type aAlterType = getCppuType( (Reference<XAlterTable>*)0);
 
@@ -362,6 +375,7 @@ Sequence< Type > SAL_CALL ODBTable::getTypes(  ) throw(RuntimeException)
 //------------------------------------------------------------------------------
 void SAL_CALL ODBTable::rename( const ::rtl::OUString& /*_rNewName*/ ) throw(SQLException, ElementExistException, RuntimeException)
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "ODBTable::rename" );
     throw SQLException(DBACORE_RESSTRING(RID_STR_NO_TABLE_RENAME),*this,SQLSTATE_GENERAL,1000,Any() );
 }
 
@@ -369,6 +383,7 @@ void SAL_CALL ODBTable::rename( const ::rtl::OUString& /*_rNewName*/ ) throw(SQL
 //------------------------------------------------------------------------------
 void SAL_CALL ODBTable::alterColumnByName( const ::rtl::OUString& _rName, const Reference< XPropertySet >& _rxDescriptor ) throw(SQLException, NoSuchElementException, RuntimeException)
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "ODBTable::alterColumnByName" );
     ::osl::MutexGuard aGuard(m_aMutex);
     checkDisposed(
         connectivity::sdbcx::OTableDescriptor_BASE::rBHelper.bDisposed);
@@ -424,6 +439,7 @@ void SAL_CALL ODBTable::alterColumnByName( const ::rtl::OUString& _rName, const 
 // -----------------------------------------------------------------------------
 sal_Int64 SAL_CALL ODBTable::getSomething( const Sequence< sal_Int8 >& rId ) throw(RuntimeException)
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "ODBTable::getSomething" );
     sal_Int64 nRet(0);
     if (rId.getLength() == 16 && 0 == rtl_compareMemory(getUnoTunnelImplementationId().getConstArray(),  rId.getConstArray(), 16 ) )
         nRet = reinterpret_cast<sal_Int64>(this);
@@ -435,6 +451,7 @@ sal_Int64 SAL_CALL ODBTable::getSomething( const Sequence< sal_Int8 >& rId ) thr
 // -----------------------------------------------------------------------------
 Sequence< sal_Int8 > ODBTable::getUnoTunnelImplementationId()
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "ODBTable::getUnoTunnelImplementationId" );
     static ::cppu::OImplementationId * pId = 0;
     if (! pId)
     {
@@ -450,11 +467,13 @@ Sequence< sal_Int8 > ODBTable::getUnoTunnelImplementationId()
 // -----------------------------------------------------------------------------
 Reference< XPropertySet > ODBTable::createColumnDescriptor()
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "ODBTable::createColumnDescriptor" );
     return new OTableColumnDescriptor();
 }
 // -----------------------------------------------------------------------------
 sdbcx::OCollection* ODBTable::createColumns(const TStringVector& _rNames)
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "ODBTable::createColumns" );
     Reference<XDatabaseMetaData> xMeta = getMetaData();
     OColumns* pCol = new OColumns(*this, m_aMutex, NULL, isCaseSensitive(), _rNames, this,this,
                                     xMeta.is() && xMeta->supportsAlterTableWithAddColumn(),
@@ -468,11 +487,13 @@ sdbcx::OCollection* ODBTable::createColumns(const TStringVector& _rNames)
 // -----------------------------------------------------------------------------
 sdbcx::OCollection* ODBTable::createKeys(const TStringVector& _rNames)
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "ODBTable::createKeys" );
     return new connectivity::OKeysHelper(this,m_aMutex,_rNames);
 }
 // -----------------------------------------------------------------------------
 sdbcx::OCollection* ODBTable::createIndexes(const TStringVector& _rNames)
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "ODBTable::createIndexes" );
     return new OIndexes(this,m_aMutex,_rNames,NULL);
 }
 // -----------------------------------------------------------------------------

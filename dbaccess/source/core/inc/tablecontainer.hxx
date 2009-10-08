@@ -70,8 +70,8 @@
 #ifndef DBACCESS_CORE_FILTERED_CONTAINER_HXX
 #include "FilteredContainer.hxx"
 #endif
-#ifndef DBA_CORE_WARNINGS_HXX
-#include "warnings.hxx"
+#ifndef DBTOOLS_WARNINGSCONTAINER_HXX
+#include <connectivity/warningscontainer.hxx>
 #endif
 #ifndef DBA_CORE_REFRESHLISTENER_HXX
 #include "RefreshListener.hxx"
@@ -102,7 +102,7 @@ namespace dbaccess
         // OFilteredContainer
         virtual void addMasterContainerListener();
         virtual void removeMasterContainerListener();
-        virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > getTableTypeFilter(const ::com::sun::star::uno::Sequence< ::rtl::OUString >& _rTableTypeFilter) const;
+        virtual ::rtl::OUString getTableTypeRestriction() const;
 
         // ::connectivity::sdbcx::OCollection
         virtual connectivity::sdbcx::ObjectType     createObject(const ::rtl::OUString& _rName);
@@ -110,16 +110,7 @@ namespace dbaccess
         virtual connectivity::sdbcx::ObjectType appendObject( const ::rtl::OUString& _rForName, const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& descriptor );
         virtual void dropObject(sal_Int32 _nPos,const ::rtl::OUString _sElementName);
 
-        virtual sal_Bool isNameValid(const ::rtl::OUString& _rName,
-                                    const ::com::sun::star::uno::Sequence< ::rtl::OUString >& _rTableFilter,
-                                    const ::com::sun::star::uno::Sequence< ::rtl::OUString >& _rTableTypeFilter,
-                                    const ::std::vector< WildCard >& _rWCSearch) const;
         virtual void SAL_CALL disposing();
-
-        /** retrieve a table type filter to pass to <member scope="com::sun::star::sdbc">XDatabaseMetaData::getTables</member>,
-            according to the current data source settings
-        */
-        void    getAllTableTypeFilter( ::com::sun::star::uno::Sequence< ::rtl::OUString >& /* [out] */ _rFilter ) const;
 
         inline virtual void SAL_CALL acquire() throw(){ OFilteredContainer::acquire();}
         inline virtual void SAL_CALL release() throw(){ OFilteredContainer::release();}
@@ -149,7 +140,7 @@ namespace dbaccess
             sal_Bool _bCase,
             const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer >&  _xTableDefinitions,
             IRefreshListener*   _pRefreshListener,
-            IWarningsContainer* _pWarningsContainer,
+            ::dbtools::IWarningsContainer* _pWarningsContainer,
             oslInterlockedCount& _nInAppend
             );
 

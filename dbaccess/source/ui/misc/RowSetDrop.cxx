@@ -31,31 +31,16 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_dbaccess.hxx"
 
-#ifndef DBAUI_TOKENWRITER_HXX
 #include "TokenWriter.hxx"
-#endif
-#ifndef _COM_SUN_STAR_SDBC_XCOLUMNLOCATE_HPP_
 #include <com/sun/star/sdbc/XColumnLocate.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDBC_XRESULTSETMETADATASUPPLIER_HPP_
 #include <com/sun/star/sdbc/XResultSetMetaDataSupplier.hpp>
-#endif
-#ifndef _DBU_MISC_HRC_
 #include "dbu_misc.hrc"
-#endif
-#ifndef _DBAUI_SQLMESSAGE_HXX_
 #include "sqlmessage.hxx"
-#endif
-#ifndef _SV_MSGBOX_HXX
 #include <vcl/msgbox.hxx>
-#endif
-#ifndef DBACCESS_SHARED_DBUSTRINGS_HRC
 #include "dbustrings.hrc"
-#endif
-#ifndef _COM_SUN_STAR_SDBC_XROWUPDATE_HPP_
 #include <com/sun/star/sdbc/XRowUpdate.hpp>
-#endif
 #include <functional>
+#include <rtl/logfile.hxx>
 
 using namespace dbaui;
 using namespace ::com::sun::star::uno;
@@ -80,11 +65,13 @@ ORowSetImportExport::ORowSetImportExport(   Window* _pParent,
                                             ,m_pParent(_pParent)
                                             ,m_bAlreadyAsked(sal_False)
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "misc", "Ocke.Janssen@sun.com", "ORowSetImportExport::ORowSetImportExport" );
     OSL_ENSURE(_pParent,"Window can't be null!");
 }
 // -----------------------------------------------------------------------------
 void ORowSetImportExport::initialize()
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "misc", "Ocke.Janssen@sun.com", "ORowSetImportExport::initialize" );
     ODatabaseImportExport::initialize();
     // do namemapping
     Reference<XColumnLocate> xColumnLocate(m_xResultSet,UNO_QUERY);
@@ -124,11 +111,13 @@ void ORowSetImportExport::initialize()
 // -----------------------------------------------------------------------------
 BOOL ORowSetImportExport::Write()
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "misc", "Ocke.Janssen@sun.com", "ORowSetImportExport::Write" );
     return TRUE;
 }
 // -----------------------------------------------------------------------------
 BOOL ORowSetImportExport::Read()
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "misc", "Ocke.Janssen@sun.com", "ORowSetImportExport::Read" );
     // check if there is any column to copy
     if(::std::find_if(m_aColumnMapping.begin(),m_aColumnMapping.end(),
                         ::std::bind2nd(::std::greater<sal_Int32>(),0)) == m_aColumnMapping.end())
@@ -183,6 +172,7 @@ BOOL ORowSetImportExport::Read()
 // -----------------------------------------------------------------------------
 sal_Bool ORowSetImportExport::insertNewRow()
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "misc", "Ocke.Janssen@sun.com", "ORowSetImportExport::insertNewRow" );
     try
     {
         m_xTargetResultSetUpdate->moveToInsertRow();
@@ -264,8 +254,7 @@ sal_Bool ORowSetImportExport::insertNewRow()
         if(!m_bAlreadyAsked)
         {
             String sAskIfContinue = String(ModuleRes(STR_ERROR_OCCURED_WHILE_COPYING));
-            String sTitle = String(ModuleRes(STR_STAT_WARNING));
-            OSQLMessageBox aDlg(m_pParent,sTitle,sAskIfContinue,WB_YES_NO|WB_DEF_YES,OSQLMessageBox::Warning);
+            OSQLWarningBox aDlg( m_pParent, sAskIfContinue, WB_YES_NO | WB_DEF_YES );
             if(aDlg.Execute() == RET_YES)
                 m_bAlreadyAsked = sal_True;
             else

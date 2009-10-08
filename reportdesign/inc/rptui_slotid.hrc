@@ -204,5 +204,9 @@
 #define SID_SELECT_ALL_LABELS                   ( SID_RPTUI_START +  161 )
 #define SID_SELECT_ALL_EDITS                    ( SID_RPTUI_START +  162 )
 
+#define SID_SECTION_SHRINK                      ( SID_RPTUI_START +  163 )
+#define SID_SECTION_SHRINK_TOP                  ( SID_RPTUI_START +  164 )
+#define SID_SECTION_SHRINK_BOTTOM               ( SID_RPTUI_START +  165 )
+#define SID_SECTION_SHRINK_MENU                 ( SID_RPTUI_START +  166 )
 
 #endif // _RPTUI_SLOTID_HRC_

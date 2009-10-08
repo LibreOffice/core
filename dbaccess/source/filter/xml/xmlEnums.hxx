@@ -166,7 +166,8 @@ namespace dbaxml
         XML_TOK_COLUMN_VISIBILITY,
         XML_TOK_COLUMN_DEFAULT_VALUE,
         XML_TOK_COLUMN_TYPE_NAME,
-        XML_TOK_COLUMN_VISIBLE
+        XML_TOK_COLUMN_VISIBLE,
+        XML_TOK_DEFAULT_CELL_STYLE_NAME
     };
 // -----------------------------------------------------------------------------
 } // namespace dbaxml

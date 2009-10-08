@@ -102,6 +102,11 @@
 #include "apitools.hxx"
 #endif
 
+namespace dbtools
+{
+    class IWarningsContainer;
+}
+
 //........................................................................
 namespace dbaccess
 {
@@ -120,16 +125,15 @@ namespace dbaccess
     class OQueryContainer;
     class OContainerListener;
     class OQuery;
-    class IWarningsContainer;
     class OQueryContainer   : public ODefinitionContainer
                             , public OQueryContainer_Base
     {
     protected:
-        IWarningsContainer*         m_pWarnings;
+        ::dbtools::IWarningsContainer*  m_pWarnings;
         ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer >
-                                    m_xCommandDefinitions;
+                                        m_xCommandDefinitions;
         ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >
-                                    m_xConnection;
+                                        m_xConnection;
         // possible actions on our "aggregate"
         enum AGGREGATE_ACTION { NONE, INSERTING, FLUSHING };
         AGGREGATE_ACTION        m_eDoingCurrently;
@@ -172,7 +176,7 @@ namespace dbaccess
             const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer >& _rxCommandDefinitions,
             const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >& _rxConn,
             const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxORB,
-            IWarningsContainer* _pWarnings
+            ::dbtools::IWarningsContainer* _pWarnings
             );
 
         DECLARE_XINTERFACE( )

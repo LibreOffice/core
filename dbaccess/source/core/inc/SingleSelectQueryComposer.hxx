@@ -217,6 +217,10 @@ namespace dbaccess
         */
         ::rtl::OUString composeStatementFromParts( const ::std::vector< ::rtl::OUString >& _rParts );
 
+        /** return the name of the column.
+        */
+        ::rtl::OUString impl_getColumnName_throw(const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& column);
+
     protected:
         virtual ~OSingleSelectQueryComposer();
     public:

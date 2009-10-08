@@ -50,6 +50,7 @@
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 
 #include <comphelper/genericpropertyset.hxx>
+#include <comphelper/mediadescriptor.hxx>
 #include <xmloff/ProgressBarHelper.hxx>
 #include <sfx2/docfile.hxx>
 #include <com/sun/star/io/XInputStream.hpp>
@@ -565,9 +566,16 @@ sal_Bool ORptFilter::implImport( const Sequence< PropertyValue >& rDescriptor )
             { MAP_LEN( "OldFormat" ), 1,    &::getCppuType((const sal_Bool*)0),                 beans::PropertyAttribute::BOUND,     0 },
             { MAP_LEN( "StreamName"), 0,    &::getCppuType( (::rtl::OUString *)0 ),             beans::PropertyAttribute::MAYBEVOID, 0 },
             { MAP_LEN("PrivateData"), 0,    &::getCppuType( (uno::Reference<XInterface> *)0 ),  beans::PropertyAttribute::MAYBEVOID, 0 },
+            { MAP_LEN( "BaseURI"),    0,    &::getCppuType( (::rtl::OUString *)0 ),             beans::PropertyAttribute::MAYBEVOID, 0 },
+            { MAP_LEN( "StreamRelPath"), 0, &::getCppuType( (::rtl::OUString *)0 ),             beans::PropertyAttribute::MAYBEVOID, 0 },
             { NULL, 0, 0, NULL, 0, 0 }
         };
+        ::comphelper::MediaDescriptor aDescriptor(rDescriptor);
         uno::Reference<beans::XPropertySet> xProp = comphelper::GenericPropertySet_CreateInstance(new comphelper::PropertySetInfo(pMap));
+        const ::rtl::OUString sVal( aDescriptor.getUnpackedValueOrDefault(aDescriptor.PROP_DOCUMENTBASEURL(),::rtl::OUString()) );
+        xProp->setPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("BaseURI")), uno::makeAny(sVal));
+        const ::rtl::OUString sHierarchicalDocumentName( aDescriptor.getUnpackedValueOrDefault(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("HierarchicalDocumentName")),::rtl::OUString()) );
+        xProp->setPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("StreamRelPath")), uno::makeAny(sHierarchicalDocumentName));
 
         uno::Reference<XComponent> xModel(GetModel(),UNO_QUERY);
         static const ::rtl::OUString s_sMeta(RTL_CONSTASCII_USTRINGPARAM("meta.xml"));
@@ -863,7 +871,7 @@ const SvXMLTokenMap& ORptFilter::GetControlElemTokenMap() const
             { XML_NAMESPACE_REPORT, XML_REPORT_ELEMENT      ,XML_TOK_REPORT_ELEMENT     },
             { XML_NAMESPACE_REPORT, XML_FORMULA             ,XML_TOK_DATA_FORMULA       },
             { XML_NAMESPACE_REPORT, XML_PRESERVE_IRI        ,XML_TOK_PRESERVE_IRI       },
-            { XML_NAMESPACE_REPORT, XML_SELECT_PAGE        ,XML_TOK_SELECT_PAGE       },
+            { XML_NAMESPACE_REPORT, XML_SELECT_PAGE         ,XML_TOK_SELECT_PAGE        },
             XML_TOKEN_MAP_END
         };
         m_pControlElemTokenMap.reset(new SvXMLTokenMap( aElemTokenMap ));

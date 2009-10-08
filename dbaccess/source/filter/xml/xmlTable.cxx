@@ -184,7 +184,7 @@ SvXMLImportContext* OXMLTable::CreateChildContext(
                 {
                     xColumns = xColumnsSup->getColumns();
                 }
-                pContext = new OXMLHierarchyCollection( GetOwnImport(), nPrefix, rLocalName ,xColumns);
+                pContext = new OXMLHierarchyCollection( GetOwnImport(), nPrefix, rLocalName ,xColumns,m_xTable);
             }
             break;
     }

@@ -56,6 +56,7 @@
 #include <com/sun/star/awt/XUnoControlContainer.hpp>
 #include <com/sun/star/awt/XVclContainerPeer.hpp>
 #include <com/sun/star/awt/XWindow.hpp>
+#include <com/sun/star/awt/TextAlign.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/script/XScriptEventsSupplier.hpp>
@@ -67,11 +68,16 @@
 #include <com/sun/star/chart2/data/XDataReceiver.hpp>
 #include <com/sun/star/chart2/data/DatabaseDataProvider.hpp>
 #include <com/sun/star/chart2/XChartDocument.hpp>
+#include <com/sun/star/style/VerticalAlignment.hpp>
+#include <com/sun/star/style/ParagraphAdjust.hpp>
+#include <com/sun/star/report/XFormattedField.hpp>
 #include <comphelper/genericpropertyset.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/property.hxx>
+#include <tools/diagnose_ex.h>
 #include "PropertyForward.hxx"
 #include <connectivity/dbtools.hxx>
+#include <connectivity/dbconversion.hxx>
 #include "UndoActions.hxx"
 #include "UndoEnv.hxx"
 #include <algorithm>
@@ -86,6 +92,7 @@ using namespace beans;
 using namespace reportdesign;
 using namespace container;
 using namespace script;
+using namespace report;
 //----------------------------------------------------------------------------
 sal_uInt16 OObjectBase::getObjectType(const uno::Reference< report::XReportComponent>& _xComponent)
 {
@@ -151,6 +158,16 @@ SdrObject* OObjectBase::createObject(const uno::Reference< report::XReportCompon
             break;
         case OBJ_CUSTOMSHAPE:
             pNewObj = OCustomShape::Create( _xComponent );
+            try
+            {
+                sal_Bool bOpaque = sal_False;
+                _xComponent->getPropertyValue(PROPERTY_OPAQUE) >>= bOpaque;
+                pNewObj->SetLayer(bOpaque ? RPT_LAYER_FRONT : RPT_LAYER_BACK);
+            }
+            catch(const uno::Exception&)
+            {
+                DBG_UNHANDLED_EXCEPTION();
+            }
             break;
         case OBJ_DLG_SUBREPORT:
         case OBJ_OLE2:
@@ -166,6 +183,63 @@ SdrObject* OObjectBase::createObject(const uno::Reference< report::XReportCompon
     return pNewObj;
 }
 // -----------------------------------------------------------------------------
+namespace
+{
+    class ParaAdjust : public AnyConverter
+    {
+    public:
+        virtual ::com::sun::star::uno::Any operator() (const ::rtl::OUString& _sPropertyName,const ::com::sun::star::uno::Any& lhs) const
+        {
+            uno::Any aRet;
+            if ( _sPropertyName.equalsAscii(PROPERTY_PARAADJUST) )
+            {
+                sal_Int16 nTextAlign = 0;
+                lhs >>= nTextAlign;
+                switch(nTextAlign)
+                {
+                    case awt::TextAlign::LEFT:
+                        nTextAlign = style::ParagraphAdjust_LEFT;
+                        break;
+                    case awt::TextAlign::CENTER:
+                        nTextAlign = style::ParagraphAdjust_CENTER;
+                        break;
+                    case awt::TextAlign::RIGHT:
+                        nTextAlign = style::ParagraphAdjust_RIGHT;
+                        break;
+                    default:
+                        OSL_ENSURE(0,"Illegal text alignment value!");
+                        break;
+                } // switch(nTextAlign)
+                aRet <<= (style::ParagraphAdjust)nTextAlign;
+            }
+            else
+            {
+                sal_Int16 nTextAlign = 0;
+                sal_Int16 eParagraphAdjust = 0;
+                lhs >>= eParagraphAdjust;
+                switch(eParagraphAdjust)
+                {
+                    case style::ParagraphAdjust_LEFT:
+                    case style::ParagraphAdjust_BLOCK:
+                        nTextAlign = awt::TextAlign::LEFT;
+                        break;
+                    case style::ParagraphAdjust_CENTER:
+                        nTextAlign = awt::TextAlign::CENTER;
+                        break;
+                    case style::ParagraphAdjust_RIGHT:
+                        nTextAlign = awt::TextAlign::RIGHT;
+                        break;
+                    default:
+                        OSL_ENSURE(0,"Illegal text alignment value!");
+                        break;
+                } // switch(eParagraphAdjust)
+                aRet <<= nTextAlign;
+            }
+            return aRet;
+        }
+    };
+}
+// -----------------------------------------------------------------------------
 const TPropertyNamePair& getPropertyNameMap(sal_uInt16 _nObjectId)
 {
     switch(_nObjectId)
@@ -175,30 +249,54 @@ const TPropertyNamePair& getPropertyNameMap(sal_uInt16 _nObjectId)
                 static TPropertyNamePair s_aNameMap;
                 if ( s_aNameMap.empty() )
                 {
-                    s_aNameMap.insert(TPropertyNamePair::value_type(PROPERTY_CONTROLBACKGROUND,PROPERTY_BACKGROUNDCOLOR));
-                    s_aNameMap.insert(TPropertyNamePair::value_type(PROPERTY_CONTROLBORDER,PROPERTY_BORDER));
-                    s_aNameMap.insert(TPropertyNamePair::value_type(PROPERTY_CONTROLBORDERCOLOR,PROPERTY_BORDERCOLOR));
+                    ::boost::shared_ptr<AnyConverter> aNoConverter(new AnyConverter());
+                    s_aNameMap.insert(TPropertyNamePair::value_type(PROPERTY_CONTROLBACKGROUND,TPropertyConverter(PROPERTY_BACKGROUNDCOLOR,aNoConverter)));
+                    s_aNameMap.insert(TPropertyNamePair::value_type(PROPERTY_CONTROLBORDER,TPropertyConverter(PROPERTY_BORDER,aNoConverter)));
+                    s_aNameMap.insert(TPropertyNamePair::value_type(PROPERTY_CONTROLBORDERCOLOR,TPropertyConverter(PROPERTY_BORDERCOLOR,aNoConverter)));
                     //s_aNameMap.insert(TPropertyNamePair::value_type(PROPERTY_PARAADJUST,PROPERTY_ALIGN));
                 }
                 return s_aNameMap;
             }
 
         case OBJ_DLG_FIXEDTEXT:
+            {
+                static TPropertyNamePair s_aNameMap;
+                if ( s_aNameMap.empty() )
+                {
+                    ::boost::shared_ptr<AnyConverter> aNoConverter(new AnyConverter());
+                    s_aNameMap.insert(TPropertyNamePair::value_type(PROPERTY_CHARCOLOR,TPropertyConverter(PROPERTY_TEXTCOLOR,aNoConverter)));
+                    s_aNameMap.insert(TPropertyNamePair::value_type(PROPERTY_CONTROLBACKGROUND,TPropertyConverter(PROPERTY_BACKGROUNDCOLOR,aNoConverter)));
+                    s_aNameMap.insert(TPropertyNamePair::value_type(PROPERTY_CHARUNDERLINECOLOR,TPropertyConverter(PROPERTY_TEXTLINECOLOR,aNoConverter)));
+                    s_aNameMap.insert(TPropertyNamePair::value_type(PROPERTY_CHARRELIEF,TPropertyConverter(PROPERTY_FONTRELIEF,aNoConverter)));
+                    s_aNameMap.insert(TPropertyNamePair::value_type(PROPERTY_CHARFONTHEIGHT,TPropertyConverter(PROPERTY_FONTHEIGHT,aNoConverter)));
+                    s_aNameMap.insert(TPropertyNamePair::value_type(PROPERTY_CHARSTRIKEOUT,TPropertyConverter(PROPERTY_FONTSTRIKEOUT,aNoConverter)));
+                    s_aNameMap.insert(TPropertyNamePair::value_type(PROPERTY_CONTROLTEXTEMPHASISMARK,TPropertyConverter(PROPERTY_FONTEMPHASISMARK,aNoConverter)));
+                    s_aNameMap.insert(TPropertyNamePair::value_type(PROPERTY_CONTROLBORDER,TPropertyConverter(PROPERTY_BORDER,aNoConverter)));
+                    s_aNameMap.insert(TPropertyNamePair::value_type(PROPERTY_CONTROLBORDERCOLOR,TPropertyConverter(PROPERTY_BORDERCOLOR,aNoConverter)));
+
+                    ::boost::shared_ptr<AnyConverter> aParaAdjust(new ParaAdjust());
+                    s_aNameMap.insert(TPropertyNamePair::value_type(PROPERTY_PARAADJUST,TPropertyConverter(PROPERTY_ALIGN,aParaAdjust)));
+                }
+                return s_aNameMap;
+            }
         case OBJ_DLG_FORMATTEDFIELD:
             {
                 static TPropertyNamePair s_aNameMap;
                 if ( s_aNameMap.empty() )
                 {
-                    s_aNameMap.insert(TPropertyNamePair::value_type(PROPERTY_CHARCOLOR,PROPERTY_TEXTCOLOR));
-                    s_aNameMap.insert(TPropertyNamePair::value_type(PROPERTY_CONTROLBACKGROUND,PROPERTY_BACKGROUNDCOLOR));
-                    s_aNameMap.insert(TPropertyNamePair::value_type(PROPERTY_CHARUNDERLINECOLOR,PROPERTY_TEXTLINECOLOR));
-                    s_aNameMap.insert(TPropertyNamePair::value_type(PROPERTY_CHARRELIEF,PROPERTY_FONTRELIEF));
-                    s_aNameMap.insert(TPropertyNamePair::value_type(PROPERTY_CHARFONTHEIGHT,PROPERTY_FONTHEIGHT));
-                    s_aNameMap.insert(TPropertyNamePair::value_type(PROPERTY_CHARSTRIKEOUT,PROPERTY_FONTSTRIKEOUT));
-                    s_aNameMap.insert(TPropertyNamePair::value_type(PROPERTY_CONTROLTEXTEMPHASISMARK,PROPERTY_FONTEMPHASISMARK));
-                    s_aNameMap.insert(TPropertyNamePair::value_type(PROPERTY_CONTROLBORDER,PROPERTY_BORDER));
-                    s_aNameMap.insert(TPropertyNamePair::value_type(PROPERTY_CONTROLBORDERCOLOR,PROPERTY_BORDERCOLOR));
-                    s_aNameMap.insert(TPropertyNamePair::value_type(PROPERTY_PARAADJUST,PROPERTY_ALIGN));
+                    ::boost::shared_ptr<AnyConverter> aNoConverter(new AnyConverter());
+                    s_aNameMap.insert(TPropertyNamePair::value_type(PROPERTY_CHARCOLOR,TPropertyConverter(PROPERTY_TEXTCOLOR,aNoConverter)));
+                    s_aNameMap.insert(TPropertyNamePair::value_type(PROPERTY_CONTROLBACKGROUND,TPropertyConverter(PROPERTY_BACKGROUNDCOLOR,aNoConverter)));
+                    s_aNameMap.insert(TPropertyNamePair::value_type(PROPERTY_CHARUNDERLINECOLOR,TPropertyConverter(PROPERTY_TEXTLINECOLOR,aNoConverter)));
+                    s_aNameMap.insert(TPropertyNamePair::value_type(PROPERTY_CHARRELIEF,TPropertyConverter(PROPERTY_FONTRELIEF,aNoConverter)));
+                    s_aNameMap.insert(TPropertyNamePair::value_type(PROPERTY_CHARFONTHEIGHT,TPropertyConverter(PROPERTY_FONTHEIGHT,aNoConverter)));
+                    s_aNameMap.insert(TPropertyNamePair::value_type(PROPERTY_CHARSTRIKEOUT,TPropertyConverter(PROPERTY_FONTSTRIKEOUT,aNoConverter)));
+                    s_aNameMap.insert(TPropertyNamePair::value_type(PROPERTY_CONTROLTEXTEMPHASISMARK,TPropertyConverter(PROPERTY_FONTEMPHASISMARK,aNoConverter)));
+                    s_aNameMap.insert(TPropertyNamePair::value_type(PROPERTY_CONTROLBORDER,TPropertyConverter(PROPERTY_BORDER,aNoConverter)));
+                    s_aNameMap.insert(TPropertyNamePair::value_type(PROPERTY_CONTROLBORDERCOLOR,TPropertyConverter(PROPERTY_BORDERCOLOR,aNoConverter)));
+                    //s_aNameMap.insert(TPropertyNamePair::value_type(PROPERTY_PARAADJUST,TPropertyConverter(PROPERTY_ALIGN,aNoConverter)));
+                    ::boost::shared_ptr<AnyConverter> aParaAdjust(new ParaAdjust());
+                    s_aNameMap.insert(TPropertyNamePair::value_type(PROPERTY_PARAADJUST,TPropertyConverter(PROPERTY_ALIGN,aParaAdjust)));
                 }
                 return s_aNameMap;
             }
@@ -208,8 +306,9 @@ const TPropertyNamePair& getPropertyNameMap(sal_uInt16 _nObjectId)
                 static TPropertyNamePair s_aNameMap;
                 if ( s_aNameMap.empty() )
                 {
-                    s_aNameMap.insert(TPropertyNamePair::value_type(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("FillColor")),PROPERTY_CONTROLBACKGROUND));
-                    s_aNameMap.insert(TPropertyNamePair::value_type(PROPERTY_PARAADJUST,PROPERTY_ALIGN));
+                    ::boost::shared_ptr<AnyConverter> aNoConverter(new AnyConverter());
+                    s_aNameMap.insert(TPropertyNamePair::value_type(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("FillColor")),TPropertyConverter(PROPERTY_CONTROLBACKGROUND,aNoConverter)));
+                    s_aNameMap.insert(TPropertyNamePair::value_type(PROPERTY_PARAADJUST,TPropertyConverter(PROPERTY_ALIGN,aNoConverter)));
                 }
                 return s_aNameMap;
             }
@@ -411,8 +510,7 @@ OCustomShape::OCustomShape(const uno::Reference< report::XReportComponent>& _xCo
           ,OObjectBase(_xComponent)
 {
     DBG_CTOR( rpt_OCustomShape, NULL);
-    // start listening
-    mxUnoShape = uno::Reference< uno::XInterface >(_xComponent,uno::UNO_QUERY);
+    impl_setUnoShape( uno::Reference< uno::XInterface >(_xComponent,uno::UNO_QUERY) );
     m_bIsListening = sal_True;
 }
 //----------------------------------------------------------------------------
@@ -428,7 +526,6 @@ OCustomShape::OCustomShape(const ::rtl::OUString& _sComponentName)
 OCustomShape::~OCustomShape()
 {
     DBG_DTOR( rpt_OCustomShape, NULL);
-    //mxUnoShape = uno::WeakReference< uno::XInterface >();
 }
 // -----------------------------------------------------------------------------
 UINT16 OCustomShape::GetObjIdentifier() const
@@ -563,6 +660,8 @@ OUnoObject::OUnoObject(const ::rtl::OUString& _sComponentName
           ,m_nObjectType(_nObjectType)
 {
     DBG_CTOR( rpt_OUnoObject, NULL);
+    if ( rModelName.getLength() )
+        impl_initializeModel_nothrow();
 }
 //----------------------------------------------------------------------------
 OUnoObject::OUnoObject(const uno::Reference< report::XReportComponent>& _xComponent
@@ -573,13 +672,52 @@ OUnoObject::OUnoObject(const uno::Reference< report::XReportComponent>& _xCompon
           ,m_nObjectType(_nObjectType)
 {
     DBG_CTOR( rpt_OUnoObject, NULL);
-    mxUnoShape = uno::Reference< uno::XInterface >(_xComponent,uno::UNO_QUERY);
+    impl_setUnoShape( uno::Reference< uno::XInterface >( _xComponent, uno::UNO_QUERY ) );
+
+    if ( rModelName.getLength() )
+        impl_initializeModel_nothrow();
+
+    if ( rModelName.getLength() )
+        impl_initializeModel_nothrow();
 }
 //----------------------------------------------------------------------------
 OUnoObject::~OUnoObject()
 {
     DBG_DTOR( rpt_OUnoObject, NULL);
-    //mxUnoShape = uno::WeakReference< uno::XInterface >();
+}
+// -----------------------------------------------------------------------------
+void OUnoObject::impl_initializeModel_nothrow()
+{
+    try
+    {
+        Reference< XFormattedField > xFormatted( m_xReportComponent, UNO_QUERY );
+        if ( xFormatted.is() )
+        {
+            const Reference< XPropertySet > xModelProps( GetUnoControlModel(), UNO_QUERY_THROW );
+            const ::rtl::OUString sTreatAsNumberProperty = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "TreatAsNumber" ) );
+            xModelProps->setPropertyValue( sTreatAsNumberProperty, makeAny( sal_False ) );
+        }
+    }
+    catch( const Exception& )
+    {
+        DBG_UNHANDLED_EXCEPTION();
+    }
+}
+// -----------------------------------------------------------------------------
+void OUnoObject::impl_setReportComponent_nothrow()
+{
+    if ( m_xReportComponent.is() )
+        return;
+
+    OReportModel* pReportModel = static_cast<OReportModel*>(GetModel());
+    OSL_ENSURE( pReportModel, "OUnoObject::impl_setReportComponent_nothrow: no report model!" );
+    if ( !pReportModel )
+        return;
+
+    OXUndoEnvironment::OUndoEnvLock aLock( pReportModel->GetUndoEnv() );
+    m_xReportComponent.set(getUnoShape(),uno::UNO_QUERY);
+
+    impl_initializeModel_nothrow();
 }
 // -----------------------------------------------------------------------------
 UINT16 OUnoObject::GetObjIdentifier() const
@@ -623,14 +761,47 @@ void OUnoObject::NbcMove( const Size& rSize )
         // stop listening
         OObjectBase::EndListening(sal_False);
 
+        bool bPositionFixed = false;
+        Size aUndoSize(0,0);
+        bool bUndoMode = false;
         if ( m_xReportComponent.is() )
         {
             OReportModel* pRptModel = static_cast<OReportModel*>(GetModel());
+            if (pRptModel->GetUndoEnv().IsUndoMode())
+            {
+                // if we are locked from outside, then we must not handle wrong moves, we are in UNDO mode
+                bUndoMode = true;
+            }
             OXUndoEnvironment::OUndoEnvLock aLock(pRptModel->GetUndoEnv());
-            m_xReportComponent->setPositionX(m_xReportComponent->getPositionX() + rSize.A());
-            m_xReportComponent->setPositionY(m_xReportComponent->getPositionY() + rSize.B());
-        }
 
+            // LLA: why there exists getPositionX and getPositionY and NOT getPosition() which return a Point?
+            int nNewX = m_xReportComponent->getPositionX() + rSize.A();
+            // can this hinder us to set components outside the area?
+            // if (nNewX < 0)
+            // {
+            //     nNewX = 0;
+            // }
+            m_xReportComponent->setPositionX(nNewX);
+            int nNewY = m_xReportComponent->getPositionY() + rSize.B();
+            if (nNewY < 0 && !bUndoMode)
+            {
+                aUndoSize.B() = abs(nNewY);
+                bPositionFixed = true;
+                nNewY = 0;
+            }
+            m_xReportComponent->setPositionY(nNewY);
+        }
+        if (bPositionFixed)
+        {
+            // OReportModel* pRptModel = static_cast<OReportModel*>(GetModel());
+            // if ( pRptModel )
+            // {
+            //    if (! pRptModel->GetUndoEnv().IsLocked())
+            //    {
+                    GetModel()->AddUndo(GetModel()->GetSdrUndoFactory().CreateUndoMoveObject(*this, aUndoSize));
+            //    }
+            // }
+        }
         // set geometry properties
         SetPropsFromRect(GetLogicRect());
 
@@ -678,27 +849,23 @@ FASTBOOL OUnoObject::EndCreate(SdrDragStat& rStat, SdrCreateCmd eCmd)
     FASTBOOL bResult = SdrUnoObj::EndCreate(rStat, eCmd);
     if ( bResult )
     {
-        OReportModel* pRptModel = static_cast<OReportModel*>(GetModel());
-        if ( pRptModel )
+        impl_setReportComponent_nothrow();
+        // set labels
+        if ( m_xReportComponent.is() )
         {
-            OXUndoEnvironment::OUndoEnvLock aLock(pRptModel->GetUndoEnv());
-            if ( !m_xReportComponent.is() )
-                m_xReportComponent.set(getUnoShape(),uno::UNO_QUERY);
-            // set labels
-            if ( m_xReportComponent.is() )
+            try
             {
-                try
+                if ( supportsService( SERVICE_FIXEDTEXT ) )
                 {
-                    if ( supportsService( SERVICE_FIXEDTEXT ) )
-                    {
-                        m_xReportComponent->setPropertyValue( PROPERTY_LABEL, uno::makeAny(GetDefaultName(this)) );
-                    }
-                }
-                catch(const uno::Exception&)
-                {
-                    OSL_ENSURE(0,"OUnoObject::EndCreate: Exception caught!");
+                    m_xReportComponent->setPropertyValue( PROPERTY_LABEL, uno::makeAny(GetDefaultName(this)) );
                 }
             }
+            catch(const uno::Exception&)
+            {
+                DBG_UNHANDLED_EXCEPTION();
+            }
+
+            impl_initializeModel_nothrow();
         }
         // set geometry properties
         SetPropsFromRect(GetLogicRect());
@@ -804,8 +971,7 @@ void OUnoObject::CreateMediator(sal_Bool _bReverse)
 {
     if ( !m_xMediator.is() )
     {
-        if ( !m_xReportComponent.is() )
-            m_xReportComponent.set(getUnoShape(),uno::UNO_QUERY);
+        impl_setReportComponent_nothrow();
 
         Reference<XPropertySet> xControlModel(GetUnoControlModel(),uno::UNO_QUERY);
         if ( !m_xMediator.is() && m_xReportComponent.is() && xControlModel.is() )
@@ -846,22 +1012,19 @@ OOle2Obj::OOle2Obj(const uno::Reference< report::XReportComponent>& _xComponent,
           :SdrOle2Obj()
           ,OObjectBase(_xComponent)
           ,m_nType(_nType)
+          ,m_bOnlyOnce(true)
 {
     DBG_CTOR( rpt_OOle2Obj, NULL);
 
-    // start listening
-    mxUnoShape = uno::Reference< uno::XInterface >(_xComponent,uno::UNO_QUERY);
+    impl_setUnoShape( uno::Reference< uno::XInterface >( _xComponent, uno::UNO_QUERY ) );
     m_bIsListening = sal_True;
-    //uno::Reference< embed::XEmbeddedObject > xEmbed(_xComponent,uno::UNO_QUERY);
-    //OSL_ENSURE(xEmbed.is(),"This is no embedded object!");
-
-    //SetObjRef(xEmbed);
 }
 //----------------------------------------------------------------------------
 OOle2Obj::OOle2Obj(const ::rtl::OUString& _sComponentName,UINT16 _nType)
           :SdrOle2Obj()
           ,OObjectBase(_sComponentName)
           ,m_nType(_nType)
+          ,m_bOnlyOnce(true)
 {
     DBG_CTOR( rpt_OOle2Obj, NULL);
     m_bIsListening = sal_True;
@@ -1043,17 +1206,42 @@ SdrObject* OOle2Obj::Clone() const
 // -----------------------------------------------------------------------------
 void OOle2Obj::impl_createDataProvider_nothrow(const uno::Reference< frame::XModel>& _xModel)
 {
-    uno::Reference < embed::XEmbeddedObject > xObj = GetObjRef();
-    uno::Reference< chart2::data::XDataReceiver > xReceiver;
-    uno::Reference< embed::XComponentSupplier > xCompSupp( xObj, uno::UNO_QUERY );
-    if( xCompSupp.is())
-        xReceiver.set( xCompSupp->getComponent(), uno::UNO_QUERY );
-    OSL_ASSERT( xReceiver.is());
-    if( xReceiver.is() )
+    try
     {
-        uno::Reference< lang::XMultiServiceFactory> xFac(_xModel,uno::UNO_QUERY);
-        uno::Reference< chart2::data::XDatabaseDataProvider > xDataProvider( xFac->createInstance(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.chart2.data.DataProvider"))),uno::UNO_QUERY);
-        xReceiver->attachDataProvider( xDataProvider.get() );
+        uno::Reference < embed::XEmbeddedObject > xObj = GetObjRef();
+        uno::Reference< chart2::data::XDataReceiver > xReceiver;
+        uno::Reference< embed::XComponentSupplier > xCompSupp( xObj, uno::UNO_QUERY );
+        if( xCompSupp.is())
+            xReceiver.set( xCompSupp->getComponent(), uno::UNO_QUERY );
+        OSL_ASSERT( xReceiver.is());
+        if( xReceiver.is() )
+        {
+            uno::Reference< lang::XMultiServiceFactory> xFac(_xModel,uno::UNO_QUERY);
+            uno::Reference< chart2::data::XDatabaseDataProvider > xDataProvider( xFac->createInstance(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.chart2.data.DataProvider"))),uno::UNO_QUERY);
+            xReceiver->attachDataProvider( xDataProvider.get() );
+        } // if( xReceiver.is() )
+    }
+    catch(uno::Exception)
+    {
+    }
+}
+// -----------------------------------------------------------------------------
+void OOle2Obj::initializeOle()
+{
+    if ( m_bOnlyOnce )
+    {
+        m_bOnlyOnce = false;
+        uno::Reference < embed::XEmbeddedObject > xObj = GetObjRef();
+        OReportModel* pRptModel = static_cast<OReportModel*>(GetModel());
+        pRptModel->GetUndoEnv().AddElement(lcl_getDataProvider(xObj));
+
+        uno::Reference< embed::XComponentSupplier > xCompSupp( xObj, uno::UNO_QUERY );
+        if( xCompSupp.is() )
+        {
+            uno::Reference< beans::XPropertySet > xChartProps( xCompSupp->getComponent(), uno::UNO_QUERY );
+            if ( xChartProps.is() )
+                xChartProps->setPropertyValue(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("NullDate")),uno::makeAny(util::DateTime(0,0,0,0,1,1,1900)));
+        }
     }
 }
 // -----------------------------------------------------------------------------
@@ -1075,8 +1263,8 @@ void OOle2Obj::initializeChart( const uno::Reference< frame::XModel>& _xModel)
         if ( !lcl_getDataProvider(xObj).is() )
             impl_createDataProvider_nothrow(_xModel);
 
-        uno::Reference< util::XNumberFormatsSupplier > xNumberFormatsSupplier( _xModel, uno::UNO_QUERY );
-        xReceiver->attachNumberFormatsSupplier( xNumberFormatsSupplier );
+        OReportModel* pRptModel = static_cast<OReportModel*>(GetModel());
+        pRptModel->GetUndoEnv().AddElement(lcl_getDataProvider(xObj));
 
         uno::Sequence< beans::PropertyValue > aArgs( 4 );
         aArgs[0] = beans::PropertyValue(
