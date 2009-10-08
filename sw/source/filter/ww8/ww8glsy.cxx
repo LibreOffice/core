@@ -258,92 +258,21 @@ bool WW8Glossary::Load( SwTextBlocks &rBlocks, bool bSaveRelFile )
 
 bool WW8GlossaryFib::IsGlossaryFib()
 {
-    if (!nFibError)
-    {
-        INT16 nFibMin;
-        INT16 nFibMax;
-        switch(nVersion)
-        {
-            case 6:
-                nFibMin = 0x0065;   // von 101 WinWord 6.0
-                //     102    "
-                // und 103 WinWord 6.0 fuer Macintosh
-                //     104    "
-                nFibMax = 0x0069;   // bis 105 WinWord 95
-                break;
-            case 7:
-                nFibMin = 0x0069;   // von 105 WinWord 95
-                nFibMax = 0x0069;   // bis 105 WinWord 95
-                break;
-            case 8:
-                nFibMin = 0x006A;   // von 106 WinWord 97
-                nFibMax = 0x00c2;   // bis 194 WinWord 2000
-                break;
-            default:
-                nFibMin = 0;            // Programm-Fehler!
-                nFibMax = 0;
-                nFib = nFibBack = 1;
-                break;
-        }
-        if ( (nFibBack < nFibMin) || (nFibBack > nFibMax) )
-            nFibError = ERR_SWG_READ_ERROR; // Error melden
-    }
-    return !nFibError;
+    // fGlsy will indicate whether this has AutoText or not
+    return fGlsy;
 }
 
-UINT32 WW8GlossaryFib::FindGlossaryFibOffset(SvStream &rTableStrm,
-        SvStream &rStrm, const WW8Fib &rFib)
+UINT32 WW8GlossaryFib::FindGlossaryFibOffset(SvStream & /* rTableStrm */,
+                                             SvStream & /* rStrm */,
+                                             const WW8Fib &rFib)
 {
-    WW8PLCF aPlc( &rTableStrm, rFib.fcPlcfsed, rFib.lcbPlcfsed, 12 );
-    WW8_CP start,ende;
-    void *pData;
-    aPlc.Get(start,ende,pData);
-    UINT32 nPo = SVBT32ToUInt32((BYTE *)pData+2);
-    //*pOut << hex << "Offset of last SEPX is " << nPo << endl;
-
-    UINT16 nLen;
-    if (nPo != 0xFFFFFFFF)
+    UINT32 nGlossaryFibOffset = 0;
+    if ( rFib.fDot ) // its a template
     {
-        rStrm.Seek(nPo);
-        rStrm >> nLen;
+        if ( rFib.pnNext  )
+            nGlossaryFibOffset = ( rFib.pnNext * 512 );
     }
-    else
-    {
-        nPo=0;
-        nLen=0;
-    }
-
-//  *pOut << hex << "Ends at " << nPo+len << endl;
-    nPo+=nLen;
-    UINT32 nEndLastPage;
-    if (nPo%512)
-    {
-        nEndLastPage = (nPo)/512;
-        nEndLastPage = (nEndLastPage+1)*512;
-    }
-    else
-        nEndLastPage = nPo;
-
-    //*pOut << hex << "SECOND FIB SHOULD BE FOUND at " << k << endl;
-
-    WW8PLCF xcPLCF( &rTableStrm, rFib.fcPlcfbteChpx,
-            rFib.lcbPlcfbteChpx, (8 > rFib.nVersion) ? 2 : 4);
-
-    xcPLCF.Get(start,ende,pData);
-
-    nPo = SVBT32ToUInt32((BYTE *)pData);
-    //*pOut << hex << "Offset of last CHPX is " << (nPo+1) *512<< endl;
-    if (((nPo+1)*512) > nEndLastPage) nEndLastPage = (nPo+1)*512;
-
-    WW8PLCF xpPLCF( &rTableStrm, rFib.fcPlcfbtePapx,
-            rFib.lcbPlcfbtePapx, (8 > rFib.nVersion) ? 2 : 4);
-    xpPLCF.Get(start,ende,pData);
-    nPo = SVBT32ToUInt32((BYTE *)pData);
-    //*pOut << hex << "Offset of last PAPX is " << nPo *512 << endl;
-    if (((nPo+1)*512) > nEndLastPage) nEndLastPage = (nPo+1)*512;
-
-    //*pOut << hex << "SECOND FIB SHOULD BE FOUND at " << nEndLastPage << endl;
-    return nEndLastPage;
+    return nGlossaryFibOffset;
 }
 
 /* vi:set tabstop=4 shiftwidth=4 expandtab: */

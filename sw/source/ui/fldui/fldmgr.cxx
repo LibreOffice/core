@@ -31,9 +31,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
 
-#ifndef _CMDID_H
 #include <cmdid.h>
-#endif
 #include <hintids.hxx>
 #include <svtools/stritem.hxx>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
@@ -63,21 +61,15 @@
 #include <svtools/zforlist.hxx>
 #include <svtools/zformat.hxx>
 #include <vcl/mnemonic.hxx>
-#ifndef _VIEW_HXX
 #include <view.hxx>
-#endif
 #include <wrtsh.hxx>        // Actives Fenster
 #include <doc.hxx>      // Actives Fenster
-#ifndef _DOCSH_HXX
 #include <docsh.hxx>        // Actives Fenster
-#endif
 #include <swmodule.hxx>
 #include <charatr.hxx>
 #include <fmtinfmt.hxx>
 #include <cellatr.hxx>
-#ifndef _DBMGR_HXX
 #include <dbmgr.hxx>
-#endif
 #include <shellres.hxx>
 #include <fldbas.hxx>
 #include <docufld.hxx>
@@ -92,9 +84,8 @@
 #include <fldmgr.hxx>
 #include <crsskip.hxx>
 #include <flddropdown.hxx>
-#ifndef _FLDUI_HRC
 #include <fldui.hrc>
-#endif
+#include <tox.hxx>
 
 using rtl::OUString;
 using namespace com::sun::star::uno;
@@ -1550,6 +1541,27 @@ void SwFldMgr::UpdateCurFld(ULONG nFormat,
             ((SwDropDownField*)pTmpFld)->SetItems(aEntries);
             ((SwDropDownField*)pTmpFld)->SetName(sPar1);
             bSetPar1 = bSetPar2 = FALSE;
+        }
+        break;
+        case TYP_AUTHORITY :
+        {
+            //#i99069# changes to a bibliography field should change the field type
+            SwAuthorityField* pAuthorityField = static_cast<SwAuthorityField*>(pTmpFld);
+            SwAuthorityFieldType* pAuthorityType = static_cast<SwAuthorityFieldType*>(pType);
+            SwAuthEntry aTempEntry;
+            for( USHORT i = 0; i < AUTH_FIELD_END; ++i )
+                aTempEntry.SetAuthorField( (ToxAuthorityField)i,
+                                rPar1.GetToken( i, TOX_STYLE_DELIMITER ));
+            if( pAuthorityType->ChangeEntryContent( &aTempEntry ) )
+            {
+                pType->UpdateFlds();
+                pSh->SetModified();
+            }
+
+            if( aTempEntry.GetAuthorField( AUTH_FIELD_IDENTIFIER ) ==
+                pAuthorityField->GetFieldText( AUTH_FIELD_IDENTIFIER ) )
+                bSetPar1 = FALSE; //otherwise it's a new or changed entry, the field needs to be updated
+            bSetPar2 = FALSE;
         }
         break;
     }

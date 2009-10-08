@@ -141,8 +141,8 @@ protected:
 
     virtual ~SwXTextPortion();
 public:
-    SwXTextPortion(const SwUnoCrsr* pPortionCrsr, ::com::sun::star::uno::Reference< ::com::sun::star::text::XText > & rParent, SwTextPortionType    eType   );
-    SwXTextPortion(const SwUnoCrsr* pPortionCrsr, ::com::sun::star::uno::Reference< ::com::sun::star::text::XText > & rParent, SwFrmFmt& rFmt );
+    SwXTextPortion(const SwUnoCrsr* pPortionCrsr, ::com::sun::star::uno::Reference< ::com::sun::star::text::XText > const& rParent, SwTextPortionType   eType   );
+    SwXTextPortion(const SwUnoCrsr* pPortionCrsr, ::com::sun::star::uno::Reference< ::com::sun::star::text::XText > const& rParent, SwFrmFmt& rFmt );
 
 
     //XTextRange
@@ -237,7 +237,7 @@ class SwXRubyPortion : public SwXTextPortion
 public:
     SwXRubyPortion(const SwUnoCrsr* pPortionCrsr,
                     SwTxtRuby& rAttr,
-                    ::com::sun::star::uno::Reference< ::com::sun::star::text::XText > & rParent,
+                    ::com::sun::star::uno::Reference< ::com::sun::star::text::XText > const& rParent,
                     sal_Bool bEnd   );
     ~SwXRubyPortion();
 };

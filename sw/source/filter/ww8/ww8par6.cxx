@@ -444,7 +444,7 @@ void wwSectionManager::SetPage(SwPageDesc &rInPageDesc, SwFrmFmt &rFmt,
     // 2. Papiergroesse
     SwFmtFrmSize aSz( rFmt.GetFrmSize() );
     aSz.SetWidth(rSection.GetPageWidth());
-    aSz.SetHeight(SnapPageDimension(rSection.GetPageHeight()));
+    aSz.SetHeight(SvxPaperInfo::GetSloppyPaperDimension(rSection.GetPageHeight()));
     rFmt.SetFmtAttr(aSz);
 
     rFmt.SetFmtAttr(
@@ -788,8 +788,8 @@ void SwWW8ImplReader::HandleLineNumbering(const wwSection &rSection)
 
 wwSection::wwSection(const SwPosition &rPos) : maStart(rPos.nNode),
     mpSection(0), mpTitlePage(0), mpPage(0), meDir(FRMDIR_HORI_LEFT_TOP),
-    nPgWidth(lA4Width), nPgLeft(MM_250), nPgRight(MM_250), mnBorders(0),
-    mbHasFootnote(false)
+    nPgWidth(SvxPaperInfo::GetPaperSize(PAPER_A4).Width()),
+    nPgLeft(MM_250), nPgRight(MM_250), mnBorders(0), mbHasFootnote(false)
 {
 }
 
@@ -1010,11 +1010,10 @@ void wwSectionManager::CreateSep(const long nTxtPos, bool /*bMustHaveBreak*/)
     aNewSection.maSep.dmOrientPage = ReadBSprm(pSep, pIds[0], 0);
 
     // 2. Papiergroesse
-    aNewSection.maSep.xaPage = ReadUSprm(pSep, pIds[1], (USHORT)lLetterWidth);
+    aNewSection.maSep.xaPage = ReadUSprm(pSep, pIds[1], lLetterWidth);
+    aNewSection.nPgWidth = SvxPaperInfo::GetSloppyPaperDimension(aNewSection.maSep.xaPage);
 
-    aNewSection.nPgWidth = SnapPageDimension(aNewSection.maSep.xaPage);
-
-    aNewSection.maSep.yaPage = ReadUSprm(pSep, pIds[2], (USHORT)lLetterHeight);
+    aNewSection.maSep.yaPage = ReadUSprm(pSep, pIds[2], lLetterHeight);
 
     // 3. LR-Raender
     static const USHORT nLef[] = { MM_250, 1800 };
@@ -2308,14 +2307,12 @@ WW8DupProperties::WW8DupProperties(SwDoc &rDoc, SwWW8FltControlStack *pStk)
         const SwFltStackEntry* pEntry = (*pCtrlStck)[ i ];
         if(pEntry->bLocked)
         {
-            if (pEntry->pAttr->Which() > RES_CHRATR_BEGIN &&
-                pEntry->pAttr->Which() < RES_CHRATR_END)
+            if (isCHRATR(pEntry->pAttr->Which()))
             {
                 aChrSet.Put( *pEntry->pAttr );
 
             }
-            else if (pEntry->pAttr->Which() > RES_PARATR_BEGIN &&
-                pEntry->pAttr->Which() < RES_PARATR_END)
+            else if (isPARATR(pEntry->pAttr->Which()))
             {
                 aParSet.Put( *pEntry->pAttr );
             }

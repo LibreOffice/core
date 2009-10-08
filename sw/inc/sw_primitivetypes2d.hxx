@@ -6,8 +6,9 @@
  *
  * OpenOffice.org - a multi-platform office productivity suite
  *
- * $RCSfile: segdefs.hxx,v $
- * $Revision: 1.3 $
+ * $RCSfile: sd_primitivetypes2d.hxx,v $
+ *
+ * $Revision: 1.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -27,4 +28,23 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#include "segdefs_.hxx"
+
+#ifndef INCLUDED_SW_PRIMITIVETYPES2D_HXX
+#define INCLUDED_SW_PRIMITIVETYPES2D_HXX
+
+#ifndef INCLUDED_DRAWINGLAYER_PRIMITIVE2D_PRIMITIVETYPES2D_HXX
+#include <drawinglayer/primitive2d/drawinglayer_primitivetypes2d.hxx>
+#endif
+
+//////////////////////////////////////////////////////////////////////////////
+
+#define PRIMITIVE2D_ID_SWVIRTFLYDRAWOBJPRIMITIVE2D              (PRIMITIVE2D_ID_RANGE_SW| 0)
+#define PRIMITIVE2D_ID_SWPOSTITANKORPRIMITIVE                   (PRIMITIVE2D_ID_RANGE_SW| 1)
+#define PRIMITIVE2D_ID_SWPOSTITSHADOWPRIMITIVE                  (PRIMITIVE2D_ID_RANGE_SW| 2)
+
+//////////////////////////////////////////////////////////////////////////////
+
+#endif // INCLUDED_SW_PRIMITIVETYPES2D_HXX
+
+//////////////////////////////////////////////////////////////////////////////
+// eof

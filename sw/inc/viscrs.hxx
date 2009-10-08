@@ -29,9 +29,8 @@
  ************************************************************************/
 #ifndef _VISCRS_HXX
 #define _VISCRS_HXX
-#ifndef _CURSOR_HXX //autogen
+
 #include <vcl/cursor.hxx>
-#endif
 #include "swcrsr.hxx"
 #include "swrect.hxx"
 #include "swregion.hxx"
@@ -145,8 +144,6 @@ public:
     SwShellCrsr( SwShellCrsr& );
     virtual ~SwShellCrsr();
 
-    virtual operator SwShellCrsr* ();
-
     void Show();            // Update und zeige alle Selektionen an
     void Hide();            // verstecke alle Selektionen
     void Invalidate( const SwRect& rRect );
@@ -181,6 +178,8 @@ public:
                                   nsSwCursorSelOverFlags::SELOVER_CHANGEPOS ));
 #endif
 
+    virtual bool IsReadOnlyAvailable() const;
+
     DECL_FIXEDMEMPOOL_NEWDEL( SwShellCrsr )
 };
 
@@ -200,8 +199,6 @@ public:
                     const SwPosition &rPtPos, const Point& rPtPt );
     virtual ~SwShellTableCrsr();
 
-    virtual operator SwShellTableCrsr* ();
-
     virtual void FillRects();   // fuer Table- und normalen Crsr
 
     // Pruefe, ob sich der SPoint innerhalb der Tabellen-SSelection befindet
@@ -209,8 +206,7 @@ public:
 
     virtual void SetMark();
     virtual SwCursor* Create( SwPaM* pRing = 0 ) const;
-    virtual operator SwShellCrsr* ();
-    virtual operator SwTableCursor* ();
+
     virtual short MaxReplaceArived(); //returns RET_YES/RET_CANCEL/RET_NO
     virtual void SaveTblBoxCntnt( const SwPosition* pPos = 0 );
 

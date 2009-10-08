@@ -32,45 +32,23 @@
 
 /** SwDoc interfaces */
 
-#ifndef IINTERFACE_HXX_INCLUDED
 #include <IInterface.hxx>
-#endif
 #include <IDocumentSettingAccess.hxx>
-#ifndef IDOCUMENTDEVICEACCESS_HXX_INCLUDED
 #include <IDocumentDeviceAccess.hxx>
-#endif
 #include <IDocumentMarkAccess.hxx>
-#ifndef IREDLINEACCESS_HXX_INCLUDED
 #include <IDocumentRedlineAccess.hxx>
-#endif
 #include <IDocumentUndoRedo.hxx>
 #include <IDocumentLinksAdministration.hxx>
 #include <IDocumentFieldsAccess.hxx>
-#ifndef IDOCUMENTCONTENTOPERATIONS_HXX_INCLUDED
 #include <IDocumentContentOperations.hxx>
-#endif
-#ifndef IDOCUMENTSTYLEPOOLACCESS_HXX_INCLUDED
 #include <IDocumentStylePoolAccess.hxx>
-#endif
-#ifndef IDOCUMENTLINENUMBERACCESS_HXX_INCLUDED
 #include <IDocumentLineNumberAccess.hxx>
-#endif
-#ifndef IDOCUMENTSTATISTICS_HXX_INCLUDED
 #include <IDocumentStatistics.hxx>
-#endif
-#ifndef IDOCUMENTSTATE_HXX_INCLUDED
 #include <IDocumentState.hxx>
-#endif
-#ifndef IDOCUMENTDRAWMODELACCESS_HXX_INCLUDED
 #include <IDocumentDrawModelAccess.hxx>
-#endif
 #include <IDocumentLayoutAccess.hxx>
-#ifndef IDOCUMENTTIMERACCESS_HXX_INCLUDED
 #include <IDocumentTimerAccess.hxx>
-#endif
-#ifndef IDOCUMENTCHARTDATAPROVIDER_HXX_INCLUDED
 #include <IDocumentChartDataProviderAccess.hxx>
-#endif
 // --> OD 2007-10-26 #i83479#
 #include <IDocumentOutlineNodes.hxx>
 #include <IDocumentListItems.hxx>
@@ -92,15 +70,11 @@ class SwList;
 #include <toxe.hxx>             // enums
 #include <flyenum.hxx>
 #include <itabenum.hxx>
-#ifndef _SWDBDATA_HXXnLinkCt
 #include <swdbdata.hxx>
-#endif
 #include <chcmprse.hxx>
 #include <com/sun/star/linguistic2/XSpellChecker1.hpp>
 #include <com/sun/star/linguistic2/XHyphenatedWord.hpp>
-#ifndef _VOS_REF_HXX
 #include <vos/ref.hxx>
-#endif
 #include <svx/svdtypes.hxx>
 #include <svtools/style.hxx>
 #include <svx/numitem.hxx>
@@ -115,6 +89,7 @@ class SwList;
 #include <vector>
 #include <set>
 #include <map>
+#include <memory>
 
 #include <boost/scoped_ptr.hpp>
 
@@ -262,6 +237,7 @@ namespace container {
 
 namespace sfx2 {
     class SvLinkSource;
+    class IXmlIdRegistry;
 }
 
 //PageDescriptor-Schnittstelle, Array hier wegen inlines.
@@ -436,6 +412,8 @@ public:
 private:
     tImplSortedNodeNumList* mpListItemsList;
     // <--
+
+    ::std::auto_ptr< ::sfx2::IXmlIdRegistry > m_pXmlIdRegistry;
 
     // -------------------------------------------------------------------
     // sonstige
@@ -726,6 +704,7 @@ private:
      SwFmt *_MakeFrmFmt(const String &, SwFmt *, BOOL, BOOL );
      SwFmt *_MakeTxtFmtColl(const String &, SwFmt *, BOOL, BOOL );
 
+     void InitTOXTypes();
 public:
 
     /** Life cycle
@@ -1125,9 +1104,9 @@ public:
     void SetEndNoteInfo(const SwEndNoteInfo& rInfo);
           SwFtnIdxs& GetFtnIdxs()       { return *pFtnIdxs; }
     const SwFtnIdxs& GetFtnIdxs() const { return *pFtnIdxs; }
-    // Fussnoten im Bereich aendern
-    sal_Bool SetCurFtn( const SwPaM& rPam, const String& rNumStr,
-                        sal_uInt16 nNumber, sal_Bool bIsEndNote );
+    // change footnotes in area
+    bool SetCurFtn( const SwPaM& rPam, const String& rNumStr,
+                    sal_uInt16 nNumber, bool bIsEndNote );
 
     /** Operations on the content of the document e.g.
         spell-checking/hyphenating/word-counting
@@ -1446,6 +1425,7 @@ public:
     void SetInReading( bool bNew )              { mbInReading = bNew; }
 
     bool IsClipBoard() const                    { return mbClipBoard; }
+    // N.B.: must be called right after constructor! (@see GetXmlIdRegistry)
     void SetClipBoard( bool bNew )              { mbClipBoard = bNew; }
 
     bool IsColumnSelection() const              { return mbColumnSelection; }
@@ -2109,6 +2089,8 @@ public:
     {
         return n32DummyCompatabilityOptions2;
     }
+
+    ::sfx2::IXmlIdRegistry& GetXmlIdRegistry();
 };
 
 

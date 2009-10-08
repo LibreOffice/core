@@ -392,13 +392,13 @@ BOOL SwDoc::SetFlyFrmAttr( SwFrmFmt& rFlyFmt, SfxItemSet& rSet )
     if( !rSet.Count() )
         return FALSE;
 
-    _UndoFmtAttr* pSaveUndo = 0;
+    ::std::auto_ptr<SwUndoFmtAttrHelper> pSaveUndo;
     const bool bDoesUndo = DoesUndo();
 
     if( DoesUndo() )
     {
         ClearRedo();
-        pSaveUndo = new _UndoFmtAttr( rFlyFmt );
+        pSaveUndo.reset( new SwUndoFmtAttrHelper( rFlyFmt ) );
         // --> FME 2004-10-13 #i32968#
         // Inserting columns in the frame causes MakeFrmFmt to put two
         // objects of type SwUndoFrmFmt on the undo stack. We don't want them.
@@ -452,15 +452,16 @@ BOOL SwDoc::SetFlyFrmAttr( SwFrmFmt& rFlyFmt, SfxItemSet& rSet )
     if( MAKEFRMS == nMakeFrms )
         rFlyFmt.MakeFrms();
 
-    if( pSaveUndo )
+    if ( pSaveUndo.get() )
     {
         // --> FME 2004-10-13 #i32968#
         DoUndo( bDoesUndo );
         // <--
 
-        if( pSaveUndo->pUndo )
-            AppendUndo( pSaveUndo->pUndo );
-        delete pSaveUndo;
+        if ( pSaveUndo->GetUndo() )
+        {
+            AppendUndo( pSaveUndo->ReleaseUndo() );
+        }
     }
 
     SetModified();

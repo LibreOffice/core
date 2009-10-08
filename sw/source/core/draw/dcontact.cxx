@@ -2576,16 +2576,6 @@ void SwDrawVirtObj::RecalcBoundRect()
     aOutRect = ReferencedObj().GetCurrentBoundRect() + aOffset;
 }
 
-//////////////////////////////////////////////////////////////////////////////
-
-SdrObject* SwDrawVirtObj::CheckHit(const Point& rPnt, USHORT nTol, const SetOfByte* pVisiLayer) const
-{
-    Point aPnt(rPnt - GetOffset());
-    BOOL bRet = rRefObj.CheckHit(aPnt, nTol, pVisiLayer) != NULL;
-
-    return bRet ? (SdrObject*)this : NULL;
-}
-
 basegfx::B2DPolyPolygon SwDrawVirtObj::TakeXorPoly() const
 {
     basegfx::B2DPolyPolygon aRetval(rRefObj.TakeXorPoly());

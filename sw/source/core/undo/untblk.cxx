@@ -59,7 +59,7 @@ SwUndoInserts::SwUndoInserts( SwUndoId nUndoId, const SwPaM& rPam )
     {
         pTxtFmtColl = pTxtNd->GetTxtColl();
         pHistory->CopyAttr( pTxtNd->GetpSwpHints(), nSttNode,
-                            0, pTxtNd->GetTxt().Len(), FALSE );
+                            0, pTxtNd->GetTxt().Len(), false );
         if( pTxtNd->HasSwAttrSet() )
             pHistory->CopyFmtAttr( *pTxtNd->GetpSwAttrSet(), nSttNode );
 
@@ -264,7 +264,7 @@ void SwUndoInserts::Undo( SwUndoIter& rUndoIter )
                 pTxtFmtColl = (SwTxtFmtColl*)pTxtNode->ChgFmtColl( pTxtFmtColl );
 
             pHistory->SetTmpEnd( nSetPos );
-            pHistory->TmpRollback( pDoc, 0, FALSE );
+            pHistory->TmpRollback( pDoc, 0, false );
         }
     }
 
@@ -288,7 +288,7 @@ void SwUndoInserts::Redo( SwUndoIter& rUndoIter )
         pSavTxtFmtColl = ((SwTxtNode*)pCNd)->GetTxtColl();
 
     pHistory->SetTmpEnd( nSetPos );
-    pHistory->TmpRollback( pDoc, 0, FALSE );
+    pHistory->TmpRollback( pDoc, 0, false );
 
     // alte Anfangs-Position fuers Rollback zurueckholen
     if( ( nSttNode != nEndNode || nSttCntnt != nEndCntnt ) && pPos )

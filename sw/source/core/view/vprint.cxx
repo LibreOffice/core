@@ -997,9 +997,11 @@ SwDoc * ViewShell::CreatePrtDoc( /*Printer* pPrt,*/ SfxObjectShellRef &rDocShell
     pPrtDoc->ReplaceStyles( *GetDoc() );
 
     SwShellCrsr *pActCrsr = pFESh->_GetCrsr();
-    SwShellCrsr *pFirstCrsr = (SwShellCrsr*)*((SwCursor*)pActCrsr->GetNext());
+    SwShellCrsr *pFirstCrsr = dynamic_cast<SwShellCrsr*>(pActCrsr->GetNext());
     if( !pActCrsr->HasMark() ) // bei Multiselektion kann der aktuelle Cursor leer sein
-        pActCrsr = (SwShellCrsr*)*((SwCursor*)pActCrsr->GetPrev());
+    {
+        pActCrsr = dynamic_cast<SwShellCrsr*>(pActCrsr->GetPrev());
+    }
 
     // Die Y-Position der ersten Selektion
     const Point aSelPoint = pFESh->IsTableMode() ?
@@ -1086,9 +1088,11 @@ SwDoc * ViewShell::FillPrtDoc( SwDoc *pPrtDoc, const SfxPrinter* pPrt)
     pPrtDoc->ReplaceStyles( *GetDoc() );
 
     SwShellCrsr *pActCrsr = pFESh->_GetCrsr();
-    SwShellCrsr *pFirstCrsr = (SwShellCrsr*)*((SwCursor*)pActCrsr->GetNext());
+    SwShellCrsr *pFirstCrsr = dynamic_cast<SwShellCrsr*>(pActCrsr->GetNext());
     if( !pActCrsr->HasMark() ) // bei Multiselektion kann der aktuelle Cursor leer sein
-        pActCrsr = (SwShellCrsr*)*((SwCursor*)pActCrsr->GetPrev());
+    {
+        pActCrsr = dynamic_cast<SwShellCrsr*>(pActCrsr->GetPrev());
+    }
 
     // Die Y-Position der ersten Selektion
     // Die Y-Position der ersten Selektion
@@ -1381,6 +1385,42 @@ BOOL ViewShell::Prt(
                             if ( pLastPageDesc != rFormatPage.GetPageDesc() )
                             {
                                 pLastPageDesc = rFormatPage.GetPageDesc();
+#if 0 // TL_PDF
+                                const BOOL bLandScp = rFormatPage.GetPageDesc()->GetLandscape();
+
+                                if( bSetPaperBin )      // Schacht einstellen.
+                                    pPrt->SetPaperBin( rFormatPage.GetFmt()->
+                                                       GetPaperBin().GetValue() );
+
+                                if (bSetOrient )
+                                 {
+                                        // Orientation einstellen: Breiter als Hoch
+                                        //  -> Landscape, sonst -> Portrait.
+                                        if( bLandScp )
+                                            pPrt->SetOrientation(ORIENTATION_LANDSCAPE);
+                                        else
+                                            pPrt->SetOrientation(ORIENTATION_PORTRAIT);
+                                 }
+
+                                 if (bSetPaperSz )
+                                 {
+                                    Size aSize = pStPage->Frm().SSize();
+                                    if ( bLandScp && bSetOrient )
+                                    {
+                                            // landscape is always interpreted as a rotation by 90 degrees !
+                                            // this leads to non WYSIWIG but at least it prints!
+                                            // #i21775#
+                                            long nWidth = aSize.Width();
+                                            aSize.Width() = aSize.Height();
+                                            aSize.Height() = nWidth;
+                                    }
+                                    Paper ePaper = SvxPaperInfo::GetSvxPaper(aSize,MAP_TWIP,TRUE);
+                                    if ( PAPER_USER == ePaper )
+                                            pPrt->SetPaperSizeUser( aSize );
+                                    else
+                                            pPrt->SetPaper( ePaper );
+                                 }
+#endif
                             }
                         }
 

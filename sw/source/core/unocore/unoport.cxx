@@ -86,7 +86,7 @@ SwFmtFld*   SwXTextPortion::GetFldFmt(sal_Bool bInit)
 
   -----------------------------------------------------------------------*/
 SwXTextPortion::SwXTextPortion(const SwUnoCrsr* pPortionCrsr,
-        uno::Reference< text::XText > & rParent,
+        uno::Reference< text::XText > const& rParent,
         SwTextPortionType eType) :
     aLstnrCntnr( (text::XTextRange*)this),
     m_pPropSet(aSwMapProvider.GetPropertySet(
@@ -121,8 +121,9 @@ SwXTextPortion::SwXTextPortion(const SwUnoCrsr* pPortionCrsr,
 /* -----------------24.03.99 16:30-------------------
  *
  * --------------------------------------------------*/
-SwXTextPortion::SwXTextPortion(const SwUnoCrsr* pPortionCrsr, uno::Reference< text::XText > & rParent,
-                        SwFrmFmt& rFmt ) :
+SwXTextPortion::SwXTextPortion(const SwUnoCrsr* pPortionCrsr,
+        uno::Reference< text::XText > const& rParent,
+        SwFrmFmt& rFmt ) :
     aLstnrCntnr( (text::XTextRange*)this),
     m_pPropSet(aSwMapProvider.GetPropertySet(PROPERTY_MAP_TEXTPORTION_EXTENSIONS)),
     xParentText(rParent),
@@ -1072,7 +1073,7 @@ void SwXTextPortion::Modify( SfxPoolItem *pOld, SfxPoolItem *pNew)
  ---------------------------------------------------------------------------*/
 SwXRubyPortion::SwXRubyPortion(const SwUnoCrsr* pPortionCrsr,
                     SwTxtRuby& rAttr,
-                    uno::Reference< text::XText > & rParent,
+                    uno::Reference< text::XText > const& rParent,
                     sal_Bool bEnd   ) :
         SwXTextPortion(pPortionCrsr, rParent, bEnd ? PORTION_RUBY_END : PORTION_RUBY_START  )
 {

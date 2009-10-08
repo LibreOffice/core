@@ -93,9 +93,7 @@ static void lcl_DefaultPageFmt( sal_uInt16 nPoolFmtId,
     // <--
 
     SwFmtFrmSize aFrmSize( ATT_FIX_SIZE );
-    SvxPaper ePaper = SvxPaperInfo::GetDefaultSvxPaper(
-        static_cast<LanguageType>( GetAppLanguage() ) );
-    const Size aPhysSize = SvxPaperInfo::GetPaperSize( ePaper );
+    const Size aPhysSize = SvxPaperInfo::GetDefaultPaperSize();
     aFrmSize.SetSize( aPhysSize );
 
     //Auf Default-Raender vorbereiten.

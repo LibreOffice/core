@@ -77,9 +77,7 @@
 #include <svx/shdditem.hxx>
 #include <svx/akrnitem.hxx>
 #include <svx/pbinitem.hxx>
-#ifndef _SVX_EMPHITEM_HXX
 #include <svx/emphitem.hxx>
-#endif
 #include <svx/twolinesitem.hxx>
 #include <svx/charscaleitem.hxx>
 #include <svx/charrotateitem.hxx>
@@ -89,6 +87,7 @@
 #include <svx/frmdiritem.hxx>
 #include <svx/blnkitem.hxx>
 #include <svx/charhiddenitem.hxx>
+#include <svx/paperinf.hxx>
 #include <fmtfld.hxx>
 #include <fchrfmt.hxx>
 #include <fmtfsize.hxx>
@@ -184,7 +183,7 @@ static Writer& OutWW8_SwNumRuleItem( Writer& rWrt, const SfxPoolItem& rHt );
 
 /*
 Sadly word does not have two different sizes for asian font size and western
-font size, it has to different fonts, but not sizes, so we have to use our
+font size, it has two different fonts, but not sizes, so we have to use our
 guess as to the script used and disable the export of one type. The same
 occurs for font weight and posture (bold and italic)
 
@@ -283,10 +282,10 @@ void SwWW8Writer::ExportPoolItemsToCHP(sw::PoolItems &rItems, USHORT nScript)
     {
         const SfxPoolItem *pItem = aI->second;
         USHORT nWhich = pItem->Which();
+        if (!isCHRATR(nWhich) && !isTXTATR(nWhich))
+            continue;
         if (FnAttrOut pOut = aWW8AttrFnTab[nWhich - RES_CHRATR_BEGIN])
         {
-            if (nWhich < RES_CHRATR_BEGIN || nWhich >= RES_TXTATR_END)
-                continue;
             if (SwWW8Writer::CollapseScriptsforWordOk(nScript, nWhich))
                 (*pOut)(*this, *pItem);
         }
@@ -344,17 +343,17 @@ void SwWW8Writer::Out_SfxItemSet(const SfxItemSet& rSet, bool bPapFmt,
         if (bChpFmt)
             ExportPoolItemsToCHP(aItems, nScript);
 
-        sw::cPoolItemIter aEnd = aItems.end();
-        for (sw::cPoolItemIter aI = aItems.begin(); aI != aEnd; ++aI)
+        if (bPapFmt)
         {
-            pItem = aI->second;
-            USHORT nWhich = pItem->Which();
-            pOut = aWW8AttrFnTab[nWhich - RES_CHRATR_BEGIN];
-            if( 0 != pOut && (!bPapFmt || RES_PARATR_NUMRULE != nWhich ))
+            sw::cPoolItemIter aEnd = aItems.end();
+            for (sw::cPoolItemIter aI = aItems.begin(); aI != aEnd; ++aI)
             {
-                bool bPap = nWhich >= RES_PARATR_BEGIN
-                            && nWhich < RES_FRMATR_END;
-                if (bPapFmt && bPap)
+                pItem = aI->second;
+                USHORT nWhich = pItem->Which();
+                if (nWhich < RES_PARATR_BEGIN || nWhich >= RES_FRMATR_END || nWhich == RES_PARATR_NUMRULE)
+                    continue;
+                pOut = aWW8AttrFnTab[nWhich - RES_CHRATR_BEGIN];
+                if( 0 != pOut )
                     (*pOut)(*this, *pItem);
             }
         }
@@ -1769,6 +1768,9 @@ WW8_WrPlcFld* SwWW8Writer::CurrentFieldPlc() const
             break;
         case TXT_EDN:
             pFldP = pFldEdn;
+            break;
+        case TXT_ATN:
+            pFldP = pFldAtn;
             break;
         case TXT_TXTBOX:
             pFldP = pFldTxtBxs;
@@ -3424,7 +3426,7 @@ static Writer& OutWW8_SwFrmSize( Writer& rWrt, const SfxPoolItem& rHt )
         else
             rWW8Wrt.pO->Insert( 164, rWW8Wrt.pO->Count() );
         rWW8Wrt.InsUInt16(
-            msword_cast<sal_uInt16>(SnapPageDimension(rSz.GetWidth())));
+            msword_cast<sal_uInt16>(SvxPaperInfo::GetSloppyPaperDimension(rSz.GetWidth())));
 
         /*sprmSYaPage*/
         if( rWW8Wrt.bWrtWW8 )
@@ -3432,7 +3434,7 @@ static Writer& OutWW8_SwFrmSize( Writer& rWrt, const SfxPoolItem& rHt )
         else
             rWW8Wrt.pO->Insert( 165, rWW8Wrt.pO->Count() );
         rWW8Wrt.InsUInt16(
-            msword_cast<sal_uInt16>(SnapPageDimension(rSz.GetHeight())));
+            msword_cast<sal_uInt16>(SvxPaperInfo::GetSloppyPaperDimension(rSz.GetHeight())));
     }
     return rWrt;
 }
@@ -4957,8 +4959,36 @@ static Writer& OutWW8_SwTabStop(Writer& rWrt, const SfxPoolItem& rHt)
 {
     SwWW8Writer& rWW8Wrt = (SwWW8Writer&)rWrt;
     const SvxTabStopItem & rTStops = (const SvxTabStopItem&)rHt;
-    const SfxPoolItem* pLR = rWW8Wrt.HasItem( RES_LR_SPACE );
-    long nCurrentLeft = pLR ? ((const SvxLRSpaceItem*)pLR)->GetTxtLeft() : 0;
+    bool bTabsRelativeToIndex = rWW8Wrt.pCurPam->GetDoc()->get(IDocumentSettingAccess::TABS_RELATIVE_TO_INDENT);
+    long nCurrentLeft = 0;
+
+    if (bTabsRelativeToIndex)
+    {
+        const SfxPoolItem* pLR = rWW8Wrt.HasItem( RES_LR_SPACE );
+
+        if (pLR != NULL)
+            nCurrentLeft = ((const SvxLRSpaceItem*)pLR)->GetTxtLeft();
+    }
+
+
+    // --> FLR 2009-03-17 #i100264#
+    if (rWW8Wrt.bStyDef
+        && rWW8Wrt.pCurrentStyle!=NULL
+        && rWW8Wrt.pCurrentStyle->DerivedFrom()!=NULL)
+    {
+        SvxTabStopItem aTabs(0, 0, SVX_TAB_ADJUST_DEFAULT, RES_PARATR_TABSTOP);
+        const SwFmt *pParentStyle=rWW8Wrt.pCurrentStyle->DerivedFrom();
+        const SvxTabStopItem* pParentTabs=HasItem<SvxTabStopItem>(pParentStyle->GetAttrSet(), RES_PARATR_TABSTOP);
+        if (pParentTabs)
+        {
+            aTabs.Insert(pParentTabs);
+        }
+
+        OutWW8_SwTabStopDelAdd(rWW8Wrt, aTabs, 0, rTStops, 0);
+        return rWrt;
+    }
+    // <--
+
 
     // StyleDef -> "einfach" eintragen || keine Style-Attrs -> dito
     const SvxTabStopItem* pStyleTabs = 0;
@@ -4972,9 +5002,14 @@ static Writer& OutWW8_SwTabStop(Writer& rWrt, const SfxPoolItem& rHt)
         OutWW8_SwTabStopAdd(rWW8Wrt, rTStops, nCurrentLeft);
     else
     {
-        const SvxLRSpaceItem &rStyleLR =
+        long nStyleLeft = 0;
+
+        if (bTabsRelativeToIndex)
+        {
+            const SvxLRSpaceItem &rStyleLR =
             ItemGet<SvxLRSpaceItem>(*rWW8Wrt.pStyAttr, RES_LR_SPACE);
-        long nStyleLeft = rStyleLR.GetTxtLeft();
+            nStyleLeft = rStyleLR.GetTxtLeft();
+        }
 
         OutWW8_SwTabStopDelAdd(rWW8Wrt, *pStyleTabs, nStyleLeft, rTStops,
             nCurrentLeft);

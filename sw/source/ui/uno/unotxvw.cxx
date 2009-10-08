@@ -38,9 +38,7 @@
 #include <hintids.hxx>
 #include <docsh.hxx>
 #include <rubylist.hxx>
-#ifndef _SWDOC_HXX //autogen
 #include <doc.hxx>
-#endif
 #include <unotxvw.hxx>
 #include <unodispatch.hxx>
 #include <unomap.hxx>
@@ -1447,9 +1445,9 @@ void SwXTextViewCursor::gotoRange(
             const ::sw::mark::IMark* const pBkmk = pRange->GetBookmark();
             pSrcNode = &(pBkmk->GetMarkPos().nNode.GetNode());
         }
-        else if (pPara && pPara->GetCrsr())
+        else if (pPara && pPara->GetTxtNode())
         {
-            pSrcNode = pPara->GetCrsr()->GetNode();
+            pSrcNode = pPara->GetTxtNode();
         }
         const SwStartNode* pTmp = pSrcNode ? pSrcNode->FindSttNodeByType(eSearchNodeType) : 0;
 
