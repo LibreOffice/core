@@ -107,8 +107,7 @@ oslConditionResult SAL_CALL osl_waitCondition(oslCondition Condition,
     while ( 1 )
     {
         /* Only wake up if a SendMessage call to the threads message loop is detected */
-
-        switch( MsgWaitForMultipleObjects( 1, &(HANDLE)Condition, FALSE, timeout, QS_SENDMESSAGE ) )
+        switch( MsgWaitForMultipleObjects( 1, (HANDLE *)(&Condition), FALSE, timeout, QS_SENDMESSAGE ) )
         {
             case WAIT_OBJECT_0 + 1:
                 {
