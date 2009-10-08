@@ -29,8 +29,6 @@
  ************************************************************************/
 
 
-
-
 #include <sfx2/sfx.hrc>
 #include <svx/globlmn.hrc>
 #include "starmath.hrc"
@@ -1576,7 +1574,7 @@ FloatingWindow RID_TOOLBOXWINDOW
     OutputSize = TRUE ;
     SVLook = TRUE ;
     Size = MAP_APPFONT ( 0 , 0 ) ;
-    Text [ en-US ] = "Selection" ;
+    Text [ en-US ] = "Formula Elements" ;
 
     ToolBox 1
     {

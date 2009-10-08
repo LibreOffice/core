@@ -2698,8 +2698,8 @@ const IDocumentSettingAccess* ViewShell::getIDocumentSettingAccess() const { ret
 IDocumentSettingAccess* ViewShell::getIDocumentSettingAccess() { return pDoc; }
 const IDocumentDeviceAccess* ViewShell::getIDocumentDeviceAccess() const { return pDoc; }
 IDocumentDeviceAccess* ViewShell::getIDocumentDeviceAccess() { return pDoc; }
-const IDocumentBookmarkAccess* ViewShell::getIDocumentBookmarkAccess() const { return pDoc; }
-IDocumentBookmarkAccess* ViewShell::getIDocumentBookmarkAccess() { return pDoc; }
+const IDocumentMarkAccess* ViewShell::getIDocumentMarkAccess() const { return pDoc->getIDocumentMarkAccess(); }
+IDocumentMarkAccess* ViewShell::getIDocumentMarkAccess() { return pDoc->getIDocumentMarkAccess(); }
 const IDocumentDrawModelAccess* ViewShell::getIDocumentDrawModelAccess() const { return pDoc; }
 IDocumentDrawModelAccess* ViewShell::getIDocumentDrawModelAccess() { return pDoc; }
 const IDocumentRedlineAccess* ViewShell::getIDocumentRedlineAccess() const { return pDoc; }

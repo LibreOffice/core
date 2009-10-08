@@ -76,7 +76,7 @@
 #include <mdiexp.hxx>       // ...Percent()
 #include <fltini.hxx>
 #include <viewopt.hxx>
-#include <bookmrk.hxx>      // fuer SwBookmark ...
+#include <IMark.hxx>        // fuer SwBookmark ...
 #include <poolfmt.hxx>
 #include <pagedesc.hxx>
 #include <section.hxx>
@@ -111,7 +111,7 @@ SwHTMLWriter::SwHTMLWriter( const String& rBaseURL )
 {
     SetBaseURL( rBaseURL );
     bFirstLine = sal_True;
-    nBkmkTabPos = USHRT_MAX;
+    nBkmkTabPos = -1;
     pDfltColor = 0;
     nImgMapCnt = 1;
     pStartNdIdx = 0;
@@ -320,8 +320,8 @@ ULONG SwHTMLWriter::WriteStream()
                                                    aName, eDestEnc, &aNonConvertableCharacters );
 
                 ByteString sOut( '<' );
-                (((((((sOut += sHTML_division)
-                    += ' ') += sHTML_O_id) += "=\"")
+                (((((((sOut += OOO_STRING_SVTOOLS_HTML_division)
+                    += ' ') += OOO_STRING_SVTOOLS_HTML_O_id) += "=\"")
                     += aName) += '\"')
                     += '>') += aStartTags;
 
@@ -387,9 +387,9 @@ ULONG SwHTMLWriter::WriteStream()
 
     if( bLFPossible )
         OutNewLine();
-    HTMLOutFuncs::Out_AsciiTag( Strm(), sHTML_body, sal_False );
+    HTMLOutFuncs::Out_AsciiTag( Strm(), OOO_STRING_SVTOOLS_HTML_body, sal_False );
     OutNewLine();
-    HTMLOutFuncs::Out_AsciiTag( Strm(), sHTML_html, sal_False );
+    HTMLOutFuncs::Out_AsciiTag( Strm(), OOO_STRING_SVTOOLS_HTML_html, sal_False );
 
     // loesche die Tabelle mit den freifliegenden Rahmen
     sal_uInt16 i;
@@ -539,7 +539,7 @@ void lcl_html_OutSectionStartTag( SwHTMLWriter& rHTMLWrt,
     if( rHTMLWrt.bLFPossible )
         rHTMLWrt.OutNewLine();
 
-    const sal_Char *pTag = pCol ? sHTML_multicol : sHTML_division;
+    const sal_Char *pTag = pCol ? OOO_STRING_SVTOOLS_HTML_multicol : OOO_STRING_SVTOOLS_HTML_division;
 
     ByteString sOut( '<' );
     sOut += pTag;
@@ -547,7 +547,7 @@ void lcl_html_OutSectionStartTag( SwHTMLWriter& rHTMLWrt,
     const String& rName = rSection.GetName();
     if( rName.Len() && !bContinued )
     {
-        ((sOut += ' ') += sHTML_O_id) += "=\"";
+        ((sOut += ' ') += OOO_STRING_SVTOOLS_HTML_O_id) += "=\"";
         rHTMLWrt.Strm() << sOut.GetBuffer();
         HTMLOutFuncs::Out_String( rHTMLWrt.Strm(), rName, rHTMLWrt.eDestEnc, &rHTMLWrt.aNonConvertableCharacters );
         sOut = '\"';
@@ -560,7 +560,7 @@ void lcl_html_OutSectionStartTag( SwHTMLWriter& rHTMLWrt,
 
     if( FILE_LINK_SECTION == rSection.GetType() )
     {
-        ((sOut += ' ') += sHTML_O_href) += "=\"";
+        ((sOut += ' ') += OOO_STRING_SVTOOLS_HTML_O_href) += "=\"";
         rHTMLWrt.Strm() << sOut.GetBuffer();
 
         const String& aFName = rSection.GetLinkFileName();
@@ -607,7 +607,7 @@ void lcl_html_OutSectionStartTag( SwHTMLWriter& rHTMLWrt,
     }
     else if( pCol )
     {
-        (((sOut += ' ') += sHTML_O_cols) += '=')
+        (((sOut += ' ') += OOO_STRING_SVTOOLS_HTML_O_cols) += '=')
             += ByteString::CreateFromInt32( pCol->GetNumCols() );
 
         // minumum gutter width
@@ -620,7 +620,7 @@ void lcl_html_OutSectionStartTag( SwHTMLWriter& rHTMLWrt,
                                 ->LogicToPixel( Size(nGutter,0),
                                                 MapMode(MAP_TWIP) ).Width();
             }
-            (((sOut += ' ') += sHTML_O_gutter) += '=')
+            (((sOut += ' ') += OOO_STRING_SVTOOLS_HTML_O_gutter) += '=')
                 += ByteString::CreateFromInt32( nGutter );
         }
     }
@@ -641,7 +641,7 @@ void lcl_html_OutSectionStartTag( SwHTMLWriter& rHTMLWrt,
 void lcl_html_OutSectionEndTag( SwHTMLWriter& rHTMLWrt,
                                 const SwFmtCol *pCol )
 {
-    const sal_Char *pTag = pCol ? sHTML_multicol : sHTML_division;
+    const sal_Char *pTag = pCol ? OOO_STRING_SVTOOLS_HTML_multicol : OOO_STRING_SVTOOLS_HTML_division;
 
     rHTMLWrt.DecIndentLevel();
     if( rHTMLWrt.bLFPossible )
@@ -744,7 +744,7 @@ void SwHTMLWriter::Out_SwDoc( SwPaM* pPam )
     sal_Bool bSaveWriteAll = bWriteAll;     // sichern
 
     // suche die naechste text::Bookmark-Position aus der text::Bookmark-Tabelle
-    nBkmkTabPos = bWriteAll ? FindPos_Bkmk( *pCurPam->GetPoint() ) : USHRT_MAX;
+    nBkmkTabPos = bWriteAll ? FindPos_Bkmk( *pCurPam->GetPoint() ) : -1;
 
     // gebe alle Bereiche des Pams in das HTML-File aus.
     do {
@@ -774,12 +774,12 @@ void SwHTMLWriter::Out_SwDoc( SwPaM* pPam )
             else if( pNd->IsTableNode() )
             {
                 OutHTML_SwTblNode( *this, *pNd->GetTableNode(), 0 );
-                nBkmkTabPos = bWriteAll ? FindPos_Bkmk( *pCurPam->GetPoint() ) : USHRT_MAX;
+                nBkmkTabPos = bWriteAll ? FindPos_Bkmk( *pCurPam->GetPoint() ) : -1;
             }
             else if( pNd->IsSectionNode() )
             {
                 OutHTML_Section( *this, *pNd->GetSectionNode() );
-                nBkmkTabPos = bWriteAll ? FindPos_Bkmk( *pCurPam->GetPoint() ) : USHRT_MAX;
+                nBkmkTabPos = bWriteAll ? FindPos_Bkmk( *pCurPam->GetPoint() ) : -1;
             }
             else if( pNd == &pDoc->GetNodes().GetEndOfContent() )
                 break;
@@ -921,18 +921,18 @@ sal_uInt16 SwHTMLWriter::OutHeaderAttrs()
 
 const SwPageDesc *SwHTMLWriter::MakeHeader( sal_uInt16 &rHeaderAttrs )
 {
-    ByteString sOut( sHTML_doctype );
+    ByteString sOut( OOO_STRING_SVTOOLS_HTML_doctype );
     (sOut += ' ') +=
-        (HTML_CFG_HTML32==nExportMode ? sHTML_doctype32
-                                       : sHTML_doctype40);
+        (HTML_CFG_HTML32==nExportMode ? OOO_STRING_SVTOOLS_HTML_doctype32
+                                       : OOO_STRING_SVTOOLS_HTML_doctype40);
     HTMLOutFuncs::Out_AsciiTag( Strm(), sOut.GetBuffer() );
 
     // baue den Vorspann
     OutNewLine();
-    HTMLOutFuncs::Out_AsciiTag( Strm(), sHTML_html );
+    HTMLOutFuncs::Out_AsciiTag( Strm(), OOO_STRING_SVTOOLS_HTML_html );
 
     OutNewLine();
-    HTMLOutFuncs::Out_AsciiTag( Strm(), sHTML_head );
+    HTMLOutFuncs::Out_AsciiTag( Strm(), OOO_STRING_SVTOOLS_HTML_head );
 
     IncIndentLevel();   // Inhalt von <HEAD> einruecken
 
@@ -1006,12 +1006,12 @@ const SwPageDesc *SwHTMLWriter::MakeHeader( sal_uInt16 &rHeaderAttrs )
 
     DecIndentLevel();   // Inhalt von <HEAD> einruecken
     OutNewLine();
-    HTMLOutFuncs::Out_AsciiTag( Strm(), sHTML_head, sal_False );
+    HTMLOutFuncs::Out_AsciiTag( Strm(), OOO_STRING_SVTOOLS_HTML_head, sal_False );
 
     // der Body wird nicht eingerueckt, weil sonst alles eingerueckt waere!
     OutNewLine();
     sOut = '<';
-    sOut += sHTML_body;
+    sOut += OOO_STRING_SVTOOLS_HTML_body;
     Strm() << sOut.GetBuffer();
     sOut.Erase();
 
@@ -1020,15 +1020,15 @@ const SwPageDesc *SwHTMLWriter::MakeHeader( sal_uInt16 &rHeaderAttrs )
 
     // Textfarbe ausgeben, wenn sie an der Standard-Vorlage gesetzt ist
     // und sich geaendert hat.
-    OutBodyColor( sHTML_O_text,
+    OutBodyColor( OOO_STRING_SVTOOLS_HTML_O_text,
                   pDoc->GetTxtCollFromPool( RES_POOLCOLL_STANDARD, false ),
                   *this );
 
     // Farben fuer (un)besuchte Links
-    OutBodyColor( sHTML_O_link,
+    OutBodyColor( OOO_STRING_SVTOOLS_HTML_O_link,
                   pDoc->GetCharFmtFromPool( RES_POOLCHR_INET_NORMAL ),
                   *this );
-    OutBodyColor( sHTML_O_vlink,
+    OutBodyColor( OOO_STRING_SVTOOLS_HTML_O_vlink,
                   pDoc->GetCharFmtFromPool( RES_POOLCHR_INET_VISIT ),
                   *this );
 
@@ -1055,34 +1055,36 @@ const SwPageDesc *SwHTMLWriter::MakeHeader( sal_uInt16 &rHeaderAttrs )
 void SwHTMLWriter::OutAnchor( const String& rName )
 {
     ByteString sOut( '<' );
-    (((sOut += sHTML_anchor) += ' ') += sHTML_O_name) += "=\"";
+    (((sOut += OOO_STRING_SVTOOLS_HTML_anchor) += ' ') += OOO_STRING_SVTOOLS_HTML_O_name) += "=\"";
     Strm() << sOut.GetBuffer();
     HTMLOutFuncs::Out_String( Strm(), rName, eDestEnc, &aNonConvertableCharacters ) << "\">";
-    HTMLOutFuncs::Out_AsciiTag( Strm(), sHTML_anchor, sal_False );
+    HTMLOutFuncs::Out_AsciiTag( Strm(), OOO_STRING_SVTOOLS_HTML_anchor, sal_False );
 }
 
 void SwHTMLWriter::OutBookmarks()
 {
     // hole das aktuelle Bookmark
-    const SwBookmark* pBookmark = USHRT_MAX != nBkmkTabPos ?
-                            pDoc->getBookmarks()[ nBkmkTabPos ] : 0;
+    const ::sw::mark::IMark* pBookmark = NULL;
+    IDocumentMarkAccess* const pMarkAccess = pDoc->getIDocumentMarkAccess();
+    if(nBkmkTabPos != -1)
+        pBookmark = (pMarkAccess->getMarksBegin() + nBkmkTabPos)->get();
     // Ausgabe aller Bookmarks in diesem Absatz. Die Content-Position
     // wird vorerst nicht beruecksichtigt!
     sal_uInt32 nNode = pCurPam->GetPoint()->nNode.GetIndex();
-    while( USHRT_MAX != nBkmkTabPos &&
-        pBookmark->GetBookmarkPos().nNode.GetIndex() == nNode )
+    while( nBkmkTabPos != -1 &&
+        pBookmark->GetMarkPos().nNode.GetIndex() == nNode )
     {
         // Der Bereich derBookmark wird erstam ignoriert, da er von uns
         // auch nicht eingelesen wird.
 
         // erst die SWG spezifischen Daten:
-        if( pBookmark->IsBookMark() && pBookmark->GetName().Len() )
+        if(dynamic_cast< const ::sw::mark::IBookmark* >(pBookmark) && pBookmark->GetName().getLength() )
             OutAnchor( pBookmark->GetName() );
 
-        if( ++nBkmkTabPos >= pDoc->getBookmarks().Count() )
-            nBkmkTabPos = USHRT_MAX;
+        if( ++nBkmkTabPos >= pMarkAccess->getMarksCount() )
+            nBkmkTabPos = -1;
         else
-            pBookmark = pDoc->getBookmarks()[ nBkmkTabPos ];
+            pBookmark = (pMarkAccess->getMarksBegin() + nBkmkTabPos)->get();
     }
 
     sal_uInt16 nPos;
@@ -1157,7 +1159,7 @@ void SwHTMLWriter::OutBackground( const SvxBrushItem *pBrushItem,
     if( rBackColor.GetColor() != COL_TRANSPARENT )
     {
         ByteString sOut( ' ' );
-        (sOut += sHTML_O_bgcolor) += '=';
+        (sOut += OOO_STRING_SVTOOLS_HTML_O_bgcolor) += '=';
         Strm() << sOut.GetBuffer();
         HTMLOutFuncs::Out_Color( Strm(), rBackColor, eDestEnc);
     }
@@ -1207,7 +1209,7 @@ void SwHTMLWriter::OutBackground( const SvxBrushItem *pBrushItem,
     {
         ByteString sOut( ' ' );
         String s( URIHelper::simpleNormalizedMakeRelative( GetBaseURL(), *pLink));
-        (sOut += sHTML_O_background) += "=\"";
+        (sOut += OOO_STRING_SVTOOLS_HTML_O_background) += "=\"";
         Strm() << sOut.GetBuffer();
         HTMLOutFuncs::Out_String( Strm(), s, eDestEnc, &aNonConvertableCharacters ) << '\"';
     }
@@ -1247,7 +1249,7 @@ void SwHTMLWriter::OutLanguage( LanguageType nLang )
     if( LANGUAGE_DONTKNOW != nLang )
     {
         ByteString sOut( ' ' );
-        (sOut += sHTML_O_lang) += "=\"";
+        (sOut += OOO_STRING_SVTOOLS_HTML_O_lang) += "=\"";
         Strm() << sOut.GetBuffer();
         HTMLOutFuncs::Out_String( Strm(), MsLangId::convertLanguageToIsoString(nLang),
                                   eDestEnc, &aNonConvertableCharacters ) << '"';
@@ -1295,7 +1297,7 @@ void SwHTMLWriter::OutDirection( sal_uInt16 nDir )
     if( pValue != 0 )
     {
         ByteString sOut( ' ' );
-        (((sOut += sHTML_O_dir) += "=\"") += pValue) += '\"';
+        (((sOut += OOO_STRING_SVTOOLS_HTML_O_dir) += "=\"") += pValue) += '\"';
         Strm() << sOut.GetBuffer();
     }
 }
@@ -1407,7 +1409,7 @@ HTMLSaveData::~HTMLSaveData()
     rWrt.pCurPam = pOldPam;
     rWrt.SetEndPaM( pOldEnd );
     rWrt.bWriteAll = bOldWriteAll;
-    rWrt.nBkmkTabPos = bOldWriteAll ? rWrt.FindPos_Bkmk( *pOldPam->GetPoint() ) : USHRT_MAX;
+    rWrt.nBkmkTabPos = bOldWriteAll ? rWrt.FindPos_Bkmk( *pOldPam->GetPoint() ) : -1;
     rWrt.nLastParaToken = 0;
     rWrt.nDefListLvl = nOldDefListLvl;
     rWrt.nDirection = nOldDirection;

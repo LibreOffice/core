@@ -56,12 +56,13 @@
 #include <swevent.hxx>
 #include <doc.hxx>
 #include <unocrsr.hxx>
-#include <bookmrk.hxx>
+#include <IMark.hxx>
 #include <unoprnms.hxx>
 #include <docsh.hxx>
 #include <swunodef.hxx>
 #include <swmodule.hxx>
 #include <svtools/smplhint.hxx>
+#include <svtools/macitem.hxx>
 
 #include <svx/acorrcfg.hxx>
 
@@ -323,7 +324,7 @@ sal_Int64 SAL_CALL SwXAutoTextGroup::getSomething( const uno::Sequence< sal_Int8
   -----------------------------------------------------------------------*/
 SwXAutoTextGroup::SwXAutoTextGroup(const OUString& rName,
             SwGlossaries*   pGlos) :
-    aPropSet(aSwMapProvider.GetPropertyMap(PROPERTY_MAP_AUTO_TEXT_GROUP)),
+    pPropSet(aSwMapProvider.GetPropertySet(PROPERTY_MAP_AUTO_TEXT_GROUP)),
     pGlossaries(pGlos),
     sName(rName),
     m_sGroupName(rName)
@@ -398,10 +399,8 @@ void SwXAutoTextGroup::renameByName(const OUString& aElementName,
     else
         throw uno::RuntimeException();
 }
-/* -----------------04.05.99 11:57-------------------
- *
- * --------------------------------------------------*/
-sal_Bool lcl_CopySelToDoc( SwDoc* pInsDoc, OTextCursorHelper* pxCursor, SwXTextRange* pxRange )
+
+sal_Bool lcl_CopySelToDoc( SwDoc* pInsDoc, OTextCursorHelper* pxCursor, SwXTextRange* pxRange)
 {
     ASSERT( pInsDoc, "kein Ins.Dokument"  );
 
@@ -421,10 +420,10 @@ sal_Bool lcl_CopySelToDoc( SwDoc* pInsDoc, OTextCursorHelper* pxCursor, SwXTextR
         }
         else
         {
-            SwBookmark* pBkm = pxRange->GetBookmark();
-            if(pBkm && pBkm->GetOtherBookmarkPos())
+            const ::sw::mark::IMark* const pBkmk = pxRange->GetBookmark();
+            if(pBkmk && pBkmk->IsExpanded())
             {
-                SwPaM aTmp(*pBkm->GetOtherBookmarkPos(), pBkm->GetBookmarkPos());
+                SwPaM aTmp(pBkmk->GetOtherMarkPos(), pBkmk->GetMarkPos());
                 bRet |= (true == pxRange->GetDoc()->Copy(aTmp, aPos));
             }
         }
@@ -722,7 +721,7 @@ sal_Bool SwXAutoTextGroup::hasByName(const OUString& rName)
 uno::Reference< beans::XPropertySetInfo >  SwXAutoTextGroup::getPropertySetInfo(void)
     throw( uno::RuntimeException )
 {
-    static uno::Reference< beans::XPropertySetInfo >  xRet = aPropSet.getPropertySetInfo();
+    static uno::Reference< beans::XPropertySetInfo >  xRet = pPropSet->getPropertySetInfo();
     return xRet;
 }
 /*-- 09.02.00 15:33:31---------------------------------------------------
@@ -734,16 +733,15 @@ void SwXAutoTextGroup::setPropertyValue(
          lang::IllegalArgumentException, lang::WrappedTargetException, uno::RuntimeException)
 {
     ::vos::OGuard aGuard(Application::GetSolarMutex());
-    const SfxItemPropertyMap*   pMap = SfxItemPropertyMap::GetByName(
-                                    aPropSet.getPropertyMap(), rPropertyName);
+    const SfxItemPropertySimpleEntry*   pEntry = pPropSet->getPropertyMap()->getByName( rPropertyName );
 
-    if(!pMap)
+    if(!pEntry)
         throw beans::UnknownPropertyException();
 
     SwTextBlocks* pGlosGroup = pGlossaries ? pGlossaries->GetGroupDoc(m_sGroupName, sal_False) : 0;
     if(!pGlosGroup || pGlosGroup->GetError())
         throw uno::RuntimeException();
-    switch(pMap->nWID)
+    switch(pEntry->nWID)
     {
         case  WID_GROUP_TITLE:
         {
@@ -767,17 +765,16 @@ uno::Any SwXAutoTextGroup::getPropertyValue(const OUString& rPropertyName)
     throw( beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException )
 {
     ::vos::OGuard aGuard(Application::GetSolarMutex());
-    const SfxItemPropertyMap*   pMap = SfxItemPropertyMap::GetByName(
-                                    aPropSet.getPropertyMap(), rPropertyName);
+    const SfxItemPropertySimpleEntry*   pEntry = pPropSet->getPropertyMap()->getByName( rPropertyName);
 
-    if(!pMap)
+    if(!pEntry)
         throw beans::UnknownPropertyException();
     SwTextBlocks* pGlosGroup = pGlossaries ? pGlossaries->GetGroupDoc(m_sGroupName, sal_False) : 0;
     if(!pGlosGroup  || pGlosGroup->GetError())
         throw uno::RuntimeException();
 
     uno::Any aAny;
-    switch(pMap->nWID)
+    switch(pEntry->nWID)
     {
         case  WID_GROUP_PATH:
             aAny <<= OUString(pGlosGroup->GetFileName());
@@ -1134,11 +1131,11 @@ void SwXAutoTextEntry::applyTo(const uno::Reference< text::XTextRange > & xTextR
     SwPaM* pInsertPaM = 0;
     if(pRange)
     {
-        SwBookmark* pBkm = pRange->GetBookmark();
-        if(pBkm->GetOtherBookmarkPos())
-            pInsertPaM = new SwPaM(*pBkm->GetOtherBookmarkPos(), pBkm->GetBookmarkPos());
+        const ::sw::mark::IMark* const pBkmk = pRange->GetBookmark();
+        if(pBkmk->IsExpanded())
+            pInsertPaM = new SwPaM(pBkmk->GetOtherMarkPos(), pBkmk->GetMarkPos());
         else
-            pInsertPaM = new SwPaM(pBkm->GetBookmarkPos());
+            pInsertPaM = new SwPaM(pBkmk->GetMarkPos());
     }
     else
     {

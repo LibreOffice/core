@@ -124,9 +124,9 @@ SV_IMPL_PTRARR(PropValDataArr, PropValDataPtr)
 #define WID_BEGIN_NOTICE                10
 #define WID_ANCHOR_CHARACTER_STYLE      11
 
-const SfxItemPropertyMap* GetFootnoteMap()
+const SfxItemPropertySet* GetFootnoteSet()
 {
-    static SfxItemPropertyMap aFootnoteMap_Impl[] =
+    static SfxItemPropertyMapEntry aFootnoteMap_Impl[] =
     {
         { SW_PROP_NAME(UNO_NAME_ANCHOR_CHAR_STYLE_NAME),WID_ANCHOR_CHARACTER_STYLE, &::getCppuType((const OUString*)0), PROPERTY_NONE,     0},
         { SW_PROP_NAME(UNO_NAME_BEGIN_NOTICE),          WID_BEGIN_NOTICE,       &::getCppuType((const OUString*)0), PROPERTY_NONE,     0},
@@ -142,11 +142,12 @@ const SfxItemPropertyMap* GetFootnoteMap()
         { SW_PROP_NAME(UNO_NAME_SUFFIX),                WID_SUFFIX,             &::getCppuType((const OUString*)0), PROPERTY_NONE,     0},
         {0,0,0,0,0,0}
     };
-    return aFootnoteMap_Impl;
+    static SfxItemPropertySet aFootnoteSet_Impl(aFootnoteMap_Impl);
+    return &aFootnoteSet_Impl;
 }
-const SfxItemPropertyMap* GetEndnoteMap()
+const SfxItemPropertySet* GetEndnoteSet()
 {
-    static SfxItemPropertyMap aEndnoteMap_Impl[] =
+    static SfxItemPropertyMapEntry aEndnoteMap_Impl[] =
     {
         { SW_PROP_NAME(UNO_NAME_ANCHOR_CHAR_STYLE_NAME),WID_ANCHOR_CHARACTER_STYLE, &::getCppuType((const OUString*)0), PROPERTY_NONE,     0},
         { SW_PROP_NAME(UNO_NAME_CHAR_STYLE_NAME),       WID_CHARACTER_STYLE,    &::getCppuType((const OUString*)0), PROPERTY_NONE,     0},
@@ -158,11 +159,12 @@ const SfxItemPropertyMap* GetEndnoteMap()
         { SW_PROP_NAME(UNO_NAME_SUFFIX),                WID_SUFFIX,     &::getCppuType((const OUString*)0), PROPERTY_NONE,     0},
         {0,0,0,0,0,0}
     };
-    return aEndnoteMap_Impl;
+    static SfxItemPropertySet aEndnoteSet_Impl(aEndnoteMap_Impl);
+    return &aEndnoteSet_Impl;
 }
-const SfxItemPropertyMap* GetNumberingRulesMap()
+const SfxItemPropertySet* GetNumberingRulesSet()
 {
-    static SfxItemPropertyMap aNumberingRulesMap_Impl[] =
+    static SfxItemPropertyMapEntry aNumberingRulesMap_Impl[] =
     {
         { SW_PROP_NAME(UNO_NAME_IS_ABSOLUTE_MARGINS),       WID_IS_ABS_MARGINS, &::getBooleanCppuType(),            PROPERTY_NONE,     0},
         { SW_PROP_NAME(UNO_NAME_IS_AUTOMATIC),              WID_IS_AUTOMATIC,   &::getBooleanCppuType(),            PROPERTY_NONE,     0},
@@ -172,7 +174,8 @@ const SfxItemPropertyMap* GetNumberingRulesMap()
         { SW_PROP_NAME(UNO_NAME_DEFAULT_LIST_ID),           WID_DEFAULT_LIST_ID, &::getCppuType((const OUString*)0), PropertyAttribute::READONLY, 0},
         {0,0,0,0,0,0}
     };
-    return aNumberingRulesMap_Impl;
+    static SfxItemPropertySet  aNumberingRulesSet_Impl( aNumberingRulesMap_Impl );
+    return &aNumberingRulesSet_Impl;
 }
 #define WID_NUM_ON                      0
 #define WID_SEPARATOR_INTERVAL          1
@@ -186,9 +189,9 @@ const SfxItemPropertyMap* GetNumberingRulesMap()
 #define WID_COUNT_LINES_IN_FRAMES       9
 #define WID_RESTART_AT_EACH_PAGE        10
 
-const SfxItemPropertyMap* GetLineNumberingMap()
+const SfxItemPropertySet* GetLineNumberingSet()
 {
-    static SfxItemPropertyMap aLineNumberingMap_Impl[] =
+    static SfxItemPropertyMapEntry aLineNumberingMap_Impl[] =
     {
         { SW_PROP_NAME(UNO_NAME_CHAR_STYLE_NAME),         WID_CHARACTER_STYLE,    &::getCppuType((const OUString*)0), PROPERTY_NONE,     0},
         { SW_PROP_NAME(UNO_NAME_COUNT_EMPTY_LINES),       WID_COUNT_EMPTY_LINES , &::getBooleanCppuType(),PROPERTY_NONE,     0},
@@ -203,7 +206,8 @@ const SfxItemPropertyMap* GetLineNumberingMap()
         { SW_PROP_NAME(UNO_NAME_SEPARATOR_INTERVAL),      WID_SEPARATOR_INTERVAL, &::getCppuType((const sal_Int16*)0),PROPERTY_NONE,     0},
         {0,0,0,0,0,0}
     };
-    return aLineNumberingMap_Impl;
+    static SfxItemPropertySet aLineNumberingSet_Impl(aLineNumberingMap_Impl);
+    return &aLineNumberingSet_Impl;
 }
 
 /* -----------------05.05.98 08:30-------------------
@@ -332,7 +336,7 @@ Sequence< OUString > SwXFootnoteProperties::getSupportedServiceNames(void) throw
   -----------------------------------------------------------------------*/
 SwXFootnoteProperties::SwXFootnoteProperties(SwDoc* pDc) :
     pDoc(pDc),
-    _pMap(GetFootnoteMap())
+    m_pPropertySet(GetFootnoteSet())
 {
 }
 /*-- 14.12.98 14:03:20---------------------------------------------------
@@ -348,7 +352,7 @@ SwXFootnoteProperties::~SwXFootnoteProperties()
 uno::Reference< beans::XPropertySetInfo >  SwXFootnoteProperties::getPropertySetInfo(void)
                                                                 throw( uno::RuntimeException )
 {
-    static uno::Reference< beans::XPropertySetInfo >  aRef = new SfxItemPropertySetInfo( _pMap );
+    static uno::Reference< beans::XPropertySetInfo >  aRef = m_pPropertySet->getPropertySetInfo();
     return aRef;
 }
 /*-- 14.12.98 14:03:20---------------------------------------------------
@@ -360,14 +364,13 @@ void SwXFootnoteProperties::setPropertyValue(const OUString& rPropertyName, cons
     vos::OGuard aGuard(Application::GetSolarMutex());
     if(pDoc)
     {
-        const SfxItemPropertyMap*   pMap = SfxItemPropertyMap::GetByName(
-                                                        _pMap, rPropertyName);
-        if(pMap)
+        const SfxItemPropertySimpleEntry*  pEntry = m_pPropertySet->getPropertyMap()->getByName( rPropertyName );
+        if(pEntry)
         {
-            if ( pMap->nFlags & PropertyAttribute::READONLY)
+            if ( pEntry->nFlags & PropertyAttribute::READONLY)
                 throw PropertyVetoException( OUString ( RTL_CONSTASCII_USTRINGPARAM ( "Property is read-only: " ) ) + rPropertyName, static_cast < cppu::OWeakObject * > ( this ) );
             SwFtnInfo aFtnInfo(pDoc->GetFtnInfo());
-            switch(pMap->nWID)
+            switch(pEntry->nWID)
             {
                 case WID_PREFIX:
                 {
@@ -440,7 +443,7 @@ void SwXFootnoteProperties::setPropertyValue(const OUString& rPropertyName, cons
                     SwCharFmt* pFmt = lcl_getCharFmt(pDoc, aValue);
                     if(pFmt)
                     {
-                        if(pMap->nWID == WID_ANCHOR_CHARACTER_STYLE)
+                        if(pEntry->nWID == WID_ANCHOR_CHARACTER_STYLE)
                             aFtnInfo.SetAnchorCharFmt(pFmt);
                         else
                             aFtnInfo.SetCharFmt(pFmt);
@@ -486,12 +489,11 @@ uno::Any SwXFootnoteProperties::getPropertyValue(const OUString& rPropertyName)
     uno::Any aRet;
     if(pDoc)
     {
-        const SfxItemPropertyMap*   pMap = SfxItemPropertyMap::GetByName(
-                                                        _pMap, rPropertyName);
-        if(pMap)
+        const SfxItemPropertySimpleEntry*  pEntry = m_pPropertySet->getPropertyMap()->getByName( rPropertyName );
+        if(pEntry)
         {
             const SwFtnInfo& rFtnInfo = pDoc->GetFtnInfo();
-            switch(pMap->nWID)
+            switch(pEntry->nWID)
             {
                 case WID_PREFIX:
                 {
@@ -558,7 +560,7 @@ uno::Any SwXFootnoteProperties::getPropertyValue(const OUString& rPropertyName)
                 {
                     String aString;
                     const SwCharFmt* pCharFmt = 0;
-                    if( pMap->nWID == WID_ANCHOR_CHARACTER_STYLE )
+                    if( pEntry->nWID == WID_ANCHOR_CHARACTER_STYLE )
                     {
                         if( rFtnInfo.GetAnchorCharFmtDep()->GetRegisteredIn() )
                             pCharFmt = rFtnInfo.GetAnchorCharFmt(*pDoc);
@@ -669,7 +671,7 @@ Sequence< OUString > SwXEndnoteProperties::getSupportedServiceNames(void) throw(
   -----------------------------------------------------------------------*/
 SwXEndnoteProperties::SwXEndnoteProperties(SwDoc* pDc) :
     pDoc(pDc),
-    _pMap(GetEndnoteMap())
+    m_pPropertySet(GetEndnoteSet())
 {
 
 }
@@ -685,7 +687,7 @@ SwXEndnoteProperties::~SwXEndnoteProperties()
   -----------------------------------------------------------------------*/
 uno::Reference< beans::XPropertySetInfo >  SwXEndnoteProperties::getPropertySetInfo(void) throw( uno::RuntimeException )
 {
-    static uno::Reference< beans::XPropertySetInfo >  aRef = new SfxItemPropertySetInfo( _pMap );
+    static uno::Reference< beans::XPropertySetInfo >  aRef = m_pPropertySet->getPropertySetInfo();
     return aRef;
 }
 /*-- 14.12.98 14:27:40---------------------------------------------------
@@ -698,14 +700,13 @@ void SwXEndnoteProperties::setPropertyValue(const OUString& rPropertyName, const
     vos::OGuard aGuard(Application::GetSolarMutex());
     if(pDoc)
     {
-        const SfxItemPropertyMap*   pMap = SfxItemPropertyMap::GetByName(
-                                                        _pMap, rPropertyName);
-        if(pMap)
+        const SfxItemPropertySimpleEntry*  pEntry = m_pPropertySet->getPropertyMap()->getByName( rPropertyName );
+        if(pEntry)
         {
-            if ( pMap->nFlags & PropertyAttribute::READONLY)
+            if ( pEntry->nFlags & PropertyAttribute::READONLY)
                 throw PropertyVetoException( OUString ( RTL_CONSTASCII_USTRINGPARAM ( "Property is read-only: " ) ) + rPropertyName, static_cast < cppu::OWeakObject * > ( this ) );
             SwEndNoteInfo aEndInfo(pDoc->GetEndNoteInfo());
-            switch(pMap->nWID)
+            switch(pEntry->nWID)
             {
                 case WID_PREFIX:
                 {
@@ -755,7 +756,7 @@ void SwXEndnoteProperties::setPropertyValue(const OUString& rPropertyName, const
                     SwCharFmt* pFmt = lcl_getCharFmt(pDoc, aValue);
                     if(pFmt)
                     {
-                        if(pMap->nWID == WID_ANCHOR_CHARACTER_STYLE)
+                        if(pEntry->nWID == WID_ANCHOR_CHARACTER_STYLE)
                             aEndInfo.SetAnchorCharFmt(pFmt);
                         else
                             aEndInfo.SetCharFmt(pFmt);
@@ -779,12 +780,11 @@ uno::Any SwXEndnoteProperties::getPropertyValue(const OUString& rPropertyName)
     uno::Any aRet;
     if(pDoc)
     {
-        const SfxItemPropertyMap*   pMap = SfxItemPropertyMap::GetByName(
-                                                        _pMap, rPropertyName);
-        if(pMap)
+        const SfxItemPropertySimpleEntry*  pEntry = m_pPropertySet->getPropertyMap()->getByName( rPropertyName );
+        if(pEntry)
         {
             const SwEndNoteInfo& rEndInfo = pDoc->GetEndNoteInfo();
-            switch(pMap->nWID)
+            switch(pEntry->nWID)
             {
                 case WID_PREFIX:
                     aRet <<= OUString(rEndInfo.GetPrefix());
@@ -832,7 +832,7 @@ uno::Any SwXEndnoteProperties::getPropertyValue(const OUString& rPropertyName)
                 {
                     String aString;
                     const SwCharFmt* pCharFmt = 0;
-                    if( pMap->nWID == WID_ANCHOR_CHARACTER_STYLE )
+                    if( pEntry->nWID == WID_ANCHOR_CHARACTER_STYLE )
                     {
                         if( rEndInfo.GetAnchorCharFmtDep()->GetRegisteredIn() )
                             pCharFmt = rEndInfo.GetAnchorCharFmt(*pDoc);
@@ -926,7 +926,7 @@ Sequence< OUString > SwXLineNumberingProperties::getSupportedServiceNames(void) 
   -----------------------------------------------------------------------*/
 SwXLineNumberingProperties::SwXLineNumberingProperties(SwDoc* pDc) :
     pDoc(pDc),
-    _pMap(GetLineNumberingMap())
+    m_pPropertySet(GetLineNumberingSet())
 {
 
 }
@@ -942,7 +942,7 @@ SwXLineNumberingProperties::~SwXLineNumberingProperties()
   -----------------------------------------------------------------------*/
 uno::Reference< beans::XPropertySetInfo >  SwXLineNumberingProperties::getPropertySetInfo(void) throw( uno::RuntimeException )
 {
-    static uno::Reference< beans::XPropertySetInfo >  aRef = new SfxItemPropertySetInfo( _pMap );
+    static uno::Reference< beans::XPropertySetInfo >  aRef = m_pPropertySet->getPropertySetInfo();
     return aRef;
 }
 /*-- 14.12.98 14:33:37---------------------------------------------------
@@ -956,14 +956,13 @@ void SwXLineNumberingProperties::setPropertyValue(
     vos::OGuard aGuard(Application::GetSolarMutex());
     if(pDoc)
     {
-        const SfxItemPropertyMap*   pMap = SfxItemPropertyMap::GetByName(
-                                                        _pMap, rPropertyName);
-        if(pMap)
+        const SfxItemPropertySimpleEntry*  pEntry = m_pPropertySet->getPropertyMap()->getByName( rPropertyName );
+        if(pEntry)
         {
-            if ( pMap->nFlags & PropertyAttribute::READONLY)
+            if ( pEntry->nFlags & PropertyAttribute::READONLY)
                 throw PropertyVetoException( OUString ( RTL_CONSTASCII_USTRINGPARAM ( "Property is read-only: " ) ) + rPropertyName, static_cast < cppu::OWeakObject * > ( this ) );
             SwLineNumberInfo  aInfo(pDoc->GetLineNumberInfo());
-            switch(pMap->nWID)
+            switch(pEntry->nWID)
             {
                 case WID_NUM_ON:
                 {
@@ -1078,12 +1077,11 @@ Any SwXLineNumberingProperties::getPropertyValue(const OUString& rPropertyName)
     Any aRet;
     if(pDoc)
     {
-        const SfxItemPropertyMap*   pMap = SfxItemPropertyMap::GetByName(
-                                                        _pMap, rPropertyName);
-        if(pMap)
+        const SfxItemPropertySimpleEntry*  pEntry = m_pPropertySet->getPropertyMap()->getByName( rPropertyName );
+        if(pEntry)
         {
             const SwLineNumberInfo& rInfo = pDoc->GetLineNumberInfo();
-            switch(pMap->nWID)
+            switch(pEntry->nWID)
             {
                 case WID_NUM_ON:
                 {
@@ -1268,7 +1266,7 @@ SwXNumberingRules::SwXNumberingRules(const SwNumRule& rRule) :
     pDoc(0),
     pDocShell(0),
     pNumRule(new SwNumRule(rRule)),
-    _pMap(GetNumberingRulesMap()),
+    m_pPropertySet(GetNumberingRulesSet()),
     bOwnNumRuleCreated(TRUE)
 {
     sal_uInt16 i;
@@ -1300,7 +1298,7 @@ SwXNumberingRules::SwXNumberingRules(SwDocShell& rDocSh) :
     pDoc(0),
     pDocShell(&rDocSh),
     pNumRule(0),
-    _pMap(GetNumberingRulesMap()),
+    m_pPropertySet(GetNumberingRulesSet()),
     bOwnNumRuleCreated(FALSE)
 {
     pDocShell->GetDoc()->GetPageDescFromPool(RES_POOLPAGE_STANDARD)->Add(this);
@@ -1312,7 +1310,7 @@ SwXNumberingRules::SwXNumberingRules(SwDoc& rDoc) :
     pDoc(&rDoc),
     pDocShell(0),
     pNumRule(0),
-    _pMap(GetNumberingRulesMap()),
+    m_pPropertySet(GetNumberingRulesSet()),
     bOwnNumRuleCreated(FALSE)
 {
     rDoc.GetPageDescFromPool(RES_POOLPAGE_STANDARD)->Add(this);
@@ -2256,7 +2254,7 @@ void SwXNumberingRules::SetNumberingRuleByIndex(
 uno::Reference< XPropertySetInfo > SwXNumberingRules::getPropertySetInfo()
     throw(RuntimeException)
 {
-    static uno::Reference< beans::XPropertySetInfo >  aRef = new SfxItemPropertySetInfo( _pMap );
+    static uno::Reference< beans::XPropertySetInfo >  aRef = m_pPropertySet->getPropertySetInfo();
     return aRef;
 }
 /*-- 19.07.00 07:49:17---------------------------------------------------
@@ -2536,7 +2534,7 @@ SwXTextColumns::SwXTextColumns(sal_uInt16 nColCount) :
     nReference(0),
     bIsAutomaticWidth(sal_True),
     nAutoDistance(0),
-    _pMap(aSwMapProvider.GetPropertyMap(PROPERTY_MAP_TEXT_COLUMS)),
+    m_pPropSet(aSwMapProvider.GetPropertySet(PROPERTY_MAP_TEXT_COLUMS)),
     nSepLineWidth(0),
     nSepLineColor(0), //black
     nSepLineHeightRelative(100),//full height
@@ -2553,7 +2551,7 @@ SwXTextColumns::SwXTextColumns(const SwFmtCol& rFmtCol) :
     nReference(0),
     aTextColumns(rFmtCol.GetNumCols()),
     bIsAutomaticWidth(rFmtCol.IsOrtho()),
-    _pMap(aSwMapProvider.GetPropertyMap(PROPERTY_MAP_TEXT_COLUMS))
+    m_pPropSet(aSwMapProvider.GetPropertySet(PROPERTY_MAP_TEXT_COLUMS))
 {
     USHORT nItemGutterWidth = rFmtCol.GetGutterWidth();
     nAutoDistance = bIsAutomaticWidth ?
@@ -2663,7 +2661,7 @@ void SwXTextColumns::setColumns(const uno::Sequence< TextColumn >& rColumns)
   -----------------------------------------------------------------------*/
 uno::Reference< XPropertySetInfo > SwXTextColumns::getPropertySetInfo(  ) throw(RuntimeException)
 {
-    static uno::Reference< beans::XPropertySetInfo >  aRef = new SfxItemPropertySetInfo( _pMap );
+    static uno::Reference< beans::XPropertySetInfo >  aRef = m_pPropSet->getPropertySetInfo();
     return aRef;
 }
 /*-- 25.10.00 10:15:39---------------------------------------------------
@@ -2673,14 +2671,13 @@ void SwXTextColumns::setPropertyValue( const OUString& rPropertyName, const Any&
         throw(UnknownPropertyException, PropertyVetoException, IllegalArgumentException,
             WrappedTargetException, RuntimeException)
 {
-    const SfxItemPropertyMap*   pMap = SfxItemPropertyMap::GetByName(
-                                                    _pMap, rPropertyName);
-    if (!pMap)
+    const SfxItemPropertySimpleEntry*  pEntry = m_pPropSet->getPropertyMap()->getByName( rPropertyName );
+    if (!pEntry)
         throw UnknownPropertyException(OUString ( RTL_CONSTASCII_USTRINGPARAM ( "Unknown property: " ) ) + rPropertyName, static_cast < cppu::OWeakObject * > ( this ) );
-    if ( pMap->nFlags & PropertyAttribute::READONLY)
+    if ( pEntry->nFlags & PropertyAttribute::READONLY)
         throw PropertyVetoException( OUString ( RTL_CONSTASCII_USTRINGPARAM ( "Property is read-only: " ) ) + rPropertyName, static_cast < cppu::OWeakObject * > ( this ) );
 
-    switch(pMap->nWID)
+    switch(pEntry->nWID)
     {
         case WID_TXTCOL_LINE_WIDTH:
         {
@@ -2746,13 +2743,12 @@ void SwXTextColumns::setPropertyValue( const OUString& rPropertyName, const Any&
 Any SwXTextColumns::getPropertyValue( const OUString& rPropertyName )
         throw(UnknownPropertyException, WrappedTargetException, RuntimeException)
 {
-    const SfxItemPropertyMap*   pMap = SfxItemPropertyMap::GetByName(
-                                                    _pMap, rPropertyName);
-    if (!pMap)
+    const SfxItemPropertySimpleEntry*  pEntry = m_pPropSet->getPropertyMap()->getByName( rPropertyName );
+    if (!pEntry)
         throw UnknownPropertyException(OUString ( RTL_CONSTASCII_USTRINGPARAM ( "Unknown property: " ) ) + rPropertyName, static_cast < cppu::OWeakObject * > ( this ) );
 
     Any aRet;
-    switch(pMap->nWID)
+    switch(pEntry->nWID)
     {
         case WID_TXTCOL_LINE_WIDTH:
             aRet <<= static_cast < sal_Int32 >(TWIP_TO_MM100(nSepLineWidth));

@@ -265,7 +265,7 @@ SwTemplateDlg::SwTemplateDlg(Window*            pParent,
             AddTabPage(TP_COLUMN,       SwColumnPage::Create,
                                         SwColumnPage::GetRanges );
 
-            AddTabPage( TP_MACRO_ASSIGN, SfxMacroTabPage::Create, 0);
+            AddTabPage( TP_MACRO_ASSIGN, pFact->GetTabPageCreatorFunc(RID_SVXPAGE_MACROASSIGN), 0);
 
             // Auskommentiert wegen Bug #45776 (per default keine Breite&Groesse in Rahmenvorlagen)
 /*          SwFmtFrmSize aSize( (const SwFmtFrmSize&)rBase.
@@ -566,11 +566,14 @@ void SwTemplateDlg::PageCreated( USHORT nId, SfxTabPage &rPage )
             break;
 
         case TP_MACRO_ASSIGN:
-            SwMacroAssignDlg::AddEvents( (SfxMacroTabPage&)rPage, MACASSGN_ALLFRM);
-            if ( pWrtShell && pWrtShell->GetView().GetDocShell()
-                && pWrtShell->GetView().GetDocShell()->GetFrame() && pWrtShell->GetView().GetDocShell()->GetFrame()->GetFrame() )
-                rPage.SetFrame( pWrtShell->GetView().GetDocShell()->GetFrame()->GetFrame()->GetFrameInterface() );
+        {
+            SfxAllItemSet aNewSet(*aSet.GetPool());
+            aNewSet.Put( SwMacroAssignDlg::AddEvents(MACASSGN_ALLFRM) );
+            if ( pWrtShell )
+                rPage.SetFrame( pWrtShell->GetView().GetViewFrame()->GetFrame()->GetFrameInterface() );
+            rPage.PageCreated(aNewSet);
             break;
+        }
 
         case RID_SVXPAGE_PICK_NUM:
             {

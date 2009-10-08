@@ -182,13 +182,13 @@ USHORT SwDoc::GetCurTOXMark( const SwPosition& rPos,
      Beschreibung: Marke loeschen
  --------------------------------------------------------------------*/
 
-void SwDoc::Delete( SwTOXMark* pTOXMark )
+void SwDoc::Delete( const SwTOXMark* pTOXMark )
 {
     // hole den TextNode und
-    SwTxtTOXMark* pTxtTOXMark = pTOXMark->GetTxtTOXMark();
+    const SwTxtTOXMark* pTxtTOXMark = pTOXMark->GetTxtTOXMark();
     ASSERT( pTxtTOXMark, "Kein TxtTOXMark, kann nicht geloescht werden" );
 
-    SwTxtNode& rTxtNd = (SwTxtNode&)pTxtTOXMark->GetTxtNode();
+    SwTxtNode& rTxtNd = const_cast<SwTxtNode&>(pTxtTOXMark->GetTxtNode());
     ASSERT( rTxtNd.GetpSwpHints(), "kann nicht geloescht werden" );
 
     if( DoesUndo() )
@@ -202,12 +202,12 @@ void SwDoc::Delete( SwTOXMark* pTOXMark )
 
         SwRegHistory aRHst( rTxtNd, pUndo->GetHistory() );
         rTxtNd.GetpSwpHints()->Register( &aRHst );
-        rTxtNd.Delete( pTxtTOXMark, TRUE );
+        rTxtNd.Delete( const_cast<SwTxtTOXMark*>( pTxtTOXMark ), TRUE );
         if( rTxtNd.GetpSwpHints() )
             rTxtNd.GetpSwpHints()->DeRegister();
     }
     else
-        rTxtNd.Delete( pTxtTOXMark, TRUE );
+        rTxtNd.Delete( const_cast<SwTxtTOXMark*>( pTxtTOXMark ), TRUE );
     SetModified();
 }
 

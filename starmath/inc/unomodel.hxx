@@ -59,6 +59,9 @@ public:
 
 ////////////////////////////////////////////////////////////
 
+#define A2OU(pText)     rtl::OUString::createFromAscii(pText)
+
+//-----------------------------------------------------------------------------
 class SmModel : public SfxBaseModel,
                 public comphelper::PropertySetHelper,
                 public com::sun::star::lang::XServiceInfo,
@@ -93,15 +96,11 @@ public:
     virtual void SAL_CALL render( sal_Int32 nRenderer, const ::com::sun::star::uno::Any& rSelection, const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& rxOptions ) throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException);
 
     //XServiceInfo
-    virtual rtl::OUString SAL_CALL getImplementationName(void)
-        throw( ::com::sun::star::uno::RuntimeException );
-    virtual BOOL SAL_CALL supportsService(const rtl::OUString& ServiceName)
-            throw( ::com::sun::star::uno::RuntimeException );
-    virtual ::com::sun::star::uno::Sequence< rtl::OUString > SAL_CALL getSupportedServiceNames(void)
-            throw( ::com::sun::star::uno::RuntimeException );
+    virtual rtl::OUString SAL_CALL getImplementationName(void) throw( ::com::sun::star::uno::RuntimeException );
+    virtual BOOL SAL_CALL supportsService(const rtl::OUString& ServiceName) throw( ::com::sun::star::uno::RuntimeException );
+    virtual ::com::sun::star::uno::Sequence< rtl::OUString > SAL_CALL getSupportedServiceNames(void) throw( ::com::sun::star::uno::RuntimeException );
 
-    virtual void SAL_CALL setParent( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& xParent )
-            throw( ::com::sun::star::lang::NoSupportException, ::com::sun::star::uno::RuntimeException );
+    virtual void SAL_CALL setParent( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& xParent ) throw( ::com::sun::star::lang::NoSupportException, ::com::sun::star::uno::RuntimeException );
 
     static ::com::sun::star::uno::Sequence< rtl::OUString > getSupportedServiceNames_Static();
     static ::rtl::OUString getImplementationName_Static();

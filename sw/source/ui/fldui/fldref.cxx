@@ -39,7 +39,7 @@
 
 #include "swtypes.hxx"
 #include <view.hxx>
-#include <bookmrk.hxx>
+#include <IMark.hxx>
 #include <expfld.hxx>
 #include <swmodule.hxx>
 #ifndef _FLDREF_HXX
@@ -59,7 +59,8 @@
 #endif
 // --> OD 2007-11-14 #i83479#
 #include <SwNodeNum.hxx>
-#include <IDocumentBookmarkAccess.hxx>
+#include <IDocumentMarkAccess.hxx>
+#include <ndtxt.hxx>
 // <--
 
 // sw/inc/expfld.hxx
@@ -78,6 +79,8 @@ USHORT  nFldDlgFmtSel       = 0;
 
 #define USER_DATA_VERSION_1 "1"
 #define USER_DATA_VERSION USER_DATA_VERSION_1
+
+
 /*--------------------------------------------------------------------
     Beschreibung:
  --------------------------------------------------------------------*/
@@ -544,11 +547,14 @@ void SwFldRefPage::UpdateSubType()
         {
             aSelectionLB.SetStyle(aSelectionLB.GetStyle()|WB_SORT);
             // alle Textmarken besorgen
-            USHORT nCnt = pSh->GetBookmarkCnt(TRUE);
-            for( USHORT n = 0; n < nCnt; ++n )
+            IDocumentMarkAccess* const pMarkAccess = pSh->getIDocumentMarkAccess();
+            for(IDocumentMarkAccess::const_iterator_t ppMark = pMarkAccess->getBookmarksBegin();
+                ppMark != pMarkAccess->getBookmarksEnd();
+                ppMark++)
             {
-                const SwBookmark& rBkmk = pSh->GetBookmark( n, TRUE );
-                aSelectionLB.InsertEntry( rBkmk.GetName() );
+                const ::sw::mark::IMark* pBkmk = ppMark->get();
+                if(IDocumentMarkAccess::BOOKMARK == IDocumentMarkAccess::GetType(*pBkmk))
+                    aSelectionLB.InsertEntry( pBkmk->GetName() );
             }
             if (IsFldEdit())
                 sOldSel = pRefFld->GetSetRefName();
@@ -952,16 +958,10 @@ BOOL SwFldRefPage::FillItemSet(SfxItemSet& )
                 pSh->getIDocumentOutlineNodesAccess()->getOutlineNodes( maOutlineNodes );
                 if ( nOutlIdx < maOutlineNodes.size() )
                 {
-                    IDocumentBookmarkAccess* pIDoc = pSh->getIDocumentBookmarkAccess();
-                    aName = pIDoc->getCrossRefBookmarkName(
-                                    *(maOutlineNodes[nOutlIdx]),
-                                    IDocumentBookmarkAccess::HEADING );
-                    if ( aName.Len() == 0 )
-                    {
-                        aName = pIDoc->makeCrossRefBookmark(
-                                    *(maOutlineNodes[nOutlIdx]),
-                                    IDocumentBookmarkAccess::HEADING );
-                    }
+                    ::sw::mark::IMark const * const pMark = pSh->getIDocumentMarkAccess()->getMarkForTxtNode(
+                        *(maOutlineNodes[nOutlIdx]),
+                        IDocumentMarkAccess::CROSSREF_HEADING_BOOKMARK);
+                    aName = pMark->GetName();
                     nTypeId = TYP_GETREFFLD;
                     nSubType = REF_BOOKMARK;
                 }
@@ -978,16 +978,10 @@ BOOL SwFldRefPage::FillItemSet(SfxItemSet& )
                 pSh->getIDocumentListItemsAccess()->getNumItems( maNumItems );
                 if ( nNumItemIdx < maNumItems.size() )
                 {
-                    IDocumentBookmarkAccess* pIDoc = pSh->getIDocumentBookmarkAccess();
-                    aName = pIDoc->getCrossRefBookmarkName(
+                    ::sw::mark::IMark const * const pMark = pSh->getIDocumentMarkAccess()->getMarkForTxtNode(
                         *(maNumItems[nNumItemIdx]->GetTxtNode()),
-                        IDocumentBookmarkAccess::NUMITEM );
-                    if ( aName.Len() == 0 )
-                    {
-                        aName = pIDoc->makeCrossRefBookmark(
-                            *(maNumItems[nNumItemIdx]->GetTxtNode()),
-                            IDocumentBookmarkAccess::NUMITEM );
-                    }
+                        IDocumentMarkAccess::CROSSREF_NUMITEM_BOOKMARK);
+                    aName = pMark->GetName();
                     nTypeId = TYP_GETREFFLD;
                     nSubType = REF_BOOKMARK;
                 }

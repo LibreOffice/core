@@ -52,7 +52,7 @@
 #include <IDocumentSettingAccess.hxx>
 #include <viewopt.hxx>  // SwViewOptions
 
-#include <bookmrk.hxx>
+#include <IMark.hxx>
 #include <pam.hxx>
 #include <doc.hxx>
 
@@ -769,9 +769,9 @@ void SwHolePortion::HandlePortion( SwPortionHandler& rPH ) const
     rPH.Text( GetLen(), GetWhichPor() );
 }
 
-void SwFieldMarkPortion::Paint( const SwTxtPaintInfo & ) const
+void SwFieldMarkPortion::Paint( const SwTxtPaintInfo & rInf) const
 {
-//  SwTxtPortion::Paint(rInf);
+    SwTxtPortion::Paint(rInf);
 }
 
 sal_Bool SwFieldMarkPortion::Format( SwTxtFormatInfo & )
@@ -782,19 +782,21 @@ sal_Bool SwFieldMarkPortion::Format( SwTxtFormatInfo & )
 }
 
 
-void SwFieldFormPortion::Paint( const SwTxtPaintInfo &rInf ) const
+//FIXME Fieldbk
+//void SwFieldFormPortion::Paint( const SwTxtPaintInfo& rInf ) const
+void SwFieldFormPortion::Paint( const SwTxtPaintInfo& ) const
 {
-//  SwTxtPortion::Paint(rInf);
-    SwTxtNode *pNd=const_cast<SwTxtNode*>(rInf.GetTxtFrm()->GetTxtNode());
-    const SwDoc *doc=pNd->GetDoc();
-    SwIndex aIndex( pNd, rInf.GetIdx() );
-    SwPosition aPosition(*pNd, aIndex);
-    SwFieldBookmark *pBM=doc->getFormFieldBookmarkFor(aPosition);
-    ASSERT(pBM!=NULL, "Where is my form field bookmark???");
-    bool checked=(pBM!=NULL?pBM->IsChecked():false);
-    rInf.DrawCheckBox( *this , checked);
-//    const XubString aTxt = XubString::CreateFromAscii("[ ]");
-//    rInf.DrawText( aTxt, *this, 0, aTxt.Len(), false );
+//    SwTxtNode *pNd=const_cast<SwTxtNode*>(rInf.GetTxtFrm()->GetTxtNode());
+//    const SwDoc *doc=pNd->GetDoc();
+//    SwIndex aIndex( pNd, rInf.GetIdx() );
+//    SwPosition aPosition(*pNd, aIndex);
+//    pMark = dynamic_cast< doc->getFieldmarkFor(aPosition);
+//    OSL_ENSURE(pMark,
+//        "SwFieldFormPortion::Paint(..)"
+//        " - Where is my form field bookmark???");
+
+//    bool checked=(pBM!=NULL?pBM->IsChecked():false);
+//    rInf.DrawCheckBox(*this , checked);
 }
 
 sal_Bool SwFieldFormPortion::Format( SwTxtFormatInfo &rInf )

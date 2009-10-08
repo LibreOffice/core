@@ -102,7 +102,7 @@ private:
     using SwCrsrShell::GotoPage;
     using SwFEShell::InsertObject;
     using SwEditShell::AutoCorrect;
-    using SwCrsrShell::GotoBookmark;
+    using SwCrsrShell::GotoMark;
 
 public:
 
@@ -409,13 +409,13 @@ typedef BOOL (SwWrtShell:: *FNSimpleMove)();
     virtual void DrawSelChanged( );
 
     // springe zum Bookmark und setze die "Selections-Flags" wieder richtig
-    BOOL GotoBookmark( USHORT nPos );
-    BOOL GotoBookmark( USHORT nPos, BOOL bSelect, BOOL bStart );
-    BOOL GotoBookmark( const String& rName );
+    BOOL GotoMark( const ::sw::mark::IMark* const pMark );
+    BOOL GotoMark( const ::sw::mark::IMark* const pMark, BOOL bSelect, BOOL bStart );
+    BOOL GotoMark( const ::rtl::OUString& rName );
     BOOL GoNextBookmark(); // TRUE, wenn's noch eine gab
     BOOL GoPrevBookmark();
 
-        bool GotoFieldBookmark(SwBookmark *pBkmk);
+    bool GotoFieldmark(::sw::mark::IFieldmark const * const pMark);
 
     BOOL GotoField( const SwFmtFld& rFld );
 
@@ -613,8 +613,7 @@ private:
         BOOKMARK_LAST_LAST_ENTRY
     };
 
-    SW_DLLPRIVATE BOOL MoveBookMark(    BookMarkMove eFuncId,
-                            USHORT nPos = 0 );
+    SW_DLLPRIVATE BOOL MoveBookMark(BookMarkMove eFuncId, const ::sw::mark::IMark* const pMark=NULL);
 };
 
 inline void SwWrtShell::ResetCursorStack()

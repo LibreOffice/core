@@ -986,13 +986,31 @@ void SwXMLExport::ExportTableLine( const SwTableLine& rLine,
                 nCPos = (sal_uInt16)rLines.GetWidth();
 
             // Und ihren Index
-            sal_uInt16 nOldCol = nCol;
-            SwXMLTableColumn_Impl aCol( nCPos );
+            const sal_uInt16 nOldCol = nCol;
+            {
+                SwXMLTableColumn_Impl aCol( nCPos );
 #ifndef PRODUCT
-            sal_Bool bFound =
+                const sal_Bool bFound =
 #endif
-                rLines.GetColumns().Seek_Entry( &aCol, &nCol );
-            ASSERT( bFound, "couldn't find column" );
+                    rLines.GetColumns().Seek_Entry( &aCol, &nCol );
+                ASSERT( bFound, "couldn't find column" );
+            }
+
+            // --> OD 2009-03-19 #i95726#
+            // Some fault tolerance, if table is somehow corrupted.
+            if ( nCol < nOldCol )
+            {
+                ASSERT( false, "table and/or table information seems to be corrupted." );
+                if ( nBox == nBoxes - 1 )
+                {
+                    nCol = rLines.GetColumns().Count() - 1;
+                }
+                else
+                {
+                    nCol = nOldCol;
+                }
+            }
+            // <--
 
             sal_uInt16 nColSpan = nCol - nOldCol + 1U;
 

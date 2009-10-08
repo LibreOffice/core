@@ -36,11 +36,11 @@
 #include <vcl/keycod.hxx>
 #endif
 #include <svtools/svarray.hxx>
-#include <IDocumentBookmarkAccess.hxx>
+#include <IDocumentMarkAccess.hxx>
+#include <vector>
 
 class SvNumberFormatter;
 class SvULongs;
-class SwBookmark;
 class SwDoc;
 class SwFmtAnchor;
 class SwFrmFmt;
@@ -51,42 +51,46 @@ class SwPaM;
 class SwNode;
 struct SwPosition;
 
-typedef USHORT SaveBookmarkType;
-namespace nsSaveBookmarkType
+namespace sw { namespace mark
 {
-    const SaveBookmarkType BKMK_POS_NONE = 0;
-    const SaveBookmarkType BKMK_POS = 1;
-    const SaveBookmarkType BKMK_POS_OTHER = 2;
-}
+    class IMark;
 
-class SaveBookmark
-{
-    String  aName, aShortName;
-    ULONG nNode1, nNode2;
-    xub_StrLen nCntnt1, nCntnt2;
-    KeyCode aCode;
-    SaveBookmarkType eBkmkType;
-    IDocumentBookmarkAccess::BookmarkType eOrigBkmType;
+    class SaveBookmark
+    {
+        public:
+            SaveBookmark(bool bSavePos,
+                bool bSaveOtherPos,
+                const ::sw::mark::IMark& rBkmk,
+                const SwNodeIndex& rMvPos,
+                const SwIndex* pIdx =0);
+            void SetInDoc(SwDoc* pDoc,
+                const SwNodeIndex&,
+                const SwIndex* pIdx =0);
+            IDocumentMarkAccess::MarkType GetOriginalBkmType() const
+                { return m_eOrigBkmType; }
 
-public:
-    SaveBookmark( int, const SwBookmark&, const SwNodeIndex&,
-                                    const SwIndex* pIdx = 0 );
-    void SetInDoc( SwDoc* pDoc, const SwNodeIndex&, const SwIndex* pIdx = 0);
-    IDocumentBookmarkAccess::BookmarkType GetOriginalBkmType() const {return eOrigBkmType;}
-};
-
-SV_DECL_PTRARR_DEL( SaveBookmarks, SaveBookmark*, 0, 10 )
-
-void _DelBookmarks( const SwNodeIndex& rStt,
-                    const SwNodeIndex& rEnd,
-                    SaveBookmarks* pSaveBkmk = 0,
-                    const SwIndex* pSttIdx = 0,
-                    const SwIndex* pEndIdx = 0 );
-
+        private:
+            ::rtl::OUString m_aName;
+            ::rtl::OUString m_aShortName;
+            KeyCode m_aCode;
+            bool m_bSavePos;
+            bool m_bSaveOtherPos;
+            IDocumentMarkAccess::MarkType m_eOrigBkmType;
+            ULONG m_nNode1;
+            ULONG m_nNode2;
+            xub_StrLen m_nCntnt1;
+            xub_StrLen m_nCntnt2;
+    };
+}}
 
 #define SAVEFLY 1
 #define SAVEFLY_SPLIT 2
 
+void _DelBookmarks(const SwNodeIndex& rStt,
+    const SwNodeIndex& rEnd,
+    ::std::vector< ::sw::mark::SaveBookmark> * SaveBkmk =0,
+    const SwIndex* pSttIdx =0,
+    const SwIndex* pEndIdx =0);
 void _SaveCntntIdx( SwDoc* pDoc, ULONG nNode, xub_StrLen nCntnt,
                     SvULongs& rSaveArr, BYTE nSaveFly = 0 );
 void _RestoreCntntIdx( SwDoc* pDoc, SvULongs& rSaveArr,

@@ -217,9 +217,7 @@ void SwEmbedObjectLink::DataChanged( const String& ,
             try
             {
                 sal_Int32 nState = xObject->getCurrentState();
-                if ( nState == embed::EmbedStates::LOADED )
-                    xObject->changeState( embed::EmbedStates::RUNNING );
-                else
+                if ( nState != embed::EmbedStates::LOADED )
                 {
                     // in some cases the linked file probably is not locked so it could be changed
                     xObject->changeState( embed::EmbedStates::LOADED );

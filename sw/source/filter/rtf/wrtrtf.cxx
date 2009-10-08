@@ -67,7 +67,7 @@
 #include <ndtxt.hxx>
 #include <wrtrtf.hxx>
 #include <flypos.hxx>
-#include <bookmrk.hxx>      // fuer SwBookmark ...
+#include <IMark.hxx>
 #include <pagedesc.hxx>     // fuer SwPageDesc...
 #include <ftninfo.hxx>
 #include <charfmt.hxx>
@@ -133,7 +133,7 @@ ULONG SwRTFWriter::WriteStream()
 
 
     pCurEndPosLst = 0;
-    nBkmkTabPos = USHRT_MAX;
+    nBkmkTabPos = -1;
     pAktPageDesc = 0;
     pAttrSet = 0;
     pFlyFmt = 0;        // kein FlyFrmFormat gesetzt
@@ -262,7 +262,7 @@ void SwRTFWriter::Out_SwDoc( SwPaM* pPam )
 {
     BOOL bSaveWriteAll = bWriteAll;     // sichern
     // suche die naechste Bookmark-Position aus der Bookmark-Tabelle
-    nBkmkTabPos = bWriteAll ? FindPos_Bkmk( *pCurPam->GetPoint() ) : USHRT_MAX;
+    nBkmkTabPos = bWriteAll ? FindPos_Bkmk( *pCurPam->GetPoint() ) : -1;
 
     // gebe alle Bereiche des Pams in das RTF-File aus.
     do {
@@ -351,11 +351,11 @@ void SwRTFWriter::Out_SwDoc( SwPaM* pPam )
 void SwRTFWriter::MakeHeader()
 {
     // baue den Vorspann wie Header, ColorTbl, FontTbl
-    Strm() << '{' << sRTF_RTF << '1'
-        << sRTF_ANSI;
+    Strm() << '{' << OOO_STRING_SVTOOLS_RTF_RTF << '1'
+        << OOO_STRING_SVTOOLS_RTF_ANSI;
     if( bWriteAll )
     {
-        Strm() << sRTF_DEFF;
+        Strm() << OOO_STRING_SVTOOLS_RTF_DEFF;
         OutULong( GetId( (SvxFontItem&)pDoc->GetAttrPool().GetDefaultItem(
                         RES_CHRATR_FONT ) ));
     }
@@ -382,10 +382,10 @@ void SwRTFWriter::MakeHeader()
     {   // Default-TabSize
         const SvxTabStopItem& rTabs = (const SvxTabStopItem&)
                     pDoc->GetAttrPool().GetDefaultItem( RES_PARATR_TABSTOP );
-        Strm() << sRTF_DEFTAB;
+        Strm() << OOO_STRING_SVTOOLS_RTF_DEFTAB;
         OutLong( rTabs[0].GetTabPos() );
         if ( !pDoc->get(IDocumentSettingAccess::USE_VIRTUAL_DEVICE) )
-            Strm() << sRTF_LYTPRTMET;
+            Strm() << OOO_STRING_SVTOOLS_RTF_LYTPRTMET;
     }
 
     // PageDescriptor ausgeben (??nur wenn das gesamte Dokument??)
@@ -421,7 +421,7 @@ void SwRTFWriter::MakeHeader()
                                     GetPageDesc()->GetName(), &nPosInDoc ))
                 {
                                                 // FALSE wegen schliessender Klammer !!
-                    OutComment( *this, sRTF_PGDSCNO, FALSE );
+                    OutComment( *this, OOO_STRING_SVTOOLS_RTF_PGDSCNO, FALSE );
                     OutULong( nPosInDoc ) << '}';
                 }
             }
@@ -432,40 +432,40 @@ void SwRTFWriter::MakeHeader()
 
         {
             if( rPageDesc.GetLandscape() )
-                Strm() << sRTF_LANDSCAPE;
+                Strm() << OOO_STRING_SVTOOLS_RTF_LANDSCAPE;
 
             const SwFmtFrmSize& rSz = rFmtPage.GetFrmSize();
             // Clipboard-Dokument wird immer ohne Drucker angelegt, so ist
             // der Std.PageDesc immer aug LONG_MAX !! Mappe dann auf DIN A4
             if( LONG_MAX == rSz.GetHeight() || LONG_MAX == rSz.GetWidth() )
             {
-                Strm() << sRTF_PAPERH;
-                OutULong( lA4Height ) << sRTF_PAPERW;
+                Strm() << OOO_STRING_SVTOOLS_RTF_PAPERH;
+                OutULong( lA4Height ) << OOO_STRING_SVTOOLS_RTF_PAPERW;
                 OutULong( lA4Width );
             }
             else
             {
-                Strm() << sRTF_PAPERH;
-                OutULong( rSz.GetHeight() ) << sRTF_PAPERW;
+                Strm() << OOO_STRING_SVTOOLS_RTF_PAPERH;
+                OutULong( rSz.GetHeight() ) << OOO_STRING_SVTOOLS_RTF_PAPERW;
                 OutULong( rSz.GetWidth() );
             }
         }
 
         {
             const SvxLRSpaceItem& rLR = rFmtPage.GetLRSpace();
-            Strm() << sRTF_MARGL;
-            OutLong( rLR.GetLeft() ) << sRTF_MARGR;
+            Strm() << OOO_STRING_SVTOOLS_RTF_MARGL;
+            OutLong( rLR.GetLeft() ) << OOO_STRING_SVTOOLS_RTF_MARGR;
             OutLong( rLR.GetRight() );
         }
 
         {
             const SvxULSpaceItem& rUL = rFmtPage.GetULSpace();
-            Strm() << sRTF_MARGT;
-            OutLong( rUL.GetUpper() ) << sRTF_MARGB;
+            Strm() << OOO_STRING_SVTOOLS_RTF_MARGT;
+            OutLong( rUL.GetUpper() ) << OOO_STRING_SVTOOLS_RTF_MARGB;
             OutLong( rUL.GetLower() );
         }
 
-        Strm() << sRTF_SECTD << sRTF_SBKNONE;
+        Strm() << OOO_STRING_SVTOOLS_RTF_SECTD << OOO_STRING_SVTOOLS_RTF_SBKNONE;
         OutRTFPageDescription( rPageDesc, FALSE, TRUE );    // Changed bCheckForFirstPage to TRUE so headers
                                                             // following title page are correctly added - i13107
         if( pSttPgDsc )
@@ -481,52 +481,52 @@ void SwRTFWriter::MakeHeader()
         const SwFtnInfo& rFtnInfo = pDoc->GetFtnInfo();
 
         const char* pOut = FTNPOS_CHAPTER == rFtnInfo.ePos
-                            ? sRTF_ENDDOC
-                            : sRTF_FTNBJ;
-        Strm() << pOut << sRTF_FTNSTART;
+                            ? OOO_STRING_SVTOOLS_RTF_ENDDOC
+                            : OOO_STRING_SVTOOLS_RTF_FTNBJ;
+        Strm() << pOut << OOO_STRING_SVTOOLS_RTF_FTNSTART;
         OutLong( rFtnInfo.nFtnOffset + 1 );
 
         switch( rFtnInfo.eNum )
         {
-        case FTNNUM_PAGE:       pOut = sRTF_FTNRSTPG;   break;
-        case FTNNUM_DOC:        pOut = sRTF_FTNRSTCONT; break;
+        case FTNNUM_PAGE:       pOut = OOO_STRING_SVTOOLS_RTF_FTNRSTPG; break;
+        case FTNNUM_DOC:        pOut = OOO_STRING_SVTOOLS_RTF_FTNRSTCONT;   break;
 //      case FTNNUM_CHAPTER:
-        default:                pOut = sRTF_FTNRESTART; break;
+        default:                pOut = OOO_STRING_SVTOOLS_RTF_FTNRESTART;   break;
         }
         Strm() << pOut;
 
         switch( rFtnInfo.aFmt.GetNumberingType() )
         {
         case SVX_NUM_CHARS_LOWER_LETTER:
-        case SVX_NUM_CHARS_LOWER_LETTER_N:  pOut = sRTF_FTNNALC;    break;
+        case SVX_NUM_CHARS_LOWER_LETTER_N:  pOut = OOO_STRING_SVTOOLS_RTF_FTNNALC;  break;
         case SVX_NUM_CHARS_UPPER_LETTER:
-        case SVX_NUM_CHARS_UPPER_LETTER_N:  pOut = sRTF_FTNNAUC;    break;
-        case SVX_NUM_ROMAN_LOWER:           pOut = sRTF_FTNNRLC;    break;
-        case SVX_NUM_ROMAN_UPPER:           pOut = sRTF_FTNNRUC;    break;
-        case SVX_NUM_CHAR_SPECIAL:          pOut = sRTF_FTNNCHI;    break;
+        case SVX_NUM_CHARS_UPPER_LETTER_N:  pOut = OOO_STRING_SVTOOLS_RTF_FTNNAUC;  break;
+        case SVX_NUM_ROMAN_LOWER:           pOut = OOO_STRING_SVTOOLS_RTF_FTNNRLC;  break;
+        case SVX_NUM_ROMAN_UPPER:           pOut = OOO_STRING_SVTOOLS_RTF_FTNNRUC;  break;
+        case SVX_NUM_CHAR_SPECIAL:          pOut = OOO_STRING_SVTOOLS_RTF_FTNNCHI;  break;
 //      case SVX_NUM_ARABIC:
-        default:                    pOut = sRTF_FTNNAR;     break;
+        default:                    pOut = OOO_STRING_SVTOOLS_RTF_FTNNAR;       break;
         }
         Strm() << pOut;
 
 
         const SwEndNoteInfo& rEndNoteInfo = pDoc->GetEndNoteInfo();
 
-        Strm() << sRTF_AENDDOC << sRTF_AFTNRSTCONT
-               << sRTF_AFTNSTART;
+        Strm() << OOO_STRING_SVTOOLS_RTF_AENDDOC << OOO_STRING_SVTOOLS_RTF_AFTNRSTCONT
+               << OOO_STRING_SVTOOLS_RTF_AFTNSTART;
         OutLong( rEndNoteInfo.nFtnOffset + 1 );
 
         switch( rEndNoteInfo.aFmt.GetNumberingType() )
         {
         case SVX_NUM_CHARS_LOWER_LETTER:
-        case SVX_NUM_CHARS_LOWER_LETTER_N:  pOut = sRTF_AFTNNALC;   break;
+        case SVX_NUM_CHARS_LOWER_LETTER_N:  pOut = OOO_STRING_SVTOOLS_RTF_AFTNNALC; break;
         case SVX_NUM_CHARS_UPPER_LETTER:
-        case SVX_NUM_CHARS_UPPER_LETTER_N:  pOut = sRTF_AFTNNAUC;   break;
-        case SVX_NUM_ROMAN_LOWER:           pOut = sRTF_AFTNNRLC;   break;
-        case SVX_NUM_ROMAN_UPPER:           pOut = sRTF_AFTNNRUC;   break;
-        case SVX_NUM_CHAR_SPECIAL:          pOut = sRTF_AFTNNCHI;   break;
+        case SVX_NUM_CHARS_UPPER_LETTER_N:  pOut = OOO_STRING_SVTOOLS_RTF_AFTNNAUC; break;
+        case SVX_NUM_ROMAN_LOWER:           pOut = OOO_STRING_SVTOOLS_RTF_AFTNNRLC; break;
+        case SVX_NUM_ROMAN_UPPER:           pOut = OOO_STRING_SVTOOLS_RTF_AFTNNRUC; break;
+        case SVX_NUM_CHAR_SPECIAL:          pOut = OOO_STRING_SVTOOLS_RTF_AFTNNCHI; break;
 //      case SVX_NUM_ARABIC:
-        default:                    pOut = sRTF_AFTNNAR;    break;
+        default:                    pOut = OOO_STRING_SVTOOLS_RTF_AFTNNAR;  break;
         }
         Strm() << pOut;
     }
@@ -539,15 +539,15 @@ void SwRTFWriter::MakeHeader()
             if( RES_DBFLD == (*pTypes)[ --nCnt ]->Which() &&
                 (*pTypes)[ nCnt ]->GetDepends() )
             {
-                Strm() << '{' << sRTF_FIELD;
-                OutComment( *this, sRTF_FLDINST ) << " DATA ";
+                Strm() << '{' << OOO_STRING_SVTOOLS_RTF_FIELD;
+                OutComment( *this, OOO_STRING_SVTOOLS_RTF_FLDINST ) << " DATA ";
                 SwDBData aData = pDoc->GetDBData();
                 String sOut(aData.sDataSource);
                 sOut += DB_DELIM;
                 sOut += (String)aData.sCommand;
                 RTFOutFuncs::Out_String( Strm(), sOut,
                                         eDefaultEncoding, bWriteHelpFmt );
-                Strm() << "}{" << sRTF_FLDRSLT << " }}";
+                Strm() << "}{" << OOO_STRING_SVTOOLS_RTF_FLDRSLT << " }}";
                 break;
             }
     }
@@ -560,11 +560,11 @@ void SwRTFWriter::MakeHeader()
 void SwRTFWriter::OutInfoDateTime( const sal_Char* i_pStr,
     const util::DateTime& i_rDT )
 {
-    Strm() << '{' << i_pStr << sRTF_YR;
-    OutLong( Strm(), i_rDT.Year ) << sRTF_MO;
-    OutLong( Strm(), i_rDT.Month ) << sRTF_DY;
-    OutLong( Strm(), i_rDT.Day ) << sRTF_HR;
-    OutLong( Strm(), i_rDT.Hours ) << sRTF_MIN;
+    Strm() << '{' << i_pStr << OOO_STRING_SVTOOLS_RTF_YR;
+    OutLong( Strm(), i_rDT.Year ) << OOO_STRING_SVTOOLS_RTF_MO;
+    OutLong( Strm(), i_rDT.Month ) << OOO_STRING_SVTOOLS_RTF_DY;
+    OutLong( Strm(), i_rDT.Day ) << OOO_STRING_SVTOOLS_RTF_HR;
+    OutLong( Strm(), i_rDT.Hours ) << OOO_STRING_SVTOOLS_RTF_MIN;
     OutLong( Strm(), i_rDT.Minutes ) << '}';
 }
 
@@ -586,7 +586,7 @@ void SwRTFWriter::OutUnicodeSafeRecord(const sal_Char *pToken,
         bool bNeedUnicodeWrapper = !CharsetSufficient(rContent, eDefaultEncoding);
 
         if (bNeedUnicodeWrapper)
-            Strm() << '{' << sRTF_UPR;
+            Strm() << '{' << OOO_STRING_SVTOOLS_RTF_UPR;
 
         Strm() << '{' << pToken << ' ';
         OutRTF_AsByteString(*this, rContent, eDefaultEncoding);
@@ -594,7 +594,7 @@ void SwRTFWriter::OutUnicodeSafeRecord(const sal_Char *pToken,
 
         if (bNeedUnicodeWrapper)
         {
-            OutComment(*this, sRTF_UD);
+            OutComment(*this, OOO_STRING_SVTOOLS_RTF_UD);
             Strm() << '{' << pToken << ' ';
             RTFOutFuncs::Out_String(Strm(), rContent, eDefaultEncoding,
                 bWriteHelpFmt);
@@ -606,7 +606,7 @@ void SwRTFWriter::OutUnicodeSafeRecord(const sal_Char *pToken,
 
 void SwRTFWriter::OutDocInfoStat()
 {
-    Strm() << '{' << sRTF_INFO;
+    Strm() << '{' << OOO_STRING_SVTOOLS_RTF_INFO;
 
     SwDocShell *pDocShell(pDoc->GetDocShell());
     uno::Reference<document::XDocumentProperties> xDocProps;
@@ -619,25 +619,25 @@ void SwRTFWriter::OutDocInfoStat()
     // may be null (in case of copying)
     if (xDocProps.is())
     {
-        OutUnicodeSafeRecord(sRTF_TITLE,    xDocProps->getTitle());
-        OutUnicodeSafeRecord(sRTF_SUBJECT,  xDocProps->getSubject());
+        OutUnicodeSafeRecord(OOO_STRING_SVTOOLS_RTF_TITLE,    xDocProps->getTitle());
+        OutUnicodeSafeRecord(OOO_STRING_SVTOOLS_RTF_SUBJECT,  xDocProps->getSubject());
 
-        OutUnicodeSafeRecord(sRTF_KEYWORDS,
+        OutUnicodeSafeRecord(OOO_STRING_SVTOOLS_RTF_KEYWORDS,
         ::comphelper::string::convertCommaSeparated(xDocProps->getKeywords()));
-        OutUnicodeSafeRecord(sRTF_DOCCOMM,  xDocProps->getDescription());
+        OutUnicodeSafeRecord(OOO_STRING_SVTOOLS_RTF_DOCCOMM,  xDocProps->getDescription());
 
-        OutUnicodeSafeRecord(sRTF_AUTHOR,   xDocProps->getAuthor() );
-        OutInfoDateTime(sRTF_CREATIM,       xDocProps->getCreationDate());
+        OutUnicodeSafeRecord(OOO_STRING_SVTOOLS_RTF_AUTHOR,   xDocProps->getAuthor() );
+        OutInfoDateTime(OOO_STRING_SVTOOLS_RTF_CREATIM,       xDocProps->getCreationDate());
 
-        OutUnicodeSafeRecord(sRTF_AUTHOR,   xDocProps->getModifiedBy() );
-        OutInfoDateTime(sRTF_REVTIM,        xDocProps->getModificationDate());
+        OutUnicodeSafeRecord(OOO_STRING_SVTOOLS_RTF_AUTHOR,   xDocProps->getModifiedBy() );
+        OutInfoDateTime(OOO_STRING_SVTOOLS_RTF_REVTIM,        xDocProps->getModificationDate());
 
-        OutInfoDateTime(sRTF_PRINTIM,       xDocProps->getPrintDate());
+        OutInfoDateTime(OOO_STRING_SVTOOLS_RTF_PRINTIM,       xDocProps->getPrintDate());
 
     }
 
     // fuer interne Zwecke - Versionsnummer rausschreiben
-    Strm() << '{' << sRTF_COMMENT << " StarWriter}{" << sRTF_VERN;
+    Strm() << '{' << OOO_STRING_SVTOOLS_RTF_COMMENT << " StarWriter}{" << OOO_STRING_SVTOOLS_RTF_VERN;
     OutLong( Strm(), SUPD*10 ) << '}';
 
     Strm() << '}';
@@ -770,16 +770,16 @@ void SwRTFWriter::OutRTFColorTab()
     }
 
     // und raus damit
-    Strm() << SwRTFWriter::sNewLine << '{' << sRTF_COLORTBL;
+    Strm() << SwRTFWriter::sNewLine << '{' << OOO_STRING_SVTOOLS_RTF_COLORTBL;
 
     for( n = 0; n < pColTbl->Count(); n++ )
     {
         const Color& rCol = (*pColTbl)[ n ];
         if( n || COL_AUTO != rCol.GetColor() )
         {
-            Strm() << sRTF_RED;
-            OutULong( rCol.GetRed() ) << sRTF_GREEN;
-            OutULong( rCol.GetGreen() ) << sRTF_BLUE;
+            Strm() << OOO_STRING_SVTOOLS_RTF_RED;
+            OutULong( rCol.GetRed() ) << OOO_STRING_SVTOOLS_RTF_GREEN;
+            OutULong( rCol.GetGreen() ) << OOO_STRING_SVTOOLS_RTF_BLUE;
             OutULong( rCol.GetBlue() );
         }
         Strm() << ';';
@@ -798,30 +798,30 @@ bool FontCharsetSufficient(const String &rFntNm, const String &rAltNm,
 
 static void _OutFont( SwRTFWriter& rWrt, const SvxFontItem& rFont, USHORT nNo )
 {
-    rWrt.Strm() << '{' << sRTF_F;
+    rWrt.Strm() << '{' << OOO_STRING_SVTOOLS_RTF_F;
 
-    const char* pStr = sRTF_FNIL;
+    const char* pStr = OOO_STRING_SVTOOLS_RTF_FNIL;
     switch (rFont.GetFamily())
     {
         case FAMILY_ROMAN:
-            pStr = sRTF_FROMAN;
+            pStr = OOO_STRING_SVTOOLS_RTF_FROMAN;
             break;
         case FAMILY_SWISS:
-            pStr = sRTF_FSWISS;
+            pStr = OOO_STRING_SVTOOLS_RTF_FSWISS;
             break;
         case FAMILY_MODERN:
-            pStr = sRTF_FMODERN;
+            pStr = OOO_STRING_SVTOOLS_RTF_FMODERN;
             break;
         case FAMILY_SCRIPT:
-            pStr = sRTF_FSCRIPT;
+            pStr = OOO_STRING_SVTOOLS_RTF_FSCRIPT;
             break;
         case FAMILY_DECORATIVE:
-            pStr = sRTF_FDECOR;
+            pStr = OOO_STRING_SVTOOLS_RTF_FDECOR;
             break;
         default:
             break;
     }
-    rWrt.OutULong(nNo) << pStr << sRTF_FPRQ;
+    rWrt.OutULong(nNo) << pStr << OOO_STRING_SVTOOLS_RTF_FPRQ;
 
     USHORT nVal = 0;
     switch (rFont.GetPitch())
@@ -856,14 +856,14 @@ static void _OutFont( SwRTFWriter& rWrt, const SvxFontItem& rFont, USHORT nNo )
         eChrSet = rtl_getTextEncodingFromWindowsCharset(nChSet);
     }
 
-    rWrt.Strm() << sRTF_FCHARSET;
+    rWrt.Strm() << OOO_STRING_SVTOOLS_RTF_FCHARSET;
     rWrt.OutULong( nChSet );
     rWrt.Strm() << ' ';
     if (aRes.HasDistinctSecondary())
     {
         RTFOutFuncs::Out_Fontname(rWrt.Strm(), aRes.msPrimary, eChrSet,
             rWrt.bWriteHelpFmt);
-        OutComment(rWrt, sRTF_FALT) << ' ';
+        OutComment(rWrt, OOO_STRING_SVTOOLS_RTF_FALT) << ' ';
         RTFOutFuncs::Out_Fontname(rWrt.Strm(), aRes.msSecondary, eChrSet,
             rWrt.bWriteHelpFmt) << '}';
     }
@@ -881,7 +881,7 @@ void SwRTFWriter::OutRTFFontTab()
     const SfxItemPool& rPool = pDoc->GetAttrPool();
     const SvxFontItem* pFont = (const SvxFontItem*)GetDfltAttr(RES_CHRATR_FONT);
 
-    Strm() << SwRTFWriter::sNewLine << '{' << sRTF_FONTTBL;
+    Strm() << SwRTFWriter::sNewLine << '{' << OOO_STRING_SVTOOLS_RTF_FONTTBL;
     _OutFont( *this, *pFont, n++ );
 
     pFont = (const SvxFontItem*)rPool.GetPoolDefaultItem(RES_CHRATR_FONT);
@@ -906,7 +906,7 @@ void RTF_WrtRedlineAuthor::Write(Writer &rWrt)
 {
     SwRTFWriter & rRTFWrt = (SwRTFWriter&)rWrt;
 
-    rRTFWrt.Strm() << '{' << sRTF_IGNORE << sRTF_REVTBL << ' ';
+    rRTFWrt.Strm() << '{' << OOO_STRING_SVTOOLS_RTF_IGNORE << OOO_STRING_SVTOOLS_RTF_REVTBL << ' ';
     typedef std::vector<String>::iterator myiter;
 
     for(std::vector<String>::iterator aIter = maAuthors.begin(); aIter != maAuthors.end(); ++aIter)
@@ -1039,7 +1039,7 @@ void SwRTFWriter::OutRTFStyleTab()
         return;
 
     bOutStyleTab = TRUE;
-    Strm() << SwRTFWriter::sNewLine << '{' << sRTF_STYLESHEET;
+    Strm() << SwRTFWriter::sNewLine << '{' << OOO_STRING_SVTOOLS_RTF_STYLESHEET;
 
     // das Default-TextStyle wird nicht mit ausgegeben !!
     for( n = 1; n < nArrLen; ++n )
@@ -1058,14 +1058,14 @@ void SwRTFWriter::OutRTFStyleTab()
                         pColl->DerivedFrom() )
                 {
                     // die Ableitung vom Format
-                    Strm() << sRTF_SBASEDON;
+                    Strm() << OOO_STRING_SVTOOLS_RTF_SBASEDON;
                     OutULong( nBasedOn );
                     break;
                 }
 
         if( pColl == &pColl->GetNextTxtFmtColl() )
         {
-            Strm() << sRTF_SNEXT;
+            Strm() << OOO_STRING_SVTOOLS_RTF_SNEXT;
             OutULong( n );
         }
         else
@@ -1075,7 +1075,7 @@ void SwRTFWriter::OutRTFStyleTab()
                         &pColl->GetNextTxtFmtColl() )
                 {
                     // die Ableitung vom Format
-                    Strm() << sRTF_SNEXT;
+                    Strm() << OOO_STRING_SVTOOLS_RTF_SNEXT;
                     OutULong( nNext );
                     break;
                 }
@@ -1083,7 +1083,7 @@ void SwRTFWriter::OutRTFStyleTab()
         //if( NO_NUMBERING != pColl->GetOutlineLevel() )//#outline level,zhaojianwei
         if(pColl->IsAssignedToListLevelOfOutlineStyle())//<-end,zhaojianwei
         {
-            Strm() << '{' << sRTF_IGNORE << sRTF_SOUTLVL;
+            Strm() << '{' << OOO_STRING_SVTOOLS_RTF_IGNORE << OOO_STRING_SVTOOLS_RTF_SOUTLVL;
             //OutULong( pColl->GetOutlineLevel() ) << '}';//#outline level,zhaojianwei
             OutULong( pColl->GetAssignedOutlineStyleLevel() ) << '}';//<-end,zhaojianwei
         }
@@ -1110,7 +1110,7 @@ void SwRTFWriter::OutRTFStyleTab()
                         pFmt->DerivedFrom() )
                 {
                     // die Ableitung vom Format
-                    Strm() << sRTF_SBASEDON;
+                    Strm() << OOO_STRING_SVTOOLS_RTF_SBASEDON;
                     OutULong( nArrLen + nBasedOn );
                     break;
                 }
@@ -1145,7 +1145,7 @@ void SwRTFWriter::OutRTFFlyFrms(const SwFlyFrmFmt& rFlyFrmFmt)
         return;
 
     if (!ExportAsInline(rFlyFrmFmt))
-        Strm() << SwRTFWriter::sNewLine << sRTF_PARD << sRTF_PLAIN;
+        Strm() << SwRTFWriter::sNewLine << OOO_STRING_SVTOOLS_RTF_PARD << OOO_STRING_SVTOOLS_RTF_PLAIN;
     //If we are only exporting an inline graphic/object then we
     //only need the its pFlyFmt for the duration of exporting it
     //for floating objects its a little more complex at the moment
@@ -1158,7 +1158,7 @@ void SwRTFWriter::OutRTFFlyFrms(const SwFlyFrmFmt& rFlyFrmFmt)
     }
 
     if (!ExportAsInline(rFlyFrmFmt))
-        Strm() << sRTF_PARD << SwRTFWriter::sNewLine;
+        Strm() << OOO_STRING_SVTOOLS_RTF_PARD << SwRTFWriter::sNewLine;
 //#i46098#:    else
         pFlyFmt = pOldFlyFmt;
 }
@@ -1198,21 +1198,21 @@ void SwRTFWriter::OutRedline( xub_StrLen nCntntPos )
                     Strm() << '{';
                     if(pCurRedline->GetType() == nsRedlineType_t::REDLINE_INSERT)
                     {
-                        Strm() << sRTF_REVISED;
-                        Strm() << sRTF_REVAUTH;
+                        Strm() << OOO_STRING_SVTOOLS_RTF_REVISED;
+                        Strm() << OOO_STRING_SVTOOLS_RTF_REVAUTH;
                         String sName = SW_MOD()->GetRedlineAuthor(pCurRedline->GetAuthor());
                         OutLong( pRedlAuthors->AddName(sName) );
-                        Strm() << sRTF_REVDTTM;
+                        Strm() << OOO_STRING_SVTOOLS_RTF_REVDTTM;
                         OutLong( sw::ms::DateTime2DTTM(pCurRedline->GetTimeStamp()) );
                         Strm() << ' ';
                     }
                     else if(pCurRedline->GetType() == nsRedlineType_t::REDLINE_DELETE)
                     {
-                        Strm() << sRTF_DELETED;
-                        Strm() << sRTF_REVAUTHDEL;
+                        Strm() << OOO_STRING_SVTOOLS_RTF_DELETED;
+                        Strm() << OOO_STRING_SVTOOLS_RTF_REVAUTHDEL;
                         String sDelName = SW_MOD()->GetRedlineAuthor(pCurRedline->GetAuthor());
                         OutLong( pRedlAuthors->AddName(sDelName) );
-                        Strm() << sRTF_REVDTTMDEL;
+                        Strm() << OOO_STRING_SVTOOLS_RTF_REVDTTMDEL;
                         OutLong( sw::ms::DateTime2DTTM(pCurRedline->GetTimeStamp()) );
                         Strm() << ' ';
                     }
@@ -1237,31 +1237,18 @@ void SwRTFWriter::OutRedline( xub_StrLen nCntntPos )
         }
 }
 
-void SwRTFWriter::OutBookmarks( xub_StrLen nCntntPos )
+void SwRTFWriter::OutBookmarks( xub_StrLen nCntntPos)
 {
-    if (USHRT_MAX == nBkmkTabPos)
+    IDocumentMarkAccess* const pMarkAccess = pDoc->getIDocumentMarkAccess();
+    if (-1 == nBkmkTabPos)
         return;
 
-    const SwBookmark* pBookmark = pDoc->getBookmarks()[nBkmkTabPos];
-    if (!pBookmark)
+    const ::sw::mark::IMark* pBookmark = (pMarkAccess->getMarksBegin() + nBkmkTabPos)->get();
+    if(!pBookmark)
         return;
 
-    // hole das aktuelle Bookmark
-    const SwPosition* pStartPos = 0;
-    const SwPosition* pEndPos = 0;
-
-    if (pBookmark->GetOtherBookmarkPos())   // this bookmark spans text
-    {
-        // the start and endpoints are different
-        SwPaM mPam(pBookmark->GetBookmarkPos(), *pBookmark->GetOtherBookmarkPos());
-        pStartPos = mPam.Start();
-        pEndPos = mPam.End();
-    }
-    else                            // this bookmark is a point
-    {
-        // so the start and endpoints are the same
-        pStartPos = pEndPos = &pBookmark->GetBookmarkPos();
-    }
+    const SwPosition* pStartPos = &pBookmark->GetMarkStart();
+    const SwPosition* pEndPos = &pBookmark->GetMarkEnd();
 
     ASSERT(pStartPos && pEndPos, "Impossible");
     if (!(pStartPos && pEndPos))
@@ -1274,24 +1261,22 @@ void SwRTFWriter::OutBookmarks( xub_StrLen nCntntPos )
         // es hier vollstaendig ausgegeben werden.
 
         // erst die SWG spezifischen Daten:
-        if (
-             pBookmark->GetShortName().Len() ||
-             pBookmark->GetKeyCode().GetCode()
-           )
+        const ::sw::mark::IBookmark* const pAsBookmark = dynamic_cast< const ::sw::mark::IBookmark* >(pBookmark);
+        if(pAsBookmark && (pAsBookmark->GetShortName().getLength() || pAsBookmark->GetKeyCode().GetCode()))
         {
-            OutComment( *this, sRTF_BKMKKEY );
-            OutULong( ( pBookmark->GetKeyCode().GetCode() |
-                     pBookmark->GetKeyCode().GetModifier() ));
-            if( !pBookmark->GetShortName().Len() )
+            OutComment( *this, OOO_STRING_SVTOOLS_RTF_BKMKKEY );
+            OutULong( ( pAsBookmark->GetKeyCode().GetCode() |
+                     pAsBookmark->GetKeyCode().GetModifier() ));
+            if( !pAsBookmark->GetShortName().getLength() )
                 Strm() << "  " ;
             else
             {
                 Strm() << ' ';
-                OutRTF_AsByteString( *this, pBookmark->GetShortName(), eDefaultEncoding );
+                OutRTF_AsByteString( *this, pAsBookmark->GetShortName(), eDefaultEncoding );
             }
             Strm() << '}';
         }
-        OutComment( *this, sRTF_BKMKSTART ) << ' ';
+        OutComment( *this, OOO_STRING_SVTOOLS_RTF_BKMKSTART ) << ' ';
         RTFOutFuncs::Out_String( Strm(), pBookmark->GetName(),
                                 eDefaultEncoding, bWriteHelpFmt ) << '}';
     }
@@ -1303,31 +1288,29 @@ void SwRTFWriter::OutBookmarks( xub_StrLen nCntntPos )
         // es hier vollstaendig ausgegeben werden.
 
         // erst die SWG spezifischen Daten:
-        if (
-             pBookmark->GetShortName().Len() ||
-             pBookmark->GetKeyCode().GetCode()
-           )
+        const ::sw::mark::IBookmark* const pAsBookmark = dynamic_cast< const ::sw::mark::IBookmark* >(pBookmark);
+        if(pAsBookmark && (pAsBookmark->GetShortName().getLength() || pAsBookmark->GetKeyCode().GetCode()))
         {
-            OutComment( *this, sRTF_BKMKKEY );
-            OutULong( ( pBookmark->GetKeyCode().GetCode() |
-                     pBookmark->GetKeyCode().GetModifier() ));
-            if( !pBookmark->GetShortName().Len() )
+            OutComment( *this, OOO_STRING_SVTOOLS_RTF_BKMKKEY );
+            OutULong( ( pAsBookmark->GetKeyCode().GetCode() |
+                     pAsBookmark->GetKeyCode().GetModifier() ));
+            if( !pAsBookmark->GetShortName().getLength() )
                 Strm() << "  " ;
             else
             {
                 Strm() << ' ';
-                OutRTF_AsByteString( *this, pBookmark->GetShortName(), eDefaultEncoding );
+                OutRTF_AsByteString( *this, pAsBookmark->GetShortName(), eDefaultEncoding );
             }
             Strm() << '}';
         }
-        OutComment( *this, sRTF_BKMKEND ) << ' ';
-        RTFOutFuncs::Out_String( Strm(), pBookmark->GetName(),
+        OutComment( *this, OOO_STRING_SVTOOLS_RTF_BKMKEND ) << ' ';
+        RTFOutFuncs::Out_String( Strm(), pAsBookmark->GetName(),
                                 eDefaultEncoding, bWriteHelpFmt ) << '}';
 
-        if( ++nBkmkTabPos >= pDoc->getBookmarks().Count() )
-            nBkmkTabPos = USHRT_MAX;
+        if(++nBkmkTabPos >= pMarkAccess->getMarksCount())
+            nBkmkTabPos = -1;
         else
-            pBookmark = pDoc->getBookmarks()[ nBkmkTabPos ];
+            pBookmark = (pMarkAccess->getMarksBegin() + nBkmkTabPos)->get();
     }
 }
 
@@ -1438,14 +1421,14 @@ void SwRTFWriter::OutPageDesc()
 
     Strm() << SwRTFWriter::sNewLine;        // ein Trenner
     bOutPageDesc = bOutPageDescTbl = TRUE;
-    OutComment( *this, sRTF_PGDSCTBL );
+    OutComment( *this, OOO_STRING_SVTOOLS_RTF_PGDSCTBL );
     for( USHORT n = 0; n < nSize; ++n )
     {
         const SwPageDesc& rPageDesc =
             const_cast<const SwDoc*>(pDoc)->GetPageDesc( n );
 
-        Strm() << SwRTFWriter::sNewLine << '{' << sRTF_PGDSC;
-        OutULong( n ) << sRTF_PGDSCUSE;
+        Strm() << SwRTFWriter::sNewLine << '{' << OOO_STRING_SVTOOLS_RTF_PGDSC;
+        OutULong( n ) << OOO_STRING_SVTOOLS_RTF_PGDSCUSE;
         OutULong( rPageDesc.ReadUseOn() );
 
         OutRTFPageDescription( rPageDesc, FALSE, FALSE );
@@ -1456,7 +1439,7 @@ void SwRTFWriter::OutPageDesc()
             if( rPageDesc.GetFollow() ==
                 &const_cast<const SwDoc *>(pDoc)->GetPageDesc( --i ) )
                 break;
-        Strm() << sRTF_PGDSCNXT;
+        Strm() << OOO_STRING_SVTOOLS_RTF_PGDSCNXT;
         OutULong( i ) << ' ';
         RTFOutFuncs::Out_String( Strm(), XlateFmtName( rPageDesc.GetName(), nsSwGetPoolIdFromName::GET_POOLID_PAGEDESC ), eDefaultEncoding,
                     bWriteHelpFmt ) << ";}";
@@ -1476,20 +1459,20 @@ void SwRTFWriter::OutRTFBorder(const SvxBorderLine* aLine, const USHORT nSpace )
     int nWidth = aLine->GetOutWidth();
 
     if(nDistance == 0)  // Single Line
-        Strm() << sRTF_BRDRS;
+        Strm() << OOO_STRING_SVTOOLS_RTF_BRDRS;
     else                // Double Line
     {
         if(nOutWidth == nInWidth)
-            Strm() << sRTF_BRDRDB;
+            Strm() << OOO_STRING_SVTOOLS_RTF_BRDRDB;
         else if (nOutWidth > nInWidth)
-            Strm() << sRTF_BRDRTNTHSG;
+            Strm() << OOO_STRING_SVTOOLS_RTF_BRDRTNTHSG;
         else if (nOutWidth < nInWidth)
-            Strm() << sRTF_BRDRTHTNSG;
+            Strm() << OOO_STRING_SVTOOLS_RTF_BRDRTHTNSG;
     }
-    Strm() << sRTF_BRDRW;
+    Strm() << OOO_STRING_SVTOOLS_RTF_BRDRW;
     OutULong(nWidth);
 
-    Strm() << sRTF_BRSP;
+    Strm() << OOO_STRING_SVTOOLS_RTF_BRSP;
     OutULong(nSpace);
 }
 
@@ -1498,28 +1481,28 @@ void SwRTFWriter::OutRTFBorders(SvxBoxItem aBox)
     const SvxBorderLine *pLine = aBox.GetTop();
     if(pLine)
     {
-        Strm() << sRTF_PGBRDRT;
+        Strm() << OOO_STRING_SVTOOLS_RTF_PGBRDRT;
         OutRTFBorder(pLine, aBox.GetDistance(BOX_LINE_TOP));
     }
 
     pLine = aBox.GetBottom();
     if(pLine)
     {
-        Strm() << sRTF_PGBRDRB;
+        Strm() << OOO_STRING_SVTOOLS_RTF_PGBRDRB;
         OutRTFBorder(pLine, aBox.GetDistance(BOX_LINE_BOTTOM));
     }
 
     pLine = aBox.GetRight();
     if(pLine)
     {
-        Strm() << sRTF_PGBRDRR;
+        Strm() << OOO_STRING_SVTOOLS_RTF_PGBRDRR;
         OutRTFBorder(pLine, aBox.GetDistance(BOX_LINE_LEFT));
     }
 
     pLine = aBox.GetLeft();
     if(pLine)
     {
-        Strm() << sRTF_PGBRDRL;
+        Strm() << OOO_STRING_SVTOOLS_RTF_PGBRDRL;
         OutRTFBorder(pLine, aBox.GetDistance(BOX_LINE_RIGHT));
     }
 }
@@ -1546,13 +1529,13 @@ void SwRTFWriter::OutRTFPageDescription( const SwPageDesc& rPgDsc,
     {
         if( bFirstLine && bWriteAll &&
             pCurPam->GetPoint()->nNode == pOrigPam->Start()->nNode )
-            Strm() << sRTF_SECTD << sRTF_SBKNONE;
+            Strm() << OOO_STRING_SVTOOLS_RTF_SECTD << OOO_STRING_SVTOOLS_RTF_SBKNONE;
         else
-            Strm() << sRTF_SECT << sRTF_SECTD;
+            Strm() << OOO_STRING_SVTOOLS_RTF_SECT << OOO_STRING_SVTOOLS_RTF_SECTD;
     }
 
     if( pAktPageDesc->GetLandscape() )
-        Strm() << sRTF_LNDSCPSXN;
+        Strm() << OOO_STRING_SVTOOLS_RTF_LNDSCPSXN;
 
     const SwFmt *pFmt = &pAktPageDesc->GetMaster(); //GetLeft();
     OutRTF_SwFmt( *this, *pFmt );
@@ -1583,7 +1566,7 @@ void SwRTFWriter::OutRTFPageDescription( const SwPageDesc& rPgDsc,
     if( pAktPageDesc != &rPgDsc )
     {
         pAktPageDesc = &rPgDsc;
-        Strm() << sRTF_TITLEPG;
+        Strm() << OOO_STRING_SVTOOLS_RTF_TITLEPG;
 
         // die Header/Footer der 1. Seite ausgeben
         const SfxPoolItem* pHt;
@@ -1619,7 +1602,7 @@ BOOL SwRTFWriter::OutBreaks( const SfxItemSet& rSet )
                 {
                     pAktPageDesc = ((SwFmtPageDesc*)pItem)->GetPageDesc();
                                                 // FALSE wegen schliessender Klammer !!
-                    OutComment( *this, sRTF_PGDSCNO, FALSE );
+                    OutComment( *this, OOO_STRING_SVTOOLS_RTF_PGDSCNO, FALSE );
                     OutULong( nPos ) << '}';
 
                     // nicht weiter, in Styles gibts keine SectionControls !!
@@ -1640,7 +1623,7 @@ BOOL SwRTFWriter::OutBreaks( const SfxItemSet& rSet )
                     SVX_BREAK_PAGE_BOTH == rBreak.GetBreak() )
                 {
                     bOutFmtAttr = true;
-                    Strm() << sRTF_PAGE;
+                    Strm() << OOO_STRING_SVTOOLS_RTF_PAGE;
                 }
             }
             else
@@ -1653,13 +1636,13 @@ BOOL SwRTFWriter::OutBreaks( const SfxItemSet& rSet )
                         break;
                     case SVX_BREAK_PAGE_BEFORE:
                         bOutFmtAttr = true;
-                        Strm() << sRTF_PAGE;
+                        Strm() << OOO_STRING_SVTOOLS_RTF_PAGE;
                         break;
                     case SVX_BREAK_PAGE_AFTER:
-                        OutComment(*this, sRTF_PGBRK, false) << "0}";
+                        OutComment(*this, OOO_STRING_SVTOOLS_RTF_PGBRK, false) << "0}";
                         break;
                     case SVX_BREAK_PAGE_BOTH:
-                        OutComment(*this, sRTF_PGBRK, false) << "1}";
+                        OutComment(*this, OOO_STRING_SVTOOLS_RTF_PGBRK, false) << "1}";
                         break;
                     default:
                         break;
@@ -1700,7 +1683,7 @@ void SwRTFWriter::CheckEndNodeForSection( const SwNode& rNd )
             {
                 if (! bOutPageDesc)
                 {
-                    Strm() << sRTF_SECT << sRTF_SECTD << sRTF_SBKNONE;
+                    Strm() << OOO_STRING_SVTOOLS_RTF_SECT << OOO_STRING_SVTOOLS_RTF_SECTD << OOO_STRING_SVTOOLS_RTF_SBKNONE;
                     OutRTFPageDescription( ( pAktPageDesc
                                             ? *pAktPageDesc
                                             : const_cast<const SwDoc *>(pDoc)

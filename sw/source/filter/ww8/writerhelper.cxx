@@ -407,19 +407,6 @@ namespace sw
             }
         }
 #endif
-
-        const OutlinerParaObject* GetOutlinerParaObject(const SdrTextObj &rObj)
-        {
-            /*
-            #i13885#
-            When the object is actively being edited, that text is not set into
-            the objects normal text object, but lives in a seperate object.
-            */
-            if (rObj.IsTextEditActive())
-                return rObj.GetEditOutlinerParaObject();
-            else
-                return rObj.GetOutlinerParaObject();
-        }
     }
 
     namespace util

@@ -88,7 +88,7 @@ void SmGetLeftSelectionPart(const ESelection aSel,
 {
     // compare start and end of selection and use the one that comes first
     if (    aSel.nStartPara <  aSel.nEndPara
-        ||  aSel.nStartPara == aSel.nEndPara  &&  aSel.nStartPos < aSel.nEndPos)
+        ||  (aSel.nStartPara == aSel.nEndPara  &&  aSel.nStartPos < aSel.nEndPos) )
     {   nPara = aSel.nStartPara;
         nPos  = aSel.nStartPos;
     }

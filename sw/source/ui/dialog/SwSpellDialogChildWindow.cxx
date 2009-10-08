@@ -63,7 +63,6 @@
 #ifndef _DIALOG_HXX
 #include <dialog.hrc>
 #endif
-#include <bookmrk.hxx>
 #include <cmdid.h>
 
 using namespace ::com::sun::star;

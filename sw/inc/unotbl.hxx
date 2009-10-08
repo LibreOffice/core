@@ -84,8 +84,8 @@ class SwXCell : public SwXCellBaseClass,
     friend void   lcl_setValue( SwXCell &rCell, double nVal );
 
 
-    SfxItemPropertySet      aPropSet;
-    SwTableBox*             pBox;       // only set in non-XML import
+    const SfxItemPropertySet*   m_pPropSet;
+    SwTableBox*                 pBox;       // only set in non-XML import
     const SwStartNode*      pStartNode; // only set in XML import
 
     // table position where pBox was found last
@@ -174,7 +174,7 @@ class SwXTextTableRow : public cppu::WeakImplHelper2
 >,
     public SwClient
 {
-    SfxItemPropertySet      aPropSet;
+    const SfxItemPropertySet*   m_pPropSet;
     SwTableLine*            pLine;
 
     SwFrmFmt* GetFrmFmt() const { return (SwFrmFmt*)GetRegisteredIn(); }
@@ -219,7 +219,7 @@ class SwXTextTableCursor : public SwXTextTableCursor_Base
     ,public OTextCursorHelper
 {
     SwDepend                aCrsrDepend;
-    SfxItemPropertySet      aPropSet;
+    const SfxItemPropertySet*   m_pPropSet;
 
     SwFrmFmt*       GetFrmFmt() const { return (SwFrmFmt*)GetRegisteredIn(); }
     //  SwUnoCrsr*      GetCrsr() const { return (SwUnoCrsr*)aCrsrDepend.GetRegisteredIn(); }
@@ -304,8 +304,7 @@ class SwXTextTable : public cppu::WeakImplHelper10
 {
     SwEventListenerContainer        aLstnrCntnr;
     SwChartEventListenerContainer   aChartLstnrCntnr;
-    SfxItemPropertySet          aPropSet;
-    const SfxItemPropertyMap*   _pMap;
+    const SfxItemPropertySet*       m_pPropSet;
 
     // Descriptor-interface
     SwTableProperties_Impl*     pTableProps;
@@ -431,10 +430,9 @@ class SwXCellRange : public cppu::WeakImplHelper7
     SwChartEventListenerContainer   aChartLstnrCntnr;
 
     SwRangeDescriptor           aRgDesc;
-    SfxItemPropertySet          aPropSet;
+    const SfxItemPropertySet*   m_pPropSet;
 
     SwUnoCrsr*                  pTblCrsr;
-    const SfxItemPropertyMap*   _pMap;
 
     sal_Bool                        bFirstRowAsLabel    :1;
     sal_Bool                        bFirstColumnAsLabel :1;

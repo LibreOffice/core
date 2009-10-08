@@ -40,6 +40,7 @@
 #include <swserv.hxx>
 #include <swbaslnk.hxx>
 #include <mvsave.hxx>
+#include <IMark.hxx>
 #include <bookmrk.hxx>
 #include <pam.hxx>
 #include <shellio.hxx>
@@ -57,7 +58,7 @@ SwServerObject::~SwServerObject()
 
 
 BOOL SwServerObject::GetData( uno::Any & rData,
-                                 const String & rMimeType, BOOL )
+                                const String & rMimeType, BOOL )
 {
     BOOL bRet = FALSE;
     WriterRef xWrt;
@@ -79,17 +80,17 @@ BOOL SwServerObject::GetData( uno::Any & rData,
         switch( eType )
         {
         case BOOKMARK_SERVER:
-            if( CNTNT_TYPE.pBkmk->GetOtherBookmarkPos() )
+            if( CNTNT_TYPE.pBkmk->IsExpanded() )
             {
                 // Bereich aufspannen
-                pPam = new SwPaM( CNTNT_TYPE.pBkmk->GetBookmarkPos(),
-                                *CNTNT_TYPE.pBkmk->GetOtherBookmarkPos() );
+                pPam = new SwPaM( CNTNT_TYPE.pBkmk->GetMarkPos(),
+                                CNTNT_TYPE.pBkmk->GetOtherMarkPos() );
             }
             break;
 
         case TABLE_SERVER:
             pPam = new SwPaM( *CNTNT_TYPE.pTblNd,
-                             *CNTNT_TYPE.pTblNd->EndOfSectionNode() );
+                            *CNTNT_TYPE.pTblNd->EndOfSectionNode() );
             break;
 
         case SECTION_SERVER:
@@ -140,19 +141,17 @@ void SwServerObject::SendDataChanged( const SwPosition& rPos )
         const SwStartNode* pNd = 0;
         switch( eType )
         {
-        case BOOKMARK_SERVER:
-            if( CNTNT_TYPE.pBkmk->GetOtherBookmarkPos() )
-            {
-                SwBookmark& rBkmk = *CNTNT_TYPE.pBkmk;
-                bCall = rBkmk.GetBookmarkPos() < *rBkmk.GetOtherBookmarkPos()
-                    ? ( rBkmk.GetBookmarkPos() <= rPos && rPos < *rBkmk.GetOtherBookmarkPos() )
-                    : ( *rBkmk.GetOtherBookmarkPos() <= rPos && rPos < rBkmk.GetBookmarkPos() );
-            }
-            break;
+            case BOOKMARK_SERVER:
+                if( CNTNT_TYPE.pBkmk->IsExpanded() )
+                {
+                    bCall = CNTNT_TYPE.pBkmk->GetMarkStart() <= rPos
+                        && rPos < CNTNT_TYPE.pBkmk->GetMarkEnd();
+                }
+                break;
 
-        case TABLE_SERVER:      pNd = CNTNT_TYPE.pTblNd;    break;
-        case SECTION_SERVER:    pNd = CNTNT_TYPE.pSectNd;   break;
-        case NONE_SERVER: break;
+            case TABLE_SERVER:      pNd = CNTNT_TYPE.pTblNd;    break;
+            case SECTION_SERVER:    pNd = CNTNT_TYPE.pSectNd;   break;
+            case NONE_SERVER: break;
         }
         if( pNd )
         {
@@ -185,18 +184,10 @@ void SwServerObject::SendDataChanged( const SwPaM& rRange )
         switch( eType )
         {
         case BOOKMARK_SERVER:
-            if( CNTNT_TYPE.pBkmk->GetOtherBookmarkPos() )
+            if(CNTNT_TYPE.pBkmk->IsExpanded())
             {
-                SwBookmark& rBkmk = *CNTNT_TYPE.pBkmk;
-                const SwPosition* pBkStt = &rBkmk.GetBookmarkPos(),
-                                * pBkEnd = rBkmk.GetOtherBookmarkPos();
-                if( *pBkStt > *pBkEnd )
-                {
-                    const SwPosition* pTmp = pBkStt;
-                    pBkStt = pBkEnd;
-                    pBkEnd = pTmp;
-                }
-                bCall = *pStt <= *pBkEnd && *pEnd > *pBkStt;
+                bCall = *pStt <= CNTNT_TYPE.pBkmk->GetMarkEnd()
+                    && *pEnd > CNTNT_TYPE.pBkmk->GetMarkStart();
             }
             break;
 
@@ -236,17 +227,10 @@ BOOL SwServerObject::IsLinkInServer( const SwBaseLink* pChkLnk ) const
     switch( eType )
     {
     case BOOKMARK_SERVER:
-        if( CNTNT_TYPE.pBkmk->GetOtherBookmarkPos() )
+        if( CNTNT_TYPE.pBkmk->IsExpanded() )
         {
-            SwBookmark& rBkmk = *CNTNT_TYPE.pBkmk;
-            const SwPosition* pStt = &rBkmk.GetBookmarkPos(),
-                            * pEnd = rBkmk.GetOtherBookmarkPos();
-            if( *pStt > *pEnd )
-            {
-                const SwPosition* pTmp = pStt;
-                pStt = pEnd;
-                pEnd = pTmp;
-            }
+            const SwPosition* pStt = &CNTNT_TYPE.pBkmk->GetMarkStart(),
+                            * pEnd = &CNTNT_TYPE.pBkmk->GetMarkEnd();
 
             nSttNd = pStt->nNode.GetIndex();
             nStt = pStt->nContent.GetIndex();
@@ -310,6 +294,31 @@ if( !pChkLnk )
     return FALSE;
 }
 
+void SwServerObject::SetNoServer()
+{
+    if(eType == BOOKMARK_SERVER && CNTNT_TYPE.pBkmk)
+    {
+        ::sw::mark::DdeBookmark* const pDdeBookmark = dynamic_cast< ::sw::mark::DdeBookmark* >(CNTNT_TYPE.pBkmk);
+        if(pDdeBookmark) pDdeBookmark->SetRefObject(NULL);
+    }
+    CNTNT_TYPE.pBkmk = 0, eType = NONE_SERVER;
+}
+
+void SwServerObject::SetDdeBookmark( ::sw::mark::IMark& rBookmark)
+{
+    ::sw::mark::DdeBookmark* const pDdeBookmark = dynamic_cast< ::sw::mark::DdeBookmark* >(&rBookmark);
+    if(pDdeBookmark)
+    {
+        eType = BOOKMARK_SERVER;
+        CNTNT_TYPE.pBkmk = &rBookmark;
+        pDdeBookmark->SetRefObject(this);
+    }
+    else
+        OSL_ENSURE(false,
+            "SwServerObject::SetNoServer(..)"
+            " - setting an bookmark that is not DDE-capable");
+}
+
 /*  */
 
 
@@ -327,7 +336,6 @@ SwDataChanged::SwDataChanged( SwDoc* pDc, const SwPosition& rPos, USHORT nTyp )
     nNode = rPos.nNode.GetIndex();
     nCntnt = rPos.nContent.GetIndex();
 }
-
 
 SwDataChanged::~SwDataChanged()
 {
@@ -361,7 +369,3 @@ SwDataChanged::~SwDataChanged()
         }
     }
 }
-
-
-
-

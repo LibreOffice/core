@@ -32,52 +32,52 @@
 #include "precompiled_starmath.hxx"
 
 
-#include <com/sun/star/accessibility/XAccessible.hpp>
-#include <com/sun/star/accessibility/AccessibleEventObject.hpp>
 #include <com/sun/star/accessibility/AccessibleEventId.hpp>
+#include <com/sun/star/accessibility/AccessibleEventObject.hpp>
 #include <com/sun/star/accessibility/AccessibleStateType.hpp>
+#include <com/sun/star/accessibility/XAccessible.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
+
+#include <comphelper/processfactory.hxx>
+#include <comphelper/storagehelper.hxx>
 #include <rtl/logfile.hxx>
-#include <vcl/menu.hxx>
-#include <vcl/decoview.hxx>
-#include <vcl/msgbox.hxx>
-#include <svtools/whiter.hxx>
-#include <svtools/undo.hxx>
-#include <svtools/intitem.hxx>
-#include <svtools/ptitem.hxx>
-#include <svtools/stritem.hxx>
-#include <svtools/eitem.hxx>
-#include <svtools/itemset.hxx>
-#include <svtools/poolitem.hxx>
-#include <svtools/transfer.hxx>
-#include <sfx2/msg.hxx>
-#include <sfx2/dispatch.hxx>
 #include <sfx2/app.hxx>
-#include <sfx2/printer.hxx>
-#include <sfx2/request.hxx>
+#include <sfx2/dispatch.hxx>
 #include <sfx2/docfile.hxx>
 #include <sfx2/docfilt.hxx>
 #include <sfx2/docinsert.hxx>
 #include <sfx2/filedlghelper.hxx>
+#include <sfx2/msg.hxx>
 #include <sfx2/objface.hxx>
-#include <svx/svxdlg.hxx>
+#include <sfx2/printer.hxx>
+#include <sfx2/request.hxx>
+#include <svtools/eitem.hxx>
+#include <svtools/intitem.hxx>
+#include <svtools/itemset.hxx>
+#include <svtools/poolitem.hxx>
+#include <svtools/ptitem.hxx>
+#include <svtools/stritem.hxx>
+#include <svtools/transfer.hxx>
+#include <svtools/undo.hxx>
+#include <svtools/whiter.hxx>
 #include <svx/dialogs.hrc>
-#include <svx/zoomitem.hxx>
 #include <svx/editeng.hxx>
+#include <svx/svxdlg.hxx>
+#include <svx/zoomitem.hxx>
+#include <vcl/decoview.hxx>
+#include <vcl/menu.hxx>
+#include <vcl/msgbox.hxx>
 #include <vcl/wrkwin.hxx>
-
-#include <comphelper/storagehelper.hxx>
-#include <comphelper/processfactory.hxx>
-
 
 #include "unomodel.hxx"
 #include "mathml.hxx"
 #include "view.hxx"
-#include "document.hxx"
 #include "config.hxx"
-#include "toolbox.hxx"
 #include "dialog.hxx"
+#include "document.hxx"
 #include "starmath.hrc"
+#include "toolbox.hxx"
+#include "mathmlimport.hxx"
 
 
 #define MINWIDTH        200
@@ -91,10 +91,8 @@
 #define SmViewShell
 #include "smslots.hxx"
 
-#define A2OU(cChar)     rtl::OUString::createFromAscii(cChar)
-
-using namespace com::sun::star::accessibility;
 using namespace com::sun::star;
+using namespace com::sun::star::accessibility;
 using namespace com::sun::star::uno;
 
 //////////////////////////////////////////////////////////////////////
@@ -1292,7 +1290,7 @@ BOOL SmViewShell::Insert( SfxMedium& rMedium )
             bChkOldVersion = FALSE;
             // is this a fabulous math package ?
             Reference<com::sun::star::frame::XModel> xModel(pDoc->GetModel());
-            SmXMLWrapper aEquation(xModel); //!! modifies the result of pDoc->GetText() !!
+            SmXMLImportWrapper aEquation(xModel);    //!! modifies the result of pDoc->GetText() !!
             bRet = 0 == aEquation.Import(rMedium);
         }
     }
@@ -1337,7 +1335,7 @@ BOOL SmViewShell::InsertFrom(SfxMedium &rMedium)
         if ( rFltName.EqualsAscii(MATHML_XML) )
         {
             Reference<com::sun::star::frame::XModel> xModel( pDoc->GetModel() );
-            SmXMLWrapper aEquation(xModel); //!! modifies the result of pDoc->GetText() !!
+            SmXMLImportWrapper aEquation(xModel);    //!! modifies the result of pDoc->GetText() !!
             bSuccess = 0 == aEquation.Import(rMedium);
         }
         else

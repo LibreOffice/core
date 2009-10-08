@@ -48,7 +48,6 @@
 #include <textsh.hxx>
 #endif
 #include <num.hxx>
-#include <bookmrk.hxx>
 #include <edtwin.hxx>
 #include <crsskip.hxx>
 

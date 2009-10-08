@@ -52,7 +52,6 @@
 #include <sfx2/fcontnr.hxx>
 #include <svx/hlnkitem.hxx>
 #include <svx/srchitem.hxx>
-#include <svx/charmap.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/docfile.hxx>
 #include <svtools/urihelper.hxx>
@@ -1107,14 +1106,14 @@ void SwTextShell::InsertSymbol( SfxRequest& rReq )
     const SfxItemSet *pArgs = rReq.GetArgs();
     const SfxPoolItem* pItem = 0;
     if( pArgs )
-        pArgs->GetItemState(GetPool().GetWhich(FN_INSERT_SYMBOL), FALSE, &pItem);
+        pArgs->GetItemState(GetPool().GetWhich(SID_CHARMAP), FALSE, &pItem);
 
     String aChars, aFontName;
     if ( pItem )
     {
         aChars = ((const SfxStringItem*)pItem)->GetValue();
         const SfxPoolItem* pFtItem = NULL;
-        pArgs->GetItemState( GetPool().GetWhich(FN_PARAM_1), FALSE, &pFtItem);
+        pArgs->GetItemState( GetPool().GetWhich(SID_ATTR_SPECIALCHAR), FALSE, &pFtItem);
         const SfxStringItem* pFontItem = PTR_CAST( SfxStringItem, pFtItem );
         if ( pFontItem )
             aFontName = pFontItem->GetValue();
@@ -1139,33 +1138,45 @@ void SwTextShell::InsertSymbol( SfxRequest& rReq )
             aFont = (SvxFontItem&)aSet.Get( GetWhichOfScript(
                         RES_CHRATR_FONT,
                         GetI18NScriptTypeOfLanguage( (USHORT)GetAppLanguage() ) ));
+        if (!aFontName.Len())
+            aFontName = aFont.GetFamilyName();
     }
 
     Font aNewFont(aFontName, Size(1,1)); // Size nur wg. CTOR
     if( !aChars.Len() )
     {
         // Eingestellten Font als Default
-        SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
-        DBG_ASSERT(pFact, "Dialogdiet fail!");
-        AbstractSvxCharacterMap* pDlg = pFact->CreateSvxCharacterMap( &GetView().GetViewFrame()->GetWindow(),  RID_SVXDLG_CHARMAP, FALSE );
-        DBG_ASSERT(pDlg, "Dialogdiet fail!");
+        SfxAllItemSet aAllSet( rSh.GetAttrPool() );
+        aAllSet.Put( SfxBoolItem( FN_PARAM_1, FALSE ) );
 
-        Font aDlgFont( pDlg->GetCharFont() );
         SwViewOption aOpt(*GetShell().GetViewOptions());
         String sSymbolFont = aOpt.GetSymbolFont();
         if( !aFontName.Len() && sSymbolFont.Len() )
-            aDlgFont.SetName(sSymbolFont);
+            aAllSet.Put( SfxStringItem( SID_FONT_NAME, sSymbolFont ) );
         else
-            aDlgFont.SetName( aFont.GetFamilyName() );
+            aAllSet.Put( SfxStringItem( SID_FONT_NAME, aFont.GetFamilyName() ) );
 
-        pDlg->SetCharFont( aDlgFont );
-
+        SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
+        SfxAbstractDialog* pDlg = pFact->CreateSfxDialog( GetView().GetWindow(), aAllSet,
+            GetView().GetViewFrame()->GetFrame()->GetFrameInterface(), RID_SVXDLG_CHARMAP );
         if( RET_OK == pDlg->Execute() )
         {
-            aChars = pDlg->GetCharacters();
-            aNewFont = pDlg->GetCharFont();
-            aOpt.SetSymbolFont(aNewFont.GetName());
-            SW_MOD()->ApplyUsrPref(aOpt, &GetView());
+            SFX_ITEMSET_ARG( pDlg->GetOutputItemSet(), pCItem, SfxStringItem, SID_CHARMAP, FALSE );
+            SFX_ITEMSET_ARG( pDlg->GetOutputItemSet(), pFontItem, SvxFontItem, SID_ATTR_CHAR_FONT, FALSE );
+            if ( pFontItem )
+            {
+                aNewFont.SetName( pFontItem->GetFamilyName() );
+                aNewFont.SetStyleName( pFontItem->GetStyleName() );
+                aNewFont.SetCharSet( pFontItem->GetCharSet() );
+                aNewFont.SetPitch( pFontItem->GetPitch() );
+            }
+
+            if ( pCItem )
+            {
+                aChars  = pCItem->GetValue();
+                aOpt.SetSymbolFont(aNewFont.GetName());
+                SW_MOD()->ApplyUsrPref(aOpt, &GetView());
+            }
         }
 
         delete pDlg;
@@ -1257,8 +1268,8 @@ void SwTextShell::InsertSymbol( SfxRequest& rReq )
 
         if ( aChars.Len() )
         {
-            rReq.AppendItem( SfxStringItem( GetPool().GetWhich(FN_INSERT_SYMBOL), aChars ) );
-            rReq.AppendItem( SfxStringItem( FN_PARAM_1, aNewFont.GetName() ) );
+            rReq.AppendItem( SfxStringItem( GetPool().GetWhich(SID_CHARMAP), aChars ) );
+            rReq.AppendItem( SfxStringItem( SID_ATTR_SPECIALCHAR, aNewFont.GetName() ) );
             rReq.Done();
         }
     }

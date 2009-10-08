@@ -101,16 +101,16 @@ const sal_uInt16 TABINDEX_MAX = 32767;
 
 static HTMLOptionEnum __FAR_DATA aHTMLFormMethodTable[] =
 {
-    { sHTML_METHOD_get,     FormSubmitMethod_GET    },
-    { sHTML_METHOD_post,    FormSubmitMethod_POST   },
+    { OOO_STRING_SVTOOLS_HTML_METHOD_get,       FormSubmitMethod_GET    },
+    { OOO_STRING_SVTOOLS_HTML_METHOD_post,  FormSubmitMethod_POST   },
     { 0,                    0                       }
 };
 
 static HTMLOptionEnum __FAR_DATA aHTMLFormEncTypeTable[] =
 {
-    { sHTML_ET_url,         FormSubmitEncoding_URL          },
-    { sHTML_ET_multipart,   FormSubmitEncoding_MULTIPART    },
-    { sHTML_ET_text,        FormSubmitEncoding_TEXT         },
+    { OOO_STRING_SVTOOLS_HTML_ET_url,           FormSubmitEncoding_URL          },
+    { OOO_STRING_SVTOOLS_HTML_ET_multipart, FormSubmitEncoding_MULTIPART    },
+    { OOO_STRING_SVTOOLS_HTML_ET_text,      FormSubmitEncoding_TEXT         },
     { 0,                    0                               }
 };
 
@@ -118,11 +118,11 @@ enum HTMLWordWrapMode { HTML_WM_OFF, HTML_WM_HARD, HTML_WM_SOFT };
 
 static HTMLOptionEnum __FAR_DATA aHTMLTextAreaWrapTable[] =
 {
-    { sHTML_WW_off,     HTML_WM_OFF },
-    { sHTML_WW_hard,    HTML_WM_HARD    },
-    { sHTML_WW_soft,    HTML_WM_SOFT    },
-    { sHTML_WW_physical,HTML_WM_HARD    },
-    { sHTML_WW_virtual, HTML_WM_SOFT    },
+    { OOO_STRING_SVTOOLS_HTML_WW_off,       HTML_WM_OFF },
+    { OOO_STRING_SVTOOLS_HTML_WW_hard,  HTML_WM_HARD    },
+    { OOO_STRING_SVTOOLS_HTML_WW_soft,  HTML_WM_SOFT    },
+    { OOO_STRING_SVTOOLS_HTML_WW_physical,HTML_WM_HARD  },
+    { OOO_STRING_SVTOOLS_HTML_WW_virtual,   HTML_WM_SOFT    },
     { 0,                0               }
 };
 
@@ -165,25 +165,25 @@ const sal_Char * __FAR_DATA aEventMethodTable[] =
 
 const sal_Char * __FAR_DATA aEventSDOptionTable[] =
 {
-    sHTML_O_SDonsubmit,
-    sHTML_O_SDonreset,
-    sHTML_O_SDonfocus,
-    sHTML_O_SDonblur,
-    sHTML_O_SDonclick,
-    sHTML_O_SDonclick,
-    sHTML_O_SDonchange,
+    OOO_STRING_SVTOOLS_HTML_O_SDonsubmit,
+    OOO_STRING_SVTOOLS_HTML_O_SDonreset,
+    OOO_STRING_SVTOOLS_HTML_O_SDonfocus,
+    OOO_STRING_SVTOOLS_HTML_O_SDonblur,
+    OOO_STRING_SVTOOLS_HTML_O_SDonclick,
+    OOO_STRING_SVTOOLS_HTML_O_SDonclick,
+    OOO_STRING_SVTOOLS_HTML_O_SDonchange,
     0
 };
 
 const sal_Char * __FAR_DATA aEventOptionTable[] =
 {
-    sHTML_O_onsubmit,
-    sHTML_O_onreset,
-    sHTML_O_onfocus,
-    sHTML_O_onblur,
-    sHTML_O_onclick,
-    sHTML_O_onclick,
-    sHTML_O_onchange,
+    OOO_STRING_SVTOOLS_HTML_O_onsubmit,
+    OOO_STRING_SVTOOLS_HTML_O_onreset,
+    OOO_STRING_SVTOOLS_HTML_O_onfocus,
+    OOO_STRING_SVTOOLS_HTML_O_onblur,
+    OOO_STRING_SVTOOLS_HTML_O_onclick,
+    OOO_STRING_SVTOOLS_HTML_O_onclick,
+    OOO_STRING_SVTOOLS_HTML_O_onchange,
     0
 };
 
@@ -916,19 +916,19 @@ static void lcl_html_getEvents( const String& rOption, const String& rValue,
                                 SvStringsDtor& rUnoMacroTbl,
                                 SvStringsDtor& rUnoMacroParamTbl )
 {
-    if( rOption.CompareIgnoreCaseToAscii( sHTML_O_sdevent,
-                            sizeof(sHTML_O_sdevent)-1 ) == COMPARE_EQUAL )
+    if( rOption.CompareIgnoreCaseToAscii( OOO_STRING_SVTOOLS_HTML_O_sdevent,
+                            sizeof(OOO_STRING_SVTOOLS_HTML_O_sdevent)-1 ) == COMPARE_EQUAL )
     {
-        String *pEvent = new String( rOption.Copy(sizeof(sHTML_O_sdevent)-1) );
+        String *pEvent = new String( rOption.Copy(sizeof(OOO_STRING_SVTOOLS_HTML_O_sdevent)-1) );
         *pEvent += '-';
         *pEvent += rValue;
         rUnoMacroTbl.Insert( pEvent, rUnoMacroTbl.Count() );
     }
-    else if( rOption.CompareIgnoreCaseToAscii( sHTML_O_sdaddparam,
-                            sizeof(sHTML_O_sdaddparam)-1 ) == COMPARE_EQUAL )
+    else if( rOption.CompareIgnoreCaseToAscii( OOO_STRING_SVTOOLS_HTML_O_sdaddparam,
+                            sizeof(OOO_STRING_SVTOOLS_HTML_O_sdaddparam)-1 ) == COMPARE_EQUAL )
     {
         String *pParam =
-                    new String( rOption.Copy( sizeof(sHTML_O_sdaddparam)-1 ) );
+                    new String( rOption.Copy( sizeof(OOO_STRING_SVTOOLS_HTML_O_sdaddparam)-1 ) );
         *pParam += '-';
         *pParam += rValue;
         rUnoMacroParamTbl.Insert( pParam, rUnoMacroParamTbl.Count() );
@@ -1753,7 +1753,7 @@ void SwHTMLParser::InsertInput()
     case HTML_IT_RADIO:
         {
             if( !bValue )
-                aTmp <<= OUString::createFromAscii( sHTML_on );
+                aTmp <<= OUString::createFromAscii( OOO_STRING_SVTOOLS_HTML_on );
             xPropSet->setPropertyValue( OUString::createFromAscii( "RefValue" ),
                                         aTmp );
             aTmp <<= OUString();
@@ -1817,12 +1817,12 @@ void SwHTMLParser::InsertInput()
             case HTML_IT_SUBMIT:
                 eButtonType = FormButtonType_SUBMIT;
                 if( !sText.Len() )
-                    sText.AssignAscii( sHTML_IT_submit );
+                    sText.AssignAscii( OOO_STRING_SVTOOLS_HTML_IT_submit );
                 break;
             case HTML_IT_RESET:
                 eButtonType = FormButtonType_RESET;
                 if( !sText.Len() )
-                    sText.AssignAscii( sHTML_IT_reset );
+                    sText.AssignAscii( OOO_STRING_SVTOOLS_HTML_IT_reset );
                 break;
             default:
                 ;

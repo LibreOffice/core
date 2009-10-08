@@ -112,7 +112,7 @@ SwFrmDlg::SwFrmDlg( SfxViewFrame*       pViewFrame,
     SfxAbstractDialogFactory* pFact = SfxAbstractDialogFactory::Create();
     DBG_ASSERT(pFact, "Dialogdiet fail!");
     AddTabPage(TP_BACKGROUND, pFact->GetTabPageCreatorFunc( RID_SVXPAGE_BACKGROUND ), 0 );
-    AddTabPage( TP_MACRO_ASSIGN, SfxMacroTabPage::Create, 0);
+    AddTabPage( TP_MACRO_ASSIGN, pFact->GetTabPageCreatorFunc(RID_SVXPAGE_MACROASSIGN), 0);
     AddTabPage( TP_BORDER, pFact->GetTabPageCreatorFunc( RID_SVXPAGE_BORDER ), 0 );
 
     if(m_bHTMLMode)
@@ -191,14 +191,15 @@ void SwFrmDlg::PageCreated( USHORT nId, SfxTabPage &rPage )
         break;
 
     case TP_MACRO_ASSIGN:
-        SwMacroAssignDlg::AddEvents( (SfxMacroTabPage&)rPage,
-            DLG_FRM_GRF == m_nDlgType ? MACASSGN_GRAPHIC
-                            : DLG_FRM_OLE == m_nDlgType ? MACASSGN_OLE
-                                                      : MACASSGN_FRMURL );
-        if ( m_pWrtShell && m_pWrtShell->GetView().GetDocShell()
-            && m_pWrtShell->GetView().GetDocShell()->GetFrame() && m_pWrtShell->GetView().GetDocShell()->GetFrame()->GetFrame() )
-            rPage.SetFrame( m_pWrtShell->GetView().GetDocShell()->GetFrame()->GetFrame()->GetFrameInterface() );
+        {
+        SfxAllItemSet aNewSet(*aSet.GetPool());
+        aNewSet.Put( SwMacroAssignDlg::AddEvents(
+            DLG_FRM_GRF == m_nDlgType ? MACASSGN_GRAPHIC : DLG_FRM_OLE == m_nDlgType ? MACASSGN_OLE : MACASSGN_FRMURL ) );
+        if ( m_pWrtShell )
+            rPage.SetFrame( m_pWrtShell->GetView().GetViewFrame()->GetFrame()->GetFrameInterface() );
+        rPage.PageCreated(aNewSet);
         break;
+        }
 
     case TP_BACKGROUND:
         if( DLG_FRM_STD == m_nDlgType )

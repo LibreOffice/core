@@ -62,96 +62,96 @@ struct HTMLNumFmtTblEntry
 
 static HTMLOptionEnum __FAR_DATA aHTMLFldTypeTable[] =
 {
-    { sHTML_FT_author,  RES_AUTHORFLD       },
-    { sHTML_FT_sender,  RES_EXTUSERFLD      },
-    { sHTML_FT_date,    RES_DATEFLD         },
-    { sHTML_FT_time,    RES_TIMEFLD         },
-    { sHTML_FT_datetime,RES_DATETIMEFLD     },
-    { sHTML_FT_page,    RES_PAGENUMBERFLD   },
-    { sHTML_FT_docinfo, RES_DOCINFOFLD      },
-    { sHTML_FT_docstat, RES_DOCSTATFLD      },
-    { sHTML_FT_filename,RES_FILENAMEFLD     },
+    { OOO_STRING_SW_HTML_FT_author, RES_AUTHORFLD       },
+    { OOO_STRING_SW_HTML_FT_sender, RES_EXTUSERFLD      },
+    { "DATE",    RES_DATEFLD            },
+    { "TIME",    RES_TIMEFLD            },
+    { OOO_STRING_SW_HTML_FT_datetime,RES_DATETIMEFLD        },
+    { OOO_STRING_SW_HTML_FT_page,   RES_PAGENUMBERFLD   },
+    { OOO_STRING_SW_HTML_FT_docinfo, RES_DOCINFOFLD     },
+    { OOO_STRING_SW_HTML_FT_docstat, RES_DOCSTATFLD     },
+    { OOO_STRING_SW_HTML_FT_filename,RES_FILENAMEFLD        },
     { 0,                0                   }
 };
 
 static HTMLNumFmtTblEntry __FAR_DATA aHTMLDateFldFmtTable[] =
 {
-    { sHTML_FF_ssys,        NF_DATE_SYSTEM_SHORT    },
-    { sHTML_FF_lsys,        NF_DATE_SYSTEM_LONG     },
-    { sHTML_FF_dmy,         NF_DATE_SYS_DDMMYY,     },
-    { sHTML_FF_dmyy,        NF_DATE_SYS_DDMMYYYY,   },
-    { sHTML_FF_dmmy,        NF_DATE_SYS_DMMMYY,     },
-    { sHTML_FF_dmmyy,       NF_DATE_SYS_DMMMYYYY,   },
-    { sHTML_FF_dmmmy,       NF_DATE_DIN_DMMMMYYYY   },
-    { sHTML_FF_dmmmyy,      NF_DATE_DIN_DMMMMYYYY   },
-    { sHTML_FF_ddmmy,       NF_DATE_SYS_NNDMMMYY    },
-    { sHTML_FF_ddmmmy,      NF_DATE_SYS_NNDMMMMYYYY },
-    { sHTML_FF_ddmmmyy,     NF_DATE_SYS_NNDMMMMYYYY },
-    { sHTML_FF_dddmmmy,     NF_DATE_SYS_NNNNDMMMMYYYY },
-    { sHTML_FF_dddmmmyy,    NF_DATE_SYS_NNNNDMMMMYYYY },
-    { sHTML_FF_my,          NF_DATE_SYS_MMYY        },
-    { sHTML_FF_md,          NF_DATE_DIN_MMDD        },
-    { sHTML_FF_ymd,         NF_DATE_DIN_YYMMDD      },
-    { sHTML_FF_yymd,        NF_DATE_DIN_YYYYMMDD    },
+    { "SSYS",       NF_DATE_SYSTEM_SHORT    },
+    { "LSYS",       NF_DATE_SYSTEM_LONG     },
+    { "DMY",        NF_DATE_SYS_DDMMYY,     },
+    { "DMYY",       NF_DATE_SYS_DDMMYYYY,   },
+    { "DMMY",       NF_DATE_SYS_DMMMYY,     },
+    { "DMMYY",      NF_DATE_SYS_DMMMYYYY,   },
+    { "DMMMY",      NF_DATE_DIN_DMMMMYYYY   },
+    { "DMMMYY",         NF_DATE_DIN_DMMMMYYYY   },
+    { "DDMMY",      NF_DATE_SYS_NNDMMMYY    },
+    { "DDMMMY",         NF_DATE_SYS_NNDMMMMYYYY },
+    { "DDMMMYY",    NF_DATE_SYS_NNDMMMMYYYY },
+    { "DDDMMMY",    NF_DATE_SYS_NNNNDMMMMYYYY },
+    { "DDDMMMYY",   NF_DATE_SYS_NNNNDMMMMYYYY },
+    { "MY",             NF_DATE_SYS_MMYY        },
+    { "MD",             NF_DATE_DIN_MMDD        },
+    { "YMD",        NF_DATE_DIN_YYMMDD      },
+    { "YYMD",       NF_DATE_DIN_YYYYMMDD    },
     { 0,                    NF_NUMERIC_START }
 };
 
 static HTMLNumFmtTblEntry __FAR_DATA aHTMLTimeFldFmtTable[] =
 {
-    { sHTML_FF_sys,      NF_TIME_HHMMSS },
-    { sHTML_FF_ssmm24,   NF_TIME_HHMM },
-    { sHTML_FF_ssmm12,   NF_TIME_HHMMAMPM },
+    { "SYS",     NF_TIME_HHMMSS },
+    { "SSMM24",      NF_TIME_HHMM },
+    { "SSMM12",      NF_TIME_HHMMAMPM },
     { 0,                 NF_NUMERIC_START }
 };
 
 static HTMLOptionEnum __FAR_DATA aHTMLPageNumFldFmtTable[] =
 {
-    { sHTML_FF_uletter,      SVX_NUM_CHARS_UPPER_LETTER },
-    { sHTML_FF_lletter,      SVX_NUM_CHARS_LOWER_LETTER },
-    { sHTML_FF_uroman,       SVX_NUM_ROMAN_UPPER },
-    { sHTML_FF_lroman,       SVX_NUM_ROMAN_LOWER },
-    { sHTML_FF_arabic,       SVX_NUM_ARABIC },
-    { sHTML_FF_none,         SVX_NUM_NUMBER_NONE },
-    { sHTML_FF_char,         SVX_NUM_CHAR_SPECIAL },
-    { sHTML_FF_page,         SVX_NUM_PAGEDESC },
-    { sHTML_FF_ulettern,     SVX_NUM_CHARS_UPPER_LETTER_N },
-    { sHTML_FF_llettern,     SVX_NUM_CHARS_LOWER_LETTER_N },
+    { OOO_STRING_SW_HTML_FF_uletter,     SVX_NUM_CHARS_UPPER_LETTER },
+    { OOO_STRING_SW_HTML_FF_lletter,     SVX_NUM_CHARS_LOWER_LETTER },
+    { OOO_STRING_SW_HTML_FF_uroman,          SVX_NUM_ROMAN_UPPER },
+    { OOO_STRING_SW_HTML_FF_lroman,          SVX_NUM_ROMAN_LOWER },
+    { OOO_STRING_SW_HTML_FF_arabic,      SVX_NUM_ARABIC },
+    { OOO_STRING_SW_HTML_FF_none,        SVX_NUM_NUMBER_NONE },
+    { OOO_STRING_SW_HTML_FF_char,        SVX_NUM_CHAR_SPECIAL },
+    { OOO_STRING_SW_HTML_FF_page,        SVX_NUM_PAGEDESC },
+    { OOO_STRING_SW_HTML_FF_ulettern,    SVX_NUM_CHARS_UPPER_LETTER_N },
+    { OOO_STRING_SW_HTML_FF_llettern,    SVX_NUM_CHARS_LOWER_LETTER_N },
     { 0,                     0 }
 };
 
 
 static HTMLOptionEnum __FAR_DATA aHTMLExtUsrFldSubTable[] =
 {
-    { sHTML_FS_company,      EU_COMPANY },
-    { sHTML_FS_firstname,    EU_FIRSTNAME },
-    { sHTML_FS_name,         EU_NAME },
-    { sHTML_FS_shortcut,     EU_SHORTCUT },
-    { sHTML_FS_street,       EU_STREET },
-    { sHTML_FS_country,      EU_COUNTRY },
-    { sHTML_FS_zip,          EU_ZIP },
-    { sHTML_FS_city,         EU_CITY },
-    { sHTML_FS_title,        EU_TITLE },
-    { sHTML_FS_position,     EU_POSITION },
-    { sHTML_FS_pphone,       EU_PHONE_PRIVATE },
-    { sHTML_FS_cphone,       EU_PHONE_COMPANY },
-    { sHTML_FS_fax,          EU_FAX },
-    { sHTML_FS_email,        EU_EMAIL },
-    { sHTML_FS_state,        EU_STATE },
+    { OOO_STRING_SW_HTML_FS_company,         EU_COMPANY },
+    { OOO_STRING_SW_HTML_FS_firstname,   EU_FIRSTNAME },
+    { OOO_STRING_SW_HTML_FS_name,        EU_NAME },
+    { OOO_STRING_SW_HTML_FS_shortcut,    EU_SHORTCUT },
+    { OOO_STRING_SW_HTML_FS_street,      EU_STREET },
+    { OOO_STRING_SW_HTML_FS_country,      EU_COUNTRY },
+    { OOO_STRING_SW_HTML_FS_zip,          EU_ZIP },
+    { OOO_STRING_SW_HTML_FS_city,         EU_CITY },
+    { OOO_STRING_SW_HTML_FS_title,        EU_TITLE },
+    { OOO_STRING_SW_HTML_FS_position,     EU_POSITION },
+    { OOO_STRING_SW_HTML_FS_pphone,       EU_PHONE_PRIVATE },
+    { OOO_STRING_SW_HTML_FS_cphone,       EU_PHONE_COMPANY },
+    { OOO_STRING_SW_HTML_FS_fax,          EU_FAX },
+    { OOO_STRING_SW_HTML_FS_email,        EU_EMAIL },
+    { OOO_STRING_SW_HTML_FS_state,        EU_STATE },
     { 0,                     0 }
 };
 
 static HTMLOptionEnum __FAR_DATA aHTMLAuthorFldFmtTable[] =
 {
-    { sHTML_FF_name,         AF_NAME },
-    { sHTML_FF_shortcut,     AF_SHORTCUT },
+    { OOO_STRING_SW_HTML_FF_name,        AF_NAME },
+    { OOO_STRING_SW_HTML_FF_shortcut,    AF_SHORTCUT },
     { 0,                     0 }
 };
 
 static HTMLOptionEnum __FAR_DATA aHTMLPageNumFldSubTable[] =
 {
-    { sHTML_FS_random,       PG_RANDOM },
-    { sHTML_FS_next,         PG_NEXT },
-    { sHTML_FS_prev,         PG_PREV },
+    { OOO_STRING_SW_HTML_FS_random,      PG_RANDOM },
+    { OOO_STRING_SW_HTML_FS_next,        PG_NEXT },
+    { OOO_STRING_SW_HTML_FS_prev,        PG_PREV },
     { 0,                     0  }
 };
 
@@ -165,46 +165,46 @@ static HTMLOptionEnum __FAR_DATA aHTMLPageNumFldSubTable[] =
 
 static HTMLOptionEnum __FAR_DATA aHTMLDocInfoFldSubTable[] =
 {
-    { sHTML_FS_title,    DI_TITEL },
-    { sHTML_FS_theme,    DI_THEMA },
-    { sHTML_FS_keys,     DI_KEYS },
-    { sHTML_FS_comment,  DI_COMMENT },
-    { sHTML_FS_info1,    DI_INFO1 },
-    { sHTML_FS_info2,    DI_INFO2 },
-    { sHTML_FS_info3,    DI_INFO3 },
-    { sHTML_FS_info4,    DI_INFO4 },
-    { sHTML_FS_custom,   DI_CUSTOM },
-    { sHTML_FS_create,   DI_CREATE },
-    { sHTML_FS_change,   DI_CHANGE },
+    { OOO_STRING_SW_HTML_FS_title,   DI_TITEL },
+    { OOO_STRING_SW_HTML_FS_theme,   DI_THEMA },
+    { OOO_STRING_SW_HTML_FS_keys,    DI_KEYS },
+    { OOO_STRING_SW_HTML_FS_comment,  DI_COMMENT },
+    { "INFO1",   DI_INFO1 },
+    { "INFO2",   DI_INFO2 },
+    { "INFO3",   DI_INFO3 },
+    { "INFO4",   DI_INFO4 },
+    { OOO_STRING_SW_HTML_FS_custom,      DI_CUSTOM },
+    { OOO_STRING_SW_HTML_FS_create,      DI_CREATE },
+    { OOO_STRING_SW_HTML_FS_change,      DI_CHANGE },
     { 0,                 0 }
 };
 
 static HTMLOptionEnum __FAR_DATA aHTMLDocInfoFldFmtTable[] =
 {
-    { sHTML_FF_author,   DI_SUB_AUTHOR },
-    { sHTML_FF_time,     DI_SUB_TIME },
-    { sHTML_FF_date,     DI_SUB_DATE },
+    { OOO_STRING_SW_HTML_FF_author,      DI_SUB_AUTHOR },
+    { OOO_STRING_SW_HTML_FF_time,    DI_SUB_TIME },
+    { OOO_STRING_SW_HTML_FF_date,    DI_SUB_DATE },
     { 0,                 0 }
 };
 
 static HTMLOptionEnum __FAR_DATA aHTMLDocStatFldSubTable[] =
 {
-    { sHTML_FS_page,     DS_PAGE },
-    { sHTML_FS_para,     DS_PARA },
-    { sHTML_FS_word,     DS_WORD },
-    { sHTML_FS_char,     DS_CHAR },
-    { sHTML_FS_tbl,      DS_TBL },
-    { sHTML_FS_grf,      DS_GRF },
-    { sHTML_FS_ole,      DS_OLE },
+    { OOO_STRING_SW_HTML_FS_page,    DS_PAGE },
+    { OOO_STRING_SW_HTML_FS_para,    DS_PARA },
+    { OOO_STRING_SW_HTML_FS_word,    DS_WORD },
+    { OOO_STRING_SW_HTML_FS_char,    DS_CHAR },
+    { OOO_STRING_SW_HTML_FS_tbl,     DS_TBL },
+    { OOO_STRING_SW_HTML_FS_grf,     DS_GRF },
+    { OOO_STRING_SW_HTML_FS_ole,     DS_OLE },
     { 0,                 0 }
 };
 
 static HTMLOptionEnum __FAR_DATA aHTMLFileNameFldFmtTable[] =
 {
-    { sHTML_FF_name,        FF_NAME },
-    { sHTML_FF_pathname,    FF_PATHNAME },
-    { sHTML_FF_path,        FF_PATH },
-    { sHTML_FF_name_noext,  FF_NAME_NOEXT },
+    { OOO_STRING_SW_HTML_FF_name,       FF_NAME },
+    { OOO_STRING_SW_HTML_FF_pathname,   FF_PATHNAME },
+    { OOO_STRING_SW_HTML_FF_path,       FF_PATH },
+    { OOO_STRING_SW_HTML_FF_name_noext, FF_NAME_NOEXT },
     { 0,                    0 }
 };
 

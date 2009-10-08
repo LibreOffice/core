@@ -258,7 +258,7 @@ public:
     sal_uInt32 nLastLFPos;              // letzte Position eines LF
 
     sal_uInt16 nLastParaToken;          // fuers Absaetze zusammenhalten
-    sal_uInt16 nBkmkTabPos;             // akt. Position in der Bookmark-Tabelle
+    sal_Int32 nBkmkTabPos;              // akt. Position in der Bookmark-Tabelle
     sal_uInt16 nImgMapCnt;              // zum eindeutig
     sal_uInt16 nFormCntrlCnt;
     sal_uInt16 nEndNote;

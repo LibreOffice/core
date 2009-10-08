@@ -1332,7 +1332,6 @@ BOOL SwNewDBMgr::MergeMailFiles(SwWrtShell* pSourceShell,
                         pStoreToFilterOptions = &rMergeDescriptor.sSaveToFilterOptions;
                 }
             }
-            String sAddress;
             bCancel = FALSE;
 
             // in case of creating a single resulting file this has to be created here
@@ -1399,7 +1398,6 @@ BOOL SwNewDBMgr::MergeMailFiles(SwWrtShell* pSourceShell,
                 pViewFrm = SfxViewFrame::GetNext(*pViewFrm, pSourrceDocSh);
             }
             ULONG nDocNo = 1;
-            ULONG nCounter = 0;
 
             long nStartRow, nEndRow;
             // collect temporary files
@@ -1410,6 +1408,7 @@ BOOL SwNewDBMgr::MergeMailFiles(SwWrtShell* pSourceShell,
                 {
                     String sPath(sSubject);
 
+                    String sAddress;
                     if( !bEMail && bColumnName )
                     {
                         SwDBFormatData aDBFormat;
@@ -1419,14 +1418,18 @@ BOOL SwNewDBMgr::MergeMailFiles(SwWrtShell* pSourceShell,
                         if (!sAddress.Len())
                             sAddress = '_';
                         sPath += sAddress;
-                        nCounter = 0;
                     }
 
                     // create a new temporary file name - only done once in case of bCreateSingleFile
                     if( 1 == nDocNo || (!rMergeDescriptor.bCreateSingleFile && !bAsSingleFile) )
                     {
                         INetURLObject aEntry(sPath);
-                        String sLeading(aEntry.GetBase());
+                        String sLeading;
+                        //#i97667# if the name is from a database field then it will be used _as is_
+                        if( sAddress.Len() )
+                            sLeading = sAddress;
+                        else
+                            sLeading = aEntry.GetBase();
                         aEntry.removeSegment();
                         sPath = aEntry.GetMainURL( INetURLObject::NO_DECODE );
                         String sExt( pStoreToFilter->GetDefaultExtension() );

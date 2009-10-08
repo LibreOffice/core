@@ -69,7 +69,7 @@
 #include <flddat.hxx>           // class SwDateTimeField
 #include <docufld.hxx>          // class SwPageNumberField
 #include <reffld.hxx>           // class SwGetRefField
-#include <bookmrk.hxx>
+#include <IMark.hxx>
 #include <expfld.hxx>           // class SwSetExpField
 #include <dbfld.hxx>            // class SwDBField
 #include <usrfld.hxx>

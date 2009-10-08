@@ -504,7 +504,7 @@ public:
     const String&       GetBaseURL() const { return sBaseURL;}
 
     // suche die naechste Bookmark-Position aus der Bookmark-Tabelle
-    USHORT FindPos_Bkmk( const SwPosition& rPos ) const;
+    sal_Int32 FindPos_Bkmk( const SwPosition& rPos ) const;
     // build a bookmark table, which is sort by the node position. The
     // OtherPos of the bookmarks also inserted.
     void CreateBookmarkTbl();

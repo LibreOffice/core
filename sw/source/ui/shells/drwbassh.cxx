@@ -193,7 +193,7 @@ void SwDrawBaseShell::Execute(SfxRequest &rReq)
                         SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
                         DBG_ASSERT(pFact, "SwAbstractDialogFactory fail!");
 
-                        AbstractSfxSingleTabDialog* pDlg = pFact->CreateSwWrapDlg( GetView().GetWindow(), aSet, pSh, TRUE, RC_DLG_SWWRAPDLG );
+                        SfxAbstractDialog* pDlg = pFact->CreateSwWrapDlg( GetView().GetWindow(), aSet, pSh, TRUE, RC_DLG_SWWRAPDLG );
                         DBG_ASSERT(pDlg, "Dialogdiet fail!");
 
                         if (pDlg->Execute() == RET_OK)

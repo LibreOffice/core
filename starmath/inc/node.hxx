@@ -33,7 +33,7 @@
 #define NODE_HXX
 
 
-#include <tools/dynary.hxx>
+#include <vector>
 
 #include "parse.hxx"
 #include "types.hxx"
@@ -63,9 +63,12 @@
 extern SmFormat *pActiveFormat;
 
 class SmDocShell;
-
 class SmNode;
-DECLARE_DYNARRAY(SmNodeArray, SmNode *)
+class SmStructureNode;
+
+typedef std::vector< SmNode * > SmNodeArray;
+typedef std::vector< SmStructureNode * > SmStructureNodeArray;
+
 
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -185,9 +188,6 @@ public:
 
 ////////////////////////////////////////////////////////////////////////////////
 
-class SmStructureNode;
-
-DECLARE_DYNARRAY(SmStructureNodeArray, SmStructureNode *)
 
 class SmStructureNode : public SmNode
 {
@@ -205,12 +205,11 @@ public:
     virtual BOOL        IsVisible() const;
 
     virtual USHORT      GetNumSubNodes() const;
-            void        SetNumSubNodes(USHORT nSize) { aSubNodes.SetSize(nSize); }
+            void        SetNumSubNodes(USHORT nSize) { aSubNodes.resize(nSize); }
 
     using   SmNode::GetSubNode;
     virtual SmNode *    GetSubNode(USHORT nIndex);
-            void SetSubNodes(SmNode *pFirst, SmNode *pSecond,
-                                SmNode *pThird = NULL);
+            void SetSubNodes(SmNode *pFirst, SmNode *pSecond, SmNode *pThird = NULL);
             void SetSubNodes(const SmNodeArray &rNodeArray);
 
     virtual SmStructureNode & operator = ( const SmStructureNode &rNode );

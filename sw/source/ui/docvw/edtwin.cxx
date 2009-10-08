@@ -149,7 +149,7 @@
 #include <vos/mutex.hxx>
 #include <vcl/svapp.hxx>
 
-#include <bookmrk.hxx>
+#include <IMark.hxx>
 #include <doc.hxx>
 
 #include "PostItMgr.hxx"
@@ -1475,8 +1475,8 @@ void SwEditWin::KeyInput(const KeyEvent &rKEvt)
                        KS_Fly_Change, KS_Draw_Change,
                        KS_SpecialInsert,
                        KS_EnterCharCell,
-                       KS_GotoNextFieldBookmark,
-                       KS_GotoPrevFieldBookmark,
+                       KS_GotoNextFieldMark,
+                       KS_GotoPrevFieldMark,
                        KS_Ende };
 
 
@@ -1897,10 +1897,12 @@ KEYINPUT_CHECKTABLE_INSDEL:
 #ifdef SW_CRSR_TIMER
                     BOOL bOld = rSh.ChgCrsrTimerFlag( FALSE );
 #endif
-                    if (rSh.IsFormProtected() || rSh.IsInFieldBookmark()!=NULL || rSh.GetChar(FALSE)==CH_TXT_ATR_FORMELEMENT) {
-                        eKeyState=KS_GotoNextFieldBookmark;
+                    if (rSh.IsFormProtected() || rSh.GetCurrentFieldmark() || rSh.GetChar(FALSE)==CH_TXT_ATR_FORMELEMENT)
+                    {
+                        eKeyState=KS_GotoNextFieldMark;
                     }
-                    else if( rSh.GetCurNumRule() && rSh.IsSttOfPara() &&
+                    else
+                    if( rSh.GetCurNumRule() && rSh.IsSttOfPara() &&
                         !rSh.HasReadonlySel() )
                     {
                         // --> OD 2007-10-02 #b660435#
@@ -1951,8 +1953,8 @@ KEYINPUT_CHECKTABLE_INSDEL:
 #ifdef SW_CRSR_TIMER
                     BOOL bOld = rSh.ChgCrsrTimerFlag( FALSE );
 #endif
-                    if (rSh.IsFormProtected() || rSh.IsInFieldBookmark()!=NULL || rSh.GetChar(FALSE)==CH_TXT_ATR_FORMELEMENT) {
-                        eKeyState=KS_GotoPrevFieldBookmark;
+                    if (rSh.IsFormProtected() || rSh.GetCurrentFieldmark()|| rSh.GetChar(FALSE)==CH_TXT_ATR_FORMELEMENT) {
+                        eKeyState=KS_GotoPrevFieldMark;
                     }
                     else if( rSh.GetCurNumRule() && rSh.IsSttOfPara() &&
                          !rSh.HasReadonlySel() )
@@ -2222,84 +2224,93 @@ KEYINPUT_CHECKTABLE_INSDEL:
             aCh = '\t';
             // kein break!
         case KS_InsChar:
-        if (rSh.GetChar(FALSE)==CH_TXT_ATR_FORMELEMENT) {
-            SwFieldBookmark *fieldBM=rSh.IsInFormFieldBookmark(); //$flr refactor!!!
-               ASSERT(fieldBM!=NULL, "Where is my FieldBookmark??");
-            if (fieldBM!=NULL) {
-            fieldBM->SetChecked(!fieldBM->IsChecked());
-            SwDocShell* pDocSh = rView.GetDocShell();
-            SwDoc *pDoc=pDocSh->GetDoc();
-            ASSERT(fieldBM->GetOtherBookmarkPos()!=NULL, "where is the otherpos?");
-            if (fieldBM->GetOtherBookmarkPos()!=NULL) {
-                SwPaM aPaM(fieldBM->GetBookmarkPos(), *fieldBM->GetOtherBookmarkPos());
-                if (0) {
-                rSh.StartAllAction();  //$flr TODO: understand why this not works
-                pDoc->SetModified(aPaM);
-                rSh.EndAllAction();
-                } else {
-                rSh.CalcLayout(); // workaround
+            if (rSh.GetChar(FALSE)==CH_TXT_ATR_FORMELEMENT)
+            {
+                ::sw::mark::ICheckboxFieldmark* pFieldmark =
+                    dynamic_cast< ::sw::mark::ICheckboxFieldmark* >
+                        (rSh.GetCurrentFieldmark());
+                OSL_ENSURE(pFieldmark,
+                    "Where is my FieldMark??");
+                if(pFieldmark)
+                {
+                    pFieldmark->SetChecked(!pFieldmark->IsChecked());
+                    SwDocShell* pDocSh = rView.GetDocShell();
+                    SwDoc *pDoc=pDocSh->GetDoc();
+                    OSL_ENSURE(pFieldmark->IsExpanded(),
+                        "where is the otherpos?");
+                    if (pFieldmark->IsExpanded())
+                    {
+                        SwPaM aPaM(pFieldmark->GetMarkPos(), pFieldmark->GetOtherMarkPos());
+                        if(0)
+                        {
+                            rSh.StartAllAction();  //$flr TODO: understand why this not works
+                            pDoc->SetModified(aPaM);
+                            rSh.EndAllAction();
+                        }
+                        else
+                        {
+                            rSh.CalcLayout(); // workaround
+                        }
+                    }
                 }
+                eKeyState = KS_Ende;
             }
-
-            }
-//          rSh.Overwrite(String('X'));
-            eKeyState = KS_Ende;
-        } else if( !rSh.HasReadonlySel() )
-        {
-            BOOL bIsNormalChar = GetAppCharClass().isLetterNumeric(
-                                                        String( aCh ), 0 );
-            if( bChkInsBlank && bIsNormalChar &&
-                (aInBuffer.Len() || !rSh.IsSttPara() || !rSh.IsEndPara() ))
+            else if(!rSh.HasReadonlySel())
             {
-                // vor dem Zeichen noch ein Blank einfuegen. Dieses
-                // kommt zwischen den Expandierten Text und dem neuen
-                // "nicht Worttrenner".
-                aInBuffer.Expand( aInBuffer.Len() + 1, ' ' );
-            }
+                BOOL bIsNormalChar = GetAppCharClass().isLetterNumeric(
+                                                            String( aCh ), 0 );
+                if( bChkInsBlank && bIsNormalChar &&
+                    (aInBuffer.Len() || !rSh.IsSttPara() || !rSh.IsEndPara() ))
+                {
+                    // vor dem Zeichen noch ein Blank einfuegen. Dieses
+                    // kommt zwischen den Expandierten Text und dem neuen
+                    // "nicht Worttrenner".
+                    aInBuffer.Expand( aInBuffer.Len() + 1, ' ' );
+                }
 
 
-            BOOL bIsAutoCorrectChar =  SvxAutoCorrect::IsAutoCorrectChar( aCh );
-            if( !aKeyEvent.GetRepeat() && pACorr && bIsAutoCorrectChar &&
-                    pACfg->IsAutoFmtByInput() &&
-                (( pACorr->IsAutoCorrFlag( ChgWeightUnderl ) &&
-                    ( '*' == aCh || '_' == aCh ) ) ||
-                 ( pACorr->IsAutoCorrFlag( ChgQuotes ) && ('\"' == aCh ))||
-                 ( pACorr->IsAutoCorrFlag( ChgSglQuotes ) && ( '\'' == aCh))))
-            {
-                FlushInBuffer();
-                rSh.AutoCorrect( *pACorr, aCh );
-                if( '\"' != aCh && '\'' != aCh )        // nur bei "*_" rufen!
-                    rSh.UpdateAttr();
-            }
-            else if( !aKeyEvent.GetRepeat() && pACorr && bIsAutoCorrectChar &&
-                    pACfg->IsAutoFmtByInput() &&
-                pACorr->IsAutoCorrFlag( CptlSttSntnc | CptlSttWrd |
-                                        ChgFractionSymbol | ChgOrdinalNumber |
-                                        ChgToEnEmDash | SetINetAttr |
-                                        Autocorrect ) &&
-                '\"' != aCh && '\'' != aCh && '*' != aCh && '_' != aCh &&
-                !bIsNormalChar
-                )
-            {
-                FlushInBuffer();
-                rSh.AutoCorrect( *pACorr, aCh );
+                BOOL bIsAutoCorrectChar =  SvxAutoCorrect::IsAutoCorrectChar( aCh );
+                if( !aKeyEvent.GetRepeat() && pACorr && bIsAutoCorrectChar &&
+                        pACfg->IsAutoFmtByInput() &&
+                    (( pACorr->IsAutoCorrFlag( ChgWeightUnderl ) &&
+                        ( '*' == aCh || '_' == aCh ) ) ||
+                     ( pACorr->IsAutoCorrFlag( ChgQuotes ) && ('\"' == aCh ))||
+                     ( pACorr->IsAutoCorrFlag( ChgSglQuotes ) && ( '\'' == aCh))))
+                {
+                    FlushInBuffer();
+                    rSh.AutoCorrect( *pACorr, aCh );
+                    if( '\"' != aCh && '\'' != aCh )        // nur bei "*_" rufen!
+                        rSh.UpdateAttr();
+                }
+                else if( !aKeyEvent.GetRepeat() && pACorr && bIsAutoCorrectChar &&
+                        pACfg->IsAutoFmtByInput() &&
+                    pACorr->IsAutoCorrFlag( CptlSttSntnc | CptlSttWrd |
+                                            ChgFractionSymbol | ChgOrdinalNumber |
+                                            ChgToEnEmDash | SetINetAttr |
+                                            Autocorrect ) &&
+                    '\"' != aCh && '\'' != aCh && '*' != aCh && '_' != aCh &&
+                    !bIsNormalChar
+                    )
+                {
+                    FlushInBuffer();
+                    rSh.AutoCorrect( *pACorr, aCh );
+                }
+                else
+                {
+                    aInBuffer.Expand( aInBuffer.Len() + aKeyEvent.GetRepeat() + 1,aCh );
+                    bFlushCharBuffer = Application::AnyInput( INPUT_KEYBOARD );
+                    bFlushBuffer = !bFlushCharBuffer;
+                    if( bFlushCharBuffer )
+                        aKeyInputFlushTimer.Start();
+                }
+                eKeyState = KS_Ende;
             }
             else
             {
-                aInBuffer.Expand( aInBuffer.Len() + aKeyEvent.GetRepeat() + 1,aCh );
-                bFlushCharBuffer = Application::AnyInput( INPUT_KEYBOARD );
-                bFlushBuffer = !bFlushCharBuffer;
-                if( bFlushCharBuffer )
-                    aKeyInputFlushTimer.Start();
+                InfoBox( this, SW_RES( MSG_READONLY_CONTENT )).Execute();
+    // ???          Window::KeyInput( aKeyEvent );
+                eKeyState = KS_Ende;
             }
-            eKeyState = KS_Ende;
-        }
-        else
-        {
-            InfoBox( this, SW_RES( MSG_READONLY_CONTENT )).Execute();
-// ???          Window::KeyInput( aKeyEvent );
-            eKeyState = KS_Ende;
-        }
         break;
 
         case KS_CheckAutoCorrect:
@@ -2358,23 +2369,19 @@ KEYINPUT_CHECKTABLE_INSDEL:
                 nKS_NUMINDENTINC_Count = 2;
                 break;
 
-        case KS_GotoNextFieldBookmark:
-        {
-        SwBookmark *pBM=rSh.GetNextFieldBookmark();
-        if (pBM!=NULL) {
-            rSh.GotoFieldBookmark(pBM);
-        }
-        }
-            break;
+            case KS_GotoNextFieldMark:
+                {
+                    ::sw::mark::IFieldmark const * const pFieldmark = rSh.GetFieldmarkAfter();
+                    if(pFieldmark) rSh.GotoFieldmark(pFieldmark);
+                }
+                break;
 
-        case KS_GotoPrevFieldBookmark:
-        {
-        SwBookmark *pBM=rSh.GetPrevFieldBookmark();
-        if (pBM!=NULL) {
-            rSh.GotoFieldBookmark(pBM);
-        }
-        }
-            break;
+            case KS_GotoPrevFieldMark:
+                {
+                    ::sw::mark::IFieldmark const * const pFieldmark = rSh.GetFieldmarkBefore();
+                    if(pFieldmark) rSh.GotoFieldmark(pFieldmark);
+                }
+                break;
 
             case KS_NumIndentDec:
                 // --> OD 2008-06-16 #i90078#
@@ -5069,49 +5076,70 @@ void SwEditWin::Command( const CommandEvent& rCEvt )
         case COMMAND_SELECTIONCHANGE:
         {
             const CommandSelectionChangeData *pData = rCEvt.GetSelectionChangeData();
-            rSh.HideCrsr();
+            rSh.SttCrsrMove();
             rSh.GoStartSentence();
             rSh.GetCrsr()->GetPoint()->nContent += sal::static_int_cast<sal_uInt16, ULONG>(pData->GetStart());
             rSh.SetMark();
-            rSh.GetCrsr()->GetMark()->nContent += sal::static_int_cast<sal_uInt16, ULONG>( pData->GetEnd() - pData->GetStart() );
-            rSh.ShowCrsr();
+            rSh.GetCrsr()->GetMark()->nContent += sal::static_int_cast<sal_uInt16, ULONG>(pData->GetEnd() - pData->GetStart());
+            rSh.EndCrsrMove( TRUE );
         }
         break;
         case COMMAND_PREPARERECONVERSION:
         if( rSh.HasSelection() )
         {
-            if ( rSh.IsMultiSelection() )
+            SwPaM *pCrsr = (SwPaM*)rSh.GetCrsr();
+
+            if( rSh.IsMultiSelection() )
             {
-                // Save the last selected area.
-                SwPaM *pCrsr = (SwPaM*)rSh.GetCrsr()->GetPrev();
-                xub_StrLen nPosIdx = pCrsr->GetPoint()->nContent.GetIndex();
-                ULONG nPosNodeIdx = pCrsr->GetPoint()->nNode.GetIndex();
-                xub_StrLen nMarkIdx = pCrsr->GetMark()->nContent.GetIndex();
-                ULONG nMarkNodeIdx = pCrsr->GetMark()->nNode.GetIndex();
+                if( pCrsr && !pCrsr->HasMark() &&
+                pCrsr->GetPoint() == pCrsr->GetMark() )
+                {
+                rSh.GoPrevCrsr();
+                pCrsr = (SwPaM*)rSh.GetCrsr();
+                }
 
-                // ToDo: Deselect the text behind the first paragraph break,
-                //       if the last selected area ranges from one paragraph
-                //       to another.
-                if( nPosNodeIdx != nMarkNodeIdx )
-                break;
-
-                // Cancel all selection.
-                while( rSh._GetCrsr()->GetNext() != rSh._GetCrsr() )
-                delete rSh._GetCrsr()->GetNext();
-
-                // Restore the last selected area.
-                rSh.GetCrsr()->GetPoint()->nContent = nPosIdx;
-                rSh.GetCrsr()->GetPoint()->nNode = nPosNodeIdx;
-                rSh.SetMark();
-                rSh.GetCrsr()->GetMark()->nContent = nMarkIdx;
-                rSh.GetCrsr()->GetMark()->nNode = nMarkNodeIdx;
-                rSh.ShowCrsr();
+                // Cancel all selections other than the last selected one.
+                while( rSh.GetCrsr()->GetNext() != rSh.GetCrsr() )
+                delete rSh.GetCrsr()->GetNext();
             }
-            else
+
+            if( pCrsr )
             {
-                // Deselect the text behind the first paragraph break.
-                rSh.NormalizePam( FALSE );
-                while( !rSh.IsSelOnePara() && rSh.MovePara( fnParaPrev, fnParaEnd ));
+                ULONG nPosNodeIdx = pCrsr->GetPoint()->nNode.GetIndex();
+                xub_StrLen nPosIdx = pCrsr->GetPoint()->nContent.GetIndex();
+                ULONG nMarkNodeIdx = pCrsr->GetMark()->nNode.GetIndex();
+                xub_StrLen nMarkIdx = pCrsr->GetMark()->nContent.GetIndex();
+
+                if( !rSh.GetCrsr()->HasMark() )
+                rSh.GetCrsr()->SetMark();
+
+                rSh.SttCrsrMove();
+
+                if( nPosNodeIdx < nMarkNodeIdx )
+                {
+                rSh.GetCrsr()->GetPoint()->nNode = nPosNodeIdx;
+                rSh.GetCrsr()->GetPoint()->nContent = nPosIdx;
+                rSh.GetCrsr()->GetMark()->nNode = nPosNodeIdx;
+                rSh.GetCrsr()->GetMark()->nContent =
+                    rSh.GetCrsr()->GetCntntNode( TRUE )->Len();
+                }
+                else if( nPosNodeIdx == nMarkNodeIdx )
+                {
+                rSh.GetCrsr()->GetPoint()->nNode = nPosNodeIdx;
+                rSh.GetCrsr()->GetPoint()->nContent = nPosIdx;
+                rSh.GetCrsr()->GetMark()->nNode = nMarkNodeIdx;
+                rSh.GetCrsr()->GetMark()->nContent = nMarkIdx;
+                }
+                else
+                {
+                rSh.GetCrsr()->GetMark()->nNode = nMarkNodeIdx;
+                rSh.GetCrsr()->GetMark()->nContent = nMarkIdx;
+                rSh.GetCrsr()->GetPoint()->nNode = nMarkNodeIdx;
+                rSh.GetCrsr()->GetPoint()->nContent =
+                    rSh.GetCrsr()->GetCntntNode( FALSE )->Len();
+                }
+
+                rSh.EndCrsrMove( TRUE );
             }
         }
         break;
@@ -5646,7 +5674,7 @@ XubString SwEditWin::GetSurroundingText() const
     String sReturn;
     SwWrtShell& rSh = rView.GetWrtShell();
     if( rSh.HasSelection() && !rSh.IsMultiSelection() && rSh.IsSelOnePara() )
-        rSh.GetSelectedText( sReturn );
+        rSh.GetSelectedText( sReturn, GETSELTXT_PARABRK_TO_ONLYCR  );
     else if( !rSh.HasSelection() )
     {
         SwPosition *pPos = rSh.GetCrsr()->GetPoint();
@@ -5657,7 +5685,7 @@ XubString SwEditWin::GetSurroundingText() const
         rSh.GoStartSentence();
         rSh.SetMark();
         rSh.GoEndSentence();
-        rSh.GetSelectedText( sReturn );
+        rSh.GetSelectedText( sReturn, GETSELTXT_PARABRK_TO_ONLYCR  );
 
         pPos->nContent = nPos;
         rSh.ClearMark();
@@ -5675,7 +5703,7 @@ Selection SwEditWin::GetSurroundingTextSelection() const
     if( rSh.HasSelection() )
     {
         String sReturn;
-        rSh.GetSelectedText( sReturn );
+        rSh.GetSelectedText( sReturn, GETSELTXT_PARABRK_TO_ONLYCR  );
         return Selection( 0, sReturn.Len() );
     }
     else

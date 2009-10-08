@@ -41,6 +41,7 @@
 #include "swdllapi.h"
 #include <swtypes.hxx>
 #include <shellid.hxx>
+#include <layout/layout.hxx>
 
 class SwBaseShell;
 class Button;
@@ -186,7 +187,7 @@ class SW_DLLPUBLIC SwView: public SfxViewShell
     static USHORT           nInsertObjectCtrlState;
     static USHORT           nInsertFieldCtrlState;
     static USHORT           nMoveType; // fuer Buttons unter dem Scrollbar (viewmdi)
-    static USHORT           nActMark; // aktuelle Sprungmarke fuer unbenannte Merker
+    static sal_Int32        nActMark; // aktuelle Sprungmarke fuer unbenannte Merker
 
     static BOOL             bExtra;
     static BOOL             bFound;
@@ -490,12 +491,12 @@ public:
             void    SetVisArea( const Point&, BOOL bUpdateScrollbar = TRUE);
             void    CheckVisArea();
 
-    static Dialog*  GetSearchDialog();
+    static LAYOUT_NS Dialog* GetSearchDialog();
 
     static USHORT   GetMoveType();
     static void     SetMoveType(USHORT nSet);
     DECL_STATIC_LINK( SwView, MoveNavigationHdl, bool* ); // #i75416#
-    static void     SetActMark(BYTE nSet);
+    static void     SetActMark(sal_Int32 nSet);
 
     BOOL            HandleWheelCommands( const CommandEvent& );
 

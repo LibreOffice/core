@@ -54,7 +54,7 @@
 #include <svtools/itemset.hxx>
 #include <sfx2/tabdlg.hxx>
 
-SwNumFmtDlg::SwNumFmtDlg(Window* pParent, SfxItemSet& rSet)
+SwNumFmtDlg::SwNumFmtDlg(Window* pParent, const SfxItemSet& rSet)
     : SfxSingleTabDialog( pParent, rSet, 0 )
 {
     // TabPage erzeugen

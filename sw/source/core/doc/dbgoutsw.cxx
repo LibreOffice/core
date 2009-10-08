@@ -90,7 +90,7 @@ String lcl_dbg_out_SvPtrArr(const T & rArr)
     return aStr;
 }
 
-const char * dbg_out(const void * pVoid)
+SW_DLLPUBLIC const char * dbg_out(const void * pVoid)
 {
     char sBuffer[1024];
 
@@ -101,7 +101,7 @@ const char * dbg_out(const void * pVoid)
     return dbg_out(aTmpStr);
 }
 
-const char * dbg_out(const String & aStr)
+SW_DLLPUBLIC const char * dbg_out(const String & aStr)
 {
     aDbgOutResult = ByteString(aStr, RTL_TEXTENCODING_ASCII_US);
 
@@ -269,18 +269,18 @@ const String lcl_dbg_out(const SfxPoolItem & rItem)
     return aStr;
 }
 
-const char * dbg_out(const SfxPoolItem & rItem)
+SW_DLLPUBLIC const char * dbg_out(const SfxPoolItem & rItem)
 {
     return dbg_out(lcl_dbg_out(rItem));
 }
 
-const char * dbg_out(const SfxPoolItem * pItem)
+SW_DLLPUBLIC const char * dbg_out(const SfxPoolItem * pItem)
 {
     return dbg_out(pItem ? lcl_dbg_out(*pItem) :
                    String("(nil)", RTL_TEXTENCODING_ASCII_US));
 }
 
-const String lcl_dbg_out(const SfxItemSet & rSet)
+SW_DLLPUBLIC const String lcl_dbg_out(const SfxItemSet & rSet)
 {
     SfxItemIter aIter(rSet);
     const SfxPoolItem * pItem;
@@ -309,7 +309,7 @@ const String lcl_dbg_out(const SfxItemSet & rSet)
     return aStr;
 }
 
-const char * dbg_out(const SfxItemSet & rSet)
+SW_DLLPUBLIC const char * dbg_out(const SfxItemSet & rSet)
 {
     return dbg_out(lcl_dbg_out(rSet));
 }
@@ -329,7 +329,7 @@ const String lcl_dbg_out(const SwTxtAttr & rAttr)
     return aStr;
 }
 
-const char * dbg_out(const SwTxtAttr & rAttr)
+SW_DLLPUBLIC const char * dbg_out(const SwTxtAttr & rAttr)
 {
     return dbg_out(lcl_dbg_out(rAttr));
 }
@@ -350,7 +350,7 @@ const String lcl_dbg_out(const SwpHints & rHints)
     return aStr;
 }
 
-const char * dbg_out(const SwpHints &rHints)
+SW_DLLPUBLIC const char * dbg_out(const SwpHints &rHints)
 {
     return dbg_out(lcl_dbg_out(rHints));
 }
@@ -371,7 +371,7 @@ String lcl_dbg_out(const SwPosition & rPos)
     return aStr;
 }
 
-const char * dbg_out(const SwPosition & rPos)
+SW_DLLPUBLIC const char * dbg_out(const SwPosition & rPos)
 {
     return dbg_out(lcl_dbg_out(rPos));
 }
@@ -393,7 +393,7 @@ String lcl_dbg_out(const SwPaM & rPam)
    return aStr;
 }
 
-const char * dbg_out(const SwPaM & rPam)
+SW_DLLPUBLIC const char * dbg_out(const SwPaM & rPam)
 {
     return dbg_out(lcl_dbg_out(rPam));
 }
@@ -403,7 +403,7 @@ String lcl_dbg_out(const SwNodeNum & )
     return String();/*rNum.ToString();*/
 }
 
-const char * dbg_out(const SwNodeNum & rNum)
+SW_DLLPUBLIC const char * dbg_out(const SwNodeNum & rNum)
 {
     return dbg_out(lcl_dbg_out(rNum));
 }
@@ -425,7 +425,7 @@ String lcl_dbg_out(const SwRect & rRect)
     return aResult;
 }
 
-const char * dbg_out(const SwRect & rRect)
+SW_DLLPUBLIC const char * dbg_out(const SwRect & rRect)
 {
     return dbg_out(lcl_dbg_out(rRect));
 }
@@ -452,7 +452,7 @@ String lcl_dbg_out(const SwFrmFmt & rFrmFmt)
     return aResult;
 }
 
-const char * dbg_out(const SwFrmFmt & rFrmFmt)
+SW_DLLPUBLIC const char * dbg_out(const SwFrmFmt & rFrmFmt)
 {
     return dbg_out(lcl_dbg_out(rFrmFmt));
 }
@@ -677,12 +677,12 @@ String lcl_dbg_out(const SwNode & rNode)
     return aTmpStr;
 }
 
-const char * dbg_out(const SwNode & rNode)
+SW_DLLPUBLIC const char * dbg_out(const SwNode & rNode)
 {
     return dbg_out(lcl_dbg_out(rNode));
 }
 
-const char * dbg_out(const SwNode * pNode)
+SW_DLLPUBLIC const char * dbg_out(const SwNode * pNode)
 {
     if (NULL != pNode)
         return dbg_out(*pNode);
@@ -690,7 +690,7 @@ const char * dbg_out(const SwNode * pNode)
         return NULL;
 }
 
-const char * dbg_out(const SwCntntNode * pNode)
+SW_DLLPUBLIC const char * dbg_out(const SwCntntNode * pNode)
 {
     if (NULL != pNode)
         return dbg_out(*pNode);
@@ -698,7 +698,7 @@ const char * dbg_out(const SwCntntNode * pNode)
         return NULL;
 }
 
-const char * dbg_out(const SwTxtNode * pNode)
+SW_DLLPUBLIC const char * dbg_out(const SwTxtNode * pNode)
 {
     if (NULL != pNode)
         return dbg_out(*pNode);
@@ -741,7 +741,7 @@ String lcl_dbg_out(SwNodes & rNodes)
     return aStr;
 }
 
-const char * dbg_out(SwNodes & rNodes)
+SW_DLLPUBLIC const char * dbg_out(SwNodes & rNodes)
 {
     return dbg_out(lcl_dbg_out(rNodes));
 }
@@ -793,7 +793,7 @@ String lcl_dbg_out(const SwUndo & rUndo)
     return aStr;
 }
 
-const char * dbg_out(const SwUndo & rUndo)
+SW_DLLPUBLIC const char * dbg_out(const SwUndo & rUndo)
 {
     return dbg_out(lcl_dbg_out(rUndo));
 }
@@ -813,7 +813,7 @@ String lcl_dbg_out(SwOutlineNodes & rNodes)
     return aStr;
 }
 
-const char * dbg_out(SwOutlineNodes & rNodes)
+SW_DLLPUBLIC const char * dbg_out(SwOutlineNodes & rNodes)
 {
     return dbg_out(lcl_dbg_out(rNodes));
 }
@@ -846,7 +846,7 @@ String lcl_dbg_out(const SwUndos & rUndos)
     return aStr;
 }
 
-const char * dbg_out(const SwUndos & rUndos)
+SW_DLLPUBLIC const char * dbg_out(const SwUndos & rUndos)
 {
     return dbg_out(lcl_dbg_out(rUndos));
 }
@@ -861,7 +861,7 @@ String lcl_dbg_out(const SwRewriter & rRewriter)
     return aResult;
 }
 
-const char * dbg_out(const SwRewriter & rRewriter)
+SW_DLLPUBLIC const char * dbg_out(const SwRewriter & rRewriter)
 {
     return dbg_out(lcl_dbg_out(rRewriter));
 }
@@ -897,7 +897,7 @@ String lcl_dbg_out(const SwNumRule & rRule)
     return aResult;
 }
 
-const char * dbg_out(const SwNumRule & rRule)
+SW_DLLPUBLIC const char * dbg_out(const SwNumRule & rRule)
 {
     return dbg_out(lcl_dbg_out(rRule));
 }
@@ -913,7 +913,7 @@ String lcl_dbg_out(const SwTxtFmtColl & rFmt)
     return aResult;
 }
 
-const char * dbg_out(const SwTxtFmtColl & rFmt)
+SW_DLLPUBLIC const char * dbg_out(const SwTxtFmtColl & rFmt)
 {
     return dbg_out(lcl_dbg_out(rFmt));
 }
@@ -923,7 +923,7 @@ String lcl_dbg_out(const SwFrmFmts & rFrmFmts)
     return lcl_dbg_out_SvPtrArr<SwFrmFmts>(rFrmFmts);
 }
 
-const char * dbg_out(const SwFrmFmts & rFrmFmts)
+SW_DLLPUBLIC const char * dbg_out(const SwFrmFmts & rFrmFmts)
 {
     return dbg_out(lcl_dbg_out(rFrmFmts));
 }
@@ -949,7 +949,7 @@ String lcl_dbg_out(const SwNumRuleTbl & rTbl)
     return aResult;
 }
 
-const char * dbg_out(const SwNumRuleTbl & rTbl)
+SW_DLLPUBLIC const char * dbg_out(const SwNumRuleTbl & rTbl)
 {
     return dbg_out(lcl_dbg_out(rTbl));
 }
@@ -994,7 +994,7 @@ String lcl_dbg_out(const SwFormToken & rToken)
     return rToken.GetString();
 }
 
-const char * dbg_out(const SwFormToken & rToken)
+SW_DLLPUBLIC const char * dbg_out(const SwFormToken & rToken)
 {
     return dbg_out(lcl_dbg_out(rToken));
 }
@@ -1020,7 +1020,7 @@ String lcl_dbg_out(const SwFormTokens & rTokens)
     return aStr;
 }
 
-const char * dbg_out(const SwFormTokens & rTokens)
+SW_DLLPUBLIC const char * dbg_out(const SwFormTokens & rTokens)
 {
     return dbg_out(lcl_dbg_out(rTokens));
 }

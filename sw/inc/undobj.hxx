@@ -48,7 +48,7 @@
 
 #include <swundo.hxx>
 
-
+#include <IMark.hxx>
 // --> OD 2006-11-01 #130889#
 #include <vector>
 // <--
@@ -63,7 +63,6 @@ class SwFmt;
 class SwFmtColl;
 class SwTxtFmtColl;
 class SwTxtNode;
-class SwBookmark;
 class SwTableNode;
 class SwTable;
 class SwTableBox;
@@ -1084,7 +1083,7 @@ class SwUndoBookmark : public SwUndo
 {
     SwHstryBookmark* pHBookmark;
 protected:
-    SwUndoBookmark( SwUndoId nUndoId, const SwBookmark& );
+    SwUndoBookmark( SwUndoId nUndoId, const ::sw::mark::IMark& );
 
     void SetInDoc( SwDoc* );
     void ResetInDoc( SwDoc* );
@@ -1112,7 +1111,7 @@ public:
 class SwUndoDelBookmark : public SwUndoBookmark
 {
 public:
-    SwUndoDelBookmark( const SwBookmark& );
+    SwUndoDelBookmark( const ::sw::mark::IMark& );
     virtual void Undo( SwUndoIter& );
     virtual void Redo( SwUndoIter& );
     OUT_UNDOBJ( DelBookmark )
@@ -1121,7 +1120,7 @@ public:
 class SwUndoInsBookmark : public SwUndoBookmark
 {
 public:
-    SwUndoInsBookmark( const SwBookmark& );
+    SwUndoInsBookmark( const ::sw::mark::IMark& );
     virtual void Undo( SwUndoIter& );
     virtual void Redo( SwUndoIter& );
     OUT_UNDOBJ( InsBookmark )

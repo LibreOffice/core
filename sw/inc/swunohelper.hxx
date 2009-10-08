@@ -75,7 +75,7 @@ BOOL UCB_GetFileListOfFolder( const String& rURL, SvStrings& rList,
                                 SvPtrarr* pDateTimeList = 0 );
 
     // is the URL an existing file?
-BOOL UCB_IsFile( const String& rURL );
+SW_DLLPUBLIC BOOL UCB_IsFile( const String& rURL );
 
     // is the URL a existing directory?
 BOOL UCB_IsDirectory( const String& rURL );

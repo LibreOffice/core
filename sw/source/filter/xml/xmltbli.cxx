@@ -336,7 +336,12 @@ inline SwXMLTableCell_Impl *SwXMLTableRow_Impl::GetCell( sal_uInt32 nCol ) const
 {
     ASSERT( nCol < USHRT_MAX,
             "SwXMLTableRow_Impl::GetCell: column number is to big" );
-    return aCells[(sal_uInt16)nCol];
+    // --> OD 2009-03-19 #i95726# - some fault tolerance
+//    return aCells[(sal_uInt16)nCol];
+    ASSERT( nCol < aCells.Count(),
+            "SwXMLTableRow_Impl::GetCell: column number is out of bound" );
+    return nCol < aCells.Count() ? aCells[(sal_uInt16)nCol] : 0;
+    // <--
 }
 
 void SwXMLTableRow_Impl::Expand( sal_uInt32 nCells, sal_Bool bOneCell )
@@ -1751,8 +1756,14 @@ const SwStartNode *SwXMLTableContext::GetPrevStartNode( sal_uInt32 nRow,
     {
         if( pPrevCell->GetStartNode() )
             pSttNd = pPrevCell->GetStartNode();
-        else
+        // --> OD 2009-03-19 #i95726# - Some fault tolerance
+//        else
+        else if ( pPrevCell->GetSubTable() )
+        // <--
             pSttNd = pPrevCell->GetSubTable()->GetLastStartNode();
+
+        ASSERT( pSttNd != 0,
+                "table corrupt" );
     }
 
     return pSttNd;
@@ -2225,6 +2236,14 @@ SwTableLine *SwXMLTableContext::MakeTableLine( SwTableBox *pUpper,
                 // No subtabels: We use the new table model.
                 SwXMLTableCell_Impl *pCell = GetCell(nTopRow,nCol);
 
+                // --> OD 2009-03-19 #i95726# - some fault tolerance
+                if ( pCell == 0 )
+                {
+                    ASSERT( false, "table seems to be corrupt." );
+                    break;
+                }
+                // <--
+
                 // Could the table fragment be splitted vertically behind the
                 // current column (uptp the current line?
                 bSplit = 1UL == pCell->GetColSpan();
@@ -2252,8 +2271,11 @@ SwTableLine *SwXMLTableContext::MakeTableLine( SwTableBox *pUpper,
             {
                 SwTableBox* pBox = 0;
                 SwXMLTableCell_Impl *pCell = GetCell( nTopRow, nStartCol );
+                // --> OD 2009-03-19 #i95726# - some fault tolerance
                 if( ( !bHasSubTables || ( pCell->GetRowSpan() == (nBottomRow-nTopRow) ) ) &&
-                    pCell->GetColSpan() == (nCol+1UL-nStartCol) )
+                    pCell->GetColSpan() == (nCol+1UL-nStartCol) &&
+                    ( pCell->GetStartNode() || pCell->GetSubTable() ) )
+                // <--
                 {
                     // insert new empty cell for covered cells:
                     long nBoxRowSpan = 1;

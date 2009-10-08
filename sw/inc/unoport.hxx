@@ -38,9 +38,7 @@
 #include <com/sun/star/container/XEnumerationAccess.hpp>
 #include <com/sun/star/beans/XPropertyState.hpp>
 #include <com/sun/star/beans/XMultiPropertySet.hpp>
-//#ifndef _COM_SUN_STAR_BEANS_XTOLERANTMULTIPROPERTYSET_HPP_
-//#include <com/sun/star/beans/XTolerantMultiPropertySet.hpp>
-//#endif
+#include <com/sun/star/beans/XTolerantMultiPropertySet.hpp>
 #include <com/sun/star/text/XTextField.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XUnoTunnel.hpp>
@@ -80,9 +78,9 @@ enum SwTextPortionType
 
 class SwXRubyPortion;
 
-class SwXTextPortion : public cppu::WeakImplHelper8
+class SwXTextPortion : public cppu::WeakImplHelper9
 <
-//    ::com::sun::star::beans::XTolerantMultiPropertySet,
+    ::com::sun::star::beans::XTolerantMultiPropertySet,
     ::com::sun::star::beans::XMultiPropertySet,
     ::com::sun::star::beans::XPropertySet,
     ::com::sun::star::text::XTextRange,
@@ -96,7 +94,7 @@ class SwXTextPortion : public cppu::WeakImplHelper8
 {
     friend class SwXRubyPortion;
     SwEventListenerContainer    aLstnrCntnr;
-    SfxItemPropertySet          aPropSet;
+    const SfxItemPropertySet*  m_pPropSet;
     ::com::sun::star::uno::Reference< ::com::sun::star::text::XText >                   xParentText;
     ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextContent >    xRefMark;
     ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextContent >    xTOXMark;
@@ -117,10 +115,15 @@ class SwXTextPortion : public cppu::WeakImplHelper8
 
     SwFmtFld*           GetFldFmt(BOOL bInit = sal_False);
 protected:
-    SfxItemPropertySet& GetPropSet() { return aPropSet; }
+    //SfxItemPropertySet& GetPropSet() { return aPropSet; }
 
-    void SAL_CALL SetPropertyValues_Impl( const ::com::sun::star::uno::Sequence< ::rtl::OUString >& aPropertyNames, const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& aValues ) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::beans::PropertyVetoException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
-    ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any > SAL_CALL GetPropertyValues_Impl( const ::com::sun::star::uno::Sequence< ::rtl::OUString >& aPropertyNames ) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
+    void SAL_CALL SetPropertyValues_Impl(
+        const ::com::sun::star::uno::Sequence< ::rtl::OUString >& aPropertyNames,
+        const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& aValues )
+            throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::beans::PropertyVetoException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
+    ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any > SAL_CALL GetPropertyValues_Impl(
+        const ::com::sun::star::uno::Sequence< ::rtl::OUString >& aPropertyNames )
+            throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
 
 //    ::com::sun::star::uno::Any  GetPropertyValue( const SfxItemPropertyMap *pEntry,
 //                                    SwUnoCrsr *pUnoCrsr,
@@ -130,11 +133,11 @@ protected:
                                     sal_Int32 nLength );
 
     void GetPropertyValue( ::com::sun::star::uno::Any &rVal,
-                const SfxItemPropertyMap *pEntry, SwUnoCrsr *pUnoCrsr, SfxItemSet *&pSet );
+                const SfxItemPropertySimpleEntry& rEntry, SwUnoCrsr *pUnoCrsr, SfxItemSet *&pSet );
 
-//    ::com::sun::star::uno::Sequence< ::com::sun::star::beans::GetDirectPropertyTolerantResult > SAL_CALL GetPropertyValuesTolerant_Impl(
-//        const ::com::sun::star::uno::Sequence< rtl::OUString >& rPropertyNames,
-//        sal_Bool bDirectValuesOnly ) throw (::com::sun::star::uno::RuntimeException);
+    ::com::sun::star::uno::Sequence< ::com::sun::star::beans::GetDirectPropertyTolerantResult > SAL_CALL GetPropertyValuesTolerant_Impl(
+        const ::com::sun::star::uno::Sequence< rtl::OUString >& rPropertyNames,
+        sal_Bool bDirectValuesOnly ) throw (::com::sun::star::uno::RuntimeException);
 
     virtual ~SwXTextPortion();
 public:
@@ -150,9 +153,9 @@ public:
     virtual void SAL_CALL  setString(const rtl::OUString& aString) throw( ::com::sun::star::uno::RuntimeException );
 
     //XTolerantMultiPropertySet
-//    virtual ::com::sun::star::uno::Sequence< ::com::sun::star::beans::SetPropertyTolerantFailed > SAL_CALL setPropertyValuesTolerant( const ::com::sun::star::uno::Sequence< ::rtl::OUString >& aPropertyNames, const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& aValues ) throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException);
-//    virtual ::com::sun::star::uno::Sequence< ::com::sun::star::beans::GetPropertyTolerantResult > SAL_CALL getPropertyValuesTolerant( const ::com::sun::star::uno::Sequence< ::rtl::OUString >& aPropertyNames ) throw (::com::sun::star::uno::RuntimeException);
-//    virtual ::com::sun::star::uno::Sequence< ::com::sun::star::beans::GetDirectPropertyTolerantResult > SAL_CALL getDirectPropertyValuesTolerant( const ::com::sun::star::uno::Sequence< ::rtl::OUString >& aPropertyNames ) throw (::com::sun::star::uno::RuntimeException);
+    virtual ::com::sun::star::uno::Sequence< ::com::sun::star::beans::SetPropertyTolerantFailed > SAL_CALL setPropertyValuesTolerant( const ::com::sun::star::uno::Sequence< ::rtl::OUString >& aPropertyNames, const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& aValues ) throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException);
+    virtual ::com::sun::star::uno::Sequence< ::com::sun::star::beans::GetPropertyTolerantResult > SAL_CALL getPropertyValuesTolerant( const ::com::sun::star::uno::Sequence< ::rtl::OUString >& aPropertyNames ) throw (::com::sun::star::uno::RuntimeException);
+    virtual ::com::sun::star::uno::Sequence< ::com::sun::star::beans::GetDirectPropertyTolerantResult > SAL_CALL getDirectPropertyValuesTolerant( const ::com::sun::star::uno::Sequence< ::rtl::OUString >& aPropertyNames ) throw (::com::sun::star::uno::RuntimeException);
 
     //XMultiPropertySet
 //    virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo(  ) throw(::com::sun::star::uno::RuntimeException);

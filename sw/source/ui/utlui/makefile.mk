@@ -54,17 +54,17 @@ SRC1FILES =  \
                 utlui.src
 
 EXCEPTIONSFILES= \
-        $(SLO)$/unotools.obj	\
+        $(SLO)$/bookctrl.obj \
+        $(SLO)$/navipi.obj \
+        $(SLO)$/unotools.obj    \
         $(SLO)$/swrenamexnameddlg.obj
 
 SLOFILES =  $(EXCEPTIONSFILES) \
-        $(SLO)$/bookctrl.obj \
         $(SLO)$/condedit.obj \
         $(SLO)$/content.obj \
         $(SLO)$/gloslst.obj \
         $(SLO)$/glbltree.obj \
         $(SLO)$/initui.obj \
-        $(SLO)$/navipi.obj \
         $(SLO)$/navicfg.obj \
         $(SLO)$/numfmtlb.obj \
         $(SLO)$/prcntfld.obj \

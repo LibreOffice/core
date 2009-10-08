@@ -59,7 +59,7 @@
 #include <txtfrm.hxx>
 #include <flyfrm.hxx>
 #include <pagedesc.hxx>
-#include <bookmrk.hxx>
+#include <IMark.hxx>
 // --> OD 2007-10-18 #i81002#
 #include <crossrefbookmark.hxx>
 // <--
@@ -252,13 +252,13 @@ void SwGetRefField::SetSubType( USHORT n )
 bool SwGetRefField::IsRefToHeadingCrossRefBookmark() const
 {
     return GetSubType() == REF_BOOKMARK &&
-           bookmarkfunc::isHeadingCrossRefBookmarkName( sSetRefName );
+        ::sw::mark::CrossRefHeadingBookmark::IsLegalName(sSetRefName);
 }
 
 bool SwGetRefField::IsRefToNumItemCrossRefBookmark() const
 {
     return GetSubType() == REF_BOOKMARK &&
-           bookmarkfunc::isNumItemCrossRefBookmarkName( sSetRefName );
+        ::sw::mark::CrossRefNumItemBookmark::IsLegalName(sSetRefName);
 }
 
 const SwTxtNode* SwGetRefField::GetReferencedTxtNode() const
@@ -869,27 +869,21 @@ SwTxtNode* SwGetRefFieldType::FindAnchor( SwDoc* pDoc, const String& rRefMark,
 
     case REF_BOOKMARK:
         {
-            USHORT nPos = pDoc->findBookmark( rRefMark );
-            if( USHRT_MAX != nPos )
+            IDocumentMarkAccess::const_iterator_t ppMark = pDoc->getIDocumentMarkAccess()->findMark(rRefMark);
+            if(ppMark != pDoc->getIDocumentMarkAccess()->getMarksEnd())
             {
-                const SwBookmark& rBkmk = *pDoc->getBookmarks()[ nPos ];
-                // --> OD 2007-09-27 #i81002# - refactoring
-                // simplify by using <SwBookmark::GetBookmarkStart()>
-//                const SwPosition* pPos = &rBkmk.GetBookmarkPos();
-//                if( rBkmk.GetOtherBookmarkPos() && *pPos > *rBkmk.GetOtherBookmarkPos() )
-//                    pPos = rBkmk.GetOtherBookmarkPos();
-                const SwPosition* pPos = rBkmk.BookmarkStart();
-                // <--
+                const ::sw::mark::IMark* pBkmk = ppMark->get();
+                const SwPosition* pPos = &pBkmk->GetMarkStart();
 
                 pTxtNd = pDoc->GetNodes()[ pPos->nNode ]->GetTxtNode();
                 *pStt = pPos->nContent.GetIndex();
-                if( pEnd )
+                if(pEnd)
                 {
-                    if( !rBkmk.GetOtherBookmarkPos() )
+                    if(!pBkmk->IsExpanded())
                     {
                         *pEnd = *pStt;
                         // --> OD 2007-10-18 #i81002#
-                        if ( dynamic_cast<const SwCrossRefBookmark*>(&rBkmk) != 0 )
+                        if(dynamic_cast< ::sw::mark::CrossRefBookmark const *>(pBkmk))
                         {
                             ASSERT( pTxtNd,
                                     "<SwGetRefFieldType::FindAnchor(..)> - node marked by cross-reference bookmark isn't a text node --> crash" );
@@ -897,16 +891,8 @@ SwTxtNode* SwGetRefFieldType::FindAnchor( SwDoc* pDoc, const String& rRefMark,
                         }
                         // <--
                     }
-                    else if( rBkmk.GetOtherBookmarkPos()->nNode == rBkmk.GetBookmarkPos().nNode )
-                    {
-                        // --> OD 2007-09-27 #i81002# - refactoring
-                        // simplify by using <SwBookmark::GetBookmarkEnd()>
-//                        *pEnd = rBkmk.GetOtherBookmarkPos() == pPos
-//                                ? rBkmk.GetBookmarkPos().nContent.GetIndex()
-//                                : rBkmk.GetOtherBookmarkPos()->nContent.GetIndex();
-                        *pEnd = rBkmk.BookmarkEnd()->nContent.GetIndex();
-                        // <--
-                    }
+                    else if(pBkmk->GetOtherMarkPos().nNode == pBkmk->GetMarkPos().nNode)
+                        *pEnd = pBkmk->GetMarkEnd().nContent.GetIndex();
                     else
                         *pEnd = USHRT_MAX;
                 }

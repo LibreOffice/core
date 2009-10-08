@@ -1204,22 +1204,24 @@ void SwTxtPaintInfo::_DrawBackBrush( const SwLinePortion &rPor ) const
     {
         SwRect aIntersect;
         CalcRect( rPor, &aIntersect, 0 );
-        SwTxtNode *pNd = pFrm->GetTxtNode();
-        SwBookmark *pBM=NULL;
-        if ( aIntersect.HasArea() )
+        if(aIntersect.HasArea())
         {
-            if (pNd)
+            SwTxtNode *pNd = pFrm->GetTxtNode();
+            const ::sw::mark::IMark* pFieldmark = NULL;
+            if(pNd)
             {
                 const SwDoc *doc=pNd->GetDoc();
-                if (doc!=NULL)
+                if(doc)
                 {
-                    SwIndex aIndex( pNd, GetIdx() );
+                    SwIndex aIndex(pNd, GetIdx());
                     SwPosition aPosition(*pNd, aIndex);
-                    pBM=doc->getFieldBookmarkFor(aPosition);
+                    pFieldmark=doc->getIDocumentMarkAccess()->getFieldmarkFor(aPosition);
                 }
             }
             bool bIsStartMark=(1==GetLen() && CH_TXT_ATR_FIELDSTART==GetTxt().GetChar(GetIdx()));
-            if (OnWin() && (pBM!=NULL || bIsStartMark))
+            if(pFieldmark) OSL_TRACE("Found Fieldmark");
+            if(bIsStartMark) OSL_TRACE("Found StartMark");
+            if (OnWin() && (pFieldmark!=NULL || bIsStartMark))
             {
                 OutputDevice* pOutDev = (OutputDevice*)GetOut();
                 pOutDev->Push( PUSH_LINECOLOR | PUSH_FILLCOLOR );
