@@ -154,7 +154,7 @@ $(DLLDEST)$/uno_types.rdb : $(SOLARBINDIR)$/udkapi.rdb
 
 $(DLLDEST)$/bridgetest_inprocess$(BATCH_SUFFIX) .ERRREMOVE: makefile.mk
 .IF "$(USE_SHELL)" == "bash"
-    echo '$(AUGMENT_LIBRARY_PATH)' uno -ro uno_services.rdb -ro uno_types.rdb \
+    echo '$(AUGMENT_LIBRARY_PATH)' '$(SOLARBINDIR)'/uno -ro uno_services.rdb -ro uno_types.rdb \
         -s com.sun.star.test.bridge.BridgeTest -- \
         com.sun.star.test.bridge.CppTestObject > $@
 .ELSE
@@ -164,7 +164,7 @@ $(DLLDEST)$/bridgetest_inprocess$(BATCH_SUFFIX) .ERRREMOVE: makefile.mk
 
 $(DLLDEST)$/bridgetest_client$(BATCH_SUFFIX) .ERRREMOVE: makefile.mk
 .IF "$(USE_SHELL)" == "bash"
-    echo '$(AUGMENT_LIBRARY_PATH)' uno -ro uno_services.rdb -ro uno_types.rdb \
+    echo '$(AUGMENT_LIBRARY_PATH)' '$(SOLARBINDIR)'/uno -ro uno_services.rdb -ro uno_types.rdb \
         -s com.sun.star.test.bridge.BridgeTest -- \
         -u \''uno:socket,host=127.0.0.1,port=2002;urp;test'\' > $@
 .ELSE
@@ -174,7 +174,7 @@ $(DLLDEST)$/bridgetest_client$(BATCH_SUFFIX) .ERRREMOVE: makefile.mk
 
 $(DLLDEST)$/bridgetest_server$(BATCH_SUFFIX) .ERRREMOVE: makefile.mk
 .IF "$(USE_SHELL)" == "bash"
-    echo '$(AUGMENT_LIBRARY_PATH)' uno -ro uno_services.rdb -ro uno_types.rdb \
+    echo '$(AUGMENT_LIBRARY_PATH)' '$(SOLARBINDIR)'/uno -ro uno_services.rdb -ro uno_types.rdb \
         -s com.sun.star.test.bridge.CppTestObject \
         -u \''uno:socket,host=127.0.0.1,port=2002;urp;test'\' --singleaccept \
         > $@
@@ -201,7 +201,7 @@ $(DLLDEST)$/bridgetest_javaserver$(BATCH_SUFFIX) : makefile.mk
 
 $(DLLDEST)$/bridgetest_inprocess_java$(BATCH_SUFFIX) .ERRREMOVE: makefile.mk
 .IF "$(USE_SHELL)" == "bash"
-    echo '$(AUGMENT_LIBRARY_PATH)' uno -ro uno_services.rdb -ro uno_types.rdb \
+    echo '$(AUGMENT_LIBRARY_PATH)' '$(SOLARBINDIR)'/uno -ro uno_services.rdb -ro uno_types.rdb \
         -s com.sun.star.test.bridge.BridgeTest \
         -env:URE_INTERNAL_JAVA_DIR=$(MY_URE_INTERNAL_JAVA_DIR) \
         -- com.sun.star.test.bridge.JavaTestObject noCurrentContext > $@

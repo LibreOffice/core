@@ -50,8 +50,12 @@ DOLLAR_SIGN=\$$
 DOLLAR_SIGN=$$
 .ENDIF
 
-#these are temporary
-PYTHON=$(WRAPCMD) python
+.IF "$(SYSTEM_PYTHON)"!="YES"
+PYTHON=$(AUGMENT_LIBRARY_PATH) $(WRAPCMD) $(SOLARBINDIR)/python
+.ELSE                   # "$(SYSTEM_LIBXSLT)"!="YES"
+PYTHON=$(AUGMENT_LIBRARY_PATH) $(WRAPCMD) python
+.ENDIF                  # "$(SYSTEM_LIBXSLT)"!="YES"
+
 
 .IF "$(GUI)"!="WNT" && "$(GUI)"!="OS2"
 .IF "$(USE_SHELL)"=="bash"
