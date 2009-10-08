@@ -85,6 +85,10 @@ icu_LDFLAGS+=-Wl,-z,noexecstack
 icu_CFLAGS+=-O $(ARCH_FLAGS) $(EXTRA_CDEFS)
 icu_CXXFLAGS+=-O $(ARCH_FLAGS) $(EXTRA_CDEFS)
 
+BUILD_ACTION_SEP=;
+# remove conversion and transliteration data to reduce binary size.
+CONFIGURE_ACTION=rm data/mappings/ucm*.mk data/translit/trn*.mk $(BUILD_ACTION_SEP)
+
 # until someone introduces SOLARIS 64-bit builds
 .IF "$(OS)"=="SOLARIS"
 DISABLE_64BIT=--enable-64bit-libs=no
@@ -96,7 +100,7 @@ LDFLAGSADD += -Wl,--hash-style=both
 
 CONFIGURE_DIR=source
 
-CONFIGURE_ACTION=sh -c 'CFLAGS="$(icu_CFLAGS)" CXXFLAGS="$(icu_CXXFLAGS)" LDFLAGS="$(icu_LDFLAGS)" ./configure --enable-layout --enable-static --enable-shared=yes $(DISABLE_64BIT)'
+CONFIGURE_ACTION+=sh -c 'CFLAGS="$(icu_CFLAGS)" CXXFLAGS="$(icu_CXXFLAGS)" LDFLAGS="$(icu_LDFLAGS)" ./configure --enable-layout --enable-static --enable-shared=yes $(DISABLE_64BIT)'
 
 #CONFIGURE_FLAGS=--enable-layout --enable-static --enable-shared=yes --enable-64bit-libs=no
 CONFIGURE_FLAGS=
@@ -138,9 +142,9 @@ OUT2BIN= \
 CONFIGURE_DIR=source
 .IF "$(COM)"=="GCC"
 .IF "$(USE_MINGW)"=="cygwin"
-CONFIGURE_ACTION=sh -c 'CFLAGS="-O -D_MT" CXXFLAGS="-O -D_MT" LDFLAGS="-L$(COMPATH)/lib/mingw -L$(COMPATH)/lib/w32api -L$(COMPATH)$/lib" LIBS="-lmingwthrd" ./configure --build=i586-pc-mingw32 --enable-layout --enable-static --enable-shared=yes --enable-64bit-libs=no'
+CONFIGURE_ACTION=+sh -c 'CFLAGS="-O -D_MT" CXXFLAGS="-O -D_MT" LDFLAGS="-L$(COMPATH)/lib/mingw -L$(COMPATH)/lib/w32api -L$(COMPATH)$/lib" LIBS="-lmingwthrd" ./configure --build=i586-pc-mingw32 --enable-layout --enable-static --enable-shared=yes --enable-64bit-libs=no'
 .ELSE
-CONFIGURE_ACTION=sh -c 'CFLAGS="-O -D_MT" CXXFLAGS="-O -D_MT" LDFLAGS="-L$(COMPATH)$/lib" LIBS="-lmingwthrd" ./configure --build=i586-pc-mingw32 --enable-layout --enable-static --enable-shared=yes --enable-64bit-libs=no'
+CONFIGURE_ACTION=+sh -c 'CFLAGS="-O -D_MT" CXXFLAGS="-O -D_MT" LDFLAGS="-L$(COMPATH)$/lib" LIBS="-lmingwthrd" ./configure --build=i586-pc-mingw32 --enable-layout --enable-static --enable-shared=yes --enable-64bit-libs=no'
 .ENDIF
 
 #CONFIGURE_FLAGS=--enable-layout --enable-static --enable-shared=yes --enable-64bit-libs=no
@@ -170,8 +174,6 @@ OUT2BIN= \
 .ELSE
 .IF "$(USE_SHELL)"=="4nt"
 BUILD_ACTION_SEP=^
-.ELSE			# "$(USE_SHELL)"=="4nt"
-BUILD_ACTION_SEP=;
 .ENDIF			# "$(USE_SHELL)"=="4nt"
 BUILD_DIR=source
 .IF "full_debug" == ""

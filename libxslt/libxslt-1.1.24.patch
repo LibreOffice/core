@@ -57,3 +57,23 @@
  if test "$includedir" != "/usr/include"; then
      the_flags="$the_flags -I$includedir `@XML_CONFIG@ --cflags`"
  else
+--- misc/libxslt-1.1.24/configure	2008-05-14 00:40:54.000000000 +0900
++++ misc/build/libxslt-1.1.24/configure	2008-07-17 22:12:38.097000000 +0900
+@@ -5730,7 +5730,7 @@
+ 
+ cygwin*)
+   # func_win32_libid is a shell function defined in ltmain.sh
+-  lt_cv_deplibs_check_method='file_magic ^x86 archive import|^x86 DLL'
++  lt_cv_deplibs_check_method='file_magic ^x86 archive|^x86 DLL'
+   lt_cv_file_magic_cmd='func_win32_libid'
+   ;;
+ 
+@@ -5739,7 +5739,7 @@
+   # func_win32_libid shell function, so use a weaker test based on 'objdump',
+   # unless we find 'file', for example because we are cross-compiling.
+   if ( file / ) >/dev/null 2>&1; then
+-    lt_cv_deplibs_check_method='file_magic ^x86 archive import|^x86 DLL'
++    lt_cv_deplibs_check_method='file_magic ^x86 archive|^x86 DLL'
+     lt_cv_file_magic_cmd='func_win32_libid'
+   else
+     lt_cv_deplibs_check_method='file_magic file format pei*-i386(.*architecture: i386)?'

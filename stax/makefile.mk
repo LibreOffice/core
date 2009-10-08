@@ -8,7 +8,7 @@
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.4 $
+# $Revision: 1.4.2.1 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -59,10 +59,15 @@ BUILD_ACTION=$(JAVAC) javax$/xml$/stream$/*.java && jar -cf jsr173_1.0_api.jar j
 
 OUT2CLASS=jsr173_1.0_api.jar
 
+.ELSE			# $(SOLAR_JAVA)!= ""
+nojava:
+    @echo "Not building $(PRJNAME) because Java is disabled"
 .ENDIF			# $(SOLAR_JAVA)!= ""
 # --- Targets ------------------------------------------------------
 
 .INCLUDE : set_ext.mk
 .INCLUDE : target.mk
+.IF "$(SOLAR_JAVA)" != ""
 .INCLUDE : tg_ext.mk
+.ENDIF
 

@@ -8,7 +8,7 @@
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.1 $
+# $Revision: 1.1.2.1 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -58,10 +58,15 @@ BUILD_ACTION=$(ANT) $(ANT_FLAGS) -Dsolarbindir=$(SOLARBINDIR) jar-bj
 
 OUT2CLASS= saxon-build$/9.0.0.7$/bj$/saxon9.jar
 
+.ELSE			# $(SOLAR_JAVA)!= ""
+nojava:
+    @echo "Not building $(PRJNAME) because Java is disabled"
 .ENDIF			# $(SOLAR_JAVA)!= ""
 # --- Targets ------------------------------------------------------
 
 .INCLUDE : set_ext.mk
 .INCLUDE : target.mk
+.IF "$(SOLAR_JAVA)" != ""
 .INCLUDE : tg_ext.mk
+.ENDIF
 

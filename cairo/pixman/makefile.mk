@@ -8,7 +8,7 @@
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.2 $
+# $Revision: 1.1.2.2 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -134,8 +134,7 @@ OUT2INC=pixman$/pixman-version.h  \
 OUT2LIB+=pixman$/.libs$/libpixman-1.a
 .ELIF "$(OS)"=="WNT"
 .IF "$(COM)"=="GCC"
-OUT2BIN+=pixman$/.libs$/*.a
-OUT2BIN+=pixman$/.libs$/*.dll
+OUT2LIB+=pixman$/.libs$/*.a
 .ELSE
 OUT2LIB+=win32$/bin.msvc$/*.lib
 OUT2BIN+=win32$/bin.msvc$/*.dll

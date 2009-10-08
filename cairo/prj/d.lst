@@ -12,4 +12,4 @@ mkdir: %_DEST%\inc%_EXT%\pixman-1
 ..\%__SRC%\lib\*.lib %_DEST%\lib%_EXT%\*.lib
 ..\%__SRC%\bin\*.dll %_DEST%\bin%_EXT%\*.dll
 ..\%__SRC%\lib\*.dll %_DEST%\bin%_EXT%\*.dll
-..\%__SRC%\bin\*.dll.* %_DEST%\bin%_EXT%\*.dll.*
+..\%__SRC%\bin\*.dll.a %_DEST%\lib%_EXT%\*.a
