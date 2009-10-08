@@ -1708,7 +1708,7 @@ void OFieldDescControl::DisplayData(OFieldDescription* pFieldDescr )
         String sDef = BoolStringUI(::comphelper::getString(pFieldDescr->GetControlDefault()));
 
         // sicher stellen das <<keiner>> nur vorhanden ist, wenn das Feld NULL sein darf
-        if ( pFieldType.get() && !pFieldType->bNullable || !pFieldDescr->IsNullable() )
+        if ( ( pFieldType.get() && !pFieldType->bNullable ) || !pFieldDescr->IsNullable() )
         {
             pFieldDescr->SetIsNullable(ColumnValue::NO_NULLS); // der Typ sagt das
 

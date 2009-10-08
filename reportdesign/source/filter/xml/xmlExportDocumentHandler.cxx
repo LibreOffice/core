@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2008 by Sun Microsystems, Inc.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -156,7 +156,7 @@ void SAL_CALL ExportDocumentHandler::endDocument() throw (uno::RuntimeException,
 }
 
 void SAL_CALL ExportDocumentHandler::startElement(const ::rtl::OUString & _sName, const uno::Reference< xml::sax::XAttributeList > & xAttribs) throw (uno::RuntimeException, xml::sax::SAXException)
-{    
+{
     bool bExport = true;
     if ( _sName.equalsAscii("office:chart") )
     {
@@ -187,7 +187,7 @@ void SAL_CALL ExportDocumentHandler::startElement(const ::rtl::OUString & _sName
             pList->AddAttribute(lcl_createAttribute(XML_NP_RPT,XML_ESCAPE_PROCESSING),::xmloff::token::GetXMLToken( XML_FALSE ));
 
         pList->AddAttribute(lcl_createAttribute(XML_NP_OFFICE,XML_MIMETYPE),MIMETYPE_OASIS_OPENDOCUMENT_CHART);
-        
+
         m_xDelegatee->startElement(lcl_createAttribute(XML_NP_OFFICE,XML_REPORT),xNewAttribs);
         bExport = false;
     }
@@ -203,7 +203,7 @@ void SAL_CALL ExportDocumentHandler::startElement(const ::rtl::OUString & _sName
         bExport = false;
         m_bTableRowsStarted = true;
         m_bFirstRowExported = true;
-    }        
+    }
     else if ( m_bTableRowsStarted && m_bFirstRowExported && (_sName.equalsAscii("table:table-row") || _sName.equalsAscii("table:table-cell")) )
         bExport = false;
     else if ( _sName.equalsAscii("chart:plot-area"))
@@ -219,7 +219,7 @@ void SAL_CALL ExportDocumentHandler::startElement(const ::rtl::OUString & _sName
     else if ( _sName.equalsAscii("chart:series"))
     {
         static ::rtl::OUString s_sCellAddress(lcl_createAttribute(XML_NP_CHART,XML_VALUES_CELL_RANGE_ADDRESS));
-        lcl_correctCellAddress(s_sCellAddress,xAttribs);        
+        lcl_correctCellAddress(s_sCellAddress,xAttribs);
     }
     else if ( m_bTableRowsStarted && !m_bFirstRowExported && _sName.equalsAscii("table:table-cell") )
     {
@@ -303,7 +303,7 @@ void SAL_CALL ExportDocumentHandler::initialize( const uno::Sequence< uno::Any >
     m_xDatabaseDataProvider.set(m_xModel->getDataProvider(),uno::UNO_QUERY);
     if ( !m_xDatabaseDataProvider.is() )
         throw uno::Exception();
-    
+
     uno::Reference< reflection::XProxyFactory > xProxyFactory( m_xContext->getServiceManager()->createInstanceWithContext(
         ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.reflection.ProxyFactory")),m_xContext),
         uno::UNO_QUERY);
@@ -314,7 +314,7 @@ void SAL_CALL ExportDocumentHandler::initialize( const uno::Sequence< uno::Any >
 
     // set ourself as delegator
     m_xProxy->setDelegator( *this );
-    
+
     const ::rtl::OUString sCommand = m_xDatabaseDataProvider->getCommand();
     if ( sCommand.getLength() )
         m_aColumns = ::dbtools::getFieldNamesByCommandDescriptor(m_xDatabaseDataProvider->getActiveConnection()
@@ -344,7 +344,7 @@ void ExportDocumentHandler::exportTableRows()
     m_xDelegatee->startElement(sRow,NULL);
 
     const ::rtl::OUString sValueType( lcl_createAttribute(XML_NP_OFFICE, XML_VALUE_TYPE) );
-    
+
     const static ::rtl::OUString s_sFieldPrefix(RTL_CONSTASCII_USTRINGPARAM("field:["));
     const static ::rtl::OUString s_sFieldPostfix(RTL_CONSTASCII_USTRINGPARAM("]"));
     const ::rtl::OUString sCell( lcl_createAttribute(XML_NP_TABLE, XML_TABLE_CELL) );
@@ -381,7 +381,7 @@ void ExportDocumentHandler::exportTableRows()
         m_xDelegatee->startElement(sFtext,xAttribs);
         m_xDelegatee->startElement(sRElement,NULL);
         m_xDelegatee->startElement(sRComponent,NULL);
-        
+
         m_xDelegatee->endElement(sRComponent);
         m_xDelegatee->endElement(sRElement);
         m_xDelegatee->endElement(sFtext);

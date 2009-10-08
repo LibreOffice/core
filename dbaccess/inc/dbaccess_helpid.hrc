@@ -441,6 +441,8 @@
 #define HID_DLG_QRY_JOIN_CONTROL                                ( HID_DBACCESS_START +  382)
 #define HID_DSADMIN_IGNORECURRENCY                              ( HID_DBACCESS_START +  383)
 
+#define HID_MACRO_MIGRATION_BACKUP_LOCATION                     ( HID_DBACCESS_START +  384)
+
 // this one below have hid in number space HID_SBA_START
 #define HID_DLG_ADABAS_NEWDB                        (HID_SBA_START +  0)
 #define HID_DLG_ADABAS_DBNAME                       (HID_SBA_START +  1)

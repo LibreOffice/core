@@ -62,7 +62,7 @@ public:
     virtual const formula::IFunctionCategory*       getCategory(sal_uInt32 nPos) const;
     virtual void                                    fillLastRecentlyUsedFunctions(::std::vector< const formula::IFunctionDescription*>& _rLastRUFunctions) const;
     virtual const formula::IFunctionDescription*    getFunctionByName(const ::rtl::OUString& _sFunctionName) const;
-    virtual const sal_Unicode                       getSingleToken(const EToken _eToken) const;
+    virtual sal_Unicode                       getSingleToken(const EToken _eToken) const;
 
     ::boost::shared_ptr< FunctionDescription >      get(const ::com::sun::star::uno::Reference< ::com::sun::star::report::meta::XFunctionDescription>& _xFunctionDescription) const;
 };

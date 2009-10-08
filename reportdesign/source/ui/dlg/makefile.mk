@@ -36,9 +36,12 @@ TARGET=uidlg
 IMGLST_SRS=$(SRS)$/$(TARGET).srs
 BMP_IN=$(PRJ)$/res
 
+VISIBILITY_HIDDEN=TRUE
+
 # --- Settings ----------------------------------
 
 .INCLUDE : settings.mk
+# .INCLUDE : $(PRJ)$/util$/dll.pmk
 
 # --- Files -------------------------------------
 

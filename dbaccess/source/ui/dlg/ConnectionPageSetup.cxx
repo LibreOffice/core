@@ -241,21 +241,21 @@ namespace dbaui
             {
                 Point aPos = m_aFT_HelpText.GetPosPixel();
                 Point aFTPos = m_aFT_Connection.GetPosPixel();
-                Point aEDPos = m_aET_Connection.GetPosPixel();
+                Point aEDPos = m_aConnectionURL.GetPosPixel();
                 Point aPBPos = m_aPB_Connection.GetPosPixel();
 
                 aEDPos.Y() = aPos.Y() + aEDPos.Y() - aFTPos.Y();
                 aPBPos.Y() = aPos.Y() + aPBPos.Y() - aFTPos.Y();
                 aFTPos.Y() = aPos.Y();
                 m_aFT_Connection.SetPosPixel(aFTPos);
-                m_aET_Connection.SetPosPixel(aEDPos);
+                m_aConnectionURL.SetPosPixel(aEDPos);
                 m_aPB_Connection.SetPosPixel(aPBPos);
             }
         }
         else
             m_aFT_Connection.Hide();
 
-        m_aET_Connection.SetModifyHdl(LINK(this, OConnectionTabPageSetup, OnEditModified));
+        m_aConnectionURL.SetModifyHdl(LINK(this, OConnectionTabPageSetup, OnEditModified));
 
         SetRoadmapStateValue(sal_False);
     }
@@ -299,13 +299,13 @@ namespace dbaui
     sal_Bool OConnectionTabPageSetup::FillItemSet(SfxItemSet& _rSet)
     {
         sal_Bool bChangedSomething = sal_False;
-        fillString(_rSet,&m_aET_Connection, DSID_CONNECTURL, bChangedSomething);
+        fillString(_rSet,&m_aConnectionURL, DSID_CONNECTURL, bChangedSomething);
         return bChangedSomething;
     }
     // -----------------------------------------------------------------------
     bool OConnectionTabPageSetup::checkTestConnection()
     {
-        return !m_aET_Connection.IsVisible() || (m_aET_Connection.GetTextNoPrefix().Len() != 0);
+        return !m_aConnectionURL.IsVisible() || (m_aConnectionURL.GetTextNoPrefix().Len() != 0);
     }
 
     // -----------------------------------------------------------------------

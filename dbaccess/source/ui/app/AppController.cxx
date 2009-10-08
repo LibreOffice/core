@@ -409,7 +409,7 @@ DBG_NAME(OApplicationController)
 OApplicationController::OApplicationController(const Reference< XMultiServiceFactory >& _rxORB)
     :OApplicationController_CBASE( _rxORB )
     ,m_aContextMenuInterceptors( getMutex() )
-    ,m_pSubComponentManager( new SubComponentManager( getSharedMutex() ) )
+    ,m_pSubComponentManager( new SubComponentManager( *this, getSharedMutex() ) )
     ,m_aTableCopyHelper(this)
     ,m_pClipbordNotifier(NULL)
     ,m_nAsyncDrop(0)
@@ -942,7 +942,7 @@ FeatureState OApplicationController::GetState(sal_uInt16 _nId) const
             case SID_DB_APP_DSUSERADMIN:
             {
                 ::dbaccess::DATASOURCE_TYPE eType = m_aTypeCollection.getType(::comphelper::getString(m_xDataSource->getPropertyValue(PROPERTY_URL)));
-                aReturn.bEnabled =  ::dbaccess::DST_EMBEDDED_HSQLDB != eType;
+                aReturn.bEnabled = ( ::dbaccess::DST_EMBEDDED_HSQLDB != eType );
             }
             break;
             case SID_DB_APP_DSRELDESIGN:
@@ -2322,6 +2322,9 @@ void OApplicationController::onSelectionChanged()
 // -----------------------------------------------------------------------------
 void OApplicationController::showPreviewFor(const ElementType _eType,const ::rtl::OUString& _sName)
 {
+    if ( m_ePreviewMode == E_PREVIEWNONE )
+        return;
+
     OApplicationView* pView = getContainer();
     if ( !pView )
         return;

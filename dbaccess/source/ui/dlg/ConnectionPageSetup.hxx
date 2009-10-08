@@ -89,21 +89,14 @@ namespace dbaui
         static  OGenericAdministrationPage* CreateUserDefinedTabPage( Window* pParent, const SfxItemSet& _rAttrSet );
 
 
-        virtual void SetServiceFactory(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > _rxORB)
-        {
-            OConnectionHelper::SetServiceFactory(_rxORB);
-//          m_aET_Connection.initializeTypeCollection(m_xORB);
-        }
-
-
         virtual BOOL        FillItemSet (SfxItemSet& _rCoreAttrs);
 
         virtual void        implInitControls(const SfxItemSet& _rSet, sal_Bool _bSaveValue);
         virtual sal_Bool    commitPage( CommitPageReason _eReason );
 
 
-        inline void enableConnectionURL() { m_aET_Connection.SetReadOnly(sal_False); }
-        inline void disableConnectionURL() { m_aET_Connection.SetReadOnly(); }
+        inline void enableConnectionURL() { m_aConnectionURL.SetReadOnly(sal_False); }
+        inline void disableConnectionURL() { m_aConnectionURL.SetReadOnly(); }
 
         /** changes the connection URL.
             <p>The new URL must be of the type which is currently selected, only the parts which do not

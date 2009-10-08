@@ -384,6 +384,7 @@ OAddTableDlg::OAddTableDlg( Window* pParent, IAddTableDialogContext& _rContext )
     m_aTableList.EnableCheckButton( NULL ); // do not show any buttons
     m_aTableList.SetSelectionMode( SINGLE_SELECTION );
     m_aTableList.notifyHiContrastChanged();
+    m_aTableList.suppressEmptyFolders();
 
     //////////////////////////////////////////////////////////////////////
     m_aQueryList.EnableInplaceEditing( FALSE );

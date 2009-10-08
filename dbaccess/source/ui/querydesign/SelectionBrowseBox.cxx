@@ -1806,7 +1806,8 @@ void OSelectionBrowseBox::AddGroupBy( const OTableFieldDescRef& rInfo , sal_uInt
 
         if (bCase(aField,rInfo->GetField()) &&
             bCase(aAlias,rInfo->GetAlias()) &&
-            pEntry->GetFunctionType() == rInfo->GetFunctionType())
+            pEntry->GetFunctionType() == rInfo->GetFunctionType() &&
+            pEntry->GetFunction() == rInfo->GetFunction())
         {
             /*sal_uInt32 nPos = aIter - rFields.begin();
             bAppend = _nCurrentPos > nPos && (rInfo->IsGroupBy() != pEntry->IsGroupBy());
@@ -1859,7 +1860,8 @@ void OSelectionBrowseBox::AddCondition( const OTableFieldDescRef& rInfo, const S
 
         if (bCase(aField,rInfo->GetField()) &&
             bCase(aAlias,rInfo->GetAlias()) &&
-            pEntry->GetFunctionType() == rInfo->GetFunctionType())
+            pEntry->GetFunctionType() == rInfo->GetFunctionType() &&
+            pEntry->GetFunction() == rInfo->GetFunction())
         {
             if ( pEntry->isNumericOrAggreateFunction() && rInfo->IsGroupBy() )
                 pEntry->SetGroupBy(sal_False);

@@ -59,6 +59,7 @@
 #endif
 #include <comphelper/sequence.hxx>
 #include <svtools/filenotation.hxx>
+#include <svtools/pathoptions.hxx>
 #include "dsntypes.hxx"
 namespace dbaxml
 {
@@ -97,7 +98,13 @@ OXMLFileBasedDatabase::OXMLFileBasedDatabase( ODBFilter& rImport,
         {
             case XML_TOK_DB_HREF:
                 {
-                    sLocation = ::svt::OFileNotation(rImport.GetAbsoluteReference(sValue)).get( ::svt::OFileNotation::N_SYSTEM );
+                    SvtPathOptions aPathOptions;
+                    rtl::OUString sFileName = aPathOptions.SubstituteVariable(sValue);
+                    if ( sValue == sFileName )
+                    {
+                        sLocation = ::svt::OFileNotation(rImport.GetAbsoluteReference(sValue)).get( ::svt::OFileNotation::N_SYSTEM );
+                    }
+
                     if ( sLocation.getLength() == 0 )
                         sLocation = sValue;
                 }

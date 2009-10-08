@@ -113,7 +113,10 @@ namespace rptui
 
         m_sUndecoratedContent = _rFieldOrExpression;
     }
-
+    //--------------------------------------------------------------------
+    ReportFormula::~ReportFormula()
+    {
+    }
     //--------------------------------------------------------------------
     void ReportFormula::impl_construct( const ::rtl::OUString& _rFormula )
     {
@@ -158,7 +161,22 @@ namespace rptui
 
         return aFieldContent.makeStringAndClear();
     }
-
+    //--------------------------------------------------------------------
+    const ::rtl::OUString& ReportFormula::getUndecoratedContent() const
+    {
+        return m_sUndecoratedContent;
+    }
+    const ::rtl::OUString&  ReportFormula::getCompleteFormula() const { return m_sCompleteFormula; }
+    bool                    ReportFormula::isValid() const { return getType() != Invalid; }
+    ReportFormula& ReportFormula::operator=(class ReportFormula const & _rHd)
+    {
+        if ( this == &_rHd )
+            return *this;
+        m_eType                 = _rHd.m_eType;
+        m_sCompleteFormula      = _rHd.m_sCompleteFormula;
+        m_sUndecoratedContent   = _rHd.m_sUndecoratedContent;
+        return *this;
+    }
 //........................................................................
 } // namespace rptui
 //........................................................................

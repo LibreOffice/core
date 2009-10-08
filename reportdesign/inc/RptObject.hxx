@@ -30,6 +30,7 @@
 #ifndef _REPORT_RPTUIOBJ_HXX
 #define _REPORT_RPTUIOBJ_HXX
 
+#include "dllapi.h"
 #include <svx/svdoole2.hxx>
 #include <svx/svdouno.hxx>
 
@@ -44,7 +45,7 @@
 #include <svx/svdoashp.hxx>
 #include <comphelper/stl_types.hxx>
 #include <comphelper/implementationreference.hxx>
-#include "dllapi.h"
+
 
 namespace rptui
 {

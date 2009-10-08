@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2008 by Sun Microsystems, Inc.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -324,7 +324,6 @@ ODatabaseModelImpl::ODatabaseModelImpl( const Reference< XMultiServiceFactory >&
             ,m_pDBContext( &_rDBContext )
             ,m_refCount(0)
             ,m_bHasAnyObjectWithMacros( false )
-            ,m_bHasMacroStorages( false )
             ,m_bModificationLock( false )
             ,m_bDocumentInitialized( false )
             ,m_aContext( _rxFactory )
@@ -364,7 +363,6 @@ ODatabaseModelImpl::ODatabaseModelImpl(
             ,m_pDBContext( &_rDBContext )
             ,m_refCount(0)
             ,m_bHasAnyObjectWithMacros( false )
-            ,m_bHasMacroStorages( false )
             ,m_bModificationLock( false )
             ,m_bDocumentInitialized( false )
             ,m_aContext( _rxFactory )
@@ -1114,7 +1112,7 @@ const AsciiPropertyValue* ODatabaseModelImpl::getDefaultDataSourceSettings()
         AsciiPropertyValue( "IgnoreCurrency",             makeAny( (sal_Bool)sal_False ) ),
         AsciiPropertyValue( "TypeInfoSettings",           makeAny( Sequence< Any >()) ),
         AsciiPropertyValue( "LocalSocket",                makeAny( ::rtl::OUString() ) ),
-        
+
         AsciiPropertyValue( NULL, Any() )
     };
     return aKnownSettings;
@@ -1391,9 +1389,8 @@ Reference< XStorage > ODatabaseModelImpl::getLastCommitDocumentStorage()
 sal_Bool ODatabaseModelImpl::documentStorageHasMacros() const
 {
     // does our root storage contain macros?
-    if ( ::sfx2::DocumentMacroMode::storageHasMacros( m_xDocumentStorage ) )
+    if ( ::sfx2::DocumentMacroMode::storageHasMacros( const_cast< ODatabaseModelImpl* >( this )->getOrCreateRootStorage() ) )
     {
-        const_cast< ODatabaseModelImpl* >( this )->m_bHasMacroStorages = true;
         return true;
     }
 

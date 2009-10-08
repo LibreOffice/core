@@ -75,7 +75,7 @@ namespace dbaui
         OConnectionHelper( Window* pParent, const ResId& _rId, const SfxItemSet& _rCoreAttrs);
         virtual ~OConnectionHelper();
         FixedText           m_aFT_Connection;
-        OConnectionURLEdit  m_aET_Connection;
+        OConnectionURLEdit  m_aConnectionURL;
         PushButton          m_aPB_Connection;
         ::dbaccess::DATASOURCE_TYPE
                             m_eType;          // the type can't be changed in this class, so we hold it as member.
@@ -96,8 +96,8 @@ namespace dbaui
 
         // setting/retrieving the current connection URL
         // necessary because for some types, the URL must be decoded for display purposes
-        String      getURL( OConnectionURLEdit* _m_pConnection ) const;
-        void        setURL( const String& _rURL, OConnectionURLEdit* _m_pConnection );
+        //String        getURL( OConnectionURLEdit* _m_pConnection ) const;
+        //void      setURL( const String& _rURL, OConnectionURLEdit* _m_pConnection );
 
         String      getURLNoPrefix( ) const;
         void        setURLNoPrefix( const String& _rURL );
@@ -122,19 +122,20 @@ namespace dbaui
            virtual void SetServiceFactory(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > _rxORB)
         {
             OGenericAdministrationPage::SetServiceFactory(_rxORB);
-            m_aET_Connection.initializeTypeCollection(m_xORB);
+            m_aConnectionURL.initializeTypeCollection(m_xORB);
         }
 
     protected:
-        DECL_LINK(OnBrowseConnections, PushButton*);
-        void        setURL( const String& _rURL );
-        String      implGetURL( sal_Bool _bPrefix ) const;
-        void        implSetURL( const String& _rURL, sal_Bool _bPrefix );
-        StringBag getInstalledAdabasDBDirs(const String &_rPath,const ::ucbhelper::ResultSetInclude& _reResultSetInclude);
-        StringBag getInstalledAdabasDBs(const String &_rConfigDir,const String &_rWorkDir);
-        virtual bool checkTestConnection();
+        void            setURL( const String& _rURL );
+        virtual bool    checkTestConnection();
 
-        void    implUpdateURLDependentStates() const;
+    private:
+        DECL_LINK(OnBrowseConnections, PushButton*);
+        StringBag   getInstalledAdabasDBDirs(const String &_rPath,const ::ucbhelper::ResultSetInclude& _reResultSetInclude);
+        StringBag   getInstalledAdabasDBs(const String &_rConfigDir,const String &_rWorkDir);
+        String      impl_getURL( sal_Bool _bPrefix ) const;
+        void        impl_setURL( const String& _rURL, sal_Bool _bPrefix );
+        void        implUpdateURLDependentStates() const;
     };
 
 //.........................................................................

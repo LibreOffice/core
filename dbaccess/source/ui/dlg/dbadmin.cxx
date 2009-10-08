@@ -105,15 +105,16 @@ ODbAdminDialog::ODbAdminDialog(Window* _pParent
                                , const Reference< XMultiServiceFactory >& _rxORB
                                )
     :SfxTabDialog(_pParent, ModuleRes(DLG_DATABASE_ADMINISTRATION), _pItems)
-    ,m_bResetting(sal_False)
     ,m_bApplied(sal_False)
     ,m_bUIEnabled( sal_True )
+    ,m_nMainPageID( PAGE_CONNECTION )
 {
     DBG_CTOR(ODbAdminDialog,NULL);
 
     m_pImpl = ::std::auto_ptr<ODbDataSourceAdministrationHelper>(new ODbDataSourceAdministrationHelper(_rxORB,this,this));
+
     // add the initial tab page
-    AddTabPage(PAGE_CONNECTION, String(ModuleRes(STR_PAGETITLE_GENERAL)), OConnectionTabPage::Create, NULL);
+    AddTabPage( m_nMainPageID, String( ModuleRes( STR_PAGETITLE_GENERAL ) ), OConnectionTabPage::Create, NULL );
 
     // remove the reset button - it's meaning is much too ambiguous in this dialog
     RemoveResetButton();
@@ -174,13 +175,11 @@ void ODbAdminDialog::addDetailPage(USHORT _nPageId, USHORT _nTextId, CreateTabPa
 }
 
 //-------------------------------------------------------------------------
-void ODbAdminDialog::implSelectDatasource(const ::com::sun::star::uno::Any& _aDataSourceName)
+void ODbAdminDialog::impl_selectDataSource(const ::com::sun::star::uno::Any& _aDataSourceName)
 {
     m_pImpl->setDataSourceOrName(_aDataSourceName);
-
-    // reset the tag pages
     Reference< XPropertySet > xDatasource = m_pImpl->getCurrentDataSource();
-    resetPages(xDatasource);
+    impl_resetPages( xDatasource );
 
     ::dbaccess::DATASOURCE_TYPE eType = getDatasourceType(*getOutputSet());
 
@@ -208,12 +207,11 @@ void ODbAdminDialog::implSelectDatasource(const ::com::sun::star::uno::Any& _aDa
         case  ::dbaccess::DST_MYSQL_ODBC:
             addDetailPage(PAGE_MYSQL_ODBC, STR_PAGETITLE_ADVANCED, ODriversSettings::CreateMySQLODBC);
             break;
+
         case  ::dbaccess::DST_MYSQL_JDBC:
             addDetailPage(PAGE_MYSQL_JDBC, STR_PAGETITLE_ADVANCED, ODriversSettings::CreateMySQLJDBC);
             break;
-        case  ::dbaccess::DST_MYSQL_NATIVE:
-            addDetailPage(PAGE_MYSQL_JDBC, STR_PAGETITLE_ADVANCED, ODriversSettings::CreateMySQLNATIVE);
-            break;
+
         case  ::dbaccess::DST_ORACLE_JDBC:
             addDetailPage(PAGE_ORACLE_JDBC, STR_PAGETITLE_ADVANCED, ODriversSettings::CreateOracleJDBC);
             break;
@@ -252,7 +250,7 @@ void ODbAdminDialog::implSelectDatasource(const ::com::sun::star::uno::Any& _aDa
 }
 
 //-------------------------------------------------------------------------
-void ODbAdminDialog::resetPages(const Reference< XPropertySet >& _rxDatasource)
+void ODbAdminDialog::impl_resetPages(const Reference< XPropertySet >& _rxDatasource)
 {
     // the selection is valid if and only if we have a datasource now
     GetInputSetImpl()->Put(SfxBoolItem(DSID_INVALID_SELECTION, !_rxDatasource.is()));
@@ -261,18 +259,8 @@ void ODbAdminDialog::resetPages(const Reference< XPropertySet >& _rxDatasource)
 
     // reset the pages
 
-    sal_uInt16 nOldSelectedPage = GetCurPageId();
-
     // prevent flicker
     SetUpdateMode(sal_False);
-
-    m_bResetting = sal_True;
-    ShowPage(PAGE_CONNECTION);
-    m_bResetting = sal_False;
-
-    // remove all tab pages (except the general one)
-    // remove all current detail pages
-    removeDetailPages();
 
     // remove all items which relate to indirect properties from the input set
     // (without this, the following may happen: select an arbitrary data source where some indirect properties
@@ -293,30 +281,24 @@ void ODbAdminDialog::resetPages(const Reference< XPropertySet >& _rxDatasource)
     delete pExampleSet;
     pExampleSet = new SfxItemSet(*GetInputSetImpl());
 
-    m_bResetting = sal_True;
+    // special case: MySQL Native does not have the generic PAGE_CONNECTION page
+    ::dbaccess::DATASOURCE_TYPE eType = getDatasourceType( *pExampleSet );
+    if ( eType == ::dbaccess::DST_MYSQL_NATIVE )
+    {
+        LocalResourceAccess aDummy(DLG_DATABASE_ADMINISTRATION, RSC_TABDIALOG);
+        AddTabPage( PAGE_MYSQL_NATIVE, String( ModuleRes( STR_PAGETITLE_CONNECTION ) ), ODriversSettings::CreateMySQLNATIVE, NULL );
+        RemoveTabPage( PAGE_CONNECTION );
+        m_nMainPageID = PAGE_MYSQL_NATIVE;
+    }
 
-    // unfortunately, I have no chance if a page with ID nOldSelectedPage still exists
-    // So we first select the general page (which is always available) and the the old page (which may not be there)
-
-    ShowPage( PAGE_CONNECTION );
-    SfxTabPage* pConnectionPage = GetTabPage(PAGE_CONNECTION);
+    ShowPage( m_nMainPageID );
+    SfxTabPage* pConnectionPage = GetTabPage( m_nMainPageID );
     if ( pConnectionPage )
         pConnectionPage->Reset(*GetInputSetImpl());
     // if this is NULL, the page has not been created yet, which means we're called before the
     // dialog was displayed (probably from inside the ctor)
 
-    if ( isUIEnabled() )
-    {
-        ShowPage( nOldSelectedPage );
-        // same for the previously selected page, if it is still there
-        SfxTabPage* pOldPage = GetTabPage( nOldSelectedPage );
-        if (pOldPage)
-            pOldPage->Reset(*GetInputSetImpl());
-    }
-
     SetUpdateMode(sal_True);
-
-    m_bResetting = sal_False;
 }
 // -----------------------------------------------------------------------------
 void ODbAdminDialog::setTitle(const ::rtl::OUString& _sTitle)
@@ -357,7 +339,7 @@ ODbAdminDialog::ApplyResult ODbAdminDialog::implApplyChanges()
 //-------------------------------------------------------------------------
 void ODbAdminDialog::selectDataSource(const ::com::sun::star::uno::Any& _aDataSourceName)
 {
-    implSelectDatasource(_aDataSourceName);
+    impl_selectDataSource(_aDataSourceName);
 }
 
 // -----------------------------------------------------------------------------
@@ -550,7 +532,7 @@ void ODbAdminDialog::destroyItemSet(SfxItemSet*& _rpSet, SfxItemPool*& _rpPool, 
     {
         _rpPool->ReleaseDefaults(sal_True);
             // the "true" means delete the items, too
-        delete _rpPool;
+        SfxItemPool::Free(_rpPool);
         _rpPool = NULL;
     }
 

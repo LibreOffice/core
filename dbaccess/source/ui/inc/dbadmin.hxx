@@ -69,9 +69,9 @@ private:
 
     ::std::auto_ptr<ODbDataSourceAdministrationHelper>  m_pImpl;
 
-    sal_Bool                m_bResetting : 1;   /// sal_True while we're resetting the pages
     sal_Bool                m_bApplied : 1;     /// sal_True if any changes have been applied while the dialog was executing
     sal_Bool                m_bUIEnabled : 1;   /// <TRUE/> if the UI is enabled, false otherwise. Cannot be switched back to <TRUE/>, once it is <FALSE/>
+    USHORT                  m_nMainPageID;
 
 public:
     /** ctor. The itemset given should have been created by <method>createItemSet</method> and should be destroyed
@@ -124,10 +124,11 @@ protected:
     inline sal_Bool isUIEnabled() const { return m_bUIEnabled; }
     inline void     disabledUI() { m_bUIEnabled = sal_False; }
 
+private:
     /// select a datasource with a given name, adjust the item set accordingly, and everything like that ..
-    void implSelectDatasource(const ::com::sun::star::uno::Any& _aDataSourceName);
+    void impl_selectDataSource(const ::com::sun::star::uno::Any& _aDataSourceName);
     /// reset the tag pages according to m_sCurrentDatasource and <arg>_rxDatasource</arg>
-    void resetPages(const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxDatasource);
+    void impl_resetPages(const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxDatasource);
 
     enum ApplyResult
     {

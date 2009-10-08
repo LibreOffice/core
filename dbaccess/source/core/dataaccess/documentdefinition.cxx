@@ -1444,42 +1444,54 @@ sal_Bool ODocumentDefinition::saveAs()
                 Reference<XNameContainer> xNC(pDocuSave->getContent(),UNO_QUERY);
                 if ( xNC.is() )
                 {
-                    try
+                    if ( m_pImpl->m_aProps.aTitle == pDocuSave->getName() )
                     {
-                        Reference< XStorage> xStorage = getContainerStorage();
-                        const static ::rtl::OUString sBaseName(RTL_CONSTASCII_USTRINGPARAM("Obj"));
-                        // -----------------------------------------------------------------------------
-                        Reference<XNameAccess> xElements(xStorage,UNO_QUERY_THROW);
-                        ::rtl::OUString sPersistentName = ::dbtools::createUniqueName(xElements,sBaseName);
-                        xStorage->copyElementTo(m_pImpl->m_aProps.sPersistentName,xStorage,sPersistentName);
-
-                        ::rtl::OUString sOldName = m_pImpl->m_aProps.aTitle;
-                        rename(pDocuSave->getName());
-                        updateDocumentTitle();
-
-                        Sequence< Any > aArguments(3);
-                        PropertyValue aValue;
-                        // set as folder
-                        aValue.Name = PROPERTY_NAME;
-                        aValue.Value <<= sOldName;
-                        aArguments[0] <<= aValue;
-
-                        aValue.Name = PROPERTY_PERSISTENT_NAME;
-                        aValue.Value <<= sPersistentName;
-                        aArguments[1] <<= aValue;
-
-                        aValue.Name = PROPERTY_AS_TEMPLATE;
-                        aValue.Value <<= m_pImpl->m_aProps.bAsTemplate;
-                        aArguments[2] <<= aValue;
-
-                        Reference< XMultiServiceFactory > xORB( m_xParentContainer, UNO_QUERY_THROW );
-                        Reference< XInterface > xComponent( xORB->createInstanceWithArguments( SERVICE_SDB_DOCUMENTDEFINITION, aArguments ) );
-                        Reference< XNameContainer > xNameContainer( m_xParentContainer, UNO_QUERY_THROW );
-                        xNameContainer->insertByName( sOldName, makeAny( xComponent ) );
+                        Reference<XEmbedPersist> xPersist(m_xEmbeddedObject,UNO_QUERY);
+                        if ( xPersist.is() )
+                        {
+                            xPersist->storeOwn();
+                            notifyDataSourceModified();
+                        }
                     }
-                    catch(Exception&)
+                    else
                     {
-                        DBG_UNHANDLED_EXCEPTION();
+                        try
+                        {
+                            Reference< XStorage> xStorage = getContainerStorage();
+                            const static ::rtl::OUString sBaseName(RTL_CONSTASCII_USTRINGPARAM("Obj"));
+                            // -----------------------------------------------------------------------------
+                            Reference<XNameAccess> xElements(xStorage,UNO_QUERY_THROW);
+                            ::rtl::OUString sPersistentName = ::dbtools::createUniqueName(xElements,sBaseName);
+                            xStorage->copyElementTo(m_pImpl->m_aProps.sPersistentName,xStorage,sPersistentName);
+
+                            ::rtl::OUString sOldName = m_pImpl->m_aProps.aTitle;
+                            rename(pDocuSave->getName());
+                            updateDocumentTitle();
+
+                            Sequence< Any > aArguments(3);
+                            PropertyValue aValue;
+                            // set as folder
+                            aValue.Name = PROPERTY_NAME;
+                            aValue.Value <<= sOldName;
+                            aArguments[0] <<= aValue;
+
+                            aValue.Name = PROPERTY_PERSISTENT_NAME;
+                            aValue.Value <<= sPersistentName;
+                            aArguments[1] <<= aValue;
+
+                            aValue.Name = PROPERTY_AS_TEMPLATE;
+                            aValue.Value <<= m_pImpl->m_aProps.bAsTemplate;
+                            aArguments[2] <<= aValue;
+
+                            Reference< XMultiServiceFactory > xORB( m_xParentContainer, UNO_QUERY_THROW );
+                            Reference< XInterface > xComponent( xORB->createInstanceWithArguments( SERVICE_SDB_DOCUMENTDEFINITION, aArguments ) );
+                            Reference< XNameContainer > xNameContainer( m_xParentContainer, UNO_QUERY_THROW );
+                            xNameContainer->insertByName( sOldName, makeAny( xComponent ) );
+                        }
+                        catch(Exception&)
+                        {
+                            DBG_UNHANDLED_EXCEPTION();
+                        }
                     }
                 }
             }
@@ -1543,15 +1555,7 @@ namespace
 // -----------------------------------------------------------------------------
 sal_Bool ODocumentDefinition::objectSupportsEmbeddedScripts() const
 {
-//    bool bAllowDocumentMacros = !m_pImpl->m_pDataSource || m_pImpl->m_pDataSource->hasAnyObjectWithMacros();
-    // TODO: revert to the disabled code. The current version is just to be able
-    // to integrate an intermediate version of the CWS, which should behave as
-    // if no macros in DB docs are allowed
-    bool bAllowDocumentMacros = !m_pImpl->m_pDataSource->hasMacroStorages();
-        // even if the current version is not able to create documents which contain macros,
-        // later versions will be. Such documents contain macro/script storages in the
-        // document root storage, in which case we need to disable the per-form/report
-        // scripting.
+    bool bAllowDocumentMacros = !m_pImpl->m_pDataSource || m_pImpl->m_pDataSource->hasAnyObjectWithMacros();
 
     // if *any* of the objects of the database document already has macros, we continue to allow it
     // to have them, until the user did a migration.

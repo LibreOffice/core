@@ -2352,24 +2352,25 @@ void OReportController::openPageDialog(const uno::Reference<report::XSection>& _
         0
     };
 
+    SfxItemPool* pPool = new SfxItemPool(String::CreateFromAscii("ReportPageProperties"), RPTUI_ID_LRSPACE,RPTUI_ID_METRIC, aItemInfos, pDefaults);
+    pPool->SetDefaultMetric( SFX_MAPUNIT_100TH_MM );    // ripped, don't understand why
+    pPool->FreezeIdRanges();                        // the same
+
     try
     {
-        ::std::auto_ptr<SfxItemPool> pPool( new SfxItemPool(String::CreateFromAscii("ReportPageProperties"), RPTUI_ID_LRSPACE,RPTUI_ID_METRIC, aItemInfos, pDefaults) );
-        pPool->SetDefaultMetric( SFX_MAPUNIT_100TH_MM );    // ripped, don't understand why
-        pPool->FreezeIdRanges();                        // the same
+        SfxItemSet aDescriptor(*pPool, pRanges);
 
-        ::std::auto_ptr<SfxItemSet> pDescriptor(new SfxItemSet(*pPool, pRanges));
         // fill it
         if ( _xSection.is() )
-            pDescriptor->Put(SvxBrushItem(::Color(_xSection->getBackColor()),ITEMID_BRUSH));
+            aDescriptor.Put(SvxBrushItem(::Color(_xSection->getBackColor()),ITEMID_BRUSH));
         else
         {
-            pDescriptor->Put(SvxSizeItem(RPTUI_ID_SIZE,VCLSize(getStyleProperty<awt::Size>(m_xReportDefinition,PROPERTY_PAPERSIZE))));
-            pDescriptor->Put(SvxLRSpaceItem(getStyleProperty<sal_Int32>(m_xReportDefinition,PROPERTY_LEFTMARGIN)
+            aDescriptor.Put(SvxSizeItem(RPTUI_ID_SIZE,VCLSize(getStyleProperty<awt::Size>(m_xReportDefinition,PROPERTY_PAPERSIZE))));
+            aDescriptor.Put(SvxLRSpaceItem(getStyleProperty<sal_Int32>(m_xReportDefinition,PROPERTY_LEFTMARGIN)
                                             ,getStyleProperty<sal_Int32>(m_xReportDefinition,PROPERTY_RIGHTMARGIN),0,0,RPTUI_ID_LRSPACE));
-            pDescriptor->Put(SvxULSpaceItem(static_cast<USHORT>(getStyleProperty<sal_Int32>(m_xReportDefinition,PROPERTY_TOPMARGIN))
+            aDescriptor.Put(SvxULSpaceItem(static_cast<USHORT>(getStyleProperty<sal_Int32>(m_xReportDefinition,PROPERTY_TOPMARGIN))
                                             ,static_cast<USHORT>(getStyleProperty<sal_Int32>(m_xReportDefinition,PROPERTY_BOTTOMMARGIN)),RPTUI_ID_ULSPACE));
-            pDescriptor->Put(SfxUInt16Item(SID_ATTR_METRIC,static_cast<UINT16>(eUserMetric)));
+            aDescriptor.Put(SfxUInt16Item(SID_ATTR_METRIC,static_cast<UINT16>(eUserMetric)));
 
             uno::Reference< style::XStyle> xPageStyle(getUsedStyle(m_xReportDefinition));
             if ( xPageStyle.is() )
@@ -2380,13 +2381,13 @@ void OReportController::openPageDialog(const uno::Reference<report::XSection>& _
                 aPageItem.PutValue(xProp->getPropertyValue(PROPERTY_PAGESTYLELAYOUT),MID_PAGE_LAYOUT);
                 aPageItem.SetLandscape(getStyleProperty<sal_Bool>(m_xReportDefinition,PROPERTY_ISLANDSCAPE));
                 aPageItem.SetNumType((SvxNumType)getStyleProperty<sal_Int16>(m_xReportDefinition,PROPERTY_NUMBERINGTYPE));
-                pDescriptor->Put(aPageItem);
-                pDescriptor->Put(SvxBrushItem(::Color(getStyleProperty<sal_Int32>(m_xReportDefinition,PROPERTY_BACKCOLOR)),RPTUI_ID_BRUSH));
+                aDescriptor.Put(aPageItem);
+                aDescriptor.Put(SvxBrushItem(::Color(getStyleProperty<sal_Int32>(m_xReportDefinition,PROPERTY_BACKCOLOR)),RPTUI_ID_BRUSH));
             }
         }
 
         {   // want the dialog to be destroyed before our set
-            ORptPageDialog aDlg(getView(), pDescriptor.get(),_xSection.is() ? RID_PAGEDIALOG_BACKGROUND : RID_PAGEDIALOG_PAGE);
+            ORptPageDialog aDlg(getView(), &aDescriptor, _xSection.is() ? RID_PAGEDIALOG_BACKGROUND : RID_PAGEDIALOG_PAGE);
             if (RET_OK == aDlg.Execute())
             {
                 // ------------
@@ -2449,9 +2450,10 @@ void OReportController::openPageDialog(const uno::Reference<report::XSection>& _
         DBG_UNHANDLED_EXCEPTION();
     }
 
+    SfxItemPool::Free(pPool);
+
     for (sal_uInt16 i=0; i<sizeof(pDefaults)/sizeof(pDefaults[0]); ++i)
         delete pDefaults[i];
-
 }
 // -----------------------------------------------------------------------------
 sal_Bool SAL_CALL OReportController::attachModel(const uno::Reference< frame::XModel > & xModel) throw( uno::RuntimeException )
@@ -3987,19 +3989,21 @@ void OReportController::openZoomDialog()
             SID_ATTR_ZOOM,SID_ATTR_ZOOM,
             0
         };
+
+        SfxItemPool* pPool = new SfxItemPool(String::CreateFromAscii("ZoomProperties"), SID_ATTR_ZOOM,SID_ATTR_ZOOM, aItemInfos, pDefaults);
+        pPool->SetDefaultMetric( SFX_MAPUNIT_100TH_MM );    // ripped, don't understand why
+        pPool->FreezeIdRanges();                        // the same
+
         try
         {
-            ::std::auto_ptr<SfxItemPool> pPool( new SfxItemPool(String::CreateFromAscii("ZoomProperties"), SID_ATTR_ZOOM,SID_ATTR_ZOOM, aItemInfos, pDefaults) );
-            pPool->SetDefaultMetric( SFX_MAPUNIT_100TH_MM );    // ripped, don't understand why
-            pPool->FreezeIdRanges();                        // the same
+            SfxItemSet aDescriptor(*pPool, pRanges);
 
-            ::std::auto_ptr<SfxItemSet> pDescriptor(new SfxItemSet(*pPool, pRanges));
             // fill it
             SvxZoomItem aZoomItem( m_eZoomType, m_nZoomValue, SID_ATTR_ZOOM );
             aZoomItem.SetValueSet(SVX_ZOOM_ENABLE_100|SVX_ZOOM_ENABLE_WHOLEPAGE|SVX_ZOOM_ENABLE_PAGEWIDTH);
-            pDescriptor->Put(aZoomItem);
+            aDescriptor.Put(aZoomItem);
 
-            ::std::auto_ptr<AbstractSvxZoomDialog> pDlg( pFact->CreateSvxZoomDialog(NULL, *pDescriptor.get(), RID_SVXDLG_ZOOM) );
+            ::std::auto_ptr<AbstractSvxZoomDialog> pDlg( pFact->CreateSvxZoomDialog(NULL, aDescriptor, RID_SVXDLG_ZOOM) );
             pDlg->SetLimits( 20, 400 );
             bool bCancel = ( RET_CANCEL == pDlg->Execute() );
 
@@ -4019,8 +4023,10 @@ void OReportController::openZoomDialog()
             DBG_UNHANDLED_EXCEPTION();
         }
 
-    for (sal_uInt16 i=0; i<sizeof(pDefaults)/sizeof(pDefaults[0]); ++i)
-        delete pDefaults[i];
+        SfxItemPool::Free(pPool);
+
+        for (sal_uInt16 i=0; i<sizeof(pDefaults)/sizeof(pDefaults[0]); ++i)
+            delete pDefaults[i];
     } // if(pFact)
 }
 // -----------------------------------------------------------------------------

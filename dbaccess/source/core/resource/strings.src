@@ -337,7 +337,7 @@ Resource RSC_DATASOURCE_TYPES
     };
     String STR_MYSQL_NATIVE
     {
-        Text  ="sdbc:mysqlc:";
+        Text  ="sdbc:mysql:mysqlc:";
     };
 };
 

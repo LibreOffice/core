@@ -1113,9 +1113,16 @@ void ODbDataSourceAdministrationHelper::convertUrl(SfxItemSet& _rDest)
 
     if ( sUrlPart.Len() )
     {
-        String sNewUrl = pCollection->getDatasourcePrefix(eType);
-        sNewUrl += sUrlPart;
-        _rDest.Put(SfxStringItem(DSID_CONNECTURL, sNewUrl));
+        if ( eType == ::dbaccess::DST_MYSQL_NATIVE )
+        {
+            _rDest.Put( SfxStringItem( DSID_DATABASENAME, sUrlPart ) );
+        }
+        else
+        {
+            String sNewUrl = pCollection->getDatasourcePrefix(eType);
+            sNewUrl += sUrlPart;
+            _rDest.Put( SfxStringItem( DSID_CONNECTURL, sNewUrl ) );
+        }
     }
 
     if ( sNewHostName.Len() )

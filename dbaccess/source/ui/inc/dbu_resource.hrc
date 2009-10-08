@@ -147,7 +147,7 @@
 #define PAGE_MYSQL_JDBC                 RID_PAGE_START + 20
 #define PAGE_GENERATED_VALUES           RID_PAGE_START + 22
 #define PAGE_ADVANCED_SETTINGS_SPECIAL  RID_PAGE_START + 23
-    // FREE
+#define PAGE_MYSQL_NATIVE               RID_PAGE_START + 24
     // FREE
     // FREE
 #define PAGE_ORACLE_JDBC                RID_PAGE_START + 27

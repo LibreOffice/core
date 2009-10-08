@@ -636,7 +636,7 @@ void OQueryTableView::AddTabWin(const ::rtl::OUString& _rComposedName, const ::r
                                 break;
                         }
                     }
-                    if(aIter != pTabWins->end())
+                    if ( aIter != pTabWins->end() && pNewTabWin != aIter->second )
                         addConnections( this, *pNewTabWin, *static_cast<OQueryTableWindow*>(aIter->second), xFKeyColumns );
                 }
                 break;

@@ -120,6 +120,8 @@ namespace dbaccess
                 { "OnPrepareViewClosing",   true  },
                 { "OnViewClosed",           false },
                 { "OnTitleChanged",         false },
+                { "OnSubComponentOpened",   false },
+                { "OnSubComponentClosed",   false },
                 { NULL, false }
             };
             return s_aData;

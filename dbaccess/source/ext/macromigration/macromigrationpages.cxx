@@ -31,6 +31,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_dbaccess.hxx"
 
+#include "dbaccess_helpid.hrc"
 #include "dbmm_module.hxx"
 #include "dbmm_global.hrc"
 #include "macromigration.hrc"
@@ -135,6 +136,8 @@ namespace dbmm
 
         m_aSaveAsLocation.SetModifyHdl( LINK( this, SaveDBDocPage, OnLocationModified ) );
         m_aSaveAsLocation.SetDropDownLineCount( 20 );
+
+        m_aSaveAsLocation.SetHelpId( HID_MACRO_MIGRATION_BACKUP_LOCATION );
 
         impl_updateLocationDependentItems();
     }

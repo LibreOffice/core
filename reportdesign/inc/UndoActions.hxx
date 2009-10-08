@@ -30,6 +30,7 @@
 #ifndef RPTUI_UNDOACTIONS_HXX
 #define RPTUI_UNDOACTIONS_HXX
 
+#include "dllapi.h"
 #include <svx/svdundo.hxx>
 #include <tools/string.hxx>
 /** === begin UNO includes === **/
@@ -52,7 +53,7 @@
 #include <svtools/lstner.hxx>
 #include <svx/svdouno.hxx>
 #include "RptModel.hxx"
-#include "dllapi.h"
+
 #include <functional>
 #include <memory>
 #include <boost/shared_ptr.hpp>

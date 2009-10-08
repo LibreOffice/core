@@ -494,8 +494,8 @@ DATASOURCE_TYPE ODsnTypeCollection::implDetermineType(const String& _rDsn) const
         return DST_FLAT;
     if (_rDsn.EqualsIgnoreCaseAscii("sdbc:calc:", 0, nSeparator))
         return DST_CALC;
-    if ( ( 11 <= nSeparator) && _rDsn.EqualsIgnoreCaseAscii("sdbc:mysqlc:", 0, nSeparator))
-        return DST_MYSQL_NATIVE;
+    //if ( ( 11 <= nSeparator) && _rDsn.EqualsIgnoreCaseAscii("sdbc:mysqlc:", 0, nSeparator))
+    //  return DST_MYSQL_NATIVE;
 
     if (_rDsn.EqualsIgnoreCaseAscii("sdbc:embedded:hsqldb", 0, _rDsn.Len()))
         return DST_EMBEDDED_HSQLDB;
@@ -537,6 +537,8 @@ DATASOURCE_TYPE ODsnTypeCollection::implDetermineType(const String& _rDsn) const
         return DST_MYSQL_ODBC;
     if (_rDsn.EqualsIgnoreCaseAscii("sdbc:mysql:jdbc", 0, nSeparator))
         return DST_MYSQL_JDBC;
+    if (_rDsn.EqualsIgnoreCaseAscii("sdbc:mysql:mysqlc", 0, nSeparator))
+        return DST_MYSQL_NATIVE;
 
     DBG_ERROR("ODsnTypeCollection::implDetermineType : unrecognized data source type !");
     return DST_UNKNOWN;

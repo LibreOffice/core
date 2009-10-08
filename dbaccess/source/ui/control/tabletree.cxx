@@ -97,6 +97,8 @@
 #ifndef _RTL_USTRBUF_HXX_
 #include <rtl/ustrbuf.hxx>
 #endif
+#include <connectivity/dbmetadata.hxx>
+
 #include <algorithm>
 
 //.........................................................................
@@ -126,6 +128,7 @@ OTableTreeListBox::OTableTreeListBox( Window* pParent, const Reference< XMultiSe
     :OMarkableTreeListBox(pParent,_rxORB,nWinStyle)
     ,m_pImageProvider( new ImageProvider )
     ,m_bVirtualRoot(_bVirtualRoot)
+    ,m_bNoEmptyFolders( false )
 {
     implSetDefaultImages();
 }
@@ -134,6 +137,7 @@ OTableTreeListBox::OTableTreeListBox( Window* pParent, const Reference< XMultiSe
     :OMarkableTreeListBox(pParent,_rxORB,rResId)
     ,m_pImageProvider( new ImageProvider )
     ,m_bVirtualRoot(_bVirtualRoot)
+    ,m_bNoEmptyFolders( false )
 {
     implSetDefaultImages();
 }
@@ -302,6 +306,26 @@ void OTableTreeListBox::UpdateTableList(
     }
     UpdateTableList( _rxConnection, aTables );
 }
+
+//------------------------------------------------------------------------
+namespace
+{
+    ::std::vector< ::rtl::OUString > lcl_getMetaDataStrings_throw( const Reference< XResultSet >& _rxMetaDataResult, sal_Int32 _nColumnIndex )
+    {
+        ::std::vector< ::rtl::OUString > aStrings;
+        Reference< XRow > xRow( _rxMetaDataResult, UNO_QUERY_THROW );
+        while ( _rxMetaDataResult->next() )
+            aStrings.push_back( xRow->getString( _nColumnIndex ) );
+        return aStrings;
+    }
+
+    bool lcl_shouldDisplayEmptySchemasAndCatalogs( const Reference< XConnection >& _rxConnection )
+    {
+        ::dbtools::DatabaseMetaData aMetaData( _rxConnection );
+        return aMetaData.displayEmptyTableFolders();
+    }
+}
+
 //------------------------------------------------------------------------
 void OTableTreeListBox::UpdateTableList( const Reference< XConnection >& _rxConnection, const TNames& _rTables )
 {
@@ -348,6 +372,35 @@ void OTableTreeListBox::UpdateTableList( const Reference< XConnection >& _rxConn
                 aIter->first,
                 sal_False
             );
+        }
+
+        if ( !m_bNoEmptyFolders && lcl_shouldDisplayEmptySchemasAndCatalogs( _rxConnection ) )
+        {
+            sal_Bool bSupportsCatalogs = xMeta->supportsCatalogsInDataManipulation();
+            sal_Bool bSupportsSchemas = xMeta->supportsSchemasInDataManipulation();
+
+            if ( bSupportsCatalogs || bSupportsSchemas )
+            {
+                // we display empty catalogs if the DB supports catalogs, and they're noted at the beginning of a
+                // composed name. Otherwise, we display empty schematas. (also see the tree structure explained in
+                // implAddEntry)
+                bool bCatalogs = bSupportsCatalogs && xMeta->isCatalogAtStart();
+
+                ::std::vector< ::rtl::OUString > aFolderNames( lcl_getMetaDataStrings_throw(
+                    bCatalogs ? xMeta->getCatalogs() : xMeta->getSchemas(), 1 ) );
+                sal_Int32 nFolderType = bCatalogs ? DatabaseObjectContainer::CATALOG : DatabaseObjectContainer::SCHEMA;
+
+                SvLBoxEntry* pRootEntry = getAllObjectsEntry();
+                for (   ::std::vector< ::rtl::OUString >::const_iterator folder = aFolderNames.begin();
+                        folder != aFolderNames.end();
+                        ++folder
+                    )
+                {
+                    SvLBoxEntry* pFolder = GetEntryPosByName( *folder, pRootEntry );
+                    if ( !pFolder )
+                        pFolder = InsertEntry( *folder, pRootEntry, FALSE, LIST_APPEND, reinterpret_cast< void* >( nFolderType ) );
+                }
+            }
         }
     }
     catch ( const Exception& )
@@ -474,24 +527,24 @@ SvLBoxEntry* OTableTreeListBox::implAddEntry(
     //   +- catalog
     //      +- table
     sal_Bool bCatalogAtStart = _rxMeta->isCatalogAtStart();
-    ::rtl::OUString& nFirstName  = bCatalogAtStart ? sCatalog : sSchema;
-    sal_Int32 nFirstFolderType   = bCatalogAtStart ? DatabaseObjectContainer::CATALOG : DatabaseObjectContainer::SCHEMA;
-    ::rtl::OUString& nSecondName = bCatalogAtStart ? sSchema : sCatalog;
-    sal_Int32 nSecondFolderType  = bCatalogAtStart ? DatabaseObjectContainer::SCHEMA : DatabaseObjectContainer::CATALOG;
+    const ::rtl::OUString& rFirstName  = bCatalogAtStart ? sCatalog : sSchema;
+    const sal_Int32 nFirstFolderType   = bCatalogAtStart ? DatabaseObjectContainer::CATALOG : DatabaseObjectContainer::SCHEMA;
+    const ::rtl::OUString& rSecondName = bCatalogAtStart ? sSchema : sCatalog;
+    const sal_Int32 nSecondFolderType  = bCatalogAtStart ? DatabaseObjectContainer::SCHEMA : DatabaseObjectContainer::CATALOG;
 
-    if ( nFirstName.getLength() )
+    if ( rFirstName.getLength() )
     {
-        SvLBoxEntry* pFolder = GetEntryPosByName( nFirstName, pParentEntry );
+        SvLBoxEntry* pFolder = GetEntryPosByName( rFirstName, pParentEntry );
         if ( !pFolder )
-            pFolder = InsertEntry( nFirstName, pParentEntry, FALSE, LIST_APPEND, reinterpret_cast< void* >( nFirstFolderType ) );
+            pFolder = InsertEntry( rFirstName, pParentEntry, FALSE, LIST_APPEND, reinterpret_cast< void* >( nFirstFolderType ) );
         pParentEntry = pFolder;
     }
 
-    if ( nSecondName.getLength() )
+    if ( rSecondName.getLength() )
     {
-        SvLBoxEntry* pFolder = GetEntryPosByName( nSecondName, pParentEntry );
+        SvLBoxEntry* pFolder = GetEntryPosByName( rSecondName, pParentEntry );
         if ( !pFolder )
-            pFolder = InsertEntry( nSecondName, pParentEntry, FALSE, LIST_APPEND, reinterpret_cast< void* >( nSecondFolderType ) );
+            pFolder = InsertEntry( rSecondName, pParentEntry, FALSE, LIST_APPEND, reinterpret_cast< void* >( nSecondFolderType ) );
         pParentEntry = pFolder;
     }
 

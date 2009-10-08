@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2008 by Sun Microsystems, Inc.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -130,7 +130,7 @@ public:
     VosMutexFacade( ::osl::Mutex& _rMutex );
 
     // IMutex
-    virtual void SAL_CALL acquire();    
+    virtual void SAL_CALL acquire();
     virtual sal_Bool SAL_CALL tryToAcquire();
     virtual void SAL_CALL release();
 
@@ -190,8 +190,6 @@ private:
 
     /// do we have any object (forms/reports) which contains macros?
     bool                                                m_bHasAnyObjectWithMacros;
-    /// does our root storage have macro/script sub storages?
-    bool                                                m_bHasMacroStorages;
 
     /// true if setting the Modified flag of the document is currently locked
     bool                                                m_bModificationLock;
@@ -417,13 +415,6 @@ public:
     */
     bool    hasAnyObjectWithMacros() const { return m_bHasAnyObjectWithMacros; }
 
-    /** determines whether the document storage has sub storages used to store macros/scripts
-
-        Though the current version does not allow creating such documents, later versions will, so
-        we need to be prepared when we encounter them.
-    */
-    bool    hasMacroStorages() const { return m_bHasMacroStorages; }
-
     /** checks our document's macro execution mode, using the interaction handler as supplied with our
         load arguments
     */
@@ -471,7 +462,7 @@ public:
             if any of the invoked operations does so
     */
     ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >
-            switchToStorage( 
+            switchToStorage(
                 const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& _rxNewRootStorage
             );
 

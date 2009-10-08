@@ -202,6 +202,9 @@ WizardTypes::WizardState ODbTypeWizDialog::determineNextState( WizardState _nCur
                 case  ::dbaccess::DST_MACAB:
                     nNextState = WZS_INVALID_STATE;
                     break;
+                case  ::dbaccess::DST_MYSQL_NATIVE:
+                    nNextState = ADDITIONAL_PAGE_MYSQL_NATIVE;
+                    break;
                 default:
                     nNextState = CONNECTION_PAGE;
                     break;
@@ -234,9 +237,6 @@ WizardTypes::WizardState ODbTypeWizDialog::determineNextState( WizardState _nCur
                     break;
                 case  ::dbaccess::DST_ADABAS:
                     nNextState = ADDITIONAL_PAGE_ADABAS;
-                    break;
-                case  ::dbaccess::DST_MYSQL_NATIVE:
-                    nNextState = ADDITIONAL_PAGE_MYSQL_NATIVE;
                     break;
                 case  ::dbaccess::DST_MYSQL_JDBC:
                     nNextState = ADDITIONAL_PAGE_MYSQL_JDBC;
@@ -335,7 +335,7 @@ TabPage* ODbTypeWizDialog::createPage(WizardState _nState)
         case ADDITIONAL_PAGE_MYSQL_JDBC:
             pPage = ODriversSettings::CreateMySQLJDBC(this,*m_pOutSet);
             break;
-            case ADDITIONAL_PAGE_MYSQL_NATIVE:
+        case ADDITIONAL_PAGE_MYSQL_NATIVE:
             pPage = ODriversSettings::CreateMySQLNATIVE(this,*m_pOutSet);
             break;
         case ADDITIONAL_PAGE_MYSQL_ODBC:
