@@ -58,7 +58,8 @@ SLOFILES= \
     $(SLO)$/resourcemodel.obj \
     $(SLO)$/util.obj \
     $(SLO)$/TagLogger.obj \
-    $(SLO)$/WW8Analyzer.obj
+    $(SLO)$/WW8Analyzer.obj \
+    $(SLO)$/Protocol.obj
 
 # linux 64 bit: compiler (gcc 4.2.3) fails with 'out of memory'
 .IF "$(OUTPATH)"=="unxlngx6"
