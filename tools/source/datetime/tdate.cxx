@@ -88,7 +88,7 @@ inline USHORT DaysInMonth( USHORT nMonth, USHORT nYear )
 
 // -----------------------------------------------------------------------
 
-static long DateToDays( USHORT nDay, USHORT nMonth, USHORT nYear )
+long Date::DateToDays( USHORT nDay, USHORT nMonth, USHORT nYear )
 {
     long nDays;
 
@@ -489,9 +489,9 @@ Date operator -( const Date& rDate, long nDays )
 
 long operator -( const Date& rDate1, const Date& rDate2 )
 {
-    ULONG  nTempDays1 = DateToDays( rDate1.GetDay(), rDate1.GetMonth(),
+    ULONG  nTempDays1 = Date::DateToDays( rDate1.GetDay(), rDate1.GetMonth(),
                                     rDate1.GetYear() );
-    ULONG  nTempDays2 = DateToDays( rDate2.GetDay(), rDate2.GetMonth(),
+    ULONG  nTempDays2 = Date::DateToDays( rDate2.GetDay(), rDate2.GetMonth(),
                                     rDate2.GetYear() );
     return nTempDays1 - nTempDays2;
 }

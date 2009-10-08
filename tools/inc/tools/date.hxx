@@ -115,6 +115,9 @@ public:
     TOOLS_DLLPUBLIC friend Date     operator +( const Date& rDate, long nDays );
     TOOLS_DLLPUBLIC friend Date     operator -( const Date& rDate, long nDays );
     TOOLS_DLLPUBLIC friend long     operator -( const Date& rDate1, const Date& rDate2 );
+
+    static long DateToDays( USHORT nDay, USHORT nMonth, USHORT nYear );
+
 };
 
 #endif // _DATE_HXX
