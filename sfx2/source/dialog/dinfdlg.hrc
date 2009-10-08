@@ -39,6 +39,8 @@
 #define CUSTOM_TYPE_NUMBER      2
 #define CUSTOM_TYPE_DATE        3
 #define CUSTOM_TYPE_BOOLEAN     4
+#define CUSTOM_TYPE_TIME        5
+#define CUSTOM_TYPE_DATETIME    6
 
 // 4 TP_DOCINFORELOAD
 #define PAGE_WIDTH          260

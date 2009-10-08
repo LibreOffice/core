@@ -358,6 +358,31 @@ public:
     inline CustomPropertyLine*      GetLine() const { return m_pLine; }
 };
 
+class CustomPropertiesDateField : public DateField
+{
+private:
+    CustomPropertyLine*             m_pLine;
+
+public:
+    inline CustomPropertiesDateField(
+        Window* pParent, const ResId& rResId, CustomPropertyLine* pLine ) :
+            DateField( pParent, rResId ), m_pLine( pLine ) {}
+
+    inline CustomPropertyLine*      GetLine() const { return m_pLine; }
+};
+class CustomPropertiesTimeField : public TimeField
+{
+private:
+    CustomPropertyLine*             m_pLine;
+
+public:
+    inline CustomPropertiesTimeField(
+        Window* pParent, const ResId& rResId, CustomPropertyLine* pLine ) :
+            TimeField( pParent, rResId ), m_pLine( pLine ) {}
+
+    inline CustomPropertyLine*      GetLine() const { return m_pLine; }
+};
+
 class CustomPropertiesRemoveButton : public ImageButton
 {
 private:
@@ -394,6 +419,8 @@ struct CustomPropertyLine
     ComboBox                        m_aNameBox;
     CustomPropertiesTypeBox         m_aTypeBox;
     CustomPropertiesEdit            m_aValueEdit;
+    CustomPropertiesDateField       m_aDateField;
+    CustomPropertiesTimeField       m_aTimeField;
     CustomPropertiesYesNoButton     m_aYesNoButton;
     CustomPropertiesRemoveButton    m_aRemoveButton;
 
@@ -413,6 +440,8 @@ private:
     ComboBox                            m_aNameBox;
     ListBox                             m_aTypeBox;
     Edit                                m_aValueEdit;
+    DateField                           m_aDateField;
+    TimeField                           m_aTimeField;
     CustomPropertiesYesNoButton         m_aYesNoButton;
     ImageButton                         m_aRemoveButton;
 
@@ -428,6 +457,8 @@ private:
     DECL_LINK(  RemoveHdl, CustomPropertiesRemoveButton* );
     DECL_LINK(  EditLoseFocusHdl, CustomPropertiesEdit* );
     DECL_LINK(  BoxLoseFocusHdl, CustomPropertiesTypeBox* );
+    //add lose focus handlers of Date/TimeField?
+
     DECL_LINK(  EditTimeoutHdl, Timer* );
     DECL_LINK(  BoxTimeoutHdl, Timer* );
 

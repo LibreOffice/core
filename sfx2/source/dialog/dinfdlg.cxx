@@ -54,7 +54,9 @@
 #include <com/sun/star/ui/dialogs/TemplateDescription.hpp>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/beans/XPropertyContainer.hpp>
+#include <com/sun/star/util/DateTime.hpp>
 #include <com/sun/star/util/Date.hpp>
+#include <com/sun/star/util/Time.hpp>
 #include <com/sun/star/document/XDocumentProperties.hpp>
 
 #include <vcl/timer.hxx>
@@ -1588,12 +1590,17 @@ CustomPropertyLine::CustomPropertyLine( Window* pParent ) :
     m_aNameBox      ( pParent, SfxResId( SFX_CB_PROPERTY_NAME ) ),
     m_aTypeBox      ( pParent, SfxResId( SFX_LB_PROPERTY_TYPE ), this ),
     m_aValueEdit    ( pParent, SfxResId( SFX_ED_PROPERTY_VALUE ), this ),
+    m_aDateField    ( pParent, SfxResId( SFX_FLD_DATE), this),
+    m_aTimeField    ( pParent, SfxResId( SFX_FLD_TIME), this),
     m_aYesNoButton  ( pParent, SfxResId( SFX_WIN_PROPERTY_YESNO ) ),
     m_aRemoveButton ( pParent, SfxResId( SFX_PB_PROPERTY_REMOVE ), this ),
     m_bIsRemoved    ( false ),
     m_bTypeLostFocus( false )
 
 {
+    m_aTimeField.SetExtFormat( EXTTIMEF_24H_LONG );
+    m_aDateField.SetExtDateFormat( XTDATEF_SYSTEM_SHORT_YYYY );
+
     m_aRemoveButton.SetModeImage( SfxResId( SFX_IMG_PROPERTY_REMOVE ), BMP_COLOR_NORMAL );
     m_aRemoveButton.SetModeImage( SfxResId( SFX_IMG_PROPERTY_REMOVE_HC ), BMP_COLOR_HIGHCONTRAST );
 }
@@ -1605,6 +1612,8 @@ void CustomPropertyLine::SetRemoved()
     m_aNameBox.Hide();
     m_aTypeBox.Hide();
     m_aValueEdit.Hide();
+    m_aDateField.Hide();
+    m_aTimeField.Hide();
     m_aYesNoButton.Hide();
     m_aRemoveButton.Hide();
 }
@@ -1617,6 +1626,8 @@ CustomPropertiesWindow::CustomPropertiesWindow( Window* pParent, const ResId& rR
     m_aNameBox      ( this, SfxResId( SFX_CB_PROPERTY_NAME ) ),
     m_aTypeBox      ( this, SfxResId( SFX_LB_PROPERTY_TYPE ) ),
     m_aValueEdit    ( this, SfxResId( SFX_ED_PROPERTY_VALUE ) ),
+    m_aDateField    ( this, SfxResId( SFX_FLD_DATE) ),
+    m_aTimeField    ( this, SfxResId( SFX_FLD_TIME) ),
     m_aYesNoButton  ( this, SfxResId( SFX_WIN_PROPERTY_YESNO ) ),
     m_aRemoveButton ( this, SfxResId( SFX_PB_PROPERTY_REMOVE ) ),
 
@@ -1641,9 +1652,10 @@ IMPL_LINK( CustomPropertiesWindow, TypeHdl, CustomPropertiesTypeBox*, pBox )
 {
     sal_Int64 nType = sal_Int64( (long)pBox->GetEntryData( pBox->GetSelectEntryPos() ) );
     CustomPropertyLine* pLine = pBox->GetLine();
-    BOOL bBooleanType = ( CUSTOM_TYPE_BOOLEAN == nType );
-    pLine->m_aValueEdit.Show( !bBooleanType );
-    pLine->m_aYesNoButton.Show( bBooleanType );
+    pLine->m_aValueEdit.Show( (CUSTOM_TYPE_TEXT == nType) || (CUSTOM_TYPE_NUMBER  == nType) );
+    pLine->m_aDateField.Show( (CUSTOM_TYPE_DATE == nType) || (CUSTOM_TYPE_DATETIME  == nType) );
+    pLine->m_aTimeField.Show( (CUSTOM_TYPE_TIME == nType) || (CUSTOM_TYPE_DATETIME  == nType) );
+    pLine->m_aYesNoButton.Show( CUSTOM_TYPE_BOOLEAN == nType );
     return 0;
 }
 
@@ -1665,6 +1677,7 @@ IMPL_LINK( CustomPropertiesWindow, RemoveHdl, CustomPropertiesRemoveButton*, pBu
                 continue;
 
             Window* pWindows[] = {  &pLine->m_aNameBox, &pLine->m_aTypeBox, &pLine->m_aValueEdit,
+                                    &pLine->m_aDateField, &pLine->m_aTimeField,
                                     &pLine->m_aYesNoButton, &pLine->m_aRemoveButton, NULL };
             Window** pCurrent = pWindows;
             while ( *pCurrent )
@@ -1772,6 +1785,8 @@ void CustomPropertiesWindow::InitControls( HeaderBar* pHeaderBar, const ScrollBa
     m_aNameBox.Hide();
     m_aTypeBox.Hide();
     m_aValueEdit.Hide();
+    m_aDateField.Hide();
+    m_aTimeField.Hide();
     m_aYesNoButton.Hide();
     m_aRemoveButton.Hide();
 
@@ -1808,6 +1823,11 @@ void CustomPropertiesWindow::InitControls( HeaderBar* pHeaderBar, const ScrollBa
             aSize.Width() = nWidth;
             aPos.X() = aRect.getX() + ( nOffset / 2 );
             m_aYesNoButton.SetPosSizePixel( aPos, aSize );
+            aSize.Width() /= 2;
+            aSize.Width() -= 2;
+            m_aDateField.SetPosSizePixel( aPos, aSize );
+            aPos.X() += aSize.Width() + 4;
+            m_aTimeField.SetPosSizePixel( aPos, aSize );
         }
 
         pCurrent++;
@@ -1837,13 +1857,17 @@ void CustomPropertiesWindow::AddLine( const ::rtl::OUString& sName, Any& rAny )
     pNewLine->m_aTypeBox.SetSelectHdl( LINK( this, CustomPropertiesWindow, TypeHdl ) );
     pNewLine->m_aRemoveButton.SetClickHdl( LINK( this, CustomPropertiesWindow, RemoveHdl ) );
     pNewLine->m_aValueEdit.SetLoseFocusHdl( LINK( this, CustomPropertiesWindow, EditLoseFocusHdl ) );
+    //add lose focus handlers of date/time fields
+
     pNewLine->m_aTypeBox.SetLoseFocusHdl( LINK( this, CustomPropertiesWindow, BoxLoseFocusHdl ) );
     long nPos = GetVisibleLineCount() * GetLineHeight();
     m_aCustomPropertiesLines.push_back( pNewLine );
     Window* pWindows[] = {  &m_aNameBox, &m_aTypeBox, &m_aValueEdit,
+                            &m_aDateField, &m_aTimeField,
                             &m_aYesNoButton, &m_aRemoveButton, NULL };
     Window* pNewWindows[] =
         {   &pNewLine->m_aNameBox, &pNewLine->m_aTypeBox, &pNewLine->m_aValueEdit,
+            &pNewLine->m_aDateField, &pNewLine->m_aTimeField,
             &pNewLine->m_aYesNoButton, &pNewLine->m_aRemoveButton, NULL };
     Window** pCurrent = pWindows;
     Window** pNewCurrent = pNewWindows;
@@ -1861,7 +1885,9 @@ void CustomPropertiesWindow::AddLine( const ::rtl::OUString& sName, Any& rAny )
     double nTmpValue = 0;
     bool bTmpValue = false;
     ::rtl::OUString sTmpValue;
-    util::DateTime aTmpDate;
+    util::DateTime aTmpDateTime;
+    util::Date aTmpDate;
+    util::Time aTmpTime;
     SvtSysLocale aSysLocale;
     const LocaleDataWrapper& rLocaleWrapper = aSysLocale.GetLocaleData();
     pNewLine->m_aNameBox.SetText( sName );
@@ -1881,50 +1907,27 @@ void CustomPropertiesWindow::AddLine( const ::rtl::OUString& sName, Any& rAny )
     }
     else if ( rAny >>= sTmpValue )
     {
-        sValue = String( sTmpValue );
+        pNewLine->m_aValueEdit.SetText( sTmpValue );
+//        sValue = String( sTmpValue );
         nType = CUSTOM_TYPE_TEXT;
     }
     else if ( rAny >>= aTmpDate )
     {
-        DateFormat eFormat = rLocaleWrapper.getDateFormat();
-        sal_Unicode cDateSep = rLocaleWrapper.getDateSep().GetChar(0);
-        switch ( eFormat )
-        {
-            case MDY :
-            {
-                sValue = String::CreateFromInt32( aTmpDate.Month );
-                sValue += cDateSep;
-                sValue += String::CreateFromInt32( aTmpDate.Day );
-                sValue += cDateSep;
-                if ( aTmpDate.Year < 10 )
-                    sValue += '0';
-                sValue += String::CreateFromInt32( aTmpDate.Year );
-                break;
-            }
-            case DMY :
-            {
-                sValue = String::CreateFromInt32( aTmpDate.Day );
-                sValue += cDateSep;
-                sValue += String::CreateFromInt32( aTmpDate.Month );
-                sValue += cDateSep;
-                if ( aTmpDate.Year < 10 )
-                    sValue += '0';
-                sValue += String::CreateFromInt32( aTmpDate.Year );
-                break;
-            }
-            case YMD :
-            {
-                if ( aTmpDate.Year < 10 )
-                    sValue += '0';
-                sValue += String::CreateFromInt32( aTmpDate.Year );
-                sValue += cDateSep;
-                sValue += String::CreateFromInt32( aTmpDate.Month );
-                sValue += cDateSep;
-                sValue += String::CreateFromInt32( aTmpDate.Day );
-                break;
-            }
-        }
         nType = CUSTOM_TYPE_DATE;
+        pNewLine->m_aDateField.SetDate( Date( aTmpDate.Day, aTmpDate.Month, aTmpDate.Year ) );
+
+    }
+    else if ( rAny >>= aTmpTime )
+    {
+        nType = CUSTOM_TYPE_TIME;
+        pNewLine->m_aTimeField.SetTime( Time( aTmpTime.Hours, aTmpTime.Minutes, aTmpTime.Seconds, aTmpTime.HundredthSeconds ) );
+    }
+    else if ( rAny >>= aTmpDateTime )
+    {
+        pNewLine->m_aDateField.SetDate( Date( aTmpDateTime.Day, aTmpDateTime.Month, aTmpDateTime.Year ) );
+        pNewLine->m_aTimeField.SetTime( Time( aTmpDateTime.Hours, aTmpDateTime.Minutes, aTmpDateTime.Seconds, aTmpDateTime.HundredthSeconds ) );
+
+        nType = CUSTOM_TYPE_DATETIME;
     }
 
     if ( nType != CUSTOM_TYPE_UNKNOWN )
@@ -1936,8 +1939,8 @@ void CustomPropertiesWindow::AddLine( const ::rtl::OUString& sName, Any& rAny )
             else
                 pNewLine->m_aYesNoButton.CheckNo();
         }
-        else
-            pNewLine->m_aValueEdit.SetText( sValue );
+//        else
+//            pNewLine->m_aValueEdit.SetText( sValue );
         pNewLine->m_aTypeBox.SelectEntryPos( m_aTypeBox.GetEntryPos( (void*)nType ) );
     }
 
@@ -2050,52 +2053,26 @@ Sequence< beans::PropertyValue > CustomPropertiesWindow::GetCustomProperties() c
                 bool bValue = pLine->m_aYesNoButton.IsYesChecked();
                 aPropertiesSeq[i].Value <<= makeAny( bValue );
             }
+            else if ( CUSTOM_TYPE_DATETIME == nType )
+            {
+                Date aTmpDate = pLine->m_aDateField.GetDate();
+                Time aTmpTime = pLine->m_aTimeField.GetTime();
+                util::DateTime aDateTime(aTmpTime.Get100Sec(), aTmpTime.GetSec(), aTmpTime.GetMin(), aTmpTime.GetHour(),
+                        aTmpDate.GetDay(), aTmpDate.GetMonth(), aTmpDate.GetYear() );
+                aPropertiesSeq[i].Value <<= aDateTime;
+            }
+            else if ( CUSTOM_TYPE_TIME == nType )
+            {
+                Time aTmpTime = pLine->m_aTimeField.GetTime();
+                util::Time aTime( aTmpTime.Get100Sec(), aTmpTime.GetSec(), aTmpTime.GetMin(), aTmpTime.GetHour() );
+                aPropertiesSeq[i].Value <<= aTime;
+            }
             else if ( CUSTOM_TYPE_DATE == nType )
             {
-                const LocaleDataWrapper& rLocaleWrapper = SvtSysLocale().GetLocaleData();
-                DateFormat eFormat = rLocaleWrapper.getDateFormat();
-                sal_Unicode cDateSep = rLocaleWrapper.getDateSep().GetChar(0);
-                String sValue( pLine->m_aValueEdit.GetText() );
-                if ( sValue.GetTokenCount( cDateSep ) == 3 )
-                {
-                    xub_StrLen nTokenDay = STRING_NOTFOUND;
-                    xub_StrLen nTokenMonth = STRING_NOTFOUND;
-                    xub_StrLen nTokenYear = STRING_NOTFOUND;
+                Date aTmpDate = pLine->m_aDateField.GetDate();
+                util::Date aDate(aTmpDate.GetDay(), aTmpDate.GetMonth(), aTmpDate.GetYear());
+                aPropertiesSeq[i].Value <<= aDate;
 
-                    switch ( eFormat )
-                    {
-                        case MDY :
-                        {
-                            nTokenDay = 1;
-                            nTokenMonth = 0;
-                            nTokenYear = 2;
-                            break;
-                        }
-                        case DMY :
-                        {
-                            nTokenDay = 0;
-                            nTokenMonth = 1;
-                            nTokenYear = 2;
-                            break;
-                        }
-                        case YMD :
-                        {
-                            nTokenDay = 2;
-                            nTokenMonth = 1;
-                            nTokenYear = 0;
-                            break;
-                        }
-                    }
-
-                    if ( nTokenDay != STRING_NOTFOUND )
-                    {
-                        util::DateTime aDateTime( 0, 0, 0, 0,
-                            sal_uInt16( sValue.GetToken( nTokenDay, cDateSep ).ToInt32() ),
-                            sal_uInt16( sValue.GetToken( nTokenMonth, cDateSep ).ToInt32() ),
-                            sal_uInt16( sValue.GetToken( nTokenYear, cDateSep ).ToInt32() ) );
-                        aPropertiesSeq[i].Value <<= makeAny( aDateTime );
-                    }
-                }
             }
             else
             {
