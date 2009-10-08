@@ -90,6 +90,7 @@ SHL2TARGET=$(TARGET2)$(DLLPOSTFIX)
 SHL2STDLIBS= \
         $(SFXLIB)				\
         $(SVTOOLLIB)			\
+        $(SVLLIB)  \
         $(VCLLIB)				\
         $(UNOTOOLSLIB)			\
         $(TOOLSLIB)				\
