@@ -728,9 +728,15 @@ static MacOSBOOL isPopupMenuOpen = NO;
         if ( nativeSubrole != nil && ! [ nativeSubrole isEqualToString: @"" ] ) {
             [ attributeNames addObject: NSAccessibilitySubroleAttribute ];
         }
+        try
+        {
         if ( [ self accessibleContext ] -> getAccessibleChildCount() > 0 ) {
             [ attributeNames addObject: NSAccessibilityChildrenAttribute ];
         }
+        }
+        catch( DisposedException& ) {}
+        catch( RuntimeException& ) {}
+        
         if ( title != nil && ! [ title isEqualToString: @"" ] ) {
             [ attributeNames addObject: NSAccessibilityTitleAttribute ];
         }
@@ -986,7 +992,7 @@ Reference < XAccessibleContext > hitTestRunner ( Point point, Reference < XAcces
     }
     Reference < XAccessibleContext > hitChild;
     NSRect screenRect = [ [ NSScreen mainScreen ] frame ];
-    Point hitPoint ( point.x , screenRect.size.height - point.y ); 
+    Point hitPoint ( static_cast<long>(point.x) , static_cast<long>(screenRect.size.height - point.y) ); 
     // check child windows first
     NSWindow * window = (NSWindow *) [ self accessibilityAttributeValue: NSAccessibilityWindowAttribute ];
     NSArray * childWindows = [ window childWindows ];

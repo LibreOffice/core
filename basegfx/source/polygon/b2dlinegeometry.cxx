@@ -352,13 +352,12 @@ namespace basegfx
             // Unfortunately, while it would be geometrically correct to not add
             // the in-between points EdgeEnd and EdgeStart, it leads to rounding
             // errors when converting to integer polygon coordinates for painting
-            const B2DVector aEdgeVector(rEdge.getEndPoint() - rEdge.getStartPoint());
-
             if(rEdge.isBezier())
             {
                 // prepare target and data common for upper and lower
                 B2DPolygon aBezierPolygon;
-                const double fEdgeLength(aEdgeVector.getLength());
+                const B2DVector aPureEdgeVector(rEdge.getEndPoint() - rEdge.getStartPoint());
+                const double fEdgeLength(aPureEdgeVector.getLength());
                 const bool bIsEdgeLengthZero(fTools::equalZero(fEdgeLength));
                 const B2DVector aTangentA(rEdge.getTangent(0.0));
                 const B2DVector aTangentB(rEdge.getTangent(1.0));
@@ -441,7 +440,11 @@ namespace basegfx
             }
             else
             {
-                const B2DVector aPerpendEdgeVector(getNormalizedPerpendicular(aEdgeVector) * fHalfLineWidth);
+                // #i101491# emulate rEdge.getTangent call which applies a factor of 0.3 to the
+                // full-length edge vector to have numerically exactly the same results as in the
+                // createAreaGeometryForJoin implementation
+                const B2DVector aEdgeTangent((rEdge.getEndPoint() - rEdge.getStartPoint()) * 0.3);
+                const B2DVector aPerpendEdgeVector(getNormalizedPerpendicular(aEdgeTangent) * fHalfLineWidth);
                 B2DPolygon aEdgePolygon;
 
                 // create upper edge
@@ -495,45 +498,75 @@ namespace basegfx
                 }
             }
 
-            // create first polygon part for edge
-            aEdgePolygon.append(aEndPoint);
-            aEdgePolygon.append(rPoint);
-            aEdgePolygon.append(aStartPoint);
-
-            if(B2DLINEJOIN_MITER == eJoin)
+            switch(eJoin)
             {
-                // Look for the cut point between start point along rTangentPrev and
-                // end point along rTangentEdge. -rTangentEdge should be used, but since
-                // the cut value is used for interpolating along the first edge, the negation
-                // is not needed since the same fCut will be found on the first edge.
-                // If it exists, insert it to complete the mitered fill polygon.
-                double fCutPos(0.0);
-                tools::findCut(aStartPoint, rTangentPrev, aEndPoint, rTangentEdge, CUTFLAG_ALL, &fCutPos);
-
-                if(0.0 != fCutPos)
+                case B2DLINEJOIN_MITER :
                 {
-                    const B2DPoint aCutPoint(interpolate(aStartPoint, aStartPoint + rTangentPrev, fCutPos));
-                    aEdgePolygon.append(aCutPoint);
-                }
-            }
-            else if(B2DLINEJOIN_ROUND == eJoin)
-            {
-                // use tooling to add needed EllipseSegment
-                double fAngleStart(atan2(rPerpendPrev.getY(), rPerpendPrev.getX()));
-                double fAngleEnd(atan2(rPerpendEdge.getY(), rPerpendEdge.getX()));
+                    aEdgePolygon.append(aEndPoint);
+                    aEdgePolygon.append(rPoint);
+                    aEdgePolygon.append(aStartPoint);
 
-                // atan2 results are [-PI .. PI], consolidate to [0.0 .. 2PI]
-                if(fAngleStart < 0.0)
+                    // Look for the cut point between start point along rTangentPrev and
+                    // end point along rTangentEdge. -rTangentEdge should be used, but since
+                    // the cut value is used for interpolating along the first edge, the negation
+                    // is not needed since the same fCut will be found on the first edge.
+                    // If it exists, insert it to complete the mitered fill polygon.
+                    double fCutPos(0.0);
+                    tools::findCut(aStartPoint, rTangentPrev, aEndPoint, rTangentEdge, CUTFLAG_ALL, &fCutPos);
+
+                    if(0.0 != fCutPos)
+                    {
+                        const B2DPoint aCutPoint(interpolate(aStartPoint, aStartPoint + rTangentPrev, fCutPos));
+                        aEdgePolygon.append(aCutPoint);
+                    }
+
+                    break;
+                }
+                case B2DLINEJOIN_ROUND :
                 {
-                    fAngleStart += F_2PI;
-                }
+                    // use tooling to add needed EllipseSegment
+                    double fAngleStart(atan2(rPerpendPrev.getY(), rPerpendPrev.getX()));
+                    double fAngleEnd(atan2(rPerpendEdge.getY(), rPerpendEdge.getX()));
 
-                if(fAngleEnd < 0.0)
+                    // atan2 results are [-PI .. PI], consolidate to [0.0 .. 2PI]
+                    if(fAngleStart < 0.0)
+                    {
+                        fAngleStart += F_2PI;
+                    }
+
+                    if(fAngleEnd < 0.0)
+                    {
+                        fAngleEnd += F_2PI;
+                    }
+
+                    const B2DPolygon aBow(tools::createPolygonFromEllipseSegment(rPoint, fHalfLineWidth, fHalfLineWidth, fAngleStart, fAngleEnd));
+
+                    if(aBow.count() > 1)
+                    {
+                        // #i101491#
+                        // use the original start/end positions; the ones from bow creation may be numerically
+                        // different due to their different creation. To guarantee good merging quality with edges
+                        // and edge roundings (and to reduce point count)
+                        aEdgePolygon = aBow;
+                        aEdgePolygon.setB2DPoint(0, aStartPoint);
+                        aEdgePolygon.setB2DPoint(aEdgePolygon.count() - 1, aEndPoint);
+                        aEdgePolygon.append(rPoint);
+
+                        break;
+                    }
+                    else
+                    {
+                        // wanted fall-through to default
+                    }
+                }
+                default: // B2DLINEJOIN_BEVEL
                 {
-                    fAngleEnd += F_2PI;
-                }
+                    aEdgePolygon.append(aEndPoint);
+                    aEdgePolygon.append(rPoint);
+                    aEdgePolygon.append(aStartPoint);
 
-                aEdgePolygon.append(tools::createPolygonFromEllipseSegment(rPoint, fHalfLineWidth, fHalfLineWidth, fAngleStart, fAngleEnd));
+                    break;
+                }
             }
 
             // create last polygon part for edge

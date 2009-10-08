@@ -32,6 +32,37 @@
 #define _DXFVEC_HXX
 
 #include <tools/gen.hxx>
+#include <vcl/lineinfo.hxx>
+
+class DXFLineInfo {
+public:
+    LineStyle       eStyle;
+    double          fWidth;
+    sal_Int32       nDashCount;
+    double          fDashLen;
+    sal_Int32       nDotCount;
+    double          fDotLen;
+    double          fDistance;
+
+    DXFLineInfo() :
+        eStyle(LINE_SOLID),
+        fWidth(0),
+        nDashCount(0),
+        fDashLen(0),
+        nDotCount(0),
+        fDotLen(0),
+        fDistance(0) {}
+
+    DXFLineInfo(const DXFLineInfo& x) :
+        eStyle(x.eStyle),
+        fWidth(x.fWidth),
+        nDashCount(x.nDashCount),
+        fDashLen(x.fDashLen),
+        nDotCount(x.nDotCount),
+        fDotLen(x.fDotLen),
+        fDistance(x.fDistance) {}
+
+};
 
 
 //------------------------------------------------------------------------------
@@ -134,6 +165,9 @@ public:
 
     BOOL Mirror() const;
         // Liefert TRUE, wenn die Matrix ein Linkssystem bildet
+
+    LineInfo Transform(const DXFLineInfo& aDXFLineInfo) const;
+        // Transform to LineInfo
 
 private:
     DXFVector aMX;

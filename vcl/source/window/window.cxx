@@ -6221,6 +6221,15 @@ void Window::SetParent( Window* pNewParent )
             pSysWin->GetTaskPaneList()->RemoveWindow( this );
         }
     }
+    // remove ownerdraw decorated windows from list in the top-most frame window
+    if( (GetStyle() & WB_OWNERDRAWDECORATION) && mpWindowImpl->mbFrame )
+    {
+        ::std::vector< Window* >& rList = ImplGetOwnerDrawList();
+        ::std::vector< Window* >::iterator p;
+        p = ::std::find( rList.begin(), rList.end(), this );
+        if( p != rList.end() )
+            rList.erase( p );
+    }
 
     ImplSetFrameParent( pNewParent );
 
@@ -6349,6 +6358,9 @@ void Window::SetParent( Window* pNewParent )
 
     if( bChangeTaskPaneList )
         pNewSysWin->GetTaskPaneList()->AddWindow( this );
+
+    if( (GetStyle() & WB_OWNERDRAWDECORATION) && mpWindowImpl->mbFrame )
+        ImplGetOwnerDrawList().push_back( this );
 
     if ( bVisible )
         Show( TRUE, SHOW_NOFOCUSCHANGE | SHOW_NOACTIVATE );

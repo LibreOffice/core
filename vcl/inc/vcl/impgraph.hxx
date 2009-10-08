@@ -55,6 +55,7 @@ struct ImpSwapInfo
 class   OutputDevice;
 class   GfxLink;
 struct  ImpSwapFile;
+class GraphicConversionParameters;
 
 class ImpGraphic
 {
@@ -102,8 +103,8 @@ private:
     BOOL                ImplIsAlpha() const;
     BOOL                ImplIsAnimated() const;
 
-    Bitmap              ImplGetBitmap( const Size* pSizePixel, BOOL bUnlimited ) const;
-    BitmapEx            ImplGetBitmapEx( const Size* pSizePixel, BOOL bUnlimited ) const;
+    Bitmap              ImplGetBitmap(const GraphicConversionParameters& rParameters) const;
+    BitmapEx            ImplGetBitmapEx(const GraphicConversionParameters& rParameters) const;
     Animation           ImplGetAnimation() const;
     const GDIMetaFile&  ImplGetGDIMetaFile() const;
 

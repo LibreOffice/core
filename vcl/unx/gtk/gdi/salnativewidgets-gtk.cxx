@@ -454,6 +454,10 @@ void GtkData::deInitNWF( void )
             gtk_widget_destroy( gWidgetData[i].gMenuWidget );
         if( gWidgetData[i].gTooltipPopup )
             gtk_widget_destroy( gWidgetData[i].gTooltipPopup );
+        delete gWidgetData[i].gCacheTabPages;
+        gWidgetData[i].gCacheTabPages = NULL;
+        delete gWidgetData[i].gCacheTabItems;
+        gWidgetData[i].gCacheTabItems = NULL;
         delete gWidgetData[i].gNWPixmapCacheList;
         gWidgetData[i].gNWPixmapCacheList = NULL;
     }

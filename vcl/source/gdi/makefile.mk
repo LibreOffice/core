@@ -139,6 +139,7 @@ EXCEPTIONSFILES=	$(SLO)$/salmisc.obj 	\
                     $(SLO)$/pngread.obj		\
                     $(SLO)$/pngwrite.obj    \
                     $(SLO)$/virdev.obj \
+                    $(SLO)$/gdimtf.obj		\
                     $(SLO)$/graphictools.obj
 
 

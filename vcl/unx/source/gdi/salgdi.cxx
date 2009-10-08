@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2008 by Sun Microsystems, Inc.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -160,10 +160,10 @@ X11SalGraphics::~X11SalGraphics()
 void X11SalGraphics::freeResources()
 {
     Display *pDisplay = GetXDisplay();
-    
+
     DBG_ASSERT( !pPaintRegion_, "pPaintRegion_" );
     if( pClipRegion_ ) XDestroyRegion( pClipRegion_ ), pClipRegion_ = None;
-    
+
     if( hBrush_ )       XFreePixmap( pDisplay, hBrush_ ), hBrush_ = None;
     if( pPenGC_ )       XFreeGC( pDisplay, pPenGC_ ), pPenGC_ = None;
     if( pFontGC_ )      XFreeGC( pDisplay, pFontGC_ ), pFontGC_ = None;
@@ -510,7 +510,7 @@ BOOL X11SalGraphics::GetDitherPixmap( SalColor nSalColor )
 void X11SalGraphics::GetResolution( sal_Int32 &rDPIX, sal_Int32 &rDPIY ) // const
 {
     const SalDisplay *pDisplay = GetDisplay();
-    
+
     rDPIX = pDisplay->GetResolution().A();
     rDPIY = pDisplay->GetResolution().B();
     if( !pDisplay->GetExactResolution() && rDPIY < 96 )
@@ -523,12 +523,12 @@ void X11SalGraphics::GetResolution( sal_Int32 &rDPIX, sal_Int32 &rDPIY ) // cons
         rDPIX = Divide( rDPIX * 200, rDPIY );
         rDPIY = 200;
     }
-    
+
     // #i12705# equalize x- and y-resolution if they are close enough
     if( rDPIX != rDPIY )
     {
         // different x- and y- resolutions are usually artifacts of
-        // a wrongly calculated screen size. 
+        // a wrongly calculated screen size.
         //if( (13*rDPIX >= 10*rDPIY) && (13*rDPIY >= 10*rDPIX) )  //+-30%
         {
 #ifdef DEBUG
@@ -582,7 +582,7 @@ void X11SalGraphics::ResetClipRegion()
         bInvert50GC_    = FALSE;
         bStippleGC_     = FALSE;
         bTrackingGC_    = FALSE;
-        
+
         XDestroyRegion( pClipRegion_ );
         pClipRegion_    = NULL;
     }
@@ -607,9 +607,9 @@ BOOL X11SalGraphics::unionClipRegion( long nX, long nY, long nDX, long nDY )
     aRect.y         = (short)nY;
     aRect.width     = (unsigned short)nDX;
     aRect.height    = (unsigned short)nDY;
-    
+
     XUnionRectWithRegion( &aRect, pClipRegion_, pClipRegion_ );
-    
+
     return TRUE;
 }
 
@@ -632,7 +632,7 @@ void X11SalGraphics::EndSetClipRegion()
     bInvert50GC_    = FALSE;
     bStippleGC_     = FALSE;
     bTrackingGC_    = FALSE;
-    
+
     if( XEmptyRegion( pClipRegion_ ) )
     {
         XDestroyRegion( pClipRegion_ );
@@ -771,7 +771,7 @@ void X11SalGraphics::drawPixel( long nX, long nY, SalColor nSalColor )
     if( nSalColor != SALCOLOR_NONE )
     {
         Display *pDisplay = GetXDisplay();
-        
+
         if( (nPenColor_ == SALCOLOR_NONE) && !bPenGC_ )
         {
             SetLineColor( nSalColor );
@@ -782,12 +782,12 @@ void X11SalGraphics::drawPixel( long nX, long nY, SalColor nSalColor )
         else
         {
             GC pGC = SelectPen();
-            
+
             if( nSalColor != nPenColor_ )
                 XSetForeground( pDisplay, pGC, GetPixel( nSalColor ) );
-            
+
             XDrawPoint( pDisplay, GetDrawable(), pGC, nX, nY );
-            
+
             if( nSalColor != nPenColor_ )
                 XSetForeground( pDisplay, pGC, nPenPixel_ );
         }
@@ -842,7 +842,7 @@ void X11SalGraphics::drawPolyLine( ULONG nPoints, const SalPoint *pPtAry, bool b
     if( nPenColor_ != 0xFFFFFFFF )
     {
         SalPolyLine Points( nPoints, pPtAry );
-        
+
         DrawLines( nPoints, Points, SelectPen(), bClose );
     }
 }
@@ -852,7 +852,7 @@ void X11SalGraphics::drawPolygon( ULONG nPoints, const SalPoint* pPtAry )
 {
     if( nPoints == 0 )
         return;
-    
+
     if( nPoints < 3 )
     {
         if( !bXORMode_ )
@@ -865,9 +865,9 @@ void X11SalGraphics::drawPolygon( ULONG nPoints, const SalPoint* pPtAry )
         }
         return;
     }
-    
+
     SalPolyLine Points( nPoints, pPtAry );
-    
+
     nPoints++;
 
     /* WORKAROUND: some Xservers (Xorg, VIA chipset in this case)
@@ -901,15 +901,15 @@ void X11SalGraphics::drawPolygon( ULONG nPoints, const SalPoint* pPtAry )
                 if( Points[i].x < 0 )
                     Points[i].x = 0;
         }
-    }       
-    
+    }
+
     if( nBrushColor_ != SALCOLOR_NONE )
         XFillPolygon( GetXDisplay(),
                       GetDrawable(),
                       SelectBrush(),
                       &Points[0], nPoints,
                       Complex, CoordModeOrigin );
-    
+
     if( nPenColor_ != 0xFFFFFFFF )
         DrawLines( nPoints, Points, SelectPen(), true );
 }
@@ -923,7 +923,7 @@ void X11SalGraphics::drawPolyPolygon( sal_uInt32        nPoly,
     {
         ULONG       i, n;
         XLIB_Region pXRegA  = NULL;
-        
+
         for( i = 0; i < nPoly; i++ ) {
             n = pPoints[i];
             SalPolyLine Points( n, pPtAry[i] );
@@ -939,24 +939,24 @@ void X11SalGraphics::drawPolyPolygon( sal_uInt32        nPoly,
                 }
             }
         }
-        
+
         if( pXRegA )
         {
             XRectangle aXRect;
             XClipBox( pXRegA, &aXRect );
-            
+
             GC pGC = SelectBrush();
             SetClipRegion( pGC, pXRegA ); // ??? doppelt
             XDestroyRegion( pXRegA );
             bBrushGC_ = FALSE;
-            
+
             XFillRectangle( GetXDisplay(),
                             GetDrawable(),
                             pGC,
                             aXRect.x, aXRect.y, aXRect.width, aXRect.height );
         }
    }
-        
+
    if( nPenColor_ != SALCOLOR_NONE )
        for( ULONG i = 0; i < nPoly; i++ )
            drawPolyLine( pPoints[i], pPtAry[i], true );
@@ -991,7 +991,7 @@ void X11SalGraphics::invert( ULONG nPoints,
                              SalInvert nFlags )
 {
     SalPolyLine Points ( nPoints, pPtAry );
-    
+
     GC pGC;
     if( SAL_INVERT_50 & nFlags )
         pGC = GetInvert50GC();
@@ -1000,7 +1000,7 @@ void X11SalGraphics::invert( ULONG nPoints,
             pGC = GetTrackingGC();
         else
             pGC = GetInvertGC();
-    
+
     if( SAL_INVERT_TRACKFRAME & nFlags )
         DrawLines ( nPoints, Points, pGC, true );
     else
@@ -1261,7 +1261,7 @@ bool X11SalGraphics::drawPolyPolygon( const ::basegfx::B2DPolyPolygon& rPolyPoly
             {
                 const int k = (nPointIdx < nPointCount) ? nPointIdx : 0;
                 const ::basegfx::B2DPoint& aPoint = aInnerPolygon.getB2DPoint( k );
-                
+
                 // convert the B2DPoint into XRENDER units
                 if(getAntiAliasB2DDraw())
                 {
@@ -1482,6 +1482,15 @@ bool X11SalGraphics::drawPolyPolygon( const ::basegfx::B2DPolyPolygon& rPolyPoly
 
 bool X11SalGraphics::drawPolyLine(const ::basegfx::B2DPolygon& rPolygon, const ::basegfx::B2DVector& rLineWidth, basegfx::B2DLineJoin eLineJoin)
 {
+    // #i101491#
+    if(rPolygon.count() > 1000)
+    {
+        // the used basegfx::tools::createAreaGeometry is simply too
+        // expensive with very big polygons; fallback to caller (who
+        // should use ImplLineConverter normally)
+        return false;
+    }
+
     const XRenderPeer& rRenderPeer = XRenderPeer::GetInstance();
     if( !rRenderPeer.AreTrapezoidsSupported() )
         return false;
@@ -1504,7 +1513,7 @@ bool X11SalGraphics::drawPolyLine(const ::basegfx::B2DPolygon& rPolygon, const :
     //const basegfx::B2DPolyPolygon aAreaPolyPoly = basegfx::tools::createAreaGeometryForSimplePolygon(
     //    aPolygon, 0.5*rLineWidth.getX(), eLineJoin );
     const basegfx::B2DPolyPolygon aAreaPolyPoly(basegfx::tools::createAreaGeometry(aPolygon, 0.5*rLineWidth.getX(), eLineJoin));
-    
+
     if( (rLineWidth.getX() != rLineWidth.getY())
     && !basegfx::fTools::equalZero( rLineWidth.getX() ) )
     {

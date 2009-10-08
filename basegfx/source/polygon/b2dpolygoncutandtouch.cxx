@@ -110,7 +110,10 @@ namespace basegfx
         {
             // #i76891# mergeTemporaryPointsAndPolygon redesigned to be able to correctly handle
             // single edges with/without control points
-            if(rTempPoints.size())
+            // #i101491# added counter for non-changing element count
+            const sal_uInt32 nTempPointCount(rTempPoints.size());
+
+            if(nTempPointCount)
             {
                 B2DPolygon aRetval;
                 const sal_uInt32 nCount(rCandidate.count());
@@ -138,7 +141,7 @@ namespace basegfx
                             double fLeftStart(0.0);
 
                             // now add all points targeted to be at this index
-                            while(nNewInd < rTempPoints.size() && rTempPoints[nNewInd].getIndex() == a)
+                            while(nNewInd < nTempPointCount && rTempPoints[nNewInd].getIndex() == a)
                             {
                                 const temporaryPoint& rTempPoint = rTempPoints[nNewInd++];
 
@@ -160,7 +163,7 @@ namespace basegfx
                         else
                         {
                             // add all points targeted to be at this index
-                            while(nNewInd < rTempPoints.size() && rTempPoints[nNewInd].getIndex() == a)
+                            while(nNewInd < nTempPointCount && rTempPoints[nNewInd].getIndex() == a)
                             {
                                 const temporaryPoint& rTempPoint = rTempPoints[nNewInd++];
                                 const B2DPoint aNewPoint(rTempPoint.getPoint());

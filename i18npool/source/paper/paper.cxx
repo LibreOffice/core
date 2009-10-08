@@ -63,7 +63,7 @@ struct PageDesc
     (long)(((v) * 35.27777778) + 0.5)
 
 #define IN2MM100( v ) \
-    ((long)((v) * 2540))
+    ((long)(((v) * 2540) + 0.5))
 
 #define MM2MM100( v ) \
     ((long)((v) * 100))
@@ -362,10 +362,15 @@ PaperInfo PaperInfo::getSystemDefaultPaper()
     {
         // if set to "use system", try to get locale from system
         if( aLocaleStr.getLength() == 0 )
+        {
+            aArgs[ 0 ] <<= CREATE_OUSTRING( "org.openoffice.System/L10N/" );
+            xConfigNA.set( xConfigProv->createInstanceWithArguments(
+                CREATE_OUSTRING( "com.sun.star.configuration.ConfigurationAccess" ), aArgs ),
+                UNO_QUERY_THROW );
             xConfigNA->getByName( CREATE_OUSTRING( "Locale" ) ) >>= aLocaleStr;
+        }
     }
     catch( Exception& ) {}
-
 
     if (aLocaleStr.getLength() == 0)
         aLocaleStr = CREATE_OUSTRING("en-US");

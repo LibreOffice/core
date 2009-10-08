@@ -102,8 +102,8 @@ void AquaSalGraphics::SetVirDevGraphics( CGLayerRef xLayer, CGContextRef xContex
     else
     {
         const CGSize aSize = CGLayerGetSize( mxLayer );
-        mnWidth = aSize.width;
-        mnHeight = aSize.height;
+        mnWidth = static_cast<int>(aSize.width);
+        mnHeight = static_cast<int>(aSize.height);
     }
 
     // prepare graphics for drawing
@@ -225,7 +225,10 @@ void AquaSalGraphics::RefreshRect(float lX, float lY, float lWidth, float lHeigh
     {
         // update a little more around the designated rectangle
         // this helps with antialiased rendering
-        const Rectangle aVclRect( Point( lX-1, lY-1 ), Size( lWidth+2, lHeight+2) );
+        const Rectangle aVclRect(Point(static_cast<long int>(lX-1),
+                    static_cast<long int>(lY-1) ),
+                 Size(  static_cast<long int>(lWidth+2),
+                    static_cast<long int>(lHeight+2) ) );
         mpFrame->maInvalidRect.Union( aVclRect );
     }
 }
